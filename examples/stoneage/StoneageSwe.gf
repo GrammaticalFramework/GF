@@ -20,7 +20,7 @@ lin
   Smell = PresVasV2 smell_V ;
   Fear = PresVasV2 fear_V ;
   Kill = PresVasV2 kill_V ;
-  Fight = PresVasV2 fight_V ;
+--  Fight = PresVasV2 fight_V ;
   Hunt = PresVasV2 hunt_V ;
   Hit = PresVasV2 hit_V ;
   Cut = PresVasV2 cut_V ;
@@ -41,7 +41,7 @@ lin
   Spit = PresV spit_V ;
   Vomit = PresV vomit_V ;
   Blow = PresV blow_V ;
-  Breathe = PresV breathe_V ;
+--  Breathe = PresV breathe_V ;
   Laugh = PresV laugh_V ;
   Sleep = PresV sleep_V ;
   Live = PresV live_V ;

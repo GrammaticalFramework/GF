@@ -87,8 +87,8 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     wide_ADeg = mk2ADeg "bred" "brett" ;
     yellow_ADeg = yellow_ADeg ;
 
---    left_A = regA "" ; -- FIXME: wtf
---    right_A = regA "" ; -- FIXME: wtf
+    left_A = mkA "vänstra" "vänstra" "vänstra" ;
+    right_A = mkA "högra" "högra" "högra" ;
 
     -- Nouns
 
