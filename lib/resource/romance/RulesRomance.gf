@@ -5,14 +5,14 @@ incomplete concrete RulesRomance of Rules = CategoriesRomance **
 
 lin 
   UseN = noun2CommNounPhrase ;
-  ModAdj = modCommNounPhrase ;
+  ModAP = modCommNounPhrase ;
   ModGenOne = npGenDet singular ;
   ModGenNum = npGenDetNum ;
   UsePN = nameNounPhrase ;
   UseN2 = funAsCommNounPhrase ; -- [SyntaxFra.noun2CommNounPhrase]
   AppN2 = appFunComm ;
   AppN3 = appFun2 ;
-  UseA1 = adj2adjPhrase ;
+  UseA = adj2adjPhrase ;
   ComplA2 = complAdj ;
   PositADeg = positAdjPhrase ;
   ComparADeg = comparAdjPhrase ;

@@ -35,7 +35,7 @@ lincat
             n : Number ; p : Person ; c : ClitType} ;
   PN     = {s : Str ; g : Gender} ;
   Det    = {s : Gender => Str ; n : Number} ;
-  A1     = Adjective ;
+  A      = Adjective ;
       -- = {s : AForm => Str ; p : Bool} ;
   A2     = Adjective ** {s2 : Preposition ; c : CaseA} ;
   ADeg   = {s : Degree => AForm => Str ; p : Bool} ;

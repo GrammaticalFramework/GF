@@ -4,7 +4,7 @@ abstract TestResource = Rules, Structural  ** {
 
 fun
   Big, Happy, Small, Old, Young : ADeg ;
-  American, Finnish : A1 ;
+  American, Finnish : A ;
   Married : A2 ; 
   Man, Woman, Car, House, Light, Bar, Bottle, Wine, Level : N ;
   Walk, Run : V ;

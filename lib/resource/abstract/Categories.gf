@@ -79,13 +79,13 @@ cat
 --3 Adjectives and adjectival phrases
 --
 
-  A1 ;     -- one-place adjective,   e.g. "even"
+  A ;      -- one-place adjective,   e.g. "even"
   A2 ;     -- two-place adjective,   e.g. "divisible (by)"
   ADeg ;   -- degree adjective,      e.g. "big/bigger/biggest"
 
   AP ;     -- adjective phrase,      e.g. "divisible by two", "bigger than John"
 
--- The difference between $A1$ and $ADeg$ is that the former has no
+-- The difference between $A$ and $ADeg$ is that the former has no
 -- comparison forms. 
 
 --!
