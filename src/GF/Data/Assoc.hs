@@ -5,9 +5,9 @@
 -- Stability   : Stable
 -- Portability : Haskell 98
 --
--- > CVS $Date: 2005/03/21 14:17:39 $ 
+-- > CVS $Date: 2005/03/29 11:17:54 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Association lists, or finite maps,
 -- including sets as maps with result type @()@.
@@ -16,18 +16,20 @@
 -----------------------------------------------------------------------------
 
 module GF.Data.Assoc ( Assoc,
-	       Set,
-	       listAssoc,
-	       listSet,
-	       accumAssoc,
-	       aAssocs,
-	       aElems,
-	       assocMap,
-	       lookupAssoc,
-	       lookupWith,
-	       (?),
-	       (?=)
-	     ) where
+		       Set,
+		       emptyAssoc,
+		       emptySet,
+		       listAssoc,
+		       listSet,
+		       accumAssoc,
+		       aAssocs,
+		       aElems,
+		       assocMap,
+		       lookupAssoc,
+		       lookupWith,
+		       (?),
+		       (?=)
+		     ) where
 
 import GF.Data.SortedList 
 
@@ -35,6 +37,9 @@ infixl 9 ?, ?=
 
 -- | a set is a finite map with empty values
 type Set a = Assoc a ()
+
+emptyAssoc :: Ord a => Assoc a b
+emptySet   :: Ord a => Set a
 
 -- | creating a finite map from a sorted key-value list 
 listAssoc   :: Ord a => SList (a, b) -> Assoc a b
@@ -77,6 +82,9 @@ lookupWith :: Ord a => b -> Assoc a b -> a -> b
 
 data Assoc a b = ANil | ANode (Assoc a b) a b (Assoc a b)
 		 deriving (Eq, Show)
+
+emptyAssoc = ANil
+emptySet   = emptyAssoc
 
 listAssoc as = assoc
   where (assoc, [])     = sl2bst (length as) as

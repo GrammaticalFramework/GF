@@ -1,20 +1,21 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : AddCoercions
+-- Module      : ConvertGFCtoMCFG.Coercions
 -- Maintainer  : PL
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:31:53 $ 
+-- > CVS $Date: 2005/03/29 11:17:55 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
+-- Adding coercion functions to a MCFG if necessary.
 -----------------------------------------------------------------------------
 
 
 module GF.Parsing.ConvertGFCtoMCFG.Coercions (addCoercions) where
 
-import Tracing
+import GF.System.Tracing
 import GF.Printing.PrintParser
 import GF.Printing.PrintSimplifiedTerm
 -- import PrintGFC
@@ -33,7 +34,7 @@ addCoercions :: MCFGrammar -> MCFGrammar
 addCoercions rules = coercions ++ rules
     where (allHeads, allArgs) = unzip [ ((head, lbls), nubsort args) | 
 					Rule head args lins _ <- rules, 
-					let lbls = [ lbl | Lin lbl _ <- lins ] ]
+					let lbls = [ lbl | Lin lbl _ <- lins ] ]
 	  allHeadSet = nubsort allHeads
 	  allArgSet  = union   allArgs <\\> map fst allHeadSet
 	  coercions = tracePrt "#coercions total" (prt . length) $

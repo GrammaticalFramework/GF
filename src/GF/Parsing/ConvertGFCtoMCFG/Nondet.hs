@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:31:53 $ 
+-- > CVS $Date: 2005/03/29 11:17:55 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Converting GFC grammars to MCFG grammars, nondeterministically.
 --
@@ -20,8 +20,7 @@
 
 module GF.Parsing.ConvertGFCtoMCFG.Nondet (convertGrammar) where
 
-import Tracing
-import IOExts (unsafePerformIO)
+import GF.System.Tracing
 import GF.Printing.PrintParser
 import GF.Printing.PrintSimplifiedTerm
 -- import PrintGFC

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:44 $ 
+-- > CVS $Date: 2005/03/29 11:17:56 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Pretty-printing of parser objects
 -----------------------------------------------------------------------------
@@ -68,6 +68,10 @@ instance Print Int where
 
 instance Print Integer where
     prt = show
+
+instance Print a => Print (Maybe a) where
+    prt (Just a) = "!" ++ prt a
+    prt Nothing  = "Nothing"
 
 instance Print a => Print (Err a) where
     prt (Ok a) = prt a

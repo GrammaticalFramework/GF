@@ -5,11 +5,11 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:39 $
+-- > CVS $Date: 2005/03/29 11:17:54 $
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
--- Backtracking state monad, with r/o environment
+-- Backtracking state monad, with r\/o environment
 -----------------------------------------------------------------------------
 
 

@@ -5,16 +5,16 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:07 $ 
+-- > CVS $Date: 2005/03/29 11:17:56 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.11 $
+-- > CVS $Revision: 1.12 $
 --
 -- AR 27\/1\/2000 -- 3\/12\/2001 -- 8\/6\/2003 
 -----------------------------------------------------------------------------
 
 module CanonToCF (canon2cf) where
 
-import Tracing -- peb 8/6-04
+import GF.System.Tracing -- peb 8/6-04
 
 import Operations
 import Option

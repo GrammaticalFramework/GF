@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:44 $ 
+-- > CVS $Date: 2005/03/29 11:17:56 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Instances for printing terms in a simplified format
 -----------------------------------------------------------------------------
@@ -19,6 +19,7 @@ import AbsGFC
 import CF
 import CFIdent
 import GF.Printing.PrintParser
+import qualified PrintGFC as P
 
 instance Print Term where
     prt (Arg arg)         = prt arg
@@ -99,6 +100,10 @@ instance Print CFCat where
 
 instance Print CFFun where 
     prt (CFFun fun) = prt (fst fun)
+
+instance Print Exp where
+    prt = P.printTree
+
 
 sizeCT :: CType -> Int
 sizeCT (RecType rt) = 1 + sum [ sizeCT t | _ `Lbg` t <- rt ]

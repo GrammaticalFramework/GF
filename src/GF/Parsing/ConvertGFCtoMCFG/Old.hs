@@ -1,15 +1,15 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : ConvertGFCtoMCFG
+-- Module      : ConvertGFCtoMCFG.Old
 -- Maintainer  : PL
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:44:39 $ 
+-- > CVS $Date: 2005/03/29 11:17:55 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
--- Converting GFC grammars to MCFG grammars.
+-- Converting GFC grammars to MCFG grammars. (Old variant)
 --
 -- the resulting grammars might be /very large/
 --
@@ -20,7 +20,7 @@
 
 module GF.Parsing.ConvertGFCtoMCFG.Old (convertGrammar) where
 
-import Tracing
+import GF.System.Tracing
 import GF.Printing.PrintParser
 import GF.Printing.PrintSimplifiedTerm
 --import PrintGFC

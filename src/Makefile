@@ -9,7 +9,7 @@ GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
 
 HUGSINCLUDE    =.:{Hugs}/libraries:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:newparsing:cfgm:speech:visualization:
-BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -inewparsing -iparsers -inotrace -icfgm -ispeech -ivisualization
+BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -inewparsing -iparsers -icfgm -ispeech -ivisualization
 GHCINCLUDE     =-ifor-ghc       $(BASICINCLUDE)
 GHCINCLUDENOFUD=-ifor-ghc-nofud $(BASICINCLUDE) 
 GHCINCLUDEGFT  =-ifor-gft       $(BASICINCLUDE) 
@@ -23,6 +23,8 @@ NOT_IN_DIST= \
 	src/old-stuff \
 	src/parsing \
 	src/conversions \
+	src/trace \
+	src/notrace \
 	src/util/AlphaConvGF.hs
 
 BIN_DIST_DIR=$(DIST_DIR)-$(host)
@@ -31,28 +33,28 @@ SNAPSHOT_DIR=GF-$(shell date +%Y%m%d)
 
 all: unix gfdoc jar
 
-temp: today noopt
+temp: today touch-files noopt
 
-unix: today nofud-links opt
+unix: today touch-files nofud-links opt
 
-windows: today nofud-links justwindows
+windows: today touch-files nofud-links justwindows
 
 install-java: javac
 	-rm -f ../bin/java
 	ln -s ../src/java ../bin
 	@echo "PLEASE edit GFHOME in bin/jgf"
 opt:
-	$(GHMAKE) $(GHCOPTFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf
-	strip gf
-	mv gf ../bin/
+	$(GHMAKE) $(GHCOPTFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf-bin
+	strip gf-bin
+	mv gf-bin ../bin/gf
 noopt:
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf
-	strip gf
-	mv gf ../bin/
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf-bin
+	strip gf-bin
+	mv gf-bin ../bin/gf
 
 ghc: nofud
 
-ghci: nofud-links ghci-nofud
+ghci: touch-files nofud-links ghci-nofud
 
 fud:
 	$(GHCXMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) GF.hs -o fgf
@@ -60,14 +62,14 @@ fud:
 	mv fgf ../bin/
 
 gft:
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) -itranslate translate/GFT.hs -o gft
-	strip gft
-	mv gft ../bin/
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) -itranslate translate/GFT.hs -o gft-bin
+	strip gft-bin
+	mv gft-bin ../bin/gft
 
 nofud: nofud-links
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf
-	strip gf
-	mv gf ../bin/
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf-bin
+	strip gf-bin
+	mv gf-bin ../bin/gf
 
 justwindows:
 	$(GHMAKE) $(GHCOPTFLAGS) $(WINDOWSINCLUDE) GF.hs -o gf.exe
@@ -87,6 +89,7 @@ shell:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) Shell.hs
 clean: 
 	-rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
+	-rm -f GF/*.{o,hi,ghi} GF/*/*.{o,hi,ghi} GF/*/*/*.{o,hi,ghi}
 	-rm -f java/*.class
 
 distclean: clean
@@ -113,14 +116,16 @@ help:
 	cd util ; runhugs MkHelpFile ; mv HelpFile.hs .. ; cd ..
 
 # added by peb:
-tracing:
-	$(GHMAKE) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD) GF.hs -o gf
-	strip gf
-	mv gf ../bin/
+tracing: GHCFLAGS += -DTRACING
+tracing: temp
 
-ghci-trace: nofud-links 
-	$(GHCI) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD)
+ghci-trace: GHCFLAGS += -DTRACING
+ghci-trace: ghci
 
+touch-files: 
+	touch GF/System/Tracing.hs
+
+# profiling
 prof: GHCOPTFLAGS += -prof -auto-all -auto-dicts
 prof: all
 

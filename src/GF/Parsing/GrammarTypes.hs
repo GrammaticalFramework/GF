@@ -1,13 +1,12 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : GrammarTypes
 -- Maintainer  : PL
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:31:48 $ 
+-- > CVS $Date: 2005/03/29 11:17:54 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- All possible instantiations of different grammar formats used for parsing
 --
@@ -36,6 +35,7 @@ module GF.Parsing.GrammarTypes
 
 import Ident (Ident(..))
 import AbsGFC
+-- import qualified GF.Parsing.FiniteTypes.Calc as Fin
 import qualified GF.Parsing.CFGrammar as CFG
 import qualified GF.Parsing.MCFGrammar as MCFG
 import GF.Printing.PrintParser
@@ -75,16 +75,16 @@ data STerm    = SArg Int Cat Path     -- ^ argument variable, the 'Path' is a pa
 				      -- pointing into the term 
 	      | SCon Constr [STerm]   -- ^ constructor
 	      | SRec [(Label, STerm)] -- ^ record
-	      | STbl [(STerm, STerm)] -- ^ table of patterns/terms
+	      | STbl [(STerm, STerm)] -- ^ table of patterns\/terms
 	      | SVariants [STerm]     -- ^ variants
 	      | SConcat STerm STerm   -- ^ concatenation
 	      | SToken Tokn           -- ^ single token
 	      | SEmpty                -- ^ empty string
 	      | SWildcard             -- ^ wildcard pattern variable
 
-	      -- | SRes CIdent        -- resource identifier
-	      -- | SVar Ident         -- bound pattern variable
-	      -- | SInt Integer       -- integer
+	      -- SRes CIdent        -- resource identifier
+	      -- SVar Ident         -- bound pattern variable
+	      -- SInt Integer       -- integer
 		deriving (Eq, Ord, Show)
 
 (+.) :: STerm -> Label -> STerm

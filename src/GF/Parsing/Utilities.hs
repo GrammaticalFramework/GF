@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : Parser
+-- Module      : Parsing.Utilities
 -- Maintainer  : PL
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:31:52 $ 
+-- > CVS $Date: 2005/03/29 11:17:54 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Basic type declarations and functions to be used when parsing
 -----------------------------------------------------------------------------
