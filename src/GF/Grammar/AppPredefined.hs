@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Predefined function type signatures and definitions.
 -----------------------------------------------------------------------------
 
 module AppPredefined where
@@ -18,7 +18,7 @@ import Operations
 import Grammar
 import Ident
 import Macros
-import PrGrammar (prt,prtBad)
+import PrGrammar (prt,prt_,prtBad)
 ---- import PGrammar (pTrm)
 
 -- predefined function type signatures and definitions. AR 12/3/2003.
@@ -42,7 +42,10 @@ typPredefined c@(IC f) = case f of
   "occur"  -> return $ mkFunType [typeTok,typeTok] (cnPredef "PBool")
   "plus"   -> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "Int")
 ----  "read"   -> (P : Type) -> Tok -> P
-----  "show"   -> (P : Type) -> P -> Tok
+  "show"   -> return $ mkProd -- (P : PType) -> P -> Tok
+    ([(zIdent "P",typePType),(wildIdent,Vr (zIdent "P"))],typeStr,[]) 
+  "toStr"  -> return $ mkProd -- (L : Type)  -> L -> Str
+    ([(zIdent "L",typeType),(wildIdent,Vr (zIdent "L"))],typeStr,[]) 
   "take"   -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
   "tk"     -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
   _        -> prtBad "unknown in Predef:" c
@@ -69,8 +72,10 @@ appPredefined t = case t of
       ("eqInt",EInt i, EInt j) -> if i==j then predefTrue else predefFalse
       ("lessInt",EInt i, EInt j) -> if i<j then predefTrue else predefFalse
       ("plus", EInt i, EInt j) -> EInt $ i+j
-      ("show", _, t) -> K $ prt t
+      ("show", _, t) -> foldr C Empty $ map K $ words $ prt t
       ("read", _, K s) -> str2tag s --- because of K, only works for atomic tags
+      ("toStr", _, t) -> trm2str t
+
       _ -> t
     _ -> t
   _ -> t
@@ -96,4 +101,15 @@ substring s t = case (s,t) of
   (c:cs, d:ds) -> (c == d && substring cs ds) || substring s ds
   ([],_) -> True
   _ -> False
+
+trm2str :: Term -> Term
+trm2str t = case t of
+  R ((_,(_,s)):_)   -> trm2str s
+  T _ ((_,s):_) -> trm2str s
+  TSh _ ((_,s):_) -> trm2str s
+  V _ (s:_) -> trm2str s
+  C _ _         -> t
+  K _           -> t
+  Empty         -> t
+  _ -> K $ "ERROR_toStr_" ++ prt_ t --- eliminated by type checker
 

@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Check correctness of module dependencies. Incomplete.
 -----------------------------------------------------------------------------
 
 module ModDeps where
@@ -81,8 +81,8 @@ moduleDeps ms = mapM deps ms where
   chDep it es ety os oty = do
     ests <- mapM (lookupModuleType gr) es
     testErr (all (compatMType ety) ests) "inappropriate extension module type" 
-    osts <- mapM (lookupModuleType gr . openedModule) os
-    testErr (all (compatOType oty) osts) "inappropriate open module type"
+----    osts <- mapM (lookupModuleType gr . openedModule) os
+----    testErr (all (compatOType oty) osts) "inappropriate open module type"
     let ab = case it of
                IdentM _ (MTConcrete a) -> [IdentM a MTAbstract]
                _ -> [] ---- 

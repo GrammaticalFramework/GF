@@ -17,6 +17,7 @@ module BackOpt (shareModule, OptSpec, shareOpt, paramOpt, valOpt, allOpt) where
 import Grammar
 import Ident
 import qualified Macros as C
+import PrGrammar (prt)
 import Operations
 import List
 import qualified Modules as M
@@ -38,16 +39,16 @@ shareModule opt (i,m) = case m of
     (i,M.ModMod (M.Module mt st fs me ops (mapTree (shareInfo opt) js)))
   _ -> (i,m)
 
-shareInfo opt (c, CncCat ty (Yes t) m) = (c, CncCat ty (Yes (shareOptim opt t)) m)
-shareInfo opt (c, CncFun kxs (Yes t) m) = (c, CncFun kxs (Yes (shareOptim opt t)) m)
-shareInfo opt (c, ResOper ty (Yes t)) = (c, ResOper ty (Yes (shareOptim opt t)))
+shareInfo opt (c, CncCat ty (Yes t) m) = (c,CncCat ty (Yes (shareOptim opt c t)) m)
+shareInfo opt (c, CncFun kxs (Yes t) m) = (c,CncFun kxs (Yes (shareOptim opt c t)) m)
+shareInfo opt (c, ResOper ty (Yes t)) = (c,ResOper ty (Yes (shareOptim opt c t)))
 shareInfo _ i = i
 
 -- the function putting together optimizations
-shareOptim :: OptSpec -> Term -> Term
-shareOptim opt 
-  | doOptFactor opt && doOptValues opt = values . factor 0
-  | doOptFactor opt = share . factor 0
+shareOptim :: OptSpec -> Ident -> Term -> Term
+shareOptim opt c 
+  | doOptFactor opt && doOptValues opt = values . factor c 0
+  | doOptFactor opt = share . factor c 0
   | doOptValues opt = values    
   | otherwise = share
 
@@ -73,17 +74,17 @@ share t = case t of
 
 -- do even more: factor parametric branches
 
-factor :: Int -> Term -> Term
-factor i t = case t of
+factor :: Ident -> Int -> Term -> Term
+factor c i t = case t of
   T _ [_] -> t
   T _ []  -> t
   T (TComp ty) cs -> 
-    T (TTyped ty) $ factors i [(p, factor (i+1) v) | (p, v) <- cs]
-  _ -> C.composSafeOp (factor i) t
+    T (TTyped ty) $ factors i [(p, factor c (i+1) v) | (p, v) <- cs]
+  _ -> C.composSafeOp (factor c i) t
  where
 
    factors i psvs =   -- we know psvs has at least 2 elements
-     let p   = qqIdent i
+     let p   = qqIdent c i
          vs' = map (mkFun p) psvs
      in if   allEqs vs'
         then mkCase p vs' 
@@ -97,7 +98,7 @@ factor i t = case t of
 
 --- we hope this will be fresh and don't check... in GFC would be safe
 
-qqIdent i = identC ("q4q__" ++ show i)
+qqIdent c i = identC ("q_" ++ prt c ++ "__" ++ show i)
 
 
 --  we need to replace subterms

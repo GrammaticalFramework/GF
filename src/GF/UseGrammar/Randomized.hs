@@ -45,7 +45,7 @@ mkTreeFromInts ints gr catfun = do
   return $ loc2tree state
 
 mkStateFromInts :: [Int] -> CGrammar -> Action
-mkStateFromInts ints gr = mkRandomState ints where
+mkStateFromInts ints gr z = mkRandomState ints z >>= reCheckState gr where
   mkRandomState [] state = do
     testErr (isCompleteState state) "not completed"
     return state

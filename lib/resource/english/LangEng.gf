@@ -8,7 +8,7 @@ concrete LangEng of Lang =
   TimeEng,
   CountryEng
 
-   ** open Prelude, ResourceEng, ParadigmsEng in {
+   ** open Prelude, ParadigmsEng in {
 
 lin
   AdvDate d = prefixSS "on" d ;

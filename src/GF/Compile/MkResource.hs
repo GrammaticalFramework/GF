@@ -18,6 +18,7 @@ import Grammar
 import Ident
 import Modules
 import Macros
+import Lockfield
 import PrGrammar
 
 import Operations
@@ -117,19 +118,6 @@ mkResDefs hasT isC gr r a mext maext abs cnc = mapMTree (mkOne a maext) abs wher
     Q _ c | always -> return $ Q r c
     Q n c | n == a || [n] == mae -> return $ Q r c ---- FIX for non-singleton exts
     _ -> composOp (redirTyp always a mae) ty
-
-lockRecType :: Ident -> Type -> Err Type
-lockRecType c t = plusRecType t $ RecType [(lockLabel c,  RecType [])]
-
-unlockRecord :: Ident -> Term -> Err Term
-unlockRecord c ft = do
-  let (xs,t) = termFormCnc ft
-  t' <- plusRecord t $ R [(lockLabel c,  (Just (RecType []),R []))]
-  return $ mkAbs xs t'
-
-lockLabel :: Ident -> Label
-lockLabel c = LIdent $ "lock_" ++ prt c ----
-
 
 -- no reuse for functions of HO/dep types
 

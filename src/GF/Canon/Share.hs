@@ -18,6 +18,7 @@ import AbsGFC
 import Ident
 import GFC
 import qualified CMacros as C
+import PrGrammar (prt)
 import Operations
 import List
 import qualified Modules as M
@@ -39,15 +40,15 @@ shareModule opt (i,m) = case m of
     (i,M.ModMod (M.Module mt st fs me ops (mapTree (shareInfo opt) js)))
   _ -> (i,m)
 
-shareInfo opt (c, CncCat ty t m) = (c, CncCat ty (shareOptim opt t) m)
-shareInfo opt (c, CncFun k xs t m) = (c, CncFun k xs (shareOptim opt t) m)
+shareInfo opt (c, CncCat ty t m) = (c, CncCat ty (shareOptim opt c t) m)
+shareInfo opt (c, CncFun k xs t m) = (c, CncFun k xs (shareOptim opt c t) m)
 shareInfo _ i = i
 
 -- the function putting together optimizations
-shareOptim :: OptSpec -> Term -> Term
-shareOptim opt 
-  | doOptFactor opt && doOptValues opt = values . factor 0
-  | doOptFactor opt = share . factor 0
+shareOptim :: OptSpec -> Ident -> Term -> Term
+shareOptim opt c 
+  | doOptFactor opt && doOptValues opt = values . factor c 0
+  | doOptFactor opt = share . factor c 0
   | doOptValues opt = values    
   | otherwise = share
 
@@ -80,22 +81,22 @@ share t = case t of
 
 -- do even more: factor parametric branches
 
-factor :: Int -> Term -> Term
-factor i t = case t of
+factor :: Ident -> Int -> Term -> Term
+factor c i t = case t of
   T _ [_] -> t
   T _ []  -> t
-  T ty cs -> T ty $ factors i [Cas [p] (factor (i+1) v) | Cas ps v <- cs, p <- ps]
-  R lts   -> R [Ass l (factor i t) | Ass l t <- lts]
-  P t l   -> P (factor i t) l
-  S t a   -> S (factor i t) (factor i a)
-  C t a   -> C (factor i t) (factor i a)
-  FV ts   -> FV (map (factor i) ts)
+  T ty cs -> T ty $ factors i [Cas [p] (factor c (i+1) v) | Cas ps v <- cs, p <- ps]
+  R lts   -> R [Ass l (factor c i t) | Ass l t <- lts]
+  P t l   -> P (factor c i t) l
+  S t a   -> S (factor c i t) (factor c i a)
+  C t a   -> C (factor c i t) (factor c i a)
+  FV ts   -> FV (map (factor c i) ts)
 
   _ -> t
  where
 
    factors i psvs =   -- we know psvs has at least 2 elements
-     let p   = pIdent i
+     let p   = pIdent c i
          vs' = map (mkFun p) psvs
      in if   allEqs vs'
         then mkCase p vs' 
@@ -107,7 +108,7 @@ factor i t = case t of
 
    mkCase p (v:_) = [Cas [PV p] v]
 
-pIdent i = identC ("p__" ++ show i)
+pIdent c i = identC ("p_" ++ prt c ++ "__" ++ show i)
 
 
 --  we need to replace subterms

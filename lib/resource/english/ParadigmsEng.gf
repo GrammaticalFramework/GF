@@ -26,8 +26,8 @@
 -- 
 -- The following modules are presupposed:
 
-resource ParadigmsEng = open (Predef=Predef), Prelude, SyntaxEng, ResourceEng in {
-
+resource ParadigmsEng = open (Predef=Predef), Prelude, SyntaxEng, ---- ResourceEng in {
+  CategoriesEng, RulesEng in {
 --2 Parameters 
 --
 -- To abstract over gender names, we define the following identifiers.

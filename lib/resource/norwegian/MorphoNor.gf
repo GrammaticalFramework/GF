@@ -91,7 +91,7 @@ oper
   mkVoice : Voice -> Str -> Str = \v,s -> case v of {
     Act => s ;
     Pass => s + case last s of {
-      "t" => "es" ;
+      "s" => "es" ;
       _   => "s"
       }
     } ;

@@ -1,3 +1,4 @@
 --# -path=.:../abstract:../../prelude
 
-instance ResourceSwe of Resource = reuse AllResourceSwe ;
+concrete ResourceSwe of Resource = RulesSwe, StructuralSwe, ClauseSwe ** {} ;
+

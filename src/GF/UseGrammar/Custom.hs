@@ -75,6 +75,7 @@ import MoreCustom -- either small/ or big/. The one in Small is empty.
 import UseIO
 
 import Monad
+import Char
 
 -- character codings
 import Unicode
@@ -365,6 +366,7 @@ customUntokenizer =
    (strCI "unwords",   const $ id)   -- DEFAULT
   ,(strCI "text",      const $ formatAsText)
   ,(strCI "code",      const $ formatAsCode)
+  ,(strCI "concat",    const $ filter (not . isSpace))
   ,(strCI "textlit",   const $ formatAsTextLit)
   ,(strCI "codelit",   const $ formatAsCodeLit)
   ,(strCI "concat",    const $ concatRemSpace)
