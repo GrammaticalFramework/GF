@@ -7,6 +7,14 @@ GF_DATA_DIR=@datadir@/GF-@PACKAGE_VERSION@
 
 JAVA=@JAVA@
 
+if [ ! -x "$JAVA" ]; then
+    JAVA=`which java`
+fi
+
+if [ ! -x "$JAVA" ]; then
+    echo "No Java VM found"
+fi
+
 GF=$GF_BIN_DIR/gf
 JARFILE=$GF_DATA_DIR/gf-java.jar
 
