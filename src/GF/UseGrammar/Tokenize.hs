@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/04 15:50:27 $ 
+-- > CVS $Date: 2005/04/04 17:29:18 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.11 $
+-- > CVS $Revision: 1.12 $
 --
 -- lexers = tokenizers, to prepare input for GF grammars. AR 4\/1\/2002.
 -- an entry for each is included in 'Custom.customTokenizer'
@@ -40,8 +40,8 @@ tokWords = map tS . words
 tokLits :: String -> [CFTok]
 tokLits = map mkCFTok . mergeStr . words where
   mergeStr ss = case ss of
-    w@(c:_):rest | elem c "\'\"" -> getStr [w] rest
-    w      :rest                 -> w : mergeStr rest
+    w@(c:cs):rest | elem c "\'\"" && c /= last w -> getStr [w] rest
+    w      :rest                  -> w : mergeStr rest
     [] -> []
   getStr v ss = case ss of
     w@(_:_):rest | elem (last w) "\'\"" -> (unwords (reverse (w:v))) : mergeStr rest
