@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/02 09:43:52 $ 
+-- > CVS $Date: 2005/03/03 16:10:37 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.9 $
+-- > CVS $Revision: 1.10 $
 --
 -- Generate all trees of given category and depth. AR 30\/4\/2004
 --
@@ -40,7 +40,7 @@ import List
 
 -- | the main function takes an abstract syntax and returns a list of trees
 generateTrees :: GFCGrammar -> Bool -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
-generateTrees gr ifm cat n mn mt = nub $ map str2tr $ generate gr' ifm cat' n mn mt'
+generateTrees gr ifm cat n mn mt = map str2tr $ generate gr' ifm cat' n mn mt'
   where
     gr' = gr2sgr gr
     cat' = prt $ snd cat
@@ -50,12 +50,17 @@ generateTrees gr ifm cat n mn mt = nub $ map str2tr $ generate gr' ifm cat' n mn
 -- translate grammar to simpler form and generated trees back
 
 gr2sgr :: GFCGrammar -> SGrammar
-gr2sgr gr = [(trId f, ty') | (f,ty) <- funRulesOf gr, ty' <- trTy ty] where
+gr2sgr gr = buildTree [(c,rs) | rs@((_,(_,c)):_) <- rules] where
+  rules =
+    groupBy (\x y -> scat x == scat y) $
+      sortBy (\x y -> compare (scat x) (scat y)) 
+        [(trId f, ty') | (f,ty) <- funRulesOf gr, ty' <- trTy ty]
   trId = prt . snd
   trTy ty = case catSkeleton ty of
     Ok (mcs,mc) -> [(map trCat mcs, trCat mc)]
     _ -> []
   trCat (m,c) = prt c ---
+  scat (_,(_,c)) = c
 
 -- str2tr :: STree -> Exp
 str2tr t = case t of
@@ -81,16 +86,39 @@ tr2str (Tr (N (_,at,val,_,_),ts)) = case (at,val) of
 -- If a tree is given as argument, generation concerns its metavariables.
 
 generate :: SGrammar -> Bool -> SCat -> Int -> Maybe Int -> Maybe STree -> [STree]
-generate gr ifm cat i mn mt = case mt of
-  Nothing -> [t | (c,t) <- gen 0 [], c == cat] 
+generate gr ifm cat i _ Nothing = errVal [] $ lookupTree id cat $ genAll i 
+ where
+  -- lazy bottom-up dynamic generation
+  genAll :: Int -> BinTree (SCat,[STree])
+  genAll i = iter i genNext (mapTree (\ (c,_) -> (c,[])) gr)
 
-  Just t -> genM t
+  iter 0 f tr = tr
+  iter n f tr = f (iter (n-1) f tr)
+
+  genNext tr = mapTree (genNew tr) tr
+
+  genNew tr (cat,ts) = 
+    (cat, [SApp (f, xs) | 
+            (f,(cs,_)) <- funs cat, 
+            xs <- combinations (map look cs),
+            let fxs = SApp (f, xs),
+            notElem fxs ts] 
+         ++ ts)
+   where
+     look c = errVal [] $ lookupTree id c tr
+
+  funs cat = errVal [] $ lookupTree id cat gr
+
+generate gr ifm cat i mn mt = case mt of
+  Nothing -> [t | (c,t) <- gen i [], c == cat] 
+
+  Just t -> genM i t
 
  where
 
   gen :: Int -> [(SCat,STree)] -> [(SCat,STree)]
-  gen n cts = if n==i then cts else
-    gen (n+1) (nub [(c,SApp (f, xs)) | (f,(cs,c)) <- gr, xs <- args cs cts] ++ cts)
+  gen n cts = if n==0 then cts else
+    gen (n-1) ([(c,SApp (f, xs)) | (f,(cs,c)) <- allRules gr, xs <- args cs cts] ++ cts)
 
   args :: [SCat] -> [(SCat,STree)] -> [[STree]]
   args cs cts = combinations 
@@ -100,17 +128,19 @@ generate gr ifm cat i mn mt = case mt of
 
   ifmetas c = if ifm then (SMeta c :) else id
 
-  genM t = case t of
-    SApp (f,ts) -> [SApp (f,ts') | ts' <- combinations (map genM ts)]
-    SMeta k -> [t | (c,t) <- gen 0 [], c == k] 
+  genM n t = case t of
+    SApp (f,ts) -> [SApp (f,ts') | ts' <- combinations (map (genM (n-1)) ts)]
+    SMeta k -> [t | (c,t) <- gen n [], c == k] 
     _ -> [t]
 
-type SGrammar = [SRule]
+type SGrammar = BinTree (SCat,[SRule])
 type SIdent = String
 type SRule = (SFun,SType)
 type SType = ([SCat],SCat)
 type SCat = SIdent
 type SFun = SIdent
+
+allRules gr = concat [rs  | (c,rs) <- tree2list gr]
 
 data STree = 
     SApp (SFun,[STree]) 
