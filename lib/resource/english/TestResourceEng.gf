@@ -1,9 +1,7 @@
 --# -path=.:../abstract:../../prelude
 
 concrete TestResourceEng of TestResource = RulesEng, StructuralEng **
-{} 
-{- -----
-open SyntaxEng, ParadigmsEng in {
+  open SyntaxEng, ParadigmsEng in {
 
 flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
 
@@ -51,4 +49,3 @@ lin
   Mary = nameReg "Mary" ;
 
 } ;
--}
