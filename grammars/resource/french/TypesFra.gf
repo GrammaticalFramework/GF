@@ -59,7 +59,7 @@ oper
 -- only approximatively correct, for "si" is not really elided before
 -- the string "il" in general, but before the pronouns "il" and "ils".
 
-  siSubj = pre {"si" ; "s'" / strs {"il"}} ;
+  elisSi = pre {"si" ; "s'" / strs {"il"}} ;
 
 
 --2 Prepositions
