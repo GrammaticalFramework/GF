@@ -1,18 +1,20 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Refresh
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:13 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Refresh where
+module Refresh (refreshTerm, refreshTermN,
+		refreshModule
+	       ) where
 
 import Operations
 import Grammar

@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : GrammarToSource
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:20 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.16 $
 --
 -- From internal source syntax to BNFC-generated (used for printing).
 -----------------------------------------------------------------------------
@@ -21,9 +21,9 @@ import Option
 import qualified AbsGF as P
 import Ident
 
--- AR 13/5/2003
+-- | AR 13\/5\/2003
+--
 -- translate internal to parsable and printable source
-
 trGrammar :: SourceGrammar -> P.Grammar
 trGrammar (MGrammar ms) = P.Gr (map trModule ms) -- no includes
 

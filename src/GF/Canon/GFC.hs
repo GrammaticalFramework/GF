@@ -1,18 +1,27 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : GFC
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:06 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
 -- canonical GF. AR 10\/9\/2002 -- 9\/5\/2003 -- 21\/9
 -----------------------------------------------------------------------------
 
-module GFC where
+module GFC (Context,
+	    CanonGrammar,
+	    CanonModInfo,
+	    CanonModule,
+	    CanonAbs,
+	    Info(..),
+	    Printname,
+	    mapInfoTerms,
+	    setFlag
+	   ) where
 
 import AbsGFC
 import PrintGFC

@@ -1,18 +1,23 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Update
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:09 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Update where
+module Update (updateRes, buildAnyTree, combineAnyInfos, unifyAnyInfo,
+	       -- * these auxiliaries should be somewhere else 
+	       -- since they don't use the info types
+	       groupInfos, sortInfos, combineInfos, unifyInfos,
+	       tryInsert, unifAbsDefs, unifConstrs
+	      ) where
 
 import Ident
 import Grammar

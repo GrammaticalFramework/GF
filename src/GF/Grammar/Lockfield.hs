@@ -1,15 +1,17 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Lockfield
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:12 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- Creating and using lock fields in reused resource grammars.
+--
+-- AR 8\/2\/2005 detached from 'compile/MkResource'
 -----------------------------------------------------------------------------
 
 module Lockfield (lockRecType, unlockRecord, lockLabel, isLockLabel) where
@@ -20,8 +22,6 @@ import Macros
 import PrGrammar
 
 import Operations
-
--- AR 8/2/2005 detached from compile/MkResource
 
 lockRecType :: Ident -> Type -> Err Type
 lockRecType c t@(RecType rs) = 

@@ -1,18 +1,21 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : PGrammar
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:09 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module PGrammar where
+module PGrammar (pTerm, pTrm, pTrms, 
+		 pMeta, pzIdent, 
+		 string2ident
+		) where
 
 ---import LexGF
 import ParGF

@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : PPrCF
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:07 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.9 $
 --
 -- printing and parsing CF grammars, rules, and trees AR 26/1/2000 -- 9/6/2003
 --

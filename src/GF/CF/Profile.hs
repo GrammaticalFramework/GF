@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Profile
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:08 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.7 $
 --
 -- restoring parse trees for discontinuous constituents, bindings, etc. AR 25/1/2001
 -- revised 8/4/2002 for the new profile structure

@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : MkUnion
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:09 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
 -- building union of modules.
 -- AR 1\/3\/2004 --- OBSOLETE 15\/9\/2004 with multiple inheritance

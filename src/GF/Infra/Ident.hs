@@ -1,18 +1,26 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Ident
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:14 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Ident where
+module Ident (-- * Identifiers
+	      Ident(..), prIdent,
+	      identC, identV, identA, identAV, identW,
+	      argIdent, strVar, wildIdent, isWildIdent,
+	      newIdent, mkIdent, varIndex,
+	      -- * refreshing identifiers
+	      IdState, initIdStateN, initIdState,
+	      lookVar, refVar, refVarPlus
+	     ) where
 
 import Operations
 -- import Monad
@@ -23,8 +31,8 @@ import Operations
 data Ident = 
    IC String            -- ^ raw identifier after parsing, resolved in Rename
  | IW                   -- ^ wildcard
-
--- below this line: internal representation never returned by the parser
+--
+-- below this constructor: internal representation never returned by the parser
  | IV (Int,String)      -- ^ /INTERNAL/ variable
  | IA (String,Int)      -- ^ /INTERNAL/ argument of cat at position
  | IAV (String,Int,Int) -- ^ /INTERNAL/ argument of cat with bindings at position

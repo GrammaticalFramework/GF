@@ -1,15 +1,17 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : CMacros
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:06 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.20 $
 --
 -- Macros for building and analysing terms in GFC concrete syntax.
+--
+-- macros for concrete syntax in GFC that do not need lookup in a grammar
 -----------------------------------------------------------------------------
 
 module CMacros where
@@ -26,8 +28,6 @@ import Operations
 
 import Char
 import Monad
-
--- macros for concrete syntax in GFC that do not need lookup in a grammar
 
 -- | how to mark subtrees, dep. on node, position, whether focus
 type JustMarker = V.TrNode -> [Int] -> Bool -> (String, String)

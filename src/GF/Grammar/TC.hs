@@ -1,26 +1,30 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : TC
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:13 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.7 $
 --
--- (Description of the module)
+-- Thierry Coquand's type checking algorithm that creates a trace
 -----------------------------------------------------------------------------
 
-module TC where
+module TC (AExp(..),
+	   Theory,
+	   checkExp,
+	   inferExp,
+	   eqVal,
+	   whnf
+	  ) where
 
 import Operations
 import Abstract
 import AbsCompute
 
 import Monad
-
--- Thierry Coquand's type checking algorithm that creates a trace
 
 data AExp =
      AVr   Ident Val 

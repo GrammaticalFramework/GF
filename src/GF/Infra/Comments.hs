@@ -1,22 +1,21 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
+-- Module      : Comments
 -- Maintainer  : (Maintainer)
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:13 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
 --
--- (Description of the module)
+-- comment removal
 -----------------------------------------------------------------------------
 
 module Comments ( remComments
 		) where
 
--- | comment removal : line tails prefixed by -- as well as chunks in {- ... -}
-
+-- | comment removal : line tails prefixed by -- as well as chunks in @{- ... -}@
 remComments :: String -> String
 remComments s = 
   case s of

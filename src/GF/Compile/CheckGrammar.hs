@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : CheckGrammar
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:08 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.20 $
 --
 -- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
 --
@@ -20,7 +20,7 @@
 --  - tables are type-annotated
 -----------------------------------------------------------------------------
 
-module CheckGrammar where
+module CheckGrammar (showCheckModule, justCheckLTerm) where
 
 import Grammar
 import Ident

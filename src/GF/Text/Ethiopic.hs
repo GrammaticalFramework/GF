@@ -1,21 +1,19 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Ethiopic
+-- Maintainer  : HH
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:14 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
--- (Description of the module)
+-- Ascii-Unicode decoding for Ethiopian.
+-- Copyright (c) Harald Hammarström 2003 under Gnu General Public License
 -----------------------------------------------------------------------------
 
 module Ethiopic (mkEthiopic) where
-
--- Ascii-Unicode decoding for Ethiopian
--- Copyright (c) Harald Hammarström 2003 under Gnu General Public License
 
 mkEthiopic :: String -> String
 mkEthiopic = digraphWordToUnicode . adHocToDigraphWord

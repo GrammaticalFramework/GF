@@ -1,20 +1,24 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : ModDeps
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:09 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.11 $
 --
 -- Check correctness of module dependencies. Incomplete.
 --
--- AR 13/5/2003
+-- AR 13\/5\/2003
 -----------------------------------------------------------------------------
 
-module ModDeps where
+module ModDeps (mkSourceGrammar,
+		moduleDeps,
+		openInterfaces,
+		requiredCanModules
+	       ) where
 
 import Grammar
 import Ident

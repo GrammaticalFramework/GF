@@ -1,15 +1,19 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Macros
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:12 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.17 $
 --
 -- Macros for constructing and analysing source code terms.
+--
+-- operations on terms and types not involving lookup in or reference to grammars
+--
+-- AR 7\/12\/1999 - 9\/5\/2000 -- 4\/6\/2001
 -----------------------------------------------------------------------------
 
 module Macros where
@@ -22,10 +26,6 @@ import PrGrammar
 
 import Monad (liftM)
 import Char (isDigit)
-
--- AR 7/12/1999 - 9/5/2000 -- 4/6/2001
-
--- operations on terms and types not involving lookup in or reference to grammars
 
 firstTypeForm :: Type -> Err (Context, Type)
 firstTypeForm t = case t of
@@ -366,7 +366,7 @@ varX i = identV (i,"x")
 mkFreshVar :: [Ident] -> Ident
 mkFreshVar olds = varX (maxVarIndex olds + 1) 
 
--- trying to preserve a given symbol
+-- | trying to preserve a given symbol
 mkFreshVarX :: [Ident] -> Ident -> Ident
 mkFreshVarX olds x = if (elem x olds) then (varX (maxVarIndex olds + 1)) else x
 
@@ -376,22 +376,22 @@ maxVarIndex = maximum . ((-1):) . map varIndex
 mkFreshVars :: Int -> [Ident] -> [Ident] 
 mkFreshVars n olds = [varX (maxVarIndex olds + i) | i <- [1..n]]
 
---- quick hack for refining with var in editor
+-- | quick hack for refining with var in editor
 freshAsTerm :: String -> Term
 freshAsTerm s = Vr (varX (readIntArg s))
 
--- create a terminal for concrete syntax
+-- | create a terminal for concrete syntax
 string2term :: String -> Term
 string2term = ccK
 
 ccK = K
 ccC = C
 
--- create a terminal from identifier
+-- | create a terminal from identifier
 ident2terminal :: Ident -> Term
 ident2terminal = ccK . prIdent
 
--- create a constant
+-- | create a constant
 string2CnTrm :: String -> Term
 string2CnTrm = Cn . zIdent
 
@@ -441,7 +441,7 @@ mkFreshMetasInTrm metas = fst . rms minMeta where
     _       -> (trm,meta)
   minMeta = if null metas then 0 else (maximum (map metaSymbInt metas) + 1)
 
--- decides that a term has no metavariables
+-- | decides that a term has no metavariables
 isCompleteTerm :: Term -> Bool
 isCompleteTerm t = case t of
   Meta _  -> False
@@ -492,7 +492,7 @@ redirectTerm n t = case t of
   Q _ f  -> Q  n f
   _ -> composSafeOp (redirectTerm n) t
 
--- to gather s-fields; assumes term in normal form, preserves label
+-- | to gather s-fields; assumes term in normal form, preserves label
 allLinFields :: Term -> Err [[(Label,Term)]]
 allLinFields trm = case unComputed trm of
 ----  R rs  -> return [[(l,t) | (l,(Just ty,t)) <- rs, isStrType ty]] -- good
@@ -502,24 +502,24 @@ allLinFields trm = case unComputed trm of
     return $ concat lts
   _ -> prtBad "fields can only be sought in a record not in" trm
 
----- deprecated
+-- | deprecated
 isLinLabel l = case l of
      LIdent ('s':cs) | all isDigit cs -> True
      _ -> False
 
--- to gather ultimate cases in a table; preserves pattern list
+-- | to gather ultimate cases in a table; preserves pattern list
 allCaseValues :: Term -> [([Patt],Term)]
 allCaseValues trm = case unComputed trm of
   T _ cs -> [(p:ps, t) | (p,t0) <- cs, (ps,t) <- allCaseValues t0]
   _      -> [([],trm)]
 
--- to gather all linearizations; assumes normal form, preserves label and args
+-- | to gather all linearizations; assumes normal form, preserves label and args
 allLinValues :: Term -> Err [[(Label,[([Patt],Term)])]]
 allLinValues trm = do
   lts <- allLinFields trm
   mapM (mapPairsM (return . allCaseValues)) lts
 
--- to mark str parts of fields in a record f by a function f
+-- | to mark str parts of fields in a record f by a function f
 markLinFields :: (Term -> Term) -> Term -> Term
 markLinFields f t = case t of
     R r -> R $ map mkField r
@@ -530,7 +530,7 @@ markLinFields f t = case t of
     T i cs -> T i [(p, mkTbl v) | (p,v) <- cs]
     _ -> f t
 
--- to get a string from a term that represents a sequence of terminals
+-- | to get a string from a term that represents a sequence of terminals
 strsFromTerm :: Term -> Err [Str]
 strsFromTerm t = case unComputed t of
   K s   -> return [str s]
@@ -558,13 +558,12 @@ strsFromTerm t = case unComputed t of
   Alias _ _ d -> strsFromTerm d --- should not be needed...
   _ -> prtBad "cannot get Str from term" t
 
--- to print an Str-denoting term as a string; if the term is of wrong type, the error msg
+-- | to print an Str-denoting term as a string; if the term is of wrong type, the error msg
 stringFromTerm :: Term -> String
 stringFromTerm = err id (ifNull "" (sstr . head)) . strsFromTerm
 
 
--- to define compositional term functions
-
+-- | to define compositional term functions
 composSafeOp :: (Term -> Term) -> Term -> Term
 composSafeOp op trm = case composOp (mkMonadic op) trm of
   Ok t -> t
@@ -572,6 +571,7 @@ composSafeOp op trm = case composOp (mkMonadic op) trm of
  where
  mkMonadic f = return . f
 
+-- | to define compositional term functions
 composOp :: Monad m => (Term -> m Term) -> Term -> m Term
 composOp co trm = 
  case trm of
@@ -686,8 +686,7 @@ collectOp co trm = case trm of
   Strs tt    -> concatMap co tt
   _ -> [] -- covers K, Vr, Cn, Sort, Ready
 
--- to find the word items in a term
-
+-- | to find the word items in a term
 wordsInTerm :: Term -> [String]
 wordsInTerm trm = filter (not . null) $ case trm of
    K s     -> [s]
@@ -705,8 +704,7 @@ defaultLinType = mkRecType linLabel [typeStr]
 metaTerms :: [Term]
 metaTerms = map (Meta . MetaSymb) [0..]
 
--- from GF1, 20/9/2003
-
+-- | from GF1, 20\/9\/2003
 isInOneType :: Type -> Bool
 isInOneType t = case t of
   Prod _ a b -> a == b

@@ -1,20 +1,19 @@
 ----------------------------------------------------------------------
 -- |
 -- Module      : PrGSL
--- Maintainer  : Bjorn Bringert (bringert@cs.chalmers.se)
+-- Maintainer  : BB
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:21 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.10 $
 --
 -- This module prints a CFG as a Nuance GSL 2.0 grammar.
 --
------------------------------------------------------------------------------
-
--- FIXME: remove / warn / fail if there are int / string literal
+-- FIXME: remove \/ warn \/ fail if there are int \/ string literal
 -- categories in the grammar
+-----------------------------------------------------------------------------
 
 module PrGSL (gslPrinter) where
 

@@ -1,18 +1,18 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : GFT
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:21 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Main where
+module Main (main) where
 
 import ShellState
 import GetGFC

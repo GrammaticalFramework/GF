@@ -1,26 +1,24 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Htmls
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:23 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
 --
--- (Description of the module)
------------------------------------------------------------------------------
-
-module Main where
-
-import System
-
 -- chop an HTML file into separate files, each linked to the next and previous.
 -- the names of the files are n-file, with n = 01,02,...
--- the chopping is performed at each separator, here defined as "<!-- NEW -->"
+-- the chopping is performed at each separator, here defined as @\<!-- NEW --\>@
+--
+-- AR 7\/1\/2002 for the Vinnova meeting in Linköping.
+-----------------------------------------------------------------------------
 
--- AR 7/1/2002 for the Vinnova meeting in Linköping.
+module Main (main) where
+
+import System
 
 main :: IO ()
 main = do

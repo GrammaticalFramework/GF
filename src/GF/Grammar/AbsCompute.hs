@@ -1,18 +1,25 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : AbsCompute
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:12 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
--- (Description of the module)
+-- computation in abstract syntax w.r.t. explicit definitions.
+--
+-- old GF computation; to be updated
 -----------------------------------------------------------------------------
 
-module AbsCompute where
+module AbsCompute (LookDef, 
+		   compute, 
+		   computeAbsTerm, 
+		   computeAbsTermIn, 
+		   beta
+		  ) where
 
 import Operations
 
@@ -24,16 +31,13 @@ import Compute
 
 import Monad (liftM, liftM2)
 
--- computation in abstract syntax w.r.t. explicit definitions.
---- old GF computation; to be updated
-
 compute :: GFCGrammar -> Exp -> Err Exp
 compute = computeAbsTerm
 
 computeAbsTerm :: GFCGrammar -> Exp -> Err Exp
 computeAbsTerm gr = computeAbsTermIn (lookupAbsDef gr) []
 
---- a hack to make compute work on source grammar as well
+-- | a hack to make compute work on source grammar as well
 type LookDef = Ident -> Ident -> Err (Maybe Term)
 
 computeAbsTermIn :: LookDef -> [Ident] -> Exp -> Err Exp

@@ -1,18 +1,19 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Compile
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:08 $
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.33 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
 
-module Compile where
+module Compile (compileModule, compileEnvShSt, compileOne
+	       ) where
 
 import Grammar
 import Ident

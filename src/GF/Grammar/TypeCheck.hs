@@ -1,18 +1,37 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : TypeCheck
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:13 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.13 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module TypeCheck where
+module TypeCheck (-- * top-level type checking functions; TC should not be called directly.
+		  annotate, annotateIn,
+		  justTypeCheck, checkIfValidExp,
+		  reduceConstraints, 
+		  splitConstraints,
+		  possibleConstraints,
+		  reduceConstraintsNode,
+		  performMetaSubstNode,
+		  -- * some top-level batch-mode checkers for the compiler
+		  justTypeCheckSrc,
+		  grammar2theorySrc,
+		  checkContext,
+		  checkTyp,
+		  checkEquation,
+		  checkConstrs,
+		  editAsTermCommand,
+		  exp2termCommand,
+		  exp2termlistCommand,
+		  tree2termlistCommand
+		 ) where
 
 import Operations
 import Zipper
@@ -35,14 +54,14 @@ import List (nub) ---
 annotate :: GFCGrammar -> Exp -> Err Tree
 annotate gr exp = annotateIn gr [] exp Nothing 
 
--- type check in empty context, return a list of constraints
+-- | type check in empty context, return a list of constraints
 justTypeCheck :: GFCGrammar -> Exp -> Val -> Err Constraints
 justTypeCheck gr e v = do
   (_,constrs0) <- checkExp (grammar2theory gr) (initTCEnv []) e v
   constrs1     <- reduceConstraints (lookupAbsDef gr) 0 constrs0
   return $ fst $ splitConstraints gr constrs1
 
--- type check in empty context, return the expression itself if valid
+-- | type check in empty context, return the expression itself if valid
 checkIfValidExp :: GFCGrammar -> Exp -> Err Exp
 checkIfValidExp gr e = do
   (_,_,constrs0) <- inferExp (grammar2theory gr) (initTCEnv []) e
@@ -63,11 +82,11 @@ annotateIn gr gamma exp = maybe (infer exp) (check exp) where
     c' <- reduceConstraints (lookupAbsDef gr) (length gamma) c
     aexp2tree (a,c')
 
--- invariant way of creating TCEnv from context
+-- | invariant way of creating TCEnv from context
 initTCEnv gamma = 
   (length gamma,[(x,VGen i x) | ((x,_),i) <- zip gamma [0..]], gamma) 
 
--- process constraints after eqVal by computing by defs
+-- | process constraints after eqVal by computing by defs
 reduceConstraints :: LookDef -> Int -> Constraints -> Err Constraints
 reduceConstraints look i = liftM concat . mapM redOne where
   redOne (u,v) = do
@@ -92,7 +111,7 @@ computeVal look v = case v of
    compt = computeAbsTermIn look
    compv = computeVal look
 
--- take apart constraints that have the form (? <> t), usable as solutions
+-- | take apart constraints that have the form (? <> t), usable as solutions
 splitConstraints :: GFCGrammar -> Constraints -> (Constraints,MetaSubst)
 splitConstraints gr = splitConstraintsGen (lookupAbsDef gr)
 
@@ -141,10 +160,11 @@ performMetaSubstNode subst n@(N (b,a,v,(c,m),s)) = let
      Meta m -> errVal e $ maybe (return e) val2expSafe $ lookup m subst
      _ -> composSafeOp metaSubstExp e
 
+reduceConstraintsNode :: GFCGrammar -> TrNode -> TrNode
 reduceConstraintsNode gr = changeConstrs red where
   red cs = errVal cs $ reduceConstraints (lookupAbsDef gr) 0 cs
 
--- weak heuristic to narrow down menus; not used for TC. 15/11/2001
+-- | weak heuristic to narrow down menus; not used for TC. 15\/11\/2001.
 -- the age-old method from GF 0.9
 possibleConstraints :: GFCGrammar -> Constraints -> Bool
 possibleConstraints gr = and . map (possibleConstraint gr)

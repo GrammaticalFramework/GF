@@ -1,18 +1,60 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : UseIO
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:16 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.8 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module UseIO where
+module UseIO (prOptCPU,
+	      putCPU,
+	      putPoint,
+	      putPoint',
+	      readFileIf,
+	      FileName,
+	      InitPath,
+	      FullPath,
+	      getFilePath,
+	      readFileIfPath,
+	      doesFileExistPath,
+	      extendPathEnv,
+	      pFilePaths,
+	      prefixPathName,
+	      justInitPath,
+	      nameAndSuffix,
+	      unsuffixFile, fileBody,
+	      fileSuffix,
+	      justFileName,
+	      suffixFile,
+	      justModuleName,
+	      getLineWell,
+	      putStrFlush,
+	      putStrLnFlush,
+	      -- * a generic quiz session
+	      QuestionsAndAnswers,
+	      teachDialogue,
+	      -- * IO monad with error; adapted from state monad
+	      IOE(..),
+	      appIOE,
+	      ioe,
+	      ioeIO,
+	      ioeErr,
+	      ioeBad,
+	      useIOE,
+	      foldIOE,
+	      putStrLnE,
+	      putStrE,
+	      putPointE,
+	      putPointEVerb,
+	      readFileIOE,
+	      readFileLibraryIOE
+	     ) where
 
 import Operations
 import Arch (prCPU)
@@ -35,7 +77,7 @@ putIfVerbW opts msg =
          then putStr (' ' : msg)
          else return ()
 
--- obsolete with IOE monad
+-- | obsolete with IOE monad
 errIO :: a -> Err a -> IO a
 errIO = errOptIO noOptions
 
@@ -95,7 +137,7 @@ doesFileExistPath paths file = do
   mpfile <- ioeIO $ getFilePath paths file
   return $ maybe False (const True) mpfile
 
--- path in environment variable has lower priority
+-- | path in environment variable has lower priority
 extendPathEnv :: String -> [FilePath] -> IO [FilePath]
 extendPathEnv var ps = do
   s <- catch (getEnv var) (const (return ""))
@@ -243,7 +285,7 @@ putPointE opts msg act = do
   return a
 -}
 
--- forces verbosity
+-- | forces verbosity
 putPointEVerb :: Options -> String -> IOE a -> IOE a
 putPointEVerb opts = putPointE (addOption beVerbose opts)
 
@@ -252,9 +294,10 @@ readFileIOE :: FilePath -> IOE (String)
 readFileIOE f = ioe $ catch (readFile f >>= return . return)
                       (\_ -> return (Bad (reportOn f))) where
   reportOn f = "File " ++ f ++ " not found."
-  
--- like readFileIOE but look also in the GF library if file not found
--- intended semantics: if file is not found, try $GF_LIB_PATH/file
+
+-- | like readFileIOE but look also in the GF library if file not found
+--
+-- intended semantics: if file is not found, try @\$GF_LIB_PATH\/file@
 -- (even if file is an absolute path, but this should always fail)
 -- it returns not only contents of the file, but also the path used
 readFileLibraryIOE :: String -> FilePath -> IOE (FilePath, String)
@@ -281,7 +324,7 @@ readFileLibraryIOE ini f =
 			_     -> ini ++ file -- relative path name
 
 
--- example
+-- | example
 koeIOE :: IO ()
 koeIOE = useIOE () $ do
   s  <- ioeIO  $ getLine

@@ -1,15 +1,15 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : MMacros
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:12 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
--- (Description of the module)
+-- some more abstractions on grammars, esp. for Edit
 -----------------------------------------------------------------------------
 
 module MMacros where
@@ -26,8 +26,6 @@ import Values
 import Macros
 
 import Monad
-
--- some more abstractions on grammars, esp. for Edit
 
 nodeTree (Tr (n,_)) = n
 argsTree (Tr (_,ts)) = ts
@@ -69,7 +67,7 @@ changeMetaSubst f (N (b,a,v,(c,m),x)) = N (b,a,v,(c, f m),x)
 changeAtom :: (Atom -> Atom) -> TrNode -> TrNode
 changeAtom f (N (b,a,v,(c,m),x)) = N (b,f a,v,(c, m),x)
 
------- on the way to Edit
+-- * on the way to Edit
 
 uTree :: Tree
 uTree = Tr (uNode, []) -- unknown tree
@@ -139,7 +137,7 @@ substTerm ss g c = case c of
 metaSubstExp :: MetaSubst -> [(Meta,Exp)]
 metaSubstExp msubst = [(m, errVal (meta2exp m) (val2expSafe v)) | (m,v) <- msubst]
 
--- belong here rather than to computation
+-- * belong here rather than to computation
 
 substitute :: [Var] -> Substitution -> Exp -> Err Exp
 substitute v s = return . substTerm v s
@@ -245,7 +243,7 @@ fun2wrap oldvars ((fun,i),typ) exp = do
     let vars = mkFreshVars (length cont) oldvars
     return $ mkAbs vars $ if n==i then exp else mExp
 
--- weak heuristics: sameness of value category
+-- | weak heuristics: sameness of value category
 compatType :: Val -> Type -> Bool
 compatType v t = errVal True $ do
   cat1 <- val2cat v
@@ -269,8 +267,7 @@ identVar (Vr x) = return x
 identVar _ = Bad "not a variable"
 
 
--- light-weight rename for user interaction; also change names of internal vars
-
+-- | light-weight rename for user interaction; also change names of internal vars
 qualifTerm :: Ident -> Term -> Term
 qualifTerm m  = qualif [] where
   qualif xs t = case t of
@@ -287,8 +284,7 @@ string2var s = case s of
   c:'_':i -> identV (readIntArg i,[c]) ---
   _ -> zIdent s
 
--- reindex variables so that they tell nesting depth level
-
+-- | reindex variables so that they tell nesting depth level
 reindexTerm :: Term -> Term
 reindexTerm = qualif (0,[]) where
   qualif dg@(d,g) t = case t of

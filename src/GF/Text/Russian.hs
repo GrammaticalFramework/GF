@@ -1,24 +1,24 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
+-- Module      : Russian
 -- Maintainer  : (Maintainer)
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:15 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
 module Russian (mkRussian, mkRusKOI8) where
 
--- an ad hoc ASCII encoding. Delimiters: /_ _/
+-- | an ad hoc ASCII encoding. Delimiters: @\/_ _\/@
 mkRussian :: String -> String
 mkRussian = unwords . (map mkRussianWord) . words
 
--- the KOI8 encoding, incomplete. Delimiters: /* */
+-- | the KOI8 encoding, incomplete. Delimiters: @\/* *\/@
 mkRusKOI8 :: String -> String
 mkRusKOI8 = unwords . (map mkRussianKOI8) . words
 

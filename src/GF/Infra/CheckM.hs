@@ -1,18 +1,23 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
+-- Module      : CheckM
 -- Maintainer  : (Maintainer)
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:13 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module CheckM where
+module CheckM (Check,
+	       checkError, checkCond, checkWarn, checkUpdate, checkInContext,
+	       checkUpdates, checkReset, checkResets, checkGetContext, 
+	       checkLookup, checkStart, checkErr, checkVal, checkIn, 
+	       prtFail
+	      ) where
 
 import Operations
 import Grammar

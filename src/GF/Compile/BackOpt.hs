@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : Aarne Ranta
+-- Module      : BackOpt
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:08 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- Optimizations on GF source code: sharing, parametrization, value sets.
 --

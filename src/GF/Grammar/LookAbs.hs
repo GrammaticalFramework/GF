@@ -1,18 +1,35 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : LookAbs
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:12 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.12 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module LookAbs where
+module LookAbs (GFCGrammar,
+		lookupAbsDef,
+		lookupFunType,
+		lookupCatContext,
+		lookupTransfer,
+		isPrimitiveFun,
+		lookupRef,
+		refsForType,
+		funRulesOf,
+		allCatsOf,
+		allBindCatsOf,
+		funsForType,
+		funsOnType,
+		funsOnTypeFs,
+		allDefs,
+		lookupFunTypeSrc,
+		lookupCatContextSrc
+	       ) where
 
 import Operations
 import qualified GFC as C
@@ -62,8 +79,7 @@ lookupCatContext gr m c = errIn ("looking up context of cat" +++ prt c) $ do
         _ -> prtBad "unknown category" c
     _ -> Bad $ prt m +++ "is not an abstract module"
 
--- lookup for transfer function: transfer-module-name, category name
-
+-- | lookup for transfer function: transfer-module-name, category name
 lookupTransfer :: GFCGrammar -> Ident -> Ident -> Err Term
 lookupTransfer gr m c = errIn ("looking up transfer of cat" +++ prt c) $ do
   mi   <- lookupModule gr m
@@ -77,7 +93,7 @@ lookupTransfer gr m c = errIn ("looking up transfer of cat" +++ prt c) $ do
     _ -> Bad $ prt m +++ "is not a transfer module"
 
 
----- should be revised (20/9/2003)
+-- | should be revised (20\/9\/2003)
 isPrimitiveFun :: GFCGrammar -> Fun -> Bool
 isPrimitiveFun gr (m,c) = case lookupAbsDef gr m c of
   Ok (Just (Eqs [])) -> True  -- is canonical
@@ -85,8 +101,7 @@ isPrimitiveFun gr (m,c) = case lookupAbsDef gr m c of
   _                  -> True  -- has no definition
 
 
--- looking up refinement terms
-
+-- | looking up refinement terms
 lookupRef :: GFCGrammar -> Binds -> Term -> Err Val
 lookupRef gr binds at = case at of
   Q m f  -> lookupFunType gr m f >>= return . vClos
@@ -147,8 +162,7 @@ allDefs gr = [((i,c),d) | (i, ModMod m) <- modules gr,
                     isModAbs m,
                     (c, C.AbsFun _ d) <- tree2list (jments m)]
 
--- this is needed at compile time
-
+-- | this is needed at compile time
 lookupFunTypeSrc :: Grammar -> Ident -> Ident -> Err Type
 lookupFunTypeSrc gr m c = do
   mi   <- lookupModule gr m
@@ -161,6 +175,7 @@ lookupFunTypeSrc gr m c = do
         _ -> prtBad "cannot find type of" c
     _ -> Bad $ prt m +++ "is not an abstract module"
 
+-- | this is needed at compile time
 lookupCatContextSrc :: Grammar -> Ident -> Ident -> Err Context
 lookupCatContextSrc gr m c = do
   mi   <- lookupModule gr m

@@ -1,15 +1,15 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Arch
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:10 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
--- (Description of the module)
+-- architecture\/compiler dependent definitions for unix\/hbc
 -----------------------------------------------------------------------------
 
 module Arch (
@@ -50,8 +50,7 @@ fetchCommand s = do
    Just s -> do addHistory s
                 return s
 
--- selects the one with the later modification time of two
-
+-- | selects the one with the later modification time of two
 selectLater :: FilePath -> FilePath -> IO FilePath
 selectLater x y = do
   ex <- doesFileExist x
@@ -66,9 +65,9 @@ selectLater x y = do
           ty <- getModificationTime y
           return $ if tx < ty then y else x
 
--- a file is considered modified also if it has not been read yet
--- new 23/2/2004: the environment ofs has just module names
-
+-- | a file is considered modified also if it has not been read yet
+--
+-- new 23\/2\/2004: the environment ofs has just module names
 modifiedFiles :: [(FilePath,ModTime)] -> [FilePath] -> IO [FilePath]
 modifiedFiles ofs fs = do
   filterM isModified fs

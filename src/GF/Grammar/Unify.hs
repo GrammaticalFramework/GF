@@ -1,29 +1,27 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Unify
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:13 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.3 $
 --
--- (Description of the module)
+-- (c) Petri Mäenpää & Aarne Ranta, 1998--2001
+--
+-- brute-force adaptation of the old-GF program AR 21\/12\/2001 ---
+-- the only use is in 'TypeCheck.splitConstraints'
 -----------------------------------------------------------------------------
 
-module Unify where
+module Unify (unifyVal) where
 
 import Abstract
 
 import Operations
 
 import List (partition)
-
--- (c) Petri Mäenpää & Aarne Ranta, 1998--2001
-
--- brute-force adaptation of the old-GF program AR 21/12/2001 ---
--- the only use is in TypeCheck.splitConstraints
 
 unifyVal :: Constraints -> Err (Constraints,MetaSubst)
 unifyVal cs0 = do

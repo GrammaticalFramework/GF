@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : PrLBNF
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:08 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.8 $
 --
 -- Printing CF grammars generated from GF as LBNF grammar for BNFC.
 -- AR 26/1/2000 -- 9/6/2003 (PPrCF) -- 8/11/2003 -- 27/9/2004.

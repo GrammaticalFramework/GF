@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/17 10:22:10 $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:07 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.7 $
 --
 -- elementary text postprocessing. AR 21/11/2001
 -----------------------------------------------------------------------------

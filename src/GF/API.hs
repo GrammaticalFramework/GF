@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:06 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.27 $
 --
 -- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 -----------------------------------------------------------------------------

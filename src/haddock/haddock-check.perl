@@ -8,8 +8,10 @@
 #   - transforming hard space to ordinary space
 
 # limitations:
-#   - does not check that type aliases are put in the export list
 #   - there might be some problems with nested comments
+#   - cannot handle type signatures for several functions
+#     (i.e. "a, b, c :: t")
+#     but on the other hand -- haddock has some problems with these too...
 
 $operSym = qr/[\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~\:]+/;
 $funSym = qr/[a-z]\w*\'*/;
@@ -33,6 +35,15 @@ for $file (@ARGV) {
   close F;
 
   print "-- $file\n";
+
+  # substituting hard spaces for ordinary spaces
+  $nchars = tr/\240/ /;
+  if ($nchars > 0) {
+    print "   ! Substituted $nchars hard spaces\n";
+    open F, ">$file.hs";
+    print F $_;
+    close F;
+  }
 
   # the module header
   s/^(--+\s*\n)+//s;

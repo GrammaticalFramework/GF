@@ -1,16 +1,3 @@
-----------------------------------------------------------------------
--- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
--- Stability   : (stable)
--- Portability : (portable)
---
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
---
--- (Description of the module)
------------------------------------------------------------------------------
 
 module PrintGFC where
 

@@ -1,15 +1,21 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : SRG
+-- Maintainer  : BB
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:21 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
 --
--- (Description of the module)
+-- Representation of, conversion to, and utilities for 
+-- printing of a general Speech Recognition Grammar. 
+--
+-- FIXME: remove \/ warn \/ fail if there are int \/ string literal
+-- categories in the grammar
+--
+-- FIXME: figure out name prefix from grammar name
 -----------------------------------------------------------------------------
 
 {- 
@@ -29,11 +35,6 @@
     Modified      : 
    ************************************************************** 
 -}
-
--- FIXME: remove / warn / fail if there are int / string literal
--- categories in the grammar
-
--- FIXME: figure out name prefix from grammar name
 
 module SRG where
 

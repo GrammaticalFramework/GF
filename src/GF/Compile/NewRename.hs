@@ -1,15 +1,15 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : NewRename
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:09 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
 --
--- AR 14/5/2003
+-- AR 14\/5\/2003
 --
 -- The top-level function 'renameGrammar' does several things:
 --
@@ -23,7 +23,7 @@
 -- Hence we can proceed by @fold@ing "from left to right".
 -----------------------------------------------------------------------------
 
-module Rename where
+module Rename (renameSourceTerm, renameModule) where
 
 import Grammar
 import Values

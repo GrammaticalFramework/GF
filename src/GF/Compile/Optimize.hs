@@ -1,18 +1,18 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Optimize
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:09 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.13 $
 --
 -- Top-level partial evaluation for GF source modules.
 -----------------------------------------------------------------------------
 
-module Optimize where
+module Optimize (optimizeModule) where
 
 import Grammar
 import Ident

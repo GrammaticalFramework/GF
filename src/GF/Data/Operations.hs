@@ -1,18 +1,79 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Operations
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:15 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.15 $
 --
--- (Description of the module)
+-- some auxiliary GF operations. AR 19\/6\/1998 -- 6\/2\/2001
+--
+-- Copyright (c) Aarne Ranta 1998-2000, under GNU General Public License (see GPL)
 -----------------------------------------------------------------------------
 
-module Operations where
+module Operations (-- * misc functions
+		   ifNull, onSnd,
+
+		   -- * the Error monad
+		   Err(..), err, maybeErr, testErr, errVal, errIn, derrIn,
+		   performOps, repeatUntilErr, repeatUntil, okError, isNotError,
+		   showBad, lookupErr, lookupErrMsg, lookupDefault, updateLookupList,
+		   mapPairListM, mapPairsM, pairM, mapErr, mapErrN, foldErr,
+		   (!?), errList, singleton, 
+		   
+		   -- ** checking
+		   checkUnique, titleIfNeeded, errMsg, errAndMsg,
+
+		   -- * a three-valued maybe type to express indirections
+		   Perhaps(..), yes, may, nope,
+		   mapP,
+		   unifPerhaps, updatePerhaps, updatePerhapsHard,
+
+		   -- * binary search trees
+		   BinTree(..), isInBinTree, commonsInTree, justLookupTree,
+		   lookupTree, lookupTreeEq, lookupTreeMany, updateTree,
+		   updateTreeGen, updateTreeEq, updatesTree, updatesTreeNondestr, buildTree,
+		   sorted2tree, mapTree, mapMTree, tree2list,
+		   depthTree, mergeTrees, 
+
+		   -- * parsing
+		   WParser, wParseResults, paragraphs,
+
+		   -- * printing
+		   indent, (+++), (++-), (++++), (+++++),
+		   prUpper, prReplicate, prTList, prQuotedString, prParenth, prCurly, 
+		   prBracket, prArgList, prSemicList, prCurlyList, restoreEscapes,
+		   numberedParagraphs, prConjList, prIfEmpty, wrapLines,
+
+		   -- ** LaTeX code producing functions
+		   dollar, mbox, ital, boldf, verbat, mkLatexFile, 
+		   begindocument, enddocument,
+
+		   -- * extra
+		   sortByLongest, combinations, mkTextFile, initFilePath,
+
+		   -- * topological sorting with test of cyclicity
+		   topoTest, topoSort,
+
+		   -- * the generic fix point iterator
+		   iterFix,
+
+		   -- * association lists
+		   updateAssoc, removeAssoc,
+
+		   -- * chop into separator-separated parts
+		   chunks, readIntArg,
+
+		   -- * state monad with error; from Agda 6\/11\/2001
+		   STM(..), appSTM, stm, stmr, readSTM, updateSTM, writeSTM, done,
+
+		   -- * error monad class
+		   ErrorMonad(..), checkAgain, checks, allChecks
+
+		  ) where
 
 import Char  (isSpace, toUpper, isSpace, isDigit)
 import List  (nub, sortBy, sort, deleteBy, nubBy)
@@ -24,9 +85,6 @@ infixr 5 ++++
 infixr 5 +++++
 infixl 9 !?
 
--- some auxiliary GF operations. AR 19/6/1998 -- 6/2/2001
--- Copyright (c) Aarne Ranta 1998-2000, under GNU General Public License (see GPL)
-
 ifNull :: b -> ([a] -> b) -> [a] -> b
 ifNull b f xs = if null xs then b else f xs
 
@@ -35,7 +93,8 @@ onSnd f (x, y) = (x, f y)
 
 -- the Error monad
 
-data Err a = Ok a | Bad String   -- like Maybe type with error msgs
+-- | like @Maybe@ type with error msgs
+data Err a = Ok a | Bad String
   deriving (Read, Show, Eq)
 
 instance Monad Err where
@@ -43,17 +102,18 @@ instance Monad Err where
   Ok a  >>= f = f a
   Bad s >>= f = Bad s
 
-instance Functor Err where   -- added 2/10/2003 by PEB
+-- | added 2\/10\/2003 by PEB
+instance Functor Err where
   fmap f (Ok a) = Ok (f a)
   fmap f (Bad s) = Bad s
 
--- analogue of maybe
+-- | analogue of @maybe@
 err :: (String -> b) -> (a -> b) -> Err a -> b 
 err d f e = case e of
   Ok a -> f a
   Bad s -> d s
 
--- add msg s to Maybe failures
+-- | add msg s to @Maybe@ failures
 maybeErr :: String -> Maybe a -> Err a
 maybeErr s = maybe (Bad s) Ok
 
@@ -66,7 +126,7 @@ errVal a = err (const a) id
 errIn :: String -> Err a -> Err a
 errIn msg = err (\s -> Bad (s ++++ "OCCURRED IN" ++++ msg)) return
 
--- used for extra error reports when developing GF
+-- | used for extra error reports when developing GF
 derrIn :: String -> Err a -> Err a
 derrIn m = errIn m -- id
 
@@ -121,14 +181,14 @@ mapPairsM f xys =
 pairM :: Monad a => (b -> a c) -> (b,b) -> a (c,c)
 pairM op (t1,t2) = liftM2 (,) (op t1) (op t2)
 
--- like mapM, but continue instead of halting with Err
+-- | like @mapM@, but continue instead of halting with 'Err'
 mapErr :: (a -> Err b) -> [a] -> Err ([b], String) 
 mapErr f xs = Ok (ys, unlines ss) 
   where
     (ys,ss) = ([y | Ok y <- fxs], [s | Bad s <- fxs])
     fxs = map f xs
 
--- alternative variant, peb 9/6-04
+-- | alternative variant, peb 9\/6-04
 mapErrN :: Int -> (a -> Err b) -> [a] -> Err ([b], String)
 mapErrN maxN f xs = Ok (ys, unlines (errHdr : ss2)) 
   where
@@ -139,8 +199,7 @@ mapErrN maxN f xs = Ok (ys, unlines (errHdr : ss2))
     nss = length ss
     fxs = map f xs
 
--- like foldM, but also return the latest value if fails
-
+-- | like @foldM@, but also return the latest value if fails
 foldErr :: (a -> b -> Err a) -> a -> [b] -> Err (a, Maybe String)
 foldErr f s xs = case xs of
   [] -> return (s,Nothing)
@@ -148,7 +207,7 @@ foldErr f s xs = case xs of
     Ok v  -> foldErr f v xx
     Bad m -> return $ (s, Just m)
 
--- !! with the error monad
+-- @!!@ with the error monad
 (!?) :: [a] -> Int -> Err a
 xs !? i = foldr (const . return) (Bad "too few elements in list") $ drop i xs
 
@@ -177,8 +236,7 @@ errAndMsg :: Err a -> Err (a,[String])
 errAndMsg (Bad m) = Bad m
 errAndMsg (Ok a) = return (a,[])
 
--- a three-valued maybe type to express indirections
-
+-- | a three-valued maybe type to express indirections
 data Perhaps a b = Yes a | May b | Nope deriving (Show,Read,Eq,Ord)
 
 yes = Yes
@@ -191,7 +249,7 @@ mapP f p = case p of
   May b -> May b
   Nope  -> Nope
 
--- this is what happens when matching two values in the same module
+-- | this is what happens when matching two values in the same module
 unifPerhaps :: (Eq a, Eq b, Show a, Show b) => 
                Perhaps a b -> Perhaps a b -> Err (Perhaps a b)
 unifPerhaps p1 p2 = case (p1,p2) of
@@ -200,7 +258,7 @@ unifPerhaps p1 p2 = case (p1,p2) of
   _ -> if p1==p2 then return p1 
                  else Bad ("update conflict between" ++++ show p1 ++++ show p2)
 
--- this is what happens when updating a module extension
+-- | this is what happens when updating a module extension
 updatePerhaps :: (Eq a,Eq b, Show a, Show b) => 
                  b -> Perhaps a b -> Perhaps a b -> Err (Perhaps a b)
 updatePerhaps old p1 p2 = case (p1,p2) of
@@ -209,7 +267,7 @@ updatePerhaps old p1 p2 = case (p1,p2) of
   (_, May a)        -> Bad "strange indirection"
   _ -> unifPerhaps p1 p2
 
--- here the value is copied instead of referred to; used for oper types
+-- | here the value is copied instead of referred to; used for oper types
 updatePerhapsHard :: (Eq a, Eq b, Show a, Show b) => b -> 
                      Perhaps a b -> Perhaps a b -> Err (Perhaps a b)
 updatePerhapsHard old p1 p2 = case (p1,p2) of
@@ -230,9 +288,9 @@ isInBinTree x tree = case tree of
    | x > a  -> isInBinTree x right
    | x == a -> True
 
--- quick method to see if two trees have common elements
+-- | quick method to see if two trees have common elements
+--
 -- the complexity is O(log |old|, |new|) so the heuristic is that new is smaller
-
 commonsInTree :: (Ord a) => BinTree (a,b) -> BinTree (a,b) -> [(a,(b,b))]
 commonsInTree old new = foldr inOld [] new' where
   new' = tree2list new
@@ -266,13 +324,11 @@ lookupTreeMany pr (t:ts) x = case lookupTree pr x t of
   _ -> lookupTreeMany pr ts x
 lookupTreeMany pr [] x = Bad $ "failed to find" +++ pr x
 
--- destructive update
-
+-- | destructive update
 updateTree :: (Ord a) => (a,b) -> BinTree (a,b) -> BinTree (a,b)
 updateTree = updateTreeGen True
 
--- destructive or not
-
+-- | destructive or not
 updateTreeGen :: (Ord a) => Bool -> (a,b) -> BinTree (a,b) -> BinTree (a,b)
 updateTreeGen destr z@(x,y) tree = case tree of
  NT -> BT z NT NT
@@ -419,8 +475,7 @@ prIfEmpty :: String -> String -> String -> String -> String
 prIfEmpty em _    _    [] = em
 prIfEmpty em nem1 nem2 s  = nem1 ++ s ++ nem2
 
--- Thomas Hallgren's wrap lines
---- optWrapLines = if argFlag "wraplines" True then wrapLines 0 else id
+-- | Thomas Hallgren's wrap lines
 wrapLines n "" = ""
 wrapLines n s@(c:cs) =
       if isSpace c
@@ -432,6 +487,8 @@ wrapLines n s@(c:cs) =
                where n' = n+l
                      l = length w
             _ -> s -- give up!!
+
+--- optWrapLines = if argFlag "wraplines" True then wrapLines 0 else id
 
 -- LaTeX code producing functions
 
@@ -468,8 +525,8 @@ sortByLongest = sortBy longer where
    x' = length x
    y' = length y
 
--- "combinations" is the same as "sequence"!!!
--- peb 30/5-04
+-- | 'combinations' is the same as @sequence@!!!
+-- peb 30\/5-04
 combinations :: [[a]] -> [[a]]
 combinations t = case t of 
   []    -> [[]]
@@ -527,8 +584,7 @@ topoSort g = reverse $ tsort 0 [ffs | ffs@(f,_) <- g, inDeg f == 0] [] where
   inDeg f = length [t | (h,hs) <- g, t <- hs, t == f]
   lx = length g
 
--- the generic fix point iterator
-
+-- | the generic fix point iterator
 iterFix :: Eq a => ([a] -> [a]) -> [a] -> [a]
 iterFix more start = iter start start 
   where
@@ -549,8 +605,7 @@ updateAssoc ab@(a,b) as = case as of
 removeAssoc :: Eq a => a -> [(a,b)] -> [(a,b)]
 removeAssoc a = filter ((/=a) . fst)
 
--- chop into separator-separated parts
-
+-- | chop into separator-separated parts
 chunks :: String -> [String] -> [[String]]
 chunks sep ws = case span (/= sep) ws of
   (a,_:b) -> a : bs where bs = chunks sep b
@@ -608,7 +663,8 @@ instance ErrorMonad (STM s) where
   handle (STM f) g = STM (\s -> (f s) 
                                 `handle` (\e -> let STM g' = (g e) in
                                                     g' s))
--- if the first check fails try another one
+
+-- | if the first check fails try another one
 checkAgain :: ErrorMonad m => m a -> m a -> m a
 checkAgain c1 c2 = handle_ c1 c2
 

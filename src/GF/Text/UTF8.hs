@@ -1,23 +1,21 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : UTF8
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:16 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
 --
--- (Description of the module)
+-- From the Char module supplied with HBC.
+-- code by Thomas Hallgren (Jul 10 1999)
 -----------------------------------------------------------------------------
 
 module UTF8 (decodeUTF8, encodeUTF8) where
 
--- From the Char module supplied with HBC.
--- code by Thomas Hallgren (Jul 10 1999)
-
--- Take a Unicode string and encode it as a string
+-- | Take a Unicode string and encode it as a string
 -- with the UTF8 method.
 decodeUTF8 :: String -> String
 decodeUTF8 "" = ""

@@ -1,18 +1,21 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : PatternMatch
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:13 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
--- (Description of the module)
+-- pattern matching for both concrete and abstract syntax. AR -- 16\/6\/2003
 -----------------------------------------------------------------------------
 
-module PatternMatch where
+module PatternMatch (matchPattern, 
+		     testOvershadow, 
+		     findMatch
+		    ) where
 
 import Operations
 import Grammar
@@ -22,8 +25,6 @@ import PrGrammar
 
 import List
 import Monad
-
--- pattern matching for both concrete and abstract syntax. AR -- 16/6/2003
 
 
 matchPattern :: [(Patt,Term)] -> Term -> Err (Term, Substitution)
@@ -105,7 +106,7 @@ varsOfPatt p = case p of
   PT _ q -> varsOfPatt q
   _ -> []
 
--- to search matching parameter combinations in tables
+-- | to search matching parameter combinations in tables
 isMatchingForms :: [Patt] -> [Term] -> Bool
 isMatchingForms ps ts = all match (zip ps ts') where
   match (PC c cs, (Cn d, ds)) = c == d && isMatchingForms cs ds

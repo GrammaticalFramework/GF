@@ -1,18 +1,18 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Compute
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:12 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.13 $
 --
--- Computation of source terms. Used in compilation and in 'cc' command.
+-- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
 
-module Compute where
+module Compute (computeConcrete, computeTerm) where
 
 import Operations
 import Grammar
@@ -31,9 +31,8 @@ import AppPredefined
 import List (nub,intersperse)
 import Monad (liftM2, liftM)
 
--- computation of concrete syntax terms into normal form
+-- | computation of concrete syntax terms into normal form
 -- used mainly for partial evaluation
-
 computeConcrete :: SourceGrammar -> Term -> Err Term
 computeConcrete g t = {- refreshTerm t >>= -} computeTerm g [] t
 
@@ -295,8 +294,7 @@ computeTerm gr = comp where
        cs' <- mapM (compBranch g) [(p, f v) | (p,v) <- cs]
        return $ S (T i cs') e
 
--- argument variables cannot be glued
-
+-- | argument variables cannot be glued
 checkNoArgVars :: Term -> Err Term
 checkNoArgVars t = case t of
   Vr (IA _)  -> Bad $ glueErrorMsg $ prt t 

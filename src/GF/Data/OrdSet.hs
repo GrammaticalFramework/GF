@@ -5,16 +5,16 @@
 -- Stability   : Obsolete
 -- Portability : Haskell 98
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:15 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- The class of ordered sets, as described in
--- "Pure Functional Parsing", section 2.2.1,
+-- \"Pure Functional Parsing\", section 2.2.1,
 -- and an example implementation
 -- derived from appendix A.1
 --
--- /OBSOLETE/! this is only used in cf\/ChartParser.hs
+-- /OBSOLETE/! this is only used in module "ChartParser"
 -----------------------------------------------------------------------------
 
 module OrdSet (OrdSet(..), Set) where

@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Str
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:16 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -23,23 +23,23 @@ module Str (
 import Operations
 import List (isPrefixOf, isSuffixOf, intersperse)
 
--- abstract token list type. AR 2001, revised and simplified 20/4/2003
-
+-- | abstract token list type. AR 2001, revised and simplified 20\/4\/2003
 newtype Str = Str [Tok]  deriving (Read, Show, Eq, Ord)
 
 data Tok = 
    TK String
- | TN Ss [(Ss, [String])] -- variants depending on next string 
+ | TN Ss [(Ss, [String])] -- ^ variants depending on next string 
 --- | TP Ss [(Ss, [String])] -- variants depending on previous string
     deriving (Eq, Ord, Show, Read)
-
--- notice that having both pre and post would leave to inconsistent situations:
---   pre {"x" ; "y" / "a"} ++ post {"b" ; "a" / "x"}
+-- ^ notice that having both pre and post would leave to inconsistent situations:
+--
+-- > pre {"x" ; "y" / "a"} ++ post {"b" ; "a" / "x"}
+--
 -- always violates a condition expressed by the one or the other
 
--- a variant can itself be a token list, but for simplicity only a list of strings
--- i.e. not itself containing variants
 
+-- | a variant can itself be a token list, but for simplicity only a list of strings
+-- i.e. not itself containing variants
 type Ss = [String]
 
 -- matching functions in both ways
@@ -80,8 +80,7 @@ str2allStrings (Str st) = alls st where
 sstr :: Str -> String
 sstr = unwords . str2strings
 
--- to handle a list of variants
-
+-- | to handle a list of variants
 sstrV :: [Str] -> String
 sstrV ss = case ss of
   []  -> "*"
@@ -127,8 +126,7 @@ glues ss tt = case (ss,tt) of
   (_,[]) -> ss
   _ -> init ss ++ [last ss ++ head tt] ++ tail tt
 
--- to create the list of all lexical items
-
+-- | to create the list of all lexical items
 allItems :: Str -> [String]
 allItems (Str s) = concatMap allOne s where
   allOne t = case t of

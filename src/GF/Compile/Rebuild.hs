@@ -1,18 +1,18 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Rebuild
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:09 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.9 $
 --
 -- Rebuild a source module from incomplete and its with-instance.
 -----------------------------------------------------------------------------
 
-module Rebuild where
+module Rebuild (rebuildModule) where
 
 import Grammar
 import ModDeps

@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : PrOld
+-- Maintainer  : GF
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:09 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.7 $
 --
 -- a hack to print gf2 into gf1 readable files
 -- Works only for canonical grammars, printed into GFC. Otherwise we would have
@@ -15,7 +15,7 @@
 -- --- printnames are not preserved, nor are lindefs
 -----------------------------------------------------------------------------
 
-module PrOld where
+module PrOld (printGrammarOld, stripTerm) where
 
 import PrGrammar
 import CanonToGrammar
@@ -59,6 +59,7 @@ stripInfo (c,i) = case i of
 
 stripContext co = [(x, stripTerm t) | (x,t) <- co]
 
+stripTerm :: Term -> Term
 stripTerm t = case t of
   Q _ c -> Vr c
   QC _ c -> Vr c
