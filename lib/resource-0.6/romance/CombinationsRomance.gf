@@ -103,6 +103,11 @@ lin
   UseInt i = {s = \\_ => i.s} ;
   NoNum = noNum ;
 
+  SymbPN i = {s = i.s ; g = Masc} ; --- cannot know gender
+  SymbCN cn s =
+    {s = \\n => cn.s ! n ++ s.s ; 
+     g = cn.g} ;
+
   CNthatS = nounThatSentence ;
 
   PredVP = predVerbPhrase ;

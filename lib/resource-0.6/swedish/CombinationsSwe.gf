@@ -103,6 +103,14 @@ lin
   UseInt i = {s = table {Nom => i.s ; Gen => i.s ++ "s"}} ; ---
   NoNum = noNum ;
 
+  SymbPN i = {s = \\_ => i.s ; g = Neutr ; x = NoMasc} ;
+  SymbCN cn s =
+    {s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ; 
+     g = cn.g ;
+     x = cn.x ;
+     p = cn.p
+     } ;
+
   CNthatS = nounThatSentence ;
 
   PredVP = predVerbPhrase ;

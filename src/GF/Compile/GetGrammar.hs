@@ -31,7 +31,7 @@ getSourceModule :: FilePath -> IOE SourceModule
 getSourceModule file = do
   string    <- readFileIOE file
   let tokens = myLexer string
-  mo1  <- ioeErr $ err2err $ pModDef tokens
+  mo1  <- ioeErr $ {- err2err $ -} pModDef tokens
   ioeErr $ transModDef mo1
 
 
@@ -62,7 +62,7 @@ parseOldGrammar :: FilePath -> IOE ([FilePath],[A.TopDef])
 parseOldGrammar file = do
   putStrE $ "reading old file" +++ file
   s <- ioeIO $ readFileIf file
-  A.OldGr incl topdefs <- ioeErr $ err2err $ pOldGrammar $ oldLexer $ fixNewlines s
+  A.OldGr incl topdefs <- ioeErr $ {- err2err $ -} pOldGrammar $ oldLexer $ fixNewlines s
   includes <- ioeErr $ transInclude incl
   return (includes, topdefs)
 

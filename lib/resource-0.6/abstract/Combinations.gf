@@ -168,6 +168,9 @@ fun
   UseFun      : Fun -> CN ;                -- "successor"
   UseInt      : Int -> Num ;               -- "32"  --- assumes i > 1
 
+  SymbPN      : String -> PN ;             -- "x"
+  SymbCN      : CN -> String -> CN ;       -- "number x"
+
   ModAdj      : AP -> CN -> CN ;           -- "red car"
   DetNP       : Det -> CN -> NP ;          -- "every car"
   MassNP      : CN -> NP ;                 -- "wine"

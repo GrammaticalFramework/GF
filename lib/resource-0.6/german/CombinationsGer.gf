@@ -109,6 +109,11 @@ lin
   PosVG  = predVerbGroup True ;
   NegVG  = predVerbGroup False ;
 
+  SymbPN i = {s = \\_ => i.s} ;
+  SymbCN cn s =
+    {s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ; 
+     g = cn.g} ;
+
   PredV  = predVerb ;
   PredAP = predAdjective ;
   PredCN = predCommNoun ;

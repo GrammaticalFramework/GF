@@ -104,6 +104,11 @@ lin
   UseInt i = {s = table {Nom => i.s ; Gen => i.s ++ "'s"}} ; ---
   NoNum = noNum ;
 
+  SymbPN i = {s = table {Nom => i.s ; Gen => i.s ++ "'s"}} ; ---
+  SymbCN cn s =
+    {s = \\n,c => cn.s ! n ! c ++ s.s ; 
+     g = cn.g} ;
+
   PredVP = predVerbPhrase ;
   PosVG  = predVerbGroup True ;
   NegVG  = predVerbGroup False ;

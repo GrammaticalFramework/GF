@@ -101,6 +101,11 @@ lin
   NoNum = noNum ;
   UseInt i = {s = \\_ => i.s ; isNum = True} ; --- case endings sometimes needed
 
+  SymbPN i = {s = \\_ => i.s} ;  --- case endings often needed
+  SymbCN cn s =
+    {s = \\f,n,c => cn.s ! f ! n ! c ++ s.s ; 
+     g = cn.g} ;
+
   CNthatS = nounThatSentence ;
 
   PredVP = predVerbPhrase ;
