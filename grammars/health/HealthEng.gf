@@ -1,6 +1,6 @@
 -- use this path to read the grammar from the same directory
 --# -path=.:../newresource/abstract:../prelude:../newresource/english
-concrete HealthEng of Health = open PredicationEng, ResourceEng, ResourceExtEng, Prelude, SyntaxEng, ExtraEng, ParadigmsEng in {
+concrete HealthEng of Health = open PredicationEng, ResourceEng, ResourceExtEng, Prelude, Predef, SyntaxEng, ExtraEng, ParadigmsEng in {
 
 flags 
   startcat=Phr ; lexer=text ; parser=chart ; unlexer=text ;
