@@ -1739,7 +1739,7 @@ happyReturn1 = \a tks -> (returnM) a
 
 pCanon tks = happyThen (happyParse 0# tks) (\x -> happyReturn (happyOut7 x))
 
-happySeq = happyDontSeq
+happySeq = happyDoSeq -- H
 
 returnM :: a -> Err a
 returnM = return
@@ -1753,7 +1753,7 @@ happyError ts =
 
 myLexer = tokens
 {-# LINE 1 "GenericTemplate.hs" #-}
--- $Id: ParGFC.hs,v 1.4 2004/09/23 15:41:45 aarne Exp $
+-- $Id: ParGFC.hs,v 1.5 2004/12/02 17:13:17 bringert Exp $
 
 
 
