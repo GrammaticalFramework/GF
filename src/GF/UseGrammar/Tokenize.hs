@@ -130,13 +130,20 @@ reservedAnsiCWords = words $
 
 unknown2string :: (String -> Bool) -> [CFTok] -> [CFTok]
 unknown2string isKnown = map mkOne where
-  mkOne t@(TS s) = if isKnown s then t else mkTL s
+  mkOne t@(TS s) 
+    | isKnown s = t
+    | all isDigit s = tI s 
+    | otherwise = tV s
   mkOne t@(TC s) = if isKnown s then t else mkTL s
   mkOne t        = t
 
 unknown2var :: (String -> Bool) -> [CFTok] -> [CFTok]
 unknown2var isKnown = map mkOne where
   mkOne t@(TS "??") = if isKnown "??" then t else tM "??"
+  mkOne t@(TS s) 
+    | isKnown s = t
+    | all isDigit s = tI s 
+    | otherwise = tV s
   mkOne t@(TS s) = if isKnown s then t else tV s
   mkOne t@(TC s) = if isKnown s then t else tV s
   mkOne t        = t
