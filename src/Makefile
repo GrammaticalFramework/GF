@@ -122,7 +122,7 @@ dist:
 	cd $(DIST_DIR)/src && autoconf && rm -rf autom4te.cache
 	find $(DIST_DIR) -name .cvsignore -exec rm -f {} ';'
 	cd $(DIST_DIR) && rm -rf $(NOT_IN_DIST)
-	tar -zcf $(DIST_DIR).tar.gz $(DIST_DIR)
+	gtar -zcf $(DIST_DIR).tar.gz $(DIST_DIR)
 	zip -r $(DIST_DIR).zip $(DIST_DIR)
 	rm -rf $(DIST_DIR)
 
@@ -135,7 +135,7 @@ binary-dist:
 	./configure CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
 	make unix gfdoc jar
 	make prefix=$(BIN_DIST_DIR)/$(prefix) install 
-	tar -zcf GF-$(PACKAGE_VERSION)-$(host).tar.gz $(BIN_DIST_DIR)
+	gtar -zcf GF-$(PACKAGE_VERSION)-$(host).tar.gz $(BIN_DIST_DIR)
 
 install-gf:
 	$(INSTALL) -d $(bindir)
