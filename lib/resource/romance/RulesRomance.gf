@@ -52,8 +52,6 @@ lin
 
   UseV2 = transAsVerb ;
 
-----  ComplV3 = complDitransVerb ;
-
   ComplA2S = predAdjSent2 ; ---- clitics get lost
 
   AdjPart = adjPastPart ;
@@ -99,9 +97,9 @@ lin
 --3 Sentences and relative clauses
 --
 
-  SlashV2 = slashTransVerb ;
-----  SlashVV2 = slashVerbVerb ;
-----  SlashAdv cl p = slashAdverb cl p.s ;
+  SlashV2  = slashTransVerb ;
+  SlashVV2 = slashVerbVerb ;
+  SlashAdv = slashAdverb ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;

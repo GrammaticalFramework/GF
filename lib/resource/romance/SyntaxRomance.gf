@@ -635,10 +635,15 @@ oper
     v ** {s2 = p1 ; c = c1 ; s3 = p2 ; c3 = c2} ;
 
 --- This must be completed to account for the order of the clitics.
+--- In the rule below, the last argument cannot get cliticized.
 
-{- ----
   complDitransVerb : 
-    DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = \donner,jean,vin ->
+    DitransVerb -> NounPhrase -> NounPhrase -> Complemnt = \donner,jean,vin ->
+      complTransVerbGen 
+        donner jean 
+        (\\_,_,_ => donner.s3 ++ vin.s ! case2pform donner.c3) ;
+
+{-
     {s = \\b,g,w =>
        let 
          adonne = formVerb2 donner g w ;
@@ -926,6 +931,17 @@ oper
     \jean,aimer ->
     predVerbGroupClause jean (predClauseGroup aimer (complVerb aimer)) **
     complementOfTransVerb aimer ;
+
+  slashVerbVerb : NounPhrase -> VerbVerb -> TransVerb -> ClauseSlashNounPhrase = 
+    \jean,vouloir,aimer ->
+    predVerbGroupClause jean 
+      (predClauseGroup aimer (complVerbVerb vouloir 
+         (predVerbGroup True {s = [] ; a = Simul} (predClauseGroup aimer (complVerb aimer))))) **
+    complementOfTransVerb aimer ;
+
+  slashAdverb : Clause -> {s : Str ; c : CaseA} -> ClauseSlashNounPhrase = 
+    \ilhabite,dans -> ilhabite ** {s2 = dans.s ; c = dans.c} ;
+
 
 --2 Relative pronouns and relative clauses
 --
