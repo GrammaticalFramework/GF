@@ -25,7 +25,7 @@ incomplete concrete CategoriesRomance of Categories =
   open Prelude, SyntaxRomance in {
 
 flags 
-  startcat=Phr ; 
+  startcat=Phr ; optimize=all ;
 
 lincat 
   N      = CommNoun ; 
@@ -66,7 +66,7 @@ lincat
 
   V2S    = TransVerb ;
   V2Q    = TransVerb ;
-  V2V    = TransVerb ** {s3 : Preposition ; c3 : CaseA} ;
+  V2V    = TransVerb ** {c3 : CaseA} ;
   V2A    = TransVerb ;
   V0     = Verb ;
 

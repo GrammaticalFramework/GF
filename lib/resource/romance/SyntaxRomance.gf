@@ -623,6 +623,38 @@ oper
 
   posNeg : Bool -> (verb, compl : Str) -> Str ;
 
+  complDitransAdjVerb : 
+    TransVerb -> NounPhrase -> AdjPhrase -> Complemnt = \rend,toi,sec ->
+      let
+        rendtoi = complTransVerb rend toi
+      in
+        \\g,n,p =>
+        let rt = rendtoi ! g ! n ! p in 
+        {clit = rt.clit ; part = rt.part ; 
+         compl = rt.compl ++ sec.s ! AF g n
+        } ;
+
+  DitransVerbVerb = TransVerb ** {c3 : CaseA} ;
+
+  complDitransVerbVerb : 
+    Bool -> DitransVerbVerb -> NounPhrase -> VerbPhrase -> Complemnt = 
+     \obj, demander, toi, nager ->
+      let
+        rendtoi = complTransVerb demander toi
+      in
+        \\g,n,p =>
+        let 
+           rt = rendtoi ! g ! n ! p ;
+           agr : Gender * Number * Person = case obj of {
+             True  => <pgen2gen toi.g, toi.n, toi.p> ;
+             False => <g,    n,    p>
+             } 
+        in 
+        {clit = rt.clit ; part = rt.part ; 
+         compl = rt.compl ++ prepCase demander.c ++ 
+                 nager.s ! VIInfinit ! agr.p1 ! agr.p2 ! agr.p3
+        } ;
+
 
 --2 Adverbs
 --
