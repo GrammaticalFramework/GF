@@ -105,6 +105,15 @@ allCatsOf gr =
                     isModAbs m,
                     (c, C.AbsCat cont _) <- tree2list (jments m)]
 
+allBindCatsOf :: GFCGrammar -> [Cat]
+allBindCatsOf gr = 
+  nub [c | (i, ModMod m) <- modules gr,
+                    isModAbs m,
+                    (c, C.AbsFun typ _) <- tree2list (jments m),
+                    Ok (cont,_) <- [firstTypeForm typ],
+                    c <- concatMap fst $ errVal [] $ mapM (catSkeleton . snd) cont
+                    ]
+
 funsForType :: (Val -> Type -> Bool) -> GFCGrammar -> Val -> [(Fun,Type)]
 funsForType compat gr val = [(fun,typ) | (fun,typ) <- funRulesOf gr, 
                                          compat val typ]

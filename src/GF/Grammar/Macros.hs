@@ -273,6 +273,10 @@ typeString = constPredefRes "String"
 typeInt = constPredefRes "Int"
 typeInts i = App (constPredefRes "Ints") (EInt i)
 
+isTypeInts ty = case ty of
+  App c _ -> c == constPredefRes "Ints"
+  _ -> False
+
 constPredefRes s = Q (IC "Predef") (zIdent s)
 
 isPredefConstant t = case t of

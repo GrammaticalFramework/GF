@@ -158,6 +158,7 @@ renameTerm env vars = ren vars where
   ren vs trm = case trm of
     Abs x b    -> liftM  (Abs x) (ren (x:vs) b)
     Prod x a b -> liftM2 (Prod x) (ren vs a) (ren (x:vs) b)
+    Typed a b  -> liftM2 Typed (ren vs a) (ren vs b)
     Vr x      
       | elem x vs -> return trm
       | otherwise -> renid trm

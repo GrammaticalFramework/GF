@@ -6,6 +6,7 @@ import Operations
 import Option
 import Ident
 import AbsGFC
+import LookAbs (allBindCatsOf)
 import GFC
 import Values (isPredefCat,cPredefAbs)
 import PrGrammar
@@ -31,9 +32,10 @@ canon2cf opts gr c = tracePrt "#size of CF" (err id (show.length.rulesOfCF)) $ d
   let cncs = [m | (n, M.ModMod m) <- M.modules gr, elem n ms]
   let mms  = [(a, tree2list (M.jments m)) | m <- cncs]
   rules0 <- liftM concat $ mapM (uncurry (cnc2cfCond opts)) mms
+  let bindcats = map snd $ allBindCatsOf gr 
   let rules = filter (not . isCircularCF) rules0 ---- temporarily here
   let grules = groupCFRules rules
-  let predef = mkCFPredef opts grules
+  let predef = mkCFPredef opts bindcats grules
   return $ CF predef
 
 cnc2cfCond :: Options -> Ident -> [(Ident,Info)] -> Err [CFRule]
@@ -151,17 +153,18 @@ term2CFItems m t = errIn "forming cf items" $ case t of
       _   -> prtBad "cannot extract record field from" arg
     cIQ c = if isPredefCat c then CIQ cPredefAbs c else CIQ m c
 
-mkCFPredef :: Options -> [CFRuleGroup] -> ([CFRuleGroup],CFPredef)
-mkCFPredef opts rules = (ruls, \s -> preds0 s ++ look s) where
+mkCFPredef :: Options -> [Ident] -> [CFRuleGroup] -> ([CFRuleGroup],CFPredef)
+mkCFPredef opts binds rules = (ruls, \s -> preds0 s ++ look s) where
   (ruls,preds) = if oElem lexerByNeed opts  -- option -cflexer
                    then predefLexer rules 
                    else (rules,emptyTrie)
   preds0 s = 
     [(cat,         metaCFFun)     | TM _ _ <- [s], cat <- cats] ++
-    [(cat,         varCFFun x)    | TV x   <- [s], cat <- catVarCF : cats] ++
+    [(cat,         varCFFun x)    | TV x   <- [s], cat <- catVarCF : bindcats] ++
     [(cfCatString, stringCFFun t) | TL t   <- [s]]              ++
     [(cfCatInt,    intCFFun t)    | TI t   <- [s]]
-  cats = map fst rules
+  cats = nub [c | (_,rs) <- rules, (_,(_,its)) <- rs, CFNonterm c <- its]
+  bindcats = [c | c <- cats, elem (cfCat2Ident c) binds]
   look = concatMap snd . map (trieLookup preds) . wordsCFTok --- for TC tokens
 
 --- TODO: integrate with morphology
