@@ -51,14 +51,7 @@ transModDef x = case x of
       MTAbstract id -> do
         id' <- transIdent id
         return (transAbsDef, GM.MTAbstract, id')
-      MTResource id -> case body of
-        MReuse c -> do
-          id' <- transIdent id
-          c' <- transIdent c
-          return (transResDef, GM.MTReuse c', id')
-        _ -> do
-          id' <- transIdent id
-          return (transResDef, GM.MTResource, id')
+      MTResource id -> mkModRes id GM.MTResource body 
       MTConcrete id open -> do
         id'   <- transIdent id
         open' <- transIdent open
@@ -68,14 +61,11 @@ transModDef x = case x of
         a'   <- transOpen a
         b'   <- transOpen a
         return (transAbsDef, GM.MTTransfer a' b', id')
-      MTInterface id -> do
-        id' <- transIdent id
-        return (transResDef, GM.MTInterface, id')
+      MTInterface id -> mkModRes id GM.MTInterface body
       MTInstance id open -> do
-        id'   <- transIdent id
         open' <- transIdent open
-        return (transResDef, GM.MTInstance open', id')
-    
+        mkModRes id (GM.MTInstance open') body
+
     case body of 
       MBody extends opens defs -> do
         extends' <- transExtend extends
@@ -83,13 +73,27 @@ transModDef x = case x of
         defs0    <- mapM trDef $ getTopDefs defs
         defs'    <- U.buildAnyTree [d | Left  ds <- defs0, d <- ds]
         flags'   <- return       [f | Right fs <- defs0, f <- fs]
-        return $ (id', GM.ModMod (GM.Module mtyp' mstat' flags' extends' opens' defs'))
+        return (id',GM.ModMod (GM.Module mtyp' mstat' flags' extends' opens' defs'))
       MReuse _ -> do
         return (id', GM.ModMod (GM.Module mtyp' mstat' [] Nothing [] NT))
       MWith m opens -> do
         m'     <- transIdent m
         opens' <- mapM transOpen opens 
         return (id', GM.ModWith mtyp' mstat' m' opens')
+ where
+       mkModRes id mtyp body = do
+         id' <- transIdent id
+         case body of
+           MReuse c -> do
+             c' <- transIdent c
+             mtyp' <- trMReuseType mtyp c'
+             return (transResDef, GM.MTReuse mtyp', id')
+           _ -> return (transResDef, mtyp, id')
+       trMReuseType mtyp c = case mtyp of
+         GM.MTInterface -> return $ GM.MRInterface c
+         GM.MTInstance op -> return $ GM.MRInstance c op
+         GM.MTResource -> return $ GM.MRResource c
+
 
 transComplMod :: ComplMod -> GM.ModuleStatus
 transComplMod x = case x of
