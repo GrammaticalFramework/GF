@@ -36,9 +36,7 @@ data ShellState = ShSt {
   canModules :: CanonGrammar ,       -- compiled abstracts and concretes
   srcModules :: G.SourceGrammar ,    -- saved resource modules
   cfs        :: [(Ident,CF)] ,       -- context-free grammars
--- peb 25/5-04:
---  cfParserInfos :: [(Ident, CFParserInfo)], -- parser information
-  cfParserInfos :: Cnv.CFParserInfo, -- peb 27/5-04
+  pInfos     :: Cnv.PInfo,           -- peb 8/6
   morphos    :: [(Ident,Morpho)],    -- morphologies
   gloptions  :: Options,             -- global options
   readFiles  :: [(FilePath,ModTime)],-- files read
@@ -61,8 +59,7 @@ emptyShellState = ShSt {
   canModules = M.emptyMGrammar,
   srcModules = M.emptyMGrammar,
   cfs        = [],
---  cfParserInfos = [], -- peb 25/5-04
-  cfParserInfos = Cnv.emptyParserInfo, -- peb 27/5-04
+  pInfos     = Cnv.pInfo M.emptyMGrammar, -- peb 8/6
   morphos    = [],
   gloptions  = noOptions,
   readFiles  = [],
@@ -81,8 +78,7 @@ data StateGrammar = StGr {
   cncId   :: Ident,
   grammar :: CanonGrammar,
   cf      :: CF,
---  cfParserInfo :: CFParserInfo, -- peb 25/5-04
-  cfParserInfo :: Cnv.CFParserInfo, -- peb 27/5-04
+  pInfo   :: Cnv.PInfo, -- peb 8/6
   morpho  :: Morpho,
   loptions :: Options
   }
@@ -92,8 +88,7 @@ emptyStateGrammar = StGr {
   cncId   = identC "#EMPTY", ---
   grammar = M.emptyMGrammar,
   cf      = emptyCF,
---  cfParserInfo = emptyParserInfo, -- peb 25/5-04
-  cfParserInfo = Cnv.emptyParserInfo, -- peb 27/5-04
+  pInfo   = Cnv.pInfo M.emptyMGrammar, -- peb 8/6
   morpho  = emptyMorpho,
   loptions = noOptions
   }
@@ -101,8 +96,7 @@ emptyStateGrammar = StGr {
 -- analysing shell grammar into parts
 stateGrammarST = grammar
 stateCF        = cf
---stateParserInfo= cfParserInfo
-stateParserInfo= cfParserInfo
+statePInfo     = pInfo
 stateMorpho    = morpho
 stateOptions   = loptions
 stateGrammarWords = allMorphoWords . stateMorpho
@@ -133,8 +127,8 @@ updateShellState opts sh (gr,(sgr,rts)) = do
       concr0 = ifNull Nothing (return . last) concrs
       notInrts f = notElem f $ map fst rts
   cfs <- mapM (canon2cf opts cgr) concrs --- would not need to update all...
---  let parserInfos = map cf2parserInfo cfs  -- peb 25/5-04
-  let parserInfos = Cnv.convertCanonToCFParserInfo gr  -- peb 27/5-04
+
+  let pinfos = Cnv.pInfo gr  -- peb 8/6
 
   let funs = funRulesOf cgr
   let cats = allCatsOf cgr
@@ -153,8 +147,7 @@ updateShellState opts sh (gr,(sgr,rts)) = do
     canModules = cgr,
     srcModules = src,
     cfs        = zip concrs cfs,
---    cfParserInfos = zip concrs parserInfos, -- peb 25/5-04
-    cfParserInfos = parserInfos, -- peb 27/5-04
+    pInfos     = pinfos, -- peb 8/6
     morphos    = zip concrs (map (mkMorpho cgr) concrs),
     gloptions  = opts,
     readFiles  = [ft | ft@(f,_) <- readFiles sh, notInrts f] ++ rts,
@@ -199,8 +192,7 @@ purgeShellState sh = ShSt {
   canModules = M.MGrammar $ purge $ M.modules $ canModules sh,
   srcModules = M.emptyMGrammar,
   cfs        = cfs sh,
---  cfParserInfos = cfParserInfos sh, -- peb 25/5-04
-  cfParserInfos = cfParserInfos sh, -- peb 27/5-04
+  pInfos     = pInfos sh,
   morphos    = morphos sh,
   gloptions  = gloptions sh,
   readFiles  = [],
@@ -257,8 +249,7 @@ stateGrammarOfLang st l = StGr {
   cncId    = l,
   grammar  = can,
   cf       = maybe emptyCF id (lookup l (cfs st)),
---  cfParserInfo = maybe emptyParserInfo id (lookup l (cfParserInfos st)), -- peb 25/5-04
-  cfParserInfo = cfParserInfos st, -- peb 27/5-04
+  pInfo    = pInfos st, -- peb 8/6
   morpho   = maybe emptyMorpho id (lookup l (morphos st)),
   loptions = errVal noOptions $ lookupOptionsCan can
   }
@@ -288,8 +279,7 @@ stateAbstractGrammar st = StGr {
   cncId   = identC "#Cnc", ---
   grammar = canModules st, ---- only abstarct ones
   cf      = emptyCF,
---  cfParserInfo = emptyParserInfo, -- peb 25/5-04
-  cfParserInfo = Cnv.emptyParserInfo, -- peb 27/5-04
+  pInfo   = Cnv.pInfo (canModules st), -- peb 8/6
   morpho  = emptyMorpho,
   loptions = gloptions st ----
   }

@@ -37,7 +37,7 @@ import GrammarToHaskell
 
 -- the cf parsing algorithms
 import ChartParser -- or some other CF Parser
-import qualified ParseCFviaCFG as PCF
+import qualified ParseCF as PCF
 --import qualified ParseGFCviaCFG as PGFC
 --import NewChartParser
 --import NewerChartParser
@@ -177,12 +177,12 @@ customGrammarPrinter =
 -- add your own grammar printers here
 -- grammar conversions, (peb) 
   ,(strCI "gfc_show",   show . grammar2canon . stateGrammarST)
-  -- ,(strCI "tnf",        prCanon . Cnv.convertCanonToTNF . stateGrammarST)
-  ,(strCI "emcfg",      Prt.prt . Cnv.convertCanonToEMCFG . stateGrammarST)
-  ,(strCI "emcfg_cf",   Prt.prt . Cnv.convertCanonViaEMCFGtoCFG . stateGrammarST)
-  ,(strCI "mcfg",       Prt.prt . Cnv.convertCanonToMCFG . stateGrammarST)
-  ,(strCI "mcfg_cf",    Prt.prt . Cnv.convertCanonToCFG . stateGrammarST)
-  ,(strCI "mcfg_show",  show . Cnv.convertCanonToMCFG . stateGrammarST)
+  ,(strCI "emcfg",      Prt.prt . Cnv.emcfg . statePInfo)
+  ,(strCI "mcfg",       Prt.prt . Cnv.mcfg . statePInfo)
+  ,(strCI "cfg",        Prt.prt . Cnv.cfg . statePInfo)
+  ,(strCI "emcfg_show", show . Cnv.emcfg . statePInfo)
+  ,(strCI "mcfg_show",  show . Cnv.mcfg . statePInfo)
+  ,(strCI "cfg_show",   show . Cnv.cfg . statePInfo)
 --- also include printing via grammar2syntax!
   ] 
   ++ moreCustomGrammarPrinter

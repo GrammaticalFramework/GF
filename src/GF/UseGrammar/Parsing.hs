@@ -20,7 +20,7 @@ import Option
 import Custom
 import ShellState
 
-import qualified ParseGFCviaCFG as N
+import qualified ParseGFC as N
 
 import Operations
 
@@ -71,7 +71,7 @@ trees2trms opts sg cn as ts0 info = do
       ts1 <- return (map cf2trm0 ts0) ----- should not need annot
       mapM (checkErr . (annotate gr) . trExp) ts1 ---- complicated; often fails
     _ -> do
-      (ts1,ss) <- checkErr $ mapErr postParse ts0
+      (ts1,ss) <- checkErr $ mapErrN 10 postParse ts0
       if null ts1 then raise ss else return ()
       ts2 <- mapM (checkErr . annotate gr . refreshMetas [] . trExp) ts1 ---- 
       if forgive then return ts2 else do
