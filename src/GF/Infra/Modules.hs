@@ -114,8 +114,17 @@ depPathModule m = fors m ++ exts m ++ opens m where
   fors m = case mtype m of
     MTTransfer i j -> [i,j]
     MTConcrete i   -> [oSimple i]
+    MTInstance i   -> [oSimple i]
     _              -> []
   exts m = map oSimple $ maybe [] return $ extends m
+
+-- all dependencies
+allDepsModule :: Ord i => MGrammar i f a -> Module i f a -> [OpenSpec i]
+allDepsModule gr m = iterFix add os0 where
+  os0 = depPathModule m
+  add os = [m | o <- os, Just (ModMod n) <- [lookup (openedModule o) mods], 
+                m <- depPathModule n]
+  mods = modules gr
 
 -- all modules that a module extends, directly or indirectly
 allExtends :: (Show i,Ord i) => MGrammar i f a -> i -> [i]
