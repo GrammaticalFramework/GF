@@ -269,7 +269,7 @@ oper pronChtoTo: Pronoun =
     PF Nom _ _  => "что-то"  ; 
     PF Gen _ _ => "чего-то" ;
     PF Dat _  _ => "чему-то" ; 
-    PF Acc _  _ => "чего-то" ; 
+    PF Acc _  _ => "что-то" ; 
     PF Inst _ _ => "чем-то" ;
     PF Prepos _ _ => "чём-то" 
     } ;
@@ -1022,7 +1022,7 @@ oper verbPredpochitat : Verbum = verbDecl Imperfective First "предпочит
 oper verbOtpravlyat : Verbum = verbDecl Imperfective First "отправля" "ю" "отправлял" "отправляй" "отправлять";
 oper verbSlomat : Verbum = verbDecl Perfective First "слома" "ю" "сломал" "сломай" "сломать";
 oper verbByut : Verbum = verbDecl Perfective First "буд" "у" "был" "будь" "быть";
-oper verbMoch : Verbum = verbDecl Imperfective First "мог" "у" "мог" "моги" "мочь";
+oper verbMoch : Verbum = verbDeclMoch Imperfective First "мог" "у" "мог" "моги" "мочь" "мож";
 
 -- Verbs with vowel "ё": "даёшь" (give), "пьёшь" (drink)  :
 oper verbDavat : Verbum = verbDecl Imperfective FirstE "да" "ю" "давал" "давай" "давать";
@@ -1051,52 +1051,67 @@ oper AspectVoice: Type = { s : VerbConj => Str ;  asp: Aspect } ;
 
 -- "PresentVerb" takes care of the present  tense conjugation.
 
-param PresentVF = PRF Number Person ;
+param PresentVF = PRF GenNum Person;
 oper PresentVerb : Type = PresentVF => Str ;
 oper presentConjDolzhen: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
-    PRF Sg P1 => del+ sgP1End ;
-    PRF Sg P2 => del+ sgP1End ;
-    PRF Sg P3 => del+ "на" ;
-    PRF Pl _ => del+ "ны" 
-  };
+    PRF APl _ => del+ "ны" ;
+    PRF (ASg Masc) P1 => del+ sgP1End ;
+    PRF (ASg Fem) P1 => del+ "на" ;
+    PRF (ASg Neut) P1 => del+ "но" ;
+    PRF (ASg Masc) P2 => del+ sgP1End ;
+    PRF (ASg Fem) P2 => del+ "на" ;
+    PRF (ASg Neut) P2 => del+ "но" ;
+    PRF (ASg Masc) P3 => del+ sgP1End ;
+    PRF (ASg Fem) P3 => del+ "на" ;
+    PRF (ASg Neut) P3 => del+ "но"   };
 
 oper presentConjMixed: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
-    PRF Sg P1 => del+ sgP1End ;
-    PRF Sg P2 => del+ "ешь" ;
-    PRF Sg P3 => del+ "ет" ;
-    PRF Pl P1 => del+ "им" ;
-    PRF Pl P2 => del+ "ите'" ;
-    PRF Pl P3 => del+ "ят"   
+    PRF (ASg _) P1 => del+ sgP1End ;
+    PRF (ASg _) P2 => del+ "ешь" ;
+    PRF (ASg _) P3 => del+ "ет" ;
+    PRF APl P1 => del+ "им" ;
+    PRF APl P2  => del+ "ите" ;
+    PRF APl P3  => del+ "ят"   
   };
 oper presentConj2: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
-    PRF Sg P1 => del+ sgP1End ;
-    PRF Sg P2 => del+ "ишь" ;
-    PRF Sg P3 => del+ "ит" ;
-    PRF Pl P1 => del+ "им" ;
-    PRF Pl P2 => del+ "ите'" ;
-    PRF Pl P3 => del+ "ят"   
+    PRF (ASg _) P1 => del+ sgP1End ;
+    PRF (ASg _) P2 => del+ "ишь" ;
+    PRF (ASg _) P3  => del+ "ит" ;
+    PRF APl P1 => del+ "им" ;
+    PRF APl P2 => del+ "ите" ;
+    PRF APl P3 => del+ "ят"   
   };
 
 oper presentConj1E: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
-    PRF Sg P1 => del+ sgP1End ;
-    PRF Sg P2 => del+ "ёшь" ;
-    PRF Sg P3 => del+ "ёт" ;
-    PRF Pl P1 => del+ "ём" ;
-    PRF Pl P2 => del+ "ёте'" ;
-    PRF Pl P3 => del+ sgP1End + "т"   
+    PRF (ASg _) P1 => del+ sgP1End ;
+    PRF (ASg _) P2 => del+ "ёшь" ;
+    PRF (ASg _) P3  => del+ "ёт" ;
+    PRF APl P1 => del+ "ём" ;
+    PRF APl P2 => del+ "ёте" ;
+    PRF APl P3 => del+ sgP1End + "т"   
   };
 oper presentConj1: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
-    PRF Sg P1 => del+ sgP1End ;
-    PRF Sg P2 => del+ "ешь" ;
-    PRF Sg P3 => del+ "ет" ;
-    PRF Pl P1 => del+ "ем" ;
-    PRF Pl P2 => del+ "ете'" ;
-    PRF Pl P3 => del+ sgP1End + "т"   
+    PRF (ASg _) P1 => del+ sgP1End ;
+    PRF (ASg _) P2 => del+ "ешь" ;
+    PRF (ASg _) P3 => del+ "ет" ;
+    PRF APl P1 => del+ "ем" ;
+    PRF APl P2 => del+ "ете" ;
+    PRF APl P3 => del+ sgP1End + "т"   
+  };
+
+oper presentConj1Moch: Str -> Str -> Str -> PresentVerb = \del, sgP1End, altRoot ->
+  table {
+    PRF (ASg _) P1 => del + sgP1End ;
+    PRF (ASg _) P2 => altRoot + "ешь" ;
+    PRF (ASg _) P3 => altRoot + "ет" ;
+    PRF APl P1 => altRoot + "ем" ;
+    PRF APl P2 => altRoot + "ете" ;
+    PRF APl P3 => del+ sgP1End + "т"   
   };
 
 -- "PastVerb" takes care of the past tense conjugation.
@@ -1139,6 +1154,14 @@ oper verbDecl: Aspect -> Conjugation -> Str -> Str -> Str -> Str ->Str -> Verbum
     Dolzhen => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConjDolzhen del sgP1End) (pastConjDolzhen sgMascPast)) (pastConjDolzhen sgMascPast)
    } 
 };
+
+-- for verbs like "мочь" ("can") with changing consonants (first conjugation):
+-- "могу - можешь"
+oper verbDeclMoch: Aspect -> Conjugation -> Str -> Str -> Str -> Str ->Str -> Str -> Verbum = 
+   \a, c, del, sgP1End, sgMascPast, imperSgP2, inf, altRoot -> case a of 
+{  Perfective  => mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj1Moch del sgP1End altRoot) (pastConj sgMascPast))  (pastConj sgMascPast);
+    Imperfective  => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj1Moch del sgP1End altRoot) (pastConj sgMascPast))  (pastConj sgMascPast)
+ };
 
 -- "mkVerb" produce the passive forms from 
 -- the active forms using the "mkPassive" method.
@@ -1206,25 +1229,25 @@ oper
     VIMP Pl P1 => ["давайте "] + inf ;
     VIMP Sg P2 => imper ;
     VIMP Pl P2 => imper+"те" ;
-    VIMP Sg P3 => ["пускай "]  + presentFuture ! (PRF Sg P3) ;
-    VIMP Pl P3 => ["пускай "] + presentFuture ! (PRF Pl P3) ;
+    VIMP Sg P3 => ["пускай "]  + presentFuture ! (PRF (ASg Masc) P3) ;
+    VIMP Pl P3 => ["пускай "] + presentFuture ! (PRF APl P3) ;
     VSUB (ASg Masc) => past ! (PSF (ASg Masc)) +[" бы"];
     VSUB (ASg Fem) => past ! (PSF (ASg Fem)) +[" бы"];
 
     VSUB (ASg Neut)  => past ! (PSF (ASg Neut) )+[" бы"];
     VSUB APl  => past ! (PSF APl) +[" бы"];
-    VIND (VPresent Sg P1) => presentFuture ! ( PRF Sg P1);
-    VIND (VPresent Sg P2) => presentFuture! (PRF Sg P2) ;
-    VIND (VPresent Sg P3) => presentFuture ! (PRF Sg P3) ;
-    VIND (VPresent Pl P1) => presentFuture ! (PRF Pl P1);
-    VIND (VPresent Pl P2) => presentFuture ! (PRF Pl P2);
-    VIND (VPresent Pl P3) => presentFuture ! (PRF Pl P3);
-    VIND (VFuture Sg P1) => ["буду "] + presentFuture ! (PRF Sg P1) ;
-    VIND (VFuture Sg P2) => ["будешь"] + presentFuture ! (PRF Sg P2) ;
-    VIND (VFuture Sg P3) => ["будет "] + presentFuture ! (PRF Sg P3) ;
-    VIND (VFuture Pl P1) => ["будем "] + presentFuture ! (PRF Pl P1) ;
-    VIND (VFuture Pl P2) => ["будете "] + presentFuture ! (PRF Pl P2) ;
-    VIND (VFuture Pl P3) => ["будут "] + presentFuture ! (PRF Pl P3) ;
+    VIND (VPresent Sg P1) => presentFuture ! ( PRF (ASg Masc) P1);
+    VIND (VPresent Sg P2) => presentFuture! (PRF (ASg Masc) P2) ;
+    VIND (VPresent Sg P3) => presentFuture ! (PRF (ASg Masc) P3) ;
+    VIND (VPresent Pl P1) => presentFuture ! (PRF APl P1);
+    VIND (VPresent Pl P2) => presentFuture ! (PRF APl P2);
+    VIND (VPresent Pl P3) => presentFuture ! (PRF APl P3);
+    VIND (VFuture Sg P1) => ["буду "] + presentFuture ! (PRF (ASg Masc) P1) ;
+    VIND (VFuture Sg P2) => ["будешь"] + presentFuture ! (PRF (ASg Masc) P2) ;
+    VIND (VFuture Sg P3) => ["будет "] + presentFuture ! (PRF (ASg Masc) P3) ;
+    VIND (VFuture Pl P1) => ["будем "] + presentFuture ! (PRF APl P1) ;
+    VIND (VFuture Pl P2) => ["будете "] + presentFuture ! (PRF APl P2) ;
+    VIND (VFuture Pl P3) => ["будут "] + presentFuture ! (PRF APl P3) ;
     
     VIND (VPast     (ASg Masc)) => past ! (PSF (ASg Masc)) ;
     VIND (VPast  (ASg Fem))  => past ! (PSF (ASg Fem) ) ;
@@ -1237,12 +1260,12 @@ oper
  oper perfectiveActivePattern: Str -> Str -> PresentVerb -> PastVerb -> AspectVoice = 
      \inf, imper, presentFuture, past -> { s=  table {
     VINF  => inf ;
-    VIMP Sg P1 => ["давайте "]+ presentFuture ! (PRF Sg P1);
-    VIMP Pl P1 => ["давайте "] + presentFuture ! (PRF Pl P1);
+    VIMP Sg P1 => ["давайте "]+ presentFuture ! (PRF (ASg Masc) P1);
+    VIMP Pl P1 => ["давайте "] + presentFuture ! (PRF APl P1);
     VIMP Sg P2 => imper ;
     VIMP Pl P2 => imper+"те" ;
-    VIMP Sg P3 => ["пускай "]  + presentFuture ! (PRF Sg P3) ;
-    VIMP Pl P3 => ["пускай "] + presentFuture ! (PRF Pl P3) ;
+    VIMP Sg P3 => ["пускай "]  + presentFuture ! (PRF (ASg Masc) P3) ;
+    VIMP Pl P3 => ["пускай "] + presentFuture ! (PRF APl P3) ;
     VSUB (ASg Masc) => past ! (PSF (ASg Masc)) +[" бы"];
     VSUB (ASg Fem) => past ! (PSF (ASg Fem)) +[" бы"];
 
@@ -1254,12 +1277,12 @@ oper
     VIND (VPresent Pl P1) => nonExist ;
     VIND (VPresent Pl P2) => nonExist ;
     VIND (VPresent Pl P3) => [] ;
-    VIND (VFuture Sg P1) => presentFuture ! (PRF Sg P1) ;
-    VIND (VFuture Sg P2) => presentFuture ! (PRF Sg P2) ;
-    VIND (VFuture Sg P3) => presentFuture ! (PRF Sg P3) ;
-    VIND (VFuture Pl P1) => presentFuture ! (PRF Pl P1) ;
-    VIND (VFuture Pl P2) => presentFuture ! (PRF Pl P2) ;
-    VIND (VFuture Pl P3) => presentFuture ! (PRF Pl P3) ;
+    VIND (VFuture Sg P1) => presentFuture ! (PRF (ASg Masc) P1) ;
+    VIND (VFuture Sg P2) => presentFuture ! (PRF (ASg Masc) P2) ;
+    VIND (VFuture Sg P3) => presentFuture ! (PRF (ASg Masc) P3) ;
+    VIND (VFuture Pl P1) => presentFuture ! (PRF APl P1) ;
+    VIND (VFuture Pl P2) => presentFuture ! (PRF APl P2) ;
+    VIND (VFuture Pl P3) => presentFuture ! (PRF APl P3) ;
     VIND (VPast  (ASg Masc)) => past ! (PSF (ASg Masc)) ;
     VIND (VPast  (ASg Fem))  => past ! (PSF (ASg Fem) ) ;
     VIND (VPast  (ASg Neut) ) => past ! (PSF (ASg Neut))  ;
