@@ -38,6 +38,29 @@ Procedure for making a GF release:
 
 10. Build an x86/linux RPM (should be done on a Mandrake Linux box):
 
+    Setup for building RPMs (first time only):
+
+    - Make sure that you have the directories neccessary to build
+      RPMs:
+      
+      $ mkdir -p ~/rpm/{BUILD,RPMS/$ARCH,RPMS/noarch,SOURCES,SRPMS,SPECS,tmp}
+
+    - Create ~/.rpmrc with the following contents:
+
+buildarchtranslate: i386: i586
+buildarchtranslate: i486: i586
+buildarchtranslate: i586: i586
+buildarchtranslate: i686: i586
+
+    - Create ~/.rpmmacros with the following contents:
+
+%_topdir        %(echo ${HOME}/rpm)
+%_tmppath       %{_topdir}/tmp
+
+%packager       Your Name <yourusername@cs.chalmers.se>
+
+    Build the RPM:
+
    $ cd src 
    $ ./configure
    $ make rpm
