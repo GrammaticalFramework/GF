@@ -1,4 +1,4 @@
-abstract Imper = PredefAbs ** {
+abstract Imper = {
 
   cat
     Program ;

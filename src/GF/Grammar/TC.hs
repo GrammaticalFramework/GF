@@ -116,13 +116,16 @@ checkInferExp th tenv@(k,_,_) e typ = do
       
 inferExp :: Theory -> TCEnv -> Exp -> Err (AExp, Val, [(Val,Val)])
 inferExp th tenv@(k,rho,gamma) e = case e of
-  Vr x -> mkAnnot (AVr x) $ noConstr $ lookupVar gamma x
-  Q m c -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c)
-  QC m c -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c) ----
-  EInt i -> return (AInt i, valAbsInt, [])
-  K i -> return (AStr i, valAbsString, [])
-  Sort _ -> return (AType, vType, [])
-  App f t -> do
+   Vr x -> mkAnnot (AVr x) $ noConstr $ lookupVar gamma x
+   Q m c 
+    | m == cPredefAbs && (elem c (map identC ["Int","String"])) ->
+                                       return (ACn (m,c) vType, vType, [])
+    | otherwise -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c)
+   QC m c -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c) ----
+   EInt i -> return (AInt i, valAbsInt, [])
+   K i -> return (AStr i, valAbsString, [])
+   Sort _ -> return (AType, vType, [])
+   App f t -> do
     (f',w,csf) <- inferExp th tenv f 
     typ <- whnf w
     case typ of
@@ -131,7 +134,13 @@ inferExp th tenv@(k,rho,gamma) e = case e of
 	b' <- whnf $ VClos ((x,VClos rho t):env) b
 	return $ (AApp f' a' b', b', csf ++ csa)
       _ -> prtBad ("Prod expected for function" +++ prt f +++ "instead of") typ
-  _ -> prtBad "cannot infer type of expression" e
+   _ -> prtBad "cannot infer type of expression" e
+ where
+   predefAbs c s = case c of
+     IC "Int" -> return $ const $ Q cPredefAbs cInt
+     IC "String" -> return $ const $ Q cPredefAbs cString
+     _ -> Bad s
+
 
 checkBranch :: Theory -> TCEnv -> Equation -> Val -> Err (([Exp],AExp),[(Val,Val)])
 checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $ 
