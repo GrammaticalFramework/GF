@@ -19,6 +19,7 @@ data AExp =
    | AAbs  Ident Val AExp 
    | AProd Ident AExp AExp 
    | AEqs  [([Exp],AExp)] ---
+   | AData Val
   deriving (Eq,Show)
 
 type Theory = QIdent -> Err Val
@@ -55,6 +56,7 @@ eval env e = ---- errIn ("eval" +++ prt e +++ "in" +++ prEnv env) $
              case e of
   Vr x    -> lookupVar env x
   Q m c   -> return $ VCn (m,c)
+  QC m c  -> return $ VCn (m,c) ---- == Q ?
   Sort c  -> return $ VType --- the only sort is Type
   App f a -> join $ liftM2 app (eval env f) (eval env a)
   _ -> return $ VClos env e
@@ -86,6 +88,7 @@ checkExp th tenv@(k,rho,gamma) e ty = do
   let v = VGen k
   case e of
     Meta m -> return $ (AMeta m typ,[])
+    EData -> return $ (AData typ,[])
 
     Abs x t -> case typ of
       VClos env (Prod y a b) -> do
@@ -141,14 +144,14 @@ inferExp th tenv@(k,rho,gamma) e = case e of
      IC "String" -> return $ const $ Q cPredefAbs cString
      _ -> Bad s
 
-
+---- this is an unreliable function which should be rewritten (AR)
 checkBranch :: Theory -> TCEnv -> Equation -> Val -> Err (([Exp],AExp),[(Val,Val)])
 checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $ 
                                   chB tenv' ps' ty 
  where 
 
-  (ps',_,rho2,_) = ps2ts k ps
-  tenv' = (k,rho2++rho, gamma)
+  (ps',_,rho2,k') = ps2ts k ps
+  tenv' = (k, rho2++rho, gamma) ---- k' ?
   (k,rho,gamma) = tenv
 
   chB tenv@(k,rho,gamma) ps ty = case ps of
@@ -172,9 +175,11 @@ checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $
 
   ps2ts k = foldr p2t ([],0,[],k) 
   p2t p (ps,i,g,k) = case p of
+     PW      -> (meta (MetaSymb i) : ps, i+1,g,k) 
      PV IW   -> (meta (MetaSymb i) : ps, i+1,g,k) 
      PV x    -> (vr x   : ps, i, upd x k g,k+1)
-----     PL s    -> (cn s : ps, i, g, k)
+     PString s -> (K s : ps, i, g, k)
+     PInt i -> (EInt i : ps, i, g, k)
      PP m c xs -> (mkApp (qq (m,c)) xss : ps, j, g',k') 
                     where (xss,j,g',k') = foldr p2t ([],i,g,k) xs
      _ -> error $ "undefined p2t case" +++ prt p +++ "in checkBranch"
