@@ -134,9 +134,10 @@ binary-dist:
 	./configure --host="$(host)" CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
 #	make unix gfdoc jar
 	make gfdoc jar
-	make prefix=$(BIN_DIST_DIR)/$(prefix) install
+	$(INSTALL) ../bin/gf util/gfdoc jgf 
+        $(INSTALL) -m 0644 java/gf-java.jar
 	$(INSTALL) configure $(BIN_DIST_DIR)
-	$(INSTALL) -m 0644 config.mk.in config.mk jgf.in $(BIN_DIST_DIR)
+	$(INSTALL) -m 0644 config.mk.in jgf.in $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 INSTALL.binary $(BIN_DIST_DIR)/INSTALL
 	$(INSTALL) -m 0644 Makefile.binary $(BIN_DIST_DIR)/Makefile
