@@ -175,9 +175,12 @@ txtHelpFile =
   "\n      -number  generate this number of trees (not impl. with Tree argument)" ++
   "\n      -depth   use this number of search steps at most" ++
   "\n" ++
-  "\ngt, generate_trees: gt Int" ++
-  "\n      Generates all trees up to the given depth." ++
+  "\ngt, generate_trees: gt" ++
+  "\n      Generates all trees up to a given depth. If the depth is large," ++
+  "\n      a small -alts is recommended" ++
   "\n  flags:" ++
+  "\n      -depth   generate to this depth (default 3)" ++
+  "\n      -alts    take this number of alternatives at each branch (default unlimited)" ++
   "\n      -cat     generate in this category" ++
   "\n      -lang    use the abstract syntax of this grammar" ++
   "\n      -number  generate (at most) this number of trees" ++

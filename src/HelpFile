@@ -162,9 +162,12 @@ gr, generate_random: gr Tree?
       -number  generate this number of trees (not impl. with Tree argument)
       -depth   use this number of search steps at most
 
-gt, generate_trees: gt Int
-      Generates all trees up to the given depth.
+gt, generate_trees: gt
+      Generates all trees up to a given depth. If the depth is large,
+      a small -alts is recommended
   flags:
+      -depth   generate to this depth (default 3)
+      -alts    take this number of alternatives at each branch (default unlimited)
       -cat     generate in this category
       -lang    use the abstract syntax of this grammar
       -number  generate (at most) this number of trees

@@ -221,7 +221,8 @@ flagYes = oArg "yes"
 flagNo  = oArg "no"
 
 -- integer flags
-flagDepth = aOpt "depth"
+flagDepth  = aOpt "depth"
+flagAlts   = aOpt "alts"
 flagLength = aOpt "length"
 flagNumber = aOpt "number"
 

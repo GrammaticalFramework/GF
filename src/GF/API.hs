@@ -157,15 +157,16 @@ randomTreesIO opts gr n = do
    g   = grammar gr
    mx  = optIntOrN opts flagDepth 41
 
-generateTrees :: Options -> GFGrammar -> Int -> [Tree]
-generateTrees opts gr n =
+generateTrees :: Options -> GFGrammar -> [Tree]
+generateTrees opts gr =
   optIntOrAll opts flagNumber  
-    [tr | t <- Gen.generateTrees gr' cat n, Ok tr <- [mkTr t]]
+    [tr | t <- Gen.generateTrees gr' cat dpt mn, Ok tr <- [mkTr t]]
   where
     mkTr = annotate gr' . qualifTerm (absId gr) 
     gr' = grammar gr
     cat = firstAbsCat opts gr
-
+    dpt = maybe 3 id $ getOptInt opts flagDepth
+    mn  = getOptInt opts flagAlts
 
 speechGenerate :: Options -> String -> IO ()
 speechGenerate opts str = do
