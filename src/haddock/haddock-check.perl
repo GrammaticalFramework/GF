@@ -5,6 +5,9 @@
 #   - does not check that type aliases are put in the export list
 #   - there might be some problems with nested comments
 
+$operSym = qr/[\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~\:]+/;
+$funSym = qr/[a-z]\w*\'*/;
+
 for $file (@ARGV) {
   $file =~ s/\.hs//;
 
@@ -26,9 +29,16 @@ for $file (@ARGV) {
     $exportlist =~ s/module\s+[A-Z]\w*//gs;
 
     # type signatures
-    while (/\n([a-z]\w*)\s*::/gs) {
+    while (/\n($funSym)\s*::/gs) {
       $function = $1;
+      # print "- $function\n";
       $exportlist =~ s/\b$function\b//;
+    }
+
+    while (/\n(\($operSym\))\s*::/gs) {
+      $function = $1;
+      # print ": $function\n";
+      $exportlist =~ s/\Q$function\E//;
     }
 
     # type aliases
@@ -39,9 +49,11 @@ for $file (@ARGV) {
     }
 
     # exported functions without type signatures
-    while ($exportlist =~ /\b(\w+)\b/gs) {
+    while ($exportlist =~ /(\b$funSym\b|\($operSym\))/gs) {
       $function = $1;
+      # print "+ $function\n";
       next if $function =~ /^[A-Z]/;
+      next if $function =~ /^\((\.\.|\:\:?|\=|\\|\||\<\-|\-\>|\@|\~|\=\>)\)$/;
       printf "%-30s | No type signature for function: %s\n", $file, $function;
     }
 
