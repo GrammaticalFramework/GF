@@ -44,7 +44,8 @@ data SRG = SRG { grammarName :: String    -- ^ grammar name
 data SRGRule = SRGRule String String [SRGAlt] -- ^ SRG category name, original category name
 	                                      --   and productions
 type SRGAlt = [Symbol String Token]
-type CatName = (String,String) -- ^ SRG category name and original name
+type CatName = (String,String) 
+-- ^ SRG category name and original name
 
 type CatNames = FiniteMap String String
 

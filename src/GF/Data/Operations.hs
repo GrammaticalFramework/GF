@@ -512,7 +512,7 @@ topoSort g = reverse $ tsort 0 [ffs | ffs@(f,_) <- g, inDeg f == 0] [] where
 
 -- the generic fix point iterator
 
-iterFix :: Eq a => ([a] -> [a]) -> [a] -> [a]
+iterFix :: Eq a => ([a] -> [a]) -> [a] -> [a]
 iterFix more start = iter start start 
   where
     iter old new = if (null new')

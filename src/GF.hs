@@ -1,11 +1,16 @@
 ----------------------------------------------------------------------
 -- |
--- Module:      Main
--- Responsible: Aarne Ranta (aarne@cs.chalmers.se)
--- Time-stamp:  <2005-02-02, 15:41>
+-- Module      : Main
+-- Maintainer  : Aarne Ranta
+-- Stability   : (stability)
+-- Portability : (portability)
 --
--- This is the main module in GF
-----------------------------------------------------------------------
+-- > CVS $Date: 2005/02/03 15:13:35 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.18 $
+--
+-- (Description)
+-----------------------------------------------------------------------------
 
 module Main (main) where
 

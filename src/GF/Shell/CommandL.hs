@@ -75,7 +75,7 @@ pCommand = pCommandWords . words where
   pCommandWords s = case s of
     "n" : cat : _ -> CNewCat cat
     "t" : ws      -> CNewTree $ unwords ws
-    "g" : ws      -> CRefineWithTree $ unwords ws  -- *g*ive
+    "g" : ws      -> CRefineWithTree $ unwords ws  -- example: *g*ive
     "p" : ws      -> CRefineParse $ unwords ws
     "rc": i : _   -> CRefineWithClip (readIntArg i)
     ">" : i : _   -> CAhead $ readIntArg i

@@ -1,11 +1,16 @@
 ----------------------------------------------------------------------
 -- |
--- Module:      GFModes
--- Responsible: Aarne Ranta (aarne@cs.chalmers.se)
--- Time-stamp:  <2005-02-02, 15:24>
+-- Module      : Main
+-- Maintainer  : Aarne Ranta
+-- Stability   : (stability)
+-- Portability : (portability)
 --
--- (Description of the module)
-----------------------------------------------------------------------
+-- > CVS $Date: 2005/02/03 15:13:36 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
+--
+-- (Description)
+-----------------------------------------------------------------------------
 
 module GFModes (gfInteract, gfBatch, batchCompile) where
 
