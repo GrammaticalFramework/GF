@@ -1,0 +1,263 @@
+module Rename where
+
+import Grammar
+import Modules
+import Ident
+import Macros
+import PrGrammar
+import Lookup
+import Extend
+import Operations
+
+import Monad
+
+-- AR 14/5/2003
+
+-- The top-level function $renameGrammar$ does several things:
+-- * extends each module symbol table by indirections to extended module
+-- * changes unqualified and as-qualified imports to absolutely qualified
+-- * goes through the definitions and resolves names
+-- Dependency analysis between modules has been performed before this pass.
+-- Hence we can proceed by $fold$ing 'from left to right'.
+
+renameGrammar :: SourceGrammar -> Err SourceGrammar
+renameGrammar g = liftM (MGrammar . reverse) $ foldM renameModule [] (modules g)
+
+-- this gives top-level access to renaming term input in the cc command
+renameSourceTerm :: SourceGrammar -> Ident -> Term -> Err Term
+renameSourceTerm g m t = do
+  mo     <- lookupErr m (modules g)
+  status <- buildStatus g m mo
+  renameTerm status [] t
+
+renameModule :: [SourceModule] -> SourceModule -> Err [SourceModule]
+renameModule ms (name,mod) = errIn ("renaming module" +++ prt name) $ case mod of
+  ModMod (Module mt fs me ops js) -> do
+    (_,mod1@(ModMod m)) <- extendModule ms (name,mod)
+    let js1 = jments m
+    status <- buildStatus (MGrammar ms) name mod1
+    js2    <- mapMTree (renameInfo status) js1
+    let mod2 = ModMod $ Module mt fs me (map forceQualif ops) js2
+    return $ (name,mod2) : ms
+
+extendModule :: [SourceModule] -> SourceModule -> Err SourceModule
+extendModule ms (name,mod) = case mod of
+  ModMod (Module mt fs me ops js0) -> do
+    js  <- case mt of
+{- --- building the {s : Str} lincat
+      MTConcrete a -> do
+        ModMod ma <- lookupModule (MGrammar ms) a
+        let cats = [c | (c,AbsCat _ _) <- tree2list $ jments ma]
+            jscs = [(c,CncCat (yes defLinType) nope nope) | c <- cats]
+        return $ updatesTreeNondestr jscs js0
+-}
+      _ -> return js0
+    js1 <- case me of
+      Just n -> do
+        m0 <- case lookup n ms of
+          Just (ModMod m) -> do
+            testErr (sameMType (mtype m) mt) 
+                    ("illegal extension type to module" +++ prt name)
+            return m
+          _ -> Bad $ "cannot find extended module" +++ prt n
+        extendMod n (jments m0) js
+      _ -> return js
+    return $ (name,ModMod (Module mt fs Nothing ops js1))
+
+
+type Status = (StatusTree, [(OpenSpec Ident, StatusTree)])
+
+type StatusTree = BinTree (Ident,StatusInfo)
+
+type StatusInfo = Ident -> Term
+
+renameIdentTerm :: Status -> Term -> Err Term
+renameIdentTerm env@(act,imps) t = case t of
+  Vr c -> do
+    f <- lookupTreeMany prt opens c
+    return $ f c
+  Cn c -> do
+    f <- lookupTreeMany prt opens c
+    return $ f c
+  Q m' c -> do
+    m <- lookupErr m' qualifs
+    f <- lookupTree prt c m
+    return $ f c
+  QC m' c -> do
+    m <- lookupErr m' qualifs
+    f <- lookupTree prt c m
+    return $ f c
+  _ -> return t
+ where
+   opens   = act : [st  | (OSimple _,st) <- imps]
+   qualifs = [  (m, st) | (OQualif m _, st) <- imps]
+
+--- would it make sense to optimize this by inlining?
+renameIdentPatt :: Status -> Patt -> Err Patt
+renameIdentPatt env p = do
+  let t = patt2term p
+  t' <- renameIdentTerm env t
+  term2patt t'
+
+info2status :: Maybe Ident -> (Ident,Info) -> (Ident,StatusInfo)
+info2status mq (c,i) = (c, case i of
+  AbsFun _ (Yes (Con g)) | g == c -> maybe Con QC mq
+  ResValue _  -> maybe Con QC mq
+  ResParam _  -> maybe Con QC mq
+  AnyInd True m -> maybe Con (const (QC m)) mq
+  AnyInd False m -> maybe Cn (const (Q m)) mq
+  _           -> maybe Cn  Q mq
+  )
+
+tree2status :: OpenSpec Ident -> BinTree (Ident,Info) -> BinTree (Ident,StatusInfo)
+tree2status o = case o of
+  OSimple i   -> mapTree (info2status (Just i))
+  OQualif i j -> mapTree (info2status (Just j))
+
+buildStatus :: SourceGrammar -> Ident -> SourceModInfo -> Err Status
+buildStatus gr c mo = let mo' = self2status c mo in case mo of
+  ModMod m -> do
+    let ops  = opens m
+    mods <- mapM (lookupModule gr . openedModule) ops
+    let sts = map modInfo2status $ zip ops mods    
+    return $ if isModCnc m
+      then (NT, sts) -- the module itself does not define any names
+      else (mo',sts) -- so the empty ident is not needed
+
+modInfo2status :: (OpenSpec Ident,SourceModInfo) -> (OpenSpec Ident, StatusTree)
+modInfo2status (o,i) = (o,case i of
+  ModMod m -> tree2status o (jments m)
+  )
+
+self2status :: Ident -> SourceModInfo -> StatusTree
+self2status c i = case i of
+  ModMod m -> mapTree (info2status (Just c)) (jments m)   -- qualify internal
+---  ModMod m -> mapTree (resInfo2status Nothing) (jments m)
+-- change Lookup.qualifAnnot if you change this
+
+forceQualif o = case o of
+  OSimple i   -> OQualif i i
+  OQualif _ i -> OQualif i i
+  
+renameInfo :: Status -> (Ident,Info) -> Err (Ident,Info)
+renameInfo status (i,info) = errIn ("renaming definition of" +++ prt i) $ 
+                                liftM ((,) i) $ case info of
+  AbsCat pco pfs -> liftM2 AbsCat (renPerh (renameContext status) pco)
+                                  (return pfs) ----
+  AbsFun pty ptr -> liftM2 AbsFun (ren pty) (ren ptr)
+
+  ResOper pty ptr -> liftM2 ResOper (ren pty) (ren ptr)
+  ResParam pp -> liftM ResParam (renPerh (mapM (renameParam status)) pp)
+  ResValue t  -> liftM ResValue (ren t)
+  CncCat pty ptr ppr -> liftM3 CncCat (ren pty) (ren ptr) (ren ppr)
+  CncFun mt  ptr ppr -> liftM2 (CncFun mt)      (ren ptr) (ren ppr)
+  _ -> return info
+ where 
+   ren = renPerh rent
+   rent = renameTerm status []
+
+renPerh ren pt = case pt of
+  Yes t -> liftM Yes $ ren t
+  _ -> return pt
+
+renameTerm :: Status -> [Ident] -> Term -> Err Term
+renameTerm env vars = ren vars where
+  ren vs trm = case trm of
+    Abs x b    -> liftM  (Abs x) (ren (x:vs) b)
+    Prod x a b -> liftM2 (Prod x) (ren vs a) (ren (x:vs) b)
+    Vr x      
+      | elem x vs -> return trm
+      | otherwise -> renid trm
+    Cn _   -> renid trm
+    Con _  -> renid trm
+    Q _ _  -> renid trm
+    QC _ _ -> renid trm
+
+----    Eqs eqs -> Eqs (map (renameEquation consts vs) eqs)
+    T i cs -> do
+      i' <- case i of
+        TTyped ty -> liftM TTyped $ ren vs ty -- the only annotation in source
+        _ -> return i
+      liftM (T i') $ mapM (renCase vs) cs  
+
+    Let (x,(m,a)) b -> do
+      m' <- case m of
+        Just ty -> liftM Just $ ren vs ty
+        _ -> return m
+      a' <- ren vs a
+      b' <- ren (x:vs) b
+      return $ Let (x,(m',a')) b'
+
+    P t@(Vr r) l                     -- for constant t we know it is projection
+      | elem r vs -> return trm                           -- var proj first
+      | otherwise -> case renid (Q r (label2ident l)) of  -- qualif   second
+          Ok t -> return t
+          _ -> liftM (flip P l) $ renid t                 -- const proj last
+
+    _ -> composOp (ren vs) trm
+
+  renid = renameIdentTerm env
+  renCase vs (p,t) = do
+    (p',vs') <- renpatt p
+    t' <- ren (vs' ++ vs) t
+    return (p',t')
+  renpatt = renamePattern env
+
+-- vars not needed in env, since patterns always overshadow old vars
+
+renamePattern :: Status -> Patt -> Err (Patt,[Ident])
+renamePattern env patt = case patt of
+
+  PC c ps -> do
+    c' <- renameIdentTerm env $ Cn c
+    psvss <- mapM renp ps
+    let (ps',vs) = unzip psvss
+    return $ case c' of
+      QC p d -> (PP p d ps', concat vs)
+      _ -> (PC c ps', concat vs)
+
+----  PP p c ps -> (PP p c ps',concat vs') where (ps',vs') = unzip $ map renp ps
+
+  PV x -> case renid patt of
+    Ok p -> return (p,[])
+    _    -> return (patt, [x])
+
+  PR r -> do
+    let (ls,ps) = unzip r
+    psvss <- mapM renp ps
+    let (ps',vs') = unzip psvss
+    return (PR (zip ls ps'), concat vs') 
+
+  _ -> return (patt,[])
+
+ where 
+   renp  = renamePattern env
+   renid = renameIdentPatt env
+
+renameParam :: Status -> (Ident, Context) -> Err (Ident, Context)
+renameParam env (c,co) = do
+  co' <- renameContext env co
+  return (c,co')
+
+renameContext :: Status -> Context -> Err Context
+renameContext b = renc [] where
+  renc vs cont = case cont of
+    (x,t) : xts 
+      | isWildIdent x -> do
+          t'   <- ren vs t
+          xts' <- renc vs xts
+          return $ (x,t') : xts'
+      | otherwise -> do
+          t'   <- ren vs t
+          let vs' = x:vs
+          xts' <- renc vs' xts
+          return $ (x,t') : xts'
+    _ -> return cont
+  ren = renameTerm b
+
+{-
+renameEquation :: Status -> [Ident] -> Equation -> Equation
+renameEquation b vs (ps,t) = (ps',renameTerm b (concat vs' ++ vs) t) where
+  (ps',vs') = unzip $ map (renamePattern b vs) ps
+-}
+
