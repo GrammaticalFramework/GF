@@ -46,8 +46,9 @@ lin
   UseV2 = transAsVerb ;
 
 -- Formation of infinitival phrases.
-{- ----
+
   UseCl tp cl = {s = \\o => tp.s ++ cl.s ! tp.b ! ClFinite tp.t tp.a o} ;
+{- ----
   UseRCl tp cl = 
     {s = \\gn,p => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! gn ! p} ;
   UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
