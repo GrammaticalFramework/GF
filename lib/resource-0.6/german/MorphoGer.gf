@@ -385,7 +385,7 @@ oper
        } ; 
        en = Predef.dp 2 geben ;
        geb = ifTok Tok (Predef.tk 1 en) "e" (Predef.tk 2 geben)(Predef.tk 1 geben) ;
-       gebt = (adde geb) + "t" ;
+       gebt = geb + (adde geb) + "t" ;
        gebte = ifTok Tok (Predef.dp 1 gab) "e" gab (gab + "e") ;
        gibst = ifSibilant (Predef.dp 1 gib) (gib + "t") (gib + "st") ;
        gegebener = (adjReg gegeben).s ;
@@ -396,7 +396,7 @@ oper
        VInd Sg P3 => gibt ;
        VInd Pl P2 => gebt ;
        VInd Pl _  => geben ; -- the famous law
-       VImp Sg    => (impe gib) ;
+       VImp Sg    => gib + (impe gib) ;
        VImp Pl    => gebt ;
        VSubj Sg P1 => geb + "e" ;
        VSubj Sg P2 => geb + "est" ;
@@ -406,16 +406,16 @@ oper
        VPresPart a => (adjReg (geben + "d")).s ! a ;
 
        VImpfInd Sg P1 => gab ;
-       VImpfInd Sg P2 => (adde gab) + "st" ;
+       VImpfInd Sg P2 => gab + (adde gab) + "st" ;
        VImpfInd Sg P3 => gab ;
-       VImpfInd Pl P2 => gebte + "n" ;
-       VImpfInd Pl _  => gab + "t" ;
+       VImpfInd Pl P2 => gab + (adde gab) + "t" ;
+       VImpfInd Pl _  => gebte + "n" ;
 
        VImpfSubj Sg P1 => gäbe ;
        VImpfSubj Sg P2 => gäbe + "st" ;
        VImpfSubj Sg P3 => gäbe ;
-       VImpfSubj Pl P2 => gäbe + "n" ;
-       VImpfSubj Pl _  => gäbe + "t" ;
+       VImpfSubj Pl P2 => gäbe + "t" ;
+       VImpfSubj Pl _  => gäbe + "n" ;
 
        VPart a    => gegebener ! a
        } ;
@@ -426,7 +426,7 @@ oper
        leg = (Predef.dp 2 legen) ;
        legte = leg + "te" ;
     in
-       mkVerbum legen ((adde leg) + "t") leg legte legte ("ge" + (leg + "t")) ;
+       mkVerbum legen (leg + (adde leg) + "t") leg legte legte ("ge" + (leg + "t")) ;
 
   regVerb = verbumWeak ;
 
@@ -437,7 +437,7 @@ oper
        gratulier = (Predef.dp 2 gratulieren) ;
        gratulierte = gratulier + "te" ;
     in
-       mkVerbum gratulieren ((adde gratulier) + "t") gratulier gratulierte gratulierte (gratulier + "t") ;
+       mkVerbum gratulieren (gratulier + (adde gratulier) + "t") gratulier gratulierte gratulierte (gratulier + "t") ;
 
 
 
@@ -446,7 +446,7 @@ oper
     let 
        sing = (Predef.dp 2 singen)
     in
-       mkVerbum singen ((adde sing) + "t") sing sang sänge gesungen ;
+       mkVerbum singen (sing + (adde sing) + "t") sing sang sänge gesungen ;
 
 -- Verbs with Umlaut in the 2nd and 3rd person singular and imperative:
   verbumStrongSehen : (_,_,_,_,_ : Str) -> Verbum = \sehen,sieht,sah,sähe,gesehen -> 
