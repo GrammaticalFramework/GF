@@ -97,6 +97,7 @@ concrete StructuralEng of Structural =
   WithPrep = ss "with" ;
   WithoutPrep = ss "without" ;
   ByMeansPrep = ss "by" ;
+  PossessPrep = ss "of" ;
   PartPrep = ss "of" ;
   AgentPrep = ss "by" ;
 

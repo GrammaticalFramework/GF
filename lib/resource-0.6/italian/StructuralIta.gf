@@ -108,6 +108,7 @@ lin
   WithPrep = justCase (CPrep P_con) ;
   WithoutPrep = justPrep "senza" ;
   ByMeansPrep = justPrep "per" ;
+  PossessPrep = justCase genitive ;
   PartPrep = justCase genitive ; ---
   AgentPrep = justCase (CPrep P_da) ;
 

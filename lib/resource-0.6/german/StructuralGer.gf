@@ -127,6 +127,7 @@ lin
   WithoutPrep = mkPrep "ohne" Acc ;
   ByMeansPrep = mkPrep "mit" Dat ;
   PartPrep = mkPrep "von" Dat ;
+  PossessPrep = mkPrep "von" Dat ;
   AgentPrep = mkPrep "durch" Acc ;
 
 } ;

@@ -126,6 +126,7 @@ WantVV = extVerb verbKhotet Act Present  ;
   WithPrep = { s2 = "с" ; c = Inst};
   WithoutPrep = { s2 = "без" ; c = Gen};
   ByMeansPrep = { s2 = ["с помощью"] ; c = Gen};
+  PossessPrep = { s2 = "" ; c = Gen}; --- ?? AR 19/2/2004
   PartPrep = { s2 = "" ; c = Nom}; -- missing in Russian
   AgentPrep = { s2 = "" ; c = Nom}; -- missing in Russian
 } ;

@@ -107,6 +107,7 @@ concrete StructuralSwe of Structural =
   WithPrep = ss "med" ;
   WithoutPrep = ss "utan" ;
   ByMeansPrep = ss "med" ;
+  PossessPrep = ss "av" ;
   PartPrep = ss "av" ;
   AgentPrep = ss "av" ;
 
