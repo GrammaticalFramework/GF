@@ -1,0 +1,238 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1></h1>
+
+# -path=.:../abstract:../../prelude 
+<h1> Russian Lexical Paradigms</h1>
+
+Aarne Ranta, Janna Khegai 2003
+
+This is an API to the user of the resource grammar 
+for adding lexical items. It give shortcuts for forming
+expressions of basic categories: nouns, adjectives, verbs.
+
+Closed categories (determiners, pronouns, conjunctions) are
+accessed through the resource syntax API, <tt>resource.Abs.gf</tt>. 
+
+
+The following files are presupposed:
+<pre>
+  resource ParadigmsRus = open (Predef=Predef), Prelude, SyntaxRus, ResourceRus in {
+  
+  flags  coding=utf8 ;
+</pre>
+
+<h2> Parameters </h2>
+
+To abstract over gender names, we define the following identifiers.
+<pre>
+  oper
+    masculine : Gender ;
+    feminine  : Gender ;
+    neuter    : Gender ;
+</pre>
+
+To abstract over case names, we define the following.
+<pre>
+    nominative    : Case ;
+    genitive      : Case ;
+    dative        : Case ;
+    accusative    : Case ; 
+    instructive   : Case ;
+    prepositional : Case ;
+</pre>
+
+In some (written in English) textbooks accusative case 
+is put on the second place. However, we follow the case order 
+standard for Russian textbooks.
+To abstract over number names, we define the following.
+<pre>
+    singular : Number ;
+    plural   : Number ;
+</pre>
+
+<h2> Nouns</h2>
+Best case: indeclinabe nouns: <i>кофе</i>, <i>пальто</i>, <i>ВУЗ</i>.
+<pre>
+     mkIndeclinableNoun: Str -> Gender -> Animacy -> N ; 
+</pre>
+
+Worst case - give six singular forms:
+Nominative, Genetive, Dative, Accusative, Instructive and Prepositional;
+corresponding six plural forms and the gender.
+May be the number of forms needed can be reduced, 
+but this requires a separate investigation.
+Animacy parameter (determining whether the Accusative form is equal 
+to the Nominative or the Genetive one) is actually of no help, 
+since there are a lot of exceptions and the gain is just one form less.
+<pre>
+    mkN  : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Gender -> Animacy -> N ; 
+  
+       -- мужчина, мужчины, мужчине, мужчину, мужчиной, мужчине
+       -- мужчины, мужчин, мужчинам, мужчин, мужчинами, мужчинах
+</pre>
+
+Here are some common patterns. The list is far from complete.
+Feminine patterns.
+<pre>
+    nMashina   : Str -> N ;    -- feminine, inanimate, ending with "-а", Inst -"машин-ой"
+    nEdinica   : Str -> N ;    -- feminine, inanimate, ending with "-а", Inst -"единиц-ей"
+    nZhenchina : Str -> N ;    -- feminine, animate, ending with "-a"
+    nNoga      : Str -> N ;    -- feminine, inanimate, ending with "г_к_х-a"
+    nMalyariya  : Str -> N ;    -- feminine, inanimate, ending with "-ия"   
+    nTetya     : Str -> N ;    -- feminine, animate, ending with "-я"   
+    nBol       : Str -> N ;    -- feminine, inanimate, ending with "-ь"(soft sign)     
+</pre>
+
+Neuter patterns. 
+<pre>
+    nObezbolivauchee : Str -> N ;   -- neutral, inanimate, ending with "-ee" 
+    nProizvedenie : Str -> N ;   -- neutral, inanimate, ending with "-e" 
+    nChislo : Str -> N ;   -- neutral, inanimate, ending with "-o" 
+</pre>
+
+Masculine patterns. 
+<pre>
+    nStomatolog : Str -> N ;    -- masculine, animate, ending with consonant
+  
+                                -- the next two differ only in 
+                                -- plural nominative (= accusative) form(s) :
+    nAdres     : Str -> N ;     -- адрес-а
+    nTelefon   : Str -> N ;     -- телефон-ы
+                                -- masculine, inanimate, ending with consonant
+  
+    nNol       : Str -> N ;    -- masculine, inanimate, ending with "-ь" (soft sign)
+    nUroven    : Str -> N ;    -- masculine, inanimate, ending with "-ень"
+</pre>
+
+Nouns used as functions need a preposition. The most common is with Genitive.
+<pre>
+    mkFun  : N -> Preposition -> Case -> Fun ;
+    funGen : N -> Fun ;
+</pre>
+
+Proper names.
+<pre>
+    mkPN  : Str -> Gender -> Animacy -> PN ;          -- "Иван", "Маша"
+</pre>
+
+On the top level, it is maybe <tt>CN</tt> that is used rather than <tt>N</tt>, and
+<tt>NP</tt> rather than <tt>PN</tt>.
+<pre>
+    mkCN  : N -> CN ;
+    mkNP  : Str -> Gender -> Animacy -> NP ;
+</pre>
+
+<h2> Adjectives</h2>
+Non-comparison (only positive degree) one-place adjectives need 28 (4 by 7)
+forms in the worst case:
+Masculine  | Feminine | Neutral | Plural
+Nominative
+Genitive
+Dative
+Accusative Inanimate
+Accusative Animate
+Instructive
+Prepositional
+Notice that 4 short forms, which exist for some adjectives are not included 
+in the current description, otherwise there would be 32 forms for 
+positive degree.
+mkAdj1 : ( : Str) -> Adj1 ;
+Invariable adjective is a special case.
+<pre>
+     adjInvar : Str -> Adj1 ;          -- khaki, mini, hindi, netto
+</pre>
+
+Some regular patterns depending on the ending.
+<pre>
+     adj1Staruyj : Str -> Adj1 ;             -- ending with "-ый"
+     adj1Malenkij : Str -> Adj1 ;            -- endign with "-ий"
+     adj1Molodoj : Str -> Adj1 ;             -- ending with "-ой", 
+                                             -- plural - молод-ые"
+     adj1Kakoj_Nibud : Str -> Str -> Adj1 ;  -- ending with "-ой", 
+                                             -- plural - "как-ие"
+</pre>
+
+Two-place adjectives need a preposition and a case as extra arguments.
+<pre>
+     mkAdj2 : Adj1 -> Str -> Case -> Adj2 ;  -- "делим на"
+</pre>
+
+Comparison adjectives need a positive adjective 
+(28 forms without short forms). 
+Taking only one comparative form (non-syntaxic) and 
+only one superlative form (syntaxic) we can produce the
+comparison adjective with only one extra argument -
+non-syntaxic comparative form.
+Syntaxic forms are based on the positive forms.
+<pre>
+     mkAdjDeg : Adj1 -> Str -> AdjDeg ;
+</pre>
+
+On top level, there are adjectival phrases. The most common case is
+just to use a one-place adjective. 
+<pre>
+     ap : Adj1  -> IsPostfixAdj -> AP ;
+</pre>
+
+<h2> Verbs</h2>
+
+In our lexicon description (<i>Verbum</i>) there are 62 forms: 
+2 (Voice) by { 1 (infinitive) + [2(number) by 3 (person)](imperative) + 
+[ [2(Number) by 3(Person)](present) + [2(Number) by 3(Person)](future) + 
+4(GenNum)(past) ](indicative)+ 4 (GenNum) (subjunctive) } 
+Participles (Present and Past) and Gerund forms are not included, 
+since they fuction more like Adjectives and Adverbs correspondingly
+rather than verbs. Aspect regarded as an inherent parameter of a verb.
+Notice, that some forms are never used for some verbs. Actually, 
+the majority of verbs do not have many of the forms.
+The worst case need 6 forms of the present tense in indicative mood
+(<i>я бегу</i>, <i>ты бежишь</i>, <i>он бежит</i>, <i>мы бежим</i>, <i>вы бежите</i>, <i>они бегут</i>),
+a past form (singular, masculine: <i>я бежал</i>), an imperative form 
+(singular, second person: <i>беги</i>), an infinitive (<i>бежать</i>).
+Inherent aspect should also be specified.
+<pre>
+     mkVerbum : Aspect -> (_,_,_,_,_,_,_,_,_ : Str) -> Verbum ;
+</pre>
+
+Common conjugation patterns are two conjugations: 
+first - verbs ending with <i>-ать/-ять</i> and second - <i>-ить/-еть</i>.
+Instead of 6 present forms of the worst case, we only need
+a present stem and one ending (singular, first person):
+<i>я люб-лю</i>, <i>я жд-у</i>, etc. To determine where the border
+between stem and ending lies it is sufficient to compare 
+first person from with second person form:
+<i>я люб-лю</i>, <i>ты люб-ишь</i>. Stems shoud be the same.
+So the definition for verb <i>любить</i>  looks like:
+mkRegVerb Imperfective Second <i>люб</i> <i>лю</i> <i>любил</i> <i>люби</i> <i>любить</i>;
+<pre>
+     mkRegVerb :Aspect -> Conjugation -> (_,_,_,_,_ : Str) -> Verbum ; 
+</pre>
+
+For writing an application grammar one usualy doesn't need
+the whole inflection table, since each verb is used in 
+a particular context that determines some of the parameters
+(Tense and Voice while Aspect is fixed from the beginning) for certain usage. 
+The <i>V</i> type, that have these parameters fixed. 
+We can extract the <i>V</i> from the lexicon.
+<pre>
+     mkV: Verbum -> Voice -> Tense -> V ;
+     mkPresentV: Verbum -> Voice -> V ;
+</pre>
+
+Two-place verbs, and the special case with direct object. Notice that
+a particle can be included in a <tt>V</tt>.
+<pre>
+     mkTV     : V   -> Str -> Case -> TV ;   -- "войти в дом"; "в", accusative
+     tvDir    : V -> TV ;                    -- "видеть", "любить"
+</pre>
+
+The definitions should not bother the user of the API. So they are
+hidden from the document.
+</body>
+</html>
