@@ -85,7 +85,7 @@ lin
 -- Adverbs.
 
   AdjAdv a = {s = a.s ! AA} ;
-----  AdvVP = adVerbPhrase ;
+  AdvVP = adVerbPhrase ;
   AdvPP p = p ;
 
   PrepNP = prepNounPhrase ;
@@ -172,8 +172,8 @@ lin
 
   OneNP = nounPhraseOn ;
 
-  ExistCN A = existNounPhrase (indefNounPhrase Sg A) ;
+-----  ExistCN A = existNounPhrase (indefNounPhrase Sg A) ;
 
-  ExistNumCN nu A = existNounPhrase (indefNounPhraseNum nu A) ;
+-----  ExistNumCN nu A = existNounPhrase (indefNounPhraseNum nu A) ;
 
 }

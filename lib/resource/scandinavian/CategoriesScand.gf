@@ -34,9 +34,7 @@ lincat
 
   V      = Verb ;
       -- = {s : VerbForm => Str ; s1 : Str} ;
-  VP     = {s  : SForm => Str ;
-            s2 : Bool => Str ; -- negation and adverbs like "alltid" 
-            s3 : SForm => Gender => Number => Person => Str} ;
+  VP     = VerbGroup ;
   VPI    = {s  : VIForm => Gender => Number => Person => Str} ;
   V2     = TransVerb ; 
       -- = Verb ** {s2 : Preposition} ;

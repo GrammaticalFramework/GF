@@ -27,6 +27,7 @@ concrete VerbphraseEng of Verbphrase = CategoriesEng **
   UsePassV v = predClauseBeGroup (passVerb v) ;
   ComplV2 v x = predClauseGroup v (complTransVerb v x) ;
   ComplReflV2 v = predClauseGroup v (reflTransVerb v) ;
+  ComplV3 v x y = predClauseGroup v (complDitransVerb v x y) ;
   ComplVS v x = predClauseGroup v (complSentVerb v x) ;
   ComplVV v x = predClauseGroup (aux2verb v) (complVerbVerb v x) ;
   ComplVQ v x = predClauseGroup v (complQuestVerb v x) ;

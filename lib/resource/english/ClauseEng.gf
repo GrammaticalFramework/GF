@@ -11,6 +11,7 @@ concrete ClauseEng of Clause = CategoriesEng **
   SPredPassV np v = predBeGroup np (passVerb v) ;
   SPredV2 np v x = predVerbClause np v (complTransVerb v x) ;
   SPredReflV2 np v = predVerbClause np v (reflTransVerb v) ;
+  SPredV3 np v x y = predVerbClause np v (complDitransVerb v x y) ;
   SPredVS np v x = predVerbClause np v (complSentVerb v x) ;
   SPredVV np v x = predVerbClause np (aux2verb v) (complVerbVerb v x) ;
   SPredVQ np v x = predVerbClause np v (complQuestVerb v x) ;

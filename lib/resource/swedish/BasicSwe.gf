@@ -154,7 +154,7 @@ lin
   sea_N = mkN "sjö" "sjön" "sjöar" "sjöarna" ;
   seek_V2 = dirV2 (mk2V "söka" "söker") ;
   see_V2 = dirV2 (mkV "se" "ser" "se" "såg" "sett" "sedd") ;
-  sell_V3 = dirV3 (irregV "sälja" "sålde" "sålt") "to" ;
+  sell_V3 = dirV3 (irregV "sälja" "sålde" "sålt") "till" ;
   send_V3 = dirV3 (regV "skicka") "till" ;
   sheep_N = mk2N "får" "får" ;
   ship_N = regN "skepp" neutrum ;

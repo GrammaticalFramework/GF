@@ -10,6 +10,7 @@ incomplete concrete ClauseScand of Clause = CategoriesScand **
   SPredPassV np v = predVerbGroupClause np (passVerb v) ;
   SPredV2 np v x = predVerbGroupClause np (complTransVerb v x) ;
   SPredReflV2 np v = predVerbGroupClause np (reflTransVerb v) ;
+  SPredV3 np v x y = predVerbGroupClause np (complDitransVerb v x y) ;
   SPredVS np v x = predVerbGroupClause np (complSentVerb v x) ;
   SPredVV np v x = predVerbGroupClause np (complVerbVerb v x) ;
   SPredVQ np v x = predVerbGroupClause np (complQuestVerb v x) ;

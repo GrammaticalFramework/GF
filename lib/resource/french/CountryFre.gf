@@ -1,4 +1,4 @@
-concrete CountryFre of Country = open ResourceFre, ParadigmsFre in {
+concrete CountryFre of Country = open CategoriesFre, ParadigmsFre in {
 
   lincat
     Country = PN ;
