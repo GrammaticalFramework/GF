@@ -71,7 +71,7 @@ instance Print Char where
 
 mkEsc :: Char -> ShowS
 mkEsc s = case s of
-  _ | elem s "\\\"'" -> showChar '\\' . showChar s
+  _ | elem s "\\\"" -> showChar '\\' . showChar s -- H (don't escape ')
   '\n' -> showString "\\n"
   '\t' -> showString "\\t"
   _ -> showChar s
