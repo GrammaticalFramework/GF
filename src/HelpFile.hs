@@ -116,6 +116,9 @@ txtHelpFile =
   "\n      pm | wf Letter.gfcm  -- print the grammar into the file Letter.gfcm" ++
   "\n      pm -printer=graph | wf D.dot  -- then do 'dot -Tps D.dot > D.ps'" ++
   "\n" ++
+  "\nvg, visualize_graph: vg" ++
+  "\n     Show the dependency graph of multilingual grammar via dot and gv." ++
+  "\n" ++
   "\npo, print_options: po" ++
   "\n      Print what modules there are in the state. Also" ++
   "\n      prints those flag values in the current state that differ from defaults." ++

@@ -73,6 +73,7 @@ data Command =
  | CPrintInformation I.Ident
  | CPrintMultiGrammar
  | CPrintSourceGrammar
+ | CShowGrammarGraph
  | CPrintGramlet 
  | CPrintCanonXML
  | CPrintCanonXMLStruct 

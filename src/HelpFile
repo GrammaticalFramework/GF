@@ -87,6 +87,9 @@ pm, print_multigrammar: pm
       pm | wf Letter.gfcm  -- print the grammar into the file Letter.gfcm
       pm -printer=graph | wf D.dot  -- then do 'dot -Tps D.dot > D.ps'
 
+vg, visualize_graph: vg
+     Show the dependency graph of multilingual grammar via dot and gv.
+
 po, print_options: po
       Print what modules there are in the state. Also
       prints those flag values in the current state that differ from defaults.

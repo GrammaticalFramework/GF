@@ -129,7 +129,8 @@ pCommand ws = case ws of
   "pxs" : []     -> aUnit CPrintCanonXMLStruct
   "px"  : []     -> aUnit CPrintCanonXML
   "pm"  : []     -> aUnit CPrintMultiGrammar
-  "sg" : []     -> aUnit CPrintSourceGrammar
+  "vg"  : []     -> aUnit CShowGrammarGraph
+  "sg"  : []     -> aUnit CPrintSourceGrammar
   "po"  : []     -> aUnit CPrintGlobalOptions
   "pl"  : []     -> aUnit CPrintLanguages
   "h"   : c : [] -> aUnit $ CHelp (Just (abbrevCommand c))

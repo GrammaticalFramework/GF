@@ -30,6 +30,7 @@ import GetTree
 
 import ShellCommands
 
+import VisualizeGrammar (visualizeCanonGrammar, visualizeSourceGrammar)
 import API
 import IOGrammar
 import Compile
@@ -244,6 +245,13 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
   CPrintMultiGrammar  -> do
     sa' <- changeState purgeShellState sa
     returnArg (AString (optPrintMultiGrammar opts cgr)) sa'
+  CShowGrammarGraph  -> do
+    ---- sa' <- changeState purgeShellState sa
+    let g0 = writeFile "grphtmp.dot" $ visualizeCanonGrammar cgr
+        g1 = system "dot -Tps grphtmp.dot >grphtmp.ps" 
+        g2 = system "gv grphtmp.ps &" 
+        g3 = return () ---- system "rm -f grphtmp.*"
+    justOutput opts (g0 >> g1 >> g2 >> g3 >> return ()) sa
   CPrintSourceGrammar -> 
       returnArg (AString (visualizeSourceGrammar src)) sa
 
