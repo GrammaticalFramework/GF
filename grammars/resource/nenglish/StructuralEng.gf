@@ -49,10 +49,10 @@ concrete StructuralEng of Structural =
   SomethingNP = nameNounPhrase (nameReg "something") ;
   NothingNP = nameNounPhrase (nameReg "nothing") ;
 
----  CanVV = vvCan ;
----  CanKnowVV = vvCan ;
----  MustVV = vvMust ;
----  WantVV = verbNoPart (regVerbP3 "want") ** {isAux = False} ;
+  CanVV = vvCan ;
+  CanKnowVV = vvCan ;
+  MustVV = vvMust ;
+  WantVV = verbNoPart (regVerbP3 "want") ** {isAux = False} ;
 
   HowIAdv = ss "how" ;
   WhenIAdv = ss "when" ;

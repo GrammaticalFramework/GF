@@ -1,11 +1,11 @@
 --# -path=.:../nabstract:../../prelude
 
---1 The Top-Level English Resource Grammar: Combination Rules
+--1 The Top-Level Swedish Resource Grammar: Combination Rules
 --
 -- Aarne Ranta 2002 -- 2003
 --
--- This is the English concrete syntax of the multilingual resource
--- grammar. Most of the work is done in the file $syntax.Eng.gf$.
+-- This is the Swedish concrete syntax of the multilingual resource
+-- grammar. Most of the work is done in the file $SyntaxSwe.gf$.
 -- However, for the purpose of documentation, we make here explicit the
 -- linearization types of each category, so that their structures and
 -- dependencies can be seen.
@@ -17,9 +17,9 @@
 -- They should use $resource.Abs.gf$ to access the syntactic rules.
 -- This file can be consulted in those, hopefully rare, occasions in which
 -- one has to know how the syntactic categories are
--- implemented. The parameter types are defined in $TypesEng.gf$.
+-- implemented. The parameter types are defined in $TypesSwe.gf$.
 
-concrete CombinationsEng of Combinations = open Prelude, SyntaxEng in {
+concrete CombinationsSwe of Combinations = open Prelude, SyntaxSwe in {
 
 flags 
   startcat=Phr ; 
@@ -27,54 +27,55 @@ flags
   unlexer=text ;
 
 lincat 
-  N      = CommNoun ;         
-      -- = {s : Number => Case => Str}
-  CN     = CommNounPhrase ;   
-      -- = CommNoun ** {g : Gender}
-  NP     = {s : NPForm => Str ; n : Number ; p : Person} ;
-  PN     = {s : Case => Str} ;
-  Det    = {s : Str ; n : Number} ;
+  CN     = {s : Number => SpeciesP => Case => Str ; g : Gender ; x : Sex ; 
+            p : IsComplexCN} ;
+  N      = CommNoun ;
+      -- = {s : Number => Species => Case => Str ; g : Gender ; x : Sex} ;
+  NP     = NounPhrase ;
+      -- = {s : NPForm => Str ; g : Gender ; n : Number} ;
+  PN     = {s : Case => Str ; g : Gender ; x : Sex} ;
+  Det    = {s : Gender => Sex => Str ; n : Number ; b : SpeciesP} ;
   Fun    = Function ;
-      -- = CommNounPhrase ** {s2 : Preposition} ;
+      -- = CommNoun ** {s2 : Preposition} ;
   Fun2   = Function ** {s3 : Preposition} ;
   Num    = {s : Case => Str} ;
+  Prep   = {s : Str} ;
 
-  Adj1   = Adjective ; 
-      -- = {s : AForm => Str}
+  Adj1   = Adjective ;
+      -- = {s : AdjFormPos => Case => Str} ; 
   Adj2   = Adjective ** {s2 : Preposition} ;
-  AdjDeg = {s : Degree => AForm => Str} ;
-  AP     = Adjective ** {p : Bool} ;
+  AdjDeg = {s : AdjForm => Str} ;
+  AP     = Adjective ** {p : IsPostfixAdj} ;
 
-  V      = Verb ; 
-      -- = {s : VForm => Str ; s1 : Particle}
-  VG     = {s : Bool => VForm => Str ; s2 : Bool => Number => Str ; 
-            isAuxT, isAuxF : Bool} ;
-  VP     = {s : VForm => Str ; s2 : Number => Str ; isAux : Bool} ;
+  V      = Verb ;
+      -- = {s : VForm => Str} ;
+  VG     = Verb ** {s2 : Bool => Str ; s3 : Gender => Number => Str} ;
+  VP     = Verb ** {s2 : Str ; s3 : Gender => Number => Str} ;
   TV     = TransVerb ; 
-      -- = Verb ** {s3 : Preposition} ;
-  V3     = TransVerb ** {s4 : Preposition} ;
+      -- = Verb ** {s2 : Preposition} ;
+  V3     = TransVerb ** {s3 : Preposition} ;
   VS     = Verb ;
   VV     = Verb ** {isAux : Bool} ;
 
-  AdV    = {s : Str ; p : Bool} ;
+  AdV    = {s : Str ; isPost : Bool} ;
 
-  S      = {s : Str} ; 
-  Slash  = {s : Bool => Str ; s2 : Preposition} ;
-  RP     = {s : Gender => Number => NPForm => Str} ;
-  RC     = {s : Gender => Number => Str} ;
-
-  IP     = {s : NPForm => Str ; n : Number} ;
+  S      = Sentence ;
+      -- = {s : Order => Str} ;
+  Slash  = Sentence ** {s2 : Preposition} ;
+  RP     = {s : RelCase => GenNum => Str ; g : RelGender} ;
+  RC     = {s : GenNum => Str} ;
+  IP     = NounPhrase ;
   Qu     = {s : QuestForm => Str} ;
   Imp    = {s : Number => Str} ;
+
   Phr    = {s : Str} ;
-  Text   = {s : Str} ;
 
   Conj   = {s : Str ; n : Number} ;
   ConjD  = {s1 : Str ; s2 : Str ; n : Number} ;
 
-  ListS  = {s1 : Str ; s2 : Str} ;
-  ListAP = {s1,s2 : AForm => Str ; p : Bool} ;
-  ListNP = {s1,s2 : NPForm => Str ; n : Number ; p : Person} ;
+  ListS  = {s1,s2 : Order => Str} ; 
+  ListAP = {s1,s2 : AdjFormPos => Case => Str ; p : Bool} ;
+  ListNP = {s1,s2 : NPForm => Str ; g : Gender ; n : Number} ;
 
 --.
 
@@ -98,11 +99,11 @@ lin
   IndefManyNP = indefNounPhraseNum plural ;
   DefOneNP = defNounPhrase singular ;
   DefManyNP = defNounPhraseNum plural ;
-  MassNP = detNounPhrase (mkDeterminer Sg []) ;
+  MassNP = detNounPhrase (mkDeterminerSg (detSgInvar []) IndefP) ;
+  UseInt i = {s = table {Nom => i.s ; Gen => i.s ++ "s"}} ; ---
+  NoNum = noNum ;
 
   CNthatS = nounThatSentence ;
-  UseInt i = {s = table {Nom => i.s ; Gen => i.s ++ "'s"}} ; ---
-  NoNum = noNum ;
 
   PredVP = predVerbPhrase ;
   PosVG  = predVerbGroup True ;
@@ -120,19 +121,24 @@ lin
   PredVV = complVerbVerb ;
   VTrans = transAsVerb ;
 
-  AdjAdv a = advPost (a.s ! AAdv) ;
+  AdjAdv a = advPost (a.s ! adverbForm ! Nom) ;
   PrepNP p = prepPhrase p.s ; ---
   AdvVP = adVerbPhrase ;
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
 
+  ThereIsCN A = predVerbPhrase npDet 
+                (predVerbGroup True
+                  (complTransVerb (mkDirectVerb verbFinnas) 
+                     (indefNounPhrase singular A))) ;
+  ThereAreCN n A = predVerbPhrase npDet 
+                   (predVerbGroup True
+                    (complTransVerb (mkDirectVerb verbFinnas) 
+                       (indefNounPhraseNum plural n A))) ;
+
   PosSlashTV = slashTransVerb True ;
   NegSlashTV = slashTransVerb False ;
-  OneVP = predVerbPhrase (nameNounPhrase (nameReg "one")) ;
-  ThereIsCN A = prefixSS ["there is"]                                ---
-                  (defaultNounPhrase (indefNounPhrase singular A)) ;
-  ThereAreCN n A = prefixSS ["there are"]  
-                  (defaultNounPhrase (indefNounPhraseNum plural n A)) ;
+  OneVP = predVerbPhrase npMan ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -153,8 +159,15 @@ lin
   IntVP = intVerbPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
-  IsThereCN = isThere singular noNum ;
-  AreThereCN = isThere plural ;
+  IsThereCN A = questVerbPhrase npDet 
+                 (predVerbGroup True
+                  (complTransVerb (mkDirectVerb verbFinnas) 
+                     (indefNounPhrase singular A))) ;
+  AreThereCN n A = questVerbPhrase npDet
+                     (predVerbGroup True
+                       (complTransVerb (mkDirectVerb verbFinnas) 
+                         (indefNounPhraseNum plural n A))) ;
+
 
   ImperVP = imperVerbPhrase ;
 

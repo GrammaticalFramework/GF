@@ -16,11 +16,11 @@ lincat
   Name       = PN ;
 
 lin
-  WhichAre A B = QuestPhrase (IntVP (NounIPMany A) (PosA B)) ;
+  WhichAre A B = QuestPhrase (IntVP (NounIPMany A) (PosVG (PredAP B))) ;
   IsThere A = QuestPhrase (IsThereCN A) ;
-  AreThere A = QuestPhrase (AreThereCN A) ;
-  WhatIs val = QuestPhrase (IntVP WhatOne (PosNP val)) ;
-  IsIt Q A = QuestPhrase (QuestVP Q (PosA A)) ;
+  AreThere A = QuestPhrase (AreThereCN NoNum A) ;
+  WhatIs val = QuestPhrase (IntVP WhatOne (PosVG (PredNP val))) ;
+  IsIt Q A = QuestPhrase (QuestVP Q (PosVG (PredAP A))) ;
 
   MoreThan   = ComparAdjP ;
   TheMost    = SuperlNP ;

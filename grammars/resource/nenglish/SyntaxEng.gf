@@ -294,7 +294,20 @@ oper
 -- There's also a parameter telling if the verb is an auxiliary:
 -- this is needed in question.
 
+  VerbGroup = {
+    s  : Bool => VForm => Str ;
+    s2 : Bool => Number => Str ; 
+    isAuxT : Bool ;
+    isAuxF : Bool
+    } ;
+
   VerbPhrase = VerbP3 ** {s2 : Number => Str ; isAux : Bool} ;
+
+  predVerbGroup : Bool -> VerbGroup -> VerbPhrase = \b,vg -> {
+    s  = vg.s ! b ;
+    s2 = vg.s2 ! b ;
+    isAux = if_then_else Bool b vg.isAuxT vg.isAuxF
+    } ;
 
 -- From the inflection table, we selecting the finite form as function 
 -- of person and number:
@@ -309,15 +322,15 @@ oper
 -- N.B. negation is *not* a function applicable to a verb phrase, since
 -- double negations with "don't" are not grammatical.
 
-  predVerb : Bool -> Verb -> VerbPhrase = \b,walk ->
-    if_then_else VerbPhrase b 
-      {s = \\v => walk.s ! v ++ walk.s1 ;
-       s2 = \\_ => [] ; 
-       isAux = False
-      }
-      {s  = \\v => contractNot (verbP3Do.s ! v) ; 
-       s2 = \\_ => walk.s ! InfImp ++ walk.s1 ;
-       isAux = True
+  predVerb : Verb -> VerbGroup = \walk ->
+      {s = \\b,v => if_then_Str b
+              (walk.s ! v ++ walk.s1)
+              (contractNot (verbP3Do.s ! v)) ;
+       s2 = \\b,_ => if_then_Str b
+              []
+              (walk.s ! InfImp ++ walk.s1) ;
+       isAuxT = False ;
+       isAuxF = True
       } ;
 
 -- Sometimes we want to extract the verb part of a verb phrase.
@@ -329,33 +342,33 @@ oper
 -- The third rule is overgenerating: "is every man" has to be ruled out
 -- on semantic grounds.
 
-  predAdjective : Bool -> Adjective -> VerbPhrase = \b,old ->
-    {s = beOrNotBe b ;
-     s2 = \\_ => old.s ! AAdj ;
-     isAux = True
+  predAdjective : Adjective -> VerbGroup = \old ->
+    {s = beOrNotBe ;
+     s2 = \\_,_ => old.s ! AAdj ;
+     isAuxT, isAuxF = True
     } ;
 
-  predCommNoun : Bool -> CommNoun -> VerbPhrase = \b,man ->
-    {s = beOrNotBe b ;
-     s2 = \\n => indefNoun n man ;
-     isAux = True
+  predCommNoun : CommNoun -> VerbGroup = \man ->
+    {s = beOrNotBe ;
+     s2 = \\_,n => indefNoun n man ;
+     isAuxT, isAuxF = True
     } ;
 
-  predNounPhrase : Bool -> NounPhrase -> VerbPhrase = \b,john ->
-    {s = beOrNotBe b ;
-     s2 = \\_ => john.s ! NomP ;
-     isAux = True
+  predNounPhrase : NounPhrase -> VerbGroup = \john ->
+    {s = beOrNotBe ;
+     s2 = \\_,_ => john.s ! NomP ;
+     isAuxT, isAuxF = True
     } ;
 
-  predAdverb : Bool -> Adverb -> VerbPhrase = \b,elsewhere ->
-    {s = beOrNotBe b ;
-     s2 = \\_ => elsewhere.s ;
-     isAux = True
+  predAdverb : Adverb -> VerbGroup = \elsewhere ->
+    {s = beOrNotBe ;
+     s2 = \\_,_ => elsewhere.s ;
+     isAuxT, isAuxF = True
     } ;
 
 -- We use an auxiliary giving all forms of "be".
 
-  beOrNotBe : Bool -> (VForm => Str) = \b -> 
+  beOrNotBe : Bool => VForm => Str = \\b => 
     if_then_else (VForm => Str) b 
       verbBe.s
       (table {
@@ -378,16 +391,13 @@ oper
 -- Particles produce free variation: before or after the complement 
 -- ("I switch on the TV" / "I switch the TV on").
 
-  complTransVerb : Bool -> TransVerb -> NounPhrase -> VerbPhrase = 
-    \b,lookat,john ->
-    let {lookatjohn = bothWays lookat.s1 (lookat.s3 ++ john.s ! AccP)} in
-    if_then_else VerbPhrase b 
-      {s = lookat.s ; 
-       s2 = \\_ => lookatjohn ; 
-       isAux = False}
-      {s = \\v => contractNot (verbP3Do.s ! v) ; 
-       s2 = \\_ => lookat.s ! InfImp ++ lookatjohn ;
-       isAux = True} ;
+  complTransVerb : TransVerb -> NounPhrase -> VerbGroup = \lookat,john ->
+    let lookatjohn = bothWays lookat.s1 (lookat.s3 ++ john.s ! AccP)
+    in {s  = \\b,v => if_then_Str b (lookat.s ! v) (contractNot (verbP3Do.s ! v)) ; 
+        s2 = \\b,_ => if_then_Str b lookatjohn (lookat.s ! InfImp ++ lookatjohn) ; 
+        isAuxT = False ;
+        isAuxF = True
+       } ;
 
 
 -- Verbs that take direct object and a  particle:
@@ -407,8 +417,8 @@ oper
 -- Therefore, the function can also be used for "he is swum", etc.
 -- The syntax is the same as for adjectival predication.
 
-  passVerb : Bool -> Verb -> VerbPhrase = \b,love ->
-    predAdjective b (adj2adjPhrase (regAdjective (love.s ! PPart))) ;
+  passVerb : Verb -> VerbGroup = \love ->
+    predAdjective (adj2adjPhrase (regAdjective (love.s ! PPart))) ;
 
 -- Transitive verbs can be used elliptically as verbs. The semantics
 -- is left to applications. The definition is trivial, due to record
@@ -426,20 +436,15 @@ oper
   mkDitransVerb : Verb -> Preposition -> Preposition -> DitransVerb = \v,p1,p2 -> 
     v ** {s3 = p1 ; s4 = p2} ;
 
-  complDitransVerb : 
-    Bool -> DitransVerb -> NounPhrase -> NounPhrase -> VerbPhrase = 
-    \b,give,you,beer ->
-      let {
+  complDitransVerb : DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = 
+    \give,you,beer ->
+      let
         youbeer = give.s1 ++ give.s3 ++ you.s ! AccP ++ give.s4 ++ beer.s ! AccP
-      } in
-      if_then_else VerbPhrase b 
-      {s = give.s ; 
-       s2 = \\_ => youbeer ;
-       isAux = False
-      }
-      {s = \\v => contractNot (verbP3Do.s ! v) ; 
-       s2 = \\_ => give.s ! InfImp ++ youbeer ;
-       isAux = True
+      in
+      {s  = \\b,v => if_then_Str b (give.s ! v) (contractNot (verbP3Do.s ! v)) ; 
+       s2 = \\b,_ => if_then_Str b  youbeer     (give.s ! InfImp ++ youbeer) ;
+       isAuxT = False ;
+       isAuxF = True
       } ;
 
 
@@ -510,12 +515,6 @@ oper
         walks.s2 ! john.n) ;
 
 
--- This is a macro for simultaneous predication and complementization.
-
-  predTransVerb : Bool -> NounPhrase -> TransVerb -> NounPhrase -> Sentence = 
-    \b,you,see,john -> 
-    predVerbPhrase you (complTransVerb b see john) ;
-
 
 --3 Sentence-complement verbs
 --
@@ -525,16 +524,13 @@ oper
 
 -- To generate "says that John walks" / "doesn't say that John walks":
 
-  complSentVerb : Bool -> SentenceVerb -> Sentence -> VerbPhrase = 
-    \b,say,johnruns ->
-    let {thatjohnruns = optStr "that" ++ johnruns.s} in
-    if_then_else VerbPhrase b 
-      {s  = say.s ; 
-       s2 = \\_ => thatjohnruns ; 
-       isAux = False}
-      {s  = \\v => contractNot (verbP3Do.s ! v) ; 
-       s2 = \\_ => say.s ! InfImp ++ thatjohnruns ;
-       isAux = True} ;
+  complSentVerb : SentenceVerb -> Sentence -> VerbGroup = \say,johnruns ->
+    let {thatjohnruns = optStr "that" ++ johnruns.s} in 
+      {s  = \\b,v => if_then_Str b (say.s ! v)  (contractNot (verbP3Do.s ! v)) ;  
+       s2 = \\b,_ => if_then_Str b thatjohnruns (say.s ! InfImp ++ thatjohnruns) ; 
+       isAuxT = False ;
+       isAuxF = True
+      } ;
 
 --3 Verb-complement verbs
 --
@@ -552,17 +548,26 @@ oper
 -- The contraction of "not" is not provided, since it would require changing
 -- the verb parameter type.
 
-  complVerbVerb : Bool -> VerbVerb -> VerbPhrase -> VerbPhrase = \b,try,run ->
-    let to = if_then_else Str try.isAux [] "to" 
+  complVerbVerb : VerbVerb -> VerbGroup -> VerbGroup = \try,run ->
+    let
+       taux  = try.isAux ;
+       to    = if_then_Str taux [] "to" ;
+       dont  = table VForm {v => if_then_Str taux 
+                 (try.s ! v ++ "not")                -- can not
+                 (contractNot (verbP3Do.s ! v))      -- doesn't ...
+                 } ;
+       trnot = if_then_Str taux 
+                  []                                  --
+                  (try.s ! InfImp ++ try.s1) ;        -- ... try
     in
-    if_then_else VerbPhrase b 
-      {s = \\v => try.s ! v ++ try.s1 ++ to ++ run.s ! InfImp ;
-       s2 = run.s2 ; 
-       isAux = try.isAux
-      }
-      {s  = \\v => try.s ! v ++ "not" ; 
-       s2 = \\n => run.s ! InfImp ++ run.s2 ! n ;
-       isAux = True
+      {s =  \\b,v => if_then_Str b 
+                        (try.s ! v ++ try.s1 ++ to ++ run.s ! True ! InfImp)
+                        (dont ! v) ;
+       s2 = \\b,v => if_then_Str b
+                        (run.s2 ! True ! v) 
+                        (trnot ++ run.s ! True ! InfImp ++ run.s2 ! True ! v) ; 
+       isAuxT = taux ;
+       isAuxF = True
       } ;
 
 -- The three most important example auxiliaries.
@@ -769,7 +774,7 @@ oper
          Sg => nameNounPhrase (nameReg "there") ;
          Pl => {s = \\_ => "there" ; n = Pl ; p = P3}
          })
-      (predNounPhrase True (indefNounPhraseNum n num bar)) ;
+      (predVerbGroup True (predNounPhrase (indefNounPhraseNum n num bar))) ;
 
 
 --3 Wh-questions
