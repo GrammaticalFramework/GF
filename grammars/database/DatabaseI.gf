@@ -18,7 +18,7 @@ lincat
 lin
   WhichAre A B = QuestPhrase (IntVP (NounIPMany A) (PosVG (PredAP B))) ;
   IsThere A = QuestPhrase (IsThereNP (IndefOneNP A)) ;
-  AreThere A = QuestPhrase (IsThereNP (IndefManyNP NoNum A)) ;
+  AreThere A = QuestPhrase (IsThereNP (IndefNumNP NoNum A)) ;
   WhatIs val = QuestPhrase (IntVP WhatOne (PosVG (PredNP val))) ;
   IsIt Q A = QuestPhrase (QuestVP Q (PosVG (PredAP A))) ;
 
@@ -35,9 +35,9 @@ lin
 
   Individual = UsePN ;
 
-  AllN = DetNP (AllsDet NoNum) ;
+  AllN = DetNP (AllNumDet NoNum) ;
   MostN = DetNP MostsDet ;
   EveryN = DetNP EveryDet ;
-  Any = DetNP (AnysDet NoNum) ;
+  Any = DetNP (AnyNumDet NoNum) ;
 
 } ;
