@@ -14,7 +14,7 @@ abstract Imper = {
   fun
     Empty : Program ;
     Funct : (AS : ListTyp) -> (V : Typ) -> 
-              (Body AS) -> (Fun AS V -> Program) -> Program ;
+              Body AS -> (Fun AS V -> Program) -> Program ;
 
     BodyNil  : Stm -> Body NilTyp ;
     BodyCons : (A : Typ) -> (AS : ListTyp) -> 
@@ -31,16 +31,12 @@ abstract Imper = {
     EVar   : (A : Typ) -> Var A -> Exp A ;
     EInt   : Int -> Exp TInt ;
     EFloat : Int -> Int -> Exp TFloat ;
-    EAddI  : Exp TInt -> Exp TInt -> Exp TInt ;
-    EAddF  : Exp TFloat -> Exp TFloat -> Exp TFloat ;
-    ESubI  : Exp TInt -> Exp TInt -> Exp TInt ;
-    ESubF  : Exp TFloat -> Exp TFloat -> Exp TFloat ;
-    EMulI  : Exp TInt -> Exp TInt -> Exp TInt ;
-    EMulF  : Exp TFloat -> Exp TFloat -> Exp TFloat ;
     ELtI   : Exp TInt -> Exp TInt -> Exp TInt ;
     ELtF   : Exp TFloat -> Exp TFloat -> Exp TInt ;
     EApp   : (AS : ListTyp) -> (V : Typ) -> Fun AS V -> ListExp AS -> Exp V ;
-
+    EAddI, EMulI, ESubI : Exp TInt -> Exp TInt -> Exp TInt ;
+    EAddF, EMulF, ESubF : Exp TFloat -> Exp TFloat -> Exp TFloat ;
+  
     TInt   : Typ ;
     TFloat : Typ ;
 
