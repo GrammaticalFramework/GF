@@ -16,34 +16,34 @@ import UTF8
 
 -- GF editing session controlled by e.g. a Java program. AR 16/11/2001
 
-sessionLineJ :: ShellState -> IO ()
-sessionLineJ env = do
+---- the Boolean is a temporary hack to have two parallel GUIs
+sessionLineJ :: Bool -> ShellState -> IO ()
+sessionLineJ isNew env = do
   putStrLnFlush $ initEditMsgJavaX env
   let env' = addGlobalOptions (options [sizeDisplay "short"]) env
-  editLoopJ env' (initSState)
-
-editLoopJ :: CEnv -> SState -> IO ()
-editLoopJ = editLoopJnewX
+  editLoopJnewX isNew env' (initSState)
 
 -- this is the real version, with XML
 
-editLoopJnewX :: CEnv -> SState -> IO ()
-editLoopJnewX env state = do
+---- the Boolean is a temporary hack to have two parallel GUIs
+editLoopJnewX :: Bool -> CEnv -> SState -> IO ()
+editLoopJnewX isNew env state = do
   c <- getCommandUTF
   case c of
     CQuit -> return ()
 
     c -> do
       (env',state') <- execCommand env c state
+      let inits = initAndEditMsgJavaX isNew env' state'
       let package = case c of
-            CCEnvImport _         -> initAndEditMsgJavaX env' state'
-            CCEnvEmptyAndImport _ -> initAndEditMsgJavaX env' state'
-            CCEnvOpenTerm _       -> initAndEditMsgJavaX env' state'
-            CCEnvOpenString _     -> initAndEditMsgJavaX env' state'
+            CCEnvImport _         -> inits
+            CCEnvEmptyAndImport _ -> inits
+            CCEnvOpenTerm _       -> inits
+            CCEnvOpenString _     -> inits
             CCEnvEmpty            -> initEditMsgJavaX env'
-            _ -> displaySStateJavaX env' state'
+            _ -> displaySStateJavaX isNew env' state'
       putStrLnFlush package
-      editLoopJnewX env' state'
+      editLoopJnewX isNew env' state'
 
 welcome = 
   "An experimental GF Editor for Java." ++ 
@@ -56,5 +56,5 @@ initEditMsgJavaX env = encodeUTF8 $ unlines $ tagXML "gfinit" $
   concat [tagAttrXML "language" ("file",file) [prLanguage lang] |
            (file,lang) <- zip (allGrammarFileNames env) (allLanguages env)]
 
-initAndEditMsgJavaX env state = 
-  initEditMsgJavaX env ++++ displaySStateJavaX env state
+initAndEditMsgJavaX isNew env state = 
+  initEditMsgJavaX env ++++ displaySStateJavaX isNew env state

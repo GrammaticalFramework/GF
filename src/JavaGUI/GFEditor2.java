@@ -1434,8 +1434,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
           { 
             position = jElement.position+"]";
             System.out.println("SELECTEDTEXT: "+position+"\n");
-            //treeChanged = true; 
-            //send("mp "+position);
+            treeChanged = true; 
+            send("mp "+position);
           }
        } else 
            System.out.println("no position in vector of size: "+outputVector.size());

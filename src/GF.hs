@@ -23,12 +23,13 @@ main = do
   xs <- getArgs
   let (os,fs) = getOptions "-" xs
       java    = oElem forJava os
+      isNew   = oElem newParser os ---- temporary hack to have two parallel GUIs
   putStrLn $ if java then encodeUTF8 welcomeMsg else welcomeMsg
   st <- case fs of 
     _ -> useIOE emptyShellState $ foldM (shellStateFromFiles os) emptyShellState fs
   ---  _ -> return emptyShellState
   if null fs then return () else putCPU 
-  if java then sessionLineJ st else do
+  if java then sessionLineJ isNew st else do
   gfInteract (initHState st) 
   return ()
 

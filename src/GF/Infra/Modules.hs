@@ -63,6 +63,10 @@ updateModule (Module  mt ms fs me ops js) i t =
 replaceJudgements :: Module i f t -> BinTree (i,t) -> Module i f t
 replaceJudgements (Module mt ms fs me ops _) js = Module mt ms fs me ops js
 
+addOpenQualif :: i -> i -> Module i f t -> Module i f t
+addOpenQualif i j (Module mt ms fs me ops js) = 
+  Module mt ms fs me (oQualif i j : ops) js
+
 allFlags :: MGrammar i f a -> [f]
 allFlags gr = concat $ map flags $ reverse [m | (_, ModMod m) <- modules gr]
 
@@ -191,13 +195,6 @@ data IdentM i = IdentM {
 typeOfModule mi = case mi of
   ModMod m -> mtype m
 
-isResourceModule mi = case typeOfModule mi of
-  MTResource -> True
-  MTReuse _ -> True
-  MTInterface -> True ---
-  MTInstance _ -> True
-  _ -> False
-
 abstractOfConcrete :: (Show i, Eq i) => MGrammar i f a -> i -> Err i
 abstractOfConcrete gr c = do
   m <- lookupModule gr c
@@ -232,6 +229,13 @@ lookupModuleType gr m = do
   mi <- lookupModule gr m
   return $ typeOfModule mi
 
+lookupModMod :: (Show i,Eq i) => MGrammar i f a -> i -> Err (Module i f a)
+lookupModMod gr i = do
+  mo <- lookupModule gr i
+  case mo of 
+    ModMod m -> return m
+    _ -> Bad $ "expected proper module, not" +++ show i
+
 lookupInfo :: (Show i, Ord i) => Module i f a -> i -> Err a
 lookupInfo mo i = lookupTree show i (jments mo)
 
@@ -241,6 +245,8 @@ isModAbs m = case mtype m of
 
 isModRes m = case mtype m of
   MTResource -> True
+  MTReuse _ -> True
+  MTInterface -> True ---
   MTInstance _ -> True
   _ -> False
 
@@ -268,3 +274,7 @@ isCompilableModule m = case m of
     MTInterface -> False
     _ -> mstatus m == MSComplete
   _ -> False ---
+
+-- interface and "incomplete M" are not complete
+isCompleteModule :: (Eq i) =>  Module i f a -> Bool
+isCompleteModule m = mstatus m == MSComplete && mtype m /= MTInterface

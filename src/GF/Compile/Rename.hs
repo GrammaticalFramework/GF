@@ -33,38 +33,12 @@ renameSourceTerm g m t = do
 
 renameModule :: [SourceModule] -> SourceModule -> Err [SourceModule]
 renameModule ms (name,mod) = errIn ("renaming module" +++ prt name) $ case mod of
-  ModMod (Module mt st fs me ops js) -> do
-    (_,mod1@(ModMod m)) <- extendModule ms (name,mod)
+  ModMod m@(Module mt st fs me ops js) -> do
     let js1 = jments m
-    status <- buildStatus (MGrammar ms) name mod1
+    status <- buildStatus (MGrammar ms) name mod
     js2    <- mapMTree (renameInfo status) js1
     let mod2 = ModMod $ Module mt st fs me (map forceQualif ops) js2
     return $ (name,mod2) : ms
-
-extendModule :: [SourceModule] -> SourceModule -> Err SourceModule
-extendModule ms (name,mod) = case mod of
-  ModMod (Module mt st fs me ops js0) -> do
-    js  <- case mt of
-{- --- building the {s : Str} lincat
-      MTConcrete a -> do
-        ModMod ma <- lookupModule (MGrammar ms) a
-        let cats = [c | (c,AbsCat _ _) <- tree2list $ jments ma]
-            jscs = [(c,CncCat (yes defLinType) nope nope) | c <- cats]
-        return $ updatesTreeNondestr jscs js0
--}
-      _ -> return js0
-    js1 <- case me of
-      Just n -> do
-        m0 <- case lookup n ms of
-          Just (ModMod m) -> do
-            testErr (sameMType (mtype m) mt) 
-                    ("illegal extension type to module" +++ prt name)
-            return m
-          _ -> Bad $ "cannot find extended module" +++ prt n
-        extendMod n (jments m0) js
-      _ -> return js
-    return $ (name,ModMod (Module mt st fs me ops js1))
-
 
 type Status = (StatusTree, [(OpenSpec Ident, StatusTree)])
 

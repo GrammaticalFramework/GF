@@ -41,7 +41,7 @@ markXML n i b =
     else ("<subtree" +++ p +++ c ++ ">", "</subtree>") 
    where 
      c = "type=" ++ prt (M.valNode n)
-     p = "position=" ++ show i
+     p = "position=" ++ (show $ reverse i)
 
 -- for XML in JGF 1, use
 markXMLjgf :: Marker
