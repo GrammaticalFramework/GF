@@ -101,6 +101,18 @@ qualifAnnotPar m t = case t of
   Con c -> QC m c
   _ -> composSafeOp (qualifAnnotPar m) t
 
+lookupAbsDef :: SourceGrammar -> Ident -> Ident -> Err (Maybe Term)
+lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
+  mi   <- lookupModule gr m
+  case mi of
+    ModMod mo -> do
+      info <- lookupInfo mo c
+      case info of
+        AbsFun _ (Yes t)  -> return $ return t
+        AnyInd _ n  -> lookupAbsDef gr n c
+        _ -> return Nothing
+    _ -> Bad $ prt m +++ "is not an abstract module"
+
 
 lookupLincat :: SourceGrammar -> Ident -> Ident -> Err Type
 lookupLincat gr m c | elem c [zIdent "String", zIdent "Int"] = 

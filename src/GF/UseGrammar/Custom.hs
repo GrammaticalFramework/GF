@@ -264,12 +264,10 @@ customTermCommand =
                                 in
                          [tr | t <- generateTrees gr False cat 2 Nothing (Just t), 
                                Ok tr <- [annotate gr $ MM.qualifTerm (absId g) t]])
-
-  ,(strCI "typecheck",  \g t -> let gr = grammar g in
-                                  err (const []) (return . const t)
-                                    (checkIfValidExp gr (tree2exp t)))
+  ,(strCI "typecheck",   \g t -> err (const [t]) (return . loc2tree)
+                                    (reCheckState (grammar g) (tree2loc t)))
   ,(strCI "solve",      \g t -> err (const [t]) (return . loc2tree)
-                                   (uniqueRefinements (grammar g) (tree2loc t)))
+                                   (solveAll (grammar g) (tree2loc t)))
   ,(strCI "context",    \g t -> err (const [t]) (return . loc2tree)
                                    (contextRefinements (grammar g) (tree2loc t)))
   ,(strCI "reindex",    \g t -> let gr = grammar g in

@@ -7,6 +7,7 @@ import Abstract
 import AbsCompute
 import Refresh
 import LookAbs
+import qualified Lookup ---
 
 import TC
 
@@ -24,14 +25,14 @@ annotate gr exp = annotateIn gr [] exp Nothing
 justTypeCheck :: GFCGrammar -> Exp -> Val -> Err Constraints
 justTypeCheck gr e v = do
   (_,constrs0) <- checkExp (grammar2theory gr) (initTCEnv []) e v
-  constrs1     <- reduceConstraints gr 0 constrs0
-  return $ fst $ splitConstraints constrs1
+  constrs1     <- reduceConstraints (lookupAbsDef gr) 0 constrs0
+  return $ fst $ splitConstraints gr constrs1
 
 -- type check in empty context, return the expression itself if valid
 checkIfValidExp :: GFCGrammar -> Exp -> Err Exp
 checkIfValidExp gr e = do
   (_,_,constrs0) <- inferExp (grammar2theory gr) (initTCEnv []) e
-  constrs1       <- reduceConstraints gr 0 constrs0
+  constrs1       <- reduceConstraints (lookupAbsDef gr) 0 constrs0
   ifNull (return e) (Bad  . unwords . prConstrs) constrs1
 
 annotateIn :: GFCGrammar -> Binds -> Exp -> Maybe Val -> Err Tree
@@ -45,7 +46,7 @@ annotateIn gr gamma exp = maybe (infer exp) (check exp) where
   env = initTCEnv gamma
   theory = grammar2theory gr 
   aexp2treeC (a,c) = do
-    c' <- reduceConstraints gr (length gamma) c
+    c' <- reduceConstraints (lookupAbsDef gr) (length gamma) c
     aexp2tree (a,c')
 
 -- invariant way of creating TCEnv from context
@@ -53,34 +54,48 @@ initTCEnv gamma =
   (length gamma,[(x,VGen i x) | ((x,_),i) <- zip gamma [0..]], gamma) 
 
 -- process constraints after eqVal by computing by defs
-reduceConstraints :: GFCGrammar -> Int -> Constraints -> Err Constraints
-reduceConstraints gr i = liftM concat . mapM redOne where
+reduceConstraints :: LookDef -> Int -> Constraints -> Err Constraints
+reduceConstraints look i = liftM concat . mapM redOne where
   redOne (u,v) = do
-    u' <- computeVal gr u
-    v' <- computeVal gr v
+    u' <- computeVal look u
+    v' <- computeVal look v
     eqVal i u' v' 
 
-computeVal :: GFCGrammar -> Val -> Err Val
-computeVal gr v = case v of
+computeVal :: LookDef -> Val -> Err Val
+computeVal look v = case v of
   VClos g@(_:_) e -> do
     e' <- compt (map fst g) e          --- bindings of g in e?
     whnf $ VClos g e'
+{- ----
+  _ -> do            ---- how to compute a Val, really??
+    e  <- val2exp v
+    e' <- compt [] e
+    whnf $ vClos e'
+-}
   VApp f c -> liftM2 VApp (compv f) (compv c) >>= whnf
   _ -> whnf v
  where
-   compt = computeAbsTermIn gr
-   compv = computeVal gr
+   compt = computeAbsTermIn look
+   compv = computeVal look
 
 -- take apart constraints that have the form (? <> t), usable as solutions
-splitConstraints :: Constraints -> (Constraints,MetaSubst)
-splitConstraints cs = csmsu where
+splitConstraints :: GFCGrammar -> Constraints -> (Constraints,MetaSubst)
+splitConstraints gr = splitConstraintsGen (lookupAbsDef gr)
+
+splitConstraintsSrc :: Grammar -> Constraints -> (Constraints,MetaSubst)
+splitConstraintsSrc gr = splitConstraintsGen (Lookup.lookupAbsDef gr)
+
+splitConstraintsGen :: LookDef -> Constraints -> (Constraints,MetaSubst)
+splitConstraintsGen look cs = csmsu where
 
   csmsu       = (nub [(a,b) | (a,b) <- csf1,a /= b],msf1)
   (csf1,msf1) = unif (csf,msf)  -- alternative: filter first
   (csf,msf)   = foldr mkOne ([],[]) cs
 
   csmsf     = foldr mkOne ([],msu) csu
-  (csu,msu) = unif (cs,[])    -- alternative: unify first
+  (csu,msu) = unif (cs1,[])    -- alternative: unify first
+
+  cs1 = errVal cs $ reduceConstraints look 0 cs
 
   mkOne (u,v) = case (u,v) of
     (VClos g (Meta m), v) | null g -> sub m v
@@ -111,6 +126,9 @@ performMetaSubstNode subst n@(N (b,a,v,(c,m),s)) = let
    metaSubstExp e = case e of
      Meta m -> errVal e $ maybe (return e) val2expSafe $ lookup m subst
      _ -> composSafeOp metaSubstExp e
+
+reduceConstraintsNode gr = changeConstrs red where
+  red cs = errVal cs $ reduceConstraints (lookupAbsDef gr) 0 cs
 
 -- weak heuristic to narrow down menus; not used for TC. 15/11/2001
 -- the age-old method from GF 0.9
@@ -191,8 +209,7 @@ cont2val = type2val . cont2exp
 justTypeCheckSrc :: Grammar -> Exp -> Val -> Err Constraints
 justTypeCheckSrc gr e v = do
   (_,constrs0) <- checkExp (grammar2theorySrc gr) (initTCEnv []) e v
------  constrs1     <- reduceConstraints gr 0 constrs0
-  return $ fst $ splitConstraints constrs0
+  return $ fst $ splitConstraintsSrc gr constrs0
 
 grammar2theorySrc :: Grammar -> Theory
 grammar2theorySrc gr (m,f) = case lookupFunTypeSrc gr m f of

@@ -187,10 +187,11 @@ refineWithTreeReal :: Bool -> CGrammar -> Tree -> Meta -> Action
 refineWithTreeReal der gr tree m state = do
   state' <- replaceSubTree tree state
   let cs0     = allConstrs state'
-      (cs,ms) = splitConstraints cs0
+      (cs,ms) = splitConstraints gr cs0
       v       = vClos $ tree2exp (bodyTree tree)
       msubst  = (m,v) : ms
-  metaSubstRefinements gr msubst $ mapLoc (performMetaSubstNode msubst) state'
+  metaSubstRefinements gr msubst $ 
+    mapLoc (reduceConstraintsNode gr . performMetaSubstNode msubst) state'
 
   -- without dep. types, no constraints, no grammar needed - simply: do
   --   testErr (actIsMeta state) "move pointer to meta"
@@ -339,12 +340,13 @@ reCheckState gr st = annotate gr (tree2exp (loc2tree st)) >>= return . tree2loc
 
 -- extract metasubstitutions from constraints and solve them
 solveAll :: CGrammar -> State -> Err State
-solveAll gr st0 = do
-  st <- reCheckState gr st0
-  let cs0     = allConstrs st
-      (cs,ms) = splitConstraints cs0
-  metaSubstRefinements gr ms $ mapLoc (performMetaSubstNode ms) st
-
+solveAll gr st = solve st >>= solve where 
+  solve st0 = do ---- why need twice?
+    st <- reCheckState gr st0
+    let cs0     = allConstrs st
+        (cs,ms) = splitConstraints gr cs0
+    metaSubstRefinements gr ms $ 
+      mapLoc (reduceConstraintsNode gr . performMetaSubstNode ms) st
 
 -- active refinements
 
