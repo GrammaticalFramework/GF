@@ -5,8 +5,7 @@ GHCFLAGS=-package lang -package util -fglasgow-exts
 GHCOPTFLAGS=-O -package lang -package util -fglasgow-exts
 GHCFUDFLAG=-package Fudgets
 
-HUGSTRACE      = trace
-HUGSINCLUDE    =.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:parsing:conversions:$(HUGSTRACE):
+HUGSINCLUDE    =.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:parsing:conversions:trace:
 BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -iparsing -iparsers -iconversions -inotrace
 GHCINCLUDE     =-ifor-ghc       $(BASICINCLUDE)
 GHCINCLUDENOFUD=-ifor-ghc-nofud $(BASICINCLUDE) 
@@ -38,8 +37,6 @@ justwindows:
 	$(GHMAKE) $(GHCOPTFLAGS) $(WINDOWSINCLUDE) --make GF.hs -o gf2.exe ; strip gf2.exe ; mv gf2.exe ../bin/
 nofud-links:
 	cd for-ghc-nofud ; rm -f *.hs ; ln -s ../for-ghc/Arch.hs ; ln -s ../for-hugs/ArchEdit.hs ; cd ..
-tracing:
-	make today ; $(GHMAKE) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD) --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
 
 batch: 
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) --make GF2.hs -o gf2 ; strip gf2
@@ -59,3 +56,12 @@ javac:
 	cd java ; javac *.java ; cd ..
 help:
 	cd util ; runhugs MkHelpFile ; mv HelpFile.hs .. ; cd ..
+
+# added by peb:
+tracing:
+	$(GHMAKE) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD) --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
+newparser:
+	$(GHMAKE) $(GHCFLAGS) -itrace -ifor-ghc-nofud -iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -inewparsing -iparsers --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
+newhugs:
+	hugs -h10M -P.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:newparsing:trace:
+
