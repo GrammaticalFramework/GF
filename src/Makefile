@@ -100,7 +100,7 @@ tracing:
 dist:
 	mkdir $(DIST_DIR)
 	cvs export -d $(DIST_DIR) -rHEAD GF2.0
-	cd $(DIST_DIR) && autoconf && rm -rf autom4te.cache
+	cd $(DIST_DIR)/src && autoconf && rm -rf autom4te.cache
 	find $(DIST_DIR) -name .cvsignore -exec rm -f {} ';'
 	tar -zcf $(DIST_DIR).tar.gz $(DIST_DIR)
 	zip -r $(DIST_DIR).zip $(DIST_DIR)
