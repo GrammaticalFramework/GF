@@ -1,7 +1,7 @@
 GF=gf
 SRC=../
 
-all: compiler
+all: parser gfcm
 
 compiler:
 	echo "pm | wf Imper.gfcm ;; pg -lang=ImperC -printer=plbnf | wf ImperC.tmp" | $(GF) $(SRC)ImperC.gf $(SRC)ImperJVM.gf
@@ -11,3 +11,9 @@ compiler:
 	make -f Makefile
 	rm *.tmp
 	jasmin runtime.j
+
+parser:
+	ghc --make TestImperC.hs -o TestImperC
+
+gfcm:
+	echo "pm | wf Imper.gfcm" | $(GF) $(SRC)ImperC.gf $(SRC)ImperJVM.gf
