@@ -21,7 +21,8 @@ concrete ResFin of ResAbs = open Prelude, SyntaxFin in {
 
 flags 
   startcat=Phr ; 
-  parser=chart ;
+  lexer=unglue ;
+  unlexer=glue ;
 
 lincat 
   N      = CommNoun ;         
