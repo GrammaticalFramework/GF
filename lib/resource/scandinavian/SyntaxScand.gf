@@ -1367,6 +1367,12 @@ oper
 
   defaultSentence : Sentence -> Utterance = \x -> ss (x.s ! Main) ;
 
+-- --- Here the agreement feature should really be given in context: 
+-- "What do you want to do? - Wash myself."
+
+  verbUtterance : VerbPhrase -> Utterance = \vp ->
+    ss (vp.s ++ vp.s2 ++ vp.s3 ! utrum !  Sg ! P1) ; 
+
 ----------- changes when parametrizing 20/1/2005
 
 ---- moved from Morphology

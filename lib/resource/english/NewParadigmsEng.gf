@@ -73,7 +73,7 @@ oper
 
 -- In practice the worst case is just: give singular and plural nominative.
 
-  reg2N : (man,men : Str) -> N ;
+  mk2N : (man,men : Str) -> N ;
 
 -- All nouns created by the previous functions are marked as
 -- $nonhuman$. If you want a $human$ noun, wrap it with the following
@@ -201,7 +201,7 @@ oper
 
   regV : Str -> V ;
 
--- The following variant duplicates the in consonant in the forms like
+-- The following variant duplicates the last letter in the forms like
 -- "rip - ripped - ripping".
 
   regDuplV : Str -> V ;
@@ -238,6 +238,26 @@ oper
   mkV3     : V -> Str -> Str -> V3 ;    -- speak, with, about
   dirV3    : V -> Str -> V3 ;           -- give,_,to
   dirdirV3 : V -> V3 ;                  -- give,_,_
+
+--3 Other complement patterns
+--
+-- Verbs and adjectives can take complements such as sentences,
+-- questions, verb phrases, and adjectives.
+
+  mkV0  : V -> V0 ;
+  mkVS  : V -> VS ;
+  mkV2S : V -> Str -> V2S ;
+  mkVV  : V -> VV ;
+  mkV2V : V -> Str -> Str -> V2V ;
+  mkVA  : V -> VA ;
+  mkV2A : V -> Str -> V2A ;
+  mkVQ  : V -> VQ ;
+  mkV2Q : V -> Str -> V2Q ;
+
+  mkAS  : A -> AS ;
+  mkA2S : A -> Str -> A2S ;
+  mkAV  : A -> AV ;
+  mkA2V : A -> Str -> A2V ;
 
 
 --2 Definitions of paradigms
@@ -277,9 +297,9 @@ oper
             }
          }
      in
-       reg2N ray rays ;
+       mk2N ray rays ;
 
-  reg2N = \man,men -> 
+  mk2N = \man,men -> 
     let mens = case last men of {
       "s" => men + "'" ;
       _   => men + "'s"
@@ -374,5 +394,20 @@ oper
   mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; s3 = p ; s4 = q ; lock_V3 = <>} ;
   dirV3 v p = mkV3 v [] p ;
   dirdirV3 v = dirV3 v [] ;
+
+  mkV0  v = v ** {lock_V0 = <>} ;
+  mkVS  v = v ** {lock_VS = <>} ;
+  mkV2S v p = mkV2 v p ** {lock_V2S = <>} ;
+  mkVV  v = v ** {isAux = False ; lock_VV = <>} ;
+  mkV2V v p t = mkV2 v p ** {s4 = t ; lock_V2V = <>} ;
+  mkVA  v = v ** {lock_VA = <>} ;
+  mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
+  mkVQ  v = v ** {lock_VQ = <>} ;
+  mkV2Q v p = mkV2 v p ** {lock_V2Q = <>} ;
+
+  mkAS  v = v ** {lock_AS = <>} ;
+  mkA2S v p = mkA2 v p ** {lock_A2S = <>} ;
+  mkAV  v = v ** {lock_AV = <>} ;
+  mkA2V v p = mkA2 v p ** {lock_A2V = <>} ;
 
 } ;

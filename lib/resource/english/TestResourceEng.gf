@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../../prelude
 
-concrete TestResourceEng of TestResource = RulesEng, StructuralEng **
+concrete TestResourceEng of TestResource = RulesEng, ClauseEng, StructuralEng **
   open Prelude, SyntaxEng, ParadigmsEng in {
 
 flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;

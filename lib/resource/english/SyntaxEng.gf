@@ -1059,6 +1059,13 @@ oper
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
     ss (I.s ! n ++ "!") ;
 
+-- --- Here the agreement feature should really be given in context: 
+-- "What do you want to do? - Wash myself."
+
+  verbUtterance : VerbPhrase -> Utterance = \vp ->
+    ss (vp.s1 ++ vp.s ! ASgP1) ; 
+
+
 --2 Sentence adverbs
 --
 -- Sentence adverbs is the largest class and open for
