@@ -28,7 +28,7 @@
 
 -- FIXME: figure out name prefix from grammar name
 
-module PrGSL (prGSL) where
+module PrGSL (gslPrinter) where
 
 import Ident
 import CFGrammar
@@ -36,26 +36,36 @@ import Parser (Symbol(..))
 import GrammarTypes
 import PrintParser
 import TransformCFG
+import Option
 
 import Data.List
+import Data.Maybe (fromMaybe)
 import Data.FiniteMap
 
 
-type GSLGrammar = [GSLRule]
+data GSLGrammar = GSLGrammar String [GSLRule]
 data GSLRule = GSLRule String [GSLAlt]
 type GSLAlt = [Symbol String Token]
 
 type CatNames = FiniteMap String String
 
-prGSL :: CFGrammar -> String
-prGSL cfg = prGSLGrammar names gsl ""
+gslPrinter :: Options -> CFGrammar -> String
+gslPrinter opts = prGSL start
+    where mstart = getOptVal opts gStartCat
+	  start = fromMaybe "S" mstart ++ "{}.s"
+
+prGSL :: String -- ^ startcat
+      -> CFGrammar -> String
+prGSL start cfg = prGSLGrammar names gsl ""
     where
     cfg' = makeNice cfg
-    gsl = cfgToGSL cfg'
+    gsl = cfgToGSL start cfg'
     names = mkCatNames "GSL_" gsl
 
-cfgToGSL :: [CFRule_] -> GSLGrammar
-cfgToGSL = map cfgRulesToGSLRule . sortAndGroupBy ruleCat
+cfgToGSL :: String  -- ^ startcat
+	 -> [CFRule_] -> GSLGrammar
+cfgToGSL start = 
+    GSLGrammar start . map cfgRulesToGSLRule . sortAndGroupBy ruleCat
     where
     ruleCat (Rule c _ _) = c
     ruleRhs (Rule _ r _) = r
@@ -63,14 +73,18 @@ cfgToGSL = map cfgRulesToGSLRule . sortAndGroupBy ruleCat
 
 mkCatNames :: String -- name prefix
 	   -> GSLGrammar -> CatNames
-mkCatNames pref gsl = listToFM (zip lhsCats names)
+mkCatNames pref (GSLGrammar start rules) = 
+    listToFM (zipWith dotIfStart lhsCats names)
     where names = [pref ++ show x | x <- [0..]]
-	  lhsCats = [ c | GSLRule c _ <- gsl ]
+	  lhsCats = [ c | GSLRule c _ <- rules]
+	  dotIfStart c n | c == start = (c, "." ++ n)
+			 | otherwise = (c, n)
 
 prGSLGrammar :: CatNames -> GSLGrammar -> ShowS
-prGSLGrammar names g = header . unlinesS (map prGSLrule g)
+prGSLGrammar names (GSLGrammar start g) = header . unlinesS (map prGSLrule g)
     where
-    header = showString ";GSL2.0" . nl
+    header = showString ";GSL2.0" . nl 
+	     . showString ("; startcat = " ++ start ) . nl
     prGSLrule (GSLRule cat rhs) = 
       showString "; " . prtS cat . nl
         . prGSLCat cat . sp . wrap "[" (unwordsS (map prGSLAlt rhs)) "]" . nl
