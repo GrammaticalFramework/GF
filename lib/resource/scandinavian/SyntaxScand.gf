@@ -9,6 +9,8 @@
 
 interface SyntaxScand = TypesScand ** open Prelude, (CO = Coordination) in {
 
+flags optimize=share ;
+
 --2 Common Nouns
 --
 --3 Simple common nouns

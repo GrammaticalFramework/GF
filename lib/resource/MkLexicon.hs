@@ -14,6 +14,13 @@ noComm s = case s of
   "" -> False
   _ -> True
 
+-- remove tailing comments
+
+remTail s = case s of
+  '-':'-':_ -> []
+  c:cs -> c : remTail cs
+  _ -> s
+
 -- postfix with category
 
 postfix p s = takeWhile (not . isSpace) s ++ "_" ++ p
@@ -70,3 +77,11 @@ mkIdent s = case words s of
      "SomewhereNP" -> "SomewhereAdv"
      "AgentPrep" -> "By8agentPrep"
      _ -> w
+
+-- massage French verbs 9/2/2005
+
+freVerb s = case words s of
+  v:_ -> "  " ++ v ++ " : " ++ cat v ++ " ;"
+  _ -> []
+ where
+   cat v = dropWhile (not . isUpper) v

@@ -3,6 +3,8 @@
 incomplete concrete ClauseScand of Clause = CategoriesScand ** 
   open Prelude, SyntaxScand in {
 
+  flags optimize=all ;
+
   lin
   SPredV np v = predVerbGroupClause np (predVerb v) ;
   SPredPassV np v = predVerbGroupClause np (passVerb v) ;
