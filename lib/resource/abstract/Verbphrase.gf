@@ -21,6 +21,7 @@ abstract Verbphrase = Categories ** {
   UseV         : V  -> VP ;               -- "walks"
   UsePassV     : V  -> VP ;               -- "is seen"
   ComplV2      : V2 -> NP -> VP ;         -- "sees Mary"
+  ComplV3      : V3 -> NP -> NP -> VP ;   -- "tells Mary everything"
   ComplReflV2  : V2 -> VP ;               -- "loves himself"
   ComplVS      : VS -> S -> VP ;          -- "says that Mary runs"
   ComplVV      : VV -> VPI -> VP ;        -- "must walk"

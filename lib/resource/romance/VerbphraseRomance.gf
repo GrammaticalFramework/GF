@@ -28,6 +28,7 @@ incomplete concrete VerbphraseRomance of Verbphrase = CategoriesRomance **
   UseV v = predClauseGroup v (complVerb v) ;
   UsePassV v = predClauseBeGroup (passVerb v) ;
   ComplV2 v x = predClauseGroup v (complTransVerb v x) ;
+  ComplV3 v x y = predClauseGroup v (complDitransVerb v x y) ;
   ComplReflV2 v = predClauseGroup v (reflTransVerb v) ;
   ComplVS v x = predClauseGroup v (complSentVerb v x) ;
   ComplVV v x = predClauseGroup v (complVerbVerb v x) ;

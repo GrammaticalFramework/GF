@@ -70,7 +70,6 @@ fun
 -- Partial saturation.
 
   UseV2        : V2 -> V ;                 -- "loves"
-  ComplV3      : V3 -> NP -> V2 ;          -- "prefers wine (to beer)"
 
   ComplA2S     : A2S -> NP  -> AS ;        -- "good for John"
 

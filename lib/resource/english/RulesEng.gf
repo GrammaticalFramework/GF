@@ -78,7 +78,7 @@ lin
 -- Partial saturation.
 
   UseV2 = transAsVerb ;
-  ComplV3 = complDitransVerb ;
+----  ComplV3 = complDitransVerb ;
 
   ComplA2S = predAdjSent2 ;
 
