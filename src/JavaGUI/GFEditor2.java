@@ -1202,8 +1202,11 @@ System.out.println("encoding "+defaultEncoding);
 
             submenu.removeAll();                         
             //menu.removeAllItems();
+            //menu.addItem("New");
+            while (1< menu.getItemCount())
+              menu.removeItemAt(1);
  System.out.println("importing: "+ file.getPath().replace('\\','/'));
-             menu.addItem("New");
+
              fileString ="";
              send("i "+ file.getPath().replace('\\','/'));  
 
