@@ -39,7 +39,9 @@ toNode i m = Node {
 			  M.MTAbstract -> (GrAbstract, Nothing)
 			  M.MTConcrete i -> (GrConcrete, Just (prIdent i))
 			  M.MTResource -> (GrResource, Nothing)
-			  -- FIXME: transfer and resource
+			  M.MTTransfer _ _ -> 
+			      -- FIXME
+			      error "Can't visualize transfer modules yet"
     
 openName :: M.OpenSpec Ident -> String
 openName (M.OSimple q i) = prIdent i
