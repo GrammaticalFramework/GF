@@ -59,7 +59,7 @@ lincat
       -- = Verb ** {s3 : Preposition} ;
   V3     = TransVerb ** {s4 : Preposition} ;
   VS     = Verb ;
-  VV     = Verb ** {isAux : Bool} ;
+  VV     = AuxVerb ** {isAux : Bool} ;
 
   VS     = Verb ;
   VQ     = Verb ;

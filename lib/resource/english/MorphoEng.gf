@@ -178,9 +178,9 @@ oper
   mkVerbP3worst : (_,_,_,_,_: Str) -> VerbP3 = \go,goes,went,gone,going -> 
     {s = table {
        InfImp => go ; 
-       Indic P3 => goes ; 
+       Indic Sg => goes ; 
        Indic _ => go ; 
-       Pastt _ => went ;
+       Pastt   => went ;
        PPart => gone ;
        PresPart => going
        }
@@ -246,21 +246,61 @@ oper
 
   verbP3Do   = mkVerbP3 "do" "does" "did" "done" ;
 
-  verbBe : VerbP3 = {s = table {
-    InfImp => "be" ; 
-    Indic P1 => "am" ; 
-    Indic P2 => "are" ;
-    Indic P3 => "is" ;
-    Pastt Sg => "was" ;
-    Pastt Pl => "were" ;
-    PPart => "been" ;
-    PresPart => "being"
-    }} ;
+  auxVerbBe : AuxVerb = {s = table {
+    AInfImp => "be" ; 
+    AIndic P1 b => if_then_Str b "am" ["am not"] ; 
+    AIndic P2 b => negAux b "are" ;
+    AIndic P3 b => negAux b "is" ;
+    APastt Sg b => negAux b "was" ;
+    APastt Pl b => negAux b "were" ;
+    APPart => "been" ;
+    APresPart => "being"
+    }
+  } ;
+
+-- The negative forms are not used; 
+--- the particle $want.s1$ disappears - is it ever needed?
+
+  verb2aux : Verb -> AuxVerb = \want -> {s = table {
+    AInfImp     => want.s ! InfImp ; 
+    AIndic P3 b => want.s ! Indic Sg ;
+    AIndic _ b  => want.s ! Indic Pl ;
+    APastt _ b  => want.s ! Pastt ;
+    APPart      => want.s ! PPart ;
+    APresPart   => want.s ! PresPart 
+    }
+  } ;
+
+  aux2verb : AuxVerb -> Verb = \want -> {s = table {
+    InfImp     => want.s ! AInfImp ; 
+    Indic Sg   => want.s ! AIndic P3 True ;
+    Indic _    => want.s ! AIndic P2 True ;
+    Pastt      => want.s ! APastt Pl True ;
+    PPart      => want.s ! APPart ;
+    PresPart   => want.s ! APresPart 
+    } ;
+   s1 = []
+  } ;
+
+-- The three most important example auxiliaries.
+
+  mkVerbAux : (_,_,_,_: Str) -> AuxVerb = \beable, can, could, beenable -> 
+    {s = table {
+       AInfImp    => beable ; 
+       AIndic _ b => negAux b can ; 
+       APastt _ b => negAux b could ;
+       APPart     => beenable ;
+       APrepPart  => nonExist ---- fix!
+       } ;
+    } ;
+
 
   verbPart : VerbP3 -> Particle -> Verb = \v,p ->
     v ** {s1 = p} ;
 
   verbNoPart : VerbP3 -> Verb = \v -> verbPart v [] ;
+
+  negAux : Bool -> Str -> Str = \b,is -> if_then_Str b is (is + "n't") ;
 
 -- The optional negation contraction is a useful macro e.g. for "do".
 

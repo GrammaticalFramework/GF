@@ -79,7 +79,7 @@ concrete StructuralEng of Structural =
   to_Prep = ss "to" ;
   under_Prep = ss "under" ;
   very_Adv = ss "very" ;
-  want_VV = verbNoPart (regVerbP3 "want") ** {isAux = False} ;
+  want_VV = verb2aux (verbNoPart (regVerbP3 "want")) ** {isAux = False} ;
   we_NP = pronNounPhrase pronWe ;
   what8many_IP = intPronWhat plural ;
   what8one_IP = intPronWhat singular ;

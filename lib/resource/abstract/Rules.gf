@@ -64,17 +64,15 @@ fun
 -- module $Verbphrase$ (deep $VP$ nesting) and its alternative,
 -- $Clause$ (shallow many-place predication structure).
 
-  PredAS       : AS -> S  -> Cl ;         -- "it is good that he comes"                
-  PredV0       : V0 -> Cl ;               -- "it is raining"
+  PredAS       : AS -> S  -> Cl ;          -- "it is good that he comes"                
+  PredV0       : V0 -> Cl ;                -- "it is raining"
 
 -- Partial saturation.
 
-  UseV2        : V2 -> V ;                    -- "loves"
-  ComplV3      : V3 -> NP -> V2 ;             -- "prefers wine (to beer)"
+  UseV2        : V2 -> V ;                 -- "loves"
+  ComplV3      : V3 -> NP -> V2 ;          -- "prefers wine (to beer)"
 
-  ComplA2S     : A2S -> NP  -> AS ;           -- "good for John"
-
-  TransVV2     : VV -> V2 -> V2 ;             -- (which song do you) want to play
+  ComplA2S     : A2S -> NP  -> AS ;        -- "good for John"
 
   UseV2V : V2V -> VV ;
   UseV2S : V2S -> VS ;
@@ -118,13 +116,15 @@ fun
 --3 Sentences and relative clauses
 --
 
-  SlashV2  : NP -> V2 -> Slash ;                -- "John doesn't love"
+  SlashV2  : NP -> V2 -> Slash ;       -- "(whom) John doesn't love"
+  SlashVV2 : NP -> VV -> V2 -> Slash ; -- "(which song do you) want to play"
+  SlashAdv : Cl -> Prep -> Slash ;     -- "(whom) John walks with"
 
-  IdRP     : RP ;                               -- "which"
-  FunRP    : N2 -> RP -> RP ;                   -- "the successor of which"
-  RelSlash : RP -> Slash -> RCl ;               -- "that I wait for"/"for which I wait" 
-  ModRS    : CN -> RS -> CN ;                   -- "man who walks"
-  RelCl    : Cl -> RCl ;                        -- "such that it is even"
+  IdRP     : RP ;                      -- "which"
+  FunRP    : N2 -> RP -> RP ;          -- "the successor of which"
+  RelSlash : RP -> Slash -> RCl ;      -- "that I wait for"/"for which I wait" 
+  ModRS    : CN -> RS -> CN ;          -- "man who walks"
+  RelCl    : Cl -> RCl ;               -- "such that it is even"
 
 --!
 --3 Questions and imperatives

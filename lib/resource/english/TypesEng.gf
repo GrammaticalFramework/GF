@@ -63,7 +63,12 @@ oper
 -- in the singular; plural forms are uniformly equal to the 2nd person singular.
 
 param
-  VForm = InfImp | Indic Person | Pastt Number | PPart | PresPart ;
+  VForm  = InfImp | Indic Number | Pastt | PPart | PresPart ;
+
+-- This is for auxiliary verbs, which have special negated indicative forms.
+
+  AuxVerbForm = AInfImp | AIndic Person Bool | APastt Number Bool | APPart | APresPart ;
+
 
 oper
   VerbP3 : Type = {s : VForm => Str} ;
@@ -73,6 +78,8 @@ oper
   Particle : Type = Str ;
   Verb = VerbP3 ** {s1 : Particle} ; 
 
+  AuxVerb = {s : AuxVerbForm => Str} ;
+  
 --
 --3 Pronouns
 --

@@ -154,7 +154,7 @@ oper
 
 -- The verbs "be" and "have" are special.
 
-  vBe   : V ;
+----  vBe   : V ;
   vHave : V ;
 
 -- Verbs with a particle.
@@ -281,7 +281,6 @@ oper
   mkV2 = \v,p -> v ** {lock_V2 = <> ; s3 = p} ;
   tvPartReg = \get, along, to -> mkV2 (vPartReg get along) to ;
 
-  vBe = verbBe  ** {s1 = [] ; lock_V = <>} ;
   vHave = verbP3Have  ** {s1 = [] ; lock_V = <>} ;
 
   tvGen = \s,p -> mkV2 (vGen s) p ;
