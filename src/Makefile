@@ -9,6 +9,8 @@ all:
 	make today ; make ghc
 ghc: 
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) --make GF.hs -o gf2+ ; strip gf2+ ; mv gf2+ ../bin/
+gft:
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) -itranslate --make translate/GFT.hs -o gft ; strip gft ; mv gft ../bin/
 nofud:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) --make GF.hs -o gf2n ; strip gf2n ; mv gf2n ../bin/
 windows:

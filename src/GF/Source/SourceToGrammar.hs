@@ -250,7 +250,7 @@ transCncDef x = case x of
   DefPrintFun defs -> do
     defs' <- liftM concat $ mapM transPrintDef defs
     returnl [(f, G.CncFun Nothing nope (yes e)) | (f,e) <- defs']
-  DefPrintOld defs -> do  -- a guess, for backward compatibility
+  DefPrintOld defs -> do  --- a guess, for backward compatibility
     defs' <- liftM concat $ mapM transPrintDef defs
     returnl [(f, G.CncFun Nothing nope (yes e)) | (f,e) <- defs']    
   DefFlag defs -> liftM Right $ mapM transFlagDef defs

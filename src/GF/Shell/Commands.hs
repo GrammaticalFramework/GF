@@ -35,6 +35,7 @@ import Custom
 import qualified Ident as I
 import Option
 import Str (sstr) ----
+import UTF8 ----
 
 import Random (mkStdGen, newStdGen)
 import Monad (liftM2, foldM)
@@ -398,7 +399,8 @@ displaySStateIn env state = (tree',msg,menu) where
 
 ---- the Boolean is a temporary hack to have two parallel GUIs
 displaySStateJavaX :: Bool -> CEnv -> SState -> String
-displaySStateJavaX isNew env state = unlines $ tagXML "gfedit" $ concat [
+displaySStateJavaX isNew env state = encodeUTF8 $ mkUnicode $
+                                     unlines $ tagXML "gfedit" $ concat [
   tagXML "linearizations" (concat 
     [tagAttrXML "lin" ("lang", prLanguage lang) ss | (lang,ss) <- lins]),
   tagXML "tree"           tree,
@@ -414,7 +416,7 @@ displaySStateJavaX isNew env state = unlines $ tagXML "gfedit" $ concat [
   opts   = addOptions (optsSState state)   -- state opts override 
               (addOption (markLin mark) (globalOptions env))
   lin (n,gr) = (n, map uni $ linearizeState noWrap opts gr zipper) where
-                  uni = {- optEncodeUTF8 gr . -} mkUnicode
+                  uni = optDecodeUTF8 gr
   exp    = prprTree $ loc2tree zipper
   zipper = stateSState state
   linAll = map lin lgrs

@@ -48,8 +48,13 @@ unifyAnyInfo c i j = errIn ("combining information for" +++ prt c) $ case (i,j) 
     liftM3 CncCat (unifPerhaps mc1 mc2) (unifPerhaps mf1 mf2) (unifPerhaps mp1 mp2)
   (CncFun m mt1 md1, CncFun _ mt2 md2) -> 
     liftM2 (CncFun m) (unifPerhaps mt1 mt2) (unifPerhaps md1 md2) ---- adding defs
+-- for bw compatibility with unspecified printnames in old GF
+  (CncFun Nothing Nope (Yes pr),_) -> 
+    unifyAnyInfo c (CncCat Nope Nope (Yes pr)) j 
+  (_,CncFun Nothing Nope (Yes pr)) -> 
+    unifyAnyInfo c i (CncCat Nope Nope (Yes pr)) 
 
-  _ -> Bad $ "cannot unify information for" +++ show i
+  _ -> Bad $ "cannot unify informations in" +++ show i +++ "and" +++ show j
 
 --- these auxiliaries should be somewhere else since they don't use the info types
 

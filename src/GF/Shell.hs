@@ -13,7 +13,7 @@ import API
 import IOGrammar
 import Compile
 ---- import GFTex
------import TeachYourself -- also a subshell
+---- import TeachYourself -- also a subshell
 
 import ShellState
 import Option
