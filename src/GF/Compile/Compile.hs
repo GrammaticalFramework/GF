@@ -144,8 +144,7 @@ makeSourceModule opts env@(k,gr,can) mo@(i,mi) = case mi of
  where
    putp = putPointE opts
 
-compileSourceModule :: Options -> CompileEnv -> SourceModule -> 
-                       IOE (Int,SourceModule)
+compileSourceModule :: Options -> CompileEnv -> SourceModule -> IOE (Int,SourceModule)
 compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
 
   let putp = putPointE opts
@@ -158,7 +157,7 @@ compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
 
   (k',mo3r:_) <- ioeErr $ refreshModule (k,mos) mo3
 
-  mo4:_ <- putp "  optimizing" $ ioeErr $ evalModule mos mo3r
+  mo4:_ <- putp "  optimizing " $ ioeErr $ evalModule mos mo3r
 
   return (k',mo4)
 
@@ -172,16 +171,16 @@ generateModuleCode opts path minfo@(name,info) = do
 
   -- for resource, also emit gfr
   case info of
-    ModMod m | mtype m == MTResource && emit && nomulti -> do
+    ModMod m | isResourceModule info && isCompilableModule info && emit && nomulti -> do
       let (file,out) = (gfrFile pname, prGrammar (MGrammar [minfo]))
       ioeIO $ writeFile file out >> putStr ("  wrote file" +++ file)
     _ -> return ()
   (file,out) <- do
       code <- return $ MkGFC.prCanonModInfo minfo'
       return (gfcFile pname, code)
-  if emit && nomulti 
+  if isCompilableModule info && emit && nomulti 
      then ioeIO $ writeFile file out >> putStr ("  wrote file" +++ file)
-     else return ()
+     else ioeIO $ putStrFlush "no need to save for this module "
   return minfo'
  where 
    nomulti = not $ oElem makeMulti opts

@@ -7,6 +7,7 @@ import Ident --H
 import Char
 
 -- the top-level printing method
+
 printTree :: Print a => a -> String
 printTree = render . prt 0
 
@@ -88,17 +89,7 @@ instance Print Grammar where
 instance Print ModDef where
   prt i e = case e of
    MMain id0 id concspecs -> prPrec i 0 (concat [["grammar"] , prt 0 id0 , ["="] , ["{"] , ["abstract"] , ["="] , prt 0 id , [";"] , prt 0 concspecs , ["}"]])
-   MAbstract id extend opens topdefs -> prPrec i 0 (concat [["abstract"] , prt 0 id , ["="] , prt 0 extend , prt 0 opens , ["{"] , prt 0 topdefs , ["}"]])
-   MResource id extend opens topdefs -> prPrec i 0 (concat [["resource"] , prt 0 id , ["="] , prt 0 extend , prt 0 opens , ["{"] , prt 0 topdefs , ["}"]])
-   MResourceInt id extend opens topdefs -> prPrec i 0 (concat [["resource"] , ["abstract"] , prt 0 id , ["="] , prt 0 extend , prt 0 opens , ["{"] , prt 0 topdefs , ["}"]])
-   MResourceImp id0 id opens topdefs -> prPrec i 0 (concat [["resource"] , prt 0 id0 , ["of"] , prt 0 id , ["="] , prt 0 opens , ["{"] , prt 0 topdefs , ["}"]])
-   MConcrete id0 id extend opens topdefs -> prPrec i 0 (concat [["concrete"] , prt 0 id0 , ["of"] , prt 0 id , ["="] , prt 0 extend , prt 0 opens , ["{"] , prt 0 topdefs , ["}"]])
-   MConcreteInt id0 id extend opens topdefs -> prPrec i 0 (concat [["concrete"] , ["abstract"] , ["of"] , prt 0 id0 , ["in"] , prt 0 id , ["="] , prt 0 extend , prt 0 opens , ["{"] , prt 0 topdefs , ["}"]])
-   MConcreteImp open id0 id -> prPrec i 0 (concat [["concrete"] , ["of"] , prt 0 open , ["="] , prt 0 id0 , ["**"] , prt 0 id])
-   MTransfer id open0 open extend opens topdefs -> prPrec i 0 (concat [["transfer"] , prt 0 id , [":"] , prt 0 open0 , ["->"] , prt 0 open , ["="] , prt 0 extend , prt 0 opens , ["{"] , prt 0 topdefs , ["}"]])
-   MReuseAbs id0 id -> prPrec i 0 (concat [["resource"] , ["abstract"] , prt 0 id0 , ["="] , ["reuse"] , prt 0 id])
-   MReuseCnc id0 id -> prPrec i 0 (concat [["resource"] , ["concrete"] , prt 0 id0 , ["="] , ["reuse"] , prt 0 id])
-   MReuseAll id0 extend id -> prPrec i 0 (concat [["resource"] , prt 0 id0 , ["="] , prt 0 extend , ["reuse"] , prt 0 id])
+   MModule complmod modtype modbody -> prPrec i 0 (concat [prt 0 complmod , prt 0 modtype , ["="] , prt 0 modbody])
 
   prtList es = case es of
    [] -> (concat [])
@@ -127,6 +118,23 @@ instance Print Transfer where
    [] -> (concat [])
    x:xs -> (concat [prt 0 x , prt 0 xs])
 
+instance Print ModType where
+  prt i e = case e of
+   MTAbstract id -> prPrec i 0 (concat [["abstract"] , prt 0 id])
+   MTResource id -> prPrec i 0 (concat [["resource"] , prt 0 id])
+   MTInterface id -> prPrec i 0 (concat [["interface"] , prt 0 id])
+   MTConcrete id0 id -> prPrec i 0 (concat [["concrete"] , prt 0 id0 , ["of"] , prt 0 id])
+   MTInstance id0 id -> prPrec i 0 (concat [["instance"] , prt 0 id0 , ["of"] , prt 0 id])
+   MTTransfer id open0 open -> prPrec i 0 (concat [["transfer"] , prt 0 id , [":"] , prt 0 open0 , ["->"] , prt 0 open])
+
+
+instance Print ModBody where
+  prt i e = case e of
+   MBody extend opens topdefs -> prPrec i 0 (concat [prt 0 extend , prt 0 opens , ["{"] , prt 0 topdefs , ["}"]])
+   MWith id opens -> prPrec i 0 (concat [prt 0 id , ["with"] , prt 0 opens])
+   MReuse id -> prPrec i 0 (concat [["reuse"] , prt 0 id])
+
+
 instance Print Extend where
   prt i e = case e of
    Ext id -> prPrec i 0 (concat [prt 0 id , ["**"]])
@@ -142,12 +150,26 @@ instance Print Opens where
 instance Print Open where
   prt i e = case e of
    OName id -> prPrec i 0 (concat [prt 0 id])
-   OQual id0 id -> prPrec i 0 (concat [["("] , prt 0 id0 , ["="] , prt 0 id , [")"]])
+   OQualQO qualopen id -> prPrec i 0 (concat [["("] , prt 0 qualopen , prt 0 id , [")"]])
+   OQual qualopen id0 id -> prPrec i 0 (concat [["("] , prt 0 qualopen , prt 0 id0 , ["="] , prt 0 id , [")"]])
 
   prtList es = case es of
    [] -> (concat [])
    [x] -> (concat [prt 0 x])
    x:xs -> (concat [prt 0 x , [","] , prt 0 xs])
+
+instance Print ComplMod where
+  prt i e = case e of
+   CMCompl  -> prPrec i 0 (concat [])
+   CMIncompl  -> prPrec i 0 (concat [["incomplete"]])
+
+
+instance Print QualOpen where
+  prt i e = case e of
+   QOCompl  -> prPrec i 0 (concat [])
+   QOIncompl  -> prPrec i 0 (concat [["incomplete"]])
+   QOInterface  -> prPrec i 0 (concat [["interface"]])
+
 
 instance Print Def where
   prt i e = case e of

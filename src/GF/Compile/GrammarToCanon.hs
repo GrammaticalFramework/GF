@@ -28,7 +28,10 @@ showGFC = err id id . liftM (P.printTree . grammar2canon) . redGrammar
 -- abstract syntax without dependent types
 
 redGrammar :: SourceGrammar -> Err C.CanonGrammar
-redGrammar (MGrammar gr) = liftM MGrammar $ mapM redModInfo gr
+redGrammar (MGrammar gr) = liftM MGrammar $ mapM redModInfo $ filter active gr where
+  active (_,m) = case typeOfModule m of
+    MTInterface -> False
+    _ -> True
 
 redModInfo :: (Ident, SourceModInfo) -> Err (Ident, C.CanonModInfo)
 redModInfo (c,info) = do
@@ -43,19 +46,25 @@ redModInfo (c,info) = do
            return (a', MTConcrete a') 
          MTAbstract -> return (c',MTAbstract) --- c' not needed
          MTResource -> return (c',MTResource) --- c' not needed
+         MTInterface -> return (c',MTResource) ---- not needed
+         MTInstance _ -> return (c',MTResource) --- c' not needed
          MTTransfer x y -> return (c',MTTransfer (om x) (om y)) --- c' not needed
-      defss <- mapM (redInfo a) $ tree2list $ jments m
+
+      ---- this generates empty GFC. Better: none 
+      let js = if mstatus m == MSIncomplete then NT else jments m
+
+      defss <- mapM (redInfo a) $ tree2list $ js
       defs  <- return $ sorted2tree $ concat defss  -- sorted, but reduced
-      return $ ModMod $ Module mt flags e os defs
+      return $ ModMod $ Module mt MSComplete flags e os defs
   return (c',info')
  where
    redExtOpen m = do
      e' <- case extends m of
        Just e -> liftM Just $ redIdent e
        _ -> return Nothing
-     os' <- mapM (\ (OQualif _ i) -> liftM OSimple (redIdent i)) $ opens m
+     os' <- mapM (\ (OQualif q _ i) -> liftM (OSimple q) (redIdent i)) $ opens m
      return (e',os')
-   om = OSimple . openedModule --- normalizing away qualif
+   om = oSimple . openedModule --- normalizing away qualif
 
 redInfo :: Ident -> (Ident,Info) -> Err [(Ident,C.Info)]
 redInfo am (c,info) = errIn ("translating definition of" +++ prt c) $ do

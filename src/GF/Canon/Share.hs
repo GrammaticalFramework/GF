@@ -18,8 +18,8 @@ fullOpt = [2]
 
 shareModule :: OptSpec -> (Ident, CanonModInfo) -> (Ident, CanonModInfo)
 shareModule opt (i,m) = case m of
-  M.ModMod (M.Module mt fs me ops js) -> 
-    (i,M.ModMod (M.Module mt fs me ops (mapTree (shareInfo opt) js)))
+  M.ModMod (M.Module mt st fs me ops js) -> 
+    (i,M.ModMod (M.Module mt st fs me ops (mapTree (shareInfo opt) js)))
   _ -> (i,m)
 
 shareInfo opt (c, CncCat ty t m) = (c, CncCat ty (shareOpt opt t) m)

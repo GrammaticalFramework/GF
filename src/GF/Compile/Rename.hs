@@ -32,17 +32,17 @@ renameSourceTerm g m t = do
 
 renameModule :: [SourceModule] -> SourceModule -> Err [SourceModule]
 renameModule ms (name,mod) = errIn ("renaming module" +++ prt name) $ case mod of
-  ModMod (Module mt fs me ops js) -> do
+  ModMod (Module mt st fs me ops js) -> do
     (_,mod1@(ModMod m)) <- extendModule ms (name,mod)
     let js1 = jments m
     status <- buildStatus (MGrammar ms) name mod1
     js2    <- mapMTree (renameInfo status) js1
-    let mod2 = ModMod $ Module mt fs me (map forceQualif ops) js2
+    let mod2 = ModMod $ Module mt st fs me (map forceQualif ops) js2
     return $ (name,mod2) : ms
 
 extendModule :: [SourceModule] -> SourceModule -> Err SourceModule
 extendModule ms (name,mod) = case mod of
-  ModMod (Module mt fs me ops js0) -> do
+  ModMod (Module mt st fs me ops js0) -> do
     js  <- case mt of
 {- --- building the {s : Str} lincat
       MTConcrete a -> do
@@ -62,7 +62,7 @@ extendModule ms (name,mod) = case mod of
           _ -> Bad $ "cannot find extended module" +++ prt n
         extendMod n (jments m0) js
       _ -> return js
-    return $ (name,ModMod (Module mt fs me ops js1))
+    return $ (name,ModMod (Module mt st fs me ops js1))
 
 
 type Status = (StatusTree, [(OpenSpec Ident, StatusTree)])
@@ -91,9 +91,9 @@ renameIdentTerm env@(act,imps) t =
     return $ f c
   _ -> return t
  where
-   opens   = act : [st  | (OSimple _,st) <- imps]
-   qualifs = [(m, st) | (OQualif m _, st) <- imps] ++ 
-             [(m, st) | (OSimple m, st) <- imps] -- qualifying is always possible
+   opens   = act : [st  | (OSimple _ _,st) <- imps]
+   qualifs = [(m, st) | (OQualif _ m _, st) <- imps] ++ 
+             [(m, st) | (OSimple _ m, st) <- imps] -- qualifying is always possible
 
 --- would it make sense to optimize this by inlining?
 renameIdentPatt :: Status -> Patt -> Err Patt
@@ -114,14 +114,14 @@ info2status mq (c,i) = (c, case i of
 
 tree2status :: OpenSpec Ident -> BinTree (Ident,Info) -> BinTree (Ident,StatusInfo)
 tree2status o = case o of
-  OSimple i   -> mapTree (info2status (Just i))
-  OQualif i j -> mapTree (info2status (Just j))
+  OSimple _ i   -> mapTree (info2status (Just i))
+  OQualif _ i j -> mapTree (info2status (Just j))
 
 buildStatus :: SourceGrammar -> Ident -> SourceModInfo -> Err Status
 buildStatus gr c mo = let mo' = self2status c mo in case mo of
   ModMod m -> do
     let gr1 = MGrammar $ (c,mo) : modules gr 
-        ops = [OSimple e | e <- allExtends gr1 c] ++ allOpens m
+        ops = [OSimple OQNormal e | e <- allExtends gr1 c] ++ allOpens m
     mods <- mapM (lookupModule gr1 . openedModule) ops
     let sts = map modInfo2status $ zip ops mods    
     return $ if isModCnc m
@@ -144,8 +144,8 @@ self2status c i = mapTree (info2status (Just c)) js where   -- qualify internal
     _ -> True
 
 forceQualif o = case o of
-  OSimple i   -> OQualif i i
-  OQualif _ i -> OQualif i i
+  OSimple q i   -> OQualif q i i
+  OQualif q _ i -> OQualif q i i
   
 renameInfo :: Status -> (Ident,Info) -> Err (Ident,Info)
 renameInfo status (i,info) = errIn ("renaming definition of" +++ prt i) $ 

@@ -15,16 +15,20 @@ trGrammar (MGrammar ms) = P.Gr (map trModule ms) -- no includes
 
 trModule :: (Ident,SourceModInfo) -> P.ModDef
 trModule (i,mo) = case mo of
-  ModMod m -> mkModule i' (trExtend (extends m)) (mkOpens (map trOpen (opens m)))
-                 (mkTopDefs (concatMap trAnyDef (tree2list (jments m)) ++ 
-                            (map trFlag (flags m))))
- where
-   i' = tri i
-   mkModule m = case typeOfModule mo of
-     MTResource -> P.MResource m
-     MTAbstract -> P.MAbstract m
-     MTConcrete a -> P.MConcrete m (tri a)
-     MTTransfer a b -> P.MTransfer m (trOpen a) (trOpen b)
+  ModMod m -> P.MModule compl typ body where
+    compl = P.CMCompl -- always complete module
+    i' = tri i
+    typ = case typeOfModule mo of
+      MTResource -> P.MTResource i'
+      MTAbstract -> P.MTAbstract i'
+      MTConcrete a -> P.MTConcrete i' (tri a)
+      MTTransfer a b -> P.MTTransfer i' (trOpen a) (trOpen b)
+      MTInstance a -> P.MTInstance i' (tri a)
+      MTInterface -> P.MTInterface i'
+    body = P.MBody 
+             (trExtend (extends m)) 
+             (mkOpens (map trOpen (opens m)))
+             (mkTopDefs (concatMap trAnyDef (tree2list (jments m)) ++ map trFlag (flags m)))
 
 trExtend :: Maybe Ident -> P.Extend
 trExtend i = maybe P.NoExt (P.Ext . tri) i
@@ -34,8 +38,15 @@ forName (MTConcrete a) = tri a
 
 trOpen :: OpenSpec Ident -> P.Open
 trOpen o = case o of
-  OSimple i   -> P.OName (tri i)
-  OQualif i j -> P.OQual (tri i) (tri j)
+  OSimple OQNormal i -> P.OQualQO P.QOCompl (tri i)
+  OSimple q i -> P.OQualQO (trQualOpen q) (tri i)
+  OQualif q i j -> P.OQual (trQualOpen q) (tri i) (tri j)
+
+trQualOpen q = case q of
+  OQNormal -> P.QOCompl
+  OQIncomplete -> P.QOIncompl
+  OQInterface -> P.QOInterface
+
 
 mkOpens ds = if null ds then P.NoOpens else P.Opens ds
 mkTopDefs ds = ds

@@ -91,15 +91,17 @@ gfFile  = suffixFile "gf"
 
 importsOfFile :: String -> [FilePath]
 importsOfFile = 
+  drop 1 .                   -- ignore module name itself
   filter (not . spec) .      -- ignore keywords and special symbols
   unqual .                   -- take away qualifiers
   takeWhile (not . term) .   -- read until curly or semic
-  drop 2 .                   -- ignore keyword and module name
   lexs .                     -- analyse into lexical tokens
   unComm                     -- ignore comments before the headed line
  where
     term = flip elem ["{",";"]
-    spec = flip elem ["of", "open","in", ":", "->", "reuse", "=", "(", ")",",","**"]
+    spec = flip elem ["of", "open","in", ":", "->", "reuse", "=", "(", ")",",","**","with",
+                      "abstract","concrete","resource","transfer","interface","incomplete",
+                      "instance"]
     unqual ws = case ws of
       "(":q:ws' -> unqual ws'
       w:ws' -> w:unqual ws'

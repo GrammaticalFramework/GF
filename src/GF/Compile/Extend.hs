@@ -17,10 +17,10 @@ import Monad
 
 extendModInfo :: Ident -> SourceModInfo -> SourceModInfo -> Err SourceModInfo
 extendModInfo name old new = case (old,new) of
-  (ModMod m0, ModMod (Module mt fs _ ops js)) -> do
+  (ModMod m0, ModMod (Module mt st fs _ ops js)) -> do
     testErr (mtype m0 == mt) ("illegal extension type at module" +++ show name)
     js' <- extendMod name (jments m0) js
-    return $ ModMod (Module mt fs Nothing ops js)
+    return $ ModMod (Module mt st fs Nothing ops js)
 
 -- this is what happens when extending a module: new information is inserted,
 -- and the process is interrupted if unification fails
