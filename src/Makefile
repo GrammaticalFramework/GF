@@ -135,7 +135,7 @@ binary-dist:
 	make unix gfdoc jar
 	$(INSTALL) ../bin/gf util/gfdoc $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 java/gf-java.jar $(BIN_DIST_DIR)
-	$(INSTALL) configure $(BIN_DIST_DIR)
+	$(INSTALL) configure config.guess config.sub install-sh $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 config.mk.in jgf.in $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 INSTALL.binary $(BIN_DIST_DIR)/INSTALL
