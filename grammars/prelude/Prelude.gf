@@ -80,4 +80,9 @@ oper
     Predef.PFalse => False ; Predef.PTrue => True
     } ;
 
+-- bind together two tokens in the lexer, either obligatorily or optionally
+
+  oper 
+    bind : Str -> Str -> Str = \x,y -> x ++ "&+" ++ y ;
+    bindOpt : Str -> Str -> Str = \x,y -> variants {bind x y ; x ++ y} ;
 } ;
