@@ -25,7 +25,12 @@ TermS. Symbol ::= String;
 (:[]). [Symbol] ::= Symbol ;
 (:). [Symbol] ::= Symbol [Symbol] ;
 
+Name. Name ::= SingleQuoteString ;
+Category. Category ::= SingleQuoteString ;
 
+token SingleQuoteString '\'' ((char - ["'\\"]) | ('\\' ["'\\"]))* '\'' ;
+
+{-
 Name. Name ::= [IdentParam] Category;
 terminator IdentParam "/";
 
@@ -46,3 +51,4 @@ ParamSimple. Param ::= Ident ;
 ParamPatt. Param ::= Ident "(" [Param] ")" ;
 ParamRec. Param ::= "{" [KeyValue] "}" ;
 separator Param "," ;
+-}

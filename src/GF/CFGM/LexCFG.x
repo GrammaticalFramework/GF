@@ -15,12 +15,13 @@ $i = [$l $d _ ']          -- identifier character
 $u = [\0-\255]          -- universal: any character
 
 @rsyms =    -- reserved words consisting of special symbols
-   \; | \: | \. | \- \> | \[ | \] | \, | \/ | \{ | \} | \! | \= | \( | \)
+   \; | \: | \. | \- \> | \[ | \] | \,
 
 :-
 
 $white+ ;
 @rsyms { tok (\p s -> PT p (TS s)) }
+\' ($u # [\' \\]| \\ [\' \\]) * \' { tok (\p s -> PT p (eitherResIdent T_SingleQuoteString s)) }
 
 $l $i*   { tok (\p s -> PT p (eitherResIdent TV s)) }
 \" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \"{ tok (\p s -> PT p (TL $ unescapeInitTail s)) }
@@ -39,13 +40,14 @@ data Tok =
  | TV String     -- identifiers
  | TD String     -- double precision float literals
  | TC String     -- character literals
+ | T_SingleQuoteString String
 
- deriving (Eq,Show)
+ deriving (Eq,Show,Ord)
 
 data Token = 
    PT  Posn Tok
  | Err Posn
-  deriving Show
+  deriving (Eq,Show,Ord)
 
 tokenPos (PT (Pn _ l _) _ :_) = "line " ++ show l
 tokenPos (Err (Pn _ l _) :_) = "line " ++ show l
@@ -60,6 +62,8 @@ prToken t = case t of
   PT _ (TV s) -> s
   PT _ (TD s) -> s
   PT _ (TC s) -> s
+  _ -> show t
+  PT _ (T_SingleQuoteString s) -> s
 
 
 eitherResIdent :: (String -> Tok) -> String -> Tok
@@ -93,7 +97,7 @@ unescapeInitTail = unesc . tail where
 -------------------------------------------------------------------
 
 data Posn = Pn !Int !Int !Int
-      deriving (Eq, Show)
+      deriving (Eq, Show,Ord)
 
 alexStartPos :: Posn
 alexStartPos = Pn 0 1 1

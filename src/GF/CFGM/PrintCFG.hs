@@ -82,6 +82,10 @@ instance Print Ident where
   prt _ (Ident i) = doc (showString i)
 
 
+instance Print SingleQuoteString where
+  prt _ (SingleQuoteString i) = doc (showString i)
+
+
 
 instance Print Grammars where
   prt i e = case e of
@@ -138,56 +142,12 @@ instance Print Symbol where
 
 instance Print Name where
   prt i e = case e of
-   Name identparams category -> prPrec i 0 (concatD [prt 0 identparams , prt 0 category])
+   Name singlequotestring -> prPrec i 0 (concatD [prt 0 singlequotestring])
 
 
 instance Print Category where
   prt i e = case e of
-   Category identparam id projs -> prPrec i 0 (concatD [prt 0 identparam , doc (showString ".") , prt 0 id , prt 0 projs])
+   Category singlequotestring -> prPrec i 0 (concatD [prt 0 singlequotestring])
 
-
-instance Print IdentParam where
-  prt i e = case e of
-   IdentParam id fields -> prPrec i 0 (concatD [prt 0 id , doc (showString "{") , prt 0 fields , doc (showString "}")])
-
-  prtList es = case es of
-   [] -> (concatD [])
-   x:xs -> (concatD [prt 0 x , doc (showString "/") , prt 0 xs])
-
-instance Print Field where
-  prt i e = case e of
-   Field keyvalue -> prPrec i 0 (concatD [doc (showString ".") , prt 0 keyvalue])
-
-  prtList es = case es of
-   [] -> (concatD [])
-   x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
-
-instance Print Proj where
-  prt i e = case e of
-   Proj param -> prPrec i 0 (concatD [doc (showString "!") , prt 0 param])
-
-  prtList es = case es of
-   [] -> (concatD [])
-   x:xs -> (concatD [prt 0 x , prt 0 xs])
-
-instance Print KeyValue where
-  prt i e = case e of
-   KeyValue id param -> prPrec i 0 (concatD [prt 0 id , doc (showString "=") , prt 0 param])
-
-  prtList es = case es of
-   [] -> (concatD [])
-   [x] -> (concatD [prt 0 x])
-   x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
-
-instance Print Param where
-  prt i e = case e of
-   ParamSimple id -> prPrec i 0 (concatD [prt 0 id])
-   ParamPatt id params -> prPrec i 0 (concatD [prt 0 id , doc (showString "(") , prt 0 params , doc (showString ")")])
-   ParamRec keyvalues -> prPrec i 0 (concatD [doc (showString "{") , prt 0 keyvalues , doc (showString "}")])
-
-  prtList es = case es of
-   [] -> (concatD [])
-   [x] -> (concatD [prt 0 x])
-   x:xs -> (concatD [prt 0 x , doc (showString ",") , prt 0 xs])
 
 
