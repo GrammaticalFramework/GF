@@ -669,7 +669,7 @@ checkEqLType env t u trm = do
 
      (RecType rs, RecType ts) -> -- and [alpha g a b && l == k --- too strong req
                                  --       | ((l,a),(k,b)) <- zip rs ts]
-                                 -- || -- if fails, try subtyping:
+                                 -- . || -- if fails, try subtyping:
                                  all (\ (l,a) -> 
                                      any (\ (k,b) -> alpha g a b && l == k) ts) rs
 

@@ -18,5 +18,6 @@ getCanonModule file = do
 getCanonGrammar :: FilePath -> IOE CanonGrammar
 getCanonGrammar file = do
   s <- ioeIO $ readFileIf file
-  c <- ioeErr {- $ err2err -} $ pCanon $ myLexer s
+  -- c <- ioeErr $ err2err $ pCanon $ myLexer s
+  c <- ioeErr $ pCanon $ myLexer s
   return $ canon2grammar c
