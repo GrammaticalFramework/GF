@@ -1,0 +1,29 @@
+digraph {
+
+GrammarSwe  [style = "solid", shape = "box", color = "green"];
+GrammarSwe -> GrammarScand  [style = "solid"];
+GrammarSwe -> SyntaxSwe  [style = "solid"];
+
+LexiconSwe  [style = "solid", shape = "box", color = "red"];
+LexiconSwe -> MorphoSwe  [style = "solid"];
+
+GrammarScand  [style = "solid", shape = "box"];
+GrammarScand -> SyntaxScand  [style = "solid"];
+
+SyntaxScand  [style = "solid", shape = "ellipse"];
+SyntaxScand -> TypesScand  [style = "solid"];
+
+SyntaxSwe  [style = "solid", shape = "ellipse", color = "yellow"];
+SyntaxSwe -> SyntaxScand  [style = "solid"];
+SyntaxSwe -> TypesSwe  [style = "solid"];
+SyntaxSwe -> MorphoSwe  [style = "solid"];
+
+MorphoSwe  [style = "solid", shape = "ellipse", color="red"];
+MorphoSwe -> TypesSwe  [style = "solid"];
+
+TypesSwe  [style = "solid", shape = "ellipse", color = "yellow"];
+TypesSwe -> TypesScand  [style = "solid"];
+
+TypesScand [style = "solid", shape = "ellipse"];
+
+}

@@ -25,11 +25,15 @@ Aarne Ranta
 <!-- NEW -->
 <h2>Plan</h2>
 
-<a href="01-gf-resource.html">Introduction to resource grammars</a> (pp. 1-16)
+Introduction to resource grammars
 
 <p>
 
 Swedish morphology and lexicon in GF
+
+<p>
+
+Syntax case study: Swedish determiners
 
 <p>
 
@@ -39,6 +43,357 @@ Syntax case study: Swedish sentence structure
 
 Danish and Norwegian through parametrization
 
+
+<!-- NEW -->
+<h2>GF = Grammatical Framework</h2>
+
+A grammar formalism based on functional programming and type theory.
+
+<p>
+
+Designed to be nice for <i>ordinary programmers</i> to use.
+
+<p>
+
+Mission: to make natural-language applications available for
+ordinary programmers, in tasks like
+<ul>
+<li> software documentation
+<li> domain-specific translation
+<li> human-computer interaction
+<li> dialogue systems
+</ul>
+Thus <i>not</i> primarily another theoretical framework for
+linguists.
+
+
+<!-- NEW -->
+<h2>Multilingual grammars</h2>
+
+<b>Abstract syntax</b>: language-independent representation
+<pre>
+  cat Prop ; Nat ;
+  fun Even : Nat -> Prop ;
+</pre>
+<b>Concrete syntax</b>: mapping from abstract syntax trees to strings in a language
+(English, French, German, Swedish,...)
+<pre>
+  lin Even x = {s = x.s ++ "is" ++ "even"} ; 
+
+  lin Even x = {s = x.s ++ "est" ++ "pair"} ;
+
+  lin Even x = {s = x.s ++ "ist" ++ "gerade"} ;
+
+  lin Even x = {s = x.s ++ "är" ++ "jämnt"} ;
+</pre>
+We can <b>translate</b> between language via the abstract syntax.
+
+<p>
+
+Is it really so simple?
+
+
+<!-- NEW -->
+<h2>Difficulties with concrete syntax</h2>
+
+Most languages have rules of <b>inflection</b>, <b>agreement</b>,
+and <b>word order</b>, which have to be obeyed when putting together
+expressions.
+
+<p>
+
+The previous multilingual grammar breaks these rules in many situations:
+<p><i>
+2 and 3 is even<br>
+la somme de 3 et de 5 est pair<br>
+wenn 2 ist gerade, dann 2+2 ist gerade<br>
+om 2 är jämnt, 2+2 är jämnt<br>
+</i>
+
+<!-- NEW -->
+<h2>Solving the difficulties</h2>
+
+GF has tools for expressing the linguistic rules that are needed to
+produce correct translations in different languages.
+
+<p>
+
+Instead of just strings, we need <p>parameters</b>, <b>tables</b>,
+and <b>record types</b>. For instance, French:
+<pre>
+  param Mod = Ind | Subj ;
+  param Gen = Masc | Fem ;
+
+  lincat Nat = {s : Str ; g : Gen} ;
+  lincat Prop = {s : Mod => Str} ;
+
+  lin Even x = {s =
+      table {
+        m => x.s ++
+             case m   of {Ind  => "est" ;  Subj => "soit"} ++
+             case x.g of {Masc => "pair" ; Fem  => "paire"}
+      }
+    } ;
+</pre>
+
+
+
+<!-- NEW -->
+<h2>Language + Libraries</h2>
+
+Writing natural language grammars still requires
+theoretical knowledge about the language.
+
+<p>
+
+Which kind of a programmer is easier to find?
+<ul>
+<li> one who can write a sorting algorithm 
+<li> one who can write a grammar for Swedish determiners
+</ul>
+
+<p>
+
+In main-stream programming, sorting algorithms are not
+written by hand but taken from <b>libraries</b>.
+
+<p>
+
+In the same way, we want to create grammar libraries that encapsulate
+basic linguistic facts.
+
+<p>
+
+Cf. the Java success story: the language is just a half of the
+success - libraries are another half.
+
+
+
+<!-- NEW -->
+<h2>Example of library-based grammar writing</h2>
+
+To define a Swedish expression of a mathematical predicate from scratch:
+<pre>
+  Even x =
+    let jämn = case &lt;x.n,x.g> of {
+      &lt;Sg,Utr>   => "jämn" ;
+      &lt;Sg,Neutr> => "jämnt" ;
+      &lt;Pl,_>     => "jämna"
+      }
+    in
+    {s = table {
+      Main => x.s ! Nom ++ "är" ++ jämn ;
+      Inv  => "är" ++ x.s ! Nom ++ jämn ;
+      Sub  => x.s ! Nom ++ "är" ++ jämn
+      }
+    }
+</pre>
+To use library functions for syntax and morphology:
+<pre>
+  Even = predA (regA "jämn") ;
+</pre>
+
+
+
+<!-- NEW -->
+<h2>Questions in grammar library design</h2>
+
+What should there be in the library?
+<br>
+<li> morphology, lexicon, syntax, semantics,...
+
+<p>
+
+How do we organize and present the library?
+<br>
+<li> division into modules, level of granularity
+<br>
+<li> "school grammar" vs. sophisticated linguistic concepts
+
+<p>
+
+Where do we get the data from?
+<br>
+<li> automatic extraction or hand-writing?
+<br>
+<li> reuse of existing resources?
+
+<p>
+
+Extra constraint: we want open-source free software.
+
+
+
+
+
+<!-- NEW -->
+<h2>The scope of the resource grammar library</h2>
+
+All morphological paradigms
+
+<p>
+
+Basic lexicon of structural, common, and irregular words
+
+<p>
+
+Basic syntactic structures
+
+<p>
+
+Currently,<br>
+<li> <i>no</i> semantics,<br>  
+<li> <i>no</i> language-specific structures if not necessary for expressivity.
+
+
+
+
+<!-- NEW -->
+<h2>Success criteria</h2>
+
+Grammatical correctness
+
+<p>
+
+Semantic coverage: you can express whatever you want.
+
+<p>
+
+Usability as library for non-linguists.
+
+<p>
+
+(Bonus for linguists:) nice generalizations w.r.t. language
+families, using the module system of GF.
+
+
+
+<!-- NEW -->
+<h2>These are not our success criteria</h2>
+
+Language coverage: you can parse all expressions. Example:
+the French <i>passé simple</i> tense, although covered by the
+morhology, is not used in the language-independent API, but
+only the <i>passé composé</i> is.
+
+<p>
+
+Semantic correctness
+<pre>
+  colourless green ideas sleep furiously
+
+  the time is seventy past forty-two
+</pre>
+
+<p>
+
+(Warning for linguists:) theoretical innovation in
+syntax (and it will all be hidden anyway!)
+
+
+
+<!-- NEW -->
+<h2>So where is semantics?</h2>
+
+GF incorporates a <b>Logical Framework</b> and is therefore
+capable of expressing logical semantics <i>à la</i> Montague
+or any other flavour, including anaphora and discourse.
+
+<p>
+
+But we do <i>not</i> try to give semantics once and
+for all for the whole language.
+
+<p>
+
+Instead, we expect semantics to be given in
+<b>application grammars</b> built on semantic models
+of different domains.
+
+<p>
+
+Example application: number theory
+<pre>
+  fun Even : Nat -> Prop ;         -- a mathematical predicate
+
+  lin Even = predA (regA "even") ; -- English translation
+  lin Even = predA (regA "pair") ; -- French translation
+  lin Even = predA (regA "jämn") ; -- Swedish translation
+</pre>
+How could the resource predict that just <i>these</i>
+translations are correct in this domain?
+
+
+
+
+
+<!-- NEW -->
+<h2>Languages</h2>
+
+The current GF Resource Project covers ten languages:
+<ul>
+<li><tt>Dan</tt>ish
+<li><tt>Eng</tt>lish
+<li><tt>Fin</tt>nish
+<li><tt>Fre</tt>nch
+<li><tt>Ger</tt>man
+<li><tt>Ita</tt>lian
+<li><tt>Nor</tt>wegian
+<li><tt>Rus</tt>sian
+<li><tt>Spa</tt>nish
+<li><tt>Swe</tt>dish
+</ul>
+The first three letters (<tt>Dan</tt> etc) are used in grammar module names
+
+
+<!-- NEW -->
+<h2>Library structure 1: language-independent API</h2>
+
+<li> syntactic <tt>Categories</tt> (parts of speech, word classes)
+
+<p>
+
+<li> <tt>Rules</tt> for combining words and phrases, e.g.
+
+<p>
+
+<li> the most common <tt>Structural</tt> words (determiners,
+conjunctions, pronouns), e.g.
+
+<!-- NEW -->
+<h2>Library structure 2: language-dependent modules</h2>
+
+<li> morphological <tt>Paradigms</tt>, e.g.
+
+<p>
+
+<li> <tt>Lexicon</tt> of frequent words
+
+
+<p>
+
+<li> <tt>Ext</tt>ended syntax with language-specific rules
+
+
+
+<!-- NEW -->
+<h2>How much can be language-independent?</h2>
+
+For the ten languages we have considered, it <i>is</i> possible
+to implement the current API.
+
+<p>
+
+Reservations:
+<ul>
+<li> does not necessarily extend to all other languages
+<li> does not necessarily cover the most idiomatic expressions
+     of each language
+<li> may not be the easiest API to implement (e.g. negation and
+inversion with  <i>do</i> in English suggest that some other
+structure would be more natural)
+<li> does not guarantee that same structure has the same semantics
+in different languages
 
 
 <!-- NEW -->
@@ -332,11 +687,11 @@ Use the worst-case function if the heuristic does not work:
 
 <h3>The module <tt>ParadigmsSwe</tt></h3>
 
-For main category - <tt>N</tt>, <tt>A</tt>, <tt>V</tt> - a worst-case
+For each main category - <tt>N</tt>, <tt>A</tt>, <tt>V</tt> - a worst-case
 function and a couple of "regular" patterns.
 <pre>
-  mkN  : (apa,apan,apor,aporna : Str) -> N ;
-  mk2N : (nyckel,nycklar : Str) -> N ;
+  mkN    : (apa,apan,apor,aporna : Str) -> N ;
+  mk2N   : (nyckel,nycklar : Str) -> N ;
 
   mkV    : (supa,super,sup,söp,supit,supen : Str) -> V ;
   regV   : (tala : Str) -> V ;
@@ -345,9 +700,9 @@ function and a couple of "regular" patterns.
 </pre>
 Construction functions for subcategorization.
 <pre>
-  mkV2  : V -> Preposition -> V2 ;
-  dirV2 : V -> V2 ;
-  mkV3  : V -> Preposition -> Preposition -> V3 ;
+  mkV2   : V -> Preposition -> V2 ;
+  dirV2  : V -> V2 ;
+  mkV3   : V -> Preposition -> Preposition -> V3 ;
 </pre>
 
 
@@ -363,7 +718,7 @@ Idea: search for <b>characteristic forms</b> of paradigms in a corpus.
 </pre>
 For instance, if you find <i>klocka</i> and <i>klockor</i>, add
 <pre>
-  klocka_N = decl1 "klocka" ;
+  klocka = decl1 "klocka" ;
 </pre>
 to the lexicon.
 
@@ -392,7 +747,7 @@ In general, exclude stems shorter than 3 characters.
 
 <p>
 
-It is necessary to check the results manually.
+To guarantee quality, it is necessary to check the results manually.
 
 
 <!-- NEW -->
@@ -439,7 +794,7 @@ with compound analysis, 50,000 without
 
 <!-- NEW -->
 
-<h2>Syntax case study: Swedish noun phrases</h2>
+<h2>Syntax case study: Swedish determiners</h2>
 
 Problem: describe agreement and inheritance of definiteness
 when a determiner is added to a common noun, possibly modified by
@@ -464,8 +819,8 @@ structures there are, without telling how they are defined.
 
 <p>
 
-The relevant fragment consists of 4 <b>categories</b> and
-3 <b>functions</b>
+The relevant fragment consists of 5 <b>categories</b> and
+4 <b>functions</b>
 <pre>
   cat 
     N ;   -- simple (lexical) common noun, e.g. "bil"
@@ -477,33 +832,112 @@ The relevant fragment consists of 4 <b>categories</b> and
     UseN  : N -> CN ;    
     UseA  : A -> AP ;    
     DetCN : Det -> CN -> NP ;
-    ModA  : A -> CN -> CN ;
+    ModAP : AP -> CN -> CN ;
 </pre>
 
 
 <!-- NEW -->
 
-<h3>Types of complex nouns and noun phrases</h3>
+<h3>The type of complex common nouns</h3>
 
-Just like to words, we assign <b>linearization types</b> to
-phrase categories. They are similar to the lexical types,
+Phrase categories are similar to lexical types,
 but often with some extra information.
+
+<p>
+
+Complex common nouns have the following linearization type
 <pre>
-  lincat
-    CN  = {s : Number => SpeciesP => Case => Str ; g : Gender ; isComplex : Bool} ;
-    NP  = {s : NPForm => Str ; g : Gender ; n : Number ; p : Person} ;
-    Det = {s : Gender => Str ; n : Number ; b : SpeciesP} ;
-    AP  = {s : AdjFormPos => Case => Str} ; 
+  CN = {
+    s : Number => SpeciesP => Case => Str ;
+    g : Gender ;
+    isComplex : Bool
+    } ;
 </pre>
-Here we use some new parameter types:
+Here we use a new parameter type,
 <pre>
-  param
-    SpeciesP   = IndefP | DefP Species ;  
-    NPForm     = PNom | PAcc | PGen GenNum ;
-    GenNum     = ASg Gender | APl ;
-    AdjFormPos = Strong GenNum | Weak ;
+  SpeciesP   = IndefP | DefP Species ;  
+</pre>
+to distinguish between three forms:
+<pre>
+  IndefP     => "stor bil"
+  DefP Indef => "stora bil"
+  DefP Def   => "stora bilen"
 </pre>
 
+
+<!-- NEW -->
+
+<h3>Simple and complex common nouns</h3>
+
+The boolean feature <tt>isComplex</tt> is <tt>False</tt> for
+"one-word" <tt>CN</tt>s. Adjectival modification makes it
+<tt>True</tt>. Notice also the agreement of the adjective to the
+noun.
+<pre>
+  UseN hus =
+    {s = \\n,b,c => hus.s ! n ! unSpeciesP b ! c ; 
+     g = hus.g ;
+     p = False
+    } ;
+
+  ModAP Stor Nybil =
+    {s = \\n, b, c =>
+           let
+             stor  = Stor.s ! mkAdjForm (unSpeciesAdjP b) n Nybil.g ! Nom ;
+             nybil = Nybil.s ! n ! b ! c
+           in preOrPost God.p nybil god ;
+     g = Nybil.g ; 
+     p = True
+     } ;    
+</pre>
+
+
+<!-- NEW -->
+
+<h3>The type of noun phrases</h3>
+
+A noun phrase must carry the <b>agreement features</b> that
+are passed to a predicate: number, gender, and person.
+<pre>
+  NP = {
+    s : NPForm => Str ;
+    g : Gender ;
+    n : Number ;
+    p : Person
+    } ;
+</pre>
+Since pronouns have special accusative and possessive forms,
+the case of noun phrases is richer than the case of nouns.
+<pre>
+  NPForm = PNom | PAcc | PGen GenNum ;
+
+  GenNum = ASg Gender | APl ;
+</pre>
+
+
+<!-- NEW -->
+
+<h3>The type of determiners</h3>
+
+A determiner agrees to the noun in gender, and determines the
+number and species of the noun.
+<pre>
+  Det = {
+    s : Gender => Str ;
+    n : Number ;
+    b : SpeciesP
+    } ;
+</pre>
+Some examples:
+<pre>
+  en_Det    = {s = genForms "en"    "ett"   ; n = Sg ; b = IndefP} ;
+
+  denna_Det = {s = genForms "denna" "detta" ; n = Sg ; b = DefP Indef} ;
+
+  den_Det   = {s = genForms "den"   "det"   ; n = Sg ; b = DefP Def} ;
+
+  dessa_Det = {s = \\ _ =>  "dessa"         ; n = Pl ; b = DefP Indef} ;
+</pre>
 
 
 
@@ -528,11 +962,24 @@ Mutual agreement:
 
 <!-- NEW -->
 
-<h3></h3>
+<h3>Definite noun phrases</h3>
 
-<!-- NEW -->
+Rather than a determiner like the English "the", we use
+a primitive way of forming definite noun phrases.
+<pre>
+  DefNP : CN -> NP ;
+</pre>
+So we can deal with the fact that only complex common nouns
+get a determiner word.
+<pre>
+  DefNP storbil = case storbil.isComplex of {
+    True  => DetCN den_det   storbil ;
+    False => DetCN empty_Det storbil
+    }
+     where
+       empty_Det = {s = \\_ => [] ; n = Sg ; b = DefP Def} ;
+</pre>
 
-<h3></h3>
 
 
 
@@ -541,73 +988,472 @@ Mutual agreement:
 <h2>Syntax case study: Swedish sentence structure</h2>
 
 Data: freedom in word order in main clause
-<p>
-<i>
-jag har inte sett dig idag<br>
-dig jag har inte sett idag<br>
-idag har jag inte sett dig<br>
-inte har jag sett dig idag<br>
-sett har jag inte dig idag (??)<br>
-sett dig har jag inte idag<p>
-</i>
+<pre>
+   jag har inte sett dig idag
+   dig jag har inte sett idag
+   idag har jag inte sett dig
+   inte har jag sett dig idag
+  *sett har jag inte dig idag
+   sett dig har jag inte idag
+</pre>
 Rigid order in questions...
-<p>
-<i>
-har jag inte sett dig idag
-</i>
-<p>
+<pre>
+  har jag inte sett dig idag
+</pre>
 ... and in subordinate clauses
-<p>
-<i>
-jag inte har sett dig idag
-</i>
-<p>
+<pre>
+  jag inte har sett dig idag
+</pre>
+
 
 
 <!-- NEW -->
 
 <h3>The topological model</h3>
 
+P. Diderichsen, for Danish, 1946; here acc. to Jörgensen & Svensson,
+<i>Nusvensk grammatik</i> (Gleerups, 2001).
+
+<p>
+
+A sentence (<tt>Sats</tt>) consists
+of different <b>fields</b>
+<pre>
+    Nexus Field       Content Field
+    -----------       -------------
+    V1   N1    A1      V2   N2    A2
+    har  jag  inte    sett  dig  idag
+</pre>
+
+
+<!-- NEW -->
+
+<h3>Main clause, inverted clause, subordinate clause</h3>
+
+The declarative <b>main clause</b> has an initial <b>fundament</b>,
+on which (almost) any of the fields (except V1) may occur:
+<pre>
+    Fundament  Nexus Field       Content Field
+    ---------  -----------       -------------
+               V1   N1    A1      V2   N2    A2
+    jag        har  _    inte    sett  dig  idag
+    inte       har  jag  _       sett  dig  idag
+    dig        har  jag  inte    sett  _    idag
+    idag       har  jag  inte    sett  dig  _
+</pre>
+The inverted clause has a rigid order
+<pre>
+    V1   N1    A1      V2   N2    A2
+    har  jag  inte    sett  dig  idag
+</pre>
+The subordinate clause has another rigid order
+<pre>
+    N1   A1    V1      V2   N2    A2
+    jag  inte  har    sett  dig  idag
+</pre>
+
+
 <!-- NEW -->
 
 <h3>The <tt>Sats</tt> data type</h3>
+
+What would be more natural than to use a record type in GF?
+<pre>
+  Sats = {
+    s1 : Str ;  -- V1
+    s2 : Str ;  -- N1
+    s3 : Str ;  -- A1
+    s4 : Str ;  -- V2
+    s5 : Str ;  -- N2
+    s6 : Str    -- A2
+    } ;
+</pre>
+A "finished" sentence has three parameters,
+<pre>
+  S = {s : Order => Str} ;
+
+  Order = Main | Inv | Sub ;
+</pre>
+
+
 
 
 <!-- NEW -->
 
 <h3>Building clauses from <tt>Sats</tt></h3>
 
+<pre>
+   SSats sats = 
+      let
+        har  = sats.s1 ;
+        jag  = sats.s2 ;
+        inte = sats.s3 ;
+        sett = sats.s4 ;
+        dig  = sats.s5 ;
+        idag = sats.s6
+      in {s = table {
+        Main => variants {
+          jag  ++ har ++ inte ++ sett ++ dig  ++ idag ;
+          inte ++ har ++ jag  ++ sett ++ dig  ++ idag ;
+          dig  ++ har ++ jag  ++ inte ++ sett ++ idag ;
+          idag ++ har ++ jag  ++ inte ++ sett ++ dig
+          } ;
+        Inv => har ++ jag  ++ inte ++ sett ++ dig ++ idag ;
+        Sub => jag ++ inte ++ har  ++ sett ++ dig ++ idag
+        }
+      } ;
+</pre>
+
+
+<!-- NEW -->
+
+<h3>Some refinements</h3>
+
+<li> Add tense variation to sentences; compound tenses have more
+variants than simple ones.
+<pre>
+  festat har jag igår
+  sova ska jag idag
+</pre>
+<li> Add boolean features telling which places are occupied; certain
+combinations can be blocked and enabled then.
+<pre>
+   sovit har jag idag
+  *sett har jag dig idag
+   sett dig har jag idag
+</pre>
+<li> Add an <b>extraposition</b> field to enable subcategorization patterns
+as in
+<pre>
+   du har sagt mig att han kommer idag
+   att han kommer idag har du sagt mig
+</pre>
+
+
 
 <!-- NEW -->
 
 <h3>Construction of <tt>Sats</tt></h3>
 
-Notice: we want to treat <tt>Sats</tt> as an abstract data type.
+Following the general principle of <b>data abstraction</b>,
+we treat <tt>Sats</tt> as an abstract data type.
+
+<p>
+
+This means that we don't explicitly write records, but
+use a handful of functions for writing records:
+<pre>
+  mkSats : NounPhrase -> Verb -> Sats = \subj,verb ->
+     let 
+       harsovit = verbSForm verb Act 
+     in
+     {s1 = \\sf => (harsovit sf).fin ;
+      s2 = subj.s ! PNom ;
+      s3 = negation ;
+      s4 = \\sf => (harsovit sf).inf ++ verb.s1 ;
+      s5, s6, s7 = [] ;
+      e3,e4,e5,e6,e7 = False
+      } ;
+</pre>
+
+
+<!-- NEW -->
+
+<h3>More constructors of <tt>Sats</tt></h3>
+
+<pre>
+  insertObject : Sats -> Str -> Sats = \sats, obj -> 
+     {s5 = sats.s5 ++ obj ;
+      s1 = sats.s1 ; s2 = sats.s2 ; s3 = sats.s3 ; s4 = sats.s4 ; s6 = sats.s6 ; s7 = sats.s7 ;
+      e5 = True ;
+      e3 = sats.e3 ; e4 = sats.e4 ; e6 = sats.e6 ; e7 = sats.e7
+      } ;
+
+  insertExtrapos : Sats -> Str -> Sats = ...
+
+  mkSatsObject : NounPhrase -> Verb -> Str -> Sats = \subj,verb,obj ->
+    insertObject (mkSats subj verb) obj ;
+
+  mkSatsCopula : NounPhrase -> Str -> Sats = \subj,obj ->
+    mkSatsObject subj (verbVara ** {s1 = []}) obj ;
+</pre>
+N.B. these would be nicer to define if GF had record field overwriting:
+<pre>
+  insertObject : Sats -> Str -> Sats = \sats, obj -> 
+    sats ** {s5 = sats.s5 ++ obj ; e5 = True} ;
+</pre>
+
 
 <!-- NEW -->
 
 <h3>Verb subcategorization patterns formalized</h3>
 
+<pre>
+    -- du sover
+    SatsV = mkSats ;
+
+    -- du ser mig
+    SatsV2 subj verb obj = 
+      mkSatsObject subj verb (verb.s2 ++ obj.s ! PAcc) ;
+
+    -- du föredrar honom framför mig
+    SatsV3 subj verb obj1 obj2 = 
+      mkSatsObject subj verb (verb.s2 ++ obj1.s ! PAcc ++ verb.s3 ++ obj2.s ! PAcc) ;
+
+    -- du säger att det regnar
+    SatsVS subj verb sent = 
+      insertExtrapos (mkSats subj verb) (optStr infinAtt ++ sent.s ! Sub) ;
+
+    -- du undrar vem som kommer
+    SatsVQ subj verb quest = 
+      insertExtrapos (mkSats subj verb) (quest.s ! IndirQ) ;
+</pre>
+
 
 <!-- NEW -->
 
-<h3>Adding adverbials</h3>
+<h3>Verb subcategorization patterns (continued)</h3>
+
+<pre>
+    -- du berättade mig att det hade regnat
+    SatsV2S subj verb obj sent = 
+      insertExtrapos 
+        (mkSatsObject subj verb (verb.s2 ++ obj.s ! PAcc)) 
+        (optStr infinAtt ++ sent.s ! Sub) ;
+
+    -- du frågar mig om det regnar
+    SatsV2Q subj verb obj quest = 
+      insertExtrapos 
+        (mkSatsObject subj verb (verb.s2 ++ obj.s ! PAcc)) 
+        (quest.s ! IndirQ) ;
+
+    -- du är trött
+    SatsAP subj adj = 
+      mkSatsCopula subj (adj.s ! predFormAdj subj.g subj.n ! Nom) ;
+</pre>
 
 
 <!-- NEW -->
 
 <h3>Coverage of verb patterns in Swedish Academy Grammar</h3>
 
+The <a href="http://www.ling.gu.se/~karinc/G3/karin.html">comparison</a>
+by
+<a href="http://www.ling.gu.se/~karinc/">Karin Cavallin</a>
+has given us guidelines.
+
+<p>
+
+We have tried to add at least those patterns that are meaningful in
+the language-independent API.
 
 
 <!-- NEW -->
 
 <h3>Remaining problems</h3>
 
+Building the fundament when there are many adverbs on the A1 and A2 slots.
+<pre>
+  på torget har jag sett dig idag
+  idag har jag sett dig på torget
+  ? idag på torget har jag sett dig 
+</pre>
+Interrogative and relative pronouns
+<pre>
+  som jag har sett idag
+  Vem har du sett idag?
+  När och var har du sett henne?
+</pre>
+The resource grammar has an old treatment without topology: can we
+make it nicer?
+
+
 
 <!-- NEW -->
 
 <h2>Danish and Norwegian through parametrization</h2>
+
+Swedish, Danish, and Norwegian are "pretty similar".
+There are differences in
+<ul>
+<li> vocabulary: <tt>flicka - pige - jente</tt>
+<li> orthography: <tt>kaka - kage - kake</tt>
+<li> some parameters, e.g. Norwegian's three genders
+<li> determiner syntax:
+  <pre>
+  den stora bilen, denna stora bil
+  den store bil,   denne store bil
+  den store bilen, denne store bilen
+  </pre>
+<li> special constructions, e.g. Norwegian's <tt>bilen min</tt>
+</ul>
+Things like agreement and word order are quite the same, at least in
+the resource API fragment.
+
+<p>
+
+Can we abstract away from the differences and build the three
+grammars together <i>without copy and paste</i>?
+
+
+<!-- NEW -->
+
+<h3>Parametrized modules</h3>
+
+The ultimate technique for avoiding copy and paste.
+Here's a simple linguistic example: case and agreement, 
+<pre>
+  interface Agreement = {
+    param Agr ; Case ;
+    oper subject : Case
+    }
+
+  incomplete concrete PredAgr of Pred = {
+    lincat
+      NP = {s : Case => Str ; a : Agr} ;
+      VP = {s : Agr => Str} ;
+    lin
+      PredVP np vp = {s = np.s ! subject ++ vp.s ! np.a} ;
+    }
+
+  instance AgreementFin of Agreement = {
+    param Agr  = {n : Number ; p : Person} ;
+    param Case = Nom | Gen | ... | Instr ; -- 14 values
+    oper subject = Nom ;
+    }
+
+  concrete PredFin of Pred = PredAgr with (Agreement = AgreementFin) ;
+</pre>
+
+
+<!-- NEW -->
+
+<h3>The Scandinavian module structure</h3>
+
+<center>
+<img src="ScanMod.gif">
+</center>
+<font size=2>green = instantiation (no work) ; yellow = instance (some work) ;
+red = specific (full work)
+</font>
+
+<!-- NEW -->
+
+<h3>Differences in <tt>Types</tt></h3>
+
+Scandinavian interface:
+<pre>
+  param
+    Gender ;
+    NounGender ;
+</pre>
+Swedish instance:
+<pre>
+    Gender = Utr | Neutr ;
+    NounGender = NUtr Sex | Neutr ;
+</pre>
+Danish instance:
+<pre>
+    Gender = Utr | Neutr ;
+    NounGender : Type = Gender ; 
+</pre>
+Norwegian instance:
+<pre>
+    Gender = Masc | Fem | Neutr ;
+    NounGender : Type = Gender ; 
+</pre>
+
+
+<!-- NEW -->
+
+<h3>Differences in <tt>Syntax</tt></h3>
+
+Scandinavian interface (fragment):
+<pre>
+  oper
+    specDefPhrase : Species ;
+    verbVara, verbHava, verbSkola, verbFinnas : V ;
+    relPron  : RP ;
+    comparÄn, infinAtt, negInte : Str ;
+</pre>
+Swedish instance:
+<pre>
+    specDefPhrase = Def ;
+    verbVara      = vara_V ; ...
+    relPron       = relPronForms "som" "vars" ;
+    comparÄn      = "än" ;
+</pre>
+Danish instance:
+<pre>
+    specDefPhrase = Indef ;
+    verbVara      = være_V ; ...
+    relPron       = relPronForms "som" "hvis" ;
+    comparÄn      = "end" ;
+</pre>
+Norwegian instance:
+<pre>
+    specDefPhrase = Def ;
+    verbVara      = være_V ; ...
+    relPron       = relPronForms "som" "hvis" ;
+    comparÄn      = "enn" ;
+</pre>
+
+
+
+<!-- NEW -->
+
+<h3>Example: definite noun phrases</h3>
+
+Here is the indefinite article, with just one parameter in place:
+<pre>
+  DefNP storbil = case storbil.isComplex of {
+    True  => DetCN den_det   storbil ;
+    False => DetCN empty_Det storbil
+    }
+     where
+       empty_Det = {s = \\_ => [] ; n = Sg ; b = DefP specDefPhrase} ;
+</pre>
+For <i>denna</i>, which is in the lexicon, we just have different entries
+<pre>
+  {s = genForms "denna" "detta" ; n = Sg ; b = DefP Indef}         -- Swe
+  {s = genForms "denne" "dette" ; n = Sg ; b = DefP specDefPhrase} -- Dan, Nor
+</pre>
+
+
+
+<!-- NEW -->
+
+<h3>Can we generate the lexicon?</h3>
+
+Idea:
+<pre>
+  word + paradigm in Swedish ---> word + paradigm in Danish/Norwegian
+</pre>
+The word is transformed by "sound laws", the paradigm by a general correspondance.
+Example:
+<pre>
+  decl1 "jacka"  ---> decl1 "jakke"
+</pre>
+This is computed to
+<pre>
+ {s : SubstForm => Str = table {
+    SF Sg Indef Nom => "jakke" ;
+    SF Sg Indef Gen => "jakkes" ;
+    SF Sg Def Nom   => "jakka" ;
+    SF Sg Def Gen   => "jakkas" ;
+    SF Pl Indef Nom => "jakker" ;
+    SF Pl Indef Gen => "jakkers" ;
+    SF Pl Def Nom   => "jakkene" ;
+    SF Pl Def Gen   => "jakkenes"
+  } ;
+  g = Fem
+ }
+</pre>
+Notice: we do <i>not</i> need to assume translation equivalence.
+
+<!-- NEW -->
+
+<h3></h3>
 
 
 
