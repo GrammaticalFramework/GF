@@ -483,6 +483,16 @@ oper
       } 
       in auxConj1 céd cèd céder ;
 
+  conj1peser : Str -> Verbe = \céder -> ---- ? a verifier
+    let {
+      ced = troncVerb céder ; 
+      d   = Predef.dp 1 ced ;
+      c   = Predef.tk 2 ced ; 
+      cèd = c + "è" + d ; 
+      céd = c + "e" + d
+      } 
+      in auxConj1 céd cèd céder ;
+
   conj1jeter : Str -> Verbe = \jeter ->
     let {
       jet  = troncVerb jeter ;
