@@ -20,6 +20,7 @@ import Randomized (mkRandomTree)
 import Zipper
 
 import MMacros
+import qualified Macros as M
 import TypeCheck
 import CMacros
 
@@ -126,8 +127,10 @@ optFile2grammarE = optFile2grammar
 string2treeInState :: GFGrammar -> String -> State -> Err Tree
 string2treeInState gr s st = do
   let metas = allMetas st
-  t <- pTerm s
-  annotate (grammar gr) $ qualifTerm (absId gr) $ refreshMetas metas t
+      xs    = map fst $ actBinds st
+  t0 <- pTerm s
+  let t = qualifTerm (absId gr) $ M.mkAbs xs $ refreshMetas metas $ t0
+  annotateExpInState (grammar gr) t st 
 
 string2srcTerm :: G.SourceGrammar -> I.Ident -> String -> Err G.Term
 string2srcTerm gr m s = do

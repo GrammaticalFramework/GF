@@ -78,9 +78,9 @@ pCommand = pCommandWords . words where
     "c" : s : _   -> CTermCommand s
     "a" : _       -> CRefineRandom --- *a*leatoire
     "m" :  _      -> CMenu
-----    "ml" : s : _  -> changeMenuLanguage s
-----    "ms" : s : _  -> changeMenuSize s
-----    "mt" : s : _  -> changeMenuTyped s
+    "ml" : s : _  -> changeMenuLanguage s
+    "ms" : s : _  -> changeMenuSize s
+    "mt" : s : _  -> changeMenuTyped s
     "v" : _       -> CView
     "q" : _       -> CQuit
     "h" : _       -> CHelp initEditMsg

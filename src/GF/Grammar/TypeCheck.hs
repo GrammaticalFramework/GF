@@ -123,6 +123,7 @@ possibleConstraint gr (u,v) = errVal True $ do
  where
   cts t u = isUnknown t || isUnknown u || case (t,u) of
     (Q m c,      Q n d)      -> c == d || notCan (m,c) || notCan (n,d)
+    (QC m c,     QC n d)     -> c == d
     (App f a,    App g b)    -> cts f g && cts a b
     (Abs x b,    Abs y c)    -> cts b c
     (Prod x a f, Prod y b g) -> cts a b && cts f g

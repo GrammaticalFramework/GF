@@ -73,9 +73,9 @@ refsForType compat gr binds val =
 funRulesOf :: GFCGrammar -> [(Fun,Type)]
 funRulesOf gr = 
 ----  funRulesForLiterals ++
-  [((i,f),typ) | (i, ModMod m)   <- modules gr,
-                   mtype m == MTAbstract,
-                   (f, C.AbsFun typ _) <- tree2list (jments m)]
+  [((i,f),typ) | (i, ModMod m) <- modules gr,
+                 mtype m == MTAbstract,
+                 (f, C.AbsFun typ _) <- tree2list (jments m)]
 
 allCatsOf :: GFCGrammar -> [(Cat,Context)]
 allCatsOf gr = 

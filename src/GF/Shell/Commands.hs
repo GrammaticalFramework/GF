@@ -3,9 +3,8 @@ module Commands where
 import Operations
 import Zipper
 
-import qualified Grammar as G ---- Cat
+import qualified Grammar as G ---- Cat, Fun
 import GFC
-import qualified AbsGFC ---- Atom
 import CMacros
 import LookAbs
 import Values (loc2treeFocus)----
@@ -19,7 +18,6 @@ import qualified Ident as I
 import qualified PShell
 import qualified Macros as M
 import PrGrammar
-import TypeCheck ---- tree2exp
 import PGrammar
 import IOGrammar
 import UseIO
@@ -400,7 +398,6 @@ displaySStateJavaX env state = unlines $ tagXML "gfedit" $ concat [
   lin (n,gr) = (n, map uni $ linearizeState noWrap opts gr zipper) where
                   uni = optEncodeUTF8 n gr . mkUnicode
   exp    = prprTree $ loc2tree zipper
----  xml    = prExpXML gr $ tree2exp $ loc2tree zipper --- better: dir. from zipper
   zipper = stateSState state
   linAll = map lin lgrs
   gr     = firstStateGrammar env
