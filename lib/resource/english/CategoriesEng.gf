@@ -38,7 +38,7 @@ lincat
   N2     = Function ;
       -- = CommNounPhrase ** {s2 : Preposition} ;
   N3     = Function ** {s3 : Preposition} ;
-  Num    = {s : Case => Str ; n : Number} ;
+  Num    = {s : Case => Str} ;
   Prep   = {s : Str} ;
 
   A      = Adjective ; 
