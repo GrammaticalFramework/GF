@@ -81,6 +81,13 @@ doesFileExistPath paths file = do
   mpfile <- ioeIO $ getFilePath paths file
   return $ maybe False (const True) mpfile
 
+-- path in environment variable has lower priority
+extendPathEnv :: String -> [FilePath] -> IO [FilePath]
+extendPathEnv var ps = do
+  s <- catch (getEnv var) (const (return ""))
+  let fs = pFilePaths s
+  return $ ps ++ fs
+
 pFilePaths :: String -> [FilePath]
 pFilePaths s = case span (/=':') s of
   (f,_:cs) -> f : pFilePaths cs

@@ -35,6 +35,10 @@ import Arch
 
 import Monad
 
+-- environment variable for grammar search path
+
+gfGrammarPathVar = "GF_LIB_PATH"
+
 -- in batch mode: write code in a file
 
 batchCompile f = liftM fst $ compileModule defOpts emptyShellState f
@@ -86,9 +90,10 @@ compileModule opts1 st0 file = do
   let opts = addOptions opts1 opts0 
   let ps0  = pathListOpts opts
   let fpath = justInitPath file
-  let ps = if useFileOpt 
-             then (map (prefixPathName fpath) ps0)
-             else ps0
+  let ps1 = if useFileOpt 
+              then (map (prefixPathName fpath) ps0)
+              else ps0
+  ps <- ioeIO $ extendPathEnv gfGrammarPathVar ps1
   let ioeIOIf = if oElem beSilent opts then (const (return ())) else ioeIO
   ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
   let putp = putPointE opts

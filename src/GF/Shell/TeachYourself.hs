@@ -24,7 +24,7 @@ teachTranslation opts ig og = do
 transTrainList :: 
   Options -> GFGrammar -> GFGrammar -> Integer -> IO [(String,[String])]
 transTrainList opts ig og number = do
-  ts <- randomTreesIO opts ig (fromInteger number)
+  ts <- randomTreesIO (addOption beSilent opts) ig (fromInteger number)
   return $ map mkOne $ ts
  where
    cat = firstCatOpts opts ig
@@ -39,7 +39,7 @@ teachMorpho opts ig = useIOE () $ do
 
 morphoTrainList :: Options -> GFGrammar -> Integer -> IOE [(String,[String])]
 morphoTrainList opts ig number = do
-  ts   <- ioeIO $ randomTreesIO opts ig (fromInteger number)
+  ts   <- ioeIO $ randomTreesIO (addOption beSilent opts) ig (fromInteger number)
   gen  <- ioeIO $ myStdGen (fromInteger number)
   mkOnes gen ts
  where
@@ -49,9 +49,9 @@ morphoTrainList opts ig number = do
      let (i,gen') = randomR (0, length pss - 1) gen
      (ps,ss) <- ioeErr $ pss !? i
      (_,ss0) <- ioeErr $ pss !? 0
-     let bas = concat $ take 1 ss0
+     let bas = unwords ss0 --- concat $ take 1 ss0
      more <- mkOnes gen' ts
-     return $ (bas +++ ":" +++ unwords (map prt_ ps), return (concat ss)) : more
+     return $ (bas +++ ":" +++ unwords (map prt_ ps), return (unwords ss)) : more
    mkOnes gen [] = return []
  
    gr = grammar ig

@@ -148,8 +148,9 @@ string2srcTerm gr m s = do
 randomTreesIO :: Options -> GFGrammar -> Int -> IO [Tree]
 randomTreesIO opts gr n = do
   gen <- myStdGen mx
-  t   <- err (\s -> putStrLnFlush s >> return []) (return . singleton) $ 
-                                                       mkRandomTree gen mx g catfun
+  t   <- err (\s -> putS s >> return []) 
+             (return . singleton) $ 
+                mkRandomTree gen mx g catfun
   ts  <- if n==1 then return [] else randomTreesIO opts gr (n-1)
   return $ t ++ ts
  where
@@ -158,6 +159,8 @@ randomTreesIO opts gr n = do
      _ -> Left $ firstAbsCat opts gr
    g   = grammar gr
    mx  = optIntOrN opts flagDepth 41
+   putS s = if oElem beSilent opts then return () else putStrLnFlush s
+
 
 generateTrees :: Options -> GFGrammar -> Maybe Tree -> [Tree]
 generateTrees opts gr mt =
