@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:39 $ 
+-- > CVS $Date: 2005/03/21 13:54:45 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.14 $
+-- > CVS $Revision: 1.15 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -35,7 +35,7 @@ import Custom
 import ShellState
 
 import PPrCF (prCFTree)
-import qualified ParseGFC as N
+import qualified GF.Parsing.ParseGFC as N
 
 import Operations
 

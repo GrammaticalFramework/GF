@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/02 14:25:45 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.44 $
+-- > CVS $Date: 2005/03/21 13:54:44 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.45 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -66,15 +66,15 @@ import GrammarToHaskell
 
 -- the cf parsing algorithms
 import ChartParser -- or some other CF Parser
-import qualified ParseCF as PCF
+import qualified GF.Parsing.ParseCF as PCF
 --import qualified ParseGFCviaCFG as PGFC
 --import NewChartParser
 --import NewerChartParser
 
 -- grammar conversions -- peb 19/4-04
 -- see also customGrammarPrinter
-import qualified ConvertGrammar as Cnv
-import qualified PrintParser as Prt
+import qualified GF.Conversion.ConvertGrammar as Cnv
+import qualified GF.Parsing.PrintParser as Prt
 
 import GFC
 import qualified MkGFC as MC
