@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/18 10:17:11 $ 
+-- > CVS $Date: 2005/03/21 13:54:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Revision: 1.8 $
 --
 -- Representation of, conversion to, and utilities for 
 -- printing of a general Speech Recognition Grammar. 
@@ -21,10 +21,10 @@
 module SRG where
 
 import Ident
-import CFGrammar
-import Parser (Symbol(..))
-import GrammarTypes
-import PrintParser
+import GF.Conversion.CFGrammar
+import GF.Parsing.Parser (Symbol(..))
+import GF.Conversion.GrammarTypes
+import GF.Parsing.PrintParser
 import TransformCFG
 import Option
 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:07 $ 
+-- > CVS $Date: 2005/03/21 13:54:24 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
 -- Bottom-up Kilbury chart parser from "Pure Functional Parsing", chapter 5.
 -- OBSOLETE -- should use new MCFG parsers instead 
@@ -15,9 +15,9 @@
 
 module ChartParser (chartParser) where
 
-import Tracing
-import PrintParser
-import PrintSimplifiedTerm
+-- import Tracing
+-- import PrintParser
+-- import PrintSimplifiedTerm
 
 import Operations
 import CF
@@ -117,11 +117,11 @@ chartParser0 (productions, terminal) = cparse
 	| otherwise               = [cats]
 
     cparse :: Category -> [Token] -> ([ParseTree], String)
-    cparse start input = trace "ChartParser" $
+    cparse start input = -- trace "ChartParser" $
 			 case lookup (0, length input, start) $
-			      tracePrt "#edgeTrees" (prt . map (length.snd)) $
+			      -- tracePrt "#edgeTrees" (prt . map (length.snd)) $
 			      edgeTrees of
-			   Just trees -> tracePrt "#trees" (prt . length . fst) $
+			   Just trees -> -- tracePrt "#trees" (prt . length . fst) $
 					 (trees, "Chart:" ++++ prChart passiveEdges)
 			   Nothing    -> ([],    "Chart:" ++++ prChart passiveEdges)
       where 
@@ -136,7 +136,7 @@ chartParser0 (productions, terminal) = cparse
 					      (i, b, a:bs) <- elems state ]
 
         initialChart :: Chart
-        initialChart = tracePrt "#initialChart" (prt . map (length.elems)) $
+        initialChart = -- tracePrt "#initialChart" (prt . map (length.elems)) $
 		       emptySet : map initialState (zip [0..] input)
           where initialState (j, sym) = makeSet [ (j, cat, []) | 
 						  (cat, _) <- terminal sym ]
@@ -151,12 +151,12 @@ chartParser0 (productions, terminal) = cparse
 					     a `elemSet` emptyCats ]
 
         passiveEdges :: [Passive]
-	passiveEdges = tracePrt "#passiveEdges" (prt . length) $
+	passiveEdges = -- tracePrt "#passiveEdges" (prt . length) $
 		       [ (i, j, cat) |
 			 (j, state) <- zip [0..] $
-			   tracePrt "#passiveChart" 
-			   (prt . map (length.filter (\(_,_,x)->null x).elems)) $
-			   tracePrt "#activeChart" (prt . map (length.elems)) $
+			   -- tracePrt "#passiveChart" 
+			   -- (prt . map (length.filter (\(_,_,x)->null x).elems)) $
+			   -- tracePrt "#activeChart" (prt . map (length.elems)) $
 			   finalChart,
 			 (i, cat, []) <- elems state ]
 		       ++
@@ -190,9 +190,11 @@ chartParser0 (productions, terminal) = cparse
 				tree <- trees ]
 
 
+{-
 instance Print ParseTree where
     prt (Node name cat trees) = prt name++"."++prt cat++"^{"++prtSep "," trees++"}"
     prt (Leaf token) = prt token
+-}
 
 -- AR 10/12/2002
 
