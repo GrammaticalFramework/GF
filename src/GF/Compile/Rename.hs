@@ -50,8 +50,8 @@ renameIdentTerm :: Status -> Term -> Err Term
 renameIdentTerm env@(act,imps) t = 
  errIn ("atomic term" +++ prt t +++ "given" +++ unwords (map (prt . fst) qualifs)) $
    case t of
-  Vr (IC "Int") -> return $ Q cPredefAbs cInt -- Int and String are predefined cats
-  Vr (IC "String") -> return $ Q cPredefAbs cString
+---  Vr (IC "Int") -> return $ Q cPredefAbs cInt -- Int and String are predefined cats
+---  Vr (IC "String") -> return $ Q cPredefAbs cString
   Vr c -> do
     f <- lookupTreeMany prt opens c
     return $ f c
