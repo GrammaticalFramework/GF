@@ -4,3 +4,5 @@ distr:
 test:
 	sh tst.sh
 
+lib:
+	sh mkLib.sh

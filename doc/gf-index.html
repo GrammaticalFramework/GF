@@ -20,8 +20,8 @@ August 10, 2004.
 
 <b>August 10, 2004. GF 2.0 now released</b>.
 Here are the <a
-href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf2-highlights.html">highlights</a>.
-Software available on the <a href="http://www.cs.chalmers.se/%7Eaarne/GF/download">Download Page</a>.
+href="doc/gf2-highlights.html">highlights</a>.
+Software available on the <a href="download">Download Page</a>.
 
 <p>
 
@@ -79,6 +79,7 @@ for Zaurus. To learn more about Zaurus, read this
 review</a>.
 </font>
 
+
 </p><h2>What is GF?</h2>
 
 The Grammatical Framework (=GF) is a grammar formalism based on type
@@ -113,14 +114,19 @@ GF Version 2.0 adds the aspect of
 <li> modularity and grammar engineering.
 </ul>
 GF is open-source software licensed under 
-<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gpl.html">GNU General Public License (GPL)</a>.
+<a href="LICENSE">GNU General Public License (GPL)</a>.
 
 
 
 <h2>Examples and demos</h2>
 
-<a href="2341.html">Numeral translator</a>: recognizes and generates 
+<a href="http://www.cs.chalmers.se/~bringert/gf/translate/">Numeral
+translator</a>: recognizes and generates 
 numbers from 1 to 999,999 in 80 languages.
+(The link goes to a live applet, which requires 
+<a href="http://java.sun.com/j2se/1.5.0/download.jsp">Java 1.5 plugin</a>. 
+Here is an <a href="doc/2341.html">example</a>, which does 
+not require the plugin.)
 
 <p>
 
@@ -130,8 +136,7 @@ French, Swedish, and Russian with a few mouse clicks.
 
 <p>
 
-<a href="http://129.16.225.78/aarne/GF/resource/">Resource grammar
-library</a>: 
+<a href="lib/resource/">Resource grammar library</a>: 
 basic structures of seven languages
 (English, Finnish, French, German, Italian, Russian, Swedish).
 Resource grammars can be used as libraries for writing GF
@@ -143,7 +148,7 @@ but they can also be useful for language training.
 
 GF is available precompiled for
 several platforms: Linux, Mac OS X, Microsoft Windows, and Sun OS.
-For more information, see the <a href="http://www.cs.chalmers.se/%7Eaarne/GF/download">Download Page</a>.
+For more information, see the <a href="download">Download Page</a>.
 
 
 <h2>Source code</h2>
@@ -160,9 +165,9 @@ The platform-independent graphical user interface is written in
 </p><p>
 
 Here is a 
-<a href="http://www.cs.chalmers.se/%7Eaarne/GF/gf-src.tgz">GF source package</a>, which includes a Makefile
+<a href="gf-src.tgz">GF source package</a>, which includes a Makefile
 for different platforms and Haskell compilers.
-The <a href="http://www.cs.chalmers.se/%7Eaarne/GF/download">Download Page</a> gives more information on
+The <a href="download">Download Page</a> gives more information on
 compiler requirements.
 
 </p><p>
@@ -175,39 +180,39 @@ Here are some older source packages still available:
 
 <ul>
 <li>
-<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/javaGUImanual/javaGUImanual.htm">User's tutorial</a>
+<a href="doc/javaGUImanual/javaGUImanual.htm">User's tutorial</a>
 on editing in the Java interface.
   
 </li><li>
-<a href="http://www.cs.chalmers.se/%7Eaarne/GF/Tutorial/">Grammarian's tutorial</a>
+<a href="Tutorial/">Grammarian's tutorial</a>
 on writing GF grammars, with exercises.
 
 </li><li>
-<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/short/01-gf-short.html">
+<a href="doc/short/01-gf-short.html">
 GF in 25 Minutes</a> for programmers.
 
 </li><li>
-<a href="http://www.cs.chalmers.se/%7Eaarne/articles/gf-jfp.ps.gz">Grammatical Framework: A Type-Theoretical
+<a href="http://www.cs.chalmers.se/~aarne/articles/gf-jfp.ps.gz">Grammatical Framework: A Type-Theoretical
 Grammar Formalism</a> (ps.gz). Theoretical paper on GF by A. Ranta, appeared
 in <i>The Journal of Functional Programming</i>, vol. 14:2. 2004, pp. 145-189.
 
 
 </li><li>
-<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf-manual.html">
+<a href="doc/gf-manual.html">
 User Manual</a> explaining the GF user interfaces and command language.
 
 </li><li>
-<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf-specification.html">
+<a href="doc/DocGF.pdf">
 Language specification</a> of the GF grammar formalism.
 
 </li><li>
-<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf2-highlights.html">
+<a href="doc/gf2-highlights.html">
 Highlights</a> of Version 2.0 (in comparison with version 1.1).
 
 
 </li><li> 
 
-<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf-bibliography.html">
+<a href="doc/gf-bibliography.html">
 Bibliography</a>: 
 publications on GF, as well as background literature.
 </li></ul>
@@ -222,7 +227,10 @@ Knowledge</a>. GF is used in implementing multimodal and multilingual dialogue s
 
 <a hred="http://www.key-project.org/">KeY</a> project on Integrated Deductive
 Software Design. GF is used for
-authoring informal and formal specifications.
+authoring informal and formal specifications. More details on the GF
+application
+<a href="http://www.cs.chalmers.se/%7Ekrijo/GF/specifications.html">
+here</a>.
 
 <p>
 
@@ -237,14 +245,9 @@ in Vienna 2003.
 <ul>
   <li>
 
-<a href="http://www.cs.chalmers.se/%7Eaarne/GF/gf-grammars.tgz">
+<a href="gf-grammars.tgz">
 Package of example GF grammars</a>
 
-<!--
-<li>
-<a href="grammars/">
-Unpacked directories with example GF grammars</a>
--->
 
 </li><li>
 <a href="http://www.cs.chalmers.se/%7Ekrijo/gramlets.html">Gramlets</a>:
@@ -256,16 +259,6 @@ GF grammars compiled to Java applets.
 The GF Xerox Home Page</a>
 with the oldest releases of and documents on GF, Version 0.54, 1999.
 
-</li><li>
-<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf-local.html">
-Local guide</a>
-on running GF on Chalmers CS computers.
-
-</li><li>
-Application project:
-<a href="http://www.cs.chalmers.se/%7Ekrijo/GF/specifications.html">
- Grammars for Object-Oriented Software Specifications</a>
-by <a href="http://www.cs.chalmers.se/%7Ekrijo/">Kristofer Johannisson</a>.
 
 </li><li>
 Earlier application:
@@ -294,15 +287,6 @@ Languge Technology Group</a>.
 More details on the
 <a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf-people.html">
 Authors and Acknowledgements</a> page.
-
-<!--
-<h2>Demo</h2>
-
-There was an
-<a href="demo/FormTranslate.html">on-line translator demo</a>
-
-currently running on an old server, and not always functional.
--->
 
 
 <h2>Implementation project</h2>
