@@ -9,11 +9,11 @@ fun
 
   -- Sentence conjunction
 
-  AndS : S -> S -> S ;
+--  AndS : S -> S -> S ;
 
   -- NP conjunction
 
-  AndNP : NP -> NP -> NP ;
+--  AndNP : NP -> NP -> NP ;
 
   -- Actions with an object
 
