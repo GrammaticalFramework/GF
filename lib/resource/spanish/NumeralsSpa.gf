@@ -1,18 +1,20 @@
-concrete NumeralsSpa of Numerals = open MorphoSpa in {
+--# -path=.:../romance:../abstract:../../prelude
+
+concrete NumeralsSpa of Numerals = open TypesSpa, MorphoSpa in {
 
 -- by Carlos Gonzalia, Chalmers, 1999
 -- original source automatically translated to new GF by AR
+-- modified by addition of gender and number 30/3/2005
 
-
-lincat Numeral = {s : Str} ;
+lincat Numeral = {s : Gender => Str ; n : Number} ;
 lincat Digit = {inh : Modif ; s : {p1 : DForm ; p2 : Modif} => Str} ;
-lincat Sub10 = {s : {p1 : DForm ; p2 : Modif} => Str} ;
-lincat Sub100 = {s : Str} ;
-lincat Sub1000 = {s : Str} ;
-lincat Sub1000000 = {s : Str} ;
+lincat Sub10 = {s : {p1 : DForm ; p2 : Modif} => Gender => Str ; n : Number} ;
+lincat Sub100 = {s : Gender => Str ; n : Number} ;
+lincat Sub1000 = {s : Gender => Str ; n : Number} ;
+lincat Sub1000000 = {s : Gender => Str ; n : Number} ;
 
-lin num x0 =
-  {s = x0.s} ;
+lin num x0 = x0 ;
+
 lin n2  =
   {inh = mod ; s = table {{p1 = unit ; p2 = mod} => "dos" ; {p1 = unit ; p2 = unmod} => "dos" ; {p1 = unit ; p2 = conj} => "y" ++ "dos" ; {p1 = teen ; p2 = mod} => "doce" ; {p1 = teen ; p2 = unmod} => "doce" ; {p1 = teen ; p2 = conj} => "doce" ; {p1 = ten ; p2 = mod} => "veinti" ; {p1 = ten ; p2 = unmod} => "veinte" ; {p1 = ten ; p2 = conj} => "veinte" ; {p1 = hundred ; p2 = mod} => "doscientos" ; {p1 = hundred ; p2 = unmod} => "doscientos" ; {p1 = hundred ; p2 = conj} => "doscientos"}} ;
 lin n3  =
@@ -30,31 +32,35 @@ lin n8  =
 lin n9  =
   {inh = conj ; s = table {{p1 = unit ; p2 = mod} => "nueve" ; {p1 = unit ; p2 = unmod} => "nueve" ; {p1 = unit ; p2 = conj} => "y" ++ "nueve" ; {p1 = teen ; p2 = mod} => "diecinueve" ; {p1 = teen ; p2 = unmod} => "diecinueve" ; {p1 = teen ; p2 = conj} => "diecinueve" ; {p1 = ten ; p2 = mod} => "noventa" ; {p1 = ten ; p2 = unmod} => "noventa" ; {p1 = ten ; p2 = conj} => "noventa" ; {p1 = hundred ; p2 = mod} => "novecientos" ; {p1 = hundred ; p2 = unmod} => "novecientos" ; {p1 = hundred ; p2 = conj} => "novecientos"}} ;
 lin pot01  =
-  {s = table {{p1 = unit ; p2 = mod} => "uno" ; {p1 = unit ; p2 = unmod} => "uno" ; {p1 = unit ; p2 = conj} => "y" ++ "uno" ; {p1 = teen ; p2 = mod} => "uno" ; {p1 = teen ; p2 = unmod} => "uno" ; {p1 = teen ; p2 = conj} => "y" ++ "uno" ; {p1 = ten ; p2 = mod} => "uno" ; {p1 = ten ; p2 = unmod} => "uno" ; {p1 = ten ; p2 = conj} => "y" ++ "uno" ; {p1 = hundred ; p2 = mod} => "ciento" ; {p1 = hundred ; p2 = unmod} => "cien" ; {p1 = hundred ; p2 = conj} => "y" ++ "uno"}} ;
+  {s = table {{p1 = unit ; p2 = mod} => uno ; {p1 = unit ; p2 = unmod}
+  => uno ; {p1 = unit ; p2 = conj} => yuno ; {p1 = teen ; p2 = mod} =>
+  uno ; {p1 = teen ; p2 = unmod} => uno ; {p1 = teen ; p2 = conj} =>
+  yuno ; {p1 = ten ; p2 = mod} => uno ; {p1 = ten ; p2 = unmod} => uno
+  ; {p1 = ten ; p2 = conj} => yuno ; {p1 = hundred ; p2 = mod} => 
+  \\_ => "ciento" ; {p1 = hundred ; p2 = unmod} => \\_ => "cien" ; {p1 = hundred ; p2 = conj} => yuno} ; n = Sg} ;
 lin pot0 d =
-  {s = table {{p1 = unit ; p2 = mod} => d.s ! {p1 = unit ; p2 = mod} ; {p1 = unit ; p2 = unmod} => d.s ! {p1 = unit ; p2 = unmod} ; {p1 = unit ; p2 = conj} => d.s ! {p1 = unit ; p2 = conj} ; {p1 = teen ; p2 = mod} => d.s ! {p1 = teen ; p2 = mod} ; {p1 = teen ; p2 = unmod} => d.s ! {p1 = teen ; p2 = unmod} ; {p1 = teen ; p2 = conj} => d.s ! {p1 = teen ; p2 = conj} ; {p1 = ten ; p2 = mod} => d.s ! {p1 = ten ; p2 = mod} ; {p1 = ten ; p2 = unmod} => d.s ! {p1 = ten ; p2 = unmod} ; {p1 = ten ; p2 = conj} => d.s ! {p1 = ten ; p2 = conj} ; {p1 = hundred ; p2 = mod} => d.s ! {p1 = hundred ; p2 = mod} ; {p1 = hundred ; p2 = unmod} => d.s ! {p1 = hundred ; p2 = unmod} ; {p1 = hundred ; p2 = conj} => d.s ! {p1 = hundred ; p2 = conj}}} ;
+  {s = \\f,g => d.s ! f ; n = Pl} ;
 lin pot110  =
-  {s = "diez"} ;
+  spl "diez" ;
 lin pot111  =
-  {s = "once"} ;
+  spl "once" ;
 lin pot1to19 d =
-  {s = d.s ! {p1 = teen ; p2 = unmod}} ;
+  spl (d.s ! {p1 = teen ; p2 = unmod}) ;
 lin pot0as1 n =
-  {s = n.s ! {p1 = unit ; p2 = unmod}} ;
+  {s = n.s ! {p1 = unit ; p2 = unmod} ; n = n.n} ;
 lin pot1 d =
-  {s = d.s ! {p1 = ten ; p2 = unmod}} ;
+  spl (d.s ! {p1 = ten ; p2 = unmod}) ;
 lin pot1plus d e =
-  {s = (d.s ! {p1 = ten ; p2 = mod}) ++ e.s ! {p1 = unit ; p2 = d.inh}} ;
-lin pot1as2 n =
-  {s = n.s} ;
+  {s = \\g => (d.s ! {p1 = ten ; p2 = mod}) ++ e.s ! {p1 = unit ; p2 =
+  d.inh} ! g ; n = Pl} ;
+lin pot1as2 n = n ;
 lin pot2 d =
-  {s = d.s ! {p1 = hundred ; p2 = unmod}} ;
+  spl (d.s ! {p1 = hundred ; p2 = unmod} ! Masc) ;
 lin pot2plus d e =
-  {s = (d.s ! {p1 = hundred ; p2 = mod}) ++ e.s} ;
-lin pot2as3 n =
-  {s = n.s} ;
+  {s = \\g => (d.s ! {p1 = hundred ; p2 = mod}) ! Masc ++ e.s ! g ; n = Pl} ;
+lin pot2as3 n = n ;
 lin pot3 n =
-  {s = n.s ++ "mil"} ;
+  spl (n.s ! Masc ++ "mil") ;
 lin pot3plus n m =
-  {s = n.s ++ "mil" ++ m.s} ;
+  {s = \\g => n.s ! Masc ++ "mil" ++ m.s ! g ; n = Pl} ;
 }

@@ -111,8 +111,8 @@ oper
     VInfin                 => amare.s ! VI Infn ;
     VFin (VPres   Ind) n p => amare.s ! VP (Pres Ind  n p) ; 
     VFin (VPres   Sub) n p => amare.s ! VP (Pres Sub n p) ;
-    VFin (VImperf Ind) n p => amare.s ! VP (Past Ind  n p) ; 
-    VFin (VImperf Sub) n p => amare.s ! VP (Past Sub n p) ;
+    VFin (VImperf Ind) n p => amare.s ! VP (Impf Ind  n p) ; 
+    VFin (VImperf Sub) n p => amare.s ! VP (Impf Sub n p) ;
     VFin VPasse n p        => amare.s ! VP (Pret n p) ;
     VFin VFut n p          => amare.s ! VP (Fut  Ind n p) ;
     VFin VCondit n p       => amare.s ! VP (Cond n p) ;
@@ -134,7 +134,7 @@ param
    
   VPers =   
      Pres Mode Number Person   
-   | Past Mode Number Person   
+   | Impf Mode Number Person   
    | Pret      Number Person   
    | Fut  Mode Number Person   
    | Cond      Number Person   
