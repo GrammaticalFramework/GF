@@ -82,7 +82,6 @@ lin
 
   ComplA2S = predAdjSent2 ;
 
-  TransVV2 = transVerbVerb ;
   AdjPart = adjPastPart ;
 
   UseV2V x = x ** {isAux = False} ;
@@ -120,6 +119,8 @@ lin
 --
 
   SlashV2 = slashTransVerbCl ;
+  SlashVV2 = slashVerbVerb ;
+  SlashAdv cl p = slashAdverb cl p.s ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -197,16 +198,12 @@ lin
 
   OneNP = nameNounPhrase (nameReg "one" human) ;
 
-  ExistCN A = predVerbClause 
+  ExistCN A = predBeGroup
                 (nameNounPhrase (nameReg "there" Neutr))
-                (mkTransVerbDir verbBe)
-                (complTransVerb (mkTransVerbDir verbBe) 
-                   (indefNounPhrase singular A)) ;
+                (complNounPhrase (indefNounPhrase singular A)) ;
   ExistNumCN nu A = 
-              predVerbClause 
+              predBeGroup 
                 (nameNounPhrasePl (nameReg "there" Neutr))
-                (mkTransVerbDir verbBe)
-                (complTransVerb (mkTransVerbDir verbBe) 
-                   (indefNounPhraseNum plural nu A)) ;
+                (complNounPhrase (indefNounPhraseNum plural nu A)) ;
 
 } ;

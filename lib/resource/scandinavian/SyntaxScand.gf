@@ -918,7 +918,20 @@ oper
   slashTransVerb : NounPhrase -> TransVerb -> ClauseSlashNounPhrase = 
     \jag, se -> 
       predVerbGroupClause jag (useVerb se (\\_,_,_ => se.s1)) ** {s2 = se.s2} ;
- 
+
+ --- this does not give negative or anterior forms
+
+  slashVerbVerb : NounPhrase -> VerbVerb -> TransVerb -> ClauseSlashNounPhrase = 
+    \jag,vilja,se ->
+      predVerbGroupClause jag (useVerb vilja (\\g,n,p => 
+              vilja.s1 ++
+              vilja.s3 ++
+              se.s ! VI (Inf Act))
+              )  ** {s2 = se.s2} ;
+
+  slashAdverb : Clause -> Preposition -> ClauseSlashNounPhrase = 
+    \youwalk,by -> youwalk ** {s2 = by} ;
+
 --2 Relative pronouns and relative clauses
 --
 -- Relative pronouns can be nominative, accusative, or genitive, and

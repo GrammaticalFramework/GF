@@ -403,7 +403,7 @@ oper
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {lock_VS = <>} ;
   mkV2S v p = mkV2 v p ** {lock_V2S = <>} ;
-  mkVV  v = v ** {isAux = False ; lock_VV = <>} ;
+  mkVV  v = verb2aux v ** {isAux = False ; lock_VV = <>} ;
   mkV2V v p t = mkV2 v p ** {s4 = t ; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;

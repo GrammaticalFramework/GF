@@ -408,22 +408,6 @@ oper
         } 
     in negAux b has ;
 
-  auxBe : Bool -> Tense -> Agr -> Str = \b,t,a -> 
-    let is = 
-      case t of {
-        Present => case a of {
-          ASgP3 _ => "is" ;
-          ASgP1   => "am" ;
-          _       => "are" 
-          } ;
-        Past      => case a of {
-          ASgP3 _ => "was" ;
-          _       => "were" 
-          } ;
-        _         => "be" --- never used
-        } 
-    in negAux b is ; ---- amn't
-
   auxTense : Bool -> Tense -> Agr -> Str = \b,t,a -> 
       case t of {
          Present => negAux b (case a of {
@@ -434,8 +418,6 @@ oper
          Future    => if_then_Str b "will" "won't" ;
          Conditional => negAux b "would"
          } ; 
-
-  negAux : Bool -> Str -> Str = \b,is -> if_then_Str b is (is + "n't") ;
 
 {- --vg
   useVerbGen : Bool -> Verb -> (Agr => Str) -> VerbGroup = \isAux,verb,arg -> 
@@ -527,14 +509,6 @@ oper
   complAdverb : PrepPhrase -> Complement = \elsewhere ->
     (\\_ => elsewhere.s) ;
 
-{- --- compiles to 25k lines gfr 3/2/2005
-  predAdjSent : Adjective -> Sentence -> Clause = \bra,hansover ->
-    predVerbGroupClause
-      (pronNounPhrase pronIt)
-      (beGroup (
-        \\n => bra.s ! AAdj ++ "that" ++ hansover.s)) ;
--}
-
   predAdjSent : Adjective -> Sentence -> Clause = \bra,hansover ->
     predBeGroup (pronNounPhrase pronIt) (\\n => bra.s ! AAdj ++ "that" ++ hansover.s) ;
 
@@ -552,47 +526,6 @@ oper
     s1 = if_then_Str b [] "not" ;
     } ;
 
-  predBeGroup : NounPhrase -> Complement -> Clause = \itt,goo ->
-    let
-      it = itt.s ! NomP ;
-      good = goo ! itt.a ;
-      begood : Tense -> Str = \t -> case t of {
-        Present => good ;
-        Past => good ;
-        _ => "be" ++ good
-        } ;
-      beengood : Tense -> Str = \t -> case t of {
-        Future      => "have" ++ "been" ++ good ;
-        Conditional => "have" ++ "been" ++ good ;
-        _ => "been" ++ good
-        } ;
-      has : Bool -> Tense -> Str = \b,t -> case t of {
-        Future      => if_then_Str b "will" "won't" ;
-        Conditional => negAux b "would" ;
-        _ => auxHave b t itt.a
-        } ;
-      is  : Bool -> Tense -> Str = \b,t -> case t of {
-        Future      => if_then_Str b "will" "won't" ;
-        Conditional => negAux b "would" ;
-        _ => auxBe b t itt.a
-        }
-    in
-    {s = \\o,b,sf => 
-      case sf of {
-        VFinite t Simul => case o of {
-          Dir => it ++ is b t ++ begood t ;
-          Inv => is b t ++ it ++ begood t
-          } ;
-        VFinite t Anter => case o of {
-          Dir => it ++ has b t ++ beengood t ;
-          Inv => has b t ++ it ++ beengood t
-          } 
---- ;
----        VInfinit Simul => it ++ begood Future ;
----        VInfinit Anter => it ++ beengood Future ;
----        VPresPart => it ++ "being" ++ good
-        }
-     } ;
 
 
   predAdjSent2 : AdjCompl -> NounPhrase -> Adjective = \bra,han ->
@@ -778,21 +711,42 @@ oper
 
   -- This applies to non-auxiliaries.
 
-  predVerbClause : NounPhrase -> Verb -> Complement -> Clause = \np,verb,comp -> 
+  predVerbClause : NounPhrase -> Verb -> Complement -> Clause =  \np,verb,comp -> 
+    let nv = predVerbClauseGen np verb comp in
+    {s = table {
+       Dir => \\b,sf => let nvg = nv ! b ! sf in nvg.p1 ++ nvg.p2 ++ nvg.p3 ;
+       Inv => \\b,sf => let nvg = nv ! b ! sf in 
+         case sf of {
+           VFinite t Simul => case b of {
+             True => auxTense b t np.a ++ nvg.p1 ++ (nv ! False ! sf).p3 ;
+             _    => nvg.p2            ++ nvg.p1 ++ nvg.p3 
+            } ;
+           _ => nvg.p2 ++ nvg.p1 ++ nvg.p3
+           }
+       }
+    } ;
+
+  predClauseGroup : Verb -> Complement -> VerbGroup =  \verb,comp -> 
+    let
+      nvg : Agr -> (Bool => SForm => (Str * Str * Str)) = 
+       \ag -> predVerbClauseGen {s = \\_ => [] ; a = ag} verb comp 
+    in
+    {s  = \\b,f,a => (nvg a ! b ! f).p2 ;
+     s2 = \\b,f,a => (nvg a ! b ! f).p3 ;
+     isAux = False ----
+    } ;
+
+  predVerbClauseGen : NounPhrase -> Verb -> Complement -> (Bool =>
+    SForm => (Str * Str * Str)) =  \np,verb,comp -> 
     let 
       it  = np.s ! NomP ;
       agr = np.a ; 
-      itgoes : Order -> Str -> Str -> Str = \o,x,y -> case o of {
-        Dir => it ++ x ++ y ;
-        Inv => x ++ it ++ y
-        } ;
-      goes : Tense -> Str = \t -> verb.s ! case <t,agr> of {
-         <Present,ASgP1>   => Indic P1 ;
-         <Present,ASgP3 _> => Indic P3 ;
-         <Present,_>       => Indic P2 ;
-         <Past,ASgP1>      => Pastt Pl ;
-         <Past,ASgP3 _>    => Pastt Sg ;
-         _       => Pastt Pl --- Future doesn't matter
+      goes : Tense -> Str = \t -> verb.s ! case t of {
+         Present => case agr of {
+                      ASgP3 _ => Indic Sg ;
+                      _ => Indic Pl
+                      } ;
+         _       => Pastt --- Future doesn't matter
          } ;
       off   = comp ! agr ;
       go    = verb.s ! InfImp ++ off ;
@@ -801,59 +755,102 @@ oper
       have = "have" ;
       has  : Bool -> Tense -> Str = \b,t -> auxHave b t agr ;
       does : Bool -> Tense -> Str = \b,t -> auxTense b t agr
-    in
-    {s = \\o,b,sf => 
-     let       
-       neg  = if_then_Str b [] "not" ;
-     in
-     case sf of {
+     in 
+     \\b =>  table {
       VFinite Present Simul => case b of {
-        True  => case o of {
-          Dir => it ++ goes Present ++ off ;
-          Inv => does b Present ++ it ++ go
-          } ;
-        False => itgoes o (does b Present) go
+        True  => <it,goes Present,off> ;
+                 ---- does b Present ++ it ++ go
+        False => <it,does b Present, go>
         } ;
       VFinite Past Simul => case b of {
-        True  => case o of {
-          Dir => it ++ goes Past ++ off ;
-          Inv => does b Past ++ it ++ go
-          } ;
-        False => itgoes o (does b Past) go
+        True  => <it,goes Past,off> ;
+                 ---- does b Present ++ it ++ go
+        False => <it,does b Past, go>
         } ;
-      VFinite t       Simul => itgoes o (does b t)    go ;
-      VFinite Present Anter => itgoes o (has b Present) gone ;
-      VFinite Past    Anter => itgoes o (has b Past)    gone ;
-      VFinite t Anter       => itgoes o (does b t)    (have ++ gone) 
+      VFinite t       Simul => <it,does b t,    go> ;
+      VFinite Present Anter => <it,has b Present, gone> ;
+      VFinite Past    Anter => <it,has b Past,    gone> ;
+      VFinite t Anter       => <it,does b t,    have ++ gone> 
 --- ;
 ---      VInfinit  Simul       => it ++ neg ++           go ;
 ---      VInfinit  Anter       => it ++ neg ++           (have ++ gone) ;
 ---      VPresPart             => it ++ neg ++           going
-      }
      } ;
-{- --vg
-  predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = 
-    \yo,dosleep -> {
-      s = \\o,b,c => 
-        let
-          a      = yo.a ; 
-          you    = yo.s ! NomP ;
-          do     = dosleep.s ! b ! c ! a ;
-          sleeps = dosleep.s2 ! b ! c ! a ;
-          does   = auxTense b Present a ;
-          did    = auxTense b Past a ;
-          sleep  = dosleep.s2 ! False ! c ! a 
-        in  
-        case o of {
-          Dir => you ++ do ++  sleeps ;
-          Inv => case <c,dosleep.isAux> of {
-            <VFinite Present Simul,False> => does ++ you ++ sleep ;
-            <VFinite Past Simul,False>    => did  ++ you ++ sleep ;
-            _ => do ++ you ++ sleeps
-            }
+
+-- This is for auxiliaries.
+
+  predBeGroup : NounPhrase -> Complement -> Clause = \np,comp ->
+    let nv = predAuxClauseGen np auxVerbBe comp in
+    {s = table {
+       Dir => \\b,sf => let nvg = nv ! b ! sf in nvg.p1 ++ nvg.p2 ++ nvg.p3 ;
+       Inv => \\b,sf => let nvg = nv ! b ! sf in nvg.p2 ++ nvg.p1 ++ nvg.p3
+       }
+    } ;
+
+{- ---
+  predClauseGroup : Verb -> Complement -> VerbGroup =  \verb,comp -> 
+    let
+      nvg : Agr -> (Bool => SForm => (Str * Str * Str)) = 
+       \ag -> predVerbClauseGen {s = \\_ => [] ; a = ag} verb comp 
+    in
+    {s  = \\b,f,a => (nvg a ! b ! f).p2 ;
+     s2 = \\b,f,a => (nvg a ! b ! f).p3 ;
+     isAux = True
+    } ;
+-}
+
+  predAuxClauseGen : NounPhrase -> AuxVerb -> Complement -> 
+    (Bool => SForm => (Str * Str * Str)) = \np,verb,comp -> 
+    let
+      it = np.s ! NomP ;
+      ita = np.a ;
+      been = verb.s ! APPart ;
+      good = comp ! ita ;
+      begood : Tense -> Str = \t -> case t of {
+        Present => good ;
+        Past => good ;
+        _ => verb.s ! AInfImp ++ good
+        } ;
+      beengood : Tense -> Str = \t -> case t of {
+        Future      => "have" ++ been ++ good ;
+        Conditional => "have" ++ been ++ good ;
+        _ => been ++ good
+        } ;
+      has : Bool -> Tense -> Str = \b,t -> case t of {
+        Future      => if_then_Str b "will" "won't" ;
+        Conditional => negAux b "would" ;
+        _ => auxHave b t ita
+        } ;
+      is  : Bool -> Tense -> Str = \b,t -> case t of {
+        Future      => if_then_Str b "will" "won't" ;
+        Conditional => negAux b "would" ;
+        _ => auxVerbForm verb b t ita
         }
+    in
+    \\b => 
+      table {
+        VFinite t Simul => <it,     is b t, begood t> ;
+        VFinite t Anter => <it,      has b t, beengood t>
+---        VInfinit Simul => it ++ begood Future ;
+---        VInfinit Anter => it ++ beengood Future ;
+---        VPresPart => it ++ "being" ++ good
       } ;
--- vg -}
+
+  auxVerbForm : AuxVerb -> Bool -> Tense -> Agr -> Str = \verb,b,t,a -> 
+      case t of {
+        Present => case a of {
+          ASgP3 _ => verb.s ! AIndic P3 b ;
+          ASgP1   => verb.s ! AIndic P1 b ;
+          _       => verb.s ! AIndic P2 b
+          } ;
+        Past      => case a of {
+          ASgP3 _ => verb.s ! APastt Sg b ;
+          _       => verb.s ! APastt Pl b
+          } ;
+        _         => verb.s ! AInfImp --- never used
+        } ;
+
+
 
 --3 Sentence-complement verbs
 --
@@ -891,7 +888,7 @@ oper
 -- the construction can be iterated, and the corresponding complication
 -- in the parameter structure.
 
-  VerbVerb : Type = Verb ** {isAux : Bool} ;
+  VerbVerb : Type = AuxVerb ** {isAux : Bool} ;
 
 -- To generate "can walk"/"can't walk"; "tries to walk"/"does not try to walk":
 -- The contraction of "not" is not provided, since it would require changing
@@ -906,26 +903,13 @@ oper
     in
 ----      if_then_else VerbGroup taux 
 ----        (useVerbAux try torun)
-        (mkComp    try torun) ;
-
--- The three most important example auxiliaries.
-
-  mkVerbAux : (_,_,_,_: Str) -> VerbVerb = \beable, can, could, beenable -> 
-    {s = table {
-       InfImp => beable ; 
-       Indic _ => can ; 
-       Pastt _ => could ;
-       PPart => beenable ;
-       PrepPart => nonExist ---- fix!
-       } ;
-     s1 = [] ;
-     isAux = True
-    } ;
+        (mkComp    (aux2verb try) torun) ; ----
 
 ---- Problem: "to" in non-present tenses comes to wrong place.
+--- The real problem is that these are *not* auxiliaries in all tenses.
 
-  vvCan  : VerbVerb = mkVerbAux ["be able to"] "can" "could" ["been able to"] ;
-  vvMust : VerbVerb = mkVerbAux ["have to"] "must" ["had to"] ["had to"] ;
+  vvCan  : VerbVerb = mkVerbAux ["be able to"] "can" "could" ["been able to"] ** {isAux = True} ;
+  vvMust : VerbVerb = mkVerbAux ["have to"] "must" ["had to"] ["had to"] ** {isAux = True} ;
 
 -- Notice agreement to object vs. subject:
 
@@ -941,13 +925,6 @@ oper
                  (simma.s ! VIInfinit ! dig.a)
                  (simma.s ! VIInfinit ! a)
         ) ;
-
-  transVerbVerb : VerbVerb -> TransVerb -> TransVerb = \vilja,hitta ->
-    {s  = vilja.s ;
-     s1 = vilja.s1 ++ if_then_Str vilja.isAux [] "to" ++
-          hitta.s ! InfImp ++ hitta.s1 ;
-     s3 = hitta.s3
-    } ;
 
   complVerbAdj : Adjective -> VerbPhrase -> Complement = \grei, simma ->
       (\\a => 
@@ -995,6 +972,32 @@ oper
        } ;
      s2 = lookat.s3
     } ;
+
+--- this does not give negative or anterior forms
+
+  slashVerbVerb : NounPhrase -> VerbVerb -> TransVerb -> ClauseSlashNounPhrase = 
+    \you,want,lookat ->
+    let youlookat = (predVerbClause you (aux2verb want) 
+                      (complVerbVerb want (predVerbI True {s = [] ; a = Simul} lookat
+                        (complVerb lookat)))).s
+    in 
+    {s = table {
+       DirQ   => youlookat ! Inv ;
+       IndirQ => youlookat ! Dir
+       } ;
+     s2 = lookat.s3
+    } ;
+
+  slashAdverb : Clause -> Preposition -> ClauseSlashNounPhrase = 
+    \youwalk,by ->
+    {s = table {
+       DirQ   => youwalk.s ! Inv ;
+       IndirQ => youwalk.s ! Dir
+       } ;
+     s2 = by
+    } ;
+
+
 
 
 --2 Relative pronouns and relative clauses

@@ -61,7 +61,6 @@ lin
 
   ComplA2S = predAdjSent2 ;
 
-  TransVV2 = transVerbVerb ;
   AdjPart = adjPastPart ;
 
   UseV2V x = x ;
@@ -102,6 +101,8 @@ lin
 --
 
   SlashV2 = slashTransVerb ;
+  SlashVV2 = slashVerbVerb ;
+  SlashAdv cl p = slashAdverb cl p.s ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
