@@ -101,10 +101,10 @@ ghci-nofud:
 today:
 	util/mktoday.sh
 javac:
-	javac -target 1.4 -source 1.4 java/*.java
+	$(JAVAC) -target 1.4 -source 1.4 java/*.java
 
 jar: javac
-	cd java; jar -cmf manifest.txt gf-java.jar *.class
+	cd java; $(JAR) -cmf manifest.txt gf-java.jar *.class
 
 help:
 	cd util ; runhugs MkHelpFile ; mv HelpFile.hs .. ; cd ..
@@ -123,7 +123,6 @@ dist:
 	find $(DIST_DIR) -name .cvsignore -exec rm -f {} ';'
 	cd $(DIST_DIR) && rm -rf $(NOT_IN_DIST)
 	gtar -zcf $(DIST_DIR).tar.gz $(DIST_DIR)
-	zip -r $(DIST_DIR).zip $(DIST_DIR)
 	rm -rf $(DIST_DIR)
 
 rpm: dist
@@ -132,9 +131,15 @@ rpm: dist
 binary-dist: 
 	rm -rf $(BIN_DIST_DIR)
 	mkdir $(BIN_DIST_DIR)
-	./configure CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
-	make unix gfdoc jar
-	make prefix=$(BIN_DIST_DIR)/$(prefix) install 
+	./configure --host="$(host)" CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
+#	make unix gfdoc jar
+	make gfdoc jar
+	make prefix=$(BIN_DIST_DIR)/$(prefix) install
+	$(INSTALL) configure $(BIN_DIST_DIR)
+	$(INSTALL) -m 0644 config.mk.in config.mk jgf.in $(BIN_DIST_DIR)
+	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
+	$(INSTALL) -m 0644 INSTALL.binary $(BIN_DIST_DIR)/INSTALL
+	$(INSTALL) -m 0644 Makefile.binary $(BIN_DIST_DIR)/Makefile
 	gtar -zcf GF-$(PACKAGE_VERSION)-$(host).tar.gz $(BIN_DIST_DIR)
 	rm -rf $(BIN_DIST_DIR)
 
@@ -149,7 +154,7 @@ install-gfdoc:
 install-editor:
 	$(INSTALL) -d $(libdir)/GF-$(PACKAGE_VERSION)
 	$(INSTALL) jgf $(bindir)
-	$(INSTALL) java/gf-java.jar $(libdir)/GF-$(PACKAGE_VERSION)
+	$(INSTALL) -m 0644 java/gf-java.jar $(libdir)/GF-$(PACKAGE_VERSION)
 
 install: install-gf install-gfdoc install-editor
 

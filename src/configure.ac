@@ -4,11 +4,11 @@ AC_INIT([GF],[2.0],[aarne@cs.chalmers.se],[GF])
 
 AC_PREREQ(2.53)
 
-AC_REVISION($Revision: 1.4 $)
+AC_REVISION($Revision: 1.5 $)
 
 AC_CONFIG_FILES([config.mk jgf])
 
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_HOST
 
 
 dnl ***********************************************
@@ -26,6 +26,32 @@ GHCI=$(dirname $GHC)/ghci
 
 AC_SUBST(GHC)
 AC_SUBST(GHCI)
+
+dnl ***********************************************
+dnl javac
+dnl ***********************************************
+
+AC_ARG_WITH(javac,
+  AC_HELP_STRING([--with-javac=<javac command>],
+               [Use a different command instead of
+                'javac' for the Java compiler.]),
+  [AC_CHECK_FILE("$withval",JAVAC="$withval",[AC_PATH_PROG(JAVAC,"$withval")])],
+  [AC_PATH_PROG(JAVAC,javac)])
+
+AC_SUBST(JAVAC)
+
+dnl ***********************************************
+dnl jar
+dnl ***********************************************
+
+AC_ARG_WITH(jar,
+  AC_HELP_STRING([--with-jar=<jar command>],
+               [Use a different command instead of
+                'jar' for the Java archive tool.]),
+  [AC_CHECK_FILE("$withval",JAR="$withval",[AC_PATH_PROG(JAR,"$withval")])],
+  [AC_PATH_PROG(JAR,jar)])
+
+AC_SUBST(JAR)
 
 dnl ***********************************************
 dnl Other programs

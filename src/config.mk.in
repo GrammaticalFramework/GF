@@ -17,3 +17,6 @@ INSTALL = @INSTALL@
 
 GHC = @GHC@
 GHCI = @GHCI@
+
+JAVAC = @JAVAC@
+JAR = @JAR@

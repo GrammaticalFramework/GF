@@ -1,0 +1,16 @@
+Installing a binary GF distribution:
+
+1. Untar the distribution file:
+
+   $ gtar -zxf GF-2.0-[host].tar.gz
+
+2. If you don't want to install the files under /usr/local, 
+   run configure with the right installation prefix:
+
+   E.g.
+
+   $ ./configure --prefix=/usr
+
+3. Install:
+
+   $ make install
