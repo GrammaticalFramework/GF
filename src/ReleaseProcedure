@@ -75,7 +75,7 @@ buildarchtranslate: i686: i586
     on a Solaris box, e.g. remote1.cs.chalmers.se):
 
    $ cd src
-   $ ./configure --host=sparc-sun-solaris2 && make binary-dist
+   $ ./configure --host=sparc-sun-solaris2 && gmake binary-dist
 
 13. Build a Mac OS X package (should be done on a Mac OS X box, 
     e.g. csmisc99.cs.chalmers.se):
