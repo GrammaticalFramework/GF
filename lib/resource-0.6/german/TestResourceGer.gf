@@ -24,18 +24,18 @@ lin
   House = declN3uS "Haus" "Häuser" ;
   Light = declN3 "Licht" ;
   Bar = declNs "Bar" ;
-  Walk = mkVerbSimple (verbLaufen "gehen" "geht" "gegangen") ;
-  Run = mkVerbSimple (verbLaufen "laufen" "läuft" "gelaufen") ; 
-  Say = mkVerbSimple (regVerb "sagen") ;
-  Prove = mkVerbSimple (regVerb "beweisen") ;
-  Send = mkTransVerb (mkVerbSimple (verbLaufen "senden" "sendet" "gesandt")) [] Acc;
-  Drink = transDir (mkVerbSimple (verbLaufen "trinken" "trinkt" "getrunken")) ;
-  Love = mkTransVerb (mkVerbSimple (regVerb "lieben")) [] Acc ;
-  Wait = mkTransVerb (mkVerbSimple (verbWarten "warten")) "auf" Acc ;
+  Walk = mkVerbSimple (verbumStrongSingen "gehen" "ging" "ginge" "gegangen") ;
+  Run = mkVerbSimple (verbumStrongLaufen "laufen" "läuft" "lief" "liefe" "gelaufen") ; 
+  Say = mkVerbSimple (verbumWeak "sagen") ;
+  Prove = mkVerbSimple (verbumGratulieren "beweisen") ; --without ge
+  Send = mkTransVerb (mkVerbSimple (verbumStrongSingen "senden" "sandte" "sändte" "gesandt")) [] Acc;
+  Drink = transDir (mkVerbSimple (verbumStrongSingen "trinken" "trank" "tränke" "getrunken")) ;
+  Love = mkTransVerb (mkVerbSimple (verbumWeak "lieben")) [] Acc ;
+  Wait = mkTransVerb (mkVerbSimple (verbumWeak "warten")) "auf" Acc ;
   Give = mkDitransVerb 
-           (mkVerbSimple (verbLaufen "geben" "gibt" "gegeben")) [] Dat [] Acc ;
+           (mkVerbSimple (verbumStrongSehen "geben" "gibt" "gab" "gäbe" "gegeben")) [] Dat [] Acc ;
   Prefer = mkDitransVerb 
-           (mkVerb (verbLaufen "ziehen" "zieht" "gezogen") "vor") [] Acc "vor" Dat ;
+           (mkVerb (verbumStrongSingen "ziehen" "zog" "zöge" "gezogen") "vor") [] Acc "vor" Dat ;
   Mother = mkFunC (n2n (declN2uF "Mutter" "Mütter")) "von" Dat ;
   Uncle = mkFunC (n2n (declN2i "Onkel")) "von" Dat ;
   Connection = mkFunC (n2n (declN1 "Verbindung")) "von" Dat ** 
@@ -44,8 +44,8 @@ lin
   Always = mkAdverb "immer" ;
   Well = mkAdverb "gut" ;
 
-  SwitchOn  = mkTransVerb (mkVerb (verbWarten "schalten") "auf") [] Acc  ;
-  SwitchOff = mkTransVerb (mkVerb (verbWarten "schalten") "aus") [] Acc  ;
+  SwitchOn  = mkTransVerb (mkVerb (verbumWeak "schalten") "auf") [] Acc  ;
+  SwitchOff = mkTransVerb (mkVerb (verbumWeak "schalten") "aus") [] Acc  ;
 
   John = mkProperName "Johann" ;
   Mary = mkProperName "Maria" ;
