@@ -1,8 +1,8 @@
 --# -path=.:../romance:../abstract:../../prelude
 
-concrete LangFre of LangVP = 
+concrete LangFre of Lang = 
   RulesFre, 
-  VerbphraseFre, 
+  ClauseFre, 
   StructuralFre,  
   BasicFre,
   TimeFre,
