@@ -105,8 +105,8 @@ lin
   Child = UseN child_N ;
   Wife = UseN wife_N ;
   Husband = UseN husband_N ;
-  Mother = UseN2 mother_N2 ;
-  Father = UseN2 father_N2 ;
+  Mother = UseN mother_N ;
+  Father = UseN father_N ;
   Animal = UseN animal_N ;
   Fish = UseN fish_N ;
   Bird = UseN bird_N ;
@@ -185,8 +185,8 @@ lin
   Name = UseN name_N ;
 
 --  NameOf = AppN2 name_N2 ;
-  MotherOf = AppN2 mother_N2 ;
-  FatherOf = AppN2 father_N2 ;
+  MotherOf = AppN2 (mkN2 mother_N "of") ;
+  FatherOf = AppN2 (mkN2 father_N "of") ;
 
   Big = ModPosA big_ADeg ;
   Long = ModPosA long_ADeg ;

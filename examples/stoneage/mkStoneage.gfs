@@ -1,0 +1,3 @@
+i -src -optimize=share examples/stoneage/StoneageEng.gf
+i -src -optimize=share examples/stoneage/StoneageSwe.gf
+pm -printer=gfcm | wf stoneage.gfcm

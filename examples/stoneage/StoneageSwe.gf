@@ -1,6 +1,6 @@
 --# -path=.:../../lib/resource/abstract:../../lib/prelude:../../lib/resource/swedish:../../lib/resource/scandinavian
 concrete StoneageSwe of Stoneage 
-  = open SyntaxSwe, ResourceSwe, SwadeshLexSwe, StoneageResSwe in {
+  = open SyntaxSwe, ResourceSwe, ParadigmsSwe, SwadeshLexSwe, StoneageResSwe in {
 
 lincat
   S = Phr ;
@@ -20,7 +20,7 @@ lin
   Smell = PresVasV2 smell_V ;
   Fear = PresVasV2 fear_V ;
   Kill = PresVasV2 kill_V ;
---  Fight = PresVasV2 fight_V ;
+  Fight = PresVasV2 fight_V ;
   Hunt = PresVasV2 hunt_V ;
   Hit = PresVasV2 hit_V ;
   Cut = PresVasV2 cut_V ;
@@ -41,7 +41,7 @@ lin
   Spit = PresV spit_V ;
   Vomit = PresV vomit_V ;
   Blow = PresV blow_V ;
---  Breathe = PresV breathe_V ;
+  Breathe = PresV breathe_V ;
   Laugh = PresV laugh_V ;
   Sleep = PresV sleep_V ;
   Live = PresV live_V ;
@@ -104,8 +104,8 @@ lin
   Child = UseN child_N ;
   Wife = UseN wife_N ;
   Husband = UseN husband_N ;
---  Mother = UseN2 mother_N2 ;
---  Father = UseN2 father_N2 ;
+  Mother = UseN mother_N ;
+  Father = UseN father_N ;
   Animal = UseN animal_N ;
   Fish = UseN fish_N ;
   Bird = UseN bird_N ;
@@ -184,8 +184,8 @@ lin
   Name = UseN name_N ;
 
 --  NameOf = AppN2 name_N2 ;
---  MotherOf = AppN2 mother_N2 ;
---  FatherOf = AppN2 father_N2 ;
+  MotherOf = AppN2 (mkN2 mother_N "till") ;
+  FatherOf = AppN2 (mkN2 father_N "till") ;
 
   Big = ModPosA big_ADeg ;
   Long = ModPosA long_ADeg ;
