@@ -200,18 +200,24 @@ oper
 
   mkV : (supa,super,sup,söp,supit,supen : Str) -> V ;
 
--- The 'regular verb' function is the first conjugation.
+-- The 'regular verb' function is the first conjugation if the
+-- infinitive ends with "a" ("tala" - "talar" - "talade" - "talat"),
+-- the third in other cases ("bo" - "bor" - "bodde" - "bott").
 
   regV : (tala : Str) -> V ;
 
--- The almost regular verb function needs the infinitive and the present.
+-- The almost regular verb function needs the infinitive and the preteritum.
+-- It can deal with almost all cases in the first, second, and third
+-- conjugation: "tala" - "talade", "leka" - "lekte", 
+-- "gräva" - "grävde", "byta" - "bytte", "vända" - "vände",
+-- "tyda" - "tydde", "bo" - "bodde".
 
-  mk2V : (leka,leker : Str) -> V ;
+  mk2V : (leka,lekte : Str) -> V ;
 
 -- There is an extensive list of irregular verbs in the module $IrregularSwe$.
 -- In practice, it is enough to give three forms, as in school books.
 
-  irregV     : (dricka, drack, druckit  : Str) -> V ;
+  irregV : (dricka, drack, druckit  : Str) -> V ;
 
 
 --3 Verbs with a particle.
@@ -316,7 +322,7 @@ oper
 
   mkV a b c d e f = mkVerb a b c d e f ** {s1 = [] ; lock_V = <>} ;
 
-  regV a = mk2V a (a + "r") ;
+  regV a = mk2V a (a + de) where {de = case last a of {"a" => "de" ; _ => "dde"}} ;
   mk2V a b = regVerb a b ** {s1 = [] ; lock_V = <>} ;
 
   irregV x y z =  vSälja x y z

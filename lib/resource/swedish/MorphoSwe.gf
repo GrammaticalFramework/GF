@@ -202,16 +202,23 @@ adj2Reg : Str -> Str -> Adj = \vid,vitt -> adjAlmostReg vid vitt (vid + "a") ;
     in 
     mkVerb sälja (sälj + er) sälj sålde sålt såld ;
 
-  regVerb : (_,_ : Str) -> Verb = \tala,talar -> 
+  regVerb : (_,_ : Str) -> Verb = \tala,talade -> 
     let 
-      ar    = Predef.dp 2 talar ;
-      tal   = Predef.tk 2 talar ;
-      forms = case ar of {
-        "ar" => vTala tal ;
-        "er" => vLeka tal ;
-        _    => case last tala of {
-          "a" => mkVerb tala talar tal (tal + "de") (tala + "t") (tala + "d") ;
-          _ => mkVerb tala talar tala (tala + "dde") (tala + "tt") (tala + "dd")
+      ade   = Predef.dp 3 talade ;
+      de    = Predef.dp 2 ade ;
+      tal   = Predef.tk 1 tala ;
+      forms = case ade of {
+        "ade" => vTala tal ;
+        "dde" => case last tala of {
+          "a" => vTyda (init tal) ;
+          _ => mkVerb tala (tala + "r") tala (tala + "dde") (tala + "tt") (tala + "dd")
+          } ;
+        "tte" => vByta (init tal) ;
+        "nde" => vVända (init tal) ;
+        "rde" => vHyra tal ;
+        _ => case de of {
+          "te" => vLeka tal ;
+          _    => vGräva tal
           }
         }
       in forms ** {s1 = []} ;
@@ -781,6 +788,32 @@ oper vLeka : Str -> Verbum = \lek ->
     VI (PtPret (Weak (AxSg Masc)) Gen) => lek + "tes" ;
     VI (PtPret (Weak AxPl) Nom) => lek + "ta" ;
     VI (PtPret (Weak AxPl) Gen) => lek + "tas"
+    }
+  } ;
+
+oper vGräva : Str -> Verbum = \gräv -> 
+ {s = table {
+    VF (Pres Act) => gräv + "er" ;
+    VF (Pres Pass) => mkVoice Pass gräv ;
+    VF (Pret Act) => gräv + "de" ;
+    VF (Pret Pass) => gräv + "des" ;
+    VF (Imper v) => mkVoice v gräv ;
+    VI (Inf Act) => gräv + "a" ;
+    VI (Inf Pass) => gräv + "as" ;
+    VI (Supin Act) => gräv + "t" ;
+    VI (Supin Pass) => gräv + "ts" ;
+    VI (PtPret (Strong (ASg Utr)) Nom) => gräv + "d" ;
+    VI (PtPret (Strong (ASg Utr)) Gen) => gräv + "ds" ;
+    VI (PtPret (Strong (ASg Neutr)) Nom) => gräv + "t" ;
+    VI (PtPret (Strong (ASg Neutr)) Gen) => gräv + "ts" ;
+    VI (PtPret (Strong APl) Nom) => gräv + "da" ;
+    VI (PtPret (Strong APl) Gen) => gräv + "das" ;
+    VI (PtPret (Weak (AxSg NoMasc)) Nom) => gräv + "da" ;
+    VI (PtPret (Weak (AxSg NoMasc)) Gen) => gräv + "das" ;
+    VI (PtPret (Weak (AxSg Masc)) Nom) => gräv + "de" ;
+    VI (PtPret (Weak (AxSg Masc)) Gen) => gräv + "des" ;
+    VI (PtPret (Weak AxPl) Nom) => gräv + "da" ;
+    VI (PtPret (Weak AxPl) Gen) => gräv + "das"
     }
   } ;
 
