@@ -71,8 +71,8 @@ authorMsg = unlines [
  "Grammatical Framework, Version 2.0-- (incomplete functionality)", 
 --- "Compiled March 26, 2003",
  "Compiled " ++ today,
- "Copyright (c) Markus Forsberg, Thomas Hallgren, Kristofer Johannisson,",
- "Janna Khegai, Peter Ljunglöf, Petri Mäenpää, and Aarne Ranta", 
- "1998-2003, under GNU General Public License (GPL)",
+ "Copyright (c) Markus Forsberg, Thomas Hallgren, Harald Hammarström,",
+ "Kristofer Johannisson, Janna Khegai, Peter Ljunglöf, Petri Mäenpää,", 
+ "and Aarne Ranta, 1998-2003, under GNU General Public License (GPL)",
  "Bug reports to aarne@cs.chalmers.se"
  ]

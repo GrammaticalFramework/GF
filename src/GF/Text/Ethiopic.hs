@@ -1,5 +1,8 @@
 module Ethiopic where
 
+-- Ascii-Unicode decoding for Ethiopian
+-- Copyright (c) Harald Hammarström 2003 under Gnu General Public License
+
 mkEthiopic :: String -> String
 mkEthiopic = digraphWordToUnicode . adHocToDigraphWord
 
