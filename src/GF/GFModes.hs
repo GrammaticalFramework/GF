@@ -1,4 +1,13 @@
-module GFModes where
+----------------------------------------------------------------------
+-- |
+-- Module:      GFModes
+-- Responsible: Aarne Ranta (aarne@cs.chalmers.se)
+-- Time-stamp:  <2005-02-02, 15:24>
+--
+-- (Description of the module)
+----------------------------------------------------------------------
+
+module GFModes (gfInteract, gfBatch, batchCompile) where
 
 import Operations
 import UseIO

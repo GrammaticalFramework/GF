@@ -1,6 +1,15 @@
-module Main where
+----------------------------------------------------------------------
+-- |
+-- Module:      Main
+-- Responsible: Aarne Ranta (aarne@cs.chalmers.se)
+-- Time-stamp:  <2005-02-02, 15:41>
+--
+-- This is the main module in GF
+----------------------------------------------------------------------
 
-import GFModes
+module Main (main) where
+
+import GFModes (gfInteract, gfBatch, batchCompile)
 import Operations
 import UseIO
 import Option
