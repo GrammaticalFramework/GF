@@ -77,7 +77,7 @@ oper
 
   nBuch   : (_,_ : Str) -> N ;    -- Buch, (Buches, Bücher) (neut)
   nMesser : Str -> N ;            -- Messer, (Messers, Messer) (neut)
-  nBein : Str -> N ;              -- Bein, (Beins, Beine) (neut)
+  nBein   : Str -> N ;            -- Bein, (Beins, Beine) (neut)
   nAuto   : Str -> N ;            -- Auto, (Autos, Autos) (neut)
 
 -- Feminine patterns. Duplicated "e" is avoided in $nFrau$.

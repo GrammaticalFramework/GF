@@ -428,6 +428,8 @@ oper
     in
        mkVerbum legen ((adde leg) + "t") leg legte legte ("ge" + (leg + "t")) ;
 
+  regVerb = verbumWeak ;
+
 
 -- Weak verbs that don't have ge- in the participle
   verbumGratulieren : Str -> Verbum = \gratulieren ->
