@@ -27,6 +27,7 @@ resource ParadigmsIta =
 -- To abstract over gender names, we define the following identifiers.
 
 oper
+  Bool      : Type ;
   Gender    : Type ;
 
   masculine : Gender ;
@@ -173,6 +174,7 @@ oper
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
+  Bool   = Prelude.Bool ;
   Gender = SyntaxIta.Gender ;
   Case = SyntaxIta.Case ;
   Number = SyntaxIta.Number ;
