@@ -129,9 +129,16 @@ install-gf2:
 	$(INSTALL) -d $(bindir)
 	$(INSTALL) ../bin/gf2 $(bindir)
 
-install: install-gf2
+install-gfdoc: 
+	$(INSTALL) -d $(bindir)
+	$(INSTALL) util/gfdoc $(bindir)
+
+install-editor:
 	$(INSTALL) -d $(libdir)/GF-$(PACKAGE_VERSION)
 	$(INSTALL) jgf2 $(bindir)
 	$(INSTALL) java/gf-java.jar $(libdir)/GF-$(PACKAGE_VERSION)
+
+install: install-gf2 install-gfdoc install-editor
+
 gfdoc:
 	cd util ; $(GHMAKE) GFDoc.hs -o gfdoc ; cd ..
