@@ -215,7 +215,7 @@ oper
     artDef g n c ++ qualPron g n ;
 
   pronJe = mkPronoun
-    "io"
+    "io"   --- (variants {"io" ; []}) etc
     "mi"
     "mi"
     "me"
