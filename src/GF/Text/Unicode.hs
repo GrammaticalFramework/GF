@@ -9,10 +9,11 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- ad hoc Unicode conversions from different alphabets
+-- AR 12/4/2000, 18/9/2001, 30/5/2002, 26/1/2004
 -----------------------------------------------------------------------------
 
-module Unicode where
+module Unicode (mkUnicode, treat) where
 
 import Greek (mkGreek)
 import Arabic (mkArabic)
@@ -29,10 +30,6 @@ import ExtendedArabic (mkExtendedArabic)
 import ExtraDiacritics (mkExtraDiacritics)
 
 import Char
-
--- ad hoc Unicode conversions from different alphabets
-
--- AR 12/4/2000, 18/9/2001, 30/5/2002, 26/1/2004
 
 mkUnicode s = case s of
   '/':'/':cs -> treat [] mkGreek   unic ++ mkUnicode rest
@@ -58,7 +55,7 @@ mkUnicode s = case s of
      c:cs -> remClosing (c:u) cs
      _ -> (reverse u,[]) -- forgiving missing end
 
--- don't convert XML tags --- assumes <> always means XML tags
+-- | don't convert XML tags --- assumes \<\> always means XML tags
 treat :: String -> (String -> String) -> String -> String
 treat old mk s = case s of
      '<':cs -> mk (reverse old) ++ '<':noTreat cs

@@ -9,15 +9,13 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- translate OCL, etc, files in batch mode
 -----------------------------------------------------------------------------
 
-module BatchTranslate where
+module BatchTranslate (translate) where
 
 import API
 import GetMyTree (file2tree)
-
--- translate OCL, etc, files in batch mode
 
 translate :: FilePath -> FilePath -> IO ()
 translate fgr txt = do

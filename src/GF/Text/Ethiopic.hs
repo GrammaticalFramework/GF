@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Ethiopic where
+module Ethiopic (mkEthiopic) where
 
 -- Ascii-Unicode decoding for Ethiopian
 -- Copyright (c) Harald Hammarström 2003 under Gnu General Public License

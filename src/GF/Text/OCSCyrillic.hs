@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module OCSCyrillic where
+module OCSCyrillic (mkOCSCyrillic) where
 
 mkOCSCyrillic :: String -> String
 mkOCSCyrillic = mkOCSCyrillicWord

@@ -1,9 +1,9 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
--- Stability   : (stable)
--- Portability : (portable)
+-- Module      : Trie
+-- Maintainer  : Markus Forsberg
+-- Stability   : Obsolete???
+-- Portability : Haskell 98
 --
 -- > CVS $Date $ 
 -- > CVS $Author $
@@ -11,16 +11,6 @@
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
-
-{- 
-   **************************************************************
-   * Filename      : Trie.hs                                    *
-   * Author        : Markus Forsberg                            *
-   *                 markus@cs.chalmers.se                      *
-   * Last Modified : 17 December, 2001                          *
-   * Lines         : 51                                         *
-   ************************************************************** 
--}
 
 module Trie (
              tcompile,

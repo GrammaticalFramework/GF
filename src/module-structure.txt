@@ -1,0 +1,253 @@
+
+
+följande är en föreslagen hierarkisk modulstruktur för GF 2.2
+
+katalogen src kommer att innehålla (åtminstone) följande:
+  - GF.hs     	     	modulen Main
+  - GF/			resten av Haskell-filerna
+  - JavaGUI/		java-filer
+  - haddock-script.csh	för att skapa haddock-dokumentation
+  - haddock-resources/  nödvändiga filer för haddock-script.csh
+  - haddock/		html-resultat efter att ha kört haddock
+
+modifiera gärna strukturen och kommentarerna nedan
+----------------------------------------------------------------------
+
+GF
+
+GF/
+	GFModes				- flyttas till Shell??
+
+	API/
+		API
+		BatchTranslate
+		GrammarToHaskell
+		IOGrammar
+		MyParser		- obsolet?
+
+	CF/				- bör så småningom försvinna
+					(ersättas med mer generell CFG-datatyp)
+		CF
+		CFIdent
+		CFtoGrammar
+		CFtoSRG
+		CanonToCF
+		ChartParser		- obsolet.
+		EBNF			- ta bort parserkombinatorerna -- skapa en bncf-fil
+		PPrCF
+		PrLBNF
+		Profile
+
+	Canon/
+		AbsGFC			[1/2 - AUTO]
+		CMacros
+		CanonToGrammar
+		GFC
+		GetGFC
+		Look
+		MkGFC
+		PrExp
+		Share
+		Unlex
+		LexGFC			[AUTO]
+		ParGFC			[AUTO]
+		PrintGFC		[1/2 - AUTO]
+		SkelGFC			[AUTO]
+		TestGFC			[AUTO]
+
+		[GFC.cf]		bnfc-fil
+		[ParGFC.y]		[AUTO] happy-fil
+		[LexGFC.x]		[AUTO] alex-fil
+
+	Compile/
+		CheckGrammar
+		Compile
+		Extend
+		GetGrammar
+		GrammarToCanon
+		MkResource
+		MkUnion
+		ModDeps
+		NewRename
+		Optimize
+		PGrammar
+		PrOld
+		Rebuild
+		RemoveLiT
+		Rename
+		ShellState
+		Update
+
+	Data/
+		Assoc
+		Glue
+		Map			- slås ihop med RedBlackSet
+		OrdMap2			- obsolet - använd Assoc istället
+		OrdSet			- obsolet - använd SortedList istället
+		RedBlack		\ slås samman
+		RedBlackSet		/
+		SharedString 		[AUTO?]
+		SortedList
+		Trie			\ slås samman
+		Trie2			/
+		Zipper
+		CheckM
+		ErrM
+
+	Fudgets/
+		EventF
+		FudgetOps
+		UnicodeF
+		WriteF
+		CommandF
+
+	Grammar/
+		AbsCompute
+		Abstract
+		AppPredefined
+		Compute
+		Grammar
+		LookAbs
+		Lookup
+		MMacros
+		Macros
+		PatternMatch
+		PrGrammar
+		Refresh
+		ReservedWords
+		TC
+		TypeCheck
+		Unify
+		Values
+
+	CFGM/
+		AbsCFG			[AUTO]
+		LexCFG			[AUTO]
+		ParCFG			[AUTO]
+		PrintCFG		[AUTO]
+		PrintCFGrammar
+
+		[CFG.cf]		bnfc-fil
+		[ParCFG.y]		[AUTO] happy-fil
+		[LexCFG.x]		[AUTO] alex-fil
+
+	Source/
+		AbsGF			[AUTO]
+		LexGF			[AUTO]
+		ParGF			[AUTO]
+		PrintGF			[AUTO]
+		SkelGF			[AUTO]
+		TestGF			[AUTO]
+		SourceToGrammar
+		GrammarToSource
+
+		[GF.cf]			bnfc-fil
+		[ParGF.y]		[AUTO] happy-fil
+		[LexGF.x]		[AUTO] alex-fil
+
+	Infra/
+		Comments
+		Ident
+		Modules
+		Operations
+		Option
+		Parsers			- nästan obsolet (används bara i EBNF)
+		ReadFiles
+		Str
+		UseIO
+
+	Parsing/			dela upp i Grammar och Parsing? 
+					(då måste nuvarande Grammar byta namn)
+		CFGrammar		-> Grammar
+		CFParserGeneral
+		CFParserIncremental
+		ConvertGFCtoMCFG	-> Grammar
+		ConvertGrammar		-> Grammar
+		ConvertMCFGtoCFG	-> Grammar
+		GeneralChart
+		GrammarTypes		-> Grammar
+		IncrementalChart
+		MCFGrammar		-> Grammar
+		MCFParserBasic
+		MCFRange
+		ParseCF
+		ParseCFG
+		ParseGFC
+		ParseMCFG
+		Parser
+		PrintParser
+		PrintSimplifiedTerm
+
+	Shell/
+		CommandL
+		Commands
+		JGF
+		PShell
+		Shell
+		ShellCommands
+		SubShell
+		TeachYourself
+
+	Speech/
+		PrGSL
+		PrJSGF
+		SRG
+		TransformCFG
+
+	System/
+		Arch
+		ArchEdit
+		Tracing
+
+	Text/
+		Arabic
+		Devanagari
+		Ethiopic
+		ExtendedArabic
+		ExtraDiacritics
+		Greek
+		Hebrew
+		Hiragana
+		LatinASupplement
+		OCSCyrillic
+		Russian
+		Tamil
+		Text
+		UTF8
+		Unicode
+
+	Translate/
+		GFT
+
+	UseGrammar/
+		Custom
+		Editing
+		Generate
+		GetTree
+		Information
+		Linear
+		MoreCustom		- obsolet?
+		Morphology
+		Paraphrases
+		Parsing
+		Randomized
+		RealMoreCustom		- obsolet?
+		Session
+		TeachYourself
+		Tokenize
+		Transfer
+
+	Util/				byta namn till Extra?
+		Today 			[AUTO]
+		HelpFile 		[AUTO]
+		AlphaConvGF
+		GFDoc
+		Htmls
+		MkHelpFile
+		HelpFile		byta namn till HelpFile.txt?
+
+		[mkHelpFile.perl]	ersättning för MkHelpFile?
+		[mktoday.sh]
+
+	Visualization/
+		VisualizeGrammar

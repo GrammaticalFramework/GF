@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- context-free grammars. AR 15/12/1999 -- 30/3/2000 -- 2/6/2001 -- 3/12/2001
 -----------------------------------------------------------------------------
 
 module CF where
@@ -22,34 +22,33 @@ import CFIdent
 import List (nub,nubBy)
 import Char (isUpper, isLower, toUpper, toLower)
 
--- context-free grammars. AR 15/12/1999 -- 30/3/2000 -- 2/6/2001 -- 3/12/2001
-
 -- CF grammar data types
 
--- abstract type CF. 
+-- | abstract type CF. 
 -- Invariant: each category has all its rules grouped with it 
 --      also: the list is never empty (the category is just missing then)
 newtype CF  = CF ([CFRuleGroup], CFPredef) 
 type CFRule = (CFFun, (CFCat, [CFItem]))
 type CFRuleGroup = (CFCat,[CFRule])
 
--- CFPredef is a hack for variable symbols and literals; normally = const []
+-- | CFPredef is a hack for variable symbols and literals; normally = @const []@
 data CFItem = CFTerm RegExp | CFNonterm CFCat deriving (Eq, Ord,Show)
 
 newtype CFTree = CFTree (CFFun,(CFCat, [CFTree])) deriving (Eq, Show)
 
-type CFPredef  = CFTok -> [(CFCat, CFFun)] -- recognize literals, variables, etc
+-- | recognize literals, variables, etc
+type CFPredef  = CFTok -> [(CFCat, CFFun)]
 
--- Wadler style + return information
+-- | Wadler style + return information
 type CFParser = [CFTok] -> ([(CFTree,[CFTok])],String)
 
 cfParseResults :: ([(CFTree,[CFTok])],String) -> [CFTree]
 cfParseResults rs = [b | (b,[]) <- fst rs]
 
--- terminals are regular expressions on words; to be completed to full regexp
+-- | terminals are regular expressions on words; to be completed to full regexp
 data RegExp = 
-    RegAlts [CFWord]         -- list of alternative words
-  | RegSpec CFTok            -- special token
+    RegAlts [CFWord]         -- ^ list of alternative words
+  | RegSpec CFTok            -- ^ special token
   deriving (Eq, Ord, Show)
 
 type CFWord = String
@@ -78,11 +77,11 @@ groupCFRules = foldr ins [] where
 
 -- to construct rules
 
--- make a rule from a single token without constituents
+-- | make a rule from a single token without constituents
 atomCFRule :: CFCat -> CFFun -> CFTok -> CFRule
 atomCFRule c f s = (f, (c, [atomCFTerm s]))
 
--- usual terminal
+-- | usual terminal
 atomCFTerm :: CFTok -> CFItem 
 atomCFTerm = CFTerm . atomRegExp
 
@@ -91,18 +90,18 @@ atomRegExp t = case t of
   TS s -> RegAlts [s] 
   _    -> RegSpec t
 
--- terminal consisting of alternatives
+-- | terminal consisting of alternatives
 altsCFTerm :: [String] -> CFItem 
 altsCFTerm = CFTerm . RegAlts
 
 
 -- to construct trees
 
--- make a tree without constituents
+-- | make a tree without constituents
 atomCFTree :: CFCat -> CFFun -> CFTree
 atomCFTree c f = buildCFTree c f []
 
--- make a tree with constituents. 
+-- | make a tree with constituents. 
 buildCFTree :: CFCat -> CFFun -> [CFTree] -> CFTree
 buildCFTree c f trees = CFTree (f,(c,trees))
 
@@ -188,8 +187,7 @@ isCircularCF (_,(c', CFNonterm c:[])) = compatCF c' c
 isCircularCF _ = False
 --- we should make a test of circular chains, too
 
--- coercion to the older predef cf type
-
+-- | coercion to the older predef cf type
 predefRules :: CFPredef -> CFTok -> [CFRule]
 predefRules pre s = [atomCFRule c f s | (c,f) <- pre s]
 

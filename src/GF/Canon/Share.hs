@@ -27,11 +27,20 @@ import qualified Modules as M
 -- following advice of Josef Svenningsson
 
 type OptSpec = [Integer] ---
+
 doOptFactor opt = elem 2 opt
 doOptValues opt = elem 3 opt
+
+shareOpt :: OptSpec
 shareOpt = []
+
+paramOpt :: OptSpec
 paramOpt = [2]
+
+valOpt :: OptSpec
 valOpt = [3]
+
+allOpt :: OptSpec
 allOpt = [2,3]
 
 shareModule :: OptSpec -> (Ident, CanonModInfo) -> (Ident, CanonModInfo)
@@ -44,7 +53,7 @@ shareInfo opt (c, CncCat ty t m) = (c, CncCat ty (shareOptim opt c t) m)
 shareInfo opt (c, CncFun k xs t m) = (c, CncFun k xs (shareOptim opt c t) m)
 shareInfo _ i = i
 
--- the function putting together optimizations
+-- | the function putting together optimizations
 shareOptim :: OptSpec -> Ident -> Term -> Term
 shareOptim opt c 
   | doOptFactor opt && doOptValues opt = values . factor c 0
@@ -52,9 +61,8 @@ shareOptim opt c
   | doOptValues opt = values    
   | otherwise = share
 
--- we need no counter to create new variable names, since variables are 
+-- | we need no counter to create new variable names, since variables are 
 -- local to tables
-
 share :: Term -> Term
 share t = case t of
   T ty cs  -> shareT ty [(p, share v) | Cas ps v <- cs, p <- ps]  -- only substant.
@@ -79,8 +87,7 @@ share t = case t of
    finalize ty css = T ty [Cas (map fst ps) t | ps@((_,t):_) <- css]
 
 
--- do even more: factor parametric branches
-
+-- | do even more: factor parametric branches
 factor :: Ident -> Int -> Term -> Term
 factor c i t = case t of
   T _ [_] -> t
@@ -111,8 +118,7 @@ factor c i t = case t of
 pIdent c i = identC ("p_" ++ prt c ++ "__" ++ show i)
 
 
---  we need to replace subterms
-
+-- | we need to replace subterms
 replace :: Term -> Term -> Term -> Term
 replace old new trm = case trm of
   T ty cs -> T ty [Cas p (repl v) | Cas p v <- cs]

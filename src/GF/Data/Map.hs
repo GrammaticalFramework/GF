@@ -1,9 +1,9 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
--- Stability   : (stable)
--- Portability : (portable)
+-- Module      : Map
+-- Maintainer  : Markus Forsberg
+-- Stability   : Stable
+-- Portability : Haskell 98
 --
 -- > CVS $Date $ 
 -- > CVS $Author $
@@ -11,16 +11,6 @@
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
-
-{- 
-   **************************************************************
-   * Filename      : Map.hs                                     *
-   * Author        : Markus Forsberg                            *
-   *                 markus@cs.chalmers.se                      *
-   * Last Modified : 15 December, 2001                          *
-   * Lines         : 53                                         *
-   ************************************************************** 
--}
 
 module Map 
            (

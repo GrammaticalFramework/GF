@@ -1,26 +1,16 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
--- Stability   : (stable)
--- Portability : (portable)
+-- Module      : RedBlack
+-- Maintainer  : Markus Forsberg
+-- Stability   : Stable
+-- Portability : Haskell 98
 --
 -- > CVS $Date $ 
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Modified version of Osanaki's implementation.
 -----------------------------------------------------------------------------
-
-{- 
-   **************************************************************
-   * Filename      : RedBlack.hs                                *
-   * Author        : Markus Forsberg                            *
-   *                 markus@cs.chalmers.se                      *
-   * Last Modified : 15 December, 2001                          *
-   * Lines         : 57                                         *
-   ************************************************************** 
--} -- Modified version of Osanaki's implementation.
 
 module RedBlack (
                 emptyTree,

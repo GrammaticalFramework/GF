@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Arabic where
+module Arabic (mkArabic) where
 
 mkArabic :: String -> String
 mkArabic = unwords . (map mkArabicWord) . words

@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module EBNF where
+module EBNF (pEBNFasGrammar) where
 
 import Operations
 import Parsers

@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GetGFC where
+module GetGFC (getCanonModule, getCanonGrammar) where
 
 import Operations
 import ParGFC

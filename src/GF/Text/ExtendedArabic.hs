@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module ExtendedArabic where
+module ExtendedArabic (mkArabic0600, mkExtendedArabic) where
 
 mkArabic0600 :: String -> String
 mkArabic0600 = digraphWordToUnicode . aarnesToDigraphWord

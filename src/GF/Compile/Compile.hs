@@ -5,11 +5,11 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
+-- > CVS $Date $
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- The top-level compilation chain from source file to gfc/gfr.
+-- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
 
 module Compile where

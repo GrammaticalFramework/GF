@@ -19,7 +19,7 @@ import Grammar
 import Ident
 import PrGrammar
 
--- the strings are non-fatal warnings
+-- | the strings are non-fatal warnings
 type Check a = STM (Context,[String]) a
 
 checkError :: String -> Check a
@@ -28,7 +28,7 @@ checkError = raise
 checkCond :: String -> Bool -> Check ()
 checkCond s b = if b then return () else checkError s
 
--- warnings should be reversed in the end
+-- | warnings should be reversed in the end
 checkWarn :: String -> Check ()
 checkWarn s = updateSTM (\ (cont,msg) -> (cont, s:msg))
 

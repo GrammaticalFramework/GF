@@ -1,15 +1,17 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
--- Stability   : (stable)
--- Portability : (portable)
+-- Module      : Parsers
+-- Maintainer  : Aarne Ranta
+-- Stability   : Almost Obsolete
+-- Portability : Haskell 98
 --
 -- > CVS $Date $ 
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- some parser combinators a` la Wadler and Hutton
+-- no longer used in many places in GF
+-- (only used in EBNF.hs)
 -----------------------------------------------------------------------------
 
 module Parsers where
@@ -28,8 +30,6 @@ infixr 5 ..+
 infixr 6 |>
 infixr 3 <<<
 
--- some parser combinators a` la Wadler and Hutton
--- no longer used in many places in GF
 
 type Parser a b = [a] -> [(b,[a])]
 

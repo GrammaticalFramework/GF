@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- hack for BNFC generated files. AR 21/9/2003
 -----------------------------------------------------------------------------
 
 module ErrM (
@@ -18,4 +18,3 @@ module ErrM (
 
 import Operations
 
--- hack for BNFC generated files. AR 21/9/2003

@@ -29,10 +29,10 @@ import Monad
 
 -- macros for concrete syntax in GFC that do not need lookup in a grammar
 
--- how to mark subtrees, dep. on node, position, whether focus
+-- | how to mark subtrees, dep. on node, position, whether focus
 type JustMarker = V.TrNode -> [Int] -> Bool -> (String, String)
 
--- also to process the text (needed for escapes e.g. in XML)
+-- | also to process the text (needed for escapes e.g. in XML)
 type Marker = (JustMarker, Maybe (String -> String))
 
 defTMarker :: JustMarker -> Marker
@@ -44,22 +44,22 @@ markSubtree (mk,esc) n is = markSubterm esc . mk n is
 escapeMkString :: Marker -> Maybe (String -> String)
 escapeMkString = snd
 
--- if no marking is wanted, use the following
+-- | if no marking is wanted, use the following
 noMark :: Marker
 noMark = defTMarker mk where
   mk _ _ _ = ("","")
 
--- for vanilla brackets, focus, and position, use
+-- | for vanilla brackets, focus, and position, use
 markBracket :: Marker
 markBracket = defTMarker mk where
   mk n p b = if b then ("[*" ++ show p,"*]") else ("[" ++ show p,"]")
 
--- for focus only
+-- | for focus only
 markFocus :: Marker
 markFocus = defTMarker mk where
   mk n p b = if b then ("[*","*]") else ("","")
 
--- for XML, use
+-- | for XML, use
 markJustXML :: JustMarker
 markJustXML n i b = 
   if b 
@@ -84,7 +84,7 @@ markXML = (markJustXML, Just esc) where
    c  :cs  -> c     :esc cs
    _ -> s
 
--- for XML in JGF 1, use
+-- | for XML in JGF 1, use
 markXMLjgf :: Marker
 markXMLjgf = defTMarker mk where
  mk n p b = 
@@ -94,7 +94,7 @@ markXMLjgf = defTMarker mk where
    where 
      c = "type=" ++ prt (M.valNode n)
 
--- the marking engine
+-- | the marking engine
 markSubterm :: Maybe (String -> String) -> (String,String) -> Term -> Term
 markSubterm esc (beg, end) t = case t of
   R rs -> R $ map markField rs 
@@ -181,13 +181,13 @@ strsFromTerm t = case t of
   _ -> return [str ("BUG[" ++ prt t ++ "]")] ---- debug
 ----  _ -> prtBad "cannot get Str from term " t
 
--- recursively collect all branches in a table
+-- | recursively collect all branches in a table
 allInTable :: Term -> [Term]
 allInTable t =  case t of
   T _ ts -> concatMap (\ (Cas _ v) -> allInTable v) ts --- expand ?
   _    -> [t]
 
--- to gather s-fields; assumes term in normal form, preserves label
+-- | to gather s-fields; assumes term in normal form, preserves label
 allLinFields :: Term -> Err [[(Label,Term)]]
 allLinFields trm = case trm of
 ----  R rs  -> return [[(l,t) | (l,(Just ty,t)) <- rs, isStrType ty]] -- good
@@ -197,20 +197,20 @@ allLinFields trm = case trm of
     return $ concat lts
   _ -> prtBad "fields can only be sought in a record not in" trm
 
----- deprecated
+-- | deprecated
 isLinLabel l = case l of
      L (A.IC ('s':cs)) | all isDigit cs -> True
      -- peb (28/4-04), for MCFG grammars to work:
      L (A.IC cs) | null cs || head cs `elem` ".!" -> True
      _ -> False
 
--- to gather ultimate cases in a table; preserves pattern list
+-- | to gather ultimate cases in a table; preserves pattern list
 allCaseValues :: Term -> [([Patt],Term)]
 allCaseValues trm = case trm of
   T _ cs -> [(p:ps, t) | Cas pp t0 <- cs, p <- pp, (ps,t) <- allCaseValues t0]
   _      -> [([],trm)]
 
--- to gather all linearizations; assumes normal form, preserves label and args
+-- | to gather all linearizations; assumes normal form, preserves label and args
 allLinValues :: Term -> Err [[(Label,[([Patt],Term)])]]
 allLinValues trm = do
   lts <- allLinFields trm
@@ -241,8 +241,7 @@ onTokens f t = case t of
    _ -> composSafeOp (onTokens f) t
 
 
--- to define compositional term functions
-
+-- | to define compositional term functions
 composSafeOp :: (Term -> Term) -> Term -> Term
 composSafeOp op trm = case composOp (mkMonadic op) trm of
   Ok t -> t
@@ -250,6 +249,7 @@ composSafeOp op trm = case composOp (mkMonadic op) trm of
  where
  mkMonadic f = return . f
 
+-- | to define compositional term functions
 composOp :: Monad m => (Term -> m Term) -> Term -> m Term
 composOp co trm = 
  case trm of

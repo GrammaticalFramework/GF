@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Russian where
+module Russian (mkRussian, mkRusKOI8) where
 
 -- an ad hoc ASCII encoding. Delimiters: /_ _/
 mkRussian :: String -> String

@@ -9,14 +9,12 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Gérard Huet's zipper (JFP 7 (1997)). AR 10/8/2001
 -----------------------------------------------------------------------------
 
 module Zipper where
 
 import Operations
-
--- Gérard Huet's zipper (JFP 7 (1997)). AR 10/8/2001
 
 newtype Tr a = Tr (a,[Tr a]) deriving (Show,Eq)
     

@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module ExtraDiacritics where
+module ExtraDiacritics (mkExtraDiacritics) where
 
 mkExtraDiacritics :: String -> String
 mkExtraDiacritics = mkExtraDiacriticsWord

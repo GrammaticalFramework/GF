@@ -9,7 +9,10 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- a hack to print gf2 into gf1 readable files
+-- Works only for canonical grammars, printed into GFC. Otherwise we would have
+-- problems with qualified names.
+-- --- printnames are not preserved, nor are lindefs
 -----------------------------------------------------------------------------
 
 module PrOld where
@@ -27,11 +30,6 @@ import GrammarToSource
 import List
 import Operations
 import UseIO
-
--- a hack to print gf2 into gf1 readable files
--- Works only for canonical grammars, printed into GFC. Otherwise we would have
--- problems with qualified names.
---- printnames are not preserved, nor are lindefs
 
 printGrammarOld :: GFC.CanonGrammar -> String
 printGrammarOld gr = err id id $ do

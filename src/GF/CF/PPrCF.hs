@@ -9,10 +9,12 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- printing and parsing CF grammars, rules, and trees AR 26/1/2000 -- 9/6/2003
+--
+-- use the Print class instead!
 -----------------------------------------------------------------------------
 
-module PPrCF where
+module PPrCF (prCF, prCFTree, prCFRule, prCFFun, prCFCat, prCFItem, prRegExp, pCF) where
 
 import Operations
 import CF
@@ -21,9 +23,6 @@ import AbsGFC
 import PrGrammar
 
 import Char
-
--- printing and parsing CF grammars, rules, and trees AR 26/1/2000 -- 9/6/2003
----- use the Print class instead!
 
 prCF :: CF -> String
 prCF = unlines . (map prCFRule) . rulesOfCF -- hiding the literal recogn function
