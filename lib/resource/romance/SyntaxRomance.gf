@@ -1071,10 +1071,12 @@ oper
 -- N.B. inversion variants and "est-ce que" are treated as above.
 
   intVerbPhrase : IntPron -> VerbGroup -> Question = \ip,vg ->
-    questClause (predVerbGroupClause (ip ** {p = P3 ; c = Clit0}) vg) ;
+    questClause (predVerbGroupClause (intNounPhrase ip) vg) ;
 
   intSlash : IntPron -> ClauseSlashNounPhrase -> Question ;
 
+  intNounPhrase : IntPron -> NounPhrase = \ip ->
+    {s = \\nf => ip.s ! pform2case nf ; g = PGen ip.g ; n = ip.n ; p = P3 ; c = Clit0} ;
 
 --3 Interrogative adverbials
 --
