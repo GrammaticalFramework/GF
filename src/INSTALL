@@ -11,14 +11,23 @@ To make and install GF2 (Version 2-beta, 2/4/2004).
 
      ghc --version
 
-3. Compile with make, either of
+3. Run configure
+
+     ./configure
+
+   If you want to install the GF somewhere other than /usr/local, use
+   the --prefix flag. E.g.
+
+     ./configure --prefix=/usr
+
+4. Compile with make, either of
 
      make unix    -- for Linux, Solaris, Mac OSX
      make windows -- for MS Windows
 
    The binary is sent to the file GF2/bin/gf2
 
-4. For a quick test: start GF2, load a grammar and parse a string:
+5. For a quick test: start GF2, load a grammar and parse a string:
 
      cd ../grammars/basic
      ../../bin/gf2 English.gf
@@ -28,7 +37,7 @@ To make and install GF2 (Version 2-beta, 2/4/2004).
      -- this is the response from GF2:
      PredA1 (Every Number) (DisjA1 Even Odd)
 
-5. If you want to run the Java GUI, go back to GF2/src and also do
+6. If you want to run the Java GUI, go back to GF2/src and also do
 
      make install-java
 
