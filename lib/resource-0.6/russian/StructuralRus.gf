@@ -29,17 +29,17 @@ lin
   ThouNP = pron2NounPhrase pronTu Animate;
   HeNP   = pron2NounPhrase pronOn Animate;
   SheNP  = pron2NounPhrase pronOna Animate;
-  ItNP= pron2NounPhrase pronOno Inanimate;
-  WeNP   = pronWithNum (pron2NounPhrase pronMu Animate);
-  YeNP   = pronWithNum (pron2NounPhrase pronVu Animate);
+  ItNP   = pron2NounPhrase pronOno Inanimate;
+  WeNumNP = pronWithNum (pron2NounPhrase pronMu Animate);
+  YeNumNP = pronWithNum (pron2NounPhrase pronVu Animate);
   YouNP  = pron2NounPhrase pronVu Animate;
   TheyNP = pron2NounPhrase pronOni Animate;
 
   EveryDet = kazhdujDet ** {n = Sg ; g = PNoGen; c= Nom} ; 
-  AllDet   = vesDet ** {n = Sg; g = PNoGen;  c = Nom} ; 
-  AllsDet  = mkDeterminerNum (vseDetPl ** {n = Pl; g = PNoGen; c = Nom} ); 
+  AllMassDet   = vesDet ** {n = Sg; g = PNoGen;  c = Nom} ; 
+  AllNumDet  = mkDeterminerNum (vseDetPl ** {n = Pl; g = PNoGen; c = Nom} ); 
   WhichDet = kotorujDet ** {n = Sg; g = PNoGen; c= Nom} ;
-  WhichsDet = mkDeterminerNum (kotorujDet ** {n = Pl; g = PNoGen; c= Nom} );  
+  WhichNumDet = mkDeterminerNum (kotorujDet ** {n = Pl; g = PNoGen; c= Nom} );  
   MostDet  = bolshinstvoSgDet ** {n = Sg; g = (PGen Neut); c= Gen} ; 
   -- inanimate, Sg: "большинство телефонов безмолству-ет" 
   MostsDet = bolshinstvoPlDet ** {n = Pl; g = (PGen Neut); c= Gen} ;  
@@ -47,21 +47,21 @@ lin
   ManyDet  = mnogoSgDet ** {n = Sg; g = (PGen Neut); c= Gen} ; 
   MuchDet  = mnogoSgDet ** {n = Sg; g = (PGen Neut); c= Gen} ; -- same as previous
   SomeDet  = nekotorujDet ** {n = Sg; g = PNoGen; c= Nom} ;
-  SomesDet = mkDeterminerNum (nekotorujDet ** {n = Pl; g = PNoGen; c= Nom} );  
+  SomeNumDet = mkDeterminerNum (nekotorujDet ** {n = Pl; g = PNoGen; c= Nom} );  
   AnyDet   = lubojDet ** {n = Sg; g = PNoGen; c= Nom} ;
-  AnysDet  = mkDeterminerNum (lubojDet ** {n = Pl; g = PNoGen; c= Nom} );  
+  AnyNumDet  = mkDeterminerNum (lubojDet ** {n = Pl; g = PNoGen; c= Nom} );  
   NoDet    = nikakojDet ** {n = Sg; g = PNoGen; c= Nom} ;
-  NosDet   = mkDeterminerNum (nikakojDet ** {n = Pl; g = PNoGen; c= Nom} );  
+  NoNumDet   = mkDeterminerNum (nikakojDet ** {n = Pl; g = PNoGen; c= Nom} );  
   ThisDet  = etotDet ** {n = Sg; g = PNoGen; c= Nom} ;
-  TheseDet = mkDeterminerNum (etotDet ** {n = Pl; g = PNoGen; c= Nom} );  
+  TheseNumDet = mkDeterminerNum (etotDet ** {n = Pl; g = PNoGen; c= Nom} );  
   ThatDet  = totDet ** {n = Sg; g = PNoGen; c= Nom} ;
-  ThoseDet = mkDeterminerNum (totDet ** {n = Pl; g = PNoGen; c= Nom} );  
+  ThoseNumDet = mkDeterminerNum (totDet ** {n = Pl; g = PNoGen; c= Nom} );  
   
   ThisNP = det2NounPhrase etotDet ; -- inanimate form only
   ThatNP = det2NounPhrase totDet ; -- inanimate form only
-  TheseNP n =  { s =\\_ => [] ; n = Pl; p = P3; g= PGen Fem ; anim = Animate ;  pron = True} ; 
+  TheseNumNP n =  { s =\\_ => [] ; n = Pl; p = P3; g= PGen Fem ; anim = Animate ;  pron = True} ; 
    -- missing in Russian
-  ThoseNP n =  { s =\\_ => [] ; n = Pl; p = P3; g=PGen Fem ; anim = Animate ;  pron = True} ; 
+  ThoseNumNP n =  { s =\\_ => [] ; n = Pl; p = P3; g=PGen Fem ; anim = Animate ;  pron = True} ; 
    -- missing in Russian
 
 EverybodyNP = mkNounPhrase Pl (noun2CommNounPhrase (eEnd_Decl "вс")) ;

@@ -24,8 +24,8 @@ lin
   ThouNP = pronNounPhrase pronDu ;
   HeNP   = pronNounPhrase pronEr ;
   SheNP  = pronNounPhrase pronSie ; 
-  WeNP n = pronNounPhrase (pronWithNum pronWir n) ;
-  YeNP n = pronNounPhrase (pronWithNum pronIhr n) ;
+  WeNumNP n = pronNounPhrase (pronWithNum pronWir n) ;
+  YeNumNP n = pronNounPhrase (pronWithNum pronIhr n) ;
   TheyNP = pronNounPhrase pronSiePl ;
 
   YouNP  = pronNounPhrase pronSSie ;
@@ -33,30 +33,30 @@ lin
   ItNP   = pronNounPhrase pronEs ; 
   ThisNP = nameNounPhrase {s = dieserDet.s ! Neut} ; ---
   ThatNP = nameNounPhrase {s = jenerDet.s ! Neut} ; ---
-  TheseNP nu = let diese = caselist "diese" "diese" "diesen" "diesen" in 
+  TheseNumNP nu = let diese = caselist "diese" "diese" "diesen" "diesen" in 
                normalNounPhrase  (\\c => diese ! c ++ nu.s) plural ;
-  ThoseNP nu = let jene = caselist "jene" "jene" "jenen" "jenen" in
+  ThoseNumNP nu = let jene = caselist "jene" "jene" "jenen" "jenen" in
                normalNounPhrase (\\c => jene ! c ++ nu.s) plural ;
 
   AnyDet = detLikeAdj "irgendwelch" ;
-  AnysDet nu = mkDeterminerNumReg nu "irgendwelche" Weak ;
+  AnyNumDet nu = mkDeterminerNumReg nu "irgendwelche" Weak ;
   EveryDet = jederDet ; 
-  AllDet   = allesDet ; 
-  AllsDet  = alleDet ; 
+  AllMassDet   = allesDet ; 
+  AllNumDet  = alleDet ; 
   WhichDet = welcherDet ;
-  WhichsDet = welcheDet ;
+  WhichNumDet = welcheDet ;
   MostDet  = meistDet ;
   MostsDet = meisteDet ;
   ManyDet = mkDeterminerPl (caselist "viele" "viele" "vielen" "vieler") Strong ;
   MuchDet = detLikeAdj "viel" ;
   NoDet = keinDet ;
-  NosDet nu = mkDeterminerNumReg nu "keine" Strong ;
+  NoNumDet nu = mkDeterminerNumReg nu "keine" Strong ;
   SomeDet = einDet ; ---
-  SomesDet nu = mkDeterminerNumReg nu "einige" Strong ;
+  SomeNumDet nu = mkDeterminerNumReg nu "einige" Strong ;
   ThatDet = detLikeAdj "jen" ;
   ThisDet = detLikeAdj "dies" ;
-  TheseDet nu = mkDeterminerNumReg nu "diese" Strong ;
-  ThoseDet nu = mkDeterminerNumReg nu "jene" Strong ;
+  TheseNumDet nu = mkDeterminerNumReg nu "diese" Strong ;
+  ThoseNumDet nu = mkDeterminerNumReg nu "jene" Strong ;
 
   HowIAdv   = ss "wie" ;
   WhenIAdv  = ss "wann" ;

@@ -12,16 +12,16 @@ concrete StructuralFin of Structural =
   ThouNP = pronNounPhrase pronSina ;
   HeNP   = pronNounPhrase pronHan ;
   SheNP  = pronNounPhrase pronHan ;
-  WeNP   = pronWithNum pronMe ;
-  YeNP   = pronWithNum pronTe ;
+  WeNumNP = pronWithNum pronMe ;
+  YeNumNP   = pronWithNum pronTe ;
   YouNP  = pronNounPhrase pronTe ;
   TheyNP = pronNounPhrase pronHe ; --- ne
 
   ItNP   = nameNounPhrase pronSe ;
   ThisNP = pronNounPhraseNP pronTama ;
   ThatNP = pronNounPhraseNP pronTuo ;
-  TheseNP = pronWithNum pronNama ;
-  ThoseNP = pronWithNum pronNuo ;
+  TheseNumNP = pronWithNum pronNama ;
+  ThoseNumNP = pronWithNum pronNuo ;
 
   EverybodyNP = {
     s = \\f => kaikkiPron Pl ! (npForm2Case Pl f) ; -- näin kaikki
@@ -60,10 +60,10 @@ concrete StructuralFin of Structural =
     } ;
   
   EveryDet = jokainenDet ; 
-  AllDet   = mkDeterminer singular (kaikkiPron Sg) ; 
-  AllsDet  = kaikkiDet ; 
+  AllMassDet   = mkDeterminer singular (kaikkiPron Sg) ; 
+  AllNumDet  = kaikkiDet ; 
   WhichDet = mikaDet ;
-  WhichsDet n = mkDeterminerGenNum n (mikaInt ! Pl) (kukaInt ! Pl) ;
+  WhichNumDet n = mkDeterminerGenNum n (mikaInt ! Pl) (kukaInt ! Pl) ;
   MostDet  = mkDeterminer singular (caseTable singular (sSuurin "enintä")) ;
   MostsDet  = useimmatDet ;
   ManyDet = mkDeterminer singular moniPron ; 
@@ -73,24 +73,21 @@ concrete StructuralFin of Structural =
 --- with a verb.
  
   AnyDet = mkDeterminerGen Sg (mikaanPron ! Sg) (kukaanPron ! Sg) ;
-  AnysDet n = mkDeterminerGenNum n (mikaanPron ! Pl) (kukaanPron ! Pl) ;
+  AnyNumDet n = mkDeterminerGenNum n (mikaanPron ! Pl) (kukaanPron ! Pl) ;
   NoDet = mkDeterminerGen Sg 
             (\\c => "ei" ++ mikaanPron ! Sg ! c) 
             (\\c => "ei" ++ kukaanPron ! Sg ! c) ;
-  NosDet n = mkDeterminerGenNum n 
+  NoNumDet n = mkDeterminerGenNum n 
             (\\c => "ei" ++ mikaanPron ! Pl ! c) 
             (\\c => "ei" ++ kukaanPron ! Pl ! c) ;
 
   ThisDet = mkDeterminer Sg (\\c => pronTama.s ! PCase c) ;
   ThatDet = mkDeterminer Sg (\\c => pronTuo.s ! PCase c) ;
-  TheseDet n = mkDeterminerNum n (\\c => pronNama.s ! PCase c) ;
-  ThoseDet n = mkDeterminerNum n (\\c => pronNuo.s ! PCase c) ;
+  TheseNumDet n = mkDeterminerNum n (\\c => pronNama.s ! PCase c) ;
+  ThoseNumDet n = mkDeterminerNum n (\\c => pronNuo.s ! PCase c) ;
 
   SomeDet  = mkDeterminerGen Sg (jokinPron ! Sg) (jokuPron ! Sg) ;
-  SomesDet n = mkDeterminerGenNum n (jokinPron ! Pl) (jokuPron ! Pl) ;
-
---- These two don't work in Finnish sentences.
-
+  SomeNumDet n = mkDeterminerGenNum n (jokinPron ! Pl) (jokuPron ! Pl) ;
 
   HowIAdv = ss "kuinka" ;
   WhenIAdv = ss "koska" ;

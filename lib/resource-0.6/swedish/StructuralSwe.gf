@@ -12,8 +12,8 @@ concrete StructuralSwe of Structural =
   ThouNP = pronNounPhrase du_33 ;
   HeNP   = pronNounPhrase han_34 ;
   SheNP  = pronNounPhrase hon_35 ;
-  WeNP n = pronNounPhrase (pronWithNum vi_36 n) ;
-  YeNP n = pronNounPhrase (pronWithNum ni_37 n) ;
+  WeNumNP n = pronNounPhrase (pronWithNum vi_36 n) ;
+  YeNumNP n = pronNounPhrase (pronWithNum ni_37 n) ;
   TheyNP = pronNounPhrase de_38 ;
 
   YouNP  = let {ni = pronNounPhrase ni_37 } in {s = ni.s ; g = ni.g ; n = Sg} ;
@@ -21,20 +21,22 @@ concrete StructuralSwe of Structural =
   ItNP   = pronNounPhrase det_40 ; ----
   ThisNP = regNameNounPhrase ["det här"] Neutr NoMasc ; 
   ThatNP = regNameNounPhrase ["det där"] Neutr NoMasc ; 
-  TheseNP n = {s = \\c => ["det här"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
-  ThoseNP n = {s = \\c => ["det där"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
+  TheseNumNP n = 
+    {s = \\c => ["det här"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
+  ThoseNumNP n = 
+    {s = \\c => ["det där"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
 
   EveryDet = varjeDet ; 
-  AllDet   = mkDeterminerSgGender2 "all" "allt" IndefP ; 
-  AllsDet  = mkDeterminerPlNum "alla" IndefP ; 
+  AllMassDet   = mkDeterminerSgGender2 "all" "allt" IndefP ; 
+  AllNumDet  = mkDeterminerPlNum "alla" IndefP ; 
   AnyDet   = mkDeterminerSgGender2 "någon" "något" IndefP ; 
-  AnysDet  = mkDeterminerPlNum "några" IndefP ; 
+  AnyNumDet  = mkDeterminerPlNum "några" IndefP ; 
   SomeDet  = mkDeterminerSgGender2 "någon" "något" IndefP ; 
-  SomesDet = mkDeterminerPlNum "några" IndefP ; 
+  SomeNumDet = mkDeterminerPlNum "några" IndefP ; 
   ManyDet  = mkDeterminerPl "många" IndefP ; 
   NoDet    = mkDeterminerSgGender2 "ingen" "inget" IndefP ; 
-  NosDet   = mkDeterminerPlNum "inga" IndefP ; 
-  WhichsDet = mkDeterminerPlNum "vilka" IndefP ; 
+  NoNumDet   = mkDeterminerPlNum "inga" IndefP ; 
+  WhichNumDet = mkDeterminerPlNum "vilka" IndefP ; 
 
   WhichDet = vilkenDet ;
   MostDet  = mkDeterminerSgGender2 ["den mesta"] ["det mesta"] (DefP Def) ;
@@ -43,8 +45,8 @@ concrete StructuralSwe of Structural =
 
   ThisDet  = mkDeterminerSgGender2 ["den här"] ["det här"] (DefP Def) ;
   ThatDet  = mkDeterminerSgGender2 ["den där"] ["det där"] (DefP Def) ;
-  TheseDet = mkDeterminerPlNum ["de här"] (DefP Def) ; 
-  ThoseDet = mkDeterminerPlNum ["de där"] (DefP Def) ; 
+  TheseNumDet = mkDeterminerPlNum ["de här"] (DefP Def) ; 
+  ThoseNumDet = mkDeterminerPlNum ["de där"] (DefP Def) ; 
 
   HowIAdv = ss "hur" ;
   WhenIAdv = ss "när" ;

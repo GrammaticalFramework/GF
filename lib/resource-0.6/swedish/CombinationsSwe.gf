@@ -83,7 +83,7 @@ lin
   UseN = noun2CommNounPhrase ;
   ModAdj = modCommNounPhrase ;
   ModGenOne = npGenDet singular noNum ;
-  ModGenMany = npGenDet plural ;
+  ModGenNum = npGenDet plural ;
   UsePN = nameNounPhrase ;
   UseFun = funAsCommNounPhrase ;
   AppFun = appFunComm ;
@@ -96,9 +96,9 @@ lin
 
   DetNP = detNounPhrase ;
   IndefOneNP = indefNounPhrase singular ;
-  IndefManyNP = indefNounPhraseNum plural ;
+  IndefNumNP = indefNounPhraseNum plural ;
   DefOneNP = defNounPhrase singular ;
-  DefManyNP = defNounPhraseNum plural ;
+  DefNumNP = defNounPhraseNum plural ;
   MassNP = detNounPhrase (mkDeterminerSg (detSgInvar []) IndefP) ;
   UseInt i = {s = table {Nom => i.s ; Gen => i.s ++ "s"}} ; ---
   NoNum = noNum ;

@@ -8,8 +8,8 @@ lin
   ThouNP = pronNounPhrase pronTu ;
   HeNP   = pronNounPhrase pronIl ;
   SheNP  = pronNounPhrase pronElle ;
-  WeNP n = pronNounPhrase (pronWithNum pronNous n) ;
-  YeNP n = pronNounPhrase (pronWithNum pronVous n) ;
+  WeNumNP n = pronNounPhrase (pronWithNum pronNous n) ;
+  YeNumNP n = pronNounPhrase (pronWithNum pronVous n) ;
   YouNP  = pronNounPhrase pronVous ;
   TheyNP = pronNounPhrase pronIls ; 
 
@@ -21,30 +21,30 @@ lin
 
   ThisNP = mkNameNounPhrase ["ceci"] Masc ;
   ThatNP = mkNameNounPhrase ["ça"] Masc ;
-  TheseNP n = mkNameNounPhrase ("ceux" ++ n.s ! Masc ++ "ci") Masc ;
-  ThoseNP n = mkNameNounPhrase ("ceux" ++ n.s ! Masc ++ "là") Masc ;
+  TheseNumNP n = mkNameNounPhrase ("ceux" ++ n.s ! Masc ++ "ci") Masc ;
+  ThoseNumNP n = mkNameNounPhrase ("ceux" ++ n.s ! Masc ++ "là") Masc ;
 
   ItNP   = pronNounPhrase pronIl ;
 
   EveryDet = chaqueDet ; 
-  AllDet   = toutDet ;
-  AllsDet  = tousDet ;
+  AllMassDet   = toutDet ;
+  AllNumDet  = tousDet ;
   WhichDet = quelDet ;
-  WhichsDet = mkDeterminerNum plural "quels" "quelles" ;
+  WhichNumDet = mkDeterminerNum plural "quels" "quelles" ;
   MostsDet = plupartDet ;
   MostDet  = mkDeterminer1 singular (["la plupart"] ++ elisDe) ; --- de
   SomeDet  = mkDeterminer1 singular "quelque" ;
-  SomesDet = mkDeterminerNum plural "quelques" "quelques" ;
-  NoDet    = mkDeterminer singular "aucun" "aucune" ; --- ne
-  NosDet   = mkDeterminerNum plural ("aucun" ++ "des") ("aucune" ++ "des") ; --- ne
+  SomeNumDet = mkDeterminerNum plural "quelques" "quelques" ;
+  NoDet = mkDeterminer singular "aucun" "aucune" ; --- ne
+  NoNumDet = mkDeterminerNum plural ("aucun" ++ "des") ("aucune" ++ "des") ; --- ne
   AnyDet   = mkDeterminer1 singular "quelque" ; ---
-  AnysDet  = mkDeterminerNum plural "quelques" "quelques" ; ---
+  AnyNumDet  = mkDeterminerNum plural "quelques" "quelques" ; ---
   ManyDet  = mkDeterminer1 plural "plusieurs" ;
   MuchDet  = mkDeterminer1 singular ("beaucoup" ++ elisDe) ; --- de
   ThisDet  = mkDeterminer singular (pre {"ce" ; "cet" / voyelle}) "cette" ; --- ci
   ThatDet  = mkDeterminer singular (pre {"ce" ; "cet" / voyelle}) "cette" ; --- là
-  TheseDet = mkDeterminerNum plural "ces" "ces" ; --- ci
-  ThoseDet = mkDeterminerNum plural "ces" "ces" ; --- là
+  TheseNumDet = mkDeterminerNum plural "ces" "ces" ; --- ci
+  ThoseNumDet = mkDeterminerNum plural "ces" "ces" ; --- là
 
   HowIAdv = commentAdv ;
   WhenIAdv = quandAdv ;

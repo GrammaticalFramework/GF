@@ -8,8 +8,8 @@ lin
   ThouNP = pronNounPhrase pronTu ;
   HeNP   = pronNounPhrase pronIl ;
   SheNP  = pronNounPhrase pronElle ;
-  WeNP n = pronNounPhrase (pronWithNum pronNous n) ;
-  YeNP n = pronNounPhrase (pronWithNum pronVous n) ;
+  WeNumNP n = pronNounPhrase (pronWithNum pronNous n) ;
+  YeNumNP n = pronNounPhrase (pronWithNum pronVous n) ;
   YouNP  = pronNounPhrase pronVous ;
   TheyNP = pronNounPhrase pronIls ; 
 
@@ -21,30 +21,30 @@ lin
 
   ThisNP = mkNameNounPhrase ["questo"] Masc ;
   ThatNP = mkNameNounPhrase ["quello"] Masc ;
-  TheseNP n = mkNameNounPhrase ("questi" ++ n.s ! Masc) Masc ;
-  ThoseNP n = mkNameNounPhrase ("quelli" ++ n.s ! Masc) Masc ;
+  TheseNumNP n = mkNameNounPhrase ("questi" ++ n.s ! Masc) Masc ;
+  ThoseNumNP n = mkNameNounPhrase ("quelli" ++ n.s ! Masc) Masc ;
 
   ItNP   = pronNounPhrase pronIl ;
 
   EveryDet = chaqueDet ; 
-  AllDet   = mkDeterminer singular "tutto" "tutta" ;
-  AllsDet  = mkDeterminerNum plural ["tutti i"] ["tutte le"] ; --- gli
+  AllMassDet   = mkDeterminer singular "tutto" "tutta" ;
+  AllNumDet  = mkDeterminerNum plural ["tutti i"] ["tutte le"] ; --- gli
   WhichDet = quelDet ;
-  WhichsDet = mkDeterminerNum plural "quali" "quali" ;
+  WhichNumDet = mkDeterminerNum plural "quali" "quali" ;
   MostsDet = plupartDet ;
   MostDet  = mkDeterminer1 singular (["la maggior parte"] ++ elisDe) ; --- de
   SomeDet  = mkDeterminer1 singular "qualche" ;
-  SomesDet = mkDeterminerNum plural "alcuni" "alcune" ;
+  SomeNumDet = mkDeterminerNum plural "alcuni" "alcune" ;
   NoDet    = mkDeterminer singular "nessuno" "nessuna" ; --- non
-  NosDet   = mkDeterminerNum plural "nessuni" "nessune" ; ---- ??
+  NoNumDet   = mkDeterminerNum plural "nessuni" "nessune" ; ---- ??
   AnyDet   = mkDeterminer1 singular "qualche" ; ---
-  AnysDet  = mkDeterminerNum plural "alcuni" "alcune" ; ---
+  AnyNumDet  = mkDeterminerNum plural "alcuni" "alcune" ; ---
   ManyDet  = mkDeterminer plural "molti" "molte" ;
   MuchDet  = mkDeterminer1 singular "molto" ;
   ThisDet  = mkDeterminer singular "questo" "questa" ;
   ThatDet  = mkDeterminer singular "quello" "quella" ;
-  TheseDet = mkDeterminerNum plural "questi" "queste" ; --- ci
-  ThoseDet = mkDeterminerNum plural "quelli" "quelle" ; --- quegli
+  TheseNumDet = mkDeterminerNum plural "questi" "queste" ; --- ci
+  ThoseNumDet = mkDeterminerNum plural "quelli" "quelle" ; --- quegli
 
   HowIAdv = commentAdv ;
   WhenIAdv = quandAdv ;

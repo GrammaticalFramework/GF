@@ -81,7 +81,7 @@ lin
   UseN = noun2CommNounPhrase ;
   ModAdj = modCommNounPhrase ;
   ModGenOne = npGenDet singular ;
-  ModGenMany = npGenDetNum ;
+  ModGenNum = npGenDetNum ;
   UsePN = nameNounPhrase ;
   UseFun = funAsCommNounPhrase ;
   AppFun = appFunComm ;
@@ -94,9 +94,9 @@ lin
 
   DetNP = detNounPhrase ;
   IndefOneNP = indefNounPhrase singular ;
-  IndefManyNP = nounPhraseNum False ;
+  IndefNumNP = nounPhraseNum False ;
   DefOneNP = defNounPhrase singular ;
-  DefManyNP = nounPhraseNum True ;
+  DefNumNP = nounPhraseNum True ;
   MassNP = partNounPhrase singular ;
   NoNum = noNum ;
   UseInt i = {s = \\_ => i.s ; isNum = True} ; --- case endings sometimes needed

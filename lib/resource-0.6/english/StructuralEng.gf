@@ -12,35 +12,35 @@ concrete StructuralEng of Structural =
   HeNP   = pronHe ;
   SheNP  = pronShe ;
   ItNP   = pronIt ;
-  WeNP   = pronWithNum pronWe ;
-  YeNP   = pronWithNum pronYouPl ;
+  WeNumNP   = pronWithNum pronWe ;
+  YeNumNP   = pronWithNum pronYouPl ;
   YouNP  = pronYouSg ;
   TheyNP = pronThey ;
 
   EveryDet = everyDet ; 
-  AllDet   = mkDeterminer Sg "all" ; --- all the missing
-  AllsDet  = mkDeterminerNum Pl "all" ;
+  AllMassDet = mkDeterminer Sg "all" ; --- all the missing
+  AllNumDet  = mkDeterminerNum Pl "all" ;
   WhichDet = whichDet ;
-  WhichsDet = mkDeterminerNum Pl "which" ;
+  WhichNumDet = mkDeterminerNum Pl "which" ;
   MostsDet = mostDet ;
   MostDet  = mkDeterminer Sg "most" ;
   SomeDet  = mkDeterminer Sg "some" ;
-  SomesDet = mkDeterminerNum Pl "some" ;
+  SomeNumDet = mkDeterminerNum Pl "some" ;
   AnyDet   = mkDeterminer Sg "any" ;
-  AnysDet  = mkDeterminerNum Pl "any" ;
+  AnyNumDet  = mkDeterminerNum Pl "any" ;
   NoDet    = mkDeterminer Sg "no" ;
-  NosDet   = mkDeterminerNum Pl "no" ;
+  NoNumDet   = mkDeterminerNum Pl "no" ;
   ManyDet  = mkDeterminer Pl "many" ;
   MuchDet  = mkDeterminer Sg ["a lot of"] ; ---
   ThisDet  = mkDeterminer Sg "this" ;
-  TheseDet = mkDeterminerNum Pl "these" ;
+  TheseNumDet = mkDeterminerNum Pl "these" ;
   ThatDet  = mkDeterminer Sg "that" ;
-  ThoseDet = mkDeterminerNum Pl "those" ;
+  ThoseNumDet = mkDeterminerNum Pl "those" ;
 
   ThisNP = nameNounPhrase (nameReg "this") ;
   ThatNP = nameNounPhrase (nameReg "that") ;
-  TheseNP n = nameNounPhrase {s = \\c => "these" ++ n.s ! c} ; --- Pl; Gen!
-  ThoseNP n = nameNounPhrase {s = \\c => "those" ++ n.s ! c} ; --- Pl; Gen!
+  TheseNumNP n = nameNounPhrase {s = \\c => "these" ++ n.s ! c} ; --- Pl; Gen!
+  ThoseNumNP n = nameNounPhrase {s = \\c => "those" ++ n.s ! c} ; --- Pl; Gen!
 
   EverybodyNP = nameNounPhrase (nameReg "everybody") ;
   SomebodyNP = nameNounPhrase (nameReg "somebody") ;
