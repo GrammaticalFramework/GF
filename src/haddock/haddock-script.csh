@@ -2,8 +2,8 @@
 
 ######################################################################
 # Author: Peter Ljunglöf
-# Time-stamp: "2005-02-04, 10:12"
-# CVS $Date: 2005/02/04 09:46:17 $
+# Time-stamp: "2005-02-04, 10:52"
+# CVS $Date: 2005/02/04 09:57:10 $
 # CVS $Author: peb $
 #
 # a script for producing documentation through Haddock
@@ -13,12 +13,11 @@ set base = `pwd`
 set docdir = $base/haddock
 set resourcedir = $base/haddock-resources
 
-set dirs = (. api compile grammar infra shell source canonical useGrammar cf newparsing parsers notrace cfgm speech visualization for-ghc)
-set rmfiles = {Lex,Par}{CFG,GF,GFC}.hs
+set dirs = (. api compile grammar infra shell source canonical useGrammar cf newparsing parsers notrace cfgm speech visualization for-hugs for-ghc)
 
 ######################################################################
 
-echo 0. Creating and cleaning Haddock directory
+echo 1. Creating and cleaning Haddock directory
 echo -- $docdir
 
 mkdir -p $docdir
@@ -27,7 +26,7 @@ rm $docdir/*
 ######################################################################
 
 echo
-echo 1. Selecting and copying Haskell files 
+echo 2. Selecting and copying Haskell files 
 
 foreach d ($dirs) 
     echo -- Directory: $d
@@ -39,12 +38,14 @@ end
 
 ######################################################################
 
-echo
-echo 2. Removing unnecessary files
+# set rmfiles = {Lex,Par}{CFG,GF,GFC}.hs
 
-cd $docdir
-echo -- `ls $rmfiles`
-rm $rmfiles
+# echo
+# echo 2. Removing unnecessary files
+
+# cd $docdir
+# echo -- `ls $rmfiles`
+# rm $rmfiles
 
 ######################################################################
 
