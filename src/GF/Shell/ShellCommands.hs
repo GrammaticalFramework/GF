@@ -91,7 +91,7 @@ isValidOption st co op = case op of
        testValidFlag st o x
      _ -> Bad $ "impossible option" +++ prOpt op
   where
-   optsOf  co = fst $ optionsOfCommand co
+   optsOf  co = ("tr" :) $ fst $ optionsOfCommand co
    flagsOf co = snd $ optionsOfCommand co
 
 testValidFlag :: ShellState -> OptFunId -> String -> Err ()
@@ -134,7 +134,7 @@ optionsOfCommand co = case co of
   CTransformGrammar _ -> flags "printer"
   CConvertLatex _ -> none
   CLinearize _ -> both "table struct record" "lang number unlexer"
-  CParse -> both "n ign raw v" "cat lang lexer parser number"
+  CParse -> both "new n ign raw v" "cat lang lexer parser number"
   CTranslate _ _ -> opts "cat lexer parser"
   CGenerateRandom -> flags "cat lang number depth"
   CGenerateTrees -> both "metas" "depth alts cat lang number"

@@ -125,12 +125,16 @@ unlex = concat . map sstr . take 1 ----
 
 -- finally, a top-level function to get a string from an expression
 linTree2string :: Marker -> CanonGrammar -> Ident -> A.Tree -> String
-linTree2string mk gr m e = err id id $ do
+linTree2string mk gr m e = head $ linTree2strings mk gr m e -- never empty
+
+-- you can also get many strings
+linTree2strings :: Marker -> CanonGrammar -> Ident -> A.Tree -> [String]
+linTree2strings mk gr m e = err return id $ do
   t  <- linearizeToRecord gr mk m e
   r  <- expandLinTables gr t
   ts <- rec2strTables r
   let ss = strs2strings $ sTables2strs $ strTables2sTables ts
-  ifNull (prtBad "empty linearization of" e) (return . head) ss
+  ifNull (prtBad "empty linearization of" e) return ss   -- thus never empty
 
 -- argument is a Tree, value is a list of strs; needed in Parsing
 
