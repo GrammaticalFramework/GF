@@ -30,7 +30,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     public MouseEvent m2;
     public static String selectedText="";
 
-    public static boolean debug = false;
+    public static boolean debug = true;
     public static boolean debug3 = false;
     public static boolean debug2 = false;
     public static boolean selectionCheck = false;
@@ -941,6 +941,20 @@ System.out.println("encoding "+defaultEncoding);
     }
   }
 
+  public void recursion(JMenu subMenu, Font font)
+  {  
+    for (int i = 0; i<subMenu.getItemCount(); i++)
+      { 
+        JMenuItem item = subMenu.getItem(i);
+        if (item != null) 
+        {
+          item.setFont(font);
+          String name = item.getClass().getName();
+          System.out.println(name);
+        }
+      }
+  }
+
   public void actionPerformed(ActionEvent ae)
   {  
     boolean abs = true;
@@ -958,7 +972,51 @@ System.out.println("encoding "+defaultEncoding);
         field.setFont(font);  
         tree.tree.setFont(font);  
         list.setFont(font);  
-    }
+        sizeList.setFont(font);  
+        sizeLabel.setFont(font);  
+        save.setFont(font);  
+        fontList.setFont(font);  
+        fontLabel.setFont(font);  
+        grammar.setFont(font);  
+        open.setFont(font);  
+        newTopic.setFont(font);  
+        gfCommand.setFont(font);  
+        leftMeta.setFont(font);  
+        left.setFont(font);  
+        top.setFont(font);  
+        right.setFont(font);  
+        rightMeta.setFont(font);  
+        read.setFont(font);  
+        alpha.setFont(font);  
+        random.setFont(font);  
+        undo.setFont(font);  
+        ok.setFont(font);  
+        cancel.setFont(font);  
+        inputLabel.setFont(font);  
+        browse.setFont(font);  
+        termReadButton.setFont(font);  
+        stringReadButton.setFont(font);  
+        filter.setFont(font);  
+        modify.setFont(font);  
+        statusLabel.setFont(font);  
+        menuBar.setFont(font);
+        menu.setFont(font);  
+  
+        submenu.setFont(font);  
+        recursion(submenu, font);
+        modeMenu.setFont(font);  
+        recursion(modeMenu, font);
+        langMenu.setFont(font);  
+        recursion(langMenu, font);
+        fileMenu.setFont(font);  
+        recursion(fileMenu, font);
+        viewMenu.setFont(font);  
+        recursion(viewMenu, font);
+
+        cbMenuItem.setFont(font);  
+        rbMenuItem.setFont(font);  
+        fileMenuItem.setFont(font);  
+   }
 
     if ( obj == menu ) {
       if (!menu.getSelectedItem().equals("New"))           
@@ -1102,6 +1160,7 @@ System.out.println("encoding "+defaultEncoding);
            }
              submenu.removeAll();
 
+
              File file = fc1.getSelectedFile();
 	     // opening the file for editing :
              if (debug) System.out.println("opening: "+ file.getPath().replace('\\','/'));
@@ -1126,31 +1185,27 @@ System.out.println("encoding "+defaultEncoding);
            if (returnVal == JFileChooser.APPROVE_OPTION) {
              File file = fc.getSelectedFile();
 	     // importing a new language :
-             if (debug) System.out.println("importing: "+ file.getPath());
-
              langMenu.removeAll();
-
              AbstractButton ab = null;
-
            while (languageGroup.getButtonCount()>0)
            {
              for (Enumeration e = languageGroup.getElements(); 
                                       e.hasMoreElements() ;) 
              {
                ab = (AbstractButton)e.nextElement();
-               System.out.println("more to remove ! "+ab.getText()); 
+               if (debug) System.out.println("more to remove ! "+ab.getText()); 
                languageGroup.remove(ab);
              }
-             System.out.println("languageGroupElement after import removal "+ 
+             if (debug) System.out.println("languageGroupElement after import removal "+ 
                             languageGroup.getButtonCount());                   
            }
 
-             submenu.removeAll();
-
-             menu.removeAllItems();
+            submenu.removeAll();                         
+            //menu.removeAllItems();
+ System.out.println("importing: "+ file.getPath().replace('\\','/'));
              menu.addItem("New");
              fileString ="";
-             send("i "+ file.getPath().replace('\\','/'));
+             send("i "+ file.getPath().replace('\\','/'));  
 
            }           
          }
@@ -1207,6 +1262,7 @@ System.out.println("encoding "+defaultEncoding);
               parseInput = s;
               //s = "gf "+s; This is for debugging, otherwise shift the comment to the next line.
               treeChanged = true; 
+            System.out.println("sending: "+ s);
               send(s);
            }
         }
@@ -1824,7 +1880,7 @@ System.out.println("encoding "+defaultEncoding);
       } //if selectionStart>-1    
       else
       {
-        System.out.println("NO SELECTION IN THE TEXT TO BE APPENDED!");
+        if (debug2) System.out.println("NO SELECTION IN THE TEXT TO BE APPENDED!");
         //cutting tags from previous focuses if any:
         int r = restString.indexOf("</subtree>");
         while (r>-1)
