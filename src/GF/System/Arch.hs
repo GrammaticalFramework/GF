@@ -7,7 +7,7 @@ import Random
 import CPUTime
 import Monad (filterM)
 import Directory
-import Readline
+import System.Console.Readline
 
 ---- import qualified UnicodeF as U --(fudlogueWrite)
 

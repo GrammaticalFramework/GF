@@ -156,6 +156,7 @@ trt trm = case trm of
 
 trp :: Patt -> P.Patt
 trp p = case p of
+    PW -> P.PW
     PV s | isWildIdent s -> P.PW
     PV s -> P.PV $ tri s
     PC c [] -> P.PCon $ tri c
@@ -164,7 +165,8 @@ trp p = case p of
     PP p c a -> P.PQC (tri p) (tri c) (map trp a)
     PR r -> P.PR [P.PA [trLabelIdent l] (trp p) | (l,p) <- r]
     PString s -> P.PStr s
-----    PT t p -> prt p ---- prParenth (prt p +++ ":" +++ prt t)
+    PInt i -> P.PInt $ toInteger i
+    PT t p -> trp p ---- prParenth (prt p +++ ":" +++ prt t)
 
 
 trAssign (lab, (mty, t)) = maybe (P.LDDef x t') (\ty -> P.LDFull x (trt ty) t') mty
