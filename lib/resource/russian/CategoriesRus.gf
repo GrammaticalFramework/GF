@@ -54,21 +54,22 @@ lincat
   Num    = Numeral ;
       -- = {s : Case => Gender => Str} ;
   
-  V      = Verb ; 
-      -- = {s : VF => Str ; t: Tense ; a : Aspect ; w: Voice} ;
+  V      = Verbum ; 
+      -- = {s : VerbForm => Str ; asp : Aspect } ;
   VG     = VerbGroup ;
-      -- = Verb ;
+      -- = Verbum ** { w: Voice; s2 : Bool => Str ; 
+      --      s3 : Gender => Number => Str ; negBefore: Bool} ;
   VP     = VerbPhrase ; 
       -- = Verb ** {s2 : Str ; s3 : Gender => Number => Str ;
       --            negBefore: Bool} ;
   V2     = TransVerb ; 
-      -- = Verb ** {s2 : Str ; c: Case } ; 
+      -- = Verbum ** {s2 : Str ; c: Case } ; 
   V3     = DitransVerb ;
       -- = TransVerb ** {s4 : Str; c2: Case} ;
   VS     = SentenceVerb ;
-      -- = Verb ;
+      -- = Verbum ;
   VV     = VerbVerb ; 
-      -- = Verb ;
+      -- = Verbum ;
    
 
   AdV    = Adverb ;
@@ -110,10 +111,9 @@ lincat
       -- = { s1,s2 : PronForm => Str ; g: Gender ; anim : Animacy ;
       --     n : Number ; p : Person ;  pron : Bool } ;
 
--- From CombinationsRus: Text   = {s : Str} ;
--- From Swedish:  PP     = Adverb ;
--- From Swedish:  Cl     = Clause ;
-      -- = {s : Bool => SForm => Order => Str} ;
+  PP     = Adverb ;
+  Cl     = Clause ;
+      -- = {s : Bool => ClForm => Str} ;
 
 }
 

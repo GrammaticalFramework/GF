@@ -24,7 +24,7 @@ param
   Case       = Nom | Gen | Dat | Acc | Inst | Prepos ;
   Voice        = Act | Pass ;
   Aspect     = Imperfective | Perfective ;
-  Tense      = Present | Past ;
+  Tense      = Present | Past | Future ;
   Degree     = Pos | Comp | Super ;
   Person     = P1 | P2 | P3 ;
   AfterPrep  = Yes | No ; 
@@ -218,6 +218,9 @@ oper
 -- in a sense that many verbs do not have all grammatically possible
 -- forms. For example, passive does not exist for the verb 
 -- "любить" (to love), but exists for the verb "ломать" (to break).
+-- In present tense verbs do not conjugate according to Genus,
+-- so parameter GenNum instead Number is used for the sake of 
+-- using for example as adjective in predication.
 
 -- Depending on the tense verbs conjugate according to combinations
 -- of gender, person and number of the verb objects. 
@@ -229,8 +232,18 @@ oper Verbum : Type = { s: VerbForm => Str ; asp : Aspect };
 param
 
   VerbForm = VFORM Voice VerbConj ;
-  VerbConj =  VIND VTense | VIMP Number Person | VINF | VSUB GenNum ;
-  VTense   = VPresent Number Person | VPast GenNum | VFuture Number Person ;
+  VerbConj =  VIND GenNum VTense | VIMP Number Person | VINF | VSUB GenNum ;
+  VTense   = VPresent Person | VPast | VFuture Person ;
+
+oper 
+   getVTense : Tense -> Person -> VTense= \t,p ->
+   case t of { Present => VPresent p ; Past => VPast; Future => VFuture p } ;
+  
+   getVoice: VerbForm -> Voice = \vf ->
+   case vf of {
+    VFORM Act _ => Act;
+    VFORM Pass _ => Pass
+  };
 
 -- For writing an application grammar one usually doesn't need
 -- the whole inflection table, since each verb is used in 
@@ -239,6 +252,7 @@ param
 -- So we define the "Verb" type, that have these parameters fixed. 
 -- The conjugation parameters left (Gender, Number, Person)
 -- are combined in the "VF" type:
+
 
 param VF =
    VFin  GenNum Person | VImper Number Person | VInf | VSubj GenNum;
@@ -249,8 +263,9 @@ oper
   extVerb : Verbum -> Voice -> Tense -> Verb = \aller, vox, t -> 
     { s = table { 
        VFin gn p => case t of { 
-           Present => aller.s ! VFORM vox (VIND (VPresent (numGNum gn) p)) ;
-           Past =>   aller.s ! VFORM vox (VIND (VPast gn)) 
+           Present => aller.s ! VFORM vox (VIND gn (VPresent p)) ;
+           Past =>   aller.s ! VFORM vox (VIND gn VPast ) ;
+           Future =>   aller.s ! VFORM vox (VIND gn (VFuture p)) 
            } ; 
        VImper n p => aller.s ! VFORM vox (VIMP n p) ;
        VInf => aller.s ! VFORM vox VINF ;

@@ -1,9 +1,10 @@
+--# -path=.:../abstract:../../prelude
 concrete RulesRus of Rules = CategoriesRus ** open Prelude, SyntaxRus in {
 
 lin 
 
   UsePN = nameNounPhrase ;
-  ComplAdj = complAdj ;
+  ComplA2 = complAdj ;
   PredVP = predVerbPhrase ;
   UseA1 = adj2adjPhrase ; 
   ModAdj = modCommNounPhrase ;
@@ -16,14 +17,6 @@ lin
   PositADeg = positAdjPhrase ;
   ComparADeg = comparAdjPhrase ;
   SuperlNP = superlNounPhrase ;
-
- -- From RulesSwe.gf: ComplA2 = complAdj ;
- --  IntCN cn s =
- --   {s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ; 
- --    g = cn.g ;
- --    x = cn.x ;
- --    p = cn.p
- --    } ;
 
   CNthatS = nounThatSentence ;
   UseInt i = useInt i.s;
@@ -45,25 +38,20 @@ lin
   DefNumNP = indefNounPhraseNum Pl ;
   MassNP = indefNounPhrase Sg;
 
-  PosVG  = predVerbGroup True ;
-  NegVG  = predVerbGroup False ;
+  PosVG  = predVerbGroup True Present ;
+  NegVG  = predVerbGroup False Present ;
 
-  PredV v = v ; -- From Swedish: PredV  = predVerb ;
+  PredV  = predVerb ;
   PredAP = predAdjective ;
   PredCN = predCommNoun ;
   PredV2 = complTransVerb ;
   PredV3 = complDitransVerb ;
-  PredPassV v = v ;
+  PredPassV = predPassVerb ;
   PredNP = predNounPhrase ;
-  PredAdV = predAdverb ;
+  PredPP = predAdverb ;
   PredVS = complSentVerb ;
   PredVV = complVerbVerb ;
   VTrans = verbOfTransVerb ;
---From Swedish:
-  --PredVP = predVerbPhrase ;
-  --PredVG = predVerbGroupClause ;
-  --PredSuperl a = predAdjective (superlAdjPhrase a) ;
-
 
   AdjAdv a = mkAdverb (a.s ! AdvF) ;
   PrepNP p = prepPhrase p ;
@@ -71,11 +59,9 @@ lin
   --LocNP = locativeNounPhrase ;
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
-  --From Swedish: AdvPP p = p ;
 
-
-  PosSlashTV = slashTransVerb True ;
-  NegSlashTV = slashTransVerb False ;
+  PosSlashV2 = slashTransVerb True ;
+  NegSlashV2 = slashTransVerb False ;
   OneVP = predVerbPhrase (pron2NounPhrase pronKtoTo Animate) ;
   ThereNP = thereIs ;
 
@@ -102,8 +88,6 @@ lin
 
   ImperVP = imperVerbPhrase ;
   
-  -- From Swedish: PrepS p = ss (p.s ++ ",") ;
-
   IndicPhrase = indicUtt ;
   QuestPhrase = interrogUtt ;
   ImperOne = imperUtterance Masc Sg ;
@@ -137,6 +121,18 @@ lin
   PhrIAdv ia = postfixSS "?" ia ;
   OnePhr p = p ;
   ConsPhr = cc2 ;  
+
+--New in the "lib"-version from Swedish:
+
+  AdvPP p = p ;
+  PredSuperl a = predAdjective (superlAdjPhrase a) ;
+  PrepS p = ss (p.s ++ ",") ;
+  IntCN cn s =
+    {s = \\n,c => cn.s ! n ! c ++ s.s ; 
+     g = cn.g ;
+     anim = cn.anim
+     } ;
+  PredVG = predVerbGroupClause ;  
 
 } ;
 
