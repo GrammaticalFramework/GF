@@ -1,15 +1,15 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : CommandF
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:20 $ 
+-- > CVS $Date: 2005/02/24 11:46:36 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
--- (Description of the module)
+-- a graphical shell for any kind of GF with Zipper editing. AR 20\/8\/2001
 -----------------------------------------------------------------------------
 
 module CommandF where

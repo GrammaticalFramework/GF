@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:06 $ 
+-- > CVS $Date: 2005/02/24 11:46:34 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.20 $
+-- > CVS $Revision: 1.21 $
 --
 -- Macros for building and analysing terms in GFC concrete syntax.
 --
@@ -143,6 +143,7 @@ patt2term p = case p of
 anyTerm :: Term
 anyTerm  = LI (A.identC "_") --- should not happen
 
+matchPatt :: [Case] -> Term -> Err Term
 matchPatt cs0 (FV ts) = liftM FV $ mapM (matchPatt cs0) ts
 matchPatt cs0 trm = term2patt trm >>= match cs0 where
   match cs t = 
@@ -199,6 +200,7 @@ allLinFields trm = case trm of
   _ -> prtBad "fields can only be sought in a record not in" trm
 
 -- | deprecated
+isLinLabel :: Label -> Bool
 isLinLabel l = case l of
      L (A.IC ('s':cs)) | all isDigit cs -> True
      -- peb (28/4-04), for MCFG grammars to work:
@@ -217,8 +219,10 @@ allLinValues trm = do
   lts <- allLinFields trm
   mapM (mapPairsM (return . allCaseValues)) lts
 
+redirectIdent :: A.Ident -> CIdent -> CIdent
 redirectIdent n f@(CIQ _ c) = CIQ n c
 
+ciq :: A.Ident -> A.Ident -> CIdent
 ciq n f = CIQ n f
 
 wordsInTerm :: Term -> [String]

@@ -5,14 +5,19 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:20 $ 
+-- > CVS $Date: 2005/02/24 11:46:38 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.16 $
+-- > CVS $Revision: 1.17 $
 --
 -- From internal source syntax to BNFC-generated (used for printing).
 -----------------------------------------------------------------------------
 
-module GrammarToSource where
+module GrammarToSource ( trGrammar, 
+			 trModule,
+			 trAnyDef,
+			 trLabel,
+			 trt, tri, trp
+		       ) where
 
 import Operations
 import Grammar
@@ -205,6 +210,7 @@ tri i = case prIdent i of
   
 trb i = if isWildIdent i then P.BWild else P.BIdent (tri i)
 
+trLabel :: Label -> P.Label
 trLabel i = case i of
   LIdent s -> P.LIdent $ identC s
   LVar i -> P.LVar $ toInteger i

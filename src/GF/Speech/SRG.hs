@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/22 13:35:19 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/02/24 11:46:38 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
 -- Representation of, conversion to, and utilities for 
 -- printing of a general Speech Recognition Grammar. 
@@ -41,8 +41,9 @@ data SRG = SRG { grammarName :: String    -- ^ grammar name
 data SRGRule = SRGRule String String [SRGAlt] -- ^ SRG category name, original category name
 	                                      --   and productions
 type SRGAlt = [Symbol String Token]
+
+-- | SRG category name and original name
 type CatName = (String,String) 
--- ^ SRG category name and original name
 
 type CatNames = FiniteMap String String
 

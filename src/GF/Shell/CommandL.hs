@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : CommandL
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:20 $ 
+-- > CVS $Date: 2005/02/24 11:46:36 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.13 $
+-- > CVS $Revision: 1.14 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -32,8 +32,7 @@ import Monad (foldM)
 
 import UTF8
 
--- a line-based shell
-
+-- | a line-based shell
 initEditLoop :: CEnv -> IO () -> IO ()
 initEditLoop env resume = do
   let env' = startEditEnv env
@@ -55,8 +54,7 @@ editLoop env state resume = do
 
     editLoop env' state' resume
 
--- execute a command script and return a tree
-
+-- | execute a command script and return a tree
 execCommandHistory :: CEnv -> String -> IO (CEnv,Tree)
 execCommandHistory env s = do
   let env'  = startEditEnv env
@@ -77,14 +75,14 @@ getCommand = do
   s <- getLine
   return $ pCommand s
 
--- decodes UTF8 if u==False, i.e. if the grammar does not use UTF8;
+-- | decodes UTF8 if u==False, i.e. if the grammar does not use UTF8;
 -- used in the Java GUI, which always uses UTF8
-
 getCommandUTF :: Bool -> IO Command
 getCommandUTF u = do
   s <- getLine
   return $ pCommand $ if u then s else decodeUTF8 s 
 
+pCommand :: String -> Command
 pCommand = pCommandWords . words where 
   pCommandWords s = case s of
     "n" : cat : _ -> CNewCat cat
@@ -147,7 +145,8 @@ pCommand = pCommandWords . words where
     []            -> CVoid
     _             -> CError
 
--- well, this lists the commands of the line-based editor
+-- | well, this lists the commands of the line-based editor
+initEditMsg :: CEnv -> String
 initEditMsg env = unlines $
   "State-dependent editing commands are given in the menu:" :
   "  n [Cat] = new, r [Fun] = refine, w [Fun] [Int] = wrap,":
@@ -166,17 +165,19 @@ initEditMsg env = unlines $
 ---- ("  f [" ++ unwords (intersperse "|" allStringCommands) ++ "] = modify output") : 
   []
 
+initEditMsgEmpty :: CEnv -> String
 initEditMsgEmpty env = initEditMsg env +++++ unlines (
   "Start editing by n Cat selecting category\n\n" :
   "-------------\n" :
   ["n" +++ cat | (_,cat) <- newCatMenu env]
   )
 
+showCurrentState :: CEnv -> SState -> String
 showCurrentState env' state' =
   unlines (tr ++ ["",""] ++ msg ++ ["",""] ++ map fst menu) 
                  where (tr,msg,menu) = displaySStateIn env' state'
 
--- to read position; borrowed from Prelude; should be elsewhere
+-- | to read position; borrowed from Prelude; should be elsewhere
 readIntList :: String -> [Int]
 readIntList s = case [x | (x,t) <- reads s, ("","") <- lex t] of
                   [x] -> x

@@ -1,15 +1,16 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Randomized
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:22 $ 
+-- > CVS $Date: 2005/02/24 11:46:39 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
--- (Description of the module)
+-- random generation and refinement. AR 22\/8\/2001.
+-- implemented as sequence of refinement menu selecsions, encoded as integers
 -----------------------------------------------------------------------------
 
 module Randomized where
@@ -26,16 +27,17 @@ import Random --- (mkStdGen, StdGen, randoms) --- bad import for hbc
 -- random generation and refinement. AR 22/8/2001
 -- implemented as sequence of refinement menu selecsions, encoded as integers
 
+myStdGen :: Int -> StdGen
 myStdGen = mkStdGen ---
 
--- build one random tree; use mx to prevent infinite search
+-- | build one random tree; use mx to prevent infinite search
 mkRandomTree :: StdGen -> Int -> CGrammar -> Either Cat Fun -> Err Tree
 mkRandomTree gen mx gr cat = mkTreeFromInts (take mx (randoms gen)) gr cat
 
 refineRandom :: StdGen -> Int -> CGrammar -> Action
 refineRandom gen mx = mkStateFromInts $ take mx $ map abs (randoms gen)
 
--- build a tree from a list of integers
+-- | build a tree from a list of integers
 mkTreeFromInts :: [Int] -> CGrammar -> Either Cat Fun -> Err Tree
 mkTreeFromInts ints gr catfun = do
   st0   <- either (\cat -> newCat gr cat initState)

@@ -1,15 +1,17 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : TeachYourself
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:22 $ 
+-- > CVS $Date: 2005/02/24 11:46:39 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
--- (Description of the module)
+-- translation and morphology quiz. AR 10\/5\/2000 -- 12\/4\/2002
+--
+-- outdated?? @shell\/TeachYourself@ is loaded instead of this...
 -----------------------------------------------------------------------------
 
 module TeachYourself where
@@ -75,6 +77,7 @@ mkAnswer as s = if (elem (norml s) as)
                    then (1,"Yes.") 
                    else (0,"No, not" +++ s ++ ", but" ++++ unlines as)
 
+norml :: String -> String
 norml = unwords . words
 
 --- the maximal number of precompiled quiz problems

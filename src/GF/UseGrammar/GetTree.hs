@@ -1,15 +1,17 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : GetTree
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:22 $ 
+-- > CVS $Date: 2005/02/24 11:46:38 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
--- (Description of the module)
+-- how to form linearizable trees from strings and from terms of different levels
+--
+-- 'String' --> raw 'Term' --> annot, qualif 'Term' --> 'Tree'
 -----------------------------------------------------------------------------
 
 module GetTree where

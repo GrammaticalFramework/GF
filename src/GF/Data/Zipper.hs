@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:16 $ 
+-- > CVS $Date: 2005/02/24 11:46:36 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- Gérard Huet's zipper (JFP 7 (1997)). AR 10\/8\/2001
 -----------------------------------------------------------------------------
@@ -62,6 +62,7 @@ data Path a =
   | Node ([Tr a], (Path a, a), [Tr a]) 
    deriving Show
 
+leaf :: a -> Tr a
 leaf a = Tr (a,[])
 
 newtype Loc a = Loc (Tr a, Path a)     deriving Show
@@ -132,6 +133,7 @@ goBackN i st
 
 -- added mappings between locations and trees
 
+loc2tree :: Loc a -> Tr a
 loc2tree (Loc (t,p)) = case p of
   Top -> t
   Node (left,(p',v),right) -> 
@@ -143,8 +145,10 @@ loc2treeMarked (Loc (Tr (a,ts),p)) =
  where 
    (mark, nomark) = (\a -> (a,True), \a -> (a, False))
 
+tree2loc :: Tr a -> Loc a
 tree2loc t = Loc (t,Top)
 
+goRoot :: Loc a -> Loc a
 goRoot = tree2loc . loc2tree
 
 goLast :: Loc a -> Err (Loc a)

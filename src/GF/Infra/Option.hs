@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:15 $ 
+-- > CVS $Date: 2005/02/24 11:46:35 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.19 $
+-- > CVS $Revision: 1.20 $
 --
 -- Options and flags used in GF shell commands and files.
 --
@@ -18,60 +18,12 @@
 --   - The constructor 'Opts' us udes in "API", "Shell" and "ShellCommands"
 -----------------------------------------------------------------------------
 
-module Option (-- * all kinds of options, should be kept abstract
-	       Option(..), Options(..), OptFun, OptFunId,
-	       noOptions, iOpt, aOpt, iOpts, oArg, oElem, eqOpt,
-	       getOptVal, getOptInt, optIntOrAll, optIntOrN, optIntOrOne,
-	       changeOptVal, addOption, addOptions, concatOptions,
-	       removeOption, removeOptions, options, unionOptions,
-
-	       -- * parsing options, with prefix pre (e.g. \"-\")
-	       getOptions, pOption, isOption,
-
-	       -- * printing options, without prefix
-	       prOpt, prOpts, 
-
-	       -- * a suggestion for option names 
-	       -- ** parsing
-	       strictParse, forgiveParse, ignoreParse, literalParse,
-	       rawParse, firstParse, dontParse, 
-	       -- ** grammar formats
-	       showAbstr, showXML, showOld, showLatex, showFullForm, 
-	       showEBNF, showCF, showWords, showOpts,
-	       isCompiled, isHaskell, noCompOpers, retainOpers, defaultGrOpts, 
-	       newParser, noCF, checkCirc, noCheckCirc, lexerByNeed,
-	       -- ** linearization
-	       allLin, firstLin, distinctLin, dontLin, showRecord, showStruct,
-	       xmlLin, latexLin, tableLin, defaultLinOpts, useUTF8, showLang, withMetas,
-	       -- ** other
-	       beVerbose, showInfo, beSilent, emitCode, getHelp, doMake, doBatch,
-	       notEmitCode, makeMulti, beShort, wholeGrammar, makeFudget, byLines, byWords,
-	       analMorpho, doTrace, noCPU, doCompute, optimizeCanon, optimizeValues,
-	       stripQualif, nostripQualif, showAll, fromSource,
-	       -- ** mainly for stand-alone
-	       useUnicode, optCompute, optCheck, optParaphrase, forJava,
-	       -- ** for edit session
-	       allLangs, absView,
-	       -- ** options that take arguments
-	       useTokenizer, useUntokenizer, useParser, withFun, firstCat, gStartCat,
-	       useLanguage, useResource, speechLanguage, useFont,
-	       grammarFormat, grammarPrinter, filterString, termCommand, transferFun,
-	       forForms, menuDisplay, sizeDisplay, typeDisplay,
-	       noDepTypes, extractGr, pathList, uniCoding,
-	       useName, useAbsName, useCncName, useResName, useFile, useOptimizer, 
-	       markLin, markOptXML, markOptJava, markOptStruct, markOptFocus,
-	       -- ** refinement order
-	       nextRefine, firstRefine, lastRefine, 
-	       -- ** Boolean flags
-	       flagYes, flagNo, caseYesNo,
-	       -- ** integer flags
-	       flagDepth, flagAlts, flagLength, flagNumber, flagRawtrees
-	      ) where
+module Option where
 
 import List (partition)
 import Char (isDigit)
 
--- all kinds of options, to be kept abstract
+-- * all kinds of options, to be kept abstract
 
 newtype Option = Opt (String,[String]) deriving (Eq,Show,Read)
 newtype Options = Opts [Option] deriving (Eq,Show,Read)
@@ -79,20 +31,20 @@ newtype Options = Opts [Option] deriving (Eq,Show,Read)
 noOptions :: Options
 noOptions = Opts []
 
+-- | simple option -o
 iOpt :: String -> Option
 iOpt o = Opt (o,[])   
--- ^ simple option -o
 
+-- | option with argument -o=a
 aOpt :: String -> String -> Option
 aOpt o a = Opt (o,[a])  
--- ^ option with argument -o=a
 
 iOpts :: [Option] -> Options
 iOpts = Opts
 
+-- | value of option argument
 oArg :: String -> String
 oArg s = s 
--- ^ value of option argument
 
 oElem :: Option -> Options -> Bool
 oElem o (Opts os) = elem o os
@@ -135,6 +87,7 @@ changeOptVal os f x =
 addOption :: Option -> Options -> Options
 addOption o (Opts os) = iOpts (o:os)
 
+addOptions :: Options -> Options -> Options
 addOptions (Opts os) os0 = foldr addOption os0 os
 
 concatOptions :: [Options] -> Options
@@ -143,14 +96,16 @@ concatOptions = foldr addOptions noOptions
 removeOption :: Option -> Options -> Options
 removeOption o (Opts os) = iOpts (filter (/=o) os)
 
+removeOptions :: Options -> Options -> Options
 removeOptions (Opts os) os0 = foldr removeOption os0 os
 
+options :: [Option] -> Options
 options = foldr addOption noOptions
 
 unionOptions :: Options -> Options -> Options
 unionOptions (Opts os) (Opts os') = Opts (os ++ os')
 
--- parsing options, with prefix pre (e.g. "-")
+-- * parsing options, with prefix pre (e.g. \"-\")
 
 getOptions :: String -> [String] -> (Options, [String])
 getOptions pre inp = let
@@ -166,24 +121,39 @@ pOption pre s = case span (/= '=') (drop (length pre) s) of
 isOption :: String -> String -> Bool
 isOption pre = (==pre) . take (length pre)
 
--- printing options, without prefix
+-- * printing options, without prefix
 
+prOpt :: Option -> String
 prOpt (Opt (s,[])) = s
 prOpt (Opt (s,xs)) = s ++ "=" ++ concat xs
+
+prOpts :: Options -> String
 prOpts (Opts os) = unwords $ map prOpt os
 
--- a suggestion for option names
+-- * a suggestion for option names
 
--- parsing
+-- ** parsing
+
+strictParse, forgiveParse, ignoreParse, literalParse, rawParse, firstParse :: Option
+-- | parse as term instead of string
+dontParse :: Option
+
 strictParse  = iOpt "strict"
 forgiveParse = iOpt "n"
 ignoreParse  = iOpt "ign"
 literalParse = iOpt "lit"
 rawParse     = iOpt "raw"
 firstParse   = iOpt "1"
-dontParse    = iOpt "read" -- parse as term instead of string
+dontParse    = iOpt "read" 
 
--- grammar formats
+-- ** grammar formats
+
+showAbstr, showXML, showOld, showLatex, showFullForm,
+  showEBNF, showCF, showWords, showOpts,
+  isCompiled, isHaskell, noCompOpers, retainOpers,
+  newParser, noCF, checkCirc, noCheckCirc, lexerByNeed :: Option
+defaultGrOpts :: [Option]
+
 showAbstr   = iOpt "abs"
 showXML     = iOpt "xml"
 showOld     = iOpt "old"
@@ -205,7 +175,13 @@ checkCirc   = iOpt "nocirc"
 noCheckCirc = iOpt "nocheckcirc"
 lexerByNeed = iOpt "cflexer"
 
--- linearization
+-- ** linearization
+
+allLin, firstLin, distinctLin, dontLin,
+  showRecord, showStruct, xmlLin, latexLin,
+  tableLin, useUTF8, showLang, withMetas :: Option
+defaultLinOpts :: [Option]
+
 allLin      = iOpt "all"
 firstLin    = iOpt "one"
 distinctLin = iOpt "nub"
@@ -220,7 +196,14 @@ useUTF8     = iOpt "utf8"
 showLang    = iOpt "lang"
 withMetas   = iOpt "metas"
 
--- other
+-- ** other
+
+beVerbose, showInfo, beSilent, emitCode, getHelp,
+  doMake, doBatch, notEmitCode, makeMulti, beShort,
+  wholeGrammar, makeFudget, byLines, byWords, analMorpho,
+  doTrace, noCPU, doCompute, optimizeCanon, optimizeValues,
+  stripQualif, nostripQualif, showAll, fromSource :: Option
+
 beVerbose    = iOpt "v"
 showInfo     = iOpt "i"
 beSilent     = iOpt "s"
@@ -246,24 +229,41 @@ nostripQualif = iOpt "nostrip"
 showAll      = iOpt "all"
 fromSource   = iOpt "src"
 
--- mainly for stand-alone
+-- ** mainly for stand-alone
+
+useUnicode, optCompute, optCheck, optParaphrase, forJava :: Option
+
 useUnicode    = iOpt "unicode"
 optCompute    = iOpt "compute"
 optCheck      = iOpt "typecheck"
 optParaphrase = iOpt "paraphrase"
 forJava       = iOpt "java"
 
--- for edit session
+-- ** for edit session
+
+allLangs, absView :: Option
+
 allLangs  = iOpt "All"
 absView   = iOpt "Abs"
 
--- options that take arguments
+-- ** options that take arguments
+
+useTokenizer, useUntokenizer, useParser, withFun, 
+  useLanguage, useResource, speechLanguage, useFont,
+  grammarFormat, grammarPrinter, filterString, termCommand,
+  transferFun, forForms, menuDisplay, sizeDisplay, typeDisplay,
+  noDepTypes, extractGr, pathList, uniCoding :: String -> Option
+-- | used on command line
+firstCat :: String -> Option
+-- | used in grammar, to avoid clash w res word
+gStartCat :: String -> Option
+
 useTokenizer   = aOpt "lexer"
 useUntokenizer = aOpt "unlexer"
 useParser      = aOpt "parser"
 withFun        = aOpt "fun"
-firstCat       = aOpt "cat"      -- used on command line
-gStartCat      = aOpt "startcat" -- used in grammar, to avoid clash w res word
+firstCat       = aOpt "cat"      
+gStartCat      = aOpt "startcat" 
 useLanguage    = aOpt "lang"
 useResource    = aOpt "res"
 speechLanguage = aOpt "language"
@@ -282,12 +282,18 @@ extractGr      = aOpt "extract"
 pathList       = aOpt "path"
 uniCoding      = aOpt "coding"
 
+useName, useAbsName, useCncName, useResName, 
+  useFile, useOptimizer :: String -> Option
+
 useName        = aOpt "name"
 useAbsName     = aOpt "abs"
 useCncName     = aOpt "cnc"
 useResName     = aOpt "res"
 useFile        = aOpt "file"
 useOptimizer   = aOpt "optimize"
+
+markLin :: String -> Option
+markOptXML, markOptJava, markOptStruct, markOptFocus :: String
 
 markLin        = aOpt "mark"
 markOptXML     = oArg "xml"
@@ -296,16 +302,26 @@ markOptStruct  = oArg "struct"
 markOptFocus   = oArg "focus"
 
 
--- refinement order
+-- ** refinement order
+
+nextRefine :: String -> Option
+firstRefine, lastRefine :: String
+
 nextRefine  = aOpt "nextrefine"
 firstRefine = oArg "first"
 lastRefine  = oArg "last"
 
--- Boolean flags
+-- ** Boolean flags
+
+flagYes, flagNo :: String
+
 flagYes = oArg "yes"
 flagNo  = oArg "no"
 
--- integer flags
+-- ** integer flags
+
+flagDepth, flagAlts, flagLength, flagNumber, flagRawtrees :: String -> Option
+
 flagDepth  = aOpt "depth"
 flagAlts   = aOpt "alts"
 flagLength = aOpt "length"

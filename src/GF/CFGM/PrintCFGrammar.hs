@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
 -- Module      : PrintCFGrammar
--- Maintainer  : (Maintainer)
+-- Maintainer  : BB
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:08 $ 
+-- > CVS $Date: 2005/02/24 11:46:34 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- Handles printing a CFGrammar in CFGM format.
 -----------------------------------------------------------------------------

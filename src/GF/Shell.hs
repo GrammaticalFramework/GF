@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Shell
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:20 $ 
+-- > CVS $Date: 2005/02/24 11:46:37 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.32 $
+-- > CVS $Revision: 1.33 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -67,20 +67,32 @@ import VisualizeGrammar (visualizeSourceGrammar)
 
 type CommandLine = (CommandOpt, CommandArg,  [CommandOpt])
 
-type SrcTerm = G.Term -- term as returned by the command parser
+-- | term as returned by the command parser
+type SrcTerm = G.Term 
 
-type HState  = (ShellState,([String],Integer)) -- history & CPU
+-- | history & CPU
+type HState  = (ShellState,([String],Integer)) 
 
 type ShellIO = (HState, CommandArg) -> IO (HState, CommandArg)
 
 initHState :: ShellState -> HState
 initHState st = (st,([],0))
 
+cpuHState :: HState -> Integer
 cpuHState (_,(_,i)) = i
+
+optsHState :: HState -> Options
 optsHState (st,_) = globalOptions st
+
+putHStateCPU :: Integer -> HState -> HState
 putHStateCPU cpu (st,(h,_)) = (st,(h,cpu))
+
+updateHistory :: String -> HState -> HState
 updateHistory s (st,(h,cpu)) = (st,(s:h,cpu))
-earlierCommandH (_,(h,_)) = ((h ++ repeat "") !!) -- empty command if index over
+
+-- | empty command if index over
+earlierCommandH :: HState -> Int -> String
+earlierCommandH (_,(h,_)) = ((h ++ repeat "") !!) 
 
 execLinesH :: String -> [CommandLine] -> HState -> IO HState
 execLinesH s cs hst@(st, (h, _)) = do
@@ -91,13 +103,13 @@ execLinesH s cs hst@(st, (h, _)) = do
 ifImpure :: [CommandLine] -> Maybe (ImpureCommand,Options)
 ifImpure cls = foldr (const . Just) Nothing [(c,os) | ((CImpure c,os),_,_) <- cls]
 
--- the main function: execution of commands. put :: Bool forces immediate output
-
+-- | the main function: execution of commands. 'put :: Bool' forces immediate output
+--
 -- command line with consecutive (;) commands: no value transmitted
 execLines :: Bool -> [CommandLine] -> HState -> IO ([String],HState)
 execLines put cs st = foldM (flip (execLine put)) ([],st) cs
 
--- command line with piped (|) commands: no value returned
+-- | command line with piped (|) commands: no value returned
 execLine :: Bool -> CommandLine -> ([String],HState) -> IO ([String],HState)
 execLine put (c@(co, os), arg, cs) (outps,st) = do
   (st',val) <- execC c (st, arg)
@@ -110,7 +122,7 @@ execLine put (c@(co, os), arg, cs) (outps,st) = do
     execs []     arg st = return st
     execs (c:cs) arg st = execLine put (c, arg, cs) st
 
--- individual commands possibly piped: value returned; this is not a state monad
+-- | individual commands possibly piped: value returned; this is not a state monad
 execC :: CommandOpt -> ShellIO
 execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
 
@@ -315,12 +327,11 @@ justOutputArg opts f sa@(st,a) = f (utf (prCommandArg a)) >> return (st, AUnit)
 justOutput :: Options -> IO () -> ShellIO
 justOutput opts = justOutputArg opts . const
 
--- type system for command arguments; instead of plain strings...
-
+-- | type system for command arguments; instead of plain strings...
 data CommandArg = 
    AError  String 
  | ATrms   [Tree] 
- | ASTrm   String   -- to receive from parser 
+ | ASTrm   String   -- ^ to receive from parser 
  | AStrs   [Str] 
  | AString String 
  | AUnit 

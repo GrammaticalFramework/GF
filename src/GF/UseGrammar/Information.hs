@@ -1,18 +1,20 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Information
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:22 $ 
+-- > CVS $Date: 2005/02/24 11:46:38 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
--- (Description of the module)
+-- information on module, category, function, operation, parameter,... 
+-- AR 16\/9\/2003.
+-- uses source grammar
 -----------------------------------------------------------------------------
 
-module Information where
+module Information (showInformation) where
 
 import Grammar
 import Ident
@@ -32,20 +34,18 @@ import UseIO
 -- information on module, category, function, operation, parameter,... AR 16/9/2003
 -- uses source grammar
 
--- the top level function
-
+-- | the top level function
 showInformation :: Options -> ShellState -> Ident -> IOE ()
 showInformation opts st c = do
   is <- ioeErr $ getInformation opts st c
   mapM_ (putStrLnE . prInformation opts c) is
 
--- the data type of different kinds of information
-
+-- | the data type of different kinds of information
 data Information = 
    IModAbs  SourceAbs
  | IModRes  SourceRes
  | IModCnc  SourceCnc
- | IModule  SourceAbs ---- to be deprecated
+ | IModule  SourceAbs -- ^ to be deprecated
  | ICatAbs  Ident Context [Ident]
  | ICatCnc  Ident Type    [CFRule] Term
  | IFunAbs  Ident Type    (Maybe Term)
@@ -97,8 +97,7 @@ prInformation opts c i = unlines $ prt c : case i of
     "type" +++ show ty
     ]
 
--- also finds out if an identifier is defined in many places
-
+-- | also finds out if an identifier is defined in many places
 getInformation :: Options -> ShellState -> Ident -> Err [Information]
 getInformation opts st c = allChecks $ [
   do

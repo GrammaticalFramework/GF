@@ -1,15 +1,15 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Linear
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:22 $ 
+-- > CVS $Date: 2005/02/24 11:46:38 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.13 $
+-- > CVS $Revision: 1.14 $
 --
--- (Description of the module)
+-- Linearization for canonical GF. AR 7\/6\/2003
 -----------------------------------------------------------------------------
 
 module Linear where
@@ -37,14 +37,15 @@ import List (intersperse)
 
 -- Linearization for canonical GF. AR 7/6/2003
 
--- The worker function: linearize a Tree, return
+-- | The worker function: linearize a Tree, return
 -- a record. Possibly mark subtrees.
-
+--
 -- NB. Constants in trees are annotated by the name of the abstract module.
 -- A concrete module name must be given to find (and choose) linearization rules.
--- If no marking is wanted, noMark  :: Marker.
--- For xml marking, use     markXML :: Marker
-
+--
+--  - If no marking is wanted, 'noMark'  :: 'Marker'.
+--
+--  - For xml marking, use     'markXML' :: 'Marker'
 linearizeToRecord :: CanonGrammar -> Marker -> Ident -> A.Tree -> Err Term
 linearizeToRecord gr mk m = lin [] where
 
@@ -85,14 +86,13 @@ linearizeToRecord gr mk m = lin [] where
     _ -> lookCat c >>= comp [tK (prt_ t)]
 
 
--- thus the special case:
-
+-- | thus the special case:
 linearizeNoMark :: CanonGrammar -> Ident -> A.Tree -> Err Term
 linearizeNoMark gr = linearizeToRecord gr noMark
 
--- expand tables in linearized term to full, normal-order tables
+-- | expand tables in linearized term to full, normal-order tables
+--
 -- NB expand from inside-out so that values are not looked up in copies of branches
-
 expandLinTables :: CanonGrammar -> Term -> Err Term
 expandLinTables gr t = case t of
   R rs -> liftM (R . map (uncurry Ass)) $ mapPairsM exp [(l,r) | Ass l r <- rs]
@@ -110,38 +110,36 @@ expandLinTables gr t = case t of
    exp  = expandLinTables gr
    comp = ccompute gr []
 
--- from records, one can get to records of tables of strings
-
+-- | from records, one can get to records of tables of strings
 rec2strTables :: Term -> Err [[(Label,[([Patt],[Str])])]]
 rec2strTables r = do
   vs <- allLinValues r
   mapM (mapPairsM (mapPairsM strsFromTerm)) vs
 
--- from these tables, one may want to extract the ones for the "s" label
-
+-- | from these tables, one may want to extract the ones for the "s" label
 strTables2sTables :: [[(Label,[([Patt],[Str])])]] -> [[([Patt],[Str])]]
 strTables2sTables ts = [t | r <- ts, (l,t) <- r, l == linLab0]
 
 linLab0 :: Label
 linLab0 = L (identC "s")
 
--- to get lists of token lists is easy
+-- | to get lists of token lists is easy
 sTables2strs :: [[([Patt],[Str])]] -> [[Str]]
 sTables2strs = map snd . concat
 
--- from this, to get a list of strings
+-- | from this, to get a list of strings
 strs2strings :: [[Str]] -> [String]
 strs2strings = map unlex
 
--- this is just unwords; use an unlexer from Text to postprocess
+-- | this is just unwords; use an unlexer from Text to postprocess
 unlex :: [Str] -> String
 unlex = concat . map sstr . take 1 ----
 
--- finally, a top-level function to get a string from an expression
+-- | finally, a top-level function to get a string from an expression
 linTree2string :: Marker -> CanonGrammar -> Ident -> A.Tree -> String
 linTree2string mk gr m e = head $ linTree2strings mk gr m e -- never empty
 
--- you can also get many strings
+-- | you can also get many strings
 linTree2strings :: Marker -> CanonGrammar -> Ident -> A.Tree -> [String]
 linTree2strings mk gr m e = err return id $ do
   t  <- linearizeToRecord gr mk m e
@@ -150,8 +148,7 @@ linTree2strings mk gr m e = err return id $ do
   let ss = strs2strings $ sTables2strs $ strTables2sTables ts
   ifNull (prtBad "empty linearization of" e) return ss   -- thus never empty
 
--- argument is a Tree, value is a list of strs; needed in Parsing
-
+-- | argument is a Tree, value is a list of strs; needed in Parsing
 allLinsOfTree :: CanonGrammar -> Ident -> A.Tree -> [Str]
 allLinsOfTree gr a e = err (singleton . str) id $ do
   e' <- return e ---- annotateExp gr e
@@ -160,11 +157,11 @@ allLinsOfTree gr a e = err (singleton . str) id $ do
   ts <- rec2strTables r'
   return $ concat $ sTables2strs $ strTables2sTables ts
 
--- the value is a list of structures arranged as records of tables of terms
+-- | the value is a list of structures arranged as records of tables of terms
 allLinsAsRec :: CanonGrammar -> Ident -> A.Tree -> Err [[(Label,[([Patt],Term)])]]
 allLinsAsRec gr c t = linearizeNoMark gr c t >>= expandLinTables gr >>= allLinValues
 
--- the value is a list of structures arranged as records of tables of strings
+-- | the value is a list of structures arranged as records of tables of strings
 -- only taking into account string fields
 allLinTables :: CanonGrammar ->Ident ->A.Tree ->Err [[(Label,[([Patt],[String])])]]
 allLinTables gr c t = do
@@ -207,15 +204,14 @@ linearizeToStrss gr mk e = do
   return $ map strsFromTerm $ allInTable t 
 -}
 
--- the value is a list of strings, not forgetting their arguments
+-- | the value is a list of strings, not forgetting their arguments
 allLinsOfFun :: CanonGrammar -> CIdent -> Err [[(Label,[([Patt],Term)])]]
 allLinsOfFun gr f = do
   t <- lookupLin gr f 
   allLinValues t
 
 
--- returns printname if one exists; otherwise linearizes with metas
-
+-- | returns printname if one exists; otherwise linearizes with metas
 printOrLinearize :: CanonGrammar -> Ident -> A.Fun -> String
 printOrLinearize gr c f@(m, d) = errVal (prt fq) $ 
   case lookupPrintname gr (CIQ c d) of

@@ -1,18 +1,28 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Tokenize
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:23 $ 
+-- > CVS $Date: 2005/02/24 11:46:39 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.9 $
+-- > CVS $Revision: 1.10 $
 --
--- (Description of the module)
+-- lexers = tokenizers, to prepare input for GF grammars. AR 4\/1\/2002.
+-- an entry for each is included in 'Custom.customTokenizer'
 -----------------------------------------------------------------------------
 
-module Tokenize where
+module Tokenize ( tokWords,
+		  tokLits,
+		  tokVars,
+		  lexHaskell,
+		  lexHaskellLiteral,
+		  lexHaskellVar,
+		  lexText,
+		  lexC2M, lexC2M',
+		  lexTextLiteral,
+		) where
 
 import Operations
 ---- import UseGrammar (isLiteral,identC)
@@ -23,8 +33,7 @@ import Char
 -- lexers = tokenizers, to prepare input for GF grammars. AR 4/1/2002
 -- an entry for each is included in Custom.customTokenizer
 
--- just words
-
+-- | just words
 tokWords :: String -> [CFTok]
 tokWords = map tS . words
 
@@ -61,15 +70,13 @@ mkTL :: String -> CFTok
 mkTL s = if (all isDigit s) then (tI s) else (tL ("'" ++ s ++ "'"))
 
 
--- Haskell lexer, usable for much code
-
+-- | Haskell lexer, usable for much code
 lexHaskell :: String -> [CFTok]
 lexHaskell ss = case lex ss of
   [(w@(_:_),ws)] -> tS w : lexHaskell ws
   _ -> []
 
--- somewhat shaky text lexer
-
+-- | somewhat shaky text lexer
 lexText :: String -> [CFTok]
 lexText = uncap . lx where
 
@@ -87,8 +94,7 @@ lexText = uncap . lx where
   uncap (TS (c:cs) : ws) = tC (c:cs) : ws
   uncap s = s
 
--- lexer for C--, a mini variant of C
-
+-- | lexer for C--, a mini variant of C
 lexC2M :: String -> [CFTok]
 lexC2M = lexC2M' False
 
@@ -125,7 +131,7 @@ reservedAnsiC s = case lookupTree show s ansiCtree of
   Ok False -> True 
   _ -> False
 
--- for an efficient lexer: precompile this!
+-- | for an efficient lexer: precompile this!
 ansiCtree = buildTree $ [(s,True)  | s <- reservedAnsiCSymbols] ++
                         [(s,False) | s <- reservedAnsiCWords]
 
@@ -140,8 +146,7 @@ reservedAnsiCWords = words $
     "union unsigned void volatile while " ++
     "main printin putchar"  --- these are not ansi-C
 
--- turn unknown tokens into string literals; not recursively for literals 123, 'foo'
-
+-- | turn unknown tokens into string literals; not recursively for literals 123, 'foo'
 unknown2string :: (String -> Bool) -> [CFTok] -> [CFTok]
 unknown2string isKnown = map mkOne where
   mkOne t@(TS s) 
@@ -161,6 +166,8 @@ unknown2var isKnown = map mkOne where
   mkOne t@(TS s) = if isKnown s then t else tV s
   mkOne t@(TC s) = if isKnown s then t else tV s
   mkOne t        = t
+
+lexTextLiteral, lexHaskellLiteral, lexHaskellVar :: (String -> Bool) -> String -> [CFTok]
 
 lexTextLiteral    isKnown = unknown2string (eitherUpper isKnown) . lexText
 lexHaskellLiteral isKnown = unknown2string isKnown . lexHaskell

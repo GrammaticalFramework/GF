@@ -1,15 +1,15 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : PShell
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:20 $ 
+-- > CVS $Date: 2005/02/24 11:46:37 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.17 $
+-- > CVS $Revision: 1.18 $
 --
--- (Description of the module)
+-- parsing GF shell commands. AR 11\/11\/2001
 -----------------------------------------------------------------------------
 
 module PShell where
@@ -29,8 +29,7 @@ import IO
 
 -- parsing GF shell commands. AR 11/11/2001
 
--- getting a sequence of command lines as input
-
+-- | getting a sequence of command lines as input
 getCommandLines :: IO (String,[CommandLine])
 getCommandLines = do
   s <- fetchCommand "> "
@@ -67,8 +66,7 @@ pInputString s = case s of
   ('"':_:_) -> [AString (init (tail s))]
   _         -> [AError "illegal string"]
 
--- command rl can be written remove_language etc.
-
+-- | command @rl@ can be written @remove_language@ etc.
 abbrevCommand :: String -> String
 abbrevCommand = hds . words . map u2sp where
   u2sp c = if c=='_' then ' ' else c

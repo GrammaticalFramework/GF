@@ -5,9 +5,9 @@
 -- Stability   : Almost Obsolete
 -- Portability : Haskell 98
 --
--- > CVS $Date: 2005/02/18 19:21:15 $ 
+-- > CVS $Date: 2005/02/24 11:46:35 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
 -- some parser combinators a la Wadler and Hutton.
 -- no longer used in many places in GF
@@ -142,24 +142,45 @@ lits ts = literals ts
 jL :: String -> Parser Char String
 jL = pJ . lits
 
+pParenth :: Parser Char a -> Parser Char a
 pParenth p = literal '(' +.. pJunk +.. p ..+ pJunk ..+ literal ')'
-pCommaList p = pTList "," (pJ p)                      -- p,...,p
-pOptCommaList p = pCommaList p ||| succeed []            -- the same or nothing
-pArgList p = pParenth (pCommaList p) ||| succeed [] -- (p,...,p), poss. empty
-pArgList2 p = pParenth (p ... jL "," +.. pCommaList p) *** uncurry (:) -- min.2 args
 
+-- | p,...,p
+pCommaList :: Parser Char a -> Parser Char [a]
+pCommaList p = pTList "," (pJ p)                      
+
+-- | the same or nothing
+pOptCommaList :: Parser Char a -> Parser Char [a]
+pOptCommaList p = pCommaList p ||| succeed []            
+
+-- | (p,...,p), poss. empty
+pArgList :: Parser Char a -> Parser Char [a]
+pArgList p = pParenth (pCommaList p) ||| succeed [] 
+
+-- | min. 2 args
+pArgList2 :: Parser Char a -> Parser Char [a]
+pArgList2 p = pParenth (p ... jL "," +.. pCommaList p) *** uncurry (:) 
+
+longestOfSome :: Parser a b -> Parser a [b]
 longestOfSome p = (p ... longestOfMany p) *** (\ (x,y) -> x:y)
 
+pIdent :: Parser Char String
 pIdent = pLetter ... longestOfMany pAlphaPlusChar *** uncurry (:)
   where alphaPlusChar c = isAlphaNum c || c=='_' || c=='\''
 
+pLetter, pDigit :: Parser Char Char
 pLetter = satisfy (`elem` (['A'..'Z'] ++ ['a'..'z'] ++ 
                            ['À' .. 'Û'] ++ ['à' .. 'û'])) -- no such in Char
-pDigit         = satisfy isDigit
-pLetters       = longestOfSome pLetter
+pDigit  = satisfy isDigit
+
+pLetters :: Parser Char String
+pLetters = longestOfSome pLetter
+
+pAlphanum, pAlphaPlusChar :: Parser Char Char
 pAlphanum      = pDigit ||| pLetter
 pAlphaPlusChar = pAlphanum ||| satisfy (`elem` "_'")
 
+pQuotedString :: Parser Char String
 pQuotedString = literal '"' +.. pEndQuoted where
  pEndQuoted =
        literal '"' *** (const [])

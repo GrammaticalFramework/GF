@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:15 $ 
+-- > CVS $Date: 2005/02/24 11:46:35 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- some auxiliary GF operations. AR 19\/6\/1998 -- 6\/2\/2001
 --
@@ -239,8 +239,13 @@ errAndMsg (Ok a) = return (a,[])
 -- | a three-valued maybe type to express indirections
 data Perhaps a b = Yes a | May b | Nope deriving (Show,Read,Eq,Ord)
 
+yes :: a -> Perhaps a b
 yes = Yes
+
+may :: b -> Perhaps a b
 may = May
+
+nope :: Perhaps a b
 nope = Nope
 
 mapP :: (a -> c) -> Perhaps a b -> Perhaps c b
@@ -419,6 +424,7 @@ paragraphs = map unlines . chop . lines where
 indent :: Int -> String -> String
 indent i s = replicate i ' ' ++ s
 
+(+++), (++-), (++++), (+++++) :: String -> String -> String
 a +++ b   = a ++ " "    ++ b
 a ++- ""  = a 
 a ++- b   = a +++ b
@@ -432,26 +438,31 @@ prUpper s = s1 ++ s2' where
    c:t -> toUpper c : t
    _ -> s2
 
+prReplicate :: Int -> String -> String
 prReplicate n s = concat (replicate n s)
 
+prTList :: String -> [String] -> String
 prTList t ss = case ss of
   []   -> ""
   [s]  -> s
   s:ss -> s ++ t ++ prTList t ss
 
+prQuotedString :: String -> String
 prQuotedString x = "\"" ++ restoreEscapes x ++ "\""
 
+prParenth :: String -> String
 prParenth s = if s == "" then "" else "(" ++ s ++ ")"
 
+prCurly, prBracket :: String -> String
 prCurly   s = "{" ++ s ++ "}"
 prBracket s = "[" ++ s ++ "]"
 
-prArgList xx = prParenth (prTList "," xx)
-
+prArgList, prSemicList, prCurlyList :: [String] -> String
+prArgList   = prParenth . prTList "," 
 prSemicList = prTList " ; "
-
 prCurlyList = prCurly . prSemicList
 
+restoreEscapes :: String -> String
 restoreEscapes s = 
   case s of 
     []       -> []
@@ -476,6 +487,7 @@ prIfEmpty em _    _    [] = em
 prIfEmpty em nem1 nem2 s  = nem1 ++ s ++ nem2
 
 -- | Thomas Hallgren's wrap lines
+wrapLines :: Int -> String -> String
 wrapLines n "" = ""
 wrapLines n s@(c:cs) =
       if isSpace c
@@ -491,15 +503,17 @@ wrapLines n s@(c:cs) =
 --- optWrapLines = if argFlag "wraplines" True then wrapLines 0 else id
 
 -- LaTeX code producing functions
-
+dollar, mbox, ital, boldf, verbat :: String -> String
 dollar s = '$' : s ++ "$"
 mbox s   = "\\mbox{" ++ s ++ "}"
 ital s   = "{\\em" +++ s ++ "}"
 boldf s  = "{\\bf" +++ s ++ "}"
 verbat s = "\\verbat!" ++ s ++ "!"
 
+mkLatexFile :: String -> String
 mkLatexFile s = begindocument +++++ s +++++ enddocument
 
+begindocument, enddocument :: String
 begindocument =
  "\\documentclass[a4paper,11pt]{article}" ++++ -- M.F. 25/01-02
  "\\setlength{\\parskip}{2mm}" ++++
@@ -510,7 +524,6 @@ begindocument =
  "\\setlength{\\textheight}{240mm}" ++++
  "\\setlength{\\textwidth}{158mm}" ++++
  "\\begin{document}\n"
-
 enddocument =
  "\n\\end{document}\n"
 

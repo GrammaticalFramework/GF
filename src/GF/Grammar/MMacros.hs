@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:12 $ 
+-- > CVS $Date: 2005/02/24 11:46:34 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- some more abstractions on grammars, esp. for Edit
 -----------------------------------------------------------------------------
@@ -27,19 +27,33 @@ import Macros
 
 import Monad
 
+nodeTree :: Tree -> TrNode
+argsTree :: Tree -> [Tree]
+
 nodeTree (Tr (n,_)) = n
 argsTree (Tr (_,ts)) = ts
 
-isFocusNode (N (_,_,_,_,b)) = b
-bindsNode   (N (b,_,_,_,_)) = b
-atomNode    (N (_,a,_,_,_)) = a
-valNode     (N (_,_,v,_,_)) = v
-constrsNode (N (_,_,_,(c,_),_)) = c
+isFocusNode    :: TrNode -> Bool
+bindsNode      :: TrNode -> Binds
+atomNode       :: TrNode -> Atom
+valNode        :: TrNode -> Val
+constrsNode    :: TrNode -> Constraints
+metaSubstsNode :: TrNode -> MetaSubst
+
+isFocusNode    (N (_,_,_,_,b)) = b
+bindsNode      (N (b,_,_,_,_)) = b
+atomNode       (N (_,a,_,_,_)) = a
+valNode        (N (_,_,v,_,_)) = v
+constrsNode    (N (_,_,_,(c,_),_)) = c
 metaSubstsNode (N (_,_,_,(_,m),_)) = m
+
+atomTree :: Tree -> Atom
+valTree  :: Tree -> Val
 
 atomTree = atomNode . nodeTree 
 valTree  = valNode  . nodeTree
 
+mkNode :: Binds -> Atom -> Val -> (Constraints, MetaSubst) -> TrNode
 mkNode binds atom vtyp cs = N (binds,atom,vtyp,cs,False)
 
 type Var = Ident
@@ -91,14 +105,14 @@ vClos = VClos []
 uExp :: Exp
 uExp = Meta meta0
 
-mExp :: Exp
-mExp = Meta meta0
-
+mExp, mExp0 :: Exp
+mExp  = Meta meta0
 mExp0 = mExp
 
 meta2exp :: MetaSymb -> Exp
 meta2exp = Meta
 
+atomC :: Fun -> Atom
 atomC = AtC
 
 funAtom :: Atom -> Err Fun
@@ -114,6 +128,7 @@ atomIsMeta atom = case atom of
   AtM _ -> True
   _   -> False
 
+getMetaAtom :: Atom -> Err Meta
 getMetaAtom a = case a of
   AtM m -> return m
   _ -> Bad "the active node is not meta"
@@ -148,12 +163,17 @@ alphaConv oldvars (x,x') = substitute (x:x':oldvars) [(x,Vr x')]
 alphaFresh :: [Var] -> Exp -> Err Exp
 alphaFresh vs = refreshTermN $ maxVarIndex vs
 
+-- | done in a state monad
 alphaFreshAll :: [Var] -> [Exp] -> Err [Exp]
-alphaFreshAll vs = mapM $ alphaFresh vs -- done in a state monad
+alphaFreshAll vs = mapM $ alphaFresh vs 
 
+-- | for display
+val2exp :: Val -> Err Exp
+val2exp = val2expP False 
 
-val2exp = val2expP False     -- for display
-val2expSafe = val2expP True  -- for type checking
+-- | for type checking
+val2expSafe :: Val -> Err Exp
+val2expSafe = val2expP True  
 
 val2expP :: Bool -> Val -> Err Exp
 val2expP safe v = case v of
@@ -191,6 +211,7 @@ freeVarsExp e = case e of
   Prod x a b -> freeVarsExp a ++ filter (/=x) (freeVarsExp b)
   _ -> [] --- thus applies to abstract syntax only
 
+ident2string :: Ident -> String
 ident2string = prIdent
 
 tree :: (TrNode,[Tree]) -> Tree
@@ -230,7 +251,8 @@ ref2exp bounds typ ref = do
   return $ mkApp ref args
   -- no refreshment of metas
   
-type Ref = Exp -- invariant: only Con or Var
+-- | invariant: only 'Con' or 'Var'
+type Ref = Exp 
 
 fun2wrap :: [Var] -> ((Fun,Int),Type) -> Exp -> Err Exp
 fun2wrap oldvars ((fun,i),typ) exp = do
@@ -252,6 +274,7 @@ compatType v t = errVal True $ do
 
 ---
 
+mkJustProd :: Context -> Term -> Term
 mkJustProd cont typ = mkProd (cont,typ,[])
 
 int2var :: Int -> Ident
@@ -263,6 +286,7 @@ meta0 = int2meta 0
 termMeta0 :: Term
 termMeta0 = Meta meta0
 
+identVar :: Term -> Err Ident
 identVar (Vr x) = return x
 identVar _ = Bad "not a variable"
 

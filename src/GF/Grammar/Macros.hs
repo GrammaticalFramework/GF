@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:12 $ 
+-- > CVS $Date: 2005/02/24 11:46:34 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.17 $
+-- > CVS $Revision: 1.18 $
 --
 -- Macros for constructing and analysing source code terms.
 --
@@ -52,7 +52,8 @@ qTypeForm t = case t of
 qq :: QIdent -> Term
 qq (m,c) = Q m c
 
-typeForm = qTypeForm ---- no need to dist any more
+typeForm :: Type -> Err (Context, Cat, [Term])
+typeForm = qTypeForm ---- no need to distinguish any more
 
 cPredef :: Ident
 cPredef = identC "Predef"
@@ -160,6 +161,7 @@ stripTerm t = case t of
    stripPatt p = errVal p $ term2patt $ stripTerm $ patt2term p
 -}
 
+computed :: Term -> Term
 computed = Computed
 
 termForm :: Term -> Err ([(Ident)], Term, [Term])
@@ -219,6 +221,7 @@ mkLet defs t = foldr Let t defs
 mkLetUntyped :: Context -> Term -> Term
 mkLetUntyped defs = mkLet [(x,(Nothing,t)) | (x,t) <- defs]
 
+isVariable :: Term -> Bool
 isVariable (Vr _ ) = True
 isVariable _ = False
 
@@ -277,22 +280,30 @@ mkRecTypeN int lab typs = RecType [ (lab i, t) | (i,t) <- zip [int..] typs]
 mkRecType :: (Int -> Label) -> [Type] -> Type
 mkRecType = mkRecTypeN 0
 
+typeType, typePType, typeStr, typeTok, typeStrs :: Term
+
 typeType  = srt "Type"
 typePType = srt "PType"
 typeStr   = srt "Str"
 typeTok   = srt "Tok"
 typeStrs  = srt "Strs"
 
+typeString, typeInt :: Term
+typeInts :: Int -> Term
+
 typeString = constPredefRes "String"
 typeInt = constPredefRes "Int"
 typeInts i = App (constPredefRes "Ints") (EInt i)
 
+isTypeInts :: Term -> Bool
 isTypeInts ty = case ty of
   App c _ -> c == constPredefRes "Ints"
   _ -> False
 
+constPredefRes :: String -> Term
 constPredefRes s = Q (IC "Predef") (zIdent s)
 
+isPredefConstant :: Term -> Bool
 isPredefConstant t = case t of
   Q (IC "Predef") _ -> True
   Q (IC "PredefAbs") _ -> True
@@ -314,9 +325,11 @@ mkDecl typ = (wildIdent, typ)
 eqStrIdent :: Ident -> Ident -> Bool
 eqStrIdent = (==)
 
+tupleLabel, linLabel :: Int -> Label
 tupleLabel i = LIdent $ "p" ++ show i
 linLabel i = LIdent $ "s" ++ show i
 
+theLinLabel :: Label
 theLinLabel = LIdent "s"
 
 tuple2record :: [Term] -> [Assign]
@@ -354,15 +367,15 @@ plusRecord t1 t2 =
    (FV rs,_    ) -> mapM (`plusRecord` t2) rs >>= return . FV
    _ -> Bad ("cannot add records" +++ prt t1 +++ "and" +++ prt t2)
 
--- default linearization type
-
+-- | default linearization type
+defLinType :: Type
 defLinType = RecType [(LIdent "s",  typeStr)]
 
--- refreshing variables
-
+-- | refreshing variables
 varX :: Int -> Ident
 varX i = identV (i,"x")
 
+-- | refreshing variables
 mkFreshVar :: [Ident] -> Ident
 mkFreshVar olds = varX (maxVarIndex olds + 1) 
 
@@ -384,6 +397,8 @@ freshAsTerm s = Vr (varX (readIntArg s))
 string2term :: String -> Term
 string2term = ccK
 
+ccK :: String -> Term
+ccC :: Term -> Term -> Term
 ccK = K
 ccC = C
 
@@ -398,7 +413,14 @@ string2CnTrm = Cn . zIdent
 symbolOfIdent :: Ident -> String
 symbolOfIdent = prIdent
 
+symid :: Ident -> String
 symid = symbolOfIdent
+
+vr :: Ident -> Term
+cn :: Ident -> Term
+srt :: String -> Term
+meta :: MetaSymb -> Term
+cnIC :: String -> Term
 
 vr = Vr
 cn = Cn
@@ -406,17 +428,22 @@ srt = Sort
 meta = Meta
 cnIC = cn . IC
 
+justIdentOf :: Term -> Maybe Ident
 justIdentOf (Vr x) = Just x
 justIdentOf (Cn x) = Just x
 justIdentOf _ = Nothing
 
+isMeta :: Term -> Bool
 isMeta (Meta _) = True
 isMeta _ = False
+
+mkMeta :: Int -> Term
 mkMeta = Meta . MetaSymb
 
 nextMeta :: MetaSymb -> MetaSymb
 nextMeta = int2meta . succ . metaSymbInt
 
+int2meta :: Int -> MetaSymb
 int2meta = MetaSymb
 
 metaSymbInt :: MetaSymb -> Int
@@ -503,6 +530,7 @@ allLinFields trm = case unComputed trm of
   _ -> prtBad "fields can only be sought in a record not in" trm
 
 -- | deprecated
+isLinLabel :: Label -> Bool
 isLinLabel l = case l of
      LIdent ('s':cs) | all isDigit cs -> True
      _ -> False
@@ -696,6 +724,7 @@ wordsInTerm trm = filter (not . null) $ case trm of
    _       -> collectOp wo trm
  where wo = wordsInTerm
 
+noExist :: Term
 noExist = FV []
 
 defaultLinType :: Type

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:14 $ 
+-- > CVS $Date: 2005/02/24 11:46:34 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -47,6 +47,11 @@ prIdent i = case i of
   IAV (s,b,j) -> s ++ "_" ++ show b ++ "_" ++ show j
   IW -> "_"
 
+identC :: String -> Ident
+identV :: (Int, String) -> Ident
+identA :: (String, Int) -> Ident
+identAV:: (String, Int, Int) -> Ident
+identW :: Ident
 (identC, identV, identA, identAV, identW) = 
     (IC,     IV,     IA,     IAV,     IW)
 
@@ -54,18 +59,22 @@ prIdent i = case i of
 -- ident s = IC s
 
 -- | to mark argument variables
+argIdent :: Int -> Ident -> Int -> Ident
 argIdent 0 (IC c) i = identA  (c,i)
 argIdent b (IC c) i = identAV (c,b,i)
 
 -- | used in lin defaults
+strVar :: Ident
 strVar = identA ("str",0)
 
 -- | wild card
+wildIdent :: Ident
 wildIdent = identW
 
 isWildIdent :: Ident -> Bool
 isWildIdent = (== wildIdent)
 
+newIdent :: Ident
 newIdent = identC "#h"
 
 mkIdent :: String -> Int -> Ident

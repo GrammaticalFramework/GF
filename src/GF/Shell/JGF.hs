@@ -1,15 +1,15 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : JGF
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:20 $ 
+-- > CVS $Date: 2005/02/24 11:46:37 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.9 $
+-- > CVS $Revision: 1.10 $
 --
--- (Description of the module)
+-- GF editing session controlled by e.g. a Java program. AR 16\/11\/2001
 -----------------------------------------------------------------------------
 
 module JGF where
@@ -31,16 +31,16 @@ import UTF8
 
 -- GF editing session controlled by e.g. a Java program. AR 16/11/2001
 
----- the Boolean is a temporary hack to have two parallel GUIs
+-- | the Boolean is a temporary hack to have two parallel GUIs
 sessionLineJ :: Bool -> ShellState -> IO ()
 sessionLineJ isNew env = do
   putStrLnFlush $ initEditMsgJavaX env
   let env' = addGlobalOptions (options [sizeDisplay "short",beSilent]) env
   editLoopJnewX isNew env' (initSState)
 
--- this is the real version, with XML
-
----- the Boolean is a temporary hack to have two parallel GUIs
+-- | this is the real version, with XML
+--
+-- the Boolean is a temporary hack to have two parallel GUIs
 editLoopJnewX :: Bool -> CEnv -> SState -> IO ()
 editLoopJnewX isNew env state = do
   c <- getCommandUTF (isCEnvUTF8 env state) ----
@@ -60,10 +60,12 @@ editLoopJnewX isNew env state = do
       putStrLnFlush package
       editLoopJnewX isNew env' state'
 
+welcome :: String
 welcome = 
   "An experimental GF Editor for Java." ++ 
   "(c) Kristofer Johannisson, Janna Khegai, and Aarne Ranta 2002 under CNU GPL."
 
+initEditMsgJavaX :: CEnv -> String
 initEditMsgJavaX env = encodeUTF8 $ mkUnicode $ unlines $ tagXML "gfinit" $ 
   tagsXML "newcat"   [["n" +++ cat]     | (_,cat) <- newCatMenu env] ++
   tagXML  "topic"    [abstractName env] ++
@@ -71,5 +73,7 @@ initEditMsgJavaX env = encodeUTF8 $ mkUnicode $ unlines $ tagXML "gfinit" $
   concat [tagAttrXML "language" ("file",file) [prLanguage lang] |
            (file,lang) <- zip (allGrammarFileNames env) (allLanguages env)]
 
+
+initAndEditMsgJavaX :: Bool -> CEnv -> SState -> String
 initAndEditMsgJavaX isNew env state = 
   initEditMsgJavaX env ++++ displaySStateJavaX isNew env state

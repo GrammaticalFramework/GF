@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Session
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:22 $ 
+-- > CVS $Date: 2005/02/24 11:46:39 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Revision: 1.8 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -27,8 +27,11 @@ import Operations
 
 -- keep these abstract
 
-type SState = [(State,([Exp],[Clip]),SInfo)] -- exps: candidate refinements,clipboard
-type SInfo  = ([String],(Int,Options))       -- string is message, int is the view
+-- | 'Exp'-list: candidate refinements,clipboard
+type SState = [(State,([Exp],[Clip]),SInfo)] 
+
+-- | 'String' is message, 'Int' is the view
+type SInfo  = ([String],(Int,Options))       
 
 initSState :: SState
 initSState = [(initState, ([],[]), (["Select 'New' category to start"],(0,noOptions)))] 
@@ -36,7 +39,20 @@ initSState = [(initState, ([],[]), (["Select 'New' category to start"],(0,noOpti
 
 type Clip = Tree ---- (Exp,Type)
 
+-- | (peb): Something wrong with this definition??
+-- Shouldn't the result type be 'SInfo'?
+--
+-- > okInfo :: Int -> SInfo == ([String], (Int, Options))
+okInfo :: n -> ([s], (n, Bool))
 okInfo n = ([],(n,True))
+
+stateSState :: SState -> State
+candsSState :: SState -> [Exp]
+clipSState  :: SState -> [Clip]
+infoSState  :: SState -> SInfo
+msgSState   :: SState -> [String]
+viewSState  :: SState -> Int
+optsSState  :: SState -> Options
 
 stateSState ((s,_,_):_)     = s
 candsSState ((_,(ts,_),_):_)= ts
@@ -46,16 +62,17 @@ msgSState   ((_,_,(m,_)):_) = m
 viewSState  ((_,_,(_,(v,_))):_) = v
 optsSState  ((_,_,(_,(_,o))):_) = o
 
+treeSState :: SState -> Tree
 treeSState = actTree . stateSState
 
 
--- from state to state
-
+-- | from state to state
 type ECommand = SState -> SState
 
--- elementary commands
+-- * elementary commands
 
--- change state, drop cands, drop message, preserve options
+-- ** change state, drop cands, drop message, preserve options
+
 changeState :: State -> ECommand
 changeState s ss = changeMsg [] $ (s,([],clipSState ss),infoSState ss) : ss 
 
@@ -77,16 +94,18 @@ withMsg m c = changeMsg m . c
 changeStOptions :: (Options -> Options) -> ECommand
 changeStOptions f ((s,ts,(m,(v,o))):ss) = (s,ts,(m,(v, f o))) : ss
 
+noNeedForMsg :: ECommand
 noNeedForMsg = changeMsg [] -- everything's all right: no message
 
+candInfo :: [Exp] -> [String]
 candInfo ts = case length ts of
   0 -> ["no acceptable alternative"]
   1 -> ["just one acceptable alternative"]
   n -> [show n +++ "alternatives to select"]
 
--- keep SState abstract from this on
+-- * keep SState abstract from this on
 
--- editing commands
+-- ** editing commands
 
 action2command :: Action -> ECommand
 action2command act state = case act (stateSState state) of 

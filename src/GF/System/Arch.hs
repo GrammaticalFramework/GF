@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:10 $ 
+-- > CVS $Date: 2005/02/24 11:46:34 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
 -- architecture\/compiler dependent definitions for unix\/hbc
 -----------------------------------------------------------------------------
@@ -35,11 +35,13 @@ myStdGen int0 = do
   let int = int0 + ctSec cal + fromInteger (div (ctPicosec cal) 10000000)
   return $ mkStdGen int
 
+prCPU :: Integer -> IO Integer
 prCPU cpu = do 
   cpu' <- getCPUTime
   putStrLn (show ((cpu' - cpu) `div` 1000000000) ++ " msec")
   return cpu'
 
+welcomeArch :: String
 welcomeArch = "This is the system compiled with ghc."
 
 fetchCommand :: String -> IO (String)
