@@ -2,7 +2,7 @@
 
 --1 A Small English Resource Syntax
 --
--- Aarne Ranta 2002
+-- Aarne Ranta 2002 - 2005
 --
 -- This resource grammar contains definitions needed to construct 
 -- indicative, interrogative, and imperative sentences in English.
