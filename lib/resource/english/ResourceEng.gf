@@ -1,3 +1,3 @@
 --# -path=.:../abstract:../../prelude
 
-instance ResourceEng of Resource = reuse AllResourceEng ;
+concrete ResourceEng of Resource = RulesEng, ClauseEng, StructuralEng ** {} ;

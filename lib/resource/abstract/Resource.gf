@@ -1,1 +1,1 @@
-abstract Resource = Rules, Clause, Structural  ** {} ;
+abstract Resource = Rules, Clause, Structural ** {} ;
