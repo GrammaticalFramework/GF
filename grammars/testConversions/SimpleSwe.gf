@@ -12,7 +12,7 @@ PP = {s : Str};
 P  = {s : Str};
 
 lin 
-cyclic x   = x;
+-- cyclic x   = x;
 mkS    x y = {s = x.s ++ y.s};
 mkVP   x y = {s = x.s ++ y.s};
 mkNP1  x y = {s = x.s ! y.g ++ y.s ! x.n};

@@ -5,8 +5,8 @@ GHCFLAGS=-package lang -package util -fglasgow-exts
 GHCOPTFLAGS=-O -package lang -package util -fglasgow-exts
 GHCFUDFLAG=-package Fudgets
 
-HUGSINCLUDE    =.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:parsing:conversions:trace:
-BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -iparsing -iparsers -iconversions -inotrace
+HUGSINCLUDE    =.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:newparsing:trace:
+BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -inewparsing -iparsers -inotrace
 GHCINCLUDE     =-ifor-ghc       $(BASICINCLUDE)
 GHCINCLUDENOFUD=-ifor-ghc-nofud $(BASICINCLUDE) 
 GHCINCLUDEGFT  =-ifor-gft       $(BASICINCLUDE) 
@@ -60,8 +60,4 @@ help:
 # added by peb:
 tracing:
 	$(GHMAKE) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD) --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
-newparser:
-	$(GHMAKE) $(GHCFLAGS) -itrace -ifor-ghc-nofud -iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -inewparsing -iparsers --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
-newhugs:
-	hugs -h10M -P.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:newparsing:trace:
 
