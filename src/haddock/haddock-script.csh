@@ -2,8 +2,8 @@
 
 ######################################################################
 # Author: Peter Ljunglöf
-# Time-stamp: "2005-02-03, 16:05"
-# CVS $Date: 2005/02/03 15:13:36 $
+# Time-stamp: "2005-02-03, 16:21"
+# CVS $Date: 2005/02/03 15:23:02 $
 # CVS $Author: peb $
 #
 # a script for producing documentation through Haddock
@@ -18,12 +18,17 @@ set rmfiles = {Lex,Par}{CFG,GF,GFC}.hs
 
 ######################################################################
 
-echo 0. Cleaning Haddock directory
+echo 0. Creating and cleaning Haddock directory
 
-rm $docdir/*
+if (-d $docdir) then
+    rm $docdir/*
+else
+    mkdir $docdir
+endif
 
 ######################################################################
 
+echo
 echo 1. Selecting and copying Haskell files 
 
 foreach d ($dirs) 
