@@ -5,14 +5,15 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:08 $
+-- > CVS $Date: 2005/03/02 14:22:53 $
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.33 $
+-- > CVS $Revision: 1.34 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
 
-module Compile (compileModule, compileEnvShSt, compileOne
+module Compile (compileModule, compileEnvShSt, compileOne,
+		CompileEnv, TimedCompileEnv
 	       ) where
 
 import Grammar

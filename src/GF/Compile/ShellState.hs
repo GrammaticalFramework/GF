@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:34 $ 
+-- > CVS $Date: 2005/03/02 14:22:53 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.36 $
+-- > CVS $Revision: 1.37 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -50,7 +50,7 @@ data ShellState = ShSt {
   canModules :: CanonGrammar ,       -- ^ compiled abstracts and concretes
   srcModules :: G.SourceGrammar ,    -- ^ saved resource modules
   cfs        :: [(Ident,CF)] ,       -- ^ context-free grammars
-  pInfos     :: [(Ident,Cnv.PInfo)], -- ^ parser information, peb 18\/6
+  pInfos     :: [(Ident,Cnv.PInfo)], -- ^ parser information, peb 18\/6-04
   morphos    :: [(Ident,Morpho)],    -- ^ morphologies
   gloptions  :: Options,             -- ^ global options
   readFiles  :: [(FilePath,ModTime)],-- ^ files read
