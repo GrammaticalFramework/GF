@@ -180,8 +180,8 @@ txtHelpFile =
   "\n      a small -alts is recommended. If a Tree argument is given, the" ++
   "\n      command completes the Tree with values to the metavariables in" ++
   "\n      the tree." ++
-  "\n  flags:" ++
-  "\n      -nometas don't return trees that include metavariables" ++
+  "\n  options:" ++
+  "\n      -metas   also return trees that include metavariables" ++
   "\n  flags:" ++
   "\n      -depth   generate to this depth (default 3)" ++
   "\n      -alts    take this number of alternatives at each branch (default unlimited)" ++

@@ -167,8 +167,8 @@ gt, generate_trees: gt Tree?
       a small -alts is recommended. If a Tree argument is given, the
       command completes the Tree with values to the metavariables in
       the tree.
-  flags:
-      -nometas don't return trees that include metavariables
+  options:
+      -metas   also return trees that include metavariables
   flags:
       -depth   generate to this depth (default 3)
       -alts    take this number of alternatives at each branch (default unlimited)

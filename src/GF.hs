@@ -7,6 +7,7 @@ import IOGrammar
 import ShellState
 import Shell
 import SubShell
+import ShellCommands
 import PShell
 import JGF
 import UTF8

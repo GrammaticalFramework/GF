@@ -9,6 +9,8 @@ import qualified GFC
 import Values
 import GetTree
 
+import ShellCommands
+
 import API
 import IOGrammar
 import Compile
@@ -40,66 +42,11 @@ import UTF8 (encodeUTF8)
 
 -- AR 18/4/2000 - 7/11/2001
 
-type SrcTerm = G.Term -- term as returned by the command parser
-
-data Command =
-   CImport FilePath
- | CRemoveLanguage Language
- | CEmptyState
- | CStripState
- | CTransformGrammar FilePath
- | CConvertLatex FilePath
-
- | CLinearize [()] ---- parameters
- | CParse
- | CTranslate Language Language
- | CGenerateRandom
- | CGenerateTrees
- | CPutTerm
- | CWrapTerm Ident
- | CMorphoAnalyse
- | CTestTokenizer
- | CComputeConcrete String
-
- | CTranslationQuiz Language Language
- | CTranslationList Language Language Int
- | CMorphoQuiz
- | CMorphoList Int
-
- | CReadFile   FilePath
- | CWriteFile  FilePath
- | CAppendFile FilePath
- | CSpeakAloud
- | CPutString
- | CShowTerm
- | CSystemCommand String
-
- | CSetFlag
- | CSetLocalFlag Language
-
- | CPrintGrammar
- | CPrintGlobalOptions
- | CPrintLanguages
- | CPrintInformation I.Ident
- | CPrintMultiGrammar
- | CPrintGramlet 
- | CPrintCanonXML
- | CPrintCanonXMLStruct 
- | CPrintHistory
- | CHelp (Maybe String)
-
- | CImpure ImpureCommand
-
- | CVoid
-
--- to isolate the commands that are executed on top level
-data ImpureCommand = 
-    ICQuit | ICExecuteHistory FilePath | ICEarlierCommand Int
-  | ICEditSession | ICTranslateSession
+-- data Command moved to ShellCommands. AR 27/5/2004
 
 type CommandLine = (CommandOpt, CommandArg,  [CommandOpt])
 
-type CommandOpt = (Command, Options)
+type SrcTerm = G.Term -- term as returned by the command parser
 
 type HState  = (ShellState,([String],Integer)) -- history & CPU
 
@@ -144,7 +91,7 @@ execLine put (c@(co, os), arg, cs) (outps,st) = do
 
 -- individual commands possibly piped: value returned; this is not a state monad
 execC :: CommandOpt -> ShellIO
-execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
+execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
 
   CImport file -> useIOE sa $ do
     st1 <- shellStateFromFiles opts st file
