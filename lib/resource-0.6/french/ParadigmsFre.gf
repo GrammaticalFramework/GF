@@ -27,6 +27,8 @@ resource ParadigmsFre =
 -- To abstract over gender names, we define the following identifiers.
 
 oper
+  Bool : Type ;
+
   Gender    : Type ;
 
   masculine : Gender ;
@@ -156,6 +158,7 @@ oper
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
+  Bool = Prelude.Bool ;
 
   Gender = SyntaxFre.Gender ;
   Case = SyntaxFre.Case ;
@@ -186,7 +189,7 @@ oper
   mkCN = UseN ;
   mkNP s g = UsePN (mkPN s g) ;
 
-  Position = Bool ;
+  Position = Prelude.Bool ;
   prepos = adjPre ;
   postpos = adjPost ;
   mkAdj1 = \x,y,z,u,p -> mkAdjective (mkAdj x y z u) p ** {lock_Adj1 = <>} ;
