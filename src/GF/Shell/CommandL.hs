@@ -55,6 +55,7 @@ pCommand = pCommandWords . words where
     "t" : ws      -> CNewTree $ unwords ws
     "g" : ws      -> CRefineWithTree $ unwords ws  -- *g*ive
     "p" : ws      -> CRefineParse $ unwords ws
+    "rc": i : _   -> CRefineWithClip (readIntArg i)
     ">" : i : _   -> CAhead $ readIntArg i
     ">" : []      -> CAhead 1
     "<" : i : _   -> CBack $ readIntArg i
@@ -75,6 +76,7 @@ pCommand = pCommandWords . words where
     "f" : s : _   -> CAddOption (filterString s)
     "u" : _       -> CUndo
     "d" : _       -> CDelete
+    "ac" : _      -> CAddClip
     "c" : s : _   -> CTermCommand s
     "a" : _       -> CRefineRandom --- *a*leatoire
     "m" :  _      -> CMenu

@@ -56,6 +56,7 @@ data Command =
  | CLast
  | CMovePosition [Int]
  | CRefineWithTree String
+ | CRefineWithClip Int
  | CRefineWithAtom String
  | CRefineParse String
  | CWrapWithFun (G.Fun,Int)
@@ -68,6 +69,7 @@ data Command =
  | CAddOption Option
  | CRemoveOption Option
  | CDelete
+ | CAddClip
  | CUndo
  | CView
  | CMenu
@@ -226,6 +228,11 @@ execECommand env c = case c of
   CRefineWithTree s  -> action2commandNext $ \x -> 
                           (string2treeInState gr s x >>= 
                             \t -> refineWithTree der cgr t x)
+  CRefineWithClip i  -> \s -> 
+                          let et = getNumberedClip i s
+                          in (case et of 
+                                Ok t -> refineByTrees der cgr [t] s
+                                Bad m -> changeMsg [m] s)
 
   CRefineParse str   -> \s -> 
                      let cat = cat2CFCat (qualifTop sgr (actCat (stateSState s)))
@@ -250,6 +257,7 @@ execECommand env c = case c of
   CAddOption o       -> changeStOptions (addOption o)
   CRemoveOption o    -> changeStOptions (removeOption o)
   CDelete            -> action2commandNext $ deleteSubTree cgr
+  CAddClip           -> \s -> (addtoClip (actTree (stateSState s))) s
   CUndo              -> undoCommand
   CMenu              -> \s -> changeMsg (menuState env s) s
   CView              -> changeView
@@ -290,14 +298,22 @@ mkRefineMenuAll env sstate =
        [(CWrapWithFun fi, prWrap fit)     | fit@(fi,_) <- wraps] ++
        [(CChangeHead f,   prChangeHead f) | f <- headChangesState cgr state] ++
        [(CPeelHead,    (ifShort "ph" "PeelHead", "ph")) | canPeelState cgr state] ++
-       [(CDelete,       (ifShort "d"  "Delete",   "d"))]
-    (refs,[],_)   -> [(CRefineWithAtom (prRefinement f), prRef t) | t@(f,_) <- refs]
-    (_,cands,_)   -> [(CSelectCand i,   prCand (t,i))    | (t,i) <- zip cands [0..]]
+       [(CDelete,      (ifShort "d"  "Delete",   "d"))] ++
+       [(CAddClip,     (ifShort "ac" "AddClip",  "ac"))]
+    (refs,[],_)   -> 
+       [(CRefineWithAtom (prRefinement f), prRef t) | t@(f,_) <- refs] ++
+       [(CRefineWithClip i, prClip i t e) | (i,t) <- possClipsSState gr sstate, 
+                                            let e = tree2string t]
+    (_,cands,_)   -> 
+       [(CSelectCand i,   prCand (t,i))    | (t,i) <- zip cands [0..]]
 
  where
-  prRef  (f,t) = 
+  prRef (f,t) = 
     (ifShort "r" "Refine" +++ prOrLinRef f +++ ifTyped (":" +++ prt t),
      "r" +++ prRefinement f)
+  prClip i t e =
+    (ifShort "rc" "Paste" +++ prOrLinTree t e,
+     "rc" +++ show i)
   prChangeHead f = 
     (ifShort "ch" "ChangeHead" +++ prOrLinFun f,
      "ch" +++ prQIdent f)
@@ -323,6 +339,11 @@ mkRefineMenuAll env sstate =
     G.QC m f ->  printname env sstate (m,f) 
     _ -> prt t
   prOrLinFun = printname env sstate
+  prOrLinTree t e = case getOptVal opts menuDisplay of
+    Just "Abs" -> e
+    Just lang  -> prQuotedString $ lin lang t
+    _ -> e
+  lin lang t = optLinearizeTreeVal opts (stateGrammarOfLang env (language lang)) t
 
 -- there are three orthogonal parameters: Abs/[conc], short/long, typed/untyped
 -- the default is Abs, long, untyped; the Menus menu changes the parameter
