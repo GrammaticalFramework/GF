@@ -2,7 +2,7 @@ include config.mk
 
 
 GHMAKE=$(GHC) --make
-GHCFLAGS=-package lang -package util -fglasgow-exts
+GHCFLAGS=-package lang -package util -fglasgow-exts $(CPPFLAGS) $(LDFLAGS)
 GHCOPTFLAGS=-O $(GHCFLAGS)
 GHCFUDFLAG=-package Fudgets
 

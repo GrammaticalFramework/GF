@@ -8,6 +8,9 @@ exec_prefix = @exec_prefix@
 bindir = @bindir@
 libdir = @libdir@
 
+CPPFLAGS = @CPPFLAGS@
+LDFLAGS = @LDFLAGS@
+
 INSTALL = @INSTALL@
 
 GHC = @GHC@
