@@ -65,6 +65,13 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
  where
    gr  = MGrammar $ (name,mod):ms
 
+-- check if a term is typable
+
+justCheckLTerm :: SourceGrammar -> Term -> Err Term
+justCheckLTerm src t = do
+  ((t',_),_) <- checkStart (inferLType src t)
+  return t'
+
 checkAbsInfo :: SourceGrammar -> Ident -> (Ident,Info) -> Check (Ident,Info)
 checkAbsInfo st m (c,info) = do
 ---- checkReservedId c

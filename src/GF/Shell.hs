@@ -5,6 +5,7 @@ import Str
 import qualified Grammar as G
 import qualified Ident as I
 import qualified Compute as Co
+import qualified CheckGrammar as Ch
 import qualified Lookup as L
 import qualified GFC
 import qualified Look
@@ -169,7 +170,9 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
            maybe (resourceOfShellState st) (return . I.identC) $ -- topmost res
              getOptVal opts useResource             -- flag -res=m
     justOutput (putStrLn (err id (prt . stripTerm) (
-                string2srcTerm src m t >>= Co.computeConcrete src))) sa
+                string2srcTerm src m t >>= 
+                Ch.justCheckLTerm src  >>=
+                Co.computeConcrete src))) sa
   CShowOpers t -> do
     m <- return $
          maybe (I.identC "?") id $  -- meaningful if no opers in t 
