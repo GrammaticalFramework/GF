@@ -104,6 +104,7 @@ lin
   WithPrep = justPrep "avec" ;
   WithoutPrep = justPrep "sans" ;
   ByMeansPrep = justPrep "par" ;
+  PossessPrep = justCase genitive ;
   PartPrep = justCase genitive ; ---
   AgentPrep = justPrep "par" ;
 

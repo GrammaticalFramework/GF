@@ -142,6 +142,7 @@ concrete StructuralFin of Structural =
   WithPrep = prepPostpGen "kanssa" ;
   WithoutPrep = prepPrep "ilman" Part ;
   ByMeansPrep = prepPostpGen "avulla" ;
+  PossessPrep = prepCase Gen ;
   PartPrep = prepCase Part ;
   AgentPrep = prepPostpGen "toimesta" ;
 

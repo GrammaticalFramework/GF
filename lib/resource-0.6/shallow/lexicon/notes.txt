@@ -1,0 +1,31 @@
+Project: to massage an ispell word list into a GF lexicon. AR 20/2/2004
+
+Used MkLex on linux.words (45424 word forms)
+
+The first run gave 6471 words, which was too much for GF.
+With the maxsize, got this down to 1587.
+The grammar now compiles in 25sec, and parses as follows:
+
+  "every commander assumes of an abbot"                    
+   610 msec, 6 ws
+
+  "every accusing commander assumes of a coarse abbot"     
+   840 msec, 8 ws
+
+  "every accusing commander assumes of a coarse abbot of all 
+   cognitive colonizers"
+   820 msec, 12 ws
+
+  "every accusing commander of a comical careful colt assumes of 
+   a coarse abbot of all cognitive colonizers"
+   3670 msec, 17 ws (nesting inside)
+
+  "every accusing commander assumes of a coarse abbot of all cognitive 
+   colonizers of a colt of a careful carpenter of every carriage"
+   TIMEOUT!
+
+Note: it is essential to import with the -cflexer flag!
+
+Time spent: 58 min, includes writing MkLex, running tests, 
+and writing these notes.
+

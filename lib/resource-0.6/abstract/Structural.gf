@@ -76,6 +76,7 @@ fun
   InFrontPrep, BehindPrep, BetweenPrep : Prep ;
   BeforePrep, DuringPrep, AfterPrep : Prep ;  -- temporal relations
   WithPrep, WithoutPrep, ByMeansPrep : Prep ; -- some other relations
+  PossessPrep : Prep ;                        -- possessive/genitive
   PartPrep : Prep ;                           -- partitive "of" ("bottle of wine")
   AgentPrep : Prep ;                          -- agent "by" in passive constructions
 

@@ -3,6 +3,7 @@ GHCFLAGS=-package lang -package util -fglasgow-exts
 GHCFUDFLAG=-package Fudgets
 GHCINCLUDE=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc -iparsing -iparsers
 GHCINCLUDENOFUD=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc-nofud -iparsing -iparsers
+GHCINCLUDEGFT=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-gft -iparsing -iparsers
 WINDOWSINCLUDE=-ifor-windows -iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -iparsing -iparsers
 
 all:
