@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:35 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.20 $
+-- > CVS $Date: 2005/02/25 15:35:48 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.21 $
 --
 -- Options and flags used in GF shell commands and files.
 --
@@ -227,6 +227,7 @@ optimizeValues = iOpt "val"
 stripQualif   = iOpt "strip"
 nostripQualif = iOpt "nostrip"
 showAll      = iOpt "all"
+showMulti    = iOpt "multi"
 fromSource   = iOpt "src"
 
 -- ** mainly for stand-alone
