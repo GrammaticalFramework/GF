@@ -13,8 +13,8 @@
 --
 -- The main difference with $MorphoSwe.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
--- had the design principle of always having existing forms as string
--- arguments of the paradigms, not stems.
+-- had the design principle of always having existing forms, not stems, as string
+-- arguments of the paradigms.
 --
 -- The following modules are presupposed:
 
@@ -28,7 +28,7 @@ oper
   utrum   : Gender ;
   neutrum : Gender ;
 
-  masculine : Sex ;
+  masculine    : Sex ;
   nonmasculine : Sex ;
 
 -- To abstract over case names, we define the following.
@@ -195,8 +195,8 @@ oper
   nonmasculine = NoMasc ;
   nominative = Nom ;
   genitive = Gen ;
-  -- singular defined in Types
-  -- plural defined in Types
+  singular = Sg ;
+  plural = Pl ;
 
   mkN = \apa, apan, apor, aporna, g, x -> let
     {nom = table {

@@ -13,13 +13,13 @@
 --
 -- The main difference with $MorphoIta.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
--- had the design principle of always having existing forms as string
--- arguments of the paradigms, not stems.
+-- had the design principle of always having existing forms, not stems, as string
+-- arguments of the paradigms.
 --
 -- The following modules are presupposed:
 
 resource ParadigmsIta = 
-  open (Predef=Predef), Prelude, (Types = TypesIta), SyntaxIta, MorphoIta, 
+  open Prelude, (Types = TypesIta), SyntaxIta, MorphoIta, 
   ResourceIta in {
 
 --2 Parameters 
@@ -30,7 +30,15 @@ oper
   masculine : Gender ;
   feminine  : Gender ;
 
--- To abstract over case names, we define the following.
+-- To abstract over number names, we define the following.
+
+  singular : Number ;
+  plural   : Number ;
+
+-- To abstract over case names, we define the following. (Except for
+-- some pronouns, the accusative is equal to the nominative, the
+-- dative is formed by the preposition "a", and the genitive by the
+-- preposition "di".)
 
   nominative : Case ;
   accusative : Case ;
@@ -44,10 +52,6 @@ oper
   prep_su  : Case ;
   prep_con : Case ;
 
--- To abstract over number names, we define the following.
-
-  singular : Number ;
-  plural   : Number ;
 
 --2 Nouns
 

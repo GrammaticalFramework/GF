@@ -13,13 +13,13 @@
 --
 -- The main difference with $MorphoFre.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
--- had the design principle of always having existing forms as string
--- arguments of the paradigms, not stems.
+-- had the design principle of always having existing forms, not stems, as string
+-- arguments of the paradigms.
 --
 -- The following modules are presupposed:
 
 resource ParadigmsFre = 
-  open (Predef=Predef), Prelude, (Types = TypesFre), SyntaxFre, MorphoFre, 
+  open Prelude, (Types = TypesFre), SyntaxFre, MorphoFre, 
   ResourceFre in {
 
 --2 Parameters 
@@ -30,17 +30,20 @@ oper
   masculine : Gender ;
   feminine  : Gender ;
 
--- To abstract over case names, we define the following.
+-- To abstract over number names, we define the following.
+
+  singular : Number ;
+  plural   : Number ;
+
+-- To abstract over case names, we define the following. (Except for
+-- some pronouns, the accusative is equal to the nominative, the
+-- dative is formed by the preposition "à", and the genitive by the
+-- preposition "de".)
 
   nominative : Case ;
   accusative : Case ;
   dative     : Case ;
   genitive   : Case ;
-
--- To abstract over number names, we define the following.
-
-  singular : Number ;
-  plural   : Number ;
 
 
 --2 Nouns
@@ -55,7 +58,7 @@ oper
   nReg    : Str -> Gender -> N ; -- regular, e.g. maison, (maisons,) feminine
   nEau    : Str -> Gender -> N ; -- eau, (eaux,) feminine
   nCas    : Str -> Gender -> N ; -- cas, (cas,) masculine
-  nCheval : Str -> N ;        -- cheval, (chevaux, masculine)
+  nCheval : Str -> N ;           -- cheval, (chevaux, masculine)
 
 -- Nouns used as functions need a case and a preposition. The most common is "de".
 
@@ -115,7 +118,7 @@ oper
 --
 -- The fragment only has present tense so far, but in all persons.
 -- These are examples of standard conjugations are available. The full list
--- of Bescherelle conjugations is given in $morpho.Fra.gf$, with all forms
+-- of Bescherelle conjugations is given in $MorphoFra.gf$, with all forms
 -- (their type is $Verbum$). The present-tense forms can be extracted by the 
 -- function $extractVerb$.
 

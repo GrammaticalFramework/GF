@@ -41,7 +41,7 @@ fun
 -- Depending on language, all, some, or none of there verbs belong to
 -- a separate class of *auxiliary* verbs. The list is incomplete.
 
-  CanVV, CanKnowVV, MustVV : VV ;             -- can (pouvoir/savoir), must
+  CanVV, CanKnowVV, MustVV : VV ;             -- can (pouvoir,savoir), must
   WantVV : VV ;                               -- want (to do)
 
 --!
@@ -65,7 +65,7 @@ fun
 --!
 --2 Prepositions
 --
--- We have carefully chosen a set of semantic relations expressible
+-- We have chosen a set of semantic relations expressible
 -- by prepositions in some languages, by cases or postpositions in
 -- others. Complement uses of prepositions are not included, and
 -- should be treated by the use of many-place verbs, adjectives, and

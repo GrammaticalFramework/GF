@@ -24,15 +24,17 @@
 -- video recorder dialogue systems, software specifications, and a 
 -- health-related phrase book. Each new application helped to identify some
 -- missing structures in the resource and suggested some additions, but the
--- number of them was usually small.
+-- number of required additions was usually small.
 -- 
 -- To use the resource in applications, you need the following 
 -- $cat$ and $fun$ rules in $oper$ form, completed by taking the
 -- $lincat$ and $lin$ judgements of a particular language. This is done
 -- by using, instead of this module, the $reuse$ module which has the name
--- $ResourceX$
+-- $ResourceX$. It is located in the subdirectory
+-- $grammars/resource/lang$ where $lang$ is the full name of the language.
 
-abstract Combinations = {
+
+abstract Combinations = PredefAbs ** {
 --!
 --2 Categories
 --
@@ -221,9 +223,9 @@ fun
   PosVG,NegVG : VG -> VP ;             -- 
 
 --!
---3 Adverbials
+--3 Adverbs
 --
--- Here is how complex adverbials can be formed and used.
+-- Here is how complex adverbs can be formed and used.
 
   AdjAdv : AP -> AdV ;                 -- "freely", "more consciously than you"
   PrepNP : Prep -> NP -> AdV ;         -- "in London", "after the war"
@@ -237,9 +239,9 @@ fun
 --
 
   PredVP : NP -> VP -> S ;                     -- "John walks"
-  PosSlashTV, NegSlashTV : NP -> TV -> Slash ; -- "John sees", "John doesn's see"
+  PosSlashTV,NegSlashTV : NP -> TV -> Slash ;  -- "John sees", "John doesn's see"
   OneVP : VP -> S ;                            -- "one walks"
-  ThereNP : NP -> S ;                        -- "there is a bar","there are 86 bars"
+  ThereNP : NP -> S ;                          -- "there is a bar","there are 86 bars"
 
   IdRP : RP ;                              -- "which"
   FunRP : Fun -> RP -> RP ;                -- "the successor of which"
@@ -317,9 +319,9 @@ fun
 -- These are, more generally, *one-phrase utterances*. The list below
 -- is very incomplete.
 
-  PhrNP : NP -> Phr ;                      -- "Some man.", "John."
+  PhrNP   : NP -> Phr ;                    -- "Some man.", "John."
   PhrOneCN, PhrManyCN : CN -> Phr ;        -- "A car.", "Cars."
-  PhrIP : IAdv -> Phr ;                    -- "Who?"
+  PhrIP   : IAdv -> Phr ;                  -- "Who?"
   PhrIAdv : IAdv -> Phr ;                  -- "Why?"
 
 --!

@@ -9,10 +9,10 @@
 -- Closed categories (determiners, pronouns, conjunctions) are
 -- accessed through the resource syntax API, $Structural.gf$. 
 --
--- The main difference with $morpho.Fin.gf$ is that the types
+-- The main difference with $MorphoFin.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
--- had the design principle of always having existing forms as string
--- arguments of the paradigms, not stems.
+-- had the design principle of always having existing forms, not
+-- stems, as string arguments of the paradigms, not stems.
 --
 -- This is the path to read the grammar from the same directory.
 --# -path=.:../abstract:../../prelude
@@ -30,8 +30,8 @@ oper
   human    : Gender ;
   nonhuman : Gender ;
 
-  --  singular : Number ;
-  --  singular : Number ;
+  singular : Number ;
+  plural   : Number ;
 
   nominative : Case ; 
   genitive   : Case ; 
@@ -50,7 +50,8 @@ oper
 -- stems, vowel alternation, and vowel harmony.
 
 oper
-  mkN : (talo,talon,talona,taloa,taloon,taloina,taloissa,talojen,taloja,taloihin 
+  mkN : 
+    (talo,talon,talona,taloa,taloon,taloina,taloissa,talojen,taloja,taloihin 
           : Str) -> Gender -> N ;
 
 -- Nouns with partitive "a"/"ä" are a large group. 
@@ -147,12 +148,13 @@ oper
 -- Nouns used as functions need a case, of which by far the commonest is
 -- the genitive.
 
-  mkFun  : N -> Case -> Fun ;
-  fGen : N -> Fun ;
+  mkFun : N -> Case -> Fun ;
+  fGen  : N -> Fun ;
 
 -- Proper names can be formed by using declensions for nouns.
+-- The plural forms are filtered away by the compiler.
 
-  mkPN : N -> PN ;
+  mkPN  : N -> PN ;
 
 
 --2 Adjectives
@@ -225,8 +227,8 @@ oper
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
-  -- singular defined in types.Fin
-  -- plural defined in types.Fin
+  singular = Sg ;
+  plural = Pl ;
 
   human = Human ; 
   nonhuman = NonHuman ;

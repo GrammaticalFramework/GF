@@ -13,8 +13,9 @@
 --
 -- The main difference with $MorphoEng.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
--- had the design principle of always having existing forms as string
--- arguments of the paradigms, not stems.
+-- had the design principle of always having existing forms, rather
+-- than stems, as string
+-- arguments of the paradigms.
 --
 -- The following modules are presupposed:
 
@@ -32,6 +33,11 @@ oper
 
   singular : Number ;
   plural   : Number ;
+
+-- To abstract over case names, we define the following.
+
+  nominative : Case ;
+  genitive   : Case ;
 
 
 --2 Nouns
@@ -69,8 +75,8 @@ oper
 
   pnReg : (John : Str) -> PN ;          -- John, John's
 
--- The most common cases on the top level havee shortcuts.
--- The regular "y"/"s" variation is taken into account in $CN$.
+-- The most common cases on the higher-level category $CN$ have shortcuts.
+-- The regular "y"/"s" variation is taken into account.
 
   cnNonhuman : Str -> CN ;
   cnHuman    : Str -> CN ;
@@ -102,7 +108,7 @@ oper
   aFat        : (fat   : Str) -> AdjDeg ;      -- fat, fatter, fattest
   aRidiculous : (ridiculous : Str) -> AdjDeg ; -- -/more/most ridiculous
 
--- On top level, there are adjectival phrases. The most common case is
+-- On higher level, there are adjectival phrases. The most common case is
 -- just to use a one-place adjective.
 
   apReg : Str -> AP ;
@@ -112,7 +118,7 @@ oper
 -- Adverbs are not inflected. Most lexical ones have position not
 -- before the verb. Some can be preverbal (e.g. "always").
 
-  mkAdv : Str -> AdV ;
+  mkAdv    : Str -> AdV ;
   mkAdvPre : Str -> AdV ;
 
 -- Adverbs modifying adjectives and sentences can also be formed.
@@ -167,9 +173,9 @@ oper
 
 -- Ditransitive verbs.
 
-  mkV3     : V -> Str -> Str -> V3 ;   -- prata, med, om
-  v3Dir    : V -> Str -> V3 ;          -- ge,_,till
-  v3DirDir : V -> V3 ;                 -- ge,_,_
+  mkV3     : V -> Str -> Str -> V3 ;    -- speak, with, about
+  v3Dir    : V -> Str -> V3 ;           -- give,_,to
+  v3DirDir : V -> V3 ;                  -- give,_,_
 
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
@@ -177,10 +183,11 @@ oper
 
   human = Hum ; 
   nonhuman = NoHum ;
-  -- singular defined in types.Eng
-  -- plural defined in types.Eng
+  singular = Sg ;
+  plural = Pl ;
 
   nominative = Nom ;
+  genitive = Nom ;
 
   mkN = \man,men,man's,men's,g -> 
     mkNoun man men man's men's ** {g = g ; lock_N = <>} ;
