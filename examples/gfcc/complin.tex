@@ -49,7 +49,7 @@ its definition consists of an abstract syntax of program
 structures and two concrete syntaxes matching the abstract
 syntax: one for C and one for JVM. From these grammar components,
 the compiler is derived by using the GF (Grammatical Framework)
-grammat tool: the front-end consists of parsing and semantic
+grammat tool: the front end consists of parsing and semantic
 checking in accordance to the C grammar, and the back end consists
 of linearization in accordance to the JVM grammar. The tool provides
 other functionalities as well, such as decompilation and interactive
@@ -112,9 +112,9 @@ An abstract syntax is similar to a \empha{theory}, or a
 concrete syntax defines, in a declarative way,
 a translation of abstract syntax trees (well-formed terms) 
 into concrete language structures, and from this definition, one can
-derive both both linearization and parsing. 
+derive both linearization and parsing. 
 
-For example,
+To give an example,
 a (somewhat simplified) translator for addition expressions
 consists of the abstract syntax rule
 \begin{verbatim}
@@ -136,16 +136,16 @@ The C rule shows that the type information is suppressed,
 and that the expression has precedence level 2 (which is a simplification,
 since we will also treat associativity).
 The JVM rule shows how addition is translated to stack machine
-instructions, where the type of the postfixed addition instruction again has to
+instructions, where the type of the postfixed addition instruction has to
 be made explicit. Our compiler, like any GF translation system, will
 consist of rules like these.
 
 The number of languages related to one abstract syntax in
 a translation system is of course not limited to two. 
-Sometimes just just one language is involved; 
+Sometimes just one language is involved; 
 GF then works much the same way as any grammar 
 formalism or parser generator. 
-The largest number of languages in an application known to us is 88, and
+The largest number of languages in an application known to us is 88;
 its domain are numeral expressions from 1 to 999,999 \cite{gf-homepage}.
  
 From the GF point of view, the goal of the compiler experiment
@@ -182,24 +182,29 @@ compilation.
 The problems that we encountered and their causes will be explained in 
 the relevant sections of this report. To summarize,
 \bequ
-The scoping conditions resulting from \HOAS are slightly different
+The scoping conditions resulting from \HOAS\ are slightly different
 from the standard ones of C.
 
 Our JVM syntax is slightly different from the specification, and
 hence needs some postprocessing.
 
-Using \HOAS to encode all bindings is sometimes cumbersome.
+Using \HOAS\ to encode all bindings is sometimes cumbersome.
 \enqu
 The first two shortcomings seem to be inevitable with the technique
 we use. The best we can do with the JVM syntax is to use simple
 postprocessing, on string level, to obtain valid JVM. The last 
 shortcoming is partly inherent to the problem of binding:
 to spell out, in any formal notation,
-what happens in nested binding structures \textit{is}
+what happens in complex binding structures \textit{is}
 complicated. But it also suggests ways in which GF could be 
-fine-tuned to give better support
+tuned to give better support
 to compiler construction, which, after all, is not an intended
 use of GF as it is now.
+
+
+
+
+
 
 
 
@@ -372,7 +377,7 @@ forbids case analysis on the length of the lists.
 On the top level, a program is a sequence of functions.
 Each function may refer to functions defined earlier
 in the program. The idea to express the binding of
-function symbols with \HOAS is analogous to the binding
+function symbols with \HOAS\ is analogous to the binding
 of variables in statements, using a continuation.
 As with variables, the principal way to build function symbols is as
 bound variables (in addition, there can be some
@@ -406,7 +411,7 @@ expressions are used to give arguments to functions.
 However, this would lead to the need of cumbersome
 projection functions when using the parameters
 in the function body. A more elegant solution is
-to use \HOAS to build function bodies:
+to use \HOAS\ to build function bodies:
 \begin{verbatim}
     RecOne  : (A : Typ) -> 
                    (Var A -> Stm) -> Program -> Rec (ConsTyp A NilTyp) ;
@@ -441,7 +446,6 @@ statements, to be able to print values of different types.
 \begin{verbatim}
     Printf : (A : Typ) -> Exp A -> Stm -> Stm ;
 \end{verbatim}
-
 
 
 
@@ -625,6 +629,23 @@ are simple and concise:
 \end{verbatim}
 
 
+\subsection{Types}
+
+Types are expressed in two different ways: 
+in declarations, we have \texttt{int} and  \texttt{float}, but
+as formatting arguments to \texttt{printf}, we have
+\verb6"%d"6 and \verb6"%f"6, with the quotes belonging to the
+names. The simplest solution in GF is to linearize types
+to records with two string fields.
+\begin{verbatim}
+  lincat
+    Typ, NumTyp = {s,s2 : Str} ;
+  lin
+    TInt    = {s = "int" ; s2 = "\"%d\""} ; 
+    TFloat  = {s = "float" ; s2 = "\"%f\""} ;
+\end{verbatim}
+
+
 \subsection{Statements}
 
 Statements in C have
@@ -639,6 +660,8 @@ the use of semicolons on a high level.
 \end{verbatim}
 As for declarations, which bind variables, we notice the
 projection \verb6.$06 to refer to the bound variable.
+Also notice the use of the \texttt{s2} field of the type
+in \texttt{printf}. 
 \begin{verbatim}
   lin
     Decl  typ cont = continues (typ.s ++ cont.$0) cont ;
@@ -646,12 +669,11 @@ projection \verb6.$06 to refer to the bound variable.
     While exp loop = continue  ("while" ++ paren exp.s ++ loop.s) ;
     IfElse exp t f = continue  ("if" ++ paren exp.s ++ t.s ++ "else" ++ f.s) ;
     Block stm      = continue  ("{" ++ stm.s ++ "}") ;
-    Printf t e     = continues ("printf" ++ paren (t.s ++ "," ++ e.s)) ;
+    Printf t e     = continues ("printf" ++ paren (t.s2 ++ "," ++ e.s)) ;
     Return _ exp   = statement ("return" ++ exp.s) ;
     Returnv        = statement "return" ;
     End            = ss [] ;
 \end{verbatim}
-
 
 
 \subsection{Functions and programs}
@@ -689,26 +711,55 @@ components into a linear structure:
 \end{verbatim}
 
 
+%%\subsection{Lexing and unlexing}
+
+
 
 \section{The concrete syntax of JVM}
 
 JVM syntax is, linguistically, more straightforward than
 the syntax of C, and could even be defined by a regular
-expression. The translation from our abstract syntax to JVM,
-however, is tricky because variables are replaced by
-their addresses (relative to the frame pointer), and
-code generation must therefore maintain a symbol table that permits
-the lookup of variable addresses. As shown in the code
-in Appendix C, we have not attempted to do this
-in linearization, but instead
-generated code with symbolic addresses.
-The postprocessor has to resolve the symbolic addresses, which
-we help by
-generating \texttt{alloc} pseudoinstructions from declarations
-(in final JVM, no \texttt{alloc} instructions appear).
+expression. However, the JVM syntax that our compiler is
+generating does not comprise full JVM, but only the fragment
+that corresponds to well-formed C programs.
 
-The following example shows how the three representations (C, pseudo-JVM, JVM) look like 
-for a piece of code.
+The JVM syntax we use is from the Jasmin assembler
+\cite{jasmin}, with some deviations which are corrected
+by a postprocessor. The main deviation are
+variable addresses, as described in Section~\ref{postproc}.
+The other deviations have to do with spacing: the normal
+unlexer of GF puts spaces between constituents, whereas
+in JVM, type names are integral parts of instruction names.
+We indicate gluing uniformly by generating an underscore
+on the side from which the adjacent element is glued. Thus
+e.g.\ \verb6i _load6 becomes \verb6iload6.
+
+
+\subsection{Symbolic JVM}
+\label{postproc}
+
+What makes the translation from our abstract syntax to JVM 
+tricky is that variables must be replaced by
+numeric addresses (relative to the frame pointer).
+Code generation must therefore maintain a symbol table that permits
+the lookup of variable addresses. As shown in the code
+in Appendix C, we do not treat symbol tables
+in linearization, but instead generated code in
+\empha{Symbolic JVM}---that is, JVM with symbolic addresses.
+Therefore we need a postprocessor that resolves the symbolic addresses,
+shown in Appendix D.
+
+To make the postprocessor straightforward,
+Symbolic JVM has special \texttt{alloc} instructions,
+which are not present in real JVM.
+Our compiler generates \texttt{alloc} instructions from
+variable declarations.
+The postprocessor comments out the \texttt{alloc} instructions, but we
+found it a good idea not to erase them completely, since they make the
+code more readable.
+
+The following example shows how the three representations (C, Symbolic JVM, JVM) 
+look like for a piece of code.
 \begin{verbatim}
   int x ;   alloc i x      ; x gets address 0
   int y ;   alloc i y      ; y gets address 1
@@ -717,33 +768,30 @@ for a piece of code.
   y = x ;   i _load x      iload 0
             i _store y     istore 1
 \end{verbatim}
-A related problem is the generation of fresh labels for
-jumps. We solve this by maintaining a growing label suffix
+
+
+\subsection{Labels and jumps}
+
+A problem related to variable addresses 
+is the generation of fresh labels for
+jumps. We solve this in linearization
+by maintaining a growing label suffix
 as a field of the linearization of statements into
-instructions. The problem remains that the two branches
+instructions. The problem remains that two branches
 in an \texttt{if-else} statement can use the same
-labels. Making them unique will have to be
+labels. Making them unique must be
 added to the post-processing pass. This is
 always possible, because labels are nested in a
 disciplined way, and jumps can never go to remote labels.
 
 As it turned out laborious to thread the label counter
-to expressions, we decided to compile comparison \verb6x < y6
-expressions into function calls, which are provided
-by a run-time library. This would no more work for the 
-conjunction \verb6x && y6
-and disjunction \verb6x || y6, if we want to keep their semantics
+to expressions, we decided to compile comparison 
+expressions (\verb6x < y6) into function calls, and provide the functions in
+a run-time library. This would no more work for the 
+conjunction (\verb6x && y6)
+and disjunction (\verb6x || y6), if we want to keep their semantics
 lazy, since function calls are strict in their arguments.
 
-The JVM syntax used is from the Jasmin assembler
-\cite{jasmin}, with small deviations which are corrected
-by the postprocessor. The deviations other than
-variable addresses have to do with spacing: the normal
-unlexer of GF puts spaces between constituents, whereas
-in JVM, type names are integral parts of instruction names.
-We indicate gluing uniformly by generating an underscores
-on the side from which the adjacent element is glued. Thus
-e.g.\ \verb6i _load6 becomes \verb6iload6.
 
 
 
@@ -751,58 +799,79 @@ e.g.\ \verb6i _load6 becomes \verb6iload6.
 \subsection{How to restore code generation by linearization}
 
 Since postprocessing is needed, we have not quite achieved
-the goal of code generation as linearization.
-If linearization is understood in the
-sense of GF. In GF, linearization rules must be
-compositional, and can only depend on parameters from
-finite parameter sets. Hence it is not possible to encode
-linearization with updates to and lookups from a symbol table,
-as is usual in code generation. 
+the goal of code generation as linearization---if
+linearization is understood in the
+sense of GF. In GF, linearization can only depend 
+on parameters from finite parameter sets. Since the size of
+a symbol table can grow indefinitely, it is not 
+possible to encode linearization with updates to and 
+lookups from a symbol table, as is usual in code generation. 
 
-Compositionality also prevents optimizations during linearization
-by clever instruction selection, elimination of superfluous
-labels and jumps, etc.
-
-One way to achieve compositional JVM linearization is to
-alpha-convert abstract syntax syntax trees
-so that variables are indexed with integers 
-that indicate their depths in the tree. 
-This hack works in the present fragment of C
-because all variables need same amount of
-memory (one word), but would break down if we
-added double-precision floats. Therefore
+One attempt we made to achieve JVM linearization with
+numeric addresses was to alpha-convert abstract syntax syntax trees
+so that variables get indexed with integers that indicate their 
+depths in the tree. This hack works in the present fragment of C
+because all variables need the same amount of memory (one word), 
+but would break down if we added double-precision floats. Therefore
 we have used the less pure (from the point of view of
 code generation as linearization) method of
 symbolic addresses.
 
 It would certainly be possible to generate variable addresses
-directly in the syntax trees
-by using dependent types; but this would clutter the abstract
+directly in the syntax trees by using dependent types; but this 
+would clutter the abstract
 syntax in a way that is hard to motivate when we are in
 the business of describing the syntax of C. The abstract syntax would
 have to, so to say, anticipate all demands of the compiler's
 target languages. 
 
-\subsection{Problems with JVM bytecode verifier}
+
+\subsection{Problems with the JVM bytecode verifier}
+
+An important restriction for linearization in GF is compositionality.
+This prevents optimizations during linearization
+by clever instruction selection, elimination of superfluous
+labels and jumps, etc. One such optimization, the removal
+of unreachable code (i.e.\ code after a \texttt{return} instruction)
+is actually required by the JVM byte code verifier.
+The solution is, again, to perform this optimization in postprocessing.
+What we currently do, however, is to be careful and write
+C programs so that they always end with a return statement.
+
+Another problem related to \texttt{return} instructions is that
+both C and JVM programs have a designated \texttt{main} function.
+This function must have a certain type, which is different in C and
+JVM. In C, \texttt{main} returns an integer encoding what runtime
+errors may have happend during execution. The JVM 
+\texttt{main}, on the other hand, returns a \texttt{void}, i.e.\
+no value at all. A \texttt{main} program returning an
+integer therefore provokes a JVM bytecode verifier error.
+The postprocessor could take care of this; but currently
+we just write programs with void \texttt{return}s in the 
+\texttt{main} functions.
+
+The parameter list of \texttt{main} is also different in C (empty list)
+and JVM (a string array \texttt{args}). We handle this problem
+with an \empha{ad hoc} postprocessor rule.
 
 
-\section{Translation as linearization vs.\ translation by transfer}
+\section{Translation as linearization vs.\ transfer}
 
-The kind of problems we encountered in code generation by
+Many of the problems we have encountered in code generation by
 linearization are familiar from
 translation systems for natural languages. For instance, to translate
 the English pronoun \eex{you} to German, you have to choose
 between \eex{du, ihr, Sie}; for Italian, there are four
-variants, and so on. All semantic distinctions
-made in any of the involved languages have to be present
-in the common abstract syntax. The usual solution to 
+variants, and so on. To deal with this by linearization,
+all semantic distinctions made in any of the involved languages 
+have to be present in the common abstract syntax. The usual solution to 
 this problem is not a universal abstract syntax, but
 \empha{transfer}: translation does not just linearize
-the same syntax trees to different languages, but defines 
-functions that translates
-the trees of one language into the trees of another.
+the same syntax trees to another language, but uses
+a noncompositional function that translates
+trees of one language into trees of another.
 
-Using transfer in the compiler
+Using transfer in the
 back end is precisely what traditional compilers do.
 The transfer function in our case would be a noncompositional
 function from the abstract syntax of C to a different abstract
@@ -818,17 +887,114 @@ for evaluating terms into normal form. Thus one could write
 \end{verbatim}
 This would be cumbersome in practice, because
 GF does not have programming-language facilities 
-like built-in lists and tuples, or monads. Of course, 
+like built-in lists and tuples, or monads. Moreover,
 the compiler could no longer be inverted into a decompiler, 
 in the way true linearization can be inverted into a parser.
 
 
 
 \section{Parser generation}
+\label{bnfc}
+
+The whole GF part of the compiler (parser, type checker, Symbolic JVM
+generator) can be run in the GF interpreter. 
+The weakest point of the resulting compiler, by current
+standards, is the parser. GF is a powerful grammar formalism, which
+needs a very general parser, taking care of ambiguities and other
+problems that are typical of natural languages but should be
+overcome in programming languages by design. The parser is moreover run
+in an interpreter that takes the grammar (in a suitably compiled form)
+as an argument. 
+
+Fortunately, it is easy to replace the generic, interpreting GF parser
+by a compiled LR(1) parser. GF supports the translation of a concrete
+syntax into the \empha{Labelled BNF} (LBNF) format \cite{lbnf}, 
+which in turn can be translated to parser generator code
+(Happy, Bison, or JavaCUP), by the BNF Converter \cite{bnfc}.
+The parser we are therefore using in the compiler is a Haskell
+program generated by Happy \cite{happy}. 
+
+We regard parser generation
+as a first step towards developing GF into a 
+production-quality compiler compiler. The efficiency of the parser
+is not the only relevant thing. Another advantage of an LR(1)
+parser generator is that it performs an analysis on the grammar
+finding conflicts, and provides a debugger. It may be
+difficult for a human to predict how a context-free grammar
+performs at parsing; it is much more difficult to do this for
+a grammar written in the abstract way that GF permits (cf.\ the
+example in Appendix B).
 
 
-\section{How to use the compiler}
+\subsection{Another notation for \HOAS}
 
+Describing variable bindings with \HOAS\ is sometimes considered
+unintuitive. Let us consider the declaration rule of C (without
+type dependencies for simplicity):
+\begin{verbatim}
+  fun Decl : Typ -> (Var -> Stm) -> Stm ;
+  lin Decl typ stm = {s = typ.s ++ stm.$0 ++ ";" ++stm.s} ;
+\end{verbatim}
+Compare this with a corresponding LBNF rule (also using a continuation):
+\begin{verbatim}
+  Decl. Stm ::= Typ Ident ";" Stm ;
+\end{verbatim}
+To explain bindings attached to this rule, one can say, in English, 
+that the identifier gets bound in the following statement.
+This means that syntax trees formed by this rule do not have 
+the form \verb6(Decl typ x stm)6, but the form \verb6(Decl typ (\x -> stm))6.
+
+One way to formalize the informal binding rules stated beside
+BNF rules is to use \empha{profiles}: data structures describing
+the way in which the logical arguments of the syntax tree are
+represented by the linearized form. The declaration rule can be
+written using a profile notation as follows:
+\begin{verbatim}
+  Decl [1,(2)3]. Stm ::= Typ Ident ";" Stm ;
+\end{verbatim}
+When compiling GF grammars into LBNF, we were forced to enrich
+LBNF by a (more general) profile notation
+(cf.\ \cite{gf-jfp}, Section 3.3). This suggested at the same
+time that profiles could provide a user-fiendly notation for
+\HOAS\ avoiding the explicit use of lambda calculus.
+
+
+
+\section{Using the compiler}
+
+Our compiler is invoked, of course, by the command \texttt{gfcc}.
+It produces a JVM \texttt{.class} file, by running the
+Jasmin bytecode assembler \cite{jasmin} on a Jasmin (\texttt{.j})
+file:
+\begin{verbatim}
+  % gfcc factorial.c
+  > > wrote file factorial.j
+  Generated: factorial.class
+\end{verbatim}
+The Jasmin code is produced by a postprocessor, written in Haskell
+(Appendix E), from the Symbolic JVM format that is produced by
+linearization. The reasons why actual Jasmin is not generated
+by linearization are explained in Section~\ref{postproc} above.
+
+In addition to the batch compiler, GF provides an interactive 
+syntax editor, in which C programs can be constructed by
+stepwise refinements, local changes, etc. The user of the
+editor can work simultaneously on all languages involved.
+In our case, this means that changes can be done both to
+the C code and to the JVM code, and they are automatically
+carried over from one language to the other.
+A screen dump of the editor is shown in Fig~\ref{demo}.
+
+\begin{figure}
+\centerline{\psfig{figure=demo2.ps}} \caption{
+GF editor session where an integer
+expression is expected to be given. The left window shows the
+abstract syntax tree, and the right window the evolving C and
+JVM code. The editor focus is shadowed, and the refinement alternatives
+are shown in a pop-up window.
+}
+\label{demo}
+\end{figure}
 
 
 
@@ -838,28 +1004,26 @@ The theoretical ideas behind our compiler experiment
 are familiar from various sources.
 Single-source language and compiler definitions
 can be built using attribute grammars \cite{knuth-attr}.
-Building single-source language definitions with
-dependent types and higher-order abstract syntax
+The use of
+dependent types in combination with higher-order abstract syntax
 has been studied in various logical frameworks 
 \cite{harper-honsell,magnusson-nordstr,twelf}.
-The addition of linearization rules to
-type-theoretical abstract syntax is studied in
-\cite{semBNF}, which also compares the method with
-attribute grammars.
+The addition of linearization rules to type-theoretical 
+abstract syntax is studied in \cite{semBNF}, which also 
+compares the method with attribute grammars.
 
 The idea of using a common abstract syntax for different 
 languages was clearly exposed by Landin \cite{landin}. The view of
 code generation as linearization is a central aspect of
 the classic compiler textbook by Aho, Sethi, and Ullman
 \cite{aho-ullman}. 
-The use of the same grammar both for parsing and linearization
+The use of one and the same grammar both for parsing and linearization
 is a guiding principle of unification-based linguistic grammar 
 formalisms \cite{pereira-shieber}. Interactive editors derived from
-grammars have been used in various programming and proof
+grammars have been developed in various programming and proof
 assistants \cite{teitelbaum,metal,magnusson-nordstr}.
 
-Even though the different ideas are well-known, they are
-applied less in practice than in theory. In particular,
+Even though the different ideas are well-known, 
 we have not seen them used together to construct a complete
 compiler. In our view, putting these ideas together is
 an attractive approach to compiling, since a compiler written
@@ -875,28 +1039,29 @@ semantics that is actually used in the implementation.
 
 \section{Conclusion}
 
-We have managed to compile a representative 
-subset of C to JVM, and growing it
+The \texttt{gfcc} compiler translates a representative 
+fragment of C to JVM, and growing the fragment
 does not necessarily pose any new kinds of problems. 
-Using \HOAS and dependent types to describe the abstract
+Using \HOAS\ and dependent types to describe the abstract
 syntax of C works fine, and defining the concrete syntax
 of C on top of this using GF linearization machinery is 
-already possible, even though more support could be
-desired for things like literals and precedences.
+possible. To build a parser that is more efficient than
+GF's generic one, GF offers code generation for standard 
+parser tools.
 
-The parser generated by GF is not able to parse all
-source programs, because some cyclic parse
-rules (of the form $C ::= C$) are generated from our grammar. 
-Recovery from cyclic rules is ongoing work in GF independently of this
-experiment. For the time being, the interactive editor is the best way to
-construct C programs using our grammar.
+The most serious difficulty with JVM code generation by linearization
+is to maintain a symbol table mapping variables to addresses.
+The solution we have chosen is to generate Symbolic JVM, that is,
+JVM with symbolic addresses, and translate the symbolic addresses to
+(relative) memory locations by a postprocessor. 
 
-The most serious difficulty with using GF as a compiler tool
-is how to generate machine code by linearization if this depends on
-a symbol table mapping variables to addresses.
-Since the compositional linearization model of GF does not
-support this, we needed postprocessing to get real JVM code
-from the linearization result. 
+Since the postprocessor works uniformly for whole Symbolic JVM,
+building a new compiler to generate JVM should now be 
+possible by just writing GF grammars. The most immediate
+idea for developing GF as a compiler tool is to define
+a similar symbolic format for an intermediate language,
+using three-operand code and virtual registers.
+
 
 
 \bibliographystyle{plain}
@@ -925,10 +1090,8 @@ abstract Imper = PredefAbs ** {
 
   fun
     Empty : Program ;
-    Funct : (AS : ListTyp) -> (V : Typ) -> 
-              (Fun AS V -> Rec AS) -> Program ;
-    FunctNil : (V : Typ) -> 
-                 Stm -> (Fun NilTyp V -> Program) -> Program ;
+    Funct : (AS : ListTyp) -> (V : Typ) -> (Fun AS V -> Rec AS) -> Program ;
+    FunctNil : (V : Typ) -> Stm -> (Fun NilTyp V -> Program) -> Program ;
     RecOne  : (A : Typ) -> (Var A -> Stm) -> Program -> Rec (ConsTyp A NilTyp) ;
     RecCons : (A : Typ) -> (AS : ListTyp) -> 
                   (Var A -> Rec AS) -> Program -> Rec (ConsTyp A AS) ;
@@ -973,17 +1136,14 @@ concrete ImperC of Imper = open ResImper in {
 
   lincat
     Exp = PrecExp ;
+    Typ, NumTyp = {s,s2 : Str} ;
     Rec = {s,s2,s3 : Str} ;
-
   lin
     Empty = ss [] ;
     FunctNil val stm cont = ss (
-      val.s ++ cont.$0 ++ paren [] ++ "{" ++ 
-      stm.s ++ "}" ++ ";" ++ cont.s) ;
+      val.s ++ cont.$0 ++ paren [] ++ "{" ++ stm.s ++ "}" ++ ";" ++ cont.s) ;
     Funct args val rec = ss (
-      val.s ++ rec.$0 ++ paren rec.s2 ++ "{" ++ 
-      rec.s ++ "}" ++ ";" ++ rec.s3) ;
-
+      val.s ++ rec.$0 ++ paren rec.s2 ++ "{" ++ rec.s ++ "}" ++ ";" ++ rec.s3) ;
     RecOne typ stm prg = stm ** {
       s2 = typ.s ++ stm.$0 ;
       s3 = prg.s
@@ -999,7 +1159,7 @@ concrete ImperC of Imper = open ResImper in {
     While exp loop = continue  ("while" ++ paren exp.s ++ loop.s) ;
     IfElse exp t f = continue  ("if" ++ paren exp.s ++ t.s ++ "else" ++ f.s) ;
     Block stm      = continue  ("{" ++ stm.s ++ "}") ;
-    Printf t e     = continues ("printf" ++ paren (t.s ++ "," ++ e.s)) ;
+    Printf t e     = continues ("printf" ++ paren (t.s2 ++ "," ++ e.s)) ;
     Return _ exp   = statement ("return" ++ exp.s) ;
     Returnv        = statement "return" ;
     End            = ss [] ;
@@ -1011,17 +1171,13 @@ concrete ImperC of Imper = open ResImper in {
     EAdd _     = infixL 2 "+" ;
     ESub _     = infixL 2 "-" ;
     ELt _      = infixN 1 "<" ;
-
     EAppNil val f = constant (f.s ++ paren []) ;
     EApp args val f exps = constant (f.s ++ paren exps.s) ;
 
-    TNum t  = t ;
-    TInt    = ss "int" ;
-    TFloat  = ss "float" ;
-    NilTyp  = ss [] ;
-    ConsTyp = cc2 ;
-    OneExp _ e = e ;
-    ConsExp _ _ e es = ss (e.s ++ "," ++ es.s) ;
+    TNum t  = t ;     
+    TInt = {s = "int" ; s2 = "\"%d\""} ; TFloat  = {s = "float" ; s2 = "\"%f\""} ;
+    NilTyp  = ss [] ; ConsTyp = cc2 ;
+    OneExp _ e = e ; ConsExp _ _ e es = ss (e.s ++ "," ++ es.s) ;
 }
 \end{verbatim}
 \normalsize
@@ -1213,54 +1369,65 @@ resource ResImper = open Predef in {
 \newpage
 
 
-\subsection*{Appendix E: Translation to real JVM}
+\subsection*{Appendix E: Translation of Symbolic JVM to Jasmin}
 
-This program is written in Haskell. Most of the changes concern
-spacing and could be done line by line; the really substantial
-change is due to the need to build a symbol table of variables
-stored relative to the frame pointer and look up variable
-addresses at each load and store.
 \small
 \begin{verbatim}
-module JVM where
+module Main where
+import Char
+import System
 
-mkJVM :: String -> String
-mkJVM = unlines . reverse . fst . foldl trans ([],([],0)) . lines where
+main :: IO ()
+main = do
+  jvm:src:_ <- getArgs
+  s <- readFile jvm
+  let cls = takeWhile (/='.') src
+  let obj = cls ++ ".j"
+  writeFile  obj $ boilerplate cls
+  appendFile obj $ mkJVM cls s
+  putStrLn $ "wrote file " ++ obj
+
+mkJVM :: String -> String -> String
+mkJVM cls = unlines . reverse . fst . foldl trans ([],([],0)) . lines where
   trans (code,(env,v)) s = case words s of
-    ".method":f:ns -> ((".method " ++ f ++ concat ns):code,([],0))
-    "alloc":t:x:_  -> (code, ((x,v):env, v + size t))
-    ".limit":"locals":ns -> chCode (".limit locals " ++ show (length ns - 1))
-    t:"_load" :x:_ -> chCode (t ++ "load "  ++ look x) 
-    t:"_store":x:_ -> chCode (t ++ "store " ++ look x)
-    t:"_return":_  -> chCode (t ++ "return")
-    "goto":ns      -> chCode ("goto " ++ concat ns)
-    "ifzero":ns    -> chCode ("ifeq " ++ concat ns) 
-    _ ->   chCode s
+    ".method":p:s:f:ns
+        | f == "main" -> (".method public static main([Ljava/lang/String;)V":code,([],1))
+        | otherwise  -> (unwords [".method",p,s, f ++ typesig ns] : code,([],0))
+    "alloc":t:x:_  -> (("; " ++ s):code, ((x,v):env, v + size t))
+    ".limit":"locals":ns -> chCode (".limit locals " ++ show (length ns))
+    "invokestatic":t:f:ns | take 8 f == "runtime/" -> 
+          chCode $ "invokestatic " ++ "runtime/" ++ t ++ drop 8 f ++ typesig ns 
+    "invokestatic":f:ns  -> chCode $ "invokestatic " ++ cls ++ "/" ++ f ++ typesig ns 
+    "alloc":ns           -> chCode $ "; " ++ s
+    t:('_':instr):[";"]  -> chCode $ t ++ instr
+    t:('_':instr):x:_    -> chCode $ t ++ instr ++ " " ++ look x
+    "goto":ns            -> chCode $ "goto " ++ label ns
+    "ifeq":ns            -> chCode $ "ifeq " ++ label ns
+    "label":ns           -> chCode $ label ns ++ ":"
+    ";":[] -> chCode ""
+    _ -> chCode s
    where
      chCode c = (c:code,(env,v))
-     look x = maybe (x ++ show env) show $ lookup x env
-     size t = case t of
+     look x   = maybe (error $ x ++ show env) show $ lookup x env
+     typesig  = init . map toUpper . concat
+     label    = init . concat
+     size t   = case t of
        "d" -> 2
        _ -> 1
+
+boilerplate :: String -> String
+boilerplate cls = unlines [
+  ".class public " ++ cls, ".super java/lang/Object",
+  ".method public <init>()V","aload_0",
+  "invokenonvirtual java/lang/Object/<init>()V","return",
+  ".end method"]
 \end{verbatim}
 \normalsize
 \newpage
 
 
-\subsection*{Appendix F: A Syntax Editor screen dump}
 
-%Show Fig~\ref{demo}
 
-\begin{figure}
-\centerline{\psfig{figure=demo2.ps}} \caption{
-GF editor session where an integer
-expression is to be given. The left window shows the
-abstract syntax tree, and the right window the evolving C and
-JVM core. The focus is shadowed, and the possible refinements
-are shown in a pop-up window.
-}
-\label{demo}
-\end{figure}
 
 
 \end{document}

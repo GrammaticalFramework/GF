@@ -14,7 +14,7 @@ int main () {
   int n ;
   n = 1 ;
   {
-    while (n < 11) printf(int,fact(n)) ; n = n+1 ;
+    while (n < 11) printf("%d",fact(n)) ; n = n+1 ;
   }
   return ;
 } ;

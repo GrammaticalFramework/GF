@@ -3,7 +3,7 @@ module Main where
 import Char
 import System
 
---- now works for programs with exactly 2 functions, main last
+--- translation from Symbolic JVM to real Jasmin code
 
 main :: IO ()
 main = do
@@ -18,30 +18,36 @@ main = do
   return () 
 
 mkJVM :: String -> String -> String
-mkJVM cls = unlines . map trans . lines where
-  trans s = case words s of
+mkJVM cls = unlines . reverse . fst . foldl trans ([],([],0)) . lines where
+  trans (code,(env,v)) s = case words s of
     ".method":p:s:f:ns
-        | take 5 f == "main_" -> ".method public static main([Ljava/lang/String;)V"   
-        | otherwise  -> unwords [".method",p,s, unindex f ++ typesig ns]
-    ".limit":"locals":ns -> ".limit locals " ++ show (length ns)
-    "invokestatic":t:f:ns | take 8 f == "runtime/" -> 
-        "invokestatic " ++ "runtime/" ++ t ++ drop 8 f ++ typesig ns 
-    "invokestatic":f:ns  -> "invokestatic " ++ cls ++ "/" ++ unindex f ++ typesig ns 
-    "alloc":ns           -> "; " ++ s
-    t:('_':instr):[]     -> t ++ instr
-    t:('_':instr):x:_    -> t ++ instr ++ " " ++ address x
-    "goto":ns            -> "goto " ++ label ns
-    "ifeq":ns            -> "ifeq " ++ label ns
-    "label":ns           -> label ns ++ ":"
-    ";":[] -> ""
-    _ -> s
+        | f == "main" -> 
+            (".method public static main([Ljava/lang/String;)V":code,([],1))   
+        | otherwise  -> 
+            (unwords [".method",p,s, f ++ typesig ns] : code,([],0))
+    "alloc":t:x:_  -> (("; " ++ s):code, ((x,v):env, v + size t))
+    ".limit":"locals":ns -> chCode (".limit locals " ++ show (length ns))
+    "invokestatic":t:f:ns 
+       | take 8 f == "runtime/" -> 
+          chCode $ "invokestatic " ++ "runtime/" ++ t ++ drop 8 f ++ typesig ns 
+    "invokestatic":f:ns -> 
+          chCode $ "invokestatic " ++ cls ++ "/" ++ f ++ typesig ns 
+    "alloc":ns           -> chCode $ "; " ++ s
+    t:('_':instr):[";"]  -> chCode $ t ++ instr
+    t:('_':instr):x:_    -> chCode $ t ++ instr ++ " " ++ look x
+    "goto":ns            -> chCode $ "goto " ++ label ns
+    "ifeq":ns            -> chCode $ "ifeq " ++ label ns
+    "label":ns           -> chCode $ label ns ++ ":"
+    ";":[] -> chCode ""
+    _ -> chCode s
    where
-     unindex = reverse . drop 1 . dropWhile (/= '_') . reverse
-     typesig = init . map toUpper . concat
-     address x = case (filter isDigit . reverse . takeWhile (/= '_') . reverse) x of
-       s@(_:_) -> show $ read s - (1 :: Int)
-       s -> s
-     label   = init . concat
+     chCode c = (c:code,(env,v))
+     look x   = maybe (error $ x ++ show env) show $ lookup x env
+     typesig  = init . map toUpper . concat
+     label    = init . concat
+     size t   = case t of
+       "d" -> 2
+       _ -> 1
 
 boilerplate :: String -> String
 boilerplate cls = unlines [
