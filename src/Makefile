@@ -12,7 +12,7 @@ ghc:
 nofud:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) --make GF.hs -o gf2n ; strip gf2n ; mv gf2n ../bin/
 windows:
-	$(GHMAKE) $(GHCFLAGS) $(WINDOWSINCLUDE) --make GF.hs -o gf2w ; strip gf2w ; mv gf2w ../bin/
+	$(GHMAKE) $(GHCFLAGS) $(WINDOWSINCLUDE) --make GF.hs -o gf2w ; strip gf2w.exe ; mv gf2w.exe ../bin/
 nofud-links:
 	cd for-ghc-nofud ; rm -f *.hs ; ln -s ../for-ghc/Arch.hs ; ln -s ../for-hugs/ArchEdit.hs ; cd ..
 batch: 
