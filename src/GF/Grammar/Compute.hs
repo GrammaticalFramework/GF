@@ -238,6 +238,10 @@ computeTerm gr = comp where
 
 checkNoArgVars :: Term -> Err Term
 checkNoArgVars t = case t of
-  Vr (IA _)  -> prtBad "cannot glue (+) term with run-time variable" t
-  Vr (IAV _) -> prtBad "cannot glue (+) term with run-time variable" t
+  Vr (IA _)  -> Bad $ glueErrorMsg $ prt t 
+  Vr (IAV _) -> Bad $ glueErrorMsg $ prt t 
   _ -> composOp checkNoArgVars t
+
+glueErrorMsg s = 
+  "Cannot glue (+) term with run-time variable" +++ s ++ "." ++++
+  "Use Prelude.bind instead."
