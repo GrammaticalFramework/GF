@@ -116,6 +116,9 @@ tracing:
 	strip gf
 	mv gf ../bin/
 
+prof: GHCOPTFLAGS += -prof -auto-all -auto-dicts
+prof: all
+
 dist:
 	-rm -rf $(DIST_DIR)
 	mkdir $(DIST_DIR)
