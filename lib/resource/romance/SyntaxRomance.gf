@@ -389,19 +389,38 @@ oper
 -- So far we restrict the syntax to present-tense verbs, even though
 -- morphology has complete conjugations.
 
-  VerbPhrase = {s : Gender => VF => Str} ;
-  VerbGroup = {s : Bool => Gender => VF => Str} ;
+param
+  VPForm = VPF Anteriority VForm ;
+  Anteriority = Simul | Anter ;
+
+oper
+  VerbPhrase = {s :         Gender => VPForm => Str} ;
+  VerbGroup  = {s : Bool => Gender => VPForm => Str} ;
 
   predVerbGroup : Bool -> VerbGroup -> VerbPhrase = \b,vg -> {
     s = vg.s ! b
     } ;
 
-  Verb = VerbPres ;
+  auxVerb : Verb -> Verb ; -- gives the copula
+
 
 -- Predication is language-dependent in the negative case.
 
-  predVerb : VerbPres -> VerbGroup = \aller -> 
-    {s = \\b,_,v => if_then_Str b (aller.s ! v) (negVerb (aller.s ! v))} ;
+  predVerb : Verb -> VerbGroup = \aller -> 
+    {s = \\b,g => table { 
+       VPF Simul v => if_then_Str b (aller.s ! v) (negVerb (aller.s ! v)) ;
+       VPF Anter v =>
+          let 
+            part  = case aller.aux of {
+              AEsse   => VPart g (nombreVerb v) ;
+              AHabere => VPart Masc Sg
+              } ;
+            allee = aller.s ! part ;
+            est   = (auxVerb aller.aux).s ! v
+          in
+          if_then_Str b est (negVerb est) ++ allee
+       } 
+     } ;
 
   negVerb : Str -> Str ;
 
@@ -433,9 +452,9 @@ oper
 
 -- complement a verb with noun phrase and optional preposition
 
-  TransVerb : Type = VerbPres ** Complement ;
+  TransVerb : Type = Verb ** Complement ;
 
-  verbOfTransVerb       : TransVerb -> VerbPres   = \v -> {s = v.s} ;
+  verbOfTransVerb       : TransVerb -> Verb   = \v -> {s = v.s} ;
   complementOfTransVerb : TransVerb -> Complement = \v -> {s2 = v.s2 ; c = v.c} ;
 
   isNounPhraseClit : NounPhrase -> Bool = \n -> case n.c of {
@@ -581,7 +600,7 @@ oper
 
   predVerbPhrase : NounPhrase -> VerbPhrase -> Sentence = \jean,dort ->
     {s = \\m => jean.s ! unstressed nominative ++ 
-                dort.s ! pgen2gen jean.g ! VFin m jean.n jean.p
+                dort.s ! pgen2gen jean.g ! VFin (VPres m) jean.n jean.p
     } ;
 
 
@@ -592,12 +611,12 @@ oper
 -- for positive and negative uses of the verb 
 -- ("je crois qu'elle vient" -"je ne crois pas qu'elle vienne"),
 
-  SentenceVerb : Type = VerbPres ** {mp, mn : Mode} ;
+  SentenceVerb : Type = Verb ** {mp, mn : Mode} ;
 
   complSentVerb : SentenceVerb -> Sentence -> VerbGroup = \croire,jeanboit ->
-    {s = \\b,_,w =>
+    {s = \\b,g,w =>
              let {m = if_then_else Mode b croire.mp croire.mn} 
-             in posNeg b (croire.s ! w) (embedConj ++ jeanboit.s ! m)} ; ----w
+             in (predVerb croire).s ! b ! g ! w  ++ (embedConj ++ jeanboit.s ! m)} ; ----w
 
   verbSent : Verb -> Mode -> Mode -> SentenceVerb = \v,mp,mn ->
     v ** {mp = mp ; mn = mn} ;
@@ -679,7 +698,8 @@ oper
 -- slash expressions ("que je vois", "dont je parle"). 
 
   relVerbPhrase : RelPron -> VerbPhrase -> RelClause = \qui,dort ->
-    {s = \\m,g,n => allRelForms qui g n nominative ++ dort.s ! g ! VFin m n P3 
+    {s = \\m,g,n => 
+       allRelForms qui g n nominative ++ dort.s ! g ! VFin (VPres m) n P3 
     } ;
 
   relSlash : RelPron -> SentenceSlashNounPhrase -> RelClause = \dont,jeparle ->
