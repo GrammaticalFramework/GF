@@ -152,17 +152,38 @@ Language-dependent resources
 
 
 <!-- NEW -->
-<h2>Use as top-level grammar</h2>
+<h2>Use as top-level grammar: testing</h2>
 
-Random generation, translation, morphological analysis...
+Import a set of $LangX$ grammars:
+<pre>
+  i english/LangEng.gf
+  i swedish/LangSwe.gf
+</pre>
+Test with random generation, translation, morphological analysis...
+<pre>
 
-<p>
 
-Language learning: translation and morpho quiz
+</pre>
 
-<p>
+<!-- NEW -->
+<h2>Use as top-level grammar: language learning quizzes</h2>
 
-Generate elementary text books from abstract syntax?
+Morpho quiz with words:
+<pre>
+
+
+</pre>
+Morpho quiz with phrases:
+<pre>
+
+
+</pre>
+Translation quiz with sentences:
+<pre>
+
+
+</pre>
+
 
 
 
@@ -179,10 +200,14 @@ No more dummy <tt>reuse</tt> modules and bulky <tt>.gfr</tt> files!
 
 If you need to convert resource category records to/from strings, use
 <pre>
-  Predef.toStr   : L -> Str ; 
-  Predef.fromStr : Str -> L ; 
+  Predef.toStr : (L : Type) -> L -> Str ; 
 </pre>
-<tt>L</tt> must be a linearization type.
+<tt>L</tt> must be a linearization type. For instance,
+<pre>
+  toStr LangNor.CN (ModAP (PositADeg old_ADeg) (UseN car_N))
+  ---> "gammel bil"
+</pre>
+
 
 
 <!-- NEW -->
@@ -205,9 +230,14 @@ Extend vocabulary at need.
 </pre>
 
 
+<!-- NEW -->
+<h2>Example application: a small translation system</h2>
+
+
+
 
 <!-- NEW -->
-<h2>Implementatin details: the structure of low-level files</h2>
+<h2>Implementation details: the structure of low-level files</h2>
 
 <center>
 <img src="Low.gif">

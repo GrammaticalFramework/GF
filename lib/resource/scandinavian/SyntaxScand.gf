@@ -9,7 +9,7 @@
 
 interface SyntaxScand = TypesScand ** open Prelude, (CO = Coordination) in {
 
-flags optimize=share ;
+flags optimize=parametrize ;
 
 --2 Common Nouns
 --
@@ -535,7 +535,7 @@ oper
   useVerb : Verb -> (Gender => Number => Person => Str) -> VerbGroup = \verb,arg -> 
     let aer = verbSForm verb Act in {
       s  = \\sf => (aer sf).fin ;
-      s2 = negation ; 
+      --* s2 = negation ; 
       s3 = \\sf,g,n,p => (aer sf).inf ++ arg ! g ! n ! p
       } ;
 
@@ -553,27 +553,28 @@ oper
 
   VerbGroup  : Type = {
     s  : SForm => Str ; 
-    s2 : Bool => Str ; 
+    --* s2 : Bool => Str ; 
     s3 : SForm => Gender => Number => Person => Str
     } ;
 
-  predVerbGroup : Bool -> Anteriority -> VerbGroup -> VerbPhrase = \b,a,vg -> 
+  predVerbGroup : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase = \b,ant,vg -> 
     let 
        vgs  = vg.s ;
-       vgs3 = vg.s3 
+       vgs3 = vg.s3 ;
+       a = ant.a ;
     in
    {s = table {
           VIInfinit => \\g,n,p => 
-            vg.s ! VInfinit a ++ vg.s2 ! b ++ vg.s3 ! VInfinit a ! g ! n ! p ;
+            vg.s ! VInfinit a ++ ant.s ++ negation ! b ++ vg.s3 ! VInfinit a ! g ! n ! p ;
           VIImperat bo =>  \\g,n,p => 
-            vg.s ! VImperat ++ vg.s2 ! bo ++ vg.s3 ! VImperat ! g ! n ! p
+            vg.s ! VImperat ++ ant.s ++ negation ! bo ++ vg.s3 ! VImperat ! g ! n ! p
           } ---- bo shadows b
     } ;
 
   predVerbGroupI : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase = 
     \b,ant,vg -> 
-    let vp = predVerbGroup b ant.a vg in
-    {s = \\i,g,n,p => ant.s ++ vp.s ! i ! g ! n ! p
+    let vp = predVerbGroup b ant vg in
+    {s = \\i,g,n,p => vp.s ! i ! g ! n ! p
     } ;
 
 
@@ -589,7 +590,8 @@ oper
   predVerb0 : Verb -> Clause = \regna -> 
     predVerbGroupClause npDet (predVerb regna) ;
 
-  progressiveVerbPhrase : VerbGroup  -> VerbGroup ;
+  progressiveVerbPhrase : VerbPhrase  -> VerbGroup ;
+
   progressiveClause     : NounPhrase -> VerbPhrase -> Clause ;
 
 -- Verb phrases can also be formed from adjectives ("är snäll"),
@@ -662,7 +664,7 @@ oper
   passVerb : Verb -> VerbGroup = \se ->
     let ses = verbSForm se Pass in {
       s  = \\sf => (ses sf).fin ;
-      s2 = negation ; 
+      --* s2 = negation ; 
       s3 = \\sf,g,n,_ => (ses sf).inf ++ se.s1
       } ;
 
@@ -736,7 +738,7 @@ oper
     {
   --- this unfortunately generates  VP#2 ::= VP#2
      s  = spelar.s ; 
-     s2 = \\b => ofta.s ++ spelar.s2 ! b ;
+     --* s2 = \\b => ofta.s ++ spelar.s2 ! b ; ----* the essential use of s2
      s3 = \\sf,g,n,p => spelar.s3 ! sf ! g ! n ! p
     } ;
 
@@ -816,7 +818,7 @@ oper
       o    = osf.o ; 
       ser  = serdiginte.s ! t ;
       dig  = serdiginte.s3 ! t ! Jag.g ! Jag.n ! Jag.p ;
-      inte = serdiginte.s2 ! b
+      inte = negation ! b --* serdiginte.s2 ! b
     } in
     case o of {
        Main => jag ++ ser ++ inte ++ dig ;  
@@ -996,9 +998,9 @@ oper
   RelClause : Type = {s : Bool => SForm => GenNum => Person => Str} ;
   RelSent   : Type = {s :                  GenNum => Person => Str} ;
 
-  relVerbGroup : RelPron -> VerbGroup -> RelClause = \som,sover ->
+  relVerbPhrase : RelPron -> VerbGroup -> RelClause = \som,sover ->
     {s = \\b,sf,gn,p => 
-       som.s ! RNom ! gn ++ sover.s2 ! b ++ sover.s ! sf ++  
+       som.s ! RNom ! gn ++ negation ! b ++ sover.s ! sf ++  
        sover.s3 ! sf ! mkGenderRel som.g (genGN gn) ! numGN gn ! p
     } ;
 

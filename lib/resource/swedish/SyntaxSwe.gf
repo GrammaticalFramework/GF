@@ -115,11 +115,10 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
     _ => "sig"
     } ;
 
-  progressiveVerbPhrase : VerbGroup -> VerbGroup = \verb ->
+  progressiveVerbPhrase : VerbPhrase -> VerbGroup =
     complVerbVerb 
       (mkVerb "hålla" "håller" "håll"  "höll" "hållit" "hållen" ** 
-         {isAux = False}) ----  ;{s3 = ["på att"]})
-      (predVerbGroup True Simul verb) ;  
+         {isAux = False}) ;
 
   progressiveClause : NounPhrase -> VerbPhrase -> Clause = \np,vp ->
     predVerbGroupClause np
@@ -131,6 +130,7 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
   strPrep : ComplPrep -> Str = \p -> case p of {
     CPnoPrep => [] ;
     CPav => "av" ;
+----    CPmed => "med" ;
     CPför => "för" ;
     CPi => "i" ;
     CPom => "om" ;

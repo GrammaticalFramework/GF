@@ -23,39 +23,43 @@ concrete VerbphraseEng of Verbphrase = CategoriesEng **
   open Prelude, SyntaxEng in {
 
   lin
-  UseV  = predVerb ;
-  UsePassV = passVerb ;
-  ComplV2 = complTransVerb ;
-  ComplReflV2 = reflTransVerb ;
-  ComplVS = complSentVerb ;
-  ComplVV = complVerbVerb ;
-  ComplVQ = complQuestVerb ;
-  ComplVA = complAdjVerb ;
-  ComplV2A = complDitransAdjVerb ;
-  ComplSubjV2V = complDitransVerbVerb False ;
-  ComplObjV2V = complDitransVerbVerb True ;
-  ComplV2S = complDitransSentVerb ;
-  ComplV2Q = complDitransQuestVerb ;
+  UseV v = predClauseGroup v (complVerb v) ;
+  UsePassV v = predClauseBeGroup (passVerb v) ;
+  ComplV2 v x = predClauseGroup v (complTransVerb v x) ;
+  ComplReflV2 v = predClauseGroup v (reflTransVerb v) ;
+  ComplVS v x = predClauseGroup v (complSentVerb v x) ;
+  ComplVV v x = predClauseGroup (aux2verb v) (complVerbVerb v x) ;
+  ComplVQ v x = predClauseGroup v (complQuestVerb v x) ;
+  ComplVA v x = predClauseGroup v (complAdjVerb v x) ;
+  ComplV2A v x y = predClauseGroup v (complDitransAdjVerb v x y) ;
+  ComplSubjV2V v x y = predClauseGroup v (complDitransVerbVerb False v x y) ;
+  ComplObjV2V v x y = predClauseGroup v (complDitransVerbVerb True v x y) ;
+  ComplV2S v x y = predClauseGroup v (complDitransSentVerb v x y) ;
+  ComplV2Q v x y = predClauseGroup v (complDitransQuestVerb v x y) ;
 
-  PredAP = predAdjective ;
-  PredSuperl a = predAdjective (superlAdjPhrase a) ;
-  PredCN = predCommNoun ;
-  PredNP = predNounPhrase ;
-  PredPP = predAdverb ;
-  PredAV = complVerbAdj ;
-  PredObjA2V = complVerbAdj2 True ;
+  PredAP v = predClauseBeGroup (complAdjective v) ;
+  PredSuperl a = predClauseBeGroup (complAdjective (superlAdjPhrase a)) ;
+  PredCN v = predClauseBeGroup (complCommNoun v) ;
+  PredNP v = predClauseBeGroup (complNounPhrase v) ;
+  PredPP v = predClauseBeGroup (complAdverb v) ;
+
+  PredAV v x = predClauseBeGroup (complVerbAdj v x) ;
+  PredObjA2V v x y = predClauseBeGroup (complVerbAdj2 True v x y) ;
+
+  PredProgVP = progressiveVerbPhrase ;
+
+----  SPredProgVP = progressiveClause ;
 
 -- Use VPs
 
   PredVP = predVerbGroupClause ;
+
   RelVP = relVerbPhrase ;
   IntVP = intVerbPhrase ;
 
-  PosVP tp = predVerbGroup True tp.a ;
-  NegVP tp = predVerbGroup False tp.a ;
+--  PosVP tp = predVerbGroup True tp.a ;
+--  NegVP tp = predVerbGroup False tp.a ;
 
-  AdvVP = adVerbPhrase ;
+----  AdvVP = adVerbPhrase ;
   SubjVP = subjunctVerbPhrase ;
-
-
 }

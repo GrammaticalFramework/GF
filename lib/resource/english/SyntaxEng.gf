@@ -690,9 +690,11 @@ oper
     APl P3 => "themselves"
     } ;
 
-
   progressiveClause : NounPhrase -> VerbPhrase -> Clause = \np,vp ->
     predBeGroup np (vp.s ! VIPresPart) ; 
+
+  progressiveVerbPhrase : VerbPhrase -> VerbGroup = \vp ->
+    predClauseBeGroup (vp.s ! VIPresPart) ; 
 
 --- negation of prp ignored: "not" only for "be"
 
@@ -725,15 +727,52 @@ oper
        }
     } ;
 
+-- These three function are just to restore the $VerbGroup$ ($VP$) based structure.
+
+  predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = \np,vp ->
+    let
+      ag = np.a ;
+      it = np.s ! NomP
+    in
+    {s = table {
+       Dir => \\b,sf => it ++ vp.s  ! b ! sf ! ag  ++ vp.s2  ! b ! sf ! ag ;
+       Inv => \\b,sf =>  
+         let
+           does = vp.s  ! b ! sf ! ag ;
+           walk = vp.s2 ! b ! sf ! ag
+         in
+         case sf of {
+           VFinite t Simul => case b of {
+             True => auxTense b t ag ++ it ++ walk ;
+             _    => does            ++ it ++ walk
+            } ;
+           _ => does ++ it ++ walk
+           }
+       }
+    } ; 
+
   predClauseGroup : Verb -> Complement -> VerbGroup =  \verb,comp -> 
     let
       nvg : Agr -> (Bool => SForm => (Str * Str * Str)) = 
-       \ag -> predVerbClauseGen {s = \\_ => [] ; a = ag} verb comp 
+        \ag -> predVerbClauseGen {s = \\_ => [] ; a = ag} verb comp 
     in
     {s  = \\b,f,a => (nvg a ! b ! f).p2 ;
      s2 = \\b,f,a => (nvg a ! b ! f).p3 ;
-     isAux = False ----
+     isAux = False
     } ;
+
+  predClauseBeGroup : Complement -> VerbGroup = \comp ->
+    let
+      nvg : Agr -> (Bool => SForm => (Str * Str * Str)) = 
+        \ag -> predAuxClauseGen {s = \\_ => [] ; a = ag} auxVerbBe comp 
+    in
+    {s  = \\b,f,a => (nvg a ! b ! f).p2 ;
+     s2 = \\b,f,a => (nvg a ! b ! f).p3 ;
+     isAux = True
+    } ;
+
+-- This is the general predication function for non-auxiliary verbs,
+-- i.e. ones with "do" inversion and negation.
 
   predVerbClauseGen : NounPhrase -> Verb -> Complement -> (Bool =>
     SForm => (Str * Str * Str)) =  \np,verb,comp -> 
@@ -1025,14 +1064,11 @@ oper
   RelClause   : Type = {s : Bool => SForm => Agr => Str} ;
   RelSentence : Type = {s :                  Agr => Str} ;
 
------- relg
   relVerbPhrase : RelPron -> VerbGroup -> RelClause = \who,walks ->
-    {s = \\b,sf,a => [] 
-----      let wa = fromAgr a in
-----      (predVerbGroupClause (relNounPhrase who wa.g wa.n) walks).s  ! Dir ! b ! sf
+    {s = \\b,sf,a => 
+      let wa = fromAgr a in
+      (predVerbGroupClause (relNounPhrase who wa.g wa.n) walks).s  ! Dir ! b ! sf
     } ;
-
---- TODO: full tense variation in relative clauses.
 
   relSlash : RelPron -> ClauseSlashNounPhrase -> RelClause = \who,yousee ->
     {s = \\b,sf,a => 
@@ -1196,15 +1232,12 @@ oper
     in
     {s = \\b,sf,_ => whoisold.s ! Dir ! b ! sf} ;
 
-{- --vg
   intVerbPhrase : IntPron -> VerbGroup -> Question = \who,walk ->
     let 
       who : NounPhrase =  {s = who.s ; a = toAgr who.n P3 who.g} ;
       whowalks : Clause = predVerbGroupClause who walk
     in
     {s = \\b,sf,_ => whowalks.s ! Dir ! b ! sf} ;
-
-  --vg -}
 
   intVerbClause : IntPron -> Verb -> Complement -> Question = \who,walk,here ->
     let 
