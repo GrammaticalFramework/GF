@@ -37,11 +37,12 @@ markFocus n p b = if b then ("[*","*]") else ("","")
 markXML :: Marker
 markXML n i b = 
   if b 
-    then ("<focus" +++ p +++ c ++ ">", "</focus>") 
-    else ("<subtree" +++ p +++ c ++ ">", "</subtree>") 
+    then ("<focus"   +++ p +++ c ++ s ++ ">", "</focus>") 
+    else ("<subtree" +++ p +++ c ++ s ++ ">", "</subtree>") 
    where 
      c = "type=" ++ prt (M.valNode n)
      p = "position=" ++ (show $ reverse i)
+     s = "" ---- if (null (M.constrsNode n)) then "" else " status=incorrect"
 
 -- for XML in JGF 1, use
 markXMLjgf :: Marker

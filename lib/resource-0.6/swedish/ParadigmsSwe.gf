@@ -25,6 +25,7 @@ resource ParadigmsSwe = open (Predef=Predef), Prelude, SyntaxSwe, ResourceSwe in
 -- To abstract over gender names, we define the following identifiers.
 
 oper
+  Gender  : Type ;
   utrum   : Gender ;
   neutrum : Gender ;
 
@@ -200,6 +201,7 @@ oper
 -- hidden from the document.
 --.
 
+  Gender = SyntaxSwe.Gender ;
   utrum = Utr ;
   neutrum = Neutr ;
   masculine = Masc ;

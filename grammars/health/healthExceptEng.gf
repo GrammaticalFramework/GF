@@ -1,4 +1,4 @@
---# -path=.:../resource/abstract:../prelude:../resource/english
+--# -path=.:../newresource/abstract:../prelude:../newresource/english
 
 concrete healthExceptEng of healthExcept = StructuralEng ** open ParadigmsEng, TypesEng in {
 
