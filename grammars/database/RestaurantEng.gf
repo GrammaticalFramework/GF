@@ -1,4 +1,4 @@
---# -path=.:../resource/nabstract:../resource/nenglish:../prelude
+--# -path=.:../newresource/abstract:../newresource/english:../prelude
 
 concrete RestaurantEng of Restaurant = 
   DatabaseEng ** open Prelude, ParadigmsEng in {

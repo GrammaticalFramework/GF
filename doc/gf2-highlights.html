@@ -10,13 +10,19 @@ Highlights, preliminary version
 
 <p>
 
-13/10/2003
+13/10/2003 - 25/11
 
 <p>
 
 <a href="http://www.cs.chalmers.se/~aarne">Aarne Ranta</a>
 
 </center>
+
+
+<h2>Syntax of GF</h2>
+
+An accurate <a href="DocGF.ps.gz">language specification</a> is now available.
+
 
 <h2>Summary of novelties</h2>
 
@@ -69,36 +75,42 @@ Highlights, preliminary version
 
 <!-- NEW -->
 
-<h2>Status (14/11/2003)</h2>
+<h2>Status (25/11/2003)</h2>
 
 Grammar compiler, editor GUIs, and shell work.
 
 <p>
 
 GF1 grammars can be automatically translated to GF2 (although result not as good
-as manual). The results can be saved in GF2 files, but this is not necessary.
+as manual, since indentation and comments are destroyed). The results can be 
+saved in GF2 files, but this is not necessary.
 
 <p>
 
 Example grammars and resource libraries are in the process of 
-be converted. At the same time, their API has grown with
-new constructions.
-English and German resources are up-to-date.
-Finnish and Swedish are also, but their derived libraries
-have not been adapted to the use of security-bringing lock fields.
-
+being converted. There will be a new API with
+many new constructions. The new versions lie in <tt>grammars/newresource</tt>.
+English and Swedish resources are up-to-date.
+In the old API version, <tt>grammars/resource</tt>, the other languages
+are up-to-date.
 
 <p>
 
 A make facility works, finding out which modules have to be recompiled.
 There is some room for improvement.
+<br>
+<b>Bug</b>.
+Sometimes the grammar compiler gets confused if there are many
+grammars open simultaneously. Then the advice is to empty
+the environment (using <tt>e</tt>) and compile grammar one by one.
+When read from <tt>gfc</tt> versions, there should be no problems
+to have several grammars simultaneously.
 
 <p>
 
 The module type <tt>grammar</tt> (to build multilingual grammars) not yet 
 implemented.
-
-<il> <tt>transfer</tt> modules have to be called by flags
+<tt>transfer</tt> modules have to be called by flags
 
 <p>
 
@@ -153,6 +165,13 @@ line, e.g.
   % gf2 -old -abs=Tutorial tut1.Eng.gf tut1.Fin.gf tut1.Fra.gf
 </pre>
 
+<p>
+
+GF2 has more reserved words than GF 1.2. When old files are read, a preprocessor
+replaces every identifier that has the shape of a new reserved word
+with a variant where the last letter is replaced by <tt>Z</tt>, e.g.
+<tt>instance</tt> is replaced by <tt>instancZ</tt>. This method is of course
+unsafe and should be replaced by something better.
 
 
 

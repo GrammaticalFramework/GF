@@ -18,7 +18,7 @@
 --
 -- The following modules are presupposed:
 
-resource ParadigmsEng = open (Predef=Predef), Prelude, SyntaxEng, ResEng in {
+resource ParadigmsEng = open (Predef=Predef), Prelude, SyntaxEng, ResourceEng in {
 
 --2 Parameters 
 --

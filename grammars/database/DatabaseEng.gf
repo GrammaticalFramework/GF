@@ -1,4 +1,4 @@
---# -path=.:../resource/nabstract:../resource/nenglish:../prelude
+--# -path=.:../newresource/abstract:../newresource/english:../prelude
 
 concrete DatabaseEng of Database = open Prelude, ResourceEng in {
 
