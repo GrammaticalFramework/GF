@@ -1,6 +1,6 @@
 %define name GF
-%define version 2.0
-%define release 2
+%define version 2.1
+%define release 1
 
 Name: %{name}
 Summary: Grammatical Framework
@@ -68,6 +68,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Nov  8 2004 Aarne Ranta <aarne@cs.chalmers.se> 2.1-1
+- release of GF 2.1
 
 * Thu Jun 24 2004 Bjorn Bringert <bringert@cs.chalmers.se> 2.0-2
 - Set ownership correctly.
