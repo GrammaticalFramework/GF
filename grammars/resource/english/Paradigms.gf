@@ -9,7 +9,7 @@
 -- Closed categories (determiners, pronouns, conjunctions) are
 -- accessed through the resource syntax API, $resource.Abs.gf$. 
 --
--- The main difference with $morpho.Eng.gf$ is that the types
+-- The main difference with $MorphoEng.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
 -- had the design principle of always having existing forms as string
 -- arguments of the paradigms, not stems.
