@@ -43,7 +43,7 @@ prCFTok t = case t of
   TL s -> s
   TI i -> show i
   TV x -> prt x
-  TM i _ -> "?" ---
+  TM i m -> m --- "?" --- m
 
 -- to build trees: the Atom contains a GF function, Cn | Meta | Vr | Literal
 newtype CFFun = CFFun (Atom, Profile) deriving (Eq,Show)
@@ -157,6 +157,8 @@ str2cftoks = map tS . words . sstr
 compatToks :: [CFTok] -> [CFTok] -> Bool
 compatToks ts us = and [compatTok t u | (t,u) <- zip ts us]
 
+compatTok (TM _ _) _ = True --- hack because metas are renamed
+compatTok _ (TM _ _) = True
 compatTok t u = any (`elem` (alts t)) (alts u) where
   alts u = case u of
     TC (c:s) -> [toLower c : s, toUpper c : s]

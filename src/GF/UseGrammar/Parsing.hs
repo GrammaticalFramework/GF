@@ -5,6 +5,7 @@ import qualified AbsGFC as C
 import GFC
 import MkGFC (trExp) ----
 import CMacros
+import MMacros (refreshMetas)
 import Linear
 import Str
 import CF
@@ -68,7 +69,7 @@ tokens2trms opts sg cn parser as = do
     _ -> do
       (ts1,ss) <- checkErr $ mapErr postParse ts0
       if null ts1 then raise ss else return ()
-      ts2 <- mapM (checkErr . (annotate gr) . trExp) ts1 ---- 
+      ts2 <- mapM (checkErr . annotate gr . refreshMetas [] . trExp) ts1 ---- 
       if forgive then return ts2 else do
         let tsss = [(t, allLinsOfTree gr cn t) | t <- ts2]
             ps = [t | (t,ss) <- tsss, 

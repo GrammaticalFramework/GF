@@ -152,8 +152,10 @@ t,  translate: t Lang Lang String
       -lexer
       -parser
 
-gr, generate_random: gr
-      Generates a random Tree.
+gr, generate_random: gr Tree?
+      Generates a random Tree of a given category. If a Tree
+      argument is given, the command completes the Tree with values to
+      the metavariables in the tree. 
   flags:
       -cat     generate in this category
       -lang    use the abstract syntax of this grammar

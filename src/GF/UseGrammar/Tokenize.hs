@@ -29,7 +29,7 @@ mkCFTok s = case s of
 
 mkCFTokVar :: String -> CFTok
 mkCFTokVar s = case s of
-  '?':_:_      -> tM s
+  '?':_:_      -> tM s --- "?" --- compat with prCF
   'x':'_':_    -> tV s
   'x':[]       -> tV s
   '$':xs@(_:_) -> if last s == '$' then tV (init xs) else tS s
