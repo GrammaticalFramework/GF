@@ -14,10 +14,18 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     KeyListener {                        
 
     public static boolean debug = false;
-    public static String focusPosition="";
+    public static boolean debug2 = false;
+    public static boolean selectionCheck = false;
+    public static String focusPosition = "";
+    public static String stringToAppend = "";
+    public static String currentPosition = "";
     public static int selStart = -1;
     public static int selEnd = -1;
     public static String restString = "";
+    public static int currentLength = 0;
+    public static int newLength = 0;
+    public static int oldLength = 0;
+    public static int addedLength = 0;
 
     public static boolean newObject = false;
     public static boolean finished = false;
@@ -54,7 +62,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     private static JTextArea output = new JTextArea();
     public static DefaultListModel listModel= new DefaultListModel();
     private JList list = new JList(listModel);
-    private static DynamicTree tree = new DynamicTree();
+    private static DynamicTree2 tree = new DynamicTree2();
  
     private JLabel grammar = new JLabel("No topic          ");   
     private JButton save = new JButton("Save");   
@@ -379,7 +387,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
 	setSize(800,730);
 	outputPanelUp.setPreferredSize(new Dimension(500,300));
         treePanel.setDividerLocation(0.3);
-        nodeTable.put(new TreePath(DynamicTree.rootNode.getPath()), new Integer(0));
+        nodeTable.put(new TreePath(DynamicTree2.rootNode.getPath()), new Integer(0));
         setVisible(true);
 
         JRadioButton termButton = new JRadioButton("Term");
@@ -483,7 +491,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
        try {
              output.setText("");
              outputString = ""; 
-             if (debug) System.out.println("output cleared");     
+             if (debug) 
+               System.out.println("output cleared\n\n\n");     
              outputVector = new Vector();             
              toProc.write(text, 0, text.length());
              toProc.newLine();
@@ -706,7 +715,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         result = fromProc.readLine();             
         if (debug) System.out.println("4 "+result);               
       }
-      System.out.println("languageGroupElement formed"+ 
+      if (debug) 
+        System.out.println("languageGroupElement formed"+ 
                             languageGroup.getButtonCount());                   
       langMenu.addSeparator();
       fileMenuItem = new JMenuItem("Add...");
@@ -720,6 +730,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
 
   public void outputAppend(){
     int i, j, k, l, l2, selectionLength, m=0, n=0;
+    if (debug2) 
+                System.out.println("INPUT:"+result);
     l = result.indexOf("<focus");
     i=result.indexOf("type=",l);
     j=result.indexOf('>',i);
@@ -731,15 +743,15 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       if (debug) System.out.println("'POSITION START: "+m); 
       n=result.indexOf("]",m);
       if (debug) System.out.println("POSITION END: "+n); 
-//      if (debug)
+      if (debug)
         System.out.println("form Lin1: "+result);
-      focusPosition = result.substring(m+9,n);
+      focusPosition = result.substring(m+9,n+1);
       statusLabel.setText(" "+result.substring(i+5,j));
       //cutting <focus>
       result= result.substring(0,l)+result.substring(j+2);
       i=result.indexOf("/focus",l);
       selectionLength = i-l-1;
-//      if (debug) 
+      if (debug2) 
         System.out.println("selection length: "+selectionLength);
       j=result.indexOf('>',i);
       k=result.length()-j-1;
@@ -761,13 +773,16 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       // appending the resulting string
       // only one focus 
       if (j==-1){
-        System.out.println("ONE FOCUS");
-        appendMarked(result+'\n',l,result.length()-k); 
+        if (debug2) 
+                System.out.println("ONE FOCUS");
+        // last space is not included!:
+        appendMarked(result+'\n',l,l+selectionLength-2); 
       } 
       //several focuses
       else {
-        System.out.println("MANY FOCUSes");
-        appendMarked(result.substring(0,j),l,l+selectionLength-1);           
+        if (debug2) 
+                System.out.println("MANY FOCUSes");
+        appendMarked(result.substring(0,j),l,l+selectionLength-2);           
         result = result.substring(j); 
         outputAppend();
       }
@@ -1239,13 +1254,13 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
              "Document is empty!","Error", JOptionPane.ERROR_MESSAGE);
        }
    }
-    public static void populateTree(DynamicTree treePanel) {
+    public static void populateTree(DynamicTree2 treePanel) {
         String p1Name = new String("Root");
         DefaultMutableTreeNode p1;
         p1 = treePanel.addObject(null, p1Name);
     }
 
-    public static void formTree(DynamicTree treePanel) {
+    public static void formTree(DynamicTree2 treePanel) {
         Hashtable table = new Hashtable();
         TreePath path=null;
         boolean treeStarted = false, selected = false;  
@@ -1412,189 +1427,206 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     /** Handle the key released event. */
     public void keyReleased(KeyEvent e) {
     }
+    public String comparePositions(String first, String second)
+    {
+      String common ="[]";
+      int i = 1; 
+      while ((i<Math.min(first.length()-1,second.length()-1))&&(first.substring(0,i+1).equals(second.substring(0,i+1))))
+      {
+        common=first.substring(0,i+1); 
+        i+=2;
+      }
+      if (common.charAt(common.length()-1)==']') 
+        return common;
+      else 
+        return common+"]";
+    }
+    public String findMax(int begin, int end)
+    {
+      String max = ((MarkedArea)outputVector.elementAt(begin)).position;
+      for (int i = begin+1; i <= end; i++)
+        max =  comparePositions(max,((MarkedArea)outputVector.elementAt(i)).position);
+      return max;
+    }
     public void caretUpdate(CaretEvent e)
     {
-     String position ="";
-     MarkedArea jElement;
+     String jPosition ="", iPosition="", position="";
+     MarkedArea jElement = null;
+     MarkedArea iElement = null;
      int j = 0;
+     int i = outputVector.size()-1;
      int start = output.getSelectionStart();
      int end = output.getSelectionEnd();
-     System.out.println("SELECTION START POSITION: "+start);
-     System.out.println("SELECTION END POSITION: "+end);
-     if (end>0&&(end<output.getText().length())) 
-       System.out.println(output.getText().charAt(end));
+     if (debug2) 
+                System.out.println("SELECTION START POSITION: "+start);
+     if (debug2) 
+                System.out.println("SELECTION END POSITION: "+end);
+     if ((debug2)&&(end>0&&(end<output.getText().length()))) 
+       System.out.println("CHAR: "+output.getText().charAt(end));
+     // not null selection:
      if (start<output.getText().length()-1) 
      {
+       // localizing end:
        while ((j< outputVector.size())&&(((MarkedArea)outputVector.elementAt(j)).end < end))
          j++;
-       if (j<outputVector.size())
+       // localising start:
+       while ((i>=0)&&(((MarkedArea)outputVector.elementAt(i)).begin > start))
+         i--;
+
+       if ((j<outputVector.size()))
        {
-          jElement = (MarkedArea)outputVector.elementAt(j);
-          if (end>=jElement.begin)
-          { 
-            position = jElement.position+"]";
-            System.out.println("SELECTEDTEXT: "+position+"\n");
-            treeChanged = true; 
-            send("mp "+position);
-          }
-       } else 
-           System.out.println("no position in vector of size: "+outputVector.size());
-     }
+         jElement = (MarkedArea)outputVector.elementAt(j);
+         jPosition = jElement.position;
+         // less & before:
+         if (i==-1)
+         { // less:
+           if (end>=jElement.begin)
+           {
+             iElement = (MarkedArea)outputVector.elementAt(0);
+             iPosition = iElement.position;
+             if (debug2) 
+                System.out.println("Less: "+jPosition+" and "+iPosition);
+             position = findMax(0,j);
+             if (debug2) 
+                System.out.println("SELECTEDTEXT: "+position+"\n");
+             treeChanged = true; 
+             send("mp "+position);
+           }
+           // before:
+           else 
+             if (debug2) 
+                System.out.println("BEFORE vector of size: "+outputVector.size());
+         }
+         // just:
+         else
+         { 
+           iElement = (MarkedArea)outputVector.elementAt(i);
+           iPosition = iElement.position;
+           if (debug2) 
+                System.out.println("SELECTEDTEXT: "+iPosition +" and "+jPosition+"\n");
+           position = findMax(i,j);
+           if (debug2) 
+                System.out.println("SELECTEDTEXT: "+position+"\n");
+           treeChanged = true; 
+           send("mp "+position);
+         }
+       } 
+       else 
+         // more && after:
+         if (i>=0)
+         {
+           iElement = (MarkedArea)outputVector.elementAt(i);
+           iPosition = iElement.position;
+           // more
+           if (start<=iElement.end)
+           { 
+             jElement = (MarkedArea)outputVector.elementAt(outputVector.size()-1);
+             jPosition = jElement.position;
+             if (debug2) 
+                System.out.println("MORE: "+iPosition+ " and "+jPosition);
+             position = findMax(i,outputVector.size()-1);
+             if (debug2) 
+                System.out.println("SELECTEDTEXT: "+position+"\n");
+             treeChanged = true; 
+             send("mp "+position);
+       }
+           else
+             // after:
+             if (debug2) 
+                System.out.println("AFTER vector of size: "+outputVector.size());
+         } 
+         else
+         // bigger:
+         {
+           iElement = (MarkedArea)outputVector.elementAt(0);
+           iPosition = iElement.position;
+           jElement = (MarkedArea)outputVector.elementAt(outputVector.size()-1);
+           jPosition = jElement.position;
+           if (debug2) 
+                System.out.println("BIGGER: "+iPosition +" and "+jPosition+"\n");         
+           if (debug2) 
+                System.out.println("SELECTEDTEXT: []\n");
+           treeChanged = true; 
+           send("mp []");
+       }
+     }//not null selection
     }
 
     public static void appendMarked(String s, int selectionStart, int selectionEnd)
     {
-      System.out.println("STRING: "+s);
-      int oldLength = output.getText().length();
-      int currentLength = 0;
-      int newLength=0;
-      int addedLength=0;
-      int resultCurrent=0;
-      int resultNew=0;
-      boolean selectionCheck ;
-      String position = "";
-      int j, l, l2, n, m2, m1, pos, selStartTotal, selEndTotal;
+      if (debug2) 
+        System.out.println("STRING: "+s);
+      currentLength = 0;
+      newLength=0;
+      oldLength = output.getText().length();               
+      int j, l, l2, n, pos, selStartTotal, selEndTotal, selEndT;
       restString = s;
+      int m2, m1;
+      String position = "";
       if (selectionStart>-1)
       {
         selStart = selectionStart;
         selEnd = selectionEnd;                               
-        System.out.println("SELECTION: " + selStart + " "+selEnd+ "TOTAL: "+s.length());
+        if (debug2) 
+                System.out.println("SELECTION: " + selStart + " "+selEnd+ "TOTAL: "+s.length());
         selectionCheck = (s.substring(selStart, selEnd).indexOf("<")==-1);
         l = restString.indexOf("<subtree");
         l2 = restString.indexOf("</subtree");
         while ((l2>-1)||(l>-1))
         { 
-          if ((l<l2)&&(l>-1))
+          if ((l2==-1)||((l<l2)&&(l>-1)))
           {
-            m2 = restString.indexOf("]",l);
-            m1 =  restString.indexOf("[",l);
             j = restString.indexOf(">",l);
             n = restString.indexOf("<",j);
-            // the tag has some words to register:
-            if ((n-j)>3)
+            m1 =  restString.indexOf("[",l);
+            m2 = restString.indexOf("]",l);
+            //getting position:
+            position = restString.substring(m1,m2+1);
+            if (debug2) 
+                System.out.println("<-POSITION: "+l+" CURRLENGTH: "+currentLength);
+            // something before the tag:
+            if (l-currentLength>1)
             {
-              //getting position:
-
-              position = restString.substring(m1,m2);
-
-
-              newLength = n-j-3+l;
-              //focus has a separate position:
-              if (selectionCheck&&(selEnd<n))
-              { selectionCheck=false;
-                System.out.println("SELECTION HAS A SEPARATE POSITION"); 
-                if ((selEnd<l)&&(currentLength<l-1))
-                { 
-                   // register the selection first:
-                   newLength = l-1;
-                   outputVector.add(new MarkedArea(currentLength+oldLength, newLength+oldLength, focusPosition)); 
-                   addedLength = newLength-currentLength+1;
-                   resultCurrent = currentLength+oldLength;
-                   resultNew = newLength+oldLength;
-                   System.out.println("APPENDING SelectedZONE First Before Tag:"
-                     +restString.substring(currentLength+j-l+1,newLength+j-l+1)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-                   currentLength = newLength+1;
-      
-                   // register the rest:
-                   newLength = n-j-3+l;
-                   addedLength = newLength-currentLength+1;
-                   resultCurrent = currentLength+oldLength;
-                   resultNew = newLength+oldLength;
-                   outputVector.add(new MarkedArea(currentLength+oldLength, newLength+oldLength, position)); 
-                   System.out.println("APPENDING ZONE Second:"+restString.substring(currentLength+j-l+1,newLength+j-l+1)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-                }
-                else 
-                  if (n-selEnd<=3)
-                    if (selStart-j<=3)
-                    {   // only selection is to register:
-                      addedLength = newLength-currentLength+1;
-                      resultCurrent = currentLength+oldLength;
-                      resultNew = newLength+oldLength;
-                      outputVector.add(new MarkedArea(resultCurrent, resultNew, focusPosition)); 
-                      System.out.println("APPENDING SelectedZONE ONLy:"+restString.substring(selStart,selEnd+1)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-                      currentLength = newLength+1;
-                    } 
-                    else
-                    {
-                      // register the rest:
-                      newLength = newLength - selEnd + selStart-1;
-                      resultCurrent = currentLength+oldLength;
-                      resultNew = newLength+oldLength;
-                      addedLength = newLength-currentLength+1; 
-                      outputVector.add(new MarkedArea(resultCurrent, resultNew, position)); 
-                      System.out.println("APPENDING ZONE First:"+restString.substring(currentLength+j-l+2,newLength+j-l+3)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-                      currentLength = newLength+1;
-
-                      //selection second:
-                      newLength = currentLength + selEnd - selStart;
-                      outputVector.add(new MarkedArea(currentLength+oldLength, newLength+oldLength, focusPosition)); 
-                      addedLength = newLength-currentLength+1; 
-                      resultCurrent = currentLength+oldLength;
-                      resultNew = newLength+oldLength;
-                      System.out.println("APPENDING SelectedZONE Second:"+restString.substring(currentLength+j-l+2,newLength+j-l+3)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);            
-                    }
-                  else
-                  { // selection first?:
-                    newLength = selEnd-j+l-1;
-                    outputVector.add(new MarkedArea(currentLength+oldLength, newLength+oldLength, focusPosition)); 
-                    addedLength = newLength-currentLength+1; 
-                    resultCurrent = currentLength+oldLength;
-                    resultNew = newLength+oldLength;
-                    System.out.println("APPENDING SelectedZONE First:"+restString.substring(currentLength+j-l+1,newLength+j-l+1)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-                    currentLength = newLength+1;
-      
-                    // register the rest:
-                    newLength = n-j-3+l;
-                    outputVector.add(new MarkedArea(currentLength+oldLength, newLength+oldLength, position)); 
-                    addedLength = newLength-currentLength+1; 
-                    resultCurrent = currentLength+oldLength;
-                    resultNew = newLength+oldLength;
-                    System.out.println("APPENDING ZONE Second:"+restString.substring(currentLength+j-l+1,newLength+j-l+1)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-                  }
-              }// if selectionCheck
-              else 
-              {
-                addedLength = newLength-currentLength+1; 
-                resultCurrent = currentLength+oldLength;
-                resultNew = newLength+oldLength;
-                outputVector.add(new MarkedArea(resultCurrent, resultNew, position)); 
-                System.out.println("APPENDNG ZONE:"+restString.substring(currentLength+j-l+2,newLength+j-l+3)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-              } 
-            } //some words to register                     
-            currentLength = newLength+1;
-            removeSubTreeTag(l,j+1);
-            l = restString.indexOf("<subtree");
-            l2 = restString.indexOf("</subtree");
+              if (debug2) 
+                System.out.println("SOMETHING BEFORE THE TAG");
+              register(currentLength, l, currentPosition);
+            }
+            // nothing before the tag:
+            else 
+            {
+              if (debug2) 
+                System.out.println("NOTHING BEFORE THE TAG");             
+              register(j+2, n, position);
+              removeSubTreeTag(l,j+1);
+            }
+            currentLength += newLength ;
           } // l<l2
           else
           { // cutting the </subtree> tags:
             removeSubTreeTag(l2,l2+10);
-            l2 = restString.indexOf("</subtree");
-            l = restString.indexOf("<subtree");
           }
+          l2 = restString.indexOf("</subtree");
+          l = restString.indexOf("<subtree");
+          if (debug2) 
+                System.out.println("/subtree index: "+l2 + "<subtree"+l);
         } //while
         if (outputVector.size()>0)
         {
           selStartTotal = selStart+oldLength;
           selEndTotal = selEnd+oldLength;
+          selEndT = selEndTotal+1;
           pos = ((MarkedArea)outputVector.elementAt(outputVector.size()-1)).end;
-          System.out.print("the last registered position: "+ pos);
-          System.out.println(" selStart: "+ selStartTotal+ " selEnd: "+selEndTotal);
+          if (debug2) 
+                System.out.print("the last registered position: "+ pos);
+          if (debug2) 
+                System.out.println(" selStart: "+ selStartTotal+ " selEnd: "+selEndTotal);
           if (selEnd+oldLength>pos)
           {
-            addedLength = selEnd-selStart+1;
-            outputVector.add(new MarkedArea(selStart+oldLength, selEnd+oldLength, focusPosition)); 
-            System.out.println("APPENDNG Selection Last:"+restString.substring(selStart,selEnd+1)+
-            "Length: "+addedLength+" POSITION: "+selStartTotal + " "+selEndTotal);
+            addedLength = selEnd-selStart+2;
+            outputVector.add(new MarkedArea(selStartTotal, selEndTotal+1, focusPosition)); 
+            if (debug2) 
+                System.out.println("APPENDNG Selection Last:"+restString.substring(selStart)+
+            "Length: "+addedLength+" POSITION: "+selStartTotal + " "+selEndT);
           }
         }
       } //if selectionStart>-1    
@@ -1602,15 +1634,114 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       output.append(restString);
       if (selectionStart>-1)
       try {  
-        output.getHighlighter().addHighlight(selStart+oldLength, selEnd+oldLength, new DefaultHighlighter.DefaultHighlightPainter(Color.green) );
-//        output.getHighlighter().addHighlight(selStart+oldLength, selEnd+oldLength, new DefaultHighlighter.DefaultHighlightPainter(Color.white) );
+        output.getHighlighter().addHighlight(selStart+oldLength, selEnd+oldLength+1, new DefaultHighlighter.DefaultHighlightPainter(Color.green) );
+//        output.getHighlighter().addHighlight(selStart+oldLength, selEnd+oldLength+1, new DefaultHighlighter.DefaultHighlightPainter(Color.white) );
       } catch (Exception e) {System.out.println("highlighting problem!");}
+    }
+
+
+
+    public static void register(int start, int end, String position)
+    {
+      oldLength = output.getText().length();
+      addedLength = 0;
+      int resultCurrent = 0;
+      int resultNew = 0;
+      newLength = end-start;
+      // the tag has some words to register:
+      if (newLength>0)
+      {
+        //focus has a separate position:
+        if (selectionCheck&&(selEnd<end))
+        { 
+          selectionCheck=false;
+          if (debug2) 
+                System.out.println("SELECTION HAS A SEPARATE POSITION"); 
+          // selection Second:
+          if (end-selEnd<=3)
+            if (selStart-start<=1)
+            { // only selection is to register:              
+              resultCurrent = currentLength + oldLength ;
+              resultNew = newLength + resultCurrent - 1;
+              outputVector.add(new MarkedArea(resultCurrent, resultNew, focusPosition)); 
+              if (debug2) 
+                System.out.println("APPENDING SelectedZONE ONLy:"+restString.substring(selStart,selEnd+2)+
+                "Length: "+newLength+" POSITION: "+resultCurrent + " "+resultNew);
+            } 
+            else
+            {
+              // register the rest:
+              resultCurrent = currentLength+oldLength;
+              resultNew = resultCurrent+ selStart-start -1;
+              addedLength = selStart -start; 
+              outputVector.add(new MarkedArea(resultCurrent, resultNew, position)); 
+              if (debug2) 
+                System.out.println("APPENDING ZONE First:"+restString.substring(start,start+addedLength)+
+              "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
+              currentLength += addedLength;
+
+              //selection second:
+              newLength = selEnd - selStart+2;
+              resultCurrent = currentLength+oldLength;
+              resultNew = resultCurrent+ newLength -1;
+              outputVector.add(new MarkedArea(resultCurrent, resultNew, focusPosition)); 
+              if (debug2) 
+                System.out.println("APPENDING SelectedZONE Second:"+restString.substring(selStart,selEnd+2)+
+                "Length: "+newLength+" POSITION: "+resultCurrent + " "+resultNew);            
+            }
+          else
+          { // selection first:
+            addedLength = selEnd - selStart +2; 
+            resultCurrent = currentLength+oldLength;
+            resultNew = resultCurrent + addedLength-1;
+            outputVector.add(new MarkedArea(resultCurrent, resultNew, focusPosition)); 
+            if (debug2) 
+              System.out.println("APPENDING SelectedZONE First:"+restString.substring(selStart,selEnd+2)+
+              "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
+            currentLength += addedLength;
+      
+            // register the rest:
+            newLength = end-selEnd-2;
+            resultCurrent = currentLength+oldLength;
+            resultNew = resultCurrent + newLength -1;
+            outputVector.add(new MarkedArea(resultCurrent, resultNew, position)); 
+            if (debug2) 
+              System.out.println("APPENDING ZONE Second:"+restString.substring(selEnd+2,end)+
+              "Length: "+newLength+" POSITION: "+resultCurrent + " "+resultNew);
+          }
+        }// if selectionCheck
+        else 
+        {
+          resultCurrent = currentLength + oldLength ;
+          resultNew = newLength + resultCurrent - 1;
+          stringToAppend = restString.substring(start,end);
+          if (stringToAppend.trim().length()>0)
+          {
+            outputVector.add(new MarkedArea(resultCurrent, resultNew, position)); 
+            if (debug2) 
+              System.out.println("APPENDING ZONE:"+stringToAppend+
+            "Length: "+newLength+" POSITION: "+resultCurrent + " "+resultNew);
+          }
+          else
+            if (debug2) 
+              System.out.println("whiteSpaces: "+newLength);         
+        } 
+      } //some words to register                     
     }
 
     //updating:
     public static void removeSubTreeTag (int start, int end)
     {
+         if (debug2) 
+           System.out.println("removing: "+ start +" to "+ end);
          int difference =end-start+1;
+         int positionStart, positionEnd;
+         if ((newLength==0)&&(difference>20))
+         {
+           positionStart = restString.indexOf("[", start);
+           positionEnd = restString.indexOf("]", start);
+           currentPosition = restString.substring(positionStart, positionEnd+1);
+         }
          restString = restString.substring(0,start)+restString.substring(end+1);
          if (selStart > end)
          {  selStart -=difference;
