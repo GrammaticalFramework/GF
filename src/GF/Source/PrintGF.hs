@@ -326,7 +326,7 @@ instance Print Exp where
    EIndir id -> prPrec i 4 (concatD [doc (showString "(") , doc (showString "in") , prt 0 id , doc (showString ")")])
    ETyped exp0 exp -> prPrec i 4 (concatD [doc (showString "<") , prt 0 exp0 , doc (showString ":") , prt 0 exp , doc (showString ">")])
    EProj exp label -> prPrec i 3 (concatD [prt 3 exp , doc (showString ".") , prt 0 label])
-   EQConstr id0 id -> prPrec i 3 (concatD [doc (showString "{0") , prt 0 id0 , doc (showString ".") , prt 0 id , doc (showString "}0")])
+   EQConstr id0 id -> prPrec i 3 (concatD [doc (showString "{0") , prt 0 id0 , doc (showString ".") , prt 0 id , doc (showString "}0")]) -- H
    EQCons id0 id -> prPrec i 3 (concatD [doc (showString "[") , prt 0 id0 , doc (showString ".") , prt 0 id , doc (showString "]")])
    EApp exp0 exp -> prPrec i 2 (concatD [prt 2 exp0 , prt 3 exp])
    ETable cases -> prPrec i 2 (concatD [doc (showString "table") , doc (showString "{") , prt 0 cases , doc (showString "}")])
