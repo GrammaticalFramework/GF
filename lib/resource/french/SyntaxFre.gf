@@ -1,6 +1,7 @@
 --# -path=.:../romance:../../prelude
 
-instance SyntaxFre of SyntaxRomance = TypesFre ** open Prelude, (CO=Coordination), MorphoFre in {
+instance SyntaxFre of SyntaxRomance = TypesFre ** 
+  open Prelude, (CO=Coordination), MorphoFre in {
 
 flags optimize=parametrize ;
 

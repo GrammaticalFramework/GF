@@ -24,6 +24,11 @@ import Operations
 -- AR 8/2/2005 detached from compile/MkResource
 
 lockRecType :: Ident -> Type -> Err Type
+lockRecType c t@(RecType rs) = 
+  let lab = lockLabel c in
+  return $ if elem lab (map fst rs) 
+    then t --- don't add an extra copy of the lock field
+    else RecType (rs ++ [(lockLabel c,  RecType [])])
 lockRecType c t = plusRecType t $ RecType [(lockLabel c,  RecType [])]
 
 unlockRecord :: Ident -> Term -> Err Term

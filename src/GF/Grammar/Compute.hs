@@ -86,16 +86,20 @@ computeTerm gr = comp where
        t' <- comp g t
        case t' of
          FV rs -> mapM (\c -> comp g (P c l)) rs >>= returnC . FV
-         R r   -> maybe (prtBad "no value for label" l) (comp g . snd) $ lookup l r 
+         R r   -> maybe (prtBad "no value for label" l) (comp g . snd) $ 
+                    lookup l $ reverse r 
 
-         ExtR (R a) b ->                 -- NOT POSSIBLE both a and b records!
-           case comp g (P (R a) l) of
-             Ok v -> return v
-             _ -> comp g (P b l)
          ExtR a (R b) ->                 
            case comp g (P (R b) l) of
              Ok v -> return v
              _ -> comp g (P a l)
+
+--- { - --- this is incorrect, since b can contain the proper value
+         ExtR (R a) b ->                 -- NOT POSSIBLE both a and b records!
+           case comp g (P (R a) l) of
+             Ok v -> return v
+             _ -> comp g (P b l)
+--- - } ---
 
          Alias _ _ r -> comp g (P r l)
 
@@ -207,8 +211,8 @@ computeTerm gr = comp where
          (Alias _ _ d, _)  -> comp g $ ExtR d s'
          (_, Alias _ _ d)  -> comp g $ Glue r' d
 
-         (R rs, R ss) -> return $ R (rs ++ ss)
-         (RecType rs, RecType ss) -> return $ RecType (rs ++ ss)
+         (R rs, R ss) -> plusRecord r' s'
+         (RecType rs, RecType ss) -> plusRecType r' s'
          _ -> return $ ExtR r' s'
 
      -- case-expand tables

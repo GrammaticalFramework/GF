@@ -17,17 +17,15 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
   SPredV2A np v x y = predVerbClause np v (complDitransAdjVerb v x y) ;
   SPredSubjV2V np v x y = predVerbClause np v (complDitransVerbVerb False v x y) ;
   SPredObjV2V np v x y = predVerbClause np v (complDitransVerbVerb True v x y) ;
-{-
-  SPredV2S np v x y = predVerbClause np v (complDitransSentVerb v x y) ;
-  SPredV2Q np v x y = predVerbClause np v (complDitransQuestVerb v x y) ;
--}
+--  SPredV2S np v x y = predVerbClause np v (complDitransSentVerb v x y) ;
+--  SPredV2Q np v x y = predVerbClause np v (complDitransQuestVerb v x y) ;
   SPredAP np v = predCopula np (complAdjective v) ;
   SPredSuperl np a = predCopula np (complAdjective (superlAdjPhrase a)) ;
   SPredCN np v = predCopula np (complCommNoun v) ;
   SPredNP np v = predCopula np (complNounPhrase v) ;
   SPredPP np v = predCopula np (complAdverb v) ;
-{-
   SPredAV np v x = predCopula np (complVerbAdj v x) ;
+{-
   SPredObjA2V np v x y = predCopula np (complVerbAdj2 True v x y) ;
 
   SPredProgVP = progressiveClause ;

@@ -215,7 +215,7 @@ oper
 
 --3 Comparison adjectives
 --
--- The type is defined in $types.Romance.gf$. Syntax adds to lexicon the position
+-- The type is defined in $TypesRomance$. Syntax adds to lexicon the position
 -- information.
 
   AdjDegr = AdjComp  ** {p : Bool} ;
@@ -489,6 +489,11 @@ oper
   complAdverb : Adverb -> Complemnt = \dehors ->
     complCopula (\\_,_,_ => dehors.s) ; 
 
+  complVerbAdj : (Adjective ** {c : CaseA}) -> VerbPhrase -> Complemnt = \facile,ouvrir ->
+    complCopula (\\g,n,p => 
+      facile.s ! AF g n ++ prepCase facile.c ++ 
+      ouvrir.s ! VIInfinit ! g ! n ! p) ;
+
 -- Passivization is like adjectival predication.
 
   passVerb : Verb -> Complemnt = \aimer ->
@@ -531,6 +536,11 @@ oper
 -- More will be needed when we add ditransitive verbs.
 
   complTransVerb : TransVerb -> NounPhrase -> Complemnt = \aime,jean ->
+    complTransVerbGen aime jean (\\_,_,_ => []) ;
+
+  complTransVerbGen : TransVerb -> NounPhrase ->
+    (Gender => Number => Person => Str) -> Complemnt = 
+    \aime,jean,ici ->
       let
         clit  = andB (isNounPhraseClit jean) (isTransVerbClit aime) ;
         Jean  = jean.s ! (case2pformClit aime.c) ; 
@@ -538,9 +548,12 @@ oper
                    (aime.s ! VPart (pgen2gen jean.g) jean.n)
                    (aime.s ! VPart  Masc             Sg)
       in
-        \\_,_,_ => case clit of {
-            True  => {clit = Jean ; part = aimee ; compl = []} ;
-            False => {clit = []   ; part = aimee ; compl = Jean}
+        \\g,n,p => 
+          let Ici = ici ! g ! n ! p 
+          in
+          case clit of {
+            True  => {clit = Jean ; part = aimee ; compl = Ici} ;
+            False => {clit = []   ; part = aimee ; compl = Jean ++ Ici}
             } ;
 
 ----- add auxVerb to Complemnt to switch to $esse$ in refl ?
@@ -625,35 +638,23 @@ oper
 
   complDitransAdjVerb : 
     TransVerb -> NounPhrase -> AdjPhrase -> Complemnt = \rend,toi,sec ->
-      let
-        rendtoi = complTransVerb rend toi
-      in
-        \\g,n,p =>
-        let rt = rendtoi ! g ! n ! p in 
-        {clit = rt.clit ; part = rt.part ; 
-         compl = rt.compl ++ sec.s ! AF g n
-        } ;
+      complTransVerbGen rend toi (\\g,n,_ => sec.s ! AF g n) ;
 
   DitransVerbVerb = TransVerb ** {c3 : CaseA} ;
 
   complDitransVerbVerb : 
     Bool -> DitransVerbVerb -> NounPhrase -> VerbPhrase -> Complemnt = 
      \obj, demander, toi, nager ->
-      let
-        rendtoi = complTransVerb demander toi
-      in
-        \\g,n,p =>
-        let 
-           rt = rendtoi ! g ! n ! p ;
-           agr : Gender * Number * Person = case obj of {
-             True  => <pgen2gen toi.g, toi.n, toi.p> ;
-             False => <g,    n,    p>
-             } 
-        in 
-        {clit = rt.clit ; part = rt.part ; 
-         compl = rt.compl ++ prepCase demander.c ++ 
-                 nager.s ! VIInfinit ! agr.p1 ! agr.p2 ! agr.p3
-        } ;
+        complTransVerbGen demander toi
+          (\\g,n,p =>
+           let 
+             agr : Gender * Number * Person = case obj of {
+               True  => <pgen2gen toi.g, toi.n, toi.p> ;
+               False => <g,    n,    p>
+               } 
+           in 
+           prepCase demander.c ++ 
+           nager.s ! VIInfinit ! agr.p1 ! agr.p2 ! agr.p3) ;
 
 
 --2 Adverbs
@@ -763,26 +764,27 @@ oper
         co   = comp ! pgen2gen np.g ! np.n ! np.p ;
         la   = co.clit ;
         ici  = co.compl ;
+        aimee = co.part ;
         aime  : TMode -> Str = \t -> verb.s ! (VFin t np.n np.p) ;
         avoir : TMode -> Str = \t -> (auxVerb verb).s ! (VFin t np.n np.p) ;
-        aimee = co.part ;
         aimer = verb.s ! VInfin ;
         avoirr = (auxVerb verb).s ! VInfin
       in
       \\b => table {
-        ClPres   Simul m   => <jean, posNeg b (la ++ aime  (VPres m))   ici> ;
-        ClPres   a m       => <jean, posNeg b (la ++ avoir (VPres m))   (aimee ++ ici)> ;
-        ClImperf Simul m   => <jean, posNeg b (la ++ aime  (VImperf m)) ici> ;
-        ClImperf a m       => <jean, posNeg b (la ++ avoir (VImperf m)) (aimee ++ ici)> ;
-        ClPasse  Simul     => <jean, posNeg b (la ++ aime  VPasse)      ici> ;
-        ClPasse  a         => <jean, posNeg b (la ++ avoir VPasse)      (aimee ++ ici)> ;
-        ClFut    Simul     => <jean, posNeg b (la ++ aime  VFut)      ici> ;
-        ClFut    a         => <jean, posNeg b (la ++ avoir VFut)      (aimee ++ ici)> ;
-        ClCondit Simul     => <jean, posNeg b (la ++ aime  VFut)      ici> ;
-        ClCondit a         => <jean, posNeg b (la ++ avoir VFut)      (aimee ++ ici)> ;
-        ClInfinit Simul    => <jean, posNeg b (la ++ aimer)           ici> ;
-        ClInfinit a        => <jean, posNeg b (la ++ avoirr)          (aimee ++ ici)>
+        ClPres   Simul m => <jean, posNeg b (la ++ aime  (VPres m))   ici> ;
+        ClPres   a m     => <jean, posNeg b (la ++ avoir (VPres m))   (aimee ++ ici)> ;
+        ClImperf Simul m => <jean, posNeg b (la ++ aime  (VImperf m)) ici> ;
+        ClImperf a m     => <jean, posNeg b (la ++ avoir (VImperf m)) (aimee ++ ici)> ;
+        ClPasse  Simul   => <jean, posNeg b (la ++ aime  VPasse)      ici> ;
+        ClPasse  a       => <jean, posNeg b (la ++ avoir VPasse)      (aimee ++ ici)> ;
+        ClFut    Simul   => <jean, posNeg b (la ++ aime  VFut)      ici> ;
+        ClFut    a       => <jean, posNeg b (la ++ avoir VFut)      (aimee ++ ici)> ;
+        ClCondit Simul   => <jean, posNeg b (la ++ aime  VFut)      ici> ;
+        ClCondit a       => <jean, posNeg b (la ++ avoir VFut)      (aimee ++ ici)> ;
+        ClInfinit Simul  => <jean, posNeg b (la ++ aimer)           ici> ;
+        ClInfinit a      => <jean, posNeg b (la ++ avoirr)          (aimee ++ ici)>
         } ;
+
 
 --3 Sentence-complement verbs
 --
