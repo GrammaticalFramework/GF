@@ -24,7 +24,7 @@ $white+ ;
 @rsyms { tok (\p s -> PT p (TS $ shareString s)) }
 
 $l $i*   { tok (\p s -> PT p (eitherResIdent (TV . shareString) s)) } -- H
-\" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \"{ tok (\p s -> PT p (TL $ unescapeInitTail $ shareString s)) } -- H
+\" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \"{ tok (\p s -> PT p (TL $ shareString $ unescapeInitTail s)) } -- H
 
 $d+      { tok (\p s -> PT p (TI s))    }
 

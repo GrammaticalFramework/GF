@@ -27,7 +27,7 @@ $white+ ;
 \' ($u # \')* \' { tok (\p s -> PT p (eitherResIdent (T_LString . shareString) s)) } -- H
 
 $l $i*   { tok (\p s -> PT p (eitherResIdent (TV . shareString) s)) } -- H
-\" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \"{ tok (\p s -> PT p (TL $ unescapeInitTail $ shareString s)) } -- H
+\" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \"{ tok (\p s -> PT p (TL $ shareString $ unescapeInitTail s)) } -- H
 
 $d+      { tok (\p s -> PT p (TI s))    }
 
