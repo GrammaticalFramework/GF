@@ -199,6 +199,15 @@ oper
 
   mkV3 : V -> Str -> Case -> Str -> Case -> V3 ;  -- geben,[],dative,[],accusative
 
+-- Sentence-complement verbs are just verbs.
+
+  mkVS : V -> VS ;
+
+-- Verb-complement verbs either need the "zu" particle or don't.
+-- The ones that don't are usually auxiliary verbs.
+
+  vsAux : V -> VV ;
+  vsZu  : V -> VV ;
 
 --2 Adverbials
 --
@@ -310,6 +319,10 @@ oper
   tvDir = \v -> mkTV v [] accusative ;
   tvDirReg = \v -> tvReg v [] accusative ; 
   mkV3 v s c t d = mkDitransVerb v s c t d ** {lock_V3 = <>} ;
+
+  mkVS v = v ** {lock_VS = <>} ;
+  vsAux v = v ** {isAux = True ; lock_VV = <>} ; 
+  vsZu v = v ** {isAux = True ; lock_VV = <>} ; 
 
   mkAdV a = ss a ** {lock_AdV = <>} ;
   mkPP x y = PrepNP {s = y ; c = x ; lock_Prep = <>} ;
