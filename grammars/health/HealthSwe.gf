@@ -44,7 +44,7 @@ lin
   Terrible = AdjP1 (extAdjective (aFin "hemsk")** {lock_Adj1 = <>}) ;
  
   BeInCondition = PredVP ; 
-  HaveIllness patient illness = predV2 (mkDirectVerb verbHava** {lock_TV =<>}) patient 
+  HaveIllness patient illness = predV2 (mkDirectVerb verbHa** {lock_TV =<>}) patient 
                                 (DetNP (nullDet  ** {lock_Det = <>}) illness) ;
   NeedMedicine patient illness = predV2 (mkDirectVerb verbBehova** {lock_TV =<>}) patient 
                                  (DetNP (nullDet  ** {lock_Det = <>}) illness) ; 
@@ -55,11 +55,11 @@ lin
   Fever = DetNP (nullDet  ** {lock_Det = <>}) (n2n (extCommNoun NoMasc (sFeber "feb")) ** {lock_CN = <>}) ;
   FeverMod degree = DetNP (nullDet  ** {lock_Det = <>}) (ModAdj degree (n2n (extCommNoun NoMasc (sFeber "feb")) ** {lock_CN = <>})) ;
  
-  Complain = predV2 (mkDirectVerb verbHava ** {lock_TV =<>}) ;
-  Broken patient head = predV2 (mkTransVerb verbHava "brutit" ** {lock_TV =<>} ) patient 
+  Complain = predV2 (mkDirectVerb verbHa ** {lock_TV =<>}) ;
+  Broken patient head = predV2 (mkTransVerb verbHa "brutit" ** {lock_TV =<>} ) patient 
                         (defNounPhrase patient.n head ** {lock_NP =<>}) ;
 
-  PainIn patient head = predV2 (mkDirectVerb verbHava** {lock_TV =<>}) patient 
+  PainIn patient head = predV2 (mkDirectVerb verbHa** {lock_TV =<>}) patient 
    (
     DetNP (nullDet  ** {lock_Det = <>}) 
     ( AppFun 
@@ -67,7 +67,7 @@ lin
        ((defNounPhrase patient.n head)** {lock_NP = <>})
     )
    ) ;
-  PainInMod patient head degree =  predV2 (mkDirectVerb verbHava** {lock_TV =<>}) patient
+  PainInMod patient head degree =  predV2 (mkDirectVerb verbHa** {lock_TV =<>}) patient
     (
       DetNP (nullDet  ** {lock_Det = <>}) 
       ( modCommNounPhrase degree 

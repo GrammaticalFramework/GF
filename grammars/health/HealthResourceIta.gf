@@ -1,6 +1,7 @@
 -- use this path to read the grammar from the same directory
---# -path=.:../abstract:../../prelude:../italian:../romance
-concrete HealthResourceIta of HealthResource = open ResourceIta, Prelude, SyntaxIta, ExtraIta, MorphoIta in {
+--# -path=.:../newresource/abstract:../prelude:../newresource/italian:../newresource/romance
+
+concrete HealthIta of Health = open ResourceIta, Prelude, SyntaxIta, ExtraIta, MorphoIta in {
 
 flags 
   startcat=Phr ; lexer=text ; parser=chart ; unlexer=text ;

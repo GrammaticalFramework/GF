@@ -60,6 +60,7 @@ oper
   } ;
 
   verbTa = {s = table {VPres Infinit _ => "ta" ; VPres Indicat _ => "tar" ; VPres Imperat _ => "ta"}; s1 =""} ;
+  verbHa = {s = table {VPres Infinit _ => "ha" ; VPres Indicat _ => "har" ; VPres Imperat _ => "ha"}; s1 =""} ;
   verbBehova = {s = table {VPres Infinit _ => "behöva" ; VPres Indicat _ => "behöver" ; VPres Imperat _ => 
             "behöv"}; s1 =""} ;
 
