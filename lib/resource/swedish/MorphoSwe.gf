@@ -47,24 +47,70 @@ oper
   verbFinnas = mkVerb "finnas" "finns" "finns" ;
 
 -- A simplified conjugation takes three forms in the worst case, plus a particle.
+-}
 
-  mkVerbPart : (supa,super,sup,upp : Str) -> Verb = \supa,super,sup,upp ->
+  mkVerbPart : (supa,super,sup,söp,supit,supen,upp : Str) -> Verb = 
+   \finna,finner,finn,fann,funnit,funnen,upp ->
+    let funn = ptPretForms funnen in
     {s = table {
-      VPres Infinit Act  => supa ;
-      VPres Infinit Pass => supa + "s" ;
-      VPres Indicat Act  => super ;
-      VPres Indicat Pass => sup + "s" ;
-      VPres Imperat Act  => sup ;
-      VPres Imparat Pass => sup + "s"
-      } ;
+    VF (Pres Ind Act) => finner ;
+    VF (Pres Ind Pass) => finn + "s" ;
+    VF (Pres Cnj Act) => finn + "e" ;
+    VF (Pres Cnj Pass) => finn + "es" ;
+    VF (Pret Ind Act) => fann ;
+    VF (Pret Ind Pass) => fann + "s" ;
+    VF (Pret Cnj Act) => fann ;        --- = ind
+    VF (Pret Cnj Pass) => fann + "s" ; --- 
+    VF Imper => finn ;
+    VI (Inf Act) => finna ;
+    VI (Inf Pass) => finna + "s" ;
+    VI (Supin Act) => funnit ;
+    VI (Supin Pass) => funnit + "s" ;
+    VI (PtPres Nom) => finn + "ande" ;
+    VI (PtPres Gen) => finn + "andes" ;
+    VI (PtPret a c) => funn ! a ! c
+    } ;
      s1 = upp
     } ;
 
+ptPretForms : Str -> AdjFormPos => Case => Str = \funnen -> \\a,c =>  
+  mkCase c (
+ {- ----
+    case Predef.dp 2 funnen of {
+   "en" => let funn : Str = Predef.tk 2 funnen in 
+     case a of {
+      (Strong (ASg Utr)) => funn + "en" ;
+      (Strong (ASg Neutr)) => funn + "et" ;
+      (Strong APl) => funn + "a" ;
+      (Weak (AxSg NoMasc)) => funn + "a" ;
+      (Weak (AxSg Masc)) => funn + "e" ;
+      (Weak AxPl) => funn + "a" 
+    } ;
+  "ad" => let funn : Str = Predef.tk 2 funnen in 
+     case a of {
+      (Strong (ASg Utr)) => funn + "ad" ;
+      (Strong (ASg Neutr)) => funn + "at" ;
+      (Strong APl) => funn + "ade" ;
+      (Weak _) => funn + "ade"
+    } ;
+
+  _ => 
+-}
+  funnen ---- to be completed
+ ---- }
+ ) ;
+
+mkCase : Case -> Str -> Str = \c,f -> case c of {
+      Nom => f ;
+      Gen => f + "s"
+      } ;
+
+
 -- The most common is a verb without a particle.
 
-  mkVerb : (supa,super,sup : Str) -> Verb = \supa,super,sup ->
-    mkVerbPart supa super sup [] ; 
--}
+  mkVerb : (_,_,_,_,_,_ : Str) -> Verb = \supa,super,sup,söp,supit,supen ->
+    mkVerbPart supa super sup söp supit supen [] ; 
+
 
 -- Prepositions are just strings.
   Preposition = Str ;
