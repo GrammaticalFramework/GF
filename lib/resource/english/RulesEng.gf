@@ -116,7 +116,7 @@ lin
 
   ProgVG = progressiveVerbPhrase ;
 
-  UseCl  tp cl = {s = tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a} ;
+  UseCl  tp cl = {s = tp.s ++ cl.s ! Dir ! tp.b ! VFinite tp.t tp.a} ;
   UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
   UseRCl tp cl = {s = \\a => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! a} ;
 
@@ -168,7 +168,7 @@ lin
   NounIPOne = nounIntPron singular ;
   NounIPMany = nounIntPron plural ;
 
-  QuestVP = questVerbPhrase ;
+  QuestCl = questClause ;
   IntVP = intVerbPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;

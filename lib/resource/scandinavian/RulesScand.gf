@@ -151,7 +151,7 @@ lin
   NounIPOne = nounIntPron singular ;
   NounIPMany = nounIntPron plural ;
 
-  QuestVP = questVerbPhrase ;
+  QuestCl = questClause ;
   IntVP = intVerbPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;

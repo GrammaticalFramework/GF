@@ -646,18 +646,33 @@ oper
 
 --3 Tensed clauses
 
-  Clause = {s : Bool => SForm => Str} ;
+-- We have direct (declarative) and inverted (interrogative) clauses.
 
-  ClForm = SForm ; ---- to be removed
+  Clause = {s : Order => Bool => SForm => Str} ;
 
+  param Order = Dir | Inv ;
+
+  oper
   predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = 
-    \yo,sleep -> {
-      s = \\b,c => 
+    \yo,dosleep -> {
+      s = \\o,b,c => 
         let
-          a   = yo.a ; 
-          you = yo.s ! NomP
+          a      = yo.a ; 
+          you    = yo.s ! NomP ;
+          do     = dosleep.s ! b ! c ! a ;
+          sleeps = dosleep.s2 ! b ! c ! a ;
+          does   = auxTense b Present a ;
+          did    = auxTense b Past a ;
+          sleep  = dosleep.s2 ! False ! c ! a 
         in  
-          you ++ sleep.s ! b ! c ! a  ++  sleep.s2 ! b ! c ! a 
+        case o of {
+          Dir => you ++ do ++  sleeps ;
+          Inv => case <c,dosleep.isAux> of {
+            <VFinite Present Simul,False> => does ++ you ++ sleep ;
+            <VFinite Past Simul,False>    => did  ++ you ++ sleep ;
+            _ => do ++ you ++ sleeps
+            }
+        }
       } ;
 
 
@@ -799,7 +814,7 @@ oper
     {s = table {
        DirQ   => \\b,f => (questVerbPhrase     you (predVerb
     lookat)).s ! b ! f ! DirQ ;
-       IndirQ => (predVerbGroupClause you (predVerb lookat)).s
+       IndirQ => (predVerbGroupClause you (predVerb lookat)).s ! Dir
        } ;
      s2 = lookat.s3
     } ;
@@ -834,7 +849,8 @@ oper
   relVerbPhrase : RelPron -> VerbGroup -> RelClause = \who,walks ->
     {s = \\b,sf,a => 
       let wa = fromAgr a in
-      (predVerbGroupClause (relNounPhrase who wa.g wa.n) walks).s ! b ! sf
+      (predVerbGroupClause (relNounPhrase who wa.g wa.n) walks).s ! Dir
+    ! b ! sf
     } ;
 
 --- TODO: full tense variation in relative clauses.
@@ -855,7 +871,7 @@ oper
 -- "number x such that x is even".
 
   relSuch : Clause -> RelClause = \A ->
-    {s = \\b,sf,_ => "such" ++ "that" ++ A.s ! b ! sf} ;
+    {s = \\b,sf,_ => "such" ++ "that" ++ A.s ! Dir ! b ! sf} ;
 
 -- The main use of relative clauses is to modify common nouns.
 -- The result is a common noun, out of which noun phrases can be formed
@@ -953,6 +969,13 @@ oper
 -- rule, $questVerbPhrase'$. The word ("ob" / "whether") never appears
 -- if there is an adverbial.
 
+  questClause : Clause -> Question = \cl -> 
+    {s = \\b,c => table {
+       DirQ   => cl.s ! Inv ! b ! c ;
+       IndirQ => cl.s ! Dir ! b ! c
+       }
+    } ;
+
   questVerbPhrase : NounPhrase -> VerbGroup -> Question = 
     questVerbPhrase' False ;
 
@@ -973,7 +996,7 @@ oper
         _ => walk.s  ! b ! cl ! John.a ++ john ++ walk.s2 ! b ! cl ! John.a
         } ;
       IndirQ => if_then_else Str adv [] (variants {"if" ; "whether"}) ++ 
-                (predVerbGroupClause John walk).s ! b ! cl
+                (predVerbGroupClause John walk).s ! Dir ! b ! cl
       }
     } ;
 
@@ -987,7 +1010,7 @@ oper
       who : NounPhrase = {s = who.s ; a = toAgr who.n P3 who.g} ;
       whowalks : Clause = predVerbGroupClause who walk
     in
-    {s = \\b,sf,_ => whowalks.s ! b ! sf} ;
+    {s = \\b,sf,_ => whowalks.s ! Dir ! b ! sf} ;
 
   intSlash : IntPron -> ClauseSlashNounPhrase -> Question = \who,yousee ->
     {s = \\b,cl,q =>
@@ -1016,10 +1039,10 @@ oper
 -- A question adverbial can be applied to anything, and whether this makes
 -- sense is a semantic question.
 
-  questAdverbial : IntAdverb -> NounPhrase -> VerbGroup -> Question = 
-    \why, you, walk ->
+  questAdverbial : IntAdverb -> Clause -> Question = 
+    \why, youwalk ->
     {s = \\b,cf,q => 
-       why.s ++ (questVerbPhrase' True you walk).s ! b ! cf !  q} ;
+       why.s ++ (questClause youwalk).s ! b ! cf !  q} ;
 
 --2 Imperatives
 --
@@ -1042,7 +1065,7 @@ oper
 -- e.g. prepositional phrases.
 
   advClause : Clause -> Adverb -> Clause = \yousing,well ->
-   {s = \\b,c => yousing.s ! b ! c ++ well.s} ;
+   {s = \\o,b,c => yousing.s ! o ! b ! c ++ well.s} ;
 
 -- Conjunctive adverbs are such as "otherwise", "therefore", which are prefixed
 -- to a sentence to form a phrase.
