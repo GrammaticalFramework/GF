@@ -99,7 +99,7 @@ cat
   VV ;     -- verb-compl. verb,      e.g. "can", "want"
 
   VP ;     -- verb phrase,           e.g. "switch the light on"
-  VPI ;    -- infin. or imp. verb phrase e.g. "switch the light on", "don't run"
+  VPI ;    -- infinitive verb phrase e.g. "switch the light on", "not have run"
 
 --!
 --3 Adverbs and prepositions/cases

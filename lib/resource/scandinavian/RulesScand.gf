@@ -149,7 +149,8 @@ lin
   UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
 
 
-  ImperVP = imperVerbPhrase ;
+  PosImperVP = imperVerbPhrase True ;
+  NegImperVP = imperVerbPhrase False ;
 
   IndicPhrase = indicUtt ;
   QuestPhrase = interrogUtt ;
