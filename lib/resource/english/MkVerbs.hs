@@ -11,13 +11,15 @@ import List
 
 -- parameters, depending on language
 
-infile   = "verbs.txt"
-outfile  = "VerbsEng.gf"
-preamble = 
+infile   = "norwegian/web2.txt"
+outfile  = "Verbs.gf"
+preamble = ""
+{-
   "resource VerbsEng = open ResourceEng, MorphoEng in {\n" ++
   "  oper vIrreg : Str -> Str -> Str -> V = \\x,y,z ->\n" ++
   "    mkVerbIrreg x y z ** {s1 = [] ; lock_V = <>} ;\n\n" 
-oper     = "vIrreg"
+-}
+oper     = "irregV"
 cat      = "V"
 name s   = s ++ "_V"
 
@@ -34,7 +36,8 @@ notComment = (/="--") . take 2
 
 mkOne :: [String] -> String
 mkOne ws@(v:_) = 
-  "  oper " ++ name v ++ " : " ++ cat ++ " = " ++ 
+  "  fun " ++ name v ++ " : " ++ cat ++ " ;\n" ++ 
+  "  lin " ++ name v ++ " : " ++ cat ++ " = " ++ 
        oper ++ " " ++ unwords (map arg ws) ++ " ;\n" 
     where
       arg w = case variants w of
