@@ -336,6 +336,21 @@ oper
     VPart a    => gewesen ! a
     } ;
 
+-- auxiliary verbs
+  verbumAux : (_,_,_,_ : Str) -> Verbum = \konnen,kann,kannst,gekonnt -> 
+  let gekonn = (adjReg gekonnt).s in
+  table {
+    VInf       => konnen ;
+    VInd Sg P1 => kann ;
+    VInd Sg P2 => kannst ;
+    VInd Sg P3 => kann ;
+    VInd Pl P2 => konnen ;
+    VInd Pl _  => konnen ;
+    VImp Sg    => nonExist ;
+    VImp Pl    => nonExist ;
+    VPart a    => gekonn ! a
+    } ;
+
 -- The verb "have":
 
   verbumHaben :  Verbum = let {

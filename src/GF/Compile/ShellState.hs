@@ -67,6 +67,8 @@ emptyShellState = ShSt {
   statistics = []
   }
 
+optInitShellState os = addGlobalOptions os emptyShellState
+
 type Language = Ident
 language = identC
 prLanguage = prIdent
@@ -225,7 +227,7 @@ greatestAbstract gr = case allAbstracts gr of
 
 -- all resource modules
 allResources :: G.SourceGrammar -> [Ident]
-allResources gr = [i | (i,M.ModMod m) <- M.modules gr, M.mtype m == M.MTResource]
+allResources gr = [i | (i,M.ModMod m) <- M.modules gr, M.isModRes m]
 
 
 -- the greatest resource in dependency order

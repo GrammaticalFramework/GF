@@ -166,7 +166,7 @@ optionsOfCommand co = case co of
   CHelp _ -> opts "all"
 
   CImpure ICEditSession -> opts "f"
-  CImpure ICTranslateSession -> both "f" "cat"
+  CImpure ICTranslateSession -> both "f langs" "cat"
 
   _ -> none
 
