@@ -27,10 +27,10 @@ import qualified Modules as M
 
 type OptSpec = [Integer] ---
 
-doOptFactor :: OptSpec
+doOptFactor :: OptSpec -> Bool
 doOptFactor opt = elem 2 opt
 
-doOptValues :: OptSpec
+doOptValues :: OptSpec -> Bool
 doOptValues opt = elem 3 opt
 
 shareOpt :: OptSpec
