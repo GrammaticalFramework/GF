@@ -68,6 +68,7 @@ abstract VerbsSweAbs = Categories ** {
   försvinna_V : V ;
   förtiga_V : V ;
   frysa_V : V ;
+  gå_V : V ;
   genomdriva_V : V ;
   gilla_V : V ;
   giva_V : V ;
@@ -87,6 +88,7 @@ abstract VerbsSweAbs = Categories ** {
   inskriva_V : V ;
   intaga_V : V ;
   kliva_V : V ;
+  klyva_V : V ;
   knipa_V : V ;
   knyta_V : V ;
   komma_V : V ;
@@ -109,6 +111,8 @@ abstract VerbsSweAbs = Categories ** {
   rinna_V : V ;
   riva_V : V ;
   ryta_V : V ;
+  säga_V : V ;
+  se_V : V ;
   sitta_V : V ;
   sjuda_V : V ;
   sjunga_V : V ;
@@ -126,8 +130,10 @@ abstract VerbsSweAbs = Categories ** {
   slippa_V : V ;
   slita_V : V ;
   sluta_V : V ;
+  smörja_V : V ;
   smita_V : V ;
   snyta_V : V ;
+  sova_V : V ;
   spinna_V : V ;
   spricka_V : V ;
   sprida_V : V ;
@@ -142,6 +148,7 @@ abstract VerbsSweAbs = Categories ** {
   supa_V : V ;
   svida_V : V ;
   svika_V : V ;
+  sy_V : V ;
   taga_V : V ;
   tiga_V : V ;
   tillåta_V : V ;

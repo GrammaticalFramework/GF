@@ -187,6 +187,7 @@ adj2Reg : Str -> Str -> Adj = \vid,vitt -> adjAlmostReg vid vitt (vid + "a") ;
         } ;
       såld = case Predef.dp 2 sålt of {
         "it" => Predef.tk 2 sålt + "en" ;
+        "tt" => Predef.tk 2 sålt + "dd" ;
         _ => init sålt + "d"
         }
     in 

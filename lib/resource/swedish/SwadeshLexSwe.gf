@@ -157,7 +157,7 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     sea_N = sea_N ;
     seed_N = regN "frö" neutrum ;
     skin_N = regN "skinn" neutrum ;
-    sky_N = regN "himmel" "himlar" ; 
+    sky_N = mk2N "himmel" "himlar" ; 
     smoke_N = regN "rök" utrum ;
     snake_N = snake_N ;
     snow_N = regN "snö" utrum ;
@@ -177,7 +177,7 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     worm_N = regN "mask" utrum ;
     year_N = regN "år" neutrum ;
 
-    name_N2 = mkN2 (regN "namn") "på" ;
+--    name_N2 = mkN2 (regN "namn") "på" ;
     mother_N2 = mother_N2 ;
     father_N2 = father_N2 ;
 
@@ -212,7 +212,7 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     lie_V = ljuga_V ;
     live_V = mk2V "leva" "levde" ;
     play_V = mk2V "leka" "lekte" ;
-    pull_V = dra_V ;
+    pull_V = draga_V ;
     push_V = mk2V "trycka" "tryckte" ;
     rub_V = smörja_V ;
     say_V = säga_V ;
