@@ -71,7 +71,8 @@ pCommand ws = case ws of
   "p"  : s      -> aString CParse s
   "t"  : i:o: s -> aString (CTranslate (language i) (language o)) s
   "gr" : []     -> aUnit   (CGenerateRandom 1)
-  "gr" : n : [] -> aUnit   (CGenerateRandom (readIntArg n)) -- deprecated 12/5/2001
+  "gr" : t      -> aTerm   (CGenerateRandom 1) t
+---  "gr" : n : [] -> aUnit   (CGenerateRandom (readIntArg n)) -- deprecated 12/5/2001
   "pt" : s      -> aTerm   CPutTerm s
 -----  "wt" : f : s  -> aTerm   (CWrapTerm (string2id f)) s
   "ma" : s      -> aString CMorphoAnalyse s
