@@ -1,4 +1,4 @@
---# -path=.:../abstract:../../prelude
+--# -path=.:../scandinavian:../abstract:../../prelude
 
 --1 Swedish Lexical Paradigms
 --
@@ -18,7 +18,7 @@
 --
 -- The following modules are presupposed:
 
-resource ParadigmsSwe = open (Predef=Predef), Prelude, SyntaxSwe, ResourceSwe in {
+resource ParadigmsSwe = open (Predef=Predef), Prelude, MorphoSwe, SyntaxSwe, ResourceSwe in {
 
 --2 Parameters 
 --
@@ -104,21 +104,21 @@ oper
 -- Non-comparison one-place adjectives need four forms in the worst case:
 -- strong singular, weak singular, plural.
 
-  mkA1 : (_,_,_,_ : Str) -> A1 ; -- liten, litet, lilla, små
+  mkA : (_,_,_,_ : Str) -> A ; -- liten, litet, lilla, små
 
 -- Special cases needing one form each are: regular adjectives,
 -- adjectives with unstressed "e" in the last syllable, those
 -- ending with "n" as a further special case, and invariable
 -- adjectives.
 
-  adjReg    : Str -> A1 ;          -- billig (billigt, billiga, billiga)
-  adjNykter : Str -> A1 ;          -- nykter (nyktert, nyktra, nyktra) 
-  adjGalen  : Str -> A1 ;          -- galen  (galet, galna, galna) 
-  adjInvar  : Str -> A1 ;          -- bra
+  adjReg    : Str -> A ;          -- billig (billigt, billiga, billiga)
+  adjNykter : Str -> A ;          -- nykter (nyktert, nyktra, nyktra) 
+  adjGalen  : Str -> A ;          -- galen  (galet, galna, galna) 
+  adjInvar  : Str -> A ;          -- bra
 
 -- Two-place adjectives need a preposition and a case as extra arguments.
 
-  mkA2    : A1 -> Str -> A2 ;  -- delbar, med
+  mkA2    : A -> Str -> A2 ;  -- delbar, med
   mkA2Reg : Str  -> Str -> A2 ;  -- 
 
 -- Comparison adjectives may need the three four forms for the positive case, plus
@@ -239,7 +239,7 @@ oper
        }
     } in 
    {s = \\n,d,c => mkCase c (nom ! SF n d Nom) ;
-    g = g ; x = x ; lock_N = <>
+    g = gensex g x ; lock_N = <>
    } ;
 
   -- auxiliaries
@@ -286,7 +286,7 @@ oper
   funTill = \f -> mkN2 f "till" ;
 
   mkPN = \karolus, karoli, g, x -> 
-    {s = table {Gen => karoli ; _ => karolus} ; g = g ; x = x ; lock_PN = <>} ;
+    {s = table {Gen => karoli ; _ => karolus} ; g = gensex g x ; lock_PN = <>} ;
   pnReg = \horst -> 
     mkPN horst (ifTok Tok (Predef.dp 1 horst) "s" horst (horst + "s")) ;
   pnS = \bk ->
@@ -296,7 +296,7 @@ oper
   mkNP = \a,b,g -> UsePN (mkPN a b g nonmasculine) ; -- gender irrelevant in NP
   npReg = \s,g -> UsePN (pnReg s g nonmasculine) ;
 
-  mkA1 = \liten, litet, lilla, små -> 
+  mkA = \liten, litet, lilla, små -> 
   {s = table {
     Strong (ASg Utr) => \\c => mkCase c liten ;
     Strong (ASg Neutr) => \\c => mkCase c litet ;
@@ -304,23 +304,23 @@ oper
     Weak (AxSg Masc) => \\c => mkCase c (Predef.tk 1 lilla + "e") ;
     Weak _ => \\c => mkCase c lilla
     } ;
-   lock_A1 = <>
+   lock_A = <>
   } ;
 
-  adjReg = \billig -> mkA1 billig (billig + "t") (billig + "a") (billig + "a") ;
+  adjReg = \billig -> mkA billig (billig + "t") (billig + "a") (billig + "a") ;
   adjNykter = \nykter -> 
     let {nyktr = Predef.tk 2 nykter + Predef.dp 1 nykter} in
-    mkA1 nykter (nykter + "t") (nyktr + "a") (nyktr + "a") ;
+    mkA nykter (nykter + "t") (nyktr + "a") (nyktr + "a") ;
   adjGalen = \galen -> 
     let {gal = Predef.tk 2 galen} in
-    mkA1 galen (gal + "et") (gal + "na") (gal + "na") ;
-  adjInvar = \bra -> {s = \\_,_ => bra ; lock_A1 = <>} ;
+    mkA galen (gal + "et") (gal + "na") (gal + "na") ;
+  adjInvar = \bra -> {s = \\_,_ => bra ; lock_A = <>} ;
 
   mkA2 = \a,p -> a ** {s2 = p ; lock_A2 = <>} ;
   mkA2Reg = \a -> mkA2 (adjReg a) ;
 
   mkADeg = \liten, litet, lilla, sma, mindre, minst, minsta -> 
-   let {lit = (mkA1 liten litet lilla sma).s} in
+   let {lit = (mkA liten litet lilla sma).s} in
    {s = table {
      AF (Posit f) c => lit ! f ! c ;
      AF Compar c    => mkCase c mindre ;
@@ -333,7 +333,7 @@ oper
   aReg = \fin -> mkADeg fin 
     (fin + "t") (fin + "a") (fin + "a") (fin + "are") (fin + "ast") (fin + "aste") ;
 
-  apReg = \s -> UseA1 (adjReg s) ;
+  apReg = \s -> UseA (adjReg s) ;
 
   mkAdv a = advPost a ** {lock_Adv = <>} ;
   mkAdvPre a = advPre a ** {lock_Adv = <>} ;
@@ -361,5 +361,10 @@ oper
   vvInf v = v ** {isAux = True ; lock_VV = <>} ;
   vvAtt v = v ** {isAux = False ; lock_VV = <>} ;
   vvBoth v = v ** {isAux = variants {False ; True} ; lock_VV = <>} ;
+
+  gensex : Gender -> Sex -> NounGender = \g,x -> case g of {
+    Utr => NUtr x ;
+    _ => NNeutr
+    } ;
 
 } ;
