@@ -10,6 +10,7 @@
 
 module RedBlack (
                 emptyTree,
+		isEmpty,		
 		Tree,
 		lookupTree,
 		insertTree,
@@ -31,6 +32,10 @@ balance color a x b = T color a x b
 
 emptyTree :: Tree key el
 emptyTree = E
+
+isEmpty :: Tree key el -> Bool
+isEmpty (E) = True
+isEmpty _   = False
 
 lookupTree :: Ord a => a -> Tree a b -> Maybe b
 lookupTree _ E = Nothing

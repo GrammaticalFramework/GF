@@ -12,6 +12,7 @@ module Map
            (
            Map,
            empty,
+           isEmpty,	   
 	   (!),     -- lookup operator.
 	   (!+),    -- lookupMany operator.
 	   (|->),   -- insert operator.
