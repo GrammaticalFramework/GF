@@ -138,8 +138,8 @@ fun
   ExistQCl  : CN -> QCl ;                   -- "is there a bar", 
   ExistNumQCl : Num -> CN -> QCl ;          -- "are there (86) bars"
 
----  ImperVP : VP -> Imp ;                    -- "be a man"
-  ImperVP : VPI -> Imp ;                    -- "(don't) be a man"
+---  ImperVP : VP -> Imp ;                  -- "be a man"
+  PosImperVP, NegImperVP : VP -> Imp ;      -- "(don't) be a man"
 
 ----rename these ??
   IndicPhrase : S -> Phr ;                 -- "I walk."

@@ -479,9 +479,6 @@ param
      VFinite  Tense Anteriority
    | VImperat
    | VInfinit Anteriority ;
-  VIForm =
-     VIImperat
-   | VIInfinit ;
 
 oper
   verbSForm : Verbum -> Voice -> SForm -> {fin,inf : Str} = \se,vo,sf -> 
@@ -525,9 +522,9 @@ oper
 -- to account for word order variations. No particle needs to be retained.
 
   VerbPhrase : Type = {
-    s  : VIForm => Str ; 
+    s  : Str ; 
     s2 : Str ; 
-    s3 : VIForm => Gender => Number => Person => Str
+    s3 : Gender => Number => Person => Str
     } ;
   VerbGroup  : Type = {
     s  : SForm => Str ; 
@@ -540,15 +537,9 @@ oper
        vgs  = vg.s ;
        vgs3 = vg.s3 
     in
-   {s  = table {
-           VIInfinit => vgs ! VInfinit a ;
-           VIImperat => vgs ! VImperat
-         } ;
+   {s  = vg.s  ! VInfinit a ;
     s2 = vg.s2 ! b ;
-    s3 = table {
-           VIInfinit => vgs3 ! VInfinit a ;
-           VIImperat => vgs3 ! VImperat
-         } ;
+    s3 = vg.s3 ! VInfinit a ;
     } ;
 
 -- A simple verb can be made into a verb phrase with an empty complement.
@@ -827,13 +818,13 @@ oper
       (\\g,n,p => 
               vilja.s1 ++
               vilja.s3 ++
-              simma.s ! VIInfinit ++ simma.s2 ++ ---- Anter!
-              simma.s3 ! VIInfinit ! g ! n ! p) ;
+              simma.s ++ simma.s2 ++ ---- Anter!
+              simma.s3 ! g ! n ! p) ;
 
   transVerbVerb : VerbVerb -> TransVerb -> TransVerb = \vilja,hitta ->
     {s  = vilja.s ;
      s1 = vilja.s1 ++ vilja.s3 ++
-          hitta.s ! VI (Inf Act) ++ hitta.s1 ;            ---- Anter!
+          hitta.s ! VI (Inf Act) ++ hitta.s1 ;
      s2 = hitta.s2
     } ;
 
@@ -842,8 +833,8 @@ oper
       (\\g,n,p => 
               grei.s ! predFormAdj g n ! Nom ++ 
               infinAtt ++
-              simma.s ! VIInfinit ++ simma.s2 ++ ---- Anter!
-              simma.s3 ! VIInfinit ! g ! n ! p) ;
+              simma.s ++ simma.s2 ++
+              simma.s3 ! g ! n ! p) ;
 
 -- Notice agreement to object vs. subject:
 
@@ -854,10 +845,10 @@ oper
      \obj,be,dig,simma ->
       useVerb be 
         (\\g,n,p => be.s1 ++ be.s2 ++ dig.s ! PAcc ++ be.s3 ++ 
-              simma.s ! VIInfinit ++ simma.s2 ++ ---- Anter!
+              simma.s ++ simma.s2 ++
               if_then_Str obj 
-                 (simma.s3 ! VIInfinit ! dig.g ! dig.n ! dig.p)
-                 (simma.s3 ! VIInfinit ! g     ! n     ! p)
+                 (simma.s3 ! dig.g ! dig.n ! dig.p)
+                 (simma.s3 ! g     ! n     ! p)
         ) ;
 
   complVerbAdj2 : 
@@ -867,10 +858,10 @@ oper
               grei.s ! predFormAdj g n ! Nom ++ 
               grei.s2 ++ dig.s ! PAcc ++
               infinAtt ++
-              simma.s ! VIInfinit ++ simma.s2 ++ ---- Anter!
+              simma.s ++ simma.s2 ++
               if_then_Str obj 
-                 (simma.s3 ! VIInfinit ! dig.g ! dig.n ! dig.p)
-                 (simma.s3 ! VIInfinit ! g ! n ! p)
+                 (simma.s3 ! dig.g ! dig.n ! dig.p)
+                 (simma.s3 ! g ! n ! p)
       ) ;
 
 --2 Sentences missing noun phrases
@@ -1159,9 +1150,9 @@ oper
 
   Imperative = {s : Number => Str} ;
 
-  imperVerbPhrase : VerbPhrase -> Imperative = \titta -> 
+  imperVerbPhrase : Bool -> VerbGroup -> Imperative = \b,titta -> 
     {s = \\n => 
-       titta.s ! VIImperat ++ titta.s2 ++ titta.s3 ! VIImperat ! utrum ! n ! P2
+       titta.s ! VImperat ++ titta.s2 ! b ++ titta.s3 ! VImperat ! utrum ! n ! P2
     } ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
