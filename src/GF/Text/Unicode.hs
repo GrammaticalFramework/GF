@@ -44,8 +44,9 @@ mkUnicode s = case s of
      c:cs -> remClosing (c:u) cs
      _ -> (reverse u,[]) -- forgiving missing end
 
-   -- don't convert XML tags --- assumes <> always means XML tags
-   treat old mk s = case s of
+-- don't convert XML tags --- assumes <> always means XML tags
+treat :: String -> (String -> String) -> String -> String
+treat old mk s = case s of
      '<':cs -> mk (reverse old) ++ '<':noTreat cs
      c:cs -> treat (c:old) mk cs
      _ -> mk (reverse old)

@@ -5,6 +5,7 @@ module MoreCustom where
 
 moreCustomGrammarParser = []
 moreCustomGrammarPrinter = []
+moreCustomMultiGrammarPrinter = []
 moreCustomSyntaxPrinter = []
 moreCustomTermPrinter = []
 moreCustomTermCommand = []
@@ -13,3 +14,4 @@ moreCustomStringCommand = []
 moreCustomParser = []
 moreCustomTokenizer = []
 moreCustomUntokenizer = []
+moreCustomUniCoding = []

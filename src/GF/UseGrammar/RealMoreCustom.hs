@@ -70,6 +70,8 @@ moreCustomGrammarPrinter =
 --- also include printing via grammar2syntax!
   ]
 
+moreCustomMultiGrammarPrinter = []
+
 moreCustomSyntaxPrinter = 
   [ 
     (strCIm "gf",    S.prSyntax) -- DEFAULT
@@ -118,5 +120,9 @@ moreCustomUntokenizer =
 -- add your own untokenizers here
   ]
 
+moreCustomUniCoding = 
+  [
+-- add your own codings here
+  ]
 
 strCIm = id

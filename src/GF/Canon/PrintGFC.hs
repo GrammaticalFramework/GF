@@ -69,12 +69,13 @@ instance Print Double where
   prt _ x = doc (shows x)
 
 instance Print Char where
-  prt _ s = doc (showChar '\'' . mkEsc s . showChar '\'')
-  prtList s = doc (showChar '"' . concatS (map mkEsc s) . showChar '"')
+  prt _ s = doc (showChar '\'' . mkEsc '\'' s . showChar '\'')
+  prtList s = doc (showChar '"' . concatS (map (mkEsc '"') s) . showChar '"')
 
-mkEsc :: Char -> ShowS
-mkEsc s = case s of
-  _ | elem s "\\\"'" -> showChar '\\' . showChar s
+mkEsc :: Char -> Char -> ShowS
+mkEsc q s = case s of
+  _ | s == q -> showChar '\\' . showChar s
+  '\\'-> showString "\\\\"
   '\n' -> showString "\\n"
   '\t' -> showString "\\t"
   _ -> showChar s
