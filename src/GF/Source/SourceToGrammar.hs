@@ -74,19 +74,21 @@ transModDef x = case x of
         id'   <- transIdent id
         open' <- transIdent open
         return (transResDef, GM.MTInstance open', id')
-
-    (extends', opens', defs',flags') <- case body of
+    
+    case body of 
       MBody extends opens defs -> do
         extends' <- transExtend extends
         opens'   <- transOpens opens
         defs0    <- mapM trDef $ getTopDefs defs
         defs'    <- U.buildAnyTree [d | Left  ds <- defs0, d <- ds]
         flags'   <- return       [f | Right fs <- defs0, f <- fs]
-        return $ (extends', opens', defs',flags')
-      MReuse _ ->
-        return (Nothing,[],NT,[])
-
-    return $ (id', GM.ModMod (GM.Module mtyp' mstat' flags' extends' opens' defs'))  
+        return $ (id', GM.ModMod (GM.Module mtyp' mstat' flags' extends' opens' defs'))
+      MReuse _ -> do
+        return (id', GM.ModMod (GM.Module mtyp' mstat' [] Nothing [] NT))
+      MWith m opens -> do
+        m'     <- transIdent m
+        opens' <- mapM transOpen opens 
+        return (id', GM.ModWith mtyp' mstat' m' opens')
 
 transComplMod :: ComplMod -> GM.ModuleStatus
 transComplMod x = case x of

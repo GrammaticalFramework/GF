@@ -69,7 +69,7 @@ moduleDeps ms = mapM deps ms where
       _ -> return []
     testErr (all (compatMType ety) ests) "inappropriate extension module type" 
     osts <- mapM (lookupModuleType gr . openedModule) os
-    testErr (all (==oty) osts) "inappropriate open module type"
+    testErr (all (compatOType oty) osts) "inappropriate open module type"
     let ab = case it of
                IdentM _ (MTConcrete a) -> [IdentM a MTAbstract]
                _ -> [] ---- 
@@ -77,12 +77,41 @@ moduleDeps ms = mapM deps ms where
                 [IdentM e ety | Just e <- [es]] ++ 
                 [IdentM (openedModule o) oty | o <- os])
 
-  -- check for superficial compatibility, not submodule relation etc
+  -- check for superficial compatibility, not submodule relation etc: what can be extended
   compatMType mt0 mt = case (mt0,mt) of
     (MTConcrete _, MTConcrete _) -> True
     (MTInstance _, MTInstance _) -> True
     (MTReuse _, MTReuse _) -> True
     ---- some more
     _ -> mt0 == mt
+  -- in the same way; this defines what can be opened
+  compatOType mt0 mt = case mt0 of
+    MTAbstract     -> mt == MTAbstract
+    MTTransfer _ _ -> mt == MTAbstract
+    _ -> case mt of
+      MTResource -> True
+      MTReuse _ -> True
+      MTInterface -> True
+      MTInstance _ -> True
+      _ -> False      
 
   gr = MGrammar ms --- hack
+
+openInterfaces :: Dependencies -> Ident -> Err [Ident]
+openInterfaces ds m = do
+  let deps = [(i,ds) | (IdentM i _,ds) <- ds]
+  let more (c,_) = [(i,mt) | Just is <- [lookup c deps], IdentM i mt <- is]
+  let mods = iterFix (concatMap more) (more (m,undefined))
+  return $ [i | (i,MTInterface) <- mods]
+
+{-
+-- to test
+exampleDeps = [
+  (ir "Nat",[ii "Gen", ir "Adj"]),
+  (ir "Adj",[ii "Num", ii "Gen", ir "Nou"]),
+  (ir "Nou",[ii "Cas"])
+  ]
+
+ii s = IdentM (IC s) MTInterface
+ir s = IdentM (IC s) MTResource
+-}

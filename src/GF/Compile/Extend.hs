@@ -80,7 +80,7 @@ extendAnyInfo n i j = errIn ("building extension for" +++ prt n) $ case (i,j) of
   _ -> Bad $ "cannot unify information in" ++++ show i ++++ "and" ++++ show j
 
 
--- opers declared in one module and defined in an extension are a special case
+-- opers declared in an interface and defined in an instance are a special case
 
 extendResOper n mt1 m1 mt2 m2 = case (m1,m2) of
   (Nope,_) -> return $ ResOper (strip mt1) m2
