@@ -1,0 +1,321 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html><head><title>GF Version 2.0</title></head>
+ 
+
+<body bgcolor="#ffffff" text="#000000">
+
+<center>
+<img src="gf-logo.gif">
+
+<h1>Grammatical Framework</h1>
+
+<h2>Version 2.0</h2>
+
+August 4, 2004.
+</center>
+
+<p>
+
+</p><h2>News</h2>
+
+<b>August 4, 2004. GF 2.0 now released</b>.
+Here are the <a
+href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf2-highlights.html">highlights</a>.
+Software available on the <a href="http://www.cs.chalmers.se/%7Eaarne/GF/download">Download Page</a>.
+
+<p>
+
+<font size=-2>
+
+<h3>Older news</h3>
+
+April 2, 2004. GF 2.0 beta version now released.
+Here are the <a href="http://www.cs.chalmers.se/%7Eaarne/GF/GF2/gf2-highlights.html">highlights</a>.
+Here is a <a href="http://www.cs.chalmers.se/%7Eaarne/GF/GF2/gf2-beta.tgz">source package</a>
+which also includes documentation and example grammars.
+Comments and suggestions welcome!
+
+<br>
+
+June 25, 2003. GF 1.2 released with updated binaries, sources,
+and grammar packages. Here are the <a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf-1.2.html">highlights</a>.
+
+<br>
+
+May 25, 2003.
+A new version of the <a href="http://www.cs.chalmers.se/%7Eaarne/GF/Tutorial">grammarian's tutorial</a>, to be used in the
+<a href="http://www.logic.at/esslli03/">ESSLLI summer school</a>.
+
+<br>
+
+March 27, 2003. 
+<a href="http://www.cs.chalmers.se/%7Ekrijo/gramlets.html">Gramlets</a>:
+GF grammars compiled to Java applets. Try out a GF editor demo.
+
+<br>
+
+March 27, 2003. GF 1.1 released with updated binaries, sources,
+and grammar packages. Here are the <a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf-1.1.html">highlights</a>.
+Version 1.0 is still available as source package.
+
+
+<br>
+
+November 1, 2002. Started web page on
+<a href="http://129.16.225.78/aarne/GF/resource/">resource grammars</a>.
+
+<br>
+November 1, 2002. Get GF Zaurus applications 
+<a href="http://129.16.225.78/aarne/GF/zaurus/">here</a>.
+
+<br>
+
+September 6, 2002. GF on Sharp Zaurus SL5500 PDA:
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/zaurus2.jpg">picture</a>.
+This was made possible by an excellent
+<a href="http://www.killefiz.de/zaurus/showdetail.php?app=430">Hugs port</a>
+for Zaurus. To learn more about Zaurus, read this
+<a href="http://linux.oreillynet.com/pub/a/linux/2002/05/23/zaurus.html">
+review</a>.
+</font>
+
+</p><h2>What is GF?</h2>
+
+The Grammatical Framework (=GF) is a grammar formalism based on type
+theory. It consists of 
+<ul>
+  <li> a special-purpose programming language
+  </li><li> a compiler of the language
+  </li><li> a generic grammar processor
+</li></ul>
+The compiler reads
+GF grammars from user-provided files, 
+and the generic grammar processor performs
+various tasks with the grammars:
+<ul>
+  <li> generation
+  </li><li> parsing
+  </li><li> translation
+  </li><li> type checking
+  </li><li> computation
+  </li><li> paraphrasing
+  </li><li> random and exhaustive generation
+  </li><li> syntax editing
+</li></ul>
+GF particularly addresses two aspects of grammars:
+<ul>
+  <li> multilinguality (parallel grammars for different languages)
+  </li><li> semantics (semantic conditions of well-formedness, semantic
+       properties of expressions)
+</li></ul>
+GF Version 2.0 adds the aspect of
+<ul>
+<li> modularity and grammar engineering.
+</ul>
+GF is open-source software licensed under 
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gpl.html">GNU General Public License (GPL)</a>.
+
+
+
+<h2>Examples and demos</h2>
+
+<a href="2341.html">Numeral translator</a>: recognizes and generates 
+numbers from 1 to 999,999 in 80 languages.
+
+<p>
+
+<a href="http://www.cs.chalmers.se/%7Ekrijo/letter-applet.html">Letter editor</a>: 
+write simple letters in English, Finnish,
+French, Swedish, and Russian with a few mouse clicks.
+
+<p>
+
+<a href="http://129.16.225.78/aarne/GF/resource/">Resource grammar
+library</a>: 
+basic structures of seven languages
+(English, Finnish, French, German, Italian, Russian, Swedish).
+Resource grammars can be used as libraries for writing GF
+applications,
+but they can also be useful for language training.
+
+
+<h2>Executable programs</h2>
+
+GF is available precompiled for
+several platforms: Linux, Mac OS X, Microsoft Windows, and Sun OS.
+For more information, see the <a href="http://www.cs.chalmers.se/%7Eaarne/GF/download">Download Page</a>.
+
+
+<h2>Source code</h2>
+
+The main part of GF is written in
+<a href="http://www.haskell.org/">Haskell</a>.
+
+<p>
+
+The platform-independent graphical user interface is written in
+<a href="http://java.sun.com/">Java</a>.
+
+
+</p><p>
+
+Here is a 
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/gf-src.tgz">GF source package</a>, which includes a Makefile
+for different platforms and Haskell compilers.
+The <a href="http://www.cs.chalmers.se/%7Eaarne/GF/download">Download Page</a> gives more information on
+compiler requirements.
+
+</p><p>
+
+Here are some older source packages still available:
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/gf-src-1.0.tgz">GF 1.0</a>, 
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/gf-src-0.976.tgz">GF 0.976</a>.
+
+</p><h2>Documents</h2>
+
+<ul>
+<li>
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/javaGUImanual/javaGUImanual.htm">User's tutorial</a>
+on editing in the Java interface.
+  
+</li><li>
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/Tutorial/">Grammarian's tutorial</a>
+on writing GF grammars, with exercises.
+
+</li><li>
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/short/01-gf-short.html">
+GF in 25 Minutes</a> for programmers.
+
+</li><li>
+<a href="http://www.cs.chalmers.se/%7Eaarne/articles/gf-jfp.ps.gz">Grammatical Framework: A Type-Theoretical
+Grammar Formalism</a> (ps.gz). Theoretical paper on GF by A. Ranta, appeared
+in <i>The Journal of Functional Programming</i>, vol. 14:2. 2004, pp. 145-189.
+
+
+</li><li>
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf-manual.html">
+User Manual</a> explaining the GF user interfaces and command language.
+
+</li><li>
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf-specification.html">
+Language specification</a> of the GF grammar formalism.
+
+</li><li>
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf2-highlights.html">
+Highlights</a> of Version 2.0 (in comparison with version 1.1).
+
+
+</li><li> 
+
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf-bibliography.html">
+Bibliography</a>: 
+publications on GF, as well as background literature.
+</li></ul>
+
+
+<h2>Projects and events</h2>
+
+<a href="http://www.talk-project.org">TALK</a> = Tools for Ambient Linguistic
+Knowledge</a>. GF is used in implementing multimodal and multilingual dialogue systems.
+
+<p>
+
+<a hred="http://www.key-project.org/">KeY</a> project on Integrated Deductive
+Software Design. GF is used for
+authoring informal and formal specifications.
+
+<p>
+
+An introductory course on GF was given at the
+<a href="http://www.logic.at/esslli03/">ESSLLI summer school</a>
+in Vienna 2003. 
+
+
+
+<h2>Miscellaneous</h2>
+
+<ul>
+  <li>
+
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/gf-grammars.tgz">
+Package of example GF grammars</a>
+
+<!--
+<li>
+<a href="grammars/">
+Unpacked directories with example GF grammars</a>
+-->
+
+</li><li>
+<a href="http://www.cs.chalmers.se/%7Ekrijo/gramlets.html">Gramlets</a>:
+GF grammars compiled to Java applets.
+
+
+</li><li>
+<a href="http://www.xrce.xerox.com/competencies/content-analysis/past-projects/gf/home.en.html">
+The GF Xerox Home Page</a>
+with the oldest releases of and documents on GF, Version 0.54, 1999.
+
+</li><li>
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf-local.html">
+Local guide</a>
+on running GF on Chalmers CS computers.
+
+</li><li>
+Application project:
+<a href="http://www.cs.chalmers.se/%7Ekrijo/GF/specifications.html">
+ Grammars for Object-Oriented Software Specifications</a>
+by <a href="http://www.cs.chalmers.se/%7Ekrijo/">Kristofer Johannisson</a>.
+
+</li><li>
+Earlier application:
+<a href="http://www.cs.chalmers.se/%7Ehallgren/Alfa/Tutorial/GFplugin.html">
+    Natural-Language Interface to the proof editor Alfa</a>.
+
+</li><li>
+    
+<a href="http://www.cs.chalmers.se/%7Emarkus/BNFC">The BNF Converter</a>.
+A GF spin-off customized for the description of programming
+languages.
+    
+
+</li><li>
+
+<a href="http://www.cs.chalmers.se/%7Eaarne/morphology">The Functional
+Morphology project</a>. Creating infrastructure for GF and other
+linguistic applications.
+
+</li></ul>
+
+<h2>Authors</h2>
+
+The <a href="http://www.cs.chalmers.se/Cs/Research/Language-technology/">
+Languge Technology Group</a>.
+More details on the
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF/doc/gf-people.html">
+Authors and Acknowledgements</a> page.
+
+<!--
+<h2>Demo</h2>
+
+There was an
+<a href="demo/FormTranslate.html">on-line translator demo</a>
+
+currently running on an old server, and not always functional.
+-->
+
+
+<h2>Implementation project</h2>
+
+Want to become a GF developer? Contact
+<a href="http://www.cs.chalmers.se/%7Eaarne/">Aarne Ranta</a>.
+Or just get the sources and start hacking.
+
+<hr>
+
+Last modified by
+<a href="http://www.cs.chalmers.se/%7Eaarne">
+Aarne Ranta</a>,
+August 4, 2004.
+
+</body></html>
