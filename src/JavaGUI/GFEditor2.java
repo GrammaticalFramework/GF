@@ -32,12 +32,17 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     public MouseEvent m2;
     public static String selectedText="";
 
+    // XML parsing:
     public static boolean debug = false;
+    // pop-up/mouse handling:
     public static boolean debug3 = false;
+    // linearization marking:
     public static boolean debug2 = true;
+
     public static boolean selectionCheck = false;
     public static LinPosition focusPosition ;
     public static String stringToAppend = "";
+
     //stack for storing the current position:
     public static Vector currentPosition = new Vector();
     public static int selStart = -1;
@@ -1803,17 +1808,22 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
      }//not null selection
     }
 
+    /*
+       s - string to append
+       selectionStart, selectionEnd - selection coordinates 
+       (focus tag is already cut)
+    */
     public static void appendMarked(String s, int selectionStart, int selectionEnd)
     { if (s.length()>0)
     {
       if (debug2) 
+      {  
         System.out.println("STRING: "+s);
-      if (debug2) 
         System.out.println("where selection start is: "+selectionStart);
-      if (debug2) 
         System.out.println("where selection end is: "+selectionEnd);
-      if (debug2&&(selectionStart>-1)) 
-        System.out.println("where selection is: "+s.substring(selectionStart,selectionEnd));
+        if ((selectionStart>-1)&&(selectionEnd>selectionStart))
+          System.out.println("where selection is: "+s.substring(selectionStart,selectionEnd));
+      }
       currentLength = 0;
       newLength=0;
       oldLength = output.getText().length();               
@@ -1821,15 +1831,15 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       restString = s;
       int m2, m1;
       LinPosition position ;
-//      if ((selectionStart>-1)&&(selectionEnd>=selectionStart))
+
       if (selectionStart>-1)
       {
         selStart = selectionStart;
         selEnd = selectionEnd;                               
         if (debug2) 
-                System.out.println("SELECTION: " + selStart + " "+selEnd+ "TOTAL: "+s.length());
+          System.out.println("SELECTION: " + selStart + " "+selEnd+ "TOTAL: "+s.length());
         if (selEnd>selStart)
-          selectionCheck = (s.substring(selStart, selEnd).indexOf("<")==-1);
+          selectionCheck = (getCharacter(s.substring(selStart, selEnd),"<",0)==-1);
         l = restString.indexOf("<subtree");
         l2 = restString.indexOf("</subtree");
         // cutting subtree-tags:
@@ -1838,7 +1848,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
           if ((l2==-1)||((l<l2)&&(l>-1)))
           {
             j = restString.indexOf('>',l);                                      
-            n = restString.indexOf("<",j);
+            n = getCharacter(restString,"<",j);
             m1 =  restString.indexOf('[',l);
             m2 = restString.indexOf(']',l);
             //getting position:
@@ -1966,7 +1976,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         r = restString.indexOf("<subtree");
         while (r>-1)
         {
-          int t = restString.indexOf(">",r);
+          int t = getCharacter(restString,">",r);
           if (t<restString.length()-2)
             restString = restString.substring(0,r)+restString.substring(t+2);
           else 
@@ -1975,7 +1985,12 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         }
       }
       // appending:
-      // output.append(restString);
+      String more = "\\"+">";
+      String less = "\\"+"<";
+      restString = replaceSubstring(restString,more,"> ");
+      restString = replaceSubstring(restString,less," <");
+      restString= replaceSubstring(restString,"\b\b","\b");
+      System.out.println(restString);
       output.append(restString.replaceAll("&-","\n "));
       if ((selectionEnd>=selectionStart)&&(selectionStart>-1))
       try {  
@@ -1986,7 +2001,33 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     }// s.length()>0
     }
 
+    public static String replaceSubstring(String s, String old, String newString)
+    {
+      String ss = s;
+      int i =ss.indexOf(old);
+      while (i!=-1)
+      {
+        ss = ss.substring(0,i) + newString + ss.substring(i+old.length());
+        i =ss.indexOf(old);
+      }
+      return ss;
+    }
 
+    public static int getCharacter(String s, String character, int position)
+    {
+      int t = restString.indexOf(character, position);
+      int i = t-1;
+      int k = 0;
+      while ((i>-1)&&(restString.charAt(i)=='\\'))
+      {
+        k++;
+        i--;
+      }
+      if (k % 2 == 0)
+        return t;
+      else
+        return getCharacter(s, character, t+1);
+    }
 
     public static void register(int start, int end, LinPosition position)
     {
