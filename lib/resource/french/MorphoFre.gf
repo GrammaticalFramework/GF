@@ -302,7 +302,8 @@ oper
 --
 -- The verb "Ítre" is often used in syntax.
 
-  verbEtre  = verbPres (conj tre "Ítre") ;
+  verbEtre  = verbPres (conj tre "Ítre") AHabere ;
+  verbAvoir  = verbPres (conjAvoir "avoir") AHabere ;
 
 -- We very often form the verb stem by dropping out the infinitive ending.
 

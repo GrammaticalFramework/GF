@@ -50,7 +50,7 @@ fun
 
   PositADeg   : ADeg -> AP ;               -- "old"
   ComparADeg  : ADeg -> NP -> AP ;         -- "older than John"
-  SuperlADeg  : ADeg -> AP ;               -- "the oldest"
+  SuperlNP    : ADeg -> CN -> NP ;         -- "the oldest man"
 
 --!
 --3 Verbs and verb phrases
@@ -69,8 +69,9 @@ fun
   PredVV      : VV -> VG -> VG ;       -- "can run", "can't run", "tries to run"
 
   PredNP      : NP -> VG ;             -- "is John", "is not John"
-  PredAdv     : Adv -> VG ;            -- "is everywhere", "is not in France"
+  PredPP      : PP -> VG ;             -- "is in France", "is not in France"
   PredAP      : AP -> VG ;             -- "is old", "isn't old"
+  PredSuperl  : ADeg -> VG ;           -- "is the oldest"
   PredCN      : CN -> VG ;             -- "is a man", "isn't a man"
   VTrans      : V2 -> V ;              -- "loves"
 

@@ -16,7 +16,7 @@ lin
   ComplA2 = complAdj ;
   PositADeg = positAdjPhrase ;
   ComparADeg = comparAdjPhrase ;
-  SuperlADeg = superlAdjDegr ;
+  SuperlNP = superlNounPhrase ;
 
   DetNP = detNounPhrase ;
   IndefOneNP = indefNounPhrase singular ;
@@ -38,13 +38,16 @@ lin
   PosVG  = predVerbGroup True ;
   NegVG  = predVerbGroup False ;
 
+  PredVG = predVerbGroupClause ;
+
   PredV  = predVerb ;
   PredAP = predAdjective ; 
+  PredSuperl a = predAdjective (superlAdjDegr a) ; 
   PredCN = predCommNoun ;
   PredV2 = complTransVerb ;
   PredV3 = complDitransVerb ;
   PredNP = predNounPhrase ;
-  PredAdv = predAdverb ;
+  PredPP = predAdverb ;
   PredVS = complSentVerb ;
   PredVV = complVerbVerb ;
   PredPassV = predPassVerb ;
