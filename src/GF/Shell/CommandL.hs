@@ -44,10 +44,13 @@ getCommand = do
   s <- getLine
   return $ pCommand s
 
-getCommandUTF :: IO Command
-getCommandUTF = do
+-- decodes UTF8 if u==False, i.e. if the grammar does not use UTF8;
+-- used in the Java GUI, which always uses UTF8
+
+getCommandUTF :: Bool -> IO Command
+getCommandUTF u = do
   s <- getLine
-  return $ pCommand s  -- the GUI is doing this: $ decodeUTF8 s 
+  return $ pCommand $ if u then s else decodeUTF8 s 
 
 pCommand = pCommandWords . words where 
   pCommandWords s = case s of
