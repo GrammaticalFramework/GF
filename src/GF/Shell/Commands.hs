@@ -126,11 +126,11 @@ execCommand env c s = case c of
 
 -- these commands do need IO
   CCEnvImport file -> useIOE (env,s) $ do
-    st <- shellStateFromFiles opts env file
+    st <- shellStateFromFiles optss env file
     return (st,s)
 
   CCEnvEmptyAndImport file -> useIOE (emptyShellState, initSState) $ do
-    st <- shellStateFromFiles opts emptyShellState file
+    st <- shellStateFromFiles optss emptyShellState file
     return (startEditEnv st,initSState)
 
   CCEnvEmpty -> do
@@ -180,6 +180,7 @@ execCommand env c s = case c of
    gr = grammarCEnv env
    cgr = canCEnv env
    opts = globalOptions env
+   optss = addOption beSilent opts
 
    -- format for documents: 
    -- GF commands of form "-- command", then term or text  

@@ -35,8 +35,9 @@ getAllFiles opts ps env file = do
   -- read module headers from all files recursively
   ds0  <- getImports ps file
   let ds = [((snd m,map fst ms),p) | ((m,ms),p) <- ds0]
-  ioeIO $ putStrLn $ "all modules:" +++ show (map (fst . fst) ds)
-
+  if oElem beSilent opts 
+    then return ()
+    else ioeIO $ putStrLn $ "all modules:" +++ show (map (fst . fst) ds)
     -- get a topological sorting of files: returns file names --- deletes paths
   ds1 <- ioeErr $ either 
            return 
