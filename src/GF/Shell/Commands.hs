@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:36 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.35 $
+-- > CVS $Date: 2005/03/10 11:14:11 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.36 $
 --
 -- temporary hacks for GF 2.0
 --
@@ -449,9 +449,10 @@ displaySStateIn env state = (tree',msg,menu) where
   separ  = singleton . map unlines . intersperse [replicate 72 '*']
 
 -- | the Boolean is a temporary hack to have two parallel GUIs
-displaySStateJavaX :: Bool -> CEnv -> SState -> String
-displaySStateJavaX isNew env state = encodeUTF8 $ mkUnicode $
-                                     unlines $ tagXML "gfedit" $ concat [
+displaySStateJavaX :: Bool -> CEnv -> SState -> String -> String
+displaySStateJavaX isNew env state m = encodeUTF8 $ mkUnicode $
+                                       unlines $ tagXML "gfedit" $ concat [
+  if null m then [] else tagXML "hmsg" [m],
   tagXML "linearizations" (concat 
     [tagAttrXML "lin" ("lang", prLanguage lang) ss | (lang,ss) <- lins]),
   tagXML "tree"           tree,

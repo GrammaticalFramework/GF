@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:37 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.10 $
+-- > CVS $Date: 2005/03/10 11:14:11 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.11 $
 --
 -- GF editing session controlled by e.g. a Java program. AR 16\/11\/2001
 -----------------------------------------------------------------------------
@@ -43,20 +43,20 @@ sessionLineJ isNew env = do
 -- the Boolean is a temporary hack to have two parallel GUIs
 editLoopJnewX :: Bool -> CEnv -> SState -> IO ()
 editLoopJnewX isNew env state = do
-  c <- getCommandUTF (isCEnvUTF8 env state) ----
+  (m,c) <- getCommandUTF (isCEnvUTF8 env state) ----
   case c of
     CQuit -> return ()
 
     c -> do
       (env',state') <- execCommand env c state
-      let inits = initAndEditMsgJavaX isNew env' state'
+      let inits = initAndEditMsgJavaX isNew env' state' m
       let package = case c of
             CCEnvImport _         -> inits
             CCEnvEmptyAndImport _ -> inits
             CCEnvOpenTerm _       -> inits
             CCEnvOpenString _     -> inits
             CCEnvEmpty            -> initEditMsgJavaX env'
-            _ -> displaySStateJavaX isNew env' state'
+            _ -> displaySStateJavaX isNew env' state' m
       putStrLnFlush package
       editLoopJnewX isNew env' state'
 
@@ -74,6 +74,6 @@ initEditMsgJavaX env = encodeUTF8 $ mkUnicode $ unlines $ tagXML "gfinit" $
            (file,lang) <- zip (allGrammarFileNames env) (allLanguages env)]
 
 
-initAndEditMsgJavaX :: Bool -> CEnv -> SState -> String
-initAndEditMsgJavaX isNew env state = 
-  initEditMsgJavaX env ++++ displaySStateJavaX isNew env state
+initAndEditMsgJavaX :: Bool -> CEnv -> SState -> String -> String
+initAndEditMsgJavaX isNew env state m = 
+  initEditMsgJavaX env ++++ displaySStateJavaX isNew env state m
