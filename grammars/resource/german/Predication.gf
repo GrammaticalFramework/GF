@@ -1,3 +1,4 @@
+--# -path=.:../abstract:../../prelude
 
 --1 A Small Predication Library
 --
@@ -28,13 +29,13 @@ oper
 -- Individual-valued function applications.
 
   appFun1 : Fun -> NP -> NP ;          -- one-place function: "the successor of x"
-  appFun2 : Fun -> NP -> NP -> NP ;    -- two-place function: "the line from x to y"
+  appFun2 : Fun2 -> NP -> NP -> NP ;   -- two-place function: "the line from x to y"
   appFunColl : Fun -> NP -> NP -> NP ; -- collective function: "the sum of x and y"
 
 -- Families of types, expressed by common nouns depending on arguments.
 
   appFam1 : Fun -> NP -> CN ;          -- one-place family: "divisor of x"
-  appFam2 : Fun -> NP -> NP -> CN ;    -- two-place family: "line from x to y"
+  appFam2 : Fun2 -> NP -> NP -> CN ;   -- two-place family: "line from x to y"
   appFamColl : Fun -> NP -> NP -> CN ; -- collective family: "path between x and y"
 
 -- Type constructor, similar to a family except that the argument is a type.
@@ -65,10 +66,10 @@ oper
   predV1 = \F, x -> PredVP x (PosV F) ;
   predV2 = \F, x, y -> PredVP x (PosTV F y) ;
   predVColl = \F, x, y -> PredVP (conjNP x y) (PosV F) ;
-  predA1 = \F, x -> PredVP x (PosA F) ;
+  predA1 = \F, x -> PredVP x (PosA (AdjP1 F)) ;
   predA2 = \F, x, y -> PredVP x (PosA (ComplAdj F y)) ;
   predAComp = \F, x, y -> PredVP x (PosA (ComparAdjP F y)) ;
-  predAColl = \F, x, y -> PredVP (conjNP x y) (PosA F) ;
+  predAColl = \F, x, y -> PredVP (conjNP x y) (PosA (AdjP1 F)) ;
   predN1 = \F, x -> PredVP x (PosCN (UseN F)) ;
   predN2 = \F, x, y -> PredVP x (PosCN (AppFun F y)) ;
   predNColl = \F, x, y -> PredVP (conjNP x y) (PosCN (UseN F)) ;
@@ -85,7 +86,8 @@ oper
   disjS = \A, B -> ConjS OrConj (TwoS A B) ;
   implS = \A, B -> SubjS IfSubj A B ;
 
-  ifThenS = \A,B -> SubjS IfSubj A {s = \\o => "then" ++ B.s ! o} ; --- not in Res
+  ifThenS = \A,B -> 
+    SubjS IfSubj A {s = \\o => "then" ++ B.s ! o ; lock_S = <>} ; --- not in Res
 
   constrTyp1 = \F, A -> AppFun F (IndefManyNP A) ;
 

@@ -1,5 +1,7 @@
+--# -path=.:../abstract:../../prelude
+
 concrete RestaurantEng of Restaurant = 
-  DatabaseEng ** open Prelude,Paradigms,DatabaseRes in {
+  DatabaseEng ** open Prelude,Paradigms,DatabaseEngRes in {
 
 lin 
   Restaurant = cnNonhuman "restaurant" ;

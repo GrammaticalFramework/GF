@@ -52,7 +52,7 @@ lincat
   V3     = TransVerb ** {s4 : Preposition} ;
   VS     = Verb ;
 
-  AdV    = {s : Str ; isPost : Bool} ;
+  AdV    = {s : Str ; p : Bool} ;
 
   S      = {s : Str} ; 
   Slash  = {s : Bool => Str ; s2 : Preposition} ;

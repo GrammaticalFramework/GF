@@ -58,10 +58,10 @@ oper
   predV1 = \F, x -> PredVP x (PosV F) ;
   predV2 = \F, x, y -> PredVP x (PosTV F y) ;
   predVColl = \F, x, y -> PredVP (conjNP x y) (PosV F) ;
-  predA1 = \F, x -> PredVP x (PosA F) ;
+  predA1 = \F, x -> PredVP x (PosA (AdjP1 F)) ;
   predA2 = \F, x, y -> PredVP x (PosA (ComplAdj F y)) ;
   predAComp = \F, x, y -> PredVP x (PosA (ComparAdjP F y)) ;
-  predAColl = \F, x, y -> PredVP (conjNP x y) (PosA F) ;
+  predAColl = \F, x, y -> PredVP (conjNP x y) (PosA (AdjP1 F)) ;
   predN1 = \F, x -> PredVP x (PosCN (UseN F)) ;
   predN2 = \F, x, y -> PredVP x (PosCN (AppFun F y)) ;
   predNColl = \F, x, y -> PredVP (conjNP x y) (PosCN (UseN F)) ;

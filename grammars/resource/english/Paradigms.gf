@@ -159,9 +159,10 @@ oper
 
   nominative = Nom ;
 
-  mkN = \man,men,man's,men's,g -> mkNoun man men man's men's ** {g = g} ;
-  nReg = addGenN nounReg ;
-  nKiss = addGenN nounS ;
+  mkN = \man,men,man's,men's,g -> 
+    mkNoun man men man's men's ** {g = g ; lock_N = <>} ;
+  nReg a g = addGenN nounReg a g ;
+  nKiss n g = addGenN nounS n g ;
   nFly = \fly -> addGenN nounY (Predef.tk 1 fly) ;
   nMan = \man,men -> mkN man men (man + "'s") (men + "'s") ;
   nHero = nKiss ;
@@ -180,33 +181,34 @@ oper
     eqy "z" nKiss (
             nReg))) fly g ;
 
-  mkFun = \n,p -> n ** {s2 = p} ;
+  mkFun = \n,p -> n ** {lock_Fun = <> ; s2 = p} ;
   funNonhuman = \s -> mkFun (nNonhuman s) "of" ;
   funHuman = \s -> mkFun (nHuman s) "of" ;
 
-  pnReg = nameReg ;
+  pnReg n = nameReg n ** {lock_PN = <>} ;
 
   cnNonhuman = \s -> UseN (nGen s nonhuman) ;
   cnHuman = \s -> UseN (nGen s human) ;
   npReg = \s -> UsePN (pnReg s) ;  
 
-  mkFunCN = \n,p -> n ** {s2 = p} ;
+  mkFunCN = \n,p -> n ** {lock_Fun = <> ; s2 = p} ;
   funOfCN = \n -> mkFunCN n "of" ;
 
   addGenN : (Str -> CommonNoun) -> Str -> Gender -> N = \f -> 
-    \s,g -> f s ** {g = g} ;
+    \s,g -> f s ** {g = g ; lock_N = <>} ;
 
-  mkAdj1 = simpleAdj ;
-  mkAdj2 = \s,p -> simpleAdj s ** {s2 = p} ;
-  mkAdjDeg = mkAdjDegr ;
-  aReg = adjDegrReg ;
-  aHappy = \happy -> adjDegrY (Predef.tk 1 happy) ;
+  mkAdj1 a = simpleAdj a ** {lock_Adj1 = <>} ;
+  mkAdj2 = \s,p -> simpleAdj s ** {s2 = p} ** {lock_Adj2 = <>} ;
+  mkAdjDeg a b c = mkAdjDegr a b c ** {lock_AdjDeg = <>} ;
+  aReg a = adjDegrReg a ** {lock_AdjDeg = <>} ;
+  aHappy = \happy -> adjDegrY (Predef.tk 1 happy) ** {lock_AdjDeg = <>} ;
   aFat = \fat -> let {fatt = fat + Predef.dp 1 fat} in 
          mkAdjDeg fat (fatt + "er") (fatt + "est") ;
-  aRidiculous = adjDegrLong ;
+  aRidiculous a = adjDegrLong a ** {lock_AdjDeg = <>} ;
   apReg = \s -> AdjP1 (mkAdj1 s) ;
 
-  mkV = \go,goes,went,gone -> verbNoPart (mkVerbP3 go goes went gone) ;
+  mkV = \go,goes,went,gone -> verbNoPart (mkVerbP3 go goes went gone) ** 
+    {lock_V = <>} ;
   vReg = \walk -> mkV walk (walk + "s") (walk + "ed") (walk + "ed") ;
   vKiss = \kiss -> mkV kiss (kiss + "es") (kiss + "ed") (kiss + "ed") ;
   vFly = \cry -> let {cr = Predef.tk 1 cry} in 
@@ -223,14 +225,16 @@ oper
     eqy "z" vKiss (
             vReg))) fly ;
 
-  vPart = \go, goes, went, gone, up -> verbPart (mkVerbP3 go goes went gone) up ;
-  vPartReg = \get, up -> verbPart (regVerbP3 get) up ;
+  vPart = \go, goes, went, gone, up -> 
+    verbPart (mkVerbP3 go goes went gone) up ** {lock_V = <>} ;
+  vPartReg = \get, up -> 
+    verbPart (regVerbP3 get) up  ** {lock_V = <>} ;
 
-  mkTV = \v,p -> v ** {s3 = p} ;
+  mkTV = \v,p -> v ** {lock_TV = <> ; s3 = p} ;
   tvPartReg = \get, along, to -> mkTV (vPartReg get along) to ;
 
-  vBe = verbBe ;
-  vHave = verbP3Have ;
+  vBe = verbBe  ** {s1 = [] ; lock_V = <>} ;
+  vHave = verbP3Have  ** {s1 = [] ; lock_V = <>} ;
 
   tvGen = \s,p -> mkTV (vGen s) p ;
   tvDir = \v -> mkTV v [] ;

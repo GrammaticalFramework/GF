@@ -417,23 +417,23 @@ oper
 -- compared adverbials as separate expressions; this could be done another way).
 -- We distinguish between post- and pre-verbal adverbs.
 
-  Adverb : Type = SS ** {isPost : Bool} ;
+  Adverb : Type = SS ** {p : Bool} ;
 
-  advPre  : Str -> Adverb = \seldom -> ss seldom ** {isPost = False} ;
-  advPost : Str -> Adverb = \well   -> ss well   ** {isPost = True} ;
+  advPre  : Str -> Adverb = \seldom -> ss seldom ** {p = False} ;
+  advPost : Str -> Adverb = \well   -> ss well   ** {p = True} ;
 
 -- N.B. this rule generates the cyclic parsing rule $VP#2 ::= VP#2$
 -- and cannot thus be parsed.
 
   adVerbPhrase : VerbPhrase -> Adverb -> VerbPhrase = \sings, well ->
-    let {postp = orB well.isPost sings.isAux} in
+    let {postp = orB well.p sings.isAux} in
     {
      s = \\v => (if_then_else Str postp [] well.s) ++ sings.s ! v ;
      s2 = \\n => sings.s2 ! n ++ (if_then_else Str postp well.s []) ;
      isAux = sings.isAux
     } ;
 
-  advAdjPhrase : Adverb -> AdjPhrase -> AdjPhrase = \very, good ->
+  advAdjPhrase : SS -> AdjPhrase -> AdjPhrase = \very, good ->
     {s = very.s ++ good.s ;
      p = good.p
     } ;
@@ -750,7 +750,7 @@ oper
 -- This class covers adverbials such as "otherwise", "therefore", which are prefixed
 -- to a sentence to form a phrase.
 
-  advSentence : Adverb -> Sentence -> Utterance = \hence,itiseven ->
+  advSentence : SS -> Sentence -> Utterance = \hence,itiseven ->
     ss (hence.s ++ itiseven.s ++ ".") ;
 
 
