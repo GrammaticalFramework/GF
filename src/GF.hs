@@ -1,5 +1,6 @@
 module Main where
 
+import GFModes
 import Operations
 import UseIO
 import Option
@@ -23,47 +24,49 @@ main :: IO ()
 main = do
   xs <- getArgs
   let (os,fs) = getOptions "-" xs
-      java    = oElem forJava os
-      isNew   = oElem newParser os ---- temporary hack to have two parallel GUIs
-  putStrLnFlush $ if java then encodeUTF8 welcomeMsg else welcomeMsg
-  st <- case fs of 
-    _ -> useIOE emptyShellState $ foldM (shellStateFromFiles os) emptyShellState fs
-  ---  _ -> return emptyShellState
-  if null fs then return () else putCPU 
-  if java then sessionLineJ isNew st else do
-  gfInteract (initHState st) 
-  return ()
+      opt j   = oElem j os
+  case 0 of
 
-gfInteract :: HState -> IO HState
-gfInteract st@(env,_) = do
-  -- putStrFlush "> " M.F 25/01-02 prompt moved to Arch.
-  (s,cs) <- getCommandLines
-  case ifImpure cs of
+    _ | opt getHelp -> do
+      putStrLnFlush $ encodeUTF8 helpMsg
 
-    -- these are the three impure commands
-    Just (ICQuit,_) -> do
-      putStrLn "See you."
-      return st
-    Just (ICExecuteHistory file,_) -> do
-      ss  <- readFileIf file
-      let co = pCommandLines ss
-      st' <- execLinesH s co st      
-      gfInteract st'      
-    Just (ICEarlierCommand i,_) -> do
-      let line = earlierCommandH st i
-          co   = pCommandLine $ words line
-      st' <- execLinesH line [co] st       -- s would not work in execLinesH
-      gfInteract st'
-    Just (ICEditSession,os) -> 
-      editSession (addOptions os opts) env >> gfInteract st
-    Just (ICTranslateSession,os) -> 
-      translateSession (addOptions os opts) env >> gfInteract st
-    -- this is a normal command sequence
+    _ | opt forJava -> do
+      putStrLnFlush $ encodeUTF8 welcomeMsg 
+      st <- useIOE emptyShellState $ 
+              foldM (shellStateFromFiles os) emptyShellState fs
+      sessionLineJ True st
+      return ()
+
+    _ | opt doMake -> do
+      case fs of
+        [f] -> batchCompile os f
+        _ -> putStrLnFlush "expecting exactly one gf file to compile"
+
+    _ | opt doBatch -> do
+      if opt beSilent then return () else putStrLnFlush "<gfbatch>"
+      st <- useIOE emptyShellState $ 
+              foldM (shellStateFromFiles os) emptyShellState fs
+      gfBatch (initHState st) 
+      if opt beSilent then return () else putStrLnFlush "</gfbatch>"
+      return ()
     _ -> do
-      st' <- execLinesH s cs st
-      gfInteract st'
-   where
-     opts = globalOptions env
+      putStrLnFlush $ welcomeMsg
+      st <- useIOE emptyShellState $ 
+              foldM (shellStateFromFiles os) emptyShellState fs
+      if null fs then return () else putCPU 
+      gfInteract (initHState st) 
+      return ()
+
+helpMsg = unlines [
+  "Usage: gf <option>* <file>*",
+  "Options:",
+  "  -make    batch-compile files",
+  "   -noemit do not emit code when compiling",
+  "   -v      be verbose when compiling",
+  "  -batch   structure session by XML tags (use > to send into a file)",
+  "  -help    show this message",
+  "To use the GUI: jgf <option>* <file>*"
+  ]
 
 welcomeMsg = 
   "Welcome to " ++ authorMsg ++++ welcomeArch ++ "\n\nType 'h' for help."

@@ -323,18 +323,16 @@ firstCatOpts opts sgr =
   maybe (stateFirstCat sgr) (string2CFCat (P.prt (absId sgr))) $ 
     getOptVal opts firstCat
 
+-- the first cat for random generation
+firstAbsCat :: Options -> StateGrammar -> G.QIdent
+firstAbsCat opts = cfCat2Cat . firstCatOpts opts
+
 -- a grammar can have start category as option startcat=foo ; default is S 
 stateFirstCat sgr =
   maybe (string2CFCat a "S") (string2CFCat a) $ 
   getOptVal (stateOptions sgr) gStartCat
  where 
    a = P.prt (absId sgr)
-
--- the first cat for random generation
-firstAbsCat :: Options -> StateGrammar -> G.QIdent
-firstAbsCat opts sgr = 
-  maybe (absId sgr, identC "S") (\c -> (absId sgr, identC c)) $ ----
-    getOptVal opts firstCat
 
 {-
 -- command-line option -cat=foo overrides the possible start cat of a grammar

@@ -244,6 +244,9 @@ lookupModMod gr i = do
 lookupInfo :: (Show i, Ord i) => Module i f a -> i -> Err a
 lookupInfo mo i = lookupTree show i (jments mo)
 
+allModMod :: (Show i,Eq i) => MGrammar i f a -> [(i,Module i f a)]
+allModMod gr = [(i,m) | (i, ModMod m) <- modules gr]
+
 isModAbs m = case mtype m of
   MTAbstract -> True
 ----  MTUnion t -> isModAbs t
