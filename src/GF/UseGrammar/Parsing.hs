@@ -19,6 +19,8 @@ import Option
 import Custom
 import ShellState
 
+import qualified ExportParser as N
+
 import Operations
 
 import List (nub)
@@ -35,7 +37,17 @@ parseStringMsg os sg cat s = do
   return (ts,unlines ss)
 
 parseStringC :: Options -> StateGrammar -> CFCat -> String -> Check [Tree]
-parseStringC opts0 sg cat s = do
+parseStringC opts0 sg cat s
+
+---- to test peb's new parser 6/10/2003
+ | oElem newParser opts0 = do  
+  let pm = maybe "" id $ getOptVal opts0 useParser -- -parser=pm
+      gr = grammar sg
+  ps <- checkErr $ N.newParser pm gr (cfCat2Cat cat) s
+  checkWarn $ unlines ps
+  return []
+
+ | otherwise = do
   let opts = unionOptions opts0 $ stateOptions sg
       cf  = stateCF sg
       gr  = stateGrammarST sg
