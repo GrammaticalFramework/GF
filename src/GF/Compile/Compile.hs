@@ -56,8 +56,9 @@ batchCompileOld f = compileOld defOpts f
 compileModule :: Options -> ShellState -> FilePath -> 
                  IOE (GFC.CanonGrammar, (SourceGrammar,[(FilePath,ModTime)]))
 
-compileModule opts st0 file | oElem showOld opts || 
-                              elem suff ["cf","ebnf"] = do
+compileModule opts st0 file | 
+     oElem showOld opts || 
+     elem suff ["cf","ebnf"] = do
   let putp = putPointE opts
   let path = [] ----
   grammar1 <- if suff == "cf"

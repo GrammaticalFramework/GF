@@ -73,8 +73,8 @@ oper
   -- these were defined in Predef before
   isNil : Tok -> Bool = \b -> pbool2bool (Predef.eqStr [] b) ;
 
-  ifTok : (A : Type) -> Tok -> Tok -> A -> A -> A = \A,t,u,a,b ->
-      case Predef.eqStr t u of {Predef.PTrue => a ; Predef.PFalse => b} ;
+  ifTok : (A : Type) -> Tok -> Tok -> A -> A -> A = \A,t,u,a,b -> 
+    case Predef.eqStr t u of {Predef.PTrue => a ; Predef.PFalse => b} ;
 
   -- so we need an interface
   pbool2bool : Predef.PBool -> Bool = \b -> case b of {

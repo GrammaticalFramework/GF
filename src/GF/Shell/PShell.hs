@@ -76,7 +76,7 @@ pCommand ws = case ws of
 -----  "wt" : f : s  -> aTerm   (CWrapTerm (string2id f)) s
   "ma" : s      -> aString CMorphoAnalyse s
   "tt" : s      -> aString CTestTokenizer s
-  "cc" : m : s  -> aUnit   $ CComputeConcrete (pzIdent m) $ unwords s
+  "cc" : s      -> aUnit   $ CComputeConcrete $ unwords s
 
   "tq" : i:o:[] -> aUnit   (CTranslationQuiz (language i) (language o))
   "tl":i:o:n:[] -> aUnit   (CTranslationList (language i) (language o) (readIntArg n))

@@ -210,6 +210,20 @@ greatestAbstract gr = case allAbstracts gr of
   [] -> Nothing
   a -> return $ last a
 
+-- all resource modules
+allResources :: G.SourceGrammar -> [Ident]
+allResources gr = [i | (i,M.ModMod m) <- M.modules gr, M.mtype m == M.MTResource]
+
+
+-- the last resource in dependency order
+greatestResource :: G.SourceGrammar -> Maybe Ident
+greatestResource gr = case allResources gr of
+  [] -> Nothing
+  a -> return $ last a
+
+resourceOfShellState :: ShellState -> Maybe Ident
+resourceOfShellState = greatestResource . srcModules
+
 qualifTop :: StateGrammar -> G.QIdent -> G.QIdent
 qualifTop gr (_,c) = (absId gr,c)
 

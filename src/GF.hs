@@ -69,7 +69,7 @@ welcomeMsg =
 
 authorMsg = unlines [
  "Grammatical Framework, Version 2-beta (incomplete functionality)",
- "November 25, 2003", 
+ "April 1, 2004", 
 --- "Compiled March 26, 2003",
  "Compiled " ++ today,
  "Copyright (c) Markus Forsberg, Thomas Hallgren, Harald Hammarström,",
