@@ -282,22 +282,25 @@ generateModuleCode opts path minfo@(name,info) = do
       "none"        -> minfo0                       -- no optimization
       _             -> shareModule shareOpt minfo0  -- sharing; default
 
-  -- for resource, also emit gfr
+  -- for resource, also emit gfr. 
+  --- Also for incomplete, to create timestamped gfc/gfr files
   case info of
     ModMod m | emitsGFR m && emit && nomulti -> do
-      let (file,out) = (gfrFile pname, prGrammar (MGrammar [minfo]))
+      let rminfo = if isCompilable info then minfo 
+                   else (name,emptyModInfo) 
+      let (file,out) = (gfrFile pname, prGrammar (MGrammar [rminfo]))
       ioeIO $ writeFile file out >> putStr ("  wrote file" +++ file)
     _ -> return ()
   (file,out) <- do
       code <- return $ MkGFC.prCanonModInfo minfo'
       return (gfcFile pname, code)
-  if isCompilable info && emit && nomulti 
+  if emit && nomulti ---- && isCompilable info 
      then ioeIO (writeFile file out) >> ioeIOIf (putStr ("  wrote file" +++ file))
      else ioeIOIf $ putStrFlush $ "no need to save module" +++ prt name
   return minfo'
  where 
    ioeIOIf = if oElem beSilent opts then (const (return ())) else ioeIO
-   emitsGFR m = isModRes m && isCompilable info
+   emitsGFR m = isModRes m ---- && isCompilable info
      ---- isModRes m || (isModCnc m && mstatus m == MSIncomplete)
    isCompilable mi = case mi of
      ModMod m -> not $ isModCnc m && mstatus m == MSIncomplete 

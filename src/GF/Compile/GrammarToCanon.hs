@@ -52,7 +52,7 @@ redModInfo (c,info) = do
       let isIncompl = not $ isCompleteModule m
       (e,os) <- if isIncompl then return ([],[]) else redExtOpen m ----
       flags <- mapM redFlag $ flags m 
-      (a,mt) <- case mtype m of
+      (a,mt0) <- case mtype m of
          MTConcrete a -> do
            a' <- redIdent a
            return (a', MTConcrete a') 
@@ -62,8 +62,9 @@ redModInfo (c,info) = do
          MTInstance _ -> return (c',MTResource) --- c' not needed
          MTTransfer x y -> return (c',MTTransfer (om x) (om y)) --- c' not needed
 
-      ---- this generates empty GFC. Better: none 
+      --- this generates empty GFC reosurce for interface and incomplete
       let js = if isIncompl then NT else jments m
+          mt = mt0 ---- if isIncompl then MTResource else mt0
 
       defss <- mapM (redInfo a) $ tree2list $ js
       defs  <- return $ sorted2tree $ concat defss  -- sorted, but reduced

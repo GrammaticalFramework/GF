@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Decide what files to read as function of dependencies and time stamps.
 -----------------------------------------------------------------------------
 
 module ReadFiles 
