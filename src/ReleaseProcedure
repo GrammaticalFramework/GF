@@ -17,49 +17,53 @@ Procedure for making a GF release:
 
    $ cvs commit -m 'Updated version numbers.' configure.ac gf.spec
 
-6. Go back to the root of the tree.
+6. Run autoconf to generate configure with the right version number:
+
+   $ autoconf
+
+7. Go back to the root of the tree.
 
    $ cd ..
 
-7. Tag the release. (X_X should be replaced by the version number, with
+8. Tag the release. (X_X should be replaced by the version number, with
    _ instead of ., e.g. 2_0)
 
    $ cvs tag RELEASE-X_X
 
-8. Build a source package:
+9. Build a source package:
 
    $ cd src
    $ ./configure
    $ make dist
 
-9. Build an x86/linux RPM (should be done on a Mandrake Linux box):
+10. Build an x86/linux RPM (should be done on a Mandrake Linux box):
 
    $ cd src 
    $ ./configure
    $ make rpm
 
-10. Build a generic binary x86/linux (should be done on a Linux box,
+11. Build a generic binary x86/linux (should be done on a Linux box,
     e.g. banded.medic.chalmers.se):
 
    $ cd src
    $ ./configure --host=i386-pc-linux-gnu
    $ make binary-dist
 
-11. Build a generic binary sparc/solaris package (should be done on a Solaris box,
+12. Build a generic binary sparc/solaris package (should be done on a Solaris box,
     e.g. remote1.cs.chalmers.se):
 
    $ cd src
    $ ./configure --host=sparc-sun-solaris2
    $ make binary-dist
 
-12. Build a Mac OS X package:
+13. Build a Mac OS X package:
 
     ???
 
-13. Build a Windows package:
+14. Build a Windows package:
 
     ???
 
-14. Update website.
+15. Update website.
 
-15. Party!
+16. Party!
