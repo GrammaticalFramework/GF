@@ -49,7 +49,7 @@ lincat
   AP     = Adjective ;
   AS     = Adjective ** {mp,mn : Mode} ; --- "more difficult for him to come than..."
   A2S    = Adjective ** {s2 : Preposition} ;
-  AV     = Adjective ;
+  AV     = Adjective ** {c : CaseA} ;
   A2V    = Adjective ** {s2 : Preposition} ;
 
   V      = Verb ; 

@@ -276,7 +276,7 @@ computeLType gr t = do
       r' <- comp r
       s' <- comp s
       case (r',s') of
-        (RecType rs, RecType ss) -> return $ RecType (rs ++ ss)
+        (RecType rs, RecType ss) -> checkErr $ plusRecType r' s'
         _ -> return $ ExtR r' s'
 
     _ | isPredefConstant ty -> return ty
@@ -414,9 +414,13 @@ inferLType gr trm = case trm of
      rT'     <- comp rT
      (s',sT) <- infer s
      sT'     <- comp sT
+
      let trm' = ExtR r' s'
+     ---- trm'    <- checkErr $ plusRecord r' s'
      case (rT', sT') of
-       (RecType rs, RecType ss) -> return (trm', RecType (rs ++ ss))
+       (RecType rs, RecType ss) -> do
+         rt <- checkErr $ plusRecType rT' sT'
+         return (trm', rt)
        _ | rT' == typeType && sT' == typeType -> return (trm', typeType)
        _ -> prtFail "records or record types expected in" trm
 

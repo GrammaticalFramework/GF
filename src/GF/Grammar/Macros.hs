@@ -339,13 +339,17 @@ mkFunType tt t = mkProd ([(wildIdent, ty) | ty <- tt], t, []) -- nondep prod
 
 plusRecType :: Type -> Type -> Err Type
 plusRecType t1 t2 = case (unComputed t1, unComputed t2) of
-  (RecType r1, RecType r2) -> return (RecType (r1 ++ r2))
+  (RecType r1, RecType r2) -> case
+    filter (`elem` (map fst r1)) (map fst r2) of
+      [] -> return (RecType (r1 ++ r2))
+      ls -> Bad $ "clashing labels" +++ unwords (map prt ls)
   _ -> Bad ("cannot add record types" +++ prt t1 +++ "and" +++ prt t2) 
 
 plusRecord :: Term -> Term -> Err Term
 plusRecord t1 t2 =
  case (t1,t2) of
-   (R r1, R r2 ) -> return (R (r1 ++ r2))
+   (R r1, R r2 ) -> return (R ([(l,v) | -- overshadowing of old fields
+                              (l,v) <- r1, not (elem l (map fst r2)) ] ++ r2))
    (_,    FV rs) -> mapM (plusRecord t1) rs >>= return . FV
    (FV rs,_    ) -> mapM (`plusRecord` t2) rs >>= return . FV
    _ -> Bad ("cannot add records" +++ prt t1 +++ "and" +++ prt t2)

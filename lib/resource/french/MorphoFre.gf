@@ -57,7 +57,15 @@ oper
   mkCNomInvar : Str -> Gender -> CNom = \cas -> 
     mkCNomIrreg cas cas ;
 
-
+  mkNomReg : Str -> Gender -> CNom = \cas -> 
+    let cass = case last cas of {
+      "s" => cas ;
+      "x" => cas ;
+      "z" => cas ;
+      _   => cas + "s"
+      }
+    in mkCNomIrreg cas cass ;
+      
 
 -- The definite article has quite some variation: three parameters and
 -- elision. This is the simples definition we have been able to find.
@@ -111,7 +119,11 @@ oper
 
   adjHeureux : Str -> Adj = \heureux ->
     let {heureu = Predef.tk 1 heureux} in 
-    mkAdj heureux heureu (heureu+"se") (heureu+"sement") ;
+    mkAdj heureux (heureu+"s") (heureu+"se") (heureu+"sement") ;
+
+  adjBanal : Str -> Adj = \banal ->
+    let {bana = Predef.tk 1 banal} in 
+    mkAdj banal (bana + "ux") (banal+"e") (banal+"ement") ;
 
   adjJeune : Str -> Adj = \jeune -> 
     mkAdj jeune (jeune+"s") jeune (jeune+"ment") ;
@@ -126,6 +138,23 @@ oper
     let {ch = Predef.tk 2 cher} in
     mkAdj cher (cher + "s") (ch + "ère") (ch + "èrement") ; 
 
+  mkAdjReg : Str -> Adj = \creux ->
+    case Predef.dp 3 creux of {
+      "eux" => adjHeureux creux ;
+      _ => case Predef.dp 2 creux of {
+        "al" => adjBanal creux ;
+        "en" => adjIndien creux ;
+        "on" => adjIndien creux ;
+        "er" => adjCher creux ;
+        _ => case Predef.dp 1 creux of {
+          "s" => adjFrancais creux ;
+          "e" => adjJeune creux ;
+          "é" => adjJoli creux ;
+          "i" => adjJoli creux ;
+          _ => adjGrand creux
+          }
+        }
+      } ;
 
 
 --2 Personal pronouns
