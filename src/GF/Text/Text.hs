@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/31 15:47:43 $ 
+-- > CVS $Date: 2005/03/31 16:57:35 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.7 $
+-- > CVS $Revision: 1.8 $
 --
 -- elementary text postprocessing. AR 21\/11\/2001.
 --
@@ -60,12 +60,13 @@ formatAsCodeLit = formatAsCode . unwords . map unStringLit . words
 
 formatAsText,formatAsHTML,formatAsLatex :: String -> String
 formatAsText  = formatAsTextGen (=="&-") (=="&-") 
-formatAsHTML  = formatAsTextGen ((=="<") . take 1) (const False) 
+formatAsHTML  = formatAsTextGen (\s -> take 1 s == "<" || last s == '>') (const False) 
 formatAsLatex = formatAsTextGen ((=="\\") . take 1)  (const False) 
 
 formatAsTextGen :: (String -> Bool) -> (String -> Bool) -> String -> String
 formatAsTextGen tag para = unwords . format . cap . words where
   format ws = case ws of
+    w :     ww | capit w -> format $ (cap ww)
     w : c : ww | major c -> format $ (w ++ c) :(cap ww)
     w : c : ww | minor c -> format $ (w ++ c) :    ww
     p : c : ww | openp p -> format $ (p ++ c) :ww
@@ -75,6 +76,7 @@ formatAsTextGen tag para = unwords . format . cap . words where
   cap (p:ww) | tag p = p : cap ww
   cap ((c:cs):ww) = (toUpper c : cs) : ww
   cap [] = []
+  capit = (=="&|")
   major = flip elem (map singleton ".!?") 
   minor = flip elem (map singleton ",:;)")
   openp = all (flip elem "(")
