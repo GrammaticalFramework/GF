@@ -51,6 +51,7 @@ welcome =
 
 initEditMsgJavaX env = encodeUTF8 $ unlines $ tagXML "gfinit" $ 
   tagsXML "newcat"   [["n" +++ cat]     | (_,cat) <- newCatMenu env] ++
+  tagXML  "topic"    [abstractName env] ++
   tagXML  "language" [prLanguage langAbstract] ++
   concat [tagAttrXML "language" ("file",file) [prLanguage lang] |
            (file,lang) <- zip (allGrammarFileNames env) (allLanguages env)]
