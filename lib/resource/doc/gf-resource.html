@@ -9,7 +9,7 @@
 
 <p>
 
-Second Version, Gothenburg, 18 February 2005
+Second Version, Gothenburg, 1 March 2005
 <br>
 First Draft, Gothenburg, 7 February 2005
 
@@ -81,13 +81,25 @@ success - libraries are another half.
 <!-- NEW -->
 <h2>Example of library-based grammar writing</h2>
 
-To define Swedish definite phrases form scratch:
+To define a Swedish expression of a mathematical predicate from scratch:
 <pre>
-
+  Even x =
+    let jämn = case <x.n,x.g> of {
+      <Sg,Utr>   => "jämn" ;
+      <Sg,Neutr> => "jämnt" ;
+      <Pl,_>     => "jämna"
+      }
+    in
+    {s = table {
+      Main => x.s ! Nom ++ "är" ++ jämn ;
+      Inv  => "är" ++ x.s ! Nom ++ jämn ;
+      Sub  => x.s ! Nom ++ "är" ++ jämn
+      }
+    }
 </pre>
-To use a library function for Swedish definite phrases:
+To use library functions for syntax and morphology:
 <pre>
-
+  Even = predA (regA "jämn") ;
 </pre>
 
 
@@ -197,8 +209,8 @@ or any other flavour, including anaphora and discourse.
 
 <p>
 
-But we do <i>not</i> believe semantics can be given once and
-for all for a natural language.
+But we do <i>not</i> try to give semantics once and
+for all for the whole language.
 
 <p>
 
@@ -246,7 +258,7 @@ The current GF Resource Project covers ten languages:
 <li><tt>Rus</tt>sian
 <li><tt>Spa</tt>nish
 <li><tt>Swe</tt>dish
-</ul>>
+</ul>
 The first three letters (<tt>Dan</tt> etc) are used in grammar module names
 
 
