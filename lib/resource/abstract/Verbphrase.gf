@@ -50,7 +50,7 @@ abstract Verbphrase = Categories ** {
 
   PosVP, NegVP : Ant -> VP  -> VPI ;      -- to eat, not to eat
 
-----  AdvVP        : VP -> AdV -> VP ;        -- "always walks"
+  AdvVP        : VP -> AdV -> VP ;        -- "always walks"
   SubjVP       : VP -> Subj -> S -> VP ;  -- "(a man who) sings when he runs"
 
 }

@@ -535,7 +535,7 @@ oper
   useVerb : Verb -> (Gender => Number => Person => Str) -> VerbGroup = \verb,arg -> 
     let aer = verbSForm verb Act in {
       s  = \\sf => (aer sf).fin ;
-      --* s2 = negation ; 
+      s2 = negation ; 
       s3 = \\sf,g,n,p => (aer sf).inf ++ arg ! g ! n ! p
       } ;
 
@@ -553,7 +553,7 @@ oper
 
   VerbGroup  : Type = {
     s  : SForm => Str ; 
-    --* s2 : Bool => Str ; 
+    s2 : Bool => Str ; 
     s3 : SForm => Gender => Number => Person => Str
     } ;
 
@@ -565,9 +565,9 @@ oper
     in
    {s = table {
           VIInfinit => \\g,n,p => 
-            vg.s ! VInfinit a ++ ant.s ++ negation ! b ++ vg.s3 ! VInfinit a ! g ! n ! p ;
+            vg.s ! VInfinit a ++ ant.s ++ vg.s2 ! b ++ vg.s3 ! VInfinit a ! g ! n ! p ;
           VIImperat bo =>  \\g,n,p => 
-            vg.s ! VImperat ++ ant.s ++ negation ! bo ++ vg.s3 ! VImperat ! g ! n ! p
+            vg.s ! VImperat ++ ant.s ++ vg.s2 ! bo ++ vg.s3 ! VImperat ! g ! n ! p
           } ---- bo shadows b
     } ;
 
@@ -664,7 +664,7 @@ oper
   passVerb : Verb -> VerbGroup = \se ->
     let ses = verbSForm se Pass in {
       s  = \\sf => (ses sf).fin ;
-      --* s2 = negation ; 
+      s2 = negation ; 
       s3 = \\sf,g,n,_ => (ses sf).inf ++ se.s1
       } ;
 
@@ -738,7 +738,7 @@ oper
     {
   --- this unfortunately generates  VP#2 ::= VP#2
      s  = spelar.s ; 
-     --* s2 = \\b => ofta.s ++ spelar.s2 ! b ; ----* the essential use of s2
+     s2 = \\b => ofta.s ++ spelar.s2 ! b ; ---- the essential use of s2
      s3 = \\sf,g,n,p => spelar.s3 ! sf ! g ! n ! p
     } ;
 
@@ -818,7 +818,7 @@ oper
       o    = osf.o ; 
       ser  = serdiginte.s ! t ;
       dig  = serdiginte.s3 ! t ! Jag.g ! Jag.n ! Jag.p ;
-      inte = negation ! b --* serdiginte.s2 ! b
+      inte = serdiginte.s2 ! b
     } in
     case o of {
        Main => jag ++ ser ++ inte ++ dig ;  
@@ -1000,7 +1000,7 @@ oper
 
   relVerbPhrase : RelPron -> VerbGroup -> RelClause = \som,sover ->
     {s = \\b,sf,gn,p => 
-       som.s ! RNom ! gn ++ negation ! b ++ sover.s ! sf ++  
+       som.s ! RNom ! gn ++ sover.s2 ! b ++ sover.s ! sf ++  
        sover.s3 ! sf ! mkGenderRel som.g (genGN gn) ! numGN gn ! p
     } ;
 

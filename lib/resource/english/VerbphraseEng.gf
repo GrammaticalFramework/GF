@@ -57,9 +57,9 @@ concrete VerbphraseEng of Verbphrase = CategoriesEng **
   RelVP = relVerbPhrase ;
   IntVP = intVerbPhrase ;
 
---  PosVP tp = predVerbGroup True tp.a ;
---  NegVP tp = predVerbGroup False tp.a ;
+  PosVP = predVerbGroup True ;
+  NegVP = predVerbGroup False ;
 
-----  AdvVP = adVerbPhrase ;
+  AdvVP = adVerbPhrase ;
   SubjVP = subjunctVerbPhrase ;
 }

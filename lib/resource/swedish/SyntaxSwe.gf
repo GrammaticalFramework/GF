@@ -7,6 +7,8 @@
 instance SyntaxSwe of SyntaxScand = TypesSwe ** 
   open Prelude, (CO = Coordination), MorphoSwe in {
 
+  flags optimize=parametrize ;
+
   oper 
 
   extCommNounMasc : Subst -> CommNoun = \sb ->
