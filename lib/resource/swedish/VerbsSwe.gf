@@ -137,6 +137,7 @@ concrete VerbsSwe of VerbsSweAbs = CategoriesSwe ** open ParadigmsSwe in {
   spricka_V = irregV "spricka" "sprack" "spruckit" ;
   sprida_V = irregV "sprida" "spred" "spridit" ;
   springa_V = irregV "springa" "sprang" "sprungit" ;
+  stå_V = irregV "stå" "stod" "stått" ;
   sticka_V = irregV "sticka" "stack" "stuckit" ;
   stiga_V = irregV "stiga" "steg" "stigit" ;
   stinka_V = irregV "stinka" "stank" "stunkit" ;
