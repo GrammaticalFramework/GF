@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:12 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/04/01 21:24:24 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.14 $
 --
 -- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
@@ -81,7 +81,9 @@ computeTerm gr = comp where
 
          (S (T i cs) e,_) -> prawitz g i (flip App a') cs e
 
-	 _ -> returnC $ appPredefined $ App f' a'
+	 _ -> do
+           (t',b) <- appPredefined (App f' a')
+           if b then return t' else comp g t'
 
      P t l | isLockLabel l -> return $ R [] 
      ---- a workaround 18/2/2005: take this away and find the reason

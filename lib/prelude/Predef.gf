@@ -22,7 +22,9 @@ resource Predef = {
   oper occur  : Tok -> Tok -> PBool    = variants {} ; -- test if occurs as substring
   oper show   : (P : Type) -> P -> Tok = variants {} ; -- convert param to string
   oper read   : (P : Type) -> Tok -> P = variants {} ; -- convert string to param
-  oper toStr  : (P : Type) -> P -> Str = variants {} ; -- find the "first" string
+  oper toStr  : (L : Type) -> L -> Str = variants {} ; -- find the "first" string
+  oper mapStr : (L : Type) -> (Str -> Str) -> L -> L = variants {} ; 
+               -- map all strings in a data structure
 
   } ;
 

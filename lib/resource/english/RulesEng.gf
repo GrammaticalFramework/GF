@@ -29,7 +29,7 @@ flags
   optimize=all ;
 
 lin 
-  UseN = noun2CommNounPhrase ;
+  UseN  = noun2CommNounPhrase ;
   UsePN = nameNounPhrase ;
 
   SymbPN i = {s = table {Nom => i.s ; Gen => i.s ++ "'s"} ; g = Neutr} ; ---
