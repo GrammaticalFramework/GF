@@ -37,7 +37,7 @@ canon2graph :: CanonGrammar -> [Node]
 canon2graph gr = [ toNode i m | (i,M.ModMod m) <- M.modules gr ]
 
 source2graph :: SourceGrammar -> [Node]
-source2graph gr = [ toNode i m | (i,M.ModMod m) <- M.modules gr ] -- FIXME: handle ModWith
+source2graph gr = [ toNode i m | (i,M.ModMod m) <- M.modules gr ] -- FIXME: handle ModWith?
 
 toNode :: Ident -> M.Module Ident f i -> Node
 toNode i m = Node {
@@ -51,16 +51,21 @@ toNode i m = Node {
 		  }
     where 
     l = prIdent i
-    (t,is) = case M.mtype m of
-			  M.MTAbstract -> (GrAbstract, Nothing)
-			  M.MTTransfer _ _ -> error "Can't visualize transfer modules yet" -- FIXME
-			  M.MTConcrete i -> (GrConcrete, Just (prIdent i))
-			  M.MTResource -> (GrResource, Nothing)
-			  M.MTInterface -> (GrInterface, Nothing)
-			  M.MTInstance i -> (GrInstance, Just (prIdent i))
-			  M.MTReuse rt -> error "Can't visualize reuse modules yet" -- FIXME
-			  M.MTUnion _ _ -> error "Can't visualize union modules yet" -- FIXME
+    (t,is) = fromModType (M.mtype m)
 
+fromModType :: M.ModuleType Ident -> (GrType, Maybe String)
+fromModType t = case t of
+		       M.MTAbstract -> (GrAbstract, Nothing)
+		       M.MTTransfer _ _ -> error "Can't visualize transfer modules yet" -- FIXME
+		       M.MTConcrete i -> (GrConcrete, Just (prIdent i))
+		       M.MTResource -> (GrResource, Nothing)
+		       M.MTInterface -> (GrInterface, Nothing)
+		       M.MTInstance i -> (GrInstance, Just (prIdent i))
+		       M.MTReuse rt -> error "Can't visualize reuse modules yet" -- FIXME
+		       M.MTUnion _ _ -> error "Can't visualize union modules yet" -- FIXME
+
+-- FIXME: there is something odd about OQualif with 'with' modules,
+-- both names seem to be the same.
 openName :: M.OpenSpec Ident -> String
 openName (M.OSimple q i) = prIdent i
 openName (M.OQualif q i _) = prIdent i
