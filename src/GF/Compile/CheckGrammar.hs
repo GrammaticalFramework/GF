@@ -608,7 +608,8 @@ checkEqLType env t u trm = do
                 ": expected" +++ prt t' ++ ", inferred" +++ prt u')
  where
    alpha g t u = case (t,u) of  --- quick hack version of TC.eqVal
-     (Prod x a b, Prod y c d) -> alpha g a c && alpha ((x,y):g) b d
+     (Prod x a b, Prod y c d) -> alpha g c a && alpha ((x,y):g) b d 
+                                                      -- contravariance!
 
      ---- this should be made in Rename
      (Q  m a, Q  n b) | a == b -> elem m (allExtendsPlus env n) 
@@ -620,11 +621,11 @@ checkEqLType env t u trm = do
      (Q  m a, QC n b) | a == b -> elem m (allExtendsPlus env n) 
                                || elem n (allExtendsPlus env m)
 
-     (RecType rs, RecType ts) -> and [alpha g a b && l == k --- too strong req
-                                        | ((l,a),(k,b)) <- zip rs ts]
-                                  || -- if fails, try subtyping:
+     (RecType rs, RecType ts) -> -- and [alpha g a b && l == k --- too strong req
+                                 --       | ((l,a),(k,b)) <- zip rs ts]
+                                 -- || -- if fails, try subtyping:
                                  all (\ (l,a) -> 
-                                      any (\ (k,b) -> alpha g a b && l == k) ts) rs
+                                     any (\ (k,b) -> alpha g a b && l == k) ts) rs
 
      (Table a b,  Table c d)  -> alpha g a c && alpha g b d
      (Vr x,       Vr y)       -> x == y || elem (x,y) g || elem (y,x) g

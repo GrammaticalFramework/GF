@@ -39,12 +39,17 @@ mkResDefs r a mext maext abs cnc = mapMTree mkOne abs where
 
   mkOne (f,info) = case info of
       AbsCat _ _ -> do
-        typ <- err (const (return defLinType)) return $ look f
-        return (f, ResOper (Yes typeType) (Yes typ))
+        typ  <- err (const (return defLinType)) return $ look f
+        typ' <- lockRecType f typ 
+        return (f, ResOper (Yes typeType) (Yes typ'))
       AbsFun (Yes typ0) _ -> do
         trm <- look f
-        typ <- redirTyp typ0 --- if isHardType typ0 then compute typ0 else ...
-        return (f, ResOper (Yes typ) (Yes trm))
+        testErr (not (isHardType typ0)) 
+                ("cannot build reuse for function" +++ prt f +++ ":" +++ prt typ0)
+        typ <- redirTyp typ0
+        cat <- valCat typ
+        trm' <- unlockRecord (snd cat) trm 
+        return (f, ResOper (Yes typ) (Yes trm'))
       AnyInd b _ -> case mext of
         Just ext -> return (f,AnyInd b ext)
         _ -> prtBad "no indirection possible in" r
@@ -65,11 +70,24 @@ mkResDefs r a mext maext abs cnc = mapMTree mkOne abs where
       _ -> prtBad "no indirection of type possible in" r
     _ -> composOp redirTyp ty
 
-{-
--- for nicer printing of type signatures: preserves synonyms if not HO/dep type
+lockRecType :: Ident -> Type -> Err Type
+lockRecType c t = plusRecType t $ RecType [(lockLabel c,  RecType [])]
+
+unlockRecord :: Ident -> Term -> Err Term
+unlockRecord c ft = do
+  let (xs,t) = termFormCnc ft
+  t' <- plusRecord t $ R [(lockLabel c,  (Just (RecType []),R []))]
+  return $ mkAbs xs t'
+
+lockLabel :: Ident -> Label
+lockLabel c = LIdent $ "lock_" ++ prt c ----
+
+
+-- no reuse for functions of HO/dep types
 
 isHardType t = case t of
-  Prod x a b -> not (isWildIdent x) || isHardType a || isHardType b
+  Prod x a b -> not (isWild x) || isHardType a || isHardType b
   App _ _    -> True
   _          -> False  
--}
+ where 
+   isWild x = isWildIdent x || prt x == "h_" --- produced by transl from canon
