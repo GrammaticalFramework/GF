@@ -9,9 +9,11 @@
 -- expressions of basic categories: nouns, adjectives, verbs.
 -- 
 -- Closed categories (determiners, pronouns, conjunctions) are
--- accessed through the resource syntax API, $resource.Abs.gf$. 
+-- accessed through the resource syntax API, $Resource.gf$. 
+-- Their original typings via abstract syntax are in
+-- $Structural.gf$, which also contains documentation.
 --
--- The main difference with $morpho.Deu.gf$ is that the types
+-- The main difference with $MorphoGer.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
 -- had the design principle of always having existing forms as string
 -- arguments of the paradigms, not stems.
@@ -211,6 +213,11 @@ oper
 
   mkPP : Case -> Str -> NP -> AdV ;
 
+-- One can also use the function $ResourceGer.PrepNP$ with one of the given
+-- prepositions or a preposition formed by giving a string and a case:
+
+  mkPrep : Str -> Case -> Prep ;
+
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
@@ -308,4 +315,6 @@ oper
   mkPP x y = PrepNP {s = y ; c = x ; lock_Prep = <>} ;
   mkAdA a = ss a ** {lock_AdA = <>} ;
   mkAdS a = ss a ** {lock_AdS = <>} ;
+  mkPrep s c = {s = s ; c = c ; lock_Prep = <>} ;
+
 } ;
