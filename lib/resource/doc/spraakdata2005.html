@@ -1,0 +1,454 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html><head><title></title></head>
+ <body bgcolor="#ffffff" text="#000000">
+<center>
+
+<img src="gf-logo.gif">
+
+<h1>GF Resources for Swedish</h1>
+
+<p>
+
+Språkdata Seminar, Gothenburg, 1 March 2005
+
+</p><p>
+
+Aarne Ranta
+
+</p><p>
+
+<tt>aarne@cs.chalmers.se</tt>
+</p></center>
+
+
+
+<!-- NEW -->
+<h2>Plan</h2>
+
+<a href="01-gf-resource.html">Introduction to resource grammars</a> (pp. 1-16)
+
+<p>
+
+Swedish morphology and lexicon in GF
+
+<p>
+
+Syntax case study: Swedish sentence structure
+
+<p>
+
+Danish and Norwegian through parametrization
+
+
+
+<!-- NEW -->
+<h2>Swedish morphology and lexicon</h2>
+
+Lexicon: list of words with inflection and other morphological
+information (gender of nouns etc).
+
+<p>
+
+Paradigms: set of functions for extending the lexicon.
+
+
+<!-- NEW -->
+<h3>Parts of speech</h3>
+
+A <b>word class</b> is a record type, with
+<b>parametric</b> and <b>inherent</b> features (<tt>param</tt>eters).
+For example, nouns are the type
+<pre>
+  N = {s : Number => Species => Case => Str ; g : Gender} ;
+</pre>
+where
+<pre>
+  param
+    Species = Indef | Def ;
+    Number  = Sg | Pl ;
+    Case    = Nom | Gen ;
+</pre>
+
+
+
+<!-- NEW -->
+<h3>Defining a lexical unit</h3>
+
+Every lexical unit has a word class as its type.
+The <b>type checker</b> of GF verifies that all and only the
+relevant information of the unit is given. For instance,
+an entry for the noun <i>bil</i> ("car") looks as follows.
+<pre>
+  bil =
+  {s = table {
+     Sg => table {
+       Indef => table {Nom => "bil"     ; Gen => "bils" } ;
+       Def   => table {Nom => "bilen"   ; Gen => "bilens" }
+       } ;
+     Pl => table {
+       Indef => table {Nom => "bilar"   ; Gen => "bilars" } ;
+       Def   => table {Nom => "bilarna" ; Gen => "bilarnas" }
+       }
+     } ;
+   g = Utr
+  }
+</pre>
+
+<!-- NEW -->
+
+<h3>The Golden Rule of Functional Programming</h3>
+
+Whenever you find yourself programming by "copy and paste", write
+a <b>function</b> instead.
+
+<p>
+
+Thus do <i>not</i> write
+<pre>
+  gran =
+  {s = table {
+     Sg => table {
+       Indef => table {Nom => "gran"     ; Gen => "grans" } ;
+       Def   => table {Nom => "granen"   ; Gen => "granens" }
+       } ;
+     Pl => table {
+       Indef => table {Nom => "granar"   ; Gen => "granars" } ;
+       Def   => table {Nom => "granarna" ; Gen => "granarnas" }
+       }
+     } ;
+   g = Utr
+  }
+</pre>
+
+
+<!-- NEW -->
+
+<h3>Inflectional paradigms as  functions</h3>
+
+Instead, write a <b>paradigm</b> that can be applied to any word
+that is "inflected in the same way":
+<pre>
+  decl2 : Str -> N = \bil ->
+  {s = table {
+     Sg => table {
+       Indef => table {Nom => bil + ""     ; Gen => bil + "s" } ;
+       Def   => table {Nom => bil + "en"   ; Gen => bil + "ens" }
+       } ;
+     Pl => table {
+       Indef => table {Nom => bil + "ar"   ; Gen => bil + "ars" } ;
+       Def   => table {Nom => bil + "arna" ; Gen => bil + "arnas" }
+       }
+     } ;
+   g = Utr
+  }
+</pre>
+This function can be used over and over again:
+<pre>
+  bil  = decl2 "bil" ;
+  gran = decl2 "gran" ;
+  dag  = decl2 "dag" ;
+</pre>
+
+
+<!-- NEW -->
+
+<h3>High-level definition of paradigms</h3>
+
+Recall: functions instead of copy-and-paste!
+
+<p>
+
+First define (for each word class) a <b>worst-case function</b>:
+<pre>
+  mkN : (apa,apan,apor,aporna : Str) -> Noun =
+  {s = table {
+     Sg => table {
+       Indef => mkCase apa ;
+       Def   => mkCase apan
+       } ;
+     Pl => table {
+       Indef => mkCase apor ;
+       Def   => mkCase aporna
+       }
+     } ;
+   g = case last apan of {
+         "n" => Utr ;
+         _   => Neutr
+  }
+</pre>
+where we uniformly produce the genitive by
+<pre>
+  mkCase : Str -> Case => Str = \f -> table {
+      Nom => f ;
+      Gen => f + case last f of {
+        "s" | "x" => [] ;
+        _ => "s"
+        }
+      } ;
+</pre>
+
+
+<!-- NEW -->
+
+<h3>High-level definition of paradigms</h3>
+
+Then define, for instance, the five declensions as follows:
+<pre>
+  decl1 : Str -> N = \apa -> let ap = init apa in
+    mkN apa (apa + "n") (ap + "or") (ap + "orna") ;
+
+  decl2 : Str -> N = \bil -> 
+    mkN bil (bil + "en") (bil + "ar") (bil + "arna") ;
+
+  decl3 : Str -> N = \fil -> 
+    mkN fil (fil + "en") (fil + "er") (fil + "erna") ;
+
+  decl4 : Str -> N = \rike -> 
+    mkN rike (rike + "t") (rike + "n") (rik + "ena") ;
+
+  decl5 : Str -> N = \lik -> 
+    mkN lik (lik + "et")  lik  (lik + "en") ;
+</pre>
+
+
+
+<!-- NEW -->
+
+<h3>What paradigms are there?</h3>
+
+Swedish nouns traditionally have 5 declensions. But each of them has
+slight variations. For instance, the "2nd declension" has the following:
+<pre>
+  gosse  - gossar  -- 211
+  nyckel - nycklar -- 231
+  seger  - segrar  -- 232
+  öken   - öknar   -- 233
+  hummer - humrar  -- 238
+  kam    - kammar  -- 241
+  mun    - munnar  -- 243
+</pre>
+and many more (S. Hellberg, <i>The Morphology of Present-Day Swedish</i>,
+Almqvist & Wiksell, Stockholm, 1978). In addition, we have at least
+<pre>
+  mås - mås -- genitive form without s
+  sax - sax 
+</pre>
+
+
+
+
+<!-- NEW -->
+
+<h3>High-level access to paradigms</h3>
+
+The "naïve user" does not want to go through 500 noun paradigms and
+pick the right one.
+
+<p>
+
+A much more efficient method is the one used in
+dictionaries: give <i>two</i> (or more) forms instead of one.
+Our "dictionary heuristic function" covers the following cases:
+<pre>
+  flicka - flickor
+  kor    - kor     (koret)
+  ko     - kor     (kon)
+  ros    - rosor   (rosen)
+  bil    - bilar
+  nyckel - nycklar
+  hummer - humrar
+  rike   - riken
+  lik    - lik     (liket)
+  lärare - lärare  (läraren)
+</pre>
+
+
+
+
+<!-- NEW -->
+
+<h3>The definition of the dictionary heuristic</h3>
+
+<pre>
+reg2Noun : Str -> Str -> Subst = \bil,bilar -> 
+   let 
+     l  = last bil ;
+     b  = Predef.tk 2 bil ; 
+     ar = Predef.dp 2 bilar 
+   in 
+   case ar of {
+      "or" => case l of {
+         "a" => decl1Noun bil ;
+         "r" => sLik bil ;
+         "o" => mkNoun bil (bil + "n")  bilar (bilar + "na") ;
+         _   => mkNoun bil (bil + "en") bilar (bilar + "na")
+         } ;
+      "ar" => ifTok Subst (Predef.tk 2 bilar) bil 
+                 (decl2Noun bil)
+                 (case l of {
+                    "e" => decl2Noun bil ;
+                    _   => mkNoun bil (bil + "n") bilar (bilar + "na") 
+                    }
+                 ) ;
+      "er" => decl3Noun bil ;
+      "en" => ifTok Subst bil bilar (sLik bil) (sRike bil) ; -- ben-ben
+      _ => ifTok Subst bil bilar (
+             case Predef.dp 3 bil of {
+                "are" => sKikare (init bil) ; 
+                _ => decl5Noun bil
+                }
+             )
+             (decl5Noun bil) --- rest case with lots of garbage
+      } ; 
+</pre>
+
+<!-- NEW -->
+
+<h3>When in doubt...</h3>
+
+Test in GF by generating the table 
+<pre>
+  > cc mk2N "öken" "öknar"
+  {s = table Number {
+    Sg => table {
+      Indef => table Case {
+        Nom => "öken" ;
+        Gen => "ökens"
+      } ;
+      Def => table Case {
+        Nom => "ökenn" ;
+        Gen => "ökenns"
+      }
+    ...
+  }
+</pre>
+Use the worst-case function if the heuristic does not work:
+<pre>
+  mkN "öken" "öknen" "öknar" "öknarna"
+</pre>
+
+
+<!-- NEW -->
+
+<h3>The module <tt>ParadigmsSwe</tt></h3>
+
+For main category - <tt>N</tt>, <tt>A</tt>, <tt>V</tt> - a worst-case
+function and a couple of "regular" patterns.
+<pre>
+  mkN  : (apa,apan,apor,aporna : Str) -> N ;
+  mk2N : (nyckel,nycklar : Str) -> N ;
+
+  mkV    : (supa,super,sup,söp,supit,supen : Str) -> V ;
+  regV   : (tala : Str) -> V ;
+  mk2V   : (leka,leker : Str) -> V ;
+  irregV : (dricka, drack, druckit  : Str) -> V ;
+</pre>
+Construction functions for subcategorization.
+<pre>
+  mkV2  : V -> Preposition -> V2 ;
+  dirV2 : V -> V2 ;
+  mkV3  : V -> Preposition -> Preposition -> V3 ;
+</pre>
+
+
+<!-- NEW -->
+
+<h3>Morphology extraction</h3>
+
+Idea: search for <b>characteristic forms</b> of paradigms in a corpus.
+<pre>
+  paradigm decl1
+    = ap+"a"
+      {ap+"a" & ap+"or" };
+</pre>
+For instance, if you find <i>klocka</i> and <i>klockor</i>, add
+<pre>
+  klocka_N = decl1 "klocka" ;
+</pre>
+to the lexicon.
+
+<p>
+
+The notation for extraction and its implementation are
+developed by Markus Forsberg and Harald Hammarström.
+
+
+
+<!-- NEW -->
+
+<h3>False positives</h3>
+
+Problem: false positives, e.g. <i>bra - bror</i>.
+
+<p>
+
+Solution: restrict stem with a regular expression
+<pre>
+  paradigm decl1 [ap : char* vowel char*]
+    = ap+"a"
+      {ap+"a" & ap+"or" };
+</pre>
+In general, exclude stems shorter than 3 characters.
+
+<p>
+
+It is necessary to check the results manually.
+
+
+<!-- NEW -->
+
+<h3>Patterns for what?</h3>
+
+"Irregular patterns" are possible, e.g.
+<pre>
+  paradigm vEI [sm:OneOrMore, t:OneOrMore]
+    = sm+"i"+t+"a"
+      {sm+"i"+t+"a" & (sm+"e"+t | sm+"i"+t+"it")} ;
+</pre>
+For rare patterns, it is more productive to build the
+corresponding part of lexicon manually.
+
+
+<!-- NEW -->
+
+<h3>Current Swedish resource lexicon</h3>
+
+49,749 lemmas (1,000 manual, rest extracted),
+605,453 word forms.
+No subcategorization information.
+
+<p>
+
+Uses the 
+<a href="http://www.cs.chalmers.se/~markus/FM/">
+Functional Morphology</a>
+format, which can be translated to GF, XFST, LEXC,
+MySQL,...
+
+<p>
+
+FM's "native" analysis engine is based on a trie
+and includes compound analysis using algorithms
+from G. Huet's
+<a href="http://sanskrit.inria.fr/huet/ZEN/">Zen Toolkit</a>.
+Analysis speed is 12,000 words per minute
+with compound analysis, 50,000 without
+(on an Intel M1.5 GHz laptop).
+
+
+
+<!-- NEW -->
+
+<h2>Syntax case study: Swedish sentence structure</h2>
+
+
+
+
+<!-- NEW -->
+
+<h2>Danish and Norwegian through parametrization</h2>
+
+
+
+</body>
+</html>

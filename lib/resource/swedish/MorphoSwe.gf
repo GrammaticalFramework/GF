@@ -255,7 +255,7 @@ adj2Reg : Str -> Str -> Adj = \vid,vitt -> adjAlmostReg vid vitt (vid + "a") ;
 mkCase : Case -> Str -> Str = \c,f -> case c of {
       Nom => f ;
       Gen => f + case last f of {
-        "s" => [] ;
+        "s" | "x" => [] ;
         _ => "s"
         }
       } ;
