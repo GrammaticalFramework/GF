@@ -15,13 +15,14 @@
 -- They should use $resource.Abs.gf$ to access the syntactic rules.
 -- This file can be consulted in those, hopefully rare, occasions in which
 -- one has to know how the syntactic categories are
--- implemented. The parameter types are defined in $types.Eng.gf$.
+-- implemented. The parameter types are defined in $TypesEng.gf$.
 
 concrete ResEng of ResAbs = open Prelude, Syntax in {
 
 flags 
   startcat=Phr ; 
-  parser=chart ;
+  lexer=text ;
+  unlexer=text ;
 
 lincat 
   N      = CommNoun ;         

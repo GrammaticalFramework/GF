@@ -1,3 +1,6 @@
+-- use this path to read the grammar from the same directory
+--# -path=.:../abstract:../../prelude
+
 concrete TestFin of TestAbs = ResFin ** open Prelude, Syntax in {
 
 flags startcat=Phr ; lexer=text ; parser=chart ; unlexer=text ;
