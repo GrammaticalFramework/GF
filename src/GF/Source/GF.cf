@@ -169,6 +169,8 @@ ETType.    Exp  ::= Exp1 "=>" Exp ; -- these are thus right associative
 EConcat.   Exp  ::= Exp1 "++" Exp ;
 EGlue.     Exp  ::= Exp1 "+"  Exp ;
 ELet.      Exp  ::= "let" "{" [LocDef] "}" "in" Exp ;
+ELetb.     Exp  ::= "let" [LocDef] "in" Exp ;
+EWhere.    Exp  ::= Exp1 "where" "{" [LocDef] "}" ;
 EEqs.      Exp  ::= "fn" "{" [Equation] "}" ;
 
 coercions Exp 4 ;
