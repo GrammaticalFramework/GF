@@ -1614,6 +1614,7 @@ System.out.println("encoding "+defaultEncoding);
     /** Handle the key released event. */
     public void keyReleased(KeyEvent e) {
     }
+
     public String comparePositions(String first, String second)
     {
       String common ="[]";
