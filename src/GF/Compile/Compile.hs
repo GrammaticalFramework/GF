@@ -88,8 +88,9 @@ compileModule opts1 st0 file = do
   opts0 <- ioeIO $ getOptionsFromFile file
   let useFileOpt = maybe False (const True) $ getOptVal opts0 pathList
   let opts = addOptions opts1 opts0 
-  let ps0  = pathListOpts opts
   let fpath = justInitPath file
+  let ps0  = pathListOpts opts fpath
+
   let ps1 = if useFileOpt 
               then (map (prefixPathName fpath) ps0)
               else ps0
@@ -132,8 +133,8 @@ compileEnvShSt st fs = ((0,sgr,cgr),fts) where
   notIns i = notElem (prt i) $ map fileBody fs
   fts = readFiles st
 
-pathListOpts :: Options -> [InitPath]
-pathListOpts opts = maybe [""] pFilePaths $ getOptVal opts pathList
+pathListOpts :: Options -> FileName -> [InitPath]
+pathListOpts opts file = maybe [file] pFilePaths $ getOptVal opts pathList
 
 reverseModules (MGrammar ms) = MGrammar $ reverse ms
 
