@@ -1,6 +1,9 @@
 --# -path=.:../../lib/resource/abstract:../../lib/prelude:../../lib/resource/swedish:../../lib/resource/scandinavian
 concrete StoneageSwe of Stoneage 
-  = open SyntaxSwe, ResourceSwe, ParadigmsSwe, SwadeshLexSwe, StoneageResSwe in {
+  = open SyntaxSwe, ResourceSwe, ParadigmsSwe, VerbsSwe, SwadeshLexSwe, StoneageResSwe in {
+
+flags
+  startcat=S;
 
 lincat
   S = Phr ;
@@ -17,10 +20,12 @@ lin
   Hear = PresVasV2 hear_V ;
   Know = PresVasV2 know_V ;
   Think = PresVasV2 think_V ;
-  Smell = PresVasV2 smell_V ;
+  Smell s o = PresCl (SPredV2 s (dirV2 känna_V) (DefOneNP 
+                           (AdvCN (UseN (mk2N "lukt" "lukter")) 
+                                  (PrepNP possess_Prep o)))) ;
   Fear = PresVasV2 fear_V ;
   Kill = PresVasV2 kill_V ;
-  Fight = PresVasV2 fight_V ;
+  Fight s o = PresCl (AdvCl (SPredV s fight_V) (AdvPP (PrepNP with_Prep o))) ;
   Hunt = PresVasV2 hunt_V ;
   Hit = PresVasV2 hit_V ;
   Cut = PresVasV2 cut_V ;
