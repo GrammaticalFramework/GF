@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:08 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.8 $
+-- > CVS $Date: 2005/03/12 13:01:48 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.9 $
 --
 -- Printing CF grammars generated from GF as LBNF grammar for BNFC.
 -- AR 26/1/2000 -- 9/6/2003 (PPrCF) -- 8/11/2003 -- 27/9/2004.
@@ -32,13 +32,18 @@ import Char
 import List (nub)
 
 prLBNF :: Bool -> StateGrammar -> String
-prLBNF new gr = unlines $ pragmas ++ (map (prCFRule cs) rules)
+prLBNF new gr = unlines $ pragmas ++ (map (prCFRule cs) rules')
   where    
     cs = map IC ["Int","String"] ++ [catIdPlus c | (_,(c,_)) <- rules]
     cf = stateCF gr
     (pragmas,rules) = if new  -- tries to treat precedence levels
                          then mkLBNF (stateGrammarST gr) $ rulesOfCF cf
                          else ([],rulesOfCF cf) -- "normal" behaviour
+    rules' = concatMap expand rules
+    expand (f,(c,its)) = [(f,(c,it)) | it <- combinations (map expIt its)]
+    expIt i = case i of
+      CFTerm (RegAlts ss) -> [CFTerm (RegAlts [s]) | s <- ss]
+      _ -> [i]
 
 -- | a hack to hide the LBNF details
 prBNF :: Bool -> StateGrammar -> String
