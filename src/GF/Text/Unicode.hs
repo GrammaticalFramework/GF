@@ -16,27 +16,28 @@ import ExtraDiacritics (mkExtraDiacritics)
 
 -- ad hoc Unicode conversions from different alphabets
 
--- AR 12/4/2000, 18/9/2001, 30/5/2002
+-- AR 12/4/2000, 18/9/2001, 30/5/2002, 26/1/2004
 
 mkUnicode s = case s of
- '/':'/':cs -> mkGreek   (remClosing cs)
- '/':'+':cs -> mkHebrew  (remClosing cs)
- '/':'-':cs -> mkArabic  (remClosing cs)
- '/':'_':cs -> mkRussian (remClosing cs)
- '/':'*':cs -> mkRusKOI8 (remClosing cs)
- '/':'E':cs -> mkEthiopic (remClosing cs)
- '/':'T':cs -> mkTamil (remClosing cs)
- '/':'C':cs -> mkOCSCyrillic (remClosing cs)
- '/':'&':cs -> mkDevanagari (remClosing cs)
- '/':'L':cs -> mkLatinASupplement (remClosing cs)
- '/':'J':cs -> mkJapanese (remClosing cs)
- '/':'6':cs -> mkArabic0600 (remClosing cs)
- '/':'A':cs -> mkExtendedArabic (remClosing cs)
- '/':'X':cs -> mkExtraDiacritics (remClosing cs)
- _      -> s
-
-remClosing cs 
- | lcs > 1 && last cs == '/' = take (lcs-2) cs
- | otherwise = cs
-    where lcs = length cs
-
+  '/':'/':cs -> mkGreek   unic ++ mkUnicode rest
+  '/':'+':cs -> mkHebrew  unic ++ mkUnicode rest
+  '/':'-':cs -> mkArabic  unic ++ mkUnicode rest
+  '/':'_':cs -> mkRussian unic ++ mkUnicode rest
+  '/':'*':cs -> mkRusKOI8 unic ++ mkUnicode rest
+  '/':'E':cs -> mkEthiopic unic ++ mkUnicode rest
+  '/':'T':cs -> mkTamil unic ++ mkUnicode rest
+  '/':'C':cs -> mkOCSCyrillic unic ++ mkUnicode rest
+  '/':'&':cs -> mkDevanagari unic ++ mkUnicode rest
+  '/':'L':cs -> mkLatinASupplement unic ++ mkUnicode rest
+  '/':'J':cs -> mkJapanese unic ++ mkUnicode rest
+  '/':'6':cs -> mkArabic0600 unic ++ mkUnicode rest
+  '/':'A':cs -> mkExtendedArabic unic ++ mkUnicode rest
+  '/':'X':cs -> mkExtraDiacritics unic ++ mkUnicode rest
+  c:cs -> c:mkUnicode cs
+  _ -> s
+ where
+   (unic,rest) = remClosing [] $ drop 2 s
+   remClosing u s = case s of
+     c:'/':s | elem c "/+-_*ETC&LJ6AX" -> (reverse u, s) --- end need not match
+     c:cs -> remClosing (c:u) cs
+     _ -> (reverse u,[]) -- forgiving missing end
