@@ -44,6 +44,8 @@ cPredefAbs = identC "PredefAbs"
 cInt = identC "Int"
 cString = identC "String"
 
+isPredefCat c = elem c [cInt,cString]
+
 eType :: Exp
 eType = Sort "Type"
 

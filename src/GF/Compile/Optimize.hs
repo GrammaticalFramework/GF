@@ -191,4 +191,5 @@ evalPrintname gr c ppr lin =
      C x y     -> C (oneBranch x) (oneBranch y)
      S x _     -> oneBranch x
      P x _     -> oneBranch x
+     Alts (d,_) -> oneBranch d
      _ -> t

@@ -92,10 +92,10 @@ tokens2trms opts sg cn parser as = do
    verb    = oElem beVerbose opts
    forgive = oElem forgiveParse opts
 
-   unknown ts = case filter noMatch ts of
+   unknown ts = case filter noMatch [t | t@(TS _) <- ts] of
      [] -> "where all words are known"
      us -> "with the unknown tokens" +++ show us --- needs to be fixed for literals
-   terminals = map TS $ cfTokens $ stateCF sg
+   terminals = map TS $ stateGrammarWords sg
    noMatch t = all (not . compatTok t) terminals 
      
 

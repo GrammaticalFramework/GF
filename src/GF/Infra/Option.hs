@@ -125,6 +125,7 @@ newParser   = iOpt "new"
 noCF        = iOpt "nocf"
 checkCirc   = iOpt "nocirc"
 noCheckCirc = iOpt "nocheckcirc"
+lexerByNeed = iOpt "cflexer"
 
 -- linearization
 allLin      = iOpt "all"

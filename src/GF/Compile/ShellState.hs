@@ -88,6 +88,7 @@ stateGrammarST = grammar
 stateCF        = cf
 stateMorpho    = morpho
 stateOptions   = loptions
+stateGrammarWords = map fst . tree2list . stateMorpho
 
 cncModuleIdST = stateGrammarST
 

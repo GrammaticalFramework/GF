@@ -3,7 +3,9 @@ module CFIdent where
 import Operations
 import GFC
 import Ident
+import Values (cPredefAbs)
 import AbsGFC
+import Macros (ident2label)
 import PrGrammar
 import Str
 import Char (toLower, toUpper)
@@ -48,6 +50,10 @@ newtype CFFun = CFFun (Atom, Profile) deriving (Eq,Show)
 
 type Profile  = [([[Int]],[Int])]
 
+wordsCFTok :: CFTok -> [String]
+wordsCFTok t = case t of
+  TC (c:cs) -> [c':cs | c' <- [toUpper c, toLower c]]
+  _ -> [prCFTok t]
 
 -- the following functions should be used instead of constructors
 
@@ -67,6 +73,9 @@ stringCFFun = mkCFFun . AS
 
 intCFFun :: Int -> CFFun 
 intCFFun = mkCFFun . AI . toInteger
+
+dummyCFFun :: CFFun
+dummyCFFun = varCFFun $ identC "_" --- used in lexer-by-need rules
 
 cfFun2String :: CFFun -> String
 cfFun2String (CFFun (f,_)) = prt f
@@ -105,8 +114,8 @@ cat2CFCat :: (Ident,Ident) -> CFCat
 cat2CFCat = uncurry idents2CFCat
 
 ---- literals
-cfCatString = string2CFCat "Predef" "String"
-cfCatInt = string2CFCat "Predef" "Int"
+cfCatString = string2CFCat (prt cPredefAbs) "String"
+cfCatInt = string2CFCat (prt cPredefAbs) "Int"
 
 
 
@@ -121,6 +130,9 @@ moduleOfCFCat (CFCat (CIQ m _, _)) = m
 -- the opposite direction
 cfCat2Cat :: CFCat -> (Ident,Ident)
 cfCat2Cat (CFCat (CIQ m c,_)) = (m,c)
+
+lexCFCat :: CFCat -> CFCat
+lexCFCat cat = ident2CFCat (uncurry CIQ (cfCat2Cat cat)) (identC "*")
 
 -- to construct CF tokens
 

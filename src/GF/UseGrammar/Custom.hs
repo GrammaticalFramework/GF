@@ -148,6 +148,7 @@ customGrammarPrinter =
   ,(strCI "lbnf",    prLBNF . stateCF)
   ,(strCI "morpho",  prMorpho . stateMorpho)
   ,(strCI "opts",    prOpts . stateOptions)
+  ,(strCI "words",   unwords . stateGrammarWords)
 {- ----
    (strCI "gf",      prt  . st2grammar . stateGrammarST)  -- DEFAULT
   ,(strCI "canon",   showCanon "Lang" . stateGrammarST)
