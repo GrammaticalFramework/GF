@@ -22,6 +22,9 @@ lin
   ShePatient = SheNP ;
   TheyPatient = TheyNP ;
   IPatientHe = INP ;
+  IPatientShe = INP ;
+  HePatient = HeNP ;
+  WePatient = WeNP ;
 
   And x y = ConjS AndConj (TwoS x y) ; 
 

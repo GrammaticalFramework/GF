@@ -24,6 +24,11 @@ lin
   TheyPatient = TheyNP ;
   IPatientHe =  { s = INP.s ; g = PGen Masc; anim = INP.anim ;
     n = INP.n ; nComp = INP.nComp ; p = INP.p ; pron = INP.pron; lock_NP = <>} ;
+  IPatientShe =   { s = INP.s ; g = PGen Fem; anim = INP.anim ;
+    n = INP.n ; nComp = INP.nComp ; p = INP.p ; pron = INP.pron; lock_NP = <>} ;
+  HePatient = HeNP ;
+  WePatient = WeNP ;
+
 
   Influenza = UseN ( gripp**{lock_N = <>}) ; 
   Malaria = UseN ( malaria**{lock_N = <>}) ; 

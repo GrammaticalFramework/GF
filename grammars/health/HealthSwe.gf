@@ -30,6 +30,9 @@ lin
   ShePatient = mkPronPatient hon_35 ;
   TheyPatient = mkPronPatient de_38 ;
   IPatientHe = mkPronPatient jag_32 ;
+  IPatientShe = mkPronPatient jag_32 ;
+  HePatient = mkPronPatient han_34 ;
+  WePatient = mkPronPatient vi_36 ;
 
   Influenza = UseN (nApa "influens") ; 
   Malaria = UseN (nApa "malari"); 
