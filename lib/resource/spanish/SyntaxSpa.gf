@@ -11,6 +11,8 @@ oper
 
   nounPhraseOn = mkNameNounPhrase "se" Masc ; --- can be plural dep. on object
 
+  pronImpers = pronIl ; ---- should be [] ?
+
   partitiveNounPhrase = \n,vino ->
     normalNounPhrase 
       (table {
@@ -35,6 +37,7 @@ oper
   npGenPossNum = \nu,ton,mec ->
     \\c => artDef mec.g Pl c ++ ton.s ! Poss Pl mec.g ++ nu.s ! mec.g ++ mec.s ! Pl ; 
 
+  existNounPhrase = variants {} ;
 {- ----
   existNounPhrase = \delvino -> {
     s = \\m => 

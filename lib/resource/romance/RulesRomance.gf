@@ -117,7 +117,7 @@ lin
     s = \\c => np.s ! case2pform c ;
     g = pgen2gen np.g ;
     n = np.n
-    };
+    } ;
   FunIP = funIntPron ;
 
   QuestCl = questClause ;
@@ -178,8 +178,8 @@ lin
 
   OneNP = nounPhraseOn ;
 
------  ExistCN A = existNounPhrase (indefNounPhrase Sg A) ;
+  ExistCN A = existNounPhrase (indefNounPhrase Sg A) ;
 
------  ExistNumCN nu A = existNounPhrase (indefNounPhraseNum nu A) ;
+  ExistNumCN nu A = existNounPhrase (indefNounPhraseNum nu A) ;
 
 }
