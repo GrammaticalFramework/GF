@@ -232,6 +232,7 @@ contextRefinements gr = refineAllNodes contextRefine where
 
 uniqueRefine :: CGrammar -> Action
 uniqueRefine gr state = case refinementsState gr state of
+  [(e,(_,True))] -> Bad "only circular refinement"
   [(e,_)] -> refineWithAtom False gr e state
   _ -> Bad "no unique refinement"
 
@@ -347,7 +348,7 @@ solveAll gr st0 = do
 
 -- active refinements
 
-refinementsState :: CGrammar -> State -> [(Term,Val)]
+refinementsState :: CGrammar -> State -> [(Term,(Val,Bool))]
 refinementsState gr state = 
   let filt = possibleRefVal gr state in 
   if actIsMeta state 

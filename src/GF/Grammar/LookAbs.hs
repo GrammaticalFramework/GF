@@ -81,15 +81,15 @@ lookupRef gr binds at = case at of
   K _    -> return valAbsString
   _      -> prtBad "cannot refine with complex term" at ---
 
-refsForType :: (Val -> Type -> Bool) -> GFCGrammar -> Binds -> Val -> [(Term,Val)]
-refsForType compat gr binds val = 
-  -- bound variables
-  [(vr i, t) | (i,t) <- binds, Ok ty <- [val2exp t], compat val ty] ++
-  -- integer and string literals
-  [(EInt i, val) | val == valAbsInt, i <- [0,1,2,5,11,1978]] ++
-  [(K s, val) | val == valAbsString, s <- ["foo", "NN", "x"]] ++
-  -- functions defined in the current abstract syntax
-  [(qq f, vClos t) | (f,t) <- funsForType compat gr val]
+refsForType :: (Val -> Type -> Bool) -> GFCGrammar -> Binds -> Val -> [(Term,(Val,Bool))]
+refsForType compat gr binds val =     
+    -- bound variables --- never recursive?
+    [(vr i, (t,False)) | (i,t) <- binds, Ok ty <- [val2exp t], compat val ty] ++
+    -- integer and string literals
+    [(EInt i, (val,False)) | val == valAbsInt, i <- [0,1,2,5,11,1978]] ++
+    [(K s, (val,False)) | val == valAbsString, s <- ["foo", "NN", "x"]] ++
+    -- functions defined in the current abstract syntax
+    [(qq f, (vClos t,isRecursiveType t)) | (f,t) <- funsForType compat gr val]
 
 
 funRulesOf :: GFCGrammar -> [(Fun,Type)]

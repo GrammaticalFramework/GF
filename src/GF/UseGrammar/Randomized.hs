@@ -36,8 +36,9 @@ mkStateFromInts ints gr = mkRandomState ints where
     testErr (isCompleteState state) "not completed"
     return state
   mkRandomState (n:ns) state = do 
-    let refs = refinementsState gr state
-    testErr (not (null refs)) $ "no refinements available for" +++ 
+    let refs  = refinementsState gr state
+        refs0 = map (not . snd . snd) refs
+    testErr (not (null refs0)) $ "no nonrecursive refinements available for" +++ 
                                               prt (actVal state)
     (ref,_) <- (refs !? (n `mod` (length refs)))
     state1  <- refineWithAtom False gr ref state

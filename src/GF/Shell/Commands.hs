@@ -310,7 +310,7 @@ mkRefineMenuAll env sstate =
        [(CSelectCand i,   prCand (t,i))    | (t,i) <- zip cands [0..]]
 
  where
-  prRef (f,t) = 
+  prRef (f,(t,_)) = 
     (ifShort "r" "Refine" +++ prOrLinRef f +++ ifTyped (":" +++ prt_ t),
      "r" +++ prRefinement f)
   prClip i t =
@@ -474,7 +474,9 @@ displaySState env state =
   (prState (stateSState state), msgSState state, menuSState env state)
 
 menuSState :: CEnv -> SState -> [(String,String)]
-menuSState env state = [(s,c) | (_,(s,c)) <- mkRefineMenuAll env state]
+menuSState env state = if null cs then [("[NO ALTERNATIVE]","")] else cs 
+  where
+    cs = [(s,c) | (_,(s,c)) <- mkRefineMenuAll env state]
 
 printname :: CEnv -> SState -> G.Fun -> String
 printname env state f = case getOptVal opts menuDisplay of
