@@ -23,6 +23,7 @@ import qualified Macros as M
 import TypeCheck
 import CMacros
 import Transfer
+import qualified Generate as Gen
 
 import Option
 import Custom
@@ -156,10 +157,21 @@ randomTreesIO opts gr n = do
    g   = grammar gr
    mx  = optIntOrN opts flagDepth 41
 
+generateTrees :: Options -> GFGrammar -> Int -> [Tree]
+generateTrees opts gr n =
+  optIntOrAll opts flagNumber  
+    [tr | t <- Gen.generateTrees gr' cat n, Ok tr <- [mkTr t]]
+  where
+    mkTr = annotate gr' . qualifTerm (absId gr) 
+    gr' = grammar gr
+    cat = firstAbsCat opts gr
+
+
 speechGenerate :: Options -> String -> IO ()
 speechGenerate opts str = do
   let lan = maybe "" (" --language" +++) $ getOptVal opts speechLanguage
-  system ("echo" +++ "\"" ++ str ++ "\" | festival --tts" ++ lan)
+  system ("flite" +++ "\" " ++ str ++ "\"")
+---  system ("echo" +++ "\"" ++ str ++ "\" | festival --tts" ++ lan)
   return ()
 
 optLinearizeTreeVal :: Options -> GFGrammar -> Tree -> String

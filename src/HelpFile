@@ -159,8 +159,15 @@ gr, generate_random: gr Tree?
   flags:
       -cat     generate in this category
       -lang    use the abstract syntax of this grammar
-      -number  generate this number of trees
+      -number  generate this number of trees (not impl. with Tree argument)
       -depth   use this number of search steps at most
+
+gt, generate_trees: gt Int
+      Generates all trees up to the given depth.
+  flags:
+      -cat     generate in this category
+      -lang    use the abstract syntax of this grammar
+      -number  generate (at most) this number of trees
 
 ma, morphologically_analyse: ma String
       Runs morphological analysis on each word in String and displays
