@@ -238,6 +238,8 @@ execECommand env c = case c of
                            replaceByTermCommand der gr c (actTree (stateSState s)) s
 ----                          "transfer" -> action2commandNext $
 ----                                       transferSubTree (stateTransferFun sgr) gr
+                         "generate" -> \s ->
+                           replaceByTermCommand der gr c (actTree (stateSState s)) s
                          _ -> replaceByEditCommand gr c
 
   CAddOption o       -> changeStOptions (addOption o)

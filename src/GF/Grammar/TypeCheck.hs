@@ -243,3 +243,6 @@ exp2termCommand gr f t = errIn ("modifying term" +++ prt t) $ do
 
 exp2termlistCommand :: GFCGrammar -> (Exp -> [Exp]) -> Tree -> [Tree]
 exp2termlistCommand gr f = err (const []) fst . mapErr (annotate gr) . f . tree2exp
+
+tree2termlistCommand :: GFCGrammar -> (Tree -> [Exp]) -> Tree -> [Tree]
+tree2termlistCommand gr f = err (const []) fst . mapErr (annotate gr) . f 

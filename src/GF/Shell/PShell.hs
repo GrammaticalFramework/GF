@@ -73,6 +73,7 @@ pCommand ws = case ws of
   "gr" : []     -> aUnit   CGenerateRandom
   "gr" : t      -> aTerm   CGenerateRandom t
   "gt" : []     -> aUnit   CGenerateTrees
+  "gt" : t      -> aTerm   CGenerateTrees t
   "pt" : s      -> aTerm   CPutTerm s
 -----  "wt" : f : s  -> aTerm   (CWrapTerm (string2id f)) s
   "ma" : s      -> aString CMorphoAnalyse s
