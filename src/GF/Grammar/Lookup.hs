@@ -10,19 +10,23 @@ import Monad
 -- lookup in resource and concrete in compiling; for abstract, use Look
 
 lookupResDef :: SourceGrammar -> Ident -> Ident -> Err Term
-lookupResDef gr m c = do
-  mi   <- lookupModule gr m
-  case mi of
-    ModMod mo -> do
-      info <- lookupInfo mo c
-      case info of
-        ResOper _ (Yes t) -> return $ qualifAnnot m t 
-        ResOper _ Nope    -> return $ Q m c
-        AnyInd _ n        -> lookupResDef gr n c
-        ResParam _        -> return $ QC m c
-        ResValue _        -> return $ QC m c
-        _   -> Bad $ prt c +++ "is not defined in resource" +++ prt m
-    _ -> Bad $ prt m +++ "is not a resource"
+lookupResDef gr = look True where 
+  look isTop m c = do
+    mi   <- lookupModule gr m
+    case mi of
+      ModMod mo -> do
+        info <- lookupInfo mo c
+        case info of
+          ResOper _ (Yes t) -> return $ qualifAnnot m t 
+          ResOper _ Nope    -> return (Q m c) ---- if isTop then lookExt m c 
+                                 ---- else prtBad "cannot find in exts" c 
+          AnyInd _ n        -> look False n c
+          ResParam _        -> return $ QC m c
+          ResValue _        -> return $ QC m c
+          _   -> Bad $ prt c +++ "is not defined in resource" +++ prt m
+      _ -> Bad $ prt m +++ "is not a resource"
+  lookExt m c =
+    checks ([look False n c | n <- allExtensions gr m] ++ [return (Q m c)])
 
 lookupResType :: SourceGrammar -> Ident -> Ident -> Err Type
 lookupResType gr m c = do
@@ -40,16 +44,21 @@ lookupResType gr m c = do
     _ -> Bad $ prt m +++ "is not a resource"
 
 lookupParams :: SourceGrammar -> Ident -> Ident -> Err [Param]
-lookupParams gr m c = do
-  mi   <- lookupModule gr m
-  case mi of
-    ModMod mo -> do
-      info <- lookupInfo mo c
-      case info of
-        ResParam (Yes ps) -> return ps
-        AnyInd _ n        -> lookupParams gr n c
-        _   -> Bad $ prt c +++ "has no parameters defined in resource" +++ prt m
-    _ -> Bad $ prt m +++ "is not a resource"
+lookupParams gr = look True where 
+  look isTop m c = do
+    mi   <- lookupModule gr m
+    case mi of
+      ModMod mo -> do
+        info <- lookupInfo mo c
+        case info of
+          ResParam (Yes ps) -> return ps
+          ---- ResParam   Nope   -> if isTop then lookExt m c 
+          ----                       else prtBad "cannot find params in exts" c 
+          AnyInd _ n        -> look False n c
+          _   -> Bad $ prt c +++ "has no parameters defined in resource" +++ prt m
+      _ -> Bad $ prt m +++ "is not a resource"
+  lookExt m c =
+    checks [look False n c | n <- allExtensions gr m]
 
 lookupParamValues :: SourceGrammar -> Ident -> Ident -> Err [Term]
 lookupParamValues gr m c = do

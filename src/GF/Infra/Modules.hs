@@ -133,6 +133,16 @@ allExtendsPlus gr i = case lookupModule gr i of
  where
    exts m = [j | Just j <- [extends m]] ++ [j | MTInstance j <- [mtype m]]
 
+-- conversely: all modules that extend a given module, incl. instances of interface
+allExtensions :: (Show i,Ord i) => MGrammar i f a -> i -> [i]
+allExtensions gr i = case lookupModule gr i of
+  Ok (ModMod m) -> let es = exts i in es ++ concatMap (allExtensions gr) es
+  _ -> []
+ where
+   exts i = [j | (j,m) <- mods, elem (Just i) [extends m] 
+                             || elem (MTInstance i) [mtype m]]
+   mods = [(j,m) | (j,ModMod m) <- modules gr]
+
 -- initial search path: the nonqualified dependencies
 searchPathModule :: Ord i => Module i f a -> [i]
 searchPathModule m = [i | OSimple _ i <- depPathModule m]
@@ -160,7 +170,7 @@ typeOfModule mi = case mi of
 isResourceModule mi = case typeOfModule mi of
   MTResource -> True
   MTReuse _ -> True
----  MTInterface -> True
+  MTInterface -> True ---
   MTInstance _ -> True
   _ -> False
 
@@ -207,6 +217,7 @@ isModAbs m = case mtype m of
 
 isModRes m = case mtype m of
   MTResource -> True
+  MTInstance _ -> True
   _ -> False
 
 isModCnc m = case mtype m of
@@ -219,6 +230,12 @@ isModTrans m = case mtype m of
 
 sameMType m n = case (m,n) of
   (MTConcrete _, MTConcrete _) -> True
+  (MTInstance _, MTInstance _) -> True
+  (MTInstance _, MTResource) -> True
+  (MTInstance _, MTInterface) -> True
+  (MTResource, MTInstance _) -> True
+  (MTResource, MTInterface) -> True
+  (MTInterface,MTResource) -> True
   _ -> m == n
 
 -- don't generate code for interfaces and for incomplete modules
@@ -227,4 +244,3 @@ isCompilableModule m = case m of
     MTInterface -> False
     _ -> mstatus m == MSComplete
   _ -> False ---
-

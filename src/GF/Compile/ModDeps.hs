@@ -82,7 +82,9 @@ moduleDeps ms = mapM deps ms where
     (MTConcrete _, MTConcrete _) -> True
     (MTInstance _, MTInstance _) -> True
     (MTReuse _, MTReuse _) -> True
-    ---- some more
+    (MTInstance _, MTResource) -> True
+    (MTResource, MTInstance _) -> True
+    ---- some more?
     _ -> mt0 == mt
   -- in the same way; this defines what can be opened
   compatOType mt0 mt = case mt0 of

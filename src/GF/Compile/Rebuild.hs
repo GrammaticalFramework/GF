@@ -11,7 +11,8 @@ import Ident
 import Modules
 import Operations
 
--- rebuilding instance + interface, and "with" modules, prior to renaming. AR 24/10/2003
+-- rebuilding instance + interface, and "with" modules, prior to renaming. 
+-- AR 24/10/2003
 
 rebuildModule :: [SourceModule] -> SourceModule -> Err SourceModule
 rebuildModule ms mo@(i,mi) = do
@@ -28,7 +29,7 @@ rebuildModule ms mo@(i,mi) = do
         MTInstance i0 -> do
           m0 <- lookupModule gr i0
           m' <- case m0 of
-            ModMod m1 | mtype m1 == MTInterface -> do
+            ModMod m1 | isResourceModule m0 -> do ---- mtype m1 == MTInterface -> do
 ----              checkCompleteInstance m1 m -- do this later, in CheckGrammar
               js' <- extendMod i (jments m1) (jments m)
               return $ replaceJudgements m js'
@@ -41,7 +42,8 @@ rebuildModule ms mo@(i,mi) = do
     ModWith mt stat ext ops -> do
       let insts = [(inf,inst) |OQualif _ inf inst <- ops]
       let infs  = map fst insts
-      let stat' = ifNull MSComplete (const MSIncomplete) [i | i <- is, notElem i infs]
+      let stat' = ifNull MSComplete (const MSIncomplete) 
+                    [i | i <- is, notElem i infs]
       testErr (stat' == MSComplete || stat == MSIncomplete) 
               ("module" +++ prt i +++ "remains incomplete")
       Module mt0 stat0 fs me ops0 js <- do
@@ -52,7 +54,8 @@ rebuildModule ms mo@(i,mi) = do
       let ops1 = ops ++ [o | o <- ops0, notElem (openedModule o) infs]
                      ++ [oQualif i i | i <- map snd insts] ----
       --- check if me is incomplete
-      return $ ModMod $ Module mt0 stat' fs me ops1 (mapTree (qualifInstanceInfo insts) js)
+      return $ ModMod $ Module mt0 stat' fs me ops1 
+                          (mapTree (qualifInstanceInfo insts) js)
 
     _ -> return mi
   return (i,mi')
@@ -75,8 +78,8 @@ qualifInstanceInfo insts (c,i) = (c,qualInfo i) where
   qualInfo i = case i of
     ResOper pty pt -> ResOper (qualP pty) (qualP pt)
     CncCat  pty pt pp -> CncCat (qualP pty) (qualP pt) (qualP pp)
-    CncFun  mp pt pp -> CncFun mp (qualP pt) (qualP pp) ---- mp
-   -----  ResParam (Yes ps) -> ResParam (yes (map qualParam ps)) 
+    CncFun  mp pt pp -> CncFun (qualLin mp) (qualP pt) (qualP pp) ---- mp
+    ResParam (Yes ps) -> ResParam (yes (map qualParam ps)) 
     ResValue pty ->  ResValue (qualP pty)
     _ -> i
   qualP pt = case pt of
@@ -88,7 +91,9 @@ qualifInstanceInfo insts (c,i) = (c,qualInfo i) where
      Q m c  -> Q  (qualId m) c
      QC m c -> QC (qualId m) c
      _ -> composSafeOp qual t
+  qualParam (p,co) = (p,[(x,qual t) | (x,t) <- co])
+  qualLin (Just (c,(co,t))) = (Just (c,([(x,qual t) | (x,t) <- co], qual t)))
+  qualLin Nothing = Nothing
+
 
    -- NB constructor patterns never appear in interfaces so we need not rename them
-
-
