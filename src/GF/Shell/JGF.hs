@@ -2,6 +2,7 @@ module JGF where
 
 import Operations
 import UseIO
+import Unicode
 
 import IOGrammar
 import Option
@@ -49,12 +50,12 @@ welcome =
   "An experimental GF Editor for Java." ++ 
   "(c) Kristofer Johannisson, Janna Khegai, and Aarne Ranta 2002 under CNU GPL."
 
-initEditMsgJavaX env = encodeUTF8 $ unlines $ tagXML "gfinit" $ 
+initEditMsgJavaX env = encodeUTF8 $ mkUnicode $ unlines $ tagXML "gfinit" $ 
   tagsXML "newcat"   [["n" +++ cat]     | (_,cat) <- newCatMenu env] ++
   tagXML  "topic"    [abstractName env] ++
   tagXML  "language" [prLanguage langAbstract] ++
   concat [tagAttrXML "language" ("file",file) [prLanguage lang] |
            (file,lang) <- zip (allGrammarFileNames env) (allLanguages env)]
 
-initAndEditMsgJavaX isNew env state = encodeUTF8 $ 
+initAndEditMsgJavaX isNew env state = 
   initEditMsgJavaX env ++++ displaySStateJavaX isNew env state
