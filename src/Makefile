@@ -1,3 +1,5 @@
+include config.mk
+
 
 GHMAKE=ghc
 GHCI=ghci 
@@ -45,13 +47,13 @@ api:
 shell: 
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) --make Shell.hs
 clean: 
-	rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
+	-rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
 hugs:
 	hugs -h10M -P$(HUGSINCLUDE)
 ghci-nofud:
 	$(GHCI) $(GHCFLAGS) $(GHCINCLUDENOFUD)
 today:
-	runhugs util/MkToday
+	util/mktoday.sh
 javac:
 	cd java ; javac *.java ; cd ..
 help:
@@ -61,3 +63,8 @@ help:
 tracing:
 	$(GHMAKE) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD) --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
 
+distclean: clean
+	-rm -f config.status config.mk config.log
+
+install:
+	$(INSTALL) ../bin/gf2 $(bindir)
