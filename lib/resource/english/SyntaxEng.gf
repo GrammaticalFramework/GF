@@ -324,11 +324,6 @@ oper
          <Present,_,_>   => "have" ;
          <Past,_,_>      => "had"
          } ;
-       do : Tense -> Number -> Person -> Str = \t,n,p -> case <t,n,p> of {
-         <Present,Sg,P3> => "does" ;
-         <Present,_,_>   => "do" ;
-         <Past,_,_>      => "did"
-         } ;
        simple : VForm -> {fin,inf : Str} = \v -> {
          fin = goes.s ! v ; 
          inf = []
@@ -351,17 +346,60 @@ oper
        VInfinit Anter       => compound "have"        gone
      } ;
 
-  
-
-} ; 
-{-
   useVerb : Verb -> (Number => Str) -> VerbGroup = \verb,arg -> 
-    let go = verbVPForm go 
+    let 
+      go = verbVPForm verb ;
+      off = verb.s1 ;
+      has  : VPForm => Str = \\f => (go f).fin ; 
+      gone : VPForm => Str = \\f => (go f).inf ++ off 
     in {
-      s  = \\b,vf => (go sf).fin ;
-      s2 = \\b,vf => (go sf).inf ;
-      s3 = arg
+      s  = table {
+             True => has ;
+             False => table {
+               VIndic t Simul n p => auxDo t n p ;
+               VImperat           => auxDo Present Sg P2 ;
+               VInfinit a         => "not" ++ has ! VInfinit a ;
+               vf                 => has ! vf
+               }
+             } ;
+      s2 = table {
+             True => gone ;
+             False => table {
+               VIndic t Simul n p => "not" ++ has ! VInfinit Simul ++ off ;
+               VImperat           => "not" ++ has ! VInfinit Simul ++ off ;
+               VInfinit a         => gone ! VInfinit a ;
+               vf                 => "not" ++ gone ! vf
+               }
+             } ;
+      s3 = arg ;
+      isAux = False
       } ;
+
+  useVerbAux : Verb -> (Number => Str) -> VerbGroup = \verb,arg -> 
+    let 
+      go = verbVPForm verb ;
+      has  : VPForm => Str = \\f => (go f).fin ; 
+      gone : VPForm => Str = \\f => (go f).inf 
+    in {
+      s  = \\_ => has ;
+      s2 = table {
+             True  => gone ;
+             False => \\vf => "not" ++ gone ! vf 
+             } ;
+      s3 = arg ;
+      isAux = True
+      } ;
+
+  auxDo : Tense -> Number -> Person -> Str = \t,n,p -> case <t,n,p> of {
+    <Present,Sg,P3> => "does" ;
+    <Present,_,_>   => "do" ;
+    <Past,_,_>      => "did"
+    } ;
+
+  beGroup : (Number => Str) -> VerbGroup = 
+    useVerbAux (verbBe ** {s1 = []}) ; 
+
+---- TODO: the contracted forms.
 
 -- Verb phrases are discontinuous: the three parts of a verb phrase are
 -- (s) an inflected verb, (s2) infinitive or participle, and (s3) complement.
@@ -383,11 +421,13 @@ oper
     isAux : Bool ;
     } ;
 
+-- All negative verb phrase behave as auxiliary ones in questions.
+
   predVerbGroup : Bool -> VerbGroup -> VerbPhrase = \b,vg -> {
     s  = vg.s ! b ;
     s2 = vg.s2 ! b ;
     s3 = vg.s3 ;
-    isAux = vg.isAux
+    isAux = orB (notB b) vg.isAux
     } ;
 
 -- A simple verb can be made into a verb phrase with an empty complement.
@@ -396,18 +436,7 @@ oper
 -- double negations with "don't" are not grammatical.
 
   predVerb : Verb -> VerbGroup = \walk ->
-      {s = \\b,v => if_then_Str b
-              (walk.s ! v ++ walk.s1)
-              (contractNot (verbP3Do.s ! v)) ;
-       s2 = \\b,_ => if_then_Str b
-              []
-              (walk.s ! InfImp ++ walk.s1) ;
-       isAux = False
-      } ;
-
--- Sometimes we want to extract the verb part of a verb phrase.
-
-  verbOfPhrase : VerbPhrase -> VerbP3 = \v -> {s = v.s} ;
+    useVerb walk (\\_ => []) ;
 
 -- Verb phrases can also be formed from adjectives ("is old"),
 -- common nouns ("is a man"), and noun phrases ("ist John").
@@ -415,39 +444,17 @@ oper
 -- on semantic grounds.
 
   predAdjective : Adjective -> VerbGroup = \old ->
-    {s = beOrNotBe ;
-     s2 = \\_,_ => old.s ! AAdj ;
-     isAux = True
-    } ;
+    beGroup (\\_ => old.s ! AAdj) ;
 
   predCommNoun : CommNoun -> VerbGroup = \man ->
-    {s = beOrNotBe ;
-     s2 = \\_,n => indefNoun n man ;
-     isAux = True
-    } ;
+    beGroup (\\n => indefNoun n man) ;
 
   predNounPhrase : NounPhrase -> VerbGroup = \john ->
-    {s = beOrNotBe ;
-     s2 = \\_,_ => john.s ! NomP ;
-     isAux = True
-    } ;
+    beGroup (\\_ => john.s ! NomP) ;
 
   predAdverb : Adverb -> VerbGroup = \elsewhere ->
-    {s = beOrNotBe ;
-     s2 = \\_,_ => elsewhere.s ;
-     isAux = True
-    } ;
+    beGroup (\\_ => elsewhere.s) ;
 
--- We use an auxiliary giving all forms of "be".
-
-  beOrNotBe : Bool => VForm => Str = \\b => 
-    if_then_else (VForm => Str) b 
-      verbBe.s
-      (table {
-        InfImp   => contractNot "do" ++ "be" ;
-        Indic P1 => "am" ++ "not" ;
-        v        => contractNot (verbBe.s ! v)
-        }) ;
 
 --3 Transitive verbs
 --
@@ -461,25 +468,24 @@ oper
 
 -- The rule for using transitive verbs is the complementization rule.
 -- Particles produce free variation: before or after the complement 
--- ("I switch on the TV" / "I switch the TV on").
+-- ("I switch on the radio" / "I switch the radio on").
+---- TODO: do this again.
 
-  complTransVerb : TransVerb -> NounPhrase -> VerbGroup = \lookat,john ->
-    let lookatjohn = bothWays lookat.s1 (lookat.s3 ++ john.s ! AccP)
-    in {s  = \\b,v => if_then_Str b (lookat.s ! v) (contractNot (verbP3Do.s ! v)) ; 
-        s2 = \\b,_ => if_then_Str b lookatjohn (lookat.s ! InfImp ++ lookatjohn) ; 
-        isAux = False
-       } ;
-
+  complTransVerb : TransVerb -> NounPhrase -> VerbGroup = \switch,radio ->
+    useVerb switch (\\_ => switch.s3 ++ radio.s ! AccP) ;
 
 -- Verbs that take direct object and a  particle:
+
   mkTransVerbPart : VerbP3 -> Str -> TransVerb = \turn,off -> 
     {s = turn.s ; s1 = off ; s3 = []} ;
 
 -- Verbs that take prepositional object, no particle:
+
   mkTransVerb : VerbP3 -> Str -> TransVerb = \wait,for -> 
     {s = wait.s ; s1 = [] ; s3 = for} ;
 
 -- Verbs that take direct object, no particle:
+
   mkTransVerbDir : VerbP3 -> TransVerb = \love -> 
     mkTransVerbPart love [] ;
 
@@ -496,7 +502,6 @@ oper
 
 --- reflTransVerb : TransVerb -> VerbGroup = \love -> 
 
-
 -- Transitive verbs can be used elliptically as verbs. The semantics
 -- is left to applications. The definition is trivial, due to record
 -- subtyping.
@@ -505,8 +510,8 @@ oper
     love ;
 
 -- *Ditransitive verbs* are verbs with three argument places.
--- We treat so far only the rule in which the ditransitive
--- verb takes both complements to form a verb phrase.
+---- TODO: We treat so far only the rule in which the ditransitive
+---- verb takes both complements to form a verb phrase.
 
   DitransVerb = TransVerb ** {s4 : Preposition} ; 
 
@@ -515,18 +520,12 @@ oper
 
   complDitransVerb : DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = 
     \give,you,beer ->
-      let
-        youbeer = give.s1 ++ give.s3 ++ you.s ! AccP ++ give.s4 ++ beer.s ! AccP
-      in
-      {s  = \\b,v => if_then_Str b (give.s ! v) (contractNot (verbP3Do.s ! v)) ; 
-       s2 = \\b,_ => if_then_Str b  youbeer     (give.s ! InfImp ++ youbeer) ;
-       isAux = False
-      } ;
+      useVerb give 
+        (\\_ => give.s1 ++ give.s3 ++ you.s ! AccP ++ give.s4 ++ beer.s ! AccP) ;
 
-
---2 Adverbials
+--2 Adverbs
 --
--- Adverbials are not inflected (we ignore comparison, and treat
+-- Adverbs are not inflected (we ignore comparison, and treat
 -- compared adverbials as separate expressions; this could be done another way).
 -- We distinguish between post- and pre-verbal adverbs.
 
@@ -543,6 +542,7 @@ oper
     {
      s = \\v => (if_then_else Str postp [] well.s) ++ sings.s ! v ;
      s2 = \\n => sings.s2 ! n ++ (if_then_else Str postp well.s []) ;
+     s3 = sings.s3 ;
      isAux = sings.isAux
     } ;
 
@@ -575,7 +575,6 @@ oper
     g = car.g
    } ;
 
-
 --2 Sentences
 --
 -- Sentences are not inflected in this fragment of English without tense.
@@ -587,10 +586,47 @@ oper
 -- contain negation. 
 
   predVerbPhrase : NounPhrase -> VerbPhrase -> Sentence = \john,walks ->
-    ss (john.s ! NomP ++ indicVerb (verbOfPhrase walks) john.p john.n ++ 
-        walks.s2 ! john.n) ;
+    ss (
+      john.s ! NomP ++ 
+      presentIndicative walks john.n john.p 
+      ) ;
 
+  presentIndicative : VerbPhrase -> Number -> Person -> Str = \sleep,n,p -> 
+    let 
+      cf = VIndic Present Simul n p
+    in 
+      sleep.s ! cf ++ sleep.s2 ! cf ++ sleep.s3 ! n ;
 
+--3 Tensed clauses
+
+  param
+  ClForm = 
+     ClIndic   Tense Anteriority
+   | ClFut     Anteriority
+   | ClCondit  Anteriority
+   | ClInfinit Anteriority      -- "naked infinitive" clauses
+    ;
+
+  oper 
+  cl2s : ClForm -> Number -> Person -> VPForm = \c,n,p -> case c of {
+    ClIndic t a => VIndic t a n p ;
+    ClFut a     => VFut a ;
+    ClCondit a  => VCondit a ; 
+    ClInfinit a => VInfinit a
+    } ;
+
+  Clause = {s : Bool => ClForm => Str} ;
+
+  predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = 
+    \you,sleep -> {
+      s = \\b,c => 
+        let
+          n  = you.n ; 
+          cf = cl2s c n you.p
+        in 
+          you.s ! NomP ++ sleep.s ! b ! cf ++ sleep.s2 ! b ! cf ++
+          sleep.s3 ! n
+      } ;
 
 --3 Sentence-complement verbs
 --
@@ -599,13 +635,11 @@ oper
   SentenceVerb : Type = Verb ;
 
 -- To generate "says that John walks" / "doesn't say that John walks":
+---- TODO: the alternative without "that"
 
   complSentVerb : SentenceVerb -> Sentence -> VerbGroup = \say,johnruns ->
-    let {thatjohnruns = optStr "that" ++ johnruns.s} in 
-      {s  = \\b,v => if_then_Str b (say.s ! v)  (contractNot (verbP3Do.s ! v)) ;  
-       s2 = \\b,_ => if_then_Str b thatjohnruns (say.s ! InfImp ++ thatjohnruns) ; 
-       isAux = False
-      } ;
+    useVerb say (\\_ => "that" ++ johnruns.s) ;
+
 
 --3 Verb-complement verbs
 --
@@ -627,22 +661,13 @@ oper
     let
        taux  = try.isAux ;
        to    = if_then_Str taux [] "to" ;
-       dont  = table VForm {v => if_then_Str taux 
-                 (try.s ! v ++ "not")                -- can not
-                 (contractNot (verbP3Do.s ! v))      -- doesn't ...
-                 } ;
-       trnot = if_then_Str taux 
-                  []                                  --
-                  (try.s ! InfImp ++ try.s1) ;        -- ... try
+       torun : Number => Str = 
+         \\n => to ++ run.s ! True ! VInfinit Simul ++ 
+                run.s2 ! True ! VInfinit Simul ++ run.s3 ! n  
     in
-      {s =  \\b,v => if_then_Str b 
-                        (try.s ! v ++ try.s1 ++ to ++ run.s ! True ! InfImp)
-                        (dont ! v) ;
-       s2 = \\b,v => if_then_Str b
-                        (run.s2 ! True ! v) 
-                        (trnot ++ run.s ! True ! InfImp ++ run.s2 ! True ! v) ; 
-       isAux = taux
-      } ;
+      if_then_else VerbGroup taux 
+        (useVerb    try torun)
+        (useVerbAux try torun) ;
 
 -- The three most important example auxiliaries.
 
@@ -650,7 +675,7 @@ oper
     {s = table {
        InfImp => beable ; 
        Indic _ => can ; 
-       Past _ => could ;
+       Pastt _ => could ;
        PPart => beenable
        } ;
      s1 = [] ;
@@ -660,6 +685,7 @@ oper
   vvCan  : VerbVerb = mkVerbAux ["be able to"] "can" "could" ["been able to"] ;
   vvMust : VerbVerb = mkVerbAux ["have to"] "must" ["had to"] ["had to"] ;
 
+}{- -----
 --2 Sentences missing noun phrases
 --
 -- This is one instance of Gazdar's *slash categories*, corresponding to his

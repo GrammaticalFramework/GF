@@ -19,78 +19,26 @@
 -- one has to know how the syntactic categories are
 -- implemented. The parameter types are defined in $TypesEng.gf$.
 
-concrete CombinationsEng of Combinations = open Prelude, SyntaxEng in {
+concrete RulesEng of Rules = CategoriesEng ** open Prelude, SyntaxEng in {
 
 flags 
   startcat=Phr ; 
   lexer=text ;
   unlexer=text ;
 
-lincat 
-  N      = CommNoun ;         
-      -- = {s : Number => Case => Str}
-  CN     = CommNounPhrase ;   
-      -- = CommNoun ** {g : Gender}
-  NP     = {s : NPForm => Str ; n : Number ; p : Person} ;
-  PN     = {s : Case => Str} ;
-  Det    = {s : Str ; n : Number} ;
-  Fun    = Function ;
-      -- = CommNounPhrase ** {s2 : Preposition} ;
-  Fun2   = Function ** {s3 : Preposition} ;
-  Num    = {s : Case => Str} ;
-
-  Adj1   = Adjective ; 
-      -- = {s : AForm => Str}
-  Adj2   = Adjective ** {s2 : Preposition} ;
-  AdjDeg = {s : Degree => AForm => Str} ;
-  AP     = Adjective ** {p : Bool} ;
-
-  V      = Verb ; 
-      -- = {s : VForm => Str ; s1 : Particle}
-  VG     = {s : Bool => VForm => Str ; s2 : Bool => Number => Str ; 
-            isAuxT, isAuxF : Bool} ;
-  VP     = {s : VForm => Str ; s2 : Number => Str ; isAux : Bool} ;
-  TV     = TransVerb ; 
-      -- = Verb ** {s3 : Preposition} ;
-  V3     = TransVerb ** {s4 : Preposition} ;
-  VS     = Verb ;
-  VV     = Verb ** {isAux : Bool} ;
-
-  AdV    = {s : Str ; p : Bool} ;
-
-  S      = {s : Str} ; 
-  Slash  = {s : Bool => Str ; s2 : Preposition} ;
-  RP     = {s : Gender => Number => NPForm => Str} ;
-  RC     = {s : Gender => Number => Str} ;
-
-  IP     = {s : NPForm => Str ; n : Number} ;
-  Qu     = {s : QuestForm => Str} ;
-  Imp    = {s : Number => Str} ;
-  Phr    = {s : Str} ;
-  Text   = {s : Str} ;
-
-  Conj   = {s : Str ; n : Number} ;
-  ConjD  = {s1 : Str ; s2 : Str ; n : Number} ;
-
-  ListS  = {s1 : Str ; s2 : Str} ;
-  ListAP = {s1,s2 : AForm => Str ; p : Bool} ;
-  ListNP = {s1,s2 : NPForm => Str ; n : Number ; p : Person} ;
-
---.
-
 lin 
   UseN = noun2CommNounPhrase ;
-  ModAdj = modCommNounPhrase ;
+  ModAP = modCommNounPhrase ;
   ModGenOne = npGenDet singular noNum ;
   ModGenNum = npGenDet plural ;
   UsePN = nameNounPhrase ;
-  UseFun = funAsCommNounPhrase ;
-  AppFun = appFunComm ;
-  AppFun2 = appFun2 ;
-  AdjP1 = adj2adjPhrase ;
-  ComplAdj = complAdj ;
-  PositAdjP = positAdjPhrase ;
-  ComparAdjP = comparAdjPhrase ;
+  UseN2 = funAsCommNounPhrase ;
+  AppN2 = appFunComm ;
+  AppN3 = appFun2 ;
+  UseA = adj2adjPhrase ;
+  ComplA2 = complAdj ;
+  PositADeg = positAdjPhrase ;
+  ComparADeg = comparAdjPhrase ;
   SuperlNP = superlNounPhrase ;
 
   DetNP = detNounPhrase ;
@@ -108,29 +56,35 @@ lin
   SymbCN cn s =
     {s = \\n,c => cn.s ! n ! c ++ s.s ; 
      g = cn.g} ;
+  IntCN cn s =
+    {s = \\n,c => cn.s ! n ! c ++ s.s ; 
+     g = cn.g} ;
 
   PredVP = predVerbPhrase ;
   PosVG  = predVerbGroup True ;
   NegVG  = predVerbGroup False ;
 
+  PredVG = predVerbGroupClause ;
+
   PredV  = predVerb ;
   PredAP = predAdjective ;
   PredCN = predCommNoun ;
-  PredTV = complTransVerb ;
+-----  PredV2 = complTransVerb ;
   PredV3 = complDitransVerb ;
   PredPassV = passVerb ;
   PredNP = predNounPhrase ;
-  PredAdV = predAdverb ;
+-----  PredPP = predAdverb ;
   PredVS = complSentVerb ;
   PredVV = complVerbVerb ;
-  VTrans = transAsVerb ;
+-----  VTrans = transAsVerb ;
 
   AdjAdv a = advPost (a.s ! AAdv) ;
+  AdvPP p = p ;
   PrepNP p = prepPhrase p.s ; ---
-  AdvVP = adVerbPhrase ;
-  AdvCN = advCommNounPhrase ;
+-----  AdvVP = adVerbPhrase ;
+-----  AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
-
+} {- -----
   PosSlashTV = slashTransVerb True ;
   NegSlashTV = slashTransVerb False ;
   OneVP = predVerbPhrase (nameNounPhrase (nameReg "one")) ;
@@ -196,3 +150,4 @@ lin
   ConsPhr = cc2 ;
 
 } ;
+-}

@@ -5,7 +5,7 @@
 -- Aarne Ranta 2002 -- 2003
 --
 concrete StructuralEng of Structural = 
-                      CombinationsEng ** open Prelude, SyntaxEng in {
+                      CategoriesEng ** open Prelude, SyntaxEng in {
  lin
   INP    = pronI ;
   ThouNP = pronYouSg ;
