@@ -505,7 +505,7 @@ constituents. The linearization of such a constituent
 is compositionally defined to be the record linearizing the body
 extended with fields for each of the variable symbols:
 \[
-\sugmap{\lambda x_{0} \rarrow \cdots \rarrow \lambda x_{n} \rarrow b}
+\sugmap{(\lambda x_{0} \rarrow \cdots \rarrow \lambda x_{n} \rarrow b)}
 \;=\;
 \sugmap{b} *\!* \{\$_{0} = \sugmap{x_{0}} ; \ldots ; \$_{n} = \sugmap{x_{n}}\}
 \]
@@ -747,7 +747,7 @@ in Appendix C, we do not treat symbol tables
 in linearization, but instead generated code in
 \empha{Symbolic JVM}---that is, JVM with symbolic addresses.
 Therefore we need a postprocessor that resolves the symbolic addresses,
-shown in Appendix D.
+shown in Appendix E.
 
 To make the postprocessor straightforward,
 Symbolic JVM has special \texttt{alloc} instructions,
