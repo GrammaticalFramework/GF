@@ -3,7 +3,7 @@ concrete StoneageSwe of Stoneage
   = open SyntaxSwe, ResourceSwe, SwadeshLexSwe, StoneageResSwe in {
 
 lincat
-  S = S ;
+  S = Phr ;
   NP = NP ;
   N = N;
   CN = CN ;
