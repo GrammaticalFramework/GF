@@ -42,7 +42,9 @@ import Random (newStdGen)
 
 --- temporary hacks for GF 2.0
 
--- abstract command language for syntax editing. AR 22/8/2001
+-- Abstract command language for syntax editing. AR 22/8/2001
+-- Most arguments are strings, to make it easier to receive them from e.g. Java.
+-- See CommandsL for a parser of a command language.
 
 data Command =
    CNewCat G.Cat
@@ -53,6 +55,7 @@ data Command =
  | CPrevMeta
  | CTop
  | CLast
+ | CMovePosition [Int]
  | CRefineWithTree String
  | CRefineWithAtom String
  | CRefineParse String
@@ -206,6 +209,7 @@ execECommand env c = case c of
   CBack n            -> action2command (goBackN n)
   CTop               -> action2command $ return . goRoot
   CLast              -> action2command $ goLast
+  CMovePosition p    -> action2command $ goPosition p
   CNextMeta          -> action2command goNextNewMeta
   CPrevMeta          -> action2command goPrevNewMeta
   CRefineWithAtom s  -> action2commandNext $ \x -> do 
