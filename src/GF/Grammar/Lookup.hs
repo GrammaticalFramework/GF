@@ -101,6 +101,9 @@ qualifAnnotPar m t = case t of
 
 
 lookupLincat :: SourceGrammar -> Ident -> Ident -> Err Type
+lookupLincat gr m c | elem c [zIdent "String", zIdent "Int"] = 
+  return defLinType --- ad hoc; not needed?
+
 lookupLincat gr m c = do
   mi <- lookupModule gr m
   case mi of
