@@ -57,7 +57,7 @@ rmPunct (Tok t:ss) | all isPunct (prt t) = rmPunct ss
 rmPunct (s:ss) = s : rmPunct ss
 
 isPunct :: Char -> Bool
-isPunct c = c `elem` "-_.;.,?!"
+isPunct c = c `elem` "-_.;.,?!()[]{}"
 
 comments :: [String] -> ShowS
 comments = unlinesS . map (showString . ("; " ++))
