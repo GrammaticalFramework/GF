@@ -35,6 +35,7 @@ oper
   npGenPossNum = \nu,ton,mec ->
     \\c => artDef mec.g Pl c ++ ton.s ! Poss Pl mec.g ++ nu.s ! mec.g ++ mec.s ! Pl ; 
 
+{- ----
   existNounPhrase = \delvino -> {
     s = \\m => 
         case m of {
@@ -42,6 +43,7 @@ oper
           Con => "haya"
           } ++ delvino.s ! stressed accusative
     } ;
+-}
 
   mkAdjSolo : Str -> Bool -> Adjective = \adj,p ->
     mkAdjective (adjSolo adj) p ;
@@ -83,8 +85,7 @@ oper
 
   negVerb = \va -> "no" ++ va ;
 
-  copula = \b,w -> let etre = (predVerb verbSer).s in
-    etre ! b ! Masc ! w ; ---- Masc
+  copula = verbSer ;
 
   isClitCase = \c -> case c of { 
      Acc => True ;
@@ -148,7 +149,7 @@ oper
   } ;
 
 -- Questions
-
+{- ----
   questVerbPhrase = \jean,dort ->
     {s = table {
       DirQ   => (predVerbPhrase jean dort).s ! Ind ;
@@ -162,14 +163,6 @@ oper
       s = \\m => case m of {DirQ => [] ; _ => "si"} ++ cedelvino
       } ;
 
-  intVerbPhrase = \qui, dormir ->
-    let dort = dormir.s ! qui.g ! VPF Simul (VFin presInd qui.n P3)
-    in
-    {s = table {
-      _ => qui.s ! Nom ++ dort
-      }
-    } ;
-
   intSlash = \Qui, Tuvois ->
     let {qui = Tuvois.s2 ++ Qui.s ! Tuvois.c ; tuvois = Tuvois.s ! Ind} in
     {s = table {
@@ -177,13 +170,18 @@ oper
       IndirQ => qui ++ tuvois
       }
     } ;
+-}
 
-  questAdverbial = \quand, jean, dort ->
-    let {jeandort = (predVerbPhrase jean dort).s ! Ind} in
-    {s = table {
-      DirQ   => quand.s ++ jeandort ;  --- inversion? 
-      IndirQ => quand.s ++ jeandort
-      }
+  intSlash = \Qui, Tuvois ->
+    {s = \\b,cl =>
+      let 
+        qui = Tuvois.s2 ++ Qui.s ! Tuvois.c ; 
+        tuvois = Tuvois.s ! b ! cl
+      in
+      table {
+        DirQ   => qui ++ tuvois ; 
+        IndirQ => qui ++ tuvois
+        }
     } ;
 
 ---- moved from MorphoIta

@@ -176,4 +176,11 @@ haber_10 : Str -> Verbum = haber_3 ;
 
 param DForm = unit  | teen  | ten  | hundred  ;
 param Modif = mod  | unmod  | conj  ;
+
+oper spl : Str -> {s : Gender => Str ; n : Number} = \s -> {s = \\_ =>
+  s ; n = Pl} ;
+
+  uno  : Gender => Str = table {Masc => "uno" ; Fem => "una"} ;
+  yuno : Gender => Str = \\g => "y" ++ uno ! g ;
+
 }

@@ -2,11 +2,6 @@ concrete NumeralsIta of Numerals = open Prelude, TypesIta, MorphoIta, SyntaxIta 
 
 
 lincat 
---Digit = {s : DForm => Str} ;
---lincat Sub10 = {s : DForm => Str ; n : Number} ;
---lincat Sub100 = {s : Str ; n : Number} ;
---lincat Sub1000 = {s : Str ; n : Number} ;
---lincat Sub1000000 = {s : Str} ;
   Numeral = {s : Gender => Str ; n : Number} ;
   Digit = {s : DForm => Str} ;
   Sub10 = {s : DForm => Gender => Str ; n : Number} ;

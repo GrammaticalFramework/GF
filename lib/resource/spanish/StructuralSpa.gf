@@ -1,116 +1,95 @@
 --# -path=.:../romance:../abstract:../../prelude
 
-concrete StructuralSpa of Structural = CategoriesSpa, NumeralsSpa ** 
-  open SyntaxSpa, MorphoSpa, Prelude in {
 
+concrete StructuralSpa of Structural = CategoriesSpa, NumeralsSpa **
+  open SyntaxSpa, MorphoSpa, BeschSpa, Prelude in {
+  
 lin
-  INP    = pronNounPhrase pronJe ;
-  ThouNP = pronNounPhrase pronTu ;
-  HeNP   = pronNounPhrase pronIl ;
-  SheNP  = pronNounPhrase pronElle ;
-  WeNumNP n = pronNounPhrase (pronWithNum pronNous n) ;
-  YeNumNP n = pronNounPhrase (pronWithNum pronVous n) ;
-  YouNP  = pronNounPhrase pronVous ;
-  TheyNP = pronNounPhrase pronIls ; 
-  TheyFemNP = pronNounPhrase pronElles ; 
 
--- Here is a point where the API is really inadequate for French,
--- which distinguishes between masculine and feminine "they".
--- The following solution is not attractive.
+  UseNumeral n = {s = \\g => n.s !g ; n = n.n} ;
 
----  TheyNP = pronNounPhrase (variants {pronIls ; pronElles}) ;
-
-  ThisNP = mkNameNounPhrase ["esto"] Masc ;
-  ThatNP = mkNameNounPhrase ["eso"] Masc ;
-  TheseNumNP n = mkNameNounPhrase ("éstos" ++ n.s ! Masc) Masc ;
-  ThoseNumNP n = mkNameNounPhrase ("ésos" ++ n.s ! Masc) Masc ;
-
-  ItNP   = pronNounPhrase pronIl ;
-
-  EveryDet = chaqueDet ; 
-  AllMassDet   = mkDeterminer singular "todo" "toda" ;
-  AllNumDet  = mkDeterminerNum plural ["todos los"] ["todas las"] ;
-  WhichDet = quelDet ;
-  WhichNumDet = mkDeterminerNum plural "cuales" "cuales" ;
-  HowManyDet = mkDeterminer plural "cuántos" "cuántas" ;
-  MostsDet = plupartDet ;
-  MostDet  = mkDeterminer1 singular (["la mayor parte"] ++ elisDe) ; --- de
-  SomeDet  = mkDeterminer singular "alguno" "alguna" ;
-  SomeNumDet = mkDeterminerNum plural "algunos" "algunas" ;
-  NoDet    = mkDeterminer singular "ninguno" "ninguna" ; --- non
-  NoNumDet   = mkDeterminerNum plural "ningunos" "ningunas" ; ---- ??
-  AnyDet   = mkDeterminer singular "alguno" "alguna" ; ---
-  AnyNumDet  = mkDeterminerNum plural "algunos" "algunas" ; ---
-  ManyDet  = mkDeterminer plural "muchos" "muchas" ;
-  MuchDet  = mkDeterminer1 singular "mucho" ;
-  ThisDet  = mkDeterminer singular "esto" "esta" ;
-  ThatDet  = mkDeterminer singular "eso" "esa" ;
-  TheseNumDet = mkDeterminerNum plural "estos" "estas" ;
-  ThoseNumDet = mkDeterminerNum plural "esos" "esas" ; 
-
-  UseNumeral n = {s = \\_ => n.s} ; ---- gender
-
-  HowIAdv = commentAdv ;
-  WhenIAdv = quandAdv ;
-  WhereIAdv = ouAdv ;
-  WhyIAdv = pourquoiAdv ;
-
-  AndConj = etConj ;
-  OrConj = ouConj  ;
-  BothAnd = etetConj ;
-  EitherOr = ououConj  ;
-  NeitherNor = niniConj  ; 
-  IfSubj = siSubj ;
-  WhenSubj = quandSubj ;
-
-  PhrYes = ouiPhr ;  
-  PhrNo = nonPhr ; --- and also Si!
-
-  VeryAdv = ss "muy" ;
-  TooAdv = ss "demasiado" ;
-  OtherwiseAdv = ss "otramente" ;
-  ThereforeAdv = ss ["por eso"] ;
-
-  EverybodyNP  = normalNounPhrase (\\c => prepCase c ++ "todos") Masc Pl ;
-  SomebodyNP   = mkNameNounPhrase ["algún"] Masc ;
-  NobodyNP     = mkNameNounPhrase ["nadién"] Masc ;  --- ne
-  EverythingNP = mkNameNounPhrase ["todo"] Masc ;
-  SomethingNP  = mkNameNounPhrase ["algo"] Masc ;
-  NothingNP    = mkNameNounPhrase ["nada"] Masc ; --- ne
-
----- provisory, for completeness
-  CanVV     = mkVerbVerbDir (verbPres (vender_4 "poder") AHabere) ; ----
-  CanKnowVV = mkVerbVerbDir (verbPres (vender_4 "saber") AHabere) ; ----
-  MustVV    = mkVerbVerbDir (verbPres (vender_4 "deber") AHabere) ; ----
-  WantVV    = mkVerbVerbDir (verbPres (vender_4 "quierer") AHabere) ; ----
-
-  EverywhereNP = ss ["en todas partes"] ;
-  SomewhereNP = ss ["en ninguna parte"] ;
-  NowhereNP = ss ["en alguna parte"] ; ----
-
-  AlthoughSubj = ss "benché" ** {m = Con} ;
-
-  AlmostAdv = ss "casi" ;
-  QuiteAdv = ss "bastante" ;
-
-  InPrep = justPrep "en" ;
-  OnPrep = justPrep "sobre" ; ----
-  ToPrep = justCase dative ; ---
-  ThroughPrep = justPrep "por" ;
-  AbovePrep = justPrep "sobre" ;
-  UnderPrep = justPrep "bajo" ;
-  InFrontPrep = {s = "delante" ; c = genitive} ;
-  BehindPrep = {s = "detrás" ; c = genitive} ;
-  BetweenPrep = justPrep "entre" ;
-  FromPrep = justCase (CPrep P_de) ;
-  BeforePrep = {s = "antes" ; c = genitive} ;
-  DuringPrep = justPrep "durante" ; ----
-  AfterPrep = {s = "después" ; c = genitive} ;
-  WithPrep = justPrep "con" ;
-  WithoutPrep = justPrep "sin" ;
-  ByMeansPrep = justPrep "por" ;
-  PossessPrep = justCase genitive ;
-  PartPrep = justCase genitive ; ---
-  AgentPrep = justPrep "por" ;
+  above_Prep = justPrep "sobre" ;
+  after_Prep = {s = "después" ; c = genitive} ;
+  all8mass_Det = mkDeterminer singular "todo" "toda" ;
+  all_NDet = mkDeterminerNum ["todos los"] ["todas las"] ;
+  almost_Adv = ss "casi" ;
+  although_Subj = ss "benché" ** {m = Con} ;
+  and_Conj = etConj ;
+  because_Subj = ss "porque" ** {m = Ind} ;
+  before_Prep = {s = "antes" ; c = genitive} ;
+  behind_Prep = {s = "detrás" ; c = genitive} ;
+  between_Prep = justPrep "entre" ;
+  both_AndConjD = etetConj ;
+  by8agent_Prep = justPrep "por" ;
+  by8means_Prep = justPrep "por" ;
+  can8know_VV = mkVerbVerbDir (verbPres (saber_71 "saber") AHabere) ;
+  can_VV = mkVerbVerbDir (verbPres (poder_58 "poder") AHabere) ; ----
+  during_Prep = justPrep "durante" ; ----
+  either8or_ConjD = ououConj ;
+  everybody_NP = normalNounPhrase (\\c => prepCase c ++ "todos") Masc Pl ;
+  every_Det = chaqueDet ;
+  everything_NP = mkNameNounPhrase ["todo"] Masc ;
+  everywhere_Adv = ss ["en todas partes"] ;
+  from_Prep = justCase (CPrep P_de) ;
+  he_NP = pronNounPhrase pronIl ;
+  how8many_IDet = mkDeterminer plural "cuántos" "cuántas" ;
+  how_IAdv = commentAdv ;
+  if_Subj = siSubj ;
+  in8front_Prep = {s = "delante" ; c = genitive} ;
+  i_NP = pronNounPhrase pronJe ;
+  in_Prep = justPrep "en" ;
+  it_NP = pronNounPhrase pronIl ;
+  many_Det = mkDeterminer plural "muchos" "muchas" ;
+  most8many_Det = plupartDet ;
+  most_Det = mkDeterminer1 singular (["la mayor parte"] ++ elisDe) ; --- de
+  much_Det = mkDeterminer1 singular "mucho" ;
+  must_VV = mkVerbVerbDir (verbPres (deber_6 "deber") AHabere) ; ----
+  no_Phr = nonPhr ;
+  on_Prep = justPrep "sobre" ; ----
+  or_Conj = ouConj ;
+  otherwise_Adv = ss "otramente" ;
+  part_Prep = justCase genitive ; ---
+  possess_Prep = justCase genitive ;
+  quite_Adv = ss "bastante" ;
+  she_NP = pronNounPhrase pronElle ;
+  so_Adv = ss "tanto" ; ----
+  somebody_NP = mkNameNounPhrase ["algún"] Masc ;
+  some_Det = mkDeterminer singular "alguno" "alguna" ;
+  some_NDet = mkDeterminerNum "algunos" "algunas" ;
+  something_NP = mkNameNounPhrase ["algo"] Masc ;
+  somewhere_Adv = ss ["en ninguna parte"] ;
+  that_Det = mkDeterminer singular "eso" "esa" ;
+  that_NP = mkNameNounPhrase ["eso"] Masc ;
+  therefore_Adv = ss ["por eso"] ;
+  these_NDet = mkDeterminerNum "estos" "estas" ;
+  they8fem_NP = pronNounPhrase pronElles ;
+  they_NP = pronNounPhrase pronIls ;
+  this_Det = mkDeterminer singular "esto" "esta" ;
+  this_NP = mkNameNounPhrase ["esto"] Masc ;
+  those_NDet = mkDeterminerNum "esos" "esas" ;
+  thou_NP = pronNounPhrase pronTu ;
+  through_Prep = justPrep "por" ;
+  too_Adv = ss "demasiado" ;
+  to_Prep = justCase dative ; ---
+  under_Prep = justPrep "bajo" ;
+  very_Adv = ss "muy" ;
+  want_VV = mkVerbVerbDir (verbPres (querer_64 "querer") AHabere) ; ----
+  we_NP = pronNounPhrase pronNous ;
+  what8one_IP = intPronWhat singular ;
+  what8many_IP = intPronWhat plural ;
+  when_IAdv = quandAdv ;
+  when_Subj = quandSubj ;
+  where_IAdv = ouAdv ;
+  which8many_IDet = mkDeterminerNum "cuales" "cuales" ** {n = Pl} ;
+  which8one_IDet = quelDet ;
+  who8one_IP = intPronWho singular ;
+  who8many_IP = intPronWho plural ;
+  why_IAdv = pourquoiAdv ;
+  without_Prep = justPrep "sin" ;
+  with_Prep = justPrep "con" ;
+  ye_NP = pronNounPhrase pronVous ;
+  yes_Phr = ouiPhr ;
+  you_NP = pronNounPhrase pronVous ;
 
 }
+
