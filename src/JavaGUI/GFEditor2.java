@@ -31,9 +31,9 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     public MouseEvent m2;
     public static String selectedText="";
 
-    public static boolean debug = false;
+    public static boolean debug = true;
     public static boolean debug3 = false;
-    public static boolean debug2 = false;
+    public static boolean debug2 = true;
     public static boolean selectionCheck = false;
     public static String focusPosition = "";
     public static String stringToAppend = "";
