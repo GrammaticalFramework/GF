@@ -1,3 +1,5 @@
+--# -path=.:../prelude
+
 concrete ArithmEng of Arithm = LogicEng ** open LogicResEng in {
 
 lin

@@ -50,8 +50,8 @@ Position   = SSDep ;
 
 lin
 MkLetter head mess end = 
-  ss (head.s ++ "," ++ "<p>" ++ 
-      mess.s ! end.n ! end.x ! head.n ! head.x ++ "." ++ "<p>" ++ 
+  ss (head.s ++ "," ++ "&-" ++ 
+      mess.s ! end.n ! end.x ! head.n ! head.x ++ "." ++ "&-" ++ 
       end.s ! head.n ! head.x) ;
 
 DearRec rec   = {s = kaer ! rec.n ! rec.x ++ rec.s ; n = rec.n ; x = rec.x} ;
@@ -68,11 +68,11 @@ PlainSent sent = sent ;
 
 FormalEnding auth = 
   {s = table {n => table {x => 
-     ["Med vänlig hälsning <p>"] ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
+     ["Med vänlig hälsning &-"] ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
 
 InformalEnding auth = 
   {s = table {n => table {x => 
-     ["Med hälsningar <p>"] ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
+     ["Med hälsningar &-"] ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
 
 ColleaguesHe  = {s = kollega ! pl ; n = pl ; x = masc} ;
 ColleaguesShe = {s = kollega ! pl ; n = pl ; x = fem} ;

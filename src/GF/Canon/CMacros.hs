@@ -16,37 +16,64 @@ import Monad
 -- macros for concrete syntax in GFC that do not need lookup in a grammar
 
 -- how to mark subtrees, dep. on node, position, whether focus
-type Marker = V.TrNode -> [Int] -> Bool -> (String, String)
+type JustMarker = V.TrNode -> [Int] -> Bool -> (String, String)
+
+-- also to process the text (needed for escapes e.g. in XML)
+type Marker = (JustMarker, Maybe (String -> String))
+
+defTMarker :: JustMarker -> Marker
+defTMarker = flip (curry id) Nothing
 
 markSubtree :: Marker -> V.TrNode -> [Int] -> Bool -> Term -> Term
-markSubtree mk n is = markSubterm . mk n is
+markSubtree (mk,esc) n is = markSubterm esc . mk n is
+
+escapeMkString :: Marker -> Maybe (String -> String)
+escapeMkString = snd
 
 -- if no marking is wanted, use the following
 noMark :: Marker
-noMark _ _ _ = ("","")
+noMark = defTMarker mk where
+  mk _ _ _ = ("","")
 
 -- for vanilla brackets, focus, and position, use
 markBracket :: Marker
-markBracket n p b = if b then ("[*" ++ show p,"*]") else ("[" ++ show p,"]")
+markBracket = defTMarker mk where
+  mk n p b = if b then ("[*" ++ show p,"*]") else ("[" ++ show p,"]")
 
 -- for focus only
 markFocus :: Marker
-markFocus n p b = if b then ("[*","*]") else ("","")
+markFocus = defTMarker mk where
+  mk n p b = if b then ("[*","*]") else ("","")
 
 -- for XML, use
-markXML :: Marker
-markXML n i b = 
+markJustXML :: JustMarker
+markJustXML n i b = 
   if b 
     then ("<focus"   +++ p +++ c ++ s ++ ">", "</focus>") 
     else ("<subtree" +++ p +++ c ++ s ++ ">", "</subtree>") 
    where 
      c = "type=" ++ prt (M.valNode n)
      p = "position=" ++ (show $ reverse i)
-     s = "" ---- if (null (M.constrsNode n)) then "" else " status=incorrect"
+     s = if (null (M.constrsNode n)) then "" else " status=incorrect"
+
+markXML :: Marker
+markXML = (markJustXML, Just esc) where
+  esc s = case s of
+   '\\':'<':cs  -> '\\':'<':esc cs
+   '\\':'>':cs  -> '\\':'>':esc cs
+   '\\':'\\':cs -> '\\':'\\':esc cs
+   ----- the first 3 needed because marking may revisit; needs to be fixed
+
+   '<':cs  -> '\\':'<':esc cs
+   '>':cs  -> '\\':'>':esc cs
+   '\\':cs -> '\\':'\\':esc cs
+   c  :cs  -> c     :esc cs
+   _ -> s
 
 -- for XML in JGF 1, use
 markXMLjgf :: Marker
-markXMLjgf n p b = 
+markXMLjgf = defTMarker mk where
+ mk n p b = 
   if b 
     then ("<focus" +++ c ++ ">", "</focus>") 
     else ("","")
@@ -54,19 +81,28 @@ markXMLjgf n p b =
      c = "type=" ++ prt (M.valNode n)
 
 -- the marking engine
-markSubterm :: (String,String) -> Term -> Term
-markSubterm (beg, end) t = case t of
+markSubterm :: Maybe (String -> String) -> (String,String) -> Term -> Term
+markSubterm esc (beg, end) t = case t of
   R rs -> R $ map markField rs 
   T ty cs -> T ty [Cas p (mark v) | Cas p v <- cs]
   FV ts -> FV $ map mark ts
-  _    -> foldr1 C (tk beg ++ [t] ++ tk end)  -- t : Str guaranteed?
+  _    -> foldr1 C (tm beg ++ [mkEscIf t] ++ tm end)  -- t : Str guaranteed?
  where
-   mark = markSubterm (beg, end)
+   mark = markSubterm esc (beg, end)
    markField lt@(Ass l t) = if isLinLabel l then (Ass l (mark t)) else lt
-   tk s = if null s then [] else [tK s]
+   tm s = if null s then [] else [tM s]
+   mkEscIf t = case esc of
+     Just f -> mkEsc f t
+     _ -> t
+   mkEsc f t = case t of
+     K (KS s) -> K (KS (f s))
+     C u v    -> C (mkEsc f u) (mkEsc f v)
+     FV ts    -> FV (map (mkEsc f) ts)
+     _ -> t ---- do we need to look at other cases?
 
-tK :: String -> Term
+tK,tM :: String -> Term
 tK = K . KS
+tM = K . KM
 
 term2patt :: Term -> Err Patt
 term2patt trm = case trm of
@@ -120,6 +156,7 @@ valTableType t = case t of
 strsFromTerm :: Term -> Err [Str]
 strsFromTerm t = case t of
   K (KS s) -> return [str s]
+  K (KM s) -> return [str s]
   K (KP d vs) -> return $ [Str [TN d [(s,v) | Var s v <- vs]]]
   C s t -> do
     s' <- strsFromTerm s

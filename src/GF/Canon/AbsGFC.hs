@@ -129,6 +129,7 @@ data Term =
 
 data Tokn =
    KS String
+ | KM String
  | KP [String] [Variant]
   deriving (Eq,Ord,Show)
 

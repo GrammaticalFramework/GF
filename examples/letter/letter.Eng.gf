@@ -3,7 +3,7 @@
 -- This file defines the English syntax of the grammar set 
 -- whose abstract syntax is $letter.Abs.gf$. 
 
-include letter.Abs.gf ;
+include letter.Abs.gf ; 
 
 flags lexer=textlit ; unlexer=textlit ;
 
@@ -44,8 +44,8 @@ Position   = SSDep ;
 
 lin
 MkLetter head mess end = 
-  ss (head.s ++ "," ++ "<p>" ++ 
-      mess.s ! end.n ! end.x ! head.n ! head.x ++ "." ++ "<p>" ++ 
+  ss (head.s ++ "," ++ "&-" ++ 
+      mess.s ! end.n ! end.x ! head.n ! head.x ++ "." ++ "&-" ++ 
       end.s ! head.n ! head.x) ;
 
 DearRec rec   = {s = "Dear" ++ rec.s ; n = rec.n ; x = rec.x} ;
@@ -62,10 +62,10 @@ PlainSent sent = sent ;
 
 FormalEnding auth = 
   {s = table {n => table {x => 
-     ["Sincerely yours <p>"] ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
+     ["Sincerely yours &-"] ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
 InformalEnding auth = 
   {s = table {n => table {x => 
-     ["With best regards <p>"] ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
+     ["With best regards &-"] ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
 
 ColleaguesHe  = {s = kollega ! pl ; n = pl ; x = masc} ;
 ColleaguesShe = {s = kollega ! pl ; n = pl ; x = fem} ;

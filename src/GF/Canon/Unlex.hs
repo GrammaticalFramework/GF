@@ -21,7 +21,7 @@ formatAsText = unwords . format . cap . words where
   cap [] = []
   major = flip elem (map (:[]) ".!?") 
   minor = flip elem (map (:[]) ",:;")
-  para  = (=="<p>") 
+  para  = (=="&-") 
 
 unlex :: [Str] -> String
 unlex = formatAsText . performBinds . concat . map sstr . take 1 ----

@@ -46,7 +46,7 @@ formatAsText = unwords . format . cap . words where
   cap [] = []
   major = flip elem (map singleton ".!?") 
   minor = flip elem (map singleton ",:;")
-  para  = (=="<p>") 
+  para  = (=="&-") 
 
 formatAsCode :: String -> String
 formatAsCode = rend 0 . words where

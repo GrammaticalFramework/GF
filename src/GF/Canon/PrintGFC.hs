@@ -272,6 +272,7 @@ instance Print Term where
 instance Print Tokn where
   prt i e = case e of
    KS str -> prPrec i 0 (concatD [prt 0 str])
+   KM str -> prPrec i 0 (concatD [prt 0 str])
    KP strs variants -> prPrec i 0 (concatD [doc (showString "[") , doc (showString "pre") , prt 0 strs , doc (showString "{") , prt 0 variants , doc (showString "}") , doc (showString "]")])
 
 
