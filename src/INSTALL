@@ -20,15 +20,15 @@ To make and install GF2 (Version 2-beta, 2/4/2004).
 
 4. For a quick test: start GF2, load a grammar and parse a string:
 
-     cd GF2/grammars/basic
-     ../../bin/gf2
+     cd ../grammars/basic
+     ../../bin/gf2 English.gf
 
      -- when GF2 has started and shows the prompt >:
      > p "every number is even or odd"
      -- this is the response from GF2:
      PredA1 (Every Number) (DisjA1 Even Odd)
 
-5. If you want to run the Java GUI, also do
+5. If you want to run the Java GUI, go back to GF2/src and also do
 
      make install-java
 
@@ -36,8 +36,10 @@ To make and install GF2 (Version 2-beta, 2/4/2004).
    the value of GFHOME to the location of your GF2/bin directory. Test the
    GUI with some grammars:
 
-     cd GF2/grammars/letter
+     cd ../grammars/letter
      ../../bin/gf2 <mkLetter.gfs
      ../../bin/jgf2 Letter.gfcm
+
+   When the window opens, push the Random button. 
 
 Author: Aarne Ranta, 2/4/2004
