@@ -2,8 +2,8 @@
 
 ######################################################################
 # Author: Peter Ljunglöf
-# Time-stamp: "2005-02-18, 14:26"
-# CVS $Date: 2005/02/18 19:21:06 $
+# Time-stamp: "2005-03-22, 06:24"
+# CVS $Date: 2005/03/29 11:17:54 $
 # CVS $Author: peb $
 #
 # a script for producing documentation through Haddock
@@ -15,7 +15,7 @@ set resourcedir = $base/haddock-resources
 
 #set dirs = (. api compile grammar infra shell source canonical useGrammar cf newparsing parsers notrace cfgm speech visualization for-hugs for-ghc)
 
-set files = (`find $base -name '*.hs' -not -path '*/conversions/*' -not -path '*/parsing/*' -not -path '*/for-*' -not -path '*/haddock*' -not -name 'Lex[GC]*' -not -name 'Par[GC]*'` $base/for-ghc-nofud/*.hs)
+set files = (`find $base -name '*.hs' -not -path '*/old-stuff/*' -not -path '*/for-*' -not -path '*/haddock*' -not -name 'Lex[GC]*' -not -name 'Par[GC]*'` $base/for-ghc-nofud/*.hs)
 
 ######################################################################
 

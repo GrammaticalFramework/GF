@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : CFParserGeneral
+-- Module      : ParseCFG.General
 -- Maintainer  : Peter Ljunglöf
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:31:54 $ 
+-- > CVS $Date: 2005/03/29 11:17:55 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Several implementations of CFG chart parsing
 -----------------------------------------------------------------------------
@@ -15,7 +15,7 @@
 module GF.Parsing.ParseCFG.General 
     (parse, Strategy) where
 
-import Tracing
+import GF.System.Tracing
 
 import GF.Parsing.Utilities
 import GF.Parsing.CFGrammar

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:40:06 $ 
+-- > CVS $Date: 2005/03/29 11:17:56 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.47 $
+-- > CVS $Revision: 1.48 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -75,6 +75,8 @@ import qualified GF.Parsing.ParseCF as PCF
 -- see also customGrammarPrinter
 import qualified GF.Parsing.ConvertGrammar as Cnv
 import qualified GF.Printing.PrintParser as Prt
+import qualified GF.Data.Assoc as Assoc
+import qualified GF.Parsing.ConvertFiniteGFC as Fin
 
 import GFC
 import qualified MkGFC as MC
@@ -256,6 +258,9 @@ customGrammarPrinter =
   ,(strCI "cfg",        Prt.prt . Cnv.cfg . statePInfo)
   ,(strCI "mcfg_show",  show . Cnv.mcfg . statePInfo)
   ,(strCI "cfg_show",   show . Cnv.cfg . statePInfo)
+-- hack for printing finiteness of grammar categories:
+  -- ,(strCI "finiteness", Prt.prtAfter "\n" . Assoc.aAssocs . Cnv.fintypes . statePInfo)
+  ,(strCI "finite",     prCanon . Fin.convertGrammar . stateGrammarST)
 --- also include printing via grammar2syntax!
   ] 
   ++ moreCustomGrammarPrinter

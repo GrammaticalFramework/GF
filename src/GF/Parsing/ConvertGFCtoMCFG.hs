@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:31:46 $ 
+-- > CVS $Date: 2005/03/29 11:17:54 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- All different conversions from GFC to MCFG
 -----------------------------------------------------------------------------
@@ -20,7 +20,7 @@ import GFC (CanonGrammar)
 import GF.Parsing.GrammarTypes
 import Ident (Ident(..))
 import Option
-import Tracing
+import GF.System.Tracing
 
 import qualified GF.Parsing.ConvertGFCtoMCFG.Old as Old
 import qualified GF.Parsing.ConvertGFCtoMCFG.Nondet as Nondet

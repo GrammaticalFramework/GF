@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:31:43 $ 
+-- > CVS $Date: 2005/03/29 11:17:54 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Definitions of context-free grammars,
 -- parser information and chart conversion
@@ -27,7 +27,7 @@ module GF.Parsing.CFGrammar
      checkGrammar
     ) where
 
-import Tracing 
+import GF.System.Tracing 
 
 -- haskell modules:
 import Array 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:31:54 $ 
+-- > CVS $Date: 2005/03/29 11:17:55 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Converting GFC grammars to MCFG grammars, nondeterministically.
 --
@@ -20,8 +20,8 @@
 
 module GF.Parsing.ConvertGFCtoMCFG.Strict (convertGrammar) where
 
-import Tracing
-import IOExts (unsafePerformIO)
+import GF.System.Tracing
+-- import IOExts (unsafePerformIO)
 import GF.Printing.PrintParser
 import GF.Printing.PrintSimplifiedTerm
 -- import PrintGFC
@@ -113,7 +113,7 @@ enumerateArg (A cat nr) = do env <- readEnv
 substitutePaths :: GrammarEnv -> [STerm] -> Term -> STerm
 substitutePaths env arguments trm  = subst trm
     where subst (con `Con` terms) = con `SCon` map subst terms
-	  subst (R record)        = SRec [ (lbl, subst term) | lbl `Ass` term <- record ]
+	  subst (R record)        = SRec [ (lbl, subst term) | lbl `Ass` term <- record ]
 	  subst (term `P` lbl)    = subst term +. lbl
 	  subst (T ptype table)   = STbl [ (pattern2sterm pat, subst term) | 
 					   pats `Cas` term <- table, pat <- pats ]

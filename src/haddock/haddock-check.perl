@@ -31,17 +31,19 @@ sub check_headerline {
   if (s/^-- \s $title \s* : \s+ (.+?) \s*\n//sx) {
     $name = $1;
     print "   > Incorrect ".lcfirst $title.": $name\n" unless $name =~ $regexp;
+    return $&;
   } else {
-    print "   > Header missing".lcfirst $title."\n";
+    print "   > Header missing: ".lcfirst $title."\n";
   }
 }
 
 if ($#ARGV >= 0) {
   @FILES = @ARGV;
 } else {
-  @dirs = qw/. api canonical cf cfgm compile for-ghc-nofud
-	     grammar infra newparsing notrace parsers shell
-	     source speech translate useGrammar util visualization/;
+  @dirs = qw{. api canonical cf cfgm compile for-ghc-nofud
+	     grammar infra notrace parsers shell
+	     source speech translate useGrammar util visualization
+	     GF GF/* GF/*/*};
   @FILES = grep(!/\/(Par|Lex)(GF|GFC|CFG)\.hs$/,
 		glob "{".join(",",@dirs)."}/*.hs");
 }
@@ -65,11 +67,13 @@ for $file (@FILES) {
   }
 
   # the module header
+  $hdr_module = $module = "";
+
   s/^ (--+ \s* \n) +//sx;
   unless (s/^ -- \s \| \s* \n//sx) {
     print "   > Incorrect module header\n";
   } else {
-    &check_headerline("Module", qr/^ [A-Z] \w* $/x);
+    $hdr_module = s/^-- \s Module \s* : \s+ (.+?) \s*\n//sx ? $1 : "";
     &check_headerline("Maintainer", qr/^ [\wåäöÅÄÖüÜ\s\@\.]+ $/x);
     &check_headerline("Stability", qr/.*/);
     &check_headerline("Portability", qr/.*/);
@@ -77,7 +81,7 @@ for $file (@FILES) {
     print "   > Missing CVS information\n"
       unless s/^(-- \s+ \> \s+ CVS \s+ \$ .*? \$ \s* \n)+//sx;
     s/^ (--+ \s* \n) +//sx;
-    print "   > Missing module description\n" 
+    print "   > Missing module description\n"
       unless /^ -- \s+ [^\(]/x;
   }
 
@@ -91,13 +95,15 @@ for $file (@FILES) {
   # the export list
   $exportlist = "";
 
-  if (/\n module \s+ (\w+) \s+ \( (.*?) \) \s+ where/sx) {
+  if (/\n module \s+ ((?: \w | \.)+) \s+ \( (.*?) \) \s+ where/sx) {
     ($module, $exportlist) = ($1, $2);
 
     $exportlist =~ s/\b module \s+ [A-Z] \w*//gsx;
     $exportlist =~ s/\(\.\.\)//g;
 
-  } else {
+  } elsif (/\n module \s+ ((?: \w | \.)+) \s+ where/sx) {
+    $module = $1;
+
     # modules without export lists
     print "   > No export list\n";
 
@@ -120,7 +126,12 @@ for $file (@FILES) {
 
       $exportlist .= " $fn ";
     }
+  } else {
+    print "  > No module header found\n";
   }
+
+  print "  > Module names not matching: $module != $hdr_module\n"
+    if $hdr_module && $module !~ /\Q$hdr_module\E$/;
 
   # fixing exportlist (double spaces as separator)
   $exportlist = " $exportlist ";

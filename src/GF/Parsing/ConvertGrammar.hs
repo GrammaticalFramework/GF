@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:31:46 $ 
+-- > CVS $Date: 2005/03/29 11:17:54 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- All (?) grammar conversions which are used in GF
 -----------------------------------------------------------------------------
@@ -19,11 +19,13 @@ module GF.Parsing.ConvertGrammar
     ) where
 
 import GFC (CanonGrammar)
+import MkGFC (grammar2canon)
 import GF.Parsing.GrammarTypes
 import Ident (Ident(..))
 import Option
-import Tracing
+import GF.System.Tracing
 
+-- import qualified GF.Parsing.FiniteTypes.Calc  as Fin
 import qualified GF.Parsing.ConvertGFCtoMCFG  as G2M
 import qualified GF.Parsing.ConvertMCFGtoCFG  as M2C
 import qualified GF.Parsing.MCFGrammar        as MCFG

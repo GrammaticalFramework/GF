@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/14 23:45:36 $ 
--- > CVS $Author: krijo $
--- > CVS $Revision: 1.17 $
+-- > CVS $Date: 2005/03/29 11:17:56 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.18 $
 --
 -- some auxiliary GF operations. AR 19\/6\/1998 -- 6\/2\/2001
 --
@@ -56,7 +56,7 @@ module Operations (-- * misc functions
 		   sortByLongest, combinations, mkTextFile, initFilePath,
 
 		   -- * topological sorting with test of cyclicity
-		   topoTest, topoSort,
+		   topoTest, topoSort, cyclesIn,
 
 		   -- * the generic fix point iterator
 		   iterFix,
@@ -570,8 +570,7 @@ mkTextFile name = do
 initFilePath :: FilePath -> FilePath
 initFilePath f = reverse (dropWhile (/='/') (reverse f))
 
--- topological sorting with test of cyclicity
-
+-- | topological sorting with test of cyclicity
 topoTest :: Eq a => [(a,[a])] -> Either [a] [[a]]
 topoTest g = if length g' == length g then Left g' else Right (cyclesIn g ++[[]]) 
   where
@@ -591,7 +590,7 @@ cyclesIn deps = nubb $ clean $ filt $ iterFix findDep immediate where
   remdup [] = []
 
 
-
+-- | topological sorting 
 topoSort :: Eq a => [(a,[a])] -> [a]
 topoSort g = reverse $ tsort 0 [ffs | ffs@(f,_) <- g, inDeg f == 0] [] where
   tsort _ []     r = r

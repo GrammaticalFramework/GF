@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : CFParserIncremental
+-- Module      : ParseCFG.Incremental
 -- Maintainer  : PL
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:31:54 $ 
+-- > CVS $Date: 2005/03/29 11:17:55 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Incremental chart parsing for context-free grammars
 -----------------------------------------------------------------------------
@@ -17,7 +17,7 @@
 module GF.Parsing.ParseCFG.Incremental 
     (parse, Strategy) where
 
-import Tracing
+import GF.System.Tracing
 import GF.Printing.PrintParser
 
 -- haskell modules:
