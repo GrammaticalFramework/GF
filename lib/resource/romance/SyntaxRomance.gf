@@ -1411,4 +1411,125 @@ oper
   siSubj, quandSubj : Subjunction ;
 
   ouiPhr, noPhr : Utterance ;
+
+---------------------------------------------------------------------
+---- for Sats; to be moved earlier
+
+  Sats : Type = {
+      s1 : Str ;        -- je                 je
+      s3 : Str ;        -- (ne) le lui        (ne)     
+      s4 : VF => Str ;  -- ai                 ai
+      s5 : Str ;        -- toujours (pas)     toujours (pas)
+      s6 : Str ;        -- (dit) directement  (voulu) le lui dire directement
+      aux : VAux ;
+      g,g2 : Gender ;   -- features for main verb and participle
+      n,n2 : Number ;
+      p : Person        -- feature of subject
+      
+      } ;
+
+  verbClForm : 
+    Verb -> ClForm -> Gender -> Number -> Person -> Gender -> Number -> (Str * Str) = 
+    \verb,cl,g,n,p,g2,n2 -> 
+      let 
+        aimee = verb.s ! VPart g2 n2 ;
+        auxv  = (auxVerb verb).s ;
+        aime  : TMode -> Str = \t -> verb.s ! (VFin t n p) ;
+        avoir : TMode -> Str = \t -> auxv ! (VFin t n p) ;
+        aimer = verb.s ! VInfin ;
+        avoirr = auxv ! VInfin
+      in
+      case cl of {
+        ClPres   Simul m => <aime  (VPres m),   []> ;
+        ClPres   a m     => <avoir (VPres m),   aimee> ;
+        ClImperf Simul m => <aime  (VImperf m), []> ;
+        ClImperf a m     => <avoir (VImperf m), aimee> ;
+        ClPasse  Simul   => <aime  VPasse,      []> ;
+        ClPasse  a       => <avoir VPasse,      aimee> ;
+        ClFut    Simul   => <aime  VFut,        []> ;
+        ClFut    a       => <avoir VFut,        aimee> ;
+        ClCondit Simul   => <aime  VCondit,     []> ;
+        ClCondit a       => <avoir VCondit,     aimee> ;
+        ClInfinit Simul  => <aimer,             []> ;
+        ClInfinit a      => <avoirr,            aimee>
+        } ;
+
+  mkSats : NounPhrase -> Verb -> Sats = \subj,verb ->
+     let ifEsse : (T : Type) -> T -> T -> T = \T,e,h ->
+       case verb.aux of {
+         AEsse   => e ;
+         AHabere => h
+         }
+     in
+     {s1 = subj.s ! unstressed nominative ;
+      s3 = [] ;
+      s4 = verb.s ;
+      s5, s6 = [] ;
+      aux = verb.aux ;
+      g = pgen2gen subj.g ;
+      n = subj.n ;
+      p = subj.p ;
+      g2 = ifEsse Gender (pgen2gen subj.g) Masc ;
+      n2 = ifEsse Number subj.n            Sg
+      } ;
+
+  insertObject : Sats -> CaseA -> Str -> NounPhrase -> Sats = \sats, c, prep, obj -> 
+     let
+       ifClit : (T : Type) -> T -> T -> T = 
+         \T -> if_then_else T (andB (isNounPhraseClit obj) (isClitCase c)) ;
+       object = obj.s ! (case2pformClit c) ;
+       clit   = ifClit Str object [] ;
+       np     = ifClit Str [] object
+     in
+     {s1  = sats.s1 ;
+      s3  = sats.s3 ++ clit ; ---- or clit ++ s3, dep. on clits
+      s4  = sats.s4 ;
+      s5  = sats.s5 ;
+      s6  = sats.s6 ++ prep ++ np ;
+      aux = sats.aux ;
+      g   = sats.g ;
+      n   = sats.n ;
+      g2  = ifClit Gender (pgen2gen obj.g) sats.g2 ; ---- only for clit acc
+      n2  = ifClit Number obj.n sats.n2 ;
+      p   = sats.p
+      } ;
+
+  insertExtrapos : Sats -> Str -> Sats = \sats,obj -> 
+     {s1  = sats.s1 ;
+      s3  = sats.s3 ;
+      s4  = sats.s4 ;
+      s5  = sats.s5 ;
+      s6  = sats.s6 ++ obj ;
+      aux = sats.aux ;
+      g   = sats.g ;
+      n   = sats.n ;
+      g2  = sats.g2 ;
+      n2  = sats.n2 ;
+      p   = sats.p
+      } ;
+
+  mkSatsObject : NounPhrase -> TransVerb -> NounPhrase -> Sats = \subj,verb,obj ->
+    insertObject (mkSats subj verb) verb.c verb.s2 obj ;
+
+  mkSatsCopula : NounPhrase -> Str -> Sats = \subj,obj ->
+    mkSatsObject subj 
+      (mkTransVerbDir copula)                         --- hack to reuse  
+      (nameNounPhrase (mkProperName obj Masc)) ;      --- this function
+
+  sats2clause : Sats -> Clause = 
+    \sats -> {s = \\b,cf =>
+      let
+        je   = sats.s1 ;
+        lui  = sats.s3 ;
+        dire = verbClForm {s = sats.s4 ; aux = sats.aux}
+                 cf sats.g sats.n sats.p sats.g2 sats.n2 ;
+        ai   = dire.p1 ;
+        dit  = dire.p2 ;
+        toujours = sats.s5 ;
+        directement = sats.s6
+      in 
+      je ++ lui ++ ai ++ toujours ++ dit ++ directement
+    } ;
+
+
 }

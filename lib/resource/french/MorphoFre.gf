@@ -106,8 +106,11 @@ oper
 -- Then the regular and invariant patterns.
 
   adjReg : Str -> Gender => Number => Str = \bu -> table {
-    Masc => nomReg bu ;
-    Fem  => nomReg (bu + "e")
+    Masc => (mkNomReg bu Masc).s ;
+    Fem  => nomReg (case last bu of {
+      "e" => bu ;
+      _ => bu + "e"
+      })
     } ;
 
   adjInvar : Str -> Gender => Number => Str = \bien -> 
@@ -116,7 +119,12 @@ oper
 -- Adjectives themselves are records. Here the most common cases:
 
   adjGrand : Str -> Adj = \grand -> 
-    mkAdj grand (grand + "s") (grand + "e") (grand + "ement") ;
+    let grande = case last grand of {
+      "e" => grand ;
+      _ => grand + "e"
+      }
+    in
+    mkAdj grand (grand + "s") grande (grande + "ment") ;
 
 -- Masculine form used for adverbial; also covers "carré".
 
@@ -154,6 +162,7 @@ oper
         "er" => adjCher creux ;
         _ => case Predef.dp 1 creux of {
           "s" => adjFrancais creux ;
+          "x" => adjFrancais creux ;
           "e" => adjJeune creux ;
           "é" => adjJoli creux ;
           "i" => adjJoli creux ;
