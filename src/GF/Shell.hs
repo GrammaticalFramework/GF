@@ -15,6 +15,9 @@ import Compile
 ---- import GFTex
 import TeachYourself -- also a subshell
 
+import Randomized ---
+import Editing (goFirstMeta) ---
+
 import ShellState
 import Option
 import Information
@@ -24,6 +27,8 @@ import PrGrammar
 
 import Monad (foldM)
 import System (system)
+import Random (newStdGen) ----
+import Zipper ----
 
 import Operations
 import UseIO
@@ -168,9 +173,19 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
   CTranslate il ol -> do
     let a' = opST2CommandArg (optParseArgErr opts (sgr il)) a
     returnArg (opTS2CommandArg (optLinearizeTreeVal opts (sgr ol)) a') sa
-  CGenerateRandom n -> do
-    ts <- randomTreesIO opts gro (optIntOrN opts flagNumber n)
-    returnArg (ATrms ts) sa
+  CGenerateRandom n -> case a of
+      ASTrm _ -> do
+        case s2t a of
+          ATrms [trm] -> do 
+            g    <- newStdGen
+            case (goFirstMeta (tree2loc trm) >>= refineRandom g 41 cgr) of
+              Ok trm' -> returnArg (ATrms [loc2tree trm']) sa
+              Bad s   -> returnArg (AError s) sa
+          _ -> returnArg a sa
+      _ -> do
+        ts <- randomTreesIO opts gro (optIntOrN opts flagNumber n)
+        returnArg (ATrms ts) sa
+
   CPutTerm -> changeArg (opTT2CommandArg (optTermCommand opts gro) . s2t) sa
 -----  CWrapTerm f -> changeArg (opTT2CommandArg (return . wrapByFun opts gro f)) sa
   CMorphoAnalyse -> changeArg (AString . morphoAnalyse opts gro . prCommandArg) sa
@@ -229,6 +244,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
    gro = grammarOfOptState opts st
    opts = addOptions opts0 (globalOptions st)
    src = srcModules st
+   cgr = canModules st
 
    s2t a = case a of
      ASTrm s  -> err AError (ATrms . return) $ string2treeErr gro s
