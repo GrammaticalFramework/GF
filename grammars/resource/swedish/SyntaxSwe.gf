@@ -7,7 +7,7 @@
 --
 -- The following modules are presupposed:
 
-resource Syntax = Morpho ** open Prelude, (CO = Coordination) in {
+resource SyntaxSwe = MorphoSwe ** open Prelude, (CO = Coordination) in {
 
 --2 Common Nouns
 --

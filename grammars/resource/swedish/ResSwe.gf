@@ -12,12 +12,12 @@
 --
 -- The users of the resource grammar should not look at this file for the
 -- linearization rules, which are in fact hidden in the document version.
--- They should use $resource.Abs.gf$ to access the syntactic rules.
+-- They should use $ResAbs.gf$ to access the syntactic rules.
 -- This file can be consulted in those, hopefully rare, occasions in which
 -- one has to know how the syntactic categories are
--- implemented. The parameter types are defined in $Types.gf$.
+-- implemented. The parameter types are defined in $TypesSwe.gf$.
 
-concrete ResSwe of ResAbs = open Prelude, Syntax in {
+concrete ResSwe of ResAbs = open Prelude, SyntaxSwe in {
 
 flags 
   startcat=Phr ; 

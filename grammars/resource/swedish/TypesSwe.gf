@@ -9,7 +9,7 @@
 -- This GF grammar was obtained from the functional morphology file TypesSw.hs
 -- semi-automatically. The GF inflection engine obtained was obtained automatically.
 
-resource Types = open Prelude in {
+resource TypesSwe = open Prelude in {
 
 --
 

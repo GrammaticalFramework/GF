@@ -1,7 +1,7 @@
 -- use this path to read the grammar from the same directory
 --# -path=.:../abstract:../../prelude
 
-concrete TestSwe of TestAbs = ResSwe ** open Syntax in {
+concrete TestSwe of TestAbs = ResSwe ** open SyntaxSwe in {
 
 flags startcat=Phr ; lexer=text ; parser=chart ; unlexer=text ;
 
@@ -12,6 +12,9 @@ lin
   Small = liten_1146 ;
   Old = gammal_16 ;
   Young = ung_29 ;
+  American = extAdjective (aFin "amerikansk") ;
+  Finnish = extAdjective (aFin "finsk") ;
+  Married = extAdjective (aAbstrakt "gift") ** {s2 = "med"} ;
   Man = extCommNoun Masc man_1144 ;
   Woman = extCommNoun NoMasc (sApa "kvinn") ;
   Car = extCommNoun NoMasc (sBil "bil") ;
