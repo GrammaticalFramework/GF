@@ -17,10 +17,11 @@ render :: [String] -> String
 render = rend 0 where
   rend i ss = case ss of
 
-    --H these three are hand-written
+    --H these four are hand-written
     "{0"     :ts -> cons "{"  $ rend (i+1) ts
     t :"}0"  :ts -> cons t    $ space "}"  $ rend (i-1) ts
     t : "."  :ts -> cons t    $ cons "."  $ rend i ts
+    "\\"     :ts -> cons "\\"  $ rend i ts
 
     "["      :ts -> cons "["  $ rend i ts
     "("      :ts -> cons "("  $ rend i ts

@@ -111,7 +111,7 @@ strs2strings = map unlex
 
 -- this is just unwords; use an unlexer from Text to postprocess
 unlex :: [Str] -> String
-unlex = performBinds . concat . map sstr . take 1 ----
+unlex = concat . map sstr . take 1 ----
 
 -- finally, a top-level function to get a string from an expression
 linTree2string :: Marker -> CanonGrammar -> Ident -> A.Tree -> String
@@ -132,6 +132,25 @@ allLinsOfTree gr a e = err (singleton . str) id $ do
   ts <- rec2strTables r'
   return $ concat $ sTables2strs $ strTables2sTables ts
 
+-- the value is a list of structures arranged as records of tables of terms
+allLinsAsRec :: CanonGrammar -> Ident -> A.Tree -> Err [[(Label,[([Patt],Term)])]]
+allLinsAsRec gr c t = linearizeNoMark gr c t >>= allLinValues
+
+-- the value is a list of structures arranged as records of tables of strings
+-- only taking into account string fields
+allLinTables :: CanonGrammar ->Ident ->A.Tree -> Err [[(Label,[([Patt],[String])])]]
+allLinTables gr c t = do
+  r' <- allLinsAsRec gr c t
+  mapM (mapM getS) r'
+ where 
+   getS (lab,pss) = liftM (curry id lab) $ mapM gets pss
+   gets (ps,t) = liftM (curry id ps . concat . map str2strings) $ strsFromTerm t
+
+prLinTable :: [[(Label,[([Patt],[String])])]] -> [String]
+prLinTable = concatMap prOne . concat where
+  prOne (lab,pss) = prt lab : map pr pss ----
+  pr (ps,ss) = unwords (map prt_ ps) +++ ":" +++ unwords ss
+
 {-
 -- the value is a list of strs
 allLinStrings :: CanonGrammar -> Tree -> [Str]
@@ -145,9 +164,6 @@ allLinsAsStrs gr ft = do
   lpts <- allLinearizations gr ft
   return $ concat $ mapM (mapPairsM (mapPairsM strsFromTerm)) lpts
 
--- the value is a list of terms of type Str, not forgetting their arguments
-allLinearizations :: CanonGrammar -> Tree -> Err [[(Label,[([Patt],Term)])]]
-allLinearizations gr ft = linearizeTree gr ft >>= allLinValues
 
 -- to a list of strings
 linearizeToStrings :: CanonGrammar -> ([Int] ->Term -> Term) -> Tree -> Err [String]

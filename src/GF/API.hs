@@ -178,6 +178,8 @@ optLinearizeTree opts0 gr t = case getOptVal opts transferFun of
 
   lin mk
     | oElem showRecord opts = liftM prt . linearizeNoMark g c
+    | oElem tableLin opts   = liftM (unlines . map untok . prLinTable) . 
+                                allLinTables g c
     | otherwise             = return . untok . linTree2string mk g c
   g = grammar gr
   c = cncId gr
@@ -288,9 +290,10 @@ optTransfer opts g = case getOptVal opts transferFun of
 optTokenizer :: Options -> GFGrammar -> String -> String
 optTokenizer opts gr = show . customOrDefault opts useTokenizer customTokenizer gr
 
--- performs UTF8 if the language name is not *U.gf ; should be by gr option ---
-optEncodeUTF8 :: Language -> GFGrammar -> String -> String
-optEncodeUTF8 lang gr = case reverse (prLanguage lang) of
-  'U':_ -> id
+-- performs UTF8 if the language does not have flag coding=utf8; replaces name*U
+
+optEncodeUTF8 :: GFGrammar -> String -> String
+optEncodeUTF8 gr = case getOptVal (stateOptions gr) uniCoding of
+  Just "utf8" -> id
   _ -> encodeUTF8
 

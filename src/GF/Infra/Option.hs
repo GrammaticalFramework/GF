@@ -191,6 +191,7 @@ typeDisplay    = aOpt "types"
 noDepTypes     = aOpt "nodeptypes"
 extractGr      = aOpt "extract"
 pathList       = aOpt "path"
+uniCoding      = aOpt "coding"
 
 markLin        = aOpt "mark"
 markOptXML     = oArg "xml"
