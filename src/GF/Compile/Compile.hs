@@ -166,7 +166,7 @@ makeSourceModule opts env@(k,gr,can) mo@(i,mi) = case mi of
       sm <- ioeErr $ makeReuse gr i (extends m) c
       let mo2 = (i, ModMod sm)
           mos = modules gr
-      putp "  type checking reused" $ ioeErr $ showCheckModule mos mo2
+      --- putp "  type checking reused" $ ioeErr $ showCheckModule mos mo2
       return $ (k,mo2)
     _ -> compileSourceModule opts env mo
   _ -> compileSourceModule opts env mo
@@ -212,7 +212,7 @@ generateModuleCode opts path minfo@(name,info) = do
 
   -- for resource, also emit gfr
   case info of
-    ModMod m | isModRes m && isCompilable info && emit && nomulti -> do
+    ModMod m | emitsGFR m && emit && nomulti -> do
       let (file,out) = (gfrFile pname, prGrammar (MGrammar [minfo]))
       ioeIO $ writeFile file out >> putStr ("  wrote file" +++ file)
     _ -> return ()
@@ -224,6 +224,8 @@ generateModuleCode opts path minfo@(name,info) = do
      else ioeIO $ putStrFlush $ "no need to save module" +++ prt name
   return minfo'
  where 
+   emitsGFR m = isModRes m && isCompilable info
+     ---- isModRes m || (isModCnc m && mstatus m == MSIncomplete)
    isCompilable mi = case mi of
      ModMod m -> not $ isModCnc m && mstatus m == MSIncomplete 
      _ -> True

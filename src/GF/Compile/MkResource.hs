@@ -26,49 +26,52 @@ makeReuse gr r me c = do
         jmsA <- case ma of 
            ModMod m' -> return $ jments m'
            _ -> prtBad "expected abstract to be the type of" a
-        liftM ((,) (opens m)) $ mkResDefs r a me (extends m) jmsA (jments m)
+        liftM ((,) (opens m)) $ mkResDefs gr r a me (extends m) jmsA (jments m)
       _ -> prtBad "expected concrete to be the type of" c
     _ -> prtBad "expected concrete to be the type of" c
 
   return $ Module MTResource MSComplete flags me ops jms
 
-mkResDefs :: Ident -> Ident -> Maybe Ident -> Maybe Ident -> 
+mkResDefs :: SourceGrammar -> Ident -> Ident -> Maybe Ident -> Maybe Ident -> 
              BinTree (Ident,Info) -> BinTree (Ident,Info) -> 
              Err (BinTree (Ident,Info))
-mkResDefs r a mext maext abs cnc = mapMTree mkOne abs where
+mkResDefs gr r a mext maext abs cnc = mapMTree (mkOne a maext) abs where
 
-  mkOne (f,info) = case info of
+  mkOne a mae (f,info) = case info of
       AbsCat _ _ -> do
-        typ  <- err (const (return defLinType)) return $ look f
+        typ  <- err (const (return defLinType)) return $ look cnc f
         typ' <- lockRecType f typ 
         return (f, ResOper (Yes typeType) (Yes typ'))
       AbsFun (Yes typ0) _ -> do
-        trm <- look f
+        trm <- look cnc f
         testErr (not (isHardType typ0)) 
                 ("cannot build reuse for function" +++ prt f +++ ":" +++ prt typ0)
-        typ <- redirTyp typ0
+        typ <- redirTyp True a mae typ0
         cat <- valCat typ
         trm' <- unlockRecord (snd cat) trm 
         return (f, ResOper (Yes typ) (Yes trm'))
-      AnyInd b _ -> case mext of
-        Just ext -> return (f,AnyInd b ext)
-        _ -> prtBad "no indirection possible in" r
+      AnyInd b n -> do
+        mo    <- lookupModMod gr n
+        info' <- lookupInfo mo f
+        mkOne n (extends mo) (f,info')
 
-  look f = do
+  look cnc f = do
      info <- lookupTree prt f cnc
      case info of
        CncCat (Yes ty) _ _ -> return ty
        CncCat _ _ _        -> return defLinType
        CncFun _ (Yes tr) _ -> return tr
+       AnyInd _ n -> do 
+         mo    <- lookupModMod gr n
+         t <- look (jments mo) f
+         redirTyp False n (extends mo) t
        _ -> prtBad "not enough information to reuse" f
 
   -- type constant qualifications changed from abstract to resource
-  redirTyp ty = case ty of
-    Q n c | n == a -> return $ Q r c
-    Q n c | Just n == maext -> case mext of
-      Just ext -> return $ Q ext c
-      _ -> prtBad "no indirection of type possible in" r
-    _ -> composOp redirTyp ty
+  redirTyp always a mae ty = case ty of
+    Q _ c | always -> return $ Q r c
+    Q n c | n == a || Just n == mae -> return $ Q r c
+    _ -> composOp (redirTyp always a mae) ty
 
 lockRecType :: Ident -> Type -> Err Type
 lockRecType c t = plusRecType t $ RecType [(lockLabel c,  RecType [])]
