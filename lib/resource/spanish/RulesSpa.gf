@@ -1,4 +1,4 @@
 --# -path=.:../romance:../abstract:../../prelude
 
-concrete RulesIta of Rules =
-  RulesRomance with (SyntaxRomance=SyntaxIta) ;
+concrete RulesSpa of Rules =
+  RulesRomance with (SyntaxRomance=SyntaxSpa) ;

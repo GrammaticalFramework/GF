@@ -25,14 +25,7 @@ oper
     "a" ; "e" ; "h" ; "i" ; "o" ; "u"
     } ;
 
-  sImpuro : Strs = strs {
-    "z" ; "sb" ; "sc" ; "sd" ; "sf" ; "sm" ; "sp" ; "sq" ; "sr" ; "st" ; "sv"
-    } ;
-
-  elision : (_,_,_ : Str) -> Str = \il, l', lo -> 
-    pre {il ; l' / vocale ; lo / sImpuro} ;
-
-  elisQue = "che" ; --- no elision in Italian
+  elisQue = "que" ; --- no elision in Italian
   elisDe = "de" ;
 
 --2 Nouns
@@ -45,14 +38,11 @@ oper
 
 -- For example:
 
-  nomVino : Str -> Number => Str = \vino -> let {vin = Predef.tk 1 vino} in
-    numForms vino (vin + "i") ;
+  nomVino : Str -> Number => Str = \vino -> 
+    numForms vino (vino + "s") ;
 
-  nomRana : Str -> Number => Str = \rana -> let {ran = Predef.tk 1 rana} in
-    numForms rana (ran + "e") ;
-
-  nomSale : Str -> Number => Str = \sale -> let {sal = Predef.tk 1 sale} in
-    numForms sale (sal + "i") ;
+  nomPilar : Str -> Number => Str = \pilar -> 
+    numForms pilar (pilar + "es") ;
 
   nomTram : Str -> Number => Str = \tram ->
     numForms tram tram ;
@@ -86,15 +76,10 @@ oper
     let 
       sol = Predef.tk 1 solo
     in
-    mkAdj solo (sol + "a") (sol + "i") (sol + "e") (sol + "amente") ;
+    mkAdj solo (sol + "a") (sol + "os") (sol + "as") (sol + "amente") ;
 
-  adjTale : Str -> Adj = \tale -> 
-    let 
-      tal  = Predef.tk 1 tale ;
-      tali = tal + "i" ;
-      tala = if_then_Str (pbool2bool (Predef.occur (Predef.dp 1 tal) "lr")) tal tale
-    in
-    mkAdj tale tale tali tali (tala + "mente") ;
+  adjUtil : Str -> Str -> Adj = \util,utiles -> 
+    mkAdj util util utiles utiles (util + "mente") ;
 
   adjBlu : Str -> Adj = \blu -> 
     mkAdj blu blu blu blu blu ; --- 
@@ -134,11 +119,11 @@ oper
 -- It is simply a function depending on number and person.
 
   pronRefl : Number -> Person -> Str = \n,p -> case <n,p> of {
-    <Sg,P1> => "mi" ;
-    <Sg,P2> => "ti" ;
-    <_, P3> => "si" ;
-    <Pl,P1> => "ci" ;
-    <Pl,P2> => "vi"
+    <Sg,P1> => "me" ;
+    <Sg,P2> => "te" ;
+    <_, P3> => "se" ;
+    <Pl,P1> => "nos" ;
+    <Pl,P2> => "vos"
     } ;
 
 
@@ -149,11 +134,11 @@ oper
 
   pronForms : Adj -> Gender -> Number -> Str = \tale,g,n -> tale.s ! AF g n ;
 
-  qualPron : Gender -> Number -> Str = pronForms (adjTale "quale") ;
+  qualPron : Gender -> Number -> Str = pronForms (adjUtil "cuál" "cuales") ;
 
-  talPron : Gender -> Number -> Str = pronForms (adjTale "tale") ;
+  talPron : Gender -> Number -> Str = pronForms (adjUtil "tál" "tales") ;
 
-  tuttoPron : Gender -> Number -> Str = pronForms (adjSolo "tutto") ;
+  tuttoPron : Gender -> Number -> Str = pronForms (adjSolo "todo") ;
 
 --2 Articles
 --
@@ -161,36 +146,26 @@ oper
 -- elision. This is the simples definition we have been able to find.
 
   artDefTable : Gender => Number => Case => Str = \\g,n,c => case <g,n,c> of {
-    <_, _, CPrep P_de>  => prepArt g n "de" ;
-    <_, _, CPrep P_a>   => prepArt g n "a" ;
-    <Masc,Sg, Nom> => elision "il" "l'" "lo" ;
-    <Masc,Sg, _> => elision "il" "l'" "lo" ;
+    <Masc,Sg, CPrep P_de> => "del" ;
+    <Masc,Sg, CPrep P_a>  => "al" ;
+    <Masc,Sg, _>          => prepCase c ++ "el" ;
 
-    <Fem ,Sg, _> => elision "la" "l'" "la" ;
-    <Masc,Pl, _> => elision "i" "gli" "gli" ;
-    <Fem ,Pl, _> => "le"
-    } ;
-
--- This auxiliary expresses the uniform rule.
-
-  prepArt : Gender -> Number -> Tok -> Tok = \g,n,de -> case <g,n> of {
-    <Masc,Sg> => elision (de + "l") (de + "ll'") (de + "llo") ;
-    <Masc,Pl> => elision (de + "i") (de + "gli") (de + "gli") ;
-    <Fem, Sg> => elision (de + "lla") (de + "ll'") (de + "lla") ;
-    <Fem, Pl> => de + "lle"
+    <Fem ,Sg, _> => prepCase c ++ "la" ;
+    <Masc,Pl, _> => prepCase c ++ "los" ;
+    <Fem ,Pl, _> => prepCase c ++ "las"
     } ;
 
 --2 Verbs
 --
---3 The Bescherell conjugations.
+--3 The Bescherelle conjugations.
 --
 -- The following conjugations tables were generated using FM software
 -- from a Haskell source.
 --
 -- The verb "essere" is often used in syntax.
 
---  verbEssere  = verbPres (essere_5 "essere") AEsse ;
---  verbAvere   = verbPres (avere_6 "avere")  AHabere ;
+  verbSer   = verbPres (ser_7 "ser") AHabere ;
+  verbHaber = verbPres (haber_10 "haber")  AHabere ;
 
 -- machine-generated GF code
 

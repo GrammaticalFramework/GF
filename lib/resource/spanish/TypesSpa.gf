@@ -36,6 +36,8 @@ oper
     P_a  => "a"
     } ;
 
+  prepositional = accusative ;
+
 oper 
   CaseA = Case ;
   NPFormA = NPForm ;

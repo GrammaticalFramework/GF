@@ -1,7 +1,7 @@
 --# -path=.:../romance:../abstract:../../prelude
 
-concrete StructuralIta of Structural = CategoriesIta, NumeralsIta ** 
-  open SyntaxIta, MorphoIta, Prelude in {
+concrete StructuralSpa of Structural = CategoriesSpa, NumeralsSpa ** 
+  open SyntaxSpa, MorphoSpa, Prelude in {
 
 lin
   INP    = pronNounPhrase pronJe ;
@@ -19,32 +19,32 @@ lin
 
 ---  TheyNP = pronNounPhrase (variants {pronIls ; pronElles}) ;
 
-  ThisNP = mkNameNounPhrase ["questo"] Masc ;
-  ThatNP = mkNameNounPhrase ["quello"] Masc ;
-  TheseNumNP n = mkNameNounPhrase ("questi" ++ n.s ! Masc) Masc ;
-  ThoseNumNP n = mkNameNounPhrase ("quelli" ++ n.s ! Masc) Masc ;
+  ThisNP = mkNameNounPhrase ["esto"] Masc ;
+  ThatNP = mkNameNounPhrase ["eso"] Masc ;
+  TheseNumNP n = mkNameNounPhrase ("éstos" ++ n.s ! Masc) Masc ;
+  ThoseNumNP n = mkNameNounPhrase ("ésos" ++ n.s ! Masc) Masc ;
 
   ItNP   = pronNounPhrase pronIl ;
 
   EveryDet = chaqueDet ; 
-  AllMassDet   = mkDeterminer singular "tutto" "tutta" ;
-  AllNumDet  = mkDeterminerNum plural ["tutti i"] ["tutte le"] ; --- gli
+  AllMassDet   = mkDeterminer singular "todo" "toda" ;
+  AllNumDet  = mkDeterminerNum plural ["todos los"] ["todas las"] ;
   WhichDet = quelDet ;
-  WhichNumDet = mkDeterminerNum plural "quali" "quali" ;
+  WhichNumDet = mkDeterminerNum plural "cuales" "cuales" ;
   MostsDet = plupartDet ;
-  MostDet  = mkDeterminer1 singular (["la maggior parte"] ++ elisDe) ; --- de
-  SomeDet  = mkDeterminer1 singular "qualche" ;
-  SomeNumDet = mkDeterminerNum plural "alcuni" "alcune" ;
-  NoDet    = mkDeterminer singular "nessuno" "nessuna" ; --- non
-  NoNumDet   = mkDeterminerNum plural "nessuni" "nessune" ; ---- ??
-  AnyDet   = mkDeterminer1 singular "qualche" ; ---
-  AnyNumDet  = mkDeterminerNum plural "alcuni" "alcune" ; ---
-  ManyDet  = mkDeterminer plural "molti" "molte" ;
-  MuchDet  = mkDeterminer1 singular "molto" ;
-  ThisDet  = mkDeterminer singular "questo" "questa" ;
-  ThatDet  = mkDeterminer singular "quello" "quella" ;
-  TheseNumDet = mkDeterminerNum plural "questi" "queste" ; --- ci
-  ThoseNumDet = mkDeterminerNum plural "quelli" "quelle" ; --- quegli
+  MostDet  = mkDeterminer1 singular (["la mayor parte"] ++ elisDe) ; --- de
+  SomeDet  = mkDeterminer singular "alguno" "alguna" ;
+  SomeNumDet = mkDeterminerNum plural "algunos" "algunas" ;
+  NoDet    = mkDeterminer singular "ninguno" "ninguna" ; --- non
+  NoNumDet   = mkDeterminerNum plural "ningunos" "ningunas" ; ---- ??
+  AnyDet   = mkDeterminer singular "alguno" "alguna" ; ---
+  AnyNumDet  = mkDeterminerNum plural "algunos" "algunas" ; ---
+  ManyDet  = mkDeterminer plural "muchos" "muchas" ;
+  MuchDet  = mkDeterminer1 singular "mucho" ;
+  ThisDet  = mkDeterminer singular "esto" "esta" ;
+  ThatDet  = mkDeterminer singular "eso" "esa" ;
+  TheseNumDet = mkDeterminerNum plural "estos" "estas" ;
+  ThoseNumDet = mkDeterminerNum plural "esos" "esas" ; 
 
   UseNumeral n = {s = \\_ => n.s} ; ---- gender
 
@@ -57,57 +57,57 @@ lin
   OrConj = ouConj  ;
   BothAnd = etetConj ;
   EitherOr = ououConj  ;
-  NeitherNor = niniConj  ; --- requires ne !
+  NeitherNor = niniConj  ; 
   IfSubj = siSubj ;
   WhenSubj = quandSubj ;
 
   PhrYes = ouiPhr ;  
   PhrNo = nonPhr ; --- and also Si!
 
-  VeryAdv = ss "molto" ;
-  TooAdv = ss "troppo" ;
-  OtherwiseAdv = ss "altramente" ;
-  ThereforeAdv = ss "quindi" ;
+  VeryAdv = ss "muy" ;
+  TooAdv = ss "demasiado" ;
+  OtherwiseAdv = ss "otramente" ;
+  ThereforeAdv = ss ["por eso"] ;
 
-  EverybodyNP  = mkNameNounPhrase ["tutti"] Masc ;
-  SomebodyNP   = mkNameNounPhrase ["qualcuno"] Masc ;
-  NobodyNP     = mkNameNounPhrase ["nessuno"] Masc ;  --- ne
-  EverythingNP = mkNameNounPhrase ["tutto"] Masc ;
-  SomethingNP  = mkNameNounPhrase ["qualche cosa"] Masc ;
-  NothingNP    = mkNameNounPhrase ["niente"] Masc ; --- ne
+  EverybodyNP  = mkNameNounPhrase ["todos"] Masc ;
+  SomebodyNP   = mkNameNounPhrase ["algún"] Masc ;
+  NobodyNP     = mkNameNounPhrase ["nadién"] Masc ;  --- ne
+  EverythingNP = mkNameNounPhrase ["todo"] Masc ;
+  SomethingNP  = mkNameNounPhrase ["algo"] Masc ;
+  NothingNP    = mkNameNounPhrase ["nada"] Masc ; --- ne
 
-  CanVV     = mkVerbVerbDir (verbPres (potere_72 "potere") AHabere) ;
-  CanKnowVV = mkVerbVerbDir (verbPres (sapere_81 "sapere") AHabere) ;
-  MustVV    = mkVerbVerbDir (verbPres (dovere_50 "dovere") AHabere) ;
-  WantVV    = mkVerbVerbDir (verbPres (volere_99 "volere") AHabere) ;
+----  CanVV     = mkVerbVerbDir (verbPres (potere_72 "potere") AHabere) ;
+----  CanKnowVV = mkVerbVerbDir (verbPres (sapere_81 "sapere") AHabere) ;
+----  MustVV    = mkVerbVerbDir (verbPres (dovere_50 "dovere") AHabere) ;
+----  WantVV    = mkVerbVerbDir (verbPres (volere_99 "volere") AHabere) ;
 
-  EverywhereNP = ss "dappertutto" ;
-  SomewhereNP = ss ["qualche parte"] ; --- ne - pas
-  NowhereNP = ss ["nessun parte"] ;
+  EverywhereNP = ss ["en todas partes"] ;
+  SomewhereNP = ss ["en ninguna parte"] ;
+  NowhereNP = ss ["en alguna parte"] ; ----
 
   AlthoughSubj = ss "benché" ** {m = Con} ;
 
-  AlmostAdv = ss "quasi" ;
-  QuiteAdv = ss "assai" ;
+  AlmostAdv = ss "casi" ;
+  QuiteAdv = ss "bastante" ;
 
-  InPrep = justCase (CPrep P_in) ;
-  OnPrep = justCase (CPrep P_su) ;
+  InPrep = justPrep "en" ;
+  OnPrep = justPrep "sobre" ; ----
   ToPrep = justCase dative ; ---
-  ThroughPrep = justPrep "per" ;
-  AbovePrep = justPrep "sopra" ;
-  UnderPrep = justPrep "sotto" ;
-  InFrontPrep = justPrep "davanti" ;
-  BehindPrep = justPrep "dietro" ;
-  BetweenPrep = justPrep "tra" ;
-  FromPrep = justCase (CPrep P_da) ;
-  BeforePrep = justPrep "prima" ;
-  DuringPrep = justPrep "durante" ;
-  AfterPrep = justPrep "dopo" ;
-  WithPrep = justCase (CPrep P_con) ;
-  WithoutPrep = justPrep "senza" ;
-  ByMeansPrep = justPrep "per" ;
+  ThroughPrep = justPrep "por" ;
+  AbovePrep = justPrep "sobre" ;
+  UnderPrep = justPrep "bajo" ;
+  InFrontPrep = {s = "delante" ; c = genitive} ;
+  BehindPrep = {s = "detrás" ; c = genitive} ;
+  BetweenPrep = justPrep "entre" ;
+  FromPrep = justCase (CPrep P_de) ;
+  BeforePrep = {s = "antes" ; c = genitive} ;
+  DuringPrep = justPrep "durante" ; ----
+  AfterPrep = {s = "después" ; c = genitive} ;
+  WithPrep = justPrep "con" ;
+  WithoutPrep = justPrep "sin" ;
+  ByMeansPrep = justPrep "por" ;
   PossessPrep = justCase genitive ;
   PartPrep = justCase genitive ; ---
-  AgentPrep = justCase (CPrep P_da) ;
+  AgentPrep = justPrep "por" ;
 
 }
