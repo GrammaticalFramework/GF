@@ -192,6 +192,13 @@ oper
      p = P3
     } ;
 
+-- Moreover, superlatives can be used alone as adjectival phrases
+-- ("the youngest" - in free variation). 
+
+  superlAdjPhrase : AdjDegr -> AdjPhrase = \big ->
+    {s = \\a => "the" ++ big.s ! Sup ! a ; 
+     p = True
+    } ;
 
 --3 Two-place adjectives
 --
@@ -298,10 +305,12 @@ oper
 
   Tense = Present | Past ;
   Anteriority = Simul | Anter ;
+  Order = Direct | Indirect ;
   VPForm = 
      VIndic   Tense Anteriority Number Person
    | VFut     Anteriority
    | VCondit  Anteriority
+   | VQuest   Tense Number Person --- needed for "do" inversions
    | VImperat
    | VInfinit Anteriority
    ;
@@ -324,6 +333,11 @@ oper
          <Present,_,_>   => "have" ;
          <Past,_,_>      => "had"
          } ;
+       do : Tense -> Number -> Person -> Str = \t,n,p -> case <t,n,p> of {
+         <Present,Sg,P3> => "does" ;
+         <Present,_,_>   => "do" ;
+         <Past,_,_>      => "did"
+         } ;
        simple : VForm -> {fin,inf : Str} = \v -> {
          fin = goes.s ! v ; 
          inf = []
@@ -337,6 +351,7 @@ oper
      in case sf of {
        VIndic t Simul n p   => simple   (tense t n p) ; 
        VIndic t Anter n p   => compound (have t n p)  gone ;
+       VQuest t       n p   => compound (do Present n p)    go ;
        VFut     Simul       => compound "will"        go ; 
        VFut     Anter       => compound "will"        ("have" ++ gone) ; 
        VCondit  Simul       => compound "would"       go ;
@@ -381,11 +396,16 @@ oper
       has  : VPForm => Str = \\f => (go f).fin ; 
       gone : VPForm => Str = \\f => (go f).inf 
     in {
-      s  = \\_ => has ;
-      s2 = table {
-             True  => gone ;
-             False => \\vf => "not" ++ gone ! vf 
+      s  = \\b => 
+           table {
+             VQuest t n p => has ! VIndic t Simul n p ; --- undo "do" inversion
+             vf => has ! vf
              } ;
+      s2 = \\b => let not = if_then_Str b [] "not" in 
+           table {
+              VQuest t n p => not ++ gone ! VIndic t Simul n p ;
+              vf => not ++ gone ! vf
+              } ;
       s3 = arg ;
       isAux = True
       } ;
@@ -452,7 +472,7 @@ oper
   predNounPhrase : NounPhrase -> VerbGroup = \john ->
     beGroup (\\_ => john.s ! NomP) ;
 
-  predAdverb : Adverb -> VerbGroup = \elsewhere ->
+  predAdverb : PrepPhrase -> VerbGroup = \elsewhere ->
     beGroup (\\_ => elsewhere.s) ;
 
 
@@ -561,13 +581,15 @@ oper
   locativeNounPhrase : NounPhrase -> Adverb = 
     prepPhrase "in" ;
 
--- This is a source of the "mann with a telescope" ambiguity, and may produce
+  PrepPhrase = SS ;
+
+-- This is a source of the "man with a telescope" ambiguity, and may produce
 -- strange things, like "cars always" (while "cars today" is OK).
 -- Semantics will have to make finer distinctions among adverbials.
 --
 -- N.B. the genitive case created in this way would not make sense.
 
-  advCommNounPhrase : CommNounPhrase -> Adverb -> CommNounPhrase = \car,today ->
+  advCommNounPhrase : CommNounPhrase -> PrepPhrase -> CommNounPhrase = \car,today ->
    {s = \\n => table {
       Nom => car.s ! n ! Nom ++ today.s ; 
       Gen => nonExist
@@ -601,31 +623,39 @@ oper
 
   param
   ClForm = 
-     ClIndic   Tense Anteriority
-   | ClFut     Anteriority
-   | ClCondit  Anteriority
+     ClIndic   Order Tense Anteriority
+   | ClFut     Order Anteriority
+   | ClCondit  Order Anteriority
    | ClInfinit Anteriority      -- "naked infinitive" clauses
     ;
 
   oper 
-  cl2s : ClForm -> Number -> Person -> VPForm = \c,n,p -> case c of {
-    ClIndic t a => VIndic t a n p ;
-    ClFut a     => VFut a ;
-    ClCondit a  => VCondit a ; 
-    ClInfinit a => VInfinit a
+  cl2s : ClForm -> Number -> Person -> {form : VPForm ; order : Order}  = \c,n,p -> case c of {
+    ClIndic Indirect t Simul => {form = VQuest t n p ; order = Indirect} ;
+    ClIndic o t a => {form = VIndic t a n p ; order = o} ;
+    ClFut o a     => {form = VFut a ; order = o} ;
+    ClCondit o a  => {form = VCondit a ; order = o} ; 
+    ClInfinit a   => {form = VInfinit a ; order = Direct} --- order does not matter
     } ;
 
   Clause = {s : Bool => ClForm => Str} ;
 
   predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = 
-    \you,sleep -> {
+    \yo,sleep -> {
       s = \\b,c => 
         let
-          n  = you.n ; 
-          cf = cl2s c n you.p
+          n   = yo.n ; 
+          cfo = cl2s c n yo.p ;
+          cf  = cfo.form ;
+          o   = cfo.order ;
+          you = yo.s ! NomP ;
+          do  = sleep.s ! b ! cf ;
+          sleeps = sleep.s2 ! b ! cf ++ sleep.s3 ! n
         in 
-          you.s ! NomP ++ sleep.s ! b ! cf ++ sleep.s2 ! b ! cf ++
-          sleep.s3 ! n
+          case o of {
+            Direct   => you ++ do ++ sleeps ;
+            Indirect => do ++ you ++ sleeps
+            }
       } ;
 
 --3 Sentence-complement verbs
@@ -685,7 +715,7 @@ oper
   vvCan  : VerbVerb = mkVerbAux ["be able to"] "can" "could" ["been able to"] ;
   vvMust : VerbVerb = mkVerbAux ["have to"] "must" ["had to"] ["had to"] ;
 
-}{- -----
+
 --2 Sentences missing noun phrases
 --
 -- This is one instance of Gazdar's *slash categories*, corresponding to his
@@ -700,25 +730,26 @@ oper
 --
 -- The particle always follows the verb, but the preposition can fly:
 -- "whom you make it up with" / "with whom you make it up".
+--- We reduce the current case to a more general one that has tense variation.
+--- TODO: full tense variation on top level.
 
-  SentenceSlashNounPhrase = {s : Bool => Str ; s2 : Preposition} ;
+  SentenceSlashNounPhrase = {s : Order =>          Str ; s2 : Preposition} ;
+  ClauseSlashNounPhrase   = Clause ** {s2 : Preposition} ;
 
   slashTransVerb : Bool -> NounPhrase -> TransVerb -> SentenceSlashNounPhrase = 
-    \b,You,lookat ->
-    let {you   = You.s ! NomP ;
-         looks = indicVerb {s = lookat.s} You.p You.n ;
-         look  = lookat.s ! InfImp ;
-         do    = indicVerb verbP3Do You.p You.n ;
-         dont  = contractNot do ;
-         up    = lookat.s1
-        } in
-    {s  = table {
-            True  => if_then_else Str b do dont ++ you ++ look ++ up ; 
-            False => you ++ if_then_else Str b looks (dont ++ look) ++ up
-            } ;
-     s2 = lookat.s3   
-    } ;
+   \pol,You,lookat -> 
+      let 
+        youlookat = slashTransVerbCl You lookat 
+      in {
+        s = \\o => youlookat.s ! pol ! ClIndic o Present Simul ;
+        s2 = youlookat.s2
+        } ;
 
+  slashTransVerbCl : NounPhrase -> TransVerb -> ClauseSlashNounPhrase = 
+    \you,lookat ->
+    predVerbGroupClause you (predVerb lookat) ** {s2 = lookat.s3} ;
+
+--- TODO: "there is" with tense variation.
 
   thereIs : NounPhrase -> Sentence = \abar ->
     predVerbPhrase 
@@ -727,6 +758,7 @@ oper
          Pl => {s = \\_ => "there" ; n = Pl ; p = P3}
          })
       (predVerbGroup True (predNounPhrase abar)) ;
+
 
 
 --2 Relative pronouns and relative clauses
@@ -744,19 +776,24 @@ oper
                     mother.s2 ++ which.s ! g ! n ! GenSP
     } ;
 
+-- An auxiliary that allows the use of predication with relative pronouns.
+
+  relNounPhrase : RelPron -> Gender -> Number -> NounPhrase = \who,g,n ->
+    {s = who.s ! g ! n ; n = n ; p = P3} ;
+
 -- Relative clauses can be formed from both verb phrases ("who walks") and
 -- slash expressions ("whom you see", "on which you sit" / "that you sit on"). 
 
   RelClause : Type = {s : Gender => Number => Str} ;
 
   relVerbPhrase : RelPron -> VerbPhrase -> RelClause = \who,walks ->
-    {s = \\g, n => who.s ! g ! n ! NomP ++ 
-                   indicVerb (verbOfPhrase walks) P3 n ++ walks.s2 ! n
-    } ;
+    {s = \\g,n => (predVerbPhrase (relNounPhrase who g n) walks).s} ;
+
+--- TODO: full tense variation in relative clauses.
 
   relSlash : RelPron -> SentenceSlashNounPhrase -> RelClause = \who,yousee ->
     {s = \\g,n => 
-           let {youSee = yousee.s ! False} in
+           let {youSee = yousee.s ! Direct} in
            variants {
              who.s ! g ! n ! AccP ++ youSee ++ yousee.s2 ;
              yousee.s2 ++ who.s ! g ! n ! GenSP ++ youSee
@@ -777,7 +814,6 @@ oper
     {s = \\n,c => man.s ! n ! c ++ whoruns.s ! man.g ! n ;
      g = man.g
     } ;
-
 
 --2 Interrogative pronouns
 --
@@ -850,6 +886,8 @@ param
 oper
   Question = SS1 QuestForm ;
 
+--- TODO: questions in all tenses.
+
 --3 Yes-no questions 
 --
 -- Yes-no questions are used both independently 
@@ -865,15 +903,17 @@ oper
     questVerbPhrase' False ;
 
   questVerbPhrase' : Bool -> NounPhrase -> VerbPhrase -> Question = 
-    \adv,john,walk ->
+    \adv,John,walk ->
+    let 
+      john = John.s ! NomP
+    in
     {s = table {
-      DirQ   => if_then_else Str walk.isAux 
-                  (indicVerb (verbOfPhrase walk) john.p john.n ++
-                   john.s ! NomP ++ walk.s2 ! john.n) 
-                  (indicVerb verbP3Do john.p john.n ++ 
-                   john.s ! NomP ++ walk.s ! InfImp ++ walk.s2 ! john.n) ;
+      DirQ   => walk.s  ! VQuest Present John.n John.p ++
+                john ++
+                walk.s2 ! VQuest Present John.n John.p ++
+                walk.s3 ! John.n ;
       IndirQ => if_then_else Str adv [] (variants {"if" ; "whether"}) ++ 
-                (predVerbPhrase john walk).s
+                (predVerbPhrase John walk).s
       }
     } ;
 
@@ -885,22 +925,20 @@ oper
          })
       (predVerbGroup True (predNounPhrase abar)) ;
 
-
 --3 Wh-questions
 --
 -- Wh-questions are of two kinds: ones that are like $NP - VP$ sentences,
 -- others that are line $S/NP - NP$ sentences.
 
   intVerbPhrase : IntPron -> VerbPhrase -> Question = \who,walk ->
-    {s = \\_ => who.s ! NomP ++ indicVerb (verbOfPhrase walk) P3 who.n ++ 
-                walk.s2 ! who.n 
+    {s = \\_ => who.s ! NomP ++ presentIndicative walk who.n P3 
     } ;
 
   intSlash : IntPron -> SentenceSlashNounPhrase -> Question = \who,yousee ->
     {s = \\q =>
            let {youSee = case q of {
-                  DirQ   => yousee.s ! True ; 
-                  IndirQ => yousee.s ! False
+                  DirQ   => yousee.s ! Indirect ; 
+                  IndirQ => yousee.s ! Direct
                   }
            } in
            variants {
@@ -909,9 +947,9 @@ oper
              } 
     } ;
 
---3 Interrogative adverbials
+--3 Interrogative adverbs
 --
--- These adverbials will be defined in the lexicon: they include
+-- These adverbs will be defined in the lexicon: they include
 -- "when", "where", "how", "why", etc, which are all invariant one-word
 -- expressions. In addition, they can be formed by adding prepositions
 -- to interrogative pronouns, in the same way as adverbials are formed
@@ -929,7 +967,6 @@ oper
     \why, you, walk ->
     {s = \\q => why.s ++ (questVerbPhrase' True you walk).s ! q} ;
 
-
 --2 Imperatives
 --
 -- We only consider second-person imperatives. 
@@ -937,14 +974,14 @@ oper
   Imperative = SS1 Number ;
 
   imperVerbPhrase : VerbPhrase -> Imperative = \walk -> 
-    {s = \\n => walk.s ! InfImp ++ walk.s2 ! n} ;
+    {s = \\n => walk.s ! VImperat ++ walk.s2 ! VImperat ++ walk.s3 ! n} ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
     ss (I.s ! n ++ "!") ;
 
---2 Sentence adverbials
+--2 Sentence adverbs
 --
--- This class covers adverbials such as "otherwise", "therefore", which are prefixed
+-- This class covers adverbs such as "otherwise", "therefore", which are prefixed
 -- to a sentence to form a phrase.
 
   advSentence : SS -> Sentence -> Utterance = \hence,itiseven ->
@@ -1119,4 +1156,3 @@ oper
     x ;
 
 } ;
--}

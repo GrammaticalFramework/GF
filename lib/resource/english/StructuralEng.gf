@@ -5,7 +5,7 @@
 -- Aarne Ranta 2002 -- 2003
 --
 concrete StructuralEng of Structural = 
-                      CategoriesEng ** open Prelude, SyntaxEng in {
+                      CategoriesEng, NumeralsEng ** open Prelude, SyntaxEng in {
  lin
   INP    = pronI ;
   ThouNP = pronYouSg ;
@@ -16,12 +16,16 @@ concrete StructuralEng of Structural =
   YeNumNP   = pronWithNum pronYouPl ;
   YouNP  = pronYouSg ;
   TheyNP = pronThey ;
+  TheyFemNP = pronThey ;
 
   EveryDet = everyDet ; 
   AllMassDet = mkDeterminer Sg "all" ; --- all the missing
   AllNumDet  = mkDeterminerNum Pl "all" ;
   WhichDet = whichDet ;
   WhichNumDet = mkDeterminerNum Pl "which" ;
+
+  UseNumeral i = {s = table {Nom => i.s ; Gen => i.s ++ "'s"}} ; ---
+
   MostsDet = mostDet ;
   MostDet  = mkDeterminer Sg "most" ;
   SomeDet  = mkDeterminer Sg "some" ;
@@ -31,6 +35,7 @@ concrete StructuralEng of Structural =
   NoDet    = mkDeterminer Sg "no" ;
   NoNumDet   = mkDeterminerNum Pl "no" ;
   ManyDet  = mkDeterminer Pl "many" ;
+  HowManyDet  = mkDeterminer Pl ["how many"] ;
   MuchDet  = mkDeterminer Sg ["a lot of"] ; ---
   ThisDet  = mkDeterminer Sg "this" ;
   TheseNumDet = mkDeterminerNum Pl "these" ;

@@ -68,25 +68,26 @@ lin
 
   PredV  = predVerb ;
   PredAP = predAdjective ;
+  PredSuperl a = predAdjective (superlAdjPhrase a) ;
   PredCN = predCommNoun ;
------  PredV2 = complTransVerb ;
+  PredV2 = complTransVerb ;
   PredV3 = complDitransVerb ;
   PredPassV = passVerb ;
   PredNP = predNounPhrase ;
------  PredPP = predAdverb ;
+  PredPP = predAdverb ;
   PredVS = complSentVerb ;
   PredVV = complVerbVerb ;
------  VTrans = transAsVerb ;
+  VTrans = transAsVerb ;
 
   AdjAdv a = advPost (a.s ! AAdv) ;
-  AdvPP p = p ;
+  AdvPP p = advPost p.s ;
   PrepNP p = prepPhrase p.s ; ---
------  AdvVP = adVerbPhrase ;
------  AdvCN = advCommNounPhrase ;
+  AdvVP = adVerbPhrase ;
+  AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
-} {- -----
-  PosSlashTV = slashTransVerb True ;
-  NegSlashTV = slashTransVerb False ;
+
+  PosSlashV2 = slashTransVerb True ;
+  NegSlashV2 = slashTransVerb False ;
   OneVP = predVerbPhrase (nameNounPhrase (nameReg "one")) ;
   ThereNP = thereIs ;
 
@@ -118,6 +119,7 @@ lin
   ImperOne = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
 
+  PrepS p = ss (p.s ++ ",") ;
   AdvS = advSentence ;
 
   TwoS = twoSentence ;
@@ -150,4 +152,3 @@ lin
   ConsPhr = cc2 ;
 
 } ;
--}
