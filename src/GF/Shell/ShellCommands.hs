@@ -161,7 +161,7 @@ optionsOfCommand co = case co of
   CShowTerm -> flags "printer"
   CSystemCommand _ -> none
 
-  CPrintGrammar -> both "utf8" "printer"
+  CPrintGrammar -> both "utf8" "printer lang"
   CPrintMultiGrammar -> opts "utf8"
 
   CHelp _ -> opts "all"

@@ -1,5 +1,5 @@
 include numerals.Abs.gf ;
-
+--- flags unlexer=reverse ;
 param DForm = unit Place | teen  | ten | hund ;
 param Size = small | large | dual ;
 param Place = attr | indep  ;

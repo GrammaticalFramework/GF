@@ -1,6 +1,6 @@
 include numerals.Abs.gf ;
 
-param Place = attr  | indep  ;
+param Place = indep | attr  ;
 param Nm = sg  | pl  ;
 oper sata : Nm => Str =
   table {{sg} => "sata" ; {pl} => "sataa"} ;

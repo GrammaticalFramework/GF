@@ -9,6 +9,8 @@ import API
 import CommandL
 import ArchEdit
 
+import List
+
 -- AR 20/4/2000 -- 12/11/2001
 
 editSession :: Options -> ShellState -> IO ()
@@ -26,10 +28,10 @@ translateSession :: Options -> ShellState -> IO ()
 translateSession opts st = do
   let grs   = allStateGrammars st
       cat   = firstCatOpts opts (firstStateGrammar st)
-      trans s = unlines $
+      trans s = unlines $ 
                 if oElem showLang opts then 
-                  [l +++ ":" +++ s | (l,s) <- zip (map (prIdent . cncId) grs) 
-                                                  (translateBetweenAll grs cat s)]
+                  sort $ [l +++ ":" +++ s | (l,s) <- zip (map (prIdent . cncId) grs) 
+                                                     (translateBetweenAll grs cat s)]
                   else translateBetweenAll grs cat s
   translateLoop opts trans
 
