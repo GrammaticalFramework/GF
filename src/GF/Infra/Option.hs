@@ -20,6 +20,10 @@ oArg s = s -- value of option argument
 oElem :: Option -> Options -> Bool
 oElem o (Opts os) = elem o os
 
+eqOpt :: String -> Option -> Bool
+eqOpt s (Opt (o, [])) = s == o
+eqOpt s _ = False
+
 type OptFun = String -> Option
 
 getOptVal :: Options -> OptFun -> Maybe String
@@ -164,6 +168,7 @@ absView   = iOpt "Abs"
 useTokenizer   = aOpt "lexer"
 useUntokenizer = aOpt "unlexer"
 useParser      = aOpt "parser"
+withFun        = aOpt "fun"
 firstCat       = aOpt "cat"      -- used on command line
 gStartCat      = aOpt "startcat" -- used in grammar, to avoid clash w res word
 useLanguage    = aOpt "lang"
@@ -181,6 +186,13 @@ typeDisplay    = aOpt "types"
 noDepTypes     = aOpt "nodeptypes"
 extractGr      = aOpt "extract"
 pathList       = aOpt "path"
+
+markLin        = aOpt "mark"
+markOptXML     = oArg "xml"
+markOptJava    = oArg "java"
+markOptStruct  = oArg "struct"
+markOptFocus   = oArg "focus"
+
 
 -- refinement order
 nextRefine  = aOpt "nextrefine"

@@ -15,16 +15,18 @@ import Random --- (mkStdGen, StdGen, randoms) --- bad import for hbc
 myStdGen = mkStdGen ---
 
 -- build one random tree; use mx to prevent infinite search
-mkRandomTree :: StdGen -> Int -> CGrammar -> QIdent -> Err Tree
+mkRandomTree :: StdGen -> Int -> CGrammar -> Either Cat Fun -> Err Tree
 mkRandomTree gen mx gr cat = mkTreeFromInts (take mx (randoms gen)) gr cat
 
 refineRandom :: StdGen -> Int -> CGrammar -> Action
 refineRandom gen mx = mkStateFromInts $ take mx $ map abs (randoms gen)
 
 -- build a tree from a list of integers
-mkTreeFromInts :: [Int] -> CGrammar -> QIdent -> Err Tree
-mkTreeFromInts ints gr cat = do
-  st0   <- newCat gr cat initState
+mkTreeFromInts :: [Int] -> CGrammar -> Either Cat Fun -> Err Tree
+mkTreeFromInts ints gr catfun = do
+  st0   <- either (\cat -> newCat gr cat initState)
+                  (\fun -> newFun gr fun initState)
+                  catfun
   state <- mkStateFromInts ints gr st0
   return $ loc2tree state
 

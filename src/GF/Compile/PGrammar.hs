@@ -43,12 +43,14 @@ string2formsAndTerm s = case s of
       (x,_:y) -> (pTrms (tail x), pTrm y)
       _ -> ([],pTrm s)
     _ -> ([], pTrm s)
+-}
 
 string2ident :: String -> Err Ident
 string2ident s = return $ case s of
   c:'_':i -> identV (readIntArg i,[c]) ---
   _ -> zIdent s
 
+{-
 -- reads the Haskell datatype
 readGrammar :: String -> Err GrammarST
 readGrammar s =  case [x | (x,t) <- reads s, ("","") <- lex t] of

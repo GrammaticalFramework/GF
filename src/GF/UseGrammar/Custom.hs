@@ -3,6 +3,7 @@ module Custom where
 import Operations
 import Text
 import Tokenize
+import Values
 import qualified Grammar as G
 import qualified AbsGFC as A
 import qualified GFC as C
@@ -22,6 +23,8 @@ import CFIdent
 import PPrCF
 import PrGrammar
 
+import Zipper
+
 ----import Morphology
 -----import GrammarToHaskell
 -----import GrammarToCanon (showCanon, showCanonOpt)
@@ -33,6 +36,8 @@ import ChartParser -- or some other CF Parser
 import MoreCustom -- either small/ or big/. The one in Small is empty.
 
 import UseIO
+
+import Monad
 
 -- minimal version also used in Hugs. AR 2/12/2002. 
 
@@ -59,10 +64,10 @@ customGrammarPrinter :: CustomData (StateGrammar -> String)
 customSyntaxPrinter  :: CustomData (GF.Grammar -> String)        
 
 -- termPrinter, "-printer=x"
-customTermPrinter  :: CustomData (StateGrammar -> A.Exp -> String)
+customTermPrinter  :: CustomData (StateGrammar -> Tree -> String)
 
 -- termCommand, "-transform=x"
-customTermCommand    :: CustomData (StateGrammar -> A.Exp -> [A.Exp])
+customTermCommand    :: CustomData (StateGrammar -> Tree -> [Tree])
 
 -- editCommand, "-edit=x"
 customEditCommand    :: CustomData (StateGrammar -> Action)
@@ -172,15 +177,15 @@ customTermCommand =
   customData "Term transformers, selected by option -transform=x" $
   [
    (strCI "identity",   \_ t -> [t]) -- DEFAULT
-{- ----
-  ,(strCI "compute",    \g t -> err (const [t]) return (computeAbsTerm g t))
-  ,(strCI "paraphrase", \g t -> mkParaphrases g t)
-  ,(strCI "typecheck",  \g t -> err (const []) return (checkIfValidExp g t))
-  ,(strCI "solve",      \g t -> editAsTermCommand g 
-                                            (uniqueRefinements g) t)
-  ,(strCI "context",    \g t -> editAsTermCommand g  
-                                            (contextRefinements g) t)
--}
+  ,(strCI "compute",    \g t -> let gr = grammar g in
+                                  err (const [t]) return 
+                                    (exp2termCommand gr (computeAbsTerm gr) t))
+----  ,(strCI "paraphrase", \g t -> mkParaphrases g t)
+----  ,(strCI "typecheck",  \g t -> err (const []) return (checkIfValidExp g t))
+  ,(strCI "solve",      \g t -> err (const [t]) (return . loc2tree)
+                                   (uniqueRefinements (grammar g) (tree2loc t)))
+  ,(strCI "context",    \g t -> err (const [t]) (return . loc2tree)
+                                   (contextRefinements (grammar g) (tree2loc t)))
 ---  ,(strCI "delete",     \g t -> [MM.mExp0])
 -- add your own term commands here
   ]
@@ -191,12 +196,10 @@ customEditCommand =
   [
    (strCI "identity",   const return) -- DEFAULT
   ,(strCI "transfer",   const return) --- done ad hoc on top level
-{- ----
-  ,(strCI "typecheck",  reCheckState)
-  ,(strCI "solve",      solveAll)
-  ,(strCI "context",    contextRefinements)
-  ,(strCI "compute",    computeSubTree)
--}
+  ,(strCI "typecheck",  \g -> reCheckState (grammar g))
+  ,(strCI "solve",      \g -> solveAll (grammar g))
+  ,(strCI "context",    \g -> contextRefinements (grammar g))
+  ,(strCI "compute",    \g -> computeSubTree (grammar g))
   ,(strCI "paraphrase", const return) --- done ad hoc on top level
 -- add your own edit commands here
   ]

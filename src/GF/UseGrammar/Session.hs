@@ -2,8 +2,9 @@ module Session where
 
 import Abstract
 import Option
----- import Custom
+import Custom
 import Editing
+import ShellState ---- grammar
 
 import Operations
 
@@ -50,6 +51,9 @@ changeMsg m ((s,ts,(_,b)):ss) = (s,ts,(m,b)) : ss   -- just change message
 changeView :: ECommand
 changeView ((s,ts,(m,(v,b))):ss) = (s,ts,(m,(v+1,b))) : ss    -- toggle view
 
+withMsg :: [String] -> ECommand -> ECommand
+withMsg m c = changeMsg m . c
+
 changeStOptions :: (Options -> Options) -> ECommand
 changeStOptions f ((s,ts,(m,(v,o))):ss) = (s,ts,(m,(v, f o))) : ss
 
@@ -90,21 +94,25 @@ refineByExps der gr trees = case trees of
   [t] -> action2commandNext (refineWithExpTC der gr t)
   _  -> changeCands trees
 
+refineByTrees :: Bool -> CGrammar -> [Tree] -> ECommand
+refineByTrees der gr trees = case trees of
+  [t] -> action2commandNext (refineWithTree der gr t)
+  _  -> changeCands  $ map tree2exp trees
+
 replaceByTrees :: CGrammar -> [Exp] -> ECommand
 replaceByTrees gr trees = case trees of
   [t] -> action2commandNext (\s -> 
             annotateExpInState gr t s >>= flip replaceSubTree s)
   _  -> changeCands trees
 
-{- ----
-replaceByEditCommand :: CGrammar -> String -> ECommand
+replaceByEditCommand :: StateGrammar -> String -> ECommand
 replaceByEditCommand gr co = 
   action2command $
   maybe return ($ gr) $
   lookupCustom customEditCommand (strCI co) 
 
-replaceByTermCommand :: CGrammar -> String -> Exp -> ECommand
-replaceByTermCommand gr co exp = 
-  replaceByTrees gr $ maybe [exp] (\f -> f (abstractOf gr) exp) $ 
-    lookupCustom customTermCommand (strCI co) 
--}
+replaceByTermCommand :: Bool -> StateGrammar -> String -> Tree -> ECommand ----
+replaceByTermCommand der gr co exp = 
+  let g = grammar gr in
+    refineByTrees der g $ maybe [exp] (\f -> f gr exp) $
+      lookupCustom customTermCommand (strCI co)

@@ -229,3 +229,9 @@ editAsTermCommand gr c e = err (const []) singleton $ do
   t  <- annotate gr $ refreshMetas [] e
   t' <- c $ tree2loc t
   return $ tree2exp $ loc2tree t'
+
+exp2termCommand :: GFCGrammar -> (Exp -> Err Exp) -> Tree -> Err Tree
+exp2termCommand gr f t = do
+  let exp = tree2exp t
+  exp2 <- f exp
+  annotate gr exp2

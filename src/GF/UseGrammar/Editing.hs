@@ -129,6 +129,13 @@ newCat gr cat@(m,c) _ = do
   testErr (null cont) "start cat must have null context" -- for easier meta refresh
   initStateCat cont cat
 
+newFun :: CGrammar -> Fun -> Action
+newFun gr fun@(m,c) _ = do
+  typ <- lookupFunType gr m c
+  cat <- valCat typ
+  st1 <- newCat gr cat initState
+  refineWithAtom True gr (qq fun) st1
+
 newTree :: Tree -> Action
 newTree t _ = return $ tree2loc t
 

@@ -231,6 +231,13 @@ fun2wrap oldvars ((fun,i),typ) exp = do
     let vars = mkFreshVars (length cont) oldvars
     return $ mkAbs vars $ if n==i then exp else mExp
 
+-- weak heuristics: sameness of value category
+compatType :: Val -> Type -> Bool
+compatType v t = errVal True $ do
+  cat1 <- val2cat v
+  cat2 <- valCat t
+  return $ cat1 == cat2
+
 ---
 
 mkJustProd cont typ = mkProd (cont,typ,[])
