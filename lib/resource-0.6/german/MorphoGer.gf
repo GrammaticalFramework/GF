@@ -51,13 +51,16 @@ oper
 -- Here are the school grammar declensions with their commonest variations.
 -- Unfortunately we cannot define *Umlaut* in GF, but have to give two forms.
 --
--- First declension, with plural "en"/"n", including weak masculins:
+-- First declension, with plural "en"/"n", including weak masculines:
 
   declN1  : Str -> CommNoun = \zahl  -> 
     mkNoun2n zahl  (zahl + "en") Fem ;
 
+  declN1in : Str -> CommNoun = \studentin -> 
+    mkNoun2n studentin (studentin + "nen") Fem ;
+
   declN1e : Str -> CommNoun = \stufe -> 
-    mkNoun2n stufe (stufe + "n") Fem ;  
+    mkNoun2n stufe (stufe + "n") Fem ; 
 
   declN1M : Str -> CommNoun = \junge -> let {jungen = junge + "n"} in
     mkNoun junge jungen jungen jungen jungen jungen Masc ;
@@ -70,8 +73,14 @@ oper
   declN2  : Str -> CommNoun = \punkt -> 
     mkNoun2es punkt (punkt+"e") Masc ;
 
+  declN2n  : Str -> CommNoun = \bein -> 
+    mkNoun2es bein (bein+"e") Neut ;
+
   declN2i  : Str -> CommNoun = \onkel -> 
     mkNoun2s onkel onkel Masc ;
+
+  declN2in  : Str -> CommNoun = \segel -> 
+    mkNoun2s segel segel Neut ;
 
   declN2u : (_,_ : Str) -> CommNoun = \raum,räume -> 
     mkNoun2es raum räume Masc ;
@@ -105,9 +114,9 @@ oper
   ProPN = {s : NPForm => Str ; n : Number ; p : Person} ;
 
   mkPronPers : (_,_,_,_,_ : Str) -> Number -> Person -> ProPN = 
-    \ich,mich,mir,meines,mein,n,p -> {
+    \ich,mich,mir,meiner,mein,n,p -> {
       s = table {
-        NPCase c    => caselist ich mich mir meines ! c ;
+        NPCase c    => caselist ich mich mir meiner ! c ;
         NPPoss gn c => mein + pronEnding ! gn ! c
         } ;
       n = n ;
@@ -121,11 +130,11 @@ oper
     GPl      => caselist "e"  "e" "en" "er"
     } ;
 
-  pronIch  = mkPronPers "ich" "mich" "mir"   "meines" "mein"  Sg P1 ;
-  pronDu   = mkPronPers "du"  "dich" "dir"   "deines" "dein"  Sg P2 ;
-  pronEr   = mkPronPers "er"  "ihn"  "ihm"   "seines" "sein"  Sg P3 ;
-  pronSie  = mkPronPers "sie" "sie"  "ihr"   "ihres"  "ihr"   Sg P3 ;
-  pronEs   = mkPronPers "es"  "es"   "ihm"   "seines" "sein"  Sg P3 ;
+  pronIch  = mkPronPers "ich" "mich" "mir"   "meiner" "mein"  Sg P1 ;
+  pronDu   = mkPronPers "du"  "dich" "dir"   "deiner" "dein"  Sg P2 ;
+  pronEr   = mkPronPers "er"  "ihn"  "ihm"   "seiner" "sein"  Sg P3 ;
+  pronSie  = mkPronPers "sie" "sie"  "ihr"   "ihrer"  "ihr"   Sg P3 ;
+  pronEs   = mkPronPers "es"  "es"   "ihm"   "seiner" "sein"  Sg P3 ;
   pronWir  = mkPronPers "wir" "uns"  "uns"   "unser"  "unser" Pl P1 ;
 
   pronSiePl = mkPronPers "sie" "sie"  "ihnen" "ihrer"  "ihr"   Pl P3 ;
@@ -265,6 +274,7 @@ oper
     adjCompReg3 billig (billig+"er") (billig+"st") ;
 
 
+--OLD:
 --2 Verbs
 --
 -- We limit ourselves to verbs in present tense infinitive, indicative, 
@@ -274,55 +284,188 @@ oper
 -- singular indicative, and the second person singular imperative. 
 -- We take care of the special cases "ten", "sen", "ln", "rn".
 --
--- A famous law about Germanic languages says that plural first and third person
--- are similar.
+-- A famous law about Germanic languages says that plural first and third 
+-- person are similar.
 
-  mkVerbum : (_,_,_,_ : Str) -> Verbum = \geben, gib, gb, gegeben -> 
+--NEW (By Harald Hammarström):
+--2 Verbs
+-- The worst-case macro needs six forms:
+-- x Infinitive, 
+-- x 3p sg pres. indicative, 
+-- x 2p sg imperative, 
+-- x 1/3p sg imperfect indicative, 
+-- x 1/3p sg imperfect subjunctive (because this uncommon form can have umlaut)
+-- x the perfect participle 
+
+-- But you'll only want to use one of the five macros:
+-- x weakVerb              -- For a regular verb like legen
+-- x verbGratulieren       -- For a regular verb without ge- in the perfect
+--                            particple. Like gratulieren, beweisen etc 
+-- x verbStrongSingen      -- A strong verb without umlauting present tense.
+--                            You'll need to supply the strong imperfect forms
+--                            as well as the participle. 
+-- x verbStrongSehen       -- A strong verb that umlauts in the 2/3p sg pres
+--                            indicative as well as the imperative. You'll
+--                            need to give (only) the 3rd p sg pres ind. in
+--                            addition to the strong imperfect forms and the
+--                            part participle.
+-- x verbStrongLaufen      -- A strong verb that umlauts in the 2/3p sg pres
+--                            indicative but NOT the imperative. You'll
+--                            need to give (only) the 3rd p sg pres ind. in
+--                            addition to the strong imperfect forms and the
+--                            part participle.
+--
+-- Things that are handled automatically
+-- x Imperative e (although optional forms are not given)
+-- x Extra e in verbs like arbeitete, regnet, findet, atmet.
+--   NOTE: If pres. umlauting strong verbs are defined through the verbumStrong
+--   macro (which they should) it is automatically handled so they avoid 
+--   falling into this rule e.g er tritt (rather than *er tritet)
+-- x s is dropped in the 2p sg if appropriate du setzt
+-- x verbs that end in -rn, -ln rather than -en
+
+-- Things that are not handled:
+-- x -ß-/-ss-
+-- x Optional dropping of -e- in e.g wand(e)re etc
+-- x Optional indicative forms instead of pres. subj. 2p sg. and 2p pl.  
+-- x (Weak) verbs without the ge- on the participle (in wait for a systematic
+--   treatment of the insep. prefixes and stress). You have to manually use
+--   the verbGratulieren for this. E.g do verbGratulieren "beweisen" - 
+--   verbWeak "beweisen" would yield *gebeweist.
+
+  impe : Str -> Str = \stem ->  
+  let
+    e = ifTok Str (Predef.dp 2 stem) "ig" "e" [] ;
+    e2 = (adde stem)
+  in  
+    e + e2 ;
+ 
+  adde : Str -> Str = \stem ->
+  let
+    eVowelorLiquid : Str -> Str = \u -> case u of {
+      "l" => "e" ; 
+      "r" => "e" ;
+      "a" => "e" ;
+      "o" => "e" ;
+      "u" => "e" ;
+      "e" => "e" ;
+      "i" => "e" ;
+      "ü" => "e" ;
+      "ä" => "e" ;
+      "ö" => "e" ;
+      _   => [] 
+    } ;   
+
+    eConsonantmn : Str -> Str -> Str = \nl, l -> 
+      case l of {"m" => eVowelorLiquid nl ;
+                 "n" => eVowelorLiquid nl ;
+                 _ => []} ;
+ 
+
+    twolast = Predef.dp 2 stem ;
+    nl = Predef.tk 1 twolast ;
+    l = Predef.tk 1 stem ;
+    e = case l of {
+          "d" => "e" ;
+          "t" => "e" ;
+          _ => eConsonantmn nl l
+        } ;
+  in 
+    e ;
+
+
+  mkVerbum : (_,_,_,_,_,_ : Str) -> Verbum = \geben,gibt,gib,gab,gäbe,gegeben -> 
     let {
+       ifSibilant : Str -> Str -> Str -> Str = \u,b1,b2 -> case u of {
+         "s" => b1 ;
+         "x" => b1 ;
+         "z" => b1 ;
+         "ß" => b1 ;
+         _   => b2 
+       } ; 
        en = Predef.dp 2 geben ;
        geb = ifTok Tok (Predef.tk 1 en) "e" (Predef.tk 2 geben)(Predef.tk 1 geben) ;
-       gebt = ifTok Tok (Predef.dp 1 geb) "t" (geb + "et") (geb + "t") ;
-       gibst = ifTok Tok (Predef.dp 1 gib) "s" (gib + "t") (gib + "st") ;
-       gegebener = (adjReg gegeben).s
+       gebt = (adde geb) + "t" ;
+       gebte = ifTok Tok (Predef.dp 1 gab) "e" gab (gab + "e") ;
+       gibst = ifSibilant (Predef.dp 1 gib) (gib + "t") (gib + "st") ;
+       gegebener = (adjReg gegeben).s ;
     } in table {
-           VInf       => geben ;
-           VInd Sg P1 => geb + "e" ;
-           VInd Sg P2 => gibst ;
-           VInd Sg P3 => gib + "t" ;
-           VInd Pl P2 => gebt ;
-           VInd Pl _  => geben ; -- the famous law
-           VImp Sg    => gb ;
-           VImp Pl    => gebt ;
-           VPart a    => gegebener ! a
-           } ;
+       VInf       => geben ;
+       VInd Sg P1 => geb + "e" ;
+       VInd Sg P2 => gibst ;
+       VInd Sg P3 => gibt ;
+       VInd Pl P2 => gebt ;
+       VInd Pl _  => geben ; -- the famous law
+       VImp Sg    => (impe gib) ;
+       VImp Pl    => gebt ;
+       VSubj Sg P1 => geb + "e" ;
+       VSubj Sg P2 => geb + "est" ;
+       VSubj Sg P3 => geb + "e" ;
+       VSubj Pl P2 => geb + "et" ;
+       VSubj Pl _  => geben ;
+       VPresPart a => (adjReg (geben + "d")).s ! a ;
 
--- Regular verbs:
+       VImpfInd Sg P1 => gab ;
+       VImpfInd Sg P2 => (adde gab) + "st" ;
+       VImpfInd Sg P3 => gab ;
+       VImpfInd Pl P2 => gebte + "n" ;
+       VImpfInd Pl _  => gab + "t" ;
 
-  regVerb : Str -> Verbum = \legen ->
-    let {lege = ifTok Tok (Predef.dp 3 legen) "ten" (Predef.tk 1 legen) (
-                ifTok Tok (Predef.dp 2 legen) "en"  (Predef.tk 2 legen) (
-                                                     Predef.tk 1 legen))} in
-    mkVerbum legen lege lege ("ge" + (lege + "t")) ;
+       VImpfSubj Sg P1 => gäbe ;
+       VImpfSubj Sg P2 => gäbe + "st" ;
+       VImpfSubj Sg P3 => gäbe ;
+       VImpfSubj Pl P2 => gäbe + "n" ;
+       VImpfSubj Pl _  => gäbe + "t" ;
 
--- Verbs ending with "t"; now recognized in $mkVerbum$.
+       VPart a    => gegebener ! a
+       } ;
+ 
+-- Weak verbs:
+  verbumWeak : Str -> Verbum = \legen ->
+    let 
+       leg = (Predef.dp 2 legen) ;
+       legte = leg + "te" ;
+    in
+       mkVerbum legen ((adde leg) + "t") leg legte legte ("ge" + (leg + "t")) ;
 
-  verbWarten : Str -> Verbum = regVerb ;
 
--- Verbs with Umlaut in the second and third person singular and imperative:
+-- Weak verbs that don't have ge- in the participle
+  verbumGratulieren : Str -> Verbum = \gratulieren ->
+    let 
+       gratulier = (Predef.dp 2 gratulieren) ;
+       gratulierte = gratulier + "te" ;
+    in
+       mkVerbum gratulieren ((adde gratulier) + "t") gratulier gratulierte gratulierte (gratulier + "t") ;
 
-  verbSehen : Str -> Str -> Str -> Verbum = \sehen, sieht, gesehen -> 
-    let {sieh = Predef.tk 1 sieht} in mkVerbum sehen sieh sieh gesehen ;
 
--- Verbs with Umlaut in the second and third person singular but not imperative:
 
-  verbLaufen : Str -> Str -> Str -> Verbum = \laufen, läuft, gelaufen -> 
-    let {läuf = Predef.tk 1 läuft ; laufe = Predef.tk 1 laufen} 
-    in mkVerbum laufen läuf laufe gelaufen ;
+-- Strong verbs (non-present-tense umlauting):
+  verbumStrongSingen : (_,_,_,_ : Str) -> Verbum = \singen, sang, sänge, gesungen ->
+    let 
+       sing = (Predef.dp 2 singen)
+    in
+       mkVerbum singen ((adde sing) + "t") sing sang sänge gesungen ;
+
+-- Verbs with Umlaut in the 2nd and 3rd person singular and imperative:
+  verbumStrongSehen : (_,_,_,_,_ : Str) -> Verbum = \sehen,sieht,sah,sähe,gesehen -> 
+    let 
+       sieh = Predef.dp 1 sieht ;
+    in 
+       mkVerbum sehen sieht sieh sah sähe gesehen ;
+
+-- Verbs with Umlaut in the 2nd and 3rd person singular but not imperative:
+-- (or any verb where the 3rd p sg pres ind is "special" and the 2p sg pres ind -- uses its stem.)   
+  verbumStrongLaufen : (_,_,_,_,_ : Str) -> Verbum = \laufen,läuft,lief,liefe,gelaufen -> 
+    let  
+       lauf = Predef.dp 2 laufen ;
+    in 
+       mkVerbum laufen läuft lauf lief liefe gelaufen ;
+
 
 -- The verb "be":
 
   verbumSein : Verbum = let {
-    gewesen = (adjReg "gewesen").s
+    sein = verbumStrongSingen "sein" "war" "wäre" "gewesen" ;
   } in
   table {
     VInf       => "sein" ;
@@ -332,29 +475,40 @@ oper
     VInd Pl P2 => "seid" ;
     VInd Pl _  => "sind" ;
     VImp Sg    => "sei" ;
-    VImp Pl    => "seiet" ;
-    VPart a    => gewesen ! a
+    VImp Pl    => "seid" ;
+
+    VSubj Sg P1 => "sei" ;
+    VSubj Sg P2 => (variants {"seiest" ; "seist"}) ;
+    VSubj Sg P3 => "sei" ;
+    VSubj Pl P2 => "seien" ;
+    VSubj Pl _  => "seiet" ;
+    VPresPart a => ((adjReg "seiend").s) ! a ;
+
+    v => sein ! v 
+
     } ;
 
--- auxiliary verbs
-  verbumAux : (_,_,_,_ : Str) -> Verbum = \konnen,kann,kannst,gekonnt -> 
-  let gekonn = (adjReg gekonnt).s in
+-- Modal auxiliary verbs
+  verbumAux : (_,_,_,_,_ : Str) -> Verbum = \können,kann,konnte,könnte,gekonnt -> 
+  let k = (verbumStrongLaufen können kann konnte könnte gekonnt)
+  in 
   table {
-    VInf       => konnen ;
     VInd Sg P1 => kann ;
-    VInd Sg P2 => kannst ;
-    VInd Sg P3 => kann ;
-    VInd Pl P2 => konnen ;
-    VInd Pl _  => konnen ;
-    VImp Sg    => nonExist ;
-    VImp Pl    => nonExist ;
-    VPart a    => gekonn ! a
-    } ;
+    v          => k ! v
+  } ;
+
+  verbumKönnen = verbumAux "können" "kann" "konnte" "könnte" "gekonnt" ;
+  verbumDürfen = verbumAux "dürfen" "darf" "durfte" "dürfte" "gedurft" ;
+  verbumMögen = verbumAux "mögen" "mag" "mochte" "möchte" "gemocht" ;
+  verbumMüssen = verbumAux "müssen" "muss" "musste" "müsste" "gemusst" ;
+  verbumSollen = verbumAux "sollen" "soll" "sollte" "söllte" "gesollt" ;
+  verbumWollen = verbumAux "wollen" "will" "wollte" "wöllte" "gewollt" ;
+  verbumWissen = verbumAux "wissen" "weiss" "wusste" "wüsste" "gewusst" ;
 
 -- The verb "have":
 
-  verbumHaben :  Verbum = let {
-    haben = (regVerb "haben")
+  verbumHaben : Verbum = let {
+    haben = (verbumStrongSingen "haben" "hatte" "hätte" "gehabt")
     } in 
     table {
       VInd Sg P2 => "hast" ;
@@ -364,16 +518,17 @@ oper
 
 -- The verb "become", used as the passive auxiliary:
 
-  verbumWerden :  Verbum = let {
-    werden = regVerb "werden" ;
-    geworden = (adjReg "geworden").s
+  verbumWerden : Verbum = let {
+    werden = (verbumStrongSingen "werden" "wurde" "würde" "geworden") ;
     } in 
     table {
       VInd Sg P2 => "wirst" ;
       VInd Sg P3 => "wird" ;
-      VPart a    => geworden ! a ;
       v          => werden ! v
       } ;
+
+
+
 
 -- A *full verb* ($Verb$) consists of the inflection forms ($Verbum$) and
 -- a *particle* (e.g. "aus-sehen"). Simple verbs are the ones that have no 
@@ -386,7 +541,10 @@ oper
   verbSein = mkVerbSimple verbumSein ;
   verbHaben = mkVerbSimple verbumHaben ;
   verbWerden = mkVerbSimple verbumWerden ;
-  verbGeben = mkVerbSimple (verbSehen "geben" "gibt" "gegeben") ;
+
+-- Apparently needed for "es gibt" etc
+  verbGeben = mkVerbSimple (verbumStrongSehen "geben" "gibt" "gab" "gäbe" "gegeben") ; 
+
 
 {-
   -- tests for optimizer
@@ -399,11 +557,11 @@ oper
     VInd Pl P2 => "seid" ;
     VInd Pl _  => "sind" ;
     VImp Sg    => "sei" ;
-    VImp Pl    => "seiet" ;
+    VImp Pl    => "seid" ;
     VPart a    => (adjReg "gewesen").s ! a
     } ;
 
-  verbumHaben2 :  Verbum = 
+  verbumHaben2 : Verbum = 
     table {
       VInd Sg P2 => "hast" ;
       VInd Sg P3 => "hat" ;

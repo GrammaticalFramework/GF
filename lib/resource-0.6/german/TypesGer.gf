@@ -75,7 +75,24 @@ param Degree = Pos | Comp | Sup ;
 -- We have a reduced conjugation with only the present tense infinitive, 
 -- indicative, and imperative forms, and past participles.
 
-param VForm = VInf | VInd Number Person | VImp Number | VPart AForm ;
+param VForm = VInf | 
+              VInd Number Person | 
+              VImp Number | 
+              VSubj Number Person | 
+              VImpfInd Number Person | 
+              VImpfSubj Number Person | 
+              VPresPart AForm | 
+              VPart AForm ;
+
+{--
+param Tense = Pres | Impf ;
+   VInf |
+   VInd Tense Number Person |
+   VSubj Tense Number Person |
+   VImp Number |
+   VPresPart AForm |
+   VPart AForm ;
+--}
 
 oper Verbum : Type = VForm => Str ;
 
