@@ -169,6 +169,7 @@ customGrammarPrinter =
 -- grammar conversions, (peb) 
   ,(strCI "gfc_show",   show . grammar2canon . stateGrammarST)
   ,(strCI "gfc_raw",    prRaw . stateGrammarST)
+  ,(strCI "tnf",        prCanon . convertCanonToTNF . stateGrammarST)
   ,(strCI "mcfg",       prMCFG . convertCanonToMCFG . stateGrammarST)
   ,(strCI "mcfg_cf",    prCF . convertCanonToCF . stateGrammarST)
   ,(strCI "mcfg_canon", prCanon . convertCanonToMCFG . stateGrammarST)
