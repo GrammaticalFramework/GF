@@ -24,11 +24,11 @@ lin n5  =
 lin n6  =
   {inh = unit ; inh1 = sg ; s = table {unit => "six" ; teen => "seize" ; ten => "soixante" }} ;
 lin n7  =
-  {inh = teen ; inh1 = sg ; s = table {unit => "sept" ; teen => "dix" ++ "-" ++ "sept" ; ten => "septante" }} ;
+  {inh = unit ; inh1 = sg ; s = table {unit => "sept" ; teen => "dix" ++ "-" ++ "sept" ; ten => "septante" }} ;
 lin n8  =
   {inh = unit ; inh1 = pl ; s = table {unit => "huit" ; teen => "dix" ++ "-" ++ "huit" ; ten => "huitante" }} ;
 lin n9  =
-  {inh = teen ; inh1 = pl ; s = table {unit => "neuf" ; teen => "dix" ++ "-" ++ "neuf" ; ten => "nonante" }} ;
+  {inh = unit ; inh1 = pl ; s = table {unit => "neuf" ; teen => "dix" ++ "-" ++ "neuf" ; ten => "nonante" }} ;
 lin pot01  =
   {inh = sg ; 
    s = table {{p1 = unit ; p2 = indep} => "un" ; 
