@@ -364,7 +364,7 @@ oper
 
     twolast = Predef.dp 2 stem ;
     nl = Predef.tk 1 twolast ;
-    l = Predef.tk 1 stem ;
+    l = Predef.dp 1 stem ;
     e = case l of {
           "d" => "e" ;
           "t" => "e" ;
@@ -434,7 +434,7 @@ oper
 -- Weak verbs that don't have ge- in the participle
   verbumGratulieren : Str -> Verbum = \gratulieren ->
     let 
-       gratulier = (Predef.dp 2 gratulieren) ;
+       gratulier = (Predef.tk 2 gratulieren) ;
        gratulierte = gratulier + "te" ;
     in
        mkVerbum gratulieren (gratulier + (adde gratulier) + "t") gratulier gratulierte gratulierte (gratulier + "t") ;
@@ -444,14 +444,14 @@ oper
 -- Strong verbs (non-present-tense umlauting):
   verbumStrongSingen : (_,_,_,_ : Str) -> Verbum = \singen, sang, sänge, gesungen ->
     let 
-       sing = (Predef.dp 2 singen)
+       sing = (Predef.tk 2 singen)
     in
        mkVerbum singen (sing + (adde sing) + "t") sing sang sänge gesungen ;
 
 -- Verbs with Umlaut in the 2nd and 3rd person singular and imperative:
   verbumStrongSehen : (_,_,_,_,_ : Str) -> Verbum = \sehen,sieht,sah,sähe,gesehen -> 
     let 
-       sieh = Predef.dp 1 sieht ;
+       sieh = Predef.tk 1 sieht ;
     in 
        mkVerbum sehen sieht sieh sah sähe gesehen ;
 
