@@ -1,6 +1,7 @@
 
 # checking that a file is haddocky:
 #   - checking if it has an export list
+#   - if there is no export list, it tries to find all defined functions
 #   - checking that all exported functions have type signatures
 #   - checking that the module header is OK
 
@@ -13,12 +14,20 @@
 #     (i.e. "a, b, c :: t")
 #     but on the other hand -- haddock has some problems with these too...
 
-$operSym = qr/[\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~\:]+/;
-$funSym = qr/[a-z]\w*\'*/;
+$operChar         =  qr/[\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]/;
+$operCharColon    =  qr/[\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~\:]/;
+$nonOperChar      = qr/[^\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]/;
+$nonOperCharColon = qr/[^\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~\:]/;
+
+$operSym = qr/$operChar $operCharColon*/x;
+$funSym = qr/[a-z] \w* \'*/x;
+
+$keyword = qr/(?: type | data | module | newtype | infix[lr]? | import | instance | class )/x;
+$keyOper = qr/^( ?: \.\. | \:\:? | \= | \\ | \| | \<\- | \-\> | \@ | \~ | \=\> | \. )$/x;
 
 sub check_headerline {
   my ($title, $regexp) = @_;
-  if (s/^-- $title *: +(.+?) *\n//s) {
+  if (s/^-- \s $title \s* : \s+ (.+?) \s*\n//sx) {
     $name = $1;
     print "   > Incorrect ".lcfirst $title.": $name\n" unless $name =~ $regexp;
   } else {
@@ -26,8 +35,17 @@ sub check_headerline {
   }
 }
 
+if ($#ARGV >= 0) {
+  @FILES = @ARGV;
+} else {
+  @dirs = qw/. api canonical cf cfgm compile for-ghc-nofud
+	     grammar infra newparsing notrace parsers shell
+	     source speech translate useGrammar util visualization/;
+  @FILES = grep(!/\/(Par|Lex)(GF|GFC|CFG)\.hs$/,
+		glob "{".join(",",@dirs)."}/*.hs");
+}
 
-for $file (@ARGV) {
+for $file (@FILES) {
   $file =~ s/\.hs//;
 
   open F, "<$file.hs";
@@ -39,71 +57,95 @@ for $file (@ARGV) {
   # substituting hard spaces for ordinary spaces
   $nchars = tr/\240/ /;
   if ($nchars > 0) {
-    print "   ! Substituted $nchars hard spaces\n";
+    print "!! > Substituted $nchars hard spaces\n";
     open F, ">$file.hs";
     print F $_;
     close F;
   }
 
   # the module header
-  s/^(--+\s*\n)+//s;
-  unless (s/^-- \|\s*\n//s) {
+  s/^ (--+ \s* \n) +//sx;
+  unless (s/^ -- \s \| \s* \n//sx) {
     print "   > Incorrect module header\n";
   } else {
-    &check_headerline("Module", qr/^[A-Z]\w*$/);
-    &check_headerline("Maintainer", qr/^[\wåäöÅÄÖüÜ\s\@\.]+$/);
+    &check_headerline("Module", qr/^ [A-Z] \w* $/x);
+    &check_headerline("Maintainer", qr/^ [\wåäöÅÄÖüÜ\s\@\.]+ $/x);
     &check_headerline("Stability", qr/.*/);
     &check_headerline("Portability", qr/.*/);
-    s/^(--+\s*\n)+//s;
-    print "   > Missing CVS information\n" unless s/^(-- > CVS +\$.*?\$ *\n)+//s;
-    s/^(--+\s*\n)+//s;
-    print "   > Missing module description\n" unless /^-- +[^\(]/;
+    s/^ (--+ \s* \n) +//sx;
+    print "   > Missing CVS information\n"
+      unless s/^(-- \s+ \> \s+ CVS \s+ \$ .*? \$ \s* \n)+//sx;
+    s/^ (--+ \s* \n) +//sx;
+    print "   > Missing module description\n" 
+      unless /^ -- \s+ [^\(]/x;
   }
 
   # removing comments
-  s/\{-.*?-\}//gs;
-  s/--.*?\n/\n/g;
+  s/\{- .*? -\}//gsx;
+  s/-- ($nonOperSymColon .*? \n | \n)/\n/gx;
 
-  # export list
-  if (/\nmodule\s+(\w+)\s+\((.*?)\)\s+where/s) {
+  # removing \n in front of whitespace (for simplification)
+  s/\n+[ \t]/ /gs;
+
+  # the export list
+  $exportlist = "";
+
+  if (/\n module \s+ (\w+) \s+ \( (.*?) \) \s+ where/sx) {
     ($module, $exportlist) = ($1, $2);
 
-    # removing modules from exportlist
-    $exportlist =~ s/module\s+[A-Z]\w*//gs;
-
-    # type signatures
-    while (/\n($funSym)\s*::/gs) {
-      $function = $1;
-      # print "- $function\n";
-      $exportlist =~ s/\b$function\b//;
-    }
-
-    while (/\n(\($operSym\))\s*::/gs) {
-      $function = $1;
-      # print ": $function\n";
-      $exportlist =~ s/\Q$function\E//;
-    }
-
-    # exported functions without type signatures
-    while ($exportlist =~ /(\b$funSym\b|\($operSym\))/gs) {
-      $function = $1;
-      # print "+ $function\n";
-      next if $function =~ /^[A-Z]/;
-      next if $function =~ /^\((\.\.|\:\:?|\=|\\|\||\<\-|\-\>|\@|\~|\=\>)\)$/;
-      print "   > No type signature for function: $function\n";
-    }
-
-    # type aliases
-    # while (/\ntype\s+(\w+)/gs) {
-    #   $type = $1;
-    #   next if $exportlist =~ /\b$type\b/;
-    #   printf "%-30s | Type alias not in export list: %s\n", $file, $type;
-    # }
+    $exportlist =~ s/\b module \s+ [A-Z] \w*//gsx;
+    $exportlist =~ s/\(\.\.\)//g;
 
   } else {
     # modules without export lists
     print "   > No export list\n";
+
+    # function definitions
+    while (/^ (.*? $nonOperCharColon) = (?!$operCharColon)/gmx) {
+      $defn = $1;
+      next if $defn =~ /^ $keyword \b/x;
+
+      if ($defn =~ /\` ($funSym) \`/x) {
+	$fn = $1;
+      } elsif ($defn =~ /(?<!$operCharColon) ($operSym)/x
+	       && $1 !~ $keyOper) {
+	$fn = "($1)";
+      } elsif ($defn =~ /^($funSym)/x) {
+	$fn = $1;
+      } else {
+	print "!! > Error in function defintion: $defn\n";
+	next;
+      }
+
+      $exportlist .= " $fn ";
+    }
   }
+
+  # removing from export list...
+
+  # ...ordinary functions
+  while (/^ ($funSym) \s* ::/gmx) {
+    $function = $1;
+    $exportlist =~ s/\b $function \b//gx;
+  }
+
+  # ...operations
+  while (/^ (\( $operSym \)) \s* ::/gmx) {
+    $function = $1;
+    $exportlist =~ s/\Q$function\E//g;
+  }
+
+  # reporting exported functions without type signatures
+  $reported = 0;
+  while ($exportlist =~ /(\b $funSym \b | \( $operSym \))/gx) {
+    $function = $1;
+    print "   > No type signature for function(s):"
+      unless $reported;
+    print "\n    " unless $reported++ % 5;
+    print " $function";
+  }
+  print "\n     ($reported functions)\n"
+    if $reported;
 
 }
 
