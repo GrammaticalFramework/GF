@@ -54,10 +54,8 @@ gfInteract st@(env,_) = do
       gfInteract st'
     Just (ICEditSession,os) -> 
       editSession (addOptions os opts) env >> gfInteract st
-{- -----
     Just (ICTranslateSession,os) -> 
       translateSession (addOptions os opts) env >> gfInteract st
--}
     -- this is a normal command sequence
     _ -> do
       st' <- execLinesH s cs st

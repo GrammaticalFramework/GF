@@ -119,6 +119,8 @@ inferExp th tenv@(k,rho,gamma) e = case e of
   Vr x -> mkAnnot (AVr x) $ noConstr $ lookupVar gamma x
   Q m c -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c)
   QC m c -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c) ----
+  EInt i -> return (AInt i, valAbsInt, [])
+  K i -> return (AStr i, valAbsString, [])
   Sort _ -> return (AType, vType, [])
   App f t -> do
     (f',w,csf) <- inferExp th tenv f 

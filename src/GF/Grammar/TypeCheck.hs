@@ -162,6 +162,10 @@ aexp2tree (aexp,cs) = do
      ACn c v -> do
        v' <- whnf v ---- 
        return ([],AtC c,v',[])
+     AInt i -> do
+       return ([],AtI i,valAbsInt,[])
+     AStr s -> do
+       return ([],AtL s,valAbsString,[])
      AMeta m v -> do
        v' <- whnf v ---- 
        return ([],AtM m,v',[])

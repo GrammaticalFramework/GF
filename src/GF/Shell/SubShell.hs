@@ -21,7 +21,7 @@ editSession opts st
 
 myUniFont = "-mutt-clearlyu-medium-r-normal--0-0-100-100-p-0-iso10646-1"
 mkOptFont = id
-{- ----
+
 translateSession :: Options -> ShellState -> IO ()
 translateSession opts st = do
   let grs   = allStateGrammars st
@@ -40,4 +40,3 @@ translateLoop opts trans = do
      if s == "." then return () else do
        putStrLnFlush $ trans s
        loopLine
--}

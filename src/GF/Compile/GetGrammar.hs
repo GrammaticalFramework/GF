@@ -14,6 +14,7 @@ import SourceToGrammar
 import Option
 --- import Custom
 import ParGF
+import qualified LexGF as L
 
 import ReadFiles ----
 
@@ -57,7 +58,7 @@ parseOldGrammar :: FilePath -> IOE ([FilePath],[A.TopDef])
 parseOldGrammar file = do
   putStrE $ "reading old file" +++ file
   s <- ioeIO $ readFileIf file
-  A.OldGr incl topdefs <- ioeErr $ err2err $ pOldGrammar $ myLexer $ fixNewlines s
+  A.OldGr incl topdefs <- ioeErr $ err2err $ pOldGrammar $ oldLexer $ fixNewlines s
   includes <- ioeErr $ transInclude incl
   return (includes, topdefs)
 
@@ -69,3 +70,13 @@ err2err (E.Bad s) = Bad s
 
 ioeEErr = ioeErr . err2err
 
+-- To resolve the new reserved words: change them by turning the final letter to Z.
+--- There is a risk of clash. 
+
+oldLexer :: String -> [L.Token]
+oldLexer = map change . L.tokens where
+  change t = case t of
+    (L.PT p (L.TS s)) | elem s new -> (L.PT p (L.TV (init s ++ "Z")))
+    _ -> t
+  new = words $ "abstract concrete interface incomplete " ++ 
+                                  "instance out open resource reuse transfer with"
