@@ -2,14 +2,14 @@ concrete RulesSwe of Rules = CategoriesSwe ** open Prelude, SyntaxSwe in {
 
 lin 
   UseN = noun2CommNounPhrase ;
-  ModAdj = modCommNounPhrase ;
+  ModAP = modCommNounPhrase ;
   ModGenOne = npGenDet singular noNum ;
   ModGenNum = npGenDet plural ;
   UsePN = nameNounPhrase ;
   UseN2 = funAsCommNounPhrase ;
   AppN2 = appFunComm ;
   AppN3 = appFun2 ;
-  UseA1 = adj2adjPhrase ;
+  UseA = adj2adjPhrase ;
   ComplA2 = complAdj ;
   PositADeg = positAdjPhrase ;
   ComparADeg = comparAdjPhrase ;

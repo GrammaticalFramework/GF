@@ -6,8 +6,8 @@ lin
   UsePN = nameNounPhrase ;
   ComplA2 = complAdj ;
   PredVP = predVerbPhrase ;
-  UseA1 = adj2adjPhrase ; 
-  ModAdj = modCommNounPhrase ;
+  UseA = adj2adjPhrase ; 
+  ModAP = modCommNounPhrase ;
   UseN  = noun2CommNounPhrase ;
   ModGenOne = npGenDet Sg noNum ;
   ModGenNum = npGenDet Pl ;

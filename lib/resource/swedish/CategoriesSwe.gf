@@ -41,7 +41,7 @@ lincat
   Num    = {s : Case => Str} ;
   Prep   = {s : Str} ;
 
-  A1     = Adjective ;
+  A      = Adjective ;
       -- = {s : AdjFormPos => Case => Str} ; 
   A2     = Adjective ** {s2 : Preposition} ;
   ADeg   = {s : AdjForm => Str} ;

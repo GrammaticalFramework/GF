@@ -36,7 +36,7 @@ lincat
       --     g: PronGen ; anim : Animacy ;  pron: Bool} ;     
   PN     = ProperName ;
       -- = {s :  Case => Str ; g : Gender ; anim : Animacy} ;
-  A1   = Adjective ;
+  A    = Adjective ;
       -- = {s : AdjForm => Str} ;
   A2   = AdjCompl ;
       -- = Adjective ** Complement ;

@@ -33,7 +33,7 @@ fun
   AppN3       : N3 -> NP -> N2 ;           -- "flight from Paris"
   UseN2       : N2 -> CN ;                 -- "successor"
 
-  ModAdj      : AP -> CN -> CN ;           -- "red car"
+  ModAP       : AP -> CN -> CN ;           -- "red car"
   CNthatS     : CN -> S -> CN ;            -- "idea that the Earth is flat"
 
   ModGenOne   : NP -> CN -> NP ;           -- "John's car"
@@ -46,14 +46,14 @@ fun
 --3 Adjectives and adjectival phrases
 --
 
-  UseA1       : A1 -> AP ;                 -- "red"
+  UseA        : A -> AP ;                  -- "red"
   ComplA2     : A2 -> NP -> AP ;           -- "divisible by two"
 
   PositADeg   : ADeg -> AP ;               -- "old"
   ComparADeg  : ADeg -> NP -> AP ;         -- "older than John"
   SuperlNP    : ADeg -> CN -> NP ;         -- "the oldest man"
 
-----  AdjPart     : V -> A1 ;                  -- "forgotten"
+----  AdjPart     : V -> A ;                  -- "forgotten"
 
 --!
 --3 Verbs and verb phrases
