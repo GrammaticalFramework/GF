@@ -14,11 +14,11 @@ import java.util.*;
 public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     KeyListener, FocusListener {                        
 
-    private int[] sizes = {14,16,20,25,30,36};
+    private int[] sizes = {16,18,20,25,30,36};
     private String[] envfonts;
     private Font font;  
     Font[] fontObjs;
-    private static int DEFAULT_FONT_SIZE = 14;
+    private static int DEFAULT_FONT_SIZE = 16;
     private JComboBox fontList;
     private JLabel fontLabel = new JLabel("   Font: ");
     private JComboBox sizeList;
@@ -280,7 +280,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         output.setSelectionColor(Color.green);
 //        output.setSelectionColor(Color.white);
 //        output.setFont(new Font("Arial Unicode MS", Font.PLAIN, 17));
-        font = new Font(null, Font.BOLD, DEFAULT_FONT_SIZE);
+        font = new Font(null, Font.PLAIN, DEFAULT_FONT_SIZE);
         output.setFont(font);
         field.setFont(font);
         field.setFocusable(true);
@@ -1024,7 +1024,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     Object obj = ae.getSource();
 
     if ( obj == fontList ) {
-        font = new Font((String)fontList.getSelectedItem(), Font.BOLD, ((Integer)sizeList.getSelectedItem()).intValue());
+        font = new Font((String)fontList.getSelectedItem(), Font.PLAIN, ((Integer)sizeList.getSelectedItem()).intValue());
         //output.setFont(font);  
         fontEveryWhere(font);
         cbMenuItem.setFont(font);  
@@ -1033,7 +1033,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     }
 
     if ( obj == sizeList ) {
-        font = new Font((String)fontList.getSelectedItem(), Font.BOLD, ((Integer)sizeList.getSelectedItem()).intValue());
+        font = new Font((String)fontList.getSelectedItem(), Font.PLAIN, ((Integer)sizeList.getSelectedItem()).intValue());
         fontEveryWhere(font);
         cbMenuItem.setFont(font);  
         rbMenuItem.setFont(font);  
