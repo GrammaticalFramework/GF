@@ -17,7 +17,7 @@ concrete StructuralDan of Structural =
   TheyNP = pronNounPhrase de_38 ;
   TheyFemNP = pronNounPhrase de_38 ;
 
-  YouNP  = let {ni = pronNounPhrase ni_37 } in {s = ni.s ; g = ni.g ; n = Sg} ;
+  YouNP  = pronNounPhrase De_38 ;
 
   ItNP   = pronNounPhrase det_40 ; ----
   ThisNP = regNameNounPhrase ["det her"] NNeutr ; 
@@ -47,8 +47,8 @@ concrete StructuralDan of Structural =
   MostsDet = flestaDet ;
   MuchDet  = mkDeterminerSg (detSgInvar "meget") IndefP ;
 
-  ThisDet  = mkDeterminerSgGender2 ["den her"] ["det her"] (DefP Def) ;
-  ThatDet  = mkDeterminerSgGender2 ["den der"] ["det der"] (DefP Def) ;
+  ThisDet  = mkDeterminerSgGender2 ["den her"] ["det her"] (DefP Indef) ;
+  ThatDet  = mkDeterminerSgGender2 ["den der"] ["det der"] (DefP Indef) ;
   TheseNumDet = mkDeterminerPlNum ["de her"] (DefP Def) ; 
   ThoseNumDet = mkDeterminerPlNum ["de der"] (DefP Def) ; 
 
