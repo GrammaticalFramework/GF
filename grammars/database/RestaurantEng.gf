@@ -1,4 +1,5 @@
---# -path=.:../newresource/abstract:../newresource/english:../prelude
+--# -path=.:../resource/abstract:../resource/english:../newresource/abstract:../newresource/english:../prelude
+--- path names: resource in release, newresource in cvs
 
 concrete RestaurantEng of Restaurant = 
   DatabaseEng ** open Prelude, ParadigmsEng in {

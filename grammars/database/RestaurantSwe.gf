@@ -1,4 +1,5 @@
---# -path=.:../newresource/abstract:../newresource/swedish:../prelude
+--# -path=.:../newresource/abstract:../newresource/swedish:../resource/abstract:../resource/swedish:../prelude
+--- path names: resource in release, newresource in cvs
 
 concrete RestaurantSwe of Restaurant = 
   DatabaseSwe ** open Prelude, ResourceSwe, ParadigmsSwe in {
