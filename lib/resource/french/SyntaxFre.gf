@@ -335,4 +335,6 @@ oper
   ouiPhr = ss ["Oui ."] ;  
   nonPhr = ss ["Non ."] ; --- and also Si!
 
+  negNe = elisNe ; negPas = "pas" ;
+
 }

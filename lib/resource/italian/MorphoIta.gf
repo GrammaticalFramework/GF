@@ -84,7 +84,7 @@ oper
      "e" => {s = numForms vino (vin + "i")
        ; g = Masc} ;
      "à" | "ù" => {s = numForms vino vino
-       ; g = Fem}
+       ; g = Fem} ;
      _ => {s = numForms vino vino
        ; g = Masc}
      } ;
@@ -471,6 +471,7 @@ param Pred = pred | indip ;
 oper mkTal : Str -> Str -> Str -> {s : DForm => Str} = 
   \två -> \tolv -> \tjugo -> 
   {s = table {ental _ => två ; ton => tolv ; tiotal => tjugo}} ;
-oper spl : Str -> {s : Str ; n : Number} = \s -> {s = s ; n = Pl} ;
+oper spl : Str -> {s : Gender => Str ; n : Number} = \s -> {s = \\_ =>
+  s ; n = Pl} ;
 oper mille : Number => Str = table {Sg => "mille" ; Pl => "mila"} ;
 }
