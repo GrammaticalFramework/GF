@@ -31,6 +31,8 @@ i,  import: i File
       -nocf         don't build context-free grammar (thus no parser)
       -nocheckcirc  don't eliminate circular rules from CF 
       -cflexer      build an optimized parser with separate lexer trie
+      -noemit       do not emit code (default with old grammar format)
+      -o            do emit code (default with new grammar format)
   flags:
       -abs          set the name used for abstract syntax (with -old option)
       -cnc          set the name used for concrete syntax (with -old option)
