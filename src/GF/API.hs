@@ -26,6 +26,7 @@ import CMacros
 import Transfer
 import qualified Generate as Gen
 
+import Text (untokWithXML)
 import Option
 import Custom
 import ShellState
@@ -208,7 +209,10 @@ optLinearizeTree opts0 gr t = case getOptVal opts transferFun of
     | otherwise = return . unlines . map untok . optIntOrOne . linTree2strings mk g c
   g = grammar gr
   c = cncId gr
-  untok = customOrDefault opts useUntokenizer customUntokenizer gr
+  untok = if False ---- oElem (markLin markOptXML) opts 
+            then untokWithXML unt
+            else unt  
+  unt = customOrDefault opts useUntokenizer customUntokenizer gr
   optIntOrOne = take $ optIntOrN opts flagNumber 1
 
 {- ----

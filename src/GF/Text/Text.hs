@@ -6,7 +6,25 @@ import Char
 -- elementary text postprocessing. AR 21/11/2001
 -- This is very primitive indeed. The functions should work on
 -- token lists and not on strings. AR 5/12/2002
+-- XML hack 14/8/2004; not in use yet
 
+-- does not apply untokenizer within XML tags --- heuristic "< "
+-- this function is applied from top level...
+untokWithXML :: (String -> String) -> String -> String
+untokWithXML unt s = case s of
+  '<':cs@(c:_) | isAlpha c -> '<':beg ++ ">" ++ unto (drop 1 rest) where 
+                  (beg,rest) = span (/='>') cs
+  '<':cs -> '<':unto cs ---
+  [] -> []
+  _ -> unt beg ++ unto rest where
+               (beg,rest) = span (/='<') s
+ where
+   unto = untokWithXML unt
+
+-- ... whereas this one is embedded on a branch
+exceptXML :: (String -> String) -> String -> String
+exceptXML unt s = '<':beg ++ ">" ++ unt (drop 1 rest) where 
+  (beg,rest) = span (/='>') s
 
 formatAsTextLit :: String -> String
 formatAsTextLit = formatAsText . unwords . map unStringLit . words 
@@ -62,3 +80,13 @@ unStringLit s = case s of
   _ -> s
  where
    strlim = (=='\'')
+
+concatRemSpace :: String -> String
+concatRemSpace = concat . words
+{-
+concatRemSpace s = case s of
+  '<':cs -> exceptXML concatRemSpace cs
+  c : cs | isSpace c -> concatRemSpace cs
+  c :cs -> c : concatRemSpace cs
+  _ -> s
+-}
