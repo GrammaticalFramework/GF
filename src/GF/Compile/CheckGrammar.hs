@@ -609,6 +609,7 @@ pattContext env typ p = case p of
     case typ' of
       RecType t -> do
         let pts = [(ty,tr) | (l,tr) <- r, Just ty <- [lookup l t]]
+        ----- checkWarn $ prt p ++++ show pts ----- debug
         mapM (uncurry (pattContext env)) pts >>= return . concat
       _ -> prtFail "record type expected for pattern instead of" typ'
   PT t p' -> do

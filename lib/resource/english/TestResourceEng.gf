@@ -27,7 +27,7 @@ lin
   Walk = verbNoPart (regVerbP3 "walk") ;
   Run = verbNoPart (mkVerb "run" "ran" "run") ;
   Say = verbNoPart (mkVerb "say" "said" "said") ;
-  Prove = verbNoPart (regVerbP3 "prove") ; 
+  Prove = verbNoPart (verbP3e "prove") ; 
   Send = mkTransVerbDir (verbNoPart (mkVerb "send" "sent" "sent")) ;
   Love = mkTransVerbDir (verbNoPart (verbP3e "love")) ;
   Wait = mkTransVerb (verbNoPart (regVerbP3 "wait")) "for" ;
@@ -45,8 +45,8 @@ lin
   SwitchOn  = mkTransVerbPart (verbP3s "switch") "on" ;
   SwitchOff = mkTransVerbPart (verbP3s "switch") "off" ;
 
-  John = nameReg "John" ;
-  Mary = nameReg "Mary" ;
+  John = nameReg "John" Masc ;
+  Mary = nameReg "Mary" Fem ;
 
 --- next
    AlreadyAdv = advPre "already" ;
@@ -54,14 +54,14 @@ lin
 
    Paint = mkTransVerbDir (verbNoPart (regVerbP3 "paint")) ;
    Green = adjDegrReg "green" ;
-   Beg = mkTransVerbDir (verbNoPart (regVerbP3 "ask")) ** {isAux = False} ;
-   Promise = mkTransVerbDir (verbNoPart (verbP3e "promise")) ** {isAux = False} ;
+   Beg = mkTransVerbDir (verbNoPart (regVerbP3 "ask")) ** {s4 = "to"} ;
+   Promise = mkTransVerbDir (verbNoPart (verbP3e "promise")) ** {s4 = "to"} ;
    Wonder = verbNoPart (regVerbP3 "wonder") ;
    Ask = mkTransVerbDir (verbNoPart (regVerbP3 "ask")) ;
    Tell = mkTransVerbDir (verbNoPart (mkVerb "tell" "told" "told")) ;
    Look = verbNoPart (regVerbP3 "look") ;
 
-   Try = mkTransVerbDir (verbNoPart (verbP3y "try")) ** {isAux = False} ;
+   Try = mkTransVerbDir (verbNoPart (verbP3y "tr")) ** {isAux = False} ;
    Important = regAdjective "important" ** {s2 = "for"} ;
    Probable = regAdjective "probable" ; ---- reg
    Easy = regAdjective "easy" ** {s2 = "for"} ;

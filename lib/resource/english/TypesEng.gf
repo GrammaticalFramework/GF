@@ -18,7 +18,7 @@ resource TypesEng = open Prelude in {
 
 param 
   Number = Sg | Pl ;
-  Gender = NoHum | Hum ;
+  Gender = Neutr | Masc | Fem ;
   Case   = Nom | Gen ;
   Person = P1 | P2 | P3 ;
   Degree = Pos | Comp | Sup ;
@@ -82,7 +82,8 @@ param
   NPForm = NomP | AccP | GenP | GenSP ; 
 
 oper
-  Pronoun  : Type = {s : NPForm => Str ; n : Number ; p : Person} ;
+  Pronoun  : Type = 
+    {s : NPForm => Str ; n : Number ; p : Person ; g : Gender} ;
 
 -- Coercions between pronoun cases and ordinaty cases.
 
@@ -93,7 +94,7 @@ oper
 --
 -- Proper names only need two cases.
 
-  ProperName : Type = SS1 Case ;
+  ProperName : Type = {s : Case => Str ; g : Gender} ;
 
 --3 Relative pronouns
 --

@@ -2,7 +2,7 @@
 
 incomplete concrete DatabaseI of Database = open Prelude, Resource in {
 
-flags lexer=text ; unlexer=text ;
+flags lexer=text ; unlexer=text ; startcat=Query ;
 
 lincat 
   Query      = Phr ;
