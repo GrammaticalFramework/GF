@@ -16,6 +16,7 @@ newtype Str = Str [Tok]  deriving (Read, Show, Eq, Ord)
 data Tok = 
    TK String
  | TN Ss [(Ss, [String])] -- variants depending on next string 
+--- | TP Ss [(Ss, [String])] -- variants depending on previous string
     deriving (Eq, Ord, Show, Read)
 
 -- notice that having both pre and post would leave to inconsistent situations:
@@ -31,14 +32,19 @@ type Ss = [String]
 
 matchPrefix :: Ss -> [(Ss,[String])] -> [String] -> Ss
 matchPrefix s vs t = 
-    head ([u | (u,as) <- vs, any (\c -> isPrefixOf c (concat t)) as] ++ [s])
+  head ([u | (u,as) <- vs, any (\c -> isPrefixOf c (concat t)) as] ++ [s])
+
+matchSuffix :: String -> Ss -> [(Ss,[String])] -> Ss
+matchSuffix t s vs = 
+  head ([u | (u,as) <- vs, any (\c -> isSuffixOf c t) as] ++ [s])
 
 str2strings :: Str -> Ss
 str2strings (Str st) = alls st where 
   alls st = case st of
-    TK s     : ts -> s                   : alls ts
-    TN ds vs : ts -> matchPrefix ds vs t ++ t where t = alls ts
-    []            -> []
+    TK s     : ts   -> s                   : alls ts
+    TN ds vs : ts   -> matchPrefix ds vs t ++ t where t = alls ts
+----    u :TP ds vs: ts -> [u] ++ matchSuffix u ds vs ++ alls ts
+    []              -> []
 
 str2allStrings :: Str -> [Ss]
 str2allStrings (Str st) = alls st where 

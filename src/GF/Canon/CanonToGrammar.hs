@@ -47,7 +47,7 @@ redInfo (c,info) = errIn ("decompiling abstract" +++ show c) $ do
   c' <- redIdent c 
   info' <- case info of
     AbsCat cont fs -> do
-      return $ G.AbsCat (Yes cont) (Yes fs)
+      return $ G.AbsCat (Yes cont) (Yes (map (uncurry G.Q) fs))
     AbsFun typ df -> do
       return $ G.AbsFun (Yes typ) (Yes df)
 

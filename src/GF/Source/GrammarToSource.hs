@@ -41,8 +41,13 @@ mkTopDefs ds = ds
 
 trAnyDef :: (Ident,Info) -> [P.TopDef]
 trAnyDef (i,info) = let i' = tri i in case info of
-  AbsCat (Yes co) _ -> [P.DefCat [P.CatDef i' (map trDecl co)]]
-  AbsFun (Yes ty) _ -> [P.DefFun [P.FunDef [i'] (trt ty)]]
+  AbsCat (Yes co) pd -> [P.DefCat [P.CatDef i' (map trDecl co)]] ++ case pd of
+    Yes fs -> [P.DefData [P.DataDef i' [P.DataQId (tri m) (tri c) | QC m c <- fs]]]
+    _ -> []
+  AbsFun (Yes ty) pt -> [P.DefFun [P.FunDef [i'] (trt ty)]] ++ case pt of
+    Yes EData -> [] -- keep this information in data defs only
+    Yes t -> [P.DefDef [P.DDef [i'] (trt t)]]
+    _ -> []
   AbsFun (May b)  _ -> [P.DefFun [P.FunDef [i'] (P.EIndir (tri b))]]
   ---- don't destroy definitions!
 
@@ -85,8 +90,6 @@ trt trm = case trm of
     Vr s -> P.EIdent $ tri s
     Cn s -> P.ECons $ tri s
     Con s -> P.EConstr $ tri s
-----    ConAt id typ -> P.EConAt (tri id) (trt typ)
-
     Sort s -> P.ESort $ case s of
       "Type" -> P.Sort_Type
       "PType" -> P.Sort_PType
@@ -95,13 +98,9 @@ trt trm = case trm of
       "Strs" -> P.Sort_Strs
       _ -> error $ "not yet sort " +++ show trm ----
 
-
     App c a -> P.EApp (trt c) (trt a)
     Abs x b -> P.EAbstr [trb x] (trt b)
-
-----    Eqs pts -> "fn" +++ prCurlyList [prtBranchOld pst | pst <- pts] ---
-----    ECase e bs -> "case" +++ prt e +++ "of" +++ prCurlyList (map prtBranch bs) 
-
+    Eqs pts -> P.EEqs [P.Equ (map trp ps) (trt t) | (ps,t) <- pts]
     Meta m  -> P.EMeta
     Prod x a b | isWildIdent x -> P.EProd (P.DExp (trt a)) (trt b)
     Prod x a b -> P.EProd (P.DDec [trb x] (trt a)) (trt b)

@@ -165,7 +165,7 @@ instance Print TopDef where
    DefCat catdefs -> prPrec i 0 (concat [["cat"] , prt 0 catdefs])
    DefFun fundefs -> prPrec i 0 (concat [["fun"] , prt 0 fundefs])
    DefDef defs -> prPrec i 0 (concat [["def"] , prt 0 defs])
-   DefData pardefs -> prPrec i 0 (concat [["data"] , prt 0 pardefs])
+   DefData datadefs -> prPrec i 0 (concat [["data"] , prt 0 datadefs])
    DefTrans flagdefs -> prPrec i 0 (concat [["transfer"] , prt 0 flagdefs])
    DefPar pardefs -> prPrec i 0 (concat [["param"] , prt 0 pardefs])
    DefOper defs -> prPrec i 0 (concat [["oper"] , prt 0 defs])
@@ -198,6 +198,24 @@ instance Print FunDef where
   prtList es = case es of
    [x] -> (concat [prt 0 x , [";"]])
    x:xs -> (concat [prt 0 x , [";"] , prt 0 xs])
+
+instance Print DataDef where
+  prt i e = case e of
+   DataDef id dataconstrs -> prPrec i 0 (concat [prt 0 id , ["="] , prt 0 dataconstrs])
+
+  prtList es = case es of
+   [x] -> (concat [prt 0 x , [";"]])
+   x:xs -> (concat [prt 0 x , [";"] , prt 0 xs])
+
+instance Print DataConstr where
+  prt i e = case e of
+   DataId id -> prPrec i 0 (concat [prt 0 id])
+   DataQId id0 id -> prPrec i 0 (concat [prt 0 id0 , ["."] , prt 0 id])
+
+  prtList es = case es of
+   [] -> (concat [])
+   [x] -> (concat [prt 0 x])
+   x:xs -> (concat [prt 0 x , ["|"] , prt 0 xs])
 
 instance Print ParDef where
   prt i e = case e of
