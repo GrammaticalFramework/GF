@@ -1,4 +1,4 @@
-//package javaGUI;                                
+//package javaGUI;                                 
 
 import java.awt.*;
 import java.awt.event.*;
@@ -10,15 +10,9 @@ import java.io.*;
 import java.util.*;
 //import gfWindow.GrammarFilter;
 
-public class GFEditor extends JFrame implements ActionListener, CaretListener,
-    KeyListener {                        
+public class GFEditor extends JFrame implements ActionListener, KeyListener {
 
-    public static boolean debug = false;
-    public static String focusPosition="";
-    public static int selStart = -1;
-    public static int selEnd = -1;
-    public static String restString = "";
-
+    public static boolean debug = true;
     public static boolean newObject = false;
     public static boolean finished = false;
     private String parseInput = "";
@@ -31,7 +25,6 @@ public class GFEditor extends JFrame implements ActionListener, CaretListener,
     private static String treeString = "";
     private static String fileString = "";
     public static Vector commands = new Vector();
-    public static Vector outputVector = new Vector();
     public static Hashtable nodeTable = new Hashtable();
     JFileChooser fc1 = new  JFileChooser("./");
     JFileChooser fc = new  JFileChooser("./");
@@ -48,6 +41,8 @@ public class GFEditor extends JFrame implements ActionListener, CaretListener,
     private static boolean waiting = false;
     public static boolean treeChanged = true;
     private static String result;
+    private static int selectionStart;
+    private static int selectionEnd;
     private static BufferedReader fromProc;   
     private static BufferedWriter toProc;
     private static String commandPath = new String("GF");
@@ -234,7 +229,6 @@ public class GFEditor extends JFrame implements ActionListener, CaretListener,
         cp = getContentPane();
         cp.setLayout(new BorderLayout());
         output.setToolTipText("Linearizations' display area");   
-        output.addCaretListener(this);
         output.setEditable(false);
         output.setLineWrap(true);
         output.setWrapStyleWord(true);
@@ -439,7 +433,7 @@ public class GFEditor extends JFrame implements ActionListener, CaretListener,
                 result = fromProc.readLine();
                 if (debug) System.out.println("1 "+result);
               }
-              appendMarked(outputString, -1,-1);
+              output.append(outputString);
               while ((result.indexOf("newcat")==-1)&&(result.indexOf("<lin ")==-1)){
                 result = fromProc.readLine();
                 if (debug) System.out.println("1 "+result);
@@ -473,7 +467,7 @@ public class GFEditor extends JFrame implements ActionListener, CaretListener,
                 }                                   
               }
             }           
-            appendMarked("*** NOTHING MORE TO READ FROM " + commandPath + "\n", -1,-1);
+            output.append("*** NOTHING MORE TO READ FROM " + commandPath + "\n");
           } catch (IOException e) {
           System.out.println("Could not read from external process");
         }
@@ -484,7 +478,6 @@ public class GFEditor extends JFrame implements ActionListener, CaretListener,
              output.setText("");
              outputString = ""; 
              if (debug) System.out.println("output cleared");     
-             outputVector = new Vector();             
              toProc.write(text, 0, text.length());
              toProc.newLine();
              toProc.flush();
@@ -619,7 +612,7 @@ public class GFEditor extends JFrame implements ActionListener, CaretListener,
           if (debug) System.out.println("7 "+result);                     
         }
         if (s.length()>1)
-          appendMarked("-------------"+'\n'+s,-1,-1);  
+          output.append("-------------"+'\n'+s);  
         result = fromProc.readLine();             
         if (debug) System.out.println("7 "+result);          
      } catch(IOException e){ }
@@ -718,8 +711,8 @@ public class GFEditor extends JFrame implements ActionListener, CaretListener,
     } catch(IOException e){ }
   }
 
-  public void outputAppend(){
-    int i, j, k, l, l2, m=0, n=0;
+  public void 	outputAppend(){
+    int i, j, k, l, l2, m;
     l = result.indexOf("<focus");
     i=result.indexOf("type=",l);
     j=result.indexOf('>',i);
@@ -728,51 +721,56 @@ public class GFEditor extends JFrame implements ActionListener, CaretListener,
 
       // in case focus tag is cut into two lines:
       if (l==-1) l=l2-7;         
-      m=result.indexOf("position",l);
-      System.out.println("POSITION START: "+m); 
-      n=result.indexOf("]",m);
-      System.out.println("POSITION END: "+n); 
-      focusPosition = result.substring(m+9,n);
+
       if (debug) System.out.println("form Lin1: "+result);
       statusLabel.setText(" "+result.substring(i+5,j));
       //cutting <focus>
-      result= result.substring(0,l)+result.substring(j+2);
+      result= result.substring(0,l)+result.substring(j+1);
       i=result.indexOf("/focus",l);
       if (debug) System.out.println("/ is at the position"+i);
       j=result.indexOf('>',i);
-      k=result.length()-j-1;
+      k=result.length()-j;
       if (debug) System.out.println("form Lin2: "+result);
+      m = output.getText().length();
       
-      if (debug)
-        System.out.println("char at the previous position"+result.charAt(i-1));
       //cutting </focus>    
       // in case focus tag is cut into two lines:
+      if (debug)
+        System.out.println("char at the previous position"+result.charAt(i-1));
       if (result.charAt(i-1)!='<') 
-        result= result.substring(0,i-8)+result.substring(j+2);
+        result= result.substring(0,i-8)+result.substring(j+1);
       else
-        result= result.substring(0,i-1)+result.substring(j+2);
+        result= result.substring(0,i-1)+result.substring(j+1);
       j= result.indexOf("<focus");
       l2 = result.indexOf("focus");    
       // in case focus tag is cut into two lines:
       if ((l2!=-1)&&(j==-1)) j=l2-7;
-
-      // appending the resulting string
       // only one focus 
       if (j==-1){
-        System.out.println("ONE FOCUS");
-        appendMarked(result+'\n',l,result.length()-k); 
+        output.append(result+'\n'); 
+        selectionStart=m+l;
+        selectionEnd=output.getText().length()-k; 
+        try {  
+          output.getHighlighter().addHighlight(selectionStart, selectionEnd, new DefaultHighlighter.DefaultHighlightPainter(Color.green) );
+//          output.getHighlighter().addHighlight(selectionStart, selectionEnd, new DefaultHighlighter.DefaultHighlightPainter(Color.white) );
+        } catch (Exception e) {}
       } 
       //several focuses
       else {
-        System.out.println("MANY FOCUSes");
-        appendMarked(result.substring(0,j),l,i);           
+        output.append(result.substring(0,j));           
         result = result.substring(j); 
+        selectionStart=m+l;
+        selectionEnd=m+i-1; 
+        try {  
+//          output.getHighlighter().addHighlight(selectionStart, selectionEnd, new DefaultHighlighter.DefaultHighlightPainter(Color.green) );
+          output.getHighlighter().addHighlight(selectionStart, selectionEnd, new DefaultHighlighter.DefaultHighlightPainter(Color.white) );
+        } catch (Exception e) {}
         outputAppend();
       }
       if (debug) System.out.println("form Lin3: "+result);
     }   
-    else //no focus at all (message?):
-      appendMarked(result+'\n', -1,-1);          
+    else 
+      output.append(result+'\n');          
     firstLin=false;
   }
 
@@ -826,7 +824,7 @@ public class GFEditor extends JFrame implements ActionListener, CaretListener,
         }
       if (visible) {   
         if (!firstLin)
-          appendMarked("************"+'\n',-1,-1);  
+          output.append("************"+'\n');  
         if (debug) System.out.println("linearization for the language: "+result);
         outputAppend();
       }
@@ -1083,8 +1081,8 @@ public class GFEditor extends JFrame implements ActionListener, CaretListener,
            String s = JOptionPane.showInputDialog("Command:", parseInput);
            if (s!=null) {
               parseInput = s;
-              //s = "gf "+s; This is for debugging, otherwise shift the comment to the next line.
-              treeChanged = true; 
+              s = "gf "+s;
+              //treeChanged = true; 
               send(s);
            }
         }
@@ -1409,187 +1407,6 @@ public class GFEditor extends JFrame implements ActionListener, CaretListener,
     }
     /** Handle the key released event. */
     public void keyReleased(KeyEvent e) {
-    }
-    public void caretUpdate(CaretEvent e)
-    {
-     int j = 0;
-     int start = output.getSelectionStart();
-     int end = output.getSelectionEnd();
-     System.out.println("SELECTION START POSITION: "+start);
-     System.out.println("SELECTION END POSITION: "+end);
-     if (end>0) System.out.println(output.getText().charAt(end));
-     if (start<output.getText().length()-1) 
-       {
-       while ((j< outputVector.size())&&(((MarkedArea)outputVector.elementAt(j)).end < end))
-         j++;
-       if (j<outputVector.size())
-       {  if (end>=((MarkedArea)outputVector.elementAt(j)).begin) 
-           System.out.println("SELECTEDTEXT: "+
-             ((MarkedArea)outputVector.elementAt(j)).position+"\n");
-       } else 
-           System.out.println("no position in vector of size: "+outputVector.size());
-     }
-    }
-
-    public static void appendMarked(String s, int selectionStart, int selectionEnd)
-    {
-      System.out.println("STRING: "+s);
-      int oldLength = output.getText().length();
-      int currentLength = 0;
-      int newLength=0;
-      int addedLength=0;
-      int resultCurrent=0;
-      int resultNew=0;
-      boolean selectionCheck ;
-      String position = "";
-      int j, l, l2, n;
-      restString = s;
-      if (selectionStart>-1)
-      {
-        selStart = selectionStart;
-        selEnd = selectionEnd;
-        selectionCheck = (s.substring(selectionStart, selectionEnd).indexOf("<")==-1);
-        l = restString.indexOf("<subtree");
-        l2 = restString.indexOf("</subtree");
-        while ((l2>-1)||(l>-1))
-        { 
-          if ((l<l2)&&(l>-1))
-          {
-            j = restString.indexOf(">",l);
-            n = restString.indexOf("<",j);
-            // the tag has some words to register:
-            if ((n-j)>3)
-            {
-              //getting position:
-              position = String.valueOf(outputVector.size());
-              newLength = n-j-3+l;
-              //focus has a separate position:
-              if (selectionCheck&&(selEnd<n))
-              { selectionCheck=false;
-                System.out.println("SELECTION HAS A SEPARATE POSITION"); 
-                if ((selEnd<l)&&(currentLength<l-1))
-                { 
-                   // register the selection first:
-                   newLength = l-1;
-                   outputVector.add(new MarkedArea(currentLength+oldLength, newLength+oldLength, position)); 
-                   addedLength = newLength-currentLength+1;
-                   resultCurrent = currentLength+oldLength;
-                   resultNew = newLength+oldLength;
-                   System.out.println("APPENDING SelectedZONE First Before Tag:"
-                     +restString.substring(currentLength+j-l+1,newLength+j-l+1)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-                   currentLength = newLength+1;
-                   position = String.valueOf(outputVector.size());
-      
-                   // register the rest:
-                   newLength = n-j-3+l;
-                   addedLength = newLength-currentLength+1;
-                   resultCurrent = currentLength+oldLength;
-                   resultNew = newLength+oldLength;
-                   outputVector.add(new MarkedArea(currentLength+oldLength, newLength+oldLength, position)); 
-                   System.out.println("APPENDING ZONE Second:"+restString.substring(currentLength+j-l+1,newLength+j-l+1)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-                }
-                else 
-                  if (n-selEnd<=3)
-                    if (selStart-j<=3)
-                    {   // only selection is to register:
-                      addedLength = newLength-currentLength+1;
-                      resultCurrent = currentLength+oldLength;
-                      resultNew = newLength+oldLength;
-                      outputVector.add(new MarkedArea(resultCurrent, resultNew, position)); 
-                      System.out.println("APPENDING SelectedZONE ONLy:"+restString.substring(selStart,selEnd+1)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-                      currentLength = newLength+1;
-                    } 
-                    else
-                    {
-                      // register the rest:
-                      newLength = newLength - selEnd + selStart-1;
-                      resultCurrent = currentLength+oldLength;
-                      resultNew = newLength+oldLength;
-                      addedLength = newLength-currentLength+1; 
-                      outputVector.add(new MarkedArea(resultCurrent, resultNew, position)); 
-                      System.out.println("APPENDING ZONE First:"+restString.substring(currentLength+j-l+2,newLength+j-l+3)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-                      currentLength = newLength+1;
-                      position = String.valueOf(outputVector.size());
-
-                      //selection second:
-                      newLength = currentLength + selEnd - selStart;
-                      outputVector.add(new MarkedArea(currentLength+oldLength, newLength+oldLength, position)); 
-                      addedLength = newLength-currentLength+1; 
-                      resultCurrent = currentLength+oldLength;
-                      resultNew = newLength+oldLength;
-                      System.out.println("APPENDING SelectedZONE Second:"+restString.substring(currentLength+j-l+2,newLength+j-l+3)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);            
-                    }
-                  else
-                  { // selection first?:
-                    newLength = selEnd-j+l-1;
-                    outputVector.add(new MarkedArea(currentLength+oldLength, newLength+oldLength, position)); 
-                    addedLength = newLength-currentLength+1; 
-                    resultCurrent = currentLength+oldLength;
-                    resultNew = newLength+oldLength;
-                    System.out.println("APPENDING SelectedZONE First:"+restString.substring(currentLength+j-l+1,newLength+j-l+1)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-                    currentLength = newLength+1;
-                    position = String.valueOf(outputVector.size());
-      
-                    // register the rest:
-                    newLength = n-j-3+l;
-                    outputVector.add(new MarkedArea(currentLength+oldLength, newLength+oldLength, position)); 
-                    addedLength = newLength-currentLength+1; 
-                    resultCurrent = currentLength+oldLength;
-                    resultNew = newLength+oldLength;
-                    System.out.println("APPENDING ZONE Second:"+restString.substring(currentLength+j-l+1,newLength+j-l+1)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-                  }
-              }// if selectionCheck
-              else 
-              {
-                addedLength = newLength-currentLength+1; 
-                resultCurrent = currentLength+oldLength;
-                resultNew = newLength+oldLength;
-                outputVector.add(new MarkedArea(resultCurrent, resultNew, position)); 
-                System.out.println("APPENDNG ZONE:"+restString.substring(currentLength+j-l+2,newLength+j-l+3)+
-                     "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
-              } 
-            } //some words to register                     
-            currentLength = newLength+1;
-            removeSubTreeTag(l,j+1);
-            l = restString.indexOf("<subtree");
-            l2 = restString.indexOf("</subtree");
-          } // l<l2
-          else
-          { // cutting the </subtree> tags:
-            removeSubTreeTag(l2,l2+10);
-            l2 = restString.indexOf("</subtree");
-            l = restString.indexOf("<subtree");
-          }
-        } //while
-      } //if selectionStart>-1    
-      // appending:
-      output.append(restString);
-      if (selectionStart>-1)
-      try {  
-        output.getHighlighter().addHighlight(selStart+oldLength, selEnd+oldLength, new DefaultHighlighter.DefaultHighlightPainter(Color.green) );
-//        output.getHighlighter().addHighlight(selStart+oldLength, selEnd+oldLength, new DefaultHighlighter.DefaultHighlightPainter(Color.white) );
-      } catch (Exception e) {System.out.println("highlighting problem!");}
-    }
-
-    //updating:
-    public static void removeSubTreeTag (int start, int end)
-    {
-         int difference =end-start+1;
-         restString = restString.substring(0,start)+restString.substring(end+1);
-         if (selStart > end)
-         {  selStart -=difference;
-            selEnd -=difference;            
-         } 
-         else 
-           if (selEnd < start) ;
-           else selEnd -=difference;            
     }
 
     public void listAction(int index) {
