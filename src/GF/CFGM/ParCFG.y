@@ -19,13 +19,6 @@ import ErrM
  '[' { PT _ (TS "[") }
  ']' { PT _ (TS "]") }
  ',' { PT _ (TS ",") }
- '/' { PT _ (TS "/") }
- '{' { PT _ (TS "{") }
- '}' { PT _ (TS "}") }
- '!' { PT _ (TS "!") }
- '=' { PT _ (TS "=") }
- '(' { PT _ (TS "(") }
- ')' { PT _ (TS ")") }
  'end' { PT _ (TS "end") }
  'grammar' { PT _ (TS "grammar") }
  'startcat' { PT _ (TS "startcat") }
@@ -33,6 +26,7 @@ import ErrM
 L_ident  { PT _ (TV $$) }
 L_integ  { PT _ (TI $$) }
 L_quoted { PT _ (TL $$) }
+L_SingleQuoteString { PT _ (T_SingleQuoteString $$) }
 L_err    { _ }
 
 
@@ -41,6 +35,7 @@ L_err    { _ }
 Ident   : L_ident  { Ident $1 }
 Integer : L_integ  { (read $1) :: Integer }
 String  : L_quoted { $1 }
+SingleQuoteString    : L_SingleQuoteString { SingleQuoteString ($1)}
 
 Grammars :: { Grammars }
 Grammars : ListGrammar { Grammars (reverse $1) } 
@@ -105,60 +100,11 @@ ListSymbol : '.' { [] }
 
 
 Name :: { Name }
-Name : ListIdentParam Category { Name (reverse $1) $2 } 
-
-
-ListIdentParam :: { [IdentParam] }
-ListIdentParam : {- empty -} { [] } 
-  | ListIdentParam IdentParam '/' { flip (:) $1 $2 }
+Name : SingleQuoteString { Name $1 } 
 
 
 Category :: { Category }
-Category : IdentParam '.' Ident ListProj { Category $1 $3 (reverse $4) } 
-
-
-IdentParam :: { IdentParam }
-IdentParam : Ident '{' ListField '}' { IdentParam $1 (reverse $3) } 
-
-
-Field :: { Field }
-Field : '.' KeyValue { Field $2 } 
-
-
-ListField :: { [Field] }
-ListField : {- empty -} { [] } 
-  | ListField Field ';' { flip (:) $1 $2 }
-
-
-Proj :: { Proj }
-Proj : '!' Param { Proj $2 } 
-
-
-ListProj :: { [Proj] }
-ListProj : {- empty -} { [] } 
-  | ListProj Proj { flip (:) $1 $2 }
-
-
-KeyValue :: { KeyValue }
-KeyValue : Ident '=' Param { KeyValue $1 $3 } 
-
-
-ListKeyValue :: { [KeyValue] }
-ListKeyValue : {- empty -} { [] } 
-  | KeyValue { (:[]) $1 }
-  | KeyValue ';' ListKeyValue { (:) $1 $3 }
-
-
-Param :: { Param }
-Param : Ident { ParamSimple $1 } 
-  | Ident '(' ListParam ')' { ParamPatt $1 $3 }
-  | '{' ListKeyValue '}' { ParamRec $2 }
-
-
-ListParam :: { [Param] }
-ListParam : {- empty -} { [] } 
-  | Param { (:[]) $1 }
-  | Param ',' ListParam { (:) $1 $3 }
+Category : SingleQuoteString { Category $1 } 
 
 
 
