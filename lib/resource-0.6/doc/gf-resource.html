@@ -3,7 +3,7 @@
 <body bgcolor="#FFFFFF" text="#000000" >
 
 <center>
-<img SRC="../gf-logo.gif">
+<img SRC="./gf-logo.gif">
 
 <h1>The GF Resource Grammar Library</h1>
 
@@ -13,7 +13,7 @@
 
 <p>
 
-Version 0.6: <a href="gf-resource.tgz">source package</a>.
+Version 0.7: <a href="gf-resource.tgz">source package</a>.
 
 <p>
 
@@ -22,9 +22,13 @@ Current languages: English, Finnish, French, German, Italian, Russian, Swedish.
 </center>
 
 <font size=2>
-<b>News</b>. <br>
+<b>News</b> <br>
 
-13/4/2004 Version 0.6 written using the module system of GF 2. Also an
+24/6/2004 Version 0.7 released together with the release of GF 2.0.
+
+<br>
+
+13/4/2004 Version 0.6 completed using the module system of GF 2. Also an
 extended coverage. The files are placed in separate subdirectories (one
 per language) and have different names than before, so that file names
 (without the extension <tt>.gf</tt>) are also legal module names.
@@ -35,7 +39,7 @@ per language) and have different names than before, so that file names
 
 <br>
 
-25/6/2003 Release of GF 1.2 making it much more efficient to work with
+25/6/2003 Release of GF 1.2 making it more efficient to work with
 resource grammars. See
 <a href="http://www.cs.chalmers.se/~aarne/GF/doc/gf-1.2.html">highlights</a>.
 Also <a href="gf-resource-0.3.tgz">source package version 0.3</a>
@@ -55,7 +59,7 @@ browsers the encoding must be set manually.
 on application and resource grammarians' views and
 added documentation
 on the type system of each language <tt>X</tt>
-in <tt>resource.X.gf</tt>.
+in <tt>CombinationsX.gf</tt>.
 
 <br>
 
@@ -78,7 +82,7 @@ English and German.
 <p>
 
 <i>
-<b>Notice</b>. You need GF Version 2.0beta or later
+<b>Notice</b>. You need GF Version 2.0 or later
 to work with these resource grammars.
 It is available from the 
 <a href="http://www.cs.chalmers.se/~aarne/GF/">GF home page</a>.
@@ -131,7 +135,9 @@ but simply
 </pre>
 The author of the French resource grammar will have defined the
 functions <tt>predAdj</tt> and <tt>adjReg</tt> in such a way that
-they can be used in all applications.
+they can be used in all applications. The type checker of the GF grammar
+compiler guarantees that only grammatically correct combinations
+can be formed by the resource grammar functions.
 
 
 
@@ -154,17 +160,18 @@ We leave it open if we can also explain the <b>semantics</b>
 of resource grammar on the general level. The philosophy of GF,
 inherited from logical frameworks,
 is that semantics is only given to 
-application grammars. (You can also compare them to Wittgenstein's
+application grammars. (You can also compare application grammars to Wittgenstein's
 "language games").
 This view gives us a lot of freedom in formulating resource grammars.
-When describing them, we sometimes say that such-and-such construction
+When describing them, we sometimes say that such-and-such a construction
 is likely to be ruled out by semantic reasons; what we mean is that
 this will actually happen in application grammars; we do <i>not</i> 
 mean that GF has no semantic rules.
-An example of this is the free formation of question adverbials, e.g.
+An example is the question
 <i>From which city is every number even or odd?</i>.
 The resource grammar makes it possible to form this question,
-but it can hardly be grammatical in any sensible application grammar.
+but it can hardly be correct in any application grammar that has
+a rigorous semantics.
 
 
 
@@ -172,17 +179,17 @@ but it can hardly be grammatical in any sensible application grammar.
 
 The resource grammar library a hierarchical structure. Its main layers are
 <ul>
-<li> The language-dependent <b>core resources</b>, to be described below.
 <li> The language-independent <b>core resource API</b>, 
-     <a href="Combination.html"><tt>Combinations.gf</tt></a>.
+     <a href="Combinations.html"><tt>Combinations.gf</tt></a>.
      <a href="Structural.html"><tt>Structural.gf</tt></a>.
-<li> The <b>derived resource libraries</b>, some of which are 
-     language-dependent, some of which aren't. The most important
-     ones are the language-dependent lexical paradigm modules
+<li> The language-dependent lexical paradigm modules
      <tt>ParadigmsX.gf</tt></a>.
+<li> The <b>derived resource libraries</b>, some of which are 
+     language-dependent, some of which aren't.
+<li> The language-dependent <b>resource infrastructure</b>, to be described below.
 </ul>
-The core resources should not be needed by application grammarians: it should
-be enough to use the core resource API and the derived libraries. If 
+The resource infrastructure should not be needed by application grammarians: it should
+be enough to use the core resource API, the paradigm modules, and the derived libraries. If 
 this is not the case, the best solution is to extend the derived resource
 libraries or create new ones. 
 
@@ -216,15 +223,15 @@ grateful for bug reports, requests, and contributions!
 
 <p>
 
-The most important exception to total data abstraction in practice is the
-incompleteness of resource lexica. Since it is impossible to have
+The most important exception to total data abstraction in practice
+concerns resource lexica. Since it is impossible to have a
 full coverage of all the words in a language, users often have to introduce
 their own lexical entries, and thereby use literal strings in their GF code.
 The safest and most convenient way of using this is via functions
 defined in <tt>ParadigmsX.gf</tt> files. Using these functions guarantees
 that the lexical entries created are type-correct. But nothing guards
 against misspelling a word, picking a wrong inflectional pattern, or
-a wrong inherent feature (such as gender).
+a wrong inherent feature (such as the gender of a French noun).
 
 
 
@@ -234,10 +241,8 @@ All documented GF grammars linked from this page
 have been written in GF and then translated to HTML 
 using a light-weight documentation tool,
 <tt>gfdoc</tt>. The tool is available as a part of the GF
-source code package, in the Haskell file
-<tt>util/GFDoc.hs</tt> that can be run in the Hugs interpreter
-by the script <tt>util/gfdoc</tt>. The program also has the
-flag <tt>+latex</tt>, which produces output in Latex instead of
+package. The program also has the
+flag <tt>-latex</tt>, which produces output in Latex instead of
 HTML.
 
 
@@ -249,7 +254,7 @@ its extension <tt>Structural</tt>.
 
 <p>
 
-The file <a href="Combinations.html"><tt>Combinations.gf</tt></a>
+The module <a href="Combinations.html"><tt>Combinations</tt></a>
 gives the core resource type signatures of phrasal categories and
 syntactic combination rules, together with some explanations
 and examples. The examples are so far only in English, but their
@@ -258,8 +263,8 @@ API has been implemented.
 
 <p>
 
-The file <a href="Structural.html"><tt>Structurals.gf</tt></a>
-gives a list of structural words such as determiners, pronouns,
+The module <a href="Structural.html"><tt>Structural</tt></a>
+defines structural words such as determiners, pronouns,
 prepositions, and conjunctions.
 
 <p>
@@ -310,9 +315,9 @@ Here are the documented versions of the paradigm modules:
 <li> English: <a href="ParadigmsEng.html"><tt>ParadigmsEng.gf</tt></a>
 <li> Finnish: <a href="ParadigmsFin.html"><tt>ParadigmsFin.gf</tt></a>
 <li> French:  <a href="ParadigmsFra.html"><tt>ParadigmsFra.gf</tt></a>
-<li> German:  <a href="ParadigmsDeu.html"><tt>ParadigmsDeu.gf</tt></a>
+<li> German:  <a href="ParadigmsGer.html"><tt>ParadigmsDeu.gf</tt></a>
 <li> Italian: <a href="ParadigmsIta.html"><tt>ParadigmsIta.gf</tt></a>
-<li> Russian: <a href="ParadigmsRusU.html"><tt>ParadigmsRusU.gf</tt></a>
+<li> Russian: <a href="ParadigmsRus.html"><tt>ParadigmsRus.gf</tt></a>
 <li> Swedish: <a href="ParadigmsSwe.html"><tt>ParadigmsSwe.gf</tt></a>
 </ul>
 
@@ -330,10 +335,10 @@ applications.
 
 <p>
 
-The API of the predication library is in the file
-<a href="abstract/Predication.html"><tt>Predication.gf</tt></a>.
-What is imported is one of the language-dependent files,
-<tt>X/PredicationX.gf</tt> for each language <tt>X</tt>.
+The API of the predication library is the module
+<a href="Predication.html"><tt>Predication</tt></a>.
+What is imported is one of the language-dependent modules,
+<tt>X/PredicationX</tt> for each language <tt>X</tt>.
 
 
 
@@ -341,24 +346,32 @@ What is imported is one of the language-dependent files,
 
 Sometimes it is useful for the application grammarian to know what the
 language-dependent linearizations types are for each category in the
-core resource. These types are defined in the files <tt>CombinationsX.gf</tt>:
+core resource. These types are defined in the files <tt>CombinationsX.gf</tt>.
+They can be translated to documents by <tt>gfdoc</tt> if desired.
+<!--
+
 <ul>
 <li> English: <a href="CombinationsEng.html"><tt>CombinationsEng.gf</tt></a>
 <li> Finnish: <a href="CombinationsFin.html"><tt>CombinationsFin.gf</tt></a>
 <li> French:  <a href="CombinationsFra.html"><tt>CombinationsFra.gf</tt></a>
 <li> German:  <a href="CombinationsDeu.html"><tt>CombinationsDeu.gf</tt></a>
 <li> Italian: <a href="CombinationsIta.html"><tt>CombinationsIta.gf</tt></a>
-<li> Russian: <a href="CombinationsRusU.html"><tt>CombinationsRusU.gf</tt></a>
+<li> Russian: <a href="CombinationsRus.html"><tt>CombinationsRusU.gf</tt></a>
 <li> Swedish: <a href="CombinationsSwe.html"><tt>CombinationsSwe.gf</tt></a>
 </ul>
+-->
+
+<p>
+
 For the sake of uniformity, we have tried to use the same names
 of parameter types when applicable. For instance, the gender parameter
 is called <tt>Gender</tt> in every grammar, even though its values
 differ. The definitions of the parameter
-types are given in the files <tt>TypesX.gf</tt>. 
+types are given in the modules <tt>TypesX</tt>. 
 The application grammarian following the complete abstraction principle
-should not use the parameter constructors directly, but rather the
-names defined in <tt>ParadigmsX.gf</tt>.
+does not open these modules and cannot hence
+use the parameter constructors directly, but rather the
+names defined in <tt>ParadigmsX</tt>.
 
 
 
@@ -412,103 +425,48 @@ an interactive system.
 
 
 
-<h2>The structure of core resource grammars</h2>
+<h2>The resource grammar infrastructure</h2>
 
 As explained above, the application grammarian's view on resource grammars
 is through API modules. They are collections of type signatures of functions.
 It is the task of linguists to define these functions.
 The definitions are in the end given
-in the <b>core resource grammars</b>.
+in the <b>resource grammar infrastructure</b>.
 
 <p>
 
 We have divided the core resource grammar for each language <tt>X</tt> 
 into the following parts:
 <ul>
-<li> Type system: <tt>types.X.gf</tt>
-<li> Morphology: <tt>morpho.X.gf</tt>
-<li> Syntax: <tt>syntax.X.gf</tt>
+<li> Type system: <tt>TypesX.gf</tt>
+<li> Morphology: <tt>MorphoX.gf</tt>
+<li> Syntax: <tt>SyntaxX.gf</tt>
 </ul>
 To get the most powerful resource grammar for each language, one can use
-these files directly. 
-
-<p>
-
-However, the languages we have studied have so much in common
-that we have gathered a considerable set of categories and rules
-in a <b>multilingual resource grammar</b>. Its parts are
-<ul>
-<li> Abstract syntax: <a href="Resource.html"><tt>Resource.gf</tt></a>
-<li> Language-dependent concrete syntax: <tt>ResourceX.gf</tt></a> for
-     each language.
-</ul>
-The advantage of using this API in application grammars is that
-<b>their concrete syntax looks the same for all languages</b>
-up to non-structural words. Thus it is possible to produce concrete syntaxes
-for new languages without knowing almost anything about them.
-The abstract syntax serves as a common API to the core resource grammar.
-
-
-<h3>The code for the core resource grammars</h3>
-
-The following links go to the <tt>gfdoc</tt>-generated
-HTML files while showing the names of the GF files.
-<ul>
-<li> English: 
-     <a href="types.Eng.html"><tt>types.Eng.gf</tt></a>,
-     <a href="morpho.Eng.html"><tt>morpho.Eng.gf</tt></a>,
-     <a href="syntax.Eng.html"><tt>syntax.Eng.gf</tt></a>.
-<li> Finnish: 
-     <a href="types.Fin.html"><tt>types.Fin.gf</tt></a>,
-     <a href="morpho.Fin.html"><tt>morpho.Fin.gf</tt></a>,
-     <a href="syntax.Fin.html"><tt>syntax.Fin.gf</tt></a>.
-<li> Shared Romance:
-     <a href="types.Romance.html"><tt>types.Romance.gf</tt></a>,
-     <a href="syntax.Romance.html"><tt>syntax.Romance.gf</tt></a>,
-<li> French:
-     <a href="types.Fra.html"><tt>types.Fra.gf</tt></a>,
-     <a href="morpho.Fra.html"><tt>morpho.Fra.gf</tt></a>,
-     <a href="syntax.Fra.html"><tt>syntax.Fra.gf</tt></a>.
-<li> Italian:
-     <a href="types.Ita.html"><tt>types.Ita.gf</tt></a>,
-     <a href="morpho.Ita.html"><tt>morpho.Ita.gf</tt></a>,
-     <a href="syntax.Ita.html"><tt>syntax.Ita.gf</tt></a>.
-<li> Russian:
-     <a href="types.RusU.html"><tt>types.RusU.gf</tt></a>,
-     <a href="morpho.RusU.html"><tt>morpho.RusU.gf</tt></a>,
-     <a href="syntax.RusU.html"><tt>syntax.RusU.gf</tt></a>.
-<li> German:
-     <a href="types.Deu.html"><tt>types.Deu.gf</tt></a>,
-     <a href="morpho.Deu.html"><tt>morpho.Deu.gf</tt></a>,
-     <a href="syntax.Deu.html"><tt>syntax.Deu.gf</tt></a>.
-<li> Swedish: 
-     <a href="types.Swe.html"><tt>types.Swe.gf</tt></a>,
-     <a href="morpho.Swe.html"><tt>morpho.Swe.gf</tt></a>,
-     <a href="syntax.Swe.html"><tt>syntax.Swe.gf</tt></a>.
-</ul>
+these files directly. To view these modules, documents can be generated
+by <tt>gfdoc</tt>.
 
 
 <h2>Compiling and using the resource</h2>
 
 If you want to use the resource grammars, 
 you should download and unpack the
-<a href="gf-resource.tgz">source package</a>.
+<a href="gf-resource.tgz">GF grammar package</a> and go to the
+directory <tt>newresource</tt>.
 At Chalmers, however, we keep the resource grammars in the
-GF CVS archive, in the directory <tt>Grammars/resource/</tt>,
+GF CVS archive, in the directory <tt>grammars/newresource/</tt>,
 and you'd better take them that way. The package accessible through www
 is usually not quite up to date.
 
 <p>
 
-To compile the resource into reusable operations, for all languages, type
+To compile the resource into precompiled modules, for all languages, type
 <pre>
   make
 </pre>
 in the <tt>resource/</tt> directory.
-This requires that you have a recent version of GF (>= 1.1).
-What you get is a set of files with names <tt>res.X.gf</tt>.
-The file <tt>res.Types.gf</tt> gives the type signatures
-of the operations. You need never consult any of these files,
+What you get is a set of <tt>gfr</tt> and <tt>gfc</tt> files.
+You need never consult any of these files,
 but mostly look into <tt>resource.Abs.gf</tt> for the type
 signatures of syntactic structures.
 
@@ -518,31 +476,18 @@ signatures of syntactic structures.
 
 <h3>A test suite</h3>
 
-The grammars <tt>test.X.gf</tt> define a few expressions of each
+The grammars <tt>TestX</tt> define a few expressions of each
 lexical category and make it possible to test linearization, parsing,
 random generation, and editing.
 
 
 <h3>A database query language</h3>
 
-The grammars <tt>database/(database | restaurant).X.gf</tt>
-make use of the resource. The <tt>restaurant.X.gf</tt>
+The grammars <tt>database/(Database|Restaurant)X.gf</tt>
+make use of the resource. The <tt>RestaurantX.gf</tt>
 grammars are just one possible application building on the generic
-<tt>database.X.gf</tt> grammars.
-Look at the 
-<a href="database/database.Abs.gf">abstract database syntax</a>
-and, as an example, the
-<a href="database/database.Fra.gf">French concrete syntax</a>.
+<tt>DatabaseX.gf</tt> grammars.
 
-
-
-<h3>A dialogue system for the video recorder</h3>
-
-The grammars <tt>video/video.X.gf</tt> are meant to be a prototype
-for dialogu systems. Look at the
-<a href="video/video.Abs.gf">abstract video grammar</a>
-and, as an example, the
-<a href="video/video.Eng.gf">English concrete syntax</a>.
 
 
 
@@ -554,40 +499,16 @@ One reason is the absence of low-level
 programming, such as string matching. Another reason is efficiency.
 In connection with the resource grammar project, we have started another
 project, <b>functional morphology</b>, which uses Haskell to implement
-morphology. Haskell morphologies can then be used for generating
-GF morphologies, as exemplified by large parts of
-<a href="morpho.Swe.html"><tt>morpho.Swe.gf</tt></a>.
-
-<p>
-
-Work is in progress to document functional morphology, but here is
-a beginning: 
-<ul>
-<li> General library for defining morphologies: 
-     <a href="General.html"><tt>General.hs</tt></a>.
-<li> Swedish inflection engine: <a href="RulesSw.html"><tt>RulesSw.hs</tt></a>.
-</ul>
-(Notice that we have here used <tt>gfdoc</tt> on Haskell files.)
-
-<p>
-
-To see that it is nevertheless possible to implement morphology in GF, look
-at the French morphology in
-<a href="morpho.Fra.html"><tt>morpho.Fra.gf</tt></a>.
-Its verb part is complete in the sense that it
-implements all the 88 inflection tables of the Bescherelle.
+morphology. See the
+<a href="http://www.cs.chalmers.se/~markus/FM"><tt>Functional Morphology Homepage</tt></a>
+for more information.
 
 
 
 <h2>Further reading</h2>
 
-If you want to read an informal introduction to 
-resource grammars, see these 
-<a href="karlsruhe.ps.gz">slides</a>, written for a German computer science
-audience. Or these
-<a href="swedish.ps.gz">other slides</a>, written for a Swedish
-linguistic audience.
-
+The paper Modular Grammar Engineering in GF and
+a set of slides on the same topic.
 
 </body>
 </html>
