@@ -375,3 +375,11 @@ possibleRefVal gr state val typ = errVal True $ do --- was False
   cs   <- return [(val, vClos vtyp)] --- eqVal gen val (vClos vtyp) --- only poss cs
   return $ possibleConstraints gr cs --- a simple heuristic
 
+possibleTreeVal :: CGrammar -> State -> Tree -> Bool
+possibleTreeVal gr state tree = errVal True $ do --- was False
+  let aval = actVal state
+  let gval = valTree tree
+  let gen = actGen state
+  cs  <- return [(aval, gval)] --- eqVal gen val (vClos vtyp) --- only poss cs
+  return $ possibleConstraints gr cs --- a simple heuristic
+

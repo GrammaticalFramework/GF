@@ -13,17 +13,20 @@ import Operations
 
 -- keep these abstract
 
-type SState = [(State,[Exp],SInfo)]       -- exps are candidate refinements
-type SInfo  = ([String],(Int,Options))    -- string is message, int is the view
+type SState = [(State,([Exp],[Clip]),SInfo)] -- exps: candidate refinements,clipboard
+type SInfo  = ([String],(Int,Options))       -- string is message, int is the view
 
 initSState :: SState
-initSState = [(initState, [], (["Select category to start"],(0,noOptions)))] 
+initSState = [(initState, ([],[]), (["Select category to start"],(0,noOptions)))] 
              -- instead of empty
+
+type Clip = Tree ---- (Exp,Type)
 
 okInfo n = ([],(n,True))
 
 stateSState ((s,_,_):_)     = s
-candsSState ((_,ts,_):_)    = ts
+candsSState ((_,(ts,_),_):_)= ts
+clipSState  ((_,(_,ts),_):_)= ts
 infoSState  ((_,_,i):_)     = i
 msgSState   ((_,_,(m,_)):_) = m
 viewSState  ((_,_,(_,(v,_))):_) = v
@@ -40,10 +43,13 @@ type ECommand = SState -> SState
 
 -- change state, drop cands, drop message, preserve options
 changeState :: State -> ECommand
-changeState s ss = changeMsg [] $ (s,[],infoSState ss) : ss 
+changeState s ss = changeMsg [] $ (s,([],clipSState ss),infoSState ss) : ss 
 
 changeCands :: [Exp] -> ECommand
-changeCands ts ss@((s,_,(_,b)):_) = (s,ts,(candInfo ts,b)) : ss   -- add new state
+changeCands ts ss@((s,(_,cb),(_,b)):_) = (s,(ts,cb),(candInfo ts,b)) : ss   
+
+addtoClip :: Clip -> ECommand
+addtoClip t ss@((s,(ts,cb),(i,b)):_) = (s,(ts,t:cb),(i,b)) : ss   
 
 changeMsg :: [String] -> ECommand
 changeMsg m ((s,ts,(_,b)):ss) = (s,ts,(m,b)) : ss   -- just change message
@@ -116,3 +122,16 @@ replaceByTermCommand der gr co exp =
   let g = grammar gr in
     refineByTrees der g $ maybe [exp] (\f -> f gr exp) $
       lookupCustom customTermCommand (strCI co)
+
+possClipsSState :: StateGrammar -> SState -> [(Int,Clip)]
+possClipsSState gr s = filter poss $ zip [0..] (clipSState s) 
+ where
+  poss = possibleTreeVal cgr st . snd
+  st   = stateSState s
+  cgr  = grammar gr
+
+getNumberedClip :: Int -> SState -> Err Clip
+getNumberedClip i s = if length cs > i then return (cs !! i) 
+                         else Bad "not enough clips"
+  where
+   cs = clipSState s
