@@ -97,7 +97,7 @@ ghci-nofud:
 today:
 	util/mktoday.sh
 javac:
-	javac -target 1.4 java/*.java
+	javac -target 1.4 -source 1.4 java/*.java
 
 jar: javac
 	cd java; jar -cmf manifest.txt gf-java.jar *.class
