@@ -8,6 +8,7 @@ Version: %{version}
 Release: %{release}
 License: GPL
 Group: Sciences/Other
+Vendor: The Language Technology Group
 URL: http://www.cs.chalmers.se/~aarne/GF/
 Source: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -71,6 +72,7 @@ rm -rf $RPM_BUILD_ROOT
 * Thu Jun 24 2004 Bjorn Bringert <bringert@cs.chalmers.se> 2.0-2
 - Set ownership correctly.
 - Move jar-file to share (thanks to Anders Carlsson for pointing this out.)
+- Added vendor tag.
 
 * Tue Jun 22 2004 Bjorn Bringert <bringert@cs.chalmers.se> 2.0-1
 - Include gfdoc binary
