@@ -125,7 +125,7 @@ lib:
 dist:
 	-rm -rf $(DIST_DIR)
 	mkdir $(DIST_DIR)
-	cvs export -d $(DIST_DIR) -rHEAD GF2.0
+	cvs export -d $(DIST_DIR) -rHEAD GF2.1
 	cd $(DIST_DIR)/src && autoconf && rm -rf autom4te.cache
 	find $(DIST_DIR) -name .cvsignore -exec rm -f {} ';'
 	cd $(DIST_DIR)/grammars && sh mkLib.sh
