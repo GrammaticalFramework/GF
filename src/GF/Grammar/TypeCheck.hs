@@ -75,9 +75,9 @@ computeVal gr v = case v of
 splitConstraints :: Constraints -> (Constraints,MetaSubst)
 splitConstraints cs = csmsu where
 
-  csmsu     = (nub [(a,b) | (a,b) <- csf,a /= b],msf)
-  csmsu0    = unif (csf,msf)  -- alternative: filter first
-  (csf,msf) = foldr mkOne ([],[]) cs
+  csmsu       = (nub [(a,b) | (a,b) <- csf1,a /= b],msf1)
+  (csf1,msf1) = unif (csf,msf)  -- alternative: filter first
+  (csf,msf)   = foldr mkOne ([],[]) cs
 
   csmsf     = foldr mkOne ([],msu) csu
   (csu,msu) = unif (cs,[])    -- alternative: unify first

@@ -81,7 +81,7 @@ def
   ImplE _ _ (ImplI _ _ b) a = b a ;
   NegE _ (NegI _ b) a = b a ;
   UnivE _ _ (UnivI _ _ b) a = b a ;
-  ExistE _ _ _ (ExistI A B a b) d = d a b ;
+  ExistE _ _ _ (ExistI _ _ a b) d = d a b ;
 
   -- Hypo and Pron are identities
   Hypo _ a = a ;
