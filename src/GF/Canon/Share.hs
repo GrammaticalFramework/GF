@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Share
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --

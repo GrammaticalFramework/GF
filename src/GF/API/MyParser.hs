@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : MyParser
+-- Maintainer  : Peter Ljunglöf
 -- Stability   : (stable)
 -- Portability : (portable)
 --
@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- template to define your own parser
+-- template to define your own parser (obsolete?)
 -----------------------------------------------------------------------------
 
 module MyParser (myParser) where
