@@ -20,6 +20,7 @@ NOT_IN_DIST= \
 	from-peb \
 	grammars \
 	doc/release2.html \
+	src/old-stuff \
 	src/parsing \
 	src/conversions \
 	src/util/AlphaConvGF.hs
