@@ -1,7 +1,7 @@
 {-# OPTIONS -fglasgow-exts -cpp #-}
-{-# LINE 3 "LexGFC.x" #-}
+{-# LINE 4 "LexGFC.x" #-}
 module LexGFC where
-import SharedString
+import SharedString -- H
 import ErrM
 
 #if __GLASGOW_HASKELL__ >= 503
@@ -30,15 +30,15 @@ alex_deflt :: AlexAddr
 alex_deflt = AlexA# "\x08\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\x0c\x00\x0c\x00\xff\xff\xff\xff"#
 
 alex_accept = listArray (0::Int,14) [[],[],[(AlexAccSkip)],[(AlexAcc (alex_action_1))],[(AlexAcc (alex_action_1))],[(AlexAcc (alex_action_1))],[],[],[(AlexAcc (alex_action_2))],[(AlexAcc (alex_action_2))],[(AlexAcc (alex_action_3))],[],[],[],[(AlexAcc (alex_action_4))]]
-{-# LINE 31 "LexGFC.x" #-}
+{-# LINE 32 "LexGFC.x" #-}
 
 tok f p s = f p s
 
 data Tok =
-   TS !String     -- reserved words
- | TL !String     -- string literals
+   TS !String     -- reserved words  -- H
+ | TL !String     -- string literals -- H
  | TI String     -- integer literals
- | TV !String     -- identifiers    -- H
+ | TV !String     -- identifiers     -- H
  | TD String     -- double precision float literals
  | TC String     -- character literals
 
@@ -132,7 +132,7 @@ alexInputPrevChar (p, c, s) = c
 
 alex_action_1 = tok (\p s -> PT p (TS (shareString s))) 
 alex_action_2 = tok (\p s -> PT p (eitherResIdent (TV . shareString) s)) 
-alex_action_3 = tok (\p s -> PT p (TL $ shareString $ unescapeInitTail s)) 
+alex_action_3 = tok (\p s -> PT p (TL $ unescapeInitTail $ shareString s)) 
 alex_action_4 = tok (\p s -> PT p (TI s))    
 {-# LINE 1 "GenericTemplate.hs" #-}
 {-# LINE 1 "<built-in>" #-}

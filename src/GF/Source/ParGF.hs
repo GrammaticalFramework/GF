@@ -2861,7 +2861,7 @@ pOldGrammar tks = happyThen (happyParse 2# tks) (\x -> happyReturn (happyOut82 x
 
 pExp tks = happyThen (happyParse 3# tks) (\x -> happyReturn (happyOut56 x))
 
-happySeq = happyDontSeq
+happySeq = happyDoSeq
 
 returnM :: a -> Err a
 returnM = return
@@ -2875,7 +2875,7 @@ happyError ts =
 
 myLexer = tokens
 {-# LINE 1 "GenericTemplate.hs" #-}
--- $Id: ParGF.hs,v 1.4 2004/09/14 18:05:47 aarne Exp $
+-- $Id: ParGF.hs,v 1.5 2004/12/06 18:44:59 bringert Exp $
 
 
 
