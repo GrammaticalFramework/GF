@@ -54,18 +54,20 @@ lincat
       -- = {s : Case => Gender => Str} ;
   
   V      = Verb ; 
-      -- = {s : VF => Str ; t: Tense ; a : Aspect ; v: Voice} ;
-  VG     = {s : Bool => VF => Str ; s2 : Bool => Str ; t: Tense ; a : Aspect ; v: Voice} ;
+      -- = {s : VF => Str ; t: Tense ; a : Aspect ; w: Voice} ;
+  VG     = VerbGroup ;
+      -- = Verb ;
   VP     = VerbPhrase ; 
       -- = Verb ** {s2 : Str ; s3 : Gender => Number => Str ;
       --            negBefore: Bool} ;
   TV     = TransVerb ; 
       -- = Verb ** {s2 : Str ; c: Case } ; 
-  V3     = TransVerb ** {s4 : Str; c2: Case} ;
+  V3     = DitransVerb ;
+      -- = TransVerb ** {s4 : Str; c2: Case} ;
   VS     = SentenceVerb ;
       -- = Verb ;
-  VV     = Verb ; 
-
+  VV     = VerbVerb ; 
+      -- = Verb ;
   AdV    = Adverb ;
       -- = {s : Str} ;
   Prep   = Preposition;
@@ -147,6 +149,22 @@ lin
   --PosVS = complSentVerb True ;
   --NegVS = complSentVerb False ;
 
+  PosVG  = predVerbGroup True ;
+  NegVG  = predVerbGroup False ;
+
+  PredV v = v ;
+  PredAP = predAdjective ;
+  PredCN = predCommNoun ;
+  PredTV = complTransVerb ;
+  PredV3 = complDitransVerb ;
+  PredPassV v = v ;
+  PredNP = predNounPhrase ;
+  PredAdV = predAdverb ;
+  PredVS = complSentVerb ;
+  PredVV = complVerbVerb ;
+  VTrans = verbOfTransVerb ;
+
+
   AdjAdv a = mkAdverb (a.s ! AdvF) ;
   PrepNP p = prepPhrase p ;
   AdvVP = adVerbPhrase ;
@@ -156,8 +174,8 @@ lin
 
   PosSlashTV = slashTransVerb True ;
   NegSlashTV = slashTransVerb False ;
--- OneVP = predVerbPhrase (nameNounPhrase (nameReg "one")) ;
---ThereNP = thereIs ;
+  OneVP = predVerbPhrase (pron2NounPhrase pronKtoTo Animate) ;
+  ThereNP = thereIs ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -178,7 +196,7 @@ lin
   IntVP = intVerbPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
---IsThereNP = isThere ;
+  IsThereNP = isThere ;
 
   ImperVP = imperVerbPhrase ;
 
