@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 18:08:58 $ 
+-- > CVS $Date: 2005/03/15 17:18:51 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
 -- Rebuild a source module from incomplete and its with-instance.
 -----------------------------------------------------------------------------
@@ -71,6 +71,7 @@ rebuildModule ms mo@(i,mi) = do
       let ops1 = ops ++ [o | o <- ops0, notElem (openedModule o) infs]
                      ++ [oQualif i i | i <- map snd insts] ----
                      ++ [oSimple i   | i <- map snd insts] ----
+               ----      ++ [oSimple ext] ---- to encode dependence
       --- check if me is incomplete
       return $ ModMod $ Module mt0 stat' fs me ops1 js 
                           ---- (mapTree (qualifInstanceInfo insts) js) -- not needed

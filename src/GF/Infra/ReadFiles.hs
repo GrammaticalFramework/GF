@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 18:08:58 $ 
+-- > CVS $Date: 2005/03/15 17:18:52 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.20 $
+-- > CVS $Revision: 1.21 $
 --
 -- Decide what files to read as function of dependencies and time stamps.
 --
@@ -135,18 +135,26 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
                 (f,(path,st0)) <- sfiles, 
                 let st = if (elem f cs) then CSComp else st0]
 
+
   -- if a compilable file depends on a resource, read gfr instead of gfc/env
   -- but don't read gfr if already in env (by CSEnvR)
   -- Also read res if the option "retain" is present
+  -- Also, if a "with" file has to be compiled, read its mother file from source
+
   res cs = map mkRes cs where
     mkRes x@(f,(path,st)) | elem st [CSRead,CSEnv] = case typ f of
-      t | elem t [MTyResource,MTyIncResource] &&
-          (not (null [m | (m,(_,CSComp)) <- cs,
+      t | (not (null [m | (m,(_,CSComp)) <- cs,
                                    Just ms <- [lookup m allDeps], elem f ms])
                     || oElem retainOpers opts)
-        -> (f,(path,CSRes))
+        -> if elem t [MTyResource,MTyIncResource] 
+              then (f,(path,CSRes)) else
+              if t == MTyIncomplete
+              then (f,(path,CSComp)) else
+              x
       _ -> x
     mkRes x = x
+
+
 
   -- construct list of paths to read
   paths cs = [mkName f p st | (f,(p,st)) <- cs, elem st [CSComp, CSRead,CSRes]]
