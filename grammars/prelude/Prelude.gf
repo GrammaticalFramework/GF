@@ -29,6 +29,8 @@ oper
   postfixSS : Str        -> SS -> SS = \f,x   -> ss (x.s ++ f) ;
   embedSS   : Str -> Str -> SS -> SS = \f,g,x -> ss (f ++ x.s ++ g) ;
 
+  id : (A : Type) -> A -> A ;
+
 -- discontinuous
   SD2 = {s1,s2 : Str} ;
   sd2 : (_,_ : Str) -> SD2 = \x,y -> {s1 = x ; s2 = y} ;

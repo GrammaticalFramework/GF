@@ -1,4 +1,4 @@
-module PrLBNF (prLBNF) where
+module PrLBNF (prLBNF,prBNF) where
 
 import CF
 import CFIdent
@@ -15,6 +15,16 @@ import Char
 
 prLBNF :: CF -> String
 prLBNF = unlines . (map prCFRule) . rulesOfCF -- hiding the literal recogn function
+
+-- a hack to hide the LBNF details
+prBNF :: CF -> String
+prBNF = unlines . (map (unwords . unLBNF . drop 1 . words . prCFRule)) . rulesOfCF 
+  where
+    unLBNF r = case r of
+      "---":ts -> ts
+      ";":"---":ts -> ts
+      c:ts -> c : unLBNF ts
+      _ -> r
 
 prCFRule :: CFRule -> String
 prCFRule (fun,(cat,its)) = 
