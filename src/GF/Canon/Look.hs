@@ -7,8 +7,10 @@ import CMacros
 ----import Values
 import MMacros
 import qualified Modules as M
+import qualified CanonToGrammar as CG
 
 import Operations
+import Option
 
 import Monad
 import List
@@ -62,6 +64,12 @@ lookupGlobal gr f = do
     ResOper _ t -> return t
     AnyInd _ n -> lookupGlobal gr $ redirectIdent n f
     _ -> prtBad "cannot find global" f
+
+lookupOptionsCan :: CanonGrammar -> Err Options
+lookupOptionsCan gr = do
+  let fs = M.allFlags gr
+  os <- mapM CG.redFlag fs
+  return $ options os
 
 lookupParamValues :: CanonGrammar -> CIdent -> Err [Term]
 lookupParamValues gr pt@(CIQ m _) = do

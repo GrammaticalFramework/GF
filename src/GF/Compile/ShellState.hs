@@ -87,7 +87,7 @@ emptyStateGrammar = StGr {
 stateGrammarST = grammar
 stateCF        = cf
 stateMorpho    = morpho
-stateOptions   = loptions ----
+stateOptions   = loptions
 
 cncModuleIdST = stateGrammarST
 
@@ -134,7 +134,7 @@ updateShellState opts sh (gr,(sgr,rts)) = do
     srcModules = src,
     cfs        = zip concrs cfs,
     morphos    = zip concrs (map (mkMorpho cgr) concrs),
-    gloptions  = options (M.allFlags src), ---- canModules
+    gloptions  = opts,
     readFiles  = [ft | ft@(f,_) <- readFiles sh, notInrts f] ++ rts,
     absCats    = csi,
     statistics = [StDepTypes deps,StBoundVars binds]
@@ -193,13 +193,17 @@ allConcretes gr a = [i | (i,M.ModMod m) <- M.modules gr, M.mtype m== M.MTConcret
 
 stateGrammarOfLang :: ShellState -> Language -> StateGrammar
 stateGrammarOfLang st l = StGr {
-  absId   = maybe (identC "Abs") id (abstract st), ---
-  cncId   = l,
-  grammar = canModules st, ---- only those needed for l
-  cf      = maybe emptyCF id (lookup l (cfs st)),
-  morpho  = maybe emptyMorpho id (lookup l (morphos st)),
-  loptions = gloptions st ---- only the own ones!
+  absId    = maybe (identC "Abs") id (abstract st), ---
+  cncId    = l,
+  grammar  = can,
+  cf       = maybe emptyCF id (lookup l (cfs st)),
+  morpho   = maybe emptyMorpho id (lookup l (morphos st)),
+  loptions = errVal noOptions $ lookupOptionsCan can
   }
+ where
+   allCan = canModules st
+   can = M.partOfGrammar allCan 
+           (l, maybe M.emptyModInfo id (lookup l (M.modules allCan)))
 
 grammarOfLang st = stateGrammarST . stateGrammarOfLang st
 cfOfLang st      = stateCF        . stateGrammarOfLang st
