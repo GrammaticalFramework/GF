@@ -161,8 +161,9 @@ getImports ps = get [] where
     let name = fileBody file0
     (p,s) <- tryRead name
     let ((typ,mname),imps) = importsOfFile s
-    ioeErr $ testErr  (mname == name) $ 
-             "module name differs from file name in" +++ name
+    let namebody = justFileName name
+    ioeErr $ testErr  (mname == namebody) $ 
+             "module name" +++ mname +++ "differs from file name" +++ namebody
     case imps of
       _ | elem name (map (snd . fst . fst) ds) -> return ds  --- file already read
       [] -> return $ (((typ,name),[]),p):ds
