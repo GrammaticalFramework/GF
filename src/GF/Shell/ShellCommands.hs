@@ -90,19 +90,21 @@ isValidOption st co op = case op of
        testErr (elem o $ optsOf co) ("invalid option:" +++ prOpt op)
      Opt (o,[x]) -> do
        testErr (elem o (flagsOf co)) ("invalid flag:" +++ o) 
-       testValidFlag st o x
+       testValidFlag st co o x
      _ -> Bad $ "impossible option" +++ prOpt op
   where
    optsOf  co = ("tr" :) $ fst $ optionsOfCommand co
    flagsOf co = snd $ optionsOfCommand co
 
-testValidFlag :: ShellState -> OptFunId -> String -> Err ()
-testValidFlag st f x = case f of
+testValidFlag :: ShellState -> Command -> OptFunId -> String -> Err ()
+testValidFlag st co f x = case f of
   "cat"     -> testIn (map prQIdent_ (allCategories st))
   "lang"    -> testIn (map prt (allLanguages st))
   "res"     -> testIn (map prt (allResources (srcModules st)))
   "number"  -> testN
-  "printer" -> testInc customGrammarPrinter
+  "printer" -> case co of
+		       CPrintGrammar -> testInc customGrammarPrinter
+		       CPrintMultiGrammar -> testInc customMultiGrammarPrinter
   "lexer"   -> testInc customTokenizer
   "unlexer" -> testInc customUntokenizer
   "depth"   -> testN
