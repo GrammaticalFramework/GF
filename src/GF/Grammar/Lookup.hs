@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Lookup in source (concrete and resource) when compiling.
 -----------------------------------------------------------------------------
 
 module Lookup where

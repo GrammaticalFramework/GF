@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Options and flags used in GF shell commands and files.
 -----------------------------------------------------------------------------
 
 module Option where
@@ -224,6 +224,7 @@ useAbsName     = aOpt "abs"
 useCncName     = aOpt "cnc"
 useResName     = aOpt "res"
 useFile        = aOpt "file"
+useOptimizer   = aOpt "optimize"
 
 markLin        = aOpt "mark"
 markOptXML     = oArg "xml"

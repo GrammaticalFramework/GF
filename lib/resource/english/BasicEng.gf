@@ -1,8 +1,11 @@
 --# -path=.:../abstract:../../prelude
+--# -val
 
 concrete BasicEng of Basic = CategoriesEng ** open NewParadigmsEng in {
 
-flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
+flags 
+  startcat=Phr ; lexer=textlit ; unlexer=text ;
+  optimize=all ;
 
 lin
   airplane_N = regN "airplane" ;

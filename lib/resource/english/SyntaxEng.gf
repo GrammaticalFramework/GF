@@ -327,8 +327,8 @@ oper
 
   SForm = 
      VFinite  Tense Anteriority
-   | VInfinit Anteriority
-   | VPresPart
+ ---  | VInfinit Anteriority
+ ---  | VPresPart
    ;
 
 -- This is how the syntactic verb phrase forms are realized as
@@ -336,6 +336,7 @@ oper
 
   oper
 
+{- --vg
   verbSForm : Bool -> Verb -> Bool -> SForm -> Agr -> {fin,inf : Str} = 
     \isAux,verb,b,sf,agr ->
     let 
@@ -380,7 +381,8 @@ oper
       VInfinit  Anter => parts neg (have ++ liked) ;
       VPresPart  => parts neg liking
       } ;
- 
+ -}
+
   auxHave : Bool -> Tense -> Agr -> Str = \b,t,a -> 
     let has = 
       case t of {
@@ -422,6 +424,7 @@ oper
 
   negAux : Bool -> Str -> Str = \b,is -> if_then_Str b is (is + "n't") ;
 
+{- --vg
   useVerbGen : Bool -> Verb -> (Agr => Str) -> VerbGroup = \isAux,verb,arg -> 
     let 
       go = verbSForm isAux verb 
@@ -436,6 +439,7 @@ oper
 
   beGroup : (Agr => Str) -> VerbGroup = 
     useVerbAux (verbBe ** {s1 = []}) ; 
+--vg -}
 
 ---- TODO: the contracted forms.
 
@@ -466,45 +470,49 @@ oper
 
 -- All negative verb phrase behave as auxiliary ones in questions.
 
-  predVerbGroup : Bool -> Anteriority -> VerbGroup -> VerbPhrase = \b,ant,vg -> {
-    s  = table {
-           VIInfinit => \\a => vg.s2 ! b ! VInfinit ant ! a ; -- s1 is just neg for inf
-           VIPresPart => \\a => vg.s2 ! b ! VPresPart ! a
+  predVerbI : Bool -> {s : Str ; a : Anteriority} -> Verb -> Complement -> VerbPhrase = 
+    \b,ant,verb,comp -> 
+    let
+      ans = ant.s ; --- just to avoid ? in parsing
+      inf = case ant.a of {
+        Simul => verb.s ! InfImp ;
+        Anter => "have" ++ verb.s ! PPart 
+        }
+      in
+      {s = table {
+           VIInfinit  => \\a => ans ++ inf ++ verb.s1 ++ comp ! a ;
+           VIPresPart => \\a => ans ++ verb.s ! PresPart ++ comp ! a
            } ;
-    s1 = if_then_Str b [] "not"
-    } ;
-
-  predVerbGroupI : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase = 
-    \b,ant,vg -> 
-    let vp = predVerbGroup b ant.a vg in
-    {s = \\f,a => ant.s ++ vp.s ! f ! a ;
-     s1 = vp.s1
-    } ;
+       s1 = if_then_Str b [] "not"
+      } ;
 
 -- A simple verb can be made into a verb phrase with an empty complement.
 -- There are two versions, depending on if we want to negate the verb.
 -- N.B. negation is *not* a function applicable to a verb phrase, since
 -- double negations with "don't" are not grammatical.
 
-  predVerb : Verb -> VerbGroup = \walk ->
-    useVerb walk (\\_ => []) ;
+  complVerb : Verb -> Complement = \walk ->
+    \\_ => walk.s1 ;
+
+  mkComp : Verb -> Complement -> Complement = \verb,comp ->
+    \\a => verb.s1 ++ comp ! a ;
 
 -- Verb phrases can also be formed from adjectives ("is old"),
 -- common nouns ("is a man"), and noun phrases ("ist John").
 -- The third rule is overgenerating: "is every man" has to be ruled out
 -- on semantic grounds.
 
-  predAdjective : Adjective -> VerbGroup = \old ->
-    beGroup (\\_ => old.s ! AAdj) ;
+  complAdjective : Adjective -> Complement = \old ->
+    (\\_ => old.s ! AAdj) ;
 
-  predCommNoun : CommNoun -> VerbGroup = \man ->
-    beGroup (\\a => indefNoun (fromAgr a).n man) ;
+  complCommNoun : CommNoun -> Complement = \man ->
+    (\\a => indefNoun (fromAgr a).n man) ;
 
-  predNounPhrase : NounPhrase -> VerbGroup = \john ->
-    beGroup (\\_ => john.s ! NomP) ;
+  complNounPhrase : NounPhrase -> Complement = \john ->
+    (\\_ => john.s ! NomP) ;
 
-  predAdverb : PrepPhrase -> VerbGroup = \elsewhere ->
-    beGroup (\\_ => elsewhere.s) ;
+  complAdverb : PrepPhrase -> Complement = \elsewhere ->
+    (\\_ => elsewhere.s) ;
 
 {- --- compiles to 25k lines gfr 3/2/2005
   predAdjSent : Adjective -> Sentence -> Clause = \bra,hansover ->
@@ -517,7 +525,21 @@ oper
   predAdjSent : Adjective -> Sentence -> Clause = \bra,hansover ->
     predBeGroup (pronNounPhrase pronIt) (\\n => bra.s ! AAdj ++ "that" ++ hansover.s) ;
 
-  predBeGroup : NounPhrase -> (Agr => Str) -> Clause = \itt,goo ->
+  Complement = Agr => Str ;
+
+  predBeGroupI : Bool -> {s : Str ; a : Anteriority} -> Complement -> VerbPhrase = 
+    \b,ant,vg ->
+    {s = table {
+       VIInfinit => \\a => ant.s ++ case ant.a of {
+         Simul => "be" ++ vg ! a ;
+         Anter => "have" ++ "been" ++ vg ! a
+         } ;
+       VIPresPart => \\a => "being" ++ vg ! a
+       } ; 
+    s1 = if_then_Str b [] "not" ;
+    } ;
+
+  predBeGroup : NounPhrase -> Complement -> Clause = \itt,goo ->
     let
       it = itt.s ! NomP ;
       good = goo ! itt.a ;
@@ -551,10 +573,11 @@ oper
         VFinite t Anter => case o of {
           Dir => it ++ has b t ++ beengood t ;
           Inv => has b t ++ it ++ beengood t
-          } ;
-        VInfinit Simul => it ++ begood Future ;
-        VInfinit Anter => it ++ beengood Future ;
-        VPresPart => it ++ "being" ++ good
+          } 
+--- ;
+---        VInfinit Simul => it ++ begood Future ;
+---        VInfinit Anter => it ++ beengood Future ;
+---        VPresPart => it ++ "being" ++ good
         }
      } ;
 
@@ -578,8 +601,8 @@ oper
 -- ("I switch on the radio" / "I switch the radio on").
 ---- TODO: do this again.
 
-  complTransVerb : TransVerb -> NounPhrase -> VerbGroup = \switch,radio ->
-    useVerb switch (\\_ => switch.s3 ++ radio.s ! AccP) ;
+  complTransVerb : TransVerb -> NounPhrase -> Complement = \switch,radio ->
+    mkComp switch (\\_ => switch.s3 ++ radio.s ! AccP) ;
 
 -- Verbs that take direct object and a  particle:
 
@@ -601,14 +624,14 @@ oper
 -- Therefore, the function can also be used for "he is swum", etc.
 -- The syntax is the same as for adjectival predication.
 
-  passVerb : Verb -> VerbGroup = \love ->
-    predAdjective (adj2adjPhrase (regAdjective (love.s ! PPart))) ;
+  passVerb : Verb -> Complement = \love ->
+    complAdjective (adj2adjPhrase (regAdjective (love.s ! PPart))) ;
 
 -- Transitive verbs can also be used reflexively.
 -- But to formalize this we must make verb phrases depend on a person parameter.
 
-  reflTransVerb : TransVerb -> VerbGroup = \love -> 
-    useVerb love (\\a => love.s1 ++ love.s3 ++ reflPron a) ; ----
+  reflTransVerb : TransVerb -> Complement = \love -> 
+    mkComp love (\\a => love.s1 ++ love.s3 ++ reflPron a) ; ----
 
 -- Transitive verbs can be used elliptically as verbs. The semantics
 -- is left to applications. The definition is trivial, due to record
@@ -634,14 +657,14 @@ oper
       } ;
 
   complDitransAdjVerb : 
-    TransVerb -> NounPhrase -> AdjPhrase -> VerbGroup = \gor,dig,sur ->
-      useVerb 
+    TransVerb -> NounPhrase -> AdjPhrase -> Complement = \gor,dig,sur ->
+      mkComp
         gor 
         (\\_ => gor.s1 ++ gor.s3 ++ dig.s ! AccP ++ sur.s ! AAdj) ;
 
   complAdjVerb : 
-    Verb -> AdjPhrase -> VerbGroup = \seut,sur ->
-      useVerb 
+    Verb -> AdjPhrase -> Complement = \seut,sur ->
+      mkComp 
         seut 
         (\\n => sur.s ! AAdj ++ seut.s1) ;
 
@@ -716,8 +739,6 @@ oper
     APl P3 => "themselves"
     } ;
 
-  progressiveVerbPhrase : VerbPhrase -> VerbGroup = \vp ->
-    beGroup (vp.s ! VIPresPart) ; 
 
   progressiveClause : NounPhrase -> VerbPhrase -> Clause = \np,vp ->
     predBeGroup np (vp.s ! VIPresPart) ; 
@@ -734,6 +755,64 @@ oper
 
   ---- compiles to 4k lines gfr. also relSlash, relVerbPhrase are bad
   oper
+  Verbal = VForm => Agr => Str ;
+
+  -- This applies to non-auxiliaries.
+
+  predVerbClause : NounPhrase -> Verb -> Complement -> Clause = \np,verb,comp -> 
+    let 
+      it  = np.s ! NomP ;
+      agr = np.a ; 
+      itgoes : Order -> Str -> Str -> Str = \o,x,y -> case o of {
+        Dir => it ++ x ++ y ;
+        Inv => x ++ it ++ y
+        } ;
+      goes : Tense -> Str = \t -> verb.s ! case <t,agr> of {
+         <Present,ASgP1>   => Indic P1 ;
+         <Present,ASgP3 _> => Indic P3 ;
+         <Present,_>       => Indic P2 ;
+         <Past,ASgP1>      => Pastt Pl ;
+         <Past,ASgP3 _>    => Pastt Sg ;
+         _       => Pastt Pl --- Future doesn't matter
+         } ;
+      off   = comp ! agr ;
+      go    = verb.s ! InfImp ++ off ;
+      gone  = verb.s ! PPart ++ off ;
+      going = verb.s ! PresPart ++ off ;
+      have = "have" ;
+      has  : Bool -> Tense -> Str = \b,t -> auxHave b t agr ;
+      does : Bool -> Tense -> Str = \b,t -> auxTense b t agr
+    in
+    {s = \\o,b,sf => 
+     let       
+       neg  = if_then_Str b [] "not" ;
+     in
+     case sf of {
+      VFinite Present Simul => case b of {
+        True  => case o of {
+          Dir => it ++ goes Present ++ off ;
+          Inv => does b Present ++ it ++ go
+          } ;
+        False => itgoes o (does b Present) go
+        } ;
+      VFinite Past Simul => case b of {
+        True  => case o of {
+          Dir => it ++ goes Past ++ off ;
+          Inv => does b Past ++ it ++ go
+          } ;
+        False => itgoes o (does b Past) go
+        } ;
+      VFinite t       Simul => itgoes o (does b t)    go ;
+      VFinite Present Anter => itgoes o (has b Present) gone ;
+      VFinite Past    Anter => itgoes o (has b Past)    gone ;
+      VFinite t Anter       => itgoes o (does b t)    (have ++ gone) 
+--- ;
+---      VInfinit  Simul       => it ++ neg ++           go ;
+---      VInfinit  Anter       => it ++ neg ++           (have ++ gone) ;
+---      VPresPart             => it ++ neg ++           going
+      }
+     } ;
+{- --vg
   predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = 
     \yo,dosleep -> {
       s = \\o,b,c => 
@@ -755,7 +834,7 @@ oper
             }
         }
       } ;
-
+-- vg -}
 
 --3 Sentence-complement verbs
 --
@@ -766,20 +845,20 @@ oper
 -- To generate "says that John walks" / "doesn't say that John walks":
 ---- TODO: the alternative without "that"
 
-  complSentVerb : SentenceVerb -> Sentence -> VerbGroup = \say,johnruns ->
-    useVerb say (\\_ => "that" ++ johnruns.s) ;
+  complSentVerb : SentenceVerb -> Sentence -> Complement = \say,johnruns ->
+    mkComp say (\\_ => "that" ++ johnruns.s) ;
 
-  complQuestVerb : SentenceVerb -> QuestionSent -> VerbGroup = \se,omduler ->
-    useVerb se (\\_ => se.s1 ++ omduler.s ! IndirQ) ;
+  complQuestVerb : SentenceVerb -> QuestionSent -> Complement = \se,omduler ->
+    mkComp se (\\_ => se.s1 ++ omduler.s ! IndirQ) ;
 
-  complDitransSentVerb : TransVerb -> NounPhrase -> Sentence -> VerbGroup = 
+  complDitransSentVerb : TransVerb -> NounPhrase -> Sentence -> Complement = 
     \sa,honom,duler ->
-      useVerb sa 
+      mkComp sa 
         (\\_ => sa.s1 ++ sa.s3 ++ honom.s ! AccP ++ "that" ++ duler.s) ;
 
-  complDitransQuestVerb : TransVerb -> NounPhrase -> QuestionSent -> VerbGroup = 
+  complDitransQuestVerb : TransVerb -> NounPhrase -> QuestionSent -> Complement = 
     \sa,honom,omduler ->
-      useVerb sa 
+      mkComp sa 
         (\\_ => sa.s1 ++ sa.s3 ++ honom.s ! AccP ++ omduler.s ! IndirQ) ;
 
 
@@ -799,16 +878,16 @@ oper
 -- The contraction of "not" is not provided, since it would require changing
 -- the verb parameter type.
 
-  complVerbVerb : VerbVerb -> VerbPhrase -> VerbGroup = \try,run ->
+  complVerbVerb : VerbVerb -> VerbPhrase -> Complement = \try,run ->
     let
        taux  = try.isAux ;
        to    = if_then_Str taux [] "to" ;
        torun : Agr => Str = 
          \\a => run.s1 ++ to ++ run.s ! VIInfinit ! a  
     in
-      if_then_else VerbGroup taux 
-        (useVerb    try torun)
-        (useVerbAux try torun) ;
+----      if_then_else VerbGroup taux 
+----        (useVerbAux try torun)
+        (mkComp    try torun) ;
 
 -- The three most important example auxiliaries.
 
@@ -834,9 +913,9 @@ oper
   DitransVerbVerb = TransVerb ** {s4 : Str} ;
 
   complDitransVerbVerb : 
-    Bool -> DitransVerbVerb -> NounPhrase -> VerbPhrase -> VerbGroup = 
+    Bool -> DitransVerbVerb -> NounPhrase -> VerbPhrase -> Complement = 
      \obj,be,dig,simma ->
-      useVerb be 
+      mkComp be 
         (\\a => be.s1 ++ be.s3 ++ dig.s ! AccP ++ be.s3 ++ be.s4 ++
                 simma.s1 ++ -- negation
               if_then_Str obj 
@@ -851,17 +930,15 @@ oper
      s3 = hitta.s3
     } ;
 
-  complVerbAdj : Adjective -> VerbPhrase -> VerbGroup = \grei, simma ->
-    beGroup
+  complVerbAdj : Adjective -> VerbPhrase -> Complement = \grei, simma ->
       (\\a => 
               grei.s ! AAdj ++ simma.s1 ++
               "to" ++
               simma.s ! VIInfinit ! a) ;
 
   complVerbAdj2 : 
-    Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> VerbGroup = 
+    Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> Complement = 
       \obj,grei,dig,simma ->
-        beGroup
           (\\a =>
               grei.s ! AAdj ++ 
               grei.s2 ++ dig.s ! AccP ++
@@ -892,10 +969,10 @@ oper
 
   slashTransVerbCl : NounPhrase -> TransVerb -> ClauseSlashNounPhrase = 
     \you,lookat ->
+    let youlookat = (predVerbClause you lookat (complVerb lookat)).s in 
     {s = table {
-       DirQ   => \\b,f => (questVerbPhrase     you (predVerb
-    lookat)).s ! b ! f ! DirQ ;
-       IndirQ => (predVerbGroupClause you (predVerb lookat)).s ! Dir
+       DirQ   => youlookat ! Inv ;
+       IndirQ => youlookat ! Dir
        } ;
      s2 = lookat.s3
     } ;
@@ -927,11 +1004,11 @@ oper
   RelClause   : Type = {s : Bool => SForm => Agr => Str} ;
   RelSentence : Type = {s :                  Agr => Str} ;
 
+------ relg
   relVerbPhrase : RelPron -> VerbGroup -> RelClause = \who,walks ->
-    {s = \\b,sf,a => 
-      let wa = fromAgr a in
-      (predVerbGroupClause (relNounPhrase who wa.g wa.n) walks).s ! Dir
-    ! b ! sf
+    {s = \\b,sf,a => [] 
+----      let wa = fromAgr a in
+----      (predVerbGroupClause (relNounPhrase who wa.g wa.n) walks).s  ! Dir ! b ! sf
     } ;
 
 --- TODO: full tense variation in relative clauses.
@@ -1056,7 +1133,7 @@ oper
        IndirQ => cl.s ! Dir ! b ! c
        }
     } ;
-
+{- --vg
   questVerbPhrase : NounPhrase -> VerbGroup -> Question = 
     questVerbPhrase' False ;
 
@@ -1080,16 +1157,35 @@ oper
                 (predVerbGroupClause John walk).s ! Dir ! b ! cl
       }
     } ;
+  -- vg -}
 
 --3 Wh-questions
 --
 -- Wh-questions are of two kinds: ones that are like $NP - VP$ sentences,
 -- others that are line $S/NP - NP$ sentences.
 
+  intNounPhrase : IntPron -> NounPhrase = \who -> 
+    {s = who.s ; a = toAgr who.n P3 who.g} ;
+
+  predBeGroupQ : IntPron -> Complement -> Question = \who,old ->
+    let whoisold = predBeGroup (intNounPhrase who) old
+    in
+    {s = \\b,sf,_ => whoisold.s ! Dir ! b ! sf} ;
+
+{- --vg
   intVerbPhrase : IntPron -> VerbGroup -> Question = \who,walk ->
     let 
-      who : NounPhrase = {s = who.s ; a = toAgr who.n P3 who.g} ;
+      who : NounPhrase =  {s = who.s ; a = toAgr who.n P3 who.g} ;
       whowalks : Clause = predVerbGroupClause who walk
+    in
+    {s = \\b,sf,_ => whowalks.s ! Dir ! b ! sf} ;
+
+  --vg -}
+
+  intVerbClause : IntPron -> Verb -> Complement -> Question = \who,walk,here ->
+    let 
+      who : NounPhrase =  {s = who.s ; a = toAgr who.n P3 who.g} ;
+      whowalks : Clause = predVerbClause who walk here
     in
     {s = \\b,sf,_ => whowalks.s ! Dir ! b ! sf} ;
 

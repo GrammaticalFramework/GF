@@ -1,16 +1,17 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : HelpFile
+-- Maintainer  : Aarne Ranta
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
+-- > CVS $Date $
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Help on shell commands. Generated from HelpFile by 'make help'.
 -----------------------------------------------------------------------------
+
 
 module HelpFile where
 
@@ -52,7 +53,6 @@ txtHelpFile =
   "\n      -old          old: parse in GF<2.0 format (not necessary)" ++
   "\n      -v            verbose: give lots of messages " ++
   "\n      -s            silent: don't give error messages" ++
-  "\n      -opt          perform branch-sharing optimization" ++
   "\n      -src          source: ignore precompiled gfc and gfr files" ++
   "\n      -retain       retain operations: read resource modules (needed in comm cc) " ++
   "\n      -nocf         don't build context-free grammar (thus no parser)" ++
@@ -65,6 +65,7 @@ txtHelpFile =
   "\n      -cnc          set the name used for concrete syntax (with -old option)" ++
   "\n      -res          set the name used for resource (with -old option)" ++
   "\n      -path         use the (colon-separated) search path to find modules" ++
+  "\n      -optimize     select an optimization to override file-defined flags" ++
   "\n  examples:" ++
   "\n      i English.gf                      -- ordinary import of Concrete" ++
   "\n      i -retain german/ParadigmsGer.gf  -- import of Resource to test" ++
@@ -453,6 +454,15 @@ txtHelpFile =
   "\n" ++
   "\n-number, the maximum number of generated items in a list. " ++
   "\n       The default is unlimited." ++
+  "\n" ++
+  "\n-optimize, optimization on generated code." ++
+  "\n       The default is share." ++
+  "\n    -optimize=share        share common branches in tables" ++
+  "\n    -optimize=parametrize  first try parametrize then do share with the rest" ++
+  "\n    -optimize=values       represent tables as courses-of-values" ++
+  "\n    -optimize=all          first try parametrize then do values with the rest" ++
+  "\n    -optimize=none         no optimization" ++
+  "\n" ++
   "\n" ++
   "\n-parser, Context-free    parsing algorithm. The default is chart." ++
   "\n    -parser=earley       Earley algorithm" ++

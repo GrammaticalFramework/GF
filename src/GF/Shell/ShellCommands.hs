@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
 
 module ShellCommands where
@@ -130,6 +130,7 @@ testValidFlag st co f x = case f of
   "transform" -> testInc customTermCommand
   "filter"  -> testInc customStringCommand
   "length"  -> testN
+  "optimize"-> testIn $ words "parametrize values all share none"
   _ -> return ()
  where
    testInc ci = 
@@ -148,8 +149,8 @@ testValidFlag st co f x = case f of
 
 optionsOfCommand :: Command -> ([String],[String])
 optionsOfCommand co = case co of
-  CImport _ -> both "old v s opt val src retain nocf nocheckcirc cflexer noemit o"
-                    "abs cnc res path"
+  CImport _ -> both "old v s src retain nocf nocheckcirc cflexer noemit o"
+                    "abs cnc res path optimize"
   CRemoveLanguage _ -> none
   CEmptyState -> none
   CStripState -> none

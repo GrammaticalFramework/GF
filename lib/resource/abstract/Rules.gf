@@ -212,8 +212,6 @@ fun
   ExistCN    : CN -> Cl ;                       -- "there is a bar"
   ExistNumCN : Num -> CN -> Cl ;                -- "there are (86) bars"
 
---- The type signatures of these ones should be changed from VP to VPI.
-
-  OneVP        : VP -> Cl ;                     -- "one walks"
+  OneNP      : NP ;                             -- "one (walks)"
 
 } ;

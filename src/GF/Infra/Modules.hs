@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Datastructures and functions for modules, common to GF and GFC.
 -----------------------------------------------------------------------------
 
 module Modules where
@@ -90,6 +90,11 @@ replaceJudgements (Module mt ms fs me ops _) js = Module mt ms fs me ops js
 addOpenQualif :: i -> i -> Module i f t -> Module i f t
 addOpenQualif i j (Module mt ms fs me ops js) = 
   Module mt ms fs me (oQualif i j : ops) js
+
+flagsModule :: (i,ModInfo i f a) -> [f]
+flagsModule (_,mi) = case mi of
+  ModMod m -> flags m
+  _ -> []
 
 allFlags :: MGrammar i f a -> [f]
 allFlags gr = concat $ map flags $ reverse [m | (_, ModMod m) <- modules gr]
