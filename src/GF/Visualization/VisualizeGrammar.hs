@@ -4,15 +4,21 @@ module VisualizeGrammar where
 import qualified Modules as M
 import GFC
 import Ident
+import Grammar (SourceGrammar)
 
-import Data.List (intersperse)
+import Data.List (intersperse, nub)
 import Data.Maybe (maybeToList)
 
-data GrType = GrAbstract | GrConcrete | GrResource
+data GrType = GrAbstract 
+	    | GrConcrete 
+	    | GrResource 
+	    | GrInterface
+	    | GrInstance
 	    deriving Show
 
 data Node = Node { 
 		  label :: String,
+		  url :: String,
 		  grtype :: GrType,
 		  extends :: [String],
 		  opens :: [String],
@@ -21,28 +27,40 @@ data Node = Node {
 		  deriving Show
 
 
-visualizeGrammar :: CanonGrammar -> String
-visualizeGrammar gr = prGraph ns
-    where
-    ns = [ toNode i m | (i,M.ModMod m) <- M.modules gr ]
+visualizeCanonGrammar :: CanonGrammar -> String
+visualizeCanonGrammar = prGraph . canon2graph
 
-toNode :: Ident -> M.Module Ident f Info -> Node
+visualizeSourceGrammar :: SourceGrammar -> String
+visualizeSourceGrammar = prGraph . source2graph
+
+canon2graph :: CanonGrammar -> [Node]
+canon2graph gr = [ toNode i m | (i,M.ModMod m) <- M.modules gr ]
+
+source2graph :: SourceGrammar -> [Node]
+source2graph gr = [ toNode i m | (i,M.ModMod m) <- M.modules gr ] -- FIXME: handle ModWith
+
+toNode :: Ident -> M.Module Ident f i -> Node
 toNode i m = Node {
-		   label = prIdent i,
+		   label = l,
+		   url = l ++ ".gf", -- FIXME: might be in a different directory
 		   grtype = t,
 		   extends = map prIdent (M.extends m),
-		   opens = map openName (M.opens m),
+		   opens = nub $ map openName (M.opens m), -- FIXME: nub is needed because of triple open with 
+		                                           -- instance modules
 		   implements = is
 		  }
     where 
+    l = prIdent i
     (t,is) = case M.mtype m of
 			  M.MTAbstract -> (GrAbstract, Nothing)
+			  M.MTTransfer _ _ -> error "Can't visualize transfer modules yet" -- FIXME
 			  M.MTConcrete i -> (GrConcrete, Just (prIdent i))
 			  M.MTResource -> (GrResource, Nothing)
-			  M.MTTransfer _ _ -> 
-			      -- FIXME
-			      error "Can't visualize transfer modules yet"
-    
+			  M.MTInterface -> (GrInterface, Nothing)
+			  M.MTInstance i -> (GrInstance, Just (prIdent i))
+			  M.MTReuse rt -> error "Can't visualize reuse modules yet" -- FIXME
+			  M.MTUnion _ _ -> error "Can't visualize union modules yet" -- FIXME
+
 openName :: M.OpenSpec Ident -> String
 openName (M.OSimple q i) = prIdent i
 openName (M.OQualif q i _) = prIdent i
@@ -54,25 +72,28 @@ prNode :: Node -> String
 prNode n = concat (map (++";\n") stmts)
     where 
     l = label n
+    t = grtype n
     stmts = [l ++ " [" ++ prAttributes attrs ++ "]"]
-	    ++ map (prExtend l) (extends n)
+	    ++ map (prExtend t l) (extends n)
 	    ++ map (prOpen l) (opens n)
-	    ++ map (prImplement l) (maybeToList (implements n))
-    style = case grtype n of
-			  GrAbstract -> "solid"
-			  GrConcrete -> "dashed"
-			  GrResource -> "dotted"
-    attrs = [("style",style),("URL", l++".gf")] -- FIXME: might be in a different directory
+	    ++ map (prImplement t l) (maybeToList (implements n))
+    (shape,style) = case t of
+			   GrAbstract  -> ("ellipse","solid")
+			   GrConcrete  -> ("box","dashed")
+			   GrResource  -> ("ellipse","dashed")
+			   GrInterface -> ("ellipse","dotted")
+			   GrInstance  -> ("diamond","dotted")
+    attrs = [("style", style),("shape", shape),("URL", url n)]
 
 
-prExtend :: String -> String -> String
-prExtend f t = prEdge f t []
+prExtend :: GrType -> String -> String -> String
+prExtend g f t = prEdge f t [("style","solid")]
 
 prOpen :: String -> String -> String
 prOpen f t = prEdge f t [("style","dotted")]
 
-prImplement :: String -> String -> String
-prImplement f t = prEdge f t [("arrowhead","empty"),("style","dashed")]
+prImplement :: GrType -> String -> String -> String
+prImplement g f t = prEdge f t [("arrowhead","empty"),("style","dashed")]
 
 prEdge :: String -> String -> [(String,String)] -> String
 prEdge f t as = f ++ " -> " ++ t ++ " [" ++ prAttributes as ++ "]"
