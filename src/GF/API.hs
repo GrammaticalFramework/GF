@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:06 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.27 $
+-- > CVS $Date: 2005/03/08 15:31:22 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.28 $
 --
 -- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 -----------------------------------------------------------------------------
@@ -298,17 +298,20 @@ optPrintGrammar :: Options -> StateGrammar -> String
 optPrintGrammar opts = customOrDefault opts grammarPrinter customGrammarPrinter
 
 optPrintMultiGrammar :: Options -> CanonGrammar -> String
-optPrintMultiGrammar opts = pmg . encode
+optPrintMultiGrammar opts = pmg . encodeId . encode
     where 
     pmg = customOrDefault opts grammarPrinter customMultiGrammarPrinter
     -- if -utf8 was given, convert from language specific codings
     encode = if oElem useUTF8 opts then mapModules moduleToUTF8 else id
+    -- if -utf8id was given, convert identifiers to UTF8
+    encodeId = if oElem useUTF8id opts then grammarIdentsToUTF8 else id
     moduleToUTF8 m = 
 	m{ jments = mapTree (onSnd (mapInfoTerms code)) (jments m),
 	   flags = setFlag "coding" "utf8" (flags m) }
 	where code = onTokens (anyCodingToUTF8 (moduleOpts m))
 	      moduleOpts = Opts . okError . mapM CG.redFlag . flags
-
+    grammarIdentsToUTF8 mgr 
+	= MGrammar [ (identToUTF8 i, mapIdents identToUTF8 mi) | (i,mi) <- modules mgr]
 
 optPrintSyntax :: Options -> GF.Grammar -> String
 optPrintSyntax opts = customOrDefault opts grammarPrinter customSyntaxPrinter
@@ -366,3 +369,26 @@ optDecodeUTF8 gr = case getOptVal (stateOptions gr) uniCoding of
 anyCodingToUTF8 :: Options -> String -> String
 anyCodingToUTF8 opts = 
     encodeUTF8 . customOrDefault opts uniCoding customUniCoding
+
+{-
+-- | Convert all text not inside double quotes to UTF8
+nonLiteralsToUTF8 :: String -> String
+nonLiteralsToUTF8 "" = ""
+nonLiteralsToUTF8 ('"':cs) = '"' : l ++ nonLiteralsToUTF8 rs
+    where (l,rs) = takeStringLit cs
+nonLiteralsToUTF8 (c:cs) = encodeUTF8 [c] : nonLiteralsToUTF8 cs 
+  where
+  -- | Split off an initial string ended by double quotes
+  takeStringLit :: String -> (String,String)
+  takeStringLit "" = ("","")
+  takeStringLit
+-}
+
+-- | Convert an identifier in unicode to UTF8 encoding
+identToUTF8 :: I.Ident -> I.Ident
+identToUTF8 i = case i of
+		I.IC s -> I.IC (encodeUTF8 s)
+		I.IW -> I.IW
+		I.IV (i,s) -> I.IV (i, encodeUTF8 s)
+	        I.IA (s,i) -> I.IA (encodeUTF8 s, i)
+		I.IAV (s,i1,i2) -> I.IAV (encodeUTF8 s, i2, i2)

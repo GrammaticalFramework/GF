@@ -81,7 +81,8 @@ pm, print_multigrammar: pm
       Prints the current multilingual grammar in .gfcm form.
       (Automatically executes the strip command (s) before doing this.)
   options:
-      -utf8  apply UTF8-encoding to the grammar
+      -utf8  apply UTF8 encoding to the tokens in the grammar
+      -utf8id apply UTF8 encoding to the identifiers in the grammar
       -graph print module dependency graph in 'dot' format
   examples:
       pm | wf Letter.gfcm  -- print the grammar into the file Letter.gfcm

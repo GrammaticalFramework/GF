@@ -1,6 +1,7 @@
 concrete NumeralsSwe of Numerals = open MorphoSwe, Prelude in {
 
 lincat 
+  Numeral = { s : Str } ;
   Digit = {s : DForm => Str} ;
   Sub10 = {s : DForm => Str} ;
 

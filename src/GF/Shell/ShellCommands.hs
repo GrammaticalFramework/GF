@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/25 15:35:48 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.24 $
+-- > CVS $Date: 2005/03/08 15:31:22 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.25 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -183,7 +183,7 @@ optionsOfCommand co = case co of
   CSystemCommand _ -> none
 
   CPrintGrammar -> both "utf8" "printer lang"
-  CPrintMultiGrammar -> both "utf8" "printer"
+  CPrintMultiGrammar -> both "utf8 utf8id" "printer"
   CPrintSourceGrammar -> both "utf8" "printer"
 
   CHelp _ -> opts "all filter length lexer unlexer printer transform depth number"
