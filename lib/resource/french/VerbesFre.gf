@@ -4,93 +4,95 @@
 -- Translated to GF by Aarne Ranta
 
 concrete VerbesFre of VerbesAbs = --- CategoriesFre ** 
-  open TypesFre, ConjugNancy in {
+  open TypesFre, MorphoFre, ConjugNancy in {
 
 lincat VN = {s : VForm => Str} ; --- aux : VAux} ;
 
-{- --- remove deficient verbs
+-- {- --- remove deficient verbs
 
-lin accroireVN = v_nancy100 "accroire" ;
-lin accroîtreVN = v_nancy100 "accroître" ;
-lin advenirVN = v_nancy100 "advenir" ;
-lin apparoirVN = v_nancy100 "apparoir" ;
-lin arguerVN = v_nancy100 "arguer" ;
-lin assavoirVN = v_nancy100 "assavoir" ;
-lin avenirVN = v_nancy100 "avenir" ;
-lin bienvenirVN = v_nancy100 "bienvenir" ;
-lin braireVN = v_nancy100 "braire" ;
-lin bruireVN = v_nancy100 "bruire" ;
-lin chaloirVN = v_nancy100 "chaloir" ;
-lin comparoirVN = v_nancy100 "comparoir" ;
-lin contredireVN = v_nancy100 "contredire" ;
-lin contrefoutreVN = v_nancy100 "contrefoutre" ;
-lin corrompreVN = v_nancy100 "corrompre" ;
-lin courbaturerVN = v_nancy100 "courbaturer" ;
-lin courreVN = v_nancy100 "courre" ;
-lin déchoirVN = v_nancy100 "déchoir" ;
-lin décloreVN = v_nancy100 "déclore" ;
-lin décroîtreVN = v_nancy100 "décroître" ;
-lin dédireVN = v_nancy100 "dédire" ;
-lin dépourvoirVN = v_nancy100 "dépourvoir" ;
-lin douerVN = v_nancy100 "douer" ;
-lin échoirVN = v_nancy100 "échoir" ;
-lin écloreVN = v_nancy100 "éclore" ;
-lin émouvoirVN = v_nancy100 "émouvoir" ;
-lin encloreVN = v_nancy100 "enclore" ;
-lin endêverVN = v_nancy100 "endêver" ;
-lin ensuivreVN = v_nancy100 "ensuivre" ;
-lin esterVN = v_nancy100 "ester" ;
-lin férirVN = v_nancy100 "férir" ;
-lin forcloreVN = v_nancy100 "forclore" ;
-lin forfaireVN = v_nancy100 "forfaire" ;
-lin foutreVN = v_nancy100 "foutre" ;
-lin frireVN = v_nancy100 "frire" ;
-lin gésirVN = v_nancy100 "gésir" ;
-lin inclureVN = v_nancy100 "inclure" ;
-lin interdireVN = v_nancy100 "interdire" ;
-lin interrompreVN = v_nancy100 "interrompre" ;
-lin issirVN = v_nancy100 "issir" ;
-lin luireVN = v_nancy100 "luire" ;
-lin malfaireVN = v_nancy100 "malfaire" ;
-lin maudireVN = v_nancy100 "maudire" ;
-lin médireVN = v_nancy100 "médire" ;
-lin méfaireVN = v_nancy100 "méfaire" ;
-lin messeoirVN = v_nancy100 "messeoir" ;
-lin occireVN = v_nancy100 "occire" ;
-lin occlureVN = v_nancy100 "occlure" ;
-lin paîtreVN = v_nancy100 "paître" ;
-lin parfaireVN = v_nancy100 "parfaire" ;
-lin partirVN = v_nancy100 "partir" ;
-lin prédireVN = v_nancy100 "prédire" ;
-lin prévaloirVN = v_nancy100 "prévaloir" ;
-lin prévoirVN = v_nancy100 "prévoir" ;
-lin promouvoirVN = v_nancy100 "promouvoir" ;
-lin querirVN = v_nancy100 "querir" ;
-lin quérirVN = v_nancy100 "quérir" ;
-lin raserVN = v_nancy100 "raser" ;
-lin rassirVN = v_nancy100 "rassir" ;
-lin ravoirVN = v_nancy100 "ravoir" ;
-lin reclureVN = v_nancy100 "reclure" ;
-lin recroîtreVN = v_nancy100 "recroître" ;
-lin reluireVN = v_nancy100 "reluire" ;
-lin renaîtreVN = v_nancy100 "renaître" ;
-lin repaîtreVN = v_nancy100 "repaître" ;
-lin résoudreVN = v_nancy100 "résoudre" ;
-lin résulterVN = v_nancy100 "résulter" ;
-lin rompreVN = v_nancy100 "rompre" ;
-lin saillirVN = v_nancy100 "saillir" ;
-lin seoirVN = v_nancy100 "seoir" ;
-lin sortirVN = v_nancy100 "sortir" ;
-lin sourdreVN = v_nancy100 "sourdre" ;
-lin stupéfaireVN = v_nancy100 "stupéfaire" ;
-lin suffireVN = v_nancy100 "suffire" ;
-lin taireVN = v_nancy100 "taire" ;
-lin tistreVN = v_nancy100 "tistre" ;
-lin titreVN = v_nancy100 "titre" ;
-lin urgerVN = v_nancy100 "urger" ;
+lin accroireVN = v_nancy100inf "accroire" ; -- seul infin
+lin accroîtreVN = v_nancy73 "accroître" ; --- diff î
+lin advenirVN = v_nancy23 "advenir" ;  --- infin et 3 pers
+--- lin apparoirVN = v_nancy100 "apparoir" ;  -- infin, 3sg pres appert
+lin arguerVN = v_nancy6 "arguer" ;        
+lin assavoirVN = v_nancy100inf "assavoir" ; -- seul inf
+--- lin avenirVN = v_nancy23 "avenir" ; --- seul part.pres
+lin bienvenirVN = v_nancy100inf "bienvenir" ; --- seul inf
+lin braireVN = v_nancy61 "braire" ;
+--- lin bruireVN = v_nancy100 "bruire" ; --- conj2Finir
+--- lin chaloirVN = v_nancy100 "chaloir" ; --- 3p, chaut
+--- lin comparoirVN = v_nancy100 "comparoir" ; --- infint, pr.pt comparant
+lin contredireVN = v_nancy78 "contredire" ;
+lin contrefoutreVN = v_nancy53 "contrefoutre" ;
+lin corrompreVN = v_nancy53 "corrompre" ;
+lin courbaturerVN = v_nancy6 "courbaturer" ; --- alt. pp courbatu
+lin courreVN = v_nancy100inf "courre" ;
+lin déchoirVN = v_nancy52 "déchoir" ; --- incompl
+lin décloreVN = v_nancy70 "déclore" ; --- seul inf et pp
+lin décroîtreVN = v_nancy67 "décroître" ;
+lin dédireVN = v_nancy78 "dédire" ;
+lin dépourvoirVN = v_nancy40 "dépourvoir" ;
+--- lin douerVN = v_nancy6 "douer" ; --- seul pp
+lin échoirVN = v_nancy52 "échoir" ;
+lin écloreVN = v_nancy70 "éclore" ;
+lin émouvoirVN = v_nancy44 "émouvoir" ;
+lin encloreVN = v_nancy70 "enclore" ;
+lin endêverVN = v_nancy100inf "endêver" ;
+lin ensuivreVN = v_nancy75 "ensuivre" ; --- seul inf, p pres, 3. pers 
+lin esterVN = v_nancy100inf "ester" ;
+--- lin férirVN = v_nancy100 "férir" ; --- seul "sans coup férir", "féru de"
+--- lin forcloreVN = v_nancy100 "forclore" ; --- seul inf, pp
+lin forfaireVN = v_nancy62 "forfaire" ; --- incompl
+lin foutreVN = v_nancy53 "foutre" ; --- incompl
+lin frireVN = v_nancy81 "frire" ; --- incompl
+lin gésirVN = mkNV (conj3gésir "gésir") ;
+lin inclureVN = v_nancy71 "inclure" ;
+lin interdireVN = v_nancy78 "interdire" ;
+lin interrompreVN = v_nancy53 "interrompre" ;
+--- lin issirVN = v_nancy100 "issir" ; --- seul pp issu
+lin luireVN = v_nancy82 "luire" ;
+lin malfaireVN = v_nancy100inf "malfaire" ;
+--- lin maudireVN = v_nancy100 "maudire" ; --- finir sauf pp maudit
+lin médireVN = v_nancy78 "médire" ; --- sauf médisez
+lin méfaireVN = v_nancy100inf "méfaire" ;
+lin messeoirVN = v_nancy50 "messeoir" ;
+--- lin occireVN = v_nancy100 "occire" ; --- seul inf, pp occis
+lin occlureVN = v_nancy71 "occlure" ;
+lin paîtreVN = v_nancy66 "paître" ;
+--- lin parfaireVN = v_nancy62 "parfaire" ; --- seul inf,  pp
+-- lin partirVN = v_nancy100 "partir" ; -- entrée séparée pour v trans
+lin prédireVN = v_nancy78 "prédire" ;
+lin prévaloirVN = v_nancy47 "prévaloir" ;
+lin prévoirVN = v_nancy39 "prévoir" ;
+lin promouvoirVN = v_nancy44 "promouvoir" ; --- incompl
+-- lin querirVN = v_nancy100 "querir" ; -- non dans B ; typo ?
+lin quérirVN = v_nancy100inf "quérir" ;
+lin raserVN = v_nancy6 "raser" ;
+--- lin rassirVN = v_nancy100 "rassir" ; --- inf, pp rassi
+lin ravoirVN = v_nancy100inf "ravoir" ;
+--- lin reclureVN = v_nancy100 "reclure" ; --- inf, pp reclus
+lin recroîtreVN = v_nancy67 "recroître" ;
+lin reluireVN = v_nancy82 "reluire" ;
+lin renaîtreVN = v_nancy65 "renaître" ; --- rare pp
+lin repaîtreVN = v_nancy66 "repaître" ;
+lin résoudreVN = mkNV (conj3résoudre "résoudre") ;
+lin résulterVN = v_nancy6 "résulter" ; --- incompl
+lin rompreVN = v_nancy53 "rompre" ;
 
-lin saillirVN = v_nancy10 "saillir" ;
--}
+lin saillirVN = v_nancy29 "saillir" ; --- incompl
+lin saillir2VN = v_nancy10 "saillir" ; --- incompl
+
+-- lin seoirVN = mkNV (conj3seoir "seoir") ; -- duplic
+--- lin sortirVN = v_nancy100 "sortir" ; -- juridique, sortissait
+--- lin sourdreVN = v_nancy100 "sourdre" ; --- incompl: seul 3pers indic
+--- lin stupéfaireVN = v_nancy100 "stupéfaire" ; --- incompl
+lin suffireVN = v_nancy81 "suffire" ;
+lin taireVN = v_nancy63 "taire" ;
+--- lin tistreVN = v_nancy100 "tistre" ; --- seul pp tissu
+--- lin titreVN = v_nancy100 "titre" ;   --- variante de tistre
+lin urgerVN = v_nancy8 "urger" ;  --- seul 3 pres
+
+
 
 
 lin accéderVN = v_nancy10 "accéder" ;
