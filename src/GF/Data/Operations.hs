@@ -168,6 +168,14 @@ updatePerhaps old p1 p2 = case (p1,p2) of
   (_, May a)        -> Bad "strange indirection"
   _ -> unifPerhaps p1 p2
 
+-- here the value is copied instead of referred to; used for oper types
+updatePerhapsHard :: b -> Perhaps a b -> Perhaps a b -> Err (Perhaps a b)
+updatePerhapsHard old p1 p2 = case (p1,p2) of
+  (Yes a,    Nope)  -> return $ yes a
+  (May older,Nope)  -> return $ may older
+  (_, May a)        -> Bad "strange indirection"
+  _ -> unifPerhaps p1 p2
+
 -- binary search trees
 
 data BinTree a = NT | BT a (BinTree a) (BinTree a) deriving (Show,Read)

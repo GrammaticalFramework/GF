@@ -17,6 +17,7 @@ lookupResDef gr m c = do
       info <- lookupInfo mo c
       case info of
         ResOper _ (Yes t) -> return $ qualifAnnot m t 
+        ResOper _ Nope    -> return $ Q m c
         AnyInd _ n        -> lookupResDef gr n c
         ResParam _        -> return $ QC m c
         ResValue _        -> return $ QC m c
@@ -31,6 +32,7 @@ lookupResType gr m c = do
       info <- lookupInfo mo c
       case info of
         ResOper (Yes t) _ -> return $ qualifAnnot m t
+        ResOper (May n) _ -> lookupResType gr n c
         AnyInd _ n        -> lookupResType gr n c
         ResParam _        -> return $ typePType
         ResValue (Yes t)  -> return $ qualifAnnotPar m t

@@ -101,7 +101,7 @@ checkResInfo gr (c,info) = do
            ty'     <- check ty typeType >>= comp . fst
            (de',_) <- check de ty'
            return (Yes ty', Yes de')
-         (Nope, Yes de) -> do
+         (_, Yes de) -> do
            (de',ty') <- infer de
            return (Yes ty', Yes de')
          _ -> return (pty, pde) --- other cases are uninteresting
@@ -610,6 +610,10 @@ checkEqLType env t u trm = do
      (Q  m a, Q  n b) | a == b -> elem m (allExtends env n) 
                                || elem n (allExtends env m)
      (QC m a, QC n b) | a == b -> elem m (allExtends env n) 
+                               || elem n (allExtends env m)
+     (QC m a, Q  n b) | a == b -> elem m (allExtends env n) 
+                               || elem n (allExtends env m)
+     (Q  m a, QC n b) | a == b -> elem m (allExtends env n) 
                                || elem n (allExtends env m)
 
      (RecType rs, RecType ts) -> and [alpha g a b && l == k --- too strong req
