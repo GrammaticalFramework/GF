@@ -8,8 +8,8 @@ GHCOPTFLAGS=-O2 $(GHCFLAGS)
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
 
-HUGSINCLUDE    =.:{Hugs}/libraries:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:newparsing:cfgm:speech:visualization:
 BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -inewparsing -iparsers -icfgm -ispeech -ivisualization
+
 GHCINCLUDE     =-ifor-ghc       $(BASICINCLUDE)
 GHCINCLUDENOFUD=-ifor-ghc-nofud $(BASICINCLUDE) 
 GHCINCLUDEGFT  =-ifor-gft       $(BASICINCLUDE) 
@@ -78,10 +78,8 @@ justwindows:
 
 nofud-links:
 	mkdir -p for-ghc-nofud
-	rm -f for-ghc-nofud/*.hs
+	rm -f for-ghc-nofud/Arch.hs
 	ln -s ../for-ghc/Arch.hs for-ghc-nofud
-	ln -s ../for-hugs/ArchEdit.hs for-ghc-nofud
-
 
 api: 
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) API.hs
@@ -100,8 +98,6 @@ distclean: clean
 	-rm -f *.tgz *.zip
 	-rm -rf $(DIST_DIR) $(BIN_DIST_DIR)
 
-hugs:
-	hugs -h10M -P$(HUGSINCLUDE)
 ghci-nofud:
 	$(GHCI) $(GHCFLAGS) $(GHCINCLUDENOFUD)
 today:

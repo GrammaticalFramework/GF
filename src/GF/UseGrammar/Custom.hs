@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/29 11:17:56 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.48 $
+-- > CVS $Date: 2005/03/29 13:26:37 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.49 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -84,8 +84,6 @@ import PrintCFGrammar (prCanonAsCFGM)
 import VisualizeGrammar (visualizeCanonGrammar, visualizeSourceGrammar)
 
 import MyParser
-
-import MoreCustom -- either small/ or big/. The one in Small is empty.
 
 import UseIO
 
@@ -220,7 +218,6 @@ customGrammarParser =
 ------   (strCI "gf",  compileModule noOptions) -- DEFAULT
 -- add your own grammar parsers here
   ] 
-  ++ moreCustomGrammarParser
 
 
 customGrammarPrinter = 
@@ -263,7 +260,6 @@ customGrammarPrinter =
   ,(strCI "finite",     prCanon . Fin.convertGrammar . stateGrammarST)
 --- also include printing via grammar2syntax!
   ] 
-  ++ moreCustomGrammarPrinter
 
 customMultiGrammarPrinter = 
   customData "Printers for multiple grammars, selected by option -printer=x" $
@@ -273,7 +269,6 @@ customMultiGrammarPrinter =
   ,(strCI "cfgm", prCanonAsCFGM)
   ,(strCI "graph", visualizeCanonGrammar)
   ]
-  ++ moreCustomMultiGrammarPrinter
 
 
 customSyntaxPrinter = 
@@ -281,7 +276,6 @@ customSyntaxPrinter =
   [ 
 -- add your own grammar printers here
   ] 
-  ++ moreCustomSyntaxPrinter
 
 
 customTermPrinter = 
@@ -290,7 +284,6 @@ customTermPrinter =
     (strCI "gf",     const prt) -- DEFAULT
 -- add your own term printers here
   ]
-  ++ moreCustomTermPrinter
 
 customTermCommand = 
   customData "Term transformers, selected by option -transform=x" $
@@ -320,7 +313,6 @@ customTermCommand =
 ---  ,(strCI "delete",     \g t -> [MM.mExp0])
 -- add your own term commands here
   ]
-  ++ moreCustomTermCommand
 
 customEditCommand = 
   customData "Editor state transformers, selected by option -edit=x" $
@@ -335,7 +327,6 @@ customEditCommand =
   ,(strCI "transfer",   const return) --- done ad hoc on top level
 -- add your own edit commands here
   ]
-  ++ moreCustomEditCommand
 
 customStringCommand = 
   customData "String filters, selected by option -filter=x" $
@@ -349,24 +340,18 @@ customStringCommand =
   ,(strCI "length",    const $ show . length)
 -- add your own string commands here
   ]
-  ++ moreCustomStringCommand
 
 customParser = 
   customData "Parsers, selected by option -parser=x" $
   [
-   (strCI "chart",    chartParser . stateCF)
+   (strCI "chart",  PCF.parse "ibn" . stateCF)
+  ,(strCI "old",    chartParser . stateCF)
   ,(strCI "myparser", myParser)
 -- add your own parsers here
   ]
   -- 31/5-04, peb:
-  ++ [ (strCI ("new"++name), PCF.parse descr . stateCF) |
+  ++ [ (strCI ("chart"++name), PCF.parse descr . stateCF) |
        (descr, names) <- PCF.alternatives, name <- names ]
-  -- 21/5-04, peb:
-  -- ++ [ (strCI ("new"++name), newChartParser descr . stateCF) |
-  --      (descr, names) <- newChartParserAlternatives, name <- names ]
-  -- ++ [ (strCI ("newer"++name), newerChartParser descr . stateParserInfo) |
-  --      (descr, names) <- newerChartParserAlternatives, name <- names ]
-  ++ moreCustomParser
 
 customTokenizer = 
   customData "Tokenizers, selected by option -lexer=x" $
@@ -385,7 +370,6 @@ customTokenizer =
   ,(strCI "codeCHigh", const $ lexC2M' True)
 -- add your own tokenizers here
   ]
-  ++ moreCustomTokenizer
 
 customUntokenizer = 
   customData "Untokenizers, selected by option -unlexer=x" $
@@ -402,7 +386,6 @@ customUntokenizer =
   ,(strCI "bind",      const $ performBinds) -- backward compat
 -- add your own untokenizers here
   ]
-  ++ moreCustomUntokenizer
 
 customUniCoding = 
   customData "Alphabet codings, selected by option -coding=x" $
@@ -424,4 +407,3 @@ customUniCoding =
   ,(strCI "extendedarabic",   mkExtendedArabic)
   ,(strCI "extradiacritics",  mkExtraDiacritics)
   ]
-  ++ moreCustomUniCoding
