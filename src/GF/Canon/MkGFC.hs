@@ -58,6 +58,7 @@ canon2grammar (Gr modules) = M.MGrammar $ map mod2info modules where
 grammar2canon :: CanonGrammar -> Canon
 grammar2canon (M.MGrammar modules) = Gr $ map info2mod modules 
 
+info2mod :: (Ident, M.ModInfo Ident Flag Info) -> Module
 info2mod m = case m of
     (a, M.ModMod (M.Module mt _ flags me os defs)) -> 
       let defs' = map info2def $ tree2list defs 
@@ -93,6 +94,7 @@ trCont cont = [(x,trExp t) | Decl x t <- cont]
 
 trFs = map trQIdent
 
+trExp :: Exp -> A.Term
 trExp t = case t of
   EProd x a b -> A.Prod x (trExp a) (trExp b)
   EAbs  x   b -> A.Abs  x (trExp b)
@@ -136,6 +138,7 @@ rtCont cont = [Decl (rtIdent x) (rtExp t) | (x,t) <- cont]
 
 rtFs = map rtQIdent
 
+rtExp :: A.Term -> Exp
 rtExp t = case t of
   A.Prod x a b -> EProd (rtIdent x) (rtExp a) (rtExp b)
   A.Abs  x   b -> EAbs  (rtIdent x) (rtExp b)
@@ -162,6 +165,7 @@ rtExp t = case t of
     _ -> error $ "MkGFC.rt not defined for" +++ show p
 
 
+rtQIdent :: (Ident, Ident) -> CIdent
 rtQIdent (m,c) = CIQ (rtIdent m) (rtIdent c)
 rtIdent x 
   | isWildIdent x = identC "h_" --- needed in declarations

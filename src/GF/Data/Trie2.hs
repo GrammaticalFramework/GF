@@ -30,6 +30,8 @@ newtype TrieT a b = TrieT ([(a,TrieT a b)],[b])
 newtype Trie a b = Trie (Map a (Trie a b), [b])
 
 emptyTrieT = TrieT ([],[])
+
+emptyTrie :: Trie a b
 emptyTrie = Trie (empty,[])
 
 optimize :: (Ord a,Eq b) => TrieT a b -> Trie a b

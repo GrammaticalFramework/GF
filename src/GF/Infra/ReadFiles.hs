@@ -161,12 +161,19 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
       CSRead -> gfcFile
       CSRes  -> gfrFile
 
+isGFC :: FilePath -> Bool
 isGFC = (== "gfc") . fileSuffix
 
+gfcFile :: FilePath -> FilePath
 gfcFile = suffixFile "gfc"
+
+gfrFile :: FilePath -> FilePath
 gfrFile = suffixFile "gfr"
+
+gfFile :: FilePath -> FilePath
 gfFile  = suffixFile "gf"
 
+resModName :: ModName -> ModName
 resModName = ('#':)
 
 -- to get imports without parsing the whole files
@@ -306,6 +313,7 @@ isOldFile f = do
 
 
 -- old GF tolerated newlines in quotes. No more supported!
+fixNewlines :: String -> String
 fixNewlines s = case s of
      '"':cs -> '"':mk cs
      c  :cs -> c:fixNewlines cs

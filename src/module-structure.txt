@@ -172,7 +172,7 @@ GF/
 		IncrementalChart
 		MCFGrammar		-> Grammar
 		MCFParserBasic
-		MCFRange
+		MCFRange                - obsolet
 		ParseCF
 		ParseCFG
 		ParseGFC
