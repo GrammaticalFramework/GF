@@ -5,10 +5,11 @@ import qualified AbsGFC as A
 import qualified Rename as R
 import GetTree
 import GFC
+--- import qualified Values as V
 import Values
 
 -----import GetGrammar
------import Compile
+import Compile
 import IOGrammar
 import Linear
 import Parsing
@@ -60,15 +61,14 @@ import System (system)
 type GFGrammar = StateGrammar
 type GFCat     = CFCat
 type Ident     = I.Ident
+--- type Tree      = V.Tree
 
 -- these are enough for many simple applications
 
-{- -----
 file2grammar :: FilePath -> IO GFGrammar
-file2grammar = do
-  egr <- appIOE $ optFile2grammar (iOpts [beSilent])
-  err putStrLn return egr
--}
+file2grammar file = do
+  egr <- appIOE $ optFile2grammar (iOpts [beSilent]) file
+  err (\s -> putStrLn s >> return emptyStateGrammar) return egr
 
 linearize :: GFGrammar -> Tree -> String
 linearize sgr = err id id . optLinearizeTree opts sgr where
@@ -118,17 +118,19 @@ transformGrammarFile opts file = do
 prIdent :: Ident -> String
 prIdent = prt
 
+string2GFCat :: String -> String -> GFCat
+string2GFCat = string2CFCat
+
 -- then stg for customizable and internal use
 
-{- -----
 optFile2grammar :: Options -> FilePath -> IOE GFGrammar
 optFile2grammar os f = do
-  gr <- ioeErr $ compileModule os f
-  return $ grammar2stateGrammar gr
+  gr <- compileModule os emptyShellState f
+  ioeErr $ grammar2stateGrammar os (fst gr)
 
 optFile2grammarE :: Options -> FilePath -> IOE GFGrammar
 optFile2grammarE = optFile2grammar
--}
+
 
 string2treeInState :: GFGrammar -> String -> State -> Err Tree
 string2treeInState gr s st = do
