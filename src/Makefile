@@ -84,7 +84,7 @@ distclean: clean
 	-rm -f java/gf-java.jar jgf
 	-rm -f util/gfdoc
 	-rm -f config.status config.mk config.log
-	-rm -f *.tar.gz *.zip
+	-rm -f *.tgz *.zip
 	-rm -rf $(DIST_DIR) $(BIN_DIST_DIR)
 
 hugs:
@@ -123,11 +123,11 @@ dist:
 	find $(DIST_DIR) -name .cvsignore -exec rm -f {} ';'
 	cd $(DIST_DIR)/grammars && sh mkLib.sh
 	cd $(DIST_DIR) && rm -rf $(NOT_IN_DIST)
-	gtar -zcf $(DIST_DIR).tar.gz $(DIST_DIR)
+	gtar -zcf $(DIST_DIR).tgz $(DIST_DIR)
 	rm -rf $(DIST_DIR)
 
 rpm: dist
-	rpmbuild -ta $(DIST_DIR).tar.gz
+	rpmbuild -ta $(DIST_DIR).tgz
 
 binary-dist: 
 	rm -rf $(BIN_DIST_DIR)
@@ -141,7 +141,7 @@ binary-dist:
 	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 INSTALL.binary $(BIN_DIST_DIR)/INSTALL
 	$(INSTALL) -m 0644 Makefile.binary $(BIN_DIST_DIR)/Makefile
-	gtar -zcf GF-$(PACKAGE_VERSION)-$(host).tar.gz $(BIN_DIST_DIR)
+	gtar -zcf GF-$(PACKAGE_VERSION)-$(host).tgz $(BIN_DIST_DIR)
 	rm -rf $(BIN_DIST_DIR)
 
 install-gf:
