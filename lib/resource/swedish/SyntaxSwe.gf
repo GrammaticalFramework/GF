@@ -121,6 +121,13 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
        {s3 = ["på att"]})
       (predVerbGroup True Simul verb) ;  
 
+  progressiveClause : NounPhrase -> VerbPhrase -> Clause = \np,vp ->
+    predVerbGroupClause np
+     (complVerbVerb 
+      (mkVerb "hålla" "håller" "håll"  "höll" "hållit" "hållen" ** 
+       {s3 = ["på att"]})
+      vp) ;
+
   strPrep : ComplPrep -> Str = \p -> case p of {
     CPnoPrep => [] ;
     CPav => "av" ;

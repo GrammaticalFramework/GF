@@ -33,6 +33,9 @@ fun
   SPredAV      : NP -> AV  ->VPI ->Cl ;       -- "John is eager to leave"
   SPredObjA2V  : NP -> A2V -> NP ->VPI ->Cl ; -- "John is easy for us to convince"
 
+  SPredProgVP  : NP -> VPI -> Cl ;            -- "he is eating"
+
+
   QPredV       : IP -> V  -> QCl ;             -- "who walks"
   QPredPassV   : IP -> V  -> QCl ;             -- "who is seen"
   QPredV2      : IP -> V2 -> NP -> QCl ;       -- "who sees Mary"

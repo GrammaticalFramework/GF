@@ -70,8 +70,6 @@ lin
 
 -- Formation of infinitival phrases.
 
-  ProgVG = progressiveVerbPhrase ;
-
   UseCl tp cl = {s = \\o => tp.s ++ cl.s ! tp.b ! ClFinite tp.t tp.a o} ;
   UseRCl tp cl = 
     {s = \\gn,p => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! gn ! p} ;

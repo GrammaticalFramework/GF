@@ -453,9 +453,13 @@ oper
 
 -- This is just an infinitival (or present participle) phrase
 
+
+param
+  VIForm = VIInfinit | VIPresPart ;
+
 oper
   VerbPhrase = {
-    s  : Agr => Str ;
+    s  : VIForm => Agr => Str ;
     s1 : Str -- "not" or []
     } ;
 
@@ -463,14 +467,17 @@ oper
 -- All negative verb phrase behave as auxiliary ones in questions.
 
   predVerbGroup : Bool -> Anteriority -> VerbGroup -> VerbPhrase = \b,ant,vg -> {
-    s  = \\a => vg.s2 ! b ! VInfinit ant ! a ; -- s1 is just neg for inf
+    s  = table {
+           VIInfinit => \\a => vg.s2 ! b ! VInfinit ant ! a ; -- s1 is just neg for inf
+           VIPresPart => \\a => vg.s2 ! b ! VPresPart ! a
+           } ;
     s1 = if_then_Str b [] "not"
     } ;
 
   predVerbGroupI : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase = 
     \b,ant,vg -> 
     let vp = predVerbGroup b ant.a vg in
-    {s = \\a => ant.s ++ vp.s ! a ;
+    {s = \\f,a => ant.s ++ vp.s ! f ! a ;
      s1 = vp.s1
     } ;
 
@@ -709,8 +716,11 @@ oper
     APl P3 => "themselves"
     } ;
 
-  progressiveVerbPhrase : VerbGroup -> VerbGroup = \vp ->
-    beGroup (vp.s2 ! True ! VPresPart) ; 
+  progressiveVerbPhrase : VerbPhrase -> VerbGroup = \vp ->
+    beGroup (vp.s ! VIPresPart) ; 
+
+  progressiveClause : NounPhrase -> VerbPhrase -> Clause = \np,vp ->
+    predBeGroup np (vp.s ! VIPresPart) ; 
 
 --- negation of prp ignored: "not" only for "be"
 
@@ -794,7 +804,7 @@ oper
        taux  = try.isAux ;
        to    = if_then_Str taux [] "to" ;
        torun : Agr => Str = 
-         \\a => run.s1 ++ to ++ run.s ! a  
+         \\a => run.s1 ++ to ++ run.s ! VIInfinit ! a  
     in
       if_then_else VerbGroup taux 
         (useVerb    try torun)
@@ -830,8 +840,8 @@ oper
         (\\a => be.s1 ++ be.s3 ++ dig.s ! AccP ++ be.s3 ++ be.s4 ++
                 simma.s1 ++ -- negation
               if_then_Str obj 
-                 (simma.s ! dig.a)
-                 (simma.s ! a)
+                 (simma.s ! VIInfinit ! dig.a)
+                 (simma.s ! VIInfinit ! a)
         ) ;
 
   transVerbVerb : VerbVerb -> TransVerb -> TransVerb = \vilja,hitta ->
@@ -846,7 +856,7 @@ oper
       (\\a => 
               grei.s ! AAdj ++ simma.s1 ++
               "to" ++
-              simma.s ! a) ;
+              simma.s ! VIInfinit ! a) ;
 
   complVerbAdj2 : 
     Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> VerbGroup = 
@@ -857,8 +867,8 @@ oper
               grei.s2 ++ dig.s ! AccP ++
               simma.s1 ++ "to" ++
               if_then_Str obj 
-                 (simma.s ! dig.a)
-                 (simma.s ! a)
+                 (simma.s ! VIInfinit ! dig.a)
+                 (simma.s ! VIInfinit ! a)
           ) ;
 
 
@@ -1127,7 +1137,7 @@ oper
          a = toAgr n P2 human ;
          dont = if_then_Str b [] "don't" 
        in
-       dont ++ walk.s ! a
+       dont ++ walk.s ! VIInfinit ! a
     } ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
@@ -1137,7 +1147,7 @@ oper
 -- "What do you want to do? - Wash myself."
 
   verbUtterance : VerbPhrase -> Utterance = \vp ->
-    ss (vp.s1 ++ vp.s ! ASgP1) ; 
+    ss (vp.s1 ++ vp.s ! VIInfinit ! ASgP1) ; 
 
 
 --2 Sentence adverbs

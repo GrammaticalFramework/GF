@@ -1,6 +1,6 @@
 --# -path=.:../scandinavian:../abstract:../../prelude
 
-concrete TestResourceNor of TestResource = RulesNor, StructuralNor **
+concrete TestResourceNor of TestResource = RulesNor, ClauseNor, StructuralNor **
   open Prelude, MorphoNor, SyntaxNor in {
 
 flags startcat=Phr ; lexer=text ; unlexer=text ;

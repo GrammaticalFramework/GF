@@ -87,10 +87,6 @@ lin
   UseA2S x = x ;
   UseA2V x = x ;
 
--- Formation of infinitival phrases.
-
-  ProgVG = progressiveVerbPhrase ;
-
   UseCl  tp cl = {s = tp.s ++ cl.s ! Dir ! tp.b ! VFinite tp.t tp.a} ;
   UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
   UseRCl tp cl = {s = \\a => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! a} ;
