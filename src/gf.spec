@@ -10,7 +10,7 @@ License: GPL
 Group: Sciences/Other
 Vendor: The Language Technology Group
 URL: http://www.cs.chalmers.se/~aarne/GF/
-Source: %{name}-%{version}.tar.gz
+Source: %{name}-%{version}.tgz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: ghc
 
