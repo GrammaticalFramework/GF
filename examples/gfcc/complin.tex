@@ -46,27 +46,31 @@ The challenge was to use dependent types to write a compiler from
 C to bytecode. This paper does not meet the challenge quite literally,
 since our compiler is for a different subset of C than Augustsson's
 specification, and since the bytecode that we generate is JVM instead
-of his format. 
+of his format. But it definitely makes use of dependent types.
 
 Augustsson's  challenge did not specify \textit{how} dependent
 types are to be used, and the first of the two points we make in this
-paper is how we interpreted the use of dependent types:
-we use dependent types in combination with higher-order abstract syntax (HOAS)
+paper (and its title) reflects our interpretation:
+we use dependent types, in combination with higher-order abstract syntax (HOAS),
 to define the grammar of the source language (here, the fragment of C).
-This grammar constitutes a single, declarative source, from which
+The grammar constitutes the single, declarative source from which
 the compiler front end is derived, comprising both parser and type
 checker.
+
+The second point, code generation by linearization, means that the
+back end is likewise implemented by a grammar of the target
+language (in this case, a fragment of JVM). This grammar is the
+declarative source from which the compiler back end is derived.
 
 The complete code of the compiler is 300 lines. It is found in 
 the appendices of this paper.
 
 
+
 \section{The Grammatical Framework}
 
-The second point mentioned in the title, 
-code generation as linearization, was suggested by
-the tool we have used for implementing the grammar:
-the \empha{Grammatical Framework} \cite{gf-jfp}. GF 
+The tool we have used for implementing the compiler is
+GF, the \empha{Grammatical Framework} \cite{gf-jfp}. GF 
 is similar to a Logical Framework (LF) extended with
 a notation for defining concrete syntax. GF was originally
 designed to help building multilingual
@@ -74,25 +78,29 @@ translation systems for natural languages and also
 between formal and natural languages. The translation model
 implemented by GF is very simple:
 \begin{verbatim}
-                    linearization
-                   --------------->
-   Abstract Syntax                  Language_i
-                   <---------------
-                     parsing
+
+
+             parsing                       linearization
+             ------------>                 ------------>
+  Language_1               Abstract Syntax               Language_2
+             <------------                 <------------
+             linearization                 parsing
 \end{verbatim}
-An abstract syntax is similar to a \empha{theory} ,or a
+An abstract syntax is similar to a \empha{theory}, or a
 \empha{signature} in a logical framework. A 
 concrete syntax defines, in a declarative way,
 a translation of abstract syntax trees (well-formed terms) 
-into concrete language structures, and this definition can
-be used for both linearization and parsing.
+into concrete language structures, and from this definition, one can
+derive both both linearization and parsing.
 The number of languages related to one abstract syntax in
-this way is unlimited. If just one language is involved, GF
-works much the same way as any grammar formalism. The largest
-application known to us links 88 languages and translates
-numeral expressions between them.
+this way is of course not limited to two. Sometimes just just one
+language is involved; 
+GF then works much the same way as any grammar formalism or parser
+generator. 
+The largest application known to us has 88 languages and translates
+numeral expressions from 1 to 999,999 between them \cite{gf-homepage}.
  
-From the GF point of view, the goal of the experiment
+From the GF point of view, the goal of the compiler experiment
 is to investigate if GF is capable of implementing
 compilers using the ideas of single-source language definition
 and code generation as linearization. The working hypothesis
@@ -123,7 +131,7 @@ JVM code back into C code.
 The language has an interactive editor that also supports incremental
 compilation.
 \enqu
-The problems that we have encountered and their causes will be explained in 
+The problems that we encountered and their causes will be explained in 
 the relevant sections of this report. To summarize,
 \bequ
 The scoping conditions resulting from HOAS are slightly different
@@ -131,27 +139,41 @@ from the standard ones of C.
 
 Our JVM syntax is forced to be slightly different from original.
 
-Using HOAS to encode bindings of functions is somewhat cumbersome.
+Using HOAS to encode all bindings is sometimes cumbersome.
 
 The C parser derived from the GF grammar does not recognize all
 valid programs.
 \enqu
 The first two shortcomings seem to be inevitable with the technique
-we use. The real JVM syntax, however, is easy to obtain by simple
-string processing from our one. The latter two shortcomings
+we use. The best we can do with the JVM syntax is to use simple
+postprocessing, on string level, to obtain valid JVM. The latter 
+two shortcomings have to do with the current implementation of GF
+rather than its core. They
 suggest that GF should be fine-tuned to give better support
 to compiler construction, which, after all, is not an intended
 use of GF as it is now.
 
 
+
 \section{The abstract syntax}
 
-An abstract syntax in GF consists of \texttt{cat} judgements
-declaring basic types, and \texttt{fun} judgements declaring
-functions. Syntax trees are well-formed terms of basic
+An \empha{abstract syntax} in GF consists of \texttt{cat} judgements
+\[
+\mbox{\texttt{cat}} \; C \; \Gamma
+\]
+declaring basic types (depending on a context $\Gamma$), 
+and \texttt{fun} judgements 
+\[
+\mbox{\texttt{fun}} \; f \; \mbox{\texttt{:}} \; A
+\]
+declaring functions $f$ of any type $A$, which can be a basic type or
+a function type.
+\empha{Syntax trees} are well-formed terms of basic
 types. As for notation, each judgement form is recognized by
-its keyword, and the same keyword governs all judgements
+its keyword (\texttt{cat}, \texttt{fun}, etc), 
+and the same keyword governs all judgements
 until the next keyword is encountered.
+
 
 
 \subsection{Statements}
@@ -168,8 +190,9 @@ that are needed to construct statements
     Var Typ ;
 \end{verbatim}
 The type \texttt{Typ} is the type of C's datatypes.
-Expressions (\texttt{Exp}) is a dependent type: we
-will give rules to construct well-typed expressions of
+Expressions (\texttt{Exp}) is a dependent type, since it has a
+nonempty context. The rules for \texttt{Exp}
+will thus be rules to construct well-typed expressions of
 a given type. \texttt{Var}\ is the type of variables,
 of a given type, that get bound in C's variable
 declarations.
@@ -185,7 +208,7 @@ rules define their abstract syntax:
 Dependent types are used in \texttt{Assign} to
 control that a variable is always assigned a value of proper
 type. The \texttt{Decl}\ function captures the rule that
-a variable must be declared before it can be assigned to:
+a variable must be declared before it can be used or assigned to:
 its second argument is a \empha{continuation}, which is
 the sequence of statements that depend on (= may refer to)
 the declared variable. 
@@ -194,7 +217,7 @@ We will treat all statements, except
 \texttt{return}s, in terms of continuations. A sequence of
 statements (which always has the type \texttt{Stm}) thus
 always ends in a \texttt{return}, or, abruptly, in
-an empty statement. Here are rules for some other
+an empty statement, \texttt{End}. Here are rules for some other
 statement forms:
 \begin{verbatim}
     Return : (A : Typ) -> Exp A -> Stm ;
@@ -209,7 +232,8 @@ Here is an example of a piece of code and its abstract syntax.
   x = 5 ;        Assign TInt x (EInt 5) (
   return x ;       Return TInt (EVar TInt x)))
 \end{verbatim}
-(Expression syntax is explained in the next section.)
+(Expression syntax will be explained in the next section.)
+
 
 
 \subsection{Expressions and types}
@@ -225,14 +249,10 @@ from variables, and by means of binary operations.
     EVar   : (A : Typ) -> Var A -> Exp A ;
     EInt   : Int -> Exp TInt ;
     EFloat : Int -> Int -> Exp TFloat ;
-    EAddI  : Exp TInt -> Exp TInt -> Exp TInt ;
-    EAddF  : Exp TFloat -> Exp TFloat -> Exp TFloat ;
-    ESubI  : Exp TInt -> Exp TInt -> Exp TInt ;
-    ESubF  : Exp TFloat -> Exp TFloat -> Exp TFloat ;
-    EMulI  : Exp TInt -> Exp TInt -> Exp TInt ;
-    EMulF  : Exp TFloat -> Exp TFloat -> Exp TFloat ;
     ELtI   : Exp TInt -> Exp TInt -> Exp TInt ;
     ELtF   : Exp TFloat -> Exp TFloat -> Exp TInt ;
+    EAddI, EMulI, ESubI : Exp TInt -> Exp TInt -> Exp TInt ;
+    EAddF, EMulF, ESubF : Exp TFloat -> Exp TFloat -> Exp TFloat ;
 \end{verbatim}
 Notice that GF has a built-in type \texttt{Int} of
 integer literals, but floats are constructed by hand.
@@ -277,14 +297,14 @@ of variables in statements, using a continuation.
   fun
     Empty : Program ;
     Funct : (AS : ListTyp) -> (V : Typ) -> 
-              (Body AS) -> (Fun AS V -> Program) -> Program ;
+              Body AS -> (Fun AS V -> Program) -> Program ;
 \end{verbatim}
 However, here we must also account for the binding of
 a function's parameters in its body. We could use
 vectors of variables, in the same way as vectors of
 expressions are used to give arguments to functions.
 However, this would lead to the need of cumbersome
-projection functions when dereferencing the parameters
+projection functions when using the parameters
 in the function body. A more elegant solution is
 to use HOAS to build function bodies:
 \begin{verbatim}
@@ -313,16 +333,36 @@ name of the function appears in the syntax trees.
 A more serious shortcoming of our way of defining functions 
 is that it does not allow recursion. The reason is simple:
 the function symbol is only bound in the continuation
-of the program, not in the function body.
+of the program, not in the function body. It seems we could
+save recursive functions with the following variant:
+\begin{verbatim}
+  cat
+    BodyProgram ListTyp ;
+    Body ListTyp ;
+
+  fun
+    mkBodyProgram : (AS : ListTyp) -> 
+      Body AS -> Program -> BodyProgram ListTyp ;
+    RecFunct : (AS : ListTyp) -> (V : Typ) -> 
+      (Fun AS V -> BodyProgram AS) -> Program ;
+\end{verbatim}
+but we have not yet investigated this.
+
 
 
 \section{The concrete syntax of C}
 
 A concrete syntax, for a given abstract syntax, 
 consists of \texttt{lincat} judgements
-defining the \empha{linearization types} of each category,
+\[
+\mbox{\texttt{lincat}} \; C \; \mbox{\texttt{=}} \; T
+\]
+defining the \empha{linearization types} $T$ of each category $C$,
 and \texttt{lin} judgements
-defining the \empha{linearization functions} of each function
+\[
+\mbox{\texttt{lin}} \; f \; \mbox{\texttt{=}} \; t
+\]
+defining the \empha{linearization functions} $t$ of each function $f$
 in the abstract syntax. The linearization functions are
 checked to be well-typed with respect the \texttt{lincat}
 definitions, and the syntax of GF forces them to be \empha{compositional}
@@ -348,9 +388,9 @@ linearization functions, and linearizations of trees.
 Because of compositionality, no case analysis on expressions
 is possible in linearization rules. The values of linearization
 therefore have to carry information on how they are used in
-different situations, which means that linearization
-types are record types instead of just the string type.
-The simplest record type that is used is
+different situations. Therefore linearization
+types are generally record types instead of just the string type.
+The simplest record type that is used in GF is
 \begin{verbatim}
   {s : Str}
 \end{verbatim}
@@ -365,13 +405,23 @@ used by default.
 Resource modules define auxiliary notions that can be
 used in concrete syntax. These notions include
 \empha{parameter types} defined by \texttt{param}
-judgements, and \empha{operations} defined by
-\texttt{oper} judgements. These judgements are
+judgements
+\[
+\mbox{\texttt{param}} \; P \; \mbox{\texttt{=}} 
+  \; C_{1} \; \Gamma_{1} \; \mid \; \cdots \; \mid \; 
+  \; C_{n} \; \Gamma_{n}
+\]
+and \empha{operations} defined by
+\texttt{oper} judgements
+\[
+\mbox{\texttt{oper}} \; f \; \mbox{\texttt{:}} \; T \; \mbox{\texttt{=}} \; t
+\]
+These judgements are
 similar to datatype and function definitions
 in functional programming, with the restriction
 that parameter types must be finite and operations
 may not be recursive. It is due to these restrictions that
-the parsing algorithms are possible to derive from
+we can always derive a parsing algorithm from a set of
 linearization rules.
 
 The following string operations are useful in almost
@@ -435,6 +485,7 @@ of superfluous parentheses, which is not allowed by
 the present grammar.
 
 
+
 \subsection{Statements}
 
 Statements in C have
@@ -448,7 +499,7 @@ the use of semicolons on a high level.
     statement : Str -> SS       = \s   -> ss (s ++ ";"); 
 \end{verbatim}
 As for declarations, which bind variables, we notice the
-special projection \verb6.$06 to refet to the bound variable.
+special projection \verb6.$06 to refer to the bound variable.
 Technically, terms that are linearized must be in $\eta$-long
 form, which guarantees that a variable symbol can always be
 found, and that a field representing it can be added to the
@@ -465,6 +516,7 @@ linearization record.
 \end{verbatim}
 
 
+
 \subsection{Functions}
 
 The only new problem presented by functions is the proper
@@ -475,7 +527,7 @@ Since compositionality prevents taking cases of list forms, e.g.
   -- ConsExp _ _ e NilExp = e ;
   -- ConsExp _ _ e es = ss (e.s ++ "," ++ es.s) ;
 \end{verbatim}
-we have to encode the size of a list in a parameter:
+we have to encode the size of a list (zero, one, or more) in a parameter:
 \begin{verbatim}
   param
     Size = Zero | One | More ;
@@ -526,40 +578,56 @@ component.
 
 JVM syntax is, linguistically, more straightforward than
 the syntax of C, and could be described by a regular
-expression. The transition of our abstract syntax to JVM,
+expression. The translation from our abstract syntax to JVM,
 however, is tricky because variables are replaced by
 their addresses (relative to the frame pointer), and
-linearization must maintain a symbol table that permits
+linearization must therefore maintain a symbol table that permits
 the lookup of a variable address. As shown in the code
 in Appendix C, we have not quite succeeded to do this
-in the generated code. Instead, we generate (non-JVM)
-\texttt{alloc} instructions and use another pass,
-written in Haskell (Appendix E), to replace variable
-symbols by their addresses.
+in the code generated by linearization. 
+Instead, we use variable symbols instead of addresses
+in \texttt{load} and \texttt{store} instructions, and
+generate \texttt{alloc} pseudoinstructions from declarations.
+Then we use another pass, written in Haskell (Appendix E), 
+to replace variable symbols by their addresses. The following example
+shows how the three representations (C, pseudo-JVM, JVM) look like 
+for a piece of code.
+\begin{verbatim}
+  int x ;   alloc i x      ; x has address 0
+  int y ;   alloc i y      ; y has address 1
+  x = 5 ;   i _push 5      ipush 5
+            i _store x     istore 0
+  y = x ;   i _load x      iload 0
+            i _store y     istore 1
+\end{verbatim}
 
 A related problem is the generation of fresh labels for
-jumps. We solve this by maintaining a growing label
+jumps. We solve this by maintaining a growing label suffix
 as a field of the linearization of statements into
 instructions. The problem remains that the two branches
 in an \texttt{if-else} statement can use the same
 labels. Making them unique will have to be
-added to the post-processing pass. This is, however,
+added to the post-processing pass. This is
 always possible, because labels are nested in a
-disciplined way.
+disciplined way, and jumps can never go to remote labels.
 
-As it turned out too laborious to thread the label counter
-to expressions, we decided to compile comparison
-expressions into method calls, which should be provided
-by a run-time library.
+As it turned out laborious to thread the label counter
+to expressions, we decided to compile comparison \verb6x < y6
+expressions into function calls, which should be provided
+by a run-time library. This would no more work for the 
+conjunction \verb6x && y6
+and disjunction \verb6x || y6, if we want to keep their semantics
+lazy, since function calls are strict in their arguments.
 
 The JVM syntax used is from the Jasmin assembler
 \cite{jasmin}, with small deviation which will
 be removed shortly.
 
 
+
 \subsection{A code example}
 
-Here is a C source program, the JVM code obtained by linearization, and
+Here is a complete C source program, the JVM code obtained by linearization, and
 the postprocessed JVM code.
 \small
 \begin{verbatim}
@@ -594,6 +662,7 @@ int main () {           call ilt ;              call ilt ;
 \normalsize
 
 
+
 \section{Related work}
 
 The theoretical ideas behind our compiler experiment
@@ -603,22 +672,23 @@ dependent types and higher-order abstract syntax
 has been studied in various logical frameworks 
 \cite{harper-honsell,magnusson-nordstr,twelf}.
 The idea of using a common abstract syntax for different 
-languages was clearly exposed in \cite{landin}. The view of
+languages was clearly exposed by Landin \cite{landin}. The view of
 code generation as linearization is a central aspect of
-the classic compiler textbook \cite{aho-ullman}. The use
-of the same grammar both for parsing and linearization
+the classic compiler textbook by Aho, Sethi, and Ullman
+\cite{aho-ullman}. 
+The use of the same grammar both for parsing and linearization
 is a guiding principle of unification-based linguistic grammar 
-formalisms \cite{pereira}. Interactive editors derived from
+formalisms \cite{pereira-shieber}. Interactive editors derived from
 grammars have been used in various programming and proof
-assistants \cite{teitelbaum,metal,ALF}.
+assistants \cite{teitelbaum,metal,magnusson-nordstr}.
 
 Even though the different ideas are well-known, they are
 applied less in practice than in theory. In particular,
 we have not seen them used together to construct a complete
 compiler. In our view, putting these ideas together is
 an attractive approach to compiling, since a compiler written
-in this way is completely declarative, and therefore concise, 
-and therefore easy to modify and extend. For instance, if
+in this way is completely declarative, hence concise, 
+and therefore easy to modify and extend. What is more, if
 a new language construct is added, the GF type checker
 verifies that the addition is propagated to all components
 of the compiler. As the implementation is declarative, 
@@ -631,6 +701,51 @@ semantics that is actually used in the implementation.
 
 We managed to compile a large subset of C, and growing it
 does not necessarily pose any new kinds of problems. 
+Using HOAS and dependent types to describe the abstract
+syntax of C works fine, and defining the concrete syntax
+of C on top of this using GF linearization machinery is 
+already possible, even though more support could be
+desired for things like literals and precedences.
+
+The parser generated by GF is not able to parse all
+source programs, because of cyclic context-free
+rules (of the form $C ::= C$). Recovery from cyclic
+rules is ongoing work in GF independently of this
+experiment.
+
+The most serious problem is that the idea of compilation
+as linearization does not quite work in the generation
+of JVM code, if linearization is understood in the
+sense of GF. In GF, linearization rules must be
+compositional, and can only depend on parameters from
+finite parameter sets. Hence it is not possible to encode
+linearization with updates to and lookups from a symbol table,
+as is usual in code generation. 
+
+Compositionality also prevents optimizations during linearization
+by clever instruction selection, elimination of superfluous
+labels and jumps, etc.
+
+It would of course be possible to implement the compiler
+back end in GF in the traditional way, as a noncompositional
+function from the abstract syntax of C to a different abstract
+syntax of JVM. The abstract syntax notation of GF permits
+definitions of functions, and the GF interpreter can be used
+for evaluating terms into normal form. Thus one could write
+\begin{verbatim}
+  fun 
+    transStm : Env -> Stm -> EnvInstr ;
+  def
+    transStm env (Decl typ rest) = ... 
+    transStm env (Assign typ var exp rest) = ... 
+\end{verbatim}
+This would be cumbersome in practice, because
+GF does not have facilities like built-in lists and tuples, 
+or monads. Of course, the compiler could no longer be
+inverted into a decompiler, in the way true linearization
+can be inverted into a parser.
+
+
 
 
 \bibliographystyle{plain}
@@ -778,7 +893,7 @@ concrete ImperJVM of Imper = open ResImper in {
     BodyCons a as body = instrb a.s [] (body ** {s3 = []});
 
     Decl  typ cont = instrb typ.s (
-      "alloc_" ++ typ.s ++ cont.$0
+      "alloc" ++ typ.s ++ cont.$0
       ) cont ;
     Assign t x exp = instrc (
       exp.s ++ 
