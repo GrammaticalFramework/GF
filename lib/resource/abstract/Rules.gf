@@ -63,24 +63,71 @@ fun
 -- have (or have not) a negation, but they are formed from verbal groups
 -- ($VG$), which have both positive and negative forms.
 
-  PredV       : V  -> VP ;             -- "walk", "doesn't walk"
-  PredPassV   : V  -> VP ;             -- "is seen", "is not seen"
-  PredV2      : V2 -> NP -> VP ;       -- "sees John", "doesn't see John"
----  PredV3      : V3 -> NP -> NP -> VG ;       -- "prefers wine to beer"
-  PredV3      : V3 -> NP -> V2 ;       -- "prefers wine (to beer)"
-  PredVS      : VS -> S  -> VP ;       -- "says that I run", "doesn't say..."
-  PredVV      : VV -> VPI -> VP ;      -- "can run", "can't run", "tries to run"
+  UseV         : V  -> VP ;               -- "walks"
+  UsePassV     : V  -> VP ;               -- "is seen"
+  ComplV2      : V2 -> NP -> VP ;         -- "sees Mary"
+  ComplReflV2  : V2 -> VP ;               -- "loves himself"
+  ComplVS      : VS -> S -> VP ;          -- "says that Mary runs"
+  ComplVV      : VV -> VPI -> VP ;        -- "must walk"
+  ComplVQ      : VQ -> QS -> VP ;         -- "asks who will come"
+  ComplVA      : VA -> AP -> VP ;         -- "looks ill"
+  ComplV2A     : V2A -> NP -> AP -> VP ;  -- "paints the house red"
+  ComplSubjV2V : V2V -> NP -> VPI -> VP ; -- "promises Mary to leave"
+  ComplObjV2V  : V2V -> NP -> VPI -> VP ; -- "asked him to go"
+  ComplV2S     : V2S -> NP -> S   -> VP ; -- "told me that you came" 
+  ComplV2Q     : V2Q -> NP -> QS  -> VP ; -- "asks me if you come"
 
-  PredNP      : NP -> VP ;             -- "is John", "is not John"
-  PredPP      : PP -> VP ;             -- "is in France", "is not in France"
-  PredAP      : AP -> VP ;             -- "is old", "isn't old"
-  PredSuperl  : ADeg -> VP ;           -- "is the oldest"
-  PredCN      : CN -> VP ;             -- "is a man", "isn't a man"
-  VTrans      : V2 -> V ;              -- "loves"
+  PredAP       : AP -> VP ;               -- "is old"
+  PredSuperl   : ADeg -> VP ;             -- "is the oldest"
+  PredCN       : CN -> VP ;               -- "is a man"
+  PredNP       : NP -> VP ;               -- "is Bill"
+  PredPP       : PP -> VP ;               -- "is in France"
+  PredAV       : AV  -> VPI -> VP   ;     -- "is eager to leave"
+  PredObjA2V   : A2V -> NP -> VPI -> VP ; -- "is easy for us to convince"
 
----  PosVG,NegVG : VG -> VP ;             -- 
+  PredAS       : AS -> S  -> Cl ;         -- "it is good that he comes"                
+  PredV0       : V0 -> Cl ;               -- "it is raining"
 
-  PredVP      : NP -> VP -> Cl ;       -- preserves all pol/tense variation
+-- These rules *use* verb phrases: 
+-- $PredVP$, $IntVP$, $RelVP$, $QuestVP$, $QuestAdv$.
+
+-- Partial saturation.
+
+  UseV2        : V2 -> V ;                    -- "loves"
+  ComplV3      : V3 -> NP -> V2 ;             -- "prefers wine (to beer)"
+
+  ComplA2S     : A2S -> NP  -> AS ;           -- "good for John"
+
+  TransVV2     : VV -> V2 -> V2 ;             -- (which song do you) want to play
+
+  UseV2V : V2V -> VV ;
+  UseV2S : V2S -> VS ;
+  UseV2Q : V2Q -> VQ ;
+  UseA2S : A2S -> AS ;
+  UseA2V : A2V -> AV ;
+
+-- Formation of infinitival phrases.
+
+  PosVP, NegVP : Ant -> VP  -> VPI ;
+
+  ProgVG : VP  -> VP ;  -- he is eating
+
+  AdjPart      : V -> A ;                     -- forgotten
+
+  UseCl  : TP -> Cl  -> S ;
+  UseRCl : TP -> RCl -> RS ;
+  UseQCl : TP -> QCl -> QS ;
+
+  PosTP  : Tense -> Ant -> TP ;
+  NegTP  : Tense -> Ant -> TP ;
+
+  TPresent : Tense ;
+  TPast    : Tense ;
+  TFuture  : Tense ;
+  TConditional : Tense ;
+
+  ASimul   : Ant ;
+  AAnter   : Ant ;
 
 --!
 --3 Adverbs
@@ -99,53 +146,40 @@ fun
 --3 Sentences and relative clauses
 --
 
----  PredVP   : NP -> VP -> S ;                   -- "John walks"
----  PosSlashV2,NegSlashV2 : NP -> V2 -> Slash ;  -- "John sees", "John doesn't see"
-  SlashV2  : NP -> V2 -> Slash ;  -- "John sees", "John doesn't see"
----  OneVP    : VP -> S ;                         -- "one walks"
-  OneVP    : VP -> Cl ;                        -- "one walks"
----  ThereNP  : NP -> S ;                         -- "there is a bar","there are 86 bars"
-  ExistCN  : CN -> Cl ;                        -- "there is a bar"
-  ExistNumCN : Num -> CN -> Cl ;               -- "there are (86) bars"
+  PredVP   : NP -> VP -> Cl ;                   -- "John walks"
+  
+  SlashV2  : NP -> V2 -> Slash ;                -- "John doesn't love"
 
-  IdRP     : RP ;                              -- "which"
-  FunRP    : N2 -> RP -> RP ;                  -- "the successor of which"
+  IdRP     : RP ;                               -- "which"
+  FunRP    : N2 -> RP -> RP ;                   -- "the successor of which"
   RelVP    : RP -> VP -> RCl ;                  -- "who walks", "who doesn't walk"
   RelSlash : RP -> Slash -> RCl ;               -- "that I wait for"/"for which I wait" 
----  ModRC    : CN -> RS -> CN ;                   -- "man who walks"
   ModRS    : CN -> RS -> CN ;                   -- "man who walks"
----  RelSuch  : S -> RCl ;                        -- "such that it is even"
   RelCl    : Cl -> RCl ;                        -- "such that it is even"
 
 --!
 --3 Questions and imperatives
 --
 
-  WhoOne, WhoMany : IP ;                   -- "who (is)", "who (are)"
-  WhatOne, WhatMany : IP ;                 -- "what (is)", "what (are)"
-  FunIP : N2 -> IP -> IP ;                 -- "the mother of whom"
-  NounIPOne, NounIPMany : CN -> IP ;       -- "which car", "which cars"
- ---- NounIPHowMany : CN -> IP ;               -- "how many cars"
+  WhoOne, WhoMany : IP ;                    -- "who (is)", "who (are)"
+  WhatOne, WhatMany : IP ;                  -- "what (is)", "what (are)"
+  FunIP : N2 -> IP -> IP ;                  -- "the mother of whom"
+  NounIPOne, NounIPMany : CN -> IP ;        -- "which car", "which cars"
 
   QuestVP   : NP -> VP -> QCl ;             -- "does John walk"; "doesn't John walk"
   IntVP     : IP -> VP -> QCl ;             -- "who walks"
   IntSlash  : IP -> Slash -> QCl ;          -- "whom does John see"
----  QuestAdv  : IAdv -> NP -> VP -> QS ;     -- "why do you walk"
   QuestAdv  : IAdv -> NP -> VP -> QCl ;     -- "why do you walk"
----  IsThereNP : NP -> QS ;                    -- "is there a bar", "are there (86) bars"
-  ExistQCl  : CN -> QCl ;                   -- "is there a bar", 
-  ExistNumQCl : Num -> CN -> QCl ;          -- "are there (86) bars"
 
----  ImperVP : VP -> Imp ;                  -- "be a man"
   PosImperVP, NegImperVP : VP -> Imp ;      -- "(don't) be a man"
 
 ----rename these ??
-  IndicPhrase : S -> Phr ;                 -- "I walk."
-  QuestPhrase : QS -> Phr ;                -- "Do I walk?"
-  ImperOne, ImperMany : Imp -> Phr ;       -- "Be a man!", "Be men!"
+  IndicPhrase : S -> Phr ;                  -- "I walk."
+  QuestPhrase : QS -> Phr ;                 -- "Do I walk?"
+  ImperOne, ImperMany : Imp -> Phr ;        -- "Be a man!", "Be men!"
 
-  PrepS : PP -> AdS ;                      -- "in Sweden, (there are bears)"
-  AdvS  : AdS -> S -> Phr ;                -- "Therefore, 2 is prime."
+  PrepS : PP -> AdS ;                       -- "in Sweden, (there are bears)"
+  AdvS  : AdS -> S -> Phr ;                 -- "Therefore, 2 is prime."
 
 --!
 --3 Coordination
@@ -184,7 +218,6 @@ fun
 
   SubjS     : Subj -> S -> S -> S ;        -- "if 2 is odd, 3 is even"
   SubjImper : Subj -> S -> Imp -> Imp ;    -- "if it is hot, use a glove!"
----  SubjQu    : Subj -> S -> QS -> QS ;      -- "if you are new, who are you?"
   SubjQS    : Subj -> S -> QS -> QS ;      -- "if you are new, who are you?"
   SubjVP    : VP -> Subj -> S -> VP ;      -- "(a man who) sings when he runs"
 
@@ -207,58 +240,17 @@ fun
   OnePhr  : Phr -> Text ;
   ConsPhr : Phr -> Text -> Text ;
 
---- next
+--2 Special constructs.
+--
+-- These constructs tend to have language-specific syntactic realizations.
 
-    PredVV2 : VV -> V2 -> V2 ;      -- (which song do you) want to play
-    AdjPart : V -> A ;              -- forgotten
-    ReflV2  : V2 -> VP ;
+  OneVP      : VP -> Cl ;                       -- "one walks"
 
--- In these predications, the last argument gets its agreement
--- features from the second, and cannot hence be made to produce
--- $V2A$/$V2S$.
+  ExistCN    : CN -> Cl ;                       -- "there is a bar"
+  ExistNumCN : Num -> CN -> Cl ;                -- "there are (86) bars"
 
-    PredV2A     : V2A -> NP -> AP -> VP ;
-    PredSubjV2V : V2V -> NP -> VPI -> VP ;
-
---- In these three it would be possible, but hardly useful...
-
-    PredObjV2V  : V2V  -> NP -> VPI -> VP ;
-    PredV2S     : V2S  -> NP -> S   -> VP ;
-    PredV2Q     : V2Q  -> NP -> QS  -> VP ;
-
-    PredAS  : AS  -> S   -> Cl ;
-    PredA2S : A2S -> NP  -> AS ;
-    PredAV  : AV  -> VPI -> VP ;
-    PredSubjA2V : A2V  -> NP -> VPI -> VP ;
-    PredObjA2V  : A2V  -> NP -> VPI -> VP ;
-    PredV0  : V0 -> Cl ;
-
-    PredVQ  : VQ -> QS -> VP ;
-    PredVA  : VA -> AP -> VP ;
-
-    UseV2V : V2V -> VV ;
-    UseV2S : V2S -> VS ;
-    UseV2Q : V2Q -> VQ ;
-    UseA2S : A2S -> AS ;
-    UseA2V : A2V -> AV ;
-
-    UseCl  : TP -> Cl  -> S ;
-    UseRCl : TP -> RCl -> RS ;
-    UseQCl : TP -> QCl -> QS ;
-    PosVP, NegVP : Ant -> VP  -> VPI ;
-
-    ProgVG : VP  -> VP ;  -- he is eating
-
-    PosTP  : Tense -> Ant -> TP ;
-    NegTP  : Tense -> Ant -> TP ;
-
-    TPresent : Tense ;
-    TPast    : Tense ;
-    TFuture  : Tense ;
-    TConditional : Tense ;
-
-    ASimul   : Ant ;
-    AAnter   : Ant ;
+  ExistQCl  : CN -> QCl ;                   -- "is there a bar", 
+  ExistNumQCl : Num -> CN -> QCl ;          -- "are there (86) bars"
 
 } ;
 

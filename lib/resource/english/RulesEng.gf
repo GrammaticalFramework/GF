@@ -28,29 +28,7 @@ flags
 
 lin 
   UseN = noun2CommNounPhrase ;
-  ModAP = modCommNounPhrase ;
-  ModGenOne = npGenDet singular noNum ;
-  ModGenNum = npGenDet plural ;
   UsePN = nameNounPhrase ;
-  UseN2 = funAsCommNounPhrase ;
-  AppN2 = appFunComm ;
-  AppN3 = appFun2 ;
-  UseA = adj2adjPhrase ;
-  ComplA2 = complAdj ;
-  PositADeg = positAdjPhrase ;
-  ComparADeg = comparAdjPhrase ;
-  SuperlNP = superlNounPhrase ;
-
-  DetNP = detNounPhrase ;
-  IndefOneNP = indefNounPhrase singular ;
-  IndefNumNP = indefNounPhraseNum plural ;
-  DefOneNP = defNounPhrase singular ;
-  DefNumNP = defNounPhraseNum plural ;
-  MassNP = detNounPhrase (mkDeterminer Sg []) ;
-
-  CNthatS = nounThatSentence ;
-  UseInt i = {s = table {Nom => i.s ; Gen => i.s ++ "'s"}} ; ---
-  NoNum = noNum ;
 
   SymbPN i = {s = table {Nom => i.s ; Gen => i.s ++ "'s"} ; g = Neutr} ; ---
   SymbCN cn s =
@@ -60,16 +38,70 @@ lin
     {s = \\n,c => cn.s ! n ! c ++ s.s ; 
      g = cn.g} ;
 
-  AdjPart = adjPastPart ;
-  ReflV2 = reflTransVerb ;
+  IndefOneNP = indefNounPhrase singular ;
+  IndefNumNP = indefNounPhraseNum plural ;
+  DefOneNP = defNounPhrase singular ;
+  DefNumNP = defNounPhraseNum plural ;
 
-  PredV2A = complDitransAdjVerb ;
-  PredSubjV2V = complDitransVerbVerb False ;
-  PredObjV2V = complDitransVerbVerb True ;
-  PredV2S = complDitransSentVerb ;
-  PredV2Q = complDitransQuestVerb ;
-  PredVA = complAdjVerb ;
-  PredVV2 = transVerbVerb ;
+  DetNP = detNounPhrase ;
+  MassNP = detNounPhrase (mkDeterminer Sg []) ;
+
+  AppN2 = appFunComm ;
+  AppN3 = appFun2 ;
+  UseN2 = funAsCommNounPhrase ;
+
+  ModAP = modCommNounPhrase ;
+  CNthatS = nounThatSentence ;
+
+  ModGenOne = npGenDet singular noNum ;
+  ModGenNum = npGenDet plural ;
+
+  UseInt i = {s = table {Nom => i.s ; Gen => i.s ++ "s"}} ; ---
+  NoNum = noNum ;
+
+  UseA = adj2adjPhrase ;
+  ComplA2 = complAdj ;
+
+  PositADeg = positAdjPhrase ;
+  ComparADeg = comparAdjPhrase ;
+  SuperlNP = superlNounPhrase ;
+
+-- verbs and verb prases
+
+  UseV  = predVerb ;
+  UsePassV = passVerb ;
+  ComplV2 = complTransVerb ;
+  ComplReflV2 = reflTransVerb ;
+  ComplVS = complSentVerb ;
+  ComplVV = complVerbVerb ;
+  ComplVQ = complQuestVerb ;
+  ComplVA = complAdjVerb ;
+  ComplV2A = complDitransAdjVerb ;
+  ComplSubjV2V = complDitransVerbVerb False ;
+  ComplObjV2V = complDitransVerbVerb True ;
+  ComplV2S = complDitransSentVerb ;
+  ComplV2Q = complDitransQuestVerb ;
+
+  PredAP = predAdjective ;
+  PredSuperl a = predAdjective (superlAdjPhrase a) ;
+  PredCN = predCommNoun ;
+  PredNP = predNounPhrase ;
+  PredPP = predAdverb ;
+  PredAV = complVerbAdj ;
+  PredObjA2V = complVerbAdj2 True ;
+
+  PredAS = predAdjSent ;
+  PredV0 rain = predVerbGroupClause (pronNounPhrase pronIt) (predVerb rain) ;
+
+-- Partial saturation.
+
+  UseV2 = transAsVerb ;
+  ComplV3 = complDitransVerb ;
+
+  ComplA2S = predAdjSent2 ;
+
+  TransVV2 = transVerbVerb ;
+  AdjPart = adjPastPart ;
 
   UseV2V x = x ** {isAux = False} ;
   UseV2S x = x ;
@@ -77,65 +109,44 @@ lin
   UseA2S x = x ;
   UseA2V x = x ;
 
-  UseCl  tp cl = {s = tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a} ;
+-- Formation of infinitival phrases.
 
   PosVP tp = predVerbGroup True tp.a ;
   NegVP tp = predVerbGroup False tp.a ;
 
   ProgVG = progressiveVerbPhrase ;
 
+  UseCl  tp cl = {s = tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a} ;
+  UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
+  UseRCl tp cl = {s = \\a => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! a} ;
+
   PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
   NegTP t a = {s = t.s ++ a.s ; b = False ; t = t.t ; a = a.a} ;
+
   TPresent     = {s = [] ; t = Present} ;
   TPast        = {s = [] ; t = Past} ;
   TFuture      = {s = [] ; t = Future} ;
   TConditional = {s = [] ; t = Conditional} ;
+
   ASimul = {s = [] ; a = Simul} ;
   AAnter = {s = [] ; a = Anter} ;
 
-  PredVP = predVerbGroupClause ;
-
-  PredV  = predVerb ;
-  PredAP = predAdjective ;
-  PredSuperl a = predAdjective (superlAdjPhrase a) ;
-  PredCN = predCommNoun ;
-  PredV2 = complTransVerb ;
-  PredV3 = complDitransVerb ;
-  PredPassV = passVerb ;
-  PredNP = predNounPhrase ;
-  PredPP = predAdverb ;
-  PredVS = complSentVerb ;
-  PredVV = complVerbVerb ;
-  PredVQ = complQuestVerb ;
-  VTrans = transAsVerb ;
-  PredV0 rain = predVerbGroupClause (pronNounPhrase pronIt) (predVerb rain) ;
-
-  PredAS  = predAdjSent ;
-  PredA2S = predAdjSent2 ;
-  PredAV  = complVerbAdj ;
-  PredSubjA2V = complVerbAdj2 False ;
-  PredObjA2V = complVerbAdj2 True ;
+-- Adverbs.
 
   AdjAdv a = advPost (a.s ! AAdv) ;
   AdvPP p = advPost p.s ;
   PrepNP p = prepPhrase p.s ; ---
+
   AdvVP = adVerbPhrase ;
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
 
-  SlashV2 = slashTransVerbCl ;
-  OneVP = predVerbGroupClause (nameNounPhrase (nameReg "one" human)) ;
-----  ThereNP = thereIs ;
+--3 Sentences and relative clauses
+--
 
-  ExistCN A = predVerbGroupClause 
-                (nameNounPhrase (nameReg "there" Neutr))
-                (complTransVerb (mkTransVerbDir verbBe) 
-                   (indefNounPhrase singular A)) ;
-  ExistNumCN nu A = 
-              predVerbGroupClause 
-                (nameNounPhrasePl (nameReg "there" Neutr))
-                (complTransVerb (mkTransVerbDir verbBe) 
-                   (indefNounPhraseNum plural nu A)) ;
+  PredVP = predVerbGroupClause ;
+
+  SlashV2 = slashTransVerbCl ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -144,7 +155,10 @@ lin
   ModRS = modRelClause ;
   RelCl = relSuch ;
 
-  UseRCl tp cl = {s = \\a => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! a} ;
+
+--!
+--3 Questions and imperatives
+--
 
   WhoOne = intPronWho singular ;
   WhoMany = intPronWho plural ;
@@ -159,28 +173,21 @@ lin
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
 
-  UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
-
-  ExistQCl A = questVerbPhrase
-                (nameNounPhrase (nameReg "there" Neutr))
-                (complTransVerb (mkTransVerbDir verbBe) 
-                   (indefNounPhrase singular A)) ;
-  ExistNumQCl nu A = 
-              questVerbPhrase
-                (nameNounPhrasePl (nameReg "there" Neutr))
-                (complTransVerb (mkTransVerbDir verbBe) 
-                   (indefNounPhraseNum plural nu A)) ;
-
   PosImperVP = imperVerbPhrase True ;
   NegImperVP = imperVerbPhrase False ;
 
   IndicPhrase = indicUtt ;
   QuestPhrase = interrogUtt ;
-  ImperOne = imperUtterance singular ;
+  ImperOne  = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
 
   PrepS p = ss (p.s ++ ",") ;
   AdvS = advSentence ;
+
+
+--!
+--3 Coordination
+--
 
   TwoS = twoSentence ;
   ConsS = consSentence ;
@@ -211,4 +218,31 @@ lin
   OnePhr p = p ;
   ConsPhr = cc2 ;
 
+-----------------------
+-- special constructions
+
+  OneVP = predVerbGroupClause (nameNounPhrase (nameReg "one" human)) ;
+----  ThereNP = thereIs ;
+
+  ExistCN A = predVerbGroupClause 
+                (nameNounPhrase (nameReg "there" Neutr))
+                (complTransVerb (mkTransVerbDir verbBe) 
+                   (indefNounPhrase singular A)) ;
+  ExistNumCN nu A = 
+              predVerbGroupClause 
+                (nameNounPhrasePl (nameReg "there" Neutr))
+                (complTransVerb (mkTransVerbDir verbBe) 
+                   (indefNounPhraseNum plural nu A)) ;
+
+  ExistQCl A = questVerbPhrase
+                (nameNounPhrase (nameReg "there" Neutr))
+                (complTransVerb (mkTransVerbDir verbBe) 
+                   (indefNounPhrase singular A)) ;
+  ExistNumQCl nu A = 
+              questVerbPhrase
+                (nameNounPhrasePl (nameReg "there" Neutr))
+                (complTransVerb (mkTransVerbDir verbBe) 
+                   (indefNounPhraseNum plural nu A)) ;
+
 } ;
+

@@ -763,6 +763,9 @@ oper
 
   Clause = {s : Bool => ClForm => Str} ;
 
+  predVerbGroupAdv : NounPhrase -> VerbGroup -> Adverb -> Clause =
+  \np,vp,a ->  predVerbGroupClause np (adVerbPhrase vp a) ;
+
   predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = 
     \Jag, serdiginte -> {
      s = \\b,c => let {
