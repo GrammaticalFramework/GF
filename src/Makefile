@@ -134,7 +134,7 @@ binary-dist:
 	./configure --host="$(host)" CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
 #	make unix gfdoc jar
 	make gfdoc jar
-	$(INSTALL) ../bin/gf util/gfdoc jgf $(BIN_DIST_DIR)
+	$(INSTALL) ../bin/gf util/gfdoc $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 java/gf-java.jar $(BIN_DIST_DIR)
 	$(INSTALL) configure $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 config.mk.in jgf.in $(BIN_DIST_DIR)
