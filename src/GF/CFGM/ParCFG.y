@@ -23,6 +23,9 @@ import ErrM
  '{' { PT _ (TS "{") }
  '}' { PT _ (TS "}") }
  '!' { PT _ (TS "!") }
+ '=' { PT _ (TS "=") }
+ '(' { PT _ (TS "(") }
+ ')' { PT _ (TS ")") }
  'end' { PT _ (TS "end") }
  'grammar' { PT _ (TS "grammar") }
  'startcat' { PT _ (TS "startcat") }
@@ -62,7 +65,7 @@ ListFlag : {- empty -} { [] }
 
 
 Rule :: { Rule }
-Rule : Ident ':' Name Profile '.' Category '->' ListSymbol { Rule $1 $3 $4 $6 (reverse $8) } 
+Rule : Ident ':' Name Profile '.' Category '->' ListSymbol { Rule $1 $3 $4 $6 $8 } 
 
 
 ListRule :: { [Rule] }
@@ -96,8 +99,9 @@ Symbol : Category { CatS $1 }
 
 
 ListSymbol :: { [Symbol] }
-ListSymbol : {- empty -} { [] } 
-  | ListSymbol Symbol { flip (:) $1 $2 }
+ListSymbol : '.' { [] } 
+  | Symbol { (:[]) $1 }
+  | Symbol ListSymbol { (:) $1 $2 }
 
 
 Name :: { Name }
@@ -110,20 +114,51 @@ ListIdentParam : {- empty -} { [] }
 
 
 Category :: { Category }
-Category : IdentParam '.' Ident ListParam { Category $1 $3 (reverse $4) } 
+Category : IdentParam '.' Ident ListProj { Category $1 $3 (reverse $4) } 
 
 
 IdentParam :: { IdentParam }
-IdentParam : Ident '{' ListParam '}' { IdentParam $1 (reverse $3) } 
+IdentParam : Ident '{' ListField '}' { IdentParam $1 (reverse $3) } 
+
+
+Field :: { Field }
+Field : '.' KeyValue { Field $2 } 
+
+
+ListField :: { [Field] }
+ListField : {- empty -} { [] } 
+  | ListField Field ';' { flip (:) $1 $2 }
+
+
+Proj :: { Proj }
+Proj : '!' Param { Proj $2 } 
+
+
+ListProj :: { [Proj] }
+ListProj : {- empty -} { [] } 
+  | ListProj Proj { flip (:) $1 $2 }
+
+
+KeyValue :: { KeyValue }
+KeyValue : Ident '=' Param { KeyValue $1 $3 } 
+
+
+ListKeyValue :: { [KeyValue] }
+ListKeyValue : {- empty -} { [] } 
+  | KeyValue { (:[]) $1 }
+  | KeyValue ';' ListKeyValue { (:) $1 $3 }
 
 
 Param :: { Param }
-Param : '!' Ident { Param $2 } 
+Param : Ident { ParamSimple $1 } 
+  | Ident '(' ListParam ')' { ParamPatt $1 $3 }
+  | '{' ListKeyValue '}' { ParamRec $2 }
 
 
 ListParam :: { [Param] }
 ListParam : {- empty -} { [] } 
-  | ListParam Param { flip (:) $1 $2 }
+  | Param { (:[]) $1 }
+  | Param ',' ListParam { (:) $1 $3 }
 
 
 

@@ -37,14 +37,28 @@ data Name =
   deriving (Eq,Ord,Show)
 
 data Category =
-   Category IdentParam Ident [Param]
+   Category IdentParam Ident [Proj]
   deriving (Eq,Ord,Show)
 
 data IdentParam =
-   IdentParam Ident [Param]
+   IdentParam Ident [Field]
+  deriving (Eq,Ord,Show)
+
+data Field =
+   Field KeyValue
+  deriving (Eq,Ord,Show)
+
+data Proj =
+   Proj Param
+  deriving (Eq,Ord,Show)
+
+data KeyValue =
+   KeyValue Ident Param
   deriving (Eq,Ord,Show)
 
 data Param =
-   Param Ident
+   ParamSimple Ident
+ | ParamPatt Ident [Param]
+ | ParamRec [KeyValue]
   deriving (Eq,Ord,Show)
 
