@@ -21,7 +21,7 @@ import List (nub)
 
 postParse :: CFTree -> Err Exp
 postParse tree = do
-  iterm <- errIn "postprocessing initial parse tree" $ tree2term tree
+  iterm <- errIn ("postprocessing parse tree" +++ prCFTree tree) $ tree2term tree
   return $ term2trm  iterm
 
 -- an intermediate data structure

@@ -295,9 +295,13 @@ stateAbstract = abstractOf . stateGrammarST
 maybeStateAbstract (ShSt (ma,_,_)) = ma
 hasStateAbstract = maybe False (const True) . maybeStateAbstract
 abstractOfState = maybe emptyAbstractST id . maybeStateAbstract
+-}
 
 stateIsWord sg = isKnownWord (stateMorpho sg)
 
+
+
+{-
 
 -- getting info on a language
 existLang :: ShellState -> Language -> Bool

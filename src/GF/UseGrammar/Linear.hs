@@ -42,13 +42,17 @@ linearizeToRecord gr mk m = lin [] where
     xs' <- mapM (\ (i,x) -> lin (i:ts) x) $ zip [0..] xs
 
     r <- case at of
-      A.AtC f -> look f >>= comp xs'
+      A.AtC f -> lookf c t f >>= comp xs'
       A.AtL s -> return $ recS $ tK $ prt at
       A.AtI i -> return $ recS $ tK $ prt at
-      A.AtV x -> lookCat c >>= comp [tK (prt at)]
-      A.AtM m -> lookCat c >>= comp [tK (prt at)] 
+      A.AtV x -> lookCat c >>= comp [tK (prt_ at)]
+      A.AtM m -> lookCat c >>= comp [tK (prt_ at)] 
 
-    return $ fmk $ mkBinds binds r
+    r' <- case r of     -- to see stg in case the result is variants {}
+      FV [] -> lookCat c >>= comp [tK (prt_ t)]
+      _ -> return r
+
+    return $ fmk $ mkBinds binds r'
 
   look = lookupLin gr . redirectIdent m . rtQIdent
   comp = ccompute gr
@@ -59,6 +63,11 @@ linearizeToRecord gr mk m = lin [] where
 
   lookCat = return . errVal defLindef . look 
          ---- should always be given in the module
+
+  -- to show missing linearization as term
+  lookf c t f = case look f of
+    Ok h -> return h
+    _ -> lookCat c >>= comp [tK (prt_ t)]
 
 
 -- thus the special case:
