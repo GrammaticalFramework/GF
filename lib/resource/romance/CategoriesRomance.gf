@@ -61,6 +61,7 @@ lincat
   V3     = TransVerb ** {s3 : Preposition ; c3 : CaseA} ;
   VS     = Verb ** {mp,mn : Mode} ;
   VV     = Verb ** {c : CaseA} ;
+  VQ     = Verb ;
   VA     = Verb ;
 
   V2S    = TransVerb ;
