@@ -29,26 +29,3 @@ Name. Name ::= SingleQuoteString ;
 Category. Category ::= SingleQuoteString ;
 
 token SingleQuoteString '\'' ((char - ["'\\"]) | ('\\' ["'\\"]))* '\'' ;
-
-{-
-Name. Name ::= [IdentParam] Category;
-terminator IdentParam "/";
-
-Category. Category ::= IdentParam "." Ident [Proj] ;
-
-IdentParam. IdentParam ::= Ident "{" [Field] "}" ;
-
-Field. Field ::= "." KeyValue ;
-terminator Field ";" ;
-
-Proj. Proj ::= "!" Param ;
-separator Proj "" ;
-
-KeyValue. KeyValue ::= Ident "=" Param ;
-separator KeyValue ";" ;
-
-ParamSimple. Param ::= Ident ;
-ParamPatt. Param ::= Ident "(" [Param] ")" ;
-ParamRec. Param ::= "{" [KeyValue] "}" ;
-separator Param "," ;
--}
