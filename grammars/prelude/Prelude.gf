@@ -1,6 +1,6 @@
 -- language-independent prelude facilities
 
-resource Prelude = open (Predef = Predef) in {
+resource Prelude = {
 
 oper
 -- to construct records and tables
@@ -71,15 +71,19 @@ oper
     E0 => E1 ; E1 => E2 ; _ => Emore} ;
 
   -- these were defined in Predef before
-  oper isNil : Tok -> Bool = \b -> pbool2bool (Predef.eqStr [] b) ;
+  isNil : Tok -> Bool = \b -> pbool2bool (Predef.eqStr [] b) ;
 
-  oper ifTok : (A : Type) -> Tok -> Tok -> A -> A -> A = \A,t,u,a,b ->
+  ifTok : (A : Type) -> Tok -> Tok -> A -> A -> A = \A,t,u,a,b ->
       case Predef.eqStr t u of {Predef.PTrue => a ; Predef.PFalse => b} ;
 
   -- so we need an interface
-  oper pbool2bool : Predef.PBool -> Bool = \b -> case b of {
+  pbool2bool : Predef.PBool -> Bool = \b -> case b of {
     Predef.PFalse => False ; Predef.PTrue => True
     } ;
+
+  init : Tok -> Tok = Predef.tk 1 ;
+  last : Tok -> Tok = Predef.dp 1 ;
+
 
 -- bind together two tokens in the lexer, either obligatorily or optionally
 

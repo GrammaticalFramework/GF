@@ -1,6 +1,13 @@
 module HelpFile where
 
 txtHelpFile =
+  "\n-- GF help file updated for GF 2.0, 24/3/2004." ++
+  "\n-- *: Commands and options marked with * are not yet implemented." ++
+  "\n--" ++
+  "\n-- Each command has a long and a short name, options, and zero or more" ++
+  "\n-- arguments. Commands are sorted by functionality. The short name is" ++
+  "\n-- given first." ++
+  "\n" ++
   "\n-- commands that change the state" ++
   "\n" ++
   "\ni, import: i File" ++
@@ -9,37 +16,42 @@ txtHelpFile =
   "\n      If a grammar with the same language name is already in the state," ++
   "\n      it is overwritten - but only if compilation succeeds. " ++
   "\n      The grammar parser depends on the file name suffix:" ++
-  "\n        .gf    normal GF source " ++
-  "\n        .gfl   LaTeX file with grammar in \\begGF..\\end{verbatim} environments" ++
-  "\n        .tex   LaTeX file with grammar in \\begGF..\\end{verbatim} environments" ++
-  "\n        .gfc   already optimized - skip compilation and type checking" ++
-  "\n        .gfhc  already compiled (a Haskell data object)" ++
-  "\n        .ebnf  EBNF format" ++
-  "\n        .cf    Context-free format" ++
+  "\n        .gf    normal GF source" ++
+  "\n        .gfc   canonical GF" ++
+  "\n        .gfr   precompiled GF resource  " ++
+  "\n        .gfcm  multilingual canonical GF" ++
+  "\n       *.ebnf  Extended BNF format" ++
+  "\n       *.cf    Context-free (BNF) format" ++
   "\n  options:" ++
+  "\n      -old          old: parse in GF<2.0 format" ++
   "\n      -v            verbose: give lots of messages " ++
   "\n      -s            silent: don't give error messages" ++
   "\n      -opt          perform branch-sharing optimization" ++
-  "\n      -retain       retain oper and lintype definitions" ++
+  "\n     *-src          source: ignore precompiled gfc and gfr files " ++
   "\n      -nocf         don't build context-free grammar (thus no parser)" ++
   "\n      -nocheckcirc  don't eliminate circular rules from CF " ++
-  "\n      -nocirc       do eliminate circ rules (default; currently just explicit ones)" ++
+  "\n      -cflexer      build an optimized parser with separate lexer trie" ++
   "\n  flags:" ++
-  "\n      -lang    set the name used for the grammar in the session" ++
-  "\n" ++
-  "\nrl, remove language: rl Language" ++
+  "\n      -abs          set the name used for abstract syntax (with -old option)" ++
+  "\n      -cnc          set the name used for concrete syntax (with -old option)" ++
+  "\n      -res          set the name used for resource (with -old option)" ++
+  "\n      " ++
+  "\nrl, remove_language: rl Language" ++
   "\n      Takes away the language from the state." ++
   "\n" ++
-  "\ne,  empty state: e" ++
+  "\ne,  empty: e" ++
   "\n      Takes away all languages and resets all global flags." ++
   "\n" ++
-  "\nsf, set flags: sf Language? Flag*" ++
+  "\nsf, set_flags: sf Language? Flag*" ++
   "\n      The values of the Flags are set for Language. If no language" ++
   "\n      is specified, the flags are set globally." ++
   "\n" ++
+  "\ns,  strip: s" ++
+  "\n      Prune the state by removing source and resource modules." ++
+  "\n" ++
   "\n-- commands that give information about the state" ++
   "\n" ++
-  "\npg, print grammar: pg" ++
+  "\npg, print_grammar: pg" ++
   "\n      Prints the actual grammar (overridden by the -lang=X flag)." ++
   "\n      The -printer=X flag sets the format in which the grammar is" ++
   "\n      written." ++
@@ -50,31 +62,29 @@ txtHelpFile =
   "\n      grammar in LaTeX." ++
   "\n  options:" ++
   "\n      -utf8  apply UTF8-encoding to the grammar" ++
-  "\n" ++
   "\n  flags: " ++
   "\n      -printer" ++
   "\n      -lang" ++
+  "\n" ++
+  "\npm, print_multigrammar: pm" ++
+  "\n      Prints the current multilingual grammar into a .gfcm file." ++
   "\n      " ++
+  "\npo, print_options: po" ++
+  "\n      Print what modules there are in the state. Also" ++
+  "\n      prints those flag values in the current state that differ from defaults." ++
   "\n" ++
-  "\npm, print multigrammar: pm" ++
-  "\n      Prints the current multilingual grammar into a Haskell file" ++
-  "\n      in a canonical format (usable by the canonical GF editor)." ++
-  "\n  options" ++
-  "\n      -opt perform branch-sharing optimization (should not have been done at import)" ++
-  "\n" ++
-  "\npo, print options: po" ++
-  "\n      Prints those flag values in the current state that differ from defaults." ++
-  "\n" ++
-  "\npl, print languages: pl" ++
+  "\npl, print_languages: pl" ++
   "\n      Prints the names of currently available languages." ++
   "\n" ++
+  "\npi, print_info: pi Ident" ++
+  "\n      Prints information on the identifier." ++
   "\n" ++
   "\n-- commands that execute and show the session history" ++
   "\n" ++
-  "\neh, execute history: eh File" ++
+  "\neh, execute_history: eh File" ++
   "\n      Executes commands in the file." ++
   "\n" ++
-  "\nph, print history; ph" ++
+  "\nph, print_history; ph" ++
   "\n      Prints the commands issued during the GF session." ++
   "\n      The result is readable by the eh command." ++
   "\n      HINT: write \"ph | wf foo.hist\" to save the history." ++
@@ -116,21 +126,21 @@ txtHelpFile =
   "\n      -parser  use this context-free parsing method" ++
   "\n      -number  return this many results at most" ++
   "\n" ++
-  "\ntt, test tokenizer: tt String" ++
+  "\ntt, test_tokenizer: tt String" ++
   "\n      Show the token list sent to the parser when String is parsed." ++
   "\n      HINT: can be useful when debugging the parser." ++
   "\n  flags: " ++
   "\n     -lexer    use this lexer" ++
   "\n" ++
-  "\ncc, compute concrete: cc Term" ++
-  "\n      Compute a term by concrete syntax definitions. " ++
-  "\n      N.B. You need the flag -retain when importing the grammar, if you want " ++
+  "\ncc, compute_concrete: cc Ident Term" ++
+  "\n      Compute a term by concrete syntax definitions." ++
+  "\n      The identifier Ident is a resource module name " ++
+  "\n      needed to resolve constant. " ++
+  "\n      N.B. You need the flag -src when importing the grammar, if you want " ++
   "\n      the oper definitions to be retained after compilation; otherwise this" ++
   "\n      command does not expand oper constants." ++
   "\n      N.B.' The resulting Term is not a term in the sense of abstract syntax," ++
   "\n      and hence not a valid input to a Tree-demanding command." ++
-  "\n  flags:" ++
-  "\n     -lang" ++
   "\n" ++
   "\nt, translate: t Lang Lang String" ++
   "\n      Parses String in Lang1 and linearizes the resulting Trees in Lang2." ++
@@ -139,7 +149,7 @@ txtHelpFile =
   "\n      -lexer" ++
   "\n      -parser" ++
   "\n" ++
-  "\ngr, generate random: gr" ++
+  "\ngr, generate_random: gr" ++
   "\n      Generates a random Tree." ++
   "\n  flags:" ++
   "\n      -cat     generate in this category" ++
@@ -147,7 +157,7 @@ txtHelpFile =
   "\n      -number  generate this number of trees" ++
   "\n      -depth   use this number of search steps at most" ++
   "\n" ++
-  "\nma, morphologically analyse: ma String" ++
+  "\nma, morphologically_analyse: ma String" ++
   "\n      Runs morphological analysis on each word in String and displays" ++
   "\n      the results line by line." ++
   "\n  options:" ++
@@ -158,43 +168,38 @@ txtHelpFile =
   "\n" ++
   "\n-- elementary generation of Strings and Trees" ++
   "\n" ++
-  "\nps, put string: ps String" ++
+  "\nps, put_string: ps String" ++
   "\n      Returns its argument String, like Unix echo." ++
-  "\n      HINT. The strength of ps comes from the possibility to receive the argument" ++
-  "\n      from a pipeline, and altering it by the -filter flag." ++
+  "\n      HINT. The strength of ps comes from the possibility to receive the " ++
+  "\n      argument from a pipeline, and altering it by the -filter flag." ++
   "\n  flags:" ++
   "\n      -filter  filter the result through this string processor " ++
   "\n      -length  cut the string after this number of characters" ++
   "\n" ++
-  "\npt, put tree: pt Tree" ++
+  "\npt, put_tree: pt Tree" ++
   "\n      Returns its argument Tree, like a specialized Unix echo." ++
-  "\n      HINT. The strength of pt comes from the possibility to receive the argument" ++
-  "\n      from a pipeline, and altering it by the -transform flag." ++
+  "\n      HINT. The strength of pt comes from the possibility to receive " ++
+  "\n      the argument from a pipeline, and altering it by the -transform flag." ++
   "\n  flags:" ++
   "\n      -transform   transform the result by this term processor" ++
   "\n      -number      generate this number of terms at most" ++
   "\n" ++
-  "\nst, show tree: st Tree" ++
+  "\nst, show_tree: st Tree" ++
   "\n      Prints the tree as a string. Unlike pt, this command cannot be" ++
   "\n      used in a pipe to produce a tree, since its output is a string." ++
   "\n  flags:" ++
   "\n      -printer     show the tree in a special format (-printer=xml supported)" ++
   "\n" ++
-  "\nwt, wrap tree: wt Fun Tree" ++
-  "\n      Returns its argument Tree wrapped in the function Fun." ++
-  "\n  flags:" ++
-  "\n      -c           compute the resulting tree" ++
-  "\n" ++
   "\n" ++
   "\n-- subshells" ++
   "\n" ++
-  "\nes, editing session: es" ++
+  "\nes, editing_session: es" ++
   "\n      Opens an interactive editing session." ++
   "\n      N.B. Exit from a Fudget session is to the Unix shell, not to GF. " ++
   "\n  options:" ++
   "\n      -f Fudget GUI (necessary for Unicode; only available in X Window System)" ++
   "\n" ++
-  "\nts, translation session: ts" ++
+  "\nts, translation_session: ts" ++
   "\n      Translates input lines from any of the actual languages to any other one." ++
   "\n      To exit, type a full stop (.) alone on a line." ++
   "\n      N.B. Exit from a Fudget session is to the Unix shell, not to GF. " ++
@@ -204,7 +209,7 @@ txtHelpFile =
   "\n  flags:" ++
   "\n      -cat" ++
   "\n" ++
-  "\ntq, translation quiz: tq Lang Lang" ++
+  "\n* tq, translation_quiz: tq Lang Lang" ++
   "\n      Random-generates translation exercises from Lang1 to Lang2," ++
   "\n      keeping score of success." ++
   "\n      To interrupt, type a full stop (.) alone on a line." ++
@@ -212,13 +217,13 @@ txtHelpFile =
   "\n  flags:" ++
   "\n      -cat" ++
   "\n" ++
-  "\ntl, translation list: tl Lang Lang Int" ++
+  "\n* tl, translation_list: tl Lang Lang Int" ++
   "\n      Random-generates a list of Int translation exercises from Lang1 to Lang2." ++
   "\n      HINT: use wf to save the exercises in a file." ++
   "\n  flags:" ++
   "\n      -cat" ++
   "\n" ++
-  "\nmq, morphology quiz: mq" ++
+  "\n* mq, morphology_quiz: mq" ++
   "\n      Random-generates morphological exercises," ++
   "\n      keeping score of success." ++
   "\n      To interrupt, type a full stop (.) alone on a line." ++
@@ -228,7 +233,7 @@ txtHelpFile =
   "\n      -cat" ++
   "\n      -lang" ++
   "\n" ++
-  "\nml, morphology list: tl Int" ++
+  "\n* ml, morphology_list: tl Int" ++
   "\n      Random-generates a list of Int morphological exercises," ++
   "\n      keeping score of success." ++
   "\n      HINT: use wf to save the exercises in a file." ++
@@ -239,38 +244,39 @@ txtHelpFile =
   "\n" ++
   "\n-- IO related commands" ++
   "\n" ++
-  "\nrf, read file: rf File" ++
+  "\nrf, read_file: rf File" ++
   "\n      Returns the contents of File as a String; error is File does not exist." ++
   "\n" ++
-  "\nwf, write file: wf File String" ++
+  "\nwf, write_file: wf File String" ++
   "\n      Writes String into File; File is created if it does not exist." ++
   "\n      N.B. the command overwrites File without a warning." ++
   "\n" ++
-  "\naf, append file: af File" ++
+  "\naf, append_file: af File" ++
   "\n      Writes String into the end of File; File is created if it does not exist." ++
   "\n" ++
-  "\ntg, transform grammar: tg File" ++
-  "\n      Reads File, parses as a grammar, but instead of compiling further, prints it. " ++
+  "\n* tg, transform_grammar: tg File" ++
+  "\n      Reads File, parses as a grammar, " ++
+  "\n      but instead of compiling further, prints it. " ++
   "\n      The environment is not changed. When parsing the grammar, the same file" ++
   "\n      name suffixes are supported as in the i command." ++
-  "\n      HINT: use this command to print the grammar in another format (the -printer" ++
-  "\n      flag); pipe it to wf to save this format." ++
+  "\n      HINT: use this command to print the grammar in " ++
+  "\n      another format (the -printer flag); pipe it to wf to save this format." ++
   "\n  flags:" ++
   "\n      -printer  (only -printer=latex supported currently)" ++
   "\n" ++
-  "\ncl, convert latex: cl File" ++
+  "\n* cl, convert_latex: cl File" ++
   "\n      Reads File, which is expected to be in LaTeX form." ++
-  "\n      Two environments are treated in special ways:" ++
-  "\n      \\begGF    - \\end{verbatim}, which contains GF judgements," ++
-  "\n      \\begTGF   - \\end{verbatim}, which contains a GF expression (displayed), and" ++
-  "\n      \\begInTGF - \\end{verbatim}, which contains a GF expressions (inlined)." ++
+  "\n      Three environments are treated in special ways:" ++
+  "\n        \\begGF    - \\end{verbatim}, which contains GF judgements," ++
+  "\n        \\begTGF   - \\end{verbatim}, which contains a GF expression (displayed)" ++
+  "\n        \\begInTGF - \\end{verbatim}, which contains a GF expressions (inlined)." ++
   "\n      Moreover, certain macros should be included in the file; you can" ++
   "\n      get those macros by applying 'tg -printer=latex foo.gf' to any grammar" ++
   "\n      foo.gf. Notice that the same File can be imported as a GF grammar," ++
   "\n      consisting of all the judgements in \\begGF environments." ++
   "\n      HINT: pipe with 'wf Foo.tex' to generate a new Latex file." ++
   "\n" ++
-  "\nsa, speak aloud: sa String" ++
+  "\nsa, speak_aloud: sa String" ++
   "\n      Uses the Festival speech generator to produce speech for String." ++
   "\n      The command cupports Festival's language flag, which is sent verbatim" ++
   "\n      to Festival, e.g. -language=spanish. Omitting this flag gives the " ++
@@ -285,7 +291,7 @@ txtHelpFile =
   "\n      Exits GF." ++
   "\n      HINT: you can use 'ph | wf history' to save your session." ++
   "\n" ++
-  "\n!, system command: ! String" ++
+  "\n!, system_command: ! String" ++
   "\n      Issues a system command. No value is returned to GF." ++
   "\n" ++
   "\n" ++
@@ -338,21 +344,16 @@ txtHelpFile =
   "\n-printer: format in which the grammar is printed. The default is gf." ++
   "\n    -printer=gf             GF grammar" ++
   "\n    -printer=cf             context-free grammar" ++
-  "\n    -printer=resource       resource grammar (cat+lincat, fun+lin --> oper)" ++
-  "\n    -printer=resourcetypes  resource grammar type signatures" ++
-  "\n    -printer=resourcedefs   resource grammar operation definitions" ++
-  "\n    -printer=happy          source file for Happy parser generator" ++
-  "\n    -printer=srg            speech recognition grammar" ++
-  "\n    -printer=canon          grammar compiled into a canonical form, Haskell module" ++
-  "\n    -printer=canonOpt       canonical form, with branch-sharing optimization" ++
-  "\n    -printer=gfhs           compiled grammar as Haskell data object" ++
-  "\n    -printer=haskell        abstract syntax in Haskell, with translations to/from GF" ++
+  "\n   *-printer=happy          source file for Happy parser generator" ++
+  "\n   *-printer=srg            speech recognition grammar" ++
+  "\n   *-printer=haskell        abstract syntax in Haskell, with transl to/from GF" ++
   "\n    -printer=morpho         full-form lexicon, long format" ++
-  "\n    -printer=latex          LaTeX file (for the tg command)" ++
+  "\n   *-printer=latex          LaTeX file (for the tg command)" ++
   "\n    -printer=fullform       full-form lexicon, short format" ++
-  "\n    -printer=xml            XML: DTD for the pg command, object for st" ++
+  "\n   *-printer=xml            XML: DTD for the pg command, object for st" ++
+  "\n    -printer=old            old GF: file readable by GF 1.2" ++
   "\n" ++
-  "\n-startcat: like -cat, but used in grammars (to avoid clash with the keyword cat)" ++
+  "\n-startcat: like -cat, but used in grammars (to avoid clash with keyword cat)" ++
   "\n" ++
   "\n-transform: transformation performed on a syntax tree. The default is identity." ++
   "\n    -transform=identity  no change" ++
@@ -361,16 +362,16 @@ txtHelpFile =
   "\n    -transform=solve     solve metavariables as derived refinements" ++
   "\n    -transform=context   solve metavariables by unique refinements as variables" ++
   "\n    -transform=delete    replace the term by metavariable" ++
-  "\n    -transform=predcalc  generating sentences from predicate calculus formulas" ++
   "\n" ++
   "\n-unlexer: untokenization transforming linearization output into a string." ++
   "\n       The default is unwords." ++
   "\n    -unlexer=unwords     space-separated token list (like unwords)" ++
-  "\n    -unlexer=text        format as text: punctuation, capitalization, paragraph <p>" ++
+  "\n    -unlexer=text        format as text: punctuation, capitals, paragraph <p>" ++
   "\n    -unlexer=code        format as code (spacing, indentation)" ++
   "\n    -unlexer=textlit     like text, but remove string literal quotes" ++
   "\n    -unlexer=codelit     like code, but remove string literal quotes" ++
   "\n    -unlexer=concat      remove all spaces" ++
   "\n    -unlexer=bind        like identity, but bind at \"&+\"" ++
   "\n" ++
+  "\n-- *: Commands and options marked with * are not yet implemented." ++
   []

@@ -3,12 +3,34 @@ module AppPredefined where
 import Operations
 import Grammar
 import Ident
-import PrGrammar (prt)
+import Macros
+import PrGrammar (prt,prtBad)
 ---- import PGrammar (pTrm)
 
 -- predefined function type signatures and definitions. AR 12/3/2003.
 
----- typPredefined :: Term -> Err Type
+isInPredefined :: Ident -> Bool
+isInPredefined = err (const True) (const False) . typPredefined
+
+typPredefined :: Ident -> Err Type
+typPredefined c@(IC f) = case f of
+  "Int"    -> return typePType
+  "PBool"  -> return typePType
+---  "PFalse" -> -- hidden
+---  "PTrue"  ->
+  "dp"     -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
+  "drop"   -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
+  "eqInt"  -> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "PBool")
+  "eqStr"  -> return $ mkFunType [typeTok,typeTok] (cnPredef "PBool")
+  "length" -> return $ mkFunType [typeTok] (cnPredef "Int")
+  "occur"  -> return $ mkFunType [typeTok,typeTok] (cnPredef "PBool")
+  "plus"   -> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "PInt")
+----  "read"   -> (P : Type) -> Tok -> P
+----  "show"   -> (P : Type) -> P -> Tok
+  "take"   -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
+  "tk"     -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
+  _        -> prtBad "unknown in Predef:" c
+typPredefined c = prtBad "unknown in Predef:" c
 
 appPredefined :: Term -> Term
 appPredefined t = case t of

@@ -16,6 +16,9 @@ import Option
 import ParGF
 import qualified LexGF as L
 
+import PPrCF
+import CFtoGrammar
+
 import ReadFiles ----
 
 import List (nub)
@@ -81,3 +84,11 @@ oldLexer = map change . L.tokens where
   new = words $ "abstract concrete interface incomplete " ++ 
                 "instance out open resource reuse transfer union with where"
 
+getCFGrammar :: Options -> FilePath -> IOE SourceGrammar
+getCFGrammar opts file = do
+  let mo = takeWhile (/='-') file
+  s    <- ioeIO $ readFileIf file
+  cf   <- ioeErr $ pCF mo file
+  defs <- return $ cf2grammar cf
+  let g = A.OldGr A.NoIncl defs
+  ioeErr $ transOldGrammar opts file g

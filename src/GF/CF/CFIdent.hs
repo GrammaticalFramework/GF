@@ -68,6 +68,10 @@ varCFFun = mkCFFun . AV
 consCFFun :: CIdent -> CFFun
 consCFFun = mkCFFun . AC
 
+-- standard way of making cf fun
+string2CFFun :: String -> String -> CFFun
+string2CFFun m c = consCFFun $ mkCIdent m c
+
 stringCFFun :: String -> CFFun 
 stringCFFun = mkCFFun . AS
 
@@ -79,6 +83,9 @@ dummyCFFun = varCFFun $ identC "_" --- used in lexer-by-need rules
 
 cfFun2String :: CFFun -> String
 cfFun2String (CFFun (f,_)) = prt f
+
+cfFun2Ident :: CFFun -> Ident
+cfFun2Ident (CFFun (f,_)) = identC $ prt_ f ---
 
 cfFun2Profile :: CFFun -> Profile
 cfFun2Profile (CFFun (_,p)) = p
@@ -130,6 +137,9 @@ moduleOfCFCat (CFCat (CIQ m _, _)) = m
 -- the opposite direction
 cfCat2Cat :: CFCat -> (Ident,Ident)
 cfCat2Cat (CFCat (CIQ m c,_)) = (m,c)
+
+cfCat2Ident :: CFCat -> Ident
+cfCat2Ident = snd . cfCat2Cat
 
 lexCFCat :: CFCat -> CFCat
 lexCFCat cat = ident2CFCat (uncurry CIQ (cfCat2Cat cat)) (identC "*")

@@ -13,7 +13,7 @@ import API
 import IOGrammar
 import Compile
 ---- import GFTex
----- import TeachYourself -- also a subshell
+import TeachYourself -- also a subshell
 
 import ShellState
 import Option
@@ -180,7 +180,6 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
     justOutput (putStrLn (err id prt (
                 string2srcTerm src m t >>= Co.computeConcrete src))) sa
 
-{- ----
   CTranslationQuiz il ol -> justOutput (teachTranslation opts (sgr il) (sgr ol)) sa
   CTranslationList il ol n -> do 
     qs <- transTrainList opts (sgr il) (sgr ol) (toInteger n)
@@ -190,14 +189,14 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
   CMorphoList n -> do 
     qs <- useIOE [] $ morphoTrainList opts gro (toInteger n)
     returnArg (AString $ foldr (+++++) [] [unlines (s:ss) | (s,ss) <- qs]) sa
--}
+
   CReadFile file   -> returnArgIO   (readFileIf file >>= return . AString) sa
   CWriteFile file  -> justOutputArg (writeFile file) sa
   CAppendFile file -> justOutputArg (appendFile file) sa
   CSpeakAloud      -> justOutputArg (speechGenerate opts) sa
   CSystemCommand s -> justOutput    (system s >> return ()) sa
------  CPutString       -> changeArg     (opSS2CommandArg (optStringCommand opts gro)) sa
------  CShowTerm        -> changeArg     (opTS2CommandArg (optPrintTerm opts gro) . s2t) sa
+  CPutString       -> changeArg    (opSS2CommandArg (optStringCommand opts gro)) sa
+-----  CShowTerm        -> changeArg  (opTS2CommandArg (optPrintTerm opts gro) . s2t) sa
 
   CSetFlag           -> changeState (addGlobalOptions opts0) sa
 ---- deprec!  CSetLocalFlag lang -> changeState (addLocalOptions lang opts0) sa
@@ -211,7 +210,10 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
   CPrintInformation c -> justOutput (useIOE () $ showInformation opts st c) sa
   CPrintLanguages     -> justOutput 
                          (putStrLn $ unwords $ map prLanguage $ allLanguages st) sa
-  CPrintMultiGrammar  -> returnArg (AString (prCanonGrammar (canModules st))) sa
+  CPrintMultiGrammar  -> do
+    sa' <- changeState purgeShellState sa
+    returnArg (AString (prCanonGrammar (canModules st))) sa'
+
 ----  CPrintGramlet       -> returnArg (AString (Gr.prGramlet st)) sa
 ----  CPrintCanonXML      -> returnArg (AString (Canon.prCanonXML st False)) sa
 ----  CPrintCanonXMLStruct -> returnArg (AString (Canon.prCanonXML st True)) sa

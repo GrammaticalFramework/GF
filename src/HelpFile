@@ -1,0 +1,374 @@
+-- GF help file updated for GF 2.0, 24/3/2004.
+-- *: Commands and options marked with * are not yet implemented.
+--
+-- Each command has a long and a short name, options, and zero or more
+-- arguments. Commands are sorted by functionality. The short name is
+-- given first.
+
+-- commands that change the state
+
+i, import: i File
+      Reads a grammar from File and compiles it into a GF runtime grammar.
+      Files "include"d in File are read recursively, nubbing repetitions.
+      If a grammar with the same language name is already in the state,
+      it is overwritten - but only if compilation succeeds. 
+      The grammar parser depends on the file name suffix:
+        .gf    normal GF source
+        .gfc   canonical GF
+        .gfr   precompiled GF resource  
+        .gfcm  multilingual canonical GF
+       *.ebnf  Extended BNF format
+       *.cf    Context-free (BNF) format
+  options:
+      -old          old: parse in GF<2.0 format
+      -v            verbose: give lots of messages 
+      -s            silent: don't give error messages
+      -opt          perform branch-sharing optimization
+     *-src          source: ignore precompiled gfc and gfr files 
+      -nocf         don't build context-free grammar (thus no parser)
+      -nocheckcirc  don't eliminate circular rules from CF 
+      -cflexer      build an optimized parser with separate lexer trie
+  flags:
+      -abs          set the name used for abstract syntax (with -old option)
+      -cnc          set the name used for concrete syntax (with -old option)
+      -res          set the name used for resource (with -old option)
+      
+* rl, remove_language: rl Language
+      Takes away the language from the state.
+
+e,  empty: e
+      Takes away all languages and resets all global flags.
+
+sf, set_flags: sf Language? Flag*
+      The values of the Flags are set for Language. If no language
+      is specified, the flags are set globally.
+
+s,  strip: s
+      Prune the state by removing source and resource modules.
+
+-- commands that give information about the state
+
+pg, print_grammar: pg
+      Prints the actual grammar (overridden by the -lang=X flag).
+      The -printer=X flag sets the format in which the grammar is
+      written.
+      N.B. since grammars are compiled when imported, this command
+      generally does not show the grammar in the same format as the
+      source. In particular, the -printer=latex is not supported. 
+      Use the command tg -printer=latex File to print the source 
+      grammar in LaTeX.
+  options:
+      -utf8  apply UTF8-encoding to the grammar
+  flags: 
+      -printer
+      -lang
+
+pm, print_multigrammar: pm
+      Prints the current multilingual grammar into a .gfcm file.
+      (Automatically executes the strip command (s) before doing this.)
+
+po, print_options: po
+      Print what modules there are in the state. Also
+      prints those flag values in the current state that differ from defaults.
+
+pl, print_languages: pl
+      Prints the names of currently available languages.
+
+pi, print_info: pi Ident
+      Prints information on the identifier.
+
+-- commands that execute and show the session history
+
+eh, execute_history: eh File
+      Executes commands in the file.
+
+ph, print_history; ph
+      Prints the commands issued during the GF session.
+      The result is readable by the eh command.
+      HINT: write "ph | wf foo.hist" to save the history.
+
+
+-- linearization, parsing, translation, and computation
+
+l,  linearize: l PattList? Tree
+      Shows all linearization forms of Tree by the actual grammar
+      (which is overridden by the -lang flag). 
+      The pattern list has the form [P, ... ,Q] where P,...,Q follow GF 
+      syntax for patterns. All those forms are generated that match with the
+      pattern list. Too short lists are filled with variables in the end.
+      Only the -table flag is available if a pattern list is specified.
+      HINT: see GF language specification for the syntax of Pattern and Term.
+      You can also copy and past parsing results.
+  options:  
+      -table   show parameters
+      -struct  bracketed form
+      -record  record, i.e. explicit GF concrete syntax term
+  flags:
+      -lang    linearize in this grammar
+      -number  give this number of forms at most
+      -unlexer filter output through unlexer
+
+p,  parse: p String
+      Shows all Trees returned for String by the actual
+      grammar (overridden by the -lang flag), in the category S (overridden
+      by the -cat flag).
+  options:
+      -n       non-strict: tolerates morphological errors
+      -ign     ignore unknown words when parsing
+      -raw     return context-free terms in raw form
+      -v       verbose: give more information if parsing fails
+  flags:
+      -cat     parse in this category
+      -lang    parse in this grammar
+      -lexer   filter input through this lexer
+      -parser  use this context-free parsing method
+      -number  return this many results at most
+
+tt, test_tokenizer: tt String
+      Show the token list sent to the parser when String is parsed.
+      HINT: can be useful when debugging the parser.
+  flags: 
+     -lexer    use this lexer
+
+cc, compute_concrete: cc Ident Term
+      Compute a term by concrete syntax definitions.
+      The identifier Ident is a resource module name 
+      needed to resolve constant. 
+      N.B. You need the flag -src when importing the grammar, if you want 
+      the oper definitions to be retained after compilation; otherwise this
+      command does not expand oper constants.
+      N.B.' The resulting Term is not a term in the sense of abstract syntax,
+      and hence not a valid input to a Tree-demanding command.
+
+t, translate: t Lang Lang String
+      Parses String in Lang1 and linearizes the resulting Trees in Lang2.
+  flags:
+      -cat
+      -lexer
+      -parser
+
+gr, generate_random: gr
+      Generates a random Tree.
+  flags:
+      -cat     generate in this category
+      -lang    use the abstract syntax of this grammar
+      -number  generate this number of trees
+      -depth   use this number of search steps at most
+
+ma, morphologically_analyse: ma String
+      Runs morphological analysis on each word in String and displays
+      the results line by line.
+  options:
+      -short   show analyses in bracketed words, instead of separate lines
+  flags:
+      -lang
+
+
+-- elementary generation of Strings and Trees
+
+ps, put_string: ps String
+      Returns its argument String, like Unix echo.
+      HINT. The strength of ps comes from the possibility to receive the 
+      argument from a pipeline, and altering it by the -filter flag.
+  flags:
+      -filter  filter the result through this string processor 
+      -length  cut the string after this number of characters
+
+pt, put_tree: pt Tree
+      Returns its argument Tree, like a specialized Unix echo.
+      HINT. The strength of pt comes from the possibility to receive 
+      the argument from a pipeline, and altering it by the -transform flag.
+  flags:
+      -transform   transform the result by this term processor
+      -number      generate this number of terms at most
+
+* st, show_tree: st Tree
+      Prints the tree as a string. Unlike pt, this command cannot be
+      used in a pipe to produce a tree, since its output is a string.
+  flags:
+      -printer     show the tree in a special format (-printer=xml supported)
+
+
+-- subshells
+
+es, editing_session: es
+      Opens an interactive editing session.
+      N.B. Exit from a Fudget session is to the Unix shell, not to GF. 
+  options:
+      -f Fudget GUI (necessary for Unicode; only available in X Window System)
+
+ts, translation_session: ts
+      Translates input lines from any of the actual languages to any other one.
+      To exit, type a full stop (.) alone on a line.
+      N.B. Exit from a Fudget session is to the Unix shell, not to GF. 
+      HINT: Set -parser and -lexer locally in each grammar.
+  options:
+      -f Fudget GUI (necessary for Unicode; only available in X Window System)
+  flags:
+      -cat
+
+tq, translation_quiz: tq Lang Lang
+      Random-generates translation exercises from Lang1 to Lang2,
+      keeping score of success.
+      To interrupt, type a full stop (.) alone on a line.
+      HINT: Set -parser and -lexer locally in each grammar.
+  flags:
+      -cat
+
+tl, translation_list: tl Lang Lang Int
+      Random-generates a list of Int translation exercises from Lang1 to Lang2.
+      HINT: use wf to save the exercises in a file.
+  flags:
+      -cat
+
+mq, morphology_quiz: mq
+      Random-generates morphological exercises,
+      keeping score of success.
+      To interrupt, type a full stop (.) alone on a line.
+      HINT: use printname judgements in your grammar to
+      produce nice expressions for desired forms.
+  flags:
+      -cat
+      -lang
+
+ml, morphology_list: ml Int
+      Random-generates a list of Int morphological exercises,
+      keeping score of success.
+      HINT: use wf to save the exercises in a file.
+  flags:
+      -cat
+      -lang
+
+
+-- IO related commands
+
+rf, read_file: rf File
+      Returns the contents of File as a String; error is File does not exist.
+
+wf, write_file: wf File String
+      Writes String into File; File is created if it does not exist.
+      N.B. the command overwrites File without a warning.
+
+af, append_file: af File
+      Writes String into the end of File; File is created if it does not exist.
+
+* tg, transform_grammar: tg File
+      Reads File, parses as a grammar, 
+      but instead of compiling further, prints it. 
+      The environment is not changed. When parsing the grammar, the same file
+      name suffixes are supported as in the i command.
+      HINT: use this command to print the grammar in 
+      another format (the -printer flag); pipe it to wf to save this format.
+  flags:
+      -printer  (only -printer=latex supported currently)
+
+* cl, convert_latex: cl File
+      Reads File, which is expected to be in LaTeX form.
+      Three environments are treated in special ways:
+        \begGF    - \end{verbatim}, which contains GF judgements,
+        \begTGF   - \end{verbatim}, which contains a GF expression (displayed)
+        \begInTGF - \end{verbatim}, which contains a GF expressions (inlined).
+      Moreover, certain macros should be included in the file; you can
+      get those macros by applying 'tg -printer=latex foo.gf' to any grammar
+      foo.gf. Notice that the same File can be imported as a GF grammar,
+      consisting of all the judgements in \begGF environments.
+      HINT: pipe with 'wf Foo.tex' to generate a new Latex file.
+
+sa, speak_aloud: sa String
+      Uses the Festival speech generator to produce speech for String.
+      The command cupports Festival's language flag, which is sent verbatim
+      to Festival, e.g. -language=spanish. Omitting this flag gives the 
+      system-dependent default voice (often British English).
+     flags:
+       -language
+
+h, help: h
+      Displays this help message.
+
+q, quit: q
+      Exits GF.
+      HINT: you can use 'ph | wf history' to save your session.
+
+!, system_command: ! String
+      Issues a system command. No value is returned to GF.
+
+
+
+-- Flags. The availability of flags is defined separately for each command.
+
+-cat: category in which parsing is performed.
+      The default is S.
+
+-depth: the search depth in e.g. random generation.
+      The default depends on application.
+
+-filter: operation performed on a string. The default is identity.
+    -filter=identity     no change
+    -filter=erase        erase the text
+    -filter=take100      show the first 100 characters
+    -filter=length       show the length of the string
+    -filter=text         format as text (punctuation, capitalization)
+    -filter=code         format as code (spacing, indentation)
+    -filter=latexfile    embed in a LaTeX file 
+
+-lang: grammar used when executing a grammar-dependent command.
+       The default is the last-imported grammar.
+
+-language: voice used by Festival as its --language flag in the sa command. 
+       The default is system-dependent. 
+
+-length: the maximum number of characters shown of a string. 
+       The default is unlimited.
+
+-lexer: tokenization transforming a string into lexical units for a parser.
+       The default is words.
+    -lexer=words         tokens are separated by spaces or newlines
+    -lexer=literals      like words, but GF integer and string literals recognized
+    -lexer=vars          like words, but "x","x_...","$...$" as vars, "?..." as meta
+    -lexer=chars         each character is a token
+    -lexer=code          use Haskell's lex
+    -lexer=text          with conventions on punctuation and capital letters
+    -lexer=codelit       like code, but treat unknown words as string literals
+    -lexer=textlit       like text, but treat unknown words as string literals
+    -lexer=codeC         use a C-like lexer
+
+-number: the maximum number of generated items in a list. 
+       The default is unlimited.
+
+-parser: Context-free    parsing algorithm. The default is chart.
+    -parser=earley       Earley algorithm
+    -parser=chart        bottom-up chart parser
+
+-printer: format in which the grammar is printed. The default is gf.
+    -printer=gf             GF grammar
+    -printer=cf             context-free grammar
+   *-printer=happy          source file for Happy parser generator
+   *-printer=srg            speech recognition grammar
+   *-printer=haskell        abstract syntax in Haskell, with transl to/from GF
+    -printer=morpho         full-form lexicon, long format
+   *-printer=latex          LaTeX file (for the tg command)
+    -printer=fullform       full-form lexicon, short format
+   *-printer=xml            XML: DTD for the pg command, object for st
+    -printer=old            old GF: file readable by GF 1.2
+
+-startcat: like -cat, but used in grammars (to avoid clash with keyword cat)
+
+-transform: transformation performed on a syntax tree. The default is identity.
+    -transform=identity  no change
+    -transform=compute   compute by using definitions in the grammar
+    -transform=typecheck return the term only if it is type-correct
+    -transform=solve     solve metavariables as derived refinements
+    -transform=context   solve metavariables by unique refinements as variables
+    -transform=delete    replace the term by metavariable
+
+-unlexer: untokenization transforming linearization output into a string.
+       The default is unwords.
+    -unlexer=unwords     space-separated token list (like unwords)
+    -unlexer=text        format as text: punctuation, capitals, paragraph <p>
+    -unlexer=code        format as code (spacing, indentation)
+    -unlexer=textlit     like text, but remove string literal quotes
+    -unlexer=codelit     like code, but remove string literal quotes
+    -unlexer=concat      remove all spaces
+    -unlexer=bind        like identity, but bind at "&+"
+
+-- *: Commands and options marked with * are not yet implemented.

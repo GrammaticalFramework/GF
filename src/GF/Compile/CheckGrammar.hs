@@ -13,6 +13,7 @@ import LookAbs
 import Macros
 import ReservedWords ----
 import PatternMatch
+import AppPredefined
 
 import Operations
 import CheckM
@@ -207,6 +208,8 @@ computeLType gr t = do
  where
   comp ty = case ty of
 
+    Q m _ | m == cPredef -> return ty
+
     Q m ident -> do
       ty' <- checkErr (lookupResDef gr m ident) 
       if ty' == ty then return ty else comp ty' --- is this necessary to test?
@@ -255,6 +258,8 @@ checkReservedId x = let c = prt x in
 
 inferLType :: SourceGrammar -> Term -> Check (Term, Type)
 inferLType gr trm = case trm of
+
+   Q m ident | m==cPredef -> termWith trm $ checkErr (typPredefined ident)
 
    Q m ident -> checks [
      termWith trm $ checkErr (lookupResType gr m ident)
@@ -616,6 +621,7 @@ checkEqLType env t u trm = do
      ---- this should be made in Rename
      (Q  m a, Q  n b) | a == b -> elem m (allExtendsPlus env n) 
                                || elem n (allExtendsPlus env m)
+                               || m == n --- for Predef
      (QC m a, QC n b) | a == b -> elem m (allExtendsPlus env n) 
                                || elem n (allExtendsPlus env m)
      (QC m a, Q  n b) | a == b -> elem m (allExtendsPlus env n) 

@@ -148,7 +148,7 @@ allLinsAsRec gr c t = linearizeNoMark gr c t >>= expandLinTables gr >>= allLinVa
 
 -- the value is a list of structures arranged as records of tables of strings
 -- only taking into account string fields
-allLinTables :: CanonGrammar ->Ident ->A.Tree -> Err [[(Label,[([Patt],[String])])]]
+allLinTables :: CanonGrammar ->Ident ->A.Tree ->Err [[(Label,[([Patt],[String])])]]
 allLinTables gr c t = do
   r' <- allLinsAsRec gr c t
   mapM (mapM getS) r'

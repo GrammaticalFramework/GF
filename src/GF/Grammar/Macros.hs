@@ -40,6 +40,12 @@ qq (m,c) = Q m c
 
 typeForm = qTypeForm ---- no need to dist any more
 
+cPredef :: Ident
+cPredef = identC "Predef"
+
+cnPredef :: String -> Term
+cnPredef f = Q cPredef (identC f)
+
 typeFormCnc :: Type -> Err (Context, Type)
 typeFormCnc t = case t of
   Prod x a b  -> do

@@ -10,7 +10,7 @@ Highlights, preliminary version
 
 <p>
 
-13/10/2003 - 25/11
+13/10/2003 - 25/11 - 24/3/2004
 
 <p>
 
@@ -35,8 +35,10 @@ An accurate <a href="DocGF.ps.gz">language specification</a> is now available.
 <li> Hierarchic structure (<tt>extend</tt>) + cross-cutting reuse (<tt>open</tt>)
 <li> Separate compilation, one module per file
 <li> Reuse of <tt>abstract</tt>+<tt>concrete</tt> as <tt>resource</tt>
-<li> New (experimental) module types: <tt>transfer</tt>, 
+<li> New module types:
      <tt>interface</tt>, <tt>instance</tt>, <tt>incomplete</tt>.
+<li> New experimental module types: <tt>transfer</tt>, 
+     <tt>union</tt>.
 
 <h4>Canonical format GFC</h4>
 
@@ -46,6 +48,7 @@ An accurate <a href="DocGF.ps.gz">language specification</a> is now available.
 <h4>New features in expression language</h4>
 
 <li> Disjunctive patterns <tt>P | ... | Q</tt>.
+<li> String patterns <tt>"foo"</tt>.
 <li> Binding token <tt>&+</tt> to glue separate tokens at unlexing phase, 
      and unlexer to resolve this.
 <li> New syntax alternatives for local definitions: <tt>let</tt> without
@@ -75,9 +78,14 @@ An accurate <a href="DocGF.ps.gz">language specification</a> is now available.
 
 <!-- NEW -->
 
-<h2>Status (25/11/2003)</h2>
+<h2>Status (24/3/2004)</h2>
 
 Grammar compiler, editor GUIs, and shell work.
+
+<p>
+
+The updated <tt>HelpFile</tt> (accessible through <tt>h</tt> command)
+marks unsupported but expected features with <tt>*</tt>.
 
 <p>
 
@@ -87,41 +95,30 @@ saved in GF2 files, but this is not necessary.
 
 <p>
 
-Example grammars and resource libraries are in the process of 
-being converted. There will be a new API with
+It is also possible to write a GF2 grammar back to GF1.
+
+
+<p>
+
+Example grammars and resource libraries are have been
+converted. There is a new resource API with
 many new constructions. The new versions lie in <tt>grammars/newresource</tt>.
-English and Swedish resources are up-to-date.
-In the old API version, <tt>grammars/resource</tt>, the other languages
-are up-to-date.
 
 <p>
 
 A make facility works, finding out which modules have to be recompiled.
 There is some room for improvement.
-<br>
-<b>Bug</b>.
-Sometimes the grammar compiler gets confused if there are many
-grammars open simultaneously. Then the advice is to empty
-the environment (using <tt>e</tt>) and compile grammar one by one.
-When read from <tt>gfc</tt> versions, there should be no problems
-to have several grammars simultaneously.
 
 <p>
 
-The module type <tt>grammar</tt> (to build multilingual grammars) not yet 
-implemented.
-<tt>transfer</tt> modules have to be called by flags
+<tt>transfer</tt> modules have to be called by flags.
 
 <p>
 
-Abstract modules (<tt>interface</tt>, <tt>instance</tt>, and <tt>incomplete</tt>)
-have not been stress-tested, but work in the examples in
-<tt>resource/romance</tt> and <tt>resource/french</tt>.
-
-<p>
 
 Soundness checking of module depencencies and completeness is not
-complete.
+complete. This means that some errors may show up too late.
+
 
 
 <!-- NEW -->
@@ -166,6 +163,15 @@ line, e.g.
 </pre>
 
 <p>
+
+To write a GF2 grammar back to GF1 (as one big file), use the command
+<pre>
+  > pg -old
+</pre>
+
+
+<p>
+
 
 GF2 has more reserved words than GF 1.2. When old files are read, a preprocessor
 replaces every identifier that has the shape of a new reserved word
@@ -311,6 +317,10 @@ compare the modification times of each <tt>gf</tt> and <tt>gfc</tt> file:
 <li> if <tt>gfc</tt> is later, just read in the module
 </ul>
 </ol>
+Inside the GF shell, also time stamps of modules read into memory are
+taken into account. Thus a module need not be read from a file if the
+module is in the memory and the file has not been modified.
+
 
 <!-- NEW -->
 
