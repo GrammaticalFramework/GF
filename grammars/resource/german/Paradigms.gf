@@ -285,7 +285,7 @@ oper
   apReg = \s -> AdjP1 (adjGen s) ;
 
   mkV = \sehen, sieht, sieh, gesehen -> 
-    mkVerbSimple (mkVerbum sehen sieht sieh gesehen) ;
+    mkVerbSimple (mkVerbum sehen (Predef.tk 1 sieht) sieh gesehen) ;
   vReg = \s -> mkVerbSimple (regVerb s) ;
   vSein = verbSein ;
   vHaben = verbHaben ;

@@ -889,6 +889,9 @@ oper
   subjunctVariants : Subjunction -> Str -> Str -> Str = \if,A,B ->
     variants {if.s ++ A ++ "," ++ B ; B ++ "," ++ if.s ++ A} ;
 
+  subjunctVerbPhrase : VerbPhrase -> Subjunction -> Sentence -> VerbPhrase =
+    \V, if, A -> 
+    adVerbPhrase V (advPost (if.s ++ A.s)) ;
 
 --2 One-word utterances
 -- 
