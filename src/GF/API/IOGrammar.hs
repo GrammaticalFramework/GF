@@ -36,7 +36,9 @@ string2annotTree gr m = annotate gr . string2absTerm (prt m) ---- prt
 
 shellStateFromFiles :: Options -> ShellState -> FilePath -> IOE ShellState
 shellStateFromFiles opts st file = do
-  let osb = addOptions (options [beVerbose, emitCode]) opts ---
+  let osb = if oElem showOld opts 
+               then addOptions (options [beVerbose]) opts -- for old, no emit
+               else addOptions (options [beVerbose, emitCode]) opts -- for new, do
   grts <- compileModule osb st file
   ioeErr $ updateShellState opts st grts
   --- liftM (changeModTimes rts) $ grammar2shellState opts gr

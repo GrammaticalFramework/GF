@@ -139,9 +139,6 @@ execLine put (c@(co, os), arg, cs) (outps,st) = do
 execC :: CommandOpt -> ShellIO
 execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
 
-  --- read old GF and write into files; no update of st yet
-  CImport file | oElem showOld opts -> useIOE sa $ batchCompileOld file >> return sa
-
   CImport file -> useIOE sa $ do
     st1 <- shellStateFromFiles opts st file
     ioeIO $ changeState (const st1) sa --- \ ((_,h),a) -> ((st,h), a))

@@ -33,11 +33,11 @@ getSourceModule file = do
 
 -- for old GF format with includes
 
-getOldGrammar :: FilePath -> IOE SourceGrammar
-getOldGrammar file = do
+getOldGrammar :: Options -> FilePath -> IOE SourceGrammar
+getOldGrammar opts file = do
   defs <- parseOldGrammarFiles file
   let g = A.OldGr A.NoIncl defs
-  ioeErr $ transOldGrammar g file
+  ioeErr $ transOldGrammar opts file g
 
 parseOldGrammarFiles :: FilePath -> IOE [A.TopDef]
 parseOldGrammarFiles file = do

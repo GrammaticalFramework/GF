@@ -4,6 +4,13 @@ import Greek (mkGreek)
 import Arabic (mkArabic)
 import Hebrew (mkHebrew)
 import Russian (mkRussian, mkRusKOI8)
+import Ethiopic (mkEthiopic)
+import Tamil (mkTamil)
+import OCSCyrillic (mkOCSCyrillic)
+import LatinASupplement (mkLatinASupplement)
+import Devanagari (mkDevanagari)
+import Hiragana (mkJapanese)
+import ExtendedArabic (mkExtendedArabic)
 
 -- ad hoc Unicode conversions from different alphabets
 
@@ -15,6 +22,13 @@ mkUnicode s = case s of
  '/':'-':cs -> mkArabic  (remClosing cs)
  '/':'_':cs -> mkRussian (remClosing cs)
  '/':'*':cs -> mkRusKOI8 (remClosing cs)
+ '/':'E':cs -> mkEthiopic (remClosing cs)
+ '/':'T':cs -> mkTamil (remClosing cs)
+ '/':'C':cs -> mkOCSCyrillic (remClosing cs)
+ '/':'&':cs -> mkDevanagari (remClosing cs)
+ '/':'L':cs -> mkLatinASupplement (remClosing cs)
+ '/':'J':cs -> mkJapanese (remClosing cs)
+ '/':'A':cs -> mkExtendedArabic (remClosing cs)
  _      -> s
 
 remClosing cs 

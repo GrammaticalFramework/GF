@@ -12,6 +12,7 @@ import AbsGF
 import PrintGF
 import RemoveLiT --- for bw compat
 import Operations
+import Option
 
 import Monad
 import Char
@@ -482,8 +483,8 @@ transDDecl x = case x of
 -- to deal with the old format, sort judgements in three modules, forming
 -- their names from a given string, e.g. file name or overriding user-given string
 
-transOldGrammar :: OldGrammar -> String -> Err G.SourceGrammar
-transOldGrammar x name = case x of
+transOldGrammar :: Options -> FilePath -> OldGrammar -> Err G.SourceGrammar
+transOldGrammar opts name0 x = case x of
   OldGr includes topdefs  -> do --- includes must be collected separately
     let moddefs = sortTopDefs topdefs
     g1 <- transGrammar $ Gr moddefs
@@ -515,9 +516,10 @@ transOldGrammar x name = case x of
    ne = NoExt
    q = CMCompl
 
-   absName = identC topic
-   resName = identC ("Res" ++ lang)
-   cncName = identC lang
+   name = maybe name0 (++ ".gf") $ getOptVal opts useName
+   absName = identC $ maybe topic id $ getOptVal opts useAbsName
+   resName = identC $ maybe ("Res" ++ lang) id $ getOptVal opts useResName
+   cncName = identC $ maybe lang id $ getOptVal opts useCncName
 
    (beg,rest) = span (/='.') name
    (topic,lang) = case rest of -- to avoid overwriting old files
