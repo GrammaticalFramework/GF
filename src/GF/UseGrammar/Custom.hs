@@ -27,6 +27,7 @@ import PrGrammar
 import PrOld
 import MkGFC
 import CFtoSRG
+import PrGSL (prGSL)
 
 import Zipper
 
@@ -190,6 +191,7 @@ customGrammarPrinter =
   ,(strCI "cf",      prCF . stateCF)
   ,(strCI "old",     printGrammarOld . stateGrammarST)
   ,(strCI "srg",     prSRG . stateCF)
+  ,(strCI "gsl",     prGSL . Cnv.cfg . statePInfo)
   ,(strCI "lbnf",    prLBNF . stateCF)
   ,(strCI "haskell", grammar2haskell . stateGrammarST)
   ,(strCI "morpho",  prMorpho . stateMorpho)
