@@ -1,24 +1,37 @@
+--# -path=.:../prelude
 concrete ImperJVM of Imper = open ResImper in {
 
 flags lexer=codevars ; unlexer=code ; startcat=Stm ;
 
   lincat
-    Body  = {s,s2 : Str} ; -- code, storage for locals
+    Rec = {s,s2,s3 : Str} ; -- code, storage for locals, continuation
     Stm = Instr ;
 
   lin
     Empty = ss [] ;
-    Funct args val body rest = ss (
-      ".method" ++ rest.$0 ++ paren args.s ++ val.s ++ ";" ++
-      ".limit" ++ "locals" ++ body.s2 ++ ";" ++
+    FunctNil val stm cont = ss (
+      ".method" ++ cont.$0 ++ paren [] ++ val.s ++ ";" ++
+      ".limit" ++ "locals" ++ stm.s2 ++ ";" ++
       ".limit" ++ "stack" ++ "1000" ++ ";" ++
-      body.s ++
+      stm.s ++
       ".end" ++ "method" ++ ";" ++
-      rest.s 
+      cont.s 
       ) ;
-    BodyNil stm = stm ;
-    BodyCons a as body = instrb a.s (
-      "alloc" ++ a.s ++ body.$0 ++ body.s2) (body ** {s3 = []});
+    Funct args val rec = ss (
+      ".method" ++ rec.$0 ++ paren args.s ++ val.s ++ ";" ++
+      ".limit" ++ "locals" ++ rec.s2 ++ ";" ++
+      ".limit" ++ "stack" ++ "1000" ++ ";" ++
+      rec.s ++
+      ".end" ++ "method" ++ ";" ++
+      rec.s3 
+      ) ;
+
+    RecOne typ stm prg = instrb typ.s (
+      "alloc" ++ typ.s ++ stm.$0 ++ stm.s2) {s = stm.s ; s2 = stm.s2 ; s3 = prg.s};
+
+    RecCons typ _ body prg = instrb typ.s (
+      "alloc" ++ typ.s ++ body.$0 ++ body.s2) 
+         {s = body.s ; s2 = body.s2 ; s3 = prg.s};
 
     Decl  typ cont = instrb typ.s (
       "alloc" ++ typ.s ++ cont.$0
@@ -61,19 +74,16 @@ flags lexer=codevars ; unlexer=code ; startcat=Stm ;
     EVar  t x  = instr (t.s ++ "_load" ++ x.s) ;
     EInt    n  = instr ("ipush" ++ n.s) ;
     EFloat a b = instr ("fpush" ++ a.s ++ "." ++ b.s) ;
-    EAddI      = binop "iadd" ;
-    EAddF      = binop "fadd" ;
-    ESubI      = binop "isub" ;
-    ESubF      = binop "fsub" ;
-    EMulI      = binop "imul" ;
-    EMulF      = binop "fmul" ;
-    ELtI       = binop ("call" ++ "ilt") ;
-    ELtF       = binop ("call" ++ "flt") ;
+    EAdd       = binopt "add" ;
+    ESub       = binopt "sub" ;
+    EMul       = binopt "mul" ;
+    ELt t      = binop ("invoke" ++ t.s ++ "lt" ++ paren (t.s ++ t.s) ++ "i") ;
     EApp args val f exps = instr (
       exps.s ++
       "invoke" ++ f.s ++ paren args.s ++ val.s
       ) ;
 
+    TNum t = t ;
     TInt   = ss "i" ;
     TFloat = ss "f" ;
 
@@ -81,5 +91,6 @@ flags lexer=codevars ; unlexer=code ; startcat=Stm ;
     ConsTyp = cc2 ;
 
     NilExp = ss [] ;
+    OneExp _ e = e ;
     ConsExp _ _ = cc2 ;
 }

@@ -59,7 +59,7 @@ prToken t = case t of
   PT _ (TD s) -> s
   PT _ (TC s) -> s
   PT _ (T_LString s) -> s
-
+  _ -> show t
 
 eitherResIdent :: (String -> Tok) -> String -> Tok
 eitherResIdent tv s = if isResWord s then (TS s) else (tv s) where
