@@ -1,0 +1,13 @@
+-- to make a multilingual gfcm grammar for rapid loading. AR 29/1/2004
+-- to run: gf2+ <mkLetter.gfs
+
+i -old -abs=Letter -cnc=English letter.Eng.gf
+i -old -abs=Letter -cnc=French  letter.Fra.gf
+i -old -abs=Letter -cnc=Swedish letter.Sve.gf
+i -old -abs=Letter -cnc=Finnish letter.Fin.gf
+i -old -abs=Letter -cnc=Russian letter.RusU.gf
+s
+pm | wf Letter.gfcm
+
+
+
