@@ -1547,11 +1547,13 @@ oper
         dit  = dire.p2 ;
         toujours = sats.s5 ;
         directement = sats.s6 ;
-        ne  = if_then_Str b [] "ne" ;  ---- negNe ;
-        pas = if_then_Str b [] "pas" ; ---- negPas ;
+        ne  = if_then_Str b [] negNe ;
+        pas = if_then_Str b [] negPas ;
         oui = sats.s7 ! b
       in 
       je ++ ne ++ lui ++ ai ++ toujours ++ pas ++ dit ++ directement ++ oui
     } ;
+
+negNe, negPas : Str ;
 
 }

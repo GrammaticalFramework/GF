@@ -13,7 +13,7 @@ DayDate day = ss (day.s ! singular) ;
 DayTimeDate day time = ss (day.s ! singular ++ "à" ++ time.s) ;
 
 FormalTime = infixSS "heures" ;
-PastTime h m = ss (m.s ++ "et" ++ h.s) ;
+PastTime h m = ss (h.s ++ "et" ++ m.s) ;
 ToTime h m = ss (h.s ++ "moins" ++ m.s) ;
 ExactTime h = ss (h.s ++ "exactement") ;
 

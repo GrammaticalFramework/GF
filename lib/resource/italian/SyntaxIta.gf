@@ -145,6 +145,8 @@ oper
       lequel.s ! RComplex g n c
       } ;
 
+  pronIl = MorphoIta.pronIl ;
+
 -- Interrogative pronouns
 
   nounIntPron = \n, mec ->
@@ -262,6 +264,8 @@ oper
 
   ouiPhr = ss ["Sì ."] ;  
   nonPhr = ss ["No ."] ;
+
+  negNe = "non" ; negPas = [] ;
 
 }
 
