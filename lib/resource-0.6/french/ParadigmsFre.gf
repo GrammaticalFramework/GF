@@ -163,6 +163,7 @@ oper
 
   nEau = \eau -> mkN eau (eau + "z") ;
   nCas = \cas -> mkN cas cas ;
+  nReg = \cas -> mkN cas (cas + "s") ;
   nCheval = \cheval -> mkN cheval (Predef.tk 1 cheval + "ux") masculine ; 
 
   funPrep = \n,p -> n ** complement p ** {lock_Fun = <>} ;

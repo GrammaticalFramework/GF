@@ -26,7 +26,7 @@ fun
   Influenza : Illness ; 
   Malaria : Illness ; 
   Diarrhea : Illness ; 
-  Allergy : Illness ; 
+  SkinAllergy : Illness ; 
   Heartburn : Illness ; 
   Rheumatism : Illness ; 
   Cystitis : Illness ; 
@@ -47,7 +47,6 @@ fun
   Ophthalmologist : Specialization ;
   Surgeon : Specialization ;
 
-  PainKiller : Medicine ;
   SleepingPeels : Medicine ;
   Sedative :  Medicine ;
   Vitamins : Medicine ;
@@ -57,6 +56,7 @@ fun
   Laxative : Medicine ;
   Insulin : Medicine ;
   Antidepressant : Medicine ;
+  PainKiller : Medicine ;
 
   Head : BodyPart ; 	
   Leg : BodyPart ; 	
@@ -72,7 +72,7 @@ fun
 --  Tooth : BodyPart ; 	
 
   Fever : Symptom ;
-  Sickness: Symptom ;
+--  Sickness: Symptom ;
 --  PainInMod : Patient -> BodyPart -> SymptomDegree -> Prop ;
 --  SymptomMod : SymptomDegree -> Symptom -> Symtom;
 --  High : SymptomDegree ;
