@@ -105,4 +105,15 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
   pronVems = "vems" ;
   pronVad = "vad" ;
 
+--- added with Nor
+
+  conjGender : Gender -> Gender -> Gender = \m,n ->
+    case <m,n> of {
+      <Utr,Utr> => Utr ;
+      _ => Neutr
+      } ;
+
+  mkDeterminerSgGender3 : Str -> Str -> Str -> SpeciesP -> Determiner = \en,_,ett -> 
+    mkDeterminerSgGender (table {Utr => en ; Neutr => ett}) ;
+
 }

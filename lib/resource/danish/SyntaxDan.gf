@@ -82,8 +82,8 @@ instance SyntaxDan of SyntaxScand = TypesDan **
   auxHar = "har" ;
   auxHade = "havde" ;
   auxHa = "have" ;
-  auxSka = "skal" ;
-  auxSkulle = "skulle" ;
+  auxSka = "val" ;
+  auxSkulle = "ville" ;
 
   infinAtt = "at" ;
 
@@ -100,5 +100,16 @@ instance SyntaxDan of SyntaxScand = TypesDan **
   pronVem = "hvem" ;
   pronVems = "hvis" ; ---- ??
   pronVad = "hvad" ;
+
+--- added with Nor
+
+  conjGender : Gender -> Gender -> Gender = \m,n ->
+    case <m,n> of {
+      <Utr,Utr> => Utr ;
+      _ => Neutr
+      } ;
+
+  mkDeterminerSgGender3 : Str -> Str -> Str -> SpeciesP -> Determiner = \en,_,ett -> 
+    mkDeterminerSgGender (table {Utr => en ; Neutr => ett}) ;
 
 }

@@ -49,8 +49,8 @@ concrete StructuralDan of Structural =
 
   ThisDet  = mkDeterminerSgGender2 ["den her"] ["det her"] (DefP Indef) ;
   ThatDet  = mkDeterminerSgGender2 ["den der"] ["det der"] (DefP Indef) ;
-  TheseNumDet = mkDeterminerPlNum ["de her"] (DefP Def) ; 
-  ThoseNumDet = mkDeterminerPlNum ["de der"] (DefP Def) ; 
+  TheseNumDet = mkDeterminerPlNum ["de her"] (DefP Indef) ; 
+  ThoseNumDet = mkDeterminerPlNum ["de der"] (DefP Indef) ; 
 
   HowIAdv = ss "hvor" ;
   WhenIAdv = ss "hvornår" ;

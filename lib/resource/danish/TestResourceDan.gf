@@ -33,7 +33,7 @@ lin
   Prefer = extTransVerb (vNopart (vSpis "foretrækk")) [] ** {s3 = "for"} ;
 
   Say = vNopart (mkVerb "sige" "siger" "siges" "sagde" "sagt" "sig") ;
-  Prove = vNopart (vSpis "bevise") ;
+  Prove = vNopart (vSpis "bevis") ;
   SwitchOn = mkDirectVerb (vHusk "lukk" ** {s1 = "op"}) ;
   SwitchOff = mkDirectVerb (vHusk "slukk" ** {s1 = []}) ;
 
