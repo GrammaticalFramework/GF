@@ -114,7 +114,7 @@ oper
            f => pron.s ! npForm2PForm f 
            } ; 
      n = pron.n ; 
-     p = NP3
+     p = NPP pron.p
     } ;
 
 -- *Partitive noun phrases* use the partitive instead of the nominative
@@ -136,7 +136,7 @@ oper
     in
     {s = \\c => meihin.s ! c ++ kaksi.s ! c ; 
      n = me.n ; 
-     p = NP3     -- meidän kahden talo (*talomme)
+     p = NPP me.p  --- meidän kahden talo (*talomme)
     } ;
 
   noNum : Numeral = {s = \\_ => [] ; isNum = False} ;
