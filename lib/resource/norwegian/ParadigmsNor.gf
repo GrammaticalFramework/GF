@@ -71,9 +71,11 @@ oper
 
   regN : Str -> Gender -> N ;
 
--- In practice the worst case is often just: give singular and plural indefinite.
+-- This function takes the singular indefinite and definite forms; the
+-- gender is computed from the definite form.
 
-  mk2N : (dreng,drenger : Str) -> N ;
+  mk2N : (bil,bilen : Str) -> N ;
+
 
 --3 Compound nouns 
 --
@@ -199,14 +201,14 @@ oper
 
   regV : (snakke : Str) -> V ;
 
--- The almost regular verb function needs the infinitive and the present.
+-- The almost regular verb function needs the infinitive and the preteritum.
 
   mk2V : (leve,levde : Str) -> V ;
 
 -- There is an extensive list of irregular verbs in the module $IrregularSwe$.
 -- In practice, it is enough to give three forms, as in school books.
 
-  irregV     : (drikke, drakk, drukket  : Str) -> V ;
+  irregV : (drikke, drakk, drukket  : Str) -> V ;
 
 
 --3 Verbs with a particle.
@@ -266,42 +268,64 @@ oper
 -- hidden from the document.
 --.
 
-  Gender = SyntaxSwe.NounGender ; 
-  Number = TypesSwe.Number ;
-  Case = TypesSwe.Case ;
-  utrum = NUtr NoMasc ; 
+  Gender = SyntaxNor.NounGender ; 
+  Number = TypesNor.Number ;
+  Case = TypesNor.Case ;
+  masculine = NUtr NoMasc ; 
+  feminine = NUtr NoMasc ; 
   neutrum = NNeutr ;
   singular = Sg ;
   plural = Pl ;
   nominative = Nom ;
   genitive = Gen ;
 
-  mkN x y z u = extCommNoun (mkNoun x y z u) ** {lock_N = <>} ;
-  regN x g = extCommNoun (regNoun x (genNoun g)) ** {lock_N = <>} ;
-  mk2N x g = extCommNoun (reg2Noun x g) ** {lock_N = <>} ;
-  mascN n = {s = n.s ; g = NUtr Masc ; lock_N = <>} ;
+  mkN x y z u = let sb = mkSubstantive x y z u 
+                in {s = \\n,b,c => sb.s ! SF n b c ; g = extNGen y ; lock_N = <>} ;
+  regN x g = case last x of {
+    "e" => case g of {
+       NUtr Masc   => mkN x (x      + "n") (x + "r") (x + "ne") ;
+       NUtr NoMasc => mkN x (init x + "a") (x + "r") (x + "ne") ;
+       NNeutr      => mkN x (x      + "t") (x + "r") (init x + "a")
+       } ;
+    _ => case g of {
+       NUtr Masc   => mkN x (x      + "en") (x + "er") (x + "ene") ;
+       NUtr NoMasc => mkN x (x      + "a")  (x + "er") (x + "ene") ;
+       NNeutr      => mkN x (x      + "et") (x + "")   (x + "a")
+       }
+    } ;
+
+  mk2N x y = case last y of {
+    "n" => regN x masculine ;
+    "a" => regN x feminine ;
+    _   => regN x neutrum
+    } ;
+
 
   mkN2 = \n,p -> n ** {lock_N2 = <> ; s2 = p} ;
   regN2 n g = mkN2 (regN n g) (mkPreposition "av") ;
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; s2 = p ; s3 = q} ;
 
-  regPN n g = {s = \\c => mkCase c n ; g = g} ** {lock_PN = <>} ;
+  regPN n g = {s = \\c => mkCase n ! c ; g = g} ** {lock_PN = <>} ;
   nounPN n = {s = n.s ! singular ! Indef ; g = n.g ; lock_PN = <>} ;
   mkNP x y n g = 
     {s = table {PGen _ => x ; _ => y} ; g = genNoun g ; n = n ; p = P3 ;
      lock_NP = <>} ;
 
-  mkA a b c = extractPositive (adjAlmostReg a b c) ** {lock_A = <>} ;
-  mk2A a b = extractPositive (adj2Reg a b) ** {lock_A = <>} ;
-  regA a = extractPositive (adjReg a) ** {lock_A = <>} ;
+  mkA a b c = extractPositive (mkAdjective a b c [] []) ** {lock_A = <>} ;
+  mk2A a b = mkA a b (a + "e") ;
+  regA a = extractPositive (regADeg a) **  {lock_A = <>} ;
 
   mkA2 a p = a ** {s2 = p ; lock_A2 = <>} ;
 
-  mkADeg a b c d e f g = mkAdjective a b c d e f g ** {lock_ADeg = <>} ;
-  regADeg a = adjReg a ** {lock_ADeg = <>} ;
-  irregADeg a b c = adjIrreg3 a b c ** {lock_ADeg = <>} ;
-  mk3ADeg a b c = adjAlmostReg a b c ** {lock_ADeg = <>} ;
-  mk2ADeg a b = adj2Reg a b ** {lock_ADeg = <>} ;
+  mkADeg a b c d e = mkAdjective a b c d e ** {lock_ADeg = <>} ;
+  regADeg a = case Predef.dp 2 a of {
+    "ig" => aBillig a ;
+    "sk" => aRask a ;
+    _ => aRod a
+    }  ** {lock_ADeg = <>} ;
+  irregADeg a b c = mkAdjective a (a + "t") (a + "e") b c ** {lock_ADeg = <>} ;
+  mk3ADeg a b c = mkAdjective a b c (a + "ere") (a + "est") ** {lock_ADeg = <>} ;
+  mk2ADeg a b = mkAdjective a b (a + "e") (a + "ere") (a + "est") ** {lock_ADeg = <>} ;
 
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;
@@ -311,10 +335,14 @@ oper
 
   mkV a b c d e f = mkVerb a b c d e f ** {s1 = [] ; lock_V = <>} ;
 
-  regV a = mk2V a (a + "r") ;
+  regV a = case last a of {
+    "e" => vHusk (init a) ;
+    _ => vBo a
+    } ** {s1 = [] ; lock_V = <>} ;
+
   mk2V a b = regVerb a b ** {s1 = [] ; lock_V = <>} ;
 
-  irregV x y z =  vSälja x y z
+  irregV x y z =  irregVerb x y z
      ** {s1 = [] ; lock_V = <>} ;
 
   partV v p = {s = v.s ; s1 = p ; lock_V = <>} ;
