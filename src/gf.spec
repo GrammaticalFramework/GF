@@ -62,7 +62,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/gf2
 %{_bindir}/jgf2
 %{_libdir}/%{name}-%{version}/gf-java.jar
-%doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html,release2.html}
+%doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html}
 
 
 %changelog
