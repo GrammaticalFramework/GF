@@ -1,3 +1,17 @@
+----------------------------------------------------------------------
+-- |
+-- Module      : (Module)
+-- Maintainer  : (Maintainer)
+-- Stability   : (stable)
+-- Portability : (portable)
+--
+-- > CVS $Date $ 
+-- > CVS $Author $
+-- > CVS $Revision $
+--
+-- (Description of the module)
+-----------------------------------------------------------------------------
+
 module UTF8 where
 
 -- From the Char module supplied with HBC.

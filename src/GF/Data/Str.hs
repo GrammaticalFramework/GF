@@ -1,3 +1,17 @@
+----------------------------------------------------------------------
+-- |
+-- Module      : (Module)
+-- Maintainer  : (Maintainer)
+-- Stability   : (stable)
+-- Portability : (portable)
+--
+-- > CVS $Date $ 
+-- > CVS $Author $
+-- > CVS $Revision $
+--
+-- (Description of the module)
+-----------------------------------------------------------------------------
+
 module Str (
   Str (..), Tok (..),        --- constructors needed in PrGrammar 
   str2strings, str2allStrings, str, sstr, sstrV, 
