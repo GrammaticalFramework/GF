@@ -136,6 +136,7 @@ binary-dist:
 	make unix gfdoc jar
 	make prefix=$(BIN_DIST_DIR)/$(prefix) install 
 	gtar -zcf GF-$(PACKAGE_VERSION)-$(host).tar.gz $(BIN_DIST_DIR)
+	rm -rf $(BIN_DIST_DIR)
 
 install-gf:
 	$(INSTALL) -d $(bindir)
