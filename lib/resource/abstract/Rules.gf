@@ -53,6 +53,8 @@ fun
   ComparADeg  : ADeg -> NP -> AP ;         -- "older than John"
   SuperlNP    : ADeg -> CN -> NP ;         -- "the oldest man"
 
+----  AdjPart     : V -> A1 ;                  -- "forgotten"
+
 --!
 --3 Verbs and verb phrases
 --
@@ -117,6 +119,7 @@ fun
   WhatOne, WhatMany : IP ;                 -- "what (is)", "what (are)"
   FunIP : N2 -> IP -> IP ;                 -- "the mother of whom"
   NounIPOne, NounIPMany : CN -> IP ;       -- "which car", "which cars"
+ ---- NounIPHowMany : CN -> IP ;               -- "how many cars"
 
   QuestVP   : NP -> VP -> Qu ;             -- "does John walk"; "doesn't John walk"
   IntVP     : IP -> VP -> Qu ;             -- "who walks"
