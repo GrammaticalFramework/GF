@@ -42,27 +42,29 @@ import List (nub,nubBy)
 
 -- AR 11/11/2001 -- 17/6/2003 (for modules) ---- unfinished
 
--- multilingual state with grammars and options
+-- | multilingual state with grammars and options
 data ShellState = ShSt {
-  abstract   :: Maybe Ident ,        -- pointer to actual abstract, if not empty st
-  concrete   :: Maybe Ident ,        -- pointer to primary concrete
-  concretes  :: [((Ident,Ident),Bool)], -- list of all concretes, and whether active
-  canModules :: CanonGrammar ,       -- compiled abstracts and concretes
-  srcModules :: G.SourceGrammar ,    -- saved resource modules
-  cfs        :: [(Ident,CF)] ,       -- context-free grammars
-  pInfos     :: [(Ident,Cnv.PInfo)], -- peb 18/6
-  morphos    :: [(Ident,Morpho)],    -- morphologies
-  gloptions  :: Options,             -- global options
-  readFiles  :: [(FilePath,ModTime)],-- files read
-  absCats    :: [(G.Cat,(G.Context,  -- cats, their contexts, 
-                  [(G.Fun,G.Type)],          -- functions to them,
-                  [((G.Fun,Int),G.Type)]))], -- functions on them
-  statistics :: [Statistics]         -- statistics on grammars
+  abstract   :: Maybe Ident ,        -- ^ pointer to actual abstract, if not empty st
+  concrete   :: Maybe Ident ,        -- ^ pointer to primary concrete
+  concretes  :: [((Ident,Ident),Bool)], -- ^ list of all concretes, and whether active
+  canModules :: CanonGrammar ,       -- ^ compiled abstracts and concretes
+  srcModules :: G.SourceGrammar ,    -- ^ saved resource modules
+  cfs        :: [(Ident,CF)] ,       -- ^ context-free grammars
+  pInfos     :: [(Ident,Cnv.PInfo)], -- ^ parser information, peb 18\/6
+  morphos    :: [(Ident,Morpho)],    -- ^ morphologies
+  gloptions  :: Options,             -- ^ global options
+  readFiles  :: [(FilePath,ModTime)],-- ^ files read
+  absCats    :: [(G.Cat,(G.Context,
+                  [(G.Fun,G.Type)],
+                  [((G.Fun,Int),G.Type)]))],   -- ^ cats, (their contexts, 
+                                               -- functions to them,
+                                               -- functions on them)
+  statistics :: [Statistics]         -- ^ statistics on grammars
   }                             
 
 data Statistics = 
-    StDepTypes Bool        -- whether there are dependent types      
-  | StBoundVars [G.Cat]    -- which categories have bound variables
+    StDepTypes Bool        -- ^ whether there are dependent types      
+  | StBoundVars [G.Cat]    -- ^ which categories have bound variables
   ---                      -- etc
    deriving (Eq,Ord)
 
@@ -87,8 +89,7 @@ type Language = Ident
 language = identC
 prLanguage = prIdent
 
--- grammar for one language in a state, comprising its abs and cnc
-
+-- | grammar for one language in a state, comprising its abs and cnc
 data StateGrammar = StGr {
   absId   :: Ident,
   cncId   :: Ident,
@@ -109,7 +110,7 @@ emptyStateGrammar = StGr {
   loptions = noOptions
   }
 
--- analysing shell grammar into parts
+-- | analysing shell grammar into parts
 stateGrammarST = grammar
 stateCF        = cf
 statePInfo     = pInfo
@@ -119,14 +120,12 @@ stateGrammarWords = allMorphoWords . stateMorpho
 
 cncModuleIdST = stateGrammarST
 
--- form a shell state from a canonical grammar
-
+-- | form a shell state from a canonical grammar
 grammar2shellState :: Options -> (CanonGrammar, G.SourceGrammar) -> Err ShellState 
 grammar2shellState opts (gr,sgr) = 
   updateShellState opts emptyShellState ((0,sgr,gr),[]) --- is 0 safe?
 
--- update a shell state from a canonical grammar
-
+-- | update a shell state from a canonical grammar
 updateShellState :: Options -> ShellState -> 
                     ((Int,G.SourceGrammar,CanonGrammar),[(FilePath,ModTime)]) ->
                ---- (CanonGrammar,(G.SourceGrammar,[(FilePath,ModTime)])) -> 
@@ -186,8 +185,7 @@ prShellStateInfo sh = unlines [
 
 abstractName sh = maybe "(none)" P.prt (abstract sh)
 
--- throw away those abstracts that are not needed --- could be more aggressive
-
+-- | throw away those abstracts that are not needed --- could be more aggressive
 filterAbstracts :: Maybe Ident -> CanonGrammar -> CanonGrammar
 filterAbstracts abstr cgr = M.MGrammar (nubBy (\x y -> fst x == fst y) [m | m <- ms, needed m]) where
   ms = M.modules cgr
@@ -234,8 +232,7 @@ changeMain (Just c) st@(ShSt _ _ cs ms ss cfs pis mos os rs acs s) =
       return (ShSt (Just a) (Just c) cs' ms ss cfs pis mos os rs acs s) 
     _ -> P.prtBad "The state has no concrete syntax named" c
 
--- form just one state grammar, if unique, from a canonical grammar
-
+-- | form just one state grammar, if unique, from a canonical grammar
 grammar2stateGrammar :: Options -> CanonGrammar -> Err StateGrammar 
 grammar2stateGrammar opts gr = do 
   st    <- grammar2shellState opts (gr,M.emptyMGrammar)
@@ -268,8 +265,7 @@ cfOfLang st      = stateCF        . stateGrammarOfLang st
 morphoOfLang st  = stateMorpho    . stateGrammarOfLang st
 optionsOfLang st = stateOptions   . stateGrammarOfLang st
 
--- the last introduced grammar, stored in options, is the default for operations
-
+-- | the last introduced grammar, stored in options, is the default for operations
 firstStateGrammar :: ShellState -> StateGrammar
 firstStateGrammar st = errVal (stateAbstractGrammar st) $ do
   concr <- maybeErr "no concrete syntax" $ concrete st 
@@ -290,7 +286,7 @@ stateAbstractGrammar st = StGr {
   }
 
 
--- analysing shell state into parts
+-- | analysing shell state into parts
 globalOptions = gloptions
 allLanguages  = map (fst . fst) . concretes
 allCategories = map fst . allCatsOf . canModules
@@ -325,17 +321,17 @@ languageOfOptState :: Options -> ShellState -> Maybe Language
 languageOfOptState opts st = 
   maybe (concrete st) (return . language) $ getOptVal opts useLanguage
 
--- command-line option -cat=foo overrides the possible start cat of a grammar
+-- | command-line option -cat=foo overrides the possible start cat of a grammar
 firstCatOpts :: Options -> StateGrammar -> CFCat
 firstCatOpts opts sgr = 
   maybe (stateFirstCat sgr) (string2CFCat (P.prt (absId sgr))) $ 
     getOptVal opts firstCat
 
--- the first cat for random generation
+-- | the first cat for random generation
 firstAbsCat :: Options -> StateGrammar -> G.QIdent
 firstAbsCat opts = cfCat2Cat . firstCatOpts opts
 
--- a grammar can have start category as option startcat=foo ; default is S 
+-- | a grammar can have start category as option startcat=foo ; default is S 
 stateFirstCat sgr =
   maybe (string2CFCat a "S") (string2CFCat a) $ 
   getOptVal (stateOptions sgr) gStartCat

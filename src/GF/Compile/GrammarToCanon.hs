@@ -32,15 +32,12 @@ import Monad
 
 -- compilation of optimized grammars to canonical GF. AR 5/10/2001 -- 12/5/2003
 
--- This is the top-level function printing a gfc file
-
+-- | This is the top-level function printing a gfc file
 showGFC :: SourceGrammar -> String
 showGFC = err id id . liftM (P.printTree . grammar2canon) . redGrammar
 
--- any grammar, first trying without dependent types
-
+-- | any grammar, first trying without dependent types
 -- abstract syntax without dependent types
-
 redGrammar :: SourceGrammar -> Err C.CanonGrammar
 redGrammar (MGrammar gr) = liftM MGrammar $ mapM redModInfo $ filter active gr where
   active (_,m) = case typeOfModule m of

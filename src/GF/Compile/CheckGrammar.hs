@@ -9,7 +9,15 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
+--
+-- type checking also does the following modifications:
+--
+--  - types of operations and local constants are inferred and put in place
+--
+--  - both these types and linearization types are computed
+--
+--  - tables are type-annotated
 -----------------------------------------------------------------------------
 
 module CheckGrammar where
@@ -36,20 +44,12 @@ import CheckM
 import List
 import Monad
 
--- AR 4/12/1999 -- 1/4/2000 -- 8/9/2001 -- 15/5/2002 -- 27/11/2002 -- 18/6/2003
-
--- type checking also does the following modifications:
--- * types of operations and local constants are inferred and put in place
--- * both these types and linearization types are computed
--- * tables are type-annotated
-
 showCheckModule :: [SourceModule] -> SourceModule -> Err ([SourceModule],String)
 showCheckModule mos m = do
     (st,(_,msg)) <- checkStart $ checkModule mos m
     return (st, unlines $ reverse msg)
 
--- checking is performed in dependency order of modules
-
+-- | checking is performed in dependency order of modules
 checkModule :: [SourceModule] -> SourceModule -> Check [SourceModule]
 checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod of
 
@@ -79,8 +79,7 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
  where
    gr  = MGrammar $ (name,mod):ms
 
--- check if a term is typable
-
+-- | check if a term is typable
 justCheckLTerm :: SourceGrammar -> Term -> Err Term
 justCheckLTerm src t = do
   ((t',_),_) <- checkStart (inferLType src t)
@@ -131,9 +130,8 @@ checkCompleteGrammar abs cnc = mapM_ checkWarn $
                       then id
                       else (("Warning: no linearization of" +++ prt f):)
 
--- General Principle: only Yes-values are checked. 
+-- | General Principle: only Yes-values are checked. 
 -- A May-value has always been checked in its origin module.
-
 checkResInfo :: SourceGrammar -> (Ident,Info) -> Check (Ident,Info)
 checkResInfo gr (c,info) = do
   checkReservedId c
@@ -289,7 +287,7 @@ checkPrintname :: SourceGrammar -> Perh Term -> Check ()
 checkPrintname st (Yes t) = checkLType st t typeStr >> return ()
 checkPrintname _ _ = return ()
 
--- for grammars obtained otherwise than by parsing ---- update!!
+-- | for grammars obtained otherwise than by parsing ---- update!!
 checkReservedId :: Ident -> Check ()
 checkReservedId x = let c = prt x in
          if isResWord c 
@@ -643,13 +641,13 @@ termWith t ct = do
   ty <- ct
   return (t,ty)
 
--- light-weight substitution for dep. types
+-- | light-weight substitution for dep. types
 substituteLType :: Context -> Type -> Check Type
 substituteLType g t = case t of
   Vr x -> return $ maybe t id $ lookup x g
   _ -> composOp (substituteLType g) t
 
--- compositional check/infer of binary operations
+-- | compositional check\/infer of binary operations
 check2 :: (Term -> Check Term) -> (Term -> Term -> Term) -> 
           Term -> Term -> Type -> Check (Term,Type)
 check2 chk con a b t = do
@@ -707,8 +705,7 @@ checkEqLType env t u trm = do
    sTypes = [typeStr, typeTok, typeString]
    comp = computeLType env
 
--- linearization types and defaults
-
+-- | linearization types and defaults
 linTypeOfType :: SourceGrammar -> Ident -> Type -> Check (Context,Type)
 linTypeOfType cnc m typ = do
   (cont,cat) <- checkErr $ typeSkeleton typ

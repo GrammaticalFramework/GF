@@ -9,7 +9,10 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- AR 14\/5\/2003 -- 11\/11
+--
+-- The top-level function 'extendModule'
+-- extends a module symbol table by indirections to the module it extends
 -----------------------------------------------------------------------------
 
 module Extend where
@@ -23,11 +26,6 @@ import Macros
 import Operations
 
 import Monad
-
--- AR 14/5/2003 -- 11/11
-
--- The top-level function $extendModule$
--- extends a module symbol table by indirections to the module it extends
 
 extendModule :: [SourceModule] -> SourceModule -> Err SourceModule
 extendModule ms (name,mod) = case mod of
@@ -58,10 +56,9 @@ extendModule ms (name,mod) = case mod of
         let me' = if isCompl then es else (filter (/=n) es) 
         return $ Module mt st fs me' ops js1
 
--- When extending a complete module: new information is inserted,
+-- | When extending a complete module: new information is inserted,
 -- and the process is interrupted if unification fails.
 -- If the extended module is incomplete, its judgements are just copied.
-
 extendMod :: Bool -> Ident -> Ident -> BinTree (Ident,Info) -> BinTree (Ident,Info) -> 
              Err (BinTree (Ident,Info))
 extendMod isCompl name base old new = foldM try new $ tree2list old where

@@ -25,9 +25,8 @@ import Ident
 import Modules
 import Operations
 
--- rebuilding instance + interface, and "with" modules, prior to renaming. 
+-- | rebuilding instance + interface, and "with" modules, prior to renaming. 
 -- AR 24/10/2003
-
 rebuildModule :: [SourceModule] -> SourceModule -> Err SourceModule
 rebuildModule ms mo@(i,mi) = do
   let gr = MGrammar ms

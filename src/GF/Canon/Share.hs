@@ -10,6 +10,9 @@
 -- > CVS $Revision $
 --
 -- Optimizations on GFC code: sharing, parametrization, value sets.
+--
+-- optimization: sharing branches in tables. AR 25\/4\/2003.
+-- following advice of Josef Svenningsson
 -----------------------------------------------------------------------------
 
 module Share (shareModule, OptSpec, shareOpt, paramOpt, valOpt, allOpt) where
@@ -22,9 +25,6 @@ import PrGrammar (prt)
 import Operations
 import List
 import qualified Modules as M
-
--- optimization: sharing branches in tables. AR 25/4/2003
--- following advice of Josef Svenningsson
 
 type OptSpec = [Integer] ---
 

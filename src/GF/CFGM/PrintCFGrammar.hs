@@ -9,10 +9,9 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Handles printing a CFGrammar in CFGM format.
 -----------------------------------------------------------------------------
 
--- Handles printing a CFGrammar in CFGM format.
 module PrintCFGrammar (prCanonAsCFGM) where
 
 import AbsGFC
@@ -32,8 +31,7 @@ import ErrM
 import List (intersperse)
 import Maybe (listToMaybe, maybe)
 
--- FIXME: fix warning about bad -printer= value
-
+-- | FIXME: fix warning about bad -printer= value
 prCanonAsCFGM :: CanonGrammar -> String
 prCanonAsCFGM gr = unlines $ map (uncurry (prLangAsCFGM gr)) xs 
     where 
@@ -43,7 +41,7 @@ prCanonAsCFGM gr = unlines $ map (uncurry (prLangAsCFGM gr)) xs
     fromOk (Bad y) = error y
     xs = [(i,getFlag fs "startcat") | (i,ModMod (Module{flags=fs})) <- cncms]
 
--- FIXME: need to look in abstract module too
+-- | FIXME: need to look in abstract module too
 getFlag :: [Flag] -> String -> Maybe String
 getFlag fs x = listToMaybe [v | Flg (IC k) (IC v) <- fs, k == x]
 

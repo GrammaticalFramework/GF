@@ -10,6 +10,9 @@
 -- > CVS $Revision $
 --
 -- Optimizations on GF source code: sharing, parametrization, value sets.
+--
+-- optimization: sharing branches in tables. AR 25\/4\/2003.
+-- following advice of Josef Svenningsson
 -----------------------------------------------------------------------------
 
 module BackOpt (shareModule, OptSpec, shareOpt, paramOpt, valOpt, allOpt) where
@@ -22,15 +25,24 @@ import Operations
 import List
 import qualified Modules as M
 
--- optimization: sharing branches in tables. AR 25/4/2003
--- following advice of Josef Svenningsson
-
 type OptSpec = [Integer] ---
+
+doOptFactor :: OptSpec
 doOptFactor opt = elem 2 opt
+
+doOptValues :: OptSpec
 doOptValues opt = elem 3 opt
+
+shareOpt :: OptSpec
 shareOpt = []
+
+paramOpt :: OptSpec
 paramOpt = [2]
+
+valOpt :: OptSpec
 valOpt = [3]
+
+allOpt :: OptSpec
 allOpt = [2,3]
 
 shareModule :: OptSpec -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)

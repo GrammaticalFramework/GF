@@ -6,9 +6,11 @@ katalogen src kommer att innehålla (åtminstone) följande:
   - GF.hs     	     	modulen Main
   - GF/			resten av Haskell-filerna
   - JavaGUI/		java-filer
-  - haddock-script.csh	för att skapa haddock-dokumentation
-  - haddock-resources/  nödvändiga filer för haddock-script.csh
-  - haddock/		html-resultat efter att ha kört haddock
+  - haddock/		filer för haddock
+  -         html/
+  -         resources/
+  -         run-haddock.csh
+  -         check-haddock.perl
 
 modifiera gärna strukturen och kommentarerna nedan
 ----------------------------------------------------------------------

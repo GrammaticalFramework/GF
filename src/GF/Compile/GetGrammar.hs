@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- this module builds the internal GF grammar that is sent to the type checker
 -----------------------------------------------------------------------------
 
 module GetGrammar where
@@ -39,8 +39,6 @@ import ReadFiles ----
 import Char (toUpper)
 import List (nub)
 import Monad (foldM)
-
--- this module builds the internal GF grammar that is sent to the type checker
 
 getSourceModule :: FilePath -> IOE SourceModule
 getSourceModule file = do
@@ -90,10 +88,9 @@ err2err (E.Bad s) = Bad s
 
 ioeEErr = ioeErr . err2err
 
--- To resolve the new reserved words: 
+-- | To resolve the new reserved words: 
 -- change them by turning the final letter to upper case.
 --- There is a risk of clash. 
-
 oldLexer :: String -> [L.Token]
 oldLexer = map change . L.tokens where
   change t = case t of

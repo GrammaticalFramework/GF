@@ -9,7 +9,11 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- remove obsolete (Lin C) expressions before doing anything else. AR 21/6/2003
+--
+-- What the program does is replace the occurrences of Lin C with the actual
+-- definition T given in lincat C = T ; with {s : Str} if no lincat is found.
+-- The procedule is uncertain, if T contains another Lin.
 -----------------------------------------------------------------------------
 
 module RemoveLiT (removeLiT) where
@@ -23,12 +27,6 @@ import Lookup
 import Operations
 
 import Monad
-
--- remove obsolete (Lin C) expressions before doing anything else. AR 21/6/2003
-
--- What the program does is replace the occurrences of Lin C with the actual
--- definition T given in lincat C = T ; with {s : Str} if no lincat is found.
--- The procedule is uncertain, if T contains another Lin.
 
 removeLiT :: SourceGrammar -> Err SourceGrammar
 removeLiT gr = liftM MGrammar $ mapM (remlModule gr) (modules gr)

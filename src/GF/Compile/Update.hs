@@ -24,8 +24,7 @@ import Operations
 import List
 import Monad
 
--- update a resource module by adding a new or changing an old definition
-
+-- | update a resource module by adding a new or changing an old definition
 updateRes :: SourceGrammar -> Ident -> Ident -> Info -> SourceGrammar
 updateRes gr@(MGrammar ms) m i info = MGrammar $ map upd ms where
   upd (n,mod) 
@@ -34,16 +33,14 @@ updateRes gr@(MGrammar ms) m i info = MGrammar $ map upd ms where
        ModMod r -> (m,ModMod $ updateModule r i info)
        _ -> (n,mod) --- no error msg
 
--- combine a list of definitions into a balanced binary search tree
-
+-- | combine a list of definitions into a balanced binary search tree
 buildAnyTree :: [(Ident,Info)] -> Err (BinTree (Ident, Info))
 buildAnyTree ias = do
   ias' <- combineAnyInfos ias
   return $ buildTree ias'
 
 
--- unifying information for abstract, resource, and concrete
-
+-- | unifying information for abstract, resource, and concrete
 combineAnyInfos :: [(Ident,Info)] -> Err [(Ident,Info)]
 combineAnyInfos = combineInfos unifyAnyInfo
 

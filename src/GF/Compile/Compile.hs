@@ -49,12 +49,10 @@ import Arch
 
 import Monad
 
--- environment variable for grammar search path
-
+-- | environment variable for grammar search path
 gfGrammarPathVar = "GF_LIB_PATH"
 
--- in batch mode: write code in a file
-
+-- | in batch mode: write code in a file
 batchCompile f = liftM fst $ compileModule defOpts emptyShellState f
   where
     defOpts = options [beVerbose, emitCode] 
@@ -66,11 +64,10 @@ batchCompileOld f = compileOld defOpts f
   where
     defOpts = options [beVerbose, emitCode] 
 
--- compile with one module as starting point
+-- | compile with one module as starting point
 -- command-line options override options (marked by --#) in the file
 -- As for path: if it is read from file, the file path is prepended to each name.
 -- If from command line, it is used as it is.
-
 compileModule :: Options -> ShellState -> FilePath -> IOE TimedCompileEnv
 ----             IOE (GFC.CanonGrammar, (SourceGrammar,[(FilePath,ModTime)]))
 
@@ -147,8 +144,7 @@ keepResModules opts gr =
     else emptyMGrammar
 
 
--- the environment
-
+-- | the environment
 type CompileEnv = (Int,SourceGrammar, GFC.CanonGrammar)
 
 emptyCompileEnv :: TimedCompileEnv
@@ -211,8 +207,7 @@ compileOne opts env@((_,srcgr,_),_) file = do
 
        extendCompileEnvInt env (k',sm',cm) ft
 
--- dispatch reused resource at early stage
-
+-- | dispatch reused resource at early stage
 makeSourceModule :: Options -> CompileEnv -> SourceModule -> IOE (Int,SourceModule)
 makeSourceModule opts env@(k,gr,can) mo@(i,mi) = case mi of
 
