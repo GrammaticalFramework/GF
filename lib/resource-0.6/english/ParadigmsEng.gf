@@ -261,7 +261,7 @@ oper
   vPart = \go, goes, went, gone, up -> 
     verbPart (mkVerbP3 go goes went gone) up ** {lock_V = <>} ;
   vPartReg = \get, up -> 
-    verbPart (regVerbP3 get) up  ** {lock_V = <>} ;
+    verbPart (vGen get) up  ** {lock_V = <>} ;
 
   mkTV = \v,p -> v ** {lock_TV = <> ; s3 = p} ;
   tvPartReg = \get, along, to -> mkTV (vPartReg get along) to ;
