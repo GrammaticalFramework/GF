@@ -25,8 +25,21 @@ oper
 
 -- A simplified verb category: present tense only.
 oper
-  verbVara = {s = table {Infinit => "vara" ; Indicat => "är" ; Imperat => "var"}} ;
-  verbHava = {s = table {Infinit => "ha" ; Indicat => "har" ; Imperat => "ha"}} ;
+  verbVara = extVerb Act vara_1200 ;
+  verbHava = extVerb Act hava_1198 ;
+
+-- A simplified conjugation takes three forms in the worst case.
+
+  mkVerb : (supa,super,sup : Str) -> Verb = \supa,super,sup ->
+    {s = table {
+      VPres Infinit Act  => supa ;
+      VPres Infinit Pass => supa + "s" ;
+      VPres Indicat Act  => super ;
+      VPres Indicat Pass => sup + "s" ;
+      VPres Imperat Act  => sup ;
+      VPres Imparat Pass => sup + "s"
+      }
+    } ;
 
 -- Prepositions are just strings.
   Preposition = Str ;
@@ -1019,6 +1032,38 @@ oper liten_1146 : Adj =
     }
   } ;
 
+oper giva_1147 : Verbum = 
+ {s = table {
+    VF (Pres Ind Act) => variants {"giver" ; "ger"} ;
+    VF (Pres Ind Pass) => variants {"gives" ; "givs" ; "ges"} ;
+    VF (Pres Conj Act) => "give" ;
+    VF (Pres Conj Pass) => "gives" ;
+    VF (Pret Ind Act) => "gav" ;
+    VF (Pret Ind Pass) => "gavs" ;
+    VF (Pret Conj Act) => "give" ;
+    VF (Pret Conj Pass) => "gives" ;
+    VF Imper => variants {"giv" ; "ge"} ;
+    VI (Inf Act) => variants {"giva" ; "ge"} ;
+    VI (Inf Pass) => variants {"givas" ; "ges"} ;
+    VI (Supin Act) => "givit" ;
+    VI (Supin Pass) => "givits" ;
+    VI (PtPres Nom) => "givande" ;
+    VI (PtPres Gen) => "givandes" ;
+    VI (PtPret (Strong (ASg Utr)) Nom) => "given" ;
+    VI (PtPret (Strong (ASg Utr)) Gen) => "givens" ;
+    VI (PtPret (Strong (ASg Neutr)) Nom) => "givet" ;
+    VI (PtPret (Strong (ASg Neutr)) Gen) => "givets" ;
+    VI (PtPret (Strong APl) Nom) => "givna" ;
+    VI (PtPret (Strong APl) Gen) => "givnas" ;
+    VI (PtPret (Weak (AxSg NoMasc)) Nom) => "givna" ;
+    VI (PtPret (Weak (AxSg NoMasc)) Gen) => "givnas" ;
+    VI (PtPret (Weak (AxSg Masc)) Nom) => "givne" ;
+    VI (PtPret (Weak (AxSg Masc)) Gen) => "givnes" ;
+    VI (PtPret (Weak AxPl) Nom) => "givna" ;
+    VI (PtPret (Weak AxPl) Gen) => "givnas"
+    }
+  } ;
+
 oper gå_1174 : Verbum = 
  {s = table {
     VF (Pres Ind Act) => "går" ;
@@ -1048,6 +1093,69 @@ oper gå_1174 : Verbum =
     VI (PtPret (Weak (AxSg Masc)) Gen) => "gångnes" ;
     VI (PtPret (Weak AxPl) Nom) => "gångna" ;
     VI (PtPret (Weak AxPl) Gen) => "gångnas"
+    }
+  } ;
+oper hava_1198 : Verbum = 
+ {s = table {
+    VF (Pres Ind Act) => variants {"haver" ; "har"} ;
+    VF (Pres Ind Pass) => variants {"havs" ; "has"} ;
+    VF (Pres Conj Act) => "have" ;
+    VF (Pres Conj Pass) => "haves" ;
+    VF (Pret Ind Act) => "hade" ;
+    VF (Pret Ind Pass) => "hades" ;
+    VF (Pret Conj Act) => "hade" ;
+    VF (Pret Conj Pass) => "hades" ;
+    VF Imper => variants {"hav" ; "ha"} ;
+    VI (Inf Act) => variants {"hava" ; "ha"} ;
+    VI (Inf Pass) => variants {"havas" ; "has"} ;
+    VI (Supin Act) => "haft" ;
+    VI (Supin Pass) => "hafts" ;
+    VI (PtPres Nom) => "havande" ;
+    VI (PtPres Gen) => "havandes" ;
+    VI (PtPret (Strong (ASg Utr)) Nom) => variants {} ;
+    VI (PtPret (Strong (ASg Utr)) Gen) => variants {} ;
+    VI (PtPret (Strong (ASg Neutr)) Nom) => variants {} ;
+    VI (PtPret (Strong (ASg Neutr)) Gen) => variants {} ;
+    VI (PtPret (Strong APl) Nom) => variants {} ;
+    VI (PtPret (Strong APl) Gen) => variants {} ;
+    VI (PtPret (Weak (AxSg NoMasc)) Nom) => variants {} ;
+    VI (PtPret (Weak (AxSg NoMasc)) Gen) => variants {} ;
+    VI (PtPret (Weak (AxSg Masc)) Nom) => variants {} ;
+    VI (PtPret (Weak (AxSg Masc)) Gen) => variants {} ;
+    VI (PtPret (Weak AxPl) Nom) => variants {} ;
+    VI (PtPret (Weak AxPl) Gen) => variants {}
+    }
+  } ;
+
+oper vara_1200 : Verbum = 
+ {s = table {
+    VF (Pres Ind Act) => "är" ;
+    VF (Pres Ind Pass) => variants {} ;
+    VF (Pres Conj Act) => "vare" ;
+    VF (Pres Conj Pass) => variants {} ;
+    VF (Pret Ind Act) => "var" ;
+    VF (Pret Ind Pass) => variants {} ;
+    VF (Pret Conj Act) => "vore" ;
+    VF (Pret Conj Pass) => variants {} ;
+    VF Imper => "var" ;
+    VI (Inf Act) => "vara" ;
+    VI (Inf Pass) => variants {} ;
+    VI (Supin Act) => "varit" ;
+    VI (Supin Pass) => variants {} ;
+    VI (PtPres Nom) => "varande" ;
+    VI (PtPres Gen) => "varandes" ;
+    VI (PtPret (Strong (ASg Utr)) Nom) => variants {} ;
+    VI (PtPret (Strong (ASg Utr)) Gen) => variants {} ;
+    VI (PtPret (Strong (ASg Neutr)) Nom) => variants {} ;
+    VI (PtPret (Strong (ASg Neutr)) Gen) => variants {} ;
+    VI (PtPret (Strong APl) Nom) => variants {} ;
+    VI (PtPret (Strong APl) Gen) => variants {} ;
+    VI (PtPret (Weak (AxSg NoMasc)) Nom) => variants {} ;
+    VI (PtPret (Weak (AxSg NoMasc)) Gen) => variants {} ;
+    VI (PtPret (Weak (AxSg Masc)) Nom) => variants {} ;
+    VI (PtPret (Weak (AxSg Masc)) Gen) => variants {} ;
+    VI (PtPret (Weak AxPl) Nom) => variants {} ;
+    VI (PtPret (Weak AxPl) Gen) => variants {}
     }
   } ;
 }

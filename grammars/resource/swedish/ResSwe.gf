@@ -186,6 +186,7 @@ lin
   ThouNP = pronNounPhrase du_33 ;
   HeNP   = pronNounPhrase han_34 ;
   SheNP  = pronNounPhrase hon_35 ;
+  ItNP   = pronNounPhrase det_40 ; ----
   WeNP   = pronNounPhrase vi_36 ;
   YeNP   = pronNounPhrase ni_37 ;
   TheyNP = pronNounPhrase de_38 ;

@@ -488,7 +488,7 @@ oper
 -- "s" passive form.
 
   passVerb : Bool -> Verb -> VerbPhrase = \b,se -> ---- passive not yet
-    se ** {
+    {s  = table {VPres m _ => se.s ! VPres m Pass} ;  
      s2 = negation b ; 
      s3 = \\_,_ => []
      } ;
@@ -582,7 +582,7 @@ oper
     \Jag, serdiginte -> 
     let {
       jag  = Jag.s ! PNom ; 
-      ser  = serdiginte.s ! Indicat ;
+      ser  = serdiginte.s ! VPres Indicat Act ;
       dig  = serdiginte.s3 ! Jag.g ! Jag.n ;
       inte = serdiginte.s2
     } in
@@ -625,7 +625,7 @@ oper
     \b, Jag, se -> 
     let {
       jag  = Jag.s ! PNom ; 
-      ser  = se.s ! Indicat ;
+      ser  = se.s ! VPres Indicat Act ;
       inte = negation b
     } in
     {s = table {
@@ -699,7 +699,7 @@ oper
 
   relVerbPhrase : RelPron -> VerbPhrase -> RelClause = \som,sover ->
     {s = \\gn => 
-       som.s ! RNom ! gn ++ sover.s2 ++ sover.s ! Indicat ++ 
+       som.s ! RNom ! gn ++ sover.s2 ++ sover.s ! VPres Indicat Act ++ 
        sover.s3 ! mkGenderRel som.g (genGN gn) ! numGN gn
     } ;
 
@@ -893,7 +893,7 @@ oper
   Imperative = SS1 Number ;
 
   imperVerbPhrase : VerbPhrase -> Imperative = \titta -> 
-    {s = \\n => titta.s ! Imperat ++ titta.s2 ++ titta.s3 ! Utr ! n} ;  
+    {s = \\n => titta.s ! VPres Imperat Act ++ titta.s2 ++ titta.s3 ! Utr ! n} ;  
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
     ss (I.s ! n ++ "!") ;
