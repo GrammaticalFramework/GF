@@ -35,9 +35,9 @@ lin
 
   Individual = UsePN ;
 
-  AllN = DetNP AllDet ;
-  MostN = DetNP MostDet ;
+  AllN = DetNP (AllsDet NoNum) ;
+  MostN = DetNP MostsDet ;
   EveryN = DetNP EveryDet ;
-  Any = DetNP AnysDet ;
+  Any = DetNP (AnysDet NoNum) ;
 
 } ;

@@ -12,32 +12,35 @@ concrete StructuralEng of Structural =
   HeNP   = pronHe ;
   SheNP  = pronShe ;
   ItNP   = pronIt ;
-  WeNP   = pronWe ;
-  YeNP   = pronYouPl ;
+  WeNP   = pronWithNum pronWe ;
+  YeNP   = pronWithNum pronYouPl ;
   YouNP  = pronYouSg ;
   TheyNP = pronThey ;
 
   EveryDet = everyDet ; 
-  AllDet   = allDet ; 
+  AllDet   = mkDeterminer Sg "all" ; --- all the missing
+  AllsDet  = mkDeterminerNum Pl "all" ;
   WhichDet = whichDet ;
-  MostDet  = mostDet ;
+  WhichsDet = mkDeterminerNum Pl "which" ;
+  MostsDet = mostDet ;
+  MostDet  = mkDeterminer Sg "most" ;
   SomeDet  = mkDeterminer Sg "some" ;
-  SomesDet = mkDeterminer Pl "some" ;
+  SomesDet = mkDeterminerNum Pl "some" ;
   AnyDet   = mkDeterminer Sg "any" ;
-  AnysDet  = mkDeterminer Pl "any" ;
+  AnysDet  = mkDeterminerNum Pl "any" ;
   NoDet    = mkDeterminer Sg "no" ;
-  NosDet   = mkDeterminer Pl "no" ;
+  NosDet   = mkDeterminerNum Pl "no" ;
   ManyDet  = mkDeterminer Sg "many" ;
   MuchDet  = mkDeterminer Sg ["a lot of"] ; ---
   ThisDet  = mkDeterminer Sg "this" ;
-  TheseDet = mkDeterminer Pl "these" ;
+  TheseDet = mkDeterminerNum Pl "these" ;
   ThatDet  = mkDeterminer Sg "that" ;
-  ThoseDet = mkDeterminer Pl "those" ;
+  ThoseDet = mkDeterminerNum Pl "those" ;
 
   ThisNP = nameNounPhrase (nameReg "this") ;
-  TheseNP = nameNounPhrase (nameReg "these") ;
   ThatNP = nameNounPhrase (nameReg "that") ;
-  ThoseNP = nameNounPhrase (nameReg "those") ;
+  TheseNP n = nameNounPhrase {s = \\c => "these" ++ n.s ! c} ;
+  ThoseNP n = nameNounPhrase {s = \\c => "those" ++ n.s ! c} ;
 
   EverybodyNP = nameNounPhrase (nameReg "everybody") ;
   SomebodyNP = nameNounPhrase (nameReg "somebody") ;
@@ -45,6 +48,11 @@ concrete StructuralEng of Structural =
   EverythingNP = nameNounPhrase (nameReg "everything") ;
   SomethingNP = nameNounPhrase (nameReg "something") ;
   NothingNP = nameNounPhrase (nameReg "nothing") ;
+
+---  CanVV = vvCan ;
+---  CanKnowVV = vvCan ;
+---  MustVV = vvMust ;
+---  WantVV = verbNoPart (regVerbP3 "want") ** {isAux = False} ;
 
   HowIAdv = ss "how" ;
   WhenIAdv = ss "when" ;
@@ -89,6 +97,7 @@ concrete StructuralEng of Structural =
   WithPrep = ss "with" ;
   WithoutPrep = ss "without" ;
   ByMeansPrep = ss "by" ;
+  PartPrep = ss "of" ;
   AgentPrep = ss "by" ;
 
 }

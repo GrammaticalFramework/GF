@@ -87,6 +87,25 @@ oper
   pronNounPhrase : ProPN -> NounPhrase = \jag -> 
     {s = jag.s ; g = jag.h1 ; n = jag.h2} ;
 
+-- The following construction has to be refined for genitive forms:
+-- "vi tre", "oss tre" are OK, but "vår tres" is not.
+
+  Numeral : Type = {s : Case => Str} ;
+
+  pronWithNum : ProPN -> Numeral -> ProPN = \we,two ->
+    {s = \\c => we.s ! c ++ two.s ! npCase c ; 
+     h1 = we.h1 ; 
+     h2 = we.h2 ;
+     h3 = we.h3
+    } ;
+
+  noNum : Numeral = {s = \\_ => []} ;
+
+-- Formal subjects
+
+  npMan = nameNounPhrase (mkProperName "man" Utr Masc) ;
+  npDet = nameNounPhrase (mkProperName "det" Neutr NoMasc) ;
+
 --2 Determiners
 --
 -- Determiners are inflected according to noun in gender and sex. 
@@ -110,8 +129,14 @@ oper
   mkDeterminerSg :  DetSg -> SpeciesP -> Determiner = \en, b -> 
     {s = en ; n = Sg ; b = b} ;
 
-  mkDeterminerPl :  DetPl -> SpeciesP -> Determiner = \alla, b -> 
-    {s = table {_ => table {_ => alla}} ; n = Pl ; b = b} ;
+  mkDeterminerPl :  DetPl -> SpeciesP -> Determiner = \alla -> 
+    mkDeterminerPlNum alla noNum ;
+
+  mkDeterminerPlNum : DetPl -> Numeral -> SpeciesP -> Determiner = \alla,n,b -> 
+    {s = \\_,_ => alla ++ n.s ! Nom ; 
+     n = Pl ; 
+     b = b
+    } ;
 
   detSgInvar : Str -> DetSg = \varje -> table {_ => table {_ => varje}} ;
 
@@ -147,12 +172,12 @@ oper
 -- Genitives of noun phrases can be used like determiners, to build noun phrases.
 -- The number argument makes the difference between "min bil" - "mina bilar".
 
-  npGenDet : Number -> NounPhrase -> CommNounPhrase -> NounPhrase = 
-    \n,huset,vin -> {
+  npGenDet : Number -> Numeral -> NounPhrase -> CommNounPhrase -> NounPhrase = 
+    \n,tre,huset,vin -> {
        s = \\c => case n of {
              Sg => huset.s ! PGen (ASg vin.g) ++ 
                    vin.s ! Sg ! DefP Indef ! npCase c ;
-             Pl => huset.s ! PGen APl ++ 
+             Pl => huset.s ! PGen APl ++ tre.s ! Nom ++
                    vin.s ! Pl ! DefP Indef ! npCase c
              } ;
        g = vin.g ;
@@ -160,10 +185,12 @@ oper
        } ;
 
 -- *Bare plural noun phrases* like "män", "goda vänner", are built without a 
--- determiner word.
+-- determiner word. But a $Numeral$ may occur.
 
-  plurDet : CommNounPhrase -> NounPhrase = \cn -> 
-    {s = \\c => cn.s ! Pl ! IndefP ! npCase c ; 
+  plurDet : CommNounPhrase -> NounPhrase = plurDetNum noNum ;
+
+  plurDetNum : Numeral -> CommNounPhrase -> NounPhrase = \num,cn -> 
+    {s = \\c => num.s ! Nom ++ cn.s ! Pl ! IndefP ! npCase c ; 
      g = cn.g ; 
      n = Pl
     } ;
@@ -174,21 +201,30 @@ oper
   denDet : CommNounPhrase -> NounPhrase = \cn -> 
     detNounPhrase 
       (mkDeterminerSgGender (table {g => artDef ! cn.p ! ASg g}) (DefP Def)) cn ;
-  deDet : CommNounPhrase -> NounPhrase = \cn -> 
-    detNounPhrase (mkDeterminerPl (artDef ! cn.p ! APl) (DefP Def)) cn ;
+  deDet : Numeral -> CommNounPhrase -> NounPhrase = \n,cn -> 
+    detNounPhrase (mkDeterminerPlNum (artDef ! cn.p ! APl) n (DefP Def)) cn ;
 
 -- It is useful to have macros for indefinite and definite, singular and plural
 -- noun-phrase-like syncategorematic expressions.
 
-  indefNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n,hus -> case n of {
-    Sg => detNounPhrase enDet hus ;
-    Pl => plurDet hus
-    } ;
+  indefNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n -> 
+    indefNounPhraseNum n noNum ;
 
-  defNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n,hus -> case n of {
-    Sg => denDet hus ;
-    Pl => deDet  hus
-    } ;
+  indefNounPhraseNum : Number -> Numeral -> CommNounPhrase -> NounPhrase = 
+   \n,num,hus ->
+    case n of {
+      Sg => detNounPhrase enDet hus ;
+      Pl => plurDetNum num hus
+      } ;
+
+  defNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n ->
+    defNounPhraseNum n noNum ;
+
+  defNounPhraseNum : Number -> Numeral -> CommNounPhrase -> NounPhrase = 
+    \n,num,hus -> case n of {
+      Sg => denDet hus ;
+      Pl => deDet num  hus
+      } ;
 
   indefNoun : Number -> CommNounPhrase -> Str = \n,man -> case n of {
     Sg => artIndef ! man.g ++ man.s ! Sg ! IndefP ! Nom ;
@@ -379,7 +415,7 @@ oper
     let {n = x.n ; nf = if_then_else Number coll Sg n} in 
     variants {
       defNounPhrase nf (appFunComm värde x) ;
-      npGenDet nf x (noun2CommNounPhrase värde)
+      npGenDet nf noNum x (noun2CommNounPhrase värde)
       } ;
 
 -- Two-place functions add one argument place.
@@ -450,6 +486,12 @@ oper
     verbVara ** {
       s2 = negation b ;
       s3 = \\_,_ => john.s ! PNom
+    } ;
+
+  predAdverb : Bool -> Adverb -> VerbPhrase = \b,ute ->
+    verbVara ** {
+      s2 = negation b ;
+      s3 = \\_,_ => ute.s
     } ;
 
 --3 Transitive verbs

@@ -92,12 +92,12 @@ oper
   mkAdj2 : (divisible, by : Str) -> Adj2 ;
 
 -- Comparison adjectives have three forms. The common irregular
--- cases are ones ending with "y" and a consonant that is duplicated.
+-- cases are ones ending with "y" and a consonant that is duplicated;
+-- the "y" ending is recognized by the function $aReg$.
 
   mkAdjDeg : (good,better,best : Str) -> AdjDeg ;
 
   aReg        : (long  : Str) -> AdjDeg ;      -- long, longer, longest
-  aHappy      : (happy : Str) -> AdjDeg ;      -- happy, happier, happiest
   aFat        : (fat   : Str) -> AdjDeg ;      -- fat, fatter, fattest
   aRidiculous : (ridiculous : Str) -> AdjDeg ; -- -/more/most ridiculous
 
@@ -197,11 +197,10 @@ oper
   addGenN : (Str -> CommonNoun) -> Str -> Gender -> N = \f -> 
     \s,g -> f s ** {g = g ; lock_N = <>} ;
 
-  mkAdj1 a = simpleAdj a ** {lock_Adj1 = <>} ;
-  mkAdj2 = \s,p -> simpleAdj s ** {s2 = p} ** {lock_Adj2 = <>} ;
-  mkAdjDeg a b c = mkAdjDegr a b c ** {lock_AdjDeg = <>} ;
+  mkAdj1 a = regAdjective a ** {lock_Adj1 = <>} ;
+  mkAdj2 = \s,p -> regAdjective s ** {s2 = p} ** {lock_Adj2 = <>} ;
+  mkAdjDeg a b c = adjDegrIrreg a b c ** {lock_AdjDeg = <>} ;
   aReg a = adjDegrReg a ** {lock_AdjDeg = <>} ;
-  aHappy = \happy -> adjDegrY (Predef.tk 1 happy) ** {lock_AdjDeg = <>} ;
   aFat = \fat -> let {fatt = fat + Predef.dp 1 fat} in 
          mkAdjDeg fat (fatt + "er") (fatt + "est") ;
   aRidiculous a = adjDegrLong a ** {lock_AdjDeg = <>} ;

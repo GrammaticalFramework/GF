@@ -1,3 +1,5 @@
+--# -path=.:../../prelude
+
 --1 A Small English Resource Syntax
 --
 -- Aarne Ranta 2002
@@ -45,10 +47,21 @@ oper
   nameNounPhrase : ProperName -> NounPhrase = \john -> 
     {s = \\c => john.s ! toCase c ; n = Sg ; p = P3} ;
 
+-- The following construction has to be refined for genitive forms:
+-- "we two", "us two" are OK, but "our two" is not.
+
+  Numeral : Type = {s : Case => Str} ;
+
+  pronWithNum : Pronoun -> Numeral -> Pronoun = \we,two ->
+    {s = \\c => we.s ! c ++ two.s ! toCase c ; n = we.n ; p = we.p} ;
+
+  noNum : Numeral = {s = \\_ => []} ;
+
 --2 Determiners
 --
 -- Determiners are inflected according to the nouns they determine.
 -- The determiner is not inflected.
+
   Determiner : Type = {s : Str ; n : Number} ;
 
   detNounPhrase : Determiner -> CommNounPhrase -> NounPhrase = \every, man -> 
@@ -57,50 +70,63 @@ oper
      p = P3
     } ;
 
-  mkDeterminer : Number -> Str -> Determiner = \n,det -> 
-    {s = det ; 
+  mkDeterminer : Number -> Str -> Determiner = \n,the -> 
+    mkDeterminerNum n the noNum ;
+
+  mkDeterminerNum : Number -> Str -> Numeral -> Determiner = \n,det,two -> 
+    {s = det ++ two.s ! Nom ; 
      n = n
     } ;
 
   everyDet = mkDeterminer Sg "every" ;
-  allDet   = mkDeterminer Pl "all" ;
+  allDet   = mkDeterminerNum Pl "all" ;
   mostDet  = mkDeterminer Pl "most" ;
   aDet     = mkDeterminer Sg artIndef ;
-  plDet    = mkDeterminer Pl [] ;
+  plDet    = mkDeterminerNum Pl [] ;
   theSgDet = mkDeterminer Sg "the" ;
-  thePlDet = mkDeterminer Pl "the" ;
+  thePlDet = mkDeterminerNum Pl "the" ;
   anySgDet = mkDeterminer Sg "any" ;
-  anyPlDet = mkDeterminer Pl "any" ;
+  anyPlDet = mkDeterminerNum Pl "any" ;
 
   whichSgDet = mkDeterminer Sg "which" ;
-  whichPlDet = mkDeterminer Pl "which" ;
+  whichPlDet = mkDeterminerNum Pl "which" ;
 
   whichDet = whichSgDet ; --- API
 
   indefNoun : Number -> CommNoun -> Str = \n,man -> 
     (indefNounPhrase n man).s ! NomP ;
 
-  indefNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n,man -> 
+  indefNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n ->
+    indefNounPhraseNum n noNum ; 
+
+  indefNounPhraseNum : Number -> Numeral ->CommNounPhrase -> NounPhrase = 
+    \n,two,man -> 
     {s = \\c => case n of {
-                       Sg => artIndef ++ man.s ! n ! toCase c ; 
-                       Pl => man.s ! n ! toCase c
+                       Sg => artIndef ++ two.s ! Nom ++ man.s ! n ! toCase c ; 
+                       Pl => two.s ! Nom ++ man.s ! n ! toCase c
                        } ;
      n = n ; p = P3
     } ;
 
-  defNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n,car -> 
-    {s = \\c => artDef ++ car.s ! n ! toCase c ; n = n ; p = P3} ;
+  defNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n ->
+    defNounPhraseNum n noNum ;
+  defNounPhraseNum : Number -> Numeral -> CommNounPhrase -> NounPhrase = 
+    \n,two,car -> 
+    {s = \\c => artDef ++ two.s ! Nom ++ car.s ! n ! toCase c ; 
+     n = n ; 
+     p = P3
+    } ;
 
 -- Genitives of noun phrases can be used like determiners, to build noun phrases.
 -- The number argument makes the difference between "my house" - "my houses".
 --
 -- We have the variation "the car of John / the car of John's / John's car"
 
-  npGenDet : Number -> NounPhrase -> CommNounPhrase -> NounPhrase = 
-    \n,john,car -> 
+  npGenDet : Number -> Numeral -> NounPhrase -> CommNounPhrase -> NounPhrase = 
+    \n,two,john,car -> 
       {s = \\c => variants {
-             artDef ++ car.s ! n ! Nom ++ "of" ++ john.s ! GenSP ; 
-             john.s ! GenP ++ car.s ! n ! toCase c
+             artDef ++ two.s ! Nom ++ car.s ! n ! Nom ++ "of" ++ john.s ! GenSP ; 
+             john.s ! GenP ++ two.s ! Nom ++ car.s ! n ! toCase c
              } ;
        n = n ; 
        p = P3
@@ -134,7 +160,7 @@ oper
   adj2adjPhrase : Adjective -> AdjPhrase = \new -> new ** {p = True} ;
 
   simpleAdjPhrase : Str -> AdjPhrase = \French ->
-    adj2adjPhrase (simpleAdj French) ;
+    adj2adjPhrase (regAdjective French) ;
 
 
 --3 Comparison adjectives
@@ -144,13 +170,13 @@ oper
 -- Positive forms are used alone, as adjectival phrases ("big").
 
   positAdjPhrase : AdjDegr -> AdjPhrase = \big -> 
-    adj2adjPhrase (ss (big.s ! Pos)) ;
+    adj2adjPhrase {s = big.s ! Pos} ;
 
 -- Comparative forms are used with an object of comparison, as
 -- adjectival phrases ("bigger then you").
 
   comparAdjPhrase : AdjDegr -> NounPhrase -> AdjPhrase = \big, you ->
-    {s = big.s ! Comp ++ "than" ++ you.s ! NomP ; 
+    {s = \\a => big.s ! Comp ! a ++ "than" ++ you.s ! NomP ; 
      p = False
     } ;
 
@@ -158,7 +184,7 @@ oper
 -- maximal representative of a domain ("the biggest house").
 
   superlNounPhrase : AdjDegr -> CommNoun -> NounPhrase = \big, house ->
-    {s = \\c => "the" ++ big.s ! Sup ++ house.s ! Sg ! toCase c ; 
+    {s = \\c => "the" ++ big.s ! Sup ! AAdj ++ house.s ! Sg ! toCase c ; 
      n = Sg ; 
      p = P3
     } ;
@@ -174,7 +200,7 @@ oper
   AdjCompl = Adjective ** {s2 : Preposition} ;
 
   complAdj : AdjCompl -> NounPhrase -> AdjPhrase = \related,john ->
-    {s = related.s ++ related.s2 ++ john.s ! AccP ; 
+    {s = \\a => related.s ! a ++ related.s2 ++ john.s ! AccP ; 
      p = False
     } ;
 
@@ -190,8 +216,8 @@ oper
 
   modCommNounPhrase : AdjPhrase -> CommNounPhrase -> CommNounPhrase = \big, car -> 
     {s = \\n => if_then_else (Case => Str) big.p 
-           (\\c => big.s ++ car.s ! n ! c)
-           (table {Nom => car.s ! n ! Nom ++ big.s ; Gen => variants {}}) ;
+           (\\c => big.s ! AAdj ++ car.s ! n ! c)
+           (table {Nom => car.s ! n ! Nom ++ big.s ! AAdj ; Gen => variants {}}) ;
      g = car.g
     } ;
 
@@ -234,7 +260,7 @@ oper
     let {n = john.n ; nf = if_then_else Number coll Sg n} in 
     variants {
       defNounPhrase nf (appFunComm mother john) ;
-      npGenDet nf john mother
+      npGenDet nf noNum john mother
       } ;
 
 -- The commonest case is functions with the preposition  "of".
@@ -305,7 +331,7 @@ oper
 
   predAdjective : Bool -> Adjective -> VerbPhrase = \b,old ->
     {s = beOrNotBe b ;
-     s2 = \\_ => old.s ;
+     s2 = \\_ => old.s ! AAdj ;
      isAux = True
     } ;
 
@@ -318,6 +344,12 @@ oper
   predNounPhrase : Bool -> NounPhrase -> VerbPhrase = \b,john ->
     {s = beOrNotBe b ;
      s2 = \\_ => john.s ! NomP ;
+     isAux = True
+    } ;
+
+  predAdverb : Bool -> Adverb -> VerbPhrase = \b,elsewhere ->
+    {s = beOrNotBe b ;
+     s2 = \\_ => elsewhere.s ;
      isAux = True
     } ;
 
@@ -376,7 +408,7 @@ oper
 -- The syntax is the same as for adjectival predication.
 
   passVerb : Bool -> Verb -> VerbPhrase = \b,love ->
-    predAdjective b (adj2adjPhrase (ss (love.s ! PPart))) ;
+    predAdjective b (adj2adjPhrase (regAdjective (love.s ! PPart))) ;
 
 -- Transitive verbs can be used elliptically as verbs. The semantics
 -- is left to applications. The definition is trivial, due to record
@@ -434,7 +466,7 @@ oper
     } ;
 
   advAdjPhrase : SS -> AdjPhrase -> AdjPhrase = \very, good ->
-    {s = very.s ++ good.s ;
+    {s = \\a => very.s ++ good.s ! a ;
      p = good.p
     } ;
 
@@ -504,6 +536,50 @@ oper
        s2 = \\_ => say.s ! InfImp ++ thatjohnruns ;
        isAux = True} ;
 
+--3 Verb-complement verbs
+--
+-- Sentence-complement verbs take verb phrases as complements.
+-- They can be auxiliaries ("can", "must") or ordinary verbs
+-- ("try"); this distinction cannot be done in the multilingual
+-- API and leads to some anomalies in English, such as the necessity
+-- to create the infinitive form "to be able to" for "can" so that
+-- the construction can be iterated, and the corresponding complication
+-- in the parameter structure.
+
+  VerbVerb : Type = Verb ** {isAux : Bool} ;
+
+-- To generate "can walk"/"can't walk"; "tries to walk"/"does not try to walk":
+-- The contraction of "not" is not provided, since it would require changing
+-- the verb parameter type.
+
+  complVerbVerb : Bool -> VerbVerb -> VerbPhrase -> VerbPhrase = \b,try,run ->
+    let to = if_then_else Str try.isAux [] "to" 
+    in
+    if_then_else VerbPhrase b 
+      {s = \\v => try.s ! v ++ try.s1 ++ to ++ run.s ! InfImp ;
+       s2 = run.s2 ; 
+       isAux = try.isAux
+      }
+      {s  = \\v => try.s ! v ++ "not" ; 
+       s2 = \\n => run.s ! InfImp ++ run.s2 ! n ;
+       isAux = True
+      } ;
+
+-- The three most important example auxiliaries.
+
+  mkVerbAux : (_,_,_,_: Str) -> VerbVerb = \beable, can, could, beenable -> 
+    {s = table {
+       InfImp => beable ; 
+       Indic _ => can ; 
+       Past _ => could ;
+       PPart => beenable
+       } ;
+     s1 = [] ;
+     isAux = True
+    } ;
+
+  vvCan  : VerbVerb = mkVerbAux ["be able to"] "can" "could" ["been able to"] ;
+  vvMust : VerbVerb = mkVerbAux ["have to"] "must" ["had to"] ["had to"] ;
 
 --2 Sentences missing noun phrases
 --
@@ -687,13 +763,13 @@ oper
       }
     } ;
 
-  isThere : Number -> CommNounPhrase -> Question = \n,bar ->
+  isThere : Number -> Numeral -> CommNounPhrase -> Question = \n,num,bar ->
     questVerbPhrase 
       (case n of {
          Sg => nameNounPhrase (nameReg "there") ;
          Pl => {s = \\_ => "there" ; n = Pl ; p = P3}
          })
-      (predNounPhrase True (indefNounPhrase n bar)) ;
+      (predNounPhrase True (indefNounPhraseNum n num bar)) ;
 
 
 --3 Wh-questions
@@ -815,20 +891,20 @@ oper
 -- The structure is the same as for sentences. The result is a prefix adjective
 -- if and only if all elements are prefix.
 
-  ListAdjPhrase : Type = SD2 ** {p : Bool} ;
+  ListAdjPhrase : Type = {s1,s2 : AForm => Str ; p : Bool} ;
 
   twoAdjPhrase : (_,_ : AdjPhrase) -> ListAdjPhrase = \x,y ->
-    CO.twoStr x.s y.s ** {p = andB x.p y.p} ;
+    CO.twoTable AForm x y ** {p = andB x.p y.p} ;
 
   consAdjPhrase : ListAdjPhrase -> AdjPhrase -> ListAdjPhrase =  \xs,x ->
-    CO.consStr CO.comma xs x.s ** {p = andB xs.p x.p} ;
+    CO.consTable AForm CO.comma xs x ** {p = andB xs.p x.p} ;
 
   conjunctAdjPhrase : Conjunction -> ListAdjPhrase -> AdjPhrase = \c,xs ->
-    ss (CO.conjunctX c xs) ** {p = xs.p} ;
+    CO.conjunctTable AForm c xs ** {p = xs.p} ;
 
   conjunctDistrAdjPhrase : ConjunctionDistr -> ListAdjPhrase -> AdjPhrase = 
     \c,xs ->
-    ss (CO.conjunctDistrX c xs) ** {p = xs.p} ;
+    CO.conjunctDistrTable AForm c xs ** {p = xs.p} ;
 
 
 --3 Coordinating noun phrases
