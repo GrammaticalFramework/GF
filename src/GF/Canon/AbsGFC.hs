@@ -119,6 +119,7 @@ data Term =
  | R [Assign]
  | P Term Label
  | T CType [Case]
+ | V CType [Term]
  | S Term Term
  | C Term Term
  | FV [Term]

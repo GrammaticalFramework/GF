@@ -77,6 +77,7 @@ data Term =
  
  | Table Term Term      -- table type:  P => A
  | T TInfo [Case]       -- table:       table {p => c ; ...}
+ | V Type [Term]        -- table given as course of values: table T [c1 ; ... ; cn]
  | S Term Term          -- selection:   t ! p
 
  | Let LocalDef Term    -- local definition: let {t : T = a} in b

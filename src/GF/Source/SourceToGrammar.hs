@@ -350,6 +350,8 @@ transExp x = case x of
   ETable cases  -> liftM (G.T G.TRaw) (transCases cases)
   ETTable exp cases -> 
     liftM2 (\t c -> G.T (G.TTyped t) c) (transExp exp) (transCases cases)
+  EVTable exp cases -> 
+    liftM2 (\t c -> G.V t c) (transExp exp) (mapM transExp cases)
   ECase exp cases  -> do
     exp' <- transExp exp
     cases' <- transCases cases

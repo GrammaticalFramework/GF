@@ -151,6 +151,12 @@ ccompute cnc = comp []
     T ty rs -> liftM (T ty . map (uncurry Cas)) $ 
                   mapPairsM compt [(l,r) | Cas l r <- rs]
 
+    V ptyp ts -> do
+      vs0 <- allParamValues cnc ptyp
+      vs  <- mapM term2patt vs0
+      let cc = [Cas [p] u | (p,u) <- zip vs ts]
+      compt $ T ptyp cc
+
     Con c xs -> liftM (Con c) $ mapM compt xs
 
     K (KS []) -> return E --- should not be needed

@@ -167,6 +167,7 @@ data Exp =
  | EQCons Ident Ident
  | EApp Exp Exp
  | ETable [Case]
+ | EVTable Exp [Exp]
  | ETTable Exp [Case]
  | ECase Exp [Case]
  | EVariants [Exp]

@@ -69,7 +69,7 @@ lin
   OtherwiseAdv = ss "altramente" ;
   ThereforeAdv = ss "quindi" ;
 
-  EverybodyNP  = mkNameNounPhrase ["tutti"] Masc ;
+  EverybodyNP  = normalNounPhrase (\\c => prepCase c ++ "tutti") Masc Pl ;
   SomebodyNP   = mkNameNounPhrase ["qualcuno"] Masc ;
   NobodyNP     = mkNameNounPhrase ["nessuno"] Masc ;  --- ne
   EverythingNP = mkNameNounPhrase ["tutto"] Masc ;

@@ -105,6 +105,7 @@ LI.   Term2 ::= "$" Ident ;  -- from pattern variables
 R.    Term2 ::= "{" [Assign] "}" ;
 P.    Term1 ::= Term2 "." Label ;
 T.    Term1 ::= "table" CType "{" [Case] "}" ;
+V.    Term1 ::= "table" CType "[" [Term2] "]" ;
 S.    Term1 ::= Term1 "!" Term2 ;
 C.    Term  ::= Term "++" Term1 ;
 FV.   Term1 ::= "variants" "{" [Term2] "}" ;  --- no separator!

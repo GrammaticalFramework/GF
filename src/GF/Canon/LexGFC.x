@@ -4,7 +4,6 @@
 module LexGFC where
 
 import ErrM
-import SharedString
 }
 
 
@@ -21,28 +20,25 @@ $u = [\0-\255]          -- universal: any character
 :-
 
 $white+ ;
-@rsyms { tok (\p s -> PT p (TS $ share s)) }
+@rsyms { tok (\p s -> PT p (TS s)) }
 
-$l $i*   { tok (\p s -> PT p (eitherResIdent (TV . share) s)) }
-\" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \"{ tok (\p s -> PT p (TL $ share $ unescapeInitTail s)) }
+$l $i*   { tok (\p s -> PT p (eitherResIdent TV s)) }
+\" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \"{ tok (\p s -> PT p (TL $ unescapeInitTail s)) }
 
-$d+      { tok (\p s -> PT p (TI $ share s))    }
+$d+      { tok (\p s -> PT p (TI s))    }
 
 
 {
 
 tok f p s = f p s
 
-share :: String -> String
-share = shareString
-
 data Tok =
-   TS !String     -- reserved words
- | TL !String     -- string literals
- | TI !String     -- integer literals
- | TV !String     -- identifiers
- | TD !String     -- double precision float literals
- | TC !String     -- character literals
+   TS String     -- reserved words
+ | TL String     -- string literals
+ | TI String     -- integer literals
+ | TV String     -- identifiers
+ | TD String     -- double precision float literals
+ | TC String     -- character literals
 
  deriving (Eq,Show,Ord)
 
@@ -67,18 +63,20 @@ prToken t = case t of
 
   _ -> show t
 
-data BTree = N | B String Tok BTree BTree deriving (Show)
-
 eitherResIdent :: (String -> Tok) -> String -> Tok
-eitherResIdent tv s = treeFind resWords
-  where
-  treeFind N = tv s
-  treeFind (B a t left right) | s < a  = treeFind left
-                              | s > a  = treeFind right
-                              | s == a = t
+eitherResIdent tv s = if isResWord s then (TS s) else (tv s) where
+  isResWord s = isInTree s $
+    B "lin" (B "concrete" (B "Type" (B "Str" (B "Ints" N N) N) (B "cat" (B "abstract" N N) N)) (B "fun" (B "flags" (B "data" N N) N) (B "in" (B "grammar" N N) N))) (B "pre" (B "open" (B "of" (B "lincat" N N) N) (B "param" (B "oper" N N) N)) (B "transfer" (B "table" (B "resource" N N) N) (B "variants" N N)))
 
-resWords = b "lin" (b "concrete" (b "Type" (b "Str" (b "Ints" N N) N) (b "cat" (b "abstract" N N) N)) (b "fun" (b "flags" (b "data" N N) N) (b "in" (b "grammar" N N) N))) (b "pre" (b "open" (b "of" (b "lincat" N N) N) (b "param" (b "oper" N N) N)) (b "transfer" (b "table" (b "resource" N N) N) (b "variants" N N)))
-   where b s = B s (TS s)
+data BTree = N | B String BTree BTree deriving (Show)
+
+isInTree :: String -> BTree -> Bool
+isInTree x tree = case tree of
+  N -> False
+  B a left right
+   | x < a  -> isInTree x left
+   | x > a  -> isInTree x right
+   | x == a -> True
 
 unescapeInitTail :: String -> String
 unescapeInitTail = unesc . tail where

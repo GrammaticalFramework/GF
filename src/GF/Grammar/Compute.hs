@@ -101,6 +101,17 @@ computeTerm gr = comp where
 
          FV ccs -> mapM (\c -> comp g (S c v')) ccs >>= returnC . FV
 
+         V ptyp ts -> do
+           vs <- allParamValues gr ptyp
+           ps <- mapM term2patt vs
+           let cc = zip ps ts
+           case v' of
+             FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . FV
+             _ -> case matchPattern cc v' of
+               Ok (c,g') -> comp (g' ++ g) c
+               _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
+               _ -> return $ S t' v' -- if v' is not canonical
+
          T _ cc -> case v' of
 	   FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . FV
            _ -> case matchPattern cc v' of
@@ -204,7 +215,8 @@ computeTerm gr = comp where
            ts   <- mapM (\ (c,g') -> comp (g' ++ g) c) sts
            ps   <- mapM term2patt vs
            let ps' = ps --- PT ptyp (head ps) : tail ps
-           return $ T (TComp ptyp) (zip ps' ts)
+           return $ --- V ptyp ts -- to save space, just course of values
+                    T (TComp ptyp) (zip ps' ts)
          _ -> do
            cs' <- mapM (compBranch g) cs
            return $ T i cs'  -- happens with variable types

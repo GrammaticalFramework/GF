@@ -198,6 +198,10 @@ redCTerm t = case t of
     ps' <- mapM redPatt ps
     ts' <- mapM redCTerm ts
     return $ G.T ty' $ map (uncurry G.Cas) $ zip (map singleton ps') ts'
+  V ty ts     -> do
+    ty' <- redCType ty
+    ts' <- mapM redCTerm ts
+    return $ G.V ty' ts'
   S u v -> liftM2 G.S (redCTerm u) (redCTerm v)
   K s   -> return $ G.K (G.KS s)
   EInt i -> return $ G.EInt $ toInteger i

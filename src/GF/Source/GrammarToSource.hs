@@ -129,6 +129,7 @@ trt trm = case trm of
     T (TComp ty) cc -> P.ETTable (trt ty) (map trCase cc)
     T (TWild ty) cc -> P.ETTable (trt ty) (map trCase cc)
     T _ cc -> P.ETable (map trCase cc)
+    V ty cc -> P.EVTable (trt ty) (map trt cc)
 
     Table x v -> P.ETType (trt x) (trt v)
     S f x -> P.ESelect  (trt f) (trt x)

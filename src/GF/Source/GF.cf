@@ -160,6 +160,7 @@ EQCons.    Exp3 ::= "[" Ident "." Ident "]" ;  -- qualified constant
 EApp.      Exp2 ::= Exp2 Exp3 ;
 ETable.    Exp2 ::= "table" "{" [Case] "}" ;
 ETTable.   Exp2 ::= "table" Exp4 "{" [Case] "}" ;
+EVTable.   Exp2 ::= "table" Exp4 "[" [Exp] "]" ;
 ECase.     Exp2 ::= "case" Exp "of" "{" [Case] "}" ;
 EVariants. Exp2 ::= "variants" "{" [Exp] "}" ;
 EPre.      Exp2 ::= "pre" "{" Exp ";" [Altern] "}" ;

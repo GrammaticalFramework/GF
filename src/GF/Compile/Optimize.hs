@@ -188,6 +188,7 @@ evalPrintname gr c ppr lin =
      Abs _ b   -> oneBranch b
      R   (r:_) -> oneBranch $ snd $ snd r
      T _ (c:_) -> oneBranch $ snd c
+     V _ (c:_) -> oneBranch c
      FV  (t:_) -> oneBranch t
      C x y     -> C (oneBranch x) (oneBranch y)
      S x _     -> oneBranch x

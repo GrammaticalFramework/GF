@@ -206,6 +206,7 @@ transExp x = case x of
   EApp exp0 exp  -> failure x
   ETable cases  -> failure x
   ETTable exp cases  -> failure x
+  EVTable exp exps  -> failure x
   ECase exp cases  -> failure x
   EVariants exps  -> failure x
   EPre exp alterns  -> failure x
