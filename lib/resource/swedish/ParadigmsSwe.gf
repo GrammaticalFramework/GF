@@ -1,6 +1,6 @@
 --# -path=.:../scandinavian:../abstract:../../prelude
 
---1 Swedish Lexical Paradigms UNDER RECONSTRUCTION!
+--1 Swedish Lexical Paradigms
 --
 -- Aarne Ranta 2003
 --

@@ -1076,7 +1076,7 @@ oper
   intPronWho : Number -> IntPron = \num -> {
     s = table {
       NomP  => "who" ;
-      AccP  => variants {"who" ; "whom"} ;
+      AccP  => variants {"whom" ; "who"} ;
       GenP  => "whose" ;
       GenSP => "whom"
       } ;

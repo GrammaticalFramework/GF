@@ -53,11 +53,11 @@ shellStateFromFiles :: Options -> ShellState -> FilePath -> IOE ShellState
 shellStateFromFiles opts st file = case fileSuffix file of
   "gfcm" -> do
      cenv <- compileOne opts (compileEnvShSt st []) file
-     ioeErr $ updateShellState opts st cenv
+     ioeErr $ updateShellState opts Nothing st cenv
   s | elem s ["cf","ebnf"] -> do
      let osb = addOptions (options [beVerbose]) opts
      grts <- compileModule osb st file
-     ioeErr $ updateShellState opts st grts
+     ioeErr $ updateShellState opts Nothing st grts
   _ -> do
      b <- ioeIO $ isOldFile file
      let opts' = if b then (addOption showOld opts) else opts
@@ -66,7 +66,8 @@ shellStateFromFiles opts st file = case fileSuffix file of
                  then addOptions (options [beVerbose]) opts' -- for old no emit
                  else addOptions (options [beVerbose, emitCode]) opts'
      grts <- compileModule osb st file
-     ioeErr $ updateShellState opts' st grts
+     let top = identC $ justModuleName file
+     ioeErr $ updateShellState opts' (Just top) st grts
      --- liftM (changeModTimes rts) $ grammar2shellState opts gr
 
 getShellStateFromFiles :: Options -> FilePath -> IO ShellState

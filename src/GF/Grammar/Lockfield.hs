@@ -12,7 +12,7 @@
 -- Creating and using lock fields in reused resource grammars.
 -----------------------------------------------------------------------------
 
-module Lockfield (lockRecType, unlockRecord, lockLabel) where
+module Lockfield (lockRecType, unlockRecord, lockLabel, isLockLabel) where
 
 import Grammar
 import Ident
@@ -40,3 +40,7 @@ unlockRecord c ft = do
 lockLabel :: Ident -> Label
 lockLabel c = LIdent $ "lock_" ++ prt c ----
 
+isLockLabel :: Label -> Bool
+isLockLabel l = case l of
+  LIdent c -> take 5 c == "lock_"
+  _ -> False

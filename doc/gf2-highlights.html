@@ -6,11 +6,11 @@
 
 <h1>Grammatical Framework Version 2</h1>
 
-Highlights, versions 2.0 and 2.1
+Highlights, versions 2.0, 2.1, and 2.2
 
 <p>
 
-13/10/2003 - 25/11 - 2/4/2004 - 18/6 - 13/10
+13/10/2003 - 25/11 - 2/4/2004 - 18/6 - 13/10 - 16/2/2005
 
 <p>
 
@@ -24,7 +24,7 @@ Highlights, versions 2.0 and 2.1
 An accurate <a href="DocGF.pdf">language specification</a> is now available.
 
 
-<h2>Summary of novelties</h2>
+<h2>Summary of novelties in Versions 2.0 to 2.2</h2>
 
 <h4>Module system</h4>
 
@@ -35,18 +35,20 @@ An accurate <a href="DocGF.pdf">language specification</a> is now available.
 <li> Hierarchic structure (single inheritance <tt>**</tt>) + 
      cross-cutting reuse (<tt>open</tt>)
 <li> Separate compilation, one module per file
-<li> Reuse of <tt>abstract</tt>+<tt>concrete</tt> as <tt>resource</tt>
+<li> Reuse of <tt>abstract</tt>+<tt>concrete</tt> as <tt>resource</tt><br>
+     <b>Version 2.2</b>: separate <tt>reuse</tt> modules no longer needed
 <li> Parametrized modules:
      <tt>interface</tt>, <tt>instance</tt>, <tt>incomplete</tt>.
 <li> New experimental module types: <tt>transfer</tt>, 
      <tt>union</tt>.
-<li> <b>Version 2.1</b>: multiple inheritance in module extension.
+<li> Version 2.1: multiple inheritance in module extension.
 
 <h4>Canonical format GFC</h4>
 
 <li> The target of GF compiler; to reuse, just read in.
 <li> Readable by Haskell/Java/C++/C applications.
-<li> <b>Version 2.1</b>: Java interpreter available for GFC (by Björn Bringert).
+<li> Version 2.1: Java interpreter available for GFC (by Björn Bringert).
+<li> <b>Version 2.2</b>: new optimizations to reduce the size of GFC files
 
 
 <h4>New features in expression language</h4>
@@ -59,7 +61,7 @@ An accurate <a href="DocGF.pdf">language specification</a> is now available.
      braces and <tt>where</tt>.
 <li> Pattern variables can be used on lhs's of <tt>oper</tt> definitions.
 <li> New Unicode transliterations (by Harad Hammarström).
-<li> <b>Version 2.1</b>: Initial segments of integers 
+<li> Version 2.1: Initial segments of integers 
      (<tt>Ints</tt><i>n</i>) available as parameter types.
 
 
@@ -78,6 +80,8 @@ An accurate <a href="DocGF.pdf">language specification</a> is now available.
 <li> <tt>pm</tt> = <tt>print_multi</tt> prints the multilingual
      grammar resident in the current state to a ready-compiles
      <tt>.gfcm</tt> file.
+<li> <b>Version 2.2</b>: several new command options
+<li> <b>Version 2.2</b>: <tt>vg</tt> visializes the module dependency graph
 <li> All commands have both long and short names (see help). Short
      names are easier to type, whereas long names
      make scripts more readable.
@@ -89,6 +93,7 @@ An accurate <a href="DocGF.pdf">language specification</a> is now available.
 <li> Active text field: click the middle button in the focus to send
      in refinement through the parser.
 <li> Clipboard: copy complex terms into the refine menu.
+<li> <b>Version 2.2</b>: text corresponding to subtrees with constraints marked with red colour
 
 
 <h4>Improved implementation</h4>
@@ -99,6 +104,10 @@ An accurate <a href="DocGF.pdf">language specification</a> is now available.
 <li> Lexical rules sorted out by option <tt>-cflexer</tt> for efficient
      parsing with large lexica.     
 <li> GHC optimizations and strictness flags are used for improving performance.
+<li> <b>Version 2.2</b>: started <a
+     href="http://www.haskell.org/haddock">haddock</tt> documentation
+     by using uniform module headers
+
 
 
 <h4>New parser (work in progress)</h4>
@@ -106,129 +115,10 @@ An accurate <a href="DocGF.pdf">language specification</a> is now available.
 <li> By Peter Ljunglöf, based on MCFG.
 <li> Much more efficient for morphology and discontinuous constituents.
 <li> Treatment of cyclic rules.
-<li> <b>Version 2.1</b>: improved generation of speech recognition
+<li> Version 2.1: improved generation of speech recognition
      grammars (by Björn Bringert).
-<li> <b>Version 2.1</b>: output of Labelled BNF files readable by the
+<li> Version 2.1: output of Labelled BNF files readable by the
      BNF Converter.
-
-
-<!-- NEW -->
-
-<h2>Missing features of GF 1.2 (13/10/2004)</h2>
-
-Generally, GF1 grammars can be automatically translated to GF2, although the
-result is not as good
-as manual, since indentation and comments are destroyed. 
-The results can be 
-saved in GF2 files, but this is not necessary. 
-Some rarely used GF1 features are no longer supported (see next section).
-It is also possible to write a GF2 grammar back to GF1, with the
-command <tt>pg -printer=old</tt>.
-
-
-<p>
-
-Resource libraries 
-and some example grammars have been
-converted. Most old example grammars work without any changes.
-However, there is a new resource API with
-many new constructions, and which is recommended.
-
-<p>
-
-Soundness checking of module depencencies and completeness is not
-complete. This means that some errors may show up too late.
-
-<p>
-
-Latex and XML printing of grammars do not work yet.
-
-
-
-<!-- NEW -->
-
-<h2>How to use GF 1.* files</h2>
-
-Backward compatibility with respect to old GF grammars has been
-a central goal. All GF grammars, from version 0.9, should work in
-the old way in GF2. The main exceptions are some features that 
-are rarely used. 
-<ul>
-<li> The <tt>package</tt> system introduced in GF 1.2, cannot be
-     interpreted in the module system of GF 2.0, since packages are in
-     mutual scope with the top level.
-<li> <tt>tokenizer</tt> pragmas are cannot be parsed any more. In GF
-     1.2, they are already replaced by <tt>lexer</tt> flags.
-<li> <tt>var</tt> pragmas cannot be parsed any more.
-</ul>
-
-<p>
-
-Very old GF grammars (from versions before 0.9), with the completely
-different notation, do not work. They should be first converted to 
-GF1 by using GF version 1.2.
-
-<p>
-
-The import command <tt>i</tt> can be given the option <tt>-old</tt>. E.g.
-<pre>
-  i -old tut1.Eng.g2
-</pre>
-But this is no more necessary: GF2 detects automatically if a grammar
-is in the GF1 format.
-
-<p>
-
-Importing a set of GF2 files generates, internally, three modules:
-<pre>
-  abstract tut1 = ...
-  resource ResEng = ...
-  concrete Eng of tut1 = open ResEng in ...
-</pre>
-(The names are different if the file name has fewer parts.)
-
-
-<p>
-
-The option <tt>-o</tt> causes GF2 to write these modules into files.
-
-<p>
-
-The flags <tt>-abs</tt>, <tt>-cnc</tt>, and <tt>-res</tt> can be used
-to give custom names to the modules. In particular, it is good to use
-the <tt>-abs</tt> flag to guarantee that the abstract syntax module
-has the same name for all grammars in a multilingual environmens:
-<pre>
-  i -old -abs=Numerals hungarian.gf
-  i -old -abs=Numerals tamil.gf
-  i -old -abs=Numerals sanskrit.gf
-</pre>
-
-<p>
-
-The same flags as in the import command can be used when invoking
-GF2 from the system shell. Many grammars can be imported on the same command
-line, e.g.
-<pre>
-  % gf2 -old -abs=Tutorial tut1.Eng.gf tut1.Fin.gf tut1.Fra.gf
-</pre>
-
-<p>
-
-To write a GF2 grammar back to GF1 (as one big file), use the command
-<pre>
-  > pg -old
-</pre>
-
-
-<p>
-
-
-GF2 has more reserved words than GF 1.2. When old files are read, a preprocessor
-replaces every identifier that has the shape of a new reserved word
-with a variant where the last letter is replaced by <tt>Z</tt>, e.g.
-<tt>instance</tt> is replaced by <tt>instancZ</tt>. This method is of course
-unsafe and should be replaced by something better.
 
 
 
@@ -406,6 +296,54 @@ To force compilation:
 
 <!-- NEW -->
 
+<h3>Compiler optimizations</h3>
+
+<b>Version 2.2</b>
+
+<p>
+
+The sometimes exploding size of generated <tt>gfc</tt> and
+<tt>gfr</tt> files has made it urgent to find optimizations
+that reduce the size of the code. There are five
+combinations optimizations that can be chosen, as the value of the
+<tt>optimize</tt> flag:
+<ul>
+<li> <tt>share</tt>: group tables so that common branch values are shared
+by the use of disjunctive patterns.
+<li> <tt>parametrize</tt>: if table branches differ at most at the
+occurrence of the pattern, replace the expanded table by a one-branch
+table with a variable. If this fails, perform <tt>share</tt>.
+<li> <tt>values</tt>: only show the values of table branches, not the
+patterns.
+<li> <tt>all</tt>: try <tt>parametrize</tt>; if this fails, do <tt>values</tt>.
+<li> <tt>none</tt>: don't do any optimizations
+</ul>
+The <tt>share</tt> and <tt>parametrize</tt> optimizations are always
+just good, whereas the <tt>values</tt> optimization may slow down the
+use of the table. However, it is very good for grammars mostly consisting
+of the inflection tables of lexical items: it can reduce the file size
+by the factor of 4.
+
+<p>
+
+An optimization can be selected individually for each
+<tt>resource</tt> and <tt>concrete</tt> module by including
+the judgement  
+<pre>
+  flags optimize=(share|parametrize|values|all|none) ;
+</pre>
+in the module body. These flags can be overridden by a flag given
+in the <tt>i</tt> command, e.g.
+<pre>
+  i -src -optimize=none Foo.gf
+</pre>
+Notice that the option <tt>-src</tt> is needed if there already are
+generated files created with other optimization flags.
+
+
+
+<!-- NEW -->
+
 <h2>Module search paths</h2>
 
 Modules can reside in different directories. Use the <tt>path</tt>
@@ -429,7 +367,124 @@ places:
 </ul>
 A flag set on a command line overrides ones set in files.
 
+
 <!-- NEW -->
+
+<h2>How to use GF 1.* files</h2>
+
+Backward compatibility with respect to old GF grammars has been
+a central goal. All GF grammars, from version 0.9, should work in
+the old way in GF2. The main exceptions are some features that 
+are rarely used. 
+<ul>
+<li> The <tt>package</tt> system introduced in GF 1.2, cannot be
+     interpreted in the module system of GF 2.0, since packages are in
+     mutual scope with the top level.
+<li> <tt>tokenizer</tt> pragmas are cannot be parsed any more. In GF
+     1.2, they are already replaced by <tt>lexer</tt> flags.
+<li> <tt>var</tt> pragmas cannot be parsed any more.
+</ul>
+
+<p>
+
+Very old GF grammars (from versions before 0.9), with the completely
+different notation, do not work. They should be first converted to 
+GF1 by using GF version 1.2.
+
+<p>
+
+The import command <tt>i</tt> can be given the option <tt>-old</tt>. E.g.
+<pre>
+  i -old tut1.Eng.g2
+</pre>
+But this is no more necessary: GF2 detects automatically if a grammar
+is in the GF1 format.
+
+<p>
+
+Importing a set of GF2 files generates, internally, three modules:
+<pre>
+  abstract tut1 = ...
+  resource ResEng = ...
+  concrete Eng of tut1 = open ResEng in ...
+</pre>
+(The names are different if the file name has fewer parts.)
+
+
+<p>
+
+The option <tt>-o</tt> causes GF2 to write these modules into files.
+
+<p>
+
+The flags <tt>-abs</tt>, <tt>-cnc</tt>, and <tt>-res</tt> can be used
+to give custom names to the modules. In particular, it is good to use
+the <tt>-abs</tt> flag to guarantee that the abstract syntax module
+has the same name for all grammars in a multilingual environmens:
+<pre>
+  i -old -abs=Numerals hungarian.gf
+  i -old -abs=Numerals tamil.gf
+  i -old -abs=Numerals sanskrit.gf
+</pre>
+
+<p>
+
+The same flags as in the import command can be used when invoking
+GF2 from the system shell. Many grammars can be imported on the same command
+line, e.g.
+<pre>
+  % gf2 -old -abs=Tutorial tut1.Eng.gf tut1.Fin.gf tut1.Fra.gf
+</pre>
+
+<p>
+
+To write a GF2 grammar back to GF1 (as one big file), use the command
+<pre>
+  > pg -old
+</pre>
+
+
+<p>
+
+
+GF2 has more reserved words than GF 1.2. When old files are read, a preprocessor
+replaces every identifier that has the shape of a new reserved word
+with a variant where the last letter is replaced by <tt>Z</tt>, e.g.
+<tt>instance</tt> is replaced by <tt>instancZ</tt>. This method is of course
+unsafe and should be replaced by something better.
+
+
+<!-- NEW -->
+
+<h2>Missing features of GF 1.2 (13/10/2004)</h2>
+
+Generally, GF1 grammars can be automatically translated to GF2, although the
+result is not as good
+as manual, since indentation and comments are destroyed. 
+The results can be 
+saved in GF2 files, but this is not necessary. 
+Some rarely used GF1 features are no longer supported (see next section).
+It is also possible to write a GF2 grammar back to GF1, with the
+command <tt>pg -printer=old</tt>.
+
+
+<p>
+
+Resource libraries 
+and some example grammars have been
+converted. Most old example grammars work without any changes.
+However, there is a new resource API with
+many new constructions, and which is recommended.
+
+<p>
+
+Soundness checking of module depencencies and completeness is not
+complete. This means that some errors may show up too late.
+
+<p>
+
+Latex and XML printing of grammars do not work yet.
+
 
 </body>
 </html>

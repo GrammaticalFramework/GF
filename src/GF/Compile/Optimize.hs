@@ -112,8 +112,8 @@ evalCncInfo gr cnc abs (c,info) = case info of
 
     return (c, CncCat ptyp pde' ppr')
 
-  CncFun (mt@(Just (_,ty))) pde ppr -> eIn ("linearization in type" +++  
-                                             show ty +++ "of") $ do
+  CncFun (mt@(Just (_,ty@(cont,val)))) pde ppr -> 
+       eIn ("linearization in type" +++ prt (mkProd (cont,val,[])) ++++ "of function") $ do
     pde' <- case pde of
       Yes de -> do
         liftM yes $ pEval ty de
