@@ -29,7 +29,7 @@ lin
   ItNP   = pronNounPhrase pronIl ;
 
   EveryDet = chaqueDet ; 
-  AllMassDet   = toutDet ;
+  AllMassDet = toutDet ;
   AllNumDet  = tousDet ;
   WhichDet = quelDet ;
   WhichNumDet = mkDeterminerNum plural "quels" "quelles" ;

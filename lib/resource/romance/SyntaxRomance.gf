@@ -428,6 +428,28 @@ oper
   formVerb : Verb -> Bool -> Gender -> VPForm -> Str = \aller,b,g,vf ->
     (predVerb aller).s ! b ! g ! vf ;
 
+-- This is needed to take apart the auxiliary ("avoir" or "être") and
+-- the participle, to form correct order of negation and clitique.
+
+  formVerb2 : Verb -> Gender -> VPForm -> 
+                {verb : Str ; part : Gender => Number => Str} = \aller,g,vf -> 
+    case vf of { 
+      VPF Simul v => {
+        verb = aller.s ! v ;
+        part = \\_,_ => []
+        } ;
+      VPF Anter v => {
+        verb = (auxVerb aller).s ! v ;
+        part = --\\gen,num => --- cannot infer type
+               table Gender {gen => table Number {num => 
+                 aller.s ! case aller.aux of {
+                   AEsse   => VPart g (nombreVerb v) ;
+                   AHabere => VPart gen num
+                   }
+               }}
+        }
+      } ;
+
   negVerb : Str -> Str ;
 
 -- Verb phrases can also be formed from adjectives ("est bon"),
@@ -472,8 +494,12 @@ oper
 -- This function is language-dependent, because it uses the language-dependent
 -- type of case.
 
-  isTransVerbClit : TransVerb -> Bool ;
+  isClitCase : CaseA -> Bool ;
 
+  isTransVerbClit : TransVerb -> Bool = \v -> isClitCase v.c ;
+
+  isDitransVerbClit : DitransVerb -> Bool * Bool = \v -> 
+    <isClitCase v.c,isClitCase v.c3> ;
 
 --3 Transitive verbs
 --
@@ -492,11 +518,13 @@ oper
     {s = \\b,g,w =>  ---- BUG: v gives stack overflow
        let 
          Jean = jean.s ! (case2pformClit aime.c) ; 
-         Aime = formVerb aime b g w 
+         AAime = formVerb2 aime g w ;
+         A = AAime.verb ;
+         Aime = AAime.part ! pgen2gen jean.g ! jean.n 
        in 
        if_then_Str (andB (isNounPhraseClit jean) (isTransVerbClit aime))
-         (Jean ++ Aime) ---- (posNeg b (Jean ++ Aime) [])
-         (Aime ++ Jean) ---- (posNeg b Aime           Jean)
+         (posNeg b (Jean ++ A) Aime)
+         (posNeg b A           (Aime ++ Jean))
     } ;
 
   mkTransVerb : Verb -> Preposition -> CaseA -> TransVerb = \v,p,c -> 
@@ -529,16 +557,18 @@ oper
    \v,p1,c1,p2,c2 -> 
     v ** {s2 = p1 ; c = c1 ; s3 = p2 ; c3 = c2} ;
 
---- This must be completed to account for the order of the clitics, and also, to
---- distinguish between different types of complements.
+--- This must be completed to account for the order of the clitics.
 
   complDitransVerb : 
     DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = \donner,jean,vin ->
     {s = \\b,g,w =>
        let 
-         donne = formVerb donner b g w ;
-         cJean = isNounPhraseClit jean ;
-         cVin  = isNounPhraseClit vin ;
+         adonne = formVerb2 donner g w ;
+         a     = adonne.verb ;
+         donne = adonne.part ! pgen2gen vin.g ! vin.n ;
+         isClit = isDitransVerbClit donner ;
+         cJean = andB (isNounPhraseClit jean) (isClit.p1) ;
+         cVin  = andB (isNounPhraseClit vin)  (isClit.p2) ;
          Jean  = jean.s ! (case2pformClit donner.c) ; 
          Vin   = vin.s ! (case2pformClit donner.c3) ;
          aJean = if_then_Str cJean [] Jean ;  
@@ -546,9 +576,24 @@ oper
          lui   = if_then_Str cJean Jean [] ;  
          te    = if_then_Str cVin Vin []  
        in 
-         te ++ lui ++ donne ++ aJean ++ duVin
-         ---- posNeg b (te ++ lui ++ donne) (aJean ++ duVin)
+         posNeg b (te ++ lui ++ a) (donne ++ aJean ++ duVin)
      } ;
+
+
+
+  complTransVerb : TransVerb -> NounPhrase -> VerbGroup = \aime,jean ->
+    {s = \\b,g,w =>  ---- BUG: v gives stack overflow
+       let 
+         Jean = jean.s ! (case2pformClit aime.c) ; 
+         AAime = formVerb2 aime g w ;
+         A = AAime.verb ;
+         Aime = AAime.part ! pgen2gen jean.g ! jean.n 
+       in 
+       if_then_Str (andB (isNounPhraseClit jean) (isTransVerbClit aime))
+         (posNeg b (Jean ++ A) Aime)
+         (posNeg b A           (Aime ++ Jean))
+    } ;
+
 
 -- The following macro builds the "ne - pas" or "non" negation. The second
 -- string argument is used for the complement of a verb phrase. In Italian,

@@ -121,8 +121,8 @@ lin
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase singular ;
   PhrManyCN = useCommonNounPhrase plural ;
-  PhrIP ip = ip ;
-  PhrIAdv ia = ia ;
+  PhrIP ip = postfixSS "?" ip ;
+  PhrIAdv ia = postfixSS "?" ia ;
 
   OnePhr p = p ;
   ConsPhr = cc2 ;
