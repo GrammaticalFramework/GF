@@ -26,6 +26,7 @@ main = do
   let (os,fs) = getOptions "-" xs
       opt j   = oElem j os
       st0     = optInitShellState os
+      ifNotSil c = if oElem beSilent os then return () else c 
   case 0 of
 
     _ | opt getHelp -> do
@@ -51,10 +52,11 @@ main = do
       if opt beSilent then return () else putStrLnFlush "</gfbatch>"
       return ()
     _ -> do
-      putStrLnFlush $ welcomeMsg
+
+      ifNotSil $ putStrLnFlush $ welcomeMsg
       st <- useIOE st0 $ 
               foldM (shellStateFromFiles os) st0 fs
-      if null fs then return () else putCPU 
+      if null fs then return () else (ifNotSil putCPU) 
       gfInteract (initHState st) 
       return ()
 
@@ -73,7 +75,7 @@ welcomeMsg =
   "Welcome to " ++ authorMsg ++++ welcomeArch ++ "\n\nType 'h' for help."
 
 authorMsg = unlines [
- "Grammatical Framework, Version 2.0",
+ "Grammatical Framework, Version 2.0+",
  "Compiled " ++ today,
  "Copyright (c)", 
  "Björn Bringert, Markus Forsberg, Thomas Hallgren, Harald Hammarström,",

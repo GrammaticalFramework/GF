@@ -93,6 +93,7 @@ RecType. CType ::= "{" [Labelling] "}" ;
 Table.   CType ::= "(" CType "=>" CType ")" ;
 Cn.      CType ::= CIdent ;
 TStr.    CType ::= "Str" ;
+TInts.   CType ::= "Ints" Integer ;
 
 Lbg.  Labelling ::= Label ":" CType ;
 
@@ -108,6 +109,7 @@ S.    Term1 ::= Term1 "!" Term2 ;
 C.    Term  ::= Term "++" Term1 ;
 FV.   Term1 ::= "variants" "{" [Term2] "}" ;  --- no separator!
 
+EInt. Term2 ::= Integer ;
 K.    Term2 ::= Tokn ;
 E.    Term2 ::= "[" "]" ;
 
@@ -129,6 +131,7 @@ PC.   Patt ::= "(" CIdent [Patt] ")" ;
 PV.   Patt ::= Ident ;
 PW.   Patt ::= "_" ;
 PR.   Patt ::= "{" [PattAssign] "}" ;
+PI.   Patt ::= Integer ;
 
 PAss. PattAssign ::= Label "=" Patt ;
 

@@ -37,12 +37,12 @@ data Tok =
  | TD String     -- double precision float literals
  | TC String     -- character literals
 
- deriving (Eq,Show)
+ deriving (Eq,Show,Ord)
 
 data Token = 
    PT  Posn Tok
  | Err Posn
-  deriving Show
+  deriving (Eq,Show,Ord)
 
 tokenPos (PT (Pn _ l _) _ :_) = "line " ++ show l
 tokenPos (Err (Pn _ l _) :_) = "line " ++ show l
@@ -57,12 +57,13 @@ prToken t = case t of
   PT _ (TV s) -> s
   PT _ (TD s) -> s
   PT _ (TC s) -> s
+  _ -> show t
 
 
 eitherResIdent :: (String -> Tok) -> String -> Tok
 eitherResIdent tv s = if isResWord s then (TS s) else (tv s) where
   isResWord s = isInTree s $
-    B "lin" (B "data" (B "abstract" (B "Type" (B "Str" N N) N) (B "concrete" (B "cat" N N) N)) (B "grammar" (B "fun" (B "flags" N N) N) (B "in" N N))) (B "pre" (B "open" (B "of" (B "lincat" N N) N) (B "param" (B "oper" N N) N)) (B "transfer" (B "table" (B "resource" N N) N) (B "variants" N N)))
+    B "lin" (B "concrete" (B "Type" (B "Str" (B "Ints" N N) N) (B "cat" (B "abstract" N N) N)) (B "fun" (B "flags" (B "data" N N) N) (B "in" (B "grammar" N N) N))) (B "pre" (B "open" (B "of" (B "lincat" N N) N) (B "param" (B "oper" N N) N)) (B "transfer" (B "table" (B "resource" N N) N) (B "variants" N N)))
 
 data BTree = N | B String BTree BTree deriving (Show)
 
@@ -90,7 +91,7 @@ unescapeInitTail = unesc . tail where
 -------------------------------------------------------------------
 
 data Posn = Pn !Int !Int !Int
-      deriving (Eq, Show)
+      deriving (Eq, Show,Ord)
 
 alexStartPos :: Posn
 alexStartPos = Pn 0 1 1

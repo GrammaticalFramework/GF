@@ -36,10 +36,10 @@ concrete ImperC of Imper = open ResImper in {
     EVar  _ x  = constant x.s ;
     EInt    n  = constant n.s ;
     EFloat a b = constant (a.s ++ "." ++ b.s) ;
-    EMul _     = infixL P2 "*" ;
-    EAdd _     = infixL P1 "+" ;
-    ESub _     = infixL P1 "-" ;
-    ELt _      = infixN P0 "<" ;
+    EMul _     = infixL 3 "*" ;
+    EAdd _     = infixL 2 "+" ;
+    ESub _     = infixL 2 "-" ;
+    ELt _      = infixN 1 "<" ;
 
     EApp args val f exps = constant (f.s ++ paren exps.s) ;
 

@@ -96,6 +96,7 @@ data Command =
 -- other commands using IO
  | CCEnvRefineWithTree String
  | CCEnvRefineParse String
+ | CCEnvSave String FilePath
 
 isQuit CQuit = True
 isQuit _ = False
@@ -159,6 +160,12 @@ execCommand env c s = case c of
 
   CCEnvOn  name -> return (languageOn  (language name) env,s)
   CCEnvOff name -> return (languageOff (language name) env,s)
+
+  CCEnvSave lang file -> do
+    let str = optLinearizeTreeVal opts (stateGrammarOfLang env (language lang)) $ treeSState s
+    writeFile file str
+    let msg = ["wrote file" +++ file]
+    return (env,changeMsg msg s)
 
 -- this command is improved by the use of IO
   CRefineRandom -> do

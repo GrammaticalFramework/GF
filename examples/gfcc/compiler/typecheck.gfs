@@ -1,0 +1,8 @@
+n Program
+open gft.tmp
+'
+c solve
+'
+c reindex
+'
+save ImperJVM jvm.tmp

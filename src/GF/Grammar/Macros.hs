@@ -271,6 +271,7 @@ typeStrs  = srt "Strs"
 
 typeString = constPredefRes "String"
 typeInt = constPredefRes "Int"
+typeInts i = App (constPredefRes "Ints") (EInt i)
 
 constPredefRes s = Q (IC "Predef") (zIdent s)
 

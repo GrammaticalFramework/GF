@@ -165,6 +165,9 @@ redCType t = case t of
   Table p v  -> liftM2 G.Table (redCType p) (redCType v)
   Q m c    -> liftM G.Cn $ redQIdent (m,c)
   QC m c   -> liftM G.Cn $ redQIdent (m,c)
+
+  App (Q (IC "Predef") (IC "Ints")) (EInt n) -> return $ G.TInts (toInteger n)
+
   Sort "Str" -> return $ G.TStr
   _ -> prtBad "cannot reduce to canonical the type" t
 
@@ -197,6 +200,7 @@ redCTerm t = case t of
     return $ G.T ty' $ map (uncurry G.Cas) $ zip (map singleton ps') ts'
   S u v -> liftM2 G.S (redCTerm u) (redCTerm v)
   K s   -> return $ G.K (G.KS s)
+  EInt i -> return $ G.EInt $ toInteger i
   C u v -> liftM2 G.C (redCTerm u) (redCTerm v)
   FV ts -> liftM G.FV $ mapM redCTerm ts
 ---  Ready ss -> return $ G.Ready [redStr ss] --- obsolete
@@ -224,6 +228,7 @@ redPatt p = case p of
     ts <- mapM redPatt tts
     return $ G.PR $  map (uncurry G.PAss) $ zip ls' ts
   PT _ q -> redPatt q
+  PInt i -> return $ G.PI (toInteger i)
   _ -> prtBad "cannot reduce pattern" p
 
 redLabel :: Label -> G.Label

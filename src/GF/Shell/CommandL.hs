@@ -4,6 +4,7 @@ import Operations
 import UseIO
 
 import CMacros
+import Values (Tree)
 
 import GetTree
 import ShellState
@@ -13,6 +14,7 @@ import Commands
 
 import Char
 import List (intersperse)
+import Monad (foldM)
 
 import UTF8
 
@@ -38,6 +40,23 @@ editLoop env state resume = do
     putStrLnFlush package
 
     editLoop env' state' resume
+
+-- execute a command script and return a tree
+
+execCommandHistory :: CEnv -> String -> IO (CEnv,Tree)
+execCommandHistory env s = do
+  let env'  = startEditEnv env
+  let state = initSStateEnv env'
+  (env',state') <- foldM exec (env,state) $ lines s
+  return $ (env',treeSState state')
+
+ where
+
+  exec (env,state) l = do
+    let c = pCommand l
+    execCommand env c state
+
+
 
 getCommand :: IO Command
 getCommand = do
@@ -101,6 +120,7 @@ pCommand = pCommandWords . words where
     "off":lang: _ -> CCEnvOff lang 
     "pfile" :f:_  -> CCEnvRefineParse f
     "tfile" :f:_  -> CCEnvRefineWithTree f
+    "save":l:f:_  -> CCEnvSave l f
 
 -- openstring file
 -- pfile file

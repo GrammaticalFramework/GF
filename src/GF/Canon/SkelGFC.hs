@@ -35,7 +35,7 @@ transModType x = case x of
 
 transExtend :: Extend -> Result
 transExtend x = case x of
-  Ext id  -> failure x
+  Ext ids  -> failure x
   NoExt  -> failure x
 
 
@@ -129,6 +129,7 @@ transCType x = case x of
   Table ctype0 ctype  -> failure x
   Cn cident  -> failure x
   TStr  -> failure x
+  TInts n  -> failure x
 
 
 transLabelling :: Labelling -> Result
@@ -148,6 +149,7 @@ transTerm x = case x of
   S term0 term  -> failure x
   C term0 term  -> failure x
   FV terms  -> failure x
+  EInt n  -> failure x
   K tokn  -> failure x
   E  -> failure x
 
@@ -191,6 +193,7 @@ transPatt x = case x of
   PV id  -> failure x
   PW  -> failure x
   PR pattassigns  -> failure x
+  PI n  -> failure x
 
 
 transPattAssign :: PattAssign -> Result

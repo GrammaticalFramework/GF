@@ -77,6 +77,7 @@ term2patt trm = case trm of
     aa' <- mapM term2patt aa
     return (PR (map (uncurry PAss) (zip ll aa')))
   LI x -> return $ PV x
+  EInt i -> return $ PI i
   _ -> prtBad "no pattern corresponds to term" trm
 
 patt2term :: Patt -> Term
@@ -85,6 +86,7 @@ patt2term p = case p of
   PV x    -> LI x
   PW      -> anyTerm ----
   PR pas  -> R [ Ass lbl (patt2term q) | PAss lbl q <- pas ]
+  PI i    -> EInt i
 
 anyTerm :: Term
 anyTerm  = LI (A.identC "_") --- should not happen
