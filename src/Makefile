@@ -3,7 +3,7 @@ GHCFLAGS=-package lang -package util
 GHCFUDFLAG=-package Fudgets
 GHCINCLUDE=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc -iparsing
 GHCINCLUDENOFUD=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc-nofud -iparsing
-WINDOWSINCLUDE=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-windows -iparsing
+WINDOWSINCLUDE=-ifor-windows -iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -iparsing
 
 all:
 	make today ; make ghc
