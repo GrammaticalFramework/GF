@@ -24,7 +24,6 @@ fun
   See : NP -> NP -> S ;
   Hear : NP -> NP -> S ;
   Know : NP -> NP -> S ;
-  Think : NP -> NP -> S ;
   Smell : NP -> NP -> S ;
   Fear : NP -> NP -> S ;
   Kill : NP -> NP -> S ;
@@ -48,6 +47,7 @@ fun
 
   -- Actions without an object
 
+  Think : NP -> S ;
   Spit : NP -> S ;
   Vomit : NP -> S ;
   Blow : NP -> S ;

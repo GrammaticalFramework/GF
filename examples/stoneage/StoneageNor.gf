@@ -28,7 +28,6 @@ lin
   See = PresVasV2 see_V ;
   Hear = PresVasV2 hear_V ;
   Know = PresVasV2 know_V ;
-  Think = PresVasV2 think_V ;
   Smell = PresV2 (mkV2 (regV "lukte") "på") ;
   Fear = PresVasV2 fear_V ;
   Kill = PresVasV2 kill_V ;
@@ -50,6 +49,7 @@ lin
   Tie = PresVasV2 tie_V ;
   Count = PresVasV2 count_V ;
 
+  Think = PresV think_V ;
   Spit = PresV spit_V ;
   Vomit = PresV vomit_V ;
   Blow = PresV blow_V ;

@@ -31,7 +31,6 @@ lin
   See = PresV2 (dirV2 see_V) ;
   Hear = PresV2 (dirV2 hear_V) ;
   Know = PresV2 (dirV2 know_V) ;
-  Think = PresV2 (dirV2 think_V) ;
   Smell = PresV2 (dirV2 smell_V) ;
   Fear = PresV2 (dirV2 fear_V) ;
   Kill = PresV2 (dirV2 kill_V) ;
@@ -53,6 +52,7 @@ lin
   Tie = PresV2 (dirV2 tie_V) ;
   Count = PresV2 (dirV2 count_V) ;
 
+  Think = PresV think_V ;
   Spit = PresV spit_V ;
   Vomit = PresV vomit_V ;
   Blow = PresV blow_V ;
