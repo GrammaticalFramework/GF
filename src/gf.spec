@@ -49,7 +49,7 @@ rm -rf $RPM_BUILD_ROOT
 %build
 cd src
 %configure
-make today opt
+make unix
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -60,6 +60,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,0755)
 %{_bindir}/gf2
+%{_bindir}/jgf2
+%{_libdir}/%{name}-%{version}/gf-java.jar
 %doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html,release2.html}
 
 

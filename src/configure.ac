@@ -4,9 +4,9 @@ AC_INIT([GF],[2.0],[dp03-7@mdstud.chalmers.se],[GF])
 
 AC_PREREQ(2.53)
 
-AC_REVISION($Revision: 1.1 $)
+AC_REVISION($Revision: 1.2 $)
 
-AC_CONFIG_FILES([config.mk])
+AC_CONFIG_FILES([config.mk jgf2])
 
 AC_CANONICAL_SYSTEM
 

@@ -13,6 +13,8 @@ GHCINCLUDENOFUD=-ifor-ghc-nofud $(BASICINCLUDE)
 GHCINCLUDEGFT  =-ifor-gft       $(BASICINCLUDE) 
 WINDOWSINCLUDE =-ifor-windows   $(BASICINCLUDE) 
 
+DIST_DIR=GF-$(PACKAGE_VERSION)
+
 all: unix
 
 unix: today nofud-links opt
@@ -67,9 +69,11 @@ shell:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) Shell.hs
 clean: 
 	-rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
+	-rm -f java/*.class
 
 distclean: clean
 	-rm -f for-ghc-nofud/*.hs
+	-rm -f java/gf-java.jar jgf2
 	-rm -f config.status config.mk config.log
 
 hugs:
@@ -80,6 +84,10 @@ today:
 	util/mktoday.sh
 javac:
 	javac java/*.java
+
+jar: javac
+	cd java; jar -cmf manifest.txt gf-java.jar *.class
+
 help:
 	cd util ; runhugs MkHelpFile ; mv HelpFile.hs .. ; cd ..
 
@@ -89,5 +97,19 @@ tracing:
 	strip gf2
 	mv gf2 ../bin/
 
+dist:
+	mkdir $(DIST_DIR)
+	cvs export -d $(DIST_DIR) -rHEAD GF2.0
+	cd $(DIST_DIR) && autoconf && rm -rf autom4te.cache
+	find $(DIST_DIR) -name .cvsignore -exec rm -f {} ';'
+	tar -zcf $(DIST_DIR).tar.gz $(DIST_DIR)
+	zip -r $(DIST_DIR).zip $(DIST_DIR)
+	rm -rf $(DIST_DIR)
+
+
 install:
+	$(INSTALL) -d $(bindir)
+	$(INSTALL) -d $(libdir)/GF-$(PACKAGE_VERSION)
 	$(INSTALL) ../bin/gf2 $(bindir)
+	$(INSTALL) jgf2 $(bindir)
+	$(INSTALL) java/gf-java.jar $(libdir)/GF-$(PACKAGE_VERSION)
