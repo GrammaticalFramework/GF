@@ -15,13 +15,13 @@
 --
 -- The main difference with $MorphoGer.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
--- had the design principle of always having existing forms as string
--- arguments of the paradigms, not stems.
+-- had the design principle of always having existing forms, not stems, as string
+-- arguments of the paradigms.
 --
 -- The following modules are presupposed:
 
-resource ParadigmsGer = open (Predef=Predef), Prelude, 
-                          (Morpho=MorphoGer), SyntaxGer, ResourceGer in {
+resource ParadigmsGer = 
+  open Prelude, (Morpho=MorphoGer), SyntaxGer, ResourceGer in {
 
 
 --2 Parameters 
@@ -174,7 +174,7 @@ oper
 
 -- Regular verbs are those where no Umlaut occurs.
 
-  vReg  : Str -> V ;         -- führen
+  vReg  : Str -> V ;             -- führen
 
 -- The verbs 'be' and 'have' are special.
 
@@ -194,11 +194,11 @@ oper
 -- Two-place verbs, and the special case with direct object. Notice that
 -- a particle can be included in a $V$.
 
-  mkTV     : V   -> Str -> Case -> TV ;  -- hören, zu, dative
+  mkTV     : V   -> Str -> Case -> TV ;    -- hören, zu, dative
 
-  tvReg    : Str -> Str -> Case -> TV ;  -- hören, zu, dative
-  tvDir    : V -> TV ;                   -- umbringen
-  tvDirReg : Str -> TV ;                 -- lieben
+  tvReg    : Str -> Str -> Case -> TV ;    -- hören, zu, dative
+  tvDir    : V -> TV ;                     -- umbringen
+  tvDirReg : Str -> TV ;                   -- lieben
 
 -- Three-place verbs require two prepositions and cases.
 
