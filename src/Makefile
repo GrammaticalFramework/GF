@@ -2,11 +2,16 @@ GHMAKE=ghc
 GHCFLAGS=-package lang -package util
 GHCFUDFLAG=-package Fudgets
 GHCINCLUDE=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc -iparsing
+GHCINCLUDENOFUD=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc-nofud -iparsing
 
 all:
 	make today ; make ghc
 ghc: 
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) --make GF.hs -o gf2+ ; strip gf2+ ; mv gf2+ ../bin/
+nofud:
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) --make GF.hs -o gf2n ; strip gf2n
+nofud-links:
+	cd for-ghc-nofud ; rm *.hs ; ln -s ../for-ghc/Arch.hs ; ln -s ../for-hugs/ArchEdit.hs ; cd ..
 batch: 
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) --make GF2.hs -o gf2 ; strip gf2
 api: 

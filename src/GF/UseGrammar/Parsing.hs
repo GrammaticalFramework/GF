@@ -43,9 +43,9 @@ parseStringC opts0 sg cat s
  | oElem newParser opts0 = do  
   let pm = maybe "" id $ getOptVal opts0 useParser -- -parser=pm
       gr = grammar sg
-  ps <- checkErr $ N.newParser pm gr (cfCat2Cat cat) s
-  checkWarn $ unlines ps
-  return []
+      ct = cfCat2Cat cat
+  ts <- checkErr $ N.newParser pm gr (cfCat2Cat cat) s
+  mapM (checkErr . (annotate gr)) ts
 
  | otherwise = do
   let opts = unionOptions opts0 $ stateOptions sg
