@@ -25,7 +25,6 @@ i,  import: i File
       -old          old: parse in GF<2.0 format (not necessary)
       -v            verbose: give lots of messages 
       -s            silent: don't give error messages
-      -opt          perform branch-sharing optimization
       -src          source: ignore precompiled gfc and gfr files
       -retain       retain operations: read resource modules (needed in comm cc) 
       -nocf         don't build context-free grammar (thus no parser)
@@ -38,6 +37,7 @@ i,  import: i File
       -cnc          set the name used for concrete syntax (with -old option)
       -res          set the name used for resource (with -old option)
       -path         use the (colon-separated) search path to find modules
+      -optimize     select an optimization to override file-defined flags
   examples:
       i English.gf                      -- ordinary import of Concrete
       i -retain german/ParadigmsGer.gf  -- import of Resource to test
@@ -426,6 +426,15 @@ q, quit: q
 
 -number, the maximum number of generated items in a list. 
        The default is unlimited.
+
+-optimize, optimization on generated code.
+       The default is share.
+    -optimize=share        share common branches in tables
+    -optimize=parametrize  first try parametrize then do share with the rest
+    -optimize=values       represent tables as courses-of-values
+    -optimize=all          first try parametrize then do values with the rest
+    -optimize=none         no optimization
+
 
 -parser, Context-free    parsing algorithm. The default is chart.
     -parser=earley       Earley algorithm

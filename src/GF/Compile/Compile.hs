@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- The top-level compilation chain from source file to gfc/gfr.
 -----------------------------------------------------------------------------
 
 module Compile where
@@ -276,12 +276,16 @@ generateModuleCode :: Options -> InitPath -> SourceModule -> IOE GFC.CanonModule
 generateModuleCode opts path minfo@(name,info) = do
   let pname = prefixPathName path (prt name)
   minfo0     <- ioeErr $ redModInfo minfo
+  let oopts = addOptions opts (iOpts (flagsModule minfo))
+      optim = maybe "share" id $ getOptVal oopts useOptimizer
   minfo'     <- return $ 
-    if optim 
-    then shareModule fullOpt minfo0   -- parametrization and sharing
-    else if values                    
-    then shareModule valOpt minfo0     -- tables as courses-of-values
-    else shareModule basicOpt minfo0  -- sharing only
+    case optim of
+      "parametrize" -> shareModule paramOpt minfo0  -- parametrization and sharing
+      "values"      -> shareModule valOpt minfo0    -- tables as courses-of-values
+      "share"       -> shareModule shareOpt minfo0  -- sharing of branches
+      "all"         -> shareModule allOpt minfo0    -- first parametrize then values
+      "none"        -> minfo0                       -- no optimization
+      _             -> shareModule shareOpt minfo0  -- sharing; default
 
   -- for resource, also emit gfr
   case info of
@@ -305,8 +309,6 @@ generateModuleCode opts path minfo@(name,info) = do
      _ -> True
    nomulti = not $ oElem makeMulti opts
    emit  = oElem emitCode opts && not (oElem notEmitCode opts)
-   optim = oElem optimizeCanon opts
-   values = oElem optimizeValues opts
 
 -- for old GF: sort into modules, write files, compile as usual
 

@@ -99,7 +99,6 @@ lin
 --
 
   SlashV2 = slashTransVerb ;
-  OneVP = predVerbGroupClause npMan ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -172,7 +171,7 @@ lin
 -----------------------
 -- special constructions
 
-  OneVP = predVerbGroupClause npMan ;
+  OneNP = npMan ;
 
   ExistCN A = predVerbGroupClause npDet 
                 (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 

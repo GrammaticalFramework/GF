@@ -69,7 +69,7 @@ lin
 -- verbs and verb prases
 
   PredAS = predAdjSent ;
-  PredV0 rain = predVerbGroupClause (pronNounPhrase pronIt) (predVerb rain) ;
+  PredV0 rain = predVerbClause (pronNounPhrase pronIt) rain (complVerb rain) ;
 
 -- Partial saturation.
 
@@ -186,16 +186,17 @@ lin
 -----------------------
 -- special constructions
 
-  OneVP = predVerbGroupClause (nameNounPhrase (nameReg "one" human)) ;
-----  ThereNP = thereIs ;
+  OneNP = nameNounPhrase (nameReg "one" human) ;
 
-  ExistCN A = predVerbGroupClause 
+  ExistCN A = predVerbClause 
                 (nameNounPhrase (nameReg "there" Neutr))
+                (mkTransVerbDir verbBe)
                 (complTransVerb (mkTransVerbDir verbBe) 
                    (indefNounPhrase singular A)) ;
   ExistNumCN nu A = 
-              predVerbGroupClause 
+              predVerbClause 
                 (nameNounPhrasePl (nameReg "there" Neutr))
+                (mkTransVerbDir verbBe)
                 (complTransVerb (mkTransVerbDir verbBe) 
                    (indefNounPhraseNum plural nu A)) ;
 

@@ -9,10 +9,10 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Optimizations on GFC code: sharing, parametrization, value sets.
 -----------------------------------------------------------------------------
 
-module Share (shareModule, OptSpec, basicOpt, fullOpt, valOpt) where
+module Share (shareModule, OptSpec, shareOpt, paramOpt, valOpt, allOpt) where
 
 import AbsGFC
 import Ident
@@ -28,9 +28,10 @@ import qualified Modules as M
 type OptSpec = [Integer] ---
 doOptFactor opt = elem 2 opt
 doOptValues opt = elem 3 opt
-basicOpt = []
-fullOpt = [2]
+shareOpt = []
+paramOpt = [2]
 valOpt = [3]
+allOpt = [2,3]
 
 shareModule :: OptSpec -> (Ident, CanonModInfo) -> (Ident, CanonModInfo)
 shareModule opt (i,m) = case m of
@@ -38,13 +39,14 @@ shareModule opt (i,m) = case m of
     (i,M.ModMod (M.Module mt st fs me ops (mapTree (shareInfo opt) js)))
   _ -> (i,m)
 
-shareInfo opt (c, CncCat ty t m) = (c, CncCat ty (shareOpt opt t) m)
-shareInfo opt (c, CncFun k xs t m) = (c, CncFun k xs (shareOpt opt t) m)
+shareInfo opt (c, CncCat ty t m) = (c, CncCat ty (shareOptim opt t) m)
+shareInfo opt (c, CncFun k xs t m) = (c, CncFun k xs (shareOptim opt t) m)
 shareInfo _ i = i
 
 -- the function putting together optimizations
-shareOpt :: OptSpec -> Term -> Term
-shareOpt opt 
+shareOptim :: OptSpec -> Term -> Term
+shareOptim opt 
+  | doOptFactor opt && doOptValues opt = values . factor 0
   | doOptFactor opt = share . factor 0
   | doOptValues opt = values    
   | otherwise = share
@@ -133,5 +135,6 @@ replace old new trm = case trm of
 
 values :: Term -> Term
 values t = case t of
+  T ty [c] -> T ty [Cas p (values t) | Cas p t <- [c]] -- preserve parametrization
   T ty cs  -> V ty [values t | Cas _ t <- cs] -- assumes proper order
   _ -> C.composSafeOp values t
