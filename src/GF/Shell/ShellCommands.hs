@@ -20,6 +20,7 @@ data Command =
    CImport FilePath
  | CRemoveLanguage Language
  | CEmptyState
+ | CChangeMain (Maybe I.Ident)
  | CStripState
  | CTransformGrammar FilePath
  | CConvertLatex FilePath
@@ -161,7 +162,7 @@ optionsOfCommand co = case co of
   CWriteFile  _ -> none
   CAppendFile _ -> none
   CSpeakAloud -> flags "language"
-  CPutString -> flags "filter length"
+  CPutString -> both "utf8" "filter length"
   CShowTerm -> flags "printer"
   CSystemCommand _ -> none
 

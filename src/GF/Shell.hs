@@ -102,8 +102,9 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
   CImport file -> useIOE sa $ do
     st1 <- shellStateFromFiles opts st file
     ioeIO $ changeState (const st1) sa --- \ ((_,h),a) -> ((st,h), a))
-  CEmptyState         -> changeState reinitShellState sa
-  CStripState         -> changeState purgeShellState sa
+  CEmptyState    -> changeState reinitShellState sa
+  CChangeMain ma -> changeStateErr (changeMain ma) sa
+  CStripState    -> changeState purgeShellState sa
 
 {-
   CRemoveLanguage lan -> changeState (removeLanguage lan) sa
@@ -173,7 +174,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
          maybe (I.identC "?") id $  -- meaningful if no opers in t 
            maybe (resourceOfShellState st) (return . I.identC) $ -- topmost res
              getOptVal opts useResource             -- flag -res=m
-    justOutput (putStrLn (err id (prt . stripTerm) (
+    justOutput opts (putStrLn (err id (prt . stripTerm) (
                 string2srcTerm src m t >>= 
                 Ch.justCheckLTerm src  >>=
                 Co.computeConcrete src))) sa
@@ -182,7 +183,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
          maybe (I.identC "?") id $  -- meaningful if no opers in t 
            maybe (resourceOfShellState st) (return . I.identC) $ -- topmost res
              getOptVal opts useResource             -- flag -res=m
-    justOutput (putStrLn (err id (unlines . map prOperSignature) (
+    justOutput opts (putStrLn (err id (unlines . map prOperSignature) (
                 string2srcTerm src m t >>= 
                 Co.computeConcrete src >>= 
                 return . L.opersForType src))) sa
@@ -190,7 +191,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
 
   CTranslationQuiz il ol -> do
     warnDiscont opts 
-    justOutput (teachTranslation opts (sgr il) (sgr ol)) sa
+    justOutput opts (teachTranslation opts (sgr il) (sgr ol)) sa
   CTranslationList il ol n -> do
     warnDiscont opts 
     qs <- transTrainList opts (sgr il) (sgr ol) (toInteger n)
@@ -198,17 +199,17 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
 
   CMorphoQuiz -> do
     warnDiscont opts 
-    justOutput (teachMorpho opts gro) sa
+    justOutput opts (teachMorpho opts gro) sa
   CMorphoList n -> do 
     warnDiscont opts 
     qs <- useIOE [] $ morphoTrainList opts gro (toInteger n)
     returnArg (AString $ foldr (+++++) [] [unlines (s:ss) | (s,ss) <- qs]) sa
 
   CReadFile file   -> returnArgIO   (readFileIf file >>= return . AString) sa
-  CWriteFile file  -> justOutputArg (writeFile file) sa
-  CAppendFile file -> justOutputArg (appendFile file) sa
-  CSpeakAloud      -> justOutputArg (speechGenerate opts) sa
-  CSystemCommand s -> justOutput    (system s >> return ()) sa
+  CWriteFile file  -> justOutputArg opts (writeFile file) sa
+  CAppendFile file -> justOutputArg opts (appendFile file) sa
+  CSpeakAloud      -> justOutputArg opts (speechGenerate opts) sa
+  CSystemCommand s -> justOutput    opts (system s >> return ()) sa
   CPutString       -> changeArg    (opSS2CommandArg (optStringCommand opts gro)) sa
 -----  CShowTerm        -> changeArg  (opTS2CommandArg (optPrintTerm opts gro) . s2t) sa
 
@@ -222,9 +223,9 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
     _               -> returnArg   (AString txtHelpFileSummary) sa
 
   CPrintGrammar       -> returnArg (AString (optPrintGrammar opts gro)) sa
-  CPrintGlobalOptions -> justOutput (putStrLn  $ prShellStateInfo st) sa
-  CPrintInformation c -> justOutput (useIOE () $ showInformation opts st c) sa
-  CPrintLanguages     -> justOutput 
+  CPrintGlobalOptions -> justOutput opts (putStrLn  $ prShellStateInfo st) sa
+  CPrintInformation c -> justOutput opts (useIOE () $ showInformation opts st c) sa
+  CPrintLanguages     -> justOutput opts 
                          (putStrLn $ unwords $ map prLanguage $ allLanguages st) sa
   CPrintMultiGrammar  -> do
     sa' <- changeState purgeShellState sa
@@ -235,7 +236,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
 ----  CPrintGramlet       -> returnArg (AString (Gr.prGramlet st)) sa
 ----  CPrintCanonXML      -> returnArg (AString (Canon.prCanonXML st False)) sa
 ----  CPrintCanonXMLStruct -> returnArg (AString (Canon.prCanonXML st True)) sa
-  _ -> justOutput (putStrLn "command not understood") sa
+  _ -> justOutput opts (putStrLn "command not understood") sa
 
  where
    sgr = stateGrammarOfLang st
@@ -264,6 +265,11 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
 changeState :: ShellStateOper -> ShellIO
 changeState f ((st,h),a) = return ((f st,h), a)
 
+changeStateErr :: ShellStateOperErr -> ShellIO
+changeStateErr f ((st,h),a) = case f st of
+  Ok st' -> return ((st',h), a)
+  Bad s  -> return ((st, h),AError s)
+
 changeArg :: (CommandArg -> CommandArg) -> ShellIO
 changeArg f (st,a) = return (st, f a)
 
@@ -279,11 +285,13 @@ returnArg = changeArg . const
 returnArgIO :: IO CommandArg -> ShellIO
 returnArgIO io (st,_) = io >>= (\a -> return (st,a))
 
-justOutputArg :: (String -> IO ()) -> ShellIO
-justOutputArg f sa@(st,a) = f (prCommandArg a) >> return (st, AUnit)
+justOutputArg :: Options -> (String -> IO ()) -> ShellIO
+justOutputArg opts f sa@(st,a) = f (utf (prCommandArg a)) >> return (st, AUnit) 
+ where
+   utf = if (oElem useUTF8 opts) then encodeUTF8 else id
 
-justOutput :: IO () -> ShellIO
-justOutput = justOutputArg . const
+justOutput :: Options -> IO () -> ShellIO
+justOutput opts = justOutputArg opts . const
 
 -- type system for command arguments; instead of plain strings...
 

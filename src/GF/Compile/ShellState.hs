@@ -210,12 +210,14 @@ purgeShellState sh = ShSt {
 
 changeMain :: Maybe Ident -> ShellState -> Err ShellState
 changeMain Nothing (ShSt _ _ cs ms ss cfs pis mos os rs acs s) = 
-  return (ShSt Nothing Nothing cs ms ss cfs pis mos os rs acs s)
-changeMain (Just c) (ShSt _ _ cs ms ss cfs pis mos os rs acs s) = 
-  case lookup c (map fst cs) of 
-    Just i -> do
-      a <- M.abstractOfConcrete ms i
-      return (ShSt (Just a) (Just i) cs ms ss cfs pis mos os rs acs s) 
+  return (ShSt Nothing Nothing [] ms ss cfs pis mos os rs acs s)
+changeMain (Just c) st@(ShSt _ _ cs ms ss cfs pis mos os rs acs s) = 
+  case lookup c (M.modules ms) of 
+    Just _ -> do
+      a   <- M.abstractOfConcrete ms c
+      let cas = M.allConcretes ms a
+      let cs' = [((c,c),True) | c <- cas]
+      return (ShSt (Just a) (Just c) cs' ms ss cfs pis mos os rs acs s) 
     _ -> P.prtBad "The state has no concrete syntax named" c
 
 -- form just one state grammar, if unique, from a canonical grammar
@@ -385,6 +387,7 @@ getLangNameOpt opts file =
 -- modify state
 
 type ShellStateOper = ShellState -> ShellState
+type ShellStateOperErr = ShellState -> Err ShellState
 
 reinitShellState :: ShellStateOper
 reinitShellState = const emptyShellState
