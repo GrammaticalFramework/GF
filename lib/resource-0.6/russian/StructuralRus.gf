@@ -83,7 +83,7 @@ WantVV = extVerb verbKhotet Act Present  ;
 
   AndConj  = ss "и"  ** {n = Pl} ;
   OrConj   = ss "или"  ** {n = Sg} ;
-  BothAnd  = sd2 "как" [", так"]  ** {n = Pl} ;
+  BothAnd  = sd2 "как" [", так и"]  ** {n = Pl} ;
   EitherOr = sd2 "либо" [", либо"]  ** {n = Sg} ;
 -- comma is not visible in GUI!
 
@@ -97,8 +97,8 @@ WantVV = extVerb verbKhotet Act Present  ;
   WhenSubj = ss "когда" ;
   AlthoughSubj = ss "хотя" ;
 
-  PhrYes = ss ["да ."] ;
-  PhrNo = ss ["нет ."] ;
+  PhrYes = ss ["Да ."] ;
+  PhrNo = ss ["Нет ."] ;
 
   EverywhereNP = ss "везде" ;
   SomewhereNP = ss "где-нибудь" ;

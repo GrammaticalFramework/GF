@@ -69,14 +69,7 @@ oper
          }
     } ;
 
-  -- A function specific for Russian for setting the gender for 
-  -- personal pronouns in first and second person, singular :
-  setNPGender : Gender -> NounPhrase -> NounPhrase = \gen, pronI -> 
-    { s = pronI.s ; g = PGen gen; anim = pronI.anim ;
-      n = pronI.n ; nComp = pronI.nComp ; p = pronI.p ; pron = pronI.pron } ;  
-
-
-  mkNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n,chelovek -> 
+    mkNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n,chelovek -> 
     {s = \\cas => chelovek.s ! n ! (extCase cas) ;
      n = n ; g = PGen chelovek.g ; p = P3 ; pron =False ;
      anim = chelovek.anim 
@@ -489,18 +482,6 @@ let {n = ivan.n ; nf = if_then_else Number coll Sg n} in
       w = Act 
     } ;
 
-  -- A function specific for Russian :
-  predNeedShortAdjective: Bool -> NounPhrase -> CommNounPhrase -> Sentence = 
-     \ b, Jag, Dig -> { s =
-    let {
-      mne  = Jag.s ! (mkPronForm Dat No NonPoss) ; 
-      nuzhen  = need.s ! AF Nom Inanimate (gNum Dig.g Sg)  ;
-      doctor = Dig.s ! Sg ! Nom ;
-      ne = negation b
-    } in
-       mne ++ ne ++ nuzhen ++ doctor 
-    } ;
-
 -- Two-place functions add one argument place.
 
   Function2 = Function ** {s3 : Str; c2: Case} ;
@@ -596,20 +577,7 @@ oper
        
     } ;
 
-  -- A function specific for Russian: 
-  U_predTransVerb : Bool -> TransVerb -> NounPhrase -> NounPhrase -> Sentence = 
-    \b,Ser,Jag,Dig -> { s =
-    let {
-      menya  =  Jag.s ! (mkPronForm Gen Yes NonPoss) ; 
-      bolit  = Ser.s ! VFin (gNum (pgen2gen Dig.g) Dig.n) Dig.p ;
-      golova = Dig.s ! (mkPronForm Nom No NonPoss) ;
-      ne = negation b
-    } in
-       "у" ++ menya ++ ne ++ bolit  ++ golova 
-    } ;
-
-
--- This is a macro for simultaneous predication and complementation.
+  -- This is a macro for simultaneous predication and complementation.
 
   predTransVerb : Bool -> TransVerb -> NounPhrase -> NounPhrase -> Sentence = 
     \b,vizhu,ya,tu -> predVerbPhrase ya (predVerbGroup b (complTransVerb vizhu tu)) ;
