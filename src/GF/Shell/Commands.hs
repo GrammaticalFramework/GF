@@ -409,7 +409,7 @@ displaySStateJavaX isNew env state = encodeUTF8 $ mkUnicode $
   ]
  where
   (tree,msg,menu) = displaySState env state
-  menu'  = [tagXML "show" [s] ++ tagXML "send" [c] | (s,c) <- menu] 
+  menu'  = [tagXML "show" [unicode s] ++ tagXML "send" [c] | (s,c) <- menu] 
   (ls,grs) = unzip $ lgrs
   lgrs   = allActiveStateGrammarsWithNames env
   lins   = (langAbstract, exp) : linAll
@@ -422,6 +422,11 @@ displaySStateJavaX isNew env state = encodeUTF8 $ mkUnicode $
   linAll = map lin lgrs
   gr     = firstStateGrammar env
   mark   = markOptXML -- markOptJava   
+
+  unicode = case getOptVal opts menuDisplay of
+    Just lang -> optDecodeUTF8 (stateGrammarOfLang env (language lang)) 
+    _ -> id
+
 
 langAbstract = language "Abstract"
 langXML      = language "XML"
