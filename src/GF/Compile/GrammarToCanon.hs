@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Code generator from optimized GF source code to GFC.
 -----------------------------------------------------------------------------
 
 module GrammarToCanon where
@@ -187,7 +187,9 @@ redCType t = case t of
 
 redCTerm :: Term -> Err G.Term
 redCTerm t = case t of
-  Vr x -> liftM G.Arg $ redArgvar x
+  Vr x -> checkAgain 
+            (liftM G.Arg $ redArgvar x) 
+            (liftM G.LI  $ redIdent x) --- for parametrize optimization
   App _ _ -> do  -- only constructor applications can remain
     (_,c,xx) <- termForm t
     xx' <- mapM redCTerm xx
@@ -212,6 +214,13 @@ redCTerm t = case t of
     ps' <- mapM redPatt ps
     ts' <- mapM redCTerm ts
     return $ G.T ty' $ map (uncurry G.Cas) $ zip (map singleton ps') ts'
+  TSh i cs -> do
+    ty  <- getTableType i
+    ty' <- redCType ty
+    let (pss,ts) = unzip cs
+    pss' <- mapM (mapM redPatt) pss
+    ts' <- mapM redCTerm ts
+    return $ G.T ty' $ map (uncurry G.Cas) $ zip pss' ts'
   V ty ts     -> do
     ty' <- redCType ty
     ts' <- mapM redCTerm ts
@@ -247,6 +256,7 @@ redPatt p = case p of
     return $ G.PR $  map (uncurry G.PAss) $ zip ls' ts
   PT _ q -> redPatt q
   PInt i -> return $ G.PI (toInteger i)
+  PV x -> liftM G.PV $ redIdent x --- for parametrize optimization
   _ -> prtBad "cannot reduce pattern" p
 
 redLabel :: Label -> G.Label

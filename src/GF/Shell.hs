@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- GF shell command interpreter.
 -----------------------------------------------------------------------------
 
 module Shell where

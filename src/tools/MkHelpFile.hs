@@ -54,6 +54,7 @@ helpHeader = unlines [
   "-- > CVS $Revision $",
   "--",
   "-- Help on shell commands. Generated from HelpFile by 'make help'.",
+  "-- PLEASE DON'T EDIT THIS FILE.",
   "-----------------------------------------------------------------------------",
   "",
   ""

@@ -5,11 +5,11 @@
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/02/04 10:10:28 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.19 $
+-- > CVS $Date: 2005/02/05 21:52:31 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.20 $
 --
--- (Description of the module)
+-- The Main module of GF program.
 -----------------------------------------------------------------------------
 
 module Main (main) where
@@ -89,7 +89,7 @@ welcomeMsg =
   "Welcome to " ++ authorMsg ++++ welcomeArch ++ "\n\nType 'h' for help."
 
 authorMsg = unlines [
- "Grammatical Framework, Version 2.1.1b",
+ "Grammatical Framework, Version 2.1.2b",
  "Compiled " ++ today,
  "Copyright (c)", 
  "Björn Bringert, Markus Forsberg, Thomas Hallgren, Harald Hammarström,",

@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- GF source abstract syntax used internally in compilation.
 -----------------------------------------------------------------------------
 
 module Grammar where
@@ -91,6 +91,7 @@ data Term =
  
  | Table Term Term      -- table type:  P => A
  | T TInfo [Case]       -- table:       table {p => c ; ...}
+ | TSh TInfo [Cases]    -- table with discjunctive patters (only back end opt)
  | V Type [Term]        -- table given as course of values: table T [c1 ; ... ; cn]
  | S Term Term          -- selection:   t ! p
 
@@ -149,6 +150,7 @@ type Equation = ([Patt],Term)
 type Labelling = (Label, Term) 
 type Assign = (Label, (Maybe Type, Term)) 
 type Case = (Patt, Term) 
+type Cases = ([Patt], Term) 
 type LocalDef = (Ident, (Maybe Type, Term))
 
 type Param = (Ident, Context) 

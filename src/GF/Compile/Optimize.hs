@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Top-level partial evaluation for GF source modules.
 -----------------------------------------------------------------------------
 
 module Optimize where
@@ -22,25 +22,38 @@ import Macros
 import Lookup
 import Refresh
 import Compute
+import BackOpt
 import CheckGrammar
 import Update
 
 import Operations
 import CheckM
+import Option
 
 import Monad
 import List
 
--- partial evaluation of concrete syntax. AR 6/2001 -- 16/5/2003
-{-
-evalGrammar :: SourceGrammar -> Err SourceGrammar
-evalGrammar gr = do
-  gr2 <- refreshGrammar gr
-  mos <- foldM evalModule [] $ modules gr2
-  return $ MGrammar $ reverse mos 
--}
+-- partial evaluation of concrete syntax. AR 6/2001 -- 16/5/2003 -- 5/2/2005
+-- only do this for resource: concrete is optimized in gfc form
+
+optimizeModule :: Options -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
+                  Err (Ident,SourceModInfo)
+optimizeModule opts ms mo@(_,mi) = case mi of
+  ModMod m0@(Module mt st fs me ops js) | st == MSComplete && isModRes m0 -> do
+      mo1 <- evalModule ms mo
+      let oopts = addOptions opts (iOpts (flagsModule mo1))
+          optim = maybe "none" id $ getOptVal oopts useOptimizer
+      return $ case optim of
+        "parametrize" -> shareModule paramOpt mo1  -- parametrization and sharing
+        "values"      -> shareModule valOpt mo1    -- tables as courses-of-values
+        "share"       -> shareModule shareOpt mo1  -- sharing of branches
+        "all"         -> shareModule allOpt mo1    -- first parametrize then values
+        "none"        -> mo1                       -- no optimization
+        _             -> mo1                       -- none; default for src
+  _ -> evalModule ms mo
+
 evalModule :: [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
-               Err [(Ident,SourceModInfo)]
+               Err (Ident,SourceModInfo)
 evalModule ms mo@(name,mod) = case mod of
 
   ModMod m0@(Module mt st fs me ops js) | st == MSComplete -> case mt of
@@ -48,13 +61,13 @@ evalModule ms mo@(name,mod) = case mod of
       let deps = allOperDependencies name js
       ids <- topoSortOpers deps
       MGrammar (mod' : _) <- foldM evalOp gr ids
-      return $ mod' : ms
+      return $ mod'
     MTConcrete a -> do
       js' <- mapMTree (evalCncInfo gr0 name a) js
-      return $ (name, ModMod (Module mt st fs me ops js')) : ms
+      return $ (name, ModMod (Module mt st fs me ops js'))
 
-    _ -> return $ (name,mod):ms
-  _ -> return $ (name,mod):ms
+    _ -> return $ (name,mod)
+  _ -> return $ (name,mod)
  where
    gr0 = MGrammar $ ms
    gr  = MGrammar $ (name,mod) : ms

@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- From internal source syntax to BNFC-generated (used for printing).
 -----------------------------------------------------------------------------
 
 module GrammarToSource where
@@ -139,6 +139,7 @@ trt trm = case trm of
     P t l -> P.EProj (trt t) (trLabel l)
     Q t l -> P.EQCons (tri t) (tri l)
     QC t l -> P.EQConstr (tri t) (tri l)
+    TSh (TComp ty) cc -> P.ETTable (trt ty) (map trCases cc)
     T (TTyped ty) cc -> P.ETTable (trt ty) (map trCase cc)
     T (TComp ty) cc -> P.ETTable (trt ty) (map trCase cc)
     T (TWild ty) cc -> P.ETTable (trt ty) (map trCase cc)
@@ -192,7 +193,8 @@ trAssign (lab, (mty, t)) = maybe (P.LDDef x t') (\ty -> P.LDFull x (trt ty) t') 
 
 trLabelling (lab,ty) = P.LDDecl [trLabelIdent lab] (trt ty)
 
-trCase (patt,trm) = P.Case [P.AltP (trp patt)] (trt trm)
+trCase  (patt, trm) = P.Case [P.AltP (trp patt)] (trt trm)
+trCases (patts,trm) = P.Case (map (P.AltP . trp) patts) (trt trm)
 
 trDecl (x,ty) = P.DDDec [trb x] (trt ty)
 
