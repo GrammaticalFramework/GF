@@ -28,6 +28,7 @@ import PrOld
 import MkGFC
 import CFtoSRG
 import PrGSL (gslPrinter)
+import PrJSGF (jsgfPrinter)
 
 import Zipper
 
@@ -194,6 +195,9 @@ customGrammarPrinter =
   ,(strCI "gsl",     \s -> let opts = stateOptions s
                                name = cncId s
                             in gslPrinter name opts $ Cnv.cfg $ statePInfo s)
+  ,(strCI "jsgf",    \s -> let opts = stateOptions s
+                               name = cncId s
+                            in jsgfPrinter name opts $ Cnv.cfg $ statePInfo s)
   ,(strCI "plbnf",   prLBNF True)
   ,(strCI "lbnf",    prLBNF False)
   ,(strCI "bnf",     prBNF False)
