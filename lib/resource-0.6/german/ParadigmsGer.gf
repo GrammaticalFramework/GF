@@ -18,7 +18,8 @@
 --
 -- The following modules are presupposed:
 
-resource Paradigms = open (Predef=Predef), Prelude, (Morpho=Morpho), Syntax, Deutsch in {
+resource ParadigmsGer = open (Predef=Predef), Prelude, 
+                          (Morpho=MorphoGer), SyntaxGer, ResourceGer in {
 
 
 --2 Parameters 
@@ -304,7 +305,7 @@ oper
   mkV3 v s c t d = mkDitransVerb v s c t d ** {lock_V3 = <>} ;
 
   mkAdV a = ss a ** {lock_AdV = <>} ;
-  mkPP x y z = prepPhrase x y z ** {lock_AdV = <>};
+  mkPP x y = PrepNP {s = y ; c = x ; lock_Prep = <>} ;
   mkAdA a = ss a ** {lock_AdA = <>} ;
   mkAdS a = ss a ** {lock_AdS = <>} ;
 } ;

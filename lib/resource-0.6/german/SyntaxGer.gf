@@ -142,6 +142,8 @@ oper
 
   mkDeterminerNum :  Numeral -> DetPl -> Adjf -> Determiner = \nu,alle,a -> 
     {s = \\_,c => alle ! c ++ nu.s ; n = Pl ; a = a} ;
+  mkDeterminerNumReg :  Numeral -> Str -> Adjf -> Determiner = \nu,alle,a -> 
+    mkDeterminerNum nu (caselist alle alle (alle + "n") (alle + "n")) a ;
 
   detLikeAdj : Str -> Determiner = \jed -> mkDeterminerSg
     (\\g,c => (adjReg jed).s ! AMod Strong (GSg g) c) Weak ;
@@ -153,11 +155,15 @@ oper
   alleDet : Numeral -> Determiner = \n ->
     mkDeterminerNum n (caselist "alle" "alle" "allen" "aller") Weak ;
   einDet = mkDeterminerSg artIndef Strong ;
+  keinDet = mkDeterminerSg (\\g,c => "k" + artIndef ! g ! c) Strong ;
   derDet = mkDeterminerSg (table {g => artDef ! GSg g}) Weak ;
   dieDet : Numeral -> Determiner = \nu -> 
     mkDeterminerNum nu (artDef ! GPl) Weak ;
 
-  meistDet = mkDeterminerPl (table {c => artDef ! GPl ! c ++ "meisten"}) Weak ;
+  meistDet = mkDeterminerSg 
+    (\\g,c => artDef ! GSg g ! c ++ (adjReg "meist").s ! AMod Weak (GSg g) c) Weak ;
+  meisteDet = mkDeterminerPl 
+    (\\c => artDef ! GPl ! c ++ "meisten") Weak ;
   welcherDet = detLikeAdj "welch" ;
   welcheDet : Numeral -> Determiner = \n ->
     mkDeterminerNum n (caselist "welche" "welche" "welchen" "welcher") Weak ;

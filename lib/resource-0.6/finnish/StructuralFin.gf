@@ -45,6 +45,19 @@ concrete StructuralFin of Structural =
     p = NP3
     } ;
 
+--- This two don't work in Finnish except out of context
+--- ("kenet tapasitte - emme ketään").
+
+  NobodyNP = {
+    s = \\f => "ei" ++ kukaanPron ! Sg ! (npForm2Case Sg f) ; 
+    n = Sg ;
+    p = NP3
+    } ;
+  NothingNP = {
+    s = \\f => "ei" ++ mikaanPron ! Sg ! (npForm2Case Sg f) ; 
+    n = Sg ;
+    p = NP3
+    } ;
   
   EveryDet = jokainenDet ; 
   AllDet   = mkDeterminer singular (kaikkiPron Sg) ; 
@@ -56,6 +69,17 @@ concrete StructuralFin of Structural =
   ManyDet = mkDeterminer singular moniPron ; 
   MuchDet = mkDeterminer singular (caseTable singular (sNauris "runsasta")) ;
 
+--- The following 4 only work this way in Finnish if used outside sentences
+--- with a verb.
+ 
+  AnyDet = mkDeterminerGen Sg (mikaanPron ! Sg) (kukaanPron ! Sg) ;
+  AnysDet n = mkDeterminerGenNum n (mikaanPron ! Pl) (kukaanPron ! Pl) ;
+  NoDet = mkDeterminerGen Sg 
+            (\\c => "ei" ++ mikaanPron ! Sg ! c) 
+            (\\c => "ei" ++ kukaanPron ! Sg ! c) ;
+  NosDet n = mkDeterminerGenNum n 
+            (\\c => "ei" ++ mikaanPron ! Pl ! c) 
+            (\\c => "ei" ++ kukaanPron ! Pl ! c) ;
 
   ThisDet = mkDeterminer Sg (\\c => pronTama.s ! PCase c) ;
   ThatDet = mkDeterminer Sg (\\c => pronTuo.s ! PCase c) ;
@@ -64,6 +88,8 @@ concrete StructuralFin of Structural =
 
   SomeDet  = mkDeterminerGen Sg (jokinPron ! Sg) (jokuPron ! Sg) ;
   SomesDet n = mkDeterminerGenNum n (jokinPron ! Pl) (jokuPron ! Pl) ;
+
+--- These two don't work in Finnish sentences.
 
 
   HowIAdv = ss "kuinka" ;
