@@ -165,8 +165,10 @@ txtHelpFile =
   "\n      -lexer" ++
   "\n      -parser" ++
   "\n" ++
-  "\ngr, generate_random: gr" ++
-  "\n      Generates a random Tree." ++
+  "\ngr, generate_random: gr Tree?" ++
+  "\n      Generates a random Tree of a given category. If a Tree" ++
+  "\n      argument is given, the command completes the Tree with values to" ++
+  "\n      the metavariables in the tree. " ++
   "\n  flags:" ++
   "\n      -cat     generate in this category" ++
   "\n      -lang    use the abstract syntax of this grammar" ++
