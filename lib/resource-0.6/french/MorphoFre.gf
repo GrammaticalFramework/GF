@@ -80,10 +80,11 @@ oper
 -- Adjectives are conveniently seen as gender-dependent nouns.
 -- Here are some patterns. First one that describes the worst case.
 
-  mkAdj : (_,_,_ : Str) -> Adj = \vieux,vieuxs,vieille ->
+  mkAdj : (_,_,_,_ : Str) -> Adj = \vieux,vieuxs,vieille,vieillement ->
     {s = table {
-       Masc => numForms vieux vieuxs ;
-       Fem  => nomReg vieille
+       AF Masc n => numForms vieux vieuxs ! n ;
+       AF Fem  n => nomReg vieille ! n ;
+       AA => vieillement
        }
     } ;
 
@@ -100,24 +101,29 @@ oper
 -- Adjectives themselves are records. Here the most common cases:
 
   adjGrand : Str -> Adj = \grand -> 
-    {s = adjReg grand} ;
+    mkAdj grand (grand + "s") (grand + "e") (grand + "ement") ;
+
+-- Masculine form used for adverbial; also covers "carré".
+
+  adjJoli : Str -> Adj = \joli -> 
+    mkAdj joli (joli + "s") (joli + "e") (joli + "ment") ;
 
   adjHeureux : Str -> Adj = \heureux ->
     let {heureu = Predef.tk 1 heureux} in 
-    mkAdj heureux heureu (heureu+"se") ;
+    mkAdj heureux heureu (heureu+"se") (heureu+"sement") ;
 
   adjJeune : Str -> Adj = \jeune -> 
-    mkAdj jeune (jeune+"s") jeune ;
+    mkAdj jeune (jeune+"s") jeune (jeune+"ment") ;
 
   adjIndien : Str -> Adj = \indien -> 
-    mkAdj indien (indien+"s") (indien+"ne") ;
+    mkAdj indien (indien+"s") (indien+"ne") (indien+"nement") ;
 
   adjFrancais : Str -> Adj = \francais -> 
-    mkAdj francais francais (francais+"e") ;
+    mkAdj francais francais (francais+"e") (francais+"ement") ;
 
   adjCher : Str -> Adj = \cher ->
     let {ch = Predef.tk 2 cher} in
-    mkAdj cher (cher + "s") (ch + "ère") ; 
+    mkAdj cher (cher + "s") (ch + "ère") (ch + "èrement") ; 
 
 
 

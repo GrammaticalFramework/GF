@@ -36,11 +36,13 @@ lincat
   PN     = {s : Str ; g : Gender} ;
   Det    = {s : Gender => Str ; n : Number} ;
   Adj1   = Adjective ;
-      -- = {s : Gender => Number => Str ; p : Bool} ;
+      -- = {s : AForm => Str ; p : Bool} ;
   Adj2   = Adjective ** {s2 : Preposition ; c : CaseA} ;
-  AdjDeg = {s : Degree => Gender => Number => Str ; p : Bool} ;
+  AdjDeg = {s : Degree => AForm => Str ; p : Bool} ;
   AP     = Adjective ;
-  Fun    = CommNoun ** {s2 : Preposition ; c : CaseA} ;
+  Fun    = Function ;
+      -- = CommNoun ** {s2 : Preposition ; c : CaseA} ;
+  Fun2   = Function ** {s3 : Preposition ; c3 : CaseA} ;
   Prep   = {s : Preposition ; c : CaseA} ; 
   Num    = {s : Gender => Str} ;
 
@@ -48,8 +50,11 @@ lincat
       -- = {s : VF => Str} ;
   VG     = {s : Bool => Gender => VF => Str} ;
   VP     = {s : Gender => VF => Str} ;
-  TV     = Verb ** {s2 : Preposition ; c : CaseA} ; 
+  TV     = TransVerb ;
+      -- = Verb ** {s2 : Preposition ; c : CaseA} ; 
+  V3     = TransVerb ** {s3 : Preposition ; c3 : CaseA} ;
   VS     = Verb ** {mp,mn : Mode} ;
+  VV     = Verb ** {c : CaseA} ;
   AdV    = {s : Str} ;
 
   S      = Sentence ; 
@@ -68,19 +73,21 @@ lincat
   ConjD  = {s1,s2 : Str ; n : Number} ;
 
   ListS  = {s1,s2 : Mode => Str} ;
-  ListAP = {s1,s2 : Gender => Number => Str ; p : Bool} ;
+  ListAP = {s1,s2 : AForm => Str ; p : Bool} ;
   ListNP = {s1,s2 : CaseA => Str ; g : PronGen ; n : Number ; p : Person} ;
 
+  Subj   = {s : Str ; m : Mode} ;
 --.
 
 lin 
   UseN = noun2CommNounPhrase ;
   ModAdj = modCommNounPhrase ;
   ModGenOne = npGenDet singular ;
-----  ModGenMany = npGenDet plural ;
+  ModGenMany = npGenDetNum ;
   UsePN = nameNounPhrase ;
   UseFun = funAsCommNounPhrase ; -- [SyntaxFra.noun2CommNounPhrase]
   AppFun = appFunComm ;
+  AppFun2 = appFun2 ;
   AdjP1 = adj2adjPhrase ;
   ComplAdj = complAdj ;
   PositAdjP = positAdjPhrase ;
@@ -89,24 +96,43 @@ lin
 
   DetNP = detNounPhrase ;
   IndefOneNP = indefNounPhrase singular ;
-----  IndefManyNP = indefNounPhrase plural ;
+  IndefManyNP = indefNounPhraseNum ;
   DefOneNP = defNounPhrase singular ;
-----  DefManyNP = defNounPhrase plural ;
+  DefManyNP = defNounPhraseNum ;
+  MassNP = partitiveNounPhrase singular ;
+  UseInt i = {s = \\_ => i.s} ;
+  NoNum = noNum ;
+
+  CNthatS = nounThatSentence ;
 
   PredVP = predVerbPhrase ;
+  PosVG  = predVerbGroup True ;
+  NegVG  = predVerbGroup False ;
+
   PredV  = predVerb ;
   PredAP = predAdjective ; 
   PredCN = predCommNoun ;
   PredTV = complTransVerb ;
+  PredV3 = complDitransVerb ;
   PredNP = predNounPhrase ;
+  PredAdV = predAdverb ;
   PredVS = complSentVerb ;
+  PredVV = complVerbVerb ;
+  PredPassV = predPassVerb ;
+  VTrans = transAsVerb ;
 
+  AdjAdv a = {s = a.s ! AA} ;
   AdvVP = adVerbPhrase ;
   PrepNP = prepNounPhrase ;
   AdvCN = advCommNounPhrase ;
+  AdvAP = advAdjPhrase ;
+
+  ThereNP = existNounPhrase ;
 
   PosSlashTV = slashTransVerb True ;
   NegSlashTV = slashTransVerb False ;
+  OneVP = predVerbPhrase nounPhraseOn ;
+
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -116,17 +142,18 @@ lin
   RelSuch = relSuch ;
 
   WhoOne = intPronWho singular ;
-----  WhoMany = intPronWho plural ;
+  WhoMany = intPronWho plural ;
   WhatOne = intPronWhat singular ;
-----  WhatMany = intPronWhat plural ;
+  WhatMany = intPronWhat plural ;
   FunIP = funIntPron ;
   NounIPOne = nounIntPron singular ;
-----  NounIPMany = nounIntPron plural ;
+  NounIPMany = nounIntPron plural ;
 
   QuestVP = questVerbPhrase ;
   IntVP = intVerbPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
+  IsThereNP = existNounPhraseQuest ;
 
   ImperVP = imperVerbPhrase ;
 
@@ -134,6 +161,8 @@ lin
   QuestPhrase = interrogUtt ;
   ImperOne = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
+
+  AdvS = advSentence ;
 
   TwoS = twoSentence ;
   ConsS = consSentence ;
@@ -153,10 +182,14 @@ lin
   SubjS = subjunctSentence ;       -- stack
   SubjImper = subjunctImperative ; 
   SubjQu = subjunctQuestion ;
+  SubjVP = subjunctVerbPhrase ;
 
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase singular ;
   PhrManyCN = useCommonNounPhrase plural ;
   PhrIP ip = ip ;
   PhrIAdv ia = ia ;
+
+  OnePhr p = p ;
+  ConsPhr = cc2 ;
 }

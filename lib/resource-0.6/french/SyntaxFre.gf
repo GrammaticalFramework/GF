@@ -9,8 +9,27 @@ oper
       jean.g 
       Sg ;
 
+  partitiveNounPhrase = \n,vin ->
+    normalNounPhrase 
+      (table {
+         Gen => elisDe ++ vin.s ! n ;
+         c => prepCase c ++ artDef vin.g n Gen ++ vin.s ! n
+         }
+      )
+      vin.g
+      n ; 
+
   chaqueDet  = mkDeterminer1 Sg "chaque" ;
-  tousDet    = mkDeterminer  Pl ["tous les"] ["toutes les"] ;
+
+  toutDet : Determiner = 
+    {s = \\g => genForms "tout" "toute" ! g ++ artDef g Sg nominative ;
+     n = Pl
+    } ;
+  tousDet : Numeral -> Determiner = \nu ->
+    {s = \\g => genForms "tous" "toutes" ! g ++ artDef g Pl nominative ++ nu.s ! g ;
+     n = Pl
+    } ;
+
   plupartDet = mkDeterminer1 Pl ["la plupart des"] ;
   unDet      = mkDeterminer  Sg "un" "une" ;
   plDet      = mkDeterminer1 Pl "des" ; ---
@@ -20,6 +39,17 @@ oper
 
   npGenPoss = \n,ton,mec ->
     \\c => prepCase c ++ ton.s ! Poss n mec.g ++ mec.s ! n ;
+
+  npGenPossNum = \nu,ton,mec ->
+    \\c => prepCase c ++ ton.s ! Poss Pl mec.g ++ nu.s ! mec.g ++ mec.s ! Pl ;
+
+  existNounPhrase = \duvin -> {
+    s = \\m => 
+        case m of {
+          Ind => ["il y a"] ;
+          Con => ["il y ait"]
+          } ++ duvin.s ! stressed accusative  --- il y en a ; have to define "y"
+    } ;
 
   mkAdjReg : Str -> Bool -> Adjective = \adj,p ->
     mkAdjective (adjGrand adj) p ;
@@ -128,6 +158,15 @@ oper
       DirQ   => optStr (estCeQue Acc) ++ (predVerbPhrase jean dort).s ! Ind ;
       IndirQ => elisSi ++ (predVerbPhrase jean dort).s ! Ind
       }
+    } ;
+
+  existNounPhraseQuest = \duvin -> {
+    s = \\m => 
+        case m of {
+          DirQ => optStr (estCeQue Acc) ++ ["il y a"] ;
+          IndirQ => elisSi ++ ["il y a"]
+          } 
+        ++ duvin.s ! stressed accusative  --- il y en a ; have to define "y"
     } ;
 
   intVerbPhrase = \qui, dort ->
@@ -283,8 +322,8 @@ oper
   etetConj = sd2 "et" "et" ** {n = Pl}  ;
   ououConj = sd2 "ou" "ou" ** {n = Sg}  ;
   niniConj = sd2 "ni" "ni" ** {n = Sg}  ; --- requires ne !
-  siSubj = ss elisSi ;
-  quandSubj = ss "quand" ;
+  siSubj = ss elisSi ** {m = Ind} ;
+  quandSubj = ss "quand" ** {m = Ind} ;
 
   ouiPhr = ss ["Oui ."] ;  
   nonPhr = ss ["Non ."] ; --- and also Si!

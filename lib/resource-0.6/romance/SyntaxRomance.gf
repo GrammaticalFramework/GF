@@ -47,6 +47,8 @@ oper
   mkNameNounPhrase : Str -> Gender -> NounPhrase = \jean,m ->
     nameNounPhrase (mkProperName jean m) ;
 
+  nounPhraseOn = mkNameNounPhrase "on" Masc ;
+
   normalNounPhrase : (CaseA => Str) -> Gender -> Number -> NounPhrase = \cs,g,n ->
     {s = \\p => cs ! (pform2case p) ;
      g = PGen g ;
@@ -173,6 +175,26 @@ oper
 
   npGenPossNum : Numeral -> NounPhrase -> CommNounPhrase -> CaseA => Str ;
 
+-- Constructions like "l'idée que la terre est ronde" are formed at the
+-- first place as common nouns, so that one can also have "la suggestion que...".
+
+  nounThatSentence : CommNounPhrase -> Sentence -> CommNounPhrase = \idee,x -> 
+    {s = \\n => idee.s ! n ++ elisQue ++ x.s ! Ind ; 
+     g = idee.g
+    } ;
+
+-- The existence construction "il y a", "c'è / ci sono" is defined separately,
+-- and ad hoc, in each language.
+
+  existNounPhrase : NounPhrase -> Sentence ;
+
+-- The partitive noun phrase has special nominative and accusative, which look like
+-- genitives ("du vin, avec du vin", as well as genitive form, where the definite
+-- article contracts away ("de vin").
+
+  partitiveNounPhrase : Number -> CommNounPhrase -> NounPhrase ;
+
+
 --2 Adjectives
 --
 -- Adjectives have a parameter $p$ telling if postposition is 
@@ -219,7 +241,7 @@ oper
 -- variants "che" and "di".
 
   comparAdjPhrase : AdjDegr -> NounPhrase -> AdjPhrase = \bon, toi ->
-    {s = \\g,n => bon.s ! Comp ! g ! n ++ comparConj ++ 
+    {s = \\a => bon.s ! Comp ! a ++ comparConj ++ 
          toi.s ! stressed accusative ; 
      p = False
     } ;
@@ -233,8 +255,8 @@ oper
   superlNounPhrase : AdjDegr -> CommNoun -> NounPhrase = \bon, mec ->
     normalNounPhrase 
       (\\c => artDef mec.g Sg c ++ if_then_else Str bon.p 
-           (bon.s ! Sup ! mec.g ! Sg ++ mec.s ! Sg)
-           (mec.s ! Sg ++ artDef mec.g Sg nominative ++ bon.s ! Sup ! mec.g ! Sg)
+           (bon.s ! Sup ! AF mec.g Sg ++ mec.s ! Sg)
+           (mec.s ! Sg ++ artDef mec.g Sg nominative ++ bon.s ! Sup ! AF mec.g Sg)
       )
       mec.g 
       Sg ; 
@@ -272,7 +294,7 @@ oper
     mkAdjective adj p ** c ;
 
   complAdj : AdjCompl -> NounPhrase -> AdjPhrase = \relie,jean ->
-    {s = \\g,n => relie.s ! g ! n ++ relie.s2 ++ jean.s ! case2pform relie.c ; 
+    {s = \\a => relie.s ! a ++ relie.s2 ++ jean.s ! case2pform relie.c ; 
      p = False
     } ;
 
@@ -288,8 +310,8 @@ oper
 
   modCommNounPhrase : AdjPhrase -> CommNounPhrase -> CommNounPhrase = \bon,mec -> 
     {s = \\n => if_then_else Str bon.p 
-           (bon.s ! mec.g ! n ++ mec.s ! n)
-           (mec.s ! n ++ bon.s ! mec.g ! n) ;
+           (bon.s ! AF mec.g n ++ mec.s ! n)
+           (mec.s ! n ++ bon.s ! AF mec.g n) ;
      g = mec.g
     } ;
 
@@ -310,24 +332,38 @@ oper
 -- of the readings is meaningful.
 
   appFunComm : Function -> NounPhrase -> CommNounPhrase = \mere,jean -> 
-    noun2CommNounPhrase
-      {s = \\n => mere.s ! n ++ mere.s2 ++ jean.s ! case2pform mere.c ;
-       g = mere.g
-      } ;
+    {s = \\n => mere.s ! n ++ mere.s2 ++ jean.s ! case2pform mere.c ;
+     g = mere.g
+    } ;
+
+-- Two-place functions add one argument place.
+
+  Function2 = Function ** {s3 : Preposition ; c3 : CaseA} ;
+
+-- There application starts by filling the first place.
+
+  appFun2 : Function2 -> NounPhrase -> Function = \vol, paris ->
+    {s = \\n => vol.s ! n ++ vol.s2 ++ paris.s ! case2pform vol.c ;
+     g = vol.g ;
+     s2 = vol.s3 ;
+     c = vol.c3
+    } ;
+
 
 -- It is possible to use a function word as a common noun; the semantics is
 -- often existential or indexical.
 
-  funAsCommNounPhrase : Function -> CommNounPhrase = 
-    noun2CommNounPhrase ;
+  funAsCommNounPhrase : Function -> CommNounPhrase = \x -> x ; 
 
 -- The following is an aggregate corresponding to the original function application
 -- producing "ma mère" and "la mère de Jean". It does not appear in the
 -- resource grammar API any longer.
 
   appFun : Bool -> Function -> NounPhrase -> NounPhrase = \coll, mere, jean ->
-    let {n = jean.n ; g = mere.g ; nf = if_then_else Number coll Sg n} in 
-    variants {
+    let 
+      n = jean.n ; 
+      g = mere.g ; nf = if_then_else Number coll Sg n
+    in variants {
       defNounPhrase nf (appFunComm mere jean) ;
       npGenDet nf jean mere
       } ;
@@ -374,7 +410,7 @@ oper
 -- on semantic grounds.
 
   predAdjective : AdjPhrase -> VerbGroup = \bon ->
-    {s = \\b,g,v => copula b ! v ++ bon.s ! g ! nombreVerb v} ; 
+    {s = \\b,g,v => copula b ! v ++ bon.s ! AF g (nombreVerb v)} ; 
 
   predCommNoun : CommNounPhrase -> VerbGroup = \homme ->
     {s = \\b,g,v => copula b ! v ++ indefNoun (nombreVerb v) homme} ; 
@@ -382,6 +418,13 @@ oper
   predNounPhrase : NounPhrase -> VerbGroup = \jean ->
     {s = \\b,g,v => copula b ! v ++ jean.s ! stressed nominative} ; 
 
+  predAdverb : Adverb -> VerbGroup = \dehors ->
+    {s = \\b,g,v => copula b ! v ++ dehors.s} ; 
+
+-- Passivization is like adjectival predication.
+
+  predPassVerb : Verb -> VerbGroup = \aimer ->
+    {s = \\b,g,v => copula b ! v ++ aimer.s ! VPart g (nombreVerb v)} ; 
 
 -- complement a verb with noun phrase and optional preposition
 
@@ -434,6 +477,38 @@ oper
   mkTransVerbDir : Verb -> TransVerb = \aimer -> 
     mkTransVerbCas aimer accusative ;
 
+-- Transitive verbs can be used elliptically as verbs. The semantics
+-- is left to applications. The definition is trivial, due to record
+-- subtyping.
+
+  transAsVerb : TransVerb -> Verb = \love -> 
+    love ;
+
+-- *Ditransitive verbs* are verbs with three argument places.
+-- We treat so far only the rule in which the ditransitive
+-- verb takes both complements to form a verb phrase.
+
+  DitransVerb = TransVerb ** {s3 : Preposition ; c3 : CaseA} ; 
+
+  mkDitransVerb : Verb -> Preposition -> CaseA -> Preposition -> CaseA -> DitransVerb = 
+   \v,p1,c1,p2,c2 -> 
+    v ** {s2 = p1 ; c = c1 ; s3 = p2 ; c3 = c2} ;
+
+--- This must be completed to account for the cliticization of the second object.
+
+  complDitransVerb : 
+    DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = \donner,jean,vin ->
+    {s = \\b,g,w =>
+       let 
+         donne = donner.s ! w ;
+         Jean  = jean.s ! (case2pform donner.c) ; 
+         duvin = vin.s ! (case2pform donner.c3) ; 
+       in 
+       if_then_Str (andB (isNounPhraseClit jean) (isTransVerbClit donner))
+         (posNeg b (Jean ++ donne) duvin)
+         (posNeg b donne          (Jean ++ duvin))
+    } ;
+
 -- The following macro builds the "ne - pas" or "non" negation. The second
 -- string argument is used for the complement of a verb phrase. In Italian,
 -- one string argument would actually be enough.
@@ -459,9 +534,14 @@ oper
 -- treated as cases. Therefore, both a preposition and a case are needed
 -- as arguments.
 
-  prepNounPhrase :  {s : Preposition ; c : CaseA} -> NounPhrase -> Adverb = 
-    \dans,jean -> 
+  prepNounPhrase : {s : Preposition ; c : CaseA} -> NounPhrase -> Adverb = \dans,jean -> 
     {s = dans.s ++ jean.s ! Ton dans.c} ;
+
+  justPrep : Preposition -> {s : Preposition ; c : CaseA} = \sans ->
+    {s = sans ; c = prepositional} ;
+
+  justCase : CaseA -> {s : Preposition ; c : CaseA} = \nom ->
+    {s = [] ; c = nom} ;
 
 -- This is a source of the "homme avec un téléscope" ambiguity, and may produce
 -- strange things, like "les voitures toujours".
@@ -471,6 +551,11 @@ oper
   advCommNounPhrase : CommNounPhrase -> Adverb -> CommNounPhrase = \mec,aparis ->
     {s = \\n => mec.s ! n ++ aparis.s ;
      g = mec.g
+    } ;
+
+  advAdjPhrase : Adverb -> AdjPhrase -> AdjPhrase = \trop,lent ->
+    {s = \\a => trop.s ++ lent.s ! a ;
+     p = lent.p
     } ;
 
 --2 Sentences
@@ -509,6 +594,21 @@ oper
 -- The embedding conjunction is language dependent.
 
   embedConj : Str ;
+
+
+--3 Verb-complement verbs
+--
+-- Verb-complement verbs take verb phrases as complements.
+-- They can need an oblique case ("à", "de"), but they work like ordinary verbs.
+
+  VerbVerb : Type = Verb ** {c : CaseA} ;
+
+  complVerbVerb : VerbVerb -> VerbGroup -> VerbGroup = \devoir, nager ->
+    {s = \\b,g,v => if_then_Str b (devoir.s ! v) (negVerb (devoir.s ! v)) ++
+         prepCase devoir.c ++ nager.s ! True ! g ! VInfin
+    } ;
+
+  mkVerbVerbDir : Verb -> VerbVerb = \v -> v ** {c = accusative} ;
 
 
 --2 Sentences missing noun phrases
@@ -669,6 +769,10 @@ oper
 
   questVerbPhrase : NounPhrase -> VerbPhrase -> Question ;
 
+-- The existence question is treated separately.
+
+  existNounPhraseQuest : NounPhrase -> Question ;
+
 --3 Wh-questions
 --
 -- Wh-questions are of two kinds: ones that are like $NP - VP$ sentences,
@@ -715,6 +819,13 @@ oper
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
     ss (I.s ! Masc ! n ++ "!") ;
 
+--2 Sentence adverbials
+--
+-- This class covers adverbials such as "autrement", "donc", which are prefixed
+-- to a sentence to form a phrase.
+
+  advSentence : SS -> Sentence -> Utterance = \donc,ildort ->
+    ss (donc.s ++ ildort.s ! Ind ++ ".") ;
 
 
 --2 Coordination
@@ -770,19 +881,19 @@ oper
 -- if and only if all elements are prefix.
 
   ListAdjPhrase : Type = 
-    {s1,s2 : Gender => Number => Str ; p : Bool} ;
+    {s1,s2 : AForm => Str ; p : Bool} ;
 
   twoAdjPhrase : (_,_ : AdjPhrase) -> ListAdjPhrase = \x,y ->
-    CO.twoTable2 Gender Number x y ** {p = andB x.p y.p} ;
+    CO.twoTable AForm x y ** {p = andB x.p y.p} ;
 
   consAdjPhrase : ListAdjPhrase -> AdjPhrase -> ListAdjPhrase =  \xs,x ->
-    CO.consTable2 Gender Number CO.comma xs x ** {p = andB xs.p x.p} ;
+    CO.consTable AForm CO.comma xs x ** {p = andB xs.p x.p} ;
 
   conjunctAdjPhrase : Conjunction -> ListAdjPhrase -> AdjPhrase = \c,xs ->
-    CO.conjunctTable2 Gender Number c xs ** {p = xs.p} ;
+    CO.conjunctTable AForm c xs ** {p = xs.p} ;
 
   conjunctDistrAdjPhrase : ConjunctionDistr -> ListAdjPhrase -> AdjPhrase = \c,xs ->
-    CO.conjunctDistrTable2 Gender Number c xs ** {p = xs.p} ;
+    CO.conjunctDistrTable AForm c xs ** {p = xs.p} ;
 
 
 --3 Coordinating noun phrases
@@ -850,9 +961,10 @@ oper
 -- Subjunctions ("si", "quand", etc) 
 -- are a different way to combine sentences than conjunctions.
 -- The main clause can be a sentences, an imperatives, or a question,
--- but the subjoined clause must be a sentence.
+-- but the subjoined clause must be a sentence. The inherent mood can be
+-- indicative ("si", "quand") or subjunctive ("bien que").
 
-  Subjunction = SS ;
+  Subjunction = {s : Str ; m : Mode} ;
 
   subjunctSentence : Subjunction -> Sentence -> Sentence -> Sentence = \si,A,B ->
     {s = \\m => subjunctVariants si A (B.s ! m)
@@ -872,11 +984,16 @@ oper
 -- and "je m'en vais si tu fume".
 
   subjunctVariants : Subjunction -> Sentence -> Str -> Str = \si,A,B ->
-    let {As = A.s ! Ind} in 
+    let {As = A.s ! si.m} in 
     variants {
       si.s ++ As ++ B ; 
       B ++ si.s ++ As
       } ;
+
+  subjunctVerbPhrase : VerbPhrase -> Subjunction -> Sentence -> VerbPhrase =
+    \V, si, A -> 
+    adVerbPhrase V (ss (si.s ++ A.s ! si.m)) ;
+
 
 --2 One-word utterances
 -- 
@@ -912,7 +1029,7 @@ oper
 
   pronJe, pronTu, pronIl, pronElle, pronNous, pronVous, pronIls, pronElles : 
     Pronoun ;
-  chaqueDet, tousDet, quelDet, plupartDet : Determiner ;
+  chaqueDet, quelDet, plupartDet : Determiner ;
 
   commentAdv, quandAdv, ouAdv, pourquoiAdv : Adverb ;
 
@@ -921,5 +1038,5 @@ oper
   siSubj, quandSubj : Subjunction ;
 
   ouiPhr, noPhr : Utterance ;
-    
+
 }

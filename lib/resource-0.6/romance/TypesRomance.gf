@@ -36,6 +36,7 @@ oper
   accusative : CaseA ; 
   genitive : CaseA ;
   dative : CaseA ;
+  prepositional : CaseA ;
 
   stressed : CaseA -> NPFormA ;
   unstressed : CaseA -> NPFormA ;
@@ -121,12 +122,17 @@ oper
 
 --3 Adjectives
 --
--- Adjectives are inflected in gender and number.
+-- Adjectives are inflected in gender and number, and there is also an adverbial form
+-- (e.g. "infiniment"), which has different paradigms and can even be irregular ("bien").
 -- Comparative adjectives are moreover inflected in degree
 -- (which in French and Italian is usually syntactic, though).
 
-  Adj     : Type = {s : Gender => Number => Str} ;
-  AdjComp : Type = {s : Degree => Gender => Number => Str} ;
+param 
+  AForm = AF Gender Number | AA ;
+
+oper
+  Adj     : Type = {s : AForm => Str} ;
+  AdjComp : Type = {s : Degree => AForm => Str} ;
 
 
 --3 Verbs 
@@ -145,6 +151,7 @@ param
   VF =
      VFin   Mode Number Person 
    | VImper NumPersI 
+   | VPart  Gender Number 
    | VInfin
    ;
 
