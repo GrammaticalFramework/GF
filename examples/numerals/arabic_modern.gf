@@ -1,4 +1,6 @@
 include numerals.Abs.gf ;
+flags coding=arabic ;
+
 --- flags unlexer=reverse ;
 param DForm = unit Place | teen  | ten | hund ;
 param Size = small | large | dual ;
