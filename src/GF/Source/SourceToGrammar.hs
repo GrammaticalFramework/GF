@@ -75,11 +75,11 @@ transModDef x = case x of
         flags'   <- return       [f | Right fs <- defs0, f <- fs]
         return (id',GM.ModMod (GM.Module mtyp' mstat' flags' extends' opens' defs'))
       MReuse _ -> do
-        return (id', GM.ModMod (GM.Module mtyp' mstat' [] Nothing [] NT))
+        return (id', GM.ModMod (GM.Module mtyp' mstat' [] [] [] NT))
       MUnion imps -> do
         imps' <- mapM transIncluded imps        
         return (id', 
-          GM.ModMod (GM.Module (GM.MTUnion mtyp' imps') mstat' [] Nothing [] NT))
+          GM.ModMod (GM.Module (GM.MTUnion mtyp' imps') mstat' [] [] [] NT))
   
       MWith m opens -> do
         m'     <- transIdent m
@@ -137,11 +137,10 @@ transTransfer x = case x of
   TransferIn open  -> liftM Left  $ transOpen open
   TransferOut open -> liftM Right $ transOpen open
 
-transExtend :: Extend -> Err (Maybe Ident)
+transExtend :: Extend -> Err [Ident]
 transExtend x = case x of
-  Ext [id]  -> transIdent id >>= return . Just
-  Ext ids  -> Bad "sorry, no support for multiple inheritance yet"
-  NoExt -> return Nothing
+  Ext ids  -> mapM transIdent ids
+  NoExt -> return []
 
 transOpens :: Opens -> Err [GM.OpenSpec Ident]
 transOpens x = case x of

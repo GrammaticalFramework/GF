@@ -26,17 +26,19 @@ resource ParadigmsEng = open (Predef=Predef), Prelude, SyntaxEng, ResourceEng in
 -- To abstract over gender names, we define the following identifiers.
 
 oper
-  Gender : Type = SyntaxEng.Gender ;
+  Gender : Type ; 
 
   human    : Gender ;
   nonhuman : Gender ;
 
 -- To abstract over number names, we define the following.
+  Number : Type ; 
 
   singular : Number ;
   plural   : Number ;
 
 -- To abstract over case names, we define the following.
+  Case : Type ;
 
   nominative : Case ;
   genitive   : Case ;
@@ -183,6 +185,9 @@ oper
 -- hidden from the document.
 --.
 
+  Gender = SyntaxEng.Gender ; 
+  Number = SyntaxEng.Number ;
+  Case = SyntaxEng.Case ;
   human = Hum ; 
   nonhuman = NoHum ;
   singular = Sg ;

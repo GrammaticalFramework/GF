@@ -26,7 +26,7 @@ data Module i f a = Module {
     mtype   :: ModuleType i ,
     mstatus :: ModuleStatus ,
     flags   :: [f] ,
-    extends :: Maybe i ,
+    extends :: [i],
     opens   :: [OpenSpec i] ,
     jments  :: BinTree (i,a)
   }
@@ -50,6 +50,11 @@ data ModuleType i =
 data MReuseType i = MRInterface i | MRInstance i i | MRResource i
   deriving (Show,Eq)
 
+-- previously: single inheritance
+extendm :: Module i f a -> Maybe i
+extendm m = case extends m of
+  [i] -> Just i
+  _   -> Nothing
 
 -- destructive update
 
@@ -131,7 +136,7 @@ depPathModule m = fors m ++ exts m ++ opens m where
     MTConcrete i   -> [oSimple i]
     MTInstance i   -> [oSimple i]
     _              -> []
-  exts m = map oSimple $ maybe [] return $ extends m
+  exts m = map oSimple $ extends m
 
 -- all dependencies
 allDepsModule :: Ord i => MGrammar i f a -> Module i f a -> [OpenSpec i]
@@ -155,8 +160,8 @@ partOfGrammar gr (i,m) = MGrammar [mo | mo@(j,_) <- mods, elem j modsFor]
 allExtends :: (Show i,Ord i) => MGrammar i f a -> i -> [i]
 allExtends gr i = case lookupModule gr i of
   Ok (ModMod m) -> case extends m of 
-    Just i1 -> i : allExtends gr i1
-    _ -> [i]
+    [] -> [i]
+    is -> i : concatMap (allExtends gr) is
   _ -> []
 
 -- this plus that an instance extends its interface
@@ -165,7 +170,7 @@ allExtendsPlus gr i = case lookupModule gr i of
   Ok (ModMod m) -> i : concatMap (allExtendsPlus gr) (exts m)
   _ -> []
  where
-   exts m = [j | Just j <- [extends m]] ++ [j | MTInstance j <- [mtype m]]
+   exts m = extends m ++ [j | MTInstance j <- [mtype m]]
 
 -- conversely: all modules that extend a given module, incl. instances of interface
 allExtensions :: (Show i,Ord i) => MGrammar i f a -> i -> [i]
@@ -173,7 +178,7 @@ allExtensions gr i = case lookupModule gr i of
   Ok (ModMod m) -> let es = exts i in es ++ concatMap (allExtensions gr) es
   _ -> []
  where
-   exts i = [j | (j,m) <- mods, elem (Just i) [extends m] 
+   exts i = [j | (j,m) <- mods, elem i (extends m) 
                              || elem (MTInstance i) [mtype m]]
    mods = [(j,m) | (j,ModMod m) <- modules gr]
 
@@ -193,7 +198,7 @@ emptyModInfo :: ModInfo i f a
 emptyModInfo = ModMod emptyModule
 
 emptyModule :: Module i f a
-emptyModule = Module MTResource MSComplete [] Nothing [] NT
+emptyModule = Module MTResource MSComplete [] [] [] NT
 
 -- we store the module type with the identifier
 

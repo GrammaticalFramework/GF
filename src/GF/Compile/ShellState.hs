@@ -181,11 +181,10 @@ filterAbstracts abstr cgr = M.MGrammar (nubBy (\x y -> fst x == fst y) [m | m <-
     Just a -> elem i $ needs a
     _ -> True
   needs a = [i | (i,M.ModMod m) <- ms, not (M.isModAbs m) || dep i a]
-  dep i a = elem i (ext a mse)
+  dep i a = elem i (ext mse a)
   mse = [(i,me) | (i,M.ModMod m) <- ms, M.isModAbs m, me <- [M.extends m]]
-  ext a es = case lookup a es of
-    Just (Just e) -> a : ext e es
-    Just _ -> a : []
+  ext es a = case lookup a es of
+    Just e -> a : concatMap (ext es) e  ---- FIX multiple exts
     _ -> []
 
 

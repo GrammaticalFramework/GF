@@ -41,9 +41,7 @@ canon2sourceModule (i,mi) = do
   return (i',info')
  where
    redExtOpen m = do
-     e' <- case M.extends m of
-       Just e -> liftM Just $ redIdent e
-       _ -> return Nothing
+     e' <- mapM redIdent $ M.extends m
      os' <- mapM (\ (M.OSimple q i) -> liftM (\i -> M.OQualif q i i) (redIdent i)) $ 
                  M.opens m
      return (e',os')

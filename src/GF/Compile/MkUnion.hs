@@ -13,7 +13,7 @@ import List
 import Monad
 
 -- building union of modules
--- AR 1/3/2004
+-- AR 1/3/2004 --- OBSOLETE 15/9/2004 with multiple inheritance
 
 makeUnion :: SourceGrammar -> Ident -> ModuleType Ident -> [(Ident,[Ident])] ->
              Err SourceModule

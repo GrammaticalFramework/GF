@@ -34,12 +34,14 @@ rebuildModule ms mo@(i,mi) = do
             js' <- extendMod False i0 (jments m1) (jments m)
             --- to avoid double inclusions, in instance I of I0 = J0 ** ...
             case extends m of
-              Nothing -> return $ replaceJudgements m js'
-              Just j0 -> do 
+              [] -> return $ replaceJudgements m js'
+              j0:jj -> do 
                 m0 <- lookupModMod gr j0
                 let notInM0 c = not $ isInBinTree (fst c) $ mapTree fst $ jments m0
                 let js2 = sorted2tree $ filter notInM0 $ tree2list js'
-                return $ replaceJudgements m js2
+                if null jj 
+                  then return $ replaceJudgements m js2
+                  else Bad "FIXME: handle multiple inheritance in instance"
           return $ ModMod m'
         _ -> return mi
 
