@@ -111,6 +111,17 @@ mapErr f xs = Ok (ys, unlines ss)
     (ys,ss) = ([y | Ok y <- fxs], [s | Bad s <- fxs])
     fxs = map f xs
 
+-- alternative variant, peb 9/6-04
+mapErrN :: Int -> (a -> Err b) -> [a] -> Err ([b], String)
+mapErrN maxN f xs = Ok (ys, unlines (errHdr : ss2)) 
+  where
+    (ys, ss) = ([y | Ok y <- fxs], [s | Bad s <- fxs])
+    errHdr = show nss ++ " errors occured" ++ 
+	     if nss > maxN then ", showing the first " ++ show maxN else ""
+    ss2 = map ("* "++) $ take maxN ss 
+    nss = length ss
+    fxs = map f xs
+
 -- !! with the error monad
 (!?) :: [a] -> Int -> Err a
 xs !? i = foldr (const . return) (Bad "too few elements in list") $ drop i xs

@@ -1,5 +1,7 @@
 module CanonToCF where
 
+import Tracing -- peb 8/6-04
+
 import Operations
 import Option
 import Ident
@@ -23,7 +25,7 @@ import Monad
 -- the abstract module name a that m is of.
 
 canon2cf :: Options -> CanonGrammar -> Ident -> Err CF
-canon2cf opts gr c = do
+canon2cf opts gr c = tracePrt "#size of CF" (err id (show.length.rulesOfCF)) $ do -- peb 8/6-04
   let ms = M.allExtends gr c
   a <- M.abstractOfConcrete gr c
   let cncs = [m | (n, M.ModMod m) <- M.modules gr, elem n ms]
