@@ -8,7 +8,7 @@
 --
 -- We use the parameter types and word classes defined for morphology.
 
-resource MorphoNor = open Prelude, TypesNor in {
+resource MorphoNor = open Predef, Prelude, TypesNor in {
 
 -- Danish grammar source: http://users.cybercity.dk/~nmb3879/danish.html
 
@@ -35,6 +35,12 @@ oper
     Nom => bil ;
     Gen => bil + "s"   --- but: hus --> hus
     } ;
+
+  extNGen : Str -> NounGender = \s -> case last s of {
+    "n" => NUtr Masc ;
+    "a" => NUtr NoMasc ;
+    _   => NNeutr
+    } ; 
 
   nBil : Str -> Subst = \bil ->
     mkSubstantive bil (bil + "en") (bil + "er")  (bil + "erne") **
@@ -74,6 +80,12 @@ oper
   aRask : Str -> Adj = \rask -> 
     mkAdjective rask rask (rask + "e") (rask + "ere") (rask + "est") ;
 
+  aBillig : Str -> Adj = \billig -> 
+    mkAdjective billig billig (billig + "e") (billig + "ere") (billig + "st") ;
+
+extractPositive : Adj -> {s : AdjFormPos => Case => Str} = \adj ->
+  {s = \\a,c => adj.s ! (AF (Posit a) c)} ;
+
 -- verbs
 
   mkVerb : (_,_,_,_,_,_ : Str) -> Verbum = 
@@ -83,7 +95,11 @@ oper
        VF (Pres Pass)   => spises ;
        VF (Pret v)      => mkVoice v spiste ;
        VI (Supin v)     => mkVoice v spist ;
-       VI (PtPret _ c)  => mkCase spist ! c ; ---- GenNum
+       VI (PtPret (Strong (ASg _)) c) => mkCase spist ! c ;
+       VI (PtPret _ c)  => case last spist of {
+         "a" => mkCase spist ! c ;
+         _   => mkCase (spist + "e") ! c
+         } ;
        VF (Imper v)     => mkVoice v spis
        }
      } ;
@@ -97,13 +113,36 @@ oper
     } ;
   
   vHusk : Str -> Verbum = \husk -> 
-    mkVerb (husk + "e") (husk + "er") (husk + "es") (husk + "et") (husk + "et") husk ;
+    let huska : Str = husk + "a"  ---- variants {husk + "a" ; husk + "et"} 
+    in
+    mkVerb (husk + "e") (husk + "er") (husk + "es") huska huska husk ;
 
   vSpis : Str -> Verbum = \spis -> 
     mkVerb (spis + "e") (spis + "er") (spis + "es") (spis + "te") (spis + "t") spis ;
 
+  vLev : Str -> Verbum = \lev -> 
+    mkVerb (lev + "e") (lev + "er") (lev + "es") (lev + "de") (lev + "d") lev ;
+
   vBo : Str -> Verbum = \bo -> 
     mkVerb bo (bo + "r") (bo + "es") (bo + "dde") (bo + "dd") bo ;
+
+  regVerb : Str -> Str -> Verbum = \spise, spiste -> 
+    let
+      spis = init spise ;
+      te   = dp 2 spiste
+    in
+    case te of {
+      "te" => vSpis spis ;
+      "de" => case last spise of {
+         "e" => vLev spis ;
+         _   => vBo spise
+         } ;
+      _  => vHusk spis 
+      } ;
+
+  irregVerb : (drikke,drakk,drukket : Str) -> Verbum = 
+    \drikke,drakk,drukket ->
+    mkVerb drikke (drikke + "r")  (drikke + "s") drakk drukket (init drikke) ; 
 
 -- pronouns
 
@@ -208,7 +247,7 @@ oper De_38 : ProPN =
 
 oper den_39 : ProPN =
  {s = table {
-    PNom => "de " ;
+    PNom => "de" ;
     PAcc => "den" ;
     PGen _ => "dens"
     } ;
