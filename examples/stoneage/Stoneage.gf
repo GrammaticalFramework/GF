@@ -74,7 +74,8 @@ fun
 
   -- Determiners
 
-  The : CN -> NP ;
+  The_One : CN -> NP ;
+  The_Many : CN -> NP ;
   A : CN -> NP ;
 --  This : CN -> NP ;
 --  That : CN -> NP ;
