@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:06 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.14 $
+-- > CVS $Date: 2005/03/08 18:08:58 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.15 $
 --
 -- for reading grammars and terms from strings and files
 -----------------------------------------------------------------------------
@@ -55,7 +55,7 @@ shellStateFromFiles opts st file = case fileSuffix file of
      cenv <- compileOne opts (compileEnvShSt st []) file
      ioeErr $ updateShellState opts Nothing st cenv
   s | elem s ["cf","ebnf"] -> do
-     let osb = addOptions (options [beVerbose]) opts
+     let osb = addOptions (options []) opts
      grts <- compileModule osb st file
      ioeErr $ updateShellState opts Nothing st grts
   _ -> do
@@ -63,8 +63,8 @@ shellStateFromFiles opts st file = case fileSuffix file of
      let opts' = if b then (addOption showOld opts) else opts
 
      let osb = if oElem showOld opts' 
-                 then addOptions (options [beVerbose]) opts' -- for old no emit
-                 else addOptions (options [beVerbose, emitCode]) opts'
+                 then addOptions (options []) opts' -- for old no emit
+                 else addOptions (options [emitCode]) opts'
      grts <- compileModule osb st file
      let top = identC $ justModuleName file
      ioeErr $ updateShellState opts' (Just top) st grts

@@ -903,6 +903,8 @@ oper
         idag = sats.s6 ;
         exts = sats.s7
       in case osf.o of {
+      Main => jag  ++ har ++ inte ++ sagt ++ dig  ++ idag ++ exts ;
+{-
       Main => variants {
                jag  ++ har ++ inte ++ sagt ++ dig  ++ idag ++ exts ;
         onlyIf (orB sats.e3 (notB b)) 
@@ -916,6 +918,7 @@ oper
         onlyIf sats.e7 
                (exts ++ har ++ jag  ++ inte ++ sagt ++ dig  ++ idag)
         } ;
+-}
       Inv => 
         har ++ jag  ++ inte ++ sagt ++ dig ++ idag ++ exts ;
       Sub => 

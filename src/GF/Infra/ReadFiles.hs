@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:15 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.19 $
+-- > CVS $Date: 2005/03/08 18:08:58 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.20 $
 --
 -- Decide what files to read as function of dependencies and time stamps.
 --
@@ -45,9 +45,9 @@ getAllFiles opts ps env file = do
   -- read module headers from all files recursively
   ds0  <- getImports ps file
   let ds = [((snd m,map fst ms),p) | ((m,ms),p) <- ds0]
-  if oElem beSilent opts 
-    then return ()
-    else ioeIO $ putStrLn $ "all modules:" +++ show (map (fst . fst) ds)
+  if oElem beVerbose opts 
+    then ioeIO $ putStrLn $ "all modules:" +++ show (map (fst . fst) ds)
+    else return ()
     -- get a topological sorting of files: returns file names --- deletes paths
   ds1 <- ioeErr $ either 
            return 

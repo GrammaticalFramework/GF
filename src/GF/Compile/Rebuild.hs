@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:09 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.9 $
+-- > CVS $Date: 2005/03/08 18:08:58 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.10 $
 --
 -- Rebuild a source module from incomplete and its with-instance.
 -----------------------------------------------------------------------------
@@ -30,8 +30,9 @@ import Operations
 rebuildModule :: [SourceModule] -> SourceModule -> Err SourceModule
 rebuildModule ms mo@(i,mi) = do
   let gr = MGrammar ms
-  deps <- moduleDeps ms
-  is   <- openInterfaces deps i
+----  deps <- moduleDeps ms
+----  is   <- openInterfaces deps i
+  let is = [] ---- the method above is buggy: try "i -src" for two grs. AR 8/3/2005
   mi'  <- case mi of
 
     -- add the information given in interface into an instance module
