@@ -48,8 +48,8 @@ lincat
 
   V      = Verb ; 
       -- = {s : VF => Str} ;
-  VG     = {s : Bool => Gender => VF => Str} ;
-  VP     = {s : Gender => VF => Str} ;
+  VG     = {s : Bool => Gender => VPForm => Str} ;
+  VP     = {s : Gender => VPForm => Str} ;
   V2     = TransVerb ;
       -- = Verb ** {s2 : Preposition ; c : CaseA} ; 
   V3     = TransVerb ** {s3 : Preposition ; c3 : CaseA} ;
@@ -61,6 +61,8 @@ lincat
   S      = Sentence ; 
       -- = {s : Mode => Str} ;
   Slash  = Sentence ** {s2 : Preposition ; c : CaseA} ;
+  Cl     = Clause ;
+      -- = {s : Bool => ClForm => Str} ;
 
   RP     = {s : RelForm => Str ; g : RelGen} ;
   RC     = {s : Mode => Gender => Number => Str} ;

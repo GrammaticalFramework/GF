@@ -76,10 +76,10 @@ lin
   SomethingNP  = mkNameNounPhrase ["quelque chose"] Masc ;
   NothingNP    = mkNameNounPhrase ["rien"] Masc ; --- ne
 
-  CanVV     = mkVerbVerbDir (verbPres (conj3pouvoir "pouvoir")) ;
-  CanKnowVV = mkVerbVerbDir (verbPres (conj3savoir "savoir")) ;
-  MustVV    = mkVerbVerbDir (verbPres (conj3devoir "devoir")) ;
-  WantVV    = mkVerbVerbDir (verbPres (conj3vouloir "vouloir")) ;
+  CanVV     = mkVerbVerbDir (verbPres (conj3pouvoir "pouvoir") AHabere) ;
+  CanKnowVV = mkVerbVerbDir (verbPres (conj3savoir "savoir") AHabere) ;
+  MustVV    = mkVerbVerbDir (verbPres (conj3devoir "devoir") AHabere) ;
+  WantVV    = mkVerbVerbDir (verbPres (conj3vouloir "vouloir") AHabere) ;
 
   EverywhereNP = ss "partout" ;
   SomewhereNP = ss ["quelque part"] ; --- ne - pas

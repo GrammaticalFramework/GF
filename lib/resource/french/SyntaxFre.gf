@@ -88,13 +88,19 @@ oper
 
   negVerb = \va -> elisNe ++ va ++ "pas" ;
 
-  copula = \b -> (etreNetre b).s ;
+  copula = \b,w -> let etre = (predVerb verbEtre).s in
+    etre ! b ! Masc ! w ;
 
   isTransVerbClit = \v -> case v.c of { 
      Acc => True ;
      Dat => True ;
      _   => False
      } ;
+
+  auxVerb ve = case ve.aux of {
+    AHabere => verbAvoir ;
+    AEsse   => verbEtre
+    } ;
 
 -- The "ne - pas" negation.
 
@@ -106,7 +112,7 @@ oper
 -- Exampe: 'to be or not to be'.
 
   etreNetre : Bool -> Verb = \b -> 
-    {s = \\w => posNeg b (verbEtre.s ! w) []} ; ---- v reveals a BUG in refresh 
+    {s = \\w => posNeg b (verbEtre.s ! w) [] ; aux = AHabere} ; ---- v reveals a BUG in refresh 
 
   embedConj = elisQue ;
 
@@ -172,11 +178,12 @@ oper
         ++ duvin.s ! stressed accusative  --- il y en a ; have to define "y"
     } ;
 
-  intVerbPhrase = \qui, dort ->
+  intVerbPhrase = \qui, dormir ->
+    let dort = dormir.s ! qui.g ! VPF Simul (VFin presInd qui.n P3)
+    in
     {s = table {
-      DirQ => qui.s ! Nom ++ optStr (estCeQue Nom) ++ 
-              dort.s ! qui.g ! VFin presInd qui.n P3 ;
-      IndirQ => "ce" ++ qui.s ! Nom ++ dort.s ! qui.g ! VFin presInd qui.n P3
+      DirQ => qui.s ! Nom ++ optStr (estCeQue Nom) ++ dort ;
+      IndirQ => "ce" ++ qui.s ! Nom ++ dort
       }
     } ;
 
