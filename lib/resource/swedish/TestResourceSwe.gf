@@ -67,7 +67,7 @@ lin
    Tell = extTransVerb (vNopart (vTala "berätt")) [] ;
    Look = extTransVerb (mkVerbPart "se" "ser" "se" "såg" "sett" "sedd" "ut") [] ;
 
-   Try = extTransVerb (vNopart (vLeka "försök")) [] ** {s3 = "att"} ;
+   Try = extTransVerb (vNopart (vLeka "försök")) [] ** {isAux=False} ;
    Important = extAdjective (aFin "viktig") ** {s2 = "för"} ;
    Probable = extAdjective (aFin "sannolik") ;
    Easy = extAdjective (aAbstrakt "lätt") ** {s2 = "för"} ;

@@ -855,18 +855,19 @@ oper
 -- ("försöka"); this distinction cannot be done in the multilingual
 -- API and leads to some anomalies in Swedish, but less so than in English.
 
-  VerbVerb : Type = Verb ** {s3 : Str} ;
+  VerbVerb : Type = Verb ** {isAux : Bool} ;
 
   complVerbVerb : VerbVerb -> VerbPhrase -> VerbGroup = \vilja, simma ->
     useVerb vilja 
       (\\g,n,p => 
               vilja.s1 ++
-              vilja.s3 ++
+              if_then_Str vilja.isAux [] "att" ++ ---- vilja.s3 ++
               simma.s ! VIInfinit ! g ! n ! p) ;
 
   transVerbVerb : VerbVerb -> TransVerb -> TransVerb = \vilja,hitta ->
     {s  = vilja.s ;
-     s1 = vilja.s1 ++ vilja.s3 ++
+     s1 = vilja.s1 ++ 
+          if_then_Str vilja.isAux [] "att" ++ ---- vilja.s3 ++
           hitta.s ! VI (Inf Act) ++ hitta.s1 ;
      s2 = hitta.s2
     } ;
@@ -927,7 +928,7 @@ oper
     \jag,vilja,se ->
       predVerbGroupClause jag (useVerb vilja (\\g,n,p => 
               vilja.s1 ++
-              vilja.s3 ++
+              if_then_Str vilja.isAux [] "att" ++ ---- vilja.s3 ++
               se.s ! VI (Inf Act))
               )  ** {s2 = se.s2} ;
 

@@ -81,6 +81,7 @@ oper
 -- The determiner determines the number of the argument noun.
 
   Determiner : Type = {s : Gender => Str ; n : Number} ;
+  NumDeterminer : Type = {s : Gender => Str} ;
 
   detNounPhrase : Determiner -> CommNoun -> NounPhrase = \tout, homme -> 
     normalNounPhrase
@@ -97,9 +98,9 @@ oper
   mkDeterminer1 : Number -> Str -> Determiner = \n,chaque -> 
     mkDeterminer n chaque chaque ;
 
-  mkDeterminerNum : Number -> Str -> Str -> Numeral -> Determiner = 
-    \n,tous,toutes,nu -> 
-    {s = \\g => genForms tous toutes ! g ++ nu.s ! g ; n = n} ;
+  mkDeterminerNum : Str -> Str -> NumDeterminer = 
+    \tous,toutes -> 
+    {s = \\g => genForms tous toutes ! g} ;
 
 
 -- Indefinite and definite noun phrases are treated separately,
@@ -261,7 +262,7 @@ oper
       mec.g 
       Sg ; 
 
-  superlAdjDegr : AdjDegr -> AdjPhrase = \bon ->
+  superlAdjPhrase : AdjDegr -> AdjPhrase = \bon ->
     {s = \\a => artDef (genAForm a) (numAForm a) nominative ++ bon.s ! Sup ! a ; 
      p = bon.p
     } ;
@@ -385,9 +386,6 @@ oper
 -- (It is not quite sure, though, whether this
 -- will suffice in French for examples like "je n'*y* vais pas": one may want to
 -- add "y" to "ne vais pas" instead of "ne - pas" to "y vais".)
---
--- So far we restrict the syntax to present-tense verbs, even though
--- morphology has complete conjugations.
 
 param
   VPForm = VPF Anteriority VF ;
@@ -397,8 +395,8 @@ oper
   VerbPhrase = {s :         Gender => VPForm => Str} ;
   VerbGroup  = {s : Bool => Gender => VPForm => Str} ;
 
-  predVerbGroup : Bool -> VerbGroup -> VerbPhrase = \b,vg -> {
-    s = vg.s ! b
+  vpf2vf : VPForm -> VF = \vpf -> case vpf of {
+    VPF _ vf => vf
     } ;
 
   auxVerb : Verb -> Verb ; -- gives the auxiliary
@@ -414,21 +412,32 @@ oper
 
 -- Predication is language-dependent in the negative case.
 
+  complVerb : Verb -> Complemnt = \verb ->
+    mkCompl verb (\\_,_,_ => []) ;
+
+  mkCompl : Verb -> (Gender => Number => Person => Str) -> Complemnt = 
+    \verb,comp -> complNoClit (
+      \\g,n,p => <verb.s ! (case verb.aux of {
+          AEsse   => VPart g n ;
+          AHabere => VPart Masc Sg
+          }),
+      comp ! g ! n ! p
+      >) ;
+
+  complNoClit : (Gender => Number => Person => (Str*Str)) -> Complemnt = 
+    \comp -> \\g,n,p =>
+      let com = comp ! g ! n ! p in 
+      {clit = [] ; part = com.p1 ; compl = com.p2} ;
+
+  complCopula : (Gender => Number => Person => Str) -> Complemnt = 
+    mkCompl copula ;
+
+  predCopula : NounPhrase -> Complemnt -> Clause = \np,co ->
+    predVerbClause np copula co ;
+
+{-
   predVerb : Verb -> VerbGroup = \aller -> 
-    {s = \\b,g => table { 
-       VPF Simul v => if_then_Str b (aller.s ! v) (negVerb (aller.s ! v)) ;
-       VPF Anter v =>
-          let 
-            part  = case aller.aux of {
-              AEsse   => VPart g (nombreVerb v) ;
-              AHabere => VPart Masc Sg
-              } ;
-            allee = aller.s ! part ;
-            est   = (auxVerb aller).s ! v
-          in
-          if_then_Str b est (negVerb est) ++ allee
-       } 
-     } ;
+    {s = \\b,g,v => "foo"} ;
 
   formVerb : Verb -> Bool -> Gender -> VPForm -> Str = \aller,b,g,vf ->
     (predVerb aller).s ! b ! g ! vf ;
@@ -454,6 +463,7 @@ oper
                }}
         }
       } ;
+-}
 
   negVerb : Str -> Str ;
 
@@ -461,27 +471,27 @@ oper
 -- common nouns ("est un homme"), and noun phrases ("est Jean").
 -- We need a copula, which is of course language-dependent.
 
-  copula : Bool -> VPForm -> Str ;
+  copula : Verb ;
 
 -- The third rule is overgenerating: "est chaque homme" has to be ruled out
 -- on semantic grounds.
 
-  predAdjective : AdjPhrase -> VerbGroup = \bon ->
-    {s = \\b,g,v => copula b v ++ bon.s ! AF g (nombreVerbPhrase v)} ; 
+  complAdjective : AdjPhrase -> Complemnt = \bon ->
+    complCopula (\\g,n,_ => bon.s ! AF g n) ;
 
-  predCommNoun : CommNounPhrase -> VerbGroup = \homme ->
-    {s = \\b,g,v => copula b v ++ indefNoun (nombreVerbPhrase v) homme} ; 
+  complCommNoun : CommNounPhrase -> Complemnt = \homme ->
+    complCopula (\\_,n,_ => indefNoun n homme) ; 
 
-  predNounPhrase : NounPhrase -> VerbGroup = \jean ->
-    {s = \\b,g,v => copula b v ++ jean.s ! stressed nominative} ; 
+  complNounPhrase : NounPhrase -> Complemnt = \jean ->
+    complCopula (\\_,_,_ => jean.s ! stressed nominative) ; 
 
-  predAdverb : Adverb -> VerbGroup = \dehors ->
-    {s = \\b,g,v => copula b v ++ dehors.s} ; 
+  complAdverb : Adverb -> Complemnt = \dehors ->
+    complCopula (\\_,_,_ => dehors.s) ; 
 
 -- Passivization is like adjectival predication.
 
-  predPassVerb : Verb -> VerbGroup = \aimer ->
-    {s = \\b,g,v => copula b v ++ aimer.s ! VPart g (nombreVerbPhrase v)} ; 
+  passVerb : Verb -> Complemnt = \aimer ->
+    complCopula (\\g,n,_ => aimer.s ! VPart g n) ;
 
 -- complement a verb with noun phrase and optional preposition
 
@@ -519,21 +529,18 @@ oper
 -- "aime Jean" ; "n'aime pas Jean" ; "l'aime" ; "ne l'aime pas".
 -- More will be needed when we add ditransitive verbs.
 
-  complTransVerb : TransVerb -> NounPhrase -> VerbGroup = \aime,jean ->
-    {s = \\b,g,w =>  ---- BUG: v gives stack overflow
-       let 
-         Jean = jean.s ! (case2pformClit aime.c) ; 
-         AAime = formVerb2 aime g w ;
-         A = AAime.verb ;
-         clit = (andB (isNounPhraseClit jean) (andB (isTransVerbClit aime) (isNotImperative w))) ;
-         Aime = if_then_Str clit
-           (AAime.part ! pgen2gen jean.g ! jean.n)
-           (AAime.part ! Masc ! Sg)
-       in 
-       if_then_Str clit
-         (posNeg b (Jean ++ A) Aime)
-         (posNeg b A           (Aime ++ Jean))
-    } ;
+  complTransVerb : TransVerb -> NounPhrase -> Complemnt = \aime,jean ->
+      let
+        clit  = andB (isNounPhraseClit jean) (isTransVerbClit aime) ;
+        Jean  = jean.s ! (case2pformClit aime.c) ; 
+        aimee = if_then_Str clit
+                   (aime.s ! VPart (pgen2gen jean.g) jean.n)
+                   (aime.s ! VPart  Masc             Sg)
+      in
+        \\_,_,_ => case clit of {
+            True  => {clit = Jean ; part = aimee ; compl = []} ;
+            False => {clit = []   ; part = aimee ; compl = Jean}
+            } ;
 
   mkTransVerb : Verb -> Preposition -> CaseA -> TransVerb = \v,p,c -> 
     v ** {s2 = p ; c = c} ;
@@ -567,6 +574,7 @@ oper
 
 --- This must be completed to account for the order of the clitics.
 
+{- ----
   complDitransVerb : 
     DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = \donner,jean,vin ->
     {s = \\b,g,w =>
@@ -588,7 +596,7 @@ oper
        in 
          posNeg b (te ++ lui ++ a) (donne ++ aJean ++ duVin)
      } ;
-
+-}
 
 -- The following macro builds the "ne - pas" or "non" negation. The second
 -- string argument is used for the complement of a verb phrase. In Italian,
@@ -649,20 +657,31 @@ oper
 -- This is the traditional $S -> NP VP$ rule. It takes care of both
 -- mode and agreement.
 
-  predVerbPhrase : NounPhrase -> VerbPhrase -> Sentence = \jean,dort ->
-    {s = \\m => jean.s ! unstressed nominative ++ 
-                dort.s ! pgen2gen jean.g ! VPF Simul (VFin (VPres m) jean.n jean.p)
-    } ;
-
 param
+  Tense = Present | Past | Future | Condit ;
+
   ClForm = 
      ClPres    Anteriority Mode
    | ClImperf  Anteriority Mode
    | ClPasse   Anteriority
    | ClFut     Anteriority
    | ClCondit  Anteriority
-----   | ClInfinit Anteriority      -- "naked infinitive" clauses
+   | ClInfinit Anteriority      -- "naked infinitive" clauses
     ;
+
+oper
+  Clause = {s : Bool => ClForm => Str} ;
+
+{-
+  predVerbPhrase : NounPhrase -> VerbPhrase -> Sentence = \jean,dort ->
+    {s = \\m => jean.s ! unstressed nominative ++ 
+                dort.s ! pgen2gen jean.g ! VPF Simul (VFin (VPres m) jean.n jean.p)
+    } ;
+
+  predVerbGroup : Bool -> VerbGroup -> VerbPhrase = \b,vg -> {
+    s = vg.s ! b
+    } ;
+
 
 oper
   cl2vp : ClForm -> Number -> Person -> VPForm = \c,n,p -> case c of {
@@ -671,17 +690,48 @@ oper
     ClPasse  a     => VPF a (VFin VPasse n p) ;
     ClFut    a     => VPF a (VFin VFut n p) ;
     ClCondit a     => VPF a (VFin VCondit n p)
+    ClInfinit a    => VPF a VInfin
     } ;
-
-  Clause = {s : Bool => ClForm => Str} ;
 
   predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = \jean,dort ->
     {s = \\b,c => 
        jean.s ! unstressed nominative ++ 
        dort.s ! b ! pgen2gen jean.g ! cl2vp c jean.n jean.p
     } ;
+-}
+  Complemnt = Gender => Number => Person => {clit, part, compl : Str} ; ---- ment
 
+  predVerbClause : NounPhrase -> Verb -> Complemnt -> Clause =  \np,verb,comp -> 
+    let nv = predVerbClauseGen np verb comp in
+    {s = \\b,cl => let nvg = nv ! b ! cl in nvg.p1 ++ nvg.p2} ;
 
+  predVerbClauseGen : NounPhrase -> Verb -> Complemnt -> 
+    (Bool => ClForm => (Str * Str)) =  \np,verb,comp -> 
+      let 
+        jean = np.s ! unstressed nominative ;
+        co   = comp ! pgen2gen np.g ! np.n ! np.p ;
+        la   = co.clit ;
+        ici  = co.compl ;
+        aime  : TMode -> Str = \t -> verb.s ! (VFin t np.n np.p) ;
+        avoir : TMode -> Str = \t -> (auxVerb verb).s ! (VFin t np.n np.p) ;
+        aimee = co.part ;
+        aimer = verb.s ! VInfin ;
+        avoirr = (auxVerb verb).s ! VInfin
+      in
+      \\b => table {
+        ClPres   Simul m   => <jean, posNeg b (la ++ aime  (VPres m))   ici> ;
+        ClPres   a m       => <jean, posNeg b (la ++ avoir (VPres m))   (aimee ++ ici)> ;
+        ClImperf Simul m   => <jean, posNeg b (la ++ aime  (VImperf m)) ici> ;
+        ClImperf a m       => <jean, posNeg b (la ++ avoir (VImperf m)) (aimee ++ ici)> ;
+        ClPasse  Simul     => <jean, posNeg b (la ++ aime  VPasse)      ici> ;
+        ClPasse  a         => <jean, posNeg b (la ++ avoir VPasse)      (aimee ++ ici)> ;
+        ClFut    Simul     => <jean, posNeg b (la ++ aime  VFut)      ici> ;
+        ClFut    a         => <jean, posNeg b (la ++ avoir VFut)      (aimee ++ ici)> ;
+        ClCondit Simul     => <jean, posNeg b (la ++ aime  VFut)      ici> ;
+        ClCondit a         => <jean, posNeg b (la ++ avoir VFut)      (aimee ++ ici)> ;
+        ClInfinit Simul    => <jean, posNeg b (la ++ aimer)           ici> ;
+        ClInfinit a        => <jean, posNeg b (la ++ avoirr)          (aimee ++ ici)>
+        } ;
 
 --3 Sentence-complement verbs
 --
@@ -692,11 +742,12 @@ oper
 
   SentenceVerb : Type = Verb ** {mp, mn : Mode} ;
 
+{- -----
   complSentVerb : SentenceVerb -> Sentence -> VerbGroup = \croire,jeanboit ->
     {s = \\b,g,w =>
              let {m = if_then_else Mode b croire.mp croire.mn} 
              in (predVerb croire).s ! b ! g ! w  ++ (embedConj ++ jeanboit.s ! m)} ; ----w
-
+-}
   verbSent : Verb -> Mode -> Mode -> SentenceVerb = \v,mp,mn ->
     v ** {mp = mp ; mn = mn} ;
 
@@ -711,12 +762,12 @@ oper
 -- They can need an oblique case ("à", "de"), but they work like ordinary verbs.
 
   VerbVerb : Type = Verb ** {c : CaseA} ;
-
+{- ----
   complVerbVerb : VerbVerb -> VerbGroup -> VerbGroup = \devoir, nager ->
     {s = \\b,g,v => formVerb devoir b g v ++
          prepCase devoir.c ++ nager.s ! True ! g ! VPF Simul VInfin ---- anter
     } ;
-
+-}
   mkVerbVerbDir : Verb -> VerbVerb = \v -> v ** {c = accusative} ;
 
 
@@ -732,11 +783,12 @@ oper
 
   SentenceSlashNounPhrase = Sentence ** Complement ;
 
+{- ----
   slashTransVerb : Bool -> NounPhrase -> TransVerb -> SentenceSlashNounPhrase = 
     \b,jean,aimer ->
     predVerbPhrase jean (predVerbGroup b (predVerb (verbOfTransVerb aimer))) ** 
     complementOfTransVerb aimer ;
-
+-}
 
 --2 Relative pronouns and relative clauses
 --
@@ -1148,5 +1200,4 @@ oper
   siSubj, quandSubj : Subjunction ;
 
   ouiPhr, noPhr : Utterance ;
-
 }

@@ -51,7 +51,7 @@ lin
   ComparADeg = comparAdjPhrase ;
   SuperlNP = superlNounPhrase ;
 
--- verbs and verb phrases
+-- verbs and verb phrases mostly in $Clause$
 
   PredAS = predAdjSent ;
   PredV0 = predVerb0 ;
@@ -65,7 +65,7 @@ lin
 
   AdjPart = adjPastPart ;
 
-  UseV2V x = x ;
+  UseV2V x = x ** {isAux = False} ;
   UseV2S x = x ;
   UseV2Q x = x ;
   UseA2S x = x ;
@@ -119,12 +119,6 @@ lin
 
   IDetCN d n = detNounPhrase d n ;
   FunIP = funIntPron ;
---  NounIPOne = nounIntPron singular ;
---  NounIPMany = nounIntPron plural ;
---  WhoOne = intPronWho singular ;
---  WhoMany = intPronWho plural ;
---  WhatOne = intPronWhat singular ;
---  WhatMany = intPronWhat plural ;
 
   QuestCl = questClause ;
   IntSlash = intSlash ;

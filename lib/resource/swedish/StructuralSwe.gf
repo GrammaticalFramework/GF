@@ -5,7 +5,8 @@
 -- Aarne Ranta 2002 -- 2004
 --
 concrete StructuralSwe of Structural = 
-  CategoriesSwe, NumeralsSwe ** open Prelude, MorphoSwe, SyntaxSwe in {
+  CategoriesSwe, NumeralsSwe ** 
+    open Prelude, MorphoSwe, SyntaxSwe in {
 
   flags optimize=values ;
 
@@ -27,8 +28,10 @@ concrete StructuralSwe of Structural =
   between_Prep = ss "mellan" ;
   both_AndConjD = sd2 "både" "och" ** {n = Pl} ;
   by8means_Prep = ss "med" ;
-  can8know_VV = mkVerb "kunna" "kan" "kunn" "kunde" "kunnat" "kunnen" ** {s3 = []} ;
-  can_VV = mkVerb "kunna" "kan" "kunn" "kunde" "kunnat" "kunnen" ** {s3 = []} ;
+  can8know_VV = mkVerb "kunna" "kan" "kunn" "kunde" "kunnat" "kunnen"
+  ** {isAux = True} ;
+  can_VV = mkVerb "kunna" "kan" "kunn" "kunde" "kunnat" "kunnen"
+  ** {isAux = True} ;
   during_Prep = ss "under" ;
   either8or_ConjD = sd2 "antingen" "eller" ** {n = Sg} ;
   everybody_NP = let alla = table {Nom => "alla" ; Gen => "allas"} in 
@@ -50,7 +53,7 @@ concrete StructuralSwe of Structural =
   most_Det = mkDeterminerSgGender2 ["den mesta"] ["det mesta"] (DefP Def) ;
   most8many_Det = flestaDet ;
   much_Det = mkDeterminerSg (detSgInvar "mycket") IndefP ;
-  must_VV = mkVerb "få" "måste" "få" "fick" "måst" "måst" ** {s3 = []} ;
+  must_VV = mkVerb "få" "måste" "få" "fick" "måst" "måst"   ** {isAux = True} ;
   no_Phr = ss ["Nej ."] ;
   on_Prep = ss "på" ;
   or_Conj = ss "eller" ** {n = Sg} ;
@@ -80,7 +83,7 @@ concrete StructuralSwe of Structural =
   to_Prep = ss "till" ;
   under_Prep = ss "under" ;
   very_Adv = ss "mycket" ;
-  want_VV = mkVerb "vilja" "vill" "vilj" "ville" "velat" "velad" ** {s3 = []} ;
+  want_VV = mkVerb "vilja" "vill" "vilj" "ville" "velat" "velad"   ** {isAux = True} ;
   we_NP = pronNounPhrase (vi_36) ;
   what8many_IP = intPronWhat plural ;
   what8one_IP = intPronWhat singular ;
