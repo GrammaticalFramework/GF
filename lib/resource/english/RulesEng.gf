@@ -60,18 +60,14 @@ lin
     {s = \\n,c => cn.s ! n ! c ++ s.s ; 
      g = cn.g} ;
 
-  PredVP = predVerbPhrase ;
-  PosVG  = predVerbGroup True ;
-  NegVG  = predVerbGroup False ;
-
-  PredVG = predVerbGroupClause ;
+  PredVP = predVerbGroupClause ;
 
   PredV  = predVerb ;
   PredAP = predAdjective ;
   PredSuperl a = predAdjective (superlAdjPhrase a) ;
   PredCN = predCommNoun ;
   PredV2 = complTransVerb ;
-  PredV3 = complDitransVerb ;
+----  PredV3 = complDitransVerb ;
   PredPassV = passVerb ;
   PredNP = predNounPhrase ;
   PredPP = predAdverb ;
@@ -86,10 +82,9 @@ lin
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
 
-  PosSlashV2 = slashTransVerb True ;
-  NegSlashV2 = slashTransVerb False ;
-  OneVP = predVerbPhrase (nameNounPhrase (nameReg "one")) ;
-  ThereNP = thereIs ;
+  SlashV2 = slashTransVerb ;
+----  OneVP = predVerbPhrase (nameNounPhrase (nameReg "one")) ;
+----  ThereNP = thereIs ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
