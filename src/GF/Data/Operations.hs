@@ -65,7 +65,8 @@ repeatUntil :: (a -> Bool) -> (a -> a) -> a -> a
 repeatUntil cond f a = if cond a then a else repeatUntil cond f (f a)
 
 okError :: Err a -> a
-okError = err (error "no result Ok") id
+-- okError = err (error "no result Ok") id
+okError = err (error . ("Bad result occurred" ++++)) id
 
 isNotError :: Err a -> Bool
 isNotError = err (const False) (const True)
