@@ -25,6 +25,10 @@ lin
   Love = extTransVerb (vTala "älsk") [] ;
   Send = extTransVerb (vTala "skick") [] ;
   Wait = extTransVerb (vTala "vänt") "på" ;
+  Give = extTransVerb (vFinna "giv" "gav" "giv") [] ** {s3 = "till"} ; --- ge
+  Prefer = extTransVerb (vFinna "föredrag" "föredrog" "föredrag") [] ** 
+           {s3 = "framför"} ; --- föredra
+
   Say = extVerb Act (vLeka "säg") ; --- works in present tense...
   Prove = extVerb Act (vTala "bevis") ;
   SwitchOn = extTransVerb (vVända "tän") [] ;
@@ -32,6 +36,8 @@ lin
 
   Mother = mkFun (extCommNoun NoMasc mor_1) "till" ;
   Uncle = mkFun (extCommNoun Masc farbror_8) "till" ;
+  Connection = mkFun (extCommNoun NoMasc (sVarelse "förbindelse")) "från" ** 
+               {s3 = "till"} ;
 
   Always = advPre "alltid" ;
   Well = advPost "bra" ;
