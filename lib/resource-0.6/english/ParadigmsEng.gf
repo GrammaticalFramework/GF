@@ -106,6 +106,12 @@ oper
 
   apReg : Str -> AP ;
 
+--2 Adverbs
+
+-- Adverbs are not inflected. The lexical ones have position not
+-- before the verb.
+
+  mkAdv : Str -> AdV ;
 
 --2 Verbs
 --
@@ -212,6 +218,14 @@ oper
   aRidiculous a = adjDegrLong a ** {lock_AdjDeg = <>} ;
   apReg = \s -> AdjP1 (mkAdj1 s) ;
 
+  aGen : Str -> AdjDeg = \s -> case last s of {
+    "y" => mkAdjDeg s (init s ++ "ier") (init s ++ "iest") ;
+    "e" => mkAdjDeg s (s ++ "r") (s ++ "st") ;
+    _   => aReg s
+    } ;
+
+  mkAdv a = advPost a ** {lock_AdV = <>} ;
+
   mkV = \go,goes,went,gone -> verbNoPart (mkVerbP3 go goes went gone) ** 
     {lock_V = <>} ;
   vReg = \walk -> mkV walk (walk + "s") (walk + "ed") (walk + "ed") ;
@@ -248,4 +262,11 @@ oper
   mkV3 x y z = mkDitransVerb x y z ** {lock_V3 = <>} ;
   v3Dir x y = mkV3 x [] y ;
   v3DirDir x = v3Dir x [] ;
+
+  -- these are used in the generated lexicon
+  noun : Str -> N = nNonhuman ;
+
+  verb2 : Str -> Str -> TV = \v -> mkTV (vGen v) ;
+  verb3 : Str -> Str -> Str -> V3 = \v -> mkV3 (vGen v) ;
+
 } ;
