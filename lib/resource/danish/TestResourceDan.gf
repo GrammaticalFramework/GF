@@ -57,13 +57,18 @@ lin
    Green = mkAdjective "grøn" "grønt" "grøne" "grønnere" "grønnest" ;
 
    Beg = extTransVerb (mkVerb "bede" "beder" "bedes" "bad" "bedt" "bed") [] ** {s3 = "at"} ;
-   Promise  = extTransVerb (vNopart (vSpis "lov")) [] ** {isAux = False} ;
-   Promise2 = extTransVerb (vNopart (vSpis "lov")) [] ** {s3 = "att"} ;
+   Promise = extTransVerb (vNopart (vSpis "lov")) [] ** {s3 = "att"} ;
    Wonder = extTransVerb (vNopart (vHusk "undr")) [] ;
    Ask = extTransVerb (mkVerb "spørge" "spørger""spørges""spurgte""spurgt""spørg") [] ;
    Tell = extTransVerb (mkVerb "fortælle" "fortæller" "fortælles"
    "fortalte" "fortalt" "fortæll") [] ;
    Look = extTransVerb (mkVerb "se" "ser" "ses" "så" "set" "sedd") []
    ; ---- ut
+
+
+   Try = extTransVerb (vNopart (vSpis "forsøg")) [] ** {s3 = "att"} ;
+   Important = extAdjective (aAbstrakt "viktig") ** {s2 = "for"} ;
+   Probable = extAdjective (aAbstrakt "sandsynlig") ;
+   Easy = extAdjective (aRod "let") ** {s2 = "for"} ;
 
 } ;

@@ -26,6 +26,10 @@ lincat
   A2     = Adjective ** {s2 : Preposition} ;
   ADeg   = {s : AdjForm => Str} ;
   AP     = Adjective ** {p : IsPostfixAdj} ;
+  AS     = Adjective ; --- "more difficult for him to come than..."
+  A2S    = Adjective ** {s2 : Preposition} ;
+  AV     = Adjective ;
+  A2V    = Adjective ** {s2 : Preposition} ;
 
   V      = Verb ;
       -- = {s : VerbForm => Str ; s1 : Str} ;
@@ -38,14 +42,14 @@ lincat
 
   VS     = Verb ;
   VQ     = Verb ;
-  VV     = Verb ** {isAux : Bool} ;
+  VV     = Verb ** {s3 : Str} ;
   VA     = Verb ;
 
-  V3S    = TransVerb ;
-  V3Q    = TransVerb ;
-  V3VObj = DitransVerbVerb ;
-  V3VSubj = DitransVerbVerb ;
-  V3A    = DitransAdjVerb ;
+  V2S    = TransVerb ;
+  V2Q    = TransVerb ;
+  V2V    = DitransVerbVerb ;
+  V2A    = DitransAdjVerb ;
+  V0     = Verb ;
 
   TP     = {s : Str ; b : Bool ; t : Tense ; a : Anteriority} ; --- the Str field is dummy
   Tense  = {s : Str ; t : Tense} ;

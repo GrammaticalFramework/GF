@@ -82,10 +82,10 @@ concrete StructuralSwe of Structural =
   SomethingNP  = nameNounPhrase (mkProperName "någonting" NNeutr) ; 
   NothingNP    = nameNounPhrase (mkProperName "ingenting" NNeutr) ; 
 
-  CanVV     = mkVerb "kunna" "kan" "kunn"  "kunde" "kunnat" "kunnen" ** {isAux = True} ;
-  CanKnowVV = mkVerb "kunna" "kan" "kunn"  "kunde" "kunnat" "kunnen" ** {isAux = True} ;
-  MustVV    = mkVerb "få"    "måste" "få"  "fick"  "måst"   "måst" ** {isAux = True} ; ---
-  WantVV    = mkVerb "vilja" "vill" "vilj" "ville" "velat" "velad" ** {isAux = True} ; ---
+  CanVV     = mkVerb "kunna" "kan" "kunn"  "kunde" "kunnat" "kunnen" ** {s3 = []} ;
+  CanKnowVV = mkVerb "kunna" "kan" "kunn"  "kunde" "kunnat" "kunnen" ** {s3 = []} ;
+  MustVV    = mkVerb "få"    "måste" "få"  "fick"  "måst"   "måst" ** {s3 = []} ;
+  WantVV    = mkVerb "vilja" "vill" "vilj" "ville" "velat" "velad" ** {s3 = []} ;
 
   EverywhereNP = advPost "varstans" ;
   SomewhereNP = advPost "någonstans" ;

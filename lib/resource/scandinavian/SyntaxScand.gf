@@ -549,6 +549,10 @@ oper
 
   negation : Bool => Str = \\b => if_then_Str b [] negInte ;
 
+  predVerb0 : Verb -> Clause = \regna -> 
+    predVerbGroupClause npDet (predVerb regna) ;
+
+
 -- Verb phrases can also be formed from adjectives ("är snäll"),
 -- common nouns ("är en man"), and noun phrases ("är den yngste mannen").
 -- The third rule is overgenerating: "är varje man" has to be ruled out
@@ -571,6 +575,16 @@ oper
 
   predAdverb : Adverb -> VerbGroup = \ute ->
     vara (\\_,_,_ => ute.s) ;
+
+  predAdjSent : Adjective -> Sentence -> Clause = \bra,hansover ->
+    predVerbGroupClause
+      npDet
+      (vara (
+        \\g,n,_ => bra.s ! predFormAdj g n ! Nom ++ infinAtt ++ hansover.s ! Sub)) ;
+
+  predAdjSent2 : AdjCompl -> NounPhrase -> Adjective = \bra,han ->
+   {s = \\af,c => bra.s ! af ! c ++ bra.s2 ++ han.s ! PAcc} ;
+
 
 --3 Transitive verbs
 --
@@ -810,22 +824,30 @@ oper
 -- ("försöka"); this distinction cannot be done in the multilingual
 -- API and leads to some anomalies in Swedish, but less so than in English.
 
-  VerbVerb : Type = Verb ** {isAux : Bool} ;
+  VerbVerb : Type = Verb ** {s3 : Str} ;
 
   complVerbVerb : VerbVerb -> VerbGroup -> VerbGroup = \vilja, simma ->
     useVerb vilja 
       (\\g,n,p => 
               vilja.s1 ++
-              if_then_Str vilja.isAux [] infinAtt ++ 
+              vilja.s3 ++
               simma.s ! VInfinit Simul ++ simma.s2 ! True ++ ---- Anter!
               simma.s3 ! VInfinit Simul ! g ! n ! p) ;
 
   transVerbVerb : VerbVerb -> TransVerb -> TransVerb = \vilja,hitta ->
     {s  = vilja.s ;
-     s1 = vilja.s1 ++ if_then_Str vilja.isAux [] infinAtt ++ 
+     s1 = vilja.s1 ++ vilja.s3 ++
           hitta.s ! VI (Inf Act) ++ hitta.s1 ;            ---- Anter!
      s2 = hitta.s2
     } ;
+
+  complVerbAdj : Adjective -> VerbGroup -> VerbGroup = \grei, simma ->
+    vara
+      (\\g,n,p => 
+              grei.s ! predFormAdj g n ! Nom ++ 
+              infinAtt ++
+              simma.s ! VInfinit Simul ++ simma.s2 ! True ++ ---- Anter!
+              simma.s3 ! VInfinit Simul ! g ! n ! p) ;
 
 -- Notice agreement to object vs. subject:
 
@@ -842,6 +864,18 @@ oper
                  (simma.s3 ! VInfinit Simul ! g ! n ! p)
         ) ;
 
+  complVerbAdj2 : 
+    Bool -> AdjCompl -> NounPhrase -> VerbGroup -> VerbGroup = \obj,grei,dig,simma ->
+    vara
+      (\\g,n,p =>
+              grei.s ! predFormAdj g n ! Nom ++ 
+              grei.s2 ++ dig.s ! PAcc ++
+              infinAtt ++
+              simma.s ! VInfinit Simul ++ simma.s2 ! True ++ ---- Anter!
+              if_then_Str obj 
+                 (simma.s3 ! VInfinit Simul ! dig.g ! dig.n ! dig.p)
+                 (simma.s3 ! VInfinit Simul ! g ! n ! p)
+      ) ;
 
 --2 Sentences missing noun phrases
 --

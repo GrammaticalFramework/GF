@@ -17,13 +17,17 @@ fun
   John, Mary : PN ;   
 
     AlreadyAdv, NowAdv : Adv ;      -- already, now
-    Paint : V3A ;
+    Paint : V2A ;
     Green : ADeg ;
-    Beg : V3VObj ;
-    Promise : VV ;
-    Promise2 : V3VSubj ;
+    Beg : V2V ;
+    Promise : V2V ;
+    Try : VV ;
     Wonder : VQ ;
-    Ask : V3Q ;
-    Tell : V3S ;
+    Ask : V2Q ;
+    Tell : V2S ;
     Look : VA ;
+    Important : A2S ;
+    Probable : AS ;
+    Easy : A2V ;
+   
 } ;

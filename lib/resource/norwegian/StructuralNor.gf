@@ -84,10 +84,10 @@ concrete StructuralNor of Structural =
   SomethingNP  = nameNounPhrase (mkProperName "noe" NNeutr) ; 
   NothingNP    = nameNounPhrase (mkProperName "intet" NNeutr) ; 
 
-  CanVV     = mkVerb "kunne" "kan" nonExist  "kunne" "kunnet" nonExist ** {s1 = [] ; isAux = True} ;
-  CanKnowVV = mkVerb "kunne" "kan" nonExist  "kunne" "kunnet" nonExist ** {s1 = [] ; isAux = True} ;
-  MustVV    = mkVerb "måtte" "må" "mås"  "måtte"  "måttet" "mått" ** {s1 = [] ; isAux = True} ; ---- ?
-  WantVV    = mkVerb "ville" "vil" nonExist "ville" "villet" "vill" ** {s1 = [] ; isAux = True} ; ---
+  CanVV     = mkVerb "kunne" "kan" nonExist  "kunne" "kunnet" nonExist ** {s1 = [] ; s3 = []} ;
+  CanKnowVV = mkVerb "kunne" "kan" nonExist  "kunne" "kunnet" nonExist ** {s1 = [] ; s3 = []} ;
+  MustVV    = mkVerb "måtte" "må" "mås"  "måtte"  "måttet" "mått" ** {s1 = [] ; s3 = []} ; ---- ?
+  WantVV    = mkVerb "ville" "vil" nonExist "ville" "villet" "vill" ** {s1 = [] ; s3 = []} ; ---
 
   EverywhereNP = advPost "overalt" ;
   SomewhereNP = advPost ["et eller annet sted"] ; ---- ?
