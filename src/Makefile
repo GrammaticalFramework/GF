@@ -114,6 +114,8 @@ dist:
 	zip -r $(DIST_DIR).zip $(DIST_DIR)
 	rm -rf $(DIST_DIR)
 
+rpm: dist
+	rpmbuild -ta $(DIST_DIR).tar.gz
 
 install:
 	$(INSTALL) -d $(bindir)

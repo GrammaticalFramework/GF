@@ -44,7 +44,7 @@ GF particularly addresses two aspects of grammars:
 
 %prep
 rm -rf $RPM_BUILD_ROOT
-%setup -q -n %{name}%{version}
+%setup -q
 
 %build
 cd src
