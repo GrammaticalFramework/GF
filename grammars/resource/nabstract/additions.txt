@@ -1,0 +1,81 @@
+-- added 19/11/2003
+
+-- Combinations.gf
+cat
+  Prep ;                            -- pre/postposition and/or case
+fun 
+  ThereIsCN, ThereAreCN : CN -> S ; -- "there is a bar", "there are bars"
+  PrepNP : Prep -> NP -> AdV ;      -- "in London", "after the war" (replace LocNP)
+  MassNP : CN -> NP ;               -- "wine"
+  IntNP : Int -> CN -> NP ;         -- "86 houses"  --- assumes i > 1
+  DefIntNP : Int -> CN -> NP ;      -- "the 86 houses" --- assumes i > 1
+  IsThereCN, AreThereCN : CN -> Qu ;-- "is there a bar", "are there bars"
+
+Warning: no linearization of AdvAP
+checking module ResFra
+Warning: no linearization of AdvS
+checking module ResFra
+Warning: no linearization of AppFun2
+checking module ResFra
+Warning: no linearization of CNthatS
+checking module ResFra
+Warning: no linearization of ConsPhr
+checking module ResFra
+Warning: no linearization of ItNP
+checking module ResFra
+Warning: no linearization of NegPassV
+checking module ResFra
+Warning: no linearization of NegV3
+checking module ResFra
+Warning: no linearization of OnePhr
+checking module ResFra
+Warning: no linearization of OneVP
+checking module ResFra
+Warning: no linearization of OtherwiseAdv
+checking module ResFra
+Warning: no linearization of PosPassV
+checking module ResFra
+Warning: no linearization of PosV3
+checking module ResFra
+Warning: no linearization of SubjVP
+checking module ResFra
+Warning: no linearization of ThereforeAdv
+checking module ResFra
+Warning: no linearization of TooAdv
+checking module ResFra
+Warning: no linearization of VTrans
+checking module ResFra
+Warning: no linearization of VeryAdv
+
+
+-- Structural.gf
+
+  SomeDet, SomesDet, AnyDet, AnysDet, NoDet,  -- sg/pl some, any, no
+  NosDet, ManyDet, MuchDet : Det ;            -- many, much
+  ThisDet, TheseDet, ThatDet, ThoseDet : Det ;-- this, these, that, those
+  ThisNP, TheseNP, ThatNP, ThoseNP : NP ;     -- this, these, that, those
+  EverybodyNP, SomebodyNP, NobodyNP,          -- everybody, somebody, nobody
+  EverythingNP, SomethingNP, NothingNP : NP ; -- everything, something, nothing
+  EverywhereNP, SomewhereNP, NowhereNP : Adv ;-- everywhere, somewhere, nowhere  
+  AlthoughSubj : Subj ;                       -- although
+  AlmostAdv, QuiteAdv : AdA ;                 -- almost, quite
+  InPrep, OnPrep, ToPrep, FromPrep,           -- spatial relations
+  ThroughPrep, AbovePrep, UnderPrep,
+  InFrontPrep, BehindPrep, BetweenPrep : Prep ;
+  BeforePrep, DuringPrep, AfterPrep : Prep ;  -- temporal relations
+  WithPrep, WithoutPrep, ByMeansPrep : Prep ; -- some other relations
+  AgentPrep : Prep ;                          -- agent "by" in passive constructions
+
+
+checking module TestFra
+Warning: no linearization of American
+checking module TestFra
+Warning: no linearization of Connection
+checking module TestFra
+Warning: no linearization of Finnish
+checking module TestFra
+Warning: no linearization of Give
+checking module TestFra
+Warning: no linearization of Married
+checking module TestFra
+Warning: no linearization of Prefer
