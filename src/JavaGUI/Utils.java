@@ -4,7 +4,7 @@ import java.io.File;
 public class Utils {
 
     public final static String gf = "gf";
-    public final static String gfm = "gfm";
+    public final static String gfcm = "gfcm";
 
     /*
      * Get the extension of a file.
