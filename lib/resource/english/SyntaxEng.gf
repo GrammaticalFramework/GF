@@ -706,7 +706,8 @@ oper
        InfImp => beable ; 
        Indic _ => can ; 
        Pastt _ => could ;
-       PPart => beenable
+       PPart => beenable ;
+       PrepPart => nonExist ---- fix!
        } ;
      s1 = [] ;
      isAux = True

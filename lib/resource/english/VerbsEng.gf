@@ -3,6 +3,7 @@ resource VerbsEng = open ResourceEng, MorphoEng in {
     mkVerbIrreg x y z ** {s1 = [] ; lock_V = <>} ;
 
   oper awake_V : V = vIrreg "awake" "awoke" "awoken" ;
+  ---- be
   oper bear_V : V = vIrreg "bear" "bore" "born" ;
   oper beat_V : V = vIrreg "beat" "beat" "beat" ;
   oper become_V : V = vIrreg "become" "became" "become" ;
@@ -60,6 +61,7 @@ resource VerbsEng = open ResourceEng, MorphoEng in {
   oper grind_V : V = vIrreg "grind" "ground" "ground" ;
   oper grow_V : V = vIrreg "grow" "grew" "grown" ;
   oper hang_V : V = vIrreg "hang" "hung" "hung" ;
+  ---- have
   oper hear_V : V = vIrreg "hear" "heard" "heard" ;
   oper hide_V : V = vIrreg "hide" "hid" "hidden" ;
   oper hit_V : V = vIrreg "hit" "hit" "hit" ;
