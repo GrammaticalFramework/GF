@@ -4,7 +4,7 @@ concrete StoneageEng of Stoneage
   StoneageResEng in {
 
 flags
-  startcat=S;
+  startcat=S; optimize=share;
 
 lincat
   S = Phr ;
@@ -16,11 +16,11 @@ lin
 
   -- Sentence conjunction
 
-  AndS s1 s2 = { s = s1.s ++ and_Conj.s ++ s2.s } ** { lock_Phr = <> } ;
+--  AndS s1 s2 = { s = s1.s ++ and_Conj.s ++ s2.s } ** { lock_Phr = <> } ;
 
   -- NP conjunction
 
-  AndNP n1 n2 = ConjNP and_Conj (TwoNP n1 n2);
+--  AndNP n1 n2 = ConjNP and_Conj (TwoNP n1 n2);
 
 
   Drink = PresV2 (dirV2 drink_V) ;
