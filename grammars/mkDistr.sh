@@ -15,6 +15,8 @@ mkdir -pv gf-grammars/resource/romance
 mkdir -pv gf-grammars/resource/russian
 mkdir -pv gf-grammars/resource/swedish
 mkdir -pv gf-grammars/database
+mkdir -pv gf-grammars/imperative
+mkdir -pv gf-grammars/imperative/compiler
 
 cp -pv letter/README gf-grammars/letter/
 cp -pv letter/mkLetter.gfs gf-grammars/letter/
@@ -34,6 +36,7 @@ cp -pv newresource/mkParadigms.gfs gf-grammars/resource/
 cp -pv newresource/README gf-grammars/resource/
 cp -pv newresource/abstract/*.gf gf-grammars/resource/abstract/
 cp -pv newresource/english/*.gf gf-grammars/resource/english/
+rm -f  gf-grammars/resource/english/ResLex*
 cp -pv newresource/finnish/*.gf gf-grammars/resource/finnish/
 cp -pv newresource/french/*.gf gf-grammars/resource/french/
 cp -pv newresource/german/*.gf gf-grammars/resource/german/
@@ -44,5 +47,16 @@ cp -pv newresource/swedish/*.gf gf-grammars/resource/swedish/
 
 cp -pv database/README gf-grammars/database/
 cp -pv database/*.gf gf-grammars/database/
+
+cp -pv imperative/*.gf gf-grammars/imperative/
+cp -pv imperative/compiler/*.hs gf-grammars/imperative/compiler/
+cp -pv imperative/compiler/README gf-grammars/imperative/compiler/
+cp -pv imperative/compiler/FILES gf-grammars/imperative/compiler/
+cp -pv imperative/compiler/gfcc gf-grammars/imperative/compiler/
+cp -pv imperative/compiler/makefile gf-grammars/imperative/compiler/
+cp -pv imperative/compiler/*.c gf-grammars/imperative/compiler/
+cp -pv imperative/compiler/*.gfs gf-grammars/imperative/compiler/
+cp -pv imperative/compiler/runtime.j gf-grammars/imperative/compiler/
+
 
 tar cvfz gf-grammars.tgz gf-grammars
