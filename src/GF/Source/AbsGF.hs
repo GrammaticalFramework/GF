@@ -41,6 +41,7 @@ data ModBody =
    MBody Extend Opens [TopDef]
  | MWith Ident [Open]
  | MReuse Ident
+ | MUnion [Included]
   deriving (Eq,Ord,Show)
 
 data Extend =
@@ -68,6 +69,11 @@ data QualOpen =
    QOCompl
  | QOIncompl
  | QOInterface
+  deriving (Eq,Ord,Show)
+
+data Included =
+   IAll Ident
+ | ISome Ident [Ident]
   deriving (Eq,Ord,Show)
 
 data Def =

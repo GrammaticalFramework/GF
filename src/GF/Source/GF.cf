@@ -41,6 +41,7 @@ MTTransfer.  ModType ::= "transfer" Ident ":" Open "->" Open ;
 MBody.  ModBody ::= Extend Opens "{" [TopDef] "}" ;
 MWith.  ModBody ::= Ident "with" [Open] ;
 MReuse. ModBody ::= "reuse" Ident ;
+MUnion. ModBody ::= "union" [Included] ;
 
 separator TopDef "" ;
 
@@ -61,6 +62,11 @@ CMIncompl. ComplMod ::= "incomplete" ;
 QOCompl.     QualOpen ::= ;
 QOIncompl.   QualOpen ::= "incomplete" ;
 QOInterface. QualOpen ::= "interface" ;
+
+separator Included "," ;
+
+IAll.  Included ::= Ident ;
+ISome. Included ::= Ident "[" [Ident] "]" ;
 
 -- definitions after the $oper$ keywords
 

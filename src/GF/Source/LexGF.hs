@@ -55,7 +55,7 @@ tokens_scan = load_scan (tokens_acts,stop_act) tokens_lx
 eitherResIdent :: (String -> Tok) -> String -> Tok
 eitherResIdent tv s = if isResWord s then (TS s) else (tv s) where
   isResWord s = isInTree s $
-    B "interface" (B "data" (B "Type" (B "Str" (B "PType" (B "Lin" N N) N) (B "Tok" (B "Strs" N N) N)) (B "cat" (B "case" (B "abstract" N N) N) (B "concrete" N N))) (B "grammar" (B "fn" (B "flags" (B "def" N N) N) (B "fun" N N)) (B "incomplete" (B "include" (B "in" N N) N) (B "instance" N N)))) (B "pattern" (B "of" (B "lincat" (B "lin" (B "let" N N) N) (B "lintype" (B "lindef" N N) N)) (B "out" (B "oper" (B "open" N N) N) (B "param" N N))) (B "strs" (B "resource" (B "printname" (B "pre" N N) N) (B "reuse" N N)) (B "variants" (B "transfer" (B "table" N N) N) (B "with" N N))))
+    B "let" (B "data" (B "Type" (B "Str" (B "PType" (B "Lin" N N) N) (B "Tok" (B "Strs" N N) N)) (B "cat" (B "case" (B "abstract" N N) N) (B "concrete" N N))) (B "in" (B "fn" (B "flags" (B "def" N N) N) (B "grammar" (B "fun" N N) N)) (B "instance" (B "incomplete" (B "include" N N) N) (B "interface" N N)))) (B "pre" (B "open" (B "lindef" (B "lincat" (B "lin" N N) N) (B "of" (B "lintype" N N) N)) (B "param" (B "out" (B "oper" N N) N) (B "pattern" N N))) (B "transfer" (B "reuse" (B "resource" (B "printname" N N) N) (B "table" (B "strs" N N) N)) (B "where" (B "variants" (B "union" N N) N) (B "with" N N))))
 
 data BTree = N | B String BTree BTree deriving (Show)
 

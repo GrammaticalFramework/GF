@@ -134,7 +134,7 @@ instance Print ModBody where
    MBody extend opens topdefs -> prPrec i 0 (concat [prt 0 extend , prt 0 opens , ["{"] , prt 0 topdefs , ["}"]])
    MWith id opens -> prPrec i 0 (concat [prt 0 id , ["with"] , prt 0 opens])
    MReuse id -> prPrec i 0 (concat [["reuse"] , prt 0 id])
-
+   MUnion includeds -> prPrec i 0 (concat [["union"] , prt 0 includeds])
 
 instance Print Extend where
   prt i e = case e of
@@ -171,6 +171,15 @@ instance Print QualOpen where
    QOIncompl  -> prPrec i 0 (concat [["incomplete"]])
    QOInterface  -> prPrec i 0 (concat [["interface"]])
 
+instance Print Included where
+  prt i e = case e of
+   IAll id -> prPrec i 0 (concat [prt 0 id])
+   ISome id ids -> prPrec i 0 (concat [prt 0 id , ["["] , prt 0 ids , ["]"]])
+
+  prtList es = case es of
+   [] -> (concat [])
+   [x] -> (concat [prt 0 x])
+   x:xs -> (concat [prt 0 x , [","] , prt 0 xs])
 
 instance Print Def where
   prt i e = case e of

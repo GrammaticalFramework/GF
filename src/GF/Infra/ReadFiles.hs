@@ -181,15 +181,20 @@ importsOfFile =
   getModuleHeader .          -- analyse into mod header
   filter (not . spec) .      -- ignore keywords and special symbols
   unqual .                   -- take away qualifiers
+  unrestr .                  -- take away union restrictions
   takeWhile (not . term) .   -- read until curly or semic
   lexs .                     -- analyse into lexical tokens
   unComm                     -- ignore comments before the headed line
  where
     term = flip elem ["{",";"]
-    spec = flip elem ["of", "open","in",":", "->","=", "(", ")",",","**"]
+    spec = flip elem ["of", "open","in",":", "->","=", "(", ")",",","**","union"]
     unqual ws = case ws of
       "(":q:ws' -> unqual ws'
       w:ws' -> w:unqual ws'
+      _ -> ws
+    unrestr ws = case ws of
+      "[":ws' -> unrestr $ tail $ dropWhile (/="]") ws'
+      w:ws' -> w:unrestr ws'
       _ -> ws
 
 getModuleHeader :: [String] -> ModuleHeader -- with, reuse
