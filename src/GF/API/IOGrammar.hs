@@ -6,6 +6,7 @@ import PGrammar
 import TypeCheck
 import Compile
 import ShellState
+import GetGrammar
 
 import Modules
 import Option
@@ -36,13 +37,19 @@ string2annotTree gr m = annotate gr . string2absTerm (prt m) ---- prt
 ---string2paramList st = map (renameTrm (lookupConcrete st) . patt2term) . pPattList
 
 shellStateFromFiles :: Options -> ShellState -> FilePath -> IOE ShellState
-shellStateFromFiles opts st file | fileSuffix file == "gfcm" = do
-  (_,_,cgr) <- compileOne opts (compileEnvShSt st []) file
-  ioeErr $ updateShellState opts st (cgr,(emptyMGrammar,[]))  
-shellStateFromFiles opts st file = do
-  let osb = if oElem showOld opts 
-               then addOptions (options [beVerbose]) opts -- for old, no emit
-               else addOptions (options [beVerbose, emitCode]) opts -- for new, do
-  grts <- compileModule osb st file
-  ioeErr $ updateShellState opts st grts
-  --- liftM (changeModTimes rts) $ grammar2shellState opts gr
+shellStateFromFiles opts st file = case fileSuffix file of
+  "cf" -> do
+     let opts' = addOptions (options [beVerbose]) opts
+     sgr <- getCFGrammar opts' file
+     ioeIO $ print sgr -----
+     return st
+  "gfcm" -> do
+     (_,_,cgr) <- compileOne opts (compileEnvShSt st []) file
+     ioeErr $ updateShellState opts st (cgr,(emptyMGrammar,[]))  
+  _ -> do
+     let osb = if oElem showOld opts 
+                 then addOptions (options [beVerbose]) opts -- for old, no emit
+                 else addOptions (options [beVerbose, emitCode]) opts -- for new,do
+     grts <- compileModule osb st file
+     ioeErr $ updateShellState opts st grts
+     --- liftM (changeModTimes rts) $ grammar2shellState opts gr

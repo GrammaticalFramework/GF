@@ -35,7 +35,7 @@ pCommandLine s = pFirst (chks s) where
 pCommandOpt :: [String] -> (Command, Options, [CommandArg])
 pCommandOpt (w:ws) = let 
   (os, co)     = getOptions "-" ws
-  (comm, args) = pCommand (w:co)
+  (comm, args) = pCommand (abbrevCommand w:co)
   in
   (comm, os, args)
 pCommandOpt s = (CVoid, noOptions, [AError "no parse"])
@@ -44,6 +44,15 @@ pInputString :: String -> [CommandArg]
 pInputString s = case s of
   ('"':_:_) -> [AString (init (tail s))]
   _         -> [AError "illegal string"]
+
+-- command rl can be written remove_language etc.
+
+abbrevCommand :: String -> String
+abbrevCommand = hds . words . map u2sp where
+  u2sp c = if c=='_' then ' ' else c
+  hds s = case s of
+    [w@[_,_]] -> w
+    _ -> map head s
 
 pCommand :: [String] -> (Command, [CommandArg])
 pCommand ws = case ws of
@@ -81,6 +90,7 @@ pCommand ws = case ws of
   "ps" : s      -> aString CPutString s
   "st" : s      -> aTerm   CShowTerm s
   "!"  : s      -> aUnit   (CSystemCommand (unwords s))
+  "sc" : s      -> aUnit   (CSystemCommand (unwords s))
   
   "sf" : l : [] -> aUnit (CSetLocalFlag (language l))
   "sf" : []     -> aUnit CSetFlag

@@ -7,8 +7,10 @@ GHCINCLUDEGFT=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iu
 WINDOWSINCLUDE=-ifor-windows -iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -iparsing -iparsers
 
 all:
-	make today ; make ghc
+	make today ; make fud
 ghc: 
+	make nofud
+fud:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) --make GF.hs -o gf2+ ; strip gf2+ ; mv gf2+ ../bin/
 gft:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) -itranslate --make translate/GFT.hs -o gft ; strip gft ; mv gft ../bin/
@@ -32,3 +34,5 @@ today:
 	runhugs util/MkToday
 javac:
 	cd java ; javac *.java ; cd ..
+help:
+	cd util ; runhugs MkHelpFile ; mv HelpFile.hs .. ; cd ..

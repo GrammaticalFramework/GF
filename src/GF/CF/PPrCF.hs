@@ -6,6 +6,8 @@ import CFIdent
 import AbsGFC
 import PrGrammar
 
+import Char
+
 -- printing and parsing CF grammars, rules, and trees AR 26/1/2000 -- 9/6/2003
 ---- use the Print class instead!
 
@@ -42,18 +44,25 @@ prRegExp (RegAlts tt) = case tt of
   [t] -> prQuotedString t
   _ -> prParenth (prTList " | " (map prQuotedString tt))
 
-{- ----
 -- rules have an amazingly easy parser, if we use the format
 -- fun. C -> item1 item2 ... where unquoted items are treated as cats
 -- Actually would be nice to add profiles to this.
 
-getCFRule :: String -> Maybe CFRule
-getCFRule s = getcf (wrds s) where
+getCFRule :: String -> String -> Err CFRule
+getCFRule mo s = getcf (wrds s) where
   getcf ww | length ww > 2 && ww !! 2 `elem` ["->", "::="] = 
-            Just (string2CFFun (init fun), (string2CFCat cat, map mkIt its)) where
+       Ok (string2CFFun mo (init fun), (string2CFCat mo cat, map mkIt its)) where
     fun : cat : _ : its = words s
     mkIt ('"':w@(_:_)) = atomCFTerm (string2CFTok (init w))
-    mkIt w = CFNonterm (string2CFCat w)
-  getcf _ = Nothing
+    mkIt w = CFNonterm (string2CFCat mo w)
+  getcf _ = Bad "invalid rule"
   wrds = takeWhile (/= ";") . words -- to permit semicolon in the end
--}
+
+pCF :: String -> String -> Err CF
+pCF mo s = do
+  rules <- mapM (getCFRule mo) $ filter isRule $ lines s
+  return $ rules2CF rules
+ where
+   isRule line = case line of
+     '-':'-':_ -> False
+     _ -> not $ all isSpace line

@@ -6,6 +6,7 @@ import Modules
 import Ident
 import Macros
 import PrGrammar
+import AppPredefined
 import Lookup
 import Extend
 import Operations
@@ -56,6 +57,7 @@ renameIdentTerm env@(act,imps) t =
   Cn c -> do
     f <- lookupTreeMany prt opens c
     return $ f c
+  Q m' c | m' == cPredef {- && isInPredefined c -} -> return t
   Q m' c -> do
     m <- lookupErr m' qualifs
     f <- lookupTree prt c m
