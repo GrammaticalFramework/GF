@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../../prelude
 
-concrete TestResourceEng of TestResource = StructuralEng ** open SyntaxEng in {
+concrete TestResourceEng of TestResource = StructuralEng ** open SyntaxEng, ParadigmsEng in {
 
 flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
 
@@ -34,8 +34,8 @@ lin
   Give = mkDitransVerb (verbNoPart (mkVerb "give" "gave" "given")) [] [] ;
   Prefer = mkDitransVerb 
     (verbNoPart (mkVerb "prefer" "preferred" "preferred")) [] "to" ;
-  Mother = funOfReg "mother" Hum ;
-  Uncle = funOfReg "uncle" Hum ;
+  Mother = funOfReg "mother" human ;
+  Uncle = funOfReg "uncle" human ;
   Connection = cnNoHum (nounReg "connection") ** {s2 = "from" ; s3 = "to"} ;
 
   Always = advPre "always" ;

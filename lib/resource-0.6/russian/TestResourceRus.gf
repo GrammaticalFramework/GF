@@ -1,6 +1,6 @@
 -- use this path to read the grammar from the same directory
 --# -path=.:../abstract:../../prelude
-concrete TestResourceRus of TestResource = StructuralRus ** open SyntaxRus in {
+concrete TestResourceRus of TestResource = StructuralRus ** open SyntaxRus, ParadigmsRus in {
 
 flags 
   coding=utf8 ;
@@ -14,16 +14,16 @@ lin
   Old = staruj ;
   Young = molodoj ;
 
- Connection =  (noun2CommNounPhrase (doroga) )** {s2 = "из" ; c = Gen; s3 = "в"; c2=Acc} ;  
+ Connection =  (noun2CommNounPhrase (doroga) )** {s2 = "из" ; c = genitive; s3 = "в"; c2=accusative} ;  
  American = ij_EndK_G_KH_Decl "американск" ; -- adj1Malenkij from Paradigms 
  Finnish = ij_EndK_G_KH_Decl "финск" ; -- adj1Malenkij from Paradigms 
-  Married = adjInvar "замужем" ** {s2 = "за"; c = Inst} ; -- adjinvar from Paradigms
-  Give = mkDitransVerb  (extVerb verbDavat Act Present) Acc Dat; 
-  Prefer = mkDitransVerb (extVerb verbPredpochitat Act Present) Acc Dat ;
+  Married = adjInvar "замужем" ** {s2 = "за"; c = instructive} ; -- adjinvar from Paradigms
+  Give = mkDitransVerb  (extVerb verbDavat active present) accusative dative; 
+  Prefer = mkDitransVerb (extVerb verbPredpochitat active present) accusative dative ;
   Bar = bar ;
   Bottle = butyulka ;
   Wine = vino ;
-  Drink = mkDirectVerb (extVerb verbPit Act Present ) ;
+  Drink = mkDirectVerb (extVerb verbPit active present ) ;
   Happy = schastlivyuj ;
 
   Man = muzhchina ;
@@ -31,22 +31,22 @@ lin
   Car = mashina ;
   House = dom ;
   Light = svet ;
-  Walk = extVerb verbGulyat Act Present ;
-  Run = extVerb verbBegat Act Present ;
-  Love = mkDirectVerb (extVerb verbLubit Act Present ) ;
-  Send = mkDirectVerb (extVerb verbOtpravlyat Act Present ) ;
-  Wait = mkDirectVerb (extVerb verbZhdat Act Present );
-  Say = extVerb verbGovorit Act Present ; --- works in present tense...
-  Prove = extVerb verbDokazuvat Act Present ;
-  SwitchOn = mkDirectVerb (extVerb verbVkluchat Act Present ) ;
-  SwitchOff = mkDirectVerb (extVerb verbVukluchat Act Present ) ;
+  Walk = extVerb verbGulyat active present ;
+  Run = extVerb verbBegat active present ;
+  Love = mkDirectVerb (extVerb verbLubit active present ) ;
+  Send = mkDirectVerb (extVerb verbOtpravlyat active present ) ;
+  Wait = mkDirectVerb (extVerb verbZhdat active present );
+  Say = extVerb verbGovorit active present ; --- works in present tense...
+  Prove = extVerb verbDokazuvat active present ;
+  SwitchOn = mkDirectVerb (extVerb verbVkluchat active present ) ;
+  SwitchOff = mkDirectVerb (extVerb verbVukluchat active present ) ;
 
-  Mother = funGen mama ;
-  Uncle = funGen dyadya ;
+--  Mother = funGen (mama **{lock_N =<>}) ;
+ -- Uncle = funGen (dyadya **{lock_N =<>});
 
   Always = vsegda ;
   Well = chorosho ;
 
-  John = mkProperNameMasc "Иван" Animate ;
-  Mary = mkProperNameFem "Маш" Animate ;
+  John = mkProperNameMasc "Иван" animate ;
+  Mary = mkProperNameFem "Маш" animate ;
 };
