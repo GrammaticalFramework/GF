@@ -416,6 +416,8 @@ inferLType gr trm = case trm of
      PP _ _ ps -> True --- all isConstPatt ps
      PR ps -> all (isConstPatt . snd) ps
      PT _ p -> isConstPatt p
+     PString _ -> True
+     PInt _ -> True
      _ -> False
 
    inferPatt p = case p of
