@@ -5,9 +5,11 @@
 -- arguments. Commands are sorted by functionality. The short name is
 -- given first.
 
+-- Type "h -all" for full help file, "h <CommandName>" for full help on a command.  
+
 -- commands that change the state
 
-i, import: i File
+i,  import: i File
       Reads a grammar from File and compiles it into a GF runtime grammar.
       Files "include"d in File are read recursively, nubbing repetitions.
       If a grammar with the same language name is already in the state,
@@ -140,7 +142,7 @@ cc, compute_concrete: cc Ident Term
       N.B.' The resulting Term is not a term in the sense of abstract syntax,
       and hence not a valid input to a Tree-demanding command.
 
-t, translate: t Lang Lang String
+t,  translate: t Lang Lang String
       Parses String in Lang1 and linearizes the resulting Trees in Lang2.
   flags:
       -cat
@@ -282,8 +284,11 @@ sa, speak_aloud: sa String
      flags:
        -language
 
-h, help: h
-      Displays this help message.
+h, help: h Command?
+      Displays the paragraph concerning the command from this help file.
+      Without the argument, shows the first lines of all paragraphs.
+  options
+       -all  show the whole help file
 
 q, quit: q
       Exits GF.

@@ -311,6 +311,12 @@ type WParser a b = [a] -> [(b,[a])] -- old Wadler style parser
 wParseResults :: WParser a b -> [a] -> [b]
 wParseResults p aa = [b | (b,[]) <- p aa]
 
+paragraphs :: String -> [String]
+paragraphs = map unlines . chop . lines where
+  chop [] = []
+  chop ss = let (ps,rest) = break empty ss in ps : chop (dropWhile empty rest)
+  empty = all isSpace
+
 -- printing
 
 indent :: Int -> String -> String

@@ -104,7 +104,8 @@ pCommand ws = case ws of
   "pm"  : []     -> aUnit CPrintMultiGrammar
   "po"  : []     -> aUnit CPrintGlobalOptions
   "pl"  : []     -> aUnit CPrintLanguages
-  "h"   : []     -> aUnit CHelp
+  "h"   : c : [] -> aUnit $ CHelp (Just (abbrevCommand c))
+  "h"   : []     -> aUnit $ CHelp Nothing
 
   "q"  : []     -> aImpure ICQuit
   "eh" : f : [] -> aImpure (ICExecuteHistory f)

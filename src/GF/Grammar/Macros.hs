@@ -128,6 +128,20 @@ unComputed t = case t of
   Computed v -> unComputed v
   _ -> t --- composSafeOp unComputed t
 
+
+{- 
+--- defined (better) in compile/PrOld
+
+stripTerm :: Term -> Term
+stripTerm t = case t of
+  Q _ c  -> Cn c
+  QC _ c -> Cn c
+  T ti psts -> T ti [(stripPatt p, stripTerm v) | (p,v) <- psts]
+  _ -> composSafeOp stripTerm t
+ where
+   stripPatt p = errVal p $ term2patt $ stripTerm $ patt2term p
+-}
+
 computed = Computed
 
 termForm :: Term -> Err ([(Ident)], Term, [Term])
