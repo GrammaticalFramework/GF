@@ -1,5 +1,5 @@
 GHMAKE=ghc 
-GHCFLAGS=-package lang -package util
+GHCFLAGS=-package lang -package util -fglasgow-exts
 GHCFUDFLAG=-package Fudgets
 GHCINCLUDE=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc -iparsing
 GHCINCLUDENOFUD=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc-nofud -iparsing

@@ -121,12 +121,12 @@ buildStatus :: SourceGrammar -> Ident -> SourceModInfo -> Err Status
 buildStatus gr c mo = let mo' = self2status c mo in case mo of
   ModMod m -> do
     let gr1 = MGrammar $ (c,mo) : modules gr 
-        ops = [OSimple OQNormal e | e <- allExtends gr1 c] ++ allOpens m
+        ops = [OSimple OQNormal e | e <- allExtendsPlus gr1 c] ++ allOpens m
     mods <- mapM (lookupModule gr1 . openedModule) ops
     let sts = map modInfo2status $ zip ops mods    
     return $ if isModCnc m
-      then (NT, sts) -- the module itself does not define any names
-      else (mo',sts) -- so the empty ident is not needed
+      then (NT, reverse sts) -- the module itself does not define any names
+      else (mo',reverse sts) -- so the empty ident is not needed
 
 modInfo2status :: (OpenSpec Ident,SourceModInfo) -> (OpenSpec Ident, StatusTree)
 modInfo2status (o,i) = (o,case i of

@@ -186,18 +186,19 @@ generateModuleCode opts path minfo@(name,info) = do
 
   -- for resource, also emit gfr
   case info of
-    ModMod m | isResourceModule info && isCompilableModule info && emit && nomulti -> do
+    ModMod m | isResourceModule info && isCompilable info && emit && nomulti -> do
       let (file,out) = (gfrFile pname, prGrammar (MGrammar [minfo]))
       ioeIO $ writeFile file out >> putStr ("  wrote file" +++ file)
     _ -> return ()
   (file,out) <- do
       code <- return $ MkGFC.prCanonModInfo minfo'
       return (gfcFile pname, code)
-  if isCompilableModule info && emit && nomulti 
+  if isCompilable info && emit && nomulti 
      then ioeIO $ writeFile file out >> putStr ("  wrote file" +++ file)
      else ioeIO $ putStrFlush "no need to save for this module "
   return minfo'
  where 
+   isCompilable _ = True ---- isCompilableModule ---- emit code for interfaces
    nomulti = not $ oElem makeMulti opts
    emit  = oElem emitCode opts
    optim = oElem optimizeCanon opts

@@ -15,6 +15,7 @@ import Monad
 -- The top-level function $extendModInfo$
 -- extends a module symbol table by indirections to the module it extends
 
+--- this is not in use 5/11/2003
 extendModInfo :: Ident -> SourceModInfo -> SourceModInfo -> Err SourceModInfo
 extendModInfo name old new = case (old,new) of
   (ModMod m0, ModMod (Module mt st fs _ ops js)) -> do

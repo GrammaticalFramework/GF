@@ -129,10 +129,12 @@ computeTerm gr = comp where
          (K a, Alts (d,vs)) -> do
             let glx = Glue x
             comp g $ Alts (glx d, [(glx v,c) | (v,c) <- vs])
-         (Alts _, K a) -> do
-            x' <- strsFromTerm x
+         (Alts _, K a) -> checks [do
+            x' <- strsFromTerm x -- this may fail when compiling opers
             return $ variants [
               foldr1 C (map K (str2strings (glueStr v (str a)))) | v <- x']
+           ,return $ Glue x y
+           ]
          _ -> do
            mapM_ checkNoArgVars [x,y]
            r <- composOp (comp g) t
