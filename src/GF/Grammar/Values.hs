@@ -31,11 +31,18 @@ type MetaSubst = [(MetaSymb,Val)]
 
 -- for TC
 
+valAbsInt, valAbsString :: Val
+valAbsInt = VCn (cPredefAbs, cInt)
+valAbsString = VCn (cPredefAbs, cString)
+
 vType :: Val
 vType = VType
 
-cType :: Ident
+cType,cPredefAbs,cInt,cString :: Ident
 cType = identC "Type" --- #0
+cPredefAbs = identC "PredefAbs"
+cInt = identC "Int"
+cString = identC "String"
 
 eType :: Exp
 eType = Sort "Type"

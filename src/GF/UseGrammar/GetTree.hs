@@ -13,6 +13,8 @@ import ShellState
 
 import Operations
 
+import Char
+
 -- how to form linearizable trees from strings and from terms of different levels
 --
 -- String --> raw Term --> annot, qualif Term --> Tree
@@ -39,11 +41,12 @@ strings2Cat s = (identC m, identC (drop 1 c)) where (m,c) = span (/= '.') s
 strings2Fun = strings2Cat
 
 string2ref :: StateGrammar -> String -> Err G.Term
-string2ref _ ('x':'_':ds) = return $ freshAsTerm ds --- hack for generated vars
-string2ref gr s = 
-  if elem '.' s 
-    then return $ uncurry G.Q $ strings2Fun s
-    else return $ G.Vr $ identC s
+string2ref gr s = case s of 
+  'x':'_':ds -> return $ freshAsTerm ds --- hack for generated vars
+  '"':_:_ -> return $ G.K $ init $ tail s
+  _:_ | all isDigit s -> return $ G.EInt $ read s
+  _ | elem '.' s -> return $ uncurry G.Q $ strings2Fun s
+  _ -> return $ G.Vr $ identC s
 
 string2cat :: StateGrammar -> String -> Err G.Cat
 string2cat gr s = 

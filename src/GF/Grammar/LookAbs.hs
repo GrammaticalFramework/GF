@@ -75,13 +75,20 @@ isPrimitiveFun gr (m,c) = case lookupAbsDef gr m c of
 
 lookupRef :: GFCGrammar -> Binds -> Term -> Err Val
 lookupRef gr binds at = case at of
-  Q m f -> lookupFunType gr m f >>= return . vClos
-  Vr i  -> maybeErr ("unknown variable" +++ prt at) $ lookup i binds
-  _     -> prtBad "cannot refine with complex term" at ---
+  Q m f  -> lookupFunType gr m f >>= return . vClos
+  Vr i   -> maybeErr ("unknown variable" +++ prt at) $ lookup i binds
+  EInt _ -> return valAbsInt
+  K _    -> return valAbsString
+  _      -> prtBad "cannot refine with complex term" at ---
 
 refsForType :: (Val -> Type -> Bool) -> GFCGrammar -> Binds -> Val -> [(Term,Val)]
 refsForType compat gr binds val = 
+  -- bound variables
   [(vr i, t) | (i,t) <- binds, Ok ty <- [val2exp t], compat val ty] ++
+  -- integer and string literals
+  [(EInt i, val) | val == valAbsInt, i <- [0,1,2,5,11,1978]] ++
+  [(K s, val) | val == valAbsString, s <- ["foo", "NN", "x"]] ++
+  -- functions defined in the current abstract syntax
   [(qq f, vClos t) | (f,t) <- funsForType compat gr val]
 
 

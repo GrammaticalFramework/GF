@@ -38,7 +38,7 @@ forName (MTConcrete a) = tri a
 
 trOpen :: OpenSpec Ident -> P.Open
 trOpen o = case o of
-  OSimple OQNormal i -> P.OQualQO P.QOCompl (tri i)
+  OSimple OQNormal i -> P.OName (tri i)
   OSimple q i -> P.OQualQO (trQualOpen q) (tri i)
   OQualif q i j -> P.OQual (trQualOpen q) (tri i) (tri j)
 

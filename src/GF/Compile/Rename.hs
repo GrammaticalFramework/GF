@@ -1,6 +1,7 @@
 module Rename where
 
 import Grammar
+import Values
 import Modules
 import Ident
 import Macros
@@ -78,6 +79,8 @@ renameIdentTerm env@(act,imps) t =
   Vr c -> do
     f <- lookupTreeMany prt opens c
     return $ f c
+  Vr (IC "Int") -> return $ Q cPredefAbs cInt -- Int and String are predefined cats
+  Vr (IC "String") -> return $ Q cPredefAbs cString
   Cn c -> do
     f <- lookupTreeMany prt opens c
     return $ f c
