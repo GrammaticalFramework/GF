@@ -18,7 +18,7 @@ public class DynamicTree2 extends JPanel implements KeyListener,
     public JTree tree;
     public int oldSelection = 0;
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
-    JPopupMenu popup = new JPopupMenu();
+    public JPopupMenu popup = new JPopupMenu();
     JMenuItem menuItem;
     Timer timer = new Timer(500, this);
     MouseEvent m;
@@ -225,7 +225,7 @@ public class DynamicTree2 extends JPanel implements KeyListener,
     void maybeShowPopup(MouseEvent e) {
          if (GFEditor2.debug) System.out.println("may be!");        
          if (e.isPopupTrigger()) {
-            m=e;
+            m = e;
             timer.start();
          } 
     }

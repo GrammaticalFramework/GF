@@ -1,6 +1,7 @@
 //package javaGUI;                                
 
 import java.awt.*;
+import java.beans.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.*;
@@ -11,9 +12,17 @@ import java.util.*;
 //import gfWindow.GrammarFilter;
 
 public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
-    KeyListener {                        
+    KeyListener, FocusListener {                        
+
+    public JPopupMenu popup2 = new JPopupMenu();
+    public JMenuItem menuItem2;
+    public static JTextField field = new JTextField("textField!"); 
+    public javax.swing.Timer timer2 = new javax.swing.Timer(500, this);
+    public MouseEvent m2;
+    public static String selectedText="";
 
     public static boolean debug = false;
+    public static boolean debug3 = false;
     public static boolean debug2 = false;
     public static boolean selectionCheck = false;
     public static String focusPosition = "";
@@ -21,6 +30,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     public static Vector currentPosition = new Vector();
     public static int selStart = -1;
     public static int selEnd = -1;
+    //public static int oldSelStart = 0;
     public static String restString = "";
     public static int currentLength = 0;
     public static int newLength = 0;
@@ -142,6 +152,12 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
               endProgram();
             }
         });
+
+        //Add listener to components that can bring up popup menus.
+        MouseListener popupListener2 = new PopupListener();
+        output.addMouseListener(popupListener2);
+        timer2.setRepeats(false);
+
         setJMenuBar(menuBar);
         setTitle("GF Syntax Editor");
         viewMenu.setToolTipText("View settings");        
@@ -246,10 +262,14 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         output.setEditable(false);
         output.setLineWrap(true);
         output.setWrapStyleWord(true);
-//        output.setSelectionColor(Color.green);
-        output.setSelectionColor(Color.white);
+        output.setSelectionColor(Color.green);
+//        output.setSelectionColor(Color.white);
 //        output.setFont(new Font("Arial Unicode MS", Font.PLAIN, 17));
         output.setFont(new Font(null, Font.PLAIN, 17));
+        field.setFont(new Font(null, Font.PLAIN, 17));
+        field.setFocusable(true);
+        field.addKeyListener(this);
+        field.addFocusListener(this);
 //        System.out.println(output.getFont().getFontName());
         gfCommand.setToolTipText("Sending a command to GF");
         read.setToolTipText("Refining with term or linearization from typed string or file");
@@ -593,7 +613,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
           result = fromProc.readLine();
           if (debug) System.out.println("6 "+result);                     
         }
-        if (newObject) formLin();               
+        if (newObject) formLin();     
         result = fromProc.readLine();             
         if (debug) System.out.println("6 "+result);          
      } catch(IOException e){ }
@@ -910,6 +930,14 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         modify.setSelectedIndex(0);
       }
     }
+    if (obj==timer2){
+            if (debug3) System.out.println("changing pop-up menu2!");
+            popup2.removeAll();
+            for (int i = 0; i<listModel.size() ; i++) 
+                addMenuItem(listModel.elementAt(i).toString());
+            popup2.show(m2.getComponent(), m2.getX(), m2.getY());
+    }
+
 /*    if ( obj == mode ) {
       if (!mode.getSelectedItem().equals("Menus"))           
       {  
@@ -922,6 +950,12 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     try {
       if (Class.forName("javax.swing.AbstractButton").isInstance(obj)) {
         String name =((AbstractButton)obj).getActionCommand();
+
+        if (name.equals("popupMenuItem")){
+           treeChanged = true; 
+           send((String)commands.elementAt
+               (popup2.getComponentIndex((JMenuItem)(ae.getSource()))));
+        }                   
 
         if ( name.equals("quit")) {
           endProgram();
@@ -1434,9 +1468,24 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     /** Handle the key pressed event. */
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();   
-        if  (keyCode == 10) { 
+        Object obj = e.getSource();
+        if  ((keyCode == 10)&&(obj==list)) { 
             listAction(list.getSelectedIndex());
         }
+        // Processing Enter:
+        if  ((keyCode == 10)&&(obj==field)) { 
+           getLayeredPane().remove(field); 
+           treeChanged = true;
+           send("p "+field.getText());        
+           System.out.println("sending parse string: "+field.getText());
+           repaint();
+        }
+        // Processing Escape:
+        if  ((keyCode == 27)&&(obj==field)) { 
+           getLayeredPane().remove(field);   
+           repaint();
+        }
+
     }
     /** Handle the key typed event. */
     public void keyTyped(KeyEvent e) {
@@ -1474,16 +1523,18 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
      int i = outputVector.size()-1;
      int start = output.getSelectionStart();
      int end = output.getSelectionEnd();
-     if (debug2) 
-                System.out.println("SELECTION START POSITION: "+start);
-     if (debug2) 
-                System.out.println("SELECTION END POSITION: "+end);
+     if (debug3) 
+             System.out.println("SELECTION START POSITION: "+start);
+     if (debug3) 
+             System.out.println("SELECTION END POSITION: "+end);
+     if (debug3) 
+       System.out.println("CARET POSITION: "+output.getCaretPosition());
      if ((debug2)&&(end>0&&(end<output.getText().length()))) 
        System.out.println("CHAR: "+output.getText().charAt(end));
      // not null selection:
-     if (start<output.getText().length()-1) 
+     if ((i>-1)&&(start<output.getText().length()-1)) 
      {
-      // if (debug2)
+     if (debug2)
        for (int k=0; k<outputVector.size(); k++)
        { 
          System.out.print("element: "+k+" begin "+((MarkedArea)outputVector.elementAt(k)).begin+" ");
@@ -1555,7 +1606,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
                 System.out.println("SELECTEDTEXT: "+position+"\n");
              treeChanged = true; 
              send("mp "+position);
-       }
+        }
            else
              // after:
              if (debug2) 
@@ -1717,6 +1768,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       if (selectionEnd>-1)
       try {  
         output.getHighlighter().addHighlight(selStart+oldLength, selEnd+oldLength+1, new DefaultHighlighter.DefaultHighlightPainter(Color.green) );
+        selectedText = output.getText().substring(selStart+oldLength, selEnd+oldLength+1);
 //        output.getHighlighter().addHighlight(selStart+oldLength, selEnd+oldLength+1, new DefaultHighlighter.DefaultHighlightPainter(Color.white) );
       } catch (Exception e) {System.out.println("highlighting problem!");}
     }// s.length()>0
@@ -1849,5 +1901,60 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         treeChanged = true; 
         send((String)commands.elementAt(list.getSelectedIndex()));
       }
+    }
+
+ // pop-up menu (adapted from DynamicTree2):
+    class PopupListener extends MouseAdapter {
+        public void mousePressed(MouseEvent e) {
+//            int selStart = tree.getRowForLocation(e.getX(), e.getY());
+//            output.setSelectionRow(selStart);
+            if (debug3) 
+       System.out.println("mouse pressed2: "+output.getSelectionStart()+" "+output.getSelectionEnd());
+            //maybeShowPopup(e);
+        }
+
+        public void mouseReleased(MouseEvent e) {
+            if (debug3) System.out.println("mouse released2!"+output.getSelectionStart()+" "+output.getSelectionEnd());
+            maybeShowPopup(e);
+        }
+    }
+    void maybeShowPopup(MouseEvent e) {
+      int i=outputVector.size()-1;
+      // right click:
+      if (e.isPopupTrigger()) {
+        m2 = e;
+        timer2.start();
+      } 
+      // middle click    
+      if (e.getButton() == MouseEvent.BUTTON2) 
+      {
+        if (debug3) System.out.println("MIDDLE BUTTON!");
+        // selection Exists:
+        if (!selectedText.equals(""))
+        {
+          if (selectedText.length()<5)
+            field.setBounds(e.getX()+200, e.getY()+80, 140, 30);
+          else
+            field.setBounds(e.getX()+200, e.getY()+80, selectedText.length()*10, 30);
+          getLayeredPane().add(field, new Integer(1), 0);  
+          field.setText(selectedText);
+          field.requestFocusInWindow();
+        }
+      }
+    }
+    void addMenuItem(String name){
+                menuItem2 = new JMenuItem(name);
+                menuItem2.setActionCommand("popupMenuItem");
+                menuItem2.addActionListener(this);
+                popup2.add(menuItem2);
+
+    }
+    public void focusGained(FocusEvent e) 
+    {
+    }
+    public void focusLost(FocusEvent e) 
+    {
+      getLayeredPane().remove(field);
+      repaint();
     }
 }
