@@ -61,7 +61,7 @@ oper
 
 oper
   pform2case : NPFormA -> CaseA ;
-  case2pform : CaseA -> NPFormA ;
+  case2pform, case2pformClit : CaseA -> NPFormA ;
 
   prepCase : CaseA -> Str ;
 
@@ -101,8 +101,6 @@ oper
 
 -- Tonic forms are divided into four classes of clitic type.
 -- The first value is used for never-clitic noun phrases.
--- This classification is incomplete, since we do not (yet) treat
--- ditransitive verbs.
 --
 -- Examples of each: "Giovanni" ; "io" ; "lui" ; "noi".
 

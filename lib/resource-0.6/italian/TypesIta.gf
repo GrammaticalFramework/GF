@@ -65,6 +65,13 @@ oper
     _   => Ton c
     } ;
 
+  case2pformClit = \c -> case c of {
+    Nom => Aton Nom ;
+    Acc => Aton Acc ;
+    CPrep P_a => Aton c ;
+    _   => Ton c
+    } ;
+
 -- Comparative adjectives are only sometimes formed morphologically
 -- (actually: by different morphemes).
 
