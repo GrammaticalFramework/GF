@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : GrammarToHaskell
+-- Maintainer  : Aarne Ranta
 -- Stability   : (stable)
 -- Portability : (portable)
 --

@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : BatchTranslate
+-- Maintainer  : Aarne Ranta
 -- Stability   : (stable)
 -- Portability : (portable)
 --

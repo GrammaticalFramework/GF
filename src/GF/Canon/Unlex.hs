@@ -1,11 +1,11 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Unlex
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
+-- > CVS $Date: 2005/02/17 10:22:10 $ 
 -- > CVS $Author $
 -- > CVS $Revision $
 --

@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : IOGrammar
+-- Maintainer  : Aarne Ranta
 -- Stability   : (stable)
 -- Portability : (portable)
 --
@@ -12,7 +12,8 @@
 -- for reading grammars and terms from strings and files
 -----------------------------------------------------------------------------
 
-module IOGrammar where
+module IOGrammar (shellStateFromFiles, 
+		  getShellStateFromFiles) where
 
 import Abstract
 import qualified GFC
