@@ -223,6 +223,18 @@ oper
     P3
     Clit2 ;
 
+---- A hack to get the dative form "y".
+  pronY = mkPronoun
+    "il"
+    (elision "l")
+    "y"
+    "lui"
+    "en" "en" "en"
+    (PGen Masc)
+    Sg
+    P3
+    Clit2 ;
+
   pronElle = mkPronoun
     "elle"
     elisLa

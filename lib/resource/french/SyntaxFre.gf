@@ -14,6 +14,8 @@ oper
 
   nounPhraseOn = mkNameNounPhrase "on" Masc ;
 
+  pronImpers : NounPhrase = pronNounPhrase pronIl ;
+
   partitiveNounPhrase = \n,vin ->
     normalNounPhrase 
       (table {
@@ -48,14 +50,19 @@ oper
   npGenPossNum = \nu,ton,mec ->
     \\c => prepCase c ++ ton.s ! Poss Pl mec.g ++ nu.s ! mec.g ++ mec.s ! Pl ;
 
-  existNounPhrase = \duvin -> {
-    s = \\m => 
-        case m of {
-          Ind => ["il y a"] ;
-          Con => ["il y ait"]
-          } ++ duvin.s ! stressed accusative  --- il y en a ; have to define "y"
-    } ;
+---- We miss "il y en a"
 
+  existNounPhrase = \unemaison -> 
+    predVerbGroupClause
+      pronImpers
+      (predClauseGroup 
+        verbAvoir
+        (complTransVerbGen 
+          (mkTransVerbCas verbAvoir dative)
+          pronY
+          (\\_,_,_ => unemaison.s ! Ton Acc)
+        )
+      ) ;
 
   reflPron : Number => Person => NPFormA => Str = \\n,p => 
     case p of {
@@ -183,16 +190,7 @@ oper
   } ;
 
 -- Questions
-{- ----
-  existNounPhraseQuest = \duvin -> {
-    s = \\m => 
-        case m of {
-          DirQ => optStr (estCeQue Acc) ++ ["il y a"] ;
-          IndirQ => elisSi ++ ["il y a"]
-          } 
-        ++ duvin.s ! stressed accusative  --- il y en a ; have to define "y"
-    } ;
--}
+
   intSlash = \Qui, Tuvois ->
     {s = \\b,cl =>
       let 

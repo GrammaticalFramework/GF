@@ -11,14 +11,8 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
 
   oper 
 
-  extCommNounMasc : Subst -> CommNoun = \sb ->
-    {s = \\n,b,c => sb.s ! SF n b c ; 
-     g = NUtr Masc
-    } ;
-
   npMan : NounPhrase = nameNounPhrase (mkProperName "man" (NUtr Masc)) ;
   npDet : NounPhrase = nameNounPhrase (mkProperName "det" NNeutr) ;
-
 
   mkAdjForm : Species -> Number -> NounGender -> AdjFormPos = \b,n,g -> 
     case <b,n> of {
@@ -119,13 +113,13 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
 
   progressiveVerbPhrase : VerbPhrase -> VerbGroup =
     complVerbVerb 
-      (mkVerb "hålla" "håller" "håll"  "höll" "hållit" "hållen" ** 
+      (mkVerbPart "hålla" "håller" "håll"  "höll" "hållit" "hållen" "på" ** 
          {isAux = False}) ;
 
   progressiveClause : NounPhrase -> VerbPhrase -> Clause = \np,vp ->
     predVerbGroupClause np
      (complVerbVerb 
-      (mkVerb "hålla" "håller" "håll"  "höll" "hållit" "hållen" ** 
+      (mkVerbPart "hålla" "håller" "håll"  "höll" "hållit" "hållen" "på" ** 
          {isAux = False}) ----  ;{s3 = ["på att"]})
       vp) ;
 
