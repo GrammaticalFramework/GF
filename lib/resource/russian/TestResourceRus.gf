@@ -1,6 +1,6 @@
 -- use this path to read the grammar from the same directory
 --# -path=.:../abstract:../../prelude
-concrete TestResourceRus of TestResource = StructuralRus ** open SyntaxRus in {
+concrete TestResourceRus of TestResource = RulesRus, StructuralRus ** open SyntaxRus in {
 
 flags 
   coding=utf8 ;
@@ -18,12 +18,12 @@ lin
  American = ij_EndK_G_KH_Decl "американск" ; -- adj1Malenkij from Paradigms 
  Finnish = ij_EndK_G_KH_Decl "финск" ; -- adj1Malenkij from Paradigms 
   Married = adjInvar "замужем" ** {s2 = "за"; c = Inst} ; -- adjinvar from Paradigms
-  Give = mkDitransVerb  (extVerb verbDavat Act Present) Acc Dat; 
-  Prefer = mkDitransVerb (extVerb verbPredpochitat Act Present) Acc Dat ;
+  Give = mkDitransVerb  verbDavat  Acc Dat; 
+  Prefer = mkDitransVerb verbPredpochitat Acc Dat ;
   Bar = bar ;
   Bottle = butyulka ;
   Wine = vino ;
-  Drink = mkDirectVerb (extVerb verbPit Act Present ) ;
+  Drink = mkDirectVerb verbPit ;
   Happy = schastlivyuj ;
 
   Man = muzhchina ;
@@ -32,15 +32,15 @@ lin
   House = dom ;
   Level = uroven ;
   Light = svet ;
-  Walk = extVerb verbGulyat Act Present ;
-  Run = extVerb verbBegat Act Present ;
-  Love = mkDirectVerb (extVerb verbLubit Act Present ) ;
-  Send = mkDirectVerb (extVerb verbOtpravlyat Act Present ) ;
-  Wait = mkDirectVerb (extVerb verbZhdat Act Present );
-  Say = extVerb verbGovorit Act Present ; --- works in present tense...
-  Prove = extVerb verbDokazuvat Act Present ;
-  SwitchOn = mkDirectVerb (extVerb verbVkluchat Act Present ) ;
-  SwitchOff = mkDirectVerb (extVerb verbVukluchat Act Present ) ;
+  Walk =  verbGulyat ;
+  Run = verbBegat ;
+  Love = mkDirectVerb verbLubit ;
+  Send = mkDirectVerb verbOtpravlyat ;
+  Wait = mkDirectVerb verbZhdat ;
+  Say = verbGovorit ; --- works in present tense...
+  Prove = verbDokazuvat ;
+  SwitchOn = mkDirectVerb verbVkluchat ;
+  SwitchOff = mkDirectVerb verbVukluchat ;
 
   Mother = funGen mama ;
   Uncle = funGen dyadya ;

@@ -75,10 +75,10 @@ EverythingNP = pron2NounPhrase pronVseInanimate Inanimate;
 SomethingNP = pron2NounPhrase pronChtoTo Inanimate ;
 NothingNP = pron2NounPhrase pronNichto Inanimate;
 
-CanVV =  extVerb verbMoch Act Present  ;
-CanKnowVV = extVerb verbMoch Act Present  ;
-MustVV = extVerb verbDolzhen Act Present  ;
-WantVV = extVerb verbKhotet Act Present  ;
+CanVV =  verbMoch ;
+CanKnowVV = verbMoch ;
+MustVV = verbDolzhen ;
+WantVV = verbKhotet ;
 
   HowIAdv = ss "как" ;
   WhenIAdv = ss "когда" ;

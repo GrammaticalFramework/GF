@@ -918,7 +918,7 @@ oper totDet: Adjective = {s = table {
       AF Inst _ (ASg Fem) => "той"; 
       AF Inst _ (ASg Neut) => "тем";
       AF Inst _ APl => "теми";
-      AF Dat  _ (ASg Masc) => "тому"; 
+      AF Dat  _ (ASg Masc) => "тому"; 
       AF Dat  _ (ASg Fem) => "той"; 
       AF Dat  _ (ASg Neut) => "тому";
       AF Dat  _ APl => "тем";
@@ -1003,7 +1003,7 @@ oper uy_j_EndDecl : Str -> Adjective = \s ->{s = table {
       AF Gen  _ (ASg Masc) => s+"ого"; 
       AF Gen  _ (ASg Fem) => s+"ой"; 
       AF Gen  _ (ASg Neut) => s+"ого";
-      AF Gen  _ APl => s+"ых";
+      AF Gen  _ APl => s+"ых";
       AF Inst _ (ASg Masc) => s+"ым"; 
       AF Inst _ (ASg Fem) => s+"ой"; 
       AF Inst _ (ASg Neut) => s+"ым";
@@ -1343,26 +1343,26 @@ oper mkPassive: AspectVoice -> PastVerb -> AspectVoice =  \av, pv ->
     VSUB (ASg Fem) => pv  ! (PSF (ASg Fem)) + "сь"+[" бы"];
     VSUB (ASg Neut)  => pv ! (PSF (ASg Neut)) + "сь"+[" бы"];
     VSUB APl  => pv ! (PSF APl) + "сь"+[" бы"] ;
-    VIND (VPresent Sg P1)  => 
+    VIND (ASg _) (VPresent P1)  => 
      --           case av.asp of { Imperfective =>
-                       av.s ! (VIND (VPresent Sg P1)) + "сь" ;
+                       av.s ! (VIND (ASg Masc) (VPresent P1)) + "сь" ;
      --                  Perfective = > nonExist
      --            }  ;
-    VIND (VPresent Sg P2) => av.s ! (VIND (VPresent Sg P2))+ "ся" ;
-    VIND (VPresent Sg P3) => av.s ! (VIND (VPresent Sg P3))+ "ся" ;
-    VIND (VPresent Pl P1) =>  av.s !( VIND (VPresent Pl P1)) + "ся" ;
-    VIND (VPresent Pl P2) => av.s !( VIND (VPresent Pl P2)) + "сь'" ;
-    VIND (VPresent Pl P3) => av.s !( VIND (VPresent Pl P3)) + "ся" ;
-    VIND (VFuture Sg P1) => av.s ! (VIND (VFuture Sg P1)) + "сь";
-    VIND (VFuture Sg P2) => av.s! (VIND (VFuture  Sg P2) )+ "ся";
-    VIND (VFuture Sg P3) => av.s! (VIND (VFuture  Sg P3)) + "ся";
-    VIND (VFuture Pl P1) => av.s! (VIND (VFuture  Pl P1) )+ "ся";
-    VIND (VFuture Pl P2) => av.s! (VIND (VFuture  Pl P2) )+ "сь";
-    VIND (VFuture Pl P3) => av.s! (VIND (VFuture  Pl P3)) + "ся";
-    VIND (VPast  (ASg Masc)) => av.s ! (VIND (VPast  (ASg Masc) )) + "ся";
-    VIND (VPast  (ASg Fem))  => av.s ! (VIND (VPast  (ASg Fem) )) + "сь";
-    VIND (VPast  (ASg Neut))  => av.s ! (VIND (VPast  (ASg Neut)) ) + "сь";
-    VIND (VPast  APl) => av.s ! (VIND (VPast  APl)) + "сь"
+    VIND (ASg _) (VPresent  P2) => av.s ! (VIND (ASg Masc) (VPresent P2))+ "ся" ;
+    VIND (ASg _) (VPresent  P3) => av.s ! (VIND (ASg Masc) (VPresent  P3))+ "ся" ;
+    VIND APl (VPresent P1) =>  av.s !( VIND APl (VPresent P1)) + "ся" ;
+    VIND APl (VPresent P2) => av.s !( VIND APl (VPresent P2)) + "сь" ;
+    VIND APl (VPresent P3) => av.s !( VIND APl (VPresent P3)) + "ся" ;
+    VIND (ASg _) (VFuture P1) => av.s ! (VIND (ASg Masc) (VFuture P1)) + "сь";
+    VIND (ASg _) (VFuture P2) => av.s! (VIND (ASg Masc) (VFuture P2) )+ "ся";
+    VIND (ASg  _) (VFuture P3) => av.s! (VIND (ASg Masc) (VFuture  P3)) + "ся";
+    VIND APl (VFuture P1) => av.s! (VIND APl (VFuture P1) )+ "ся";
+    VIND APl (VFuture P2) => av.s! (VIND APl (VFuture P2) )+ "сь";
+    VIND APl (VFuture P3) => av.s! (VIND APl (VFuture P3)) + "ся";
+    VIND  (ASg Masc) VPast => av.s ! (VIND  (ASg Masc) VPast ) + "ся";
+    VIND (ASg Fem) VPast    => av.s ! (VIND (ASg Fem) VPast ) + "сь";
+    VIND (ASg Neut) VPast    => av.s ! (VIND (ASg Neut) VPast) + "сь";
+    VIND APl VPast   => av.s ! (VIND APl VPast ) + "сь"
   } ;
   asp = av.asp
 };
@@ -1385,23 +1385,23 @@ oper
 
     VSUB (ASg Neut)  => past ! (PSF (ASg Neut) )+[" бы"];
     VSUB APl  => past ! (PSF APl) +[" бы"];
-    VIND (VPresent Sg P1) => presentFuture ! ( PRF (ASg Masc) P1);
-    VIND (VPresent Sg P2) => presentFuture! (PRF (ASg Masc) P2) ;
-    VIND (VPresent Sg P3) => presentFuture ! (PRF (ASg Masc) P3) ;
-    VIND (VPresent Pl P1) => presentFuture ! (PRF APl P1);
-    VIND (VPresent Pl P2) => presentFuture ! (PRF APl P2);
-    VIND (VPresent Pl P3) => presentFuture ! (PRF APl P3);
-    VIND (VFuture Sg P1) => ["буду "] + presentFuture ! (PRF (ASg Masc) P1) ;
-    VIND (VFuture Sg P2) => ["будешь"] + presentFuture ! (PRF (ASg Masc) P2) ;
-    VIND (VFuture Sg P3) => ["будет "] + presentFuture ! (PRF (ASg Masc) P3) ;
-    VIND (VFuture Pl P1) => ["будем "] + presentFuture ! (PRF APl P1) ;
-    VIND (VFuture Pl P2) => ["будете "] + presentFuture ! (PRF APl P2) ;
-    VIND (VFuture Pl P3) => ["будут "] + presentFuture ! (PRF APl P3) ;
+    VIND (ASg _) (VPresent P1) => presentFuture ! ( PRF (ASg Masc) P1);
+    VIND (ASg _) (VPresent P2) => presentFuture! (PRF (ASg Masc) P2) ;
+    VIND (ASg _) (VPresent P3) => presentFuture ! (PRF (ASg Masc) P3) ;
+    VIND APl (VPresent P1) => presentFuture ! (PRF APl P1);
+    VIND APl (VPresent P2) => presentFuture ! (PRF APl P2);
+    VIND APl (VPresent P3) => presentFuture ! (PRF APl P3);
+    VIND (ASg _) (VFuture P1) => ["буду "] + presentFuture ! (PRF (ASg Masc) P1) ;
+    VIND (ASg _) (VFuture P2) => ["будешь"] + presentFuture ! (PRF (ASg Masc) P2) ;
+    VIND (ASg _) (VFuture P3) => ["будет "] + presentFuture ! (PRF (ASg Masc) P3) ;
+    VIND APl (VFuture P1) => ["будем "] + presentFuture ! (PRF APl P1) ;
+    VIND APl (VFuture P2) => ["будете "] + presentFuture ! (PRF APl P2) ;
+    VIND APl (VFuture P3) => ["будут "] + presentFuture ! (PRF APl P3) ;
     
-    VIND (VPast     (ASg Masc)) => past ! (PSF (ASg Masc)) ;
-    VIND (VPast  (ASg Fem))  => past ! (PSF (ASg Fem) ) ;
-    VIND (VPast  (ASg Neut) ) => past ! (PSF (ASg Neut))  ;
-    VIND (VPast  APl) => past ! (PSF APl)
+    VIND (ASg Masc) VPast   => past ! (PSF (ASg Masc)) ;
+    VIND (ASg Fem) VPast  => past ! (PSF (ASg Fem) ) ;
+    VIND (ASg Neut) VPast  => past ! (PSF (ASg Neut))  ;
+    VIND APl VPast  => past ! (PSF APl)
   } ;
   asp = Imperfective 
 } ;
@@ -1420,22 +1420,20 @@ oper
 
     VSUB (ASg Neut)  => past ! (PSF (ASg Neut) )+[" бы"];
     VSUB APl  => past ! (PSF APl) +[" бы"];
-    VIND (VPresent Sg P1) => [] ;
-    VIND (VPresent Sg P2) => [] ;
-    VIND (VPresent Sg P3) => [] ;
-    VIND (VPresent Pl P1) => nonExist ;
-    VIND (VPresent Pl P2) => nonExist ;
-    VIND (VPresent Pl P3) => [] ;
-    VIND (VFuture Sg P1) => presentFuture ! (PRF (ASg Masc) P1) ;
-    VIND (VFuture Sg P2) => presentFuture ! (PRF (ASg Masc) P2) ;
-    VIND (VFuture Sg P3) => presentFuture ! (PRF (ASg Masc) P3) ;
-    VIND (VFuture Pl P1) => presentFuture ! (PRF APl P1) ;
-    VIND (VFuture Pl P2) => presentFuture ! (PRF APl P2) ;
-    VIND (VFuture Pl P3) => presentFuture ! (PRF APl P3) ;
-    VIND (VPast  (ASg Masc)) => past ! (PSF (ASg Masc)) ;
-    VIND (VPast  (ASg Fem))  => past ! (PSF (ASg Fem) ) ;
-    VIND (VPast  (ASg Neut) ) => past ! (PSF (ASg Neut))  ;
-    VIND (VPast  APl) => past ! (PSF APl)
+    VIND (ASg _) (VPresent _) => [] ;
+    VIND APl (VPresent P1) => nonExist ;
+    VIND APl (VPresent P2) => nonExist ;
+    VIND APl (VPresent P3) => [] ;
+    VIND (ASg _) (VFuture P1) => presentFuture ! (PRF (ASg Masc) P1) ;
+    VIND (ASg _) (VFuture P2) => presentFuture ! (PRF (ASg Masc) P2) ;
+    VIND (ASg _) (VFuture P3) => presentFuture ! (PRF (ASg Masc) P3) ;
+    VIND APl (VFuture P1) => presentFuture ! (PRF APl P1) ;
+    VIND APl (VFuture P2) => presentFuture ! (PRF APl P2) ;
+    VIND APl (VFuture P3) => presentFuture ! (PRF APl P3) ;
+    VIND (ASg Masc) VPast => past ! (PSF (ASg Masc)) ;
+    VIND (ASg Fem) VPast   => past ! (PSF (ASg Fem) ) ;
+    VIND (ASg Neut) VPast   => past ! (PSF (ASg Neut))  ;
+    VIND APl VPast => past ! (PSF APl)
   } ;
   asp = Perfective 
 } ; 

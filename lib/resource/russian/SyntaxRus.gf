@@ -248,6 +248,13 @@ pgNum : PronGen -> Number -> GenNum = \g,n ->
      g = PGen dom.g
     } ;
 
+-- Moreover, superlatives can be used alone as adjectival phrases
+-- ("самый крупный", "крупнейший" - in free variation). 
+
+  superlAdjPhrase : AdjDegr -> AdjPhrase = \bolshoj ->
+    {s = bolshoj.s ! Super  ; 
+     p = False
+    } ;
 
 --3 Two-place adjectives
 --
@@ -366,17 +373,17 @@ let {n = ivan.n ; nf = if_then_else Number coll Sg n} in
 -- ("купить хлеба", "не читать газет") are overlooked in mkDirectVerb
 -- and can be expressed via more a general rule mkTransVerb.
 
-  TransVerb : Type = Verb ** {s2 : Str ; c: Case } ; 
+  TransVerb : Type = Verbum ** {s2 : Str ; c: Case } ; 
 
   complementOfTransVerb : TransVerb -> Complement = \v -> {s2 = v.s2 ; c = v.c} ;
-  verbOfTransVerb       : TransVerb -> Verb   = \v -> 
-    {s = v.s; t = v.t; a = v.a ; w = v.w } ;
+  verbOfTransVerb       : TransVerb -> Verbum   = \v -> 
+    {s = v.s; asp = v.asp } ;
 
-  mkTransVerb : Verb -> Str  -> Case -> TransVerb = \v,p,cas -> 
+  mkTransVerb : Verbum -> Str  -> Case -> TransVerb = \v,p,cas -> 
     v ** {s2 = p ; c = cas } ;
 
-  mkDirectVerb : Verb -> TransVerb = \v -> 
-    mkTransVerb v nullPrep Acc;
+  mkDirectVerb : Verbum -> TransVerb = \v -> 
+ mkTransVerb v nullPrep Acc;
 
   nullPrep : Str = [] ;
 
@@ -384,7 +391,12 @@ let {n = ivan.n ; nf = if_then_else Number coll Sg n} in
 
   complTransVerb :TransVerb -> NounPhrase -> VerbGroup = \se,tu ->
     {s =\\vf =>  se.s ! vf ++ se.s2 ++ tu.s ! (mkPronForm se.c No NonPoss) ; 
-      a = se.a ; t = se.t ; w = se.w   } ;
+      asp = se.asp ; 
+      w = Act;
+      s2 = table{_ => ""}; 
+      s3 = table{_=> table{_=>""}}; 
+      negBefore = True
+    } ;
 
 --3 Verb phrases
 --
@@ -392,20 +404,42 @@ let {n = ivan.n ; nf = if_then_else Number coll Sg n} in
 -- (s) an inflected verb, (s2) verb adverbials (such as negation), and
 -- (s3) complement. This discontinuity is needed in sentence formation
 -- to account for word order variations.
-
-  VerbGroup = Verb  ;
-
-  VerbPhrase : Type = Verb ** {s2 : Str ; s3 : Gender => Number => Str ;
+ 
+   VerbPhrase : Type = Verb ** {s2 : Str ; s3 : Gender => Number => Str ;
     negBefore: Bool} ;
+
+-- VerbGroup is new in "lib"-verion of the resource. 
+-- Unlike VerbPhrase, VerbGroup does not have Tense parameter fixed.
+-- It also not yet negated (s2):
+
+  VerbGroup : Type = Verbum  ** {w: Voice; s2 : Bool => Str ; s3 : Gender => Number => Str ; negBefore: Bool};
+
+-- A verb can be made into a verb phrase with an empty complement.
+-- There are two versions, depending on if we want to negate the verb (Bool).
+
+  predVerbGroup : Bool -> Tense -> VerbGroup -> VerbPhrase = \b,t, vidit -> 
+    (extVerb vidit vidit.w t)** {
+     s2 = negation b ; 
+     s3 = vidit.s3 ;
+     negBefore = vidit.negBefore
+     } ;
 
 -- A simple verb can be made into a verb phrase with an empty complement.
 -- There are two versions, depending on if we want to negate the verb.
-  predVerbGroup : Bool -> VerbGroup -> VerbPhrase = \b,vidit -> 
-    vidit ** {
-     s2 = negation b ; 
-     s3 = \\_,_ => [] ;
-     negBefore = True --  this should be a parameter !
-     } ;
+-- N.B. negation is *not* a function applicable to a verb phrase, since
+-- double negations with "inte" are not grammatical.
+
+  predVerb : Verbum -> VerbGroup = \se -> 
+    se** {w=Act;      s2 = table{True => ""; False => "не"};
+      negBefore = True;
+      s3 = table{_=> table{_ => ""}}
+} ;
+
+  predPassVerb : Verbum -> VerbGroup = \se ->  
+    se ** {w=Pass;      s2 = table{True => ""; False => "не"};
+      negBefore = True;
+      s3 = table{_=> table{_ => ""}}
+};
 
   negation : Bool -> Str = \b -> if_then_else Str b [] "не" ; 
 
@@ -423,63 +457,24 @@ let {n = ivan.n ; nf = if_then_else Number coll Sg n} in
 -- all the rest.
 
   predAdverb : Adverb -> VerbGroup = \zloj ->
-    { s= \\vf => case vf of {
-          VFin _ _ =>  zloj.s ;
-          VImper Sg _ => "будь" ++ zloj.s;
-          VImper Pl _ => "будьте" ++ zloj.s;
-          -- person is ignored !
-          VInf  => "быть" ++ zloj.s;
-          VSubj _ => ""
-          } ;        
-      t = Present ; 
-      a = Imperfective ;
-      w = Act 
-    } ;
-
-  predAdjective : AdjPhrase -> VerbGroup = \zloj ->
-    { s= \\vf => case vf of {
-          VFin gn _ => case (numGNum gn) of { 
-             Sg => zloj.s ! AF Nom Animate (ASg (genGNum gn)) ;
-              Pl => zloj.s ! AF Nom Animate APl  
-          } ;
-          VImper Sg _ => "будь" ++ zloj.s ! AF Inst Animate (ASg Masc);
-          VImper Pl _ => "будьте" ++ zloj.s ! AF Inst Animate APl  ;
-          -- person is ignored !
-          VInf  => "быть" ++ zloj.s ! AF Inst Animate (ASg Masc) ;
--- infinitive does not save GenNum info!
-          VSubj _ => ""
-          } ;        
-      t = Present ; 
-      a = Imperfective ;
-      w = Act 
-    } ;
-
-  predCommNoun : CommNounPhrase -> VerbGroup = \chelovek ->
-   {  s= \\vf => case vf of {
-          VFin gn _ => (indefNounPhrase (numGNum gn) chelovek ).s ! (mkPronForm Nom No NonPoss) ;
-          VImper Sg _ => "будь"++ (indefNounPhrase Sg chelovek ).s ! (mkPronForm Inst No NonPoss) ;
-          VImper Pl _ => "будьте"++(indefNounPhrase Pl chelovek ).s ! (mkPronForm Inst No NonPoss);
-          -- person is ignored !
-          VInf  => "быть" ++ (indefNounPhrase Sg chelovek ).s ! (mkPronForm Inst No NonPoss) ;
-          VSubj _ => ""
-          } ;        
-      t = Present ; 
-      a = Imperfective ;
-      w = Act 
-           } ;
-
-  predNounPhrase : NounPhrase -> VerbGroup = \masha ->
-    { s= \\vf => case vf of {
-          VFin _ _ =>  masha.s ! (mkPronForm Nom No NonPoss) ;
-          VImper Sg _ => "будь" ++ masha.s ! (mkPronForm Inst No NonPoss);
-          VImper Pl _ => "будьте" ++ masha.s ! (mkPronForm Inst No NonPoss);
-          VInf  => "быть" ++ masha.s ! (mkPronForm Inst No NonPoss);
--- infinitive does not save Number parameter!
-          VSubj _ => ""
-          } ;        
-      t = Present ; 
-      a = Imperfective ;
-      w = Act 
+    { s= table {
+        VFORM _  (VIMP Sg _) => "будь" ++ zloj.s;    -- person is ignored !
+        VFORM _  (VIMP Pl _) => "будьте" ++ zloj.s;
+        VFORM _ VINF => "быть" ++ zloj.s;
+        VFORM _ (VIND _ (VPresent  _)) => zloj.s ;
+        VFORM _ (VIND (ASg Fem) VPast)  => "была" ++ zloj.s;
+        VFORM _ (VIND (ASg Masc) VPast)  => "был" ++ zloj.s;
+        VFORM _ (VIND (ASg Neut) VPast)  => "было" ++ zloj.s;
+        VFORM _ (VIND APl  VPast) => "были" ++ zloj.s;
+        VFORM _ (VIND (ASg _) (VFuture  _)) => "будет" ++ zloj.s;
+       VFORM _ (VIND APl (VFuture _)) => "будут" ++ zloj.s;
+        VFORM _ (VSUB _) => ""
+        } ;        
+      asp = Imperfective ;
+      w = Act;
+      s2 = table{True => ""; False => "не"};
+      negBefore = True;
+      s3 = table{_=> table{_ => ""}}
     } ;
 
 -- Two-place functions add one argument place.
@@ -500,7 +495,7 @@ let {n = ivan.n ; nf = if_then_else Number coll Sg n} in
 
   DitransVerb = TransVerb ** {s4 : Str; c2: Case} ; 
 
-  mkDitransVerb : Verb -> Case ->  Case -> DitransVerb = \v,c1,c2 -> 
+  mkDitransVerb : Verbum -> Case ->  Case -> DitransVerb = \v,c1,c2 -> 
     v ** {s2 = ""; c = c1; s4 = ""; c2=c2 } ;
 
   complDitransVerb : DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = 
@@ -509,10 +504,12 @@ let {n = ivan.n ; nf = if_then_else Number coll Sg n} in
         tebepivo = dat.s2 ++
          tu.s ! PF dat.c No NonPoss ++ dat.s4 ++ pivo.s ! PF dat.c2 Yes NonPoss 
       in
-      {s  = \\vf => (dat.s ! vf) ++ tebepivo ;
-      t = dat.t ; 
-      a = dat.a ;
-      w = dat.w
+      {s  = \\vf => (dat.s ! vf) ++ tebepivo ; 
+      asp = dat.asp ;
+      w = Act;
+      s2 = table{True => ""; False => "не"};
+      negBefore = True;
+      s3 = table{_=> table{_ => ""}}
     } ;
 
 
@@ -573,27 +570,57 @@ oper
        in
        if_then_else Str tebyaNeVizhu.negBefore  
         (ya ++ ne ++ vizhu ++ tebya)
+        (ya ++ vizhu ++ ne ++ tebya)
+    } ;
+param
+  ClForm =  ClIndic Tense | ClCondit  | ClInfinit ;      -- "naked infinitive" clauses
+    
+oper
+  Clause = {s : Bool => ClForm => Str} ;
+
+  predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = 
+  \Ya, tebyaNeVizhu -> { s = \\b,c =>
+       let  { 
+          ya = Ya.s ! (case c of {
+              ClInfinit => (mkPronForm Acc No NonPoss); 
+               _ =>(mkPronForm Nom No NonPoss)
+               });
+         ne = tebyaNeVizhu.s2 ! b;
+         vizhu = tebyaNeVizhu.s ! (case c of {
+               ClInfinit => VFORM tebyaNeVizhu.w (VIMP Ya.n Ya.p);
+               ClIndic t => VFORM tebyaNeVizhu.w (VIND (pgNum Ya.g Ya.n) (getVTense t Ya.p));
+               ClCondit => VFORM tebyaNeVizhu.w (VIND (pgNum Ya.g Ya.n) VPast)
+              });
+         tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.g) ! Ya.n 
+       }
+       in
+       if_then_else Str tebyaNeVizhu.negBefore  
+        (ya ++ ne ++ vizhu ++ tebya)
         (ya ++ vizhu ++ ne ++ tebya)
-       
     } ;
 
   -- This is a macro for simultaneous predication and complementation.
 
   predTransVerb : Bool -> TransVerb -> NounPhrase -> NounPhrase -> Sentence = 
-    \b,vizhu,ya,tu -> predVerbPhrase ya (predVerbGroup b (complTransVerb vizhu tu)) ;
+    \b,vizhu,ya,tu -> predVerbPhrase ya (predVerbGroup b Present (complTransVerb vizhu tu)) ;
  
 --3 Sentence-complement verbs
 --
 -- Sentence-complement verbs take sentences as complements.
 
-  SentenceVerb : Type = Verb ;
+  SentenceVerb : Type = Verbum ;
 
 -- To generate "сказал, что Иван гуляет" / "не сказал, что Иван гуляет":
 
   complSentVerb : SentenceVerb -> Sentence -> VerbGroup = 
     \vidit,tuUlubaeshsya ->
     {s = \\vf => vidit.s ! vf ++ [", что"] ++ tuUlubaeshsya.s ;
-     t = vidit.t ; w = vidit.w ; a = vidit.a } ;
+     asp = vidit.asp;
+     w = Act;
+      s2 = table{True => ""; False => "не"};
+      negBefore = True;
+      s3 = table{_=> table{_ => ""}}
+ } ;
 
 --3 Verb-complement verbs
 --
@@ -605,17 +632,19 @@ oper
 -- the construction can be iterated, and the corresponding complication
 -- in the parameter structure.
 
-  VerbVerb : Type = Verb ;
+  VerbVerb : Type = Verbum ;
 
 -- To generate "can walk"/"can't walk"; "tries to walk"/"does not try to walk":
 -- The contraction of "not" is not provided, since it would require changing
 -- the verb parameter type.
 
   complVerbVerb : VerbVerb -> VerbGroup -> VerbGroup = \putatsya,bezhat ->
-  { s =  \\vf => putatsya.s ! vf  ++ bezhat.s ! VInf ; 
-      t = putatsya.t ; 
-      a = putatsya.a ;
-      w = putatsya.w
+  { s =  \\vf => putatsya.s ! vf  ++ bezhat.s ! VFORM bezhat.w VINF ; 
+      asp = putatsya.asp ;
+      w = Act;
+      s2 = table{True => ""; False => "не"};
+      negBefore = True;
+      s3 = table{_=> table{_ => ""}}
   } ;
 
 --2 Sentences missing noun phrases
@@ -632,7 +661,11 @@ oper
 
   slashTransVerb : Bool -> NounPhrase -> TransVerb -> SentenceSlashNounPhrase = 
     \b,ivan,lubit ->
-    predVerbPhrase ivan (predVerbGroup b (verbOfTransVerb lubit)) ** 
+    predVerbPhrase ivan (predVerbGroup b Present ((verbOfTransVerb lubit)**
+     { s2 =   table{True => ""; False => "не"};
+       w = Act;
+      negBefore = True;
+      s3 = table{_=> table{_ => ""}} })) ** 
     complementOfTransVerb lubit ;
 
 thereIs : NounPhrase -> Sentence = \bar ->
@@ -721,7 +754,7 @@ oper
           indefNounPhrase ivan.n (appFunComm detstvo ivan) ; -- detstvoIvana
 -- bug version:
 --  funIntPron : Function -> IntPron -> IntPron = 
---    appFun False ; 
+--    appFun False ; 
 
 
 -- There is a variety of simple interrogative pronouns:
@@ -816,7 +849,7 @@ oper
 isThere : NounPhrase -> Question = \bar ->
     questVerbPhrase 
     ({s = \\_ => ["есть ли"] ; n = bar.n ; p = P3; g = bar.g; anim = bar.anim; pron = bar.pron})
-      (predVerbGroup True (predNounPhrase bar)) ;
+      (predVerbGroup True Present (predNounPhrase bar)) ;
 
 --3 Wh-questions
 --
@@ -1044,4 +1077,86 @@ isThere : NounPhrase -> Question = \bar ->
 
   defaultSentence : Sentence -> Utterance = \x -> 
     x ;
+
+  predNounPhrase : NounPhrase -> VerbGroup = \masha ->  { s= table {
+      VFORM _ (VSUB _) => "" ;        
+        VFORM _  (VIMP Sg _) => "будь" ++ masha.s ! (mkPronForm Inst No NonPoss);
+        VFORM _  (VIMP Pl _) => "будьте" ++  masha.s ! (mkPronForm Inst No NonPoss) ;  
+        VFORM _ VINF => "быть" ++   masha.s ! (mkPronForm Inst No NonPoss);
+        VFORM _ (VIND _ (VPresent _)) =>  masha.s ! (mkPronForm Nom No NonPoss) ;
+VFORM _ (VIND (ASg Fem) VPast) =>"была"++masha.s ! (mkPronForm Inst No NonPoss);
+VFORM _ (VIND (ASg Masc) VPast) =>"был" ++ masha.s!(mkPronForm Inst No NonPoss);
+VFORM _ (VIND (ASg Neut) VPast) =>"было" ++ masha.s!(mkPronForm Inst No NonPoss);
+VFORM _ (VIND APl VPast) => "были" ++ masha.s ! (mkPronForm Inst No NonPoss);
+VFORM _ (VIND APl (VFuture P3)) => "будут"++masha.s ! (mkPronForm Inst No NonPoss);
+VFORM _ (VIND APl (VFuture P2)) => "будете"++masha.s !(mkPronForm Inst No NonPoss);
+VFORM _ (VIND APl (VFuture P1)) => "будем"++masha.s ! (mkPronForm Inst No NonPoss);
+VFORM _ (VIND (ASg _) (VFuture P3))=>"будет"++masha.s!(mkPronForm Inst No NonPoss) ;
+VFORM _ (VIND (ASg _) (VFuture P2)) => "будешь"++ masha.s ! (mkPronForm Inst No NonPoss) ;
+VFORM _ (VIND (ASg _) (VFuture  P1))=> "буду"++ masha.s ! (mkPronForm Inst No NonPoss)     
+   } ;        
+      asp = Imperfective ;
+      w = Act;
+      s2 = table{True => ""; False => "не"};
+      negBefore = True;
+      s3 = table{_=> table{_ => ""}}
+
+   } ;
+
+
+  predCommNoun : CommNounPhrase -> VerbGroup = \chelovek ->
+   {  s= table {
+        VFORM _  (VIMP Sg _) => "будь" ++ (indefNounPhrase Sg chelovek ).s ! (mkPronForm Inst No NonPoss);
+        VFORM _  (VIMP Pl _) => "будьте" ++  (indefNounPhrase Pl chelovek ).s ! (mkPronForm Inst No NonPoss) ;  
+-- person is ignored !
+        VFORM _ VINF => "быть" ++ (indefNounPhrase Sg chelovek ).s ! (mkPronForm Inst No NonPoss) ; 
+        VFORM _ (VIND gn (VPresent _)) =>  (indefNounPhrase (numGNum gn) chelovek ).s ! (mkPronForm Nom No NonPoss);
+        VFORM _ (VIND (ASg Fem) VPast) => "была" ++ (indefNounPhrase Sg chelovek ).s ! (mkPronForm Inst No NonPoss);
+        VFORM _ (VIND (ASg Masc) VPast)  => "был" ++ (indefNounPhrase Sg chelovek ).s ! (mkPronForm Inst No NonPoss);
+        VFORM _ (VIND (ASg Neut) VPast)  => "было" ++ (indefNounPhrase Sg chelovek ).s ! (mkPronForm Inst No NonPoss);
+        VFORM _ (VIND APl VPast) => "были" ++ (indefNounPhrase Pl chelovek ).s ! (mkPronForm Inst No NonPoss);
+       VFORM _ (VIND APl (VFuture P3)) => "будут" ++ (indefNounPhrase Pl chelovek ).s ! (mkPronForm Inst No NonPoss);
+       VFORM _ (VIND APl (VFuture P2)) => "будете" ++ (indefNounPhrase Pl chelovek ).s ! (mkPronForm Inst No NonPoss);
+       VFORM _ (VIND APl (VFuture P1)) => "будем" ++ (indefNounPhrase Pl chelovek ).s ! (mkPronForm Inst No NonPoss);
+       VFORM _ (VIND (ASg g) (VFuture  P3)) => "будет" ++ (indefNounPhrase Sg chelovek ).s ! (mkPronForm Inst No NonPoss);
+        VFORM _ (VIND (ASg g) (VFuture P2)) => "будешь"++ (indefNounPhrase Sg chelovek ).s ! (mkPronForm Inst No NonPoss);
+        VFORM _ (VIND (ASg g) (VFuture P1))=> "буду" ++ (indefNounPhrase Sg chelovek ).s ! (mkPronForm Inst No NonPoss);
+        VFORM _ (VSUB _ )=> ""
+         } ;        
+      asp = Imperfective ;
+      w = Act;
+      s2 = table{True => ""; False => "не"};
+      negBefore = True;
+      s3 = table{_=> table{_ => ""}}
+
+   } ;  
+
+  predAdjective : AdjPhrase -> VerbGroup = \zloj ->
+    { s= table {
+        VFORM _  (VIMP Sg _) => "будь" ++ zloj.s ! AF Inst Animate (ASg Masc);
+        VFORM _  (VIMP Pl _) => "будьте" ++ zloj.s ! AF Inst Animate APl  ;  
+-- person is ignored !
+        VFORM _ VINF => "быть" ++ zloj.s ! AF Inst Animate (ASg Masc) ; 
+-- infinitive does not save GenNum, 
+-- but indicative does for the sake of adjectival predication !
+        VFORM _ (VIND gn (VPresent _)) =>  zloj.s ! AF Nom Animate gn ;
+        VFORM _ (VIND (ASg Fem) VPast)  => "была" ++ zloj.s! AF Nom Animate (ASg Fem);
+        VFORM _ (VIND (ASg Masc) VPast)  => "был" ++ zloj.s! AF Nom Animate (ASg Masc);
+        VFORM _ (VIND (ASg Neut) VPast)  => "был" ++ zloj.s! AF Nom Animate (ASg Neut);
+        VFORM _ (VIND APl VPast) => "были" ++ zloj.s! AF Nom Animate APl;
+       VFORM _ (VIND APl (VFuture P3)) => "будут" ++ zloj.s! AF Nom Animate APl;
+       VFORM _ (VIND APl (VFuture P2)) => "будете" ++ zloj.s! AF Nom Animate APl;
+       VFORM _ (VIND APl (VFuture P1)) => "будем" ++ zloj.s! AF Nom Animate APl;
+       VFORM _ (VIND (ASg g) (VFuture  P3)) => "будет" ++ zloj.s! AF Nom Animate (ASg g);
+        VFORM _ (VIND (ASg g) (VFuture  P2)) => "будешь"++ zloj.s! AF Nom Animate (ASg g);
+        VFORM _ (VIND (ASg g) (VFuture  P1))=> "буду" ++ zloj.s! AF Nom Animate (ASg g);
+        VFORM _ (VSUB _) => ""
+          } ;        
+      asp = Imperfective ;      
+      w = Act;
+      s2 = table{True => ""; False => "не"};
+      negBefore = True;
+      s3 = table{_=> table{_ => ""}}
+
+    } ;
 };
