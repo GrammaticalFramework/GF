@@ -123,16 +123,18 @@ cncModuleIdST = stateGrammarST
 -- | form a shell state from a canonical grammar
 grammar2shellState :: Options -> (CanonGrammar, G.SourceGrammar) -> Err ShellState 
 grammar2shellState opts (gr,sgr) = 
-  updateShellState opts emptyShellState ((0,sgr,gr),[]) --- is 0 safe?
+  updateShellState opts Nothing emptyShellState ((0,sgr,gr),[]) --- is 0 safe?
 
 -- | update a shell state from a canonical grammar
-updateShellState :: Options -> ShellState -> 
+updateShellState :: Options -> Maybe Ident -> ShellState -> 
                     ((Int,G.SourceGrammar,CanonGrammar),[(FilePath,ModTime)]) ->
                ---- (CanonGrammar,(G.SourceGrammar,[(FilePath,ModTime)])) -> 
                     Err ShellState 
-updateShellState opts sh ((_,sgr,gr),rts) = do 
+updateShellState opts mcnc sh ((_,sgr,gr),rts) = do 
   let cgr0 = M.updateMGrammar (canModules sh) gr
-      a' = M.greatestAbstract cgr0
+  a' <- return $ case mcnc of
+    Just cnc -> err (const Nothing) Just $ M.abstractOfConcrete cgr0 cnc
+    _ -> M.greatestAbstract cgr0
   abstr0 <- case abstract sh of
     Just a -> do
       -- test that abstract is compatible --- unsafe exception for old? 

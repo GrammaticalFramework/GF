@@ -118,12 +118,14 @@ openInterfaces ds m = do
 
 -- | this function finds out what modules are really needed in the canoncal gr.
 -- its argument is typically a concrete module name
-requiredCanModules :: (Eq i, Show i) => MGrammar i f a -> i -> [i]
-requiredCanModules gr = nub . iterFix (concatMap more) . singleton where
+requiredCanModules :: (Ord i, Show i) => MGrammar i f a -> i -> [i]
+requiredCanModules gr = nub . iterFix (concatMap more) . allExtends gr where
   more i = errVal [] $ do
     m <- lookupModMod gr i
-    return $ extends m ++ map openedModule (opens m)
-
+    return $ extends m ++ [o | o <- map openedModule (opens m), notReuse o]
+  notReuse i = errVal True $ do
+    m <- lookupModMod gr i
+    return $ isModRes m -- to exclude reused Cnc and Abs from required
 
 
 {-

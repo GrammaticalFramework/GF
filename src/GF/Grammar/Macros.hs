@@ -486,6 +486,12 @@ patt2term pt = case pt of
   PInt i    -> EInt i
   PString s -> K s 
 
+redirectTerm :: Ident -> Term -> Term
+redirectTerm n t = case t of
+  QC _ f -> QC n f
+  Q _ f  -> Q  n f
+  _ -> composSafeOp (redirectTerm n) t
+
 -- to gather s-fields; assumes term in normal form, preserves label
 allLinFields :: Term -> Err [[(Label,Term)]]
 allLinFields trm = case unComputed trm of

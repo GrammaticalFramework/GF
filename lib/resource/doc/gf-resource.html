@@ -9,7 +9,9 @@
 
 <p>
 
-<b>First Draft, Gothenburg, 7 February 2005</b>
+Second Version, Gothenburg, 18 February 2005
+<br>
+First Draft, Gothenburg, 7 February 2005
 
 </p><p>
 
@@ -23,17 +25,123 @@ Aarne Ranta
 
 
 <!-- NEW -->
-<h2>The purpose of the resource grammar library</h2>
+<h2>GF = Grammatical Framework</h2>
 
-Basic syntactic structures
+A grammar formalism based on functional programming and type theory.
 
 <p>
+
+Designed to be nice for <i>ordinary programmers</i> to use.
+
+<p>
+
+Mission: to make natural-language applications available for
+ordinary programmers, in tasks like
+<ul>
+<li> software documentation
+<li> domain-specific translation
+<li> human-computer interaction
+<li> dialogue systems
+</ul>
+Thus <i>not</i> primarily another theoretical framework for
+linguists.
+
+
+<!-- NEW -->
+<h2>Language + Libraries</h2>
+
+Writing natural language grammars still requires
+theoretical knowledge about the language.
+
+<p>
+
+Which kind of programmer is easier to find?
+<ul>
+<li> one who can write a sorting algorithm 
+<li> one who can write a grammar for Swedish determiners
+</ul>
+
+<p>
+
+In main-stream programming, sorting algorithms are not
+written by hand but taken from <b>libraries</b>.
+
+<p>
+
+In the same way, we want to create grammar libraries that encapsulate
+basic linguistic facts.
+
+<p>
+
+Cf. the Java success story: the language is just a half of the
+success - libraries are another half.
+
+
+
+<!-- NEW -->
+<h2>Example of library-based grammar writing</h2>
+
+To define Swedish definite phrases form scratch:
+<pre>
+
+</pre>
+To use a library function for Swedish definite phrases:
+<pre>
+
+</pre>
+
+
+<!-- NEW -->
+<h2>Questions in grammar library design</h2>
+
+What should there be in the library?
+<br>
+<li> morphology, lexicon, syntax, semantics,...
+
+<p>
+
+How do we organize and present the library?
+<br>
+<li> division into modules, level of granularity
+<br>
+<li> "school grammar" vs. sophisticated linguistic concepts
+
+<p>
+
+Where do we get the data from?
+<br>
+<li> automatic extraction or hand-writing?
+<br>
+<li> reuse of existing resources?
+
+<p>
+
+Extra constraint: we want open-source free software.
+
+
+
+
+
+<!-- NEW -->
+<h2>The scope of the resource grammar library</h2>
 
 All morphological paradigms
 
 <p>
 
 Basic lexicon of structural, common, and irregular words
+
+<p>
+
+Basic syntactic structures
+
+<p>
+
+Currently <i>no</i> semantics,  
+<i>no</i> language-specific structures if not
+necessary for expressivity.
+
+
 
 
 <!-- NEW -->
@@ -43,17 +151,23 @@ Grammatical correctness
 
 <p>
 
-Semantic coverage
+Semantic coverage: you can express whatever you want.
 
 <p>
 
-Usability as library for non-linguists
+Usability as library for non-linguists.
+
+<p>
+
+(Bonus for linguists:) nice generalizations w.r.t. language
+families, using the module system of GF.
+
 
 
 <!-- NEW -->
-<h2>These are  not success criteria</h2>
+<h2>These are not our success criteria</h2>
 
-Language coverage
+Language coverage: you can parse all expressions.
 
 <p>
 
@@ -64,11 +178,61 @@ Semantic correctness
   the time is seventy past forty-two
 </pre>
 
+<p>
+
+(Warning for linguists:) theoretical innovation in
+syntax
+
+
+
+<!-- NEW -->
+<h2>So where is semantics?</h2>
+
+GF incorporates a <b>Logical Framework</b> and is therefore
+capable of expressing logical semantics <i>à la</i> Montague
+or any other flavour, including anaphora and discourse.
+
+<p>
+
+But we do <i>not</i> believe semantics can be given once and
+for all for a natural language.
+
+<p>
+
+Instead, we expect semantics to be given in
+<b>application grammars</b> built on semantic models
+of different domains.
+
+<p>
+
+Example application: number theory
+<pre>
+  fun Even : Nat -> Prop ;         -- a mathematical predicate
+
+  lin Even = predA (regA "even") ; -- English translation
+  lin Even = predA (regA "pair") ; -- French translation
+  lin Even = predA (regA "jämn") ; -- Swedish translation
+</pre>
+How could the resource predict that just <i>these</i>
+translations are correct in this domain?
+
+<p>
+
+Application grammars are built by experts of these domains
+who - thanks to resource grammars - do no more need to be
+experts in linguistics.
+
+
+
+
+
+
 
 <!-- NEW -->
 <h2>Languages</h2>
 
-<p>
+The current GF Resource Project covers ten languages:
+<ul>
 <li><tt>Dan</tt>ish
 <li><tt>Eng</tt>lish
 <li><tt>Fin</tt>nish
@@ -79,30 +243,86 @@ Semantic correctness
 <li><tt>Rus</tt>sian
 <li><tt>Spa</tt>nish
 <li><tt>Swe</tt>dish
-<p>
+</ul>>
+The first three letters (<tt>Dan</tt> etc) are used in grammar module names
+
+
+<!-- NEW -->
+<h2>Library structure 1: language-independent API</h2>
+
+<li> syntactic <tt>Categories</tt> (parts of speech, word classes), e.g.
+<pre>
+  V ; NP ; CN ; Det ;  -- verb, noun phrase, common noun, determiner
+</pre>
+<li> <tt>Rules</tt> for combining words and phrases, e.g.
+<pre>
+  DetNP : Det -> CN -> NP ; -- combine Det and CN into NP
+</pre>
+<li> the most common <tt>Structural</tt> words (determiners,
+conjunctions, pronouns), e.g.
+<pre>
+  and_Conj : Conj ;
+</pre>
+
+<!-- NEW -->
+<h2>Library structure 2: language-dependent modules</h2>
+
+<li> morphological <tt>Paradigms</tt>, e.g.
+<pre>
+  mkN : Str -> Str -> Str -> Str -> Gender -> N ; -- worst-case nouns
+  mkN : Str -> N ;                                -- regular nouns
+</pre>
+<li> irregular <tt>Verbs</tt>, e.g.
+<pre>
+  angripa_V = irregV "angripa" "angrep" "angripit" ;
+</pre>
+<li> <tt>Lexicon</tt> of frequent words
+<pre>
+  man_N = mkN "man" "mannen" "män" "männen" masculine ;
+</pre>
+<li> <tt>Ext</tt>ended syntax with language-specific rules
+<pre>
+  PassBli : V2 -> NP -> VP ;  -- bli överkörd av ngn
+</pre>
 
 
 
 <!-- NEW -->
-<h2>Library structure: overview</h2>
+<h2>How much can be language-independent?</h2>
 
-Language-independent API
+For the ten languages we have considered, it <i>is</i> possible
+to implement the current API.
 
 <p>
 
-Language-dependent resources
+Reservations:
 <ul>
-<li> morphological <tt>Paradigms</tt>
-<li> irregular <tt>Verbs</tt>
-</ul>
+<li> does not necessarily extend to all other languages
+<li> does not necessarily cover the most idiomatic expressions
+     of each language
+<li> may not be the easiest API to implement (e.g. negation and
+inversion with  <i>do</i> in English suggest that some other
+structure would be more natural)
+<li> does not guarantee that same structure has the same semantics
+in different languages
+<p>
 
 
 <!-- NEW -->
 <h2>Library structure: language-independent API</h2>
 
 <center>
+<img src="Resource.gif">
+</center>
+
+
+<!-- NEW -->
+<h2>Library structure: test bed for the language-independent API</h2>
+
+<center>
 <img src="Lang.gif">
 </center>
+
 
 <!-- NEW -->
 <h2>API documentation</h2>
@@ -113,7 +333,9 @@ Language-dependent resources
 <a href="Rules.html">Rules</a>
 
 <p>
-<a href="Clause.html">Clause</a>
+Alternative views on sentence formation:
+<a href="Clause.html">Clause</a>,
+<a href="Verbphrase.html">Verbphrase</a>
 
 <p>
 <a href="Structural.html">Structural</a>
@@ -135,19 +357,27 @@ Language-dependent resources
 <!-- NEW -->
 <h2>Paradigms documentation</h2>
 
-<a href="ParadigmsEng.html">English</a>
-
-<p>
-
+<a href="ParadigmsEng.html">English paradigms</a>
+<br>
+<a href="BasicEng.html">example use of English oaradigms</a>
+<br>
 <a href="VerbsEng.html">English verbs</a>
 
 <p>
 
-<a href="ParadigmsSwe.html">Swedish</a>
+<a href="ParadigmsFre.html">French paradigms</a>
+<br>
+<a href="BasicFre.html">example use of French paradigms</a>
+<br>
+<a href="VerbsFre.html">French verbs</a>
 
 <p>
 
-<a href="BasicSwe.html">example of Swedish</a>
+<a href="ParadigmsSwe.html">Swedish paradigms</a>
+<br>
+<a href="BasicSwe.html">example use of Swedish paradigms</a>
+<br>
+<a href="VerbsSwe.html">Swedish verbs</a>
 
 
 

@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../../prelude
 
---1 English Lexical Paradigms UNDER RECONSTRUCTION!
+--1 English Lexical Paradigms
 --
 -- Aarne Ranta 2003
 --

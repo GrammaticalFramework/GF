@@ -24,6 +24,7 @@ import Macros
 import Lookup
 import Refresh
 import PatternMatch
+import Lockfield (isLockLabel) ----
 
 import AppPredefined
 
@@ -82,6 +83,12 @@ computeTerm gr = comp where
          (S (T i cs) e,_) -> prawitz g i (flip App a') cs e
 
 	 _ -> returnC $ appPredefined $ App f' a'
+
+     P t l | isLockLabel l -> return $ R [] 
+     ---- a workaround 18/2/2005: take this away and find the reason
+     ---- why earlier compilation destroys the lock field
+
+
      P t l  -> do
        t' <- comp g t
        case t' of
