@@ -20,7 +20,7 @@ import Option
 import Custom
 import ShellState
 
-import qualified ExportParser as N
+import qualified ParseGFCviaCFG as N
 
 import Operations
 
@@ -43,9 +43,9 @@ parseStringC opts0 sg cat s
 ---- to test peb's new parser 6/10/2003
  | oElem newParser opts0 = do  
   let pm = maybe "" id $ getOptVal opts0 useParser -- -parser=pm
-      gr = grammar sg
+      gr = stateGrammarST sg 
       ct = cfCat2Cat cat
-  ts <- checkErr $ N.newParser pm gr (cfCat2Cat cat) s
+  ts <- checkErr $ N.newParser pm sg ct s -- peb 27/5-04 (changed gr -> sg)
   mapM (checkErr . (annotate gr)) ts
 
  | otherwise = do
@@ -58,11 +58,13 @@ parseStringC opts0 sg cat s
   tokens2trms opts sg cn parser (tok s)
 
 tokens2trms :: Options ->StateGrammar ->Ident -> CFParser -> [CFTok] -> Check [Tree]
-tokens2trms opts sg cn parser as = do
-  let res@(trees,info) = parser as
-  ts0 <- return $ cfParseResults res          -- removed nub, peb 25/5-04
-  -- ts0 <- return $ nub (cfParseResults res) -- nub gives quadratic behaviour!
-                                              -- SortedList.nubsort is O(n log n)
+tokens2trms opts sg cn parser toks = trees2trms opts sg cn toks trees info
+    where result = parser toks
+	  info   = snd result
+	  trees  = {- nub $ -} cfParseResults result -- peb 25/5-04: removed nub (O(n^2))
+
+trees2trms :: Options -> StateGrammar -> Ident -> [CFTok] -> [CFTree] -> String -> Check [Tree]
+trees2trms opts sg cn as ts0 info = do
   ts  <- case () of
     _ | null ts0 -> checkWarn "No success in cf parsing" >> return []
     _ | raw      -> do

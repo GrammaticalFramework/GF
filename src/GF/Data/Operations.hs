@@ -407,14 +407,15 @@ begindocument =
  "\\setlength{\\parskip}{2mm}" ++++
  "\\setlength{\\parindent}{0mm}" ++++
  "\\setlength{\\oddsidemargin}{0mm}" ++++
- "\\setlength{\\evensidemargin}{-2mm}" ++++
- "\\setlength{\\topmargin}{-8mm}" ++++
+ ("\\setlength{\\evensidemargin}{"++"-2mm}") ++++ -- peb 27/5-04: to prevent hugs-mode 
+ ("\\setlength{\\topmargin}{"++"-8mm}") ++++      -- from treating the rest as comments
  "\\setlength{\\textheight}{240mm}" ++++
  "\\setlength{\\textwidth}{158mm}" ++++
  "\\begin{document}\n"
 
 enddocument =
  "\n\\end{document}\n"
+
 
 sortByLongest :: [[a]] -> [[a]]
 sortByLongest = sortBy longer where
@@ -426,10 +427,13 @@ sortByLongest = sortBy longer where
    x' = length x
    y' = length y
 
+-- "combinations" is the same as "sequence"!!!
+-- peb 30/5-04
 combinations :: [[a]] -> [[a]]
 combinations t = case t of 
   []    -> [[]]
   aa:uu -> [a:u | a <- aa, u <- combinations uu]
+
 
 mkTextFile :: String -> IO ()
 mkTextFile name = do
