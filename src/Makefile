@@ -26,6 +26,8 @@ NOT_IN_DIST= \
 
 BIN_DIST_DIR=$(DIST_DIR)-$(host)
 
+SNAPSHOT_DIR=GF-$(shell date +%Y%m%d)
+
 all: unix gfdoc jar
 
 temp: today noopt
@@ -138,6 +140,9 @@ dist:
 
 rpm: dist
 	rpmbuild -ta $(DIST_DIR).tgz
+
+snapshot: DIST_DIR=$(SNAPSHOT_DIR)
+snapshot: dist
 
 binary-dist: 
 	rm -rf $(BIN_DIST_DIR)
