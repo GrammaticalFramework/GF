@@ -439,9 +439,170 @@ with compound analysis, 50,000 without
 
 <!-- NEW -->
 
+<h2>Syntax case study: Swedish noun phrases</h2>
+
+Problem: describe agreement and inheritance of definiteness
+when a determiner is added to a common noun, possibly modified by
+an adjective:
+<p>
+<i>
+en bil<br>
+bilen<p>
+en stor bil<br>
+den stora bilen<p>
+denna bil<br>
+denna stora bil
+</i>
+</p>
+
+<!-- NEW -->
+
+<h3>Abstract syntax for noun phrases</h3>
+
+The <b>abstract syntax</b> of a GF grammar defines what grammatical
+structures there are, without telling how they are defined.
+
+<p>
+
+The relevant fragment consists of 4 <b>categories</b> and
+3 <b>functions</b>
+<pre>
+  cat 
+    N ;   -- simple (lexical) common noun, e.g. "bil"
+    CN ;  -- possibly complex common noun, e.g. "stor bil"
+    Det ; -- determiner,                   e.g. "denna"          
+    NP ;  -- noun phrase,                  e.g. "bilen"
+    AP :  -- adjectival phrase,            e.g. "stor"
+  fun
+    UseN  : N -> CN ;    
+    UseA  : A -> AP ;    
+    DetCN : Det -> CN -> NP ;
+    ModA  : A -> CN -> CN ;
+</pre>
+
+
+<!-- NEW -->
+
+<h3>Types of complex nouns and noun phrases</h3>
+
+Just like to words, we assign <b>linearization types</b> to
+phrase categories. They are similar to the lexical types,
+but often with some extra information.
+<pre>
+  lincat
+    CN  = {s : Number => SpeciesP => Case => Str ; g : Gender ; isComplex : Bool} ;
+    NP  = {s : NPForm => Str ; g : Gender ; n : Number ; p : Person} ;
+    Det = {s : Gender => Str ; n : Number ; b : SpeciesP} ;
+    AP  = {s : AdjFormPos => Case => Str} ; 
+</pre>
+Here we use some new parameter types:
+<pre>
+  param
+    SpeciesP   = IndefP | DefP Species ;  
+    NPForm     = PNom | PAcc | PGen GenNum ;
+    GenNum     = ASg Gender | APl ;
+    AdjFormPos = Strong GenNum | Weak ;
+</pre>
+
+
+
+
+<!-- NEW -->
+
+<h3>Building noun phrases with a determiner</h3>
+
+Mutual agreement:
+<ul>
+<li> the determiner gets the gender of the noun
+<li> the noun gets the number and definiteness of the determiner
+</ul>
+<pre>
+  DetCN : Det -> CN -> NP = \en, man -> 
+    {s = \\c => en.s ! man.g ++ 
+                man.s ! en.n ! en.b ! npCase c ;
+     g = genNoun man.g ; 
+     n = en.n ; 
+     p = P3
+    } ;
+</pre>
+
+<!-- NEW -->
+
+<h3></h3>
+
+<!-- NEW -->
+
+<h3></h3>
+
+
+
+<!-- NEW -->
+
 <h2>Syntax case study: Swedish sentence structure</h2>
 
+Data: freedom in word order in main clause
+<p>
+<i>
+jag har inte sett dig idag<br>
+dig jag har inte sett idag<br>
+idag har jag inte sett dig<br>
+inte har jag sett dig idag<br>
+sett har jag inte dig idag (??)<br>
+sett dig har jag inte idag<p>
+</i>
+Rigid order in questions...
+<p>
+<i>
+har jag inte sett dig idag
+</i>
+<p>
+... and in subordinate clauses
+<p>
+<i>
+jag inte har sett dig idag
+</i>
+<p>
 
+
+<!-- NEW -->
+
+<h3>The topological model</h3>
+
+<!-- NEW -->
+
+<h3>The <tt>Sats</tt> data type</h3>
+
+
+<!-- NEW -->
+
+<h3>Building clauses from <tt>Sats</tt></h3>
+
+
+<!-- NEW -->
+
+<h3>Construction of <tt>Sats</tt></h3>
+
+Notice: we want to treat <tt>Sats</tt> as an abstract data type.
+
+<!-- NEW -->
+
+<h3>Verb subcategorization patterns formalized</h3>
+
+
+<!-- NEW -->
+
+<h3>Adding adverbials</h3>
+
+
+<!-- NEW -->
+
+<h3>Coverage of verb patterns in Swedish Academy Grammar</h3>
+
+
+
+<!-- NEW -->
+
+<h3>Remaining problems</h3>
 
 
 <!-- NEW -->
