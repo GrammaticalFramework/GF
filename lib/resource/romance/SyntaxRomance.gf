@@ -426,7 +426,7 @@ oper
      } ;
 
   formVerb : Verb -> Bool -> Gender -> VPForm -> Str = \aller,b,g,vf ->
-    let va = (predVerb aller).s in va ! b ! g ! vf ;
+    (predVerb aller).s ! b ! g ! vf ;
 
   negVerb : Str -> Str ;
 
