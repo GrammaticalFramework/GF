@@ -36,7 +36,7 @@ data ShellState = ShSt {
   canModules :: CanonGrammar ,       -- compiled abstracts and concretes
   srcModules :: G.SourceGrammar ,    -- saved resource modules
   cfs        :: [(Ident,CF)] ,       -- context-free grammars
-  pInfos     :: Cnv.PInfo,           -- peb 8/6
+  pInfos     :: [(Ident,Cnv.PInfo)], -- peb 18/6
   morphos    :: [(Ident,Morpho)],    -- morphologies
   gloptions  :: Options,             -- global options
   readFiles  :: [(FilePath,ModTime)],-- files read
@@ -59,7 +59,7 @@ emptyShellState = ShSt {
   canModules = M.emptyMGrammar,
   srcModules = M.emptyMGrammar,
   cfs        = [],
-  pInfos     = Cnv.pInfo M.emptyMGrammar, -- peb 8/6
+  pInfos     = [], -- peb 18/6
   morphos    = [],
   gloptions  = noOptions,
   readFiles  = [],
@@ -88,7 +88,7 @@ emptyStateGrammar = StGr {
   cncId   = identC "#EMPTY", ---
   grammar = M.emptyMGrammar,
   cf      = emptyCF,
-  pInfo   = Cnv.pInfo M.emptyMGrammar, -- peb 8/6
+  pInfo   = Cnv.emptyPInfo, -- peb 18/6
   morpho  = emptyMorpho,
   loptions = noOptions
   }
@@ -129,7 +129,7 @@ updateShellState opts sh ((_,sgr,gr),rts) = do
       notInrts f = notElem f $ map fst rts
   cfs <- mapM (canon2cf opts cgr) concrs --- would not need to update all...
 
-  let pinfos = Cnv.pInfo gr  -- peb 8/6
+  let pinfos = map (Cnv.pInfo cgr) concrs  -- peb 18/6
 
   let funs = funRulesOf cgr
   let cats = allCatsOf cgr
@@ -148,7 +148,7 @@ updateShellState opts sh ((_,sgr,gr),rts) = do
     canModules = cgr,
     srcModules = src,
     cfs        = zip concrs cfs,
-    pInfos     = pinfos, -- peb 8/6
+    pInfos     = zip concrs pinfos, -- peb 8/6
     morphos    = zip concrs (map (mkMorpho cgr) concrs),
     gloptions  = gloptions sh, --- opts, -- this would be command-line options
     readFiles  = [ft | ft@(f,_) <- readFiles sh, notInrts f] ++ rts,
@@ -250,7 +250,7 @@ stateGrammarOfLang st l = StGr {
   cncId    = l,
   grammar  = can,
   cf       = maybe emptyCF id (lookup l (cfs st)),
-  pInfo    = pInfos st, -- peb 8/6
+  pInfo    = maybe Cnv.emptyPInfo id (lookup l (pInfos st)), -- peb 18/6
   morpho   = maybe emptyMorpho id (lookup l (morphos st)),
   loptions = errVal noOptions $ lookupOptionsCan can
   }
@@ -280,7 +280,7 @@ stateAbstractGrammar st = StGr {
   cncId   = identC "#Cnc", ---
   grammar = canModules st, ---- only abstarct ones
   cf      = emptyCF,
-  pInfo   = Cnv.pInfo (canModules st), -- peb 8/6
+  pInfo   = Cnv.emptyPInfo, -- peb 18/6
   morpho  = emptyMorpho,
   loptions = gloptions st ----
   }

@@ -5,7 +5,7 @@ cat
 S; VP; NP; V; N; D; P; PP; 
 
 fun 
-cyclic  : S -> S;
+-- cyclic  : S -> S;
 mkS     : NP -> VP -> S;
 mkVP    : V -> NP -> VP;
 mkNP1   : D -> N -> NP;

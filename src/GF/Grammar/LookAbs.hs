@@ -25,7 +25,7 @@ lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
     _ -> Bad $ prt m +++ "is not an abstract module"
 
 lookupFunType :: GFCGrammar -> Ident -> Ident -> Err Type
-lookupFunType gr m c = errIn ("looking up funtype of" +++ prt c) $ do
+lookupFunType gr m c = errIn ("looking up funtype of" +++ prt c +++ "in module" +++ prt m) $ do
   mi   <- lookupModule gr m
   case mi of
     ModMod mo -> do

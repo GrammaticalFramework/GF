@@ -27,7 +27,8 @@ concrete TestVars of TestVarsA = open TestVarsR in {
 lincat S = { s : Str };
 lin
 --s = { s = variants { "a" ; "b" ; "c" } };
-e = { s = variants { "e" ; "f" } };
+--e = { s = variants { "e" ; "f" } };
+e = { s = "e" };
 ee x = { s = x.s ++ x.s };
 f = { s = "g" };
 ff x = { s = "e" ++ x.s };
