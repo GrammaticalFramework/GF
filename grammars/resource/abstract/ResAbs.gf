@@ -229,6 +229,7 @@ fun
   SubjS     : Subj -> S -> S -> S ;        -- "if 2 is odd, 3 is even"
   SubjImper : Subj -> S -> Imp -> Imp ;    -- "if it is hot, use a glove!"
   SubjQu    : Subj -> S -> Qu -> Qu ;      -- "if you are new, who are you?"
+  SubjVP    : VP -> Subj -> S -> VP ;      -- "(a man who) sings when he runs"
 
 --2 One-word utterances
 --

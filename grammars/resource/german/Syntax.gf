@@ -341,11 +341,12 @@ oper
 --3 Verb phrases
 --
 -- Verb phrases are discontinuous: the parts of a verb phrase are
--- (s) an inflected verb, (s2) particle, and 
--- (s3) negation and complement. This discontinuity is needed in sentence formation
+-- (s) an inflected verb, (s2) particle,  
+-- (s3) negation and complement, and (s4) sentential adverbial. 
+-- This discontinuity is needed in sentence formation
 -- to account for word order variations.
 
-  VerbPhrase = Verb ** {s3 : Number => Str} ; 
+  VerbPhrase = Verb ** {s3 : Number => Str ; s4 : Str} ; 
 
 -- A simple verb can be made into a verb phrase with an empty complement.
 -- There are two versions, depending on if we want to negate the verb.
@@ -354,7 +355,8 @@ oper
 
   predVerb : Bool -> Verb -> VerbPhrase = \b,aussehen -> 
     aussehen ** {
-     s3 = \\_ => negation b
+     s3 = \\_ => negation b ;
+     s4 = []
      } ;
 
   negation : Bool -> Str = \b -> if_then_else Str b [] "nicht" ;
@@ -370,17 +372,20 @@ oper
 
   predAdjective : Bool -> Adjective -> VerbPhrase = \b,gut ->
     verbSein ** {
-      s3 = \\_ => negation b ++ gut.s ! APred
+      s3 = \\_ => negation b ++ gut.s ! APred ;
+      s4 = []
       } ;
 
   predCommNoun : Bool -> CommNounPhrase -> VerbPhrase = \b,man ->
     verbSein ** {
-      s3 = \\n => negation b ++ indefNoun n man
+      s3 = \\n => negation b ++ indefNoun n man ;
+      s4 = []
      } ;
 
   predNounPhrase : Bool -> NounPhrase -> VerbPhrase = \b,dermann ->
     verbSein ** {
-      s3 = \\n => negation b ++ dermann.s ! NPCase Nom
+      s3 = \\n => negation b ++ dermann.s ! NPCase Nom ;
+      s4 = []
      } ;
 
 --3 Transitive verbs
@@ -407,7 +412,8 @@ oper
       } in
     {s  = warten.s ; 
      s2 = warten.s2 ; 
-     s3 = \\_ => bothWays aufdich nicht
+     s3 = \\_ => bothWays aufdich nicht ;
+     s4 = []
     } ;
 
 -- Transitive verbs with accusative objects can be used passively. 
@@ -417,7 +423,8 @@ oper
   passVerb : Bool -> Verb -> VerbPhrase = \b,lieben ->
     {s  = verbumWerden ; 
      s2 = [] ; 
-     s3 = \\_ => negation b ++ lieben.s ! VPart APred
+     s3 = \\_ => negation b ++ lieben.s ! VPart APred ;
+     s4 = []
     } ;
 
 -- Transitive verb can be used elliptically as a verb. The semantics
@@ -451,7 +458,8 @@ oper
        nicht ++ zudir ++ dasbier ;
        zudir ++ nicht ++ dasbier ;
        zudir ++ dasbier ++ nicht
-       }
+       } ;
+     s4 = []
     } ;
   
 
@@ -467,7 +475,8 @@ oper
   adVerbPhrase : VerbPhrase -> Adverb -> VerbPhrase = \spielt, gut ->
     {s  = spielt.s ; 
      s2 = spielt.s2 ;
-     s3 = \\n => spielt.s3 ! n ++ gut.s 
+     s3 = \\n => spielt.s3 ! n ++ gut.s ;
+     s4 = spielt.s4
     } ;
 
   advAdjPhrase : Adverb -> AdjPhrase -> AdjPhrase = \sehr, gut ->
@@ -511,12 +520,13 @@ oper
       ich   = Ich.s ! NPCase Nom ; 
       liebe = LiebeDichNichtAus.s ! VInd Ich.n Ich.p ;
       aus   = LiebeDichNichtAus.s2 ;
-      dichnichtgut = LiebeDichNichtAus.s3 ! Ich.n
+      dichnichtgut = LiebeDichNichtAus.s3 ! Ich.n ;
+      wennesregnet = LiebeDichNichtAus.s4
     } in
     {s = table {
-       Main => ich ++ liebe ++ dichnichtgut ++ aus ;
-       Inv  => liebe ++ ich ++ dichnichtgut ++ aus ;
-       Sub  => ich ++ dichnichtgut ++ aus ++ liebe
+       Main => ich ++ liebe ++ dichnichtgut ++ aus ++ wennesregnet ;
+       Inv  => liebe ++ ich ++ dichnichtgut ++ aus ++ wennesregnet ;
+       Sub  => ich ++ dichnichtgut ++ aus ++ liebe ++ wennesregnet
        }
     } ;
 
@@ -527,8 +537,10 @@ oper
   SentenceVerb : Type = Verb ;
 
   complSentVerb : Bool -> SentenceVerb -> Sentence -> VerbPhrase = \b,sage,duisst ->
-    sage **
-    {s3 = \\_ => negation b ++ "," ++ "dass" ++ duisst.s ! Sub} ;
+    sage ** {
+      s3 = table Number {_ => negation b} ;
+      s4 = "," ++ "dass" ++ duisst.s ! Sub
+      } ;
 
 
 --2 Sentences missing noun phrases
@@ -746,7 +758,7 @@ oper
   Imperative = SS1 Number ;
 
   imperVerbPhrase : VerbPhrase -> Imperative = \komm -> 
-    {s = \\n => komm.s ! VImp n ++ komm.s3 ! n ++ komm.s2} ;  
+    {s = \\n => komm.s ! VImp n ++ komm.s3 ! n ++ komm.s2 ++ komm.s4} ;  
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
     ss (I.s ! n ++ "!") ;
@@ -909,6 +921,18 @@ oper
     let {As = A.s ! Sub} in 
     variants {if.s ++ As ++ "," ++ B ; B ++ "," ++ if.s ++ As} ;
 
+-- Subjunctions can be used for building adverbials, which can modify verb phrases
+-- ("ich lache wenn ich gehe und singe wenn ich laufe"). , noun phrases, etc.
+-- For reasons of word order, we treat this separately from other adverbials,
+-- but this could be remedied by an extra parameter in adverbials.
+
+  subjunctVerbPhrase : VerbPhrase -> Subjunction -> Sentence -> VerbPhrase = 
+    \ruft,wenn,ergeht ->
+    {s  = ruft.s ; 
+     s2 = ruft.s2 ;
+     s3 = ruft.s3 ;
+     s4 = ruft.s4 ++ "," ++ wenn.s ++ ergeht.s ! Sub 
+    } ;
 
 --2 One-word utterances
 -- 

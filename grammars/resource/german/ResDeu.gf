@@ -45,7 +45,7 @@ lincat
 
   V      = Verb ; 
       -- = {s : VForm => Str ; s2 : Particle} ;
-  VP     = Verb ** {s3 : Number => Str} ;
+  VP     = Verb ** {s3 : Number => Str ; s4 : Str} ;
   TV     = TransVerb ; 
       -- = Verb ** {s3 : Preposition ; c : Case} ;
   V3     = TransVerb ** {s4 : Preposition ; c2 : Case} ;
@@ -173,6 +173,7 @@ lin
   SubjS = subjunctSentence ;
   SubjImper = subjunctImperative ;
   SubjQu = subjunctQuestion ;
+  SubjVP = subjunctVerbPhrase ;
 
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase singular ;
