@@ -194,7 +194,7 @@ doc2latex (Doc title paras) = unlines $
 para2latex :: Paragraph -> String
 para2latex p = case p of
   Text its      -> concat (map item2latex its)
-  Item its      -> "$\\bullet$" ++ concat (map item2latex its)
+  Item its      -> "\n\n$\\bullet$" ++ concat (map item2latex its) ++ "\n\n"
   Code s        -> unlines $ envLatex "verbatim" $ map (indent 2) $ 
                                                    remEmptyLines $ lines $ s
   New           -> "\n"
