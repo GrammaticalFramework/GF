@@ -129,10 +129,10 @@ oper
   mkDeterminerSg :  DetSg -> SpeciesP -> Determiner = \en, b -> 
     {s = en ; n = Sg ; b = b} ;
 
-  mkDeterminerPl :  DetPl -> SpeciesP -> Determiner = \alla -> 
-    mkDeterminerPlNum alla noNum ;
+  mkDeterminerPl :  DetPl -> SpeciesP -> Determiner = \alla,b -> 
+    mkDeterminerPlNum alla b noNum ;
 
-  mkDeterminerPlNum : DetPl -> Numeral -> SpeciesP -> Determiner = \alla,n,b -> 
+  mkDeterminerPlNum : DetPl -> SpeciesP -> Numeral -> Determiner = \alla,b,n -> 
     {s = \\_,_ => alla ++ n.s ! Nom ; 
      n = Pl ; 
      b = b
@@ -202,7 +202,7 @@ oper
     detNounPhrase 
       (mkDeterminerSgGender (table {g => artDef ! cn.p ! ASg g}) (DefP Def)) cn ;
   deDet : Numeral -> CommNounPhrase -> NounPhrase = \n,cn -> 
-    detNounPhrase (mkDeterminerPlNum (artDef ! cn.p ! APl) n (DefP Def)) cn ;
+    detNounPhrase (mkDeterminerPlNum (artDef ! cn.p ! APl) (DefP Def) n) cn ;
 
 -- It is useful to have macros for indefinite and definite, singular and plural
 -- noun-phrase-like syncategorematic expressions.
@@ -447,50 +447,53 @@ oper
 -- to account for word order variations.
 
   VerbPhrase : Type = Verb ** {s2 : Str ; s3 : Gender => Number => Str} ;
+  VerbGroup  : Type = Verb ** {s2 : Bool => Str ; s3 : Gender => Number => Str} ;
+
+  predVerbGroup : Bool -> VerbGroup -> VerbPhrase = \b,vg -> {
+    s  = vg.s ;
+    s2 = vg.s2 ! b ;
+    s3 = vg.s3
+    } ;
 
 -- A simple verb can be made into a verb phrase with an empty complement.
 -- There are two versions, depending on if we want to negate the verb.
 -- N.B. negation is *not* a function applicable to a verb phrase, since
 -- double negations with "inte" are not grammatical.
 
-  predVerb : Bool -> Verb -> VerbPhrase = \b,se -> 
+  predVerb : Verb -> VerbGroup = \se -> 
     se ** {
-     s2 = negation b ; 
+     s2 = negation ; 
      s3 = \\_,_ => []
      } ;
 
-  negation : Bool -> Str = \b -> if_then_else Str b [] "inte" ;
-
--- Sometimes we want to extract the verb part of a verb phrase.
-
-  verbOfPhrase : VerbPhrase -> Verb = \v -> {s = v.s} ;
+  negation : Bool => Str = \\b => if_then_Str b [] "inte" ;
 
 -- Verb phrases can also be formed from adjectives ("är snäll"),
 -- common nouns ("är en man"), and noun phrases ("är den yngste mannen").
 -- The third rule is overgenerating: "är varje man" has to be ruled out
 -- on semantic grounds.
 
-  predAdjective : Bool -> Adjective -> VerbPhrase = \b,arg ->
+  predAdjective : Adjective -> VerbGroup = \arg ->
     verbVara ** {
-      s2 = negation b ; 
+      s2 = negation ; 
       s3 = \\g,n => arg.s ! mkAdjForm Indef n g NoMasc ! Nom
       } ;
 
-  predCommNoun : Bool -> CommNounPhrase -> VerbPhrase = \b,man ->
+  predCommNoun : CommNounPhrase -> VerbGroup = \man ->
     verbVara ** {
-      s2 = negation b ;
+      s2 = negation ;
       s3 = \\_,n => indefNoun n man
      } ;
 
-  predNounPhrase : Bool -> NounPhrase -> VerbPhrase = \b,john ->
+  predNounPhrase : NounPhrase -> VerbGroup = \john ->
     verbVara ** {
-      s2 = negation b ;
+      s2 = negation ;
       s3 = \\_,_ => john.s ! PNom
     } ;
 
-  predAdverb : Bool -> Adverb -> VerbPhrase = \b,ute ->
+  predAdverb : Adverb -> VerbGroup = \ute ->
     verbVara ** {
-      s2 = negation b ;
+      s2 = negation ;
       s3 = \\_,_ => ute.s
     } ;
 
@@ -517,9 +520,9 @@ oper
 
 -- The rule for using transitive verbs is the complementization rule:
 
-  complTransVerb : Bool -> TransVerb -> NounPhrase -> VerbPhrase = \b,se,dig ->
+  complTransVerb : TransVerb -> NounPhrase -> VerbGroup = \se,dig ->
     {s = se.s ; 
-     s2 = negation b ; 
+     s2 = negation ; 
      s3 = \\_,_ => se.s2 ++ dig.s ! PAcc
     } ;
 
@@ -529,9 +532,9 @@ oper
 -- The syntax is the same as for active verbs, with the choice of the
 -- "s" passive form.
 
-  passVerb : Bool -> Verb -> VerbPhrase = \b,se -> ---- passive not yet
+  passVerb : Verb -> VerbGroup = \se -> ---- passive not yet
     {s  = table {VPres m _ => se.s ! VPres m Pass} ;  
-     s2 = negation b ; 
+     s2 = negation ; 
      s3 = \\_,_ => []
      } ;
 
@@ -552,10 +555,9 @@ oper
     v ** {s2 = p1 ; s3 = p2} ;
 
   complDitransVerb : 
-    Bool -> DitransVerb -> NounPhrase -> NounPhrase -> VerbPhrase = 
-    \b,ge,dig,vin ->
+    DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = \ge,dig,vin ->
     {s = ge.s ; 
-     s2 = negation b ; 
+     s2 = negation ; 
      s3 = \\_,_ => ge.s2 ++ dig.s ! PAcc ++ ge.s3 ++ vin.s ! PAcc
     } ;
 
@@ -635,10 +637,6 @@ oper
        }
     } ;
 
--- This is a macro for simultaneous predication and complementation.
-
-  predTransVerb : Bool -> NounPhrase -> TransVerb -> NounPhrase -> Sentence = 
-    \b,jag,ser,dig -> predVerbPhrase jag (complTransVerb b ser dig) ;
 
 --3 Sentence-complement verbs
 --
@@ -646,9 +644,27 @@ oper
 
   SentenceVerb : Type = Verb ;
 
-  complSentVerb : Bool -> SentenceVerb -> Sentence -> VerbPhrase = \b,se,duler ->
-    {s = se.s ; s2 = negation b ; s3 = \\_,_ => optStr "att" ++ duler.s ! Main} ;
+  complSentVerb : SentenceVerb -> Sentence -> VerbGroup = \se,duler ->
+    {s  = se.s ; 
+     s2 = negation ; 
+     s3 = \\_,_ => optStr "att" ++ duler.s ! Main
+    } ;
 
+--3 Verb-complement verbs
+--
+-- Sentence-complement verbs take verb phrases as complements.
+-- They can be auxiliaries ("kan", "måste") or ordinary verbs
+-- ("försöka"); this distinction cannot be done in the multilingual
+-- API and leads to some anomalies in Swedish, but less so than in English.
+
+  VerbVerb : Type = Verb ** {isAux : Bool} ;
+
+  complVerbVerb : VerbVerb -> VerbGroup -> VerbGroup = \vilja, simma ->
+    {s  = vilja.s ; 
+     s2 = negation ; 
+     s3 = \\g,n => if_then_Str vilja.isAux [] "att" ++ 
+                simma.s ! VPres Infinit Act ++ simma.s2 ! True ++ simma.s3 ! g ! n
+    } ;
 
 
 --2 Sentences missing noun phrases
@@ -668,7 +684,7 @@ oper
     let {
       jag  = Jag.s ! PNom ; 
       ser  = se.s ! VPres Indicat Act ;
-      inte = negation b
+      inte = negation ! b
     } in
     {s = table {
        Main => jag ++ ser ++ inte ;  

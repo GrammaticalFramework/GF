@@ -42,7 +42,7 @@ oper
 
 -- parametric order between two strings
   preOrPost : Bool -> Str -> Str -> Str = \pr,x,y -> 
-    if_then_else Str pr (x ++ y) (y ++ x) ;
+    if_then_Str pr (x ++ y) (y ++ x) ;
 
 -- Booleans
 
@@ -59,6 +59,7 @@ oper
   orB  : (_,_ : Bool) -> Bool = \a,b -> if_then_else Bool a True b ;
   notB : Bool         -> Bool = \a   -> if_then_else Bool a False True ;
 
+  if_then_Str : Bool -> Str -> Str -> Str = if_then_else Str ;
 
 -- zero, one, two, or more (elements in a list etc)
 
