@@ -27,6 +27,8 @@ NOT_IN_DIST= \
 	src/conversions \
 	src/util/AlphaConvGF.hs
 
+BIN_DIST_DIR=$(DIST_DIR)-$(host)
+
 all: unix
 
 unix: today nofud-links opt
@@ -90,6 +92,7 @@ distclean: clean
 	-rm -f util/gfdoc
 	-rm -f config.status config.mk config.log
 	-rm -f *.tar.gz *.zip
+	-rm -rf $(DIST_DIR) $(BIN_DIST_DIR)
 
 hugs:
 	hugs -h10M -P$(HUGSINCLUDE)
@@ -125,6 +128,14 @@ dist:
 
 rpm: dist
 	rpmbuild -ta $(DIST_DIR).tar.gz
+
+binary-dist: 
+	rm -rf $(BIN_DIST_DIR)
+	mkdir $(BIN_DIST_DIR)
+	./configure CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
+	make unix gfdoc jar
+	make prefix=$(BIN_DIST_DIR)/$(prefix) install 
+	tar -zcf GF-$(PACKAGE_VERSION)-$(host).tar.gz $(BIN_DIST_DIR)
 
 install-gf:
 	$(INSTALL) -d $(bindir)
