@@ -59,7 +59,7 @@ oper
 
 -- The commonest case for functions is common noun + "di".
 
-  funDi : CommNounPhrase -> Function = \mere -> 
+  funGen : CommNounPhrase -> Function = \mere -> 
     mere ** complementCas genitive ;
 
 -- Chains of "cui" - "cui" do not arise.

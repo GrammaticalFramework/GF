@@ -38,8 +38,8 @@ lin
   Prove = verbSent (verbAmare "dimostrare") Ind Ind ;
   SwitchOn = mkTransVerbDir (verbAmare "allumare") ; 
   SwitchOff = mkTransVerbDir verbPresSpegnere ;
-  Mother = funDi (mkCNom (nomSale "madre") Fem) ;
-  Uncle = funDi (mkCNom (nomVino "zio") Masc) ;
+  Mother = funGen (mkCNom (nomSale "madre") Fem) ;
+  Uncle = funGen (mkCNom (nomVino "zio") Masc) ;
   Connection = mkCNom (nomSale "connessione") Fem ** 
                {s2 = [] ; c = CPrep P_da ; s3 = [] ; c3 = dative} ;
 
