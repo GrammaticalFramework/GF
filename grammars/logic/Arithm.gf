@@ -44,6 +44,7 @@ def
               (LtNat one n) 
               (Univ Nat (\x -> Impl (Conj (LtNat one x) (Div n x)) (EqNat x n))) ;
 
+  Abs = Abs ;
 ---  data Elem = zero | succ ;
 
 fun ex1 : Text ;
