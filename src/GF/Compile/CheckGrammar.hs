@@ -233,6 +233,9 @@ computeLType gr t = do
  where
   comp ty = case ty of
 
+    App (Q (IC "Predef") (IC "Ints")) _ -> return ty ---- shouldn't be needed
+    Q (IC "Predef") (IC "Int")          -> return ty ---- shouldn't be needed
+
     Q m c | elem c [cPredef,cPredefAbs] -> return ty
 
     Q m ident -> checkIn ("Q" +++ show m) $ do
@@ -663,6 +666,15 @@ checkEqLType env t u trm = do
                                  -- || -- if fails, try subtyping:
                                  all (\ (l,a) -> 
                                      any (\ (k,b) -> alpha g a b && l == k) ts) rs
+
+     -- the following say that Ints n is a subset of Int and of Ints m
+     (App (Q (IC "Predef") (IC "Ints")) (EInt n), 
+        App (Q (IC "Predef") (IC "Ints")) (EInt m)) -> m >= n
+     (App (Q (IC "Predef") (IC "Ints")) (EInt n), 
+        Q (IC "Predef") (IC "Int"))                 -> True ---- should check size
+     
+     (Q (IC "Predef") (IC "Int"),
+        App (Q (IC "Predef") (IC "Ints")) (EInt n)) -> True
 
      (Table a b,  Table c d)  -> alpha g a c && alpha g b d
      (Vr x,       Vr y)       -> x == y || elem (x,y) g || elem (y,x) g

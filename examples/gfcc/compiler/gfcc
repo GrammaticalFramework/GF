@@ -1,0 +1,4 @@
+./TestImperC $1 | tail -1 >gft.tmp
+echo "es -file=typecheck.gfs" | gf+ -s Imper.gfcm
+runhugs CleanJVM jvm.tmp $1
+rm *.tmp

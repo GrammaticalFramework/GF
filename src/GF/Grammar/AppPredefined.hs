@@ -15,16 +15,18 @@ isInPredefined = err (const True) (const False) . typPredefined
 typPredefined :: Ident -> Err Type
 typPredefined c@(IC f) = case f of
   "Int"    -> return typePType
+  "Ints"   -> return $ mkFunType [cnPredef "Int"] typePType
   "PBool"  -> return typePType
   "PFalse" -> return $ cnPredef "PBool"
   "PTrue"  -> return $ cnPredef "PBool"
   "dp"     -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
   "drop"   -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
   "eqInt"  -> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "PBool")
+  "lessInt"-> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "PBool")
   "eqStr"  -> return $ mkFunType [typeTok,typeTok] (cnPredef "PBool")
   "length" -> return $ mkFunType [typeTok] (cnPredef "Int")
   "occur"  -> return $ mkFunType [typeTok,typeTok] (cnPredef "PBool")
-  "plus"   -> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "PInt")
+  "plus"   -> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "Int")
 ----  "read"   -> (P : Type) -> Tok -> P
 ----  "show"   -> (P : Type) -> P -> Tok
   "take"   -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
@@ -51,6 +53,7 @@ appPredefined t = case t of
       ("eqStr",K s,    K t) -> if s == t then predefTrue else predefFalse
       ("occur",K s,    K t) -> if substring s t then predefTrue else predefFalse
       ("eqInt",EInt i, EInt j) -> if i==j then predefTrue else predefFalse
+      ("lessInt",EInt i, EInt j) -> if i<j then predefTrue else predefFalse
       ("plus", EInt i, EInt j) -> EInt $ i+j
       ("show", _, t) -> K $ prt t
       ("read", _, K s) -> str2tag s --- because of K, only works for atomic tags

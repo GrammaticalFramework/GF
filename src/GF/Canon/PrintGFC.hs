@@ -234,6 +234,7 @@ instance Print CType where
    Table ctype0 ctype -> prPrec i 0 (concatD [doc (showString "(") , prt 0 ctype0 , doc (showString "=>") , prt 0 ctype , doc (showString ")")])
    Cn cident -> prPrec i 0 (concatD [prt 0 cident])
    TStr  -> prPrec i 0 (concatD [doc (showString "Str")])
+   TInts n -> prPrec i 0 (concatD [doc (showString "Ints") , prt 0 n])
 
   prtList es = case es of
    [] -> (concatD [])
@@ -260,6 +261,7 @@ instance Print Term where
    S term0 term -> prPrec i 1 (concatD [prt 1 term0 , doc (showString "!") , prt 2 term])
    C term0 term -> prPrec i 0 (concatD [prt 0 term0 , doc (showString "++") , prt 1 term])
    FV terms -> prPrec i 1 (concatD [doc (showString "variants") , doc (showString "{") , prt 2 terms , doc (showString "}")])
+   EInt n -> prPrec i 2 (concatD [prt 0 n])
    K tokn -> prPrec i 2 (concatD [prt 0 tokn])
    E  -> prPrec i 2 (concatD [doc (showString "[") , doc (showString "]")])
 
@@ -322,6 +324,7 @@ instance Print Patt where
    PV id -> prPrec i 0 (concatD [prt 0 id])
    PW  -> prPrec i 0 (concatD [doc (showString "_")])
    PR pattassigns -> prPrec i 0 (concatD [doc (showString "{") , prt 0 pattassigns , doc (showString "}")])
+   PI n -> prPrec i 0 (concatD [prt 0 n])
 
   prtList es = case es of
    [] -> (concatD [])

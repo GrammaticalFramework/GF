@@ -104,6 +104,7 @@ data CType =
  | Table CType CType
  | Cn CIdent
  | TStr
+ | TInts Integer
   deriving (Eq,Ord,Show)
 
 data Labelling =
@@ -121,6 +122,7 @@ data Term =
  | S Term Term
  | C Term Term
  | FV [Term]
+ | EInt Integer
  | K Tokn
  | E
   deriving (Eq,Ord,Show)
@@ -157,6 +159,7 @@ data Patt =
  | PV Ident
  | PW
  | PR [PattAssign]
+ | PI Integer
   deriving (Eq,Ord,Show)
 
 data PattAssign =

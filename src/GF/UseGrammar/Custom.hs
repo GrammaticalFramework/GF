@@ -267,6 +267,9 @@ customTermCommand =
                                    (uniqueRefinements (grammar g) (tree2loc t)))
   ,(strCI "context",    \g t -> err (const [t]) (return . loc2tree)
                                    (contextRefinements (grammar g) (tree2loc t)))
+  ,(strCI "reindex",    \g t -> let gr = grammar g in
+                                  err (const [t]) return 
+                                    (exp2termCommand gr (return . MM.reindexTerm) t))
 ---  ,(strCI "delete",     \g t -> [MM.mExp0])
 -- add your own term commands here
   ]

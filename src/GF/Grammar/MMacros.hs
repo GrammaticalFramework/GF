@@ -272,3 +272,15 @@ string2var :: String -> Ident
 string2var s = case s of
   c:'_':i -> identV (readIntArg i,[c]) ---
   _ -> zIdent s
+
+-- reindex variables so that they tell nesting depth level
+
+reindexTerm :: Term -> Term
+reindexTerm = qualif (0,[]) where
+  qualif dg@(d,g) t = case t of
+    Abs x b    -> let x' = ind x d in Abs x' $ qualif (d+1, (x,x'):g) b
+    Prod x a b -> let x' = ind x d in Prod x' (qualif dg a) $ qualif (d+1, (x,x'):g) b
+    Vr x       -> Vr $ look x g
+    _ -> composSafeOp (qualif dg) t
+  look x  = maybe x id . lookup x --- if x is not in scope it is unchanged
+  ind x d = identC $ prIdent x ++ "_" ++ show d

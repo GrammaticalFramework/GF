@@ -1,32 +1,27 @@
-resource ResImper = {
+resource ResImper = open Predef in {
 
   -- precedence
 
-  param
-    Prec = P0 | P1 | P2 | P3 ;
-  oper
-    PrecExp   : Type = {s : Prec => Str} ;
-    ex        : PrecExp -> Str = \exp -> exp.s ! P0 ;
-    constant  : Str -> PrecExp = \c -> {s = \\_ => c} ;
+  oper 
+    Prec     : PType = Predef.Ints 4 ;
+    PrecExp  : Type = {s : Prec => Str} ;
+    ex       : PrecExp -> Str = \exp -> exp.s ! 0 ;
+    constant : Str -> PrecExp = \c -> {s = \\_ => c} ;
     infixN : Prec -> Str -> PrecExp -> PrecExp -> PrecExp = \p,f,x,y ->
-      {s = \\k => mkPrec (x.s ! (nextPrec ! p) ++ f ++ y.s ! (nextPrec ! p)) ! p ! k} ;
+      {s = mkPrec (x.s ! (nextPrec ! p) ++ f ++ y.s ! (nextPrec ! p)) ! p} ;
     infixL : Prec -> Str -> PrecExp -> PrecExp -> PrecExp = \p,f,x,y ->
       {s = mkPrec (x.s ! p ++ f ++ y.s ! (nextPrec ! p)) ! p} ;
 
-    nextPrec : Prec => Prec = table {P0 => P1 ; P1 => P2 ; _ => P3} ;
-    mkPrec : Str -> Prec => Prec => Str = \str -> table {
-      P3 => table {                -- use the term of precedence P3...
-        _   => str} ;              -- ...always without parentheses
-      P2 => table {                -- use the term of precedence P2...
-        P3  => paren str ;     -- ...in parentheses if P3 is expected...
-        _   => str} ;              -- ...otherwise without parentheses
-      P1 => table {
-        P3 | P2 => paren str ;
-        _  => str} ;
-      P0 => table {
-        P0  => str ;
-        _   => paren str}
+    nextPrec : Prec => Prec = table {
+      4 => 4 ; 
+      n => Predef.plus n 1
       } ;
+
+    mkPrec : Str -> Prec => Prec => Str = \str -> 
+      \\p,q => case Predef.lessInt p q of {
+        Predef.PTrue => paren str ;
+        _ => str
+        } ;
 
   -- string operations
 

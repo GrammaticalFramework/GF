@@ -208,6 +208,7 @@ useName        = aOpt "name"
 useAbsName     = aOpt "abs"
 useCncName     = aOpt "cnc"
 useResName     = aOpt "res"
+useFile        = aOpt "file"
 
 markLin        = aOpt "mark"
 markOptXML     = oArg "xml"

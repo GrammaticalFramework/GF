@@ -167,7 +167,7 @@ optionsOfCommand co = case co of
 
   CHelp _ -> opts "all filter length lexer unlexer printer transform depth number"
 
-  CImpure ICEditSession -> opts "f"
+  CImpure ICEditSession -> both "f" "file"
   CImpure ICTranslateSession -> both "f langs" "cat"
 
   _ -> none

@@ -79,6 +79,7 @@ isInConstantForm trm = case trm of
     R r      -> all (isInConstantForm . snd . snd) r
     K _      -> True
     Alias _ _ t -> isInConstantForm t
+    EInt _   -> True
     _       -> False ---- isInArgVarForm trm
 
 varsOfPatt :: Patt -> [Ident]
