@@ -26,6 +26,10 @@ instance Monad Err where
   Ok a  >>= f = f a
   Bad s >>= f = Bad s
 
+instance Functor Err where   -- added 2/10/2003 by PEB
+  fmap f (Ok a) = Ok (f a)
+  fmap f (Bad s) = Bad s
+
 -- analogue of maybe
 err :: (String -> b) -> (a -> b) -> Err a -> b 
 err d f e = case e of
