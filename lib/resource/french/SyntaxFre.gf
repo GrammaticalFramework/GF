@@ -104,7 +104,9 @@ oper
 
   negVerb = \va -> elisNe ++ va ++ "pas" ;
 
+--  copula = \b,w -> let etre = (predVerb verbEtre).s in  etre ! b ! Masc ! w ;
   copula = verbEtre ;
+
 
   isClitCase = \c -> case c of { 
      Acc => True ;

@@ -178,6 +178,11 @@ oper
     _ => singular ---
     } ;
 
+  personVerb : VF -> Person = \v -> case v of {
+    VFin _ _ p => p ;
+    _ => P3 ---
+    } ;
+
   presInd = VPres Ind ;
 -- The imperative forms depend on number and person.
 

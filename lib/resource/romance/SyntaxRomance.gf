@@ -406,6 +406,10 @@ oper
     VPF _ f => nombreVerb f
     } ;
 
+  personVerbPhrase : VPForm -> Person = \v -> case v of {
+    VPF _ f => personVerb f
+    } ;
+
   isNotImperative : VPForm -> Bool = \v -> case v of {
     VPF _ (VImper _) => False ;
     _ => True
@@ -724,33 +728,32 @@ param
 oper
   Clause = {s : Bool => ClForm => Str} ;
 
-{-
-  predVerbPhrase : NounPhrase -> VerbPhrase -> Sentence = \jean,dort ->
-    {s = \\m => jean.s ! unstressed nominative ++ 
-                dort.s ! pgen2gen jean.g ! VPF Simul (VFin (VPres m) jean.n jean.p)
+  ----  VIForm = VIInfinit | VIImperat Bool Number ;
+  predVerbGroup : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase = 
+    \b,ant,vg -> 
+    {s = \\vi,g,n,p => ant.s ++ vg.s ! b ! g ! VPF ant.a VInfin ---- imper
     } ;
 
-  predVerbGroup : Bool -> VerbGroup -> VerbPhrase = \b,vg -> {
-    s = vg.s ! b
-    } ;
-
-
-oper
   cl2vp : ClForm -> Number -> Person -> VPForm = \c,n,p -> case c of {
     ClPres   a m   => VPF a (VFin (VPres m) n p) ;
     ClImperf a m   => VPF a (VFin (VImperf m) n p) ;
     ClPasse  a     => VPF a (VFin VPasse n p) ;
     ClFut    a     => VPF a (VFin VFut n p) ;
-    ClCondit a     => VPF a (VFin VCondit n p)
+    ClCondit a     => VPF a (VFin VCondit n p) ;
     ClInfinit a    => VPF a VInfin
     } ;
 
-  predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = \jean,dort ->
-    {s = \\b,c => 
-       jean.s ! unstressed nominative ++ 
-       dort.s ! b ! pgen2gen jean.g ! cl2vp c jean.n jean.p
+  vp2cl : VPForm -> ClForm = \vf -> case vf of {
+    VPF a (VFin (VPres m)   _ _) => ClPres   a m ;
+    VPF a (VFin (VImperf m) _ _) => ClImperf a m ;
+    VPF a (VFin (VPasse) _ _)    => ClPasse  a ;
+    VPF a (VFin (VFut) _ _)      => ClFut    a ;
+    VPF a (VFin (VCondit) _ _)   => ClCondit a ;
+    VPF a VInfin    => ClInfinit a ;
+    _    => ClInfinit Simul ---- imper
     } ;
--}
+
+
   Complemnt = Gender => Number => Person => {clit, part, compl : Str} ; ---- ment
 
   predVerbClause : NounPhrase -> Verb -> Complemnt -> Clause =  \np,verb,comp -> 
@@ -784,6 +787,28 @@ oper
         ClInfinit Simul  => <jean, posNeg b (la ++ aimer)           ici> ;
         ClInfinit a      => <jean, posNeg b (la ++ avoirr)          (aimee ++ ici)>
         } ;
+
+-- These three function are just to restore the $VerbGroup$ ($VP$) based structure.
+
+  predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = \np,vp ->
+    let
+      it = np.s ! unstressed nominative
+    in
+    {s = \\b,cf => it ++ vp.s  ! b ! pgen2gen np.g ! cl2vp cf np.n np.p} ;
+
+  predClauseGroup : Verb -> Complemnt -> VerbGroup =  \verb,comp -> 
+    let
+      nvg : PronGen -> Number -> Person -> (Bool => ClForm => (Str * Str)) =
+        \g,n,p -> 
+        predVerbClauseGen {s = \\_ => [] ; g=g ; n=n ; p=p ; c=Clit0} verb comp 
+                          -- clit type irrelevant in subject position
+    in
+    {s  = \\b,g,vf => 
+       (nvg (PGen g) (nombreVerbPhrase vf)  (personVerbPhrase vf) ! b ! (vp2cl vf)).p2
+    } ;
+
+  predClauseBeGroup : Complemnt -> VerbGroup = 
+    predClauseGroup copula ;
 
 
 --3 Sentence-complement verbs
