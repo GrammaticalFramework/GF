@@ -75,6 +75,7 @@ distclean: clean
 	-rm -f for-ghc-nofud/*.hs
 	-rm -f java/gf-java.jar jgf2
 	-rm -f config.status config.mk config.log
+	-rm -f *.tar.gz *.zip
 
 hugs:
 	hugs -h10M -P$(HUGSINCLUDE)
