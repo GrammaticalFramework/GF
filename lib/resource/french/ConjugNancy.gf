@@ -1,10 +1,17 @@
-resource ConjugNancy = open TypesFre, MorphoFre in {
+resource ConjugNancy = open Prelude, TypesFre, MorphoFre in {
 
 oper VerbeN = {s : VForm => Str} ;
 oper mkNV : Verbe -> VerbeN = \ve -> 
   {s = ve} ;
 
 oper conj : Str -> Verbe = conj1aimer ;  --- temp. default
+
+oper v_nancy100inf : Str -> VerbeN = \ve -> {s = table {
+  Inf => ve ;
+  _ => nonExist
+  }
+} ;
+
 
 oper v_nancy1 : Str -> VerbeN = \s -> mkNV (conjAvoir s) ;
 oper v_nancy2 : Str -> VerbeN = \s -> mkNV (conj tre s) ;

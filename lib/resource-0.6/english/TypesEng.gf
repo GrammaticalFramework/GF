@@ -66,7 +66,7 @@ param
   VForm = InfImp | Indic Person | Past Number | PPart ;
 
 oper
-  VerbP3 : Type = SS1 VForm ;
+  VerbP3 : Type = {s : VForm => Str} ;
 
 -- A full verb can moreover have a particle.
 
