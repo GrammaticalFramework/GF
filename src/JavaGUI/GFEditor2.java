@@ -593,7 +593,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
             fromProc = new BufferedReader (isr);
             String defaultEncoding = isr.getEncoding();
             if (debug) System.out.println("encoding "+defaultEncoding);
-            toProc = new BufferedWriter(new OutputStreamWriter(extProc.getOutputStream(),"UTF8"));
+            toProc = new BufferedWriter(
+               new OutputStreamWriter(extProc.getOutputStream(),"UTF8"));
             /*  try {
                   UIManager.setLookAndFeel(
                   //UIManager.getSystemLookAndFeelClassName() );         
