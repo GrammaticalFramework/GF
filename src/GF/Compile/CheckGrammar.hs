@@ -54,7 +54,7 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
 
       MTInstance a -> do
         ModMod abs <- checkErr $ lookupModule gr a
-        checkCompleteInstance abs mo
+        -- checkCompleteInstance abs mo -- this is done in Rebuild
         mapMTree (checkResInfo gr) js
 
     return $ (name, ModMod (Module mt st fs me ops js')) : ms
@@ -90,18 +90,6 @@ checkCompleteGrammar abs cnc = mapM_ checkWarn $
          ckOne f = if isInBinTree f given 
                       then id
                       else (("Warning: no linearization of" +++ prt f):)
-
-checkCompleteInstance :: SourceRes -> SourceRes -> Check ()
-checkCompleteInstance abs cnc = mapM_ checkWarn $
-  checkComplete [f | (f, ResOper (Yes _) _) <- abs'] cnc'
-   where
-     abs' = tree2list $ jments abs
-     cnc' = mapTree fst $ jments cnc
-     checkComplete sought given = foldr ckOne [] sought
-       where
-         ckOne f = if isInBinTree f given 
-                      then id
-                      else (("Warning: no definition given to" +++ prt f):)
 
 -- General Principle: only Yes-values are checked. 
 -- A May-value has always been checked in its origin module.
@@ -623,14 +611,14 @@ checkEqLType env t u trm = do
      (Prod x a b, Prod y c d) -> alpha g a c && alpha ((x,y):g) b d
 
      ---- this should be made in Rename
-     (Q  m a, Q  n b) | a == b -> elem m (allExtends env n) 
-                               || elem n (allExtends env m)
-     (QC m a, QC n b) | a == b -> elem m (allExtends env n) 
-                               || elem n (allExtends env m)
-     (QC m a, Q  n b) | a == b -> elem m (allExtends env n) 
-                               || elem n (allExtends env m)
-     (Q  m a, QC n b) | a == b -> elem m (allExtends env n) 
-                               || elem n (allExtends env m)
+     (Q  m a, Q  n b) | a == b -> elem m (allExtendsPlus env n) 
+                               || elem n (allExtendsPlus env m)
+     (QC m a, QC n b) | a == b -> elem m (allExtendsPlus env n) 
+                               || elem n (allExtendsPlus env m)
+     (QC m a, Q  n b) | a == b -> elem m (allExtendsPlus env n) 
+                               || elem n (allExtendsPlus env m)
+     (Q  m a, QC n b) | a == b -> elem m (allExtendsPlus env n) 
+                               || elem n (allExtendsPlus env m)
 
      (RecType rs, RecType ts) -> and [alpha g a b && l == k --- too strong req
                                         | ((l,a),(k,b)) <- zip rs ts]

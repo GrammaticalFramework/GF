@@ -60,6 +60,9 @@ updateModule :: Ord i => Module i f t -> i -> t -> Module i f t
 updateModule (Module  mt ms fs me ops js) i t = 
   Module mt ms fs me ops (updateTree (i,t) js)
 
+replaceJudgements :: Module i f t -> BinTree (i,t) -> Module i f t
+replaceJudgements (Module mt ms fs me ops _) js = Module mt ms fs me ops js
+
 data MainGrammar i = MainGrammar {
     mainAbstract  :: i ,
     mainConcretes :: [MainConcreteSpec i]
@@ -118,6 +121,14 @@ allExtends gr i = case lookupModule gr i of
     Just i1 -> i : allExtends gr i1
     _ -> [i]
   _ -> []
+
+-- this plus that an instance extends its interface
+allExtendsPlus :: (Show i,Ord i) => MGrammar i f a -> i -> [i]
+allExtendsPlus gr i = case lookupModule gr i of
+  Ok (ModMod m) -> i : concatMap (allExtendsPlus gr) (exts m)
+  _ -> []
+ where
+   exts m = [j | Just j <- [extends m]] ++ [j | MTInstance j <- [mtype m]]
 
 -- initial search path: the nonqualified dependencies
 searchPathModule :: Ord i => Module i f a -> [i]

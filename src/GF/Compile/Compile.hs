@@ -7,13 +7,13 @@ import PrGrammar
 import Update
 import Lookup
 import Modules
-import ModDeps
 import ReadFiles
 import ShellState
 import MkResource
 
 -- the main compiler passes
 import GetGrammar
+import Rebuild
 import Rename
 import Refresh
 import CheckGrammar
@@ -141,6 +141,7 @@ makeSourceModule opts env@(k,gr,can) mo@(i,mi) = case mi of
       putp "  type checking reused" $ ioeErr $ showCheckModule mos mo2
       return $ (k,mo2)
     _ -> compileSourceModule opts env mo
+  _ -> compileSourceModule opts env mo
  where
    putp = putPointE opts
 
@@ -150,7 +151,9 @@ compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
   let putp = putPointE opts
       mos  = modules gr
 
-  mo2:_ <- putp "  renaming " $ ioeErr $ renameModule mos mo
+  mo1   <- ioeErr $ rebuildModule mos mo
+
+  mo2:_ <- putp "  renaming " $ ioeErr $ renameModule mos mo1
 
   (mo3:_,warnings) <- putp "  type checking" $ ioeErr $ showCheckModule mos mo2
   putStrE warnings
