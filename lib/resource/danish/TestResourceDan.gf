@@ -1,6 +1,7 @@
 --# -path=.:../scandinavian:../abstract:../../prelude
 
-concrete TestResourceDan of TestResource = RulesDan, StructuralDan ** open MorphoDan, SyntaxDan in {
+concrete TestResourceDan of TestResource = RulesDan, StructuralDan ** 
+  open Prelude, MorphoDan, SyntaxDan in {
 
 flags startcat=Phr ; lexer=text ; unlexer=text ;
 
@@ -47,4 +48,22 @@ lin
 
   John = mkProperName "Johan" NUtr ;
   Mary = mkProperName "Maria" NUtr ;
+
+--- next
+   AlreadyAdv = advPre "allerede" ;
+   NowAdv = advPre "nu" ;
+
+   Paint = extTransVerb (vNopart (vHusk "mål")) [] ;
+   Green = mkAdjective "grøn" "grønt" "grøne" "grønnere" "grønnest" ;
+
+   Beg = extTransVerb (mkVerb "bede" "beder" "bedes" "bad" "bedt" "bed") [] ** {s3 = "at"} ;
+   Promise  = extTransVerb (vNopart (vSpis "lov")) [] ** {isAux = False} ;
+   Promise2 = extTransVerb (vNopart (vSpis "lov")) [] ** {s3 = "att"} ;
+   Wonder = extTransVerb (vNopart (vHusk "undr")) [] ;
+   Ask = extTransVerb (mkVerb "spørge" "spørger""spørges""spurgte""spurgt""spørg") [] ;
+   Tell = extTransVerb (mkVerb "fortælle" "fortæller" "fortælles"
+   "fortalte" "fortalt" "fortæll") [] ;
+   Look = extTransVerb (mkVerb "se" "ser" "ses" "så" "set" "sedd") []
+   ; ---- ut
+
 } ;

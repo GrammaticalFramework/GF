@@ -1,6 +1,7 @@
 --# -path=.:../scandinavian:../abstract:../../prelude
 
-concrete TestResourceNor of TestResource = RulesNor, StructuralNor ** open MorphoNor, SyntaxNor in {
+concrete TestResourceNor of TestResource = RulesNor, StructuralNor **
+  open Prelude, MorphoNor, SyntaxNor in {
 
 flags startcat=Phr ; lexer=text ; unlexer=text ;
 
@@ -32,7 +33,7 @@ lin
   Give = extTransVerb (vNopart (mkVerb "gi" "gir" "gives" "gav" "givet" "gi")) [] ** {s3 = "til"} ; ---- ?
   Prefer = extTransVerb (vNopart (vSpis "foretrekk")) [] ** {s3 = "for"} ;
 
-  Say = vNopart (mkVerb "si" "sier" "sies" "sagde" "sagt" "sig") ;  ---- ?
+  Say = vNopart (mkVerb "si" "sier" "sies" "sa" "sagt" "sig") ;  ---- ?
   Prove = vNopart (vSpis "bevis") ;
   SwitchOn = mkDirectVerb (vHusk "lukk" ** {s1 = "opp"}) ;
   SwitchOff = mkDirectVerb (vHusk "slukk" ** {s1 = []}) ;
@@ -46,4 +47,23 @@ lin
 
   John = mkProperName "Johan" (NUtr Masc) ;
   Mary = mkProperName "Maria" (NUtr NoMasc) ;
+
+--- next
+   AlreadyAdv = advPre "allerede" ;
+   NowAdv = advPre "nå" ;
+
+   Paint = extTransVerb (vNopart (vHusk "mål")) [] ;
+   Green = mkAdjective "grønn" "grønt" "grøne" "grønnere" "grønnest" ;
+
+   Beg = extTransVerb (mkVerb "be" "ber" "bes" "bad" "bedt" "be") [] ** {s3 = "at"} ;
+   Promise  = extTransVerb (vNopart (vSpis "lov")) [] ** {isAux = False} ;
+   Promise2 = extTransVerb (vNopart (vSpis "lov")) [] ** {s3 = "att"} ;
+   Wonder = extTransVerb (vNopart (vHusk "undr")) [] ;
+   Ask = extTransVerb (mkVerb "spørre" "spør""spørs""spurde""spurt""spør") [] ;
+   Tell = extTransVerb (mkVerb "fortelle" "forteller" "fortelles"
+   "fortalte" "fortalt" "fortell") [] ;
+   Look = extTransVerb (mkVerb "se" "ser" "ses" "så" "sett" "sedd") []
+   ; ---- ut
+
+
 } ;

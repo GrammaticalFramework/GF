@@ -82,7 +82,7 @@ instance SyntaxDan of SyntaxScand = TypesDan **
   auxHar = "har" ;
   auxHade = "havde" ;
   auxHa = "have" ;
-  auxSka = "val" ;
+  auxSka = "vil" ;
   auxSkulle = "ville" ;
 
   infinAtt = "at" ;
