@@ -111,12 +111,17 @@ tracing:
 prof: GHCOPTFLAGS += -prof -auto-all -auto-dicts
 prof: all
 
+lib:
+	cd ../grammars
+	sh mkLib.sh
+
 dist:
 	-rm -rf $(DIST_DIR)
 	mkdir $(DIST_DIR)
 	cvs export -d $(DIST_DIR) -rHEAD GF2.0
 	cd $(DIST_DIR)/src && autoconf && rm -rf autom4te.cache
 	find $(DIST_DIR) -name .cvsignore -exec rm -f {} ';'
+	cd $(DIST_DIR)/grammars && sh mkLib.sh
 	cd $(DIST_DIR) && rm -rf $(NOT_IN_DIST)
 	gtar -zcf $(DIST_DIR).tar.gz $(DIST_DIR)
 	rm -rf $(DIST_DIR)
