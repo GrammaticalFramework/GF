@@ -270,7 +270,7 @@ separator DDecl "" ;
 
 -- for backward compatibility
 
-OldGr. OldGrammar ::= Include [TopDef] ;
+OldGr.  OldGrammar ::= Include [TopDef] ;
 
 NoIncl. Include ::= ;
 Incl.   Include ::= "include" [FileName] ;
@@ -292,3 +292,10 @@ ELin.      Exp2 ::= "Lin" Ident ;
 DefPrintOld.  TopDef ::= "printname" [PrintDef] ;
 DefLintype.   TopDef ::= "lintype"   [Def] ;
 DefPattern.   TopDef ::= "pattern"   [Def] ;
+
+-- deprecated packages are attempted to be interpreted
+DefPackage.   TopDef ::= "package" Ident "=" "{" [TopDef] "}" ";" ;
+
+-- these two are just ignored after parsing
+DefVars.      TopDef ::= "var" [Def] ;
+DefTokenizer. TopDef ::= "tokenizer" Ident ";" ;

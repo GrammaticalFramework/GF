@@ -79,6 +79,10 @@ type MCat = (Ident,Ident)
 sortMCat :: String -> MCat
 sortMCat s = (zIdent "_", zIdent s)
 
+--- hack for Editing.actCat in empty state
+errorCat :: MCat
+errorCat = (zIdent "?", zIdent "?")
+
 getMCat :: Term -> Err MCat
 getMCat t = case t of
   Q  m c -> return (m,c)

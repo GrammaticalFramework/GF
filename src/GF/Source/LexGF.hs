@@ -35,13 +35,17 @@ tokenPos (PT (Pn _ l _) _ :_) = "line " ++ show l
 tokenPos (Err (Pn _ l _) :_) = "line " ++ show l
 tokenPos _ = "end of file"
 
+posLineCol (Pn _ l c) = (l,c)
+mkPosToken t@(PT p _) = (posLineCol p, prToken t)
+
 prToken t = case t of
   PT _ (TS s) -> s
   PT _ (TI s) -> s
   PT _ (TV s) -> s
   PT _ (TD s) -> s
   PT _ (TC s) -> s
-  _ -> show t
+  PT _ (T_LString s) -> s
+
 
 tokens:: String -> [Token]
 tokens inp = scan tokens_scan inp
@@ -55,7 +59,7 @@ tokens_scan = load_scan (tokens_acts,stop_act) tokens_lx
 eitherResIdent :: (String -> Tok) -> String -> Tok
 eitherResIdent tv s = if isResWord s then (TS s) else (tv s) where
   isResWord s = isInTree s $
-    B "let" (B "data" (B "Type" (B "Str" (B "PType" (B "Lin" N N) N) (B "Tok" (B "Strs" N N) N)) (B "cat" (B "case" (B "abstract" N N) N) (B "concrete" N N))) (B "in" (B "fn" (B "flags" (B "def" N N) N) (B "grammar" (B "fun" N N) N)) (B "instance" (B "incomplete" (B "include" N N) N) (B "interface" N N)))) (B "pre" (B "open" (B "lindef" (B "lincat" (B "lin" N N) N) (B "of" (B "lintype" N N) N)) (B "param" (B "out" (B "oper" N N) N) (B "pattern" N N))) (B "transfer" (B "reuse" (B "resource" (B "printname" N N) N) (B "table" (B "strs" N N) N)) (B "where" (B "variants" (B "union" N N) N) (B "with" N N))))
+    B "lincat" (B "def" (B "Type" (B "Str" (B "PType" (B "Lin" N N) N) (B "Tok" (B "Strs" N N) N)) (B "cat" (B "case" (B "abstract" N N) N) (B "data" (B "concrete" N N) N))) (B "include" (B "fun" (B "fn" (B "flags" N N) N) (B "in" (B "grammar" N N) N)) (B "interface" (B "instance" (B "incomplete" N N) N) (B "lin" (B "let" N N) N)))) (B "resource" (B "out" (B "of" (B "lintype" (B "lindef" N N) N) (B "oper" (B "open" N N) N)) (B "pattern" (B "param" (B "package" N N) N) (B "printname" (B "pre" N N) N))) (B "union" (B "table" (B "strs" (B "reuse" N N) N) (B "transfer" (B "tokenizer" N N) N)) (B "where" (B "variants" (B "var" N N) N) (B "with" N N))))
 
 data BTree = N | B String BTree BTree deriving (Show)
 

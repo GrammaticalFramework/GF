@@ -1,6 +1,6 @@
 Procedure for making a GF release:
 
-1. Make sure everything the should be in the release has been
+1. Make sure everything that should be in the release has been
    checked in.
 
 2. Go to the src/ dir.
@@ -43,7 +43,7 @@ Procedure for making a GF release:
     - Make sure that you have the directories neccessary to build
       RPMs:
       
-      $ mkdir -p ~/rpm/{BUILD,RPMS/$ARCH,RPMS/noarch,SOURCES,SRPMS,SPECS,tmp}
+      $ mkdir -p ~/rpm/{BUILD,RPMS/i586,RPMS/noarch,SOURCES,SRPMS,SPECS,tmp}
 
     - Create ~/.rpmrc with the following contents:
 

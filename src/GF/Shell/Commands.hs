@@ -26,6 +26,7 @@ import Unicode
 
 import CF
 import CFIdent (cat2CFCat, cfCat2Cat)
+import PPrCF (prCFCat)
 import Linear
 import Randomized
 import Editing
@@ -130,10 +131,10 @@ execCommand env c s = case c of
 
   CCEnvEmptyAndImport file -> useIOE (emptyShellState, initSState) $ do
     st <- shellStateFromFiles opts emptyShellState file
-    return (st,s)
+    return (startEditEnv st,s)
 
   CCEnvEmpty -> do
-    return (emptyShellState, initSState)
+    return (startEditEnv emptyShellState, initSState)
 
   CCEnvGFShell command -> do
     let cs = PShell.pCommandLines command
@@ -224,7 +225,7 @@ execECommand env c = case c of
                      let cat = cat2CFCat (qualifTop sgr (actCat (stateSState s)))
                          ts = parseAny agrs cat str
                      in (if null ts ---- debug
-                           then withMsg [str, "parse failed in cat" +++ show cat]
+                           then withMsg [str, "parse failed in cat" +++ prCFCat cat]
                            else id) 
                             (refineByTrees der cgr ts) s
 
@@ -269,6 +270,10 @@ string2varPair :: String -> Err (I.Ident,I.Ident)
 string2varPair s = case words s of
   x : y : [] -> liftM2 (,) (string2ident x) (string2ident y)
   _          -> Bad "expected format 'x y'"
+
+
+
+startEditEnv env = addGlobalOptions (options [sizeDisplay "short"]) env
 
 -- seen on display
 

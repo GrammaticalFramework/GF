@@ -210,6 +210,9 @@ instance Print TopDef where
    DefPrintOld printdefs -> prPrec i 0 (concat [["printname"] , prt 0 printdefs])
    DefLintype defs -> prPrec i 0 (concat [["lintype"] , prt 0 defs])
    DefPattern defs -> prPrec i 0 (concat [["pattern"] , prt 0 defs])
+   DefPackage id topdefs -> prPrec i 0 (concat [["package"] , prt 0 id , ["="] , ["{"] , prt 0 topdefs , ["}"] , [";"]])
+   DefVars defs -> prPrec i 0 (concat [["var"] , prt 0 defs])
+   DefTokenizer id -> prPrec i 0 (concat [["tokenizer"] , prt 0 id , [";"]])
 
   prtList es = case es of
    [] -> (concat [])

@@ -136,7 +136,7 @@ optionsOfCommand co = case co of
   CStripState -> none
   CTransformGrammar _ -> flags "printer"
   CConvertLatex _ -> none
-  CLinearize _ -> both "table struct record all" "lang number unlexer"
+  CLinearize _ -> both "utf8 table struct record all" "lang number unlexer"
   CParse -> both "new n ign raw v" "cat lang lexer parser number rawtrees"
   CTranslate _ _ -> opts "cat lexer parser"
   CGenerateRandom -> flags "cat lang number depth"
@@ -161,7 +161,8 @@ optionsOfCommand co = case co of
   CShowTerm -> flags "printer"
   CSystemCommand _ -> none
 
-  CPrintGrammar -> flags "printer"
+  CPrintGrammar -> both "utf8" "printer"
+  CPrintMultiGrammar -> opts "utf8"
 
   CHelp _ -> opts "all"
 
