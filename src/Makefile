@@ -133,3 +133,5 @@ install: install-gf2
 	$(INSTALL) -d $(libdir)/GF-$(PACKAGE_VERSION)
 	$(INSTALL) jgf2 $(bindir)
 	$(INSTALL) java/gf-java.jar $(libdir)/GF-$(PACKAGE_VERSION)
+gfdoc:
+	cd util ; $(GHMAKE) GFDoc.hs -o gfdoc ; cd ..

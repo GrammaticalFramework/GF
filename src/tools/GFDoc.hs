@@ -13,22 +13,21 @@ main :: IO ()
 main = do
   xx <- getArgs
   let 
-   (typ,format,name) = case xx of
-    "+latex" : x: [] -> (0,doc2latex,x)
-    "+htmls" : x: [] -> (2,doc2html,x)
-    x:[]             -> (1,doc2html,x)
-    _ -> (1,doc2html, "unknown.txt") ---
+   (typ,format,names) = case xx of
+    "-latex" : xs -> (0,doc2latex,xs)
+    "-htmls" : xs -> (2,doc2html,xs)
+    xs            -> (1,doc2html,xs)
   if null xx
      then do
        putStrLn welcome
        putStrLn help
-     else do  
+     else flip mapM_ names (\name -> do  
        ss <- readFile name
        let outfile = fileFormat typ name
-       writeFile outfile $ format $ pDoc $ ss
+       writeFile outfile $ format $ pDoc $ ss)
   if typ == 2
      then do
-       system $ "htmls " ++ (fileFormat typ name)
+       mapM (\name -> system $ "htmls " ++ (fileFormat typ name)) names
        return ()
      else return ()
 
@@ -40,10 +39,10 @@ welcome = unlines [
 
 help = unlines $ [
   "",
-  "Usage: gfdoc (+latex|+htmls) file",
+  "Usage: gfdoc (-latex|-htmls) <file>+",
   "",
   "The program operates with lines in GF code, treating them into LaTeX",
-  "(flag +latex), to a set of HTML documents (flag +htmls), or to one",
+  "(flag -latex), to a set of HTML documents (flag -htmls), or to one",
   "HTML file (by default). The output is written in a file",
   "whose name is formed from the input file name by replacing its suffix",
   "with html or tex; in case of set of HTML files, the names are prefixed",
