@@ -18,7 +18,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     private String[] envfonts;
     private Font font;  
     Font[] fontObjs;
-    private static int DEFAULT_FONT_SIZE = 18;
+    private static int DEFAULT_FONT_SIZE = 20;
     private JComboBox fontList;
     private JLabel fontLabel = new JLabel("   Font: ");
     private JComboBox sizeList;
@@ -346,12 +346,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         }
         sizeList.addActionListener(this);
 
-        sizeList.setFont(font);
-        fontList.setFont(font);
-        menu.setFont(font);
-        filter.setFont(font);
-        modify.setFont(font);
-
+        fontEveryWhere(font);
+      
         upPanel.add(sizeLabel);
         upPanel.add(sizeList);
         upPanel.add(fontLabel);
@@ -733,7 +729,7 @@ System.out.println("encoding "+defaultEncoding);
   
       more = true;
       while (more){
-        if ((result.indexOf("/gf")==-1)&&(result.indexOf("lin")==-1)) {         
+        if ((result.indexOf("/gfinit")==-1)&&(result.indexOf("lin")==-1)) {         
           //form lang and Menu menu: 
           cbMenuItem = new JCheckBoxMenuItem(result.substring(4));
           if (debug) System.out.println ("menu item: "+result.substring(4));   
@@ -772,12 +768,12 @@ System.out.println("encoding "+defaultEncoding);
         // read </language>
         result = fromProc.readLine();
         if (debug) System.out.println("2 "+result); 
-        // read <language> or </gf...>
+        // read <language> or </gfinit...>
         result = fromProc.readLine();
         if (debug) System.out.println("3 "+result); 
-        if ((result.indexOf("/gf")!=-1)||(result.indexOf("lin")!=-1)) 
+        if ((result.indexOf("/gfinit")!=-1)||(result.indexOf("lin")!=-1)) 
           more = false; 
-        if (result.indexOf("/gf")!=-1)
+        if (result.indexOf("/gfinit")!=-1)
           finished = true;
         // registering the file name:
         if (result.indexOf("language")!=-1) {
@@ -950,32 +946,8 @@ System.out.println("encoding "+defaultEncoding);
     }
   }
 
-  public void recursion(JMenu subMenu, Font font)
-  {  
-    for (int i = 0; i<subMenu.getItemCount(); i++)
-      { 
-        JMenuItem item = subMenu.getItem(i);
-        if (item != null) 
-        {
-          item.setFont(font);
-          String name = item.getClass().getName();
-          System.out.println(name);
-        }
-      }
-  }
-
-  public void actionPerformed(ActionEvent ae)
-  {  
-    boolean abs = true;
-    Object obj = ae.getSource();
-
-    if ( obj == fontList ) {
-        font = new Font((String)fontList.getSelectedItem(), Font.PLAIN, ((Integer)sizeList.getSelectedItem()).intValue());
-        output.setFont(font);  
-    }
-
-    if ( obj == sizeList ) {
-        font = new Font((String)fontList.getSelectedItem(), Font.PLAIN, ((Integer)sizeList.getSelectedItem()).intValue());
+  public void fontEveryWhere(Font font)
+  {                          
         output.setFont(font);  
         field.setFont(font);  
         tree.tree.setFont(font);  
@@ -1022,6 +994,35 @@ System.out.println("encoding "+defaultEncoding);
         viewMenu.setFont(font);  
         recursion(viewMenu, font);
 
+}
+
+  public void recursion(JMenu subMenu, Font font)
+  {  
+    for (int i = 0; i<subMenu.getItemCount(); i++)
+      { 
+        JMenuItem item = subMenu.getItem(i);
+        if (item != null) 
+        {
+          item.setFont(font);
+          String name = item.getClass().getName();
+          System.out.println(name);
+        }
+      }
+  }
+
+  public void actionPerformed(ActionEvent ae)
+  {  
+    boolean abs = true;
+    Object obj = ae.getSource();
+
+    if ( obj == fontList ) {
+        font = new Font((String)fontList.getSelectedItem(), Font.PLAIN, ((Integer)sizeList.getSelectedItem()).intValue());
+        output.setFont(font);  
+    }
+
+    if ( obj == sizeList ) {
+        font = new Font((String)fontList.getSelectedItem(), Font.PLAIN, ((Integer)sizeList.getSelectedItem()).intValue());
+        fontEveryWhere(font);
         cbMenuItem.setFont(font);  
         rbMenuItem.setFont(font);  
         fileMenuItem.setFont(font);  
