@@ -1,72 +1,68 @@
-concrete RulesSwe of Rules = CategoriesSwe ** open Prelude, SyntaxSwe in {
+--# -path=.:../abstract:../../prelude
+
+incomplete concrete RulesRomance of Rules = CategoriesRomance ** 
+  open Prelude, SyntaxRomance in {
 
 lin 
   UseN = noun2CommNounPhrase ;
   ModAdj = modCommNounPhrase ;
-  ModGenOne = npGenDet singular noNum ;
-  ModGenNum = npGenDet plural ;
+  ModGenOne = npGenDet singular ;
+  ModGenNum = npGenDetNum ;
   UsePN = nameNounPhrase ;
-  UseN2 = funAsCommNounPhrase ;
+  UseN2 = funAsCommNounPhrase ; -- [SyntaxFra.noun2CommNounPhrase]
   AppN2 = appFunComm ;
   AppN3 = appFun2 ;
   UseA1 = adj2adjPhrase ;
   ComplA2 = complAdj ;
   PositADeg = positAdjPhrase ;
   ComparADeg = comparAdjPhrase ;
-  SuperlADeg = superlAdjPhrase ;
+  SuperlADeg = superlAdjDegr ;
 
   DetNP = detNounPhrase ;
   IndefOneNP = indefNounPhrase singular ;
-  IndefNumNP = indefNounPhraseNum plural ;
+  IndefNumNP = indefNounPhraseNum ;
   DefOneNP = defNounPhrase singular ;
-  DefNumNP = defNounPhraseNum plural ;
-  MassNP = detNounPhrase (mkDeterminerSg (detSgInvar []) IndefP) ;
-  UseInt i = {s = table {Nom => i.s ; Gen => i.s ++ "s"}} ; ---
+  DefNumNP = defNounPhraseNum ;
+  MassNP = partitiveNounPhrase singular ;
+  UseInt i = {s = \\_ => i.s} ;
   NoNum = noNum ;
 
-  SymbPN i = {s = \\_ => i.s ; g = Neutr ; x = NoMasc} ;
+  SymbPN i = {s = i.s ; g = Masc} ; --- cannot know gender
   SymbCN cn s =
-    {s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ; 
-     g = cn.g ;
-     x = cn.x ;
-     p = cn.p
-     } ;
+    {s = \\n => cn.s ! n ++ s.s ; 
+     g = cn.g} ;
 
   CNthatS = nounThatSentence ;
 
   PredVP = predVerbPhrase ;
-
   PosVG  = predVerbGroup True ;
   NegVG  = predVerbGroup False ;
 
-  PredVG = predVerbGroupClause ;
-
   PredV  = predVerb ;
-  PredAP = predAdjective ;
+  PredAP = predAdjective ; 
   PredCN = predCommNoun ;
   PredV2 = complTransVerb ;
   PredV3 = complDitransVerb ;
-  PredPassV = passVerb ;
   PredNP = predNounPhrase ;
   PredAdv = predAdverb ;
   PredVS = complSentVerb ;
   PredVV = complVerbVerb ;
+  PredPassV = predPassVerb ;
   VTrans = transAsVerb ;
 
-  AdjAdv a = advPost (a.s ! adverbForm ! Nom) ;
-  AdvPP p = p ;
-  PrepNP p = prepPhrase p.s ; ---
+  AdjAdv a = {s = a.s ! AA} ;
   AdvVP = adVerbPhrase ;
+  AdvPP p = p ;
+  PrepNP = prepNounPhrase ;
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
 
-  ThereNP A = predVerbPhrase npDet 
-                (predVerbGroup True
-                  (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) A)) ;
+  ThereNP = existNounPhrase ;
 
   PosSlashV2 = slashTransVerb True ;
   NegSlashV2 = slashTransVerb False ;
-  OneVP = predVerbPhrase npMan ;
+  OneVP = predVerbPhrase nounPhraseOn ;
+
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -87,9 +83,7 @@ lin
   IntVP = intVerbPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
-  IsThereNP A = questVerbPhrase npDet 
-                 (predVerbGroup True
-                  (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) A)) ; 
+  IsThereNP = existNounPhraseQuest ;
 
   ImperVP = imperVerbPhrase ;
 
@@ -98,13 +92,13 @@ lin
   ImperOne = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
 
-  PrepS p = ss (p.s ++ ",") ;
+  PrepS p = p ;
   AdvS = advSentence ;
 
   TwoS = twoSentence ;
   ConsS = consSentence ;
   ConjS = conjunctSentence ;
-  ConjDS = conjunctDistrSentence ;
+  ConjDS = conjunctDistrSentence ; -- [Coordination.conjunctDistrTable]
 
   TwoAP = twoAdjPhrase ;
   ConsAP = consAdjPhrase ;
@@ -116,8 +110,8 @@ lin
   ConjNP = conjunctNounPhrase ;
   ConjDNP = conjunctDistrNounPhrase ;
 
-  SubjS = subjunctSentence ;
-  SubjImper = subjunctImperative ;
+  SubjS = subjunctSentence ;       -- stack
+  SubjImper = subjunctImperative ; 
   SubjQu = subjunctQuestion ;
   SubjVP = subjunctVerbPhrase ;
 
@@ -129,5 +123,4 @@ lin
 
   OnePhr p = p ;
   ConsPhr = cc2 ;
-
-} ;
+}
