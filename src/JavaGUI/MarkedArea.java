@@ -3,15 +3,16 @@
   {
     public int begin;
     public int end;
-    public String position;
+    public LinPosition position;
     public String words;
 
-    MarkedArea(int b, int e, String p, String w)
+    MarkedArea(int b, int e, LinPosition p, String w)
     {
       begin = b;
       end = e;
       position = p;
       words = w;
     }
+    
   }
 
