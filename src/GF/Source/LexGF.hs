@@ -133,7 +133,7 @@ alexInputPrevChar (p, c, s) = c
 alex_action_3 = tok (\p s -> PT p (TS $ shareString s)) 
 alex_action_4 = tok (\p s -> PT p (eitherResIdent (T_LString . shareString) s)) 
 alex_action_5 = tok (\p s -> PT p (eitherResIdent (TV . shareString) s)) 
-alex_action_6 = tok (\p s -> PT p (TL $ unescapeInitTail $ shareString s)) 
+alex_action_6 = tok (\p s -> PT p (TL $ shareString $ unescapeInitTail s)) 
 alex_action_7 = tok (\p s -> PT p (TI s))    
 {-# LINE 1 "GenericTemplate.hs" #-}
 {-# LINE 1 "<built-in>" #-}
