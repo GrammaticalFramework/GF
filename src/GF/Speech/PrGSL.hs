@@ -28,6 +28,8 @@ import GrammarTypes
 import PrintParser
 import Option
 
+import Data.Char (toUpper)
+
 gslPrinter :: Ident -- ^ Grammar name
 	   -> Options -> CFGrammar -> String
 gslPrinter name opts cfg = prGSL srg ""
@@ -49,7 +51,12 @@ prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
 		   where rhs' = rmPunct rhs
     prSymbol (Cat c) = prCat c
     prSymbol (Tok t) = wrap "\"" (prtS t) "\""
-    prCat c = showString c
+    -- GSL requires an upper case letter in category names
+    prCat c = showString (firstToUpper c)
+
+firstToUpper :: String -> String
+firstToUpper [] = []
+firstToUpper (x:xs) = toUpper x : xs
 
 rmPunct :: [Symbol String Token] -> [Symbol String Token] 
 rmPunct [] = []
