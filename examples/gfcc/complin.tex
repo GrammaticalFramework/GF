@@ -17,6 +17,7 @@
 
 \newcommand{\begit}{\begin{itemize}}
 \newcommand{\enit}{\end{itemize}}
+\newcommand{\HOAS}{higher-order abstract syntax}
 \newcommand{\newone}{} %%{\newpage}
 \newcommand{\heading}[1]{\subsection{#1}}
 \newcommand{\explanation}[1]{{\small #1}}
@@ -37,6 +38,23 @@
 
 \maketitle
 
+
+\subsection*{Abstract}
+
+{\em
+This paper presents a compiler for a fragment of the C programming
+language, with JVM (Java Virtual Machine) as target language.
+The compiler is implemented in a purely declarative way:
+its definition consists of an abstract syntax of program
+structures and two concrete syntaxes matching the abstract
+syntax: one for C and one for JVM. From these grammar components,
+the compiler is derived by using the GF (Grammatical Framework)
+grammat tool: the front-end consists of parsing and semantic
+checking in accordance to the C grammar, and the back end consists
+of linearization in accordance to the JVM grammar. The tool provides
+other functionalities as well, such as decompilation and interactive
+editing. 
+}
 
 \section{Introduction}
 
@@ -62,8 +80,10 @@ The second point, code generation by linearization, means that the
 back end is likewise implemented by a grammar of the target
 language (in this case, a fragment of JVM). This grammar is the
 declarative source from which the compiler back end is derived.
+In addition, some simple string processing is needed to
+make the code conform to Jasmin assembler requirements.
 
-The complete code of the compiler is 300 lines. It is found in 
+The complete code of the compiler is 300 lines. It is presented in 
 the appendices of this paper.
 
 
@@ -72,15 +92,15 @@ the appendices of this paper.
 
 The tool we have used for implementing the compiler is
 GF, the \empha{Grammatical Framework} \cite{gf-jfp}. GF 
-is similar to a Logical Framework (LF) extended with
+is similar to a Logical Framework (LF) 
+\cite{harper-honsell}
+extended with
 a notation for defining concrete syntax. GF was originally
 designed to help building multilingual
 translation systems for natural languages and also
 between formal and natural languages. The translation model
 implemented by GF is very simple:
 \begin{verbatim}
-
-
              parsing                       linearization
              ------------>                 ------------>
   Language_1               Abstract Syntax               Language_2
@@ -92,14 +112,41 @@ An abstract syntax is similar to a \empha{theory}, or a
 concrete syntax defines, in a declarative way,
 a translation of abstract syntax trees (well-formed terms) 
 into concrete language structures, and from this definition, one can
-derive both both linearization and parsing.
+derive both both linearization and parsing. 
+
+For example,
+a (somewhat simplified) translator for addition expressions
+consists of the abstract syntax rule
+\begin{verbatim}
+  fun EAdd : (A : Typ) -> Exp A -> Exp A -> Exp A ;
+\end{verbatim}
+the C concrete syntax rule
+\begin{verbatim}
+  lin EAdd _ x y = {s = x.s ++ "+" ++ y.s ; prec = 2} ;
+\end{verbatim}
+and the JVM concrete syntax rule
+\begin{verbatim}
+  lin EAdd t x y = {s = x.s ++ y.s ++ t.s ++ "_add"} ;
+\end{verbatim}
+The abstract syntax rule uses a type argument to capture
+the fact that addition is polymorphic (which is a simplification,
+because we will restrict the rule to numeric types only)
+and that both operands have the same type as the value.
+The C rule shows that the type information is suppressed,
+and that the expression has precedence level 2 (which is a simplification,
+since we will also treat associativity).
+The JVM rule shows how addition is translated to stack machine
+instructions, where the type of the postfixed addition instruction again has to
+be made explicit. Our compiler, like any GF translation system, will
+consist of rules like these.
+
 The number of languages related to one abstract syntax in
-this way is of course not limited to two. Sometimes just just one
-language is involved; 
-GF then works much the same way as any grammar formalism or parser
-generator. 
-The largest application known to us has 88 languages and translates
-numeral expressions from 1 to 999,999 between them \cite{gf-homepage}.
+a translation system is of course not limited to two. 
+Sometimes just just one language is involved; 
+GF then works much the same way as any grammar 
+formalism or parser generator. 
+The largest number of languages in an application known to us is 88, and
+its domain are numeral expressions from 1 to 999,999 \cite{gf-homepage}.
  
 From the GF point of view, the goal of the compiler experiment
 is to investigate if GF is capable of implementing
@@ -135,22 +182,22 @@ compilation.
 The problems that we encountered and their causes will be explained in 
 the relevant sections of this report. To summarize,
 \bequ
-The scoping conditions resulting from HOAS are slightly different
+The scoping conditions resulting from \HOAS are slightly different
 from the standard ones of C.
 
-Our JVM syntax is forced to be slightly different from original.
+Our JVM syntax is slightly different from the specification, and
+hence needs some postprocessing.
 
-Using HOAS to encode all bindings is sometimes cumbersome.
-
-The C parser derived from the GF grammar does not recognize all
-valid programs.
+Using \HOAS to encode all bindings is sometimes cumbersome.
 \enqu
 The first two shortcomings seem to be inevitable with the technique
 we use. The best we can do with the JVM syntax is to use simple
-postprocessing, on string level, to obtain valid JVM. The latter 
-two shortcomings have to do with the current implementation of GF
-rather than its core. They
-suggest that GF should be fine-tuned to give better support
+postprocessing, on string level, to obtain valid JVM. The last 
+shortcoming is partly inherent to the problem of binding:
+to spell out, in any formal notation,
+what happens in nested binding structures \textit{is}
+complicated. But it also suggests ways in which GF could be 
+fine-tuned to give better support
 to compiler construction, which, after all, is not an intended
 use of GF as it is now.
 
@@ -170,10 +217,24 @@ and \texttt{fun} judgements
 declaring functions $f$ of any type $A$, which can be a basic type or
 a function type.
 \empha{Syntax trees} are well-formed terms of basic
-types. As for notation, each judgement form is recognized by
+types, in $\eta$-long normal form.
+
+As for notation, each judgement form is recognized by
 its keyword (\texttt{cat}, \texttt{fun}, etc), 
 and the same keyword governs all judgements
 until the next keyword is encountered.
+
+The abstract syntax that we will present is no doubt closer
+to C than to JVM. One reason is that what we are building is a
+\textit{C compiler}, and match with the target language is
+secondary consideration. Another, more general reason is tha
+C is a higher-level language and JVM which means, among
+other things, that C makes more semantic distinctions.
+In general, the abstract syntax of a translation system
+must reflect all semantic distinctions that can be made
+in the languages involved, and then it is a good idea to
+start with looking at what the most distinctive language
+needs.
 
 
 
@@ -191,8 +252,9 @@ that are needed to construct statements
     Var Typ ;
 \end{verbatim}
 The type \texttt{Typ} is the type of C's datatypes.
-Expressions (\texttt{Exp}) is a dependent type, since it has a
-nonempty context. The rules for \texttt{Exp}
+The type (\texttt{Exp}) of expressions is a dependent type, 
+since it has a nonempty context, indicating that \texttt{Exp} take
+a \texttt{Typ} as argument. The rules for \texttt{Exp}
 will thus be rules to construct well-typed expressions of
 a given type. \texttt{Var}\ is the type of variables,
 of a given type, that get bound in C's variable
@@ -206,13 +268,14 @@ rules define their abstract syntax:
     Decl   : (A : Typ) -> (Var A -> Stm) -> Stm ;
     Assign : (A : Typ) -> Var A -> Exp A -> Stm -> Stm ;
 \end{verbatim}
-Dependent types are used in \texttt{Assign} to
-control that a variable is always assigned a value of proper
-type. The \texttt{Decl}\ function captures the rule that
+The \texttt{Decl}\ function captures the rule that
 a variable must be declared before it can be used or assigned to:
 its second argument is a \empha{continuation}, which is
 the sequence of statements that depend on (= may refer to)
 the declared variable. 
+The \texttt{Assign} function uses dependent types to 
+control that a variable is always assigned a value of proper
+type. 
 
 We will treat all statements, except
 \texttt{return}s, in terms of continuations. A sequence of
@@ -221,45 +284,59 @@ always ends in a \texttt{return}, or, abruptly, in
 an empty statement, \texttt{End}. Here are rules for some other
 statement forms:
 \begin{verbatim}
-    Return : (A : Typ) -> Exp A -> Stm ;
     While  : Exp TInt -> Stm -> Stm -> Stm ;
     IfElse : Exp TInt -> Stm -> Stm -> Stm -> Stm ;
     Block  : Stm -> Stm -> Stm ;
+    Return : (A : Typ) -> Exp A -> Stm ;
     End    : Stm ;
 \end{verbatim}
 Here is an example of a piece of code and its abstract syntax.
 \begin{verbatim}
-  int x ;      Decl TInt (\x -> 
-  x = 5 ;        Assign TInt x (EInt 5) (
-  return x ;       Return TInt (EVar TInt x)))
+  int x ;      Decl (TNum TInt) (\x -> 
+  x = 5 ;        Assign (TNum TInt) x (EInt 5) (
+  return x ;       Return (TNum TInt) (EVar (TNum TInt) x)))
 \end{verbatim}
-(Expression syntax will be explained in the next section.)
+The details of expression and type 
+syntax will be explained in the next section.
 
 
 
-\subsection{Expressions and types}
+\subsection{Types and expressions}
 
-We consider two C types: integers and floats.
+Our fragment of C has two types: integers and floats.
+Many operators of C are overloaded so that they can
+be used for both of these types, as well as for
+some other numeric types---but not for e.g.\ arrays
+and structures. We capture this distinction by a notion
+reminiscent of \empha{type classes}: we introduce a special
+category of numeric types, and a coercion of numeric types
+into types in general.
 \begin{verbatim}
-    TInt   : Typ ;
-    TFloat : Typ ;
+  cat 
+    NumTyp ;
+  fun
+    TInt, TFloat : NumTyp ;
+    TNum : NumTyp -> Typ ;  
 \end{verbatim}
-Well-typed expressions can be built from constants,
+Well-typed expressions are built from constants,
 from variables, and by means of binary operations.
 \begin{verbatim}
     EVar   : (A : Typ) -> Var A -> Exp A ;
-    EInt   : Int -> Exp TInt ;
-    EFloat : Int -> Int -> Exp TFloat ;
-    ELtI   : Exp TInt -> Exp TInt -> Exp TInt ;
-    ELtF   : Exp TFloat -> Exp TFloat -> Exp TInt ;
-    EAddI, EMulI, ESubI : Exp TInt -> Exp TInt -> Exp TInt ;
-    EAddF, EMulF, ESubF : Exp TFloat -> Exp TFloat -> Exp TFloat ;
+    EInt   : Int -> Exp (TNum TInt) ;
+    EFloat : Int -> Int -> Exp (TNum TFloat) ;
+    ELt    : (n : NumTyp) -> let Ex = Exp (TNum n) in 
+               Ex -> Ex -> Exp (TNum TInt) ;
+    EAdd, EMul, ESub : (n : NumTyp) -> let Ex = Exp (TNum n) in 
+               Ex -> Ex -> Ex ;
 \end{verbatim}
-Notice that GF has a built-in type \texttt{Int} of
+Notice that the category \texttt{Var} has no constructors,
+but its expressions are only created by
+variable bindings in \HOAS. 
+Notice also that GF has a built-in type \texttt{Int} of
 integer literals, but floats are constructed by hand.
 
-Yet another expression for are function calls. To this
-end, we need a notions of (user-defined) functions and
+Yet another expression form are function calls. To this
+end, we need a notion of (user-defined) functions and
 argument lists. The type of functions depends on an
 argument type list and a value type. Expression lists
 are formed to match type lists.
@@ -270,17 +347,24 @@ are formed to match type lists.
     ListExp ListTyp ;
 
   fun
+    EAppNil : (V : Typ) -> Fun NilTyp V -> Exp V ;
     EApp    : (AS : ListTyp) -> (V : Typ) -> 
                 Fun AS V -> ListExp AS -> Exp V ;
 
     NilTyp  : ListTyp ;
     ConsTyp : Typ -> ListTyp -> ListTyp ;
 
-    NilExp  : ListExp NilTyp ;
+    OneExp  : (A : Typ) -> Exp A -> ListExp (ConsTyp A NilTyp) ;
     ConsExp : (A : Typ) -> (AS : ListTyp) -> 
                 Exp A -> ListExp AS -> ListExp (ConsExp A AS) ;
 \end{verbatim}
-
+The separation between zero-element applications and other
+applications is a concession to the concrete syntax of C:
+it in this way that we can control the use of commas so that
+they appear between arguments (\texttt{(x,y,z)}) but not
+after the last argument (\texttt{(x,y,z,)}).
+The compositionality of linearization (Section~\ref{compositionality} below)
+forbids case analysis on the length of the lists.
 
 
 \subsection{Functions}
@@ -288,66 +372,78 @@ are formed to match type lists.
 On the top level, a program is a sequence of functions.
 Each function may refer to functions defined earlier
 in the program. The idea to express the binding of
-function symbols with HOAS is analogous to the binding
+function symbols with \HOAS is analogous to the binding
 of variables in statements, using a continuation.
+As with variables, the principal way to build function symbols is as
+bound variables (in addition, there can be some
+built-in functions, unlike in the case of variables).
+The continuation of can be recursive, which we express by
+making the function body into a part of the continuation;
+the category \texttt{Rec} is the combination of a function
+body and the subsequent function definitions.
 \begin{verbatim}
   cat
     Program ;
-    Body ListTyp ;
-
+    Rec ListTyp ;
   fun
     Empty : Program ;
     Funct : (AS : ListTyp) -> (V : Typ) -> 
-              Body AS -> (Fun AS V -> Program) -> Program ;
+              (Fun AS V -> Rec AS) -> Program ;
+    FunctNil : (V : Typ) -> 
+                 Stm -> (Fun NilTyp V -> Program) -> Program ;
 \end{verbatim}
-However, here we must also account for the binding of
-a function's parameters in its body. We could use
+For syntactic reasons similar to function application
+expressions in the previous section, we have distinguished between
+empty and non-empty argument lists.
+
+The tricky problem with function definitions
+is that they involve two nested binding constructions:
+the outer binding of the function symbol and the inner
+binding of the function parameter lists.
+For the latter, we could use
 vectors of variables, in the same way as vectors of
 expressions are used to give arguments to functions.
 However, this would lead to the need of cumbersome
 projection functions when using the parameters
 in the function body. A more elegant solution is
-to use HOAS to build function bodies:
+to use \HOAS to build function bodies:
 \begin{verbatim}
-    BodyNil  : Stm -> Body NilTyp ;
-    BodyCons : (A : Typ) -> (AS : ListTyp) -> 
-                  (Var A -> Body AS) -> Body (ConsTyp A AS) ;
+    RecOne  : (A : Typ) -> 
+                   (Var A -> Stm) -> Program -> Rec (ConsTyp A NilTyp) ;
+    RecCons : (A : Typ) -> (AS : ListTyp) -> 
+                  (Var A -> Rec AS) -> Program -> Rec (ConsTyp A AS) ;
 \end{verbatim}
 The end result is an abstract syntax whose relation
 to concrete syntax is somewhat remote. Here is an example of
 the code of a function and its abstract syntax:
 \begin{verbatim}
-                    Funct (
-  int abs (int x){    ConsTyp TInt NilTyp) TInt 
-                      (BodyCons TInt NilTyp (\x -> 
-                         BodyNil (
-  if (x < 0){              IfElse (ELtI (EVar TInt x) (EInt 0))
-    return 0 - x ;           (Block (Return TInt 
-                                 (ESubI (EInt 0) (EVar TInt x))) 
-    }                          End) 
-  else return x ;            (Return TInt (EVar TInt x)) End))) 
-  }                             (\abs -> Empty)
+                      let int = TNum TInt in
+  int fact (int n) {  Funct int int (\fact -> RecOne int (\n -> 
+    int f ;             Decl int (\f -> 
+    f = 1 ;             Assign int f (EInt 1) ( 
+    while (1 < n) {     While (ELt int (EInt 1) (EVar int n)) (Block (
+      f = n * f ;         Assign int f (EMul int (EVar int n) (EVar int f)) (
+      n = n - 1 ;         Assign int n (ESub int (EVar int n) (EInt 1)) 
+    }                     End)) 
+    return f ;          (Return int (EVar int f))) End))) 
+  } ;                   Empty)
 \end{verbatim}
-Notice, in particular, how far from the function header the
-name of the function appears in the syntax trees.
 
-A more serious shortcoming of our way of defining functions 
-is that it does not allow recursion. The reason is simple:
-the function symbol is only bound in the continuation
-of the program, not in the function body. It seems we could
-save recursive functions with the following variant:
+
+\subsection{The \texttt{printf} function}
+
+To give a valid type to the C function \texttt{printf}
+is one of the things that can be done with
+dependent types \cite{cayenne}. We have not defined \texttt{printf}
+in its full strength, partly because of the difficulties to compile
+it into JVM. But we use special cases of \texttt{printf} as
+statements, to be able to print values of different types.
 \begin{verbatim}
-  cat
-    BodyProgram ListTyp ;
-    Body ListTyp ;
-
-  fun
-    mkBodyProgram : (AS : ListTyp) -> 
-      Body AS -> Program -> BodyProgram ListTyp ;
-    RecFunct : (AS : ListTyp) -> (V : Typ) -> 
-      (Fun AS V -> BodyProgram AS) -> Program ;
+    Printf : (A : Typ) -> Exp A -> Stm -> Stm ;
 \end{verbatim}
-but we have not yet investigated this.
+
+
+
 
 
 
@@ -386,19 +482,34 @@ and the linearization algorithm is simply
 using the \sugmap{} notation for both linearization types, 
 linearization functions, and linearizations of trees.
 
+\label{compositionality}
 Because of compositionality, no case analysis on expressions
 is possible in linearization rules. The values of linearization
 therefore have to carry information on how they are used in
 different situations. Therefore linearization
 types are generally record types instead of just the string type.
 The simplest record type that is used in GF is
-\begin{verbatim}
-  {s : Str}
-\end{verbatim}
+\bece
+\verb6{s : Str}6
+\ence
 If the linearization type of a category is not explicitly
 given by a \texttt{lincat} judgement, this type is
 used by default. 
 
+With \HOAS, a syntax tree can have variable-bindings in its
+constituents. The linearization of such a constituent
+is compositionally defined to be the record linearizing the body
+extended with fields for each of the variable symbols:
+\[
+\sugmap{\lambda x_{0} \rarrow \cdots \rarrow \lambda x_{n} \rarrow b}
+\;=\;
+\sugmap{b} *\!* \{\$_{0} = \sugmap{x_{0}} ; \ldots ; \$_{n} = \sugmap{x_{n}}\}
+\]
+Notice that the requirement the variable symbols can
+also be found because linearizable trees are in $\eta$-long normal form.
+Also notice that we are here using the 
+\sugmap{} notation in yet another way, to denote the magic operation
+that converts variable symbols into strings.
 
 
 \subsection{Resource modules}
@@ -431,60 +542,87 @@ but are here defined from scratch to make the code shown in
 the Appendices complete.
 \begin{verbatim}
   oper
-    SS  : Type = {s : Str} ;
-    ss  : Str -> SS = \s -> {s = s} ;
-    cc2 : (_,_ : SS) -> SS = \x,y -> ss (x.s ++ y.s) ;
+    SS    : Type = {s : Str} ;
+    ss    : Str -> SS = \s -> {s = s} ;
+    cc2   : (_,_ : SS) -> SS = \x,y -> ss (x.s ++ y.s) ;
+    paren : Str -> Str = \str -> "(" ++ str ++ ")" ;
 \end{verbatim}
 
 
 
-\subsection{Expressions}
+\subsection{Precedence}
 
-We want to be able to recognixe and generate one and the same expression with
+We want to be able to recognize and generate one and the same expression with
 or without parentheses, depending on whether its precedence level
 is lower or higher than expected. For instance, a sum used as
 an operand of multiplication should be in parentheses. We
 capture this by defining a parameter type of
 precedence levels. Four levels are enough for the present
-fragment of C, so we define the auxiliary notions
-\begin{verbatim}
-  param Prec = P0 | P1 | P2 | P3 ;
-  oper PrecExp : Type = {s : Prec => Str} ;
+fragment of C, so we use the enumeration type of 
+integers from 0 to 4 to define the \empha{inherent precedence level}
+of an expression
+\begin{verbatim} 
+  oper 
+    Prec    : PType = Predef.Ints 4 ;
+    PrecExp : Type = {s : Str ; p : Prec} ;
 \end{verbatim}
 in a resource module (see Appendix D), and
 \begin{verbatim}
   lincat Exp = PrecExp ;
 \end{verbatim}
-in the concrete syntax of C itself. The following auxiliary notions
-are also used in the concrete syntax of C:
+in the concrete syntax of C itself. 
+
+To state that an expression has a certain inherent precedence level,
+we use the operation
 \begin{verbatim}
-  oper
-    paren : Str -> Str = \str -> "(" ++ str ++ ")" ;
-    ex : PrecExp -> Str = \exp -> exp.s ! P0 ;
-    constant : Str -> PrecExp = \c -> {s = \\_ => c} ;
-    infixN : Prec -> Str -> PrecExp -> PrecExp -> PrecExp = \p,f,x,y ->
-      {s = mkPrec (x.s ! (nextPrec ! p) ++ f ++ y.s ! (nextPrec ! p)) ! p} ;
-    infixL : Prec -> Str -> PrecExp -> PrecExp -> PrecExp = \p,f,x,y ->
-      {s = mkPrec (x.s ! p ++ f ++ y.s ! (nextPrec ! p)) ! p} ;
+    mkPrec : Prec -> Str -> PrecExp = \p,s -> {s = s ; p = p} ;
 \end{verbatim}
-Here are the linearization rules of expressions:
+To use an expression of a given inherent level at some expected level,
+we define a function that says that, if the inherent level is lower
+than the expected level, parentheses are required. 
 \begin{verbatim}
-  lin
-    EVar  _ x    = constant x.s ;
-    EInt    n    = constant n.s ;
-    EFloat a b   = constant (a.s ++ "." ++ b.s) ;
-    EMulI, EMulF = infixL P2 "*" ;
-    EAddI, EAddF = infixL P1 "+" ;
-    ESubI, ESubF = infixL P1 "-" ;
-    ELtI,  ELtF  = infixN P0 "<" ;
+    usePrec : PrecExp -> Prec -> Str = \x,p ->
+      ifThenElse 
+        (Predef.lessInt x.p p) 
+        (paren x.s)
+        x.s ;
+\end{verbatim}
+(The code shown in Appendix D is at the moment more cumbersome,
+due to holes in the support for integer arithmetic in GF.)
+
+With the help of \texttt{mkPrec} and \texttt{usePrec},
+we can now define the main high-level operations that are
+used in the concrete syntax itself---constants (highest level),
+non-associative infixes, and left associative infixes:
+\begin{verbatim}
+    constant : Str -> PrecExp = mkPrec 4 ;
+
+    infixN : Prec -> Str -> (_,_ : PrecExp) -> PrecExp = \p,f,x,y ->
+      mkPrec p (usePrec x (nextPrec p) ++ f ++ usePrec y (nextPrec p)) ;
+    infixL : Prec -> Str -> (_,_ : PrecExp) -> PrecExp = \p,f,x,y ->
+      mkPrec p (usePrec x p ++ f ++ usePrec y (nextPrec p)) ;
+\end{verbatim}
+(The code in Appendix D adds to this an associativity parameter, 
+which is redundant in GF, but which we use to instruct the Happy 
+parser generator.)
+
+
+\subsection{Expressions}
+
+With the machinery introduced, the linearization rules of expressions
+are simple and concise:
+\begin{verbatim}
+    EVar  _ x  = constant x.s ;
+    EInt    n  = constant n.s ;
+    EFloat a b = constant (a.s ++ "." ++ b.s) ;
+    EMul _     = infixL 3 "*" ;
+    EAdd _     = infixL 2 "+" ;
+    ESub _     = infixL 2 "-" ;
+    ELt _      = infixN 1 "<" ;
+
+    EAppNil val f = constant (f.s ++ paren []) ;
     EApp args val f exps = constant (f.s ++ paren exps.s) ;
 \end{verbatim}
-A useful addition to GF when fine-tuned for compiler
-construction might be a hard-coded treatment of
-precedence---in particular, to permit the addition
-of superfluous parentheses, which is not allowed by
-the present grammar.
-
 
 
 \subsection{Statements}
@@ -500,77 +638,54 @@ the use of semicolons on a high level.
     statement : Str -> SS       = \s   -> ss (s ++ ";"); 
 \end{verbatim}
 As for declarations, which bind variables, we notice the
-special projection \verb6.$06 to refer to the bound variable.
-Technically, terms that are linearized must be in $\eta$-long
-form, which guarantees that a variable symbol can always be
-found, and that a field representing it can be added to the
-linearization record.
+projection \verb6.$06 to refer to the bound variable.
 \begin{verbatim}
   lin
     Decl  typ cont = continues (typ.s ++ cont.$0) cont ;
-    Assign _ x exp = continues (x.s ++ "=" ++ ex exp) ;
-    Return _ exp   = statement ("return" ++ ex exp) ;
-    While exp loop = continue  ("while" ++ paren (ex exp) ++ loop.s) ;
-    IfElse exp t f = continue  ("if" ++ paren (ex exp) ++ t.s ++ "else" ++ f.s) ;
+    Assign _ x exp = continues (x.s ++ "=" ++ exp.s) ;
+    While exp loop = continue  ("while" ++ paren exp.s ++ loop.s) ;
+    IfElse exp t f = continue  ("if" ++ paren exp.s ++ t.s ++ "else" ++ f.s) ;
     Block stm      = continue  ("{" ++ stm.s ++ "}") ;
+    Printf t e     = continues ("printf" ++ paren (t.s ++ "," ++ e.s)) ;
+    Return _ exp   = statement ("return" ++ exp.s) ;
+    Returnv        = statement "return" ;
     End            = ss [] ;
 \end{verbatim}
 
 
 
-\subsection{Functions}
+\subsection{Functions and programs}
 
-The only new problem presented by functions is the proper
-distribution of commas in parameter and argument lists.
-Since compositionality prevents taking cases of list forms, e.g.
+The category \texttt{Rec} of recursive function bodies with continuations
+has three components: the function body itself, the parameter list, and
+the program that follows. We express this by a linearization type that
+contains three strings:
 \begin{verbatim}
-  -- NilExp = ss [] ;
-  -- ConsExp _ _ e NilExp = e ;
-  -- ConsExp _ _ e es = ss (e.s ++ "," ++ es.s) ;
+  lincat Rec = {s,s2,s3 : Str} ;
 \end{verbatim}
-we have to encode the size of a list (zero, one, or more) in a parameter:
+The body construction rules accumulate the parameter list
+independently of the two other components:
 \begin{verbatim}
-  param
-    Size = Zero | One | More ;
-  oper
-    nextSize : Size -> Size = \n -> case n of {
-      Zero => One ;
-      _    => More
-      } ;
-    separator : Str -> Size -> Str = \t,n -> case n of {
-      Zero => [] ;
-     _ => t
-     } ;
-\end{verbatim}
-For expression lists, we now have
-\begin{verbatim}
-  lincat 
-    ListExp = {s : Str ; size : Size} ;
   lin
-    NilExp = ss [] ;
-    ConsExp _ _ e es = {
-      s = ex e ++ separator "," es.size ++ es.s ;
-      size = nextSize es.size
+    RecOne typ stm prg = stm ** {
+      s2 = typ.s ++ stm.$0 ;
+      s3 = prg.s
       } ;
-\end{verbatim}
-Parameter lists are collected as components of function bodies
-(because of HOAS), and their size is encoded as yet another 
-component.
-\begin{verbatim}
-  lincat
-    Body = {s,s2 : Str ; size : Size} ;
-  lin
-    Empty = ss [] ;
-    Funct args val body cont = ss (
-      val.s ++ cont.$0 ++ paren body.s2 ++ "{" ++ 
-      body.s ++ "}" ++ ";" ++ cont.s) ;
-
-    BodyNil stm = stm ** {s2 = [] ; size = Zero} ;
-    BodyCons typ _ body = {
+    RecCons typ _ body prg = {
       s  = body.s ; 
-      s2 = typ.s ++ body.$0 ++ separator "," body.size ++ body.s2 ;
-      size = nextSize body.size
+      s2 = typ.s ++ body.$0 ++ "," ++ body.s2 ;
+      s3 = prg.s
       } ;
+\end{verbatim}
+The top-level program construction rules rearrange the three
+components into a linear structure:
+\begin{verbatim}
+    FunctNil val stm cont = ss (
+      val.s ++ cont.$0 ++ paren [] ++ "{" ++ 
+      stm.s ++ "}" ++ ";" ++ cont.s) ;
+    Funct args val rec = ss (
+      val.s ++ rec.$0 ++ paren rec.s2 ++ "{" ++ 
+      rec.s ++ "}" ++ ";" ++ rec.s3) ;
 \end{verbatim}
 
 
@@ -578,30 +693,30 @@ component.
 \section{The concrete syntax of JVM}
 
 JVM syntax is, linguistically, more straightforward than
-the syntax of C, and could be described by a regular
+the syntax of C, and could even be defined by a regular
 expression. The translation from our abstract syntax to JVM,
 however, is tricky because variables are replaced by
 their addresses (relative to the frame pointer), and
-linearization must therefore maintain a symbol table that permits
-the lookup of a variable address. As shown in the code
-in Appendix C, we have not quite succeeded to do this
-in the code generated by linearization. 
-Instead, we use variable symbols instead of addresses
-in \texttt{load} and \texttt{store} instructions, and
-generate \texttt{alloc} pseudoinstructions from declarations.
-Then we use another pass, written in Haskell (Appendix E), 
-to replace variable symbols by their addresses. The following example
-shows how the three representations (C, pseudo-JVM, JVM) look like 
+code generation must therefore maintain a symbol table that permits
+the lookup of variable addresses. As shown in the code
+in Appendix C, we have not attempted to do this
+in linearization, but instead
+generated code with symbolic addresses.
+The postprocessor has to resolve the symbolic addresses, which
+we help by
+generating \texttt{alloc} pseudoinstructions from declarations
+(in final JVM, no \texttt{alloc} instructions appear).
+
+The following example shows how the three representations (C, pseudo-JVM, JVM) look like 
 for a piece of code.
 \begin{verbatim}
-  int x ;   alloc i x      ; x has address 0
-  int y ;   alloc i y      ; y has address 1
-  x = 5 ;   i _push 5      ipush 5
+  int x ;   alloc i x      ; x gets address 0
+  int y ;   alloc i y      ; y gets address 1
+  x = 5 ;   ldc 5          ldc 5
             i _store x     istore 0
   y = x ;   i _load x      iload 0
             i _store y     istore 1
 \end{verbatim}
-
 A related problem is the generation of fresh labels for
 jumps. We solve this by maintaining a growing label suffix
 as a field of the linearization of statements into
@@ -614,59 +729,28 @@ disciplined way, and jumps can never go to remote labels.
 
 As it turned out laborious to thread the label counter
 to expressions, we decided to compile comparison \verb6x < y6
-expressions into function calls, which should be provided
+expressions into function calls, which are provided
 by a run-time library. This would no more work for the 
 conjunction \verb6x && y6
 and disjunction \verb6x || y6, if we want to keep their semantics
 lazy, since function calls are strict in their arguments.
 
 The JVM syntax used is from the Jasmin assembler
-\cite{jasmin}, with small deviation which will
-be removed shortly.
+\cite{jasmin}, with small deviations which are corrected
+by the postprocessor. The deviations other than
+variable addresses have to do with spacing: the normal
+unlexer of GF puts spaces between constituents, whereas
+in JVM, type names are integral parts of instruction names.
+We indicate gluing uniformly by generating an underscores
+on the side from which the adjacent element is glued. Thus
+e.g.\ \verb6i _load6 becomes \verb6iload6.
 
-
-
-\subsection{A code example}
-
-Here is a complete C source program, the JVM code obtained by linearization, and
-the postprocessed JVM code.
-\small
-\begin{verbatim}
-int abs (int x){        .method abs (i)i ;
-  if (x < 0){           .limit locals i ;       .method abs(i)i;
-    return 0 - x ;      .limit stack 1000 ;     .limit locals 1
-    }                   alloc i x ;             .limit stack 1000 ;
-  else return x ;       i _load x ;             iload 0
-  } ;                   ipush 0 ;               ipush 0 ;
-int main () {           call ilt ;              call ilt ;
-  int i ;               ifzero FALSE_ ;         ifzero FALSE_;
-  i = abs (16);         ipush 0 ;               ipush 0 ;
-  } ;                   i _load x ;             iload 0
-                        isub ;                  isub ;
-                        i _return ;             ireturn
-                        ;                       ;
-                        goto TRUE_ ;            goto TRUE_;
-                        FALSE_ ;                FALSE_ ;
-                        i _load x ;             iload 0
-                        i _return ;             ireturn
-                        TRUE_ ;                 TRUE_ ;
-                        .end method ;           .end method ;
-                        .method main () i ;     .method main()i;
-                        .limit locals i ;       .limit locals 1
-                        .limit stack 1000 ;     .limit stack 1000 ;
-                        alloc i i ;             ipush 16 ;
-                        ipush 16 ;              invoke abs (i)i ;
-                        invoke abs (i)i ;       istore 0
-                        i _store i ;            .end method ;
-                        .end method ;
-\end{verbatim}
-\normalsize
 
 
 
 \subsection{How to restore code generation by linearization}
 
-SInce postprocessing is needed, we have not quite achieved
+Since postprocessing is needed, we have not quite achieved
 the goal of code generation as linearization.
 If linearization is understood in the
 sense of GF. In GF, linearization rules must be
@@ -679,25 +763,43 @@ Compositionality also prevents optimizations during linearization
 by clever instruction selection, elimination of superfluous
 labels and jumps, etc.
 
-One way to achieve compositional JVM linearization would be
-to change the abstract syntax
-so that variables do not only carry a string with them but
-also a relative address. This would certainly be possible
-with dependent types; but it would clutter the abstract
+One way to achieve compositional JVM linearization is to
+alpha-convert abstract syntax syntax trees
+so that variables are indexed with integers 
+that indicate their depths in the tree. 
+This hack works in the present fragment of C
+because all variables need same amount of
+memory (one word), but would break down if we
+added double-precision floats. Therefore
+we have used the less pure (from the point of view of
+code generation as linearization) method of
+symbolic addresses.
+
+It would certainly be possible to generate variable addresses
+directly in the syntax trees
+by using dependent types; but this would clutter the abstract
 syntax in a way that is hard to motivate when we are in
 the business of describing the syntax of C. The abstract syntax would
 have to, so to say, anticipate all demands of the compiler's
 target languages. 
 
-In fact, translation systems for natural
-languages have similar problems. For instance, to translate
+\subsection{Problems with JVM bytecode verifier}
+
+
+\section{Translation as linearization vs.\ translation by transfer}
+
+The kind of problems we encountered in code generation by
+linearization are familiar from
+translation systems for natural languages. For instance, to translate
 the English pronoun \eex{you} to German, you have to choose
 between \eex{du, ihr, Sie}; for Italian, there are four
 variants, and so on. All semantic distinctions
 made in any of the involved languages have to be present
 in the common abstract syntax. The usual solution to 
-this problem is \empha{transfer}: you do not just linearize
-the same syntax tree, but define a function that translates
+this problem is not a universal abstract syntax, but
+\empha{transfer}: translation does not just linearize
+the same syntax trees to different languages, but defines 
+functions that translates
 the trees of one language into the trees of another.
 
 Using transfer in the compiler
@@ -720,15 +822,12 @@ like built-in lists and tuples, or monads. Of course,
 the compiler could no longer be inverted into a decompiler, 
 in the way true linearization can be inverted into a parser.
 
-One more idea would be to hard-code some support
-for symbol tables into the extension of GF tuned for
-compiler construction. For instance, the concrete syntax of HOAS
-could not only keep track of variable symbols but also
-assign a unique index to each symbol.
-Linearization to C could then use the symbols, as
-in this paper, and linearization to JVM could use 
-the indexes.
 
+
+\section{Parser generation}
+
+
+\section{How to use the compiler}
 
 
 
@@ -779,7 +878,7 @@ semantics that is actually used in the implementation.
 We have managed to compile a representative 
 subset of C to JVM, and growing it
 does not necessarily pose any new kinds of problems. 
-Using HOAS and dependent types to describe the abstract
+Using \HOAS and dependent types to describe the abstract
 syntax of C works fine, and defining the concrete syntax
 of C on top of this using GF linearization machinery is 
 already possible, even though more support could be
@@ -797,9 +896,7 @@ is how to generate machine code by linearization if this depends on
 a symbol table mapping variables to addresses.
 Since the compositional linearization model of GF does not
 support this, we needed postprocessing to get real JVM code
-from the linearization result. The question is this problem can
-be solved by some simple and natural extension of GF.
-
+from the linearization result. 
 
 
 \bibliographystyle{plain}
@@ -808,15 +905,16 @@ be solved by some simple and natural extension of GF.
 
 
 \newpage
-\section*{Appendix A: The abstract syntax}
+\subsection*{Appendix A: The abstract syntax}
 
 \small
 \begin{verbatim}
-abstract Imper = {
-
+abstract Imper = PredefAbs ** {
   cat
     Program ;
+    Rec ListTyp ;
     Typ ;
+    NumTyp ;
     ListTyp ;
     Fun ListTyp Typ ;
     Body ListTyp ;
@@ -828,145 +926,160 @@ abstract Imper = {
   fun
     Empty : Program ;
     Funct : (AS : ListTyp) -> (V : Typ) -> 
-              (Body AS) -> (Fun AS V -> Program) -> Program ;
-    BodyNil  : Stm -> Body NilTyp ;
-    BodyCons : (A : Typ) -> (AS : ListTyp) -> 
-                  (Var A -> Body AS) -> Body (ConsTyp A AS) ;
+              (Fun AS V -> Rec AS) -> Program ;
+    FunctNil : (V : Typ) -> 
+                 Stm -> (Fun NilTyp V -> Program) -> Program ;
+    RecOne  : (A : Typ) -> (Var A -> Stm) -> Program -> Rec (ConsTyp A NilTyp) ;
+    RecCons : (A : Typ) -> (AS : ListTyp) -> 
+                  (Var A -> Rec AS) -> Program -> Rec (ConsTyp A AS) ;
 
-    Decl   : (A : Typ) -> (Var A -> Stm) -> Stm ;
-    Assign : (A : Typ) -> Var A -> Exp A -> Stm -> Stm ;
-    Return : (A : Typ) -> Exp A -> Stm ;
-    While  : Exp TInt -> Stm -> Stm -> Stm ;
-    IfElse : Exp TInt -> Stm -> Stm -> Stm -> Stm ;
-    Block  : Stm -> Stm -> Stm ;
-    End    : Stm ;
+    Decl    : (A : Typ) -> (Var A -> Stm) -> Stm ;
+    Assign  : (A : Typ) -> Var A -> Exp A -> Stm -> Stm ;
+    While   : Exp TInt -> Stm -> Stm -> Stm ;
+    IfElse  : Exp TInt -> Stm -> Stm -> Stm -> Stm ;
+    Block   : Stm -> Stm -> Stm ;
+    Printf  : (A : Typ) -> Exp A -> Stm -> Stm ;
+    Return  : (A : Typ) -> Exp A -> Stm ;
+    Returnv : Stm ;
+    End     : Stm ;
 
     EVar   : (A : Typ) -> Var A -> Exp A ;
-    EInt   : Int -> Exp TInt ;
-    EFloat : Int -> Int -> Exp TFloat ;
-    ELtI   : Exp TInt -> Exp TInt -> Exp TInt ;
-    ELtF   : Exp TFloat -> Exp TFloat -> Exp TInt ;
-    EApp   : (AS : ListTyp) -> (V : Typ) -> Fun AS V -> ListExp AS -> Exp V ;
-    EAddI, EMulI, ESubI : Exp TInt -> Exp TInt -> Exp TInt ;
-    EAddF, EMulF, ESubF : Exp TFloat -> Exp TFloat -> Exp TFloat ;
+    EInt   : Int -> Exp (TNum TInt) ;
+    EFloat : Int -> Int -> Exp (TNum TFloat) ;
+    ELt    : (n : NumTyp) -> let Ex = Exp (TNum n) in Ex -> Ex -> Exp (TNum TInt) ;
+    EAdd, EMul, ESub : (n : NumTyp) -> let Ex = Exp (TNum n) in Ex -> Ex -> Ex ;
+    EAppNil : (V : Typ) -> Fun NilTyp V -> Exp V ;
+    EApp    : (AS : ListTyp) -> (V : Typ) -> Fun AS V -> ListExp AS -> Exp V ;
 
-    TInt, TFloat : Typ ;
-
+    TNum   : NumTyp -> Typ ;  
+    TInt, TFloat : NumTyp ;
     NilTyp  : ListTyp ;
     ConsTyp : Typ -> ListTyp -> ListTyp ;
-
-    NilExp  : ListExp NilTyp ;
+    OneExp  : (A : Typ) -> Exp A -> ListExp (ConsTyp A NilTyp) ;
     ConsExp : (A : Typ) -> (AS : ListTyp) -> 
-                 Exp A -> ListExp AS -> ListExp (ConsExp A AS) ;
+                 Exp A -> ListExp AS -> ListExp (ConsTyp A AS) ;
 }
 \end{verbatim}
 \normalsize
 \newpage
 
 
-\section*{Appendix B: The concrete syntax of C}
+\subsection*{Appendix B: The concrete syntax of C}
 
 \small
 \begin{verbatim}
 concrete ImperC of Imper = open ResImper in {
-  flags lexer=codevars ; unlexer=code ; startcat=Stm ;
+  flags lexer=codevars ; unlexer=code ; startcat=Program ;
 
   lincat
     Exp = PrecExp ;
-    Body = {s,s2 : Str ; size : Size} ;
-    ListExp = {s : Str ; size : Size} ;
+    Rec = {s,s2,s3 : Str} ;
 
   lin
     Empty = ss [] ;
-    Funct args val body cont = ss (
-      val.s ++ cont.$0 ++ paren body.s2 ++ "{" ++ 
-      body.s ++ "}" ++ ";" ++ cont.s) ;
-    BodyNil stm = stm ** {s2 = [] ; size = Zero} ;
-    BodyCons typ _ body = {
+    FunctNil val stm cont = ss (
+      val.s ++ cont.$0 ++ paren [] ++ "{" ++ 
+      stm.s ++ "}" ++ ";" ++ cont.s) ;
+    Funct args val rec = ss (
+      val.s ++ rec.$0 ++ paren rec.s2 ++ "{" ++ 
+      rec.s ++ "}" ++ ";" ++ rec.s3) ;
+
+    RecOne typ stm prg = stm ** {
+      s2 = typ.s ++ stm.$0 ;
+      s3 = prg.s
+      } ;
+    RecCons typ _ body prg = {
       s  = body.s ; 
-      s2 = typ.s ++ body.$0 ++ separator "," body.size ++ body.s2 ;
-      size = nextSize body.size
+      s2 = typ.s ++ body.$0 ++ "," ++ body.s2 ;
+      s3 = prg.s
       } ;
 
     Decl  typ cont = continues (typ.s ++ cont.$0) cont ;
-    Assign _ x exp = continues (x.s ++ "=" ++ ex exp) ;
-    Return _ exp   = statement ("return" ++ ex exp) ;
-    While exp loop = continue  ("while" ++ paren (ex exp) ++ loop.s) ;
-    IfElse exp t f = continue  ("if" ++ paren (ex exp) ++ t.s ++ "else" ++ f.s) ;
+    Assign _ x exp = continues (x.s ++ "=" ++ exp.s) ;
+    While exp loop = continue  ("while" ++ paren exp.s ++ loop.s) ;
+    IfElse exp t f = continue  ("if" ++ paren exp.s ++ t.s ++ "else" ++ f.s) ;
     Block stm      = continue  ("{" ++ stm.s ++ "}") ;
+    Printf t e     = continues ("printf" ++ paren (t.s ++ "," ++ e.s)) ;
+    Return _ exp   = statement ("return" ++ exp.s) ;
+    Returnv        = statement "return" ;
     End            = ss [] ;
  
-    EVar  _ x    = constant x.s ;
-    EInt    n    = constant n.s ;
-    EFloat a b   = constant (a.s ++ "." ++ b.s) ;
-    EMulI, EMulF = infixL P2 "*" ;
-    EAddI, EAddF = infixL P1 "+" ;
-    ESubI, ESubF = infixL P1 "-" ;
-    ELtI,  ELtF  = infixN P0 "<" ;
+    EVar  _ x  = constant x.s ;
+    EInt    n  = constant n.s ;
+    EFloat a b = constant (a.s ++ "." ++ b.s) ;
+    EMul _     = infixL 3 "*" ;
+    EAdd _     = infixL 2 "+" ;
+    ESub _     = infixL 2 "-" ;
+    ELt _      = infixN 1 "<" ;
+
+    EAppNil val f = constant (f.s ++ paren []) ;
     EApp args val f exps = constant (f.s ++ paren exps.s) ;
 
+    TNum t  = t ;
     TInt    = ss "int" ;
     TFloat  = ss "float" ;
     NilTyp  = ss [] ;
     ConsTyp = cc2 ;
-
-    NilExp = ss [] ** {size = Zero} ;
-    ConsExp _ _ e es = {
-      s = ex e ++ separator "," es.size ++ es.s ;
-      size = nextSize es.size
-      } ;
+    OneExp _ e = e ;
+    ConsExp _ _ e es = ss (e.s ++ "," ++ es.s) ;
 }
 \end{verbatim}
 \normalsize
 \newpage
 
 
-\section*{Appendix C: The concrete syntax of JVM}
+\subsection*{Appendix C: The concrete syntax of JVM}
 
 \small
 \begin{verbatim}
 concrete ImperJVM of Imper = open ResImper in {
-
-  flags lexer=codevars ; unlexer=code ; startcat=Stm ;
+  flags lexer=codevars ; unlexer=code ; startcat=Program ;
 
   lincat
-    Body  = {s,s2 : Str} ; -- code, storage for locals
+    Rec = {s,s2,s3 : Str} ; -- code, storage for locals, continuation
     Stm = Instr ;
 
   lin
     Empty = ss [] ;
-    Funct args val body rest = ss (
-      ".method" ++ rest.$0 ++ paren args.s ++ val.s ++ ";" ++
-      ".limit" ++ "locals" ++ body.s2 ++ ";" ++
+    FunctNil val stm cont = ss (
+      ".method" ++ "public" ++ "static" ++ cont.$0 ++ paren [] ++ val.s ++ ";" ++
+      ".limit" ++ "locals" ++ stm.s2 ++ ";" ++
       ".limit" ++ "stack" ++ "1000" ++ ";" ++
-      body.s ++
-      ".end" ++ "method" ++ ";" ++
-      rest.s 
+      stm.s ++
+      ".end" ++ "method" ++ ";" ++ ";" ++
+      cont.s 
       ) ;
-    BodyNil stm = stm ;
-    BodyCons a as body = instrb a.s [] (body ** {s3 = []});
+    Funct args val rec = ss (
+      ".method" ++ "public" ++ "static" ++ rec.$0 ++ paren args.s ++ val.s ++ ";" ++
+      ".limit"  ++ "locals" ++ rec.s2 ++ ";" ++
+      ".limit"  ++ "stack"  ++ "1000" ++ ";" ++
+      rec.s ++
+      ".end" ++ "method" ++ ";" ++ ";" ++
+      rec.s3 
+      ) ;
+
+    RecOne typ stm prg = instrb typ.s (
+      ["alloc"] ++ typ.s ++ stm.$0 ++ stm.s2) {s = stm.s ; s2 = stm.s2 ; s3 = prg.s};
+
+    RecCons typ _ body prg = instrb typ.s (
+      ["alloc"] ++ typ.s ++ body.$0 ++ body.s2) 
+         {s = body.s ; s2 = body.s2 ; s3 = prg.s};
 
     Decl  typ cont = instrb typ.s (
-      "alloc" ++ typ.s ++ cont.$0
+      ["alloc"] ++ typ.s ++ cont.$0
       ) cont ;
-    Assign t x exp = instrc (
-      exp.s ++ 
-      t.s ++ "_store" ++ x.s
-      ) ;
-    Return t exp   = instr (
-      exp.s ++ 
-      t.s ++ "_return") ;
+    Assign t x exp = instrc (exp.s ++ t.s ++ "_store" ++ x.s) ;
     While exp loop = 
       let 
         test = "TEST_" ++ loop.s2 ; 
         end = "END_" ++ loop.s2
       in instrl (
-        test ++ ";" ++
+        "label" ++ test ++ ";" ++
         exp.s ++ 
-        "ifzero" ++ end ++ ";" ++ 
+        "ifeq" ++ end ++ ";" ++ 
         loop.s ++
         "goto" ++ test ++ ";" ++ 
-        end
+        "label" ++ end
         ) ;
     IfElse exp t f = 
       let 
@@ -974,78 +1087,83 @@ concrete ImperJVM of Imper = open ResImper in {
         true  = "TRUE_" ++ t.s2 ++ f.s2
       in instrl (
         exp.s ++ 
-        "ifzero" ++ false ++ ";" ++ 
+        "ifeq" ++ false ++ ";" ++ 
         t.s ++
         "goto" ++ true ++ ";" ++
-        false ++ ";" ++
+        "label" ++ false ++ ";" ++
         f.s ++ 
-        true
+        "label" ++ true
         ) ;
     Block stm      = instrc stm.s ;
+    Printf t e     = instrc (e.s ++ "invokestatic" ++ t.s ++ "runtime/printf" ++ paren (t.s) ++ "v") ;
+    Return t exp   = instr (exp.s ++ t.s ++ "_return") ;
+    Returnv        = instr "return" ;
     End            = ss [] ** {s2,s3 = []} ;
 
     EVar  t x  = instr (t.s ++ "_load" ++ x.s) ;
-    EInt    n  = instr ("ipush" ++ n.s) ;
-    EFloat a b = instr ("fpush" ++ a.s ++ "." ++ b.s) ;
-    EAddI      = binop "iadd" ;
-    EAddF      = binop "fadd" ;
-    ESubI      = binop "isub" ;
-    ESubF      = binop "fsub" ;
-    EMulI      = binop "imul" ;
-    EMulF      = binop "fmul" ;
-    ELtI       = binop ("call" ++ "ilt") ;
-    ELtF       = binop ("call" ++ "flt") ;
+    EInt    n  = instr ("ldc" ++ n.s) ;
+    EFloat a b = instr ("ldc" ++ a.s ++ "." ++ b.s) ;
+    EAdd       = binopt "_add" ;
+    ESub       = binopt "_sub" ;
+    EMul       = binopt "_mul" ;
+    ELt t  = binop ("invokestatic" ++ t.s ++ "runtime/lt" ++ paren (t.s ++ t.s) ++ "i") ;
+    EAppNil val f = instr (
+      "invokestatic" ++ f.s ++ paren [] ++ val.s
+      ) ;
     EApp args val f exps = instr (
       exps.s ++
-      "invoke" ++ f.s ++ paren args.s ++ val.s
+      "invokestatic" ++ f.s ++ paren args.s ++ val.s
       ) ;
 
+    TNum t = t ;
     TInt   = ss "i" ;
     TFloat = ss "f" ;
-
     NilTyp = ss [] ;
     ConsTyp = cc2 ;
-
-    NilExp = ss [] ;
+    OneExp _ e = e ;
     ConsExp _ _ = cc2 ;
 }
-
 \end{verbatim}
 \normalsize
 \newpage
 
-\section*{Appendix D: Auxiliary operations for concrete syntax}
+\subsection*{Appendix D: Auxiliary operations for concrete syntax}
 
 \small
 \begin{verbatim}
-resource ResImper = {
+resource ResImper = open Predef in {
 
   -- precedence
 
-  param
-    Prec = P0 | P1 | P2 | P3 ;
-  oper
-    PrecExp   : Type = {s : Prec => Str} ;
-    ex        : PrecExp -> Str = \exp -> exp.s ! P0 ;
-    constant  : Str -> PrecExp = \c -> {s = \\_ => c} ;
-    infixN : Prec -> Str -> PrecExp -> PrecExp -> PrecExp = \p,f,x,y ->
-      {s = \\k => mkPrec (x.s ! (nextPrec ! p) ++ f ++ y.s ! (nextPrec ! p)) ! p ! k} ;
-    infixL : Prec -> Str -> PrecExp -> PrecExp -> PrecExp = \p,f,x,y ->
-      {s = mkPrec (x.s ! p ++ f ++ y.s ! (nextPrec ! p)) ! p} ;
+  param PAssoc = PN | PL | PR ;
 
-    nextPrec : Prec => Prec = table {P0 => P1 ; P1 => P2 ; _ => P3} ;
-    mkPrec : Str -> Prec => Prec => Str = \str -> table {
-      P3 => table {                -- use the term of precedence P3...
-        _   => str} ;              -- ...always without parentheses
-      P2 => table {                -- use the term of precedence P2...
-        P3  => paren str ;     -- ...in parentheses if P3 is expected...
-        _   => str} ;              -- ...otherwise without parentheses
-      P1 => table {
-        P3 | P2 => paren str ;
-        _  => str} ;
-      P0 => table {
-        P0  => str ;
-        _   => paren str}
+  oper 
+    Prec    : PType = Predef.Ints 4 ;
+    PrecExp : Type = {s : Str ; p : Prec ; a : PAssoc} ;
+
+    mkPrec : Prec -> PAssoc -> Str -> PrecExp = \p,a,f -> 
+      {s = f ; p = p ; a = a} ;
+
+    usePrec : PrecExp -> Prec -> Str = \x,p ->
+      case <<x.p,p> : Prec * Prec> of {
+        <3,4> | <2,3> | <2,4> => paren x.s ;
+        <1,1> | <1,0> | <0,0> => x.s ;
+        <1,_> | <0,_>         => paren x.s ;
+        _ => x.s
+        } ;
+
+    constant : Str -> PrecExp = mkPrec 4 PN ;
+
+    infixN : Prec -> Str -> (_,_ : PrecExp) -> PrecExp = \p,f,x,y ->
+      mkPrec p PN (usePrec x (nextPrec p) ++ f ++ usePrec y (nextPrec p)) ;
+    infixL : Prec -> Str -> (_,_ : PrecExp) -> PrecExp = \p,f,x,y ->
+      mkPrec p PL (usePrec x p ++ f ++ usePrec y (nextPrec p)) ;
+    infixR : Prec -> Str -> (_,_ : PrecExp) -> PrecExp = \p,f,x,y ->
+      mkPrec p PR (usePrec x (nextPrec p) ++ f ++ usePrec y p) ;
+
+    nextPrec : Prec -> Prec = \p -> case <p : Prec> of {
+      4 => 4 ; 
+      n => Predef.plus n 1
       } ;
 
   -- string operations
@@ -1087,13 +1205,15 @@ resource ResImper = {
       ss (s ++ ";" ++ i.s) ** {s2 = v ++ i.s2 ; s3 = i.s3} ;
     binop  : Str -> SS -> SS -> SS = \op, x, y ->
       ss (x.s ++ y.s ++ op ++ ";") ;
+    binopt : Str -> SS -> SS -> SS -> SS = \op, t ->
+      binop (t.s ++ op) ;
 }
 \end{verbatim}
 \normalsize
 \newpage
 
 
-\section*{Appendix E: Translation to real JVM}
+\subsection*{Appendix E: Translation to real JVM}
 
 This program is written in Haskell. Most of the changes concern
 spacing and could be done line by line; the really substantial
@@ -1114,7 +1234,7 @@ mkJVM = unlines . reverse . fst . foldl trans ([],([],0)) . lines where
     t:"_store":x:_ -> chCode (t ++ "store " ++ look x)
     t:"_return":_  -> chCode (t ++ "return")
     "goto":ns      -> chCode ("goto " ++ concat ns)
-    "ifzero":ns    -> chCode ("ifzero " ++ concat ns) 
+    "ifzero":ns    -> chCode ("ifeq " ++ concat ns) 
     _ ->   chCode s
    where
      chCode c = (c:code,(env,v))
@@ -1126,7 +1246,10 @@ mkJVM = unlines . reverse . fst . foldl trans ([],([],0)) . lines where
 \normalsize
 \newpage
 
-Show Fig~\ref{demo}
+
+\subsection*{Appendix F: A Syntax Editor screen dump}
+
+%Show Fig~\ref{demo}
 
 \begin{figure}
 \centerline{\psfig{figure=demo2.ps}} \caption{

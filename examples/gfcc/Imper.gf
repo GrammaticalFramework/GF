@@ -19,7 +19,6 @@ abstract Imper = PredefAbs ** {
               (Fun AS V -> Rec AS) -> Program ;
     FunctNil : (V : Typ) -> 
                  Stm -> (Fun NilTyp V -> Program) -> Program ;
-
     RecOne  : (A : Typ) -> (Var A -> Stm) -> Program -> Rec (ConsTyp A NilTyp) ;
     RecCons : (A : Typ) -> (AS : ListTyp) -> 
                   (Var A -> Rec AS) -> Program -> Rec (ConsTyp A AS) ;
@@ -38,16 +37,15 @@ abstract Imper = PredefAbs ** {
     EInt   : Int -> Exp (TNum TInt) ;
     EFloat : Int -> Int -> Exp (TNum TFloat) ;
     ELt    : (n : NumTyp) -> let Ex = Exp (TNum n) in Ex -> Ex -> Exp (TNum TInt) ;
-    EApp   : (AS : ListTyp) -> (V : Typ) -> Fun AS V -> ListExp AS -> Exp V ;
     EAdd, EMul, ESub : (n : NumTyp) -> let Ex = Exp (TNum n) in Ex -> Ex -> Ex ;
+    EAppNil : (V : Typ) -> Fun NilTyp V -> Exp V ;
+    EApp    : (AS : ListTyp) -> (V : Typ) -> Fun AS V -> ListExp AS -> Exp V ;
 
     TNum   : NumTyp -> Typ ;  
     TInt, TFloat : NumTyp ;
-
     NilTyp  : ListTyp ;
     ConsTyp : Typ -> ListTyp -> ListTyp ;
 
-    NilExp  : ListExp NilTyp ;
     OneExp  : (A : Typ) -> Exp A -> ListExp (ConsTyp A NilTyp) ;
     ConsExp : (A : Typ) -> (AS : ListTyp) -> 
                  Exp A -> ListExp AS -> ListExp (ConsTyp A AS) ;
