@@ -22,7 +22,7 @@ import List (nub)
 prLBNF :: Bool -> StateGrammar -> String
 prLBNF new gr = unlines $ pragmas ++ (map (prCFRule cs) rules)
   where    
-    cs = map IC ["Int","String"] ++ [catId c | (_,(c,_)) <- rules]
+    cs = map IC ["Int","String"] ++ [catIdPlus c | (_,(c,_)) <- rules]
     cf = stateCF gr
     (pragmas,rules) = if new  -- tries to treat precedence levels
                          then mkLBNF (stateGrammarST gr) $ rulesOfCF cf
@@ -82,6 +82,10 @@ mkLBNF gr rules = (coercions, nub $ concatMap mkRule rules) where
 
 catId ((CFCat ((CIQ _ c),l))) = c
 
+catIdPlus ((CFCat ((CIQ _ c@(IC s)),l))) = case reverse s of
+  '+':cs -> IC $ reverse $ dropWhile isDigit cs
+  _ -> c
+
 prCFRule :: [Ident] -> CFRule -> String
 prCFRule cs (fun,(cat,its)) = 
   prCFFun cat fun ++ "." +++ prCFCat True cat +++ "::=" +++  --- err in cat -> in syntax
@@ -121,7 +125,7 @@ prCFCat :: Bool -> CFCat -> String
 prCFCat b (CFCat ((CIQ _ c),l)) = prId b c ++ prLab l ----
 
 -- if a category does not have a production of its own, we replace it by Ident
-prCFItem cs (CFNonterm c) = if elem (catId c) cs then prCFCat False c else "Ident"
+prCFItem cs (CFNonterm c) = if elem (catIdPlus c) cs then prCFCat False c else "Ident"
 prCFItem _ (CFTerm a) = prRegExp a
 
 prRegExp (RegAlts tt) = case tt of

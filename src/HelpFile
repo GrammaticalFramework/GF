@@ -435,8 +435,11 @@ q, quit: q
     -printer=gfc            GFC grammar
     -printer=gf             GF grammar
     -printer=old            old GF grammar
-    -printer=cf             context-free grammar
-   *-printer=happy          source file for Happy parser generator
+    -printer=cf             context-free grammar, with profiles
+    -printer=bnf            context-free grammar, without profiles
+    -printer=lbnf           labelled context-free grammar for BNF Converter
+    -printer=plbnf          grammar for BNF Converter, with precedence levels
+   *-printer=happy          source file for Happy parser generator (use lbnf!)
     -printer=srg            speech recognition grammar
     -printer=haskell        abstract syntax in Haskell, with transl to/from GF
     -printer=morpho         full-form lexicon, long format
