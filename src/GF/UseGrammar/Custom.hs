@@ -208,9 +208,8 @@ customTermCommand =
   ,(strCI "generate",   \g t -> let gr = grammar g
                                     cat = actCat $ tree2loc t --- not needed
                                 in
-                                  tree2termlistCommand gr
-                                    (generateTrees gr cat 2
-                                      Nothing . Just) t)
+                         [tr | t <- generateTrees gr cat 2 Nothing (Just t), 
+                               Ok tr <- [annotate gr $ MM.qualifTerm (absId g) t]])
 
   ,(strCI "typecheck",  \g t -> let gr = grammar g in
                                   err (const []) (return . const t)
