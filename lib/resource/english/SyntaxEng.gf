@@ -450,8 +450,7 @@ oper
     isAux : Bool
     } ;
 
--- This is just an infinitival (or present participle) phrase
-
+-- The following is just an infinitival (or present participle) phrase.
 
 param
   VIForm = VIInfinit | VIPresPart ;

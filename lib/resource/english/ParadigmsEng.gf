@@ -374,7 +374,10 @@ oper
         _   => crie + "ed"
         } ;
       crying = case y of {
-        "e" => cr + "ing" ;
+        "e" => case last cr of {
+           "e" => cry + "ing" ; 
+           _ => cr + "ing" 
+           } ;
         _   => cry + "ing"
         }
     in mkV cry cries cried cried crying ;
@@ -383,7 +386,8 @@ oper
     let fitt = fit + last fit in
     mkV fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing") ;
 
-  irregV x y z = mkVerbIrreg x y z ** {s1 = [] ; lock_V = <>} ;
+  irregV x y z = let reg = (regV x).s in
+    mkV x (reg ! Indic Sg) y z (reg ! PresPart) ** {s1 = [] ; lock_V = <>} ;
 
   irregDuplV fit y z = 
     let 

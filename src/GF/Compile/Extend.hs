@@ -107,8 +107,8 @@ extendAnyInfo isc n o i j =
     testErr (b1 == b2) "inconsistent indirection status"
 ---- commented out as work-around for a spurious problem in
 ---- TestResourceFre; should look at building of completion. 17/11/2004 
-----    testErr (m1 == m2) $ 
-----      "different sources of indirection: " +++ show m1 +++ show m2
+    testErr (m1 == m2) $ 
+      "different sources of indirection: " +++ show m1 +++ show m2
     return i
 
   _ -> Bad $ "cannot unify information in" ++++ show i ++++ "and" ++++ show j
