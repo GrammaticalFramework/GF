@@ -273,6 +273,75 @@ oper tener_4 : Str -> Verbum = \tener ->
     VP (Pass Pl Fem) => t_ + "enidas"
     }
   } ;
+
+oper cortar_5 : Str -> Verbum = \cortar ->
+  let cort_ = Predef.tk 2 cortar in
+ {s = table {
+    VI Infn => cort_ + "ar" ;
+    VI Ger => cort_ + "ando" ;
+    VI Part => cort_ + "ado" ;
+    VP (Pres Ind Sg P1) => cort_ + "o" ;
+    VP (Pres Ind Sg P2) => cort_ + "as" ;
+    VP (Pres Ind Sg P3) => cort_ + "a" ;
+    VP (Pres Ind Pl P1) => cort_ + "amos" ;
+    VP (Pres Ind Pl P2) => cort_ + "áis" ;
+    VP (Pres Ind Pl P3) => cort_ + "an" ;
+    VP (Pres Subj Sg P1) => cort_ + "e" ;
+    VP (Pres Subj Sg P2) => cort_ + "es" ;
+    VP (Pres Subj Sg P3) => cort_ + "e" ;
+    VP (Pres Subj Pl P1) => cort_ + "emos" ;
+    VP (Pres Subj Pl P2) => cort_ + "éis" ;
+    VP (Pres Subj Pl P3) => cort_ + "en" ;
+    VP (Impf Ind Sg P1) => cort_ + "aba" ;
+    VP (Impf Ind Sg P2) => cort_ + "abas" ;
+    VP (Impf Ind Sg P3) => cort_ + "aba" ;
+    VP (Impf Ind Pl P1) => cort_ + "ábamos" ;
+    VP (Impf Ind Pl P2) => cort_ + "abais" ;
+    VP (Impf Ind Pl P3) => cort_ + "aban" ;
+    VP (Impf Subj Sg P1) => variants {cort_ + "ara" ; cort_ + "ase"} ;
+    VP (Impf Subj Sg P2) => variants {cort_ + "aras" ; cort_ + "ases"} ;
+    VP (Impf Subj Sg P3) => variants {cort_ + "ara" ; cort_ + "ase"} ;
+    VP (Impf Subj Pl P1) => variants {cort_ + "áramos" ; cort_ + "ásemos"} ;
+    VP (Impf Subj Pl P2) => variants {cort_ + "arais" ; cort_ + "aseis"} ;
+    VP (Impf Subj Pl P3) => variants {cort_ + "aran" ; cort_ + "asen"} ;
+    VP (Pret Sg P1) => cort_ + "é" ;
+    VP (Pret Sg P2) => cort_ + "aste" ;
+    VP (Pret Sg P3) => cort_ + "ó" ;
+    VP (Pret Pl P1) => cort_ + "amos" ;
+    VP (Pret Pl P2) => cort_ + "asteis" ;
+    VP (Pret Pl P3) => cort_ + "aron" ;
+    VP (Fut Ind Sg P1) => cort_ + "aré" ;
+    VP (Fut Ind Sg P2) => cort_ + "arás" ;
+    VP (Fut Ind Sg P3) => cort_ + "ará" ;
+    VP (Fut Ind Pl P1) => cort_ + "aremos" ;
+    VP (Fut Ind Pl P2) => cort_ + "aréis" ;
+    VP (Fut Ind Pl P3) => cort_ + "arán" ;
+    VP (Fut Subj Sg P1) => cort_ + "are" ;
+    VP (Fut Subj Sg P2) => cort_ + "ares" ;
+    VP (Fut Subj Sg P3) => cort_ + "are" ;
+    VP (Fut Subj Pl P1) => cort_ + "áremos" ;
+    VP (Fut Subj Pl P2) => cort_ + "areis" ;
+    VP (Fut Subj Pl P3) => cort_ + "aren" ;
+    VP (Cond Sg P1) => cort_ + "aría" ;
+    VP (Cond Sg P2) => cort_ + "arías" ;
+    VP (Cond Sg P3) => cort_ + "aría" ;
+    VP (Cond Pl P1) => cort_ + "aríamos" ;
+    VP (Cond Pl P2) => cort_ + "aríais" ;
+    VP (Cond Pl P3) => cort_ + "arían" ;
+    VP (Imp Sg P1) => variants {} ;
+    VP (Imp Sg P2) => cort_ + "a" ;
+    VP (Imp Sg P3) => cort_ + "e" ;
+    VP (Imp Pl P1) => cort_ + "emos" ;
+    VP (Imp Pl P2) => cort_ + "ad" ;
+    VP (Imp Pl P3) => cort_ + "en" ;
+    VP (Pass Sg Masc) => cort_ + "ado" ;
+    VP (Pass Sg Fem) => cort_ + "ada" ;
+    VP (Pass Pl Masc) => cort_ + "ados" ;
+    VP (Pass Pl Fem) => cort_ + "adas"
+    }
+  } ;
+
+
 oper deber_6 : Str -> Verbum = \deber ->
   let deb_ = Predef.tk 2 deber in
  {s = table {
