@@ -24,6 +24,10 @@ To make and install GF2 (Version 2-beta, 2/4/2004).
 
      ./configure --prefix=/usr
 
+   To compile on Chalmers Solaris systems using VCS, use this configuration:
+
+     ./configure CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
+
 5. Compile with make, either of
 
      make unix    -- for Linux, Solaris, Mac OSX
