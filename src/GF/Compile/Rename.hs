@@ -62,7 +62,7 @@ extendModule ms (name,mod) = case mod of
           _ -> Bad $ "cannot find extended module" +++ prt n
         extendMod n (jments m0) js
       _ -> return js
-    return $ (name,ModMod (Module mt fs Nothing ops js1))
+    return $ (name,ModMod (Module mt fs me ops js1))
 
 
 type Status = (StatusTree, [(OpenSpec Ident, StatusTree)])
@@ -72,7 +72,9 @@ type StatusTree = BinTree (Ident,StatusInfo)
 type StatusInfo = Ident -> Term
 
 renameIdentTerm :: Status -> Term -> Err Term
-renameIdentTerm env@(act,imps) t = case t of
+renameIdentTerm env@(act,imps) t = 
+ errIn ("atomic term" +++ prt t +++ "given" +++ unwords (map (prt . fst) qualifs)) $
+   case t of
   Vr c -> do
     f <- lookupTreeMany prt opens c
     return $ f c
@@ -90,7 +92,8 @@ renameIdentTerm env@(act,imps) t = case t of
   _ -> return t
  where
    opens   = act : [st  | (OSimple _,st) <- imps]
-   qualifs = [  (m, st) | (OQualif m _, st) <- imps]
+   qualifs = [(m, st) | (OQualif m _, st) <- imps] ++ 
+             [(m, st) | (OSimple m, st) <- imps] -- qualifying is always possible
 
 --- would it make sense to optimize this by inlining?
 renameIdentPatt :: Status -> Patt -> Err Patt
@@ -117,8 +120,9 @@ tree2status o = case o of
 buildStatus :: SourceGrammar -> Ident -> SourceModInfo -> Err Status
 buildStatus gr c mo = let mo' = self2status c mo in case mo of
   ModMod m -> do
-    let ops  = allOpens m
-    mods <- mapM (lookupModule gr . openedModule) ops
+    let gr1 = MGrammar $ (c,mo) : modules gr 
+        ops = [OSimple e | e <- allExtends gr1 c] ++ allOpens m
+    mods <- mapM (lookupModule gr1 . openedModule) ops
     let sts = map modInfo2status $ zip ops mods    
     return $ if isModCnc m
       then (NT, sts) -- the module itself does not define any names

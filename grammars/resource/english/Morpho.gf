@@ -5,7 +5,7 @@
 -- This resource morphology contains definitions needed in the resource
 -- syntax. It moreover contains the most usual inflectional patterns.
 --
--- We use the parameter types and word classes defined in $types.Eng.gf$.
+-- We use the parameter types and word classes defined in $Types.gf$.
 
 resource Morpho = Types ** open Prelude in {
 

@@ -5,22 +5,26 @@
 -- Although concrete syntax differs a lot between different languages,
 -- many structures can be found that are common, on a certain level
 -- of abstraction. What we will present in the following is an abstract 
--- syntax that has been successfully defined for English, French, German, 
+-- syntax that has been successfully defined for English, Finnish, French, German, 
 -- Italian, Russian, and Swedish. It has been applied to define language
 -- fragments on technical or near-to-technical domains: database queries,
 -- video recorder dialogue systems, software specifications, and a 
--- health-related phrase book.
---
+-- health-related phrase book. Each new application helped to identify some
+-- missing structures in the resource and suggested some additions, but the
+-- number of them was usually small.
+-- 
 -- To use the resource in applications, you need the following 
 -- $cat$ and $fun$ rules in $oper$ form, completed by taking the
--- $lincat$ and $lin$ judgements of a particular language. There is 
--- a GF command for making this translation automatically.
+-- $lincat$ and $lin$ judgements of a particular language. This is done
+-- by using the $reuse$ module with the desired concrete syntax of
+-- $ResAbs$ as argument.
+
 
 --2 Categories
 --
 -- The categories of this resource grammar are mostly 'standard' categories
 -- of linguistics. Their is no claim that they correspond to semantic categories
--- definable in type theory: to define such correspondences it the business
+-- definable in type theory: to define such correspondences is the business
 -- of applications grammars.
 --
 -- Categories that may look special are $Adj2$, $Fun$, and $TV$. They are all
@@ -102,13 +106,14 @@ cat
   Phr ;    -- full phrase,           e.g. "John walks.","Who walks?", "Wait for me!"
   Text ;   -- sequence of phrases    e.g. "One is odd. Therefore, two is even."
 
+
 --2 Rules
 --
--- This set of rules is minimal, in the sense defining the simplest combinations
--- of categories and of not having redundant rules.
+-- This set of rules is minimal, in the sense of defining the simplest combinations
+-- of categories and not having redundant rules.
 -- When the resource grammar is used as a library, it will often be useful to
 -- access it through an intermediate library that defines more rules as 
--- combinations of the ones below.
+-- 'macros' for combinations of the ones below.
 
 --3 Nouns and noun phrases
 --

@@ -112,6 +112,9 @@ ccompute cnc = comp []
           if noVar v' 
              then matchPatt cs v' >>= compt
              else return $ S u' v'
+        FV ccs -> do
+          v' <- compt v
+          mapM (\c -> compt (S c v')) ccs >>= return . FV
 
         _      -> liftM (S u') $ compt v
 

@@ -27,8 +27,9 @@ extendModInfo name old new = case (old,new) of
 
 extendMod :: Ident -> BinTree (Ident,Info) -> BinTree (Ident,Info) -> 
              Err (BinTree (Ident,Info))
-extendMod name old new = 
-  foldM (tryInsert (extendAnyInfo name) (indirInfo name)) new $ tree2list old
+extendMod name old new = foldM try new $ tree2list old where
+  try t i@(c,_) = errIn ("constant" +++ prt c) $
+                  tryInsert (extendAnyInfo name) (indirInfo name) t i
 
 indirInfo :: Ident -> Info -> Info
 indirInfo n info = AnyInd b n' where 
@@ -58,7 +59,7 @@ perhIndir n p = case p of
   _ -> p
 
 extendAnyInfo :: Ident -> Info -> Info -> Err Info
-extendAnyInfo n i j = case (i,j) of
+extendAnyInfo n i j = errIn ("building extension for" +++ prt n) $ case (i,j) of
   (AbsCat mc1 mf1, AbsCat mc2 mf2) -> 
     liftM2 AbsCat (updatePerhaps n mc1 mc2) (updatePerhaps n mf1 mf2) --- add cstrs
   (AbsFun mt1 md1, AbsFun mt2 md2) -> 
@@ -66,8 +67,7 @@ extendAnyInfo n i j = case (i,j) of
 
   (ResParam mt1, ResParam mt2) -> liftM ResParam $ updatePerhaps n mt1 mt2
   (ResValue mt1, ResValue mt2) -> liftM ResValue $ updatePerhaps n mt1 mt2
-  (ResOper mt1 m1, ResOper mt2 m2) -> 
-    liftM2 ResOper (updatePerhaps n mt1 mt2) (updatePerhaps n m1 m2)
+  (ResOper mt1 m1, ResOper mt2 m2) -> extendResOper n mt1 m1 mt2 m2 
 
   (CncCat mc1 mf1 mp1, CncCat mc2 mf2 mp2) -> 
     liftM3 CncCat (updatePerhaps n mc1 mc2) 
@@ -75,4 +75,20 @@ extendAnyInfo n i j = case (i,j) of
   (CncFun m mt1 md1, CncFun _ mt2 md2) -> 
     liftM2 (CncFun m) (updatePerhaps n mt1 mt2) (updatePerhaps n md1 md2)
 
-  _ -> Bad $ "cannot unify information for" +++ show n
+  (AnyInd _ _, ResOper _ _) -> return j ----
+
+  _ -> Bad $ "cannot unify information in" ++++ show i ++++ "and" ++++ show j
+
+
+-- opers declared in one module and defined in an extension are a special case
+
+extendResOper n mt1 m1 mt2 m2 = case (m1,m2) of
+  (Nope,_) -> return $ ResOper (strip mt1) m2
+  _ -> liftM2 ResOper (updatePerhaps n mt1 mt2) (updatePerhaps n m1 m2)
+ where
+   strip (Yes t) = Yes $ strp t
+   strip m = m
+   strp t = case t of
+     Q _ c  -> Vr c
+     QC _ c -> Vr c
+     _ -> composSafeOp strp t

@@ -6,7 +6,7 @@
 -- However, it only includes those parameters that are needed for
 -- analysing individual words: such parameters are defined in syntax modules.
 --
--- we use the language-independent prelude.
+-- We use the language-independent prelude.
 
 resource Types = open Prelude in {
 
