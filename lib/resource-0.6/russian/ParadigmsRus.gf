@@ -267,8 +267,8 @@ oper
      anim = anim
    } ** {lock_N = <>}  ;
 
-  nMashina   = \s -> aEndInanimateDecl s ** {lock_N = <>};
-  nEdinica   = \s -> ej_aEndInanimateDecl s ** {lock_N = <>};
+  nMashina   = \s -> aEndInAnimateDecl s ** {lock_N = <>};
+  nEdinica   = \s -> ej_aEndInAnimateDecl s ** {lock_N = <>};
   nZhenchina = \s -> (aEndAnimateDecl s) ** { g = Fem ; anim = Animate } ** {lock_N = <>}; 
   nNoga      = \s -> aEndG_K_KH_Decl s ** {lock_N = <>};    
   nMalyariya  = \s -> i_yaEndDecl s ** {lock_N = <>};

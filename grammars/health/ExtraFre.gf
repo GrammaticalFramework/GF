@@ -8,13 +8,32 @@
 resource ExtraFre = open PredicationFre, ResourceFre, Prelude, SyntaxFre, MorphoFre, ParadigmsFre in {
 
 oper 
-  avoirBesoin: CN -> VP = \medicine ->   
+  NPMedicine: Type = NP ** {des : Bool};
+
+  avoirBesoin1: CN -> VP = \doctor ->   
     PosVG ( PredTV (tvDir vAvoir) (DetNP nullDet (
-           AppFun (funDe (mkCNomReg "besoin" Masc ** {lock_N =<>})) 
-           (IndefOneNP medicine)
+           AppFun (funDe (nReg "besoin" Masc) ) 
+           (IndefOneNP doctor)
          )
        )
-    ) **{lock_VP =<>} ;
+    ) ;
+
+  avoirBesoin: NPMedicine -> VP = \medicine ->   
+    if_then_else VP medicine.des     
+
+    (PosVG ( PredTV (tvDir vAvoir) (DetNP nullDet (
+           AppFun (funPrep (nReg "besoin" Masc) "") 
+           medicine
+         )
+       )
+    )) 
+
+    (PosVG ( PredTV (tvDir vAvoir) (DetNP nullDet (
+           AppFun (funDe (nReg "besoin" Masc)) 
+           medicine
+         )
+       )
+    )) ;
 
   injuredBody: (Gender => Number => Str) -> NP -> CN -> S =
    \injured, patient, head -> 
@@ -29,6 +48,7 @@ oper
   
   delDet : Det = mkDeterminer Sg (artDef Masc Sg genitive) 
     (artDef Fem Sg genitive)  ** {lock_Det = <>} ;
+  desDet : Det = mkDeterminer1 Pl "des"  ** {lock_Det = <>} ;
 
   nullDet : Det = mkDeterminer1 Sg "" ** {lock_Det =<>} ;
 

@@ -9,11 +9,11 @@ resource ExtraRus = open ResourceRus, Prelude, SyntaxRus in {
 flags  coding=utf8 ;
 
 oper
-  predNeedShortAdjective: Bool -> NP -> CN -> S = \b, Jag, Dig -> { s =
+  predNeedShortAdjective: Bool -> NP -> NP -> S = \b, Jag, Dig -> { s =
     let {
       mne  = Jag.s ! (mkPronForm Dat No NonPoss) ; 
-      nuzhen  = need.s ! AF Nom Inanimate (gNum Dig.g Sg)  ;
-      doctor = Dig.s ! Sg ! Nom ;
+      nuzhen  = need.s ! AF Nom Inanimate (gNum (pgen2gen Dig.g) Dig.n)  ;
+      doctor = Dig.s ! (mkPronForm Nom No NonPoss) ;
       ne = negation b
     } in
        mne ++ ne ++ nuzhen ++ doctor ;

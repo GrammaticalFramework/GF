@@ -1,6 +1,6 @@
 -- use this path to read the grammar from the same directory
 --# -path=.:../newresource/abstract:../prelude:../newresource/english
-concrete HealthEng of Health = open PredicationEng, ResourceEng, Prelude, SyntaxEng, ExtraEng in {
+concrete HealthEng of Health = open PredicationEng, ResourceEng, ResourceExtEng, Prelude, SyntaxEng, ExtraEng, ParadigmsEng in {
 
 flags 
   startcat=Phr ; lexer=text ; parser=chart ; unlexer=text ;
@@ -16,7 +16,7 @@ lincat
   Illness = CN ; 
   Condition = VP ;
   Specialization = CN ;
-  Medicine  = CN ;
+  Medicine  = NP ;
 
 lin 
   ShePatient = SheNP ;
@@ -25,10 +25,40 @@ lin
 
   And x y = ConjS AndConj (TwoS x y) ; 
 
-  Influenza = cnNoHum (nounReg "influenza")** {lock_CN = <>} ; 
-  Malaria =  cnNoHum (nounReg "malaria") ** {lock_CN = <>}; 
-  Dentist  = cnHum (nounReg "dentist")** {lock_CN = <>}  ;
-  PainKiller = cnNoHum (nounReg "painkiller")** {lock_CN = <>} ;
+  Influenza = cnNonhuman "influenza" ; 
+  Malaria = cnNonhuman "malaria" ; 
+  Diarrhea = cnNonhuman "diarrhea" ; 
+  SkinAllergy = AppFun (mkFun (nNonhuman "skin") []) (MassNP (cnNonhuman "allergy")) ;  
+  Heartburn = cnNonhuman "heartburn" ;  
+  Rheumatism = cnNonhuman "rheumatism" ;  
+  Cystitis = cnNonhuman "cystitis" ;  
+  Asthma = cnNonhuman "asthma" ; 
+  Arthritis = cnNonhuman "arthritis" ; 
+  Diabetes = cnNonhuman "diabetes" ; 
+  Tonsillitis = cnNonhuman "tonsillitis" ; 
+  Constipation = cnNonhuman "constipation" ; 
+  
+  Dentist  = cnHuman "dentist" ; 
+  Gynecologist = cnHuman "gynecologist" ;
+  Urologist = cnHuman "urologist" ; 
+  Pediatrician = cnHuman "pediatrician" ;
+  Physician = cnHuman "physician" ;
+  Dermatologist = cnHuman "dermatologist" ;
+  Cardiologist = cnHuman "cardiologist" ;
+  Neuropathologist = cnHuman "neuropathologist" ;
+  Ophthalmologist = cnHuman "ophthalmologist" ;
+  Surgeon = cnHuman "surgeon" ;
+
+  SleepingPeels = IndefManyNP (ModAdj (apReg "sleeping") (cnNonhuman "peel"));
+  Vitamins = IndefManyNP (cnNonhuman "vitamin") ;
+  EyeDrops = IndefManyNP (cnNonhuman "eye-drop") ;
+  Antibiotics = IndefManyNP (cnNonhuman "antibiotic") ;
+  Sedative = IndefOneNP (cnNonhuman "sedative") ;
+  Viagra = MassNP (cnNonhuman "viagra") ;
+  Laxative = IndefOneNP (cnNonhuman "laxative") ;
+  Insulin = MassNP (cnNonhuman "insulin");
+  Antidepressant = IndefOneNP (cnNonhuman "antidepressant") ;
+  PainKiller = IndefOneNP (cnNonhuman "painkiller") ;
 
   Leg = { s = \\_,n,_ => case n of {Sg =>"leg" ; Pl=> "legs" }; 
          painInType = True } ;
@@ -44,7 +74,10 @@ lin
 --           Pl => table {_  => "teeth" }};
 --           False => table { _ => table {_=> "toothache"}}} ;
 --           painInType = False } ; 	
-  Throat = { s = \\_,n,_ => case n of {Sg =>"throat" ; Pl=> "throats" };           painInType = True } ; 	
+  Throat = { s = table{ True => table {Sg => table {_  => "throat" }; 
+           Pl => table {_  => "throats" }};
+           False => table { _ => table {_=> ["sore throat"]}}} ;
+           painInType = False } ; 		
   Ear = { s = \\_,n,_ => case n of {Sg =>"ear" ; Pl=> "ears" };           painInType = True } ; 	
   Chest = { s = \\_,n,_ => case n of {Sg =>"chest" ; Pl=> "chests" };           painInType = True } ; 	
   Foot = { s = \\_,n,_ => case n of {Sg =>"foot" ; Pl=> "feet" };           painInType = True } ; 	
@@ -64,10 +97,8 @@ lin
 
   NeedDoctor patient doctor = predV2 (mkTransVerbDir (regVerbP3 "need")**{lock_TV = <>}) 
        patient (DetNP (aDet ** {lock_Det = <>}) doctor); 
-  NeedMedicine patient medicine = predV2 (mkTransVerbDir (regVerbP3 "need")**{lock_TV = <>}) 
-       patient (DetNP (aDet ** {lock_Det = <>}) medicine); 
-  TakeMedicine patient medicine = predV2 (mkTransVerbDir (regVerbP3 "take")**{lock_TV = <>})
-       patient (DetNP (aDet ** {lock_Det = <>}) medicine) ; 
+  NeedMedicine = predV2 (mkTransVerbDir (regVerbP3 "need")**{lock_TV = <>}) ; 
+  TakeMedicine = predV2 (mkTransVerbDir (regVerbP3 "take")**{lock_TV = <>}) ;
 
   Injured = injuredBody (mkTransVerb verbP3Have "injured"**{lock_TV = <>}) ;
   Broken = injuredBody (mkTransVerb verbP3Have "broken"**{lock_TV = <>}) ;

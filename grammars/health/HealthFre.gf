@@ -3,7 +3,7 @@
 -- use this path to read the grammar from the same directory
 --# -path=.:../newresource/abstract:../prelude:../newresource/french:../newresource/romance
 
-concrete HealthFre of Health = open PredicationFre, ResourceFre, Prelude, SyntaxFre, MorphoFre, ExtraFre, ParadigmsFre in {
+concrete HealthFre of Health = open PredicationFre, ParadigmsFre, ResourceFre, Prelude, SyntaxFre, MorphoFre, ExtraFre, ParadigmsFre, ResourceExtFre in {
 
 -- 1. still using "à" instead of "aux" in PainIn operations 
 -- because of the UTF8 problem with non-utf8 resource grammars! 
@@ -17,10 +17,10 @@ lincat
   Symptom = NP ;
   SymptomDegree = AP ;
   Prop = S ;
-  Illness = CN ; 
+  Illness = NP ; 
   Condition = VP ;
   Specialization = CN ;
-  Medicine  = CN ;
+  Medicine  = NPMedicine ;
 
 lin 
   And x y = ConjS AndConj (TwoS x y) ;  
@@ -29,31 +29,66 @@ lin
   TheyPatient = TheyNP ;
   IPatientHe = INP ;
                                                
-  Influenza = mkCNomReg "grippe" Fem ** {lock_CN = <> }; 
-  Malaria =  mkCNomReg "malaria" Fem ** {lock_CN = <> }; 
-  HaveIllness patient illness = predV2 (tvDir vAvoir) patient (DefOneNP illness) ;  
+  HaveIllness = predV2 (tvDir vAvoir) ;  
   Complain = predV2 (tvDir vAvoir) ;
 
   BeInCondition = PredVP ; 
   CatchCold = PosVG (PredTV (tvDir vAvoir) (IndefOneNP (mkCNomReg "rhume" Masc ** {lock_CN = <> })));
   Pregnant = PosVG (PredAP (mkAdjective (adjJeune "enceinte") adjPost** {lock_AP = <> })) ;
 
-  Dentist  = mkCNomReg "dentiste" Masc ** {lock_CN = <> } ;
-  PainKiller = mkCNomReg "calmant" Masc ** {lock_CN = <> };
+  Influenza = DefOneNP (mkCN (nReg "grippe" Fem)); 
+  Malaria = DefOneNP (mkCN (nReg "malaria" Fem)); 
+  Diarrhea = IndefOneNP (mkCN (nReg "diarrhée" Fem)) ; 
+  Constipation = IndefOneNP (mkCN (nReg "constipation" Fem)); 
+  Rheumatism = DetNP desDet (mkCN (nReg  "rhumatisme" Masc)) ;  
+  Arthritis = DetNP delDet (mkCN (nReg "arthrite" Fem)) ; 
+  SkinAllergy =IndefOneNP ( ModAdj 
+             (AdjP1 (adj1Reg "épidermique" postpos)) 
+             (mkCN (nReg "allergie" Fem))
+    );  
+  Heartburn = DetNP desDet (AppFun (funCase (nReg "brûlure" Fem) Gen) 
+              (DetNP nullDet (mkCN (nReg "estomac"  Masc)))) ;
+  Tonsillitis = IndefOneNP (mkCN (nReg "angine" Fem)) ; 
+  Asthma = DetNP delDet (mkCN (nReg  "asthme" Masc)) ; 
+  Cystitis =IndefOneNP ( mkCN (nReg  "cystite" Fem)) ;  
+  Diabetes = DefOneNP (mkCN (nReg  "diabète" Masc)) ; 
 
-  NeedDoctor patient doctor = PredVP patient (avoirBesoin doctor ** {lock_VP = <> }) ;
-  NeedMedicine patient medicine = PredVP patient (avoirBesoin medicine** {lock_VP = <> }) ;
-  TakeMedicine patient medicine = predV2 (mkTransVerbDir (verbPres 
-              (conj3prendre "prendre")) ** {lock_TV = <> } ) patient (IndefOneNP medicine) ;
+  Dentist  = mkCN (nReg "dentiste" Masc) ;  
+  Gynecologist = mkCN (nReg "gynécologue" Masc) ;
+  Urologist = mkCN (nReg "urologue" Masc) ; 
+  Pediatrician = mkCN (nReg "pédiatre" Masc) ;
+  Physician = mkCN (nReg "thérapeute" Masc) ;
+  Dermatologist = mkCN (nReg  "dermatologue" Masc) ;
+  Cardiologist = mkCN (nReg "cardiologue" Masc) ;
+  Neuropathologist = mkCN (nReg "neurologue" Masc) ;
+  Ophthalmologist = mkCN (nReg "ophthalmologue" Masc) ;
+  Surgeon = mkCN (nReg "chirurgien" Masc ) ;
 
-  Fever = DetNP (delDet ** {lock_Det = <> }) (mkCNomReg "fièvre" Fem ** {lock_CN = <> }) ;
+  SleepingPeels = DetNP desDet (mkCN (nReg "somnifêre" Masc ))**{des = True};
+  Vitamins = DetNP desDet (mkCN (nReg "vitamine" Fem))**{des = True} ;
+  EyeDrops =  DetNP desDet (AppFun (funPrep (nReg "goutte" Fem) "pour") 
+              (DefManyNP (mkCN (mkN "oeil" "yeux" Masc))))**{des = True} ;
+  Antibiotics = DetNP desDet (mkCN (nReg "antibiotique" Masc))**{des = True} ;
+  Insulin = DetNP delDet (mkCN (nReg "insuline" Fem))**{des = True};
+
+  Viagra = DetNP nullDet (mkCN(nReg "viagra" Fem))**{des = False} ;
+  Laxative = IndefOneNP (mkCN (nReg  "laxatif" Masc)) **{des = False};
+  Sedative = IndefOneNP (mkCN (nReg  "sédatif" Masc)) **{des = False};
+  Antidepressant = IndefOneNP (mkCN (nReg "antidépressif" Masc)) **{des = False};
+  PainKiller = IndefOneNP (mkCN (nReg "calmant" Masc)) **{des = False};
+                    
+  NeedDoctor patient doctor = PredVP patient (avoirBesoin1 doctor ** {lock_VP = <> }) ;
+  NeedMedicine patient medicine = PredVP patient (avoirBesoin medicine ** {lock_VP = <> }) ;
+  TakeMedicine = predV2 (mkTransVerbDir (verbPres (conj3prendre "prendre")) ** {lock_TV = <> } ) ;
+
+  Fever = DetNP delDet (mkCN (nReg "fièvre" Fem)) ;
 
   PainIn patient head = predV2 (tvDir vAvoir) patient
-     (DetNP (nullDet ** {lock_Det = <> }) 
+     (DetNP nullDet 
       (
         AppFun 
-          ((mkCNomReg "mal" Masc ** {lock_CN = <> })** complementCas Dat ** {lock_Fun = <> }) 
-          (defNounPhrase patient.n head ** {lock_NP = <> })
+          ((mkCN (nReg "mal" Masc))** complementCas Dat ** {lock_Fun = <> }) 
+          (defNounPhrase patient.n head ** {lock_NP = <>})
       )
      ) ;
 
