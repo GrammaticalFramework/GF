@@ -191,7 +191,9 @@ customGrammarPrinter =
   ,(strCI "cf",      prCF . stateCF)
   ,(strCI "old",     printGrammarOld . stateGrammarST)
   ,(strCI "srg",     prSRG . stateCF)
-  ,(strCI "gsl",  \s -> gslPrinter (stateOptions s) $ Cnv.cfg $ statePInfo s)
+  ,(strCI "gsl",     \s -> let opts = stateOptions s
+                               name = cncId s
+                            in gslPrinter name opts $ Cnv.cfg $ statePInfo s)
   ,(strCI "lbnf",    prLBNF . stateCF)
   ,(strCI "haskell", grammar2haskell . stateGrammarST)
   ,(strCI "morpho",  prMorpho . stateMorpho)
