@@ -108,10 +108,11 @@ oper
 
 --2 Adverbs
 
--- Adverbs are not inflected. The lexical ones have position not
--- before the verb.
+-- Adverbs are not inflected. Most lexical ones have position not
+-- before the verb. Some can be preverbal (e.g. "always").
 
   mkAdv : Str -> AdV ;
+  mkAdvPre : Str -> AdV ;
 
 --2 Verbs
 --
@@ -219,12 +220,13 @@ oper
   apReg = \s -> AdjP1 (mkAdj1 s) ;
 
   aGen : Str -> AdjDeg = \s -> case last s of {
-    "y" => mkAdjDeg s (init s + "ier") (init s + "iest") ;
+    "y" => mkAdjDeg s (init s ++ "ier") (init s + "iest") ;
     "e" => mkAdjDeg s (s + "r") (s + "st") ;
     _   => aReg s
     } ;
 
   mkAdv a = advPost a ** {lock_AdV = <>} ;
+  mkAdvPre a = advPre a ** {lock_AdV = <>} ;
 
   mkV = \go,goes,went,gone -> verbNoPart (mkVerbP3 go goes went gone) ** 
     {lock_V = <>} ;
