@@ -1,0 +1,11 @@
+include config.mk
+
+GF_LIB_DIR=$(libdir)/GF-$(PACKAGE_VERSION)
+
+install: 
+	$(INSTALL) -d $(bindir)
+	$(INSTALL) ./$(bindir)/* $(bindir)
+# overwrite the old one with the newly configured one if there is one
+	[ -f jgf ] && $(INSTALL) jgf $(bindir) 
+	$(INSTALL) -d $(GF_LIB_DIR)
+	$(INSTALL) -m 0644 ./$(GF_LIB_DIR)/* $(GF_LIB_DIR)
