@@ -1,7 +1,7 @@
 GF=gf
 SRC=../
 
-all: parser gfcm
+all: parser gfcm runtime
 
 compiler:
 	echo "pm | wf Imper.gfcm ;; pg -lang=ImperC -printer=plbnf | wf ImperC.tmp" | $(GF) $(SRC)ImperC.gf $(SRC)ImperJVM.gf
@@ -17,3 +17,6 @@ parser:
 
 gfcm:
 	echo "pm | wf Imper.gfcm" | $(GF) $(SRC)ImperC.gf $(SRC)ImperJVM.gf
+
+runtime:
+	jasmin runtime.j
