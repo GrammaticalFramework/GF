@@ -1,6 +1,6 @@
 --# -path=.:../resource/nabstract:../resource/nenglish:../prelude
 
-concrete DatabaseEng of Database = open Prelude, ResEng in {
+concrete DatabaseEng of Database = open Prelude, ResourceEng in {
 
 flags lexer=text ; unlexer=text ;
 
@@ -17,8 +17,8 @@ lincat
 
 lin
   WhichAre A B = QuestPhrase (IntVP (NounIPMany A) (PosVG (PredAP B))) ;
-  IsThere A = QuestPhrase (IsThereCN A) ;
-  AreThere A = QuestPhrase (AreThereCN NoNum A) ;
+  IsThere A = QuestPhrase (IsThereNP (IndefOneNP A)) ;
+  AreThere A = QuestPhrase (IsThereNP (IndefManyNP NoNum A)) ;
   WhatIs val = QuestPhrase (IntVP WhatOne (PosVG (PredNP val))) ;
   IsIt Q A = QuestPhrase (QuestVP Q (PosVG (PredAP A))) ;
 
