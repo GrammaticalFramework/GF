@@ -11,9 +11,7 @@ instance SyntaxNor of SyntaxScand = TypesNor **
 
 -- When common nouns are extracted from lexicon, the composite noun form is ignored.
 
-  npMan : NounPhrase = nameNounPhrase (mkProperName "man" (NUtr Masc)) ;
   npDet : NounPhrase = nameNounPhrase (mkProperName "det" NNeutr) ;
-
 
   mkAdjForm : Species -> Number -> NounGender -> AdjFormPos = \b,n,g -> 
     case <b,n> of {
@@ -23,7 +21,7 @@ instance SyntaxNor of SyntaxScand = TypesNor **
       } ;
 
   verbFinnas : Verb = 
-    deponentVerb (mkVerb "finne" "finner" "finnes" "fant" "funnet" "finn" ** {s1 = []}) ;
+    mkVerb "finnes" "finner" "finnes" "fantes" "funnets" "fins" ** {s1 = []} ;
   verbVara = mkVerb "være" "er" nonExist "var" "vært" "vær" ** {s1 = []} ;
   verbHava = mkVerb "ha" "ha" "has" "hadde" "hatt" "ha" ** {s1 = []} ;
 
