@@ -75,7 +75,7 @@ welcomeMsg =
   "Welcome to " ++ authorMsg ++++ welcomeArch ++ "\n\nType 'h' for help."
 
 authorMsg = unlines [
- "Grammatical Framework, Version 2.1",
+ "Grammatical Framework, Version 2.1.1b",
  "Compiled " ++ today,
  "Copyright (c)", 
  "Björn Bringert, Markus Forsberg, Thomas Hallgren, Harald Hammarström,",

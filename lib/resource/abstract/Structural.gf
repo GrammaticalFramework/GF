@@ -7,7 +7,7 @@
 -- Sometimes they are not really meaningful, e.g. $TheyNP$ in French
 -- should really be replaced by masculine and feminine variants.
 
-abstract Structural = Categories ** {
+abstract Structural = Categories, Numerals ** {
 
 fun
 
@@ -34,6 +34,8 @@ fun
 
   EverybodyNP, SomebodyNP, NobodyNP,          -- everybody, somebody, nobody
   EverythingNP, SomethingNP, NothingNP : NP ; -- everything, something, nothing
+
+  UseNumeral  : Numeral -> Num ;              -- "thirty-two"  --- assumes i > 1
 
 --!
 --2 Auxiliary verbs

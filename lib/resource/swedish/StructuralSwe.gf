@@ -5,7 +5,7 @@
 -- Aarne Ranta 2002 -- 2004
 --
 concrete StructuralSwe of Structural = 
-                      CategoriesSwe ** open Prelude, SyntaxSwe in {
+                      CategoriesSwe, NumeralsSwe ** open Prelude, SyntaxSwe in {
  lin
 
   INP    = pronNounPhrase jag_32 ;
@@ -37,6 +37,8 @@ concrete StructuralSwe of Structural =
   NoDet    = mkDeterminerSgGender2 "ingen" "inget" IndefP ; 
   NoNumDet   = mkDeterminerPlNum "inga" IndefP ; 
   WhichNumDet = mkDeterminerPlNum "vilka" IndefP ; 
+
+  UseNumeral i = {s = table {Nom => i.s ; Gen => i.s ++ "s"}} ; ---
 
   WhichDet = vilkenDet ;
   MostDet  = mkDeterminerSgGender2 ["den mesta"] ["det mesta"] (DefP Def) ;

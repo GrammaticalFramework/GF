@@ -1,0 +1,81 @@
+--# -path=.:../abstract:../../prelude
+
+--1 The Top-Level French Resource Grammar
+--
+-- Aarne Ranta 2002 -- 2003
+--
+-- This is the French concrete syntax of the multilingual resource
+-- grammar. Most of the work is done in the file 
+-- $syntax.Romance.gf$, some in $syntax.Fra.gf$.
+-- However, for the purpose of documentation, we make here explicit the
+-- linearization types of each category, so that their structures and
+-- dependencies can be seen.
+-- Another substantial part are the linearization rules of some
+-- structural words.
+--
+-- The users of the resource grammar should not look at this file for the
+-- linearization rules, which are in fact hidden in the document version.
+-- They should use $resource.Abs.gf$ to access the syntactic rules.
+-- This file can be consulted in those, hopefully rare, occasions in which
+-- one has to know how the syntactic categories are
+-- implemented. Most parameter types are defined in $TypesRomance$, some in
+-- $TypesFra$ and $TypesIta$.
+
+incomplete concrete CategoriesRomance of Categories = 
+  open Prelude, SyntaxRomance in {
+
+flags 
+  startcat=Phr ; 
+
+lincat 
+  N      = CommNoun ; 
+      -- = {s : Number => Str ; g : Gender} ;
+  CN     = CommNoun ; 
+  NP     = {s : NPFormA => Str ; g : PronGen ; 
+            n : Number ; p : Person ; c : ClitType} ;
+  PN     = {s : Str ; g : Gender} ;
+  Det    = {s : Gender => Str ; n : Number} ;
+  A1     = Adjective ;
+      -- = {s : AForm => Str ; p : Bool} ;
+  A2     = Adjective ** {s2 : Preposition ; c : CaseA} ;
+  ADeg   = {s : Degree => AForm => Str ; p : Bool} ;
+  AP     = Adjective ;
+  N2     = Function ;
+      -- = CommNoun ** {s2 : Preposition ; c : CaseA} ;
+  N3     = Function ** {s3 : Preposition ; c3 : CaseA} ;
+  Prep   = {s : Preposition ; c : CaseA} ; 
+  Num    = {s : Gender => Str} ;
+
+  V      = Verb ; 
+      -- = {s : VF => Str} ;
+  VG     = {s : Bool => Gender => VF => Str} ;
+  VP     = {s : Gender => VF => Str} ;
+  V2     = TransVerb ;
+      -- = Verb ** {s2 : Preposition ; c : CaseA} ; 
+  V3     = TransVerb ** {s3 : Preposition ; c3 : CaseA} ;
+  VS     = Verb ** {mp,mn : Mode} ;
+  VV     = Verb ** {c : CaseA} ;
+  Adv    = {s : Str} ;
+  PP     = {s : Str} ;
+
+  S      = Sentence ; 
+      -- = {s : Mode => Str} ;
+  Slash  = Sentence ** {s2 : Preposition ; c : CaseA} ;
+
+  RP     = {s : RelForm => Str ; g : RelGen} ;
+  RC     = {s : Mode => Gender => Number => Str} ;
+
+  IP     = {s : CaseA => Str ; g : Gender ; n : Number} ;
+  Qu     = {s : QuestForm => Str} ;
+  Imp    = {s : Gender => Number => Str} ;
+  Phr    = {s : Str} ;
+
+  Conj   = {s : Str ; n : Number} ;
+  ConjD  = {s1,s2 : Str ; n : Number} ;
+
+  ListS  = {s1,s2 : Mode => Str} ;
+  ListAP = {s1,s2 : AForm => Str ; p : Bool} ;
+  ListNP = {s1,s2 : CaseA => Str ; g : PronGen ; n : Number ; p : Person} ;
+
+  Subj   = {s : Str ; m : Mode} ;
+}

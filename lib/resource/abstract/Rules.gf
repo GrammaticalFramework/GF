@@ -7,7 +7,7 @@
 -- access it through an intermediate library that defines more rules as 
 -- 'macros' for combinations of the ones below.
 
-abstract Rules = Categories, Numerals ** {
+abstract Rules = Categories ** {
 
 --!
 --3 Nouns and noun phrases
@@ -39,7 +39,6 @@ fun
   ModGenNum   : Num -> NP -> CN -> NP ;    -- "John's cars", "John's 86 cars"
 
   UseInt      : Int -> Num ;               -- "32"  --- assumes i > 1
-  UseNumeral  : Numeral -> Num ;           -- "thirty-two"  --- assumes i > 1
   NoNum       : Num ;                      -- no numeral modifier
 
 --!
