@@ -156,7 +156,11 @@ oper
     mkDeterminerSg (\\g => en ! genNoun g) ;
 
   mkDeterminerSgGender2 : Str -> Str -> SpeciesP -> Determiner = \en,ett -> 
-    mkDeterminerSgGender (table {Utr => en ; Neutr => ett}) ;
+    mkDeterminerSgGender3 en en ett ;
+
+-- This is only needed in Norwegian.
+
+  mkDeterminerSgGender3 : Str -> Str -> Str -> SpeciesP -> Determiner ;
 
 -- Here are some examples. We are in fact doing some ad hoc morphology here, 
 -- instead of importing the lexicon.
@@ -281,7 +285,7 @@ oper
     case n of {Sg => ASg g ; Pl => APl} ;
 
   genGN : GenNum -> Gender = \gn -> 
-    case gn of {ASg g => g ; _ => Utr} ;
+    case gn of {ASg g => g ; _ => utrum} ;
   numGN : GenNum -> Number = \gn -> 
     case gn of {ASg _ => Sg ; APl => Pl} ;
 
@@ -928,7 +932,7 @@ oper
       PGen _ => pronVems ;
       _      => pronVem
       } ;
-    g = Utr ;
+    g = utrum ;
     n = num
   } ;
 
@@ -1053,7 +1057,7 @@ oper
   Imperative = SS1 Number ;
 
   imperVerbPhrase : VerbPhrase -> Imperative = \titta -> 
-    {s = \\n => titta.s ! VImperat ++ titta.s2 ++ titta.s3 ! VImperat ! Utr ! n} ;  
+    {s = \\n => titta.s ! VImperat ++ titta.s2 ++ titta.s3 ! VImperat ! utrum ! n} ;  
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
     ss (I.s ! n ++ "!") ;
@@ -1173,10 +1177,7 @@ oper
     _ => Pl 
     } ;
 
-  conjGender : Gender -> Gender -> Gender = \m,n -> case <m,n> of {
-    <Utr,Utr> => Utr ;
-    _ => Neutr 
-    } ;
+  conjGender : Gender -> Gender -> Gender ;
 
 
 --2 Subjunction

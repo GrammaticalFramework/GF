@@ -10,12 +10,15 @@
 instance TypesSwe of TypesScand = {
 
 param
+  Gender     = Utr | Neutr ;
   NounGender = NUtr Sex | NNeutr ;
 
 oper
   genNoun = \s -> case s of {NUtr _ => Utr ; NNeutr => Neutr} ;
   sexNoun = \s -> case s of {NUtr x => x ; NNeutr => NoMasc} ;
   gen2nounGen = \s -> case s of {Utr => NUtr NoMasc ; Neutr => NNeutr} ;
+
+  utrum = Utr ; neutrum = Neutr ;
 
 param
   AdjFormPos = Strong GenNum | Weak SexNum ;

@@ -19,7 +19,7 @@ interface TypesScand = {
 -- Their parameter values are atomic.
 
 param
-  Gender  = Utr | Neutr ;
+  Gender ;
   Number  = Sg | Pl ;
   Species = Indef | Def ;
   Case    = Nom | Gen ;
@@ -45,6 +45,8 @@ param SubstForm = SF Number Species Case ;
 -- Substantives moreover have an inherent gender. 
 
 oper Subst : Type = {s : SubstForm => Str ; h1 : Gender} ;
+
+  neutrum, utrum : Gender ;
 
 --3 Adjectives
 --
@@ -84,7 +86,7 @@ param
 oper 
   Adj : Type = {s : AdjForm => Str} ;
 
-  adverbForm : AdjFormPos = Strong (ASg Neutr) ;
+  adverbForm : AdjFormPos = Strong (ASg neutrum) ;
 
 --3 Verbs
 --
