@@ -29,8 +29,8 @@ evalModule :: [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) ->
                Err [(Ident,SourceModInfo)]
 evalModule ms mo@(name,mod) = case mod of
 
-  ModMod (Module mt st fs me ops js) | st == MSComplete -> case mt of
-    MTResource -> do
+  ModMod m0@(Module mt st fs me ops js) | st == MSComplete -> case mt of
+    _ | isModRes m0 -> do
       let deps = allOperDependencies name js
       ids <- topoSortOpers deps
       MGrammar (mod' : _) <- foldM evalOp gr ids

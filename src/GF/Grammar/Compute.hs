@@ -172,6 +172,10 @@ computeTerm gr = comp where
          _ -> return $ ExtR r' s'
 
      -- case-expand tables
+     T i@(TComp _) cs -> do
+       cs' <- mapPairsM (comp g) cs
+       return $ T i cs'
+
      T i cs -> do
        pty0 <- getTableType i
        ptyp <- comp g pty0
