@@ -2,6 +2,7 @@ include config.mk
 
 GF_LIB_DIR=$(libdir)/GF-$(PACKAGE_VERSION)
 
+.PHONY: install
 install: 
 	$(INSTALL) -d $(bindir)
 	$(INSTALL) gf gfdoc jgf $(bindir)
