@@ -15,6 +15,7 @@ incomplete resource Predication = open Resource, ResourceExt in {
 oper
   predV1 : V -> NP -> S ;             -- one-place verb: "John walks"
   predV2 : TV -> NP -> NP -> S ;      -- two-place verb: "John loves Mary"
+  predV3 : V3 -> NP -> NP -> NP -> S ;-- three-place verb: "John prefers Mary to Jane"
   predVColl : V -> NP -> NP -> S ;    -- collective verb: "John and Mary fight"
   predA1 : Adj1 -> NP -> S ;          -- one-place adjective: "John is old"
   predA2 : Adj2 -> NP -> NP -> S ;    -- two-place adj: "John is married to Mary"
@@ -23,10 +24,12 @@ oper
   predN1 : N -> NP -> S ;             -- one-place noun: "John is a man"
   predN2 : Fun -> NP -> NP -> S ;     -- two-place noun: "John is a lover of Mary"
   predNColl : N -> NP -> NP -> S ;    -- collective noun: "John and Mary are lovers"
+  predAdv : AdV -> NP -> S ;          -- adverb: "Joh is outside"
 
 -- Individual-valued function applications.
 
   appFun1 : Fun -> NP -> NP ;          -- one-place function: "the successor of x"
+  appFun2 : Fun2 -> NP -> NP -> NP ;   -- two-place function: "the distance from x to y"
   appFunColl : Fun -> NP -> NP -> NP ; -- collective function: "the sum of x and y"
 
 -- Families of types, expressed by common nouns depending on arguments.
@@ -56,6 +59,7 @@ oper
 oper
   predV1 = \F, x -> PredVP x (PosV F) ;
   predV2 = \F, x, y -> PredVP x (PosTV F y) ;
+  predV3 = \F, x, y, z -> PredVP x (PosVG (PredV3 F y z)) ;
   predVColl = \F, x, y -> PredVP (conjNP x y) (PosV F) ;
   predA1 = \F, x -> PredVP x (PosA (AdjP1 F)) ;
   predA2 = \F, x, y -> PredVP x (PosA (ComplAdj F y)) ;
@@ -64,8 +68,11 @@ oper
   predN1 = \F, x -> PredVP x (PosCN (UseN F)) ;
   predN2 = \F, x, y -> PredVP x (PosCN (AppFun F y)) ;
   predNColl = \F, x, y -> PredVP (conjNP x y) (PosCN (UseN F)) ;
+  predAdv = \F, x -> PredVP x (PosVG (PredAdV F)) ;
+
 
   appFun1 = \f, x -> DefOneNP (AppFun f x) ;
+  appFun2 = \f, x, y -> DefOneNP (AppFun (AppFun2 f y) x) ;
   appFunColl = \f, x, y -> DefOneNP (AppFun f (conjNP x y)) ;
 
   appFam1 = \F, x -> AppFun F x ;
