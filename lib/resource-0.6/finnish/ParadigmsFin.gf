@@ -27,6 +27,8 @@ resource ParadigmsFin = open Prelude, SyntaxFin, ResourceFin in {
 -- we define the following identifiers.
 
 oper
+  Gender   : Type;
+
   human    : Gender ;
   nonhuman : Gender ;
 
@@ -227,6 +229,8 @@ oper
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
+  Gender = SyntaxFin.Gender ;
+
   singular = Sg ;
   plural = Pl ;
 

@@ -27,6 +27,8 @@ resource ParadigmsIta =
 -- To abstract over gender names, we define the following identifiers.
 
 oper
+  Gender    : Type ;
+
   masculine : Gender ;
   feminine  : Gender ;
 
@@ -167,6 +169,7 @@ oper
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
+  Gender = SyntaxIta.Gender ;
 
   masculine = Masc ;
   feminine  = Fem ;

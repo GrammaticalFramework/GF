@@ -23,6 +23,7 @@ flags  coding=utf8 ;
 -- To abstract over gender names, we define the following identifiers.
 
 oper
+  Gender : Type ;
   masculine : Gender ;
   feminine  : Gender ;
   neuter    : Gender ;
@@ -222,7 +223,7 @@ oper
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
-
+  Gender = SyntaxRus.Gender ;
 
   masculine = Masc ;
   feminine  = Fem ;
