@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 13:54:44 $ 
+-- > CVS $Date: 2005/03/21 14:17:45 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.45 $
+-- > CVS $Revision: 1.46 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -74,7 +74,7 @@ import qualified GF.Parsing.ParseCF as PCF
 -- grammar conversions -- peb 19/4-04
 -- see also customGrammarPrinter
 import qualified GF.Conversion.ConvertGrammar as Cnv
-import qualified GF.Parsing.PrintParser as Prt
+import qualified GF.Printing.PrintParser as Prt
 
 import GFC
 import qualified MkGFC as MC
