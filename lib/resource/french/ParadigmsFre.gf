@@ -296,7 +296,7 @@ oper
     {s = np.s ; g = np.g ; p = np.p ; c = np.c ; n = n ; lock_NP = <>} ;
 
   mkA a b c d = mkAdj a c b d ** {p = False ; lock_A = <>} ;
-  regA a = mkAdjReg a False ** {p = False ; lock_A = <>} ;
+  regA a = mkAdjReg a ** {p = False ; lock_A = <>} ;
   prefA a = {s = a.s ; p = True ; lock_A = <>} ;
 
   mkA2 a p = a ** {c = p.p1 ; s2 = p.p2 ; lock_A2 = <>} ;

@@ -66,9 +66,9 @@ lin
   Fly = PresV fly_V ;
   Walk = PresV walk_V ;
   Come = PresV come_V ;
-  Lie = PresV lie_V ;
-  Sit = PresV sit_V ;
-  Stand = PresV stand_V ;
+  Lie = PresReflV lie_V ;
+  Sit = PresReflV sit_V ;
+  Stand = PresReflV stand_V ;
   Turn = PresV turn_V ;
   Fall = PresV fall_V ;
   Sing = PresV sing_V ;

@@ -1,13 +1,14 @@
 -- AR 12/10/2002 following www.geocities.com/tsca.geo/dansk/dknummer.html
 
-concrete NumeralsDan of Numerals = open Prelude, MorphoDan in {
+concrete NumeralsDan of Numerals = open Prelude, TypesDan, MorphoDan in {
 
-lincat Numeral = {s : Str} ;
-lincat Digit = {s : DForm => Str} ;
-lincat Sub10 = {s : DForm => Str} ;
-lincat Sub100 = {s : Str} ;
-lincat Sub1000 = {s : Str} ;
-lincat Sub1000000 = {s : Str} ;
+lincat 
+  Numeral = {s : Gender => Str ; n : Number} ;
+  Digit = {s : DForm => Str} ;
+  Sub10 = {s : DForm => Gender => Str ; n : Number} ;
+  Sub100 = {s : Gender => Str ; n : Number} ;
+  Sub1000 = {s : Gender => Str ; n : Number} ;
+  Sub1000000 = {s : Gender => Str ; n : Number} ;
 
 lin num x = x ;
 
@@ -20,18 +21,20 @@ lin n7 = mkTal "syv"  "sytten"  "halvfjerds" ;
 lin n8 = mkTal "otte" "atten"   "firs" ;
 lin n9 = mkTal "ni"   "nitten"  "halvfems" ;
 
-lin pot01 = {s = table {f => "en"}} ; ---
-lin pot0 d = {s = table {f => d.s ! f}} ;
-lin pot110 = ss "ti" ;
-lin pot111 = ss "elleve" ;
-lin pot1to19 d = ss (d.s ! ton) ;
-lin pot0as1 n = ss (n.s ! ental) ;
-lin pot1 d = ss (d.s ! tiotal) ;
-lin pot1plus d e = ss (e.s ! ental ++ "og" ++ d.s ! tiotal) ;
-lin pot1as2 n = n ;
-lin pot2 d = ss (d.s ! ental ++ "hundrede") ;
-lin pot2plus d e = ss (d.s ! ental ++ "hundrede" ++ "og" ++ e.s) ;
-lin pot2as3 n = n ;
-lin pot3 n = ss (n.s ++ "tusind") ;
-lin pot3plus n m = ss (n.s ++ "tusind" ++ "og" ++ m.s) ; ---
+  pot01 = {s = table {f => table {Neutr => "et" ; _ => "en"}} ; n = Sg} ;
+  pot0 d = {s = \\f,g => d.s ! f ; n = Pl} ;
+  pot110 = numPl "ti" ;
+  pot111 = numPl "elleve" ;
+  pot1to19 d = numPl (d.s ! ton) ;
+  pot0as1 n = {s = n.s ! ental ; n = n.n} ;
+  pot1 d = numPl (d.s ! tiotal) ;
+  pot1plus d e = {s = \\g => e.s ! ental ! g ++ "og" ++ d.s ! tiotal ; n = Pl} ;
+  pot1as2 n = n ;
+  pot2 d = numPl (d.s ! ental ! Neutr ++ "hundrede") ;
+  pot2plus d e = 
+    {s = \\g => d.s ! ental ! Neutr ++ "hundrede" ++ "og" ++ e.s ! g ; n = Pl} ;
+  pot2as3 n = n ;
+  pot3 n = numPl (n.s ! Neutr ++ "tusind") ;
+  pot3plus n m = {s = \\g => n.s ! Neutr ++ "tusind" ++ "og" ++ m.s ! g ; n = Pl} ;
+
 }

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 18:08:58 $ 
+-- > CVS $Date: 2005/03/14 17:40:10 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- for reading grammars and terms from strings and files
 -----------------------------------------------------------------------------
@@ -67,7 +67,8 @@ shellStateFromFiles opts st file = case fileSuffix file of
                  else addOptions (options [emitCode]) opts'
      grts <- compileModule osb st file
      let top = identC $ justModuleName file
-     ioeErr $ updateShellState opts' (Just top) st grts
+         mtop = if oElem showOld opts' then Nothing else Just top
+     ioeErr $ updateShellState opts' mtop st grts
      --- liftM (changeModTimes rts) $ grammar2shellState opts gr
 
 getShellStateFromFiles :: Options -> FilePath -> IO ShellState

@@ -75,13 +75,13 @@ oper
 -- The following construction has to be refined for genitive forms:
 -- "we two", "us two" are OK, but "our two" is not.
 
-  Numeral : Type = {s : Case => Str} ;
+  Numeral : Type = {s : Case => Str ; n : Number} ;
 
   pronWithNum : Pronoun -> Numeral -> Pronoun = \we,two ->
     {s = \\c => we.s ! c ++ two.s ! toCase c ; n = we.n ; p = we.p ; g
     = human} ;
 
-  noNum : Numeral = {s = \\_ => []} ;
+  noNum : Numeral = {s = \\_ => [] ; n = Pl} ;
 
   pronNounPhrase : Pronoun -> NounPhrase = \pro -> 
     {s = pro.s ; a = toAgr pro.n pro.p pro.g} ;
@@ -101,13 +101,13 @@ oper
 
   numDetNounPhrase : DeterminerNum -> Numeral -> CommNounPhrase -> NounPhrase = 
     \all, six, men -> 
-    {s = \\c => all.s ++ six.s ! Nom ++ men.s ! Pl ! toCase c ; 
-     a = toAgr Pl P3 men.g 
+    {s = \\c => all.s ++ six.s ! Nom ++ men.s ! six.n ! toCase c ; 
+     a = toAgr six.n P3 men.g 
     } ;
   justNumDetNounPhrase : DeterminerNum -> Numeral -> NounPhrase = 
     \all, six -> 
     {s = \\c => all.s ++ six.s ! toCase c ; 
-     a = toAgr Pl P3 Neutr --- gender does not matter
+     a = toAgr six.n P3 Neutr --- gender does not matter
     } ;
 
   mkDeterminer : Number -> Str -> Determiner = \n,the -> 
@@ -142,9 +142,14 @@ oper
     \n,two,man -> 
     {s = \\c => case n of {
                        Sg => artIndef ++ two.s ! Nom ++ man.s ! n ! toCase c ; 
-                       Pl => two.s ! Nom ++ man.s ! n ! toCase c
+                       Pl => two.s ! Nom ++ man.s ! two.n ! toCase c
                        } ;
-     a = toAgr n P3 man.g
+     a = toAgr nb P3 man.g where {
+       nb = case <n,two.n> of {
+         <Pl,Pl> => Pl ;
+         _ => Sg
+         }
+       }
     } ;
 
   defNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n ->
