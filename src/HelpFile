@@ -38,6 +38,7 @@ i,  import: i File
       -res          set the name used for resource (with -old option)
       -path         use the (colon-separated) search path to find modules
       -optimize     select an optimization to override file-defined flags
+      -conversion   select parsing method (values strict|nondet)
   examples:
       i English.gf                      -- ordinary import of Concrete
       i -retain german/ParadigmsGer.gf  -- import of Resource to test

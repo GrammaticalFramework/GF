@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:12 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.9 $
+-- > CVS $Date: 2005/04/01 21:24:24 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.10 $
 --
 -- Predefined function type signatures and definitions.
 -----------------------------------------------------------------------------
@@ -47,39 +47,59 @@ typPredefined c@(IC f) = case f of
     ([(zIdent "P",typePType),(wildIdent,Vr (zIdent "P"))],typeStr,[]) 
   "toStr"  -> return $ mkProd -- (L : Type)  -> L -> Str
     ([(zIdent "L",typeType),(wildIdent,Vr (zIdent "L"))],typeStr,[]) 
+  "mapStr" -> 
+    let ty = zIdent "L" in
+    return $ mkProd -- (L : Type)  -> (Str -> Str) -> L -> L
+    ([(ty,typeType),(wildIdent,mkFunType [typeStr] typeStr),(wildIdent,Vr ty)],Vr ty,[]) 
   "take"   -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
   "tk"     -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
   _        -> prtBad "unknown in Predef:" c
 typPredefined c = prtBad "unknown in Predef:" c
 
-appPredefined :: Term -> Term
+appPredefined :: Term -> Err (Term,Bool)
 appPredefined t = case t of
 
-  App f x -> case f of
-
+  App f x0 -> do
+   (x,_) <- appPredefined x0
+   case f of
     -- one-place functions
-    Q (IC "Predef") (IC f) -> case (f, appPredefined x) of
-      ("length", K s) -> EInt $ length s
-      _ -> t
+    Q (IC "Predef") (IC f) -> case (f, x) of
+      ("length", K s) -> retb $ EInt $ length s
+      _ -> retb t ---- prtBad "cannot compute predefined" t
 
     -- two-place functions
-    App (Q (IC "Predef") (IC f)) z -> case (f, appPredefined z, appPredefined x) of
-      ("drop", EInt i, K s) -> K (drop i s)
-      ("take", EInt i, K s) -> K (take i s)
-      ("tk",   EInt i, K s) -> K (take (max 0 (length s - i)) s)
-      ("dp",   EInt i, K s) -> K (drop (max 0 (length s - i)) s)
-      ("eqStr",K s,    K t) -> if s == t then predefTrue else predefFalse
-      ("occur",K s,    K t) -> if substring s t then predefTrue else predefFalse
-      ("eqInt",EInt i, EInt j) -> if i==j then predefTrue else predefFalse
-      ("lessInt",EInt i, EInt j) -> if i<j then predefTrue else predefFalse
-      ("plus", EInt i, EInt j) -> EInt $ i+j
-      ("show", _, t) -> foldr C Empty $ map K $ words $ prt t
-      ("read", _, K s) -> str2tag s --- because of K, only works for atomic tags
-      ("toStr", _, t) -> trm2str t
+    App (Q (IC "Predef") (IC f)) z0 -> do
+     (z,_) <- appPredefined z0
+     case (f, z, x) of
+      ("drop", EInt i, K s) -> retb $ K (drop i s)
+      ("take", EInt i, K s) -> retb $ K (take i s)
+      ("tk",   EInt i, K s) -> retb $ K (take (max 0 (length s - i)) s)
+      ("dp",   EInt i, K s) -> retb $ K (drop (max 0 (length s - i)) s)
+      ("eqStr",K s,    K t) -> retb $ if s == t then predefTrue else predefFalse
+      ("occur",K s,    K t) -> retb $ if substring s t then predefTrue else predefFalse
+      ("eqInt",EInt i, EInt j) -> retb $ if i==j then predefTrue else predefFalse
+      ("lessInt",EInt i, EInt j) -> retb $ if i<j then predefTrue else predefFalse
+      ("plus", EInt i, EInt j) -> retb $ EInt $ i+j
+      ("show", _, t) -> retb $ foldr C Empty $ map K $ words $ prt t
+      ("read", _, K s) -> retb $ str2tag s --- because of K, only works for atomic tags
+      ("toStr", _, t) -> trm2str t >>= retb
 
-      _ -> t
-    _ -> t
-  _ -> t
+      _ -> retb t ---- prtBad "cannot compute predefined" t
+
+    -- three-place functions
+    App (App (Q (IC "Predef") (IC f)) z0) y0 -> do
+     (y,_) <- appPredefined y0
+     (z,_) <- appPredefined z0
+     case (f, z, y, x) of
+      ("mapStr",ty,op,t) -> retf $ mapStr ty op t
+      _ -> retb t ---- prtBad "cannot compute predefined" t
+
+    _ -> retb t ---- prtBad "cannot compute predefined" t
+  _ -> retb t
+                  ---- should really check the absence of arg variables
+ where
+   retb t = return (t,True)  -- no further computing needed
+   retf t = return (t,False) -- must be computed further
 
 -- read makes variables into constants
 
@@ -103,14 +123,27 @@ substring s t = case (s,t) of
   ([],_) -> True
   _ -> False
 
-trm2str :: Term -> Term
+trm2str :: Term -> Err Term
 trm2str t = case t of
-  R ((_,(_,s)):_)   -> trm2str s
-  T _ ((_,s):_) -> trm2str s
+  R ((_,(_,s)):_) -> trm2str s
+  T _ ((_,s):_)   -> trm2str s
   TSh _ ((_,s):_) -> trm2str s
-  V _ (s:_) -> trm2str s
-  C _ _         -> t
-  K _           -> t
-  Empty         -> t
-  _ -> K $ "ERROR_toStr_" ++ prt_ t --- eliminated by type checker
+  V _ (s:_)       -> trm2str s
+  C _ _         -> return $ t
+  K _           -> return $ t
+  Empty         -> return $ t
+  _ -> prtBad "cannot get Str from term" t
 
+-- simultaneous recursion on type and term: type arg is essential!
+-- But simplify the task by assuming records are type-annotated
+-- (this has been done in type checking)
+mapStr :: Type -> Term -> Term -> Term
+mapStr ty f t = case (ty,t) of
+  _ | elem ty [typeStr,typeTok] -> App f t
+  (_,        R ts)    -> R [(l,mapField v)   | (l,v) <- ts]
+  (Table a b,T ti cs) -> T ti [(p,mapStr b f v) | (p,v) <- cs]
+  _    -> t 
+ where
+   mapField (mty,te) = case mty of
+     Just ty -> (mty,mapStr ty f te)
+     _ -> (mty,te)
