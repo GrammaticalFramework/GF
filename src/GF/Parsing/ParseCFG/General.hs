@@ -5,21 +5,20 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:41 $ 
+-- > CVS $Date: 2005/03/21 22:31:54 $ 
 -- > CVS $Author: peb $
 -- > CVS $Revision: 1.1 $
 --
 -- Several implementations of CFG chart parsing
 -----------------------------------------------------------------------------
 
-module GF.Parsing.CFParserGeneral (parse,
-			Strategy
-		       ) where
+module GF.Parsing.ParseCFG.General 
+    (parse, Strategy) where
 
 import Tracing
 
-import GF.Parsing.Parser
-import GF.Conversion.CFGrammar
+import GF.Parsing.Utilities
+import GF.Parsing.CFGrammar
 import GF.Parsing.GeneralChart 
 import GF.Data.Assoc
 

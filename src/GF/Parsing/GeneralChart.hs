@@ -5,26 +5,27 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:42 $ 
+-- > CVS $Date: 2005/03/21 22:31:48 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Simple implementation of deductive chart parsing
 -----------------------------------------------------------------------------
 
 
-module GF.Parsing.GeneralChart (-- * Type definition
-		     Chart,
-		     -- * Main functions
-		     chartLookup,
-		     buildChart,
-		     -- * Probably not needed
-		     emptyChart,
-		     chartMember,
-		     chartInsert,
-		     chartList,
-		     addToChart
-		    ) where
+module GF.Parsing.GeneralChart
+    (-- * Type definition
+     Chart,
+     -- * Main functions
+     chartLookup,
+     buildChart,
+     -- * Probably not needed
+     emptyChart,
+     chartMember,
+     chartInsert,
+     chartList,
+     addToChart
+    ) where
 
 -- import Trace 
 

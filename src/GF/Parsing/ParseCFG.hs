@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:42 $ 
+-- > CVS $Date: 2005/03/21 22:31:51 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Main parsing module for context-free grammars
 -----------------------------------------------------------------------------
@@ -16,10 +16,10 @@
 module GF.Parsing.ParseCFG (parse) where
 
 import Char (toLower)
-import GF.Parsing.Parser
-import GF.Conversion.CFGrammar
-import qualified GF.Parsing.CFParserGeneral as PGen
-import qualified GF.Parsing.CFParserIncremental as PInc
+import GF.Parsing.Utilities
+import GF.Parsing.CFGrammar
+import qualified GF.Parsing.ParseCFG.General as PGen
+import qualified GF.Parsing.ParseCFG.Incremental as PInc
 
 
 parse :: (Ord n, Ord c, Ord t, Show t) => 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:42 $ 
+-- > CVS $Date: 2005/03/21 22:31:50 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Chart parsing of grammars in CF format
 -----------------------------------------------------------------------------
@@ -22,8 +22,8 @@ import GF.Data.SortedList (nubsort)
 import GF.Data.Assoc
 import qualified CF
 import qualified CFIdent as CFI
-import GF.Parsing.Parser
-import GF.Conversion.CFGrammar
+import GF.Parsing.Utilities
+import GF.Parsing.CFGrammar
 import qualified GF.Parsing.ParseCFG as P
 
 type Token    = CFI.CFTok
