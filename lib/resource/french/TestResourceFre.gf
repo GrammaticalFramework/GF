@@ -29,7 +29,7 @@ lin
   Drink = mkTransVerbDir (verbPres (conj3boire "boire")  AHabere) ;
   Wait = mkTransVerbDir (verbPres (conj3rendre "attendre")  AHabere) ;
   Give = mkDitransVerb (verbPres (conj1aimer "donner")  AHabere) [] dative [] accusative ;
-  Prefer = mkDitransVerb (verbPres (conj1aimer "preférer")  AHabere) [] accusative [] dative ; 
+  Prefer = mkDitransVerb (verbPres (conj1céder "préférer")  AHabere) [] accusative [] dative ; 
   Say = verbSent (verbPres (conj3dire "dire")  AHabere) Ind Ind ;
   Prove = verbSent (verbPres (conj1aimer "démontrer")  AHabere) Ind Ind ;
   SwitchOn = mkTransVerbDir (verbPres (conj1aimer "allumer")  AHabere) ; 

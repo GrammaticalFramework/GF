@@ -25,7 +25,7 @@ oper
 
   toutDet : Determiner = 
     {s = \\g => genForms "tout" "toute" ! g ++ artDef g Sg nominative ;
-     n = Pl
+     n = Sg
     } ;
   tousDet : Numeral -> Determiner = \nu ->
     {s = \\g => genForms "tous" "toutes" ! g ++ artDef g Pl nominative ++ nu.s ! g ;
@@ -91,10 +91,10 @@ oper
   copula = \b,w -> let etre = (predVerb verbEtre).s in
     etre ! b ! Masc ! w ;
 
-  isTransVerbClit = \v -> case v.c of { 
+  isClitCase = \c -> case c of { 
      Acc => True ;
      Dat => True ;
-     _   => False
+     _   => False  --- this is not quite correct
      } ;
 
   auxVerb ve = case ve.aux of {

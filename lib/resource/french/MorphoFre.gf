@@ -478,8 +478,8 @@ oper
       ced = troncVerb céder ; 
       d   = Predef.dp 1 ced ;
       c   = Predef.tk 2 ced ; 
-      cèd = c + "è" + "d" ; 
-      céd = c + "é" + "d"
+      cèd = c + "è" + d ; 
+      céd = c + "é" + d
       } 
       in auxConj1 céd cèd céder ;
 

@@ -2,8 +2,6 @@
 
 abstract Numerals = {
 
-flags startcat=Numeral ;
-
 cat 
   Numeral ;     -- 0..
   Digit ;       -- 2..9
