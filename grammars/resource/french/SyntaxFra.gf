@@ -129,7 +129,7 @@ oper
   questVerbPhrase = \jean,dort ->
     {s = table {
       DirQ   => optStr (estCeQue Acc) ++ (predVerbPhrase jean dort).s ! Ind ;
-      IndirQ => siSubj ++ (predVerbPhrase jean dort).s ! Ind
+      IndirQ => elisSi ++ (predVerbPhrase jean dort).s ! Ind
       }
     } ;
 
@@ -286,7 +286,7 @@ oper
   etetConj = sd2 "et" "et" ** {n = Pl}  ;
   ououConj = sd2 "ou" "ou" ** {n = Sg}  ;
   niniConj = sd2 "ni" "ni" ** {n = Sg}  ; --- requires ne !
-  siSubj = ss siSubj ;
+  siSubj = ss elisSi ;
   quandSubj = ss "quand" ;
 
   ouiPhr = ss ["Oui ."] ;  
