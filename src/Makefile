@@ -60,6 +60,7 @@ justwindows:
 	mv gf2.exe ../bin/
 
 nofud-links:
+	mkdir -p for-ghc-nofud
 	rm -f for-ghc-nofud/*.hs
 	ln -s ../for-ghc/Arch.hs for-ghc-nofud
 	ln -s ../for-hugs/ArchEdit.hs for-ghc-nofud
