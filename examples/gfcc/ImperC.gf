@@ -27,10 +27,12 @@ concrete ImperC of Imper = open ResImper in {
 
     Decl  typ cont = continues (typ.s ++ cont.$0) cont ;
     Assign _ x exp = continues (x.s ++ "=" ++ exp.s) ;
-    Return _ exp   = statement ("return" ++ exp.s) ;
     While exp loop = continue  ("while" ++ paren exp.s ++ loop.s) ;
     IfElse exp t f = continue  ("if" ++ paren exp.s ++ t.s ++ "else" ++ f.s) ;
     Block stm      = continue  ("{" ++ stm.s ++ "}") ;
+    Printf t e     = continues ("printf" ++ paren (t.s ++ "," ++ e.s)) ;
+    Return _ exp   = statement ("return" ++ exp.s) ;
+    Returnv        = statement "return" ;
     End            = ss [] ;
  
     EVar  _ x  = constant x.s ;
