@@ -1,0 +1,31 @@
+DESCRIPTION
+
+The Grammatical Framework (=GF) is a grammar formalism based on type theory. 
+It consists of
+
+    * a special-purpose programming language
+    * a compiler of the language
+    * a generic grammar processor 
+
+The compiler reads GF grammars from user-provided files, and the 
+generic grammar processor performs various tasks with the grammars:
+
+    * generation
+    * parsing
+    * translation
+    * type checking
+    * computation
+    * paraphrasing
+    * random generation
+    * syntax editing 
+
+GF particularly addresses two aspects of grammars:
+
+    * multilinguality (parallel grammars for different languages)
+    * semantics (semantic conditions of well-formedness, semantic 
+      properties of expressions) 
+
+
+INSTALLATION
+
+See src/INSTALL for installation instructions.
