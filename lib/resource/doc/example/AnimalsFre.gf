@@ -11,11 +11,11 @@ concrete AnimalsFre of Animals =
     Action = V2 ;
   lin
     Who act obj = QuestPhrase (UseQCl (PosTP TPresent ASimul) 
-                   (IntVP who8one_IP (ComplV2 act (IndefNumNP NoNum (UseN obj))))) ;
+                   (IntVP who8one_IP (ComplV2 act (DefNumNP NoNum (UseN obj))))) ;
     Whom subj act = QuestPhrase (UseQCl (PosTP TPresent ASimul) 
                       (IntSlash who8one_IP (SlashV2 (DefOneNP (UseN subj)) act))) ;
     Answer subj act obj = IndicPhrase (UseCl (PosTP TPresent ASimul) 
-                            (PredVP (DefOneNP (UseN subj)) (ComplV2 act (IndefNumNP NoNum (UseN obj))))) ;
+                            (PredVP (DefOneNP (UseN subj)) (ComplV2 act (DefNumNP NoNum (UseN obj))))) ;
     Dog   = regN "chien" masculine ;
     Cat   = regN "chat" masculine ;
     Mouse = regN "souris" feminine ;

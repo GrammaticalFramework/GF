@@ -484,7 +484,7 @@ Source modules:
 
 <p>
 
-<a href=example/AnimalsFre.gf>AnimalsFre</a> (does not compile yet)
+<a href=example/AnimalsFre.gf>AnimalsFre</a>
 
 <p>
 
@@ -496,27 +496,30 @@ Source modules:
 
 The resources are bulky, and it takes a therefore a lot of
 time and memory to load the grammars. However, they can be
-comiled into the <tt>gfcm</tt>
+compiled into the <tt>gfcm</tt>
 (<b>GF canonical multilingual</b>) format,
-which is almost one thousand times smaller and faster to load.
+which is almost one thousand times smaller and faster to load
+for this set of grammars.
 
 <p>
 
 Just issue the following GF commands 
 <pre>
-  i AnimalsEng.gf
-  -- i AnimalsFre.gf -- does not compile yet
-  i AnimalsSwe.gf
+  i -src AnimalsEng.gf ;; s
+  i -src AnimalsFre.gf ;; s
+  i -src AnimalsSwe.gf ;; s
   pm | wf animals.gfcm
 </pre>
-and you get a grammar this end-user grammar.
+and you get an end-user grammar <tt>animals.gfcm</tt>.
 
 <p>
 
 You can also write the commands in a <tt>gfs</tt> (<b>GF script</b>)
-file, say <tt>mkAnimals.gfs</tt>, and then call GF with
+file, say
+<a href=mkAnimals.gfc><tt>mkAnimals.gfs</tt></a>,
+and then call GF with
 <pre>
-  gf <mkAnimals.gfs
+  gf &lt;mkAnimals.gfs
 </pre>
 
 
@@ -529,7 +532,10 @@ Step 1: use a simplified access to present-tense sentences,
 <p>
 
 Step 2: factor out the categories and purely combinational
-rules into an <tt>incomplete</ii> module (to be shown...)
+rules into an <tt>incomplete</tt> module (to be shown... but
+this does not work for French, which uses different structures:
+e.g. <i>Qui aime les lions ?</i> with a definite phrase
+where English has <i>Who loves lions?</i>
 
 
 <!-- NEW -->
