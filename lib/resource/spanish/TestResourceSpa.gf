@@ -36,7 +36,7 @@ lin
   SwitchOn = mkTransVerbDir  (verbPres (vender_4 "enciender") AHabere) ; ----
   SwitchOff = mkTransVerbDir  (verbPres (zurrar_3 "apagar") AHabere) ;
   Mother = funGen (mkCNom (nomVino "madre") Fem) ;
-  Uncle = funGen (mkCNom (nomVino "zio") Masc) ;
+  Uncle = funGen (mkCNom (nomVino "tío") Masc) ;
   Connection = mkCNom (nomPilar "connexión") Fem ** 
                {s2 = [] ; c = CPrep P_de ; s3 = [] ; c3 = dative} ;
 

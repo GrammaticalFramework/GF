@@ -146,6 +146,7 @@ transTerm x = case x of
   R assigns  -> failure x
   P term label  -> failure x
   T ctype cases  -> failure x
+  V ctype terms  -> failure x
   S term0 term  -> failure x
   C term0 term  -> failure x
   FV terms  -> failure x
@@ -158,6 +159,7 @@ transTokn :: Tokn -> Result
 transTokn x = case x of
   KS str  -> failure x
   KP strs variants  -> failure x
+  KM str  -> failure x
 
 
 transAssign :: Assign -> Result

@@ -136,6 +136,10 @@ redCTerm x = case x of
                   [G.PV _] -> G.TTyped ctype'
                   _ -> G.TComp ctype'
     return $ G.T tinfo $ zip ps' ts'
+  V ctype ts  -> do
+    ctype' <- redCType ctype
+    ts' <- mapM redCTerm ts
+    return $ G.V ctype' ts'
   S term0 term  -> liftM2 G.S (redCTerm term0) (redCTerm term)
   C term0 term  -> liftM2 G.C (redCTerm term0) (redCTerm term)
   FV terms  -> liftM G.FV $ mapM redCTerm terms

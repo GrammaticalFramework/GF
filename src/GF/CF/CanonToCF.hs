@@ -97,6 +97,9 @@ term2CFItems m t = errIn "forming cf items" $ case t of
    T _ cc -> do
      its  <- mapM t2c [t | Cas _ t <- cc]
      tryMkCFTerm (concat its)
+   V _ cc -> do
+     its  <- mapM t2c [t | t <- cc]
+     tryMkCFTerm (concat its)
 
    C t1 t2 -> do
      its1 <- t2c t1

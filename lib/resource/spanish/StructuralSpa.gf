@@ -71,7 +71,7 @@ lin
   OtherwiseAdv = ss "otramente" ;
   ThereforeAdv = ss ["por eso"] ;
 
-  EverybodyNP  = mkNameNounPhrase ["todos"] Masc ;
+  EverybodyNP  = normalNounPhrase (\\c => prepCase c ++ "todos") Masc Pl ;
   SomebodyNP   = mkNameNounPhrase ["algún"] Masc ;
   NobodyNP     = mkNameNounPhrase ["nadién"] Masc ;  --- ne
   EverythingNP = mkNameNounPhrase ["todo"] Masc ;

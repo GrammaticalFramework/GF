@@ -588,6 +588,12 @@ composOp co trm =
      do cc' <- mapPairListM (co . snd) cc
         i'  <- changeTableType co i
         return (T i' cc')
+
+   V ty vs ->
+     do ty' <- co ty
+        vs' <- mapM co vs
+        return (V ty' vs')
+
    Let (x,(mt,a)) b -> 
      do a'  <- co a
         mt' <- case mt of

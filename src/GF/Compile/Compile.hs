@@ -252,9 +252,12 @@ generateModuleCode :: Options -> InitPath -> SourceModule -> IOE GFC.CanonModule
 generateModuleCode opts path minfo@(name,info) = do
   let pname = prefixPathName path (prt name)
   minfo0     <- ioeErr $ redModInfo minfo
-  minfo'     <- return $ if optim 
-                then shareModule fullOpt minfo0   -- parametrization and sharing
-                else shareModule basicOpt minfo0  -- sharing only
+  minfo'     <- return $ 
+    if optim 
+    then shareModule fullOpt minfo0   -- parametrization and sharing
+    else if values                    
+    then shareModule valOpt minfo0     -- tables as courses-of-values
+    else shareModule basicOpt minfo0  -- sharing only
 
   -- for resource, also emit gfr
   case info of
@@ -279,6 +282,7 @@ generateModuleCode opts path minfo@(name,info) = do
    nomulti = not $ oElem makeMulti opts
    emit  = oElem emitCode opts && not (oElem notEmitCode opts)
    optim = oElem optimizeCanon opts
+   values = oElem optimizeValues opts
 
 -- for old GF: sort into modules, write files, compile as usual
 

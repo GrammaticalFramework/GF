@@ -334,6 +334,7 @@ instance Print Exp where
    EApp exp0 exp -> prPrec i 2 (concatD [prt 2 exp0 , prt 3 exp])
    ETable cases -> prPrec i 2 (concatD [doc (showString "table") , doc (showString "{") , prt 0 cases , doc (showString "}")])
    ETTable exp cases -> prPrec i 2 (concatD [doc (showString "table") , prt 4 exp , doc (showString "{") , prt 0 cases , doc (showString "}")])
+   EVTable exp exps -> prPrec i 2 (concatD [doc (showString "table") , prt 4 exp , doc (showString "[") , prt 0 exps , doc (showString "]")])
    ECase exp cases -> prPrec i 2 (concatD [doc (showString "case") , prt 0 exp , doc (showString "of") , doc (showString "{") , prt 0 cases , doc (showString "}")])
    EVariants exps -> prPrec i 2 (concatD [doc (showString "variants") , doc (showString "{") , prt 0 exps , doc (showString "}")])
    EPre exp alterns -> prPrec i 2 (concatD [doc (showString "pre") , doc (showString "{") , prt 0 exp , doc (showString ";") , prt 0 alterns , doc (showString "}")])

@@ -258,6 +258,7 @@ instance Print Term where
    R assigns -> prPrec i 2 (concatD [doc (showString "{") , prt 0 assigns , doc (showString "}")])
    P term label -> prPrec i 1 (concatD [prt 2 term , doc (showString ".") , prt 0 label])
    T ctype cases -> prPrec i 1 (concatD [doc (showString "table") , prt 0 ctype , doc (showString "{") , prt 0 cases , doc (showString "}")])
+   V ctype terms -> prPrec i 1 (concatD [doc (showString "table") , prt 0 ctype , doc (showString "[") , prt 2 terms , doc (showString "]")])
    S term0 term -> prPrec i 1 (concatD [prt 1 term0 , doc (showString "!") , prt 2 term])
    C term0 term -> prPrec i 0 (concatD [prt 0 term0 , doc (showString "++") , prt 1 term])
    FV terms -> prPrec i 1 (concatD [doc (showString "variants") , doc (showString "{") , prt 2 terms , doc (showString "}")])

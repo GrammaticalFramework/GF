@@ -1,4 +1,4 @@
-module Share (shareModule, OptSpec, basicOpt, fullOpt) where
+module Share (shareModule, OptSpec, basicOpt, fullOpt, valOpt) where
 
 import AbsGFC
 import Ident
@@ -13,8 +13,10 @@ import qualified Modules as M
 
 type OptSpec = [Integer] ---
 doOptFactor opt = elem 2 opt
+doOptValues opt = elem 3 opt
 basicOpt = []
 fullOpt = [2]
+valOpt = [3]
 
 shareModule :: OptSpec -> (Ident, CanonModInfo) -> (Ident, CanonModInfo)
 shareModule opt (i,m) = case m of
@@ -30,6 +32,7 @@ shareInfo _ i = i
 shareOpt :: OptSpec -> Term -> Term
 shareOpt opt 
   | doOptFactor opt = share . factor 0
+  | doOptValues opt = values    
   | otherwise = share
 
 -- we need no counter to create new variable names, since variables are 
@@ -114,3 +117,7 @@ replace old new trm = case trm of
      R _ -> True
      _ -> False
 
+values :: Term -> Term
+values t = case t of
+  T ty cs  -> V ty [values t | Cas _ t <- cs] -- assumes proper order
+  _ -> C.composSafeOp values t

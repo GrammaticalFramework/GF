@@ -1,6 +1,6 @@
 --# -path=.:../newresource/abstract:../prelude
 
-incomplete concrete DatabaseI of Database = open Prelude, Resource, Structural in {
+incomplete concrete DatabaseI of Database = open Prelude, Resource in {
 
 flags lexer=text ; unlexer=text ;
 
