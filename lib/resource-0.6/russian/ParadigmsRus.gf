@@ -29,6 +29,7 @@ oper
   neuter    : Gender ;
 
 -- To abstract over case names, we define the following.
+  Case : Type ;
 
   nominative    : Case ;
   genitive      : Case ;
@@ -42,6 +43,7 @@ oper
 -- standard for Russian textbooks.
 
 -- To abstract over number names, we define the following.
+  Number : Type ;
 
   singular : Number ;
   plural   : Number ;
@@ -224,6 +226,8 @@ oper
 -- hidden from the document.
 --.
   Gender = SyntaxRus.Gender ;
+  Case = SyntaxRus.Case ;
+  Number = SyntaxRus.Number ;
 
   masculine = Masc ;
   feminine  = Fem ;

@@ -32,9 +32,12 @@ oper
   human    : Gender ;
   nonhuman : Gender ;
 
+  Number   : Type;
+
   singular : Number ;
   plural   : Number ;
 
+  Case     : Type ;
   nominative : Case ; 
   genitive   : Case ; 
   partitive  : Case ; 
@@ -230,6 +233,8 @@ oper
 -- hidden from the document.
 --.
   Gender = SyntaxFin.Gender ;
+  Case = SyntaxFin.Case ;
+  Number = SyntaxFin.Number ;
 
   singular = Sg ;
   plural = Pl ;
