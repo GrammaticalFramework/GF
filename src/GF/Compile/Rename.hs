@@ -50,10 +50,8 @@ renameIdentTerm :: Status -> Term -> Err Term
 renameIdentTerm env@(act,imps) t = 
  errIn ("atomic term" +++ prt t +++ "given" +++ unwords (map (prt . fst) qualifs)) $
    case t of
----  Vr (IC "Int") -> return $ Q cPredefAbs cInt -- Int and String are predefined cats
----  Vr (IC "String") -> return $ Q cPredefAbs cString
   Vr c -> do
-    f <- lookupTreeMany prt opens c
+    f <- err (predefAbs c) return $ lookupTreeMany prt opens c
     return $ f c
   Cn c -> do
     f <- lookupTreeMany prt opens c
@@ -70,7 +68,13 @@ renameIdentTerm env@(act,imps) t =
  where
    opens   = act : [st  | (OSimple _ _,st) <- imps]
    qualifs = [(m, st) | (OQualif _ m _, st) <- imps] ++ 
-             [(m, st) | (OSimple _ m, st) <- imps] -- qualifying is always possible
+             [(m, st) | (OSimple _ m, st) <- imps] -- qualif is always possible
+
+   -- this facility is mainly for BWC with GF1: you need not import PredefAbs
+   predefAbs c s = case c of
+     IC "Int" -> return $ const $ Q cPredefAbs cInt
+     IC "String" -> return $ const $ Q cPredefAbs cString
+     _ -> Bad s
 
 --- would it make sense to optimize this by inlining?
 renameIdentPatt :: Status -> Patt -> Err Patt
