@@ -61,6 +61,14 @@ resource ResImper = open Predef in {
 
   -- operations for JVM
 
+  param TypIdent = TIInt | TIFloat ; -- to be continued
+
+  oper
+    typInstr : Str -> TypIdent -> Str = \instr,t -> case t of {
+      TIInt   => "i" + instr ;
+      TIFloat => "f" + instr
+      } ;
+
     Instr  : Type = {s,s2,s3 : Str} ; -- code, variables, labels
     instr  : Str -> Instr = \s -> 
       statement s ** {s2,s3 = []} ;
@@ -72,6 +80,6 @@ resource ResImper = open Predef in {
       ss (s ++ ";" ++ i.s) ** {s2 = v ++ i.s2 ; s3 = i.s3} ;
     binop  : Str -> SS -> SS -> SS = \op, x, y ->
       ss (x.s ++ y.s ++ op ++ ";") ;
-    binopt : Str -> SS -> SS -> SS -> SS = \op, t ->
-      binop (t.s ++ op) ;
+    binopt : Str -> TypIdent -> SS -> SS -> SS = \op, t ->
+      binop (typInstr op t) ;
 }

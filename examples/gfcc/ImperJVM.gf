@@ -5,6 +5,7 @@ flags lexer=codevars ; unlexer=code ; startcat=Stm ;
 
   lincat
     Rec = {s,s2,s3 : Str} ; -- code, storage for locals, continuation
+    Typ = {s : Str ; t : TypIdent} ;
     Stm = Instr ;
 
   lin
@@ -36,7 +37,7 @@ flags lexer=codevars ; unlexer=code ; startcat=Stm ;
     Decl  typ cont = instrb typ.s (
       ["alloc"] ++ typ.s ++ cont.$0
       ) cont ;
-    Assign t x exp = instrc (exp.s ++ t.s ++ "_store" ++ x.s) ;
+    Assign t x exp = instrc (exp.s ++ typInstr "store" t.t ++ x.s) ;
     While exp loop = 
       let 
         test = "TEST_" ++ loop.s2 ; 
@@ -62,30 +63,29 @@ flags lexer=codevars ; unlexer=code ; startcat=Stm ;
         f.s ++ 
         "label" ++ true
         ) ;
-    Block stm      = instrc stm.s ;
-    Printf t e     = instrc (e.s ++ "invokestatic" ++ t.s ++ "runtime/printf" ++ paren (t.s) ++ "v") ;
-    Return t exp   = instr (exp.s ++ t.s ++ "_return") ;
+    Block stm  = instrc stm.s ;
+    Printf t e = instrc (e.s ++ "runtime" ++ typInstr "printf" t.t ++ paren (t.s) ++ "V") ;
+    Return t exp   = instr (exp.s ++ typInstr "return" t.t) ;
     Returnv        = instr "return" ;
     End            = ss [] ** {s2,s3 = []} ;
 
-    EVar  t x  = instr (t.s ++ "_load" ++ x.s) ;
+    EVar  t x  = instr (typInstr "load" t.t ++ x.s) ;
     EInt    n  = instr ("ldc" ++ n.s) ;
     EFloat a b = instr ("ldc" ++ a.s ++ "." ++ b.s) ;
-    EAdd       = binopt "_add" ;
-    ESub       = binopt "_sub" ;
-    EMul       = binopt "_mul" ;
-    ELt t      = binop ("invokestatic" ++ t.s ++ "runtime/lt" ++ paren (t.s ++ t.s) ++ "i") ;
+    EAdd t _ = binopt "add" t.t ;
+    ESub t _ = binopt "sub" t.t ;
+    EMul t _ = binopt "mul" t.t ;
+    ELt t _ = binop ("runtime" ++ typInstr "lt" t.t ++ paren (t.s ++ t.s) ++ "I") ;
     EAppNil val f = instr (
-      "invokestatic" ++ f.s ++ paren [] ++ val.s
+      "static" ++ f.s ++ paren [] ++ val.s
       ) ;
     EApp args val f exps = instr (
       exps.s ++
-      "invokestatic" ++ f.s ++ paren args.s ++ val.s
+      "static" ++ f.s ++ paren args.s ++ val.s
       ) ;
 
-    TNum t = t ;
-    TInt   = ss "i" ;
-    TFloat = ss "f" ;
+    TInt   = {s = "I" ; t = TIInt} ;
+    TFloat = {s = "F" ; t = TIFloat} ;
     NilTyp = ss [] ;
     ConsTyp = cc2 ;
     OneExp _ e = e ;

@@ -4,10 +4,9 @@ abstract Imper = {
     Program ;
     Rec ListTyp ;
     Typ ;
-    NumTyp ;
+    IsNum Typ ;
     ListTyp ;
     Fun ListTyp Typ ;
-    Body ListTyp ;
     Stm ;
     Exp Typ ;
     Var Typ ;
@@ -25,8 +24,8 @@ abstract Imper = {
 
     Decl    : (A : Typ) -> (Var A -> Stm) -> Stm ;
     Assign  : (A : Typ) -> Var A -> Exp A -> Stm -> Stm ;
-    While   : Exp (TNum TInt) -> Stm -> Stm -> Stm ;
-    IfElse  : Exp (TNum TInt) -> Stm -> Stm -> Stm -> Stm ;
+    While   : Exp TInt -> Stm -> Stm -> Stm ;
+    IfElse  : Exp TInt -> Stm -> Stm -> Stm -> Stm ;
     Block   : Stm -> Stm -> Stm ;
     Printf  : (A : Typ) -> Exp A -> Stm -> Stm ;
     Return  : (A : Typ) -> Exp A -> Stm ;
@@ -34,15 +33,15 @@ abstract Imper = {
     End     : Stm ;
 
     EVar   : (A : Typ) -> Var A -> Exp A ;
-    EInt   : Int -> Exp (TNum TInt) ;
-    EFloat : Int -> Int -> Exp (TNum TFloat) ;
-    ELt    : (n : NumTyp) -> let Ex = Exp (TNum n) in Ex -> Ex -> Exp (TNum TInt) ;
-    EAdd, EMul, ESub : (n : NumTyp) -> let Ex = Exp (TNum n) in Ex -> Ex -> Ex ;
+    EInt   : Int -> Exp TInt ;
+    EFloat : Int -> Int -> Exp TFloat ;
+    ELt    : (n : Typ) -> IsNum n -> Exp n -> Exp n -> Exp TInt ;
+    EAdd, EMul, ESub : (n : Typ) -> IsNum n -> Exp n -> Exp n -> Exp n ;
     EAppNil : (V : Typ) -> Fun NilTyp V -> Exp V ;
     EApp    : (AS : ListTyp) -> (V : Typ) -> Fun AS V -> ListExp AS -> Exp V ;
 
-    TNum   : NumTyp -> Typ ;  
-    TInt, TFloat : NumTyp ;
+    TInt, TFloat : Typ ;
+    isNumInt : IsNum TInt ; isNumFloat : IsNum TFloat ; 
     NilTyp  : ListTyp ;
     ConsTyp : Typ -> ListTyp -> ListTyp ;
 
