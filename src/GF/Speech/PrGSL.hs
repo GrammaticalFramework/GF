@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : PrGSL
+-- Maintainer  : Bjorn Bringert (bringert@cs.chalmers.se)
 -- Stability   : (stable)
 -- Portability : (portable)
 --
@@ -9,25 +9,9 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- This module prints a CFG as a Nuance GSL 2.0 grammar.
+--
 -----------------------------------------------------------------------------
-
-{- 
-   **************************************************************
-    GF Module
-   
-    Description   : This module prints a CFG as a Nuance GSL 2.0
-                    grammar.
-
-    Author        : Björn Bringert (bringert@cs.chalmers.se)
-
-    License       : GPL (GNU General Public License)
-
-    Created       : September 13, 2004
-
-    Modified      : October 1, 2004
-   ************************************************************** 
--}
 
 -- FIXME: remove / warn / fail if there are int / string literal
 -- categories in the grammar
@@ -42,7 +26,7 @@ import GrammarTypes
 import PrintParser
 import Option
 
-import Data.Char (toUpper)
+import Data.Char (toUpper,toLower)
 
 gslPrinter :: Ident -- ^ Grammar name
 	   -> Options -> CFGrammar -> String
@@ -64,7 +48,7 @@ prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
     prAlt rhs = wrap "(" (unwordsS (map prSymbol rhs')) ")"
 		   where rhs' = rmPunct rhs
     prSymbol (Cat c) = prCat c
-    prSymbol (Tok t) = wrap "\"" (prtS t) "\""
+    prSymbol (Tok t) = wrap "\"" (showString (showToken t)) "\""
     -- GSL requires an upper case letter in category names
     prCat c = showString (firstToUpper c)
 
@@ -76,6 +60,10 @@ rmPunct :: [Symbol String Token] -> [Symbol String Token]
 rmPunct [] = []
 rmPunct (Tok t:ss) | all isPunct (prt t) = rmPunct ss
 rmPunct (s:ss) = s : rmPunct ss
+
+-- Nuance does not like upper case characters in tokens
+showToken :: Token -> String
+showToken t = map toLower (prt t)
 
 isPunct :: Char -> Bool
 isPunct c = c `elem` "-_.;.,?!()[]{}"
