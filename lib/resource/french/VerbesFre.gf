@@ -6298,6 +6298,253 @@ lin soupeserVN2 = v_nancy9 "soupeser" ** {aux = AHabere ; c = Acc} ;
 lin suréleverVN2 = v_nancy9 "surélever" ** {aux = AHabere ; c = Acc} ;
 lin surmenerVN2 = v_nancy9 "surmener" ** {aux = AHabere ; c = Acc} ;
 lin sursemerVN2 = v_nancy9 "sursemer" ** {aux = AHabere ; c = Acc} ;
+
+lin absenterVN = v_nancy6 "absenter" ** {aux = AHabere ; c = Acc} ;
+lin abstenirVN = v_nancy23 "abstenir" ** {aux = AHabere ; c = Acc} ;
+lin acagnarderVN = v_nancy6 "acagnarder" ** {aux = AHabere ; c = Acc} ;
+lin accointerVN = v_nancy6 "accointer" ** {aux = AHabere ; c = Acc} ;
+lin accouderVN = v_nancy6 "accouder" ** {aux = AHabere ; c = Acc} ;
+lin accroupirVN = v_nancy19 "accroupir" ** {aux = AHabere ; c = Acc} ;
+lin acoquinerVN = v_nancy6 "acoquiner" ** {aux = AHabere ; c = Acc} ;
+lin adoniserVN = v_nancy6 "adoniser" ** {aux = AHabere ; c = Acc} ;
+lin adonnerVN = v_nancy6 "adonner" ** {aux = AHabere ; c = Acc} ;
+lin affairerVN = v_nancy6 "affairer" ** {aux = AHabere ; c = Acc} ;
+lin agenouillerVN = v_nancy6 "agenouiller" ** {aux = AHabere ; c = Acc} ;
+lin agrifferVN = v_nancy6 "agriffer" ** {aux = AHabere ; c = Acc} ;
+lin aheurterVN = v_nancy6 "aheurter" ** {aux = AHabere ; c = Acc} ;
+lin amouracherVN = v_nancy6 "amouracher" ** {aux = AHabere ; c = Acc} ;
+lin anastomoserVN = v_nancy6 "anastomoser" ** {aux = AHabere ; c = Acc} ;
+lin apparenterVN = v_nancy6 "apparenter" ** {aux = AHabere ; c = Acc} ;
+lin arrogerVN = v_nancy8 "arroger" ** {aux = AHabere ; c = Acc} ;
+lin arsouillerVN = v_nancy6 "arsouiller" ** {aux = AHabere ; c = Acc} ;
+lin autodéterminerVN = v_nancy6 "autodéterminer" ** {aux = AHabere ; c = Acc} ;
+lin autofinancerVN = v_nancy7 "autofinancer" ** {aux = AHabere ; c = Acc} ;
+lin autoguiderVN = v_nancy6 "autoguider" ** {aux = AHabere ; c = Acc} ;
+lin autosuggestionnerVN = v_nancy6 "autosuggestionner" ** {aux = AHabere ; c = Acc} ;
+lin autotomiserVN = v_nancy6 "autotomiser" ** {aux = AHabere ; c = Acc} ;
+lin baugerVN = v_nancy8 "bauger" ** {aux = AHabere ; c = Acc} ;
+lin bidonnerVN = v_nancy6 "bidonner" ** {aux = AHabere ; c = Acc} ;
+lin bilerVN = v_nancy6 "biler" ** {aux = AHabere ; c = Acc} ;
+lin bitturerVN = v_nancy6 "bitturer" ** {aux = AHabere ; c = Acc} ;
+lin biturerVN = v_nancy6 "biturer" ** {aux = AHabere ; c = Acc} ;
+lin blottirVN = v_nancy19 "blottir" ** {aux = AHabere ; c = Acc} ;
+
+lin calaminerVN = v_nancy6 "calaminer" ** {aux = AHabere ; c = Acc} ;
+
+lin carapaterVN = v_nancy6 "carapater" ** {aux = AHabere ; c = Acc} ;
+lin carnifierVN = v_nancy15 "carnifier" ** {aux = AHabere ; c = Acc} ;
+lin castagnerVN = v_nancy6 "castagner" ** {aux = AHabere ; c = Acc} ;
+lin chamaillerVN = v_nancy6 "chamailler" ** {aux = AHabere ; c = Acc} ;
+lin contreficherVN = v_nancy6 "contreficher" ** {aux = AHabere ; c = Acc} ;
+lin contrefoutreVN = v_nancy100 "contrefoutre" ** {aux = AHabere ; c = Acc} ;
+lin cuiterVN = v_nancy6 "cuiter" ** {aux = AHabere ; c = Acc} ;
+lin déballonnerVN = v_nancy6 "déballonner" ** {aux = AHabere ; c = Acc} ;
+lin débraillerVN = v_nancy6 "débrailler" ** {aux = AHabere ; c = Acc} ;
+lin décorderVN = v_nancy6 "décorder" ** {aux = AHabere ; c = Acc} ;
+lin dédireVN = v_nancy100 "dédire" ** {aux = AHabere ; c = Acc} ;
+lin déganterVN = v_nancy6 "déganter" ** {aux = AHabere ; c = Acc} ;
+lin dégrouillerVN = v_nancy6 "dégrouiller" ** {aux = AHabere ; c = Acc} ;
+lin déjugerVN = v_nancy8 "déjuger" ** {aux = AHabere ; c = Acc} ;
+lin démenerVN = v_nancy9 "démener" ** {aux = AHabere ; c = Acc} ;
+lin démerderVN = v_nancy6 "démerder" ** {aux = AHabere ; c = Acc} ;
+lin démoderVN = v_nancy6 "démoder" ** {aux = AHabere ; c = Acc} ;
+lin démouscaillerVN = v_nancy6 "démouscailler" ** {aux = AHabere ; c = Acc} ;
+lin dénuerVN = v_nancy6 "dénuer" ** {aux = AHabere ; c = Acc} ;
+lin dépatouillerVN = v_nancy6 "dépatouiller" ** {aux = AHabere ; c = Acc} ;
+lin désaccorderVN = v_nancy6 "désaccorder" ** {aux = AHabere ; c = Acc} ;
+lin désaffectionnerVN = v_nancy6 "désaffectionner" ** {aux = AHabere ; c = Acc} ;
+lin désincarnerVN = v_nancy6 "désincarner" ** {aux = AHabere ; c = Acc} ;
+lin désisterVN = v_nancy6 "désister" ** {aux = AHabere ; c = Acc} ;
+lin désopilerVN = v_nancy6 "désopiler" ** {aux = AHabere ; c = Acc} ;
+lin dévergonderVN = v_nancy6 "dévergonder" ** {aux = AHabere ; c = Acc} ;
+lin duveterVN = v_nancy11 "duveter" ** {aux = AHabere ; c = Acc} ;
+lin ébattreVN = v_nancy55 "ébattre" ** {aux = AHabere ; c = Acc} ;
+lin ébaubirVN = v_nancy19 "ébaubir" ** {aux = AHabere ; c = Acc} ;
+lin ébaudirVN = v_nancy19 "ébaudir" ** {aux = AHabere ; c = Acc} ;
+lin ébrouerVN = v_nancy6 "ébrouer" ** {aux = AHabere ; c = Acc} ;
+lin écrierVN = v_nancy15 "écrier" ** {aux = AHabere ; c = Acc} ;
+lin écroulerVN = v_nancy6 "écrouler" ** {aux = AHabere ; c = Acc} ;
+lin efforcerVN = v_nancy7 "efforcer" ** {aux = AHabere ; c = Acc} ;
+lin égaillerVN = v_nancy6 "égailler" ** {aux = AHabere ; c = Acc} ;
+lin égosillerVN = v_nancy6 "égosiller" ** {aux = AHabere ; c = Acc} ;
+lin émacierVN = v_nancy15 "émacier" ** {aux = AHabere ; c = Acc} ;
+lin émbéguinerVN = v_nancy6 "émbéguiner" ** {aux = AHabere ; c = Acc} ;
+lin emboireVN = v_nancy69 "emboire" ** {aux = AHabere ; c = Acc} ;
+lin empiffrerVN = v_nancy6 "empiffrer" ** {aux = AHabere ; c = Acc} ;
+lin empresserVN = v_nancy6 "empresser" ** {aux = AHabere ; c = Acc} ;
+lin enamourerVN = v_nancy6 "enamourer" ** {aux = AHabere ; c = Acc} ;
+lin énamourerVN = v_nancy6 "énamourer" ** {aux = AHabere ; c = Acc} ;
+lin encastelerVN = v_nancy12 "encasteler" ** {aux = AHabere ; c = Acc} ;
+lin enfuirVN = v_nancy36 "enfuir" ** {aux = AHabere ; c = Acc} ;
+lin engouerVN = v_nancy6 "engouer" ** {aux = AHabere ; c = Acc} ;
+lin enkysterVN = v_nancy6 "enkyster" ** {aux = AHabere ; c = Acc} ;
+lin enquérirVN = v_nancy24 "enquérir" ** {aux = AHabere ; c = Acc} ;
+lin ensauverVN = v_nancy6 "ensauver" ** {aux = AHabere ; c = Acc} ;
+lin ensuivreVN = v_nancy100 "ensuivre" ** {aux = AHabere ; c = Acc} ;
+lin entraccorderVN = v_nancy6 "entraccorder" ** {aux = AHabere ; c = Acc} ;
+lin entraccuserVN = v_nancy6 "entraccuser" ** {aux = AHabere ; c = Acc} ;
+lin entradmirerVN = v_nancy6 "entradmirer" ** {aux = AHabere ; c = Acc} ;
+lin entraiderVN = v_nancy6 "entraider" ** {aux = AHabere ; c = Acc} ;
+lin entr'aimerVN = v_nancy6 "entr'aimer" ** {aux = AHabere ; c = Acc} ;
+lin entr'apercevoirVN = v_nancy38 "entr'apercevoir" ** {aux = AHabere ; c = Acc} ;
+lin entrebattreVN = v_nancy55 "entrebattre" ** {aux = AHabere ; c = Acc} ;
+lin entrechoquerVN = v_nancy6 "entrechoquer" ** {aux = AHabere ; c = Acc} ;
+lin entre_déchirerVN = v_nancy6 "entre-déchirer" ** {aux = AHabere ; c = Acc} ;
+lin entre_détruireVN = v_nancy82 "entre-détruire" ** {aux = AHabere ; c = Acc} ;
+lin entre_dévorerVN = v_nancy6 "entre-dévorer" ** {aux = AHabere ; c = Acc} ;
+lin entre_frapperVN = v_nancy6 "entre-frapper" ** {aux = AHabere ; c = Acc} ;
+lin entr'égorgerVN = v_nancy8 "entr'égorger" ** {aux = AHabere ; c = Acc} ;
+lin entre_haïrVN = v_nancy20 "entre-haïr" ** {aux = AHabere ; c = Acc} ;
+lin entre_heurterVN = v_nancy6 "entre-heurter" ** {aux = AHabere ; c = Acc} ;
+lin entre_louerVN = v_nancy6 "entre-louer" ** {aux = AHabere ; c = Acc} ;
+lin entremettreVN = v_nancy56 "entremettre" ** {aux = AHabere ; c = Acc} ;
+lin entre_regarderVN = v_nancy6 "entre-regarder" ** {aux = AHabere ; c = Acc} ;
+lin entretaillerVN = v_nancy6 "entretailler" ** {aux = AHabere ; c = Acc} ;
+lin entre_tuerVN = v_nancy6 "entre-tuer" ** {aux = AHabere ; c = Acc} ;
+lin envoilerVN = v_nancy6 "envoiler" ** {aux = AHabere ; c = Acc} ;
+lin envolerVN = v_nancy6 "envoler" ** {aux = AHabere ; c = Acc} ;
+lin éperdreVN = v_nancy53 "éperdre" ** {aux = AHabere ; c = Acc} ;
+lin éprendreVN = v_nancy54 "éprendre" ** {aux = AHabere ; c = Acc} ;
+lin esbaudirVN = v_nancy19 "esbaudir" ** {aux = AHabere ; c = Acc} ;
+lin esbignerVN = v_nancy6 "esbigner" ** {aux = AHabere ; c = Acc} ;
+lin esclafferVN = v_nancy6 "esclaffer" ** {aux = AHabere ; c = Acc} ;
+lin escrimerVN = v_nancy6 "escrimer" ** {aux = AHabere ; c = Acc} ;
+lin évaderVN = v_nancy6 "évader" ** {aux = AHabere ; c = Acc} ;
+lin évanouirVN = v_nancy19 "évanouir" ** {aux = AHabere ; c = Acc} ;
+lin évertuerVN = v_nancy6 "évertuer" ** {aux = AHabere ; c = Acc} ;
+lin exclamerVN = v_nancy6 "exclamer" ** {aux = AHabere ; c = Acc} ;
+lin exonderVN = v_nancy6 "exonder" ** {aux = AHabere ; c = Acc} ;
+lin extasierVN = v_nancy15 "extasier" ** {aux = AHabere ; c = Acc} ;
+lin faillerVN = v_nancy6 "failler" ** {aux = AHabere ; c = Acc} ;
+
+lin fierVN = v_nancy6 "fier" ** {aux = AHabere ; c = Acc} ;
+
+lin gargariserVN = v_nancy6 "gargariser" ** {aux = AHabere ; c = Acc} ;
+lin gendarmerVN = v_nancy6 "gendarmer" ** {aux = AHabere ; c = Acc} ;
+lin gobergerVN = v_nancy8 "goberger" ** {aux = AHabere ; c = Acc} ;
+lin gominerVN = v_nancy6 "gominer" ** {aux = AHabere ; c = Acc} ;
+lin gourerVN = v_nancy6 "gourer" ** {aux = AHabere ; c = Acc} ;
+lin grumelerVN = v_nancy11 "grumeler" ** {aux = AHabere ; c = Acc} ;
+lin hypertrophierVN = v_nancy15 "hypertrophier" ** {aux = AHabere ; c = Acc} ;
+lin immiscerVN = v_nancy7 "immiscer" ** {aux = AHabere ; c = Acc} ;
+lin ingénierVN = v_nancy15 "ingénier" ** {aux = AHabere ; c = Acc} ;
+lin interpénétrerVN = v_nancy10 "interpénétrer" ** {aux = AHabere ; c = Acc} ;
+lin invétérerVN = v_nancy10 "invétérer" ** {aux = AHabere ; c = Acc} ;
+lin lamenterVN = v_nancy6 "lamenter" ** {aux = AHabere ; c = Acc} ;
+lin lignifierVN = v_nancy15 "lignifier" ** {aux = AHabere ; c = Acc} ;
+lin magnerVN = v_nancy6 "magner" ** {aux = AHabere ; c = Acc} ;
+lin marrerVN = v_nancy6 "marrer" ** {aux = AHabere ; c = Acc} ;
+lin mécompterVN = v_nancy6 "mécompter" ** {aux = AHabere ; c = Acc} ;
+lin méfierVN = v_nancy15 "méfier" ** {aux = AHabere ; c = Acc} ;
+lin mésallierVN = v_nancy15 "mésallier" ** {aux = AHabere ; c = Acc} ;
+lin morfondreVN = v_nancy53 "morfondre" ** {aux = AHabere ; c = Acc} ;
+lin motterVN = v_nancy6 "motter" ** {aux = AHabere ; c = Acc} ;
+lin mutinerVN = v_nancy6 "mutiner" ** {aux = AHabere ; c = Acc} ;
+
+lin obstinerVN = v_nancy6 "obstiner" ** {aux = AHabere ; c = Acc} ;
+lin opiniâtrerVN = v_nancy6 "opiniâtrer" ** {aux = AHabere ; c = Acc} ;
+lin pageoterVN = v_nancy6 "pageoter" ** {aux = AHabere ; c = Acc} ;
+lin paîtreVN = v_nancy66 "paître" ** {aux = AHabere ; c = Acc} ;
+lin pajoterVN = v_nancy6 "pajoter" ** {aux = AHabere ; c = Acc} ;
+lin parjurerVN = v_nancy6 "parjurer" ** {aux = AHabere ; c = Acc} ;
+
+lin pavanerVN = v_nancy6 "pavaner" ** {aux = AHabere ; c = Acc} ;
+lin pistacherVN = v_nancy6 "pistacher" ** {aux = AHabere ; c = Acc} ;
+lin poilerVN = v_nancy6 "poiler" ** {aux = AHabere ; c = Acc} ;
+lin pommelerVN = v_nancy11 "pommeler" ** {aux = AHabere ; c = Acc} ;
+lin pourprerVN = v_nancy6 "pourprer" ** {aux = AHabere ; c = Acc} ;
+lin prélasserVN = v_nancy6 "prélasser" ** {aux = AHabere ; c = Acc} ;
+lin prémunirVN = v_nancy19 "prémunir" ** {aux = AHabere ; c = Acc} ;
+lin prosternerVN = v_nancy6 "prosterner" ** {aux = AHabere ; c = Acc} ;
+lin raviserVN = v_nancy6 "raviser" ** {aux = AHabere ; c = Acc} ;
+lin rebellerVN = v_nancy6 "rebeller" ** {aux = AHabere ; c = Acc} ;
+lin rebifferVN = v_nancy6 "rebiffer" ** {aux = AHabere ; c = Acc} ;
+lin récrierVN = v_nancy15 "récrier" ** {aux = AHabere ; c = Acc} ;
+lin recroquevillerVN = v_nancy6 "recroqueviller" ** {aux = AHabere ; c = Acc} ;
+lin réfugierVN = v_nancy15 "réfugier" ** {aux = AHabere ; c = Acc} ;
+lin relaisserVN = v_nancy6 "relaisser" ** {aux = AHabere ; c = Acc} ;
+lin renfrognerVN = v_nancy6 "renfrogner" ** {aux = AHabere ; c = Acc} ;
+
+lin rengorgerVN = v_nancy8 "rengorger" ** {aux = AHabere ; c = Acc} ;
+lin repentirVN = v_nancy25 "repentir" ** {aux = AHabere ; c = Acc} ;
+lin ressourcerVN = v_nancy7 "ressourcer" ** {aux = AHabere ; c = Acc} ;
+lin ressouvenirVN = v_nancy23 "ressouvenir" ** {aux = AHabere ; c = Acc} ;
+lin revancherVN = v_nancy6 "revancher" ** {aux = AHabere ; c = Acc} ;
+--- lin saillir2VN = v_nancy10 "saillir" ** {aux = AHabere ; c = Acc} ;
+
+lin silicatiserVN = v_nancy6 "silicatiser" ** {aux = AHabere ; c = Acc} ;
+--- lin sortirVN = v_nancy100 "sortir" ** {aux = AHabere ; c = Acc} ;
+
+
+--- lin sortirVN = v_nancy100 "sortir" ** {aux = AHabere ; c = Acc} ;
+
+
+lin souvenirVN = v_nancy23 "souvenir" ** {aux = AHabere ; c = Acc} ;
+lin suiciderVN = v_nancy6 "suicider" ** {aux = AHabere ; c = Acc} ;
+lin tapirVN = v_nancy19 "tapir" ** {aux = AHabere ; c = Acc} ;
+lin targuerVN = v_nancy6 "targuer" ** {aux = AHabere ; c = Acc} ;
+lin trémousserVN = v_nancy6 "trémousser" ** {aux = AHabere ; c = Acc} ;
+lin vallonnerVN = v_nancy6 "vallonner" ** {aux = AHabere ; c = Acc} ;
+lin vautrerVN = v_nancy6 "vautrer" ** {aux = AHabere ; c = Acc} ;
+lin vermoulerVN = v_nancy6 "vermouler" ** {aux = AHabere ; c = Acc} ;
+
+-- still more
+
+lin assavoirVN = v_nancy100inf "assavoir" ** {aux = AHabere} ; -- seul inf
+lin bicherVN = v_nancy6 "bicher" ** {aux = AHabere} ;
+lin bichoterVN = v_nancy6 "bichoter" ** {aux = AHabere} ;
+lin bienvenirVN = v_nancy100inf "bienvenir" ** {aux = AHabere} ; --- seul inf
+lin boumerVN = v_nancy6 "boumer" ** {aux = AHabere} ;
+lin brouillasserVN = v_nancy6 "brouillasser" ** {aux = AHabere} ;
+lin bruinerVN = v_nancy6 "bruiner" ** {aux = AHabere} ;
+lin brumasserVN = v_nancy6 "brumasser" ** {aux = AHabere} ;
+lin brumerVN = v_nancy6 "brumer" ** {aux = AHabere} ;
+lin béerVN = v_nancy13 "béer" ** {aux = AHabere} ;
+lin contribuerVN = v_nancy6 "contribuer" ** {aux = AHabere} ;
+lin crachinerVN = v_nancy6 "crachiner" ** {aux = AHabere} ;
+lin déblatérerVN = v_nancy10 "déblatérer" ** {aux = AHabere} ;
+lin désadapterVN = v_nancy6 "désadapter" ** {aux = AHabere} ;
+lin empiéterVN = v_nancy10 "empiéter" ** {aux = AHabere} ;
+lin enjuguerVN = v_nancy6 "enjuguer" ** {aux = AHabere} ;
+lin entre_mangerVN = v_nancy8 "entre-manger" ** {aux = AHabere} ;
+lin entre_nuireVN = v_nancy82 "entre-nuire" ** {aux = AHabere} ;
+lin falloirVN = v_nancy46 "falloir" ** {aux = AHabere} ;
+lin faseyerVN = v_nancy6 "faseyer" ** {aux = AHabere} ;
+lin faséyerVN = v_nancy10 "faséyer" ** {aux = AHabere} ;
+lin grêlerVN = v_nancy6 "grêler" ** {aux = AHabere} ;
+lin influerVN = v_nancy6 "influer" ** {aux = AHabere} ;
+lin insurgerVN = v_nancy8 "insurger" ** {aux = AHabere} ;
+lin ironiserVN = v_nancy6 "ironiser" ** {aux = AHabere} ;
+lin lésinerVN = v_nancy6 "lésiner" ** {aux = AHabere} ;
+lin mondialiserVN = v_nancy6 "mondialiser" ** {aux = AHabere} ;
+lin neigeoterVN = v_nancy6 "neigeoter" ** {aux = AHabere} ;
+lin neigerVN = v_nancy8 "neiger" ** {aux = AHabere} ;
+lin pagnoterVN = v_nancy6 "pagnoter" ** {aux = AHabere} ;
+lin persisterVN = v_nancy6 "persister" ** {aux = AHabere} ;
+lin persévérerVN = v_nancy10 "persévérer" ** {aux = AHabere} ;
+lin pleuvasserVN = v_nancy6 "pleuvasser" ** {aux = AHabere} ;
+lin pleuvinerVN = v_nancy6 "pleuviner" ** {aux = AHabere} ;
+lin pleuvoirVN = v_nancy45 "pleuvoir" ** {aux = AHabere} ;
+lin pleuvoterVN = v_nancy6 "pleuvoter" ** {aux = AHabere} ;
+lin pluvinerVN = v_nancy6 "pluviner" ** {aux = AHabere} ;
+lin ramaillerVN = v_nancy6 "ramailler" ** {aux = AHabere} ;
+lin repleuvoirVN = v_nancy45 "repleuvoir" ** {aux = AHabere} ;
+lin saillir2VN = v_nancy10 "saillir" ** {aux = AHabere} ; --- incompl
+lin semblerVN = v_nancy6 "sembler" ** {aux = AHabere} ;
+lin sombrerVN = v_nancy6 "sombrer" ** {aux = AHabere} ;
+lin spéculerVN = v_nancy6 "spéculer" ** {aux = AHabere} ;
+lin sévirVN = v_nancy19 "sévir" ** {aux = AHabere} ;
+lin tonnerVN = v_nancy6 "tonner" ** {aux = AHabere} ;
+lin transigerVN = v_nancy8 "transiger" ** {aux = AHabere} ;
+lin vaserVN = v_nancy6 "vaser" ** {aux = AHabere} ;
+lin venterVN = v_nancy6 "venter" ** {aux = AHabere} ;
+lin verglacerVN = v_nancy7 "verglacer" ** {aux = AHabere} ;
+lin zonerVN = v_nancy6 "zoner" ** {aux = AHabere} ;
+lin élimerVN = v_nancy6 "élimer" ** {aux = AHabere} ;
+lin êtreVN = v_nancy2 "être" ** {aux = AHabere} ;
+
+
+
 }
 
 

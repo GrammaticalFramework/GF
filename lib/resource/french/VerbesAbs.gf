@@ -6290,8 +6290,8 @@ fun suréleverVN2 : VN2 ;
 fun surmenerVN2 : VN2 ;
 fun sursemerVN2 : VN2 ;
 
-{-
 ---- the following did not match any attrs : reflexive deponents only ?
+-- recreated the next day
 
 fun absenterVN : VN ;
 fun abstenirVN : VN ;
@@ -6511,8 +6511,7 @@ fun seoirVN : VN ;
 fun sévirVN : VN ;
 fun silicatiserVN : VN ;
 fun sombrerVN : VN ;
-fun sortirVN : VN ;
-fun sortirVN : VN ;
+
 fun souvenirVN : VN ;
 fun spéculerVN : VN ;
 fun suiciderVN : VN ;
@@ -6528,6 +6527,5 @@ fun venterVN : VN ;
 fun verglacerVN : VN ;
 fun vermoulerVN : VN ;
 fun zonerVN : VN ;
--}
 
 }
