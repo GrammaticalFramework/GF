@@ -1,4 +1,6 @@
 include numerals.Abs.gf ;
+flags coding=greek ;
+
 -- Classical Greek (of Athens)
 -- Aarne's transliteration
 -- There are attested variant forms. kai:s between the elements in bigger ->

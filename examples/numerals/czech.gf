@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=latinasupplement ;
 
 oper bind : Str -> Str -> Str = \s1 -> \s2 -> s1 ++ s2 ;
 

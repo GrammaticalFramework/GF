@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=ethiopic ;
 
 -- 14, 15 have variants in pronounciation {asraratt, asrammIst}
 

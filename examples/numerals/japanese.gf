@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=japanese ;
 
 param DForm = unit | attr | ten | hundred | thousand ; 
 param Size = sg | pl | more10 ;

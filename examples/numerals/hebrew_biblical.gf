@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=hebrew ;
 
 param DForm = unit Place | cons  | ten | hund ;
 param Size = small | large | dual ;

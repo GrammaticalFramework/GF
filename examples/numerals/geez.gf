@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=ethiopic ;
 
 -- No long consonants marked in the indigen. script
 -- s is set intersection s

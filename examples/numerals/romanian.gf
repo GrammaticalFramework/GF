@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=latinasupplement ;
 
 -- Note [s,], [a%] for Romanian s, and a with up bow ontop (not â)
 

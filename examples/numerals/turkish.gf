@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=latinasupplement ;
 
 param DForm = unit | ten | teen ;
 param Size = sg | pl ;
