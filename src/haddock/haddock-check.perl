@@ -141,7 +141,7 @@ for $file (@FILES) {
     $function = $1;
     print "   > No type signature for function(s):"
       unless $reported;
-    print "\n    " unless $reported++ % 5;
+    print "\n    " unless $reported++ % 500;
     print " $function";
   }
   print "\n     ($reported functions)\n"
