@@ -18,7 +18,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     private String[] envfonts;
     private Font font;  
     Font[] fontObjs;
-    private static int DEFAULT_FONT_SIZE = 16;
+    private static int DEFAULT_FONT_SIZE = 14;
     private JComboBox fontList;
     private JLabel fontLabel = new JLabel("   Font: ");
     private JComboBox sizeList;
@@ -371,14 +371,14 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         treePanel.setDividerSize(5);
         treePanel.setDividerLocation(100);
         centerPanel2.setLayout(new BorderLayout());
-        gui2.setSize(350,150);
+        gui2.setSize(350,100);
         gui2.setTitle("Select Action on Subterm");
         gui2.setLocationRelativeTo(treePanel);
         centerPanelDown.setLayout(new BorderLayout());
         centerPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                                    treePanel, centerPanelDown);
         centerPanel.setDividerSize(5);
-        centerPanel.setDividerLocation(350);
+        centerPanel.setDividerLocation(250);
         centerPanel.addKeyListener(tree);      
         centerPanel.setOneTouchExpandable(true);
         centerPanelDown.add(middlePanel, BorderLayout.NORTH);
@@ -447,8 +447,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         undo.setFocusable(false);  
 
         output.addKeyListener(tree);            
-	setSize(1040,800);
-	outputPanelUp.setPreferredSize(new Dimension(500,300));
+	setSize(800,600);
+	outputPanelUp.setPreferredSize(new Dimension(400,230));
         treePanel.setDividerLocation(0.3);
         nodeTable.put(new TreePath(DynamicTree2.rootNode.getPath()), new Integer(0));
         setVisible(true);
