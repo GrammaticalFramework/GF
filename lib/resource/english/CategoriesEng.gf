@@ -90,6 +90,7 @@ lincat
 
   IP     = {s : NPForm => Str ; n : Number ; g : Gender} ;
   IDet   = {s : Str ; n : Number} ;
+  IAdv   = {s : Str } ;
   QCl    = {s : Bool => SForm => QuestForm => Str} ;
   QS     = {s :                  QuestForm => Str} ;
   Imp    = {s : Number => Str} ;

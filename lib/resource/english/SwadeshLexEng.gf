@@ -34,20 +34,20 @@ concrete SwadeshLexEng of SwadeshLex = CategoriesEng
 
     here_Adv = here_Adv;
     there_Adv = there_Adv;
---    where_IAdv = where_IAdv;
---    when_IAdv = when_IAdv;
---    how_IAdv = how_IAdv;
+    where_IAdv = where_IAdv;
+    when_IAdv = when_IAdv;
+    how_IAdv = how_IAdv;
 
     -- not : Adv ; -- ?
 
 
     -- Numerals
 
---    one_Num = UseNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01)))) ;
---    two_Num = UseNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))) ;
---    three_Num = UseNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n3))))) ;
---    four_Num = UseNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n4))))) ;
---    five_Num = UseNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))) ;
+    one_Num = UseNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01)))) ;
+    two_Num = UseNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))) ;
+    three_Num = UseNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n3))))) ;
+    four_Num = UseNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n4))))) ;
+    five_Num = UseNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))) ;
 
     -- Adjectives
 
