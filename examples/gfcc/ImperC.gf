@@ -4,7 +4,7 @@ concrete ImperC of Imper = open ResImper in {
 
   lincat
     Exp = PrecExp ; 
-    Typ, NumTyp = {s,s2 : Str} ;
+    Typ = {s,s2 : Str} ;
     Rec = {s,s2,s3 : Str} ;
 
   lin
@@ -39,15 +39,14 @@ concrete ImperC of Imper = open ResImper in {
     EVar  _ x  = constant x.s ;
     EInt    n  = constant n.s ;
     EFloat a b = constant (a.s ++ "." ++ b.s) ;
-    EMul _     = infixL 3 "*" ;
-    EAdd _     = infixL 2 "+" ;
-    ESub _     = infixL 2 "-" ;
-    ELt _      = infixN 1 "<" ;
+    EMul _ _   = infixL 3 "*" ;
+    EAdd _ _   = infixL 2 "+" ;
+    ESub _ _   = infixL 2 "-" ;
+    ELt _ _    = infixN 1 "<" ;
 
     EAppNil val f = constant (f.s ++ paren []) ;
     EApp args val f exps = constant (f.s ++ paren exps.s) ;
 
-    TNum t  = t ;
     TInt    = {s = "int" ; s2 = "\"%d\""} ; 
     TFloat  = {s = "float" ; s2 = "\"%f\""} ;
     NilTyp  = ss [] ;

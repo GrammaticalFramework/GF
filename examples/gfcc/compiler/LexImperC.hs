@@ -60,20 +60,18 @@ prToken t = case t of
 
   _ -> show t
 
+data BTree = N | B String Tok BTree BTree deriving (Show)
+
 eitherResIdent :: (String -> Tok) -> String -> Tok
-eitherResIdent tv s = if isResWord s then (TS s) else (tv s) where
-  isResWord s = isInTree s $
-    B "int" (B "float" (B "else" N N) (B "if" N N)) (B "return" (B "printf" N N) (B "while" N N))
+eitherResIdent tv s = treeFind resWords
+  where
+  treeFind N = tv s
+  treeFind (B a t left right) | s < a  = treeFind left
+                              | s > a  = treeFind right
+                              | s == a = t
 
-data BTree = N | B String BTree BTree deriving (Show)
-
-isInTree :: String -> BTree -> Bool
-isInTree x tree = case tree of
-  N -> False
-  B a left right
-   | x < a  -> isInTree x left
-   | x > a  -> isInTree x right
-   | x == a -> True
+resWords = b "int" (b "float" (b "else" N N) (b "if" N N)) (b "return" (b "printf" N N) (b "while" N N))
+   where b s = B s (TS s)
 
 unescapeInitTail :: String -> String
 unescapeInitTail = unesc . tail where
