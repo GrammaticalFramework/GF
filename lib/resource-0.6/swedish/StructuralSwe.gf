@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../../prelude
 
---1 The Top-Level English Resource Grammar: Structural Words
+--1 The Top-Level Swedish Resource Grammar: Structural Words
 --
 -- Aarne Ranta 2002 -- 2003
 --

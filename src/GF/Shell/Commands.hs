@@ -168,8 +168,8 @@ execCommand env c s = case c of
     return (env', state1)
 -}
 
-----  CCEnvOn  name -> return (languageOn  (language name) env,s)
-----  CCEnvOff name -> return (languageOff (language name) env,s)
+  CCEnvOn  name -> return (env,s) ---- return (languageOn  (language name) env,s)
+  CCEnvOff name -> return (env,s) ---- return (languageOff (language name) env,s)
 
 -- this command is improved by the use of IO
   CRefineRandom -> do
