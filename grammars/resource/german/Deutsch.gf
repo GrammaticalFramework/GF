@@ -1,0 +1,1 @@
+resource Deutsch = reuse ResDeu ;
