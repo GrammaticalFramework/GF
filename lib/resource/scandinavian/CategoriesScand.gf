@@ -58,7 +58,10 @@ lincat
   
 
   Adv    = Adverb ; 
-      -- = {s : Str ; isPost : Bool} ;
+      -- = {s : Str} ;
+  AdV    = Adverb ; 
+  AdA    = Adverb ; 
+  AdC    = Adverb ; 
   PP     = Adverb ;
 
   S      = Sentence ;

@@ -164,8 +164,8 @@ lin
   ImperOne  = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
 
-  PrepS p = ss (p.s ++ ",") ;
-  AdvS = advSentence ;
+  AdvCl = advClause ;
+  AdvPhr = advSentence ;
 
 
 --!

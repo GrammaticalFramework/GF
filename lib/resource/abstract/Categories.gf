@@ -105,9 +105,10 @@ cat
 --3 Adverbs and prepositions/cases
 --
 
-  Adv ;    -- adverbial              e.g. "now", "in the house"
+  Adv ;    -- sentence adverb        e.g. "now", "in the house"
+  AdV ;    -- verb adverb            e.g. "always"
   AdA ;    -- ad-adjective           e.g. "very"
-  AdS ;    -- sentence adverbial     e.g. "therefore", "otherwise"
+  AdC ;    -- conjoining adverb      e.g. "therefore", "otherwise"
   PP ;     -- prepositional phrase   e.g. "in London"
   Prep ;   -- pre/postposition, case e.g. "after", Adessive
 

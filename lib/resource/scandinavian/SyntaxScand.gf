@@ -690,19 +690,18 @@ oper
 -- Even prepositional phrases can be both 
 -- ("att han i alla fall skulle komma").
 
-  Adverb : Type = SS ** {isPost : Bool} ;
+  Adverb : Type = SS ; 
   PrepPhrase : Type = Adverb ;
 
-  advPre  : Str -> Adverb = \alltid -> ss alltid ** {isPost = False} ;
-  advPost : Str -> Adverb = \bra    -> ss bra    ** {isPost = True} ;
+  advPre  : Str -> Adverb = ss ;
+  advPost : Str -> Adverb = ss ; 
 
-  adVerbPhrase : VerbGroup -> Adverb -> VerbGroup = \spelar, bra ->
-    let {postp = bra.isPost} in
+  adVerbPhrase : VerbGroup -> Adverb -> VerbGroup = \spelar, ofta ->
     {
   --- this unfortunately generates  VP#2 ::= VP#2
      s  = spelar.s ; 
-     s2 = \\b => (if_then_else Str postp [] bra.s) ++ spelar.s2 ! b ;
-     s3 = \\sf,g,n,p => spelar.s3 ! sf ! g ! n ! p ++ (if_then_else Str postp bra.s [])
+     s2 = \\b => ofta.s ++ spelar.s2 ! b ;
+     s3 = \\sf,g,n,p => spelar.s3 ! sf ! g ! n ! p
     } ;
 
   advAdjPhrase : SS -> AdjPhrase -> AdjPhrase = \mycket, dyr ->
@@ -1163,6 +1162,13 @@ oper
     ss (I.s ! n ++ "!") ;
 
 --2 Sentence adverbials
+--
+-- Sentence adverbs is the largest class and open for
+-- e.g. prepositional phrases.
+
+  advClause : Clause -> Adverb -> Clause = \yousing,well ->
+   {s = \\b,c => yousing.s ! b ! c ++ well.s} ;
+
 --
 -- This class covers adverbials such as "annars", "därför", which are prefixed
 -- to a sentence to form a phrase.

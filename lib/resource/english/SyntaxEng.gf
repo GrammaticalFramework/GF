@@ -573,21 +573,17 @@ oper
 --
 -- Adverbs are not inflected (we ignore comparison, and treat
 -- compared adverbials as separate expressions; this could be done another way).
--- We distinguish between post- and pre-verbal adverbs.
+-- We distinguish between different combinatory adverbs in the sybntax itself.
 
-  Adverb : Type = SS ** {p : Bool} ;
-
-  advPre  : Str -> Adverb = \seldom -> ss seldom ** {p = False} ;
-  advPost : Str -> Adverb = \well   -> ss well   ** {p = True} ;
+  Adverb : Type = SS ;
 
 -- N.B. this rule generates the cyclic parsing rule $VP#2 ::= VP#2$
 -- and cannot thus be parsed.
 
-  adVerbPhrase : VerbGroup -> Adverb -> VerbGroup = \sings, well ->
-    let {postp = orB well.p sings.isAux} in
+  adVerbPhrase : VerbGroup -> Adverb -> VerbGroup = \sings, often ->
     {
-     s  = \\b,sf,a => (if_then_else Str postp [] well.s) ++ sings.s ! b ! sf ! a ;
-     s2 = \\b,sf,a => sings.s2 ! b ! sf ! a ++ (if_then_else Str postp well.s []) ;
+     s  = \\b,sf,a => sings.s ! b ! sf ! a ++ often.s ; ---- depends on sf and isAux 
+     s2 = \\b,sf,a => sings.s2 ! b ! sf ! a ;
      isAux = sings.isAux
     } ;
 
@@ -601,7 +597,7 @@ oper
 -- is a little shaky, since other prepositions may be preferred ("on", "at").
 
   prepPhrase : Preposition -> NounPhrase -> Adverb = \on, it ->
-    advPost (on ++ it.s ! AccP) ;
+    ss (on ++ it.s ! AccP) ;
 
   locativeNounPhrase : NounPhrase -> Adverb = 
     prepPhrase "in" ;
@@ -1042,7 +1038,13 @@ oper
 
 --2 Sentence adverbs
 --
--- This class covers adverbs such as "otherwise", "therefore", which are prefixed
+-- Sentence adverbs is the largest class and open for
+-- e.g. prepositional phrases.
+
+  advClause : Clause -> Adverb -> Clause = \yousing,well ->
+   {s = \\b,c => yousing.s ! b ! c ++ well.s} ;
+
+-- Conjunctive adverbs are such as "otherwise", "therefore", which are prefixed
 -- to a sentence to form a phrase.
 
   advSentence : SS -> Sentence -> Utterance = \hence,itiseven ->
@@ -1206,7 +1208,7 @@ oper
 
   subjunctVerbPhrase : VerbGroup -> Subjunction -> Sentence -> VerbGroup =
     \V, if, A -> 
-    adVerbPhrase V (advPost (if.s ++ A.s)) ;
+    adVerbPhrase V (ss (if.s ++ A.s)) ;
 
 --2 One-word utterances
 -- 

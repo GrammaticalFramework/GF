@@ -56,7 +56,7 @@ fun
   EverywhereNP, SomewhereNP,NowhereNP : Adv ; -- everywhere, somewhere, nowhere  
   VeryAdv, TooAdv : AdA ;                     -- very, too
   AlmostAdv, QuiteAdv : AdA ;                 -- almost, quite
-  OtherwiseAdv, ThereforeAdv : AdS ;          -- therefore, otherwise            
+  OtherwiseAdv, ThereforeAdv : AdC ;          -- therefore, otherwise            
 
 --!
 --2 Conjunctions and subjunctions
