@@ -64,9 +64,10 @@ tokens2trms opts sg cn parser as = do
     _ | null ts0 -> checkWarn "No success in cf parsing" >> return []
     _ | raw      -> do
       ts1 <- return (map cf2trm0 ts0) ----- should not need annot
-      mapM (checkErr . (annotate gr) . trExp) ts1 ---- complicated
+      mapM (checkErr . (annotate gr) . trExp) ts1 ---- complicated; often fails
     _ -> do
-      (ts1,_) <- checkErr $ mapErr postParse ts0
+      (ts1,ss) <- checkErr $ mapErr postParse ts0
+      if null ts1 then raise ss else return ()
       ts2 <- mapM (checkErr . (annotate gr) . trExp) ts1 ---- 
       if forgive then return ts2 else do
         let tsss = [(t, allLinsOfTree gr cn t) | t <- ts2]
@@ -75,7 +76,7 @@ tokens2trms opts sg cn parser as = do
         if null ps 
            then raise $ "Failure in morphology." ++
                   if verb 
-                     then "\nPossible corrections: " +++++ 
+                     then "\nPossible corrections: " +++++
                           unlines (nub (map sstr (concatMap snd tsss)))
                      else ""
            else return ps

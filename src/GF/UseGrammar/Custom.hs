@@ -241,8 +241,8 @@ customTokenizer =
   ,(strCI "code",      const $ lexHaskell)
   ,(strCI "text",      const $ lexText)
   ,(strCI "unglue",    \gr -> map tS . decomposeWords (stateMorpho gr))
-----  ,(strCI "codelit",   lexHaskellLiteral . stateIsWord)
-----  ,(strCI "textlit",   lexTextLiteral . stateIsWord)
+  ,(strCI "codelit",   lexHaskellLiteral . stateIsWord)
+  ,(strCI "textlit",   lexTextLiteral . stateIsWord)
   ,(strCI "codeC",     const $ lexC2M)
   ,(strCI "codeCHigh", const $ lexC2M' True)
 -- add your own tokenizers here

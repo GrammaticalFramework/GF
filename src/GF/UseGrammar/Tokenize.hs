@@ -129,6 +129,9 @@ unknown2string isKnown = map mkOne where
   mkOne t@(TC s) = if isKnown s then t else mkTL s
   mkOne t        = t
 
-lexTextLiteral    isKnown = unknown2string isKnown . lexText
+lexTextLiteral    isKnown = unknown2string (eitherUpper isKnown) . lexText
 lexHaskellLiteral isKnown = unknown2string isKnown . lexHaskell
+
+eitherUpper isKnown w@(c:cs) = isKnown (toLower c : cs) || isKnown (toUpper c : cs)
+eitherUpper isKnown w = isKnown w
 

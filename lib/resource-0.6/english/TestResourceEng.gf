@@ -2,7 +2,7 @@
 
 concrete TestResourceEng of TestResource = StructuralEng ** open SyntaxEng in {
 
-flags startcat=Phr ; lexer=literals ; parser=chart ; unlexer=text ;
+flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
 
 -- a random sample from the lexicon
 

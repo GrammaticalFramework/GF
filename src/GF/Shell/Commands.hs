@@ -268,7 +268,7 @@ execECommand env c = case c of
   _                  -> changeMsg ["command not yet implemented"]
  where
    sgr  = firstStateGrammar env 
-   agrs = [sgr] ---- allActiveGrammars env
+   agrs = allStateGrammars env ---- allActiveGrammars env
    cgr  = canCEnv env
    gr   = grammarCEnv env
    der  = maybe True not $ caseYesNo (globalOptions env) noDepTypes
