@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/04 08:12:56 $ 
+-- > CVS $Date: 2005/03/04 12:05:10 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.12 $
+-- > CVS $Revision: 1.13 $
 --
 -- Generate all trees of given category and depth. AR 30\/4\/2004
 --
@@ -73,10 +73,15 @@ str2tr t = case t of
 -- tr2str :: Tree -> STree
 tr2str (Tr (N (_,at,val,_,_),ts)) = case (at,val) of
   (AtC (_,f), _)         -> SApp (prt_ f,map tr2str ts)
-  (AtM _,     VCn (_,c)) -> SMeta (prt_ c)
+  (AtM _,     v)         -> SMeta (catOf v)
   (AtL s,     _)         -> SString s
   (AtI i,     _)         -> SInt i
   _ -> SMeta "FAILED_TO_GENERATE" ---- err monad!
+ where
+   catOf v = case v of
+     VApp w _  -> catOf w
+     VCn (_,c) -> prt_ c
+     _ -> "FAILED_TO_GENERATE_FROM_META"
 
 ------------------------------------------
 -- do the main thing with a simpler data structure
@@ -95,7 +100,7 @@ generate gr ifm cat i mn mt = case mt of
 
   allTrees = genAll i
 
-  -- lazy bottom-up dynamic generation
+  -- dynamic generation
   genAll :: Int -> BinTree (SCat,[[STree]])
   genAll i = iter i genNext (mapTree (\ (c,_) -> (c,[[]])) gr)
 
@@ -110,7 +115,6 @@ generate gr ifm cat i mn mt = case mt of
             xs <- combinations (map look cs),
             let fxs = SApp (f, xs),
             depth fxs == size]
---            notElem fxs ts] ---- quadratic; better to check depth
          : ts)
    where
      look c = concat $ errVal [] $ lookupTree id c tr
