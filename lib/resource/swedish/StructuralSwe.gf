@@ -1,11 +1,11 @@
---# -path=.:../abstract:../../prelude
+--# -path=.:../abstract:../scandinavian:../../prelude
 
 --1 The Top-Level Swedish Resource Grammar: Structural Words
 --
 -- Aarne Ranta 2002 -- 2004
 --
 concrete StructuralSwe of Structural = 
-                      CategoriesSwe, NumeralsSwe ** open Prelude, SyntaxSwe in {
+  CategoriesSwe, NumeralsSwe ** open Prelude, MorphoSwe, SyntaxSwe in {
  lin
 
   INP    = pronNounPhrase jag_32 ;
@@ -20,8 +20,8 @@ concrete StructuralSwe of Structural =
   YouNP  = let {ni = pronNounPhrase ni_37 } in {s = ni.s ; g = ni.g ; n = Sg} ;
 
   ItNP   = pronNounPhrase det_40 ; ----
-  ThisNP = regNameNounPhrase ["det här"] Neutr NoMasc ; 
-  ThatNP = regNameNounPhrase ["det där"] Neutr NoMasc ; 
+  ThisNP = regNameNounPhrase ["det här"] NNeutr ; 
+  ThatNP = regNameNounPhrase ["det där"] NNeutr ; 
   TheseNumNP n = 
     {s = \\c => ["de här"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
   ThoseNumNP n = 
@@ -75,11 +75,11 @@ concrete StructuralSwe of Structural =
 
   EverybodyNP  = let alla = table {Nom => "alla" ; Gen => "allas"} in
                    {s = \\c => alla ! npCase c ; g = Utr ; n = Pl} ;
-  SomebodyNP   = nameNounPhrase (mkProperName "någon" Utr Masc) ;
-  NobodyNP     = nameNounPhrase (mkProperName "ingen" Utr Masc) ;
-  EverythingNP = nameNounPhrase (mkProperName "allting" Neutr NoMasc) ; 
-  SomethingNP  = nameNounPhrase (mkProperName "någonting" Neutr NoMasc) ; 
-  NothingNP    = nameNounPhrase (mkProperName "ingenting" Neutr NoMasc) ; 
+  SomebodyNP   = nameNounPhrase (mkProperName "någon" (NUtr Masc)) ;
+  NobodyNP     = nameNounPhrase (mkProperName "ingen" (NUtr Masc)) ;
+  EverythingNP = nameNounPhrase (mkProperName "allting" NNeutr) ; 
+  SomethingNP  = nameNounPhrase (mkProperName "någonting" NNeutr) ; 
+  NothingNP    = nameNounPhrase (mkProperName "ingenting" NNeutr) ; 
 
   CanVV     = mkVerb "kunna" "kan" "kunn"  "kunde" "kunnat" "kunnen" ** {isAux = True} ;
   CanKnowVV = mkVerb "kunna" "kan" "kunn"  "kunde" "kunnat" "kunnen" ** {isAux = True} ;

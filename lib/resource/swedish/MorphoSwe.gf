@@ -10,45 +10,7 @@
 
 resource MorphoSwe = TypesSwe ** open Prelude in {
 
--- The indefinite and definite article
 oper
-  artIndef = table {Utr => "en" ; Neutr => "ett"} ;
-
-  artDef : Bool => GenNum => Str = table {
-    True => table {
-      ASg Utr => "den" ;
-      ASg Neutr => "det" ;              -- det gamla huset
-      APl => variants {"de" ; "dom"}
-      } ;
-    False => table {_ => []}            -- huset
-    } ;
-
--- A simplified verb category: present tense only (no more!).
-
-oper
-  verbVara = vara_1200 ;
-  verbHava = hava_1198 ;
-
-  verbFinnas : Verb = vFinna "finn" "fann" "funn" ** {s1 = []} ;
-
-  deponentVerb : Verb -> Verb = \finna -> {
-    s = table {
-      VF (Pres m _) => finna.s ! VF (Pres m Pass) ;
-      VF (Pret m _) => finna.s ! VF (Pret m Pass) ;
-      VI (Inf _)    => finna.s ! VI (Inf Pass) ;
-      VI (Supin _)  => finna.s ! VI (Supin Pass) ;
-      v             => finna.s ! v --- Imper !
-      } ;
-    s1 = finna.s1
-    } ;
-
-{- deprecated 
-
-  verbFinnas = mkVerb "finnas" "finns" "finns" ;
-
--- A simplified conjugation takes three forms in the worst case, plus a particle.
--}
-
   mkVerbPart : (supa,super,sup,söp,supit,supen,upp : Str) -> Verb = 
    \finna,finner,finn,fann,funnit,funnen,upp ->
     let funn = ptPretForms funnen in
