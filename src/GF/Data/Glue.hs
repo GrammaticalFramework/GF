@@ -9,16 +9,14 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- AR 8-11-2003, using Markus Forsberg's implementation of Huet's @unglue@
 -----------------------------------------------------------------------------
 
-module Glue where
+module Glue (decomposeSimple, exTrie) where
 
 import Trie2
 import Operations
 import List
-
--------- AR 8/11/2003, using Markus Forsberg's implementation of Huet's unglue
 
 decomposeSimple :: Trie Char a -> [Char] -> Err [[Char]]
 decomposeSimple t s = do

@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- lookup in GFC. AR 2003
 -----------------------------------------------------------------------------
 
 module Look where
@@ -28,8 +28,6 @@ import Option
 
 import Monad
 import List
-
--- lookup in GFC. AR 2003
 
 -- linearization lookup
 

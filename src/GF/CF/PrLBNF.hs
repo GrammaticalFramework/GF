@@ -9,7 +9,9 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Printing CF grammars generated from GF as LBNF grammar for BNFC.
+-- AR 26/1/2000 -- 9/6/2003 (PPrCF) -- 8/11/2003 -- 27/9/2004.
+-- With primitive error messaging, by rules and rule tails commented out
 -----------------------------------------------------------------------------
 
 module PrLBNF (prLBNF,prBNF) where
@@ -29,10 +31,6 @@ import Modules
 import Char
 import List (nub)
 
--- Printing CF grammars generated from GF as LBNF grammar for BNFC.
--- AR 26/1/2000 -- 9/6/2003 (PPrCF) -- 8/11/2003 -- 27/9/2004
--- With primitive error messaging, by rules and rule tails commented out
-
 prLBNF :: Bool -> StateGrammar -> String
 prLBNF new gr = unlines $ pragmas ++ (map (prCFRule cs) rules)
   where    
@@ -42,7 +40,7 @@ prLBNF new gr = unlines $ pragmas ++ (map (prCFRule cs) rules)
                          then mkLBNF (stateGrammarST gr) $ rulesOfCF cf
                          else ([],rulesOfCF cf) -- "normal" behaviour
 
--- a hack to hide the LBNF details
+-- | a hack to hide the LBNF details
 prBNF :: Bool -> StateGrammar -> String
 prBNF b = unlines . (map (unwords . unLBNF . drop 1 . words)) . lines . prLBNF b
   where
@@ -52,7 +50,7 @@ prBNF b = unlines . (map (unwords . unLBNF . drop 1 . words)) . lines . prLBNF b
       c:ts -> c : unLBNF ts
       _ -> r
 
---- awful low level code without abstraction over label names etc
+--- | awful low level code without abstraction over label names etc
 mkLBNF :: CanonGrammar -> [CFRule] -> ([String],[CFRule])
 mkLBNF gr rules = (coercions, nub $ concatMap mkRule rules) where
   coercions = ["coercions" +++ prt_ c +++ show n +++ ";"  | 
@@ -129,7 +127,7 @@ prLab i = case i of
      L (IC "_") -> "" ---
      _ -> let x = prt i in "_" ++ x ++ if isDigit (last x) then "_" else ""
 
--- just comment out the rest if you cannot interpret the function name in LBNF
+-- | just comment out the rest if you cannot interpret the function name in LBNF
 -- two versions, depending on whether in the beginning of a rule or elsewhere;
 -- in the latter case, error just terminates the rule 
 prErr :: Bool -> String -> String
@@ -138,7 +136,7 @@ prErr b s = (if b then "" else " ;") +++ "---" +++ s
 prCFCat :: Bool -> CFCat -> String
 prCFCat b (CFCat ((CIQ _ c),l)) = prId b c ++ prLab l ----
 
--- if a category does not have a production of its own, we replace it by Ident
+-- | if a category does not have a production of its own, we replace it by Ident
 prCFItem cs (CFNonterm c) = if elem (catIdPlus c) cs then prCFCat False c else "Ident"
 prCFItem _ (CFTerm a) = prRegExp a
 

@@ -12,9 +12,10 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Comments where
+module Comments ( remComments
+		) where
 
--- comment removal : line tails prefixed by -- as well as chunks in {- ... -}
+-- | comment removal : line tails prefixed by -- as well as chunks in {- ... -}
 
 remComments :: String -> String
 remComments s = 

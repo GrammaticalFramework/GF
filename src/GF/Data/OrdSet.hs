@@ -1,29 +1,21 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
--- Stability   : (stable)
--- Portability : (portable)
+-- Module      : OrdSet
+-- Maintainer  : Peter Ljunglöf
+-- Stability   : Obsolete
+-- Portability : Haskell 98
 --
 -- > CVS $Date $ 
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- The class of ordered sets, as described in
+-- "Pure Functional Parsing", section 2.2.1,
+-- and an example implementation
+-- derived from appendix A.1
+--
+-- /OBSOLETE/! this is only used in cf\/ChartParser.hs
 -----------------------------------------------------------------------------
-
-{- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-   Filename:    OrdSet.hs
-   Author:      Peter Ljunglöf
-   Time-stamp:  <2004-05-07 14:16:12 peb>
-
-   Description: The class of ordered sets, as described in
-                "Pure Functional Parsing", section 2.2.1,
-		and an example implementation
-		derived from appendix A.1
-
-  OBSOLETE! this is only used in cf/ChartParser.hs
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -}
 
 module OrdSet (OrdSet(..), Set) where
 

@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : ChartParser
+-- Maintainer  : Peter Ljunglöf
 -- Stability   : (stable)
 -- Portability : (portable)
 --
@@ -9,21 +9,9 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Bottom-up Kilbury chart parser from "Pure Functional Parsing", chapter 5.
+-- OBSOLETE -- should use new MCFG parsers instead 
 -----------------------------------------------------------------------------
-
-{- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-   Filename:    ChartParser.hs
-   Author:      Peter Ljunglöf
-   Time-stamp:  <2004-05-25 02:20:01 peb>
-
-   Description: Bottom-up Kilbury chart parser from 
-                "Pure Functional Parsing", chapter 5
-
-   DESIRED CHANGES: - The modules OrdSet and OrdMap2 are obsolete
-                      and should be changed to newer versions
-		    - Also, should use the CFG parsers in parsing/
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -}
 
 module ChartParser (chartParser) where
 

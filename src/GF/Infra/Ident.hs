@@ -17,14 +17,17 @@ module Ident where
 import Operations
 -- import Monad
 
+
+-- | the constructors labelled /INTERNAL/ are
+-- internal representation never returned by the parser
 data Ident = 
-   IC String            -- raw identifier after parsing, resolved in Rename
- | IW                   -- wildcard
+   IC String            -- ^ raw identifier after parsing, resolved in Rename
+ | IW                   -- ^ wildcard
 
 -- below this line: internal representation never returned by the parser
- | IV (Int,String)      -- variable
- | IA (String,Int)      -- argument of cat at position
- | IAV (String,Int,Int) -- argument of cat with bindings at position
+ | IV (Int,String)      -- ^ /INTERNAL/ variable
+ | IA (String,Int)      -- ^ /INTERNAL/ argument of cat at position
+ | IAV (String,Int,Int) -- ^ /INTERNAL/ argument of cat with bindings at position
 
   deriving (Eq, Ord, Show, Read)
 
@@ -42,14 +45,14 @@ prIdent i = case i of
 -- normal identifier
 -- ident s = IC s
 
--- to mark argument variables
+-- | to mark argument variables
 argIdent 0 (IC c) i = identA  (c,i)
 argIdent b (IC c) i = identAV (c,b,i)
 
--- used in lin defaults
+-- | used in lin defaults
 strVar = identA ("str",0)
 
--- wild card
+-- | wild card
 wildIdent = identW
 
 isWildIdent :: Ident -> Bool

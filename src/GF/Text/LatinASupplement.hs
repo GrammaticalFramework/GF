@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module LatinASupplement where
+module LatinASupplement (mkLatinASupplement) where
 
 mkLatinASupplement :: String -> String
 mkLatinASupplement = mkLatinASupplementWord

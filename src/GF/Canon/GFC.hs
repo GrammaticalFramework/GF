@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- canonical GF. AR 10\/9\/2002 -- 9\/5\/2003 -- 21\/9
 -----------------------------------------------------------------------------
 
 module GFC where
@@ -25,8 +25,6 @@ import Operations
 import qualified Modules as M
 
 import Char
-
--- canonical GF. AR 10/9/2002 -- 9/5/2003 -- 21/9
 
 type Context = [(Ident,Exp)]
 
@@ -44,7 +42,7 @@ data Info =
  | AbsTrans A.Term
 
  | ResPar  [ParDef]
- | ResOper CType Term     -- global constant
+ | ResOper CType Term     -- ^ global constant
  | CncCat  CType Term Printname
  | CncFun  CIdent [ArgVar] Term Printname
  | AnyInd Bool Ident

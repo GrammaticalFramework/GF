@@ -9,10 +9,10 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- a decompiler. AR 12/6/2003 -- 19/4/2004
 -----------------------------------------------------------------------------
 
-module CanonToGrammar where
+module CanonToGrammar (canon2sourceGrammar, canon2sourceModule, redFlag) where
 
 import AbsGFC
 import GFC
@@ -27,8 +27,6 @@ import Ident
 import Operations
 
 import Monad
-
--- a decompiler. AR 12/6/2003 -- 19/4/2004
 
 canon2sourceGrammar :: CanonGrammar -> Err G.SourceGrammar
 canon2sourceGrammar gr = do

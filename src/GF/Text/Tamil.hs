@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Tamil where
+module Tamil (mkTamil) where
 
 mkTamil :: String -> String
 mkTamil = digraphWordToUnicode . adHocToDigraphWord

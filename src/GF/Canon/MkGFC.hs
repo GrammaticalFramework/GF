@@ -12,7 +12,10 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module MkGFC where
+module MkGFC (prCanonModInfo, prCanon, prCanonMGr, 
+	      canon2grammar, grammar2canon, 
+	      info2mod,
+	      trExp, rtExp, rtQIdent) where
 
 import GFC
 import AbsGFC

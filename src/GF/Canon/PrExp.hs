@@ -9,19 +9,15 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- print trees without qualifications
 -----------------------------------------------------------------------------
 
-module PrExp where
+module PrExp (prExp) where
 
 import AbsGFC
 import GFC
 
 import Operations
-
--- some printing
-
--- print trees without qualifications
 
 prExp :: Exp -> String
 prExp e = case e of

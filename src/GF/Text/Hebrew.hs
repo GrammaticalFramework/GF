@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Hebrew where
+module Hebrew (mkHebrew) where
 
 mkHebrew :: String -> String
 mkHebrew = mkHebrewWord

@@ -9,18 +9,16 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- elementary text postprocessing. AR 21/11/2001
 -----------------------------------------------------------------------------
 
-module Unlex where
+module Unlex (formatAsText, unlex, performBinds) where
 
 import Operations
 import Str
 
 import Char
 import List (isPrefixOf)
-
--- elementary text postprocessing. AR 21/11/2001
 
 formatAsText :: String -> String
 formatAsText = unwords . format . cap . words where
@@ -40,7 +38,7 @@ formatAsText = unwords . format . cap . words where
 unlex :: [Str] -> String
 unlex = formatAsText . performBinds . concat . map sstr . take 1 ----
 
--- modified from GF/src/Text by adding hyphen
+-- | modified from GF/src/Text by adding hyphen
 performBinds :: String -> String
 performBinds = unwords . format . words where
   format ws = case ws of

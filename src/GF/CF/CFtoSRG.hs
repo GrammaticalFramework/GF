@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : CFtoSRG
+-- Maintainer  : Markus Forsberg
 -- Stability   : (stable)
 -- Portability : (portable)
 --
@@ -9,27 +9,12 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- This module prints a CF as a SRG (Speech Recognition Grammar).
+-- Created : 21 January, 2001.
+-- Modified : 16 April, 2004 by Aarne Ranta for GF 2.
 -----------------------------------------------------------------------------
 
-{- 
-   **************************************************************
-    GF Module
-   
-    Description   : This module prints a CF as a SRG (Speech 
-                    Recognition Grammar).
-
-    Author        : Markus Forsberg (markus@cs.chalmers.se)
-
-    License       : GPL (GNU General Public License)
-
-    Created       : 21 January, 2001                           
-
-    Modified      : 16 April, 2004 by Aarne Ranta for GF 2
-   ************************************************************** 
--}
-
-module CFtoSRG where
+module CFtoSRG (prSRG) where
 
 import Operations
 import CF

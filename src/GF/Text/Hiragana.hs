@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Hiragana where
+module Hiragana (mkJapanese) where
 
 -- long vowel romaaji must be ei, ou not ee, oo  
 

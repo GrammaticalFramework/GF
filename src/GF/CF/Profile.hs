@@ -9,7 +9,8 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- restoring parse trees for discontinuous constituents, bindings, etc. AR 25/1/2001
+-- revised 8/4/2002 for the new profile structure
 -----------------------------------------------------------------------------
 
 module Profile (postParse) where
@@ -29,23 +30,21 @@ import Operations
 import Monad
 import List (nub)
 
-
--- restoring parse trees for discontinuous constituents, bindings, etc. AR 25/1/2001
--- revised 8/4/2002 for the new profile structure
-
+-- | the job is done in two passes: 
+-- 
+--   1. tree2term: restore constituent order from Profile 
+-- 
+--   2. term2trm:  restore Bindings from Binds
 postParse :: CFTree -> Err Exp
 postParse tree = do
   iterm <- errIn ("postprocessing parse tree" +++ prCFTree tree) $ tree2term tree
   return $ term2trm  iterm
 
--- an intermediate data structure
+-- | an intermediate data structure
 data ITerm = ITerm (Atom, BindVs) [ITerm] | IMeta   deriving (Eq,Show)
 type BindVs = [[I.Ident]]
 
--- the job is done in two passes: 
--- (1) tree2term: restore constituent order from Profile 
--- (2) term2trm:  restore Bindings from Binds
-
+-- | (1) restore constituent order from Profile 
 tree2term :: CFTree -> Err ITerm
 -- tree2term (CFTree (f,(_,[t]))) | f == dummyCFFun = tree2term t -- not used
 tree2term (CFTree (cff@(CFFun (fun,pro)), (_,trees))) = case fun of
@@ -93,6 +92,7 @@ tree2term (CFTree (cff@(CFFun (fun,pro)), (_,trees))) = case fun of
          testErr (all (==y) ys) ("fail to unify bindings of" +++ prt y)
          return y
 
+-- | (2) restore Bindings from Binds
 term2trm :: ITerm -> Exp 
 term2trm IMeta = EAtom (AM 0) ---- mExp0
 term2trm (ITerm (fun, binds) terms) =

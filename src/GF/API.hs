@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : API
+-- Maintainer  : Aarne Ranta
 -- Stability   : (stable)
 -- Portability : (portable)
 --
@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 -----------------------------------------------------------------------------
 
 module API where
@@ -71,8 +71,6 @@ import Zipper
 import List (nub)
 import Monad (liftM)
 import System (system)
-
--- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 
 type GFGrammar = StateGrammar
 type GFCat     = CFCat
@@ -279,7 +277,7 @@ optParseArgErrMsg opts gr s = do
     _ -> return ts
   return (ts',m)
 
--- analyses word by word
+-- | analyses word by word
 morphoAnalyse :: Options -> GFGrammar -> String -> String
 morphoAnalyse opts gr 
   | oElem beShort opts = morphoTextShort mo 
@@ -318,7 +316,7 @@ optPrintSyntax opts = customOrDefault opts grammarPrinter customSyntaxPrinter
 optPrintTree :: Options -> GFGrammar -> Tree -> String
 optPrintTree opts = customOrDefault opts grammarPrinter customTermPrinter
 
--- look for string command (-filter=x)
+-- | look for string command (-filter=x)
 optStringCommand :: Options -> GFGrammar -> String -> String
 optStringCommand opts g = 
   optIntOrAll opts flagLength .  
@@ -352,19 +350,19 @@ optTokenizer opts gr = show . customOrDefault opts useTokenizer customTokenizer 
 
 -- performs UTF8 if the language does not have flag coding=utf8; replaces name*U
 
--- convert a Unicode string into a UTF8 encoded string
+-- | convert a Unicode string into a UTF8 encoded string
 optEncodeUTF8 :: GFGrammar -> String -> String
 optEncodeUTF8 gr = case getOptVal (stateOptions gr) uniCoding of
   Just "utf8" -> id
   _ -> encodeUTF8
 
--- convert a UTF8 encoded string into a Unicode string
+-- | convert a UTF8 encoded string into a Unicode string
 optDecodeUTF8 :: GFGrammar -> String -> String
 optDecodeUTF8 gr = case getOptVal (stateOptions gr) uniCoding of
   Just "utf8" -> decodeUTF8 
   _ -> id
 
--- convert a string encoded with some coding given by the coding flag to UTF8
+-- | convert a string encoded with some coding given by the coding flag to UTF8
 anyCodingToUTF8 :: Options -> String -> String
 anyCodingToUTF8 opts = 
     encodeUTF8 . customOrDefault opts uniCoding customUniCoding

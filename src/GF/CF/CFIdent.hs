@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- symbols (categories, functions) for context-free grammars.
 -----------------------------------------------------------------------------
 
 module CFIdent where
@@ -24,19 +24,17 @@ import PrGrammar
 import Str
 import Char (toLower, toUpper)
 
--- symbols (categories, functions) for context-free grammars.
-
--- these types should be abstract
-
+-- this type should be abstract
 data CFTok = 
-   TS String     -- normal strings
- | TC String     -- strings that are ambiguous between upper or lower case
- | TL String     -- string literals
- | TI Int        -- integer literals
- | TV Ident      -- variables
- | TM Int String -- metavariables; the integer identifies it
+   TS String     -- ^ normal strings
+ | TC String     -- ^ strings that are ambiguous between upper or lower case
+ | TL String     -- ^ string literals
+ | TI Int        -- ^ integer literals
+ | TV Ident      -- ^ variables
+ | TM Int String -- ^ metavariables; the integer identifies it
   deriving (Eq, Ord, Show)
 
+-- | this type should be abstract
 newtype CFCat = CFCat (CIdent,Label) deriving (Eq, Ord, Show)
 
 tS, tC, tL, tI, tV, tM :: String -> CFTok
@@ -59,7 +57,7 @@ prCFTok t = case t of
   TV x -> prt x
   TM i m -> m --- "?" --- m
 
--- to build trees: the Atom contains a GF function, Cn | Meta | Vr | Literal
+-- | to build trees: the Atom contains a GF function, @Cn | Meta | Vr | Literal@
 newtype CFFun = CFFun (Atom, Profile) deriving (Eq,Ord,Show) 
 -- - - - - - - - - - - - - - - - - - - - -         ^^^ added by peb, 21/5-04 
 
@@ -83,7 +81,7 @@ varCFFun = mkCFFun . AV
 consCFFun :: CIdent -> CFFun
 consCFFun = mkCFFun . AC
 
--- standard way of making cf fun
+-- | standard way of making cf fun
 string2CFFun :: String -> String -> CFFun
 string2CFFun m c = consCFFun $ mkCIdent m c
 
@@ -115,14 +113,14 @@ metaCFFun = mkCFFun $ AM 0
 
 -- to construct CF categories
 
--- belongs elsewhere
+-- | belongs elsewhere
 mkCIdent :: String -> String -> CIdent
 mkCIdent m c = CIQ (identC m) (identC c)
 
 ident2CFCat :: CIdent -> Ident -> CFCat
 ident2CFCat mc d = CFCat (mc, L d)
 
--- standard way of making cf cat: label s
+-- | standard way of making cf cat: label s
 string2CFCat :: String -> String -> CFCat
 string2CFCat m c = ident2CFCat (mkCIdent m c) (identC "s")
 
@@ -135,7 +133,7 @@ catVarCF = ident2CFCat (mkCIdent "_" "#Var") (identC "_") ----
 cat2CFCat :: (Ident,Ident) -> CFCat
 cat2CFCat = uncurry idents2CFCat
 
----- literals
+-- | literals
 cfCatString = string2CFCat (prt cPredefAbs) "String"
 cfCatInt = string2CFCat (prt cPredefAbs) "Int"
 
@@ -149,7 +147,7 @@ uCFCat = cat2CFCat uCat
 moduleOfCFCat :: CFCat -> Ident
 moduleOfCFCat (CFCat (CIQ m _, _)) = m
 
--- the opposite direction
+-- | the opposite direction
 cfCat2Cat :: CFCat -> (Ident,Ident)
 cfCat2Cat (CFCat (CIQ m c,_)) = (m,c)
 
@@ -179,12 +177,11 @@ compatTok t u = any (`elem` (alts t)) (alts u) where
     TC (c:s) -> [toLower c : s, toUpper c : s]
     _ -> [prCFTok u]
 
--- decide if two CFFuns have the same function head (profiles may differ)
-
+-- | decide if two CFFuns have the same function head (profiles may differ)
 compatCFFun :: CFFun -> CFFun -> Bool
 compatCFFun (CFFun (f,_)) (CFFun (g,_)) = f == g
 
--- decide whether two categories match
+-- | decide whether two categories match
 -- the modifiers can be from different modules, but on the same extension
 -- path, so there is no clash, and they can be safely ignored ---
 compatCF :: CFCat -> CFCat -> Bool

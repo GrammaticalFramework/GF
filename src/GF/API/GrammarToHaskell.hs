@@ -9,7 +9,9 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- to write a GF abstract grammar into a Haskell module with translations from
+-- data objects into GF trees. Example: GSyntax for Agda.
+-- AR 11/11/1999 -- 7/12/2000 -- 18/5/2004
 -----------------------------------------------------------------------------
 
 module GrammarToHaskell (grammar2haskell) where
@@ -20,17 +22,13 @@ import Macros
 import Modules
 import Operations
 
--- to write a GF abstract grammar into a Haskell module with translations from
--- data objects into GF trees. Example: GSyntax for Agda.
--- AR 11/11/1999 -- 7/12/2000 -- 18/5/2004
-
--- the main function
+-- | the main function
 grammar2haskell :: GFC.CanonGrammar -> String
 grammar2haskell gr = foldr (++++) [] $  
   haskPreamble ++ [datatypes gr', gfinstances gr', fginstances gr']
     where gr' = hSkeleton gr
 
--- by this you can prefix all identifiers with stg; the default is 'G'
+-- | by this you can prefix all identifiers with stg; the default is 'G'
 gId :: OIdent -> OIdent 
 gId i = 'G':i
 

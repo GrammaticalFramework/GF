@@ -9,17 +9,15 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- template to define your own parser
 -----------------------------------------------------------------------------
 
-module MyParser where
+module MyParser (myParser) where
 
 import ShellState
 import CFIdent
 import CF
 import Operations
-
--- template to define your own parser
 
 -- type CFParser = [CFTok] -> ([(CFTree,[CFTok])],String)
 

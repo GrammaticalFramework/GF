@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- for reading grammars and terms from strings and files
 -----------------------------------------------------------------------------
 
 module IOGrammar where
@@ -30,9 +30,7 @@ import Arch
 
 import Monad (liftM)
 
--- for reading grammars and terms from strings and files
-
---- a heuristic way of renaming constants is used
+-- | a heuristic way of renaming constants is used
 string2absTerm :: String -> String -> Term 
 string2absTerm m = renameTermIn m . pTrm
 

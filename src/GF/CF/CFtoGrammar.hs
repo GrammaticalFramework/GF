@@ -9,10 +9,10 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- 26\/1\/2000 -- 18\/4 -- 24\/3\/2004
 -----------------------------------------------------------------------------
 
-module CFtoGrammar where
+module CFtoGrammar (cf2grammar) where
 
 import Ident
 import Grammar
@@ -28,8 +28,6 @@ import Operations
 
 import List (nub)
 import Char (isSpace)
-
--- 26/1/2000 -- 18/4 -- 24/3/2004
 
 cf2grammar :: CF -> [A.TopDef]
 cf2grammar cf = concatMap S.trAnyDef (abs ++ conc) where

@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Greek where
+module Greek (mkGreek) where
 
 mkGreek :: String -> String
 mkGreek = unwords . (map mkGreekWord) . mkGravis . words

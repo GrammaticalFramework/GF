@@ -9,10 +9,10 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- AR 27\/1\/2000 -- 3\/12\/2001 -- 8\/6\/2003 
 -----------------------------------------------------------------------------
 
-module CanonToCF where
+module CanonToCF (canon2cf) where
 
 import Tracing -- peb 8/6-04
 
@@ -33,12 +33,9 @@ import Trie2
 import List (nub,partition)
 import Monad
 
--- AR 27/1/2000 -- 3/12/2001 -- 8/6/2003 
-
--- The main function: for a given cnc module m, build the CF grammar with all the
--- rules coming from modules that m extends. The categories are qualified by
--- the abstract module name a that m is of.
-
+-- | The main function: for a given cnc module 'm', build the CF grammar with all the
+-- rules coming from modules that 'm' extends. The categories are qualified by
+-- the abstract module name 'a' that 'm' is of.
 canon2cf :: Options -> CanonGrammar -> Ident -> Err CF
 canon2cf opts gr c = tracePrt "#size of CF" (err id (show.length.rulesOfCF)) $ do -- peb 8/6-04
   let ms = M.allExtends gr c
@@ -60,20 +57,20 @@ cnc2cfCond opts m gr =
 type IFun = Ident
 type ICat = CIdent
 
--- all CF rules corresponding to a linearization rule
+-- | all CF rules corresponding to a linearization rule
 lin2cf :: (Ident, IFun, ICat, [ArgVar], Term) -> Err [CFRule]
 lin2cf (m,fun,cat,args,lin) = errIn ("building CF rule for" +++ prt fun) $ do
   rhss0  <- allLinValues lin                   -- :: [(Label, [([Patt],Term)])]
   rhss1  <- mapM (mkCFItems m) (concat rhss0)  -- :: [(Label, [[PreCFItem]])]
   mapM (mkCfRules m fun cat args) rhss1 >>= return . nub . concat
 
--- making sequences of CF items from every branch in a linearization
+-- | making sequences of CF items from every branch in a linearization
 mkCFItems :: Ident -> (Label, [([Patt],Term)]) -> Err (Label, [[PreCFItem]])
 mkCFItems m (lab,pts) = do
   itemss <- mapM (term2CFItems m) (map snd pts)
   return (lab, concat itemss) ---- combinations? (test!)
 
--- making CF rules from sequences of CF items
+-- | making CF rules from sequences of CF items
 mkCfRules :: Ident -> IFun -> ICat -> [ArgVar] -> (Label, [[PreCFItem]]) -> Err [CFRule]
 mkCfRules m fun cat args (lab, itss) = mapM mkOneRule itss
  where
@@ -91,10 +88,10 @@ mkCfRules m fun cat args (lab, itss) = mapM mkOneRule itss
         where
           mkB x = [k | (k,(j, LV y,False)) <- nonterms, j == i, y == x]
 
--- intermediate data structure of CFItems with information for profiles
+-- | intermediate data structure of CFItems with information for profiles
 data PreCFItem = 
-    PTerm RegExp                       -- like ordinary Terminal 
-  | PNonterm CIdent Integer Label Bool -- cat, position, part/bind, whether arg
+    PTerm RegExp                       -- ^ like ordinary Terminal 
+  | PNonterm CIdent Integer Label Bool -- ^ cat, position, part\/bind, whether arg
    deriving Eq                    
 
 precf2cf :: PreCFItem -> CFItem
@@ -103,7 +100,7 @@ precf2cf (PNonterm cm _ (L c) True) = CFNonterm (ident2CFCat cm c)
 precf2cf (PNonterm _ _ _ False) = CFNonterm catVarCF
 
 
--- the main job in translating linearization rules into sequences of cf items 
+-- | the main job in translating linearization rules into sequences of cf items 
 term2CFItems :: Ident -> Term -> Err [[PreCFItem]]
 term2CFItems m t = errIn "forming cf items" $ case t of
    S c _ -> t2c c

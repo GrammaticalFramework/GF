@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Devanagari where
+module Devanagari (mkDevanagari) where
 
 mkDevanagari :: String -> String
 mkDevanagari = digraphWordToUnicode . adHocToDigraphWord

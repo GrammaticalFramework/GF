@@ -1,9 +1,9 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
--- Stability   : (stable)
--- Portability : (portable)
+-- Module      : Trie2
+-- Maintainer  : Markus Forsberg
+-- Stability   : Stable
+-- Portability : Haskell 98
 --
 -- > CVS $Date $ 
 -- > CVS $Author $
@@ -12,12 +12,6 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-{- 
-   **************************************************************
-   * Author        : Markus Forsberg                            *
-   *                 markus@cs.chalmers.se                      *
-   ************************************************************** 
--}
 module Trie2 (
              tcompile,
 	     collapse,
