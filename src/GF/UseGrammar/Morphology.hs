@@ -15,40 +15,33 @@ import Glue
 import Char
 import List (sortBy, intersperse)
 import Monad (liftM)
+import Trie2
 
 -- construct a morphological analyser from a GF grammar. AR 11/4/2001
 
--- we have found the binary search tree sorted by word forms more efficient
+-- we first found the binary search tree sorted by word forms more efficient
 -- than a trie, at least for grammars with 7000 word forms
+-- (18/11/2003) but this may change since we have to use a trie 
+-- for decompositions and also want to use it in the parser
 
-type Morpho = BinTree (String,[String])
+type Morpho = Trie Char String
 
-emptyMorpho = NT
+emptyMorpho = emptyTrie
 
--- with literals
 appMorpho :: Morpho -> String -> (String,[String])
-appMorpho m s = (s, ps ++ ms) where
-  ms = case lookupTree id s m of
-    Ok vs -> vs
-    _ -> []
-  ps = [] ---- case lookupLiteral s of
-    ---- Ok (t,_) -> [tagPrt t]
-    ---- _ -> []
+appMorpho = appMorphoOnly
+---- add lookup for literals
 
 -- without literals
 appMorphoOnly :: Morpho -> String -> (String,[String])
-appMorphoOnly m s = (s, ms) where
-  ms = case lookupTree id s m of
-    Ok vs -> vs
-    _ -> []
+appMorphoOnly m s = trieLookup m s
 
 -- recognize word, exluding literals
 isKnownWord :: Morpho -> String -> Bool
 isKnownWord mo = not . null . snd . appMorphoOnly mo
 
 mkMorpho :: CanonGrammar -> Ident -> Morpho 
----- mkMorpho gr = emptyMorpho ----
-mkMorpho gr a = mkMorphoTree $ concat $ map mkOne $ allItems where
+mkMorpho gr a = tcompile $ concatMap mkOne $ allItems where
 
   mkOne (Left (fun,c))  = map (prOne fun c) $ allLins fun
   mkOne (Right (fun,_)) = map (prSyn fun) $ allSyns fun
@@ -58,14 +51,14 @@ mkMorpho gr a = mkMorphoTree $ concat $ map mkOne $ allItems where
     ts <- allLinsOfFun gr (CIQ a f)  
     ss <- mapM (mapPairsM (mapPairsM (return . wordsInTerm))) ts
     return [(p,s) | (p,fs) <- concat $ map snd $ concat ss, s <- fs]
-  prOne (_,f) c (ps,s) = (s, prt f +++ tagPrt c ++ concat (map prt_ ps))
+  prOne (_,f) c (ps,s) = (s, [prt f +++ tagPrt c +++ unwords (map prt_ ps)])
 
   -- gather syncategorematic words
   allSyns fun@(m,f) = errVal [] $ do
     tss <- allLinsOfFun gr (CIQ a f) 
     let ss = [s | ts <- tss, (_,fs) <- ts, (_,s) <- fs]
     return $ concat $ map wordsInTerm ss
-  prSyn f s = (s, "+<syncategorematic>" ++ tagPrt f)
+  prSyn f s = (s, ["+<syncategorematic>" ++ tagPrt f])
 
   -- all words, Left from lexical rules and Right syncategorematic
   allItems = [lexRole t (f,c) | (f,c,t) <- allFuns] where
@@ -77,7 +70,7 @@ mkMorpho gr a = mkMorphoTree $ concat $ map mkOne $ allItems where
 -- printing full-form lexicon and results
 
 prMorpho :: Morpho -> String
-prMorpho = unlines . map prMorphoAnalysis . tree2list
+prMorpho = unlines . map prMorphoAnalysis . collapse
 
 prMorphoAnalysis :: (String,[String]) -> String
 prMorphoAnalysis (w,fs) = unlines (w:fs)
@@ -92,7 +85,7 @@ tagPrt (m,c) = "+" ++ prt c --- module name
 -- print all words recognized
 
 allMorphoWords :: Morpho -> [String]
-allMorphoWords = map fst . tree2list
+allMorphoWords = map fst . collapse
 
 -- analyse running text and show results either in short form or on separate lines
 morphoTextShort mo = unwords . map (prMorphoAnalysisShort . appMorpho mo) . words
@@ -100,7 +93,7 @@ morphoText mo = unlines . map (('\n':) . prMorphoAnalysis . appMorpho mo) . word
 
 -- format used in the Italian Verb Engine
 prFullForm :: Morpho -> String
-prFullForm = unlines . map prOne . tree2list where
+prFullForm = unlines . map prOne . collapse where
   prOne (s,ps) = s ++ " : " ++ unwords (intersperse "/" ps)
 
 -- using Huet's unglueing method to find word boundaries
@@ -109,21 +102,4 @@ prFullForm = unlines . map prOne . tree2list where
 ---- Moreover, we should specify the cases in which this happens - not all words
 
 decomposeWords :: Morpho -> String -> [String]
-decomposeWords mo s = errVal (words s) $
-  decomposeSimple (tcompileSimple (map fst $ tree2list mo)) s
-
--- auxiliaries
-
-mkMorphoTree :: (Ord a, Eq b) => [(a,b)] -> BinTree (a,[b])
-mkMorphoTree = sorted2tree . sortAssocs
-
-sortAssocs :: (Ord a, Eq b) => [(a,b)] -> [(a,[b])]
-sortAssocs = arrange . sortBy (\ (x,_) (y,_) -> compare x y) where
-  arrange ((x,v):xvs) = arr x [v] xvs
-  arrange [] = []
-  arr y vs xs = case xs of
-    (x,v):xvs -> if x==y then arr y vvs xvs else (y,vs) : arr x [v] xvs
-                    where vvs = if elem v vs then vs else (v:vs)
-    _ -> [(y,vs)]
-    
-
+decomposeWords mo s = errVal (words s) $ decomposeSimple mo s

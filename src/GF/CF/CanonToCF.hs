@@ -12,6 +12,7 @@ import qualified Modules as M
 import CF
 import CFIdent
 import Morphology
+import Trie2
 import List (nub,partition)
 import Monad
 
@@ -152,28 +153,26 @@ mkCFPredef :: Options -> [CFRuleGroup] -> ([CFRuleGroup],CFPredef)
 mkCFPredef opts rules = (ruls, \s -> preds0 s ++ look s) where
   (ruls,preds) = if oElem lexerByNeed opts  -- option -cflexer
                    then predefLexer rules 
-                   else (rules,NT)
+                   else (rules,emptyTrie)
   preds0 s = 
     [(cat,         metaCFFun)     | TM _ _ <- [s], cat <- cats] ++
     [(cat,         varCFFun x)    | TV x   <- [s], cat <- cats] ++
     [(cfCatString, stringCFFun t) | TL t   <- [s]]              ++
     [(cfCatInt,    intCFFun t)    | TI t   <- [s]]
   cats = map fst rules
-  look s = errVal [] $ liftM concat $ 
-             mapM (flip justLookupTree preds . tS) $ wordsCFTok s --- for TC tokens
+  look = concatMap snd . map (trieLookup preds) . wordsCFTok --- for TC tokens
 
---- TODO: use trie instead of bintree; integrate with morphology
-predefLexer :: [CFRuleGroup] -> ([CFRuleGroup],BinTree (CFTok,[(CFCat, CFFun)]))
-predefLexer groups = (reverse ruls, sorted2tree $ sortAssocs preds) where
+--- TODO: integrate with morphology
+--- predefLexer :: [CFRuleGroup] -> ([CFRuleGroup],BinTree (CFTok,[(CFCat, CFFun)]))
+predefLexer groups = (reverse ruls, tcompile preds) where
   (ruls,preds) = foldr mkOne ([],[]) groups
   mkOne group@(cat,rules) (rs,ps) = (rule:rs,pre ++ ps) where
     (rule,pre) = case partition isLexical rules of
       ([],_) -> (group,[])
-      (ls,rest) -> ((cat,rest), concatMap mkLexRule ls) --- useLexRule cat : rest
+      (ls,rest) -> ((cat,rest), concatMap mkLexRule ls)
   isLexical (f,(c,its)) = case its of
     [CFTerm (RegAlts ws)] -> True
     _ -> False
---  useLexRule cat = (dummyCFFun,(cat,[CFNonterm (lexCFCat cat)])) -- not needed
   mkLexRule r = case r of
-    (fun,(cat,[CFTerm (RegAlts ws)])) -> [(tS w, (cat,fun)) | w <- ws]
+    (fun,(cat,[CFTerm (RegAlts ws)])) -> [(w, [(cat,fun)]) | w <- ws]
     _ -> []
