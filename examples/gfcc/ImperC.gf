@@ -43,6 +43,7 @@ concrete ImperC of Imper = open ResImper in {
     ESub _     = infixL 2 "-" ;
     ELt _      = infixN 1 "<" ;
 
+    EAppNil val f = constant (f.s ++ paren []) ;
     EApp args val f exps = constant (f.s ++ paren exps.s) ;
 
     TNum t  = t ;
@@ -50,8 +51,6 @@ concrete ImperC of Imper = open ResImper in {
     TFloat  = ss "float" ;
     NilTyp  = ss [] ;
     ConsTyp = cc2 ;
-
-    NilExp = ss [] ;
     OneExp _ e = e ;
     ConsExp _ _ e es = ss (e.s ++ "," ++ es.s) ;
 }

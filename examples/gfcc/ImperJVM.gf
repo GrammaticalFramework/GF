@@ -75,6 +75,9 @@ flags lexer=codevars ; unlexer=code ; startcat=Stm ;
     ESub       = binopt "_sub" ;
     EMul       = binopt "_mul" ;
     ELt t      = binop ("invokestatic" ++ t.s ++ "runtime/lt" ++ paren (t.s ++ t.s) ++ "i") ;
+    EAppNil val f = instr (
+      "invokestatic" ++ f.s ++ paren [] ++ val.s
+      ) ;
     EApp args val f exps = instr (
       exps.s ++
       "invokestatic" ++ f.s ++ paren args.s ++ val.s
@@ -83,11 +86,8 @@ flags lexer=codevars ; unlexer=code ; startcat=Stm ;
     TNum t = t ;
     TInt   = ss "i" ;
     TFloat = ss "f" ;
-
     NilTyp = ss [] ;
     ConsTyp = cc2 ;
-
-    NilExp = ss [] ;
     OneExp _ e = e ;
     ConsExp _ _ = cc2 ;
 }
