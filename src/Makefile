@@ -1,5 +1,6 @@
 GHMAKE=ghc 
 GHCFLAGS=-package lang -package util -fglasgow-exts
+GHCOPTFLAGS=-O -package lang -package util -fglasgow-exts
 GHCFUDFLAG=-package Fudgets
 GHCINCLUDE=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc -iparsing -iparsers
 GHCINCLUDENOFUD=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc-nofud -iparsing -iparsers
@@ -9,11 +10,14 @@ WINDOWSINCLUDE=-ifor-windows -iapi -icompile -igrammar -iinfra -ishell -isource 
 all:
 	make today ; make ghc
 unix:
-	make nofud-links ; make ghc
+	make nofud-links ; make opt
 windows:
 	make nofud-links ; make justwindows
 install-java:
 	make javac ; cd ../bin ; ln -s ../src/java ; echo "PLEASE edit GFHOME in bin/jgf2"
+opt:
+	$(GHMAKE) $(GHCOPTFLAGS) $(GHCINCLUDENOFUD) --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
+
 ghc: 
 	make nofud
 fud:
@@ -23,7 +27,7 @@ gft:
 nofud:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
 justwindows:
-	$(GHMAKE) $(GHCFLAGS) $(WINDOWSINCLUDE) --make GF.hs -o gf2.exe ; strip gf2.exe ; mv gf2.exe ../bin/
+	$(GHMAKE) $(GHCOPTFLAGS) $(WINDOWSINCLUDE) --make GF.hs -o gf2.exe ; strip gf2.exe ; mv gf2.exe ../bin/
 nofud-links:
 	cd for-ghc-nofud ; rm -f *.hs ; ln -s ../for-ghc/Arch.hs ; ln -s ../for-hugs/ArchEdit.hs ; cd ..
 batch: 
