@@ -1,1 +1,1 @@
-module Today where today = "Wed Sep 24 17:15:34 CEST 2003"
+module Today where today = "Thu Sep 25 14:28:54 CEST 2003"

@@ -63,6 +63,7 @@ pCommand = pCommandWords . words where
     "<<" : _      -> CPrevMeta
     "'" : _       -> CTop
     "+" : _       -> CLast
+    "mp" : p      -> CMovePosition (readIntList (unwords p))
     "r" : f : _   -> CRefineWithAtom f
     "w" : f:i : _ -> CWrapWithFun (strings2Fun f, readIntArg i)
     "ch": f : _   -> CChangeHead (strings2Fun f)
@@ -133,3 +134,9 @@ initEditMsgEmpty env = initEditMsg env +++++ unlines (
 showCurrentState env' state' =
   unlines (tr ++ ["",""] ++ msg ++ ["",""] ++ map fst menu) 
                  where (tr,msg,menu) = displaySStateIn env' state'
+
+-- to read position; borrowed from Prelude; should be elsewhere
+readIntList :: String -> [Int]
+readIntList s = case [x | (x,t) <- reads s, ("","") <- lex t] of
+                  [x] -> x
+                  _   -> []

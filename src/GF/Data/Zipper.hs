@@ -100,6 +100,16 @@ goLast :: Loc a -> Err (Loc a)
 goLast = rep goAhead where
   rep f s = err (const (return s)) (rep f) (f s)
 
+goPosition :: [Int] -> Loc a -> Err (Loc a)
+goPosition p = go p . goRoot where
+  go []     s = return s
+  go (p:ps) s = goDown s >>= apply p goRight >>= go ps
+
+apply :: Monad m => Int -> (a -> m a) -> a -> m a
+apply n f a = case n of
+  0 -> return a
+  _ -> f a >>= apply (n-1) f
+
 -- added some utilities
 
 traverseCollect :: Path a -> [a]
