@@ -159,7 +159,7 @@ linearizeToStrss gr mk e = do
   R rs <- linearizeToRecord gr mk e ----
   t <- lookupErr linLab0 [(r,s) | Ass r s <- rs]
   return $ map strsFromTerm $ allInTable t 
-  
+-}
 
 -- the value is a list of strings, not forgetting their arguments
 allLinsOfFun :: CanonGrammar -> CIdent -> Err [[(Label,[([Patt],Term)])]]
@@ -167,9 +167,6 @@ allLinsOfFun gr f = do
   t <- lookupLin gr f 
   allLinValues t
 
-
-
--}
 
 -- returns printname if one exists; otherwise linearizes with metas
 

@@ -172,6 +172,8 @@ data Exp =
  | EConcat Exp Exp
  | EGlue Exp Exp
  | ELet [LocDef] Exp
+ | ELetb [LocDef] Exp
+ | EWhere Exp [LocDef]
  | EEqs [Equation]
  | ELString LString
  | ELin Ident

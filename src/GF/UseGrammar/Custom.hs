@@ -21,11 +21,13 @@ import CFIdent
 
 ---- import CFtoGrammar
 import PPrCF
+import PrLBNF
 import PrGrammar
+import MkGFC
 
 import Zipper
 
-----import Morphology
+import Morphology
 -----import GrammarToHaskell
 -----import GrammarToCanon (showCanon, showCanonOpt)
 -----import qualified GrammarToGFC as GFC
@@ -141,16 +143,16 @@ customGrammarParser =
 customGrammarPrinter = 
   customData "Grammar printers, selected by option -printer=x" $
   [
-----   (strCI "gf",      prt)  -- DEFAULT
-  (strCI "cf",      prCF . stateCF)
-
+   (strCI "gfc",     prCanon . stateGrammarST) -- DEFAULT
+  ,(strCI "cf",      prCF . stateCF)
+  ,(strCI "lbnf",    prLBNF . stateCF)
+  ,(strCI "morpho",  prMorpho . stateMorpho)
+  ,(strCI "opts",    prOpts . stateOptions)
 {- ----
    (strCI "gf",      prt  . st2grammar . stateGrammarST)  -- DEFAULT
   ,(strCI "canon",   showCanon "Lang" . stateGrammarST)
   ,(strCI "gfc",     GFC.showGFC . stateGrammarST)
   ,(strCI "canonOpt",showCanonOpt "Lang" . stateGrammarST)
-  ,(strCI "morpho",  prMorpho . stateMorpho)
-  ,(strCI "opts",    prOpts . stateOptions)
 -}
 -- add your own grammar printers here
 --- also include printing via grammar2syntax!
@@ -236,6 +238,7 @@ customTokenizer =
   ,(strCI "chars",     const $ map (tS . singleton))
   ,(strCI "code",      const $ lexHaskell)
   ,(strCI "text",      const $ lexText)
+  ,(strCI "unglue",    \gr -> map tS . decomposeWords (stateMorpho gr))
 ----  ,(strCI "codelit",   lexHaskellLiteral . stateIsWord)
 ----  ,(strCI "textlit",   lexTextLiteral . stateIsWord)
   ,(strCI "codeC",     const $ lexC2M)
@@ -253,7 +256,8 @@ customUntokenizer =
   ,(strCI "textlit",   const $ formatAsTextLit)
   ,(strCI "codelit",   const $ formatAsCodeLit)
   ,(strCI "concat",    const $ concat . words)
-  ,(strCI "bind",      const $ performBinds)
+  ,(strCI "glue",      const $ performBinds)
+  ,(strCI "bind",      const $ performBinds) -- backward compat
 -- add your own untokenizers here
   ]
   ++ moreCustomUntokenizer

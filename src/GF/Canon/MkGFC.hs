@@ -12,6 +12,9 @@ import qualified Modules as M
 prCanonModInfo :: CanonModule -> String
 prCanonModInfo = prt . info2mod
 
+prCanon :: CanonGrammar -> String
+prCanon = unlines . map prCanonModInfo . M.modules
+
 canon2grammar :: Canon -> CanonGrammar
 canon2grammar (Gr modules) = M.MGrammar $ map mod2info modules where
   mod2info m = case m of
