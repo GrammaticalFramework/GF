@@ -13,6 +13,16 @@ lincat
   CN = CN ;
 
 lin
+
+  -- Sentence conjunction
+
+  AndS s1 s2 = { s = s1.s ++ and_Conj.s ++ s2.s } ** { lock_Phr = <> } ;
+
+  -- NP conjunction
+
+  AndNP n1 n2 = ConjNP and_Conj (TwoNP n1 n2);
+
+
   Drink = PresV2 (dirV2 drink_V) ;
   Eat = PresV2 (dirV2 eat_V) ;
   Bite = PresV2 (dirV2 bite_V) ;
@@ -69,15 +79,15 @@ lin
   Swell = PresV swell_V ;
   Burn = PresV burn_V ;
 
+  Give = PresV3 (dirV3 give_V "to") ;
+
 --  Say = ;
---  Give = giveV3 ;
 
   The_One = DefOneNP ;
   The_Many = DefNumNP NoNum ;
   A = IndefOneNP ;
-
---  This : CN -> NP ;
---  That : CN -> NP ;
+  This = DetNP this_Det ;
+  That = DetNP that_Det ;
   All = NDetNP all_NDet NoNum ;
   Many = DetNP many_Det ;
   Some_One = DetNP some_Det ;

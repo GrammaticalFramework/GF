@@ -35,6 +35,16 @@ abstract SwadeshLex = Categories ** {
 
     -- not : Adv ; -- ?
 
+    -- Conjunctions
+
+    and_Conj : Conj ;
+
+    -- Prepositions
+
+    at_Prep : Prep ;  
+    in_Prep : Prep ;
+    with_Prep : Prep ;
+
     -- Numerals
 
     one_Num : Num ;
