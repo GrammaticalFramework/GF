@@ -10,7 +10,6 @@ instance SyntaxDan of SyntaxScand = TypesDan **
 
 -- When common nouns are extracted from lexicon, the composite noun form is ignored.
 
-  npMan : NounPhrase = nameNounPhrase (mkProperName "man" NUtr) ;
   npDet : NounPhrase = nameNounPhrase (mkProperName "det" NNeutr) ;
 
   mkAdjForm : Species -> Number -> NounGender -> AdjFormPos = \b,n,g -> 

@@ -11,15 +11,6 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
 
   oper 
 
-  npMan : NounPhrase = {
-    s = table {
-      PNom => "man" ;
-      PAcc => "en" ;
-      PGen _ => "ens"
-      } ;
-    g = Utr ; n = Sg ; p = P3
-    } ;
-
   npDet : NounPhrase = nameNounPhrase (mkProperName "det" NNeutr) ;
 
   mkAdjForm : Species -> Number -> NounGender -> AdjFormPos = \b,n,g -> 

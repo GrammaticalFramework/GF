@@ -111,7 +111,15 @@ oper
 
 -- Formal subjects
 
-  npMan : NounPhrase ;
+  npMan : NounPhrase = {
+    s = table {
+      PNom => "man" ;
+      PAcc => "en" ;
+      PGen _ => "ens"
+      } ;
+    g = utrum ; n = Sg ; p = P3
+    } ;
+
   npDet : NounPhrase ;
 
 --2 Determiners
