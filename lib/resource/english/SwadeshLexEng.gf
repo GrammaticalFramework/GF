@@ -176,10 +176,6 @@ concrete SwadeshLexEng of SwadeshLex = CategoriesEng
     worm_N = regN "worm" ;
     year_N = regN "year" ;
 
-    name_N2 = mkN2 (regN "name") "of" ;
-    mother_N2 = mother_N2 ;
-    father_N2 = father_N2 ;
-
     -- Verbs
 
     bite_V = bite_V ;
@@ -238,7 +234,5 @@ concrete SwadeshLexEng of SwadeshLex = CategoriesEng
     walk_V = walk_V ;
     wash_V = regV "wash" ;
     wipe_V = regV "wipe" ;
-
-    give_V3 = dirV3 give_V "to" ;
 
 }

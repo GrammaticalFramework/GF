@@ -111,7 +111,8 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     egg_N = mk2N "ägg" "ägg" ;
     eye_N = mkN "öga" "ögat" "ögon" "ögonen" ;
     fat_N = mk2N "fett" "fetter" ;
---    father_N = UseN2 father_N2 ;
+--    father_N = mascN (mkN "far" "fadern" "fäder" "fäderna") ; 
+    father_N = UseN2 father_N2 ;
     feather_N = mk2N "fjäder" "fjädrar" ;
     fingernail_N = mk2N "nagel" "naglar" ;
     fire_N = mk2N "eld" "eldar" ;
@@ -139,7 +140,8 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     man_N = man_N ;
     meat_N = meat_N ;
     moon_N = moon_N ;
---    mother_N = UseN2 mother_N2 ;
+--    mother_N = mkN "mor" "modern" "mödrar" "mödrarna" ;
+    mother_N = UseN2 mother_N2 ;
     mountain_N = mountain_N ;
     mouth_N = mk2N "mun" "munnar" ;
     name_N = mk2N "namn" "namn" ;
@@ -176,10 +178,6 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     woman_N = woman_N ;
     worm_N = mk2N "mask" "maskar" ;
     year_N = mk2N "år" "år" ;
-
---    name_N2 = mkN2 (mk2N "namn" "namn") "på" ;
-    mother_N2 = mother_N2 ;
-    father_N2 = father_N2 ;
 
     -- Verbs
 
@@ -239,7 +237,5 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     walk_V = gå_V ;
     wash_V = regV "tvätta" ;
     wipe_V = regV "torka" ;
-
-    give_V3 = dirV3 giva_V "to" ;
 
 }

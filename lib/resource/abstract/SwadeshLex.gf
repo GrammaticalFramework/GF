@@ -169,10 +169,6 @@ abstract SwadeshLex = Categories ** {
     worm_N : N ;
     year_N : N ;
 
-    name_N2 : N2 ;
-    mother_N2 : N2 ;
-    father_N2 : N2 ;
-
     -- Verbs
 
     bite_V : V ;
@@ -231,7 +227,5 @@ abstract SwadeshLex = Categories ** {
     walk_V : V ;
     wash_V : V ;
     wipe_V : V ;
-
-    give_V3 : V3 ;
 
 }
