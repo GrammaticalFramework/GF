@@ -3,6 +3,7 @@ GHCFLAGS=-package lang -package util
 GHCFUDFLAG=-package Fudgets
 GHCINCLUDE=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc -iparsing
 GHCINCLUDENOFUD=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc-nofud -iparsing
+WINDOWSINCLUDE=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-windows -iparsing
 
 all:
 	make today ; make ghc
@@ -10,6 +11,8 @@ ghc:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) --make GF.hs -o gf2+ ; strip gf2+ ; mv gf2+ ../bin/
 nofud:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) --make GF.hs -o gf2n ; strip gf2n ; mv gf2n ../bin/
+windows:
+	$(GHMAKE) $(GHCFLAGS) $(WINDOWSINCLUDE) --make GF.hs -o gf2w ; strip gf2w ; mv gf2w ../bin/
 nofud-links:
 	cd for-ghc-nofud ; rm -f *.hs ; ln -s ../for-ghc/Arch.hs ; ln -s ../for-hugs/ArchEdit.hs ; cd ..
 batch: 
