@@ -1,6 +1,6 @@
 --# -path=.:../scandinavian:../abstract:../../prelude
 
-concrete BasicNor of Basic = CategoriesNor ** open ParadigmsNor in {
+concrete BasicNor of Basic = CategoriesNor ** open ParadigmsNor,VerbsNor in {
 
 flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
   optimize=values ;
@@ -33,7 +33,7 @@ lin
   boy_N = regN "gutt" masculine ;
   bread_N = regN "brød" neutrum ;
   break_V2 = dirV2 (mk2V "knuse" "knuste") ;
-  broad_ADeg = mkADeg "bred" ;
+  broad_ADeg = regADeg "bred" ;
   brother_N2 = mkN2 ( (mkN "bror" "broren" "brødre" "brødrene")) "til" ;
   brown_ADeg = regADeg "brun" ;
   butter_N = regN "smør" neutrum ;
@@ -74,11 +74,11 @@ lin
   find_V2 = dirV2 (irregV "finne" "fann" "funnet") ;
   fish_N = mk2N "fisk" "fisken" ;
   floor_N = regN "golv" neutrum ;
-  forget_V2 = dirV2 (mkV "glemme" "glemmer" "glemte" "glemt" "glem") ;
+  forget_V2 = dirV2 (mkV "glemme" "glemmer" "glemmes" "glemte" "glemt" "glem") ;
   fridge_N = regN "kjøleskap" neutrum ;
   friend_N = mkN "venn" "vennen" "venner" "vennene" ;
   fruit_N = mk2N "frukt" "frukten" ;
-  fun_AV = mkAV (mk3A "morsom" "morsomt" "morsomme") ;
+  fun_AV = mkAV (mkA "morsom" "morsomt" "morsomme") ;
   garden_N = regN "hage" masculine ;
   girl_N = regN "jente" feminine ;
   glove_N = regN "hanske" masculine ;
@@ -89,7 +89,7 @@ lin
   harbour_N = regN "havn" feminine;
   hate_V2 = dirV2 (regV "hate") ;
   hat_N = regN "hatt" masculine ;
-  have_V2 = dirV2 have_V ;
+  have_V2 = dirV2 ha_V ;
   hear_V2 = dirV2 (mk2V "høre" "hørte") ;
   hill_N = regN "haug" masculine ;
   hope_VS = mkVS (regV "håpe") ;
@@ -149,7 +149,7 @@ lin
   roof_N = regN "tak" neutrum ;
   rubber_N = mk2N "gummi" "gummien" ;
   run_V = springe_V ;
-  say_VS = mkVS sie_V ;
+  say_VS = mkVS si_V ;
   school_N = regN "skole" feminine;
   science_N = mk2N "vitenskap" "vitenskapen" ;
   sea_N = mk2N "sjø" "sjøen" ;
@@ -164,7 +164,7 @@ lin
   shop_N = mk2N "butikk" "butikken" ;
   short_ADeg = regADeg "kort" ;
   silver_N = mk2N "sølv" "sølvet";
-  sister_N = mk2N "søster" "søsteren" "søstrer" "søstrene" ;
+  sister_N = mkN "søster" "søsteren" "søstrer" "søstrene" ;
   sleep_V = irregV "sove" "sov" "sovet" ;
   small_ADeg = mkADeg "liten" "lite" "små" "mindre" "minst" ; ---- lille
   snake_N = regN "orm" masculine ;

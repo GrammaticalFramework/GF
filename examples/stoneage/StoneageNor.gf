@@ -31,12 +31,10 @@ lin
   Hear = PresVasV2 hear_V ;
   Know = PresVasV2 know_V ;
   Think = PresVasV2 think_V ;
-  Smell s o = PresCl (SPredV2 s (dirV2 kenne_V) (DefOneNP 
-                           (AdvCN (UseN (mk2N "lukt" "lukten")) 
-                                  (PrepNP possess_Prep o)))) ;
+  Smell = PresV2 (mkV2 (regV "lukte") "på") ;
   Fear = PresVasV2 fear_V ;
   Kill = PresVasV2 kill_V ;
-  Fight s o = PresCl (AdvCl (SPredV s fight_V) (AdvPP (PrepNP with_Prep o))) ;
+  Fight s o = PresCl (AdvCl (SPredV s slåss_V) (AdvPP (PrepNP with_Prep o))) ;
   Hunt = PresVasV2 hunt_V ;
   Hit = PresVasV2 hit_V ;
   Cut = PresVasV2 cut_V ;

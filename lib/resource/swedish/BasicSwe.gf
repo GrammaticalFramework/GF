@@ -131,7 +131,7 @@ lin
   peace_N = regN "fred" utrum ; ---- ar?
   pen_N = regN "penna" utrum ;
   planet_N = mk2N "planet" "planeter" ;
-  plastic_N = mk2N "plastic" "plastiker" ;
+  plastic_N = mk2N "plast" "plaster" ;
   play_V2 = dirV2 (regV "spela") ;
   policeman_N = mk2N "polis" "poliser" ;
   priest_N = mk2N "präst" "präster" ;

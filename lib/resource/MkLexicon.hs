@@ -106,3 +106,15 @@ prQuot s = "\"" ++ s ++ "\""
 isConsonant = not . isVowel
 
 isVowel = flip elem "aeiouyäöå"
+
+-- Norwegian 13/3
+
+groupLines :: [String] -> [String]
+groupLines ss = [unwords [a, b, c] | [a,_,b,c,_] <- grps ss] where
+  grps ls = let (g,rest) = splitAt 5 ls in g:grps rest
+
+lin2fun s = case words s of
+  _:fun:_:_ -> "  fun " ++ fun ++ " : " ++ cat fun ++ " ;"
+  _ -> s 
+ where
+   cat fun = reverse (takeWhile (/='_') (reverse fun))
