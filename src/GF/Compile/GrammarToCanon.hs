@@ -38,7 +38,7 @@ redModInfo (c,info) = do
   c'    <- redIdent c
   info' <- case info of
     ModMod m -> do
-      let isIncompl = mstatus m == MSIncomplete
+      let isIncompl = not $ isCompleteModule m
       (e,os) <- if isIncompl then return (Nothing,[]) else redExtOpen m ----
       flags <- mapM redFlag $ flags m 
       (a,mt) <- case mtype m of
@@ -185,6 +185,7 @@ redCTerm t = case t of
         ls' = map redLabel ls
     ts <- mapM (redCTerm . snd) tts
     return $ G.R $ map (uncurry G.Ass) $ zip ls' ts
+  RecType [] -> return $ G.R [] --- comes out in parsing
   P tr l -> do
     tr' <- redCTerm tr
     return $ G.P tr' (redLabel l)

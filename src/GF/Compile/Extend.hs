@@ -78,25 +78,27 @@ perhIndir n p = case p of
 extendAnyInfo :: Bool -> Ident -> Info -> Info -> Err Info
 extendAnyInfo isc n i j = errIn ("building extension for" +++ prt n) $ case (i,j) of
   (AbsCat mc1 mf1, AbsCat mc2 mf2) -> 
-    liftM2 AbsCat (updn mc1 mc2) (updn mf1 mf2) --- add cstrs
+    liftM2 AbsCat (updn isc n mc1 mc2) (updn isc n mf1 mf2) --- add cstrs
   (AbsFun mt1 md1, AbsFun mt2 md2) -> 
-    liftM2 AbsFun (updn mt1 mt2) (updn md1 md2) --- add defs
+    liftM2 AbsFun (updn isc n mt1 mt2) (updn isc n md1 md2) --- add defs
   (ResParam mt1, ResParam mt2) -> 
-    liftM ResParam $ updn mt1 mt2
+    liftM ResParam $ updn isc n mt1 mt2
   (ResValue mt1, ResValue mt2) -> 
-    liftM ResValue $ updn mt1 mt2
+    liftM ResValue $ updn isc n mt1 mt2
   (ResOper mt1 m1, ResOper mt2 m2) ->           ---- extendResOper n mt1 m1 mt2 m2 
-    liftM2 ResOper (updn mt1 mt2) (updn m1 m2)
+    liftM2 ResOper (updn isc n mt1 mt2) (updn isc n m1 m2)
   (CncCat mc1 mf1 mp1, CncCat mc2 mf2 mp2) -> 
-    liftM3 CncCat (updn mc1 mc2) (updn mf1 mf2) (updn mp1 mp2)
+    liftM3 CncCat (updn isc n mc1 mc2) (updn isc n mf1 mf2) (updn isc n mp1 mp2)
   (CncFun m mt1 md1, CncFun _ mt2 md2) -> 
-    liftM2 (CncFun m) (updn mt1 mt2) (updn md1 md2)
+    liftM2 (CncFun m) (updn isc n mt1 mt2) (updn isc n md1 md2)
 
 ----  (AnyInd _ _, ResOper _ _) -> return j ----
 
   _ -> Bad $ "cannot unify information in" ++++ show i ++++ "and" ++++ show j
- where
-   updn = if isc then (updatePerhaps n) else (updatePerhapsHard n)
+
+--- where
+   
+updn isc n = if isc then (updatePerhaps n) else (updatePerhapsHard n)
 
 
 

@@ -118,6 +118,7 @@ trt trm = case trm of
     Prod x a b | isWildIdent x -> P.EProd (P.DExp (trt a)) (trt b)
     Prod x a b -> P.EProd (P.DDec [trb x] (trt a)) (trt b)
 
+    R [] -> P.ETuple [] --- to get correct parsing when read back
     R r -> P.ERecord $ map trAssign r
     RecType r -> P.ERecord $ map trLabelling r
     ExtR x y -> P.EExtend (trt x) (trt y)

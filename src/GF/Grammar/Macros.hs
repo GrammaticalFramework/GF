@@ -135,6 +135,11 @@ termForm t = case t of
    _       -> 
      return ([],t,[])
 
+termFormCnc :: Term -> ([(Ident)], Term)
+termFormCnc t = case t of
+   Abs x b  -> (x:xs, t') where (xs,t') = termFormCnc b 
+   _        -> ([],t)
+
 appForm :: Term -> (Term, [Term])
 appForm t = case t of
   App c a -> (fun, args ++ [a]) where (fun, args) = appForm c
