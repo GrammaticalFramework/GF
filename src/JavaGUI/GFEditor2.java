@@ -821,7 +821,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
 
   public void outputAppend(){
     int i, j, j2, k, l, l2, selectionLength, m=0, n=0;
-    result=result.replace('\n',' ');
+    //result=result.replace('\n',' ');
     if (debug2) 
       System.out.println("INPUT:"+result);
     l = result.indexOf("<focus");
