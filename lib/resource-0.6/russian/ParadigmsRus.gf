@@ -243,7 +243,7 @@ oper
      s = table { SF _ _ => s } ;
      g = g ;
      anim = anim 
-   } ;
+   } ** {lock_N = <>};
 
 
   mkN =  \nomSg, genSg, datSg, accSg, instSg, preposSg,
@@ -265,32 +265,32 @@ oper
      } ;                           
      g = g ;
      anim = anim
-   }  ;
+   } ** {lock_N = <>}  ;
 
-  nMashina   = \s -> aEndInanimateDecl s;
-  nEdinica   = \s -> ej_aEndInanimateDecl s;
-  nZhenchina = \s -> (aEndAnimateDecl s) ** { g = Fem } ; 
-  nNoga      = \s -> aEndG_K_KH_Decl s ;    
-  nMalyariya  = \s -> i_yaEndDecl s ;
-  nTetya     = \s -> (yaEndAnimateDecl s) ** {g = Fem}  ;
-  nBol       = \s -> softSignEndDeclFem  s ;
+  nMashina   = \s -> aEndInanimateDecl s ** {lock_N = <>};
+  nEdinica   = \s -> ej_aEndInanimateDecl s ** {lock_N = <>};
+  nZhenchina = \s -> (aEndAnimateDecl s) ** { g = Fem ; anim = Animate } ** {lock_N = <>}; 
+  nNoga      = \s -> aEndG_K_KH_Decl s ** {lock_N = <>};    
+  nMalyariya  = \s -> i_yaEndDecl s ** {lock_N = <>};
+  nTetya     = \s -> (yaEndAnimateDecl s) ** {g = Fem; anim = Animate; lock_N = <>} ;
+  nBol       = \s -> softSignEndDeclFem  s ** {lock_N = <>};
 
 -- Neuter patterns. 
 
-  nObezbolivauchee = \s -> eeEndInAnimateDecl s ;
-  nProizvedenie = \s -> eEndInAnimateDecl s ;
-  nChislo = \s -> oEndInAnimateDecl s ;
+  nObezbolivauchee = \s -> eeEndInAnimateDecl s ** {lock_N = <>};
+  nProizvedenie = \s -> eEndInAnimateDecl s ** {lock_N = <>};
+  nChislo = \s -> oEndInAnimateDecl s ** {lock_N = <>};
 
 
 -- Masculine patterns. 
 
-  nStomatolog = \s -> nullEndAnimateDecl s ; 
+  nStomatolog = \s -> nullEndAnimateDecl s ** {lock_N = <>}; 
                               
-  nAdres     = \s -> nullEndInAnimateDecl2 s ; 
-  nTelefon   = \s -> nullEndInAnimateDecl1 s ; 
+  nAdres     = \s -> nullEndInAnimateDecl2 s ** {lock_N = <>}; 
+  nTelefon   = \s -> nullEndInAnimateDecl1 s ** {lock_N = <>}; 
 
-  nNol       = \s -> softSignEndDeclMasc s ;
-  nUroven    = \s -> EN_softSignEndDeclMasc s ;
+  nNol       = \s -> softSignEndDeclMasc s ** {lock_N = <>};
+  nUroven    = \s -> EN_softSignEndDeclMasc s ** {lock_N = <>};
 
 -- mkFun     defined in syntax.RusU
 -- funGen    defined in syntax.RusU 
@@ -299,24 +299,23 @@ oper
     case g of { 
        Masc => mkProperNameMasc ivan anim ; 
        _ => mkProperNameFem ivan anim
-    } ;
+    } ** {lock_PN =<>};
   mkCN = UseN ;
   mkNP = \x,y,z -> UsePN (mkPN x y z) ;
 
 -- Adjective definitions
 
-  adjInvar = \s -> { s = \\af => s };
+  adjInvar = \s -> { s = \\af => s } ** {lock_Adj1= <>};
 
-  adj1Staruyj = uy_j_EndDecl  ;       
-  adj1Malenkij = ij_EndK_G_KH_Decl ;       
-  adj1Molodoj = uy_oj_EndDecl ;        
-  adj1Kakoj_Nibud = i_oj_EndDecl ; 
+  adj1Staruyj s = uy_j_EndDecl s ** {lock_Adj1 = <>} ;       
+  adj1Malenkij s = ij_EndK_G_KH_Decl s ** {lock_Adj1= <>};       
+  adj1Molodoj s = uy_oj_EndDecl s ** {lock_Adj1= <>};        
+  adj1Kakoj_Nibud s t = i_oj_EndDecl s t ** {lock_Adj1= <>}; 
 
-  mkAdj2 = \a,p,c -> a ** {s2 = p ; c = c} ;
-
+  mkAdj2 a p c= mkAdjective2 a p c ** {lock_Adj2 = <>};
   -- mkAdjDeg defined in morpho.RusU
 
-  ap = \a,p -> a ** { p = p } ;
+  ap a p = mkAdjPhrase a p ** {lock_AP = <>};  -- defined in syntax module
 
 -- Verb definitions 
 
@@ -346,7 +345,7 @@ oper
 
    mkRegVerb = verbDecl ;                  -- defined in morpho.RusU.gf
 
-   mkV = extVerb ;                         -- defined in types.RusU.gf
+   mkV a b c = extVerb a b c ** {lock_V = <>};                         -- defined in types.RusU.gf
 
    mkPresentV = \aller, vox -> 
     { s = table { 
@@ -354,9 +353,9 @@ oper
        VImper n p => aller.s ! VFORM vox (VIMP n p) ;
        VInf => aller.s ! VFORM vox VINF ;
        VSubj gn => aller.s ! VFORM vox (VSUB gn)
-       }; t = Present ; a = aller.asp ; v = vox } ;
+       }; t = Present ; a = aller.asp ; w = vox ; lock_V = <>} ;
 
-   mkTV = mkTransVerb ;                    -- defined in syntax.RusU.gf
-   tvDir = mkDirectVerb;                   -- defined in syntax.RusU.gf
+   mkTV a b c = mkTransVerb a b c ** {lock_TV = <>};                    -- defined in syntax.RusU.gf
+   tvDir v = mkDirectVerb v ** {lock_TV = <>};                           -- defined in syntax.RusU.gf
 
 } ;

@@ -203,6 +203,10 @@ oper
 
   adj2adjPhrase : Adjective -> AdjPhrase = \novuj -> novuj ** {p = False} ;
 
+  mkAdjPhrase : Adjective -> IsPostfixAdj  -> AdjPhrase = \novuj ,p -> novuj ** {p = p} ;
+
+  mkAdjective2: Adjective-> Str-> Case -> AdjCompl =  \a,p,c -> a ** {s2 = p ; c = c} ;
+
 --3 Comparison adjectives
 --
 -- Each of the comparison forms has a characteristic use:
