@@ -39,8 +39,8 @@ concrete StructuralEng of Structural =
 
   ThisNP = nameNounPhrase (nameReg "this") ;
   ThatNP = nameNounPhrase (nameReg "that") ;
-  TheseNumNP n = nameNounPhrase {s = \\c => "these" ++ n.s ! c} ; --- Pl; Gen!
-  ThoseNumNP n = nameNounPhrase {s = \\c => "those" ++ n.s ! c} ; --- Pl; Gen!
+  TheseNumNP n = nameNounPhrasePl {s = \\c => "these" ++ n.s ! c} ;
+  ThoseNumNP n = nameNounPhrasePl {s = \\c => "those" ++ n.s ! c} ;
 
   EverybodyNP = nameNounPhrase (nameReg "everybody") ;
   SomebodyNP = nameNounPhrase (nameReg "somebody") ;

@@ -47,6 +47,9 @@ oper
   nameNounPhrase : ProperName -> NounPhrase = \john -> 
     {s = \\c => john.s ! toCase c ; n = Sg ; p = P3} ;
 
+  nameNounPhrasePl : ProperName -> NounPhrase = \john -> 
+    {s = \\c => john.s ! toCase c ; n = Pl ; p = P3} ;
+
 -- The following construction has to be refined for genitive forms:
 -- "we two", "us two" are OK, but "our two" is not.
 

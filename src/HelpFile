@@ -418,6 +418,7 @@ q, quit: q
     -lexer=vars          like words, but "x","x_...","$...$" as vars, "?..." as meta
     -lexer=chars         each character is a token
     -lexer=code          use Haskell's lex
+    -lexer=codevars      like code, but "x", "x_..." as vars, "??" as meta
     -lexer=text          with conventions on punctuation and capital letters
     -lexer=codelit       like code, but treat unknown words as string literals
     -lexer=textlit       like text, but treat unknown words as string literals

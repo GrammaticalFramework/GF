@@ -20,6 +20,7 @@ import Option
 import Custom
 import ShellState
 
+import PPrCF (prCFTree)
 import qualified ParseGFC as N
 
 import Operations
@@ -69,7 +70,10 @@ trees2trms opts sg cn as ts0 info = do
     _ | null ts0 -> checkWarn "No success in cf parsing" >> return []
     _ | raw      -> do
       ts1 <- return (map cf2trm0 ts0) ----- should not need annot
-      mapM (checkErr . (annotate gr) . trExp) ts1 ---- complicated; often fails
+      checks [
+         mapM (checkErr . (annotate gr) . trExp) ts1 ---- complicated, often fails
+        ,checkWarn (unlines ("Raw CF trees:":(map prCFTree ts0))) >> return []
+        ]
     _ -> do
       let num = optIntOrN opts flagRawtrees 99999
       let (ts01,rest) = splitAt num ts0

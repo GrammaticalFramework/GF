@@ -18,6 +18,9 @@ incomplete concrete ShallowI of Shallow = open (Resource = Resource) in {
     Det = Resource.Det ;
     Prep = Resource.Prep ;
     Num = Resource.Num ;
+    AdjDeg = Resource.AdjDeg ;
+    Adj2 = Resource.Adj2 ;
+    V3 = Resource.V3 ;
 
   lin
     PhrS = Resource.IndicPhrase ;

@@ -35,6 +35,11 @@ mkCFTokVar s = case s of
   '$':xs@(_:_) -> if last s == '$' then tV (init xs) else tS s
   _            -> tS s
 
+mkTokVars :: (String -> [CFTok]) -> String -> [CFTok]
+mkTokVars tok = map tv . tok where
+  tv (TS s) = mkCFTokVar s
+  tv t = t
+
 mkLit :: String -> CFTok
 mkLit s = if (all isDigit s) then (tI s) else (tL s)
 

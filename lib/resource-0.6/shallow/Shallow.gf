@@ -23,6 +23,9 @@ abstract Shallow = {
     Verb ;
     TV ;
     Adj ;
+    AdjDeg ; ----
+    Adj2 ;   ----
+    V3 ; ----
     N ;
     Noun ;
     CN ;
