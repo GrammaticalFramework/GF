@@ -119,7 +119,8 @@ oper
 -- Determiners are inflected according to noun in gender and sex. 
 -- The number and species of the noun are determined by the determiner.
 
-  Determiner : Type = {s : NounGender => Str ; n : Number ; b : SpeciesP} ;
+  Determiner    : Type = {s : NounGender => Str ; n : Number ; b : SpeciesP} ;
+  DeterminerNum : Type = {s : NounGender => Str ;              b : SpeciesP} ;
 
   artIndef : Gender => Str ;
 
@@ -130,6 +131,17 @@ oper
   detNounPhrase : Determiner -> CommNounPhrase -> NounPhrase = \en, man -> 
     {s = table {c => en.s ! man.g ++ man.s ! en.n ! en.b ! npCase c} ;
      g = genNoun man.g ; n = en.n ; p = P3} ;
+
+  numDetNounPhrase : DeterminerNum -> Numeral -> CommNounPhrase -> NounPhrase = 
+   \alla,sex, man -> 
+    {s = \\c => alla.s ! man.g ++ sex.s ! Nom ++ man.s ! Pl ! alla.b ! npCase c ;
+     g = genNoun man.g ; n = Pl ; p = P3} ;
+
+  justNumDetNounPhrase : DeterminerNum -> Numeral -> NounPhrase = 
+   \alla,sex -> 
+    {s = \\c => alla.s ! NNeutr ++ sex.s ! npCase c ;
+     g = Neutr ; n = Pl ; p = P3} ;
+
 
 -- The following macros are sufficient to define most determiners.
 -- All $SpeciesP$ values come into question: 
@@ -142,13 +154,12 @@ oper
     {s = en ; n = Sg ; b = b} ;
 
   mkDeterminerPl :  DetPl -> SpeciesP -> Determiner = \alla,b -> 
-    mkDeterminerPlNum alla b noNum ;
-
-  mkDeterminerPlNum : DetPl -> SpeciesP -> Numeral -> Determiner = \alla,b,n -> 
-    {s = \\_ => alla ++ n.s ! Nom ; 
+    {s = \\_ => alla  ; 
      n = Pl ; 
      b = b
     } ;
+
+  mkDeterminerPlNum : DetPl -> SpeciesP -> DeterminerNum = mkDeterminerPl ;
 
   detSgInvar : Str -> DetSg = \varje -> table {_ => varje} ;
 
@@ -226,9 +237,10 @@ oper
       (mkDeterminerSgGender (table {g => artDef ! cn.p ! ASg g}) 
       (DefP  (specDefPhrase cn.p))) cn ;
   deDet : Numeral -> CommNounPhrase -> NounPhrase = \n,cn -> 
-    detNounPhrase 
+    numDetNounPhrase 
       (mkDeterminerPlNum (artDef ! cn.p ! APl) 
-      (DefP (specDefPhrase cn.p)) n) cn ;
+        (DefP (specDefPhrase cn.p))) 
+      n cn ;
 
 -- This is uniformly $Def$ in Swedish, but in Danish, $Indef$ for
 -- compounds with determiner.
@@ -725,6 +737,12 @@ oper
      s2 = \\b => ofta.s ++ spelar.s2 ! b ;
      s3 = \\sf,g,n,p => spelar.s3 ! sf ! g ! n ! p
     } ;
+
+  advVerbPhrase : VerbPhrase -> Adverb -> VerbPhrase = \sing, well ->
+    {
+     s  = \\a,b,c,d => sing.s ! a ! b ! c ! d  ++ well.s
+    } ;
+
 
   advAdjPhrase : SS -> AdjPhrase -> AdjPhrase = \mycket, dyr ->
     {s = \\a,c => mycket.s ++ dyr.s ! a ! c ;
@@ -1324,6 +1342,35 @@ oper
     } ;
 
   conjGender : Gender -> Gender -> Gender ;
+
+--3 Coordinating adverbs
+--
+-- We need a category of lists of adverbs. It is a discontinuous
+-- category, the parts corresponding to 'init' and 'last' segments
+-- (rather than 'head' and 'tail', because we have to keep track of the slot between
+-- the last two elements of the list). A list has at least two elements.
+
+  ListAdverb : Type = SD2 ;
+
+  twoAdverb : (_,_ : Adverb) -> ListAdverb = CO.twoSS ;
+
+  consAdverb : ListAdverb -> Adverb -> ListAdverb =
+    CO.consSS CO.comma ;
+
+-- To coordinate a list of adverbs by a simple conjunction, we place
+-- it between the last two elements; commas are put in the other slots,
+
+  conjunctAdverb : Conjunction -> ListAdverb -> Adverb = \c,xs ->
+    ss (CO.conjunctX c xs) ;
+
+-- To coordinate a list of adverbs by a distributed conjunction, we place
+-- the first part (e.g. "either") in front of the first element, the second
+-- part ("or") between the last two elements, and commas in the other slots.
+
+  conjunctDistrAdverb : ConjunctionDistr -> ListAdverb -> Adverb = 
+    \c,xs ->
+    ss (CO.conjunctDistrX c xs) ;
+
 
 
 --2 Subjunction

@@ -1,7 +1,7 @@
 --# -path=.:../abstract:../../prelude
 --# -val
 
-concrete BasicEng of Basic = CategoriesEng ** open NewParadigmsEng in {
+concrete BasicEng of Basic = CategoriesEng ** open ParadigmsEng in {
 
 flags 
   startcat=Phr ; lexer=textlit ; unlexer=text ;
@@ -220,4 +220,10 @@ lin
   put_V2 = mkV2 (irregDuplV "put" "put" "put") [] ;
   stop_V = regV "stop" ;
   jump_V = regV "jump" ;
+  here_Adv = mkAdv "here" ;
+  here7to_Adv = mkAdv "here" ;
+  here7from_Adv = mkAdv ["from here"] ;
+  there_Adv = mkAdv "there" ;
+  there7to_Adv = mkAdv "there" ;
+  there7from_Adv = mkAdv ["from there"] ;
 } ;

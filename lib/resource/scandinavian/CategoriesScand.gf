@@ -15,6 +15,7 @@ lincat
       -- = {s : NPForm => Str ; g : Gender ; n : Number ; p : Person} ;
   PN     = {s : Case => Str ; g : NounGender} ;
   Det    = {s : NounGender => Str ; n : Number ; b : SpeciesP} ;
+  NDet   = {s : NounGender => Str ;              b : SpeciesP} ;
   N2     = Function ;
       -- = CommNoun ** {s2 : Preposition} ;
   N3     = Function ** {s3 : Preposition} ;
@@ -72,6 +73,7 @@ lincat
   RS     = {s :                  GenNum => Person => Str} ;
   RCl    = {s : Bool => SForm => GenNum => Person => Str} ;
   IP     = NounPhrase ;
+  IDet   = {s : NounGender => Str ; n : Number ; b : SpeciesP} ;
   QS     = {s :                  QuestForm => Str} ;
   QCl    = {s : Bool => SForm => QuestForm => Str} ;
   Imp    = {s : Number => Str} ;
@@ -84,4 +86,6 @@ lincat
   ListS  = {s1,s2 : Order => Str} ; 
   ListAP = {s1,s2 : AdjFormPos => Case => Str ; p : Bool} ;
   ListNP = {s1,s2 : NPForm => Str ; g : Gender ; n : Number ; p : Person} ;
+  ListAdv = {s1,s2 : Str} ; 
+
 }

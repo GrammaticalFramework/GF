@@ -11,6 +11,8 @@
 
 resource SyntaxEng = MorphoEng ** open Prelude, (CO = Coordination) in {
 
+flags optimize=parametrize ;
+
 --2 Common Nouns
 --
 -- Simple common nouns are defined as the type $CommNoun$ in $morpho.Deu.gf$.
@@ -89,33 +91,44 @@ oper
 -- Determiners are inflected according to the nouns they determine.
 -- The determiner is not inflected.
 
-  Determiner : Type = {s : Str ; n : Number} ;
+  Determiner    : Type = {s : Str ; n : Number} ;
+  DeterminerNum : Type = {s : Str} ;
 
   detNounPhrase : Determiner -> CommNounPhrase -> NounPhrase = \every, man -> 
     {s = \\c => every.s ++ man.s ! every.n ! toCase c ; 
      a = toAgr every.n P3 man.g 
     } ;
 
-  mkDeterminer : Number -> Str -> Determiner = \n,the -> 
-    mkDeterminerNum n the noNum ;
+  numDetNounPhrase : DeterminerNum -> Numeral -> CommNounPhrase -> NounPhrase = 
+    \all, six, men -> 
+    {s = \\c => all.s ++ six.s ! Nom ++ men.s ! Pl ! toCase c ; 
+     a = toAgr Pl P3 men.g 
+    } ;
+  justNumDetNounPhrase : DeterminerNum -> Numeral -> NounPhrase = 
+    \all, six -> 
+    {s = \\c => all.s ++ six.s ! toCase c ; 
+     a = toAgr Pl P3 Neutr --- gender does not matter
+    } ;
 
-  mkDeterminerNum : Number -> Str -> Numeral -> Determiner = \n,det,two -> 
-    {s = det ++ two.s ! Nom ; 
+  mkDeterminer : Number -> Str -> Determiner = \n,the -> 
+    {s = the ;
      n = n
     } ;
 
+  mkDeterminerNum : Str -> DeterminerNum = mkDeterminer Pl ;
+
   everyDet = mkDeterminer Sg "every" ;
-  allDet   = mkDeterminerNum Pl "all" ;
+  allDet   = mkDeterminerNum "all" ;
   mostDet  = mkDeterminer Pl "most" ;
   aDet     = mkDeterminer Sg artIndef ;
-  plDet    = mkDeterminerNum Pl [] ;
+  plDet    = mkDeterminerNum [] ;
   theSgDet = mkDeterminer Sg "the" ;
-  thePlDet = mkDeterminerNum Pl "the" ;
+  thePlDet = mkDeterminerNum "the" ;
   anySgDet = mkDeterminer Sg "any" ;
-  anyPlDet = mkDeterminerNum Pl "any" ;
+  anyPlDet = mkDeterminerNum "any" ;
 
   whichSgDet = mkDeterminer Sg "which" ;
-  whichPlDet = mkDeterminerNum Pl "which" ;
+  whichPlDet = mkDeterminerNum "which" ;
 
   whichDet = whichSgDet ; --- API
 
@@ -687,6 +700,12 @@ oper
      isAux = sings.isAux
     } ;
 
+  advVerbPhrase : VerbPhrase -> Adverb -> VerbPhrase = \sing, well ->
+    {
+     s  = \\b,a => sing.s ! b ! a ++ well.s ;
+     s1 = sing.s1
+    } ;
+
   advAdjPhrase : SS -> AdjPhrase -> AdjPhrase = \very, good ->
     {s = \\a => very.s ++ good.s ! a ;
      p = good.p
@@ -1163,6 +1182,9 @@ oper
 --
 -- Wh-questions are of two kinds: ones that are like $NP - VP$ sentences,
 -- others that are line $S/NP - NP$ sentences.
+
+  nounPhraseInt : NounPhrase -> IntPron = \who -> 
+    {s = who.s} ** fromAgr who.a ;
 
   intNounPhrase : IntPron -> NounPhrase = \who -> 
     {s = who.s ; a = toAgr who.n P3 who.g} ;

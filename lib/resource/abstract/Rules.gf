@@ -27,6 +27,8 @@ fun
   DefNumNP    : Num -> CN -> NP ;          -- "the cars", "the 86 cars"
 
   DetNP       : Det -> CN -> NP ;          -- "every car"
+  NDetNP      : NDet -> Num -> CN -> NP ;  -- "these (5) cars"
+  NDetNum     : NDet -> Num ->       NP ;  -- "these (5)"
   MassNP      : CN -> NP ;                 -- "wine"
 
   AppN2       : N2 -> NP -> CN ;           -- "successor of zero"
@@ -110,6 +112,7 @@ fun
 
   AdvCN  : CN -> PP -> CN ;            -- "house in London"
   AdvAP  : AdA -> AP -> AP ;           -- "very good"
+  AdvAdv : AdA -> Adv -> Adv ;         -- "very well"
 
 --!
 --3 Sentences and relative clauses
@@ -127,10 +130,8 @@ fun
 --3 Questions and imperatives
 --
 
-  WhoOne, WhoMany : IP ;                    -- "who (is)", "who (are)"
-  WhatOne, WhatMany : IP ;                  -- "what (is)", "what (are)"
-  FunIP : N2 -> IP -> IP ;                  -- "the mother of whom"
-  NounIPOne, NounIPMany : CN -> IP ;        -- "which car", "which cars"
+  FunIP  : N2 -> IP -> IP ;                 -- "the mother of whom"
+  IDetCN : IDet -> CN -> IP ;               -- "which car", "which cars"
 
   QuestCl    : Cl -> QCl ;                  -- "does John walk"; "doesn't John walk"
   IntSlash   : IP -> Slash -> QCl ;         -- "whom does John see"
@@ -144,7 +145,9 @@ fun
   ImperOne, ImperMany : Imp -> Phr ;        -- "Be a man!", "Be men!"
 
   AdvCl  : Cl -> Adv -> Cl ;                -- "John walks in the park"
-  AdvPhr : AdC -> S -> Phr ;                -- "Therefore, 2 is prime."
+  AdvVP  : VPI -> Adv -> VPI ;              -- "walk in the park"
+  AdCPhr : AdC -> S -> Phr ;                -- "Therefore, 2 is prime."
+  AdvPhr : Adv -> S -> Phr ;                -- "In India, there are tigers."
 
 --!
 --3 Coordination
@@ -158,13 +161,15 @@ fun
 -- is linguistically problematic in German because $VP$ is a discontinuous
 -- category.
 
-  ConjS  : Conj -> ListS -> S ;            -- "John walks and Mary runs"
-  ConjAP : Conj -> ListAP -> AP ;          -- "even and prime"
-  ConjNP : Conj -> ListNP -> NP ;          -- "John or Mary"
+  ConjS    : Conj -> ListS -> S ;            -- "John walks and Mary runs"
+  ConjAP   : Conj -> ListAP -> AP ;          -- "even and prime"
+  ConjNP   : Conj -> ListNP -> NP ;          -- "John or Mary"
+  ConjAdv  : Conj -> ListAdv -> Adv ;        -- "quickly or slowly"
 
-  ConjDS  : ConjD -> ListS -> S ;          -- "either John walks or Mary runs"
-  ConjDAP : ConjD -> ListAP -> AP ;        -- "both even and prime"
-  ConjDNP : ConjD -> ListNP -> NP ;        -- "either John or Mary"
+  ConjDS   : ConjD -> ListS -> S ;           -- "either John walks or Mary runs"
+  ConjDAP  : ConjD -> ListAP -> AP ;         -- "both even and prime"
+  ConjDNP  : ConjD -> ListNP -> NP ;         -- "either John or Mary"
+  ConjDAdv : ConjD -> ListAdv -> Adv ;       -- "both badly and slowly"
 
   TwoS  : S -> S -> ListS ;
   ConsS : ListS -> S -> ListS ;
@@ -174,6 +179,9 @@ fun
 
   TwoNP  : NP -> NP -> ListNP ;
   ConsNP : ListNP -> NP -> ListNP ;
+
+  TwoAdv  : Adv -> Adv -> ListAdv ;
+  ConsAdv : ListAdv -> Adv -> ListAdv ;
 
 --!
 --3 Subordination

@@ -1,8 +1,9 @@
 --# -path=.:../scandinavian:../abstract:../../prelude
 
-concrete BasicSwe of Basic = CategoriesSwe ** open NewParadigmsSwe in {
+concrete BasicSwe of Basic = CategoriesSwe ** open ParadigmsSwe in {
 
 flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
+  optimize=values ;
 
 lin
   airplane_N = regN "flygplan" neutrum ;
@@ -218,5 +219,11 @@ lin
   put_V2 = mkV2 (irregV "sätta" "satte" "satt") [] ;
   stop_V = regV "stanna" ;
   jump_V = regV "hoppa" ;
+  here_Adv = mkAdv "här" ;
+  here7to_Adv = mkAdv "hit" ;
+  here7from_Adv = mkAdv ["härifrån"] ;
+  there_Adv = mkAdv "där" ;
+  there7to_Adv = mkAdv "dit" ;
+  there7from_Adv = mkAdv ["därifrån"] ;
 
 } ;

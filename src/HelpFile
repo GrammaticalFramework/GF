@@ -82,8 +82,10 @@ pm, print_multigrammar: pm
       (Automatically executes the strip command (s) before doing this.)
   options:
       -utf8  apply UTF8-encoding to the grammar
+      -graph print module dependency graph in 'dot' format
   examples:
       pm | wf Letter.gfcm  -- print the grammar into the file Letter.gfcm
+      pm -printer=graph | wf D.dot  -- then do 'dot -Tps D.dot > D.ps'
 
 po, print_options: po
       Print what modules there are in the state. Also
