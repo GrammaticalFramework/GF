@@ -83,7 +83,7 @@ lin
   UseN = noun2CommNounPhrase ;
   ModAdj = modCommNounPhrase ;
   ModGenOne = npGenDet singular ;
-  ModGenMany = npGenDetNum ;
+  ModGenNum = npGenDetNum ;
   UsePN = nameNounPhrase ;
   UseFun = funAsCommNounPhrase ; -- [SyntaxFra.noun2CommNounPhrase]
   AppFun = appFunComm ;
@@ -96,9 +96,9 @@ lin
 
   DetNP = detNounPhrase ;
   IndefOneNP = indefNounPhrase singular ;
-  IndefManyNP = indefNounPhraseNum ;
+  IndefNumNP = indefNounPhraseNum ;
   DefOneNP = defNounPhrase singular ;
-  DefManyNP = defNounPhraseNum ;
+  DefNumNP = defNounPhraseNum ;
   MassNP = partitiveNounPhrase singular ;
   UseInt i = {s = \\_ => i.s} ;
   NoNum = noNum ;

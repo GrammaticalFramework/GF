@@ -17,19 +17,19 @@ fun
 -- Many plural determiners can take a numeral modifier. So can the plural
 -- pronouns "we" and "you".
 
-  EveryDet, WhichDet, AllDet,                 -- every, sg which, sg all
+  EveryDet, WhichDet, AllMassDet,             -- every, sg which, sg all
   SomeDet, AnyDet, NoDet,                     -- sg some, any, no
   MostDet, MostsDet, ManyDet, MuchDet : Det ; -- sg most, pl most, many, much
   ThisDet, ThatDet : Det ;                    -- this, that
 
-  AllsDet, WhichsDet,                         -- pl all, which (86)
-  SomesDet, AnysDet, NosDet,                  -- pl some, any, no
-  TheseDet, ThoseDet : Num -> Det ;           -- these, those (86)
+  AllNumDet, WhichNumDet,                     -- pl all, which (86)
+  SomeNumDet, AnyNumDet, NoNumDet,            -- pl some, any, no
+  TheseNumDet, ThoseNumDet : Num -> Det ;     -- these, those (86)
 
   ThisNP, ThatNP : NP ;                       -- this, that
-  TheseNP, ThoseNP : Num -> NP ;              -- these, those (86)
+  TheseNumNP, ThoseNumNP : Num -> NP ;        -- these, those (86)
   INP, ThouNP, HeNP, SheNP, ItNP : NP ;       -- personal pronouns in singular
-  WeNP, YeNP : Num -> NP ;                    -- these pronouns can take numeral 
+  WeNumNP, YeNumNP : Num -> NP ;              -- these pronouns can take numeral 
   TheyNP : NP ; YouNP : NP ;                  -- they, the polite you
 
   EverybodyNP, SomebodyNP, NobodyNP,          -- everybody, somebody, nobody

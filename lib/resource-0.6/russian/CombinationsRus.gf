@@ -120,7 +120,7 @@ lin
 
   UseN  = noun2CommNounPhrase ;
   ModGenOne = npGenDet Sg noNum ;
-  ModGenMany = npGenDet Pl ;
+  ModGenNum = npGenDet Pl ;
   UseFun = funAsCommNounPhrase ;
   AppFun = appFunComm ;
   AppFun2 = appFun2 ;
@@ -135,19 +135,10 @@ lin
 
   DetNP = detNounPhrase ;
   IndefOneNP = indefNounPhrase Sg ;
-  IndefManyNP = indefNounPhraseNum Pl ;
+  IndefNumNP = indefNounPhraseNum Pl ;
   DefOneNP = indefNounPhrase Sg ;
-  DefManyNP = indefNounPhraseNum Pl ;
+  DefNumNP = indefNounPhraseNum Pl ;
   MassNP = indefNounPhrase Sg;
-
-  --PosV = predVerb True ;
-  --NegV = predVerb False ;
-  --PosCN = predCommNoun True ;
-  --NegCN = predCommNoun False ;
-  --PosNP = predNounPhrase True ;
-  --NegNP = predNounPhrase False ;
-  --PosVS = complSentVerb True ;
-  --NegVS = complSentVerb False ;
 
   PosVG  = predVerbGroup True ;
   NegVG  = predVerbGroup False ;
