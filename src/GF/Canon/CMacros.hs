@@ -161,7 +161,7 @@ wordsInTerm trm = filter (not . null) $ case trm of
    T _ cs  -> concat [wo t | Cas _ t <- cs]
    C s t   -> wo s ++ wo t
    FV ts   -> concatMap wo ts
-   K (KP ss vs) -> ss ++ concat [s ++ t | Var s t <- vs]
+   K (KP ss vs) -> ss ++ concat [s | Var s _ <- vs]
    P t _   -> wo t --- not needed ?
    _       -> []
  where wo = wordsInTerm

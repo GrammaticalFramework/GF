@@ -147,6 +147,7 @@ customGrammarPrinter =
   ,(strCI "cf",      prCF . stateCF)
   ,(strCI "lbnf",    prLBNF . stateCF)
   ,(strCI "morpho",  prMorpho . stateMorpho)
+  ,(strCI "fullform",prFullForm . stateMorpho)
   ,(strCI "opts",    prOpts . stateOptions)
   ,(strCI "words",   unwords . stateGrammarWords)
 {- ----

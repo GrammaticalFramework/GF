@@ -166,4 +166,7 @@ ccompute cnc = comp []
      noVar v = case v of
        LI _ -> False
        R rs -> all noVar [t | Ass _ t <- rs]
-       _    -> True --- other cases?
+       Con _ ts -> all noVar ts
+       FV ts -> all noVar ts
+       S x y -> noVar x && noVar y
+       _    -> True --- other cases that can be values to pattern match?
