@@ -158,7 +158,7 @@ resModName = ('#':)
 getImports :: [InitPath] -> FileName -> IOE [(ModuleHeader,InitPath)]
 getImports ps = get [] where
   get ds file0 = do
-    let name = fileBody file0
+    let name = justModuleName file0 ---- fileBody file0
     (p,s) <- tryRead name
     let ((typ,mname),imps) = importsOfFile s
     let namebody = justFileName name
