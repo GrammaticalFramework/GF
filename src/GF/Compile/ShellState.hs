@@ -142,13 +142,15 @@ updateShellState opts sh (gr,(sgr,rts)) = do
 
 prShellStateInfo :: ShellState -> String
 prShellStateInfo sh = unlines [
-  "main abstract :    " +++ maybe "(none)" P.prt (abstract sh),
+  "main abstract :    " +++ abstractName sh,
   "main concrete :    " +++ maybe "(none)" P.prt (concrete sh),
   "all concretes :    " +++ unwords (map (P.prt . fst) (concretes sh)),
   "canonical modules :" +++ unwords (map (P.prt .fst) (M.modules (canModules sh))),
   "source modules :   " +++ unwords (map (P.prt .fst) (M.modules (srcModules sh))),
   "global options :   " +++ prOpts (gloptions sh)
   ]
+
+abstractName sh = maybe "(none)" P.prt (abstract sh)
 
 -- throw away those abstracts that are not needed --- could be more aggressive
 

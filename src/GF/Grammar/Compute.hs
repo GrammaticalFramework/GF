@@ -113,6 +113,9 @@ computeTerm gr = comp where
 
 	 _    -> returnC $ S t' v'
 
+     -- normalize away empty tokens
+     K "" -> return Empty
+
      -- glue if you can
      Glue x0 y0 -> do
        x <- comp g x0
@@ -123,8 +126,8 @@ computeTerm gr = comp where
 
          (S (T i cs) e, s) -> prawitz g i (flip Glue s) cs e
          (s, S (T i cs) e) -> prawitz g i (Glue s) cs e
-         (_,K "")          -> return x
-         (K "",_)          -> return y
+         (_,Empty)         -> return x
+         (Empty,_)         -> return y
          (K a, K b)        -> return $ K (a ++ b)
          (K a, Alts (d,vs)) -> do
             let glx = Glue x
