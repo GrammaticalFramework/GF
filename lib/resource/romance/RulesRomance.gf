@@ -85,7 +85,7 @@ lin
 -- Adverbs.
 
   AdjAdv a = {s = a.s ! AA} ;
-  AdvVP = adVerbPhrase ;
+----  AdvVP = adVerbPhrase ;
   AdvPP p = p ;
 
   PrepNP = prepNounPhrase ;

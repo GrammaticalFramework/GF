@@ -15,13 +15,13 @@ lin
   art_N = regN "art" feminine ;
   ask_V2Q = mkV2Q (regV "demander") dative ;
   baby_N = regN "bébé" masculine ;
-  bad_ADeg = mkADeg (regA "mauvaise") (regA "pire") ;
+  bad_ADeg = prefADeg (mkADeg (regA "mauvais") (regA "pire")) ;
   bank_N = regN "banque" feminine ;
-  beautiful_ADeg = regADeg "joli" ; ---- beau
+  beautiful_ADeg = prefADeg (regADeg "joli") ; ---- beau
   become_VA = mkVA devenir_V ;
   beer_N = regN "bière" feminine ;
   beg_V2V = mkV2V (regV "demander") accusative dative ;
-  big_ADeg = regADeg "grand" ;
+  big_ADeg = prefADeg (regADeg "grand") ;
   bike_N = regN "vélo" masculine ;
   bird_N = regN "oiseau" masculine ;
   black_ADeg = regADeg "noir" ;
@@ -83,8 +83,8 @@ lin
   girl_N = regN "fille" feminine ;
   glove_N = regN "gant" masculine ;
   gold_N = regN "or" masculine ;
-  good_ADeg = mkADeg (mkA "bon" "bonne" "bons" "bien") 
-    (mkA "meilleur" "meilleure" "meilleurs" "mieux") ;
+  good_ADeg = prefADeg (mkADeg (mkA "bon" "bonne" "bons" "bien") 
+    (mkA "meilleur" "meilleure" "meilleurs" "mieux")) ;
   go_V = aller_V ;
   green_ADeg = regADeg "vert" ;
   harbour_N = regN "port" masculine ;
@@ -123,10 +123,11 @@ lin
   mountain_N = regN "montagne" feminine ;
   music_N = regN "musique" feminine ;
   narrow_ADeg = regADeg "étroit" ;
-  new_ADeg = compADeg (mkA "nouveau" "nouvelle" "nouveaux" "nouvellement") ;
+  new_ADeg = prefADeg (compADeg (mkA "nouveau" "nouvelle" "nouveaux" "nouvellement")) ;
   newspaper_N = regN "journal" masculine ;
   oil_N = regN "huile" feminine ;
-  old_ADeg = compADeg (mkA "vieux" "vieille" "vieux" "vieillement") ; ---- vieil
+  old_ADeg = 
+    prefADeg (compADeg (mkA "vieux" "vieille" "vieux" "vieillement")) ; ---- vieil
   open_V2 = ouvrir_V2 ;
   paint_V2A = mkV2A (v2V peindre_V2) accusative ;
   paper_N = regN "papier" masculine ;
@@ -167,7 +168,7 @@ lin
   silver_N = regN "argent" masculine ;
   sister_N = regN "soeur" feminine ;
   sleep_V = v2V dormir_V2 ;
-  small_ADeg = regADeg "petit" ;
+  small_ADeg = prefADeg (regADeg "petit") ;
   snake_N = regN "serpent" masculine ;
   sock_N = regN "chaussette" feminine ;
   speak_V2 = dirV2 (regV "parler") ;
@@ -201,7 +202,7 @@ lin
   war_N = regN "guerre" masculine ;
   watch_V2 = dirV2 (regV "regarder") ;
   water_N = regN "eau" feminine ;
-  white_ADeg = compADeg (mkA "blanc" "blance" "blancs" "blanchement") ;
+  white_ADeg = compADeg (mkA "blanc" "blanche" "blancs" "blanchement") ;
   window_N = regN "fenêtre" feminine ;
   wine_N = regN "vin" masculine ;
   win_V2 = dirV2 (regV "gagner") ; ---- vaincre
@@ -210,7 +211,7 @@ lin
   wood_N = regN "bois" masculine ;
   write_V2 = écrire_V2 ;
   yellow_ADeg = regADeg "jaune" ;
-  young_ADeg = regADeg "jeune" ;
+  young_ADeg = prefADeg (regADeg "jeune") ;
 
   do_V2 = faire_V2 ;
   now_Adv = mkAdv "maintenant" ;

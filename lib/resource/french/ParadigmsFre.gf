@@ -170,6 +170,10 @@ oper
 
   adegA : ADeg -> A ;
 
+-- For prefixed adjectives, the following function is
+-- provided.
+
+  prefADeg : ADeg -> ADeg ;
 
 --2 Adverbs
 
@@ -284,7 +288,7 @@ oper
   mkNP x g n = let np = mkNameNounPhrase x g in
     {s = np.s ; g = np.g ; p = np.p ; c = np.c ; n = n ; lock_NP = <>} ;
 
-  mkA a b c d = mkAdj a b c d ** {p = False ; lock_A = <>} ;
+  mkA a b c d = mkAdj a c b d ** {p = False ; lock_A = <>} ;
   regA a = mkAdjReg a False ** {p = False ; lock_A = <>} ;
   prefA a = {s = a.s ; p = True ; lock_A = <>} ;
 
@@ -294,6 +298,7 @@ oper
   compADeg a = {s = table {Pos => a.s ; _ => \\f => "plus" ++ a.s ! f} ; p = a.p ;
                lock_ADeg = <>} ;
   regADeg a = compADeg (regA a) ;
+  prefADeg a = {s = a.s ; p = True ; lock_ADeg = <>} ;
 
   adegA a = {s = a.s ! Pos ; p = a.p ; lock_A = <>} ;
 
