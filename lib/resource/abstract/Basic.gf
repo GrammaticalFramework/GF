@@ -26,7 +26,7 @@ abstract Basic = Categories ** {
   bread_N : N ;
   break_V2 : V2 ;
   broad_ADeg : ADeg ;
-  brother_N : N ;
+  brother_N2 : N2 ;
   brown_ADeg : ADeg ;
   butter_N : N ;
   buy_V2 : V2 ;
@@ -61,7 +61,7 @@ abstract Basic = Categories ** {
   eat_V2 : V2 ;
   enemy_N : N ;
   factory_N : N ;
-  father_N : N ;
+  father_N2 : N2 ;
   fear_VS : VS ;
   find_V2 : V2 ;
   fish_N : N ;
@@ -110,7 +110,7 @@ abstract Basic = Categories ** {
   meat_N : N ;
   milk_N : N ;
   moon_N : N ;
-  mother_N : N ;
+  mother_N2 : N2 ;
   mountain_N : N ;
   music_N : N ;
   narrow_ADeg : ADeg ;
@@ -181,7 +181,7 @@ abstract Basic = Categories ** {
   train_N : N ;
   travel_V : V ;
   tree_N : N ;
-  trousers_N : N ;
+----  trousers_N : N ;
   ugly_ADeg : ADeg ;
   understand_V2 : V2 ;
   university_N : N ;
@@ -202,4 +202,15 @@ abstract Basic = Categories ** {
   write_V2 : V2 ;
   yellow_ADeg : ADeg ;
   young_ADeg : ADeg ;
+
+  do_V2 : V2 ;
+  now_Adv : Adv ;
+  already_Adv : Adv ;
+  song_N : N ;
+  add_V3 : V3 ;
+  number_N : N ;
+  put_V2 : V2 ;
+  stop_V : V ;
+  jump_V : V ;
+
 }

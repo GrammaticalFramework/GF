@@ -1,4 +1,4 @@
---# -path=.:../romance:../abstract:../../prelude
+--# -path=.:../romance:../oldabstract:../abstract:../../prelude
 
 concrete TestResourceFre of TestResource = RulesFre, StructuralFre ** 
   open Prelude, TypesFre, MorphoFre, SyntaxFre in {

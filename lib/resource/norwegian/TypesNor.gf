@@ -25,14 +25,5 @@ oper
 param
   AdjFormPos = Strong GenNum | Weak ;
 
-  VFin = 
-   Pres Mode Voice
- | Pret Mode Voice
- | Imper ;         --- no passive
- 
-  VInf =
-   Inf Voice
- | Supin Voice
- | PtPret Case ;  ---- number and gender
 
 }

@@ -1,3 +1,4 @@
 --# -path=.:../scandinavian:../abstract:../../prelude
 
-concrete ClauseSwe of Clause = ClauseScand with (SyntaxScand=SyntaxSwe) ;
+concrete ClauseSwe of Clause = CategoriesSwe **
+  ClauseScand with (SyntaxScand=SyntaxSwe) ;

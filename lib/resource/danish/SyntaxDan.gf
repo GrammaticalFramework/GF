@@ -14,24 +14,12 @@ instance SyntaxDan of SyntaxScand = TypesDan **
   npMan : NounPhrase = nameNounPhrase (mkProperName "man" NUtr) ;
   npDet : NounPhrase = nameNounPhrase (mkProperName "det" NNeutr) ;
 
-
   mkAdjForm : Species -> Number -> NounGender -> AdjFormPos = \b,n,g -> 
     case <b,n> of {
       <Indef,Sg> => Strong (ASg (genNoun g)) ;
       <Indef,Pl> => Strong APl ;
       <Def,  _>  => Weak
       } ;
-
-  deponentVerb : Verb -> Verb = \finna -> {
-    s = table {
-      VF (Pres m _) => finna.s ! VF (Pres m Pass) ;
-      VF (Pret m _) => finna.s ! VF (Pret m Pass) ;
-      VI (Inf _)    => finna.s ! VI (Inf Pass) ;
-      VI (Supin _)  => finna.s ! VI (Supin Pass) ;
-      v             => finna.s ! v --- Imper !
-      } ;
-    s1 = finna.s1
-    } ;
 
   verbFinnas : Verb = 
     deponentVerb (mkVerb "finde" "finder" "findes" "fandt" "fundet" "find" ** {s1 = []}) ;
@@ -111,10 +99,6 @@ instance SyntaxDan of SyntaxScand = TypesDan **
 
   mkDeterminerSgGender3 : Str -> Str -> Str -> SpeciesP -> Determiner = \en,_,ett -> 
     mkDeterminerSgGender (table {Utr => en ; Neutr => ett}) ;
-
-  adjPastPart : Verb -> Adjective = \verb -> {
-    s = \\af,c => verb.s1 ++ verb.s ! VI (PtPret c) ---- af
-    } ;
 
   reflPron : Number -> Person -> Str = \n,p -> case <n,p> of {
     <Sg,P1> => "mig" ;

@@ -165,12 +165,13 @@ extendCompileEnvCanon ((k,s,c),fts) cgr ft =
 type TimedCompileEnv = (CompileEnv,[(FilePath,ModTime)])
 
 compileOne :: Options -> TimedCompileEnv -> FullPath -> IOE TimedCompileEnv
-compileOne opts env file = do
+compileOne opts env@((_,srcgr,_),_) file = do
 
   let putp = putPointE opts
   let gf   = fileSuffix file
   let path = justInitPath file
   let name = fileBody file
+  let mos  = modules srcgr
 
   case gf of
     -- for multilingual canonical gf, just read the file and update environment
@@ -188,12 +189,13 @@ compileOne opts env file = do
 
     -- for compiled resource, parse and organize, then update environment
     "gfr" -> do
-       sm0  <- putp ("| parsing" +++ file) $ getSourceModule file
-       let mos = case env of ((_,gr,_),_) -> modules gr
+       sm0 <- putp ("| parsing" +++ file) $ getSourceModule file
        sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm0
+---- experiment with not optimizing gfr 
+----      sm:_  <- putp "  optimizing " $ ioeErr $ evalModule mos sm1
        let gfc = gfcFile name 
-       cm <- putp ("+ reading" +++ gfc) $ getCanonModule gfc
-       ft <- getReadTimes file
+       cm  <- putp ("+ reading" +++ gfc) $ getCanonModule gfc
+       ft  <- getReadTimes file
        extendCompileEnv env (sm,cm) ft
 
     -- for gf source, do full compilation
@@ -202,7 +204,12 @@ compileOne opts env file = do
        (k',sm)  <- makeSourceModule opts (fst env) sm0
        cm  <- putp "  generating code... " $ generateModuleCode opts path sm
        ft <- getReadTimes file
-       extendCompileEnvInt env (k',sm,cm) ft
+
+       sm':_ <- case snd sm of
+----         ModMod n | isModRes n -> putp "  optimizing " $ ioeErr $ evalModule mos sm
+         _ -> return [sm]
+
+       extendCompileEnvInt env (k',sm',cm) ft
 
 -- dispatch reused resource at early stage
 
@@ -255,8 +262,11 @@ compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
 
       (k',mo3r:_) <- ioeErr $ refreshModule (k,mos) mo3
 
-      mo4:_ <- putp "  optimizing " $ ioeErr $ evalModule mos mo3r
-
+      mo4:_ <- 
+----        case snd mo1b of
+----          ModMod n | isModCnc n -> 
+        putp "  optimizing " $ ioeErr $ evalModule mos mo3r
+----        _ -> return [mo3r]
       return (k',mo4)
  where
    ----   prDebug mo = ioeIO $ putStrLn $ prGrammar $ MGrammar [mo] ---- debug

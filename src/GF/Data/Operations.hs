@@ -192,14 +192,17 @@ mapP f p = case p of
   Nope  -> Nope
 
 -- this is what happens when matching two values in the same module
-unifPerhaps :: (Eq a, Eq b) => Perhaps a b -> Perhaps a b -> Err (Perhaps a b)
+unifPerhaps :: (Eq a, Eq b, Show a, Show b) => 
+               Perhaps a b -> Perhaps a b -> Err (Perhaps a b)
 unifPerhaps p1 p2 = case (p1,p2) of
   (Nope, _)  -> return p2
   (_, Nope)  -> return p1
-  _ -> if p1==p2 then return p1 else Bad "update conflict"
+  _ -> if p1==p2 then return p1 
+                 else Bad ("update conflict between" ++++ show p1 ++++ show p2)
 
 -- this is what happens when updating a module extension
-updatePerhaps :: (Eq a,Eq b) => b -> Perhaps a b -> Perhaps a b -> Err (Perhaps a b)
+updatePerhaps :: (Eq a,Eq b, Show a, Show b) => 
+                 b -> Perhaps a b -> Perhaps a b -> Err (Perhaps a b)
 updatePerhaps old p1 p2 = case (p1,p2) of
   (Yes a,    Nope)  -> return $ may old
   (May older,Nope)  -> return $ may older
@@ -207,7 +210,7 @@ updatePerhaps old p1 p2 = case (p1,p2) of
   _ -> unifPerhaps p1 p2
 
 -- here the value is copied instead of referred to; used for oper types
-updatePerhapsHard :: (Eq a, Eq b) => b -> 
+updatePerhapsHard :: (Eq a, Eq b, Show a, Show b) => b -> 
                      Perhaps a b -> Perhaps a b -> Err (Perhaps a b)
 updatePerhapsHard old p1 p2 = case (p1,p2) of
   (Yes a,    Nope)  -> return $ yes a

@@ -33,7 +33,7 @@ data MGrammar i f a = MGrammar {modules :: [(i,ModInfo i f a)]}
 data ModInfo i f a =
     ModMainGrammar (MainGrammar i)
   | ModMod  (Module i f a)
-  | ModWith (ModuleType i) ModuleStatus i [OpenSpec i]
+  | ModWith (ModuleType i) ModuleStatus i [i] [OpenSpec i]
   deriving Show
 
 data Module i f a = Module {

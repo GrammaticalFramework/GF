@@ -26,17 +26,6 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
       <Def,  Pl> => Weak AxPl
       } ;
 
-  deponentVerb : Verb -> Verb = \finna -> {
-    s = table {
-      VF (Pres m _) => finna.s ! VF (Pres m Pass) ;
-      VF (Pret m _) => finna.s ! VF (Pret m Pass) ;
-      VI (Inf _)    => finna.s ! VI (Inf Pass) ;
-      VI (Supin _)  => finna.s ! VI (Supin Pass) ;
-      v             => finna.s ! v --- Imper !
-      } ;
-    s1 = finna.s1
-    } ;
-
   verbVara = vara_1200 ** {s1 = []} ;
   verbHava = hava_1198 ** {s1 = []};
 
@@ -118,10 +107,6 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
 
 -- next
 
-  adjPastPart : Verb -> Adjective = \verb -> {
-    s = \\af,c => verb.s1 ++ verb.s ! VI (PtPret af c) --- på slagen
-    } ;
-
   reflPron : Number -> Person -> Str = \n,p -> case <n,p> of {
     <Sg,P1> => "mig" ;
     <Sg,P2> => "dig" ;
@@ -135,4 +120,14 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
       (mkVerb "hålla" "håller" "håll"  "höll" "hållit" "hållen" ** 
        {s3 = ["på att"]})
       (predVerbGroup True Simul verb) ;  
+
+  strPrep : ComplPrep -> Str = \p -> case p of {
+    CPnoPrep => [] ;
+    CPav => "av" ;
+    CPför => "för" ;
+    CPi => "i" ;
+    CPom => "om" ;
+    CPpå => "på" ;
+    CPtill => "till"
+    } ;
 }

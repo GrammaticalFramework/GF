@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Rebuild a source module from incomplete and its with-instance.
 -----------------------------------------------------------------------------
 
 module Rebuild where
@@ -45,7 +45,7 @@ rebuildModule ms mo@(i,mi) = do
           m1 <- lookupModMod gr i0
           testErr (isModRes m1) ("interface expected instead of" +++ prt i0)
           m' <- do
-            js' <- extendMod False i0 (jments m1) (jments m)
+            js' <- extendMod False i0 i (jments m1) (jments m)
             --- to avoid double inclusions, in instance I of I0 = J0 ** ...
             case extends m of
               [] -> return $ replaceJudgements m js'
@@ -60,14 +60,14 @@ rebuildModule ms mo@(i,mi) = do
         _ -> return mi
 
     -- add the instance opens to an incomplete module "with" instances
-    ModWith mt stat ext ops -> do
+    ModWith mt stat ext me ops -> do
       let insts = [(inf,inst) | OQualif _ inf inst <- ops]
       let infs  = map fst insts
       let stat' = ifNull MSComplete (const MSIncomplete)
                     [i | i <- is, notElem i infs]
       testErr (stat' == MSComplete || stat == MSIncomplete) 
               ("module" +++ prt i +++ "remains incomplete")
-      Module mt0 _ fs me ops0 js <- lookupModMod gr ext
+      Module mt0 _ fs me' ops0 js <- lookupModMod gr ext
       let ops1 = ops ++ [o | o <- ops0, notElem (openedModule o) infs]
                      ++ [oQualif i i | i <- map snd insts] ----
                      ++ [oSimple i   | i <- map snd insts] ----

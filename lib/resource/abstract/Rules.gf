@@ -136,6 +136,8 @@ fun
   IntSlash   : IP -> Slash -> QCl ;         -- "whom does John see"
   QuestAdv   : IAdv -> Cl -> QCl ;          -- "why do you walk"
 
+  PosImpVP, NegImpVP : VPI -> Imp ;         -- "(don't) be a man"
+
 ----rename these ??
   IndicPhrase : S -> Phr ;                  -- "I walk."
   QuestPhrase : QS -> Phr ;                 -- "Do I walk?"
@@ -213,7 +215,6 @@ fun
 --- The type signatures of these ones should be changed from VP to VPI.
 
   ProgVG       : VP -> VP ;               -- he is eating
-  PosImperVP, NegImperVP : VP -> Imp ;    -- "(don't) be a man"
   OneVP        : VP -> Cl ;               -- "one walks"
 
 } ;

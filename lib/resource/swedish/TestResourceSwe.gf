@@ -1,7 +1,7 @@
 --# -path=.:../scandinavian:../abstract:../../prelude
 
 concrete TestResourceSwe of TestResource = 
--- RulesSwe, 
+RulesSwe, 
 ClauseSwe,
 StructuralSwe 
 ** 
@@ -28,17 +28,17 @@ lin
   House = extCommNoun (sHus "hus") ;
   Light = extCommNoun (sHus "ljus") ;
   Wine = extCommNoun (sParti "vin") ;
-  Walk = vNopart gå_1174 ;
+  Walk = vNopart (mkVerb "gå" "går" "gå" "gick" "gått" "gången") ;
   Run = vNopart (vFinna "spring" "sprang" "sprung") ;
   Drink = extTransVerb (vFinna "drick" "drack" "druck") [] ;
   Love = extTransVerb (vNopart (vTala "älsk")) [] ;
   Send = extTransVerb (vNopart (vTala "skick")) [] ;
   Wait = extTransVerb (vNopart (vTala "vänt")) "på" ;
-  Give = extTransVerb (vNopart (vFinna "giv" "gav" "giv")) [] ** {s3 = "till"} ; --- ge
+  Give = extTransVerb (vNopart (mkVerb "ge" "ger" "ge" "gav" "givit" "given")) [] ** {s3 = "till"} ;
   Prefer = extTransVerb (vNopart (vFinna "föredrag" "föredrog" "föredrag")) [] ** 
            {s3 = "framför"} ; --- föredra
 
-  Say = vNopart (vLeka "säg") ; --- works in present tense...
+  Say = vNopart (mkVerb "säga" "säger" "säg" "sade" "sagt" "sagd") ;
   Prove = vNopart (vTala "bevis") ;
   SwitchOn = mkDirectVerb (vFinna "sätt" "satte" "satt" ** {s1 = "på"}) ;
   SwitchOff = mkDirectVerb (vLeka "stäng" ** {s1 = "av"}) ;

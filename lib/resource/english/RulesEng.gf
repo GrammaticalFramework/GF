@@ -142,8 +142,8 @@ lin
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
 
-  PosImperVP = imperVerbPhrase True ;
-  NegImperVP = imperVerbPhrase False ;
+  PosImpVP = imperVerbPhrase True ;
+  NegImpVP = imperVerbPhrase False ;
 
   IndicPhrase = indicUtt ;
   QuestPhrase = interrogUtt ;

@@ -10,69 +10,268 @@
 
 resource MorphoSwe = TypesSwe ** open Prelude in {
 
+-- Nouns
+
 oper
-  mkVerbPart : (supa,super,sup,söp,supit,supen,upp : Str) -> Verb = 
-   \finna,finner,finn,fann,funnit,funnen,upp ->
+  mkNoun : (apa,apan,apor,aporna : Str) -> Subst =
+  \apa,apan,apor,aporna ->  
+ {s = table {
+    SF Sg Indef c => mkCase c apa ;
+    SF Sg Def c => mkCase c apan ;
+    SF Pl Indef c => mkCase c apor ;
+    SF Pl Def c => mkCase c aporna
+    } ;
+  h1 = case last apan of {
+    "n" => Utr ;
+    _ => Neutr
+    }
+  } ;
+
+  reg2Noun : Str -> Str -> Subst = \bil,bilar -> 
+   let 
+     l  = last bil ;
+     b  = Predef.tk 2 bil ; 
+     ar = Predef.dp 2 bilar 
+   in 
+   case ar of {
+      "or" => case l of {
+         "a" => decl1Noun bil ;
+         "r" => sLik bil ;
+         "o" => mkNoun bil (bil + "n")  bilar (bilar + "na") ;
+         _   => mkNoun bil (bil + "en") bilar (bilar + "na")
+         } ;
+      "ar" => ifTok Subst (Predef.tk 2 bilar) bil 
+                 (decl2Noun bil)
+                 (case l of {
+                    "e" => decl2Noun bil ;
+                    _   => mkNoun bil (bil + "n") bilar (bilar + "na") 
+                    }
+                 ) ;
+      "er" => decl3Noun bil ;
+      "en" => ifTok Subst bil bilar (sLik bil) (sRike bil) ; -- ben-ben
+      _ => ifTok Subst bil bilar (
+             case Predef.dp 3 bil of {
+                "are" => sKikare (init bil) ; 
+                _ => decl5Noun bil
+                }
+             )
+             (decl5Noun bil) --- rest case with lots of garbage
+      } ; 
+         
+--- this is a very rough heuristic as regards "ar/er"
+
+  regNoun : Str -> Gender -> Subst = \bil,g -> case g of {
+    Utr => case last bil of {
+      "a" => decl1Noun bil ;
+      _   => decl2Noun bil
+      } ;
+    Neutr => case last bil of {
+      "e" => sRike bil ;
+      _   => decl5Noun bil
+      }
+    } ;
+
+
+  decl1Noun : Str -> Subst = \apa -> sApa (init apa) ;
+
+  decl2Noun : Str -> Subst = \bil ->
+    case last bil of {
+      "e" => sPojke (init bil) ;
+      _ => mkNoun bil (bil + "en") (bil + "ar") (bil + "arna")
+      } ;
+
+  decl3Noun : Str -> Subst = \sak ->
+    case last sak of {
+      "e" => sVarelse (init sak) ;
+      "å" => sNivå sak ;
+      _ => mkNoun sak (sak + "en") (sak + "er") (sak + "erna")
+      } ;
+
+  decl5Noun : Str -> Subst = \lik ->
+    mkNoun lik (lik + "et") lik (lik + "en") ;
+
+
+-- Adjectives
+
+
+mkAdjPos : Str -> Str -> Str -> Str -> AdjFormPos -> Str ;
+mkAdjPos liten litet lilla sma a = case a of {
+  Strong gn => case gn of {
+    ASg Utr => liten ;
+    ASg Neutr => litet ;
+    APl => sma
+    } ;
+  Weak sn => case sn of {
+    AxSg NoMasc => lilla ;
+    AxSg Masc => init lilla + "e" ;
+    AxPl => sma
+   }
+  } ;
+
+-- The worst-case macro for the full declension (including comparison forms)
+-- is not so much worse.
+
+mkAdjective : Str -> Str -> Str -> Str -> 
+                     Str -> Str -> Str -> Adj ;
+mkAdjective liten litet lilla sma mindre minst minsta = {s = table {
+  AF (Posit p) c => mkCase c (mkAdjPos liten litet lilla sma p) ;
+  AF Compar  c   => mkCase c mindre ;
+  AF (Super SupStrong) c => mkCase c minst ;
+  AF (Super SupWeak) c   => mkCase c minsta
+  } 
+} ;
+
+-- It is handy to extract the positive part of a declension only, if
+-- the other comparicon forms aren't needed or don't make sense.
+
+extractPositive : Adj -> {s : AdjFormPos => Case => Str} ;
+extractPositive adj = {s = \\a,c => adj.s ! (AF (Posit a) c)} ;
+
+-- The notion of 'moderately irregular adjective' covers almost all adjectives.
+
+adjIrreg : (_,_,_,_ : Str) -> Adj ;
+adjIrreg god gott battre bast = 
+  mkAdjective god gott (god + "a") (god + "a") battre bast (bast + "a") ;
+
+-- Often it is possible to derive the $Pos Sg Neutr$ form even if the
+-- comparison forms are irregular.
+
+adjIrreg3 : (_,_,_: Str) -> Adj ;
+adjIrreg3 ung yngre yngst = adjIrreg ung (ung + "t") yngre yngst ;
+
+-- Some adjectives must be given $Pos Sg Utr$ $Pos Sg Neutr$, and $Pos Pl$,
+-- e.g. those ending with unstressed "en".
+
+adjAlmostReg : (_,_,_: Str) -> Adj ;
+adjAlmostReg ljummen ljummet ljumma = 
+  mkAdjective ljummen ljummet ljumma ljumma 
+              (ljumma + "re") (ljumma + "st") (ljumma + "ste") ;
+
+adjReg : Str -> Adj = \fin -> adjAlmostReg fin (fin + "t") (fin + "a") ;
+
+adj2Reg : Str -> Str -> Adj = \vid,vitt -> adjAlmostReg vid vitt (vid + "a") ;
+
+
+-- Verbs
+
+  mkVerb : (supa,super,sup,söp,supit,supen : Str) -> Verb = 
+   \finna,finner,finn,fann,funnit,funnen ->
     let funn = ptPretForms funnen in
     {s = table {
-    VF (Pres Ind Act) => finner ;
-    VF (Pres Ind Pass) => finn + "s" ;
-    VF (Pres Cnj Act) => finn + "e" ;
-    VF (Pres Cnj Pass) => finn + "es" ;
-    VF (Pret Ind Act) => fann ;
-    VF (Pret Ind Pass) => fann + "s" ;
-    VF (Pret Cnj Act) => fann ;        --- = ind
-    VF (Pret Cnj Pass) => fann + "s" ; --- 
-    VF Imper => finn ;
-    VI (Inf Act) => finna ;
-    VI (Inf Pass) => finna + "s" ;
-    VI (Supin Act) => funnit ;
-    VI (Supin Pass) => funnit + "s" ;
-    VI (PtPres Nom) => finn + "ande" ;
-    VI (PtPres Gen) => finn + "andes" ;
+    VF (Pres Act) => finner ;
+    VF (Pres Pass) => mkVoice Pass finn ;
+    VF (Pret v) => mkVoice v fann ;
+    VF (Imper v) => mkVoice v finn ;
+    VI (Inf v) => mkVoice v finna ;
+    VI (Supin v) => mkVoice v funnit ;
     VI (PtPret a c) => funn ! a ! c
     } ;
-     s1 = upp
-    } ;
+     s1 = []
+   } ;
 
-ptPretForms : Str -> AdjFormPos => Case => Str = \funnen -> \\a,c =>  
-  mkCase c (
- {- ----
-    case Predef.dp 2 funnen of {
-   "en" => let funn : Str = Predef.tk 2 funnen in 
-     case a of {
-      (Strong (ASg Utr)) => funn + "en" ;
-      (Strong (ASg Neutr)) => funn + "et" ;
-      (Strong APl) => funn + "a" ;
-      (Weak (AxSg NoMasc)) => funn + "a" ;
-      (Weak (AxSg Masc)) => funn + "e" ;
-      (Weak AxPl) => funn + "a" 
-    } ;
-  "ad" => let funn : Str = Predef.tk 2 funnen in 
-     case a of {
-      (Strong (ASg Utr)) => funn + "ad" ;
-      (Strong (ASg Neutr)) => funn + "at" ;
-      (Strong APl) => funn + "ade" ;
-      (Weak _) => funn + "ade"
-    } ;
+  vFinna : (_,_,_ : Str) -> Verb = \finn, fann, funn -> 
+    mkVerb (finn + "a") (finn + "er") finn fann (funn + "it") (funn + "en") ;
 
-  _ => 
--}
-  funnen ---- to be completed
- ---- }
- ) ;
+-- Now this is more general and subsumes $vFinna$.
+
+  vSälja : (_,_,_ : Str) -> Verb = \sälja, sålde, sålt -> 
+    let
+      a = last sälja ; 
+      sälj = case a of {
+        "a" => init sälja ;
+        _ => sälja
+        } ;
+      er = case a of {
+        "a" => "er" ;
+        _ => "r"
+        } ;
+      såld = case Predef.dp 2 sålt of {
+        "it" => Predef.tk 2 sålt + "en" ;
+        _ => init sålt + "d"
+        }
+    in 
+    mkVerb sälja (sälj + er) sälj sålde sålt såld ;
+
+  regVerb : (_,_ : Str) -> Verb = \tala,talar -> 
+    let 
+      ar    = Predef.dp 2 talar ;
+      tal   = Predef.tk 2 talar ;
+      forms = case ar of {
+        "ar" => vTala tal ;
+        "er" => vLeka tal ;
+        _    => case last tala of {
+          "a" => mkVerb tala talar tal (tal + "de") (tala + "t") (tala + "d") ;
+          _ => mkVerb tala talar tala (tala + "dde") (tala + "tt") (tala + "dd")
+          }
+        }
+      in forms ** {s1 = []} ;
+
+  ptPretForms : Str -> AdjFormPos => Case => Str = \funnen -> \\a,c =>  
+  let 
+    funn  = Predef.tk 2 funnen ;
+    en    = Predef.dp 2 funnen ;
+    funne = init funnen ;
+    n     = last funnen ;
+    m     = case last funn of {
+      "n" => [] ;
+      _ => "n"
+      } ;
+    funna = case en of {
+     "en" => case a of {
+       (Strong (ASg Utr)) => funn + "en" ;
+       (Strong (ASg Neutr)) => funn + "et" ;
+       (Weak (AxSg Masc)) => funn + m + "e" ;
+       _ => funn + m + "a"
+       } ;
+     "dd" => case a of {
+       (Strong (ASg Utr)) => funn + "dd" ;
+       (Strong (ASg Neutr)) => funn + "tt" ;
+       (Weak (AxSg Masc)) => funn + "dde" ;
+       _ => funn + "dda"
+       } ;
+     "ad" => case a of {
+       (Strong (ASg Utr)) => funn + "ad" ;
+       (Strong (ASg Neutr)) => funn + "at" ;
+       _ => funn + "ade"
+       } ;
+     _ => case n of {
+       "d" => case a of {
+         (Strong (ASg Utr)) => funne + "d" ;
+         (Strong (ASg Neutr)) => funne + "t" ;
+         (Weak (AxSg Masc)) => funne + "de" ;
+         _ => funne + "da"
+         } ;
+       _ => case a of {
+         (Strong (ASg Utr)) => funne + "t" ;
+         (Strong (ASg Neutr)) => funne + "t" ;
+         (Weak (AxSg Masc)) => funne + "te" ;
+         _ => funne + "ta"
+         }
+      }
+  }
+  in 
+  mkCase c funna ;
 
 mkCase : Case -> Str -> Str = \c,f -> case c of {
       Nom => f ;
-      Gen => f + "s"
+      Gen => f + case last f of {
+        "s" => [] ;
+        _ => "s"
+        }
       } ;
 
+mkVoice : Voice -> Str -> Str = \c,f -> case c of {
+      Act  => f ;
+      Pass => f + case last f of {
+        "s" => "es" ;
+        _ => "s"
+        }
+      } ;
 
 -- The most common is a verb without a particle.
 
-  mkVerb : (_,_,_,_,_,_ : Str) -> Verb = \supa,super,sup,söp,supit,supen ->
-    mkVerbPart supa super sup söp supit supen [] ; 
-
+  mkVerbPart : (_,_,_,_,_,_,_ : Str) -> Verb = \supa,super,sup,söp,supit,supen,upp ->
+    {s = (mkVerb supa super sup söp supit supen).s} ** {s1 = upp} ; 
 
 -- Prepositions are just strings.
   Preposition = Str ;
@@ -524,21 +723,16 @@ oper aAbstrakt : Str -> Adj = \abstrakt ->
 
 oper vTala : Str -> Verbum = \tal -> 
  {s = table {
-    VF (Pres Ind Act) => tal + "ar" ;
-    VF (Pres Ind Pass) => tal + "as" ;
-    VF (Pres Cnj Act) => tal + "e" ;
-    VF (Pres Cnj Pass) => tal + "es" ;
-    VF (Pret Ind Act) => tal + "ade" ;
-    VF (Pret Ind Pass) => tal + "ades" ;
-    VF (Pret Cnj Act) => tal + "ade" ;
-    VF (Pret Cnj Pass) => tal + "ades" ;
-    VF Imper => tal + "a" ;
+    VF (Pres Act) => tal + "ar" ;
+    VF (Pres Pass) => tal + "as" ;
+    VF (Pret Act) => tal + "ade" ;
+    VF (Pret Pass) => tal + "ades" ;
+    VF (Imper Act) => tal + "a" ;
+    VF (Imper Pass) => tal + "as" ;
     VI (Inf Act) => tal + "a" ;
     VI (Inf Pass) => tal + "as" ;
     VI (Supin Act) => tal + "at" ;
     VI (Supin Pass) => tal + "ats" ;
-    VI (PtPres Nom) => tal + "ande" ;
-    VI (PtPres Gen) => tal + "andes" ;
     VI (PtPret (Strong (ASg Utr)) Nom) => tal + "ad" ;
     VI (PtPret (Strong (ASg Utr)) Gen) => tal + "ads" ;
     VI (PtPret (Strong (ASg Neutr)) Nom) => tal + "at" ;
@@ -556,21 +750,15 @@ oper vTala : Str -> Verbum = \tal ->
 
 oper vLeka : Str -> Verbum = \lek -> 
  {s = table {
-    VF (Pres Ind Act) => lek + "er" ;
-    VF (Pres Ind Pass) => variants {lek + "s" ; lek + "es"} ;
-    VF (Pres Cnj Act) => lek + "e" ;
-    VF (Pres Cnj Pass) => lek + "es" ;
-    VF (Pret Ind Act) => lek + "te" ;
-    VF (Pret Ind Pass) => lek + "tes" ;
-    VF (Pret Cnj Act) => lek + "te" ;
-    VF (Pret Cnj Pass) => lek + "tes" ;
-    VF Imper => lek ;
+    VF (Pres Act) => lek + "er" ;
+    VF (Pres Pass) => mkVoice Pass lek ;
+    VF (Pret Act) => lek + "te" ;
+    VF (Pret Pass) => lek + "tes" ;
+    VF (Imper v) => mkVoice v lek ;
     VI (Inf Act) => lek + "a" ;
     VI (Inf Pass) => lek + "as" ;
     VI (Supin Act) => lek + "t" ;
     VI (Supin Pass) => lek + "ts" ;
-    VI (PtPres Nom) => lek + "ande" ;
-    VI (PtPres Gen) => lek + "andes" ;
     VI (PtPret (Strong (ASg Utr)) Nom) => lek + "t" ;
     VI (PtPret (Strong (ASg Utr)) Gen) => lek + "ts" ;
     VI (PtPret (Strong (ASg Neutr)) Nom) => lek + "t" ;
@@ -588,21 +776,16 @@ oper vLeka : Str -> Verbum = \lek ->
 
 oper vTyda : Str -> Verbum = \ty -> 
  {s = table {
-    VF (Pres Ind Act) => ty + "der" ;
-    VF (Pres Ind Pass) => variants {ty + "ds" ; ty + "des"} ;
-    VF (Pres Cnj Act) => ty + "de" ;
-    VF (Pres Cnj Pass) => ty + "des" ;
-    VF (Pret Ind Act) => ty + "dde" ;
-    VF (Pret Ind Pass) => ty + "ddes" ;
-    VF (Pret Cnj Act) => ty + "dde" ;
-    VF (Pret Cnj Pass) => ty + "ddes" ;
-    VF Imper => ty + "d" ;
+    VF (Pres Act) => ty + "der" ;
+    VF (Pres Pass) => variants {ty + "ds" ; ty + "des"} ;
+    VF (Pret Act) => ty + "dde" ;
+    VF (Pret Pass) => ty + "ddes" ;
+    VF (Imper Act) => ty + "d" ;
+    VF (Imper Pass) => ty + "ds" ;
     VI (Inf Act) => ty + "da" ;
     VI (Inf Pass) => ty + "das" ;
     VI (Supin Act) => ty + "tt" ;
     VI (Supin Pass) => ty + "tts" ;
-    VI (PtPres Nom) => ty + "dande" ;
-    VI (PtPres Gen) => ty + "dandes" ;
     VI (PtPret (Strong (ASg Utr)) Nom) => ty + "dd" ;
     VI (PtPret (Strong (ASg Utr)) Gen) => ty + "dds" ;
     VI (PtPret (Strong (ASg Neutr)) Nom) => ty + "tt" ;
@@ -620,21 +803,16 @@ oper vTyda : Str -> Verbum = \ty ->
 
 oper vVända : Str -> Verbum = \vän -> 
  {s = table {
-    VF (Pres Ind Act) => vän + "der" ;
-    VF (Pres Ind Pass) => variants {vän + "ds" ; vän + "des"} ;
-    VF (Pres Cnj Act) => vän + "de" ;
-    VF (Pres Cnj Pass) => vän + "des" ;
-    VF (Pret Ind Act) => vän + "de" ;
-    VF (Pret Ind Pass) => vän + "des" ;
-    VF (Pret Cnj Act) => vän + "de" ;
-    VF (Pret Cnj Pass) => vän + "des" ;
-    VF Imper => vän + "d" ;
+    VF (Pres Act) => vän + "der" ;
+    VF (Pres Pass) => variants {vän + "ds" ; vän + "des"} ;
+    VF (Pret Act) => vän + "de" ;
+    VF (Pret Pass) => vän + "des" ;
+    VF (Imper Act) => vän + "d" ;
+    VF (Imper Pass) => vän + "ds" ;
     VI (Inf Act) => vän + "da" ;
     VI (Inf Pass) => vän + "das" ;
     VI (Supin Act) => vän + "t" ;
     VI (Supin Pass) => vän + "ts" ;
-    VI (PtPres Nom) => vän + "dande" ;
-    VI (PtPres Gen) => vän + "dandes" ;
     VI (PtPret (Strong (ASg Utr)) Nom) => vän + "d" ;
     VI (PtPret (Strong (ASg Utr)) Gen) => vän + "ds" ;
     VI (PtPret (Strong (ASg Neutr)) Nom) => vän + "t" ;
@@ -652,21 +830,16 @@ oper vVända : Str -> Verbum = \vän ->
 
 oper vByta : Str -> Verbum = \by -> 
  {s = table {
-    VF (Pres Ind Act) => by + "ter" ;
-    VF (Pres Ind Pass) => variants {by + "ts" ; by + "tes"} ;
-    VF (Pres Cnj Act) => by + "te" ;
-    VF (Pres Cnj Pass) => by + "tes" ;
-    VF (Pret Ind Act) => by + "tte" ;
-    VF (Pret Ind Pass) => by + "ttes" ;
-    VF (Pret Cnj Act) => by + "tte" ;
-    VF (Pret Cnj Pass) => by + "ttes" ;
-    VF Imper => by + "t" ;
+    VF (Pres Act) => by + "ter" ;
+    VF (Pres Pass) => variants {by + "ts" ; by + "tes"} ;
+    VF (Pret Act) => by + "tte" ;
+    VF (Pret Pass) => by + "ttes" ;
+    VF (Imper Act) => by + "t" ;
+    VF (Imper Pass) => by + "ts" ;
     VI (Inf Act) => by + "ta" ;
     VI (Inf Pass) => by + "tas" ;
     VI (Supin Act) => by + "tt" ;
     VI (Supin Pass) => by + "tts" ;
-    VI (PtPres Nom) => by + "tande" ;
-    VI (PtPres Gen) => by + "tandes" ;
     VI (PtPret (Strong (ASg Utr)) Nom) => by + "tt" ;
     VI (PtPret (Strong (ASg Utr)) Gen) => by + "tts" ;
     VI (PtPret (Strong (ASg Neutr)) Nom) => by + "tt" ;
@@ -682,55 +855,18 @@ oper vByta : Str -> Verbum = \by ->
     }
   } ;
 
-oper vGömma : Str -> Verbum = \göm -> 
- {s = table {
-    VF (Pres Ind Act) => göm + "mer" ;
-    VF (Pres Ind Pass) => variants {göm + "s" ; göm + "mes"} ;
-    VF (Pres Cnj Act) => göm + "me" ;
-    VF (Pres Cnj Pass) => göm + "mes" ;
-    VF (Pret Ind Act) => göm + "de" ;
-    VF (Pret Ind Pass) => göm + "des" ;
-    VF (Pret Cnj Act) => göm + "de" ;
-    VF (Pret Cnj Pass) => göm + "des" ;
-    VF Imper => göm ;
-    VI (Inf Act) => göm + "ma" ;
-    VI (Inf Pass) => göm + "mas" ;
-    VI (Supin Act) => göm + "t" ;
-    VI (Supin Pass) => göm + "ts" ;
-    VI (PtPres Nom) => göm + "mande" ;
-    VI (PtPres Gen) => göm + "mandes" ;
-    VI (PtPret (Strong (ASg Utr)) Nom) => göm + "d" ;
-    VI (PtPret (Strong (ASg Utr)) Gen) => göm + "ds" ;
-    VI (PtPret (Strong (ASg Neutr)) Nom) => göm + "t" ;
-    VI (PtPret (Strong (ASg Neutr)) Gen) => göm + "ts" ;
-    VI (PtPret (Strong APl) Nom) => göm + "da" ;
-    VI (PtPret (Strong APl) Gen) => göm + "das" ;
-    VI (PtPret (Weak (AxSg NoMasc)) Nom) => göm + "da" ;
-    VI (PtPret (Weak (AxSg NoMasc)) Gen) => göm + "das" ;
-    VI (PtPret (Weak (AxSg Masc)) Nom) => göm + "de" ;
-    VI (PtPret (Weak (AxSg Masc)) Gen) => göm + "des" ;
-    VI (PtPret (Weak AxPl) Nom) => göm + "da" ;
-    VI (PtPret (Weak AxPl) Gen) => göm + "das"
-    }
-  } ;
-
 oper vHyra : Str -> Verbum = \hyr -> 
  {s = table {
-    VF (Pres Ind Act) => hyr ;
-    VF (Pres Ind Pass) => variants {hyr + "s" ; hyr + "es"} ;
-    VF (Pres Cnj Act) => hyr + "e" ;
-    VF (Pres Cnj Pass) => hyr + "es" ;
-    VF (Pret Ind Act) => hyr + "de" ;
-    VF (Pret Ind Pass) => hyr + "des" ;
-    VF (Pret Cnj Act) => hyr + "de" ;
-    VF (Pret Cnj Pass) => hyr + "des" ;
-    VF Imper => hyr ;
+    VF (Pres Act) => hyr ;
+    VF (Pres Pass) => variants {hyr + "s" ; hyr + "es"} ;
+    VF (Pret Act) => hyr + "de" ;
+    VF (Pret Pass) => hyr + "des" ;
+    VF (Imper Act) => hyr ;
+    VF (Imper Pass) => hyr + "s" ;
     VI (Inf Act) => hyr + "a" ;
     VI (Inf Pass) => hyr + "as" ;
     VI (Supin Act) => hyr + "t" ;
     VI (Supin Pass) => hyr + "ts" ;
-    VI (PtPres Nom) => hyr + "ande" ;
-    VI (PtPres Gen) => hyr + "andes" ;
     VI (PtPret (Strong (ASg Utr)) Nom) => hyr + "d" ;
     VI (PtPret (Strong (ASg Utr)) Gen) => hyr + "ds" ;
     VI (PtPret (Strong (ASg Neutr)) Nom) => hyr + "t" ;
@@ -743,70 +879,6 @@ oper vHyra : Str -> Verbum = \hyr ->
     VI (PtPret (Weak (AxSg Masc)) Gen) => hyr + "des" ;
     VI (PtPret (Weak AxPl) Nom) => hyr + "da" ;
     VI (PtPret (Weak AxPl) Gen) => hyr + "das"
-    }
-  } ;
-
-oper vTåla : Str -> Verbum = \tål -> 
- {s = table {
-    VF (Pres Ind Act) => tål ;
-    VF (Pres Ind Pass) => variants {tål + "s" ; tål + "es"} ;
-    VF (Pres Cnj Act) => tål + "e" ;
-    VF (Pres Cnj Pass) => tål + "es" ;
-    VF (Pret Ind Act) => tål + "de" ;
-    VF (Pret Ind Pass) => tål + "des" ;
-    VF (Pret Cnj Act) => tål + "de" ;
-    VF (Pret Cnj Pass) => tål + "des" ;
-    VF Imper => tål ;
-    VI (Inf Act) => tål + "a" ;
-    VI (Inf Pass) => tål + "as" ;
-    VI (Supin Act) => tål + "t" ;
-    VI (Supin Pass) => tål + "ts" ;
-    VI (PtPres Nom) => tål + "ande" ;
-    VI (PtPres Gen) => tål + "andes" ;
-    VI (PtPret (Strong (ASg Utr)) Nom) => tål + "d" ;
-    VI (PtPret (Strong (ASg Utr)) Gen) => tål + "ds" ;
-    VI (PtPret (Strong (ASg Neutr)) Nom) => tål + "t" ;
-    VI (PtPret (Strong (ASg Neutr)) Gen) => tål + "ts" ;
-    VI (PtPret (Strong APl) Nom) => tål + "da" ;
-    VI (PtPret (Strong APl) Gen) => tål + "das" ;
-    VI (PtPret (Weak (AxSg NoMasc)) Nom) => tål + "da" ;
-    VI (PtPret (Weak (AxSg NoMasc)) Gen) => tål + "das" ;
-    VI (PtPret (Weak (AxSg Masc)) Nom) => tål + "de" ;
-    VI (PtPret (Weak (AxSg Masc)) Gen) => tål + "des" ;
-    VI (PtPret (Weak AxPl) Nom) => tål + "da" ;
-    VI (PtPret (Weak AxPl) Gen) => tål + "das"
-    }
-  } ;
-
-oper vFinna : (_,_,_ : Str) -> Verbum = \finn, fann, funn -> 
- {s = table {
-    VF (Pres Ind Act) => finn + "er" ;
-    VF (Pres Ind Pass) => variants {finn + "s" ; finn + "es"} ;
-    VF (Pres Cnj Act) => finn + "e" ;
-    VF (Pres Cnj Pass) => finn + "es" ;
-    VF (Pret Ind Act) => fann ;
-    VF (Pret Ind Pass) => fann + "s" ;
-    VF (Pret Cnj Act) => funn + "e" ;
-    VF (Pret Cnj Pass) => funn + "es" ;
-    VF Imper => finn ;
-    VI (Inf Act) => finn + "a" ;
-    VI (Inf Pass) => finn + "as" ;
-    VI (Supin Act) => funn + "it" ;
-    VI (Supin Pass) => funn + "its" ;
-    VI (PtPres Nom) => finn + "ande" ;
-    VI (PtPres Gen) => finn + "andes" ;
-    VI (PtPret (Strong (ASg Utr)) Nom) => funn + "en" ;
-    VI (PtPret (Strong (ASg Utr)) Gen) => funn + "ens" ;
-    VI (PtPret (Strong (ASg Neutr)) Nom) => funn + "et" ;
-    VI (PtPret (Strong (ASg Neutr)) Gen) => funn + "ets" ;
-    VI (PtPret (Strong APl) Nom) => funn + "a" ;
-    VI (PtPret (Strong APl) Gen) => funn + "as" ;
-    VI (PtPret (Weak (AxSg NoMasc)) Nom) => funn + "a" ;
-    VI (PtPret (Weak (AxSg NoMasc)) Gen) => funn + "as" ;
-    VI (PtPret (Weak (AxSg Masc)) Nom) => funn + "e" ;
-    VI (PtPret (Weak (AxSg Masc)) Gen) => funn + "es" ;
-    VI (PtPret (Weak AxPl) Nom) => funn + "a" ;
-    VI (PtPret (Weak AxPl) Gen) => funn + "as"
     }
   } ;
 
@@ -1065,86 +1137,18 @@ oper liten_1146 : Adj =
     }
   } ;
 
-oper giva_1147 : Verbum = 
- {s = table {
-    VF (Pres Ind Act) => variants {"giver" ; "ger"} ;
-    VF (Pres Ind Pass) => variants {"gives" ; "givs" ; "ges"} ;
-    VF (Pres Conj Act) => "give" ;
-    VF (Pres Conj Pass) => "gives" ;
-    VF (Pret Ind Act) => "gav" ;
-    VF (Pret Ind Pass) => "gavs" ;
-    VF (Pret Conj Act) => "give" ;
-    VF (Pret Conj Pass) => "gives" ;
-    VF Imper => variants {"giv" ; "ge"} ;
-    VI (Inf Act) => variants {"giva" ; "ge"} ;
-    VI (Inf Pass) => variants {"givas" ; "ges"} ;
-    VI (Supin Act) => "givit" ;
-    VI (Supin Pass) => "givits" ;
-    VI (PtPres Nom) => "givande" ;
-    VI (PtPres Gen) => "givandes" ;
-    VI (PtPret (Strong (ASg Utr)) Nom) => "given" ;
-    VI (PtPret (Strong (ASg Utr)) Gen) => "givens" ;
-    VI (PtPret (Strong (ASg Neutr)) Nom) => "givet" ;
-    VI (PtPret (Strong (ASg Neutr)) Gen) => "givets" ;
-    VI (PtPret (Strong APl) Nom) => "givna" ;
-    VI (PtPret (Strong APl) Gen) => "givnas" ;
-    VI (PtPret (Weak (AxSg NoMasc)) Nom) => "givna" ;
-    VI (PtPret (Weak (AxSg NoMasc)) Gen) => "givnas" ;
-    VI (PtPret (Weak (AxSg Masc)) Nom) => "givne" ;
-    VI (PtPret (Weak (AxSg Masc)) Gen) => "givnes" ;
-    VI (PtPret (Weak AxPl) Nom) => "givna" ;
-    VI (PtPret (Weak AxPl) Gen) => "givnas"
-    }
-  } ;
-
-oper gå_1174 : Verbum = 
- {s = table {
-    VF (Pres Ind Act) => "går" ;
-    VF (Pres Ind Pass) => "gås" ;
-    VF (Pres Cnj Act) => "gå" ;
-    VF (Pres Cnj Pass) => "gås" ;
-    VF (Pret Ind Act) => "gick" ;
-    VF (Pret Ind Pass) => "gicks" ;
-    VF (Pret Cnj Act) => "ginge" ;
-    VF (Pret Cnj Pass) => "ginges" ;
-    VF Imper => "gå" ;
-    VI (Inf Act) => "gå" ;
-    VI (Inf Pass) => "gås" ;
-    VI (Supin Act) => "gått" ;
-    VI (Supin Pass) => "gåtts" ;
-    VI (PtPres Nom) => "gående" ;
-    VI (PtPres Gen) => "gåendes" ;
-    VI (PtPret (Strong (ASg Utr)) Nom) => "gången" ;
-    VI (PtPret (Strong (ASg Utr)) Gen) => "gångens" ;
-    VI (PtPret (Strong (ASg Neutr)) Nom) => "gånget" ;
-    VI (PtPret (Strong (ASg Neutr)) Gen) => "gångets" ;
-    VI (PtPret (Strong APl) Nom) => "gångna" ;
-    VI (PtPret (Strong APl) Gen) => "gångnas" ;
-    VI (PtPret (Weak (AxSg NoMasc)) Nom) => "gångna" ;
-    VI (PtPret (Weak (AxSg NoMasc)) Gen) => "gångnas" ;
-    VI (PtPret (Weak (AxSg Masc)) Nom) => "gångne" ;
-    VI (PtPret (Weak (AxSg Masc)) Gen) => "gångnes" ;
-    VI (PtPret (Weak AxPl) Nom) => "gångna" ;
-    VI (PtPret (Weak AxPl) Gen) => "gångnas"
-    }
-  } ;
 oper hava_1198 : Verbum = 
  {s = table {
-    VF (Pres Ind Act) => variants {"haver" ; "har"} ;
-    VF (Pres Ind Pass) => variants {"havs" ; "has"} ;
-    VF (Pres Conj Act) => "have" ;
-    VF (Pres Conj Pass) => "haves" ;
-    VF (Pret Ind Act) => "hade" ;
-    VF (Pret Ind Pass) => "hades" ;
-    VF (Pret Conj Act) => "hade" ;
-    VF (Pret Conj Pass) => "hades" ;
-    VF Imper => variants {"hav" ; "ha"} ;
-    VI (Inf Act) => variants {"hava" ; "ha"} ;
-    VI (Inf Pass) => variants {"havas" ; "has"} ;
+    VF (Pres Act) => "har" ;
+    VF (Pres Pass) => "has" ;
+    VF (Pret Act) => "hade" ;
+    VF (Pret Pass) => "hades" ;
+    VF (Imper Act) => "ha" ;
+    VF (Imper Pass) => "has" ;
+    VI (Inf Act) => "ha" ;
+    VI (Inf Pass) => "has" ;
     VI (Supin Act) => "haft" ;
     VI (Supin Pass) => "hafts" ;
-    VI (PtPres Nom) => "havande" ;
-    VI (PtPres Gen) => "havandes" ;
     VI (PtPret (Strong (ASg Utr)) Nom) => variants {} ;
     VI (PtPret (Strong (ASg Utr)) Gen) => variants {} ;
     VI (PtPret (Strong (ASg Neutr)) Nom) => variants {} ;
@@ -1162,21 +1166,15 @@ oper hava_1198 : Verbum =
 
 oper vara_1200 : Verbum = 
  {s = table {
-    VF (Pres Ind Act) => "är" ;
-    VF (Pres Ind Pass) => variants {} ;
-    VF (Pres Conj Act) => "vare" ;
-    VF (Pres Conj Pass) => variants {} ;
-    VF (Pret Ind Act) => "var" ;
-    VF (Pret Ind Pass) => variants {} ;
-    VF (Pret Conj Act) => "vore" ;
-    VF (Pret Conj Pass) => variants {} ;
-    VF Imper => "var" ;
+    VF (Pres Act) => "är" ;
+    VF (Pres Pass) => variants {} ;
+    VF (Pret Act) => "var" ;
+    VF (Pret Pass) => variants {} ;
+    VF (Imper _) => "var" ;
     VI (Inf Act) => "vara" ;
     VI (Inf Pass) => variants {} ;
     VI (Supin Act) => "varit" ;
     VI (Supin Pass) => variants {} ;
-    VI (PtPres Nom) => "varande" ;
-    VI (PtPres Gen) => "varandes" ;
     VI (PtPret (Strong (ASg Utr)) Nom) => variants {} ;
     VI (PtPret (Strong (ASg Utr)) Gen) => variants {} ;
     VI (PtPret (Strong (ASg Neutr)) Nom) => variants {} ;
@@ -1204,7 +1202,5 @@ oper
 
   regTal : Str -> LinDigit = \fem -> 
     mkTal fem (fem + "ton") (fem + "tio") ;
-
-
 
 }

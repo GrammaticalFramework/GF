@@ -1,6 +1,6 @@
 --# -path=.:../scandinavian:../abstract:../../prelude
 
-concrete TestResourceDan of TestResource = RulesDan, StructuralDan ** 
+concrete TestResourceDan of TestResource = RulesDan, ClauseDan, StructuralDan ** 
   open Prelude, MorphoDan, SyntaxDan in {
 
 flags startcat=Phr ; lexer=text ; unlexer=text ;

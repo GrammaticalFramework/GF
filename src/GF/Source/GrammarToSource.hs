@@ -62,7 +62,7 @@ trQualOpen q = case q of
   OQInterface -> P.QOInterface
 
 
-mkOpens ds = if null ds then P.NoOpens else P.Opens ds
+mkOpens ds = if null ds then P.NoOpens else P.OpenIn ds
 mkTopDefs ds = ds
 
 trAnyDef :: (Ident,Info) -> [P.TopDef]
@@ -80,7 +80,7 @@ trAnyDef (i,info) = let i' = tri i in case info of
 
   ResOper pty ptr -> [P.DefOper [trDef i' pty ptr]]
   ResParam pp -> [P.DefPar [case pp of
-    Yes ps -> P.ParDef i' [P.ParConstr (tri c) (map trDecl co) | (c,co) <- ps]
+    Yes ps -> P.ParDefDir i' [P.ParConstr (tri c) (map trDecl co) | (c,co) <- ps]
     May b  -> P.ParDefIndir i' $ tri b
     _      -> P.ParDefAbs i']]
 
