@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 13:54:44 $ 
+-- > CVS $Date: 2005/03/21 14:17:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- This module prints a CFG as a JSGF grammar.
 --
@@ -24,7 +24,7 @@ import Ident
 import GF.Conversion.CFGrammar
 import GF.Parsing.Parser (Symbol(..))
 import GF.Conversion.GrammarTypes
-import GF.Parsing.PrintParser
+import GF.Printing.PrintParser
 import Option
 
 jsgfPrinter :: Ident -- ^ Grammar name
