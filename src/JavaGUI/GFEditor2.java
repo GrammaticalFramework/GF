@@ -772,15 +772,16 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       //cutting </focus>    
       // in case focus tag is cut into two lines:
       if (result.charAt(i-1)!='<') 
+        // check if punktualtion marks like . ! ? are at the end of a sentence:
         if (result.charAt(j+1)==' ')
           result= result.substring(0,i-8)+result.substring(j+2);
         else
-          result= result.substring(0,i-8)+result.substring(j+1);
+          result= result.substring(0,i-9)+result.substring(j+1);
       else
         if (result.charAt(j+1)==' ')
           result= result.substring(0,i-1)+result.substring(j+2);
         else
-          result= result.substring(0,i-1)+result.substring(j+1);
+          result= result.substring(0,i-2)+result.substring(j+1);
      j= result.indexOf("<focus");
       l2 = result.indexOf("focus");    
       // in case focus tag is cut into two lines:
@@ -1482,12 +1483,13 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
      // not null selection:
      if (start<output.getText().length()-1) 
      {
-       if (debug2)
+      // if (debug2)
        for (int k=0; k<outputVector.size(); k++)
        { 
          System.out.print("element: "+k+" begin "+((MarkedArea)outputVector.elementAt(k)).begin+" ");
-         System.out.print(" end "+((MarkedArea)outputVector.elementAt(k)).end+" ");       
-         System.out.println(" position "+((MarkedArea)outputVector.elementAt(k)).position+" ");   
+         System.out.print(" end: "+((MarkedArea)outputVector.elementAt(k)).end+" ");       
+         System.out.print(" position: "+((MarkedArea)outputVector.elementAt(k)).position+" ");   
+         System.out.println(" words: "+((MarkedArea)outputVector.elementAt(k)).words);   
        }
        // localizing end:
        while ((j< outputVector.size())&&(((MarkedArea)outputVector.elementAt(j)).end < end))
@@ -1632,22 +1634,49 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
             currentLength += newLength ;
           } // l<l2
           else
-          { // something before the tag:
+          { 
+            // something before the </subtree> tag:
             if (l2-currentLength>1)
             {
               if (debug2) 
-                System.out.println("SOMETHING BEFORE THE </subtree TAG");
+                System.out.println("SOMETHING BEFORE THE </subtree> TAG");
               if (currentPosition.size()>0)
                 register(currentLength, l2, (String)currentPosition.elementAt(currentPosition.size()-1));
               else
                 register(currentLength, l2, "[]");
               currentLength += newLength ;
             }
-            // cutting the </subtree> tags:
-            if (restString.charAt(l2+10)==' ')
-              removeSubTreeTag(l2,l2+10);
-            else
-              removeSubTreeTag(l2,l2+9); 
+            // nothing before the tag:
+            else 
+              // punctuation after the </subtree> tag:
+              if (restString.substring(l2+10,l2+11).trim().length()>0)
+              {
+                if (debug2) 
+                  System.out.println("PUNCTUATION AFTER THE </subtree> TAG");
+                if (debug2) System.out.println("STRING: "+restString);
+                //cutting the tag first!:
+                if (l2>0)
+                  removeSubTreeTag(l2-1,l2+9); 
+                else
+                  removeSubTreeTag(l2,l2+9);
+                if (debug2) System.out.println("STRING after cutting the </subtree> tag: "+restString);
+                // cutting the space in the last registered component:
+                if (outputVector.size()>0)
+                {
+                   ((MarkedArea)outputVector.elementAt(outputVector.size()-1)).end -=1; 
+                   if (currentLength>0) currentLength -=1; 
+                }
+               if (debug2) System.out.println("currentLength: "+currentLength +" old length " +oldLength);
+                // register the punctuation:
+                if (currentPosition.size()>0)
+                  register(currentLength, currentLength+2, (String)currentPosition.elementAt(currentPosition.size()-1));
+                else
+                  register(currentLength, currentLength+2, "[]");
+                currentLength += newLength ;
+              }
+              else
+                // just cutting the </subtree> tag:
+                removeSubTreeTag(l2,l2+10);
           }
           l2 = restString.indexOf("</subtree");
           l = restString.indexOf("<subtree");
@@ -1676,7 +1705,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
           if (selEnd+oldLength>pos)
           {
             addedLength = selEndTotal-selStartTotal+2;
-            outputVector.addElement(new MarkedArea(selStartTotal, selEndTotal+1, focusPosition)); 
+            outputVector.addElement(new MarkedArea(selStartTotal, selEndTotal+1, focusPosition,restString.substring(currentLength))); 
             if (debug2) 
                 System.out.println("APPENDING Selection Last:"+restString.substring(currentLength)+
             "Length: "+addedLength+" POSITION: "+selStartTotal + " "+selEndT);
@@ -1717,7 +1746,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
             { // only selection is to register:              
               resultCurrent = currentLength + oldLength ;
               resultNew = newLength + resultCurrent - 1;
-              outputVector.addElement(new MarkedArea(resultCurrent, resultNew, focusPosition)); 
+              outputVector.addElement(new MarkedArea(resultCurrent, resultNew, focusPosition,restString.substring(selStart,selEnd+2))); 
               if (debug2) 
                 System.out.println("APPENDING SelectedZONE ONLy:"+restString.substring(selStart,selEnd+2)+
                 "Length: "+newLength+" POSITION: "+resultCurrent + " "+resultNew);
@@ -1728,7 +1757,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
               resultCurrent = currentLength+oldLength;
               resultNew = resultCurrent+ selStart-start -1;
               addedLength = selStart -start; 
-              outputVector.addElement(new MarkedArea(resultCurrent, resultNew, position)); 
+              outputVector.addElement(new MarkedArea(resultCurrent, resultNew, position,restString.substring(start,start+addedLength))); 
               if (debug2) 
                 System.out.println("APPENDING ZONE First:"+restString.substring(start,start+addedLength)+
               "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
@@ -1738,7 +1767,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
               newLength = selEnd - selStart+2;
               resultCurrent = currentLength+oldLength;
               resultNew = resultCurrent+ newLength -1;
-              outputVector.addElement(new MarkedArea(resultCurrent, resultNew, focusPosition)); 
+              outputVector.addElement(new MarkedArea(resultCurrent, resultNew, focusPosition,restString.substring(selStart,selEnd+2))); 
               if (debug2) 
                 System.out.println("APPENDING SelectedZONE Second:"+restString.substring(selStart,selEnd+2)+
                 "Length: "+newLength+" POSITION: "+resultCurrent + " "+resultNew);            
@@ -1748,7 +1777,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
             addedLength = selEnd - selStart +2; 
             resultCurrent = currentLength+oldLength;
             resultNew = resultCurrent + addedLength-1;
-            outputVector.addElement(new MarkedArea(resultCurrent, resultNew, focusPosition)); 
+            outputVector.addElement(new MarkedArea(resultCurrent, resultNew, focusPosition,restString.substring(selStart,selEnd+2))); 
             if (debug2) 
               System.out.println("APPENDING SelectedZONE First:"+restString.substring(selStart,selEnd+2)+
               "Length: "+addedLength+" POSITION: "+resultCurrent + " "+resultNew);
@@ -1758,20 +1787,22 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
             newLength = end-selEnd-2;
             resultCurrent = currentLength+oldLength;
             resultNew = resultCurrent + newLength -1;
-            outputVector.addElement(new MarkedArea(resultCurrent, resultNew, position)); 
+            outputVector.addElement(new MarkedArea(resultCurrent, resultNew, position,restString.substring(selEnd+2,end))); 
             if (debug2) 
               System.out.println("APPENDING ZONE Second:"+restString.substring(selEnd+2,end)+
               "Length: "+newLength+" POSITION: "+resultCurrent + " "+resultNew);
           }
-        }// if selectionCheck
+        }// focus has a separate position
         else 
         {
           resultCurrent = currentLength + oldLength ;
           resultNew = newLength + resultCurrent - 1;
+          if (debug2) System.out.println("Start: "+ start + " end: "+end);
+          if (debug2) System.out.println("STRING: "+ restString + " which length is: "+restString.length());
           stringToAppend = restString.substring(start,end);
           if (stringToAppend.trim().length()>0)
           {
-            outputVector.addElement(new MarkedArea(resultCurrent, resultNew, position)); 
+            outputVector.addElement(new MarkedArea(resultCurrent, resultNew, position,stringToAppend)); 
             if (debug2) 
               System.out.println("APPENDING ZONE:"+stringToAppend+
             "Length: "+newLength+" POSITION: "+resultCurrent + " "+resultNew+" "+position);
@@ -1786,8 +1817,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     //updating:
     public static void removeSubTreeTag (int start, int end)
     {
-         //if (debug2) 
-         //  System.out.println("removing: "+ start +" to "+ end);
+         if (debug2) 
+           System.out.println("removing: "+ start +" to "+ end);
          int difference =end-start+1;
          int positionStart, positionEnd;
          if (difference>20)
@@ -1798,7 +1829,10 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
          }
          else
            currentPosition.removeElementAt(currentPosition.size()-1);
-         restString = restString.substring(0,start)+restString.substring(end+1);
+         if (start>0)
+           restString = restString.substring(0,start)+restString.substring(end+1);
+         else
+           restString = restString.substring(end+1);
          if (selStart > end)
          {  selStart -=difference;
             selEnd -=difference;            
