@@ -94,8 +94,11 @@ pFilePaths s = case span (/=':') s of
   (f,_)    -> [f]
 
 prefixPathName :: String -> FilePath -> FilePath
-prefixPathName "" f = f
-prefixPathName p f = p ++ "/" ++ f
+prefixPathName p f = case f of
+    '/':_ -> f  -- do not prefix [Unix style] absolute paths
+    _ -> case p of
+        "" -> f
+        _  -> p ++ "/" ++ f
 
 justInitPath :: FilePath -> FilePath
 justInitPath = reverse . drop 1 . dropWhile (/='/') . reverse
