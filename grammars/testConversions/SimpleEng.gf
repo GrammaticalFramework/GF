@@ -18,7 +18,7 @@ mkVP   x y = {s = table {n => x.s ! n ++ y.s}};
 mkNP1  x y = {s = x.s ++ y.s ! x.n ; n = x.n};
 mkNP2  x   = {s = x.s ! Pl ; n = Pl};
 mkNP3  x y = {s = x.s ++ y.s; n = x.n};
-mkPP   x y = {s = x.s ++ y.s};
+mkPP   x y = {s = y.s ++ x.s};
 
 robin = {s = "Robin" ; n = Sg};
 dog   = {s = table {Sg => "dog"   ; Pl => "dogs"}};

@@ -11,7 +11,7 @@ mkVP    : V -> NP -> VP;
 mkNP1   : D -> N -> NP;
 mkNP2   : N -> NP;
 mkNP3   : NP -> PP -> NP;
-mkPP    : P -> NP -> PP;
+mkPP    : NP -> P -> PP;
 
 robin   : NP;
 dog     : N;
