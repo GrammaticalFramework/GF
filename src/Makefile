@@ -17,7 +17,6 @@ WINDOWSINCLUDE =-ifor-windows   $(BASICINCLUDE)
 DIST_DIR=GF-$(PACKAGE_VERSION)
 NOT_IN_DIST= \
 	from-peb \
-	doc \
 	grammars \
 	src/parsing \
 	src/conversions \
