@@ -53,6 +53,7 @@ cd src
 make unix
 
 %install
+cd src
 %makeinstall
 
 %clean
