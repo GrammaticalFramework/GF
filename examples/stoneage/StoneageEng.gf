@@ -1,6 +1,6 @@
 --# -path=.:../../lib/resource/abstract:../../lib/prelude:../../lib/resource/english
 concrete StoneageEng of Stoneage 
-  = open SyntaxEng, ResourceEng, SwadeshLexEng, StoneageResEng in {
+  = open SyntaxEng, ResourceEng, SwadeshLexEng, StoneageRes in {
 
 lincat
   S = S ;
@@ -9,34 +9,34 @@ lincat
   CN = CN ;
 
 lin
-  Drink = PresVasV2 drink_V ;
-  Eat = PresVasV2 eat_V ;
-  Bite = PresVasV2 bite_V ;
-  Suck = PresVasV2 suck_V ;
-  See = PresVasV2 see_V ;
-  Hear = PresVasV2 hear_V ;
-  Know = PresVasV2 know_V ;
-  Think = PresVasV2 think_V ;
-  Smell = PresVasV2 smell_V ;
-  Fear = PresVasV2 fear_V ;
-  Kill = PresVasV2 kill_V ;
-  Fight = PresVasV2 fight_V ;
-  Hunt = PresVasV2 hunt_V ;
-  Hit = PresVasV2 hit_V ;
-  Cut = PresVasV2 cut_V ;
-  Split = PresVasV2 split_V ;
-  Stab = PresVasV2 stab_V ;
-  Scratch = PresVasV2 scratch_V ;
-  Hold = PresVasV2 hold_V ;
-  Squeeze = PresVasV2 squeeze_V ;
-  Rub = PresVasV2 rub_V ;
-  Wash = PresVasV2 wash_V ;
-  Wipe = PresVasV2 wipe_V ;
-  Pull = PresVasV2 pull_V ;
-  Push = PresVasV2 push_V ;
-  Throw = PresVasV2 throw_V ;
-  Tie = PresVasV2 tie_V ;
-  Count = PresVasV2 count_V ;
+  Drink = PresV (dirV2 drink_V) ;
+  Eat = PresV (dirV2 eat_V) ;
+  Bite = PresV (dirV2 bite_V) ;
+  Suck = PresV (dirV2 suck_V) ;
+  See = PresV (dirV2 see_V) ;
+  Hear = PresV (dirV2 hear_V) ;
+  Know = PresV (dirV2 know_V) ;
+  Think = PresV (dirV2 think_V) ;
+  Smell = PresV (dirV2 smell_V) ;
+  Fear = PresV (dirV2 fear_V) ;
+  Kill = PresV (dirV2 kill_V) ;
+  Fight = PresV (dirV2 fight_V) ;
+  Hunt = PresV (dirV2 hunt_V) ;
+  Hit = PresV (dirV2 hit_V) ;
+  Cut = PresV (dirV2 cut_V) ;
+  Split = PresV (dirV2 split_V) ;
+  Stab = PresV (dirV2 stab_V) ;
+  Scratch = PresV (dirV2 scratch_V) ;
+  Hold = PresV (dirV2 hold_V) ;
+  Squeeze = PresV (dirV2 squeeze_V) ;
+  Rub = PresV (dirV2 rub_V) ;
+  Wash = PresV (dirV2 wash_V) ;
+  Wipe = PresV (dirV2 wipe_V) ;
+  Pull = PresV (dirV2 pull_V) ;
+  Push = PresV (dirV2 push_V) ;
+  Throw = PresV (dirV2 throw_V) ;
+  Tie = PresV (dirV2 tie_V) ;
+  Count = PresV (dirV2 count_V) ;
 
   Spit = PresV spit_V ;
   Vomit = PresV vomit_V ;
