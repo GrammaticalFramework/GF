@@ -37,12 +37,15 @@ import GrammarToHaskell
 
 -- the cf parsing algorithms
 import ChartParser -- or some other CF Parser
-import NewChartParser 
-import NewerChartParser 
+import qualified ParseCFviaCFG as PCF
+--import qualified ParseGFCviaCFG as PGFC
+--import NewChartParser
+--import NewerChartParser
 
 -- grammar conversions -- peb 19/4-04
 -- see also customGrammarPrinter
 import qualified ConvertGrammar as Cnv
+import qualified PrintParser as Prt
 
 import MyParser
 
@@ -174,9 +177,11 @@ customGrammarPrinter =
 -- add your own grammar printers here
 -- grammar conversions, (peb) 
   ,(strCI "gfc_show",   show . grammar2canon . stateGrammarST)
-  ,(strCI "tnf",        prCanon . Cnv.convertCanonToTNF . stateGrammarST)
-  ,(strCI "mcfg",       Cnv.prMCFG . Cnv.convertCanonToMCFG . stateGrammarST)
-  ,(strCI "mcfg_cf",    Cnv.prCFG . Cnv.convertCanonToCFG . stateGrammarST)
+  -- ,(strCI "tnf",        prCanon . Cnv.convertCanonToTNF . stateGrammarST)
+  ,(strCI "emcfg",      Prt.prt . Cnv.convertCanonToEMCFG . stateGrammarST)
+  ,(strCI "emcfg_cf",   Prt.prt . Cnv.convertCanonViaEMCFGtoCFG . stateGrammarST)
+  ,(strCI "mcfg",       Prt.prt . Cnv.convertCanonToMCFG . stateGrammarST)
+  ,(strCI "mcfg_cf",    Prt.prt . Cnv.convertCanonToCFG . stateGrammarST)
   ,(strCI "mcfg_show",  show . Cnv.convertCanonToMCFG . stateGrammarST)
 --- also include printing via grammar2syntax!
   ] 
@@ -262,11 +267,14 @@ customParser =
   ,(strCI "myparser", myParser)
 -- add your own parsers here
   ]
+  -- 31/5-04, peb:
+  ++ [ (strCI ("new"++name), PCF.parse descr . stateCF) |
+       (descr, names) <- PCF.alternatives, name <- names ]
   -- 21/5-04, peb:
-  ++ [ (strCI ("new"++name), newChartParser descr . stateCF) |
-       (descr, names) <- newChartParserAlternatives, name <- names ]
-  ++ [ (strCI ("newer"++name), newerChartParser descr . stateParserInfo) |
-       (descr, names) <- newerChartParserAlternatives, name <- names ]
+  -- ++ [ (strCI ("new"++name), newChartParser descr . stateCF) |
+  --      (descr, names) <- newChartParserAlternatives, name <- names ]
+  -- ++ [ (strCI ("newer"++name), newerChartParser descr . stateParserInfo) |
+  --      (descr, names) <- newerChartParserAlternatives, name <- names ]
   ++ moreCustomParser
 
 customTokenizer = 
