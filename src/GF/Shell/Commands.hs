@@ -63,7 +63,7 @@ data Command =
  | CRefineParse String
  | CWrapWithFun (String,Int)
  | CChangeHead String
- | CPeelHead
+ | CPeelHead (String,Int)
  | CAlphaConvert String
  | CRefineRandom
  | CSelectCand Int
@@ -206,7 +206,7 @@ execECommand env c = case c of
                           uniqueRefinements cgr s'
   CWrapWithFun (f,i) -> action2commandNext $ wrapWithFun cgr (qualif f, i)
   CChangeHead f      -> action2commandNext $ changeFunHead cgr (qualif f)
-  CPeelHead          -> action2commandNext $ peelFunHead cgr
+  CPeelHead (f,i)    -> action2commandNext $ peelFunHead cgr (qualif f,i)
 
   CAlphaConvert s    -> action2commandNext $ \x ->
                           string2varPair s >>= \xy -> alphaConvert cgr xy x
@@ -285,12 +285,12 @@ mkRefineMenuAll :: CEnv -> SState -> [(Command,(String,String))]
 mkRefineMenuAll env sstate = 
   case (refinementsState cgr state, candsSState sstate, wrappingsState cgr state) of
     ([],[],wraps) -> 
-       [(CWrapWithFun (prQIdent_ f, i), prWrap fit)     
+       [(CWrapWithFun (prQIdent_ f, i), prWrap "w" "Wrap" fit)     
          | fit@((f,i),_) <- wraps] ++
        [(CChangeHead (prQIdent_ f),  prChangeHead f) 
          | f <- headChangesState cgr state] ++
-       [(CPeelHead,    (ifShort "ph" "PeelHead", "ph")) 
-         | canPeelState cgr state] ++
+       [(CPeelHead (prQIdent_ f, i), prPeel "ph" "PeelHead" fi)     
+         | fi@(f,i) <- peelingsState cgr state] ++
        [(CDelete,      (ifShort "d"  "Delete",   "d"))] ++
        [(CAddClip,     (ifShort "ac" "AddClip",  "ac"))]
     (refs,[],_)   -> 
@@ -309,10 +309,14 @@ mkRefineMenuAll env sstate =
   prChangeHead f = 
     (ifShort "ch" "ChangeHead" +++ prOrLinFun f,
      "ch" +++ prQIdent_ f)
-  prWrap ((f,i),t) = 
-    (ifShort "w" "Wrap"   +++ prOrLinFun f +++ ifTyped (":" +++ prt t) +++
+  prWrap sh lg ((f,i),t) = 
+    (ifShort sh lg   +++ prOrLinFun f +++ ifTyped (":" +++ prt t) +++
      ifShort (show i) (prBracket (show i)),
-     "w" +++ prQIdent_ f +++ show i)
+     sh +++ prQIdent_ f +++ show i)
+  prPeel sh lg (f,i) = 
+    (ifShort sh lg   +++ prOrLinFun f +++
+     ifShort (show i) (prBracket (show i)),
+     sh +++ prQIdent_ f +++ show i)
   prCand (t,i) = 
     (ifShort ("s" +++ prOrLinExp t) ("Select" +++ prOrLinExp t),"s" +++ show i)
 

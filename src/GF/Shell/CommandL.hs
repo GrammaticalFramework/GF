@@ -68,7 +68,7 @@ pCommand = pCommandWords . words where
     "r" : f : _   -> CRefineWithAtom f
     "w" : f:i : _ -> CWrapWithFun (f, readIntArg i)
     "ch": f : _   -> CChangeHead f
-    "ph": _       -> CPeelHead
+    "ph": f:i : _ -> CPeelHead (f, readIntArg i)
     "x" : ws      -> CAlphaConvert $ unwords ws
     "s" : i : _   -> CSelectCand (readIntArg i)
     "f" : "unstructured" : _ -> CRemoveOption showStruct --- hmmm
