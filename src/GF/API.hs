@@ -201,9 +201,10 @@ optLinearizeTree opts0 gr t = case getOptVal opts transferFun of
 
   lin mk
     | oElem showRecord opts = liftM prt . linearizeNoMark g c
-    | oElem tableLin opts   = liftM (unlines . map untok . prLinTable) . 
+    | oElem tableLin opts   = liftM (unlines . map untok . prLinTable True) . 
                                 allLinTables g c
-    | oElem showAll opts    = return . unlines . linTree2strings mk g c
+    | oElem showAll opts    = liftM (unlines . map untok . prLinTable False) . 
+                                allLinTables g c
     | otherwise             = return . unlines . optIntOrOne . linTree2strings mk g c
   g = grammar gr
   c = cncId gr

@@ -161,10 +161,11 @@ allLinTables gr c t = do
    gets (ps,t) = liftM (curry id ps . cc . map str2strings) $ strsFromTerm t
    cc = concat . intersperse ["/"]
 
-prLinTable :: [[(Label,[([Patt],[String])])]] -> [String]
-prLinTable = concatMap prOne . concat where
-  prOne (lab,pss) = prt lab : map pr pss ----
-  pr (ps,ss) = unwords (map prt_ ps) +++ ":" +++ unwords ss
+prLinTable :: Bool -> [[(Label,[([Patt],[String])])]] -> [String]
+prLinTable pars = concatMap prOne . concat where
+  prOne (lab,pss) = (if pars then ((prt lab) :) else id) (map pr pss) ----
+  pr (ps,ss) = (if pars then ((unwords (map prt_ ps) +++ ":") +++)
+                             else id) (unwords ss)
 
 {-
 -- the value is a list of strs

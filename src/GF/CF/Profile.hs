@@ -56,20 +56,16 @@ tree2term (CFTree (cff@(CFFun (fun,pro)), (_,trees))) = case fun of
                    then Bad "arity error" 
                    else return xs'
            where xs' = [t | t@(ITerm _ _) <- xs]
-   unif [] = return $ IMeta
-   unif xs@(ITerm fp@(f,_) xx : ts) = do
-     let hs = [h | ITerm (h,_) _ <- ts]
-     testErr (all (==f) hs)                 -- if fails, hs must be nonempty
-        ("unification expects" +++ prt f +++ "but found" +++ prt (head hs))
-     xx' <- mapM unifArg [0 .. length xx - 1]
-     return $ ITerm fp xx'
+   unif xs = case [t | t@(ITerm _ _) <- xs] of 
+    [] -> return $ IMeta
+    (ITerm fp@(f,_) xx : ts) -> do
+      let hs = [h | ITerm (h,_) _ <- ts, h /= f]
+      testErr (null hs)                 -- if fails, hs must be nonempty
+              ("unification expects" +++ prt f +++ "but found" +++ prt (head hs))
+      xx' <- mapM unifArg [0 .. length xx - 1]
+      return $ ITerm fp xx'
     where
-      unifArg i = tryUnif [zz !! i | ITerm _ zz <- xs]
-   tryUnif xx = case [t | t@(ITerm _ _) <- xx] of
-     [] -> return IMeta
-     x:xs -> if all (==x) xs 
-             then return x 
-             else Bad "failed to unify"
+      unifArg i = unif [zz !! i | ITerm _ zz <- xs]
 
    mkBinds (xss,_) = mapM mkBind xss
    mkBind xs = do

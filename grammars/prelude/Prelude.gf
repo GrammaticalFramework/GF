@@ -1,6 +1,6 @@
 -- language-independent prelude facilities
 
-resource Prelude = {
+resource Prelude = open (Predef=Predef) in {
 
 oper
 -- to construct records and tables

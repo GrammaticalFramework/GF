@@ -105,6 +105,7 @@ testValidFlag st f x = case f of
   "lexer"   -> testInc customTokenizer
   "unlexer" -> testInc customUntokenizer
   "depth"   -> testN
+  "rawtrees"-> testN
   "parser"  -> testInc customParser
   "alts"    -> testN
   "transform" -> testInc customTermCommand
@@ -129,14 +130,14 @@ testValidFlag st f x = case f of
 optionsOfCommand :: Command -> ([String],[String])
 optionsOfCommand co = case co of
   CImport _ -> both "old v s opt src retain nocf nocheckcirc cflexer"
-                    "abs cnc res"
+                    "abs cnc res path"
   CRemoveLanguage _ -> none
   CEmptyState -> none
   CStripState -> none
   CTransformGrammar _ -> flags "printer"
   CConvertLatex _ -> none
-  CLinearize _ -> both "table struct record" "lang number unlexer"
-  CParse -> both "new n ign raw v" "cat lang lexer parser number"
+  CLinearize _ -> both "table struct record all" "lang number unlexer"
+  CParse -> both "new n ign raw v" "cat lang lexer parser number rawtrees"
   CTranslate _ _ -> opts "cat lexer parser"
   CGenerateRandom -> flags "cat lang number depth"
   CGenerateTrees -> both "metas" "depth alts cat lang number"
