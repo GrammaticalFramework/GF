@@ -1,5 +1,5 @@
 concrete TimeEng of Time = NumeralsEng ** 
-  open Prelude, ResourceEng, ParadigmsEng in {
+  open Prelude, CategoriesEng, ParadigmsEng in {
 
 lincat
 Date = SS ;

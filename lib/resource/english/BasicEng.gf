@@ -218,7 +218,7 @@ lin
   add_V3 = dirV3 (regV "add") "to" ;
   number_N = regN "number" ;
   put_V2 = mkV2 (irregDuplV "put" "put" "put") [] ;
-  stop_V = regV "stop" ;
+  stop_V = regDuplV "stop" ;
   jump_V = regV "jump" ;
   here_Adv = mkAdv "here" ;
   here7to_Adv = mkAdv "here" ;

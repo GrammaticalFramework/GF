@@ -1,4 +1,4 @@
-concrete CountryEng of Country = open ResourceEng, ParadigmsEng in {
+concrete CountryEng of Country = open CategoriesEng, ParadigmsEng in {
 
   lincat
     Country = PN ;

@@ -17,6 +17,7 @@ module Lookup where
 import Operations
 import Abstract
 import Modules
+import Lockfield
 
 import List (nub)
 import Monad
@@ -34,6 +35,11 @@ lookupResDef gr = look True where
           ResOper _ (Yes t) -> return $ qualifAnnot m t 
           ResOper _ Nope    -> return (Q m c) ---- if isTop then lookExt m c 
                                  ---- else prtBad "cannot find in exts" c 
+
+          CncCat (Yes ty) _ _ -> lockRecType c $ ty
+          CncCat _ _ _        -> lockRecType c $ defLinType
+          CncFun _ (Yes tr) _ -> unlockRecord c tr
+
           AnyInd _ n        -> look False n c
           ResParam _        -> return $ QC m c
           ResValue _        -> return $ QC m c
@@ -51,6 +57,11 @@ lookupResType gr m c = do
       case info of
         ResOper (Yes t) _ -> return $ qualifAnnot m t
         ResOper (May n) _ -> lookupResType gr n c
+
+        -- used in reused concrete
+        CncCat _ _ _ -> return typeType
+        CncFun (Just (_,(cont,val))) _ _ -> return $ mkProd (cont, val, [])
+
         AnyInd _ n        -> lookupResType gr n c
         ResParam _        -> return $ typePType
         ResValue (Yes t)  -> return $ qualifAnnotPar m t

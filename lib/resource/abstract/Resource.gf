@@ -1,1 +1,1 @@
-interface Resource = reuse AllResource ;
+abstract Resource = Rules, Clause, Structural  ** {} ;

@@ -83,7 +83,10 @@ oper
 
   mkVoice : Voice -> Str -> Str = \v,s -> case v of {
     Act => s ;
-    Pass => s + "s"
+    Pass => s + case last s of {
+      "s" => "es" ;
+      _   => "s"
+      }
     } ;
   
   vHusk : Str -> Verbum = \husk -> 

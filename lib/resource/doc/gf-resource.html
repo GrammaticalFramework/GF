@@ -37,6 +37,35 @@ Basic lexicon of structural, common, and irregular words
 
 
 <!-- NEW -->
+<h2>Success criteria</h2>
+
+Grammatical correctness
+
+<p>
+
+Semantic coverage
+
+<p>
+
+Usability as library for non-linguists
+
+
+<!-- NEW -->
+<h2>These are  not success criteria</h2>
+
+Language coverage
+
+<p>
+
+Semantic correctness
+<pre>
+  colourless green ideas sleep furiously
+
+  the time is seventy past forty-two
+</pre>
+
+
+<!-- NEW -->
 <h2>Languages</h2>
 
 <p>
@@ -110,6 +139,10 @@ Language-dependent resources
 
 <p>
 
+<a href="VerbsEng.html">English verbs</a>
+
+<p>
+
 <a href="ParadigmsSwe.html">Swedish</a>
 
 <p>
@@ -119,19 +152,97 @@ Language-dependent resources
 
 
 <!-- NEW -->
-<h2>Using it</h2>
+<h2>Use as top-level grammar</h2>
+
+Random generation, translation, morphological analysis...
+
+<p>
+
+Language learning: translation and morpho quiz
+
+<p>
+
+Generate elementary text books from abstract syntax?
+
+
+
+<!-- NEW -->
+<h2>Use as library</h2>
+
+Import directly by <tt>open</tt>:
+<pre>
+  concrete AppNor of App = open LangNor, ParadigmsNor in {...}
+</pre>
+No more dummy <tt>reuse</tt> modules and bulky <tt>.gfr</tt> files!
+
+<p>
+
+If you need to convert resource category records to/from strings, use
+<pre>
+  Predef.toStr   : L -> Str ; 
+  Predef.fromStr : Str -> L ; 
+</pre>
+<tt>L</tt> must be a linearization type.
+
+
+<!-- NEW -->
+<h2>Use as library through parser</h2>
+
+Use the parser when developing a resource.
+<pre>
+  > p -cat=S -v "jag ska åka till Chalmers"
+  unknown tokens [TS "åka",TS "Chalmers"]
+
+  > p -cat=S "jag ska gå till Danmark"
+  UseCl (PosTP TFuture ASimul)
+    (AdvCl (SPredV i_NP go_V)
+    (AdvPP (PrepNP to_Prep (UsePN (PNCountry Denmark)))))
+</pre>
+Extend vocabulary at need.
+<pre>
+  åka_V = lexV "åker" ; 
+  Chalmers = regPN "Chalmers" neutrum ;
+</pre>
+
+
 
 <!-- NEW -->
 <h2>Implementatin details: the structure of low-level files</h2>
+
+<center>
+<img src="Low.gif">
+</center>
 
 
 <!-- NEW -->
 <h2>The use of parametric modules</h2>
 
+In two language families:
+<ul>
+<li> Romance: French, Italian, Spanish
+<li> Scandinavian: Danish, Norwegian, Swedish
+</ul>
+<center>
+<img src="Scand.gif">
+</center>
+
 
 <!-- NEW -->
 <h2>Current status</h2>
 
+<table border=1>
+<tr><td>Language</td> <td>v0.6</td> <td>API</td> <td>Paradigms</td> <td>Basic lex</td> <td>Verbs</td></tr>
+<tr><td>Danish</td>    <td> </td> <td>X</td> <td></td> <td></td> <td></tr>
+<tr><td>English</td>   <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</tr>
+<tr><td>Finnish</td>   <td>X</td> <td> </td> <td></td> <td></td> <td></tr>
+<tr><td>French</td>    <td>X</td> <td>*</td> <td>*</td> <td></td> <td>*</tr>
+<tr><td>German</td>    <td>X</td> <td> </td> <td>*</td> <td></td> <td></tr>
+<tr><td>Italian</td>   <td>X</td> <td>*</td> <td>*</td> <td></td> <td>*</tr>
+<tr><td>Norwegian</td> <td> </td> <td>X</td> <td></td> <td></td> <td></tr>
+<tr><td>Russian</td>   <td>X</td> <td>*</td> <td>*</td> <td></td> <td></tr>
+<tr><td>Spanish</td>   <td> </td> <td>*</td> <td></td> <td></td> <td>*</tr>
+<tr><td>Swedish</td>   <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>*</tr>
+</table>
 
 <!-- NEW -->
 <h2>Obtaining it</h2>

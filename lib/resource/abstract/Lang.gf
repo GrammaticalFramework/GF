@@ -1,3 +1,5 @@
+--# -path=.:../../prelude
+
 abstract Lang = 
   Rules, 
   Clause, 
