@@ -1,3 +1,5 @@
+--# -path=.:../../prelude
+
 --1 A Simple Finnish Resource Morphology
 --
 -- Aarne Ranta 2002
@@ -30,6 +32,7 @@ oper
       NCase Sg Adess  => vede + ("ll" + a) ;
       NCase Sg Ablat  => vede + ("lt" + a) ;
       NCase Sg Allat  => vede + "lle" ;
+      NCase Sg Abess  => vede + ("tt" + a) ;
 
       NCase Pl Nom    => vede + "t" ;
       NCase Pl Gen    => vesien ;
@@ -42,6 +45,7 @@ oper
       NCase Pl Adess  => vesii + ("ll" + a) ;
       NCase Pl Ablat  => vesii + ("lt" + a) ;
       NCase Pl Allat  => vesii + "lle" ;
+      NCase Pl Abess  => vesii + ("tt" + a) ;
 
       NPossNom       => vete ;
       NPossGenPl     => Predef.tk 1 vesien ;
@@ -96,6 +100,34 @@ oper
   sTalo : Str -> CommonNoun = \talo ->
     let {a = getHarmony (Predef.dp 1 talo)} in
     sKukko talo (talo + "n") (talo + ("j" + a)) ;
+
+  sBaari : Str -> CommonNoun = \baaria ->
+    let
+      baari = Predef.tk 1 baaria ; 
+      baar = Predef.tk 1 baari ; 
+      a = getHarmony (Predef.dp 1 baaria) 
+    in
+      sKukko baari (baari + "n") (baar + ("ej" + a)) ;
+
+  sKorpi : (_,_,_ : Str) -> CommonNoun = \korpi,korven,korpena ->
+    let {
+      a      = Predef.dp 1 korpena ;
+      korpe  = Predef.tk 2 korpena ;
+      korve  = Predef.tk 1 korven ;
+      korvi  = Predef.tk 1 korve + "i"
+    } 
+    in
+    mkSubst a 
+            korpi
+            korve
+            korpe
+            (korpe + a) 
+            (korpe + "en")
+            korpi
+            korvi
+            (korpi + "en") 
+            (korpi + a)
+            (korpi + "in") ;
 
 -- Loan words ending in consonants are actually similar to words like
 -- "malli"/"mallin"/"malleja", with the exception that the "i" is not attached
@@ -300,7 +332,9 @@ oper
       a        = Predef.dp 1 naurista ;
       nauris   = Predef.tk 2 naurista ;
       nauri    = Predef.tk 3 naurista ;
-      naurii   = nauri + "i"
+      i        = Predef.dp 1 nauri ;
+      naurii   = nauri + i ;
+      naurei   = nauri + "i"
     } 
     in
     mkSubst a 
@@ -309,11 +343,11 @@ oper
             naurii
             (nauris + ("t" + a)) 
             (naurii + "seen")
-            naurii
-            naurii
-            (naurii + "den")
-            (naurii + ("t" + a))
-            (naurii + "siin") ;
+            naurei
+            naurei
+            (naurei + "den")
+            (naurei + ("t" + a))
+            (naurei + "siin") ;
 
 -- The following two are used for adjective comparison.
 
@@ -421,6 +455,7 @@ getHarmony : Str -> Str = \u ->
       PCase Adess  => minu + ("ll" + a) ;
       PCase Ablat  => minu + ("lt" + a) ;
       PCase Allat  => minu + "lle" ;
+      PCase Abess  => minu + ("tt" + a) ;
       PAcc         => Predef.tk 1 minun + "t"
       } ;
      n = n ; p = p} ; 
@@ -432,6 +467,11 @@ getHarmony : Str -> Str = \u ->
   pronTe   = mkPronoun "te" "teidän" "teitä" "teinä" "teihin"  Pl P2 ;
   pronHe   = mkPronoun "he" "heidän" "heitä" "heinä" "heihin"  Pl P3 ;
   pronNe   = mkPronoun "ne" "niiden" "niitä" "niinä" "niihin"  Pl P3 ;
+
+  pronTama = mkPronoun "tämä" "tämän" "tätä" "tänä" "tähän"  Sg P3 ;
+  pronNama = mkPronoun "nämä" "näiden" "näitä" "näinä" "näihin"  Pl P3 ;
+  pronTuo  = mkPronoun "tuo" "tuon" "tuota" "tuona" "tuohon"  Sg P3 ;
+  pronNuo  = mkPronoun "nuo" "noiden" "noita" "noina" "noihin"  Pl P3 ;
 
 -- The non-human pronoun "se" ('it') is even more irregular,
 -- Its accusative cases do not
@@ -451,7 +491,8 @@ getHarmony : Str -> Str = \u ->
       Illat  => "siihen" ;
       Adess  => "sillä" ;
       Ablat  => "siltä" ;
-      Allat  => "sille"
+      Allat  => "sille" ;
+      Abess  => "sittä"
       } ;
     } ;
 
@@ -525,16 +566,63 @@ getHarmony : Str -> Str = \u ->
         }
       } ;
 
+  jokuPron : Number => Case => Str =
+    let 
+      ku = sPuu "ku" ;
+      kui = sPuu "kuu" 
+    in
+    table {
+      Sg => table {
+        Nom => "joku" ;
+        Gen => "jonkun" ;
+        c => relPron.s ! Sg ! c + ku.s ! NCase Sg c
+       } ; 
+      Pl => table {
+        Nom => "jotkut" ;
+        c => relPron.s ! Pl ! c + kui.s ! NCase Pl c
+        }
+      } ;
+
+  jokinPron : Number => Case => Str =
+    table {
+      Sg => table {
+        Nom => "jokin" ;
+        Gen => "jonkin" ;
+        c => relPron.s ! Sg ! c + "kin"
+       } ; 
+      Pl => table {
+        Nom => "jotkin" ;
+        c => relPron.s ! Pl ! c + "kin"
+        }
+      } ;
+
+moniPron : Case => Str = caseTable singular (sSusi "moni" "monen" "monena") ;
+
 caseTable : Number -> CommonNoun -> Case => Str = \n,cn -> 
   \\c => cn.s ! NCase n c ;
 
 
 --2 Adjectives
 --
+-- To form an adjective, it is usually enough to give a noun declension: the
+-- adverbial form is regular.
+
+  noun2adj : CommonNoun -> Adjective = noun2adjComp True ;
+
+  noun2adjComp : Bool -> CommonNoun -> Adjective = \isPos,tuore ->
+    let 
+      tuoreesti  = Predef.tk 1 (tuore.s ! NCase Sg Gen) + "sti" ; 
+      tuoreemmin = Predef.tk 2 (tuore.s ! NCase Sg Gen) + "in"
+    in {s = table {
+         AN f => tuore.s ! f ;
+         AAdv => if_then_Str isPos tuoreesti tuoreemmin
+         }
+       } ;
+
 -- For the comparison of adjectives, three noun declensions 
 -- are needed in the worst case.
 
-  mkAdjDegr : (_,_,_ : CommonNoun) -> AdjDegr = \hyva,parempi,paras -> 
+  mkAdjDegr : (_,_,_ : Adjective) -> AdjDegr = \hyva,parempi,paras -> 
     {s = table {
       Pos  => hyva.s ;
       Comp => parempi.s ;
@@ -546,7 +634,10 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 -- the characteristic forms of comparative and superlative. 
 
   regAdjDegr : CommonNoun -> Str -> Str -> AdjDegr = \kiva, kivempaa, kivinta ->
-    mkAdjDegr kiva (sSuurempi kivempaa) (sSuurin kivinta) ;
+    mkAdjDegr 
+      (noun2adj kiva) 
+      (noun2adjComp False (sSuurempi kivempaa)) 
+      (noun2adjComp False (sSuurin kivinta)) ;
 
 
 --3 Verbs
@@ -574,21 +665,26 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       }
     } ;
 
--- For "sanoa", "valua", "kysyä".
+-- For "harppoa", "hukkua", "löytyä", with grade alternation.
 
-  vSanoa : Str -> Verb = \sanoa -> 
+  vHukkua : (_,_ : Str) -> Verb = \hukkua,huku -> 
     let {
-      a    = Predef.dp 1 sanoa ;
-      sano = Predef.tk 1 sanoa ;
-      o    = Predef.dp 1 sano 
+      a     = Predef.dp 1 hukkua ;
+      hukku = Predef.tk 1 hukkua ;
+      u     = Predef.dp 1 huku 
     } in
     mkVerb
-      sanoa
-      (sano + "n")
-      (sano + o)
-      (sano + (("v" + a) + "t"))
-      (sano + (("k" + a) + a))
-      (sano + ((("t" + a) + a) + "n")) ;
+      hukkua
+      (huku + "n")
+      (hukku + u)
+      (hukku + (("v" + a) + "t"))
+      (hukku + (("k" + a) + a))
+      (huku + ((("t" + a) + a) + "n")) ;
+
+-- For cases without alternation: "sanoa", "valua", "kysyä".
+
+  vSanoa : Str -> Verb = \sanoa ->
+    vHukkua sanoa (Predef.tk 1 sanoa) ;
 
 -- For "ottaa", "käyttää", "löytää", "huoltaa", "hiihtää", "siirtää".
 
@@ -611,6 +707,21 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
   vPoistaa : Str -> Verb = \poistaa -> 
     vOttaa poistaa (Predef.tk 1 poistaa + "n") ;
+
+-- For "osata", "lisätä"
+
+  vOsata : Str -> Verb = \osata -> 
+    let {
+      a   = Predef.dp 1 osata ;
+      osa = Predef.tk 2 osata
+    } in
+    mkVerb
+      osata
+      (osa + (a + "n"))
+      (osa + a)
+      (osa + ((("a" + "v") + a) + "t"))
+      (osa + ((("t" + "k") + a) + a)) 
+      (osata + (a + "n")) ;
 
 -- For "juosta", "piestä", "nousta", "rangaista", "kävellä", "surra", "panna".
 
@@ -671,8 +782,8 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       Human => kukaInt
     } ;
 
-  kaikkiPron : Case => Str = 
-    let {kaiket = caseTable Pl (sKukko "kaikki" "kaiken" "kaikkia")} in
+  kaikkiPron : Number -> Case => Str = \n -> 
+    let {kaiket = caseTable n (sKorpi "kaikki" "kaiken" "kaikkena")} in
     table {
       Nom => "kaikki" ;
       c => kaiket ! c

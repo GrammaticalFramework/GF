@@ -107,6 +107,16 @@ oper
   pronNounPhrase : Pronoun -> NounPhrase = \pron ->
     {s = \\f => pron.s ! npForm2PForm f ; n = pron.n ; p = NPP pron.p} ;
 
+  pronNounPhraseNP : Pronoun -> NounPhrase = \pron ->
+    {s = table {
+           NPAccNom => pron.s ! PCase Nom ;
+           NPAccGen => pron.s ! PCase Gen ;
+           f => pron.s ! npForm2PForm f 
+           } ; 
+     n = pron.n ; 
+     p = NP3
+    } ;
+
 -- *Partitive noun phrases* use the partitive instead of the nominative
 -- and accusative forms.
 
@@ -122,9 +132,11 @@ oper
   Numeral : Type = {s : NPForm => Str ; isNum : Bool} ;
 
   pronWithNum : Pronoun -> Numeral -> NounPhrase = \me,kaksi ->
-    {s = \\c => me.s ! npForm2PForm c ++ kaksi.s ! c ; 
+    let meihin = pronNounPhraseNP me 
+    in
+    {s = \\c => meihin.s ! c ++ kaksi.s ! c ; 
      n = me.n ; 
-     p = NPP me.p
+     p = NP3     -- meidän kahden talo (*talomme)
     } ;
 
   noNum : Numeral = {s = \\_ => [] ; isNum = False} ;
@@ -179,7 +191,7 @@ oper
     mkDeterminerGenNum n kaikki kaikki ;
 
   jokainenDet = mkDeterminer Sg (caseTable Sg (sNainen "jokaista")) ;
-  kaikkiDet : Numeral -> Determiner = \n -> mkDeterminerNum n kaikkiPron ;
+  kaikkiDet : Numeral -> Determiner = \n -> mkDeterminerNum n (kaikkiPron Pl) ;
   useimmatDet = mkDeterminer Pl (caseTable Pl (sSuurin "useinta")) ;
   mikaDet     = mkDeterminerGen Sg (mikaInt ! Sg) (kukaInt ! Sg) ;
   mitkaDet : Numeral -> Determiner = \n -> 
@@ -228,6 +240,19 @@ oper
      p = NP3
     } ;
 
+  npGenDetNum : Numeral -> NounPhrase -> CommNounPhrase -> NounPhrase = 
+    \viisi,jussi,talo ->
+    {s = \\c => jussi.s ! NPCase Gen ++ viisi.s ! c ++ 
+                ifPossSuffix talo jussi.p jussi.n (
+                  case viisi.isNum of {
+                    True => Part ;
+                    _ => npForm2Case Pl c
+                    }
+                  ) ;
+     n = Pl ; 
+     p = NP3
+    } ;
+
   ifPossSuffix : CommNounPhrase -> NPPerson -> Number -> Case -> Str = 
     \talo,np,n,c -> case np of {
       NP3   => talo.s ! False ! n ! c ;
@@ -248,6 +273,11 @@ oper
      g = idea.g
     } ;
 
+-- The existential structure is simple.
+
+  onNounPhrase : NounPhrase -> Sentence = \kaljaa ->
+    ss (kaljaa.s ! NPCase Nom ++ "on") ;
+
 --2 Adjectives
 --
 -- Adjectival phrases are used either as attributes or in predicative position.
@@ -265,10 +295,10 @@ param
   AdjPos = APred | AAttr ;
 
 oper
-  AdjPhrase : Type = {s : AdjPos => Number => Case => Str} ;
+  AdjPhrase : Type = {s : AdjPos => AForm => Str} ;
 
   adj2adjPhrase : Adjective -> AdjPhrase = \uusi -> 
-    {s = \\_,n,c => uusi.s ! NCase n c} ;
+    {s = \\_ => uusi.s} ;
 
 
 --3 Comparison adjectives
@@ -284,11 +314,11 @@ oper
 -- adjectival phrases ("isompi kuin te"/"teitä isompi").
 
   comparAdjPhrase : AdjDegr -> NounPhrase -> AdjPhrase = \iso, te ->
-    {s = let {teitaisompi : Number => Case => Str = 
-              \\n,c => te.s ! NPCase Part ++ iso.s ! Comp ! NCase n c} in 
+    {s = let {teitaisompi : AForm => Str = 
+              \\a => te.s ! NPCase Part ++ iso.s ! Comp ! a} in 
          table {
            APred => variants {
-             \\n,c => iso.s ! Comp ! NCase n c ++ kuinConj ++ te.s ! NPCase Nom ;
+             \\a => iso.s ! Comp ! a ++ kuinConj ++ te.s ! NPCase Nom ;
              teitaisompi
              } ;     
            AAttr => teitaisompi
@@ -300,7 +330,7 @@ oper
 
   superlNounPhrase : AdjDegr -> CommNounPhrase -> NounPhrase = \iso,talo ->
     {s = \\np => let {c = npForm2Case Sg np} in
-                 iso.s ! Sup ! NCase Sg c ++ talo.s ! False ! Sg ! c ; 
+                 iso.s ! Sup ! AN (NCase Sg c) ++ talo.s ! False ! Sg ! c ; 
      n = Sg ; 
      p = NP3
     } ;
@@ -319,20 +349,20 @@ oper
 
   complAdj : AdjCompl -> NounPhrase -> AdjPhrase = \hyva,paini ->
     let {
-      hyvat : Number => Case => Str = \\n,c => hyva.s ! NCase n c ;
+      hyvat : AForm => Str = \\a => hyva.s ! a ;
       painissa : Str = paini.s ! hyva.c
       }
     in
     {s = table {
-           AAttr => \\n,c => painissa ++ hyvat ! n ! c ; 
-           APred => \\n,c => if_then_else Str 
+           AAttr => \\a => painissa ++ hyvat ! a ; 
+           APred => \\a => if_then_else Str 
                                (isLocalNPForm hyva.c)
                                (variants {
-                                  hyvat ! n ! c ++ painissa ;
-                                  painissa ++ hyvat ! n ! c
+                                  hyvat ! a ++ painissa ;
+                                  painissa ++ hyvat ! a
                                   }
                                )
-                               (painissa ++ hyvat ! n ! c)
+                               (painissa ++ hyvat ! a)
            }
      } ;
 
@@ -358,7 +388,7 @@ oper
 -- given to the noun.
 
   modCommNounPhrase : AdjPhrase -> CommNounPhrase -> CommNounPhrase = \iso,mies -> 
-    {s = \\p,n,c => iso.s ! AAttr ! n ! c ++ mies.s ! p ! n ! c ;
+    {s = \\p,n,c => iso.s ! AAttr ! AN (NCase n c) ++ mies.s ! p ! n ! c ;
      g = mies.g
     } ;
 
@@ -503,7 +533,11 @@ oper
 -- in terms of the common noun rule.
 
   predAdjective : AdjPhrase -> VerbGroup = \iso ->
-    let {isot : CommNounPhrase = {s = \\_ => iso.s ! APred ; g = NonHuman}} 
+    let 
+      isot : CommNounPhrase = {
+        s = \\_,n,c => iso.s ! APred ! AN (NCase n c) ; 
+        g = NonHuman
+        } 
     in predCommNoun isot ;
 
   predCommNoun : CommNounPhrase -> VerbGroup = \mies ->
@@ -589,17 +623,17 @@ oper
 -- Most two-place verbs can be used passively; the object case need not be
 -- the accusative, and it becomes the subject case in the passive sentence.
 
-  passTransVerb : Bool -> TransVerb -> VerbPhrase = \b,tavata ->
-    {s  = \\_ => if_then_else Str b (tavata.s ! Pass b) "ei" ;
-     s2 = \\_ => if_then_else Str b [] (tavata.s ! Pass b) ;
+  passTransVerb : TransVerb -> VerbGroup = \tavata ->
+    {s  = \\b,_ => if_then_else Str b (tavata.s ! Pass b) "ei" ;
+     s2 = \\b,_ => if_then_else Str b [] (tavata.s ! Pass b) ;
      c  = tavata.c
     } ;
 
 -- The API function does not demand that the verb is two-place.
 -- Therefore, we can only give it the accusative case, as default.
 
-  passVerb : Bool -> Verb -> VerbPhrase = \b,uida ->
-    passTransVerb b (mkTransVerbDir uida) ;
+  passVerb : Verb -> VerbGroup = \uida ->
+    passTransVerb (mkTransVerbDir uida) ;
 
 -- Transitive verbs can be used elliptically as verbs. The semantics
 -- is left to applications. The definition is trivial, due to record
@@ -656,23 +690,28 @@ oper
     } ;
 
   advAdjPhrase : Adverb -> AdjPhrase -> AdjPhrase = \liian, iso ->
-    {s = \\p,n,c => liian.s ++ iso.s ! p ! n ! c
+    {s = \\p,a => liian.s ++ iso.s ! p ! a
     } ;
 
 -- Adverbials are typically generated by case, prepositions, or postpositions.
--- The rule for creating locative noun phrases by the inessive case
--- is a shaky, since the adessive is often required.
 
-  prepPhrase : Str -> Case -> NounPhrase -> Adverb = \ennen,c,talvi ->
-    ss (ennen ++ talvi.s ! NPCase c) ;
+  Preposition : Type = {s : Str ; c : Case ; isPrep : Bool} ;
 
-  postpPhrase : Str -> Case -> NounPhrase -> Adverb = \aikana,c,talvi ->
-    ss (talvi.s ! NPCase c ++ aikana) ;
+  prepPrep : Str -> Case -> Preposition = \ennen,gen ->
+    {s = ennen ; c = gen ; isPrep = True} ;
 
-  caseAdv : Case -> NounPhrase -> Adverb = prepPhrase [] ;
+  prepPostp : Str -> Case -> Preposition = \takana,gen ->
+    {s = takana ; c = gen ; isPrep = False} ;
 
-  locativeNounPhrase : NounPhrase -> Adverb = \np -> --- caseAdv Iness ;
-    ss (np.s ! NPCase Iness) ;
+  prepPostpGen : Str -> Preposition = \takana ->
+    prepPostp takana Gen ;
+
+  prepCase : Case -> Preposition = \iness ->
+    {s = [] ; c = iness ; isPrep = False} ;
+
+  prepPhrase : Preposition -> NounPhrase -> Adverb = \takana, talo -> 
+    let talon = talo.s ! NPCase takana.c 
+    in ss (if_then_Str takana.isPrep (takana.s ++ talon) (talon ++ takana.s)) ;
 
 -- This is a source of the "mann with a telescope" ambiguity, and may produce
 -- strange things, like "autot aina" (while "autot tänään" is OK).
@@ -732,24 +771,22 @@ oper
     let
       hc = haluta.c ;
       haluan = case hc of {
-        CC Nom => predVerb haluta ;
-        _ => predVerb haluta ----- {s = \\b,v =>  
-        }
+        CCase Nom => predVerb haluta ;
+        _ => predVerb {s = table {
+               Imper Sg => haluta.s ! Imper Sg ;
+               ImpNegPl => haluta.s ! ImpNegPl ;
+               _ => haluta.s ! Ind Sg P3
+               }
+             }
+       }
     in {
       s  = haluan.s ;
-      s2 = \\b,v => haluan.s2 ! b ! v ++ uida.s ;
+      s2 = \\b,v => haluan.s2 ! b ! v ++ uida.s ! True ! Inf ++ 
+                    uida.s2 ! True ! Inf ;
       c  = hc
       } ;
 
-    {s  = vilja.s ; 
-     s2 = negation ; 
-     s3 = \\g,n => 
-              vilja.s1 ++
-              if_then_Str vilja.isAux [] "att" ++ 
-              simma.s ! VPres Infinit Act ++ simma.s2 ! True ++ simma.s3 ! g ! n
-    } ;
-
-
+nomVerbVerb : Verb -> VerbVerb = \v -> v ** {c = CCase Nom} ;
 
 --2 Sentences missing noun phrases
 --
@@ -899,6 +936,8 @@ oper
     let {np = Ind jussi.n (np2Person jussi.p)} in
     ss (ui.s ! np ++ koPart ++ jussi.s ! complementCase True ui.c Inf ++ ui.s2 ! np);
 
+  onkoNounPhrase : NounPhrase -> Question = \kaljaa ->
+    ss ("onko" ++ kaljaa.s ! NPCase Nom) ;
 
 --3 Wh-questions
 --
@@ -1010,19 +1049,19 @@ oper
 -- The structure is the same as for sentences. Parameters are passed to components.
 
   ListAdjPhrase : Type = 
-    {s1,s2 : AdjPos => Number => Case => Str} ;
+    {s1,s2 : AdjPos => AForm => Str} ;
 
   twoAdjPhrase : (_,_ : AdjPhrase) -> ListAdjPhrase = \x,y ->
-    CO.twoTable3 AdjPos Number Case x y ;
+    CO.twoTable2 AdjPos AForm x y ;
 
   consAdjPhrase : ListAdjPhrase -> AdjPhrase -> ListAdjPhrase =  \xs,x ->
-    CO.consTable3 AdjPos Number Case CO.comma xs x ;
+    CO.consTable2 AdjPos AForm CO.comma xs x ;
 
   conjunctAdjPhrase : Conjunction -> ListAdjPhrase -> AdjPhrase = \c,xs ->
-    CO.conjunctTable3 AdjPos Number Case c xs ;
+    CO.conjunctTable2 AdjPos AForm c xs ;
 
   conjunctDistrAdjPhrase : ConjunctionDistr -> ListAdjPhrase -> AdjPhrase = \c,xs ->
-    CO.conjunctDistrTable3 AdjPos Number Case c xs ;
+    CO.conjunctDistrTable2 AdjPos AForm c xs ;
 
 
 --3 Coordinating noun phrases

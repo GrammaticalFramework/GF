@@ -1,9 +1,11 @@
---1 The Top-Level Finnish Resource Grammar
+--# -path=.:../abstract:../../prelude
+
+--1 The Top-Level German Resource Grammar
 --
 -- Aarne Ranta 2002 -- 2003
 --
--- This is the Finnish concrete syntax of the multilingual resource
--- grammar. Most of the work is done in the file $syntax.Fin.gf$.
+-- This is the German concrete syntax of the multilingual resource
+-- grammar. Most of the work is done in the file $syntax.Deu.gf$.
 -- However, for the purpose of documentation, we make here explicit the
 -- linearization types of each category, so that their structures and
 -- dependencies can be seen.
@@ -15,73 +17,74 @@
 -- They should use $resource.Abs.gf$ to access the syntactic rules.
 -- This file can be consulted in those, hopefully rare, occasions in which
 -- one has to know how the syntactic categories are
--- implemented. The parameter types are defined in $TypesFin.gf$.
+-- implemented. The parameter types are defined in $TypesGer.gf$.
 
-concrete CombinationsFin of Combinations = open Prelude, SyntaxFin in {
+concrete CombinationsGer of Combinations = open Prelude, SyntaxGer in {
 
 flags 
   startcat=Phr ; 
-  lexer=unglue ;
-  unlexer=glue ;
+  parser=chart ;
 
 lincat 
-  N      = CommNoun ;         
-      -- = {s : NForm => Str ; g : Gender}
-  CN     = CommNounPhrase ;   
-  NP     = {s : NPForm => Str ; n : Number ; p : NPPerson} ;
-  PN     = {s : Case => Str} ;
-  Det    = {s : Gender => Case => Str ; n : Number ; isNum : Bool} ;
-  Num    = {s : NPForm => Str ; isNum : Bool} ;
+  CN     = CommNounPhrase ; 
+      -- = {s : Adjf => Number => Case => Str ; g : Gender} ;
+  N      = CommNoun ;
+      -- = {s : Number => Case => Str ; g : Gender} ; 
+  NP     = NounPhrase ;
+      -- = {s : NPForm => Str ; n : Number ; p : Person ; pro : Bool} ;
+  PN     = ProperName ;
+      -- = {s : Case => Str} ;
+  Det    = {s : Gender => Case => Str ; n : Number ; a : Adjf} ;
   Fun    = Function ;
-      -- = CommNounPhrase ** {c : NPForm} ;
-  Fun2   = Function ** {c2 : NPForm} ;
+      -- = CommNounPhrase ** {s2 : Preposition ; c : Case} ;
+  Fun2   = Function ** {s3 : Preposition ; c2 : Case} ;
+  Num    = {s : Str} ;
+  Prep   = {s : Str ; c : Case} ;
 
   Adj1   = Adjective ;
-      -- = CommonNoun
-  Adj2   = Adjective ** {c : NPForm} ;
+      -- = {s : AForm => Str} ;
+  Adj2   = Adjective ** {s2 : Preposition ; c : Case} ;
   AdjDeg = {s : Degree => AForm => Str} ;
-  AP     = {s : AdjPos => AForm => Str} ;
+  AP     = Adjective ** {p : Bool} ;
 
   V      = Verb ; 
-      -- = {s : VForm => Str}
-  VP     = Verb ** {s2 : VForm => Str ; c : ComplCase} ;
-  VG     = {s,s2 : Bool => VForm => Str ; c : ComplCase} ;
-  TV     = TransVerb ;
-      -- = Verb ** {s3, s4 : Str ; c : ComplCase} ;
-  V3     = TransVerb ** {s5, s6 : Str ; c2 : ComplCase} ;
+      -- = {s : VForm => Str ; s2 : Particle} ;
+  VG     = {s : VForm => Str ; s2 : Str ; s3 : Bool => Number => Str ; s4 : Str} ;
+  VP     = Verb ** {s3 : Number => Str ; s4 : Str} ; 
+  TV     = TransVerb ; 
+      -- = Verb ** {s3 : Preposition ; c : Case} ;
+  V3     = TransVerb ** {s4 : Preposition ; c2 : Case} ;
   VS     = Verb ;
-  VV     = Verb ** {c : ComplCase} ;
-
+  VV     = Verb ** {isAux : Bool} ;
   AdV    = {s : Str} ;
-  Prep   = {s : Str ; c : Case ; isPrep : Bool} ;
-
 
   S      = Sentence ;
-      -- = {s : Str} ; 
-  Slash  = Sentence ** {s2 : Str ; c : Case} ;
+      -- = {s : Order => Str} ; 
+  Slash  = Sentence ** {s2 : Preposition ; c : Case} ;
 
-  RP     = {s : Number => Case => Str} ;
-  RC     = {s : Number => Str} ;
+  RP     = {s : GenNum => Case => Str} ;
+  RC     = {s : GenNum => Str} ;
 
-  IP     = {s : NPForm => Str ; n : Number} ;
-  Qu     = {s : Str} ;
+  IP     = ProperName ** {n : Number} ;
+  Qu     = {s : QuestForm => Str} ;
   Imp    = {s : Number => Str} ;
   Phr    = {s : Str} ;
+  Text   = {s : Str} ;
 
   Conj   = {s : Str ; n : Number} ;
-  ConjD  = {s1 : Str ; s2 : Str ; n : Number} ;
+  ConjD  = {s1,s2 : Str ; n : Number} ;
 
-  ListS  = {s1 : Str ; s2 : Str} ;
-  ListAP = {s1,s2 : AdjPos => AForm => Str} ;
-  ListNP = {s1,s2 : NPForm => Str ; n : Number ; p : NPPerson} ;
+  ListS  = {s1,s2 : Order => Str} ; 
+  ListAP = {s1,s2 : AForm => Str ; p : Bool} ;
+  ListNP = {s1,s2 : NPForm => Str ; n : Number ; p : Person ; pro : Bool} ;
 
 --.
 
 lin 
   UseN = noun2CommNounPhrase ;
   ModAdj = modCommNounPhrase ;
-  ModGenOne = npGenDet singular ;
-  ModGenMany = npGenDetNum ;
+  ModGenOne = npGenDet singular noNum ;
+  ModGenMany = npGenDet plural ;
   UsePN = nameNounPhrase ;
   UseFun = funAsCommNounPhrase ;
   AppFun = appFunComm ;
@@ -94,15 +97,14 @@ lin
 
   DetNP = detNounPhrase ;
   IndefOneNP = indefNounPhrase singular ;
-  IndefManyNP = nounPhraseNum False ;
+  IndefManyNP = plurDetNum ;
   DefOneNP = defNounPhrase singular ;
-  DefManyNP = nounPhraseNum True ;
-  MassNP = partNounPhrase singular ;
+  DefManyNP nu = defNounPhraseNum nu plural ;
+  MassNP = massNounPhrase ;
+  UseInt i = i ;
   NoNum = noNum ;
-  UseInt i = {s = \\_ => i.s ; isNum = True} ; --- case endings sometimes needed
 
   CNthatS = nounThatSentence ;
-
   PredVP = predVerbPhrase ;
   PosVG  = predVerbGroup True ;
   NegVG  = predVerbGroup False ;
@@ -119,16 +121,20 @@ lin
   PredVV = complVerbVerb ;
   VTrans = transAsVerb ;
 
-  AdjAdv a = ss (a.s ! AAttr ! AAdv) ; --- also APred?
-  AdvVP = adVerbPhrase ;
+  AdjAdv a = ss (a.s ! APred) ;
   PrepNP = prepPhrase ;
+  AdvVP = adVerbPhrase ;
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
 
+  ThereNP A = predVerbPhrase (pronNounPhrase pronEs) 
+    (predVerbGroup True (complTransVerb (transDir verbGeben) A)) ;
+  IsThereNP A = questVerbPhrase (pronNounPhrase pronEs) 
+    (predVerbGroup True (complTransVerb (transDir verbGeben) A)) ;
+
   PosSlashTV = slashTransVerb True ;
   NegSlashTV = slashTransVerb False ;
-  OneVP = passPredVerbPhrase ;
-  ThereNP = onNounPhrase ;
+  OneVP = predVerbPhrase (nameNounPhrase {s = \\_ => "man"}) ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -147,7 +153,6 @@ lin
 
   QuestVP = questVerbPhrase ;
   IntVP = intVerbPhrase ;
-  IsThereNP = onkoNounPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
 
@@ -189,6 +194,5 @@ lin
 
   OnePhr p = p ;
   ConsPhr = cc2 ;
-
 
 } ;
