@@ -57,6 +57,7 @@ markSubterm :: (String,String) -> Term -> Term
 markSubterm (beg, end) t = case t of
   R rs -> R $ map markField rs 
   T ty cs -> T ty [Cas p (mark v) | Cas p v <- cs]
+  FV ts -> FV $ map mark ts
   _    -> foldr1 C [tK beg, t, tK end]  -- t : Str guaranteed?
  where
    mark = markSubterm (beg, end)
