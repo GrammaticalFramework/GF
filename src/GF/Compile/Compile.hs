@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/02 14:22:53 $
--- > CVS $Author: peb $
--- > CVS $Revision: 1.34 $
+-- > CVS $Date: 2005/03/08 18:08:58 $
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.35 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
@@ -57,14 +57,14 @@ gfGrammarPathVar = "GF_LIB_PATH"
 -- | in batch mode: write code in a file
 batchCompile f = liftM fst $ compileModule defOpts emptyShellState f
   where
-    defOpts = options [beVerbose, emitCode] 
+    defOpts = options [emitCode] 
 batchCompileOpt f = liftM fst $ compileModule defOpts emptyShellState f
   where
-    defOpts = options [beVerbose, emitCode, optimizeCanon] 
+    defOpts = options [emitCode, optimizeCanon] 
 
 batchCompileOld f = compileOld defOpts f
   where
-    defOpts = options [beVerbose, emitCode] 
+    defOpts = options [emitCode] 
 
 -- | compile with one module as starting point
 -- command-line options override options (marked by --#) in the file
@@ -76,7 +76,8 @@ compileModule :: Options -> ShellState -> FilePath -> IOE TimedCompileEnv
 compileModule opts st0 file | 
      oElem showOld opts || 
      elem suff ["cf","ebnf"] = do
-  let putp = putPointE opts
+  let putp  = putPointE opts
+  let putpp = putPointEsil opts
   let path = [] ----
   grammar1 <- if suff == "cf"
               then putp ("- parsing" +++ suff +++ file) $ getCFGrammar opts file
@@ -85,12 +86,12 @@ compileModule opts st0 file |
               else putp ("- parsing old gf" +++ file) $ getOldGrammar opts file
   let mods = modules grammar1
   let env = compileEnvShSt st0 []
-  foldM (comp putp path) env mods
+  foldM (comp putpp path) env mods
  where
    suff = fileSuffix file
-   comp putp path env sm0 = do
+   comp putpp path env sm0 = do
      (k',sm)  <- makeSourceModule opts (fst env) sm0
-     cm  <- putp "  generating code... " $ generateModuleCode opts path sm
+     cm  <- putpp "  generating code... " $ generateModuleCode opts path sm
      ft <- getReadTimes file ---
      extendCompileEnvInt env (k',sm,cm) ft
 
@@ -106,9 +107,8 @@ compileModule opts1 st0 file = do
               then (map (prefixPathName fpath) ps0)
               else ps0
   ps <- ioeIO $ extendPathEnv gfGrammarPathVar ps1
-  let ioeIOIf = if oElem beSilent opts then (const (return ())) else ioeIO
+  let ioeIOIf = if oElem beVerbose opts then ioeIO else (const (return ()))
   ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
-  let putp = putPointE opts
   let st = st0 --- if useFileOpt then emptyShellState else st0
   let rfs = readFiles st
   let file' = if useFileOpt then justFileName file else file -- to find file itself
@@ -166,6 +166,12 @@ compileOne :: Options -> TimedCompileEnv -> FullPath -> IOE TimedCompileEnv
 compileOne opts env@((_,srcgr,_),_) file = do
 
   let putp = putPointE opts
+  let putpp = putPointEsil opts
+  let putpOpt v m act
+       | oElem beVerbose opts =  putp v act
+       | oElem beSilent opts  =  putpp v act
+       | otherwise = ioeIO (putStrFlush m) >> act
+
   let gf   = fileSuffix file
   let path = justInitPath file
   let name = fileBody file
@@ -187,7 +193,7 @@ compileOne opts env@((_,srcgr,_),_) file = do
 
     -- for compiled resource, parse and organize, then update environment
     "gfr" -> do
-       sm0 <- putp ("| parsing" +++ file) $ getSourceModule file
+       sm0 <- putp ("| reading" +++ file) $ getSourceModule file
        sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm0
 ---- experiment with not optimizing gfr 
 ----      sm:_  <- putp "  optimizing " $ ioeErr $ evalModule mos sm1
@@ -198,9 +204,9 @@ compileOne opts env@((_,srcgr,_),_) file = do
 
     -- for gf source, do full compilation
     _ -> do
-       sm0 <- putp ("- parsing" +++ file) $ getSourceModule file
+       sm0 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ getSourceModule file
        (k',sm)  <- makeSourceModule opts (fst env) sm0
-       cm  <- putp "  generating code... " $ generateModuleCode opts path sm
+       cm  <- putpp "  generating code... " $ generateModuleCode opts path sm
        ft <- getReadTimes file
 
        sm':_ <- case snd sm of
@@ -235,13 +241,14 @@ compileSourceModule :: Options -> CompileEnv ->
                        SourceModule -> IOE (Int,SourceModule)
 compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
 
-  let putp = putPointE opts
-      mos  = modules gr
+  let putp  = putPointE opts
+      putpp = putPointEsil opts
+      mos   = modules gr
 
   if (oElem showOld opts && oElem emitCode opts) 
     then do
       let (file,out) = (gfFile (prt i), prGrammar (MGrammar [mo]))
-      ioeIO $ writeFile file out >> putStr ("  wrote file" +++ file)
+      putp ("  wrote file" +++ file) $ ioeIO $ writeFile file out
     else return ()
 
   mo1   <- ioeErr $ rebuildModule mos mo
@@ -252,17 +259,17 @@ compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
     (_,ModMod n) | not (isCompleteModule n) -> do
       return (k,mo1b)   -- refresh would fail, since not renamed
     _ -> do
-      mo2:_ <- putp "  renaming " $ ioeErr $ renameModule mos mo1b
+      mo2:_ <- putpp "  renaming " $ ioeErr $ renameModule mos mo1b
 
-      (mo3:_,warnings) <- putp "  type checking" $ ioeErr $ showCheckModule mos mo2
-      putStrE warnings
+      (mo3:_,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule mos mo2
+      if null warnings then return () else putp warnings $ return ()
 
       (k',mo3r:_) <- ioeErr $ refreshModule (k,mos) mo3
 
       mo4 <- 
 ----        case snd mo1b of
 ----          ModMod n | isModCnc n -> 
-        putp "  optimizing " $ ioeErr $ optimizeModule opts mos mo3r
+        putpp "  optimizing " $ ioeErr $ optimizeModule opts mos mo3r
 ----        _ -> return [mo3r]
       return (k',mo4)
  where
@@ -291,17 +298,19 @@ generateModuleCode opts path minfo@(name,info) = do
       let rminfo = if isCompilable info then minfo 
                    else (name,emptyModInfo) 
       let (file,out) = (gfrFile pname, prGrammar (MGrammar [rminfo]))
-      ioeIO $ writeFile file out >> putStr ("  wrote file" +++ file)
+      putp ("  wrote file" +++ file) $ ioeIO $ writeFile file out
     _ -> return ()
   (file,out) <- do
       code <- return $ MkGFC.prCanonModInfo minfo'
       return (gfcFile pname, code)
   if emit && nomulti ---- && isCompilable info 
-     then ioeIO (writeFile file out) >> ioeIOIf (putStr ("  wrote file" +++ file))
-     else ioeIOIf $ putStrFlush $ "no need to save module" +++ prt name
+     then putp  ("  wrote file" +++ file) $ ioeIO $ writeFile file out
+     else putpp ("no need to save module" +++ prt name) $ return ()
   return minfo'
  where 
-   ioeIOIf = if oElem beSilent opts then (const (return ())) else ioeIO
+   putp  = putPointE opts
+   putpp = putPointEsil opts
+
    emitsGFR m = isModRes m ---- && isCompilable info
      ---- isModRes m || (isModCnc m && mstatus m == MSIncomplete)
    isCompilable mi = case mi of
@@ -326,4 +335,3 @@ writeNewGF m@(i,_) = do
   ioeIO $ writeFile file $ prGrammar (MGrammar [m])
   ioeIO $ putStrLn $ "wrote file" +++ file
   return file
-

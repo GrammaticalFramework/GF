@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:36 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.9 $
+-- > CVS $Date: 2005/03/08 18:08:58 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.10 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -227,9 +227,17 @@ putStrLnE = ioeIO . putStrLnFlush
 putStrE :: String -> IOE ()
 putStrE = ioeIO . putStrFlush 
 
+-- this is more verbose
 putPointE :: Options -> String -> IOE a -> IOE a
-putPointE opts msg act = do
-  let ve x = if oElem beSilent opts then return () else x
+putPointE = putPointEgen (oElem beSilent)
+
+-- this is less verbose
+putPointEsil :: Options -> String -> IOE a -> IOE a
+putPointEsil = putPointEgen (not . oElem beVerbose)
+
+putPointEgen :: (Options -> Bool) -> Options -> String -> IOE a -> IOE a
+putPointEgen cond opts msg act = do
+  let ve x = if cond opts then return () else x
   ve $ ioeIO $ putStrFlush msg
   a <- act
 ---  ve $ ioeIO $ putShow' id a --- replace by a statistics command

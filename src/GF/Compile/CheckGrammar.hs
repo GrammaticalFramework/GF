@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:08 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.20 $
+-- > CVS $Date: 2005/03/08 18:08:58 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.21 $
 --
 -- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
 --
@@ -63,8 +63,8 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
 
       MTConcrete a -> do
         ModMod abs <- checkErr $ lookupModule gr a
-        checkCompleteGrammar abs mo
-        mapMTree (checkCncInfo gr name (a,abs)) js
+        js1 <- checkCompleteGrammar abs mo
+        mapMTree (checkCncInfo gr name (a,abs)) js1
 
       MTInterface -> mapMTree (checkResInfo gr) js
 
@@ -118,17 +118,26 @@ checkAbsInfo st m (c,info) = do
      _ -> composOp (compAbsTyp g) t
 
 
-checkCompleteGrammar :: SourceAbs -> SourceCnc -> Check ()
-checkCompleteGrammar abs cnc = mapM_ checkWarn $
-  checkComplete [f | (f, AbsFun (Yes _) _) <- abs'] cnc'
-   where
-     abs' = tree2list $ jments abs
-     cnc' = mapTree fst $ jments cnc
-     checkComplete sought given = foldr ckOne [] sought
-       where
-         ckOne f = if isInBinTree f given 
-                      then id
-                      else (("Warning: no linearization of" +++ prt f):)
+checkCompleteGrammar :: SourceAbs -> SourceCnc -> Check (BinTree (Ident,Info))
+checkCompleteGrammar abs cnc = do
+  let js = jments cnc
+  let fs = tree2list $ jments abs
+  foldM checkOne js fs
+ where
+   checkOne js i@(c,info) = case info of
+     AbsFun (Yes _) _ -> case lookupTree prt c js of
+       Ok _ -> return js
+       _ -> do
+         checkWarn $ "Warning: no linearization of" +++ prt c
+         return js
+     AbsCat (Yes _) _ -> case lookupTree prt c js of
+       Ok _ -> return js
+       _ -> do
+         checkWarn $ 
+           "Warning: no linearization type for" +++ prt c ++ 
+           ", inserting default {s : Str}" 
+         return $ updateTree (c,CncCat (Yes defLinType) nope nope) js
+     _ -> return js
 
 -- | General Principle: only Yes-values are checked. 
 -- A May-value has always been checked in its origin module.

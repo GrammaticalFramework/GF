@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:09 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/03/08 18:08:58 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.12 $
 --
 -- Check correctness of module dependencies. Incomplete.
 --
@@ -74,7 +74,7 @@ moduleDeps ms = mapM deps ms where
     ModMod m -> case mtype m of
       MTConcrete a -> do
         aty <- lookupModuleType gr a
-        testErr (aty == MTAbstract) "the for-module is not an abstract syntax" 
+        testErr (aty == MTAbstract) "the of-module is not an abstract syntax" 
         chDep (IdentM c (MTConcrete a)) 
               (extends m) (MTConcrete a) (opens m) MTResource
       t -> chDep (IdentM c t) (extends m) t (opens m) t
