@@ -3,8 +3,14 @@ module Morphology where
 import AbsGFC
 import GFC
 import PrGrammar
+import CMacros
+import LookAbs
+import Ident
+import qualified Macros as M
+import Linear
 
 import Operations
+import Glue
 
 import Char
 import List (sortBy, intersperse)
@@ -40,35 +46,33 @@ appMorphoOnly m s = (s, ms) where
 isKnownWord :: Morpho -> String -> Bool
 isKnownWord mo = not . null . snd . appMorphoOnly mo
 
-mkMorpho :: CanonGrammar -> Morpho 
-mkMorpho gr = emptyMorpho ----
-{- ----
-mkMorpho gr = mkMorphoTree $ concat $ map mkOne $ allItems where
+mkMorpho :: CanonGrammar -> Ident -> Morpho 
+---- mkMorpho gr = emptyMorpho ----
+mkMorpho gr a = mkMorphoTree $ concat $ map mkOne $ allItems where
+
   mkOne (Left (fun,c))  = map (prOne fun c) $ allLins fun
   mkOne (Right (fun,_)) = map (prSyn fun) $ allSyns fun
   
   -- gather forms of lexical items
-  allLins fun = errVal [] $ do
-    ts <- allLinsOfFun gr fun 
+  allLins fun@(m,f) = errVal [] $ do
+    ts <- allLinsOfFun gr (CIQ a f)  
     ss <- mapM (mapPairsM (mapPairsM (return . wordsInTerm))) ts
     return [(p,s) | (p,fs) <- concat $ map snd $ concat ss, s <- fs]
-  prOne f c (ps,s) = (s, prt f +++ tagPrt c ++ concat (map tagPrt ps))
+  prOne (_,f) c (ps,s) = (s, prt f +++ tagPrt c ++ concat (map prt_ ps))
 
   -- gather syncategorematic words
-  allSyns fun = errVal [] $ do
-    tss <- allLinsOfFun gr fun 
+  allSyns fun@(m,f) = errVal [] $ do
+    tss <- allLinsOfFun gr (CIQ a f) 
     let ss = [s | ts <- tss, (_,fs) <- ts, (_,s) <- fs]
     return $ concat $ map wordsInTerm ss
   prSyn f s = (s, "+<syncategorematic>" ++ tagPrt f)
 
   -- all words, Left from lexical rules and Right syncategorematic
-  allItems = [lexRole t (f,c) | (f,c) <- allFuns, t <- lookType f] where
-    allFuns = allFunsWithValCat ab
-    lookType = errVal [] . liftM (:[]) . lookupFunType ab
-    lexRole t = case typeForm t of
+  allItems = [lexRole t (f,c) | (f,c,t) <- allFuns] where
+    allFuns = [(f,c,t) | (f,t) <- funRulesOf gr, Ok c <- [M.valCat t]]
+    lexRole t = case M.typeForm t of
       Ok ([],_,_) -> Left
       _ -> Right
--}
 
 -- printing full-form lexicon and results
 
@@ -82,8 +86,8 @@ prMorphoAnalysisShort :: (String,[String]) -> String
 prMorphoAnalysisShort (w,fs) = prBracket (w' ++ prTList "/" fs) where
   w' = if null fs then w +++ "*" else ""
 
-tagPrt :: Print a => a -> String
-tagPrt = ("+" ++) . prt --- could look up print name in grammar
+tagPrt :: Print a => (a,a) -> String
+tagPrt (m,c) = "+" ++ prt c --- module name
 
 -- print all words recognized
 
@@ -98,6 +102,15 @@ morphoText mo = unlines . map (('\n':) . prMorphoAnalysis . appMorpho mo) . word
 prFullForm :: Morpho -> String
 prFullForm = unlines . map prOne . tree2list where
   prOne (s,ps) = s ++ " : " ++ unwords (intersperse "/" ps)
+
+-- using Huet's unglueing method to find word boundaries
+---- it would be much better to use a trie also for morphological analysis,
+---- so this is for the sake of experiment
+---- Moreover, we should specify the cases in which this happens - not all words
+
+decomposeWords :: Morpho -> String -> [String]
+decomposeWords mo s = errVal (words s) $
+  decomposeSimple (tcompileSimple (map fst $ tree2list mo)) s
 
 -- auxiliaries
 

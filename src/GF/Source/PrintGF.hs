@@ -321,6 +321,8 @@ instance Print Exp where
    EConcat exp0 exp -> prPrec i 0 (concat [prt 1 exp0 , ["++"] , prt 0 exp])
    EGlue exp0 exp -> prPrec i 0 (concat [prt 1 exp0 , ["+"] , prt 0 exp])
    ELet locdefs exp -> prPrec i 0 (concat [["let"] , ["{"] , prt 0 locdefs , ["}"] , ["in"] , prt 0 exp])
+   ELetb locdefs exp -> prPrec i 0 (concat [["let"] , prt 0 locdefs , ["in"] , prt 0 exp])
+   EWhere exp locdefs -> prPrec i 0 (concat [prt 1 exp , ["where"] , ["{"] , prt 0 locdefs , ["}"]])
    EEqs equations -> prPrec i 0 (concat [["fn"] , ["{"] , prt 0 equations , ["}"]])
    ELString lstring -> prPrec i 4 (concat [prt 0 lstring])
    ELin id -> prPrec i 2 (concat [["Lin"] , prt 0 id])

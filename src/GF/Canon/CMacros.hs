@@ -152,3 +152,15 @@ redirectIdent n f@(CIQ _ c) = CIQ n c
 
 ciq n f = CIQ n f
 
+wordsInTerm :: Term -> [String]
+wordsInTerm trm = filter (not . null) $ case trm of
+   K (KS s) -> [s]
+   S c _   -> wo c
+   R rs    -> concat [wo t | Ass _ t <- rs]
+   T _ cs  -> concat [wo t | Cas _ t <- cs]
+   C s t   -> wo s ++ wo t
+   FV ts   -> concatMap wo ts
+   K (KP ss vs) -> ss ++ concat [s ++ t | Var s t <- vs]
+   P t _   -> wo t --- not needed ?
+   _       -> []
+ where wo = wordsInTerm

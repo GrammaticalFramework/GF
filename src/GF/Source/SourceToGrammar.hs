@@ -357,6 +357,8 @@ transExp x = case x of
    where
      tryLoc (c,(mty,Just e)) = return (c,(mty,e))
      tryLoc (c,_) = Bad $ "local definition of" +++ GP.prt c +++ "without value"
+  ELetb defs exp -> transExp $ ELet defs exp
+  EWhere exp defs -> transExp $ ELet defs exp
 
   ELString (LString str) -> return $ G.K str 
   ELin id -> liftM G.LiT $ transIdent id
