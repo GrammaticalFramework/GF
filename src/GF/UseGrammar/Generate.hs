@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/03 16:40:51 $ 
+-- > CVS $Date: 2005/03/04 08:12:56 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.11 $
+-- > CVS $Revision: 1.12 $
 --
 -- Generate all trees of given category and depth. AR 30\/4\/2004
 --
@@ -91,28 +91,29 @@ generate gr ifm cat i mn mt = case mt of
   Just t  -> genM t
  where
 
-  gen cat = errVal [] $ lookupTree id cat $ allTrees
+  gen cat = concat $ errVal [] $ lookupTree id cat $ allTrees
 
   allTrees = genAll i
 
   -- lazy bottom-up dynamic generation
-  genAll :: Int -> BinTree (SCat,[STree])
-  genAll i = iter i genNext (mapTree (\ (c,_) -> (c,[])) gr)
+  genAll :: Int -> BinTree (SCat,[[STree]])
+  genAll i = iter i genNext (mapTree (\ (c,_) -> (c,[[]])) gr)
 
   iter 0 f tr = tr
   iter n f tr = iter (n-1) f (f tr)
 
   genNext tr = mapTree (genNew tr) tr
 
-  genNew tr (cat,ts) = 
+  genNew tr (cat,ts) = let size = length ts in
     (cat, [SApp (f, xs) | 
             (f,(cs,_)) <- funs cat, 
             xs <- combinations (map look cs),
             let fxs = SApp (f, xs),
-            notElem fxs ts] 
-         ++ ts)
+            depth fxs == size]
+--            notElem fxs ts] ---- quadratic; better to check depth
+         : ts)
    where
-     look c = errVal [] $ lookupTree id c tr
+     look c = concat $ errVal [] $ lookupTree id c tr
 
   funs cat = maybe id take mn $ errVal [] $ lookupTree id cat gr
 
@@ -136,6 +137,11 @@ data STree =
   | SString String
   | SInt Int
    deriving (Show,Eq)
+
+depth :: STree -> Int
+depth t = case t of
+  SApp (_,ts@(_:_)) -> maximum (map depth ts) + 1
+  _ -> 1
 
 ------------------------------------------
 -- to test
