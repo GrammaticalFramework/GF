@@ -1641,11 +1641,11 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       restString = s;
       int m2, m1;
       String position = "";
-      if (selectionStart>-1)
+      if ((selectionStart>-1)&&(selectionEnd>selectionStart))
       {
         selStart = selectionStart;
         selEnd = selectionEnd;                               
-        if (debug2) 
+        //if (debug2) 
                 System.out.println("SELECTION: " + selStart + " "+selEnd+ "TOTAL: "+s.length());
         if (selEnd>-1)
           selectionCheck = (s.substring(selStart, selEnd).indexOf("<")==-1);
@@ -1880,7 +1880,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
            currentPosition.addElement(restString.substring(positionStart, positionEnd+1));
          }
          else
-           currentPosition.removeElementAt(currentPosition.size()-1);
+           if (currentPosition.size()>0)
+             currentPosition.removeElementAt(currentPosition.size()-1);
          if (start>0)
            restString = restString.substring(0,start)+restString.substring(end+1);
          else
