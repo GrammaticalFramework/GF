@@ -18,7 +18,6 @@ DIST_DIR=GF-$(PACKAGE_VERSION)
 NOT_IN_DIST= \
 	from-peb \
 	grammars \
-	doc/gf-index.html \
 	doc/index.html \
 	doc/release2.html \
 	src/parsing \
