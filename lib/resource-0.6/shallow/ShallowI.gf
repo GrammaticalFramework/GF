@@ -9,9 +9,11 @@ incomplete concrete ShallowI of Shallow = open (Resource = Resource) in {
     Verb = Resource.V ;
     TV = Resource.TV ;
     Adj  = Resource.Adj1 ;
+    N = Resource.N ;
     Noun = Resource.CN ;
     CN  = Resource.CN ;
     NP  = Resource.NP ;
+    PN  = Resource.PN ;
     Adv = Resource.AdV ;
     Det = Resource.Det ;
     Prep = Resource.Prep ;
@@ -62,12 +64,14 @@ incomplete concrete ShallowI of Shallow = open (Resource = Resource) in {
     ModNoun a n = Resource.ModAdj (Resource.AdjP1 a) n ;
     PrepNP = Resource.PrepNP ;
     PrepNoun f p x = Resource.AdvCN f (Resource.PrepNP p x) ;
+    NounN = Resource.UseN ;
     CNNoun n = n ;
 
     AllNP = Resource.DetNP (Resource.AllNumDet Resource.NoNum) ;
     EveryNP = Resource.DetNP Resource.EveryDet ;
     DefNP = Resource.DefOneNP ;
     IndefNP = Resource.IndefOneNP ;
+    UsePN = Resource.UsePN ;
 
     PossessPrep = Resource.PossessPrep ;
 }

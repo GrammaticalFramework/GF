@@ -9,7 +9,7 @@
 -- expressions of basic categories: nouns, adjectives, verbs.
 -- 
 -- Closed categories (determiners, pronouns, conjunctions) are
--- accessed through the resource syntax API, $resource.Abs.gf$. 
+-- accessed through the resource syntax API, $Structural.gf$. 
 --
 -- The main difference with $MorphoEng.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
@@ -148,6 +148,12 @@ oper
 
   tvPartReg : Str -> Str -> Str -> TV ; -- get, along, with
 
+-- Ditransitive verbs.
+
+  mkV3     : V -> Str -> Str -> V3 ;   -- prata, med, om
+  v3Dir    : V -> Str -> V3 ;          -- ge,_,till
+  v3DirDir : V -> V3 ;                 -- ge,_,_
+
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
@@ -239,4 +245,7 @@ oper
   tvDir = \v -> mkTV v [] ;
   tvGenDir = \s -> tvDir (vGen s) ;
 
+  mkV3 x y z = mkDitransVerb x y z ** {lock_V3 = <>} ;
+  v3Dir x y = mkV3 x [] y ;
+  v3DirDir x = v3Dir x [] ;
 } ;

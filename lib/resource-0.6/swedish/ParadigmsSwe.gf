@@ -69,9 +69,9 @@ oper
   nKikare : Str -> N ;   -- kikare (kikaren, kikare, kikarna) ; utrum
 
 -- Nouns used as functions need a preposition. The most common ones are "av",
--- "på", and "till".
+-- "på", and "till". A preposition is a string.
 
-  mkFun   : N -> Preposition -> Fun ;
+  mkFun   : N -> Str -> Fun ;
   funAv   : N -> Fun ;
   funPaa  : N -> Fun ;
   funTill : N -> Fun ;
@@ -157,8 +157,14 @@ oper
 
 -- Two-place verbs, and the special case with direct object. 
 
-  mkTV     : V -> Preposition -> TV ;   -- tycka, om
-  tvDir    : V -> TV ;                  -- gilla
+  mkTV     : V -> Str -> TV ;   -- tycka, om
+  tvDir    : V -> TV ;          -- gilla
+
+-- Ditransitive verbs.
+
+  mkV3     : V -> Str -> Str -> V3 ;   -- prata, med, om
+  v3Dir    : V -> Str -> V3 ;          -- ge,_,till
+  v3DirDir : V -> V3 ;                 -- ge,_,_
 
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
@@ -288,5 +294,8 @@ oper
   mkPartV v p = {s = v.s ; s1 = p ; lock_V = <>} ;
   mkTV x y = mkTransVerb x y ** {lock_TV = <>} ;
   tvDir = \v -> mkTV v [] ;
+  mkV3 x y z = mkDitransVerb x y z ** {lock_V3 = <>} ;
+  v3Dir x y = mkV3 x [] y ;
+  v3DirDir x = v3Dir x [] ;
 
 } ;

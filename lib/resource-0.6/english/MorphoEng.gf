@@ -33,6 +33,12 @@ oper
   nounY   : Str -> CommonNoun = \fl -> 
     mkNoun (fl + "y") (fl + "ies") (fl + "y's") (fl + "ies'") ;
 
+  nounGen : Str -> CommonNoun = \dog -> case last dog of {
+    "y" => nounY "dog" ;
+    "s" => nounS (init "dog") ;
+    _   => nounReg "dog"
+    } ;
+
 --3 Proper names
 --
 -- Regular proper names are inflected with "'s" in the genitive.
@@ -173,6 +179,13 @@ oper
 
   verbP3y   : Str -> VerbP3 = \cr -> 
     mkVerbP3 (cr + "y") (cr + "ies") (cr + "ied") (cr + "ied") ;
+
+  verbGen : Str -> VerbP3 = \kill -> case last kill of {
+    "y" => verbP3y (init "kill") ;
+    "e" => verbP3y (init "kill") ;
+    "s" => verbP3s (init "kill") ;
+    _   => regVerbP3 "kill"
+    } ;
 
   verbP3Have = mkVerbP3 "have" "has" "had" "had" ;
 

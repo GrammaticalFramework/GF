@@ -18,9 +18,11 @@ abstract Shallow = {
     Verb ;
     TV ;
     Adj ;
+    N ;
     Noun ;
     CN ;
     NP ;
+    PN ;
     Adv ;
     Prep ;
 
@@ -48,7 +50,9 @@ abstract Shallow = {
     PrepNP : Prep -> NP -> Adv ;
     PrepNoun : CN -> Prep -> NP -> CN ;
     CNNoun : Noun -> CN ;
+    NounN : N -> Noun ;
     DefNP, IndefNP, EveryNP, AllNP : CN -> NP ;
+    UsePN : PN -> NP ;
 
     PossessPrep : Prep ;
 }
