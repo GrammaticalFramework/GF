@@ -301,7 +301,7 @@ oper
 
   commentAdv = ss "comme" ;
   quandAdv = ss "quando" ;
-  ouAdv = ss "o" ;
+  ouAdv = ss "dove" ;
   pourquoiAdv = ss "perché" ;
 
   etConj = ss "e" ** {n = Pl} ;

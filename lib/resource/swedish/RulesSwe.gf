@@ -31,6 +31,12 @@ lin
      x = cn.x ;
      p = cn.p
      } ;
+  IntCN cn s =
+    {s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ; 
+     g = cn.g ;
+     x = cn.x ;
+     p = cn.p
+     } ;
 
   CNthatS = nounThatSentence ;
 

@@ -19,6 +19,7 @@ fun
 
   SymbPN      : String -> PN ;             -- "x"
   SymbCN      : CN -> String -> CN ;       -- "number x"
+  IntCN       : CN -> Int -> CN ;          -- "number 53"
 
   IndefOneNP  : CN -> NP ;                 -- "a car", "cars"
   IndefNumNP  : Num -> CN -> NP ;          -- "houses", "86 houses"

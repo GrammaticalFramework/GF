@@ -1,0 +1,1 @@
+interface Resource = reuse AllResource ;

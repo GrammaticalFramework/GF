@@ -407,6 +407,11 @@ oper
     VPF _ f => nombreVerb f
     } ;
 
+  isNotImperative : VPForm -> Bool = \v -> case v of {
+    VPF _ (VImper _) => False ;
+    _ => True
+    } ;
+
 -- Predication is language-dependent in the negative case.
 
   predVerb : Verb -> VerbGroup = \aller -> 
@@ -520,7 +525,7 @@ oper
          Jean = jean.s ! (case2pformClit aime.c) ; 
          AAime = formVerb2 aime g w ;
          A = AAime.verb ;
-         clit = (andB (isNounPhraseClit jean) (isTransVerbClit aime)) ;
+         clit = (andB (isNounPhraseClit jean) (andB (isTransVerbClit aime) (isNotImperative w))) ;
          Aime = if_then_Str clit
            (AAime.part ! pgen2gen jean.g ! jean.n)
            (AAime.part ! Masc ! Sg)

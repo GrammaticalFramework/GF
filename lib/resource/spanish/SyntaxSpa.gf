@@ -277,19 +277,30 @@ oper
     Clit3 ;
 
   pronIls = mkPronoun
-    "ellos"  ---- ellas
+    "ellos"
     "los"
     "les"
     "ellos"
     "su" "su" "sus" "sus"
-    PNoGen
+    (PGen Masc)
+    Pl
+    P3
+    Clit1 ;
+
+  pronElles = mkPronoun
+    "ellas"
+    "las"
+    "les"
+    "ellas"
+    "su" "su" "sus" "sus"
+    (PGen Fem)
     Pl
     P3
     Clit1 ;
 
   commentAdv = ss "como" ;
   quandAdv = ss "cuando" ;
-  ouAdv = ss "o" ;
+  ouAdv = ss "donde" ;
   pourquoiAdv = ss "porqué" ;
 
   etConj = ss "y" ** {n = Pl} ;

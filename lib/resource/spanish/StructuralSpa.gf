@@ -12,6 +12,7 @@ lin
   YeNumNP n = pronNounPhrase (pronWithNum pronVous n) ;
   YouNP  = pronNounPhrase pronVous ;
   TheyNP = pronNounPhrase pronIls ; 
+  TheyFemNP = pronNounPhrase pronElles ; 
 
 -- Here is a point where the API is really inadequate for French,
 -- which distinguishes between masculine and feminine "they".
@@ -31,6 +32,7 @@ lin
   AllNumDet  = mkDeterminerNum plural ["todos los"] ["todas las"] ;
   WhichDet = quelDet ;
   WhichNumDet = mkDeterminerNum plural "cuales" "cuales" ;
+  HowManyDet = mkDeterminer plural "cuántos" "cuántas" ;
   MostsDet = plupartDet ;
   MostDet  = mkDeterminer1 singular (["la mayor parte"] ++ elisDe) ; --- de
   SomeDet  = mkDeterminer singular "alguno" "alguna" ;
@@ -76,10 +78,11 @@ lin
   SomethingNP  = mkNameNounPhrase ["algo"] Masc ;
   NothingNP    = mkNameNounPhrase ["nada"] Masc ; --- ne
 
-----  CanVV     = mkVerbVerbDir (verbPres (potere_72 "potere") AHabere) ;
-----  CanKnowVV = mkVerbVerbDir (verbPres (sapere_81 "sapere") AHabere) ;
-----  MustVV    = mkVerbVerbDir (verbPres (dovere_50 "dovere") AHabere) ;
-----  WantVV    = mkVerbVerbDir (verbPres (volere_99 "volere") AHabere) ;
+---- provisory, for completeness
+  CanVV     = mkVerbVerbDir (verbPres (vender_4 "poder") AHabere) ; ----
+  CanKnowVV = mkVerbVerbDir (verbPres (vender_4 "saber") AHabere) ; ----
+  MustVV    = mkVerbVerbDir (verbPres (vender_4 "deber") AHabere) ; ----
+  WantVV    = mkVerbVerbDir (verbPres (vender_4 "quierer") AHabere) ; ----
 
   EverywhereNP = ss ["en todas partes"] ;
   SomewhereNP = ss ["en ninguna parte"] ;
