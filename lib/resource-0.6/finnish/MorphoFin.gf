@@ -97,7 +97,7 @@ oper
   sLukko : Str -> CommonNoun = \lukko -> 
    let a = getHarmony (last lukko) 
    in
-   sKukko lukko (weakGrade lukko + "n") (lukko + "n" + a) ;
+   sKukko lukko (weakGrade lukko + "n") (lukko + "j" + a) ;
 
 -- The special case with no alternations: the vowel harmony is inferred from the
 -- last letter - which must be one of "o", "u", "ö", "y".

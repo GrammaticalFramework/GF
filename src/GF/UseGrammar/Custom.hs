@@ -191,7 +191,9 @@ customTermCommand =
                                     (exp2termCommand gr (computeAbsTerm gr) t))
   ,(strCI "paraphrase", \g t -> let gr = grammar g in
                                   exp2termlistCommand gr (mkParaphrases gr) t)
-----  ,(strCI "typecheck",  \g t -> err (const []) return (checkIfValidExp g t))
+  ,(strCI "typecheck",  \g t -> let gr = grammar g in
+                                  err (const []) (return . const t)
+                                    (checkIfValidExp gr (tree2exp t)))
   ,(strCI "solve",      \g t -> err (const [t]) (return . loc2tree)
                                    (uniqueRefinements (grammar g) (tree2loc t)))
   ,(strCI "context",    \g t -> err (const [t]) (return . loc2tree)

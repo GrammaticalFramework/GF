@@ -61,7 +61,7 @@ instance Print Char where
   prtList s = ["\"" ++ concatMap mkEsc s ++ "\""]
 
 mkEsc s = case s of
-  _ | elem s "\\\"'" -> '\\':[s]
+  _ | elem s "\\\"" -> '\\':[s]
   '\n' -> "\\n"
   '\t' -> "\\t"
   _ -> [s]

@@ -30,12 +30,12 @@ prCFFun :: CFFun -> String
 prCFFun = prCFFun' True ---- False -- print profiles for debug
 
 prCFFun' :: Bool -> CFFun -> String
-prCFFun' profs (CFFun (t, p)) = prt t ++ pp p where
+prCFFun' profs (CFFun (t, p)) = prt_ t ++ pp p where
     pp p = if (not profs || normal p) then "" else "_" ++ concat (map show p)
     normal p = and [x==y && null b | ((b,x),y) <- zip p (map (:[]) [0..])]
 
 prCFCat :: CFCat -> String
-prCFCat (CFCat (c,l)) = prt c ++ "-" ++ prt l ----
+prCFCat (CFCat (c,l)) = prt_ c ++ "-" ++ prt_ l ----
 
 prCFItem (CFNonterm c) = prCFCat c
 prCFItem (CFTerm a) = prRegExp a
