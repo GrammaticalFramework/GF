@@ -27,7 +27,7 @@ fun
 
   Univ  : (A : Dom) -> (Elem A -> Prop) -> Prop ;
   Exist : (A : Dom) -> (Elem A -> Prop) -> Prop ;
-
+ 
   -- progressive implication à la type theory
   ImplP : (A : Prop) -> (Proof A -> Prop) -> Prop ;
 
