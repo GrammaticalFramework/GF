@@ -59,9 +59,9 @@ lin
   
   ThisNP = det2NounPhrase etotDet ; -- inanimate form only
   ThatNP = det2NounPhrase totDet ; -- inanimate form only
-  TheseNP n =  { s =\\_ => [] ; n = Pl; p = P3; g=Fem ; anim = Animate ;  pron = True} ; 
+  TheseNP n =  { s =\\_ => [] ; n = Pl; p = P3; g= PGen Fem ; anim = Animate ;  pron = True} ; 
    -- missing in Russian
-  ThoseNP n =  { s =\\_ => [] ; n = Pl; p = P3; g=Fem ; anim = Animate ;  pron = True} ; 
+  ThoseNP n =  { s =\\_ => [] ; n = Pl; p = P3; g=PGen Fem ; anim = Animate ;  pron = True} ; 
    -- missing in Russian
 
 EverybodyNP = mkNounPhrase Pl (noun2CommNounPhrase (eEnd_Decl "вс")) ;
@@ -85,6 +85,7 @@ WantVV = extVerb verbKhotet Act Present  ;
   OrConj   = ss "или"  ** {n = Sg} ;
   BothAnd  = sd2 "как" [", так"]  ** {n = Pl} ;
   EitherOr = sd2 "либо" [", либо"]  ** {n = Sg} ;
+-- comma is not visible in GUI!
 
 -- In case of "neither..  no" expression double negation is not 
 -- only possible, but also required in Russian.

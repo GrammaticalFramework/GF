@@ -41,51 +41,56 @@ oper
 oper
 
   NounPhrase : Type = { s : PronForm => Str ; n : Number ; 
-   p : Person ; g: Gender ; anim : Animacy ;  pron: Bool} ;
+   p : Person ; g: PronGen ; anim : Animacy ;  pron: Bool} ;
 
 -- The following construction has to be refined for genitive forms:
 -- "we two", "us two" are OK, but "our two" is not.
+--  actually also "Animacy" for numerals 1-4 should be resent
 
   Numeral : Type = {s : Case => Gender => Str} ;
 
   pronWithNum : NounPhrase -> Numeral -> NounPhrase = \mu,dva ->
-    {s = \\pf => mu.s!pf ++ dva.s ! (extCase pf) ! mu.g ; 
+    {s = \\pf => mu.s!pf ++ dva.s ! (extCase pf) ! (pgen2gen mu.g) ; 
      n = mu.n ; p = mu.p; g = mu.g ; pron = mu.pron; anim = mu.anim } ;
 
  noNum : Numeral = {s = \\_,_ => []} ;
+
+-- unclear how to tell apart the numbers from their string representation,
+-- so just leave a decimal representation, without case-suffixes:
+
  useInt : Str -> Numeral = \i -> 
-    {s = table {
-        Nom => table {_ => i }; 
-        Gen => table {_ => i ++ "'-х"};
-        Dat => table {_ => i ++ "'-м"};
-        Acc => table {_ => i };
-        Inst => table {_ => i ++ "-мя"};
-        Prepos => table {_ => i ++ "'-х"}
+    {s = table { _ => table {_ => i }
+--        Nom => table {_ => i }; 
+ --       Gen => table {_ => i ++ "-х"};
+ --       Dat => table {_ => i ++ "'-м"};
+ --       Acc => table {_ => i };
+ --       Inst => table {_ => i ++ "-мя"};
+ --       Prepos => table {_ => i ++ "-х"}
          }
     } ;
 
   -- A function specific for Russian for setting the gender for 
   -- personal pronouns in first and second person, singular :
   setNPGender : Gender -> NounPhrase -> NounPhrase = \gen, pronI -> 
-    { s = pronI.s ; g = gen ; anim = pronI.anim ;
+    { s = pronI.s ; g = PGen gen; anim = pronI.anim ;
       n = pronI.n ; nComp = pronI.nComp ; p = pronI.p ; pron = pronI.pron } ;  
 
 
   mkNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n,chelovek -> 
     {s = \\cas => chelovek.s ! n ! (extCase cas) ;
-     n = n ; g = chelovek.g ; p = P3 ; pron =False ;
+     n = n ; g = PGen chelovek.g ; p = P3 ; pron =False ;
      anim = chelovek.anim 
     } ;
   pron2NounPhrase : Pronoun -> Animacy -> NounPhrase = \ona, anim -> 
-    {s = ona.s ; n = ona.n ; g = pgen2gen ona.g ; 
+    {s = ona.s ; n = ona.n ; g =  ona.g ; 
      pron = ona.pron; p = ona.p ; anim = anim } ;
 
   det2NounPhrase : Adjective -> NounPhrase = \eto -> 
-    {s = \\pf => eto.s ! (AF (extCase pf) Inanimate (ASg Neut)); n = Sg ; g = Neut ; pron = False ; p = P3 ; anim = Inanimate } ;
+    {s = \\pf => eto.s ! (AF (extCase pf) Inanimate (ASg Neut)); n = Sg ; g = PGen Neut ; pron = False ; p = P3 ; anim = Inanimate } ;
 
   nameNounPhrase : ProperName -> NounPhrase = 
     \masha -> {s = \\c => masha.s ! (extCase c) ; 
-      p = P3; g = masha.g ; anim = masha.anim ; 
+      p = P3; g = PGen masha.g ; anim = masha.anim ; 
       n = Sg; nComp = Sg; pron = False} ;
 
 
@@ -120,17 +125,18 @@ oper
      n = kazhduj.n ; 
      p = P3 ;
      pron = False;
-     g = case kazhduj.g of { PNoGen => okhotnik.g;  _=> pgen2gen kazhduj.g } ;
+     g = kazhduj.g ;
      anim = okhotnik.anim 
     } ;
 
  indefNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n ->
     indefNounPhraseNum n noNum ; 
 
+-- a problem: "2 бутылки", but "5 бутылок" in Nominative case! Ignored for the moment:
   indefNounPhraseNum : Number -> Numeral ->CommNounPhrase -> NounPhrase = 
     \n,dva,mashina -> 
     {s = \\c =>  dva.s ! (extCase c) ! mashina.g ++  mashina.s ! n !  (extCase c) ;
-     n = n ; p = P3; g = mashina.g ; anim = mashina.anim ; 
+     n = n ; p = P3; g = PGen mashina.g ; anim = mashina.anim ; 
      pron = False
     } ;
 
@@ -157,7 +163,7 @@ oper
              False =>  dva.s ! (extCase c) ! mashina.g ++ mashina.s ! n ! (extCase c)  ++         
                              masha.s ! (mkPronForm Gen No (Poss (gNum mashina.g n))) 
        } ;
-       n = n ; p = P3 ;  g = mashina.g ; anim = mashina.anim ; pron = False
+       n = n ; p = P3 ;  g = PGen mashina.g ; anim = mashina.anim ; pron = False
       } ;
 
 -- Constructions like "the idea that two is even" are formed at the
@@ -181,13 +187,25 @@ oper
   -- Coercions between the compound gen-num type and gender and number:
 
   gNum : Gender -> Number -> GenNum = \g,n -> 
-    case n of {Sg => case g of 
+    case n of 
+   {   Sg => case g of 
                  { Fem => ASg Fem ;
                    Masc => ASg Masc ;
-                   Neut => ASg Neut 
-                   -- _  => variants {ASg Masc ; ASg Fem}
-                   } ; Pl => APl} ;
+                   Neut => ASg Neut  } ;
+       Pl => APl
+   } ;
 
+pgNum : PronGen -> Number -> GenNum = \g,n -> 
+    case n of 
+   {   Sg => case g of 
+                 { PGen Fem => ASg Fem ;
+                   PGen Masc => ASg Masc ;
+                   PGen Neut => ASg Neut ;
+                   _ => ASg Masc } ; 
+        Pl => APl
+   } ;
+              --    _  => variants {ASg Masc ; ASg Fem}  } ; 
+              --  "variants" version cause "no term variants" error during linearization
 
 
 --3 Adjective phrases
@@ -234,7 +252,7 @@ oper
      p = P3 ;
      pron = False;
      anim = dom.anim ;
-     g = dom.g
+     g = PGen dom.g
     } ;
 
 
@@ -288,9 +306,11 @@ oper
 -- of the readings is meaningful.
 
   appFunComm : Function -> NounPhrase -> CommNounPhrase = \mama,ivan -> 
-     {s = \\n, cas => 
-         mama.s ! n ! cas ++ mama.s2 ++ 
-         ivan.s ! (mkPronForm mama.c No (Poss (gNum mama.g n)));
+     {s = \\n, cas =>  case ivan.pron of 
+       { True => ivan.s ! (mkPronForm cas No (Poss (gNum mama.g n))) ++ mama.s ! n ! cas;
+         False => mama.s ! n ! cas ++ mama.s2 ++ 
+         ivan.s ! (mkPronForm mama.c Yes (Poss (gNum mama.g n)))
+       };
        g = mama.g ;
        anim = mama.anim
       } ;
@@ -303,6 +323,12 @@ oper
   mkFun : CommNoun -> Str -> Case -> Function = \f,p,c ->
     (n2n f) ** {s2 = p ; c = c} ;
 
+
+-- The commonest cases are functions with Genitive.
+
+  funGen : CommNoun -> Function = \urovenCen -> 
+    mkFun urovenCen [] Gen ;
+
 -- The following is an aggregate corresponding to the original function application
 -- producing "детство Ивана" and "Иваново детство". It does not appear in the
 -- resource abstract syntax any longer.
@@ -310,18 +336,13 @@ oper
 -- must also be included 
 -- Such possesive form is only possible with proper names in Russian :
 
-  appFun : Bool -> Function -> NounPhrase -> NounPhrase = \coll,detstvo, ivan -> 
-    let {n = ivan.n ; nf = if_then_else Number coll Sg n} in 
-    variants {
-      indefNounPhrase nf (appFunComm detstvo ivan) ; -- detstvoIvana
-      npGenDet nf noNum ivan detstvo
-      } ;
+appFun : Bool -> Function -> NounPhrase -> NounPhrase = \coll,detstvo, ivan -> 
+let {n = ivan.n ; nf = if_then_else Number coll Sg n} in 
+  variants {
+    indefNounPhrase nf (appFunComm detstvo ivan) ; -- detstvoIvana
+    npGenDet nf noNum ivan detstvo
+ } ;
 
-
--- The commonest cases are functions with Genitive.
-
-  funGen : CommNoun -> Function = \urovenCen -> 
-    mkFun urovenCen [] Gen ;
 
 --3 Modification of common nouns
 --
@@ -400,19 +421,21 @@ oper
   verbOfPhrase : VerbPhrase -> Verb = \v -> 
     {s = v.s; t = v.t ; a = v.a ; w =v.w} ;
 
-
--- Verb phrases can also be formed from adjectives ("- молод"),
--- common nouns ("- человек"), and noun phrases ("- самый молодой").
--- The third rule is overgenerating: "- каждый человек" has to be ruled out
+-- Verb phrases can also be formed from adjectives (" молод"),
+-- common nouns (" человек"), and noun phrases (" самый молодой").
+-- The third rule is overgenerating: " каждый человек" has to be ruled out
 -- on semantic grounds.
--- Note: in some case we can even omit a dash "-"  :
--- "Я думаю, что это хорошая машина".
+-- Note: we omit a dash "-" because it will cause problems with negation word order:
+-- "Я не - волшебник". Alternatively, we can consider verb-based VP and
+-- all the rest.
 
   predAdverb : Adverb -> VerbGroup = \zloj ->
     { s= \\vf => case vf of {
-          VFin _ _ => "-" ++ zloj.s ;
-          VImper _ _ => "";
-          VInf  => "";
+          VFin _ _ =>  zloj.s ;
+          VImper Sg _ => "будь" ++ zloj.s;
+          VImper Pl _ => "будьте" ++ zloj.s;
+          -- person is ignored !
+          VInf  => "быть" ++ zloj.s;
           VSubj _ => ""
           } ;        
       t = Present ; 
@@ -423,11 +446,14 @@ oper
   predAdjective : AdjPhrase -> VerbGroup = \zloj ->
     { s= \\vf => case vf of {
           VFin gn _ => case (numGNum gn) of { 
-             Sg => "-" ++ zloj.s ! AF Nom Animate (ASg (genGNum gn)) ;
-              Pl => "-" ++ zloj.s ! AF Nom Animate APl  
+             Sg => zloj.s ! AF Nom Animate (ASg (genGNum gn)) ;
+              Pl => zloj.s ! AF Nom Animate APl  
           } ;
-          VImper _ _ => "";
-          VInf  => "";
+          VImper Sg _ => "будь" ++ zloj.s ! AF Inst Animate (ASg Masc);
+          VImper Pl _ => "будьте" ++ zloj.s ! AF Inst Animate APl  ;
+          -- person is ignored !
+          VInf  => "быть" ++ zloj.s ! AF Inst Animate (ASg Masc) ;
+-- infinitive does not save GenNum info!
           VSubj _ => ""
           } ;        
       t = Present ; 
@@ -437,10 +463,11 @@ oper
 
   predCommNoun : CommNounPhrase -> VerbGroup = \chelovek ->
    {  s= \\vf => case vf of {
-          VFin gn _ => "-" ++ 
-    (indefNounPhrase (numGNum gn) chelovek ).s ! (mkPronForm Nom No NonPoss) ;
-          VImper _ _ => "";
-          VInf  => "";
+          VFin gn _ => (indefNounPhrase (numGNum gn) chelovek ).s ! (mkPronForm Nom No NonPoss) ;
+          VImper Sg _ => "будь"++ (indefNounPhrase Sg chelovek ).s ! (mkPronForm Inst No NonPoss) ;
+          VImper Pl _ => "будьте"++(indefNounPhrase Pl chelovek ).s ! (mkPronForm Inst No NonPoss);
+          -- person is ignored !
+          VInf  => "быть" ++ (indefNounPhrase Sg chelovek ).s ! (mkPronForm Inst No NonPoss) ;
           VSubj _ => ""
           } ;        
       t = Present ; 
@@ -450,9 +477,11 @@ oper
 
   predNounPhrase : NounPhrase -> VerbGroup = \masha ->
     { s= \\vf => case vf of {
-          VFin _ _ => "-" ++  masha.s ! (mkPronForm Nom No NonPoss) ;
-          VImper _ _ => "";
-          VInf  => "";
+          VFin _ _ =>  masha.s ! (mkPronForm Nom No NonPoss) ;
+          VImper Sg _ => "будь" ++ masha.s ! (mkPronForm Inst No NonPoss);
+          VImper Pl _ => "будьте" ++ masha.s ! (mkPronForm Inst No NonPoss);
+          VInf  => "быть" ++ masha.s ! (mkPronForm Inst No NonPoss);
+-- infinitive does not save Number parameter!
           VSubj _ => ""
           } ;        
       t = Present ; 
@@ -497,7 +526,7 @@ oper
     \dat,tu,pivo ->
       let
         tebepivo = dat.s2 ++
-         tu.s ! PF dat.c Yes NonPoss ++ dat.s4 ++ pivo.s ! PF dat.c2 Yes NonPoss 
+         tu.s ! PF dat.c No NonPoss ++ dat.s4 ++ pivo.s ! PF dat.c2 Yes NonPoss 
       in
       {s  = \\vf => (dat.s ! vf) ++ tebepivo ;
       t = dat.t ; 
@@ -557,8 +586,8 @@ oper
        let 
        { ya = Ya.s ! (mkPronForm Nom No NonPoss);
          ne = tebyaNeVizhu.s2;
-         vizhu = tebyaNeVizhu.s ! VFin (gNum Ya.g Ya.n) Ya.p;
-         tebya = tebyaNeVizhu.s3 ! Ya.g ! Ya.n 
+        vizhu = tebyaNeVizhu.s ! VFin (pgNum Ya.g Ya.n) Ya.p;
+         tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.g) ! Ya.n 
        }
        in
        if_then_else Str tebyaNeVizhu.negBefore  
@@ -572,7 +601,7 @@ oper
     \b,Ser,Jag,Dig -> { s =
     let {
       menya  =  Jag.s ! (mkPronForm Gen Yes NonPoss) ; 
-      bolit  = Ser.s ! VFin (gNum Dig.g Dig.n) Dig.p ;
+      bolit  = Ser.s ! VFin (gNum (pgen2gen Dig.g) Dig.n) Dig.p ;
       golova = Dig.s ! (mkPronForm Nom No NonPoss) ;
       ne = negation b
     } in
@@ -639,9 +668,7 @@ oper
     complementOfTransVerb lubit ;
 
 thereIs : NounPhrase -> Sentence = \bar ->
-    predVerbPhrase 
-      ({s = \\_ => "есть" ; n = bar.n ; p = P3; g = bar.g; anim = bar.anim; pron = bar.pron })
-      (predVerbGroup True (predNounPhrase bar)) ;
+    {s = "есть" ++ bar.s ! PF Nom No NonPoss} ;
 
 --2 Coordination
 --
@@ -722,11 +749,15 @@ oper
 -- to a relative pronoun to create a new one. We can reuse the rule applying
 -- functions to noun phrases!
 
-  funIntPron : Function -> IntPron -> IntPron = 
-    appFun False ; 
+ funIntPron : Function -> NounPhrase -> NounPhrase = \detstvo, ivan -> 
+          indefNounPhrase ivan.n (appFunComm detstvo ivan) ; -- detstvoIvana
+-- bug version:
+--  funIntPron : Function -> IntPron -> IntPron = 
+--    appFun False ; 
+
 
 -- There is a variety of simple interrogative pronouns:
--- "какая машина", "кто", "что".
+-- "какая машина", "кто", "что".
 
   nounIntPron : Number -> CommNounPhrase -> IntPron = \n, x ->
     detNounPhrase (kakojDet ** {n = n ; g = PNoGen;  c = Nom}) x ;
@@ -740,7 +771,7 @@ oper
     PF Inst _ _ => "кем" ;
     PF Prepos _ _ => ["о ком"] 
     } ;
-    g = Masc ;
+    g = PGen Masc ;
     anim = Animate ;
     n = num ;
     p = P3  ;
@@ -757,8 +788,8 @@ oper
     PF Acc _ _ => "что" ; 
     PF Inst _ _ => "чем" ;
     PF Prepos _ _=> ["о чем"] 
-    } ;
-    g = Neut ;
+    } ;
+    g = PGen Neut ;
     anim = Inanimate ;
     n = num ;
     p = P3  ;
@@ -806,8 +837,8 @@ oper
   questVerbPhrase : NounPhrase -> VerbPhrase -> Question = 
   \tu,spish -> 
     let { vu = tu.s ! (mkPronForm Nom No NonPoss); 
-         spish = spish.s ! VFin (gNum tu.g tu.n) tu.p 
-              ++ spish.s2 ++ spish.s3 ! tu.g ! tu.n } in
+         spish = spish.s2 ++ spish.s ! VFin (gNum (pgen2gen tu.g) tu.n) tu.p 
+              ++ spish.s3 ! (pgen2gen tu.g) ! tu.n } in
      { s = table {
        DirQ   =>  vu ++ spish  ;
        IndirQ => spish ++ "ли" ++ vu 
@@ -850,8 +881,8 @@ isThere : NounPhrase -> Question = \bar ->
   questAdverbial : IntAdverb -> NounPhrase -> VerbPhrase -> Question = 
     \kak, tu, pozhivaesh ->
     {s = \\q => kak.s ++ tu.s ! (mkPronForm Nom No NonPoss) ++ 
-       pozhivaesh.s2 ++ pozhivaesh.s ! VFin (gNum tu.g tu.n) tu.p ++ 
-       pozhivaesh.s3 ! tu.g ! tu.n } ; 
+       pozhivaesh.s2 ++ pozhivaesh.s ! VFin (gNum (pgen2gen tu.g) tu.n) tu.p ++ 
+       pozhivaesh.s3 ! (pgen2gen tu.g) ! tu.n } ; 
  
 --2 Imperatives
 --
@@ -860,7 +891,7 @@ isThere : NounPhrase -> Question = \bar ->
   Imperative: Type = { s: Gender => Number => Str } ;
 
   imperVerbPhrase : VerbPhrase -> Imperative = \budGotov -> 
-    {s = \\g, n => budGotov.s ! VImper n P2 ++ budGotov.s2 ++ budGotov.s3 ! g ! n} ;  
+    {s = \\g, n => budGotov.s2 ++ budGotov.s ! VImper n P2 ++ budGotov.s3 ! g ! n} ;  
 
   imperUtterance : Gender -> Number -> Imperative -> Utterance = \g,n,I ->
     ss (I.s ! g ! n ++ "!") ;
@@ -928,17 +959,17 @@ isThere : NounPhrase -> Question = \bar ->
 -- The structure is the same as for sentences. The result is either always plural
 -- or plural if any of the components is, depending on the conjunction.
 
-  ListNounPhrase : Type = { s1,s2 : PronForm => Str ; g: Gender ; 
+  ListNounPhrase : Type = { s1,s2 : PronForm => Str ; g: PronGen ; 
                    anim : Animacy ; n : Number ; p : Person ;  pron : Bool } ;
 
   twoNounPhrase : (_,_ : NounPhrase) -> ListNounPhrase = \x,y ->
     CO.twoTable PronForm x y ** {n = conjNumber x.n y.n ; 
-       g = conjGender x.g y.g ; p = conjPerson x.p y.p ;
+       g = conjPGender x.g y.g ; p = conjPerson x.p y.p ;
        pron = conjPron x.pron y.pron ; anim = conjAnim x.anim y.anim } ;
 
   consNounPhrase : ListNounPhrase -> NounPhrase -> ListNounPhrase =  \xs,x ->
     CO.consTable PronForm CO.comma xs x ** 
-       {n = conjNumber xs.n x.n ; g = conjGender x.g xs.g ;
+       {n = conjNumber xs.n x.n ; g = conjPGender x.g xs.g ;
           anim = conjAnim x.anim xs.anim ;
           p = conjPerson xs.p x.p; pron = conjPron xs.pron x.pron} ;
 
@@ -982,6 +1013,7 @@ isThere : NounPhrase -> Question = \bar ->
 -- The later is not totally correct, but there is no correct way to say that.
 
   conjGender : Gender -> Gender -> Gender = \_,m -> m ; 
+ conjPGender : PronGen -> PronGen -> PronGen = \_,m -> m ; 
 
   conjAnim : Animacy -> Animacy -> Animacy = \_,m -> m ; 
 
