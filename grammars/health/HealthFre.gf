@@ -1,4 +1,4 @@
--- UTF8 version currently differs from non-UTF8 !!!
+-- UTF-8 version currently differs from non-UTF-8 !!!
 
 -- use this path to read the grammar from the same directory
 --# -path=.:../newresource/abstract:../prelude:../newresource/french:../newresource/romance
@@ -6,7 +6,7 @@
 concrete HealthFre of Health = open PredicationFre, ParadigmsFre, ResourceFre, Prelude, SyntaxFre, MorphoFre, ExtraFre, ParadigmsFre, ResourceExtFre in {
 
 -- 1. still using "à" instead of "aux" in PainIn operations 
--- because of the UTF8 problem with non-utf8 resource grammars! 
+-- because of the UTF-8 problem with non-utf-8 resource grammars! 
 
 flags 
   startcat=Phr ; lexer=text ; parser=chart ; unlexer=text ;

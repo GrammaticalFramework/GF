@@ -1,4 +1,4 @@
-
+--# -path=.:../../prelude
 --1 A Small Predication Library
 --
 -- (c) Aarne Ranta 2003 under Gnu GPL.
