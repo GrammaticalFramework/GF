@@ -192,7 +192,7 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     cut_V = skära_V ;
     die_V = dö_V ;
     dig_V = mk2V "gräva" "gräver" ;
-    drink_V = drink_V ;
+    drink_V = dricka_V ;
     eat_V = äta_V ;
     fall_V = falla_V ;
     fear_V = regV "frukta" ;
@@ -240,6 +240,6 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     wash_V = regV "tvätta" ;
     wipe_V = regV "torka" ;
 
-    give_V3 = dirV3 give_V "to" ;
+    give_V3 = dirV3 giva_V "to" ;
 
 }
