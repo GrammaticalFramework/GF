@@ -115,6 +115,7 @@ E.    Term2 ::= "[" "]" ;
 
 KS.   Tokn  ::= String ;
 KP.   Tokn  ::= "[" "pre" [String] "{" [Variant] "}" "]" ;
+internal KM.   Tokn  ::= String ; -- mark-up
 
 Ass.  Assign  ::= Label "=" Term ;
 Cas.  Case    ::= [Patt] "=>" Term ;

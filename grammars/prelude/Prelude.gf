@@ -94,6 +94,7 @@ oper
     glueOpt : Str -> Str -> Str = \x,y -> variants {glue x y ; x ++ y} ;
     noglueOpt : Str -> Str -> Str = \x,y -> variants {x ++ y ; glue x y} ;
 
--- this should be hidden, and never changed since it's hardcoded in (un)lexers
+-- these should be hidden, and never changed since it's hardcoded in (un)lexers
     BIND : Str = "&+" ;
+    PARA : Str = "&-" ;
 } ;

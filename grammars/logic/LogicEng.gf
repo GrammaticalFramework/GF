@@ -1,4 +1,4 @@
-concrete LogicEng of Logic = open LogicResEng in {
+concrete LogicEng of Logic = open LogicResEng, Prelude in {
 
 flags lexer=vars ; unlexer=text ;
 
@@ -8,9 +8,10 @@ lincat
 
 lin 
 Statement A = {s = A.s ++ "."} ;
-ThmWithProof A a = {s = ["Theorem ."] ++ A.s ++ [". <p> Proof ."] ++ a.s ++ "."} ;
+ThmWithProof A a = {s = 
+  ["Theorem ."] ++ A.s ++ "." ++ PARA ++ "Proof" ++ "." ++ a.s ++ "."} ;
 ThmWithTrivialProof A a = 
-  {s = "Theorem" ++ "." ++ A.s ++ [". <p> Proof . Trivial ."]} ;
+  {s = "Theorem" ++ "." ++ A.s ++ "." ++ PARA ++ "Proof" ++ "." ++ "Trivial" ++ "."} ;
 Disj A B = {s = A.s ++ "or" ++ B.s} ;
 Conj A B = {s = A.s ++ "and" ++ B.s} ;
 Impl A B = {s = "if" ++ A.s ++ "then" ++ B.s} ;
