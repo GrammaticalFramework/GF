@@ -12,7 +12,9 @@ lin
   Japanese = AdjP1 (adjReg "japansk") ;
 
   address = funAv (nRisk "adress") ;
-  phone = funTill (nPapper "nummer") ;
+  phone = 
+    funTill (mkN "telefonnummer" "telefonnumret" "telefonnummer"
+                 "telefonnumren" neutrum nonmasculine) ;
   priceLevel = funPaa (nRisk "prisnivå") ;
 
   Cheap = aReg "billig" ;
@@ -25,6 +27,6 @@ lin
 
   LucasCarton = pnReg ["Lucas-Carton"] neutrum nonmasculine ; --- -
   LaCoupole  = pnReg ["La-Coupole"] neutrum nonmasculine ;
-  BurgerKing = pnReg ["Burger-King"] neutrum nonmasculine ;
+  BurgerKing = pnS ["Burger King"] neutrum nonmasculine ;
 
 }

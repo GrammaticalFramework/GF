@@ -81,6 +81,7 @@ oper
 
   mkPN  : (_,_ : Str) -> Gender -> Sex -> PN ;  -- Karolus, Karoli
   pnReg : Str -> Gender -> Sex -> PN ;          -- Johan,Johans ; Johannes, Johannes
+  pnS   : Str -> Gender -> Sex -> PN ;          -- "Burger King(s)"
 
 -- On the top level, it is maybe $CN$ that is used rather than $N$, and
 -- $NP$ rather than $PN$.
@@ -127,6 +128,24 @@ oper
 -- into account.
 
   apReg : Str -> AP ;
+
+--2 Adverbs
+
+-- Adverbs are not inflected. Most lexical ones have position not
+-- before the verb. Some can be preverbal (e.g. "alltid").
+
+  mkAdv : Str -> AdV ;
+  mkAdvPre : Str -> AdV ;
+
+-- Adverbs modifying adjectives and sentences can also be formed.
+
+  mkAdA : Str -> AdA ;
+  mkAdS : Str -> AdS ;
+
+-- Prepositional phrases are another productive form of adverbials.
+
+  mkPP : Str -> NP -> AdV ;
+
 
 --2 Verbs
 --
@@ -238,6 +257,8 @@ oper
     {s = table {Gen => karoli ; _ => karolus} ; g = g ; x = x ; lock_PN = <>} ;
   pnReg = \horst -> 
     mkPN horst (ifTok Tok (Predef.dp 1 horst) "s" horst (horst + "s")) ;
+  pnS = \bk ->
+    mkPN bk (bk + "s") ;
 
   mkCN = UseN ;
   mkNP = \a,b,g -> UsePN (mkPN a b g nonmasculine) ; -- gender irrelevant in NP
@@ -281,6 +302,12 @@ oper
     (fin + "t") (fin + "a") (fin + "a") (fin + "are") (fin + "ast") (fin + "aste") ;
 
   apReg = \s -> AdjP1 (adjReg s) ;
+
+  mkAdv a = advPost a ** {lock_AdV = <>} ;
+  mkAdvPre a = advPre a ** {lock_AdV = <>} ;
+  mkPP x y = prepPhrase x y ** {lock_AdV = <>} ;
+  mkAdA a = ss a ** {lock_AdA = <>} ;
+  mkAdS a = ss a ** {lock_AdS = <>} ;
 
   mkV x y z = mkVerb x y z ** {lock_V = <>} ;
   vKoka = \tala -> mkV tala (tala+"r") tala ;
