@@ -36,9 +36,9 @@ combineAnyInfos = combineInfos unifyAnyInfo
 unifyAnyInfo :: Ident -> Info -> Info -> Err Info
 unifyAnyInfo c i j = errIn ("combining information for" +++ prt c) $ case (i,j) of
   (AbsCat mc1 mf1, AbsCat mc2 mf2) -> 
-    liftM2 AbsCat (unifPerhaps mc1 mc2) (unifPerhaps mf1 mf2) ---- adding constrs
+    liftM2 AbsCat (unifPerhaps mc1 mc2) (unifConstrs mf1 mf2) -- adding constrs
   (AbsFun mt1 md1, AbsFun mt2 md2) -> 
-    liftM2 AbsFun (unifPerhaps mt1 mt2) (unifAbsDefs md1 md2) ---- adding defs
+    liftM2 AbsFun (unifPerhaps mt1 mt2) (unifAbsDefs md1 md2) -- adding defs
 
   (ResParam mt1, ResParam mt2) -> liftM ResParam $ unifPerhaps mt1 mt2
   (ResOper mt1 m1, ResOper mt2 m2) -> 
@@ -95,4 +95,11 @@ unifAbsDefs p1 p2 = case (p1,p2) of
   (Nope, _)  -> return p2
   (_, Nope)  -> return p1
   (Yes (Eqs bs), Yes (Eqs ds)) -> return $ yes $ Eqs $ bs ++ ds --- order!
-  _ -> Bad "update conflict"
+  _ -> Bad "update conflict for definitions"
+
+unifConstrs :: Perh [Term] -> Perh [Term] -> Err (Perh [Term])
+unifConstrs p1 p2 = case (p1,p2) of
+  (Nope, _)  -> return p2
+  (_, Nope)  -> return p1
+  (Yes bs, Yes ds) -> return $ yes $ bs ++ ds
+  _ -> Bad "update conflict for constructors"

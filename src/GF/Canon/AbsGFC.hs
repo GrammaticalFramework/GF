@@ -61,6 +61,7 @@ data Exp =
  | EProd Ident Exp Exp
  | EAbs Ident Exp
  | EAtom Atom
+ | EData
  | EEq [Equation]
   deriving (Eq,Ord,Show)
 

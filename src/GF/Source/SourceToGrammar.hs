@@ -144,13 +144,24 @@ transAbsDef x = case x of
   DefDef defs  -> do
     defs' <- liftM concat $ mapM getDefsGen defs
     returnl [(c, G.AbsFun nope pe) | (c,(_,pe)) <- defs']
-  DefData _ -> returnl [] ----
+  DefData ds -> do
+    ds' <- mapM transDataDef ds
+    returnl $ 
+      [(c, G.AbsCat nope (yes ps)) | (c,ps) <- ds'] ++
+      [(f, G.AbsFun nope (yes G.EData))  | (_,fs) <- ds', tf <- fs, f <- funs tf]
   DefTrans defs  -> do
     let (ids,vals) = unzip [(i,v) | FlagDef i v <- defs]
     defs' <- liftM2 zip (mapM transIdent ids) (mapM transIdent vals)
     returnl [(c, G.AbsTrans f) | (c,f) <- defs']
   DefFlag defs -> liftM Right $ mapM transFlagDef defs
   _ -> Bad $ "illegal definition in abstract module:" ++++ printTree x
+ where
+   -- to get data constructors as terms
+   funs t = case t of
+     G.Cn f -> [f]
+     G.Q _ f -> [f]
+     G.QC _ f -> [f]
+     _ -> []
 
 returnl :: a -> Err (Either a b)
 returnl = return . Left
@@ -167,6 +178,14 @@ transCatDef x = case x of
 transFunDef :: FunDef -> Err ([Ident], G.Type)
 transFunDef x = case x of
   FunDef ids typ  -> liftM2 (,) (mapM transIdent ids) (transExp typ)
+
+transDataDef :: DataDef -> Err (Ident,[G.Term])
+transDataDef x = case x of
+  DataDef id ds  -> liftM2 (,) (transIdent id) (mapM transData ds) 
+ where
+   transData d = case d of
+     DataId id  -> liftM G.Cn $ transIdent id
+     DataQId id0 id  -> liftM2 G.QC (transIdent id0) (transIdent id)
 
 transResDef :: TopDef -> Err (Either [(Ident, G.Info)] [GO.Option])
 transResDef x = case x of
@@ -327,6 +346,8 @@ transExp x = case x of
   ELString (LString str) -> return $ G.K str 
   ELin id -> liftM G.LiT $ transIdent id
 
+  EEqs eqs -> liftM G.Eqs $ mapM transEquation eqs
+
   _ -> Bad $ "translation not yet defined for" +++ printTree x ----
 
 --- this is complicated: should we change Exp or G.Term ?
@@ -420,6 +441,10 @@ transCase (Case pattalts exp) = do
   patts <- mapM transPatt [p | AltP p <- pattalts]
   exp'  <- transExp exp  
   return [(p,exp') | p <- patts]
+
+transEquation :: Equation -> Err G.Equation
+transEquation x = case x of
+  Equ apatts exp -> liftM2 (,) (mapM transPatt apatts) (transExp exp)
 
 transAltern :: Altern -> Err (G.Term, G.Term)
 transAltern x = case x of

@@ -60,9 +60,15 @@ redInfo am (c,info) = errIn ("translating definition of" +++ prt c) $ do
   c' <- redIdent c 
   case info of
     AbsCat (Yes cont) pfs -> do
-      returns c' $ C.AbsCat cont [] ---- constrs
+      let fs = case pfs of
+                 Yes ts -> [(m,c) | Q m c <- ts]
+                 _ -> []
+      returns c' $ C.AbsCat cont fs
     AbsFun (Yes typ) pdf -> do
-      returns c' $ C.AbsFun typ (Eqs []) ---- df
+      let df = case pdf of
+                 Yes t -> t
+                 _ -> EData --- data vs. primitive
+      returns c' $ C.AbsFun typ df
 
     ResParam (Yes ps) -> do
       ps' <- mapM redParam ps

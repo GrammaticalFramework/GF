@@ -35,6 +35,7 @@ indirInfo n info = AnyInd b n' where
   (b,n') = case info of
     ResValue _ -> (True,n)
     ResParam _ -> (True,n)
+    AbsFun _ (Yes EData) -> (True,n) 
     AnyInd b k -> (b,k)
     _ -> (False,n) ---- canonical in Abs
 

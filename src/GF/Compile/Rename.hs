@@ -101,7 +101,7 @@ renameIdentPatt env p = do
 
 info2status :: Maybe Ident -> (Ident,Info) -> (Ident,StatusInfo)
 info2status mq (c,i) = (c, case i of
-  AbsFun _ (Yes (Con g)) | g == c -> maybe Con QC mq
+  AbsFun _ (Yes EData) -> maybe Con QC mq
   ResValue _  -> maybe Con QC mq
   ResParam _  -> maybe Con QC mq
   AnyInd True m -> maybe Con (const (QC m)) mq
@@ -143,7 +143,7 @@ renameInfo :: Status -> (Ident,Info) -> Err (Ident,Info)
 renameInfo status (i,info) = errIn ("renaming definition of" +++ prt i) $ 
                                 liftM ((,) i) $ case info of
   AbsCat pco pfs -> liftM2 AbsCat (renPerh (renameContext status) pco)
-                                  (return pfs) ----
+                                  (renPerh (mapM rent) pfs)
   AbsFun pty ptr -> liftM2 AbsFun (ren pty) (ren ptr)
 
   ResOper pty ptr -> liftM2 ResOper (ren pty) (ren ptr)
@@ -172,8 +172,7 @@ renameTerm env vars = ren vars where
     Con _  -> renid trm
     Q _ _  -> renid trm
     QC _ _ -> renid trm
-
-----    Eqs eqs -> Eqs (map (renameEquation consts vs) eqs)
+    Eqs eqs -> liftM Eqs $ mapM (renameEquation env vars) eqs
     T i cs -> do
       i' <- case i of
         TTyped ty -> liftM TTyped $ ren vs ty -- the only annotation in source
@@ -212,9 +211,10 @@ renamePattern env patt = case patt of
     c' <- renameIdentTerm env $ Cn c
     psvss <- mapM renp ps
     let (ps',vs) = unzip psvss
-    return $ case c' of
-      QC p d -> (PP p d ps', concat vs)
-      _ -> (PC c ps', concat vs)
+    case c' of
+      QC p d -> return (PP p d ps', concat vs)
+      Q  p d -> return (PP p d ps', concat vs) ---- should not happen
+      _ -> prtBad "unresolved pattern" c' ---- (PC c ps', concat vs)
 
 ----  PP p c ps -> (PP p c ps',concat vs') where (ps',vs') = unzip $ map renp ps
 
@@ -255,9 +255,10 @@ renameContext b = renc [] where
     _ -> return cont
   ren = renameTerm b
 
-{-
-renameEquation :: Status -> [Ident] -> Equation -> Equation
-renameEquation b vs (ps,t) = (ps',renameTerm b (concat vs' ++ vs) t) where
-  (ps',vs') = unzip $ map (renamePattern b vs) ps
--}
+-- vars not needed in env, since patterns always overshadow old vars
 
+renameEquation :: Status -> [Ident] -> Equation -> Err Equation
+renameEquation b vs (ps,t) = do
+  (ps',vs') <- liftM unzip $ mapM (renamePattern b) ps
+  t'        <- renameTerm b (concat vs' ++ vs) t
+  return (ps',t')

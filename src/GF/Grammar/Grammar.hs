@@ -24,7 +24,7 @@ type SourceCnc = Module Ident Option Info
 -- judgements in abstract syntax
 
 data Info =                  
-   AbsCat   (Perh Context) (Perh [Fun])    -- constructors
+   AbsCat   (Perh Context) (Perh [Term])   -- constructors; must be Id or QId
  | AbsFun   (Perh Type) (Perh Term)        -- Yes f = canonical
  | AbsTrans Ident
 
@@ -55,6 +55,7 @@ data Term =
    Vr Ident             -- variable
  | Cn Ident             -- constant
  | Con Ident            -- constructor
+ | EData                -- to mark in definition that a fun is a constructor
  | Sort String          -- basic type
  | EInt Int             -- integer literal
  | K String             -- string literal or token: "foo"
@@ -67,8 +68,6 @@ data Term =
  | Eqs [Equation]       -- abstraction by cases: fn {x y -> b ; z u -> c}
                         -- only used in internal representation
  | Typed Term Term      -- type-annotated term
-
- | ECase Term [Branch]  -- case expression in abstract syntax à la Alfa
 
 -- below this only for concrete syntax
  | RecType [Labelling]  -- record type: { p : A ; ...}

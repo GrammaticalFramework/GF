@@ -6,15 +6,18 @@ import ParGF
 import SkelGF
 import PrintGF
 import AbsGF
+
 import ErrM
 
 type ParseFun a = [Token] -> Err a
+
+myLLexer = myLexer
 
 runFile :: (Print a, Show a) => ParseFun a -> FilePath -> IO()
 runFile p f = readFile f >>= run p
 
 run :: (Print a, Show a) => ParseFun a -> String -> IO()
-run p s = case (p (myLexer s)) of
+run p s = case (p (myLLexer s)) of
            Bad s    -> do  putStrLn "\nParse Failed...\n"
                            putStrLn s
            Ok  tree -> do putStrLn "\nParse Successful!"

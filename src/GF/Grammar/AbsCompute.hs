@@ -47,7 +47,7 @@ computeAbsTermIn gr = compt where
           return $ mkAbs yy $ mkApp f aa'
 
   look (Q m f) = case lookupAbsDef gr m f of
-    Ok (Just (Eqs [])) -> Nothing  -- canonical
+    Ok (Just EData) -> Nothing  -- canonical --- should always be QC
     Ok md -> md
     _ -> Nothing
   look _ = Nothing

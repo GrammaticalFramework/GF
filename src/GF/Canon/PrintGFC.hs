@@ -163,6 +163,7 @@ instance Print Exp where
    EAtom atom -> prPrec i 2 (concat [prt 0 atom])
    EAbs id exp -> prPrec i 0 (concat [["\\"] , prt 0 id , ["->"] , prt 0 exp])
    EEq equations -> prPrec i 0 (concat [["{"] , prt 0 equations , ["}"]])
+   EData  -> prPrec i 2 (concat [["data"]])
 
 instance Print Sort where
   prt i e = case e of
@@ -185,7 +186,7 @@ instance Print APatt where
    APW  -> prPrec i 0 (concat [["_"]])
 
   prtList es = case es of
-   [x] -> (concat [prt 0 x])
+   [] -> (concat [])
    x:xs -> (concat [prt 0 x , prt 0 xs])
 
 instance Print Atom where

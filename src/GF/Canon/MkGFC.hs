@@ -67,7 +67,8 @@ trExp t = case t of
   EProd x a b -> A.Prod x (trExp a) (trExp b)
   EAbs  x   b -> A.Abs  x (trExp b)
   EApp  f a   -> A.App  (trExp f)  (trExp a)
-  EEq _       -> A.Eqs [] ---- eqs
+  EEq eqs     -> A.Eqs [(map trPt ps, trExp e) | Equ ps e <- eqs]
+  EData       -> A.EData
   _    -> trAt t
  where
   trAt (EAtom t) = case t of
@@ -78,6 +79,12 @@ trExp t = case t of
     AT s   -> A.Sort $ prt s
     AS s   -> A.K s
     AI i   -> A.EInt $ fromInteger i
+  trPt p = case p of
+    APC mc ps -> let (m,c) = trQIdent mc in A.PP m c (map trPt ps)
+    APV x -> A.PV x
+    APS s -> A.PString s
+    API i -> A.PInt $ fromInteger i
+    APW   -> A.PW
 
 trQIdent (CIQ m c) = (m,c)
 
@@ -102,7 +109,8 @@ rtExp t = case t of
   A.Prod x a b -> EProd (rtIdent x) (rtExp a) (rtExp b)
   A.Abs  x   b -> EAbs  (rtIdent x) (rtExp b)
   A.App  f a   -> EApp  (rtExp f) (rtExp a)
-  A.Eqs _      -> EEq [] ---- eqs
+  A.Eqs eqs    -> EEq   [Equ (map rtPt ps) (rtExp e) | (ps,e) <- eqs]
+  A.EData      -> EData
   _ -> EAtom $ rtAt t
  where
   rtAt t = case t of
@@ -114,6 +122,14 @@ rtExp t = case t of
     A.K s          -> AS s
     A.EInt i       -> AI $ toInteger i
     _ -> error $ "MkGFC.rt not defined for" +++ show t
+  rtPt p = case p of
+    A.PP m c ps -> APC (rtQIdent (m,c)) (map rtPt ps)
+    A.PV x      -> APV x
+    A.PString s -> APS s
+    A.PInt i    -> API $ toInteger i
+    A.PW        -> APW
+    _ -> error $ "MkGFC.rt not defined for" +++ show p
+
 
 rtQIdent (m,c) = CIQ (rtIdent m) (rtIdent c)
 rtIdent x 
