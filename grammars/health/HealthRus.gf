@@ -1,7 +1,7 @@
 -- use this path to read the grammar from the same directory
 --# -path=.:../newresource/abstract:../prelude:../newresource/russian
 
-concrete HealthRus of Health = open PredicationRus, ResourceRus, Prelude, SyntaxRus, ExtraRus, ResourceExtRus, ParadigmsRus in {
+concrete HealthRus of Health = open PredicationRus, ResourceRus, SyntaxRus, ExtraRus, ResourceExtRus, ParadigmsRus in {
 
 flags 
   coding=utf8 ;
@@ -71,21 +71,21 @@ lin
   Pregnant = PosVG (PredAP (AdjP1 (beremenen ** {lock_Adj1 = <>}))) ;
                                  
   TakeMedicine = predV2 (mkDirectVerb 
-    (extVerb verbPrinimat Act Present)**{lock_TV = <>}) ; 
+    (extVerb verbPrinimat active present)**{lock_TV = <>}) ; 
   Injured patient painkiller = predV2 (mkDirectVerb
-   (extVerb verbPoranit Act Past)**{lock_TV = <>}) patient (mkNounPhrase patient.n painkiller ** {lock_NP = <>}) ;
+   (extVerb verbPoranit active past)**{lock_TV = <>}) patient (mkNounPhrase patient.n painkiller ** {lock_NP = <>}) ;
   Broken patient painkiller = predV2 (mkDirectVerb
-   (extVerb verbSlomat Act Past)**{lock_TV = <>}) patient (mkNounPhrase patient.n painkiller ** {lock_NP = <>}) ;
+   (extVerb verbSlomat active past)**{lock_TV = <>}) patient (mkNounPhrase patient.n painkiller ** {lock_NP = <>}) ;
                                
-  HaveIllness patient symptom = U_predTransVerb True tvHave
+  HaveIllness patient symptom = U_predTransVerb true tvHave
      patient (mkNounPhrase Sg symptom ** {lock_NP = <>}) ;
-  Complain = U_predTransVerb True tvHave ;
+  Complain = U_predTransVerb true tvHave ;
 
-  NeedDoctor = predNeedShortAdjective True ; 
-  NeedMedicine = predNeedShortAdjective True ; 
+  NeedDoctor = predNeedShortAdjective true ; 
+  NeedMedicine = predNeedShortAdjective true ; 
 
-  PainIn patient head = U_predTransVerb True (mkDirectVerb 
-    (extVerb verbBolet_2 Act Present ) ** {lock_TV =<>}) patient (mkNounPhrase patient.n head ** {lock_NP =<>}) ;
+  PainIn patient head = U_predTransVerb true (mkDirectVerb 
+    (extVerb verbBolet_2 active present ) ** {lock_TV =<>}) patient (mkNounPhrase patient.n head ** {lock_NP =<>}) ;
  
  Head = UseN ( golova**{lock_N = <>});
  Leg = UseN ( noga**{lock_N = <>});
@@ -103,7 +103,7 @@ lin
 --  Terrible = AdjP1 (extAdjective uzhasnuj ** {lock_Adj1 = <>});
 --  FeverMod degree =  mkNounPhrase Sg 
 -- (ModAdj degree (UseN ( temperatura**{lock_N = <>}))) ** {lock_NP = <>};
---  PainInMod patient head degree = U_predTransVerb True (mkDirectVerb
+--  PainInMod patient head degree = U_predTransVerb true (mkDirectVerb
 --    (extVerb have Act Present) ** {lock_TV =<>}) patient 
 -- (mkNounPhrase Sg (ModAdj degree 
 --(AppFun (mkFun bol "в" Prepos ** {lock_Fun = <>}) 

@@ -51,6 +51,10 @@ oper
 --2 Nouns
 
 -- Best case: indeclinabe nouns: "кофе", "пальто", "ВУЗ".
+  Animacy: Type ; 
+  
+  animate: Animacy;
+  inanimate: Animacy; 
  
    mkIndeclinableNoun: Str -> Gender -> Animacy -> N ; 
 
@@ -183,6 +187,21 @@ oper
 -- rather than verbs. Aspect regarded as an inherent parameter of a verb.
 -- Notice, that some forms are never used for some verbs. Actually, 
 -- the majority of verbs do not have many of the forms.
+Voice: Type; 
+Aspect: Type; 
+Tense : Type;  
+Bool: Type;
+
+true: Bool;
+false: Bool;
+ 
+active: Voice ;
+passive: Voice ;
+imperfective: Aspect;
+perfective: Aspect ;  
+present : Tense ;
+past : Tense ;
+
 
 -- The worst case need 6 forms of the present tense in indicative mood
 -- ("я бегу", "ты бежишь", "он бежит", "мы бежим", "вы бежите", "они бегут"),
@@ -228,7 +247,14 @@ oper
   Gender = SyntaxRus.Gender ;
   Case = SyntaxRus.Case ;
   Number = SyntaxRus.Number ;
+  Animacy = SyntaxRus.Animacy;
+  Aspect = SyntaxRus.Aspect;
+  Voice = SyntaxRus.Voice ;
+  Tense = SyntaxRus.Tense ;
+   Bool = Prelude.Bool ;
 
+  true = True;
+  false = False ;
   masculine = Masc ;
   feminine  = Fem ;
   neuter = Neut ;
@@ -240,6 +266,18 @@ oper
   prepositional = Prepos ;
   singular = Sg ;
   plural = Pl ;
+  animate = Animate ;
+  inanimate = Inanimate ;
+  active = Act ;
+  passive = Pass ; 
+  imperfective = Imperfective ;
+  perfective = Perfective ;
+  present = Present ;
+  past = Past ;
+  --  Degree     = Pos | Comp | Super ;
+ -- Person     = P1 | P2 | P3 ;
+ -- AfterPrep  = Yes | No ; 
+ -- Possessive = NonPoss | Poss GenNum ;
 
 -- Noun definitions
 
