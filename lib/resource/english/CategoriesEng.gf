@@ -53,7 +53,7 @@ lincat
   V      = Verb ; 
       -- = {s : VForm => Str ; s1 : Particle}
   VP     = {s,s2 : Bool => SForm => Agr => Str ; isAux : Bool} ;
-  VPI    = {s : Agr => Str ; s1 : Str} ; -- s1 is "not" or []
+  VPI    = {s : VIForm => Agr => Str ; s1 : Str} ; -- s1 is "not" or []
   V2     = TransVerb ; 
       -- = Verb ** {s3 : Preposition} ;
   V3     = TransVerb ** {s4 : Preposition} ;

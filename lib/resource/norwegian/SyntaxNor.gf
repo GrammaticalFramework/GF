@@ -116,4 +116,12 @@ instance SyntaxNor of SyntaxScand = TypesNor **
       )
       (predVerbGroup True Simul verb) ;  
 
+  progressiveClause : NounPhrase -> VerbPhrase -> Clause = \np,vp ->
+    predVerbGroupClause np
+     (complVerbVerb 
+      (verbVara **
+       {s3 = ["ved at"]}
+      )
+      vp) ;
+
 }

@@ -214,7 +214,6 @@ fun
 
 --- The type signatures of these ones should be changed from VP to VPI.
 
-  ProgVG       : VP -> VP ;               -- he is eating
-  OneVP        : VP -> Cl ;               -- "one walks"
+  OneVP        : VP -> Cl ;                     -- "one walks"
 
 } ;

@@ -114,4 +114,13 @@ instance SyntaxDan of SyntaxScand = TypesDan **
        {s3 = ["ved at"]}
       )
       (predVerbGroup True Simul verb) ;  
+
+  progressiveClause : NounPhrase -> VerbPhrase -> Clause = \np,vp ->
+    predVerbGroupClause np
+     (complVerbVerb 
+      (verbVara **
+       {s3 = ["ved at"]}
+      )
+      vp) ;
+
 }

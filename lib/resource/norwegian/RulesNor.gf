@@ -1,4 +1,4 @@
 --# -path=.:../scandinavian:../abstract:../../prelude
 
-concrete RulesNor of Rules =
+concrete RulesNor of Rules = CategoriesNor **
   RulesScand with (SyntaxScand=SyntaxNor) ;

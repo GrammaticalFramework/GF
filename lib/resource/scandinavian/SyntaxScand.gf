@@ -575,7 +575,8 @@ oper
   predVerb0 : Verb -> Clause = \regna -> 
     predVerbGroupClause npDet (predVerb regna) ;
 
-  progressiveVerbPhrase : VerbGroup -> VerbGroup ;
+  progressiveVerbPhrase : VerbGroup  -> VerbGroup ;
+  progressiveClause     : NounPhrase -> VerbPhrase -> Clause ;
 
 -- Verb phrases can also be formed from adjectives ("är snäll"),
 -- common nouns ("är en man"), and noun phrases ("är den yngste mannen").

@@ -28,6 +28,8 @@ incomplete concrete ClauseScand of Clause = CategoriesScand **
   SPredAV np v x = predVerbGroupClause np (complVerbAdj v x) ;
   SPredObjA2V np v x y = predVerbGroupClause np (complVerbAdj2 True v x y) ;
 
+  SPredProgVP = progressiveClause ;
+
 
   QPredV np v = intVerbPhrase np (predVerb v) ;
   QPredPassV np v = intVerbPhrase np (passVerb v) ;
