@@ -5,33 +5,16 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:21 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/02/22 13:35:19 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 --  This module does some useful transformations on CFGs.
 --
 -- FIXME: remove cycles
 -----------------------------------------------------------------------------
 
-{- 
-   **************************************************************
-    GF Module
-   
-    Description   : This module does some useful transformations
-                    on CFGs.
-
-    Author        : Björn Bringert (bringert@cs.chalmers.se)
-
-    License       : GPL (GNU General Public License)
-
-    Created       : September 13, 2004
-
-    Modified      : 
-   ************************************************************** 
--}
-
-module TransformCFG where
+module TransformCFG (makeNice, CFRule_) where
 
 import Ident
 import CFGrammar
