@@ -74,6 +74,10 @@ oper
   funCase : N -> Case -> Fun ;
   funDe   : N -> Fun ;
 
+-- Functions can also be built from compunt nouns ("le numéro téléphonique de")
+
+  funCNCase : CN -> Case -> Fun ;
+
 -- Proper names, with their gender.
 
   mkPN : Str -> Gender -> PN ; -- Jean, masculine
@@ -100,6 +104,9 @@ oper
 -- only need the masculine singular form.
 
   adj1Reg  : Str -> Position -> Adj1 ;
+  adj1Sale : Str -> Position -> Adj1 ;
+  adj1Anglais : Str -> Position -> Adj1 ;
+  adj1Italien : Str -> Position -> Adj1 ;
   adj1Cher : (cher, chère : Str) -> Position -> Adj1 ;
 
 -- Two-place adjectives need a preposition and a case as extra arguments.
@@ -183,7 +190,8 @@ oper
   nCheval = \cheval -> mkN cheval (Predef.tk 1 cheval + "ux") masculine ; 
 
   funPrep = \n,p -> n ** complement p ** {lock_Fun = <>} ;
-  funCase = \n,p -> n ** complementCas p ** {lock_Fun = <>} ;
+  funCase   = \n,p -> n ** complementCas p ** {lock_Fun = <>} ;
+  funCNCase = \n,p -> n ** complementCas p ** {lock_Fun = <>} ;
   funDe x = funCase x genitive ;
   mkPN s g = mkProperName s g ** {lock_PN = <>} ;
   mkCN = UseN ;
@@ -192,8 +200,11 @@ oper
   Position = Prelude.Bool ;
   prepos = adjPre ;
   postpos = adjPost ;
-  mkAdj1 = \x,y,z,u,p -> mkAdjective (mkAdj x y z u) p ** {lock_Adj1 = <>} ;
+  mkAdj1 = \x,y,z,u,p -> mkAdjective (mkAdj x z y u) p ** {lock_Adj1 = <>} ;
   adj1Reg = \lent -> mkAdj1 lent (lent+"e") (lent+"s") (lent+"ement") ;
+  adj1Sale = \sale -> mkAdj1 sale sale (sale+"s") (sale+"ment") ;
+  adj1Anglais = \anglais -> mkAdj1 anglais (anglais+"e") anglais (anglais+"ement") ;
+  adj1Italien = \italien -> mkAdj1 italien (italien+"ne") (italien+"s") (italien+"nement") ;
   adj1Cher = \cher,chere -> mkAdj1 cher chere (cher+"s") (chere + "ment") ;
 
   mkAdj2 = \a,p,c -> mkAdjCompl a postpos {s2 = p ; c = c} ** {lock_Adj2 = <>} ;
