@@ -304,3 +304,8 @@ optEncodeUTF8 gr = case getOptVal (stateOptions gr) uniCoding of
   Just "utf8" -> id
   _ -> encodeUTF8
 
+optDecodeUTF8 :: GFGrammar -> String -> String
+optDecodeUTF8 gr = case getOptVal (stateOptions gr) uniCoding of
+  Just "utf8" -> decodeUTF8 
+  _ -> id
+

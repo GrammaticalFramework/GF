@@ -1,7 +1,8 @@
 module Hebrew where
 
 mkHebrew :: String -> String
-mkHebrew = reverse . mkHebrewWord
+mkHebrew = mkHebrewWord
+----mkHebrew = reverse . mkHebrewWord
 --- reverse : assumes everything's on same line
 
 type HebrewChar = Char

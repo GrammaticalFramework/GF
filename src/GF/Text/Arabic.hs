@@ -1,7 +1,8 @@
 module Arabic where
 
 mkArabic :: String -> String
-mkArabic = reverse . unwords . (map mkArabicWord) . words
+mkArabic = unwords . (map mkArabicWord) . words
+----mkArabic = reverse . unwords . (map mkArabicWord) . words
 --- reverse : assumes everything's on same line
 
 type ArabicChar = Char

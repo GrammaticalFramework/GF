@@ -24,7 +24,7 @@ main = do
   let (os,fs) = getOptions "-" xs
       java    = oElem forJava os
       isNew   = oElem newParser os ---- temporary hack to have two parallel GUIs
-  putStrLn $ if java then encodeUTF8 welcomeMsg else welcomeMsg
+  putStrLnFlush $ if java then encodeUTF8 welcomeMsg else welcomeMsg
   st <- case fs of 
     _ -> useIOE emptyShellState $ foldM (shellStateFromFiles os) emptyShellState fs
   ---  _ -> return emptyShellState

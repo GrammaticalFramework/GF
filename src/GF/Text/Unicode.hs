@@ -14,15 +14,17 @@ import ExtendedArabic (mkArabic0600)
 import ExtendedArabic (mkExtendedArabic)
 import ExtraDiacritics (mkExtraDiacritics)
 
+import Char
+
 -- ad hoc Unicode conversions from different alphabets
 
 -- AR 12/4/2000, 18/9/2001, 30/5/2002, 26/1/2004
 
 mkUnicode s = case s of
-  '/':'/':cs -> mkGreek   unic ++ mkUnicode rest
+  '/':'/':cs -> treat [] mkGreek   unic ++ mkUnicode rest
   '/':'+':cs -> mkHebrew  unic ++ mkUnicode rest
   '/':'-':cs -> mkArabic  unic ++ mkUnicode rest
-  '/':'_':cs -> mkRussian unic ++ mkUnicode rest
+  '/':'_':cs -> treat [] mkRussian unic ++ mkUnicode rest
   '/':'*':cs -> mkRusKOI8 unic ++ mkUnicode rest
   '/':'E':cs -> mkEthiopic unic ++ mkUnicode rest
   '/':'T':cs -> mkTamil unic ++ mkUnicode rest
@@ -36,8 +38,19 @@ mkUnicode s = case s of
   c:cs -> c:mkUnicode cs
   _ -> s
  where
-   (unic,rest) = remClosing [] $ drop 2 s
+   (unic,rest) = remClosing [] $ dropWhile isSpace $ drop 2 s
    remClosing u s = case s of
      c:'/':s | elem c "/+-_*ETC&LJ6AX" -> (reverse u, s) --- end need not match
      c:cs -> remClosing (c:u) cs
      _ -> (reverse u,[]) -- forgiving missing end
+
+   -- don't convert XML tags --- assumes <> always means XML tags
+   treat old mk s = case s of
+     '<':cs -> mk (reverse old) ++ '<':noTreat cs
+     c:cs -> treat (c:old) mk cs
+     _ -> mk (reverse old)
+    where
+      noTreat s = case s of
+        '>':cs -> '>' : treat [] mk cs
+        c:cs -> c : noTreat cs
+        _ -> s
