@@ -52,7 +52,7 @@ lin
 
 --- next
    AlreadyAdv = advPre "redan" ;
-   NowAdv = advPre "now" ;
+   NowAdv = advPre "nu" ;
 
    Paint = extTransVerb (vNopart (vTala "mål")) [] ;
    Green = aFin "grön" ;

@@ -6,7 +6,7 @@ fun
   Big, Happy, Small, Old, Young : ADeg ;
   American, Finnish : A ;
   Married : A2 ; 
-  Man, Woman, Car, House, Light, Bar, Bottle, Wine, Level : N ;
+  Man, Woman, Car, House, Light, Bar, Bottle, Wine : N ;
   Walk, Run : V ;
   Send, Wait, Love, Drink, SwitchOn, SwitchOff : V2 ;
   Give, Prefer : V3 ;
