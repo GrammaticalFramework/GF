@@ -6,8 +6,9 @@ import Ident
 import PrGrammar (prt)
 ---- import PGrammar (pTrm)
 
--- predefined function definitions. AR 12/3/2003.
--- Type checker looks at signatures in predefined.gf
+-- predefined function type signatures and definitions. AR 12/3/2003.
+
+---- typPredefined :: Term -> Err Type
 
 appPredefined :: Term -> Term
 appPredefined t = case t of

@@ -163,6 +163,7 @@ trp p = case p of
     PP p c [] -> P.PQ (tri p) (tri c)
     PP p c a -> P.PQC (tri p) (tri c) (map trp a)
     PR r -> P.PR [P.PA [trLabelIdent l] (trp p) | (l,p) <- r]
+    PString s -> P.PStr s
 ----    PT t p -> prt p ---- prParenth (prt p +++ ":" +++ prt t)
 
 

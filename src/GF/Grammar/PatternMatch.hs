@@ -77,6 +77,7 @@ isInConstantForm trm = case trm of
     Abs _ _  -> True
     App c a  -> isInConstantForm c && isInConstantForm a
     R r      -> all (isInConstantForm . snd . snd) r
+    K _      -> True
     Alias _ _ t -> isInConstantForm t
     _       -> False ---- isInArgVarForm trm
 
