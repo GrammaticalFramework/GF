@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Morphological analyser constructed from a GF grammar.
 -----------------------------------------------------------------------------
 
 module Morphology where

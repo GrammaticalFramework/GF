@@ -10,6 +10,7 @@
 -- > CVS $Revision $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
+-- PLEASE DON'T EDIT THIS FILE.
 -----------------------------------------------------------------------------
 
 
@@ -456,17 +457,15 @@ txtHelpFile =
   "\n       The default is unlimited." ++
   "\n" ++
   "\n-optimize, optimization on generated code." ++
-  "\n       The default is share." ++
+  "\n       The default is share for concrete, none for resource modules." ++
   "\n    -optimize=share        share common branches in tables" ++
   "\n    -optimize=parametrize  first try parametrize then do share with the rest" ++
   "\n    -optimize=values       represent tables as courses-of-values" ++
   "\n    -optimize=all          first try parametrize then do values with the rest" ++
   "\n    -optimize=none         no optimization" ++
   "\n" ++
-  "\n" ++
-  "\n-parser, Context-free    parsing algorithm. The default is chart." ++
-  "\n    -parser=earley       Earley algorithm" ++
-  "\n    -parser=chart        bottom-up chart parser" ++
+  "\n-parser, Context-free    parsing algorithm. Under construction." ++
+  "\n       The default is a chart parser via context-free approximation." ++
   "\n" ++
   "\n-printer, format in which the grammar is printed. The default is gfc." ++
   "\n    -printer=gfc            GFC grammar" ++

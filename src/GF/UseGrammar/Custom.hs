@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- A database for customizable GF shell commands. 
 -----------------------------------------------------------------------------
 
 module Custom where

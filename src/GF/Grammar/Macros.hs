@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Macros for constructing and analysing source code terms.
 -----------------------------------------------------------------------------
 
 module Macros where
@@ -603,6 +603,11 @@ composOp co trm =
         i'  <- changeTableType co i
         return (T i' cc')
 
+   TSh i cc -> 
+     do cc' <- mapPairListM (co . snd) cc
+        i'  <- changeTableType co i
+        return (TSh i' cc')
+
    V ty vs ->
      do ty' <- co ty
         vs' <- mapM co vs
@@ -661,6 +666,8 @@ collectOp co trm = case trm of
   RecType r  -> concatMap (co . snd) r 
   P t i      -> co t
   T _ cc     -> concatMap (co . snd) cc -- not from patterns --- nor from type annot
+  TSh _ cc   -> concatMap (co . snd) cc -- not from patterns --- nor from type annot
+  V _ cc     -> concatMap co         cc --- nor from type annot
   Let (x,(mt,a)) b -> maybe [] co mt ++ co a ++ co b
   C s1 s2    -> co s1 ++ co s2 
   Glue s1 s2 -> co s1 ++ co s2 

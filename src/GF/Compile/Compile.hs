@@ -262,10 +262,10 @@ compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
 
       (k',mo3r:_) <- ioeErr $ refreshModule (k,mos) mo3
 
-      mo4:_ <- 
+      mo4 <- 
 ----        case snd mo1b of
 ----          ModMod n | isModCnc n -> 
-        putp "  optimizing " $ ioeErr $ evalModule mos mo3r
+        putp "  optimizing " $ ioeErr $ optimizeModule opts mos mo3r
 ----        _ -> return [mo3r]
       return (k',mo4)
  where

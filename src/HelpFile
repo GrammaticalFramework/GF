@@ -428,17 +428,15 @@ q, quit: q
        The default is unlimited.
 
 -optimize, optimization on generated code.
-       The default is share.
+       The default is share for concrete, none for resource modules.
     -optimize=share        share common branches in tables
     -optimize=parametrize  first try parametrize then do share with the rest
     -optimize=values       represent tables as courses-of-values
     -optimize=all          first try parametrize then do values with the rest
     -optimize=none         no optimization
 
-
--parser, Context-free    parsing algorithm. The default is chart.
-    -parser=earley       Earley algorithm
-    -parser=chart        bottom-up chart parser
+-parser, Context-free    parsing algorithm. Under construction.
+       The default is a chart parser via context-free approximation.
 
 -printer, format in which the grammar is printed. The default is gfc.
     -printer=gfc            GFC grammar

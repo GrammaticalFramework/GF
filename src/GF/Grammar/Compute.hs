@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Computation of source terms. Used in compilation and in 'cc' command.
 -----------------------------------------------------------------------------
 
 module Compute where
@@ -217,6 +217,9 @@ computeTerm gr = comp where
        -- if there are no variables, don't even go inside
        cs' <- if (null g) then return cs else mapPairsM (comp g) cs
        return $ T i cs'
+
+     --- this means some extra work; should implement TSh directly
+     TSh i cs -> comp g $ T i [(p,v) | (ps,v) <- cs, p <- ps]
 
      T i cs -> do
        pty0 <- getTableType i

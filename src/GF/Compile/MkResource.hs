@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Compile a gfc module into a "reuse" gfr resource, interface, or instance.
 -----------------------------------------------------------------------------
 
 module MkResource where

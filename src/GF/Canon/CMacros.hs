@@ -9,7 +9,7 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- Macros for building and analysing terms in GFC concrete syntax.
 -----------------------------------------------------------------------------
 
 module CMacros where
@@ -226,6 +226,7 @@ wordsInTerm trm = filter (not . null) $ case trm of
    S c _   -> wo c
    R rs    -> concat [wo t | Ass _ t <- rs]
    T _ cs  -> concat [wo t | Cas _ t <- cs]
+   V _ cs  -> concat [wo t | t <- cs]
    C s t   -> wo s ++ wo t
    FV ts   -> concatMap wo ts
    K (KP ss vs) -> ss ++ concat [s | Var s _ <- vs]
