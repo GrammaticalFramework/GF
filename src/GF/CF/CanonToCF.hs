@@ -73,7 +73,7 @@ mkCfRules m fun cat args (lab, itss) = mapM mkOneRule itss
       mkOne (A  c i) = mkOne (AB c 0 i)
       mkOne (AB _ b i) = (map mkB [0..b-1], [k | (k,(j,_,True)) <- nonterms, j==i])
         where
-          mkB j = [p | (p,(k, LV l,False)) <- nonterms, k == i, l == j]
+          mkB x = [k | (k,(j, LV y,False)) <- nonterms, j == i, y == x]
 
 -- intermediate data structure of CFItems with information for profiles
 data PreCFItem = 
@@ -143,10 +143,10 @@ term2CFItems m t = errIn "forming cf items" $ case t of
     tryMkCFTerm itss = return itss
 
     extrR arg lab = case (arg,lab) of
-      (Arg (A cat pos), l@(L _))  -> return [[PNonterm (cIQ cat) pos l True]]
-      (Arg (A cat pos), l@(LV _)) -> return [[PNonterm (cIQ cat) pos l False]]
-      (Arg (AB cat pos b), l@(L _))  -> return [[PNonterm (cIQ cat) pos l True]]
-      (Arg (AB cat pos b), l@(LV _)) -> return [[PNonterm (cIQ cat) pos l False]]
+      (Arg (A  cat pos),   l@(L _))  -> return [[PNonterm (cIQ cat) pos l True]]
+      (Arg (A  cat pos),   l@(LV _)) -> return [[PNonterm (cIQ cat) pos l False]]
+      (Arg (AB cat b pos), l@(L _))  -> return [[PNonterm (cIQ cat) pos l True]]
+      (Arg (AB cat b pos), l@(LV _)) -> return [[PNonterm (cIQ cat) pos l False]]
                                      ---- ??
       _   -> prtBad "cannot extract record field from" arg
     cIQ c = if isPredefCat c then CIQ cPredefAbs c else CIQ m c
@@ -158,7 +158,7 @@ mkCFPredef opts rules = (ruls, \s -> preds0 s ++ look s) where
                    else (rules,emptyTrie)
   preds0 s = 
     [(cat,         metaCFFun)     | TM _ _ <- [s], cat <- cats] ++
-    [(cat,         varCFFun x)    | TV x   <- [s], cat <- cats] ++
+    [(cat,         varCFFun x)    | TV x   <- [s], cat <- catVarCF : cats] ++
     [(cfCatString, stringCFFun t) | TL t   <- [s]]              ++
     [(cfCatInt,    intCFFun t)    | TI t   <- [s]]
   cats = map fst rules

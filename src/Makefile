@@ -2,9 +2,10 @@ include config.mk
 
 
 GHMAKE=$(GHC) --make
+GHCXMAKE=ghcxmake
 GHCFLAGS=-package lang -package util -fglasgow-exts $(CPPFLAGS) $(LDFLAGS)
 GHCOPTFLAGS=-O $(GHCFLAGS)
-GHCFUDFLAG=-package Fudgets
+GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
 
 HUGSINCLUDE    =.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:newparsing:trace:
@@ -45,9 +46,9 @@ ghc: nofud
 ghci: nofud-links ghci-nofud
 
 fud:
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) GF.hs -o gf+
-	strip gf+
-	mv gf+ ../bin/
+	$(GHCXMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) GF.hs -o fgf
+	strip fgf
+	mv fgf ../bin/
 
 gft:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) -itranslate translate/GFT.hs -o gft

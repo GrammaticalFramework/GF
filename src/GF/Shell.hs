@@ -209,9 +209,10 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
 ---- deprec!  CSetLocalFlag lang -> changeState (addLocalOptions lang opts0) sa
 
   CHelp (Just c) -> returnArg   (AString (txtHelpCommand c)) sa
-  CHelp _
-    | oElem showAll opts  -> returnArg   (AString txtHelpFile) sa
-    | otherwise           -> returnArg   (AString txtHelpFileSummary) sa
+  CHelp _ -> case opts0 of
+    Opts [o] | o == showAll -> returnArg   (AString txtHelpFile) sa
+    Opts [o]        -> returnArg   (AString (txtHelpCommand ('-':prOpt o))) sa
+    _               -> returnArg   (AString txtHelpFileSummary) sa
 
   CPrintGrammar       -> returnArg (AString (optPrintGrammar opts gro)) sa
   CPrintGlobalOptions -> justOutput (putStrLn  $ prShellStateInfo st) sa
