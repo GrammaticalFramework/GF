@@ -60,6 +60,19 @@ lin
     {s = \\n,c => cn.s ! n ! c ++ s.s ; 
      g = cn.g} ;
 
+  AdjPart = adjPastPart ;
+  ReflV2 = reflTransVerb ;
+  ProgVP = progressiveVerbPhrase ;
+
+  PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
+  NegTP t a = {s = t.s ++ a.s ; b = False ; t = t.t ; a = a.a} ;
+  TPresent     = {s = [] ; t = ClPresent} ;
+  TPast        = {s = [] ; t = ClPast} ;
+  TFuture      = {s = [] ; t = ClFuture} ;
+  TConditional = {s = [] ; t = ClConditional} ;
+  ASimul = {s = [] ; a = Simul} ;
+  AAnter = {s = [] ; a = Anter} ;
+
   PredVP = predVerbGroupClause ;
 
   PredV  = predVerb ;
@@ -82,7 +95,7 @@ lin
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
 
-  SlashV2 = slashTransVerb ;
+  SlashV2 = slashTransVerbCl ;
 ----  OneVP = predVerbPhrase (nameNounPhrase (nameReg "one")) ;
 ----  ThereNP = thereIs ;
 
@@ -90,8 +103,8 @@ lin
   FunRP = funRelPron ;
   RelVP = relVerbPhrase ;
   RelSlash = relSlash ;
-  ModRC = modRelClause ;
-  RelSuch = relSuch ;
+  ModRS = modRelClause ;
+  RelCl = relSuch ;
 
   WhoOne = intPronWho singular ;
   WhoMany = intPronWho plural ;
@@ -105,9 +118,13 @@ lin
   IntVP = intVerbPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
-  IsThereNP = isThere ;
 
-  ImperVP = imperVerbPhrase ;
+----  ExistQCl  : CN -> QCl ;                   -- "is there a bar", 
+----  ExistNumQCl : Num -> CN -> QCl ;          -- "are there (86) bars"
+
+
+  PosImperVP = imperVerbPhrase True ;
+  NegImperVP = imperVerbPhrase False ;
 
   IndicPhrase = indicUtt ;
   QuestPhrase = interrogUtt ;
@@ -134,7 +151,7 @@ lin
 
   SubjS = subjunctSentence ;
   SubjImper = subjunctImperative ;
-  SubjQu = subjunctQuestion ;
+  SubjQS = subjunctQuestion ;
   SubjVP = subjunctVerbPhrase ;
 
   PhrNP = useNounPhrase ;
