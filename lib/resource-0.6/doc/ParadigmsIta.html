@@ -1,0 +1,192 @@
+<html>
+<body>
+<i> Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (aarne@cs.chalmers.se) 2002 under GNU GPL.
+ </i>
+<p>
+<h1></h1>
+
+# -path=.:../romance:../abstract:../../prelude
+<h1> Italian Lexical Paradigms</h1>
+<p>
+Aarne Ranta 2003
+<p>
+This is an API to the user of the resource grammar 
+for adding lexical items. It give shortcuts for forming
+expressions of basic categories: nouns, adjectives, verbs.
+
+Closed categories (determiners, pronouns, conjunctions) are
+accessed through the resource syntax API, <tt>resource.Abs.gf</tt>. 
+<p>
+The main difference with <tt>MorphoIta.gf</tt> is that the types
+referred to are compiled resource grammar types. We have moreover
+had the design principle of always having existing forms, not stems, as string
+arguments of the paradigms.
+<p>
+The following modules are presupposed:
+<pre>
+  resource ParadigmsIta = 
+    open Prelude, (Types = TypesIta), SyntaxIta, MorphoIta, 
+    ResourceIta in {
+</pre>
+
+<h2> Parameters </h2>
+<p>
+To abstract over gender names, we define the following identifiers.
+<pre>
+  oper
+    masculine : Gender ;
+    feminine  : Gender ;
+</pre>
+
+To abstract over number names, we define the following.
+<pre>
+    singular : Number ;
+    plural   : Number ;
+</pre>
+
+To abstract over case names, we define the following. (Except for
+some pronouns, the accusative is equal to the nominative, the
+dative is formed by the preposition <i>a</i>, and the genitive by the
+preposition <i>di</i>.)
+<pre>
+    nominative : Case ;
+    accusative : Case ;
+    dative     : Case ;
+    genitive   : Case ;
+  
+    prep_a   : Case ;
+    prep_di  : Case ;
+    prep_da  : Case ;
+    prep_in  : Case ;
+    prep_su  : Case ;
+    prep_con : Case ;
+</pre>
+
+<h2> Nouns</h2>
+Worst case: two forms (singular + plural),
+and the gender.
+<pre>
+    mkN  : (_,_ : Str) -> Gender -> N ;   -- uomo, uomini, masculine
+</pre>
+
+Often it is enough with one form. If it ends with
+<i>o</i> or <i>a</i>, no gender is needed; if with something else, 
+the gender must be given.
+<pre>
+    nVino  : Str -> N ;           -- vino (, vini, masculine)
+    nRana  : Str -> N ;           -- rana (, rane, feminine)
+    nSale  : Str -> Gender -> N ; -- sale (, sali), masculine
+    nTram  : Str -> Gender -> N ; -- tram (, tram), masculine
+</pre>
+
+Nouns used as functions need a case and a preposition. The most common is <i>di</i>.
+Recall that the prepositions <i>a</i>, <i>di</i>, <i>da</i>, <i>in</i>, <i>su</i>, <i>con</i> are treated 
+as part of the case (cf. above).
+<pre>
+    funPrep : N -> Preposition -> Fun ;
+    funCase : N -> Case -> Fun ;
+    funDi   : N -> Fun ;
+</pre>
+
+Proper names, with their gender.
+<pre>
+    mkPN : Str -> Gender -> PN ; -- Giovanni, masculine
+</pre>
+
+On the top level, it is maybe <tt>CN</tt> that is used rather than <tt>N</tt>, and
+<tt>NP</tt> rather than <tt>PN</tt>.
+<pre>
+    mkCN  : N -> CN ;
+    mkNP  : Str -> Gender -> NP ;
+</pre>
+
+<h2> Adjectives</h2>
+Non-comparison one-place adjectives need four forms in the worst case.
+A parameter tells if they are pre- or postpositions in modification.
+<pre>
+    Position : Type ;
+    prepos : Position ;  
+    postpos : Position ;  
+  
+    mkAdj1 : (solo,sola,soli,sole,solamente : Str) -> Position -> Adj1 ;
+</pre>
+
+Adjectives ending with <i>o</i> and <i>e</i>, and invariable adjectives, 
+are the most important regular patterns.
+<pre>
+    adj1Solo : (solo : Str) -> Bool -> Adj1 ;
+    adj1Tale : (tale : Str) -> Bool -> Adj1 ;
+    adj1Blu  : (blu  : Str) -> Bool -> Adj1 ;
+</pre>
+
+Two-place adjectives need a preposition and a case as extra arguments.
+<pre>
+    mkAdj2 : Adj1 -> Preposition -> Case -> Adj2 ;  -- divisibile per
+</pre>
+
+Comparison adjectives may need two adjectives, corresponding to the
+positive and other forms. 
+<pre>
+    mkAdjDeg : (buono, migliore : Adj1) -> AdjDeg ;
+</pre>
+
+In the completely regular case, the comparison forms are constructed by
+the particle <i>più</i>.
+<pre>
+    aSolo : Str -> Position -> AdjDeg ;    -- lento (, più lento)
+    aTale : Str -> Position -> AdjDeg ;    -- grave (, più grave)
+    aBlu  : Str -> Position -> AdjDeg ;    -- blu   (, più blu)
+</pre>
+
+On top level, there are adjectival phrases. The most common case is
+just to use a one-place adjective. 
+<pre>
+    apSolo : Str -> Position -> AP ;
+    apTale : Str -> Position -> AP ;
+    apBlu  : Str -> Position -> AP ;
+</pre>
+
+<h2> Verbs</h2>
+<p>
+The fragment only has present tense so far, but in all persons.
+The worst case needs nine forms (and is not very user-friendly).
+<pre>
+    mkV : (_,_,_,_,_,_,_,_,_ : Str) -> V ;
+</pre>
+
+These are examples of standard conjugations. Other conjugations
+can be extracted from the Italian functional morphology, which has full
+<i>Bescherelle</i> tables.
+<pre>
+    vAmare   : Str -> V ;
+    vDormire : Str -> V ;
+    vFinire  : Str -> V ;
+    vCorrere : (_,_ : Str) -> V ;
+</pre>
+
+The verbs 'be' and 'have' are special.
+<pre>
+    vEssere  : V ;
+    vAvere   : V ;
+</pre>
+
+Two-place verbs, and the special case with direct object. Notice that
+a particle can be included in a <tt>V</tt>.
+<pre>
+    mkTV  : V -> Preposition -> Case -> TV ;
+    tvDir : V -> TV ;  
+</pre>
+
+The idiom with <i>avere</i> and an invariable noun, such as <i>paura</i>, <i>fame</i>,
+and a two-place variant with <i>di</i> + complement.
+<pre>
+    averCosa   : Str -> V ;
+    averCosaDi : Str -> TV ;
+</pre>
+
+The definitions should not bother the user of the API. So they are
+hidden from the document.
+</body>
+</html>
