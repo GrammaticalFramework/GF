@@ -2,7 +2,7 @@
 
 concrete SwadeshLexEng of SwadeshLex = CategoriesEng 
   ** open ResourceEng, SyntaxEng, ParadigmsEng, VerbsEng, 
-          BasicEng in {
+          BasicEng, Prelude in {
 
   lin
 
@@ -43,6 +43,12 @@ concrete SwadeshLexEng of SwadeshLex = CategoriesEng
     -- Conjunctions
 
     and_Conj = and_Conj ;
+
+    -- Prepositions
+
+    at_Prep = ss "at" ;
+    in_Prep = ss "in" ;
+    with_Prep = ss "with" ;
 
     -- Numerals
 

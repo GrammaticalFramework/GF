@@ -2,7 +2,7 @@
 
 concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe 
   ** open ResourceSwe, SyntaxSwe, ParadigmsSwe, VerbsSwe, 
-          BasicSwe in {
+          BasicSwe, Prelude in {
 
   lin
 
@@ -44,6 +44,12 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
 
     and_Conj = and_Conj ;
 
+    -- Prepositions
+
+    at_Prep = ss "vid" ;
+    in_Prep = ss "i" ;
+    with_Prep = ss "med" ;
+
     -- Numerals
 
     one_Num = UseNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01)))) ;
@@ -67,6 +73,7 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     good_ADeg = good_ADeg ;
     green_ADeg = green_ADeg ;
     heavy_ADeg = irregADeg "tung" "tyngre" "tyngst" ;
+    left_A = mkA "vänstra" "vänstra" "vänstra" ;
     long_ADeg = long_ADeg ;
     narrow_ADeg = narrow_ADeg ;
     near_ADeg = mkADeg "nära" "nära" "nära" "nära" 
@@ -74,8 +81,8 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     new_ADeg = new_ADeg ;
     old_ADeg = old_ADeg ;
     red_ADeg = red_ADeg ;
+    right_A = mkA "högra" "högra" "högra" ;
     rotten_ADeg = mk3ADeg "rutten" "ruttet" "ruttna" ;
-
     round_ADeg = regADeg "rund" ;
     sharp_ADeg = regADeg "vass" ;
     short_ADeg = short_ADeg ;
@@ -90,8 +97,6 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     wide_ADeg = mk2ADeg "bred" "brett" ;
     yellow_ADeg = yellow_ADeg ;
 
-    left_A = mkA "vänstra" "vänstra" "vänstra" ;
-    right_A = mkA "högra" "högra" "högra" ;
 
     -- Nouns
 
@@ -209,14 +214,14 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     hold_V = hålla_V ;
     hunt_V = regV "jaga" ;
     kill_V = regV "döda" ;
-    know_V = kunna_V ; -- FIXME: känna? veta?
+    know_V = veta_V ;
     laugh_V = regV "skratta" ;
-    lie_V = ljuga_V ;
+    lie_V = ligga_V ;
     live_V = leva_V ;
     play_V = mk2V "leka" "leker" ;
     pull_V = draga_V ;
     push_V = mk2V "trycka" "trycker" ;
-    rub_V = smörja_V ;
+    rub_V = gnida_V ;
     say_V = säga_V ;
     scratch_V = regV "klia" ;
     see_V = se_V ;
@@ -227,8 +232,8 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
     smell_V = regV "lukta" ;
     spit_V = regV "spotta" ;
     split_V = klyva_V ;
-    squeeze_V = regV "krama" ;
-    stab_V = hugga_V ;
+    squeeze_V = klämma_V ;
+    stab_V = sticka_V ;
     stand_V = stå_V ;
     suck_V = suga_V ;
     swell_V = svälla_V ;

@@ -33,8 +33,6 @@ abstract SwadeshLex = Categories ** {
     when_IAdv : IAdv ;
     how_IAdv : IAdv ;
 
-    -- not : Adv ; -- ?
-
     -- Conjunctions
 
     and_Conj : Conj ;
@@ -44,6 +42,10 @@ abstract SwadeshLex = Categories ** {
     at_Prep : Prep ;  
     in_Prep : Prep ;
     with_Prep : Prep ;
+
+    -- not -- ?
+    -- if -- ?
+    -- because -- ?
 
     -- Numerals
 
