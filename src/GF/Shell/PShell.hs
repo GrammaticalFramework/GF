@@ -70,9 +70,9 @@ pCommand ws = case ws of
 
   "p"  : s      -> aString CParse s
   "t"  : i:o: s -> aString (CTranslate (language i) (language o)) s
-  "gr" : []     -> aUnit   (CGenerateRandom 1)
-  "gr" : t      -> aTerm   (CGenerateRandom 1) t
-  "gt" : n : [] -> aUnit   (CGenerateTrees (readIntArg n))
+  "gr" : []     -> aUnit   CGenerateRandom
+  "gr" : t      -> aTerm   CGenerateRandom t
+  "gt" : []     -> aUnit   CGenerateTrees
   "pt" : s      -> aTerm   CPutTerm s
 -----  "wt" : f : s  -> aTerm   (CWrapTerm (string2id f)) s
   "ma" : s      -> aString CMorphoAnalyse s

@@ -53,8 +53,8 @@ data Command =
  | CLinearize [()] ---- parameters
  | CParse
  | CTranslate Language Language
- | CGenerateRandom Int
- | CGenerateTrees Int
+ | CGenerateRandom
+ | CGenerateTrees
  | CPutTerm
  | CWrapTerm Ident
  | CMorphoAnalyse
@@ -174,7 +174,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
   CTranslate il ol -> do
     let a' = opST2CommandArg (optParseArgErr opts (sgr il)) a
     returnArg (opTS2CommandArg (optLinearizeTreeVal opts (sgr ol)) a') sa
-  CGenerateRandom n -> do
+  CGenerateRandom -> do
     let 
       a' = case a of
         ASTrm _ -> s2t a
@@ -186,9 +186,9 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
               Ok trm' -> returnArg (ATrms [loc2tree trm']) sa
               Bad s   -> returnArg (AError s) sa
       _ -> do
-        ts <- randomTreesIO opts gro (optIntOrN opts flagNumber n)
+        ts <- randomTreesIO opts gro (optIntOrN opts flagNumber 1)
         returnArg (ATrms ts) sa
-  CGenerateTrees n -> returnArg (ATrms $ generateTrees opts gro n) sa
+  CGenerateTrees -> returnArg (ATrms $ generateTrees opts gro) sa
 
 
   CPutTerm -> changeArg (opTT2CommandArg (optTermCommand opts gro) . s2t) sa

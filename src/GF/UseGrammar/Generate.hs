@@ -17,8 +17,8 @@ import List
 
 -- the main function takes an abstract syntax and returns a list of trees
 
--- generateTrees :: GFCGrammar -> Cat -> Int -> [Exp]
-generateTrees gr cat n = map str2tr $ generate gr' cat' n where
+-- generateTrees :: GFCGrammar -> Cat -> Int -> Maybe Int -> [Exp]
+generateTrees gr cat n mn = map str2tr $ generate gr' cat' n mn where
   gr' = gr2sgr gr
   cat' = prt $ snd cat
 
@@ -39,17 +39,22 @@ str2tr (STr (f,ts)) = mkApp (trId f) (map str2tr ts) where
 
 ------------------------------------------
 -- do the main thing with a simpler data structure
+-- the first Int gives tree depth, the second constrains subtrees
+-- chosen for each branch. A small number, such as 2, is a good choice
+-- if the depth is large (more than 3)
 
-generate :: SGrammar -> SCat -> Int -> [STree]
-generate gr cat i = [t | (c,t) <- gen 0 [], c == cat] where
+
+generate :: SGrammar -> SCat -> Int -> Maybe Int -> [STree]
+generate gr cat i mn = [t | (c,t) <- gen 0 [], c == cat] where
 
   gen :: Int -> [(SCat,STree)] -> [(SCat,STree)]
   gen n cts = if n==i then cts else
     gen (n+1) (nub [(c,STr (f, xs)) | (f,(cs,c)) <- gr, xs <- args cs cts] ++ cts)
 
   args :: [SCat] -> [(SCat,STree)] -> [[STree]]
-  args cs cts = combinations [[t | (k,t) <- cts, k == c] | c <- cs]
+  args cs cts = combinations [constr [t | (k,t) <- cts, k == c] | c <- cs]
 
+  constr = maybe id take mn
 
 type SGrammar = [SRule]
 type SIdent = String
