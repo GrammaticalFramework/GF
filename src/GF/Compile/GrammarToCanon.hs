@@ -74,22 +74,22 @@ redInfo am (c,info) = errIn ("translating definition of" +++ prt c) $ do
       ps' <- mapM redParam ps
       returns c' $ C.ResPar ps'
 
-    CncCat pty ptr ppr -> case (pty,ptr) of
-      (Yes ty, Yes (Abs _ t)) -> do
+    CncCat pty ptr ppr -> case (pty,ptr,ppr) of
+      (Yes ty, Yes (Abs _ t), Yes pr) -> do
         ty'  <- redCType ty
         trm' <- redCTerm t
-        ppr' <- return $ G.FV []  ---- redCTerm 
-        return [(c', C.CncCat ty' trm' ppr')]
+        pr'  <- redCTerm pr 
+        return [(c', C.CncCat ty' trm' pr')]
       _ -> prtBad "cannot reduce rule for" c
       
-    CncFun mt ptr ppr -> case (mt,ptr) of
-      (Just (cat,_), Yes trm) -> do
+    CncFun mt ptr ppr -> case (mt,ptr,ppr) of
+      (Just (cat,_), Yes trm, Yes pr) -> do
         cat' <- redIdent cat
         (xx,body,_) <- termForm trm
         xx'   <- mapM redArgvar xx
         body' <- errIn (prt body) $ redCTerm body ---- debug
-        ppr'  <- return $ G.FV []  ---- redCTerm 
-        return [(c',C.CncFun (G.CIQ am cat') xx' body' ppr')]
+        pr'   <- redCTerm pr 
+        return [(c',C.CncFun (G.CIQ am cat') xx' body' pr')]
       _ -> prtBad ("cannot reduce rule" +++ show info +++ "for") c ---- debug
 
     AnyInd s b -> do

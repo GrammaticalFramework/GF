@@ -3,10 +3,11 @@ module Commands where
 import Operations
 import Zipper
 
-import qualified Grammar as G ---- Cat, Fun
+import qualified Grammar as G ---- Cat, Fun, Q, QC
 import GFC
 import CMacros
 import LookAbs
+import Look
 import Values (loc2treeFocus)----
 
 import GetTree
@@ -14,7 +15,6 @@ import API
 import ShellState
 
 import qualified Shell
-import qualified Ident as I
 import qualified PShell
 import qualified Macros as M
 import PrGrammar
@@ -23,7 +23,6 @@ import IOGrammar
 import UseIO
 import Unicode
 
-import Option
 import CF
 import CFIdent (cat2CFCat, cfCat2Cat)
 import Linear
@@ -32,10 +31,13 @@ import Editing
 import Session
 import Custom
 
-import Random (mkStdGen)
+import qualified Ident as I
+import Option
+import Str (sstr) ----
+
+import Random (mkStdGen, newStdGen)
 import Monad (liftM2)
 import List (intersperse)
-import Random (newStdGen)
 
 --- temporary hacks for GF 2.0
 
@@ -105,10 +107,11 @@ abstractCEnv = absId
 stdGenCEnv env s = mkStdGen (length (displayJustStateIn env s) * 31 +11) ---
 
 initSStateEnv env = case getOptVal (stateOptions sgr) gStartCat of
-----  Just cat -> action2commandNext (newCat gr (identC cat)) initSState
+  Just cat -> action2commandNext (newCat gr (abs, I.identC cat)) initSState
   _ -> initSState
  where 
    sgr = firstStateGrammar env
+   abs = absId sgr
    gr  = stateGrammarST sgr
 
 -- the main function
@@ -274,8 +277,8 @@ string2varPair s = case words s of
 cMenuDisplay :: String -> Command
 cMenuDisplay s = CAddOption (menuDisplay s)
 
-newCatMenu env = [(CNewCat c, prQIdent c) | ---- printname env initSState c) | 
-                         (c,[]) <- allCatsOf (canCEnv env)]
+newCatMenu env = [(CNewCat c, printname env initSState c) | 
+                                  (c,[]) <- allCatsOf (canCEnv env)]
 
 mkRefineMenu :: CEnv -> SState -> [(Command,String)]
 mkRefineMenu env sstate = [(c,s) | (c,(s,_)) <- mkRefineMenuAll env sstate]
@@ -293,7 +296,7 @@ mkRefineMenuAll env sstate =
 
  where
   prRef  (f,t) = 
-    (ifShort "r" "Refine" +++ prOrLinExp f +++ ifTyped (":" +++ prt t),
+    (ifShort "r" "Refine" +++ prOrLinRef f +++ ifTyped (":" +++ prt t),
      "r" +++ prRefinement f)
   prChangeHead f = 
     (ifShort "ch" "ChangeHead" +++ prOrLinFun f,
@@ -314,11 +317,10 @@ mkRefineMenuAll env sstate =
     _ -> b
   ifShort = ifOpt sizeDisplay "short"
   ifTyped t = ifOpt typeDisplay "typed" t ""
-  prOrLinExp t = prRefinement t --- maybe (prt t) prOrLinFun $ M.justIdentOf t
-  prOrLinTree t = case getOptVal opts menuDisplay of
-    Just "Abs" -> prt t
-    Just lang -> optLinearizeTreeVal (addOption firstLin opts) 
-                          (stateGrammarOfLang env (language lang)) t
+  prOrLinExp t = prt t ---- 
+  prOrLinRef t = case t of
+    G.Q m f  ->  printname env sstate (m,f) 
+    G.QC m f ->  printname env sstate (m,f) 
     _ -> prt t
   prOrLinFun = printname env sstate
 
@@ -364,9 +366,11 @@ menuState env = map snd . mkRefineMenu env
 prState :: State -> [String]
 prState s = prMarkedTree (loc2treeMarked s)
 
+displayJustStateIn :: CEnv -> SState -> String
 displayJustStateIn env state = case displaySStateIn env state of 
    (t,msg,_) -> unlines (t ++ ["",""] ++ msg) --- ad hoc for CommandF
 
+displaySStateIn :: CEnv -> SState -> ([String],[String],[(String,String)])
 displaySStateIn env state = (tree',msg,menu) where
   (tree,msg,menu) = displaySState env state
   grs    = allStateGrammars env
@@ -380,6 +384,7 @@ displaySStateIn env state = (tree',msg,menu) where
   linAll = map lin grs
   separ  = singleton . map unlines . intersperse [replicate 72 '*']
 
+displaySStateJavaX :: CEnv -> SState -> String
 displaySStateJavaX env state = unlines $ tagXML "gfedit" $ concat [
   tagXML "linearizations" (concat 
     [tagAttrXML "lin" ("lang", prLanguage lang) ss | (lang,ss) <- lins]),
@@ -391,7 +396,7 @@ displaySStateJavaX env state = unlines $ tagXML "gfedit" $ concat [
   (tree,msg,menu) = displaySState env state
   menu'  = [tagXML "show" [s] ++ tagXML "send" [c] | (s,c) <- menu] 
   (ls,grs) = unzip $ lgrs
-  lgrs   = allStateGrammarsWithNames env --- allActiveStateGrammarsWithNames env
+  lgrs   = allStateGrammarsWithNames env ---- allActiveStateGrammarsWithNames env
   lins   = (langAbstract, exp) : linAll
   opts   = addOptions (optsSState state)   -- state opts override 
               (addOption (markLin mark) (globalOptions env))
@@ -406,14 +411,13 @@ displaySStateJavaX env state = unlines $ tagXML "gfedit" $ concat [
 langAbstract = language "Abstract"
 langXML      = language "XML"
 
-
 linearizeState :: (String -> [String]) -> Options -> GFGrammar -> State -> [String]
 linearizeState wrap opts gr = 
  wrap . strop . unt . optLinearizeTreeVal opts gr . loc2treeFocus
 
   where
-   unt   = id ---- customOrDefault (stateOptions g) useUntokenizer customUntokenizer g
-   strop = id ---- maybe id ($ g) $ customAsOptVal opts filterString customStringCommand
+   unt   = customOrDefault (stateOptions gr) useUntokenizer customUntokenizer gr
+   strop = maybe id ($ gr) $ customAsOptVal opts filterString customStringCommand
    br    = oElem showStruct opts
 
 noWrap, fudWrap :: String -> [String]
@@ -430,14 +434,17 @@ menuSState env state = [(s,c) | (_,(s,c)) <- mkRefineMenuAll env state]
 printname :: CEnv -> SState -> G.Fun -> String
 printname env state f = case getOptVal opts menuDisplay of
   Just "Abs" -> prQIdent f
-  Just lang  -> printn lang
+  Just lang  -> printn lang f
   _ -> prQIdent f
  where
   opts = addOptions (optsSState state) (globalOptions env)
-  printn lang = printOrLinearize gr m f where
+  printn lang f = err id (ifNull (prQIdent f) (sstr . head)) $ do
+    t  <- lookupPrintname gr mf 
+    strsFromTerm t
+   where
      sgr = stateGrammarOfLang env (language lang)
      gr  = grammar sgr
-     m   = cncId sgr
+     mf  = ciq (cncId sgr) (snd f)
 
 --- XML printing; does not belong here!
 

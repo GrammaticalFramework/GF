@@ -82,7 +82,7 @@ evalCncInfo gr cnc abs (c,info) = case info of
         return $ May b
       _ -> return pde   -- indirection
 
-    ppr' <- return ppr ----
+    ppr' <- liftM yes $ evalPrintname gr c ppr (yes $ K $ prt c)
 
     return (c, CncCat ptyp pde' ppr')
 
@@ -92,9 +92,7 @@ evalCncInfo gr cnc abs (c,info) = case info of
       Yes de -> do
         liftM yes $ pEval ty de
       _ -> return pde
-    ppr' <- case ppr of
-      Yes pr -> liftM yes $ comp pr
-      _ -> return ppr  
+    ppr' <-  liftM yes $ evalPrintname gr c ppr pde'
     return $ (c, CncFun mt pde' ppr') -- only cat in type actually needed
 
   _ ->  return (c,info)
@@ -169,3 +167,27 @@ mkLinDefault gr typ = do
        return $ R $ [assign l t | (l,t) <- zip ls ts']
      _ -> prtBad "linearization type field cannot be" typ
 
+-- Form the printname: if given, compute. If not, use the computed
+-- lin for functions, cat name for cats (dispatch made in evalCncDef above).
+--- We cannot use linearization at this stage, since we do not know the
+--- defaults we would need for question marks - and we're not yet in canon.
+
+evalPrintname :: SourceGrammar -> Ident -> MPr -> Perh Term -> Err Term
+evalPrintname gr c ppr lin =
+  case ppr of
+    Yes pr -> comp pr
+    _ -> case lin of
+      Yes t -> return $ K $ prt $ oneBranch t ---- stringFromTerm
+      _ -> return $ K $ prt c ----
+ where
+   comp = computeConcrete gr
+
+   oneBranch t = case t of
+     Abs _ b   -> oneBranch b
+     R   (r:_) -> oneBranch $ snd $ snd r
+     T _ (c:_) -> oneBranch $ snd c
+     FV  (t:_) -> oneBranch t
+     C x y     -> C (oneBranch x) (oneBranch y)
+     S x _     -> oneBranch x
+     P x _     -> oneBranch x
+     _ -> t
