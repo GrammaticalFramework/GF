@@ -1,17 +1,3 @@
-----------------------------------------------------------------------
--- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
--- Stability   : (stable)
--- Portability : (portable)
---
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
---
--- (Description of the module)
------------------------------------------------------------------------------
-
 {-# OPTIONS -fglasgow-exts -cpp #-}
 -- parser produced by Happy Version 1.13
 
@@ -1781,7 +1767,7 @@ happyError ts =
 
 myLexer = tokens
 {-# LINE 1 "GenericTemplate.hs" #-}
--- $Id: ParGFC.hs,v 1.7 2005/02/04 10:10:38 peb Exp $
+-- $Id: ParGFC.hs,v 1.8 2005/02/04 14:17:06 bringert Exp $
 
 
 
