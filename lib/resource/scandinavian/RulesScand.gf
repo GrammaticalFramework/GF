@@ -62,7 +62,7 @@ lin
   PosVP tp = predVerbGroup True tp.a ;
   NegVP tp = predVerbGroup False tp.a ;
 
-  ProgVP = progressiveVerbPhrase ;
+  ProgVG = progressiveVerbPhrase ;
 
   PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
   NegTP t a = {s = t.s ++ a.s ; b = False ; t = t.t ; a = a.a} ;

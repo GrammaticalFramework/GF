@@ -7,16 +7,16 @@
 concrete StructuralEng of Structural = 
                       CategoriesEng, NumeralsEng ** open Prelude, SyntaxEng in {
  lin
-  INP    = pronI ;
-  ThouNP = pronYouSg ;
-  HeNP   = pronHe ;
-  SheNP  = pronShe ;
-  ItNP   = pronIt ;
-  WeNumNP   = pronWithNum pronWe ;
-  YeNumNP   = pronWithNum pronYouPl ;
-  YouNP  = pronYouSg ;
-  TheyNP = pronThey ;
-  TheyFemNP = pronThey ;
+  INP    = pronNounPhrase pronI ;
+  ThouNP = pronNounPhrase pronYouSg ;
+  HeNP   = pronNounPhrase pronHe ;
+  SheNP  = pronNounPhrase pronShe ;
+  ItNP   = pronNounPhrase pronIt ;
+  WeNumNP n  = pronNounPhrase (pronWithNum pronWe n) ;
+  YeNumNP n  = pronNounPhrase (pronWithNum pronYouPl n) ;
+  YouNP  = pronNounPhrase pronYouSg ;
+  TheyNP = pronNounPhrase pronThey ;
+  TheyFemNP = pronNounPhrase pronThey ;
 
   EveryDet = everyDet ; 
   AllMassDet = mkDeterminer Sg "all" ; --- all the missing
@@ -42,17 +42,19 @@ concrete StructuralEng of Structural =
   ThatDet  = mkDeterminer Sg "that" ;
   ThoseNumDet = mkDeterminerNum Pl "those" ;
 
-  ThisNP = nameNounPhrase (nameReg "this") ;
-  ThatNP = nameNounPhrase (nameReg "that") ;
-  TheseNumNP n = nameNounPhrasePl {s = \\c => "these" ++ n.s ! c} ;
-  ThoseNumNP n = nameNounPhrasePl {s = \\c => "those" ++ n.s ! c} ;
+  ThisNP = nameNounPhrase (nameReg "this" Neutr) ;
+  ThatNP = nameNounPhrase (nameReg "that" Neutr) ;
+  TheseNumNP n = nameNounPhrasePl {s = \\c => "these" ++ n.s ! c ; g =
+  Neutr} ;
+  ThoseNumNP n = nameNounPhrasePl {s = \\c => "those" ++ n.s ! c ; g =
+  Neutr} ;
 
-  EverybodyNP = nameNounPhrase (nameReg "everybody") ;
-  SomebodyNP = nameNounPhrase (nameReg "somebody") ;
-  NobodyNP = nameNounPhrase (nameReg "nobody") ;
-  EverythingNP = nameNounPhrase (nameReg "everything") ;
-  SomethingNP = nameNounPhrase (nameReg "something") ;
-  NothingNP = nameNounPhrase (nameReg "nothing") ;
+  EverybodyNP = nameNounPhrase (nameReg "everybody" human) ;
+  SomebodyNP = nameNounPhrase (nameReg "somebody" human) ;
+  NobodyNP = nameNounPhrase (nameReg "nobody" human) ;
+  EverythingNP = nameNounPhrase (nameReg "everything" Neutr) ;
+  SomethingNP = nameNounPhrase (nameReg "something" Neutr) ;
+  NothingNP = nameNounPhrase (nameReg "nothing" Neutr) ;
 
   CanVV = vvCan ;
   CanKnowVV = vvCan ;

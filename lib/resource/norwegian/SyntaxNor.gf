@@ -124,10 +124,11 @@ instance SyntaxNor of SyntaxScand = TypesNor **
     _ => "seg"
     } ;
 
-  progressiveVerbPhrase : VerbPhrase -> VerbGroup =
+  progressiveVerbPhrase : VerbGroup -> VerbGroup = \verb -> 
     complVerbVerb
       (verbVara **
        {s3 = ["ved at"]}
-      ) ;
+      )
+      (predVerbGroup True Simul verb) ;  
 
 }

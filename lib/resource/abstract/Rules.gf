@@ -247,7 +247,7 @@ fun
     UseQCl : TP -> QCl -> QS ;
     PosVP, NegVP : Ant -> VP  -> VPI ;
 
-    ProgVP : VPI -> VP ;  -- he is eating
+    ProgVG : VP  -> VP ;  -- he is eating
 
     PosTP  : Tense -> Ant -> TP ;
     NegTP  : Tense -> Ant -> TP ;

@@ -33,22 +33,42 @@ oper
     cn ** {g = g} ;
 
   cnHum : CommonNoun -> CommNoun = \cn ->
-    cnGen cn Hum ;
+    cnGen cn human ;
   cnNoHum : CommonNoun -> CommNoun = \cn ->
-    cnGen cn NoHum ;
+    cnGen cn Neutr ;
 
 --2 Noun phrases
 --
 -- The worst case is pronouns, which have inflection in the possessive forms. 
 -- Proper names are a special case.
 
-  NounPhrase : Type = Pronoun ;
+  NounPhrase : Type = {s : NPForm => Str ; a : Agr} ;
+
+-- The worst case for agreement features are reflexive pronouns (8 different).
+
+  param Agr = ASgP1 | ASgP2 | ASgP3 Gender | APl Person ;
+
+  oper
+    toAgr : Number -> Person -> Gender -> Agr = \n,p,g -> 
+      case <n,p> of {
+        <Sg,P1> => ASgP1 ;
+        <Sg,P2> => ASgP2 ;
+        <Sg,P3> => ASgP3 g ;
+        _       => APl p
+        } ;
+    fromAgr : Agr -> {n : Number ; p : Person ; g : Gender} = \a ->
+      case a of {
+        ASgP1   => {n = Sg ; p = P1 ; g = human} ;
+        ASgP2   => {n = Sg ; p = P2 ; g = human} ;
+        ASgP3 g => {n = Sg ; p = P1 ; g = g} ;
+        APl   p => {n = Pl ; p = p ; g = human}
+        } ;
 
   nameNounPhrase : ProperName -> NounPhrase = \john -> 
-    {s = \\c => john.s ! toCase c ; n = Sg ; p = P3} ;
+    {s = \\c => john.s ! toCase c ; a = toAgr Sg P3 john.g} ;
 
   nameNounPhrasePl : ProperName -> NounPhrase = \john -> 
-    {s = \\c => john.s ! toCase c ; n = Pl ; p = P3} ;
+    {s = \\c => john.s ! toCase c ; a = toAgr Pl P3 john.g} ;
 
 -- The following construction has to be refined for genitive forms:
 -- "we two", "us two" are OK, but "our two" is not.
@@ -56,10 +76,13 @@ oper
   Numeral : Type = {s : Case => Str} ;
 
   pronWithNum : Pronoun -> Numeral -> Pronoun = \we,two ->
-    {s = \\c => we.s ! c ++ two.s ! toCase c ; n = we.n ; p = we.p} ;
+    {s = \\c => we.s ! c ++ two.s ! toCase c ; n = we.n ; p = we.p ; g
+    = human} ;
 
   noNum : Numeral = {s = \\_ => []} ;
 
+  pronNounPhrase : Pronoun -> NounPhrase = \pro -> 
+    {s = pro.s ; a = toAgr pro.n pro.p pro.g} ;
 
 --2 Determiners
 --
@@ -70,8 +93,7 @@ oper
 
   detNounPhrase : Determiner -> CommNounPhrase -> NounPhrase = \every, man -> 
     {s = \\c => every.s ++ man.s ! every.n ! toCase c ; 
-     n = every.n ; 
-     p = P3
+     a = toAgr every.n P3 man.g 
     } ;
 
   mkDeterminer : Number -> Str -> Determiner = \n,the -> 
@@ -109,7 +131,7 @@ oper
                        Sg => artIndef ++ two.s ! Nom ++ man.s ! n ! toCase c ; 
                        Pl => two.s ! Nom ++ man.s ! n ! toCase c
                        } ;
-     n = n ; p = P3
+     a = toAgr n P3 man.g
     } ;
 
   defNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n ->
@@ -117,8 +139,7 @@ oper
   defNounPhraseNum : Number -> Numeral -> CommNounPhrase -> NounPhrase = 
     \n,two,car -> 
     {s = \\c => artDef ++ two.s ! Nom ++ car.s ! n ! toCase c ; 
-     n = n ; 
-     p = P3
+     a = toAgr n P3 car.g
     } ;
 
 -- Genitives of noun phrases can be used like determiners, to build noun phrases.
@@ -132,8 +153,7 @@ oper
              artDef ++ two.s ! Nom ++ car.s ! n ! Nom ++ "of" ++ john.s ! GenSP ; 
              john.s ! GenP ++ two.s ! Nom ++ car.s ! n ! toCase c
              } ;
-       n = n ; 
-       p = P3
+       a = toAgr n P3 car.g
       } ;
 
 -- *Bare plural noun phrases* like "men", "good cars", are built without a 
@@ -141,8 +161,7 @@ oper
 
   plurDet : CommNounPhrase -> NounPhrase = \cn -> 
     {s = \\c => cn.s ! plural ! toCase c ; 
-     p = P3 ; 
-     n = Pl
+     a = toAgr Pl P3 cn.g
     } ;
 
 -- Constructions like "the idea that two is even" are formed at the
@@ -189,8 +208,7 @@ oper
 
   superlNounPhrase : AdjDegr -> CommNoun -> NounPhrase = \big, house ->
     {s = \\c => "the" ++ big.s ! Sup ! AAdj ++ house.s ! Sg ! toCase c ; 
-     n = Sg ; 
-     p = P3
+     a = toAgr Sg P3 house.g
     } ;
 
 -- Moreover, superlatives can be used alone as adjectival phrases
@@ -268,7 +286,7 @@ oper
 -- resource grammar API any longer.
 
   appFun : Bool -> Function -> NounPhrase -> NounPhrase = \coll, mother,john -> 
-    let {n = john.n ; nf = if_then_else Number coll Sg n} in 
+    let {n = (fromAgr john.a).n ; nf = if_then_else Number coll Sg n} in 
     variants {
       defNounPhrase nf (appFunComm mother john) ;
       npGenDet nf noNum john mother
@@ -304,16 +322,13 @@ oper
 
   param
 
-  Tense = Present | Past ;
+  Tense = Present | Past | Future | Conditional ;
   Anteriority = Simul | Anter ;
-  Order = Direct | Indirect ;
+
   SForm = 
-     VIndic   Tense Anteriority Number Person
-   | VFut     Anteriority
-   | VCondit  Anteriority
-   | VQuest   Tense Number Person --- needed for "do" inversions
-   | VImperat
+     VFinite  Tense Anteriority
    | VInfinit Anteriority
+   | VPresPart
    ;
 
 -- This is how the syntactic verb phrase forms are realized as
@@ -321,103 +336,89 @@ oper
 
   oper
 
-  verbSForm : Verb -> SForm -> {fin,inf : Str} = \goes,sf -> 
-     let
-       tense : Tense -> Number -> Person -> VForm = \t,n,p -> case <t,n,p> of {
-         <Present,Sg,_> => Indic p ;
-         <Present,_,_>  => Indic P2 ;
-         <Past,Sg,P2>   => Pastt Pl ;
-         <Past,_,_>     => Pastt n
-         } ;
-       have : Tense -> Number -> Person -> Str = \t,n,p -> case <t,n,p> of {
-         <Present,Sg,P3> => "has" ;
-         <Present,_,_>   => "have" ;
-         <Past,_,_>      => "had"
-         } ;
-       do : Tense -> Number -> Person -> Str = \t,n,p -> case <t,n,p> of {
-         <Present,Sg,P3> => "does" ;
-         <Present,_,_>   => "do" ;
-         <Past,_,_>      => "did"
-         } ;
-       simple : VForm -> {fin,inf : Str} = \v -> {
-         fin = goes.s ! v ; 
-         inf = []
-         } ;
-       compound : Str -> Str -> {fin,inf : Str} = \x,y -> {
-         fin = x ; 
-         inf = y
-         } ;
-       go   : Str = goes.s ! InfImp ;
-       gone : Str = goes.s ! PPart
-     in case sf of {
-       VIndic t Simul n p   => simple   (tense t n p) ; 
-       VIndic t Anter n p   => compound (have t n p)  gone ;
-       VQuest t       n p   => compound (do Present n p)    go ;
-       VFut     Simul       => compound "will"        go ; 
-       VFut     Anter       => compound "will"        ("have" ++ gone) ; 
-       VCondit  Simul       => compound "would"       go ;
-       VCondit  Anter       => compound "would"       ("have" ++ gone) ; 
-       VImperat             => simple   InfImp ;
-       VInfinit Simul       => simple   InfImp ;
-       VInfinit Anter       => compound "have"        gone
-     } ;
-
-  useVerb : Verb -> (Number => Str) -> VerbGroup = \verb,arg -> 
+  verbSForm : Bool -> Verb -> Bool -> SForm -> Agr -> {fin,inf : Str} = 
+    \isAux,verb,b,sf,agr ->
     let 
-      go = verbSForm verb ;
-      off = verb.s1 ;
-      has  : SForm => Str = \\f => (go f).fin ; 
-      gone : SForm => Str = \\f => (go f).inf ++ off 
-    in {
-      s  = table {
-             True => has ;
-             False => table {
-               VIndic t Simul n p => auxDo t n p ;
-               VImperat           => auxDo Present Sg P2 ;
-               VInfinit a         => "not" ++ has ! VInfinit a ;
-               vf                 => has ! vf
-               }
-             } ;
-      s2 = table {
-             True => gone ;
-             False => table {
-               VIndic t Simul n p => "not" ++ has ! VInfinit Simul ++ off ;
-               VImperat           => "not" ++ has ! VInfinit Simul ++ off ;
-               VInfinit a         => gone ! VInfinit a ;
-               vf                 => "not" ++ gone ! vf
-               }
-             } ;
-      s3 = arg ;
-      isAux = False
+      parts : Str -> Str -> {fin,inf : Str} = \x,y -> 
+        {fin = x ; inf = y} ;
+      likes : Tense -> Str = \t -> verb.s ! case <t,agr> of {
+         <Present,ASgP1>   => Indic P1 ;
+         <Present,ASgP3 _> => Indic P3 ;
+         <Present,_>       => Indic P2 ;
+         <Past,ASgP1>   => Pastt Pl ;
+         <Past,ASgP3 _> => Pastt Sg ;
+         _       => Pastt Pl --- Future doesn't matter
+         } ;
+      like   = verb.s ! InfImp ;
+      liked  = verb.s ! PPart ;
+      liking = verb.s ! PresPart ;
+      has  : Tense -> Str = \t -> auxHave b t agr ;
+      have = "have" ;
+      neg  = if_then_Str b [] "not" ;
+      does : Tense -> Str = \t -> auxTense b t agr
+    in
+    case sf of {
+      VFinite Present Simul => case b of {
+        True  => parts (likes Present) [] ;
+        False => case isAux of {
+          True => parts (likes Present ++ "not") [] ;
+          _ => parts (does  Present) like
+          } 
+        } ;
+      VFinite Past Simul => case b of {
+        True  => parts (likes Past) [] ;
+        False => case isAux of {
+          True => parts (likes Past ++ "not") [] ;
+          _ => parts (does  Past) like
+          }
+        } ;
+      VFinite t       Simul => parts (does t)      like ;
+      VFinite Present Anter => parts (has Present) liked ;
+      VFinite Past    Anter => parts (has Past)    liked ;
+      VFinite t Anter       => parts (does t)      (have ++ liked) ;
+      VInfinit  Simul => parts neg like ;
+      VInfinit  Anter => parts neg (have ++ liked) ;
+      VPresPart  => parts neg liking
       } ;
+ 
+  auxHave : Bool -> Tense -> Agr -> Str = \b,t,a -> 
+    let has = 
+      case t of {
+        Present => case a of {
+          ASgP3 _ => "has" ; 
+          _       => "have" 
+          } ;
+        Past      => "had" ;
+        _         => "have" --- never used
+        } 
+    in negAux b has ;
 
-  useVerbAux : Verb -> (Number => Str) -> VerbGroup = \verb,arg -> 
+  auxTense : Bool -> Tense -> Agr -> Str = \b,t,a -> 
+      case t of {
+         Present => negAux b (case a of {
+           ASgP3 _  => "does" ;
+           _   => "do" 
+           }) ;
+         Past      => negAux b "did" ;
+         Future    => if_then_Str b "will" "won't" ;
+         Conditional => negAux b "would"
+         } ; 
+
+  negAux : Bool -> Str -> Str = \b,is -> if_then_Str b is (is + "n't") ;
+
+  useVerbGen : Bool -> Verb -> (Agr => Str) -> VerbGroup = \isAux,verb,arg -> 
     let 
-      go = verbSForm verb ;
-      has  : SForm => Str = \\f => (go f).fin ; 
-      gone : SForm => Str = \\f => (go f).inf 
-    in {
-      s  = \\b => 
-           table {
-             VQuest t n p => has ! VIndic t Simul n p ; --- undo "do" inversion
-             vf => has ! vf
-             } ;
-      s2 = \\b => let not = if_then_Str b [] "not" in 
-           table {
-              VQuest t n p => not ++ gone ! VIndic t Simul n p ;
-              vf => not ++ gone ! vf
-              } ;
-      s3 = arg ;
-      isAux = True
-      } ;
-
-  auxDo : Tense -> Number -> Person -> Str = \t,n,p -> case <t,n,p> of {
-    <Present,Sg,P3> => "does" ;
-    <Present,_,_>   => "do" ;
-    <Past,_,_>      => "did"
+      go = verbSForm isAux verb 
+    in
+    {s  = \\b,sf,ag => (go b sf ag).fin ;
+     s2 = \\b,sf,ag => (go b sf ag).inf ++ arg ! ag ;
+     isAux = isAux
     } ;
 
-  beGroup : (Number => Str) -> VerbGroup = 
+  useVerb    : Verb -> (Agr => Str) -> VerbGroup = useVerbGen False ;
+  useVerbAux : Verb -> (Agr => Str) -> VerbGroup = useVerbGen True ;
+
+  beGroup : (Agr => Str) -> VerbGroup = 
     useVerbAux (verbBe ** {s1 = []}) ; 
 
 ---- TODO: the contracted forms.
@@ -429,26 +430,25 @@ oper
 -- this is needed in question.
 
   VerbGroup = {
-    s  : Bool => SForm => Str ;
-    s2 : Bool => SForm => Str ; 
-    s3 : Number => Str ;
+    s  : Bool => SForm => Agr => Str ;
+    s2 : Bool => SForm => Agr => Str ;
     isAux : Bool
     } ;
 
+-- This is just an infinitival (or present participle) phrase
+
+oper
   VerbPhrase = {
-    s  : Str ;
-    s2 : Str ; 
-    s3 : Number => Str ;
-    isAux : Bool ;
+    s  : Agr => Str ;
+    s1 : Str -- "not" or []
     } ;
+
 
 -- All negative verb phrase behave as auxiliary ones in questions.
 
-  predVerbGroup : Bool -> Anteriority -> VerbGroup -> VerbPhrase = \b,a,vg -> {
-    s  = vg.s ! b ! VInfinit a ;
-    s2 = vg.s2 ! b ! VInfinit a ;
-    s3 = vg.s3 ;
-    isAux = orB (notB b) vg.isAux
+  predVerbGroup : Bool -> Anteriority -> VerbGroup -> VerbPhrase = \b,ant,vg -> {
+    s  = \\a => vg.s2 ! b ! VInfinit ant ! a ; -- s1 is just neg for inf
+    s1 = if_then_Str b [] "not"
     } ;
 
 -- A simple verb can be made into a verb phrase with an empty complement.
@@ -468,7 +468,7 @@ oper
     beGroup (\\_ => old.s ! AAdj) ;
 
   predCommNoun : CommNoun -> VerbGroup = \man ->
-    beGroup (\\n => indefNoun n man) ;
+    beGroup (\\a => indefNoun (fromAgr a).n man) ;
 
   predNounPhrase : NounPhrase -> VerbGroup = \john ->
     beGroup (\\_ => john.s ! NomP) ;
@@ -478,7 +478,7 @@ oper
 
   predAdjSent : Adjective -> Sentence -> Clause = \bra,hansover ->
     predVerbGroupClause
-      pronIt
+      (pronNounPhrase pronIt)
       (beGroup (
         \\n => bra.s ! AAdj ++ "that" ++ hansover.s)) ;
 
@@ -531,7 +531,7 @@ oper
 -- But to formalize this we must make verb phrases depend on a person parameter.
 
   reflTransVerb : TransVerb -> VerbGroup = \love -> 
-    useVerb love (\\v => love.s1 ++ love.s3 ++ reflPron Sg P3) ; ----
+    useVerb love (\\a => love.s1 ++ love.s3 ++ reflPron a) ; ----
 
 -- Transitive verbs can be used elliptically as verbs. The semantics
 -- is left to applications. The definition is trivial, due to record
@@ -555,17 +555,12 @@ oper
        s1 = ge.s1 ++ ge.s3 ++ dig.s ! AccP ;
        s3 = ge.s4
       } ;
---  complDitransVerb : DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = 
---    \give,you,beer ->
---      useVerb give 
---        (\\_ => give.s1 ++ give.s3 ++ you.s ! AccP ++ give.s4 ++ beer.s ! AccP) ;
 
   complDitransAdjVerb : 
     TransVerb -> NounPhrase -> AdjPhrase -> VerbGroup = \gor,dig,sur ->
       useVerb 
         gor 
-        (\\_ => gor.s1 ++ gor.s3 ++ dig.s ! AccP ++ 
-                    sur.s ! AAdj) ;
+        (\\_ => gor.s1 ++ gor.s3 ++ dig.s ! AccP ++ sur.s ! AAdj) ;
 
   complAdjVerb : 
     Verb -> AdjPhrase -> VerbGroup = \seut,sur ->
@@ -591,9 +586,8 @@ oper
   adVerbPhrase : VerbGroup -> Adverb -> VerbGroup = \sings, well ->
     let {postp = orB well.p sings.isAux} in
     {
-     s  = \\b,sf => (if_then_else Str postp [] well.s) ++ sings.s ! b ! sf ;
-     s2 = \\b,sf => sings.s2 ! b ! sf ++ (if_then_else Str postp well.s []) ;
-     s3 = sings.s3 ;
+     s  = \\b,sf,a => (if_then_else Str postp [] well.s) ++ sings.s ! b ! sf ! a ;
+     s2 = \\b,sf,a => sings.s2 ! b ! sf ! a ++ (if_then_else Str postp well.s []) ;
      isAux = sings.isAux
     } ;
 
@@ -634,96 +628,40 @@ oper
 
   Sentence : Type = SS ;
 
-{- --- obsolete
--- This is the traditional $S -> NP VP$ rule. It takes care of
--- agreement between subject and verb. Recall that the VP may already
--- contain negation. 
-
-  predVerbPhrase : NounPhrase -> VerbPhrase -> Sentence = \john,walks ->
-    ss (
-      john.s ! NomP ++ 
-      presentIndicative walks john.n john.p 
-      ) ;
-
-  presentIndicative : VerbPhrase -> Number -> Person -> Str = \sleep,n,p -> 
-    let 
-      cf = VIndic Present Simul n p
-    in 
-      sleep.s ! cf ++ sleep.s2 ! cf ++ sleep.s3 ! n ;
--}
-
   adjPastPart : Verb -> Adjective = \verb -> {
     s = \\_ => verb.s ! PPart ++ verb.s1 ---- same Adv form
     } ;
 
-  reflPron : Number -> Person -> Str = \n,p -> case <n,p> of {
-    <Sg,P1> => "myself" ;
-    <Sg,P2> => "yourself" ;
-    <Sg,P3> => "herself" ; ---- himself
-    <Pl,P1> => "ourselves" ;
-    <Pl,P2> => "yourselves" ;
-    <Pl,P3> => "themselves"
+  reflPron : Agr -> Str = \a -> case a of {
+    ASgP1 => "myself" ;
+    ASgP2 => "yourself" ;
+    ASgP3 Masc  => "himself" ;
+    ASgP3 Fem   => "herself" ;
+    ASgP3 Neutr => "itself" ;
+    APl P1 => "ourselves" ;
+    APl P2 => "yourselves" ;
+    APl P3 => "themselves"
     } ;
 
----- revise; first include pres part in VerbGroup
-  progressiveVerbPhrase : VerbPhrase -> VerbGroup = \vp ->
-    predAdjective {s = \\_ => vp.s ++ vp.s2 ++ vp.s3 ! Sg ; p = False} ;
+  progressiveVerbPhrase : VerbGroup -> VerbGroup = \vp ->
+    beGroup (vp.s2 ! True ! VPresPart) ; 
+
+--- negation of prp ignored: "not" only for "be"
 
 --3 Tensed clauses
 
-  param
+  Clause = {s : Bool => SForm => Str} ;
 
---- would need cleaning up so we wouldn't need this type
-
-  ClTense = ClPresent | ClPast | ClFuture | ClConditional ;
-
-  ClForm = 
-     ClIndic   Order Tense Anteriority
-   | ClFut     Order Anteriority
-   | ClCondit  Order Anteriority
-   | ClInfinit Anteriority      -- "naked infinitive" clauses
-    ;
-
-  oper 
-  cl2s : ClForm -> Number -> Person -> {form : SForm ; order : Order} =
-  \c,n,p -> case c of {
-    ClIndic Indirect t Simul => {form = VQuest t n p ; order = Indirect} ;
-    ClIndic o t a => {form = VIndic t a n p ; order = o} ;
-    ClFut o a     => {form = VFut a ; order = o} ;
-    ClCondit o a  => {form = VCondit a ; order = o} ; 
-    ClInfinit a   => {form = VInfinit a ; order = Direct} --- order doesn't matter
-    } ;
-  s2cl : SForm -> Order -> ClForm = \s,o -> case s of {
-    VIndic t a _ _  => ClIndic o t a ;
-    VInfinit a   => ClInfinit a ;
-    _ => ClInfinit Simul ---- ??
-    } ;
-  t2cl : ClTense -> Anteriority -> ClForm = \t,a -> case t of {
-    ClPresent => ClIndic Direct Present a ;
-    ClPast    => ClIndic Direct Past a ;
-    ClFuture  => ClFut   Direct a ;
-    ClConditional => ClCondit Direct a
-    } ;
-
-
-  Clause = {s : Bool => ClForm => Str} ;
+  ClForm = SForm ; ---- to be removed
 
   predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = 
     \yo,sleep -> {
       s = \\b,c => 
         let
-          n   = yo.n ; 
-          cfo = cl2s c n yo.p ;
-          cf  = cfo.form ;
-          o   = cfo.order ;
-          you = yo.s ! NomP ;
-          do  = sleep.s ! b ! cf ;
-          sleeps = sleep.s2 ! b ! cf ++ sleep.s3 ! n
-        in 
-          case o of {
-            Direct   => you ++ do ++ sleeps ;
-            Indirect => do ++ you ++ sleeps
-            }
+          a   = yo.a ; 
+          you = yo.s ! NomP
+        in  
+          you ++ sleep.s ! b ! c ! a  ++  sleep.s2 ! b ! c ! a 
       } ;
 
 --3 Sentence-complement verbs
@@ -772,8 +710,8 @@ oper
     let
        taux  = try.isAux ;
        to    = if_then_Str taux [] "to" ;
-       torun : Number => Str = 
-         \\n => to ++ run.s ++  run.s2 ++ run.s3 ! n  
+       torun : Agr => Str = 
+         \\a => run.s1 ++ to ++ run.s ! a  
     in
       if_then_else VerbGroup taux 
         (useVerb    try torun)
@@ -793,22 +731,24 @@ oper
      isAux = True
     } ;
 
+---- Problem: "to" in non-present tenses comes to wrong place.
+
   vvCan  : VerbVerb = mkVerbAux ["be able to"] "can" "could" ["been able to"] ;
   vvMust : VerbVerb = mkVerbAux ["have to"] "must" ["had to"] ["had to"] ;
 
 -- Notice agreement to object vs. subject:
 
-  DitransVerbVerb = TransVerb ** {s3 : Str} ;
+  DitransVerbVerb = TransVerb ** {s4 : Str} ;
 
   complDitransVerbVerb : 
     Bool -> DitransVerbVerb -> NounPhrase -> VerbPhrase -> VerbGroup = 
      \obj,be,dig,simma ->
       useVerb be 
-        (\\n => be.s1 ++ be.s3 ++ dig.s ! AccP ++ be.s3 ++ 
-              simma.s ++ simma.s2 ++
+        (\\a => be.s1 ++ be.s3 ++ dig.s ! AccP ++ be.s3 ++ be.s4 ++
+                simma.s1 ++ -- negation
               if_then_Str obj 
-                 (simma.s3 ! dig.n) ---- dig.g ! dig.n ! dig.p)
-                 (simma.s3 ! n)     ---- g     ! n     ! p)
+                 (simma.s ! dig.a)
+                 (simma.s ! a)
         ) ;
 
   transVerbVerb : VerbVerb -> TransVerb -> TransVerb = \vilja,hitta ->
@@ -820,24 +760,22 @@ oper
 
   complVerbAdj : Adjective -> VerbPhrase -> VerbGroup = \grei, simma ->
     beGroup
-      (\\n => 
-              grei.s ! AAdj ++ 
+      (\\a => 
+              grei.s ! AAdj ++ simma.s1 ++
               "to" ++
-              simma.s ++ simma.s2 ++
-              simma.s3 ! n) ;
+              simma.s ! a) ;
 
   complVerbAdj2 : 
     Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> VerbGroup = 
       \obj,grei,dig,simma ->
         beGroup
-          (\\n =>
+          (\\a =>
               grei.s ! AAdj ++ 
               grei.s2 ++ dig.s ! AccP ++
-              "to" ++
-              simma.s ++ simma.s2 ++
+              simma.s1 ++ "to" ++
               if_then_Str obj 
-                 (simma.s3 ! dig.n) ---- dig.g ! dig.n ! dig.p)
-                 (simma.s3 ! n)     ---- g ! n ! p)
+                 (simma.s ! dig.a)
+                 (simma.s ! a)
           ) ;
 
 
@@ -856,23 +794,18 @@ oper
 -- The particle always follows the verb, but the preposition can fly:
 -- "whom you make it up with" / "with whom you make it up".
 --- We reduce the current case to a more general one that has tense variation.
---- TODO: full tense variation on top level.
 
-  SentenceSlashNounPhrase = {s : Order =>          Str ; s2 : Preposition} ;
-  ClauseSlashNounPhrase   = Clause ** {s2 : Preposition} ;
-
-  slashTransVerb : Bool -> NounPhrase -> TransVerb -> SentenceSlashNounPhrase = 
-   \pol,You,lookat -> 
-      let 
-        youlookat = slashTransVerbCl You lookat 
-      in {
-        s = \\o => youlookat.s ! pol ! ClIndic o Present Simul ;
-        s2 = youlookat.s2
-        } ;
+  ClauseSlashNounPhrase = {s : QuestForm => Bool => SForm => Str ; s2 : Preposition} ;
 
   slashTransVerbCl : NounPhrase -> TransVerb -> ClauseSlashNounPhrase = 
     \you,lookat ->
-    predVerbGroupClause you (predVerb lookat) ** {s2 = lookat.s3} ;
+    {s = table {
+       DirQ   => \\b,f => (questVerbPhrase     you (predVerb
+    lookat)).s ! b ! f ! DirQ ;
+       IndirQ => (predVerbGroupClause you (predVerb lookat)).s
+       } ;
+     s2 = lookat.s3
+    } ;
 
 
 --2 Relative pronouns and relative clauses
@@ -893,26 +826,31 @@ oper
 -- An auxiliary that allows the use of predication with relative pronouns.
 
   relNounPhrase : RelPron -> Gender -> Number -> NounPhrase = \who,g,n ->
-    {s = who.s ! g ! n ; n = n ; p = P3} ;
+    {s = who.s ! g ! n ; a = toAgr n P3 g} ;
 
 -- Relative clauses can be formed from both verb phrases ("who walks") and
 -- slash expressions ("whom you see", "on which you sit" / "that you sit on"). 
 
-  RelClause   : Type = {s : Bool => SForm => Gender => Number => Str} ;
-  RelSentence : Type = {s :                  Gender => Number => Str} ;
+  RelClause   : Type = {s : Bool => SForm => Agr => Str} ;
+  RelSentence : Type = {s :                  Agr => Str} ;
 
   relVerbPhrase : RelPron -> VerbGroup -> RelClause = \who,walks ->
-    {s = \\b,sf,g,n => 
-       (predVerbGroupClause (relNounPhrase who g n) walks).s ! b ! s2cl sf Direct} ;
+    {s = \\b,sf,a => 
+      let wa = fromAgr a in
+      (predVerbGroupClause (relNounPhrase who wa.g wa.n) walks).s ! b ! sf
+    } ;
 
 --- TODO: full tense variation in relative clauses.
 
   relSlash : RelPron -> ClauseSlashNounPhrase -> RelClause = \who,yousee ->
-    {s = \\b,sf,g,n => 
-           let {youSee = yousee.s ! b ! s2cl sf Direct} in
+    {s = \\b,sf,a => 
+           let
+             whom = who.s ! (fromAgr a).g ! (fromAgr a).n ; 
+             youSee = yousee.s ! IndirQ ! b ! sf
+           in
            variants {
-             who.s ! g ! n ! AccP ++ youSee ++ yousee.s2 ;
-             yousee.s2 ++ who.s ! g ! n ! GenSP ++ youSee
+             whom ! AccP ++ youSee ++ yousee.s2 ;
+             yousee.s2 ++ whom ! GenSP ++ youSee
              }
     } ;
 
@@ -920,14 +858,14 @@ oper
 -- "number x such that x is even".
 
   relSuch : Clause -> RelClause = \A ->
-    {s = \\b,sf,_,_ => "such" ++ "that" ++ A.s ! b ! s2cl sf Direct} ;
+    {s = \\b,sf,_ => "such" ++ "that" ++ A.s ! b ! sf} ;
 
 -- The main use of relative clauses is to modify common nouns.
 -- The result is a common noun, out of which noun phrases can be formed
 -- by determiners. No comma is used before these relative clause.
 
   modRelClause : CommNounPhrase -> RelSentence -> CommNounPhrase = \man,whoruns ->
-    {s = \\n,c => man.s ! n ! c ++ whoruns.s ! man.g ! n ;
+    {s = \\n,c => man.s ! n ! c ++ whoruns.s ! toAgr n P3 man.g ;
      g = man.g
     } ;
 
@@ -936,14 +874,15 @@ oper
 -- If relative pronouns are adjective-like, interrogative pronouns are
 -- noun-phrase-like. 
 
-  IntPron : Type = {s : NPForm => Str ; n : Number} ; 
+  IntPron : Type = {s : NPForm => Str ; n : Number ; g : Gender} ; 
 
 -- In analogy with relative pronouns, we have a rule for applying a function
 -- to a relative pronoun to create a new one. 
 
   funIntPron : Function -> IntPron -> IntPron = \mother,which -> 
     {s = \\c => "the" ++ mother.s ! which.n ! Nom ++ mother.s2 ++ which.s ! GenSP ;
-     n = which.n
+     n = which.n ;
+     g = mother.g
     } ;
 
 -- There is a variety of simple interrogative pronouns:
@@ -951,7 +890,8 @@ oper
 
   nounIntPron : Number -> CommNounPhrase -> IntPron = \n, car ->
     {s = \\c => "which" ++ car.s ! n ! toCase c ; 
-     n = n
+     n = n ;
+     g = car.g
     } ; 
 
   intPronWho : Number -> IntPron = \num -> {
@@ -961,7 +901,7 @@ oper
       GenP  => "whose" ;
       GenSP => "whom"
       } ;
-    n = num
+    n = num ; g = human
   } ;
 
   intPronWhat : Number -> IntPron = \num -> {
@@ -969,7 +909,7 @@ oper
       GenP  => "what's" ;
       _ => "what"
       } ;
-    n = num
+    n = num ; g = Neutr
   } ;
 
 
@@ -1000,8 +940,8 @@ param
   QuestForm = DirQ | IndirQ ;
 
 oper
-  Question     = {s : Bool => ClForm => QuestForm => Str} ;
-  QuestionSent = {s :                   QuestForm => Str} ;
+  Question     = {s : Bool => SForm => QuestForm => Str} ;
+  QuestionSent = {s :                  QuestForm => Str} ;
 
 --- TODO: questions in all tenses.
 
@@ -1022,13 +962,19 @@ oper
   questVerbPhrase' : Bool -> NounPhrase -> VerbGroup -> Question = 
     \adv,John,walk ->
     let 
-      john = John.s ! NomP
+      john = John.s ! NomP ;
+      does : Bool -> Tense -> Str = \b,t -> auxTense b t John.a
     in
     {s = \\b,cl => table {
-      DirQ   => walk.s  ! b ! VQuest Present John.n John.p ++
-                john ++
-                walk.s2 ! b ! VQuest Present John.n John.p ++
-                walk.s3 ! John.n ;
+      DirQ  => case walk.isAux of {
+        False => case cl of {
+          VFinite t Simul => 
+            does b t ++ john ++ walk.s2 ! False ! cl ! John.a ;
+          _ => 
+            walk.s  ! b ! cl ! John.a ++ john ++ walk.s2 ! b ! cl ! John.a
+          } ;
+        _ => walk.s  ! b ! cl ! John.a ++ john ++ walk.s2 ! b ! cl ! John.a
+        } ;
       IndirQ => if_then_else Str adv [] (variants {"if" ; "whether"}) ++ 
                 (predVerbGroupClause John walk).s ! b ! cl
       }
@@ -1041,7 +987,7 @@ oper
 
   intVerbPhrase : IntPron -> VerbGroup -> Question = \who,walk ->
     let 
-      who : NounPhrase = who ** {p = P3} ;
+      who : NounPhrase = {s = who.s ; a = toAgr who.n P3 who.g} ;
       whowalks : Clause = predVerbGroupClause who walk
     in
     {s = \\b,sf,_ => whowalks.s ! b ! sf} ;
@@ -1049,10 +995,7 @@ oper
   intSlash : IntPron -> ClauseSlashNounPhrase -> Question = \who,yousee ->
     {s = \\b,cl,q =>
            let 
-             youSee = case q of {
-               DirQ   => yousee.s ! b ! cl ; 
-               IndirQ => yousee.s ! b ! cl   ---- the difference??
-               }
+             youSee = yousee.s ! q ! b ! cl 
            in
            variants {
              who.s ! AccP ++ youSee ++ yousee.s2 ;
@@ -1088,7 +1031,10 @@ oper
   Imperative = SS1 Number ;
 
   imperVerbPhrase : Bool -> VerbGroup -> Imperative = \b,walk -> 
-    {s = \\n => walk.s ! b ! VImperat ++ walk.s2 ! b ! VImperat ++ walk.s3 ! n} ;
+    {s = \\n => 
+       let a = toAgr n P2 human in
+       walk.s ! b ! VInfinit Simul ! a ++ walk.s2 ! b ! VInfinit Simul ! a
+    } ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
     ss (I.s ! n ++ "!") ;
@@ -1177,21 +1123,26 @@ oper
 -- The structure is the same as for sentences. The result is either always plural
 -- or plural if any of the components is, depending on the conjunction.
 
-  ListNounPhrase : Type = {s1,s2 : NPForm => Str ; n : Number ; p : Person} ;
+  ListNounPhrase : Type = {s1,s2 : NPForm => Str ; a : Agr} ;
 
   twoNounPhrase : (_,_ : NounPhrase) -> ListNounPhrase = \x,y ->
-    CO.twoTable NPForm x y ** {n = conjNumber x.n y.n ; p = conjPerson x.p y.p} ;
+    CO.twoTable NPForm x y ** {a = conjAgr x.a y.a} ;
 
   consNounPhrase : ListNounPhrase -> NounPhrase -> ListNounPhrase =  \xs,x ->
-    CO.consTable NPForm CO.comma xs x ** 
-       {n = conjNumber xs.n x.n ; p = conjPerson xs.p x.p} ;
+    CO.consTable NPForm CO.comma xs x ** {a = conjAgr xs.a x.a} ;
 
   conjunctNounPhrase : Conjunction -> ListNounPhrase -> NounPhrase = \c,xs ->
-    CO.conjunctTable NPForm c xs ** {n = conjNumber c.n xs.n ; p = xs.p} ;
+    let xa = fromAgr xs.a
+    in
+    CO.conjunctTable NPForm c xs ** 
+      {a = toAgr (conjNumber c.n xa.n) xa.p xa.g} ;
 
   conjunctDistrNounPhrase : ConjunctionDistr -> ListNounPhrase -> NounPhrase = 
     \c,xs ->
-    CO.conjunctDistrTable NPForm c xs ** {n = conjNumber c.n xs.n ; p = xs.p} ;
+    let xa = fromAgr xs.a
+    in
+    CO.conjunctDistrTable NPForm c xs ** 
+      {a = toAgr (conjNumber c.n xa.n) xa.p xa.g} ;
 
 -- We have to define a calculus of numbers of persons. For numbers,
 -- it is like the conjunction with $Pl$ corresponding to $False$.
@@ -1207,7 +1158,22 @@ oper
   conjPerson : Person -> Person -> Person = \_,p -> 
     p ;
 
+-- For gender, human (Masc) if any component is human.
 
+  conjGender : Gender -> Gender -> Gender = \m,n -> case <m,n> of {
+    <Neutr,Neutr> => Neutr ;
+    _ => human
+    } ;
+
+-- Thus
+
+  conjAgr : Agr -> Agr -> Agr = \x,y -> 
+    let
+      xa = fromAgr x ;
+      ya = fromAgr y
+    in
+      toAgr (conjNumber xa.n ya.n) (conjPerson xa.p ya.p) (conjGender xa.g ya.g) ;
+   
 
 --2 Subjunction
 --
@@ -1254,9 +1220,6 @@ oper
 
   useCommonNounPhrase : Number -> CommNounPhrase -> Utterance = \n,car -> 
     useNounPhrase (indefNounPhrase n car) ;
-
-  useRegularName : SS -> NounPhrase = \john -> 
-    nameNounPhrase (nameReg john.s) ;
 
 -- Here are some default forms.
 

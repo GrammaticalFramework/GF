@@ -60,39 +60,42 @@ oper
 --
 -- Regular proper names are inflected with "'s" in the genitive.
 
-  nameReg : Str -> ProperName = \john -> 
-    {s = table {Nom => john ; Gen => john + "'s"}} ;
+  nameReg : Str -> Gender -> ProperName = \john,g -> 
+    {s = table {Nom => john ; Gen => john + "'s"} ; g = g} ;
 
 
 --2 Pronouns
 --
 -- Here we define personal and relative pronouns.
 
-  mkPronoun : (_,_,_,_ : Str) -> Number -> Person -> Pronoun = \I,me,my,mine,n,p -> 
+  mkPronoun : (_,_,_,_ : Str) -> Number -> Person -> Gender -> Pronoun = 
+   \I,me,my,mine,n,p,g -> 
     {s = table {NomP => I ; AccP => me ; GenP => my ; GenSP => mine} ; 
-     n = n ; p = p} ;
+     n = n ; p = p ; g = g} ;
 
-  pronI = mkPronoun "I" "me" "my" "mine" Sg P1 ;
-  pronYouSg = mkPronoun "you" "you" "your" "yours" Sg P2 ; -- verb form still OK
-  pronHe = mkPronoun "he" "him" "his" "his" Sg P3 ;
-  pronShe = mkPronoun "she" "her" "her" "hers" Sg P3 ;
-  pronIt = mkPronoun "it" "it" "its" "it" Sg P3 ;
+  human : Gender = Masc ; --- doesn't matter
 
-  pronWe = mkPronoun "we" "us" "our" "ours" Pl P1 ;
-  pronYouPl = mkPronoun "you" "you" "your" "yours" Pl P2 ;
-  pronThey = mkPronoun "they" "them" "their" "theirs" Pl P3 ;
+  pronI = mkPronoun "I" "me" "my" "mine" Sg P1 human ;
+  pronYouSg = mkPronoun "you" "you" "your" "yours" Sg P2 human ; -- verb form still OK
+  pronHe = mkPronoun "he" "him" "his" "his" Sg P3 Masc ;
+  pronShe = mkPronoun "she" "her" "her" "hers" Sg P3 Fem ;
+  pronIt = mkPronoun "it" "it" "its" "it" Sg P3 Neutr ;
+
+  pronWe = mkPronoun "we" "us" "our" "ours" Pl P1 human ;
+  pronYouPl = mkPronoun "you" "you" "your" "yours" Pl P2 human ;
+  pronThey = mkPronoun "they" "them" "their" "theirs" Pl P3 human ; ---
 
 -- Relative pronouns in the accusative have the 'no pronoun' variant.
 -- The simple pronouns do not really depend on number.
 
   relPron : RelPron = {s = table {
-    NoHum => \\_ => table {
+    Neutr => \\_ => table {
       NomP => variants {"that" ; "which"} ;
       AccP => variants {"that" ; "which" ; []} ;
       GenP => variants {"whose"} ;
       GenSP => variants {"which"}
       } ;
-    Hum => \\_ => table {
+    _ => \\_ => table {
       NomP => variants {"that" ; "who"} ;
       AccP => variants {"that" ; "who" ; "whom" ; []} ;
       GenP => variants {"whose"} ;

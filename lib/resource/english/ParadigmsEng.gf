@@ -188,8 +188,8 @@ oper
   Gender = SyntaxEng.Gender ; 
   Number = SyntaxEng.Number ;
   Case = SyntaxEng.Case ;
-  human = Hum ; 
-  nonhuman = NoHum ;
+  human = Masc ; 
+  nonhuman = Neutr ;
   singular = Sg ;
   plural = Pl ;
 
@@ -205,8 +205,8 @@ oper
   nHero = nKiss ;
   nSheep = \sheep -> nMan sheep sheep ;
 
-  nHuman = \s -> nGen s Hum ;
-  nNonhuman = \s -> nGen s NoHum ;
+  nHuman = \s -> nGen s human ;
+  nNonhuman = \s -> nGen s nonhuman ;
 
   nGen : Str -> Gender -> N = \fly,g -> let {
       fl  = Predef.tk 1 fly ; 
@@ -222,7 +222,7 @@ oper
   funNonhuman = \s -> mkN2 (nNonhuman s) "of" ;
   funHuman = \s -> mkN2 (nHuman s) "of" ;
 
-  pnReg n = nameReg n ** {lock_PN = <>} ;
+  pnReg n = nameReg n human ** {lock_PN = <>} ;
 
   cnNonhuman = \s -> UseN (nGen s nonhuman) ;
   cnHuman = \s -> UseN (nGen s human) ;

@@ -130,9 +130,9 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
     _ => "sig"
     } ;
 
-  progressiveVerbPhrase : VerbPhrase -> VerbGroup = 
+  progressiveVerbPhrase : VerbGroup -> VerbGroup = \verb ->
     complVerbVerb 
       (mkVerb "hålla" "håller" "håll"  "höll" "hållit" "hållen" ** 
-       {s3 = ["på att"]}
-      ) ;  
+       {s3 = ["på att"]})
+      (predVerbGroup True Simul verb) ;  
 }
