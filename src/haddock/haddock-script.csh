@@ -2,42 +2,42 @@
 
 ######################################################################
 # Author: Peter Ljunglöf
-# Time-stamp: "2005-03-22, 06:24"
-# CVS $Date: 2005/03/29 11:17:54 $
+# Time-stamp: "2005-03-29, 13:55"
+# CVS $Date: 2005/03/29 11:58:45 $
 # CVS $Author: peb $
 #
 # a script for producing documentation through Haddock
 ######################################################################
 
-set base = `pwd`
-set docdir = $base/haddock
-set resourcedir = $base/haddock-resources
+# set base = `pwd`
+set docdir = haddock
+set tempdir = .haddock-temp-files
+set resourcedir = haddock-resources
 
 #set dirs = (. api compile grammar infra shell source canonical useGrammar cf newparsing parsers notrace cfgm speech visualization for-hugs for-ghc)
 
-set files = (`find $base -name '*.hs' -not -path '*/old-stuff/*' -not -path '*/for-*' -not -path '*/haddock*' -not -name 'Lex[GC]*' -not -name 'Par[GC]*'` $base/for-ghc-nofud/*.hs)
+set files = (`find * -name '*.hs' -not -path 'old-stuff/*' -not -path 'for-*' -not -path 'haddock*' -not -name 'Lex[GC]*' -not -name 'Par[GC]*'` $base/for-ghc-nofud/*.hs)
 
 ######################################################################
 
 echo 1. Creating and cleaning Haddock directory
-echo -- $docdir
+echo -- $docdir 
 
 mkdir -p $docdir
 rm -r $docdir/*
 
 ######################################################################
 
-# echo
-# echo 2. Selecting and soft linking Haskell files 
+echo
+echo 2. Copying Haskell files to temporary directory ($tempdir)
 
-# foreach d ($dirs) 
-#     echo -- Directory: $d
-#     cd $base/$d
-#     foreach f (*.hs) 
-#         ln -fs $base/$d/$f $docdir/$f
-# 	# tr "\240" " " < $f > $docdir/$f
-#     end
-# end
+rm -r $tempdir
+
+foreach f ($files) 
+    echo -- $f
+    mkdir -p `dirname $tempdir/$f`
+    perl -e 's/^#/-- CPP #/' $f > $tempdir/$f
+end
 
 ######################################################################
 
@@ -53,36 +53,33 @@ rm -r $docdir/*
 ######################################################################
 
 echo
-echo 2. Invoking Haddock
+echo 3. Invoking Haddock
 
-# cd $docdir
-haddock -o $docdir -h -t 'Grammatical Framework' $files
+cd $tempdir
+haddock -o ../$docdir -h -t 'Grammatical Framework' $files
+cd ..
 
 ######################################################################
 
 echo
-echo 3. Restructuring to HTML framesets
+echo 4. Restructuring to HTML framesets
 
-cd $docdir
 echo -- Substituting for frame targets inside html files
-mv index.html index-frame.html
-foreach f (*.html) 
-    perl -pe 's/<HEAD/<HEAD><BASE TARGET="contents"/; s/"index.html"/"index-frame.html"/; s/(<A HREF = "\S*index\S*.html")/$1 TARGET="index"/' $f > tempfile
-    mv tempfile $f
+mv $docdir/index.html $docdir/index-frame.html
+foreach f ($docdir/*.html) 
+    perl -pe 's/<HEAD/<HEAD><BASE TARGET="contents"/; s/"index.html"/"index-frame.html"/; s/(<A HREF = "\S*index\S*.html")/$1 TARGET="index"/' $f > .tempfile
+    mv .tempfile $f
 end
 
-cd $resourcedir
 echo -- Copying resource files:
-echo -- `ls *.*`
-cp *.* $docdir
+echo -- `ls $resourcedir/*.*`
+cp $resourcedir/*.* $docdir
 
 ######################################################################
 
 echo
-echo 4. Finished
+echo 5. Finished
 echo -- The documentation is located at:
 echo -- $docdir/index.html
-
-cd $base
 
 

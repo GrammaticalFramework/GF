@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/29 11:18:39 $ 
+-- > CVS $Date: 2005/03/29 11:58:46 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Calculating the finiteness of each type in a grammar
 -----------------------------------------------------------------------------
@@ -43,9 +43,11 @@ convertModule split (Mod mtyp ext op fl defs)
     where newDefs  = solutions defMonad () () 
 	  defMonad = member defs >>= convertDef split
 
+----------------------------------------------------------------------
 -- the main conversion function
 convertDef :: Splitable -> Def -> CnvMonad Def
 
+-- converting abstract "cat" definitions
 convertDef split (AbsDCat cat decls cidents)
     = case splitableCat split cat of
         Just newCats -> do newCat <- member newCats
@@ -59,8 +61,9 @@ convertDef split (AbsDCat cat decls cidents)
 		   case splitableCat split argCat of
 		     Nothing -> return (newCat, decl : newDecls) 
 		     Just newArgs -> do newArg <- member newArgs
-					return (mergeCats "/" newCat newArg, newDecls)
+					return (mergeArg newCat newArg, newDecls)
 
+-- converting abstract "fun" definitions
 convertDef split (AbsDFun fun typ@(EAtom (AC (CIQ mod cat))) def)
     = case splitableFun split fun of
         Just newCat -> return (AbsDFun fun (EAtom (AC (CIQ mod newCat))) def)
@@ -70,9 +73,13 @@ convertDef split (AbsDFun fun typ def)
     = do newTyp <- expandType split [] typ
 	 return (AbsDFun fun newTyp def)
 
+-- converting concrete "lincat" definitions
+-- convertDef split (
+
 convertDef _ def = return def
 
--- expanding Exp's
+----------------------------------------------------------------------
+-- expanding type expressions
 expandType :: Splitable -> [(Ident, Cat)] -> Exp -> CnvMonad Exp
 expandType split env (EProd x a@(EAtom (AC (CIQ mod cat))) b)
     = case splitableCat split cat of
@@ -90,7 +97,7 @@ expandType split env app
 
 expandApp :: Splitable -> [(Ident, Cat)] -> [Cat] -> Exp -> CnvMonad Exp
 expandApp split env addons (EAtom (AC (CIQ mod cat)))
-    = return (EAtom (AC (CIQ mod (foldl (mergeCats "/") cat addons))))
+    = return (EAtom (AC (CIQ mod (foldl mergeArg cat addons))))
 expandApp split env addons (EApp exp arg@(EAtom (AC (CIQ mod fun))))
     = case splitableFun split fun of
         Just newCat -> expandApp split env (newCat:addons) exp
@@ -118,11 +125,11 @@ calcSplitable :: [Module] -> Splitable
 calcSplitable modules = (listAssoc splitableCats, listAssoc splitableFuns)
     where splitableCats = tracePrt "splitableCats" (prtSep " ") $
 			  groupPairs $ nubsort 
-			  [ (cat, mergeCats ":" fun cat) | (cat, fun) <- constantCats ]
+			  [ (cat, mergeFun fun cat) | (cat, fun) <- constantCats ]
 
 	  splitableFuns = tracePrt "splitableFuns" (prtSep " ") $
 			  nubsort
-			  [ (fun, mergeCats ":" fun cat) | (cat, fun) <- constantCats ]
+			  [ (fun, mergeFun fun cat) | (cat, fun) <- constantCats ]
 
 	  constantCats = tracePrt "constantCats" (prtSep " ") $
 			 [ (cat, fun) |
@@ -145,14 +152,22 @@ calcSplitable modules = (listAssoc splitableCats, listAssoc splitableFuns)
 
 
 ----------------------------------------------------------------------
+-- utilities
 
+-- the main result category of a type expression
 resultCat :: Exp -> Cat
 resultCat (EProd _ _ b) = resultCat b
 resultCat (EApp a _) = resultCat a
 resultCat (EAtom (AC (CIQ _ cat))) = cat
 
-mergeCats :: String -> Cat -> Cat -> Cat
-mergeCats str (IC cat) (IC arg) = IC (cat ++ str ++ arg)
+-- mergeing categories
+mergeCats :: String -> String -> String -> Cat -> Cat -> Cat
+mergeCats before middle after (IC cat) (IC arg) 
+    = IC (before ++ cat ++ middle ++ arg ++ after)
+
+mergeFun, mergeArg :: Cat -> Cat -> Cat
+mergeFun = mergeCats "{" ":" "}"
+mergeArg = mergeCats "" "" ""
 
 ----------------------------------------------------------------------
 -- obsolete?
