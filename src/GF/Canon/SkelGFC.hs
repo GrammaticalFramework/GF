@@ -29,6 +29,7 @@ transModType x = case x of
   MTAbs id  -> failure x
   MTCnc id0 id  -> failure x
   MTRes id  -> failure x
+  MTTrans id0 id1 id  -> failure x
 
 
 transExtend :: Extend -> Result
@@ -52,6 +53,7 @@ transDef :: Def -> Result
 transDef x = case x of
   AbsDCat id decls cidents  -> failure x
   AbsDFun id exp0 exp  -> failure x
+  AbsDTrans id exp  -> failure x
   ResDPar id pardefs  -> failure x
   ResDOper id ctype term  -> failure x
   CncDCat id ctype term0 term  -> failure x

@@ -88,7 +88,7 @@ transTopDef x = case x of
   DefFun fundefs  -> failure x
   DefDef defs  -> failure x
   DefData datadefs  -> failure x
-  DefTrans flagdefs  -> failure x
+  DefTrans defs  -> failure x
   DefPar pardefs  -> failure x
   DefOper defs  -> failure x
   DefLincat printdefs  -> failure x

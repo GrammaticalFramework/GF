@@ -26,7 +26,7 @@ type SourceCnc = Module Ident Option Info
 data Info =                  
    AbsCat   (Perh Context) (Perh [Term])   -- constructors; must be Id or QId
  | AbsFun   (Perh Type) (Perh Term)        -- Yes f = canonical
- | AbsTrans Ident
+ | AbsTrans Term
 
 -- judgements in resource
  | ResParam (Perh [Param])

@@ -20,10 +20,11 @@ trModule (i,mo) = case mo of
                             (map trFlag (flags m))))
  where
    i' = tri i
-   mkModule = case typeOfModule mo of
-     MTResource -> P.MResource
-     MTAbstract -> P.MAbstract
-     MTConcrete a -> P.MConcrete (tri a)
+   mkModule m = case typeOfModule mo of
+     MTResource -> P.MResource m
+     MTAbstract -> P.MAbstract m
+     MTConcrete a -> P.MConcrete m (tri a)
+     MTTransfer a b -> P.MTransfer m (trOpen a) (trOpen b)
 
 trExtend :: Maybe Ident -> P.Extend
 trExtend i = maybe P.NoExt (P.Ext . tri) i
@@ -50,6 +51,7 @@ trAnyDef (i,info) = let i' = tri i in case info of
     _ -> []
   AbsFun (May b)  _ -> [P.DefFun [P.FunDef [i'] (P.EIndir (tri b))]]
   ---- don't destroy definitions!
+  AbsTrans f -> [P.DefTrans [P.DDef [i'] (trt f)]]
 
   ResOper pty ptr -> [P.DefOper [trDef i' pty ptr]]
   ResParam pp -> [P.DefPar [case pp of

@@ -66,6 +66,10 @@ openedModule o = case o of
   OSimple m -> m
   OQualif _ m -> m
 
+allOpens m = case mtype m of
+  MTTransfer a b -> a : b : opens m
+  _ -> opens m
+
 -- initial dependency list
 depPathModule :: Ord i => Module i f a -> [OpenSpec i]
 depPathModule m = fors m ++ exts m ++ opens m where
@@ -174,6 +178,10 @@ isModRes m = case mtype m of
 
 isModCnc m = case mtype m of
   MTConcrete _ -> True
+  _ -> False
+
+isModTrans m = case mtype m of
+  MTTransfer _ _ -> True
   _ -> False
 
 sameMType m n = case (m,n) of

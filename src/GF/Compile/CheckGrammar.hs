@@ -42,6 +42,10 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
       js' <- mapMTree (checkAbsInfo gr name) js
       return $ (name, ModMod (Module mt fs me ops js')) : ms
 
+    MTTransfer a b -> do
+      js' <- mapMTree (checkAbsInfo gr name) js
+      return $ (name, ModMod (Module mt fs me ops js')) : ms
+
     MTResource -> do
       js' <- mapMTree (checkResInfo gr) js
       return $ (name, ModMod (Module mt fs me ops js')) : ms
