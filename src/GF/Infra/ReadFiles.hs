@@ -6,7 +6,7 @@ module ReadFiles
 --  
 getAllFiles,fixNewlines,ModName,getOptionsFromFile,
 --  
-gfcFile,gfFile,gfrFile,isGFC,resModName) where
+gfcFile,gfFile,gfrFile,isGFC,resModName,isOldFile) where
 
 import Arch (selectLater, modifiedFiles, ModTime, getModTime,laterModTime)
 
@@ -250,6 +250,18 @@ getOptionsFromFile file = do
   s <- readFileIf file
   let ls = filter (isPrefixOf "--#") $ lines s
   return $ fst $ getOptions "-" $ map (unwords . words . drop 3) ls
+
+-- check if old GF file
+isOldFile :: FilePath -> IO Bool
+isOldFile f = do
+  s <- readFileIf f
+  let s' = unComm s
+  return $ not (null s') && old (head (words s'))
+ where
+   old = flip elem $ words 
+     "cat category data def flags fun include lin lincat lindef lintype oper param pattern printname rule"
+
+
 
 -- old GF tolerated newlines in quotes. No more supported!
 fixNewlines s = case s of

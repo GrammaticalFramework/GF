@@ -35,7 +35,7 @@ txtHelpFile =
   "\n        .ebnf  Extended BNF format" ++
   "\n        .cf    Context-free (BNF) format" ++
   "\n  options:" ++
-  "\n      -old          old: parse in GF<2.0 format" ++
+  "\n      -old          old: parse in GF<2.0 format (not necessary)" ++
   "\n      -v            verbose: give lots of messages " ++
   "\n      -s            silent: don't give error messages" ++
   "\n      -opt          perform branch-sharing optimization" ++
@@ -146,15 +146,17 @@ txtHelpFile =
   "\n  flags: " ++
   "\n     -lexer    use this lexer" ++
   "\n" ++
-  "\ncc, compute_concrete: cc Ident Term" ++
-  "\n      Compute a term by concrete syntax definitions." ++
-  "\n      The identifier Ident is a resource module name " ++
-  "\n      needed to resolve constant. " ++
+  "\ncc, compute_concrete: cc Term" ++
+  "\n      Compute a term by concrete syntax definitions. Uses the topmost" ++
+  "\n      resource module (the last in listing by command po) to resolve " ++
+  "\n      constant names. " ++
   "\n      N.B. You need the flag -retain when importing the grammar, if you want " ++
   "\n      the oper definitions to be retained after compilation; otherwise this" ++
   "\n      command does not expand oper constants." ++
   "\n      N.B.' The resulting Term is not a term in the sense of abstract syntax," ++
   "\n      and hence not a valid input to a Tree-demanding command." ++
+  "\n  flags:" ++
+  "\n     -res      use another module than the topmost one" ++
   "\n" ++
   "\nt,  translate: t Lang Lang String" ++
   "\n      Parses String in Lang1 and linearizes the resulting Trees in Lang2." ++

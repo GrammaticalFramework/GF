@@ -182,6 +182,7 @@ withFun        = aOpt "fun"
 firstCat       = aOpt "cat"      -- used on command line
 gStartCat      = aOpt "startcat" -- used in grammar, to avoid clash w res word
 useLanguage    = aOpt "lang"
+useResource    = aOpt "res"
 speechLanguage = aOpt "language"
 useFont        = aOpt "font"
 grammarFormat  = aOpt "format"

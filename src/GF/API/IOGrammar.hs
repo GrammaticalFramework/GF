@@ -8,6 +8,7 @@ import Compile
 import ShellState
 
 import Modules
+import ReadFiles (isOldFile)
 import Option
 import Operations
 import UseIO
@@ -45,9 +46,12 @@ shellStateFromFiles opts st file = case fileSuffix file of
      grts <- compileModule osb st file
      ioeErr $ updateShellState opts st grts
   _ -> do
-     let osb = if oElem showOld opts 
-                 then addOptions (options [beVerbose]) opts -- for old, no emit
-                 else addOptions (options [beVerbose, emitCode]) opts -- for new,do
+     b <- ioeIO $ isOldFile file
+     let opts' = if b then (addOption showOld opts) else opts
+
+     let osb = if oElem showOld opts' 
+                 then addOptions (options [beVerbose]) opts' -- for old no emit
+                 else addOptions (options [beVerbose, emitCode]) opts'
      grts <- compileModule osb st file
-     ioeErr $ updateShellState opts st grts
+     ioeErr $ updateShellState opts' st grts
      --- liftM (changeModTimes rts) $ grammar2shellState opts gr

@@ -53,7 +53,7 @@ data Command =
  | CWrapTerm Ident
  | CMorphoAnalyse
  | CTestTokenizer
- | CComputeConcrete I.Ident String
+ | CComputeConcrete String
 
  | CTranslationQuiz Language Language
  | CTranslationList Language Language Int
@@ -176,7 +176,11 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
   CMorphoAnalyse -> changeArg (AString . morphoAnalyse opts gro . prCommandArg) sa
   CTestTokenizer -> changeArg (AString . optTokenizer opts gro . prCommandArg) sa
 
-  CComputeConcrete m t -> 
+  CComputeConcrete t -> do
+    m <- return $
+         maybe (I.identC "?") id $  -- meaningful if no opers in t 
+           maybe (resourceOfShellState st) (return . I.identC) $ -- topmost res
+             getOptVal opts useResource             -- flag -res=m
     justOutput (putStrLn (err id (prt . stripTerm) (
                 string2srcTerm src m t >>= Co.computeConcrete src))) sa
 

@@ -22,7 +22,7 @@ i,  import: i File
         .ebnf  Extended BNF format
         .cf    Context-free (BNF) format
   options:
-      -old          old: parse in GF<2.0 format
+      -old          old: parse in GF<2.0 format (not necessary)
       -v            verbose: give lots of messages 
       -s            silent: don't give error messages
       -opt          perform branch-sharing optimization
@@ -133,15 +133,17 @@ tt, test_tokenizer: tt String
   flags: 
      -lexer    use this lexer
 
-cc, compute_concrete: cc Ident Term
-      Compute a term by concrete syntax definitions.
-      The identifier Ident is a resource module name 
-      needed to resolve constant. 
+cc, compute_concrete: cc Term
+      Compute a term by concrete syntax definitions. Uses the topmost
+      resource module (the last in listing by command po) to resolve 
+      constant names. 
       N.B. You need the flag -retain when importing the grammar, if you want 
       the oper definitions to be retained after compilation; otherwise this
       command does not expand oper constants.
       N.B.' The resulting Term is not a term in the sense of abstract syntax,
       and hence not a valid input to a Tree-demanding command.
+  flags:
+     -res      use another module than the topmost one
 
 t,  translate: t Lang Lang String
       Parses String in Lang1 and linearizes the resulting Trees in Lang2.
