@@ -1104,7 +1104,7 @@ oper gå_1174 : Verbum =
   } ;
 oper hava_1198 : Verbum = 
  {s = table {
-    VF (Pres Ind Act) => variants {"haver" ; "har"} ;
+    VF (Pres Ind Act) => variants { "har"; "haver"} ;
     VF (Pres Ind Pass) => variants {"havs" ; "has"} ;
     VF (Pres Conj Act) => "have" ;
     VF (Pres Conj Pass) => "haves" ;
