@@ -220,40 +220,41 @@ oper
   ablative = Ablat ;
   allative = Allat ;
 
-  mkN = \a,b,c,d,e,f,g,h,i,j,k -> mkNoun a b c d e f g h i j ** {g = k} ;
+  mkN = \a,b,c,d,e,f,g,h,i,j,k -> 
+    mkNoun a b c d e f g h i j ** {g = k ; lock_N = <>} ;
 
-  nKukko = \a,b,c,g -> sKukko a b c ** {g = g} ;
-  nTalo = \a,g -> sTalo a ** {g = g} ;
-  nLinux = \a,g -> sLinux a ** {g = g} ;
-  nPeruna = \a,g -> sPeruna a ** {g = g} ;
-  nRae = \a,b,g -> sRae a b ** {g = g} ;
-  nSusi = \a,b,c,g -> sSusi a b c ** {g = g} ;
-  nPuu = \a,g -> sPuu a ** {g = g} ;
-  nSuo = \a,g -> sSuo a ** {g = g} ;
-  nNainen = \a,g -> sNainen a ** {g = g} ;
-  nTilaus = \a,b,g -> sTilaus a b ** {g = g} ;
-  nNauris = \a,g -> sNauris a ** {g = g} ;
+  nKukko = \a,b,c,g -> sKukko a b c ** {g = g ; lock_N = <>} ;
+  nTalo = \a,g -> sTalo a ** {g = g ; lock_N = <>} ;
+  nLinux = \a,g -> sLinux a ** {g = g ; lock_N = <>} ;
+  nPeruna = \a,g -> sPeruna a ** {g = g ; lock_N = <>} ;
+  nRae = \a,b,g -> sRae a b ** {g = g ; lock_N = <>} ;
+  nSusi = \a,b,c,g -> sSusi a b c ** {g = g ; lock_N = <>} ;
+  nPuu = \a,g -> sPuu a ** {g = g ; lock_N = <>} ;
+  nSuo = \a,g -> sSuo a ** {g = g ; lock_N = <>} ;
+  nNainen = \a,g -> sNainen a ** {g = g ; lock_N = <>} ;
+  nTilaus = \a,b,g -> sTilaus a b ** {g = g ; lock_N = <>} ;
+  nNauris = \a,g -> sNauris a ** {g = g ; lock_N = <>} ;
 
 
-  nComp = \s,n -> {s = \\c => s ++ n.s ! c ; g = n.g} ;
-  mkFun = \n,c -> n2n n ** {c = NPCase c} ;
+  nComp = \s,n -> {s = \\c => s ++ n.s ! c ; g = n.g ; lock_N = <>} ;
+  mkFun = \n,c -> n2n n ** {c = NPCase c ; lock_Fun = <>} ;
   fGen = \n -> mkFun n genitive ;
-  mkPN = mkProperName ;
+  mkPN n = mkProperName n ** {lock_PN = <>} ;
 
-  mkAdj1 = \x -> {s = x.s} ;
-  mkAdj2 = \x,c -> mkAdj1 x ** {c = NPCase c} ;
-  mkAdjDeg = regAdjDegr ;
+  mkAdj1 = \x -> {s = x.s ; lock_Adj1 = <>} ;
+  mkAdj2 = \x,c -> mkAdj1 x ** {c = NPCase c ; lock_Adj2 = <>} ;
+  mkAdjDeg x y z = regAdjDegr x y z ** {lock_AdjDeg = <>} ;
 
-  mkV = mkVerb ;
-  vValua = vSanoa ;
-  vKattaa = vOttaa ;
-  vOstaa = vPoistaa ;
-  vNousta = vJuosta ;
-  vTuoda = vJuoda ;
-  vOlla = verbOlla ;
-  vEi = verbEi ;
+  mkV a b c d e f = mkVerb a b c d e f ** {lock_V = <>} ;
+  vValua v = vSanoa v ** {lock_V = <>} ;
+  vKattaa v u = vOttaa v u ** {lock_V = <>} ;
+  vOstaa v = vPoistaa v ** {lock_V = <>} ;
+  vNousta v u = vJuosta v u ** {lock_V = <>} ;
+  vTuoda v = vJuoda v ** {lock_V = <>} ;
+  vOlla = verbOlla ** {lock_V = <>} ;
+  vEi = verbEi ** {lock_V = <>} ;
 
-  mkTV = \v,c,p,o -> v ** {s3 = p ; s4 = o ; c = c} ;
+  mkTV = \v,c,p,o -> v ** {s3 = p ; s4 = o ; c = c ; lock_TV = <>} ;
   tvCase = \v,c -> mkTV v c [] [] ; 
-  tvDir = mkTransVerbDir ;
+  tvDir v = mkTransVerbDir v ** {lock_TV = <>} ;
 } ;
