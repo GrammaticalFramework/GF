@@ -1,12 +1,15 @@
+{- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   Filename:    OrdMap2.hs
+   Author:      Peter Ljunglöf
+   Time-stamp:  <2004-05-07 14:16:03 peb>
 
+   Description: The class of finite maps, as described in
+                "Pure Functional Parsing", section 2.2.2
+		and an example implementation,
+		derived from appendix A.2
 
---------------------------------------------------
--- The class of ordered finite maps
--- as described in section 2.2.2
-
--- and an example implementation, 
--- derived from the implementation in appendix A.2
-
+  OBSOLETE! this is only used in cf/ChartParser.hs
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -}
 
 module OrdMap2 (OrdMap(..), Map) where
 

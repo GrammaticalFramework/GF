@@ -5,8 +5,9 @@ GHCFLAGS=-package lang -package util -fglasgow-exts
 GHCOPTFLAGS=-O -package lang -package util -fglasgow-exts
 GHCFUDFLAG=-package Fudgets
 
-HUGSINCLUDE    =.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:parsing:conversions:
-BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -iparsing -iparsers -iconversions
+HUGSTRACE      = trace
+HUGSINCLUDE    =.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:parsing:conversions:$(HUGSTRACE):
+BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -iparsing -iparsers -iconversions -inotrace
 GHCINCLUDE     =-ifor-ghc       $(BASICINCLUDE)
 GHCINCLUDENOFUD=-ifor-ghc-nofud $(BASICINCLUDE) 
 GHCINCLUDEGFT  =-ifor-gft       $(BASICINCLUDE) 
@@ -37,6 +38,9 @@ justwindows:
 	$(GHMAKE) $(GHCOPTFLAGS) $(WINDOWSINCLUDE) --make GF.hs -o gf2.exe ; strip gf2.exe ; mv gf2.exe ../bin/
 nofud-links:
 	cd for-ghc-nofud ; rm -f *.hs ; ln -s ../for-ghc/Arch.hs ; ln -s ../for-hugs/ArchEdit.hs ; cd ..
+tracing:
+	make today ; $(GHMAKE) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD) --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
+
 batch: 
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) --make GF2.hs -o gf2 ; strip gf2
 api: 

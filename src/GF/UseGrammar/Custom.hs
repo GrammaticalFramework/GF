@@ -37,11 +37,12 @@ import GrammarToHaskell
 
 -- the cf parsing algorithms
 import ChartParser -- or some other CF Parser
+import NewChartParser 
+import NewerChartParser 
 
 -- grammar conversions -- peb 19/4-04
 -- see also customGrammarPrinter
-import qualified ConvertGrammar as CG
-import TestConversions (prRaw)
+import qualified ConvertGrammar as Cnv
 
 import MoreCustom -- either small/ or big/. The one in Small is empty.
 
@@ -170,15 +171,11 @@ customGrammarPrinter =
 -}
 -- add your own grammar printers here
 -- grammar conversions, (peb) 
-{-
   ,(strCI "gfc_show",   show . grammar2canon . stateGrammarST)
-  ,(strCI "gfc_raw",    prRaw . stateGrammarST)
-  ,(strCI "tnf",        prCanon . CG.convertCanonToTNF . stateGrammarST)
-  ,(strCI "mcfg",       CG.prMCFG .  CG.convertCanonToMCFG . stateGrammarST)
-  ,(strCI "mcfg_cf",    prCF .  CG.convertCanonToCFG . stateGrammarST)
-  ,(strCI "mcfg_canon", prCanon .  CG.convertCanonToMCFG . stateGrammarST)
-  ,(strCI "mcfg_raw",   prRaw .  CG.convertCanonToMCFG . stateGrammarST)
--}
+  ,(strCI "tnf",        prCanon . Cnv.convertCanonToTNF . stateGrammarST)
+  ,(strCI "mcfg",       Cnv.prMCFG . Cnv.convertCanonToMCFG . stateGrammarST)
+  ,(strCI "mcfg_cf",    Cnv.prCFG . Cnv.convertCanonToCFG . stateGrammarST)
+  ,(strCI "mcfg_show",  show . Cnv.convertCanonToMCFG . stateGrammarST)
 --- also include printing via grammar2syntax!
   ] 
   ++ moreCustomGrammarPrinter
@@ -262,6 +259,11 @@ customParser =
    (strCI "chart",    chartParser . stateCF)
 -- add your own parsers here
   ]
+  -- 21/5-04, peb:
+  ++ [ (strCI ("new"++name), newChartParser descr . stateCF) |
+       (descr, names) <- newChartParserAlternatives, name <- names ]
+  ++ [ (strCI ("newer"++name), newerChartParser descr . stateParserInfo) |
+       (descr, names) <- newerChartParserAlternatives, name <- names ]
   ++ moreCustomParser
 
 customTokenizer = 

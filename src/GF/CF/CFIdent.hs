@@ -46,7 +46,8 @@ prCFTok t = case t of
   TM i m -> m --- "?" --- m
 
 -- to build trees: the Atom contains a GF function, Cn | Meta | Vr | Literal
-newtype CFFun = CFFun (Atom, Profile) deriving (Eq,Show)
+newtype CFFun = CFFun (Atom, Profile) deriving (Eq,Ord,Show) 
+-- - - - - - - - - - - - - - - - - - - - -         ^^^ added by peb, 21/5-04 
 
 type Profile  = [([[Int]],[Int])]
 
