@@ -1,0 +1,59 @@
+N!nLukko: ku/kko kukon -- kukkoja
+N!nLukko: ru/tto ruton -- ruttoja
+N!nLukko: ty/ttö tytön -- tyttöjä
+N!nLukko: lä/tty lätyn -- lättyjä
+N!nLukko: ha/ttu hatun -- hattuja
+N!nLukko: hui/ppu huipun -- huippuja
+N!nLukko: hy/ppy hypyn -- hyppyjä
+
+N!nTalo: tal/o |talon|talossa|talosta| --taloja
+N!nTalo: hal/u |halun|halussa|talusta| haluja
+N!nTalo: sär/ö |särön|särössä|säröstä| --säröjä
+N!nTalo: säv/y |sävyn|sävyssä|sävystä| --sävyjä
+
+N!nArpi:  ar/pi  (arvessa|arvella|arvissa|arvilla)
+N!nSylki: syl/ki (syljessä|syljellä|syljissä|syljillä)
+-- nKoira: koir/a koiran koiria -- koirien
+-- nKoira: syyl/ä syylän syyliä
+
+N!nLinux: linux/ia linux
+N!nLinux: syrinx/iä syrinx
+
+N!nRae: ta/e   |takeeseen|
+N!nRae: perh/e |perheeseen|
+N!nRae: sa/de  |sateeseen|
+
+-- N!nSusi: su/si suden suteen
+
+N!nPuu: m/aa maahan |maassa|maasta|
+N!nPuu: p/uu puuhun
+N!nPuu: p/ii piihin
+N!nPuu: p/ää päähän |päässä|päästä|
+N!nPuu: k/öö kööhön 
+
+N!nSuo: s/uo |suohon|suossa|
+N!nSuo: t/ie |tiehen|tiessä|
+N!nSuo: t/yö |työhön|työssä|
+
+N!nNainen: nai/sta nainen -- naisen
+N!nNainen: hyi/stä hyinen
+
+N!nTilaus: til/aus tilauksen
+
+N!nNauris: naur/is |naurista|nauriin|
+
+V!vValua: san/oa |sanon|sanoo| |sanoi|sanoin|sanoit| |sanoisi|sanoisin|sanoisit|
+V!vValua: kys/yä |kysyn|kysyy| |kysyi|kysyin|kysyit| |kysyisi|kysyisin|kysyisit|
+V!vValua: kul/ua [kylun|kuluu| |kului|kuluin|        |kuluisi|
+
+V!vOstaa: ost/aa |ostan|ostat| |osti|ostin| |ostanut|
+V!vOstaa: est/ää |estän|estät| |esti|estin| |estänyt|
+
+-- 
+-- To do then:
+--   grep fun koe >LexAbs.gf
+--   grep lin koe >LexEng.gf
+-- And prefix these files with
+--  abstract LexAbs = Shallow ** {
+--  --# -path=.:..:../../../prelude:../../abstract:../../english
+--  concrete LexFin of LexAbs = ShallowFin ** open ParadigmsFin in {
