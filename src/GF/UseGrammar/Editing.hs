@@ -164,9 +164,21 @@ noMoreMetas = err (const True) (const False) . goNextMeta
 replaceSubTree :: Tree -> Action
 replaceSubTree tree state = changeLoc state tree
 
+refineOrReplaceWithTree :: Bool -> CGrammar -> Tree -> Action
+refineOrReplaceWithTree der gr tree state = case actMeta state of
+  Ok m -> refineWithTreeReal der gr tree m state
+  _ -> do
+    let tree1 = addBinds (actBinds state) $ tree
+    state' <- replaceSubTree tree1 state
+    reCheckState gr state'
+
 refineWithTree :: Bool -> CGrammar -> Tree -> Action
 refineWithTree der gr tree state = do
-  m      <- errIn "move pointer to meta" $ actMeta state
+  m <- errIn "move pointer to meta" $ actMeta state
+  refineWithTreeReal der gr tree m state
+
+refineWithTreeReal :: Bool -> CGrammar -> Tree -> Meta -> Action
+refineWithTreeReal der gr tree m state = do
   state' <- replaceSubTree tree state
   let cs0     = allConstrs state'
       (cs,ms) = splitConstraints cs0

@@ -96,7 +96,7 @@ refineByExps der gr trees = case trees of
 
 refineByTrees :: Bool -> CGrammar -> [Tree] -> ECommand
 refineByTrees der gr trees = case trees of
-  [t] -> action2commandNext (refineWithTree der gr t)
+  [t] -> action2commandNext (refineOrReplaceWithTree der gr t)
   _  -> changeCands  $ map tree2exp trees
 
 replaceByTrees :: CGrammar -> [Exp] -> ECommand
