@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:38 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/03/02 09:43:52 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.12 $
 --
 -- generic tree editing, with some grammar notions assumed. AR 18\/8\/2001.
 -- 19\/6\/2003 for GFC
@@ -357,6 +357,14 @@ peelFunHead gr (f@(m,c),i) state = do
 -- | an expensive operation
 reCheckState :: CGrammar -> State -> Err State
 reCheckState gr st = annotate gr (tree2exp (loc2tree st)) >>= return . tree2loc
+
+-- | a variant that returns Bad instead of a tree with unsolvable constraints
+reCheckStateReject :: CGrammar -> State -> Err State
+reCheckStateReject gr st = do
+  st' <- reCheckState gr st
+  case (constrsNode $ nodeTree $ actTree st') of 
+    [] -> return st'
+    cs -> Bad $ "Unsolvable constraints:" +++ prConstraints cs
 
 -- | extract metasubstitutions from constraints and solve them
 solveAll :: CGrammar -> State -> Err State

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:38 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.42 $
+-- > CVS $Date: 2005/03/02 09:43:52 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.43 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -302,8 +302,8 @@ customTermCommand =
                                 in
                          [tr | t <- generateTrees gr False cat 2 Nothing (Just t), 
                                Ok tr <- [annotate gr $ MM.qualifTerm (absId g) t]])
-  ,(strCI "typecheck",   \g t -> err (const [t]) (return . loc2tree)
-                                    (reCheckState (grammar g) (tree2loc t)))
+  ,(strCI "typecheck",   \g t -> err (const []) (return . loc2tree)
+                                    (reCheckStateReject (grammar g) (tree2loc t)))
   ,(strCI "solve",      \g t -> err (const [t]) (return . loc2tree)
                                    (solveAll (grammar g) (tree2loc t)))
   ,(strCI "context",    \g t -> err (const [t]) (return . loc2tree)
