@@ -312,5 +312,7 @@ oper
   ouiPhr = ss ["Sí ."] ;  
   nonPhr = ss ["No ."] ;
 
+  negNe = "no" ; negPas = [] ;
+
 }
 

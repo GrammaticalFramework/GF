@@ -199,6 +199,12 @@ oper
 
   regV : Str -> V ;
 
+-- The module $BeschSpa$ gives all the patterns of the "Bescherelle"
+-- book. To use them in the category $V$, wrap them with the function
+
+  verboV : Verbum -> V ;
+
+
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object.
@@ -317,6 +323,8 @@ oper
             }
           }
     in verbPres verb AHabere ** {lock_V = <>} ;
+
+  verboV ve = verbPres ve AHabere ** {lock_V = <>} ;
 
   mkV2 v p = {s = v.s ; aux = v.aux ;  s2 = p.p2 ; c = p.p1 ; lock_V2 = <>} ;
   dirV2 v = mkV2 v accusative ;

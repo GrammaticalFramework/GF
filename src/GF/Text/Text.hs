@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:16 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/03/31 15:47:43 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.7 $
 --
 -- elementary text postprocessing. AR 21\/11\/2001.
 --
@@ -22,6 +22,8 @@ module Text (untokWithXML,
 	     formatAsTextLit,
 	     formatAsCodeLit,
 	     formatAsText,
+	     formatAsHTML,
+	     formatAsLatex,
 	     formatAsCode,
 	     performBinds,
 	     unStringLit,
@@ -56,20 +58,26 @@ formatAsTextLit = formatAsText . unwords . map unStringLit . words
 formatAsCodeLit :: String -> String
 formatAsCodeLit = formatAsCode . unwords . map unStringLit . words 
 
-formatAsText :: String -> String
-formatAsText = unwords . format . cap . words where
+formatAsText,formatAsHTML,formatAsLatex :: String -> String
+formatAsText  = formatAsTextGen (=="&-") (=="&-") 
+formatAsHTML  = formatAsTextGen ((=="<") . take 1) (const False) 
+formatAsLatex = formatAsTextGen ((=="\\") . take 1)  (const False) 
+
+formatAsTextGen :: (String -> Bool) -> (String -> Bool) -> String -> String
+formatAsTextGen tag para = unwords . format . cap . words where
   format ws = case ws of
-    w : c : ww | major c -> (w ++ c)      : format (cap ww)
-    w : c : ww | minor c -> (w ++ c)      : format ww
+    w : c : ww | major c -> format $ (w ++ c) :(cap ww)
+    w : c : ww | minor c -> format $ (w ++ c) :    ww
+    p : c : ww | openp p -> format $ (p ++ c) :ww
     c     : ww | para  c -> "\n\n"        : format ww
     w     : ww           -> w             : format ww
     [] -> []
-  cap (p:(c:cs):ww) | para p = p : (toUpper c : cs) : ww
+  cap (p:ww) | tag p = p : cap ww
   cap ((c:cs):ww) = (toUpper c : cs) : ww
   cap [] = []
   major = flip elem (map singleton ".!?") 
-  minor = flip elem (map singleton ",:;")
-  para  = (=="&-") 
+  minor = flip elem (map singleton ",:;)")
+  openp = all (flip elem "(")
 
 formatAsCode :: String -> String
 formatAsCode = rend 0 . words where
