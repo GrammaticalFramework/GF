@@ -13,6 +13,7 @@ import MkResource
 
 -- the main compiler passes
 import GetGrammar
+import Extend
 import Rebuild
 import Rename
 import Refresh
@@ -93,7 +94,7 @@ reverseModules (MGrammar ms) = MGrammar $ reverse ms
 keepResModules :: Options -> SourceGrammar -> SourceGrammar
 keepResModules opts gr = 
   if oElem retainOpers opts 
-    then MGrammar $ reverse [(i,mi) | (i,mi) <- modules gr, isResourceModule mi]
+    then MGrammar $ reverse [(i,mi) | (i,mi@(ModMod m)) <- modules gr, isModRes m]
     else emptyMGrammar
 
 
@@ -157,7 +158,8 @@ makeSourceModule opts env@(k,gr,can) mo@(i,mi) = case mi of
  where
    putp = putPointE opts
 
-compileSourceModule :: Options -> CompileEnv -> SourceModule -> IOE (Int,SourceModule)
+compileSourceModule :: Options -> CompileEnv -> 
+                       SourceModule -> IOE (Int,SourceModule)
 compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
 
   let putp = putPointE opts
@@ -165,16 +167,25 @@ compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
 
   mo1   <- ioeErr $ rebuildModule mos mo
 
-  mo2:_ <- putp "  renaming " $ ioeErr $ renameModule mos mo1
+  mo1b  <- ioeErr $ extendModule mos mo1
+  ---- prDebug mo1b
 
-  (mo3:_,warnings) <- putp "  type checking" $ ioeErr $ showCheckModule mos mo2
-  putStrE warnings
+  case mo1b of
+    (_,ModMod n) | not (isCompleteModule n) -> return (k,mo1b)
+    _ -> do
+      mo2:_ <- putp "  renaming " $ ioeErr $ renameModule mos mo1b
 
-  (k',mo3r:_) <- ioeErr $ refreshModule (k,mos) mo3
+      (mo3:_,warnings) <- putp "  type checking" $ ioeErr $ showCheckModule mos mo2
+      putStrE warnings
 
-  mo4:_ <- putp "  optimizing " $ ioeErr $ evalModule mos mo3r
+      (k',mo3r:_) <- ioeErr $ refreshModule (k,mos) mo3
 
-  return (k',mo4)
+      mo4:_ <- putp "  optimizing " $ ioeErr $ evalModule mos mo3r
+
+      return (k',mo4)
+ where
+   prDebug mo = ioeIO $ putStrLn $ prGrammar $ MGrammar [mo] ---- debug
+
 
 generateModuleCode :: Options -> InitPath -> SourceModule -> IOE GFC.CanonModule
 generateModuleCode opts path minfo@(name,info) = do
@@ -186,7 +197,7 @@ generateModuleCode opts path minfo@(name,info) = do
 
   -- for resource, also emit gfr
   case info of
-    ModMod m | isResourceModule info && isCompilable info && emit && nomulti -> do
+    ModMod m | isModRes m && isCompilable info && emit && nomulti -> do
       let (file,out) = (gfrFile pname, prGrammar (MGrammar [minfo]))
       ioeIO $ writeFile file out >> putStr ("  wrote file" +++ file)
     _ -> return ()

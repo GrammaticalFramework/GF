@@ -38,7 +38,8 @@ redModInfo (c,info) = do
   c'    <- redIdent c
   info' <- case info of
     ModMod m -> do
-      (e,os) <- redExtOpen m
+      let isIncompl = mstatus m == MSIncomplete
+      (e,os) <- if isIncompl then return (Nothing,[]) else redExtOpen m ----
       flags <- mapM redFlag $ flags m 
       (a,mt) <- case mtype m of
          MTConcrete a -> do
@@ -51,7 +52,7 @@ redModInfo (c,info) = do
          MTTransfer x y -> return (c',MTTransfer (om x) (om y)) --- c' not needed
 
       ---- this generates empty GFC. Better: none 
-      let js = if mstatus m == MSIncomplete then NT else jments m
+      let js = if isIncompl then NT else jments m
 
       defss <- mapM (redInfo a) $ tree2list $ js
       defs  <- return $ sorted2tree $ concat defss  -- sorted, but reduced
@@ -62,7 +63,9 @@ redModInfo (c,info) = do
      e' <- case extends m of
        Just e -> liftM Just $ redIdent e
        _ -> return Nothing
-     os' <- mapM (\ (OQualif q _ i) -> liftM (OSimple q) (redIdent i)) $ opens m
+     os' <- mapM (\o -> case o of 
+              OQualif q _ i -> liftM (OSimple q) (redIdent i)
+              _ -> prtBad "cannot translate unqualified open in" c) $ opens m
      return (e',os')
    om = oSimple . openedModule --- normalizing away qualif
 

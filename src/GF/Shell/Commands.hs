@@ -409,8 +409,9 @@ displaySStateIn env state = (tree',msg,menu) where
   linAll = map lin grs
   separ  = singleton . map unlines . intersperse [replicate 72 '*']
 
-displaySStateJavaX :: CEnv -> SState -> String
-displaySStateJavaX env state = unlines $ tagXML "gfedit" $ concat [
+---- the Boolean is a temporary hack to have two parallel GUIs
+displaySStateJavaX :: Bool -> CEnv -> SState -> String
+displaySStateJavaX isNew env state = unlines $ tagXML "gfedit" $ concat [
   tagXML "linearizations" (concat 
     [tagAttrXML "lin" ("lang", prLanguage lang) ss | (lang,ss) <- lins]),
   tagXML "tree"           tree,
@@ -431,7 +432,7 @@ displaySStateJavaX env state = unlines $ tagXML "gfedit" $ concat [
   zipper = stateSState state
   linAll = map lin lgrs
   gr     = firstStateGrammar env
-  mark   = markOptXML -- markOptJava   
+  mark   = if isNew then markOptXML else markOptJava   
 
 langAbstract = language "Abstract"
 langXML      = language "XML"

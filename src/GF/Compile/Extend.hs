@@ -10,27 +10,56 @@ import Operations
 
 import Monad
 
--- AR 14/5/2003
+-- AR 14/5/2003 -- 11/11
 
--- The top-level function $extendModInfo$
+-- The top-level function $extendModule$
 -- extends a module symbol table by indirections to the module it extends
 
---- this is not in use 5/11/2003
-extendModInfo :: Ident -> SourceModInfo -> SourceModInfo -> Err SourceModInfo
-extendModInfo name old new = case (old,new) of
-  (ModMod m0, ModMod (Module mt st fs _ ops js)) -> do
-    testErr (mtype m0 == mt) ("illegal extension type at module" +++ show name)
-    js' <- extendMod name (jments m0) js
-    return $ ModMod (Module mt st fs Nothing ops js)
+extendModule :: [SourceModule] -> SourceModule -> Err SourceModule
+extendModule ms (name,mod) = case mod of
+  ModMod (Module mt st fs me ops js) -> do
 
--- this is what happens when extending a module: new information is inserted,
--- and the process is interrupted if unification fails
+{- --- building the {s : Str} lincat from js0
+    js  <- case mt of
+      MTConcrete a -> do
+        ModMod ma <- lookupModule (MGrammar ms) a
+        let cats = [c | (c,AbsCat _ _) <- tree2list $ jments ma]
+            jscs = [(c,CncCat (yes defLinType) nope nope) | c <- cats]
+        return $ updatesTreeNondestr jscs js0
+      _ -> return js0
+-}
 
-extendMod :: Ident -> BinTree (Ident,Info) -> BinTree (Ident,Info) -> 
+    case me of
+      -- if the module is an extension of another one...
+      Just n -> do
+        (m0,isCompl) <- do
+          m <- lookupModMod  (MGrammar ms) n
+
+          -- test that the module types match, and find out if the old is complete
+          testErr (sameMType (mtype m) mt) 
+                    ("illegal extension type to module" +++ prt name)
+          return (m,isCompleteModule m)
+
+        -- build extension in a way depending on whether the old module is complete
+        js1 <- extendMod isCompl n (jments m0) js
+
+        -- if incomplete, throw away extension information
+        let me' = if isCompl then me else Nothing 
+        return $ (name,ModMod (Module mt st fs me' ops js1))
+
+      -- if the module is not an extension, just return it
+      _ -> return (name,mod)
+
+-- When extending a complete module: new information is inserted,
+-- and the process is interrupted if unification fails.
+-- If the extended module is incomplete, its judgements are just copied.
+
+extendMod :: Bool -> Ident -> BinTree (Ident,Info) -> BinTree (Ident,Info) -> 
              Err (BinTree (Ident,Info))
-extendMod name old new = foldM try new $ tree2list old where
+extendMod isCompl name old new = foldM try new $ tree2list old where
   try t i@(c,_) = errIn ("constant" +++ prt c) $
-                  tryInsert (extendAnyInfo name) (indirInfo name) t i
+                  tryInsert (extendAnyInfo isCompl name) indirIf t i
+  indirIf = if isCompl then indirInfo name else id
 
 indirInfo :: Ident -> Info -> Info
 indirInfo n info = AnyInd b n' where 
@@ -41,46 +70,37 @@ indirInfo n info = AnyInd b n' where
     AnyInd b k -> (b,k)
     _ -> (False,n) ---- canonical in Abs
 
-{- ----
-case info of
-  AbsFun pty ptr -> AbsFun (perhIndir n pty) (perhIndir n ptr)
-  ---- find a suitable indirection for cat info!
-
-  ResOper pty ptr -> ResOper (perhIndir n pty) (perhIndir n ptr)
-  ResParam pp -> ResParam (perhIndir n pp) 
-  _ -> info
-
-  CncCat pty ptr ppr -> CncCat (perhIndir n pty) (perhIndir n ptr) (perhIndir n ppr)
-  CncFun m ptr   ppr -> CncFun m (perhIndir n ptr)                 (perhIndir n ppr)
--}
-
 perhIndir :: Ident -> Perh a -> Perh a
 perhIndir n p = case p of
   Yes _ -> May n
   _ -> p
 
-extendAnyInfo :: Ident -> Info -> Info -> Err Info
-extendAnyInfo n i j = errIn ("building extension for" +++ prt n) $ case (i,j) of
+extendAnyInfo :: Bool -> Ident -> Info -> Info -> Err Info
+extendAnyInfo isc n i j = errIn ("building extension for" +++ prt n) $ case (i,j) of
   (AbsCat mc1 mf1, AbsCat mc2 mf2) -> 
-    liftM2 AbsCat (updatePerhaps n mc1 mc2) (updatePerhaps n mf1 mf2) --- add cstrs
+    liftM2 AbsCat (updn mc1 mc2) (updn mf1 mf2) --- add cstrs
   (AbsFun mt1 md1, AbsFun mt2 md2) -> 
-    liftM2 AbsFun (updatePerhaps n mt1 mt2) (updatePerhaps n md1 md2) --- add defs
-
-  (ResParam mt1, ResParam mt2) -> liftM ResParam $ updatePerhaps n mt1 mt2
-  (ResValue mt1, ResValue mt2) -> liftM ResValue $ updatePerhaps n mt1 mt2
-  (ResOper mt1 m1, ResOper mt2 m2) -> extendResOper n mt1 m1 mt2 m2 
-
+    liftM2 AbsFun (updn mt1 mt2) (updn md1 md2) --- add defs
+  (ResParam mt1, ResParam mt2) -> 
+    liftM ResParam $ updn mt1 mt2
+  (ResValue mt1, ResValue mt2) -> 
+    liftM ResValue $ updn mt1 mt2
+  (ResOper mt1 m1, ResOper mt2 m2) ->           ---- extendResOper n mt1 m1 mt2 m2 
+    liftM2 ResOper (updn mt1 mt2) (updn m1 m2)
   (CncCat mc1 mf1 mp1, CncCat mc2 mf2 mp2) -> 
-    liftM3 CncCat (updatePerhaps n mc1 mc2) 
-                  (updatePerhaps n mf1 mf2) (updatePerhaps n mp1 mp2)
+    liftM3 CncCat (updn mc1 mc2) (updn mf1 mf2) (updn mp1 mp2)
   (CncFun m mt1 md1, CncFun _ mt2 md2) -> 
-    liftM2 (CncFun m) (updatePerhaps n mt1 mt2) (updatePerhaps n md1 md2)
+    liftM2 (CncFun m) (updn mt1 mt2) (updn md1 md2)
 
-  (AnyInd _ _, ResOper _ _) -> return j ----
+----  (AnyInd _ _, ResOper _ _) -> return j ----
 
   _ -> Bad $ "cannot unify information in" ++++ show i ++++ "and" ++++ show j
+ where
+   updn = if isc then (updatePerhaps n) else (updatePerhapsHard n)
 
 
+
+{- ---- no more needed: this is done in Rebuild
 -- opers declared in an interface and defined in an instance are a special case
 
 extendResOper n mt1 m1 mt2 m2 = case (m1,m2) of
@@ -93,3 +113,4 @@ extendResOper n mt1 m1 mt2 m2 = case (m1,m2) of
      Q _ c  -> Vr c
      QC _ c -> Vr c
      _ -> composSafeOp strp t
+-}

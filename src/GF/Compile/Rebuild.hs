@@ -19,43 +19,38 @@ rebuildModule ms mo@(i,mi) = do
   let gr = MGrammar ms
   deps <- moduleDeps ms
   is   <- openInterfaces deps i
-  mi' <- case mi of
+  mi'  <- case mi of
 
-    -- add the interface type signatures into an instance module
+    -- add the information given in interface into an instance module
     ModMod m -> do
       testErr (null is || mstatus m == MSIncomplete) 
-              ("module" +++ prt i +++ "must be declared incomplete") 
-      mi' <- case mtype m of
+              ("module" +++ prt i +++ 
+               "has open interfaces and must therefore be declared incomplete") 
+      case mtype m of
         MTInstance i0 -> do
-          m0 <- lookupModule gr i0
-          m' <- case m0 of
-            ModMod m1 | isResourceModule m0 -> do ---- mtype m1 == MTInterface -> do
-----              checkCompleteInstance m1 m -- do this later, in CheckGrammar
-              js' <- extendMod i (jments m1) (jments m)
-              return $ replaceJudgements m js'
-            _ -> prtBad "interface expected instead of" i0
-          return mi -----
+          m1 <- lookupModMod gr i0
+          testErr (isModRes m1) ("interface expected instead of" +++ prt i0)
+          m' <- do
+            js' <- extendMod False i0 (jments m1) (jments m)
+            return $ replaceJudgements m js'
+          return $ ModMod m'
         _ -> return mi
-      return mi'
 
     -- add the instance opens to an incomplete module "with" instances
     ModWith mt stat ext ops -> do
-      let insts = [(inf,inst) |OQualif _ inf inst <- ops]
+      let insts = [(inf,inst) | OQualif _ inf inst <- ops]
       let infs  = map fst insts
       let stat' = ifNull MSComplete (const MSIncomplete) 
                     [i | i <- is, notElem i infs]
       testErr (stat' == MSComplete || stat == MSIncomplete) 
               ("module" +++ prt i +++ "remains incomplete")
-      Module mt0 stat0 fs me ops0 js <- do
-        mi <- lookupModule gr ext
-        case mi of
-          ModMod m -> return m --- check compatibility of module type
-          _ -> prtBad "expected regular module in 'with' clause, not" ext
+      Module mt0 _ fs me ops0 js <- lookupModMod gr ext
       let ops1 = ops ++ [o | o <- ops0, notElem (openedModule o) infs]
                      ++ [oQualif i i | i <- map snd insts] ----
+                     ++ [oSimple i   | i <- map snd insts] ----
       --- check if me is incomplete
-      return $ ModMod $ Module mt0 stat' fs me ops1 
-                          (mapTree (qualifInstanceInfo insts) js)
+      return $ ModMod $ Module mt0 stat' fs me ops1 js 
+                          ---- (mapTree (qualifInstanceInfo insts) js) -- not needed
 
     _ -> return mi
   return (i,mi')
@@ -72,6 +67,7 @@ checkCompleteInstance abs cnc = ifNull (return ()) (Bad . unlines) $
                       then id
                       else (("Error: no definition given to" +++ prt f):)
 
+{- ---- should not be needed
 qualifInstanceInfo :: [(Ident,Ident)] -> (Ident,Info) -> (Ident,Info)
 qualifInstanceInfo insts (c,i) = (c,qualInfo i) where
 
@@ -95,5 +91,5 @@ qualifInstanceInfo insts (c,i) = (c,qualInfo i) where
   qualLin (Just (c,(co,t))) = (Just (c,([(x,qual t) | (x,t) <- co], qual t)))
   qualLin Nothing = Nothing
 
-
    -- NB constructor patterns never appear in interfaces so we need not rename them
+-}

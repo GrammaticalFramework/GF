@@ -5,8 +5,8 @@ GFHOME=/home/aarne/GF2/bin
        # /.../chalmers.se/fs/cab/cs/.users/markus/home/GF1
 
 JGUILIB=$GFHOME/java/
-GF=$GFHOME/gf2
-JGUI=GFEditor
+GF=$GFHOME/gf2+
+JGUI=GFEditor2
 
-java -cp $JGUILIB $JGUI "$GF -java $*"
+java -cp $JGUILIB $JGUI "$GF -java -new $*"
 

@@ -459,7 +459,7 @@ getHarmony : Str -> Str = \u ->
 -- as a separate word ("auto &+ ni"), which needs unlexing. Unlexing also
 -- has to fix the vowel harmony in cases like "äiti &+ nsä".
 
-  suff : Str -> Str = \ni -> "&+" ++ ni ;
+  suff : Str -> Str = \ni -> BIND ++ ni ;
 
   possSuffix : Number => Person => Str = \\n,p => 
     suff (case <n,p> of {
