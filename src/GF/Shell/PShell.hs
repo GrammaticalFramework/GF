@@ -51,6 +51,7 @@ pCommand ws = case ws of
   "i"  : f : [] -> aUnit   (CImport f)
   "rl" : l : [] -> aUnit   (CRemoveLanguage (language l))
   "e"  : []     -> aUnit   CEmptyState
+  "s"  : []     -> aUnit   CStripState
   "tg" : f : [] -> aUnit   (CTransformGrammar f)
   "cl" : f : [] -> aUnit   (CConvertLatex f)
 

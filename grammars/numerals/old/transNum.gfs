@@ -1,56 +1,56 @@
-i -old -abs=Nums numerals.Dec.gf
-i -old -abs=Nums amharic.gf
-i -old -abs=Nums basque.gf
-i -old -abs=Nums biblical_hebrew.gf
-i -old -abs=Nums classical_arabic.gf
-i -old -abs=Nums classical_greek.gf
-i -old -abs=Nums croatian.gf
-i -old -abs=Nums bulgarian.gf
-i -old -abs=Nums catalan.gf
-i -old -abs=Nums czech.gf
-i -old -abs=Nums khmer.gf
-i -old -abs=Nums kwami.gf
-i -old -abs=Nums lamani.gf
-i -old -abs=Nums latvian.gf
-i -old -abs=Nums stieng.gf
-i -old -abs=Nums swahili.gf
-i -old -abs=Nums geez.gf
-i -old -abs=Nums hindi.gf
-i -old -abs=Nums hungarian.gf
-i -old -abs=Nums icelandic.gf
-i -old -abs=Nums irish.gf
-i -old -abs=Nums italian.gf
-i -old -abs=Nums japanese.gf
-i -old -abs=Nums khowar.gf
-i -old -abs=Nums korean.gf
-i -old -abs=Nums kulung.gf
-i -old -abs=Nums modern_greek.gf
-i -old -abs=Nums mongolian.gf
-i -old -abs=Nums numerals.ChiU.gf
-i -old -abs=Nums numerals.Dan.gf
-i -old -abs=Nums numerals.Deu.gf
-i -old -abs=Nums numerals.Eng.gf
-i -old -abs=Nums numerals.Fra.gf
-i -old -abs=Nums numerals.Malay.gf
-i -old -abs=Nums numerals.Ned.gf
-i -old -abs=Nums numerals.NorB.gf
-i -old -abs=Nums numerals.Rus.gf
-i -old -abs=Nums numerals.Suo.gf
-i -old -abs=Nums numerals.Swe.gf
-i -old -abs=Nums numerals.Tam.gf
-i -old -abs=Nums old_church_slavonic.gf
-i -old -abs=Nums pashto.gf
-i -old -abs=Nums polish.gf
-i -old -abs=Nums portuguese.gf
-i -old -abs=Nums quechua.gf
-i -old -abs=Nums romanian.gf
-i -old -abs=Nums sanskrit.gf
-i -old -abs=Nums slovak.gf
-i -old -abs=Nums sorani.gf
-i -old -abs=Nums spanish.gf
-i -old -abs=Nums swiss_french.gf
-i -old -abs=Nums tamil.gf
-i -old -abs=Nums tibetan.gf
-i -old -abs=Nums totonac.gf
-i -old -abs=Nums turkish.gf
+i -old -abs=Nums -cnc=Decimal numerals.Dec.gf
+i -old -abs=Nums -cnc=Amharic amharic.gf
+i -old -abs=Nums -cnc=Basque basque.gf
+i -old -abs=Nums -cnc=Hebrew biblical_hebrew.gf
+i -old -abs=Nums -cnc=Arabic classical_arabic.gf
+i -old -abs=Nums -cnc=GreekOld classical_greek.gf
+i -old -abs=Nums -cnc=Croatian croatian.gf
+i -old -abs=Nums -cnc=Bulgarian bulgarian.gf
+i -old -abs=Nums -cnc=Catalan catalan.gf
+i -old -abs=Nums -cnc=Czech czech.gf
+i -old -abs=Nums -cnc=Khmer khmer.gf
+i -old -abs=Nums -cnc=Kwami kwami.gf
+i -old -abs=Nums -cnc=Lamani lamani.gf
+i -old -abs=Nums -cnc=Latvian latvian.gf
+i -old -abs=Nums -cnc=Stieng stieng.gf
+i -old -abs=Nums -cnc=Swahili swahili.gf
+i -old -abs=Nums -cnc=Geez geez.gf
+i -old -abs=Nums -cnc=Hindi hindi.gf
+i -old -abs=Nums -cnc=Hungarian hungarian.gf
+i -old -abs=Nums -cnc=Icelandic icelandic.gf
+i -old -abs=Nums -cnc=Irish irish.gf
+i -old -abs=Nums -cnc=Italian italian.gf
+i -old -abs=Nums -cnc=Japanese japanese.gf
+i -old -abs=Nums -cnc=Khowar khowar.gf
+i -old -abs=Nums -cnc=Korean korean.gf
+i -old -abs=Nums -cnc=Kulung kulung.gf
+i -old -abs=Nums -cnc=GreekNew modern_greek.gf
+i -old -abs=Nums -cnc=Mongolian mongolian.gf
+i -old -abs=Nums -cnc=Chinese numerals.ChiU.gf
+i -old -abs=Nums -cnc=Danish numerals.Dan.gf
+i -old -abs=Nums -cnc=German numerals.Deu.gf
+i -old -abs=Nums -cnc=English numerals.Eng.gf
+i -old -abs=Nums -cnc=French numerals.Fra.gf
+i -old -abs=Nums -cnc=Malay numerals.Malay.gf
+i -old -abs=Nums -cnc=Dutch numerals.Ned.gf
+i -old -abs=Nums -cnc=Norwegian numerals.NorB.gf
+i -old -abs=Nums -cnc=Russian numerals.Rus.gf
+i -old -abs=Nums -cnc=Finnish numerals.Suo.gf
+i -old -abs=Nums -cnc=Swedish numerals.Swe.gf
+i -old -abs=Nums -cnc=Tampere numerals.Tam.gf
+i -old -abs=Nums -cnc=ChurchSlavonic old_church_slavonic.gf
+i -old -abs=Nums -cnc=Pashto pashto.gf
+i -old -abs=Nums -cnc=Polish polish.gf
+i -old -abs=Nums -cnc=Portuguese portuguese.gf
+i -old -abs=Nums -cnc=Quechua quechua.gf
+i -old -abs=Nums -cnc=Romanian romanian.gf
+i -old -abs=Nums -cnc=Sanskrit sanskrit.gf
+i -old -abs=Nums -cnc=Slovak slovak.gf
+i -old -abs=Nums -cnc=Sorani sorani.gf
+i -old -abs=Nums -cnc=Spanich spanish.gf
+i -old -abs=Nums -cnc=SwissFrench swiss_french.gf
+i -old -abs=Nums -cnc=Tamil tamil.gf
+i -old -abs=Nums -cnc=Tibetan tibetan.gf
+i -old -abs=Nums -cnc=Totonac totonac.gf
+i -old -abs=Nums -cnc=Turkish turkish.gf
 ---ts -f

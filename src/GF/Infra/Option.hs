@@ -139,6 +139,7 @@ latexLin    = showLatex
 tableLin    = iOpt "table"
 defaultLinOpts = [firstLin]
 useUTF8     = iOpt "utf8"
+showLang    = iOpt "lang"
 
 -- other
 beVerbose    = iOpt "v"

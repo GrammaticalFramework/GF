@@ -41,6 +41,7 @@ data Command =
    CImport FilePath
  | CRemoveLanguage Language
  | CEmptyState
+ | CStripState
  | CTransformGrammar FilePath
  | CConvertLatex FilePath
 
@@ -143,6 +144,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
     st1 <- shellStateFromFiles opts st file
     ioeIO $ changeState (const st1) sa --- \ ((_,h),a) -> ((st,h), a))
   CEmptyState         -> changeState reinitShellState sa
+  CStripState         -> changeState purgeShellState sa
 
 {-
   CRemoveLanguage lan -> changeState (removeLanguage lan) sa
@@ -209,7 +211,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
   CPrintInformation c -> justOutput (useIOE () $ showInformation opts st c) sa
   CPrintLanguages     -> justOutput 
                          (putStrLn $ unwords $ map prLanguage $ allLanguages st) sa
-----  CPrintMultiGrammar  -> returnArg (AString (prMultiGrammar opts st)) sa
+  CPrintMultiGrammar  -> returnArg (AString (prCanonGrammar (canModules st))) sa
 ----  CPrintGramlet       -> returnArg (AString (Gr.prGramlet st)) sa
 ----  CPrintCanonXML      -> returnArg (AString (Canon.prCanonXML st False)) sa
 ----  CPrintCanonXMLStruct -> returnArg (AString (Canon.prCanonXML st True)) sa

@@ -35,6 +35,7 @@ import qualified Compute as Co
 import qualified Ident as I
 import qualified GrammarToCanon as GC
 import qualified CanonToGrammar as CG
+import qualified MkGFC as MC
 
 import Editing
 
@@ -112,6 +113,9 @@ transformGrammarFile opts file = do
   sy <- useIOE GF.emptySyntax $ getSyntax opts file
   return $ optPrintSyntax opts sy
 -}
+
+prIdent :: Ident -> String
+prIdent = prt
 
 -- then stg for customizable and internal use
 
@@ -256,6 +260,9 @@ optPrintGrammar opts = customOrDefault opts grammarPrinter customGrammarPrinter
 
 optPrintSyntax :: Options -> GF.Grammar -> String
 optPrintSyntax opts = customOrDefault opts grammarPrinter customSyntaxPrinter
+
+prCanonGrammar :: CanonGrammar -> String
+prCanonGrammar = MC.prCanon
 
 {- ----
 optPrintTree :: Options -> GFGrammar -> Tree -> String

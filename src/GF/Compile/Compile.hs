@@ -125,6 +125,9 @@ extendCompileEnvInt (_,MGrammar ss, MGrammar cs) (k,sm,cm) =
 
 extendCompileEnv (k,s,c) (sm,cm) = extendCompileEnvInt (k,s,c) (k,sm,cm)
 
+extendCompileEnvCanon (k,s,c) cgr = 
+  return (k,s, MGrammar (modules cgr ++ modules c))
+
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
 compileOne opts env file = do
 
@@ -134,7 +137,12 @@ compileOne opts env file = do
   let name = fileBody file
 
   case gf of
-    -- for canonical gf, just read the file and update environment
+    -- for multilingual canonical gf, just read the file and update environment
+    "gfcm" -> do
+       cgr <- putp ("+ reading" +++ file) $ getCanonGrammar file
+       extendCompileEnvCanon env cgr
+
+    -- for canonical gf, read the file and update environment, also source env
     "gfc" -> do
        cm <- putp ("+ reading" +++ file) $ getCanonModule file
        sm <- ioeErr $ CG.canon2sourceModule cm
@@ -179,6 +187,12 @@ compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
 
   let putp = putPointE opts
       mos  = modules gr
+
+  if (oElem showOld opts && oElem emitCode opts) 
+    then do
+      let (file,out) = (gfFile (prt i), prGrammar (MGrammar [mo]))
+      ioeIO $ writeFile file out >> putStr ("  wrote file" +++ file)
+    else return ()
 
   mo1   <- ioeErr $ rebuildModule mos mo
 

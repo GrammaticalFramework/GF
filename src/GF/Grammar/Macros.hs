@@ -175,6 +175,9 @@ appc = appCons . zIdent
 mkLet :: [LocalDef] -> Term -> Term
 mkLet defs t = foldr Let t defs
 
+mkLetUntyped :: Context -> Term -> Term
+mkLetUntyped defs = mkLet [(x,(Nothing,t)) | (x,t) <- defs]
+
 isVariable (Vr _ ) = True
 isVariable _ = False
 

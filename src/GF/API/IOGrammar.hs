@@ -1,6 +1,5 @@
 module IOGrammar where
 
-import Option
 import Abstract
 import qualified GFC
 import PGrammar
@@ -8,6 +7,8 @@ import TypeCheck
 import Compile
 import ShellState
 
+import Modules
+import Option
 import Operations
 import UseIO
 import Arch
@@ -35,6 +36,9 @@ string2annotTree gr m = annotate gr . string2absTerm (prt m) ---- prt
 ---string2paramList st = map (renameTrm (lookupConcrete st) . patt2term) . pPattList
 
 shellStateFromFiles :: Options -> ShellState -> FilePath -> IOE ShellState
+shellStateFromFiles opts st file | fileSuffix file == "gfcm" = do
+  (_,_,cgr) <- compileOne opts (compileEnvShSt st []) file
+  ioeErr $ updateShellState opts st (cgr,(emptyMGrammar,[]))  
 shellStateFromFiles opts st file = do
   let osb = if oElem showOld opts 
                then addOptions (options [beVerbose]) opts -- for old, no emit
