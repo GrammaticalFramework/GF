@@ -4,21 +4,25 @@ concrete ImperC of Imper = open ResImper in {
 
   lincat
     Exp = PrecExp ;
-    Body = {s,s2 : Str} ;
+    Rec = {s,s2,s3 : Str} ;
 
   lin
     Empty = ss [] ;
-    Funct args val body cont = ss (
-      val.s ++ cont.$0 ++ paren body.s2 ++ "{" ++ 
-      body.s ++ "}" ++ ";" ++ cont.s) ;
+    FunctNil val stm cont = ss (
+      val.s ++ cont.$0 ++ paren [] ++ "{" ++ 
+      stm.s ++ "}" ++ ";" ++ cont.s) ;
+    Funct args val rec = ss (
+      val.s ++ rec.$0 ++ paren rec.s2 ++ "{" ++ 
+      rec.s ++ "}" ++ ";" ++ rec.s3) ;
 
-    BodyNil stm = stm ** {s2 = []} ;
-    BodyOne typ stm = stm ** {
-      s2 = typ.s ++ stm.$0
+    RecOne typ stm prg = stm ** {
+      s2 = typ.s ++ stm.$0 ;
+      s3 = prg.s
       } ;
-    BodyCons typ _ body = {
+    RecCons typ _ body prg = {
       s  = body.s ; 
       s2 = typ.s ++ body.$0 ++ "," ++ body.s2 ;
+      s3 = prg.s
       } ;
 
     Decl  typ cont = continues (typ.s ++ cont.$0) cont ;

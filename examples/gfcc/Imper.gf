@@ -2,6 +2,7 @@ abstract Imper = PredefAbs ** {
 
   cat
     Program ;
+    Rec ListTyp ;
     Typ ;
     NumTyp ;
     ListTyp ;
@@ -15,12 +16,13 @@ abstract Imper = PredefAbs ** {
   fun
     Empty : Program ;
     Funct : (AS : ListTyp) -> (V : Typ) -> 
-              Body AS -> (Fun AS V -> Program) -> Program ;
+              (Fun AS V -> Rec AS) -> Program ;
+    FunctNil : (V : Typ) -> 
+                 Stm -> (Fun NilTyp V -> Program) -> Program ;
 
-    BodyNil  : Stm -> Body NilTyp ;
-    BodyOne  : (A : Typ) -> (Var A -> Stm) -> Body (ConsTyp A NilTyp) ;
-    BodyCons : (A : Typ) -> (AS : ListTyp) -> 
-                  (Var A -> Body AS) -> Body (ConsTyp A AS) ;
+    RecOne  : (A : Typ) -> (Var A -> Stm) -> Program -> Rec (ConsTyp A NilTyp) ;
+    RecCons : (A : Typ) -> (AS : ListTyp) -> 
+                  (Var A -> Rec AS) -> Program -> Rec (ConsTyp A AS) ;
 
     Decl   : (A : Typ) -> (Var A -> Stm) -> Stm ;
     Assign : (A : Typ) -> Var A -> Exp A -> Stm -> Stm ;

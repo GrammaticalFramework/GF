@@ -168,6 +168,7 @@ instance Print Val where
   prt (VClos env e) = case e of
     Meta _ -> prt_ e ++ prEnv env
     _      -> prt_ e ---- ++ prEnv env ---- for debugging
+  prt VType = "Type"
  
 prv1 v = case v of
   VApp _ _  -> prParenth $ prt v
