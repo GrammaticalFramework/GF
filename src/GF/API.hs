@@ -157,10 +157,10 @@ randomTreesIO opts gr n = do
    g   = grammar gr
    mx  = optIntOrN opts flagDepth 41
 
-generateTrees :: Options -> GFGrammar -> [Tree]
-generateTrees opts gr =
+generateTrees :: Options -> GFGrammar -> Maybe Tree -> [Tree]
+generateTrees opts gr mt =
   optIntOrAll opts flagNumber  
-    [tr | t <- Gen.generateTrees gr' cat dpt mn, Ok tr <- [mkTr t]]
+    [tr | t <- Gen.generateTrees gr' cat dpt mn mt, Ok tr <- [mkTr t]]
   where
     mkTr = annotate gr' . qualifTerm (absId gr) 
     gr' = grammar gr

@@ -175,9 +175,11 @@ txtHelpFile =
   "\n      -number  generate this number of trees (not impl. with Tree argument)" ++
   "\n      -depth   use this number of search steps at most" ++
   "\n" ++
-  "\ngt, generate_trees: gt" ++
+  "\ngt, generate_trees: gt Tree?" ++
   "\n      Generates all trees up to a given depth. If the depth is large," ++
-  "\n      a small -alts is recommended" ++
+  "\n      a small -alts is recommended. If a Tree argument is given, the" ++
+  "\n      command completes the Tree with values to the metavariables in" ++
+  "\n      the tree." ++
   "\n  flags:" ++
   "\n      -depth   generate to this depth (default 3)" ++
   "\n      -alts    take this number of alternatives at each branch (default unlimited)" ++

@@ -188,7 +188,15 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
       _ -> do
         ts <- randomTreesIO opts gro (optIntOrN opts flagNumber 1)
         returnArg (ATrms ts) sa
-  CGenerateTrees -> returnArg (ATrms $ generateTrees opts gro) sa
+  CGenerateTrees -> do
+    let 
+      a' = case a of
+        ASTrm _ -> s2t a
+        _ -> a
+      mt = case a' of
+        ATrms (tr:_) -> Just tr
+        _ -> Nothing
+    returnArg (ATrms $ generateTrees opts gro mt) sa
 
 
   CPutTerm -> changeArg (opTT2CommandArg (optTermCommand opts gro) . s2t) sa

@@ -66,7 +66,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
          "erase", "take100", "text", "code", "latexfile", 
                         "structured", "unstructured" };
     private String [] modifyMenu = {"Modify", "identity","transfer", 
-         "compute", "paraphrase", "typecheck", "solve", "context" };
+         "compute", "paraphrase", "generate","typecheck", "solve", "context" };
 //    private String [] modeMenu = {"Menus", "printname", 
 //         "plain", "short", "long", "typed", "untyped" };
     private static String [] newMenu = {"New"};

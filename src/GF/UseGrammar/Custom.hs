@@ -11,6 +11,7 @@ import qualified AbsGF as GF
 import qualified MMacros as MM
 import AbsCompute
 import TypeCheck
+import Generate
 ------import Compile
 import ShellState
 import Editing
@@ -203,6 +204,14 @@ customTermCommand =
                                     (exp2termCommand gr (computeAbsTerm gr) t))
   ,(strCI "paraphrase", \g t -> let gr = grammar g in
                                   exp2termlistCommand gr (mkParaphrases gr) t)
+
+  ,(strCI "generate",   \g t -> let gr = grammar g
+                                    cat = actCat $ tree2loc t --- not needed
+                                in
+                                  tree2termlistCommand gr
+                                    (generateTrees gr cat 2
+                                      Nothing . Just) t)
+
   ,(strCI "typecheck",  \g t -> let gr = grammar g in
                                   err (const []) (return . const t)
                                     (checkIfValidExp gr (tree2exp t)))
@@ -219,12 +228,13 @@ customEditCommand =
   customData "Editor state transformers, selected by option -edit=x" $
   [
    (strCI "identity",   const return) -- DEFAULT
-  ,(strCI "transfer",   const return) --- done ad hoc on top level
   ,(strCI "typecheck",  \g -> reCheckState (grammar g))
   ,(strCI "solve",      \g -> solveAll (grammar g))
   ,(strCI "context",    \g -> contextRefinements (grammar g))
   ,(strCI "compute",    \g -> computeSubTree (grammar g))
   ,(strCI "paraphrase", const return) --- done ad hoc on top level
+  ,(strCI "generate",   const return) --- done ad hoc on top level
+  ,(strCI "transfer",   const return) --- done ad hoc on top level
 -- add your own edit commands here
   ]
   ++ moreCustomEditCommand

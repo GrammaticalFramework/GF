@@ -162,9 +162,11 @@ gr, generate_random: gr Tree?
       -number  generate this number of trees (not impl. with Tree argument)
       -depth   use this number of search steps at most
 
-gt, generate_trees: gt
+gt, generate_trees: gt Tree?
       Generates all trees up to a given depth. If the depth is large,
-      a small -alts is recommended
+      a small -alts is recommended. If a Tree argument is given, the
+      command completes the Tree with values to the metavariables in
+      the tree.
   flags:
       -depth   generate to this depth (default 3)
       -alts    take this number of alternatives at each branch (default unlimited)
