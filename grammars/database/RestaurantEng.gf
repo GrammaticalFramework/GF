@@ -28,4 +28,4 @@ lin
   LaCoupole = pnReg ["La Coupole"] ;
   BurgerKing = pnReg ["Burger King"] ;
 
-} ;
+} 

@@ -4,7 +4,7 @@
 --1 Functions that are not in the API, but common in Russian 
 --
 -- Aarne Ranta, Janna Khegai 2003
-resource ExtraRus = open ResourceRus, Prelude, SyntaxRus in {
+resource ExtraRus = open PredicationRus, ResourceRus, ParadigmsRus, SyntaxRus in {
 
 flags  coding=utf8 ;
 
@@ -32,5 +32,5 @@ oper
       lock_S = <>
     } ;
 
-  tvHave : TV = mkDirectVerb (extVerb have Act Present) ** { lock_TV = <>};    
+  tvHave : TV = mkDirectVerb (extVerb have active present) ** { lock_TV = <>};    
 };
