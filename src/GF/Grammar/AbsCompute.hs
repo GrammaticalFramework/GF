@@ -20,7 +20,7 @@ computeAbsTerm :: GFCGrammar -> Exp -> Err Exp
 computeAbsTerm gr = computeAbsTermIn gr []
 
 computeAbsTermIn :: GFCGrammar -> [Ident] -> Exp -> Err Exp
-computeAbsTermIn gr = compt where
+computeAbsTermIn gr xs e = errIn ("computing" +++ prt e) $ compt xs e where
   compt vv t = case t of
     Prod x a b  -> liftM2 (Prod x) (compt vv a) (compt (x:vv) b)
     Abs x b     -> liftM  (Abs  x)              (compt (x:vv) b)

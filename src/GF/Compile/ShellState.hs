@@ -187,12 +187,22 @@ optionsOfLang st = stateOptions   . stateGrammarOfLang st
 -- the last introduced grammar, stored in options, is the default for operations
 
 firstStateGrammar :: ShellState -> StateGrammar
-firstStateGrammar st = errVal emptyStateGrammar $ do
+firstStateGrammar st = errVal (stateAbstractGrammar st) $ do
   concr <- maybeErr "no concrete syntax" $ concrete st 
   return $ stateGrammarOfLang st concr
 
 mkStateGrammar :: ShellState -> Language -> StateGrammar
 mkStateGrammar = stateGrammarOfLang
+
+stateAbstractGrammar :: ShellState -> StateGrammar
+stateAbstractGrammar st = StGr {
+  absId   = maybe (identC "Abs") id (abstract st), ---
+  cncId   = identC "#Cnc", ---
+  grammar = canModules st, ---- only abstarct ones
+  cf      = emptyCF,
+  morpho  = emptyMorpho
+  }
+
 
 -- analysing shell state into parts
 globalOptions = gloptions

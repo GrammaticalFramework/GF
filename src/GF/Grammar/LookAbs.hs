@@ -13,7 +13,7 @@ import Monad
 type GFCGrammar = C.CanonGrammar
 
 lookupAbsDef :: GFCGrammar -> Ident -> Ident -> Err (Maybe Term)
-lookupAbsDef gr m c = do
+lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
   mi   <- lookupModule gr m
   case mi of
     ModMod mo -> do
@@ -25,7 +25,7 @@ lookupAbsDef gr m c = do
     _ -> Bad $ prt m +++ "is not an abstract module"
 
 lookupFunType :: GFCGrammar -> Ident -> Ident -> Err Type
-lookupFunType gr m c = do
+lookupFunType gr m c = errIn ("looking up funtype of" +++ prt c) $ do
   mi   <- lookupModule gr m
   case mi of
     ModMod mo -> do
@@ -37,7 +37,7 @@ lookupFunType gr m c = do
     _ -> Bad $ prt m +++ "is not an abstract module"
 
 lookupCatContext :: GFCGrammar -> Ident -> Ident -> Err Context
-lookupCatContext gr m c = do
+lookupCatContext gr m c = errIn ("looking up context of cat" +++ prt c) $ do
   mi   <- lookupModule gr m
   case mi of
     ModMod mo -> do
