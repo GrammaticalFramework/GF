@@ -174,17 +174,22 @@ oper
 
 -- Regular verbs are those where no Umlaut occurs.
 
-  vReg  : Str -> V ;         -- kommen
+  vReg  : Str -> V ;         -- führen
 
 -- The verbs 'be' and 'have' are special.
 
   vSein  : V ;
   vHaben : V ;
 
+-- Some irregular verbs.
+
+  vFahren : V ;
+
 -- Verbs with a detachable particle, with regular ones as a special case.
 
   vPart    :  (_,_,_,_,_ : Str) -> V ;     -- sehen, sieht, sieh, gesehen, aus
   vPartReg :  (_,_     : Str) -> V ;       -- bringen, um
+  mkVPart  :  V -> Str -> V ;              -- vFahren, aus
 
 -- Two-place verbs, and the special case with direct object. Notice that
 -- a particle can be included in a $V$.
@@ -310,9 +315,11 @@ oper
   vReg = \s -> mkVerbSimple (regVerb s) ** {lock_V = <>} ;
   vSein = verbSein ** {lock_V = <>} ;
   vHaben = verbHaben ** {lock_V = <>} ;
+  vFahren = mkV "fahren" "fährt" "fuhr" "gefahren" ;
   vPart = \sehen, sieht, sieh, gesehen, aus -> 
     mkVerb (mkVerbum sehen sieht sieh gesehen) aus ** {lock_V = <>} ;
   vPartReg = \sehen, aus -> mkVerb (regVerb sehen) aus ** {lock_V = <>} ;
+  mkVPart v p = mkVerb v.s p  ** {lock_V = <>} ;
 
   mkTV v p c = mkTransVerb v p c  ** {lock_TV = <>} ;
   tvReg = \hören, zu, dat -> mkTV (vReg hören) zu dat ;

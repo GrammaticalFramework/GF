@@ -22,9 +22,9 @@ oper
   predA2 : Adj2 -> NP -> NP -> AS ;    -- two-place adj: "John is married to Mary"
   predAComp : AdjDeg -> NP -> NP -> AS ; -- compar adj: "John is older than Mary"
   predAColl : Adj1 -> NP -> NP -> AS ; -- collective adj: "John and Mary are married"
-  predN1 : N -> NP -> AS ;             -- one-place noun: "John is a man"
+  predN1 : CN -> NP -> AS ;            -- one-place noun: "John is a man"
   predN2 : Fun -> NP -> NP -> AS ;     -- two-place noun: "John is a lover of Mary"
-  predNColl : N -> NP -> NP -> AS ;    -- collective noun: "John and Mary are lovers"
+  predNColl : CN -> NP -> NP -> AS ;   -- collective noun: "John and Mary are lovers"
   predAdv : AdV -> NP -> AS ;          -- adverb: "Joh is outside"
 
 -- Individual-valued function applications.
@@ -67,10 +67,11 @@ oper
   predA2 = \F, x, y -> mkPred x (PredAP (ComplAdj F y)) ;
   predAComp = \F, x, y -> mkPred x (PredAP (ComparAdjP F y)) ;
   predAColl = \F, x, y -> mkPred (conjNP x y) (PredAP (AdjP1 F)) ;
-  predN1 = \F, x -> mkPred x (PredCN (UseN F)) ;
+  predN1 = \F, x -> mkPred x (PredCN F) ;
   predN2 = \F, x, y -> mkPred x (PredCN (AppFun F y)) ;
-  predNColl = \F, x, y -> mkPred (conjNP x y) (PredCN (UseN F)) ;
+  predNColl = \F, x, y -> mkPred (conjNP x y) (PredCN F) ;
   predAdv = \F, x -> mkPred x (PredAdV F) ;
+----  predAdvColl = \F, x, y -> mkPred (conjNP x y) (PredAdV F) ;
 
 
   appFun1 = \f, x -> DefOneNP (AppFun f x) ;
