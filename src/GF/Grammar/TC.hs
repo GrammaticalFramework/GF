@@ -118,6 +118,7 @@ inferExp :: Theory -> TCEnv -> Exp -> Err (AExp, Val, [(Val,Val)])
 inferExp th tenv@(k,rho,gamma) e = case e of
   Vr x -> mkAnnot (AVr x) $ noConstr $ lookupVar gamma x
   Q m c -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c)
+  QC m c -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c) ----
   Sort _ -> return (AType, vType, [])
   App f t -> do
     (f',w,csf) <- inferExp th tenv f 
@@ -187,6 +188,9 @@ checkPatt th tenv exp val = do
      Q m c  -> do
        typ <- lookupConst th (m,c)
        return $ (ACn (m,c) typ, typ, [])
+     QC m c  -> do
+       typ <- lookupConst th (m,c)
+       return $ (ACn (m,c) typ, typ, []) ----
      App f t -> do
        (f',w,csf) <- checkExpP tenv f val
        typ <- whnf w
