@@ -29,12 +29,12 @@ To make and install GF2 (Version 2-beta, 2/4/2004).
      make unix    -- for Linux, Solaris, Mac OSX
      make windows -- for MS Windows
 
-   The binary is sent to the file GF2/bin/gf2
+   The binary is sent to the file GF2/bin/gf
 
 6. For a quick test: start GF2, load a grammar and parse a string:
 
      cd ../grammars/basic
-     ../../bin/gf2 English.gf
+     ../../bin/gf English.gf
 
      -- when GF2 has started and shows the prompt >:
      > p "every number is even or odd"
@@ -45,13 +45,13 @@ To make and install GF2 (Version 2-beta, 2/4/2004).
 
      make install-java
 
-   Then edit the file GF2/bin/jgf2 by changing
+   Then edit the file GF2/bin/jgf by changing
    the value of GFHOME to the location of your GF2/bin directory. Test the
    GUI with some grammars:
 
      cd ../grammars/letter
-     ../../bin/gf2 <mkLetter.gfs
-     ../../bin/jgf2 Letter.gfcm
+     ../../bin/gf <mkLetter.gfs
+     ../../bin/jgf Letter.gfcm
 
    When the window opens, push the Random button. 
 
