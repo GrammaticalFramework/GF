@@ -248,6 +248,8 @@ execECommand env c = case c of
   CSelectCand i      -> selectCand cgr i
 
   CTermCommand c     -> case c of
+                         "reindex" -> \s ->
+                           replaceByTermCommand der gr c (actTree (stateSState s)) s
                          "paraphrase" -> \s ->
                            replaceByTermCommand der gr c (actTree (stateSState s)) s
 ----                          "transfer" -> action2commandNext $

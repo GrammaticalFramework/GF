@@ -12,6 +12,11 @@ typecheck.gfs -- the type checker and constraint solver ; GF editor script
 CleanJVM.hs   -- cleans up jvm.tmp to produce Foo.j ; Haskell module
 makefile      -- builds the compiler from GF source ; Unix Make file
 
+Runtime system:
+--------------
+
+runtime.j     -- jasmin source of the runtime class
+
 Generated files:
 ---------------
 Imper.gfcm    -- canonical multilingual GF grammar for C and JVM
