@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # change the value of GFHOME to the directory where you have the gf binary
-GFHOME=/home/aarne/GF/bin
+GFHOME=/home/aarne/GF2/bin
 
 JGUILIB=$GFHOME/java/
 GF=$GFHOME/gf2

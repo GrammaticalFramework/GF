@@ -43,7 +43,8 @@ gr2sgr gr = [(trId f, ty') | (f,ty) <- funRulesOf gr, ty' <- trTy ty] where
 -- str2tr :: STree -> Exp
 str2tr t = case t of
   SApp (f,ts) -> mkApp (trId f) (map str2tr ts) 
-  
+  SMeta _     -> mkMeta 0
+----  SString s   -> K s
  where
    trId = cn . zIdent
 
@@ -75,7 +76,8 @@ generate gr cat i mn mt = case mt of
     gen (n+1) (nub [(c,SApp (f, xs)) | (f,(cs,c)) <- gr, xs <- args cs cts] ++ cts)
 
   args :: [SCat] -> [(SCat,STree)] -> [[STree]]
-  args cs cts = combinations [constr [t | (k,t) <- cts, k == c] | c <- cs]
+  args cs cts = combinations 
+    [constr (SMeta c : [t | (k,t) <- cts, k == c]) | c <- cs]
 
   constr = maybe id take mn
 
