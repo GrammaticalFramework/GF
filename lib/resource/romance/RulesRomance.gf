@@ -21,6 +21,8 @@ lin
   DefNumNP = defNounPhraseNum ;
 
   DetNP = detNounPhrase ;
+  NDetNP = numDetNounPhrase ;
+  NDetNum = justNumDetNounPhrase ; 
   MassNP = partitiveNounPhrase singular ;
 
   AppN2 = appFunComm ;
@@ -43,7 +45,19 @@ lin
   ComparADeg = comparAdjPhrase ;
   SuperlNP = superlNounPhrase ;
 
-  UseV2 = transAsVerb ;
+----  PredAS = predAdjSent ;
+----  PredV0 rain = predVerbClause (pronNounPhrase pronIt) rain (complVerb rain) ;
+
+-- Partial saturation.
+
+----  UseV2 = transAsVerb ;
+
+----  ComplV3 = complDitransVerb ;
+
+----  ComplA2S = predAdjSent2 ;
+
+----  AdjPart = adjPastPart ;
+
 
   UseV2V x = x ** {isAux = False} ;
   UseV2S x = x ;
@@ -115,8 +129,11 @@ lin
   ImperOne = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
 
------  PrepS p = p ;
------  AdvS = advSentence ;
+----  AdvCl  = advClause ;
+----  AdvVPI = advVerbPhrase ;
+
+----  AdCPhr = advSentence ;
+----  AdvPhr = advSentence ;
 
   TwoS = twoSentence ;
   ConsS = consSentence ;
@@ -148,6 +165,7 @@ lin
   PhrManyCN = useCommonNounPhrase plural ;
   PhrIP ip = postfixSS "?" ip ;
   PhrIAdv ia = postfixSS "?" ia ;
+----  PhrVPI = verbUtterance ;
 
   OnePhr p = p ;
   ConsPhr = cc2 ;

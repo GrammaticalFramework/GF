@@ -81,13 +81,30 @@ oper
 -- The determiner determines the number of the argument noun.
 
   Determiner : Type = {s : Gender => Str ; n : Number} ;
-  NumDeterminer : Type = {s : Gender => Str} ;
+  DeterminerNum : Type = {s : Gender => Str} ;
 
   detNounPhrase : Determiner -> CommNoun -> NounPhrase = \tout, homme -> 
     normalNounPhrase
       (\\c => prepCase c ++ tout.s ! homme.g ++ homme.s ! tout.n)
       homme.g 
       tout.n ;
+
+
+  numDetNounPhrase : DeterminerNum -> Numeral -> CommNounPhrase -> NounPhrase = 
+    \tous, six, homme -> 
+    normalNounPhrase
+      (\\c => prepCase c ++ tous.s ! homme.g ++ six.s ! homme.g ++ homme.s ! Pl)
+      homme.g 
+      Pl ;
+
+--- Here one would like to provide a feminine variant as well.
+
+  justNumDetNounPhrase : DeterminerNum -> Numeral -> NounPhrase = 
+    \tous, six -> 
+    normalNounPhrase
+      (\\c => prepCase c ++ tous.s ! Masc ++ six.s ! Masc)
+      Masc
+      Pl ;
 
 -- The following macros are sufficient to define most determiners,
 -- as shown by the examples that follow.
@@ -98,7 +115,7 @@ oper
   mkDeterminer1 : Number -> Str -> Determiner = \n,chaque -> 
     mkDeterminer n chaque chaque ;
 
-  mkDeterminerNum : Str -> Str -> NumDeterminer = 
+  mkDeterminerNum : Str -> Str -> DeterminerNum = 
     \tous,toutes -> 
     {s = \\g => genForms tous toutes ! g} ;
 
