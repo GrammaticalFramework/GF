@@ -28,6 +28,9 @@ lin
   ShePatient = SheNP ;
   TheyPatient = TheyNP ;
   IPatientHe = INP ;
+  IPatientShe = INP ;
+  HePatient = HeNP ;
+  WePatient = WeNP ;
                                                
   HaveIllness = predV2 (tvDir vAvoir) ;  
   Complain = predV2 (tvDir vAvoir) ;
@@ -106,8 +109,9 @@ lin
   Arm = mkCNomReg "bras" Masc ** {lock_CN = <> };
   Back = mkCNomReg "dos" Masc ** {lock_CN = <> };
   Shoulder = mkCNomReg "epaule" Fem ** {lock_CN = <> };
---  Knee = mkCNomReg "genou" Masc ** {lock_CN = <> };
 --  Tooth = mkCNomReg "dents" Masc ** {lock_CN = <> };
+--  Knee = mkCNomReg "genou" Masc ** {lock_CN = <> };
+
   
 
 --  High = AdjP1 (mkAdjReg "élevé" adjPost ** {lock_Adj1 = <> }) ;

@@ -20,8 +20,11 @@ fun
   Complain : Patient -> Symptom -> Prop ;
 
   ShePatient : Patient ;
+  HePatient : Patient ;
+  WePatient : Patient ;
   TheyPatient : Patient ;
   IPatientHe : Patient ;
+  IPatientShe : Patient ;
 
   Influenza : Illness ; 
   Malaria : Illness ; 
@@ -68,8 +71,9 @@ fun
   Arm : BodyPart ; 	
   Back : BodyPart ; 	
   Shoulder : BodyPart ; 	
---  Knee : BodyPart ; 	
 --  Tooth : BodyPart ; 	
+--  Knee : BodyPart ; 	
+
 
   Fever : Symptom ;
 --  Sickness: Symptom ;
