@@ -4,8 +4,7 @@ include config.mk
 GHMAKE=$(GHC) --make
 GHCXMAKE=ghcxmake
 GHCFLAGS=-package lang -package util -fglasgow-exts $(CPPFLAGS) $(LDFLAGS)
-GHCOPTFLAGS=$(GHCFLAGS)
-##GHCOPTFLAGS=-O $(GHCFLAGS)
+GHCOPTFLAGS=-O $(GHCFLAGS)
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
 
@@ -29,6 +28,8 @@ BIN_DIST_DIR=$(DIST_DIR)-$(host)
 
 all: unix
 
+temp: today noopt
+
 unix: today nofud-links opt
 
 windows: today nofud-links justwindows
@@ -39,6 +40,10 @@ install-java: javac
 	@echo "PLEASE edit GFHOME in bin/jgf"
 opt:
 	$(GHMAKE) $(GHCOPTFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf
+	strip gf
+	mv gf ../bin/
+noopt:
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf
 	strip gf
 	mv gf ../bin/
 
