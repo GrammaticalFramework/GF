@@ -27,8 +27,9 @@ canon2cf opts gr c = do
   let mms  = [(a, tree2list (M.jments m)) | m <- cncs]
   rules0 <- liftM concat $ mapM (uncurry (cnc2cfCond opts)) mms
   let rules = filter (not . isCircularCF) rules0 ---- temporarily here
-  let predef = const [] ---- mkCFPredef cfcats
-  return $ CF (groupCFRules rules, predef)
+  let grules = groupCFRules rules
+  let predef = mkCFPredef $ map fst grules
+  return $ CF (grules, predef)
 
 cnc2cfCond :: Options -> Ident -> [(Ident,Info)] -> Err [CFRule]
 cnc2cfCond opts m gr = 
@@ -144,14 +145,9 @@ term2CFItems m t = errIn "forming cf items" $ case t of
                                      ---- ??
       _   -> prtBad "cannot extract record field from" arg
 
-{- Proof + 1 @ 4     catVarCF :: CFCat
-PNonterm CIdent Integer Label Bool -- cat, position, part/bind, whether arg
-
-
 mkCFPredef :: [CFCat] -> CFPredef
 mkCFPredef cats s = 
-  [(cat, metaCFFun)  | TM _ _ <- [s], cat <- cats] ++
-  [(cat, varCFFun x) | TV x   <- [s], cat <- cats] ++
-  [(cat, lit)        | TL t   <- [s], Just (cat,lit) <- [getCFLiteral t]] ++
-  [(cat, lit)        | TI i   <- [s], Just (cat,lit) <- [getCFLiteral (show i)]] ---
--}
+  [(cat,         metaCFFun)     | TM _ _ <- [s], cat <- cats] ++
+  [(cat,         varCFFun x)    | TV x   <- [s], cat <- cats] ++
+  [(cfCatString, stringCFFun t) | TL t   <- [s]]              ++
+  [(cfCatInt,    intCFFun t)    | TI t   <- [s]]

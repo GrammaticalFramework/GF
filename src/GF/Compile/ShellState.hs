@@ -70,7 +70,8 @@ data StateGrammar = StGr {
   grammar :: CanonGrammar,
   cf      :: CF,
 ----  parser :: StaticParserInfo,
-  morpho  :: Morpho
+  morpho  :: Morpho,
+  loptions :: Options
   }
 
 emptyStateGrammar = StGr {
@@ -78,14 +79,15 @@ emptyStateGrammar = StGr {
   cncId   = identC "#EMPTY", ---
   grammar = M.emptyMGrammar,
   cf      = emptyCF,
-  morpho  = emptyMorpho
+  morpho  = emptyMorpho,
+  loptions = noOptions
   }
 
 -- analysing shell grammar into parts
 stateGrammarST = grammar
 stateCF        = cf
 stateMorpho    = morpho
-stateOptions _ = noOptions ----
+stateOptions   = loptions ----
 
 cncModuleIdST = stateGrammarST
 
@@ -122,16 +124,17 @@ updateShellState opts sh (gr,(sgr,rts)) = do
                                       | (c,co) <- cats, let tc = cat2val co c]
   let deps = True ---- not $ null $ allDepCats cgr
   let binds = [] ---- allCatsWithBind cgr 
+  let src = M.updateMGrammar (srcModules sh) sgr
 
   return $ ShSt {
     abstract   = abstr0, 
     concrete   = concr0, 
     concretes  = zip concrs concrs,
     canModules = cgr,
-    srcModules = M.updateMGrammar (srcModules sh) sgr,
+    srcModules = src,
     cfs        = zip concrs cfs,
     morphos    = zip concrs (repeat emptyMorpho),
-    gloptions  = opts,                            ---- -- global options
+    gloptions  = options (M.allFlags src), ---- canModules
     readFiles  = [ft | ft@(f,_) <- readFiles sh, notInrts f] ++ rts,
     absCats    = csi,
     statistics = [StDepTypes deps,StBoundVars binds]
@@ -194,7 +197,8 @@ stateGrammarOfLang st l = StGr {
   cncId   = l,
   grammar = canModules st, ---- only those needed for l
   cf      = maybe emptyCF id (lookup l (cfs st)),
-  morpho  = maybe emptyMorpho id (lookup l (morphos st))
+  morpho  = maybe emptyMorpho id (lookup l (morphos st)),
+  loptions = gloptions st ---- only the own ones!
   }
 
 grammarOfLang st = stateGrammarST . stateGrammarOfLang st
@@ -218,7 +222,8 @@ stateAbstractGrammar st = StGr {
   cncId   = identC "#Cnc", ---
   grammar = canModules st, ---- only abstarct ones
   cf      = emptyCF,
-  morpho  = emptyMorpho
+  morpho  = emptyMorpho,
+  loptions = gloptions st ----
   }
 
 

@@ -56,23 +56,17 @@ type Profile  = [([[Int]],[Int])]
 mkCFFun :: Atom -> CFFun
 mkCFFun t = CFFun (t,[])
 
-{- ----
-getCFLiteral :: String -> Maybe (CFCat, CFFun)
-getCFLiteral s = case lookupLiteral' s of
-  Ok (c, lit) -> Just (cat2CFCat c, mkCFFun lit)
-  _ -> Nothing
--}
-
 varCFFun :: Ident -> CFFun
 varCFFun = mkCFFun . AV
 
 consCFFun :: CIdent -> CFFun
 consCFFun = mkCFFun . AC
 
-{- ----
-string2CFFun :: String -> CFFun 
-string2CFFun = consCFFun . Ident
--}
+stringCFFun :: String -> CFFun 
+stringCFFun = mkCFFun . AS
+
+intCFFun :: Int -> CFFun 
+intCFFun = mkCFFun . AI . toInteger
 
 cfFun2String :: CFFun -> String
 cfFun2String (CFFun (f,_)) = prt f
@@ -109,6 +103,11 @@ catVarCF = ident2CFCat (mkCIdent "_" "#Var") (identC "_") ----
 
 cat2CFCat :: (Ident,Ident) -> CFCat
 cat2CFCat = uncurry idents2CFCat
+
+---- literals
+cfCatString = string2CFCat "Predef" "String"
+cfCatInt = string2CFCat "Predef" "Int"
+
 
 
 {- ----

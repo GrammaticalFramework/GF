@@ -44,3 +44,9 @@ string2ref gr s =
   if elem '.' s 
     then return $ uncurry G.Q $ strings2Fun s
     else return $ G.Vr $ identC s
+
+string2cat :: StateGrammar -> String -> Err G.Cat
+string2cat gr s = 
+  if elem '.' s 
+    then return $ strings2Fun s
+    else return $ curry id (absId gr) (identC s)

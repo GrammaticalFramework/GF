@@ -2,11 +2,13 @@ module ReadFiles where
 
 import Arch (selectLater, modifiedFiles, ModTime)
 
+import Option
 import Operations
 import UseIO
 import System
 import Char
 import Monad
+import List
 
 -- make analysis for GF grammar modules. AR 11/6/2003
 
@@ -121,6 +123,14 @@ dpComm s = case s of
 lexs s = x:xs where 
       (x,y) = head $ lex s
       xs = if null y then [] else lexs y
+
+-- options can be passed to the compiler by comments in --#, in the main file
+ 
+getOptionsFromFile ::  FilePath -> IO Options
+getOptionsFromFile file = do
+  s <- readFileIf file
+  let ls = filter (isPrefixOf "--#") $ lines s
+  return $ fst $ getOptions "-" $ map (unwords . words . drop 3) ls
 
 -- old GF tolerated newlines in quotes. No more supported!
 fixNewlines s = case s of

@@ -21,7 +21,11 @@ tokVars :: String -> [CFTok]
 tokVars = map mkCFTokVar . words
 
 mkCFTok :: String -> CFTok
-mkCFTok s = tS s ---- if (isLiteral s) then (mkLit s) else (tS s)
+mkCFTok s = case s of
+  '"' :cs@(_:_) -> tL $ init cs
+  '\'':cs@(_:_) -> tL $ init cs --- 's Gravenhage
+  _:_ | all isDigit s -> tI s
+  _ -> tS s
 
 mkCFTokVar :: String -> CFTok
 mkCFTokVar s = case s of

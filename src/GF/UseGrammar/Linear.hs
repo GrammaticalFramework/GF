@@ -12,7 +12,7 @@ import LookAbs
 import MMacros
 import TypeCheck (annotate) ----
 import Str
-import Unlex
+import Text
 ----import TypeCheck -- to annotate
 
 import Operations
@@ -105,9 +105,13 @@ linLab0 = L (identC "s")
 sTables2strs :: [[([Patt],[Str])]] -> [[Str]]
 sTables2strs = map snd . concat
 
--- from this, to get a list of strings --- customize unlexer
+-- from this, to get a list of strings
 strs2strings :: [[Str]] -> [String]
 strs2strings = map unlex
+
+-- this is just unwords; use an unlexer from Text to postprocess
+unlex :: [Str] -> String
+unlex = performBinds . concat . map sstr . take 1 ----
 
 -- finally, a top-level function to get a string from an expression
 linTree2string :: Marker -> CanonGrammar -> Ident -> A.Tree -> String

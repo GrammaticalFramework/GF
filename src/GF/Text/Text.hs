@@ -31,15 +31,23 @@ formatAsText = unwords . format . cap . words where
   para  = (=="<p>") 
 
 formatAsCode :: String -> String
-formatAsCode = unwords . format . words where
-  format ws = case ws of
-    p : w : ww | parB p -> format ((p ++ w') : ww') where (w':ww') = format (w:ww)
-    w : p : ww | par  p -> format ((w ++ p') : ww') where (p':ww') = format (p:ww)
-    w     : ww           -> w        : format ww
-    [] -> []
-  parB = flip elem (map singleton "([{")
-  parE = flip elem (map singleton "}])")
-  par t = parB t || parE t
+formatAsCode = rend 0 . words where
+  -- render from BNF Converter
+  rend i ss = case ss of
+    "["      :ts -> cons "["  $ rend i ts
+    "("      :ts -> cons "("  $ rend i ts
+    "{"      :ts -> cons "{"  $ new (i+1) $ rend (i+1) ts
+    "}" : ";":ts -> new (i-1) $ space "}" $ cons ";" $ new (i-1) $ rend (i-1) ts
+    "}"      :ts -> new (i-1) $ cons "}" $ new (i-1) $ rend (i-1) ts
+    ";"      :ts -> cons ";"  $ new i $ rend i ts
+    t  : "," :ts -> cons t    $ space "," $ rend i ts
+    t  : ")" :ts -> cons t    $ cons ")"  $ rend i ts
+    t  : "]" :ts -> cons t    $ cons "]"  $ rend i ts
+    t        :ts -> space t   $ rend i ts
+    _            -> ""
+  cons s t  = s ++ t
+  new i s   = '\n' : replicate (2*i) ' ' ++ dropWhile isSpace s
+  space t s = if null s then t else t ++ " " ++ s
 
 performBinds :: String -> String
 performBinds = unwords . format . words where
