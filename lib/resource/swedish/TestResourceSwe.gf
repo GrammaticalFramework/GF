@@ -1,6 +1,7 @@
 --# -path=.:../scandinavian:../abstract:../../prelude
 
-concrete TestResourceSwe of TestResource = RulesSwe, StructuralSwe ** open MorphoSwe, SyntaxSwe in {
+concrete TestResourceSwe of TestResource = RulesSwe, StructuralSwe ** 
+  open Prelude, MorphoSwe, SyntaxSwe in {
 
 flags startcat=Phr ; lexer=text ; unlexer=text ;
 
@@ -48,4 +49,18 @@ lin
 
   John = mkProperName "Johan" (NUtr Masc) ;
   Mary = mkProperName "Maria" (NUtr NoMasc) ;
+
+--- next
+   AlreadyAdv = advPre "redan" ;
+   NowAdv = advPre "now" ;
+
+   Paint = extTransVerb (vNopart (vTala "mål")) [] ;
+   Green = aFin "grön" ;
+   Beg = extTransVerb (mkVerbPart "be" "ber" "be" "bad" "bett" "bedd" []) [] ** {s3 = "att"} ;
+   Promise  = extTransVerb (vNopart (vTala "lov")) [] ** {isAux = False} ;
+   Promise2 = extTransVerb (vNopart (vTala "lov")) [] ** {s3 = "att"} ;
+   Wonder = extTransVerb (vNopart (vTala "undr")) [] ;
+   Ask = extTransVerb (vNopart (vTala "fråg")) [] ;
+   Tell = extTransVerb (vNopart (vTala "berätt")) [] ;
+   Look = extTransVerb (mkVerbPart "se" "ser" "se" "såg" "sett" "sedd" "ut") [] ;
 } ;

@@ -41,10 +41,27 @@ lin
 
   CNthatS = nounThatSentence ;
 
-  PredVP = predVerbPhrase ;
+   PredVV2 = transVerbVerb ;
+   AdjPart = adjPastPart ;
 
-  PosVG  = predVerbGroup True ;
-  NegVG  = predVerbGroup False ;
+   PredV3A = complDitransAdjVerb ;
+   PredV3VSubj = complDitransVerbVerb False ;
+   PredV3VObj = complDitransVerbVerb True ;
+   PredV3S = complDitransSentVerb ;
+   PredV3Q = complDitransQuestVerb ;
+   PredVA = complAdjVerb ;
+
+  UseCl tp cl = {s = \\o => tp.s ++ cl.s ! tp.b ! ClFinite tp.t tp.a o} ;
+  UseVG tp = predVerbGroup tp.b tp.t tp.a ;
+
+  PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
+  NegTP t a = {s = t.s ++ a.s ; b = False ; t = t.t ; a = a.a} ;
+  TPresent     = {s = [] ; t = Present} ;
+  TPast        = {s = [] ; t = Past} ;
+  TFuture      = {s = [] ; t = Future} ;
+  TConditional = {s = [] ; t = Condit} ;
+  ASimul = {s = [] ; a = Simul} ;
+  AAnter = {s = [] ; a = Anter} ;
 
   PredVG = predVerbGroupClause ;
 
@@ -55,9 +72,12 @@ lin
   PredV2 = complTransVerb ;
   PredV3 = complDitransVerb ;
   PredPassV = passVerb ;
+  ReflV2 = reflTransVerb ;
+
   PredNP = predNounPhrase ;
   PredPP = predAdverb ;
   PredVS = complSentVerb ;
+  PredVQ = complQuestVerb ;
   PredVV = complVerbVerb ;
   VTrans = transAsVerb ;
 
@@ -68,20 +88,25 @@ lin
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
 
-  ThereNP A = predVerbPhrase npDet 
-                (predVerbGroup True
-                  (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) A)) ;
+  ExistCN A = predVerbGroupClause npDet 
+                (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 
+                   (indefNounPhrase singular A)) ;
+  ExistNumCN nu A = predVerbGroupClause npDet 
+                (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 
+                   (indefNounPhraseNum plural nu A)) ;
 
-  PosSlashV2 = slashTransVerb True ;
-  NegSlashV2 = slashTransVerb False ;
-  OneVP = predVerbPhrase npMan ;
+  SlashV2 = slashTransVerb ;
+  OneVG = predVerbGroupClause npMan ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
-  RelVP = relVerbPhrase ;
+  RelVG = relVerbGroup ;
   RelSlash = relSlash ;
-  ModRC = modRelClause ;
-  RelSuch = relSuch ;
+  ModRS = modRelClause ;
+  RelCl = relSuch ;
+
+  UseRCl tp cl = 
+    {s = \\gn,p => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! gn ! p} ;
 
   WhoOne = intPronWho singular ;
   WhoMany = intPronWho plural ;
@@ -91,13 +116,21 @@ lin
   NounIPOne = nounIntPron singular ;
   NounIPMany = nounIntPron plural ;
 
-  QuestVP = questVerbPhrase ;
-  IntVP = intVerbPhrase ;
+  QuestVG = questVerbPhrase ;
+  IntVG = intVerbPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
-  IsThereNP A = questVerbPhrase npDet 
-                 (predVerbGroup True
-                  (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) A)) ; 
+
+  ExistQCl A = questVerbPhrase npDet 
+                (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 
+                   (indefNounPhrase singular A)) ;
+  ExistNumQCl nu A = questVerbPhrase npDet 
+                (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 
+                   (indefNounPhraseNum plural nu A)) ;
+
+
+  UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
+
 
   ImperVP = imperVerbPhrase ;
 
@@ -126,7 +159,7 @@ lin
 
   SubjS = subjunctSentence ;
   SubjImper = subjunctImperative ;
-  SubjQu = subjunctQuestion ;
+  SubjQS = subjunctQuestion ;
   SubjVP = subjunctVerbPhrase ;
 
   PhrNP = useNounPhrase ;

@@ -14,16 +14,5 @@ fun
   Mother, Uncle : N2 ;
   Connection : N3 ;
   Well, Always : Adv ;
-  John, Mary : PN ;   
-
-    AlreadyAdv, NowAdv : Adv ;      -- already, now
-    Paint : V3A ;
-    Green : ADeg ;
-    Beg : V3VObj ;
-    Promise : VV ;
-    Promise2 : V3VSubj ;
-    Wonder : VQ ;
-    Ask : V3Q ;
-    Tell : V3S ;
-    Look : VA ;
+  John, Mary : PN ;
 } ;
