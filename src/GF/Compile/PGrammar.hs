@@ -9,6 +9,7 @@ import qualified AbsGFC as A
 import qualified GFC as G
 import GetGrammar
 import Macros
+import MMacros
 
 import Operations
 
@@ -46,9 +47,7 @@ string2formsAndTerm s = case s of
 -}
 
 string2ident :: String -> Err Ident
-string2ident s = return $ case s of
-  c:'_':i -> identV (readIntArg i,[c]) ---
-  _ -> zIdent s
+string2ident s = return $ string2var s
 
 {-
 -- reads the Haskell datatype

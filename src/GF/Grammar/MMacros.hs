@@ -255,14 +255,20 @@ identVar (Vr x) = return x
 identVar _ = Bad "not a variable"
 
 
--- light-weight rename for user interaction
+-- light-weight rename for user interaction; also change names of internal vars
 
 qualifTerm :: Ident -> Term -> Term
 qualifTerm m  = qualif [] where
   qualif xs t = case t of
-    Abs x b -> Abs x $ qualif (x:xs) b
+    Abs x b -> let x' = chV x in Abs x' $ qualif (x':xs) b
     Prod x a b -> Prod x (qualif xs a) $ qualif (x:xs) b
-    Vr x | notElem x xs -> Q m x 
+    Vr x -> let x' = chV x in if (elem x' xs) then (Vr x') else (Q m x) 
     Cn c  -> Q m c
     Con c -> QC m c
     _ -> composSafeOp (qualif xs) t
+  chV x = string2var $ prIdent x
+    
+string2var :: String -> Ident
+string2var s = case s of
+  c:'_':i -> identV (readIntArg i,[c]) ---
+  _ -> zIdent s
