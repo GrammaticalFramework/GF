@@ -37,24 +37,28 @@ showCheckModule mos m = do
 checkModule :: [SourceModule] -> SourceModule -> Check [SourceModule]
 checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod of
 
-  ModMod mo@(Module mt fs me ops js) -> case mt of
-    MTAbstract -> do
-      js' <- mapMTree (checkAbsInfo gr name) js
-      return $ (name, ModMod (Module mt fs me ops js')) : ms
+  ModMod mo@(Module mt st fs me ops js) -> do
+    js' <- case mt of
+      MTAbstract -> mapMTree (checkAbsInfo gr name) js
 
-    MTTransfer a b -> do
-      js' <- mapMTree (checkAbsInfo gr name) js
-      return $ (name, ModMod (Module mt fs me ops js')) : ms
+      MTTransfer a b -> mapMTree (checkAbsInfo gr name) js
 
-    MTResource -> do
-      js' <- mapMTree (checkResInfo gr) js
-      return $ (name, ModMod (Module mt fs me ops js')) : ms
+      MTResource -> mapMTree (checkResInfo gr) js
 
-    MTConcrete a -> do
-      ModMod abs <- checkErr $ lookupModule gr a
-      checkCompleteGrammar abs mo
-      js' <- mapMTree (checkCncInfo gr name (a,abs)) js
-      return $ (name, ModMod (Module mt fs me ops js')) : ms
+      MTConcrete a -> do
+        ModMod abs <- checkErr $ lookupModule gr a
+        checkCompleteGrammar abs mo
+        mapMTree (checkCncInfo gr name (a,abs)) js
+
+      MTInterface -> mapMTree (checkResInfo gr) js
+
+      MTInstance a -> do
+        ModMod abs <- checkErr $ lookupModule gr a
+        checkCompleteInstance abs mo
+        mapMTree (checkResInfo gr) js
+
+    return $ (name, ModMod (Module mt st fs me ops js')) : ms
+
   _ -> return $ (name,mod) : ms
  where
    gr  = MGrammar $ (name,mod):ms
@@ -86,6 +90,18 @@ checkCompleteGrammar abs cnc = mapM_ checkWarn $
          ckOne f = if isInBinTree f given 
                       then id
                       else (("Warning: no linearization of" +++ prt f):)
+
+checkCompleteInstance :: SourceRes -> SourceRes -> Check ()
+checkCompleteInstance abs cnc = mapM_ checkWarn $
+  checkComplete [f | (f, ResOper (Yes _) _) <- abs'] cnc'
+   where
+     abs' = tree2list $ jments abs
+     cnc' = mapTree fst $ jments cnc
+     checkComplete sought given = foldr ckOne [] sought
+       where
+         ckOne f = if isInBinTree f given 
+                      then id
+                      else (("Warning: no definition given to" +++ prt f):)
 
 -- General Principle: only Yes-values are checked. 
 -- A May-value has always been checked in its origin module.

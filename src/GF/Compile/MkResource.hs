@@ -30,7 +30,7 @@ makeReuse gr r me c = do
       _ -> prtBad "expected concrete to be the type of" c
     _ -> prtBad "expected concrete to be the type of" c
 
-  return $ Module MTResource flags me ops jms
+  return $ Module MTResource MSComplete flags me ops jms
 
 mkResDefs :: Ident -> Ident -> Maybe Ident -> Maybe Ident -> 
              BinTree (Ident,Info) -> BinTree (Ident,Info) -> 

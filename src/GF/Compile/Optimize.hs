@@ -29,7 +29,7 @@ evalModule :: [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) ->
                Err [(Ident,SourceModInfo)]
 evalModule ms mo@(name,mod) = case mod of
 
-  ModMod (Module mt fs me ops js) -> case mt of
+  ModMod (Module mt st fs me ops js) | st == MSComplete -> case mt of
     MTResource -> do
       let deps = allOperDependencies name js
       ids <- topoSortOpers deps
@@ -37,9 +37,10 @@ evalModule ms mo@(name,mod) = case mod of
       return $ mod' : ms
     MTConcrete a -> do
       js' <- mapMTree (evalCncInfo gr0 name a) js
-      return $ (name, ModMod (Module mt fs me ops js')) : ms
+      return $ (name, ModMod (Module mt st fs me ops js')) : ms
 
     _ -> return $ (name,mod):ms
+  _ -> return $ (name,mod):ms
  where
    gr0 = MGrammar $ ms
    gr  = MGrammar $ (name,mod) : ms

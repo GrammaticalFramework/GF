@@ -35,56 +35,63 @@ transGrammar x = case x of
 
 transModDef :: ModDef -> Err (Ident, G.SourceModInfo)
 transModDef x = case x of
+
   MMain id0 id concspecs  -> do
     id0' <- transIdent id0
     id'  <- transIdent id
     concspecs' <- mapM transConcSpec concspecs
     return $ (id0', GM.ModMainGrammar (GM.MainGrammar id' concspecs'))
-  MAbstract id extends opens defs  -> do
-    id'      <- transIdent id
-    extends' <- transExtend extends
-    opens'   <- transOpens opens
-    defs0    <- mapM transAbsDef $ getTopDefs defs
-    defs'    <- U.buildAnyTree [d | Left  ds <- defs0, d <- ds]
-    flags    <- return       [f | Right fs <- defs0, f <- fs]
-    return $ (id', GM.ModMod (GM.Module GM.MTAbstract flags extends' opens' defs')) 
-  MResource id extends opens defs  -> do
-    id'      <- transIdent id
-    extends' <- transExtend extends
-    opens'   <- transOpens opens
-    defs0    <- mapM transResDef $ getTopDefs defs
-    defs'    <- U.buildAnyTree [d | Left  ds <- defs0, d <- ds]
-    flags    <- return       [f | Right fs <- defs0, f <- fs]
-    return $ (id', GM.ModMod (GM.Module GM.MTResource flags extends' opens' defs')) 
-  MConcrete id open extends opens defs -> do
-    id'      <- transIdent id
-    open'    <- transIdent open
-    extends' <- transExtend extends
-    opens'   <- transOpens opens
-    defs0    <- mapM transCncDef $ getTopDefs defs
-    defs'    <- U.buildAnyTree [d | Left  ds <- defs0, d <- ds]
-    flags    <- return       [f | Right fs <- defs0, f <- fs]
-    return $ (id', 
-      GM.ModMod (GM.Module (GM.MTConcrete open') flags extends' opens' defs'))
-  MTransfer id open0 open extends opens defs -> do
-    id'      <- transIdent id
-    open0'   <- transOpen open0
-    open'    <- transOpen open
-    extends' <- transExtend extends
-    opens'   <- transOpens opens
-    defs0    <- mapM transAbsDef $ getTopDefs defs
-    defs'    <- U.buildAnyTree [d | Left  ds <- defs0, d <- ds]
-    flags    <- return       [f | Right fs <- defs0, f <- fs]
-    return $ (id', 
-     GM.ModMod (GM.Module (GM.MTTransfer open0' open') flags extends' opens' defs'))
 
-  MReuseAbs id0 id  -> failure x
-  MReuseCnc id0 id  -> failure x
-  MReuseAll r e c  -> do
-    r' <- transIdent r
-    e' <- transExtend e
-    c' <- transIdent c
-    return $ (r', GM.ModMod (GM.Module (GM.MTReuse c') [] e' [] NT)) 
+  MModule compl mtyp body -> do
+
+    let mstat' = transComplMod compl
+
+    (trDef, mtyp', id') <- case mtyp of
+      MTAbstract id -> do
+        id' <- transIdent id
+        return (transAbsDef, GM.MTAbstract, id')
+      MTResource id -> case body of
+        MReuse c -> do
+          id' <- transIdent id
+          c' <- transIdent c
+          return (transResDef, GM.MTReuse c', id')
+        _ -> do
+          id' <- transIdent id
+          return (transResDef, GM.MTResource, id')
+      MTConcrete id open -> do
+        id'   <- transIdent id
+        open' <- transIdent open
+        return (transCncDef, GM.MTConcrete open', id')
+      MTTransfer id a b -> do
+        id'  <- transIdent id
+        a'   <- transOpen a
+        b'   <- transOpen a
+        return (transAbsDef, GM.MTTransfer a' b', id')
+      MTInterface id -> do
+        id' <- transIdent id
+        return (transResDef, GM.MTInterface, id')
+      MTInstance id open -> do
+        id'   <- transIdent id
+        open' <- transIdent open
+        return (transResDef, GM.MTInstance open', id')
+
+    (extends', opens', defs',flags') <- case body of
+      MBody extends opens defs -> do
+        extends' <- transExtend extends
+        opens'   <- transOpens opens
+        defs0    <- mapM trDef $ getTopDefs defs
+        defs'    <- U.buildAnyTree [d | Left  ds <- defs0, d <- ds]
+        flags'   <- return       [f | Right fs <- defs0, f <- fs]
+        return $ (extends', opens', defs',flags')
+      MReuse _ ->
+        return (Nothing,[],NT,[])
+
+    return $ (id', GM.ModMod (GM.Module mtyp' mstat' flags' extends' opens' defs'))  
+
+transComplMod :: ComplMod -> GM.ModuleStatus
+transComplMod x = case x of
+  CMCompl  -> GM.MSComplete
+  CMIncompl  -> GM.MSIncomplete
 
 getTopDefs :: [TopDef] -> [TopDef]
 getTopDefs x = x
@@ -130,8 +137,15 @@ transOpens x = case x of
 
 transOpen :: Open -> Err (GM.OpenSpec Ident)
 transOpen x = case x of
-  OName id   -> liftM  GM.OSimple $ transIdent id
-  OQual id m -> liftM2 GM.OQualif (transIdent id) (transIdent m)
+  OName id     -> liftM   (GM.OSimple GM.OQNormal) $ transIdent id
+  OQualQO q id -> liftM2  GM.OSimple (transQualOpen q) (transIdent id)
+  OQual q id m -> liftM3  GM.OQualif  (transQualOpen q) (transIdent id) (transIdent m)
+
+transQualOpen :: QualOpen -> Err GM.OpenQualif
+transQualOpen x = case x of
+  QOCompl  -> return GM.OQNormal
+  QOInterface  -> return GM.OQInterface
+  QOIncompl  -> return GM.OQIncomplete
 
 transAbsDef :: TopDef -> Err (Either [(Ident, G.Info)] [GO.Option])
 transAbsDef x = case x of
@@ -489,10 +503,13 @@ transOldGrammar x name = case x of
      DefPrintCat printdefs  -> (a,r,d:c)
      DefPrintFun printdefs  -> (a,r,d:c)
      DefPrintOld printdefs  -> (a,r,d:c)
-   mkAbs a = MAbstract absName NoExt (Opens []) $ topDefs a
-   mkRes r = MResource resName NoExt (Opens []) $ topDefs r
-   mkCnc r = MConcrete cncName absName NoExt (Opens [OName resName]) $ topDefs r
+   mkAbs a = MModule q (MTAbstract absName) (MBody ne (Opens []) (topDefs a))
+   mkRes r = MModule q (MTResource resName) (MBody ne  (Opens []) (topDefs r))
+   mkCnc r = MModule q (MTConcrete cncName absName) 
+                                            (MBody ne (Opens [OName resName]) (topDefs r))
    topDefs t = t
+   ne = NoExt
+   q = CMCompl
 
    absName = identC topic
    resName = identC ("Res" ++ lang)

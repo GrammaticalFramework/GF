@@ -27,17 +27,7 @@ transGrammar x = case x of
 transModDef :: ModDef -> Result
 transModDef x = case x of
   MMain id0 id concspecs  -> failure x
-  MAbstract id extend opens topdefs  -> failure x
-  MResource id extend opens topdefs  -> failure x
-  MResourceInt id extend opens topdefs  -> failure x
-  MResourceImp id0 id opens topdefs  -> failure x
-  MConcrete id0 id extend opens topdefs  -> failure x
-  MConcreteInt id0 id extend opens topdefs  -> failure x
-  MConcreteImp open id0 id  -> failure x
-  MTransfer id open0 open extend opens topdefs  -> failure x
-  MReuseAbs id0 id  -> failure x
-  MReuseCnc id0 id  -> failure x
-  MReuseAll id0 extend id  -> failure x
+  MModule complmod modtype modbody  -> failure x
 
 
 transConcSpec :: ConcSpec -> Result
@@ -56,6 +46,23 @@ transTransfer x = case x of
   TransferOut open  -> failure x
 
 
+transModType :: ModType -> Result
+transModType x = case x of
+  MTAbstract id  -> failure x
+  MTResource id  -> failure x
+  MTInterface id  -> failure x
+  MTConcrete id0 id  -> failure x
+  MTInstance id0 id  -> failure x
+  MTTransfer id open0 open  -> failure x
+
+
+transModBody :: ModBody -> Result
+transModBody x = case x of
+  MBody extend opens topdefs  -> failure x
+  MWith id opens  -> failure x
+  MReuse id  -> failure x
+
+
 transExtend :: Extend -> Result
 transExtend x = case x of
   Ext id  -> failure x
@@ -71,7 +78,21 @@ transOpens x = case x of
 transOpen :: Open -> Result
 transOpen x = case x of
   OName id  -> failure x
-  OQual id0 id  -> failure x
+  OQualQO qualopen id  -> failure x
+  OQual qualopen id0 id  -> failure x
+
+
+transComplMod :: ComplMod -> Result
+transComplMod x = case x of
+  CMCompl  -> failure x
+  CMIncompl  -> failure x
+
+
+transQualOpen :: QualOpen -> Result
+transQualOpen x = case x of
+  QOCompl  -> failure x
+  QOIncompl  -> failure x
+  QOInterface  -> failure x
 
 
 transDef :: Def -> Result

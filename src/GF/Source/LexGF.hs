@@ -55,7 +55,7 @@ tokens_scan = load_scan (tokens_acts,stop_act) tokens_lx
 eitherResIdent :: (String -> Tok) -> String -> Tok
 eitherResIdent tv s = if isResWord s then (TS s) else (tv s) where
   isResWord s = isInTree s $
-    B "let" (B "concrete" (B "Tok" (B "Str" (B "PType" (B "Lin" N N) N) (B "Strs" N N)) (B "case" (B "abstract" (B "Type" N N) N) (B "cat" N N))) (B "fun" (B "flags" (B "def" (B "data" N N) N) (B "fn" N N)) (B "in" (B "grammar" N N) (B "include" N N)))) (B "pattern" (B "of" (B "lindef" (B "lincat" (B "lin" N N) N) (B "lintype" N N)) (B "out" (B "oper" (B "open" N N) N) (B "param" N N))) (B "strs" (B "resource" (B "printname" (B "pre" N N) N) (B "reuse" N N)) (B "transfer" (B "table" N N) (B "variants" N N))))
+    B "interface" (B "data" (B "Type" (B "Str" (B "PType" (B "Lin" N N) N) (B "Tok" (B "Strs" N N) N)) (B "cat" (B "case" (B "abstract" N N) N) (B "concrete" N N))) (B "grammar" (B "fn" (B "flags" (B "def" N N) N) (B "fun" N N)) (B "incomplete" (B "include" (B "in" N N) N) (B "instance" N N)))) (B "pattern" (B "of" (B "lincat" (B "lin" (B "let" N N) N) (B "lintype" (B "lindef" N N) N)) (B "out" (B "oper" (B "open" N N) N) (B "param" N N))) (B "strs" (B "resource" (B "printname" (B "pre" N N) N) (B "reuse" N N)) (B "variants" (B "transfer" (B "table" N N) N) (B "with" N N))))
 
 data BTree = N | B String BTree BTree deriving (Show)
 
@@ -114,7 +114,7 @@ lx__14_0 = (True,[(3,"pTSpec",[],Nothing,Nothing)],-1,(('0','0'),[]))
 lx__15_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
 lx__15_0 = (False,[],15,(('\'','\''),[('\'',16)]))
 lx__16_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__16_0 = (True,[(4,"mk_LString",[],Nothing,Nothing)],15,(('\'','\''),[('\'',16)]))
+lx__16_0 = (True,[(4,"mk_LString",[],Nothing,Nothing)],-1,(('0','0'),[]))
 lx__17_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
 lx__17_0 = (True,[(5,"ident",[],Nothing,Nothing)],-1,(('\'','\255'),[('\'',17),('0',17),('1',17),('2',17),('3',17),('4',17),('5',17),('6',17),('7',17),('8',17),('9',17),('A',17),('B',17),('C',17),('D',17),('E',17),('F',17),('G',17),('H',17),('I',17),('J',17),('K',17),('L',17),('M',17),('N',17),('O',17),('P',17),('Q',17),('R',17),('S',17),('T',17),('U',17),('V',17),('W',17),('X',17),('Y',17),('Z',17),('_',17),('a',17),('b',17),('c',17),('d',17),('e',17),('f',17),('g',17),('h',17),('i',17),('j',17),('k',17),('l',17),('m',17),('n',17),('o',17),('p',17),('q',17),('r',17),('s',17),('t',17),('u',17),('v',17),('w',17),('x',17),('y',17),('z',17),('\192',17),('\193',17),('\194',17),('\195',17),('\196',17),('\197',17),('\198',17),('\199',17),('\200',17),('\201',17),('\202',17),('\203',17),('\204',17),('\205',17),('\206',17),('\207',17),('\208',17),('\209',17),('\210',17),('\211',17),('\212',17),('\213',17),('\214',17),('\216',17),('\217',17),('\218',17),('\219',17),('\220',17),('\221',17),('\222',17),('\223',17),('\224',17),('\225',17),('\226',17),('\227',17),('\228',17),('\229',17),('\230',17),('\231',17),('\232',17),('\233',17),('\234',17),('\235',17),('\236',17),('\237',17),('\238',17),('\239',17),('\240',17),('\241',17),('\242',17),('\243',17),('\244',17),('\245',17),('\246',17),('\248',17),('\249',17),('\250',17),('\251',17),('\252',17),('\253',17),('\254',17),('\255',17)]))
 lx__18_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))

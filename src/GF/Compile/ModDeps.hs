@@ -39,7 +39,7 @@ checkUniqueErr ms = do
 
 checkUniqueImportNames :: [Ident] -> SourceModInfo -> Err ()
 checkUniqueImportNames ns mo = case mo of
-  ModMod m -> test [n | OQualif n v <- opens m, n /= v]
+  ModMod m -> test [n | OQualif _ n v <- opens m, n /= v]
 
  where
 
@@ -80,7 +80,7 @@ moduleDeps ms = mapM deps ms where
   -- check for superficial compatibility, not submodule relation etc
   compatMType mt0 mt = case (mt0,mt) of
     (MTConcrete _, MTConcrete _) -> True
-    (MTResourceImpl _, MTResourceImpl _) -> True
+    (MTInstance _, MTInstance _) -> True
     (MTReuse _, MTReuse _) -> True
     ---- some more
     _ -> mt0 == mt

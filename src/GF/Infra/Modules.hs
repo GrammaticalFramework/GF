@@ -18,17 +18,33 @@ data MGrammar i f a = MGrammar {modules :: [(i,ModInfo i f a)]}
 
 data ModInfo i f a =
     ModMainGrammar (MainGrammar i)
-  | ModMod (Module i f a)
+  | ModMod  (Module i f a)
+  | ModWith (ModuleType i) ModuleStatus i [OpenSpec i]
   deriving Show
 
 data Module i f a = Module {
     mtype   :: ModuleType i ,
+    mstatus :: ModuleStatus ,
     flags   :: [f] ,
     extends :: Maybe i ,
     opens   :: [OpenSpec i] ,
     jments  :: BinTree (i,a)
   }
   deriving Show
+
+-- encoding the type of the module
+data ModuleType i = 
+    MTAbstract 
+  | MTTransfer (OpenSpec i) (OpenSpec i) 
+  | MTResource
+  | MTConcrete i
+
+  -- up to this, also used in GFC. Below, source only.
+
+  | MTInterface
+  | MTInstance i 
+  | MTReuse i
+  deriving (Eq,Show)
 
 -- destructive update
 
@@ -41,8 +57,8 @@ updateMGrammar old new = MGrammar $
    ns = modules new
 
 updateModule :: Ord i => Module i f t -> i -> t -> Module i f t
-updateModule (Module  mt fs me ops js) i t = 
-  Module mt fs me ops (updateTree (i,t) js)
+updateModule (Module  mt ms fs me ops js) i t = 
+  Module mt ms fs me ops (updateTree (i,t) js)
 
 data MainGrammar i = MainGrammar {
     mainAbstract  :: i ,
@@ -58,13 +74,29 @@ data MainConcreteSpec i = MainConcreteSpec {
   }
   deriving Show
 
-data OpenSpec i = OSimple i | OQualif i i
+data OpenSpec i = 
+   OSimple OpenQualif i 
+ | OQualif OpenQualif i i
+  deriving (Eq,Show)
+
+data OpenQualif =
+   OQNormal
+ | OQInterface
+ | OQIncomplete
+  deriving (Eq,Show)
+
+oSimple = OSimple OQNormal
+oQualif = OQualif OQNormal
+
+data ModuleStatus = 
+   MSComplete 
+ | MSIncomplete 
   deriving (Eq,Show)
 
 openedModule :: OpenSpec i -> i
 openedModule o = case o of
-  OSimple m -> m
-  OQualif _ m -> m
+  OSimple _ m -> m
+  OQualif _ _ m -> m
 
 allOpens m = case mtype m of
   MTTransfer a b -> a : b : opens m
@@ -75,9 +107,9 @@ depPathModule :: Ord i => Module i f a -> [OpenSpec i]
 depPathModule m = fors m ++ exts m ++ opens m where
   fors m = case mtype m of
     MTTransfer i j -> [i,j]
-    MTConcrete i   -> [OSimple i]
+    MTConcrete i   -> [oSimple i]
     _              -> []
-  exts m = map OSimple $ maybe [] return $ extends m
+  exts m = map oSimple $ maybe [] return $ extends m
 
 -- all modules that a module extends, directly or indirectly
 allExtends :: (Show i,Ord i) => MGrammar i f a -> i -> [i]
@@ -89,7 +121,7 @@ allExtends gr i = case lookupModule gr i of
 
 -- initial search path: the nonqualified dependencies
 searchPathModule :: Ord i => Module i f a -> [i]
-searchPathModule m = [i | OSimple i <- depPathModule m]
+searchPathModule m = [i | OSimple _ i <- depPathModule m]
 
 -- a new module can safely be added to the end, since nothing old can depend on it
 addModule :: Ord i => 
@@ -108,27 +140,14 @@ data IdentM i = IdentM {
   }
   deriving (Eq,Show)
 
--- encoding the type of the module
-data ModuleType i = 
-    MTAbstract 
-  | MTTransfer (OpenSpec i) (OpenSpec i) 
-  | MTResource
-  | MTResourceInt
-  | MTResourceImpl i 
-  | MTConcrete i
-  | MTConcreteInt i i 
-  | MTConcreteImpl i i i
-  | MTReuse i
-  deriving (Eq,Show)
-
 typeOfModule mi = case mi of
   ModMod m -> mtype m
 
 isResourceModule mi = case typeOfModule mi of
   MTResource -> True
   MTReuse _ -> True
-  MTResourceInt -> True
-  MTResourceImpl _ -> True
+---  MTInterface -> True
+  MTInstance _ -> True
   _ -> False
 
 abstractOfConcrete :: (Show i, Eq i) => MGrammar i f a -> i -> Err i
@@ -187,3 +206,11 @@ isModTrans m = case mtype m of
 sameMType m n = case (m,n) of
   (MTConcrete _, MTConcrete _) -> True
   _ -> m == n
+
+-- don't generate code for interfaces and for incomplete modules
+isCompilableModule m = case m of
+  ModMod m -> case mtype m of
+    MTInterface -> False
+    _ -> mstatus m == MSComplete
+  _ -> False ---
+

@@ -31,7 +31,7 @@ canon2sourceModule (i,mi) = do
           M.MTResource -> return (i',M.MTResource) --- c' not needed
           M.MTTransfer x y -> return (i',M.MTTransfer x y) --- c' not needed
       defs   <- mapMTree redInfo $ M.jments m
-      return $ M.ModMod $ M.Module mt flags e os defs
+      return $ M.ModMod $ M.Module mt (M.mstatus m) flags e os defs
     _ -> Bad $ "cannot decompile module type"
   return (i',info')
  where
@@ -39,7 +39,7 @@ canon2sourceModule (i,mi) = do
      e' <- case M.extends m of
        Just e -> liftM Just $ redIdent e
        _ -> return Nothing
-     os' <- mapM (\ (M.OSimple i) -> liftM (\i -> M.OQualif i i) (redIdent i)) $ 
+     os' <- mapM (\ (M.OSimple q i) -> liftM (\i -> M.OQualif q i i) (redIdent i)) $ 
                  M.opens m
      return (e',os')
 

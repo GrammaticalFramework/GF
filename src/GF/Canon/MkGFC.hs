@@ -21,29 +21,29 @@ canon2grammar (Gr modules) = M.MGrammar $ map mod2info modules where
             MTAbs a -> (a,M.MTAbstract)
             MTRes a -> (a,M.MTResource)
             MTCnc a x -> (a,M.MTConcrete x)
-            MTTrans a x y -> (a,M.MTTransfer (M.OSimple x) (M.OSimple y))
-      in (a,M.ModMod (M.Module mt' flags (ee e) (oo os) defs'))
+            MTTrans a x y -> (a,M.MTTransfer (M.oSimple x) (M.oSimple y))
+      in (a,M.ModMod (M.Module mt' M.MSComplete flags (ee e) (oo os) defs'))
   ee (Ext m) = Just m
   ee _ = Nothing
-  oo (Opens ms) = map M.OSimple ms
+  oo (Opens ms) = map M.oSimple ms
   oo _ = []
 
 grammar2canon :: CanonGrammar -> Canon
 grammar2canon (M.MGrammar modules) = Gr $ map info2mod modules 
 
 info2mod m = case m of
-    (a, M.ModMod (M.Module mt flags me os defs)) -> 
+    (a, M.ModMod (M.Module mt _ flags me os defs)) -> 
       let defs' = map info2def $ tree2list defs 
           mt'   = case mt of
              M.MTAbstract -> MTAbs a
              M.MTResource -> MTRes a
              M.MTConcrete x -> MTCnc a x
-             M.MTTransfer (M.OSimple x) (M.OSimple y) -> MTTrans a x y
+             M.MTTransfer (M.OSimple _ x) (M.OSimple _ y) -> MTTrans a x y
       in
         Mod mt' (gfcE me) (gfcO os) flags defs'
  where
   gfcE = maybe NoExt Ext
-  gfcO os = if null os then NoOpens else Opens [m | M.OSimple m <- os]
+  gfcO os = if null os then NoOpens else Opens [m | M.OSimple _ m <- os]
 
 
 -- these translations are meant to be trivial
