@@ -14,6 +14,7 @@ import UTF8
 import Today (today)
 import Arch
 import System (getArgs)
+import Monad (foldM)
 
 -- AR 19/4/2000 -- 11/11/2001
 
@@ -24,8 +25,8 @@ main = do
       java    = oElem forJava os
   putStrLn $ if java then encodeUTF8 welcomeMsg else welcomeMsg
   st <- case fs of 
-    f:_ -> useIOE emptyShellState (shellStateFromFiles os emptyShellState f)
-    _ -> return emptyShellState
+    _ -> useIOE emptyShellState $ foldM (shellStateFromFiles os) emptyShellState fs
+  ---  _ -> return emptyShellState
   if null fs then return () else putCPU 
   if java then sessionLineJ st else do
   gfInteract (initHState st) 

@@ -177,9 +177,10 @@ optLinearizeTree opts gr t = case getOptVal opts transferFun of
 
   lin mk
     | oElem showRecord opts = liftM prt . linearizeNoMark g c
-    | otherwise             = return . linTree2string mk g c
+    | otherwise             = return . untok . linTree2string mk g c
   g = grammar gr
   c = cncId gr
+  untok = customOrDefault opts useUntokenizer customUntokenizer gr
 
 {- ----
         untoksl . lin where

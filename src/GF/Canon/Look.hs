@@ -144,6 +144,8 @@ ccompute cnc = comp []
 
     Con c xs -> liftM (Con c) $ mapM compt xs
 
+    K (KS []) -> return E --- should not be needed
+
     _        -> return t  
    where
      compt = comp g xs

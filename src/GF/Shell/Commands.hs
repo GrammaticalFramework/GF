@@ -6,9 +6,10 @@ import Zipper
 import qualified Grammar as G ---- Cat, Fun, Q, QC
 import GFC
 import CMacros
+import Macros (qq)----
 import LookAbs
 import Look
-import Values (loc2treeFocus)----
+import Values (loc2treeFocus,tree2exp)----
 
 import GetTree
 import API
@@ -46,7 +47,7 @@ import List (intersperse)
 -- See CommandsL for a parser of a command language.
 
 data Command =
-   CNewCat G.Cat
+   CNewCat String
  | CNewTree String
  | CAhead Int
  | CBack Int
@@ -201,7 +202,8 @@ execCommand env c s = case c of
 execECommand :: CEnv -> Command -> ECommand
 execECommand env c = case c of
   CNewCat cat        -> action2commandNext $ \x -> do
-                          s' <- newCat cgr cat x
+                          cat' <- string2cat sgr cat
+                          s' <- newCat cgr cat' x
                           uniqueRefinements cgr s'
   CNewTree s         -> action2commandNext $ \x -> do 
                           t  <- string2treeErr gr s 
@@ -271,6 +273,7 @@ execECommand env c = case c of
    gr   = grammarCEnv env
    der  = maybe True not $ caseYesNo (globalOptions env) noDepTypes
           -- if there are dep types, then derived refs;  deptypes is the default
+   abs = absId sgr
 
 --
 
@@ -285,7 +288,7 @@ string2varPair s = case words s of
 cMenuDisplay :: String -> Command
 cMenuDisplay s = CAddOption (menuDisplay s)
 
-newCatMenu env = [(CNewCat c, printname env initSState c) | 
+newCatMenu env = [(CNewCat (prQIdent c), printname env initSState c) | 
                                   (c,[]) <- allCatsOf (canCEnv env)]
 
 mkRefineMenu :: CEnv -> SState -> [(Command,String)]
@@ -302,8 +305,7 @@ mkRefineMenuAll env sstate =
        [(CAddClip,     (ifShort "ac" "AddClip",  "ac"))]
     (refs,[],_)   -> 
        [(CRefineWithAtom (prRefinement f), prRef t) | t@(f,_) <- refs] ++
-       [(CRefineWithClip i, prClip i t e) | (i,t) <- possClipsSState gr sstate, 
-                                            let e = tree2string t]
+       [(CRefineWithClip i, prClip i t) | (i,t) <- possClipsSState gr sstate] 
     (_,cands,_)   -> 
        [(CSelectCand i,   prCand (t,i))    | (t,i) <- zip cands [0..]]
 
@@ -311,8 +313,8 @@ mkRefineMenuAll env sstate =
   prRef (f,t) = 
     (ifShort "r" "Refine" +++ prOrLinRef f +++ ifTyped (":" +++ prt t),
      "r" +++ prRefinement f)
-  prClip i t e =
-    (ifShort "rc" "Paste" +++ prOrLinTree t e,
+  prClip i t =
+    (ifShort "rc" "Paste" +++ prOrLinTree t,
      "rc" +++ show i)
   prChangeHead f = 
     (ifShort "ch" "ChangeHead" +++ prOrLinFun f,
@@ -339,10 +341,10 @@ mkRefineMenuAll env sstate =
     G.QC m f ->  printname env sstate (m,f) 
     _ -> prt t
   prOrLinFun = printname env sstate
-  prOrLinTree t e = case getOptVal opts menuDisplay of
-    Just "Abs" -> e
+  prOrLinTree t = case getOptVal opts menuDisplay of
+    Just "Abs" -> prTermOpt opts $ tree2exp t
     Just lang  -> prQuotedString $ lin lang t
-    _ -> e
+    _ -> prTermOpt opts $ tree2exp t
   lin lang t = optLinearizeTreeVal opts (stateGrammarOfLang env (language lang)) t
 
 -- there are three orthogonal parameters: Abs/[conc], short/long, typed/untyped
@@ -364,6 +366,8 @@ displayCommandMenu :: CEnv -> [(Command,String)]
 displayCommandMenu env =
   [(CAddOption (menuDisplay s), s) | s <- "Abs" : langs] ++
   [(CAddOption (sizeDisplay s), s) | s <- ["short", "long"]] ++
+  [(fo nostripQualif, s) | (fo,s) <- [(CAddOption,"qualified"),
+                                      (CRemoveOption,"unqualified")]] ++
   [(CAddOption (typeDisplay s), s) | s <- ["typed", "untyped"]]
  where
    langs = map prLanguage $ allLanguages env
@@ -456,7 +460,7 @@ printname :: CEnv -> SState -> G.Fun -> String
 printname env state f = case getOptVal opts menuDisplay of
   Just "Abs" -> prQIdent f
   Just lang  -> printn lang f
-  _ -> prQIdent f
+  _ -> prTermOpt opts (qq f)
  where
   opts = addOptions (optsSState state) (globalOptions env)
   printn lang f = err id (ifNull (prQIdent f) (sstr . head)) $ do

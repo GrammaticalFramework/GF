@@ -47,15 +47,27 @@ batchCompileOld f = compileOld defOpts f
     defOpts = options [beVerbose, emitCode] 
 
 -- compile with one module as starting point
+-- command-line options override options (marked by --#) in the file
+-- As for path: if it is read from file, the file path is prepended to each name.
+-- If from command line, it is used as it is.
 
 compileModule :: Options -> ShellState -> FilePath -> 
                  IOE (GFC.CanonGrammar, (SourceGrammar,[(FilePath,ModTime)]))
-compileModule opts st file = do
-  let ps   = pathListOpts opts
+compileModule opts1 st0 file = do
+  opts0 <- ioeIO $ getOptionsFromFile file
+  let useFileOpt = maybe False (const True) $ getOptVal opts0 pathList
+  let opts = addOptions opts1 opts0 
+  let ps0  = pathListOpts opts
+  let fpath = justInitPath file
+  let ps = if useFileOpt 
+             then (map (prefixPathName fpath) ps0)
+             else ps0
   ioeIO $ print ps ----
   let putp = putPointE opts
-  let rfs  = readFiles st
-  files <- getAllFiles ps rfs file
+  let st = st0 --- if useFileOpt then emptyShellState else st0
+  let rfs = readFiles st
+  let file' = if useFileOpt then justFileName file else file -- to find file itself
+  files <- getAllFiles ps rfs file'
   ioeIO $ print files ----
   let names = map (fileBody . justFileName) files
   ioeIO $ print names ----

@@ -51,7 +51,7 @@ getCommandUTF = do
 
 pCommand = pCommandWords . words where 
   pCommandWords s = case s of
-    "n" : cat : _ -> CNewCat (strings2Cat cat)
+    "n" : cat : _ -> CNewCat cat
     "t" : ws      -> CNewTree $ unwords ws
     "g" : ws      -> CRefineWithTree $ unwords ws  -- *g*ive
     "p" : ws      -> CRefineParse $ unwords ws

@@ -9,6 +9,8 @@ import qualified PrintGFC as C
 import qualified AbsGFC as A
 import Values
 import GrammarToSource
+
+import Option
 import Ident
 import Str
 
@@ -97,13 +99,6 @@ prMarkedTree = prf 1 where
 prTree :: Tree -> [String]
 prTree = prMarkedTree . mapTr (\n -> (n,False))
 
---- to get rig of brackets
-prRefinement :: Term -> String
-prRefinement t = case t of
-  Q m c  -> prQIdent (m,c)
-  QC m c -> prQIdent (m,c)
-  _ -> prt t
-
 -- a pretty-printer for parsable output
 tree2string = unlines . prprTree
 
@@ -187,3 +182,12 @@ prExp e = case e of
    pr2 e = case e of
      App _ _ -> prParenth $ prExp e
      _ -> pr1 e
+
+-- option -strip strips qualifications
+prTermOpt opts = if oElem nostripQualif opts then prt else prExp
+
+--- to get rid of brackets in the editor
+prRefinement t = case t of
+    Q m c  -> prQIdent (m,c)
+    QC m c -> prQIdent (m,c)
+    _ -> prt t

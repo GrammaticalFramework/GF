@@ -59,6 +59,9 @@ addOption o (Opts os) = iOpts (o:os)
 
 addOptions (Opts os) os0 = foldr addOption os0 os
 
+concatOptions :: [Options] -> Options
+concatOptions = foldr addOptions noOptions
+
 removeOption :: Option -> Options -> Options
 removeOption o (Opts os) = iOpts (filter (/=o) os)
 
@@ -152,6 +155,8 @@ doTrace      = iOpt "tr"
 noCPU        = iOpt "nocpu"
 doCompute    = iOpt "c"
 optimizeCanon = iOpt "opt"
+stripQualif   = iOpt "strip"
+nostripQualif = iOpt "nostrip"
 
 -- mainly for stand-alone
 useUnicode    = iOpt "unicode"

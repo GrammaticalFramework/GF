@@ -63,6 +63,9 @@ updateModule (Module  mt ms fs me ops js) i t =
 replaceJudgements :: Module i f t -> BinTree (i,t) -> Module i f t
 replaceJudgements (Module mt ms fs me ops _) js = Module mt ms fs me ops js
 
+allFlags :: MGrammar i f a -> [f]
+allFlags gr = concat $ map flags $ reverse [m | (_, ModMod m) <- modules gr]
+
 data MainGrammar i = MainGrammar {
     mainAbstract  :: i ,
     mainConcretes :: [MainConcreteSpec i]
