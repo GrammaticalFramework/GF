@@ -68,7 +68,8 @@ lin
 --  Say = ;
 --  Give = giveV3 ;
 
-  The = DefOneNP;
+  The_One = DefOneNP;
+  The_Many = DefNumNP NoNum ;
   A = IndefOneNP ;
 
 --  This : CN -> NP ;
