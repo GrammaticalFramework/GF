@@ -73,9 +73,6 @@ compileModule opts st0 file |
   let mods = modules grammar1
   let env = compileEnvShSt st0 []
   foldM (comp putp path) env mods
-----  (_,sgr,cgr) <- foldM (comp putp path) env mods
-----  return $ (reverseModules cgr,       -- to preserve dependency order
-----            (reverseModules sgr,[]))
  where
    suff = fileSuffix file
    comp putp path env sm0 = do
@@ -109,16 +106,6 @@ compileModule opts1 st0 file = do
   (e,mm) <- foldIOE (compileOne opts) env0 files
   maybe (return ()) putStrLnE mm
   return e
-
-{- ----
-  (_,sgr,cgr) <- foldM (compileOne opts) env0 files
-  t <- ioeIO getNowTime
-  return $ (reverseModules cgr,       -- to preserve dependency order
-            (reverseModules sgr, --- keepResModules opts sgr, --- keep all so far
-             [(justModuleName f,t) | f <- files]   -- pass on the time of reading
-          ++ [(resModName (justModuleName f),t)    -- also #file if file.(gf|gfr)
-                                   | f <- files, not (isGFC f)]))
--}
 
 getReadTimes file = do
   t <- ioeIO getNowTime

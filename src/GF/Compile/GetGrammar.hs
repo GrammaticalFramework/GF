@@ -42,7 +42,8 @@ getOldGrammar :: Options -> FilePath -> IOE SourceGrammar
 getOldGrammar opts file = do
   defs <- parseOldGrammarFiles file
   let g = A.OldGr A.NoIncl defs
-  ioeErr $ transOldGrammar opts file g
+  let name = justFileName file
+  ioeErr $ transOldGrammar opts name g
 
 parseOldGrammarFiles :: FilePath -> IOE [A.TopDef]
 parseOldGrammarFiles file = do
