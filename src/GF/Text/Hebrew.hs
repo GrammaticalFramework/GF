@@ -1,13 +1,15 @@
 module Hebrew where
 
 mkHebrew :: String -> String
-mkHebrew = mkHebrewWord
+mkHebrew = reverse . mkHebrewWord
 --- reverse : assumes everything's on same line
 
 type HebrewChar = Char
 
 -- HH 031103 added code for spooling the markup
--- removed reverse, words, unwords (seemed obsolete and come out wrong on the screen)
+-- removed reverse, words, unwords 
+-- (seemed obsolete and come out wrong on the screen)
+-- AR 26/1/2004 put reverse back - needed in Fudgets (but not in Java?)
 
 mkHebrewWord :: String -> [HebrewChar]
 -- mkHebrewWord = map mkHebrewChar

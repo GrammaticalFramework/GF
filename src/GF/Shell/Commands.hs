@@ -414,7 +414,7 @@ displaySStateJavaX isNew env state = unlines $ tagXML "gfedit" $ concat [
   opts   = addOptions (optsSState state)   -- state opts override 
               (addOption (markLin mark) (globalOptions env))
   lin (n,gr) = (n, map uni $ linearizeState noWrap opts gr zipper) where
-                  uni = optEncodeUTF8 gr . mkUnicode
+                  uni = {- optEncodeUTF8 gr . -} mkUnicode
   exp    = prprTree $ loc2tree zipper
   zipper = stateSState state
   linAll = map lin lgrs

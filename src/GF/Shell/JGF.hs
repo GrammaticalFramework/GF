@@ -56,5 +56,5 @@ initEditMsgJavaX env = encodeUTF8 $ unlines $ tagXML "gfinit" $
   concat [tagAttrXML "language" ("file",file) [prLanguage lang] |
            (file,lang) <- zip (allGrammarFileNames env) (allLanguages env)]
 
-initAndEditMsgJavaX isNew env state = 
+initAndEditMsgJavaX isNew env state = encodeUTF8 $ 
   initEditMsgJavaX env ++++ displaySStateJavaX isNew env state

@@ -178,7 +178,7 @@ evalPrintname gr c ppr lin =
   case ppr of
     Yes pr -> comp pr
     _ -> case lin of
-      Yes t -> return $ K $ prt $ oneBranch t ---- stringFromTerm
+      Yes t -> return $ K $ clean $ prt $ oneBranch t ---- stringFromTerm
       _ -> return $ K $ prt c ----
  where
    comp = computeConcrete gr
@@ -193,3 +193,11 @@ evalPrintname gr c ppr lin =
      P x _     -> oneBranch x
      Alts (d,_) -> oneBranch d
      _ -> t
+
+  --- very unclean cleaner
+   clean s = case s of
+     '+':'+':' ':cs -> clean cs
+     '"':cs -> clean cs
+     c:cs -> c: clean cs
+     _ -> s
+
