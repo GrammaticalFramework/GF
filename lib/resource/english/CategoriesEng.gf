@@ -45,6 +45,10 @@ lincat
   A2     = Adjective ** {s2 : Preposition} ;
   ADeg   = {s : Degree => AForm => Str} ;
   AP     = Adjective ** {p : Bool} ;
+  AS     = Adjective ; --- "more difficult for him to come than..."
+  A2S    = Adjective ** {s2 : Preposition} ;
+  AV     = Adjective ;
+  A2V    = Adjective ** {s2 : Preposition} ;
 
   V      = Verb ; 
       -- = {s : VForm => Str ; s1 : Particle}
@@ -55,6 +59,16 @@ lincat
   V3     = TransVerb ** {s4 : Preposition} ;
   VS     = Verb ;
   VV     = Verb ** {isAux : Bool} ;
+
+  VS     = Verb ;
+  VQ     = Verb ;
+  VA     = Verb ;
+
+  V2S    = TransVerb ;
+  V2Q    = TransVerb ;
+  V2V    = TransVerb ** {isAux : Bool} ;
+  V2A    = TransVerb ;
+  V0     = Verb ;
 
   TP     = {s : Str ; b : Bool ; t : ClTense ; a : Anteriority} ; --- the Str field is dummy
   Tense  = {s : Str ; t : ClTense} ;

@@ -1,7 +1,7 @@
 --# -path=.:../abstract:../../prelude
 
 concrete TestResourceEng of TestResource = RulesEng, StructuralEng **
-  open SyntaxEng, ParadigmsEng in {
+  open Prelude, SyntaxEng, ParadigmsEng in {
 
 flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
 
@@ -47,5 +47,24 @@ lin
 
   John = nameReg "John" ;
   Mary = nameReg "Mary" ;
+
+--- next
+   AlreadyAdv = advPre "already" ;
+   NowAdv = advPre "now" ;
+
+   Paint = mkTransVerbDir (verbNoPart (regVerbP3 "paint")) ;
+   Green = adjDegrReg "green" ;
+   Beg = mkTransVerbDir (verbNoPart (regVerbP3 "ask")) ** {isAux = False} ;
+   Promise = mkTransVerbDir (verbNoPart (verbP3e "promise")) ** {isAux = False} ;
+   Wonder = verbNoPart (regVerbP3 "wonder") ;
+   Ask = mkTransVerbDir (verbNoPart (regVerbP3 "ask")) ;
+   Tell = mkTransVerbDir (verbNoPart (mkVerb "tell" "told" "told")) ;
+   Look = verbNoPart (regVerbP3 "look") ;
+
+   Try = mkTransVerbDir (verbNoPart (verbP3y "try")) ** {isAux = False} ;
+   Important = regAdjective "important" ** {s2 = "for"} ;
+   Probable = regAdjective "probable" ; ---- reg
+   Easy = regAdjective "easy" ** {s2 = "for"} ;
+   Rain = verbNoPart (regVerbP3 "rain") ;
 
 } ;

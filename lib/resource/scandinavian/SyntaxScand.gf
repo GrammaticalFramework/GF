@@ -852,9 +852,10 @@ oper
         ) ;
 
   complVerbAdj2 : 
-    Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> VerbGroup = \obj,grei,dig,simma ->
-    vara
-      (\\g,n,p =>
+    Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> VerbGroup = 
+      \obj,grei,dig,simma ->
+        vara
+          (\\g,n,p =>
               grei.s ! predFormAdj g n ! Nom ++ 
               grei.s2 ++ dig.s ! PAcc ++
               infinAtt ++
@@ -862,7 +863,7 @@ oper
               if_then_Str obj 
                  (simma.s3 ! dig.g ! dig.n ! dig.p)
                  (simma.s3 ! g ! n ! p)
-      ) ;
+          ) ;
 
 --2 Sentences missing noun phrases
 --

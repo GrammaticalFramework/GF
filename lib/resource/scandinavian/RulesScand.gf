@@ -57,7 +57,7 @@ lin
   UseA2S x = x ;
   UseA2V x = x ;
 
-   UseCl tp cl = {s = \\o => tp.s ++ cl.s ! tp.b ! ClFinite tp.t tp.a o} ;
+  UseCl tp cl = {s = \\o => tp.s ++ cl.s ! tp.b ! ClFinite tp.t tp.a o} ;
  
   PosVP tp = predVerbGroup True tp.a ;
   NegVP tp = predVerbGroup False tp.a ;
@@ -147,7 +147,6 @@ lin
 
 
   UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
-
 
   PosImperVP = imperVerbPhrase True ;
   NegImperVP = imperVerbPhrase False ;

@@ -60,6 +60,7 @@ oper
 
   noNum : Numeral = {s = \\_ => []} ;
 
+
 --2 Determiners
 --
 -- Determiners are inflected according to the nouns they determine.
@@ -475,6 +476,15 @@ oper
   predAdverb : PrepPhrase -> VerbGroup = \elsewhere ->
     beGroup (\\_ => elsewhere.s) ;
 
+  predAdjSent : Adjective -> Sentence -> Clause = \bra,hansover ->
+    predVerbGroupClause
+      pronIt
+      (beGroup (
+        \\n => bra.s ! AAdj ++ "that" ++ hansover.s)) ;
+
+  predAdjSent2 : AdjCompl -> NounPhrase -> Adjective = \bra,han ->
+   {s = \\af => bra.s ! af ++ bra.s2 ++ han.s ! AccP} ;
+
 
 --3 Transitive verbs
 --
@@ -539,10 +549,30 @@ oper
   mkDitransVerb : Verb -> Preposition -> Preposition -> DitransVerb = \v,p1,p2 -> 
     v ** {s3 = p1 ; s4 = p2} ;
 
-  complDitransVerb : DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = 
-    \give,you,beer ->
-      useVerb give 
-        (\\_ => give.s1 ++ give.s3 ++ you.s ! AccP ++ give.s4 ++ beer.s ! AccP) ;
+  complDitransVerb : 
+    DitransVerb -> NounPhrase -> TransVerb = \ge,dig ->
+      {s  = ge.s ;
+       s1 = ge.s1 ++ ge.s3 ++ dig.s ! AccP ;
+       s3 = ge.s4
+      } ;
+--  complDitransVerb : DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = 
+--    \give,you,beer ->
+--      useVerb give 
+--        (\\_ => give.s1 ++ give.s3 ++ you.s ! AccP ++ give.s4 ++ beer.s ! AccP) ;
+
+  complDitransAdjVerb : 
+    TransVerb -> NounPhrase -> AdjPhrase -> VerbGroup = \gor,dig,sur ->
+      useVerb 
+        gor 
+        (\\_ => gor.s1 ++ gor.s3 ++ dig.s ! AccP ++ 
+                    sur.s ! AAdj) ;
+
+  complAdjVerb : 
+    Verb -> AdjPhrase -> VerbGroup = \seut,sur ->
+      useVerb 
+        seut 
+        (\\n => sur.s ! AAdj ++ seut.s1) ;
+
 
 --2 Adverbs
 --
@@ -643,6 +673,8 @@ oper
 
   param
 
+--- would need cleaning up so we wouldn't need this type
+
   ClTense = ClPresent | ClPast | ClFuture | ClConditional ;
 
   ClForm = 
@@ -653,18 +685,26 @@ oper
     ;
 
   oper 
-  cl2s : ClForm -> Number -> Person -> {form : SForm ; order : Order}  = \c,n,p -> case c of {
+  cl2s : ClForm -> Number -> Person -> {form : SForm ; order : Order} =
+  \c,n,p -> case c of {
     ClIndic Indirect t Simul => {form = VQuest t n p ; order = Indirect} ;
     ClIndic o t a => {form = VIndic t a n p ; order = o} ;
     ClFut o a     => {form = VFut a ; order = o} ;
     ClCondit o a  => {form = VCondit a ; order = o} ; 
-    ClInfinit a   => {form = VInfinit a ; order = Direct} --- order does not matter
+    ClInfinit a   => {form = VInfinit a ; order = Direct} --- order doesn't matter
     } ;
   s2cl : SForm -> Order -> ClForm = \s,o -> case s of {
     VIndic t a _ _  => ClIndic o t a ;
     VInfinit a   => ClInfinit a ;
     _ => ClInfinit Simul ---- ??
     } ;
+  t2cl : ClTense -> Anteriority -> ClForm = \t,a -> case t of {
+    ClPresent => ClIndic Direct Present a ;
+    ClPast    => ClIndic Direct Past a ;
+    ClFuture  => ClFut   Direct a ;
+    ClConditional => ClCondit Direct a
+    } ;
+
 
   Clause = {s : Bool => ClForm => Str} ;
 
@@ -697,6 +737,19 @@ oper
 
   complSentVerb : SentenceVerb -> Sentence -> VerbGroup = \say,johnruns ->
     useVerb say (\\_ => "that" ++ johnruns.s) ;
+
+  complQuestVerb : SentenceVerb -> QuestionSent -> VerbGroup = \se,omduler ->
+    useVerb se (\\_ => se.s1 ++ omduler.s ! IndirQ) ;
+
+  complDitransSentVerb : TransVerb -> NounPhrase -> Sentence -> VerbGroup = 
+    \sa,honom,duler ->
+      useVerb sa 
+        (\\_ => sa.s1 ++ sa.s3 ++ honom.s ! AccP ++ "that" ++ duler.s) ;
+
+  complDitransQuestVerb : TransVerb -> NounPhrase -> QuestionSent -> VerbGroup = 
+    \sa,honom,omduler ->
+      useVerb sa 
+        (\\_ => sa.s1 ++ sa.s3 ++ honom.s ! AccP ++ omduler.s ! IndirQ) ;
 
 
 --3 Verb-complement verbs
@@ -743,6 +796,50 @@ oper
   vvCan  : VerbVerb = mkVerbAux ["be able to"] "can" "could" ["been able to"] ;
   vvMust : VerbVerb = mkVerbAux ["have to"] "must" ["had to"] ["had to"] ;
 
+-- Notice agreement to object vs. subject:
+
+  DitransVerbVerb = TransVerb ** {s3 : Str} ;
+
+  complDitransVerbVerb : 
+    Bool -> DitransVerbVerb -> NounPhrase -> VerbPhrase -> VerbGroup = 
+     \obj,be,dig,simma ->
+      useVerb be 
+        (\\n => be.s1 ++ be.s3 ++ dig.s ! AccP ++ be.s3 ++ 
+              simma.s ++ simma.s2 ++
+              if_then_Str obj 
+                 (simma.s3 ! dig.n) ---- dig.g ! dig.n ! dig.p)
+                 (simma.s3 ! n)     ---- g     ! n     ! p)
+        ) ;
+
+  transVerbVerb : VerbVerb -> TransVerb -> TransVerb = \vilja,hitta ->
+    {s  = vilja.s ;
+     s1 = vilja.s1 ++ if_then_Str vilja.isAux [] "to" ++
+          hitta.s ! InfImp ++ hitta.s1 ;
+     s3 = hitta.s3
+    } ;
+
+  complVerbAdj : Adjective -> VerbPhrase -> VerbGroup = \grei, simma ->
+    beGroup
+      (\\n => 
+              grei.s ! AAdj ++ 
+              "to" ++
+              simma.s ++ simma.s2 ++
+              simma.s3 ! n) ;
+
+  complVerbAdj2 : 
+    Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> VerbGroup = 
+      \obj,grei,dig,simma ->
+        beGroup
+          (\\n =>
+              grei.s ! AAdj ++ 
+              grei.s2 ++ dig.s ! AccP ++
+              "to" ++
+              simma.s ++ simma.s2 ++
+              if_then_Str obj 
+                 (simma.s3 ! dig.n) ---- dig.g ! dig.n ! dig.p)
+                 (simma.s3 ! n)     ---- g ! n ! p)
+          ) ;
+
 
 --2 Sentences missing noun phrases
 --
@@ -776,18 +873,6 @@ oper
   slashTransVerbCl : NounPhrase -> TransVerb -> ClauseSlashNounPhrase = 
     \you,lookat ->
     predVerbGroupClause you (predVerb lookat) ** {s2 = lookat.s3} ;
-
-{-
---- TODO: "there is" with tense variation.
-
-  thereIs : NounPhrase -> Sentence = \abar ->
-    predVerbPhrase 
-      (case abar.n of {
-         Sg => nameNounPhrase (nameReg "there") ;
-         Pl => {s = \\_ => "there" ; n = Pl ; p = P3}
-         })
-      (predVerbGroup True (predNounPhrase abar)) ;
--}
 
 
 --2 Relative pronouns and relative clauses
@@ -948,16 +1033,6 @@ oper
                 (predVerbGroupClause John walk).s ! b ! cl
       }
     } ;
-
-{-
-  isThere : NounPhrase -> Question = \abar ->
-    questVerbPhrase 
-      (case abar.n of {
-         Sg => nameNounPhrase (nameReg "there") ;
-         Pl => {s = \\_ => "there" ; n = Pl ; p = P3}
-         })
-      (predVerbGroup True (predNounPhrase abar)) ;
--}
 
 --3 Wh-questions
 --

@@ -62,6 +62,26 @@ lin
 
   AdjPart = adjPastPart ;
   ReflV2 = reflTransVerb ;
+
+  PredV2A = complDitransAdjVerb ;
+  PredSubjV2V = complDitransVerbVerb False ;
+  PredObjV2V = complDitransVerbVerb True ;
+  PredV2S = complDitransSentVerb ;
+  PredV2Q = complDitransQuestVerb ;
+  PredVA = complAdjVerb ;
+  PredVV2 = transVerbVerb ;
+
+  UseV2V x = x ;
+  UseV2S x = x ;
+  UseV2Q x = x ;
+  UseA2S x = x ;
+  UseA2V x = x ;
+
+  UseCl  tp cl = {s = tp.s ++ cl.s ! tp.b ! t2cl tp.t tp.a} ;
+
+  PosVP tp = predVerbGroup True tp.a ;
+  NegVP tp = predVerbGroup False tp.a ;
+
   ProgVP = progressiveVerbPhrase ;
 
   PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
@@ -80,13 +100,21 @@ lin
   PredSuperl a = predAdjective (superlAdjPhrase a) ;
   PredCN = predCommNoun ;
   PredV2 = complTransVerb ;
-----  PredV3 = complDitransVerb ;
+  PredV3 = complDitransVerb ;
   PredPassV = passVerb ;
   PredNP = predNounPhrase ;
   PredPP = predAdverb ;
   PredVS = complSentVerb ;
   PredVV = complVerbVerb ;
+  PredVQ = complQuestVerb ;
   VTrans = transAsVerb ;
+  PredV0 rain = predVerbGroupClause pronIt (predVerb rain) ;
+
+  PredAS  = predAdjSent ;
+  PredA2S = predAdjSent2 ;
+  PredAV  = complVerbAdj ;
+  PredSubjA2V = complVerbAdj2 False ;
+  PredObjA2V = complVerbAdj2 True ;
 
   AdjAdv a = advPost (a.s ! AAdv) ;
   AdvPP p = advPost p.s ;
@@ -96,8 +124,17 @@ lin
   AdvAP = advAdjPhrase ;
 
   SlashV2 = slashTransVerbCl ;
-----  OneVP = predVerbPhrase (nameNounPhrase (nameReg "one")) ;
+  OneVP = predVerbGroupClause (nameNounPhrase (nameReg "one")) ;
 ----  ThereNP = thereIs ;
+  ExistCN A = predVerbGroupClause 
+                (nameNounPhrase (nameReg "there"))
+                (complTransVerb (mkTransVerbDir verbBe) 
+                   (indefNounPhrase singular A)) ;
+  ExistNumCN nu A = 
+              predVerbGroupClause 
+                (nameNounPhrasePl (nameReg "there"))
+                (complTransVerb (mkTransVerbDir verbBe) 
+                   (indefNounPhraseNum plural nu A)) ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -105,6 +142,11 @@ lin
   RelSlash = relSlash ;
   ModRS = modRelClause ;
   RelCl = relSuch ;
+
+  UseRCl tp cl = 
+    {s = \\g,n => 
+      tp.s ++ cl.s ! tp.b ! (cl2s (t2cl tp.t tp.a) n P3).form ! g ! n} ;
+    --- P3 ==> p
 
   WhoOne = intPronWho singular ;
   WhoMany = intPronWho plural ;
@@ -119,8 +161,17 @@ lin
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
 
-----  ExistQCl  : CN -> QCl ;                   -- "is there a bar", 
-----  ExistNumQCl : Num -> CN -> QCl ;          -- "are there (86) bars"
+  UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! t2cl tp.t tp.a ! q} ;
+
+  ExistQCl A = questVerbPhrase
+                (nameNounPhrase (nameReg "there"))
+                (complTransVerb (mkTransVerbDir verbBe) 
+                   (indefNounPhrase singular A)) ;
+  ExistNumQCl nu A = 
+              questVerbPhrase
+                (nameNounPhrasePl (nameReg "there"))
+                (complTransVerb (mkTransVerbDir verbBe) 
+                   (indefNounPhraseNum plural nu A)) ;
 
 
   PosImperVP = imperVerbPhrase True ;
