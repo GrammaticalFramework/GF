@@ -11,7 +11,7 @@
 --
 -- We use the parameter types and word classes defined in $types.Fra.gf$.
 
-resource MorphoFre = open (Predef=Predef), Prelude, TypesFre in {
+resource MorphoFre = open Predef, Prelude, TypesFre in {
 
 flags optimize=all ;
 
@@ -58,12 +58,18 @@ oper
     mkCNomIrreg cas cas ;
 
   mkNomReg : Str -> Gender -> CNom = \cas -> 
-    let cass = case last cas of {
+    let cass = case dp 2 cas of {
+      "al" => init cas ++ "ux" ;
+      "au" => cas + "x" ;
+      "eu" => cas + "x" ;
+      "ou" => cas + "x" ;
+      _ => case last cas of {
       "s" => cas ;
       "x" => cas ;
       "z" => cas ;
       _   => cas + "s"
       }
+    }
     in mkCNomIrreg cas cass ;
       
 
@@ -559,6 +565,36 @@ oper
   conj1envoyer : Str -> Verbe = \envoyer ->
     let {renv = Predef.tk 4 envoyer} in
     auxConj1 (renv + "oy") (renv + "oi") (renv + "err") ;
+
+-- This is a collective dispatcher.
+
+  mkVerbReg : Str -> Verbe = \parler ->
+    let
+      e = last (tk 4 parler) ;
+      c = last (tk 3 parler) ;
+      verb_é = pbool2bool (occur "é" (e + last (tk 5 parler))) ;
+      verb_e = andB (pbool2bool (occur e "e")) (pbool2bool (occur c "cmnprsv"))
+    in
+    case Predef.dp 4 parler of {
+      "éger" => conj1assiéger parler ;
+      "eler" => conj1jeter parler ;
+      "eter" => conj1jeter parler ;
+      _ => case verb_é of {
+        True => conj1céder parler ;
+        _ => case verb_e of {
+          True => conj1peser parler ;
+          _ => case Predef.dp 3 parler of {
+            "cer" => conj1placer parler ;
+            "ger" => conj1manger parler ;
+            "yer" => conj1payer parler ;
+            _ => case dp 2 parler of {
+              "ir" => conj2finir parler ;
+              _ => conj1aimer parler
+              }
+            }
+          }
+        }
+      } ;
 
 
 --3 The second conjugation

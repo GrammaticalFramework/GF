@@ -256,14 +256,14 @@ oper
   superlNounPhrase : AdjDegr -> CommNoun -> NounPhrase = \bon, mec ->
     normalNounPhrase 
       (\\c => artDef mec.g Sg c ++ if_then_else Str bon.p 
-           (bon.s ! Sup ! AF mec.g Sg ++ mec.s ! Sg)
-           (mec.s ! Sg ++ artDef mec.g Sg nominative ++ bon.s ! Sup ! AF mec.g Sg)
+           (bon.s ! Comp ! AF mec.g Sg ++ mec.s ! Sg)
+           (mec.s ! Sg ++ artDef mec.g Sg nominative ++ bon.s ! Comp ! AF mec.g Sg)
       )
       mec.g 
       Sg ; 
 
   superlAdjPhrase : AdjDegr -> AdjPhrase = \bon ->
-    {s = \\a => artDef (genAForm a) (numAForm a) nominative ++ bon.s ! Sup ! a ; 
+    {s = \\a => artDef (genAForm a) (numAForm a) nominative ++ bon.s ! Comp ! a ; 
      p = bon.p
     } ;
 

@@ -19,7 +19,7 @@ param
   Gender = Masc | Fem ;
   Person = P1 | P2 | P3 ;
   Mode   = Ind | Con ;
-  Degree = Pos | Comp | Sup ;
+  Degree = Pos | Comp ;
 
 -- The case must be made an abstract type, since it varies from language to
 -- language. The same concerns those parameter types that depend on case.
