@@ -177,10 +177,8 @@ customGrammarPrinter =
 -- add your own grammar printers here
 -- grammar conversions, (peb) 
   ,(strCI "gfc_show",   show . grammar2canon . stateGrammarST)
-  ,(strCI "emcfg",      Prt.prt . Cnv.emcfg . statePInfo)
   ,(strCI "mcfg",       Prt.prt . Cnv.mcfg . statePInfo)
   ,(strCI "cfg",        Prt.prt . Cnv.cfg . statePInfo)
-  ,(strCI "emcfg_show", show . Cnv.emcfg . statePInfo)
   ,(strCI "mcfg_show",  show . Cnv.mcfg . statePInfo)
   ,(strCI "cfg_show",   show . Cnv.cfg . statePInfo)
 --- also include printing via grammar2syntax!
