@@ -557,11 +557,9 @@ oper
     v ** {s3 = p1 ; s4 = p2} ;
 
   complDitransVerb : 
-    DitransVerb -> NounPhrase -> TransVerb = \ge,dig ->
-      {s  = ge.s ;
-       s1 = ge.s1 ++ ge.s3 ++ dig.s ! AccP ;
-       s3 = ge.s4
-      } ;
+    DitransVerb -> NounPhrase -> NounPhrase -> Complement = \give,her,beer ->
+      mkComp give 
+        (\\_ => give.s3 ++ her.s ! AccP ++ give.s4 ++ beer.s ! AccP) ;
 
   complDitransAdjVerb : 
     TransVerb -> NounPhrase -> AdjPhrase -> Complement = \gor,dig,sur ->

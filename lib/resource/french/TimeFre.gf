@@ -1,5 +1,5 @@
 concrete TimeFre of Time = NumeralsFre ** 
-  open Prelude, MorphoFre, ResourceFre, ParadigmsFre in {
+  open Prelude, MorphoFre, CategoriesFre, ParadigmsFre in {
 
 lincat
 Date = SS ;

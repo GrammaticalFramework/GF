@@ -14,7 +14,7 @@ fun
   SPredV       : NP -> V  -> Cl ;             -- "John walks"
   SPredPassV   : NP -> V  -> Cl ;             -- "John is seen"
   SPredV2      : NP -> V2 -> NP -> Cl ;       -- "John sees Mary"
-  SPredV3      : NP -> V2 -> NP -> NP -> Cl ; -- "John tells Mary everything"
+  SPredV3      : NP -> V3 -> NP -> NP -> Cl ; -- "John tells Mary everything"
   SPredReflV2  : NP -> V2 -> Cl ;             -- "John loves himself"
   SPredVS      : NP -> VS -> S  -> Cl ;       -- "John says that Mary runs"
   SPredVV      : NP -> VV -> VPI -> Cl ;      -- "John must walk"

@@ -530,12 +530,8 @@ oper
        VInfinit Anter        => compound [] (auxHa ++ sett vo)
      } ;
 
-  useVerb : Verb -> (Gender => Number => Person => Str) -> VerbGroup = \verb,arg -> 
-    let aer = verbSForm verb Act in {
-      s  = \\sf => (aer sf).fin ;
-      s2 = negation ; 
-      s3 = \\sf,g,n,p => (aer sf).inf ++ arg ! g ! n ! p
-      } ;
+  useVerb : Verb -> (Gender => Number => Person => Str) -> VerbGroup = 
+    mkVerbGroupObject ;
 
 -- Verb phrases are discontinuous: the parts of a verb phrase are
 -- (s) an inflected verb, (s2) verb adverbials (such as negation), and
@@ -549,39 +545,118 @@ oper
     s : VIForm => Gender => Number => Person => Str
     } ;
 
-  VerbGroup  : Type = {
-    s  : SForm => Str ; 
-    s2 : Bool => Str ; 
-    s3 : SForm => Gender => Number => Person => Str
-    } ;
+-------------------------
 
-  predVerbGroup : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase = \b,ant,vg -> 
+  VerbGroup  : Type = {
+--    s  : SForm => Str ; 
+--    s2 : Bool => Str ; 
+--    s3 : SForm => Gender => Number => Person => Str
+
+      s1 : SForm => Str ;  -- V1 har
+      s3 : Bool => Str ;   -- A1 inte
+      s4 : SForm => Str ;  -- V2 sagt
+      s5 : Gender => Number => Person => Str ; -- N2 dig
+      s6 : Str ;           -- A2 idag
+      s7 : Str ;           -- S  extraposition
+      e3,e4,e5,e6,e7 : Bool   -- indicate if the field exists
+      } ;
+
+  predVerb : Verb -> VerbGroup = \verb ->
+     let 
+       harsovit = verbSForm verb Act 
+     in
+     {s1 = \\sf => (harsovit sf).fin ;
+      s3 = negation ;
+      s4 = \\sf => (harsovit sf).inf ++ verb.s1 ;
+      s5 = \\_,_,_ => [] ; 
+      s6, s7 = [] ;
+      e3,e4,e5,e6,e7 = False
+      } ;
+
+  insertObjectVP : VerbGroup -> (Gender => Number => Person => Str) -> VerbGroup = 
+    \sats, obj -> 
+     {s1 = sats.s1 ;
+      s3 = sats.s3 ;
+      s4 = sats.s4 ;
+      s5 = \\g,n,p => sats.s5 ! g ! n ! p ++ obj ! g ! n ! p ;
+      s6 = sats.s6 ;
+      s7 = sats.s7 ;
+      e3 = sats.e3 ;
+      e4 = sats.e4 ;
+      e5 = True ;
+      e6 = sats.e6 ;
+      e7 = sats.e7
+      } ;
+
+  insertAdverbVP : VerbGroup -> Str -> VerbGroup = \sats, adv -> 
+     {s1 = sats.s1 ;
+      s3 = sats.s3 ;
+      s4 = sats.s4 ;
+      s6 = sats.s6 ++ adv ;
+      s5 = sats.s5 ;
+      s7 = sats.s7 ;
+      e3 = sats.e3 ;
+      e4 = sats.e4 ;
+      e6 = True ;
+      e5 = sats.e5 ;
+      e7 = sats.e7
+      } ;
+
+  insertExtraposVP : VerbGroup -> Str -> VerbGroup = \sats, exts -> 
+     {s1 = sats.s1 ;
+      s3 = sats.s3 ;
+      s4 = sats.s4 ;
+      s6 = sats.s6 ;
+      s5 = sats.s5 ;
+      s7 = sats.s7 ++ exts ;
+      e3 = sats.e3 ;
+      e4 = sats.e4 ;
+      e7 = True ;
+      e5 = sats.e5 ;
+      e6 = sats.e6
+      } ;
+
+  mkVerbGroupObject : Verb -> (Gender => Number => Person => Str) -> VerbGroup = 
+    \verb,obj ->
+    insertObjectVP (predVerb verb) obj ;
+
+  mkVerbGroupCopula : (Gender => Number => Person => Str) -> VerbGroup = 
+    \obj ->
+    mkVerbGroupObject (verbVara ** {s1 = []}) obj ;
+
+-----------------------
+
+
+
+  predVerbGroup : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase = 
+    \b,ant,vg -> 
     let 
-       vgs  = vg.s ;
-       vgs3 = vg.s3 ;
+       vgs  = vg.s1 ;
+       vgs3 : SForm => Gender => Number => Person => Str = \\sf,g,n,p => 
+         vg.s4 ! sf ++ vg.s5 ! g ! n ! p ++ vg.s6 ++ vg.s7 ;
        a = ant.a ;
     in
    {s = table {
           VIInfinit => \\g,n,p => 
-            vg.s ! VInfinit a ++ ant.s ++ vg.s2 ! b ++ vg.s3 ! VInfinit a ! g ! n ! p ;
+            vgs ! VInfinit a ++ ant.s ++ vg.s3 ! b ++ vgs3 ! VInfinit a ! g ! n ! p ;
           VIImperat bo =>  \\g,n,p => 
-            vg.s ! VImperat ++ ant.s ++ vg.s2 ! bo ++ vg.s3 ! VImperat ! g ! n ! p
+            vgs ! VImperat ++ ant.s ++ vg.s3 ! bo ++ vgs3 ! VImperat ! g ! n ! p
           } ---- bo shadows b
     } ;
 
   predVerbGroupI : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase = 
+    predVerbGroup ;
+{- ----
     \b,ant,vg -> 
     let vp = predVerbGroup b ant vg in
     {s = \\i,g,n,p => vp.s ! i ! g ! n ! p
     } ;
-
+-}
 
 -- A simple verb can be made into a verb phrase with an empty complement.
 -- There are two versions, depending on if we want to negate the verb.
 -- N.B. negation is *not* a function applicable to a verb phrase, since
 -- double negations with "inte" are not grammatical.
-
-  predVerb : Verb -> VerbGroup = \se -> useVerb se (\\_,_,_ => se.s1) ;
 
   negation : Bool => Str = \\b => if_then_Str b [] negInte ;
 
@@ -651,7 +726,7 @@ oper
 -- The rule for using transitive verbs is the complementization rule:
 
   complTransVerb : TransVerb -> NounPhrase -> VerbGroup = \se,dig ->
-    useVerb se (\\_,_,_ => se.s1 ++ {-strPrep-} se.s2 ++ dig.s ! PAcc) ;
+    useVerb se (\\_,_,_ => {-strPrep-} se.s2 ++ dig.s ! PAcc) ;
 
 -- Transitive verbs with accusative objects can be used passively. 
 -- The function does not check that the verb is transitive.
@@ -659,11 +734,16 @@ oper
 -- The syntax is the same as for active verbs, with the choice of the
 -- "s" passive form.
 
-  passVerb : Verb -> VerbGroup = \se ->
-    let ses = verbSForm se Pass in {
-      s  = \\sf => (ses sf).fin ;
-      s2 = negation ; 
-      s3 = \\sf,g,n,_ => (ses sf).inf ++ se.s1
+  passVerb : Verb -> VerbGroup = \verb ->
+     let 
+       harsovit = verbSForm verb Pass
+     in
+     {s1 = \\sf => (harsovit sf).fin ;
+      s3 = negation ;
+      s4 = \\sf => (harsovit sf).inf ++ verb.s1 ;
+      s5 = \\_,_,_ => [] ; 
+      s6, s7 = [] ;
+      e3,e4,e5,e6,e7 = False
       } ;
 
 -- Transitive verbs can be used elliptically as verbs. The semantics
@@ -688,15 +768,10 @@ oper
     v ** {s2 = p1 ; s3 = p2} ;
 
   complDitransVerb : 
-    DitransVerb -> NounPhrase -> TransVerb = \ge,dig ->
-      {s  = ge.s ;
-       s1 = ge.s1 ++ {-strPrep-} ge.s2 ++ dig.s ! PAcc ;
-       s2 = ge.s3
-      } ;
-
----      useVerb 
----        ge 
----        (\\_,_ => ge.s1 ++ ge.s2 ++ dig.s ! PAcc ++ ge.s3 ++ vin.s ! PAcc) ;
+    DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = \ge,dig,vin ->
+      useVerb 
+        ge 
+        (\\_,_,_ => ge.s1 ++ ge.s2 ++ dig.s ! PAcc ++ ge.s3 ++ vin.s ! PAcc) ;
 
 -- Adjective-complement ditransitive verbs.
 
@@ -733,12 +808,16 @@ oper
   advPost : Str -> Adverb = ss ; 
 
   adVerbPhrase : VerbGroup -> Adverb -> VerbGroup = \spelar, ofta ->
+    insertAdverbVP spelar ofta.s ;
+  ----- sentence adv!
+{- -----
     {
   --- this unfortunately generates  VP#2 ::= VP#2
      s  = spelar.s ; 
      s2 = \\b => ofta.s ++ spelar.s2 ! b ; ---- the essential use of s2
      s3 = \\sf,g,n,p => spelar.s3 ! sf ! g ! n ! p
     } ;
+-}
 
   advVerbPhrase : VerbPhrase -> Adverb -> VerbPhrase = \sing, well ->
     {
@@ -813,22 +892,37 @@ oper
   \np,vp,a ->  predVerbGroupClause np (adVerbPhrase vp a) ;
 
   predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = 
-    \Jag, serdiginte -> {
-     s = \\b,c => let {
-      jag  = Jag.s ! (case c of {ClInfinite _ => PAcc ; _ => PNom}) ;
-      osf  = cl2s c ;
-      t    = osf.sf ;
-      o    = osf.o ; 
-      ser  = serdiginte.s ! t ;
-      dig  = serdiginte.s3 ! t ! Jag.g ! Jag.n ! Jag.p ;
-      inte = serdiginte.s2 ! b
-    } in
-    case o of {
-       Main => jag ++ ser ++ inte ++ dig ;  
-       Inv  => ser ++ jag ++ inte ++ dig ;
-       Sub  => jag ++ inte ++ ser ++ dig
-       }
+    \subj,sats -> {s = \\b,cf =>
+      let
+        osf  = cl2s cf ;
+        har  = sats.s1 ! osf.sf ;
+        jag  = subj.s ! PNom ;
+        inte = sats.s3 ! b ;
+        sagt = sats.s4 ! osf.sf ;
+        dig  = sats.s5 ! subj.g ! subj.n ! subj.p ;
+        idag = sats.s6 ;
+        exts = sats.s7
+      in case osf.o of {
+      Main => variants {
+               jag  ++ har ++ inte ++ sagt ++ dig  ++ idag ++ exts ;
+        onlyIf (orB sats.e3 (notB b)) 
+               (inte ++ har ++ jag  ++ sagt ++ dig  ++ idag ++ exts) ;
+        onlyIf (orB sats.e4 (isCompoundClForm cf))
+               (sagt ++ har ++ jag  ++ inte ++ dig  ++ idag ++ exts) ;
+        onlyIf sats.e5 
+               (dig  ++ har ++ jag  ++ inte ++ sagt ++ idag ++ exts) ;
+        onlyIf sats.e6 
+               (idag ++ har ++ jag  ++ inte ++ sagt ++ dig  ++ exts) ;
+        onlyIf sats.e7 
+               (exts ++ har ++ jag  ++ inte ++ sagt ++ dig  ++ idag)
+        } ;
+      Inv => 
+        har ++ jag  ++ inte ++ sagt ++ dig ++ idag ++ exts ;
+      Sub => 
+        jag ++ inte ++ har  ++ sagt ++ dig ++ idag ++ exts
+      }
     } ;
+
 
 --3 For $Sats$, the native topological structure.
 
@@ -1079,8 +1173,12 @@ oper
 
   relVerbPhrase : RelPron -> VerbGroup -> RelClause = \som,sover ->
     {s = \\b,sf,gn,p => 
-       som.s ! RNom ! gn ++ sover.s2 ! b ++ sover.s ! sf ++  
-       sover.s3 ! sf ! mkGenderRel som.g (genGN gn) ! numGN gn ! p
+       som.s ! RNom ! gn ++ 
+       sover.s3 ! b ++ 
+       sover.s1 ! sf ++  
+       sover.s4 ! sf ++
+       sover.s5 ! mkGenderRel som.g (genGN gn) ! numGN gn ! p ++
+       sover.s6 ++ sover.s7
     } ;
 
   relSlash : RelPron -> ClauseSlashNounPhrase -> RelClause = \som,jagTalar ->

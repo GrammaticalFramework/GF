@@ -26,6 +26,7 @@ incomplete concrete VerbphraseScand of Verbphrase = CategoriesScand **
   UseV  = predVerb ;
   UsePassV = passVerb ;
   ComplV2 = complTransVerb ;
+  ComplV3 = complDitransVerb ;
   ComplReflV2 = reflTransVerb ;
   ComplVS = complSentVerb ;
   ComplVV = complVerbVerb ;
