@@ -36,8 +36,10 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     public static boolean debug = false;
     // pop-up/mouse handling:
     public static boolean debug3 = false;
+    // red mark-up && html:
+    public static boolean debug4 = false;
     // linearization marking:
-    public static boolean debug2 = true;
+    public static boolean debug2 = false;
 
     public static boolean selectionCheck = false;
     public static LinPosition focusPosition ;
@@ -977,11 +979,13 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       MarkedArea ma = (MarkedArea)outputVector.elementAt(i) ;              
       int begin = ma.begin ;
       int end = ma.end ;
-      System.out.println("BEGIN: "+ begin +" END: "+end+" "+ma.words+" "+ma.position.position);
+      if (debug4) 
+       System.out.println("BEGIN: "+ begin +" END: "+end+" "+ma.words+" "+ma.position.position);
       if (!ma.position.correctPosition)
         try {  
           output.getHighlighter().addHighlight(begin, end, new DefaultHighlighter.DefaultHighlightPainter(Color.red));
-          System.out.println("HIGHLIGHT: "+output.getText().substring(begin, end));
+          if (debug4) 
+            System.out.println("HIGHLIGHT: "+output.getText().substring(begin, end));
         } catch (Exception e) {System.out.println("highlighting problem!");}
     }
   }
@@ -1311,12 +1315,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
  
                fileString="";
                grammar.setText("No Topic          ");
-
-           System.out.println("new Topic is working");
-               // bug in GF, do reset manually:
-               send("e");
-
-               send("e "+ file.getPath().replace('\\','/'));
+               send(" e "+ file.getPath().replace('\\','/'));
              }
            }           
          }
@@ -1990,7 +1989,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       restString = replaceSubstring(restString,more,"> ");
       restString = replaceSubstring(restString,less," <");
       restString= replaceSubstring(restString,"\b\b","\b");
-      System.out.println(restString);
+      if (debug4) 
+        System.out.println(restString);
       output.append(restString.replaceAll("&-","\n "));
       if ((selectionEnd>=selectionStart)&&(selectionStart>-1))
       try {  
