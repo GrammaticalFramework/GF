@@ -12,7 +12,7 @@
 -- AR 8-11-2003, using Markus Forsberg's implementation of Huet's @unglue@
 -----------------------------------------------------------------------------
 
-module Glue (decomposeSimple, exTrie) where
+module Glue (decomposeSimple) where
 
 import Trie2
 import Operations

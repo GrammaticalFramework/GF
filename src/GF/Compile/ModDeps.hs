@@ -10,6 +10,8 @@
 -- > CVS $Revision $
 --
 -- Check correctness of module dependencies. Incomplete.
+--
+-- AR 13/5/2003
 -----------------------------------------------------------------------------
 
 module ModDeps where
@@ -27,12 +29,9 @@ import Operations
 import Monad
 import List
 
--- AR 13/5/2003
-
--- to check uniqueness of module names and import names, the
+-- | to check uniqueness of module names and import names, the
 -- appropriateness of import and extend types,
 -- to build a dependency graph of modules, and to sort them topologically
-
 mkSourceGrammar :: [(Ident,SourceModInfo)] -> Err SourceGrammar
 mkSourceGrammar ms = do
   let ns = map fst ms
@@ -50,8 +49,7 @@ checkUniqueErr ms = do
   let msg = checkUnique ms
   if null msg then return () else Bad $ unlines msg
 
--- check that import names don't clash with module names
-
+-- | check that import names don't clash with module names
 checkUniqueImportNames :: [Ident] -> SourceModInfo -> Err ()
 checkUniqueImportNames ns mo = case mo of
   ModMod m -> test [n | OQualif _ n v <- opens m, n /= v]
@@ -62,11 +60,10 @@ checkUniqueImportNames ns mo = case mo of
                     ("import names clashing with module names among" +++ 
                        unwords (map prt ms))
 
--- to decide what modules immediately depend on what, and check if the
--- dependencies are appropriate
-
 type Dependencies = [(IdentM Ident,[IdentM Ident])]
 
+-- | to decide what modules immediately depend on what, and check if the
+-- dependencies are appropriate
 moduleDeps :: [(Ident,SourceModInfo)] -> Err Dependencies
 moduleDeps ms = mapM deps ms where
   deps (c,mi) = errIn ("checking dependencies of module" +++ prt c) $ case mi of
@@ -119,9 +116,8 @@ openInterfaces ds m = do
   let mods = iterFix (concatMap more) (more (m,undefined))
   return $ [i | (i,MTInterface) <- mods]
 
--- this function finds out what modules are really needed in the canoncal gr.
+-- | this function finds out what modules are really needed in the canoncal gr.
 -- its argument is typically a concrete module name
-
 requiredCanModules :: (Eq i, Show i) => MGrammar i f a -> i -> [i]
 requiredCanModules gr = nub . iterFix (concatMap more) . singleton where
   more i = errVal [] $ do

@@ -9,7 +9,18 @@
 -- > CVS $Author $
 -- > CVS $Revision $
 --
--- (Description of the module)
+-- AR 14/5/2003
+--
+-- The top-level function 'renameGrammar' does several things:
+--
+--   - extends each module symbol table by indirections to extended module
+--
+--   - changes unqualified and as-qualified imports to absolutely qualified
+--
+--   - goes through the definitions and resolves names
+--
+-- Dependency analysis between modules has been performed before this pass.
+-- Hence we can proceed by @fold@ing "from left to right".
 -----------------------------------------------------------------------------
 
 module Rename where
@@ -27,23 +38,14 @@ import Operations
 
 import Monad
 
--- AR 14/5/2003
-
--- The top-level function $renameGrammar$ does several things:
--- * extends each module symbol table by indirections to extended module
--- * changes unqualified and as-qualified imports to absolutely qualified
--- * goes through the definitions and resolves names
--- Dependency analysis between modules has been performed before this pass.
--- Hence we can proceed by $fold$ing 'from left to right'.
-
--- this gives top-level access to renaming term input in the cc command
+-- | this gives top-level access to renaming term input in the cc command
 renameSourceTerm :: SourceGrammar -> Ident -> Term -> Err Term
 renameSourceTerm g m t = do
   mo     <- lookupErr m (modules g)
   let status = (modules g,(m,mo)) --- <- buildStatus g m mo
   renameTerm status [] t
 
--- this is used in the compiler, separately for each module
+-- | this is used in the compiler, separately for each module
 renameModule :: [SourceModule] -> SourceModule -> Err [SourceModule]
 renameModule ms (name,mod) = errIn ("renaming module" +++ prt name) $ case mod of
   ModMod m@(Module mt st fs me ops js) -> do
@@ -114,7 +116,7 @@ renameIdentTerm env@(imps,act@(_,ModMod this)) t =
      IC "String" -> return $ Q cPredefAbs cString
      _ -> Bad s
 
---- would it make sense to optimize this by inlining?
+-- | would it make sense to optimize this by inlining?
 renameIdentPatt :: Status -> Patt -> Err Patt
 renameIdentPatt env p = do
   let t = patt2term p
@@ -233,8 +235,7 @@ renameTerm env vars = ren vars where
     return (p',t')
   renpatt = renamePattern env
 
--- vars not needed in env, since patterns always overshadow old vars
-
+-- | vars not needed in env, since patterns always overshadow old vars
 renamePattern :: Status -> Patt -> Err (Patt,[Ident])
 renamePattern env patt = case patt of
 
@@ -286,8 +287,7 @@ renameContext b = renc [] where
     _ -> return cont
   ren = renameTerm b
 
--- vars not needed in env, since patterns always overshadow old vars
-
+-- | vars not needed in env, since patterns always overshadow old vars
 renameEquation :: Status -> [Ident] -> Equation -> Err Equation
 renameEquation b vs (ps,t) = do
   (ps',vs') <- liftM unzip $ mapM (renamePattern b) ps

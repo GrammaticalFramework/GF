@@ -33,9 +33,8 @@ import Option
 import Monad
 import List
 
--- partial evaluation of concrete syntax. AR 6/2001 -- 16/5/2003 -- 5/2/2005
+-- | partial evaluation of concrete syntax. AR 6\/2001 -- 16\/5\/2003 -- 5\/2\/2005.
 -- only do this for resource: concrete is optimized in gfc form
-
 optimizeModule :: Options -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
                   Err (Ident,SourceModInfo)
 optimizeModule opts ms mo@(_,mi) = case mi of
@@ -77,9 +76,8 @@ evalModule ms mo@(name,mod) = case mod of
      info' <- evalResInfo gr (i,info)
      return $ updateRes g name i info'
 
--- only operations need be compiled in a resource, and this is local to each
+-- | only operations need be compiled in a resource, and this is local to each
 -- definition since the module is traversed in topological order
-
 evalResInfo :: SourceGrammar -> (Ident,Info) -> Err Info
 evalResInfo gr (c,info) = case info of
 
@@ -129,8 +127,7 @@ evalCncInfo gr cnc abs (c,info) = case info of
    pEval = partEval gr
    eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
 
--- the main function for compiling linearizations
-
+-- | the main function for compiling linearizations
 partEval :: SourceGrammar -> (Context,Type) -> Term -> Err Term
 partEval gr (context, val) trm = do
   let vars  = map fst context
@@ -159,8 +156,7 @@ recordExpand typ trm = case unComputed typ of
   _ -> return trm
 
 
--- auxiliaries for compiling the resource
-
+-- | auxiliaries for compiling the resource
 allOperDependencies :: Ident -> BinTree (Ident,Info) -> [(Ident,[Ident])]
 allOperDependencies m b = 
   [(f, nub (opty pty ++ opty pt)) | (f, ResOper pty pt) <- tree2list b]
@@ -196,11 +192,10 @@ mkLinDefault gr typ = do
      _ | isTypeInts typ -> return $ EInt 0 -- exists in all as first val
      _ -> prtBad "linearization type field cannot be" typ
 
--- Form the printname: if given, compute. If not, use the computed
+-- | Form the printname: if given, compute. If not, use the computed
 -- lin for functions, cat name for cats (dispatch made in evalCncDef above).
 --- We cannot use linearization at this stage, since we do not know the
 --- defaults we would need for question marks - and we're not yet in canon.
-
 evalPrintname :: SourceGrammar -> Ident -> MPr -> Perh Term -> Err Term
 evalPrintname gr c ppr lin =
   case ppr of

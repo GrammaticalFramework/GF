@@ -25,9 +25,8 @@ import Operations
 
 import Monad
 
--- extracting resource r from abstract + concrete syntax
--- AR 21/8/2002 -- 22/6/2003 for GF with modules
-
+-- | extracting resource r from abstract + concrete syntax.
+-- AR 21\/8\/2002 -- 22\/6\/2003 for GF with modules
 makeReuse :: SourceGrammar -> Ident -> [Ident] -> 
              MReuseType Ident -> Err SourceRes
 makeReuse gr r me mrc = do
@@ -70,9 +69,8 @@ makeReuse gr r me mrc = do
         _ -> prtBad "expected concrete to be the type of" c
 
 
--- the first  Boolean indicates if the type needs be given
+-- | the first  Boolean indicates if the type needs be given
 -- the second Boolean indicates if the definition needs be given
-
 mkResDefs :: Bool -> Bool -> 
              SourceGrammar -> Ident -> Ident -> [Ident] -> [Ident] -> 
              BinTree (Ident,Info) -> BinTree (Ident,Info) -> 
@@ -119,8 +117,7 @@ mkResDefs hasT isC gr r a mext maext abs cnc = mapMTree (mkOne a maext) abs wher
     Q n c | n == a || [n] == mae -> return $ Q r c ---- FIX for non-singleton exts
     _ -> composOp (redirTyp always a mae) ty
 
--- no reuse for functions of HO/dep types
-
+-- | no reuse for functions of HO\/dep types
 isHardType t = case t of
   Prod x a b -> not (isWild x) || isHardType a || isHardType b
   App _ _    -> True
