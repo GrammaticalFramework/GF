@@ -3,7 +3,7 @@
 -- use this path to read the grammar from the same directory
 --# -path=.:../newresource/abstract:../prelude:../newresource/french:../newresource/romance
 
-concrete HealthFre of Health = open PredicationFre, ResourceFre, Prelude, SyntaxFre, MorphoFre, ExtraFre in {
+concrete HealthFre of Health = open PredicationFre, ResourceFre, Prelude, SyntaxFre, MorphoFre, ExtraFre, ParadigmsFre in {
 
 -- 1. still using "à" instead of "aux" in PainIn operations 
 -- because of the UTF8 problem with non-utf8 resource grammars! 
@@ -32,11 +32,11 @@ lin
                                                
   Influenza = mkCNomReg "grippe" Fem ** {lock_CN = <> }; 
   Malaria =  mkCNomReg "malaria" Fem ** {lock_CN = <> }; 
-  HaveIllness patient illness = predV2 tvAvoir patient (DefOneNP illness) ;  
-  Complain = predV2 tvAvoir ;
+  HaveIllness patient illness = predV2 (tvDir vAvoir) patient (DefOneNP illness) ;  
+  Complain = predV2 (tvDir vAvoir) ;
 
   BeInCondition = PredVP ; 
-  CatchCold = PosVG (PredTV tvAvoir (IndefOneNP (mkCNomReg "rhume" Masc ** {lock_CN = <> })));
+  CatchCold = PosVG (PredTV (tvDir vAvoir) (IndefOneNP (mkCNomReg "rhume" Masc ** {lock_CN = <> })));
   Pregnant = PosVG (PredAP (mkAdjective (adjJeune "enceinte") adjPost** {lock_AP = <> })) ;
 
   High = AdjP1 (mkAdjReg "élevé" adjPost ** {lock_Adj1 = <> }) ;
@@ -55,7 +55,7 @@ lin
   FeverMod degree = DetNP (delDet ** {lock_Det = <> }) (ModAdj degree (mkCNomReg "fièvre" Fem** {lock_CN = <> })) ;
   Fever = DetNP (delDet ** {lock_Det = <> }) (mkCNomReg "fièvre" Fem ** {lock_CN = <> }) ;
 
-  PainInMod patient head degree = predV2 tvAvoir patient 
+  PainInMod patient head degree = predV2 (tvDir vAvoir) patient 
     (DetNP (nullDet ** {lock_Det = <> }) 
       ( ModAdj degree
         (
@@ -65,7 +65,7 @@ lin
       )
     ) ;
               
-  PainIn patient head = predV2 tvAvoir patient
+  PainIn patient head = predV2 (tvDir vAvoir) patient
      (DetNP (nullDet ** {lock_Det = <> }) 
       (
         AppFun 

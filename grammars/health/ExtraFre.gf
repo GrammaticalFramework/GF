@@ -5,12 +5,12 @@
 --
 -- Aarne Ranta, Janna Khegai 2003
 
-resource ExtraFre = open PredicationFre, ResourceFre, Prelude, SyntaxFre, MorphoFre in {
+resource ExtraFre = open PredicationFre, ResourceFre, Prelude, SyntaxFre, MorphoFre, ParadigmsFre in {
 
 oper 
   avoirBesoin: CN -> VP = \medicine ->   
-    PosVG ( PredTV tvAvoir (DetNP nullDet (
-           AppFun (funDe (mkCNomReg "besoin" Masc) ** {lock_Fun =<>} ) 
+    PosVG ( PredTV (tvDir vAvoir) (DetNP nullDet (
+           AppFun (funDe (mkCNomReg "besoin" Masc ** {lock_N =<>})) 
            (IndefOneNP medicine)
          )
        )
@@ -32,7 +32,7 @@ oper
 
   nullDet : Det = mkDeterminer1 Sg "" ** {lock_Det =<>} ;
 
-  tvAvoir = mkTransVerbDir (verbPres (conj3savoir ""))** {lock_TV = <> };
+---  tvAvoir = mkTransVerbDir (verbPres (conj3savoir ""))** {lock_TV = <> };
 
 };
 
