@@ -7,7 +7,13 @@ GHCINCLUDEGFT=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iu
 WINDOWSINCLUDE=-ifor-windows -iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -iparsing -iparsers
 
 all:
-	make today ; make fud
+	make today ; make ghc
+unix:
+	make nofud-links ; make ghc
+windows:
+	make nofud-links ; make justwindows
+install-java:
+	make javac ; cd ../bin ; ln -s ../src/java ; echo "PLEASE edit GFHOME in bin/jgf2"
 ghc: 
 	make nofud
 fud:
@@ -15,9 +21,9 @@ fud:
 gft:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) -itranslate --make translate/GFT.hs -o gft ; strip gft ; mv gft ../bin/
 nofud:
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) --make GF.hs -o gf2n ; strip gf2n ; mv gf2n ../bin/
-windows:
-	$(GHMAKE) $(GHCFLAGS) $(WINDOWSINCLUDE) --make GF.hs -o gf2w ; strip gf2w.exe ; mv gf2w.exe ../bin/
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
+justwindows:
+	$(GHMAKE) $(GHCFLAGS) $(WINDOWSINCLUDE) --make GF.hs -o gf2 ; strip gf2.exe ; mv gf2.exe ../bin/
 nofud-links:
 	cd for-ghc-nofud ; rm -f *.hs ; ln -s ../for-ghc/Arch.hs ; ln -s ../for-hugs/ArchEdit.hs ; cd ..
 batch: 

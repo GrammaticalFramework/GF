@@ -10,7 +10,7 @@ Highlights, preliminary version
 
 <p>
 
-13/10/2003 - 25/11 - 24/3/2004
+13/10/2003 - 25/11 - 2/4/2004
 
 <p>
 
@@ -56,11 +56,14 @@ An accurate <a href="DocGF.ps.gz">language specification</a> is now available.
 <li> Pattern variables can be used on lhs's of <tt>oper</tt> definitions.
 <li> New Unicode transliterations (by Harad Hammarström).
 
-<h4>New parser (forthcoming)</h4>
+<h4>New shell commands</h4>
 
-<li> By Peter Ljunglöf, based on MCFG
-<li> Much more efficient for morphology and discontinuous constituents
-<li> Treatment of cyclic rules
+<li> <tt>pi</tt> = <tt>print_info</tt>: information on an identifier in scope.
+<li> <tt>h</tt> = <tt>help</tt> now in long or short form, 
+     and on individual commands.
+<li> All commands have both long and short names (see help). Long names
+     are a handy way to make scripts more readable.
+
 
 <h4>New editor features</h4>
 
@@ -74,6 +77,13 @@ An accurate <a href="DocGF.ps.gz">language specification</a> is now available.
      give reliable LaTeX documentation.
 <li> Lexican rules sorted out by option <tt>-cflexer</tt> for efficient
      parsing with large lexica.     
+
+<h4>New parser (forthcoming)</h4>
+
+<li> By Peter Ljunglöf, based on MCFG
+<li> Much more efficient for morphology and discontinuous constituents
+<li> Treatment of cyclic rules
+
 
 
 <!-- NEW -->
@@ -119,23 +129,46 @@ There is some room for improvement.
 Soundness checking of module depencencies and completeness is not
 complete. This means that some errors may show up too late.
 
+<p>
+
+Latex and XML printing of grammars do not work yet.
 
 
 <!-- NEW -->
 
 <h2>How to use GF 1.* files</h2>
 
-The import command <tt>i</tt> is given the option <tt>-old</tt>. E.g.
+Backward compatibility with respect to old GF grammars has been
+a central goal. All GF grammars, from version 0.9, should work in
+the old way in GF2. The main exception is the <tt>package</tt> system
+introduced in GF 1.2, which would interfere too much with the new
+module system.
+
+<p>
+
+Very old GF grammars (from versions before 0.9), with the completely
+different notation, do not work. They should be first converted to 
+GF1 by using GF version 1.2.
+
+<p>
+
+The import command <tt>i</tt> can be given the option <tt>-old</tt>. E.g.
 <pre>
   i -old tut1.Eng.g2
 </pre>
-This generates, internally, three modules:
+But this is no more necessary: GF2 detects automatically if a grammar
+is in the GF1 format.
+
+<p>
+
+Importing a set of GF2 files generates, internally, three modules:
 <pre>
   abstract tut1 = ...
   resource ResEng = ...
   concrete Eng of tut1 = open ResEng in ...
 </pre>
 (The names are different if the file name has fewer parts.)
+
 
 <p>
 
@@ -178,6 +211,11 @@ replaces every identifier that has the shape of a new reserved word
 with a variant where the last letter is replaced by <tt>Z</tt>, e.g.
 <tt>instance</tt> is replaced by <tt>instancZ</tt>. This method is of course
 unsafe and should be replaced by something better.
+
+<p>
+
+The <tt>package</tt> format of GF 1.2 is made obsolete
+by the module system. It is not handled properly by GF2.
 
 
 
@@ -321,6 +359,18 @@ Inside the GF shell, also time stamps of modules read into memory are
 taken into account. Thus a module need not be read from a file if the
 module is in the memory and the file has not been modified.
 
+
+<p>
+
+To force compilation:
+<ul>
+<li> The flag <i>-src</i> in the import command forces compilation from
+     source even if more recent object files exist. This is useful
+     when testing new versions of GF.
+<li> The flag <i>-retain</i> in the import command forces reading in
+     <tt>gfr</tt> files in addition to <tt>gfc</tt> files. This is useful
+     when testing operations with the <tt>cc</tt> command.
+</ul>
 
 <!-- NEW -->
 
