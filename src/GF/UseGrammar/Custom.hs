@@ -40,7 +40,8 @@ import ChartParser -- or some other CF Parser
 
 -- grammar conversions -- peb 19/4-04
 -- see also customGrammarPrinter
-import ConvertGrammar
+import qualified ConvertGrammar as CG
+import TestConversions (prRaw)
 
 import MoreCustom -- either small/ or big/. The one in Small is empty.
 
@@ -169,13 +170,15 @@ customGrammarPrinter =
 -}
 -- add your own grammar printers here
 -- grammar conversions, (peb) 
+{-
   ,(strCI "gfc_show",   show . grammar2canon . stateGrammarST)
   ,(strCI "gfc_raw",    prRaw . stateGrammarST)
-  ,(strCI "tnf",        prCanon . convertCanonToTNF . stateGrammarST)
-  ,(strCI "mcfg",       prMCFG . convertCanonToMCFG . stateGrammarST)
-  ,(strCI "mcfg_cf",    prCF . convertCanonToCF . stateGrammarST)
-  ,(strCI "mcfg_canon", prCanon . convertCanonToMCFG . stateGrammarST)
-  ,(strCI "mcfg_raw",   prRaw . convertCanonToMCFG . stateGrammarST)
+  ,(strCI "tnf",        prCanon . CG.convertCanonToTNF . stateGrammarST)
+  ,(strCI "mcfg",       CG.prMCFG .  CG.convertCanonToMCFG . stateGrammarST)
+  ,(strCI "mcfg_cf",    prCF .  CG.convertCanonToCFG . stateGrammarST)
+  ,(strCI "mcfg_canon", prCanon .  CG.convertCanonToMCFG . stateGrammarST)
+  ,(strCI "mcfg_raw",   prRaw .  CG.convertCanonToMCFG . stateGrammarST)
+-}
 --- also include printing via grammar2syntax!
   ] 
   ++ moreCustomGrammarPrinter
