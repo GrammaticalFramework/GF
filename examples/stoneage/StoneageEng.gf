@@ -1,6 +1,7 @@
---# -path=.:../../lib/resource/abstract:../../lib/prelude:../../lib/resource/english
+--# -path=.:../../lib/resource/abstract:../../lib/resource/english:../../lib/prelude
 concrete StoneageEng of Stoneage 
-  = open SyntaxEng, ResourceEng, SwadeshLexEng, StoneageRes in {
+  = open SyntaxEng, ResourceEng, ParadigmsEng, SwadeshLexEng,
+  StoneageResEng in {
 
 lincat
   S = S ;
