@@ -35,7 +35,7 @@ lin
   brother_N2 = mkN2 (mascN (mkN "bror" "brodern" "bröder" "bröderna")) "till" ;
   brown_ADeg = regADeg "brun" ;
   butter_N = regN "smör" neutrum ;
-  buy_V2 = dirV2 (mk2V "köpa" "köper") ;
+  buy_V2 = dirV2 (mk2V "köpa" "köpte") ;
   camera_N = regN "kamera" utrum ;
   cap_N = regN "mössa" utrum ;
   car_N = regN "bil" utrum ;
@@ -49,7 +49,7 @@ lin
   city_N = mk2N "stad" "städer" ;
   clean_ADeg = regADeg "ren" ;
   clever_ADeg = regADeg "klok" ;
-  close_V2 = dirV2 (mk2V "stänga" "stänger") ;
+  close_V2 = dirV2 (mk2V "stänga" "stängde") ;
   coat_N = regN "rock" utrum ;
   cold_ADeg = regADeg "kall" ;
   come_V = (mkV "komma" "kommer" "kom" "kom" "kommit" "kommen") ;
@@ -104,7 +104,7 @@ lin
   learn_V2 = dirV2 (mkV "lära" "lär" "lär" "lärde" "lärt" "lärd") ; ---- refl!
   leather_N = mkN "läder" "lädret" "läder" "lädren" ;
   leave_V2 = dirV2 (regV "lämna") ;
-  like_V2 = mkV2 (mk2V "tycka" "tycker") "om" ;
+  like_V2 = mkV2 (mk2V "tycka" "tyckte") "om" ;
   listen_V2 = mkV2 (regV "lyssna") "på" ;
   live_V = (irregV "leva" "levde" "levt") ; ---- ?
   long_ADeg = irregADeg "lång" "längre" "längst" ;
@@ -139,7 +139,7 @@ lin
   queen_N = regN "drottning" utrum ;
   radio_N = regN "radio" utrum ; ----
   rain_V0 = mkV0 (regV "regna") ;
-  read_V2 = dirV2 (mk2V "läsa" "läser") ;
+  read_V2 = dirV2 (mk2V "läsa" "läste") ;
   red_ADeg = mk2ADeg "röd" "rött" ;
   religion_N = mk2N "religion" "religioner" ;
   restaurant_N = mk2N "restaurang" "restauranger" ;
@@ -152,7 +152,7 @@ lin
   school_N = regN "skola" utrum;
   science_N = mk2N "vetenskap" "vetenskaper" ;
   sea_N = mkN "sjö" "sjön" "sjöar" "sjöarna" ;
-  seek_V2 = dirV2 (mk2V "söka" "söker") ;
+  seek_V2 = dirV2 (mk2V "söka" "sökte") ;
   see_V2 = dirV2 (mkV "se" "ser" "se" "såg" "sett" "sedd") ;
   sell_V3 = dirV3 (irregV "sälja" "sålde" "sålt") "till" ;
   send_V3 = dirV3 (regV "skicka") "till" ;
@@ -186,7 +186,7 @@ lin
   thick_ADeg = regADeg "tjock" ;
   thin_ADeg = mk2ADeg "tunn" "tunt" ;
   train_N = regN "tåg" neutrum ;
-  travel_V = mk2V "resa" "reser" ;
+  travel_V = mk2V "resa" "reste" ;
   tree_N = regN "träd" neutrum ;
   ----  trousers_N = regN "trousers" ; ---- pl t !
   ugly_ADeg = regADeg "ful" ;
