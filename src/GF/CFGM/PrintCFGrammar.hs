@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:34 $ 
+-- > CVS $Date: 2005/03/18 10:17:10 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Revision: 1.8 $
 --
 -- Handles printing a CFGrammar in CFGM format.
 -----------------------------------------------------------------------------
@@ -27,6 +27,7 @@ import qualified AbsCFG
 import qualified Parser
 import qualified PrintParser
 import ErrM
+import qualified Option
 
 import List (intersperse)
 import Maybe (listToMaybe, maybe)
@@ -45,8 +46,11 @@ prCanonAsCFGM gr = unlines $ map (uncurry (prLangAsCFGM gr)) xs
 getFlag :: [Flag] -> String -> Maybe String
 getFlag fs x = listToMaybe [v | Flg (IC k) (IC v) <- fs, k == x]
 
+-- | OBS! Should use 'ShellState.statePInfo' or 'ShellState.pInfos'
+-- instead of 'Cnv.pInfo' (which recalculates the grammar every time)
 prLangAsCFGM :: CanonGrammar -> Ident -> Maybe String -> String
-prLangAsCFGM gr i start = prCFGrammarAsCFGM (Cnv.cfg (Cnv.pInfo gr i)) i start
+prLangAsCFGM gr i start = prCFGrammarAsCFGM (Cnv.cfg (Cnv.pInfo opts gr i)) i start
+    where opts = Option.noOptions
 
 {-
 prCFGrammarAsCFGM :: GT.CFGrammar -> Ident -> Maybe String -> String
@@ -67,6 +71,17 @@ cfGrammarToCFGM gr i start = AbsCFG.Grammar (identToCFGMIdent i) flags (map rule
     where flags = maybe [] (\c -> [AbsCFG.StartCat $ strToCFGMCat (c++"{}.s")]) start
 
 ruleToCFGMRule :: GT.CFRule -> AbsCFG.Rule
+-- new version, without the MCFName constructor:
+ruleToCFGMRule (CFGrammar.Rule c rhs (GT.CFName ({-GT.MCFName-} fun {-cat args-}) {-lbl-} profile)) 
+    = AbsCFG.Rule fun' n' p' c' rhs'
+    where 
+    fun' = identToCFGMIdent fun
+    n' = strToCFGMName "this_should_disappear"
+    p' = profileToCFGMProfile profile
+    c' = catToCFGMCat c
+    rhs' = map symbolToGFCMSymbol rhs
+
+{- old version, with the MCFName constructor:
 ruleToCFGMRule (CFGrammar.Rule c rhs (GT.CFName (GT.MCFName fun cat args) lbl profile)) 
     = AbsCFG.Rule fun' n' p' c' rhs'
     where 
@@ -75,6 +90,7 @@ ruleToCFGMRule (CFGrammar.Rule c rhs (GT.CFName (GT.MCFName fun cat args) lbl pr
     p' = profileToCFGMProfile profile
     c' = catToCFGMCat c
     rhs' = map symbolToGFCMSymbol rhs
+-}
 
 profileToCFGMProfile :: GT.CFProfile -> AbsCFG.Profile
 profileToCFGMProfile = AbsCFG.Profile . map (AbsCFG.Ints . map fromIntegral)
@@ -91,7 +107,7 @@ catToCFGMCat = strToCFGMCat . Prt.prt
 strToCFGMName :: String -> AbsCFG.Name
 strToCFGMName = AbsCFG.Name . AbsCFG.SingleQuoteString . quoteSingle
 
-symbolToGFCMSymbol :: Parser.Symbol GT.CFCat GT.Token -> AbsCFG.Symbol
+symbolToGFCMSymbol :: Parser.Symbol GT.CFCat GT.Tokn -> AbsCFG.Symbol
 symbolToGFCMSymbol (Parser.Cat c) = AbsCFG.CatS (catToCFGMCat c)
 symbolToGFCMSymbol (Parser.Tok t) = AbsCFG.TermS (Prt.prt t)
 

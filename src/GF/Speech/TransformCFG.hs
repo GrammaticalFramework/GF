@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/22 13:35:19 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/03/18 10:17:11 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -30,7 +30,7 @@ import Debug.Trace
 
 
 -- | not very nice to get replace the structured CFCat type with a simple string
-type CFRule_ = Rule CFName String Token
+type CFRule_ = Rule CFName String Tokn
 
 type CFRules = FiniteMap String [CFRule_]
 

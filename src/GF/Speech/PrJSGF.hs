@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/22 13:35:19 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/03/18 10:17:11 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- This module prints a CFG as a JSGF grammar.
 --
@@ -53,7 +53,7 @@ prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
     prSymbol (Tok t) = wrap "\"" (prtS t) "\""
     prCat c = showChar '<' . showString c . showChar '>'
 
-rmPunct :: [Symbol String Token] -> [Symbol String Token] 
+rmPunct :: [Symbol String Tokn] -> [Symbol String Tokn] 
 rmPunct [] = []
 rmPunct (Tok t:ss) | all isPunct (prt t) = rmPunct ss
 rmPunct (s:ss) = s : rmPunct ss
