@@ -2,8 +2,8 @@
 
 ######################################################################
 # Author: Peter Ljunglöf
-# Time-stamp: "2005-02-03, 16:21"
-# CVS $Date: 2005/02/03 15:23:02 $
+# Time-stamp: "2005-02-04, 10:12"
+# CVS $Date: 2005/02/04 09:46:17 $
 # CVS $Author: peb $
 #
 # a script for producing documentation through Haddock
@@ -19,12 +19,10 @@ set rmfiles = {Lex,Par}{CFG,GF,GFC}.hs
 ######################################################################
 
 echo 0. Creating and cleaning Haddock directory
+echo -- $docdir
 
-if (-d $docdir) then
-    rm $docdir/*
-else
-    mkdir $docdir
-endif
+mkdir -p $docdir
+rm $docdir/*
 
 ######################################################################
 
