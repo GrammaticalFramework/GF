@@ -38,18 +38,18 @@ install-java: javac
 	ln -s ../src/java ../bin
 	@echo "PLEASE edit GFHOME in bin/jgf2"
 opt:
-	$(GHMAKE) $(GHCOPTFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf2
-	strip gf2
-	mv gf2 ../bin/
+	$(GHMAKE) $(GHCOPTFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf
+	strip gf
+	mv gf ../bin/
 
 ghc: nofud
 
 ghci: nofud-links ghci-nofud
 
 fud:
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) GF.hs -o gf2+
-	strip gf2+
-	mv gf2+ ../bin/
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) GF.hs -o gf+
+	strip gf+
+	mv gf+ ../bin/
 
 gft:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) -itranslate translate/GFT.hs -o gft
@@ -57,14 +57,14 @@ gft:
 	mv gft ../bin/
 
 nofud: nofud-links
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf2
-	strip gf2
-	mv gf2 ../bin/
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf
+	strip gf
+	mv gf ../bin/
 
 justwindows:
-	$(GHMAKE) $(GHCOPTFLAGS) $(WINDOWSINCLUDE) GF.hs -o gf2.exe
-	strip gf2.exe
-	mv gf2.exe ../bin/
+	$(GHMAKE) $(GHCOPTFLAGS) $(WINDOWSINCLUDE) GF.hs -o gf.exe
+	strip gf.exe
+	mv gf.exe ../bin/
 
 nofud-links:
 	mkdir -p for-ghc-nofud
@@ -73,8 +73,8 @@ nofud-links:
 	ln -s ../for-hugs/ArchEdit.hs for-ghc-nofud
 
 batch: 
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) GF2.hs -o gf2
-	strip gf2
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) GF2.hs -o gf
+	strip gf
 
 api: 
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) API.hs
@@ -86,7 +86,8 @@ clean:
 
 distclean: clean
 	-rm -f for-ghc-nofud/*.hs
-	-rm -f java/gf-java.jar jgf2
+	-rm -f java/gf-java.jar jgf
+	-rm -f util/gfdoc
 	-rm -f config.status config.mk config.log
 	-rm -f *.tar.gz *.zip
 
@@ -107,9 +108,9 @@ help:
 
 # added by peb:
 tracing:
-	$(GHMAKE) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD) GF.hs -o gf2
-	strip gf2
-	mv gf2 ../bin/
+	$(GHMAKE) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD) GF.hs -o gf
+	strip gf
+	mv gf ../bin/
 
 dist:
 	-rm -rf $(DIST_DIR)
@@ -125,9 +126,9 @@ dist:
 rpm: dist
 	rpmbuild -ta $(DIST_DIR).tar.gz
 
-install-gf2:
+install-gf:
 	$(INSTALL) -d $(bindir)
-	$(INSTALL) ../bin/gf2 $(bindir)
+	$(INSTALL) ../bin/gf $(bindir)
 
 install-gfdoc: 
 	$(INSTALL) -d $(bindir)
@@ -135,10 +136,10 @@ install-gfdoc:
 
 install-editor:
 	$(INSTALL) -d $(libdir)/GF-$(PACKAGE_VERSION)
-	$(INSTALL) jgf2 $(bindir)
+	$(INSTALL) jgf $(bindir)
 	$(INSTALL) java/gf-java.jar $(libdir)/GF-$(PACKAGE_VERSION)
 
-install: install-gf2 install-gfdoc install-editor
+install: install-gf install-gfdoc install-editor
 
 gfdoc:
 	cd util ; $(GHMAKE) GFDoc.hs -o gfdoc ; cd ..
