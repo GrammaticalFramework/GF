@@ -63,5 +63,4 @@ cp -pv imperative/compiler/*.gfs grammars/imperative/compiler/
 cp -pv imperative/compiler/runtime.j grammars/imperative/compiler/
 
 
-tar cvfz gf-grammars.tgz grammars
-
+tar cvfz gf-grammars-2.1.tgz grammars
