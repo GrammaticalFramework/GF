@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:13 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/03/17 09:58:18 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.8 $
 --
 -- Thierry Coquand's type checking algorithm that creates a trace
 -----------------------------------------------------------------------------
@@ -94,6 +94,9 @@ eqVal k u1 u2 = ---- errIn (prt u1 +++ "<>" +++ prBracket (show k) +++ prt u2) $
         (eqVal k     (VClos env1          a1) (VClos env2          a2))
         (eqVal (k+1) (VClos ((x1,v x1):env1) e1) (VClos ((x2,v x1):env2) e2))
     (VGen i _, VGen j _) -> return [(w1,w2) | i /= j]
+    (VCn (_, i), VCn (_,j)) -> return [(w1,w2) | i /= j] 
+    --- thus ignore qualifications; valid because inheritance cannot
+    --- be qualified. Simplifies annotation. AR 17/3/2005 
     _ -> return [(w1,w2) | w1 /= w2]
 -- invariant: constraints are in whnf
 
