@@ -655,7 +655,7 @@ happyError ts =
 
 myLexer = tokens
 {-# LINE 1 "GenericTemplate.hs" #-}
--- $Id: ParImperC.hs,v 1.1 2004/11/08 10:22:38 aarne Exp $
+-- $Id: ParImperC.hs,v 1.2 2004/11/09 19:12:51 aarne Exp $
 
 
 
