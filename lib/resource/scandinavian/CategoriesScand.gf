@@ -12,7 +12,7 @@ lincat
   N      = CommNoun ;
       -- = {s : Number => Species => Case => Str ; g : NounGender} ;
   NP     = NounPhrase ;
-      -- = {s : NPForm => Str ; g : Gender ; n : Number} ;
+      -- = {s : NPForm => Str ; g : Gender ; n : Number ; p : Person} ;
   PN     = {s : Case => Str ; g : NounGender} ;
   Det    = {s : NounGender => Str ; n : Number ; b : SpeciesP} ;
   N2     = Function ;
@@ -29,30 +29,44 @@ lincat
 
   V      = Verb ;
       -- = {s : VerbForm => Str ; s1 : Str} ;
-  VG     = {s : SForm => Str ; s2 : Bool => Str ; s3 : SForm => Gender => Number => Str} ;
-  VP     = {s : SForm => Str ; s2 : Str ; s3 : SForm => Gender => Number => Str} ;
+  VG     = {s : SForm => Str ; s2 : Bool => Str ; 
+            s3 : SForm => Gender => Number => Person => Str} ;
+  VP     = {s : Str ; s2 : Str ; s3 : Gender => Number => Person => Str} ;
   V2     = TransVerb ; 
       -- = Verb ** {s2 : Preposition} ;
   V3     = TransVerb ** {s3 : Preposition} ;
-  VS     = Verb ;
-  VV     = Verb ** {isAux : Bool} ;
-  V3A    = DitransAdjVerb ;
-  V3V    = DitransVerbVerb ;
 
+  VS     = Verb ;
+  VQ     = Verb ;
+  VV     = Verb ** {isAux : Bool} ;
+  VA     = Verb ;
+
+  V3S    = TransVerb ;
+  V3Q    = TransVerb ;
+  V3VObj = DitransVerbVerb ;
+  V3VSubj = DitransVerbVerb ;
+  V3A    = DitransAdjVerb ;
+
+  TP     = {s : Str ; b : Bool ; t : Tense ; a : Anteriority} ; --- the Str field is dummy
+  Tense  = {s : Str ; t : Tense} ;
+  Ant    = {s : Str ; a : Anteriority} ;
+  
 
   Adv    = Adverb ; 
       -- = {s : Str ; isPost : Bool} ;
   PP     = Adverb ;
 
   S      = Sentence ;
-      -- = {s : Order => Str} ;
+      -- = {s :                  Order => Str} ;
   Cl     = Clause ;
       -- = {s : Bool => SForm => Order => Str} ;
-  Slash  = Sentence ** {s2 : Preposition} ;
+  Slash  = Clause ** {s2 : Preposition} ;
   RP     = {s : RelCase => GenNum => Str ; g : RelGender} ;
-  RC     = {s : GenNum => Str} ;
+  RS     = {s :                  GenNum => Person => Str} ;
+  RCl    = {s : Bool => SForm => GenNum => Person => Str} ;
   IP     = NounPhrase ;
-  Qu     = {s : QuestForm => Str} ;
+  QS     = {s :                  QuestForm => Str} ;
+  QCl    = {s : Bool => SForm => QuestForm => Str} ;
   Imp    = {s : Number => Str} ;
 
   Phr    = {s : Str} ;
@@ -62,5 +76,5 @@ lincat
 
   ListS  = {s1,s2 : Order => Str} ; 
   ListAP = {s1,s2 : AdjFormPos => Case => Str ; p : Bool} ;
-  ListNP = {s1,s2 : NPForm => Str ; g : Gender ; n : Number} ;
+  ListNP = {s1,s2 : NPForm => Str ; g : Gender ; n : Number ; p : Person} ;
 }

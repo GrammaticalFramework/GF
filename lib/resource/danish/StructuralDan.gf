@@ -23,9 +23,11 @@ concrete StructuralDan of Structural =
   ThisNP = regNameNounPhrase ["det her"] NNeutr ; 
   ThatNP = regNameNounPhrase ["det der"] NNeutr ; 
   TheseNumNP n = 
-    {s = \\c => ["de her"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
+    {s = \\c => ["de her"] ++ n.s ! npCase c ; g = Neutr ; n = Pl ; p
+  = P3} ;
   ThoseNumNP n = 
-    {s = \\c => ["de der"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
+    {s = \\c => ["de der"] ++ n.s ! npCase c ; g = Neutr ; n = Pl ; p
+  = P3} ;
 
   EveryDet = varjeDet ; 
   AllMassDet   = mkDeterminerSgGender2 "all" "alt" IndefP ; 
@@ -74,7 +76,7 @@ concrete StructuralDan of Structural =
   ThereforeAdv = ss "derfor" ;
 
   EverybodyNP  = let alla = table {Nom => "alle" ; Gen => "alles"} in
-                   {s = \\c => alla ! npCase c ; g = Utr ; n = Pl} ;
+                 {s = \\c => alla ! npCase c ; g = Utr ; n = Pl ; p = P3} ;
   SomebodyNP   = nameNounPhrase (mkProperName "nogen" NUtr) ;
   NobodyNP     = nameNounPhrase (mkProperName "ingen" NUtr) ;
   EverythingNP = nameNounPhrase (mkProperName "alt"   NNeutr) ; 

@@ -112,4 +112,16 @@ instance SyntaxNor of SyntaxScand = TypesNor **
   mkDeterminerSgGender3 : Str -> Str -> Str -> SpeciesP -> Determiner = \en,ei,ett -> 
     mkDeterminerSgGender (table {Utr Masc => en ; Utr NoMasc => ei ; Neutr => ett}) ;
 
+  adjPastPart : Verb -> Adjective = \verb -> {
+    s = \\af,c => verb.s1 ++ verb.s ! VI (PtPret c) ---- af
+    } ;
+
+  reflPron : Number -> Person -> Str = \n,p -> case <n,p> of {
+    <Sg,P1> => "meg" ;
+    <Sg,P2> => "meg" ;
+    <Pl,P1> => "oss" ;
+    <Pl,P2> => "jer" ;
+    _ => "seg"
+    } ;
+
 }

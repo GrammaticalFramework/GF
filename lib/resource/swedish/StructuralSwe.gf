@@ -17,15 +17,16 @@ concrete StructuralSwe of Structural =
   TheyNP = pronNounPhrase de_38 ;
   TheyFemNP = pronNounPhrase de_38 ;
 
-  YouNP  = let {ni = pronNounPhrase ni_37 } in {s = ni.s ; g = ni.g ; n = Sg} ;
+  YouNP  = let {ni = pronNounPhrase ni_37 } in {
+             s = ni.s ; g = ni.g ; n = Sg ; p = P2} ; ---- gives wrong refl
 
   ItNP   = pronNounPhrase det_40 ; ----
   ThisNP = regNameNounPhrase ["det här"] NNeutr ; 
   ThatNP = regNameNounPhrase ["det där"] NNeutr ; 
   TheseNumNP n = 
-    {s = \\c => ["de här"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
+    {s = \\c => ["de här"] ++ n.s ! npCase c ; g = Neutr ; n = Pl ; p = P3} ;
   ThoseNumNP n = 
-    {s = \\c => ["de där"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
+    {s = \\c => ["de där"] ++ n.s ! npCase c ; g = Neutr ; n = Pl ; p = P3} ;
 
   EveryDet = varjeDet ; 
   AllMassDet   = mkDeterminerSgGender2 "all" "allt" IndefP ; 
@@ -74,7 +75,7 @@ concrete StructuralSwe of Structural =
   ThereforeAdv = ss "därför" ;
 
   EverybodyNP  = let alla = table {Nom => "alla" ; Gen => "allas"} in
-                   {s = \\c => alla ! npCase c ; g = Utr ; n = Pl} ;
+                   {s = \\c => alla ! npCase c ; g = Utr ; n = Pl ; p = P3} ;
   SomebodyNP   = nameNounPhrase (mkProperName "någon" (NUtr Masc)) ;
   NobodyNP     = nameNounPhrase (mkProperName "ingen" (NUtr Masc)) ;
   EverythingNP = nameNounPhrase (mkProperName "allting" NNeutr) ; 

@@ -53,6 +53,7 @@ fun
   ComparADeg  : ADeg -> NP -> AP ;         -- "older than John"
   SuperlNP    : ADeg -> CN -> NP ;         -- "the oldest man"
 
+----  AdjPart     : V -> A ;                  -- "forgotten"
 
 --!
 --3 Verbs and verb phrases
@@ -66,8 +67,7 @@ fun
   PredV       : V  -> VG ;             -- "walk", "doesn't walk"
   PredPassV   : V  -> VG ;             -- "is seen", "is not seen"
   PredV2      : V2 -> NP -> VG ;       -- "sees John", "doesn't see John"
----  PredV3      : V3 -> NP -> NP -> VG ;       -- "prefers wine to beer"
-  PredV3      : V3 -> NP -> V2 ;       -- "prefers wine (to beer)"
+  PredV3      : V3 -> NP -> NP -> VG ; -- "prefers wine to beer"
   PredVS      : VS -> S  -> VG ;       -- "says that I run", "doesn't say..."
   PredVV      : VV -> VG -> VG ;       -- "can run", "can't run", "tries to run"
 
@@ -78,7 +78,7 @@ fun
   PredCN      : CN -> VG ;             -- "is a man", "isn't a man"
   VTrans      : V2 -> V ;              -- "loves"
 
----  PosVG,NegVG : VG -> VP ;             -- 
+  PosVG,NegVG : VG -> VP ;             -- 
 
   PredVG      : NP -> VG -> Cl ;       -- preserves all pol/tense variation
 
@@ -99,24 +99,17 @@ fun
 --3 Sentences and relative clauses
 --
 
----  PredVP   : NP -> VP -> S ;                   -- "John walks"
----  PosSlashV2,NegSlashV2 : NP -> V2 -> Slash ;  -- "John sees", "John doesn't see"
-  SlashV2  : NP -> V2 -> Slash ;  -- "John sees", "John doesn't see"
----  OneVP    : VP -> S ;                         -- "one walks"
-  OneVG    : VG -> Cl ;                        -- "one walks"
----  ThereNP  : NP -> S ;                         -- "there is a bar","there are 86 bars"
-  ExistCN  : CN -> Cl ;                        -- "there is a bar"
-  ExistNumCN : Num -> CN -> Cl ;               -- "there are (86) bars"
+  PredVP   : NP -> VP -> S ;                   -- "John walks"
+  PosSlashV2,NegSlashV2 : NP -> V2 -> Slash ;  -- "John sees", "John doesn't see"
+  OneVP    : VP -> S ;                         -- "one walks"
+  ThereNP  : NP -> S ;                         -- "there is a bar","there are 86 bars"
 
   IdRP     : RP ;                              -- "which"
   FunRP    : N2 -> RP -> RP ;                  -- "the successor of which"
----  RelVP    : RP -> VP -> RCl ;                  -- "who walks", "who doesn't walk"
-  RelVG    : RP -> VG -> RCl ;                -- "who walks", "who doesn't walk"
-  RelSlash : RP -> Slash -> RCl ;               -- "that I wait for"/"for which I wait" 
----  ModRC    : CN -> RS -> CN ;                   -- "man who walks"
-  ModRS    : CN -> RS -> CN ;                   -- "man who walks"
----  RelSuch  : S -> RCl ;                        -- "such that it is even"
-  RelCl    : Cl -> RCl ;                        -- "such that it is even"
+  RelVP    : RP -> VP -> RC ;                  -- "who walks", "who doesn't walk"
+  RelSlash : RP -> Slash -> RC ;               -- "that I wait for"/"for which I wait" 
+  ModRC    : CN -> RC -> CN ;                  -- "man who walks"
+  RelSuch  : S -> RC ;                         -- "such that it is even"
 
 --!
 --3 Questions and imperatives
@@ -128,21 +121,16 @@ fun
   NounIPOne, NounIPMany : CN -> IP ;       -- "which car", "which cars"
  ---- NounIPHowMany : CN -> IP ;               -- "how many cars"
 
-  QuestVG   : NP -> VG -> QCl ;             -- "does John walk"; "doesn't John walk"
----  IntVP     : IP -> VP -> QCl ;             -- "who walks"
-  IntVG     : IP -> VG -> QCl ;             -- "who walks"
-  IntSlash  : IP -> Slash -> QCl ;          -- "whom does John see"
----  QuestAdv  : IAdv -> NP -> VP -> QS ;     -- "why do you walk"
-  QuestAdv  : IAdv -> NP -> VG -> QCl ;     -- "why do you walk"
----  IsThereNP : NP -> QS ;                    -- "is there a bar", "are there (86) bars"
-  ExistQCl  : CN -> QCl ;                   -- "is there a bar", 
-  ExistNumQCl : Num -> CN -> QCl ;          -- "are there (86) bars"
+  QuestVP   : NP -> VP -> Qu ;             -- "does John walk"; "doesn't John walk"
+  IntVP     : IP -> VP -> Qu ;             -- "who walks"
+  IntSlash  : IP -> Slash -> Qu ;          -- "whom does John see"
+  QuestAdv  : IAdv -> NP -> VP -> Qu ;     -- "why do you walk"
+  IsThereNP : NP -> Qu ;                   -- "is there a bar", "are there (86) bars"
 
   ImperVP : VP -> Imp ;                    -- "be a man"
 
-----rename these ??
   IndicPhrase : S -> Phr ;                 -- "I walk."
-  QuestPhrase : QS -> Phr ;                -- "Do I walk?"
+  QuestPhrase : Qu -> Phr ;                -- "Do I walk?"
   ImperOne, ImperMany : Imp -> Phr ;       -- "Be a man!", "Be men!"
 
   PrepS : PP -> AdS ;                      -- "in Sweden, (there are bears)"
@@ -185,8 +173,7 @@ fun
 
   SubjS     : Subj -> S -> S -> S ;        -- "if 2 is odd, 3 is even"
   SubjImper : Subj -> S -> Imp -> Imp ;    -- "if it is hot, use a glove!"
----  SubjQu    : Subj -> S -> QS -> QS ;      -- "if you are new, who are you?"
-  SubjQS    : Subj -> S -> QS -> QS ;      -- "if you are new, who are you?"
+  SubjQu    : Subj -> S -> Qu -> Qu ;      -- "if you are new, who are you?"
   SubjVP    : VP -> Subj -> S -> VP ;      -- "(a man who) sings when he runs"
 
 --!
@@ -207,45 +194,6 @@ fun
   
   OnePhr  : Phr -> Text ;
   ConsPhr : Phr -> Text -> Text ;
-
---- next
-
-    PredVV2 : VV -> V2 -> V2 ;      -- (which song do you) want to play
-    AdjPart : V -> A ;              -- forgotten
-    ReflV2  : V2 -> VG ;
-
--- In these predications, the last argument gets its agreement
--- features from the second, and cannot hence be made to produce
--- $V3A$/$V3S$.
-
-    PredV3A     : V3A     -> NP -> AP -> VG ;
-    PredV3VSubj : V3VSubj -> NP -> VG -> VG ;
-
---- In these three it would be possible, but hardly useful...
-
-    PredV3VObj  : V3VObj  -> NP -> VG -> VG ;
-    PredV3S     : V3S     -> NP -> S  -> VG ;
-    PredV3Q     : V3Q     -> NP -> QS -> VG ;
-
-
-    PredVQ  : VQ -> QS -> VG ;
-    PredVA  : VA -> AP -> VG ;
-
-    UseCl  : TP -> Cl  -> S ;
-    UseVG  : TP -> VG  -> VP ;
-    UseRCl : TP -> RCl -> RS ;
-    UseQCl : TP -> QCl -> QS ;
-
-    PosTP  : Tense -> Ant -> TP ;
-    NegTP  : Tense -> Ant -> TP ;
-
-    TPresent : Tense ;
-    TPast    : Tense ;
-    TFuture  : Tense ;
-    TConditional : Tense ;
-
-    ASimul   : Ant ;
-    AAnter   : Ant ;
 
 } ;
 

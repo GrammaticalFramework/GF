@@ -121,4 +121,12 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
   adjPastPart : Verb -> Adjective = \verb -> {
     s = \\af,c => verb.s1 ++ verb.s ! VI (PtPret af c) --- på slagen
     } ;
+
+  reflPron : Number -> Person -> Str = \n,p -> case <n,p> of {
+    <Sg,P1> => "mig" ;
+    <Sg,P2> => "mig" ;
+    <Pl,P1> => "oss" ;
+    <Pl,P2> => "er" ;
+    _ => "sig"
+    } ;
 }

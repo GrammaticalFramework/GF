@@ -112,4 +112,15 @@ instance SyntaxDan of SyntaxScand = TypesDan **
   mkDeterminerSgGender3 : Str -> Str -> Str -> SpeciesP -> Determiner = \en,_,ett -> 
     mkDeterminerSgGender (table {Utr => en ; Neutr => ett}) ;
 
+  adjPastPart : Verb -> Adjective = \verb -> {
+    s = \\af,c => verb.s1 ++ verb.s ! VI (PtPret c) ---- af
+    } ;
+
+  reflPron : Number -> Person -> Str = \n,p -> case <n,p> of {
+    <Sg,P1> => "mig" ;
+    <Sg,P2> => "mig" ;
+    <Pl,P1> => "os" ;
+    <Pl,P2> => "seg" ; --- ? dere ?
+    _ => "seg"
+    } ;
 }

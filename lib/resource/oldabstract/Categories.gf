@@ -120,7 +120,7 @@ cat
   Cl ;     -- clause (variable tense) e.g. "John walks"/"John walked"
   Slash ;  -- sentence without NP,    e.g. "John waits for (...)"
   RP ;     -- relative pronoun,       e.g. "which", "the mother of whom"
-  RCl ;    -- relative clause,        e.g. "who walks", "that I wait for"
+  RC ;     -- relative clause,        e.g. "who walks", "that I wait for"
 
 --!
 --3 Questions and imperatives
@@ -129,7 +129,7 @@ cat
 
   IP ;     -- interrogative pronoun, e.g. "who", "whose mother", "which yellow car"
   IAdv ;   -- interrogative adverb., e.g. "when", "why" 
-  QCl ;    -- question,              e.g. "who walks"
+  Qu ;     -- question,              e.g. "who walks"
   Imp ;    -- imperative,            e.g. "walk!"
 
 --!
@@ -153,28 +153,6 @@ cat
   Text ;   -- sequence of phrases    e.g. "One is odd. Therefore, two is even."
 
 ---- next
-
   V3A ;         -- paint the house red
-  V3VSubj ;     -- promise John to come
-  V3VObj ;      -- ask John to come
-  V3S ;         -- tell John that it is raining
-  VQ ;          -- ask who comes
-  V3Q ;         -- ask John who comes
-  VA ;          -- look yellow
-
-  V0 ;          -- (it) rains
-
-  AS ;          -- (it is) important that he comes
-  AV ;          -- difficult to play 
-
--- NB: it is difficult to play the sonata 
--- vs. it (the sonata) is difficult to play
-
-  QS ;          -- question with fixed tense and polarity
-  RS ;          -- relative clause with fixed tense and polarity
-
-  TP ;          -- tense x polarity selector
-  Tense ;       -- (abstract) tense
-  Ant ;         -- (abstract) anteriority
-
+  V3V ;         -- ask John to come
 }
