@@ -1,0 +1,299 @@
+<html>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<center>
+
+<h1>Grammatical Framework Version 2</h1>
+
+Highlights, preliminary version
+
+<p>
+
+13/10/2003
+
+<p>
+
+<a href="http://www.cs.chalmers.se/~aarne">Aarne Ranta</a>
+
+</center>
+
+<h2>Summary of novelties</h2>
+
+<h4>Module system</h4>
+
+<li> Separate modules for <tt>abstract</tt>, 
+     <tt>concrete</tt>, and <tt>resource</tt>.
+<li> Replaces the file-based <tt>include</tt> system
+<li> Name space handling with qualified names
+<li> Hierarchic structure (<tt>extend</tt>) + cross-cutting reuse (<tt>open</tt>)
+<li> Separate compilation, one module per file
+<li> Reuse of <tt>abstract</tt>+<tt>concrete</tt> as <tt>resource</tt>
+<li> New (experimental) module types: <tt>transfer</tt>, 
+     <tt>interface</tt>, <tt>instance</tt>, <tt>incomplete</tt>.
+
+<h4>Canonical format GFC</h4>
+
+<li> The target of GF compiler; to reuse, just read in
+<li> Readable by Haskell/Java/C++/C applications
+
+<h4>New features in expression language</h4>
+
+<li> Disjunctive patterns <tt>P | ... | Q</tt>.
+<li> Binding token <tt>&+</tt> to glue separate tokens at unlexing phase, 
+     and unlexer to resolve this.
+<li> New syntax alternatives for local definitions: <tt>let</tt> without
+     braces and <tt>where</tt>.
+<li> Pattern variables can be used on lhs's of <tt>oper</tt> definitions.
+
+<h4>New parser (forthcoming)</h4>
+
+<li> By Peter Ljunglöf, based on MCFG
+<li> Much more efficient for morphology and discontinuous constituents
+<li> Treatment of cyclic rules
+
+<h4>New editor features</h4>
+
+<li> Active text field (forthcoming, by Janna Khegai)
+<li> Clipboard
+
+<h4>Improved implementation</h4>
+
+<li> Haskell source code organized into subdirectories.
+<li> BNF Converter used for defining the languages GF and GFC, which also
+     give reliable LaTeX documentation.
+     
+
+
+<!-- NEW -->
+
+<h2>Status (14/11/2003)</h2>
+
+Grammar compiler, editor GUIs, and shell work.
+
+<p>
+
+GF1 grammars can be automatically translated to GF2 (although result not as good
+as manual). The results can be saved in GF2 files, but this is not necessary.
+
+<p>
+
+Example grammars and resource libraries are in the process of 
+be converted. At the same time, their API has grown with
+new constructions.
+English and German resources are up-to-date.
+Finnish and Swedish are also, but their derived libraries
+have not been adapted to the use of security-bringing lock fields.
+
+
+<p>
+
+A make facility works, finding out which modules have to be recompiled.
+There is some room for improvement.
+
+<p>
+
+The module type <tt>grammar</tt> (to build multilingual grammars) not yet 
+implemented.
+
+<il> <tt>transfer</tt> modules have to be called by flags
+
+<p>
+
+Abstract modules (<tt>interface</tt>, <tt>instance</tt>, and <tt>incomplete</tt>)
+have not been stress-tested, but work in the examples in
+<tt>resource/romance</tt> and <tt>resource/french</tt>.
+
+<p>
+
+Soundness checking of module depencencies and completeness is not
+complete.
+
+
+<!-- NEW -->
+
+<h2>How to use GF 1.* files</h2>
+
+The import command <tt>i</tt> is given the option <tt>-old</tt>. E.g.
+<pre>
+  i -old tut1.Eng.g2
+</pre>
+This generates, internally, three modules:
+<pre>
+  abstract tut1 = ...
+  resource ResEng = ...
+  concrete Eng of tut1 = open ResEng in ...
+</pre>
+(The names are different if the file name has fewer parts.)
+
+<p>
+
+The option <tt>-o</tt> causes GF2 to write these modules into files.
+
+<p>
+
+The flags <tt>-abs</tt>, <tt>-cnc</tt>, and <tt>-res</tt> can be used
+to give custom names to the modules. In particular, it is good to use
+the <tt>-abs</tt> flag to guarantee that the abstract syntax module
+has the same name for all grammars in a multilingual environmens:
+<pre>
+  i -old -abs=Numerals hungarian.gf
+  i -old -abs=Numerals tamil.gf
+  i -old -abs=Numerals sanskrit.gf
+</pre>
+
+<p>
+
+The same flags as in the import command can be used when invoking
+GF2 from the system shell. Many grammars can be imported on the same command
+line, e.g.
+<pre>
+  % gf2 -old -abs=Tutorial tut1.Eng.gf tut1.Fin.gf tut1.Fra.gf
+</pre>
+
+
+
+
+<!-- NEW -->
+
+<h2>Abstract, concrete, and resource modules</h2>
+
+Judgement forms are sorted as follows:
+<ul>
+<li> abstract: 
+  <tt>cat</tt>, <tt>fun</tt>, <tt>def</tt>, <tt>data</tt>, <tt>flags</tt>
+<li> concrete: 
+  <tt>lincat</tt>, <tt>cat</tt>, <tt>printname</tt>, <tt>flags</tt>
+<li> resource: 
+  <tt>param</tt>, <tt>oper</tt>, <tt>flags</tt>
+<li> 
+</ul>
+Example:
+<pre>
+  abstract Sums = {
+    cat 
+      Exp ;
+    fun 
+      One : Exp ;
+      plus : Exp -> Exp -> Exp ;
+  }
+
+  concrete EnglishSums of Sums = open ResEng in {
+    lincat 
+      Exp = {s : Str ; n : Number} ;
+    lin
+      One = expSg "one" ;
+      sum x y = expSg ("the" ++ "sum" ++ "of" ++ x.s ++ "and" ++ y.s) ;
+  }
+
+  resource ResEng = {
+    param 
+      Number = Sg | Pl ;
+    oper 
+      expSG : Str -> {s : Str ; n : Number} = \s -> {s = s ; n = Sg} ;
+  }
+</pre>
+
+
+
+<!-- NEW -->
+
+<h2>Opening and extending modules</h2>
+
+A <tt>concrete</tt> or <tt>resource</tt> can <b>open</b> a
+<tt>resource</tt>. This means that
+<ul>
+<li> the names defined in <tt>resource</tt> can be used ("become visible")
+<li> but: these names are not included in ("exported from") the opening module
+</ul>
+A module of any type can moreover <b>extend</b> a module of the same type.
+This means that
+<ul>
+<li> the names defined in the extended module can be used ("become visible")
+<li> and also: these names are included in ("exported from") the extending module
+</ul>
+Examples of extension:
+<pre>
+  abstract Products = Sums ** {
+    fun times : Exp -> Exp -> Exp ;
+  }
+  -- names exported: Exp, plus, times
+
+  concrete English of Products = EnglishSums ** open ResEng in {
+    lin times x y = expSg ("the" ++ "product" ++ "of" ++ x.s ++ "and" ++ y.s) ;
+  }
+</pre>
+Another important difference:
+<li> extension is single
+<li> opening can be multiple: <tt>open Foo, Bar, Baz in {...}</tt>
+
+<p>
+
+Moreover:
+<li> opening can be <b>qualified</b>
+<p>
+Example of qualified opening:
+<pre>
+  concrete NumberSystems of Systems = open (Bin = Binary), (Dec = Decimal) in {
+    lin 
+      BZero = Bin.Zero ;
+      DZero = Dec.Zero
+  }
+</pre>
+  
+
+<!-- NEW -->
+
+<h2>Compiling modules</h2>
+
+Separate compilation assumes there is <b>one module per file</b>.
+
+<p>
+
+The <b>module header</b> is the beginning of the module code up to the
+first left bracket (<tt>{</tt>). The header gives
+<ul>
+<li> the module type: <tt>abstract</tt>, <tt>concrete</tt> (<tt>of</tt> <i>A</i>), 
+  or <tt>resource</tt>
+<li> the name of the module (next to the module type keyword)
+<li> the name of extended module (between <tt>=</tt> and <tt>**</tt>)
+<li> the names of opened modules
+</ul>
+
+<p>
+
+<b>filename</b> = <b>modulename</b> <tt>.</tt> <b>extension</b>
+
+<p>
+
+File name extensions:
+<ul>
+<li> <tt>gf</tt>: GF source file (uses GF syntax, is type checked and compiled)
+<li> <tt>gfc</tt>: canonical GF file (uses GFC syntax, is only read in; produced 
+from all kinds of modules)
+<li> <tt>gfr</tt>: GF resource file (uses GF syntax, is only read in; produced from
+<tt>resource</tt> modules)
+</ul>
+Only <tt>gf</tt> files should ever be written/edited manually!
+
+<p>
+
+What the make facility does when compiling <tt>Foo.gf</tt>
+<ol>
+<li> read the module header of <tt>Foo.gf</tt>, and recursively all headers from
+the modules it <b>depends</b> on (i.e. extends or opens) 
+<li> build a dependency graph of these modules, and do topological sorting
+<li> starting from the first module in topological order,
+compare the modification times of each <tt>gf</tt> and <tt>gfc</tt> file:
+<ul>
+<li> if <tt>gf</tt> is later, compile the module and all modules depending on it
+<li> if <tt>gfc</tt> is later, just read in the module
+</ul>
+</ol>
+
+<!-- NEW -->
+
+<!-- NEW -->
+
+</body>
+</html>
