@@ -521,16 +521,17 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
                 if (debug) System.out.println("1 "+result);
               }
               appendMarked(outputString, -1,-1);
-              while ((result.indexOf("newcat")==-1)&&(result.indexOf("<lin ")==-1)){
+              
+              while ((result!=null)&&(result.indexOf("newcat")==-1)&&(result.indexOf("<lin ")==-1)){
                 result = fromProc.readLine();
                 if (debug) System.out.println("1 "+result);
               }
-              if (result.indexOf("<lin ")==-1)
+              if ((result!=null)&&(result.indexOf("<lin ")==-1))
                 formNewMenu();                   
 
               if (!finished) { 
 
-                while ((result.length()==0)||(result.indexOf("<lin ")==-1)) {
+                while ((result!=null)&&((result.length()==0)||(result.indexOf("<lin ")==-1))) {
                   result = fromProc.readLine();
                   if (result!=null){
                     if (debug) System.out.println("10 "+result);                    
