@@ -11,6 +11,23 @@
 
 resource MorphoEng = TypesEng ** open Prelude, (Predef=Predef) in {
 
+--2 Phonology
+--
+-- To regulate the use of endings for both nouns, adjectives, and verbs:
+
+oper
+  y2ie : Str -> Str -> Str = \fly,s -> 
+    let y = last fly in
+    case y of {
+    "a" => fly + "s" ;
+    "e" => fly + "s" ;
+    "o" => fly + "s" ;
+    "u" => fly + "s" ;
+    _   => init fly ++ "ies"
+    } ;
+
+
+
 --2 Nouns
 --
 -- For conciseness and abstraction, we define a worst-case macro for
@@ -165,6 +182,32 @@ oper
        }
     } ;
 
+-- This is what we use to derive the irregular forms in almost all cases
+
+  mkVerbIrreg : (_,_,_ : Str) -> VerbP3 = \bite,bit,bitten -> 
+    let bites = case last bite of {
+      "y" => y2ie bite "s" ;
+      "s" => init bite + "es" ;
+      _   => bite + "s"
+      } 
+    in mkVerbP3 bite bites bit bitten ;
+
+-- This is used to derive regular forms.
+
+  mkVerbReg : Str -> VerbP3 = \soak -> 
+    let 
+      soaks = case last soak of {
+        "y" => y2ie soak "s" ;
+        "s" => init soak + "es" ;
+        _   => soak + "s"
+        } ;
+      soaked = case last soak of {
+        "e" => init soak + "s" ;
+        _   => soak + "ed"
+        }
+    in 
+    mkVerbP3 soak soaks soaked soaked ;
+
   mkVerb : (_,_,_ : Str) -> VerbP3 = \ring,rang,rung ->
     mkVerbP3 ring (ring + "s") rang rung ;
 
@@ -181,10 +224,10 @@ oper
     mkVerbP3 (cr + "y") (cr + "ies") (cr + "ied") (cr + "ied") ;
 
   verbGen : Str -> VerbP3 = \kill -> case last kill of {
-    "y" => verbP3y (init "kill") ;
-    "e" => verbP3y (init "kill") ;
-    "s" => verbP3s (init "kill") ;
-    _   => regVerbP3 "kill"
+    "y" => verbP3y (init kill) ;
+    "e" => verbP3y (init kill) ;
+    "s" => verbP3s (init kill) ;
+    _   => regVerbP3 kill
     } ;
 
   verbP3Have = mkVerbP3 "have" "has" "had" "had" ;
