@@ -882,10 +882,12 @@ oper
 
   conj3choir : Str -> Verbe = \choir ->
     let {
-      ch = Predef.tk 3 choir ;
-      tchoir = auxConj3usS "oi" "oy" "oi" "" (variants {"oir" ; "err"}) "oi" "oy" ""
+      e = Predef.tk 5 choir ;
+      tchoir = 
+        auxConj3usS "choi" "choy" "choi" "ch" 
+          (variants {"choir" ; "cherr"}) "choi" "choy" "ch"
     } in
-    \\p => ch + tchoir ! p ;
+    \\p => e + tchoir ! p ;
 
   conj3échoir : Str -> Verbe = \échoir -> 
     let {techoir = conj3choir échoir} in

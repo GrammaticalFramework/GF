@@ -1,9 +1,12 @@
 --# -path=.:../romance:../abstract:../../prelude
 
+-- Verbs from Nancy, courtesy of Sylvain Pogodalla, 25/11/2004
+-- Translated to GF by Aarne Ranta
+
 concrete VerbesFre of VerbesAbs = --- CategoriesFre ** 
   open TypesFre, ConjugNancy in {
 
-lincat V = {s : VF => Str ; aux : VAux} ;
+lincat VN = {s : VForm => Str} ; --- aux : VAux} ;
 
 {- --- remove deficient verbs
 

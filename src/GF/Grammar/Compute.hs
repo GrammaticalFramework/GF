@@ -139,6 +139,13 @@ computeTerm gr = comp where
               foldr1 C (map K (str2strings (glueStr v (str a)))) | v <- x']
            ,return $ Glue x y
            ]
+         (FV ks,_)         -> do
+           kys <- mapM (comp g . flip Glue y) ks
+           return $ FV kys
+         (_,FV ks)         -> do
+           xks <- mapM (comp g . Glue x) ks
+           return $ FV xks
+
          _ -> do
            mapM_ checkNoArgVars [x,y]
            r <- composOp (comp g) t
@@ -152,10 +159,17 @@ computeTerm gr = comp where
      C a b    -> do
        a' <- comp g a
        b' <- comp g b
-       returnC $ case (a',b') of
-         (Empty,_) -> b'
-         (_,Empty) -> a'
-         _     -> C a' b'
+       case (a',b') of
+         (Alts _, K a) -> checks [do
+            as <- strsFromTerm a' -- this may fail when compiling opers
+            return $ variants [
+              foldr1 C (map K (str2strings (plusStr v (str a)))) | v <- as]
+            ,
+            return $ C a' b'
+           ]
+         (Empty,_) -> returnC b'
+         (_,Empty) -> returnC a'
+         _     -> returnC $ C a' b'
 
      -- reduce free variation as much as you can
      FV [t] -> comp g t
