@@ -132,6 +132,7 @@ abstract VerbsSweAbs = Categories ** {
   spricka_V : V ;
   sprida_V : V ;
   springa_V : V ;
+  stå_V : V ;
   sticka_V : V ;
   stiga_V : V ;
   stinka_V : V ;
