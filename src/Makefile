@@ -125,9 +125,11 @@ dist:
 rpm: dist
 	rpmbuild -ta $(DIST_DIR).tar.gz
 
-install:
+install-gf2:
 	$(INSTALL) -d $(bindir)
-	$(INSTALL) -d $(libdir)/GF-$(PACKAGE_VERSION)
 	$(INSTALL) ../bin/gf2 $(bindir)
+
+install: install-gf2
+	$(INSTALL) -d $(libdir)/GF-$(PACKAGE_VERSION)
 	$(INSTALL) jgf2 $(bindir)
 	$(INSTALL) java/gf-java.jar $(libdir)/GF-$(PACKAGE_VERSION)

@@ -42,6 +42,12 @@ GF particularly addresses the following aspects of grammars:
       libraries)
 
 
+%package editor
+Summary: GF 
+Group: Sciences/Other
+%description editor
+This package contains the GF syntax editor. 
+
 
 %prep
 rm -rf $RPM_BUILD_ROOT
@@ -50,7 +56,7 @@ rm -rf $RPM_BUILD_ROOT
 %build
 cd src
 %configure
-make unix
+make unix jar
 
 %install
 cd src
@@ -60,11 +66,12 @@ cd src
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root,0755)
 %{_bindir}/gf2
+%doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html}
+
+%files editor
 %{_bindir}/jgf2
 %{_libdir}/%{name}-%{version}/gf-java.jar
-%doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html}
 
 
 %changelog
