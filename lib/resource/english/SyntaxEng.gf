@@ -443,9 +443,9 @@ oper
 
 -- All negative verb phrase behave as auxiliary ones in questions.
 
-  predVerbGroup : Bool -> VerbGroup -> VerbPhrase = \b,vg -> {
-    s  = vg.s ! b ;
-    s2 = vg.s2 ! b ;
+  predVerbGroup : Bool -> Anteriority -> VerbGroup -> VerbPhrase = \b,a,vg -> {
+    s  = vg.s ! b ! VInfinit a ;
+    s2 = vg.s2 ! b ! VInfinit a ;
     s3 = vg.s3 ;
     isAux = orB (notB b) vg.isAux
     } ;
@@ -520,7 +520,8 @@ oper
 -- Transitive verbs can also be used reflexively.
 -- But to formalize this we must make verb phrases depend on a person parameter.
 
---- reflTransVerb : TransVerb -> VerbGroup = \love -> 
+  reflTransVerb : TransVerb -> VerbGroup = \love -> 
+    useVerb love (\\v => love.s1 ++ love.s3 ++ reflPron Sg P3) ; ----
 
 -- Transitive verbs can be used elliptically as verbs. The semantics
 -- is left to applications. The definition is trivial, due to record
@@ -557,11 +558,11 @@ oper
 -- N.B. this rule generates the cyclic parsing rule $VP#2 ::= VP#2$
 -- and cannot thus be parsed.
 
-  adVerbPhrase : VerbPhrase -> Adverb -> VerbPhrase = \sings, well ->
+  adVerbPhrase : VerbGroup -> Adverb -> VerbGroup = \sings, well ->
     let {postp = orB well.p sings.isAux} in
     {
-     s = \\v => (if_then_else Str postp [] well.s) ++ sings.s ! v ;
-     s2 = \\n => sings.s2 ! n ++ (if_then_else Str postp well.s []) ;
+     s  = \\b,sf => (if_then_else Str postp [] well.s) ++ sings.s ! b ! sf ;
+     s2 = \\b,sf => sings.s2 ! b ! sf ++ (if_then_else Str postp well.s []) ;
      s3 = sings.s3 ;
      isAux = sings.isAux
     } ;
@@ -603,6 +604,7 @@ oper
 
   Sentence : Type = SS ;
 
+{- --- obsolete
 -- This is the traditional $S -> NP VP$ rule. It takes care of
 -- agreement between subject and verb. Recall that the VP may already
 -- contain negation. 
@@ -618,10 +620,31 @@ oper
       cf = VIndic Present Simul n p
     in 
       sleep.s ! cf ++ sleep.s2 ! cf ++ sleep.s3 ! n ;
+-}
+
+  adjPastPart : Verb -> Adjective = \verb -> {
+    s = \\_ => verb.s ! PPart ++ verb.s1 ---- same Adv form
+    } ;
+
+  reflPron : Number -> Person -> Str = \n,p -> case <n,p> of {
+    <Sg,P1> => "myself" ;
+    <Sg,P2> => "yourself" ;
+    <Sg,P3> => "herself" ; ---- himself
+    <Pl,P1> => "ourselves" ;
+    <Pl,P2> => "yourselves" ;
+    <Pl,P3> => "themselves"
+    } ;
+
+---- revise; first include pres part in VerbGroup
+  progressiveVerbPhrase : VerbPhrase -> VerbGroup = \vp ->
+    predAdjective {s = \\_ => vp.s ++ vp.s2 ++ vp.s3 ! Sg ; p = False} ;
 
 --3 Tensed clauses
 
   param
+
+  ClTense = ClPresent | ClPast | ClFuture | ClConditional ;
+
   ClForm = 
      ClIndic   Order Tense Anteriority
    | ClFut     Order Anteriority
@@ -636,6 +659,11 @@ oper
     ClFut o a     => {form = VFut a ; order = o} ;
     ClCondit o a  => {form = VCondit a ; order = o} ; 
     ClInfinit a   => {form = VInfinit a ; order = Direct} --- order does not matter
+    } ;
+  s2cl : SForm -> Order -> ClForm = \s,o -> case s of {
+    VIndic t a _ _  => ClIndic o t a ;
+    VInfinit a   => ClInfinit a ;
+    _ => ClInfinit Simul ---- ??
     } ;
 
   Clause = {s : Bool => ClForm => Str} ;
@@ -687,13 +715,12 @@ oper
 -- The contraction of "not" is not provided, since it would require changing
 -- the verb parameter type.
 
-  complVerbVerb : VerbVerb -> VerbGroup -> VerbGroup = \try,run ->
+  complVerbVerb : VerbVerb -> VerbPhrase -> VerbGroup = \try,run ->
     let
        taux  = try.isAux ;
        to    = if_then_Str taux [] "to" ;
        torun : Number => Str = 
-         \\n => to ++ run.s ! True ! VInfinit Simul ++ 
-                run.s2 ! True ! VInfinit Simul ++ run.s3 ! n  
+         \\n => to ++ run.s ++  run.s2 ++ run.s3 ! n  
     in
       if_then_else VerbGroup taux 
         (useVerb    try torun)
@@ -750,6 +777,7 @@ oper
     \you,lookat ->
     predVerbGroupClause you (predVerb lookat) ** {s2 = lookat.s3} ;
 
+{-
 --- TODO: "there is" with tense variation.
 
   thereIs : NounPhrase -> Sentence = \abar ->
@@ -759,7 +787,7 @@ oper
          Pl => {s = \\_ => "there" ; n = Pl ; p = P3}
          })
       (predVerbGroup True (predNounPhrase abar)) ;
-
+-}
 
 
 --2 Relative pronouns and relative clauses
@@ -788,14 +816,15 @@ oper
   RelClause   : Type = {s : Bool => SForm => Gender => Number => Str} ;
   RelSentence : Type = {s :                  Gender => Number => Str} ;
 
-  relVerbPhrase : RelPron -> VerbPhrase -> RelClause = \who,walks ->
-    {s = \\g,n => (predVerbPhrase (relNounPhrase who g n) walks).s} ;
+  relVerbPhrase : RelPron -> VerbGroup -> RelClause = \who,walks ->
+    {s = \\b,sf,g,n => 
+       (predVerbGroupClause (relNounPhrase who g n) walks).s ! b ! s2cl sf Direct} ;
 
 --- TODO: full tense variation in relative clauses.
 
-  relSlash : RelPron -> SentenceSlashNounPhrase -> RelClause = \who,yousee ->
-    {s = \\g,n => 
-           let {youSee = yousee.s ! Direct} in
+  relSlash : RelPron -> ClauseSlashNounPhrase -> RelClause = \who,yousee ->
+    {s = \\b,sf,g,n => 
+           let {youSee = yousee.s ! b ! s2cl sf Direct} in
            variants {
              who.s ! g ! n ! AccP ++ youSee ++ yousee.s2 ;
              yousee.s2 ++ who.s ! g ! n ! GenSP ++ youSee
@@ -805,14 +834,14 @@ oper
 -- A 'degenerate' relative clause is the one often used in mathematics, e.g.
 -- "number x such that x is even".
 
-  relSuch : Sentence -> RelClause = \A ->
-    {s = \\_,_ => "such" ++ "that" ++ A.s} ;
+  relSuch : Clause -> RelClause = \A ->
+    {s = \\b,sf,_,_ => "such" ++ "that" ++ A.s ! b ! s2cl sf Direct} ;
 
 -- The main use of relative clauses is to modify common nouns.
 -- The result is a common noun, out of which noun phrases can be formed
 -- by determiners. No comma is used before these relative clause.
 
-  modRelClause : CommNounPhrase -> RelClause -> CommNounPhrase = \man,whoruns ->
+  modRelClause : CommNounPhrase -> RelSentence -> CommNounPhrase = \man,whoruns ->
     {s = \\n,c => man.s ! n ! c ++ whoruns.s ! man.g ! n ;
      g = man.g
     } ;
@@ -874,7 +903,7 @@ oper
   Utterance = SS ;
   
   indicUtt : Sentence -> Utterance = \x -> ss (x.s ++ ".") ;
-  interrogUtt : Question -> Utterance = \x -> ss (x.s ! DirQ ++ "?") ;
+  interrogUtt : QuestionSent -> Utterance = \x -> ss (x.s ! DirQ ++ "?") ;
 
 
 --2 Questions
@@ -886,8 +915,8 @@ param
   QuestForm = DirQ | IndirQ ;
 
 oper
-  Question     = {s : Bool => SForm => QuestForm => Str} ;
-  QuestionSent = {s :                  QuestForm => Str} ;
+  Question     = {s : Bool => ClForm => QuestForm => Str} ;
+  QuestionSent = {s :                   QuestForm => Str} ;
 
 --- TODO: questions in all tenses.
 
@@ -902,24 +931,25 @@ oper
 -- rule, $questVerbPhrase'$. The word ("ob" / "whether") never appears
 -- if there is an adverbial.
 
-  questVerbPhrase : NounPhrase -> VerbPhrase -> Question = 
+  questVerbPhrase : NounPhrase -> VerbGroup -> Question = 
     questVerbPhrase' False ;
 
-  questVerbPhrase' : Bool -> NounPhrase -> VerbPhrase -> Question = 
+  questVerbPhrase' : Bool -> NounPhrase -> VerbGroup -> Question = 
     \adv,John,walk ->
     let 
       john = John.s ! NomP
     in
-    {s = table {
-      DirQ   => walk.s  ! VQuest Present John.n John.p ++
+    {s = \\b,cl => table {
+      DirQ   => walk.s  ! b ! VQuest Present John.n John.p ++
                 john ++
-                walk.s2 ! VQuest Present John.n John.p ++
+                walk.s2 ! b ! VQuest Present John.n John.p ++
                 walk.s3 ! John.n ;
       IndirQ => if_then_else Str adv [] (variants {"if" ; "whether"}) ++ 
-                (predVerbPhrase John walk).s
+                (predVerbGroupClause John walk).s ! b ! cl
       }
     } ;
 
+{-
   isThere : NounPhrase -> Question = \abar ->
     questVerbPhrase 
       (case abar.n of {
@@ -927,23 +957,28 @@ oper
          Pl => {s = \\_ => "there" ; n = Pl ; p = P3}
          })
       (predVerbGroup True (predNounPhrase abar)) ;
+-}
 
 --3 Wh-questions
 --
 -- Wh-questions are of two kinds: ones that are like $NP - VP$ sentences,
 -- others that are line $S/NP - NP$ sentences.
 
-  intVerbPhrase : IntPron -> VerbPhrase -> Question = \who,walk ->
-    {s = \\_ => who.s ! NomP ++ presentIndicative walk who.n P3 
-    } ;
+  intVerbPhrase : IntPron -> VerbGroup -> Question = \who,walk ->
+    let 
+      who : NounPhrase = who ** {p = P3} ;
+      whowalks : Clause = predVerbGroupClause who walk
+    in
+    {s = \\b,sf,_ => whowalks.s ! b ! sf} ;
 
-  intSlash : IntPron -> SentenceSlashNounPhrase -> Question = \who,yousee ->
-    {s = \\q =>
-           let {youSee = case q of {
-                  DirQ   => yousee.s ! Indirect ; 
-                  IndirQ => yousee.s ! Direct
-                  }
-           } in
+  intSlash : IntPron -> ClauseSlashNounPhrase -> Question = \who,yousee ->
+    {s = \\b,cl,q =>
+           let 
+             youSee = case q of {
+               DirQ   => yousee.s ! b ! cl ; 
+               IndirQ => yousee.s ! b ! cl   ---- the difference??
+               }
+           in
            variants {
              who.s ! AccP ++ youSee ++ yousee.s2 ;
              yousee.s2 ++ who.s ! GenSP ++ youSee
@@ -966,9 +1001,10 @@ oper
 -- A question adverbial can be applied to anything, and whether this makes
 -- sense is a semantic question.
 
-  questAdverbial : IntAdverb -> NounPhrase -> VerbPhrase -> Question = 
+  questAdverbial : IntAdverb -> NounPhrase -> VerbGroup -> Question = 
     \why, you, walk ->
-    {s = \\q => why.s ++ (questVerbPhrase' True you walk).s ! q} ;
+    {s = \\b,cf,q => 
+       why.s ++ (questVerbPhrase' True you walk).s ! b ! cf !  q} ;
 
 --2 Imperatives
 --
@@ -976,8 +1012,8 @@ oper
 
   Imperative = SS1 Number ;
 
-  imperVerbPhrase : VerbPhrase -> Imperative = \walk -> 
-    {s = \\n => walk.s ! VImperat ++ walk.s2 ! VImperat ++ walk.s3 ! n} ;
+  imperVerbPhrase : Bool -> VerbGroup -> Imperative = \b,walk -> 
+    {s = \\n => walk.s ! b ! VImperat ++ walk.s2 ! b ! VImperat ++ walk.s3 ! n} ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
     ss (I.s ! n ++ "!") ;
@@ -1119,14 +1155,14 @@ oper
     \if, A, B -> 
     {s = \\n => subjunctVariants if A.s (B.s ! n)} ;
 
-  subjunctQuestion : Subjunction -> Sentence -> Question -> Question = 
+  subjunctQuestion : Subjunction -> Sentence -> QuestionSent -> QuestionSent = 
     \if, A, B ->
     {s = \\q => subjunctVariants if A.s (B.s ! q)} ;
 
   subjunctVariants : Subjunction -> Str -> Str -> Str = \if,A,B ->
     variants {if.s ++ A ++ "," ++ B ; B ++ "," ++ if.s ++ A} ;
 
-  subjunctVerbPhrase : VerbPhrase -> Subjunction -> Sentence -> VerbPhrase =
+  subjunctVerbPhrase : VerbGroup -> Subjunction -> Sentence -> VerbGroup =
     \V, if, A -> 
     adVerbPhrase V (advPost (if.s ++ A.s)) ;
 
@@ -1152,7 +1188,7 @@ oper
   defaultNounPhrase : NounPhrase -> SS = \john -> 
     ss (john.s ! NomP) ;
 
-  defaultQuestion : Question -> SS = \whoareyou ->
+  defaultQuestion : QuestionSent -> SS = \whoareyou ->
     ss (whoareyou.s ! DirQ) ;
 
   defaultSentence : Sentence -> Utterance = \x -> 

@@ -56,19 +56,23 @@ lincat
   VS     = Verb ;
   VV     = Verb ** {isAux : Bool} ;
 
+  TP     = {s : Str ; b : Bool ; t : ClTense ; a : Anteriority} ; --- the Str field is dummy
+  Tense  = {s : Str ; t : ClTense} ;
+  Ant    = {s : Str ; a : Anteriority} ;
+
   Adv    = {s : Str ; p : Bool} ;
 
   S      = {s : Str} ; 
   Cl     = Clause ;
-      -- = {s : Bool => SForm => Str} ;
+      -- = {s : Bool => ClForm => Str} ;
   Slash  = Clause ** {s2 : Preposition} ;
   RP     = {s : Gender => Number => NPForm => Str} ;
   RCl    = {s : Bool => SForm => Gender => Number => Str} ;
   RS     = {s :                  Gender => Number => Str} ;
 
   IP     = {s : NPForm => Str ; n : Number} ;
-  QCl    = {s : Bool => SForm => QuestForm => Str} ;
-  QS     = {s :                  QuestForm => Str} ;
+  QCl    = {s : Bool => ClForm => QuestForm => Str} ;
+  QS     = {s :                   QuestForm => Str} ;
   Imp    = {s : Number => Str} ;
   Phr    = {s : Str} ;
   Text   = {s : Str} ;
