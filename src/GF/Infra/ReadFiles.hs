@@ -13,10 +13,12 @@ import Arch (selectLater, modifiedFiles, ModTime, getModTime,laterModTime)
 import Option
 import Operations
 import UseIO
+
 import System
 import Char
 import Monad
 import List
+import Directory
 
 -- make analysis for GF grammar modules. AR 11/6/2003--24/2/2004
 
@@ -76,6 +78,7 @@ selectFormat env (p,f) = do
         (Just tenv,_,_,Just tgf) | laterModTime tenv tgf -> CSEnvR
         (_,Just tenv,_,Just tgf) | laterModTime tenv tgf -> CSEnv
         (_,_,Just tgfc,Just tgf) | laterModTime tgfc tgf -> CSRead
+        (_,_,_,        Nothing) -> CSRead -- source does not exist
         _ -> CSComp
   return $ (f, (p,stat))
 
@@ -126,9 +129,9 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
   res cs = map mkRes cs where
     mkRes x@(f,(path,st)) | elem st [CSRead,CSEnv] = case typ f of
       t | elem t [MTyResource,MTyIncResource] &&
-          not (null [m | (m,(_,CSComp)) <- cs,
+          (not (null [m | (m,(_,CSComp)) <- cs,
                                    Just ms <- [lookup m allDeps], elem f ms])
-                    || oElem retainOpers opts
+                    || oElem retainOpers opts)
         -> (f,(path,CSRes))
       _ -> x
     mkRes x = x
@@ -154,9 +157,9 @@ resModName = ('#':)
 
 getImports :: [InitPath] -> FileName -> IOE [(ModuleHeader,InitPath)]
 getImports ps = get [] where
-  get ds file = do
-    let name = fileBody file
-    (p,s) <- readFileIfPath ps $ file
+  get ds file0 = do
+    let name = fileBody file0
+    (p,s) <- tryRead name
     let ((typ,mname),imps) = importsOfFile s
     ioeErr $ testErr  (mname == name) $ 
              "module name differs from file name in" +++ name
@@ -164,8 +167,17 @@ getImports ps = get [] where
       _ | elem name (map (snd . fst . fst) ds) -> return ds  --- file already read
       [] -> return $ (((typ,name),[]),p):ds
       _ -> do
-        let files = map (gfFile . fst) imps --- requires there's always .gf file
+        let files = map (gfFile . fst) imps 
         foldM get ((((typ,name),imps),p):ds) files
+  tryRead name = do
+    file <- do
+      let file_gf = gfFile name
+      b <- doesFileExistPath ps file_gf                   -- try gf file first
+      if b then return file_gf else return (gfcFile name) -- gfc next
+
+    readFileIfPath ps $ file
+
+
 
 -- internal module dep information
 

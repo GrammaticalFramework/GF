@@ -122,6 +122,15 @@ mapErrN maxN f xs = Ok (ys, unlines (errHdr : ss2))
     nss = length ss
     fxs = map f xs
 
+-- like foldM, but also return the latest value if fails
+
+foldErr :: (a -> b -> Err a) -> a -> [b] -> Err (a, Maybe String)
+foldErr f s xs = case xs of
+  [] -> return (s,Nothing)
+  x:xx -> case f s x of
+    Ok v  -> foldErr f v xx
+    Bad m -> return $ (s, Just m)
+
 -- !! with the error monad
 (!?) :: [a] -> Int -> Err a
 xs !? i = foldr (const . return) (Bad "too few elements in list") $ drop i xs

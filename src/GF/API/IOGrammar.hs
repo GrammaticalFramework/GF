@@ -39,8 +39,8 @@ string2annotTree gr m = annotate gr . string2absTerm (prt m) ---- prt
 shellStateFromFiles :: Options -> ShellState -> FilePath -> IOE ShellState
 shellStateFromFiles opts st file = case fileSuffix file of
   "gfcm" -> do
-     (_,_,cgr) <- compileOne opts (compileEnvShSt st []) file
-     ioeErr $ updateShellState opts st (cgr,(emptyMGrammar,[]))
+     cenv <- compileOne opts (compileEnvShSt st []) file
+     ioeErr $ updateShellState opts st cenv
   s | elem s ["cf","ebnf"] -> do
      let osb = addOptions (options [beVerbose]) opts
      grts <- compileModule osb st file
