@@ -1,0 +1,31 @@
+#!/bin/sh
+
+GF="gf"
+DOT="dot" 
+
+BASE=$1
+shift
+
+if [ -z "$BASE" ]; then
+  echo "Usage: gfmap name module ..." 1>&2
+  echo
+  echo "Creates a clickable module dependency graph"
+  exit 2
+fi
+
+DOT_FILE="$BASE.dot"
+IMG_FILE="$BASE.gif"
+MAP_FILE="$BASE.map"
+HTML_FILE="$BASE.html"
+
+$GF -s -src "$@" <<COMMANDS
+sg | wf $DOT_FILE
+COMMANDS
+
+$DOT -Tgif -o $IMG_FILE $DOT_FILE
+$DOT -Tcmapx -o $MAP_FILE $DOT_FILE
+
+echo "<img src='$IMG_FILE' usemap='#_anonymous_0' />" > $HTML_FILE
+cat $MAP_FILE >> $HTML_FILE
+
+echo "Created $HTML_FILE and $IMG_FILE"
