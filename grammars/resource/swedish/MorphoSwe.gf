@@ -8,7 +8,7 @@
 --
 -- We use the parameter types and word classes defined for morphology.
 
-resource Morpho = Types ** open Prelude in {
+resource MorphoSwe = TypesSwe ** open Prelude in {
 
 -- The indefinite and definite article
 oper

@@ -1,1 +1,0 @@
-resource Svenska = reuse ResSwe ;
