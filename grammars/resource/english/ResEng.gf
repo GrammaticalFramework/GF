@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../../prelude
+
 --1 The Top-Level English Resource Grammar
 --
 -- Aarne Ranta 2002 -- 2003
