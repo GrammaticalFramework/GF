@@ -1,3 +1,17 @@
+----------------------------------------------------------------------
+-- |
+-- Module      : (Module)
+-- Maintainer  : (Maintainer)
+-- Stability   : (stable)
+-- Portability : (portable)
+--
+-- > CVS $Date $ 
+-- > CVS $Author $
+-- > CVS $Revision $
+--
+-- (Description of the module)
+-----------------------------------------------------------------------------
+
 module Arch (
  myStdGen, prCPU, selectLater, modifiedFiles, ModTime, getModTime,getNowTime,
  welcomeArch, fetchCommand, laterModTime) where

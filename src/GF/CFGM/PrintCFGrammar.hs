@@ -1,3 +1,17 @@
+----------------------------------------------------------------------
+-- |
+-- Module      : (Module)
+-- Maintainer  : (Maintainer)
+-- Stability   : (stable)
+-- Portability : (portable)
+--
+-- > CVS $Date $ 
+-- > CVS $Author $
+-- > CVS $Revision $
+--
+-- (Description of the module)
+-----------------------------------------------------------------------------
+
 -- Handles printing a CFGrammar in CFGM format.
 module PrintCFGrammar (prCanonAsCFGM) where
 

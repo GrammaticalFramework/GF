@@ -5,11 +5,11 @@
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/02/03 15:13:35 $ 
+-- > CVS $Date: 2005/02/04 10:10:28 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.18 $
+-- > CVS $Revision: 1.19 $
 --
--- (Description)
+-- (Description of the module)
 -----------------------------------------------------------------------------
 
 module Main (main) where

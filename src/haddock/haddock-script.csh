@@ -2,8 +2,8 @@
 
 ######################################################################
 # Author: Peter Ljunglöf
-# Time-stamp: "2005-02-04, 10:52"
-# CVS $Date: 2005/02/04 09:57:10 $
+# Time-stamp: "2005-02-04, 11:02"
+# CVS $Date: 2005/02/04 10:10:28 $
 # CVS $Author: peb $
 #
 # a script for producing documentation through Haddock
