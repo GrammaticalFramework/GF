@@ -1151,8 +1151,8 @@ abstract Imper = PredefAbs ** {
 
     Decl    : (A : Typ) -> (Var A -> Stm) -> Stm ;
     Assign  : (A : Typ) -> Var A -> Exp A -> Stm -> Stm ;
-    While   : Exp TInt -> Stm -> Stm -> Stm ;
-    IfElse  : Exp TInt -> Stm -> Stm -> Stm -> Stm ;
+    While   : Exp (TNum TInt) -> Stm -> Stm -> Stm ;
+    IfElse  : Exp (TNum TInt) -> Stm -> Stm -> Stm -> Stm ;
     Block   : Stm -> Stm -> Stm ;
     Printf  : (A : Typ) -> Exp A -> Stm -> Stm ;
     Return  : (A : Typ) -> Exp A -> Stm ;
