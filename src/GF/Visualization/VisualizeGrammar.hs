@@ -62,7 +62,7 @@ prNode n = concat (map (++";\n") stmts)
 			  GrAbstract -> "solid"
 			  GrConcrete -> "dashed"
 			  GrResource -> "dotted"
-    attrs = [("style",style)]
+    attrs = [("style",style),("URL", l++".gf")] -- FIXME: might be in a different directory
 
 
 prExtend :: String -> String -> String
@@ -78,4 +78,4 @@ prEdge :: String -> String -> [(String,String)] -> String
 prEdge f t as = f ++ " -> " ++ t ++ " [" ++ prAttributes as ++ "]"
 
 prAttributes :: [(String,String)] -> String
-prAttributes = concat . intersperse ", " . map (\ (n,v) -> n ++ " = " ++ v)
+prAttributes = concat . intersperse ", " . map (\ (n,v) -> n ++ " = " ++ show v)
