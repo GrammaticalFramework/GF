@@ -32,7 +32,14 @@ rebuildModule ms mo@(i,mi) = do
           testErr (isModRes m1) ("interface expected instead of" +++ prt i0)
           m' <- do
             js' <- extendMod False i0 (jments m1) (jments m)
-            return $ replaceJudgements m js'
+            --- to avoid double inclusions, in instance I of I0 = J0 ** ...
+            case extends m of
+              Nothing -> return $ replaceJudgements m js'
+              Just j0 -> do 
+                m0 <- lookupModMod gr j0
+                let notInM0 c = not $ isInBinTree (fst c) $ mapTree fst $ jments m0
+                let js2 = sorted2tree $ filter notInM0 $ tree2list js'
+                return $ replaceJudgements m js2
           return $ ModMod m'
         _ -> return mi
 
@@ -40,7 +47,7 @@ rebuildModule ms mo@(i,mi) = do
     ModWith mt stat ext ops -> do
       let insts = [(inf,inst) | OQualif _ inf inst <- ops]
       let infs  = map fst insts
-      let stat' = ifNull MSComplete (const MSIncomplete) 
+      let stat' = ifNull MSComplete (const MSIncomplete)
                     [i | i <- is, notElem i infs]
       testErr (stat' == MSComplete || stat == MSIncomplete) 
               ("module" +++ prt i +++ "remains incomplete")

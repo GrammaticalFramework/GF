@@ -168,10 +168,11 @@ compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
   mo1   <- ioeErr $ rebuildModule mos mo
 
   mo1b  <- ioeErr $ extendModule mos mo1
-  ---- prDebug mo1b
+  ----  prDebug mo1b
 
   case mo1b of
-    (_,ModMod n) | not (isCompleteModule n) -> return (k,mo1b)
+    (_,ModMod n) | not (isCompleteModule n) -> do
+      return (k,mo1b)   -- refresh would fail, since not renamed
     _ -> do
       mo2:_ <- putp "  renaming " $ ioeErr $ renameModule mos mo1b
 

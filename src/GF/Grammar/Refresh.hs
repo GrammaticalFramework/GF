@@ -86,7 +86,7 @@ refreshGrammar = liftM (MGrammar . snd) . foldM refreshModule (0,[]) . modules
 
 refreshModule :: (Int,[SourceModule]) -> SourceModule -> Err (Int,[SourceModule])
 refreshModule (k,ms) mi@(i,m) = case m of
-    ModMod mo@(Module mt fs st me ops js) | (isModCnc mo || mt == MTResource) -> do
+    ModMod mo@(Module mt fs st me ops js) | (isModCnc mo || isModRes mo) -> do
       (k',js') <- foldM refreshRes (k,[]) $ tree2list js
       return (k', (i, ModMod(Module mt fs st me ops (buildTree js'))) : ms)
     _ -> return (k, mi:ms)
