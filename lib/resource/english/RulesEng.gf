@@ -148,8 +148,8 @@ lin
   ImperOne  = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
 
-  AdvCl = advClause ;
-  AdvVP = advVerbPhrase ;
+  AdvCl  = advClause ;
+  AdvVPI = advVerbPhrase ;
 
   AdCPhr = advSentence ;
   AdvPhr = advSentence ;

@@ -145,7 +145,7 @@ fun
   ImperOne, ImperMany : Imp -> Phr ;        -- "Be a man!", "Be men!"
 
   AdvCl  : Cl -> Adv -> Cl ;                -- "John walks in the park"
-  AdvVP  : VPI -> Adv -> VPI ;              -- "walk in the park"
+  AdvVPI : VPI -> Adv -> VPI ;              -- "walk in the park"
   AdCPhr : AdC -> S -> Phr ;                -- "Therefore, 2 is prime."
   AdvPhr : Adv -> S -> Phr ;                -- "In India, there are tigers."
 

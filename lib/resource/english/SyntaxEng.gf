@@ -340,61 +340,14 @@ oper
 
   SForm = 
      VFinite  Tense Anteriority
- ---  | VInfinit Anteriority
- ---  | VPresPart
+   | VInfinit Anteriority
+   | VPresPart
    ;
 
 -- This is how the syntactic verb phrase forms are realized as
 -- inflectional forms of verbs.
 
   oper
-
-{- --vg
-  verbSForm : Bool -> Verb -> Bool -> SForm -> Agr -> {fin,inf : Str} = 
-    \isAux,verb,b,sf,agr ->
-    let 
-      parts : Str -> Str -> {fin,inf : Str} = \x,y -> 
-        {fin = x ; inf = y} ;
-      likes : Tense -> Str = \t -> verb.s ! case <t,agr> of {
-         <Present,ASgP1>   => Indic P1 ;
-         <Present,ASgP3 _> => Indic P3 ;
-         <Present,_>       => Indic P2 ;
-         <Past,ASgP1>   => Pastt Pl ;
-         <Past,ASgP3 _> => Pastt Sg ;
-         _       => Pastt Pl --- Future doesn't matter
-         } ;
-      like   = verb.s ! InfImp ;
-      liked  = verb.s ! PPart ;
-      liking = verb.s ! PresPart ;
-      has  : Tense -> Str = \t -> auxHave b t agr ;
-      have = "have" ;
-      neg  = if_then_Str b [] "not" ;
-      does : Tense -> Str = \t -> auxTense b t agr
-    in
-    case sf of {
-      VFinite Present Simul => case b of {
-        True  => parts (likes Present) [] ;
-        False => case isAux of {
-          True => parts (likes Present ++ "not") [] ;
-          _ => parts (does  Present) like
-          } 
-        } ;
-      VFinite Past Simul => case b of {
-        True  => parts (likes Past) [] ;
-        False => case isAux of {
-          True => parts (likes Past ++ "not") [] ;
-          _ => parts (does  Past) like
-          }
-        } ;
-      VFinite t       Simul => parts (does t)      like ;
-      VFinite Present Anter => parts (has Present) liked ;
-      VFinite Past    Anter => parts (has Past)    liked ;
-      VFinite t Anter       => parts (does t)      (have ++ liked) ;
-      VInfinit  Simul => parts neg like ;
-      VInfinit  Anter => parts neg (have ++ liked) ;
-      VPresPart  => parts neg liking
-      } ;
- -}
 
   auxHave : Bool -> Tense -> Agr -> Str = \b,t,a -> 
     let has = 
@@ -461,6 +414,15 @@ oper
     s1 : Str -- "not" or []
     } ;
 
+-- To form an infinitival group
+  predVerbGroup : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase =
+    \b,ant,vg -> {
+    s  = table {
+           VIInfinit  => \\a => ant.s ++ vg.s2 ! b ! VInfinit ant.a ! a ;
+           VIPresPart => \\a => ant.s ++ vg.s2 ! b ! VPresPart ! a
+           } ;
+    s1 = if_then_Str b [] "not"
+    } ;
 
 -- All negative verb phrase behave as auxiliary ones in questions.
 
@@ -794,7 +756,9 @@ oper
       has  : Bool -> Tense -> Str = \b,t -> auxHave b t agr ;
       does : Bool -> Tense -> Str = \b,t -> auxTense b t agr
      in 
-     \\b =>  table {
+     \\b =>
+      let neg = if_then_Str b [] "not" in
+      table {
       VFinite Present Simul => case b of {
         True  => <it,goes Present,off> ;
                  ---- does b Present ++ it ++ go
@@ -808,11 +772,10 @@ oper
       VFinite t       Simul => <it,does b t,    go> ;
       VFinite Present Anter => <it,has b Present, gone> ;
       VFinite Past    Anter => <it,has b Past,    gone> ;
-      VFinite t Anter       => <it,does b t,    have ++ gone> 
---- ;
----      VInfinit  Simul       => it ++ neg ++           go ;
----      VInfinit  Anter       => it ++ neg ++           (have ++ gone) ;
----      VPresPart             => it ++ neg ++           going
+      VFinite t Anter       => <it,does b t,    have ++ gone>  ;
+      VInfinit  Simul       => <it, neg,           go> ;
+      VInfinit  Anter       => <it, neg,           have ++ gone> ;
+      VPresPart             => <it, neg,           going>
      } ;
 
 -- This is for auxiliaries.
@@ -824,18 +787,6 @@ oper
        Inv => \\b,sf => let nvg = nv ! b ! sf in nvg.p2 ++ nvg.p1 ++ nvg.p3
        }
     } ;
-
-{- ---
-  predClauseGroup : Verb -> Complement -> VerbGroup =  \verb,comp -> 
-    let
-      nvg : Agr -> (Bool => SForm => (Str * Str * Str)) = 
-       \ag -> predVerbClauseGen {s = \\_ => [] ; a = ag} verb comp 
-    in
-    {s  = \\b,f,a => (nvg a ! b ! f).p2 ;
-     s2 = \\b,f,a => (nvg a ! b ! f).p3 ;
-     isAux = True
-    } ;
--}
 
   predAuxClauseGen : NounPhrase -> AuxVerb -> Complement -> 
     (Bool => SForm => (Str * Str * Str)) = \np,verb,comp -> 
@@ -868,10 +819,10 @@ oper
     \\b => 
       table {
         VFinite t Simul => <it,     is b t, begood t> ;
-        VFinite t Anter => <it,      has b t, beengood t>
----        VInfinit Simul => it ++ begood Future ;
----        VInfinit Anter => it ++ beengood Future ;
----        VPresPart => it ++ "being" ++ good
+        VFinite t Anter => <it,     has b t, beengood t> ;
+        VInfinit Simul  => <it,     [], begood Future> ;
+        VInfinit Anter  => <it,     [], beengood Future> ;
+        VPresPart       => <it,     [], "being" ++ good>
       } ;
 
   auxVerbForm : AuxVerb -> Bool -> Tense -> Agr -> Str = \verb,b,t,a -> 

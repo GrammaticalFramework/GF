@@ -56,7 +56,7 @@ incomplete concrete VerbphraseScand of Verbphrase = CategoriesScand **
   PosVP tp = predVerbGroup True tp ;
   NegVP tp = predVerbGroup False tp ;
 
-----  AdvVP = adVerbPhrase ;
+  AdvVP = adVerbPhrase ;
   SubjVP = subjunctVerbPhrase ;
 
 }
