@@ -128,7 +128,7 @@ oper
 -- Adverbs modifying adjectives and sentences can also be formed.
 
   mkAdA : Str -> AdA ;
-  mkAdS : Str -> AdS ;
+  mkAdC : Str -> AdC ;
 
 -- Prepositional phrases are another productive form of adverbials.
 
@@ -249,11 +249,11 @@ oper
     _   => aReg s
     } ;
 
-  mkAdv a = advPost a ** {lock_Adv = <>} ;
-  mkAdvPre a = advPre a ** {lock_Adv = <>} ;
+  mkAdv a = ss a ** {lock_Adv = <>} ;
+  mkAdvPre a = ss a ** {lock_Adv = <>} ;
   mkPP x y = prepPhrase x y ** {lock_Adv = <>} ;
   mkAdA a = ss a ** {lock_AdA = <>} ;
-  mkAdS a = ss a ** {lock_AdS = <>} ;
+  mkAdC a = ss a ** {lock_AdC = <>} ;
 
   mkV = \go,goes,went,gone -> verbNoPart (mkVerbP3 go goes went gone) ** 
     {lock_V = <>} ;

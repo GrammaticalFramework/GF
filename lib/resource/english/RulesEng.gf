@@ -133,8 +133,8 @@ lin
 
 -- Adverbs.
 
-  AdjAdv a = advPost (a.s ! AAdv) ;
-  AdvPP p = advPost p.s ;
+  AdjAdv a = ss (a.s ! AAdv) ;
+  AdvPP p = p ;
   PrepNP p = prepPhrase p.s ; ---
 
   AdvVP = adVerbPhrase ;
@@ -181,8 +181,8 @@ lin
   ImperOne  = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
 
-  PrepS p = ss (p.s ++ ",") ;
-  AdvS = advSentence ;
+  AdvCl = advClause ;
+  AdvPhr = advSentence ;
 
 
 --!

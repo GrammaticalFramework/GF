@@ -138,7 +138,7 @@ fun
   AdvPP  : PP -> Adv ;                 -- "in London", "after the war"
   PrepNP : Prep -> NP -> PP ;          -- "in London", "after the war"
 
-  AdvVP  : VP -> Adv -> VP ;           -- "always walks", "walks in the park" 
+  AdvVP  : VP -> AdV -> VP ;           -- "always walks"
   AdvCN  : CN -> PP -> CN ;            -- "house in London"
   AdvAP  : AdA -> AP -> AP ;           -- "very good"
 
@@ -178,8 +178,8 @@ fun
   QuestPhrase : QS -> Phr ;                 -- "Do I walk?"
   ImperOne, ImperMany : Imp -> Phr ;        -- "Be a man!", "Be men!"
 
-  PrepS : PP -> AdS ;                       -- "in Sweden, (there are bears)"
-  AdvS  : AdS -> S -> Phr ;                 -- "Therefore, 2 is prime."
+  AdvCl  : Cl -> Adv -> Cl ;                -- "John walks in the park"
+  AdvPhr : AdC -> S -> Phr ;                -- "Therefore, 2 is prime."
 
 --!
 --3 Coordination

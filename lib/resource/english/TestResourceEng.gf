@@ -39,8 +39,8 @@ lin
   Uncle = funOfReg "uncle" human ;
   Connection = cnNoHum (nounReg "connection") ** {s2 = "from" ; s3 = "to"} ;
 
-  Always = advPre "always" ;
-  Well = advPost "well" ;
+  Always = ss "always" ;
+  Well = ss "well" ;
 
   SwitchOn  = mkTransVerbPart (verbP3s "switch") "on" ;
   SwitchOff = mkTransVerbPart (verbP3s "switch") "off" ;
@@ -49,8 +49,8 @@ lin
   Mary = nameReg "Mary" Fem ;
 
 --- next
-   AlreadyAdv = advPre "already" ;
-   NowAdv = advPre "now" ;
+   AlreadyAdv = ss "already" ;
+   NowAdv = ss "now" ;
 
    Paint = mkTransVerbDir (verbNoPart (regVerbP3 "paint")) ;
    Green = adjDegrReg "green" ;

@@ -65,9 +65,9 @@ concrete StructuralEng of Structural =
   WhenIAdv = ss "when" ;
   WhereIAdv = ss "where" ;
   WhyIAdv = ss "why" ;
-  EverywhereNP = advPost "everywhere" ;
-  SomewhereNP = advPost "somewhere" ;
-  NowhereNP = advPost "nowhere" ;
+  EverywhereNP = ss "everywhere" ;
+  SomewhereNP = ss "somewhere" ;
+  NowhereNP = ss "nowhere" ;
 
   AndConj = ss "and" ** {n = Pl} ;
   OrConj = ss "or" ** {n = Sg} ;

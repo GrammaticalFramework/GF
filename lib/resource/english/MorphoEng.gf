@@ -17,13 +17,13 @@ resource MorphoEng = TypesEng ** open Prelude, (Predef=Predef) in {
 
 oper
   y2ie : Str -> Str -> Str = \fly,s -> 
-    let y = last fly in
+    let y = last (init fly) in
     case y of {
-    "a" => fly + "s" ;
-    "e" => fly + "s" ;
-    "o" => fly + "s" ;
-    "u" => fly + "s" ;
-    _   => init fly ++ "ies"
+      "a" => fly + s ;
+      "e" => fly + s ;
+      "o" => fly + s ;
+      "u" => fly + s ;
+    _   => init fly + "ie" + s
     } ;
 
 
@@ -175,16 +175,24 @@ oper
 --
 -- Except for "be", the worst case needs four forms.
 
-  mkVerbP3 : (_,_,_,_: Str) -> VerbP3 = \go,goes,went,gone -> 
+  mkVerbP3worst : (_,_,_,_,_: Str) -> VerbP3 = \go,goes,went,gone,going -> 
     {s = table {
        InfImp => go ; 
        Indic P3 => goes ; 
        Indic _ => go ; 
        Pastt _ => went ;
        PPart => gone ;
-       PresPart => go + "ing" ---- fix!
+       PresPart => going
        }
     } ;
+
+  mkVerbP3 : (_,_,_,_: Str) -> VerbP3 = \go,goes,went,gone -> 
+    let going = case last go of {
+      "e" => init go + "ing" ;
+      _ => go + "ing"
+      }
+    in
+    mkVerbP3worst go goes went gone going ;
 
 -- This is what we use to derive the irregular forms in almost all cases
 

@@ -74,7 +74,10 @@ lincat
   Tense  = {s : Str ; t : Tense} ;
   Ant    = {s : Str ; a : Anteriority} ;
 
-  Adv    = {s : Str ; p : Bool} ;
+  Adv    = {s : Str} ;
+  AdV    = {s : Str} ;
+  AdA    = {s : Str} ;
+  AdC    = {s : Str} ;
 
   S      = {s : Str} ; 
   Cl     = Clause ;
