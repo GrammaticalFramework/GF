@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/02 14:22:53 $ 
+-- > CVS $Date: 2005/03/18 10:17:10 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.37 $
+-- > CVS $Revision: 1.38 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -166,7 +166,7 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
       notInrts f = notElem f $ map fst rts
   cfs <- mapM (canon2cf opts cgr) concrs --- would not need to update all...
 
-  let pinfos = map (Cnv.pInfo cgr) concrs  -- peb 18/6
+  let pinfos = map (Cnv.pInfo opts cgr) concrs  -- peb 18/6
 
   let funs = funRulesOf cgr
   let cats = allCatsOf cgr

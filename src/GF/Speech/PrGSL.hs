@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:21 $ 
+-- > CVS $Date: 2005/03/18 10:17:10 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
 -- This module prints a CFG as a Nuance GSL 2.0 grammar.
 --
@@ -55,13 +55,13 @@ firstToUpper :: String -> String
 firstToUpper [] = []
 firstToUpper (x:xs) = toUpper x : xs
 
-rmPunct :: [Symbol String Token] -> [Symbol String Token] 
+rmPunct :: [Symbol String Tokn] -> [Symbol String Tokn] 
 rmPunct [] = []
 rmPunct (Tok t:ss) | all isPunct (prt t) = rmPunct ss
 rmPunct (s:ss) = s : rmPunct ss
 
 -- Nuance does not like upper case characters in tokens
-showToken :: Token -> String
+showToken :: Tokn -> String
 showToken t = map toLower (prt t)
 
 isPunct :: Char -> Bool

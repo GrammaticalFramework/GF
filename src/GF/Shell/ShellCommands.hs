@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 15:31:22 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.25 $
+-- > CVS $Date: 2005/03/18 10:17:10 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.26 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -151,7 +151,7 @@ testValidFlag st co f x = case f of
 optionsOfCommand :: Command -> ([String],[String])
 optionsOfCommand co = case co of
   CImport _ -> both "old v s src retain nocf nocheckcirc cflexer noemit o"
-                    "abs cnc res path optimize"
+                    "abs cnc res path optimize conversion"
   CRemoveLanguage _ -> none
   CEmptyState -> none
   CStripState -> none

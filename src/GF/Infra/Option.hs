@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 15:31:22 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.22 $
+-- > CVS $Date: 2005/03/18 10:17:10 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.23 $
 --
 -- Options and flags used in GF shell commands and files.
 --
@@ -283,6 +283,10 @@ noDepTypes     = aOpt "nodeptypes"
 extractGr      = aOpt "extract"
 pathList       = aOpt "path"
 uniCoding      = aOpt "coding"
+
+-- peb 16/3-05:
+gfcConversion :: String -> Option
+gfcConversion  = aOpt "conversion"
 
 useName, useAbsName, useCncName, useResName, 
   useFile, useOptimizer :: String -> Option
