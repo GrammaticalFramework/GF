@@ -24,13 +24,15 @@ abstract Imper = PredefAbs ** {
     RecCons : (A : Typ) -> (AS : ListTyp) -> 
                   (Var A -> Rec AS) -> Program -> Rec (ConsTyp A AS) ;
 
-    Decl   : (A : Typ) -> (Var A -> Stm) -> Stm ;
-    Assign : (A : Typ) -> Var A -> Exp A -> Stm -> Stm ;
-    Return : (A : Typ) -> Exp A -> Stm ;
-    While  : Exp TInt -> Stm -> Stm -> Stm ;
-    IfElse : Exp TInt -> Stm -> Stm -> Stm -> Stm ;
-    Block  : Stm -> Stm -> Stm ;
-    End    : Stm ;
+    Decl    : (A : Typ) -> (Var A -> Stm) -> Stm ;
+    Assign  : (A : Typ) -> Var A -> Exp A -> Stm -> Stm ;
+    While   : Exp TInt -> Stm -> Stm -> Stm ;
+    IfElse  : Exp TInt -> Stm -> Stm -> Stm -> Stm ;
+    Block   : Stm -> Stm -> Stm ;
+    Printf  : (A : Typ) -> Exp A -> Stm -> Stm ;
+    Return  : (A : Typ) -> Exp A -> Stm ;
+    Returnv : Stm ;
+    End     : Stm ;
 
     EVar   : (A : Typ) -> Var A -> Exp A ;
     EInt   : Int -> Exp (TNum TInt) ;

@@ -36,13 +36,7 @@ flags lexer=codevars ; unlexer=code ; startcat=Stm ;
     Decl  typ cont = instrb typ.s (
       ["alloc"] ++ typ.s ++ cont.$0
       ) cont ;
-    Assign t x exp = instrc (
-      exp.s ++ 
-      t.s ++ "_store" ++ x.s
-      ) ;
-    Return t exp   = instr (
-      exp.s ++ 
-      t.s ++ "_return") ;
+    Assign t x exp = instrc (exp.s ++ t.s ++ "_store" ++ x.s) ;
     While exp loop = 
       let 
         test = "TEST_" ++ loop.s2 ; 
@@ -69,14 +63,17 @@ flags lexer=codevars ; unlexer=code ; startcat=Stm ;
         "label" ++ true
         ) ;
     Block stm      = instrc stm.s ;
+    Printf t e     = instrc (e.s ++ "invokestatic" ++ t.s ++ "runtime/printf" ++ paren (t.s) ++ "v") ;
+    Return t exp   = instr (exp.s ++ t.s ++ "_return") ;
+    Returnv        = instr "return" ;
     End            = ss [] ** {s2,s3 = []} ;
 
     EVar  t x  = instr (t.s ++ "_load" ++ x.s) ;
     EInt    n  = instr ("ldc" ++ n.s) ;
     EFloat a b = instr ("ldc" ++ a.s ++ "." ++ b.s) ;
-    EAdd       = binopt "add" ;
-    ESub       = binopt "sub" ;
-    EMul       = binopt "mul" ;
+    EAdd       = binopt "_add" ;
+    ESub       = binopt "_sub" ;
+    EMul       = binopt "_mul" ;
     ELt t      = binop ("invokestatic" ++ t.s ++ "runtime/lt" ++ paren (t.s ++ t.s) ++ "i") ;
     EApp args val f exps = instr (
       exps.s ++

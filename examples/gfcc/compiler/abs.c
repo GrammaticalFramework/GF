@@ -1,12 +1,20 @@
 int abs (int x){
+  int y ;
+  {
   if (x < 0){
-    return 0 - x ;
+    y = 0 - x ;
     }
-  else return x ;
+  else {
+    y = x ;
+    }
+  }
+  return y ;
   } ;
 int main () {
   int i ;
   i = abs (16);
+  printf (int,i) ;
+  return ;
   } ;
 
 

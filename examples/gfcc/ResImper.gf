@@ -72,6 +72,6 @@ resource ResImper = open Predef in {
       ss (s ++ ";" ++ i.s) ** {s2 = v ++ i.s2 ; s3 = i.s3} ;
     binop  : Str -> SS -> SS -> SS = \op, x, y ->
       ss (x.s ++ y.s ++ op ++ ";") ;
-    binopt : Str -> SS -> SS -> SS -> SS = \op, x, y, t ->
-      ss (x.s ++ y.s ++ t.s ++ op ++ ";") ;
+    binopt : Str -> SS -> SS -> SS -> SS = \op, t ->
+      binop (t.s ++ op) ;
 }
