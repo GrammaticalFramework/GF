@@ -44,6 +44,8 @@ import NewerChartParser
 -- see also customGrammarPrinter
 import qualified ConvertGrammar as Cnv
 
+import MyParser
+
 import MoreCustom -- either small/ or big/. The one in Small is empty.
 
 import UseIO
@@ -257,6 +259,7 @@ customParser =
   customData "Parsers, selected by option -parser=x" $
   [
    (strCI "chart",    chartParser . stateCF)
+  ,(strCI "myparser", myParser)
 -- add your own parsers here
   ]
   -- 21/5-04, peb:
