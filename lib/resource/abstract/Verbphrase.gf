@@ -13,6 +13,8 @@
 
 abstract Verbphrase = Categories ** {
 
+  flags optimize=all ;
+
 -- These rules produce verb phrases.
 
   fun
@@ -38,6 +40,8 @@ abstract Verbphrase = Categories ** {
   PredAV       : AV  -> VPI -> VP   ;     -- "is eager to leave"
   PredObjA2V   : A2V -> NP -> VPI -> VP ; -- "is easy for us to convince"
 
+  PredProgVP   : VPI -> VP ;              -- "is eating fish"
+
 -- These rules *use* verb phrases. 
 
   PredVP       : NP -> VP -> Cl ;         -- "John walks"
@@ -46,7 +50,7 @@ abstract Verbphrase = Categories ** {
 
   PosVP, NegVP : Ant -> VP  -> VPI ;      -- to eat, not to eat
 
-  AdvVP        : VP -> AdV -> VP ;        -- "always walks"
+----  AdvVP        : VP -> AdV -> VP ;        -- "always walks"
   SubjVP       : VP -> Subj -> S -> VP ;  -- "(a man who) sings when he runs"
 
 }

@@ -1,8 +1,5 @@
 --# -path=.:../abstract:../../prelude
 
-incomplete concrete VerbphraseScand of Verbphrase = CategoriesScand ** 
-  open Prelude, SyntaxScand in {
-
 --1 The Top-Level English Resource Grammar: Combination Rules
 --
 -- Aarne Ranta 2002 -- 2003
@@ -22,8 +19,8 @@ incomplete concrete VerbphraseScand of Verbphrase = CategoriesScand **
 -- one has to know how the syntactic categories are
 -- implemented. The parameter types are defined in $TypesEng.gf$.
 
-concrete VerbphraseEng of Verbphrase = CategoriesEng ** 
-  open Prelude, SyntaxEng in {
+incomplete concrete VerbphraseScand of Verbphrase = CategoriesScand ** 
+  open Prelude, SyntaxScand in {
 
   lin
   UseV  = predVerb ;
@@ -48,16 +45,18 @@ concrete VerbphraseEng of Verbphrase = CategoriesEng **
   PredAV = complVerbAdj ;
   PredObjA2V = complVerbAdj2 True ;
 
+  PredProgVP = progressiveVerbPhrase ;
+
 -- Use VPs
 
   PredVP = predVerbGroupClause ;
   RelVP = relVerbPhrase ;
   IntVP = intVerbPhrase ;
 
-  PosVP tp = predVerbGroup True tp.a ;
-  NegVP tp = predVerbGroup False tp.a ;
+  PosVP tp = predVerbGroup True tp ;
+  NegVP tp = predVerbGroup False tp ;
 
-  AdvVP = adVerbPhrase ;
+----  AdvVP = adVerbPhrase ;
   SubjVP = subjunctVerbPhrase ;
 
 }

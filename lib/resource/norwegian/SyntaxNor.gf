@@ -3,6 +3,8 @@
 instance SyntaxNor of SyntaxScand = TypesNor ** 
   open Prelude, (CO = Coordination), MorphoNor in {
 
+  flags optimize=all ;
+
   oper 
 
 ------ mkAdjForm
@@ -75,7 +77,7 @@ instance SyntaxNor of SyntaxScand = TypesNor **
   auxSka = "vil" ;
   auxSkulle = "ville" ;
 
-  infinAtt = "at" ;
+  infinAtt = "å" ;
 
   varjeDet : Determiner = mkDeterminerSg (detSgInvar "hver") IndefP ;
   allaDet  : Determiner = mkDeterminerPl "alle" IndefP ;
@@ -109,12 +111,9 @@ instance SyntaxNor of SyntaxScand = TypesNor **
     _ => "seg"
     } ;
 
-  progressiveVerbPhrase : VerbGroup -> VerbGroup = \verb -> 
+  progressiveVerbPhrase : VerbPhrase -> VerbGroup = 
     complVerbVerb
-      (verbVara **
-       {isAux = False} ----- {s3 = ["ved at"]}
-      )
-      (predVerbGroup True Simul verb) ;  
+      ({s = verbVara.s ; s1 = "ved" ; isAux = False}) ;
 
   progressiveClause : NounPhrase -> VerbPhrase -> Clause = \np,vp ->
     predVerbGroupClause np

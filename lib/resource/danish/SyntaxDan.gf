@@ -3,8 +3,9 @@
 instance SyntaxDan of SyntaxScand = TypesDan ** 
   open Prelude, (CO = Coordination), MorphoDan in {
 
-  oper 
+  flags optimize=all ;
 
+  oper 
 ------ mkAdjForm
 
 -- When common nouns are extracted from lexicon, the composite noun form is ignored.
@@ -108,12 +109,9 @@ instance SyntaxDan of SyntaxScand = TypesDan **
     _ => "seg"
     } ;
 
-  progressiveVerbPhrase : VerbGroup -> VerbGroup = \verb -> 
+  progressiveVerbPhrase : VerbPhrase -> VerbGroup = 
     complVerbVerb
-      (verbVara **
-       {isAux = False} ----- {s3 = ["ved at"]}
-      )
-      (predVerbGroup True Simul verb) ;  
+      {s = verbVara.s ; s1 = "ved" ; isAux = False} ;
 
   progressiveClause : NounPhrase -> VerbPhrase -> Clause = \np,vp ->
     predVerbGroupClause np
