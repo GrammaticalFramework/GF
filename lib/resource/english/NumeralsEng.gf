@@ -1,5 +1,6 @@
 concrete NumeralsEng of Numerals = open Prelude, MorphoEng in {
 
+lincat Numeral = { s : Str } ;
 lincat Digit = {s : DForm => Str} ;
 lincat Sub10 = {s : DForm => Str} ;
 
