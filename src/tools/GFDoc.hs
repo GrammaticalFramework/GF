@@ -5,6 +5,7 @@ import System
 import Char
 
 -- produce a HTML document from a list of GF grammar files. AR 6/10/2002
+-- Added --! (NewPage) and --* (Item) 21/11/2003
 
 -- to read files and write a file
 
@@ -13,9 +14,10 @@ main = do
   xx <- getArgs
   let 
    (typ,format,name) = case xx of
-    "+latex" : x: [] -> (True,doc2latex,x)
-    x:[]             -> (False,doc2html,x)
-    _ -> (True,doc2html, "unknown.txt") ---
+    "+latex" : x: [] -> (0,doc2latex,x)
+    "+htmls" : x: [] -> (2,doc2html,x)
+    x:[]             -> (1,doc2html,x)
+    _ -> (1,doc2html, "unknown.txt") ---
   if null xx
      then do
        putStrLn welcome
@@ -24,6 +26,11 @@ main = do
        ss <- readFile name
        let outfile = fileFormat typ name
        writeFile outfile $ format $ pDoc $ ss
+  if typ == 2
+     then do
+       system $ "htmls " ++ (fileFormat typ name)
+       return ()
+     else return ()
 
 welcome = unlines [
   "",
@@ -33,21 +40,25 @@ welcome = unlines [
 
 help = unlines $ [
   "",
-  "Usage: gfdoc (+latex) file",
+  "Usage: gfdoc (+latex|+htmls) file",
   "",
   "The program operates with lines in GF code, treating them into LaTeX",
-  "(flag +latex) or to HTML (by default). The output is written in a file",
+  "(flag +latex), to a set of HTML documents (flag +htmls), or to one",
+  "HTML file (by default). The output is written in a file",
   "whose name is formed from the input file name by replacing its suffix",
-  "with html or tex.",
+  "with html or tex; in case of set of HTML files, the names are prefixed",
+  "by 01-, 02-, etc, and each file has navigation links.",
   "",
   "The translation is line by line",
   "depending as follows on how the line begins",
   "",
   " --[Int]    heading of level Int",  
   " --         new paragraph",
+  " --!        new page (in HTML, recognized by the htmls program)",
   " --.        end of document",
 ---  " ---        ignore this comment line in document",
 ---  " {---}      ignore this code line in document",
+  " --*[Text]  Text paragraph starting with a bullet",
   " --[Text]   Text belongs to text paragraph",
   " [Text]     Text belongs to code paragraph",
   "",
@@ -59,7 +70,7 @@ help = unlines $ [
   " $[Text]$   example code (courier)"
   ]
 
-fileFormat isLatex x = body ++ if isLatex then "tex" else "html" where
+fileFormat typ x = body ++ if (typ==0) then "tex" else "html" where
   body = reverse $ dropWhile (/='.') $ reverse x
 
 -- the document datatype
@@ -72,7 +83,9 @@ data Paragraph =
    Text [TextItem]         -- text line starting with --
  | List [[TextItem]]       -- 
  | Code String             -- other text line
+ | Item [TextItem]         -- bulleted item: line prefixed by --*
  | New                     -- new paragraph: line consisting of --
+ | NewPage                 -- new parage: line consisting of --!
  | Heading Int [TextItem]  -- text line starting with --n where n = 1,2,3,4
 
 data TextItem =
@@ -100,7 +113,9 @@ pDoc s = case lines s of
      _ -> unlines code : grp rest where (code,rest) = span (not . isComment) ss 
    pPara s = case s of
      '-':'-':d:text | isDigit d -> Heading (read [d]) (pItems text)
+     '-':'-':'!':[]             -> NewPage
      '-':'-':[]                 -> New
+     '-':'-':'*':text           -> Item (pItems (dropWhile isSpace text))
      '-':'-':text               -> Text (pItems (dropWhile isSpace text))
      _                          -> Code s
    pItems s = case s of
@@ -139,9 +154,11 @@ doc2html (Doc title paras) = unlines $
 para2html :: Paragraph -> String
 para2html p = case p of
   Text its      -> concat (map item2html its)
+  Item its      -> mkTagXML "li" ++ concat (map item2html its)
   Code s        -> unlines $ tagXML "pre" $ map (indent 2) $ 
                                               remEmptyLines $ lines $ spec s
   New           -> mkTagXML "p"
+  NewPage       -> mkTagXML "p" ++ "\n" ++ mkTagXML "!-- NEW --"
   Heading i its -> concat $ tagXML ('h':show i) [concat (map item2html its)]
 
 item2html :: TextItem -> String
@@ -177,9 +194,11 @@ doc2latex (Doc title paras) = unlines $
 para2latex :: Paragraph -> String
 para2latex p = case p of
   Text its      -> concat (map item2latex its)
+  Item its      -> "$\\bullet$" ++ concat (map item2latex its)
   Code s        -> unlines $ envLatex "verbatim" $ map (indent 2) $ 
                                                    remEmptyLines $ lines $ s
   New           -> "\n"
+  NewPage       -> "\\newpage"
   Heading i its -> headingLatex i (concat (map item2latex its))
 
 item2latex :: TextItem -> String
