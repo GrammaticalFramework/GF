@@ -1,3 +1,3 @@
 --# -path=.:../abstract:../../prelude
 
-resource ResourceFin = reuse StructuralFin ;
+instance ResourceFin of Resource = reuse StructuralFin ;

@@ -1,3 +1,3 @@
 --# -path=.:../romance:../abstract:../../prelude
 
-resource ResourceIta = reuse StructuralIta ;
+instance ResourceIta of Resource = reuse StructuralIta ;

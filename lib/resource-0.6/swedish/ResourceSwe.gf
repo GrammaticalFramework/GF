@@ -1,3 +1,3 @@
 --# -path=.:../abstract:../../prelude
 
-resource ResourceSwe = reuse StructuralSwe ;
+instance ResourceSwe of Resource = reuse StructuralSwe ;

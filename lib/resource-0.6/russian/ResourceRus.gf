@@ -1,2 +1,3 @@
 --# -path=.:../abstract:../../prelude
-resource ResourceRus = reuse StructuralRus ;
+
+instance ResourceRus of Resource = reuse StructuralRus ;

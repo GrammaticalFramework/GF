@@ -1,3 +1,3 @@
 --# -path=.:../abstract:../../prelude
 
-resource ResourceGer = reuse StructuralGer ;
+instance ResourceGer of Resource = reuse StructuralGer ;

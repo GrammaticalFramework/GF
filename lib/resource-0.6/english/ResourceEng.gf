@@ -1,3 +1,3 @@
 --# -path=.:../abstract:../../prelude
 
-resource ResourceEng = reuse StructuralEng ;
+instance ResourceEng of Resource = reuse StructuralEng ;

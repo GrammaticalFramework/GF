@@ -1,3 +1,3 @@
 --# -path=.:../romance:../abstract:../../prelude
 
-resource ResourceFre = reuse StructuralFre ;
+instance ResourceFre of Resource = reuse StructuralFre ;
