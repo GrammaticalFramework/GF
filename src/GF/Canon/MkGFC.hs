@@ -15,7 +15,14 @@ prCanonModInfo = prt . info2mod
 prCanon :: CanonGrammar -> String
 prCanon = unlines . map prCanonModInfo . M.modules
 
+prCanonMGr :: CanonGrammar -> String
+prCanonMGr g = header ++++ prCanon g where
+  header = case M.greatestAbstract g of
+    Just a -> prt (MGr (M.allConcretes g a) a [])
+    _ -> []
+
 canon2grammar :: Canon -> CanonGrammar
+canon2grammar (MGr _ _ modules) = canon2grammar (Gr modules) ---- ignoring the header
 canon2grammar (Gr modules) = M.MGrammar $ map mod2info modules where
   mod2info m = case m of
     Mod mt e os flags defs -> 

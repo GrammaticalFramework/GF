@@ -119,7 +119,7 @@ updateShellState :: Options -> ShellState ->
                     Err ShellState 
 updateShellState opts sh ((_,sgr,gr),rts) = do 
   let cgr0 = M.updateMGrammar (canModules sh) gr
-      a' = ifNull Nothing (return . head) $ allAbstracts cgr0
+      a' = M.greatestAbstract cgr0
   abstr0 <- case abstract sh of
     Just a -> do
       -- test that abstract is compatible --- unsafe exception for old? 
@@ -128,7 +128,7 @@ updateShellState opts sh ((_,sgr,gr),rts) = do
       return $ Just a
     _ -> return a'
   let cgr = filterAbstracts abstr0 cgr0
-  let concrs = maybe [] (allConcretes cgr) abstr0
+  let concrs = maybe [] (M.allConcretes cgr) abstr0
       concr0 = ifNull Nothing (return . head) concrs
       notInrts f = notElem f $ map fst rts
   cfs <- mapM (canon2cf opts cgr) concrs --- would not need to update all...
@@ -217,36 +217,11 @@ grammar2stateGrammar opts gr = do
   concr <- maybeErr "no concrete syntax" $ concrete st 
   return $ stateGrammarOfLang st concr
 
--- all abstract modules
-allAbstracts :: CanonGrammar -> [Ident]
-allAbstracts gr = [i | (i,M.ModMod m) <- M.modules gr, M.mtype m == M.MTAbstract]
-
--- the last abstract in dependency order (head of list)
-greatestAbstract :: CanonGrammar -> Maybe Ident
-greatestAbstract gr = case allAbstracts gr of
-  [] -> Nothing
-  a -> return $ head a
-
--- all resource modules
-allResources :: G.SourceGrammar -> [Ident]
-allResources gr = [i | (i,M.ModMod m) <- M.modules gr, M.isModRes m]
-
-
--- the greatest resource in dependency order
-greatestResource :: G.SourceGrammar -> Maybe Ident
-greatestResource gr = case allResources gr of
-  [] -> Nothing
-  a -> return $ head a
-
 resourceOfShellState :: ShellState -> Maybe Ident
-resourceOfShellState = greatestResource . srcModules
+resourceOfShellState = M.greatestResource . srcModules
 
 qualifTop :: StateGrammar -> G.QIdent -> G.QIdent
 qualifTop gr (_,c) = (absId gr,c)
-
--- all concretes for a given abstract
-allConcretes :: CanonGrammar -> Ident -> [Ident]
-allConcretes gr a = [i | (i,M.ModMod m) <- M.modules gr, M.mtype m== M.MTConcrete a]
 
 stateGrammarOfLang :: ShellState -> Language -> StateGrammar
 stateGrammarOfLang st l = StGr {

@@ -7,7 +7,8 @@ import Ident --H
 -- newtype Ident = Ident String deriving (Eq,Ord,Show) --H
 
 data Canon =
-   Gr [Module]
+   MGr [Ident] Ident [Module]
+ | Gr [Module]
   deriving (Eq,Ord,Show)
 
 data Module =
@@ -27,8 +28,8 @@ data Extend =
   deriving (Eq,Ord,Show)
 
 data Open =
-   NoOpens
- | Opens [Ident]
+   Opens [Ident]
+ | NoOpens
   deriving (Eq,Ord,Show)
 
 data Flag =

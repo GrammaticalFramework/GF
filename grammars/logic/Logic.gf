@@ -32,25 +32,36 @@ fun
   ImplP : (A : Prop) -> (Proof A -> Prop) -> Prop ;
 
   -- inference rules
+data  
   ConjI  : (A,B : Prop) -> Proof A -> Proof B -> Proof (Conj A B) ;
+fun  
   ConjEl : (A,B : Prop) -> Proof (Conj A B) -> Proof A ;
   ConjEr : (A,B : Prop) -> Proof (Conj A B) -> Proof B ;
+data  
   DisjIl : (A,B : Prop) -> Proof A -> Proof (Disj A B) ;
   DisjIr : (A,B : Prop) -> Proof B -> Proof (Disj A B) ;
+fun  
   DisjE  : (A,B,C : Prop) -> Proof (Disj A B) -> 
               (Proof A -> Proof C) -> (Proof B -> Proof C) -> Proof C ;
+data
   ImplI  : (A,B : Prop) -> (Proof A -> Proof B) -> Proof (Impl A B) ;
+fun
   ImplE  : (A,B : Prop) -> Proof (Impl A B) -> Proof A -> Proof B ;
+data
   NegI   : (A : Prop) -> (Proof A -> Proof Abs) -> Proof (Neg A) ;
+fun
   NegE   : (A : Prop) -> Proof (Neg A) -> Proof A -> Proof Abs ;
   AbsE   : (C : Prop) -> Proof Abs -> Proof C ;
-
+data
   UnivI  : (A : Dom) -> (B : Elem A -> Prop) -> 
               ((x : Elem A) -> Proof (B x)) -> Proof (Univ A B) ;
+fun
   UnivE  : (A : Dom) -> (B : Elem A -> Prop) -> 
               Proof (Univ A B) -> (a : Elem A) -> Proof (B a) ;
+data
   ExistI : (A : Dom) -> (B : Elem A -> Prop) -> 
               (a : Elem A) -> Proof (B a) -> Proof (Exist A B) ;
+fun
   ExistE : (A : Dom) -> (B : Elem A -> Prop) -> (C : Prop) -> 
               Proof (Exist A B) -> ((x : Elem A) -> Proof (B x) -> Proof C) -> 
               Proof C ;
@@ -60,9 +71,6 @@ fun
 
   -- pronoun
   Pron : (A : Dom) -> Elem A -> Elem A ;
-
-data
-  Proof = ConjI | DisjIl | DisjIr ;
 
 def 
   -- proof normalization

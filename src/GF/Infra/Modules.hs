@@ -296,3 +296,28 @@ isCompilableModule m = case m of
 -- interface and "incomplete M" are not complete
 isCompleteModule :: (Eq i) =>  Module i f a -> Bool
 isCompleteModule m = mstatus m == MSComplete && mtype m /= MTInterface
+
+
+-- all abstract modules
+allAbstracts :: Eq i => MGrammar i f a -> [i]
+allAbstracts gr = [i | (i,ModMod m) <- modules gr, mtype m == MTAbstract]
+
+-- the last abstract in dependency order (head of list)
+greatestAbstract :: Eq i => MGrammar i f a -> Maybe i
+greatestAbstract gr = case allAbstracts gr of
+  []  -> Nothing
+  a:_ -> return a
+
+-- all resource modules
+allResources :: MGrammar i f a -> [i]
+allResources gr = [i | (i,ModMod m) <- modules gr, isModRes m]
+
+-- the greatest resource in dependency order
+greatestResource :: MGrammar i f a -> Maybe i
+greatestResource gr = case allResources gr of
+  [] -> Nothing
+  a -> return $ head a
+
+-- all concretes for a given abstract
+allConcretes :: Eq i => MGrammar i f a -> i -> [i]
+allConcretes gr a = [i | (i, ModMod m) <- modules gr, mtype m == MTConcrete a]

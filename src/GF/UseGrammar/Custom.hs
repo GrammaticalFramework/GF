@@ -221,6 +221,7 @@ customMultiGrammarPrinter =
   customData "Printers for multiple grammars, selected by option -printer=x" $
   [
    (strCI "gfcm", MC.prCanon)
+  ,(strCI "header", MC.prCanonMGr)
   ,(strCI "cfgm", prCanonAsCFGM)
   ]
   ++ moreCustomMultiGrammarPrinter

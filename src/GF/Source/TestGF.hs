@@ -11,6 +11,7 @@ import SkelGF
 import PrintGF
 import AbsGF
 
+
 import ErrM
 
 type ParseFun a = [Token] -> Err a
@@ -27,6 +28,7 @@ run p s = case (p (myLLexer s)) of
            Ok  tree -> do putStrLn "\nParse Successful!"
                           putStrLn $ "\n[Abstract Syntax]\n\n" ++ show tree
                           putStrLn $ "\n[Linearized tree]\n\n" ++ printTree tree
+
 
 main :: IO ()
 main = do args <- getArgs

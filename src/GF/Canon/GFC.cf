@@ -4,7 +4,8 @@
 
 entrypoints Canon ;
 
-Gr. Canon ::= [Module] ;
+MGr. Canon ::= "grammar" [Ident] "of" Ident ";" [Module] ;
+Gr.  Canon ::= [Module] ;
 
 Mod. Module ::= ModType "=" Extend Open "{" [Flag] [Def] "}" ;
 

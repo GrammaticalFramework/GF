@@ -45,7 +45,7 @@ MUnion. ModBody ::= "union" [Included] ;
 
 separator TopDef "" ;
 
-Ext.   Extend ::= Ident "**" ;
+Ext.   Extend ::= [Ident] "**" ;
 NoExt. Extend ::= ;
 
 separator Open "," ;
@@ -79,6 +79,7 @@ DFull.  Def ::= [Ident] ":" Exp "=" Exp ;
 
 DefCat.    TopDef ::= "cat" [CatDef] ;
 DefFun.    TopDef ::= "fun" [FunDef] ;
+DefFunData.TopDef ::= "data" [FunDef] ;
 DefDef.    TopDef ::= "def" [Def] ;
 DefData.   TopDef ::= "data" [DataDef] ;
 
@@ -145,6 +146,7 @@ EString.   Exp4 ::= String ;
 EInt.      Exp4 ::= Integer ;
 EMeta.     Exp4 ::= "?" ;
 EEmpty.    Exp4 ::= "[" "]" ;
+EData.     Exp4 ::= "data" ;
 EStrings.  Exp4 ::= "[" String "]" ;
 ERecord.   Exp4 ::= "{" [LocDef] "}" ; -- !
 ETuple.    Exp4 ::= "<" [TupleComp] ">" ;  --- needed for separator ","

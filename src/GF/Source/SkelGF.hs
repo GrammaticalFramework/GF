@@ -66,7 +66,7 @@ transModBody x = case x of
 
 transExtend :: Extend -> Result
 transExtend x = case x of
-  Ext id  -> failure x
+  Ext ids  -> failure x
   NoExt  -> failure x
 
 
@@ -114,6 +114,7 @@ transTopDef :: TopDef -> Result
 transTopDef x = case x of
   DefCat catdefs  -> failure x
   DefFun fundefs  -> failure x
+  DefFunData fundefs  -> failure x
   DefDef defs  -> failure x
   DefData datadefs  -> failure x
   DefTrans defs  -> failure x
@@ -193,6 +194,7 @@ transExp x = case x of
   EInt n  -> failure x
   EMeta  -> failure x
   EEmpty  -> failure x
+  EData  -> failure x
   EStrings str  -> failure x
   ERecord locdefs  -> failure x
   ETuple tuplecomps  -> failure x

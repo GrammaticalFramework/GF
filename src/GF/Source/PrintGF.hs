@@ -150,7 +150,7 @@ instance Print ModBody where
 
 instance Print Extend where
   prt i e = case e of
-   Ext id -> prPrec i 0 (concatD [prt 0 id , doc (showString "**")])
+   Ext ids -> prPrec i 0 (concatD [prt 0 ids , doc (showString "**")])
    NoExt  -> prPrec i 0 (concatD [])
 
 
@@ -209,6 +209,7 @@ instance Print TopDef where
   prt i e = case e of
    DefCat catdefs -> prPrec i 0 (concatD [doc (showString "cat") , prt 0 catdefs])
    DefFun fundefs -> prPrec i 0 (concatD [doc (showString "fun") , prt 0 fundefs])
+   DefFunData fundefs -> prPrec i 0 (concatD [doc (showString "data") , prt 0 fundefs])
    DefDef defs -> prPrec i 0 (concatD [doc (showString "def") , prt 0 defs])
    DefData datadefs -> prPrec i 0 (concatD [doc (showString "data") , prt 0 datadefs])
    DefTrans defs -> prPrec i 0 (concatD [doc (showString "transfer") , prt 0 defs])
@@ -321,6 +322,7 @@ instance Print Exp where
    EInt n -> prPrec i 4 (concatD [prt 0 n])
    EMeta  -> prPrec i 4 (concatD [doc (showString "?")])
    EEmpty  -> prPrec i 4 (concatD [doc (showString "[") , doc (showString "]")])
+   EData  -> prPrec i 4 (concatD [doc (showString "data")])
    EStrings str -> prPrec i 4 (concatD [doc (showString "[") , prt 0 str , doc (showString "]")])
    ERecord locdefs -> prPrec i 4 (concatD [doc (showString "{") , prt 0 locdefs , doc (showString "}")])
    ETuple tuplecomps -> prPrec i 4 (concatD [doc (showString "<") , prt 0 tuplecomps , doc (showString ">")])
