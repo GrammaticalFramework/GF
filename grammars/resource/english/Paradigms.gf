@@ -74,6 +74,10 @@ oper
   cnHuman    : Str -> CN ;
   npReg      : Str -> NP ;
 
+-- In some cases, you may want to make a complex $CN$ into a function.
+
+  mkFunCN  : CN -> Preposition -> Fun ;
+  funOfCN : CN -> Fun ;
 
 --2 Adjectives
 
@@ -184,6 +188,9 @@ oper
   cnHuman = \s -> UseN (nGen s human) ;
   npReg = \s -> UsePN (pnReg s) ;  
 
+  mkFunCN = \n,p -> n ** {s2 = p} ;
+  funOfCN = \n -> mkFunCN n "of" ;
+
   addGenN : (Str -> CommonNoun) -> Str -> Gender -> N = \f -> 
     \s,g -> f s ** {g = g} ;
 
@@ -218,7 +225,7 @@ oper
   vPartReg = \get, up -> verbPart (regVerbP3 get) up ;
 
   mkTV = \v,p -> v ** {s3 = p} ;
-  tvPartReg = \get, along, with -> mkTV (vPartReg get along) with ;
+  tvPartReg = \get, along, to -> mkTV (vPartReg get along) to ;
 
   vBe = verbBe ;
   vHave = verbP3Have ;
