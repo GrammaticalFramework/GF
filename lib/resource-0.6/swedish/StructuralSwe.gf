@@ -67,33 +67,6 @@ concrete StructuralSwe of Structural =
   OtherwiseAdv = ss "annars" ;
   ThereforeAdv = ss "därför" ;
 
-{-
-  EveryDet = everyDet ; 
-  AllDet   = mkDeterminer Sg "all" ; --- all the missing
-  AllsDet  = mkDeterminerNum Pl "all" ;
-  WhichDet = whichDet ;
-  WhichsDet = mkDeterminerNum Pl "which" ;
-  MostsDet = mostDet ;
-  MostDet  = mkDeterminer Sg "most" ;
-  SomeDet  = mkDeterminer Sg "some" ;
-  SomesDet = mkDeterminerNum Pl "some" ;
-  AnyDet   = mkDeterminer Sg "any" ;
-  AnysDet  = mkDeterminerNum Pl "any" ;
-  NoDet    = mkDeterminer Sg "no" ;
-  NosDet   = mkDeterminerNum Pl "no" ;
-  ManyDet  = mkDeterminer Sg "many" ;
-  MuchDet  = mkDeterminer Sg ["a lot of"] ; ---
-  ThisDet  = mkDeterminer Sg "this" ;
-  TheseDet = mkDeterminerNum Pl "these" ;
-  ThatDet  = mkDeterminer Sg "that" ;
-  ThoseDet = mkDeterminerNum Pl "those" ;
-
-  ThisNP = nameNounPhrase (nameReg "this") ;
-  ThatNP = nameNounPhrase (nameReg "that") ;
-  TheseNP n = nameNounPhrase {s = \\c => "these" ++ n.s ! c} ;
-  ThoseNP n = nameNounPhrase {s = \\c => "those" ++ n.s ! c} ;
--}
-
   EverybodyNP  = nameNounPhrase (mkProperName "alleman" Utr Masc) ;
   SomebodyNP   = nameNounPhrase (mkProperName "någon" Utr Masc) ;
   NobodyNP     = nameNounPhrase (mkProperName "ingen" Utr Masc) ;

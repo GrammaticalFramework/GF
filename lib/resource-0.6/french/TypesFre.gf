@@ -24,6 +24,7 @@ oper
   accusative = Acc ;
   genitive = Gen ;
   dative = Dat ;
+  prepositional = accusative ;
 
   stressed = Ton ;
   unstressed = Aton ;
@@ -91,12 +92,12 @@ oper
   adjCompLong : Adj -> AdjComp = \cher ->
     mkAdjComp 
       cher.s 
-      (\\g,n => "plus" ++ cher.s ! g ! n) ;
+      (\\a => "plus" ++ cher.s ! a) ;
 
 -- Comparative adjectives are only sometimes formed morphologically
 -- (actually: by different morphemes).
 
-  mkAdjComp : (_,_ : Gender => Number => Str) -> AdjComp = 
+  mkAdjComp : (_,_ : AForm => Str) -> AdjComp = 
     \bon, meilleur -> 
     {s = table {Pos => bon ; _ => meilleur}} ;
 
@@ -137,7 +138,8 @@ oper
     VInfin       => aller ! Inf ;
     VFin Ind n p => aller ! Indic Pres n p ; 
     VFin Sub n p => aller ! Subjo SPres n p ;
-    VImper np    => aller ! Imper np
+    VImper np    => aller ! Imper np ;
+    VPart g n    => aller ! Part (PPasse g n)
     }} ;
 
 -- The full conjunction is a table on $VForm$:

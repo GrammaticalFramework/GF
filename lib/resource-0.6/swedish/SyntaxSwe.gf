@@ -428,7 +428,7 @@ oper
 
   Function2 = Function ** {s3 : Preposition} ;
 
--- There application starts by filling the first place.
+-- Their application starts by filling the first place.
 
   appFun2 : Function2 -> NounPhrase -> Function = \flyg, paris ->
     {s  = \\n,d,c => flyg.s ! n ! d ! c ++ flyg.s2 ++ paris.s ! PAcc ;
@@ -660,7 +660,7 @@ oper
 
 --3 Verb-complement verbs
 --
--- Sentence-complement verbs take verb phrases as complements.
+-- Verb-complement verbs take verb phrases as complements.
 -- They can be auxiliaries ("kan", "måste") or ordinary verbs
 -- ("försöka"); this distinction cannot be done in the multilingual
 -- API and leads to some anomalies in Swedish, but less so than in English.
