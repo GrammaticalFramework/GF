@@ -1,0 +1,104 @@
+\documentstyle[isolatin1, 12pt]{report}
+%\setlength{\parindent}{0mm}
+%\setlength{\parskip}{2mm}
+\setlength{\textheight}{240mm}
+\setlength{\textwidth}{148mm}
+\setlength{\topmargin}{-16mm}
+
+\input{macros}
+
+\renewcommand{\keyw}[1]{\mbox{{\bf #1 }}} % keywords in bold
+\newcommand{\syb}[1]{{\sl #1}}            % identifiers in slanted romans
+\newcommand{\str}[1]{{\em ``#1"}}         % strings in italics (with quotes)
+\newcommand{\kwtable}{\mbox{{\bf table}}} % the word table (sometimes nice to omit)
+\newcommand{\gfsize}{\small}              % gf code is written in small
+
+\newcommand{\begGF}{\begin{verbatim}}  % for judgements
+\newcommand{\begTGF}{\begin{verbatim}} % for terms
+
+\renewcommand{\eop}[1]{\syb{#1}}
+
+\newcommand{\keyword}[1]{\mbox{{\bf #1}}}
+\newcommand{\cs}[1]{#1}
+\newcommand{\tm}[1]{"\mbox{#1}"}
+\newcommand{\maincomment}[1]{}
+\newcommand{\lin}{\keyword{lin}}
+\newcommand{\lincat}{\keyword{lincat}}
+\newcommand{\oper}{\keyword{oper}}
+\newcommand{\param}{\keyword{param}}
+\newcommand{\tplus}{+\!\!+\,}
+\newcommand{\sel}{\; ! \;}
+\newcommand{\funarr}{\rightarrow}
+\newcommand{\Str}{\eop{Str}}
+\newcommand{\catcat}{\eop{cat}}
+\newcommand{\fun}{\keyword{fun}}
+\newcommand{\tbl}{\keyword{table}}
+\newcommand{\pattern}{\keyword{pattern}}
+\newcommand{\equal}{\keyword{ =}}
+\renewcommand{\colon}{\keyword{ :}}
+\newcommand{\plusplus}{\mbox{ \scriptsize{$+\!+$} }}
+\newcommand{\pp}{\plusplus}
+
+\newcommand{\linn}[2]{#1 \; \rhd \; #2}
+\newcommand{\abstr}[2]{\lambda #1 \rightarrow #2}
+\newcommand{\LiT}[1]{\sugmap{#1}}
+\newcommand{\letexp}[4]{\keyword{let} \; \{ #1 = #2 : #3 \} \; \keyword{in} \; #4}
+\newcommand{\metav}[2]{?_{\eop{\tiny #1}_{\scriptsize #2}}}
+
+\newcommand{\brandnewslide}[1]{\section{#1}}
+\newcommand{\newslide}[1]{\subsection{#1}}
+\newcommand{\oldslide}[1]{}
+
+\newcommand{\empha}[1]{{\em #1}}
+
+
+\title{{\Large \bf Building Natural-Language Applications in GF}}
+
+\author{Aarne Ranta}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\maketitle
+
+
+
+\chapter*{Introduction}
+
+This book is written for programmers who want to build 
+natural-language applications without first having to acquire
+professional training in linguistics. The aim with making this
+happen is to make natural-language applications more wide-spread
+and to improve their quality. The tool that makes this possible
+is the Grammatical Framework, GF.
+
+There are many reasons why natural-language applications are not
+common. One reason is that they are difficult to build. No-one has
+ever managed to write a program that correctly recognizes arbitrary 
+natural-language input in any language
+
+
+GF is a special-purpose programming language for writing grammars.
+Programs written in GF are called grammars. A grammar is a declarative
+description of a language, which can be a natural language (like
+English or Finnish) or a formal language (like C or predicate logic).
+
+
+
+
+
+\chapter{Building a Phrase Book}
+
+\chapter{Using a Linguistic Resource}
+
+
+
+
+
+\bibliographystyle{plain}
+
+\bibliography{gf-bib}
+
+
+\end{document}
