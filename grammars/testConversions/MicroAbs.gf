@@ -1,16 +1,10 @@
 
 abstract MicroAbs = {
 
-cat S; V; VV; W;
+cat A; 
 
 fun 
-sv : V -> S;
-vars : VV;
-ww : W -> W;
-svw : V -> W -> S;
+a, ab : A;
+redup : A -> A;
 
-supr : V -> V -> S;
-supredup : S -> S -> S;
-suplbl : V -> S;
-reorder : V -> V -> V;
 }

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:34 $ 
+-- > CVS $Date: 2005/03/15 11:18:07 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -36,6 +36,7 @@ data Ident =
  | IV (Int,String)      -- ^ /INTERNAL/ variable
  | IA (String,Int)      -- ^ /INTERNAL/ argument of cat at position
  | IAV (String,Int,Int) -- ^ /INTERNAL/ argument of cat with bindings at position
+-- 
 
   deriving (Eq, Ord, Show, Read)
 
