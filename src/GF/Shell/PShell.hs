@@ -3,6 +3,7 @@ module PShell where
 import Operations
 import UseIO
 import ShellState
+import ShellCommands
 import Shell
 import Option
 import PGrammar (pzIdent, pTrm) --- (string2formsAndTerm)

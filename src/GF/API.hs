@@ -167,7 +167,7 @@ generateTrees opts gr mt =
     cat = firstAbsCat opts gr
     dpt = maybe 3 id $ getOptInt opts flagDepth
     mn  = getOptInt opts flagAlts
-    ifm = not $ oElem noMetas opts
+    ifm = oElem withMetas opts
 
 speechGenerate :: Options -> String -> IO ()
 speechGenerate opts str = do

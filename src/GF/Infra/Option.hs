@@ -25,6 +25,7 @@ eqOpt s (Opt (o, [])) = s == o
 eqOpt s _ = False
 
 type OptFun = String -> Option
+type OptFunId = String
 
 getOptVal :: Options -> OptFun -> Maybe String
 getOptVal (Opts os) fopt = 
@@ -140,7 +141,7 @@ tableLin    = iOpt "table"
 defaultLinOpts = [firstLin]
 useUTF8     = iOpt "utf8"
 showLang    = iOpt "lang"
-noMetas     = iOpt "nometas"
+withMetas   = iOpt "metas"
 
 -- other
 beVerbose    = iOpt "v"

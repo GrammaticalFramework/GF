@@ -287,6 +287,7 @@ stateAbstractGrammar st = StGr {
 -- analysing shell state into parts
 globalOptions = gloptions
 allLanguages  = map (fst . fst) . concretes
+allCategories = map fst . allCatsOf . canModules
 
 allStateGrammars = map snd . allStateGrammarsWithNames
 
