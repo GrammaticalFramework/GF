@@ -31,7 +31,8 @@ oper
    let 
      l  = last bil ;
      b  = Predef.tk 2 bil ; 
-     ar = Predef.dp 2 bilar 
+     ar = Predef.dp 2 bilar ;
+     bile = Predef.tk 2 bilar
    in 
    case ar of {
       "or" => case l of {
@@ -40,14 +41,21 @@ oper
          "o" => mkNoun bil (bil + "n")  bilar (bilar + "na") ;
          _   => mkNoun bil (bil + "en") bilar (bilar + "na")
          } ;
-      "ar" => ifTok Subst (Predef.tk 2 bilar) bil 
+      "ar" => ifTok Subst bil bilar 
+                (decl5Noun bil) 
+                (ifTok Subst bile bil 
                  (decl2Noun bil)
                  (case l of {
-                    "e" => decl2Noun bil ;
-                    _   => mkNoun bil (bil + "n") bilar (bilar + "na") 
+                    "e" => decl2Noun bil ; -- pojke-pojkar
+                    _   => mkNoun bil (bile + "en") bilar (bilar + "na") -- mun-munnar
                     }
-                 ) ;
-      "er" => decl3Noun bil ;
+                 )
+                ) ;
+      "er" => case l of {
+        "e" => sVarelse (init bil) ;
+        "å" => sNivå bil ;
+        _   => mkNoun bil (bil + "en") (bilar) (bilar + "na")
+      } ;
       "en" => ifTok Subst bil bilar (sLik bil) (sRike bil) ; -- ben-ben
       _ => ifTok Subst bil bilar (
              case Predef.dp 3 bil of {
@@ -77,6 +85,7 @@ oper
   decl2Noun : Str -> Subst = \bil ->
     case last bil of {
       "e" => sPojke (init bil) ;
+      "o" | "u" | "y" => mkNoun bil (bil + "n") (bil + "ar") (bil + "arna") ;
       _ => mkNoun bil (bil + "en") (bil + "ar") (bil + "arna")
       } ;
 
