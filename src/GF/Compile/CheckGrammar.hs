@@ -6,6 +6,7 @@ import Modules
 import Refresh ----
 
 import TypeCheck
+import Values (cPredefAbs) ---
 
 import PrGrammar
 import Lookup
@@ -208,9 +209,9 @@ computeLType gr t = do
  where
   comp ty = case ty of
 
-    Q m _ | m == cPredef -> return ty
+    Q m c | elem c [cPredef,cPredefAbs] -> return ty
 
-    Q m ident -> do
+    Q m ident -> checkIn ("Q" +++ show m) $ do
       ty' <- checkErr (lookupResDef gr m ident) 
       if ty' == ty then return ty else comp ty' --- is this necessary to test?
 
@@ -259,7 +260,7 @@ checkReservedId x = let c = prt x in
 inferLType :: SourceGrammar -> Term -> Check (Term, Type)
 inferLType gr trm = case trm of
 
-   Q m ident | m==cPredef -> termWith trm $ checkErr (typPredefined ident)
+   Q m ident | isPredef m -> termWith trm $ checkErr (typPredefined ident)
 
    Q m ident -> checks [
      termWith trm $ checkErr (lookupResType gr m ident)
@@ -269,7 +270,7 @@ inferLType gr trm = case trm of
      prtFail "cannot infer type of constant" trm
      ]
 
-   QC m ident | m==cPredef -> termWith trm $ checkErr (typPredefined ident)
+   QC m ident | isPredef m -> termWith trm $ checkErr (typPredefined ident)
 
    QC m ident -> checks [
      termWith trm $ checkErr (lookupResType gr m ident)
@@ -402,6 +403,8 @@ inferLType gr trm = case trm of
 
    check = checkLType env
    
+   isPredef m = elem m [cPredef,cPredefAbs]
+
    justCheck ty te = check ty te >>= return . fst
 
    -- for record fields, which may be typed

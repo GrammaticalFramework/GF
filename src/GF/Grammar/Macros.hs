@@ -272,6 +272,7 @@ constPredefRes s = Q (IC "Predef") (zIdent s)
 
 isPredefConstant t = case t of
   Q (IC "Predef") _ -> True
+  Q (IC "PredefAbs") _ -> True
   _ -> False
 
 mkSelects :: Term -> [Term] -> Term

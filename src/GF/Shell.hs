@@ -128,7 +128,12 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
         ASTrm _ -> s2t a
         _ -> a
     case a' of
-      ATrms (trm:_) -> do
+      ATrms (trm:_) -> case tree2exp trm of
+        G.EInt _ -> do
+          putStrLn "Warning: Number argument deprecated, use gr -number=n instead"
+          ts <- randomTreesIO opts gro (optIntOrN opts flagNumber 1)
+          returnArg (ATrms ts) sa
+        _ -> do
             g    <- newStdGen
             case (goFirstMeta (tree2loc trm) >>= refineRandom g 41 cgr) of
               Ok trm' -> returnArg (ATrms [loc2tree trm']) sa
