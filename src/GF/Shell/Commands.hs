@@ -432,7 +432,7 @@ displaySStateJavaX isNew env state = unlines $ tagXML "gfedit" $ concat [
   zipper = stateSState state
   linAll = map lin lgrs
   gr     = firstStateGrammar env
-  mark   = if isNew then markOptXML else markOptJava   
+  mark   = markOptXML -- markOptJava   
 
 langAbstract = language "Abstract"
 langXML      = language "XML"

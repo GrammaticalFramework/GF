@@ -28,4 +28,4 @@ hugs:
 today:
 	runhugs util/MkToday
 javac:
-	cd java ; javac GFEditor.java ; cd ..
+	cd java ; javac *.java ; cd ..
