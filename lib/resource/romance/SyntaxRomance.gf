@@ -62,7 +62,7 @@ oper
 -- Many determiners can be modified with numerals, which may be inflected in
 -- gender.
 
-  Numeral : Type = {s : Gender => Str} ;
+  Numeral : Type = {s : Gender => Str ; n : Number} ;
 
   pronWithNum : Pronoun -> Numeral -> Pronoun = \nous,deux ->
     {s = \\c => nous.s ! c ++ deux.s ! pgen2gen nous.g ; 
@@ -72,7 +72,7 @@ oper
      c = nous.c
     } ;
 
-  noNum : Numeral = {s = \\_ => []} ;
+  noNum : Numeral = {s = \\_ => [] ; n = Pl} ;
 
 -- The existence construction "il y a", "c'è / ci sono" is defined separately,
 -- and ad hoc, in each language.
@@ -98,9 +98,9 @@ oper
   numDetNounPhrase : DeterminerNum -> Numeral -> CommNounPhrase -> NounPhrase = 
     \tous, six, homme -> 
     normalNounPhrase
-      (\\c => prepCase c ++ tous.s ! homme.g ++ six.s ! homme.g ++ homme.s ! Pl)
+      (\\c => prepCase c ++ tous.s ! homme.g ++ six.s ! homme.g ++ homme.s ! six.n)
       homme.g 
-      Pl ;
+      six.n ;
 
 --- Here one would like to provide a feminine variant as well.
 
@@ -109,7 +109,7 @@ oper
     normalNounPhrase
       (\\c => prepCase c ++ tous.s ! Masc ++ six.s ! Masc)
       Masc
-      Pl ;
+      six.n ;
 
 -- The following macros are sufficient to define most determiners,
 -- as shown by the examples that follow.
@@ -138,9 +138,9 @@ oper
 
   indefNounPhraseNum : Numeral -> CommNounPhrase -> NounPhrase = \nu,mec -> 
     normalNounPhrase 
-      (\\c => nu.s ! mec.g ++ mec.s ! Pl)
+      (\\c => prepCase c ++ nu.s ! mec.g ++ mec.s ! nu.n)
       mec.g 
-      Pl ; 
+      nu.n ; 
 
   defNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n,mec -> 
     normalNounPhrase 
@@ -150,9 +150,9 @@ oper
 
   defNounPhraseNum : Numeral -> CommNounPhrase -> NounPhrase = \nu,mec -> 
     normalNounPhrase 
-      (\\c => artDef mec.g Pl c ++ nu.s !mec.g ++ mec.s ! Pl)
+      (\\c => artDef mec.g nu.n c ++ nu.s !mec.g ++ mec.s ! nu.n)
       mec.g
-      Pl ; 
+      nu.n ; 
 
 -- We often need indefinite noun phrases synacategorematically.
 
@@ -179,7 +179,7 @@ oper
           _     => npGenPossNum nu jeanne mec
           }
         } in
-    normalNounPhrase str mec.g Pl ; 
+    normalNounPhrase str mec.g nu.n ; 
 
 -- These auxiliary rules define the genitive with "de" and with the possessive.
 -- Here there is a difference between French and Italian: Italian has a definite
@@ -191,7 +191,7 @@ oper
 
   npGenDeNum : Numeral -> NounPhrase -> CommNounPhrase -> CaseA => Str = 
     \nu,jeanne,mec ->
-    \\c => artDef mec.g Pl c ++ nu.s ! mec.g ++ mec.s ! Pl ++ 
+    \\c => artDef mec.g nu.n c ++ nu.s ! mec.g ++ mec.s ! nu.n ++ 
            jeanne.s ! case2pform genitive ;
 
   npGenPoss : Number -> NounPhrase -> CommNounPhrase -> CaseA => Str ;

@@ -41,7 +41,7 @@ lin
   ModGenOne = npGenDet singular noNum ;
   ModGenNum = npGenDet plural ;
 
-  UseInt i = {s = table {Nom => i.s ; Gen => i.s ++ "s"}} ; ---
+  UseInt i = {s = \\_ => table {Nom => i.s ; Gen => i.s ++ "s"} ; n = Pl} ; ---
   NoNum = noNum ;
 
   UseA = adj2adjPhrase ;

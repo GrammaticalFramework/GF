@@ -289,4 +289,6 @@ oper mkTal : Str -> Str -> Str -> {s : DForm => Str} =
   {s = table {ental => två ; ton => tolv ; tiotal => tjugo}} ;
 oper regTal : Str -> {s : DForm => Str} = \fem -> mkTal fem (fem + "ten") (fem + "ti") ;
 
+  numPl : Str -> {s : Gender => Str ; n : Number} = \n -> 
+    {s = \\_ => n ; n = Pl} ;
 }

@@ -1,56 +1,81 @@
 concrete NumeralsFre of Numerals = open TypesFre, MorphoFre in {
 
-lincat Numeral = {s : Str} ;
-lincat Digit = {inh : DForm ; inh1 : Number ; s : DForm => Str} ;
-lincat Sub10 = {inh : Number ; s : {p1 : DForm ; p2 : Place} => Str} ;
-lincat Sub100 = {s : Place => Str} ;
-lincat Sub1000 = {s : Place => Str} ;
-lincat Sub1000000 = {s : Str} ;
+lincat Numeral = {s : Gender => Str ; n : Number} ;
+lincat Digit = {inh : DForm ; inh1 : Number ; s : Gender => DForm => Str ; n : Number} ;
+lincat Sub10 = {inh : Number ; s : Gender => {p1 : DForm ; p2 : Place} => Str ; n : Number} ;
+lincat Sub100 = {s : Gender => Place => Str ; n : Number} ;
+lincat Sub1000 = {s : Gender => Place => Str ; n : Number} ;
+lincat Sub1000000 = {s : Gender => Str ; n : Number} ;
 
-lin num x0 =
-  {s = x0.s} ;
+lin num x0 = x0 ;
+
 lin n2  =
-  {inh = unit ; inh1 = Sg ; s = table {unit => "deux" ; teen => "douze" ; jten => "vingt" ; ten => "vingt" ; tenplus => "vingt"}} ;
+  digitPl {inh = unit ; inh1 = Sg ; s = table {unit => "deux" ; teen => "douze" ; jten => "vingt" ; ten => "vingt" ; tenplus => "vingt"}} ;
 lin n3  =
-  {inh = unit ; inh1 = Sg ; s = table {unit => "trois" ; teen => "treize" ; jten => "trente" ; ten => "trente" ; tenplus => "trente"}} ;
+  digitPl {inh = unit ; inh1 = Sg ; s = table {unit => "trois" ; teen => "treize" ; jten => "trente" ; ten => "trente" ; tenplus => "trente"}} ;
 lin n4  =
-  {inh = unit ; inh1 = Sg ; s = table {unit => "quatre" ; teen => "quatorze" ; jten => "quarante" ; ten => "quarante" ; tenplus => "quarante"}} ;
+   digitPl {inh = unit ; inh1 = Sg ; s = table {unit => "quatre" ; teen => "quatorze" ; jten => "quarante" ; ten => "quarante" ; tenplus => "quarante"}} ;
 lin n5  =
-  {inh = unit ; inh1 = Sg ; s = table {unit => "cinq" ; teen => "quinze" ; jten => "cinquante" ; ten => "cinquante" ; tenplus => "cinquante"}} ;
+   digitPl {inh = unit ; inh1 = Sg ; s = table {unit => "cinq" ; teen => "quinze" ; jten => "cinquante" ; ten => "cinquante" ; tenplus => "cinquante"}} ;
 lin n6  =
-  {inh = unit ; inh1 = Sg ; s = table {unit => "six" ; teen => "seize" ; jten => "soixante" ; ten => "soixante" ; tenplus => "soixante"}} ;
+   digitPl {inh = unit ; inh1 = Sg ; s = table {unit => "six" ; teen => "seize" ; jten => "soixante" ; ten => "soixante" ; tenplus => "soixante"}} ;
 lin n7  =
-  {inh = teen ; inh1 = Sg ; s = table {unit => "sept" ; teen => "dix" ++ "-" ++ "sept" ; jten => "soixante" ++ "-" ++ "dix" ; ten => "soixante" ++ "-" ++ "dix" ; tenplus => "soixante"}} ;
+   digitPl {inh = teen ; inh1 = Sg ; s = table {unit => "sept" ; teen => "dix" ++ "-" ++ "sept" ; jten => "soixante" ++ "-" ++ "dix" ; ten => "soixante" ++ "-" ++ "dix" ; tenplus => "soixante"}} ;
 lin n8  =
-  {inh = unit ; inh1 = Pl ; s = table {unit => "huit" ; teen => "dix" ++ "-" ++ "huit" ; jten => "quatre" ++ "-" ++ "vingts" ; ten => "quatre" ++ "-" ++ "vingt" ; tenplus => "quatre" ++ "-" ++ "vingt"}} ;
+   digitPl {inh = unit ; inh1 = Pl ; s = table {unit => "huit" ; teen => "dix" ++ "-" ++ "huit" ; jten => "quatre" ++ "-" ++ "vingts" ; ten => "quatre" ++ "-" ++ "vingt" ; tenplus => "quatre" ++ "-" ++ "vingt"}} ;
 lin n9  =
-  {inh = teen ; inh1 = Pl ; s = table {unit => "neuf" ; teen => "dix" ++ "-" ++ "neuf" ; jten => "quatre" ++ "-" ++ "vingt" ++ "-" ++ "dix" ; ten => "quatre" ++ "-" ++ "vingt" ++ "-" ++ "dix" ; tenplus => "quatre" ++ "-" ++ "vingt"}} ;
+   digitPl {inh = teen ; inh1 = Pl ; s = table {unit => "neuf" ; teen => "dix" ++ "-" ++ "neuf" ; jten => "quatre" ++ "-" ++ "vingt" ++ "-" ++ "dix" ; ten => "quatre" ++ "-" ++ "vingt" ++ "-" ++ "dix" ; tenplus => "quatre" ++ "-" ++ "vingt"}} ;
 lin pot01  =
-  {inh = Sg ; s = table {{p1 = unit ; p2 = indep} => "un" ; {p1 = unit ; p2 = attr} => [] ; {p1 = teen ; p2 = indep} => "onze" ; {p1 = teen ; p2 = attr} => [] ; {p1 = jten ; p2 = indep} => "dix" ; {p1 = jten ; p2 = attr} => [] ; {p1 = ten ; p2 = indep} => "dix" ; {p1 = ten ; p2 = attr} => [] ; {p1 = tenplus ; p2 = indep} => "dix" ; {p1 = tenplus ; p2 = attr} => []}} ;
+  {inh = Sg ; s = \\g => table {{p1 = unit ; p2 = indep} => case g of {Masc =>
+  "un" ; Fem => "une"} ; {p1 = unit ; p2 = attr} => [] ; {p1 = teen ;
+  p2 = indep} => "onze" ; {p1 = teen ; p2 = attr} => [] ; {p1 = jten ;
+  p2 = indep} => "dix" ; {p1 = jten ; p2 = attr} => [] ; {p1 = ten ;
+  p2 = indep} => "dix" ; {p1 = ten ; p2 = attr} => [] ; {p1 = tenplus
+  ; p2 = indep} => "dix" ; {p1 = tenplus ; p2 = attr} => []} ; n = Sg} ;
 lin pot0 d =
-  {inh = Pl ; s = table {{p1 = unit ; p2 = indep} => d.s ! unit ; {p1 = unit ; p2 = attr} => d.s ! unit ; {p1 = teen ; p2 = indep} => d.s ! teen ; {p1 = teen ; p2 = attr} => d.s ! teen ; {p1 = jten ; p2 = indep} => d.s ! jten ; {p1 = jten ; p2 = attr} => d.s ! jten ; {p1 = ten ; p2 = indep} => d.s ! ten ; {p1 = ten ; p2 = attr} => d.s ! ten ; {p1 = tenplus ; p2 = indep} => d.s ! tenplus ; {p1 = tenplus ; p2 = attr} => d.s ! tenplus}} ;
+  {inh = Pl ; s = \\g => table {{p1 = unit ; p2 = indep} => d.s ! g !  unit
+  ; {p1 = unit ; p2 = attr} => d.s ! g ! unit ; {p1 = teen ; p2 = indep}
+  => d.s ! g ! teen ; {p1 = teen ; p2 = attr} => d.s ! g ! teen ; {p1 = jten ;
+  p2 = indep} => d.s ! g ! jten ; {p1 = jten ; p2 = attr} => d.s ! g ! jten ;
+  {p1 = ten ; p2 = indep} => d.s ! g ! ten ; {p1 = ten ; p2 = attr} => d.s
+  ! g ! ten ; {p1 = tenplus ; p2 = indep} => d.s ! g ! tenplus ; {p1 = tenplus
+  ; p2 = attr} => d.s ! g ! tenplus} ; n = Pl} ;
 lin pot110  =
-  {s = table {indep => "dix" ; attr => "dix"}} ;
+  {s = \\_ => table {indep => "dix" ; attr => "dix"} ; n = Pl} ;
 lin pot111  =
-  {s = table {indep => "onze" ; attr => "onze"}} ;
+  {s = \\_ => table {indep => "onze" ; attr => "onze"} ; n = Pl} ;
 lin pot1to19 d =
-  {s = table {indep => d.s ! teen ; attr => d.s ! teen}} ;
+  {s = \\g => table {indep => d.s ! g ! teen ; attr => d.s ! g ! teen} ; n = Pl} ;
 lin pot0as1 n =
-  {s = table {indep => n.s ! {p1 = unit ; p2 = indep} ; attr => n.s ! {p1 = unit ; p2 = attr}}} ;
+  {s = \\g => table {indep => n.s ! g ! {p1 = unit ; p2 = indep} ;
+  attr => n.s ! g ! {p1 = unit ; p2 = attr}} ; n = n.n} ;
 lin pot1 d =
-  {s = table {indep => d.s ! jten ; attr => d.s ! ten}} ;
+  {s = \\g => table {indep => d.s ! g ! jten ; attr => d.s ! g ! ten}
+  ; n = Pl} ;
 lin pot1plus d e =
-  {s = table {indep => (d.s ! tenplus) ++ (table {{p1 = Sg ; p2 = Sg} => "et" ; {p1 = Sg ; p2 = pl} => "-" ; {p1 = Pl ; p2 = Sg} => "-" ; {p1 = Pl ; p2 = pl} => "-"} ! {p1 = d.inh1 ; p2 = e.inh}) ++ e.s ! {p1 = d.inh ; p2 = indep} ; attr => (d.s ! tenplus) ++ (table {{p1 = Sg ; p2 = Sg} => "et" ; {p1 = Sg ; p2 = pl} => "-" ; {p1 = Pl ; p2 = Sg} => "-" ; {p1 = Pl ; p2 = pl} => "-"} ! {p1 = d.inh1 ; p2 = e.inh}) ++ e.s ! {p1 = d.inh ; p2 = indep}}} ;
-lin pot1as2 n =
-  {s = table {indep => n.s ! indep ; attr => n.s ! attr}} ;
+  {s = \\g => table {indep => (d.s ! g ! tenplus) ++ (table {{p1 = Sg
+  ; p2 = Sg} => "et" ; {p1 = Sg ; p2 = pl} => "-" ; {p1 = Pl ; p2 =
+  Sg} => "-" ; {p1 = Pl ; p2 = pl} => "-"} ! {p1 = d.inh1 ; p2 =
+  e.inh}) ++ e.s ! g ! {p1 = d.inh ; p2 = indep} ; attr => (d.s ! g !
+  tenplus) ++ (table {{p1 = Sg ; p2 = Sg} => "et" ; {p1 = Sg ; p2 =
+  pl} => "-" ; {p1 = Pl ; p2 = Sg} => "-" ; {p1 = Pl ; p2 = pl} =>
+  "-"} ! {p1 = d.inh1 ; p2 = e.inh}) ++ e.s ! g ! {p1 = d.inh ; p2 =
+  indep}} ; n = Pl} ;
+lin pot1as2 n = n ;
+----  {s = \\g,d => n.s ! indep ; attr => n.s ! attr}} ;
 lin pot2 d =
-  {s = table {indep => (d.s ! {p1 = unit ; p2 = attr}) ++ table {Sg => "cent" ; Pl => "cents"} ! (d.inh) ; attr => (d.s ! {p1 = unit ; p2 = attr}) ++ "cent"}} ;
+  {s = \\g => table {indep => (d.s ! Masc ! {p1 = unit ; p2 = attr})
+  ++ table {Sg => "cent" ; Pl => "cents"} ! (d.inh) ; attr => (d.s !
+  Masc ! {p1 = unit ; p2 = attr}) ++ "cent"} ; n = Pl} ;
 lin pot2plus d e =
-  {s = table {indep => (d.s ! {p1 = unit ; p2 = attr}) ++ "cent" ++ e.s ! indep ; attr => (d.s ! {p1 = unit ; p2 = attr}) ++ "cent" ++ e.s ! indep}} ;
+  {s = \\g => table {indep => (d.s ! Masc ! {p1 = unit ; p2 = attr})
+  ++ "cent" ++ e.s ! g ! indep ; attr => (d.s ! Masc ! {p1 = unit ; p2
+  = attr}) ++ "cent" ++ e.s ! g ! indep} ; n = Pl} ;
 lin pot2as3 n =
-  {s = n.s ! indep} ;
+  {s = \\g => n.s ! g ! indep ; n = n.n} ;
 lin pot3 n =
-  {s = (n.s ! attr) ++ "mille"} ;
+  {s = \\_ => (n.s ! Masc ! attr) ++ "mille" ; n = Pl} ;
 lin pot3plus n m =
-  {s = (n.s ! attr) ++ "mille" ++ m.s ! indep} ;
+  {s = \\g => (n.s ! Masc !  attr) ++ "mille" ++ m.s ! g ! indep ; n =
+  Pl} ;
 }

@@ -603,8 +603,8 @@ oper
       _ => case verb_é of {
         True => conj1céder parler ;
         _ => case verb_e of {
-          True => conj1peser parler ;
-          _ => case Predef.dp 3 parler of {
+----          True => conj1peser parler ;
+          False | _ => case Predef.dp 3 parler of {
             "cer" => conj1placer parler ;
             "ger" => conj1manger parler ;
             "yer" => conj1payer parler ;
@@ -617,6 +617,13 @@ oper
         }
       } ;
 
+-- The following can be more reliable.
+
+  mkVerb3Reg : Str -> Str -> Str -> Verbe = \jeter,jette,jettera ->
+    auxConj1 
+      (Predef.tk 2 jeter) 
+      (Predef.tk 1 jette)  
+      (Predef.tk 1 jettera) ;
 
 --3 The second conjugation
 --
@@ -1342,5 +1349,11 @@ oper
 
 param DForm = unit  | teen  | jten  | ten  | tenplus  ;
 param Place = indep  | attr  ;
+
+oper
+  digitPl : 
+  {inh : DForm ; inh1 : Number ; s : DForm => Str} ->
+  {inh : DForm ; inh1 : Number ; s : Gender => DForm => Str ; n : Number} = \d -> 
+  {inh = d.inh ; inh1 = d.inh1 ; s = \\_ => d.s ; n = Pl} ;
 
 }

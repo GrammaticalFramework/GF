@@ -6,7 +6,7 @@ concrete StructuralFre of Structural =
 
 lin
 
-  UseNumeral n = {s = \\_ => n.s} ; ---- gender
+  UseNumeral n = {s = \\g => n.s !g ; n = n.n} ;
 
   above_Prep = {s = ["au dessus"] ; c = genitive} ;
   after_Prep = justPrep "après" ;
