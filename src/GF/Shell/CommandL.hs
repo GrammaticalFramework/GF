@@ -66,8 +66,8 @@ pCommand = pCommandWords . words where
     "+" : _       -> CLast
     "mp" : p      -> CMovePosition (readIntList (unwords p))
     "r" : f : _   -> CRefineWithAtom f
-    "w" : f:i : _ -> CWrapWithFun (strings2Fun f, readIntArg i)
-    "ch": f : _   -> CChangeHead (strings2Fun f)
+    "w" : f:i : _ -> CWrapWithFun (f, readIntArg i)
+    "ch": f : _   -> CChangeHead f
     "ph": _       -> CPeelHead
     "x" : ws      -> CAlphaConvert $ unwords ws
     "s" : i : _   -> CSelectCand (readIntArg i)

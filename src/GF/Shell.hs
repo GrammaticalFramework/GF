@@ -171,7 +171,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
   CGenerateRandom n -> do
     ts <- randomTreesIO opts gro (optIntOrN opts flagNumber n)
     returnArg (ATrms ts) sa
------  CPutTerm -> changeArg (opTT2CommandArg (optTermCommand opts gro) . s2t) sa
+  CPutTerm -> changeArg (opTT2CommandArg (optTermCommand opts gro) . s2t) sa
 -----  CWrapTerm f -> changeArg (opTT2CommandArg (return . wrapByFun opts gro f)) sa
   CMorphoAnalyse -> changeArg (AString . morphoAnalyse opts gro . prCommandArg) sa
   CTestTokenizer -> changeArg (AString . optTokenizer opts gro . prCommandArg) sa

@@ -37,7 +37,7 @@ import Option
 import Str (sstr) ----
 
 import Random (mkStdGen, newStdGen)
-import Monad (liftM2)
+import Monad (liftM2, foldM)
 import List (intersperse)
 
 --- temporary hacks for GF 2.0
@@ -60,8 +60,8 @@ data Command =
  | CRefineWithClip Int
  | CRefineWithAtom String
  | CRefineParse String
- | CWrapWithFun (G.Fun,Int)
- | CChangeHead G.Fun
+ | CWrapWithFun (String,Int)
+ | CChangeHead String
  | CPeelHead
  | CAlphaConvert String
  | CRefineRandom
@@ -127,13 +127,9 @@ execCommand env c s = case c of
     st <- shellStateFromFiles opts env file
     return (st,s)
 
-{- ----
-  CCEnvEmptyAndImport file -> do
-    gr <- optFile2grammar noOptions Nothing file
-    let lan = getLangNameOpt noOptions file
-    return (updateLanguage file (lan, getStateConcrete gr) 
-                 (initWithAbstract (stateAbstract gr) emptyShellState), initSState)
--}
+  CCEnvEmptyAndImport file -> useIOE (emptyShellState, initSState) $ do
+    st <- shellStateFromFiles opts emptyShellState file
+    return (st,s)
 
   CCEnvEmpty -> do
     return (emptyShellState, initSState)
@@ -143,33 +139,20 @@ execCommand env c s = case c of
     (msg,(env',_)) <- Shell.execLines False cs (Shell.initHState env)
     return (env', changeMsg msg s) ----
 
-{- ----
   CCEnvOpenTerm file -> do
     c <- readFileIf file
     let (fs,t) = envAndTerm file c
-
-    env' <- shellStateFromFiles noOptions fs
-    return (env', (action2commandNext $ \x -> 
-                      (string2treeErr (grammarCEnv env') t x >>= 
-                                                      \t -> newTree t x)) s)
+    env' <- useIOE env $ foldM (shellStateFromFiles noOptions) env fs
+    return (env', execECommand env' (CNewTree t) s)
 
   CCEnvOpenString file -> do
     c <- readFileIf file
     let (fs,t) = envAndTerm file c
-    env' <- shellStateFromFiles noOptions fs
-    let gr   = grammarCEnv env'
-        sgr  = firstStateGrammar env'
-        agrs = allActiveGrammars env'
-        cat  = firstCatOpts (stateOptions sgr) sgr
-    state0 <- err (const $ return (stateSState s)) return $
-                   newCat gr (cfCat2Cat cat) $ stateSState s
-    state1 <- return $ 
-                   refineByExps True gr (parseAny agrs cat t) $ changeState state0 s
-    return (env', state1)
--}
+    env' <- useIOE env $ foldM (shellStateFromFiles noOptions) env fs
+    return (env', execECommand env' (CRefineParse t) s)
 
-  CCEnvOn  name -> return (env,s) ---- return (languageOn  (language name) env,s)
-  CCEnvOff name -> return (env,s) ---- return (languageOff (language name) env,s)
+  CCEnvOn  name -> return (languageOn  (language name) env,s)
+  CCEnvOff name -> return (languageOff (language name) env,s)
 
 -- this command is improved by the use of IO
   CRefineRandom -> do
@@ -220,8 +203,8 @@ execECommand env c = case c of
                           t  <- string2ref gr s
                           s' <- refineWithAtom der cgr t x
                           uniqueRefinements cgr s'
-  CWrapWithFun fi    -> action2commandNext $ wrapWithFun cgr fi
-  CChangeHead f      -> action2commandNext $ changeFunHead cgr f
+  CWrapWithFun (f,i) -> action2commandNext $ wrapWithFun cgr (qualif f, i)
+  CChangeHead f      -> action2commandNext $ changeFunHead cgr (qualif f)
   CPeelHead          -> action2commandNext $ peelFunHead cgr
 
   CAlphaConvert s    -> action2commandNext $ \x ->
@@ -268,12 +251,13 @@ execECommand env c = case c of
   _                  -> changeMsg ["command not yet implemented"]
  where
    sgr  = firstStateGrammar env 
-   agrs = allStateGrammars env ---- allActiveGrammars env
+   agrs = allActiveGrammars env
    cgr  = canCEnv env
    gr   = grammarCEnv env
    der  = maybe True not $ caseYesNo (globalOptions env) noDepTypes
           -- if there are dep types, then derived refs;  deptypes is the default
    abs = absId sgr
+   qualif = string2Fun gr
 
 --
 
@@ -298,9 +282,12 @@ mkRefineMenuAll :: CEnv -> SState -> [(Command,(String,String))]
 mkRefineMenuAll env sstate = 
   case (refinementsState cgr state, candsSState sstate, wrappingsState cgr state) of
     ([],[],wraps) -> 
-       [(CWrapWithFun fi, prWrap fit)     | fit@(fi,_) <- wraps] ++
-       [(CChangeHead f,   prChangeHead f) | f <- headChangesState cgr state] ++
-       [(CPeelHead,    (ifShort "ph" "PeelHead", "ph")) | canPeelState cgr state] ++
+       [(CWrapWithFun (prQIdent_ f, i), prWrap fit)     
+         | fit@((f,i),_) <- wraps] ++
+       [(CChangeHead (prQIdent_ f),  prChangeHead f) 
+         | f <- headChangesState cgr state] ++
+       [(CPeelHead,    (ifShort "ph" "PeelHead", "ph")) 
+         | canPeelState cgr state] ++
        [(CDelete,      (ifShort "d"  "Delete",   "d"))] ++
        [(CAddClip,     (ifShort "ac" "AddClip",  "ac"))]
     (refs,[],_)   -> 
@@ -311,18 +298,18 @@ mkRefineMenuAll env sstate =
 
  where
   prRef (f,t) = 
-    (ifShort "r" "Refine" +++ prOrLinRef f +++ ifTyped (":" +++ prt t),
+    (ifShort "r" "Refine" +++ prOrLinRef f +++ ifTyped (":" +++ prt_ t),
      "r" +++ prRefinement f)
   prClip i t =
     (ifShort "rc" "Paste" +++ prOrLinTree t,
      "rc" +++ show i)
   prChangeHead f = 
     (ifShort "ch" "ChangeHead" +++ prOrLinFun f,
-     "ch" +++ prQIdent f)
+     "ch" +++ prQIdent_ f)
   prWrap ((f,i),t) = 
     (ifShort "w" "Wrap"   +++ prOrLinFun f +++ ifTyped (":" +++ prt t) +++
      ifShort (show i) (prBracket (show i)),
-     "w" +++ prQIdent f +++ show i)
+     "w" +++ prQIdent_ f +++ show i)
   prCand (t,i) = 
     (ifShort ("s" +++ prOrLinExp t) ("Select" +++ prOrLinExp t),"s" +++ show i)
 
@@ -335,14 +322,14 @@ mkRefineMenuAll env sstate =
     _ -> b
   ifShort = ifOpt sizeDisplay "short"
   ifTyped t = ifOpt typeDisplay "typed" t ""
-  prOrLinExp t = prt t ---- 
+  prOrLinExp t = prt_ t ---- 
   prOrLinRef t = case t of
     G.Q m f  ->  printname env sstate (m,f) 
     G.QC m f ->  printname env sstate (m,f) 
-    _ -> prt t
+    _ -> prt_ t
   prOrLinFun = printname env sstate
   prOrLinTree t = case getOptVal opts menuDisplay of
-    Just "Abs" -> prTermOpt opts $ tree2exp t
+    Just "Abs" -> prt_ $ tree2exp t ---- prTermOpt opts $ tree2exp t
     Just lang  -> prQuotedString $ lin lang t
     _ -> prTermOpt opts $ tree2exp t
   lin lang t = optLinearizeTreeVal opts (stateGrammarOfLang env (language lang)) t
@@ -422,7 +409,7 @@ displaySStateJavaX isNew env state = unlines $ tagXML "gfedit" $ concat [
   (tree,msg,menu) = displaySState env state
   menu'  = [tagXML "show" [s] ++ tagXML "send" [c] | (s,c) <- menu] 
   (ls,grs) = unzip $ lgrs
-  lgrs   = allStateGrammarsWithNames env ---- allActiveStateGrammarsWithNames env
+  lgrs   = allActiveStateGrammarsWithNames env
   lins   = (langAbstract, exp) : linAll
   opts   = addOptions (optsSState state)   -- state opts override 
               (addOption (markLin mark) (globalOptions env))
@@ -459,12 +446,12 @@ menuSState env state = [(s,c) | (_,(s,c)) <- mkRefineMenuAll env state]
 
 printname :: CEnv -> SState -> G.Fun -> String
 printname env state f = case getOptVal opts menuDisplay of
-  Just "Abs" -> prQIdent f
+  Just "Abs" -> prQIdent_ f
   Just lang  -> printn lang f
-  _ -> prTermOpt opts (qq f)
+  _ -> prQIdent_ f ---- prTermOpt opts (qq f)
  where
   opts = addOptions (optsSState state) (globalOptions env)
-  printn lang f = err id (ifNull (prQIdent f) (sstr . head)) $ do
+  printn lang f = err id (ifNull (prQIdent_ f) (sstr . head)) $ do
     t  <- lookupPrintname gr mf 
     strsFromTerm t
    where

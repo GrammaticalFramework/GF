@@ -29,6 +29,11 @@ class Print a where
   prt_ = prt
   prpr = return . prt
 
+-- 8/1/2004
+--- Usually followed principle: prt_ for displaying in the editor, prt
+--- in writing grammars to a file. For some constructs, e.g. prMarkedTree,
+--- only the former is ever needed.
+
 -- to show terms etc in error messages
 prtBad :: Print a => String -> a -> Err b
 prtBad s a = Bad (s +++ prt a)
@@ -92,14 +97,18 @@ instance Print TrNode where
     prBinds bi ++ 
     prt at +++ ":" +++ prt vt 
     +++ prConstraints cs +++ prMetaSubst ms
+  prt_ (N (bi,at,vt,(cs,ms),_)) = 
+    prBinds bi ++ 
+    prt_ at +++ ":" +++ prt_ vt 
+    +++ prConstraints cs +++ prMetaSubst ms
 
 prMarkedTree :: Tr (TrNode,Bool) -> [String]
 prMarkedTree = prf 1 where
   prf ind t@(Tr (node, trees)) = 
     prNode ind node : concatMap (prf (ind + 2)) trees
   prNode ind node = case node of
-    (n, False) -> indent ind (prt n)
-    (n, _)     -> '*' : indent (ind - 1) (prt n)
+    (n, False) -> indent ind (prt_ n)
+    (n, _)     -> '*' : indent (ind - 1) (prt_ n)
 
 prTree :: Tree -> [String]
 prTree = prMarkedTree . mapTr (\n -> (n,False))
@@ -111,9 +120,9 @@ prprTree :: Tree -> [String]
 prprTree = prf False where
   prf par t@(Tr (node, trees)) = 
     parIf par (prn node : concat [prf (ifPar t) t | t <- trees])
-  prn (N (bi,at,_,_,_)) = prb bi ++ prt at
+  prn (N (bi,at,_,_,_)) = prb bi ++ prt_ at
   prb [] = ""
-  prb bi = "\\" ++ concat (intersperse "," (map (prt . fst) bi)) ++ " -> "
+  prb bi = "\\" ++ concat (intersperse "," (map (prt_ . fst) bi)) ++ " -> "
   parIf par (s:ss) = map (indent 2) $
                          if par 
                             then ('(':s) : ss ++ [")"] 
@@ -144,15 +153,15 @@ prBinds bi = if null bi
                 then [] 
                 else "\\" ++ concat (intersperse "," (map prValDecl bi)) +++ "-> "
  where
-   prValDecl (x,t) = prParenth (prt x +++ ":" +++ prt t)
+   prValDecl (x,t) = prParenth (prt_ x +++ ":" +++ prt_ t)
 
 instance Print Val where
   prt (VGen i x) = prt x ---- ++ "-$" ++ show i ---- latter part for debugging
   prt (VApp u v) = prt u +++ prv1 v
-  prt (VCn mc) = prQIdent mc
+  prt (VCn mc) = prQIdent_ mc
   prt (VClos env e) = case e of
-    Meta _ -> prt e ++ prEnv env
-    _      -> prt e ---- ++ prEnv env ---- for debugging
+    Meta _ -> prt_ e ++ prEnv env
+    _      -> prt_ e ---- ++ prEnv env ---- for debugging
  
 prv1 v = case v of
   VApp _ _  -> prParenth $ prt v
@@ -165,9 +174,14 @@ instance Print Atom where
   prt (AtV i) = prt i
   prt (AtL s) = s
   prt (AtI i) = show i
+  prt_ (AtC f) = prQIdent_ f 
+  prt_ a = prt a
 
 prQIdent :: QIdent -> String
 prQIdent (m,f) = prt m ++ "." ++ prt f
+
+prQIdent_ :: QIdent -> String
+prQIdent_ (_,f) = prt f
 
 -- print terms without qualifications
 

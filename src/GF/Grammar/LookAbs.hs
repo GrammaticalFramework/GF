@@ -119,6 +119,11 @@ funsOnTypeFs compat fs val = [((fun,i),typ) |
                                         (i,arg) <- zip [0..] (map snd args),
                                         compat val arg]
 
+allDefs :: GFCGrammar -> [(Fun,Term)]
+allDefs gr = [((i,c),d) | (i, ModMod m) <- modules gr,
+                    isModAbs m,
+                    (c, C.AbsFun _ d) <- tree2list (jments m)]
+
 -- this is needed at compile time
 
 lookupFunTypeSrc :: Grammar -> Ident -> Ident -> Err Type
