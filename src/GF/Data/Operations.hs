@@ -179,7 +179,7 @@ updatePerhapsHard old p1 p2 = case (p1,p2) of
 
 -- binary search trees
 
-data BinTree a = NT | BT a (BinTree a) (BinTree a) deriving (Show,Read)
+data BinTree a = NT | BT a !(BinTree a) !(BinTree a) deriving (Show,Read)
 
 isInBinTree :: (Ord a) => a -> BinTree a -> Bool
 isInBinTree x tree = case tree of
