@@ -132,6 +132,14 @@ lin
   UseInt i = useInt i.s;
   NoNum = noNum ;
 
+  --- these two by AR 3/6/2004
+  SymbPN i = {s = \\_ => i.s ; g = Neut ; anim = Inanimate} ; ---
+  SymbCN cn s =
+    {s = \\n,c => cn.s ! n ! c ++ s.s ; 
+     g = cn.g ;
+     anim = cn.anim
+    } ;
+
 
   DetNP = detNounPhrase ;
   IndefOneNP = indefNounPhrase Sg ;

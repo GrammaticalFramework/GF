@@ -81,6 +81,7 @@ oper
   mkFunCN  : CN -> Preposition -> Fun ;
   funOfCN : CN -> Fun ;
 
+
 --2 Adjectives
 
 -- Non-comparison one-place adjectives just have one form.

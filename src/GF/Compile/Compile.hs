@@ -87,15 +87,16 @@ compileModule opts1 st0 file = do
   let ps = if useFileOpt 
              then (map (prefixPathName fpath) ps0)
              else ps0
-  ioeIO $ putStrLn $ "module search path:" +++ show ps ----
+  let ioeIOIf = if oElem beSilent opts then (const (return ())) else ioeIO
+  ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
   let putp = putPointE opts
   let st = st0 --- if useFileOpt then emptyShellState else st0
   let rfs = readFiles st
   let file' = if useFileOpt then justFileName file else file -- to find file itself
   files <- getAllFiles opts ps rfs file'
-  ioeIO $ putStrLn $ "files to read:" +++ show files ----
+  ioeIOIf $ putStrLn $ "files to read:" +++ show files ----
   let names = map justModuleName files
-  ioeIO $ putStrLn $ "modules to include:" +++ show names ----
+  ioeIOIf $ putStrLn $ "modules to include:" +++ show names ----
   let env0 = compileEnvShSt st names
   (_,sgr,cgr) <- foldM (compileOne opts) env0 files
   t <- ioeIO getNowTime

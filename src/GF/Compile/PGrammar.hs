@@ -15,7 +15,7 @@ import Operations
 
 pTerm :: String -> Err Term
 pTerm s = do
-  e <- err2err $ pExp $ myLexer s
+  e <- {- err2err $ -} pExp $ myLexer s
   transExp e
 
 pTrm :: String -> Term
