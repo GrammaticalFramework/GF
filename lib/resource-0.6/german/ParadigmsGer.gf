@@ -29,6 +29,8 @@ resource ParadigmsGer =
 -- To abstract over gender names, we define the following identifiers.
 
 oper
+  Gender    : Type ; 
+
   masculine : Gender ;
   feminine  : Gender ;
   neuter    : Gender ;
@@ -295,6 +297,7 @@ oper
 -- hidden from the document.
 --.
 
+  Gender = SyntaxGer.Gender ;
 
   masculine = Masc ;
   feminine  = Fem ;
