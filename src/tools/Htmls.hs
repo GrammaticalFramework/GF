@@ -17,8 +17,9 @@ htmls :: FilePath -> IO ()
 htmls file = do
   s  <- readFile file
   let ss = allPages s
-  mapM (uncurry writeFile) (map (mkFile file (length ss)) ss)
-  return ()
+      lg = length ss
+  putStrLn $ show lg ++ " slides"
+  mapM_ (uncurry writeFile . mkFile file lg) ss
 
 allPages :: String -> [(Int,String)]
 allPages = zip [1..] . map unlines . chop . lines where

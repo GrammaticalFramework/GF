@@ -95,6 +95,7 @@ instance Print Ident where
 
 instance Print Canon where
   prt i e = case e of
+   MGr ids id modules -> prPrec i 0 (concatD [doc (showString "grammar") , prt 0 ids , doc (showString "of") , prt 0 id , doc (showString ";") , prt 0 modules])
    Gr modules -> prPrec i 0 (concatD [prt 0 modules])
 
 

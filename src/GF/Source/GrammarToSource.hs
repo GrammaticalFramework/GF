@@ -31,7 +31,7 @@ trModule (i,mo) = case mo of
              (mkTopDefs (concatMap trAnyDef (tree2list (jments m)) ++ map trFlag (flags m)))
 
 trExtend :: Maybe Ident -> P.Extend
-trExtend i = maybe P.NoExt (P.Ext . tri) i
+trExtend i = maybe P.NoExt (P.Ext . singleton . tri) i
 
 ---- this has to be completed with other mtys
 forName (MTConcrete a) = tri a

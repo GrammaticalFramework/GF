@@ -71,6 +71,7 @@ instance Print A.Case where prt = C.printTree
 instance Print A.CType where prt = C.printTree
 instance Print A.Label where prt = C.printTree
 instance Print A.Module where prt = C.printTree
+instance Print A.Canon where prt = C.printTree
 instance Print A.Sort where prt = C.printTree
 
 instance Print A.Atom where 

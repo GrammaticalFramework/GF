@@ -45,7 +45,7 @@ data ModBody =
   deriving (Eq,Ord,Show)
 
 data Extend =
-   Ext Ident
+   Ext [Ident]
  | NoExt
   deriving (Eq,Ord,Show)
 
@@ -86,6 +86,7 @@ data Def =
 data TopDef =
    DefCat [CatDef]
  | DefFun [FunDef]
+ | DefFunData [FunDef]
  | DefDef [Def]
  | DefData [DataDef]
  | DefTrans [Def]
@@ -155,6 +156,7 @@ data Exp =
  | EInt Integer
  | EMeta
  | EEmpty
+ | EData
  | EStrings String
  | ERecord [LocDef]
  | ETuple [TupleComp]

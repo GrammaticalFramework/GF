@@ -16,6 +16,7 @@ transIdent x = case x of
 
 transCanon :: Canon -> Result
 transCanon x = case x of
+  MGr ids id modules  -> failure x
   Gr modules  -> failure x
 
 
@@ -40,8 +41,8 @@ transExtend x = case x of
 
 transOpen :: Open -> Result
 transOpen x = case x of
-  NoOpens  -> failure x
   Opens ids  -> failure x
+  NoOpens  -> failure x
 
 
 transFlag :: Flag -> Result

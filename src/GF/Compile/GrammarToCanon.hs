@@ -80,8 +80,8 @@ redInfo am (c,info) = errIn ("translating definition of" +++ prt c) $ do
       returns c' $ C.AbsCat cont fs
     AbsFun (Yes typ) pdf -> do
       let df = case pdf of
-                 Yes t -> t
-                 _ -> EData --- data vs. primitive
+                 Yes t -> t  -- definition or "data"
+                 _ -> Eqs [] -- primitive notion
       returns c' $ C.AbsFun typ df
     AbsTrans t -> 
       returns c' $ C.AbsTrans t

@@ -139,7 +139,8 @@ transTransfer x = case x of
 
 transExtend :: Extend -> Err (Maybe Ident)
 transExtend x = case x of
-  Ext id  -> transIdent id >>= return . Just
+  Ext [id]  -> transIdent id >>= return . Just
+  Ext ids  -> Bad "sorry, no support for multiple inheritance yet"
   NoExt -> return Nothing
 
 transOpens :: Opens -> Err [GM.OpenSpec Ident]
@@ -173,6 +174,9 @@ transAbsDef x = case x of
   DefFun fundefs -> do
     fundefs' <- mapM transFunDef fundefs
     returnl [(fun, G.AbsFun (yes typ) nope) | (funs,typ) <- fundefs', fun <- funs]
+  DefFunData fundefs -> do
+    fundefs' <- mapM transFunDef fundefs
+    returnl [(fun, G.AbsFun (yes typ) (yes G.EData)) | (funs,typ) <- fundefs', fun <- funs]
   DefDef defs  -> do
     defs' <- liftM concat $ mapM getDefsGen defs
     returnl [(c, G.AbsFun nope pe) | (c,(_,pe)) <- defs']

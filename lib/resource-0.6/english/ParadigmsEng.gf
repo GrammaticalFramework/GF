@@ -26,6 +26,8 @@ resource ParadigmsEng = open (Predef=Predef), Prelude, SyntaxEng, ResourceEng in
 -- To abstract over gender names, we define the following identifiers.
 
 oper
+  Gender : Type = SyntaxEng.Gender ;
+
   human    : Gender ;
   nonhuman : Gender ;
 

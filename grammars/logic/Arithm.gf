@@ -3,9 +3,10 @@ abstract Arithm = Logic ** {
 -- arithmetic
 fun 
   Nat, Real  : Dom ;
+data
   zero : Elem Nat ;
   succ : Elem Nat -> Elem Nat ;
-  
+fun
   trunc : Elem Real -> Elem Nat ;
 
   EqNat : (m,n : Elem Nat) -> Prop ;
@@ -19,13 +20,13 @@ fun
   two  : Elem Nat ;
   sum  : (m,n : Elem Nat) -> Elem Nat ;
   prod : (m,n : Elem Nat) -> Elem Nat ;
-
+data
   evax1 : Proof (Even zero) ;
   evax2 : (n : Elem Nat) -> Proof (Even n) -> Proof (Odd (succ n)) ;
   evax3 : (n : Elem Nat) -> Proof (Odd n)  -> Proof (Even (succ n)) ;
   eqax1 : Proof (EqNat zero zero) ;
   eqax2 : (m,n : Elem Nat) -> Proof (EqNat m n) -> Proof (EqNat (succ m) (succ n)) ;
-
+fun
   IndNat : (C : Elem Nat -> Prop) -> 
              Proof (C zero) -> 
              ((x : Elem Nat) -> Proof (C x) -> Proof (C (succ x))) -> 
@@ -45,7 +46,6 @@ def
               (Univ Nat (\x -> Impl (Conj (LtNat one x) (Div n x)) (EqNat x n))) ;
 
   Abs = Abs ;
----  data Elem = zero | succ ;
 
 fun ex1 : Text ;
 def ex1 = 

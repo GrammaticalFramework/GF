@@ -7,6 +7,7 @@ import PrGrammar
 
 import Option
 import Operations
+import Modules
 
 import Char (isDigit)
 
@@ -177,7 +178,6 @@ optionsOfCommand co = case co of
   CPrintGlobalOptions
   CPrintLanguages
   CPrintInformation I.Ident
-  CPrintMultiGrammar
   CPrintGramlet 
   CPrintCanonXML
   CPrintCanonXMLStruct 

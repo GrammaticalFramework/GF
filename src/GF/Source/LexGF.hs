@@ -1,19 +1,33 @@
-
+{-# OPTIONS -cpp #-}
+{-# LINE 3 "LexGF.x" #-}
 module LexGF where
 
-import Alex
 import ErrM
 
-pTSpec p = PT p . TS    
+#if __GLASGOW_HASKELL__ >= 503
+import Data.Array
+import Data.Char (ord)
+import Data.Array.Base (unsafeAt)
+#else
+import Array
+import Char (ord)
+#endif
+alex_base :: Array Int Int
+alex_base = listArray (0,27) [1,21,57,58,24,25,26,0,68,69,27,28,29,66,0,38,19,39,0,44,45,156,364,0,279,487,213,51]
 
-mk_LString p = PT p . eitherResIdent T_LString 
+alex_table :: Array Int Int
+alex_table = listArray (0,742) [0,-1,-1,-1,-1,-1,-1,-1,-1,-1,13,13,13,13,13,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,13,14,24,-1,14,-1,-1,19,14,14,15,17,14,5,14,14,27,27,27,27,27,27,27,27,27,27,14,14,14,16,14,14,14,4,-1,-1,2,2,9,9,9,10,13,13,13,13,13,14,14,14,18,18,0,0,14,0,0,0,0,14,14,14,-1,14,-1,13,27,27,27,27,27,27,27,27,27,27,0,0,0,0,9,8,0,0,0,0,0,0,0,0,0,12,14,14,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,6,7,22,0,0,0,0,0,0,0,0,22,22,22,22,22,22,22,22,22,22,0,0,-1,0,0,0,0,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,25,-1,0,0,22,25,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,0,0,0,0,0,0,0,0,0,0,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,0,0,0,0,0,0,0,23,0,0,0,0,0,0,0,0,0,25,0,0,0,0,0,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,26,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,0,0,0,0,0,0,0,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,0,0,0,0,22,0,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,0,0,0,0,0,0,0,0,0,0,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,26,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,0,22,22,22,22,22,22,22,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-ident  p = PT p . eitherResIdent TV 
+alex_check :: Array Int Int
+alex_check = listArray (0,742) [-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,45,10,10,45,45,45,45,45,45,9,10,11,12,13,42,62,43,39,39,-1,-1,62,-1,-1,-1,-1,91,92,93,94,95,96,32,48,49,50,51,52,53,54,55,56,57,-1,-1,-1,-1,45,45,-1,-1,-1,-1,-1,-1,-1,-1,-1,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,125,125,39,-1,-1,-1,-1,-1,-1,-1,-1,48,49,50,51,52,53,54,55,56,57,-1,-1,215,-1,-1,-1,-1,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,34,247,-1,-1,95,39,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,10,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,92,-1,-1,-1,-1,-1,-1,-1,34,-1,-1,-1,-1,-1,-1,-1,-1,-1,110,-1,-1,-1,-1,-1,116,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,92,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,39,248,249,250,251,252,253,254,255,48,49,50,51,52,53,54,55,56,57,-1,-1,-1,-1,-1,-1,-1,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,-1,-1,-1,-1,95,-1,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,10,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,34,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,92,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,-1,248,249,250,251,252,253,254,255,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
 
-string p = PT p . TL . unescapeInitTail 
+alex_deflt :: Array Int Int
+alex_deflt = listArray (0,27) [21,-1,3,3,-1,-1,11,-1,11,11,11,11,-1,-1,-1,-1,-1,-1,-1,20,20,-1,-1,-1,25,25,-1,-1]
 
-int    p = PT p . TI    
+alex_accept = listArray (0::Int,27) [[],[],[(AlexAccSkip)],[(AlexAccSkip)],[],[(AlexAcc (alex_action_3))],[(AlexAccSkip)],[(AlexAccSkip)],[],[],[],[],[(AlexAcc (alex_action_3))],[(AlexAccSkip)],[(AlexAcc (alex_action_3))],[(AlexAcc (alex_action_3))],[(AlexAcc (alex_action_3))],[(AlexAcc (alex_action_3))],[(AlexAcc (alex_action_4))],[],[],[(AlexAcc (alex_action_5))],[(AlexAcc (alex_action_5))],[(AlexAcc (alex_action_6))],[],[],[],[(AlexAcc (alex_action_7))]]
+{-# LINE 34 "LexGF.x" #-}
 
+tok f p s = f p s
 
 data Tok =
    TS String     -- reserved words
@@ -47,15 +61,6 @@ prToken t = case t of
   PT _ (T_LString s) -> s
 
 
-tokens:: String -> [Token]
-tokens inp = scan tokens_scan inp
-
-tokens_scan:: Scan Token
-tokens_scan = load_scan (tokens_acts,stop_act) tokens_lx
-        where
-        stop_act p ""  = []
-        stop_act p inp = [Err p]
-
 eitherResIdent :: (String -> Tok) -> String -> Tok
 eitherResIdent tv s = if isResWord s then (TS s) else (tv s) where
   isResWord s = isInTree s $
@@ -81,52 +86,208 @@ unescapeInitTail = unesc . tail where
     c:cs      -> c : unesc cs
     _         -> []
 
-tokens_acts = [("ident",ident),("int",int),("mk_LString",mk_LString),("pTSpec",pTSpec),("string",string)]
+-------------------------------------------------------------------
+-- Alex wrapper code.
+-- A modified "posn" wrapper.
+-------------------------------------------------------------------
 
-tokens_lx :: [(Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))]
-tokens_lx = [lx__0_0,lx__1_0,lx__2_0,lx__3_0,lx__4_0,lx__5_0,lx__6_0,lx__7_0,lx__8_0,lx__9_0,lx__10_0,lx__11_0,lx__12_0,lx__13_0,lx__14_0,lx__15_0,lx__16_0,lx__17_0,lx__18_0,lx__19_0,lx__20_0,lx__21_0]
-lx__0_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__0_0 = (False,[],-1,(('\t','\255'),[('\t',10),('\n',10),('\v',10),('\f',10),('\r',10),(' ',10),('!',14),('"',18),('$',14),('\'',15),('(',14),(')',14),('*',11),('+',13),(',',14),('-',1),('.',14),('/',14),('0',21),('1',21),('2',21),('3',21),('4',21),('5',21),('6',21),('7',21),('8',21),('9',21),(':',14),(';',14),('<',14),('=',12),('>',14),('?',14),('@',14),('A',17),('B',17),('C',17),('D',17),('E',17),('F',17),('G',17),('H',17),('I',17),('J',17),('K',17),('L',17),('M',17),('N',17),('O',17),('P',17),('Q',17),('R',17),('S',17),('T',17),('U',17),('V',17),('W',17),('X',17),('Y',17),('Z',17),('[',14),('\\',14),(']',14),('_',14),('a',17),('b',17),('c',17),('d',17),('e',17),('f',17),('g',17),('h',17),('i',17),('j',17),('k',17),('l',17),('m',17),('n',17),('o',17),('p',17),('q',17),('r',17),('s',17),('t',17),('u',17),('v',17),('w',17),('x',17),('y',17),('z',17),('{',4),('|',14),('}',14),('\192',17),('\193',17),('\194',17),('\195',17),('\196',17),('\197',17),('\198',17),('\199',17),('\200',17),('\201',17),('\202',17),('\203',17),('\204',17),('\205',17),('\206',17),('\207',17),('\208',17),('\209',17),('\210',17),('\211',17),('\212',17),('\213',17),('\214',17),('\216',17),('\217',17),('\218',17),('\219',17),('\220',17),('\221',17),('\222',17),('\223',17),('\224',17),('\225',17),('\226',17),('\227',17),('\228',17),('\229',17),('\230',17),('\231',17),('\232',17),('\233',17),('\234',17),('\235',17),('\236',17),('\237',17),('\238',17),('\239',17),('\240',17),('\241',17),('\242',17),('\243',17),('\244',17),('\245',17),('\246',17),('\248',17),('\249',17),('\250',17),('\251',17),('\252',17),('\253',17),('\254',17),('\255',17)]))
-lx__1_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__1_0 = (True,[(3,"pTSpec",[],Nothing,Nothing)],-1,(('-','>'),[('-',2),('>',14)]))
-lx__2_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__2_0 = (False,[],2,(('\n','\n'),[('\n',3)]))
-lx__3_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__3_0 = (True,[(0,"",[],Nothing,Nothing)],-1,(('0','0'),[]))
-lx__4_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__4_0 = (True,[(3,"pTSpec",[],Nothing,Nothing)],-1,(('-','-'),[('-',5)]))
-lx__5_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__5_0 = (False,[],5,(('-','-'),[('-',8)]))
-lx__6_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__6_0 = (False,[],5,(('-','}'),[('-',8),('}',7)]))
-lx__7_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__7_0 = (True,[(1,"",[],Nothing,Nothing)],5,(('-','-'),[('-',8)]))
-lx__8_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__8_0 = (False,[],5,(('-','}'),[('-',6),('}',9)]))
-lx__9_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__9_0 = (True,[(1,"",[],Nothing,Nothing)],-1,(('0','0'),[]))
-lx__10_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__10_0 = (True,[(2,"",[],Nothing,Nothing)],-1,(('\t',' '),[('\t',10),('\n',10),('\v',10),('\f',10),('\r',10),(' ',10)]))
-lx__11_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__11_0 = (True,[(3,"pTSpec",[],Nothing,Nothing)],-1,(('*','*'),[('*',14)]))
-lx__12_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__12_0 = (True,[(3,"pTSpec",[],Nothing,Nothing)],-1,(('>','>'),[('>',14)]))
-lx__13_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__13_0 = (True,[(3,"pTSpec",[],Nothing,Nothing)],-1,(('+','+'),[('+',14)]))
-lx__14_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__14_0 = (True,[(3,"pTSpec",[],Nothing,Nothing)],-1,(('0','0'),[]))
-lx__15_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__15_0 = (False,[],15,(('\'','\''),[('\'',16)]))
-lx__16_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__16_0 = (True,[(4,"mk_LString",[],Nothing,Nothing)],-1,(('0','0'),[]))
-lx__17_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__17_0 = (True,[(5,"ident",[],Nothing,Nothing)],-1,(('\'','\255'),[('\'',17),('0',17),('1',17),('2',17),('3',17),('4',17),('5',17),('6',17),('7',17),('8',17),('9',17),('A',17),('B',17),('C',17),('D',17),('E',17),('F',17),('G',17),('H',17),('I',17),('J',17),('K',17),('L',17),('M',17),('N',17),('O',17),('P',17),('Q',17),('R',17),('S',17),('T',17),('U',17),('V',17),('W',17),('X',17),('Y',17),('Z',17),('_',17),('a',17),('b',17),('c',17),('d',17),('e',17),('f',17),('g',17),('h',17),('i',17),('j',17),('k',17),('l',17),('m',17),('n',17),('o',17),('p',17),('q',17),('r',17),('s',17),('t',17),('u',17),('v',17),('w',17),('x',17),('y',17),('z',17),('\192',17),('\193',17),('\194',17),('\195',17),('\196',17),('\197',17),('\198',17),('\199',17),('\200',17),('\201',17),('\202',17),('\203',17),('\204',17),('\205',17),('\206',17),('\207',17),('\208',17),('\209',17),('\210',17),('\211',17),('\212',17),('\213',17),('\214',17),('\216',17),('\217',17),('\218',17),('\219',17),('\220',17),('\221',17),('\222',17),('\223',17),('\224',17),('\225',17),('\226',17),('\227',17),('\228',17),('\229',17),('\230',17),('\231',17),('\232',17),('\233',17),('\234',17),('\235',17),('\236',17),('\237',17),('\238',17),('\239',17),('\240',17),('\241',17),('\242',17),('\243',17),('\244',17),('\245',17),('\246',17),('\248',17),('\249',17),('\250',17),('\251',17),('\252',17),('\253',17),('\254',17),('\255',17)]))
-lx__18_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__18_0 = (False,[],18,(('\n','\\'),[('\n',-1),('"',20),('\\',19)]))
-lx__19_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__19_0 = (False,[],-1,(('"','t'),[('"',18),('\'',18),('\\',18),('n',18),('t',18)]))
-lx__20_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__20_0 = (True,[(6,"string",[],Nothing,Nothing)],-1,(('0','0'),[]))
-lx__21_0 :: (Bool, [(Int,String,[Int],Maybe((Char,Char),[(Char,Bool)]),Maybe Int)], Int, ((Char,Char),[(Char,Int)]))
-lx__21_0 = (True,[(7,"int",[],Nothing,Nothing)],-1,(('0','9'),[('0',21),('1',21),('2',21),('3',21),('4',21),('5',21),('6',21),('7',21),('8',21),('9',21)]))
+data Posn = Pn !Int !Int !Int
+      deriving (Eq, Show)
 
+alexStartPos :: Posn
+alexStartPos = Pn 0 1 1
+
+alexMove :: Posn -> Char -> Posn
+alexMove (Pn a l c) '\t' = Pn (a+1)  l     (((c+7) `div` 8)*8+1)
+alexMove (Pn a l c) '\n' = Pn (a+1) (l+1)   1
+alexMove (Pn a l c) _    = Pn (a+1)  l     (c+1)
+
+type AlexInput = (Posn, -- current position,
+		  Char,	-- previous char
+		  String)	-- current input string
+
+tokens :: String -> [Token]
+tokens str = go (alexStartPos, '\n', str)
+    where
+      go :: (Posn, Char, String) -> [Token]
+      go inp@(pos, _, str) =
+    	  case alexScan inp 0 of
+    	    AlexEOF                -> []
+    	    AlexError (pos, _, _)  -> fail $ show pos ++ ": lexical error"
+    	    AlexSkip  inp' len     -> go inp'
+    	    AlexToken inp' len act -> act pos (take len str) : (go inp')
+
+alexGetChar :: AlexInput -> Maybe (Char,AlexInput)
+alexGetChar (p, c, [])    = Nothing
+alexGetChar (p, _, (c:s)) =
+    let p' = alexMove p c
+     in p' `seq` Just (c, (p', c, s))
+
+alexInputPrevChar :: AlexInput -> Char
+alexInputPrevChar (p, c, s) = c
+
+alex_action_3 = tok (\p s -> PT p (TS s)) 
+alex_action_4 = tok (\p s -> PT p (eitherResIdent T_LString s)) 
+alex_action_5 = tok (\p s -> PT p (eitherResIdent TV s)) 
+alex_action_6 = tok (\p s -> PT p (TL $ unescapeInitTail s)) 
+alex_action_7 = tok (\p s -> PT p (TI s))    
+{-# LINE 1 "GenericTemplate.hs" #-}
+-- -----------------------------------------------------------------------------
+-- ALEX TEMPLATE
+--
+-- This code is in the PUBLIC DOMAIN; you may copy it freely and use
+-- it for any purpose whatsoever.
+
+-- -----------------------------------------------------------------------------
+-- INTERNALS and main scanner engine
+
+{-# LINE 22 "GenericTemplate.hs" #-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{-# LINE 66 "GenericTemplate.hs" #-}
+
+alexIndexShortOffAddr arr off = arr ! off
+
+
+-- -----------------------------------------------------------------------------
+-- Main lexing routines
+
+data AlexReturn a
+  = AlexEOF
+  | AlexError  !AlexInput
+  | AlexSkip   !AlexInput !Int
+  | AlexToken  !AlexInput !Int a
+
+-- alexScan :: AlexInput -> StartCode -> Maybe (AlexInput,Int,act)
+alexScan input (sc)
+  = alexScanUser undefined input (sc)
+
+alexScanUser user input (sc)
+  = case alex_scan_tkn user input (0) input sc AlexNone of
+	(AlexNone, input') ->
+		case alexGetChar input of
+			Nothing -> 
+
+
+
+				   AlexEOF
+			Just _ ->
+
+
+
+				   AlexError input
+
+	(AlexLastSkip input len, _) ->
+
+
+
+		AlexSkip input len
+
+	(AlexLastAcc k input len, _) ->
+
+
+
+		AlexToken input len k
+
+
+-- Push the input through the DFA, remembering the most recent accepting
+-- state it encountered.
+
+alex_scan_tkn user orig_input len input s last_acc =
+  input `seq` -- strict in the input
+  case s of 
+    (-1) -> (last_acc, input)
+    _ -> alex_scan_tkn' user orig_input len input s last_acc
+
+alex_scan_tkn' user orig_input len input s last_acc =
+  let 
+	new_acc = check_accs (alex_accept `unsafeAt` (s))
+  in
+  new_acc `seq`
+  case alexGetChar input of
+     Nothing -> (new_acc, input)
+     Just (c, new_input) -> 
+
+
+
+	let
+		base   = alexIndexShortOffAddr alex_base s
+		(ord_c) = ord c
+		offset = (base + ord_c)
+		check  = alexIndexShortOffAddr alex_check offset
+		
+		new_s = if (offset >= (0)) && (check == ord_c)
+			  then alexIndexShortOffAddr alex_table offset
+			  else alexIndexShortOffAddr alex_deflt s
+	in
+	alex_scan_tkn user orig_input (len + (1)) new_input new_s new_acc
+
+  where
+	check_accs [] = last_acc
+	check_accs (AlexAcc a : _) = AlexLastAcc a input (len)
+	check_accs (AlexAccSkip : _)  = AlexLastSkip  input (len)
+	check_accs (AlexAccPred a pred : rest)
+	   | pred user orig_input (len) input
+	   = AlexLastAcc a input (len)
+	check_accs (AlexAccSkipPred pred : rest)
+	   | pred user orig_input (len) input
+	   = AlexLastSkip input (len)
+	check_accs (_ : rest) = check_accs rest
+
+data AlexLastAcc a
+  = AlexNone
+  | AlexLastAcc a !AlexInput !Int
+  | AlexLastSkip  !AlexInput !Int
+
+data AlexAcc a user
+  = AlexAcc a
+  | AlexAccSkip
+  | AlexAccPred a (AlexAccPred user)
+  | AlexAccSkipPred (AlexAccPred user)
+
+type AlexAccPred user = user -> AlexInput -> Int -> AlexInput -> Bool
+
+-- -----------------------------------------------------------------------------
+-- Predicates on a rule
+
+alexAndPred p1 p2 user in1 len in2
+  = p1 user in1 len in2 && p2 user in1 len in2
+
+--alexPrevCharIsPred :: Char -> AlexAccPred _ 
+alexPrevCharIs c _ input _ _ = c == alexInputPrevChar input
+
+--alexPrevCharIsOneOfPred :: Array Char Bool -> AlexAccPred _ 
+alexPrevCharIsOneOf arr _ input _ _ = arr ! alexInputPrevChar input
+
+--alexRightContext :: Int -> AlexAccPred _
+alexRightContext (sc) user _ _ input = 
+     case alex_scan_tkn user input (0) input sc AlexNone of
+	  (AlexNone, _) -> False
+	  _ -> True
+	-- TODO: there's no need to find the longest
+	-- match when checking the right context, just
+	-- the first match will do.
+
+-- used by wrappers
+iUnbox (i) = i
