@@ -20,9 +20,8 @@
 -- one has to know how the syntactic categories are
 -- implemented. The parameter types are defined in $types.RusU.gf$.
 
-concrete ResRus of ResAbs = open Prelude, Syntax in {
-flags 
- coding=utf8 ;
+concrete CombinationsRus of Combinations = open Prelude, SyntaxRus in {
+flags  
   startcat=Phr ; 
   lexer=text ;
   unlexer=text ;
@@ -41,7 +40,7 @@ lincat
   Adj1   = Adjective ;
       -- = {s : AdjForm => Str} ;
   Det    = Determiner ;
-      -- = Adjective ** { n: Number; c : Case } ;
+      -- = Adjective ** {n: Number; g: PronGen; c: Case} ; 
   Adj2   = AdjCompl ;
       -- = Adjective ** Complement ;
   AdjDeg = AdjDegr ;
@@ -50,21 +49,28 @@ lincat
       -- = Adjective ** {p : IsPostfixAdj} ; 
   Fun    = Function ;  
       -- = CommNounPhrase ** Complement ;
- Fun2   = Function ** {s3 : Preposition; c2: Case} ;
-
+  Fun2   = Function ** {s3 : Str; c2: Case} ; 
+  Num    = Numeral ;
+      -- = {s : Case => Gender => Str} ;
+  
   V      = Verb ; 
       -- = {s : VF => Str ; t: Tense ; a : Aspect ; v: Voice} ;
+  VG     = {s : Bool => VF => Str ; s2 : Bool => Str ; t: Tense ; a : Aspect ; v: Voice} ;
   VP     = VerbPhrase ; 
       -- = Verb ** {s2 : Str ; s3 : Gender => Number => Str ;
       --            negBefore: Bool} ;
   TV     = TransVerb ; 
-      -- = Verb ** {s2 : Preposition ; c: Case } ; 
- V3     = TransVerb ** {s4 : Preposition; c2: Case} ;
+      -- = Verb ** {s2 : Str ; c: Case } ; 
+  V3     = TransVerb ** {s4 : Str; c2: Case} ;
   VS     = SentenceVerb ;
       -- = Verb ;
+  VV     = Verb ; 
+
   AdV    = Adverb ;
       -- = {s : Str} ;
-
+  Prep   = Preposition;
+      -- = {s : Str ; c: Case } ;
+ 
   S      = Sentence ; 
       -- = {s : Str} ;
   Slash  = SentenceSlashNounPhrase ; 
@@ -83,7 +89,7 @@ lincat
       -- = { s: Gender => Number => Str } ;
   Phr    = Utterance ;
       -- = {s : Str} ;
- Text   = {s : Str} ;
+  Text   = {s : Str} ;
 
   Conj   = Conjunction ;
       -- = {s : Str ; n : Number} ;
@@ -103,44 +109,55 @@ lin
   UsePN = nameNounPhrase ;
   ComplAdj = complAdj ;
   PredVP = predVerbPhrase ;
-  PosTV = complTransVerb True ;
-  NegTV = complTransVerb False ;
+  --PosTV = complTransVerb True ;
+  --NegTV = complTransVerb False ;
   AdjP1 = adj2adjPhrase ; 
   ModAdj = modCommNounPhrase ;
-  PosA = predAdjective True ;
-  NegA = predAdjective False ;
+  --PosA = predAdjective True ;
+  --NegA = predAdjective False ;
 
   UseN  = noun2CommNounPhrase ;
-  ModGenOne = npGenDet Sg ;
+  ModGenOne = npGenDet Sg noNum ;
   ModGenMany = npGenDet Pl ;
   UseFun = funAsCommNounPhrase ;
   AppFun = appFunComm ;
+  AppFun2 = appFun2 ;
   PositAdjP = positAdjPhrase ;
   ComparAdjP = comparAdjPhrase ;
   SuperlNP = superlNounPhrase ;
 
+  CNthatS = nounThatSentence ;
+  UseInt i = useInt i.s;
+  NoNum = noNum ;
+
+
   DetNP = detNounPhrase ;
   IndefOneNP = indefNounPhrase Sg ;
-  IndefManyNP = indefNounPhrase Pl ;
-  DefOneNP = defNounPhrase Sg ;
-  DefManyNP = defNounPhrase Pl ;
+  IndefManyNP = indefNounPhraseNum Pl ;
+  DefOneNP = indefNounPhrase Sg ;
+  DefManyNP = indefNounPhraseNum Pl ;
+  MassNP = indefNounPhrase Sg;
 
-  PosV = predVerb True ;
-  NegV = predVerb False ;
-  PosCN = predCommNoun True ;
-  NegCN = predCommNoun False ;
-  PosNP = predNounPhrase True ;
-  NegNP = predNounPhrase False ;
-  PosVS = complSentVerb True ;
-  NegVS = complSentVerb False ;
+  --PosV = predVerb True ;
+  --NegV = predVerb False ;
+  --PosCN = predCommNoun True ;
+  --NegCN = predCommNoun False ;
+  --PosNP = predNounPhrase True ;
+  --NegNP = predNounPhrase False ;
+  --PosVS = complSentVerb True ;
+  --NegVS = complSentVerb False ;
 
+  AdjAdv a = mkAdverb (a.s ! AdvF) ;
+  PrepNP p = prepPhrase p ;
   AdvVP = adVerbPhrase ;
-  LocNP = locativeNounPhrase ;
+  --LocNP = locativeNounPhrase ;
   AdvCN = advCommNounPhrase ;
--- AdvAP = advAdjPhrase ;
+  AdvAP = advAdjPhrase ;
 
   PosSlashTV = slashTransVerb True ;
   NegSlashTV = slashTransVerb False ;
+-- OneVP = predVerbPhrase (nameNounPhrase (nameReg "one")) ;
+--ThereNP = thereIs ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -161,6 +178,7 @@ lin
   IntVP = intVerbPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
+--IsThereNP = isThere ;
 
   ImperVP = imperVerbPhrase ;
 
@@ -168,7 +186,7 @@ lin
   QuestPhrase = interrogUtt ;
   ImperOne = imperUtterance Masc Sg ;
   ImperMany = imperUtterance Masc Pl ;
- --AdvS = advSentence ;
+  AdvS = advSentence ;
 
   TwoS = twoSentence ;
   ConsS = consSentence ;
@@ -188,54 +206,13 @@ lin
   SubjS = subjunctSentence ;
   SubjImper = subjunctImperative ;
   SubjQu = subjunctQuestion ;
+  SubjVP = subjunctVerbPhrase ;
 
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase Sg ;
   PhrManyCN = useCommonNounPhrase Pl ;
   PhrIP ip = postfixSS "?" ip ;
   PhrIAdv ia = postfixSS "?" ia ;
- OnePhr p = p ;
- ConsPhr = cc2 ;
-
-
-  INP    = pron2NounPhrase pronYa Animate;
-  ThouNP = pron2NounPhrase pronTu Animate;
-  HeNP   = pron2NounPhrase pronOn Animate;
-  SheNP  = pron2NounPhrase pronOna Animate;
-  WeNP   = pron2NounPhrase pronMu Animate;
-  YeNP   = pron2NounPhrase pronVu Animate;
-  YouNP  = pron2NounPhrase pronVu Animate;
-  TheyNP = pron2NounPhrase pronOni Animate;
-
-  EveryDet = kazhdujDet ** {n = Sg ; c= Nom} ; 
-  AllDet   = vseDetPl ** {n = Pl;  c= Nom} ; 
-  WhichDet = kotorujDet ** {n = Sg; c= Nom} ;  -- a singular version only 
-  MostDet  = bolshinstvoDet ** {n = Pl; c= Gen} ;
-
-  HowIAdv = ss "как" ;
-  WhenIAdv = ss "когда" ;
-  WhereIAdv = ss "где" ;
-  WhyIAdv = ss "почему" ;
-
-  AndConj  = ss "и"  ** {n = Pl} ;
-  OrConj   = ss "или"  ** {n = Sg} ;
-  BothAnd  = sd2 "как" [", так"]  ** {n = Pl} ;
-  EitherOr = sd2 "либо" [", либо"]  ** {n = Sg} ;
-
--- In case of "neither..  no" expression double negation is not 
--- only possible, but also required in Russian.
--- There is no means of control for this however in the resource grammar.
-
-  NeitherNor = sd2 "ни" [", ни"]  ** {n = Sg} ;
-
-  IfSubj   = ss "если" ;
-  WhenSubj = ss "когда" ;
-
-  PhrYes = ss ["да ."] ;
-  PhrNo = ss ["нет ."] ;
-
-  VeryAdv = ss "очень" ;
-  TooAdv = ss "слишком" ;
-  OtherwiseAdv = ss "иначе" ;
-  ThereforeAdv = ss "следовательно" ;
+  OnePhr p = p ;
+  ConsPhr = cc2 ;
 } ;
