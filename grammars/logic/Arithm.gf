@@ -34,15 +34,17 @@ fun
 def 
   one = succ zero ;
   two = succ one ;
-  sum m zero = m ;
   sum m (succ n) = succ (sum m n) ;
-  prod m zero = zero ;
+  sum m zero = m ;
   prod m (succ n) = sum (prod m n) m ;
+  prod m zero = zero ;
   LtNat m n = Exist Nat (\x -> EqNat n (sum m (succ x))) ;
   Div m n = Exist Nat (\x -> EqNat m (prod x n)) ;
   Prime n = Conj 
               (LtNat one n) 
               (Univ Nat (\x -> Impl (Conj (LtNat one x) (Div n x)) (EqNat x n))) ;
+
+--- data Elem = zero | succ ;
 
 fun ex1 : Text ;
 def ex1 = 

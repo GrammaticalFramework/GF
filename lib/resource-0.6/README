@@ -27,13 +27,15 @@ Known bugs:
 
 Finnish
   Numerals (1,2,3,...) are not inflected
+  Omission of subject personal pronoun not permitted
 
 French
   Order of clitics with ditransitives is not fully controlled
 
 Italian
-  Order of clitics with ditransitives is not fully controlled
-
+  Order of clitics with ditransitives is not fully controlled.
+  Omission of subject personal pronoun not permitted.
+  Article is not omitted in "la mia madre".
 
 General
   * Negative noun phrases ("nobody", "nothing", etc) in TestResource are
@@ -44,9 +46,12 @@ General
 
 Missing structures
   * Tense and aspect
+  * Alternative word orders in many languages (Finnish, German, ...)
+  * coordination of VP, TV, AdV
   * "I want you to go"
   * "I paint the house blue"
-  " "the house that he wants to buy"
+  * "the house that he wants to buy"
+
 
 
 opyright (c) 2001-2004 Janna Khegai, Aarne Ranta
