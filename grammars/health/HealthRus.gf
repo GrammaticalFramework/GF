@@ -1,7 +1,7 @@
 -- use this path to read the grammar from the same directory
+--# -path=.:../newresource/abstract:../prelude:../newresource/russian
 
 concrete HealthRus of Health = open PredicationRus, ResourceRus, Prelude, SyntaxRus, ExtraRus in {
---# -path=.:../newresource/abstract:../prelude:../newresource/russian
 
 flags 
   coding=utf8 ;
@@ -50,17 +50,17 @@ lin
    (extVerb verbSlomat Act Past)**{lock_TV = <>}) patient (mkNounPhrase patient.n painkiller ** {lock_NP = <>}) ;
                                
   HaveIllness patient symptom = U_predTransVerb True tvHave
-     patient (mkNounPhrase Sg symptom) ;
+     patient (mkNounPhrase Sg symptom ** {lock_NP = <>}) ;
   Complain = U_predTransVerb True tvHave ;
 
   NeedDoctor = predNeedShortAdjective True ; 
   NeedMedicine = predNeedShortAdjective True ; 
 
   PainIn patient head = U_predTransVerb True (mkDirectVerb 
-    (extVerb verbBolet_2 Act Present )) patient (mkNounPhrase patient.n head) ;
+    (extVerb verbBolet_2 Act Present ) ** {lock_TV =<>}) patient (mkNounPhrase patient.n head ** {lock_NP =<>}) ;
  
   PainInMod patient head degree = U_predTransVerb True (mkDirectVerb
-    (extVerb have Act Present)) patient (mkNounPhrase Sg (ModAdj degree 
-      (AppFun (mkFun bol "в" Prepos ** {lock_Fun = <>}) (mkNounPhrase patient.n head** {lock_NP = <>}))));
+    (extVerb have Act Present) ** {lock_TV =<>}) patient (mkNounPhrase Sg (ModAdj degree 
+      (AppFun (mkFun bol "в" Prepos ** {lock_Fun = <>}) (mkNounPhrase patient.n head** {lock_NP = <>}))) ** {lock_NP =<>});
 
 };

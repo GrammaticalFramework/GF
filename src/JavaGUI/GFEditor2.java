@@ -14,6 +14,15 @@ import java.util.*;
 public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     KeyListener, FocusListener {                        
 
+    private int[] sizes = {10,12,16,20,25,30,36};
+    private String[] envfonts;
+    private Font[] fontObjs;
+    private static int DEFAULT_FONT_SIZE = 12;
+    private JComboBox fontList;
+    private JLabel fontLabel = new JLabel("   Font: ");
+    private JComboBox sizeList;
+    private JLabel sizeLabel = new JLabel("   Size: ");
+
     public JPopupMenu popup2 = new JPopupMenu();
     public JMenuItem menuItem2;
     public static JTextField field = new JTextField("textField!"); 
@@ -22,8 +31,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     public static String selectedText="";
 
     public static boolean debug = false;
-    public static boolean debug3 = false;
-    public static boolean debug2 = true;
+    public static boolean debug3 = true;
+    public static boolean debug2 = false;
     public static boolean selectionCheck = false;
     public static String focusPosition = "";
     public static String stringToAppend = "";
@@ -152,6 +161,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
               endProgram();
             }
         });
+
 
         //Add listener to components that can bring up popup menus.
         MouseListener popupListener2 = new PopupListener();
@@ -311,14 +321,34 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         upPanel.add(open);
         upPanel.add(save);
         upPanel.add(newTopic);
+        upPanel.add(filter);
         
         filter.setToolTipText("Choosing the linearization representation format");
         modeMenu.setToolTipText("Choosing the refinement options' representation");   
         statusLabel.setToolTipText("The current focus type");
         list.setToolTipText("The list of current refinment options");
+
+        GraphicsEnvironment gEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        envfonts = gEnv.getAvailableFontFamilyNames();
+        fontObjs = new Font[envfonts.length];
+	for (int fi = 0; fi < envfonts.length; fi++) {
+	    fontObjs[fi] = new Font(envfonts[fi], Font.PLAIN, DEFAULT_FONT_SIZE);
+        }
+        fontList = new JComboBox(envfonts);
+        fontList.addActionListener(this);
+        sizeList = new JComboBox();
+        for (int i = 0; i<sizes.length; i++)
+        {
+          sizeList.addItem(new Integer(sizes[i]));    
+        }
+        sizeList.addActionListener(this);
+
+        upPanel.add(fontLabel);
+        upPanel.add(fontList);
+        upPanel.add(sizeLabel);
+        upPanel.add(sizeList);
+
         tree.setToolTipText("The abstract syntax tree representation of the current editing object");
-        upPanel.add(filter);
-        //upPanel.add(mode);
         populateTree(tree); 
         outputPanelUp.setLayout(new BorderLayout());
         outputPanelUp.add(outputPanelCenter, BorderLayout.CENTER);
@@ -456,6 +486,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         inputPanel2.add(cancel);
         inputPanel2.add(browse);
         dialog.setSize(350,135);                                          
+
 
           try {
             result = fromProc.readLine();
@@ -909,6 +940,21 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
   {  
     boolean abs = true;
     Object obj = ae.getSource();
+    Font font;
+
+    if ( obj == fontList ) {
+        font = new Font((String)fontList.getSelectedItem(), Font.PLAIN, ((Integer)sizeList.getSelectedItem()).intValue());
+        output.setFont(font);  
+    }
+
+    if ( obj == sizeList ) {
+        font = new Font((String)fontList.getSelectedItem(), Font.PLAIN, ((Integer)sizeList.getSelectedItem()).intValue());
+        output.setFont(font);  
+        field.setFont(font);  
+        tree.tree.setFont(font);  
+        list.setFont(font);  
+    }
+
     if ( obj == menu ) {
       if (!menu.getSelectedItem().equals("New"))           
       { 
@@ -1962,14 +2008,14 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       // middle click    
       if (e.getButton() == MouseEvent.BUTTON2) 
       {
-        if (debug3) System.out.println("MIDDLE BUTTON!");
         // selection Exists:
         if (!selectedText.equals(""))
         {
+          if (debug3) System.out.println(e.getX() + " " + e.getY());
           if (selectedText.length()<5)
-            field.setBounds(e.getX()+200, e.getY()+80, 140, 30);
+            field.setBounds(e.getX()+(int)Math.round(tree.getBounds().getWidth()), e.getY()+80, 400, 40);
           else
-            field.setBounds(e.getX()+200, e.getY()+80, selectedText.length()*10, 30);
+            field.setBounds(e.getX()+(int)Math.round(tree.getBounds().getWidth()), e.getY()+80, selectedText.length()*20, 40);
           getLayeredPane().add(field, new Integer(1), 0);  
           field.setText(selectedText);
           field.requestFocusInWindow();

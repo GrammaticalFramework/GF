@@ -9,7 +9,6 @@ concrete HealthFre of Health = open PredicationFre, ResourceFre, Prelude, Syntax
 -- because of the UTF8 problem with non-utf8 resource grammars! 
 
 flags 
-  coding=utf8 ;
   startcat=Phr ; lexer=text ; parser=chart ; unlexer=text ;
 
 lincat 
