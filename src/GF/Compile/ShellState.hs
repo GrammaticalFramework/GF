@@ -122,7 +122,8 @@ updateShellState opts sh ((_,sgr,gr),rts) = do
       a' = ifNull Nothing (return . head) $ allAbstracts cgr0
   abstr0 <- case abstract sh of
     Just a -> do
-      --- test that abstract is compatible
+      -- test that abstract is compatible
+      testErr (maybe True (a==) a') ("expected abstract" +++ P.prt a) 
       return $ Just a
     _ -> return a'
   let cgr = filterAbstracts abstr0 cgr0
@@ -173,7 +174,7 @@ abstractName sh = maybe "(none)" P.prt (abstract sh)
 -- throw away those abstracts that are not needed --- could be more aggressive
 
 filterAbstracts :: Maybe Ident -> CanonGrammar -> CanonGrammar
-filterAbstracts abstr cgr = M.MGrammar [m | m <- ms, needed m] where
+filterAbstracts abstr cgr = M.MGrammar (nubBy (\x y -> fst x == fst y) [m | m <- ms, needed m]) where
   ms = M.modules cgr
   needed (i,_) = case abstr of
     Just a -> elem i $ needs a

@@ -144,13 +144,15 @@ execCommand env c s = case c of
   CCEnvOpenTerm file -> do
     c <- readFileIf file
     let (fs,t) = envAndTerm file c
-    env' <- useIOE env $ foldM (shellStateFromFiles noOptions) env fs
+    (env',_) <- execCommand env (CCEnvGFShell fs) s
+----    env' <- useIOE env $ foldM (shellStateFromFiles noOptions) env fs
     return (env', execECommand env' (CNewTree t) s)
 
   CCEnvOpenString file -> do
     c <- readFileIf file
     let (fs,t) = envAndTerm file c
-    env' <- useIOE env $ foldM (shellStateFromFiles noOptions) env fs
+    (env',_) <- execCommand env (CCEnvGFShell fs) s
+---- env' <- useIOE env $ foldM (shellStateFromFiles noOptions) env fs
     return (env', execECommand env' (CRefineParse t) s)
 
   CCEnvOn  name -> return (languageOn  (language name) env,s)
@@ -177,9 +179,10 @@ execCommand env c s = case c of
    cgr = canCEnv env
    opts = globalOptions env
 
-   -- format for documents: import lines of form "-- file", then term 
+   -- format for documents: 
+   -- GF commands of form "-- command", then term or text  
    envAndTerm f s = 
-     (map ((initFilePath f ++) . filter (/=' ') . drop 2) fs, unlines ss) where
+     (unwords (intersperse ";;" fs), unlines ss) where
        (fs,ss) = span isImport (lines s)
        isImport l = take 2 l == "--"
 
