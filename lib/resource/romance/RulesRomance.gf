@@ -35,7 +35,7 @@ lin
   ModGenOne = npGenDet singular ;
   ModGenNum = npGenDetNum ;
 
-  UseInt i = {s = \\_ => i.s} ;
+  UseInt i = {s = \\_ => i.s ; n = Pl} ; ---- n
   NoNum = noNum ;
 
   UseA = adj2adjPhrase ;

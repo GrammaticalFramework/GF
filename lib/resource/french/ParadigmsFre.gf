@@ -205,6 +205,13 @@ oper
 
   regV : Str -> V ;
 
+-- Sometimes, however, it is not predictable which variant of the "er"
+-- conjugation is to be selected. Then it is better to use the function
+-- that gives the third person singular present indicative and future 
+-- (("il") "jette", "jettera") as second argument.
+
+  reg3V : (jeter,jette,jettera : Str) -> V ;
+
 -- The function $regV$ gives all verbs the compound auxiliary "avoir".
 -- To change it to "être", use the following function.
 
@@ -307,6 +314,7 @@ oper
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
   regV x = let v = (mkVerbReg x) in verbPres v AHabere ** {aux = AHabere ; lock_V = <>} ;
+  reg3V x y z = let v = (mkVerb3Reg x y z) in verbPres v AHabere ** {aux = AHabere ; lock_V = <>} ;
   etreV v = {s = v.s ; aux = AEsse ; lock_V = <>} ;
 
   mkV2 v p = {s = v.s ; aux = v.aux ;  s2 = p.p2 ; c = p.p1 ; lock_V2 = <>} ;

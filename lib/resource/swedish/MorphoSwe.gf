@@ -1246,4 +1246,7 @@ oper
   regTal : Str -> LinDigit = \fem -> 
     mkTal fem (fem + "ton") (fem + "tio") ;
 
+  numPl : Str -> {s : Gender => Str ; n : Number} = \n ->
+    {s = \\_ => n ; n = Pl} ;
+
 }

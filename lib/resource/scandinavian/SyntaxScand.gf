@@ -98,16 +98,16 @@ oper
 -- The following construction has to be refined for genitive forms:
 -- "vi tre", "oss tre" are OK, but "vår tres" is not.
 
-  Numeral : Type = {s : Case => Str} ;
+  Numeral : Type = {s : Gender => Case => Str ; n : Number} ;
 
   pronWithNum : ProPN -> Numeral -> ProPN = \we,two ->
-    {s = \\c => we.s ! c ++ two.s ! npCase c ; 
+    {s = \\c => we.s ! c ++ two.s ! utrum ! npCase c ; 
      h1 = we.h1 ; 
      h2 = we.h2 ;
      h3 = we.h3
     } ;
 
-  noNum : Numeral = {s = \\_ => []} ;
+  noNum : Numeral = {s = \\_,_ => [] ; n = Pl} ;
 
 -- Formal subjects
 
@@ -142,13 +142,13 @@ oper
 
   numDetNounPhrase : DeterminerNum -> Numeral -> CommNounPhrase -> NounPhrase = 
    \alla,sex, man -> 
-    {s = \\c => alla.s ! man.g ++ sex.s ! Nom ++ man.s ! Pl ! alla.b ! npCase c ;
-     g = genNoun man.g ; n = Pl ; p = P3} ;
+    {s = \\c => alla.s ! man.g ++ sex.s ! genNoun man.g ! Nom ++ man.s ! sex.n ! alla.b ! npCase c ;
+     g = genNoun man.g ; n = sex.n ; p = P3} ;
 
   justNumDetNounPhrase : DeterminerNum -> Numeral -> NounPhrase = 
    \alla,sex -> 
-    {s = \\c => alla.s ! NNeutr ++ sex.s ! npCase c ;
-     g = Neutr ; n = Pl ; p = P3} ;
+    {s = \\c => alla.s ! NNeutr ++ sex.s ! utrum ! npCase c ;
+     g = Neutr ; n = sex.n ; p = P3} ;
 
 
 -- The following macros are sufficient to define most determiners.
@@ -216,7 +216,7 @@ oper
        s = \\c => case n of {
              Sg => huset.s ! PGen (ASg (genNoun vin.g)) ++ 
                    vin.s ! Sg ! DefP Indef ! npCase c ;
-             Pl => huset.s ! PGen APl ++ tre.s ! Nom ++
+             Pl => huset.s ! PGen APl ++ tre.s ! genNoun vin.g ! Nom ++
                    vin.s ! Pl ! DefP Indef ! npCase c
              } ;
        g = genNoun vin.g ;
@@ -230,9 +230,9 @@ oper
   plurDet : CommNounPhrase -> NounPhrase = plurDetNum noNum ;
 
   plurDetNum : Numeral -> CommNounPhrase -> NounPhrase = \num,cn -> 
-    {s = \\c => num.s ! Nom ++ cn.s ! Pl ! IndefP ! npCase c ; 
+    {s = \\c => num.s ! genNoun cn.g ! Nom ++ cn.s ! num.n ! IndefP ! npCase c ; 
      g = genNoun cn.g ; 
-     n = Pl ;
+     n = num.n ;
      p = P3
     } ;
 

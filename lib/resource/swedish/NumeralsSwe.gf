@@ -1,9 +1,12 @@
 concrete NumeralsSwe of Numerals = open MorphoSwe, Prelude in {
 
 lincat 
-  Numeral = { s : Str } ;
+  Numeral = {s : Gender => Str ; n : Number} ;
   Digit = {s : DForm => Str} ;
-  Sub10 = {s : DForm => Str} ;
+  Sub10 = {s : DForm => Gender => Str ; n : Number} ;
+  Sub100 = {s : Gender => Str ; n : Number} ;
+  Sub1000 = {s : Gender => Str ; n : Number} ;
+  Sub1000000 = {s : Gender => Str ; n : Number} ;
 
 lin 
   num x = x ;
@@ -17,19 +20,19 @@ lin
   n8 = mkTal  "åtta" "arton"   "åttio" ;
   n9 = mkTal  "nio"  "nitton"   "nittio" ;
 
-  pot01 = {s = table {f => "ett"}} ;
-  pot0 d = {s = table {f => d.s ! f}} ;
-  pot110 = ss "tio" ;
-  pot111 = ss "elva" ;
-  pot1to19 d = ss (d.s ! ton) ;
-  pot0as1 n = ss (n.s ! ental) ;
-  pot1 d = ss (d.s ! tiotal) ;
-  pot1plus d e = ss (d.s ! tiotal ++ e.s ! ental) ;
+  pot01 = {s = table {f => table {Neutr => "ett" ; _ => "en"}} ; n = Sg} ;
+  pot0 d = {s = \\f,g => d.s ! f ; n = Pl} ;
+  pot110 = numPl "tio" ;
+  pot111 = numPl "elva" ;
+  pot1to19 d = numPl (d.s ! ton) ;
+  pot0as1 n = {s = n.s ! ental ; n = n.n} ;
+  pot1 d = numPl (d.s ! tiotal) ;
+  pot1plus d e = {s = \\g => d.s ! tiotal ++ e.s ! ental ! g ; n = Pl} ;
   pot1as2 n = n ;
-  pot2 d = ss (d.s ! ental ++ "hundra") ;
-  pot2plus d e = ss (d.s ! ental ++ "hundra" ++ e.s) ;
+  pot2 d = numPl (d.s ! ental ! Neutr ++ "hundra") ;
+  pot2plus d e = {s = \\g => d.s ! ental ! Neutr ++ "hundra" ++ e.s ! g ; n = Pl} ;
   pot2as3 n = n ;
-  pot3 n = ss (n.s ++ "tusen") ;
-  pot3plus n m = ss (n.s ++ "tusen" ++ m.s) ;
+  pot3 n = numPl (n.s ! Neutr ++ "tusen") ;
+  pot3plus n m = {s = \\g => n.s ! Neutr ++ "tusen" ++ m.s ! g ; n = Pl} ;
 
 }

@@ -37,7 +37,7 @@ lin
   brother_N2 = deN2 (regN "frère" masculine) ;
   brown_ADeg = regADeg "brun" ;
   butter_N = regN "beurre" masculine ;
-  buy_V2 = dirV2 (regV "acheter") ;
+  buy_V2 = dirV2 (reg3V "acheter" "achète" "achètera") ;
   camera_N = compN (regN "appareil" masculine) ["de photo"] ;
   cap_N = regN "casquette" feminine ;
   car_N = regN "voiture" feminine ;
@@ -93,7 +93,7 @@ lin
   have_V2 = avoir_V2 ;
   hear_V2 = entendre_V2 ;
   hill_N = regN "colline" feminine ;
-  hope_VS = mkVS (regV "espérer") ;
+  hope_VS = mkVS (reg3V "espérer" "espère" "espérera") ;
   horse_N = regN "cheval" masculine ;
   hot_ADeg = regADeg "chaud" ;
   house_N = regN "maison" feminine ;

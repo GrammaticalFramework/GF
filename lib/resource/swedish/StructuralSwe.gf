@@ -12,7 +12,8 @@ concrete StructuralSwe of Structural =
 
  lin
 
-  UseNumeral i = {s = table {Nom => i.s ; Gen => i.s ++ "s"}} ; ---
+  UseNumeral i = {s = \\g => table {Nom => i.s ! g ; Gen => i.s ! g ++
+  "s"} ; n = i.n} ; ---
 
   above_Prep = ss "ovanför" ;
   after_Prep = ss "efter" ;

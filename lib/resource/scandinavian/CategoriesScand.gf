@@ -19,7 +19,7 @@ lincat
   N2     = Function ;
       -- = CommNoun ** {s2 : Preposition} ;
   N3     = Function ** {s3 : Preposition} ;
-  Num    = {s : Case => Str} ;
+  Num    = {s : Gender => Case => Str ; n : Number} ;
   Prep   = {s : Str} ;
 
   A      = Adjective ;
