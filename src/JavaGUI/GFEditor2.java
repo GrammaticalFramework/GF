@@ -667,7 +667,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         linearization += result+"\n";           
         result = fromProc.readLine();
         if (debug) System.out.println("6 "+result);
-        while (result.indexOf("/linearization")==-1){       
+        while ((result!=null)&&(result.indexOf("/linearization")==-1)){       
           linearization += result+"\n";           
           result = fromProc.readLine();
           if (debug) System.out.println("6 "+result);                     
