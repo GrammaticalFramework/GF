@@ -279,6 +279,9 @@ oper
   extAdjective : Adj -> Adjective = \adj ->
     {s = table {f => table {c => adj.s ! AF (Posit f) c}}} ;
 
+  adjPastPart : Verb -> Adjective ;
+ 
+
 -- Coercions between the compound gen-num type and gender and number:
 
   gNum : Gender -> Number -> GenNum = \g,n -> 
@@ -630,6 +633,19 @@ oper
         ge 
         (\\_,_ => ge.s1 ++ ge.s2 ++ dig.s ! PAcc ++ ge.s3 ++ vin.s ! PAcc) ;
 
+-- Adjective-complement ditransitive verbs.
+
+  DitransAdjVerb = TransVerb ; 
+
+  mkDitransAdjVerb : Verb -> Preposition -> DitransAdjVerb = \v,p1 -> 
+    v ** {s2 = p1} ;
+
+  complDitransAdjVerb : 
+    DitransVerb -> NounPhrase -> AdjPhrase -> VerbGroup = \gor,dig,sur ->
+      useVerb 
+        gor 
+        (\\_,_ => gor.s1 ++ gor.s2 ++ dig.s ! PAcc ++ 
+                  sur.s ! predFormAdj dig.g dig.n ! Nom) ;
 
 --2 Adverbs
 --
@@ -717,6 +733,8 @@ param
    | ClInfinit Anteriority      -- "naked infinitive" clauses
     ;
 
+  ClTense = ClPresent | ClPast | ClFuture | ClPerfect ;
+
 oper cl2s : ClForm -> {o : Order ; sf : SForm} = \c -> case c of {
   ClIndic t a o   => {o = o ; sf = VIndic t a} ;
   ClFut a o       => {o = o ; sf = VFut a} ;
@@ -741,6 +759,16 @@ oper cl2s : ClForm -> {o : Order ; sf : SForm} = \c -> case c of {
        Main => jag ++ ser ++ inte ++ dig ;  
        Inv  => ser ++ jag ++ inte ++ dig ;
        Sub  => jag ++ inte ++ ser ++ dig
+       }
+    } ;
+
+
+  clause2sentence : Bool -> ClTense -> Clause -> Sentence = \b,t,cl ->
+    {s = \\o => cl.s ! b ! case t of {
+       ClPresent => ClIndic Present Simul o ;
+       ClPast    => ClIndic Past    Simul o ;
+       ClFuture  => ClFut           Simul o ;
+       ClPerfect => ClIndic Present Anter o
        }
     } ;
 
@@ -770,6 +798,24 @@ oper cl2s : ClForm -> {o : Order ; sf : SForm} = \c -> case c of {
               if_then_Str vilja.isAux [] infinAtt ++ 
               simma.s ! VInfinit Simul ++ simma.s2 ! True ++ ---- Anter!
               simma.s3 ! VInfinit Simul ! g ! n) ;
+
+  transVerbVerb : VerbVerb -> TransVerb -> TransVerb = \vilja,hitta ->
+    {s  = vilja.s ;
+     s1 = vilja.s1 ++ if_then_Str vilja.isAux [] infinAtt ++ 
+          hitta.s ! VI (Inf Act) ++ hitta.s1 ;            ---- Anter!
+     s2 = hitta.s2
+    } ;
+
+-- Notice agreement to object rather than subject:
+
+  DitransVerbVerb = TransVerb ** {part : Str} ;
+
+  complDitransVerbVerb : 
+    DitransVerbVerb -> NounPhrase -> VerbGroup -> VerbGroup = \be,dig,simma ->
+      useVerb be 
+        (\\g,n => be.s1 ++ be.s2 ++ dig.s ! PAcc ++ be.part ++ 
+              simma.s ! VInfinit Simul ++ simma.s2 ! True ++ ---- Anter!
+              simma.s3 ! VInfinit Simul ! dig.g ! dig.n) ;
 
 
 --2 Sentences missing noun phrases
@@ -939,7 +985,7 @@ oper
   intPronWhat : Number -> IntPron = \num -> {
     s = table {
       PGen  _ => nonExist ; ---
-      _ => "hvad"
+      _ => pronVad
       } ;
     n = num ;
     g = Neutr

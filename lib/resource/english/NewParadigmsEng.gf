@@ -39,12 +39,14 @@ oper
   nonhuman : Gender ;
 
 -- To abstract over number names, we define the following.
+
   Number : Type ; 
 
   singular : Number ;
   plural   : Number ;
 
 -- To abstract over case names, we define the following.
+
   Case : Type ;
 
   nominative : Case ;
@@ -168,10 +170,6 @@ oper
   mkAdA : Str -> AdA ;
   mkAdS : Str -> AdS ;
 
--- Prepositional phrases are another productive form of adverbials.
-
-  mkPP : Prep -> NP -> Adv ;
-
 --2 Prepositions
 --
 -- A preposition is just a string.
@@ -238,12 +236,12 @@ oper
   nonhuman = NoHum ;
   singular = Sg ;
   plural = Pl ;
-
   nominative = Nom ;
-  genitive = Nom ;
+  genitive = Gen ;
 
   mkN = \man,men,man's,men's,g -> 
     mkNoun man men man's men's ** {g = g ; lock_N = <>} ;
+---
   nReg a g = addGenN nounReg a g ;
   nKiss n g = addGenN nounS n g ;
   nFly = \fly -> addGenN nounY (Predef.tk 1 fly) ;
