@@ -1,17 +1,3 @@
-----------------------------------------------------------------------
--- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
--- Stability   : (stable)
--- Portability : (portable)
---
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
---
--- (Description of the module)
------------------------------------------------------------------------------
-
 {-# OPTIONS -cpp #-}
 {-# LINE 3 "LexGFC.x" #-}
 module LexGFC where
