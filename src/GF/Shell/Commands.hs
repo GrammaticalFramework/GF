@@ -403,7 +403,7 @@ displaySStateJavaX env state = unlines $ tagXML "gfedit" $ concat [
   lgrs   = allStateGrammarsWithNames env --- allActiveStateGrammarsWithNames env
   lins   = (langAbstract, exp) : linAll
   opts   = addOptions (optsSState state)   -- state opts override 
-              (addOption (markLin markOptJava) (globalOptions env))
+              (addOption (markLin mark) (globalOptions env))
   lin (n,gr) = (n, map uni $ linearizeState noWrap opts gr zipper) where
                   uni = optEncodeUTF8 n gr . mkUnicode
   exp    = prprTree $ loc2tree zipper
@@ -411,6 +411,7 @@ displaySStateJavaX env state = unlines $ tagXML "gfedit" $ concat [
   zipper = stateSState state
   linAll = map lin lgrs
   gr     = firstStateGrammar env
+  mark   = markOptJava -- to be: markOptXML
 
 langAbstract = language "Abstract"
 langXML      = language "XML"
