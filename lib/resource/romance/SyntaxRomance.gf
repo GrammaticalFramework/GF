@@ -520,9 +520,12 @@ oper
          Jean = jean.s ! (case2pformClit aime.c) ; 
          AAime = formVerb2 aime g w ;
          A = AAime.verb ;
-         Aime = AAime.part ! pgen2gen jean.g ! jean.n 
+         clit = (andB (isNounPhraseClit jean) (isTransVerbClit aime)) ;
+         Aime = if_then_Str clit
+           (AAime.part ! pgen2gen jean.g ! jean.n)
+           (AAime.part ! Masc ! Sg)
        in 
-       if_then_Str (andB (isNounPhraseClit jean) (isTransVerbClit aime))
+       if_then_Str clit
          (posNeg b (Jean ++ A) Aime)
          (posNeg b A           (Aime ++ Jean))
     } ;
@@ -565,10 +568,12 @@ oper
        let 
          adonne = formVerb2 donner g w ;
          a     = adonne.verb ;
-         donne = adonne.part ! pgen2gen vin.g ! vin.n ;
          isClit = isDitransVerbClit donner ;
          cJean = andB (isNounPhraseClit jean) (isClit.p1) ;
          cVin  = andB (isNounPhraseClit vin)  (isClit.p2) ;
+         donne = if_then_Str cVin 
+                   (adonne.part ! pgen2gen vin.g ! vin.n)
+                   (adonne.part ! Masc ! Sg) ;
          Jean  = jean.s ! (case2pformClit donner.c) ; 
          Vin   = vin.s ! (case2pformClit donner.c3) ;
          aJean = if_then_Str cJean [] Jean ;  
@@ -578,21 +583,6 @@ oper
        in 
          posNeg b (te ++ lui ++ a) (donne ++ aJean ++ duVin)
      } ;
-
-
-
-  complTransVerb : TransVerb -> NounPhrase -> VerbGroup = \aime,jean ->
-    {s = \\b,g,w =>  ---- BUG: v gives stack overflow
-       let 
-         Jean = jean.s ! (case2pformClit aime.c) ; 
-         AAime = formVerb2 aime g w ;
-         A = AAime.verb ;
-         Aime = AAime.part ! pgen2gen jean.g ! jean.n 
-       in 
-       if_then_Str (andB (isNounPhraseClit jean) (isTransVerbClit aime))
-         (posNeg b (Jean ++ A) Aime)
-         (posNeg b A           (Aime ++ Jean))
-    } ;
 
 
 -- The following macro builds the "ne - pas" or "non" negation. The second
