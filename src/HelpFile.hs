@@ -44,6 +44,8 @@ txtHelpFile =
   "\n      -nocf         don't build context-free grammar (thus no parser)" ++
   "\n      -nocheckcirc  don't eliminate circular rules from CF " ++
   "\n      -cflexer      build an optimized parser with separate lexer trie" ++
+  "\n      -noemit       do not emit code (default with old grammar format)" ++
+  "\n      -o            do emit code (default with new grammar format)" ++
   "\n  flags:" ++
   "\n      -abs          set the name used for abstract syntax (with -old option)" ++
   "\n      -cnc          set the name used for concrete syntax (with -old option)" ++
