@@ -208,7 +208,7 @@ putStrE = ioeIO . putStrFlush
 
 putPointE :: Options -> String -> IOE a -> IOE a
 putPointE opts msg act = do
-  let ve x = if oElem beVerbose opts then x else return ()
+  let ve x = if oElem beSilent opts then return () else x
   ve $ ioeIO $ putStrFlush msg
   a <- act
 ---  ve $ ioeIO $ putShow' id a --- replace by a statistics command

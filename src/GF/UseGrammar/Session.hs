@@ -17,7 +17,7 @@ type SState = [(State,([Exp],[Clip]),SInfo)] -- exps: candidate refinements,clip
 type SInfo  = ([String],(Int,Options))       -- string is message, int is the view
 
 initSState :: SState
-initSState = [(initState, ([],[]), (["Select category to start"],(0,noOptions)))] 
+initSState = [(initState, ([],[]), (["Select 'New' category to start"],(0,noOptions)))] 
              -- instead of empty
 
 type Clip = Tree ---- (Exp,Type)

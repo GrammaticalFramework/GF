@@ -21,7 +21,7 @@ import UTF8
 sessionLineJ :: Bool -> ShellState -> IO ()
 sessionLineJ isNew env = do
   putStrLnFlush $ initEditMsgJavaX env
-  let env' = addGlobalOptions (options [sizeDisplay "short"]) env
+  let env' = addGlobalOptions (options [sizeDisplay "short",beSilent]) env
   editLoopJnewX isNew env' (initSState)
 
 -- this is the real version, with XML

@@ -84,11 +84,12 @@ compileModule opts st0 file |
 compileModule opts1 st0 file = do
   opts0 <- ioeIO $ getOptionsFromFile file
   let useFileOpt = maybe False (const True) $ getOptVal opts0 pathList
+  let useLineOpt = maybe False (const True) $ getOptVal opts1 pathList
   let opts = addOptions opts1 opts0 
   let fpath = justInitPath file
   let ps0  = pathListOpts opts fpath
 
-  let ps1 = if useFileOpt 
+  let ps1 = if (useFileOpt && not useLineOpt) 
               then (map (prefixPathName fpath) ps0)
               else ps0
   ps <- ioeIO $ extendPathEnv gfGrammarPathVar ps1
