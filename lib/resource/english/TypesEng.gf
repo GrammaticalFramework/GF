@@ -63,7 +63,7 @@ oper
 -- in the singular; plural forms are uniformly equal to the 2nd person singular.
 
 param
-  VForm = InfImp | Indic Person | Pastt Number | PPart ;
+  VForm = InfImp | Indic Person | Pastt Number | PPart | PresPart ;
 
 oper
   VerbP3 : Type = {s : VForm => Str} ;

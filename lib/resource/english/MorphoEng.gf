@@ -178,7 +178,8 @@ oper
        Indic P3 => goes ; 
        Indic _ => go ; 
        Pastt _ => went ;
-       PPart => gone
+       PPart => gone ;
+       PresPart => go + "ing" ---- fix!
        }
     } ;
 
@@ -241,7 +242,8 @@ oper
     Indic P3 => "is" ;
     Pastt Sg => "was" ;
     Pastt Pl => "were" ;
-    PPart => "been"
+    PPart => "been" ;
+    PresPart => "being"
     }} ;
 
   verbPart : VerbP3 -> Particle -> Verb = \v,p ->
