@@ -1,3 +1,5 @@
+--# -path=.:../../prelude
+
 --1 A Simple English Resource Morphology
 --
 -- Aarne Ranta 2002
@@ -7,7 +9,7 @@
 --
 -- We use the parameter types and word classes defined in $Types.gf$.
 
-resource MorphoEng = TypesEng ** open Prelude in {
+resource MorphoEng = TypesEng ** open Prelude, (Predef=Predef) in {
 
 --2 Nouns
 --
@@ -90,25 +92,58 @@ oper
 
 --2 Adjectives
 --
--- For the comparison of adjectives, three forms are needed in the worst case.
+-- To form the adjectival and the adverbial forms, two strings are needed
+-- in the worst case.
 
-  mkAdjDegr : (_,_,_ : Str) -> AdjDegr = \good,better,best -> 
-    {s = table {Pos => good ; Comp => better ; Sup => best}} ;
+  mkAdjective : Str -> Str -> Adjective = \free,freely -> {
+    s = table {
+      AAdj => free ;
+      AAdv => freely
+      }
+    } ;
+  
+-- However, the ending "iy" is sufficient for most cases. This function 
+-- automatically changes the word-final "y" to "i" ("happy" - "happily").
+-- N.B. this is not correct for "shy", but $mkAdjective$ has to be used.
 
-  adjDegrReg : Str -> AdjDegr = \long ->
-    mkAdjDegr long (long + "er") (long + "est") ;
+  regAdjective : Str -> Adjective = \free -> 
+    let 
+      y = Predef.dp 1 free
+    in mkAdjective 
+         free 
+         (ifTok Str y "y" (Predef.tk 1 free + ("ily")) (free + "ly")) ;
 
-  adjDegrY : Str -> AdjDegr = \lovel ->
-    mkAdjDegr (lovel + "y") (lovel + "ier") (lovel + "iest") ;
+-- For the comparison of adjectives, six forms are needed to cover all cases.
+-- But there is no adjective that actually needs all these.
+
+  mkAdjDegrWorst : (_,_,_,_,_,_ : Str) -> AdjDegr = 
+    \good,well,better,betterly,best,bestly -> 
+    {s = table {
+       Pos => (mkAdjective good well).s ;
+       Comp => (mkAdjective better betterly).s ; 
+       Sup => (mkAdjective best bestly).s
+       }
+    } ;
+
+-- What is usually needed for irregular comparisons are just three forms,
+-- since the adverbial form is the same (in comparative or superlative)
+-- or formed in the regular way (positive).
+
+  adjDegrIrreg : (_,_,_ : Str) -> AdjDegr = \bad,worse,worst ->
+    let badly = (regAdjective bad).s ! AAdv
+    in mkAdjDegrWorst bad badly worse worse worst worst ;
+
+-- Like above, the regular formation takes account of final "y".
+
+  adjDegrReg : Str -> AdjDegr = \happy ->
+    let happi = ifTok Str (Predef.dp 1 happy) "y" (Predef.tk 1 happy + "i") happy
+    in adjDegrIrreg happy (happi + "er") (happi + "est") ;
 
 -- Many adjectives are 'inflected' by adding a comparison word.
 
   adjDegrLong : Str -> AdjDegr = \ridiculous ->
-    mkAdjDegr ridiculous ("more" ++ ridiculous) ("most" ++ ridiculous) ;
+    adjDegrIrreg ridiculous ("more" ++ ridiculous) ("most" ++ ridiculous) ;
 
--- simple adjectives are just strings
-
-  simpleAdj : Str -> Adjective = ss ;
 
 --3 Verbs
 --

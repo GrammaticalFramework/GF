@@ -37,11 +37,12 @@ lincat
   Fun    = Function ;
       -- = CommNounPhrase ** {s2 : Preposition} ;
   Fun2   = Function ** {s3 : Preposition} ;
+  Num    = {s : Case => Str} ;
 
   Adj1   = Adjective ; 
-      -- = {s : Str}
+      -- = {s : AForm => Str}
   Adj2   = Adjective ** {s2 : Preposition} ;
-  AdjDeg = {s : Degree => Str} ;
+  AdjDeg = {s : Degree => AForm => Str} ;
   AP     = Adjective ** {p : Bool} ;
 
   V      = Verb ; 
@@ -51,6 +52,7 @@ lincat
       -- = Verb ** {s3 : Preposition} ;
   V3     = TransVerb ** {s4 : Preposition} ;
   VS     = Verb ;
+  VV     = Verb ** {isAux : Bool} ;
 
   AdV    = {s : Str ; p : Bool} ;
 
@@ -69,7 +71,7 @@ lincat
   ConjD  = {s1 : Str ; s2 : Str ; n : Number} ;
 
   ListS  = {s1 : Str ; s2 : Str} ;
-  ListAP = {s1 : Str ; s2 : Str ; p : Bool} ;
+  ListAP = {s1,s2 : AForm => Str ; p : Bool} ;
   ListNP = {s1,s2 : NPForm => Str ; n : Number ; p : Person} ;
 
 --.
@@ -77,7 +79,7 @@ lincat
 lin 
   UseN = noun2CommNounPhrase ;
   ModAdj = modCommNounPhrase ;
-  ModGenOne = npGenDet singular ;
+  ModGenOne = npGenDet singular noNum ;
   ModGenMany = npGenDet plural ;
   UsePN = nameNounPhrase ;
   UseFun = funAsCommNounPhrase ;
@@ -91,14 +93,14 @@ lin
 
   DetNP = detNounPhrase ;
   IndefOneNP = indefNounPhrase singular ;
-  IndefManyNP = indefNounPhrase plural ;
+  IndefManyNP = indefNounPhraseNum plural ;
   DefOneNP = defNounPhrase singular ;
-  DefManyNP = defNounPhrase plural ;
+  DefManyNP = defNounPhraseNum plural ;
   MassNP = detNounPhrase (mkDeterminer Sg []) ;
-  IntNP n = detNounPhrase (mkDeterminer Pl n.s) ;
-  DefIntNP n = detNounPhrase (mkDeterminer Pl ("the" ++ n.s)) ;
 
   CNthatS = nounThatSentence ;
+  UseInt i = {s = table {Nom => i.s ; Gen => i.s ++ "'s"}} ; ---
+  NoNum = noNum ;
 
   PredVP = predVerbPhrase ;
   PosV = predVerb True ;
@@ -115,12 +117,17 @@ lin
   NegPassV = passVerb False ;
   PosNP = predNounPhrase True ;
   NegNP = predNounPhrase False ;
+  PosAdV = predAdverb True ;
+  NegAdV = predAdverb False ;
   PosVS = complSentVerb True ;
   NegVS = complSentVerb False ;
+---  PosVV = complVerbVerb True ;
+---  NegVV = complVerbVerb False ;
   VTrans = transAsVerb ;
 
-  AdvVP = adVerbPhrase ;
+  AdjAdv a = advPost (a.s ! AAdv) ;
   PrepNP p = prepPhrase p.s ; ---
+  AdvVP = adVerbPhrase ;
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
 
@@ -129,8 +136,8 @@ lin
   OneVP = predVerbPhrase (nameNounPhrase (nameReg "one")) ;
   ThereIsCN A = prefixSS ["there is"]                                ---
                   (defaultNounPhrase (indefNounPhrase singular A)) ;
-  ThereAreCN A = prefixSS ["there are"]  
-                  (defaultNounPhrase (indefNounPhrase plural A)) ;
+  ThereAreCN n A = prefixSS ["there are"]  
+                  (defaultNounPhrase (indefNounPhraseNum plural n A)) ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -151,7 +158,7 @@ lin
   IntVP = intVerbPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
-  IsThereCN = isThere singular ;
+  IsThereCN = isThere singular noNum ;
   AreThereCN = isThere plural ;
 
   ImperVP = imperVerbPhrase ;

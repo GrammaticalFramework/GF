@@ -48,6 +48,7 @@ cat
   Det ;    -- determiner,            e.g. "every", "all"
   Fun ;    -- function word,         e.g. "mother (of)"
   Fun2 ;   -- two-place function,    e.g. "flight (from) (to)"
+  Num ;    -- numeral,               e.g. "three", "879"            
 
 --3 Adjectives and adjectival phrases
 --
@@ -64,6 +65,7 @@ cat
   TV ;     -- two-place verb,        e.g. "love", "wait (for)", "switch on"
   V3 ;     -- three-place verb,      e.g. "give", "prefer (stg) (to stg)"
   VS ;     -- sentence-compl. verb,  e.g. "say", "prove"
+---  VV ;     -- verb-compl. verb,      e.g. "can", "want"
   VP ;     -- verb phrase,           e.g. "switch the light on"
 
 --3 Adverbials
@@ -124,16 +126,19 @@ fun
   ModAdj : AP -> CN -> CN ;                -- "red car"
   DetNP : Det -> CN -> NP ;                -- "every car"
   MassNP : CN -> NP ;                      -- "wine"
-  IntNP : Int -> CN -> NP ;                -- "86 houses" --- assumes i > 1
-  DefIntNP : Int -> CN -> NP ;             -- "the 86 houses" --- assumes i > 1
-  IndefOneNP, IndefManyNP : CN -> NP ;     -- "a car", "cars"
-  DefOneNP, DefManyNP : CN -> NP ;         -- "the car", "the cars"
-  ModGenOne, ModGenMany : NP -> CN -> NP ; -- "John's car", "John's cars"
+  IndefOneNP : CN -> NP ;                  -- "a car", "cars"
+  IndefManyNP : Num -> CN -> NP ;          -- "houses", "86 houses"
+  DefOneNP : CN -> NP ;                    -- "the car"
+  DefManyNP : Num -> CN -> NP ;            -- "the cars", "the 86 cars"
+  ModGenOne : NP -> CN -> NP ;             -- "John's car"
+  ModGenMany : Num -> NP -> CN -> NP ;     -- "John's cars", "John's 86 cars"
   UsePN : PN -> NP ;                       -- "John"
   UseFun : Fun -> CN ;                     -- "successor"
   AppFun : Fun -> NP -> CN ;               -- "successor of zero"
   AppFun2 : Fun2 -> NP -> Fun ;            -- "flight from Paris"
   CNthatS : CN -> S -> CN ;                -- "idea that the Earth is flat"
+  UseInt : Int -> Num ;                    -- "32"  --- assumes i > 1
+  NoNum : Num ;                            -- no numeral modifier
 
 --3 Adjectives and adjectival phrases
 --
@@ -153,17 +158,21 @@ fun
   PosTV, NegTV : TV -> NP -> VP ;          -- "sees John", "doesn't see John"
   PosPassV, NegPassV : V -> VP ;           -- "is seen", "is not seen"
   PosNP, NegNP : NP -> VP ;                -- "is John", "is not John"
+  PosAdV, NegAdV : AdV -> VP ;             -- "is everywhere", "is not in France"
   PosVS, NegVS : VS -> S -> VP ;           -- "says that I run", "doesn't say..."
+---  PosVV, NegVV : VV -> VP -> VP ;       -- "can run", "can't run", "tries to run"
   PosV3, NegV3 : V3 -> NP -> NP -> VP ;    -- "prefers wine to beer"
   VTrans : TV -> V ;                       -- "loves"
 
 --3 Adverbials
 --
+-- Here is how complex adverbials can be formed and used.
+
+  AdjAdv : AP -> AdV ;                     -- "freely", "more consciously than you"
+  PrepNP : Prep -> NP -> AdV ;             -- "in London", "after the war"
 
   AdvVP : VP -> AdV -> VP ;                -- "always walks", "walks in the park" 
-  PrepNP : Prep -> NP -> AdV ;             -- "in London", "after the war"
   AdvCN : CN -> AdV -> CN ;                -- "house in London", "house today"
-
   AdvAP : AdA -> AP -> AP ;                -- "very good"
 
 
@@ -173,7 +182,8 @@ fun
   PredVP : NP -> VP -> S ;                     -- "John walks"
   PosSlashTV, NegSlashTV : NP -> TV -> Slash ; -- "John sees", "John doesn's see"
   OneVP : VP -> S ;                            -- "one walks"
-  ThereIsCN, ThereAreCN : CN -> S ;            -- "there is a car", "there are cars"
+  ThereIsCN : CN -> S ;                        -- "there is a bar"
+  ThereAreCN : Num -> CN -> S ;                -- "there are 86 bars"
 
   IdRP : RP ;                              -- "which"
   FunRP : Fun -> RP -> RP ;                -- "the successor of which"
@@ -194,7 +204,8 @@ fun
   IntVP : IP -> VP -> Qu ;                 -- "who walks"
   IntSlash : IP -> Slash -> Qu ;           -- "whom does John see"
   QuestAdv : IAdv -> NP -> VP -> Qu ;      -- "why do you walk"
-  IsThereCN, AreThereCN : CN -> Qu ;       -- "is there a bar", "are there bars"
+  IsThereCN : CN -> Qu ;                   -- "is there a bar"
+  AreThereCN : Num -> CN -> Qu ;           -- "are there (86) bars"
 
   ImperVP : VP -> Imp ;                    -- "be a man"
 

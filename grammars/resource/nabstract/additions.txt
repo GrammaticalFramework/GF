@@ -2,58 +2,82 @@
 
 -- Combinations.gf
 cat
-  Prep ;                            -- pre/postposition and/or case
+  Prep ;     -- pre/postposition and/or case  e.g. 
+  Num ;      -- numeral,                      e.g. "three", "879"            
+---  VV ;       -- verb-compl. verb,             e.g. "can", "want"
+
 fun 
-  ThereIsCN, ThereAreCN : CN -> S ; -- "there is a bar", "there are bars"
+  ThereIsCN : CN -> S ;             -- "there is a bar", "there are bars"
+  ThereAreCN : Num -> CN -> S ;     -- "there are 86 bars"
   PrepNP : Prep -> NP -> AdV ;      -- "in London", "after the war" (replace LocNP)
   MassNP : CN -> NP ;               -- "wine"
-  IntNP : Int -> CN -> NP ;         -- "86 houses"  --- assumes i > 1
-  DefIntNP : Int -> CN -> NP ;      -- "the 86 houses" --- assumes i > 1
+---  PosVV, NegVV : VV -> VP -> VP ;   -- "can run", "can't run", "tries to run"
+  PosAdV, NegAdV : AdV -> VP ;      -- "is everywhere", "is not in France"
+  AdjAdv : AP -> AdV ;              -- "freely", "more consciously than you"
   IsThereCN, AreThereCN : CN -> Qu ;-- "is there a bar", "are there bars"
 
-Warning: no linearization of AdvAP
-checking module ResFra
-Warning: no linearization of AdvS
-checking module ResFra
-Warning: no linearization of AppFun2
-checking module ResFra
-Warning: no linearization of CNthatS
-checking module ResFra
-Warning: no linearization of ConsPhr
-checking module ResFra
-Warning: no linearization of ItNP
-checking module ResFra
-Warning: no linearization of NegPassV
-checking module ResFra
-Warning: no linearization of NegV3
-checking module ResFra
-Warning: no linearization of OnePhr
-checking module ResFra
-Warning: no linearization of OneVP
-checking module ResFra
-Warning: no linearization of OtherwiseAdv
-checking module ResFra
-Warning: no linearization of PosPassV
-checking module ResFra
-Warning: no linearization of PosV3
-checking module ResFra
-Warning: no linearization of SubjVP
-checking module ResFra
-Warning: no linearization of ThereforeAdv
-checking module ResFra
-Warning: no linearization of TooAdv
-checking module ResFra
-Warning: no linearization of VTrans
-checking module ResFra
-Warning: no linearization of VeryAdv
+
+  -- changed type signatures: added Num
+  IndefManyNP : Num -> CN -> NP ;          -- "houses", "86 houses"
+  DefManyNP : Num -> CN -> NP ;            -- "the cars", "the 86 cars"
+  ModGenMany : Num -> NP -> CN -> NP ;     -- "John's cars", "John's 86 cars"
+ 
+  UseInt : Int -> Num ;             -- "32"  --- assumes i > 1
+  NoNum : Num ;                     -- no numeral modifier
+
+  IsThereCN, AreThereCN : CN -> Qu ;-- "is there a bar", "are there bars"
+
+-- from Hajo's work
+
+AdvAP
+
+AdvS
+
+AppFun2
+
+CNthatS
+
+ConsPhr
+
+ItNP
+
+NegPassV
+
+NegV3
+
+OnePhr
+
+OneVP
+
+OtherwiseAdv
+
+PosPassV
+
+PosV3
+
+SubjVP
+
+ThereforeAdv
+
+TooAdv
+
+VTrans
+
+VeryAdv
 
 
 -- Structural.gf
 
-  SomeDet, SomesDet, AnyDet, AnysDet, NoDet,  -- sg/pl some, any, no
-  NosDet, ManyDet, MuchDet : Det ;            -- many, much
-  ThisDet, TheseDet, ThatDet, ThoseDet : Det ;-- this, these, that, those
-  ThisNP, TheseNP, ThatNP, ThoseNP : NP ;     -- this, these, that, those
+-- Some of these are just changes to Num -> Det|NP.
+  AllDet : Det ;                              -- sg all
+  AllsDet, WhichsDet,                         -- pl all, which (86)
+  SomesDet, AnysDet, NosDet,                  -- pl some, any, no
+  TheseDet, ThoseDet : Num -> Det ;           -- these, those (86)
+  ThisNP, TheseNP : NP ;                      -- this, that
+  TheseNP, ThoseNP : Num -> NP ;              -- these, those (86)
+  INP, ThouNP, HeNP, SheNP, ItNP : NP ;       -- personal pronouns in singular
+  WeNP, YeNP : Num -> NP ;                    -- these pronouns can take numeral 
+
   EverybodyNP, SomebodyNP, NobodyNP,          -- everybody, somebody, nobody
   EverythingNP, SomethingNP, NothingNP : NP ; -- everything, something, nothing
   EverywhereNP, SomewhereNP, NowhereNP : Adv ;-- everywhere, somewhere, nowhere  
@@ -64,18 +88,20 @@ Warning: no linearization of VeryAdv
   InFrontPrep, BehindPrep, BetweenPrep : Prep ;
   BeforePrep, DuringPrep, AfterPrep : Prep ;  -- temporal relations
   WithPrep, WithoutPrep, ByMeansPrep : Prep ; -- some other relations
+  PartPrep : Prep ;                           -- partitive "of" ("bottle of wine")
   AgentPrep : Prep ;                          -- agent "by" in passive constructions
 
 
-checking module TestFra
-Warning: no linearization of American
-checking module TestFra
-Warning: no linearization of Connection
-checking module TestFra
-Warning: no linearization of Finnish
-checking module TestFra
-Warning: no linearization of Give
-checking module TestFra
-Warning: no linearization of Married
-checking module TestFra
-Warning: no linearization of Prefer
+
+American
+
+Connection
+
+Finnish
+
+Give
+
+Married
+
+Prefer
+

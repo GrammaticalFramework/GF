@@ -8,18 +8,22 @@ flags startcat=Phr ; lexer=literals ; parser=chart ; unlexer=text ;
 -- a random sample from the lexicon
 
 lin
-  Big = mkAdjDegr "big" "bigger" "biggest";
+  Big = adjDegrIrreg "big" "bigger" "biggest";
+  Happy = adjDegrReg "happy" ;
   Small = adjDegrReg "small" ;
   Old = adjDegrReg "old" ;
   Young = adjDegrReg "young" ;
-  American = simpleAdj "American" ;
-  Finnish = simpleAdj "Finnish" ;
-  Married = simpleAdj "married" ** {s2 = "to"} ;
+  American = regAdjective "American" ;
+  Finnish = regAdjective "Finnish" ;
+  Married = regAdjective "married" ** {s2 = "to"} ;
   Man = cnHum (mkNoun "man" "men" "man's" "men's") ;
   Woman = cnHum (mkNoun "woman" "women" "woman's" "women's") ;
   Car = cnNoHum (nounReg "car") ;
   House = cnNoHum (nounReg "house") ;
   Light = cnNoHum (nounReg "light") ;
+  Bar = cnNoHum (nounReg "bar") ;
+  Bottle = cnNoHum (nounReg "bottle") ;
+  Wine = cnNoHum (nounReg "wine") ;
   Walk = verbNoPart (regVerbP3 "walk") ;
   Run = verbNoPart (mkVerb "run" "ran" "run") ;
   Say = verbNoPart (mkVerb "say" "said" "said") ;
@@ -27,6 +31,7 @@ lin
   Send = mkTransVerbDir (verbNoPart (mkVerb "send" "sent" "sent")) ;
   Love = mkTransVerbDir (verbNoPart (verbP3e "love")) ;
   Wait = mkTransVerb (verbNoPart (regVerbP3 "wait")) "for" ;
+  Drink = mkTransVerbDir (verbNoPart (mkVerb "drink" "drank" "drunk")) ;
   Give = mkDitransVerb (verbNoPart (mkVerb "give" "gave" "given")) [] [] ;
   Prefer = mkDitransVerb 
     (verbNoPart (mkVerb "prefer" "preferred" "preferred")) [] "to" ;

@@ -27,6 +27,7 @@ oper
 oper
   verbVara = extVerb Act vara_1200 ;
   verbHava = extVerb Act hava_1198 ;
+  verbFinnas = mkVerb "finnas" "finns" "finns" ;
 
 -- A simplified conjugation takes three forms in the worst case.
 

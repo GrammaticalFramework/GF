@@ -73,6 +73,8 @@ param
 oper 
   Adj : Type = {s : AdjForm => Str} ;
 
+  adverbForm : AdjFormPos = Strong (ASg Neutr) ;
+
 --3 Verbs
 --
 -- Verbs have 9 finite forms and as many as 18 infinite forms; the large number

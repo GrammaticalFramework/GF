@@ -48,10 +48,13 @@ oper
 --
 -- The major division is between the comparison degrees, but it
 -- is also good to leave room for adjectives that cannon be compared.
--- Such adjectives are simply strings.
+-- It is, however, productive to form an adverbial from any adjective.
 
-  Adjective : Type = SS ;
-  AdjDegr = SS1 Degree ;
+param AForm = AAdj | AAdv ;
+
+oper
+  Adjective : Type = SS1 AForm ;
+  AdjDegr = {s : Degree => AForm => Str} ;
 
 --3 Verbs
 --
