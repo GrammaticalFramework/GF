@@ -48,7 +48,7 @@ rm -rf $RPM_BUILD_ROOT
 %build
 cd src
 %configure
-make unix jar
+make unix gfdoc jar
 
 %install
 cd src
@@ -59,12 +59,16 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %{_bindir}/gf2
+%{_bindir}/gfdoc
 %{_bindir}/jgf2
 %{_libdir}/%{name}-%{version}/gf-java.jar
 %doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html}
 
 
 %changelog
+
+* Tue Jun 22 2004 Bjorn Bringert <bringert@cs.chalmers.se> 2.0-1
+- Include gfdoc binary
 
 * Mon Jun 21 2004 Bjorn Bringert <bringert@cs.chalmers.se> 2.0-1
 - Initial packaging
