@@ -1,5 +1,26 @@
 module ExtendedArabic where
 
+mkArabic0600 :: String -> String
+mkArabic0600 = digraphWordToUnicode . aarnesToDigraphWord
+
+aarnesToDigraphWord :: String -> [(Char, Char)]
+aarnesToDigraphWord str = case str of
+  [] -> []
+  '<' : cs -> ('\\', '<') : spoolMarkup2 cs
+
+  'v' : cs -> ('T', 'H') : aarnesToDigraphWord cs
+  'a' : cs -> (' ', 'A') : aarnesToDigraphWord cs
+  'o' : cs -> (' ', '3') : aarnesToDigraphWord cs
+  'O' : cs -> ('\'', 'i') : aarnesToDigraphWord cs
+
+  'u' : cs -> ('\'', 'A') : aarnesToDigraphWord cs
+  'C' : cs -> (' ', 'X') : aarnesToDigraphWord cs
+
+  'U' : cs -> ('~', 'A') : aarnesToDigraphWord cs
+  'A' : cs -> ('"', 't') : aarnesToDigraphWord cs
+  'c' : cs -> ('s', 'h') : aarnesToDigraphWord cs
+  c : cs -> (' ', c) : aarnesToDigraphWord cs
+
 mkExtendedArabic :: String -> String
 mkExtendedArabic = digraphWordToUnicode . adHocToDigraphWord
 
@@ -56,3 +77,9 @@ spoolMarkup s = case s of
    [] -> [] -- Shouldn't happen
    '>' : cs -> ('\\', '>') : adHocToDigraphWord cs
    c1 : cs -> ('\\', c1) : spoolMarkup cs
+
+spoolMarkup2 :: String -> [(Char, Char)]
+spoolMarkup2 s = case s of
+   [] -> [] -- Shouldn't happen
+   '>' : cs -> ('\\', '>') : aarnesToDigraphWord cs
+   c1 : cs -> ('\\', c1) : spoolMarkup2 cs
