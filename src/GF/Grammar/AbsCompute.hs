@@ -17,10 +17,13 @@ compute :: GFCGrammar -> Exp -> Err Exp
 compute = computeAbsTerm
 
 computeAbsTerm :: GFCGrammar -> Exp -> Err Exp
-computeAbsTerm gr = computeAbsTermIn gr []
+computeAbsTerm gr = computeAbsTermIn (lookupAbsDef gr) []
 
-computeAbsTermIn :: GFCGrammar -> [Ident] -> Exp -> Err Exp
-computeAbsTermIn gr xs e = errIn ("computing" +++ prt e) $ compt xs e where
+--- a hack to make compute work on source grammar as well
+type LookDef = Ident -> Ident -> Err (Maybe Term)
+
+computeAbsTermIn :: LookDef -> [Ident] -> Exp -> Err Exp
+computeAbsTermIn lookd xs e = errIn ("computing" +++ prt e) $ compt xs e where
   compt vv t = case t of
     Prod x a b  -> liftM2 (Prod x) (compt vv a) (compt (x:vv) b)
     Abs x b     -> liftM  (Abs  x)              (compt (x:vv) b)
@@ -46,11 +49,12 @@ computeAbsTermIn gr xs e = errIn ("computing" +++ prt e) $ compt xs e where
         _ -> do
           return $ mkAbs yy $ mkApp f aa'
 
-  look (Q m f) = case lookupAbsDef gr m f of
-    Ok (Just EData) -> Nothing  -- canonical --- should always be QC
-    Ok md -> md
-    _ -> Nothing
-  look _ = Nothing
+  look t = case t of
+     (Q m f) -> case lookd m f of
+       Ok (Just EData) -> Nothing  -- canonical --- should always be QC
+       Ok md -> md
+       _ -> Nothing
+     _ -> Nothing
 
 beta :: [Ident] -> Exp -> Exp
 beta vv c = case c of
