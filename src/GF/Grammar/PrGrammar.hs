@@ -162,7 +162,7 @@ prBinds bi = if null bi
    prValDecl (x,t) = prParenth (prt_ x +++ ":" +++ prt_ t)
 
 instance Print Val where
-  prt (VGen i x) = prt x ---- ++ "-$" ++ show i ---- latter part for debugging
+  prt (VGen i x) = prt x ++ "{-" ++ show i ++ "-}" ---- latter part for debugging
   prt (VApp u v) = prt u +++ prv1 v
   prt (VCn mc) = prQIdent_ mc
   prt (VClos env e) = case e of

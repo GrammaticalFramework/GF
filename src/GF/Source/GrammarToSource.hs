@@ -152,6 +152,7 @@ trt trm = case trm of
     Alts (t, tt) -> P.EPre (trt t) [P.Alt (trt v) (trt c) | (v,c) <- tt]
     FV ts -> P.EVariants $ map trt ts
     Strs tt -> P.EStrs $ map trt tt
+    EData -> P.EData
     _ -> error $ "not yet" +++ show trm ----
 
 trp :: Patt -> P.Patt

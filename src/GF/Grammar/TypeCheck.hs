@@ -13,6 +13,7 @@ import TC
 import Unify ---
 
 import Monad (foldM, liftM, liftM2)
+import List (nub) ---
 
 -- top-level type checking functions; TC should not be called directly.
 
@@ -74,7 +75,8 @@ computeVal gr v = case v of
 splitConstraints :: Constraints -> (Constraints,MetaSubst)
 splitConstraints cs = csmsu where
 
-  csmsu     = unif (csf,msf)  -- alternative: filter first
+  csmsu     = (nub [(a,b) | (a,b) <- csf,a /= b],msf)
+  csmsu0    = unif (csf,msf)  -- alternative: filter first
   (csf,msf) = foldr mkOne ([],[]) cs
 
   csmsf     = foldr mkOne ([],msu) csu
