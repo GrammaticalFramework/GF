@@ -1,7 +1,7 @@
 {-# OPTIONS -fglasgow-exts -cpp #-}
 {-# LINE 3 "LexGFC.x" #-}
 module LexGFC where
-
+import SharedString
 import ErrM
 
 #if __GLASGOW_HASKELL__ >= 503
@@ -35,10 +35,10 @@ alex_accept = listArray (0::Int,14) [[],[],[(AlexAccSkip)],[(AlexAcc (alex_actio
 tok f p s = f p s
 
 data Tok =
-   TS String     -- reserved words
- | TL String     -- string literals
+   TS !String     -- reserved words
+ | TL !String     -- string literals
  | TI String     -- integer literals
- | TV String     -- identifiers
+ | TV !String     -- identifiers    -- H
  | TD String     -- double precision float literals
  | TC String     -- character literals
 
@@ -130,9 +130,9 @@ alexGetChar (p, _, (c:s)) =
 alexInputPrevChar :: AlexInput -> Char
 alexInputPrevChar (p, c, s) = c
 
-alex_action_1 = tok (\p s -> PT p (TS s)) 
-alex_action_2 = tok (\p s -> PT p (eitherResIdent TV s)) 
-alex_action_3 = tok (\p s -> PT p (TL $ unescapeInitTail s)) 
+alex_action_1 = tok (\p s -> PT p (TS (shareString s))) 
+alex_action_2 = tok (\p s -> PT p (eitherResIdent (TV . shareString) s)) 
+alex_action_3 = tok (\p s -> PT p (TL $ shareString $ unescapeInitTail s)) 
 alex_action_4 = tok (\p s -> PT p (TI s))    
 {-# LINE 1 "GenericTemplate.hs" #-}
 {-# LINE 1 "<built-in>" #-}
