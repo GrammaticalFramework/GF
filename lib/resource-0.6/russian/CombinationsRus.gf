@@ -34,7 +34,7 @@ lincat
       -- = {s : Number => Case => Str; g : Gender; anim : Animacy} ;  
   NP     = NounPhrase ;
       -- = { s : PronForm => Str ; n : Number ; p : Person ;
-      --     g: Gender ; anim : Animacy ;  pron: Bool} ;     
+      --     g: PronGen ; anim : Animacy ;  pron: Bool} ;     
   PN     = ProperName ;
       -- = {s :  Case => Str ; g : Gender ; anim : Animacy} ;
   Adj1   = Adjective ;
