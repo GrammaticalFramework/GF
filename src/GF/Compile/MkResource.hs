@@ -13,43 +13,74 @@ import Monad
 -- extracting resource r from abstract + concrete syntax
 -- AR 21/8/2002 -- 22/6/2003 for GF with modules
 
-makeReuse :: SourceGrammar -> Ident -> Maybe Ident -> Ident -> Err SourceRes
-makeReuse gr r me c = do
-  mc <- lookupModule gr c
-
+makeReuse :: SourceGrammar -> Ident -> Maybe Ident -> 
+             MReuseType Ident -> Err SourceRes
+makeReuse gr r me mrc = do
   flags <- return [] --- no flags are passed: they would not make sense
+  case mrc of
+    MRResource c -> do
+      (ops,jms) <- mkFull True c
+      return $ Module MTResource MSComplete flags me ops jms
 
-  (ops,jms) <- case mc of 
-    ModMod m -> case mtype m of
-      MTConcrete a -> do
-        ma <- lookupModule gr a
-        jmsA <- case ma of 
-           ModMod m' -> return $ jments m'
-           _ -> prtBad "expected abstract to be the type of" a
-        liftM ((,) (opens m)) $ mkResDefs gr r a me (extends m) jmsA (jments m)
-      _ -> prtBad "expected concrete to be the type of" c
-    _ -> prtBad "expected concrete to be the type of" c
+    MRInstance c a -> do
+      (ops,jms) <- mkFull False c
+      return $ Module (MTInstance a) MSComplete flags me ops jms
 
-  return $ Module MTResource MSComplete flags me ops jms
+    MRInterface c -> do
+      mc <- lookupModule gr c
 
-mkResDefs :: SourceGrammar -> Ident -> Ident -> Maybe Ident -> Maybe Ident -> 
+      (ops,jms) <- case mc of 
+        ModMod m -> case mtype m of
+          MTAbstract -> liftM ((,) (opens m)) $ 
+                          mkResDefs True False gr r c me (extends m) (jments m) NT
+          _ -> prtBad "expected abstract to be the type of" c
+        _ -> prtBad "expected abstract to be the type of" c
+
+      return $ Module MTInterface MSIncomplete flags me ops jms
+
+ where
+    mkFull hasT c = do
+      mc <- lookupModule gr c
+
+      case mc of 
+        ModMod m -> case mtype m of
+          MTConcrete a -> do
+            ma <- lookupModule gr a
+            jmsA <- case ma of 
+               ModMod m' -> return $ jments m'
+               _ -> prtBad "expected abstract to be the type of" a
+            liftM ((,) (opens m)) $ 
+               mkResDefs hasT True gr r a me (extends m) jmsA (jments m)
+          _ -> prtBad "expected concrete to be the type of" c
+        _ -> prtBad "expected concrete to be the type of" c
+
+
+-- the first  Boolean indicates if the type needs be given
+-- the second Boolean indicates if the definition needs be given
+
+mkResDefs :: Bool -> Bool -> 
+             SourceGrammar -> Ident -> Ident -> Maybe Ident -> Maybe Ident -> 
              BinTree (Ident,Info) -> BinTree (Ident,Info) -> 
              Err (BinTree (Ident,Info))
-mkResDefs gr r a mext maext abs cnc = mapMTree (mkOne a maext) abs where
+mkResDefs hasT isC gr r a mext maext abs cnc = mapMTree (mkOne a maext) abs where
+
+  ifTyped  = yes --- if hasT then yes else const nope --- needed for TC
+  ifCompl  = if isC  then yes else const nope
+  doIf b t = if b then t else return typeType -- latter value not used
 
   mkOne a mae (f,info) = case info of
       AbsCat _ _ -> do
-        typ  <- err (const (return defLinType)) return $ look cnc f
-        typ' <- lockRecType f typ 
-        return (f, ResOper (Yes typeType) (Yes typ'))
+        typ  <- doIf isC $ err (const (return defLinType)) return $ look cnc f
+        typ' <- doIf isC $ lockRecType f typ 
+        return (f, ResOper (ifTyped typeType) (ifCompl typ'))
       AbsFun (Yes typ0) _ -> do
-        trm <- look cnc f
+        trm <- doIf isC $ look cnc f
         testErr (not (isHardType typ0)) 
                 ("cannot build reuse for function" +++ prt f +++ ":" +++ prt typ0)
         typ <- redirTyp True a mae typ0
         cat <- valCat typ
-        trm' <- unlockRecord (snd cat) trm 
-        return (f, ResOper (Yes typ) (Yes trm'))
+        trm' <- doIf isC $ unlockRecord (snd cat) trm 
+        return (f, ResOper (ifTyped typ) (ifCompl trm'))
       AnyInd b n -> do
         mo    <- lookupModMod gr n
         info' <- lookupInfo mo f

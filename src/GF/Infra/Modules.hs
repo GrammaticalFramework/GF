@@ -43,8 +43,12 @@ data ModuleType i =
 
   | MTInterface
   | MTInstance i 
-  | MTReuse i
+  | MTReuse (MReuseType i)
   deriving (Eq,Show)
+
+data MReuseType i = MRInterface i | MRInstance i i | MRResource i
+  deriving (Show,Eq)
+
 
 -- destructive update
 
