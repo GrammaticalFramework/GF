@@ -55,10 +55,13 @@ batchCompileOld f = compileOld defOpts f
 
 compileModule :: Options -> ShellState -> FilePath -> 
                  IOE (GFC.CanonGrammar, (SourceGrammar,[(FilePath,ModTime)]))
-compileModule opts st0 file | oElem showOld opts = do
+
+compileModule opts st0 file | oElem showOld opts || fileSuffix file == "cf" = do
   let putp = putPointE opts
   let path = [] ----
-  grammar1 <- putp ("- parsing old gf" +++ file) $ getOldGrammar opts file
+  grammar1 <- if fileSuffix file == "cf"
+                then putp ("- parsing cf" +++ file) $ getCFGrammar opts file
+                else putp ("- parsing old gf" +++ file) $ getOldGrammar opts file
   let mods = modules grammar1
   let env = compileEnvShSt st0 []
   (_,sgr,cgr) <- foldM (comp putp path) env mods

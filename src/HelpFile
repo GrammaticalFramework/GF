@@ -18,7 +18,7 @@ i, import: i File
         .gfr   precompiled GF resource  
         .gfcm  multilingual canonical GF
        *.ebnf  Extended BNF format
-       *.cf    Context-free (BNF) format
+        .cf    Context-free (BNF) format
   options:
       -old          old: parse in GF<2.0 format
       -v            verbose: give lots of messages 
