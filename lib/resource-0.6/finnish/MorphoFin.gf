@@ -9,7 +9,7 @@
 --
 -- We use the parameter types and word classes defined in $TypesFin.gf$.
 
-resource MorphoFin = TypesFin ** open (Predef = Predef), Prelude in {
+resource MorphoFin = TypesFin ** open Prelude in {
 
 --2 Nouns
 --
@@ -94,6 +94,11 @@ oper
             kukkoja
             (kukkoi + ifi "in" "ihin") ;
 
+  sLukko : Str -> CommonNoun = \lukko -> 
+   let a = getHarmony (last lukko) 
+   in
+   sKukko lukko (weakGrade lukko + "n") (lukko + "n" + a) ;
+
 -- The special case with no alternations: the vowel harmony is inferred from the
 -- last letter - which must be one of "o", "u", "ö", "y".
 
@@ -128,6 +133,17 @@ oper
             (korpi + "en") 
             (korpi + a)
             (korpi + "in") ;
+
+  sArpi : Str -> CommonNoun = \arpi -> 
+    sKorpi arpi (init (weakGrade arpi) + "en") (init arpi + "ena") ;
+  sSylki : Str -> CommonNoun = \sylki -> 
+    sKorpi sylki (init (weakGrade sylki) + "en") (init sylki + "enä") ;
+
+--- This is not quite right.
+
+  sKoira : Str -> CommonNoun = \koira ->
+    let a = getHarmony (last koira) in
+    sKorpi koira (koira + "n") (koira + "n" + a) ;
 
 -- Loan words ending in consonants are actually similar to words like
 -- "malli"/"mallin"/"malleja", with the exception that the "i" is not attached
@@ -397,33 +413,58 @@ oper
 
 -- This auxiliary resolves vowel harmony from a given letter.
 
-getHarmony : Str -> Str = \u -> 
-  ifTok Str u "a" "a" (
-  ifTok Str u "o" "a" (
-  ifTok Str u "u" "a" "ä")) ;
+getHarmony : Str -> Str = \u -> case u of {
+  "a" => "a" ;
+  "o" => "a" ;
+  "u" => "a" ;
+  _   => "ä"
+  } ;
 
 
--- We could use an extension of the following for grade alternation, but we don't;
--- in general, *whether there is* grade alternation must be given in the lexicon
--- anyway (cf. "auto" - "auton", not "audon").
+-- The following function defines how grade alternation works if it is active.
+-- In general, *whether there is* grade alternation must be given in the lexicon
+-- (cf. "auto" - "auton", not "audon").
 
   weakGrade : Str -> Str = \kukko -> 
     let {
+      kukk = init kukko ;
       ku = Predef.tk 3 kukko ;
-      kk = Predef.tk 1 (Predef.dp 3 kukko) ;
-      o  = Predef.dp 1 kukko ;
-      ifkk = ifTok Str kk ;
-      k =
-        ifkk "kk" "k"  (
-        ifkk "pp" "p"  (
-        ifkk "tt" "t"  (
-        ifkk "nt" "nn" (
-        ifkk "mp" "mm" (
-        ifkk "rt" "rr" (
-        ifkk "lt" "ll" (
-        kk)))))))
+      kul = Predef.tk 2 kukko ;
+      kk = init (Predef.dp 3 kukko) ;
+      k  = last kk ;
+      o  = last kukko ;
+      kuk = case kk of {
+        "kk" => ku + "k" ;
+        "pp" => ku + "p" ;
+        "tt" => ku + "t" ;
+        "nt" => ku + "nn" ;
+        "mp" => ku + "mm" ;
+        "rt" => ku + "rr" ;
+        "lt" => ku + "ll" ;
+        "lk" => kul + case o of {
+           "i" => "j" ;
+           _   => ""
+           } ;
+        "rk" => kul + case o of {
+           "i" => "rj" ;
+           _   => ""
+           } ;
+        "hk" => kukk ;  -- *tahko-tahon
+        "sk" => kukk ;  -- *lasku-lasvun
+        "sp" => kukk ;  -- *raspi-rasvin
+        "st" => kukk ;  -- *lastu-lasdun
+        _ => case k of {
+          "k" => case o of {
+            "u" => kul + "v" ;
+            _ => kul 
+            };
+          "p" => kul + "v" ;
+          "t" => kul + "d" ;
+          _ => kukk
+          }
+        }
     } 
-    in ku + k + o ;
+    in kuk + o ;
 
 
 --3 Proper names

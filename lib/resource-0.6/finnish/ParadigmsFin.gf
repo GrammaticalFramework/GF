@@ -19,7 +19,7 @@
 --
 -- The following modules are presupposed:
 
-resource ParadigmsFin = open (Predef=Predef), Prelude, SyntaxFin, ResourceFin in {
+resource ParadigmsFin = open Prelude, SyntaxFin, ResourceFin in {
 
 --2 Parameters 
 --
@@ -65,6 +65,13 @@ oper
 -- which must be one of "o", "u", "ö", "y".
 
   nTalo : (talo : Str) -> Gender -> N ;
+
+-- Another special case are nouns where the last two consonants
+-- undergo regular weak-grade alternation:
+-- "kukko - kukon", "rutto - ruton", "hyppy - hypyn", "sampo - sammon",
+-- "kunto - kunnon", "sisältö - sisällön", .
+
+  nLukko : (lukko : Str) -> Gender -> N ;
 
 -- Foreign words ending in consonants are actually similar to words like
 -- "malli"/"mallin"/"malleja", with the exception that the "i" is not attached
@@ -224,6 +231,7 @@ oper
     mkNoun a b c d e f g h i j ** {g = k ; lock_N = <>} ;
 
   nKukko = \a,b,c,g -> sKukko a b c ** {g = g ; lock_N = <>} ;
+  nLukko = \a,g -> sLukko a ** {g = g ; lock_N = <>} ;
   nTalo = \a,g -> sTalo a ** {g = g ; lock_N = <>} ;
   nLinux = \a,g -> sLinux a ** {g = g ; lock_N = <>} ;
   nPeruna = \a,g -> sPeruna a ** {g = g ; lock_N = <>} ;
