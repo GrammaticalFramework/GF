@@ -347,8 +347,10 @@ q, quit: q
     -parser=earley       Earley algorithm
     -parser=chart        bottom-up chart parser
 
--printer: format in which the grammar is printed. The default is gf.
+-printer: format in which the grammar is printed. The default is gfc.
+    -printer=gfc            GFC grammar
     -printer=gf             GF grammar
+    -printer=old            old GF grammar
     -printer=cf             context-free grammar
    *-printer=happy          source file for Happy parser generator
     -printer=srg            speech recognition grammar

@@ -360,11 +360,13 @@ txtHelpFile =
   "\n    -parser=earley       Earley algorithm" ++
   "\n    -parser=chart        bottom-up chart parser" ++
   "\n" ++
-  "\n-printer: format in which the grammar is printed. The default is gf." ++
+  "\n-printer: format in which the grammar is printed. The default is gfc." ++
+  "\n    -printer=gfc            GFC grammar" ++
   "\n    -printer=gf             GF grammar" ++
+  "\n    -printer=old            old GF grammar" ++
   "\n    -printer=cf             context-free grammar" ++
   "\n   *-printer=happy          source file for Happy parser generator" ++
-  "\n   *-printer=srg            speech recognition grammar" ++
+  "\n    -printer=srg            speech recognition grammar" ++
   "\n   *-printer=haskell        abstract syntax in Haskell, with transl to/from GF" ++
   "\n    -printer=morpho         full-form lexicon, long format" ++
   "\n   *-printer=latex          LaTeX file (for the tg command)" ++

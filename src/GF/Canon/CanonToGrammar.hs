@@ -14,7 +14,12 @@ import Operations
 
 import Monad
 
--- a decompiler. AR 12/6/2003
+-- a decompiler. AR 12/6/2003 -- 19/4/2004
+
+canon2sourceGrammar :: CanonGrammar -> Err G.SourceGrammar
+canon2sourceGrammar gr = do
+  ms' <- mapM canon2sourceModule $ M.modules gr
+  return $ M.MGrammar ms'
 
 canon2sourceModule :: CanonModule -> Err G.SourceModule
 canon2sourceModule (i,mi) = do

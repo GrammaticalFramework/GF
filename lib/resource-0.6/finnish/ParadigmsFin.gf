@@ -60,18 +60,28 @@ oper
 
   nKukko : (kukko,kukon,kukkoja : Str) -> Gender -> N ;
 
+-- For convenience, we define 1-argument paradigms as producing the
+-- nonhuman gender; the following function changes this:
+
+  humanN : N -> N ;
+
 -- A special case are nouns with no alternations: 
 -- the vowel harmony is inferred from the last letter,
 -- which must be one of "o", "u", "ö", "y".
 
-  nTalo : (talo : Str) -> Gender -> N ;
+  nTalo : (talo : Str) -> N ;
 
 -- Another special case are nouns where the last two consonants
 -- undergo regular weak-grade alternation:
 -- "kukko - kukon", "rutto - ruton", "hyppy - hypyn", "sampo - sammon",
 -- "kunto - kunnon", "sisältö - sisällön", .
 
-  nLukko : (lukko : Str) -> Gender -> N ;
+  nLukko : (lukko : Str) -> N ;
+
+-- "arpi - arven", "sappi - sapen", "kampi - kammen";"sylki - syljen"
+
+  nArpi  : (arpi : Str) -> N ;
+  nSylki : (sylki : Str) -> N ;
 
 -- Foreign words ending in consonants are actually similar to words like
 -- "malli"/"mallin"/"malleja", with the exception that the "i" is not attached
@@ -80,18 +90,18 @@ oper
 -- 1-syllabic words ending in "n" would have variant plural genitive and 
 -- partitive forms, like "sultanien"/"sultaneiden", which are not covered.)
 
-  nLinux : (linuxia : Str) -> Gender -> N ;
+  nLinux : (linuxia : Str) -> N ;
 
 -- Nouns of at least 3 syllables ending with "a" or "ä", like "peruna", "tavara",
 -- "rytinä".
 
-  nPeruna : (peruna : Str) -> Gender -> N ;
+  nPeruna : (peruna : Str) -> N ;
 
 -- The following paradigm covers both nouns ending in an aspirated "e", such as
 -- "rae", "perhe", "savuke", and also many ones ending in a consonant
 -- ("rengas", "kätkyt"). The singular nominative and essive are given.
 
-  nRae : (rae, rakeena : Str) -> Gender -> N ;
+  nRae : (rae, rakeena : Str) -> N ;
 
 -- The following covers nouns with partitive "ta"/"tä", such as
 -- "susi", "vesi", "pieni". To get all stems and the vowel harmony, it takes
@@ -102,28 +112,32 @@ oper
 -- Nouns ending with a long vowel, such as "puu", "pää", "pii", "leikkuu",
 -- are inflected according to the following.
 
-  nPuu : (puu : Str) -> Gender -> N ;
+  nPuu : (puu : Str) -> N ;
 
 -- One-syllable diphthong nouns, such as "suo", "tie", "työ", are inflected by
 -- the following.
 
-  nSuo : (suo : Str) -> Gender -> N ;
+  nSuo : (suo : Str) -> N ;
 
 -- Many adjectives but also nouns have the nominative ending "nen" which in other
 -- cases becomes "s": "nainen", "ihminen", "keltainen". 
 -- To capture the vowel harmony, we use the partitive form as the argument.
 
-  nNainen : (naista : Str) -> Gender -> N ;
+  nNainen : (naista : Str) -> N ;
 
 -- The following covers some nouns ending with a consonant, e.g.
 -- "tilaus", "kaulin", "paimen", "laidun".
 
   nTilaus : (tilaus,tilauksena : Str) -> Gender -> N ;
 
+-- Special case:
+
+  nKulaus : (kulaus : Str) -> N ;
+
 -- The following covers nouns like "nauris" and adjectives like "kallis", "tyyris".
 -- The partitive form is taken to get the vowel harmony.
 
-  nNauris : (naurista : Str) -> Gender -> N ;
+  nNauris : (naurista : Str) -> N ;
 
 -- Separately-written compound nouns, like "sambal oelek", "Urho Kekkonen",
 -- have only their last part inflected.
@@ -231,17 +245,24 @@ oper
     mkNoun a b c d e f g h i j ** {g = k ; lock_N = <>} ;
 
   nKukko = \a,b,c,g -> sKukko a b c ** {g = g ; lock_N = <>} ;
-  nLukko = \a,g -> sLukko a ** {g = g ; lock_N = <>} ;
-  nTalo = \a,g -> sTalo a ** {g = g ; lock_N = <>} ;
-  nLinux = \a,g -> sLinux a ** {g = g ; lock_N = <>} ;
-  nPeruna = \a,g -> sPeruna a ** {g = g ; lock_N = <>} ;
-  nRae = \a,b,g -> sRae a b ** {g = g ; lock_N = <>} ;
+
+  humanN = \n -> {s = n.s ; lock_N = n.lock_N ; g = human} ;
+
+  nLukko = \a -> sLukko a ** {g = nonhuman ; lock_N = <>} ;
+  nTalo = \a -> sTalo a ** {g = nonhuman ; lock_N = <>} ;
+  nArpi = \a -> sArpi a ** {g = nonhuman ; lock_N = <>} ;
+  nSylki = \a -> sSylki a ** {g = nonhuman ; lock_N = <>} ;
+  nLinux = \a -> sLinux a ** {g = nonhuman ; lock_N = <>} ;
+  nPeruna = \a -> sPeruna a ** {g = nonhuman ; lock_N = <>} ;
+  nRae = \a,b -> sRae a b ** {g = nonhuman ; lock_N = <>} ;
   nSusi = \a,b,c,g -> sSusi a b c ** {g = g ; lock_N = <>} ;
-  nPuu = \a,g -> sPuu a ** {g = g ; lock_N = <>} ;
-  nSuo = \a,g -> sSuo a ** {g = g ; lock_N = <>} ;
-  nNainen = \a,g -> sNainen a ** {g = g ; lock_N = <>} ;
+  nPuu = \a -> sPuu a ** {g = nonhuman ; lock_N = <>} ;
+  nSuo = \a -> sSuo a ** {g = nonhuman ; lock_N = <>} ;
+  nNainen = \a -> sNainen a ** {g = nonhuman ; lock_N = <>} ;
   nTilaus = \a,b,g -> sTilaus a b ** {g = g ; lock_N = <>} ;
-  nNauris = \a,g -> sNauris a ** {g = g ; lock_N = <>} ;
+  nKulaus = \a -> nTilaus a (init a + "ksen" + getHarmony (last
+  (init a))) nonhuman ;
+  nNauris = \a -> sNauris a ** {g = nonhuman ; lock_N = <>} ;
 
 
   nComp = \s,n -> {s = \\c => s ++ n.s ! c ; g = n.g ; lock_N = <>} ;

@@ -210,9 +210,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
     | oElem showAll opts  -> returnArg   (AString txtHelpFile) sa
     | otherwise           -> returnArg   (AString txtHelpFileSummary) sa
 
-  CPrintGrammar
-    | oElem showOld opts -> returnArg (AString $ printGrammarOld (canModules st)) sa
-    | otherwise -> returnArg (AString (optPrintGrammar opts gro)) sa
+  CPrintGrammar -> returnArg (AString (optPrintGrammar opts gro)) sa
   CPrintGlobalOptions -> justOutput (putStrLn $ prShellStateInfo st) sa
   CPrintInformation c -> justOutput (useIOE () $ showInformation opts st c) sa
   CPrintLanguages     -> justOutput 
