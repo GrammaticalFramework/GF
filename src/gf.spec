@@ -52,7 +52,7 @@ cd src
 make unix
 
 %install
-rm -rf $RPM_BUILD_ROOT
+%makeinstall
 
 %clean
 rm -rf $RPM_BUILD_ROOT
