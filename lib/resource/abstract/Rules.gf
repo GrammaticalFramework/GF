@@ -91,7 +91,6 @@ fun
   AdvPP  : PP -> Adv ;                 -- "in London", "after the war"
   PrepNP : Prep -> NP -> PP ;          -- "in London", "after the war"
 
----  AdvVP  : VP -> Adv -> VP ;           -- "always walks", "walks in the park" 
   AdvVP  : VP -> Adv -> VP ;           -- "always walks", "walks in the park" 
   AdvCN  : CN -> PP -> CN ;            -- "house in London"
   AdvAP  : AdA -> AP -> AP ;           -- "very good"
@@ -111,8 +110,7 @@ fun
 
   IdRP     : RP ;                              -- "which"
   FunRP    : N2 -> RP -> RP ;                  -- "the successor of which"
----  RelVP    : RP -> VP -> RCl ;                  -- "who walks", "who doesn't walk"
-  RelVP    : RP -> VP -> RCl ;                -- "who walks", "who doesn't walk"
+  RelVP    : RP -> VP -> RCl ;                  -- "who walks", "who doesn't walk"
   RelSlash : RP -> Slash -> RCl ;               -- "that I wait for"/"for which I wait" 
 ---  ModRC    : CN -> RS -> CN ;                   -- "man who walks"
   ModRS    : CN -> RS -> CN ;                   -- "man who walks"

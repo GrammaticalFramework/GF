@@ -48,8 +48,8 @@ lincat
 
   V      = Verb ; 
       -- = {s : VForm => Str ; s1 : Particle}
-  VG     = {s,s2 : Bool => VPForm => Str ; s3 : Number => Str ; isAux : Bool} ;
-  VP     = {s,s2 :         VPForm => Str ; s3 : Number => Str ; isAux : Bool} ;
+  VP     = {s,s2 : Bool => SForm => Str ; s3 : Number => Str ; isAux : Bool} ;
+  VPI    = {s,s2 :                  Str ; s3 : Number => Str ; isAux : Bool} ;
   V2     = TransVerb ; 
       -- = Verb ** {s3 : Preposition} ;
   V3     = TransVerb ** {s4 : Preposition} ;
@@ -61,12 +61,14 @@ lincat
   S      = {s : Str} ; 
   Cl     = Clause ;
       -- = {s : Bool => SForm => Str} ;
-  Slash  = {s : Order => Str ; s2 : Preposition} ;
+  Slash  = Clause ** {s2 : Preposition} ;
   RP     = {s : Gender => Number => NPForm => Str} ;
-  RC     = {s : Gender => Number => Str} ;
+  RCl    = {s : Bool => SForm => Gender => Number => Str} ;
+  RS     = {s :                  Gender => Number => Str} ;
 
   IP     = {s : NPForm => Str ; n : Number} ;
-  Qu     = {s : QuestForm => Str} ;
+  QCl    = {s : Bool => SForm => QuestForm => Str} ;
+  QS     = {s :                  QuestForm => Str} ;
   Imp    = {s : Number => Str} ;
   Phr    = {s : Str} ;
   Text   = {s : Str} ;

@@ -306,7 +306,7 @@ oper
   Tense = Present | Past ;
   Anteriority = Simul | Anter ;
   Order = Direct | Indirect ;
-  VPForm = 
+  SForm = 
      VIndic   Tense Anteriority Number Person
    | VFut     Anteriority
    | VCondit  Anteriority
@@ -320,7 +320,7 @@ oper
 
   oper
 
-  verbVPForm : Verb -> VPForm -> {fin,inf : Str} = \goes,sf -> 
+  verbSForm : Verb -> SForm -> {fin,inf : Str} = \goes,sf -> 
      let
        tense : Tense -> Number -> Person -> VForm = \t,n,p -> case <t,n,p> of {
          <Present,Sg,_> => Indic p ;
@@ -363,10 +363,10 @@ oper
 
   useVerb : Verb -> (Number => Str) -> VerbGroup = \verb,arg -> 
     let 
-      go = verbVPForm verb ;
+      go = verbSForm verb ;
       off = verb.s1 ;
-      has  : VPForm => Str = \\f => (go f).fin ; 
-      gone : VPForm => Str = \\f => (go f).inf ++ off 
+      has  : SForm => Str = \\f => (go f).fin ; 
+      gone : SForm => Str = \\f => (go f).inf ++ off 
     in {
       s  = table {
              True => has ;
@@ -392,9 +392,9 @@ oper
 
   useVerbAux : Verb -> (Number => Str) -> VerbGroup = \verb,arg -> 
     let 
-      go = verbVPForm verb ;
-      has  : VPForm => Str = \\f => (go f).fin ; 
-      gone : VPForm => Str = \\f => (go f).inf 
+      go = verbSForm verb ;
+      has  : SForm => Str = \\f => (go f).fin ; 
+      gone : SForm => Str = \\f => (go f).inf 
     in {
       s  = \\b => 
            table {
@@ -428,15 +428,15 @@ oper
 -- this is needed in question.
 
   VerbGroup = {
-    s  : Bool => VPForm => Str ;
-    s2 : Bool => VPForm => Str ; 
+    s  : Bool => SForm => Str ;
+    s2 : Bool => SForm => Str ; 
     s3 : Number => Str ;
     isAux : Bool
     } ;
 
   VerbPhrase = {
-    s  : VPForm => Str ;
-    s2 : VPForm => Str ; 
+    s  : Str ;
+    s2 : Str ; 
     s3 : Number => Str ;
     isAux : Bool ;
     } ;
@@ -630,7 +630,7 @@ oper
     ;
 
   oper 
-  cl2s : ClForm -> Number -> Person -> {form : VPForm ; order : Order}  = \c,n,p -> case c of {
+  cl2s : ClForm -> Number -> Person -> {form : SForm ; order : Order}  = \c,n,p -> case c of {
     ClIndic Indirect t Simul => {form = VQuest t n p ; order = Indirect} ;
     ClIndic o t a => {form = VIndic t a n p ; order = o} ;
     ClFut o a     => {form = VFut a ; order = o} ;
@@ -785,7 +785,8 @@ oper
 -- Relative clauses can be formed from both verb phrases ("who walks") and
 -- slash expressions ("whom you see", "on which you sit" / "that you sit on"). 
 
-  RelClause : Type = {s : Gender => Number => Str} ;
+  RelClause   : Type = {s : Bool => SForm => Gender => Number => Str} ;
+  RelSentence : Type = {s :                  Gender => Number => Str} ;
 
   relVerbPhrase : RelPron -> VerbPhrase -> RelClause = \who,walks ->
     {s = \\g,n => (predVerbPhrase (relNounPhrase who g n) walks).s} ;
@@ -885,7 +886,8 @@ param
   QuestForm = DirQ | IndirQ ;
 
 oper
-  Question = SS1 QuestForm ;
+  Question     = {s : Bool => SForm => QuestForm => Str} ;
+  QuestionSent = {s :                  QuestForm => Str} ;
 
 --- TODO: questions in all tenses.
 
