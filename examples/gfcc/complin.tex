@@ -1,6 +1,7 @@
 \documentclass[12pt]{article}
 
 \usepackage{isolatin1}
+\input{psfig.sty}
 
 \setlength{\oddsidemargin}{0mm}
 %\setlength{\evensidemargin}{0mm}
@@ -736,10 +737,17 @@ the indexes.
 
 The theoretical ideas behind our compiler experiment
 are familiar from various sources.
+Single-source language and compiler definitions
+can be built using attribute grammars \cite{knuth-attr}.
 Building single-source language definitions with
 dependent types and higher-order abstract syntax
 has been studied in various logical frameworks 
 \cite{harper-honsell,magnusson-nordstr,twelf}.
+The addition of linearization rules to
+type-theoretical abstract syntax is studied in
+\cite{semBNF}, which also compares the method with
+attribute grammars.
+
 The idea of using a common abstract syntax for different 
 languages was clearly exposed by Landin \cite{landin}. The view of
 code generation as linearization is a central aspect of
@@ -1118,6 +1126,18 @@ mkJVM = unlines . reverse . fst . foldl trans ([],([],0)) . lines where
 \normalsize
 \newpage
 
+Show Fig~\ref{demo}
+
+\begin{figure}
+\centerline{\psfig{figure=demo2.ps}} \caption{
+GF editor session where an integer
+expression is to be given. The left window shows the
+abstract syntax tree, and the right window the evolving C and
+JVM core. The focus is shadowed, and the possible refinements
+are shown in a pop-up window.
+}
+\label{demo}
+\end{figure}
 
 
 \end{document}
