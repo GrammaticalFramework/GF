@@ -50,19 +50,10 @@ oper
   npGenPossNum = \nu,ton,mec ->
     \\c => prepCase c ++ ton.s ! Poss Pl mec.g ++ nu.s ! mec.g ++ mec.s ! Pl ;
 
----- We miss "il y en a"
-
   existNounPhrase = \unemaison -> 
-    predVerbGroupClause
-      pronImpers
-      (predClauseGroup 
-        verbAvoir
-        (complTransVerbGen 
-          (mkTransVerbCas verbAvoir dative)
-          pronY
-          (\\_,_,_ => unemaison.s ! Ton Acc)
-        )
-      ) ;
+    sats2clause (
+      insertObject (mkSatsObject pronImpers (mkTransVerbCas verbAvoir dative) pronY) 
+        accusative [] unemaison) ;
 
   reflPron : Number => Person => NPFormA => Str = \\n,p => 
     case p of {

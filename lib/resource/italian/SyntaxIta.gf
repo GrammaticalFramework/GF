@@ -39,6 +39,8 @@ oper
 
   npGenPossNum = \nu,ton,mec ->
     \\c => artDef mec.g Pl c ++ ton.s ! Poss Pl mec.g ++ nu.s ! mec.g ++ mec.s ! Pl ; 
+
+  existNounPhrase = variants {} ; ----
 {- ----
   existNounPhrase = \delvino -> {
     s = \\m => 
