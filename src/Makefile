@@ -1,10 +1,9 @@
 include config.mk
 
 
-GHMAKE=ghc
-GHCI=ghci 
+GHMAKE=$(GHC) --make
 GHCFLAGS=-package lang -package util -fglasgow-exts
-GHCOPTFLAGS=-O -package lang -package util -fglasgow-exts
+GHCOPTFLAGS=-O $(GHCFLAGS)
 GHCFUDFLAG=-package Fudgets
 
 HUGSINCLUDE    =.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:newparsing:trace:
@@ -14,38 +13,58 @@ GHCINCLUDENOFUD=-ifor-ghc-nofud $(BASICINCLUDE)
 GHCINCLUDEGFT  =-ifor-gft       $(BASICINCLUDE) 
 WINDOWSINCLUDE =-ifor-windows   $(BASICINCLUDE) 
 
-all:
-	make today ; make ghc
-unix:
-	make nofud-links ; make opt
-windows:
-	make nofud-links ; make justwindows
-install-java:
-	make javac ; cd ../bin ; ln -s ../src/java ; echo "PLEASE edit GFHOME in bin/jgf2"
-opt:
-	$(GHMAKE) $(GHCOPTFLAGS) $(GHCINCLUDENOFUD) --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
+all: unix
 
-ghc: 
-	make nofud
-ghci:
-	make nofud-links ; make ghci-nofud
+unix: today nofud-links opt
+
+windows: today nofud-links justwindows
+
+install-java: javac
+	-rm -f ../bin/java
+	ln -s ../src/java ../bin
+	@echo "PLEASE edit GFHOME in bin/jgf2"
+opt:
+	$(GHMAKE) $(GHCOPTFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf2
+	strip gf2
+	mv gf2 ../bin/
+
+ghc: nofud
+
+ghci: nofud-links ghci-nofud
+
 fud:
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) --make GF.hs -o gf2+ ; strip gf2+ ; mv gf2+ ../bin/
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) GF.hs -o gf2+
+	strip gf2+
+	mv gf2+ ../bin/
+
 gft:
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) -itranslate --make translate/GFT.hs -o gft ; strip gft ; mv gft ../bin/
-nofud:
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) -itranslate translate/GFT.hs -o gft
+	strip gft
+	mv gft ../bin/
+
+nofud: nofud-links
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf2
+	strip gf2
+	mv gf2 ../bin/
+
 justwindows:
-	$(GHMAKE) $(GHCOPTFLAGS) $(WINDOWSINCLUDE) --make GF.hs -o gf2.exe ; strip gf2.exe ; mv gf2.exe ../bin/
+	$(GHMAKE) $(GHCOPTFLAGS) $(WINDOWSINCLUDE) GF.hs -o gf2.exe
+	strip gf2.exe
+	mv gf2.exe ../bin/
+
 nofud-links:
-	cd for-ghc-nofud ; rm -f *.hs ; ln -s ../for-ghc/Arch.hs ; ln -s ../for-hugs/ArchEdit.hs ; cd ..
+	rm -f for-ghc-nofud/*.hs
+	ln -s ../for-ghc/Arch.hs for-ghc-nofud
+	ln -s ../for-hugs/ArchEdit.hs for-ghc-nofud
 
 batch: 
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) --make GF2.hs -o gf2 ; strip gf2
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) GF2.hs -o gf2
+	strip gf2
+
 api: 
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) --make API.hs
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) API.hs
 shell: 
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) --make Shell.hs
+	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) Shell.hs
 clean: 
 	-rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
 hugs:
@@ -55,15 +74,18 @@ ghci-nofud:
 today:
 	util/mktoday.sh
 javac:
-	cd java ; javac *.java ; cd ..
+	javac java/*.java
 help:
 	cd util ; runhugs MkHelpFile ; mv HelpFile.hs .. ; cd ..
 
 # added by peb:
 tracing:
-	$(GHMAKE) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD) --make GF.hs -o gf2 ; strip gf2 ; mv gf2 ../bin/
+	$(GHMAKE) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD) GF.hs -o gf2
+	strip gf2
+	mv gf2 ../bin/
 
 distclean: clean
+	-rm -f for-ghc-nofud/*.hs
 	-rm -f config.status config.mk config.log
 
 install:
