@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/29 13:26:37 $ 
+-- > CVS $Date: 2005/03/31 15:47:43 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.49 $
+-- > CVS $Revision: 1.50 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -376,6 +376,8 @@ customUntokenizer =
   [
    (strCI "unwords",   const $ id)   -- DEFAULT
   ,(strCI "text",      const $ formatAsText)
+  ,(strCI "html",      const $ formatAsHTML)
+  ,(strCI "latex",     const $ formatAsLatex)
   ,(strCI "code",      const $ formatAsCode)
   ,(strCI "concat",    const $ filter (not . isSpace))
   ,(strCI "textlit",   const $ formatAsTextLit)

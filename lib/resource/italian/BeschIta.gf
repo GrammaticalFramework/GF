@@ -6148,7 +6148,69 @@ oper finire_100 : Str -> Verbo = \finire ->
   } ;
 
 ---- apparire_101
----- aprire_102
+
+oper aprire_102 : Str -> Verbo = \aprire -> 
+  let ap_ = Predef.tk 4 aprire in
+ {s = table {
+    Inf => ap_ + "rire" ;
+    InfClit => ap_ + "rir" ;
+    Indi Pres Sg P1 => ap_ + "ro" ;
+    Indi Pres Sg P2 => ap_ + "ri" ;
+    Indi Pres Sg P3 => ap_ + "re" ;
+    Indi Pres Pl P1 => ap_ + "riamo" ;
+    Indi Pres Pl P2 => ap_ + "rite" ;
+    Indi Pres Pl P3 => ap_ + "rono" ;
+    Indi Imperf Sg P1 => ap_ + "rivo" ;
+    Indi Imperf Sg P2 => ap_ + "rivi" ;
+    Indi Imperf Sg P3 => ap_ + "riva" ;
+    Indi Imperf Pl P1 => ap_ + "rivamo" ;
+    Indi Imperf Pl P2 => ap_ + "rivate" ;
+    Indi Imperf Pl P3 => ap_ + "rivano" ;
+    Pass Sg P1 => variants {ap_ + "rii" ; ap_ + "ersi"} ;
+    Pass Sg P2 => ap_ + "risti" ;
+    Pass Sg P3 => variants {ap_ + "rì" ; ap_ + "erse"} ;
+    Pass Pl P1 => ap_ + "rimmo" ;
+    Pass Pl P2 => ap_ + "riste" ;
+    Pass Pl P3 => variants {ap_ + "rirono" ; ap_ + "ersero"} ;
+    Fut Sg P1 => ap_ + "rirò" ;
+    Fut Sg P2 => ap_ + "rirai" ;
+    Fut Sg P3 => ap_ + "rirà" ;
+    Fut Pl P1 => ap_ + "riremo" ;
+    Fut Pl P2 => ap_ + "rirete" ;
+    Fut Pl P3 => ap_ + "riranno" ;
+    Cong Pres Sg P1 => ap_ + "ra" ;
+    Cong Pres Sg P2 => ap_ + "ra" ;
+    Cong Pres Sg P3 => ap_ + "ra" ;
+    Cong Pres Pl P1 => ap_ + "riamo" ;
+    Cong Pres Pl P2 => ap_ + "riate" ;
+    Cong Pres Pl P3 => ap_ + "rano" ;
+    Cong Imperf Sg P1 => ap_ + "rissi" ;
+    Cong Imperf Sg P2 => ap_ + "rissi" ;
+    Cong Imperf Sg P3 => ap_ + "risse" ;
+    Cong Imperf Pl P1 => ap_ + "rissimo" ;
+    Cong Imperf Pl P2 => ap_ + "riste" ;
+    Cong Imperf Pl P3 => ap_ + "rissero" ;
+    Cond Sg P1 => ap_ + "rirei" ;
+    Cond Sg P2 => ap_ + "riresti" ;
+    Cond Sg P3 => ap_ + "rirebbe" ;
+    Cond Pl P1 => ap_ + "riremmo" ;
+    Cond Pl P2 => ap_ + "rireste" ;
+    Cond Pl P3 => ap_ + "rirebbero" ;
+    Imper SgP2 => ap_ + "ri" ;
+    Imper PlP1 => ap_ + "riamo" ;
+    Imper PlP2 => ap_ + "rite" ;
+    Ger => ap_ + "rendo" ;
+    Part PresP Masc Sg => ap_ + "rendo" ;
+    Part PresP Masc Pl => ap_ + "rendo" ;
+    Part PresP Fem Sg => ap_ + "rendo" ;
+    Part PresP Fem Pl => ap_ + "rendo" ;
+    Part PassP Masc Sg => ap_ + "erto" ;
+    Part PassP Masc Pl => ap_ + "erti" ;
+    Part PassP Fem Sg => ap_ + "erta" ;
+    Part PassP Fem Pl => ap_ + "erte"
+    }
+  } ;
+
 
 oper fuggire_104 : Str -> Verbo = \fuggire -> 
   let fugg_ = Predef.tk 3 fuggire in
@@ -6212,7 +6274,72 @@ oper fuggire_104 : Str -> Verbo = \fuggire ->
     }
   } ;
 
+oper morire_105 : Str -> Verbo = \morire -> 
+  let mor_ = Predef.tk 3 morire ;
+      m_   = Predef.tk 5 morire 
+  in
+ {s = table {
+    Inf => mor_ + "ire" ;
+    InfClit => mor_ + "ir" ;
+    Indi Pres Sg P1 => m_ + "uoio" ;
+    Indi Pres Sg P2 => m_ + "uori" ;
+    Indi Pres Sg P3 => m_ + "uore" ;
+    Indi Pres Pl P1 => mor_ + "iamo" ;
+    Indi Pres Pl P2 => mor_ + "ite" ;
+    Indi Pres Pl P3 => m_ + "uoiono" ;
+    Indi Imperf Sg P1 => mor_ + "ivo" ;
+    Indi Imperf Sg P2 => mor_ + "ivi" ;
+    Indi Imperf Sg P3 => mor_ + "iva" ;
+    Indi Imperf Pl P1 => mor_ + "ivamo" ;
+    Indi Imperf Pl P2 => mor_ + "ivate" ;
+    Indi Imperf Pl P3 => mor_ + "ivano" ;
+    Pass Sg P1 => mor_ + "ii" ;
+    Pass Sg P2 => mor_ + "isti" ;
+    Pass Sg P3 => mor_ + "ì" ;
+    Pass Pl P1 => mor_ + "immo" ;
+    Pass Pl P2 => mor_ + "iste" ;
+    Pass Pl P3 => mor_ + "irono" ;
+    Fut Sg P1 => mor_ + "irò" ;  ---- also morrò etc
+    Fut Sg P2 => mor_ + "irai" ;
+    Fut Sg P3 => mor_ + "irà" ;
+    Fut Pl P1 => mor_ + "iremo" ;
+    Fut Pl P2 => mor_ + "irete" ;
+    Fut Pl P3 => mor_ + "iranno" ;
+    Cong Pres Sg P1 => m_ + "uoia" ;
+    Cong Pres Sg P2 => m_ + "uoia" ;
+    Cong Pres Sg P3 => m_ + "uoia" ;
+    Cong Pres Pl P1 => mor_ + "iamo" ;
+    Cong Pres Pl P2 => mor_ + "iate" ;
+    Cong Pres Pl P3 => m_ + "uoiano" ;
+    Cong Imperf Sg P1 => mor_ + "issi" ;
+    Cong Imperf Sg P2 => mor_ + "issi" ;
+    Cong Imperf Sg P3 => mor_ + "isse" ;
+    Cong Imperf Pl P1 => mor_ + "issimo" ;
+    Cong Imperf Pl P2 => mor_ + "iste" ;
+    Cong Imperf Pl P3 => mor_ + "issero" ;
+    Cond Sg P1 => mor_ + "irei" ;
+    Cond Sg P2 => mor_ + "iresti" ;
+    Cond Sg P3 => mor_ + "irebbe" ;
+    Cond Pl P1 => mor_ + "iremmo" ;
+    Cond Pl P2 => mor_ + "ireste" ;
+    Cond Pl P3 => mor_ + "irebbero" ;
+    Imper SgP2 => m_ + "uori" ;
+    Imper PlP1 => mor_ + "iamo" ;
+    Imper PlP2 => mor_ + "ite" ;
+    Ger => mor_ + "endo" ;
+    Part PresP Masc Sg => mor_ + "ente" ;
+    Part PresP Masc Pl => mor_ + "enti" ;
+    Part PresP Fem Sg => mor_ + "ente" ;
+    Part PresP Fem Pl => mor_ + "enti" ;
+    Part PassP Masc Sg => mor_ + "to" ;
+    Part PassP Masc Pl => mor_ + "ti" ;
+    Part PassP Fem Sg => mor_ + "ta" ;
+    Part PassP Fem Pl => mor_ + "te"
+    }
+  } ;
+
 ---- morire_105
+
 ---- salire_106
 ---- seguire_107
 ---- udire_108

@@ -194,10 +194,6 @@ oper
 
 --2 Verbs
 --
--- Irregular verbs are given in the module $VerbsFre$. 
--- If a verb should be missing in that list, the module
--- $BeschFre$ gives all the patterns of the "Bescherelle" book.
--- 
 -- Regular verbs are ones with the infinitive "er" or "ir", the
 -- latter with plural present indicative forms as "finissons".
 -- The regular verb function is the first conjugation recognizes
@@ -206,10 +202,16 @@ oper
 
   regV : Str -> V ;
 
+-- The module $BeschIta$ gives all the patterns of the "Bescherelle"
+-- book. To use them in the category $V$, wrap them with the function
+
+  verboV : Verbo -> V ;
+
 -- The function $regV$ gives all verbs the compound auxiliary "avoir".
 -- To change it to "être", use the following function.
 
   essereV : V -> V ;
+
 
 --3 Two-place verbs
 --
@@ -328,6 +330,8 @@ oper
           }
         }
     in verbPres verb AHabere ** {aux = AHabere ; lock_V = <>} ;
+
+  verboV ve = verbPres ve AHabere ** {lock_V = <>} ;
 
   essereV v = {s = v.s ; aux = AEsse ; lock_V = <>} ;
 

@@ -100,8 +100,8 @@ lin
 --
 
   SlashV2  = slashTransVerb ;
-----  SlashVV2 = slashVerbVerb ;
-----  SlashAdv = slashAdverb ;
+  SlashVV2 = slashVerbVerb ;
+  SlashAdv = slashAdverb ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -113,15 +113,19 @@ lin
 --3 Questions and imperatives
 --
 
-----  IDetCN d n = detNounPhrase d n ;
+  IDetCN d n = let np = detNounPhrase d n in {
+    s = \\c => np.s ! case2pform c ;
+    g = pgen2gen np.g ;
+    n = np.n
+    };
   FunIP = funIntPron ;
 
   QuestCl = questClause ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
 
-----  PosImpVP = imperVerbPhrase True ;
-----  NegImpVP = imperVerbPhrase False ;
+  PosImpVP = imperVerbPhrase True ;
+  NegImpVP = imperVerbPhrase False ;
 
   IndicPhrase = indicUtt ;
   QuestPhrase = interrogUtt ;
@@ -164,7 +168,7 @@ lin
   PhrManyCN = useCommonNounPhrase plural ;
   PhrIP ip = postfixSS "?" ip ;
   PhrIAdv ia = postfixSS "?" ia ;
-----  PhrVPI = verbUtterance ;
+  PhrVPI = verbUtterance ;
 
   OnePhr p = p ;
   ConsPhr = cc2 ;

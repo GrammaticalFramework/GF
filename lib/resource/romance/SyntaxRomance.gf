@@ -943,22 +943,24 @@ oper
 
   ClauseSlashNounPhrase = Clause ** Complement ;
 
-  slashTransVerb : NounPhrase -> TransVerb -> ClauseSlashNounPhrase = 
-    \jean,aimer -> variants {} ; ----
-{- ----
-    predVerbGroupClause jean (predClauseGroup aimer (complVerb aimer)) **
-    complementOfTransVerb aimer ;
+  dummyNounPhrase : NounPhrase = mkNameNounPhrase [] Masc ;
+
+  slashTransVerb : NounPhrase -> TransVerb -> ClauseSlashNounPhrase = \np,v -> 
+    sats2clause (mkSatsObject np v dummyNounPhrase) ** 
+    complementOfTransVerb v ;
+
 
   slashVerbVerb : NounPhrase -> VerbVerb -> TransVerb -> ClauseSlashNounPhrase = 
-    \jean,vouloir,aimer ->
-    predVerbGroupClause jean 
-      (predClauseGroup aimer (complVerbVerb vouloir 
-         (predVerbGroup True {s = [] ; a = Simul} (predClauseGroup aimer (complVerb aimer))))) **
-    complementOfTransVerb aimer ;
+    \subj, verb, tv -> 
+   sats2clause (
+     insertExtrapos 
+       (mkSats subj verb) 
+       (\\_ =>  prepCase verb.c ++ tv.s ! VInfin)
+     ) ** complementOfTransVerb tv ;
 
   slashAdverb : Clause -> {s : Str ; c : CaseA} -> ClauseSlashNounPhrase = 
     \ilhabite,dans -> ilhabite ** {s2 = dans.s ; c = dans.c} ;
--}
+
 
 --2 Relative pronouns and relative clauses
 --
@@ -1165,11 +1167,10 @@ oper
 
   Imperative = {s : Gender => Number => Str} ;
 
-{- -----
-  imperVerbPhrase : VerbPhrase -> Imperative = \dormir -> 
-    {s = \\g,n => dormir.s ! g ! VPF Simul (vImper n P2)
+  imperVerbPhrase : Bool -> VerbPhrase -> Imperative = \b,dormir -> 
+    {s = \\g,n => dormir.s ! VIImperat b n ! g ! n ! P2
     } ;
--}
+
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
     ss (I.s ! Masc ! n ++ "!") ;
 
@@ -1396,6 +1397,9 @@ oper
     postfixSS "." (defaultNounPhrase jean) ;
   useCommonNounPhrase : Number -> CommNounPhrase -> Utterance = \n,mec -> 
     useNounPhrase (indefNounPhrase n mec) ;
+
+  verbUtterance : VerbPhrase -> Utterance = \vp ->
+    ss (vp.s ! VIInfinit ! Masc !  Sg ! P3) ; 
 
 
 -- one-form variants

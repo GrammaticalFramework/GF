@@ -322,7 +322,7 @@ oper
 
 --2 Verbs
 --
---3 The Bescherell conjugations.
+--3 The Bescherelle conjugations.
 --
 -- The following conjugations tables were generated using FM software
 -- from a Haskell source.
