@@ -155,10 +155,18 @@ oper
 
 param 
   VF =
-     VFin   Mode Number Person 
+     VInfin
+   | VFin   TMode Number Person 
    | VImper NumPersI 
    | VPart  Gender Number 
-   | VInfin
+   ;
+
+  TMode = 
+     VPres   Mode
+   | VImperf Mode
+   | VPasse
+   | VFut
+   | VCondit
    ;
 
   NumPersI  = SgP2 | PlP1 | PlP2 ;
@@ -171,6 +179,7 @@ oper
     _ => singular ---
     } ;
 
+  presInd = VPres Ind ;
 -- The imperative forms depend on number and person.
 
   vImper : Number -> Person -> VF = \n,p -> case <n,p> of {
@@ -182,7 +191,10 @@ oper
 
   Verbum : Type ;
 
-  VerbPres : Type = {s : VF => Str} ;
+  Verb : Type = {s : VF => Str ; aux : VAux} ;
 
-  verbPres : Verbum -> VerbPres ;
+  verbPres : Verbum -> VAux -> Verb ;
+
+param VAux = AEsse | AHabere ;
+
 }

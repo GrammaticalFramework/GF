@@ -105,7 +105,7 @@ oper
 
 -- Exampe: 'to be or not to be'.
 
-  etreNetre : Bool -> VerbPres = \b -> 
+  etreNetre : Bool -> Verb = \b -> 
     {s = \\w => posNeg b (verbEtre.s ! w) []} ; ---- v reveals a BUG in refresh 
 
   embedConj = elisQue ;
@@ -175,8 +175,8 @@ oper
   intVerbPhrase = \qui, dort ->
     {s = table {
       DirQ => qui.s ! Nom ++ optStr (estCeQue Nom) ++ 
-              dort.s ! qui.g ! VFin Ind qui.n P3 ;
-      IndirQ => "ce" ++ qui.s ! Nom ++ dort.s ! qui.g ! VFin Ind qui.n P3
+              dort.s ! qui.g ! VFin presInd qui.n P3 ;
+      IndirQ => "ce" ++ qui.s ! Nom ++ dort.s ! qui.g ! VFin presInd qui.n P3
       }
     } ;
 
