@@ -291,6 +291,70 @@ oper
 --
 --3 Verb phrases
 --
+-- The syntactic verb phrase form type, which includes compound tenses,
+-- is defined as follows.
+
+  param
+
+  Anteriority = Simul | Anter ;
+
+  Tense = Pres | Pas | Fut ;
+
+  VerbForm = 
+     VInd  Tense Anteriority Number Person
+   | VCond Anteriority
+   | VInf  Anteriority
+   | VImp ;
+
+-- This is how the syntactic verb phrase forms are realized as
+-- inflectional forms of verbs.
+
+  oper
+
+{-
+  VGrp : Type = {s,s2 : Str ; isAux : Bool}
+
+  inflVerb : 
+      VerbP3 -> Bool -> VerbForm -> VGrp =
+        \verb,b,v -> let
+           simple : Bool -> Str -> VGrp = \s -> {s = s ; s2 = [] ; isAux = False} ;
+             s = if_then_Str b
+              (walk.s ! v ++ walk.s1)
+              (contractNot (verbP3Do.s ! v)) ;
+
+s ; s2 = [] ; isAux = False} ;
+
+         in case v of {
+           VInd Pres Simul n p => simple b (indicVerb verb p n) ;
+           VInd Pas  Simul n p => simple b (verb.s ! Past n) ;
+           VInd Fut  Simul n p => compos (will b) infin ;
+           VInd t    Anter n p => compos (have b t) pastp ;
+           VCond a             => compos (would b)  infin ;
+
+
+
+  indicVerb : VerbP3 -> Person -> Number -> Str = \v,p,n -> case n of {
+    Sg => v.s ! Indic p ;
+    Pl => v.s ! Indic P2
+    } ;
+     predVerb : Verb -> VerbGroup = \walk ->
+      {s = \\b,v => if_then_Str b
+              (walk.s ! v ++ walk.s1)
+              (contractNot (verbP3Do.s ! v)) ;
+       s2 = \\b,_ => if_then_Str b
+              []
+              (walk.s ! InfImp ++ walk.s1) ;
+       isAuxT = False ;
+       isAuxF = True
+      } ;
+  VerbGrp = {
+    s  : Bool => VerbForm => Str ;
+    s2 : Bool => Number => Str ; 
+    isAuxT : Bool ;
+    isAuxF : Bool
+    } ;
+-}
+
 -- Verb phrases are discontinuous: the two parts of a verb phrase are
 -- (s) an inflected verb, (s2) infinitive and complement.
 -- For instance: "doesn't" - "walk" ; "isn't" - "old" ; "is" - "a man"
