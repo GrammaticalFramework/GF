@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../../prelude
+
 --1 English Lexical Paradigms
 --
 -- Aarne Ranta 2003

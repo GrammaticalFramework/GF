@@ -69,9 +69,9 @@ oper
 
   conjunctDistrTable2 : 
     (P,Q : Type) -> ConjunctionDistr -> ListTable2 P Q -> {s : P => Q => Str} = 
-    \_,_,or,xs ->
+    \P,Q,or,xs ->
     {s = 
-    table {p => table {q => or.s1++ xs.s1 ! p ! q ++ or.s2 ++ xs.s2 ! p ! q}}} ;
+    table P {p => table Q {q => or.s1++ xs.s1 ! p ! q ++ or.s2 ++ xs.s2 ! p ! q}}} ;
 
   ListTable3 : Type -> Type -> Type -> Type = \P,Q,R -> 
     {s1,s2 : P => Q => R => Str} ; 
