@@ -1,0 +1,72 @@
+        Funct
+          (ConsTyp
+            TInt
+            NilTyp
+          )
+          TInt
+          (BodyCons
+            TInt
+            NilTyp
+            (\x -> BodyNil
+              (IfElse
+                (ELtI
+                  (EVar
+                    TInt
+                    x
+                  )
+                  (EInt
+                    0
+                  )
+                )
+                (Block
+                  (Return
+                    TInt
+                    (ESubI
+                      (EInt
+                        0
+                      )
+                      (EVar
+                        TInt
+                        x
+                      )
+                    )
+                  )
+                  End
+                )
+                (Return
+                  TInt
+                  (EVar
+                    TInt
+                    x
+                  )
+                )
+                End
+              )
+            )
+          )
+          (\abs -> Funct
+            NilTyp
+            TInt
+            (BodyNil
+              (Decl
+                TInt
+                (\i -> Assign
+                  TInt
+                  i
+                  (EApp
+                    (ConsTyp
+                      TInt
+                      NilTyp
+                    )
+                    TInt
+                    abs
+		   (ConsExp ? ? (EInt 16) NilExp) 
+                  )
+                  End
+                )
+              )
+            )
+            (\main -> Empty
+            )
+	   )
+    
