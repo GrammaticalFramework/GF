@@ -266,10 +266,11 @@ generateModuleCode opts path minfo@(name,info) = do
       code <- return $ MkGFC.prCanonModInfo minfo'
       return (gfcFile pname, code)
   if isCompilable info && emit && nomulti 
-     then ioeIO $ writeFile file out >> putStr ("  wrote file" +++ file)
-     else ioeIO $ putStrFlush $ "no need to save module" +++ prt name
+     then ioeIO (writeFile file out) >> ioeIOIf (putStr ("  wrote file" +++ file))
+     else ioeIOIf $ putStrFlush $ "no need to save module" +++ prt name
   return minfo'
  where 
+   ioeIOIf = if oElem beSilent opts then (const (return ())) else ioeIO
    emitsGFR m = isModRes m && isCompilable info
      ---- isModRes m || (isModCnc m && mstatus m == MSIncomplete)
    isCompilable mi = case mi of
