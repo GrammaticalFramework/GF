@@ -4,7 +4,7 @@
 GFHOME=/home/aarne/GF2/bin
 
 JGUILIB=$GFHOME/java/
-GF=$GFHOME/gf2
+GF=$GFHOME/gf
 JGUI=GFEditor2
 
 java -cp $JGUILIB $JGUI "$GF -java $*"

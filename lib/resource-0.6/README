@@ -1,0 +1,53 @@
+GF Resource grammar library, v. 0.6.
+
+To precompile a test suite:
+
+  gf <mkTest.gfs
+
+To precompile resource syntaxes and paradigms:
+
+  gf <mkParadigms.gfs
+
+To test multilingual syntax editing:
+
+  jgf TestAll.gfcm
+
+Modules to use (open) for a given language X:
+
+  ResourceX     -- basic resource API
+  ParadigmsX    -- morphological paradigms
+
+API documentation found in
+
+  Combinations  -- syntactic categories and combination rules
+  Structural    -- structural words
+  ParadigmsX    -- parameter types and morphological paradigms
+
+Known bugs:
+
+Finnish
+  Numerals (1,2,3,...) are not inflected
+
+French
+  Order of clitics with ditransitives is not fully controlled
+
+Italian
+  Order of clitics with ditransitives is not fully controlled
+
+
+General
+  * Negative noun phrases ("nobody", "nothing", etc) in TestResource are
+  not treated adequately. For instance, in French
+  the negation word "pas" appears even if "rien" or "personne" is present.
+  * The numeral 1 is not treated  specially in "these 1 are old" etc
+
+
+Missing structures
+  * Tense and aspect
+  * "I want you to go"
+  * "I paint the house blue"
+  " "the house that he wants to buy"
+
+
+
+Document last updated August 3, 2004, by Aarne Ranta.

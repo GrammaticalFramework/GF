@@ -1,0 +1,37 @@
+Numeral grammars, from 1 to 999999.
+
+Many grammars were written during the Chalmes CS graduate courses in 1999
+and 2002. Grammars originally written in 1999 are automatic translations from
+old-GF source, which explains their bad formatting and structure.
+(Authors: Koen Claessen, Carlos Gonzalía, Qiao Haiyan, Patrik Jansson, 
+Peter Ljunglöf, Wojciech Mostowski, Aarne Ranta, Karol Ostrovski, David Wahlstedt
+1999--2002)
+
+The majority of gramamars were written in 2003-2004 by Harald
+Hammarström, who also wrote papers on various aspects of numeral
+systems in the world's languages.
+
+
+Test usage:
+
+To precompile a multilingual numeral grammar:
+
+  gf <mkNumerals.gfs
+
+To open a translation session,
+
+  gf numerals.gfcm  -- in the OS shell
+  trans -lang       -- in the GF shell
+
+To create an example HTML page with translations of a numeral:
+
+  echo "x=2341" | gft numerals.gfcm >2341.html
+
+(Requires the gft program, produces by "make gft" in GF sources)
+
+Document last updated August 3, 2004 by Aarne Ranta.
+
+Copyright (c) Koen Claessen, Carlos Gonzalía, Qiao Haiyan, Harald
+Hammarström, Patrik Jansson, Peter Ljunglöf, Wojciech Mostowski, Aarne
+Ranta, Karol Ostrovski, David Wahlstedt 1999--2004, under
+GNU General Public License (GPL).
