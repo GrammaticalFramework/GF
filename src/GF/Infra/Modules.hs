@@ -126,6 +126,16 @@ allDepsModule gr m = iterFix add os0 where
                 m <- depPathModule n]
   mods = modules gr
 
+-- select just those modules that a given one depends on, including itself
+partOfGrammar :: Ord i => MGrammar i f a -> (i,ModInfo i f a) -> MGrammar i f a
+partOfGrammar gr (i,m) = MGrammar [mo | mo@(j,_) <- mods, elem j modsFor] 
+  where
+    mods = modules gr
+    modsFor = case m of
+      ModMod n -> (i:) $ map openedModule $ allDepsModule gr n
+      _ -> [i] ---- ModWith?
+
+
 -- all modules that a module extends, directly or indirectly
 allExtends :: (Show i,Ord i) => MGrammar i f a -> i -> [i]
 allExtends gr i = case lookupModule gr i of
@@ -164,6 +174,11 @@ addModule gr name mi = MGrammar $ (modules gr ++ [(name,mi)])
 emptyMGrammar :: MGrammar i f a
 emptyMGrammar = MGrammar []
 
+emptyModInfo :: ModInfo i f a
+emptyModInfo = ModMod emptyModule
+
+emptyModule :: Module i f a
+emptyModule = Module MTResource MSComplete [] Nothing [] NT
 
 -- we store the module type with the identifier
 
