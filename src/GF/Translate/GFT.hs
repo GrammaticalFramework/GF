@@ -27,7 +27,7 @@ main = do
 
 ----  interact (doTranslate grs cat)
   s <- getLine
-  putStrLnFlush $ doTranslate grs cat $ drop 2 s
+  putStrLnFlush $ doTranslate grs cat $ drop 2 s -- to remove "n="
 
 doTranslate grs cat s =
   let ss = [l +++ ":" +++ s | (l,s) <- zip (map (prIdent . cncId) grs) 
