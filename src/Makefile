@@ -1,11 +1,16 @@
-GHMAKE=ghc 
+
+GHMAKE=ghc
+GHCI=ghci 
 GHCFLAGS=-package lang -package util -fglasgow-exts
 GHCOPTFLAGS=-O -package lang -package util -fglasgow-exts
 GHCFUDFLAG=-package Fudgets
-GHCINCLUDE=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc -iparsing -iparsers
-GHCINCLUDENOFUD=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc-nofud -iparsing -iparsers
-GHCINCLUDEGFT=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-gft -iparsing -iparsers
-WINDOWSINCLUDE=-ifor-windows -iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -iparsing -iparsers
+
+HUGSINCLUDE    =.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:parsing:conversions:
+BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -iparsing -iparsers -iconversions
+GHCINCLUDE     =-ifor-ghc       $(BASICINCLUDE)
+GHCINCLUDENOFUD=-ifor-ghc-nofud $(BASICINCLUDE) 
+GHCINCLUDEGFT  =-ifor-gft       $(BASICINCLUDE) 
+WINDOWSINCLUDE =-ifor-windows   $(BASICINCLUDE) 
 
 all:
 	make today ; make ghc
@@ -20,6 +25,8 @@ opt:
 
 ghc: 
 	make nofud
+ghci:
+	make nofud-links ; make ghci-nofud
 fud:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) --make GF.hs -o gf2+ ; strip gf2+ ; mv gf2+ ../bin/
 gft:
@@ -39,7 +46,9 @@ shell:
 clean: 
 	rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
 hugs:
-	hugs -P.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:parsing: GF
+	hugs -E"open -a emacs" -P$(HUGSINCLUDE)
+ghci-nofud:
+	$(GHCI) $(GHCFLAGS) $(GHCINCLUDENOFUD)
 today:
 	runhugs util/MkToday
 javac:

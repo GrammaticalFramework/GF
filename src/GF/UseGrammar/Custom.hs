@@ -37,6 +37,10 @@ import Morphology
 -- the cf parsing algorithms
 import ChartParser -- or some other CF Parser
 
+-- grammar conversions -- peb 19/4-04
+-- see also customGrammarPrinter
+import ConvertGrammar
+
 import MoreCustom -- either small/ or big/. The one in Small is empty.
 
 import UseIO
@@ -162,6 +166,13 @@ customGrammarPrinter =
   ,(strCI "canonOpt",showCanonOpt "Lang" . stateGrammarST)
 -}
 -- add your own grammar printers here
+-- grammar conversions, (peb) 
+  ,(strCI "gfc_show",   show . grammar2canon . stateGrammarST)
+  ,(strCI "gfc_raw",    prRaw . stateGrammarST)
+  ,(strCI "mcfg",       prMCFG . convertCanonToMCFG . stateGrammarST)
+  ,(strCI "mcfg_cf",    prCF . convertCanonToCF . stateGrammarST)
+  ,(strCI "mcfg_canon", prCanon . convertCanonToMCFG . stateGrammarST)
+  ,(strCI "mcfg_raw",   prRaw . convertCanonToMCFG . stateGrammarST)
 --- also include printing via grammar2syntax!
   ] 
   ++ moreCustomGrammarPrinter
