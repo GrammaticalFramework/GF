@@ -125,8 +125,8 @@ string2GFCat = string2CFCat
 
 optFile2grammar :: Options -> FilePath -> IOE GFGrammar
 optFile2grammar os f = do
-  gr <- compileModule os emptyShellState f
-  ioeErr $ grammar2stateGrammar os (fst gr)
+  ((_,_,gr),_) <- compileModule os emptyShellState f
+  ioeErr $ grammar2stateGrammar os gr
 
 optFile2grammarE :: Options -> FilePath -> IOE GFGrammar
 optFile2grammarE = optFile2grammar

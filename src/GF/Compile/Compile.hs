@@ -53,8 +53,8 @@ batchCompileOld f = compileOld defOpts f
 -- As for path: if it is read from file, the file path is prepended to each name.
 -- If from command line, it is used as it is.
 
-compileModule :: Options -> ShellState -> FilePath -> 
-                 IOE (GFC.CanonGrammar, (SourceGrammar,[(FilePath,ModTime)]))
+compileModule :: Options -> ShellState -> FilePath -> IOE TimedCompileEnv
+----             IOE (GFC.CanonGrammar, (SourceGrammar,[(FilePath,ModTime)]))
 
 compileModule opts st0 file | 
      oElem showOld opts || 
@@ -68,15 +68,17 @@ compileModule opts st0 file |
               else putp ("- parsing old gf" +++ file) $ getOldGrammar opts file
   let mods = modules grammar1
   let env = compileEnvShSt st0 []
-  (_,sgr,cgr) <- foldM (comp putp path) env mods
-  return $ (reverseModules cgr,       -- to preserve dependency order
-            (reverseModules sgr,[]))
+  foldM (comp putp path) env mods
+----  (_,sgr,cgr) <- foldM (comp putp path) env mods
+----  return $ (reverseModules cgr,       -- to preserve dependency order
+----            (reverseModules sgr,[]))
  where
    suff = fileSuffix file
    comp putp path env sm0 = do
-     (k',sm)  <- makeSourceModule opts env sm0
+     (k',sm)  <- makeSourceModule opts (fst env) sm0
      cm  <- putp "  generating code... " $ generateModuleCode opts path sm
-     extendCompileEnvInt env (k',sm,cm)
+     ft <- getReadTimes file ---
+     extendCompileEnvInt env (k',sm,cm) ft
 
 compileModule opts1 st0 file = do
   opts0 <- ioeIO $ getOptionsFromFile file
@@ -98,6 +100,11 @@ compileModule opts1 st0 file = do
   let names = map justModuleName files
   ioeIOIf $ putStrLn $ "modules to include:" +++ show names ----
   let env0 = compileEnvShSt st names
+  (e,mm) <- foldIOE (compileOne opts) env0 files
+  maybe (return ()) putStrLnE mm
+  return e
+
+{- ----
   (_,sgr,cgr) <- foldM (compileOne opts) env0 files
   t <- ioeIO getNowTime
   return $ (reverseModules cgr,       -- to preserve dependency order
@@ -105,12 +112,20 @@ compileModule opts1 st0 file = do
              [(justModuleName f,t) | f <- files]   -- pass on the time of reading
           ++ [(resModName (justModuleName f),t)    -- also #file if file.(gf|gfr)
                                    | f <- files, not (isGFC f)]))
-compileEnvShSt :: ShellState -> [ModName] -> CompileEnv
-compileEnvShSt st fs = (0,sgr,cgr) where
+-}
+
+getReadTimes file = do
+  t <- ioeIO getNowTime
+  let m = justModuleName file
+  return $ (m,t) : [(resModName m,t) | not (isGFC file)]
+
+compileEnvShSt :: ShellState -> [ModName] -> TimedCompileEnv
+compileEnvShSt st fs = ((0,sgr,cgr),fts) where
   cgr = MGrammar [m | m@(i,_) <- modules (canModules st), notInc i]
   sgr = MGrammar [m | m@(i,_) <- modules (srcModules st), notIns i]
   notInc i = notElem (prt i) $ map fileBody fs
   notIns i = notElem (prt i) $ map fileBody fs
+  fts = readFiles st
 
 pathListOpts :: Options -> [InitPath]
 pathListOpts opts = maybe [""] pFilePaths $ getOptVal opts pathList
@@ -128,18 +143,20 @@ keepResModules opts gr =
 
 type CompileEnv = (Int,SourceGrammar, GFC.CanonGrammar)
 
-emptyCompileEnv :: CompileEnv
-emptyCompileEnv = (0,emptyMGrammar,emptyMGrammar)
+emptyCompileEnv :: TimedCompileEnv
+emptyCompileEnv = ((0,emptyMGrammar,emptyMGrammar),[])
 
-extendCompileEnvInt (_,MGrammar ss, MGrammar cs) (k,sm,cm) = 
-  return (k,MGrammar (sm:ss), MGrammar (cm:cs)) --- reverse later
+extendCompileEnvInt ((_,MGrammar ss, MGrammar cs),fts) (k,sm,cm) ft = 
+  return ((k,MGrammar (sm:ss), MGrammar (cm:cs)),ft++fts) --- reverse later
 
-extendCompileEnv (k,s,c) (sm,cm) = extendCompileEnvInt (k,s,c) (k,sm,cm)
+extendCompileEnv e@((k,_,_),_) (sm,cm) = extendCompileEnvInt e (k,sm,cm)
 
-extendCompileEnvCanon (k,s,c) cgr = 
-  return (k,s, MGrammar (modules cgr ++ modules c))
+extendCompileEnvCanon ((k,s,c),fts) cgr ft = 
+  return ((k,s, MGrammar (modules cgr ++ modules c)),ft++fts)
 
-compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
+type TimedCompileEnv = (CompileEnv,[(FilePath,ModTime)])
+
+compileOne :: Options -> TimedCompileEnv -> FullPath -> IOE TimedCompileEnv
 compileOne opts env file = do
 
   let putp = putPointE opts
@@ -151,29 +168,33 @@ compileOne opts env file = do
     -- for multilingual canonical gf, just read the file and update environment
     "gfcm" -> do
        cgr <- putp ("+ reading" +++ file) $ getCanonGrammar file
-       extendCompileEnvCanon env cgr
+       ft <- getReadTimes file
+       extendCompileEnvCanon env cgr ft
 
     -- for canonical gf, read the file and update environment, also source env
     "gfc" -> do
        cm <- putp ("+ reading" +++ file) $ getCanonModule file
        sm <- ioeErr $ CG.canon2sourceModule cm
-       extendCompileEnv env (sm, cm)
+       ft <- getReadTimes file
+       extendCompileEnv env (sm, cm) ft
 
     -- for compiled resource, parse and organize, then update environment
     "gfr" -> do
        sm0  <- putp ("| parsing" +++ file) $ getSourceModule file
-       let mos = case env of (_,gr,_) -> modules gr
+       let mos = case env of ((_,gr,_),_) -> modules gr
        sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm0
        let gfc = gfcFile name 
        cm <- putp ("+ reading" +++ gfc) $ getCanonModule gfc
-       extendCompileEnv env (sm,cm)
+       ft <- getReadTimes file
+       extendCompileEnv env (sm,cm) ft
 
     -- for gf source, do full compilation
     _ -> do
        sm0 <- putp ("- parsing" +++ file) $ getSourceModule file
-       (k',sm)  <- makeSourceModule opts env sm0
+       (k',sm)  <- makeSourceModule opts (fst env) sm0
        cm  <- putp "  generating code... " $ generateModuleCode opts path sm
-       extendCompileEnvInt env (k',sm,cm)
+       ft <- getReadTimes file
+       extendCompileEnvInt env (k',sm,cm) ft
 
 -- dispatch reused resource at early stage
 
@@ -268,7 +289,7 @@ compileOld opts file = do
   let putp = putPointE opts
   grammar1 <- putp ("- parsing old gf" +++ file) $ getOldGrammar opts file
   files <- mapM writeNewGF $ modules grammar1
-  (_,_,grammar) <- foldM (compileOne opts) emptyCompileEnv files
+  ((_,_,grammar),_) <- foldM (compileOne opts) emptyCompileEnv files
   return grammar
 
 writeNewGF :: SourceModule -> IOE FilePath

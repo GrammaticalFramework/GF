@@ -107,16 +107,17 @@ cncModuleIdST = stateGrammarST
 
 grammar2shellState :: Options -> (CanonGrammar, G.SourceGrammar) -> Err ShellState 
 grammar2shellState opts (gr,sgr) = 
-  updateShellState opts emptyShellState (gr,(sgr,[]))
+  updateShellState opts emptyShellState ((0,sgr,gr),[]) --- is 0 safe?
 
 -- update a shell state from a canonical grammar
 
 updateShellState :: Options -> ShellState -> 
-                    (CanonGrammar,(G.SourceGrammar,[(FilePath,ModTime)])) -> 
+                    ((Int,G.SourceGrammar,CanonGrammar),[(FilePath,ModTime)]) ->
+               ---- (CanonGrammar,(G.SourceGrammar,[(FilePath,ModTime)])) -> 
                     Err ShellState 
-updateShellState opts sh (gr,(sgr,rts)) = do 
+updateShellState opts sh ((_,sgr,gr),rts) = do 
   let cgr0 = M.updateMGrammar (canModules sh) gr
-      a' = ifNull Nothing (return . last) $ allAbstracts cgr0
+      a' = ifNull Nothing (return . head) $ allAbstracts cgr0
   abstr0 <- case abstract sh of
     Just a -> do
       --- test that abstract is compatible
@@ -124,7 +125,7 @@ updateShellState opts sh (gr,(sgr,rts)) = do
     _ -> return a'
   let cgr = filterAbstracts abstr0 cgr0
   let concrs = maybe [] (allConcretes cgr) abstr0
-      concr0 = ifNull Nothing (return . last) concrs
+      concr0 = ifNull Nothing (return . head) concrs
       notInrts f = notElem f $ map fst rts
   cfs <- mapM (canon2cf opts cgr) concrs --- would not need to update all...
 
@@ -149,7 +150,7 @@ updateShellState opts sh (gr,(sgr,rts)) = do
     cfs        = zip concrs cfs,
     pInfos     = pinfos, -- peb 8/6
     morphos    = zip concrs (map (mkMorpho cgr) concrs),
-    gloptions  = opts,
+    gloptions  = gloptions sh, --- opts, -- this would be command-line options
     readFiles  = [ft | ft@(f,_) <- readFiles sh, notInrts f] ++ rts,
     absCats    = csi,
     statistics = [StDepTypes deps,StBoundVars binds]
@@ -216,22 +217,22 @@ grammar2stateGrammar opts gr = do
 allAbstracts :: CanonGrammar -> [Ident]
 allAbstracts gr = [i | (i,M.ModMod m) <- M.modules gr, M.mtype m == M.MTAbstract]
 
--- the last abstract in dependency order
+-- the last abstract in dependency order (head of list)
 greatestAbstract :: CanonGrammar -> Maybe Ident
 greatestAbstract gr = case allAbstracts gr of
   [] -> Nothing
-  a -> return $ last a
+  a -> return $ head a
 
 -- all resource modules
 allResources :: G.SourceGrammar -> [Ident]
 allResources gr = [i | (i,M.ModMod m) <- M.modules gr, M.mtype m == M.MTResource]
 
 
--- the last resource in dependency order
+-- the greatest resource in dependency order
 greatestResource :: G.SourceGrammar -> Maybe Ident
 greatestResource gr = case allResources gr of
   [] -> Nothing
-  a -> return $ last a
+  a -> return $ head a
 
 resourceOfShellState :: ShellState -> Maybe Ident
 resourceOfShellState = greatestResource . srcModules

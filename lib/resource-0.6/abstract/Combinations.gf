@@ -32,7 +32,7 @@
 -- by using, instead of this module, the $reuse$ module which has the name
 -- $ResourceX$
 
-abstract Combinations = PredefAbs ** {
+abstract Combinations = {
 --!
 --2 Categories
 --

@@ -76,6 +76,11 @@ readFileIfPath paths file = do
       return (justInitPath pfile,s)
     _ -> ioeErr $ Bad ("File " ++ file ++ " does not exist.")
 
+doesFileExistPath :: [FilePath] -> String -> IOE Bool
+doesFileExistPath paths file = do
+  mpfile <- ioeIO $ getFilePath paths file
+  return $ maybe False (const True) mpfile
+
 pFilePaths :: String -> [FilePath]
 pFilePaths s = case span (/=':') s of
   (f,_:cs) -> f : pFilePaths cs
@@ -178,6 +183,15 @@ ioeBad = ioe . return . Bad
 
 useIOE :: a -> IOE a -> IO a
 useIOE a ioe = appIOE ioe >>= err (\s -> putStrLn s >> return a) return 
+
+foldIOE :: (a -> b -> IOE a) -> a -> [b] -> IOE (a, Maybe String)
+foldIOE f s xs = case xs of
+  [] -> return (s,Nothing)
+  x:xx -> do
+    ev <- ioeIO $ appIOE (f s x) 
+    case ev of 
+      Ok v  -> foldIOE f v xx
+      Bad m -> return $ (s, Just m)
 
 putStrLnE :: String -> IOE ()
 putStrLnE = ioeIO . putStrLnFlush 
