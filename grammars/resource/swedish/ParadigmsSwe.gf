@@ -18,7 +18,7 @@
 --
 -- The following modules are presupposed:
 
-resource ParadigmsSwe = open (Predef=Predef), Prelude, SyntaxSwe, Swedish in {
+resource ParadigmsSwe = open (Predef=Predef), Prelude, TypesSwe, SyntaxSwe, Swedish in {
 
 --2 Parameters 
 --
@@ -177,7 +177,7 @@ oper
        }
     } in 
    {s = \\n,d,c => mkCase c (nom ! SF n d Nom) ;
-    g = g ; x = x
+    g = g ; x = x ; lock_N = <>
    } ;
 
   -- auxiliaries
@@ -218,13 +218,13 @@ oper
     mkN murare (murar + "en") murare (murar + "na") utrum nonmasculine ;
 
 
---  mkFun     defined in syntax.Swe
+  mkFun x y =  SyntaxSwe.mkFun x y ** {lock_Fun = <>} ;
   funAv = \f -> mkFun f "av" ;
   funPå = \f -> mkFun f "på" ;
   funTill = \f -> mkFun f "till" ;
 
   mkPN = \karolus, karoli, g, x -> 
-    {s = table {Gen => karoli ; _ => karolus} ; g = g ; x = x} ;
+    {s = table {Gen => karoli ; _ => karolus} ; g = g ; x = x ; lock_PN = <>} ;
   pnReg = \horst -> 
     mkPN horst (ifTok Tok (Predef.dp 1 horst) "s" horst (horst + "s")) ;
 
@@ -239,7 +239,8 @@ oper
     Strong APl => \\c => mkCase c små ;
     Weak (AxSg Masc) => \\c => mkCase c (Predef.tk 1 lilla + "e") ;
     Weak _ => \\c => mkCase c lilla
-    }
+    } ;
+   lock_Adj1 = <>
   } ;
 
   adjReg = \billig -> mkAdj1 billig (billig + "t") (billig + "a") (billig + "a") ;
@@ -249,9 +250,9 @@ oper
   adjGalen = \galen -> 
     let {gal = Predef.tk 2 galen} in
     mkAdj1 galen (gal + "et") (gal + "na") (gal + "na") ;
-  adjInvar = \bra -> {s = \\_,_ => bra} ;
+  adjInvar = \bra -> {s = \\_,_ => bra ; lock_Adj1 = <>} ;
 
-  mkAdj2 = \a,p -> a ** {s2 = p} ;
+  mkAdj2 = \a,p -> a ** {s2 = p ; lock_Adj2 = <>} ;
   mkAdj2Reg = \a -> mkAdj2 (adjReg a) ;
 
   mkAdjDeg = \liten, litet, lilla, sma, mindre, minst, minsta -> 
@@ -261,7 +262,8 @@ oper
      AF Compar c    => mkCase c mindre ;
      AF (Super SupStrong) c => mkCase c minst ;
      AF (Super SupWeak) c => mkCase c minsta --- masculine!
-     }
+     } ;
+    lock_AdjDeg = <>
    } ;
 
   aReg = \fin -> mkAdjDeg fin 
@@ -269,16 +271,16 @@ oper
 
   apReg = \s -> AdjP1 (adjReg s) ;
 
-  mkV = mkVerb ;
+  mkV x y z = mkVerb x y z ** {lock_V = <>} ;
   vKoka = \tala -> mkV tala (tala+"r") tala ;
   vSteka = \leka -> let {lek = Predef.tk 1 leka} in mkV leka (lek + "er") lek ;
   vBo = \bo -> mkV bo (bo+"r") bo ;
   vAndas = \andas -> mkV andas andas andas ;
   vTrivas = \trivas -> 
     let {trivs = Predef.tk 1 trivas + "s"} in mkV trivas trivs trivs ;
-  vVara = verbVara ;
-  vHa = verbHava ;
-  mkTV = mkTransVerb ;
+  vVara = verbVara ** {lock_V = <>} ;
+  vHa = verbHava ** {lock_V = <>} ;
+  mkTV x y = mkTransVerb x y ** {lock_TV = <>} ;
   tvDir = \v -> mkTV v [] ;
 
 } ;
