@@ -1,24 +1,24 @@
 --# -path=.:../prelude
 
-concrete TimetableHTML of Timetable = open Prelude in {
+concrete TimetableHTML of Timetable = open Prelude, HTML in {
 
   lin
     MkTable cs ts = 
-      ss ("<table>" ++ "<tr><td></td>"++ cs.s ++ </tr> ++ ts.s ++ "</table>") ;
+      ss (intagAttr "table" 
+            "border=ON" (intag "tr" (intag "td" [] ++ cs.s) ++ ts.s)) ;
     NilTrain _ = ss [] ;
-    ConsTrain cs n t ts = 
-      ss ("<tr>" ++ n.s ++ t.s ++ "</tr>") ;
-    OneCity c = ss ("<td>" ++ c ++ "</td>") ;
-    ConsCity c cs = ss (c.s ++ "to" ++ cs.s) ;
+    ConsTrain cs n t ts = ss (intag "tr" (intag "td" n.s ++ t.s) ++ ts.s) ;
+    OneCity c = ss (intag "td" c.s) ;
+    ConsCity c cs = ss (intag "td" c.s ++ cs.s) ;
 
-    StopTime t = t ;
-    NoStop = ss ["no stop"] ;
+    StopTime t = ss (intag "td" t.s) ;
+    NoStop = ss (intag "td" "-") ;
 
-    LocTrain c s = cc2 c s ;
-    CityTrain c s cs t = ss (c.s ++ s.s ++ "," ++ t.s) ;
+    LocTrain c s = s ;
+    CityTrain c s cs t = ss (s.s ++ t.s) ;
 
-    T i = prefixSS "at" i ;
-    N n = prefixSS "train" n ;
-    C s = s ;
+    T i = i ;
+    N n = ss (intag "b" n.s) ;
+    C s = ss (intag "b" s.s) ;
 
 }
