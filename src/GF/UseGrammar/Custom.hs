@@ -52,7 +52,7 @@ import qualified PrintParser as Prt
 import GFC
 import qualified MkGFC as MC
 import PrintCFGrammar (prCanonAsCFGM)
-import VisualizeGrammar (visualizeGrammar)
+import VisualizeGrammar (visualizeCanonGrammar, visualizeSourceGrammar)
 
 import MyParser
 
@@ -230,7 +230,7 @@ customMultiGrammarPrinter =
    (strCI "gfcm", MC.prCanon)
   ,(strCI "header", MC.prCanonMGr)
   ,(strCI "cfgm", prCanonAsCFGM)
-  ,(strCI "graph", visualizeGrammar)
+  ,(strCI "graph", visualizeCanonGrammar)
   ]
   ++ moreCustomMultiGrammarPrinter
 

@@ -57,6 +57,7 @@ data Command =
  | CPrintLanguages
  | CPrintInformation I.Ident
  | CPrintMultiGrammar
+ | CPrintSourceGrammar
  | CPrintGramlet 
  | CPrintCanonXML
  | CPrintCanonXMLStruct 
@@ -166,6 +167,7 @@ optionsOfCommand co = case co of
 
   CPrintGrammar -> both "utf8" "printer lang"
   CPrintMultiGrammar -> both "utf8" "printer"
+  CPrintSourceGrammar -> both "utf8" "printer"
 
   CHelp _ -> opts "all filter length lexer unlexer printer transform depth number"
 

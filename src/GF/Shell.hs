@@ -41,6 +41,7 @@ import Operations
 import UseIO
 import UTF8 (encodeUTF8)
 
+import VisualizeGrammar (visualizeSourceGrammar)
 
 ---- import qualified GrammarToGramlet as Gr
 ---- import qualified GrammarToCanonXML2 as Canon
@@ -228,6 +229,8 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
   CPrintMultiGrammar  -> do
     sa' <- changeState purgeShellState sa
     returnArg (AString (optPrintMultiGrammar opts cgr)) sa'
+  CPrintSourceGrammar -> 
+      returnArg (AString (visualizeSourceGrammar src)) sa
 
 ----  CPrintGramlet       -> returnArg (AString (Gr.prGramlet st)) sa
 ----  CPrintCanonXML      -> returnArg (AString (Canon.prCanonXML st False)) sa
