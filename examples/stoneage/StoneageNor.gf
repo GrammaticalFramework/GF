@@ -2,8 +2,6 @@
 concrete StoneageNor of Stoneage 
   = open SyntaxNor, ResourceNor, ParadigmsNor, VerbsNor, SwadeshLexNor, StoneageResNor in {
 
---- rough-translated from Swedish by AR 11/3/2005. To be fixed soon.
-
 flags
   startcat=S; optimize=share;
 

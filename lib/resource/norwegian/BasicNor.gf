@@ -5,7 +5,6 @@ concrete BasicNor of Basic = CategoriesNor ** open ParadigmsNor,VerbsNor in {
 flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
   optimize=values ;
 
---- rough-translated from Swedish by AR 11/3/2005. To be fixed soon.
 
 lin
   airplane_N = mk2N "fly" "flyet" ;
