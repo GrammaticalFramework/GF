@@ -6,7 +6,6 @@ import PGrammar
 import TypeCheck
 import Compile
 import ShellState
-import GetGrammar
 
 import Modules
 import Option
@@ -38,11 +37,6 @@ string2annotTree gr m = annotate gr . string2absTerm (prt m) ---- prt
 
 shellStateFromFiles :: Options -> ShellState -> FilePath -> IOE ShellState
 shellStateFromFiles opts st file = case fileSuffix file of
-  "cf" -> do
-     let opts' = addOptions (options [beVerbose]) opts
-     sgr <- getCFGrammar opts' file
-     ioeIO $ print sgr -----
-     return st
   "gfcm" -> do
      (_,_,cgr) <- compileOne opts (compileEnvShSt st []) file
      ioeErr $ updateShellState opts st (cgr,(emptyMGrammar,[]))  

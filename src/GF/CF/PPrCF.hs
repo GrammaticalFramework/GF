@@ -55,7 +55,7 @@ getCFRule mo s = getcf (wrds s) where
     fun : cat : _ : its = words s
     mkIt ('"':w@(_:_)) = atomCFTerm (string2CFTok (init w))
     mkIt w = CFNonterm (string2CFCat mo w)
-  getcf _ = Bad "invalid rule"
+  getcf _ = Bad (" invalid rule:" +++ s)
   wrds = takeWhile (/= ";") . words -- to permit semicolon in the end
 
 pCF :: String -> String -> Err CF

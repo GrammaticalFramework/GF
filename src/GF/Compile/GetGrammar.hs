@@ -88,7 +88,7 @@ getCFGrammar :: Options -> FilePath -> IOE SourceGrammar
 getCFGrammar opts file = do
   let mo = takeWhile (/='-') file
   s    <- ioeIO $ readFileIf file
-  cf   <- ioeErr $ pCF mo file
+  cf   <- ioeErr $ pCF mo s
   defs <- return $ cf2grammar cf
   let g = A.OldGr A.NoIncl defs
   ioeErr $ transOldGrammar opts file g
