@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:36 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.14 $
+-- > CVS $Date: 2005/03/10 11:14:11 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.15 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -77,13 +77,19 @@ getCommand = do
 
 -- | decodes UTF8 if u==False, i.e. if the grammar does not use UTF8;
 -- used in the Java GUI, which always uses UTF8
-getCommandUTF :: Bool -> IO Command
+getCommandUTF :: Bool -> IO (String,Command)
 getCommandUTF u = do
   s <- getLine
-  return $ pCommand $ if u then s else decodeUTF8 s 
+  return $ pCommandMsg $ if u then s else decodeUTF8 s 
 
 pCommand :: String -> Command
-pCommand = pCommandWords . words where 
+pCommand = snd . pCommandMsg
+
+pCommandMsg :: String -> (String,Command)
+pCommandMsg s = (m,pCommandWords $ words c) where
+  (m,c) = case s of
+    '[':s2 -> let (a,b) = span (/=']') s2 in (a,drop 1 b)
+    _ -> ("",s) 
   pCommandWords s = case s of
     "n" : cat : _ -> CNewCat cat
     "t" : ws      -> CNewTree $ unwords ws

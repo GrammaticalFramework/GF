@@ -754,7 +754,7 @@ oper
     love ;
 
   reflTransVerb : TransVerb -> VerbGroup = \se ->
-    useVerb se (\\_,n,p => se.s1 ++ {-strPrep-} se.s2 ++ reflPron n p) ;
+    useVerb se (\\_,n,p => {-strPrep-} se.s2 ++ reflPron n p) ;
 
   reflPron : Number -> Person -> Str ;
 
@@ -771,7 +771,7 @@ oper
     DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = \ge,dig,vin ->
       useVerb 
         ge 
-        (\\_,_,_ => ge.s1 ++ ge.s2 ++ dig.s ! PAcc ++ ge.s3 ++ vin.s ! PAcc) ;
+        (\\_,_,_ => ge.s2 ++ dig.s ! PAcc ++ ge.s3 ++ vin.s ! PAcc) ;
 
 -- Adjective-complement ditransitive verbs.
 
@@ -784,7 +784,7 @@ oper
     DitransAdjVerb -> NounPhrase -> AdjPhrase -> VerbGroup = \gor,dig,sur ->
       useVerb 
         gor 
-        (\\_,_,_ => gor.s1 ++ {-strPrep-} gor.s2 ++ dig.s ! PAcc ++ 
+        (\\_,_,_ => {-strPrep-} gor.s2 ++ dig.s ! PAcc ++ 
                     sur.s ! predFormAdj dig.g dig.n ! Nom) ;
 
   complAdjVerb : 
@@ -1011,20 +1011,20 @@ oper
   SentenceVerb : Type = Verb ;
 
   complSentVerb : SentenceVerb -> Sentence -> VerbGroup = \se,duler ->
-    useVerb se (\\_,_,_ => se.s1 ++ optStr infinAtt ++ duler.s ! Sub) ;
+    useVerb se (\\_,_,_ => optStr infinAtt ++ duler.s ! Sub) ;
 
   complQuestVerb : SentenceVerb -> QuestionSent -> VerbGroup = \se,omduler ->
-    useVerb se (\\_,_,_ => se.s1 ++ omduler.s ! IndirQ) ;
+    useVerb se (\\_,_,_ => omduler.s ! IndirQ) ;
 
   complDitransSentVerb : TransVerb -> NounPhrase -> Sentence -> VerbGroup = 
     \sa,honom,duler ->
       useVerb sa 
-        (\\_,_,_ => sa.s1 ++ {-strPrep-} sa.s2 ++ honom.s ! PAcc ++ optStr infinAtt ++ duler.s ! Main) ;
+        (\\_,_,_ => {-strPrep-} sa.s2 ++ honom.s ! PAcc ++ optStr infinAtt ++ duler.s ! Main) ;
 
   complDitransQuestVerb : TransVerb -> NounPhrase -> QuestionSent -> VerbGroup = 
     \sa,honom,omduler ->
       useVerb sa 
-        (\\_,_,_ => sa.s1 ++ {-strPrep-} sa.s2 ++ honom.s ! PAcc ++ omduler.s ! IndirQ) ;
+        (\\_,_,_ => {-strPrep-} sa.s2 ++ honom.s ! PAcc ++ omduler.s ! IndirQ) ;
 
 --3 Verb-complement verbs
 --
@@ -1038,14 +1038,12 @@ oper
   complVerbVerb : VerbVerb -> VerbPhrase -> VerbGroup = \vilja, simma ->
     useVerb vilja 
       (\\g,n,p => 
-              vilja.s1 ++
               if_then_Str vilja.isAux [] infinAtt ++ ---- vilja.s3 ++
               simma.s ! VIInfinit ! g ! n ! p) ;
 
   transVerbVerb : VerbVerb -> TransVerb -> TransVerb = \vilja,hitta ->
     {s  = vilja.s ;
-     s1 = vilja.s1 ++ 
-          if_then_Str vilja.isAux [] infinAtt ++ ---- vilja.s3 ++
+     s1 = if_then_Str vilja.isAux [] infinAtt ++ ---- vilja.s3 ++
           hitta.s ! VI (Inf Act) ++ hitta.s1 ;
      s2 = hitta.s2
     } ;
@@ -1065,7 +1063,7 @@ oper
     Bool -> DitransVerbVerb -> NounPhrase -> VerbPhrase -> VerbGroup = 
      \obj,be,dig,simma ->
       useVerb be 
-        (\\g,n,p => be.s1 ++ {-strPrep-} be.s2 ++ dig.s ! PAcc ++ be.s3 ++ 
+        (\\g,n,p => {-strPrep-} be.s2 ++ dig.s ! PAcc ++ be.s3 ++ 
               if_then_Str obj 
                  (simma.s ! VIInfinit ! dig.g ! dig.n ! dig.p)
                  (simma.s ! VIInfinit ! g     ! n     ! p)
@@ -1098,14 +1096,13 @@ oper
 
   slashTransVerb : NounPhrase -> TransVerb -> ClauseSlashNounPhrase = 
     \jag, se -> 
-      predVerbGroupClause jag (useVerb se (\\_,_,_ => se.s1)) ** {s2 = se.s2} ;
+      predVerbGroupClause jag (useVerb se (\\_,_,_ => [])) ** {s2 = se.s2} ;
 
  --- this does not give negative or anterior forms
 
   slashVerbVerb : NounPhrase -> VerbVerb -> TransVerb -> ClauseSlashNounPhrase = 
     \jag,vilja,se ->
       predVerbGroupClause jag (useVerb vilja (\\g,n,p => 
-              vilja.s1 ++
               if_then_Str vilja.isAux [] infinAtt ++ ---- vilja.s3 ++
               se.s ! VI (Inf Act))
               )  ** {s2 = se.s2} ;
