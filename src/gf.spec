@@ -8,7 +8,7 @@ Version: %{version}
 Release: %{release}
 License: GPL
 Group: Sciences/Other
-URL: http://www.cs.chalmers.se/~aarne/GF/pub/work-index/
+URL: http://www.cs.chalmers.se/~aarne/GF/
 Source: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: ghc
@@ -33,12 +33,13 @@ generic grammar processor performs various tasks with the grammars:
     * random generation
     * syntax editing 
 
-GF particularly addresses two aspects of grammars:
+GF particularly addresses the following aspects of grammars:
 
     * multilinguality (parallel grammars for different languages)
     * semantics (semantic conditions of well-formedness, semantic 
       properties of expressions) 
-
+    * grammar engineering (modularity, information hiding, reusable
+      libraries)
 
 
 
