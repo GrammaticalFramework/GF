@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 18:08:58 $ 
+-- > CVS $Date: 2005/03/11 15:37:20 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.21 $
+-- > CVS $Revision: 1.22 $
 --
 -- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
 --
@@ -447,7 +447,7 @@ inferLType gr trm = case trm of
      return $ (Table p' t', typeType)
 
    FV vs -> do
-     (ty,_) <- checks $ map infer vs
+     (_,ty) <- checks $ map infer vs
 ---     checkIfComplexVariantType trm ty
      check trm ty
 
