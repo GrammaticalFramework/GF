@@ -116,7 +116,8 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
     let us = uses f in
     if not (all noComp us) then
       fp else 
-    if (elem (typ f) [MTyIncomplete, MTyIncResource] || 
+    if (elem (typ f) [] ---- MTyIncomplete, MTyIncResource]
+        || 
         (not (null us) && all isAux us)) then
       (f,(p,CSDont)) else
       fp

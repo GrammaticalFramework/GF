@@ -111,7 +111,7 @@ instance SyntaxDan of SyntaxScand = TypesDan **
   progressiveVerbPhrase : VerbGroup -> VerbGroup = \verb -> 
     complVerbVerb
       (verbVara **
-       {s3 = ["ved at"]}
+       {isAux = False} ----- {s3 = ["ved at"]}
       )
       (predVerbGroup True Simul verb) ;  
 
@@ -119,7 +119,7 @@ instance SyntaxDan of SyntaxScand = TypesDan **
     predVerbGroupClause np
      (complVerbVerb 
       (verbVara **
-       {s3 = ["ved at"]}
+       {isAux = False} ----- {s3 = ["ved at"]}
       )
       vp) ;
 

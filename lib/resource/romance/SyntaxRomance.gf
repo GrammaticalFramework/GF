@@ -769,6 +769,14 @@ oper
          ----- let m = if_then_else Mode b croire.mp croire.mn 
          embedConj ++ jeanboit.s ! croire.mp) ;
 
+  complQuestVerb : Verb -> Question -> Complemnt = \demander,sijeanboit ->
+    mkCompl 
+      demander 
+      (\\g,n,p => sijeanboit.s ! IndirQ) ;
+
+  complAdjVerb : Verb -> AdjPhrase -> Complemnt = \sent,bon ->
+    mkCompl sent (\\g,n,_ => bon.s ! AF g n) ;
+
   verbSent : Verb -> Mode -> Mode -> SentenceVerb = \v,mp,mn ->
     v ** {mp = mp ; mn = mn} ;
 

@@ -64,7 +64,7 @@ lin
    Look = extTransVerb (mkVerb "se" "ser" "ses" "så" "sett" "sedd") []
    ; ---- ut
 
-   Try = extTransVerb (vNopart (vSpis "forsøk")) [] ** {s3 = "att"} ;
+   Try = extTransVerb (vNopart (vSpis "forsøk")) [] ** {isAux = False} ;
    Important = extAdjective (aAbstrakt "viktig") ** {s2 = "for"} ;
    Probable = extAdjective (aAbstrakt "sannsynlig") ;
    Easy = extAdjective (aRod "grei") ** {s2 = "for"} ;

@@ -4,6 +4,8 @@
 
 concrete specUserSwe of specUser = specificSwe, genUserSwe ** {
 
+flags startcat=DMove ;
+
 lin 
 --- Answers in request list
 vcr_add_rec_job_args4 chts wdts stts etts = {s = 
