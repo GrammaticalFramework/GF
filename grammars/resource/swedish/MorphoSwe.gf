@@ -147,6 +147,20 @@ oper sSak : Str -> Subst = \sak ->
   h1 = Utr
   } ;
 
+oper sVarelse : Str -> Subst = \varelse -> 
+ {s = table {
+    SF Sg Indef Nom => varelse ;
+    SF Sg Indef Gen => varelse + "s" ;
+    SF Sg Def Nom => varelse + "n" ;
+    SF Sg Def Gen => varelse + "ns" ;
+    SF Pl Indef Nom => varelse + "r" ;
+    SF Pl Indef Gen => varelse + "rs" ;
+    SF Pl Def Nom => varelse + "rna" ;
+    SF Pl Def Gen => varelse + "rnas"
+    } ;
+  h1 = Utr
+  } ;
+
 oper sNivå : Str -> Subst = \nivå -> 
  {s = table {
     SF Sg Indef Nom => nivå ;

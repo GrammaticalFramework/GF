@@ -32,7 +32,9 @@ lincat
       -- = {s : NPForm => Str ; g : Gender ; n : Number} ;
   PN     = {s : Case => Str ; g : Gender ; x : Sex} ;
   Det    = {s : Gender => Sex => Str ; n : Number ; b : SpeciesP} ;
-  Fun    = CommNoun ** {s2 : Preposition} ;
+  Fun    = Function ;
+      -- = CommNoun ** {s2 : Preposition} ;
+  Fun2   = Function ** {s3 : Preposition} ;
 
   Adj1   = Adjective ;
       -- = {s : AdjFormPos => Case => Str} ; 
@@ -43,7 +45,9 @@ lincat
   V      = Verb ;
       -- = {s : VForm => Str} ;
   VP     = Verb ** {s2 : Str ; s3 : Gender => Number => Str} ;
-  TV     = Verb ** {s2 : Preposition} ;
+  TV     = TransVerb ; 
+      -- = Verb ** {s2 : Preposition} ;
+  V3     = TransVerb ** {s3 : Preposition} ;
   VS     = Verb ;
 
   AdV    = {s : Str ; isPost : Bool} ;
@@ -76,6 +80,7 @@ lin
   UsePN = nameNounPhrase ;
   UseFun = funAsCommNounPhrase ;
   AppFun = appFunComm ;
+  AppFun2 = appFun2 ;
   AdjP1 = adj2adjPhrase ;
   ComplAdj = complAdj ;
   PositAdjP = positAdjPhrase ;
@@ -88,6 +93,8 @@ lin
   DefOneNP = defNounPhrase singular ;
   DefManyNP = defNounPhrase plural ;
 
+  CNthatS = nounThatSentence ;
+
   PredVP = predVerbPhrase ;
   PosV = predVerb True ;
   NegV = predVerb False ;
@@ -97,18 +104,24 @@ lin
   NegCN = predCommNoun False ;
   PosTV = complTransVerb True ;
   NegTV = complTransVerb False ;
+  PosV3 = complDitransVerb True ;
+  NegV3 = complDitransVerb False ;
   PosNP = predNounPhrase True ;
   NegNP = predNounPhrase False ;
+  PosPassV = passVerb True ;
+  NegPassV = passVerb False ;
   PosVS = complSentVerb True ;
   NegVS = complSentVerb False ;
-
+  VTrans = transAsVerb ;
 
   AdvVP = adVerbPhrase ;
   LocNP = locativeNounPhrase ;
   AdvCN = advCommNounPhrase ;
+  AdvAP = advAdjPhrase ;
 
   PosSlashTV = slashTransVerb True ;
   NegSlashTV = slashTransVerb False ;
+  OneVP = predVerbPhrase (nameNounPhrase (mkProperName "man" Utr Masc)) ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -137,6 +150,8 @@ lin
   ImperOne = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
 
+  AdvS = advSentence ;
+
 lin
   TwoS = twoSentence ;
   ConsS = consSentence ;
@@ -156,12 +171,16 @@ lin
   SubjS = subjunctSentence ;
   SubjImper = subjunctImperative ;
   SubjQu = subjunctQuestion ;
+  SubjVP = subjunctVerbPhrase ;
 
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase singular ;
   PhrManyCN = useCommonNounPhrase plural ;
   PhrIP ip = ip ;
   PhrIAdv ia = ia ;
+
+  OnePhr p = p ;
+  ConsPhr = cc2 ;
 
   INP    = pronNounPhrase jag_32 ;
   ThouNP = pronNounPhrase du_33 ;
@@ -193,4 +212,9 @@ lin
 
   PhrYes = ss ["Ja ."] ;
   PhrNo = ss ["Nej ."] ;
+
+  VeryAdv = ss "mycket" ;
+  TooAdv = ss "för" ;
+  OtherwiseAdv = ss "annars" ;
+  ThereforeAdv = ss "därför" ;
 } ;
