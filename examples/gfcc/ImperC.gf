@@ -3,7 +3,8 @@ concrete ImperC of Imper = open ResImper in {
   flags lexer=codevars ; unlexer=code ; startcat=Stm ;
 
   lincat
-    Exp = PrecExp ;
+    Exp = PrecExp ; 
+    Typ, NumTyp = {s,s2 : Str} ;
     Rec = {s,s2,s3 : Str} ;
 
   lin
@@ -30,7 +31,7 @@ concrete ImperC of Imper = open ResImper in {
     While exp loop = continue  ("while" ++ paren exp.s ++ loop.s) ;
     IfElse exp t f = continue  ("if" ++ paren exp.s ++ t.s ++ "else" ++ f.s) ;
     Block stm      = continue  ("{" ++ stm.s ++ "}") ;
-    Printf t e     = continues ("printf" ++ paren (t.s ++ "," ++ e.s)) ;
+    Printf t e     = continues ("printf" ++ paren (t.s2 ++ "," ++ e.s)) ;
     Return _ exp   = statement ("return" ++ exp.s) ;
     Returnv        = statement "return" ;
     End            = ss [] ;
@@ -47,8 +48,8 @@ concrete ImperC of Imper = open ResImper in {
     EApp args val f exps = constant (f.s ++ paren exps.s) ;
 
     TNum t  = t ;
-    TInt    = ss "int" ;
-    TFloat  = ss "float" ;
+    TInt    = {s = "int" ; s2 = "\"%d\""} ; 
+    TFloat  = {s = "float" ; s2 = "\"%f\""} ;
     NilTyp  = ss [] ;
     ConsTyp = cc2 ;
     OneExp _ e = e ;

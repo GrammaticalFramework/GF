@@ -6,10 +6,10 @@ int main () {
   int lo ; int hi ;
   lo = 1 ;
   hi = lo ;
-  printf(int,lo) ;
+  printf("%d",lo) ;
   {
     while (hi < mx()) {
-      printf(int,hi) ;
+      printf("%d",hi) ;
       hi = lo + hi ;
       lo = hi - lo ;
       }

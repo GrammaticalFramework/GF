@@ -13,7 +13,7 @@ int abs (int x){
 int main () {
   int i ;
   i = abs (16);
-  printf (int,i) ;
+  printf ("%d",i) ;
   return ;
   } ;
 
