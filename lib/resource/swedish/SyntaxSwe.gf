@@ -116,4 +116,9 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
   mkDeterminerSgGender3 : Str -> Str -> Str -> SpeciesP -> Determiner = \en,_,ett -> 
     mkDeterminerSgGender (table {Utr => en ; Neutr => ett}) ;
 
+-- next
+
+  adjPastPart : Verb -> Adjective = \verb -> {
+    s = \\af,c => verb.s1 ++ verb.s ! VI (PtPret af c) --- på slagen
+    } ;
 }

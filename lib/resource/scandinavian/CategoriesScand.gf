@@ -36,6 +36,9 @@ lincat
   V3     = TransVerb ** {s3 : Preposition} ;
   VS     = Verb ;
   VV     = Verb ** {isAux : Bool} ;
+  V3A    = DitransAdjVerb ;
+  V3V    = DitransVerbVerb ;
+
 
   Adv    = Adverb ; 
       -- = {s : Str ; isPost : Bool} ;

@@ -151,4 +151,8 @@ cat
 
   Phr ;    -- full phrase,           e.g. "John walks.","Who walks?", "Wait for me!"
   Text ;   -- sequence of phrases    e.g. "One is odd. Therefore, two is even."
+
+---- next
+  V3A ;         -- paint the house red
+  V3V ;         -- ask John to come
 }
