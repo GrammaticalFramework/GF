@@ -5,6 +5,8 @@ concrete TestResourceDan of TestResource = RulesDan, ClauseDan, StructuralDan **
 
 flags startcat=Phr ; lexer=text ; unlexer=text ;
 
+  optimize=values ;
+
 -- a random sample from the lexicon
 
 lin

@@ -72,7 +72,8 @@ cat
 
   PN ;     -- proper name,           e.g. "John", "New York"
   NP ;     -- noun phrase,           e.g. "John", "all cars", "you"
-  Det ;    -- determiner,            e.g. "every", "all"
+  Det ;    -- determiner,            e.g. "every", "many"
+  NDet ;   -- det that admits a num, e.g. "all (the 5)"
   Num ;    -- numeral,               e.g. "three", "879"            
 
 --!
@@ -128,10 +129,12 @@ cat
 --
 -- This group has no lexical categories.
 
-  IP ;     -- interrogative pronoun, e.g. "who", "whose mother", "which yellow car"
-  IAdv ;   -- interrogative adverb., e.g. "when", "why" 
-  QCl ;    -- question,              e.g. "who walks"
-  Imp ;    -- imperative,            e.g. "walk!"
+  IP ;     -- interrogative pronoun,  e.g. "who", "whose mother", "which car"
+  IDet ;   -- interrog. determiner,   e.g. "which", "how many"
+  IAdv ;   -- interrogative adverb.,  e.g. "when", "why" 
+  QCl ;    -- question,               e.g. "who walks"
+  QS ;     -- question w. fixed tense
+  Imp ;    -- imperative,             e.g. "walk!"
 
 --!
 --3 Coordination and subordination
@@ -144,6 +147,7 @@ cat
   ListS ;  -- list of sentences
   ListAP ; -- list of adjectival phrases
   ListNP ; -- list of noun phrases
+  ListAdv ;-- list of adverbs
 
 --!
 --3 Complete utterances
@@ -174,7 +178,7 @@ cat
 
 --- also: John is easy (for you) to please vs. John is eager to please
 
-  QS ;          -- question with fixed tense and polarity
+
   RS ;          -- relative clause with fixed tense and polarity
 
   TP ;          -- tense x polarity selector

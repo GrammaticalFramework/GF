@@ -212,5 +212,10 @@ abstract Basic = Categories ** {
   put_V2 : V2 ;
   stop_V : V ;
   jump_V : V ;
-
+  here_Adv : Adv ;
+  here7to_Adv : Adv ;
+  here7from_Adv : Adv ;
+  there_Adv : Adv ;
+  there7to_Adv : Adv ;
+  there7from_Adv : Adv ;
 }

@@ -111,8 +111,10 @@ txtHelpFile =
   "\n      (Automatically executes the strip command (s) before doing this.)" ++
   "\n  options:" ++
   "\n      -utf8  apply UTF8-encoding to the grammar" ++
+  "\n      -graph print module dependency graph in 'dot' format" ++
   "\n  examples:" ++
   "\n      pm | wf Letter.gfcm  -- print the grammar into the file Letter.gfcm" ++
+  "\n      pm -printer=graph | wf D.dot  -- then do 'dot -Tps D.dot > D.ps'" ++
   "\n" ++
   "\npo, print_options: po" ++
   "\n      Print what modules there are in the state. Also" ++

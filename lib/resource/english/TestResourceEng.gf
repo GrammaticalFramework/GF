@@ -1,7 +1,7 @@
 --# -path=.:../abstract:../../prelude
 
 concrete TestResourceEng of TestResource = RulesEng, ClauseEng, StructuralEng **
-  open Prelude, SyntaxEng, ParadigmsEng in {
+  open Prelude, SyntaxEng, OldParadigmsEng in {
 
 flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
 

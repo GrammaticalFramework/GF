@@ -25,6 +25,8 @@ lin
   DefNumNP = defNounPhraseNum plural ;
 
   DetNP = detNounPhrase ;
+  NDetNP = numDetNounPhrase ;
+  NDetNum = justNumDetNounPhrase ; 
   MassNP = detNounPhrase (mkDeterminerSg (detSgInvar []) IndefP) ;
 
   AppN2 = appFunComm ;
@@ -94,6 +96,7 @@ lin
 
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
+  AdvAdv = cc2 ;
 
 --3 Sentences and relative clauses
 --
@@ -111,13 +114,14 @@ lin
 --3 Questions and imperatives
 --
 
-  WhoOne = intPronWho singular ;
-  WhoMany = intPronWho plural ;
-  WhatOne = intPronWhat singular ;
-  WhatMany = intPronWhat plural ;
+  IDetCN d n = detNounPhrase d n ;
   FunIP = funIntPron ;
-  NounIPOne = nounIntPron singular ;
-  NounIPMany = nounIntPron plural ;
+--  NounIPOne = nounIntPron singular ;
+--  NounIPMany = nounIntPron plural ;
+--  WhoOne = intPronWho singular ;
+--  WhoMany = intPronWho plural ;
+--  WhatOne = intPronWhat singular ;
+--  WhatMany = intPronWhat plural ;
 
   QuestCl = questClause ;
   IntSlash = intSlash ;
@@ -132,7 +136,9 @@ lin
   ImperMany = imperUtterance plural ;
 
   AdvCl = advClause ;
+  AdvVP = advVerbPhrase ;
   AdvPhr = advSentence ;
+  AdCPhr = advSentence ;
 
 
 --!
@@ -153,6 +159,11 @@ lin
   ConsNP = consNounPhrase ;
   ConjNP = conjunctNounPhrase ;
   ConjDNP = conjunctDistrNounPhrase ;
+
+  TwoAdv = twoAdverb ;
+  ConsAdv = consAdverb ;
+  ConjAdv = conjunctAdverb ;
+  ConjDAdv = conjunctDistrAdverb ;
 
   SubjS = subjunctSentence ;
   SubjImper = subjunctImperative ;
