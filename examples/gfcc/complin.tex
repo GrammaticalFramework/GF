@@ -22,12 +22,13 @@
 \newcommand{\heading}[1]{\subsection{#1}}
 \newcommand{\explanation}[1]{{\small #1}}
 \newcommand{\empha}[1]{{\em #1}}
+\newcommand{\commentOut}[1]{}
 \newcommand{\rarrow}{\; \rightarrow\;}
 
 \newcommand{\nocolor}{} %% {\color[rgb]{0,0,0}}
 
 
-\title{{\bf Single-Source Language Definitions and Code Generation as Linearization}}
+\title{{\bf Declarative Language Definitions and Code Generation as Linearization}}
 
 \author{Aarne Ranta \\
   Department of Computing Science \\
@@ -994,10 +995,11 @@ editor can work simultaneously on all languages involved.
 In our case, this means that changes can be done both to
 the C code and to the JVM code, and they are automatically
 carried over from one language to the other.
+\commentOut{
 A screen dump of the editor is shown in Fig~\ref{demo}.
 
 \begin{figure}
-\centerline{\psfig{figure=demo2.ps}} \caption{
+\centerline{\psfig{figure=demo2.epsi}} \caption{
 GF editor session where an integer
 expression is expected to be given. The left window shows the
 abstract syntax tree, and the right window the evolving C and
@@ -1006,7 +1008,7 @@ are shown in a pop-up window.
 }
 \label{demo}
 \end{figure}
-
+}
 
 
 \section{Related work}
