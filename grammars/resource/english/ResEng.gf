@@ -31,7 +31,9 @@ lincat
   NP     = {s : NPForm => Str ; n : Number ; p : Person} ;
   PN     = {s : Case => Str} ;
   Det    = {s : Str ; n : Number} ;
-  Fun    = CommNounPhrase ** {s2 : Preposition} ;
+  Fun    = Function ;
+      -- = CommNounPhrase ** {s2 : Preposition} ;
+  Fun2   = Function ** {s3 : Preposition} ;
 
   Adj1   = Adjective ; 
       -- = {s : Str}
@@ -42,7 +44,9 @@ lincat
   V      = Verb ; 
       -- = {s : VForm => Str ; s1 : Particle}
   VP     = {s : VForm => Str ; s2 : Number => Str ; isAux : Bool} ;
-  TV     = Verb ** {s3 : Preposition} ;
+  TV     = TransVerb ; 
+      -- = Verb ** {s3 : Preposition} ;
+  V3     = TransVerb ** {s4 : Preposition} ;
   VS     = Verb ;
 
   AdV    = {s : Str ; isPost : Bool} ;
@@ -56,6 +60,7 @@ lincat
   Qu     = {s : QuestForm => Str} ;
   Imp    = {s : Number => Str} ;
   Phr    = {s : Str} ;
+  Text   = {s : Str} ;
 
   Conj   = {s : Str ; n : Number} ;
   ConjD  = {s1 : Str ; s2 : Str ; n : Number} ;
@@ -74,6 +79,7 @@ lin
   UsePN = nameNounPhrase ;
   UseFun = funAsCommNounPhrase ;
   AppFun = appFunComm ;
+  AppFun2 = appFun2 ;
   AdjP1 = adj2adjPhrase ;
   ComplAdj = complAdj ;
   PositAdjP = positAdjPhrase ;
@@ -86,6 +92,8 @@ lin
   DefOneNP = defNounPhrase singular ;
   DefManyNP = defNounPhrase plural ;
 
+  CNthatS = nounThatSentence ;
+
   PredVP = predVerbPhrase ;
   PosV = predVerb True ;
   NegV = predVerb False ;
@@ -95,18 +103,24 @@ lin
   NegCN = predCommNoun False ;
   PosTV = complTransVerb True ;
   NegTV = complTransVerb False ;
+  PosV3 = complDitransVerb True ;
+  NegV3 = complDitransVerb False ;
+  PosPassV = passVerb True ;
+  NegPassV = passVerb False ;
   PosNP = predNounPhrase True ;
   NegNP = predNounPhrase False ;
   PosVS = complSentVerb True ;
   NegVS = complSentVerb False ;
-
+  VTrans = transAsVerb ;
 
   AdvVP = adVerbPhrase ;
   LocNP = locativeNounPhrase ;
   AdvCN = advCommNounPhrase ;
+  AdvAP = advAdjPhrase ;
 
   PosSlashTV = slashTransVerb True ;
   NegSlashTV = slashTransVerb False ;
+  OneVP = predVerbPhrase (nameNounPhrase (nameReg "one")) ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -135,6 +149,8 @@ lin
   ImperOne = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
 
+  AdvS = advSentence ;
+
 lin
   TwoS = twoSentence ;
   ConsS = consSentence ;
@@ -161,12 +177,14 @@ lin
   PhrIP ip = ip ;
   PhrIAdv ia = ia ;
 
+  OnePhr p = p ;
+  ConsPhr = cc2 ;
 
-lin
   INP    = pronI ;
   ThouNP = pronYouSg ;
   HeNP   = pronHe ;
   SheNP  = pronShe ;
+  ItNP   = pronIt ;
   WeNP   = pronWe ;
   YeNP   = pronYouPl ;
   YouNP  = pronYouSg ;
@@ -192,4 +210,10 @@ lin
 
   PhrYes = ss "Yes." ;
   PhrNo = ss "No." ;
+
+  VeryAdv = ss "very" ;
+  TooAdv = ss "too" ;
+  OtherwiseAdv = ss "otherwise" ;
+  ThereforeAdv = ss "therefore" ;
+
 } ;

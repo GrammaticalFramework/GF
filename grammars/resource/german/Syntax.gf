@@ -29,7 +29,6 @@ oper
   n2n = noun2CommNounPhrase ;
 
 
-
 --2 Noun phrases
 --
 -- The worst case is pronouns, which have inflection in the possessive
@@ -70,6 +69,26 @@ oper
   mkProperName : Str -> ProperName = \horst ->
     {s = table {Gen => horst + "s" ; _ => horst}} ;
 
+--2 Mass nouns
+--
+-- Mass nouns are morphologically similar to nouns, but they have one special
+-- rule of noun phrase formation, using the bare singular (in German).
+-- Example: "Bier ist gut".
+-- They can also be coerced to common nouns: "ein Mexikanisches Bier".
+
+  MassNounPhrase : Type = CommNounPhrase ;
+
+  massNounPhrase : MassNounPhrase -> NounPhrase = \bier -> {
+     s = \\c => let {nc = caseNP c} in 
+                bier.s ! adjfCas Strong nc ! Sg ! nc ;
+     p = P3 ; 
+     n = Sg ;
+     pro = False
+     } ;
+
+  massCommNoun : MassNounPhrase -> CommNounPhrase = \x -> x ;
+
+
 --2 Determiners
 --
 -- Determiners are inflected according to the nouns they determine.
@@ -77,13 +96,14 @@ oper
 
   Determiner : Type = {s : Gender => Case => Str ; n : Number ; a : Adjf} ;
 
-  detNounPhrase : Determiner -> CommNounPhrase -> NounPhrase = \ein, mann -> 
-    {s = \\c => let {nc = caseNP c} in 
+  detNounPhrase : Determiner -> CommNounPhrase -> NounPhrase = \ein, mann -> {
+     s = \\c => let {nc = caseNP c} in 
             ein.s ! mann.g ! nc ++ mann.s ! adjfCas ein.a nc ! ein.n ! nc ;
      p = P3 ; 
      n = ein.n ;
      pro = False
      } ;
+
 
 -- The adjectival form after a determiner depends both on the inferent form
 -- and on the case ("ein alter Mann" but "einem alten Mann").
@@ -400,6 +420,40 @@ oper
      s3 = \\_ => negation b ++ lieben.s ! VPart APred
     } ;
 
+-- Transitive verb can be used elliptically as a verb. The semantics
+-- is left to applications. The definition is trivial, due to record
+-- subtyping.
+
+  transAsVerb : TransVerb -> Verb = \lieben -> 
+    lieben ;
+
+-- *Ditransitive verbs* are verbs with three argument places.
+-- We treat so far only the rule in which the ditransitive
+-- verb takes both complements to form a verb phrase.
+
+  DitransVerb = TransVerb ** {s4 : Preposition ; c2 : Case} ; 
+
+  mkDitransVerb : 
+    Verb -> Preposition -> Case -> Preposition -> Case -> DitransVerb =
+    \v,p1,c1,p2,c2 -> v ** {s3 = p1 ; c = c1 ; s4 = p2 ; c2 = c2} ;
+
+  complDitransVerb : 
+    Bool -> DitransVerb -> NounPhrase -> NounPhrase -> VerbPhrase = 
+    \b,geben,dir,bier ->
+    let {
+      zudir   = geben.s3 ++ dir.s ! NPCase geben.c ; 
+      dasbier = geben.s4 ++ bier.s ! NPCase geben.c2 ;
+      nicht = negation b
+      } in
+    {s  = geben.s ; 
+     s2 = geben.s2 ;
+     s3 = \\_ => variants {
+       nicht ++ zudir ++ dasbier ;
+       zudir ++ nicht ++ dasbier ;
+       zudir ++ dasbier ++ nicht
+       }
+    } ;
+  
 
 --2 Adverbials
 --
@@ -699,7 +753,7 @@ oper
 
 --2 Sentence adverbials
 --
--- This class covers adverbials such as "sonst", "folgelich", which are prefixed
+-- This class covers adverbials such as "sonst", "deshalb", which are prefixed
 -- to a sentence to form a phrase; the sentence gets inverted word order.
 
   advSentence : Adverb -> Sentence -> Utterance = \sonst,ist1gerade ->

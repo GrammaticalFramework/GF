@@ -103,11 +103,11 @@ oper
 
 --2 Verbs
 --
--- The fragment only has present tense so far, but in all persons.
--- Except for "be", the worst case needs two forms: the infinitive and
--- the third person singular.
+-- The fragment now has all verb forms, except the gerund/present participle.
+-- Except for "be", the worst case needs four forms: the infinitive and
+-- the third person singular present, the past indicative, and the past participle.
 
-  mkV   : (go, goes : Str) -> V ;
+  mkV   : (go, goes, went, gone : Str) -> V ;
 
   vReg  : (walk : Str) -> V ;  -- walk, walks
   vKiss : (kiss : Str) -> V ;  -- kiss, kisses
@@ -126,7 +126,7 @@ oper
 
 -- Verbs with a particle.
 
-  vPart    : (go, goes, up : Str) -> V ;
+  vPart    : (go, goes, went, gone, up : Str) -> V ;
   vPartReg : (get,      up : Str) -> V ;    
 
 -- Two-place verbs, and the special case with direct object.
@@ -197,10 +197,11 @@ oper
   aRidiculous = adjDegrLong ;
   apReg = \s -> AdjP1 (mkAdj1 s) ;
 
-  mkV = \go,goes -> verbNoPart (mkVerbP3 goes go) ;
-  vReg = \run -> mkV run (run + "s") ;
-  vKiss = \kiss -> mkV kiss (kiss + "es") ;
-  vFly = \fly -> mkV fly (Predef.tk 1 fly + "ies") ;
+  mkV = \go,goes,went,gone -> verbNoPart (mkVerbP3 go goes went gone) ;
+  vReg = \walk -> mkV walk (walk + "s") (walk + "ed") (walk + "ed") ;
+  vKiss = \kiss -> mkV kiss (kiss + "es") (kiss + "ed") (kiss + "ed") ;
+  vFly = \cry -> let {cr = Predef.tk 1 cry} in 
+                   mkV cry (cr + "ies") (cr + "ied") (cr + "ied") ;
   vGo = vKiss ;
 
   vGen = \fly -> let {
@@ -213,14 +214,14 @@ oper
     eqy "z" vKiss (
             vReg))) fly ;
 
-  vPart = \go, goes, up -> verbPart (mkVerbP3 goes go) up ;
+  vPart = \go, goes, went, gone, up -> verbPart (mkVerbP3 go goes went gone) up ;
   vPartReg = \get, up -> verbPart (regVerbP3 get) up ;
 
   mkTV = \v,p -> v ** {s3 = p} ;
   tvPartReg = \get, along, with -> mkTV (vPartReg get along) with ;
 
   vBe = verbBe ;
-  vHave = mkV "have" "has" ;
+  vHave = verbP3Have ;
 
   tvGen = \s,p -> mkTV (vGen s) p ;
   tvDir = \v -> mkTV v [] ;

@@ -58,7 +58,8 @@ cat
 
   V ;      -- one-place verb,        e.g. "walk"
   TV ;     -- two-place verb,        e.g. "love", "wait (for)", "switch on"
-  VS ;     -- sentence-compl. verb   e.g. "say", "prove"
+  V3 ;     -- three-place verb,      e.g. "give", "prefer (stg) (to stg)"
+  VS ;     -- sentence-compl. verb,  e.g. "say", "prove"
   VP ;     -- verb phrase,           e.g. "switch the light on"
 
 --3 Adverbials
@@ -144,6 +145,8 @@ fun
   PosPassV, NegPassV : V -> VP ;           -- "is seen", "is not seen"
   PosNP, NegNP : NP -> VP ;                -- "is John", "is not John"
   PosVS, NegVS : VS -> S -> VP ;           -- "says that I run", "doesn't say..."
+  PosV3, NegV3 : V3 -> NP -> NP -> VP ;    -- "prefers wine to beer"
+  VTrans : TV -> V ;                       -- "loves"
 
 --3 Adverbials
 --

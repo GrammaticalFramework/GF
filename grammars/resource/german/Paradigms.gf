@@ -190,6 +190,11 @@ oper
   tvDir    : V -> TV ;                   -- umbringen
   tvDirReg : Str -> TV ;                 -- lieben
 
+-- Three-place verbs require two prepositions and cases.
+
+  mkV3 : V -> Str -> Case -> Str -> Case -> TV ;  -- geben,[],dative,[],accusative
+
+
 --2 Adverbials
 --
 -- Adverbials for modifying verbs, adjectives, and sentences can be formed 
@@ -292,6 +297,7 @@ oper
   tvReg = \hören, zu, dat -> mkTV (vReg hören) zu dat ;
   tvDir = \v -> mkTV v [] accusative ;
   tvDirReg = \v -> tvReg v [] accusative ; 
+  mkV3 = mkDitransVerb ;
 
   mkAdV = ss ;
   mkPP = prepPhrase ;

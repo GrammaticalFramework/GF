@@ -46,7 +46,9 @@ lincat
   V      = Verb ; 
       -- = {s : VForm => Str ; s2 : Particle} ;
   VP     = Verb ** {s3 : Number => Str} ;
-  TV     = Verb ** {s3 : Preposition ; c : Case} ;
+  TV     = TransVerb ; 
+      -- = Verb ** {s3 : Preposition ; c : Case} ;
+  V3     = TransVerb ** {s4 : Preposition ; c2 : Case} ;
   VS     = Verb ;
   AdV    = {s : Str} ;
 
@@ -110,6 +112,9 @@ lin
   NegNP = predNounPhrase False ;
   PosVS = complSentVerb True ;
   NegVS = complSentVerb False ;
+  PosV3 = complDitransVerb True ;
+  NegV3 = complDitransVerb False ;
+  VTrans = transAsVerb ;
 
   AdvVP = adVerbPhrase ;
   LocNP = locativeNounPhrase ;
