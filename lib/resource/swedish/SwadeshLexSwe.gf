@@ -40,6 +40,9 @@ concrete SwadeshLexSwe of SwadeshLex = CategoriesSwe
 
     -- not : Adv ; -- ?
 
+    -- Conjunctions
+
+    and_Conj = and_Conj ;
 
     -- Numerals
 

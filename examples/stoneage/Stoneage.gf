@@ -7,6 +7,14 @@ cat
 
 fun
 
+  -- Sentence conjunction
+
+  AndS : S -> S -> S ;
+
+  -- NP conjunction
+
+  AndNP : NP -> NP -> NP ;
+
   -- Actions with an object
 
   Drink : NP -> NP -> S ;
@@ -67,18 +75,20 @@ fun
   Swell : NP -> S ;
   Burn : NP -> S ;
 
+  -- Actions with an object and a recipient
+
+  Give : NP -> NP -> NP -> S ; -- subject object recipient
+
 --  Say
 --  FearThat
-
---  Give : NP -> NP -> NP -> S ;
 
   -- Determiners
 
   The_One : CN -> NP ;
   The_Many : CN -> NP ;
   A : CN -> NP ;
---  This : CN -> NP ;
---  That : CN -> NP ;
+  This : CN -> NP ;
+  That : CN -> NP ;
   All : CN -> NP ;
   Many : CN -> NP ;
   Some_One : CN -> NP ;
