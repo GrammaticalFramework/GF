@@ -16,7 +16,7 @@ shell:
 clean: 
 	rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
 hugs:
-	hugs -P.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:parsing GF
+	hugs -P.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:parsing: GF
 today:
 	runhugs util/MkToday
 javac:
