@@ -120,8 +120,13 @@ extractPositive : Adj -> {s : AdjFormPos => Case => Str} = \adj ->
   vSpis : Str -> Verbum = \spis -> 
     mkVerb (spis + "e") (spis + "er") (spis + "es") (spis + "te") (spis + "t") spis ;
 
-  vLev : Str -> Verbum = \lev -> 
-    mkVerb (lev + "e") (lev + "er") (lev + "es") (lev + "de") (lev + "d") lev ;
+  vLev : Str -> Verbum = \lev ->
+    let lever = case last lev of {
+      "r" => lev ;
+      _   => lev + "er"
+      }
+    in 
+    mkVerb (lev + "e") lever (lev + "es") (lev + "de") (lev + "d") lev ;
 
   vBo : Str -> Verbum = \bo -> 
     mkVerb bo (bo + "r") (bo + "es") (bo + "dde") (bo + "dd") bo ;
@@ -142,7 +147,14 @@ extractPositive : Adj -> {s : AdjFormPos => Case => Str} = \adj ->
 
   irregVerb : (drikke,drakk,drukket : Str) -> Verbum = 
     \drikke,drakk,drukket ->
-    mkVerb drikke (drikke + "r")  (drikke + "s") drakk drukket (init drikke) ; 
+    let
+      drikk = init drikke ;
+      drikker = case last (init drikke) of {
+        "r" => drikk ;
+        _   => drikke + "r"
+        }
+    in 
+    mkVerb drikke drikker  (drikke + "s") drakk drukket drikk ; 
 
 -- pronouns
 
