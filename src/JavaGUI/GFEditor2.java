@@ -14,11 +14,11 @@ import java.util.*;
 public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     KeyListener, FocusListener {                        
 
-    private int[] sizes = {10,12,16,20,25,30,36};
+    private int[] sizes = {14,16,20,25,30,36};
     private String[] envfonts;
     private Font font;  
     Font[] fontObjs;
-    private static int DEFAULT_FONT_SIZE = 20;
+    private static int DEFAULT_FONT_SIZE = 14;
     private JComboBox fontList;
     private JLabel fontLabel = new JLabel("   Font: ");
     private JComboBox sizeList;
@@ -31,7 +31,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     public MouseEvent m2;
     public static String selectedText="";
 
-    public static boolean debug = true;
+    public static boolean debug = false;
     public static boolean debug3 = false;
     public static boolean debug2 = false;
     public static boolean selectionCheck = false;
@@ -101,8 +101,9 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     private JButton alpha = new JButton("Alpha");   
     private JButton random = new JButton("Random");   
     private JButton undo = new JButton("Undo");   
-
+    private JPanel coverPanel = new JPanel();   
     private JPanel inputPanel = new JPanel();   
+
     private JPanel inputPanel2 = new JPanel();   
     private JPanel inputPanel3 = new JPanel();   
     private JButton ok = new JButton("OK");   
@@ -268,7 +269,9 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         modeMenu.add(rbMenuItemUnTyped);
 
         cp = getContentPane();
-        cp.setLayout(new BorderLayout());
+        JScrollPane cpPanelScroll = new JScrollPane(coverPanel); 
+        cp.add(cpPanelScroll);
+        coverPanel.setLayout(new BorderLayout());
         output.setToolTipText("Linearizations' display area");   
         output.addCaretListener(this);
         output.setEditable(false);
@@ -277,7 +280,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         output.setSelectionColor(Color.green);
 //        output.setSelectionColor(Color.white);
 //        output.setFont(new Font("Arial Unicode MS", Font.PLAIN, 17));
-        font = new Font(null, Font.PLAIN, 20);
+        font = new Font(null, Font.BOLD, DEFAULT_FONT_SIZE);
         output.setFont(font);
         field.setFont(font);
         field.setFocusable(true);
@@ -339,7 +342,10 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         }
         fontList = new JComboBox(envfonts);
         fontList.addActionListener(this);
+        fontList.setToolTipText("Changing font type");
+
         sizeList = new JComboBox();
+        sizeList.setToolTipText("Changing font size");
         for (int i = 0; i<sizes.length; i++)
         {
           sizeList.addItem(new Integer(sizes[i]));    
@@ -371,13 +377,15 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         centerPanelDown.setLayout(new BorderLayout());
         centerPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                                    treePanel, centerPanelDown);
+        centerPanel.setDividerSize(5);
+        centerPanel.setDividerLocation(350);
         centerPanel.addKeyListener(tree);      
         centerPanel.setOneTouchExpandable(true);
         centerPanelDown.add(middlePanel, BorderLayout.NORTH);
         centerPanelDown.add(outputPanelDown, BorderLayout.CENTER);
-        cp.add(centerPanel, BorderLayout.CENTER);
-        cp.add(upPanel, BorderLayout.NORTH);
-        cp.add(downPanel, BorderLayout.SOUTH);
+        coverPanel.add(centerPanel, BorderLayout.CENTER);
+        coverPanel.add(upPanel, BorderLayout.NORTH);
+        coverPanel.add(downPanel, BorderLayout.SOUTH);
 
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -439,7 +447,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         undo.setFocusable(false);  
 
         output.addKeyListener(tree);            
-	setSize(800,730);
+	setSize(1040,800);
 	outputPanelUp.setPreferredSize(new Dimension(500,300));
         treePanel.setDividerLocation(0.3);
         nodeTable.put(new TreePath(DynamicTree2.rootNode.getPath()), new Integer(0));
@@ -573,8 +581,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
                        // extProc.getInputStream());
 
             fromProc = new BufferedReader (isr);
-String defaultEncoding = isr.getEncoding();
-System.out.println("encoding "+defaultEncoding);
+            String defaultEncoding = isr.getEncoding();
+            if (debug) System.out.println("encoding "+defaultEncoding);
             toProc = new BufferedWriter(new OutputStreamWriter(extProc.getOutputStream(),"UTF8"));
             /*  try {
                   UIManager.setLookAndFeel(
@@ -756,7 +764,7 @@ System.out.println("encoding "+defaultEncoding);
              languageGroup.add(rbMenuItem);
              if ((result.substring(4)).equals(selectedMenuLanguage))
              {
-                System.out.println("Selecting "+selectedMenuLanguage);
+                if (debug) System.out.println("Selecting "+selectedMenuLanguage);
                 rbMenuItem.setSelected(true);
              }
 
@@ -1005,7 +1013,7 @@ System.out.println("encoding "+defaultEncoding);
         {
           item.setFont(font);
           String name = item.getClass().getName();
-          System.out.println(name);
+          if (debug) System.out.println(name);
         }
       }
   }
@@ -1016,12 +1024,16 @@ System.out.println("encoding "+defaultEncoding);
     Object obj = ae.getSource();
 
     if ( obj == fontList ) {
-        font = new Font((String)fontList.getSelectedItem(), Font.PLAIN, ((Integer)sizeList.getSelectedItem()).intValue());
-        output.setFont(font);  
+        font = new Font((String)fontList.getSelectedItem(), Font.BOLD, ((Integer)sizeList.getSelectedItem()).intValue());
+        //output.setFont(font);  
+        fontEveryWhere(font);
+        cbMenuItem.setFont(font);  
+        rbMenuItem.setFont(font);  
+        fileMenuItem.setFont(font);  
     }
 
     if ( obj == sizeList ) {
-        font = new Font((String)fontList.getSelectedItem(), Font.PLAIN, ((Integer)sizeList.getSelectedItem()).intValue());
+        font = new Font((String)fontList.getSelectedItem(), Font.BOLD, ((Integer)sizeList.getSelectedItem()).intValue());
         fontEveryWhere(font);
         cbMenuItem.setFont(font);  
         rbMenuItem.setFont(font);  
@@ -1108,13 +1120,15 @@ System.out.println("encoding "+defaultEncoding);
             if (group.getSelection().getActionCommand().equals("term")) {
               if (end !=-1)
                 if (abs) {
-                  writeOutput(fileString+text.substring(0, end), file.getPath());
+                 // writeOutput(fileString+text.substring(0, end), file.getPath());
+                    writeOutput(text.substring(0, end), file.getPath());
                   abs=true;
                 }
                 else {
                   int i = linearization.indexOf('\n');
                   int j = linearization.indexOf("/lin");
-                  writeOutput(fileString+linearization.substring(i+1, j-1), file.getPath());
+                  //writeOutput(fileString+linearization.substring(i+1, j-1), file.getPath());
+                    writeOutput(linearization.substring(i+1, j-1), file.getPath());
                 } 
               else
                 JOptionPane.showMessageDialog(this, "No term to save");   
@@ -1124,11 +1138,13 @@ System.out.println("encoding "+defaultEncoding);
                 // abstract syntax is shown:
                 if (abs){
                   end =  text.indexOf('\n', end);
-                  writeOutput(fileString+text.substring(end), file.getPath());
+                  //writeOutput(fileString+text.substring(end), file.getPath());
+                  writeOutput(text.substring(end), file.getPath());
                   abs = true;
                 }
                 else
-                  writeOutput(fileString+text, file.getPath());
+                  //writeOutput(fileString+text, file.getPath());
+                  writeOutput(text, file.getPath());
            }           
          }
 
@@ -1162,10 +1178,10 @@ System.out.println("encoding "+defaultEncoding);
                                       e.hasMoreElements() ;) 
              {
                ab = (AbstractButton)e.nextElement();
-               System.out.println("more to remove ! "+ab.getText()); 
+               if (debug) System.out.println("more to remove ! "+ab.getText()); 
                languageGroup.remove(ab);
              }
-             System.out.println("languageGroupElement after import removal "+ 
+             if (debug) System.out.println("languageGroupElement after import removal "+ 
                             languageGroup.getButtonCount());                   
            }
              submenu.removeAll();
@@ -1213,7 +1229,7 @@ System.out.println("encoding "+defaultEncoding);
             submenu.removeAll();                         
             while (1< menu.getItemCount())
               menu.removeItemAt(1);
- System.out.println("importing: "+ file.getPath().replace('\\','/'));
+            if (debug) System.out.println("importing: "+ file.getPath().replace('\\','/'));
 
              fileString ="";
              send("i "+ file.getPath().replace('\\','/'));  
@@ -1248,10 +1264,10 @@ System.out.println("encoding "+defaultEncoding);
                                       e.hasMoreElements() ;) 
              {
                ab = (AbstractButton)e.nextElement();
-               System.out.println("more to remove ! "+ab.getText()); 
+               if (debug) System.out.println("more to remove ! "+ab.getText()); 
                languageGroup.remove(ab);
              }
-             System.out.println("languageGroupElement after import removal "+ 
+             if (debug) System.out.println("languageGroupElement after import removal "+ 
                             languageGroup.getButtonCount());                   
            }
 
@@ -1273,7 +1289,7 @@ System.out.println("encoding "+defaultEncoding);
               parseInput = s;
               //s = "gf "+s; This is for debugging, otherwise shift the comment to the next line.
               treeChanged = true; 
-            System.out.println("sending: "+ s);
+            if (debug) System.out.println("sending: "+ s);
               send(s);
            }
         }
@@ -1296,10 +1312,10 @@ System.out.println("encoding "+defaultEncoding);
                                       e.hasMoreElements() ;) 
              {
                ab = (AbstractButton)e.nextElement();
-               System.out.println("more to remove ! "+ab.getText()); 
+               if (debug) System.out.println("more to remove ! "+ab.getText()); 
                languageGroup.remove(ab);
              }
-             System.out.println("languageGroupElement after import removal "+ 
+             if (debug) System.out.println("languageGroupElement after import removal "+ 
                             languageGroup.getButtonCount());                   
            }
 
@@ -1355,7 +1371,7 @@ System.out.println("encoding "+defaultEncoding);
              termInput = inputField.getText();
              if (termInput.indexOf('/')==-1){
                send("g "+termInput); 
-               System.out.println("sending term  string");
+               if (debug) System.out.println("sending term  string");
              }
              else {
                send("tfile "+termInput);                           
@@ -1366,11 +1382,11 @@ System.out.println("encoding "+defaultEncoding);
              parseInput = inputField.getText();
              if (parseInput.indexOf('/')==-1){
                send("p "+parseInput);        
-               System.out.println("sending parse string: "+parseInput);
+               if (debug) System.out.println("sending parse string: "+parseInput);
              }   
              else {
                send("pfile "+parseInput);           
-               System.out.println("sending file parse string: "+parseInput);          
+               if (debug) System.out.println("sending file parse string: "+parseInput);        
              }
            }
            dialog.hide();
@@ -1483,7 +1499,7 @@ System.out.println("encoding "+defaultEncoding);
       public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
         if (action.equals("split") ) {
-          cp.remove(centerPanel);
+          coverPanel.remove(centerPanel);
           centerPanel2.add(middlePanelUp, BorderLayout.SOUTH);
           if (((JCheckBoxMenuItem)viewMenu.getItem(0)).isSelected()) {             
             centerPanel2.add(treePanel, BorderLayout.CENTER);
@@ -1491,14 +1507,14 @@ System.out.println("encoding "+defaultEncoding);
           else {
             centerPanel2.add(outputPanelUp, BorderLayout.CENTER);
           } 
-          cp.add(centerPanel2, BorderLayout.CENTER);                 
+          coverPanel.add(centerPanel2, BorderLayout.CENTER);                 
           gui2.getContentPane().add(outputPanelDown);
           gui2.setVisible(true);
           pack();
           repaint();                                       
         }
         if (action.equals("combine") ) {
-          cp.remove(centerPanel2);  
+          coverPanel.remove(centerPanel2);  
           middlePanel.add(middlePanelUp, BorderLayout.NORTH);
           if (((JCheckBoxMenuItem)viewMenu.getItem(0)).isSelected()) {                         gui2.setVisible(false);
             centerPanel.setLeftComponent(treePanel);
@@ -1507,11 +1523,12 @@ System.out.println("encoding "+defaultEncoding);
             centerPanel.setLeftComponent(outputPanelUp);
             gui2.setVisible(false);
           } 
-          cp.add(centerPanel, BorderLayout.CENTER);
+          coverPanel.add(centerPanel, BorderLayout.CENTER);
           centerPanelDown.add(outputPanelDown, BorderLayout.CENTER);
           pack();
           repaint();               
         }
+
         if (action.equals("showTree") ) {
           if (!((JCheckBoxMenuItem)e.getSource()).isSelected()){
             if (debug) System.out.println("was selected");
@@ -1550,11 +1567,11 @@ System.out.println("encoding "+defaultEncoding);
           if (debug) 
             System.out.println("language option has changed "+((JCheckBoxMenuItem)e.getSource()).getText());
           if (((JCheckBoxMenuItem)e.getSource()).isSelected()){
-            System.out.println("turning on");
+            if (debug) System.out.println("turning on");
             send("on "+((JCheckBoxMenuItem)e.getSource()).getText());
           }
           else{
-            System.out.println("turning off");
+            if (debug) System.out.println("turning off");
             send("off "+((JCheckBoxMenuItem)e.getSource()).getText());
           }
         }
@@ -1579,7 +1596,7 @@ System.out.println("encoding "+defaultEncoding);
                 else 
                   if (!action.equals("split")&&!action.equals("combine")&&!action.equals("showTree"))
                   {
-                  System.out.println("sending "+action);
+                  if (debug) System.out.println("sending "+action);
                   send("ml " + action);
                   }
               }
@@ -1599,7 +1616,7 @@ System.out.println("encoding "+defaultEncoding);
            getLayeredPane().remove(field); 
            treeChanged = true;
            send("p "+field.getText());        
-           System.out.println("sending parse string: "+field.getText());
+           if (debug) System.out.println("sending parse string: "+field.getText());
            repaint();
         }
         // Processing Escape:
