@@ -13,16 +13,17 @@ resource Predication = open Deutsch in {
 -- We first define a set of predication patterns.
 
 oper
-  predV1 : V -> NP -> S ;             -- one-place verb: "John walks"
-  predV2 : TV -> NP -> NP -> S ;      -- two-place verb: "John loves Mary"
-  predVColl : V -> NP -> NP -> S ;    -- collective verb: "John and Mary fight"
-  predA1 : Adj1 -> NP -> S ;          -- one-place adjective: "John is old"
-  predA2 : Adj2 -> NP -> NP -> S ;    -- two-place adj: "John is married to Mary"
+  predV1 : V -> NP -> S ;               -- one-place verb: "John walks"
+  predV2 : TV -> NP -> NP -> S ;        -- two-place verb: "John loves Mary"
+  predV3 : TV -> NP -> NP -> NP -> S ;  -- three-place verb: "John gives Mary beer"
+  predVColl : V -> NP -> NP -> S ;      -- collective verb: "John and Mary fight"
+  predA1 : Adj1 -> NP -> S ;            -- one-place adjective: "John is old"
+  predA2 : Adj2 -> NP -> NP -> S ;      -- two-place adj: "John is married to Mary"
   predAComp : AdjDeg -> NP -> NP -> S ; -- compar adj: "John is older than Mary"
-  predAColl : Adj1 -> NP -> NP -> S ; -- collective adj: "John and Mary are married"
-  predN1 : N -> NP -> S ;             -- one-place noun: "John is a man"
-  predN2 : Fun -> NP -> NP -> S ;     -- two-place noun: "John is a lover of Mary"
-  predNColl : N -> NP -> NP -> S ;    -- collective noun: "John and Mary are lovers"
+  predAColl : Adj1 -> NP -> NP -> S ;   -- collect adj: "John and Mary are married"
+  predN1 : N -> NP -> S ;               -- one-place noun: "John is a man"
+  predN2 : Fun -> NP -> NP -> S ;       -- two-place noun: "John is a lover of Mary"
+  predNColl : N -> NP -> NP -> S ;      -- collect noun: "John and Mary are lovers"
 
 -- Individual-valued function applications.
 
@@ -42,9 +43,13 @@ oper
 
 -- Logical connectives on two sentences.
 
-  conjS : S -> S -> S ;
-  disjS : S -> S -> S ;
-  implS : S -> S -> S ;
+  conjS : S -> S -> S ;  -- A and B
+  disjS : S -> S -> S ;  -- A or B
+  implS : S -> S -> S ;  -- if A, B
+
+-- A variant of implication.
+
+  ifThenS : S -> S -> S ;  -- if A, then B
 
 -- As an auxiliary, we need two-place conjunction of names ("John and Mary"), 
 -- used in collective predication.
@@ -79,6 +84,8 @@ oper
   conjS = \A, B -> ConjS AndConj (TwoS A B) ;
   disjS = \A, B -> ConjS OrConj (TwoS A B) ;
   implS = \A, B -> SubjS IfSubj A B ;
+
+  ifThenS = \A,B -> SubjS IfSubj A {s = \\o => "then" ++ B.s ! o} ; --- not in Res
 
   constrTyp1 = \F, A -> AppFun F (IndefManyNP A) ;
 

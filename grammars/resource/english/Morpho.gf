@@ -51,6 +51,7 @@ oper
   pronYouSg = mkPronoun "you" "you" "your" "yours" Sg P2 ; -- verb form still OK
   pronHe = mkPronoun "he" "him" "his" "his" Sg P3 ;
   pronShe = mkPronoun "she" "her" "her" "hers" Sg P3 ;
+  pronIt = mkPronoun "it" "it" "its" "it" Sg P3 ;
 
   pronWe = mkPronoun "we" "us" "our" "ours" Pl P1 ;
   pronYouPl = mkPronoun "you" "you" "your" "yours" Pl P2 ;
@@ -111,29 +112,45 @@ oper
 
 --3 Verbs
 --
--- Except for "be", the worst case needs two forms.
+-- Except for "be", the worst case needs four forms.
 
-  mkVerbP3 : (_,_: Str) -> VerbP3 = \goes,go -> 
-    {s = table {InfImp => go ; Indic P3 => goes ; Indic _ => go}} ;
+  mkVerbP3 : (_,_,_,_: Str) -> VerbP3 = \go,goes,went,gone -> 
+    {s = table {
+       InfImp => go ; 
+       Indic P3 => goes ; 
+       Indic _ => go ; 
+       Past _ => went ;
+       PPart => gone
+       }
+    } ;
+
+  mkVerb : (_,_,_ : Str) -> VerbP3 = \ring,rang,rung ->
+    mkVerbP3 ring (ring + "s") rang rung ;
 
   regVerbP3 : Str -> VerbP3 = \walk -> 
-    mkVerbP3 (walk + "s") walk ;
+    mkVerb walk (walk + "ed") (walk + "ed") ;
 
   verbP3s   : Str -> VerbP3 = \kiss -> 
-    mkVerbP3 (kiss + "es") kiss ;
+    mkVerbP3 kiss (kiss + "es") (kiss + "ed") (kiss + "ed") ;
 
-  verbP3y   : Str -> VerbP3 = \fl -> 
-    mkVerbP3 (fl + "ies") (fl + "y") ;
+  verbP3e   : Str -> VerbP3 = \love -> 
+    mkVerbP3 love (love + "s") (love + "d") (love + "d") ;
 
-  verbP3Have = mkVerbP3 "has" "have" ;
+  verbP3y   : Str -> VerbP3 = \cr -> 
+    mkVerbP3 (cr + "y") (cr + "ies") (cr + "ied") (cr + "ied") ;
 
-  verbP3Do   = verbP3s "do" ;
+  verbP3Have = mkVerbP3 "have" "has" "had" "had" ;
+
+  verbP3Do   = mkVerbP3 "do" "does" "did" "done" ;
 
   verbBe : VerbP3 = {s = table {
     InfImp => "be" ; 
     Indic P1 => "am" ; 
     Indic P2 => "are" ;
-    Indic P3 => "is"
+    Indic P3 => "is" ;
+    Past Sg  => "was" ;
+    Past Pl  => "were" ;
+    PPart => "been"
     }} ;
 
   verbPart : VerbP3 -> Particle -> Verb = \v,p ->

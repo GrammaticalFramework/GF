@@ -55,12 +55,12 @@ oper
 
 --3 Verbs
 --
--- We limit the grammar so far to verbs in infinitive-imperative or present tense.
+-- We treat the full conjugation now.
 -- The present tense is made to depend on person, which correspond to forms
 -- in the singular; plural forms are uniformly equal to the 2nd person singular.
 
 param
-  VForm = InfImp | Indic Person ;
+  VForm = InfImp | Indic Person | Past Number | PPart ;
 
 oper
   VerbP3 : Type = SS1 VForm ;

@@ -9,6 +9,9 @@ lin
   Small = adjCompReg "klein" ;
   Old = adjCompReg3 "alt" "älter" "ältest";
   Young = adjCompReg3 "jung" "jünger" "jüngst";
+  American = adjReg "Amerikanisch" ;
+  Finnish = adjReg "Finnisch" ;
+  Married = adjReg "verheiratet" ** {s2 = "mit" ; c = Dat} ;
   Man = declN2u "Mann" "Männer" ;
   Woman = declN1 "Frau" ;
   Car = declNs "Auto" ;
@@ -20,7 +23,11 @@ lin
   Prove = mkVerbSimple (regVerb "beweisen") ;
   Send = mkTransVerb (mkVerbSimple (verbLaufen "senden" "sendet" "gesandt")) [] Acc;
   Love = mkTransVerb (mkVerbSimple (regVerb "lieben")) [] Acc ;
-  Wait =  mkTransVerb (mkVerbSimple (verbWarten "warten")) "auf" Acc ;
+  Wait = mkTransVerb (mkVerbSimple (verbWarten "warten")) "auf" Acc ;
+  Give = mkDitransVerb 
+           (mkVerbSimple (verbLaufen "geben" "gibt" "gegeben")) [] Dat [] Acc ;
+  Prefer = mkDitransVerb 
+           (mkVerb (verbLaufen "ziehen" "zieht" "gezogen") "vor") [] Acc "vor" Dat ;
   Mother = mkFunC (n2n (declN2uF "Mutter" "Mütter")) "von" Dat ;
   Uncle = mkFunC (n2n (declN2i "Onkel")) "von" Dat ;
   Connection = mkFunC (n2n (declN1 "Verbindung")) "von" Dat ** 
