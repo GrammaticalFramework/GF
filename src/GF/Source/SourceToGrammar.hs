@@ -557,13 +557,15 @@ transInclude x = case x of
  where
    trans f = case f of
      FString s  -> s
-     FIdent (IC s) -> let s' = init s ++ [toLower (last s)] in 
-                      if elem s' newReservedWords then s' else s 
-                      --- unsafe hack ; cf. GetGrammar.oldLexer
+     FIdent (IC s) -> modif s
      FSlash filename  -> '/' : trans filename
      FDot filename  -> '.' : trans filename
      FMinus filename  -> '-' : trans filename
-     FAddId (IC s) filename  -> s ++ trans filename
+     FAddId (IC s) filename  -> modif s ++ trans filename
+   modif s = let s' = init s ++ [toLower (last s)] in 
+             if elem s' newReservedWords then s' else s 
+                      --- unsafe hack ; cf. GetGrammar.oldLexer
+
 
 newReservedWords = 
   words $ "abstract concrete interface incomplete " ++ 

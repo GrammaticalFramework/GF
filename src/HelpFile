@@ -78,6 +78,8 @@ pg, print_grammar: pg
 pm, print_multigrammar: pm
       Prints the current multilingual grammar in .gfcm form.
       (Automatically executes the strip command (s) before doing this.)
+  options:
+      -utf8  apply UTF8-encoding to the grammar
   examples:
       pm | wf Letter.gfcm  -- print the grammar into the file Letter.gfcm
 

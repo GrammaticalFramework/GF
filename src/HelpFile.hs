@@ -91,6 +91,8 @@ txtHelpFile =
   "\npm, print_multigrammar: pm" ++
   "\n      Prints the current multilingual grammar in .gfcm form." ++
   "\n      (Automatically executes the strip command (s) before doing this.)" ++
+  "\n  options:" ++
+  "\n      -utf8  apply UTF8-encoding to the grammar" ++
   "\n  examples:" ++
   "\n      pm | wf Letter.gfcm  -- print the grammar into the file Letter.gfcm" ++
   "\n" ++

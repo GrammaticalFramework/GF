@@ -189,7 +189,7 @@ optLinearizeTree opts0 gr t = case getOptVal opts transferFun of
   Just m -> useByTransfer flin g (I.identC m) t
   _ -> flin t
  where
-  opts = addOptions (stateOptions gr) opts0
+  opts = addOptions opts0 (stateOptions gr)
   flin = case getOptVal opts markLin of
     Just mk
      | mk == markOptXML    -> lin markXML
