@@ -2,6 +2,8 @@
 
 instance SyntaxFre of SyntaxRomance = TypesFre ** open Prelude, (CO=Coordination), MorphoFre in {
 
+flags optimize=parametrize ;
+
 oper
   nameNounPhrase = \jean -> 
     normalNounPhrase
@@ -51,6 +53,19 @@ oper
           Ind => ["il y a"] ;
           Con => ["il y ait"]
           } ++ duvin.s ! stressed accusative  --- il y en a ; have to define "y"
+    } ;
+
+
+  reflPron : Number => Person => NPFormA => Str = \\n,p => 
+    case p of {
+      P3 => table {
+        Ton x => prepCase x ++ "soi" ;
+        Aton _ => elision "s" ;
+        Poss Sg Masc => "son" ;
+        Poss Sg Fem  => "sa" ;
+        Poss Pl _    => "ses"
+        } ;
+      _ => (personPron Masc n p).s
     } ;
 
   mkAdjReg : Str -> Bool -> Adjective = \adj,p ->

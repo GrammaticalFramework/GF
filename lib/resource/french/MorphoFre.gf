@@ -13,6 +13,7 @@
 
 resource MorphoFre = open (Predef=Predef), Prelude, TypesFre in {
 
+flags optimize=all ;
 
 --3 Front vowels
 --
@@ -242,19 +243,23 @@ oper
     P3
     Clit1 ;
 
---2 Reflexive pronouns
---
--- It is simply a function depending on number and person.
+  personPron : Gender -> Number -> Person -> Pronoun = \g,n,p -> 
+    case <n,p> of {
+      <Sg,P1> => pronJe ;
+      <Sg,P2> => pronTu ;
+      <Sg,P3> => case g of {
+        Masc => pronIl ;
+        Fem  => pronElle 
+        } ;
+      <Pl,P1> => pronNous ;
+      <Pl,P2> => pronVous ;
+      <Pl,P3> => case g of {
+        Masc => pronIls ;
+        Fem  => pronElles 
+        } 
+      } ;
 
-  pronRefl : Number -> Person -> Str = \n,p -> case <n,p> of {
-    <Sg,P1> => elision "m" ;
-    <Sg,P2> => elision "t" ;
-    <_, P3> => elision "s" ;
-    <Pl,P1> => "nous" ;
-    <Pl,P2> => "vous"
-    } ;
-
-
+-- Reflexive pronouns are defined in $SyntaxFre$.
 
 -- The composable pronoun "lequel" is inflected by varying the definite
 -- article and the determiner "quel" in the expected way.

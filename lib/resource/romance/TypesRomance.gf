@@ -65,7 +65,6 @@ oper
 
   prepCase : CaseA -> Str ;
 
-
   adjCompLong : Adj -> AdjComp ;
 
   relPronForms : CaseA => Str ;
