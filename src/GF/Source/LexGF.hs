@@ -1,8 +1,9 @@
 {-# OPTIONS -fglasgow-exts -cpp #-}
-{-# LINE 4 "LexGF.x" #-}
+{-# LINE 3 "LexGF.x" #-}
 module LexGF where
-import SharedString -- H
+
 import ErrM
+import SharedString
 
 #if __GLASGOW_HASKELL__ >= 503
 import Data.Array
@@ -34,14 +35,17 @@ alex_accept = listArray (0::Int,27) [[],[],[(AlexAccSkip)],[(AlexAccSkip)],[],[(
 
 tok f p s = f p s
 
+share :: String -> String
+share = shareString
+
 data Tok =
-   TS !String     -- reserved words    -- H
- | TL !String     -- string literals   -- H
- | TI String     -- integer literals
- | TV !String     -- identifiers       -- H
- | TD String     -- double precision float literals
- | TC String     -- character literals
- | T_LString !String                   -- H
+   TS !String     -- reserved words
+ | TL !String     -- string literals
+ | TI !String     -- integer literals
+ | TV !String     -- identifiers
+ | TD !String     -- double precision float literals
+ | TC !String     -- character literals
+ | T_LString !String
 
  deriving (Eq,Show,Ord)
 
@@ -130,11 +134,11 @@ alexGetChar (p, _, (c:s)) =
 alexInputPrevChar :: AlexInput -> Char
 alexInputPrevChar (p, c, s) = c
 
-alex_action_3 = tok (\p s -> PT p (TS $ shareString s)) 
-alex_action_4 = tok (\p s -> PT p (eitherResIdent (T_LString . shareString) s)) 
-alex_action_5 = tok (\p s -> PT p (eitherResIdent (TV . shareString) s)) 
-alex_action_6 = tok (\p s -> PT p (TL $ shareString $ unescapeInitTail s)) 
-alex_action_7 = tok (\p s -> PT p (TI s))    
+alex_action_3 = tok (\p s -> PT p (TS $ share s)) 
+alex_action_4 = tok (\p s -> PT p (eitherResIdent (T_LString . share) s)) 
+alex_action_5 = tok (\p s -> PT p (eitherResIdent (TV . share) s)) 
+alex_action_6 = tok (\p s -> PT p (TL $ share $ unescapeInitTail s)) 
+alex_action_7 = tok (\p s -> PT p (TI $ share s))    
 {-# LINE 1 "GenericTemplate.hs" #-}
 {-# LINE 1 "<built-in>" #-}
 {-# LINE 1 "<command line>" #-}
