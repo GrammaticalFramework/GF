@@ -9,6 +9,8 @@ oper
       jean.g 
       Sg ;
 
+  nounPhraseOn = mkNameNounPhrase "si" Masc ; --- can be plural dep. on object
+
   partitiveNounPhrase = \n,vino ->
     normalNounPhrase 
       (table {
@@ -85,7 +87,8 @@ oper
 
   isTransVerbClit = \v -> case v.c of { 
      Acc => True ;
-     _   => False  --- hmmm
+     CPrep P_a => True ; -- dative
+     _   => False
      } ;
 
 -- The negation of a verb.

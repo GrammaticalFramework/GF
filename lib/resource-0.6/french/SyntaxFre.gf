@@ -9,6 +9,8 @@ oper
       jean.g 
       Sg ;
 
+  nounPhraseOn = mkNameNounPhrase "on" Masc ;
+
   partitiveNounPhrase = \n,vin ->
     normalNounPhrase 
       (table {
@@ -90,7 +92,8 @@ oper
 
   isTransVerbClit = \v -> case v.c of { 
      Acc => True ;
-     _   => False  --- hmmm
+     Dat => True ;
+     _   => False
      } ;
 
 -- The "ne - pas" negation.

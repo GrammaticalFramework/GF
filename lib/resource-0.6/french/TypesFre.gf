@@ -126,6 +126,13 @@ oper
     _   => Ton c
     } ;
 
+  case2pformClit = \c -> case c of {
+    Nom => Aton Nom ;
+    Acc => Aton Acc ;
+    Dat => Aton Dat ;
+    _   => Ton c
+    } ;
+
 -- Relative pronouns: the case-dependent parameter type.
 
   param RelForm = RSimple Case | RComplex Gender Number Case ;

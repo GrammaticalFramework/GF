@@ -47,7 +47,7 @@ oper
   mkNameNounPhrase : Str -> Gender -> NounPhrase = \jean,m ->
     nameNounPhrase (mkProperName jean m) ;
 
-  nounPhraseOn = mkNameNounPhrase "on" Masc ;
+  nounPhraseOn : NounPhrase ; 
 
   normalNounPhrase : (CaseA => Str) -> Gender -> Number -> NounPhrase = \cs,g,n ->
     {s = \\p => cs ! (pform2case p) ;
@@ -459,7 +459,7 @@ oper
 
   complTransVerb : TransVerb -> NounPhrase -> VerbGroup = \aime,jean ->
     {s = \\b,g,w =>  ---- BUG: v gives stack overflow
-       let {Jean = jean.s ! (case2pform aime.c) ; Aime = aime.s ! w} in 
+       let {Jean = jean.s ! (case2pformClit aime.c) ; Aime = aime.s ! w} in 
        if_then_Str (andB (isNounPhraseClit jean) (isTransVerbClit aime))
          (posNeg b (Jean ++ Aime) [])
          (posNeg b Aime           Jean)
@@ -490,24 +490,30 @@ oper
 
   DitransVerb = TransVerb ** {s3 : Preposition ; c3 : CaseA} ; 
 
-  mkDitransVerb : Verb -> Preposition -> CaseA -> Preposition -> CaseA -> DitransVerb = 
+  mkDitransVerb : 
+   Verb -> Preposition -> CaseA -> Preposition -> CaseA -> DitransVerb = 
    \v,p1,c1,p2,c2 -> 
     v ** {s2 = p1 ; c = c1 ; s3 = p2 ; c3 = c2} ;
 
---- This must be completed to account for the cliticization of the second object.
+--- This must be completed to account for the order of the clitics, and also, to
+--- distinguish between different types of complements.
 
   complDitransVerb : 
     DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = \donner,jean,vin ->
     {s = \\b,g,w =>
        let 
          donne = donner.s ! w ;
-         Jean  = jean.s ! (case2pform donner.c) ; 
-         duvin = vin.s ! (case2pform donner.c3) ; 
+         cJean = isNounPhraseClit jean ;
+         cVin  = isNounPhraseClit vin ;
+         Jean  = jean.s ! (case2pformClit donner.c) ; 
+         Vin   = vin.s ! (case2pformClit donner.c3) ;
+         aJean = if_then_Str cJean [] Jean ;  
+         duVin = if_then_Str cVin [] Vin ;  
+         lui   = if_then_Str cJean Jean [] ;  
+         te    = if_then_Str cVin Vin []  
        in 
-       if_then_Str (andB (isNounPhraseClit jean) (isTransVerbClit donner))
-         (posNeg b (Jean ++ donne) duvin)
-         (posNeg b donne          (Jean ++ duvin))
-    } ;
+         posNeg b (te ++ lui ++ donne) (aJean ++ duVin)
+     } ;
 
 -- The following macro builds the "ne - pas" or "non" negation. The second
 -- string argument is used for the complement of a verb phrase. In Italian,
