@@ -20,7 +20,7 @@ import UTF8
 
 initEditLoop :: CEnv -> IO () -> IO ()
 initEditLoop env resume = do
-  let env' = addGlobalOptions (options [sizeDisplay "short"]) env
+  let env' = startEditEnv env
   putStrLnFlush $ initEditMsg env'
   let state = initSStateEnv env'
   putStrLnFlush $ showCurrentState env' state
@@ -113,7 +113,9 @@ pCommand = pCommandWords . words where
 -- well, this lists the commands of the line-based editor
 initEditMsg env = unlines $
   "State-dependent editing commands are given in the menu:" :
-  "  n = new, r = refine, w = wrap, d = delete, s = select." :
+  "  n [Cat] = new, r [Fun] = refine, w [Fun] [Int] = wrap,":
+  "  ch [Fun] = change head, d = delete, s [Int] = select," :
+  "  x [Var] [Var] = alpha convert." :
   "Commands changing the environment:" :
   "  i [file] = import, e = empty." :
   "Other commands:" : 

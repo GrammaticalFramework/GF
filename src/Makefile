@@ -5,6 +5,7 @@ GHMAKE=$(GHC) --make
 GHCFLAGS=-package lang -package util -fglasgow-exts $(CPPFLAGS) $(LDFLAGS)
 GHCOPTFLAGS=-O $(GHCFLAGS)
 GHCFUDFLAG=-package Fudgets
+JAVAFLAGS=-target 1.4 -source 1.4
 
 HUGSINCLUDE    =.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:newparsing:trace:
 BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -inewparsing -iparsers -inotrace
@@ -101,7 +102,7 @@ ghci-nofud:
 today:
 	util/mktoday.sh
 javac:
-	$(JAVAC) -target 1.4 -source 1.4 java/*.java
+	$(JAVAC) $(JAVAFLAGS) java/*.java
 
 jar: javac
 	cd java; $(JAR) -cmf manifest.txt gf-java.jar *.class

@@ -5,6 +5,7 @@ import qualified GFC
 import TypeCheck
 import LookAbs
 import AbsCompute
+import Macros (errorCat)
 
 import Operations
 import Zipper
@@ -35,7 +36,7 @@ actVal :: State -> Val
 actVal = valNode . nodeTree . actTree
 
 actCat :: State -> Cat
-actCat = errVal undefined . val2cat . actVal ---- undef
+actCat = errVal errorCat . val2cat . actVal ---- undef
 
 actAtom :: State -> Atom
 actAtom = atomTree . actTree

@@ -505,28 +505,34 @@ transOldGrammar opts name0 x = case x of
     g1 <- transGrammar $ Gr moddefs
     removeLiT g1 --- needed for bw compatibility with an obsolete feature
  where
-   sortTopDefs ds = [mkAbs a,mkRes r,mkCnc c] 
-     where (a,r,c) = foldr srt ([],[],[]) ds
-   srt d (a,r,c) = case d of
-     DefCat catdefs  -> (d:a,r,c)
-     DefFun fundefs  -> (d:a,r,c)
-     DefDef defs     -> (d:a,r,c)
-     DefData pardefs -> (d:a,r,c)
-     DefPar pardefs  -> (a,d:r,c)
-     DefOper defs    -> (a,d:r,c)
-     DefLintype defs -> (a,d:r,c)
-     DefLincat defs  -> (a,r,d:c)
-     DefLindef defs  -> (a,r,d:c)
-     DefLin defs     -> (a,r,d:c)
-     DefPattern defs -> (a,r,d:c)
-     DefFlag defs    -> (a,r,d:c) --- a guess
-     DefPrintCat printdefs  -> (a,r,d:c)
-     DefPrintFun printdefs  -> (a,r,d:c)
-     DefPrintOld printdefs  -> (a,r,d:c)
-   mkAbs a = MModule q (MTAbstract absName) (MBody ne (Opens []) (topDefs a))
-   mkRes r = MModule q (MTResource resName) (MBody ne  (Opens []) (topDefs r))
-   mkCnc r = MModule q (MTConcrete cncName absName) 
-                                            (MBody ne (Opens [OName resName]) (topDefs r))
+   sortTopDefs ds = [mkAbs a,mkRes ops r,mkCnc ops c] ++ map mkPack ps
+     where 
+       ops = map fst ps
+       (a,r,c,ps) = foldr srt ([],[],[],[]) ds
+   srt d (a,r,c,ps) = case d of
+     DefCat catdefs  -> (d:a,r,c,ps)
+     DefFun fundefs  -> (d:a,r,c,ps)
+     DefDef defs     -> (d:a,r,c,ps)
+     DefData pardefs -> (d:a,r,c,ps)
+     DefPar pardefs  -> (a,d:r,c,ps)
+     DefOper defs    -> (a,d:r,c,ps)
+     DefLintype defs -> (a,d:r,c,ps)
+     DefLincat defs  -> (a,r,d:c,ps)
+     DefLindef defs  -> (a,r,d:c,ps)
+     DefLin defs     -> (a,r,d:c,ps)
+     DefPattern defs -> (a,r,d:c,ps)
+     DefFlag defs    -> (a,r,d:c,ps) --- a guess
+     DefPrintCat printdefs  -> (a,r,d:c,ps)
+     DefPrintFun printdefs  -> (a,r,d:c,ps)
+     DefPrintOld printdefs  -> (a,r,d:c,ps)
+     DefPackage m ds        -> (a,r,c,(m,ds):ps)
+     _ -> (a,r,c,ps)
+   mkAbs a = MModule q (MTAbstract absName) (MBody ne (Opens [])  (topDefs a))
+   mkRes ps r = MModule q (MTResource resName) (MBody ne (Opens ops) (topDefs r))
+                  where ops = map OName ps
+   mkCnc ps r = MModule q (MTConcrete cncName absName) 
+                               (MBody ne (Opens (map OName (resName:ps))) (topDefs r))
+   mkPack (m, ds) = MModule q (MTResource m) (MBody ne  (Opens []) (topDefs ds))
    topDefs t = t
    ne = NoExt
    q = CMCompl
@@ -551,11 +557,17 @@ transInclude x = case x of
  where
    trans f = case f of
      FString s  -> s
-     FIdent (IC s) -> s
+     FIdent (IC s) -> let s' = init s ++ [toLower (last s)] in 
+                      if elem s' newReservedWords then s' else s 
+                      --- unsafe hack ; cf. GetGrammar.oldLexer
      FSlash filename  -> '/' : trans filename
      FDot filename  -> '.' : trans filename
      FMinus filename  -> '-' : trans filename
      FAddId (IC s) filename  -> s ++ trans filename
+
+newReservedWords = 
+  words $ "abstract concrete interface incomplete " ++ 
+          "instance out open resource reuse transfer union with where"
 
 termInPattern :: G.Term -> G.Term
 termInPattern t = M.mkAbs xx $ G.R [(s, (Nothing, toP body))] where

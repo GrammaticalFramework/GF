@@ -313,11 +313,15 @@ firstGrammarST  = stateGrammarST . firstStateGrammar
 firstAbstractST = abstractOf . firstGrammarST
 firstConcreteST = concreteOf . firstGrammarST
 -}
--- command-line option -language=foo overrides the actual grammar in state
+-- command-line option -lang=foo overrides the actual grammar in state
 grammarOfOptState :: Options -> ShellState -> StateGrammar
 grammarOfOptState opts st = 
   maybe (firstStateGrammar st) (stateGrammarOfLang st . language) $ 
                                                getOptVal opts useLanguage
+
+languageOfOptState :: Options -> ShellState -> Maybe Language
+languageOfOptState opts st = 
+  maybe (concrete st) (return . language) $ getOptVal opts useLanguage
 
 -- command-line option -cat=foo overrides the possible start cat of a grammar
 firstCatOpts :: Options -> StateGrammar -> CFCat

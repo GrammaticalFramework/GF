@@ -128,6 +128,9 @@ transTopDef x = case x of
   DefPrintOld printdefs  -> failure x
   DefLintype defs  -> failure x
   DefPattern defs  -> failure x
+  DefPackage id topdefs  -> failure x
+  DefVars defs  -> failure x
+  DefTokenizer id  -> failure x
 
 
 transCatDef :: CatDef -> Result

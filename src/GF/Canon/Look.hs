@@ -41,6 +41,7 @@ lookupLincat gr f = do
   case info of
     CncCat t _ _ -> return t
     AnyInd _ n -> lookupLincat gr $ redirectIdent n f
+    _ -> prtBad "no lincat found for" f
 
 lookupPrintname :: CanonGrammar -> CIdent -> Err Term
 lookupPrintname gr f = do

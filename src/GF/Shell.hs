@@ -7,6 +7,9 @@ import qualified Ident as I
 import qualified Compute as Co
 import qualified Lookup as L
 import qualified GFC
+import qualified Look
+import qualified CMacros
+import qualified GrammarToCanon
 import Values
 import GetTree
 
@@ -28,7 +31,7 @@ import HelpFile
 import PrOld
 import PrGrammar
 
-import Monad (foldM)
+import Monad (foldM,liftM)
 import System (system)
 import Random (newStdGen) ----
 import Zipper ----
@@ -112,12 +115,15 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
   CPrintHistory -> (returnArg $ AString $ unlines $ reverse h) sa
   -- good to have here for piping; eh and ec must be done on outer level
 
-  CLinearize [] -> changeArg (opTS2CommandArg (optLinearizeTreeVal opts gro) . s2t) sa
+  CLinearize [] ->  
+    changeArg (opTS2CommandArg (optLinearizeTreeVal opts gro) . s2t) sa
 ----  CLinearize m -> changeArg (opTS2CommandArg (optLinearizeArgForm opts gro m)) sa
 
-  CParse     -> case optParseArgErrMsg opts gro (prCommandArg a) of
-    Ok (ts,msg) -> putStrLnFlush msg >> changeArg (const $ ATrms ts) sa
-    Bad msg -> changeArg (const $ AError msg) sa
+  CParse     -> do
+    warnDiscont opts 
+    case optParseArgErrMsg opts gro (prCommandArg a) of
+      Ok (ts,msg) -> putStrLnFlush msg >> changeArg (const $ ATrms ts) sa
+      Bad msg -> changeArg (const $ AError msg) sa
 
   CTranslate il ol -> do
     let a' = opST2CommandArg (optParseArgErr opts (sgr il)) a
@@ -175,13 +181,19 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
                 return . L.opersForType src))) sa
 
 
-  CTranslationQuiz il ol -> justOutput (teachTranslation opts (sgr il) (sgr ol)) sa
-  CTranslationList il ol n -> do 
+  CTranslationQuiz il ol -> do
+    warnDiscont opts 
+    justOutput (teachTranslation opts (sgr il) (sgr ol)) sa
+  CTranslationList il ol n -> do
+    warnDiscont opts 
     qs <- transTrainList opts (sgr il) (sgr ol) (toInteger n)
     returnArg (AString $ foldr (+++++) [] [unlines (s:ss) | (s,ss) <- qs]) sa
 
-  CMorphoQuiz -> justOutput (teachMorpho opts gro) sa
+  CMorphoQuiz -> do
+    warnDiscont opts 
+    justOutput (teachMorpho opts gro) sa
   CMorphoList n -> do 
+    warnDiscont opts 
     qs <- useIOE [] $ morphoTrainList opts gro (toInteger n)
     returnArg (AString $ foldr (+++++) [] [unlines (s:ss) | (s,ss) <- qs]) sa
 
@@ -201,8 +213,8 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
     | oElem showAll opts  -> returnArg   (AString txtHelpFile) sa
     | otherwise           -> returnArg   (AString txtHelpFileSummary) sa
 
-  CPrintGrammar -> returnArg (AString (optPrintGrammar opts gro)) sa
-  CPrintGlobalOptions -> justOutput (putStrLn $ prShellStateInfo st) sa
+  CPrintGrammar       -> returnArg (AString (optPrintGrammar opts gro)) sa
+  CPrintGlobalOptions -> justOutput (putStrLn  $ prShellStateInfo st) sa
   CPrintInformation c -> justOutput (useIOE () $ showInformation opts st c) sa
   CPrintLanguages     -> justOutput 
                          (putStrLn $ unwords $ map prLanguage $ allLanguages st) sa
@@ -226,6 +238,14 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
      ASTrm s  -> err AError (ATrms . return) $ string2treeErr gro s
      _ -> a
 
+   warnDiscont os = err putStrLn id $ do
+     let c0 = firstAbsCat os gro
+     c <- GrammarToCanon.redQIdent c0
+     lang <- maybeErr "no concrete" $ languageOfOptState os st
+     t <- Look.lookupLincat cgr $ CMacros.redirectIdent lang c
+     return $ if CMacros.isDiscontinuousCType t 
+       then (putStrLn ("Warning: discontinuous category" +++ prt_ c))
+       else (return ())
 
 -- commands either change the state or process the argument, but not both
 -- some commands just do output

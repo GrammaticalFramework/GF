@@ -104,6 +104,16 @@ defLinType = RecType [Lbg (L (A.identC "s")) TStr]
 defLindef :: Term
 defLindef = R [Ass (L (A.identC "s")) (Arg (A (A.identC "str") 0))]
 
+isDiscontinuousCType :: CType -> Bool
+isDiscontinuousCType t = case t of
+  RecType rs -> length [t | Lbg _ t <- rs, valTableType t == TStr] > 1
+  _ -> True --- does not occur; would not behave well in lin commands
+
+valTableType :: CType -> CType
+valTableType t = case t of
+  Table _ v -> valTableType v
+  _ -> t
+
 strsFromTerm :: Term -> Err [Str]
 strsFromTerm t = case t of
   K (KS s) -> return [str s]

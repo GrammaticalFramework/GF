@@ -100,6 +100,9 @@ data TopDef =
  | DefPrintOld [PrintDef]
  | DefLintype [Def]
  | DefPattern [Def]
+ | DefPackage Ident [TopDef]
+ | DefVars [Def]
+ | DefTokenizer Ident
   deriving (Eq,Ord,Show)
 
 data CatDef =
