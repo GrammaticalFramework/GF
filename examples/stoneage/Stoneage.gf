@@ -78,6 +78,15 @@ fun
   Few : CN -> NP ;
   Other : CN -> NP ;
 
+  -- Pronouns
+ 
+  I : NP ;
+  You_One : NP ;
+  He : NP ;
+  We : NP ;
+  You_Many : NP ;
+  They : NP ;
+
   -- People
   Woman : CN ;
   Man : CN ;

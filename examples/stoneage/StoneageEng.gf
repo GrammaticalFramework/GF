@@ -80,6 +80,17 @@ lin
   Few = DetNP few_Det ;
   Other = DetNP other_Det ;
 
+  -- Pronouns
+
+  I = i_NP ;
+  You_One = thou_NP ;
+  He = he_NP ;
+  We = we_NP ;
+  You_Many = you_NP ;
+  They = they_NP ;
+
+  -- Nouns
+
   Woman = UseN woman_N ;
   Man = UseN man_N ;
   Person = UseN person_N ;
