@@ -33,6 +33,21 @@ lookupLin gr f = do
     CncCat _ t _ -> return t
     AnyInd _ n -> lookupLin gr $ redirectIdent n f
 
+lookupLincat :: CanonGrammar -> CIdent -> Err CType
+lookupLincat gr f = do
+  info <- lookupCncInfo gr f
+  case info of
+    CncCat t _ _ -> return t
+    AnyInd _ n -> lookupLincat gr $ redirectIdent n f
+
+lookupPrintname :: CanonGrammar -> CIdent -> Err Term
+lookupPrintname gr f = do
+  info <- lookupCncInfo gr f
+  case info of
+    CncFun _ _ _ t -> return t
+    CncCat _ _ t -> return t
+    AnyInd _ n -> lookupPrintname gr $ redirectIdent n f
+
 lookupResInfo :: CanonGrammar -> CIdent -> Err Info
 lookupResInfo gr f@(CIQ m c) = do
   mt <- M.lookupModule gr m

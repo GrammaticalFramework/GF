@@ -8,6 +8,9 @@ import Ident
 import PrGrammar
 import CMacros
 import Look
+import LookAbs
+import MMacros
+import TypeCheck (annotate) ----
 import Str
 import Unlex
 ----import TypeCheck -- to annotate
@@ -115,7 +118,6 @@ linTree2string mk gr m e = err id id $ do
   let ss = strs2strings $ sTables2strs $ strTables2sTables ts
   ifNull (prtBad "empty linearization of" e) (return . head) ss
 
-
 -- argument is a Tree, value is a list of strs; needed in Parsing
 
 allLinsOfTree :: CanonGrammar -> Ident -> A.Tree -> [Str]
@@ -165,23 +167,19 @@ allLinsOfFun gr f = do
 
 -}
 
-
-
-
-{- ----
 -- returns printname if one exists; otherwise linearizes with metas
-printOrLinearize :: CanonGrammar -> Fun -> String
-printOrLinearize gr f = 
-{- ----
- errVal (prtt f) $ case lookupPrintname cnc f of
-  Ok s -> return s
-  _ -> -} 
- 
-          unlines $ take 1 $ err singleton id $ 
-       do
-    t  <- lookupFunType gr f
-    f' <- ref2exp [] t (AC f) --- []
-    lin f'
- where 
-   lin = linearizeToStrings gr (const id) ----
--}
+
+printOrLinearize :: CanonGrammar -> Ident -> A.Fun -> String
+printOrLinearize gr c f@(m, d) = errVal (prt fq) $ 
+  case lookupPrintname gr (CIQ c d) of
+    Ok t -> do
+      ss <- strsFromTerm t
+      let s = strs2strings [ss]
+      return $ ifNull (prt fq) head s
+    _ -> do
+      ty  <- lookupFunType gr m d
+      f'  <- ref2exp [] ty (A.QC m d)
+      tr  <- annotate gr f' 
+      return $ linTree2string noMark gr c tr
+   where
+     fq = CIQ m d  

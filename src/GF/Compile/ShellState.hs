@@ -101,13 +101,14 @@ updateShellState :: Options -> ShellState ->
                     (CanonGrammar,(G.SourceGrammar,[(FilePath,ModTime)])) -> 
                     Err ShellState 
 updateShellState opts sh (gr,(sgr,rts)) = do 
-  let cgr = M.updateMGrammar (canModules sh) gr
-      a' = ifNull Nothing (return . last) $ allAbstracts cgr
+  let cgr0 = M.updateMGrammar (canModules sh) gr
+      a' = ifNull Nothing (return . last) $ allAbstracts cgr0
   abstr0 <- case abstract sh of
     Just a -> do
       --- test that abstract is compatible
       return $ Just a
     _ -> return a'
+  let cgr = filterAbstracts abstr0 cgr0
   let concrs = maybe [] (allConcretes cgr) abstr0
       concr0 = ifNull Nothing (return . last) concrs
       notInrts f = notElem f $ map fst rts
@@ -146,6 +147,21 @@ prShellStateInfo sh = unlines [
   "global options :   " +++ prOpts (gloptions sh)
   ]
 
+-- throw away those abstracts that are not needed --- could be more aggressive
+
+filterAbstracts :: Maybe Ident -> CanonGrammar -> CanonGrammar
+filterAbstracts abstr cgr = M.MGrammar [m | m <- ms, needed m] where
+  ms = M.modules cgr
+  needed (i,_) = case abstr of
+    Just a -> elem i $ needs a
+    _ -> True
+  needs a = [i | (i,M.ModMod m) <- ms, not (M.isModAbs m) || dep i a]
+  dep i a = elem i (ext a mse)
+  mse = [(i,me) | (i,M.ModMod m) <- ms, M.isModAbs m, me <- [M.extends m]]
+  ext a es = case lookup a es of
+    Just (Just e) -> a : ext e es
+    Just _ -> a : []
+    _ -> []
 
 -- form just one state grammar, if unique, from a canonical grammar
 
