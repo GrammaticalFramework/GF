@@ -1988,7 +1988,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       String less = "\\"+"<";
       restString = replaceSubstring(restString,more,"> ");
       restString = replaceSubstring(restString,less," <");
-      restString= replaceSubstring(restString,"\b\b","\b");
+      restString= replaceSubstring(restString,"\\\\"," \\");
       if (debug4) 
         System.out.println(restString);
       output.append(restString.replaceAll("&-","\n "));

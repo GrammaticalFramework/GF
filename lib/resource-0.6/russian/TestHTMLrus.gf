@@ -10,7 +10,7 @@ flags
 
 lin
  body = {s= "<body> " ++"Это тело" ++ " </body>"};
- head = {s= "<head> " ++ "Это голова \" ++ " </head>"};
+ head = {s= "<head> " ++ "Это голова \\" ++ " </head>"};
  htmlText x y =  {s= " <html> "++ x.s ++ " " ++ y.s ++ " </html>"};
 
 };
