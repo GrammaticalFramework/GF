@@ -196,9 +196,14 @@ oper
 -- Adjectival phrases have a parameter $p$ telling if they are prefixed ($True$) or 
 -- postfixed (complex APs). 
 
-  AdjPhrase : Type = Adjective ** {p : Bool} ;
+  AdjPhrase : Type = {s : Agr => Str ; p : Bool} ;
 
-  adj2adjPhrase : Adjective -> AdjPhrase = \new -> new ** {p = True} ;
+  noAPAgr : Agr = ASgP2 ;
+
+  adj2adjPhrase : Adjective -> AdjPhrase = \new -> 
+    {s = \\_ => new.s ! AAdj ;
+     p = True
+    } ;
 
   simpleAdjPhrase : Str -> AdjPhrase = \French ->
     adj2adjPhrase (regAdjective French) ;
@@ -217,7 +222,7 @@ oper
 -- adjectival phrases ("bigger then you").
 
   comparAdjPhrase : AdjDegr -> NounPhrase -> AdjPhrase = \big, you ->
-    {s = \\a => big.s ! Comp ! a ++ "than" ++ you.s ! NomP ; 
+    {s = \\_ => big.s ! Comp ! AAdj ++ "than" ++ you.s ! NomP ; 
      p = False
     } ;
 
@@ -233,7 +238,7 @@ oper
 -- ("the youngest" - in free variation). 
 
   superlAdjPhrase : AdjDegr -> AdjPhrase = \big ->
-    {s = \\a => "the" ++ big.s ! Sup ! a ; 
+    {s = \\_ => "the" ++ big.s ! Sup ! AAdj ; 
      p = True
     } ;
 
@@ -247,7 +252,7 @@ oper
   AdjCompl = Adjective ** {s2 : Preposition} ;
 
   complAdj : AdjCompl -> NounPhrase -> AdjPhrase = \related,john ->
-    {s = \\a => related.s ! a ++ related.s2 ++ john.s ! AccP ; 
+    {s = \\a => related.s ! AAdj ++ related.s2 ++ john.s ! AccP ; 
      p = False
     } ;
 
@@ -263,8 +268,12 @@ oper
 
   modCommNounPhrase : AdjPhrase -> CommNounPhrase -> CommNounPhrase = \big, car -> 
     {s = \\n => if_then_else (Case => Str) big.p 
-           (\\c => big.s ! AAdj ++ car.s ! n ! c)
-           (table {Nom => car.s ! n ! Nom ++ big.s ! AAdj ; Gen => variants {}}) ;
+           (\\c => big.s ! noAPAgr ++ car.s ! n ! c)
+           (\\c => car.s ! n ! Nom ++ big.s ! noAPAgr ++ case c of {
+              Nom => [] ;
+              Gen => "'s" --- detached clitic
+              }
+           ) ;
      g = car.g
     } ;
 
@@ -537,7 +546,7 @@ oper
 -- The syntax is the same as for adjectival predication.
 
   passVerb : Verb -> Complement = \love ->
-    complAdjective (adj2adjPhrase (regAdjective (love.s ! PPart))) ;
+    complAdjective (regAdjective (love.s ! PPart)) ;
 
 -- Transitive verbs can also be used reflexively.
 -- But to formalize this we must make verb phrases depend on a person parameter.
@@ -570,13 +579,14 @@ oper
     TransVerb -> NounPhrase -> AdjPhrase -> Complement = \gor,dig,sur ->
       mkComp
         gor 
-        (\\_ => gor.s1 ++ gor.s3 ++ dig.s ! AccP ++ sur.s ! AAdj) ;
+        (\\_ => gor.s1 ++ gor.s3 ++ dig.s ! AccP ++ sur.s ! noAPAgr) ;
+    ---- should be agr a; make mkComp more general
 
   complAdjVerb : 
     Verb -> AdjPhrase -> Complement = \seut,sur ->
       mkComp 
         seut 
-        (\\n => sur.s ! AAdj ++ seut.s1) ;
+        (\\n => sur.s ! noAPAgr ++ seut.s1) ;
 
 
 --2 Adverbs
@@ -917,23 +927,26 @@ oper
                  (simma.s ! VIInfinit ! a)
         ) ;
 
-  complVerbAdj : Adjective -> VerbPhrase -> Complement = \grei, simma ->
-      (\\a => 
+  complVerbAdj : Adjective -> VerbPhrase -> AdjPhrase = \grei, simma ->
+    {s = \\a => 
               grei.s ! AAdj ++ simma.s1 ++
               "to" ++
-              simma.s ! VIInfinit ! a) ;
+              simma.s ! VIInfinit ! a ;
+     p = False 
+    } ;
 
   complVerbAdj2 : 
-    Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> Complement = 
+    Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> AdjPhrase = 
       \obj,grei,dig,simma ->
-          (\\a =>
+      {s = \\a =>
               grei.s ! AAdj ++ 
               grei.s2 ++ dig.s ! AccP ++
               simma.s1 ++ "to" ++
               if_then_Str obj 
                  (simma.s ! VIInfinit ! dig.a)
-                 (simma.s ! VIInfinit ! a)
-          ) ;
+                 (simma.s ! VIInfinit ! a) ;
+       p = False
+      } ;
 
 
 --2 Sentences missing noun phrases
@@ -1323,20 +1336,20 @@ oper
 -- The structure is the same as for sentences. The result is a prefix adjective
 -- if and only if all elements are prefix.
 
-  ListAdjPhrase : Type = {s1,s2 : AForm => Str ; p : Bool} ;
+  ListAdjPhrase : Type = {s1,s2 : Agr => Str ; p : Bool} ;
 
   twoAdjPhrase : (_,_ : AdjPhrase) -> ListAdjPhrase = \x,y ->
-    CO.twoTable AForm x y ** {p = andB x.p y.p} ;
+    CO.twoTable Agr x y ** {p = andB x.p y.p} ;
 
   consAdjPhrase : ListAdjPhrase -> AdjPhrase -> ListAdjPhrase =  \xs,x ->
-    CO.consTable AForm CO.comma xs x ** {p = andB xs.p x.p} ;
+    CO.consTable Agr CO.comma xs x ** {p = andB xs.p x.p} ;
 
   conjunctAdjPhrase : Conjunction -> ListAdjPhrase -> AdjPhrase = \c,xs ->
-    CO.conjunctTable AForm c xs ** {p = xs.p} ;
+    CO.conjunctTable Agr c xs ** {p = xs.p} ;
 
   conjunctDistrAdjPhrase : ConjunctionDistr -> ListAdjPhrase -> AdjPhrase = 
     \c,xs ->
-    CO.conjunctDistrTable AForm c xs ** {p = xs.p} ;
+    CO.conjunctDistrTable Agr c xs ** {p = xs.p} ;
 
 
 --3 Coordinating noun phrases

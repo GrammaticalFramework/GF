@@ -45,7 +45,7 @@ lincat
       -- = {s : AForm => Str}
   A2     = Adjective ** {s2 : Preposition} ;
   ADeg   = {s : Degree => AForm => Str} ;
-  AP     = Adjective ** {p : Bool} ;
+  AP     = {s : Agr => Str ; p : Bool} ;
   AS     = Adjective ; --- "more difficult for him to come than..."
   A2S    = Adjective ** {s2 : Preposition} ;
   AV     = Adjective ;
@@ -102,7 +102,7 @@ lincat
   ConjD  = {s1 : Str ; s2 : Str ; n : Number} ;
 
   ListS  = {s1 : Str ; s2 : Str} ;
-  ListAP = {s1,s2 : AForm => Str ; p : Bool} ;
+  ListAP = {s1,s2 : Agr => Str ; p : Bool} ;
   ListNP = {s1,s2 : NPForm => Str ; a : Agr} ;
   ListAdv = {s1 : Str ; s2 : Str} ;
 

@@ -18,15 +18,15 @@ abstract Verbphrase = Categories ** {
 -- These rules produce verb phrases.
 
   fun
-  UseV         : V  -> VP ;               -- "walks"
-  UsePassV     : V  -> VP ;               -- "is seen"
-  ComplV2      : V2 -> NP -> VP ;         -- "sees Mary"
-  ComplV3      : V3 -> NP -> NP -> VP ;   -- "tells Mary everything"
-  ComplReflV2  : V2 -> VP ;               -- "loves himself"
-  ComplVS      : VS -> S -> VP ;          -- "says that Mary runs"
-  ComplVV      : VV -> VPI -> VP ;        -- "must walk"
-  ComplVQ      : VQ -> QS -> VP ;         -- "asks who will come"
-  ComplVA      : VA -> AP -> VP ;         -- "looks ill"
+  UseV         : V   -> VP ;              -- "walks"
+  UsePassV     : V   -> VP ;              -- "is seen"
+  ComplV2      : V2  -> NP -> VP ;        -- "sees Mary"
+  ComplV3      : V3  -> NP -> NP -> VP ;  -- "tells Mary everything"
+  ComplReflV2  : V2  -> VP ;              -- "loves himself"
+  ComplVS      : VS  -> S -> VP ;         -- "says that Mary runs"
+  ComplVV      : VV  -> VPI -> VP ;       -- "must walk"
+  ComplVQ      : VQ  -> QS -> VP ;        -- "asks who will come"
+  ComplVA      : VA  -> AP -> VP ;        -- "looks ill"
   ComplV2A     : V2A -> NP -> AP -> VP ;  -- "paints the house red"
   ComplSubjV2V : V2V -> NP -> VPI -> VP ; -- "promises Mary to leave"
   ComplObjV2V  : V2V -> NP -> VPI -> VP ; -- "asked him to go"
@@ -34,12 +34,9 @@ abstract Verbphrase = Categories ** {
   ComplV2Q     : V2Q -> NP -> QS  -> VP ; -- "asks me if you come"
 
   PredAP       : AP -> VP ;               -- "is old"
-  PredSuperl   : ADeg -> VP ;             -- "is the oldest"
   PredCN       : CN -> VP ;               -- "is a man"
   PredNP       : NP -> VP ;               -- "is Bill"
   PredAdv      : Adv -> VP ;              -- "is in France", "is here"
-  PredAV       : AV  -> VPI -> VP   ;     -- "is eager to leave"
-  PredObjA2V   : A2V -> NP -> VPI -> VP ; -- "is easy for us to convince"
 
   PredProgVP   : VPI -> VP ;              -- "is eating fish"
 

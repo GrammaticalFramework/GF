@@ -17,8 +17,8 @@ PastTime h m = ss (m.s ++ "över" ++ h.s) ;
 ToTime h m = ss (m.s ++ "i" ++ h.s) ;
 ExactTime h = ss (h.s ++ "prick") ;
 
-NumHour n = n ;
-NumMinute n = n ;
+NumHour n = {s = n.s ! Neutr} ;
+NumMinute n = {s = n.s ! Neutr} ;
 
 monday = regN "måndag" utrum ;
 tuesday = regN "tisdag" utrum ;

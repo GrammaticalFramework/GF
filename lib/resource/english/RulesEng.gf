@@ -66,9 +66,12 @@ lin
   UseA = adj2adjPhrase ;
   ComplA2 = complAdj ;
 
-  PositADeg = positAdjPhrase ;
+  ComplAV v x = complVerbAdj v x ;
+  ComplObjA2V v x y = complVerbAdj2 True v x y ;
+
+  PositADeg  = positAdjPhrase ;
   ComparADeg = comparAdjPhrase ;
-  SuperlNP = superlNounPhrase ;
+  SuperlADeg = superlAdjPhrase ;
 
 -- verbs and verb prases
 
@@ -78,7 +81,6 @@ lin
 -- Partial saturation.
 
   UseV2 = transAsVerb ;
-----  ComplV3 = complDitransVerb ;
 
   ComplA2S = predAdjSent2 ;
 

@@ -22,14 +22,10 @@ concrete ClauseEng of Clause = CategoriesEng **
   SPredV2S np v x y = predVerbClause np v (complDitransSentVerb v x y) ;
   SPredV2Q np v x y = predVerbClause np v (complDitransQuestVerb v x y) ;
 
-  SPredAP np v = predBeGroup np (complAdjective v) ;
-  SPredSuperl np a = predBeGroup np (complAdjective (superlAdjPhrase a)) ;
+  SPredAP np v = predBeGroup np v.s ;
   SPredCN np v = predBeGroup np (complCommNoun v) ;
   SPredNP np v = predBeGroup np (complNounPhrase v) ;
   SPredAdv np v = predBeGroup np (complAdverb v) ;
-
-  SPredAV np v x = predBeGroup np (complVerbAdj v x) ;
-  SPredObjA2V np v x y = predBeGroup np (complVerbAdj2 True v x y) ;
 
   SPredProgVP = progressiveClause ;
 
@@ -49,18 +45,15 @@ concrete ClauseEng of Clause = CategoriesEng **
   QPredV2S np v x y = intVerbClause np v (complDitransSentVerb v x y) ;
   QPredV2Q np v x y = intVerbClause np v (complDitransQuestVerb v x y) ;
 
-  QPredAP np v = predBeGroupQ np (complAdjective v) ;
-  QPredSuperl np a = predBeGroupQ np (complAdjective (superlAdjPhrase a)) ;
+  QPredAP np v = predBeGroupQ np v.s ;
   QPredCN np v = predBeGroupQ np (complCommNoun v) ;
   QPredNP np v = predBeGroupQ np (complNounPhrase v) ;
   QPredAdv np v = predBeGroupQ np (complAdverb v) ;
-  QPredAV np v x = predBeGroupQ np (complVerbAdj v x) ;
-  QPredObjA2V np v x y = predBeGroupQ np (complVerbAdj2 True v x y) ;
 
   IPredV a v = predVerbI True a v (complVerb v) ;
   IPredV2 a v x = predVerbI True a v (complTransVerb v x) ;
 
-  IPredAP a v = predBeGroupI True a (complAdjective v) ;
+  IPredAP a v = predBeGroupI True a v.s ;
 
 {-
 -- Use VPs

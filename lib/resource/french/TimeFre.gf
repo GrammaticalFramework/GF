@@ -17,8 +17,8 @@ PastTime h m = ss (m.s ++ "et" ++ h.s) ;
 ToTime h m = ss (h.s ++ "moins" ++ m.s) ;
 ExactTime h = ss (h.s ++ "exactement") ;
 
-NumHour n = ss (n.s ! indep) ;
-NumMinute n = ss (n.s ! indep) ;
+NumHour n = ss (n.s ! feminine ! indep) ;
+NumMinute n = ss (n.s ! feminine ! indep) ;
 
 monday = regN "lundi" masculine ;
 tuesday = regN "mardi" masculine ;

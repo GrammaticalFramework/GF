@@ -22,12 +22,9 @@ incomplete concrete ClauseI of Clause = open Rules, Verbphrase in {
   SPredV2Q np v x y = PredVP np (ComplV2Q v x y) ;
 
   SPredAP np v = PredVP np (PredAP v) ;
-  SPredSuperl np a = PredVP np (PredSuperl a) ;
   SPredCN np v = PredVP np (PredCN v) ;
   SPredNP np v = PredVP np (PredNP v) ;
   SPredAdv np v = PredVP np (PredAdv v) ;
-  SPredAV np v x = PredVP np (PredAV v x) ;
-  SPredObjA2V np v x y = PredVP np (PredObjA2V v x y) ;
 
   SPredProgVP np vp = PredVP np (PredProgVP vp) ;
 
@@ -46,12 +43,9 @@ incomplete concrete ClauseI of Clause = open Rules, Verbphrase in {
   QPredV2Q np v x y = IntVP np (ComplV2Q v x y) ;
 
   QPredAP np v = IntVP np (PredAP v) ;
-  QPredSuperl np a = IntVP np (PredSuperl a) ;
   QPredCN np v = IntVP np (PredCN v) ;
   QPredNP np v = IntVP np (PredNP v) ;
   QPredAdv np v = IntVP np (PredAdv v) ;
-  QPredAV np v x = IntVP np (PredAV v x) ;
-  QPredObjA2V np v x y = IntVP np (PredObjA2V v x y) ;
 
   IPredV a v = PosVP a (UseV v) ;
   IPredV2 a v x = PosVP a (ComplV2 v x) ;

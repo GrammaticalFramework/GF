@@ -27,12 +27,9 @@ fun
   SPredV2Q     : NP -> V2Q  -> NP -> QS  -> Cl ;  -- "John asked me if it is good"
 
   SPredAP      : NP -> AP -> Cl ;             -- "John is old"
-  SPredSuperl  : NP -> ADeg -> Cl ;           -- "John is the oldest"
   SPredCN      : NP -> CN -> Cl ;             -- "John is a man"
   SPredNP      : NP -> NP -> Cl ;             -- "John is Bill"
   SPredAdv     : NP -> Adv -> Cl ;            -- "John is in France"
-  SPredAV      : NP -> AV  ->VPI ->Cl ;       -- "John is eager to leave"
-  SPredObjA2V  : NP -> A2V -> NP ->VPI ->Cl ; -- "John is easy for us to convince"
 
   SPredProgVP  : NP -> VPI -> Cl ;            -- "he is eating"
 
@@ -52,13 +49,9 @@ fun
   QPredV2Q     : IP -> V2Q  -> NP -> QS  -> QCl ;  -- "who asked me if it is good"
 
   QPredAP      : IP -> AP -> QCl ;             -- "who is old"
-  QPredSuperl  : IP -> ADeg -> QCl ;           -- "who is the oldest"
   QPredCN      : IP -> CN -> QCl ;             -- "who is a man"
   QPredNP      : IP -> NP -> QCl ;             -- "who is Bill"
   QPredAdv     : IP -> Adv -> QCl ;            -- "who is in France"
-  QPredAV      : IP -> AV  ->VPI ->QCl ;       -- "who is eager to leave"
-  QPredObjA2V  : IP -> A2V -> NP ->VPI ->QCl ; -- "who is easy for us to convince"
-
 
   IPredV       : Ant -> V  -> VPI ;            -- "walk"
   IPredV2      : Ant -> V2 -> NP -> VPI ;      -- "see Mary"
