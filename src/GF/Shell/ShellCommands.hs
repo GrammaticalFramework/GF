@@ -129,7 +129,7 @@ testValidFlag st f x = case f of
 
 optionsOfCommand :: Command -> ([String],[String])
 optionsOfCommand co = case co of
-  CImport _ -> both "old v s opt src retain nocf nocheckcirc cflexer"
+  CImport _ -> both "old v s opt src retain nocf nocheckcirc cflexer noemit o"
                     "abs cnc res path"
   CRemoveLanguage _ -> none
   CEmptyState -> none

@@ -1,0 +1,18 @@
+Project starting to redo the old-gf database query grammars, this time 
+using resource grammars.
+
+The base grammars DatabaseX are built as instantiations of the
+parametrized module DatabaseI. They are therefore easy to add
+for any language supporting the resource interface Resource,
+following the model of DatabaseEng and DatabaseSwe.
+
+The restaurant vocabulary is so far only available for
+English and Swedish. The rest should be easy to modify from
+corresponging grammars in the GF 1 grammar package. This time,
+however, only the ParadigmsX modules should be used to define the
+lexical entries.
+
+Copyright (c) 2004 Aarne Ranta
+under GNU General Public License (GPL).
+
+Document last updated August 3, 2004.

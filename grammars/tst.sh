@@ -10,6 +10,10 @@ cd ../resource
 gf <mkTest.gfs
 gf <mkParadigms.gfs
 jgf TestAll.gfcm
+rm -f TestAll.gfcm
+cd ../database
+echo "gr -number=8 | l" | gf -path=.:../resource/abstract:../resource/english:../resource/swedish:../prelude -noemit RestaurantEng.gf RestaurantSwe.gf
+cd ../resource
 rm -f */*.gfc */*.gfr
 rm -f ../prelude/*.gfc ../prelude/*.gfr
-rm -f TestAll.gfcm
+

@@ -14,6 +14,7 @@ mkdir -pv gf-grammars/resource/italian
 mkdir -pv gf-grammars/resource/romance
 mkdir -pv gf-grammars/resource/russian
 mkdir -pv gf-grammars/resource/swedish
+mkdir -pv gf-grammars/database
 
 cp -pv letter/README gf-grammars/letter/
 cp -pv letter/mkLetter.gfs gf-grammars/letter/
@@ -25,6 +26,7 @@ cp -pv newnumerals/README gf-grammars/numerals/
 cp -pv newnumerals/*.gf gf-grammars/numerals/
 cp -pv newnumerals/mkNumerals.gfs gf-grammars/numerals/
 
+cp -pv prelude/README gf-grammars/prelude/
 cp -pv prelude/*.gf gf-grammars/prelude/
 
 cp -pv newresource/mkTest.gfs gf-grammars/resource/
@@ -39,5 +41,8 @@ cp -pv newresource/italian/*.gf gf-grammars/resource/italian/
 cp -pv newresource/romance/*.gf gf-grammars/resource/romance/
 cp -pv newresource/russian/*.gf gf-grammars/resource/russian/
 cp -pv newresource/swedish/*.gf gf-grammars/resource/swedish/
+
+cp -pv database/README gf-grammars/database/
+cp -pv database/*.gf gf-grammars/database/
 
 tar cvfz gf-grammars.tgz gf-grammars
