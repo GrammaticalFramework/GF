@@ -1,0 +1,35 @@
+entrypoints Grammars;
+
+Grammars. Grammars ::= [Grammar];
+
+Grammar. Grammar ::= "grammar" Ident [Flag] [Rule] "end" "grammar";
+separator Grammar "";
+
+StartCat. Flag ::= "startcat" Category;
+terminator Flag ";";
+
+Rule. Rule ::= Ident ":" Name Profile "." Category "->" [Symbol];
+terminator Rule ";";
+
+Profile. Profile ::= "[" [Ints] "]";
+
+Ints. Ints ::= "[" [Integer] "]";
+separator Ints ",";
+separator Integer ",";
+
+CatS. Symbol ::= Category;
+TermS. Symbol ::= String;
+
+separator Symbol "";
+
+Name. Name ::= [IdentParam] Category;
+terminator IdentParam "/";
+
+Category. Category ::= IdentParam "." Ident [Param] ;
+
+IdentParam. IdentParam ::= Ident "{" [Param] "}" ;
+
+Param. Param ::= "!" Ident ;
+separator Param "";
+
+

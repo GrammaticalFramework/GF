@@ -33,6 +33,7 @@ import ShellState
 import Linear
 import GFC
 import qualified Grammar as G
+import Modules
 import PrGrammar
 import qualified Compute as Co
 import qualified Ident as I
@@ -284,12 +285,21 @@ prMultiGrammar opts = M.showMGrammar (oElem optimizeCanon opts)
 optPrintGrammar :: Options -> StateGrammar -> String
 optPrintGrammar opts = customOrDefault opts grammarPrinter customGrammarPrinter
 
+optPrintMultiGrammar :: Options -> CanonGrammar -> String
+optPrintMultiGrammar opts = pmg . encode
+    where 
+    pmg = customOrDefault opts grammarPrinter customMultiGrammarPrinter
+    -- if -utf8 was given, convert from language specific codings
+    encode = if oElem useUTF8 opts then mapModules moduleToUTF8 else id
+    moduleToUTF8 m = 
+	m{ jments = mapTree (onSnd (mapInfoTerms code)) (jments m),
+	   flags = setFlag "coding" "utf8" (flags m) }
+	where code = onTokens (anyCodingToUTF8 (moduleOpts m))
+	      moduleOpts = Opts . okError . mapM CG.redFlag . flags
+
+
 optPrintSyntax :: Options -> GF.Grammar -> String
 optPrintSyntax opts = customOrDefault opts grammarPrinter customSyntaxPrinter
-
-prCanonGrammar :: CanonGrammar -> String
-prCanonGrammar = MC.prCanon
-
 
 optPrintTree :: Options -> GFGrammar -> Tree -> String
 optPrintTree opts = customOrDefault opts grammarPrinter customTermPrinter
@@ -328,13 +338,19 @@ optTokenizer opts gr = show . customOrDefault opts useTokenizer customTokenizer 
 
 -- performs UTF8 if the language does not have flag coding=utf8; replaces name*U
 
+-- convert a Unicode string into a UTF8 encoded string
 optEncodeUTF8 :: GFGrammar -> String -> String
 optEncodeUTF8 gr = case getOptVal (stateOptions gr) uniCoding of
   Just "utf8" -> id
   _ -> encodeUTF8
 
+-- convert a UTF8 encoded string into a Unicode string
 optDecodeUTF8 :: GFGrammar -> String -> String
 optDecodeUTF8 gr = case getOptVal (stateOptions gr) uniCoding of
   Just "utf8" -> decodeUTF8 
   _ -> id
 
+-- convert a string encoded with some coding given by the coding flag to UTF8
+anyCodingToUTF8 :: Options -> String -> String
+anyCodingToUTF8 opts = 
+    encodeUTF8 . customOrDefault opts uniCoding customUniCoding

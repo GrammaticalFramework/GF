@@ -220,7 +220,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
                          (putStrLn $ unwords $ map prLanguage $ allLanguages st) sa
   CPrintMultiGrammar  -> do
     sa' <- changeState purgeShellState sa
-    returnArg (AString (prCanonGrammar (canModules st))) sa'
+    returnArg (AString (optPrintMultiGrammar opts cgr)) sa'
 
 ----  CPrintGramlet       -> returnArg (AString (Gr.prGramlet st)) sa
 ----  CPrintCanonXML      -> returnArg (AString (Canon.prCanonXML st False)) sa

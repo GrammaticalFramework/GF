@@ -47,6 +47,10 @@ import qualified ParseCF as PCF
 import qualified ConvertGrammar as Cnv
 import qualified PrintParser as Prt
 
+import GFC
+import qualified MkGFC as MC
+import PrintCFGrammar (prCanonAsCFGM)
+
 import MyParser
 
 import MoreCustom -- either small/ or big/. The one in Small is empty.
@@ -54,6 +58,23 @@ import MoreCustom -- either small/ or big/. The one in Small is empty.
 import UseIO
 
 import Monad
+
+-- character codings
+import Unicode
+import UTF8 (decodeUTF8)
+import Greek (mkGreek)
+import Arabic (mkArabic)
+import Hebrew (mkHebrew)
+import Russian (mkRussian, mkRusKOI8)
+import Ethiopic (mkEthiopic)
+import Tamil (mkTamil)
+import OCSCyrillic (mkOCSCyrillic)
+import LatinASupplement (mkLatinASupplement)
+import Devanagari (mkDevanagari)
+import Hiragana (mkJapanese)
+import ExtendedArabic (mkArabic0600)
+import ExtendedArabic (mkExtendedArabic)
+import ExtraDiacritics (mkExtraDiacritics)
 
 -- minimal version also used in Hugs. AR 2/12/2002. 
 
@@ -75,6 +96,9 @@ customGrammarParser :: CustomData (FilePath -> IOE C.CanonGrammar)
 
 -- grammarPrinter, "-printer=x"
 customGrammarPrinter :: CustomData (StateGrammar -> String)             
+
+-- multiGrammarPrinter, "-printer=x"
+customMultiGrammarPrinter :: CustomData (CanonGrammar -> String)    
 
 -- syntaxPrinter, "-printer=x"
 customSyntaxPrinter  :: CustomData (GF.Grammar -> String)        
@@ -100,6 +124,10 @@ customTokenizer      :: CustomData (StateGrammar -> String -> [CFTok])
 -- useUntokenizer, "-unlexer=x" --- should be from token list to string
 customUntokenizer    :: CustomData (StateGrammar -> String -> String)  
 
+-- uniCoding, "-coding=x"
+-- contains conversions from different codings to the internal
+-- unicode coding
+customUniCoding :: CustomData (String -> String)
 
 -- this is the way of selecting an item
 customOrDefault :: Options -> OptFun -> CustomData a -> a
@@ -184,6 +212,15 @@ customGrammarPrinter =
 --- also include printing via grammar2syntax!
   ] 
   ++ moreCustomGrammarPrinter
+
+customMultiGrammarPrinter = 
+  customData "Printers for multiple grammars, selected by option -printer=x" $
+  [
+   (strCI "gfcm", MC.prCanon)
+  ,(strCI "cfgm", prCanonAsCFGM)
+  ]
+  ++ moreCustomMultiGrammarPrinter
+
 
 customSyntaxPrinter = 
   customData "Syntax printers, selected by option -printer=x" $
@@ -308,3 +345,25 @@ customUntokenizer =
 -- add your own untokenizers here
   ]
   ++ moreCustomUntokenizer
+
+customUniCoding = 
+  customData "Alphabet codings, selected by option -coding=x" $
+  [
+   (strCI "latin1",           id) -- DEFAULT
+  ,(strCI "utf8",             decodeUTF8)
+  ,(strCI "greek",            treat [] mkGreek)
+  ,(strCI "hebrew",           mkHebrew)
+  ,(strCI "arabic",           mkArabic)
+  ,(strCI "russian",          treat [] mkRussian)
+  ,(strCI "russianKOI8",      mkRusKOI8)
+  ,(strCI "ethiopic",         mkEthiopic)
+  ,(strCI "tamil",            mkTamil)
+  ,(strCI "OCScyrillic",      mkOCSCyrillic)
+  ,(strCI "devanagari",       mkDevanagari)
+  ,(strCI "latinasupplement", mkLatinASupplement)
+  ,(strCI "japanese",         mkJapanese)
+  ,(strCI "arabic0600",       mkArabic0600)
+  ,(strCI "extendedarabic",   mkExtendedArabic)
+  ,(strCI "extradiacritics",  mkExtraDiacritics)
+  ]
+  ++ moreCustomUniCoding

@@ -178,3 +178,56 @@ wordsInTerm trm = filter (not . null) $ case trm of
    P t _   -> wo t --- not needed ?
    _       -> []
  where wo = wordsInTerm
+
+onTokens :: (String -> String) -> Term -> Term
+onTokens f t = case t of
+   K (KS s) -> K (KS (f s))
+   K (KP ss vs) -> K (KP (map f ss) [Var (map f x) (map f y) | Var x y <- vs])
+   _ -> composSafeOp (onTokens f) t
+
+
+-- to define compositional term functions
+
+composSafeOp :: (Term -> Term) -> Term -> Term
+composSafeOp op trm = case composOp (mkMonadic op) trm of
+  Ok t -> t
+  _ -> error "the operation is safe isn't it ?"
+ where
+ mkMonadic f = return . f
+
+composOp :: Monad m => (Term -> m Term) -> Term -> m Term
+composOp co trm = 
+ case trm of
+  Con x as ->
+      do
+      as' <- mapM co as
+      return (Con x as')
+  R as -> 
+      do
+      let onAss (Ass l t) = liftM (Ass l) (co t)
+      as' <- mapM onAss as
+      return (R as')
+  P a x ->
+      do
+      a' <- co a
+      return (P a' x)
+  T x as ->
+      do
+      let onCas (Cas ps t) = liftM (Cas ps) (co t)
+      as' <- mapM onCas as
+      return (T x as')
+  S a b ->
+      do
+      a' <- co a
+      b' <- co b
+      return (S a' b')
+  C a b ->
+      do
+      a' <- co a
+      b' <- co b
+      return (C a' b')
+  FV as -> 
+      do
+      as' <- mapM co as
+      return (FV as')
+  _ -> return trm -- covers Arg, I, LI, K, E

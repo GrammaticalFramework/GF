@@ -15,7 +15,10 @@ infixl 9 !?
 
 ifNull :: b -> ([a] -> b) -> [a] -> b
 ifNull b f xs = if null xs then b else f xs
-  
+
+onSnd :: (a -> b) -> (c,a) -> (c,b)
+onSnd f (x, y) = (x, f y)
+
 -- the Error monad
 
 data Err a = Ok a | Bad String   -- like Maybe type with error msgs

@@ -162,7 +162,7 @@ optionsOfCommand co = case co of
   CSystemCommand _ -> none
 
   CPrintGrammar -> both "utf8" "printer lang"
-  CPrintMultiGrammar -> opts "utf8"
+  CPrintMultiGrammar -> both "utf8" "printer"
 
   CHelp _ -> opts "all"
 

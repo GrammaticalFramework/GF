@@ -75,6 +75,12 @@ addOpenQualif i j (Module mt ms fs me ops js) =
 allFlags :: MGrammar i f a -> [f]
 allFlags gr = concat $ map flags $ reverse [m | (_, ModMod m) <- modules gr]
 
+mapModules :: (Module i f a -> Module i f a) 
+	   -> MGrammar i f a -> MGrammar i f a 
+mapModules f = MGrammar . map (onSnd mapModules') . modules
+    where mapModules' (ModMod m) = ModMod (f m)
+	  mapModules' m = m
+
 data MainGrammar i = MainGrammar {
     mainAbstract  :: i ,
     mainConcretes :: [MainConcreteSpec i]
