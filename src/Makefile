@@ -16,9 +16,16 @@ WINDOWSINCLUDE =-ifor-windows   $(BASICINCLUDE)
 DIST_DIR=GF-$(PACKAGE_VERSION)
 NOT_IN_DIST= \
 	from-peb \
+	doc/release2.html \
 	grammars/resource \
+	grammars/aggregation \
+	grammars/numerals \
+	grammars/ocl \
+	grammars/testConversions \
+	grammars/timetable \
 	src/parsing \
-	src/conversions
+	src/conversions \
+	src/util/AlphaConvGF.hs
 
 all: unix
 
