@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:44 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.10 $
+-- > CVS $Date: 2005/03/21 14:27:10 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.11 $
 --
 -- Handles printing a CFGrammar in CFGM format.
 -----------------------------------------------------------------------------
@@ -49,7 +49,7 @@ getFlag fs x = listToMaybe [v | Flg (IC k) (IC v) <- fs, k == x]
 -- instead of 'Cnv.pInfo' (which recalculates the grammar every time)
 prLangAsCFGM :: CanonGrammar -> Ident -> Maybe String -> String
 prLangAsCFGM gr i start = prCFGrammarAsCFGM (Cnv.cfg (Cnv.pInfo opts gr i)) i start
-    where opts = Option.noOptions
+    where opts = Option.Opts [Option.gfcConversion "nondet"]
 
 {-
 prCFGrammarAsCFGM :: GT.CFGrammar -> Ident -> Maybe String -> String
@@ -71,11 +71,10 @@ cfGrammarToCFGM gr i start = AbsCFG.Grammar (identToCFGMIdent i) flags (map rule
 
 ruleToCFGMRule :: GT.CFRule -> AbsCFG.Rule
 -- new version, without the MCFName constructor:
-ruleToCFGMRule (CFGrammar.Rule c rhs (GT.CFName ({-GT.MCFName-} fun {-cat args-}) {-lbl-} profile)) 
-    = AbsCFG.Rule fun' n' p' c' rhs'
+ruleToCFGMRule (CFGrammar.Rule c rhs (GT.CFName fun profile)) 
+    = AbsCFG.Rule fun' p' c' rhs'
     where 
-    fun' = identToCFGMIdent fun
-    n' = strToCFGMName "this_should_disappear"
+    fun' = identToFun fun
     p' = profileToCFGMProfile profile
     c' = catToCFGMCat c
     rhs' = map symbolToGFCMSymbol rhs
@@ -97,14 +96,15 @@ profileToCFGMProfile = AbsCFG.Profile . map (AbsCFG.Ints . map fromIntegral)
 identToCFGMIdent :: Ident -> AbsCFG.Ident
 identToCFGMIdent = AbsCFG.Ident . Prt.prt
 
+identToFun :: Ident -> AbsCFG.Fun
+identToFun IW = AbsCFG.Coerce
+identToFun i = AbsCFG.Cons (identToCFGMIdent i)
+
 strToCFGMCat :: String -> AbsCFG.Category
 strToCFGMCat = AbsCFG.Category . AbsCFG.SingleQuoteString . quoteSingle
 
 catToCFGMCat :: GT.CFCat -> AbsCFG.Category
 catToCFGMCat = strToCFGMCat . Prt.prt
-
-strToCFGMName :: String -> AbsCFG.Name
-strToCFGMName = AbsCFG.Name . AbsCFG.SingleQuoteString . quoteSingle
 
 symbolToGFCMSymbol :: Parser.Symbol GT.CFCat GT.Tokn -> AbsCFG.Symbol
 symbolToGFCMSymbol (Parser.Cat c) = AbsCFG.CatS (catToCFGMCat c)

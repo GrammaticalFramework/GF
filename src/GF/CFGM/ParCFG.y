@@ -16,6 +16,7 @@ import ErrM
  ':' { PT _ (TS ":") }
  '.' { PT _ (TS ".") }
  '->' { PT _ (TS "->") }
+ '_' { PT _ (TS "_") }
  '[' { PT _ (TS "[") }
  ']' { PT _ (TS "]") }
  ',' { PT _ (TS ",") }
@@ -60,12 +61,17 @@ ListFlag : {- empty -} { [] }
 
 
 Rule :: { Rule }
-Rule : Ident ':' Name Profile '.' Category '->' ListSymbol { Rule $1 $3 $4 $6 $8 } 
+Rule : Fun ':' Profile '.' Category '->' ListSymbol { Rule $1 $3 $5 $7 } 
 
 
 ListRule :: { [Rule] }
 ListRule : {- empty -} { [] } 
   | ListRule Rule ';' { flip (:) $1 $2 }
+
+
+Fun :: { Fun }
+Fun : Ident { Cons $1 } 
+  | '_' { Coerce }
 
 
 Profile :: { Profile }
@@ -97,10 +103,6 @@ ListSymbol :: { [Symbol] }
 ListSymbol : '.' { [] } 
   | Symbol { (:[]) $1 }
   | Symbol ListSymbol { (:) $1 $2 }
-
-
-Name :: { Name }
-Name : SingleQuoteString { Name $1 } 
 
 
 Category :: { Category }
