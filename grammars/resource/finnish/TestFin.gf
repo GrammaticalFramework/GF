@@ -3,7 +3,7 @@
 
 concrete TestFin of TestAbs = ResFin ** open Prelude, SyntaxFin in {
 
-flags startcat=Phr ; lexer=text ; parser=chart ; unlexer=text ;
+flags startcat=Phr ; lexer=unglue ; unlexer=glue ;
 
 -- a random sample from the lexicon
 

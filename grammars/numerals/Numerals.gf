@@ -1,4 +1,4 @@
--- numerals from 1 to 999999 in decimal notation. AR 1998 -- 2003
+-- numerals from 1 to 999999 in decimal notation
 
 abstract Numerals = {
 
@@ -31,10 +31,4 @@ fun
   pot2as3 : Sub1000 -> Sub1000000 ;             -- coercion of 1..999
   pot3 : Sub1000 -> Sub1000000 ;                -- m * 1000
   pot3plus : Sub1000 -> Sub1000 -> Sub1000000 ; -- m * 1000 + n
-
-data
-  Numeral = num ;
-  Digit = n2 | n3 | n4 | n5 | n6 | n7 | n8 | n9 ;
-  Sub10 = pot01 | pot0 ;
-  Sub100 = pot110 | pot111 | pot1to19 | pot0as1 | pot1 | pot1plus ;
 }
