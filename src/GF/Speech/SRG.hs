@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:21 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/02/22 13:35:19 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- Representation of, conversion to, and utilities for 
 -- printing of a general Speech Recognition Grammar. 
@@ -17,24 +17,6 @@
 --
 -- FIXME: figure out name prefix from grammar name
 -----------------------------------------------------------------------------
-
-{- 
-   **************************************************************
-    GF Module
-   
-    Description   : Representation of, conversion to, and
-                    utilities for printing of a 
-                    general Speech Recognition Grammar. 
-
-    Author        : Björn Bringert (bringert@cs.chalmers.se)
-
-    License       : GPL (GNU General Public License)
-
-    Created       : October 1, 2004
-
-    Modified      : 
-   ************************************************************** 
--}
 
 module SRG where
 

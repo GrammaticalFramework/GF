@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:21 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/02/22 13:35:19 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- This module prints a CFG as a JSGF grammar.
 --
@@ -16,22 +16,6 @@
 --
 -- FIXME: convert to UTF-8
 -----------------------------------------------------------------------------
-
-{- 
-   **************************************************************
-    GF Module
-   
-    Description   : This module prints a CFG as a JSGF grammar.
-
-    Author        : Björn Bringert (bringert@cs.chalmers.se)
-
-    License       : GPL (GNU General Public License)
-
-    Created       : October 1, 2004
-
-    Modified      : 
-   ************************************************************** 
--}
 
 module PrJSGF (jsgfPrinter) where
 
