@@ -25,6 +25,7 @@ main = do
   xs <- getArgs
   let (os,fs) = getOptions "-" xs
       opt j   = oElem j os
+      st0     = optInitShellState os
   case 0 of
 
     _ | opt getHelp -> do
@@ -32,8 +33,8 @@ main = do
 
     _ | opt forJava -> do
       putStrLnFlush $ encodeUTF8 welcomeMsg 
-      st <- useIOE emptyShellState $ 
-              foldM (shellStateFromFiles os) emptyShellState fs
+      st <- useIOE st0 $ 
+              foldM (shellStateFromFiles os) st0 fs
       sessionLineJ True st
       return ()
 
@@ -44,15 +45,15 @@ main = do
 
     _ | opt doBatch -> do
       if opt beSilent then return () else putStrLnFlush "<gfbatch>"
-      st <- useIOE emptyShellState $ 
-              foldM (shellStateFromFiles os) emptyShellState fs
+      st <- useIOE st0 $ 
+              foldM (shellStateFromFiles os) st0 fs
       gfBatch (initHState st) 
       if opt beSilent then return () else putStrLnFlush "</gfbatch>"
       return ()
     _ -> do
       putStrLnFlush $ welcomeMsg
-      st <- useIOE emptyShellState $ 
-              foldM (shellStateFromFiles os) emptyShellState fs
+      st <- useIOE st0 $ 
+              foldM (shellStateFromFiles os) st0 fs
       if null fs then return () else putCPU 
       gfInteract (initHState st) 
       return ()

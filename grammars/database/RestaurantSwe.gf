@@ -27,6 +27,6 @@ lin
 
   LucasCarton = pnReg ["Lucas-Carton"] neutrum nonmasculine ; --- -
   LaCoupole  = pnReg ["La-Coupole"] neutrum nonmasculine ;
-  BurgerKing = pnS ["Burger King"] neutrum nonmasculine ;
+  BurgerKing = pnS (variants {["Burger King"] ; "BK"}) neutrum nonmasculine ;
 
 }

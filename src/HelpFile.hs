@@ -48,6 +48,10 @@ txtHelpFile =
   "\n      -abs          set the name used for abstract syntax (with -old option)" ++
   "\n      -cnc          set the name used for concrete syntax (with -old option)" ++
   "\n      -res          set the name used for resource (with -old option)" ++
+  "\n      -path         use the (colon-separated) search path to find modules" ++
+  "\n  examples:" ++
+  "\n      i English.gf                      -- ordinary import of Concrete" ++
+  "\n      i -retain german/ParadigmsGer.gf  -- import of Resource to test" ++
   "\n      " ++
   "\n* rl, remove_language: rl Language" ++
   "\n      Takes away the language from the state." ++
@@ -55,9 +59,12 @@ txtHelpFile =
   "\ne,  empty: e" ++
   "\n      Takes away all languages and resets all global flags." ++
   "\n" ++
-  "\nsf, set_flags: sf Language? Flag*" ++
+  "\nsf, set_flags: sf Flag*" ++
   "\n      The values of the Flags are set for Language. If no language" ++
   "\n      is specified, the flags are set globally." ++
+  "\n  examples:" ++
+  "\n      sf -nocpu     -- stop showing CPU time" ++
+  "\n      sf -lang=Swe  -- make Swe the default concrete" ++
   "\n" ++
   "\ns,  strip: s" ++
   "\n      Prune the state by removing source and resource modules." ++
@@ -78,10 +85,14 @@ txtHelpFile =
   "\n  flags: " ++
   "\n      -printer" ++
   "\n      -lang" ++
+  "\n  examples:" ++
+  "\n      pg -printer=cf  -- show the context-free skeleton" ++
   "\n" ++
   "\npm, print_multigrammar: pm" ++
-  "\n      Prints the current multilingual grammar into a .gfcm file." ++
+  "\n      Prints the current multilingual grammar in .gfcm form." ++
   "\n      (Automatically executes the strip command (s) before doing this.)" ++
+  "\n  examples:" ++
+  "\n      pm | wf Letter.gfcm  -- print the grammar into the file Letter.gfcm" ++
   "\n" ++
   "\npo, print_options: po" ++
   "\n      Print what modules there are in the state. Also" ++
@@ -101,8 +112,8 @@ txtHelpFile =
   "\nph, print_history; ph" ++
   "\n      Prints the commands issued during the GF session." ++
   "\n      The result is readable by the eh command." ++
-  "\n      HINT: write \"ph | wf foo.hist\" to save the history." ++
-  "\n" ++
+  "\n  examples:" ++
+  "\n      ph | wf foo.hist\"  -- save the history into a file" ++
   "\n" ++
   "\n-- linearization, parsing, translation, and computation" ++
   "\n" ++
@@ -119,10 +130,13 @@ txtHelpFile =
   "\n      -table   show parameters" ++
   "\n      -struct  bracketed form" ++
   "\n      -record  record, i.e. explicit GF concrete syntax term" ++
+  "\n      -all     show all forms and variants" ++
   "\n  flags:" ++
   "\n      -lang    linearize in this grammar" ++
   "\n      -number  give this number of forms at most" ++
   "\n      -unlexer filter output through unlexer" ++
+  "\n  examples:" ++
+  "\n      l -lang=Swe -table  -- show full inflection table in Swe" ++
   "\n" ++
   "\np,  parse: p String" ++
   "\n      Shows all Trees returned for String by the actual" ++
@@ -133,18 +147,23 @@ txtHelpFile =
   "\n      -ign     ignore unknown words when parsing" ++
   "\n      -raw     return context-free terms in raw form" ++
   "\n      -v       verbose: give more information if parsing fails" ++
+  "\n      -new     use an experimental method (GF 2.0; sometimes very good)" ++
   "\n  flags:" ++
   "\n      -cat     parse in this category" ++
   "\n      -lang    parse in this grammar" ++
   "\n      -lexer   filter input through this lexer" ++
   "\n      -parser  use this context-free parsing method" ++
   "\n      -number  return this many results at most" ++
+  "\n  examples:" ++
+  "\n      p -cat=S -new \"jag är gammal\"   -- print an S with the new method" ++
   "\n" ++
   "\ntt, test_tokenizer: tt String" ++
   "\n      Show the token list sent to the parser when String is parsed." ++
   "\n      HINT: can be useful when debugging the parser." ++
   "\n  flags: " ++
   "\n     -lexer    use this lexer" ++
+  "\n  examples:" ++
+  "\n     tt -lexer=codelit \"2*(x + 3)\"  -- a favourite lexer for program code" ++
   "\n" ++
   "\ncc, compute_concrete: cc Term" ++
   "\n      Compute a term by concrete syntax definitions. Uses the topmost" ++
@@ -157,6 +176,8 @@ txtHelpFile =
   "\n      and hence not a valid input to a Tree-demanding command." ++
   "\n  flags:" ++
   "\n     -res      use another module than the topmost one" ++
+  "\n  examples:" ++
+  "\n     cc -res=ParadigmsFin (nLukko \"hyppy\")   -- inflect \"hyppy\" with nLukko" ++
   "\n" ++
   "\nso, show_operations: so Type" ++
   "\n      Show oper operations with the given value type. Uses the topmost " ++
@@ -168,6 +189,8 @@ txtHelpFile =
   "\n      topmost resource. In that case, use appropriate qualified name." ++
   "\n  flags:" ++
   "\n     -res      use another module than the topmost one" ++
+  "\n  examples:" ++
+  "\n     so -res=ParadigmsFin ResourceFin.N  -- show N-paradigms in ParadigmsFin" ++
   "\n" ++
   "\nt,  translate: t Lang Lang String" ++
   "\n      Parses String in Lang1 and linearizes the resulting Trees in Lang2." ++
@@ -175,6 +198,8 @@ txtHelpFile =
   "\n      -cat" ++
   "\n      -lexer" ++
   "\n      -parser" ++
+  "\n  examples:" ++
+  "\n      t Eng Swe -cat=S \"every number is even or odd\"" ++
   "\n" ++
   "\ngr, generate_random: gr Tree?" ++
   "\n      Generates a random Tree of a given category. If a Tree" ++
@@ -185,6 +210,10 @@ txtHelpFile =
   "\n      -lang    use the abstract syntax of this grammar" ++
   "\n      -number  generate this number of trees (not impl. with Tree argument)" ++
   "\n      -depth   use this number of search steps at most" ++
+  "\n  examples:" ++
+  "\n      gr -cat=Query            -- generate in category Query" ++
+  "\n      gr (PredVP ? (NegVG ?))  -- generate a random tree of this form" ++
+  "\n      gr -cat=S -tr | l        -- gererate and linearize" ++
   "\n" ++
   "\ngt, generate_trees: gt Tree?" ++
   "\n      Generates all trees up to a given depth. If the depth is large," ++
@@ -199,6 +228,10 @@ txtHelpFile =
   "\n      -cat     generate in this category" ++
   "\n      -lang    use the abstract syntax of this grammar" ++
   "\n      -number  generate (at most) this number of trees" ++
+  "\n  examples:" ++
+  "\n      gt -depth=10 -cat=NP     -- generate all NP's to depth 10 " ++
+  "\n      gt (PredVP ? (NegVG ?))  -- generate all trees of this form" ++
+  "\n      gt -cat=S -tr | l        -- gererate and linearize" ++
   "\n" ++
   "\nma, morphologically_analyse: ma String" ++
   "\n      Runs morphological analysis on each word in String and displays" ++
@@ -207,6 +240,8 @@ txtHelpFile =
   "\n      -short   show analyses in bracketed words, instead of separate lines" ++
   "\n  flags:" ++
   "\n      -lang" ++
+  "\n  examples:" ++
+  "\n      wf Bible.txt | ma -short | wf Bible.tagged  -- analyse the Bible" ++
   "\n" ++
   "\n" ++
   "\n-- elementary generation of Strings and Trees" ++
@@ -218,6 +253,8 @@ txtHelpFile =
   "\n  flags:" ++
   "\n      -filter  filter the result through this string processor " ++
   "\n      -length  cut the string after this number of characters" ++
+  "\n  examples:" ++
+  "\n      gr -cat=Letter | l | ps -filter=text -- random letter as text" ++
   "\n" ++
   "\npt, put_tree: pt Tree" ++
   "\n      Returns its argument Tree, like a specialized Unix echo." ++
@@ -226,6 +263,9 @@ txtHelpFile =
   "\n  flags:" ++
   "\n      -transform   transform the result by this term processor" ++
   "\n      -number      generate this number of terms at most" ++
+  "\n  examples:" ++
+  "\n      p \"zero is even\" | pt -transform=solve  -- solve ?'s in parse result" ++
+  "\n" ++
   "\n" ++
   "\n* st, show_tree: st Tree" ++
   "\n      Prints the tree as a string. Unlike pt, this command cannot be" ++
@@ -243,14 +283,17 @@ txtHelpFile =
   "\n      -f Fudget GUI (necessary for Unicode; only available in X Window System)" ++
   "\n" ++
   "\nts, translation_session: ts" ++
-  "\n      Translates input lines from any of the actual languages to any other one." ++
+  "\n      Translates input lines from any of the actual languages to all other ones." ++
   "\n      To exit, type a full stop (.) alone on a line." ++
   "\n      N.B. Exit from a Fudget session is to the Unix shell, not to GF. " ++
   "\n      HINT: Set -parser and -lexer locally in each grammar." ++
   "\n  options:" ++
-  "\n      -f Fudget GUI (necessary for Unicode; only available in X Window System)" ++
+  "\n      -f    Fudget GUI (necessary for Unicode; only available in X Windows)" ++
+  "\n      -lang prepend translation results with language names" ++
   "\n  flags:" ++
-  "\n      -cat" ++
+  "\n      -cat    the parser category" ++
+  "\n  examples:" ++
+  "\n      ts -cat=Numeral -lang  -- translate numerals, show language names" ++
   "\n" ++
   "\ntq, translation_quiz: tq Lang Lang" ++
   "\n      Random-generates translation exercises from Lang1 to Lang2," ++
@@ -259,12 +302,16 @@ txtHelpFile =
   "\n      HINT: Set -parser and -lexer locally in each grammar." ++
   "\n  flags:" ++
   "\n      -cat" ++
+  "\n  examples:" ++
+  "\n      tq -cat=NP TestResourceEng TestResourceSwe  -- quiz for NPs" ++
   "\n" ++
   "\ntl, translation_list: tl Lang Lang Int" ++
   "\n      Random-generates a list of Int translation exercises from Lang1 to Lang2." ++
   "\n      HINT: use wf to save the exercises in a file." ++
   "\n  flags:" ++
   "\n      -cat" ++
+  "\n  examples:" ++
+  "\n      tl -cat=NP TestResourceEng TestResourceSwe  -- quiz list for NPs" ++
   "\n" ++
   "\nmq, morphology_quiz: mq" ++
   "\n      Random-generates morphological exercises," ++
@@ -275,6 +322,8 @@ txtHelpFile =
   "\n  flags:" ++
   "\n      -cat" ++
   "\n      -lang" ++
+  "\n  examples:" ++
+  "\n      mq -cat=N -lang=TestResourceSwe  -- quiz for Swedish nouns" ++
   "\n" ++
   "\nml, morphology_list: ml Int" ++
   "\n      Random-generates a list of Int morphological exercises," ++
@@ -283,12 +332,14 @@ txtHelpFile =
   "\n  flags:" ++
   "\n      -cat" ++
   "\n      -lang" ++
+  "\n  examples:" ++
+  "\n      ml -cat=N -lang=TestResourceSwe  -- quiz list for Swedish nouns" ++
   "\n" ++
   "\n" ++
   "\n-- IO related commands" ++
   "\n" ++
   "\nrf, read_file: rf File" ++
-  "\n      Returns the contents of File as a String; error is File does not exist." ++
+  "\n      Returns the contents of File as a String; error if File does not exist." ++
   "\n" ++
   "\nwf, write_file: wf File String" ++
   "\n      Writes String into File; File is created if it does not exist." ++
@@ -320,18 +371,19 @@ txtHelpFile =
   "\n      HINT: pipe with 'wf Foo.tex' to generate a new Latex file." ++
   "\n" ++
   "\nsa, speak_aloud: sa String" ++
-  "\n      Uses the Festival speech generator to produce speech for String." ++
-  "\n      The command cupports Festival's language flag, which is sent verbatim" ++
-  "\n      to Festival, e.g. -language=spanish. Omitting this flag gives the " ++
-  "\n      system-dependent default voice (often British English)." ++
-  "\n     flags:" ++
-  "\n       -language" ++
+  "\n      Uses the Flite speech generator to produce speech for String." ++
+  "\n      Works for American English spelling. " ++
+  "\n  examples:" ++
+  "\n    h | sa              -- listen to the list of commands" ++
+  "\n    gr -cat=S | l | sa  -- generate a random sentence and speak it aloud" ++
   "\n" ++
   "\nh, help: h Command?" ++
   "\n      Displays the paragraph concerning the command from this help file." ++
   "\n      Without the argument, shows the first lines of all paragraphs." ++
   "\n  options" ++
   "\n       -all  show the whole help file" ++
+  "\n  examples:" ++
+  "\n       h print_grammar  -- show all information on the pg command" ++
   "\n" ++
   "\nq, quit: q" ++
   "\n      Exits GF." ++
@@ -339,36 +391,36 @@ txtHelpFile =
   "\n" ++
   "\n!, system_command: ! String" ++
   "\n      Issues a system command. No value is returned to GF." ++
-  "\n" ++
+  "\n   example:" ++
+  "\n      ! ls" ++
   "\n" ++
   "\n" ++
   "\n-- Flags. The availability of flags is defined separately for each command." ++
   "\n" ++
-  "\n-cat: category in which parsing is performed." ++
+  "\n-cat, category in which parsing is performed." ++
   "\n      The default is S." ++
   "\n" ++
-  "\n-depth: the search depth in e.g. random generation." ++
+  "\n-depth, the search depth in e.g. random generation." ++
   "\n      The default depends on application." ++
   "\n" ++
-  "\n-filter: operation performed on a string. The default is identity." ++
+  "\n-filter, operation performed on a string. The default is identity." ++
   "\n    -filter=identity     no change" ++
   "\n    -filter=erase        erase the text" ++
   "\n    -filter=take100      show the first 100 characters" ++
   "\n    -filter=length       show the length of the string" ++
   "\n    -filter=text         format as text (punctuation, capitalization)" ++
   "\n    -filter=code         format as code (spacing, indentation)" ++
-  "\n    -filter=latexfile    embed in a LaTeX file " ++
   "\n" ++
-  "\n-lang: grammar used when executing a grammar-dependent command." ++
+  "\n-lang, grammar used when executing a grammar-dependent command." ++
   "\n       The default is the last-imported grammar." ++
   "\n" ++
-  "\n-language: voice used by Festival as its --language flag in the sa command. " ++
+  "\n-language, voice used by Festival as its --language flag in the sa command. " ++
   "\n       The default is system-dependent. " ++
   "\n" ++
-  "\n-length: the maximum number of characters shown of a string. " ++
+  "\n-length, the maximum number of characters shown of a string. " ++
   "\n       The default is unlimited." ++
   "\n" ++
-  "\n-lexer: tokenization transforming a string into lexical units for a parser." ++
+  "\n-lexer, tokenization transforming a string into lexical units for a parser." ++
   "\n       The default is words." ++
   "\n    -lexer=words         tokens are separated by spaces or newlines" ++
   "\n    -lexer=literals      like words, but GF integer and string literals recognized" ++
@@ -380,14 +432,14 @@ txtHelpFile =
   "\n    -lexer=textlit       like text, but treat unknown words as string literals" ++
   "\n    -lexer=codeC         use a C-like lexer" ++
   "\n" ++
-  "\n-number: the maximum number of generated items in a list. " ++
+  "\n-number, the maximum number of generated items in a list. " ++
   "\n       The default is unlimited." ++
   "\n" ++
-  "\n-parser: Context-free    parsing algorithm. The default is chart." ++
+  "\n-parser, Context-free    parsing algorithm. The default is chart." ++
   "\n    -parser=earley       Earley algorithm" ++
   "\n    -parser=chart        bottom-up chart parser" ++
   "\n" ++
-  "\n-printer: format in which the grammar is printed. The default is gfc." ++
+  "\n-printer, format in which the grammar is printed. The default is gfc." ++
   "\n    -printer=gfc            GFC grammar" ++
   "\n    -printer=gf             GF grammar" ++
   "\n    -printer=old            old GF grammar" ++
@@ -401,9 +453,9 @@ txtHelpFile =
   "\n   *-printer=xml            XML: DTD for the pg command, object for st" ++
   "\n    -printer=old            old GF: file readable by GF 1.2" ++
   "\n" ++
-  "\n-startcat: like -cat, but used in grammars (to avoid clash with keyword cat)" ++
+  "\n-startcat, like -cat, but used in grammars (to avoid clash with keyword cat)" ++
   "\n" ++
-  "\n-transform: transformation performed on a syntax tree. The default is identity." ++
+  "\n-transform, transformation performed on a syntax tree. The default is identity." ++
   "\n    -transform=identity  no change" ++
   "\n    -transform=compute   compute by using definitions in the grammar" ++
   "\n    -transform=typecheck return the term only if it is type-correct" ++
@@ -411,7 +463,7 @@ txtHelpFile =
   "\n    -transform=context   solve metavariables by unique refinements as variables" ++
   "\n    -transform=delete    replace the term by metavariable" ++
   "\n" ++
-  "\n-unlexer: untokenization transforming linearization output into a string." ++
+  "\n-unlexer, untokenization transforming linearization output into a string." ++
   "\n       The default is unwords." ++
   "\n    -unlexer=unwords     space-separated token list (like unwords)" ++
   "\n    -unlexer=text        format as text: punctuation, capitals, paragraph <p>" ++

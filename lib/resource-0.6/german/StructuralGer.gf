@@ -92,13 +92,13 @@ lin
 
 
   CanVV     = 
-    mkVerbSimple (verbSehen "können" "kann" "gekonnt")  ** {isAux = True} ; ---
+    mkVerbSimple (verbumAux "können" "kann" "kannst" "gekonnt") ** {isAux = True} ;
   CanKnowVV = 
-    mkVerbSimple (verbSehen "können" "kann" "gekonnt")  ** {isAux = True} ; ---
+    mkVerbSimple (verbumAux "können" "kann" "kannst" "gekonnt") ** {isAux = True} ;
   MustVV    = 
-    mkVerbSimple (verbSehen "müssen" "muss" "gemusst")  ** {isAux = True} ; ---
+    mkVerbSimple (verbumAux "müssen" "muss" "musst" "gemusst")  ** {isAux = True} ;
   WantVV    = 
-    mkVerbSimple (verbSehen "wollen" "will" "gewollt")  ** {isAux = True} ; ---
+    mkVerbSimple (verbumAux "wollen" "will" "willst" "gewollt") ** {isAux = True} ;
 
 
   EverywhereNP = ss "überall" ;

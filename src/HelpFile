@@ -35,6 +35,10 @@ i,  import: i File
       -abs          set the name used for abstract syntax (with -old option)
       -cnc          set the name used for concrete syntax (with -old option)
       -res          set the name used for resource (with -old option)
+      -path         use the (colon-separated) search path to find modules
+  examples:
+      i English.gf                      -- ordinary import of Concrete
+      i -retain german/ParadigmsGer.gf  -- import of Resource to test
       
 * rl, remove_language: rl Language
       Takes away the language from the state.
@@ -42,9 +46,12 @@ i,  import: i File
 e,  empty: e
       Takes away all languages and resets all global flags.
 
-sf, set_flags: sf Language? Flag*
+sf, set_flags: sf Flag*
       The values of the Flags are set for Language. If no language
       is specified, the flags are set globally.
+  examples:
+      sf -nocpu     -- stop showing CPU time
+      sf -lang=Swe  -- make Swe the default concrete
 
 s,  strip: s
       Prune the state by removing source and resource modules.
@@ -65,10 +72,14 @@ pg, print_grammar: pg
   flags: 
       -printer
       -lang
+  examples:
+      pg -printer=cf  -- show the context-free skeleton
 
 pm, print_multigrammar: pm
-      Prints the current multilingual grammar into a .gfcm file.
+      Prints the current multilingual grammar in .gfcm form.
       (Automatically executes the strip command (s) before doing this.)
+  examples:
+      pm | wf Letter.gfcm  -- print the grammar into the file Letter.gfcm
 
 po, print_options: po
       Print what modules there are in the state. Also
@@ -88,8 +99,8 @@ eh, execute_history: eh File
 ph, print_history; ph
       Prints the commands issued during the GF session.
       The result is readable by the eh command.
-      HINT: write "ph | wf foo.hist" to save the history.
-
+  examples:
+      ph | wf foo.hist"  -- save the history into a file
 
 -- linearization, parsing, translation, and computation
 
@@ -106,10 +117,13 @@ l,  linearize: l PattList? Tree
       -table   show parameters
       -struct  bracketed form
       -record  record, i.e. explicit GF concrete syntax term
+      -all     show all forms and variants
   flags:
       -lang    linearize in this grammar
       -number  give this number of forms at most
       -unlexer filter output through unlexer
+  examples:
+      l -lang=Swe -table  -- show full inflection table in Swe
 
 p,  parse: p String
       Shows all Trees returned for String by the actual
@@ -120,18 +134,23 @@ p,  parse: p String
       -ign     ignore unknown words when parsing
       -raw     return context-free terms in raw form
       -v       verbose: give more information if parsing fails
+      -new     use an experimental method (GF 2.0; sometimes very good)
   flags:
       -cat     parse in this category
       -lang    parse in this grammar
       -lexer   filter input through this lexer
       -parser  use this context-free parsing method
       -number  return this many results at most
+  examples:
+      p -cat=S -new "jag är gammal"   -- print an S with the new method
 
 tt, test_tokenizer: tt String
       Show the token list sent to the parser when String is parsed.
       HINT: can be useful when debugging the parser.
   flags: 
      -lexer    use this lexer
+  examples:
+     tt -lexer=codelit "2*(x + 3)"  -- a favourite lexer for program code
 
 cc, compute_concrete: cc Term
       Compute a term by concrete syntax definitions. Uses the topmost
@@ -144,6 +163,8 @@ cc, compute_concrete: cc Term
       and hence not a valid input to a Tree-demanding command.
   flags:
      -res      use another module than the topmost one
+  examples:
+     cc -res=ParadigmsFin (nLukko "hyppy")   -- inflect "hyppy" with nLukko
 
 so, show_operations: so Type
       Show oper operations with the given value type. Uses the topmost 
@@ -155,6 +176,8 @@ so, show_operations: so Type
       topmost resource. In that case, use appropriate qualified name.
   flags:
      -res      use another module than the topmost one
+  examples:
+     so -res=ParadigmsFin ResourceFin.N  -- show N-paradigms in ParadigmsFin
 
 t,  translate: t Lang Lang String
       Parses String in Lang1 and linearizes the resulting Trees in Lang2.
@@ -162,6 +185,8 @@ t,  translate: t Lang Lang String
       -cat
       -lexer
       -parser
+  examples:
+      t Eng Swe -cat=S "every number is even or odd"
 
 gr, generate_random: gr Tree?
       Generates a random Tree of a given category. If a Tree
@@ -172,6 +197,10 @@ gr, generate_random: gr Tree?
       -lang    use the abstract syntax of this grammar
       -number  generate this number of trees (not impl. with Tree argument)
       -depth   use this number of search steps at most
+  examples:
+      gr -cat=Query            -- generate in category Query
+      gr (PredVP ? (NegVG ?))  -- generate a random tree of this form
+      gr -cat=S -tr | l        -- gererate and linearize
 
 gt, generate_trees: gt Tree?
       Generates all trees up to a given depth. If the depth is large,
@@ -186,6 +215,10 @@ gt, generate_trees: gt Tree?
       -cat     generate in this category
       -lang    use the abstract syntax of this grammar
       -number  generate (at most) this number of trees
+  examples:
+      gt -depth=10 -cat=NP     -- generate all NP's to depth 10 
+      gt (PredVP ? (NegVG ?))  -- generate all trees of this form
+      gt -cat=S -tr | l        -- gererate and linearize
 
 ma, morphologically_analyse: ma String
       Runs morphological analysis on each word in String and displays
@@ -194,6 +227,8 @@ ma, morphologically_analyse: ma String
       -short   show analyses in bracketed words, instead of separate lines
   flags:
       -lang
+  examples:
+      wf Bible.txt | ma -short | wf Bible.tagged  -- analyse the Bible
 
 
 -- elementary generation of Strings and Trees
@@ -205,6 +240,8 @@ ps, put_string: ps String
   flags:
       -filter  filter the result through this string processor 
       -length  cut the string after this number of characters
+  examples:
+      gr -cat=Letter | l | ps -filter=text -- random letter as text
 
 pt, put_tree: pt Tree
       Returns its argument Tree, like a specialized Unix echo.
@@ -213,6 +250,9 @@ pt, put_tree: pt Tree
   flags:
       -transform   transform the result by this term processor
       -number      generate this number of terms at most
+  examples:
+      p "zero is even" | pt -transform=solve  -- solve ?'s in parse result
+
 
 * st, show_tree: st Tree
       Prints the tree as a string. Unlike pt, this command cannot be
@@ -230,14 +270,17 @@ es, editing_session: es
       -f Fudget GUI (necessary for Unicode; only available in X Window System)
 
 ts, translation_session: ts
-      Translates input lines from any of the actual languages to any other one.
+      Translates input lines from any of the actual languages to all other ones.
       To exit, type a full stop (.) alone on a line.
       N.B. Exit from a Fudget session is to the Unix shell, not to GF. 
       HINT: Set -parser and -lexer locally in each grammar.
   options:
-      -f Fudget GUI (necessary for Unicode; only available in X Window System)
+      -f    Fudget GUI (necessary for Unicode; only available in X Windows)
+      -lang prepend translation results with language names
   flags:
-      -cat
+      -cat    the parser category
+  examples:
+      ts -cat=Numeral -lang  -- translate numerals, show language names
 
 tq, translation_quiz: tq Lang Lang
       Random-generates translation exercises from Lang1 to Lang2,
@@ -246,12 +289,16 @@ tq, translation_quiz: tq Lang Lang
       HINT: Set -parser and -lexer locally in each grammar.
   flags:
       -cat
+  examples:
+      tq -cat=NP TestResourceEng TestResourceSwe  -- quiz for NPs
 
 tl, translation_list: tl Lang Lang Int
       Random-generates a list of Int translation exercises from Lang1 to Lang2.
       HINT: use wf to save the exercises in a file.
   flags:
       -cat
+  examples:
+      tl -cat=NP TestResourceEng TestResourceSwe  -- quiz list for NPs
 
 mq, morphology_quiz: mq
       Random-generates morphological exercises,
@@ -262,6 +309,8 @@ mq, morphology_quiz: mq
   flags:
       -cat
       -lang
+  examples:
+      mq -cat=N -lang=TestResourceSwe  -- quiz for Swedish nouns
 
 ml, morphology_list: ml Int
       Random-generates a list of Int morphological exercises,
@@ -270,12 +319,14 @@ ml, morphology_list: ml Int
   flags:
       -cat
       -lang
+  examples:
+      ml -cat=N -lang=TestResourceSwe  -- quiz list for Swedish nouns
 
 
 -- IO related commands
 
 rf, read_file: rf File
-      Returns the contents of File as a String; error is File does not exist.
+      Returns the contents of File as a String; error if File does not exist.
 
 wf, write_file: wf File String
       Writes String into File; File is created if it does not exist.
@@ -307,18 +358,19 @@ af, append_file: af File
       HINT: pipe with 'wf Foo.tex' to generate a new Latex file.
 
 sa, speak_aloud: sa String
-      Uses the Festival speech generator to produce speech for String.
-      The command cupports Festival's language flag, which is sent verbatim
-      to Festival, e.g. -language=spanish. Omitting this flag gives the 
-      system-dependent default voice (often British English).
-     flags:
-       -language
+      Uses the Flite speech generator to produce speech for String.
+      Works for American English spelling. 
+  examples:
+    h | sa              -- listen to the list of commands
+    gr -cat=S | l | sa  -- generate a random sentence and speak it aloud
 
 h, help: h Command?
       Displays the paragraph concerning the command from this help file.
       Without the argument, shows the first lines of all paragraphs.
   options
        -all  show the whole help file
+  examples:
+       h print_grammar  -- show all information on the pg command
 
 q, quit: q
       Exits GF.
@@ -326,36 +378,36 @@ q, quit: q
 
 !, system_command: ! String
       Issues a system command. No value is returned to GF.
-
+   example:
+      ! ls
 
 
 -- Flags. The availability of flags is defined separately for each command.
 
--cat: category in which parsing is performed.
+-cat, category in which parsing is performed.
       The default is S.
 
--depth: the search depth in e.g. random generation.
+-depth, the search depth in e.g. random generation.
       The default depends on application.
 
--filter: operation performed on a string. The default is identity.
+-filter, operation performed on a string. The default is identity.
     -filter=identity     no change
     -filter=erase        erase the text
     -filter=take100      show the first 100 characters
     -filter=length       show the length of the string
     -filter=text         format as text (punctuation, capitalization)
     -filter=code         format as code (spacing, indentation)
-    -filter=latexfile    embed in a LaTeX file 
 
--lang: grammar used when executing a grammar-dependent command.
+-lang, grammar used when executing a grammar-dependent command.
        The default is the last-imported grammar.
 
--language: voice used by Festival as its --language flag in the sa command. 
+-language, voice used by Festival as its --language flag in the sa command. 
        The default is system-dependent. 
 
--length: the maximum number of characters shown of a string. 
+-length, the maximum number of characters shown of a string. 
        The default is unlimited.
 
--lexer: tokenization transforming a string into lexical units for a parser.
+-lexer, tokenization transforming a string into lexical units for a parser.
        The default is words.
     -lexer=words         tokens are separated by spaces or newlines
     -lexer=literals      like words, but GF integer and string literals recognized
@@ -367,14 +419,14 @@ q, quit: q
     -lexer=textlit       like text, but treat unknown words as string literals
     -lexer=codeC         use a C-like lexer
 
--number: the maximum number of generated items in a list. 
+-number, the maximum number of generated items in a list. 
        The default is unlimited.
 
--parser: Context-free    parsing algorithm. The default is chart.
+-parser, Context-free    parsing algorithm. The default is chart.
     -parser=earley       Earley algorithm
     -parser=chart        bottom-up chart parser
 
--printer: format in which the grammar is printed. The default is gfc.
+-printer, format in which the grammar is printed. The default is gfc.
     -printer=gfc            GFC grammar
     -printer=gf             GF grammar
     -printer=old            old GF grammar
@@ -388,9 +440,9 @@ q, quit: q
    *-printer=xml            XML: DTD for the pg command, object for st
     -printer=old            old GF: file readable by GF 1.2
 
--startcat: like -cat, but used in grammars (to avoid clash with keyword cat)
+-startcat, like -cat, but used in grammars (to avoid clash with keyword cat)
 
--transform: transformation performed on a syntax tree. The default is identity.
+-transform, transformation performed on a syntax tree. The default is identity.
     -transform=identity  no change
     -transform=compute   compute by using definitions in the grammar
     -transform=typecheck return the term only if it is type-correct
@@ -398,7 +450,7 @@ q, quit: q
     -transform=context   solve metavariables by unique refinements as variables
     -transform=delete    replace the term by metavariable
 
--unlexer: untokenization transforming linearization output into a string.
+-unlexer, untokenization transforming linearization output into a string.
        The default is unwords.
     -unlexer=unwords     space-separated token list (like unwords)
     -unlexer=text        format as text: punctuation, capitals, paragraph <p>
