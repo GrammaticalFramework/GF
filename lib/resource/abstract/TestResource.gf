@@ -29,5 +29,5 @@ fun
     Important : A2S ;
     Probable : AS ;
     Easy : A2V ;
-   
+    Rain : V0 ;
 } ;

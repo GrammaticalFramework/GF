@@ -118,10 +118,16 @@ instance SyntaxNor of SyntaxScand = TypesNor **
 
   reflPron : Number -> Person -> Str = \n,p -> case <n,p> of {
     <Sg,P1> => "meg" ;
-    <Sg,P2> => "meg" ;
+    <Sg,P2> => "deg" ;
     <Pl,P1> => "oss" ;
     <Pl,P2> => "jer" ;
     _ => "seg"
     } ;
+
+  progressiveVerbPhrase : VerbPhrase -> VerbGroup =
+    complVerbVerb
+      (verbVara **
+       {s3 = ["ved at"]}
+      ) ;
 
 }

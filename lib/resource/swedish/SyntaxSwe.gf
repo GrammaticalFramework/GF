@@ -124,9 +124,15 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
 
   reflPron : Number -> Person -> Str = \n,p -> case <n,p> of {
     <Sg,P1> => "mig" ;
-    <Sg,P2> => "mig" ;
+    <Sg,P2> => "dig" ;
     <Pl,P1> => "oss" ;
     <Pl,P2> => "er" ;
     _ => "sig"
     } ;
+
+  progressiveVerbPhrase : VerbPhrase -> VerbGroup = 
+    complVerbVerb 
+      (mkVerb "hålla" "håller" "håll"  "höll" "hållit" "hållen" ** 
+       {s3 = ["på att"]}
+      ) ;  
 }

@@ -57,10 +57,12 @@ lin
   UseA2S x = x ;
   UseA2V x = x ;
 
+   UseCl tp cl = {s = \\o => tp.s ++ cl.s ! tp.b ! ClFinite tp.t tp.a o} ;
  
+  PosVP tp = predVerbGroup True tp.a ;
+  NegVP tp = predVerbGroup False tp.a ;
 
-  UseCl tp cl = {s = \\o => tp.s ++ cl.s ! tp.b ! ClFinite tp.t tp.a o} ;
-  UseVG tp = predVerbGroup tp.b tp.t tp.a ;
+  ProgVP = progressiveVerbPhrase ;
 
   PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
   NegTP t a = {s = t.s ++ a.s ; b = False ; t = t.t ; a = a.a} ;
@@ -71,7 +73,7 @@ lin
   ASimul = {s = [] ; a = Simul} ;
   AAnter = {s = [] ; a = Anter} ;
 
-  PredVG = predVerbGroupClause ;
+  PredVP = predVerbGroupClause ;
 
   PredV  = predVerb ;
   PredAP = predAdjective ;
@@ -111,11 +113,11 @@ lin
                    (indefNounPhraseNum plural nu A)) ;
 
   SlashV2 = slashTransVerb ;
-  OneVG = predVerbGroupClause npMan ;
+  OneVP = predVerbGroupClause npMan ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
-  RelVG = relVerbGroup ;
+  RelVP = relVerbGroup ;
   RelSlash = relSlash ;
   ModRS = modRelClause ;
   RelCl = relSuch ;
@@ -131,8 +133,8 @@ lin
   NounIPOne = nounIntPron singular ;
   NounIPMany = nounIntPron plural ;
 
-  QuestVG = questVerbPhrase ;
-  IntVG = intVerbPhrase ;
+  QuestVP = questVerbPhrase ;
+  IntVP = intVerbPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
 
@@ -151,7 +153,7 @@ lin
 
   IndicPhrase = indicUtt ;
   QuestPhrase = interrogUtt ;
-  ImperOne = imperUtterance singular ;
+  ImperOne  = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
 
   PrepS p = ss (p.s ++ ",") ;

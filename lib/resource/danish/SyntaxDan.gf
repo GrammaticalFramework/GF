@@ -118,9 +118,16 @@ instance SyntaxDan of SyntaxScand = TypesDan **
 
   reflPron : Number -> Person -> Str = \n,p -> case <n,p> of {
     <Sg,P1> => "mig" ;
-    <Sg,P2> => "mig" ;
+    <Sg,P2> => "dig" ;
     <Pl,P1> => "os" ;
     <Pl,P2> => "seg" ; --- ? dere ?
     _ => "seg"
     } ;
+
+  progressiveVerbPhrase : VerbPhrase -> VerbGroup =
+    complVerbVerb
+      (verbVara **
+       {s3 = ["ved at"]}
+      ) ;
+
 }
