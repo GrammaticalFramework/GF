@@ -67,6 +67,11 @@ shell:
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) Shell.hs
 clean: 
 	-rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
+
+distclean: clean
+	-rm -f for-ghc-nofud/*.hs
+	-rm -f config.status config.mk config.log
+
 hugs:
 	hugs -h10M -P$(HUGSINCLUDE)
 ghci-nofud:
@@ -83,10 +88,6 @@ tracing:
 	$(GHMAKE) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD) GF.hs -o gf2
 	strip gf2
 	mv gf2 ../bin/
-
-distclean: clean
-	-rm -f for-ghc-nofud/*.hs
-	-rm -f config.status config.mk config.log
 
 install:
 	$(INSTALL) ../bin/gf2 $(bindir)
