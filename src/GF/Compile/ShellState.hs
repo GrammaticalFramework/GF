@@ -208,6 +208,16 @@ purgeShellState sh = ShSt {
    purge = nubBy (\x y -> fst x == fst y) . filter (flip elem needed . fst)
    acncs = maybe [] singleton (abstract sh) ++ map (snd . fst) (concretes sh)
 
+changeMain :: Maybe Ident -> ShellState -> Err ShellState
+changeMain Nothing (ShSt _ _ cs ms ss cfs pis mos os rs acs s) = 
+  return (ShSt Nothing Nothing cs ms ss cfs pis mos os rs acs s)
+changeMain (Just c) (ShSt _ _ cs ms ss cfs pis mos os rs acs s) = 
+  case lookup c (map fst cs) of 
+    Just i -> do
+      a <- M.abstractOfConcrete ms i
+      return (ShSt (Just a) (Just i) cs ms ss cfs pis mos os rs acs s) 
+    _ -> P.prtBad "The state has no concrete syntax named" c
+
 -- form just one state grammar, if unique, from a canonical grammar
 
 grammar2stateGrammar :: Options -> CanonGrammar -> Err StateGrammar 
