@@ -158,6 +158,7 @@ instance Print ModBody where
   prt i e = case e of
    MBody extend opens topdefs -> prPrec i 0 (concatD [prt 0 extend , prt 0 opens , doc (showString "{") , prt 0 topdefs , doc (showString "}")])
    MWith id opens -> prPrec i 0 (concatD [prt 0 id , doc (showString "with") , prt 0 opens])
+   MWithE ids id opens -> prPrec i 0 (concatD [prt 0 ids , doc (showString "**") , prt 0 id , doc (showString "with") , prt 0 opens])
    MReuse id -> prPrec i 0 (concatD [doc (showString "reuse") , prt 0 id])
    MUnion includeds -> prPrec i 0 (concatD [doc (showString "union") , prt 0 includeds])
 
@@ -171,7 +172,7 @@ instance Print Extend where
 instance Print Opens where
   prt i e = case e of
    NoOpens  -> prPrec i 0 (concatD [])
-   Opens opens -> prPrec i 0 (concatD [doc (showString "open") , prt 0 opens , doc (showString "in")])
+   OpenIn opens -> prPrec i 0 (concatD [doc (showString "open") , prt 0 opens , doc (showString "in")])
 
 
 instance Print Open where
@@ -282,7 +283,7 @@ instance Print DataConstr where
 
 instance Print ParDef where
   prt i e = case e of
-   ParDef id parconstrs -> prPrec i 0 (concatD [prt 0 id , doc (showString "=") , prt 0 parconstrs])
+   ParDefDir id parconstrs -> prPrec i 0 (concatD [prt 0 id , doc (showString "=") , prt 0 parconstrs])
    ParDefIndir id0 id -> prPrec i 0 (concatD [prt 0 id0 , doc (showString "=") , doc (showString "(") , doc (showString "in") , prt 0 id , doc (showString ")")])
    ParDefAbs id -> prPrec i 0 (concatD [prt 0 id])
 

@@ -1,4 +1,4 @@
---# -path=.:../romance:../abstract:../../prelude
+--# -path=.:../romance:../oldabstract:../abstract:../../prelude
 
 concrete TestResourceIta of TestResource = 
   RulesIta, StructuralIta ** open Prelude, TypesIta, MorphoIta, SyntaxIta in {

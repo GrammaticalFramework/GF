@@ -254,10 +254,18 @@ getModuleHeader ws = case ws of
       ((MTyResource,name),(m,MUInstance):(n,MUComplete):[(n,MUOther) | n <- ms])
     ms -> ((MTyResource,name),(m,MUInstance):[(n,MUOther) | n <- ms])
 
+  "concrete":name:a:ws2 -> case span (/= "with") ws2 of
+
+    (es,_:ms) -> ((MTyOther,name),
+                  [(m,MUOther)    | m <- es] ++
+                  [(n,MUComplete) | n <- ms])
+    --- m:"with":ms -> ((MTyOther,name),(m,MUOther):[(n,MUComplete) | n <- ms])
+    (ms,[]) -> ((MTyOther,name),[(n,MUOther) | n <- a:ms])
+
   _:name:ws2 -> case ws2 of
     "reuse":m:_ -> ((MTyOther,name),[(m,MUReuse)])
-    m:n:"with":ms -> 
-      ((MTyOther,name),(m,MUInstance):(n,MUOther):[(n,MUComplete) | n <- ms])
+    ---- m:n:"with":ms -> 
+    ----  ((MTyOther,name),(m,MUInstance):(n,MUOther):[(n,MUComplete) | n <- ms])
     m:"with":ms -> ((MTyOther,name),(m,MUOther):[(n,MUComplete) | n <- ms])
     ms -> ((MTyOther,name),[(n,MUOther) | n <- ms])
 

@@ -72,12 +72,12 @@ oper
   mkVerb : (_,_,_,_,_,_ : Str) -> Verbum = 
     \spise,spiser,spises,spiste,spist,spis -> {s = table {
        VI (Inf v)       => mkVoice v spise ;
-       VF (Pres m Act)  => spiser ;
-       VF (Pres m Pass) => spises ;
-       VF (Pret m v)    => mkVoice v spiste ;
+       VF (Pres Act)    => spiser ;
+       VF (Pres Pass)   => spises ;
+       VF (Pret v)      => mkVoice v spiste ;
        VI (Supin v)     => mkVoice v spist ;
-       VI (PtPret c)    => mkCase spist ! c ;
-       VF Imper         => spis
+       VI (PtPret _ c)  => mkCase spist ! c ; ---- GenNum
+       VF (Imper v)     => mkVoice v spis
        }
      } ;
 

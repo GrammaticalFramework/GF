@@ -68,20 +68,18 @@ prToken t = case t of
 
   _ -> show t
 
+data BTree = N | B String Tok BTree BTree deriving (Show)
+
 eitherResIdent :: (String -> Tok) -> String -> Tok
-eitherResIdent tv s = if isResWord s then (TS s) else (tv s) where
-  isResWord s = isInTree s $
-    B "lincat" (B "def" (B "Type" (B "Str" (B "PType" (B "Lin" N N) N) (B "Tok" (B "Strs" N N) N)) (B "cat" (B "case" (B "abstract" N N) N) (B "data" (B "concrete" N N) N))) (B "include" (B "fun" (B "fn" (B "flags" N N) N) (B "in" (B "grammar" N N) N)) (B "interface" (B "instance" (B "incomplete" N N) N) (B "lin" (B "let" N N) N)))) (B "resource" (B "out" (B "of" (B "lintype" (B "lindef" N N) N) (B "oper" (B "open" N N) N)) (B "pattern" (B "param" (B "package" N N) N) (B "printname" (B "pre" N N) N))) (B "union" (B "table" (B "strs" (B "reuse" N N) N) (B "transfer" (B "tokenizer" N N) N)) (B "where" (B "variants" (B "var" N N) N) (B "with" N N))))
+eitherResIdent tv s = treeFind resWords
+  where
+  treeFind N = tv s
+  treeFind (B a t left right) | s < a  = treeFind left
+                              | s > a  = treeFind right
+                              | s == a = t
 
-data BTree = N | B String BTree BTree deriving (Show)
-
-isInTree :: String -> BTree -> Bool
-isInTree x tree = case tree of
-  N -> False
-  B a left right
-   | x < a  -> isInTree x left
-   | x > a  -> isInTree x right
-   | x == a -> True
+resWords = b "lincat" (b "def" (b "Type" (b "Str" (b "PType" (b "Lin" N N) N) (b "Tok" (b "Strs" N N) N)) (b "cat" (b "case" (b "abstract" N N) N) (b "data" (b "concrete" N N) N))) (b "include" (b "fun" (b "fn" (b "flags" N N) N) (b "in" (b "grammar" N N) N)) (b "interface" (b "instance" (b "incomplete" N N) N) (b "lin" (b "let" N N) N)))) (b "resource" (b "out" (b "of" (b "lintype" (b "lindef" N N) N) (b "oper" (b "open" N N) N)) (b "pattern" (b "param" (b "package" N N) N) (b "printname" (b "pre" N N) N))) (b "union" (b "table" (b "strs" (b "reuse" N N) N) (b "transfer" (b "tokenizer" N N) N)) (b "where" (b "variants" (b "var" N N) N) (b "with" N N))))
+   where b s = B s (TS s)
 
 unescapeInitTail :: String -> String
 unescapeInitTail = unesc . tail where

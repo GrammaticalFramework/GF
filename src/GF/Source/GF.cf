@@ -39,7 +39,8 @@ MTInstance.  ModType ::= "instance" Ident "of" Ident ;
 MTTransfer.  ModType ::= "transfer" Ident ":" Open "->" Open ;
 
 MBody.  ModBody ::= Extend Opens "{" [TopDef] "}" ;
-MWith.  ModBody ::= Ident "with" [Open] ;
+MWith.  ModBody ::=              Ident "with" [Open] ;
+MWithE. ModBody ::= [Ident] "**" Ident "with" [Open] ;
 MReuse. ModBody ::= "reuse" Ident ;
 MUnion. ModBody ::= "union" [Included] ;
 
@@ -50,7 +51,7 @@ NoExt. Extend ::= ;
 
 separator Open "," ;
 NoOpens. Opens ::= ;
-Opens.   Opens ::= "open" [Open] "in" ;
+OpenIn.  Opens ::= "open" [Open] "in" ;
 
 OName.   Open ::= Ident ;
 OQualQO. Open ::= "(" QualOpen Ident ")" ;
@@ -105,7 +106,7 @@ DataQId.   DataConstr ::= Ident "." Ident ;
 separator DataConstr "|" ;
 
 
-ParDef.      ParDef ::= Ident "=" [ParConstr] ;
+ParDefDir.   ParDef ::= Ident "=" [ParConstr] ;
 ParDefIndir. ParDef ::= Ident "=" "(" "in" Ident ")" ;
 ParDefAbs.   ParDef ::= Ident ;
 

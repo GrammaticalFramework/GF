@@ -56,6 +56,11 @@ fun
   QPredObjA2V  : IP -> A2V -> NP ->VPI ->QCl ; -- "who is easy for us to convince"
 
 
+  IPredV       : Ant -> V  -> VPI ;            -- "walk"
+  IPredV2      : Ant -> V2 -> NP -> VPI ;      -- "see Mary"
+  IPredAP      : Ant -> AP -> VPI ;            -- "be old"
+
+
 {-
 -- These rules *use* verb phrases. 
 

@@ -31,7 +31,7 @@ lin
   bread_N = regN "bread" ;
   break_V2 = dirV2 (irregV "break" "broke" "broken") ;
   broad_ADeg = regADeg "broad" ;
-  brother_N = regN "brother" ;
+  brother_N2 = regN2 "brother" ;
   brown_ADeg = regADeg "brown" ;
   butter_N = regN "butter" ;
   buy_V2 = dirV2 (irregV "buy" "bought" "bought") ;
@@ -66,7 +66,7 @@ lin
   eat_V2 = dirV2 (irregV "eat" "ate" "eaten") ;
   enemy_N = regN "enemy" ;
   factory_N = regN "factory" ;
-  father_N = regN "father" ;
+  father_N2 = regN2 "father" ;
   fear_VS = mkVS (regV "fear") ;
   find_V2 = dirV2 (irregV "find" "found" "found") ;
   fish_N = mk2N "fish" "fish" ;
@@ -80,7 +80,7 @@ lin
   girl_N = regN "girl" ;
   glove_N = regN "glove" ;
   gold_N = regN "gold" ;
-  good_ADeg = regADeg "good" ;
+  good_ADeg = mkADeg "good" "better" "best" "well" ;
   go_V = (mkV "go" "goes" "went" "gone" "going") ;
   green_ADeg = regADeg "green" ;
   harbour_N = regN "harbour" ;
@@ -93,7 +93,7 @@ lin
   horse_N = regN "horse" ;
   hot_ADeg = regADeg "hot" ;
   house_N = regN "house" ;
-  important_ADeg = regADeg "important" ;
+  important_ADeg = compoundADeg (regA "important") ;
   industry_N = regN "industry" ;
   iron_N = regN "iron" ;
   king_N = regN "king" ;
@@ -115,7 +115,7 @@ lin
   meat_N = regN "meat" ;
   milk_N = regN "milk" ;
   moon_N = regN "moon" ;
-  mother_N = regN "mother" ;
+  mother_N2 = regN2 "mother" ;
   mountain_N = regN "mountain" ;
   music_N = regN "music" ;
   narrow_ADeg = regADeg "narrow" ;
@@ -186,12 +186,12 @@ lin
   train_N = regN "train" ;
   travel_V = (regDuplV "travel") ;
   tree_N = regN "tree" ;
-  trousers_N = regN "trousers" ;
+ ---- trousers_N = regN "trousers" ;
   ugly_ADeg = regADeg "ugly" ;
   understand_V2 = dirV2 (irregV "understand" "understood" "understood") ;
   university_N = regN "university" ;
   village_N = regN "village" ;
-  wait_V2 = dirV2 (regV "wait") ;
+  wait_V2 = mkV2 (regV "wait") "for" ;
   walk_V = (regV "walk") ;
   warm_ADeg = regADeg "warm" ;
   war_N = regN "war" ;
@@ -207,4 +207,14 @@ lin
   write_V2 = dirV2 (irregV "write" "wrote" "written") ;
   yellow_ADeg = regADeg "yellow" ;
   young_ADeg = regADeg "young" ;
+
+  do_V2 = dirV2 (mkV "do" "does" "did" "done" "doing") ;
+  now_Adv = mkAdv "now" ;
+  already_Adv = mkAdv "already" ;
+  song_N = regN "song" ;
+  add_V3 = dirV3 (regV "add") "to" ;
+  number_N = regN "number" ;
+  put_V2 = mkV2 (irregDuplV "put" "put" "put") [] ;
+  stop_V = regV "stop" ;
+  jump_V = regV "jump" ;
 } ;

@@ -96,9 +96,14 @@ transModDef x = case x of
           GM.ModMod (GM.Module (GM.MTUnion mtyp' imps') mstat' [] [] [] NT))
   
       MWith m opens -> do
-        m'     <- transIdent m
-        opens' <- mapM transOpen opens 
-        return (id', GM.ModWith mtyp' mstat' m' opens')
+        m'       <- transIdent m
+        opens'   <- mapM transOpen opens 
+        return (id', GM.ModWith mtyp' mstat' m' [] opens')
+      MWithE extends m opens -> do
+        extends' <- mapM transIdent extends
+        m'       <- transIdent m
+        opens'   <- mapM transOpen opens 
+        return (id', GM.ModWith mtyp' mstat' m' extends' opens')
  where
        mkModRes id mtyp body = do
          id' <- transIdent id
@@ -159,7 +164,7 @@ transExtend x = case x of
 transOpens :: Opens -> Err [GM.OpenSpec Ident]
 transOpens x = case x of
   NoOpens  -> return []
-  Opens opens  -> mapM transOpen opens
+  OpenIn opens  -> mapM transOpen opens
 
 transOpen :: Open -> Err (GM.OpenSpec Ident)
 transOpen x = case x of
@@ -257,7 +262,7 @@ transResDef x = case x of
 
 transParDef :: ParDef -> Err (Ident, [G.Param])
 transParDef x = case x of
-  ParDef id params  -> liftM2 (,) (transIdent id) (mapM transParConstr params)
+  ParDefDir id params  -> liftM2 (,) (transIdent id) (mapM transParConstr params)
   ParDefAbs id -> liftM2 (,) (transIdent id) (return [])
   _ -> Bad $ "illegal definition in resource:" ++++ printTree x
 
@@ -549,12 +554,12 @@ transOldGrammar opts name0 x = case x of
      DefPrintOld printdefs  -> (a,r,d:c,ps)
      DefPackage m ds        -> (a,r,c,(m,ds):ps)
      _ -> (a,r,c,ps)
-   mkAbs a = MModule q (MTAbstract absName) (MBody ne (Opens [])  (topDefs a))
-   mkRes ps r = MModule q (MTResource resName) (MBody ne (Opens ops) (topDefs r))
+   mkAbs a = MModule q (MTAbstract absName) (MBody ne (OpenIn [])  (topDefs a))
+   mkRes ps r = MModule q (MTResource resName) (MBody ne (OpenIn ops) (topDefs r))
                   where ops = map OName ps
    mkCnc ps r = MModule q (MTConcrete cncName absName) 
-                               (MBody ne (Opens (map OName (resName:ps))) (topDefs r))
-   mkPack (m, ds) = MModule q (MTResource m) (MBody ne  (Opens []) (topDefs ds))
+                               (MBody ne (OpenIn (map OName (resName:ps))) (topDefs r))
+   mkPack (m, ds) = MModule q (MTResource m) (MBody ne  (OpenIn []) (topDefs ds))
    topDefs t = t
    ne = NoExt
    q = CMCompl

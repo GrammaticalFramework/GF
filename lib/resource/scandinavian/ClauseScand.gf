@@ -53,6 +53,11 @@ incomplete concrete ClauseScand of Clause = CategoriesScand **
   QPredAV np v x = intVerbPhrase np (complVerbAdj v x) ;
   QPredObjA2V np v x y = intVerbPhrase np (complVerbAdj2 True v x y) ;
 
+  IPredV a v = predVerbGroupI True a (predVerb v) ;
+  IPredV2 a v x = predVerbGroupI True a (complTransVerb v x) ;
+----  SPredAP np v = predBeGroup np (\\_ => v.s ! AAdj) ;
+  IPredAP a v = predVerbGroupI True a (predAdjective v) ;
+
 {-
 -- Use VPs
 

@@ -1,4 +1,4 @@
---# -path=.:../romance:../abstract:../../prelude
+--# -path=.:../romance:../oldabstract:../abstract:../../prelude
 
 concrete TestResourceSpa of TestResource = 
   RulesSpa, StructuralSpa ** open Prelude, TypesSpa, MorphoSpa, SyntaxSpa in {

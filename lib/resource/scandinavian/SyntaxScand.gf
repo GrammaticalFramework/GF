@@ -283,8 +283,10 @@ oper
   extAdjective : Adj -> Adjective = \adj ->
     {s = table {f => table {c => adj.s ! AF (Posit f) c}}} ;
 
-  adjPastPart : Verb -> Adjective ;
- 
+  adjPastPart : Verb -> Adjective = \verb -> {
+    s = \\af,c => verb.s1 ++ verb.s ! VI (PtPret af c) --- på slagen
+    } ;
+
 
 -- Coercions between the compound gen-num type and gender and number:
 
@@ -365,12 +367,12 @@ oper
 --3 Two-place adjectives
 --
 -- A two-place adjective is an adjective with a preposition used before
--- the complement. (Rem. $Preposition = Str$).
+-- the complement. 
 
   AdjCompl = Adjective ** {s2 : Preposition} ;
 
   complAdj : AdjCompl -> NounPhrase -> AdjPhrase = \förtjust,dig ->
-    {s = \\a,c => förtjust.s ! a ! c ++ förtjust.s2 ++ dig.s ! PAcc ;
+    {s = \\a,c => förtjust.s ! a ! c ++ {-strPrep-} förtjust.s2 ++ dig.s ! PAcc ;
      p = True
     } ;
 
@@ -408,6 +410,13 @@ oper
 -- preposition prefixed to its argument ("mor till x").
 -- The type is analogous to two-place adjectives and transitive verbs.
 
+  param ComplPrep = CPnoPrep | CPav | CPför | CPi | CPom | CPpå | CPtill ;
+
+  oper
+  Preposition = Str ; ---- ComplPrep ; ---
+
+  strPrep : ComplPrep -> Str ;
+
   Function = CommNoun ** {s2 : Preposition} ;
 
   mkFun : CommNoun -> Preposition -> Function = \f,p ->
@@ -425,7 +434,7 @@ oper
     noun2CommNounPhrase
       {s = \\n,b => table {
               Gen => nonExist ;
-              _ => värde.s ! n ! b ! Nom ++ värde.s2 ++ x.s ! PAcc
+              _ => värde.s ! n ! b ! Nom ++ {-strPrep-} värde.s2 ++ x.s ! PAcc
               } ;
        g = värde.g ;
       } ;
@@ -454,7 +463,7 @@ oper
 -- Their application starts by filling the first place.
 
   appFun2 : Function2 -> NounPhrase -> Function = \flyg, paris ->
-    {s  = \\n,d,c => flyg.s ! n ! d ! c ++ flyg.s2 ++ paris.s ! PAcc ;
+    {s  = \\n,d,c => flyg.s ! n ! d ! c ++ {-strPrep-} flyg.s2 ++ paris.s ! PAcc ;
      g  = flyg.g ;
      s2 = flyg.s3
     } ;
@@ -496,15 +505,15 @@ oper
        hasett : Voice -> Str = \v -> auxHa ++ sett v
 
      in case sf of {
-       VFinite Present Simul => simple   (VF (Pres Ind vo)) ; 
+       VFinite Present Simul => simple   (VF (Pres vo)) ; 
        VFinite Present Anter => compound auxHar (sett vo) ;
-       VFinite Past    Simul => simple   (VF (Pret Ind vo)) ; 
+       VFinite Past    Simul => simple   (VF (Pret vo)) ; 
        VFinite Past    Anter => compound auxHade (sett vo) ;
        VFinite Future  Simul => compound auxSka (see vo) ; 
        VFinite Future  Anter => compound auxSka (hasett vo) ; 
        VFinite Condit  Simul => compound auxSkulle (see vo) ;
        VFinite Condit  Anter => compound auxSkulle (hasett vo) ; 
-       VImperat              => simple   (VF Imper) ; --- no passive
+       VImperat              => simple   (VF (Imper vo)) ;
        VInfinit Simul        => compound [] (se.s ! VI (Inf vo)) ;
        VInfinit Anter        => compound [] (auxHa ++ sett vo)
      } ;
@@ -521,11 +530,13 @@ oper
 -- (s3) complement. This discontinuity is needed in sentence formation
 -- to account for word order variations. No particle needs to be retained.
 
+  param VIForm = VIInfinit | VIImperat Bool ;
+
+  oper
   VerbPhrase : Type = {
-    s  : Str ; 
-    s2 : Str ; 
-    s3 : Gender => Number => Person => Str
+    s : VIForm => Gender => Number => Person => Str
     } ;
+
   VerbGroup  : Type = {
     s  : SForm => Str ; 
     s2 : Bool => Str ; 
@@ -537,10 +548,20 @@ oper
        vgs  = vg.s ;
        vgs3 = vg.s3 
     in
-   {s  = vg.s  ! VInfinit a ;
-    s2 = vg.s2 ! b ;
-    s3 = vg.s3 ! VInfinit a ;
+   {s = table {
+          VIInfinit => \\g,n,p => 
+            vg.s ! VInfinit a ++ vg.s2 ! b ++ vg.s3 ! VInfinit a ! g ! n ! p ;
+          VIImperat bo =>  \\g,n,p => 
+            vg.s ! VImperat ++ vg.s2 ! bo ++ vg.s3 ! VImperat ! g ! n ! p
+          } ---- bo shadows b
     } ;
+
+  predVerbGroupI : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase = 
+    \b,ant,vg -> 
+    let vp = predVerbGroup b ant.a vg in
+    {s = \\i,g,n,p => ant.s ++ vp.s ! i ! g ! n ! p
+    } ;
+
 
 -- A simple verb can be made into a verb phrase with an empty complement.
 -- There are two versions, depending on if we want to negate the verb.
@@ -586,7 +607,7 @@ oper
         \\g,n,_ => bra.s ! predFormAdj g n ! Nom ++ infinAtt ++ hansover.s ! Sub)) ;
 
   predAdjSent2 : AdjCompl -> NounPhrase -> Adjective = \bra,han ->
-   {s = \\af,c => bra.s ! af ! c ++ bra.s2 ++ han.s ! PAcc} ;
+   {s = \\af,c => bra.s ! af ! c ++ {-strPrep-} bra.s2 ++ han.s ! PAcc} ;
 
 
 --3 Transitive verbs
@@ -605,7 +626,7 @@ oper
   mkDirectVerb : Verb -> TransVerb = \v -> 
     mkTransVerb v nullPrep ;
 
-  nullPrep : Preposition = [] ;
+  nullPrep : Preposition = [] ; ---- CPnoPrep ;
 
 
   extTransVerb : Verbum -> Preposition -> TransVerb = \v,p ->
@@ -615,7 +636,7 @@ oper
 -- The rule for using transitive verbs is the complementization rule:
 
   complTransVerb : TransVerb -> NounPhrase -> VerbGroup = \se,dig ->
-    useVerb se (\\_,_,_ => se.s1 ++ se.s2 ++ dig.s ! PAcc) ;
+    useVerb se (\\_,_,_ => se.s1 ++ {-strPrep-} se.s2 ++ dig.s ! PAcc) ;
 
 -- Transitive verbs with accusative objects can be used passively. 
 -- The function does not check that the verb is transitive.
@@ -638,7 +659,7 @@ oper
     love ;
 
   reflTransVerb : TransVerb -> VerbGroup = \se ->
-    useVerb se (\\_,n,p => se.s1 ++ se.s2 ++ reflPron n p) ;
+    useVerb se (\\_,n,p => se.s1 ++ {-strPrep-} se.s2 ++ reflPron n p) ;
 
   reflPron : Number -> Person -> Str ;
 
@@ -654,7 +675,7 @@ oper
   complDitransVerb : 
     DitransVerb -> NounPhrase -> TransVerb = \ge,dig ->
       {s  = ge.s ;
-       s1 = ge.s1 ++ ge.s2 ++ dig.s ! PAcc ;
+       s1 = ge.s1 ++ {-strPrep-} ge.s2 ++ dig.s ! PAcc ;
        s2 = ge.s3
       } ;
 
@@ -673,7 +694,7 @@ oper
     DitransAdjVerb -> NounPhrase -> AdjPhrase -> VerbGroup = \gor,dig,sur ->
       useVerb 
         gor 
-        (\\_,_,_ => gor.s1 ++ gor.s2 ++ dig.s ! PAcc ++ 
+        (\\_,_,_ => gor.s1 ++ {-strPrep-} gor.s2 ++ dig.s ! PAcc ++ 
                     sur.s ! predFormAdj dig.g dig.n ! Nom) ;
 
   complAdjVerb : 
@@ -713,7 +734,7 @@ oper
 -- The rule for creating locative noun phrases by the preposition "i"
 -- is a little shaky: "i Sverige" but "på Island".
 
-  prepPhrase : Preposition -> NounPhrase -> Adverb = \i,huset ->
+  prepPhrase : Str -> NounPhrase -> Adverb = \i,huset ->
     advPost (i ++ huset.s ! PAcc) ;
 
   locativeNounPhrase : NounPhrase -> Adverb = 
@@ -799,12 +820,12 @@ oper
   complDitransSentVerb : TransVerb -> NounPhrase -> Sentence -> VerbGroup = 
     \sa,honom,duler ->
       useVerb sa 
-        (\\_,_,_ => sa.s1 ++ sa.s2 ++ honom.s ! PAcc ++ optStr infinAtt ++ duler.s ! Main) ;
+        (\\_,_,_ => sa.s1 ++ {-strPrep-} sa.s2 ++ honom.s ! PAcc ++ optStr infinAtt ++ duler.s ! Main) ;
 
   complDitransQuestVerb : TransVerb -> NounPhrase -> QuestionSent -> VerbGroup = 
     \sa,honom,omduler ->
       useVerb sa 
-        (\\_,_,_ => sa.s1 ++ sa.s2 ++ honom.s ! PAcc ++ omduler.s ! IndirQ) ;
+        (\\_,_,_ => sa.s1 ++ {-strPrep-} sa.s2 ++ honom.s ! PAcc ++ omduler.s ! IndirQ) ;
 
 --3 Verb-complement verbs
 --
@@ -820,8 +841,7 @@ oper
       (\\g,n,p => 
               vilja.s1 ++
               vilja.s3 ++
-              simma.s ++ simma.s2 ++ ---- Anter!
-              simma.s3 ! g ! n ! p) ;
+              simma.s ! VIInfinit ! g ! n ! p) ;
 
   transVerbVerb : VerbVerb -> TransVerb -> TransVerb = \vilja,hitta ->
     {s  = vilja.s ;
@@ -835,8 +855,7 @@ oper
       (\\g,n,p => 
               grei.s ! predFormAdj g n ! Nom ++ 
               infinAtt ++
-              simma.s ++ simma.s2 ++
-              simma.s3 ! g ! n ! p) ;
+              simma.s ! VIInfinit ! g ! n ! p) ;
 
 -- Notice agreement to object vs. subject:
 
@@ -846,11 +865,10 @@ oper
     Bool -> DitransVerbVerb -> NounPhrase -> VerbPhrase -> VerbGroup = 
      \obj,be,dig,simma ->
       useVerb be 
-        (\\g,n,p => be.s1 ++ be.s2 ++ dig.s ! PAcc ++ be.s3 ++ 
-              simma.s ++ simma.s2 ++
+        (\\g,n,p => be.s1 ++ {-strPrep-} be.s2 ++ dig.s ! PAcc ++ be.s3 ++ 
               if_then_Str obj 
-                 (simma.s3 ! dig.g ! dig.n ! dig.p)
-                 (simma.s3 ! g     ! n     ! p)
+                 (simma.s ! VIInfinit ! dig.g ! dig.n ! dig.p)
+                 (simma.s ! VIInfinit ! g     ! n     ! p)
         ) ;
 
   complVerbAdj2 : 
@@ -859,12 +877,11 @@ oper
         vara
           (\\g,n,p =>
               grei.s ! predFormAdj g n ! Nom ++ 
-              grei.s2 ++ dig.s ! PAcc ++
+              {-strPrep-} grei.s2 ++ dig.s ! PAcc ++
               infinAtt ++
-              simma.s ++ simma.s2 ++
               if_then_Str obj 
-                 (simma.s3 ! dig.g ! dig.n ! dig.p)
-                 (simma.s3 ! g ! n ! p)
+                 (simma.s ! VIInfinit ! dig.g ! dig.n ! dig.p)
+                 (simma.s ! VIInfinit ! g     ! n     ! p)
           ) ;
 
 --2 Sentences missing noun phrases
@@ -932,7 +949,7 @@ oper
     {s = \\c,gn => 
            variants {
              vilken.s ! RGen ! gn ++ värde.s ! numGN gn ! Indef ! relCase c ; 
-             värde.s ! numGN gn ! Def ! Nom ++ värde.s2 ++ vilken.s ! RPrep ! gn
+             värde.s ! numGN gn ! Def ! Nom ++ {-strPrep-} värde.s2 ++ vilken.s ! RPrep ! gn
              } ;
      g = RG (genNoun värde.g)
     } ;
@@ -954,7 +971,7 @@ oper
     {s = \\b,sf,gn,p => 
            let 
              jagtalar = jagTalar.s ! b ! s2cl sf Sub ; 
-             om = jagTalar.s2
+             om = {-strPrep-} jagTalar.s2
            in variants {
              som.s ! RAcc ! gn ++ jagtalar ++ om ;
              om ++ som.s ! RPrep ! gn ++ jagtalar
@@ -1117,7 +1134,7 @@ oper
   intSlash : IntPron -> ClauseSlashNounPhrase -> Question = \Vem, jagTalar ->
     let
       vem = Vem.s ! PAcc ; 
-      om = jagTalar.s2
+      om = {-strPrep-} jagTalar.s2
     in
     {s = \\b,sf => 
       let
@@ -1148,7 +1165,7 @@ oper
 
   IntAdverb = SS ;
 
-  prepIntAdverb : Preposition -> IntPron -> IntAdverb =
+  prepIntAdverb : Str -> IntPron -> IntAdverb =
     prepPhrase ;
 
 -- A question adverbial can be applied to anything, and whether this makes
@@ -1164,9 +1181,9 @@ oper
 
   Imperative = {s : Number => Str} ;
 
-  imperVerbPhrase : Bool -> VerbGroup -> Imperative = \b,titta -> 
+  imperVerbPhrase : Bool -> VerbPhrase -> Imperative = \b,titta -> 
     {s = \\n => 
-       titta.s ! VImperat ++ titta.s2 ! b ++ titta.s3 ! VImperat ! utrum ! n ! P2
+       titta.s ! VIImperat b ! utrum ! n ! P2
     } ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
@@ -1371,14 +1388,11 @@ oper
 -- "What do you want to do? - Wash myself."
 
   verbUtterance : VerbPhrase -> Utterance = \vp ->
-    ss (vp.s ++ vp.s2 ++ vp.s3 ! utrum !  Sg ! P1) ; 
+    ss (vp.s ! VIInfinit ! utrum !  Sg ! P1) ; 
 
 ----------- changes when parametrizing 20/1/2005
 
 ---- moved from Morphology
-
--- Prepositions are just strings.
-  Preposition = Str ;
 
 -- Relative pronouns have a special case system. $RPrep$ is the form used
 -- after a preposition (e.g. "det hus i vilket jag bor").
@@ -1395,7 +1409,18 @@ oper
 
   pronNågon : GenNum => Str ;
 
-  deponentVerb : Verb -> Verb ;
+  deponentVerb : Verb -> Verb = \finna -> {
+    s = table {
+      VF (Pres _)   => finna.s ! VF (Pres Pass) ;
+      VF (Pret _)   => finna.s ! VF (Pret Pass) ;
+      VF (Imper _)  => finna.s ! VF (Imper Pass) ;
+      VI (Inf _)    => finna.s ! VI (Inf Pass) ;
+      VI (Supin _)  => finna.s ! VI (Supin Pass) ;
+      v             => finna.s ! v
+      } ;
+    s1 = finna.s1
+    } ;
+
 
   verbFinnas : Verb ;
   verbVara : Verb ;

@@ -31,6 +31,12 @@ import Monad
 
 extendModule :: [SourceModule] -> SourceModule -> Err SourceModule
 extendModule ms (name,mod) = case mod of
+
+  ---- Just to allow inheritance in incomplete concrete (which are not
+  ---- compiled anyway), extensions are not built for them.
+  ---- Should be replaced by real control. AR 4/2/2005
+  ModMod m | mstatus m == MSIncomplete && isModCnc m -> return (name,mod)
+
   ModMod m -> do
     mod' <- foldM extOne m (extends m) 
     return (name,ModMod mod') 
@@ -42,10 +48,11 @@ extendModule ms (name,mod) = case mod of
           -- test that the module types match, and find out if the old is complete
           testErr (sameMType (mtype m) mt) 
                     ("illegal extension type to module" +++ prt name)
-          return (m,isCompleteModule m)
+          return (m, isCompleteModule m)
+----       return (m, if (isCompleteModule m) then True else not (isCompleteModule mod))
 
         -- build extension in a way depending on whether the old module is complete
-        js1 <- extendMod isCompl n (jments m0) js
+        js1 <- extendMod isCompl n name (jments m0) js
 
         -- if incomplete, throw away extension information
         let me' = if isCompl then es else (filter (/=n) es) 
@@ -55,11 +62,11 @@ extendModule ms (name,mod) = case mod of
 -- and the process is interrupted if unification fails.
 -- If the extended module is incomplete, its judgements are just copied.
 
-extendMod :: Bool -> Ident -> BinTree (Ident,Info) -> BinTree (Ident,Info) -> 
+extendMod :: Bool -> Ident -> Ident -> BinTree (Ident,Info) -> BinTree (Ident,Info) -> 
              Err (BinTree (Ident,Info))
-extendMod isCompl name old new = foldM try new $ tree2list old where
+extendMod isCompl name base old new = foldM try new $ tree2list old where
   try t i@(c,_) = errIn ("constant" +++ prt c) $
-                  tryInsert (extendAnyInfo isCompl name) indirIf t i
+                  tryInsert (extendAnyInfo isCompl name base) indirIf t i
   indirIf = if isCompl then indirInfo name else id
 
 indirInfo :: Ident -> Info -> Info
@@ -76,8 +83,9 @@ perhIndir n p = case p of
   Yes _ -> May n
   _ -> p
 
-extendAnyInfo :: Bool -> Ident -> Info -> Info -> Err Info
-extendAnyInfo isc n i j = errIn ("building extension for" +++ prt n) $ case (i,j) of
+extendAnyInfo :: Bool -> Ident -> Ident -> Info -> Info -> Err Info
+extendAnyInfo isc n o i j = 
+ errIn ("building extension for" +++ prt n +++ "in" +++ prt o) $ case (i,j) of
   (AbsCat mc1 mf1, AbsCat mc2 mf2) -> 
     liftM2 AbsCat (updn isc n mc1 mc2) (updn isc n mf1 mf2) --- add cstrs
   (AbsFun mt1 md1, AbsFun mt2 md2) -> 
@@ -107,7 +115,8 @@ extendAnyInfo isc n i j = errIn ("building extension for" +++ prt n) $ case (i,j
 
 --- where
    
-updn isc n = if isc then (updatePerhaps n) else (updatePerhapsHard n)
+updn isc n = if isc  then (updatePerhaps n) else (updatePerhapsHard n)
+updc isc n = if True then (updatePerhaps n) else (updatePerhapsHard n)
 
 
 

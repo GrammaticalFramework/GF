@@ -54,6 +54,7 @@ data ModType =
 data ModBody =
    MBody Extend Opens [TopDef]
  | MWith Ident [Open]
+ | MWithE [Ident] Ident [Open]
  | MReuse Ident
  | MUnion [Included]
   deriving (Eq,Ord,Show)
@@ -65,7 +66,7 @@ data Extend =
 
 data Opens =
    NoOpens
- | Opens [Open]
+ | OpenIn [Open]
   deriving (Eq,Ord,Show)
 
 data Open =
@@ -138,7 +139,7 @@ data DataConstr =
   deriving (Eq,Ord,Show)
 
 data ParDef =
-   ParDef Ident [ParConstr]
+   ParDefDir Ident [ParConstr]
  | ParDefIndir Ident Ident
  | ParDefAbs Ident
   deriving (Eq,Ord,Show)

@@ -96,9 +96,16 @@ oper
 oper Verbum : Type = {s : VerbForm => Str} ;
 
 param
-  VFin ;
- 
-  VInf ;
+  VFin =
+   Pres Voice
+ | Pret Voice
+ | Imper Voice ;
+
+  VInf = 
+   Inf Voice
+ | Supin Voice
+ | PtPret AdjFormPos Case
+ ;
 
   VerbForm = 
      VF VFin

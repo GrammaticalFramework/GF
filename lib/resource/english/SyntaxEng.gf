@@ -393,6 +393,22 @@ oper
         } 
     in negAux b has ;
 
+  auxBe : Bool -> Tense -> Agr -> Str = \b,t,a -> 
+    let is = 
+      case t of {
+        Present => case a of {
+          ASgP3 _ => "is" ;
+          ASgP1   => "am" ;
+          _       => "are" 
+          } ;
+        Past      => case a of {
+          ASgP3 _ => "was" ;
+          _       => "were" 
+          } ;
+        _         => "be" --- never used
+        } 
+    in negAux b is ; ---- amn't
+
   auxTense : Bool -> Tense -> Agr -> Str = \b,t,a -> 
       case t of {
          Present => negAux b (case a of {
@@ -451,6 +467,13 @@ oper
     s1 = if_then_Str b [] "not"
     } ;
 
+  predVerbGroupI : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase = 
+    \b,ant,vg -> 
+    let vp = predVerbGroup b ant.a vg in
+    {s = \\a => ant.s ++ vp.s ! a ;
+     s1 = vp.s1
+    } ;
+
 -- A simple verb can be made into a verb phrase with an empty complement.
 -- There are two versions, depending on if we want to negate the verb.
 -- N.B. negation is *not* a function applicable to a verb phrase, since
@@ -476,11 +499,58 @@ oper
   predAdverb : PrepPhrase -> VerbGroup = \elsewhere ->
     beGroup (\\_ => elsewhere.s) ;
 
+{- --- compiles to 25k lines gfr 3/2/2005
   predAdjSent : Adjective -> Sentence -> Clause = \bra,hansover ->
     predVerbGroupClause
       (pronNounPhrase pronIt)
       (beGroup (
         \\n => bra.s ! AAdj ++ "that" ++ hansover.s)) ;
+-}
+
+  predAdjSent : Adjective -> Sentence -> Clause = \bra,hansover ->
+    predBeGroup (pronNounPhrase pronIt) (\\n => bra.s ! AAdj ++ "that" ++ hansover.s) ;
+
+  predBeGroup : NounPhrase -> (Agr => Str) -> Clause = \itt,goo ->
+    let
+      it = itt.s ! NomP ;
+      good = goo ! itt.a ;
+      begood : Tense -> Str = \t -> case t of {
+        Present => good ;
+        Past => good ;
+        _ => "be" ++ good
+        } ;
+      beengood : Tense -> Str = \t -> case t of {
+        Future      => "have" ++ "been" ++ good ;
+        Conditional => "have" ++ "been" ++ good ;
+        _ => "been" ++ good
+        } ;
+      has : Bool -> Tense -> Str = \b,t -> case t of {
+        Future      => if_then_Str b "will" "won't" ;
+        Conditional => negAux b "would" ;
+        _ => auxHave b t itt.a
+        } ;
+      is  : Bool -> Tense -> Str = \b,t -> case t of {
+        Future      => if_then_Str b "will" "won't" ;
+        Conditional => negAux b "would" ;
+        _ => auxBe b t itt.a
+        }
+    in
+    {s = \\o,b,sf => 
+      case sf of {
+        VFinite t Simul => case o of {
+          Dir => it ++ is b t ++ begood t ;
+          Inv => is b t ++ it ++ begood t
+          } ;
+        VFinite t Anter => case o of {
+          Dir => it ++ has b t ++ beengood t ;
+          Inv => has b t ++ it ++ beengood t
+          } ;
+        VInfinit Simul => it ++ begood Future ;
+        VInfinit Anter => it ++ beengood Future ;
+        VPresPart => it ++ "being" ++ good
+        }
+     } ;
+
 
   predAdjSent2 : AdjCompl -> NounPhrase -> Adjective = \bra,han ->
    {s = \\af => bra.s ! af ++ bra.s2 ++ han.s ! AccP} ;
@@ -652,6 +722,7 @@ oper
 
   param Order = Dir | Inv ;
 
+  ---- compiles to 4k lines gfr. also relSlash, relVerbPhrase are bad
   oper
   predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = 
     \yo,dosleep -> {
@@ -1050,10 +1121,13 @@ oper
 
   Imperative = SS1 Number ;
 
-  imperVerbPhrase : Bool -> VerbGroup -> Imperative = \b,walk -> 
+  imperVerbPhrase : Bool -> VerbPhrase -> Imperative = \b,walk -> 
     {s = \\n => 
-       let a = toAgr n P2 human in
-       walk.s ! b ! VInfinit Simul ! a ++ walk.s2 ! b ! VInfinit Simul ! a
+       let 
+         a = toAgr n P2 human ;
+         dont = if_then_Str b [] "don't" 
+       in
+       dont ++ walk.s ! a
     } ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->

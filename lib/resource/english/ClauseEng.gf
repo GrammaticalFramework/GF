@@ -20,14 +20,14 @@ concrete ClauseEng of Clause = CategoriesEng **
   SPredV2S np v x y = predVerbGroupClause np (complDitransSentVerb v x y) ;
   SPredV2Q np v x y = predVerbGroupClause np (complDitransQuestVerb v x y) ;
 
-  SPredAP np v = predVerbGroupClause np (predAdjective v) ;
+  SPredAP np v = predBeGroup np (\\_ => v.s ! AAdj) ;
+--  SPredAP np v = predVerbGroupClause np (predAdjective v) ;
   SPredSuperl np a = predVerbGroupClause np (predAdjective (superlAdjPhrase a)) ;
   SPredCN np v = predVerbGroupClause np (predCommNoun v) ;
   SPredNP np v = predVerbGroupClause np (predNounPhrase v) ;
   SPredPP np v = predVerbGroupClause np (predAdverb v) ;
   SPredAV np v x = predVerbGroupClause np (complVerbAdj v x) ;
   SPredObjA2V np v x y = predVerbGroupClause np (complVerbAdj2 True v x y) ;
-
 
   QPredV np v = intVerbPhrase np (predVerb v) ;
   QPredPassV np v = intVerbPhrase np (passVerb v) ;
@@ -52,6 +52,11 @@ concrete ClauseEng of Clause = CategoriesEng **
   QPredPP np v = intVerbPhrase np (predAdverb v) ;
   QPredAV np v x = intVerbPhrase np (complVerbAdj v x) ;
   QPredObjA2V np v x y = intVerbPhrase np (complVerbAdj2 True v x y) ;
+
+  IPredV a v = predVerbGroupI True a (predVerb v) ;
+  IPredV2 a v x = predVerbGroupI True a (complTransVerb v x) ;
+----  SPredAP np v = predBeGroup np (\\_ => v.s ! AAdj) ;
+  IPredAP a v = predVerbGroupI True a (predAdjective v) ;
 
 {-
 -- Use VPs
