@@ -98,8 +98,8 @@ cat
   VS ;     -- sentence-compl. verb,  e.g. "say", "prove"
   VV ;     -- verb-compl. verb,      e.g. "can", "want"
 
-  VG ;     -- verbal group,          e.g. "switch the light on"
-  VP ;     -- verb phrase,           e.g. "switch the light on", "don't run"
+  VP ;     -- verb phrase,           e.g. "switch the light on"
+  VPI ;    -- infin. or imp. verb phrase e.g. "switch the light on", "don't run"
 
 --!
 --3 Adverbs and prepositions/cases

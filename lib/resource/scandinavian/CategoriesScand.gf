@@ -33,9 +33,10 @@ lincat
 
   V      = Verb ;
       -- = {s : VerbForm => Str ; s1 : Str} ;
-  VG     = {s : SForm => Str ; s2 : Bool => Str ; 
+  VP     = {s : SForm => Str ; s2 : Bool => Str ; 
             s3 : SForm => Gender => Number => Person => Str} ;
-  VP     = {s : Str ; s2 : Str ; s3 : Gender => Number => Person => Str} ;
+  VPI    = {s : VIForm => Str ; s2 : Str ; 
+            s3 : VIForm => Gender => Number => Person => Str} ;
   V2     = TransVerb ; 
       -- = Verb ** {s2 : Preposition} ;
   V3     = TransVerb ** {s3 : Preposition} ;

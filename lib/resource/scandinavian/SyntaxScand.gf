@@ -479,6 +479,9 @@ param
      VFinite  Tense Anteriority
    | VImperat
    | VInfinit Anteriority ;
+  VIForm =
+     VIImperat
+   | VIInfinit ;
 
 oper
   verbSForm : Verbum -> Voice -> SForm -> {fin,inf : Str} = \se,vo,sf -> 
@@ -504,9 +507,9 @@ oper
        VFinite Future  Anter => compound auxSka (hasett vo) ; 
        VFinite Condit  Simul => compound auxSkulle (see vo) ;
        VFinite Condit  Anter => compound auxSkulle (hasett vo) ; 
-       VImperat             => simple   (VF Imper) ; --- no passive
-       VInfinit Simul       => simple   (VI (Inf vo)) ;
-       VInfinit Anter       => compound auxHa (sett vo)
+       VImperat              => simple   (VF Imper) ; --- no passive
+       VInfinit Simul        => compound [] (se.s ! VI (Inf vo)) ;
+       VInfinit Anter        => compound [] (auxHa ++ sett vo)
      } ;
 
   useVerb : Verb -> (Gender => Number => Person => Str) -> VerbGroup = \verb,arg -> 
@@ -522,9 +525,9 @@ oper
 -- to account for word order variations. No particle needs to be retained.
 
   VerbPhrase : Type = {
-    s  : Str ; 
+    s  : VIForm => Str ; 
     s2 : Str ; 
-    s3 : Gender => Number => Person => Str
+    s3 : VIForm => Gender => Number => Person => Str
     } ;
   VerbGroup  : Type = {
     s  : SForm => Str ; 
@@ -532,13 +535,21 @@ oper
     s3 : SForm => Gender => Number => Person => Str
     } ;
 
-  predVerbGroup : Bool -> Tense -> Anteriority -> VerbGroup -> VerbPhrase = \b,t,a,vg -> {
-    s  = vg.s ! VFinite t a ;
+  predVerbGroup : Bool -> Anteriority -> VerbGroup -> VerbPhrase = \b,a,vg -> 
+    let 
+       vgs  = vg.s ;
+       vgs3 = vg.s3 
+    in
+   {s  = table {
+           VIInfinit => vgs ! VInfinit a ;
+           VIImperat => vgs ! VImperat
+         } ;
     s2 = vg.s2 ! b ;
-    s3 = vg.s3 ! VFinite t a
+    s3 = table {
+           VIInfinit => vgs3 ! VInfinit a ;
+           VIImperat => vgs3 ! VImperat
+         } ;
     } ;
-
-  predVerbGroupTrue = predVerbGroup True Present Simul ; ---- temporary
 
 -- A simple verb can be made into a verb phrase with an empty complement.
 -- There are two versions, depending on if we want to negate the verb.
@@ -552,6 +563,7 @@ oper
   predVerb0 : Verb -> Clause = \regna -> 
     predVerbGroupClause npDet (predVerb regna) ;
 
+  progressiveVerbPhrase : VerbPhrase -> VerbGroup ;
 
 -- Verb phrases can also be formed from adjectives ("är snäll"),
 -- common nouns ("är en man"), and noun phrases ("är den yngste mannen").
@@ -693,13 +705,13 @@ oper
   advPre  : Str -> Adverb = \alltid -> ss alltid ** {isPost = False} ;
   advPost : Str -> Adverb = \bra    -> ss bra    ** {isPost = True} ;
 
-  adVerbPhrase : VerbPhrase -> Adverb -> VerbPhrase = \spelar, bra ->
+  adVerbPhrase : VerbGroup -> Adverb -> VerbGroup = \spelar, bra ->
     let {postp = bra.isPost} in
     {
   --- this unfortunately generates  VP#2 ::= VP#2
      s  = spelar.s ; 
-     s2 = (if_then_else Str postp [] bra.s) ++ spelar.s2 ;
-     s3 = \\g,n,p => spelar.s3 ! g ! n ! p ++ (if_then_else Str postp bra.s [])
+     s2 = \\b => (if_then_else Str postp [] bra.s) ++ spelar.s2 ! b ;
+     s3 = \\sf,g,n,p => spelar.s3 ! sf ! g ! n ! p ++ (if_then_else Str postp bra.s [])
     } ;
 
   advAdjPhrase : SS -> AdjPhrase -> AdjPhrase = \mycket, dyr ->
@@ -740,22 +752,6 @@ oper
 
 -- This is the traditional $S -> NP VP$ rule. It takes care of both
 -- word order and agreement.
-
- ----- obsolete
-  predVerbPhrase : NounPhrase -> VerbPhrase -> Sentence = 
-    \Jag, serdiginte -> 
-    let {
-      jag  = Jag.s ! PNom ; 
-      ser  = serdiginte.s ;
-      dig  = serdiginte.s3 ! Jag.g ! Jag.n ! Jag.p ;
-      inte = serdiginte.s2
-    } in
-    {s = table {
-       Main => jag ++ ser ++ inte ++ dig ;  
-       Inv  => ser ++ jag ++ inte ++ dig ;
-       Sub  => jag ++ inte ++ ser ++ dig
-       }
-    } ;
 
 param
   ClForm = 
@@ -826,13 +822,13 @@ oper
 
   VerbVerb : Type = Verb ** {s3 : Str} ;
 
-  complVerbVerb : VerbVerb -> VerbGroup -> VerbGroup = \vilja, simma ->
+  complVerbVerb : VerbVerb -> VerbPhrase -> VerbGroup = \vilja, simma ->
     useVerb vilja 
       (\\g,n,p => 
               vilja.s1 ++
               vilja.s3 ++
-              simma.s ! VInfinit Simul ++ simma.s2 ! True ++ ---- Anter!
-              simma.s3 ! VInfinit Simul ! g ! n ! p) ;
+              simma.s ! VIInfinit ++ simma.s2 ++ ---- Anter!
+              simma.s3 ! VIInfinit ! g ! n ! p) ;
 
   transVerbVerb : VerbVerb -> TransVerb -> TransVerb = \vilja,hitta ->
     {s  = vilja.s ;
@@ -841,40 +837,40 @@ oper
      s2 = hitta.s2
     } ;
 
-  complVerbAdj : Adjective -> VerbGroup -> VerbGroup = \grei, simma ->
+  complVerbAdj : Adjective -> VerbPhrase -> VerbGroup = \grei, simma ->
     vara
       (\\g,n,p => 
               grei.s ! predFormAdj g n ! Nom ++ 
               infinAtt ++
-              simma.s ! VInfinit Simul ++ simma.s2 ! True ++ ---- Anter!
-              simma.s3 ! VInfinit Simul ! g ! n ! p) ;
+              simma.s ! VIInfinit ++ simma.s2 ++ ---- Anter!
+              simma.s3 ! VIInfinit ! g ! n ! p) ;
 
 -- Notice agreement to object vs. subject:
 
   DitransVerbVerb = TransVerb ** {s3 : Str} ;
 
   complDitransVerbVerb : 
-    Bool -> DitransVerbVerb -> NounPhrase -> VerbGroup -> VerbGroup = 
+    Bool -> DitransVerbVerb -> NounPhrase -> VerbPhrase -> VerbGroup = 
      \obj,be,dig,simma ->
       useVerb be 
         (\\g,n,p => be.s1 ++ be.s2 ++ dig.s ! PAcc ++ be.s3 ++ 
-              simma.s ! VInfinit Simul ++ simma.s2 ! True ++ ---- Anter!
+              simma.s ! VIInfinit ++ simma.s2 ++ ---- Anter!
               if_then_Str obj 
-                 (simma.s3 ! VInfinit Simul ! dig.g ! dig.n ! dig.p)
-                 (simma.s3 ! VInfinit Simul ! g ! n ! p)
+                 (simma.s3 ! VIInfinit ! dig.g ! dig.n ! dig.p)
+                 (simma.s3 ! VIInfinit ! g     ! n     ! p)
         ) ;
 
   complVerbAdj2 : 
-    Bool -> AdjCompl -> NounPhrase -> VerbGroup -> VerbGroup = \obj,grei,dig,simma ->
+    Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> VerbGroup = \obj,grei,dig,simma ->
     vara
       (\\g,n,p =>
               grei.s ! predFormAdj g n ! Nom ++ 
               grei.s2 ++ dig.s ! PAcc ++
               infinAtt ++
-              simma.s ! VInfinit Simul ++ simma.s2 ! True ++ ---- Anter!
+              simma.s ! VIInfinit ++ simma.s2 ++ ---- Anter!
               if_then_Str obj 
-                 (simma.s3 ! VInfinit Simul ! dig.g ! dig.n ! dig.p)
-                 (simma.s3 ! VInfinit Simul ! g ! n ! p)
+                 (simma.s3 ! VIInfinit ! dig.g ! dig.n ! dig.p)
+                 (simma.s3 ! VIInfinit ! g ! n ! p)
       ) ;
 
 --2 Sentences missing noun phrases
@@ -1161,10 +1157,12 @@ oper
 --
 -- We only consider second-person imperatives.
 
-  Imperative = SS1 Number ;
+  Imperative = {s : Number => Str} ;
 
   imperVerbPhrase : VerbPhrase -> Imperative = \titta -> 
-    {s = \\n => titta.s ++ titta.s2 ++ titta.s3 ! utrum ! n ! P2} ;
+    {s = \\n => 
+       titta.s ! VIImperat ++ titta.s2 ++ titta.s3 ! VIImperat ! utrum ! n ! P2
+    } ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
     ss (I.s ! n ++ "!") ;
@@ -1330,7 +1328,7 @@ oper
     let {As = A.s ! Sub} in 
     variants {if.s ++ As ++ "," ++ B ; B ++ "," ++ if.s ++ As} ;
 
-  subjunctVerbPhrase : VerbPhrase -> Subjunction -> Sentence -> VerbPhrase =
+  subjunctVerbPhrase : VerbGroup -> Subjunction -> Sentence -> VerbGroup =
     \V, if, A -> 
     adVerbPhrase V (advPost (if.s ++ A.s ! Sub)) ;
 

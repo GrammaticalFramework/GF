@@ -68,6 +68,7 @@ lin
    Important = extAdjective (aAbstrakt "viktig") ** {s2 = "for"} ;
    Probable = extAdjective (aAbstrakt "sannsynlig") ;
    Easy = extAdjective (aRod "grei") ** {s2 = "for"} ;
+   Rain = extTransVerb (vNopart (vHusk "regn")) [] ;
 
 
 } ;
