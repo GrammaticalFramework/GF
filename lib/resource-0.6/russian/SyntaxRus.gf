@@ -175,8 +175,7 @@ oper
 -- (for semantic reasons)  is useful, e.g. "русский".
  
 oper 
-
-  extAdjective : AdjDegr -> Adjective = \adj ->
+   extAdjective : AdjDegr -> Adjective = \adj ->
     { s = \\af => adj.s ! Pos ! af } ;
 
   -- Coercions between the compound gen-num type and gender and number:
@@ -365,10 +364,9 @@ oper
 
 -- The rule for using transitive verbs is the complementization rule:
 
-  complTransVerb : Bool -> TransVerb -> NounPhrase -> VerbPhrase = \b,se,tu ->
-    {s = se.s ; a = se.a ; t = se.t ; w = se.w ; s2 = negation b ;
-     s3 = \\_,_ => se.s2 ++ tu.s ! (mkPronForm se.c No NonPoss) ; 
-     negBefore = True } ;
+  complTransVerb :TransVerb -> NounPhrase -> VerbGroup = \se,tu ->
+    {s =\\vf =>  se.s ! vf ++ se.s2 ++ tu.s ! (mkPronForm se.c No NonPoss) ; 
+      a = se.a ; t = se.t ; w = se.w   } ;
 
 --3 Verb phrases
 --
@@ -377,17 +375,18 @@ oper
 -- (s3) complement. This discontinuity is needed in sentence formation
 -- to account for word order variations.
 
+  VerbGroup = Verb  ;
+
   VerbPhrase : Type = Verb ** {s2 : Str ; s3 : Gender => Number => Str ;
     negBefore: Bool} ;
 
 -- A simple verb can be made into a verb phrase with an empty complement.
 -- There are two versions, depending on if we want to negate the verb.
-
-  predVerb : Bool -> Verb -> VerbPhrase = \b,vidit -> 
+  predVerbGroup : Bool -> VerbGroup -> VerbPhrase = \b,vidit -> 
     vidit ** {
      s2 = negation b ; 
      s3 = \\_,_ => [] ;
-     negBefore = True
+     negBefore = True --  this should be a parameter !
      } ;
 
   negation : Bool -> Str = \b -> if_then_else Str b [] "не" ; 
@@ -405,37 +404,56 @@ oper
 -- Note: in some case we can even omit a dash "-"  :
 -- "Я думаю, что это хорошая машина".
 
-  predAdjective : Bool -> Adjective -> VerbPhrase = \b,zloj ->
-    { s= \\_ => "-" ;        
+  predAdverb : Adverb -> VerbGroup = \zloj ->
+    { s= \\vf => case vf of {
+          VFin _ _ => "-" ++ zloj.s ;
+          VImper _ _ => "";
+          VInf  => "";
+          VSubj _ => ""
+          } ;        
       t = Present ; 
       a = Imperfective ;
-      w = Act ;
-      s2 = negation b ; 
-      s3 = \\g,n => case n of {
-          Sg => zloj.s ! AF Nom Animate (ASg g) ;
-          Pl => zloj.s ! AF Nom Animate APl  
-          } ;
-     negBefore = False
+      w = Act 
     } ;
 
-  predCommNoun : Bool -> CommNounPhrase -> VerbPhrase = \b,chelovek ->
-   {  s= \\_ => "-" ;        
+  predAdjective : AdjPhrase -> VerbGroup = \zloj ->
+    { s= \\vf => case vf of {
+          VFin gn _ => case (numGNum gn) of { 
+             Sg => "-" ++ zloj.s ! AF Nom Animate (ASg (genGNum gn)) ;
+              Pl => "-" ++ zloj.s ! AF Nom Animate APl  
+          } ;
+          VImper _ _ => "";
+          VInf  => "";
+          VSubj _ => ""
+          } ;        
       t = Present ; 
       a = Imperfective ;
-      w = Act ;
-      s2 = negation b ;
-      s3 = \\_,n => (indefNounPhrase n chelovek ).s ! (mkPronForm Nom No NonPoss) ;
-      negBefore = False
-     } ;
+      w = Act 
+    } ;
 
-  predNounPhrase : Bool -> NounPhrase -> VerbPhrase = \b,masha ->
-    { s= \\_ => "-" ;        
+  predCommNoun : CommNounPhrase -> VerbGroup = \chelovek ->
+   {  s= \\vf => case vf of {
+          VFin gn _ => "-" ++ 
+    (indefNounPhrase (numGNum gn) chelovek ).s ! (mkPronForm Nom No NonPoss) ;
+          VImper _ _ => "";
+          VInf  => "";
+          VSubj _ => ""
+          } ;        
       t = Present ; 
       a = Imperfective ;
-      w = Act ;
-      s2 = negation b ;
-      s3 = \\_,_ => masha.s ! (mkPronForm Nom No NonPoss) ;
-      negBefore = False
+      w = Act 
+           } ;
+
+  predNounPhrase : NounPhrase -> VerbGroup = \masha ->
+    { s= \\vf => case vf of {
+          VFin _ _ => "-" ++  masha.s ! (mkPronForm Nom No NonPoss) ;
+          VImper _ _ => "";
+          VInf  => "";
+          VSubj _ => ""
+          } ;        
+      t = Present ; 
+      a = Imperfective ;
+      w = Act 
     } ;
 
   -- A function specific for Russian :
@@ -461,6 +479,28 @@ oper
      g  = poezd.g ; anim = poezd.anim;
      s2 = poezd.s3; c = poezd.c2 
     } ;
+
+-- *Ditransitive verbs* are verbs with three argument places.
+-- We treat so far only the rule in which the ditransitive
+-- verb takes both complements to form a verb phrase.
+
+  DitransVerb = TransVerb ** {s4 : Str; c2: Case} ; 
+
+  mkDitransVerb : Verb -> Case ->  Case -> DitransVerb = \v,c1,c2 -> 
+    v ** {s2 = ""; c = c1; s4 = ""; c2=c2 } ;
+
+  complDitransVerb : DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = 
+    \dat,tu,pivo ->
+      let
+        tebepivo = dat.s2 ++
+         tu.s ! PF dat.c Yes NonPoss ++ dat.s4 ++ pivo.s ! PF dat.c2 Yes NonPoss 
+      in
+      {s  = \\vf => (dat.s ! vf) ++ tebepivo ;
+      t = dat.t ; 
+      a = dat.a ;
+      w = dat.w
+    } ;
+
 
 --2 Adverbials
 --
@@ -539,7 +579,7 @@ oper
 -- This is a macro for simultaneous predication and complementation.
 
   predTransVerb : Bool -> TransVerb -> NounPhrase -> NounPhrase -> Sentence = 
-    \b,vizhu,ya,tu -> predVerbPhrase ya (complTransVerb b vizhu tu) ;
+    \b,vizhu,ya,tu -> predVerbPhrase ya (predVerbGroup b (complTransVerb vizhu tu)) ;
  
 --3 Sentence-complement verbs
 --
@@ -549,12 +589,33 @@ oper
 
 -- To generate "сказал, что Иван гуляет" / "не сказал, что Иван гуляет":
 
-  complSentVerb : Bool -> SentenceVerb -> Sentence -> VerbPhrase = 
-    \b,vidit,tuUlubaeshsya ->
-    {s = vidit.s ; s2 = negation b ; s3 = \\_,_ => [", что"] ++ 
-     tuUlubaeshsya.s ;
-     t = vidit.t ; w = vidit.w ; a = vidit.a ; negBefore = True } ;
+  complSentVerb : SentenceVerb -> Sentence -> VerbGroup = 
+    \vidit,tuUlubaeshsya ->
+    {s = \\vf => vidit.s ! vf ++ [", что"] ++ tuUlubaeshsya.s ;
+     t = vidit.t ; w = vidit.w ; a = vidit.a } ;
 
+--3 Verb-complement verbs
+--
+-- Sentence-complement verbs take verb phrases as complements.
+-- They can be auxiliaries ("can", "must") or ordinary verbs
+-- ("try"); this distinction cannot be done in the multilingual
+-- API and leads to some anomalies in English, such as the necessity
+-- to create the infinitive form "to be able to" for "can" so that
+-- the construction can be iterated, and the corresponding complication
+-- in the parameter structure.
+
+  VerbVerb : Type = Verb ;
+
+-- To generate "can walk"/"can't walk"; "tries to walk"/"does not try to walk":
+-- The contraction of "not" is not provided, since it would require changing
+-- the verb parameter type.
+
+  complVerbVerb : VerbVerb -> VerbGroup -> VerbGroup = \putatsya,bezhat ->
+  { s =  \\vf => putatsya.s ! vf  ++ bezhat.s ! VInf ; 
+      t = putatsya.t ; 
+      a = putatsya.a ;
+      w = putatsya.w
+  } ;
 
 --2 Sentences missing noun phrases
 --
@@ -570,16 +631,13 @@ oper
 
   slashTransVerb : Bool -> NounPhrase -> TransVerb -> SentenceSlashNounPhrase = 
     \b,ivan,lubit ->
-    predVerbPhrase ivan (predVerb b (verbOfTransVerb lubit)) ** 
+    predVerbPhrase ivan (predVerbGroup b (verbOfTransVerb lubit)) ** 
     complementOfTransVerb lubit ;
 
---thereIs : NounPhrase -> Sentence = \abar ->
- --   predVerbPhrase 
-  --    (case abar.n of {
-  --       Sg => nameNounPhrase (nameReg "there") ;
-  --       Pl => {s = \\_ => "there" ; n = Pl ; p = P3}
-  --       })
-  --    (predVerbGroup True (predNounPhrase abar)) ;
+thereIs : NounPhrase -> Sentence = \bar ->
+    predVerbPhrase 
+      ({s = \\_ => "есть" ; n = bar.n ; p = P3; g = bar.g; anim = bar.anim; pron = bar.pron })
+      (predVerbGroup True (predNounPhrase bar)) ;
 
 --2 Coordination
 --
@@ -752,13 +810,10 @@ oper
       }
     } ;
 
---isThere : NounPhrase -> Question = \abar ->
- --   questVerbPhrase 
- --     (case abar.n of {
- --        Sg => nameNounPhrase (nameReg "there") ;
- --        Pl => {s = \\_ => "there" ; n = Pl ; p = P3}
- --        })
- --     (predVerbGroup True (predNounPhrase abar)) ;
+isThere : NounPhrase -> Question = \bar ->
+    questVerbPhrase 
+    ({s = \\_ => ["есть ли"] ; n = bar.n ; p = P3; g = bar.g; anim = bar.anim; pron = bar.pron})
+      (predVerbGroup True (predNounPhrase bar)) ;
 
 --3 Wh-questions
 --

@@ -14,12 +14,17 @@ lin
   Old = staruj ;
   Young = molodoj ;
 
-  --Connection = cnNoHum (nounReg "connection") ** {s2 = "from" ; s3 = "to"} ;  Fun2
- -- American = adj1Malenkij "американск" ;
- -- Finnish = adj1Malenkij "финск" ;
- -- Married = adjInvar "замужем" ** {s2 = "за"; c = instructive} ;
-  --Give = mkDitransVerb (verbNoPart (mkVerb "give" "gave" "given")) [] [] ;  V3
-  --Prefer = mkDitransVerb (mkVerb "prefer" "preferred" "preferred")) [] "to" ; V3
+ Connection =  (noun2CommNounPhrase (doroga) )** {s2 = "из" ; c = Gen; s3 = "в"; c2=Acc} ;  
+ American = ij_EndK_G_KH_Decl "американск" ; -- adj1Malenkij from Paradigms 
+ Finnish = ij_EndK_G_KH_Decl "финск" ; -- adj1Malenkij from Paradigms 
+  Married = adjInvar "замужем" ** {s2 = "за"; c = Inst} ; -- adjinvar from Paradigms
+  Give = mkDitransVerb  (extVerb verbDavat Act Present) Acc Dat; 
+  Prefer = mkDitransVerb (extVerb verbPredpochitat Act Present) Acc Dat ;
+  Bar = bar ;
+  Bottle = butyulka ;
+  Wine = vino ;
+  Drink = mkDirectVerb (extVerb verbPit Act Present ) ;
+  Happy = schastlivyuj ;
 
   Man = muzhchina ;
   Woman = zhenchina ;

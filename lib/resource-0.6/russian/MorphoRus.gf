@@ -457,6 +457,7 @@ oper eEndInAnimateDecl: Str -> CommNoun =  \proizvedeni ->
     g = Neut  ; anim = Inanimate 
   } ;
 oper chislo : CommNoun = oEndInAnimateDecl "числ"  ;
+oper vino : CommNoun = oEndInAnimateDecl "вин"  ;
 oper oEndInAnimateDecl: Str -> CommNoun = \chisl ->
   let { chis = Predef.tk 1 chisl ; ending = Predef.dp 3 chisl } in 
     oEndInAnimateDecl3  chisl (chis+"e"+ending) ;
@@ -555,7 +556,9 @@ oper EN_softSignEndDeclMasc: Str -> CommNoun =  \rem ->
   } ;
 
 oper noga : CommNoun = aEndG_K_KH_Decl "ног" ;
+oper doroga : CommNoun = aEndG_K_KH_Decl "дорог" ;
 oper dvojka : CommNoun = aEndG_K_KH_Decl "двойк" ;
+oper butyulka : CommNoun = aEndG_K_KH_Decl "бутылк" ;
 oper aEndG_K_KH_Decl: Str -> CommNoun =  \nog ->
 { s  =  table  {
       SF Sg Nom =>  nog+"а" ; 
@@ -717,6 +720,8 @@ oper eEnd_Decl: Str -> CommNoun =  \vs ->
 -- and vice verca using "mkAdjDeg" operation.
  
 oper 
+   adjInvar: Str -> Adjective = \s -> { s = \\af => s };
+
    kazhdujDet: Adjective = uy_j_EndDecl "кажд" ;
    samuj: Adjective = uy_j_EndDecl "сам" ;
    lubojDet: Adjective = uy_oj_EndDecl "люб" ;
@@ -742,6 +747,7 @@ oper mkAdjDeg: Adjective -> Str -> AdjDegr = \adj, s ->
            }
   }; 
 oper uzhasnuj: AdjDegr = mkAdjDeg (uy_j_EndDecl "ужасн") "ужаснее";     
+oper schastlivyuj: AdjDegr = mkAdjDeg (uy_j_EndDecl "счастлив") "счастливее";     
 oper deshevuj: AdjDegr = mkAdjDeg (uy_j_EndDecl "дешев") "дешевле";     
 oper staruj: AdjDegr = mkAdjDeg (uy_j_EndDecl "стар") "старше";     
 oper totDet: Adjective = {s = table {
@@ -1001,7 +1007,7 @@ oper have: Verbum = {s=\\ vf => "-" ; asp = Imperfective} ;
 -- (according to the number and the person of the subject)
 -- patterns in the present tense in the indicative mood.
 
-param Conjugation = First | Second | Mixed | Dolzhen;
+param Conjugation = First | FirstE | Second | Mixed | Dolzhen;
 
 --3 First conjugation (in Present) verbs :
 
@@ -1012,10 +1018,15 @@ oper verbZhdat : Verbum = verbDecl Imperfective First "жд" "у" "ждал" "ж
 oper verbBegat : Verbum = verbDecl Imperfective First "бега" "ю" "бегал" "бегай" "бегать";
 oper verbPrinimat : Verbum = verbDecl Imperfective First "принима" "ю" "принимал" "принимай" "принимать"; 
 oper verbDokazuvat : Verbum = verbDecl Imperfective First "доказыва" "ю" "доказывал" "доказывай" "доказывать";
+oper verbPredpochitat : Verbum = verbDecl Imperfective First "предпочита" "ю" "предпочитал" "предпочитай" "предпочитать";
 oper verbOtpravlyat : Verbum = verbDecl Imperfective First "отправля" "ю" "отправлял" "отправляй" "отправлять";
 oper verbSlomat : Verbum = verbDecl Perfective First "слома" "ю" "сломал" "сломай" "сломать";
 oper verbByut : Verbum = verbDecl Perfective First "буд" "у" "был" "будь" "быть";
 oper verbMoch : Verbum = verbDecl Imperfective First "мог" "у" "мог" "моги" "мочь";
+
+-- Verbs with vowel "ё": "даёшь" (give), "пьёшь" (drink)  :
+oper verbDavat : Verbum = verbDecl Imperfective FirstE "да" "ю" "давал" "давай" "давать";
+oper verbPit : Verbum = verbDecl Imperfective FirstE "пь" "ю" "пил" "пей" "пить";
 
 --3 Second conjugation (in Present) verbs :
 
@@ -1069,6 +1080,15 @@ oper presentConj2: Str -> Str -> PresentVerb = \del, sgP1End ->
     PRF Pl P3 => del+ "ят"   
   };
 
+oper presentConj1E: Str -> Str -> PresentVerb = \del, sgP1End ->
+  table {
+    PRF Sg P1 => del+ sgP1End ;
+    PRF Sg P2 => del+ "ёшь" ;
+    PRF Sg P3 => del+ "ёт" ;
+    PRF Pl P1 => del+ "ём" ;
+    PRF Pl P2 => del+ "ёте'" ;
+    PRF Pl P3 => del+ sgP1End + "т"   
+  };
 oper presentConj1: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
     PRF Sg P1 => del+ sgP1End ;
@@ -1106,12 +1126,14 @@ oper verbDecl: Aspect -> Conjugation -> Str -> Str -> Str -> Str ->Str -> Verbum
    \a, c, del, sgP1End, sgMascPast, imperSgP2, inf -> case a of 
 {  Perfective  =>  case c of  {
      First =>    mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj1 del sgP1End) (pastConj sgMascPast))  (pastConj sgMascPast);
+     FirstE =>    mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj1E del sgP1End) (pastConj sgMascPast))  (pastConj sgMascPast);
      Second =>    mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj2 del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
     Mixed => mkVerb (perfectiveActivePattern inf imperSgP2 (presentConjMixed del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
     Dolzhen => mkVerb (perfectiveActivePattern inf imperSgP2 (presentConjDolzhen del sgP1End) (pastConjDolzhen sgMascPast)) (pastConjDolzhen sgMascPast)
 } ;
    Imperfective  => case c of { 
      First => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj1 del sgP1End) (pastConj sgMascPast))  (pastConj sgMascPast);
+     FirstE => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj1E del sgP1End) (pastConj sgMascPast))  (pastConj sgMascPast);
     Second => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj2 del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
     Mixed => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConjMixed del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast) ;
     Dolzhen => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConjDolzhen del sgP1End) (pastConjDolzhen sgMascPast)) (pastConjDolzhen sgMascPast)
