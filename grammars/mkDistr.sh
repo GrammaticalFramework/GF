@@ -1,7 +1,7 @@
 rm -rf grammars
 mkdir -pv grammars
 mkdir -pv grammars/letter
-# mkdir -pv grammars/logic
+mkdir -pv grammars/logic
 mkdir -pv grammars/basic
 mkdir -pv grammars/numerals
 mkdir -pv grammars/prelude
@@ -23,7 +23,7 @@ cp -pv letter/README grammars/letter/
 cp -pv letter/mkLetter.gfs grammars/letter/
 cp -pv letter/*.gf grammars/letter/
 
-# cp -pv logic/*.gf grammars/logic/
+cp -pv logic/*.gf grammars/logic/
 
 cp -pv newnumerals/README grammars/numerals/
 cp -pv newnumerals/*.gf grammars/numerals/
@@ -63,5 +63,5 @@ cp -pv imperative/compiler/*.gfs grammars/imperative/compiler/
 cp -pv imperative/compiler/runtime.j grammars/imperative/compiler/
 
 
-tar cvfz grammars.tgz grammars
+tar cvfz gf-grammars.tgz grammars
 
