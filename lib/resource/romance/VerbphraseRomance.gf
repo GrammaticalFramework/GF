@@ -50,8 +50,6 @@ incomplete concrete VerbphraseRomance of Verbphrase = CategoriesRomance **
 
 ----  PredProgVP = progressiveVerbPhrase ;
 
-----  SPredProgVP = progressiveClause ;
-
 -- Use VPs
 
   PredVP = predVerbGroupClause ;

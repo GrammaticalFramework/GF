@@ -139,7 +139,9 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
     Just a -> do
       -- test that abstract is compatible --- unsafe exception for old? 
       --- if True oElem showOld opts then return () else
-      testErr (maybe True (a==) a') ("expected abstract" +++ P.prt a) 
+      case a' of
+        Nothing -> return ()
+        Just b -> testErr (a==b) ("expected abstract" +++ P.prt a +++ "but found " +++ P.prt b) 
       return $ Just a
     _ -> return a'
   let cgr = filterAbstracts abstr0 cgr0
@@ -184,6 +186,20 @@ prShellStateInfo sh = unlines [
   "source modules :   " +++ unwords (map (P.prt .fst) (M.modules (srcModules sh))),
   "global options :   " +++ prOpts (gloptions sh)
   ]
+
+{- ---- should be called from IOGrammar *before* compiling
+testSameAbstract :: ShellState -> Maybe Ident -> Err (Maybe Ident)
+testSameAbstract sh mcnc = do
+  abstr0 <- case abstract sh of
+    Just a -> do
+      -- test that abstract is compatible --- unsafe exception for old? 
+      --- if True oElem showOld opts then return () else
+      case a' of
+        Nothing -> return ()
+        Just b -> testErr (a==b) ("expected abstract" +++ P.prt a +++ "but found " +++ P.prt b) 
+      return $ Just a
+    _ -> return a'
+-}
 
 abstractName sh = maybe "(none)" P.prt (abstract sh)
 
