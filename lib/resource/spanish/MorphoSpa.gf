@@ -55,7 +55,13 @@ oper
   mkCNomIrreg : Str -> Str -> Gender -> CNom = \mec,mecs -> 
     mkCNom (numForms mec mecs) ;
 
-
+  mkNomReg : Str -> CNom = \mec ->
+    case last mec of {
+      "o" | "e" => mkCNom (nomVino mec) Masc ; 
+      "a" => mkCNom (nomVino mec) Fem ;
+      "z" => mkCNomIrreg mec (init mec + "ces") Fem ;
+      _   => mkCNom (nomPilar mec) Masc
+      } ;
 
 --2 Adjectives
 --
@@ -84,6 +90,13 @@ oper
   adjBlu : Str -> Adj = \blu -> 
     mkAdj blu blu blu blu blu ; --- 
 
+  mkAdjReg : Str -> Adj = \solo -> 
+    case last solo of {
+      "o" => adjSolo solo ;
+      "e" => adjUtil solo (solo + "s") ;
+      _   => adjUtil solo (solo + "es")
+----      _   => adjBlu solo
+      } ;
 
 --2 Personal pronouns
 --
