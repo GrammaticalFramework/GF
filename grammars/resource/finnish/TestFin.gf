@@ -1,7 +1,7 @@
 -- use this path to read the grammar from the same directory
 --# -path=.:../abstract:../../prelude
 
-concrete TestFin of TestAbs = ResFin ** open Prelude, Syntax in {
+concrete TestFin of TestAbs = ResFin ** open Prelude, SyntaxFin in {
 
 flags startcat=Phr ; lexer=text ; parser=chart ; unlexer=text ;
 
@@ -12,6 +12,11 @@ lin
   Small = regAdjDegr (sSusi "pieni" "pienen" "pienen‰") "pienemp‰‰" "pienint‰" ;
   Old = regAdjDegr (sKukko "vanha" "vanhan" "vanhoja") "vanhempaa" "vanhinta" ;
   Young = regAdjDegr (sSusi "nuori" "nuoren" "nuorena") "nuorempaa" "nuorinta" ;
+  American = sNainen "amerikkalaista" ;
+  Finnish = sNainen "suomalaista" ;
+
+  Married = sKukko "vihitty" "vihityn" "vihittyj‰" ** {c = NPCase Illat} ; 
+            --- naimisissa !
 
   Man = cnHum (mkNoun "mies" "miehen" "miehen‰" "miest‰" "mieheen" "miehin‰" 
                 "miehiss‰" "miesten" "miehi‰" "miehiin") ;
@@ -27,9 +32,15 @@ lin
   Send = mkTransVerbDir (vOttaa "l‰hett‰‰" "l‰het‰n") ;
   Love = mkTransVerbCase (vPoistaa "rakastaa") Part ;
   Wait = mkTransVerbCase (vOttaa "odottaa" "odotan") Part ;
+  Give = mkTransVerbDir (vOttaa "antaa" "annan") ** 
+         {s5 = [] ; s6 = [] ; c2 = CCase Allat} ;
+  Prefer = mkTransVerbDir (vOttaa "asettaa" "asetan") ** 
+           {s5 = [] ; s6 = "edelle" ; c2 = CCase Gen} ; --- pit‰‰ paremp(a/i)na
 
   Mother = funGen (n2n (cnHum (sKukko "‰iti" "‰idin" "‰itej‰"))) ;
   Uncle = funGen (n2n (cnHum (sKukko "set‰" "sed‰n" "seti‰"))) ; --- eno!
+  Connection = n2n (cnNoHum (sRakkaus "yhteys")) **
+               {c = NPCase Elat ; c2 = NPCase Illat} ; --- Tampereelle !
 
   Always = ss "aina" ;
   Well = ss "hyvin" ;

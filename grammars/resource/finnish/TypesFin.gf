@@ -8,7 +8,7 @@
 --
 -- We use the language-independent prelude.
 
-resource Types = open Prelude in {
+resource TypesFin = open Prelude in {
 
 --
 --2 Enumerated parameter types 
@@ -74,7 +74,8 @@ oper
 --3 Verbs
 --
 -- We limit the grammar so far to verbs in the infinitive, second-person 
--- imperative, and present tense indicative. A special form is needed for
+-- imperative, and present tense indicative active and passive. 
+-- A special form is needed for
 -- the negated plural imperative.
 
 param
@@ -82,7 +83,9 @@ param
      Inf
    | Ind Number Person
    | Imper Number
-   | ImpNegPl ;
+   | ImpNegPl
+   | Pass Bool 
+   ;
 
 oper
   Verb : Type = SS1 VForm ;
@@ -90,10 +93,10 @@ oper
   vFormNeg = Imper Sg ;
 
   vform2number : VForm -> Number = \v -> case v of {
-    Inf => Sg ;
     Ind n _ => n ;
     Imper n => n ;
-    ImpNegPl => Pl
+    ImpNegPl => Pl ;
+    _ => Sg ---
     } ;
 
 --

@@ -15,9 +15,9 @@
 -- They should use $resource.Abs.gf$ to access the syntactic rules.
 -- This file can be consulted in those, hopefully rare, occasions in which
 -- one has to know how the syntactic categories are
--- implemented. The parameter types are defined in $types.Fin.gf$.
+-- implemented. The parameter types are defined in $TypesFin.gf$.
 
-concrete ResFin of ResAbs = open Prelude, Syntax in {
+concrete ResFin of ResAbs = open Prelude, SyntaxFin in {
 
 flags 
   startcat=Phr ; 
@@ -42,7 +42,7 @@ lincat
 
   V      = Verb ; 
       -- = {s : VForm => Str}
-  VP     = Verb ** {s2 : VForm => Str} ;
+  VP     = Verb ** {s2 : VForm => Str ; c : ComplCase} ;
   TV     = TransVerb ;
       -- = Verb ** {s3, s4 : Str ; c : ComplCase} ;
   V3     = TransVerb ** {s5, s6 : Str ; c2 : ComplCase} ;
@@ -92,6 +92,8 @@ lin
   DefOneNP = defNounPhrase singular ;
   DefManyNP = defNounPhrase plural ;
 
+  CNthatS = nounThatSentence ;
+
   PredVP = predVerbPhrase ;
   PosV = predVerb True ;
   NegV = predVerb False ;
@@ -103,6 +105,8 @@ lin
   NegTV = complTransVerb False ;
   PosV3 = complDitransVerb True ;
   NegV3 = complDitransVerb False ;
+  PosPassV = passVerb True ;
+  NegPassV = passVerb False ;
   PosNP = predNounPhrase True ;
   NegNP = predNounPhrase False ;
   PosVS = complSentVerb True ;
@@ -116,6 +120,7 @@ lin
 
   PosSlashTV = slashTransVerb True ;
   NegSlashTV = slashTransVerb False ;
+  OneVP = passPredVerbPhrase ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
@@ -165,6 +170,7 @@ lin
   SubjS = subjunctSentence ;
   SubjImper = subjunctImperative ;
   SubjQu = subjunctQuestion ;
+  SubjVP = subjunctVerbPhrase ;
 
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase singular ;

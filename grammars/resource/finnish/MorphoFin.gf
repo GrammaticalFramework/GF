@@ -5,9 +5,9 @@
 -- This resource morphology contains definitions needed in the resource
 -- syntax. It moreover contains the most usual inflectional patterns.
 --
--- We use the parameter types and word classes defined in $Types.gf$.
+-- We use the parameter types and word classes defined in $TypesFin.gf$.
 
-resource Morpho = Types ** open (Predef = Predef), Prelude in {
+resource MorphoFin = TypesFin ** open (Predef = Predef), Prelude in {
 
 --2 Nouns
 --
@@ -266,6 +266,32 @@ oper
             (tilaus + "ten")
             (tilauks + ("i" + a))
             (tilauks + "iin") ;
+
+-- Some words have the three grades ("rakkaus","rakkauden","rakkautena"), which
+-- are however derivable from the stem.
+
+  sRakkaus : Str -> CommonNoun = \rakkaus ->
+    let {
+      rakkau    = Predef.tk 1 rakkaus ;
+      rakkaut   = rakkau + "t" ;
+      rakkaute  = rakkau + "te" ;
+      rakkaude  = rakkau + "de" ;
+      rakkauksi = rakkau + "ksi" ;
+      u         = Predef.dp 1 rakkau ;
+      a         = ifTok Str u "u" "a" "ä"
+    } 
+    in
+    mkSubst a 
+            rakkaus
+            rakkaude
+            rakkaute
+            (rakkaut + ("t" + a)) 
+            (rakkaut + "een")
+            rakkauksi
+            rakkauksi
+            (rakkauksi + "en")
+            (rakkauksi + a)
+            (rakkauksi + "in") ;
 
 -- The following covers nouns like "nauris" and adjectives like "kallis", "tyyris".
 
@@ -526,7 +552,8 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 --3 Verbs
 --
 
-  mkVerb : (_,_,_,_,_ : Str) -> Verb = \tulla,tulen,tulee,tulevat,tulkaa -> 
+  mkVerb : (_,_,_,_,_,_ : Str) -> Verb = 
+    \tulla,tulen,tulee,tulevat,tulkaa,tullaan -> 
     let {
       tule = Predef.tk 1 tulen ;
       a = Predef.dp 1 tulkaa
@@ -541,7 +568,9 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       Ind Pl P3 => tulevat ;
       Imper Sg  => tule ;
       Imper Pl  => tulkaa ;
-      ImpNegPl  => Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "ö") 
+      ImpNegPl  => Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "ö") ;
+      Pass True => tullaan ;
+      Pass False => Predef.tk 2 tullaan
       }
     } ;
 
@@ -551,14 +580,15 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     let {
       a    = Predef.dp 1 sanoa ;
       sano = Predef.tk 1 sanoa ;
-      o    = Predef.dp 1 sano
+      o    = Predef.dp 1 sano 
     } in
     mkVerb
       sanoa
       (sano + "n")
       (sano + o)
       (sano + (("v" + a) + "t"))
-      (sano + (("k" + a) + a)) ;
+      (sano + (("k" + a) + a))
+      (sano + ((("t" + a) + a) + "n")) ;
 
 -- For "ottaa", "käyttää", "löytää", "huoltaa", "hiihtää", "siirtää".
 
@@ -566,14 +596,16 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     let {
       a    = Predef.dp 1 ottaa ;
       ota  = Predef.tk 1 otan ;
-      otta = Predef.tk 1 ottaa
+      otta = Predef.tk 1 ottaa ;
+      ote  = Predef.tk 1 ota + "e"
     } in
     mkVerb
       ottaa
       (ota + "n")
       ottaa
       (otta + (("v" + a) + "t"))
-      (otta + (("k" + a) + a)) ;
+      (otta + (("k" + a) + a)) 
+      (ote  + ((("t" + a) + a) + "n")) ;
 
 -- For "poistaa", "ryystää".
 
@@ -593,7 +625,8 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       juoksen
       (juokse + "e")
       (juokse + (("v" + a) + "t"))
-      (juos + (("k" + a) + a)) ;
+      (juos + (("k" + a) + a)) 
+      (juosta + (a + "n")) ;
 
 -- For "juoda", "syödä".
 
@@ -607,16 +640,17 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (juo + "n")
       juo
       (juo + (("v" + a) + "t"))
-      (juo + (("k" + a) + a)) ;
+      (juo + (("k" + a) + a)) 
+      (juoda + (a + "n")) ;
 
 
-  verbOlla : Verb = mkVerb "olla" "olen" "on" "ovat" "olkaa" ;
+  verbOlla : Verb = mkVerb "olla" "olen" "on" "ovat" "olkaa" "ollaan" ;
 
--- The negating operator "ei" is actually a verb, which has has present 
--- indicative and imperative forms, but no infinitive.
+-- The negating operator "ei" is actually a verb, which has present 
+-- active indicative and imperative forms, but no infinitive.
 
   verbEi : Verb = 
-    let {ei = mkVerb nonExist "en" "ei" "eivät" "älkää"} in
+    let {ei = mkVerb nonExist "en" "ei" "eivät" "älkää" "ei"} in
     {s = table {
       Ind Pl P3 => "eivät" ;
       v => ei.s ! v
