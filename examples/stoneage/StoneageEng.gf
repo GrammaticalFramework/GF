@@ -80,6 +80,12 @@ lin
   Few = DetNP few_Det ;
   Other = DetNP other_Det ;
 
+  One = IndefNumNP one_Num ;
+  Two = IndefNumNP two_Num ;
+  Three = IndefNumNP three_Num ;
+  Four = IndefNumNP four_Num ;
+  Five = IndefNumNP five_Num ;
+
   -- Pronouns
 
   I = i_NP ;
