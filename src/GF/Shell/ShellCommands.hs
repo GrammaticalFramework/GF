@@ -30,6 +30,7 @@ data Command =
  | CGenerateRandom
  | CGenerateTrees
  | CPutTerm
+ | CReadTerm
  | CWrapTerm I.Ident
  | CMorphoAnalyse
  | CTestTokenizer

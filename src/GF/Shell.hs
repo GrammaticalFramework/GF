@@ -133,6 +133,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
     let 
       a' = case a of
         ASTrm _ -> s2t a
+        AString _ -> s2t a
         _ -> a
     case a' of
       ATrms (trm:_) -> case tree2exp trm of
@@ -152,6 +153,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
     let 
       a' = case a of
         ASTrm _ -> s2t a
+        AString _ -> s2t a
         _ -> a
       mt = case a' of
         ATrms (tr:_) -> Just tr
@@ -159,7 +161,8 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
     returnArg (ATrms $ generateTrees opts gro mt) sa
 
 
-  CPutTerm -> changeArg (opTT2CommandArg (optTermCommand opts gro) . s2t) sa
+  CPutTerm -> changeArg (opTT2CommandArg (optTermCommand opts gro)  . s2t) sa
+
 ----  CWrapTerm f -> changeArg (opTT2CommandArg (return . wrapByFun opts gro f)) sa
   CMorphoAnalyse -> changeArg (AString . morphoAnalyse opts gro . prCommandArg) sa
   CTestTokenizer -> changeArg (AString . optTokenizer opts gro . prCommandArg) sa
@@ -240,6 +243,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
 
    s2t a = case a of
      ASTrm s  -> err AError (ATrms . return) $ string2treeErr gro s
+     AString s  -> err AError (ATrms . return) $ string2treeErr gro s
      _ -> a
 
    warnDiscont os = err putStrLn id $ do
