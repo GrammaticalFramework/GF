@@ -8,6 +8,7 @@ concrete TestResourceFre of TestResource =
   open Prelude, TypesFre, MorphoFre, SyntaxFre in {
 
 flags startcat=Phr ; lexer=text ; parser=chart ; unlexer=text ;
+optimize=all ;
 
 lin
   Big = mkAdjDegrReg "grand" adjPre ;

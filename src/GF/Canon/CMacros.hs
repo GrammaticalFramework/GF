@@ -129,6 +129,7 @@ term2patt trm = case trm of
     return (PR (map (uncurry PAss) (zip ll aa')))
   LI x -> return $ PV x
   EInt i -> return $ PI i
+  FV (t:_) -> term2patt t ----
   _ -> prtBad "no pattern corresponds to term" trm
 
 patt2term :: Patt -> Term
