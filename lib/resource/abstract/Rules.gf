@@ -89,7 +89,7 @@ fun
   PredV0       : V0 -> Cl ;               -- "it is raining"
 
 -- These rules *use* verb phrases: 
--- $PredVP$, $IntVP$, $RelVP$, $QuestVP$, $QuestAdv$.
+-- $PredVP$, $IntVP$, $RelVP$.
 
 -- Partial saturation.
 
@@ -110,9 +110,9 @@ fun
 
   PosVP, NegVP : Ant -> VP  -> VPI ;
 
-  ProgVG : VP  -> VP ;  -- he is eating
+  ProgVG  : VP -> VP ;  -- he is eating
 
-  AdjPart      : V -> A ;                     -- forgotten
+  AdjPart : V -> A ;                     -- forgotten
 
   UseCl  : TP -> Cl  -> S ;
   UseRCl : TP -> RCl -> RS ;
@@ -166,10 +166,10 @@ fun
   FunIP : N2 -> IP -> IP ;                  -- "the mother of whom"
   NounIPOne, NounIPMany : CN -> IP ;        -- "which car", "which cars"
 
-  QuestVP   : NP -> VP -> QCl ;             -- "does John walk"; "doesn't John walk"
-  IntVP     : IP -> VP -> QCl ;             -- "who walks"
-  IntSlash  : IP -> Slash -> QCl ;          -- "whom does John see"
-  QuestAdv  : IAdv -> NP -> VP -> QCl ;     -- "why do you walk"
+  QuestCl    : Cl -> QCl ;                  -- "does John walk"; "doesn't John walk"
+  IntVP      : IP -> VP -> QCl ;            -- "who walks"
+  IntSlash   : IP -> Slash -> QCl ;         -- "whom does John see"
+  QuestAdv   : IAdv -> Cl -> QCl ;          -- "why do you walk"
 
   PosImperVP, NegImperVP : VP -> Imp ;      -- "(don't) be a man"
 

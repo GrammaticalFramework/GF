@@ -1071,6 +1071,17 @@ oper
 -- rule, $questVerbPhrase'$. The only difference is if "om" appears
 -- in the indirect form.
 
+  questClause : Clause -> Question = \dusover ->
+    {s = \\b,sf => 
+      let 
+        dusov : Order => Str = \\o => dusover.s ! b ! s2cl sf o
+      in
+      table {
+        DirQ   => dusov ! Inv ;
+        IndirQ => dusov ! Sub
+        }
+    } ;
+
   questVerbPhrase : NounPhrase -> VerbGroup -> Question = 
     questVerbPhrase' False ;
 
@@ -1143,9 +1154,9 @@ oper
 -- A question adverbial can be applied to anything, and whether this makes
 -- sense is a semantic question.
 
-  questAdverbial : IntAdverb -> NounPhrase -> VerbGroup -> Question = 
-    \hur, du, mår ->
-    {s = \\b,sf,q => hur.s ++ (questVerbPhrase' True du mår).s ! b ! sf ! q} ;
+  questAdverbial : IntAdverb -> Clause -> Question = 
+    \hur, dumår ->
+    {s = \\b,sf,q => hur.s ++ (questClause dumår).s ! b ! sf ! q} ;
 
 --2 Imperatives
 --

@@ -81,7 +81,7 @@ lincat
 
   S      = {s : Str} ; 
   Cl     = Clause ;
-      -- = {s : Bool => SForm => Str} ;
+      -- = {s : Order => Bool => SForm => Str} ;
   Slash  = {s : QuestForm => Bool => SForm => Str ; s2 : Preposition} ;
   RP     = {s : Gender => Number => NPForm => Str} ;
   RCl    = {s : Bool => SForm => Agr => Str} ;
