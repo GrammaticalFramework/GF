@@ -351,7 +351,7 @@ q, quit: q
     -printer=gf             GF grammar
     -printer=cf             context-free grammar
    *-printer=happy          source file for Happy parser generator
-   *-printer=srg            speech recognition grammar
+    -printer=srg            speech recognition grammar
    *-printer=haskell        abstract syntax in Haskell, with transl to/from GF
     -printer=morpho         full-form lexicon, long format
    *-printer=latex          LaTeX file (for the tg command)

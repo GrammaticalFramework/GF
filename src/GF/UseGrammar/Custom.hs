@@ -24,6 +24,7 @@ import PPrCF
 import PrLBNF
 import PrGrammar
 import MkGFC
+import CFtoSRG
 
 import Zipper
 
@@ -145,6 +146,7 @@ customGrammarPrinter =
   [
    (strCI "gfc",     prCanon . stateGrammarST) -- DEFAULT
   ,(strCI "cf",      prCF . stateCF)
+  ,(strCI "srg",     prSRG . stateCF)
   ,(strCI "lbnf",    prLBNF . stateCF)
   ,(strCI "morpho",  prMorpho . stateMorpho)
   ,(strCI "fullform",prFullForm . stateMorpho)

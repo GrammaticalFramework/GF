@@ -17,6 +17,7 @@ incomplete concrete ShallowI of Shallow = open (Resource = Resource) in {
     Adv = Resource.AdV ;
     Det = Resource.Det ;
     Prep = Resource.Prep ;
+    Num = Resource.Num ;
 
   lin
     PhrS = Resource.IndicPhrase ;
@@ -63,15 +64,76 @@ incomplete concrete ShallowI of Shallow = open (Resource = Resource) in {
 
     ModNoun a n = Resource.ModAdj (Resource.AdjP1 a) n ;
     PrepNP = Resource.PrepNP ;
-    PrepNoun f p x = Resource.AdvCN f (Resource.PrepNP p x) ;
+    AdvNoun f a = Resource.AdvCN f a ;
     NounN = Resource.UseN ;
     CNNoun n = n ;
 
-    AllNP = Resource.DetNP (Resource.AllNumDet Resource.NoNum) ;
-    EveryNP = Resource.DetNP Resource.EveryDet ;
+    DetNP = Resource.DetNP ;
     DefNP = Resource.DefOneNP ;
     IndefNP = Resource.IndefOneNP ;
     UsePN = Resource.UsePN ;
 
-    PossessPrep = Resource.PossessPrep ;
+-- created in hugs from gf Warning lines by:
+-- do {s <- readFile "koe2" ; mapM_ (appendFile "koe3" . (\f -> f ++ " = Resource." ++ f ++ " ;\n") . last . words) (lines s)}
+
+AfterPrep = Resource.AfterPrep ;
+AgentPrep = Resource.AgentPrep ;
+AllMassDet = Resource.AllMassDet ;
+AllNumDet = Resource.AllNumDet ;
+AnyDet = Resource.AnyDet ;
+AnyNumDet = Resource.AnyNumDet ;
+BeforePrep = Resource.BeforePrep ;
+BehindPrep = Resource.BehindPrep ;
+BetweenPrep = Resource.BetweenPrep ;
+ByMeansPrep = Resource.ByMeansPrep ;
+DuringPrep = Resource.DuringPrep ;
+EveryDet = Resource.EveryDet ;
+EverybodyNP = Resource.EverybodyNP ;
+EverythingNP = Resource.EverythingNP ;
+FromPrep = Resource.FromPrep ;
+HeNP = Resource.HeNP ;
+INP = Resource.INP ;
+InFrontPrep = Resource.InFrontPrep ;
+InPrep = Resource.InPrep ;
+ItNP = Resource.ItNP ;
+ManyDet = Resource.ManyDet ;
+MostDet = Resource.MostDet ;
+MostsDet = Resource.MostsDet ;
+MuchDet = Resource.MuchDet ;
+NoDet = Resource.NoDet ;
+NoNum = Resource.NoNum ;
+NoNumDet = Resource.NoNumDet ;
+NobodyNP = Resource.NobodyNP ;
+NothingNP = Resource.NothingNP ;
+OnPrep = Resource.OnPrep ;
+PartPrep = Resource.PartPrep ;
+PhrNo = Resource.PhrNo ;
+PhrYes = Resource.PhrYes ;
+PossessPrep = Resource.PossessPrep ;
+SheNP = Resource.SheNP ;
+SomeDet = Resource.SomeDet ;
+SomeNumDet = Resource.SomeNumDet ;
+SomebodyNP = Resource.SomebodyNP ;
+SomethingNP = Resource.SomethingNP ;
+ThatDet = Resource.ThatDet ;
+ThatNP = Resource.ThatNP ;
+TheseNumDet = Resource.TheseNumDet ;
+TheseNumNP = Resource.TheseNumNP ;
+TheyNP = Resource.TheyNP ;
+ThisDet = Resource.ThisDet ;
+ThisNP = Resource.ThisNP ;
+ThoseNumDet = Resource.ThoseNumDet ;
+ThoseNumNP = Resource.ThoseNumNP ;
+ThouNP = Resource.ThouNP ;
+ThroughPrep = Resource.ThroughPrep ;
+ToPrep = Resource.ToPrep ;
+UnderPrep = Resource.UnderPrep ;
+WeNumNP = Resource.WeNumNP ;
+WhichDet = Resource.WhichDet ;
+WhichNumDet = Resource.WhichNumDet ;
+WithPrep = Resource.WithPrep ;
+WithoutPrep = Resource.WithoutPrep ;
+YeNumNP = Resource.YeNumNP ;
+YouNP = Resource.YouNP ;
+
 }
