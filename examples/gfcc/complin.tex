@@ -304,6 +304,17 @@ Here is an example of a piece of code and its abstract syntax.
 The details of expression and type 
 syntax will be explained in the next section.
 
+Our binding syntax is more liberal than C's in two ways.
+First,
+lambda calculus permits overshadowing previous bindings
+by new ones, e.g. to write \verb6\x -> (\x -> f x)6.
+The corresponding overshadowing of declarations is not
+legal in C, within one and the same block.
+Secondly, we allow declarations anywhere in a block,
+not just in the beginning.
+The second deviation would be easy to mend, whereas
+the first one is inherent to the method of \HOAS.
+
 
 
 \subsection{Types and expressions}
