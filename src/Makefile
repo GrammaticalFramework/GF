@@ -4,7 +4,7 @@ include config.mk
 GHMAKE=$(GHC) --make
 GHCXMAKE=ghcxmake
 GHCFLAGS=-package lang -package util -fglasgow-exts $(CPPFLAGS) $(LDFLAGS)
-GHCOPTFLAGS=-O $(GHCFLAGS)
+GHCOPTFLAGS=-O2 $(GHCFLAGS)
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
 
