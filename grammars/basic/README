@@ -1,0 +1,10 @@
+The naming of the grammars tut1.*.gf comes from their use in the
+first GF tutorial in 1998. They still make a good starting
+point to try out translating and editing. Their code is mostly 
+automatic translation from old-GF source.
+
+The grammars Basic.gf and English.gf follow the module syntax
+of GF 2. The other grammars can also be used in GF 2, which
+creates a module structure when compiling them.
+
+(AR 1998-2004)
