@@ -48,6 +48,77 @@ linguists.
 
 
 <!-- NEW -->
+<h2>Multilingual grammars</h2>
+
+<b>Abstract syntax</b>: language-independent representation
+<pre>
+  cat Prop ; Nat ;
+  fun Even : Nat -> Prop ;
+</pre>
+<b>Concrete syntax</b>: mapping from abstract syntax trees to strings in a language
+(English, French, German, Swedish,...)
+<pre>
+  lin Even x = {s = x.s ++ "is" ++ "even"} ; 
+
+  lin Even x = {s = x.s ++ "est" ++ "pair"} ;
+
+  lin Even x = {s = x.s ++ "ist" ++ "gerade"} ;
+
+  lin Even x = {s = x.s ++ "är" ++ "jämnt"} ;
+</pre>
+We can <b>translate</b> between language via the abstract syntax.
+
+<p>
+
+Is it really so simple?
+
+
+<!-- NEW -->
+<h2>Difficulties with concrete syntax</h2>
+
+Most languages have rules of <b>inflection</b>, <b>agreement</b>,
+and <b>word order</b>, which have to be obeyed when putting together
+expressions.
+
+<p>
+
+The previous multilingual grammar breaks these rules in many situations:
+<p><i>
+2 and 3 is even<br>
+la somme de 3 et de 5 est pair<br>
+wenn 2 ist gerade, dann 2+2 ist gerade<br>
+om 2 är jämnt, 2+2 är jämnt<br>
+</i>
+
+<!-- NEW -->
+<h2>Solving the difficulties</h2>
+
+GF has tools for expressing the linguistic rules that are needed to
+produce correct translations in different languages.
+
+<p>
+
+Instead of just strings, we need <p>parameters</b>, <b>tables</b>,
+and <b>record types</b>. For instance, French:
+<pre>
+  param Mod = Ind | Subj ;
+  param Gen = Masc | Fem ;
+
+  lincat Nat = {s : Str ; g : Gen} ;
+  lincat Prop = {s : Mod => Str} ;
+
+  lin Even x = {s =
+      table {
+        m => x.s ++
+             case m   of {Ind  => "est" ;  Subj => "soit"} ++
+             case x.g of {Masc => "pair" ; Fem  => "paire"}
+      }
+    } ;
+</pre>
+
+
+
+<!-- NEW -->
 <h2>Language + Libraries</h2>
 
 Writing natural language grammars still requires
@@ -55,7 +126,7 @@ theoretical knowledge about the language.
 
 <p>
 
-Which kind of programmer is easier to find?
+Which kind of a programmer is easier to find?
 <ul>
 <li> one who can write a sorting algorithm 
 <li> one who can write a grammar for Swedish determiners
@@ -84,10 +155,10 @@ success - libraries are another half.
 To define a Swedish expression of a mathematical predicate from scratch:
 <pre>
   Even x =
-    let jämn = case <x.n,x.g> of {
-      <Sg,Utr>   => "jämn" ;
-      <Sg,Neutr> => "jämnt" ;
-      <Pl,_>     => "jämna"
+    let jämn = case &lt;x.n,x.g> of {
+      &lt;Sg,Utr>   => "jämn" ;
+      &lt;Sg,Neutr> => "jämnt" ;
+      &lt;Pl,_>     => "jämna"
       }
     in
     {s = table {
@@ -101,6 +172,7 @@ To use library functions for syntax and morphology:
 <pre>
   Even = predA (regA "jämn") ;
 </pre>
+
 
 
 <!-- NEW -->
@@ -149,9 +221,9 @@ Basic syntactic structures
 
 <p>
 
-Currently <i>no</i> semantics,  
-<i>no</i> language-specific structures if not
-necessary for expressivity.
+Currently,<br>
+<li> <i>no</i> semantics,<br>  
+<li> <i>no</i> language-specific structures if not necessary for expressivity.
 
 
 
@@ -196,7 +268,7 @@ Semantic correctness
 <p>
 
 (Warning for linguists:) theoretical innovation in
-syntax
+syntax (and it will all be hidden anyway!)
 
 
 
