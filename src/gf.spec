@@ -58,9 +58,9 @@ cd src
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%{_bindir}/gf2
+%{_bindir}/gf
 %{_bindir}/gfdoc
-%{_bindir}/jgf2
+%{_bindir}/jgf
 %{_libdir}/%{name}-%{version}/gf-java.jar
 %doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html}
 
