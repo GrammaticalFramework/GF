@@ -301,7 +301,7 @@ customUntokenizer =
   ,(strCI "code",      const $ formatAsCode)
   ,(strCI "textlit",   const $ formatAsTextLit)
   ,(strCI "codelit",   const $ formatAsCodeLit)
-  ,(strCI "concat",    const $ concat . words)
+  ,(strCI "concat",    const $ concatRemSpace)
   ,(strCI "glue",      const $ performBinds)
   ,(strCI "reverse",   const $ reverse)
   ,(strCI "bind",      const $ performBinds) -- backward compat

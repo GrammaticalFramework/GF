@@ -122,7 +122,8 @@ updateShellState opts sh ((_,sgr,gr),rts) = do
       a' = ifNull Nothing (return . head) $ allAbstracts cgr0
   abstr0 <- case abstract sh of
     Just a -> do
-      -- test that abstract is compatible
+      -- test that abstract is compatible --- unsafe exception for old? 
+      --- if True oElem showOld opts then return () else
       testErr (maybe True (a==) a') ("expected abstract" +++ P.prt a) 
       return $ Just a
     _ -> return a'
