@@ -1,54 +1,52 @@
 rm -rf ../lib
-mkdir -pv lib
-mkdir -pv lib/letter
-# mkdir -pv lib/logic
-mkdir -pv lib/numerals
-mkdir -pv lib/prelude
-mkdir -pv lib/resource
-mkdir -pv lib/resource/abstract
-mkdir -pv lib/resource/english
-mkdir -pv lib/resource/finnish
-mkdir -pv lib/resource/french
-mkdir -pv lib/resource/german
-mkdir -pv lib/resource/italian
-mkdir -pv lib/resource/romance
-mkdir -pv lib/resource/russian
-mkdir -pv lib/resource/swedish
-mkdir -pv lib/resource/doc
-mkdir -pv lib/database
+mkdir -p lib
+mkdir -p lib/letter
+# mkdir -p lib/logic
+mkdir -p lib/numerals
+mkdir -p lib/prelude
+mkdir -p lib/resource
+mkdir -p lib/resource/abstract
+mkdir -p lib/resource/english
+mkdir -p lib/resource/finnish
+mkdir -p lib/resource/french
+mkdir -p lib/resource/german
+mkdir -p lib/resource/italian
+mkdir -p lib/resource/romance
+mkdir -p lib/resource/russian
+mkdir -p lib/resource/swedish
+mkdir -p lib/resource/doc
+mkdir -p lib/database
 
-cp -pv letter/README lib/letter/
-cp -pv letter/mkLetter.gfs lib/letter/
-cp -pv letter/*.gf lib/letter/
+cp -p letter/README lib/letter/
+cp -p letter/mkLetter.gfs lib/letter/
+cp -p letter/*.gf lib/letter/
 
-# cp -pv logic/*.gf lib/logic/
+# cp -p logic/*.gf lib/logic/
 
-cp -pv newnumerals/README lib/numerals/
-cp -pv newnumerals/*.gf lib/numerals/
-cp -pv newnumerals/mkNumerals.gfs lib/numerals/
+cp -p newnumerals/README lib/numerals/
+cp -p newnumerals/*.gf lib/numerals/
+cp -p newnumerals/mkNumerals.gfs lib/numerals/
 
-cp -pv prelude/README lib/prelude/
-cp -pv prelude/*.gf lib/prelude/
+cp -p prelude/README lib/prelude/
+cp -p prelude/*.gf lib/prelude/
 
-cp -pv newresource/mkTest.gfs lib/resource/
-cp -pv newresource/mkParadigms.gfs lib/resource/
-cp -pv newresource/README lib/resource/
-cp -pv newresource/Makefile lib/resource/
-cp -pv newresource/index.html lib/resource/
-cp -pv newresource/abstract/*.gf lib/resource/abstract/
-cp -pv newresource/english/*.gf lib/resource/english/
-cp -pv newresource/finnish/*.gf lib/resource/finnish/
-cp -pv newresource/french/*.gf lib/resource/french/
-cp -pv newresource/german/*.gf lib/resource/german/
-cp -pv newresource/italian/*.gf lib/resource/italian/
-cp -pv newresource/romance/*.gf lib/resource/romance/
-cp -pv newresource/russian/*.gf lib/resource/russian/
-cp -pv newresource/swedish/*.gf lib/resource/swedish/
+cp -p newresource/mkTest.gfs lib/resource/
+cp -p newresource/mkParadigms.gfs lib/resource/
+cp -p newresource/README lib/resource/
+cp -p newresource/Makefile lib/resource/
+cp -p newresource/index.html lib/resource/
+cp -p newresource/abstract/*.gf lib/resource/abstract/
+cp -p newresource/english/*.gf lib/resource/english/
+cp -p newresource/finnish/*.gf lib/resource/finnish/
+cp -p newresource/french/*.gf lib/resource/french/
+cp -p newresource/german/*.gf lib/resource/german/
+cp -p newresource/italian/*.gf lib/resource/italian/
+cp -p newresource/romance/*.gf lib/resource/romance/
+cp -p newresource/russian/*.gf lib/resource/russian/
+cp -p newresource/swedish/*.gf lib/resource/swedish/
+cp -p newresource/doc/*.html lib/resource/doc/
 
-cp -pv database/README lib/database/
-cp -pv database/*.gf lib/database/
+cp -p database/README lib/database/
+cp -p database/*.gf lib/database/
 
 mv lib ..
-
-cd ../lib/resource
-make gfdoc
