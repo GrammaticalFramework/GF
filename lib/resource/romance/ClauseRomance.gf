@@ -6,13 +6,50 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
   flags optimize=all ; --- parametrize much worse, 15/2
 
   lin
-  SPredV np v = predVerbClause np v (complVerb v) ;
-  SPredPassV np v = predCopula np (passVerb v) ;
-  SPredV2 np v x = predVerbClause np v (complTransVerb v x) ;
---  SPredReflV2 np v = predVerbClause np v (reflTransVerb v) ;
-  SPredVS np v x = predVerbClause np v (complSentVerb v x) ;
-  SPredVV np v x = predVerbClause np v (complVerbVerb v x) ;
-  SPredVQ np v x = predVerbClause np v (complQuestVerb v x) ;
+  SPredV  np v   = 
+    sats2clause (mkSats np v) ;
+  SPredPassV subj v = 
+    sats2clause (mkSatsCopula subj (v.s ! VPart (pgen2gen subj.g) subj.n)) ;
+  SPredV2 np v y = 
+    sats2clause (mkSatsObject np v y) ;
+  SPredV3 subj verb obj1 obj2 = 
+    sats2clause (insertObject (mkSatsObject subj verb obj1) verb.c3 verb.s3 obj2) ;
+
+  SPredReflV2 subj verb = 
+    sats2clause (
+      mkSatsObject subj
+        {s = verb.s ; s2 = [] ; c = accusative ; aux = AEsse}
+        ---- {s = verb.s ; s2 = verb.s2 ; c = verb.c ; aux = AEsse}
+        ---- this produces huge cf - find out why! AR 16/3/2005 
+        (reflPronNounPhrase (pgen2gen subj.g) subj.n subj.p)) ;
+
+  SPredVS subj verb sent = 
+    sats2clause (
+      insertExtrapos (mkSats subj verb) (embedConj ++ sent.s ! verb.mp)) ; ---- mn
+  SPredVQ subj verb quest = 
+    sats2clause (
+      insertExtrapos (mkSats subj verb) (quest.s ! IndirQ)) ;
+  SPredV2S subj verb obj sent = 
+    sats2clause (
+      insertExtrapos 
+        (mkSatsObject subj verb obj)
+        (embedConj ++ sent.s ! verb.mp)) ; ---- mn ;
+  SPredV2Q subj verb obj quest = 
+    sats2clause (
+      insertExtrapos 
+        (mkSatsObject subj verb obj) 
+        (quest.s ! IndirQ)) ;
+  SPredAP subj adj = 
+    sats2clause (mkSatsCopula subj (adj.s ! AF (pgen2gen subj.g) subj.n)) ;
+  SPredCN subj cn = 
+    sats2clause (mkSatsCopula subj (indefNoun subj.n cn)) ;
+  SPredNP subj np = 
+    sats2clause (mkSatsCopula subj (np.s ! stressed nominative)) ;
+  SPredAdv subj adv = 
+    sats2clause (mkSatsCopula subj adv.s) ;
+
+{-
+
   SPredVA np v x = predVerbClause np v (complAdjVerb v x) ;
   SPredV2A np v x y = predVerbClause np v (complDitransAdjVerb v x y) ;
   SPredSubjV2V np v x y = predVerbClause np v (complDitransVerbVerb False v x y) ;
@@ -25,7 +62,7 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
   SPredNP np v = predCopula np (complNounPhrase v) ;
   SPredPP np v = predCopula np (complAdverb v) ;
   SPredAV np v x = predCopula np (complVerbAdj v x) ;
-{-
+
   SPredObjA2V np v x y = predCopula np (complVerbAdj2 True v x y) ;
 
   SPredProgVP = progressiveClause ;
@@ -99,9 +136,9 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
   SPredPP np v = predVerbGroupClause np (predAdverb v) ;
 --  SPredAV np v x = predVerbGroupClause np (complVerbAdj v x) ;
 --  SPredObjA2V np v x y = predVerbGroupClause np (complVerbAdj2 True v x y) ;
-
---  SPredProgVP = progressiveClause ;
 -}
+--  SPredProgVP = progressiveClause ;
+
 {-
   QPredV np v = intVerbPhrase np (predVerb v) ;
   QPredPassV np v = intVerbPhrase np (passVerb v) ;
