@@ -61,6 +61,7 @@ transModBody x = case x of
   MBody extend opens topdefs  -> failure x
   MWith id opens  -> failure x
   MReuse id  -> failure x
+  MUnion includeds  -> failure x
 
 
 transExtend :: Extend -> Result
@@ -93,6 +94,12 @@ transQualOpen x = case x of
   QOCompl  -> failure x
   QOIncompl  -> failure x
   QOInterface  -> failure x
+
+
+transIncluded :: Included -> Result
+transIncluded x = case x of
+  IAll id  -> failure x
+  ISome id ids  -> failure x
 
 
 transDef :: Def -> Result
@@ -209,6 +216,8 @@ transExp x = case x of
   EConcat exp0 exp  -> failure x
   EGlue exp0 exp  -> failure x
   ELet locdefs exp  -> failure x
+  ELetb locdefs exp  -> failure x
+  EWhere exp locdefs  -> failure x
   EEqs equations  -> failure x
   ELString lstring  -> failure x
   ELin id  -> failure x

@@ -44,6 +44,7 @@ data ModuleType i =
   | MTInterface
   | MTInstance i 
   | MTReuse (MReuseType i)
+  | MTUnion (ModuleType i) [(i,[i])] --- not meant to be recursive
   deriving (Eq,Show)
 
 data MReuseType i = MRInterface i | MRInstance i i | MRResource i
@@ -245,21 +246,25 @@ lookupInfo mo i = lookupTree show i (jments mo)
 
 isModAbs m = case mtype m of
   MTAbstract -> True
+----  MTUnion t -> isModAbs t
   _ -> False
 
 isModRes m = case mtype m of
   MTResource -> True
   MTReuse _ -> True
+----  MTUnion t -> isModRes t --- maybe not needed, since eliminated early
   MTInterface -> True ---
   MTInstance _ -> True
   _ -> False
 
 isModCnc m = case mtype m of
   MTConcrete _ -> True
+----  MTUnion t -> isModCnc t
   _ -> False
 
 isModTrans m = case mtype m of
   MTTransfer _ _ -> True
+----  MTUnion t -> isModTrans t
   _ -> False
 
 sameMType m n = case (m,n) of

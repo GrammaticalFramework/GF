@@ -79,5 +79,5 @@ oldLexer = map change . L.tokens where
     (L.PT p (L.TS s)) | elem s new -> (L.PT p (L.TV (init s ++ "Z")))
     _ -> t
   new = words $ "abstract concrete interface incomplete " ++ 
-                "instance out open resource reuse transfer with where"
+                "instance out open resource reuse transfer union with where"
 

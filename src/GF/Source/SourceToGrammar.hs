@@ -76,6 +76,11 @@ transModDef x = case x of
         return (id',GM.ModMod (GM.Module mtyp' mstat' flags' extends' opens' defs'))
       MReuse _ -> do
         return (id', GM.ModMod (GM.Module mtyp' mstat' [] Nothing [] NT))
+      MUnion imps -> do
+        imps' <- mapM transIncluded imps        
+        return (id', 
+          GM.ModMod (GM.Module (GM.MTUnion mtyp' imps') mstat' [] Nothing [] NT))
+  
       MWith m opens -> do
         m'     <- transIdent m
         opens' <- mapM transOpen opens 
@@ -153,6 +158,12 @@ transQualOpen x = case x of
   QOCompl  -> return GM.OQNormal
   QOInterface  -> return GM.OQInterface
   QOIncompl  -> return GM.OQIncomplete
+
+transIncluded :: Included -> Err (Ident,[Ident])
+transIncluded x = case x of
+  IAll i  -> liftM (flip (curry id) []) $ transIdent i
+  ISome i ids  -> liftM2 (curry id) (transIdent i) (mapM transIdent ids)
+
 
 transAbsDef :: TopDef -> Err (Either [(Ident, G.Info)] [GO.Option])
 transAbsDef x = case x of

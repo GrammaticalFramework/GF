@@ -13,8 +13,8 @@ isResWord s = isInTree s resWordTree
 resWordTree :: BTree
 resWordTree = 
 --  mapTree fst $ sorted2tree $ flip zip (repeat ()) $ sort allReservedWords
-    B "let" (B "concrete" (B "Tok" (B "Str" (B "PType" (B "Lin" N N) N) (B "Strs" N N)) (B "case" (B "abstract" (B "Type" N N) N) (B "cat" N N))) (B "fun" (B "flags" (B "def" (B "data" N N) N) (B "fn" N N)) (B "in" (B "grammar" N N) (B "include" N N)))) (B "pattern" (B "of" (B "lindef" (B "lincat" (B "lin" N N) N) (B "lintype" N N)) (B "out" (B "oper" (B "open" N N) N) (B "param" N N))) (B "strs" (B "resource" (B "printname" (B "pre" N N) N) (B "reuse" N N)) (B "transfer" (B "table" N N) (B "variants" N N))))
-
+--  nowadays obtained from LexGF.hs
+    B "let" (B "data" (B "Type" (B "Str" (B "PType" (B "Lin" N N) N) (B "Tok" (B "Strs" N N) N)) (B "cat" (B "case" (B "abstract" N N) N) (B "concrete" N N))) (B "in" (B "fn" (B "flags" (B "def" N N) N) (B "grammar" (B "fun" N N) N)) (B "instance" (B "incomplete" (B "include" N N) N) (B "interface" N N)))) (B "pre" (B "open" (B "lindef" (B "lincat" (B "lin" N N) N) (B "of" (B "lintype" N N) N)) (B "param" (B "out" (B "oper" N N) N) (B "pattern" N N))) (B "transfer" (B "reuse" (B "resource" (B "printname" N N) N) (B "table" (B "strs" N N) N)) (B "where" (B "variants" (B "union" N N) N) (B "with" N N))))
 
 isResWordGFC :: String -> Bool
 isResWordGFC s = isInTree s $
