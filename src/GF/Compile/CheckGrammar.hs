@@ -78,15 +78,32 @@ checkAbsInfo st m (c,info) = do
  case info of
    AbsCat (Yes cont) _ -> mkCheck "category" $ 
      checkContext st cont ---- also cstrs
-   AbsFun (Yes typ) (Yes d) -> mkCheck "function" $ 
-     checkTyp st typ ----- ++ 
-     ----- checkEquation st (m,c) d  ---- also if there's no def!
+   AbsFun (Yes typ0) md -> do
+    typ <- compAbsTyp [] typ0   -- to calculate let definitions
+    mkCheck "function" $
+       checkTyp st typ ++ 
+       case md of
+         Yes d ->  checkEquation st (m,c) d
+         _ -> []
+    return $ (c,AbsFun (Yes typ) md)
    _ -> return (c,info)
  where
    mkCheck cat ss = case ss of
      [] -> return (c,info)
      ["[]"] -> return (c,info) ----
      _  -> checkErr $ prtBad (unlines ss ++++ "in" +++ cat) c
+   compAbsTyp g t = case t of
+     Vr x -> maybe (fail ("no value given to variable" +++ prt x)) return $ lookup x g
+     Let (x,(_,a)) b -> do
+       a' <- compAbsTyp g a
+       compAbsTyp ((x, a'):g) b
+     Prod x a b -> do
+       a' <- compAbsTyp g a
+       b' <- compAbsTyp ((x,Vr x):g) b
+       return $ Prod x a' b'
+     Abs _ _ -> return t
+     _ -> composOp (compAbsTyp g) t
+
 
 checkCompleteGrammar :: SourceAbs -> SourceCnc -> Check ()
 checkCompleteGrammar abs cnc = mapM_ checkWarn $

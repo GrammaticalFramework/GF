@@ -1,8 +1,9 @@
-abstract Imper = {
+abstract Imper = PredefAbs ** {
 
   cat
     Program ;
     Typ ;
+    NumTyp ;
     ListTyp ;
     Fun ListTyp Typ ;
     Body ListTyp ;
@@ -17,6 +18,7 @@ abstract Imper = {
               Body AS -> (Fun AS V -> Program) -> Program ;
 
     BodyNil  : Stm -> Body NilTyp ;
+    BodyOne  : (A : Typ) -> (Var A -> Stm) -> Body (ConsTyp A NilTyp) ;
     BodyCons : (A : Typ) -> (AS : ListTyp) -> 
                   (Var A -> Body AS) -> Body (ConsTyp A AS) ;
 
@@ -29,22 +31,20 @@ abstract Imper = {
     End    : Stm ;
 
     EVar   : (A : Typ) -> Var A -> Exp A ;
-    EInt   : Int -> Exp TInt ;
-    EFloat : Int -> Int -> Exp TFloat ;
-    ELtI   : Exp TInt -> Exp TInt -> Exp TInt ;
-    ELtF   : Exp TFloat -> Exp TFloat -> Exp TInt ;
+    EInt   : Int -> Exp (TNum TInt) ;
+    EFloat : Int -> Int -> Exp (TNum TFloat) ;
+    ELt    : (n : NumTyp) -> let Ex = Exp (TNum n) in Ex -> Ex -> Exp (TNum TInt) ;
     EApp   : (AS : ListTyp) -> (V : Typ) -> Fun AS V -> ListExp AS -> Exp V ;
-    EAddI, EMulI, ESubI : Exp TInt -> Exp TInt -> Exp TInt ;
-    EAddF, EMulF, ESubF : Exp TFloat -> Exp TFloat -> Exp TFloat ;
-  
-    TInt   : Typ ;
-    TFloat : Typ ;
+    EAdd, EMul, ESub : (n : NumTyp) -> let Ex = Exp (TNum n) in Ex -> Ex -> Ex ;
+
+    TNum   : NumTyp -> Typ ;  
+    TInt, TFloat : NumTyp ;
 
     NilTyp  : ListTyp ;
     ConsTyp : Typ -> ListTyp -> ListTyp ;
 
     NilExp  : ListExp NilTyp ;
+    OneExp  : (A : Typ) -> Exp A -> ListExp (ConsTyp A NilTyp) ;
     ConsExp : (A : Typ) -> (AS : ListTyp) -> 
-                 Exp A -> ListExp AS -> ListExp (ConsExp A AS) ;
-
+                 Exp A -> ListExp AS -> ListExp (ConsTyp A AS) ;
 }
