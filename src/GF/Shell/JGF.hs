@@ -29,7 +29,7 @@ sessionLineJ isNew env = do
 ---- the Boolean is a temporary hack to have two parallel GUIs
 editLoopJnewX :: Bool -> CEnv -> SState -> IO ()
 editLoopJnewX isNew env state = do
-  c <- getCommandUTF
+  c <- getCommandUTF (isCEnvUTF8 env state) ----
   case c of
     CQuit -> return ()
 

@@ -441,6 +441,15 @@ displaySStateJavaX isNew env state = encodeUTF8 $ mkUnicode $
     Just lang -> optDecodeUTF8 (stateGrammarOfLang env (language lang)) 
     _ -> id
 
+-- the env is UTF8 if the display language is 
+--- should be independent
+isCEnvUTF8 :: CEnv -> SState -> Bool
+isCEnvUTF8 env st = maybe False id $ do
+   lang <- getOptVal opts menuDisplay
+   co   <- getOptVal (stateOptions (stateGrammarOfLang env (language lang))) uniCoding
+   return $ co == "utf8"
+  where
+    opts = addOptions (optsSState st) (globalOptions env)
 
 langAbstract = language "Abstract"
 langXML      = language "XML"
