@@ -5,21 +5,21 @@ resource Predef = {
   -- this type is for internal use only
   param PBool = PTrue | PFalse ;
 
-  -- these operations have their definitions in AppPredefined.hs
-  oper Int : Type = variants {} ; ----
+  -- these operations have their proper definitions in AppPredefined.hs
 
-  oper length : Tok ->        Int  = variants {} ;
-  oper drop   : Int -> Tok -> Tok  = variants {} ;
-  oper take   : Int -> Tok -> Tok  = variants {} ;
-  oper tk     : Int -> Tok -> Tok  = variants {} ;
-  oper dp     : Int -> Tok -> Tok  = variants {} ;
-  oper eqInt  : Int -> Int -> PBool = variants {} ; 
-  oper plus   : Int -> Int -> Int  = variants {} ;
+  oper Int : Type = variants {} ;                      -- the type of integers
 
-  oper eqStr  : Tok -> Tok -> PBool   = variants {} ; 
-  oper eqTok  : (P : Type) -> P -> P -> PBool = variants {} ; 
-  oper show   : (P : Type) -> P -> Tok = variants {} ; 
-  oper read   : (P : Type) -> Tok -> P = variants {} ; 
+  oper length : Tok ->        Int      = variants {} ; -- length of string
+  oper drop   : Int -> Tok -> Tok      = variants {} ; -- drop prefix of length
+  oper take   : Int -> Tok -> Tok      = variants {} ; -- take prefix of length
+  oper tk     : Int -> Tok -> Tok      = variants {} ; -- drop suffix of length
+  oper dp     : Int -> Tok -> Tok      = variants {} ; -- take suffix of length
+  oper eqInt  : Int -> Int -> PBool    = variants {} ; -- test if equal integers
+  oper plus   : Int -> Int -> Int      = variants {} ; -- add integers
+  oper eqStr  : Tok -> Tok -> PBool    = variants {} ; -- test if equal strings
+  oper occur  : Tok -> Tok -> PBool    = variants {} ; -- test if occurs as substring
+  oper show   : (P : Type) -> P -> Tok = variants {} ; -- convert param to string
+  oper read   : (P : Type) -> Tok -> P = variants {} ; -- convert string to param
 
   } ;
 

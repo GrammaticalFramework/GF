@@ -99,7 +99,7 @@ importsOfFile =
   unComm                     -- ignore comments before the headed line
  where
     term = flip elem ["{",";"]
-    spec = flip elem ["of", "open","in", "reuse", "=", "(", ")",",","**"]
+    spec = flip elem ["of", "open","in", ":", "->", "reuse", "=", "(", ")",",","**"]
     unqual ws = case ws of
       "(":q:ws' -> unqual ws'
       w:ws' -> w:unqual ws'

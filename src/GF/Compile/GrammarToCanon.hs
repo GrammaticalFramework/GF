@@ -43,6 +43,7 @@ redModInfo (c,info) = do
            return (a', MTConcrete a') 
          MTAbstract -> return (c',MTAbstract) --- c' not needed
          MTResource -> return (c',MTResource) --- c' not needed
+         MTTransfer x y -> return (c',MTTransfer (om x) (om y)) --- c' not needed
       defss <- mapM (redInfo a) $ tree2list $ jments m
       defs  <- return $ sorted2tree $ concat defss  -- sorted, but reduced
       return $ ModMod $ Module mt flags e os defs
@@ -54,6 +55,7 @@ redModInfo (c,info) = do
        _ -> return Nothing
      os' <- mapM (\ (OQualif _ i) -> liftM OSimple (redIdent i)) $ opens m
      return (e',os')
+   om = OSimple . openedModule --- normalizing away qualif
 
 redInfo :: Ident -> (Ident,Info) -> Err [(Ident,C.Info)]
 redInfo am (c,info) = errIn ("translating definition of" +++ prt c) $ do
@@ -69,6 +71,8 @@ redInfo am (c,info) = errIn ("translating definition of" +++ prt c) $ do
                  Yes t -> t
                  _ -> EData --- data vs. primitive
       returns c' $ C.AbsFun typ df
+    AbsTrans t -> 
+      returns c' $ C.AbsTrans t
 
     ResParam (Yes ps) -> do
       ps' <- mapM redParam ps

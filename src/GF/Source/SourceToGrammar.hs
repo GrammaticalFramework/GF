@@ -150,9 +150,8 @@ transAbsDef x = case x of
       [(c, G.AbsCat nope (yes ps)) | (c,ps) <- ds'] ++
       [(f, G.AbsFun nope (yes G.EData))  | (_,fs) <- ds', tf <- fs, f <- funs tf]
   DefTrans defs  -> do
-    let (ids,vals) = unzip [(i,v) | FlagDef i v <- defs]
-    defs' <- liftM2 zip (mapM transIdent ids) (mapM transIdent vals)
-    returnl [(c, G.AbsTrans f) | (c,f) <- defs']
+    defs' <- liftM concat $ mapM getDefsGen defs
+    returnl [(c, G.AbsTrans f) | (c,(_,Yes f)) <- defs']
   DefFlag defs -> liftM Right $ mapM transFlagDef defs
   _ -> Bad $ "illegal definition in abstract module:" ++++ printTree x
  where

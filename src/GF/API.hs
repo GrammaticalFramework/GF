@@ -17,12 +17,12 @@ import PPrCF
 import CFIdent
 import PGrammar
 import Randomized (mkRandomTree)
-import Zipper
 
 import MMacros
 import qualified Macros as M
 import TypeCheck
 import CMacros
+import Transfer
 
 import Option
 import Custom
@@ -47,6 +47,7 @@ import Arch (myStdGen)
 import UTF8
 import Operations
 import UseIO
+import Zipper
 
 import List (nub)
 import Monad (liftM)
@@ -161,20 +162,24 @@ optLinearizeTreeVal :: Options -> GFGrammar -> Tree -> String
 optLinearizeTreeVal opts gr = err id id . optLinearizeTree opts gr
 
 optLinearizeTree :: Options -> GFGrammar -> Tree -> Err String
-optLinearizeTree opts gr t = case getOptVal opts markLin of
-  Just mk
-    | mk == markOptXML    -> lin markXML t
-    | mk == markOptJava   -> lin markXMLjgf t
-    | mk == markOptStruct -> lin markBracket t
-    | mk == markOptFocus  -> lin markFocus t
-    | otherwise           -> lin noMark t 
-  _ -> lin noMark t
+optLinearizeTree opts gr t = case getOptVal opts transferFun of
+  Just m -> useByTransfer flin g (I.identC m) t
+  _ -> flin t
  where
-   lin mk
+  flin = case getOptVal opts markLin of
+    Just mk
+     | mk == markOptXML    -> lin markXML
+     | mk == markOptJava   -> lin markXMLjgf
+     | mk == markOptStruct -> lin markBracket
+     | mk == markOptFocus  -> lin markFocus
+     | otherwise           -> lin noMark
+    _ -> lin noMark
+
+  lin mk
     | oElem showRecord opts = liftM prt . linearizeNoMark g c
     | otherwise             = return . linTree2string mk g c
-   g = grammar gr
-   c = cncId gr
+  g = grammar gr
+  c = cncId gr
 
 {- ----
         untoksl . lin where
@@ -208,13 +213,22 @@ optLinearizeArgForm opts sgr fs ts0 = untoksl $ lin ts where
 optParseArg :: Options -> GFGrammar -> String -> [Tree]
 optParseArg opts gr =  err (const []) id . optParseArgErr opts gr
 
+optParseArgAny :: Options -> [GFGrammar] -> String -> [Tree]
+optParseArgAny opts grs s = concat [pars gr s | gr <- grs] where
+  pars gr = optParseArg opts gr --- grammar options!
+
 optParseArgErr :: Options -> GFGrammar -> String -> Err [Tree]
 optParseArgErr opts gr = liftM fst . optParseArgErrMsg opts gr
 
 optParseArgErrMsg :: Options -> GFGrammar -> String -> Err ([Tree],String)
-optParseArgErrMsg opts gr s = 
+optParseArgErrMsg opts gr s = do
   let cat = firstCatOpts opts gr
-  in parseStringMsg opts gr cat s
+      g   = grammar gr
+  (ts,m) <- parseStringMsg opts gr cat s
+  ts' <- case getOptVal opts transferFun of
+    Just m -> mkByTransfer (const $ return ts) g (I.identC m) s
+    _ -> return ts
+  return (ts',m)
 
 -- analyses word by word
 morphoAnalyse :: Options -> GFGrammar -> String -> String

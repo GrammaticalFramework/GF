@@ -48,6 +48,21 @@ lookupCatContext gr m c = errIn ("looking up context of cat" +++ prt c) $ do
         _ -> prtBad "unknown category" c
     _ -> Bad $ prt m +++ "is not an abstract module"
 
+-- lookup for transfer function: transfer-module-name, category name
+
+lookupTransfer :: GFCGrammar -> Ident -> Ident -> Err Term
+lookupTransfer gr m c = errIn ("looking up transfer of cat" +++ prt c) $ do
+  mi   <- lookupModule gr m
+  case mi of
+    ModMod mo -> do
+      info <- lookupInfo mo c
+      case info of
+        C.AbsTrans t -> return t
+        C.AnyInd _ n  -> lookupTransfer gr n c
+        _ -> prtBad "cannot transfer function for" c
+    _ -> Bad $ prt m +++ "is not a transfer module"
+
+
 ---- should be revised (20/9/2003)
 isPrimitiveFun :: GFCGrammar -> Fun -> Bool
 isPrimitiveFun gr (m,c) = case lookupAbsDef gr m c of

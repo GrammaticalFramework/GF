@@ -21,6 +21,7 @@ canon2grammar (Gr modules) = M.MGrammar $ map mod2info modules where
             MTAbs a -> (a,M.MTAbstract)
             MTRes a -> (a,M.MTResource)
             MTCnc a x -> (a,M.MTConcrete x)
+            MTTrans a x y -> (a,M.MTTransfer (M.OSimple x) (M.OSimple y))
       in (a,M.ModMod (M.Module mt' flags (ee e) (oo os) defs'))
   ee (Ext m) = Just m
   ee _ = Nothing
@@ -37,6 +38,7 @@ info2mod m = case m of
              M.MTAbstract -> MTAbs a
              M.MTResource -> MTRes a
              M.MTConcrete x -> MTCnc a x
+             M.MTTransfer (M.OSimple x) (M.OSimple y) -> MTTrans a x y
       in
         Mod mt' (gfcE me) (gfcO os) flags defs'
  where
@@ -51,6 +53,7 @@ defs2infos = sorted2tree . map def2info
 def2info d = case d of
   AbsDCat c cont fs -> (c,AbsCat (trCont cont) (trFs fs))
   AbsDFun c ty df   -> (c,AbsFun (trExp ty) (trExp df))
+  AbsDTrans c t     -> (c,AbsTrans (trExp t))
   ResDPar c    df   -> (c,ResPar df)
   ResDOper c ty df  -> (c,ResOper ty df)
   CncDCat c ty df pr   -> (c, CncCat ty df pr)
@@ -95,6 +98,7 @@ infos2defs = map info2def . tree2list
 info2def d = case d of
   (c,AbsCat cont fs)    -> AbsDCat c (rtCont cont) (rtFs fs)
   (c,AbsFun ty df)      -> AbsDFun c (rtExp ty) (rtExp df)
+  (c,AbsTrans t)        -> AbsDTrans c (rtExp t)
   (c,ResPar    df)      -> ResDPar c df
   (c,ResOper ty df)     -> ResDOper c ty df
   (c,CncCat ty df pr)   -> CncDCat c ty df pr

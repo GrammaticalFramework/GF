@@ -166,7 +166,7 @@ instance Print TopDef where
    DefFun fundefs -> prPrec i 0 (concat [["fun"] , prt 0 fundefs])
    DefDef defs -> prPrec i 0 (concat [["def"] , prt 0 defs])
    DefData datadefs -> prPrec i 0 (concat [["data"] , prt 0 datadefs])
-   DefTrans flagdefs -> prPrec i 0 (concat [["transfer"] , prt 0 flagdefs])
+   DefTrans defs -> prPrec i 0 (concat [["transfer"] , prt 0 defs])
    DefPar pardefs -> prPrec i 0 (concat [["param"] , prt 0 pardefs])
    DefOper defs -> prPrec i 0 (concat [["oper"] , prt 0 defs])
    DefLincat printdefs -> prPrec i 0 (concat [["lincat"] , prt 0 printdefs])

@@ -27,6 +27,7 @@ type CanonAbs = M.Module Ident Option Info
 data Info = 
    AbsCat  A.Context [A.Fun]
  | AbsFun  A.Type A.Term
+ | AbsTrans A.Term
 
  | ResPar  [ParDef]
  | ResOper CType Term     -- global constant

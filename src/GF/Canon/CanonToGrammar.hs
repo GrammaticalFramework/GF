@@ -29,6 +29,7 @@ canon2sourceModule (i,mi) = do
             return (a', M.MTConcrete a') 
           M.MTAbstract -> return (i',M.MTAbstract) --- c' not needed
           M.MTResource -> return (i',M.MTResource) --- c' not needed
+          M.MTTransfer x y -> return (i',M.MTTransfer x y) --- c' not needed
       defs   <- mapMTree redInfo $ M.jments m
       return $ M.ModMod $ M.Module mt flags e os defs
     _ -> Bad $ "cannot decompile module type"
@@ -50,6 +51,8 @@ redInfo (c,info) = errIn ("decompiling abstract" +++ show c) $ do
       return $ G.AbsCat (Yes cont) (Yes (map (uncurry G.Q) fs))
     AbsFun typ df -> do
       return $ G.AbsFun (Yes typ) (Yes df)
+    AbsTrans t -> do
+      return $ G.AbsTrans t
 
     ResPar par -> liftM (G.ResParam . Yes) $ mapM redParam par
 

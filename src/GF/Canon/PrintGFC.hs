@@ -97,7 +97,7 @@ instance Print ModType where
    MTAbs id -> prPrec i 0 (concat [["abstract"] , prt 0 id])
    MTCnc id0 id -> prPrec i 0 (concat [["concrete"] , prt 0 id0 , ["of"] , prt 0 id])
    MTRes id -> prPrec i 0 (concat [["resource"] , prt 0 id])
-
+   MTTrans id open0 open -> prPrec i 0 (concat [["transfer"] , prt 0 id , [":"] , prt 0 open0 , ["->"] , prt 0 open])
 
 instance Print Extend where
   prt i e = case e of
@@ -123,6 +123,7 @@ instance Print Def where
   prt i e = case e of
    AbsDCat id decls cidents -> prPrec i 0 (concat [["cat"] , prt 0 id , ["["] , prt 0 decls , ["]"] , ["="] , prt 0 cidents])
    AbsDFun id exp0 exp -> prPrec i 0 (concat [["fun"] , prt 0 id , [":"] , prt 0 exp0 , ["="] , prt 0 exp])
+   AbsDTrans id exp -> prPrec i 0 (concat [["transfer"] , prt 0 id , ["="] , prt 0 exp])
    ResDPar id pardefs -> prPrec i 0 (concat [["param"] , prt 0 id , ["="] , prt 0 pardefs])
    ResDOper id ctype term -> prPrec i 0 (concat [["oper"] , prt 0 id , [":"] , prt 0 ctype , ["="] , prt 0 term])
    CncDCat id ctype term0 term -> prPrec i 0 (concat [["lincat"] , prt 0 id , ["="] , prt 0 ctype , ["="] , prt 0 term0 , [";"] , prt 0 term])

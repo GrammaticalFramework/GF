@@ -26,6 +26,7 @@ appPredefined t = case t of
       ("tk",   EInt i, K s) -> K (take (max 0 (length s - i)) s)
       ("dp",   EInt i, K s) -> K (drop (max 0 (length s - i)) s)
       ("eqStr",K s,    K t) -> if s == t then predefTrue else predefFalse
+      ("occur",K s,    K t) -> if substring s t then predefTrue else predefFalse
       ("eqInt",EInt i, EInt j) -> if i==j then predefTrue else predefFalse
       ("plus", EInt i, EInt j) -> EInt $ i+j
       ("show", _, t) -> K $ prt t
@@ -49,3 +50,10 @@ str2tag s = case s of
 
 predefTrue = Q (IC "Predef") (IC "PTrue")
 predefFalse = Q (IC "Predef") (IC "PFalse")
+
+substring :: String -> String -> Bool
+substring s t = case (s,t) of
+  (c:cs, d:ds) -> (c == d && substring cs ds) || substring s ds
+  ([],_) -> True
+  _ -> False
+

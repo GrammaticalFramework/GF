@@ -117,7 +117,7 @@ tree2status o = case o of
 buildStatus :: SourceGrammar -> Ident -> SourceModInfo -> Err Status
 buildStatus gr c mo = let mo' = self2status c mo in case mo of
   ModMod m -> do
-    let ops  = opens m
+    let ops  = allOpens m
     mods <- mapM (lookupModule gr . openedModule) ops
     let sts = map modInfo2status $ zip ops mods    
     return $ if isModCnc m
@@ -130,10 +130,14 @@ modInfo2status (o,i) = (o,case i of
   )
 
 self2status :: Ident -> SourceModInfo -> StatusTree
-self2status c i = case i of
-  ModMod m -> mapTree (info2status (Just c)) (jments m)   -- qualify internal
----  ModMod m -> mapTree (resInfo2status Nothing) (jments m)
--- change Lookup.qualifAnnot if you change this
+self2status c i = mapTree (info2status (Just c)) js where   -- qualify internal
+  js = case i of
+    ModMod m 
+      | isModTrans m -> sorted2tree $ filter noTrans $ tree2list $ jments m 
+      | otherwise -> jments m
+  noTrans (_,d) = case d of  -- to enable other than transfer js in transfer module 
+    AbsTrans _ -> False
+    _ -> True
 
 forceQualif o = case o of
   OSimple i   -> OQualif i i
@@ -145,6 +149,7 @@ renameInfo status (i,info) = errIn ("renaming definition of" +++ prt i) $
   AbsCat pco pfs -> liftM2 AbsCat (renPerh (renameContext status) pco)
                                   (renPerh (mapM rent) pfs)
   AbsFun pty ptr -> liftM2 AbsFun (ren pty) (ren ptr)
+  AbsTrans f -> liftM AbsTrans (rent f)
 
   ResOper pty ptr -> liftM2 ResOper (ren pty) (ren ptr)
   ResParam pp -> liftM ResParam (renPerh (mapM (renameParam status)) pp)
