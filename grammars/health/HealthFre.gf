@@ -13,7 +13,7 @@ flags
 
 lincat 
   Patient = NP ;
-  Body = CN ;
+  BodyPart = CN ;
   Symptom = NP ;
   SymptomDegree = AP ;
   Prop = S ;
@@ -23,7 +23,7 @@ lincat
   Medicine  = CN ;
 
 lin 
-   And x y = ConjS AndConj (TwoS x y) ;  
+  And x y = ConjS AndConj (TwoS x y) ;  
 
   ShePatient = SheNP ;
   TheyPatient = TheyNP ;
@@ -38,11 +38,6 @@ lin
   CatchCold = PosVG (PredTV (tvDir vAvoir) (IndefOneNP (mkCNomReg "rhume" Masc ** {lock_CN = <> })));
   Pregnant = PosVG (PredAP (mkAdjective (adjJeune "enceinte") adjPost** {lock_AP = <> })) ;
 
-  High = AdjP1 (mkAdjReg "élevé" adjPost ** {lock_Adj1 = <> }) ;
-  Terrible = AdjP1 ((mkAdjective (mkAdj "terrible" "terrible" "terrible" "terrible")  adjPre ** {lock_Adj1 = <> })** {lock_AP = <> });
-
-  Head = mkCNomReg "tête" Fem ** {lock_CN = <> };
-  Leg = mkCNomReg "jambe" Fem ** {lock_CN = <> };
   Dentist  = mkCNomReg "dentiste" Masc ** {lock_CN = <> } ;
   PainKiller = mkCNomReg "calmant" Masc ** {lock_CN = <> };
 
@@ -51,19 +46,8 @@ lin
   TakeMedicine patient medicine = predV2 (mkTransVerbDir (verbPres 
               (conj3prendre "prendre")) ** {lock_TV = <> } ) patient (IndefOneNP medicine) ;
 
-  FeverMod degree = DetNP (delDet ** {lock_Det = <> }) (ModAdj degree (mkCNomReg "fièvre" Fem** {lock_CN = <> })) ;
   Fever = DetNP (delDet ** {lock_Det = <> }) (mkCNomReg "fièvre" Fem ** {lock_CN = <> }) ;
 
-  PainInMod patient head degree = predV2 (tvDir vAvoir) patient 
-    (DetNP (nullDet ** {lock_Det = <> }) 
-      ( ModAdj degree
-        (
-          AppFun ((mkCNomReg "mal" Masc ** {lock_CN = <> })** complementCas Dat** {lock_Fun = <> }) 
-          (defNounPhrase patient.n head ** {lock_NP = <> })
-        )
-      )
-    ) ;
-              
   PainIn patient head = predV2 (tvDir vAvoir) patient
      (DetNP (nullDet ** {lock_Det = <> }) 
       (
@@ -75,6 +59,35 @@ lin
 
   Injured = injuredBody (adjReg "blessé") ;
   Broken = injuredBody (adjReg "cassé") ;
+
+
+  Head = mkCNomReg "tête" Fem ** {lock_CN = <> };
+  Leg = mkCNomReg "jambe" Fem ** {lock_CN = <> };
+  Stomac = mkCNomReg "estomac" Masc ** {lock_CN = <> }; 	
+  Throat = mkCNomReg "gorge" Fem ** {lock_CN = <> };
+  Ear = mkCNomReg "oreille" Fem ** {lock_CN = <> };
+  Chest = mkCNomReg "poitrine" Fem ** {lock_CN = <> };
+  Foot = mkCNomReg "pied" Masc ** {lock_CN = <> };
+  Arm = mkCNomReg "bras" Masc ** {lock_CN = <> };
+  Back = mkCNomReg "dos" Masc ** {lock_CN = <> };
+  Shoulder = mkCNomReg "epaule" Fem ** {lock_CN = <> };
+--  Knee = mkCNomReg "genou" Masc ** {lock_CN = <> };
+--  Tooth = mkCNomReg "dents" Masc ** {lock_CN = <> };
+  
+
+--  High = AdjP1 (mkAdjReg "élevé" adjPost ** {lock_Adj1 = <> }) ;
+--  Terrible = AdjP1 ((mkAdjective (mkAdj "terrible" "terrible" "terrible" "terrible")  adjPre ** {lock_Adj1 = <> })** {lock_AP = <> });
+--  FeverMod degree = DetNP (delDet ** {lock_Det = <> }) (ModAdj degree (mkCNomReg "fièvre" Fem** {lock_CN = <> })) ;
+--  PainInMod patient head degree = predV2 (tvDir vAvoir) patient 
+--    (DetNP (nullDet ** {lock_Det = <> }) 
+--      ( ModAdj degree
+--        (
+--          AppFun ((mkCNomReg "mal" Masc ** {lock_CN = <> })** complementCas Dat** {lock_Fun = <> }) 
+--          (defNounPhrase patient.n head ** {lock_NP = <> })
+--        )
+--      )
+--    ) ;
+
 
 };
 

@@ -332,6 +332,18 @@ oper pronVseInanimate: Pronoun =
 
 oper SubstFormDecl = SS1 SubstForm ;
 
+oper gorlo : CommNoun = oEndInAnimateDecl "горл"  ;
+oper koleno : CommNoun = oEndInAnimateDecl "колен"  ;
+oper plecho : CommNoun = oEndInAnimateDecl "плеч"  ;
+oper ukho : CommNoun = oEndInAnimateDecl "ух"  ;
+oper zhivot : CommNoun = nullEndInAnimateDecl1 "живот" ; 
+oper grud : CommNoun = softSignEndDeclFem "груд" ;
+oper spina : CommNoun = aEndG_K_KH_Decl "спин" ;
+oper stopa : CommNoun = aEndG_K_KH_Decl "стоп" ;
+oper ruka : CommNoun = aEndG_K_KH_Decl "рук" ;
+
+
+
 oper muzhchina : CommNoun = (aEndAnimateDecl "мужчин") ** { g = Masc ; anim = Animate } ;
 oper zhenchina : CommNoun = (aEndAnimateDecl "женщин") ** { g = Fem ; anim = Animate } ;
 oper mama : CommNoun = (aEndAnimateDecl "мам")**{ g = Fem ; anim = Animate } ;

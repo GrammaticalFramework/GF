@@ -31,7 +31,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     public static String selectedText="";
 
     public static boolean debug = false;
-    public static boolean debug3 = true;
+    public static boolean debug3 = false;
     public static boolean debug2 = false;
     public static boolean selectionCheck = false;
     public static String focusPosition = "";
@@ -563,8 +563,13 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         Locale.setDefault(Locale.US);
         try {
             Process extProc = Runtime.getRuntime().exec(args[0]); 
-            fromProc = new BufferedReader (new InputStreamReader(
-                           extProc.getInputStream(),"UTF8"));
+            InputStreamReader isr = new InputStreamReader(
+                           extProc.getInputStream(),"UTF8");
+                       // extProc.getInputStream());
+
+            fromProc = new BufferedReader (isr);
+String defaultEncoding = isr.getEncoding();
+System.out.println("encoding "+defaultEncoding);
             toProc = new BufferedWriter(new OutputStreamWriter(extProc.getOutputStream(),"UTF8"));
             /*  try {
                   UIManager.setLookAndFeel(
