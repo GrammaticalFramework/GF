@@ -1,6 +1,6 @@
 %define name GF
 %define version 2.0
-%define release 0.pre1
+%define release 1
 
 Name: %{name}
 Summary: Grammatical Framework
