@@ -54,6 +54,7 @@ data Command =
  | CParse
  | CTranslate Language Language
  | CGenerateRandom Int
+ | CGenerateTrees Int
  | CPutTerm
  | CWrapTerm Ident
  | CMorphoAnalyse
@@ -187,6 +188,8 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
       _ -> do
         ts <- randomTreesIO opts gro (optIntOrN opts flagNumber n)
         returnArg (ATrms ts) sa
+  CGenerateTrees n -> returnArg (ATrms $ generateTrees opts gro n) sa
+
 
   CPutTerm -> changeArg (opTT2CommandArg (optTermCommand opts gro) . s2t) sa
 -----  CWrapTerm f -> changeArg (opTT2CommandArg (return . wrapByFun opts gro f)) sa

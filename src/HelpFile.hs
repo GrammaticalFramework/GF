@@ -172,8 +172,15 @@ txtHelpFile =
   "\n  flags:" ++
   "\n      -cat     generate in this category" ++
   "\n      -lang    use the abstract syntax of this grammar" ++
-  "\n      -number  generate this number of trees" ++
+  "\n      -number  generate this number of trees (not impl. with Tree argument)" ++
   "\n      -depth   use this number of search steps at most" ++
+  "\n" ++
+  "\ngt, generate_trees: gt Int" ++
+  "\n      Generates all trees up to the given depth." ++
+  "\n  flags:" ++
+  "\n      -cat     generate in this category" ++
+  "\n      -lang    use the abstract syntax of this grammar" ++
+  "\n      -number  generate (at most) this number of trees" ++
   "\n" ++
   "\nma, morphologically_analyse: ma String" ++
   "\n      Runs morphological analysis on each word in String and displays" ++
