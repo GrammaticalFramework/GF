@@ -46,15 +46,13 @@ Procedure for making a GF release:
     e.g. banded.medic.chalmers.se):
 
    $ cd src
-   $ ./configure --host=i386-pc-linux-gnu
-   $ make binary-dist
+   $ ./configure --host=i386-pc-linux-gnu && make binary-dist
 
-12. Build a generic binary sparc/solaris package (should be done on a Solaris box,
-    e.g. remote1.cs.chalmers.se):
+12. Build a generic binary sparc/solaris package (should be done 
+    on a Solaris box, e.g. remote1.cs.chalmers.se):
 
    $ cd src
-   $ ./configure --host=sparc-sun-solaris2
-   $ make binary-dist
+   $ ./configure --host=sparc-sun-solaris2 && make binary-dist
 
 13. Build a Mac OS X package:
 

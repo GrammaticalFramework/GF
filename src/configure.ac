@@ -4,7 +4,7 @@ AC_INIT([GF],[2.0],[aarne@cs.chalmers.se],[GF])
 
 AC_PREREQ(2.53)
 
-AC_REVISION($Revision: 1.5 $)
+AC_REVISION($Revision: 1.6 $)
 
 AC_CONFIG_FILES([config.mk jgf])
 
@@ -52,6 +52,19 @@ AC_ARG_WITH(jar,
   [AC_PATH_PROG(JAR,jar)])
 
 AC_SUBST(JAR)
+
+dnl ***********************************************
+dnl java
+dnl ***********************************************
+
+AC_ARG_WITH(java,
+  AC_HELP_STRING([--with-java=<java command>],
+               [Use a different command instead of
+                'java' for the Java Virtual Machine.]),
+  [AC_CHECK_FILE("$withval",JAVA="$withval",[AC_PATH_PROG(JAVA,"$withval")])],
+  [AC_PATH_PROG(JAVA,java)])
+
+AC_SUBST(JAVA)
 
 dnl ***********************************************
 dnl Other programs
