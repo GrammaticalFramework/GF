@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:45 $ 
+-- > CVS $Date: 2005/03/21 22:40:06 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Revision: 1.8 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -17,9 +17,9 @@
 module TransformCFG (makeNice, CFRule_) where
 
 import Ident
-import GF.Conversion.CFGrammar
-import GF.Parsing.Parser (Symbol(..))
-import GF.Conversion.GrammarTypes
+import GF.Parsing.CFGrammar
+import GF.Parsing.Utilities (Symbol(..))
+import GF.Parsing.GrammarTypes
 import GF.Printing.PrintParser
 
 import Data.FiniteMap

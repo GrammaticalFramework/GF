@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 13:54:24 $ 
+-- > CVS $Date: 2005/03/21 22:40:03 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.39 $
+-- > CVS $Revision: 1.40 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -36,7 +36,7 @@ import Arch (ModTime)
 
 -- peb 25/5-04
 -- import CFtoCFG
-import qualified GF.Conversion.ConvertGrammar as Cnv
+import qualified GF.Parsing.ConvertGrammar as Cnv
 
 import List (nub,nubBy)
 
