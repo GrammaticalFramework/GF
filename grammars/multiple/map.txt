@@ -1,0 +1,32 @@
+Using multiple inheritance in GF. AR 15/9/2004.
+
+The following diagrams show inheritance between abstract syntaxes in two simple systems.
+
+                   TopCity
+                  /   |    \
+                 /    |     \
+      SystemCity   UserCity  Top
+        /      \   /     \
+  System       City      User
+
+
+                   TopMath
+                  /   |    \
+                 /    |     \
+      SystemMath   UserMath  Top
+        /      \   /     \
+  System       Math      User
+
+
+Idea of each module: 
+
+  User            -- User's moves on any domain
+  System          -- System's moves on any domain
+  Top             -- grammar covering both kinds of moves
+  X = Math, City  -- possible domains
+  UserX           -- User's domain specific moves
+  SystemX         -- System's domain specific moves
+  TopX            -- all moves on the domain X
+
+In parallel to the abstract syntax hierarchies, we have of course
+hierarchies of concrete syntaxes for any language; this directory contains Eng.

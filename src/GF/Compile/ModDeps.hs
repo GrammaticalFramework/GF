@@ -65,9 +65,7 @@ moduleDeps ms = mapM deps ms where
       t -> chDep (IdentM c t) (extends m) t (opens m) t
 
   chDep it es ety os oty = do
-    ests <- case es of
-      Just e -> liftM singleton $ lookupModuleType gr e
-      _ -> return []
+    ests <- mapM (lookupModuleType gr) es
     testErr (all (compatMType ety) ests) "inappropriate extension module type" 
     osts <- mapM (lookupModuleType gr . openedModule) os
     testErr (all (compatOType oty) osts) "inappropriate open module type"
@@ -75,7 +73,7 @@ moduleDeps ms = mapM deps ms where
                IdentM _ (MTConcrete a) -> [IdentM a MTAbstract]
                _ -> [] ---- 
     return (it, ab ++
-                [IdentM e ety | Just e <- [es]] ++ 
+                [IdentM e ety | e <- es] ++ 
                 [IdentM (openedModule o) oty | o <- os])
 
   -- check for superficial compatibility, not submodule relation etc: what can be extended
@@ -114,7 +112,7 @@ requiredCanModules :: (Eq i, Show i) => MGrammar i f a -> i -> [i]
 requiredCanModules gr = nub . iterFix (concatMap more) . singleton where
   more i = errVal [] $ do
     m <- lookupModMod gr i
-    return $ maybe [] return (extends m) ++ map openedModule (opens m)
+    return $ extends m ++ map openedModule (opens m)
 
 
 

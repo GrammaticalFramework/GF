@@ -23,7 +23,7 @@ data ModType =
   deriving (Eq,Ord,Show)
 
 data Extend =
-   Ext Ident
+   Ext [Ident]
  | NoExt
   deriving (Eq,Ord,Show)
 

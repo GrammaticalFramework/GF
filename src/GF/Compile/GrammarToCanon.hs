@@ -39,7 +39,7 @@ redModInfo (c,info) = do
   info' <- case info of
     ModMod m -> do
       let isIncompl = not $ isCompleteModule m
-      (e,os) <- if isIncompl then return (Nothing,[]) else redExtOpen m ----
+      (e,os) <- if isIncompl then return ([],[]) else redExtOpen m ----
       flags <- mapM redFlag $ flags m 
       (a,mt) <- case mtype m of
          MTConcrete a -> do
@@ -61,8 +61,7 @@ redModInfo (c,info) = do
  where
    redExtOpen m = do
      e' <- case extends m of
-       Just e -> liftM Just $ redIdent e
-       _ -> return Nothing
+       es -> mapM redIdent es
      os' <- mapM (\o -> case o of 
               OQualif q _ i -> liftM (OSimple q) (redIdent i)
               _ -> prtBad "cannot translate unqualified open in" c) $ opens m

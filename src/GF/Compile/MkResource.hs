@@ -13,7 +13,7 @@ import Monad
 -- extracting resource r from abstract + concrete syntax
 -- AR 21/8/2002 -- 22/6/2003 for GF with modules
 
-makeReuse :: SourceGrammar -> Ident -> Maybe Ident -> 
+makeReuse :: SourceGrammar -> Ident -> [Ident] -> 
              MReuseType Ident -> Err SourceRes
 makeReuse gr r me mrc = do
   flags <- return [] --- no flags are passed: they would not make sense
@@ -59,7 +59,7 @@ makeReuse gr r me mrc = do
 -- the second Boolean indicates if the definition needs be given
 
 mkResDefs :: Bool -> Bool -> 
-             SourceGrammar -> Ident -> Ident -> Maybe Ident -> Maybe Ident -> 
+             SourceGrammar -> Ident -> Ident -> [Ident] -> [Ident] -> 
              BinTree (Ident,Info) -> BinTree (Ident,Info) -> 
              Err (BinTree (Ident,Info))
 mkResDefs hasT isC gr r a mext maext abs cnc = mapMTree (mkOne a maext) abs where
@@ -101,7 +101,7 @@ mkResDefs hasT isC gr r a mext maext abs cnc = mapMTree (mkOne a maext) abs wher
   -- type constant qualifications changed from abstract to resource
   redirTyp always a mae ty = case ty of
     Q _ c | always -> return $ Q r c
-    Q n c | n == a || Just n == mae -> return $ Q r c
+    Q n c | n == a || [n] == mae -> return $ Q r c ---- FIX for non-singleton exts
     _ -> composOp (redirTyp always a mae) ty
 
 lockRecType :: Ident -> Type -> Err Type

@@ -33,8 +33,8 @@ canon2grammar (Gr modules) = M.MGrammar $ map mod2info modules where
             MTCnc a x -> (a,M.MTConcrete x)
             MTTrans a x y -> (a,M.MTTransfer (M.oSimple x) (M.oSimple y))
       in (a,M.ModMod (M.Module mt' M.MSComplete flags (ee e) (oo os) defs'))
-  ee (Ext m) = Just m
-  ee _ = Nothing
+  ee (Ext m) = m
+  ee _ = []
   oo (Opens ms) = map M.oSimple ms
   oo _ = []
 
@@ -52,7 +52,7 @@ info2mod m = case m of
       in
         Mod mt' (gfcE me) (gfcO os) flags defs'
  where
-  gfcE = maybe NoExt Ext
+  gfcE = ifNull NoExt Ext
   gfcO os = if null os then NoOpens else Opens [m | M.OSimple _ m <- os]
 
 

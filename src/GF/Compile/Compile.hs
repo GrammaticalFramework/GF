@@ -10,7 +10,7 @@ import Modules
 import ReadFiles
 import ShellState
 import MkResource
-import MkUnion
+---- import MkUnion
 
 -- the main compiler passes
 import GetGrammar
@@ -202,9 +202,12 @@ makeSourceModule opts env@(k,gr,can) mo@(i,mi) = case mi of
           mos = modules gr
       --- putp "  type checking reused" $ ioeErr $ showCheckModule mos mo2
       return $ (k,mo2)
+{- ---- obsolete
     MTUnion ty imps -> do
       mo' <- ioeErr $ makeUnion gr i ty imps
       compileSourceModule opts env mo'
+-}
+
     _ -> compileSourceModule opts env mo
   _ -> compileSourceModule opts env mo
  where

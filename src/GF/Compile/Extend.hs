@@ -17,21 +17,11 @@ import Monad
 
 extendModule :: [SourceModule] -> SourceModule -> Err SourceModule
 extendModule ms (name,mod) = case mod of
-  ModMod (Module mt st fs me ops js) -> do
-
-{- --- building the {s : Str} lincat from js0
-    js  <- case mt of
-      MTConcrete a -> do
-        ModMod ma <- lookupModule (MGrammar ms) a
-        let cats = [c | (c,AbsCat _ _) <- tree2list $ jments ma]
-            jscs = [(c,CncCat (yes defLinType) nope nope) | c <- cats]
-        return $ updatesTreeNondestr jscs js0
-      _ -> return js0
--}
-
-    case me of
-      -- if the module is an extension of another one...
-      Just n -> do
+  ModMod m -> do
+    mod' <- foldM extOne m (extends m) 
+    return (name,ModMod mod') 
+ where
+   extOne mod@(Module mt st fs es ops js) n = do
         (m0,isCompl) <- do
           m <- lookupModMod  (MGrammar ms) n
 
@@ -44,11 +34,8 @@ extendModule ms (name,mod) = case mod of
         js1 <- extendMod isCompl n (jments m0) js
 
         -- if incomplete, throw away extension information
-        let me' = if isCompl then me else Nothing 
-        return $ (name,ModMod (Module mt st fs me' ops js1))
-
-      -- if the module is not an extension, just return it
-      _ -> return (name,mod)
+        let me' = if isCompl then es else (filter (/=n) es) 
+        return $ Module mt st fs me' ops js1
 
 -- When extending a complete module: new information is inserted,
 -- and the process is interrupted if unification fails.
@@ -93,6 +80,12 @@ extendAnyInfo isc n i j = errIn ("building extension for" +++ prt n) $ case (i,j
     liftM2 (CncFun m) (updn isc n mt1 mt2) (updn isc n md1 md2)
 
 ----  (AnyInd _ _, ResOper _ _) -> return j ----
+
+  (AnyInd b1 m1, AnyInd b2 m2) -> do
+    testErr (b1 == b2) "inconsistent indirection status"
+    testErr (m1 == m2) $ 
+      "different sources of indirection: " +++ show m1 +++ show m2
+    return i
 
   _ -> Bad $ "cannot unify information in" ++++ show i ++++ "and" ++++ show j
 

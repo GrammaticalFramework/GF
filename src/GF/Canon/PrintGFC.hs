@@ -117,7 +117,7 @@ instance Print ModType where
 
 instance Print Extend where
   prt i e = case e of
-   Ext id -> prPrec i 0 (concatD [prt 0 id , doc (showString "**")])
+   Ext ids -> prPrec i 0 (concatD [prt 0 ids , doc (showString "**")])
    NoExt  -> prPrec i 0 (concatD [])
 
 

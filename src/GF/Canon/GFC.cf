@@ -16,7 +16,7 @@ MTTrans. ModType ::= "transfer" Ident ":" Ident "->" Ident ;
 
 separator Module "" ;
 
-Ext.   Extend ::= Ident "**" ;
+Ext.   Extend ::= [Ident] "**" ;
 NoExt. Extend ::= ;
 
 Opens.   Open ::= "open" [Ident] "in" ;
