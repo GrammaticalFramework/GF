@@ -237,7 +237,7 @@ oper
   apReg = \s -> AdjP1 (mkAdj1 s) ;
 
   aGen : Str -> AdjDeg = \s -> case last s of {
-    "y" => mkAdjDeg s (init s ++ "ier") (init s + "iest") ;
+    "y" => mkAdjDeg s (init s + "ier") (init s + "iest") ;
     "e" => mkAdjDeg s (s + "r") (s + "st") ;
     _   => aReg s
     } ;

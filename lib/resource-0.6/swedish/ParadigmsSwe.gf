@@ -185,6 +185,17 @@ oper
   v3Dir    : V -> Str -> V3 ;          -- ge,_,till
   v3DirDir : V -> V3 ;                 -- ge,_,_
 
+-- Sentence complement verbs.
+
+  mkVS     : V -> VS ;                 -- säga (att ...)
+
+-- Verb phrase complement verbs.
+
+  vvInf    : V -> VV ;                 -- orka (spela)
+  vvAtt    : V -> VV ;                 -- gilla (att spela)
+  vvBoth   : V -> VV ;                 -- försöka (spela | att spela)
+  
+
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
@@ -324,5 +335,10 @@ oper
   mkV3 x y z = mkDitransVerb x y z ** {lock_V3 = <>} ;
   v3Dir x y = mkV3 x [] y ;
   v3DirDir x = v3Dir x [] ;
+
+  mkVS v  = v ** {lock_VS = <>} ;
+  vvInf v = v ** {isAux = True ; lock_VV = <>} ;
+  vvAtt v = v ** {isAux = False ; lock_VV = <>} ;
+  vvBoth v = v ** {isAux = variants {False ; True} ; lock_VV = <>} ;
 
 } ;
