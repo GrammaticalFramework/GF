@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:38 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.17 $
+-- > CVS $Date: 2005/04/04 15:50:27 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.18 $
 --
 -- From internal source syntax to BNFC-generated (used for printing).
 -----------------------------------------------------------------------------
@@ -145,6 +145,8 @@ trt trm = case trm of
     Q t l -> P.EQCons (tri t) (tri l)
     QC t l -> P.EQConstr (tri t) (tri l)
     TSh (TComp ty) cc -> P.ETTable (trt ty) (map trCases cc)
+    TSh (TTyped ty) cc -> P.ETTable (trt ty) (map trCases cc)
+    TSh (TWild ty) cc -> P.ETTable (trt ty) (map trCases cc)
     T (TTyped ty) cc -> P.ETTable (trt ty) (map trCase cc)
     T (TComp ty) cc -> P.ETTable (trt ty) (map trCase cc)
     T (TWild ty) cc -> P.ETTable (trt ty) (map trCase cc)

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:39 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.10 $
+-- > CVS $Date: 2005/04/04 15:50:27 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.11 $
 --
 -- lexers = tokenizers, to prepare input for GF grammars. AR 4\/1\/2002.
 -- an entry for each is included in 'Custom.customTokenizer'
@@ -38,15 +38,23 @@ tokWords :: String -> [CFTok]
 tokWords = map tS . words
 
 tokLits :: String -> [CFTok]
-tokLits = map mkCFTok . words
+tokLits = map mkCFTok . mergeStr . words where
+  mergeStr ss = case ss of
+    w@(c:_):rest | elem c "\'\"" -> getStr [w] rest
+    w      :rest                 -> w : mergeStr rest
+    [] -> []
+  getStr v ss = case ss of
+    w@(_:_):rest | elem (last w) "\'\"" -> (unwords (reverse (w:v))) : mergeStr rest
+    w      :rest                 -> getStr (w:v) rest
+    [] -> reverse v
 
 tokVars :: String -> [CFTok]
 tokVars = map mkCFTokVar . words
 
 mkCFTok :: String -> CFTok
 mkCFTok s = case s of
-  '"' :cs@(_:_) -> tL $ init cs
-  '\'':cs@(_:_) -> tL $ init cs --- 's Gravenhage
+  '"' :cs@(_:_) | last cs == '"'  -> tL $ init cs
+  '\'':cs@(_:_) | last cs == '\'' -> tL $ init cs --- 's Gravenhage
   _:_ | all isDigit s -> tI s
   _ -> tS s
 
@@ -152,7 +160,7 @@ unknown2string isKnown = map mkOne where
   mkOne t@(TS s) 
     | isKnown s = t
     | all isDigit s = tI s 
-    | otherwise = tV s
+    | otherwise = tL s
   mkOne t@(TC s) = if isKnown s then t else mkTL s
   mkOne t        = t
 
@@ -163,7 +171,6 @@ unknown2var isKnown = map mkOne where
     | isKnown s = t
     | all isDigit s = tI s 
     | otherwise = tV s
-  mkOne t@(TS s) = if isKnown s then t else tV s
   mkOne t@(TC s) = if isKnown s then t else tV s
   mkOne t        = t
 
