@@ -240,7 +240,7 @@ param VF =
    VFin  GenNum Person | VImper Number Person | VInf | VSubj GenNum;
 
 oper 
-  Verb : Type = {s : VF => Str ; t: Tense ; a : Aspect ; v: Voice} ;
+  Verb : Type = {s : VF => Str ; t: Tense ; a : Aspect ; w: Voice} ;
 
   extVerb : Verbum -> Voice -> Tense -> Verb = \aller, vox, t -> 
     { s = table { 
@@ -251,7 +251,7 @@ oper
        VImper n p => aller.s ! VFORM vox (VIMP n p) ;
        VInf => aller.s ! VFORM vox VINF ;
        VSubj gn => aller.s ! VFORM vox (VSUB gn)
-       }; t = t ; a = aller.asp ; v = vox } ;
+       }; t = t ; a = aller.asp ; w = vox } ;
 
 
 --3 Other open classes

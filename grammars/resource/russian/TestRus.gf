@@ -14,6 +14,14 @@ lin
   Small = malenkij ;
   Old = staruj ;
   Young = molodoj ;
+
+  --Connection = cnNoHum (nounReg "connection") ** {s2 = "from" ; s3 = "to"} ;  Fun2
+ -- American = adj1Malenkij "американск" ;
+ -- Finnish = adj1Malenkij "финск" ;
+ -- Married = adjInvar "замужем" ** {s2 = "за"; c = instructive} ;
+  --Give = mkDitransVerb (verbNoPart (mkVerb "give" "gave" "given")) [] [] ;  V3
+  --Prefer = mkDitransVerb (mkVerb "prefer" "preferred" "preferred")) [] "to" ; V3
+
   Man = muzhchina ;
   Woman = zhenchina ;
   Car = mashina ;
