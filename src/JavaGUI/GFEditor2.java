@@ -534,7 +534,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
             Process extProc = Runtime.getRuntime().exec(args[0]); 
             fromProc = new BufferedReader (new InputStreamReader(
                            extProc.getInputStream(),"UTF8"));
-            toProc = new BufferedWriter(new OutputStreamWriter(extProc.getOutputStream()));
+            toProc = new BufferedWriter(new OutputStreamWriter(extProc.getOutputStream(),"UTF8"));
             /*  try {
                   UIManager.setLookAndFeel(
                   //UIManager.getSystemLookAndFeelClassName() );         
