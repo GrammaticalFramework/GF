@@ -82,11 +82,19 @@ oper
 
 -- Then the regular and invariant patterns.
 
-  adjSolo : Str -> Adj = \solo -> let {sol = Predef.tk 1 solo} in
+  adjSolo : Str -> Adj = \solo -> 
+    let 
+      sol = Predef.tk 1 solo
+    in
     mkAdj solo (sol + "a") (sol + "i") (sol + "e") (sol + "amente") ;
 
-  adjTale : Str -> Adj = \tale -> let {tali = Predef.tk 1 tale + "i"} in
-    mkAdj tale tale tali tali (Predef.tk 1 tale + "mente") ;
+  adjTale : Str -> Adj = \tale -> 
+    let 
+      tal  = Predef.tk 1 tale ;
+      tali = tal + "i" ;
+      tala = if_then_Str (pbool2bool (Predef.occur (Predef.dp 1 tal) "lr")) tal tale
+    in
+    mkAdj tale tale tali tali (tala + "mente") ;
 
   adjBlu : Str -> Adj = \blu -> 
     mkAdj blu blu blu blu blu ; --- 
@@ -194,7 +202,7 @@ oper mkVerbPres : (_,_,_,_,_,_,_,_,_ : Str) -> VerbPres =
   \veng, viene, ven, venite, vengono, venga, vieni, venire, venuto -> 
   let 
     vien = Predef.tk 1 vieni ;
-    venut = (adjSolo (Predef.tk 1 venuto)).s
+    venut = (adjSolo venuto).s
   in
   {s = table {
      VFin Ind Sg P1 => veng + "o" ;
