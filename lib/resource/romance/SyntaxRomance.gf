@@ -594,6 +594,14 @@ oper
 
   reflPron : Number => Person => NPFormA => Str ;
 
+  reflPronNounPhrase : Gender -> Number -> Person -> NounPhrase = \g,n,p -> 
+    {s = reflPron ! n ! p ;
+     g = PGen g ;  -- needed in participle agreement
+     n = n ;
+     p = p ;
+     c = Clit1 ---- depends on person?
+    } ;
+
 ---- There is no adverbial form for the past participle.
 
   adjPastPart : Verb -> Adjective = \verb -> {

@@ -76,9 +76,6 @@ oper
       _ => (personPron Masc n p).s
     } ;
 
-  mkAdjReg : Str -> Bool -> Adjective = \adj,p ->
-    mkAdjective (adjGrand adj) p ;
-
   comparConj = elisQue ;
 
   mkAdjDegrReg : Str -> Bool -> AdjDegr = \adj,p ->

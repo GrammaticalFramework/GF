@@ -8,6 +8,10 @@ oper
     PresCl (insertObject (mkSatsObject s v o) v.c3 v.s3 r) ;
   PresVasV2 : V -> NP -> NP -> Phr = \ v -> PresV2 (dirV2 v) ;
 
+  PresReflV : V -> NP -> Phr = \v,s -> 
+    PresCl (insertObject (mkSats s v) accusative.p1 [] 
+      (reflPronNounPhrase (pgen2gen s.g) s.n s.p)) ;
+
   PresCl : Sats -> Phr = \c -> 
     {s = (UseCl (PosTP TPresent ASimul) 
             (sats2clause c ** {lock_Cl = <>})

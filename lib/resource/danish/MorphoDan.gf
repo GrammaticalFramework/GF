@@ -226,6 +226,8 @@ oper mkTal : Str -> Str -> Str -> {s : DForm => Str} =
   \to, tolv, tyve -> 
   {s = table {ental => to ; ton => tolv ; tiotal => tyve}} ;
 oper regTal : Str ->  {s : DForm => Str} = \fem -> mkTal fem (fem + "ton") (fem + "tio") ;
+  numPl : Str -> {s : Gender => Str ; n : Number} = \n ->
+    {s = \\_ => n ; n = Pl} ;
 
 
 }
