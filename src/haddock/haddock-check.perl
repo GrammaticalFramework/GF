@@ -1,5 +1,11 @@
 
-# checking that a file is haddocky
+# checking that a file is haddocky:
+#   - checking if it has an export list
+#   - checking that all exported functions have type signatures
+#   - checking that the module header is OK
+
+# changes on files:
+#   - transforming hard space to ordinary space
 
 # limitations:
 #   - does not check that type aliases are put in the export list
@@ -8,6 +14,17 @@
 $operSym = qr/[\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~\:]+/;
 $funSym = qr/[a-z]\w*\'*/;
 
+sub check_headerline {
+  my ($title, $regexp) = @_;
+  if (s/^-- $title *: +(.+?) *\n//s) {
+    $name = $1;
+    print "   > Incorrect ".lcfirst $title.": $name\n" unless $name =~ $regexp;
+  } else {
+    print "   > Header missing".lcfirst $title."\n";
+  }
+}
+
+
 for $file (@ARGV) {
   $file =~ s/\.hs//;
 
@@ -15,7 +32,22 @@ for $file (@ARGV) {
   $_ = join "", <F>;
   close F;
 
-  # print "- $file\n";
+  print "-- $file\n";
+
+  # the module header
+  s/^(--+\s*\n)+//s;
+  unless (s/^-- \|\s*\n//s) {
+    print "   > Incorrect module header\n";
+  } else {
+    &check_headerline("Module", qr/^[A-Z]\w*$/);
+    &check_headerline("Maintainer", qr/^[\wåäöÅÄÖüÜ\s\@\.]+$/);
+    &check_headerline("Stability", qr/.*/);
+    &check_headerline("Portability", qr/.*/);
+    s/^(--+\s*\n)+//s;
+    print "   > Missing CVS information\n" unless s/^(-- > CVS +\$.*?\$ *\n)+//s;
+    s/^(--+\s*\n)+//s;
+    print "   > Missing module description\n" unless /^-- +[^\(]/;
+  }
 
   # removing comments
   s/\{-.*?-\}//gs;
@@ -41,25 +73,25 @@ for $file (@ARGV) {
       $exportlist =~ s/\Q$function\E//;
     }
 
-    # type aliases
-    while (/\ntype\s+(\w+)/gs) {
-      $type = $1;
-      next if $exportlist =~ /\b$type\b/;
-      printf "%-30s | Type alias not in export list: %s\n", $file, $type;
-    }
-
     # exported functions without type signatures
     while ($exportlist =~ /(\b$funSym\b|\($operSym\))/gs) {
       $function = $1;
       # print "+ $function\n";
       next if $function =~ /^[A-Z]/;
       next if $function =~ /^\((\.\.|\:\:?|\=|\\|\||\<\-|\-\>|\@|\~|\=\>)\)$/;
-      printf "%-30s | No type signature for function: %s\n", $file, $function;
+      print "   > No type signature for function: $function\n";
     }
+
+    # type aliases
+    # while (/\ntype\s+(\w+)/gs) {
+    #   $type = $1;
+    #   next if $exportlist =~ /\b$type\b/;
+    #   printf "%-30s | Type alias not in export list: %s\n", $file, $type;
+    # }
 
   } else {
     # modules without export lists
-    printf "%-30s | No export list\n", $file;
+    print "   > No export list\n";
   }
 
 }

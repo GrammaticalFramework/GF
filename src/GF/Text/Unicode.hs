@@ -31,6 +31,7 @@ import ExtraDiacritics (mkExtraDiacritics)
 
 import Char
 
+mkUnicode :: String -> String
 mkUnicode s = case s of
   '/':'/':cs -> treat [] mkGreek   unic ++ mkUnicode rest
   '/':'+':cs -> mkHebrew  unic ++ mkUnicode rest

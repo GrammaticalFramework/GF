@@ -102,6 +102,7 @@ isZeroTok t = case t of
 strTok :: Ss -> [(Ss,[String])] -> Str
 strTok ds vs = Str [TN ds vs]
 
+prStr :: Str -> String
 prStr = prQuotedString . sstr
 
 plusStr :: Str -> Str -> Str

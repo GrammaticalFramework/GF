@@ -50,9 +50,11 @@ prCFFun' profs (CFFun (t, p)) = prt_ t ++ pp p where
 prCFCat :: CFCat -> String
 prCFCat (CFCat (c,l)) = prt_ c ++ "-" ++ prt_ l ----
 
+prCFItem :: CFItem -> String
 prCFItem (CFNonterm c) = prCFCat c
 prCFItem (CFTerm a) = prRegExp a
 
+prRegExp :: RegExp -> String
 prRegExp (RegAlts tt) = case tt of
   [t] -> prQuotedString t
   _ -> prParenth (prTList " | " (map prQuotedString tt))
