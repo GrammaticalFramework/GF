@@ -6,6 +6,9 @@ cat
   CN ;
 
 fun
+  
+  -- Actions with an object
+
   Drink : NP -> NP -> S ;
   Eat : NP -> NP -> S ;
   Bite : NP -> NP -> S ;
@@ -34,6 +37,8 @@ fun
   Throw : NP -> NP -> S ;
   Tie : NP -> NP -> S ;
   Count : NP -> NP -> S ;
+
+  -- Actions without an object
 
   Spit : NP -> S ;
   Vomit : NP -> S ;
@@ -67,6 +72,8 @@ fun
 
 --  Give : NP -> NP -> NP -> S ;
 
+  -- Determiners
+
   The : CN -> NP ;
   A : CN -> NP ;
 --  This : CN -> NP ;
@@ -77,6 +84,12 @@ fun
   Some_Many : CN -> NP ;
   Few : CN -> NP ;
   Other : CN -> NP ;
+
+  One : CN -> NP ;
+  Two : CN -> NP ;
+  Three : CN -> NP ;
+  Four : CN -> NP ;
+  Five : CN -> NP ;
 
   -- Pronouns
  
