@@ -67,7 +67,8 @@ concrete StructuralSwe of Structural =
   OtherwiseAdv = ss "annars" ;
   ThereforeAdv = ss "därför" ;
 
-  EverybodyNP  = nameNounPhrase (mkProperName "alleman" Utr Masc) ;
+  EverybodyNP  = let alla = table {Nom => "alla" ; Gen => "allas"} in
+                   {s = \\c => alla ! npCase c ; g = Utr ; n = Pl} ;
   SomebodyNP   = nameNounPhrase (mkProperName "någon" Utr Masc) ;
   NobodyNP     = nameNounPhrase (mkProperName "ingen" Utr Masc) ;
   EverythingNP = nameNounPhrase (mkProperName "allting" Neutr NoMasc) ; 

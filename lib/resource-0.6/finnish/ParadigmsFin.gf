@@ -7,7 +7,7 @@
 -- expressions of basic categories: nouns, adjectives, verbs.
 -- 
 -- Closed categories (determiners, pronouns, conjunctions) are
--- accessed through the resource syntax API, $resource.Abs.gf$. 
+-- accessed through the resource syntax API, $Structural.gf$. 
 --
 -- The main difference with $morpho.Fin.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
@@ -19,7 +19,7 @@
 --
 -- The following modules are presupposed:
 
-resource ParadigmsFin = open (Predef=Predef), Prelude, SyntaxFin, Finnish in {
+resource ParadigmsFin = open (Predef=Predef), Prelude, SyntaxFin, ResourceFin in {
 
 --2 Parameters 
 --
@@ -241,7 +241,7 @@ oper
   fGen = \n -> mkFun n genitive ;
   mkPN n = mkProperName n ** {lock_PN = <>} ;
 
-  mkAdj1 = \x -> {s = x.s ; lock_Adj1 = <>} ;
+  mkAdj1 = \x -> noun2adj x ** {lock_Adj1 = <>} ;
   mkAdj2 = \x,c -> mkAdj1 x ** {c = NPCase c ; lock_Adj2 = <>} ;
   mkAdjDeg x y z = regAdjDegr x y z ** {lock_AdjDeg = <>} ;
 

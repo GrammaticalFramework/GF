@@ -566,6 +566,46 @@ getHarmony : Str -> Str = \u ->
         }
       } ;
 
+  mikaanPron : Number => Case => Str = \\n,c =>
+    case <n,c> of {
+        <Sg,Nom> => "mik‰‰n" ;
+        <_,Part> => "mit‰‰n" ;
+        <Sg,Gen> => "mink‰‰n" ;
+        <Pl,Nom> => "mitk‰‰n" ;
+        <Pl,Gen> => "mittenk‰‰n" ;
+        <_,Ess>  => "min‰‰n" ;
+        <_,Iness> => "miss‰‰n" ;
+        <_,Elat> => "mist‰‰n" ;
+        <_,Adess> => "mill‰‰n" ;
+        <_,Ablat> => "milt‰‰n" ;
+        _   => mikaInt ! n ! c + "k‰‰n"
+       } ; 
+
+  kukaanPron : Number => Case => Str =
+    table {
+      Sg => table {
+        Nom => "kukaan" ;
+        Part => "ket‰‰n" ;
+        Ess => "ken‰‰n" ;
+        Iness => "kess‰‰n" ;
+        Elat  => "kest‰‰n" ;
+        Illat => "kehenk‰‰n" ;
+        Adess => "kell‰‰n" ;
+        Ablat => "kelt‰‰n" ;
+        c   => kukaInt ! Sg ! c + "k‰‰n"
+       } ; 
+      Pl => table {
+        Nom => "ketk‰‰n" ;
+        Part => "keit‰‰n" ;
+        Ess => "kein‰‰n" ;
+        Iness => "keiss‰‰n" ;
+        Elat => "keist‰‰n" ;
+        Adess => "keill‰‰n" ;
+        Ablat => "keilt‰‰n" ;
+        c   => kukaInt ! Pl ! c + "k‰‰n"
+        }
+      } ;
+
   jokuPron : Number => Case => Str =
     let 
       ku = sPuu "ku" ;
