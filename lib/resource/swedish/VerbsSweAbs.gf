@@ -88,6 +88,7 @@ abstract VerbsSweAbs = Categories ** {
   inskriva_V : V ;
   intaga_V : V ;
   känna_V : V ;
+  klämma_V : V ;
   kliva_V : V ;
   klyva_V : V ;
   knipa_V : V ;
@@ -98,6 +99,7 @@ abstract VerbsSweAbs = Categories ** {
   kvida_V : V ;
   låta_V : V ;
   leva_V : V ;
+  ligga_V : V ;
   ljuda_V : V ;
   ljuga_V : V ;
   ljuta_V : V ;
@@ -169,6 +171,7 @@ abstract VerbsSweAbs = Categories ** {
   utesluta_V : V ;
   utskriva_V : V ;
   vända_V : V ;
+  veta_V : V ;
   vina_V : V ;
   vinna_V : V ;
   vrida_V : V ;
