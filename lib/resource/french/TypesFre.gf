@@ -141,7 +141,9 @@ oper
 
 -- Verbs: conversion from full verbs to present-tense verbs.
 
-  verbPres = \aller,a -> {s = table { 
+  verbPres = \aller,a -> {s = vvf aller ; aux = a} ;
+
+  vvf : (VForm => Str) -> (VF => Str) = \aller -> table { 
     VInfin       => aller ! Inf ;
     VFin (VPres   Ind) n p => aller ! Indic Pres n p ; 
     VFin (VPres   Sub) n p => aller ! Subjo SPres n p ;
@@ -153,8 +155,6 @@ oper
     VImper np    => aller ! Imper np ;
     VPart g n    => aller ! Part (PPasse g n)
     } ;
-  aux = a
-  } ;
 
 -- The full conjunction is a table on $VForm$:
 

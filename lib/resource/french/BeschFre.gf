@@ -1,13 +1,12 @@
 resource BeschFre = open Prelude, TypesFre, MorphoFre in {
 
-oper VerbeN = {s : VForm => Str} ;
-oper mkNV : Verbe -> VerbeN = \ve -> 
-  {s = ve} ;
+oper VerbeN = {s : VF => Str} ;
+oper mkNV : Verbe -> VerbeN = \ve -> {s = vvf ve} ;
 
 oper conj : Str -> Verbe = conj1aimer ;  --- temp. default
 
 oper v_nancy100inf : Str -> VerbeN = \ve -> {s = table {
-  Inf => ve ;
+  VInfin => ve ;
   _ => nonExist
   }
 } ;
