@@ -325,7 +325,7 @@ mkRefineMenuAll env sstate =
     _ -> b
   ifShort = ifOpt sizeDisplay "short"
   ifTyped t = ifOpt typeDisplay "typed" t ""
-  prOrLinExp t = prt_ t ---- 
+  prOrLinExp t = err (const $ prt_ t) prOrLinTree $ annotateInState cgr t state
   prOrLinRef t = case t of
     G.Q m f  ->  printname env sstate (m,f) 
     G.QC m f ->  printname env sstate (m,f) 
