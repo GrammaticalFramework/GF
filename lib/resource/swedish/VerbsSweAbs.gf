@@ -39,6 +39,7 @@ abstract VerbsSweAbs = Categories ** {
   brinna_V : V ;
   brista_V : V ;
   bryta_V : V ;
+  dö_V : V ;
   draga_V : V ;
   dricka_V : V ;
   driva_V : V ;
@@ -75,6 +76,7 @@ abstract VerbsSweAbs = Categories ** {
   gnida_V : V ;
   gråta_V : V ;
   gripa_V : V ;
+  hålla_V : V ;
   hinna_V : V ;
   hugga_V : V ;
   iakttaga_V : V ;
@@ -87,7 +89,9 @@ abstract VerbsSweAbs = Categories ** {
   kliva_V : V ;
   knipa_V : V ;
   knyta_V : V ;
+  komma_V : V ;
   krypa_V : V ;
+  kunna_V : V ;
   kvida_V : V ;
   låta_V : V ;
   ljuda_V : V ;
@@ -117,6 +121,7 @@ abstract VerbsSweAbs = Categories ** {
   skrika_V : V ;
   skriva_V : V ;
   skryta_V : V ;
+  slå_V : V ;
   slinka_V : V ;
   slippa_V : V ;
   slita_V : V ;
