@@ -20,16 +20,29 @@ separator Integer ",";
 CatS. Symbol ::= Category;
 TermS. Symbol ::= String;
 
-separator Symbol "";
+-- separator Symbol "";
+[]. [Symbol] ::= "." ;
+(:[]). [Symbol] ::= Symbol ;
+(:). [Symbol] ::= Symbol [Symbol] ;
+
 
 Name. Name ::= [IdentParam] Category;
 terminator IdentParam "/";
 
-Category. Category ::= IdentParam "." Ident [Param] ;
+Category. Category ::= IdentParam "." Ident [Proj] ;
 
-IdentParam. IdentParam ::= Ident "{" [Param] "}" ;
+IdentParam. IdentParam ::= Ident "{" [Field] "}" ;
 
-Param. Param ::= "!" Ident ;
-separator Param "";
+Field. Field ::= "." KeyValue ;
+terminator Field ";" ;
 
+Proj. Proj ::= "!" Param ;
+separator Proj "" ;
 
+KeyValue. KeyValue ::= Ident "=" Param ;
+separator KeyValue ";" ;
+
+ParamSimple. Param ::= Ident ;
+ParamPatt. Param ::= Ident "(" [Param] ")" ;
+ParamRec. Param ::= "{" [KeyValue] "}" ;
+separator Param "," ;

@@ -15,7 +15,7 @@ $i = [$l $d _ ']          -- identifier character
 $u = [\0-\255]          -- universal: any character
 
 @rsyms =    -- reserved words consisting of special symbols
-   \; | \: | \. | \- \> | \[ | \] | \, | \/ | \{ | \} | \!
+   \; | \: | \. | \- \> | \[ | \] | \, | \/ | \{ | \} | \! | \= | \( | \)
 
 :-
 
