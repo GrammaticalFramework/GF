@@ -1,0 +1,127 @@
+\documentclass[12pt]{article}
+
+\usepackage{isolatin1}
+
+\setlength{\oddsidemargin}{0mm}
+%\setlength{\evensidemargin}{0mm}
+\setlength{\evensidemargin}{-2mm}
+\setlength{\topmargin}{-16mm}
+\setlength{\textheight}{240mm}
+\setlength{\textwidth}{158mm}
+
+%\setlength{\parskip}{2mm}
+%\setlength{\parindent}{0mm}
+
+\input{macros}
+
+\newcommand{\begit}{\begin{itemize}}
+\newcommand{\enit}{\end{itemize}}
+\newcommand{\newone}{} %%{\newpage}
+\newcommand{\heading}[1]{\subsection{#1}}
+\newcommand{\explanation}[1]{{\small #1}}
+\newcommand{\empha}[1]{{\em #1}}
+
+\newcommand{\nocolor}{} %% {\color[rgb]{0,0,0}}
+
+
+\title{{\bf Single-Source Language Definitions and Compilation as Linearization}}
+
+\author{Aarne Ranta \\
+  Department of Computing Science \\
+  Chalmers University of Technology and the University of Gothenburg\\
+  {\tt aarne@cs.chalmers.se}}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Introduction}
+
+In this paper, we will describe a compiler that translates a
+subset of C into JVM-like byte code. The compiler has a number of
+unusual, yet attractive features:
+\bequ
+The front end is defined by a grammar of C as its single source.
+
+The grammar defines both abstract and concrete syntax, and also
+semantic well-formedness (types, variable scopes).
+
+The back end is implemented by means of a grammar of JVM providing
+another concrete syntax to the abstract syntax of C.
+
+As a result of the way JVM is defined, only semantically well formed
+JVM programs are generated.
+
+The JVM grammar can also be used as a decompiler, which translates
+JVM code back into C code.
+
+The language has an interactive editor that also supports incremental
+compilation.
+\enqu
+The theoretical ideas making this kind of a compiler possible
+are familiar from various sources.
+The grammar that is
+powerful enough to enable a single-source language definition
+uses \empha{dependent types} and \empha{higher-order abstract syntax}
+in the same way as \empha{logical frameworks} \cite{harper,ALF,twelf}.
+The very idea of using a common abstract syntax for different 
+languages was clearly exposed in \cite{landin}. The view of
+code generation as linearization is a central aspect of
+the classic compiler textbook \cite{aho-ullman}. The use
+of the same grammar both for parsing and linearization
+is a guiding principle of unification-based linguistic grammar 
+formalisms \cite{pereira}. Interactive editors derived from
+grammars have been used in various programming and proof
+assistants \cite{teitelbaum-reps,metal,ALF}.
+
+Even though the different ideas are well-known, they are
+applied less in practive than in theory. In particular,
+we have not seen them used together to construct a complete
+compiler. In our view, putting these ideas together is
+a satisfactory approach to compiling, since a compiler written
+in this way is completele declarative and therefore easy to
+modify and to port. It is also self-documenting. since the
+human-readable grammar defines the syntax and static
+semantics that is actually used in the implementation.
+
+The tool that we have used for writing our compiler is GF, the
+\empha{Grammatical Framework} \cite{gf-jfp}. GF 
+is a grammar formalism designed to help building multilingual
+translation systems for natural languages and also
+between formal and natural languages. One goal of this work
+has been to investigate if GF is capable of implementing
+compilers using the ideas of single-source language definition
+and code generation as linearization. The working hypothesis
+was that it \textit{is} capable but inconvenient, and that,
+working out a complete example, we would find out what 
+should be done to extend GF into a compiler construction tool.
+
+The various shortcomings and their causes will be explained in 
+the relevant sections of this report. To summarize,
+\bequ
+The scoping conditions resulting from HOAS are slightly different
+from the standard ones of C.
+
+Our JVM syntax is forced to be slightly different from original.
+
+Using HOAS to encode bindings of functions is somewhat cumbersome.
+
+The C parser derived from the GF grammar does not recognize all
+valid programs.
+\enqu
+The first two shortcomings seem to us inherent to the techniques
+we use. The real JVM syntax, however, is easy to obtain by simple
+string processing from our one. The latter two shortcomings
+suggest that GF should be fine-tuned to give better support
+to compiler construction, which, after all is not an intended
+use of GF as it is now.
+
+
+
+
+\end{document}
+
+\begin{verbatim}
+\end{verbatim}
+
