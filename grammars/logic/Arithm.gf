@@ -44,7 +44,7 @@ def
               (LtNat one n) 
               (Univ Nat (\x -> Impl (Conj (LtNat one x) (Div n x)) (EqNat x n))) ;
 
---- data Elem = zero | succ ;
+---  data Elem = zero | succ ;
 
 fun ex1 : Text ;
 def ex1 = 
