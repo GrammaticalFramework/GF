@@ -293,8 +293,10 @@ opST2CommandArg f = err AError ATrms . f . prCommandArg
 
 opTS2CommandArg :: (Tree -> String) -> CommandArg -> CommandArg
 opTS2CommandArg f (ATrms ts) = AString $ unlines $ map f ts
-opTS2CommandArg _ _ = AError ("expected term")
+opTS2CommandArg _ (AError s) = AError ("expected term, but got error:" ++++ s)
+opTS2CommandArg _ a = AError ("expected term, but got:" ++++ prCommandArg a)
 
 opTT2CommandArg :: (Tree -> [Tree]) -> CommandArg -> CommandArg
 opTT2CommandArg f (ATrms ts) = ATrms $ concat $ map f ts
-opTT2CommandArg _ _ = AError ("expected term")
+opTT2CommandArg _ (AError s) = AError ("expected term, but got error:" ++++ s)
+opTT2CommandArg _ a = AError ("expected term, but got:" ++++ prCommandArg a)
