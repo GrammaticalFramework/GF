@@ -154,21 +154,24 @@ cat
 
 ---- next
 
-  V3A ;         -- paint the house red
-  V3VSubj ;     -- promise John to come
-  V3VObj ;      -- ask John to come
-  V3S ;         -- tell John that it is raining
+  V2A ;         -- paint the house red
+  V2V ;         -- promise John to come / ask John to come
+  V2S ;         -- tell John that it is raining
   VQ ;          -- ask who comes
-  V3Q ;         -- ask John who comes
+  V2Q ;         -- ask John who comes
   VA ;          -- look yellow
 
   V0 ;          -- (it) rains
 
   AS ;          -- (it is) important that he comes
+  A2S ;         -- (it is) important for me that he comes
   AV ;          -- difficult to play 
+  A2V ;         -- difficult for him to play 
 
 -- NB: it is difficult to play the sonata 
 -- vs. it (the sonata) is difficult to play
+
+--- also: John is easy (for you) to please vs. John is eager to please
 
   QS ;          -- question with fixed tense and polarity
   RS ;          -- relative clause with fixed tense and polarity

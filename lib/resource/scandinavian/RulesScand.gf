@@ -41,15 +41,23 @@ lin
 
   CNthatS = nounThatSentence ;
 
-   PredVV2 = transVerbVerb ;
-   AdjPart = adjPastPart ;
+  PredVV2 = transVerbVerb ;
+  AdjPart = adjPastPart ;
 
-   PredV3A = complDitransAdjVerb ;
-   PredV3VSubj = complDitransVerbVerb False ;
-   PredV3VObj = complDitransVerbVerb True ;
-   PredV3S = complDitransSentVerb ;
-   PredV3Q = complDitransQuestVerb ;
-   PredVA = complAdjVerb ;
+  PredV2A = complDitransAdjVerb ;
+  PredSubjV2V = complDitransVerbVerb False ;
+  PredObjV2V = complDitransVerbVerb True ;
+  PredV2S = complDitransSentVerb ;
+  PredV2Q = complDitransQuestVerb ;
+  PredVA = complAdjVerb ;
+
+  UseV2V x = x ;
+  UseV2S x = x ;
+  UseV2Q x = x ;
+  UseA2S x = x ;
+  UseA2V x = x ;
+
+ 
 
   UseCl tp cl = {s = \\o => tp.s ++ cl.s ! tp.b ! ClFinite tp.t tp.a o} ;
   UseVG tp = predVerbGroup tp.b tp.t tp.a ;
@@ -80,6 +88,13 @@ lin
   PredVQ = complQuestVerb ;
   PredVV = complVerbVerb ;
   VTrans = transAsVerb ;
+  PredV0 = predVerb0 ;
+
+  PredAS  = predAdjSent ;
+  PredA2S = predAdjSent2 ;
+  PredAV  = complVerbAdj ;
+  PredSubjA2V = complVerbAdj2 False ;
+  PredObjA2V = complVerbAdj2 True ;
 
   AdjAdv a = advPost (a.s ! adverbForm ! Nom) ;
   AdvPP p = p ;

@@ -57,10 +57,16 @@ lin
    Paint = extTransVerb (vNopart (vTala "mål")) [] ;
    Green = aFin "grön" ;
    Beg = extTransVerb (mkVerbPart "be" "ber" "be" "bad" "bett" "bedd" []) [] ** {s3 = "att"} ;
-   Promise  = extTransVerb (vNopart (vTala "lov")) [] ** {isAux = False} ;
-   Promise2 = extTransVerb (vNopart (vTala "lov")) [] ** {s3 = "att"} ;
+   Promise = extTransVerb (vNopart (vTala "lov")) [] ** {s3 = "att"} ;
    Wonder = extTransVerb (vNopart (vTala "undr")) [] ;
    Ask = extTransVerb (vNopart (vTala "fråg")) [] ;
    Tell = extTransVerb (vNopart (vTala "berätt")) [] ;
    Look = extTransVerb (mkVerbPart "se" "ser" "se" "såg" "sett" "sedd" "ut") [] ;
+
+   Try = extTransVerb (vNopart (vLeka "försök")) [] ** {s3 = "att"} ;
+   Important = extAdjective (aFin "viktig") ** {s2 = "för"} ;
+   Probable = extAdjective (aFin "sannolik") ;
+   Easy = extAdjective (aAbstrakt "lätt") ** {s2 = "för"} ;
+
+
 } ;

@@ -216,20 +216,32 @@ fun
 
 -- In these predications, the last argument gets its agreement
 -- features from the second, and cannot hence be made to produce
--- $V3A$/$V3S$.
+-- $V2A$/$V2S$.
 
-    PredV3A     : V3A     -> NP -> AP -> VG ;
-    PredV3VSubj : V3VSubj -> NP -> VG -> VG ;
+    PredV2A     : V2A -> NP -> AP -> VG ;
+    PredSubjV2V : V2V -> NP -> VG -> VG ;
 
 --- In these three it would be possible, but hardly useful...
 
-    PredV3VObj  : V3VObj  -> NP -> VG -> VG ;
-    PredV3S     : V3S     -> NP -> S  -> VG ;
-    PredV3Q     : V3Q     -> NP -> QS -> VG ;
+    PredObjV2V  : V2V  -> NP -> VG -> VG ;
+    PredV2S     : V2S  -> NP -> S  -> VG ;
+    PredV2Q     : V2Q  -> NP -> QS -> VG ;
 
+    PredAS  : AS  -> S  -> Cl ;
+    PredA2S : A2S -> NP -> AS ;
+    PredAV  : AV  -> VG -> VG ;
+    PredSubjA2V : A2V  -> NP -> VG -> VG ;
+    PredObjA2V  : A2V  -> NP -> VG -> VG ;
+    PredV0  : V0 -> Cl ;
 
     PredVQ  : VQ -> QS -> VG ;
     PredVA  : VA -> AP -> VG ;
+
+    UseV2V : V2V -> VV ;
+    UseV2S : V2S -> VS ;
+    UseV2Q : V2Q -> VQ ;
+    UseA2S : A2S -> AS ;
+    UseA2V : A2V -> AV ;
 
     UseCl  : TP -> Cl  -> S ;
     UseVG  : TP -> VG  -> VP ;
