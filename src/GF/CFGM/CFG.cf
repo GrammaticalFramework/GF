@@ -8,8 +8,11 @@ separator Grammar "";
 StartCat. Flag ::= "startcat" Category;
 terminator Flag ";";
 
-Rule. Rule ::= Ident ":" Name Profile "." Category "->" [Symbol];
+Rule. Rule ::= Fun ":" Profile "." Category "->" [Symbol];
 terminator Rule ";";
+
+Cons. Fun ::= Ident ;
+Coerce. Fun ::= "_" ;
 
 Profile. Profile ::= "[" [Ints] "]";
 
@@ -25,7 +28,6 @@ TermS. Symbol ::= String;
 (:[]). [Symbol] ::= Symbol ;
 (:). [Symbol] ::= Symbol [Symbol] ;
 
-Name. Name ::= SingleQuoteString ;
 Category. Category ::= SingleQuoteString ;
 
 token SingleQuoteString '\'' ((char - ["'\\"]) | ('\\' ["'\\"]))* '\'' ;

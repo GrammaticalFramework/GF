@@ -4,6 +4,7 @@
 module LexCFG where
 
 import ErrM
+
 }
 
 
@@ -15,32 +16,35 @@ $i = [$l $d _ ']          -- identifier character
 $u = [\0-\255]          -- universal: any character
 
 @rsyms =    -- reserved words consisting of special symbols
-   \; | \: | \. | \- \> | \[ | \] | \,
+   \; | \: | \. | \- \> | \_ | \[ | \] | \,
 
 :-
 
 $white+ ;
-@rsyms { tok (\p s -> PT p (TS s)) }
-\' ($u # [\' \\]| \\ [\' \\]) * \' { tok (\p s -> PT p (eitherResIdent T_SingleQuoteString s)) }
+@rsyms { tok (\p s -> PT p (TS $ share s)) }
+\' ($u # [\' \\]| \\ [\' \\]) * \' { tok (\p s -> PT p (eitherResIdent (T_SingleQuoteString . share) s)) }
 
-$l $i*   { tok (\p s -> PT p (eitherResIdent TV s)) }
-\" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \"{ tok (\p s -> PT p (TL $ unescapeInitTail s)) }
+$l $i*   { tok (\p s -> PT p (eitherResIdent (TV . share) s)) }
+\" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \"{ tok (\p s -> PT p (TL $ share $ unescapeInitTail s)) }
 
-$d+      { tok (\p s -> PT p (TI s))    }
+$d+      { tok (\p s -> PT p (TI $ share s))    }
 
 
 {
 
 tok f p s = f p s
 
+share :: String -> String
+share = id
+
 data Tok =
-   TS String     -- reserved words
- | TL String     -- string literals
- | TI String     -- integer literals
- | TV String     -- identifiers
- | TD String     -- double precision float literals
- | TC String     -- character literals
- | T_SingleQuoteString String
+   TS !String     -- reserved words
+ | TL !String     -- string literals
+ | TI !String     -- integer literals
+ | TV !String     -- identifiers
+ | TD !String     -- double precision float literals
+ | TC !String     -- character literals
+ | T_SingleQuoteString !String
 
  deriving (Eq,Show,Ord)
 
@@ -62,24 +66,22 @@ prToken t = case t of
   PT _ (TV s) -> s
   PT _ (TD s) -> s
   PT _ (TC s) -> s
-  _ -> show t
   PT _ (T_SingleQuoteString s) -> s
 
+  _ -> show t
+
+data BTree = N | B String Tok BTree BTree deriving (Show)
 
 eitherResIdent :: (String -> Tok) -> String -> Tok
-eitherResIdent tv s = if isResWord s then (TS s) else (tv s) where
-  isResWord s = isInTree s $
-    B "grammar" (B "end" N N) (B "startcat" N N)
+eitherResIdent tv s = treeFind resWords
+  where
+  treeFind N = tv s
+  treeFind (B a t left right) | s < a  = treeFind left
+                              | s > a  = treeFind right
+                              | s == a = t
 
-data BTree = N | B String BTree BTree deriving (Show)
-
-isInTree :: String -> BTree -> Bool
-isInTree x tree = case tree of
-  N -> False
-  B a left right
-   | x < a  -> isInTree x left
-   | x > a  -> isInTree x right
-   | x == a -> True
+resWords = b "grammar" (b "end" N N) (b "startcat" N N)
+   where b s = B s (TS s)
 
 unescapeInitTail :: String -> String
 unescapeInitTail = unesc . tail where
