@@ -1,9 +1,9 @@
 To make and install GF2 (Version 2-beta, 2/4/2004).
 
 1. Unpack GF2 and go to the source directory (the place where this 
-   INSTALL file is!)
+   INSTALL file is - so you have probably done this already!)
 
-     tar tgz gf2-beta.tgz
+     tar xvfz gf2-beta.tgz
      cd GF2/src
 
 2. Make sure you have GHC (Glasgow Haskell Compiler), version 5.02 or later.
