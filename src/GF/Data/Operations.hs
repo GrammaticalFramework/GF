@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:35 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.16 $
+-- > CVS $Date: 2005/03/14 23:45:36 $ 
+-- > CVS $Author: krijo $
+-- > CVS $Revision: 1.17 $
 --
 -- some auxiliary GF operations. AR 19\/6\/1998 -- 6\/2\/2001
 --
@@ -77,7 +77,7 @@ module Operations (-- * misc functions
 
 import Char  (isSpace, toUpper, isSpace, isDigit)
 import List  (nub, sortBy, sort, deleteBy, nubBy)
-import Monad (liftM2)
+import Monad (liftM2, MonadPlus, mzero, mplus)
 
 infixr 5 +++
 infixr 5 ++-
@@ -106,6 +106,12 @@ instance Monad Err where
 instance Functor Err where
   fmap f (Ok a) = Ok (f a)
   fmap f (Bad s) = Bad s
+
+-- | added by KJ
+instance MonadPlus Err where
+    mzero = Bad "error (no reason given)"
+    mplus (Ok a)  _ = Ok a
+    mplus (Bad s) b = b
 
 -- | analogue of @maybe@
 err :: (String -> b) -> (a -> b) -> Err a -> b 
