@@ -6,11 +6,11 @@
 
 <h1>Grammatical Framework Version 2</h1>
 
-Highlights, version 2.0
+Highlights, versions 2.0 and 2.1
 
 <p>
 
-13/10/2003 - 25/11 - 2/4/2004 - 18/6
+13/10/2003 - 25/11 - 2/4/2004 - 18/6 - 13/10
 
 <p>
 
@@ -40,12 +40,13 @@ An accurate <a href="DocGF.pdf">language specification</a> is now available.
      <tt>interface</tt>, <tt>instance</tt>, <tt>incomplete</tt>.
 <li> New experimental module types: <tt>transfer</tt>, 
      <tt>union</tt>.
-
+<li> <b>Version 2.1</b>: multiple inheritance in module extension.
 
 <h4>Canonical format GFC</h4>
 
-<li> The target of GF compiler; to reuse, just read in
-<li> Readable by Haskell/Java/C++/C applications
+<li> The target of GF compiler; to reuse, just read in.
+<li> Readable by Haskell/Java/C++/C applications.
+<li> <b>Version 2.1</b>: Java interpreter available for GFC (by Björn Bringert).
 
 
 <h4>New features in expression language</h4>
@@ -58,6 +59,8 @@ An accurate <a href="DocGF.pdf">language specification</a> is now available.
      braces and <tt>where</tt>.
 <li> Pattern variables can be used on lhs's of <tt>oper</tt> definitions.
 <li> New Unicode transliterations (by Harad Hammarström).
+<li> <b>Version 2.1</b>: Initial segments of integers 
+     (<tt>Ints</tt><i>n</i>) available as parameter types.
 
 
 <h4>New shell commands and command functionalities</h4>
@@ -103,32 +106,22 @@ An accurate <a href="DocGF.pdf">language specification</a> is now available.
 <li> By Peter Ljunglöf, based on MCFG.
 <li> Much more efficient for morphology and discontinuous constituents.
 <li> Treatment of cyclic rules.
-
+<li> <b>Version 2.1</b>: improved generation of speech recognition
+     grammars (by Björn Bringert).
+<li> <b>Version 2.1</b>: output of Labelled BNF files readable by the
+     BNF Converter.
 
 
 <!-- NEW -->
 
-<h2>Status (18/6/2004)</h2>
+<h2>Missing features of GF 1.2 (13/10/2004)</h2>
 
-Grammar compiler, editor GUIs, and shell work for all platforms
-(with restrictions for Solaris).
-
-<p>
-
-The updated <tt>HelpFile</tt> (accessible through <tt>h</tt> command)
-marks unsupported features present in GF 1.2 with <tt>*</tt>.
-They will be supported again if interested users appear.
-
-<p>
-
-GF1 grammars can be automatically translated to GF2 (although the
+Generally, GF1 grammars can be automatically translated to GF2, although the
 result is not as good
-as manual, since indentation and comments are destroyed). The results can be 
+as manual, since indentation and comments are destroyed. 
+The results can be 
 saved in GF2 files, but this is not necessary. 
 Some rarely used GF1 features are no longer supported (see next section).
-
-<p>
-
 It is also possible to write a GF2 grammar back to GF1, with the
 command <tt>pg -printer=old</tt>.
 
@@ -136,14 +129,10 @@ command <tt>pg -printer=old</tt>.
 <p>
 
 Resource libraries 
-and some example grammars and have been
+and some example grammars have been
 converted. Most old example grammars work without any changes.
-There is a new resource API with
-many new constructions.
-
-<p>
-
-A make facility works, finding out which modules have to be recompiled.
+However, there is a new resource API with
+many new constructions, and which is recommended.
 
 <p>
 
@@ -313,16 +302,10 @@ Examples of extension:
     lin times x y = expSg ("the" ++ "product" ++ "of" ++ x.s ++ "and" ++ y.s) ;
   }
 </pre>
-Another important difference:
-<li> extension is single
-<li> opening can be multiple: <tt>open Foo, Bar, Baz in {...}</tt>
 
 <p>
 
-Moreover:
-<li> opening can be <b>qualified</b>
-<p>
-Example of qualified opening:
+Opening, but not extension, can be <b>qualified</b>:
 <pre>
   concrete NumberSystems of Systems = open (Bin = Binary), (Dec = Decimal) in {
     lin 
@@ -330,6 +313,17 @@ Example of qualified opening:
       DZero = Dec.Zero
   }
 </pre>
+
+<p>
+
+<b>Version 2.1</b> introduces <tt>multiple inheritance</tt>: a module
+can extend several modules at the same time, for instance,
+<pre>
+  abstract Dialogue = User, System ** { ...}
+</pre>
+may be used to put together "User's moves" and "System's moves" into
+one Dialogue System grammar. 
+
   
 
 <!-- NEW -->
@@ -346,7 +340,7 @@ first left bracket (<tt>{</tt>). The header gives
 <li> the module type: <tt>abstract</tt>, <tt>concrete</tt> (<tt>of</tt> <i>A</i>), 
   or <tt>resource</tt>
 <li> the name of the module (next to the module type keyword)
-<li> the name of extended module (between <tt>=</tt> and <tt>**</tt>)
+<li> the names of extended modules (between <tt>=</tt> and <tt>**</tt>)
 <li> the names of opened modules
 </ul>
 
