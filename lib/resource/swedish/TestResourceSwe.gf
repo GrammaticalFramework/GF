@@ -20,7 +20,7 @@ lin
   Finnish = extAdjective (aFin "finsk") ;
   Happy = aFin "lycklig" ;
   Married = extAdjective (aAbstrakt "gift") ** {s2 = "med"} ;
-  Man = extCommNounMasc man_1144 ;
+  Man = extCommNoun man_1144 ;
   Bar = extCommNoun (sSak "bar") ;
   Bottle = extCommNoun (sApa "flask") ;
   Woman = extCommNoun (sApa "kvinn") ;
@@ -44,7 +44,7 @@ lin
   SwitchOff = mkDirectVerb (vLeka "stäng" ** {s1 = "av"}) ;
 
   Mother = mkFun (extCommNoun mor_1) "till" ;
-  Uncle = mkFun (extCommNounMasc farbror_8) "till" ;
+  Uncle = mkFun (extCommNoun farbror_8) "till" ;
   Connection = mkFun (extCommNoun (sVarelse "förbindelse")) "från" ** 
                {s3 = "till"} ;
 

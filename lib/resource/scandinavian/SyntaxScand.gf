@@ -26,8 +26,6 @@ oper
      g = gen2nounGen sb.h1 
     } ;
 
-  extCommNounMasc : Subst -> CommNoun ;
-
 -- These constants are used for data abstraction over the parameter type $Num$.
   singular = Sg ;
   plural = Pl ;
@@ -863,13 +861,13 @@ oper
     useVerb vilja 
       (\\g,n,p => 
               vilja.s1 ++
-              if_then_Str vilja.isAux [] "att" ++ ---- vilja.s3 ++
+              if_then_Str vilja.isAux [] infinAtt ++ ---- vilja.s3 ++
               simma.s ! VIInfinit ! g ! n ! p) ;
 
   transVerbVerb : VerbVerb -> TransVerb -> TransVerb = \vilja,hitta ->
     {s  = vilja.s ;
      s1 = vilja.s1 ++ 
-          if_then_Str vilja.isAux [] "att" ++ ---- vilja.s3 ++
+          if_then_Str vilja.isAux [] infinAtt ++ ---- vilja.s3 ++
           hitta.s ! VI (Inf Act) ++ hitta.s1 ;
      s2 = hitta.s2
     } ;
@@ -930,7 +928,7 @@ oper
     \jag,vilja,se ->
       predVerbGroupClause jag (useVerb vilja (\\g,n,p => 
               vilja.s1 ++
-              if_then_Str vilja.isAux [] "att" ++ ---- vilja.s3 ++
+              if_then_Str vilja.isAux [] infinAtt ++ ---- vilja.s3 ++
               se.s ! VI (Inf Act))
               )  ** {s2 = se.s2} ;
 

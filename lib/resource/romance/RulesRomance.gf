@@ -45,19 +45,18 @@ lin
   ComparADeg = comparAdjPhrase ;
   SuperlNP = superlNounPhrase ;
 
-----  PredAS = predAdjSent ;
-----  PredV0 rain = predVerbClause (pronNounPhrase pronIt) rain (complVerb rain) ;
+  PredAS = predAdjSent ;
+  PredV0 rain = predVerbClause (pronNounPhrase pronImpers) rain (complVerb rain) ;
 
 -- Partial saturation.
 
-----  UseV2 = transAsVerb ;
+  UseV2 = transAsVerb ;
 
 ----  ComplV3 = complDitransVerb ;
 
-----  ComplA2S = predAdjSent2 ;
+  ComplA2S = predAdjSent2 ; ---- clitics get lost
 
-----  AdjPart = adjPastPart ;
-
+  AdjPart = adjPastPart ;
 
   UseV2V x = x ** {isAux = False} ;
   UseV2S x = x ;
@@ -129,11 +128,11 @@ lin
   ImperOne = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
 
-----  AdvCl  = advClause ;
-----  AdvVPI = advVerbPhrase ;
+  AdvCl  = advClause ;
+  AdvVPI = advVerbPhrase ;
 
-----  AdCPhr = advSentence ;
-----  AdvPhr = advSentence ;
+  AdCPhr = advSentence ;
+  AdvPhr = advSentence ;
 
   TwoS = twoSentence ;
   ConsS = consSentence ;
@@ -175,14 +174,8 @@ lin
 
   OneNP = nounPhraseOn ;
 
+  ExistCN A = existNounPhrase (indefNounPhrase Sg A) ;
 
-{- ----
-  ExistCN A = predVerbGroupClause npDet 
-                (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 
-                   (indefNounPhrase singular A)) ;
-  ExistNumCN nu A = predVerbGroupClause npDet 
-                (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 
-                   (indefNounPhraseNum plural nu A)) ;
--}
+  ExistNumCN nu A = existNounPhrase (indefNounPhraseNum nu A) ;
 
 }
