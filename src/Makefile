@@ -34,7 +34,7 @@ windows: today nofud-links justwindows
 install-java: javac
 	-rm -f ../bin/java
 	ln -s ../src/java ../bin
-	@echo "PLEASE edit GFHOME in bin/jgf2"
+	@echo "PLEASE edit GFHOME in bin/jgf"
 opt:
 	$(GHMAKE) $(GHCOPTFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf
 	strip gf
@@ -70,9 +70,6 @@ nofud-links:
 	ln -s ../for-ghc/Arch.hs for-ghc-nofud
 	ln -s ../for-hugs/ArchEdit.hs for-ghc-nofud
 
-batch: 
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) GF2.hs -o gf
-	strip gf
 
 api: 
 	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) API.hs
