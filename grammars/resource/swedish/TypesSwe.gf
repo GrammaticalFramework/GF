@@ -99,17 +99,20 @@ param
 -- However, the syntax only needs a simplified verb category, with 
 -- present tense only. Such a verb can be extracted from the full verb,
 -- and a choice can be made between an active and a passive (deponent) verb.
+-- Active verbs continue to have passive forms.
 
 param
-  VForm = Infinit | Indicat | Imperat ;
+  VMode = Infinit | Indicat | Imperat ;
+  VForm = VPres VMode Voice ;
 
 oper
   Verb : Type = SS1 VForm ;
 
   extVerb : Voice -> Verbum -> Verb = \v,verb -> {s = table { 
-    Infinit => verb.s ! VI (Inf v) ;
-    Indicat => verb.s ! VF (Pres Ind v) ;
-    Imperat => verb.s ! VF Imper  --- no passive in Verbum
+    VPres Infinit v    => verb.s ! VI (Inf v) ;
+    VPres Indicat v    => verb.s ! VF (Pres Ind v) ;
+    VPres Imperat Act  => verb.s ! VF Imper ; 
+    VPres Imperat Pass => verb.s ! VF (Pres Ind Pass)   --- no passive in Verbum
     }} ;
 
 --3 Other open classes
