@@ -1,10 +1,10 @@
 include config.mk
 
-GF_LIB_DIR=$(libdir)/GF-$(PACKAGE_VERSION)
+GF_DATA_DIR=$(datadir)/GF-$(PACKAGE_VERSION)
 
 .PHONY: install
 install: 
 	$(INSTALL) -d $(bindir)
 	$(INSTALL) gf gfdoc jgf $(bindir)
-	$(INSTALL) -d $(GF_LIB_DIR)
-	$(INSTALL) -m 0644 gf-java.jar $(GF_LIB_DIR)
+	$(INSTALL) -d $(GF_DATA_DIR)
+	$(INSTALL) -m 0644 gf-java.jar $(GF_DATA_DIR)

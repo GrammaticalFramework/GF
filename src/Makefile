@@ -152,9 +152,9 @@ install-gfdoc:
 	$(INSTALL) util/gfdoc $(bindir)
 
 install-editor:
-	$(INSTALL) -d $(libdir)/GF-$(PACKAGE_VERSION)
+	$(INSTALL) -d $(datadir)/GF-$(PACKAGE_VERSION)
 	$(INSTALL) jgf $(bindir)
-	$(INSTALL) -m 0644 java/gf-java.jar $(libdir)/GF-$(PACKAGE_VERSION)
+	$(INSTALL) -m 0644 java/gf-java.jar $(datedir)/GF-$(PACKAGE_VERSION)
 
 install: install-gf install-gfdoc install-editor
 

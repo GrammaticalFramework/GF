@@ -1,6 +1,6 @@
 %define name GF
 %define version 2.0
-%define release 1
+%define release 2
 
 Name: %{name}
 Summary: Grammatical Framework
@@ -58,14 +58,19 @@ cd src
 rm -rf $RPM_BUILD_ROOT
 
 %files
+%defattr(-,root,root,0755) 
 %{_bindir}/gf
 %{_bindir}/gfdoc
 %{_bindir}/jgf
-%{_libdir}/%{name}-%{version}/gf-java.jar
+%{_datadir}/%{name}-%{version}/gf-java.jar
 %doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html}
 
 
 %changelog
+
+* Thu Jun 24 2004 Bjorn Bringert <bringert@cs.chalmers.se> 2.0-2
+- Set ownership correctly.
+- Move jar-file to share (thanks to Anders Carlsson for pointing this out.)
 
 * Tue Jun 22 2004 Bjorn Bringert <bringert@cs.chalmers.se> 2.0-1
 - Include gfdoc binary
