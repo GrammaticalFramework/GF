@@ -463,7 +463,70 @@ Extend vocabulary at need.
 <!-- NEW -->
 <h2>Example application: a small translation system</h2>
 
+You can say things like the following:
+<pre>
+  who chases mice ?
+  whom does the lion chase ?
+  the dog chases cats
+</pre>
+Source modules:
 
+<p>
+
+<a href=example/Animals.gf>Animals</a>
+
+<p>
+
+<a href=example/AnimalsEng.gf>AnimalsEng</a>
+
+<p>
+
+<a href=example/AnimalsFre.gf>AnimalsFre</a>
+
+<p>
+
+<a href=example/AnimalsSwe.gf>AnimalsSwe</a>
+
+
+<!-- NEW -->
+<h2>Compiling the example application</h2>
+
+The resources are bulky, and it takes a therefore a lot of
+time and memory to load the grammars. However, they can be
+comiled into the <tt>gfcm</tt>
+(<b>GF canonical multilingual</b>) format,
+which is almost one thousand times smaller and faster to load.
+
+<p>
+
+Just issue the following GF commands 
+<pre>
+  i AnimalsEng.gf
+  i AnimalsFre.gf
+  i AnimalsSwe.gf
+  pm | wf animals.gfcm
+</pre>
+and you get a grammar this end-user grammar.
+
+<p>
+
+You can also write the commands in a <tt>gfs</tt> (<b>GF script</b>)
+file, say <tt>mkAnimals.gfs</tt>, and then call GF with
+<pre>
+  gf <mkAnimals.gfs
+</pre>
+
+
+<!-- NEW -->
+<h2>Further simplifications of the application grammar</h2>
+
+Step 1: use a simplified access to present-tense sentences,
+<tt>SentenceX</tt> (to be written...)
+
+<p>
+
+Step 2: factor out the categories and purely combinational
+rules into an <tt>incomplete</ii> module (to be shown...)
 
 
 <!-- NEW -->
