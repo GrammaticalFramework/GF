@@ -27,7 +27,7 @@
 -- The following modules are presupposed:
 
 resource ParadigmsSwe = 
-  open (Predef=Predef), Prelude, TypesSwe, MorphoSwe, SyntaxSwe, ResourceSwe in {
+  open (Predef=Predef), Prelude, TypesSwe, MorphoSwe, SyntaxSwe, CategoriesSwe in {
 
 --2 Parameters 
 --

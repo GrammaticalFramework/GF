@@ -85,3 +85,24 @@ freVerb s = case words s of
   _ -> []
  where
    cat v = dropWhile (not . isUpper) v
+
+-- Swedish verbs 17/2
+
+sweVerb s = case words s of
+  ('v':a:u:[]):verb:_ -> "fun " ++ verb ++ " : V ;\n" ++ 
+                         "lin " ++ verb ++ " = " ++ infl a u verb ++ " ;"
+  _ -> []
+ where
+   infl a u verb = 
+     let
+       (dne,geb) = span isConsonant $ tail $ reverse verb 
+       (beg,voc,end) = (reverse (tail geb), head geb, reverse dne)
+       (pret,sup) = (beg++ [toLower a] ++end, beg++ [toLower u] ++ end ++"it")
+     in
+     unwords ["irregV", prQuot verb, prQuot pret, prQuot sup] 
+
+prQuot s = "\"" ++ s ++ "\""
+
+isConsonant = not . isVowel
+
+isVowel = flip elem "aeiouyäöå"
