@@ -28,7 +28,7 @@ import List (nub,nubBy)
 data ShellState = ShSt {
   abstract   :: Maybe Ident ,        -- pointer to actual abstract, if not empty st
   concrete   :: Maybe Ident ,        -- pointer to primary concrete
-  concretes  :: [(Ident,Ident)],     -- list of all concretes
+  concretes  :: [((Ident,Ident),Bool)], -- list of all concretes, and whether active
   canModules :: CanonGrammar ,       -- compiled abstracts and concretes
   srcModules :: G.SourceGrammar ,    -- saved resource modules
   cfs        :: [(Ident,CF)] ,       -- context-free grammars
@@ -133,7 +133,7 @@ updateShellState opts sh (gr,(sgr,rts)) = do
   return $ ShSt {
     abstract   = abstr0, 
     concrete   = concr0, 
-    concretes  = zip concrs concrs,
+    concretes  = zip (zip concrs concrs) (repeat True),
     canModules = cgr,
     srcModules = src,
     cfs        = zip concrs cfs,
@@ -148,7 +148,7 @@ prShellStateInfo :: ShellState -> String
 prShellStateInfo sh = unlines [
   "main abstract :    " +++ abstractName sh,
   "main concrete :    " +++ maybe "(none)" P.prt (concrete sh),
-  "all concretes :    " +++ unwords (map (P.prt . fst) (concretes sh)),
+  "all concretes :    " +++ unwords (map (P.prt . fst) (map fst (concretes sh))),
   "canonical modules :" +++ unwords (map (P.prt .fst) (M.modules (canModules sh))),
   "source modules :   " +++ unwords (map (P.prt .fst) (M.modules (srcModules sh))),
   "global options :   " +++ prOpts (gloptions sh)
@@ -177,7 +177,7 @@ purgeShellState :: ShellState -> ShellState
 purgeShellState sh = ShSt {
   abstract   = abstract sh,
   concrete   = concrete sh,
-  concretes  = [(a,i) | (a,i) <- concretes sh, elem i needed],
+  concretes  = [((a,i),b) | ((a,i),b) <- concretes sh, elem i needed],
   canModules = M.MGrammar $ purge $ M.modules $ canModules sh,
   srcModules = M.emptyMGrammar,
   cfs        = cfs sh,
@@ -190,7 +190,7 @@ purgeShellState sh = ShSt {
  where
    needed = nub $ concatMap (requiredCanModules (canModules sh)) acncs
    purge = nubBy (\x y -> fst x == fst y) . filter (flip elem needed . fst)
-   acncs = maybe [] singleton (abstract sh) ++ map snd (concretes sh)
+   acncs = maybe [] singleton (abstract sh) ++ map (snd . fst) (concretes sh)
 
 -- form just one state grammar, if unique, from a canonical grammar
 
@@ -259,22 +259,21 @@ stateAbstractGrammar st = StGr {
 
 -- analysing shell state into parts
 globalOptions = gloptions
-allLanguages  = map fst . concretes
+allLanguages  = map (fst . fst) . concretes
 
 allStateGrammars = map snd . allStateGrammarsWithNames
 
-allStateGrammarsWithNames st = [(c, mkStateGrammar st c) | (c,_) <- concretes st]
+allStateGrammarsWithNames st = 
+  [(c, mkStateGrammar st c) | ((c,_),_) <- concretes st]
 
-allGrammarFileNames st = [prLanguage c ++ ".gf" | (c,_) <- concretes st] ---
+allGrammarFileNames st = [prLanguage c ++ ".gf" | ((c,_),_) <- concretes st] ---
 
-{-
-allActiveStateGrammarsWithNames (ShSt (ma,gs,_)) = 
-  [(l, mkStateGrammar a c) | (l,((_,True),c)) <- gs, Just a <- [ma]]
-
-
+allActiveStateGrammarsWithNames st =   
+  [(c, mkStateGrammar st c) | ((c,_),True) <- concretes st]
 
 allActiveGrammars = map snd . allActiveStateGrammarsWithNames
 
+{-
 allGrammarSTs = map stateGrammarST . allStateGrammars
 allCFs        = map stateCF        . allStateGrammars
 
@@ -370,14 +369,15 @@ type ShellStateOper = ShellState -> ShellState
 reinitShellState :: ShellStateOper
 reinitShellState = const emptyShellState
 
-{-
 languageOn  = languageOnOff True
 languageOff = languageOnOff False
 
 languageOnOff :: Bool -> Language -> ShellStateOper
-languageOnOff b lang (ShSt (ab,gs,os)) = ShSt (ab, gs', os) where
-  gs' = [if lang==l then (l,((f,b),g)) else i | i@(l,((f,_),g)) <- gs]
+languageOnOff b lang (ShSt a c cs cg sg cfs ms os fs cats sts) =
+  ShSt a c cs' cg sg cfs ms os fs cats sts where
+  cs' = [if lang==l then ((l,c),b) else i | i@((l,c),_) <- cs]
 
+{-
 updateLanguage :: FilePath -> (Language, StateConcrete) -> ShellStateOper
 updateLanguage file (lang,gr) (ShSt (ab,gs,os)) = 
   ShSt (ab, updateAssoc (lang,((file,True),gr)) gs, os') where

@@ -264,7 +264,7 @@ optPrintSyntax opts = customOrDefault opts grammarPrinter customSyntaxPrinter
 prCanonGrammar :: CanonGrammar -> String
 prCanonGrammar = MC.prCanon
 
-{- ----
+
 optPrintTree :: Options -> GFGrammar -> Tree -> String
 optPrintTree opts = customOrDefault opts grammarPrinter customTermPrinter
 
@@ -274,11 +274,11 @@ optStringCommand opts g =
   optIntOrAll opts flagLength .  
   customOrDefault opts filterString customStringCommand g
 
-optTreeCommand :: Options -> GFGrammar -> Tree -> [Tree]
-optTreeCommand opts st = 
+optTermCommand :: Options -> GFGrammar -> Tree -> [Tree]
+optTermCommand opts st = 
   optIntOrAll opts flagNumber .  
   customOrDefault opts termCommand customTermCommand st
--}
+
 
 {-
 -- wraps term in a function and optionally computes the result

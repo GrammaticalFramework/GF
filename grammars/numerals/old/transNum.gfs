@@ -53,4 +53,29 @@ i -old -abs=Nums -cnc=Tamil tamil.gf
 i -old -abs=Nums -cnc=Tibetan tibetan.gf
 i -old -abs=Nums -cnc=Totonac totonac.gf
 i -old -abs=Nums -cnc=Turkish turkish.gf
+i -old -abs=Nums -cnc=AfTunni af_tunni.gf
+i -old -abs=Nums -cnc=Albanian albanian.gf
+i -old -abs=Nums -cnc=BearlakeSlave bearlake_slave.gf
+i -old -abs=Nums -cnc=Dagur dagur.gf
+i -old -abs=Nums -cnc=Fulfulde fulfulde.gf
+i -old -abs=Nums -cnc=Guahibo guahibo.gf
+i -old -abs=Nums -cnc=Guarani guarani.gf
+i -old -abs=Nums -cnc=Kabardian kabardian.gf
+i -old -abs=Nums -cnc=Kambera kambera.gf
+i -old -abs=Nums -cnc=Kawaiisu kawaiisu.gf
+i -old -abs=Nums -cnc=KolymaYukaghir kolyma_yukaghir.gf
+i -old -abs=Nums -cnc=Kwaza kwaza.gf
+i -old -abs=Nums -cnc=Lithuanian lithuanian.gf
+i -old -abs=Nums -cnc=Lotuxo lotuxo.gf
+i -old -abs=Nums -cnc=Maale maale.gf
+i -old -abs=Nums -cnc=Maltese maltese.gf
+i -old -abs=Nums -cnc=Mapuche mapuche.gf
+i -old -abs=Nums -cnc=Maybrat maybrat.gf
+i -old -abs=Nums -cnc=Miya miya.gf
+i -old -abs=Nums -cnc=Nenets nenets.gf
+i -old -abs=Nums -cnc=Sango sango.gf
+i -old -abs=Nums -cnc=TukangBesi tukang_besi.gf
+i -old -abs=Nums -cnc=Welsh welsh.gf
+i -old -abs=Nums -cnc=YasinBurushaski yasin_burushaski.gf
+
 ---ts -f
