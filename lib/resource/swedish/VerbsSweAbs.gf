@@ -87,6 +87,7 @@ abstract VerbsSweAbs = Categories ** {
   innesluta_V : V ;
   inskriva_V : V ;
   intaga_V : V ;
+  känna_V : V ;
   kliva_V : V ;
   klyva_V : V ;
   knipa_V : V ;

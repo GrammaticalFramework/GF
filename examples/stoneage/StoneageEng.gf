@@ -3,6 +3,9 @@ concrete StoneageEng of Stoneage
   = open SyntaxEng, ResourceEng, ParadigmsEng, SwadeshLexEng,
   StoneageResEng in {
 
+flags
+  startcat=S;
+
 lincat
   S = Phr ;
   NP = NP ;
