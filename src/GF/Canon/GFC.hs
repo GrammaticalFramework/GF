@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 15:31:22 $ 
+-- > CVS $Date: 2005/03/08 15:49:24 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.8 $
+-- > CVS $Revision: 1.9 $
 --
 -- canonical GF. AR 10\/9\/2002 -- 9\/5\/2003 -- 21\/9
 -----------------------------------------------------------------------------
@@ -20,8 +20,8 @@ module GFC (Context,
 	    Info(..),
 	    Printname,
 	    mapInfoTerms,
-	    setFlag,
-            mapIdents
+	    setFlag
+--            , mapIdents
 	   ) where
 
 import AbsGFC
@@ -71,6 +71,7 @@ mapInfoTerms f i = case i of
 setFlag :: String -> String -> [Flag] -> [Flag]
 setFlag n v fs = Flg (IC n) (IC v):[f | f@(Flg (IC n') _) <- fs, n' /= n]
 
+{-
 -- | Apply a function to all identifiers in a module
 mapIdents :: (Ident -> Ident) -> M.ModInfo Ident Flag Info -> M.ModInfo Ident Flag Info
 mapIdents f mi = case mi of
@@ -156,6 +157,7 @@ mapIdents f mi = case mi of
   fav av = case av of
 		   A i x -> A (f i) x
 		   AB i x y -> AB (f i) x y
+-}
 {-
   fat :: A.Term -> A.Term
   fat t = case t of
