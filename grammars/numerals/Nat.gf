@@ -1,7 +1,7 @@
 -- Unary and binary natural numbers, and conversions between them. AR 8/10/2003
 -- To be used as an example of transfer.
 
-abstract Nat = {
+abstract Nat = Numerals ** {
 
   cat Nat ;
   fun 
