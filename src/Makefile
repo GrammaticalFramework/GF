@@ -26,7 +26,7 @@ NOT_IN_DIST= \
 
 BIN_DIST_DIR=$(DIST_DIR)-$(host)
 
-all: unix
+all: unix gfdoc jar
 
 temp: today noopt
 
