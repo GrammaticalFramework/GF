@@ -1,4 +1,5 @@
-i -src -optimize=share examples/stoneage/StoneageEng.gf
-i -src -optimize=share examples/stoneage/StoneageSwe.gf
-i -src -optimize=share examples/stoneage/StoneageNor.gf
+i -src examples/stoneage/StoneageEng.gf
+i -src examples/stoneage/StoneageFre.gf
+i -src examples/stoneage/StoneageNor.gf
+i -src examples/stoneage/StoneageSwe.gf
 pm -printer=gfcm | wf stoneage.gfcm

@@ -28,7 +28,6 @@ lin
   See = PresVasV2 see_V ;
   Hear = PresVasV2 hear_V ;
   Know = PresVasV2 know_V ;
-  Think = PresVasV2 think_V ;
   Smell s o = PresCl (SPredV2 s (dirV2 känna_V) (DefOneNP 
                            (AdvCN (UseN (mk2N "lukt" "lukter")) 
                                   (PrepNP possess_Prep o)))) ;
@@ -52,6 +51,7 @@ lin
   Tie = PresVasV2 tie_V ;
   Count = PresVasV2 count_V ;
 
+  Think = PresV think_V ;
   Spit = PresV spit_V ;
   Vomit = PresV vomit_V ;
   Blow = PresV blow_V ;
