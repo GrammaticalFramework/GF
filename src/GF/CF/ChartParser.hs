@@ -1,5 +1,21 @@
+{- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+   Filename:    ChartParser.hs
+   Author:      Peter Ljunglöf
+   Time-stamp:  <2004-05-25 02:20:01 peb>
+
+   Description: Bottom-up Kilbury chart parser from 
+                "Pure Functional Parsing", chapter 5
+
+   DESIRED CHANGES: - The modules OrdSet and OrdMap2 are obsolete
+                      and should be changed to newer versions
+		    - Also, should use the CFG parsers in parsing/
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -}
 
 module ChartParser (chartParser) where
+
+import Tracing
+import PrintParser
+import PrintSimplifiedTerm
 
 import Operations
 import CF
@@ -20,6 +36,10 @@ type Terminal   = Token -> [(Category, Maybe Name)]
 type GParser    = Grammar -> Category -> [Token] -> ([ParseTree],String)
 data ParseTree  = Node Name Category [ParseTree] | Leaf Token
 
+maxTake :: Int
+-- maxTake = 1000
+maxTake = maxBound
+
 --------------------------------------------------
 -- converting between GF parsing and CFG parsing
 
@@ -28,7 +48,7 @@ buildParser gparser cf = parse
   where 
     parse = \start input -> 
             let parse2 = parse' (CFNonterm start) input in 
-            ([(parse2tree t, []) | t <- fst parse2], snd parse2) 
+	    (take maxTake [(parse2tree t, []) | t <- fst parse2], snd parse2) 
     parse' = gparser (cf2grammar cf)
 
 cf2grammar :: CF -> Grammar
@@ -95,8 +115,12 @@ chartParser0 (productions, terminal) = cparse
 	| otherwise               = [cats]
 
     cparse :: Category -> [Token] -> ([ParseTree], String)
-    cparse start input = case lookup (0, length input, start) edgeTrees of
-			   Just trees -> (trees, "Chart:" ++++ prChart passiveEdges)
+    cparse start input = trace "ChartParser" $
+			 case lookup (0, length input, start) $
+			      tracePrt "#edgeTrees" (prt . map (length.snd)) $
+			      edgeTrees of
+			   Just trees -> tracePrt "#trees" (prt . length . fst) $
+					 (trees, "Chart:" ++++ prChart passiveEdges)
 			   Nothing    -> ([],    "Chart:" ++++ prChart passiveEdges)
       where 
         finalChart :: Chart
@@ -110,7 +134,8 @@ chartParser0 (productions, terminal) = cparse
 					      (i, b, a:bs) <- elems state ]
 
         initialChart :: Chart
-        initialChart = emptySet : map initialState (zip [0..] input)
+        initialChart = tracePrt "#initialChart" (prt . map (length.elems)) $
+		       emptySet : map initialState (zip [0..] input)
           where initialState (j, sym) = makeSet [ (j, cat, []) | 
 						  (cat, _) <- terminal sym ]
 
@@ -124,8 +149,13 @@ chartParser0 (productions, terminal) = cparse
 					     a `elemSet` emptyCats ]
 
         passiveEdges :: [Passive]
-	passiveEdges = [ (i, j, cat) |
-			 (j, state) <- zip [0..] finalChart,
+	passiveEdges = tracePrt "#passiveEdges" (prt . length) $
+		       [ (i, j, cat) |
+			 (j, state) <- zip [0..] $
+			   tracePrt "#passiveChart" 
+			   (prt . map (length.filter (\(_,_,x)->null x).elems)) $
+			   tracePrt "#activeChart" (prt . map (length.elems)) $
+			   finalChart,
 			 (i, cat, []) <- elems state ]
 		       ++
 		       [ (i, i, cat) |
@@ -158,9 +188,15 @@ chartParser0 (productions, terminal) = cparse
 				tree <- trees ]
 
 
+instance Print ParseTree where
+    prt (Node name cat trees) = prt name++"."++prt cat++"^{"++prtSep "," trees++"}"
+    prt (Leaf token) = prt token
+
 -- AR 10/12/2002
 
 prChart :: [Passive] -> String
 prChart = unlines . map (unwords . map prOne) . positions where
   prOne (i,j,it) = show i ++ "-" ++ show j ++ "-" ++ prCFItem it
   positions = groupBy (\ (i,_,_) (j,_,_) -> i == j) 
+
+

@@ -60,7 +60,9 @@ parseStringC opts0 sg cat s
 tokens2trms :: Options ->StateGrammar ->Ident -> CFParser -> [CFTok] -> Check [Tree]
 tokens2trms opts sg cn parser as = do
   let res@(trees,info) = parser as
-  ts0 <- return $ nub (cfParseResults res)
+  ts0 <- return $ cfParseResults res          -- removed nub, peb 25/5-04
+  -- ts0 <- return $ nub (cfParseResults res) -- nub gives quadratic behaviour!
+                                              -- SortedList.nubsort is O(n log n)
   ts  <- case () of
     _ | null ts0 -> checkWarn "No success in cf parsing" >> return []
     _ | raw      -> do
