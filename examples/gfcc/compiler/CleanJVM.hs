@@ -1,30 +1,45 @@
 module Main where
 
+import Char
 import System
 
 main :: IO ()
 main = do
   jvm:src:_ <- getArgs
   s <- readFile jvm
-  let obj = takeWhile (/='.') src ++ ".j"
-  writeFile obj $ mkJVM s
+  let cls = takeWhile (/='.') src
+  let obj = cls ++ ".j"
+  writeFile  obj $ boilerplate cls
+  appendFile obj $ mkJVM cls s
   putStrLn $ "wrote file " ++ obj
 
-mkJVM :: String -> String
-mkJVM = unlines . reverse . fst . foldl trans ([],([],0)) . lines where
-  trans (code,(env,v)) s = case words s of
-    ".method":f:ns -> ((".method " ++ f ++ concat ns):code,([],0))
-    "alloc":t:x:_  -> (code, ((x,v):env, v + size t))
-    ".limit":"locals":ns -> chCode (".limit locals " ++ show (length ns - 1))
-    t:"_load" :x:_ -> chCode (t ++ "load "  ++ look x) 
-    t:"_store":x:_ -> chCode (t ++ "store " ++ look x)
-    t:"_return":_  -> chCode (t ++ "return")
-    "goto":ns      -> chCode ("goto " ++ concat ns)
-    "ifzero":ns    -> chCode ("ifzero " ++ concat ns) 
-    _ ->   chCode s
+mkJVM :: String -> String -> String
+mkJVM cls = unlines . map trans . lines where
+  trans s = case words s of
+    ".method":p:s:f:ns   -> unwords [".method",p,s, unindex f ++ typesig ns]
+    ".limit":"locals":ns -> ".limit locals " ++ show (length ns - 1)
+    "invokestatic":t:"runtime/lt":ns -> ".invokestatic " ++ "runtime/" ++ t ++ "lt" ++ typesig ns 
+    "invokestatic":f:ns  -> "invokestatic " ++ cls ++ "/" ++ unindex f ++ typesig ns 
+    "alloc":ns           -> "; " ++ s
+    t:('_':instr):x:_    -> t ++ instr ++ " " ++ address x
+    "goto":ns            -> "goto "   ++ label ns
+    "ifeq":ns            -> "ifzero " ++ label ns
+    "label":ns           -> label ns
+    ";":[] -> ""
+    _ -> s
    where
-     chCode c = (c:code,(env,v))
-     look x = maybe (x ++ show env) show $ lookup x env
-     size t = case t of
-       "d" -> 2
-       _ -> 1
+     unindex = reverse . drop 1 . dropWhile (/= '_') . reverse
+     typesig = init . map toUpper . concat
+     address = reverse . takeWhile (/= '_') . reverse
+     label   = init . concat
+
+boilerplate :: String -> String
+boilerplate cls = unlines [
+  ".class public " ++ cls ++ ".j",
+  ".super java/lang/Object",
+  ".method public <init>()V",
+  "aload_0",
+  "invokenonvirtual java/lang/Object/<init>()V",
+  "return",
+  ".end method"
+  ]

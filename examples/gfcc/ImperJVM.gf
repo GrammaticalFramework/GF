@@ -10,31 +10,31 @@ flags lexer=codevars ; unlexer=code ; startcat=Stm ;
   lin
     Empty = ss [] ;
     FunctNil val stm cont = ss (
-      ".method" ++ cont.$0 ++ paren [] ++ val.s ++ ";" ++
+      ".method" ++ "public" ++ "static" ++ cont.$0 ++ paren [] ++ val.s ++ ";" ++
       ".limit" ++ "locals" ++ stm.s2 ++ ";" ++
       ".limit" ++ "stack" ++ "1000" ++ ";" ++
       stm.s ++
-      ".end" ++ "method" ++ ";" ++
+      ".end" ++ "method" ++ ";" ++ ";" ++
       cont.s 
       ) ;
     Funct args val rec = ss (
-      ".method" ++ rec.$0 ++ paren args.s ++ val.s ++ ";" ++
-      ".limit" ++ "locals" ++ rec.s2 ++ ";" ++
-      ".limit" ++ "stack" ++ "1000" ++ ";" ++
+      ".method" ++ "public" ++ "static" ++ rec.$0 ++ paren args.s ++ val.s ++ ";" ++
+      ".limit"  ++ "locals" ++ rec.s2 ++ ";" ++
+      ".limit"  ++ "stack"  ++ "1000" ++ ";" ++
       rec.s ++
-      ".end" ++ "method" ++ ";" ++
+      ".end" ++ "method" ++ ";" ++ ";" ++
       rec.s3 
       ) ;
 
     RecOne typ stm prg = instrb typ.s (
-      "alloc" ++ typ.s ++ stm.$0 ++ stm.s2) {s = stm.s ; s2 = stm.s2 ; s3 = prg.s};
+      ["alloc"] ++ typ.s ++ stm.$0 ++ stm.s2) {s = stm.s ; s2 = stm.s2 ; s3 = prg.s};
 
     RecCons typ _ body prg = instrb typ.s (
-      "alloc" ++ typ.s ++ body.$0 ++ body.s2) 
+      ["alloc"] ++ typ.s ++ body.$0 ++ body.s2) 
          {s = body.s ; s2 = body.s2 ; s3 = prg.s};
 
     Decl  typ cont = instrb typ.s (
-      "alloc" ++ typ.s ++ cont.$0
+      ["alloc"] ++ typ.s ++ cont.$0
       ) cont ;
     Assign t x exp = instrc (
       exp.s ++ 
@@ -48,12 +48,12 @@ flags lexer=codevars ; unlexer=code ; startcat=Stm ;
         test = "TEST_" ++ loop.s2 ; 
         end = "END_" ++ loop.s2
       in instrl (
-        test ++ ";" ++
+        "label" ++ test ++ ";" ++
         exp.s ++ 
-        "ifzero" ++ end ++ ";" ++ 
+        "ifeq" ++ end ++ ";" ++ 
         loop.s ++
         "goto" ++ test ++ ";" ++ 
-        end
+        "label" ++ end
         ) ;
     IfElse exp t f = 
       let 
@@ -61,26 +61,26 @@ flags lexer=codevars ; unlexer=code ; startcat=Stm ;
         true  = "TRUE_" ++ t.s2 ++ f.s2
       in instrl (
         exp.s ++ 
-        "ifzero" ++ false ++ ";" ++ 
+        "ifeq" ++ false ++ ";" ++ 
         t.s ++
         "goto" ++ true ++ ";" ++
-        false ++ ";" ++
+        "label" ++ false ++ ";" ++
         f.s ++ 
-        true
+        "label" ++ true
         ) ;
     Block stm      = instrc stm.s ;
     End            = ss [] ** {s2,s3 = []} ;
 
     EVar  t x  = instr (t.s ++ "_load" ++ x.s) ;
-    EInt    n  = instr ("ipush" ++ n.s) ;
-    EFloat a b = instr ("fpush" ++ a.s ++ "." ++ b.s) ;
+    EInt    n  = instr ("ldc" ++ n.s) ;
+    EFloat a b = instr ("ldc" ++ a.s ++ "." ++ b.s) ;
     EAdd       = binopt "add" ;
     ESub       = binopt "sub" ;
     EMul       = binopt "mul" ;
-    ELt t      = binop ("invoke" ++ t.s ++ "lt" ++ paren (t.s ++ t.s) ++ "i") ;
+    ELt t      = binop ("invokestatic" ++ t.s ++ "runtime/lt" ++ paren (t.s ++ t.s) ++ "i") ;
     EApp args val f exps = instr (
       exps.s ++
-      "invoke" ++ f.s ++ paren args.s ++ val.s
+      "invokestatic" ++ f.s ++ paren args.s ++ val.s
       ) ;
 
     TNum t = t ;
