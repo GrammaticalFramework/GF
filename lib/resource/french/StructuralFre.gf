@@ -1,113 +1,95 @@
 --# -path=.:../romance:../abstract:../../prelude
 
-concrete StructuralFre of Structural = CategoriesFre, NumeralsFre ** 
-  open SyntaxFre, MorphoFre, Prelude in {
+concrete StructuralFre of Structural =
+  CategoriesFre, NumeralsFre ** 
+    open SyntaxFre, MorphoFre, Prelude in {
 
 lin
-  INP    = pronNounPhrase pronJe ;
-  ThouNP = pronNounPhrase pronTu ;
-  HeNP   = pronNounPhrase pronIl ;
-  SheNP  = pronNounPhrase pronElle ;
-  WeNumNP n = pronNounPhrase (pronWithNum pronNous n) ;
-  YeNumNP n = pronNounPhrase (pronWithNum pronVous n) ;
-  YouNP  = pronNounPhrase pronVous ;
-  TheyNP = pronNounPhrase pronIls ; 
-
--- Here is a point where the API is really inadequate for French,
--- which distinguishes between masculine and feminine "they".
--- The following solution is not attractive.
-
----  TheyNP = pronNounPhrase (variants {pronIls ; pronElles}) ;
-
-  ThisNP = mkNameNounPhrase ["ceci"] Masc ;
-  ThatNP = mkNameNounPhrase ["ça"] Masc ;
-  TheseNumNP n = mkNameNounPhrase ("ceux" ++ n.s ! Masc ++ "ci") Masc ;
-  ThoseNumNP n = mkNameNounPhrase ("ceux" ++ n.s ! Masc ++ "là") Masc ;
 
   UseNumeral n = {s = \\_ => n.s} ; ---- gender
 
-  ItNP   = pronNounPhrase pronIl ;
+  above_Prep = {s = ["au dessus"] ; c = genitive} ;
+  after_Prep = justPrep "après" ;
+  all8mass_Det = toutDet ;
+  all_NDet = mkDeterminerNum ["tous les"] ["toutes les"] ;
+  almost_Adv = ss "presque" ;
+  although_Subj = ss ("bien" ++ elisQue) ** {m = Con} ;
+  and_Conj = etConj ;
+  because_Subj = ss ("parce" ++ elisQue) ** {m = Ind} ;
+  before_Prep = justPrep "avant" ;
+  behind_Prep = justPrep "derrière" ;
+  between_Prep = justPrep "entre" ;
+  both_AndConjD = etetConj ;
+  by8agent_Prep = justPrep "par" ;
+  by8means_Prep = justPrep "par" ;
+  can8know_VV = mkVerbVerbDir (verbPres (conj3savoir "savoir") AHabere) ;
+  can_VV = mkVerbVerbDir (verbPres (conj3pouvoir "pouvoir") AHabere) ;
+  during_Prep = justPrep "pendant" ;
+  either8or_ConjD = ououConj ;
+  everybody_NP = mkNameNounPhrase ["tout le monde"] Masc ;
+  every_Det = chaqueDet ;
+  everything_NP = mkNameNounPhrase ["tout"] Masc ;
+  everywhere_Adv = ss "partout" ;
+  from_Prep = justCase genitive ; ---
+  he_NP = pronNounPhrase pronIl ;
+  how_IAdv = commentAdv ;
+  how8many_IDet = {s = \\_ => "combien" ++ elisDe ; n = Pl} ;
+  if_Subj = siSubj ;
+  in8front_Prep = justPrep "devant" ;
+  i_NP = pronNounPhrase pronJe ;
+  in_Prep = justPrep "dans" ;
+  it_NP = pronNounPhrase pronIl ;
+  many_Det = mkDeterminer1 plural "plusieurs" ;
+  most8many_Det = plupartDet ;
+  most_Det = mkDeterminer1 singular (["la plupart"] ++ elisDe) ; --- de
+  much_Det = mkDeterminer1 singular ("beaucoup" ++ elisDe) ; --- de
+  must_VV = mkVerbVerbDir (verbPres (conj3devoir "devoir") AHabere) ;
+  no_Phr = nonPhr ; --- and also Si!
+  on_Prep = justPrep "sur" ;
+  or_Conj = ouConj ;
+  otherwise_Adv = ss "autrement" ;
+  part_Prep = justCase genitive ; ---
+  possess_Prep = justCase genitive ;
+  quite_Adv = ss "assez" ;
+  she_NP = pronNounPhrase pronElle ;
+  so_Adv = ss "si" ;
+  somebody_NP = mkNameNounPhrase ["quelqu'un"] Masc ;
+  some_Det = mkDeterminer1 singular "quelque" ;
+  some_NDet = mkDeterminerNum "quelques" "quelques" ;
+  something_NP = mkNameNounPhrase ["quelque chose"] Masc ;
+  somewhere_Adv = ss ["quelque part"] ; --- ne - pas
+  that_Det = mkDeterminer singular (pre {"ce" ; "cet" / voyelle}) "cette" ; --- là
+  that_NP = mkNameNounPhrase ["ça"] Masc ;
+  therefore_Adv = ss "donc" ;
+  these_NDet = mkDeterminerNum "ces" "ces" ; --- ci
+  they_NP = pronNounPhrase pronIls ;
+  they8fem_NP = pronNounPhrase pronElles ;
+  this_Det = mkDeterminer singular (pre {"ce" ; "cet" / voyelle}) "cette" ; --- ci
+  this_NP = mkNameNounPhrase ["ceci"] Masc ;
+  those_NDet = mkDeterminerNum "ces" "ces" ; --- là
+  thou_NP = pronNounPhrase pronTu ;
+  through_Prep = justPrep "par" ;
+  too_Adv = ss "trop" ;
+  to_Prep = justCase dative ; ---
+  under_Prep = justPrep "sous" ;
+  very_Adv = ss "très" ;
+  want_VV = mkVerbVerbDir (verbPres (conj3vouloir "vouloir") AHabere) ;
+  we_NP = pronNounPhrase pronNous ;
+  what8one_IP = intPronWhat singular ;
+  what8many_IP = intPronWhat plural ;
+  when_IAdv = quandAdv ;
+  when_Subj = quandSubj ;
+  where_IAdv = ouAdv ;
+  which8many_IDet = mkDeterminerNum "quels" "quelles" ** {n = Pl} ;
+  which8one_IDet = quelDet ;
+  who8one_IP = intPronWho singular ;
+  who8many_IP = intPronWho plural ;
+  why_IAdv = pourquoiAdv ;
+  without_Prep = justPrep "sans" ;
+  with_Prep = justPrep "avec" ;
+  ye_NP = pronNounPhrase pronVous ;
+  yes_Phr = ouiPhr ;
+  you_NP = pronNounPhrase pronVous ;
 
-  EveryDet = chaqueDet ; 
-  AllMassDet = toutDet ;
-  AllNumDet  = tousDet ;
-  WhichDet = quelDet ;
-  WhichNumDet = mkDeterminerNum plural "quels" "quelles" ;
-  MostsDet = plupartDet ;
-  MostDet  = mkDeterminer1 singular (["la plupart"] ++ elisDe) ; --- de
-  SomeDet  = mkDeterminer1 singular "quelque" ;
-  SomeNumDet = mkDeterminerNum plural "quelques" "quelques" ;
-  NoDet = mkDeterminer singular "aucun" "aucune" ; --- ne
-  NoNumDet = mkDeterminerNum plural ("aucun" ++ "des") ("aucune" ++ "des") ; --- ne
-  AnyDet   = mkDeterminer1 singular "quelque" ; ---
-  AnyNumDet  = mkDeterminerNum plural "quelques" "quelques" ; ---
-  ManyDet  = mkDeterminer1 plural "plusieurs" ;
-  MuchDet  = mkDeterminer1 singular ("beaucoup" ++ elisDe) ; --- de
-  ThisDet  = mkDeterminer singular (pre {"ce" ; "cet" / voyelle}) "cette" ; --- ci
-  ThatDet  = mkDeterminer singular (pre {"ce" ; "cet" / voyelle}) "cette" ; --- là
-  TheseNumDet = mkDeterminerNum plural "ces" "ces" ; --- ci
-  ThoseNumDet = mkDeterminerNum plural "ces" "ces" ; --- là
-
-  HowIAdv = commentAdv ;
-  WhenIAdv = quandAdv ;
-  WhereIAdv = ouAdv ;
-  WhyIAdv = pourquoiAdv ;
-
-  AndConj = etConj ;
-  OrConj = ouConj  ;
-  BothAnd = etetConj ;
-  EitherOr = ououConj  ;
-  NeitherNor = niniConj  ; --- requires ne !
-  IfSubj = siSubj ;
-  WhenSubj = quandSubj ;
-
-  PhrYes = ouiPhr ;  
-  PhrNo = nonPhr ; --- and also Si!
-
-  VeryAdv = ss "très" ;
-  TooAdv = ss "trop" ;
-  OtherwiseAdv = ss "autrement" ;
-  ThereforeAdv = ss "donc" ;
-
-  EverybodyNP  = mkNameNounPhrase ["tout le monde"] Masc ;
-  SomebodyNP   = mkNameNounPhrase ["quelqu'un"] Masc ;
-  NobodyNP     = mkNameNounPhrase ["personne"] Masc ;  --- ne
-  EverythingNP = mkNameNounPhrase ["tout"] Masc ;
-  SomethingNP  = mkNameNounPhrase ["quelque chose"] Masc ;
-  NothingNP    = mkNameNounPhrase ["rien"] Masc ; --- ne
-
-  CanVV     = mkVerbVerbDir (verbPres (conj3pouvoir "pouvoir") AHabere) ;
-  CanKnowVV = mkVerbVerbDir (verbPres (conj3savoir "savoir") AHabere) ;
-  MustVV    = mkVerbVerbDir (verbPres (conj3devoir "devoir") AHabere) ;
-  WantVV    = mkVerbVerbDir (verbPres (conj3vouloir "vouloir") AHabere) ;
-
-  EverywhereNP = ss "partout" ;
-  SomewhereNP = ss ["quelque part"] ; --- ne - pas
-  NowhereNP = ss ["nulle part"] ;
-
-  AlthoughSubj = ss ("bien" ++ elisQue) ** {m = Con} ;
-
-  AlmostAdv = ss "presque" ;
-  QuiteAdv = ss "assez" ;
-
-  InPrep = justPrep "dans" ;
-  OnPrep = justPrep "sur" ;
-  ToPrep = justCase dative ; ---
-  ThroughPrep = justPrep "par" ;
-  AbovePrep = {s = ["au dessus"] ; c = genitive} ;
-  UnderPrep = justPrep "sous" ;
-  InFrontPrep = justPrep "devant" ;
-  BehindPrep = justPrep "derrière" ;
-  BetweenPrep = justPrep "entre" ;
-  FromPrep = justCase genitive ; ---
-  BeforePrep = justPrep "avant" ;
-  DuringPrep = justPrep "pendant" ;
-  AfterPrep = justPrep "après" ;
-  WithPrep = justPrep "avec" ;
-  WithoutPrep = justPrep "sans" ;
-  ByMeansPrep = justPrep "par" ;
-  PossessPrep = justCase genitive ;
-  PartPrep = justCase genitive ; ---
-  AgentPrep = justPrep "par" ;
 
 }

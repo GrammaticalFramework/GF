@@ -5,27 +5,7 @@ incomplete concrete RulesRomance of Rules = CategoriesRomance **
 
 lin 
   UseN = noun2CommNounPhrase ;
-  ModAP = modCommNounPhrase ;
-  ModGenOne = npGenDet singular ;
-  ModGenNum = npGenDetNum ;
   UsePN = nameNounPhrase ;
-  UseN2 = funAsCommNounPhrase ; -- [SyntaxFra.noun2CommNounPhrase]
-  AppN2 = appFunComm ;
-  AppN3 = appFun2 ;
-  UseA = adj2adjPhrase ;
-  ComplA2 = complAdj ;
-  PositADeg = positAdjPhrase ;
-  ComparADeg = comparAdjPhrase ;
-  SuperlNP = superlNounPhrase ;
-
-  DetNP = detNounPhrase ;
-  IndefOneNP = indefNounPhrase singular ;
-  IndefNumNP = indefNounPhraseNum ;
-  DefOneNP = defNounPhrase singular ;
-  DefNumNP = defNounPhraseNum ;
-  MassNP = partitiveNounPhrase singular ;
-  UseInt i = {s = \\_ => i.s} ;
-  NoNum = noNum ;
 
   SymbPN i = {s = i.s ; g = Masc} ; --- cannot know gender
   SymbCN cn s =
@@ -35,71 +15,106 @@ lin
     {s = \\n => cn.s ! n ++ i.s ; 
      g = cn.g} ;
 
+  IndefOneNP = indefNounPhrase singular ;
+  IndefNumNP = indefNounPhraseNum ;
+  DefOneNP = defNounPhrase singular ;
+  DefNumNP = defNounPhraseNum ;
+
+  DetNP = detNounPhrase ;
+  MassNP = partitiveNounPhrase singular ;
+
+  AppN2 = appFunComm ;
+  AppN3 = appFun2 ;
+  UseN2 = funAsCommNounPhrase ; -- [SyntaxFra.noun2CommNounPhrase]
+
+  ModAP = modCommNounPhrase ;
   CNthatS = nounThatSentence ;
 
-  PredVP = predVerbPhrase ;
-  PosVG  = predVerbGroup True ;
-  NegVG  = predVerbGroup False ;
+  ModGenOne = npGenDet singular ;
+  ModGenNum = npGenDetNum ;
 
-  PredVG = predVerbGroupClause ;
+  UseInt i = {s = \\_ => i.s} ;
+  NoNum = noNum ;
 
-  PredV  = predVerb ;
-  PredAP = predAdjective ; 
-  PredSuperl a = predAdjective (superlAdjDegr a) ; 
-  PredCN = predCommNoun ;
-  PredV2 = complTransVerb ;
-  PredV3 = complDitransVerb ;
-  PredNP = predNounPhrase ;
-  PredPP = predAdverb ;
-  PredVS = complSentVerb ;
-  PredVV = complVerbVerb ;
-  PredPassV = predPassVerb ;
-  VTrans = transAsVerb ;
+  UseA = adj2adjPhrase ;
+  ComplA2 = complAdj ;
+
+  PositADeg = positAdjPhrase ;
+  ComparADeg = comparAdjPhrase ;
+  SuperlNP = superlNounPhrase ;
+
+  UseV2 = transAsVerb ;
+
+-- Formation of infinitival phrases.
+{- ----
+  UseCl tp cl = {s = \\o => tp.s ++ cl.s ! tp.b ! ClFinite tp.t tp.a o} ;
+  UseRCl tp cl = 
+    {s = \\gn,p => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! gn ! p} ;
+  UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
+-}
+
+  PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
+  NegTP t a = {s = t.s ++ a.s ; b = False ; t = t.t ; a = a.a} ;
+
+  TPresent     = {s = [] ; t = Present} ;
+  TPast        = {s = [] ; t = Past} ;
+  TFuture      = {s = [] ; t = Future} ;
+  TConditional = {s = [] ; t = Condit} ;
+
+  ASimul = {s = [] ; a = Simul} ;
+  AAnter = {s = [] ; a = Anter} ;
+
+-- Adverbs.
 
   AdjAdv a = {s = a.s ! AA} ;
-  AdvVP = adVerbPhrase ;
+----  AdvVP = adVerbPhrase ;
   AdvPP p = p ;
+
   PrepNP = prepNounPhrase ;
+
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
+  AdvAdv = cc2 ;
 
-  ThereNP = existNounPhrase ;
+{-
+--3 Sentences and relative clauses
+--
 
-  PosSlashV2 = slashTransVerb True ;
-  NegSlashV2 = slashTransVerb False ;
-  OneVP = predVerbPhrase nounPhraseOn ;
+  SlashV2 = slashTransVerb ;
+  SlashVV2 = slashVerbVerb ;
+  SlashAdv cl p = slashAdverb cl p.s ;
 
+  --PosSlashV2 = slashTransVerb True ;
+  --NegSlashV2 = slashTransVerb False ;
+-}
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
-  RelVP = relVerbPhrase ;
-  RelSlash = relSlash ;
-  ModRC = modRelClause ;
-  RelSuch = relSuch ;
+----  RelSlash = relSlash ;
+----  ModRS = modRelClause ;
+----  RelCl = relSuch ;
 
-  WhoOne = intPronWho singular ;
-  WhoMany = intPronWho plural ;
-  WhatOne = intPronWhat singular ;
-  WhatMany = intPronWhat plural ;
+--!
+--3 Questions and imperatives
+--
+
+----  IDetCN d n = detNounPhrase d n ;
   FunIP = funIntPron ;
-  NounIPOne = nounIntPron singular ;
-  NounIPMany = nounIntPron plural ;
 
-  QuestVP = questVerbPhrase ;
-  IntVP = intVerbPhrase ;
-  IntSlash = intSlash ;
-  QuestAdv = questAdverbial ;
-  IsThereNP = existNounPhraseQuest ;
+----  QuestCl = questClause ;
+----  IntSlash = intSlash ;
+----  QuestAdv = questAdverbial ;
 
-  ImperVP = imperVerbPhrase ;
+----  PosImpVP = imperVerbPhrase True ;
+----  NegImpVP = imperVerbPhrase False ;
 
   IndicPhrase = indicUtt ;
   QuestPhrase = interrogUtt ;
   ImperOne = imperUtterance singular ;
   ImperMany = imperUtterance plural ;
 
-  PrepS p = p ;
-  AdvS = advSentence ;
+-----  PrepS p = p ;
+-----  AdvS = advSentence ;
 
   TwoS = twoSentence ;
   ConsS = consSentence ;
@@ -118,8 +133,8 @@ lin
 
   SubjS = subjunctSentence ;       -- stack
   SubjImper = subjunctImperative ; 
-  SubjQu = subjunctQuestion ;
-  SubjVP = subjunctVerbPhrase ;
+  SubjQS = subjunctQuestion ;
+ ----- SubjVP = subjunctVerbPhrase ;
 
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase singular ;
@@ -129,4 +144,20 @@ lin
 
   OnePhr p = p ;
   ConsPhr = cc2 ;
+
+-----------------------
+-- special constructions
+
+  OneNP = nounPhraseOn ;
+
+
+{- ----
+  ExistCN A = predVerbGroupClause npDet 
+                (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 
+                   (indefNounPhrase singular A)) ;
+  ExistNumCN nu A = predVerbGroupClause npDet 
+                (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 
+                   (indefNounPhraseNum plural nu A)) ;
+-}
+
 }

@@ -1,6 +1,10 @@
---# -path=.:../romance:../oldabstract:../abstract:../../prelude
+--# -path=.:../romance:../abstract:../../prelude
 
-concrete TestResourceFre of TestResource = RulesFre, StructuralFre ** 
+concrete TestResourceFre of TestResource = 
+  RulesFre, 
+  ClauseFre,
+  StructuralFre 
+  ** 
   open Prelude, TypesFre, MorphoFre, SyntaxFre in {
 
 flags startcat=Phr ; lexer=text ; parser=chart ; unlexer=text ;

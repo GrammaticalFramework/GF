@@ -43,7 +43,7 @@ lincat
 
   VS     = Verb ;
   VQ     = Verb ;
-  VV     = Verb ** {s3 : Str} ;
+  VV     = Verb ** {isAux : Bool} ;
   VA     = Verb ;
 
   V2S    = TransVerb ;
@@ -69,9 +69,11 @@ lincat
   Cl     = Clause ;
       -- = {s : Bool => SForm => Order => Str} ;
   Slash  = Clause ** {s2 : Preposition} ;
+
   RP     = {s : RelCase => GenNum => Str ; g : RelGender} ;
   RS     = {s :                  GenNum => Person => Str} ;
   RCl    = {s : Bool => SForm => GenNum => Person => Str} ;
+
   IP     = NounPhrase ;
   IDet   = {s : NounGender => Str ; n : Number ; b : SpeciesP} ;
   QS     = {s :                  QuestForm => Str} ;
@@ -87,5 +89,7 @@ lincat
   ListAP = {s1,s2 : AdjFormPos => Case => Str ; p : Bool} ;
   ListNP = {s1,s2 : NPForm => Str ; g : Gender ; n : Number ; p : Person} ;
   ListAdv = {s1,s2 : Str} ; 
+
+  Subj    = {s : Str} ;
 
 }

@@ -88,8 +88,7 @@ oper
 
   negVerb = \va -> elisNe ++ va ++ "pas" ;
 
-  copula = \b,w -> let etre = (predVerb verbEtre).s in
-    etre ! b ! Masc ! w ;
+  copula = verbEtre ;
 
   isClitCase = \c -> case c of { 
      Acc => True ;
@@ -161,7 +160,7 @@ oper
   } ;
 
 -- Questions
-
+{- ----
   questVerbPhrase = \jean,dort ->
     {s = table {
       DirQ   => optStr (estCeQue Acc) ++ (predVerbPhrase jean dort).s ! Ind ;
@@ -211,7 +210,7 @@ oper
       IndirQ => quand.s                          ++ jeandort
       }
     } ;
-
+-}
 ----- moved from Morpho
 
 --2 Articles

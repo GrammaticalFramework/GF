@@ -35,49 +35,76 @@ lincat
             n : Number ; p : Person ; c : ClitType} ;
   PN     = {s : Str ; g : Gender} ;
   Det    = {s : Gender => Str ; n : Number} ;
-  A      = Adjective ;
-      -- = {s : AForm => Str ; p : Bool} ;
-  A2     = Adjective ** {s2 : Preposition ; c : CaseA} ;
-  ADeg   = {s : Degree => AForm => Str ; p : Bool} ;
-  AP     = Adjective ;
+  NDet   = {s : Gender => Str} ;
   N2     = Function ;
       -- = CommNoun ** {s2 : Preposition ; c : CaseA} ;
   N3     = Function ** {s3 : Preposition ; c3 : CaseA} ;
   Prep   = {s : Preposition ; c : CaseA} ; 
   Num    = {s : Gender => Str} ;
 
+  A      = Adjective ;
+      -- = {s : AForm => Str ; p : Bool} ;
+  A2     = Adjective ** {s2 : Preposition ; c : CaseA} ;
+  ADeg   = {s : Degree => AForm => Str ; p : Bool} ;
+  AP     = Adjective ;
+  AS     = Adjective ** {mp,mn : Mode} ; --- "more difficult for him to come than..."
+  A2S    = Adjective ** {s2 : Preposition} ;
+  AV     = Adjective ;
+  A2V    = Adjective ** {s2 : Preposition} ;
+
   V      = Verb ; 
       -- = {s : VF => Str} ;
-  VG     = {s : Bool => Gender => VPForm => Str} ;
-  VP     = {s : Gender => VPForm => Str} ;
+  VP     = {s : Bool => Gender => VPForm => Str} ;
+  VPI    = {s : Gender => Number => Person => Str} ;
   V2     = TransVerb ;
       -- = Verb ** {s2 : Preposition ; c : CaseA} ; 
   V3     = TransVerb ** {s3 : Preposition ; c3 : CaseA} ;
   VS     = Verb ** {mp,mn : Mode} ;
   VV     = Verb ** {c : CaseA} ;
+  VA     = Verb ;
+
+  V2S    = TransVerb ;
+  V2Q    = TransVerb ;
+  V2V    = TransVerb ** {s3 : Preposition ; c3 : CaseA} ;
+  V2A    = TransVerb ;
+  V0     = Verb ;
+
+  TP     = {s : Str ; b : Bool ; t : Tense ; a : Anteriority} ; --- the Str field is dummy
+  Tense  = {s : Str ; t : Tense} ;
+  Ant    = {s : Str ; a : Anteriority} ;
+
   Adv    = {s : Str} ;
+  AdV    = {s : Str} ;
+  AdA    = {s : Str} ;
+  AdC    = {s : Str} ;
   PP     = {s : Str} ;
 
   S      = Sentence ; 
       -- = {s : Mode => Str} ;
-  Slash  = Sentence ** {s2 : Preposition ; c : CaseA} ;
   Cl     = Clause ;
       -- = {s : Bool => ClForm => Str} ;
+  Slash  = Sentence ** {s2 : Preposition ; c : CaseA} ;
 
   RP     = {s : RelForm => Str ; g : RelGen} ;
-  RC     = {s : Mode => Gender => Number => Str} ;
+  RS     = {s :           Mode => Gender => Number => Person => Str} ;
+  RCl    = {s : Bool => ClForm => Gender => Number => Person => Str} ;
 
   IP     = {s : CaseA => Str ; g : Gender ; n : Number} ;
-  Qu     = {s : QuestForm => Str} ;
+  IDet   = {s : Gender => Str ; n : Number} ;
+  QS     = {s :                   QuestForm => Str} ;
+  QCl    = {s : Bool => ClForm => QuestForm => Str} ;
   Imp    = {s : Gender => Number => Str} ;
+
   Phr    = {s : Str} ;
 
   Conj   = {s : Str ; n : Number} ;
   ConjD  = {s1,s2 : Str ; n : Number} ;
 
-  ListS  = {s1,s2 : Mode => Str} ;
-  ListAP = {s1,s2 : AForm => Str ; p : Bool} ;
-  ListNP = {s1,s2 : CaseA => Str ; g : PronGen ; n : Number ; p : Person} ;
+  ListS   = {s1,s2 : Mode => Str} ;
+  ListAP  = {s1,s2 : AForm => Str ; p : Bool} ;
+  ListNP  = {s1,s2 : CaseA => Str ; g : PronGen ; n : Number ; p : Person} ;
+  ListAdv = {s1,s2 : Str} ; 
 
-  Subj   = {s : Str ; m : Mode} ;
+  Subj    = {s : Str ; m : Mode} ;
+
 }
