@@ -250,7 +250,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
      let c0 = firstAbsCat os gro
      c <- GrammarToCanon.redQIdent c0
      lang <- maybeErr "no concrete" $ languageOfOptState os st
-     t <- Look.lookupLincat cgr $ CMacros.redirectIdent lang c
+     t <- return $ errVal CMacros.defLinType $ Look.lookupLincat cgr $ CMacros.redirectIdent lang c
      return $ if CMacros.isDiscontinuousCType t 
        then (putStrLn ("Warning: discontinuous category" +++ prt_ c))
        else (return ())
