@@ -210,7 +210,7 @@ fun
   PredV       : V  -> VG ;             -- "walk", "doesn't walk"
   PredPassV   : V  -> VG ;             -- "is seen", "is not seen"
   PredTV      : TV -> NP -> VG ;       -- "sees John", "doesn't see John"
-  PredVS      : VS -> S -> VG ;        -- "says that I run", "doesn't say..."
+  PredVS      : VS -> S  -> VG ;       -- "says that I run", "doesn't say..."
   PredVV      : VV -> VG -> VG ;       -- "can run", "can't run", "tries to run"
   PredV3      : V3 -> NP -> NP -> VG ; -- "prefers wine to beer"
 
@@ -221,6 +221,7 @@ fun
   VTrans      : TV -> V ;              -- "loves"
 
   PosVG,NegVG : VG -> VP ;             -- 
+
 
 --!
 --3 Adverbs
@@ -239,7 +240,7 @@ fun
 --
 
   PredVP : NP -> VP -> S ;                     -- "John walks"
-  PosSlashTV,NegSlashTV : NP -> TV -> Slash ;  -- "John sees", "John doesn's see"
+  PosSlashTV,NegSlashTV : NP -> TV -> Slash ;  -- "John sees", "John doesn't see"
   OneVP : VP -> S ;                            -- "one walks"
   ThereNP : NP -> S ;                          -- "there is a bar","there are 86 bars"
 
@@ -259,7 +260,7 @@ fun
   FunIP : Fun -> IP -> IP ;                -- "the mother of whom"
   NounIPOne, NounIPMany : CN -> IP ;       -- "which car", "which cars"
 
-  QuestVP : NP -> VP -> Qu;                -- "does John walk"; "doesn't John walk"
+  QuestVP : NP -> VP -> Qu ;               -- "does John walk"; "doesn't John walk"
   IntVP : IP -> VP -> Qu ;                 -- "who walks"
   IntSlash : IP -> Slash -> Qu ;           -- "whom does John see"
   QuestAdv : IAdv -> NP -> VP -> Qu ;      -- "why do you walk"

@@ -230,6 +230,7 @@ flagDepth  = aOpt "depth"
 flagAlts   = aOpt "alts"
 flagLength = aOpt "length"
 flagNumber = aOpt "number"
+flagRawtrees = aOpt "rawtrees"
 
 caseYesNo :: Options -> OptFun -> Maybe Bool
 caseYesNo opts f = do

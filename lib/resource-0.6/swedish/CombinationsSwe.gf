@@ -114,6 +114,7 @@ lin
   CNthatS = nounThatSentence ;
 
   PredVP = predVerbPhrase ;
+
   PosVG  = predVerbGroup True ;
   NegVG  = predVerbGroup False ;
 

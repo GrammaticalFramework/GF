@@ -71,7 +71,14 @@ trees2trms opts sg cn as ts0 info = do
       ts1 <- return (map cf2trm0 ts0) ----- should not need annot
       mapM (checkErr . (annotate gr) . trExp) ts1 ---- complicated; often fails
     _ -> do
-      (ts1,ss) <- checkErr $ mapErrN 10 postParse ts0
+      let num = optIntOrN opts flagRawtrees 99999
+      let (ts01,rest) = splitAt num ts0
+      if null rest then return () 
+         else checkWarn ("Warning: only" +++ show num +++ "raw parses out of" +++ 
+                          show (length ts0) +++ 
+                          "considered; use -rawtrees=<Int> to see more"
+                     )
+      (ts1,ss) <- checkErr $ mapErrN 10 postParse ts01
       if null ts1 then raise ss else return ()
       ts2 <- mapM (checkErr . annotate gr . refreshMetas [] . trExp) ts1 ---- 
       if forgive then return ts2 else do
