@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:34 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.21 $
+-- > CVS $Date: 2005/03/07 17:50:00 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.22 $
 --
 -- Macros for building and analysing terms in GFC concrete syntax.
 --
@@ -16,6 +16,7 @@
 
 module CMacros where
 
+import Ident
 import AbsGFC
 import GFC
 import qualified Ident as A ---- no need to qualif? 21/9
@@ -244,6 +245,43 @@ onTokens f t = case t of
    K (KS s) -> K (KS (f s))
    K (KP ss vs) -> K (KP (map f ss) [Var (map f x) (map f y) | Var x y <- vs])
    _ -> composSafeOp (onTokens f) t
+
+-- | Apply some function to all identifiers in a GFC term
+onTermIdents :: (Ident -> Ident) -> Term -> Term
+onTermIdents f t = case t of
+  Arg av -> Arg $ case av of
+                    A i x -> A (f i) x
+                    AB i x y -> AB (f i) x y
+  I ci -> I (fc ci)
+  Con ci ts -> Con (fc ci) (map (onTermIdents f) ts)
+  LI i -> LI (f i)
+  R as -> R [Ass (fl l) (onTermIdents f t) | Ass l t <- as]
+  P t l -> P (onTermIdents f t) (fl l)
+  T ct cs -> T (fct ct) [Cas (map fp ps) (onTermIdents f t) | Cas ps t <- cs]
+  V ct ts -> V (fct ct) (map (onTermIdents f) ts)
+  S t1 t2 -> S (onTermIdents f t1) (onTermIdents f t2)
+  C t1 t2 -> C (onTermIdents f t1) (onTermIdents f t2)
+  FV ts -> FV (map (onTermIdents f) ts)
+  _ -> t
+  where 
+    fc :: CIdent -> CIdent
+    fc (CIQ i1 i2) = CIQ (f i1) (f i2)
+    fl :: Label -> Label
+    fl l = case l of
+               L i -> L (f i)
+               _ -> l
+    fct :: CType -> CType
+    fct ct = case ct of 
+                 RecType ls -> RecType [ Lbg (fl l) (fct ct) | Lbg l ct <- ls ]
+                 Table t1 t2 -> Table (fct t1) (fct t2)
+                 Cn ci -> Cn (fc ci)
+                 _ -> ct
+    fp :: Patt -> Patt
+    fp p = case p of 
+               PC ci ps -> PC (fc ci) (map fp ps)
+               PV i -> PV (f i)
+               PR ps -> PR [PAss (fl l) (fp p) | PAss l p <- ps]
+	       _ -> p
 
 
 -- | to define compositional term functions
