@@ -309,6 +309,11 @@ inferLType gr trm = case trm of
 
    Vr ident -> termWith trm $ checkLookup ident
 
+   Typed e t -> do
+     t' <- comp t
+     check e t'
+     return (e,t')
+
    App f a -> do
      (f',fty) <- infer f
      fty' <- comp fty

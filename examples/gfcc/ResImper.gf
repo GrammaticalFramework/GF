@@ -2,26 +2,36 @@ resource ResImper = open Predef in {
 
   -- precedence
 
-  oper 
-    Prec     : PType = Predef.Ints 4 ;
-    PrecExp  : Type = {s : Prec => Str} ;
-    ex       : PrecExp -> Str = \exp -> exp.s ! 0 ;
-    constant : Str -> PrecExp = \c -> {s = \\_ => c} ;
-    infixN : Prec -> Str -> PrecExp -> PrecExp -> PrecExp = \p,f,x,y ->
-      {s = mkPrec (x.s ! (nextPrec ! p) ++ f ++ y.s ! (nextPrec ! p)) ! p} ;
-    infixL : Prec -> Str -> PrecExp -> PrecExp -> PrecExp = \p,f,x,y ->
-      {s = mkPrec (x.s ! p ++ f ++ y.s ! (nextPrec ! p)) ! p} ;
+  param PAssoc = PN | PL | PR ;
 
-    nextPrec : Prec => Prec = table {
+  oper 
+    Prec    : PType = Predef.Ints 4 ;
+    PrecExp : Type = {s : Str ; p : Prec ; a : PAssoc} ;
+
+    mkPrec : Prec -> PAssoc -> Str -> PrecExp = \p,a,f -> 
+      {s = f ; p = p ; a = a} ;
+
+    usePrec : PrecExp -> Prec -> Str = \x,p ->
+      case <<x.p,p> : Prec * Prec> of {
+        <3,4> | <2,3> | <2,4> => paren x.s ;
+        <1,1> | <1,0> | <0,0> => x.s ;
+        <1,_> | <0,_>         => paren x.s ;
+        _ => x.s
+        } ;
+
+    constant : Str -> PrecExp = mkPrec 4 PN ;
+
+    infixN : Prec -> Str -> (_,_ : PrecExp) -> PrecExp = \p,f,x,y ->
+      mkPrec p PN (usePrec x (nextPrec p) ++ f ++ usePrec y (nextPrec p)) ;
+    infixL : Prec -> Str -> (_,_ : PrecExp) -> PrecExp = \p,f,x,y ->
+      mkPrec p PL (usePrec x p ++ f ++ usePrec y (nextPrec p)) ;
+    infixR : Prec -> Str -> (_,_ : PrecExp) -> PrecExp = \p,f,x,y ->
+      mkPrec p PR (usePrec x (nextPrec p) ++ f ++ usePrec y p) ;
+
+    nextPrec : Prec -> Prec = \p -> case <p : Prec> of {
       4 => 4 ; 
       n => Predef.plus n 1
       } ;
-
-    mkPrec : Str -> Prec => Prec => Str = \str -> 
-      \\p,q => case Predef.lessInt p q of {
-        Predef.PTrue => paren str ;
-        _ => str
-        } ;
 
   -- string operations
 

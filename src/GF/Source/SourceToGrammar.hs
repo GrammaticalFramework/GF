@@ -353,7 +353,10 @@ transExp x = case x of
   ECase exp cases  -> do
     exp' <- transExp exp
     cases' <- transCases cases
-    return $ G.S (G.T G.TRaw cases') exp'
+    let annot = case exp' of
+          G.Typed _ t -> G.TTyped t
+          _ -> G.TRaw 
+    return $ G.S (G.T annot cases') exp'
   ECTable binds exp  -> liftM2 M.mkCTable (mapM transBind binds) (transExp exp)
 
   EVariants exps    -> liftM G.FV $ mapM transExp exps

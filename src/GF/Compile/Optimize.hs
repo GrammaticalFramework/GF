@@ -166,6 +166,7 @@ mkLinDefault gr typ = do
        let (ls,ts) = unzip r
        ts' <- mapM mkDefField ts
        return $ R $ [assign l t | (l,t) <- zip ls ts']
+     _ | isTypeInts typ -> return $ EInt 0 -- exists in all as first val
      _ -> prtBad "linearization type field cannot be" typ
 
 -- Form the printname: if given, compute. If not, use the computed

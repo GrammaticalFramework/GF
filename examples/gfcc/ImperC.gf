@@ -26,10 +26,10 @@ concrete ImperC of Imper = open ResImper in {
       } ;
 
     Decl  typ cont = continues (typ.s ++ cont.$0) cont ;
-    Assign _ x exp = continues (x.s ++ "=" ++ ex exp) ;
-    Return _ exp   = statement ("return" ++ ex exp) ;
-    While exp loop = continue  ("while" ++ paren (ex exp) ++ loop.s) ;
-    IfElse exp t f = continue  ("if" ++ paren (ex exp) ++ t.s ++ "else" ++ f.s) ;
+    Assign _ x exp = continues (x.s ++ "=" ++ exp.s) ;
+    Return _ exp   = statement ("return" ++ exp.s) ;
+    While exp loop = continue  ("while" ++ paren exp.s ++ loop.s) ;
+    IfElse exp t f = continue  ("if" ++ paren exp.s ++ t.s ++ "else" ++ f.s) ;
     Block stm      = continue  ("{" ++ stm.s ++ "}") ;
     End            = ss [] ;
  
@@ -50,6 +50,6 @@ concrete ImperC of Imper = open ResImper in {
     ConsTyp = cc2 ;
 
     NilExp = ss [] ;
-    OneExp _ e = ss (ex e) ;
-    ConsExp _ _ e es = ss (ex e ++ "," ++ es.s) ;
+    OneExp _ e = e ;
+    ConsExp _ _ e es = ss (e.s ++ "," ++ es.s) ;
 }
