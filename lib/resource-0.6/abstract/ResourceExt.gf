@@ -19,6 +19,8 @@ oper
   DefManyNP : CN -> NP = DefNumNP NoNum ;
   ModGenMany : NP -> CN -> NP = ModGenNum NoNum ;
 
+  LocNP : NP -> AdV = PrepNP InPrep ;
+
   WeNP : NP = WeNumNP NoNum ;
   YeNP : NP = YeNumNP NoNum ;
 
