@@ -3,7 +3,6 @@ module Commands where
 import Operations
 import Zipper
 
-----import AccessGrammar (Term (Vr)) ----
 import qualified Grammar as G ---- Cat
 import GFC
 import qualified AbsGFC ---- Atom
@@ -235,21 +234,20 @@ execECommand env c = case c of
                            else id) 
                             (refineByTrees der cgr ts) s
 
-  
   CRefineRandom      -> \s -> action2commandNext
                                 (refineRandom (stdGenCEnv env s) 41 cgr) s 
 
   CSelectCand i      -> selectCand cgr i
 
   CTermCommand c     -> case c of
-                          "paraphrase" -> \s ->
-                            replaceByTermCommand der gr c (actTree (stateSState s)) s
+                         "paraphrase" -> \s ->
+                           replaceByTermCommand der gr c (actTree (stateSState s)) s
 ----                          "transfer" -> action2commandNext $
 ----                                       transferSubTree (stateTransferFun sgr) gr
-                          _ -> replaceByEditCommand gr c
+                         _ -> replaceByEditCommand gr c
 
-----  CAddOption o       -> changeStOptions (addOption o)
-----  CRemoveOption o    -> changeStOptions (removeOption o)
+  CAddOption o       -> changeStOptions (addOption o)
+  CRemoveOption o    -> changeStOptions (removeOption o)
   CDelete            -> action2commandNext $ deleteSubTree cgr
   CUndo              -> undoCommand
   CMenu              -> \s -> changeMsg (menuState env s) s
@@ -342,28 +340,26 @@ allTermCommands = snd $ customInfo customEditCommand
 stringCommandMenu = []
 
 displayCommandMenu :: CEnv -> [(Command,String)]
-displayCommandMenu env = []
-{- ----
-
-termCommandMenu = 
-
-stringCommandMenu = 
-   (CAddOption showStruct,      "structured") :
-   (CRemoveOption showStruct,   "unstructured") :
-  [(CAddOption (filterString s), s) | s <- allStringCommands]
-
-displayCommandMenu env = 
+displayCommandMenu env =
   [(CAddOption (menuDisplay s), s) | s <- "Abs" : langs] ++
   [(CAddOption (sizeDisplay s), s) | s <- ["short", "long"]] ++
   [(CAddOption (typeDisplay s), s) | s <- ["typed", "untyped"]]
  where
    langs = map prLanguage $ allLanguages env
 
+{- ----
+
+stringCommandMenu = 
+   (CAddOption showStruct,      "structured") :
+   (CRemoveOption showStruct,   "unstructured") :
+  [(CAddOption (filterString s), s) | s <- allStringCommands]
+-}
+
 changeMenuLanguage, changeMenuSize, changeMenuTyped :: String -> Command
 changeMenuLanguage s = CAddOption (menuDisplay s)
 changeMenuSize s     = CAddOption (sizeDisplay s)
 changeMenuTyped s    = CAddOption (typeDisplay s)
--}
+
 
 menuState env = map snd . mkRefineMenu env
 
@@ -417,7 +413,7 @@ langXML      = language "XML"
 linearizeState :: (String -> [String]) -> Options -> GFGrammar -> State -> [String]
 linearizeState wrap opts gr = 
  wrap . strop . unt . optLinearizeTreeVal opts gr . loc2treeFocus
-                  --- markedLinString br g
+
   where
    unt   = id ---- customOrDefault (stateOptions g) useUntokenizer customUntokenizer g
    strop = id ---- maybe id ($ g) $ customAsOptVal opts filterString customStringCommand
@@ -437,13 +433,14 @@ menuSState env state = [(s,c) | (_,(s,c)) <- mkRefineMenuAll env state]
 printname :: CEnv -> SState -> G.Fun -> String
 printname env state f = case getOptVal opts menuDisplay of
   Just "Abs" -> prQIdent f
-----  Just lang  -> printn lang f
+  Just lang  -> printn lang
   _ -> prQIdent f
  where
   opts = addOptions (optsSState state) (globalOptions env)
-  printn lang = linearize gr ---- printOrLinearize (grammarOfLang env (language lang))
-  gr = grammarCEnv env
-
+  printn lang = printOrLinearize gr m f where
+     sgr = stateGrammarOfLang env (language lang)
+     gr  = grammar sgr
+     m   = cncId sgr
 
 --- XML printing; does not belong here!
 
