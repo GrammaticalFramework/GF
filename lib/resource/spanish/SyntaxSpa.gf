@@ -1,7 +1,7 @@
 --# -path=.:../romance:../../prelude
 
-instance SyntaxIta of SyntaxRomance = 
-  TypesIta ** open Prelude, (CO=Coordination), MorphoIta in {
+instance SyntaxSpa of SyntaxRomance = 
+  TypesSpa ** open Prelude, (CO=Coordination), MorphoSpa in {
 oper
   nameNounPhrase = \jean -> 
     normalNounPhrase
@@ -9,25 +9,25 @@ oper
       jean.g 
       Sg ;
 
-  nounPhraseOn = mkNameNounPhrase "si" Masc ; --- can be plural dep. on object
+  nounPhraseOn = mkNameNounPhrase "se" Masc ; --- can be plural dep. on object
 
   partitiveNounPhrase = \n,vino ->
     normalNounPhrase 
       (table {
-         CPrep P_di => elisDe ++ vino.s ! n ;
-         c => prepCase c ++ artDef vino.g n (CPrep P_di) ++ vino.s ! n
+         CPrep P_de => elisDe ++ vino.s ! n ;
+         c => prepCase c ++ artDef vino.g n (CPrep P_de) ++ vino.s ! n
          }
       )
       vino.g
       n ;
 
-  chaqueDet  = mkDeterminer1 Sg "ogni" ;
-  tousDet    = mkDeterminer  Pl ["tutti i"] ["tutte le"] ; --- gli
-  plupartDet = mkDeterminer1 Pl ["la maggior parte di"] ;  --- dei, degli, delle
+  chaqueDet  = mkDeterminer1 Sg "cada" ;
+  tousDet    = mkDeterminer  Pl ["todos los"] ["todas las"] ; --- gli
+  plupartDet = mkDeterminer1 Pl ["la mayor parte de"] ;  --- dei, degli, delle
   unDet      = mkDeterminer  Sg artUno artUna ;
   plDet      = mkDeterminer1 Pl [] ;                       --- dei, degli, delle
 
-  quelDet  = mkDeterminer1 Sg "quale" ;
+  quelDet  = mkDeterminer1 Sg "cuál" ; ----
 
   npGenPoss = \n,ton,mec ->
     \\c => artDef mec.g n c ++ ton.s ! Poss n mec.g ++ mec.s ! n ; --- mia madre
@@ -38,26 +38,26 @@ oper
   existNounPhrase = \delvino -> {
     s = \\m => 
         case m of {
-          Ind => case delvino.n of {Sg => "c'è" ;      Pl => ["ci sono"]} ;
-          Con => case delvino.n of {Sg => ["ci sia"] ; Pl => ["ci siano"]}
-          } ++ delvino.s ! stressed accusative  --- ce ne sono ; have to define "ci"
+          Ind => "hay" ;
+          Con => "haya"
+          } ++ delvino.s ! stressed accusative
     } ;
 
   mkAdjSolo : Str -> Bool -> Adjective = \adj,p ->
     mkAdjective (adjSolo adj) p ;
 
-  mkAdjTale : Str -> Bool -> Adjective = \adj,p ->
-    mkAdjective (adjTale adj) p ;
+  mkAdjUtil : Str -> Str -> Bool -> Adjective = \adj,as,p ->
+    mkAdjective (adjUtil adj as) p ;
 
   mkAdjDegrSolo : Str -> Bool -> AdjDegr = \adj,p ->
     mkAdjDegrLong (adjSolo adj) p ;
 
-  mkAdjDegrTale : Str -> Bool -> AdjDegr = \adj,p ->
-    mkAdjDegrLong (adjTale adj) p ;
+  mkAdjDegrUtil : Str -> Str -> Bool -> AdjDegr = \adj,as,p ->
+    mkAdjDegrLong (adjUtil adj as) p ;
 
-  comparConj = variants {"di" ; "che"} ;
+  comparConj = "que" ;
 
--- The commonest case for functions is common noun + "di".
+-- The commonest case for functions is common noun + "de".
 
   funGen : CommNounPhrase -> Function = \mere -> 
     mere ** complementCas genitive ;
@@ -68,7 +68,7 @@ oper
     {s = table {
            RComplex g n c => variants {
                case mere.c of {
-                 CPrep P_di => artDef mere.g n c ++ 
+                 CPrep P_de => artDef mere.g n c ++ 
                                lequel.s ! RSimple dative ++ mere.s ! n ;
                  _ => nonExist} ;
                artDef mere.g n c ++ mere.s ! n ++ 
@@ -81,9 +81,9 @@ oper
 
 -- Verbs
 
-  negVerb = \va -> "non" ++ va ;
+  negVerb = \va -> "no" ++ va ;
 
-  copula = \b,w -> let etre = (predVerb verbEssere).s in
+  copula = \b,w -> let etre = (predVerb verbSer).s in
     etre ! b ! Masc ! w ; ---- Masc
 
   isClitCase = \c -> case c of { 
@@ -92,19 +92,18 @@ oper
      _   => False
      } ;
 
-  auxVerb ve = case ve.aux of {
-    AHabere => verbAvere ;
-    AEsse   => verbEssere
-    } ;
+-- Spanish only has one compound auxiliary.
+
+  auxVerb ve = verbHaber ; 
 
 -- The negation of a verb.
 
   posNeg = \b,v,c -> 
     if_then_else Str b
       (v ++ c)
-      ("non" ++ v ++ c) ;
+      ("no" ++ v ++ c) ;
 
-  embedConj = "che" ;
+  embedConj = "que" ;
 
 -- Relative pronouns
 
@@ -135,14 +134,14 @@ oper
     } ; 
 
   intPronWho = \num -> {
-    s = \\c => prepCase c ++ "chi" ;
+    s = \\c => prepCase c ++ "quién" ;
     g = Masc ; --- can we decide this?
     n = num
   } ;
 
   intPronWhat = \num -> {
     s = table {
-          c => prepCase c ++ "che" ++ optStr "cosa" 
+          c => prepCase c ++ "qué"
           } ;
     g = Masc ; --- can we decide this?
     n = num
@@ -153,14 +152,14 @@ oper
   questVerbPhrase = \jean,dort ->
     {s = table {
       DirQ   => (predVerbPhrase jean dort).s ! Ind ;
-      IndirQ => "se" ++ (predVerbPhrase jean dort).s ! Ind
+      IndirQ => "si" ++ (predVerbPhrase jean dort).s ! Ind
       }
     } ;
 
   existNounPhraseQuest = \delvino -> 
     let cedelvino = (existNounPhrase delvino).s ! Ind 
     in {
-      s = \\m => case m of {DirQ => [] ; _ => "se"} ++ cedelvino
+      s = \\m => case m of {DirQ => [] ; _ => "si"} ++ cedelvino
       } ;
 
   intVerbPhrase = \qui, dormir ->
@@ -175,17 +174,8 @@ oper
     let {qui = Tuvois.s2 ++ Qui.s ! Tuvois.c ; tuvois = Tuvois.s ! Ind} in
     {s = table {
       DirQ   => qui ++ tuvois ; 
-      IndirQ => ifCe Tuvois.c ++ qui ++ tuvois
+      IndirQ => qui ++ tuvois
       }
-    } ;
-
--- An auxiliary to distinguish between
--- "je ne sais pas" ("ce qui dort" / "ce que tu veux" / "à qui tu penses").
-
-  ifCe : Case -> Str = \c -> case c of { ---
-    Nom => "ciò" ;
-    Acc => "ciò" ; 
-    _   => []
     } ;
 
   questAdverbial = \quand, jean, dort ->
@@ -204,8 +194,8 @@ oper
   genForms = \matto, matta ->
     table {Masc => matto ; Fem => matta} ; 
 
-  artUno : Str = elision "un" "un" "uno" ;
-  artUna : Str = elision "una" "un'" "una" ;
+  artUno : Str = "un" ;
+  artUna : Str = "una" ;
 
   artIndef = \g,n,c -> case n of {
     Sg  => prepCase c ++ genForms artUno artUna ! g ;
@@ -221,11 +211,11 @@ oper
     artDef g n c ++ qualPron g n ;
 
   pronJe = mkPronoun
-    "io"   --- (variants {"io" ; []}) etc
-    "mi"
-    "mi"
+    "yo"   --- (variants {"yo" ; []}) etc
     "me"
-    "mio" "mia" "miei" "mie"
+    "me"
+    "mí"
+    "mi" "mi" "mis" "mis"
     PNoGen     -- gender cannot be known from pronoun alone
     Sg
     P1
@@ -233,86 +223,84 @@ oper
 
   pronTu = mkPronoun
     "tu"
-    "ti"
-    "ti"
     "te"
-    "tuo" "tua" "tuoi" "tue"
+    "te"
+    "tí"
+    "tu" "tu" "tus" "tus"
     PNoGen
     Sg
     P2
     Clit1 ;
 
   pronIl = mkPronoun
-    "lui"
+    "el"
     "lo"
-    "gli"
-    "lui"
-    "suo" "sua" "suoi" "sue"
+    "le"
+    "él"
+    "su" "su" "sus" "sus"
     (PGen Masc)
     Sg
     P3
     Clit2 ;
 
   pronElle = mkPronoun
-    "lei"
+    "ella"
     "la"
     "le"
-    "lei"
-    "suo" "sua" "suoi" "sue"
+    "ella"
+    "su" "su" "sus" "sus"
     (PGen Fem)
     Sg
     P3
     Clit2 ;
 
   pronNous = mkPronoun
-    "noi"
-    "ci"
-    "ci"
-    "noi"
-    "nostro" "nostra" "nostri" "nostre"
-    PNoGen
+    "nosotros"  ---- nosotras
+    "nos"
+    "nos"
+    "nosotros"
+    "nuestro" "nuestra" "nuestros" "nuestras"
+    (PGen Masc)
     Pl
     P1
     Clit3 ;
 
   pronVous = mkPronoun
-    "voi"
-    "vi"
-    "vi"
-    "voi"
-    "vostro" "vostra" "vostri" "vostre"
-    PNoGen
-    Pl   --- depends!
+    "vosotros"  ---- vosotras
+    "vos"
+    "vos"
+    "vosotros"
+    "vuestro" "vuestra" "vuestros" "vuestras"
+    (PGen Masc)
+    Pl
     P2
     Clit3 ;
 
   pronIls = mkPronoun
-    "loro"
-    "loro"
-    "li"   --- le !
-    "loro"
-    "loro" "loro" "loro" "loro"
+    "ellos"  ---- ellas
+    "los"
+    "les"
+    "ellos"
+    "su" "su" "sus" "sus"
     PNoGen
     Pl
     P3
     Clit1 ;
 
--- moved from ResIta
-
-  commentAdv = ss "comme" ;
-  quandAdv = ss "quando" ;
+  commentAdv = ss "como" ;
+  quandAdv = ss "cuando" ;
   ouAdv = ss "o" ;
-  pourquoiAdv = ss "perché" ;
+  pourquoiAdv = ss "porqué" ;
 
-  etConj = ss "e" ** {n = Pl} ;
+  etConj = ss "y" ** {n = Pl} ;
   ouConj = ss "o" ** {n = Sg}  ;
-  etetConj = sd2 "e" "e" ** {n = Pl}  ;
+  etetConj = sd2 "y" "y" ** {n = Pl}  ;
   ououConj = sd2 "o" "o" ** {n = Sg}  ;
-  niniConj = sd2 "né" "né" ** {n = Sg}  ; --- requires ne !
-  siSubj = ss "se" ** {m = Ind} ;
-  quandSubj = ss "quando" ** {m = Ind} ;
+  niniConj = sd2 "no" "ni" ** {n = Sg}  ; ----
+  siSubj = ss "si" ** {m = Ind} ;
+  quandSubj = ss "cuando" ** {m = Ind} ;
 
-  ouiPhr = ss ["Sì ."] ;  
+  ouiPhr = ss ["Sí ."] ;  
   nonPhr = ss ["No ."] ;
 
 }
