@@ -8,8 +8,8 @@ GHCOPTFLAGS=-O $(GHCFLAGS)
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
 
-HUGSINCLUDE    =.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:newparsing:trace:
-BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -inewparsing -iparsers -inotrace -icfgm -ispeech
+HUGSINCLUDE    =.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:newparsing:trace:visualization:
+BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -inewparsing -iparsers -inotrace -icfgm -ispeech -ivisualization
 GHCINCLUDE     =-ifor-ghc       $(BASICINCLUDE)
 GHCINCLUDENOFUD=-ifor-ghc-nofud $(BASICINCLUDE) 
 GHCINCLUDEGFT  =-ifor-gft       $(BASICINCLUDE) 
