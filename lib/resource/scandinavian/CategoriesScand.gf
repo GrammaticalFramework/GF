@@ -68,7 +68,7 @@ lincat
   S      = Sentence ;
       -- = {s :                  Order => Str} ;
   Cl     = Clause ;
-      -- = {s : Bool => SForm => Order => Str} ;
+      -- = {s : Bool => ClForm => Str} ;
   Slash  = Clause ** {s2 : Preposition} ;
 
   RP     = {s : RelCase => GenNum => Str ; g : RelGender} ;

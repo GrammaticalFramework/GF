@@ -928,7 +928,8 @@ oper
   ClauseSlashNounPhrase = Clause ** Complement ;
 
   slashTransVerb : NounPhrase -> TransVerb -> ClauseSlashNounPhrase = 
-    \jean,aimer ->
+    \jean,aimer -> variants {} ; ----
+{- ----
     predVerbGroupClause jean (predClauseGroup aimer (complVerb aimer)) **
     complementOfTransVerb aimer ;
 
@@ -941,7 +942,7 @@ oper
 
   slashAdverb : Clause -> {s : Str ; c : CaseA} -> ClauseSlashNounPhrase = 
     \ilhabite,dans -> ilhabite ** {s2 = dans.s ; c = dans.c} ;
-
+-}
 
 --2 Relative pronouns and relative clauses
 --

@@ -37,7 +37,7 @@ abstract Verbphrase = Categories ** {
   PredSuperl   : ADeg -> VP ;             -- "is the oldest"
   PredCN       : CN -> VP ;               -- "is a man"
   PredNP       : NP -> VP ;               -- "is Bill"
-  PredPP       : PP -> VP ;               -- "is in France"
+  PredAdv      : Adv -> VP ;              -- "is in France", "is here"
   PredAV       : AV  -> VPI -> VP   ;     -- "is eager to leave"
   PredObjA2V   : A2V -> NP -> VPI -> VP ; -- "is easy for us to convince"
 

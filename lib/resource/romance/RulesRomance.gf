@@ -98,8 +98,8 @@ lin
 --
 
   SlashV2  = slashTransVerb ;
-  SlashVV2 = slashVerbVerb ;
-  SlashAdv = slashAdverb ;
+----  SlashVV2 = slashVerbVerb ;
+----  SlashAdv = slashAdverb ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;

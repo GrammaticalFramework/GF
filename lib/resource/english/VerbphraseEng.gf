@@ -41,7 +41,7 @@ concrete VerbphraseEng of Verbphrase = CategoriesEng **
   PredSuperl a = predClauseBeGroup (complAdjective (superlAdjPhrase a)) ;
   PredCN v = predClauseBeGroup (complCommNoun v) ;
   PredNP v = predClauseBeGroup (complNounPhrase v) ;
-  PredPP v = predClauseBeGroup (complAdverb v) ;
+  PredAdv v = predClauseBeGroup (complAdverb v) ;
 
   PredAV v x = predClauseBeGroup (complVerbAdj v x) ;
   PredObjA2V v x y = predClauseBeGroup (complVerbAdj2 True v x y) ;

@@ -77,7 +77,7 @@ lin
   UseRCl tp cl = 
     {s = \\gn,p => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! gn ! p} ;
   UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
- 
+
   PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
   NegTP t a = {s = t.s ++ a.s ; b = False ; t = t.t ; a = a.a} ;
 

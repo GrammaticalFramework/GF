@@ -1,4 +1,4 @@
-concrete CountrySwe of Country = open ResourceSwe, ParadigmsSwe in {
+concrete CountrySwe of Country = open CategoriesSwe, ParadigmsSwe in {
 
   lincat
     Country = PN ;

@@ -792,6 +792,11 @@ param
     ;
 
 oper 
+  isCompoundClForm : ClForm -> Bool = \cf -> case cf of {
+    ClFinite Present Simul _ | ClFinite Past Simul _ => False ;
+    _ => True
+    } ;
+
   cl2s : ClForm -> {o : Order ; sf : SForm} = \c -> case c of {
     ClFinite t a o   => {o = o ; sf = VFinite t a} ;
     ClInfinite a     => {o = Sub ; sf = VInfinit a} -- "jag såg John inte hälsa"
@@ -825,6 +830,82 @@ oper
        }
     } ;
 
+--3 For $Sats$, the native topological structure.
+
+    Sats = {
+      s1 : SForm => Str ;  -- V1 har
+      s2 : Str ;           -- N1 jag
+      s3 : Bool => Str ;   -- A1 inte
+      s4 : SForm => Str ;  -- V2 sagt
+      s5 : Str ;           -- N2 dig
+      s6 : Str ;           -- A2 idag
+      s7 : Str ;           -- S  extraposition
+      e3,e4,e5,e6,e7 : Bool   -- indicate if the field exists
+      } ;
+
+  mkSats : NounPhrase -> Verb -> Sats = \subj,verb ->
+     let 
+       harsovit = verbSForm verb Act 
+     in
+     {s1 = \\sf => (harsovit sf).fin ;
+      s2 = subj.s ! PNom ;
+      s3 = negation ;
+      s4 = \\sf => (harsovit sf).inf ++ verb.s1 ;
+      s5, s6, s7 = [] ;
+      e3,e4,e5,e6,e7 = False
+      } ;
+
+  insertObject : Sats -> Str -> Sats = \sats, obj -> 
+     {s1 = sats.s1 ;
+      s2 = sats.s2 ;
+      s3 = sats.s3 ;
+      s4 = sats.s4 ;
+      s5 = sats.s5 ++ obj ;
+      s6 = sats.s6 ;
+      s7 = sats.s7 ;
+      e3 = sats.e3 ;
+      e4 = sats.e4 ;
+      e5 = True ;
+      e6 = sats.e6 ;
+      e7 = sats.e7
+      } ;
+
+  insertAdverb : Sats -> Str -> Sats = \sats, adv -> 
+     {s1 = sats.s1 ;
+      s2 = sats.s2 ;
+      s3 = sats.s3 ;
+      s4 = sats.s4 ;
+      s6 = sats.s6 ++ adv ;
+      s5 = sats.s5 ;
+      s7 = sats.s7 ;
+      e3 = sats.e3 ;
+      e4 = sats.e4 ;
+      e6 = True ;
+      e5 = sats.e5 ;
+      e7 = sats.e7
+      } ;
+
+  insertExtrapos : Sats -> Str -> Sats = \sats, exts -> 
+     {s1 = sats.s1 ;
+      s2 = sats.s2 ;
+      s3 = sats.s3 ;
+      s4 = sats.s4 ;
+      s6 = sats.s6 ;
+      s5 = sats.s5 ;
+      s7 = sats.s7 ++ exts ;
+      e3 = sats.e3 ;
+      e4 = sats.e4 ;
+      e7 = True ;
+      e5 = sats.e5 ;
+      e6 = sats.e6
+      } ;
+
+  mkSatsObject : NounPhrase -> Verb -> Str -> Sats = \subj,verb,obj ->
+    insertObject (mkSats subj verb) obj ;
+
+  mkSatsCopula : NounPhrase -> Str -> Sats = \subj,obj ->
+    mkSatsObject subj (verbVara ** {s1 = []}) obj ;
+
 
 --3 Sentence-complement verbs
 --
@@ -833,7 +914,7 @@ oper
   SentenceVerb : Type = Verb ;
 
   complSentVerb : SentenceVerb -> Sentence -> VerbGroup = \se,duler ->
-    useVerb se (\\_,_,_ => se.s1 ++ optStr infinAtt ++ duler.s ! Main) ;
+    useVerb se (\\_,_,_ => se.s1 ++ optStr infinAtt ++ duler.s ! Sub) ;
 
   complQuestVerb : SentenceVerb -> QuestionSent -> VerbGroup = \se,omduler ->
     useVerb se (\\_,_,_ => se.s1 ++ omduler.s ! IndirQ) ;

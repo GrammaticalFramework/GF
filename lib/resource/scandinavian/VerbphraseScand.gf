@@ -41,7 +41,7 @@ incomplete concrete VerbphraseScand of Verbphrase = CategoriesScand **
   PredSuperl a = predAdjective (superlAdjPhrase a) ;
   PredCN = predCommNoun ;
   PredNP = predNounPhrase ;
-  PredPP = predAdverb ;
+  PredAdv = predAdverb ;
   PredAV = complVerbAdj ;
   PredObjA2V = complVerbAdj2 True ;
 
