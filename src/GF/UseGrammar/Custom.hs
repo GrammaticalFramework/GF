@@ -303,6 +303,7 @@ customUntokenizer =
   ,(strCI "codelit",   const $ formatAsCodeLit)
   ,(strCI "concat",    const $ concat . words)
   ,(strCI "glue",      const $ performBinds)
+  ,(strCI "reverse",   const $ reverse)
   ,(strCI "bind",      const $ performBinds) -- backward compat
 -- add your own untokenizers here
   ]
