@@ -14,7 +14,7 @@ excluded = ["numerals.Abs.gf"]
 
 main :: IO ()
 main = do
-  system "ls >files"
+  system "ls *.gf >files"
   s <- readFile "files"
   writeFile scriptFile $ unlines $ map mkOne $ 
                          filter (flip notElem excluded) $ lines s
