@@ -12,7 +12,7 @@
 -- Creating and using lock fields in reused resource grammars.
 -----------------------------------------------------------------------------
 
-module Lockfield where
+module Lockfield (lockRecType, unlockRecord, lockLabel) where
 
 import Grammar
 import Ident
