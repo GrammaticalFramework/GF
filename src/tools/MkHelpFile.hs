@@ -7,6 +7,13 @@ main = do
 
 mkHsFile ss =
   "module HelpFile where\n\n" ++
+  "import Operations\n\n" ++
+  "txtHelpFileSummary =\n" ++
+  "  unlines $ map (concat . take 1 . lines) $ paragraphs txtHelpFile\n\n" ++
+  "txtHelpCommand c =\n" ++ 
+  "  case lookup c [(takeWhile (/=',') p,p) | p <- paragraphs txtHelpFile] of\n" ++
+  "    Just s -> s\n" ++
+  "    _ -> \"Command not found.\"\n\n" ++
   "txtHelpFile =\n" ++
   unlines (map mkOne ss) ++
   "  []"

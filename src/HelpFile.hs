@@ -1,5 +1,15 @@
 module HelpFile where
 
+import Operations
+
+txtHelpFileSummary =
+  unlines $ map (concat . take 1 . lines) $ paragraphs txtHelpFile
+
+txtHelpCommand c =
+  case lookup c [(takeWhile (/=',') p,p) | p <- paragraphs txtHelpFile] of
+    Just s -> s
+    _ -> "Command not found."
+
 txtHelpFile =
   "\n-- GF help file updated for GF 2.0, 24/3/2004." ++
   "\n-- *: Commands and options marked with * are not yet implemented." ++
@@ -8,9 +18,11 @@ txtHelpFile =
   "\n-- arguments. Commands are sorted by functionality. The short name is" ++
   "\n-- given first." ++
   "\n" ++
+  "\n-- Type \"h -all\" for full help file, \"h <CommandName>\" for full help on a command.  " ++
+  "\n" ++
   "\n-- commands that change the state" ++
   "\n" ++
-  "\ni, import: i File" ++
+  "\ni,  import: i File" ++
   "\n      Reads a grammar from File and compiles it into a GF runtime grammar." ++
   "\n      Files \"include\"d in File are read recursively, nubbing repetitions." ++
   "\n      If a grammar with the same language name is already in the state," ++
@@ -21,7 +33,7 @@ txtHelpFile =
   "\n        .gfr   precompiled GF resource  " ++
   "\n        .gfcm  multilingual canonical GF" ++
   "\n       *.ebnf  Extended BNF format" ++
-  "\n       *.cf    Context-free (BNF) format" ++
+  "\n        .cf    Context-free (BNF) format" ++
   "\n  options:" ++
   "\n      -old          old: parse in GF<2.0 format" ++
   "\n      -v            verbose: give lots of messages " ++
@@ -36,7 +48,7 @@ txtHelpFile =
   "\n      -cnc          set the name used for concrete syntax (with -old option)" ++
   "\n      -res          set the name used for resource (with -old option)" ++
   "\n      " ++
-  "\nrl, remove_language: rl Language" ++
+  "\n* rl, remove_language: rl Language" ++
   "\n      Takes away the language from the state." ++
   "\n" ++
   "\ne,  empty: e" ++
@@ -68,7 +80,8 @@ txtHelpFile =
   "\n" ++
   "\npm, print_multigrammar: pm" ++
   "\n      Prints the current multilingual grammar into a .gfcm file." ++
-  "\n      " ++
+  "\n      (Automatically executes the strip command (s) before doing this.)" ++
+  "\n" ++
   "\npo, print_options: po" ++
   "\n      Print what modules there are in the state. Also" ++
   "\n      prints those flag values in the current state that differ from defaults." ++
@@ -142,7 +155,7 @@ txtHelpFile =
   "\n      N.B.' The resulting Term is not a term in the sense of abstract syntax," ++
   "\n      and hence not a valid input to a Tree-demanding command." ++
   "\n" ++
-  "\nt, translate: t Lang Lang String" ++
+  "\nt,  translate: t Lang Lang String" ++
   "\n      Parses String in Lang1 and linearizes the resulting Trees in Lang2." ++
   "\n  flags:" ++
   "\n      -cat" ++
@@ -184,7 +197,7 @@ txtHelpFile =
   "\n      -transform   transform the result by this term processor" ++
   "\n      -number      generate this number of terms at most" ++
   "\n" ++
-  "\nst, show_tree: st Tree" ++
+  "\n* st, show_tree: st Tree" ++
   "\n      Prints the tree as a string. Unlike pt, this command cannot be" ++
   "\n      used in a pipe to produce a tree, since its output is a string." ++
   "\n  flags:" ++
@@ -209,7 +222,7 @@ txtHelpFile =
   "\n  flags:" ++
   "\n      -cat" ++
   "\n" ++
-  "\n* tq, translation_quiz: tq Lang Lang" ++
+  "\ntq, translation_quiz: tq Lang Lang" ++
   "\n      Random-generates translation exercises from Lang1 to Lang2," ++
   "\n      keeping score of success." ++
   "\n      To interrupt, type a full stop (.) alone on a line." ++
@@ -217,13 +230,13 @@ txtHelpFile =
   "\n  flags:" ++
   "\n      -cat" ++
   "\n" ++
-  "\n* tl, translation_list: tl Lang Lang Int" ++
+  "\ntl, translation_list: tl Lang Lang Int" ++
   "\n      Random-generates a list of Int translation exercises from Lang1 to Lang2." ++
   "\n      HINT: use wf to save the exercises in a file." ++
   "\n  flags:" ++
   "\n      -cat" ++
   "\n" ++
-  "\n* mq, morphology_quiz: mq" ++
+  "\nmq, morphology_quiz: mq" ++
   "\n      Random-generates morphological exercises," ++
   "\n      keeping score of success." ++
   "\n      To interrupt, type a full stop (.) alone on a line." ++
@@ -233,7 +246,7 @@ txtHelpFile =
   "\n      -cat" ++
   "\n      -lang" ++
   "\n" ++
-  "\n* ml, morphology_list: tl Int" ++
+  "\nml, morphology_list: ml Int" ++
   "\n      Random-generates a list of Int morphological exercises," ++
   "\n      keeping score of success." ++
   "\n      HINT: use wf to save the exercises in a file." ++
@@ -284,8 +297,11 @@ txtHelpFile =
   "\n     flags:" ++
   "\n       -language" ++
   "\n" ++
-  "\nh, help: h" ++
-  "\n      Displays this help message." ++
+  "\nh, help: h Command?" ++
+  "\n      Displays the paragraph concerning the command from this help file." ++
+  "\n      Without the argument, shows the first lines of all paragraphs." ++
+  "\n  options" ++
+  "\n       -all  show the whole help file" ++
   "\n" ++
   "\nq, quit: q" ++
   "\n      Exits GF." ++

@@ -80,7 +80,7 @@ data Command =
  | CPrintCanonXML
  | CPrintCanonXMLStruct 
  | CPrintHistory
- | CHelp
+ | CHelp (Maybe String)
 
  | CImpure ImpureCommand
 
@@ -177,7 +177,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
   CTestTokenizer -> changeArg (AString . optTokenizer opts gro . prCommandArg) sa
 
   CComputeConcrete m t -> 
-    justOutput (putStrLn (err id prt (
+    justOutput (putStrLn (err id (prt . stripTerm) (
                 string2srcTerm src m t >>= Co.computeConcrete src))) sa
 
   CTranslationQuiz il ol -> justOutput (teachTranslation opts (sgr il) (sgr ol)) sa
@@ -201,7 +201,10 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
   CSetFlag           -> changeState (addGlobalOptions opts0) sa
 ---- deprec!  CSetLocalFlag lang -> changeState (addLocalOptions lang opts0) sa
 
-  CHelp              -> returnArg   (AString txtHelpFile) sa
+  CHelp (Just c) -> returnArg   (AString (txtHelpCommand c)) sa
+  CHelp _
+    | oElem showAll opts  -> returnArg   (AString txtHelpFile) sa
+    | otherwise           -> returnArg   (AString txtHelpFileSummary) sa
 
   CPrintGrammar
     | oElem showOld opts -> returnArg (AString $ printGrammarOld (canModules st)) sa

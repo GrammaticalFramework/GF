@@ -58,11 +58,12 @@ markSubterm (beg, end) t = case t of
   R rs -> R $ map markField rs 
   T ty cs -> T ty [Cas p (mark v) | Cas p v <- cs]
   FV ts -> FV $ map mark ts
-  _    -> foldr1 C [tK beg, t, tK end]  -- t : Str guaranteed?
+  _    -> foldr1 C (tk beg ++ [t] ++ tk end)  -- t : Str guaranteed?
  where
    mark = markSubterm (beg, end)
    markField lt@(Ass l t) = if isLinLabel l then (Ass l (mark t)) else lt
-   
+   tk s = if null s then [] else [tK s]
+
 tK :: String -> Term
 tK = K . KS
 

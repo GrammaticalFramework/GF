@@ -160,6 +160,8 @@ doCompute    = iOpt "c"
 optimizeCanon = iOpt "opt"
 stripQualif   = iOpt "strip"
 nostripQualif = iOpt "nostrip"
+showAll      = iOpt "all"
+fromSource   = iOpt "src"
 
 -- mainly for stand-alone
 useUnicode    = iOpt "unicode"
