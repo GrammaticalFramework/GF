@@ -7,6 +7,7 @@
 -- w for [sh]
 
 include numerals.Abs.gf ;
+flags coding=OCScyrillic ;
 
 param Size = sg | dual | threefour | fiveup ; 
 

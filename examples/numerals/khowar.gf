@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=latinasupplement ;
 
 -- 2 has a non-general variant "joowáloo" ;
 

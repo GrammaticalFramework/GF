@@ -4,6 +4,7 @@
 -- j for i kratkoe i.e i with a thing
 
 include numerals.Abs.gf ;
+flags coding=russian ;
 
 param Size = sg | below10 | tenover ; 
 param DForm = unit | teen | ten | hundred ;

@@ -4,6 +4,7 @@
 -- u^ with line over
 
 include numerals.Abs.gf ;
+flags coding=latinasupplement ;
 
 param DForm = unit | teen | ten | hundred ; 
 

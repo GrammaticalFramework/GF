@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=greek ;
 
 -- Free variation on accents on m'ia and d'yo
 

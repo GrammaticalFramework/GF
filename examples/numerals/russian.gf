@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=russian ;
 
 -- Toiska, 13/8/2000, AR with Arto Mustajoki.
 

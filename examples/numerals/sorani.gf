@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=extendedarabic ;
 
 param DForm = unit | ten | teen | hund | kilurrest | kilurresthAzar ;
 param Size = sg | less500 | fiveup | more500 ; 

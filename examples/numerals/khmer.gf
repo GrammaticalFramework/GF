@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=extradiacritics ;
 
 param DForm = unit | ten ;
 param Size = sg | pl ;

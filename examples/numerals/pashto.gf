@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=extendedarabic ;
 
 param DForm = unit | ten | teen | spctwo | twenties;
 param Size = sg | two | less100 | more100 ; 

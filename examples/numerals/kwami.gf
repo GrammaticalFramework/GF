@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=latinasupplement ;
 
 -- D^ is from implosive d IPA symbol
 -- N Num 

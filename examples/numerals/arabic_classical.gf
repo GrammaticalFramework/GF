@@ -1,4 +1,5 @@
 include numerals.Abs.gf ;
+flags coding=arabic0600 ;
 
 -- There is uncertainty as to wthere forms like 102 000 should be
 -- hundred and thousand<DUAL> or hundred and two thousands<GEN.PL> or

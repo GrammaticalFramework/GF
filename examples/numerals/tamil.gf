@@ -17,6 +17,7 @@
 
 
 include numerals.Abs.gf ;
+flags coding=tamil ;
 
 oper 
   vowel : Strs = strs {"o" ; "e" ; "a" ; "i" ; "u"} ;
