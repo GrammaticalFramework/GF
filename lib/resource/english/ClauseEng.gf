@@ -25,7 +25,7 @@ concrete ClauseEng of Clause = CategoriesEng **
   SPredSuperl np a = predBeGroup np (complAdjective (superlAdjPhrase a)) ;
   SPredCN np v = predBeGroup np (complCommNoun v) ;
   SPredNP np v = predBeGroup np (complNounPhrase v) ;
-  SPredPP np v = predBeGroup np (complAdverb v) ;
+  SPredAdv np v = predBeGroup np (complAdverb v) ;
 
   SPredAV np v x = predBeGroup np (complVerbAdj v x) ;
   SPredObjA2V np v x y = predBeGroup np (complVerbAdj2 True v x y) ;
@@ -52,7 +52,7 @@ concrete ClauseEng of Clause = CategoriesEng **
   QPredSuperl np a = predBeGroupQ np (complAdjective (superlAdjPhrase a)) ;
   QPredCN np v = predBeGroupQ np (complCommNoun v) ;
   QPredNP np v = predBeGroupQ np (complNounPhrase v) ;
-  QPredPP np v = predBeGroupQ np (complAdverb v) ;
+  QPredAdv np v = predBeGroupQ np (complAdverb v) ;
   QPredAV np v x = predBeGroupQ np (complVerbAdj v x) ;
   QPredObjA2V np v x y = predBeGroupQ np (complVerbAdj2 True v x y) ;
 

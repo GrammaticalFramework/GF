@@ -668,7 +668,6 @@ oper
 
   param Order = Dir | Inv ;
 
-  ---- compiles to 4k lines gfr. also relSlash, relVerbPhrase are bad
   oper
   Verbal = VForm => Agr => Str ;
 
@@ -701,12 +700,12 @@ oper
        Inv => \\b,sf =>  
          let
            does = vp.s  ! b ! sf ! ag ;
-           walk = vp.s2 ! b ! sf ! ag
+           walk = vp.s2 ! False ! sf ! ag
          in
          case sf of {
            VFinite t Simul => case b of {
-             True => auxTense b t ag ++ it ++ walk ;
-             _    => does            ++ it ++ walk
+             True => if_then_Str vp.isAux does (auxTense b t ag)++ it ++ walk ;
+             _    => does ++ it ++ walk
             } ;
            _ => does ++ it ++ walk
            }

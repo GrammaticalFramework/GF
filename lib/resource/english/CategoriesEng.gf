@@ -75,6 +75,7 @@ lincat
   Tense  = {s : Str ; t : Tense} ;
   Ant    = {s : Str ; a : Anteriority} ;
 
+  PP     = {s : Str} ;
   Adv    = {s : Str} ;
   AdV    = {s : Str} ;
   AdA    = {s : Str} ;
@@ -90,7 +91,7 @@ lincat
 
   IP     = {s : NPForm => Str ; n : Number ; g : Gender} ;
   IDet   = {s : Str ; n : Number} ;
-  IAdv   = {s : Str } ;
+  IAdv   = {s : Str} ;
   QCl    = {s : Bool => SForm => QuestForm => Str} ;
   QS     = {s :                  QuestForm => Str} ;
   Imp    = {s : Number => Str} ;

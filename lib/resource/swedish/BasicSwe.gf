@@ -25,7 +25,7 @@ lin
   black_ADeg = mk2ADeg "svart" "svart" ;
   blue_ADeg = mk2ADeg "blå" "blått";
   boat_N = regN "båt" utrum ;
-  book_N = mk2N "bok" "böcker" ;
+  book_N = mkN "bok" "boken" "böcker" "böckerna" ;
   boot_N = mk2N "stövel" "stövlar" ;
   boss_N = mk2N "chef" "chefer" ;
   boy_N = regN "pojke" utrum ;
@@ -49,7 +49,7 @@ lin
   city_N = mk2N "stad" "städer" ;
   clean_ADeg = regADeg "ren" ;
   clever_ADeg = regADeg "klok" ;
-  close_V2 = dirV2 (regV "stänga") ;
+  close_V2 = dirV2 (mk2V "stänga" "stänger") ;
   coat_N = regN "rock" utrum ;
   cold_ADeg = regADeg "kall" ;
   come_V = (mkV "komma" "kommer" "kom" "kom" "kommit" "kommen") ;
@@ -105,7 +105,7 @@ lin
   leather_N = mkN "läder" "lädret" "läder" "lädren" ;
   leave_V2 = dirV2 (regV "lämna") ;
   like_V2 = mkV2 (mk2V "tycka" "tycker") "om" ;
-  listen_V2 = dirV2 (regV "lyssna") ;
+  listen_V2 = mkV2 (regV "lyssna") "på" ;
   live_V = (irregV "leva" "levde" "levt") ; ---- ?
   long_ADeg = irregADeg "lång" "längre" "längst" ;
   lose_V2 = dirV2 (regV "förlora") ;

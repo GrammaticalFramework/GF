@@ -1,4 +1,4 @@
 --# -path=.:../romance:../abstract:../../prelude
 
-concrete ResourceFre of Resource = RulesFre, StructuralFre, ClauseFre ** {} ;
+concrete ResourceFre of ResourceVP = RulesFre, StructuralFre, VerbphraseFre ** {} ;
 

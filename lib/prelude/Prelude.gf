@@ -63,6 +63,11 @@ oper
 
   if_then_Str : Bool -> Str -> Str -> Str = if_then_else Str ;
 
+  onlyIf : Bool -> Str -> Str = \b,s -> case b of {
+    True => s ;
+    _ => nonExist
+    } ;
+
 -- zero, one, two, or more (elements in a list etc)
 
 param

@@ -29,14 +29,14 @@ incomplete concrete VerbphraseRomance of Verbphrase = CategoriesRomance **
   UsePassV v = predClauseBeGroup (passVerb v) ;
   ComplV2 v x = predClauseGroup v (complTransVerb v x) ;
   ComplV3 v x y = predClauseGroup v (complDitransVerb v x y) ;
-  ComplReflV2 v = predClauseGroup v (reflTransVerb v) ;
+----  ComplReflV2 v = predClauseGroup v (reflTransVerb v) ;
   ComplVS v x = predClauseGroup v (complSentVerb v x) ;
   ComplVV v x = predClauseGroup v (complVerbVerb v x) ;
   ComplVQ v x = predClauseGroup v (complQuestVerb v x) ;
   ComplVA v x = predClauseGroup v (complAdjVerb v x) ;
   ComplV2A v x y = predClauseGroup v (complDitransAdjVerb v x y) ;
-  ComplSubjV2V v x y = predClauseGroup v (complDitransVerbVerb False v x y) ;
-  ComplObjV2V v x y = predClauseGroup v (complDitransVerbVerb True v x y) ;
+----  ComplSubjV2V v x y = predClauseGroup v (complDitransVerbVerb False v x y) ;
+----  ComplObjV2V v x y = predClauseGroup v (complDitransVerbVerb True v x y) ;
   ComplV2S v x y = predClauseGroup v (complDitransSentVerb v x y) ;
   ComplV2Q v x y = predClauseGroup v (complDitransQuestVerb v x y) ;
 
@@ -44,7 +44,7 @@ incomplete concrete VerbphraseRomance of Verbphrase = CategoriesRomance **
   PredSuperl a = predClauseBeGroup (complAdjective (superlAdjPhrase a)) ;
   PredCN v = predClauseBeGroup (complCommNoun v) ;
   PredNP v = predClauseBeGroup (complNounPhrase v) ;
-  PredPP v = predClauseBeGroup (complAdverb v) ;
+  PredAdv v = predClauseBeGroup (complAdverb v) ;
 
   PredAV v x = predClauseBeGroup (complVerbAdj v x) ;
   PredObjA2V v x y = predClauseBeGroup (complVerbAdj2 True v x y) ;

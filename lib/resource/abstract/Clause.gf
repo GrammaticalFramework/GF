@@ -30,7 +30,7 @@ fun
   SPredSuperl  : NP -> ADeg -> Cl ;           -- "John is the oldest"
   SPredCN      : NP -> CN -> Cl ;             -- "John is a man"
   SPredNP      : NP -> NP -> Cl ;             -- "John is Bill"
-  SPredPP      : NP -> PP -> Cl ;             -- "John is in France"
+  SPredAdv     : NP -> Adv -> Cl ;            -- "John is in France"
   SPredAV      : NP -> AV  ->VPI ->Cl ;       -- "John is eager to leave"
   SPredObjA2V  : NP -> A2V -> NP ->VPI ->Cl ; -- "John is easy for us to convince"
 
@@ -55,7 +55,7 @@ fun
   QPredSuperl  : IP -> ADeg -> QCl ;           -- "who is the oldest"
   QPredCN      : IP -> CN -> QCl ;             -- "who is a man"
   QPredNP      : IP -> NP -> QCl ;             -- "who is Bill"
-  QPredPP      : IP -> PP -> QCl ;             -- "who is in France"
+  QPredAdv     : IP -> Adv -> QCl ;            -- "who is in France"
   QPredAV      : IP -> AV  ->VPI ->QCl ;       -- "who is eager to leave"
   QPredObjA2V  : IP -> A2V -> NP ->VPI ->QCl ; -- "who is easy for us to convince"
 

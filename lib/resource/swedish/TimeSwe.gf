@@ -1,5 +1,5 @@
 concrete TimeSwe of Time = NumeralsSwe ** 
-  open Prelude, MorphoSwe, ResourceSwe, ParadigmsSwe in {
+  open Prelude, MorphoSwe, CategoriesSwe, ParadigmsSwe in {
 
 lincat
 Date = SS ;
