@@ -131,7 +131,7 @@ execCommand env c s = case c of
 
   CCEnvEmptyAndImport file -> useIOE (emptyShellState, initSState) $ do
     st <- shellStateFromFiles opts emptyShellState file
-    return (startEditEnv st,s)
+    return (startEditEnv st,initSState)
 
   CCEnvEmpty -> do
     return (startEditEnv emptyShellState, initSState)
@@ -144,15 +144,17 @@ execCommand env c s = case c of
   CCEnvOpenTerm file -> do
     c <- readFileIf file
     let (fs,t) = envAndTerm file c
-    (env',_) <- execCommand env (CCEnvGFShell fs) s
-----    env' <- useIOE env $ foldM (shellStateFromFiles noOptions) env fs
+----    (env',_) <- execCommand env (CCEnvGFShell fs) s  --TODO; next deprec
+----    env' <- useIOE env $ foldM (shellStateFromFiles noOptions) env fs 
+    let env' = env ----
     return (env', execECommand env' (CNewTree t) s)
 
   CCEnvOpenString file -> do
     c <- readFileIf file
     let (fs,t) = envAndTerm file c
-    (env',_) <- execCommand env (CCEnvGFShell fs) s
+----    (env',_) <- execCommand env (CCEnvGFShell fs) s  --TODO; next deprec
 ---- env' <- useIOE env $ foldM (shellStateFromFiles noOptions) env fs
+    let env' = env ----
     return (env', execECommand env' (CRefineParse t) s)
 
   CCEnvOn  name -> return (languageOn  (language name) env,s)
@@ -228,7 +230,7 @@ execECommand env c = case c of
                      let cat = cat2CFCat (qualifTop sgr (actCat (stateSState s)))
                          ts = parseAny agrs cat str
                      in (if null ts ---- debug
-                           then withMsg [str, "parse failed in cat" +++ prCFCat cat]
+                           then withMsg ["parse failed in cat" +++ prCFCat cat]
                            else id) 
                             (refineByTrees der cgr ts) s
 
