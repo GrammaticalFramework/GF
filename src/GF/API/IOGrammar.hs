@@ -39,7 +39,11 @@ shellStateFromFiles :: Options -> ShellState -> FilePath -> IOE ShellState
 shellStateFromFiles opts st file = case fileSuffix file of
   "gfcm" -> do
      (_,_,cgr) <- compileOne opts (compileEnvShSt st []) file
-     ioeErr $ updateShellState opts st (cgr,(emptyMGrammar,[]))  
+     ioeErr $ updateShellState opts st (cgr,(emptyMGrammar,[]))
+  s | elem s ["cf","ebnf"] -> do
+     let osb = addOptions (options [beVerbose]) opts
+     grts <- compileModule osb st file
+     ioeErr $ updateShellState opts st grts
   _ -> do
      let osb = if oElem showOld opts 
                  then addOptions (options [beVerbose]) opts -- for old, no emit

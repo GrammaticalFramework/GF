@@ -16,8 +16,8 @@ typPredefined :: Ident -> Err Type
 typPredefined c@(IC f) = case f of
   "Int"    -> return typePType
   "PBool"  -> return typePType
----  "PFalse" -> -- hidden
----  "PTrue"  ->
+  "PFalse" -> return $ cnPredef "PBool"
+  "PTrue"  -> return $ cnPredef "PBool"
   "dp"     -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
   "drop"   -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
   "eqInt"  -> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "PBool")

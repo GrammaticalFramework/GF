@@ -32,14 +32,15 @@ txtHelpFile =
   "\n        .gfc   canonical GF" ++
   "\n        .gfr   precompiled GF resource  " ++
   "\n        .gfcm  multilingual canonical GF" ++
-  "\n       *.ebnf  Extended BNF format" ++
+  "\n        .ebnf  Extended BNF format" ++
   "\n        .cf    Context-free (BNF) format" ++
   "\n  options:" ++
   "\n      -old          old: parse in GF<2.0 format" ++
   "\n      -v            verbose: give lots of messages " ++
   "\n      -s            silent: don't give error messages" ++
   "\n      -opt          perform branch-sharing optimization" ++
-  "\n     *-src          source: ignore precompiled gfc and gfr files " ++
+  "\n      -src          source: ignore precompiled gfc and gfr files" ++
+  "\n      -retain       retain operations: read resource modules (needed in comm cc) " ++
   "\n      -nocf         don't build context-free grammar (thus no parser)" ++
   "\n      -nocheckcirc  don't eliminate circular rules from CF " ++
   "\n      -cflexer      build an optimized parser with separate lexer trie" ++
@@ -149,7 +150,7 @@ txtHelpFile =
   "\n      Compute a term by concrete syntax definitions." ++
   "\n      The identifier Ident is a resource module name " ++
   "\n      needed to resolve constant. " ++
-  "\n      N.B. You need the flag -src when importing the grammar, if you want " ++
+  "\n      N.B. You need the flag -retain when importing the grammar, if you want " ++
   "\n      the oper definitions to be retained after compilation; otherwise this" ++
   "\n      command does not expand oper constants." ++
   "\n      N.B.' The resulting Term is not a term in the sense of abstract syntax," ++
