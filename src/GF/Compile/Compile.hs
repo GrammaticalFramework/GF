@@ -92,7 +92,7 @@ compileModule opts1 st0 file = do
   t <- ioeIO getNowTime
   return $ (reverseModules cgr,       -- to preserve dependency order
             (reverseModules sgr, --- keepResModules opts sgr, --- keep all so far
-             [(f,t) | f <- files]))   -- pass on the time of creation
+             [])) ---- (f,t) | f <- files]))   -- pass on the time of creation
 
 compileEnvShSt :: ShellState -> [ModName] -> CompileEnv
 compileEnvShSt st fs = (0,sgr,cgr) where
