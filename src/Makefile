@@ -115,6 +115,9 @@ tracing:
 	strip gf
 	mv gf ../bin/
 
+ghci-trace: nofud-links 
+	$(GHCI) $(GHCFLAGS) -itrace $(GHCINCLUDENOFUD)
+
 prof: GHCOPTFLAGS += -prof -auto-all -auto-dicts
 prof: all
 
