@@ -1,0 +1,8 @@
+i english/TestResourceEng.gf 
+i finnish/TestResourceFin.gf 
+i french/TestResourceFre.gf 
+i german/TestResourceGer.gf 
+i italian/TestResourceIta.gf 
+i russian/TestResourceRus.gf 
+i swedish/TestResourceSwe.gf
+pm | wf TestAll.gfcm
