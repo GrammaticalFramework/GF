@@ -10,3 +10,4 @@ compiler:
 	bnfc -m -prof ImperC.cf
 	make -f Makefile
 	rm *.tmp
+	jasmin runtime.j
