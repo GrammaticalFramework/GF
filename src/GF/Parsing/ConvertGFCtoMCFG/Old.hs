@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:31:53 $ 
+-- > CVS $Date: 2005/03/21 22:44:39 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Converting GFC grammars to MCFG grammars.
 --
@@ -39,7 +39,7 @@ import MkGFC (grammar2canon)
 import GF.Parsing.Utilities
 import GF.Parsing.GrammarTypes 
 import GF.Parsing.MCFGrammar (Rule(..), Lin(..))
-import SortedList (nubsort, groupPairs)
+import GF.Data.SortedList (nubsort, groupPairs)
 import Maybe (listToMaybe)
 import List (groupBy, transpose)
 
