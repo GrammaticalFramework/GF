@@ -9,7 +9,7 @@ flags
 
 lincat 
   Patient = NP ;
-  Body = CN ;
+  BodyPart = CN ;
   Symptom = NP ;
   SymptomDegree = AP ;
   Prop = S ;
@@ -30,13 +30,8 @@ lin
 
   Dentist  =  n2n stomatolog ** {lock_CN = <>};
   PainKiller = n2n obezbolivauchee ** {lock_CN = <>};
-  High = AdjP1 (extAdjective vusokij ** {lock_Adj1 = <>});
-  Terrible = AdjP1 (extAdjective uzhasnuj ** {lock_Adj1 = <>});
 
-  Head = n2n golova ** {lock_CN = <>};
-  Leg = n2n noga ** {lock_CN = <>};
   Fever = mkNounPhrase Sg (n2n temperatura)** {lock_NP = <>}; 
-  FeverMod degree = mkNounPhrase Sg (ModAdj degree (n2n temperatura** {lock_CN = <>})) ** {lock_NP = <>};
   BeInCondition = PredVP ; 
   CatchCold = PosVG (PredAP (AdjP1 (prostuzhen ** {lock_Adj1 = <>}))) ;
   Pregnant = PosVG (PredAP (AdjP1 (beremenen ** {lock_Adj1 = <>}))) ;
@@ -59,8 +54,25 @@ lin
   PainIn patient head = U_predTransVerb True (mkDirectVerb 
     (extVerb verbBolet_2 Act Present ) ** {lock_TV =<>}) patient (mkNounPhrase patient.n head ** {lock_NP =<>}) ;
  
-  PainInMod patient head degree = U_predTransVerb True (mkDirectVerb
-    (extVerb have Act Present) ** {lock_TV =<>}) patient (mkNounPhrase Sg (ModAdj degree 
-      (AppFun (mkFun bol "в" Prepos ** {lock_Fun = <>}) (mkNounPhrase patient.n head** {lock_NP = <>}))) ** {lock_NP =<>});
+ Head = n2n golova ** {lock_CN = <>};
+ Leg = n2n noga ** {lock_CN = <>};
+  Stomac = n2n zhivot ** {lock_CN = <>};
+  Throat = n2n gorlo ** {lock_CN = <>};
+  Ear = n2n ukho ** {lock_CN = <>};
+  Chest = n2n grud ** {lock_CN = <>};
+  Foot = n2n stopa ** {lock_CN = <>};
+  Arm = n2n ruka ** {lock_CN = <>};
+  Back = n2n spina ** {lock_CN = <>};
+  Shoulder = n2n plecho ** {lock_CN = <>};
+--  Knee = n2n koleno ** {lock_CN = <>};
 
+--  High = AdjP1 (extAdjective vusokij ** {lock_Adj1 = <>});
+--  Terrible = AdjP1 (extAdjective uzhasnuj ** {lock_Adj1 = <>});
+--  FeverMod degree =  mkNounPhrase Sg 
+-- (ModAdj degree (n2n temperatura** {lock_CN = <>})) ** {lock_NP = <>};
+--  PainInMod patient head degree = U_predTransVerb True (mkDirectVerb
+--    (extVerb have Act Present) ** {lock_TV =<>}) patient 
+-- (mkNounPhrase Sg (ModAdj degree 
+--(AppFun (mkFun bol "в" Prepos ** {lock_Fun = <>}) 
+-- (mkNounPhrase patient.n head** {lock_NP = <>}))) ** {lock_NP =<>});
 };
