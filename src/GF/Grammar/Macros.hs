@@ -192,6 +192,9 @@ appCons = mkApp . Cn
 appc :: String -> [Term] -> Term
 appc = appCons . zIdent
 
+appqc :: String -> String -> [Term] -> Term
+appqc q c = mkApp (Q (zIdent q) (zIdent c))
+
 mkLet :: [LocalDef] -> Term -> Term
 mkLet defs t = foldr Let t defs
 

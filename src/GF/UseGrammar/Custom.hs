@@ -31,7 +31,7 @@ import CFtoSRG
 import Zipper
 
 import Morphology
------import GrammarToHaskell
+import GrammarToHaskell
 -----import GrammarToCanon (showCanon, showCanonOpt)
 -----import qualified GrammarToGFC as GFC
 
@@ -156,6 +156,7 @@ customGrammarPrinter =
   ,(strCI "old",     printGrammarOld . stateGrammarST)
   ,(strCI "srg",     prSRG . stateCF)
   ,(strCI "lbnf",    prLBNF . stateCF)
+  ,(strCI "haskell", grammar2haskell . stateGrammarST)
   ,(strCI "morpho",  prMorpho . stateMorpho)
   ,(strCI "fullform",prFullForm . stateMorpho)
   ,(strCI "opts",    prOpts . stateOptions)
@@ -208,7 +209,7 @@ customTermCommand =
   ,(strCI "generate",   \g t -> let gr = grammar g
                                     cat = actCat $ tree2loc t --- not needed
                                 in
-                         [tr | t <- generateTrees gr cat 2 Nothing (Just t), 
+                         [tr | t <- generateTrees gr False cat 2 Nothing (Just t), 
                                Ok tr <- [annotate gr $ MM.qualifTerm (absId g) t]])
 
   ,(strCI "typecheck",  \g t -> let gr = grammar g in

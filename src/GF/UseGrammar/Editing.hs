@@ -40,6 +40,11 @@ actCat = errVal undefined . val2cat . actVal ---- undef
 actAtom :: State -> Atom
 actAtom = atomTree . actTree
 
+actFun :: State -> Err Fun
+actFun s = case actAtom s of
+  AtC f -> return f
+  t -> prtBad "active atom: expected function, found" t
+
 actExp = tree2exp . actTree
 
 -- current local bindings
@@ -319,10 +324,12 @@ changeFunHead gr f state = do
   let state' = changeNode (changeAtom (const (atomC f))) state
   reCheckState gr state' --- must be done because of constraints elsewhere
 
-peelFunHead :: CGrammar -> Action
-peelFunHead gr state = do
-  state' <- forgetNode state
-  reCheckState gr state' --- must be done because of constraints elsewhere
+peelFunHead :: CGrammar -> (Fun,Int) -> Action
+peelFunHead gr (f@(m,c),i) state = do
+  tree0 <- nthSubtree i $ actTree state
+  let tree = addBinds (actBinds state) $ tree0
+  state' <- replaceSubTree tree state
+  reCheckState gr state' --- must be unfortunately done. 20/11/2001
 
 -- an expensive operation
 reCheckState :: CGrammar -> State -> Err State
@@ -355,18 +362,26 @@ wrappingsState gr state
    funs = funsOnType (possibleRefVal gr state) gr aval
    aval = actVal state
 
+peelingsState :: CGrammar -> State -> [(Fun,Int)]
+peelingsState gr state
+  | actIsMeta state = []
+  | isRootState state = 
+      err (const []) (\f -> [(f,i) | i <- [0 .. arityTree tree - 1]]) $ actFun state
+  | otherwise = 
+      err (const []) 
+          (\f -> [fi | (fi@(g,_),typ) <- funs, 
+                       possibleRefVal gr state aval typ,g==f]) $ actFun state
+ where 
+   funs = funsOnType (possibleRefVal gr state) gr aval
+   aval = actVal state
+   tree = actTree state
+
 headChangesState :: CGrammar -> State -> [Fun]
 headChangesState gr state = errVal [] $ do 
   f@(m,c) <-  funAtom (actAtom state)
   typ0 <- lookupFunType gr m c
   return [fun | (fun,typ) <- funRulesOf gr, fun /= f, typ == typ0] 
                                                           --- alpha-conv !
-
-canPeelState :: CGrammar -> State -> Bool
-canPeelState gr state = errVal False $ do
-  f@(m,c) <-  funAtom (actAtom state)
-  typ <- lookupFunType gr m c
-  return $ isInOneType typ
 
 possibleRefVal :: CGrammar -> State -> Val -> Type -> Bool
 possibleRefVal gr state val typ = errVal True $ do --- was False

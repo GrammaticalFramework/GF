@@ -160,13 +160,14 @@ randomTreesIO opts gr n = do
 generateTrees :: Options -> GFGrammar -> Maybe Tree -> [Tree]
 generateTrees opts gr mt =
   optIntOrAll opts flagNumber  
-    [tr | t <- Gen.generateTrees gr' cat dpt mn mt, Ok tr <- [mkTr t]]
+    [tr | t <- Gen.generateTrees gr' ifm cat dpt mn mt, Ok tr <- [mkTr t]]
   where
     mkTr = annotate gr' . qualifTerm (absId gr) 
     gr' = grammar gr
     cat = firstAbsCat opts gr
     dpt = maybe 3 id $ getOptInt opts flagDepth
     mn  = getOptInt opts flagAlts
+    ifm = not $ oElem noMetas opts
 
 speechGenerate :: Options -> String -> IO ()
 speechGenerate opts str = do
@@ -296,11 +297,14 @@ optTermCommand opts st =
 {-
 -- wraps term in a function and optionally computes the result
 
-wrapByFun :: Options -> StateGrammar -> Ident -> Term -> Term
-wrapByFun opts g f t = 
+wrapByFun :: Options -> GFGrammar -> Ident -> Tree -> Tree
+wrapByFun opts gr f t = 
   if oElem doCompute opts 
-  then err (const t) id $ computeAbsTerm (stateAbstract g) (appCons f [t])
-  else appCons f [t]
+  then err (const t) id $ computeAbsTerm (stateAbstract g) (appCons f' [t])
+  else appCons f' [t]
+ where
+   qualifTerm (absId gr) $ 
+
 
 optTransfer :: Options -> StateGrammar -> Term -> Term
 optTransfer opts g = case getOptVal opts transferFun of

@@ -181,6 +181,8 @@ txtHelpFile =
   "\n      command completes the Tree with values to the metavariables in" ++
   "\n      the tree." ++
   "\n  flags:" ++
+  "\n      -nometas don't return trees that include metavariables" ++
+  "\n  flags:" ++
   "\n      -depth   generate to this depth (default 3)" ++
   "\n      -alts    take this number of alternatives at each branch (default unlimited)" ++
   "\n      -cat     generate in this category" ++
@@ -381,7 +383,7 @@ txtHelpFile =
   "\n    -printer=cf             context-free grammar" ++
   "\n   *-printer=happy          source file for Happy parser generator" ++
   "\n    -printer=srg            speech recognition grammar" ++
-  "\n   *-printer=haskell        abstract syntax in Haskell, with transl to/from GF" ++
+  "\n    -printer=haskell        abstract syntax in Haskell, with transl to/from GF" ++
   "\n    -printer=morpho         full-form lexicon, long format" ++
   "\n   *-printer=latex          LaTeX file (for the tg command)" ++
   "\n    -printer=fullform       full-form lexicon, short format" ++

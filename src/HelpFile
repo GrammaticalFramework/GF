@@ -168,6 +168,8 @@ gt, generate_trees: gt Tree?
       command completes the Tree with values to the metavariables in
       the tree.
   flags:
+      -nometas don't return trees that include metavariables
+  flags:
       -depth   generate to this depth (default 3)
       -alts    take this number of alternatives at each branch (default unlimited)
       -cat     generate in this category
@@ -368,7 +370,7 @@ q, quit: q
     -printer=cf             context-free grammar
    *-printer=happy          source file for Happy parser generator
     -printer=srg            speech recognition grammar
-   *-printer=haskell        abstract syntax in Haskell, with transl to/from GF
+    -printer=haskell        abstract syntax in Haskell, with transl to/from GF
     -printer=morpho         full-form lexicon, long format
    *-printer=latex          LaTeX file (for the tg command)
     -printer=fullform       full-form lexicon, short format

@@ -180,3 +180,9 @@ changeRoot f loc = case loc of
    chPath pv = case pv of 
      (Top,a) -> (Top, f a)
      (Node (left,pv,right),v) -> (Node (left, chPath pv,right),v)
+
+nthSubtree :: Int -> Tr a -> Err (Tr a)
+nthSubtree n (Tr (a,ts)) = ts !? n
+
+arityTree :: Tr a -> Int
+arityTree (Tr (_,ts)) = length ts

@@ -22,8 +22,8 @@ import List
 
 --- if type were shown more modules should be imported
 -- generateTrees :: 
--- GFCGrammar -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
-generateTrees gr cat n mn mt = map str2tr $ generate gr' cat' n mn mt'
+-- GFCGrammar -> Bool -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
+generateTrees gr ifm cat n mn mt = map str2tr $ generate gr' ifm cat' n mn mt'
   where
     gr' = gr2sgr gr
     cat' = prt $ snd cat
@@ -63,8 +63,8 @@ tr2str (Tr (N (_,at,val,_,_),ts)) = case (at,val) of
 -- if the depth is large (more than 3)
 -- If a tree is given as argument, generation concerns its metavariables.
 
-generate :: SGrammar -> SCat -> Int -> Maybe Int -> Maybe STree -> [STree]
-generate gr cat i mn mt = case mt of
+generate :: SGrammar -> Bool -> SCat -> Int -> Maybe Int -> Maybe STree -> [STree]
+generate gr ifm cat i mn mt = case mt of
   Nothing -> [t | (c,t) <- gen 0 [], c == cat] 
 
   Just t -> genM t
@@ -77,9 +77,11 @@ generate gr cat i mn mt = case mt of
 
   args :: [SCat] -> [(SCat,STree)] -> [[STree]]
   args cs cts = combinations 
-    [constr (SMeta c : [t | (k,t) <- cts, k == c]) | c <- cs]
+    [constr (ifmetas c [t | (k,t) <- cts, k == c]) | c <- cs]
 
   constr = maybe id take mn
+
+  ifmetas c = if ifm then (SMeta c :) else id
 
   genM t = case t of
     SApp (f,ts) -> [SApp (f,ts') | ts' <- combinations (map genM ts)]
