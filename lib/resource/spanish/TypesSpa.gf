@@ -32,7 +32,7 @@ oper
     } ;
 
   strPrep : Prep -> Str = \p -> case p of {
-    P_di => "de" ;
+    P_de => "de" ;
     P_a  => "a"
     } ;
 
@@ -107,14 +107,14 @@ oper
 
   verbPres = \amare,a -> {s = table { 
     VInfin                 => amare.s ! VI Infn ;
-    VFin (VPres   Ind) n p => amare.s ! Pres Ind  n p ; 
-    VFin (VPres   Sub) n p => amare.s ! Pres Sub n p ;
-    VFin (VImperf Ind) n p => amare.s ! Past Ind  n p ; 
-    VFin (VImperf Sub) n p => amare.s ! Past Sub n p ;
-    VFin VPasse n p        => amare.s ! Pret n p ;
-    VFin VFut n p          => amare.s ! Fut  Ind n p ;
-    VFin VCondit n p       => amare.s ! Cond n p ;
-    VImper np              => amare.s ! Imp  Sg P2 ; ---- n p ;
+    VFin (VPres   Ind) n p => amare.s ! VP (Pres Ind  n p) ; 
+    VFin (VPres   Sub) n p => amare.s ! VP (Pres Sub n p) ;
+    VFin (VImperf Ind) n p => amare.s ! VP (Past Ind  n p) ; 
+    VFin (VImperf Sub) n p => amare.s ! VP (Past Sub n p) ;
+    VFin VPasse n p        => amare.s ! VP (Pret n p) ;
+    VFin VFut n p          => amare.s ! VP (Fut  Ind n p) ;
+    VFin VCondit n p       => amare.s ! VP (Cond n p) ;
+    VImper np              => amare.s ! VP (Imp  Sg P2) ; ---- n p ;
     VPart g n              => amare.s ! VI Part ---- g n ?
     } ;
   aux = a
