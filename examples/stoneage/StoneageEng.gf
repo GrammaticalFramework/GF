@@ -4,7 +4,7 @@ concrete StoneageEng of Stoneage
   StoneageResEng in {
 
 lincat
-  S = S ;
+  S = Phr ;
   NP = NP ;
   N = N;
   CN = CN ;

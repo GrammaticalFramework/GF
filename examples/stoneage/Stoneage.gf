@@ -6,7 +6,7 @@ cat
   CN ;
 
 fun
-  
+
   -- Actions with an object
 
   Drink : NP -> NP -> S ;
