@@ -18,6 +18,7 @@ import qualified LexGF as L
 
 import PPrCF
 import CFtoGrammar
+import EBNF
 
 import ReadFiles ----
 
@@ -86,9 +87,23 @@ oldLexer = map change . L.tokens where
 
 getCFGrammar :: Options -> FilePath -> IOE SourceGrammar
 getCFGrammar opts file = do
-  let mo = takeWhile (/='-') file
+  let mo = takeWhile (/='.') file
   s    <- ioeIO $ readFileIf file
   cf   <- ioeErr $ pCF mo s
   defs <- return $ cf2grammar cf
   let g = A.OldGr A.NoIncl defs
+---  let ma = justModuleName file
+---  let mc = 'C':ma ---
+---  let opts' = addOptions (options [useAbsName ma, useCncName mc]) opts
+  ioeErr $ transOldGrammar opts file g
+
+getEBNFGrammar :: Options -> FilePath -> IOE SourceGrammar
+getEBNFGrammar opts file = do
+  let mo = takeWhile (/='.') file
+  s    <- ioeIO $ readFileIf file
+  defs <- ioeErr $ pEBNFasGrammar s
+  let g = A.OldGr A.NoIncl defs
+---  let ma = justModuleName file
+---  let mc = 'C':ma ---
+---  let opts' = addOptions (options [useAbsName ma, useCncName mc]) opts
   ioeErr $ transOldGrammar opts file g

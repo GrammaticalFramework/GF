@@ -52,7 +52,7 @@ getCFRule :: String -> String -> Err CFRule
 getCFRule mo s = getcf (wrds s) where
   getcf ww | length ww > 2 && ww !! 2 `elem` ["->", "::="] = 
        Ok (string2CFFun mo (init fun), (string2CFCat mo cat, map mkIt its)) where
-    fun : cat : _ : its = words s
+    fun : cat : _ : its = ww
     mkIt ('"':w@(_:_)) = atomCFTerm (string2CFTok (init w))
     mkIt w = CFNonterm (string2CFCat mo w)
   getcf _ = Bad (" invalid rule:" +++ s)

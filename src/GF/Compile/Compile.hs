@@ -56,18 +56,22 @@ batchCompileOld f = compileOld defOpts f
 compileModule :: Options -> ShellState -> FilePath -> 
                  IOE (GFC.CanonGrammar, (SourceGrammar,[(FilePath,ModTime)]))
 
-compileModule opts st0 file | oElem showOld opts || fileSuffix file == "cf" = do
+compileModule opts st0 file | oElem showOld opts || 
+                              elem suff ["cf","ebnf"] = do
   let putp = putPointE opts
   let path = [] ----
-  grammar1 <- if fileSuffix file == "cf"
-                then putp ("- parsing cf" +++ file) $ getCFGrammar opts file
-                else putp ("- parsing old gf" +++ file) $ getOldGrammar opts file
+  grammar1 <- if suff == "cf"
+              then putp ("- parsing" +++ suff +++ file) $ getCFGrammar opts file
+              else if suff == "ebnf"
+              then putp ("- parsing" +++ suff +++ file) $ getEBNFGrammar opts file
+              else putp ("- parsing old gf" +++ file) $ getOldGrammar opts file
   let mods = modules grammar1
   let env = compileEnvShSt st0 []
   (_,sgr,cgr) <- foldM (comp putp path) env mods
   return $ (reverseModules cgr,       -- to preserve dependency order
             (reverseModules sgr,[]))
  where
+   suff = fileSuffix file
    comp putp path env sm0 = do
      (k',sm)  <- makeSourceModule opts env sm0
      cm  <- putp "  generating code... " $ generateModuleCode opts path sm
@@ -87,7 +91,7 @@ compileModule opts1 st0 file = do
   let st = st0 --- if useFileOpt then emptyShellState else st0
   let rfs = readFiles st
   let file' = if useFileOpt then justFileName file else file -- to find file itself
-  files <- getAllFiles ps rfs file'
+  files <- getAllFiles opts ps rfs file'
   ioeIO $ putStrLn $ "files to read:" +++ show files ----
   let names = map justModuleName files
   ioeIO $ putStrLn $ "modules to include:" +++ show names ----

@@ -19,14 +19,15 @@ i,  import: i File
         .gfc   canonical GF
         .gfr   precompiled GF resource  
         .gfcm  multilingual canonical GF
-       *.ebnf  Extended BNF format
+        .ebnf  Extended BNF format
         .cf    Context-free (BNF) format
   options:
       -old          old: parse in GF<2.0 format
       -v            verbose: give lots of messages 
       -s            silent: don't give error messages
       -opt          perform branch-sharing optimization
-     *-src          source: ignore precompiled gfc and gfr files 
+      -src          source: ignore precompiled gfc and gfr files
+      -retain       retain operations: read resource modules (needed in comm cc) 
       -nocf         don't build context-free grammar (thus no parser)
       -nocheckcirc  don't eliminate circular rules from CF 
       -cflexer      build an optimized parser with separate lexer trie
@@ -136,7 +137,7 @@ cc, compute_concrete: cc Ident Term
       Compute a term by concrete syntax definitions.
       The identifier Ident is a resource module name 
       needed to resolve constant. 
-      N.B. You need the flag -src when importing the grammar, if you want 
+      N.B. You need the flag -retain when importing the grammar, if you want 
       the oper definitions to be retained after compilation; otherwise this
       command does not expand oper constants.
       N.B.' The resulting Term is not a term in the sense of abstract syntax,

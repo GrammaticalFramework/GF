@@ -40,9 +40,9 @@ cf2rule (fun, (cat, items)) = (def,ldef) where
  ldef  = (f, CncFun 
                Nothing 
                (yes (mkAbs (map fst args) 
-                      (mkRecord linLabel [foldconcat (map mkIt args0)])))
+                      (mkRecord (const theLinLabel) [foldconcat (map mkIt args0)])))
                nope)
- mkIt (v, CFNonterm _) = P (Vr v) (linLabel 0)
+ mkIt (v, CFNonterm _) = P (Vr v) theLinLabel
  mkIt (_, CFTerm (RegAlts [a])) = K a
  mkIt _ = K "" --- regexp not recognized in input CF ; use EBNF for this
  foldconcat [] = K ""

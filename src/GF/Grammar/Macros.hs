@@ -290,6 +290,8 @@ eqStrIdent = (==)
 tupleLabel i = LIdent $ "p" ++ show i
 linLabel i = LIdent $ "s" ++ show i
 
+theLinLabel = LIdent "s"
+
 tuple2record :: [Term] -> [Assign]
 tuple2record ts = [assign (tupleLabel i) t | (i,t) <- zip [1..] ts]
 

@@ -68,11 +68,16 @@ prContext co = unwords $ map prParenth [prt x +++ ":" +++ prt t | (x,t) <- co]
 instance Print A.Exp where prt = C.printTree
 instance Print A.Term where prt = C.printTree
 instance Print A.Case where prt = C.printTree
-instance Print A.Atom where prt = C.printTree
 instance Print A.CType where prt = C.printTree
 instance Print A.Label where prt = C.printTree
 instance Print A.Module where prt = C.printTree
 instance Print A.Sort where prt = C.printTree
+
+instance Print A.Atom where 
+  prt = C.printTree
+  prt_ (A.AC c) = prt_ c
+  prt_ (A.AD c) = prt_ c
+  prt_ a = prt a
 
 instance Print A.Patt where 
   prt = C.printTree
@@ -174,7 +179,7 @@ instance Print Atom where
   prt (AtV i) = prt i
   prt (AtL s) = s
   prt (AtI i) = show i
-  prt_ (AtC f) = prQIdent_ f 
+  prt_ (AtC (_,f)) = prt f 
   prt_ a = prt a
 
 prQIdent :: QIdent -> String

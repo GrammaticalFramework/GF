@@ -62,6 +62,7 @@ renameIdentTerm env@(act,imps) t =
     m <- lookupErr m' qualifs
     f <- lookupTree prt c m
     return $ f c
+  QC m' c | m' == cPredef {- && isInPredefined c -} -> return t
   QC m' c -> do
     m <- lookupErr m' qualifs
     f <- lookupTree prt c m

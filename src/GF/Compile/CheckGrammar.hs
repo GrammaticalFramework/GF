@@ -269,6 +269,8 @@ inferLType gr trm = case trm of
      prtFail "cannot infer type of constant" trm
      ]
 
+   QC m ident | m==cPredef -> termWith trm $ checkErr (typPredefined ident)
+
    QC m ident -> checks [
      termWith trm $ checkErr (lookupResType gr m ident)
      ,
@@ -426,7 +428,7 @@ inferLType gr trm = case trm of
      _ -> False
 
    inferPatt p = case p of
-     PP q c ps -> checkErr $ lookupResType gr q c >>= valTypeCnc
+     PP q c ps | q /= cPredef -> checkErr $ lookupResType gr q c >>= valTypeCnc
      _ -> infer (patt2term p) >>= return . snd
 
 checkLType :: SourceGrammar -> Term -> Type -> Check (Term, Type)
@@ -560,7 +562,7 @@ checkLType env trm typ0 = do
 pattContext :: LTEnv -> Type -> Patt -> Check Context
 pattContext env typ p = case p of
   PV x -> return [(x,typ)]
-  PP q c ps -> do
+  PP q c ps | q /= cPredef -> do
     t <- checkErr $ lookupResType cnc q c
     (cont,v) <- checkErr $ typeFormCnc t
     checkCond ("wrong number of arguments for constructor in" +++ prt p) 

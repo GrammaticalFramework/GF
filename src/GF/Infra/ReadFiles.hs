@@ -27,15 +27,15 @@ import List
 type ModName = String
 type ModEnv  = [(ModName,ModTime)]
 
-getAllFiles :: [InitPath] -> ModEnv -> FileName -> IOE [FullPath]
-getAllFiles ps env file = do
+getAllFiles :: Options -> [InitPath] -> ModEnv -> FileName -> IOE [FullPath]
+getAllFiles opts ps env file = do
 
   -- read module headers from all files recursively
   ds0  <- getImports ps file
   let ds = [((snd m,map fst ms),p) | ((m,ms),p) <- ds0]
   ioeIO $ putStrLn $ "all modules:" +++ show (map (fst . fst) ds)
 
-  -- get a topological sorting of files: returns file names --- deletes paths
+    -- get a topological sorting of files: returns file names --- deletes paths
   ds1 <- ioeErr $ either 
            return 
            (\ms -> Bad $ "circular modules" +++ 
@@ -44,12 +44,15 @@ getAllFiles ps env file = do
   -- associate each file name with its path --- more optimal: save paths in ds1
   let paths = [(f,p) | ((f,_),p) <- ds]
   let pds1 = [(p,f) | f <- ds1, Just p <- [lookup f paths]]
+  if oElem fromSource opts 
+    then return [gfFile (prefixPathName p f) | (p,f) <- pds1]
+    else do
 
 
-  ds2 <- ioeIO $ mapM (selectFormat env) pds1
+    ds2 <- ioeIO $ mapM (selectFormat env) pds1
 
-  let ds4 = needCompile (map fst ds0) ds2
-  return ds4
+    let ds4 = needCompile opts (map fst ds0) ds2
+    return ds4
 
 -- to decide whether to read gf or gfc, or if in env; returns full file path
 
@@ -77,8 +80,9 @@ selectFormat env (p,f) = do
   return $ (f, (p,stat))
 
 
-needCompile :: [ModuleHeader] -> [(ModName,(InitPath,CompStatus))] -> [FullPath]
-needCompile headers sfiles0 = paths $ res $ mark $ iter changed where
+needCompile :: Options -> 
+               [ModuleHeader] -> [(ModName,(InitPath,CompStatus))] -> [FullPath]
+needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
 
   deps = [(snd m,map fst ms) | (m,ms) <- headers]
   typ m = maybe MTyOther id $ lookup m [(m,t) | ((t,m),_) <- headers]
@@ -117,10 +121,12 @@ needCompile headers sfiles0 = paths $ res $ mark $ iter changed where
 
   -- if a compilable file depends on a resource, read gfr instead of gfc/env
   -- but don't read gfr if already in env (by CSEnvR)
+  -- Also read res if the option "retain" is present
   res cs = map mkRes cs where
     mkRes x@(f,(path,st)) | elem st [CSRead,CSEnv] = case typ f of
       MTyResource | not (null [m | (m,(_,CSComp)) <- cs,
                                    Just ms <- [lookup m allDeps], elem f ms])
+                    || oElem retainOpers opts
         -> (f,(path,CSRes))
       _ -> x
     mkRes x = x

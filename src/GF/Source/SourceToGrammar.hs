@@ -539,6 +539,8 @@ transOldGrammar opts name0 x = case x of
    (beg,rest) = span (/='.') name
    (topic,lang) = case rest of -- to avoid overwriting old files
      ".gf" -> ("Abs" ++ beg,"Cnc" ++ beg)
+     ".cf" -> ("Abs" ++ beg,"Cnc" ++ beg)
+     ".ebnf" -> ("Abs" ++ beg,"Cnc" ++ beg)
      []    -> ("Abs" ++ beg,"Cnc" ++ beg)
      _:s   -> (beg, takeWhile (/='.') s)
 
