@@ -1,0 +1,2 @@
+abstract AllResource = Rules, Structural  ** {} ;
+

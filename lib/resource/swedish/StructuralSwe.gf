@@ -15,6 +15,7 @@ concrete StructuralSwe of Structural =
   WeNumNP n = pronNounPhrase (pronWithNum vi_36 n) ;
   YeNumNP n = pronNounPhrase (pronWithNum ni_37 n) ;
   TheyNP = pronNounPhrase de_38 ;
+  TheyFemNP = pronNounPhrase de_38 ;
 
   YouNP  = let {ni = pronNounPhrase ni_37 } in {s = ni.s ; g = ni.g ; n = Sg} ;
 
@@ -34,6 +35,7 @@ concrete StructuralSwe of Structural =
   SomeDet  = mkDeterminerSgGender2 "någon" "något" IndefP ; 
   SomeNumDet = mkDeterminerPlNum "några" IndefP ; 
   ManyDet  = mkDeterminerPl "många" IndefP ; 
+  HowManyDet  = mkDeterminerPl ["hur många"] IndefP ; 
   NoDet    = mkDeterminerSgGender2 "ingen" "inget" IndefP ; 
   NoNumDet   = mkDeterminerPlNum "inga" IndefP ; 
   WhichNumDet = mkDeterminerPlNum "vilka" IndefP ; 

@@ -31,6 +31,9 @@ lin
   SymbCN cn s =
     {s = \\n => cn.s ! n ++ s.s ; 
      g = cn.g} ;
+  IntCN cn i =
+    {s = \\n => cn.s ! n ++ i.s ; 
+     g = cn.g} ;
 
   CNthatS = nounThatSentence ;
 

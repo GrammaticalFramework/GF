@@ -18,6 +18,7 @@ fun
 -- pronouns "we" and "you".
 
   EveryDet, WhichDet, AllMassDet,             -- every, sg which, sg all
+  HowManyDet,                                 --- should actually be interrogative
   SomeDet, AnyDet, NoDet,                     -- sg some, any, no
   MostDet, MostsDet, ManyDet, MuchDet : Det ; -- sg most, pl most, many, much
   ThisDet, ThatDet : Det ;                    -- this, that
@@ -31,6 +32,7 @@ fun
   INP, ThouNP, HeNP, SheNP, ItNP : NP ;       -- personal pronouns in singular
   WeNumNP, YeNumNP : Num -> NP ;              -- these pronouns can take numeral 
   TheyNP : NP ; YouNP : NP ;                  -- they, the polite you
+  TheyFemNP : NP ;
 
   EverybodyNP, SomebodyNP, NobodyNP,          -- everybody, somebody, nobody
   EverythingNP, SomethingNP, NothingNP : NP ; -- everything, something, nothing

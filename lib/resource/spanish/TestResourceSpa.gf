@@ -17,7 +17,8 @@ lin
   Man = mkCNom (nomVino "hombre") Masc ;
   Woman = mkCNom (nomPilar "mujer") Fem ;
   Car = mkCNom (nomVino "coche") Masc ;
-  Light = mkCNom (nomPilar "luz") Fem ;
+  Light = mkCNom (numForms "luz" "luces") Fem ;
+  Level = mkCNom (nomPilar "nivel") Masc ;
   House = mkCNom (nomVino "casa") Fem ;
   Wine = mkCNom (nomVino "vino") Masc ;
   Bottle = mkCNom (nomVino "botella") Fem ;
@@ -32,7 +33,7 @@ lin
   Prefer = mkDitransVerb (verbPres (zurrir_5 "preferir") AHabere) [] accusative [] dative ;
 ----  Say = verbSent (verbPres (dire_44 "dire") AHabere) Ind Ind ;
   Prove = verbSent  (verbPres (zurrar_3 "demonstrar") AHabere) Ind Ind ;
-----  SwitchOn = mkTransVerbDir  (verbPres (zurrar_3 "encender") AHabere) ; 
+  SwitchOn = mkTransVerbDir  (verbPres (vender_4 "enciender") AHabere) ; ----
   SwitchOff = mkTransVerbDir  (verbPres (zurrar_3 "apagar") AHabere) ;
   Mother = funGen (mkCNom (nomVino "madre") Fem) ;
   Uncle = funGen (mkCNom (nomVino "zio") Masc) ;
