@@ -1,7 +1,8 @@
 -- The UTF8 version currently differs from the non-UTF8 !!!
 
 -- The difference with the UTF8 version is that 
--- operation "verbVara" doesn't need to be replaced
+-- operations "verbVara" (vbVara see ExtraSweU.gf) 
+-- and "predAP" (predAP, see ExtraSweU.gf) need to be replaced
 -- using the UTF8 encoding (because of the UTF8 problem 
 -- with UTF8 resource grammars) 
 
@@ -100,10 +101,10 @@ lin
   Leg = UseN (nRep "ben") ;
   Stomac = UseN  (nPojke "mage")  ;
   Throat = UseN  (nBil "hals") ;
-  Ear = UseN  (mkN "öra" "örat" "öron" "öronen" Neutr NoMasc) ;
+  Ear = UseN  (mkN "öra" "örat" "öron" "öronen" neutrum nonmasculine) ;
   Chest = UseN (nRep "bröst") ;
-  Foot = UseN  (mkN "fot" "foten" "fötter" "fötterna" Utr NoMasc) ;
-  Arm = UseN  (mkN "hand" "handen" "händer" "händerna" Utr NoMasc) ;
+  Foot = UseN  (mkN "fot" "foten" "fötter" "fötterna" utrum nonmasculine) ;
+  Arm = UseN  (mkN "hand" "handen" "händer" "händerna" utrum nonmasculine) ;
   Back = UseN  (nBil "rygg") ;
   Shoulder = UseN  (nNyckel "axel") ;
 
@@ -115,7 +116,7 @@ lin
 --      DetNP (nullDet  ** {lock_Det = <>}) 
 --      ( modCommNounPhrase degree 
 --           ( AppFun 
---               ((mkFun (extCommNoun NoMasc (sBil "ont")) "i") ** {lock_Fun = <>}) 
+--               ((mkFun (extCommNoun nonmasculine (sBil "ont")) "i") ** {lock_Fun = <>}) 
 --               ((defNounPhrase patient.n head)** {lock_NP = <>})
 --           ) ** {lock_CN = <>}
 --      )

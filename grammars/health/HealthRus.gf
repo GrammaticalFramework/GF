@@ -65,7 +65,7 @@ lin
   Antidepressant = IndefOneNP (UseN ( antidepressant**{lock_N = <>})); 
   PainKiller = IndefOneNP (UseN ( obezbolivauchee**{lock_N = <>}));
 
-  Fever = mkNounPhrase Sg (UseN ( temperatura**{lock_N = <>}))** {lock_NP = <>}; 
+  Fever = mkNounPhrase singular (UseN ( temperatura**{lock_N = <>}))** {lock_NP = <>}; 
   BeInCondition = PredVP ; 
   CatchCold = PosVG (PredAP (AdjP1 (prostuzhen ** {lock_Adj1 = <>}))) ;
   Pregnant = PosVG (PredAP (AdjP1 (beremenen ** {lock_Adj1 = <>}))) ;
@@ -78,7 +78,7 @@ lin
    (extVerb verbSlomat active past)**{lock_TV = <>}) patient (mkNounPhrase patient.n painkiller ** {lock_NP = <>}) ;
                                
   HaveIllness patient symptom = U_predTransVerb true tvHave
-     patient (mkNounPhrase Sg symptom ** {lock_NP = <>}) ;
+     patient (mkNounPhrase singular symptom ** {lock_NP = <>}) ;
   Complain = U_predTransVerb true tvHave ;
 
   NeedDoctor = predNeedShortAdjective true ; 
@@ -101,11 +101,11 @@ lin
 
 --  High = AdjP1 (extAdjective vusokij ** {lock_Adj1 = <>});
 --  Terrible = AdjP1 (extAdjective uzhasnuj ** {lock_Adj1 = <>});
---  FeverMod degree =  mkNounPhrase Sg 
+--  FeverMod degree =  mkNounPhrase singular 
 -- (ModAdj degree (UseN ( temperatura**{lock_N = <>}))) ** {lock_NP = <>};
 --  PainInMod patient head degree = U_predTransVerb true (mkDirectVerb
 --    (extVerb have Act Present) ** {lock_TV =<>}) patient 
--- (mkNounPhrase Sg (ModAdj degree 
+-- (mkNounPhrase singular (ModAdj degree 
 --(AppFun (mkFun bol "в" Prepos ** {lock_Fun = <>}) 
 -- (mkNounPhrase patient.n head** {lock_NP = <>}))) ** {lock_NP =<>});
 };

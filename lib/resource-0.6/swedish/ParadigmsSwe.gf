@@ -48,6 +48,7 @@ oper
   plural   : Number ;
 
 
+
 --2 Nouns
 
 -- Worst case: give all nominative forms and the gender.
@@ -159,6 +160,11 @@ oper
 -- The worst case needs three forms: the infinitive, the indicative, and the
 -- imperative.
 
+  Voice: Type;
+
+  passive : Voice;
+  active: Voice;
+
   mkV : (_,_,_ : Str) -> V ;   -- vara, är, var; trivas, trivs, trivs
 
 -- The main conjugations need one string each.
@@ -210,6 +216,7 @@ oper
   Sex = SyntaxSwe.Sex ;
   Case = SyntaxSwe.Case ;
   Number = SyntaxSwe.Number ;
+  Voice = SyntaxSwe.Voice ;
 
   utrum = Utr ;
   neutrum = Neutr ;
@@ -219,6 +226,9 @@ oper
   genitive = Gen ;
   singular = Sg ;
   plural = Pl ;
+
+  active = Act;
+  passive = Pass;
 
   mkN = \apa, apan, apor, aporna, g, x -> let
     {nom = table {

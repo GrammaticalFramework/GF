@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../../prelude
 
-concrete TestResourceSwe of TestResource = StructuralSwe ** open SyntaxSwe in {
+concrete TestResourceSwe of TestResource = StructuralSwe ** open SyntaxSwe, ParadigmsSwe in {
 
 flags startcat=Phr ; lexer=text ; unlexer=text ;
 
@@ -15,16 +15,16 @@ lin
   Finnish = extAdjective (aFin "finsk") ;
   Happy = aFin "lycklig" ;
   Married = extAdjective (aAbstrakt "gift") ** {s2 = "med"} ;
-  Man = extCommNoun Masc man_1144 ;
-  Bar = extCommNoun NoMasc (sSak "bar") ;
-  Bottle = extCommNoun NoMasc (sApa "flask") ;
-  Woman = extCommNoun NoMasc (sApa "kvinn") ;
-  Car = extCommNoun NoMasc (sBil "bil") ;
-  House = extCommNoun NoMasc (sHus "hus") ;
-  Light = extCommNoun NoMasc (sHus "ljus") ;
-  Wine = extCommNoun NoMasc (sParti "vin") ;
-  Walk = extVerb Act gå_1174 ;
-  Run = extVerb Act (vFinna "spring" "sprang" "sprung") ;
+  Man = extCommNoun masculine man_1144 ;
+  Bar = extCommNoun nonmasculine (sSak "bar") ;
+  Bottle = extCommNoun nonmasculine (sApa "flask") ;
+  Woman = extCommNoun nonmasculine (sApa "kvinn") ;
+  Car = extCommNoun nonmasculine (sBil "bil") ;
+  House = extCommNoun nonmasculine (sHus "hus") ;
+  Light = extCommNoun nonmasculine (sHus "ljus") ;
+  Wine = extCommNoun nonmasculine (sParti "vin") ;
+  Walk = extVerb active gå_1174 ;
+  Run = extVerb active (vFinna "spring" "sprang" "sprung") ;
   Drink = extTransVerb (vFinna "drick" "drack" "druck") [] ;
   Love = extTransVerb (vTala "älsk") [] ;
   Send = extTransVerb (vTala "skick") [] ;
@@ -33,19 +33,19 @@ lin
   Prefer = extTransVerb (vFinna "föredrag" "föredrog" "föredrag") [] ** 
            {s3 = "framför"} ; --- föredra
 
-  Say = extVerb Act (vLeka "säg") ; --- works in present tense...
-  Prove = extVerb Act (vTala "bevis") ;
-  SwitchOn = mkDirectVerb (extVerbPart Act (vFinna "sätt" "satte" "satt") "på") ;
-  SwitchOff = mkDirectVerb (extVerbPart Act (vLeka "stäng") "av") ;
+  Say = extVerb active (vLeka "säg") ; --- works in present tense...
+  Prove = extVerb active (vTala "bevis") ;
+  SwitchOn = mkDirectVerb (extVerbPart active (vFinna "sätt" "satte" "satt") "på") ;
+  SwitchOff = mkDirectVerb (extVerbPart active (vLeka "stäng") "av") ;
 
-  Mother = mkFun (extCommNoun NoMasc mor_1) "till" ;
-  Uncle = mkFun (extCommNoun Masc farbror_8) "till" ;
-  Connection = mkFun (extCommNoun NoMasc (sVarelse "förbindelse")) "från" ** 
+  Mother = mkFun (extCommNoun nonmasculine mor_1**{lock_N = <>}) "till" ;
+  Uncle = mkFun (extCommNoun masculine farbror_8 **{lock_N = <>}) "till" ;
+  Connection = mkFun (extCommNoun nonmasculine (sVarelse "förbindelse")**{lock_N = <>}) "från" ** 
                {s3 = "till"} ;
 
   Always = advPre "alltid" ;
   Well = advPost "bra" ;
 
-  John = mkProperName "Johan" Utr Masc ;
-  Mary = mkProperName "Maria" Utr NoMasc ;
+  John = mkProperName "Johan" utrum masculine ;
+  Mary = mkProperName "Maria" utrum nonmasculine ;
 } ;
