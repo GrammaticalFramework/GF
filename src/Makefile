@@ -14,6 +14,11 @@ GHCINCLUDEGFT  =-ifor-gft       $(BASICINCLUDE)
 WINDOWSINCLUDE =-ifor-windows   $(BASICINCLUDE) 
 
 DIST_DIR=GF-$(PACKAGE_VERSION)
+NOT_IN_DIST= \
+	from-peb \
+	grammars/resource \
+	src/parsing \
+	src/conversions
 
 all: unix
 
@@ -99,10 +104,12 @@ tracing:
 	mv gf2 ../bin/
 
 dist:
+	-rm -rf $(DIST_DIR)
 	mkdir $(DIST_DIR)
 	cvs export -d $(DIST_DIR) -rHEAD GF2.0
 	cd $(DIST_DIR)/src && autoconf && rm -rf autom4te.cache
 	find $(DIST_DIR) -name .cvsignore -exec rm -f {} ';'
+	cd $(DIST_DIR) && rm -rf $(NOT_IN_DIST)
 	tar -zcf $(DIST_DIR).tar.gz $(DIST_DIR)
 	zip -r $(DIST_DIR).zip $(DIST_DIR)
 	rm -rf $(DIST_DIR)
