@@ -561,6 +561,9 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         }
    }
 
+   /*
+    sending a command text to GF
+    */
     public static void send(String text){
        try {
              output.setText("");
@@ -608,6 +611,11 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         }
     }
 
+   /*
+    Parses the GF-output between <menu> and </menu>  tags
+    and fills the corrsponding GUI list -"Select Action".
+  */
+
     public static void formSelectMenu (){
       if (debug) System.out.println("list model changing! ");      
       String s ="";
@@ -653,6 +661,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
      } catch(IOException e){ }
    }
 
+   /* put the command into the list of commands */
    public static void saveCommand(){
      if (newObject) commands.add(result);
      try {            
@@ -661,6 +670,9 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
      } catch(IOException e){ }
    }
 
+  /*
+    Accumulates the GF-output between <linearization> </linearization>  tags
+  */
 
    public void readLin(){
       try {
@@ -678,6 +690,10 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         if (debug) System.out.println("6 "+result);          
      } catch(IOException e){ }
    }
+
+  /*
+    Accumulates the GF-output between <tree> </tree>  tags
+  */
 
    public static void readTree(){
       try {
@@ -698,6 +714,11 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
      } catch(IOException e){ }
    }
 
+  /*
+    Parses the GF-output between <message> </message>  tags
+    and puts it in the linearization area.
+  */
+
    public static void readMessage(){
       String s ="";
       try {
@@ -714,6 +735,10 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         if (debug) System.out.println("7 "+result);          
      } catch(IOException e){ }
    }
+  /*
+    Parses the GF-output between <gfinit> tags
+    and fill the New combobox in the GUI.
+  */
                        
   public void formNewMenu () {
     boolean more = true;
@@ -821,6 +846,11 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     } catch(IOException e){ }
   }
 
+    /*
+    Parses the GF-output between <lin> </lin>  tags
+    and puts the string in the linearization area on the screen
+  */
+
   public void outputAppend(){
     int i, j, j2, k, l, l2, selectionLength, m=0, n=0;
     //result=result.replace('\n',' ');
@@ -906,6 +936,9 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     firstLin=false;
   }
 
+  /*
+    Parses the GF-output between <linearization> </linearization>  tags
+  */
   public void formLin(){
     boolean visible=true; 
     firstLin=true; 
@@ -992,6 +1025,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     }
   }
 
+  /* Sets the font on all the GUI-elements to font.*/
   public void fontEveryWhere(Font font)
   {                          
         output.setFont(font);  
@@ -1042,6 +1076,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
 
 }
 
+  /* Set the font in the submenus */
   public void recursion(JMenu subMenu, Font font)
   {  
     for (int i = 0; i<subMenu.getItemCount(); i++)
@@ -1481,11 +1516,18 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
              "Document is empty!","Error", JOptionPane.ERROR_MESSAGE);
        }
    }
+
+   /* Form a dummy tree in treePanel */
     public static void populateTree(DynamicTree2 treePanel) {
         String p1Name = new String("Root");
         DefaultMutableTreeNode p1;
         p1 = treePanel.addObject(null, p1Name);
     }
+
+  /*
+    Parses the GF-output between <tree> </tree>  tags
+    and build the corresponding tree.
+  */
 
     public static void formTree(DynamicTree2 treePanel) {
         Hashtable table = new Hashtable();
@@ -1672,6 +1714,16 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     public void keyReleased(KeyEvent e) {
     }
 
+    /** 
+      Returns the biggest position of first and second.
+      Each word in the linearization area has the corresponding
+      position in the tree. The position-notion is taken from 
+      GF-Haskell, where empty position ("[]") 
+      represents tree-root, "[0]" represents  first child of the root,
+      "[0,0]" represents the first grandchild of the root etc.
+      So comparePositions("[0]","[0,0]")="[0]"
+
+    */
     public String comparePositions(String first, String second)
     {
       String common ="[]";
@@ -1686,6 +1738,12 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       else 
         return common+"]";
     }
+
+    /* 
+       Returns the widest position (see comments to comparePositions) 
+       covered in the string from begin to end in the 
+       linearization area.
+    */
     public String findMax(int begin, int end)
     {
       String max = (((MarkedArea)outputVector.elementAt(begin)).position).position;
@@ -1810,6 +1868,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     }
 
     /*
+       Appends the string s to the text in the linearization area
+       on the screen.
        s - string to append
        selectionStart, selectionEnd - selection coordinates 
        (focus tag is already cut)
@@ -2003,6 +2063,9 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     }// s.length()>0
     }
 
+    /*
+      Replaces the occurences of old by newString in the s
+    */
     public static String replaceSubstring(String s, String old, String newString)
     {
       String ss = s;
@@ -2015,6 +2078,10 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       return ss;
     }
 
+    /*
+      Finding position of the charactern not starting with escape symbol (//) 
+      in the string s from position. 
+    */
     public static int getCharacter(String s, String character, int position)
     {
       int t = restString.indexOf(character, position);
@@ -2031,6 +2098,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         return getCharacter(s, character, t+1);
     }
 
+    /* Assigns the position to the substring from start to end in the linearization */
     public static void register(int start, int end, LinPosition position)
     {
       oldLength = output.getText().length();
@@ -2111,7 +2179,9 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       } //some words to register                     
     }
 
-    //updating:
+    /* removing subtree-tag in the interval start-end 
+    and updating the coordinates after that
+    */
     public static void removeSubTreeTag (int start, int end)
     {
          if (debug2) 
@@ -2143,6 +2213,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
            else selEnd -=difference;            
     }
 
+    /* handling the event of choosing the action at index from the  list*/
     public void listAction(int index) {
       if (index == -1) 
         {if (debug) System.out.println("no selection");}
