@@ -8,6 +8,7 @@ import MMacros
 
 import Look
 import LookAbs
+import ModDeps
 import qualified Modules as M
 import qualified Grammar as G
 import qualified PrGrammar as P
@@ -18,6 +19,8 @@ import Morphology
 import Option
 import Ident
 import Arch (ModTime)
+
+import List (nub,nubBy)
 
 -- AR 11/11/2001 -- 17/6/2003 (for modules) ---- unfinished
 
@@ -168,6 +171,26 @@ filterAbstracts abstr cgr = M.MGrammar [m | m <- ms, needed m] where
     Just (Just e) -> a : ext e es
     Just _ -> a : []
     _ -> []
+
+
+purgeShellState :: ShellState -> ShellState
+purgeShellState sh = ShSt {
+  abstract   = abstract sh,
+  concrete   = concrete sh,
+  concretes  = [(a,i) | (a,i) <- concretes sh, elem i needed],
+  canModules = M.MGrammar $ purge $ M.modules $ canModules sh,
+  srcModules = M.emptyMGrammar,
+  cfs        = cfs sh,
+  morphos    = morphos sh,
+  gloptions  = gloptions sh,
+  readFiles  = [],
+  absCats    = absCats sh,
+  statistics = statistics sh
+  }
+ where
+   needed = nub $ concatMap (requiredCanModules (canModules sh)) acncs
+   purge = nubBy (\x y -> fst x == fst y) . filter (flip elem needed . fst)
+   acncs = maybe [] singleton (abstract sh) ++ map snd (concretes sh)
 
 -- form just one state grammar, if unique, from a canonical grammar
 

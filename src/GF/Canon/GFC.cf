@@ -8,9 +8,9 @@ Gr. Canon ::= [Module] ;
 
 Mod. Module ::= ModType "=" Extend Open "{" [Flag] [Def] "}" ;
 
-MTAbs. ModType ::= "abstract" Ident ; 
-MTCnc. ModType ::= "concrete" Ident "of" Ident ;
-MTRes. ModType ::= "resource" Ident ;
+MTAbs.   ModType ::= "abstract" Ident ; 
+MTCnc.   ModType ::= "concrete" Ident "of" Ident ;
+MTRes.   ModType ::= "resource" Ident ;
 MTTrans. ModType ::= "transfer" Ident ":" Ident "->" Ident ;
 
 separator Module "" ;
@@ -18,8 +18,8 @@ separator Module "" ;
 Ext.   Extend ::= Ident "**" ;
 NoExt. Extend ::= ;
 
-NoOpens. Open ::= ;
 Opens.   Open ::= "open" [Ident] "in" ;
+NoOpens. Open ::= ;
 
 
 -- judgements
@@ -30,15 +30,15 @@ AbsDCat.   Def ::= "cat" Ident "[" [Decl] "]" "=" [CIdent] ;
 AbsDFun.   Def ::= "fun" Ident ":" Exp "=" Exp ;
 AbsDTrans. Def ::= "transfer" Ident "=" Exp ;
 
-ResDPar.  Def ::= "param"  Ident "=" [ParDef] ;
-ResDOper. Def ::= "oper"   Ident ":" CType "=" Term ;
+ResDPar.   Def ::= "param"  Ident "=" [ParDef] ;
+ResDOper.  Def ::= "oper"   Ident ":" CType "=" Term ;
 
-CncDCat.  Def ::= "lincat" Ident "=" CType "=" Term ";" Term  ; 
-CncDFun.  Def ::= "lin"    Ident ":" CIdent "=" "\\" [ArgVar] "->" Term ";" Term ;
+CncDCat.   Def ::= "lincat" Ident "=" CType "=" Term ";" Term  ; 
+CncDFun.   Def ::= "lin"    Ident ":" CIdent "=" "\\" [ArgVar] "->" Term ";" Term ;
 
-AnyDInd.  Def ::= Ident Status "in" Ident ;
+AnyDInd.   Def ::= Ident Status "in" Ident ;
 
-ParD.     ParDef ::= Ident [CType] ;
+ParD. ParDef ::= Ident [CType] ;
 
 -- the canonicity of an indirected constant
 

@@ -11,6 +11,7 @@ import Modules
 import Operations
 
 import Monad
+import List
 
 -- AR 13/5/2003
 
@@ -106,6 +107,17 @@ openInterfaces ds m = do
   let mods = iterFix (concatMap more) (more (m,undefined))
   return $ [i | (i,MTInterface) <- mods]
 
+-- this function finds out what modules are really needed in the canoncal gr.
+-- its argument is typically a concrete module name
+
+requiredCanModules :: (Eq i, Show i) => MGrammar i f a -> i -> [i]
+requiredCanModules gr = nub . iterFix (concatMap more) . singleton where
+  more i = errVal [] $ do
+    m <- lookupModMod gr i
+    return $ maybe [] return (extends m) ++ map openedModule (opens m)
+
+
+
 {-
 -- to test
 exampleDeps = [
@@ -117,3 +129,4 @@ exampleDeps = [
 ii s = IdentM (IC s) MTInterface
 ir s = IdentM (IC s) MTResource
 -}
+

@@ -26,7 +26,11 @@ translateSession :: Options -> ShellState -> IO ()
 translateSession opts st = do
   let grs   = allStateGrammars st
       cat   = firstCatOpts opts (firstStateGrammar st)
-      trans = unlines . translateBetweenAll grs cat
+      trans s = unlines $
+                if oElem showLang opts then 
+                  [l +++ ":" +++ s | (l,s) <- zip (map (prIdent . cncId) grs) 
+                                                  (translateBetweenAll grs cat s)]
+                  else translateBetweenAll grs cat s
   translateLoop opts trans
 
 translateLoop opts trans = do

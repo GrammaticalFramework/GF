@@ -25,7 +25,7 @@ computeConcrete g t = {- refreshTerm t >>= -} computeTerm g [] t
 computeTerm :: SourceGrammar -> Substitution -> Term -> Err Term
 computeTerm gr = comp where
 
-   comp g t = --- errIn ("subterm" +++ prt t) $ --- for debugging 
+   comp g t = ---- errIn ("subterm" +++ prt t) $ --- for debugging 
               case t of
 
      Q (IC "Predef") _ -> return t
@@ -59,6 +59,7 @@ computeTerm gr = comp where
        a' <- comp g a
        case (f',a') of
          (Abs x b,_) -> comp (ext x a' g) b
+         (QC _ _,_)  -> returnC $ App f' a'
          (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . FV
          (_, FV as)  -> mapM (\c -> comp g (App f' c)) as >>= return . FV
 
@@ -172,8 +173,10 @@ computeTerm gr = comp where
          _ -> return $ ExtR r' s'
 
      -- case-expand tables
+     -- if already expanded, don't expand again
      T i@(TComp _) cs -> do
-       cs' <- mapPairsM (comp g) cs
+       -- if there are no variables, don't even go inside
+       cs' <- if (null g) then return cs else mapPairsM (comp g) cs
        return $ T i cs'
 
      T i cs -> do
