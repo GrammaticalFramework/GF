@@ -10,6 +10,7 @@
 
 module Trie (
              tcompile,
+	     collapse,
              Trie,
 	     trieLookup,
 	     decompose,
@@ -34,6 +35,14 @@ emptyTrie = TrieT ([],[])
 optimize :: TrieT -> Trie
 optimize (TrieT (xs,res)) = Trie ([(c,optimize t) | (c,t) <- xs] |->+ empty,
 				  res)
+
+collapse :: Trie -> [(String,[(Attr,String)])]
+collapse trie = collapse' trie []
+  where collapse' (Trie (map,(x:xs))) s = if (isEmpty map) then [(reverse s,(x:xs))]
+	                                   else (reverse s,(x:xs)):
+					    concat [ collapse' trie (c:s) | (c,trie) <- flatten map]
+	collapse' (Trie (map,[])) s
+	 = concat [ collapse' trie (c:s) | (c,trie) <- flatten map]
 
 tcompile :: [(String,[(Attr,String)])] -> Trie
 tcompile xs = optimize $ build xs emptyTrie
