@@ -58,7 +58,7 @@ oper
 -- singular nominative and genitive, and plural partitive.
 -- Examples: "talo", "kukko", "huippu", "koira", "kukka", "syylä", "särki"...
 
-  nKukko : (kukko,kukon,kukkoja : Str) -> Gender -> N ;
+  nKukko : (kukko,kukon,kukkoja : Str) -> N ;
 
 -- For convenience, we define 1-argument paradigms as producing the
 -- nonhuman gender; the following function changes this:
@@ -107,7 +107,7 @@ oper
 -- "susi", "vesi", "pieni". To get all stems and the vowel harmony, it takes
 -- the singular nominative, genitive, and essive.
 
-  nSusi : (susi,suden,sutta : Str) -> Gender -> N ;
+  nSusi : (susi,suden,sutta : Str) -> N ;
 
 -- Nouns ending with a long vowel, such as "puu", "pää", "pii", "leikkuu",
 -- are inflected according to the following.
@@ -128,7 +128,7 @@ oper
 -- The following covers some nouns ending with a consonant, e.g.
 -- "tilaus", "kaulin", "paimen", "laidun".
 
-  nTilaus : (tilaus,tilauksena : Str) -> Gender -> N ;
+  nTilaus : (tilaus,tilauksena : Str) -> N ;
 
 -- Special case:
 
@@ -244,7 +244,7 @@ oper
   mkN = \a,b,c,d,e,f,g,h,i,j,k -> 
     mkNoun a b c d e f g h i j ** {g = k ; lock_N = <>} ;
 
-  nKukko = \a,b,c,g -> sKukko a b c ** {g = g ; lock_N = <>} ;
+  nKukko = \a,b,c -> sKukko a b c ** {g = nonhuman ; lock_N = <>} ;
 
   humanN = \n -> {s = n.s ; lock_N = n.lock_N ; g = human} ;
 
@@ -255,13 +255,13 @@ oper
   nLinux = \a -> sLinux a ** {g = nonhuman ; lock_N = <>} ;
   nPeruna = \a -> sPeruna a ** {g = nonhuman ; lock_N = <>} ;
   nRae = \a,b -> sRae a b ** {g = nonhuman ; lock_N = <>} ;
-  nSusi = \a,b,c,g -> sSusi a b c ** {g = g ; lock_N = <>} ;
+  nSusi = \a,b,c -> sSusi a b c ** {g = nonhuman ; lock_N = <>} ;
   nPuu = \a -> sPuu a ** {g = nonhuman ; lock_N = <>} ;
   nSuo = \a -> sSuo a ** {g = nonhuman ; lock_N = <>} ;
   nNainen = \a -> sNainen a ** {g = nonhuman ; lock_N = <>} ;
-  nTilaus = \a,b,g -> sTilaus a b ** {g = g ; lock_N = <>} ;
+  nTilaus = \a,b -> sTilaus a b ** {g = nonhuman ; lock_N = <>} ;
   nKulaus = \a -> nTilaus a (init a + "ksen" + getHarmony (last
-  (init a))) nonhuman ;
+  (init a))) ;
   nNauris = \a -> sNauris a ** {g = nonhuman ; lock_N = <>} ;
 
 

@@ -6,24 +6,26 @@ N!nLukko: ha/ttu hatun -- hattuja
 N!nLukko: hui/ppu huipun -- huippuja
 N!nLukko: hy/ppy hypyn -- hyppyjä
 
-N!nTalo: tal/o |talon|talossa|talosta| --taloja
+N!nTalo: tal/o |talon|talossa|talosta| taloja taloa
 N!nTalo: hal/u |halun|halussa|talusta| haluja
-N!nTalo: sär/ö |särön|särössä|säröstä| --säröjä
-N!nTalo: säv/y |sävyn|sävyssä|sävystä| --sävyjä
+N!nTalo: sär/ö |särön|särössä|säröstä| säröjä halua
+N!nTalo: säv/y |sävyn|sävyssä|sävystä| sävyjä
 
 N!nArpi:  ar/pi  (arvessa|arvella|arvissa|arvilla)
 N!nSylki: syl/ki (syljessä|syljellä|syljissä|syljillä)
--- nKoira: koir/a koiran koiria -- koirien
--- nKoira: syyl/ä syylän syyliä
+N!nKukko: koir/a +koiran +koiria
+N!nKukko: syyl/ä +syylän +syyliä
 
-N!nLinux: linux/ia linux
-N!nLinux: syrinx/iä syrinx
+N!nLinux: linux/ia linux linuxin
+N!nLinux: syrinx/iä syrinx syrinxin
 
-N!nRae: ta/e   |takeeseen|
-N!nRae: perh/e |perheeseen|
-N!nRae: sa/de  |sateeseen|
+N!nRae: ta/e   +takeena
+N!nRae: perh/e +perheenä
+N!nRae: sa/de  +sateena
 
--- N!nSusi: su/si suden suteen
+N!nSusi: su/si  +suden +sutta
+N!nSusi: pie/ni +pienen +pientä
+N!nSusi: ka/nsi +kannen +kantta
 
 N!nPuu: m/aa maahan |maassa|maasta|
 N!nPuu: p/uu puuhun
@@ -38,22 +40,22 @@ N!nSuo: t/yö |työhön|työssä|
 N!nNainen: nai/sta nainen -- naisen
 N!nNainen: hyi/stä hyinen
 
-N!nTilaus: til/aus tilauksen
+N!nTilaus: til/aus +tilauksena
 
 N!nNauris: naur/is |naurista|nauriin|
 
-V!vValua: san/oa |sanon|sanoo| |sanoi|sanoin|sanoit| |sanoisi|sanoisin|sanoisit|
-V!vValua: kys/yä |kysyn|kysyy| |kysyi|kysyin|kysyit| |kysyisi|kysyisin|kysyisit|
-V!vValua: kul/ua [kylun|kuluu| |kului|kuluin|        |kuluisi|
+Verb!vValua: san/oa |sanon|sanoo| |sanoi|sanoin|sanoit| |sanoisi|sanoisin|sanoisit|
+Verb!vValua: kys/yä |kysyn|kysyy| |kysyi|kysyin|kysyit| |kysyisi|kysyisin|kysyisit|
+Verb!vValua: kul/ua [kylun|kuluu| |kului|kuluin|        |kuluisi|
 
-V!vOstaa: ost/aa |ostan|ostat| |osti|ostin| |ostanut|
-V!vOstaa: est/ää |estän|estät| |esti|estin| |estänyt|
+Verb!vOstaa: ost/aa |ostan|ostat| |osti|ostin| |ostanut|
+Verb!vOstaa: est/ää |estän|estät| |esti|estin| |estänyt|
 
 -- 
 -- To do then:
 --   grep fun koe >LexAbs.gf
 --   grep lin koe >LexEng.gf
 -- And prefix these files with
---  abstract LexAbs = Shallow ** {
---  --# -path=.:..:../../../prelude:../../abstract:../../english
---  concrete LexFin of LexAbs = ShallowFin ** open ParadigmsFin in {
+--  abstract FinAbs = Shallow ** {
+--  --# -path=.:..:../../../prelude:../../abstract:../../finnish
+--  concrete FinFin of FinAbs = ShallowFin ** open ParadigmsFin in {

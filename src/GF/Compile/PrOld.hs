@@ -56,6 +56,8 @@ stripTerm t = case t of
                   TComp ty -> TComp $ stripTerm ty
                   TWild ty -> TWild $ stripTerm ty
                   _ -> ti
+  R [] -> EInt 8      --- GF 1.2 parser doesn't accept empty records 
+  RecType [] -> Cn "Int" ---
   _ -> composSafeOp stripTerm t
 
 stripPattern p = case p of
