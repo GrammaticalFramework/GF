@@ -138,11 +138,13 @@ randomTreesIO :: Options -> GFGrammar -> Int -> IO [Tree]
 randomTreesIO opts gr n = do
   gen <- myStdGen mx
   t   <- err (\s -> putStrLnFlush s >> return []) (return . singleton) $ 
-                                                       mkRandomTree gen mx g cat
+                                                       mkRandomTree gen mx g catfun
   ts  <- if n==1 then return [] else randomTreesIO opts gr (n-1)
   return $ t ++ ts
  where
-   cat = firstAbsCat opts gr
+   catfun = case getOptVal opts withFun of
+     Just fun -> Right $ (absId gr, I.identC fun)
+     _ -> Left $ firstAbsCat opts gr
    g   = grammar gr
    mx  = optIntOrN opts flagDepth 41
 
@@ -156,10 +158,18 @@ optLinearizeTreeVal :: Options -> GFGrammar -> Tree -> String
 optLinearizeTreeVal opts gr = err id id . optLinearizeTree opts gr
 
 optLinearizeTree :: Options -> GFGrammar -> Tree -> Err String
-optLinearizeTree opts gr t 
-  | oElem showRecord opts = liftM prt $ linearizeNoMark g c t
-  | otherwise             = return $ linTree2string g c t
+optLinearizeTree opts gr t = case getOptVal opts markLin of
+  Just mk
+    | mk == markOptXML    -> lin markXML t
+    | mk == markOptJava   -> lin markXMLjgf t
+    | mk == markOptStruct -> lin markBracket t
+    | mk == markOptFocus  -> lin markFocus t
+    | otherwise           -> lin noMark t 
+  _ -> lin noMark t
  where
+   lin mk
+    | oElem showRecord opts = liftM prt . linearizeNoMark g c
+    | otherwise             = return . linTree2string mk g c
    g = grammar gr
    c = cncId gr
 

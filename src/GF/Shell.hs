@@ -143,8 +143,8 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = case comm of
   CImport file | oElem showOld opts -> useIOE sa $ batchCompileOld file >> return sa
 
   CImport file -> useIOE sa $ do
-    st <- shellStateFromFiles opts st file
-    ioeIO $ changeState (const st) sa --- \ ((_,h),a) -> ((st,h), a))
+    st1 <- shellStateFromFiles opts st file
+    ioeIO $ changeState (const st1) sa --- \ ((_,h),a) -> ((st,h), a))
   CEmptyState         -> changeState reinitShellState sa
 
 {-

@@ -97,7 +97,6 @@ funsOnTypeFs compat fs val = [((fun,i),typ) |
                                         (i,arg) <- zip [0..] (map snd args),
                                         compat val arg]
 
-
 -- this is needed at compile time
 
 lookupFunTypeSrc :: Grammar -> Ident -> Ident -> Err Type

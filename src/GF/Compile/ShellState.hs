@@ -3,8 +3,11 @@ module ShellState where
 import Operations
 import GFC
 import AbsGFC
----import CMacros
+import Macros
+import MMacros
+
 import Look
+import LookAbs
 import qualified Modules as M
 import qualified Grammar as G
 import qualified PrGrammar as P
@@ -108,15 +111,12 @@ updateShellState opts sh (gr,(sgr,rts)) = do
       notInrts f = notElem f $ map fst rts
   cfs <- mapM (canon2cf opts cgr) concrs --- would not need to update all...
 
-  let funs = [] ---- funRulesOf cgr
-  let cats = [] ---- allCatsOf cgr
-  let csi  = [] ----
-{-
-             [(c,(co,
+  let funs = funRulesOf cgr
+  let cats = allCatsOf cgr
+  let csi  = [(c,(co,
                   [(fun,typ) | (fun,typ) <- funs, compatType tc typ], 
                   funsOnTypeFs compatType funs tc))
-                                              | (c,co) <- cats, let tc = cat2type c]
--}
+                                      | (c,co) <- cats, let tc = cat2val co c]
   let deps = True ---- not $ null $ allDepCats cgr
   let binds = [] ---- allCatsWithBind cgr 
 
@@ -162,6 +162,9 @@ greatestAbstract :: CanonGrammar -> Maybe Ident
 greatestAbstract gr = case allAbstracts gr of
   [] -> Nothing
   a -> return $ last a
+
+qualifTop :: StateGrammar -> G.QIdent -> G.QIdent
+qualifTop gr (_,c) = (absId gr,c)
 
 -- all concretes for a given abstract
 allConcretes :: CanonGrammar -> Ident -> [Ident]

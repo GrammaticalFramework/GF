@@ -24,19 +24,17 @@ import Monad
 
 -- NB. Constants in trees are annotated by the name of the abstract module.
 -- A concrete module name must be given to find (and choose) linearization rules.
+-- If no marking is wanted, noMark  :: Marker.
+-- For xml marking, use     markXML :: Marker
 
 linearizeToRecord :: CanonGrammar -> Marker -> Ident -> A.Tree -> Err Term
 linearizeToRecord gr mk m = lin [] where
 
-  lin ts t = errIn ("lint" +++ prt t) $ ---- 
-    if A.isFocusNode (A.nodeTree t) 
-      then liftM markFocus $ lint ts t
-      else lint ts t
-
-  lint ts t@(Tr (n,xs)) = do
+  lin ts t@(Tr (n,xs)) = errIn ("linearization of" +++ prt t) $ do
 
     let binds = A.bindsNode n
         at    = A.atomNode n
+        fmk   = markSubtree mk n ts (A.isFocusNode n)
     c   <- A.val2cat $ A.valNode n
     xs' <- mapM (\ (i,x) -> lin (i:ts) x) $ zip [0..] xs
 
@@ -47,7 +45,7 @@ linearizeToRecord gr mk m = lin [] where
       A.AtV x -> lookCat c >>= comp [tK (prt at)]
       A.AtM m -> lookCat c >>= comp [tK (prt at)] 
 
-    return $ mk ts $ mkBinds binds r
+    return $ fmk $ mkBinds binds r
 
   look = lookupLin gr . redirectIdent m . rtQIdent
   comp = ccompute gr
@@ -59,12 +57,6 @@ linearizeToRecord gr mk m = lin [] where
   lookCat = return . errVal defLindef . look 
          ---- should always be given in the module
 
-type Marker = [Int] -> Term -> Term
-
--- if no marking is wanted, use the following
-
-noMark :: [Int] -> Term -> Term
-noMark = const id
 
 -- thus the special case:
 
@@ -115,9 +107,9 @@ strs2strings :: [[Str]] -> [String]
 strs2strings = map unlex
 
 -- finally, a top-level function to get a string from an expression
-linTree2string :: CanonGrammar -> Ident -> A.Tree -> String
-linTree2string gr m e = err id id $ do
-  t  <- linearizeNoMark gr m e
+linTree2string :: Marker -> CanonGrammar -> Ident -> A.Tree -> String
+linTree2string mk gr m e = err id id $ do
+  t  <- linearizeToRecord gr mk m e
   r  <- expandLinTables gr t
   ts <- rec2strTables r
   let ss = strs2strings $ sTables2strs $ strTables2sTables ts

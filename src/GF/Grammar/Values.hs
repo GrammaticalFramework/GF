@@ -50,3 +50,11 @@ tree2exp (Tr (N (bi,at,_,_,_),ts)) = foldr Abs (foldl App at' ts') bi' where
     AtI s -> EInt s
   bi' = map fst bi
   ts' = map tree2exp ts
+
+loc2treeFocus :: Loc TrNode -> Tree
+loc2treeFocus (Loc (Tr (a,ts),p)) = 
+  loc2tree (Loc (Tr (mark a, map (mapTr nomark) ts), mapPath nomark p)) 
+ where 
+   (mark, nomark) = (\(N (a,b,c,d,_)) -> N(a,b,c,d,True), 
+                     \(N (a,b,c,d,_)) -> N(a,b,c,d,False))
+

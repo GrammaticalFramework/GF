@@ -14,7 +14,7 @@ import EventF
 
 fudlogueEditF :: CEnv -> IO ()
 fudlogueEditF env = 
-  fudlogue $ gfSizeP $ shellF ("GF 1.1 Fudget Editor") (gfF env)
+  fudlogue $ gfSizeP $ shellF ("GF 2.0- Fudget Editor") (gfF env)
 
 gfF env = nameLayoutF gfLayout $ (gfOutputF env >==< gfCommandF env) >+< quitButF
 

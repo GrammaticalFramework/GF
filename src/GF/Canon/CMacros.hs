@@ -3,6 +3,8 @@ module CMacros where
 import AbsGFC
 import GFC
 import qualified Ident as A ---- no need to qualif? 21/9
+import qualified Values as V
+import qualified MMacros as M
 import PrGrammar
 import Str
 
@@ -13,21 +15,53 @@ import Monad
 
 -- macros for concrete syntax in GFC that do not need lookup in a grammar
 
-markFocus :: Term -> Term
-markFocus = markSubterm "[*" "*]"
+-- how to mark subtrees, dep. on node, position, whether focus
+type Marker = V.TrNode -> [Int] -> Bool -> (String, String)
 
-markSubterm :: String -> String -> Term -> Term
-markSubterm beg end t = case t of
+markSubtree :: Marker -> V.TrNode -> [Int] -> Bool -> Term -> Term
+markSubtree mk n is = markSubterm . mk n is
+
+-- if no marking is wanted, use the following
+noMark :: Marker
+noMark _ _ _ = ("","")
+
+-- for vanilla brackets, focus, and position, use
+markBracket :: Marker
+markBracket n p b = if b then ("[*" ++ show p,"*]") else ("[" ++ show p,"]")
+
+-- for focus only
+markFocus :: Marker
+markFocus n p b = if b then ("[*","*]") else ("","")
+
+-- for XML, use
+markXML :: Marker
+markXML n i b = 
+  if b 
+    then ("<focus" +++ p +++ c ++ ">", "</focus>") 
+    else ("<subtree" +++ p +++ c ++ ">", "</subtree>") 
+   where 
+     c = "type=" ++ prt (M.valNode n)
+     p = "position=" ++ show i
+
+-- for XML in JGF 1, use
+markXMLjgf :: Marker
+markXMLjgf n p b = 
+  if b 
+    then ("<focus" +++ c ++ ">", "</focus>") 
+    else ("","")
+   where 
+     c = "type=" ++ prt (M.valNode n)
+
+-- the marking engine
+markSubterm :: (String,String) -> Term -> Term
+markSubterm (beg, end) t = case t of
   R rs -> R $ map markField rs 
   T ty cs -> T ty [Cas p (mark v) | Cas p v <- cs]
   _    -> foldr1 C [tK beg, t, tK end]  -- t : Str guaranteed?
  where
-   mark = markSubterm beg end
+   mark = markSubterm (beg, end)
    markField lt@(Ass l t) = if isLinLabel l then (Ass l (mark t)) else lt
-   isLinLabel (L (A.IC s)) = case s of ----
-      's':cs -> all isDigit cs
-      _ -> False
-
+   
 tK :: String -> Term
 tK = K . KS
 

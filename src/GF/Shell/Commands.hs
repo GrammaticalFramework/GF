@@ -9,6 +9,7 @@ import GFC
 import qualified AbsGFC ---- Atom
 import CMacros
 import LookAbs
+import Values (loc2treeFocus)----
 
 import GetTree
 import API
@@ -27,7 +28,7 @@ import Unicode
 
 import Option
 import CF
------ import CFIdent (cat2CFCat, cfCat2Cat)
+import CFIdent (cat2CFCat, cfCat2Cat)
 import Linear
 import Randomized
 import Editing
@@ -114,20 +115,19 @@ initSStateEnv env = case getOptVal (stateOptions sgr) gStartCat of
 
 execCommand :: CEnv -> Command -> SState -> IO (CEnv,SState)
 execCommand env c s = case c of
-{- ----
+
 -- these commands do need IO
-  CCEnvImport file -> do
+  CCEnvImport file -> useIOE (env,s) $ do
+    st <- shellStateFromFiles opts env file
+    return (st,s)
 
-    gr <- optFile2grammar noOptions (maybeStateAbstract env) file
-    let lan = getLangNameOpt noOptions file
-    return (updateLanguage file (lan, getStateConcrete gr) 
-                           (initWithAbstract (stateAbstract gr) env), s)
-
+{- ----
   CCEnvEmptyAndImport file -> do
     gr <- optFile2grammar noOptions Nothing file
     let lan = getLangNameOpt noOptions file
     return (updateLanguage file (lan, getStateConcrete gr) 
                  (initWithAbstract (stateAbstract gr) emptyShellState), initSState)
+-}
 
   CCEnvEmpty -> do
     return (emptyShellState, initSState)
@@ -137,6 +137,7 @@ execCommand env c s = case c of
     (msg,(env',_)) <- Shell.execLines False cs (Shell.initHState env)
     return (env', changeMsg msg s) ----
 
+{- ----
   CCEnvOpenTerm file -> do
     c <- readFileIf file
     let (fs,t) = envAndTerm file c
@@ -159,10 +160,11 @@ execCommand env c s = case c of
     state1 <- return $ 
                    refineByExps True gr (parseAny agrs cat t) $ changeState state0 s
     return (env', state1)
-
-  CCEnvOn  name -> return (languageOn  (language name) env,s)
-  CCEnvOff name -> return (languageOff (language name) env,s)
 -}
+
+----  CCEnvOn  name -> return (languageOn  (language name) env,s)
+----  CCEnvOff name -> return (languageOff (language name) env,s)
+
 -- this command is improved by the use of IO
   CRefineRandom -> do
     g <- newStdGen
@@ -196,12 +198,10 @@ execECommand env c = case c of
   CNewCat cat        -> action2commandNext $ \x -> do
                           s' <- newCat cgr cat x
                           uniqueRefinements cgr s'
-{- ----
   CNewTree s         -> action2commandNext $ \x -> do 
                           t  <- string2treeErr gr s 
                           s' <- newTree t x
                           uniqueRefinements cgr s'
--}
   CAhead n           -> action2command (goAheadN n)
   CBack n            -> action2command (goBackN n)
   CTop               -> action2command $ return . goRoot
@@ -215,34 +215,43 @@ execECommand env c = case c of
   CWrapWithFun fi    -> action2commandNext $ wrapWithFun cgr fi
   CChangeHead f      -> action2commandNext $ changeFunHead cgr f
   CPeelHead          -> action2commandNext $ peelFunHead cgr
-{- ----
+
   CAlphaConvert s    -> action2commandNext $ \x ->
-                          string2varPair s >>= \xy -> alphaConvert gr xy x
-
+                          string2varPair s >>= \xy -> alphaConvert cgr xy x
+{- ----
   CRefineWithTree s  -> action2commandNext $ \x -> 
-                          (string2treeErr gr s x >>= \t -> refineWithTree der gr t x)
+                          (string2treeErr cgr s x >>= 
+                            \t -> refineWithTree der cgr t x)
 
-  CRefineParse str   -> \s -> refineByExps der gr 
+  CRefineParse str   -> \s -> refineByTrees der cgr 
                           (parseAny agrs (cat2CFCat (actCat (stateSState s))) str) s
 -}
+  CRefineParse str   -> \s -> 
+                     let cat = cat2CFCat (qualifTop sgr (actCat (stateSState s)))
+                         ts = parseAny agrs cat str
+                     in (if null ts ---- debug
+                           then withMsg [str, "parse failed in cat" +++ show cat]
+                           else id) 
+                            (refineByTrees der cgr ts) s
+
   
-  CRefineRandom -> \s -> action2commandNext
-                              (refineRandom (stdGenCEnv env s) 41 cgr) s 
+  CRefineRandom      -> \s -> action2commandNext
+                                (refineRandom (stdGenCEnv env s) 41 cgr) s 
 
   CSelectCand i      -> selectCand cgr i
-{- ----
+
   CTermCommand c     -> case c of
                           "paraphrase" -> \s ->
-                             replaceByTermCommand gr c (actExp (stateSState s)) s
-                          "transfer" -> action2commandNext $
-                                        transferSubTree (stateTransferFun sgr) gr
+                            replaceByTermCommand der gr c (actTree (stateSState s)) s
+----                          "transfer" -> action2commandNext $
+----                                       transferSubTree (stateTransferFun sgr) gr
                           _ -> replaceByEditCommand gr c
--}
+
 ----  CAddOption o       -> changeStOptions (addOption o)
 ----  CRemoveOption o    -> changeStOptions (removeOption o)
   CDelete            -> action2commandNext $ deleteSubTree cgr
   CUndo              -> undoCommand
-----  CMenu              -> \s -> changeMsg (menuState env s) s
+  CMenu              -> \s -> changeMsg (menuState env s) s
   CView              -> changeView
   CHelp h            -> changeMsg [h env]
   CVoid              -> id
@@ -258,18 +267,16 @@ execECommand env c = case c of
 --
 
 
-{- ----
 string2varPair :: String -> Err (I.Ident,I.Ident)
 string2varPair s = case words s of
   x : y : [] -> liftM2 (,) (string2ident x) (string2ident y)
   _          -> Bad "expected format 'x y'"
 
-
 -- seen on display
 
 cMenuDisplay :: String -> Command
 cMenuDisplay s = CAddOption (menuDisplay s)
--}
+
 newCatMenu env = [(CNewCat c, prQIdent c) | ---- printname env initSState c) | 
                          (c,[]) <- allCatsOf (canCEnv env)]
 
@@ -282,7 +289,7 @@ mkRefineMenuAll env sstate =
     ([],[],wraps) -> 
        [(CWrapWithFun fi, prWrap fit)     | fit@(fi,_) <- wraps] ++
        [(CChangeHead f,   prChangeHead f) | f <- headChangesState cgr state] ++
-       [(CPeelHead,     (ifShort "ph" "PeelHead", "ph")) | canPeelState cgr state] ++
+       [(CPeelHead,    (ifShort "ph" "PeelHead", "ph")) | canPeelState cgr state] ++
        [(CDelete,       (ifShort "d"  "Delete",   "d"))]
     (refs,[],_)   -> [(CRefineWithAtom (prRefinement f), prRef t) | t@(f,_) <- refs]
     (_,cands,_)   -> [(CSelectCand i,   prCand (t,i))    | (t,i) <- zip cands [0..]]
@@ -327,14 +334,17 @@ emptyMenuItem = (CVoid,("",""))
 
 ---- allStringCommands = snd $ customInfo customStringCommand
 termCommandMenu, stringCommandMenu :: [(Command,String)]
-termCommandMenu = []
+termCommandMenu = [(CTermCommand s, s) | s <- allTermCommands]
+
+allTermCommands = snd $ customInfo customEditCommand
+
 stringCommandMenu = []
 
 displayCommandMenu :: CEnv -> [(Command,String)]
 displayCommandMenu env = []
 {- ----
----- allTermCommands = snd $ customInfo customEditCommand
-termCommandMenu = [(CTermCommand s, s) | s <- allTermCommands]
+
+termCommandMenu = 
 
 stringCommandMenu = 
    (CAddOption showStruct,      "structured") :
@@ -367,7 +377,8 @@ displaySStateIn env state = (tree',msg,menu) where
   grs    = allStateGrammars env
   lang   = (viewSState state) `mod` (length grs + 3)
   tree'  = (tree : exp : linAll ++ separ (linAll ++ [tree])) !! lang
-  opts   = addOptions (optsSState state) (globalOptions env)  -- state opts override
+  opts   = addOptions (optsSState state)   -- state opts override
+             (addOption (markLin markOptFocus) (globalOptions env))
   lin g  = linearizeState fudWrap opts g zipper
   exp    = return $ tree2string $ loc2tree zipper
   zipper = stateSState state
@@ -387,7 +398,8 @@ displaySStateJavaX env state = unlines $ tagXML "gfedit" $ concat [
   (ls,grs) = unzip $ lgrs
   lgrs   = allStateGrammarsWithNames env --- allActiveStateGrammarsWithNames env
   lins   = (langAbstract, exp) : linAll
-  opts   = addOptions (optsSState state) (globalOptions env)  -- state opts override
+  opts   = addOptions (optsSState state)   -- state opts override 
+              (addOption (markLin markOptJava) (globalOptions env))
   lin (n,gr) = (n, map uni $ linearizeState noWrap opts gr zipper) where
                   uni = optEncodeUTF8 n gr . mkUnicode
   exp    = prprTree $ loc2tree zipper
@@ -402,7 +414,7 @@ langXML      = language "XML"
 
 linearizeState :: (String -> [String]) -> Options -> GFGrammar -> State -> [String]
 linearizeState wrap opts gr = 
- wrap . strop . unt . optLinearizeTreeVal opts gr . loc2tree
+ wrap . strop . unt . optLinearizeTreeVal opts gr . loc2treeFocus
                   --- markedLinString br g
   where
    unt   = id ---- customOrDefault (stateOptions g) useUntokenizer customUntokenizer g

@@ -107,6 +107,10 @@ idents2CFCat m c = ident2CFCat (CIQ m c) (identC "s")
 catVarCF :: CFCat
 catVarCF = ident2CFCat (mkCIdent "_" "#Var") (identC "_") ----
 
+cat2CFCat :: (Ident,Ident) -> CFCat
+cat2CFCat = uncurry idents2CFCat
+
+
 {- ----
 uCFCat :: CFCat
 uCFCat = cat2CFCat uCat
@@ -116,9 +120,8 @@ moduleOfCFCat :: CFCat -> Ident
 moduleOfCFCat (CFCat (CIQ m _, _)) = m
 
 -- the opposite direction
-cfCat2Cat :: CFCat -> CIdent   
-cfCat2Cat (CFCat (s,_)) = s
-
+cfCat2Cat :: CFCat -> (Ident,Ident)
+cfCat2Cat (CFCat (CIQ m c,_)) = (m,c)
 
 -- to construct CF tokens
 
