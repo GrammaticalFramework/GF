@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:38 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.8 $
+-- > CVS $Date: 2005/03/02 09:43:52 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.9 $
 --
 -- Generate all trees of given category and depth. AR 30\/4\/2004
 --
@@ -40,7 +40,7 @@ import List
 
 -- | the main function takes an abstract syntax and returns a list of trees
 generateTrees :: GFCGrammar -> Bool -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
-generateTrees gr ifm cat n mn mt = map str2tr $ generate gr' ifm cat' n mn mt'
+generateTrees gr ifm cat n mn mt = nub $ map str2tr $ generate gr' ifm cat' n mn mt'
   where
     gr' = gr2sgr gr
     cat' = prt $ snd cat
