@@ -14,7 +14,7 @@ lincat Sub100 = {s : Place => Str ; size : Size} ;
 lincat Sub1000 = {s : Place => Str ; size : Size} ;
 lincat Sub1000000 = {s : Str} ;
 lin num x0 =
-  {s = "/-" ++ x0.s ++ "-/"} ; -- the Arabic environment
+  {s = "/6" ++ x0.s ++ "6/"} ; -- the Arabic0x0600 environment
 
 lin n2  =
   {s = table {(unit attr) => [] ; 
@@ -75,7 +75,7 @@ lin pot1to19 d =
 lin pot0as1 n =
   {s = table {p => n.s ! unit p} ; size = n.size} ;
 lin pot1 d =
-  {s = table {_ => d.s ! ten} ; size = pl} ;
+  {s = table {_ => d.s ! ten} ; size = eleventonineteen} ;
 lin pot1plus d e =
   {s = table {_ => e.s ! unit indep ++ "w" ++ d.s ! ten} ; size = e.size} ;
 lin pot1as2 n =
