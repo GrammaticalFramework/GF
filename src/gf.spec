@@ -41,14 +41,6 @@ GF particularly addresses the following aspects of grammars:
     * grammar engineering (modularity, information hiding, reusable
       libraries)
 
-
-%package editor
-Summary: GF 
-Group: Sciences/Other
-%description editor
-This package contains the GF syntax editor. 
-
-
 %prep
 rm -rf $RPM_BUILD_ROOT
 %setup -q
@@ -67,11 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %{_bindir}/gf2
-%doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html}
-
-%files editor
 %{_bindir}/jgf2
 %{_libdir}/%{name}-%{version}/gf-java.jar
+%doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html}
 
 
 %changelog
