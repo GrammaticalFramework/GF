@@ -98,7 +98,8 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
     let us = uses f in
     if not (all noComp us) then
       fp else 
-    if (typ f == MTyIncomplete || (not (null us) && all isAux us)) then
+    if (elem (typ f) [MTyIncomplete, MTyIncResource] || 
+        (not (null us) && all isAux us)) then
       (f,(p,CSDont)) else
       fp
 
@@ -124,7 +125,8 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
   -- Also read res if the option "retain" is present
   res cs = map mkRes cs where
     mkRes x@(f,(path,st)) | elem st [CSRead,CSEnv] = case typ f of
-      MTyResource | not (null [m | (m,(_,CSComp)) <- cs,
+      t | elem t [MTyResource,MTyIncResource] &&
+          not (null [m | (m,(_,CSComp)) <- cs,
                                    Just ms <- [lookup m allDeps], elem f ms])
                     || oElem retainOpers opts
         -> (f,(path,CSRes))
@@ -177,6 +179,7 @@ data ModUse =
 data ModTyp =
    MTyResource
  | MTyIncomplete
+ | MTyIncResource -- interface, incomplete resource
  | MTyOther
   deriving (Eq,Show)
 
@@ -205,10 +208,12 @@ importsOfFile =
 
 getModuleHeader :: [String] -> ModuleHeader -- with, reuse
 getModuleHeader ws = case ws of
-  "incomplete":ws2 -> let ((_,name),us) = getModuleHeader ws2 in
-    ((MTyIncomplete,name),us)
+  "incomplete":ws2 -> let ((ty,name),us) = getModuleHeader ws2 in
+    case ty of
+      MTyResource -> ((MTyIncResource,name),us)
+      _ -> ((MTyIncomplete,name),us)
   "interface":ws2 -> let ((_,name),us) = getModuleHeader ("resource":ws2) in
-    ((MTyIncomplete,name),us)
+    ((MTyIncResource,name),us)
  
   "resource":name:ws2 -> case ws2 of
     "reuse":m:_ -> ((MTyResource,name),[(m,MUReuse)])
