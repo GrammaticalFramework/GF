@@ -14,7 +14,7 @@ import java.util.*;
 public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     KeyListener, FocusListener {                        
 
-    private int[] sizes = {16,18,20,25,30,36};
+    private int[] sizes = {14,18,22,26,30};
     private String[] envfonts;
     private Font font;  
     Font[] fontObjs;
@@ -1027,17 +1027,17 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
         font = new Font((String)fontList.getSelectedItem(), Font.PLAIN, ((Integer)sizeList.getSelectedItem()).intValue());
         //output.setFont(font);  
         fontEveryWhere(font);
-        cbMenuItem.setFont(font);  
-        rbMenuItem.setFont(font);  
-        fileMenuItem.setFont(font);  
+        if (cbMenuItem!=null) cbMenuItem.setFont(font);  
+        if (rbMenuItem!=null) rbMenuItem.setFont(font);  
+        if (fileMenuItem!=null) fileMenuItem.setFont(font);  
     }
 
     if ( obj == sizeList ) {
         font = new Font((String)fontList.getSelectedItem(), Font.PLAIN, ((Integer)sizeList.getSelectedItem()).intValue());
         fontEveryWhere(font);
-        cbMenuItem.setFont(font);  
-        rbMenuItem.setFont(font);  
-        fileMenuItem.setFont(font);  
+        if (cbMenuItem!=null) cbMenuItem.setFont(font);  
+        if (rbMenuItem!=null) rbMenuItem.setFont(font);  
+        if (fileMenuItem!=null) fileMenuItem.setFont(font);  
    }
 
     if ( obj == menu ) {
