@@ -77,10 +77,12 @@ oper
 
   nBuch   : (_,_ : Str) -> N ;    -- Buch, (Buches, Bücher) (neut)
   nMesser : Str -> N ;            -- Messer, (Messers, Messer) (neut)
+  nBein : Str -> N ;              -- Bein, (Beins, Beine) (neut)
   nAuto   : Str -> N ;            -- Auto, (Autos, Autos) (neut)
 
 -- Feminine patterns. Duplicated "e" is avoided in $nFrau$.
 
+  nStudentin : Str -> N ;         -- Studentin (Studentinne) 
   nHand   : (_,_ : Str) -> N ;    -- Hand, Hände; Mutter, Mütter (fem)
   nFrau   : Str -> N ;            -- Frau (, Frauen) ; Wiese (, Wiesen) (fem)
 
@@ -158,7 +160,7 @@ oper
 
   apReg : Str -> AP ;
 
-
+--OLD:
 --2 Verbs
 --
 -- The fragment only has present tense so far, but in all persons.
@@ -170,11 +172,61 @@ oper
 -- The function recognizes if the stem ends with "s" or "t" and performs the
 -- appropriate contractions.
 
-  mkV : (_,_,_,_ : Str) -> V ;   -- geben, gibt, gib, gegeben
+--NEW (By Harald Hammarström):
+--2 Verbs
+-- The worst-case macro needs six forms:
+-- x Infinitive, 
+-- x 3p sg pres. indicative, 
+-- x 2p sg imperative, 
+-- x 1/3p sg imperfect indicative, 
+-- x 1/3p sg imperfect subjunctive (because this uncommon form can have umlaut)
+-- x the perfect participle 
 
--- Regular verbs are those where no Umlaut occurs.
+-- But you'll only want to use one of the five macros:
+-- x weakVerb              -- For a regular verb like legen
+-- x verbGratulieren       -- For a regular verb without ge- in the perfect
+--                            particple. Like gratulieren, beweisen etc 
+-- x verbStrongSingen      -- A strong verb without umlauting present tense.
+--                            You'll need to supply the strong imperfect forms
+--                            as well as the participle. 
+-- x verbStrongSehen       -- A strong verb that umlauts in the 2/3p sg pres
+--                            indicative as well as the imperative. You'll
+--                            need to give (only) the 3rd p sg pres ind. in
+--                            addition to the strong imperfect forms and the
+--                            part participle.
+-- x verbStrongLaufen      -- A strong verb that umlauts in the 2/3p sg pres
+--                            indicative but NOT the imperative. You'll
+--                            need to give (only) the 3rd p sg pres ind. in
+--                            addition to the strong imperfect forms and the
+--                            part participle.
+--
+-- Things that are handled automatically
+-- x Imperative e (although optional forms are not given)
+-- x Extra e in verbs like arbeitete, regnet, findet, atmet.
+--   NOTE: If pres. umlauting strong verbs are defined through the verbumStrong
+--   macro (which they should) it is automatically handled so they avoid 
+--   falling into this rule e.g er tritt (rather than *er tritet)
+-- x s is dropped in the 2p sg if appropriate du setzt
+-- x verbs that end in -rn, -ln rather than -en
 
-  vReg  : Str -> V ;             -- führen
+-- Things that are not handled:
+-- x -ß-/-ss-
+-- x Optional dropping of -e- in e.g wand(e)re etc
+-- x Optional indicative forms instead of pres. subj. 2p sg. and 2p pl.  
+-- x (Weak) verbs without the ge- on the participle (in wait for a systematic
+--   treatment of the insep. prefixes and stress). You have to manually use
+--   the verbGratulieren for this. E.g do verbGratulieren "beweisen" - 
+--   verbWeak "beweisen" would yield *gebeweist.
+
+  mkV : (_,_,_,_,_,_ : Str) -> V ;   -- geben, gibt, gib, gab, gäbe, gegeben
+
+-- Weak verbs are sometimes called regular verbs.
+  
+  vWeak  : Str -> V ;             -- führen
+
+  vGratulieren : Str -> V ;             -- gratulieren
+  vSehen : (_,_,_,_,_ : Str) -> V ; -- sehen, sieht, sah, sähe, gesehen
+  vLaufen : (_,_,_,_,_ : Str) -> V ; -- laufen, lauft, liefe, liefe, gelaufen
 
 -- The verbs 'be' and 'have' are special.
 
@@ -187,16 +239,23 @@ oper
 
 -- Verbs with a detachable particle, with regular ones as a special case.
 
-  vPart    :  (_,_,_,_,_ : Str) -> V ;     -- sehen, sieht, sieh, gesehen, aus
-  vPartReg :  (_,_     : Str) -> V ;       -- bringen, um
+  vPartWeak  : (_,_ : Str) -> V ;             -- führen, aus
+
+--  vPartGratulieren (_,_ : Str) -> V ;          
+  vPartSehen : (_,_,_,_,_,_ : Str) -> V ; -- sehen, sieht, sah, sähe, gesehen
+  vPartLaufen : (_,_,_,_,_,_ : Str) -> V ; -- laufen, lauft, liefe, liefe, gelaufen
   mkVPart  :  V -> Str -> V ;              -- vFahren, aus
+
+-- Obsolete; use vPartWeak etc instead
+  --vPart    :  (_,_,_,_,_ : Str) -> V ;   -- sehen, sieht, sieh, gesehen, aus
+  --vPartReg :  (_,_     : Str) -> V ;     -- bringen, um
 
 -- Two-place verbs, and the special case with direct object. Notice that
 -- a particle can be included in a $V$.
 
   mkTV     : V   -> Str -> Case -> TV ;    -- hören, zu, dative
 
-  tvReg    : Str -> Str -> Case -> TV ;    -- hören, zu, dative
+  tvWeak    : Str -> Str -> Case -> TV ;    -- hören, zu, dative
   tvDir    : V -> TV ;                     -- umbringen
   tvDirReg : Str -> TV ;                   -- lieben
 
@@ -271,11 +330,13 @@ oper
     } in
     mkN soldat soldaten soldaten soldaten soldaten soldaten masculine ;
 
+  nBein = \bein -> declN2n bein ** {lock_N = <>};
   nBuch = \buch, bücher -> nGen buch (buch + "es") bücher neuter ;
   nMesser = \messer -> nGen messer (messer + "s") messer neuter ;
   nAuto = \auto -> let {autos = auto + "s"} in 
           mkNoun4 auto autos autos autos neuter ** {lock_N = <>} ;
 
+  nStudentin = \studentin -> declN1in studentin ** {lock_N = <>}; 
   nHand = \hand, hände -> nGen hand hand hände feminine ;
 
   nFrau = \frau -> let {
@@ -310,21 +371,31 @@ oper
   aPastPart = \v -> {s = table AForm {a => v.s ! VPart a} ; lock_Adj1 = <>} ; 
   apReg = \s -> AdjP1 (adjGen s) ;
 
-  mkV = \sehen, sieht, sieh, gesehen -> 
-    mkVerbSimple (mkVerbum sehen (Predef.tk 1 sieht) sieh gesehen) ** {lock_V = <>} ;
-  vReg = \s -> mkVerbSimple (regVerb s) ** {lock_V = <>} ;
+  mkV a b c d e f = mkVerbSimple (mkVerbum a b c d e f) ** {lock_V = <>} ;
+  vWeak a = mkVerbSimple (verbumWeak a) ** {lock_V = <>} ;
+  vGratulieren a = mkVerbSimple (verbumGratulieren a) ** {lock_V = <>} ; 
+  vSehen a b c d e = mkVerbSimple (verbumStrongSehen a b c d e) ** {lock_V = <>} ;
+  vLaufen a b c d e = mkVerbSimple (verbumStrongLaufen a b c d e) ** {lock_V = <>} ;
+
+  -- vReg = \s -> mkVerbSimple (regVerb s) ** {lock_V = <>} ;
   vSein = verbSein ** {lock_V = <>} ;
   vHaben = verbHaben ** {lock_V = <>} ;
-  vFahren = mkV "fahren" "fährt" "fuhr" "gefahren" ;
-  vPart = \sehen, sieht, sieh, gesehen, aus -> 
-    mkVerb (mkVerbum sehen sieht sieh gesehen) aus ** {lock_V = <>} ;
-  vPartReg = \sehen, aus -> mkVerb (regVerb sehen) aus ** {lock_V = <>} ;
+  vFahren = mkVerbSimple (verbumStrongLaufen "fahren" "fährt" "fuhr" "führe" "gefahren") ** {lock_V = <>} ;
+
+  vPartWeak = \führen, aus -> (mkVerb (verbumWeak führen) aus) ** {lock_V = <>} ;
+  --vGratulieren = verbumGratulieren ** {lock_V = <>} ; 
+  vPartSehen a b c d e aus = (mkVerb (verbumStrongSehen a b c d e) aus) ** {lock_V = <>} ;
+  vPartLaufen a b c d e aus = (mkVerb (verbumStrongLaufen a b c d e) aus) ** {lock_V = <>} ;
+
+  --vPart = \sehen, sieht, sieh, gesehen, aus -> 
+  --  mkVerb (mkVerbum sehen sieht sieh gesehen) aus ** {lock_V = <>} ;
+  --vPartReg = \sehen, aus -> mkVerb (regVerb sehen) aus ** {lock_V = <>} ;
   mkVPart v p = mkVerb v.s p  ** {lock_V = <>} ;
 
   mkTV v p c = mkTransVerb v p c  ** {lock_TV = <>} ;
-  tvReg = \hören, zu, dat -> mkTV (vReg hören) zu dat ;
+  tvWeak = \hören, zu, dat -> mkTV (vWeak hören) zu dat ;
   tvDir = \v -> mkTV v [] accusative ;
-  tvDirReg = \v -> tvReg v [] accusative ; 
+  tvDirReg = \v -> tvWeak v [] accusative ; 
   mkV3 v s c t d = mkDitransVerb v s c t d ** {lock_V3 = <>} ;
 
   mkVS v = v ** {lock_VS = <>} ;
