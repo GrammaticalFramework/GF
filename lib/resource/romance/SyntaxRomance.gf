@@ -500,17 +500,22 @@ oper
   complAdverb : Adverb -> Complemnt = \dehors ->
     complCopula (\\_,_,_ => dehors.s) ; 
 
-  complVerbAdj : AdjCompl -> VerbPhrase -> Complemnt = \facile,ouvrir ->
-    complCopula (\\g,n,p => 
-      facile.s ! AF g n ++ prepCase facile.c ++ facile.s2 ++
-      ouvrir.s ! VIInfinit ! g ! n ! p) ;
+  complVerbAdj : AdjCompl -> VerbPhrase -> AdjPhrase = \facile,ouvrir ->
+    {s = \\gn => ---- p
+      facile.s ! gn ++ prepCase facile.c ++ facile.s2 ++
+      ouvrir.s ! VIInfinit ! Masc ! Sg ! P3 ;
+     p = False
+    } ;
 
-  complVerbAdj2 : Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> Complemnt = 
+  complVerbAdj2 : Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> AdjPhrase = 
     \b,facile,lui,nager ->
-    complTransVerbGen (copula ** {c = dative ; s2=[]}) lui
-      (\\g,n,p => 
-        facile.s ! AF g n ++ prepCase facile.c ++ facile.s2 ++
-        nager.s ! VIInfinit ! g ! n ! p) ; ---- agr dep on b
+    {s = \\gn => ---- p 
+        facile.s ! gn ++ 
+        lui.s ! stressed dative ++         ---- also "pour lui" ?
+        prepCase facile.c ++ facile.s2 ++
+        nager.s ! VIInfinit ! pgen2gen lui.g ! lui.n ! P3 ; ---- agr dep on b
+     p = False
+     } ;
 
   progressiveVerbPhrase : VerbPhrase -> VerbGroup ;
 
@@ -584,7 +589,7 @@ oper
       in  
         \\g,n,p => 
         let 
-          soi   = reflPron ! n ! p ! (case2pformClit aime.c) ; 
+          soi   = reflPron ! n ! p ! unstressed accusative ; ---- (case2pformClit aime.c) ; 
           aimee = aime.s ! VPart g n
         in
         case clit of {
@@ -869,6 +874,9 @@ oper
 -- ("je crois qu'elle vient" -"je ne crois pas qu'elle vienne"),
 
   SentenceVerb : Type = Verb ** {mp, mn : Mode} ;
+
+  subordMode : SentenceVerb -> Bool -> Mode = \verb,b -> 
+   if_then_else Mode b verb.mp verb.mn ;
 
   complSentVerb : SentenceVerb -> Sentence -> Complemnt = \croire,jeanboit ->
     mkCompl 
@@ -1429,6 +1437,7 @@ oper
       s4 : VF => Str ;  -- ai                 ai
       s5 : Str ;        -- toujours (pas)     toujours (pas)
       s6 : Str ;        -- (dit) directement  (voulu) le lui dire directement
+      s7 : Bool => Str; -- qu'il pleu/pleuve
       aux : VAux ;
       g,g2 : Gender ;   -- features for main verb and participle
       n,n2 : Number ;
@@ -1473,6 +1482,7 @@ oper
       s3 = [] ;
       s4 = verb.s ;
       s5, s6 = [] ;
+      s7 = \\_ => [] ;
       aux = verb.aux ;
       g = pgen2gen subj.g ;
       n = subj.n ;
@@ -1494,6 +1504,7 @@ oper
       s4  = sats.s4 ;
       s5  = sats.s5 ;
       s6  = sats.s6 ++ prep ++ np ;
+      s7  = sats.s7 ;
       aux = sats.aux ;
       g   = sats.g ;
       n   = sats.n ;
@@ -1502,12 +1513,13 @@ oper
       p   = sats.p
       } ;
 
-  insertExtrapos : Sats -> Str -> Sats = \sats,obj -> 
+  insertExtrapos : Sats -> (Bool => Str) -> Sats = \sats,obj -> 
      {s1  = sats.s1 ;
       s3  = sats.s3 ;
       s4  = sats.s4 ;
       s5  = sats.s5 ;
-      s6  = sats.s6 ++ obj ;
+      s6  = sats.s6 ;
+      s7  = obj ;
       aux = sats.aux ;
       g   = sats.g ;
       n   = sats.n ;
@@ -1535,10 +1547,11 @@ oper
         dit  = dire.p2 ;
         toujours = sats.s5 ;
         directement = sats.s6 ;
-        ne  = if_then_Str b [] "ne" ; ---- negNe ;
-        pas = if_then_Str b [] "pas"  ---- negPas
+        ne  = if_then_Str b [] "ne" ;  ---- negNe ;
+        pas = if_then_Str b [] "pas" ; ---- negPas ;
+        oui = sats.s7 ! b
       in 
-      je ++ ne ++ lui ++ ai ++ toujours ++ pas ++ dit ++ directement
+      je ++ ne ++ lui ++ ai ++ toujours ++ pas ++ dit ++ directement ++ oui
     } ;
 
 }

@@ -53,7 +53,10 @@ fun
 
   PositADeg   : ADeg -> AP ;               -- "old"
   ComparADeg  : ADeg -> NP -> AP ;         -- "older than John"
-  SuperlNP    : ADeg -> CN -> NP ;         -- "the oldest man"
+  SuperlADeg  : ADeg -> AP ;               -- "the oldest"
+
+  ComplAV     : AV  -> VPI -> AP ;         -- "eager to leave"
+  ComplObjA2V : A2V -> NP -> VPI -> AP ;   -- "easy for us to convince"
 
 
 
@@ -103,7 +106,7 @@ fun
 --
 -- Here is how complex adverbs can be formed and used.
 
-  AdjAdv : AP -> Adv ;                 -- "freely", "more consciously than you"
+  AdjAdv : A -> Adv ;                  -- "freely"
   AdvPP  : PP -> Adv ;                 -- "in London", "after the war"
   PrepNP : Prep -> NP -> PP ;          -- "in London", "after the war"
 

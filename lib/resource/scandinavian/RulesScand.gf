@@ -46,10 +46,12 @@ lin
 
   UseA = adj2adjPhrase ;
   ComplA2 = complAdj ;
+  ComplAV = complVerbAdj ;
+  ComplObjA2V = complVerbAdj2 True ;
 
-  PositADeg = positAdjPhrase ;
+  PositADeg  = positAdjPhrase ;
   ComparADeg = comparAdjPhrase ;
-  SuperlNP = superlNounPhrase ;
+  SuperlADeg = superlAdjPhrase ;
 
 -- verbs and verb phrases mostly in $Clause$
 

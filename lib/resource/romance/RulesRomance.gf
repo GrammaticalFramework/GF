@@ -40,10 +40,12 @@ lin
 
   UseA = adj2adjPhrase ;
   ComplA2 = complAdj ;
+  ComplAV v x = complVerbAdj v x ;
+  ComplObjA2V v x y = complVerbAdj2 True v x y ;
 
-  PositADeg = positAdjPhrase ;
+  PositADeg  = positAdjPhrase ;
   ComparADeg = comparAdjPhrase ;
-  SuperlNP = superlNounPhrase ;
+  SuperlADeg = superlAdjPhrase ;
 
   PredAS = predAdjSent ;
   PredV0 rain = predVerbClause (pronNounPhrase pronImpers) rain (complVerb rain) ;

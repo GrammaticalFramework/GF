@@ -17,8 +17,8 @@ PastTime h m = ss (m.s ++ "over" ++ h.s) ;
 ToTime h m = ss (m.s ++ "på" ++ h.s) ;
 ExactTime h = ss (h.s ++ "akkurat") ;
 
-NumHour n = n ;
-NumMinute n = n ;
+NumHour n = {s = n.s ! Neutr} ;
+NumMinute n = {s = n.s ! Neutr} ;
 
 monday = regN "mandag" masculine ;
 tuesday = regN "tirsdag" masculine ;

@@ -372,6 +372,12 @@ oper
 
   superlSpecies : Species ;
 
+  superlAdjPhrase : AdjDegr -> AdjPhrase = \ung ->
+    {s = \\a,c => ung.s ! AF (Super SupWeak) c ;
+     p = True
+    } ;
+
+{-
 -- Moreover, superlatives can be used alone as adjectival phrases
 -- ("yngst", "den yngste" - in free variation). 
 -- N.B. the former is only permitted in predicative position.
@@ -383,6 +389,7 @@ oper
            } ; 
      p = False
     } ;
+-}
 
 --3 Two-place adjectives
 --
@@ -1056,12 +1063,13 @@ oper
      s2 = hitta.s2
     } ;
 
-  complVerbAdj : Adjective -> VerbPhrase -> VerbGroup = \grei, simma ->
-    vara
-      (\\g,n,p => 
-              grei.s ! predFormAdj g n ! Nom ++ 
+  complVerbAdj : Adjective -> VerbPhrase -> AdjPhrase = \grei, simma ->
+    {s = \\a,c =>
+              grei.s ! a ! Nom ++ 
               infinAtt ++
-              simma.s ! VIInfinit ! g ! n ! p) ;
+              simma.s ! VIInfinit ! Neutr ! Sg ! P3 ; ---- agreement!
+     p = False
+    } ;
 
 -- Notice agreement to object vs. subject:
 
@@ -1078,17 +1086,17 @@ oper
         ) ;
 
   complVerbAdj2 : 
-    Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> VerbGroup = 
+    Bool -> AdjCompl -> NounPhrase -> VerbPhrase -> AdjPhrase = 
       \obj,grei,dig,simma ->
-        vara
-          (\\g,n,p =>
-              grei.s ! predFormAdj g n ! Nom ++ 
+        {s = \\a,_ =>
+              grei.s ! a ! Nom ++ 
               {-strPrep-} grei.s2 ++ dig.s ! PAcc ++
               infinAtt ++
-              if_then_Str obj 
-                 (simma.s ! VIInfinit ! dig.g ! dig.n ! dig.p)
-                 (simma.s ! VIInfinit ! g     ! n     ! p)
-          ) ;
+           ----   if_then_Str obj 
+                 (simma.s ! VIInfinit ! dig.g ! dig.n ! dig.p) ;
+           ----      (simma.s ! VIInfinit ! g     ! n     ! p)
+         p = False
+        } ;
 
 --2 Sentences missing noun phrases
 --
