@@ -29,15 +29,20 @@ oper
   utrum   : Gender ;
   neutrum : Gender ;
 
+  Sex  : Type ;
+
   masculine    : Sex ;
   nonmasculine : Sex ;
 
 -- To abstract over case names, we define the following.
 
+  Case  : Type ;
+
   nominative : Case ;
   genitive   : Case ;
 
 -- To abstract over number names, we define the following.
+  Number  : Type ;
 
   singular : Number ;
   plural   : Number ;
@@ -202,6 +207,10 @@ oper
 --.
 
   Gender = SyntaxSwe.Gender ;
+  Sex = SyntaxSwe.Sex ;
+  Case = SyntaxSwe.Case ;
+  Number = SyntaxSwe.Number ;
+
   utrum = Utr ;
   neutrum = Neutr ;
   masculine = Masc ;

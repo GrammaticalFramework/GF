@@ -37,12 +37,16 @@ oper
 
 -- To abstract over case names, we define the following.
 
+  Case    : Type ; 
+
   nominative : Case ;
   accusative : Case ;
   dative     : Case ;
   genitive   : Case ;
 
 -- To abstract over number names, we define the following.
+
+  Number    : Type ; 
 
   singular : Number ;
   plural   : Number ;
@@ -298,6 +302,8 @@ oper
 --.
 
   Gender = SyntaxGer.Gender ;
+  Case = SyntaxGer.Case ;
+  Number = SyntaxGer.Number ;
 
   masculine = Masc ;
   feminine  = Fem ;

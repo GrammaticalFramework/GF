@@ -34,6 +34,8 @@ oper
 
 -- To abstract over number names, we define the following.
 
+  Number    : Type ;
+
   singular : Number ;
   plural   : Number ;
 
@@ -41,6 +43,8 @@ oper
 -- some pronouns, the accusative is equal to the nominative, the
 -- dative is formed by the preposition "a", and the genitive by the
 -- preposition "di".)
+
+  Case    : Type ;
 
   nominative : Case ;
   accusative : Case ;
@@ -170,6 +174,8 @@ oper
 -- hidden from the document.
 --.
   Gender = SyntaxIta.Gender ;
+  Case = SyntaxIta.Case ;
+  Number = SyntaxIta.Number ;
 
   masculine = Masc ;
   feminine  = Fem ;
