@@ -114,6 +114,15 @@ oper
   mkAdv : Str -> AdV ;
   mkAdvPre : Str -> AdV ;
 
+-- Adverbs modifying adjectives and sentences can also be formed.
+
+  mkAdA : Str -> AdA ;
+  mkAdS : Str -> AdS ;
+
+-- Prepositional phrases are another productive form of adverbials.
+
+  mkPP : Str -> NP -> AdV ;
+
 --2 Verbs
 --
 -- The fragment now has all verb forms, except the gerund/present participle.
@@ -227,6 +236,9 @@ oper
 
   mkAdv a = advPost a ** {lock_AdV = <>} ;
   mkAdvPre a = advPre a ** {lock_AdV = <>} ;
+  mkPP x y = prepPhrase x y ** {lock_AdV = <>} ;
+  mkAdA a = ss a ** {lock_AdA = <>} ;
+  mkAdS a = ss a ** {lock_AdS = <>} ;
 
   mkV = \go,goes,went,gone -> verbNoPart (mkVerbP3 go goes went gone) ** 
     {lock_V = <>} ;
