@@ -2,6 +2,9 @@
 
 instance SyntaxIta of SyntaxRomance = 
   TypesIta ** open Prelude, (CO=Coordination), MorphoIta in {
+
+flags optimize=all ;
+
 oper
   nameNounPhrase = \jean -> 
     normalNounPhrase
@@ -10,6 +13,8 @@ oper
       Sg ;
 
   nounPhraseOn = mkNameNounPhrase "si" Masc ; --- can be plural dep. on object
+
+  pronImpers : NounPhrase = pronNounPhrase pronIl ; ---- should be empty
 
   partitiveNounPhrase = \n,vino ->
     normalNounPhrase 
@@ -34,7 +39,7 @@ oper
 
   npGenPossNum = \nu,ton,mec ->
     \\c => artDef mec.g Pl c ++ ton.s ! Poss Pl mec.g ++ nu.s ! mec.g ++ mec.s ! Pl ; 
-
+{- ----
   existNounPhrase = \delvino -> {
     s = \\m => 
         case m of {
@@ -42,6 +47,21 @@ oper
           Con => case delvino.n of {Sg => ["ci sia"] ; Pl => ["ci siano"]}
           } ++ delvino.s ! stressed accusative  --- ce ne sono ; have to define "ci"
     } ;
+-}
+
+  reflPron : Number => Person => NPFormA => Str = \\n,p => 
+    case p of {
+      P3 => table {
+        Ton x => prepCase x ++ "sé" ;
+        Aton _ => "si" ;
+        Poss Sg Masc => "suo" ;
+        Poss Sg Fem  => "sua" ;
+        Poss Pl Masc => "suoi" ;
+        Poss Pl _    => "sue"
+        } ;
+      _ => (personPron Masc n p).s
+    } ;
+
 
   mkAdjSolo : Str -> Bool -> Adjective = \adj,p ->
     mkAdjective (adjSolo adj) p ;
@@ -83,8 +103,7 @@ oper
 
   negVerb = \va -> "non" ++ va ;
 
-  copula = \b,w -> let etre = (predVerb verbEssere).s in
-    etre ! b ! Masc ! w ; ---- Masc
+  copula = verbEssere ;
 
   isClitCase = \c -> case c of { 
      Acc => True ;
@@ -149,7 +168,7 @@ oper
   } ;
 
 -- Questions
-
+{- ----
   questVerbPhrase = \jean,dort ->
     {s = table {
       DirQ   => (predVerbPhrase jean dort).s ! Ind ;
@@ -163,20 +182,25 @@ oper
       s = \\m => case m of {DirQ => [] ; _ => "se"} ++ cedelvino
       } ;
 
-  intVerbPhrase = \qui, dormir ->
-    let dort = dormir.s ! qui.g ! VPF Simul (VFin presInd qui.n P3)
-    in
-    {s = table {
-      _ => qui.s ! Nom ++ dort
-      }
-    } ;
-
   intSlash = \Qui, Tuvois ->
     let {qui = Tuvois.s2 ++ Qui.s ! Tuvois.c ; tuvois = Tuvois.s ! Ind} in
     {s = table {
       DirQ   => qui ++ tuvois ; 
       IndirQ => ifCe Tuvois.c ++ qui ++ tuvois
       }
+    } ;
+-}
+
+  intSlash = \Qui, Tuvois ->
+    {s = \\b,cl =>
+      let 
+        qui = Tuvois.s2 ++ Qui.s ! Tuvois.c ; 
+        tuvois = Tuvois.s ! b ! cl
+      in
+      table {
+        DirQ   => qui ++ tuvois ; 
+        IndirQ => ifCe Tuvois.c ++ qui ++ tuvois
+        }
     } ;
 
 -- An auxiliary to distinguish between
@@ -187,7 +211,7 @@ oper
     Acc => "ciò" ; 
     _   => []
     } ;
-
+{- ----
   questAdverbial = \quand, jean, dort ->
     let {jeandort = (predVerbPhrase jean dort).s ! Ind} in
     {s = table {
@@ -195,7 +219,7 @@ oper
       IndirQ => quand.s ++ jeandort
       }
     } ;
-
+-}
 ---- moved from MorphoIta
 
 -- A macro for defining gender-dependent tables will be useful.
@@ -220,82 +244,6 @@ oper
   ilqualPron : Gender -> Number -> Case -> Str = \g,n,c -> 
     artDef g n c ++ qualPron g n ;
 
-  pronJe = mkPronoun
-    "io"   --- (variants {"io" ; []}) etc
-    "mi"
-    "mi"
-    "me"
-    "mio" "mia" "miei" "mie"
-    PNoGen     -- gender cannot be known from pronoun alone
-    Sg
-    P1
-    Clit1 ;
-
-  pronTu = mkPronoun
-    "tu"
-    "ti"
-    "ti"
-    "te"
-    "tuo" "tua" "tuoi" "tue"
-    PNoGen
-    Sg
-    P2
-    Clit1 ;
-
-  pronIl = mkPronoun
-    "lui"
-    "lo"
-    "gli"
-    "lui"
-    "suo" "sua" "suoi" "sue"
-    (PGen Masc)
-    Sg
-    P3
-    Clit2 ;
-
-  pronElle = mkPronoun
-    "lei"
-    "la"
-    "le"
-    "lei"
-    "suo" "sua" "suoi" "sue"
-    (PGen Fem)
-    Sg
-    P3
-    Clit2 ;
-
-  pronNous = mkPronoun
-    "noi"
-    "ci"
-    "ci"
-    "noi"
-    "nostro" "nostra" "nostri" "nostre"
-    PNoGen
-    Pl
-    P1
-    Clit3 ;
-
-  pronVous = mkPronoun
-    "voi"
-    "vi"
-    "vi"
-    "voi"
-    "vostro" "vostra" "vostri" "vostre"
-    PNoGen
-    Pl   --- depends!
-    P2
-    Clit3 ;
-
-  pronIls = mkPronoun
-    "loro"
-    "loro"
-    "li"   --- le !
-    "loro"
-    "loro" "loro" "loro" "loro"
-    PNoGen
-    Pl
-    P3
-    Clit1 ;
 
 -- moved from ResIta
 
