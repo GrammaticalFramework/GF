@@ -222,14 +222,11 @@ execECommand env c = case c of
 
   CAlphaConvert s    -> action2commandNext $ \x ->
                           string2varPair s >>= \xy -> alphaConvert cgr xy x
-{- ----
+
   CRefineWithTree s  -> action2commandNext $ \x -> 
-                          (string2treeErr cgr s x >>= 
+                          (string2treeInState gr s x >>= 
                             \t -> refineWithTree der cgr t x)
 
-  CRefineParse str   -> \s -> refineByTrees der cgr 
-                          (parseAny agrs (cat2CFCat (actCat (stateSState s))) str) s
--}
   CRefineParse str   -> \s -> 
                      let cat = cat2CFCat (qualifTop sgr (actCat (stateSState s)))
                          ts = parseAny agrs cat str

@@ -23,11 +23,11 @@ import Arch (ModTime)
 
 -- multilingual state with grammars and options
 data ShellState = ShSt {
-  abstract   :: Maybe Ident ,        -- pointer to actual abstract; nothing in empty st
+  abstract   :: Maybe Ident ,        -- pointer to actual abstract, if not empty st
   concrete   :: Maybe Ident ,        -- pointer to primary concrete
   concretes  :: [(Ident,Ident)],     -- list of all concretes
-  canModules :: CanonGrammar ,       -- the place where abstracts and concretes reside
-  srcModules :: G.SourceGrammar ,    -- the place of saved resource modules
+  canModules :: CanonGrammar ,       -- compiled abstracts and concretes
+  srcModules :: G.SourceGrammar ,    -- saved resource modules
   cfs        :: [(Ident,CF)] ,       -- context-free grammars
   morphos    :: [(Ident,Morpho)],    -- morphologies
   gloptions  :: Options,             -- global options
@@ -69,6 +69,7 @@ data StateGrammar = StGr {
   cncId   :: Ident,
   grammar :: CanonGrammar,
   cf      :: CF,
+----  parser :: StaticParserInfo,
   morpho  :: Morpho
   }
 
@@ -91,7 +92,8 @@ cncModuleIdST = stateGrammarST
 -- form a shell state from a canonical grammar
 
 grammar2shellState :: Options -> (CanonGrammar, G.SourceGrammar) -> Err ShellState 
-grammar2shellState opts (gr,sgr) = updateShellState opts emptyShellState (gr,(sgr,[]))
+grammar2shellState opts (gr,sgr) = 
+  updateShellState opts emptyShellState (gr,(sgr,[]))
 
 -- update a shell state from a canonical grammar
 

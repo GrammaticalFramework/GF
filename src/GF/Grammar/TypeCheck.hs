@@ -121,12 +121,12 @@ possibleConstraint gr (u,v) = errVal True $ do
     v' <- val2exp v >>= compute gr
     return $ cts u' v'
  where
-  cts t u = case (t,u) of
+  cts t u = isUnknown t || isUnknown u || case (t,u) of
     (Q m c,      Q n d)      -> c == d || notCan (m,c) || notCan (n,d)
     (App f a,    App g b)    -> cts f g && cts a b
     (Abs x b,    Abs y c)    -> cts b c
     (Prod x a f, Prod y b g) -> cts a b && cts f g
-    (_         , _)          -> isUnknown t || isUnknown u
+    (_         , _)          -> False
 
   isUnknown t = case t of
     Vr _ -> True
