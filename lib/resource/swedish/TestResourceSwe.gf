@@ -1,6 +1,10 @@
 --# -path=.:../scandinavian:../abstract:../../prelude
 
-concrete TestResourceSwe of TestResource = RulesSwe, StructuralSwe ** 
+concrete TestResourceSwe of TestResource = 
+-- RulesSwe, 
+ClauseSwe,
+StructuralSwe 
+** 
   open Prelude, MorphoSwe, SyntaxSwe in {
 
 flags startcat=Phr ; lexer=text ; unlexer=text ;

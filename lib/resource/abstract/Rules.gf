@@ -54,42 +54,16 @@ fun
   SuperlNP    : ADeg -> CN -> NP ;         -- "the oldest man"
 
 
+
 --!
 --3 Verbs and verb phrases
 --
--- The principal way of forming sentences ($S$) is by combining a noun phrase
--- with a verb phrase (the $PredVP$ rule below). In addition to this, verb
--- phrases have uses in relative clauses and questions. Verb phrases already
--- have (or have not) a negation, but they are formed from verbal groups
--- ($VG$), which have both positive and negative forms.
-
-  UseV         : V  -> VP ;               -- "walks"
-  UsePassV     : V  -> VP ;               -- "is seen"
-  ComplV2      : V2 -> NP -> VP ;         -- "sees Mary"
-  ComplReflV2  : V2 -> VP ;               -- "loves himself"
-  ComplVS      : VS -> S -> VP ;          -- "says that Mary runs"
-  ComplVV      : VV -> VPI -> VP ;        -- "must walk"
-  ComplVQ      : VQ -> QS -> VP ;         -- "asks who will come"
-  ComplVA      : VA -> AP -> VP ;         -- "looks ill"
-  ComplV2A     : V2A -> NP -> AP -> VP ;  -- "paints the house red"
-  ComplSubjV2V : V2V -> NP -> VPI -> VP ; -- "promises Mary to leave"
-  ComplObjV2V  : V2V -> NP -> VPI -> VP ; -- "asked him to go"
-  ComplV2S     : V2S -> NP -> S   -> VP ; -- "told me that you came" 
-  ComplV2Q     : V2Q -> NP -> QS  -> VP ; -- "asks me if you come"
-
-  PredAP       : AP -> VP ;               -- "is old"
-  PredSuperl   : ADeg -> VP ;             -- "is the oldest"
-  PredCN       : CN -> VP ;               -- "is a man"
-  PredNP       : NP -> VP ;               -- "is Bill"
-  PredPP       : PP -> VP ;               -- "is in France"
-  PredAV       : AV  -> VPI -> VP   ;     -- "is eager to leave"
-  PredObjA2V   : A2V -> NP -> VPI -> VP ; -- "is easy for us to convince"
+-- The main uses of verbs and verb phrases have been moved to the
+-- module $Verbphrase$ (deep $VP$ nesting) and its alternative,
+-- $Clause$ (shallow many-place predication structure).
 
   PredAS       : AS -> S  -> Cl ;         -- "it is good that he comes"                
   PredV0       : V0 -> Cl ;               -- "it is raining"
-
--- These rules *use* verb phrases: 
--- $PredVP$, $IntVP$, $RelVP$.
 
 -- Partial saturation.
 
@@ -107,10 +81,6 @@ fun
   UseA2V : A2V -> AV ;
 
 -- Formation of infinitival phrases.
-
-  PosVP, NegVP : Ant -> VP  -> VPI ;
-
-  ProgVG  : VP -> VP ;  -- he is eating
 
   AdjPart : V -> A ;                     -- forgotten
 
@@ -138,7 +108,6 @@ fun
   AdvPP  : PP -> Adv ;                 -- "in London", "after the war"
   PrepNP : Prep -> NP -> PP ;          -- "in London", "after the war"
 
-  AdvVP  : VP -> AdV -> VP ;           -- "always walks"
   AdvCN  : CN -> PP -> CN ;            -- "house in London"
   AdvAP  : AdA -> AP -> AP ;           -- "very good"
 
@@ -146,13 +115,10 @@ fun
 --3 Sentences and relative clauses
 --
 
-  PredVP   : NP -> VP -> Cl ;                   -- "John walks"
-  
   SlashV2  : NP -> V2 -> Slash ;                -- "John doesn't love"
 
   IdRP     : RP ;                               -- "which"
   FunRP    : N2 -> RP -> RP ;                   -- "the successor of which"
-  RelVP    : RP -> VP -> RCl ;                  -- "who walks", "who doesn't walk"
   RelSlash : RP -> Slash -> RCl ;               -- "that I wait for"/"for which I wait" 
   ModRS    : CN -> RS -> CN ;                   -- "man who walks"
   RelCl    : Cl -> RCl ;                        -- "such that it is even"
@@ -167,11 +133,8 @@ fun
   NounIPOne, NounIPMany : CN -> IP ;        -- "which car", "which cars"
 
   QuestCl    : Cl -> QCl ;                  -- "does John walk"; "doesn't John walk"
-  IntVP      : IP -> VP -> QCl ;            -- "who walks"
   IntSlash   : IP -> Slash -> QCl ;         -- "whom does John see"
   QuestAdv   : IAdv -> Cl -> QCl ;          -- "why do you walk"
-
-  PosImperVP, NegImperVP : VP -> Imp ;      -- "(don't) be a man"
 
 ----rename these ??
   IndicPhrase : S -> Phr ;                  -- "I walk."
@@ -219,7 +182,6 @@ fun
   SubjS     : Subj -> S -> S -> S ;        -- "if 2 is odd, 3 is even"
   SubjImper : Subj -> S -> Imp -> Imp ;    -- "if it is hot, use a glove!"
   SubjQS    : Subj -> S -> QS -> QS ;      -- "if you are new, who are you?"
-  SubjVP    : VP -> Subj -> S -> VP ;      -- "(a man who) sings when he runs"
 
 --!
 --2 One-word utterances
@@ -231,6 +193,7 @@ fun
   PhrOneCN, PhrManyCN : CN -> Phr ;        -- "A car.", "Cars."
   PhrIP   : IAdv -> Phr ;                  -- "Who?"
   PhrIAdv : IAdv -> Phr ;                  -- "Why?"
+  PhrVPI  : VPI -> Phr ;                   -- "Tända ljus."
 
 --!
 --2 Text formation
@@ -244,13 +207,13 @@ fun
 --
 -- These constructs tend to have language-specific syntactic realizations.
 
-  OneVP      : VP -> Cl ;                       -- "one walks"
-
   ExistCN    : CN -> Cl ;                       -- "there is a bar"
   ExistNumCN : Num -> CN -> Cl ;                -- "there are (86) bars"
 
-  ExistQCl  : CN -> QCl ;                   -- "is there a bar", 
-  ExistNumQCl : Num -> CN -> QCl ;          -- "are there (86) bars"
+--- The type signatures of these ones should be changed from VP to VPI.
+
+  ProgVG       : VP -> VP ;               -- he is eating
+  PosImperVP, NegImperVP : VP -> Imp ;    -- "(don't) be a man"
+  OneVP        : VP -> Cl ;               -- "one walks"
 
 } ;
-

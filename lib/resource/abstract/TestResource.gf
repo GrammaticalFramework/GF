@@ -1,4 +1,4 @@
-abstract TestResource = Rules, Structural  ** {
+abstract TestResource = Rules, Clause, Structural  ** {
 
 -- a random sample of lexicon to test resource grammar with
 

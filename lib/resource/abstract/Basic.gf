@@ -1,4 +1,4 @@
-abstract Basic = Shallow ** {
+abstract Basic = Categories ** {
   fun
   airplane_N : N ;
   answer_V2S : V2S ;
@@ -12,8 +12,7 @@ abstract Basic = Shallow ** {
   beautiful_ADeg : ADeg ;
   become_VA : VA ;
   beer_N : N ;
-  beg_VV : VV ;
-  be_V : V ;
+  beg_V2V : V2V ;
   big_ADeg : ADeg ;
   bike_N : N ;
   bird_N : N ;
@@ -58,6 +57,7 @@ abstract Basic = Shallow ** {
   dog_N : N ;
   door_N : N ;
   drink_V2 : V2 ;
+  easy_A2V : A2V ;
   eat_V2 : V2 ;
   enemy_N : N ;
   factory_N : N ;
@@ -70,6 +70,7 @@ abstract Basic = Shallow ** {
   fridge_N : N ;
   friend_N : N ;
   fruit_N : N ;
+  fun_AV : AV ;
   garden_N : N ;
   girl_N : N ;
   glove_N : N ;
@@ -105,6 +106,7 @@ abstract Basic = Shallow ** {
   love_N : N ;
   love_V2 : V2 ;
   man_N : N ;
+  married_A2 : A2 ;
   meat_N : N ;
   milk_N : N ;
   moon_N : N ;
@@ -117,6 +119,7 @@ abstract Basic = Shallow ** {
   oil_N : N ;
   old_ADeg : ADeg ;
   open_V2 : V2 ;
+  paint_V2A : V2A ;
   paper_N : N ;
   peace_N : N ;
   pen_N : N ;
@@ -125,8 +128,10 @@ abstract Basic = Shallow ** {
   play_V2 : V2 ;
   policeman_N : N ;
   priest_N : N ;
+  probable_AS : AS ;
   queen_N : N ;
   radio_N : N ;
+  rain_V0 : V0 ;
   read_V2 : V2 ;
   red_ADeg : ADeg ;
   religion_N : N ;
@@ -164,9 +169,10 @@ abstract Basic = Shallow ** {
   student_N : N ;
   stupid_ADeg : ADeg ;
   sun_N : N ;
-  switch8off_V : V ;
-  switch8on_V : V ;
+  switch8off_V2 : V2 ;
+  switch8on_V2 : V2 ;
   table_N : N ;
+  talk_V3 : V3 ;
   teacher_N : N ;
   teach_V2 : V2 ;
   television_N : N ;
@@ -191,6 +197,7 @@ abstract Basic = Shallow ** {
   wine_N : N ;
   win_V2 : V2 ;
   woman_N : N ;
+  wonder_VQ : VQ ;
   wood_N : N ;
   write_V2 : V2 ;
   yellow_ADeg : ADeg ;

@@ -49,28 +49,6 @@ lin
 
 -- verbs and verb phrases
 
-  UseV  = predVerb ;
-  UsePassV = passVerb ;
-  ComplV2 = complTransVerb ;
-  ComplReflV2 = reflTransVerb ;
-  ComplVS = complSentVerb ;
-  ComplVV = complVerbVerb ;
-  ComplVQ = complQuestVerb ;
-  ComplVA = complAdjVerb ;
-  ComplV2A = complDitransAdjVerb ;
-  ComplSubjV2V = complDitransVerbVerb False ;
-  ComplObjV2V = complDitransVerbVerb True ;
-  ComplV2S = complDitransSentVerb ;
-  ComplV2Q = complDitransQuestVerb ;
-
-  PredAP = predAdjective ;
-  PredSuperl a = predAdjective (superlAdjPhrase a) ;
-  PredCN = predCommNoun ;
-  PredNP = predNounPhrase ;
-  PredPP = predAdverb ;
-  PredAV = complVerbAdj ;
-  PredObjA2V = complVerbAdj2 True ;
-
   PredAS = predAdjSent ;
   PredV0 = predVerb0 ;
 
@@ -91,9 +69,6 @@ lin
   UseA2V x = x ;
 
 -- Formation of infinitival phrases.
-
-  PosVP tp = predVerbGroup True tp.a ;
-  NegVP tp = predVerbGroup False tp.a ;
 
   ProgVG = progressiveVerbPhrase ;
 
@@ -119,21 +94,17 @@ lin
   AdvPP p = p ;
   PrepNP p = prepPhrase p.s ; ---
 
-  AdvVP = adVerbPhrase ;
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
 
 --3 Sentences and relative clauses
 --
 
-  PredVP = predVerbGroupClause ;
-
   SlashV2 = slashTransVerb ;
   OneVP = predVerbGroupClause npMan ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
-  RelVP = relVerbGroup ;
   RelSlash = relSlash ;
   ModRS = modRelClause ;
   RelCl = relSuch ;
@@ -152,7 +123,6 @@ lin
   NounIPMany = nounIntPron plural ;
 
   QuestCl = questClause ;
-  IntVP = intVerbPhrase ;
   IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
 
@@ -190,13 +160,13 @@ lin
   SubjS = subjunctSentence ;
   SubjImper = subjunctImperative ;
   SubjQS = subjunctQuestion ;
-  SubjVP = subjunctVerbPhrase ;
 
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase singular ;
   PhrManyCN = useCommonNounPhrase plural ;
   PhrIP ip = ip ;
   PhrIAdv ia = ia ;
+  PhrVPI = verbUtterance ;
 
   OnePhr p = p ;
   ConsPhr = cc2 ;
@@ -210,13 +180,6 @@ lin
                 (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 
                    (indefNounPhrase singular A)) ;
   ExistNumCN nu A = predVerbGroupClause npDet 
-                (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 
-                   (indefNounPhraseNum plural nu A)) ;
-
-  ExistQCl A = questVerbPhrase npDet 
-                (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 
-                   (indefNounPhrase singular A)) ;
-  ExistNumQCl nu A = questVerbPhrase npDet 
                 (complTransVerb (mkDirectVerb (deponentVerb verbFinnas)) 
                    (indefNounPhraseNum plural nu A)) ;
 
