@@ -423,7 +423,7 @@ oper
 -- Weak verbs:
   verbumWeak : Str -> Verbum = \legen ->
     let 
-       leg = (Predef.dp 2 legen) ;
+       leg = (Predef.tk 2 legen) ;
        legte = leg + "te" ;
     in
        mkVerbum legen (leg + (adde leg) + "t") leg legte legte ("ge" + (leg + "t")) ;
