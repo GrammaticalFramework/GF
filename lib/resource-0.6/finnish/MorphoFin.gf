@@ -437,6 +437,7 @@ getHarmony : Str -> Str = \u -> case u of {
         "kk" => ku + "k" ;
         "pp" => ku + "p" ;
         "tt" => ku + "t" ;
+        "nk" => ku + "ng" ;
         "nt" => ku + "nn" ;
         "mp" => ku + "mm" ;
         "rt" => ku + "rr" ;
@@ -446,7 +447,7 @@ getHarmony : Str -> Str = \u -> case u of {
            _   => ""
            } ;
         "rk" => kul + case o of {
-           "i" => "rj" ;
+           "i" => "j" ;
            _   => ""
            } ;
         "hk" => kukk ;  -- *tahko-tahon

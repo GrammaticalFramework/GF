@@ -19,10 +19,11 @@ import Option
 import CF
 import CFIdent
 
----- import CFtoGrammar
+import CanonToGrammar
 import PPrCF
 import PrLBNF
 import PrGrammar
+import PrOld
 import MkGFC
 import CFtoSRG
 
@@ -145,7 +146,9 @@ customGrammarPrinter =
   customData "Grammar printers, selected by option -printer=x" $
   [
    (strCI "gfc",     prCanon . stateGrammarST) -- DEFAULT
+  ,(strCI "gf",      err id prGrammar . canon2sourceGrammar . stateGrammarST)
   ,(strCI "cf",      prCF . stateCF)
+  ,(strCI "old",     printGrammarOld . stateGrammarST)
   ,(strCI "srg",     prSRG . stateCF)
   ,(strCI "lbnf",    prLBNF . stateCF)
   ,(strCI "morpho",  prMorpho . stateMorpho)

@@ -22,7 +22,7 @@ import CF
 import CFIdent
 ---import UseGrammar
 import PPrCF
-import List (intersperse)
+import List (intersperse,nub)
 
 header :: String
 header = unlines ["#ABNF 1.0 ISO-8859-1;\n",
@@ -38,7 +38,7 @@ prSRGC :: [CFCat] -> CF -> String
 prSRGC [] _      = []
 prSRGC (c:cs) cf =  "$" ++ prCFCat c ++ " = " ++ items ++ ";\n"++ prSRGC cs cf
  where items    =   concat $ intersperse " | " $   
-		    map f $ map valItemsCF (rulesForCFCat cf c)
+		    map f $ nub $ map valItemsCF (rulesForCFCat cf c)
        f [] = "$NULL"
        f xs = unwords $ map prSRGItem xs
 
