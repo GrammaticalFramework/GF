@@ -21,9 +21,10 @@ $nonOperCharColon = qr/[^\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~\:]/;
 
 $operSym = qr/$operChar $operCharColon*/x;
 $funSym = qr/[a-z] \w* \'*/x;
+$funOrOper = qr/(?: $funSym | \($operSym\) )/x;
 
 $keyword = qr/(?: type | data | module | newtype | infix[lr]? | import | instance | class )/x;
-$keyOper = qr/^( ?: \.\. | \:\:? | \= | \\ | \| | \<\- | \-\> | \@ | \~ | \=\> | \. )$/x;
+$keyOper = qr/^(?: \.\. | \:\:? | \= | \\ | \| | \<\- | \-\> | \@ | \~ | \=\> | \. )$/x;
 
 sub check_headerline {
   my ($title, $regexp) = @_;
@@ -101,13 +102,13 @@ for $file (@FILES) {
     print "   > No export list\n";
 
     # function definitions
-    while (/^ (.*? $nonOperCharColon) = (?!$operCharColon)/gmx) {
+    while (/^ (.*? $nonOperCharColon) = (?! $operCharColon)/gmx) {
       $defn = $1;
       next if $defn =~ /^ $keyword \b/x;
 
       if ($defn =~ /\` ($funSym) \`/x) {
 	$fn = $1;
-      } elsif ($defn =~ /(?<!$operCharColon) ($operSym)/x
+      } elsif ($defn =~ /(?<! $operCharColon) ($operSym)/x
 	       && $1 !~ $keyOper) {
 	$fn = "($1)";
       } elsif ($defn =~ /^($funSym)/x) {
@@ -121,30 +122,29 @@ for $file (@FILES) {
     }
   }
 
-  # removing from export list...
+  # fixing exportlist (double spaces as separator)
+  $exportlist = " $exportlist ";
+  $exportlist =~ s/(\s | \,)+/  /gx;
 
-  # ...ordinary functions
-  while (/^ ($funSym) \s* ::/gmx) {
-    $function = $1;
-    $exportlist =~ s/\b $function \b//gx;
-  }
-
-  # ...operations
-  while (/^ (\( $operSym \)) \s* ::/gmx) {
-    $function = $1;
-    $exportlist =~ s/\Q$function\E//g;
+  # removing functions with type signatures from export list
+  while (/^ ($funOrOper (\s* , \s* $funOrOper)*) \s* ::/gmx) {
+    $functionlist = $1;
+    while ($functionlist =~ s/^ ($funOrOper) (\s* , \s*)?//x) {
+      $function = $1;
+      $exportlist =~ s/\s \Q$function\E \s/ /gx;
+    }
   }
 
   # reporting exported functions without type signatures
   $reported = 0;
-  while ($exportlist =~ /(\b $funSym \b | \( $operSym \))/gx) {
+  while ($exportlist =~ /\s ($funOrOper) \s/x) {
     $function = $1;
-    print "   > No type signature for function(s):"
-      unless $reported;
-    print "\n    " unless $reported++ % 500;
+    $exportlist =~ s/\s \Q$function\E \s/ /gx;
+    print "   > No type signature for function(s):\n    "
+      unless $reported++;
     print " $function";
   }
-  print "\n     ($reported functions)\n"
+  print "\n     $reported function(s)\n"
     if $reported;
 
 }

@@ -1,15 +1,19 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : MoreCustom
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:22 $ 
+-- > CVS $Date: 2005/02/24 11:46:39 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
--- (Description of the module)
+-- databases for customizable commands. AR 21\/11\/2001
+--
+-- Extends "Custom".
+--
+-- obsolete???
 -----------------------------------------------------------------------------
 
 module MoreCustom where
@@ -53,6 +57,7 @@ import qualified TransPredCalc as PC
 -- databases for customizable commands. AR 21/11/2001
 -- Extends ../Custom.
 
+moreCustomGrammarParser :: CustomData (FilePath -> IOE C.CanonGrammar) 
 moreCustomGrammarParser = 
   [
    (strCIm "gfl",  S.parseGrammar . extractGFLatex)   
@@ -66,6 +71,7 @@ moreCustomGrammarParser =
   pAsGrammar p = err Bad (\g -> return (([],noOptions),g)) . p
 
 
+moreCustomGrammarPrinter :: CustomData (StateGrammar -> String)             
 moreCustomGrammarPrinter = 
   [
    (strCIm "happy",   cf2HappyS . stateCF)
@@ -84,8 +90,10 @@ moreCustomGrammarPrinter =
 --- also include printing via grammar2syntax!
   ]
 
+moreCustomMultiGrammarPrinter :: CustomData (CanonGrammar -> String)    
 moreCustomMultiGrammarPrinter = []
 
+moreCustomSyntaxPrinter  :: CustomData (GF.Grammar -> String)        
 moreCustomSyntaxPrinter = 
   [ 
     (strCIm "gf",    S.prSyntax) -- DEFAULT
@@ -93,28 +101,33 @@ moreCustomSyntaxPrinter =
 -- add your own grammar printers here
   ]
 
+moreCustomTermPrinter  :: CustomData (StateGrammar -> Tree -> String)
 moreCustomTermPrinter = 
   [ 
     (strCIm "xml",    \g t -> unlines $ prElementX $ term2elemx (stateAbstract g) t)
 -- add your own term printers here
   ]
 
+moreCustomTermCommand    :: CustomData (StateGrammar -> Tree -> [Tree])
 moreCustomTermCommand = 
   [
    (strCIm "predcalc",   \_ t -> PC.transfer t)
 -- add your own term commands here
   ]
 
+moreCustomEditCommand    :: CustomData (StateGrammar -> Action)
 moreCustomEditCommand = 
   [
 -- add your own edit commands here
   ]
 
+moreCustomStringCommand  :: CustomData (StateGrammar -> String -> String)
 moreCustomStringCommand = 
   [
 -- add your own string commands here
   ]
 
+moreCustomParser         :: CustomData (StateGrammar -> CFCat -> CFParser)
 moreCustomParser = 
   [
    (strCIm "chart",    chartParser . stateCF)
@@ -124,19 +137,23 @@ moreCustomParser =
 -- add your own parsers here
   ]
 
+moreCustomTokenizer      :: CustomData (StateGrammar -> String -> [CFTok])  
 moreCustomTokenizer = 
   [
 -- add your own tokenizers here
   ]
 
+moreCustomUntokenizer    :: CustomData (StateGrammar -> String -> String)  
 moreCustomUntokenizer = 
   [
 -- add your own untokenizers here
   ]
 
+moreCustomUniCoding :: CustomData (String -> String)
 moreCustomUniCoding = 
   [
 -- add your own codings here
   ]
 
+strCIm :: String -> CommandId
 strCIm = id

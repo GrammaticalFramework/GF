@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:15 $ 
+-- > CVS $Date: 2005/02/24 11:46:35 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.19 $
+-- > CVS $Revision: 1.20 $
 --
 -- Datastructures and functions for modules, common to GF and GFC.
 --
@@ -149,7 +149,10 @@ data OpenQualif =
  | OQIncomplete
   deriving (Eq,Show)
 
+oSimple :: i -> OpenSpec i
 oSimple = OSimple OQNormal
+
+oQualif :: i -> i -> OpenSpec i
 oQualif = OQualif OQNormal
 
 data ModuleStatus = 
@@ -162,6 +165,7 @@ openedModule o = case o of
   OSimple _ m -> m
   OQualif _ _ m -> m
 
+allOpens :: Module i f a -> [OpenSpec i]
 allOpens m = case mtype m of
   MTTransfer a b -> a : b : opens m
   _ -> opens m
@@ -245,6 +249,7 @@ data IdentM i = IdentM {
   }
   deriving (Eq,Show)
 
+typeOfModule :: ModInfo i f a -> ModuleType i
 typeOfModule mi = case mi of
   ModMod m -> mtype m
 
@@ -295,11 +300,13 @@ lookupInfo mo i = lookupTree show i (jments mo)
 allModMod :: (Show i,Eq i) => MGrammar i f a -> [(i,Module i f a)]
 allModMod gr = [(i,m) | (i, ModMod m) <- modules gr]
 
+isModAbs :: Module i f a -> Bool
 isModAbs m = case mtype m of
   MTAbstract -> True
 ----  MTUnion t -> isModAbs t
   _ -> False
 
+isModRes :: Module i f a -> Bool
 isModRes m = case mtype m of
   MTResource -> True
   MTReuse _ -> True
@@ -308,16 +315,19 @@ isModRes m = case mtype m of
   MTInstance _ -> True
   _ -> False
 
+isModCnc :: Module i f a -> Bool
 isModCnc m = case mtype m of
   MTConcrete _ -> True
 ----  MTUnion t -> isModCnc t
   _ -> False
 
+isModTrans :: Module i f a -> Bool
 isModTrans m = case mtype m of
   MTTransfer _ _ -> True
 ----  MTUnion t -> isModTrans t
   _ -> False
 
+sameMType :: Eq i => ModuleType i -> ModuleType i -> Bool
 sameMType m n = case (m,n) of
   (MTConcrete _, MTConcrete _) -> True
   (MTInstance _, MTInstance _) -> True
@@ -329,6 +339,7 @@ sameMType m n = case (m,n) of
   _ -> m == n
 
 -- | don't generate code for interfaces and for incomplete modules
+isCompilableModule :: ModInfo i f a -> Bool
 isCompilableModule m = case m of
   ModMod m -> case mtype m of
     MTInterface -> False

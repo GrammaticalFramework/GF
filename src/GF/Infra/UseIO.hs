@@ -5,56 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:16 $ 
+-- > CVS $Date: 2005/02/24 11:46:36 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.8 $
+-- > CVS $Revision: 1.9 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module UseIO (prOptCPU,
-	      putCPU,
-	      putPoint,
-	      putPoint',
-	      readFileIf,
-	      FileName,
-	      InitPath,
-	      FullPath,
-	      getFilePath,
-	      readFileIfPath,
-	      doesFileExistPath,
-	      extendPathEnv,
-	      pFilePaths,
-	      prefixPathName,
-	      justInitPath,
-	      nameAndSuffix,
-	      unsuffixFile, fileBody,
-	      fileSuffix,
-	      justFileName,
-	      suffixFile,
-	      justModuleName,
-	      getLineWell,
-	      putStrFlush,
-	      putStrLnFlush,
-	      -- * a generic quiz session
-	      QuestionsAndAnswers,
-	      teachDialogue,
-	      -- * IO monad with error; adapted from state monad
-	      IOE(..),
-	      appIOE,
-	      ioe,
-	      ioeIO,
-	      ioeErr,
-	      ioeBad,
-	      useIOE,
-	      foldIOE,
-	      putStrLnE,
-	      putStrE,
-	      putPointE,
-	      putPointEVerb,
-	      readFileIOE,
-	      readFileLibraryIOE
-	     ) where
+module UseIO where
 
 import Operations
 import Arch (prCPU)
@@ -67,11 +25,13 @@ import Monad
 putShow' :: Show a => (c -> a) -> c -> IO ()
 putShow' f = putStrLn . show . length . show . f
 
+putIfVerb :: Options -> String -> IO ()
 putIfVerb opts msg =
       if oElem beVerbose opts
          then putStrLn msg
          else return ()
 
+putIfVerbW :: Options -> String -> IO ()
 putIfVerbW opts msg =
       if oElem beVerbose opts
          then putStr (' ' : msg)
@@ -88,8 +48,10 @@ errOptIO os e m = case m of
     putIfVerb os k
     return e
 
+prOptCPU :: Options -> Integer -> IO Integer
 prOptCPU opts = if (oElem noCPU opts) then (const (return 0)) else prCPU
 
+putCPU :: IO ()
 putCPU = do 
   prCPU 0 
   return ()
@@ -194,7 +156,7 @@ putStrFlush s = putStr s >> hFlush stdout
 putStrLnFlush :: String -> IO ()
 putStrLnFlush s = putStrLn s >> hFlush stdout
 
--- a generic quiz session
+-- * a generic quiz session
 
 type QuestionsAndAnswers = [(String, String -> (Integer,String))]
 
@@ -222,7 +184,7 @@ teachDialogue qas welc = do
       "You can interrupt the quiz by entering a line consisting of a dot ('.').\n"
 
 
--- IO monad with error; adapted from state monad
+-- * IO monad with error; adapted from state monad
 
 newtype IOE a = IOE (IO (Err a))
 

@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : SubShell
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:20 $ 
+-- > CVS $Date: 2005/02/24 11:46:37 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -35,7 +35,10 @@ editSession opts st
    st'   = addGlobalOptions opts st
    font  = maybe myUniFont mkOptFont $ getOptVal opts useFont
 
+myUniFont :: String
 myUniFont = "-mutt-clearlyu-medium-r-normal--0-0-100-100-p-0-iso10646-1"
+
+mkOptFont :: String -> String
 mkOptFont = id
 
 translateSession :: Options -> ShellState -> IO ()
@@ -49,6 +52,7 @@ translateSession opts st = do
                   else translateBetweenAll grs cat s
   translateLoop opts trans
 
+translateLoop :: Options -> (String -> String) -> IO ()
 translateLoop opts trans = do
   let fud  = oElem makeFudget opts
       font = maybe myUniFont mkOptFont $ getOptVal opts useFont

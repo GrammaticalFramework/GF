@@ -1,15 +1,16 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Editing
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:22 $ 
+-- > CVS $Date: 2005/02/24 11:46:38 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
--- (Description of the module)
+-- generic tree editing, with some grammar notions assumed. AR 18\/8\/2001.
+-- 19\/6\/2003 for GFC
 -----------------------------------------------------------------------------
 
 module Editing where
@@ -31,7 +32,7 @@ type CGrammar = GFC.CanonGrammar
 
 type State = Loc TrNode
 
--- the "empty" state
+-- | the "empty" state
 initState :: State
 initState = tree2loc uTree 
 
@@ -60,25 +61,26 @@ actFun s = case actAtom s of
   AtC f -> return f
   t -> prtBad "active atom: expected function, found" t
 
+actExp :: State -> Exp
 actExp = tree2exp . actTree
 
--- current local bindings
+-- | current local bindings
 actBinds :: State -> Binds
 actBinds = bindsNode . nodeTree . actTree
 
--- constraints in current subtree
+-- | constraints in current subtree
 actConstrs :: State -> Constraints
 actConstrs = allConstrsTree . actTree   
 
--- constraints in the whole tree
+-- | constraints in the whole tree
 allConstrs :: State -> Constraints
 allConstrs = allConstrsTree . loc2tree   
 
--- metas in current subtree
+-- | metas in current subtree
 actMetas :: State -> [Meta]
 actMetas = metasTree . actTree   
 
--- metas in the whole tree
+-- | metas in the whole tree
 allMetas :: State -> [Meta]
 allMetas = metasTree . loc2tree
 
@@ -100,32 +102,37 @@ allPrevVars = map fst . allPrevBinds
 allVars :: State -> [Var]
 allVars = map fst . allBinds
 
+vGenIndex :: State -> Int
 vGenIndex = length . allBinds
 
+actIsMeta :: State -> Bool
 actIsMeta = atomIsMeta . actAtom
 
 actMeta :: State -> Err Meta
 actMeta = getMetaAtom . actAtom
 
--- meta substs are not only on the actual path...
+-- | meta substs are not only on the actual path...
 entireMetaSubst :: State -> MetaSubst
 entireMetaSubst = concatMap metaSubstsNode . scanTree . loc2tree
 
+isCompleteTree :: Tree -> Bool
 isCompleteTree = null . filter atomIsMeta . map atomNode . scanTree 
+
+isCompleteState :: State -> Bool
 isCompleteState = isCompleteTree . loc2tree
 
 initStateCat :: Context -> Cat -> Err State
 initStateCat cont cat = do
   return $ tree2loc (Tr (mkNode [] mAtom (cat2val cont cat) ([],[]), []))
 
--- this function only concerns the body of an expression...
+-- | this function only concerns the body of an expression...
 annotateInState :: CGrammar -> Exp -> State -> Err Tree
 annotateInState gr exp state = do
   let binds = allBinds state
       val   = actVal state
   annotateIn gr binds exp (Just val)
 
--- ...whereas this one works with lambda abstractions
+-- | ...whereas this one works with lambda abstractions
 annotateExpInState :: CGrammar -> Exp -> State -> Err Tree
 annotateExpInState gr exp state = do
   let cont  = allPrevBinds state
@@ -139,7 +146,7 @@ treeByExp trans gr exp0 state = do
   exp <- trans exp0
   annotateExpInState gr exp state
 
--- actions
+-- * actions
 
 type Action = State -> Err State
 
@@ -172,6 +179,7 @@ goPrevNewMeta s = goBack  s >>= goPrevMeta
 
 goNextMetaIfCan = actionIfPossible goNextMeta
 
+actionIfPossible :: Action -> Action
 actionIfPossible a s = return $ errVal s (a s)
 
 goFirstMeta, goLastMeta :: Action
@@ -276,18 +284,16 @@ refineWithAtom der gr at state = do
   exp <- ref2exp oldvars typ at
   refineWithExpTC der gr exp state
 
--- in this command, we know that the result is well-typed, since computation
+-- | in this command, we know that the result is well-typed, since computation
 -- rules have been type checked and the result is equal
-
 computeSubTree :: CGrammar -> Action
 computeSubTree gr state = do
   let exp = tree2exp (actTree state)
   tree <- treeByExp (compute gr) gr exp state
   replaceSubTree tree state
 
--- but here we don't, since the transfer flag isn't type checked,
+-- | but here we don't, since the transfer flag isn't type checked,
 -- and computing the transfer function is not checked to preserve equality
-
 transferSubTree :: Maybe Fun -> CGrammar -> Action
 transferSubTree Nothing _ s = return s
 transferSubTree (Just fun) gr state = do
@@ -348,11 +354,11 @@ peelFunHead gr (f@(m,c),i) state = do
   state' <- replaceSubTree tree state
   reCheckState gr state' --- must be unfortunately done. 20/11/2001
 
--- an expensive operation
+-- | an expensive operation
 reCheckState :: CGrammar -> State -> Err State
 reCheckState gr st = annotate gr (tree2exp (loc2tree st)) >>= return . tree2loc
 
--- extract metasubstitutions from constraints and solve them
+-- | extract metasubstitutions from constraints and solve them
 solveAll :: CGrammar -> State -> Err State
 solveAll gr st = solve st >>= solve where 
   solve st0 = do ---- why need twice?
@@ -362,7 +368,7 @@ solveAll gr st = solve st >>= solve where
     metaSubstRefinements gr ms $ 
       mapLoc (reduceConstraintsNode gr . performMetaSubstNode ms) st
 
--- active refinements
+-- * active refinements
 
 refinementsState :: CGrammar -> State -> [(Term,(Val,Bool))]
 refinementsState gr state = 

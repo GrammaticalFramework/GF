@@ -1,15 +1,20 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Morphology
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:22 $ 
+-- > CVS $Date: 2005/02/24 11:46:39 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- Morphological analyser constructed from a GF grammar.
+--
+-- we first found the binary search tree sorted by word forms more efficient
+-- than a trie, at least for grammars with 7000 word forms
+-- (18\/11\/2003) but this may change since we have to use a trie 
+-- for decompositions and also want to use it in the parser
 -----------------------------------------------------------------------------
 
 module Morphology where
@@ -35,11 +40,12 @@ import Trie2
 
 -- we first found the binary search tree sorted by word forms more efficient
 -- than a trie, at least for grammars with 7000 word forms
--- (18/11/2003) but this may change since we have to use a trie 
+-- (18\/11\/2003) but this may change since we have to use a trie 
 -- for decompositions and also want to use it in the parser
 
 type Morpho = Trie Char String
 
+emptyMorpho :: Morpho
 emptyMorpho = emptyTrie
 
 appMorpho :: Morpho -> String -> (String,[String])
@@ -96,13 +102,18 @@ prMorphoAnalysisShort (w,fs) = prBracket (w' ++ prTList "/" fs) where
 tagPrt :: Print a => (a,a) -> String
 tagPrt (m,c) = "+" ++ prt c --- module name
 
--- print all words recognized
-
+-- | print all words recognized
 allMorphoWords :: Morpho -> [String]
 allMorphoWords = map fst . collapse
 
 -- analyse running text and show results either in short form or on separate lines
+
+-- | analyse running text and show results in short form
+morphoTextShort :: Morpho -> String -> String
 morphoTextShort mo = unwords . map (prMorphoAnalysisShort . appMorpho mo) . words
+
+-- | analyse running text and show results on separate lines
+morphoText :: Morpho -> String -> String
 morphoText mo = unlines . map (('\n':) . prMorphoAnalysis . appMorpho mo) . words
 
 -- format used in the Italian Verb Engine

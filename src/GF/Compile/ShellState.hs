@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:09 $ 
+-- > CVS $Date: 2005/02/24 11:46:34 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.35 $
+-- > CVS $Revision: 1.36 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -68,6 +68,7 @@ data Statistics =
   ---                      -- etc
    deriving (Eq,Ord)
 
+emptyShellState :: ShellState
 emptyShellState = ShSt {
   abstract   = Nothing,
   concrete   = Nothing,
@@ -83,10 +84,15 @@ emptyShellState = ShSt {
   statistics = []
   }
 
+optInitShellState :: Options -> ShellState
 optInitShellState os = addGlobalOptions os emptyShellState
 
 type Language = Ident
+
+language :: String -> Language
 language = identC
+
+prLanguage :: Language -> String
 prLanguage = prIdent
 
 -- | grammar for one language in a state, comprising its abs and cnc
@@ -100,6 +106,7 @@ data StateGrammar = StGr {
   loptions :: Options
   }
 
+emptyStateGrammar :: StateGrammar
 emptyStateGrammar = StGr {
   absId   = identC "#EMPTY", ---
   cncId   = identC "#EMPTY", ---
@@ -110,7 +117,15 @@ emptyStateGrammar = StGr {
   loptions = noOptions
   }
 
--- | analysing shell grammar into parts
+-- analysing shell grammar into parts
+
+stateGrammarST    :: StateGrammar -> CanonGrammar
+stateCF           :: StateGrammar -> CF
+statePInfo        :: StateGrammar -> Cnv.PInfo
+stateMorpho       :: StateGrammar -> Morpho
+stateOptions      :: StateGrammar -> Options
+stateGrammarWords :: StateGrammar -> [String]
+
 stateGrammarST = grammar
 stateCF        = cf
 statePInfo     = pInfo
@@ -118,6 +133,7 @@ stateMorpho    = morpho
 stateOptions   = loptions
 stateGrammarWords = allMorphoWords . stateMorpho
 
+cncModuleIdST :: StateGrammar -> CanonGrammar
 cncModuleIdST = stateGrammarST
 
 -- | form a shell state from a canonical grammar
@@ -201,6 +217,7 @@ testSameAbstract sh mcnc = do
     _ -> return a'
 -}
 
+abstractName :: ShellState -> String
 abstractName sh = maybe "(none)" P.prt (abstract sh)
 
 -- | throw away those abstracts that are not needed --- could be more aggressive
@@ -278,6 +295,11 @@ stateGrammarOfLang st l = StGr {
    can = M.partOfGrammar allCan 
            (l, maybe M.emptyModInfo id (lookup l (M.modules allCan)))
 
+grammarOfLang :: ShellState -> Language -> CanonGrammar
+cfOfLang      :: ShellState -> Language -> CF
+morphoOfLang  :: ShellState -> Language -> Morpho
+optionsOfLang :: ShellState -> Language -> Options
+
 grammarOfLang st = stateGrammarST . stateGrammarOfLang st
 cfOfLang st      = stateCF        . stateGrammarOfLang st
 morphoOfLang st  = stateMorpho    . stateGrammarOfLang st
@@ -304,7 +326,17 @@ stateAbstractGrammar st = StGr {
   }
 
 
--- | analysing shell state into parts
+-- analysing shell state into parts
+
+globalOptions                   :: ShellState -> Options
+allLanguages                    :: ShellState -> [Language]
+allCategories                   :: ShellState -> [G.Cat]
+allStateGrammars                :: ShellState -> [StateGrammar]
+allStateGrammarsWithNames       :: ShellState -> [(Language, StateGrammar)]
+allGrammarFileNames             :: ShellState -> [String]
+allActiveStateGrammarsWithNames :: ShellState -> [(Language, StateGrammar)]
+allActiveGrammars               :: ShellState -> [StateGrammar]
+
 globalOptions = gloptions
 allLanguages  = map (fst . fst) . concretes
 allCategories = map fst . allCatsOf . canModules
@@ -350,6 +382,7 @@ firstAbsCat :: Options -> StateGrammar -> G.QIdent
 firstAbsCat opts = cfCat2Cat . firstCatOpts opts
 
 -- | a grammar can have start category as option startcat=foo ; default is S 
+stateFirstCat :: StateGrammar -> CFCat
 stateFirstCat sgr =
   maybe (string2CFCat a "S") (string2CFCat a) $ 
   getOptVal (stateOptions sgr) gStartCat
@@ -369,6 +402,7 @@ hasStateAbstract = maybe False (const True) . maybeStateAbstract
 abstractOfState = maybe emptyAbstractST id . maybeStateAbstract
 -}
 
+stateIsWord :: StateGrammar -> String -> Bool
 stateIsWord sg = isKnownWord (stateMorpho sg)
 
 
@@ -420,6 +454,7 @@ type ShellStateOperErr = ShellState -> Err ShellState
 reinitShellState :: ShellStateOper
 reinitShellState = const emptyShellState
 
+languageOn, languageOff :: Language -> ShellStateOper
 languageOn  = languageOnOff True
 languageOff = languageOnOff False
 

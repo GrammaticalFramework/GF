@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Parsing
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:22 $ 
+-- > CVS $Date: 2005/02/24 11:46:39 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.13 $
+-- > CVS $Revision: 1.14 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -132,7 +132,7 @@ trees2trms opts sg cn as ts0 info = do
 
 --- too much type checking in building term info? return FullTerm to save work?
 
--- raw parsing: so simple it is for a context-free CF grammar
+-- | raw parsing: so simple it is for a context-free CF grammar
 cf2trm0 :: CFTree -> C.Exp
 cf2trm0 (CFTree (fun, (_, trees))) = mkAppAtom (cffun2trm fun) (map cf2trm0 trees)
  where

@@ -1,15 +1,19 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Commands
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:20 $ 
+-- > CVS $Date: 2005/02/24 11:46:36 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.34 $
+-- > CVS $Revision: 1.35 $
 --
--- (Description of the module)
+-- temporary hacks for GF 2.0
+--
+-- Abstract command language for syntax editing. AR 22\/8\/2001.
+-- Most arguments are strings, to make it easier to receive them from e.g. Java.
+-- See "CommandsL" for a parser of a command language.
 -----------------------------------------------------------------------------
 
 module Commands where
@@ -52,7 +56,7 @@ import Option
 import Str (sstr) ----
 import UTF8 ----
 
-import Random (mkStdGen, newStdGen)
+import Random (StdGen, mkStdGen, newStdGen)
 import Monad (liftM2, foldM)
 import List (intersperse)
 
@@ -91,41 +95,46 @@ data Command =
  | CView
  | CMenu
  | CQuit
- | CHelp  (CEnv -> String) -- help message depends on grammar and interface
- | CError -- syntax error in command
- | CVoid  -- empty command, e.g. just <enter>
+ | CHelp  (CEnv -> String) -- ^ help message depends on grammar and interface
+ | CError -- ^ syntax error in command
+ | CVoid  -- ^ empty command, e.g. just \<enter\>
 
--- commands affecting CEnv
- | CCEnvImport String
- | CCEnvEmptyAndImport String
- | CCEnvOpenTerm String
- | CCEnvOpenString String
- | CCEnvEmpty
+ | CCEnvImport String         -- ^ |-- commands affecting 'CEnv'
+ | CCEnvEmptyAndImport String -- ^ |
+ | CCEnvOpenTerm String       -- ^ |
+ | CCEnvOpenString String     -- ^ |
+ | CCEnvEmpty                 -- ^ |
 
- | CCEnvOn  String
- | CCEnvOff String
+ | CCEnvOn  String            -- ^ |
+ | CCEnvOff String            -- ^ |
 
- | CCEnvGFShell String
+ | CCEnvGFShell String        -- ^ |==========
 
--- other commands using IO
- | CCEnvRefineWithTree String
- | CCEnvRefineParse String
- | CCEnvSave String FilePath
+ | CCEnvRefineWithTree String -- ^ |-- other commands using 'IO'
+ | CCEnvRefineParse String    -- ^ |
+ | CCEnvSave String FilePath  -- ^ |==========
 
+isQuit :: Command -> Bool
 isQuit CQuit = True
 isQuit _ = False
 
--- an abstract environment type
-
+-- | an abstract environment type
 type CEnv    = ShellState
 
+grammarCEnv :: CEnv -> StateGrammar
 grammarCEnv  = firstStateGrammar
+
+canCEnv :: CEnv -> CanonGrammar
 canCEnv  = canModules
+
+concreteCEnv, abstractCEnv :: StateGrammar -> I.Ident
 concreteCEnv = cncId
 abstractCEnv = absId
 
+stdGenCEnv :: CEnv -> SState -> StdGen
 stdGenCEnv env s = mkStdGen (length (displayJustStateIn env s) * 31 +11) ---
 
+initSStateEnv :: CEnv -> SState
 initSStateEnv env = case getOptVal (stateOptions sgr) gStartCat of
   Just cat -> action2commandNext (newCat gr (abs, I.identC cat)) initSState
   _ -> initSState
@@ -134,8 +143,7 @@ initSStateEnv env = case getOptVal (stateOptions sgr) gStartCat of
    abs = absId sgr
    gr  = stateGrammarST sgr
 
--- the main function
-
+-- | the main function
 execCommand :: CEnv -> Command -> SState -> IO (CEnv,SState)
 execCommand env c s = case c of
 
@@ -301,14 +309,14 @@ string2varPair s = case words s of
   _          -> Bad "expected format 'x y'"
 
 
-
+startEditEnv :: CEnv -> CEnv
 startEditEnv env = addGlobalOptions (options [sizeDisplay "short"]) env
 
--- seen on display
-
+-- | seen on display
 cMenuDisplay :: String -> Command
 cMenuDisplay s = CAddOption (menuDisplay s)
 
+newCatMenu :: CEnv -> [(Command, String)]
 newCatMenu env = [(CNewCat (prQIdent c), printname env initSState c) | 
                                   (c,[]) <- allCatsOf (canCEnv env)]
 
@@ -378,16 +386,19 @@ mkRefineMenuAll env sstate =
 -- there are three orthogonal parameters: Abs/[conc], short/long, typed/untyped
 -- the default is Abs, long, untyped; the Menus menu changes the parameter
 
+emptyMenuItem :: (Command, (String, String))
 emptyMenuItem = (CVoid,("",""))
 
 
 
 ---- allStringCommands = snd $ customInfo customStringCommand
-termCommandMenu, stringCommandMenu :: [(Command,String)]
+termCommandMenu :: [(Command,String)]
 termCommandMenu = [(CTermCommand s, s) | s <- allTermCommands]
 
+allTermCommands :: [String]
 allTermCommands = snd $ customInfo customEditCommand
 
+stringCommandMenu :: [(Command,String)]
 stringCommandMenu = []
 
 displayCommandMenu :: CEnv -> [(Command,String)]
@@ -413,7 +424,7 @@ changeMenuLanguage s = CAddOption (menuDisplay s)
 changeMenuSize s     = CAddOption (sizeDisplay s)
 changeMenuTyped s    = CAddOption (typeDisplay s)
 
-
+menuState :: CEnv -> SState -> [String]
 menuState env = map snd . mkRefineMenu env
 
 prState :: State -> [String]
@@ -437,7 +448,7 @@ displaySStateIn env state = (tree',msg,menu) where
   linAll = map lin grs
   separ  = singleton . map unlines . intersperse [replicate 72 '*']
 
----- the Boolean is a temporary hack to have two parallel GUIs
+-- | the Boolean is a temporary hack to have two parallel GUIs
 displaySStateJavaX :: Bool -> CEnv -> SState -> String
 displaySStateJavaX isNew env state = encodeUTF8 $ mkUnicode $
                                      unlines $ tagXML "gfedit" $ concat [
@@ -467,8 +478,9 @@ displaySStateJavaX isNew env state = encodeUTF8 $ mkUnicode $
     Just lang -> optDecodeUTF8 (stateGrammarOfLang env (language lang)) 
     _ -> id
 
--- the env is UTF8 if the display language is 
---- should be independent
+-- | the env is UTF8 if the display language is 
+--
+-- should be independent
 isCEnvUTF8 :: CEnv -> SState -> Bool
 isCEnvUTF8 env st = maybe False id $ do
    lang <- getOptVal opts menuDisplay
@@ -477,6 +489,7 @@ isCEnvUTF8 env st = maybe False id $ do
   where
     opts = addOptions (optsSState st) (globalOptions env)
 
+langAbstract, langXML :: I.Ident
 langAbstract = language "Abstract"
 langXML      = language "XML"
 
@@ -517,13 +530,26 @@ printname env state f = case getOptVal opts menuDisplay of
      gr  = grammar sgr
      mf  = ciq (cncId sgr) (snd f)
 
---- XML printing; does not belong here!
+-- * XML printing; does not belong here!
 
+tagsXML :: String -> [[String]] -> [String]
 tagsXML t = concatMap (tagXML t)
+
+tagAttrXML :: String -> (String, String) -> [String] -> [String]
 tagAttrXML t av ss = mkTagAttrXML t av : map (indent 2) ss ++ [mkEndTagXML t]
+
+tagXML :: String -> [String] -> [String]
 tagXML t ss = mkTagXML t : map (indent 2) ss ++ [mkEndTagXML t]
+
+mkTagXML :: String -> String
 mkTagXML t = '<':t ++ ">"
+
+mkEndTagXML :: String -> String
 mkEndTagXML t = mkTagXML ('/':t)
+
+mkTagAttrsXML :: String -> [(String, String)] -> String
 mkTagAttrsXML t avs = '<':t +++ unwords [a++"="++v | (a,v) <- avs] ++">"
-mkTagAttrXML  t av  = mkTagAttrsXML t [av]
+
+mkTagAttrXML :: String -> (String, String) -> String
+mkTagAttrXML t av  = mkTagAttrsXML t [av]
 

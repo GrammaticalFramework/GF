@@ -1,15 +1,19 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Paraphrases
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:22 $ 
+-- > CVS $Date: 2005/02/24 11:46:39 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
--- (Description of the module)
+-- paraphrases of GF terms. AR 6\/10\/1998 -- 24\/9\/1999 -- 5\/7\/2000 -- 5\/6\/2002
+--
+-- Copyright (c) Aarne Ranta 1998--99, under GNU General Public License (see GPL)
+--
+-- thus inherited from the old GF. Incomplete and inefficient...
 -----------------------------------------------------------------------------
 
 module Paraphrases (mkParaphrases) where

@@ -1,15 +1,15 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : TeachYourself
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:20 $ 
+-- > CVS $Date: 2005/02/24 11:46:37 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
--- (Description of the module)
+-- translation and morphology quiz. AR 10\/5\/2000 -- 12\/4\/2002
 -----------------------------------------------------------------------------
 
 module TeachYourself where
@@ -71,15 +71,17 @@ morphoTrainList opts ig number = do
    gr = grammar ig
    cnc = cncId ig
 
--- compare answer to the list of right answers, increase score and give feedback 
+-- | compare answer to the list of right answers, increase score and give feedback 
 mkAnswer :: [String] -> String -> (Integer, String) 
 mkAnswer as s = if (elem (norml s) as) 
                    then (1,"Yes.") 
                    else (0,"No, not" +++ s ++ ", but" ++++ unlines as)
 
+
+norml :: String -> String
 norml = unwords . words
 
---- the maximal number of precompiled quiz problems
+-- | the maximal number of precompiled quiz problems
 infinity :: Integer
 infinity = 123 
 

@@ -1,15 +1,15 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Transfer
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:23 $ 
+-- > CVS $Date: 2005/02/24 11:46:40 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
--- (Description of the module)
+-- linearize, parse, etc, by transfer. AR 9\/10\/2003
 -----------------------------------------------------------------------------
 
 module Transfer where

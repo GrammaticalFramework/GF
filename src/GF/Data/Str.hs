@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:16 $ 
+-- > CVS $Date: 2005/02/24 11:46:35 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -26,16 +26,16 @@ import List (isPrefixOf, isSuffixOf, intersperse)
 -- | abstract token list type. AR 2001, revised and simplified 20\/4\/2003
 newtype Str = Str [Tok]  deriving (Read, Show, Eq, Ord)
 
+-- | notice that having both pre and post would leave to inconsistent situations:
+--
+-- > pre {"x" ; "y" / "a"} ++ post {"b" ; "a" / "x"}
+--
+-- always violates a condition expressed by the one or the other
 data Tok = 
    TK String
  | TN Ss [(Ss, [String])] -- ^ variants depending on next string 
 --- | TP Ss [(Ss, [String])] -- variants depending on previous string
     deriving (Eq, Ord, Show, Read)
--- ^ notice that having both pre and post would leave to inconsistent situations:
---
--- > pre {"x" ; "y" / "a"} ++ post {"b" ; "a" / "x"}
---
--- always violates a condition expressed by the one or the other
 
 
 -- | a variant can itself be a token list, but for simplicity only a list of strings

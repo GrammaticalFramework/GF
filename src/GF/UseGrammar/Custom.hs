@@ -1,15 +1,28 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Custom
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:21 $ 
+-- > CVS $Date: 2005/02/24 11:46:38 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.41 $
+-- > CVS $Revision: 1.42 $
 --
 -- A database for customizable GF shell commands. 
+--
+-- databases for customizable commands. AR 21\/11\/2001.
+-- for:  grammar parsers, grammar printers, term commands, string commands.
+-- idea: items added here are usable throughout GF; nothing else need be edited.
+-- they are often usable through the API: hence API cannot be imported here!
+--
+-- Major redesign 3\/4\/2002: the first entry in each database is DEFAULT.
+-- If no other value is given, the default is selected.
+-- Because of this, two invariants have to be preserved:
+--
+--  - no databases may be empty
+--
+--  - additions are made to the end of the database
 -----------------------------------------------------------------------------
 
 module Custom where
@@ -104,59 +117,61 @@ import ExtraDiacritics (mkExtraDiacritics)
 -- Major redesign 3/4/2002: the first entry in each database is DEFAULT.
 -- If no other value is given, the default is selected.
 -- Because of this, two invariants have to be preserved:
--- ** no databases may be empty
--- ** additions are made to the end of the database
+--  - no databases may be empty
+--  - additions are made to the end of the database
 
--- these are the databases; the comment gives the name of the flag
+-- * these are the databases; the comment gives the name of the flag
 
--- grammarFormat, "-format=x" or file suffix
+-- | grammarFormat, \"-format=x\" or file suffix
 customGrammarParser :: CustomData (FilePath -> IOE C.CanonGrammar) 
 
--- grammarPrinter, "-printer=x"
+-- | grammarPrinter, \"-printer=x\"
 customGrammarPrinter :: CustomData (StateGrammar -> String)             
 
--- multiGrammarPrinter, "-printer=x"
+-- | multiGrammarPrinter, \"-printer=x\"
 customMultiGrammarPrinter :: CustomData (CanonGrammar -> String)    
 
--- syntaxPrinter, "-printer=x"
+-- | syntaxPrinter, \"-printer=x\"
 customSyntaxPrinter  :: CustomData (GF.Grammar -> String)        
 
--- termPrinter, "-printer=x"
+-- | termPrinter, \"-printer=x\"
 customTermPrinter  :: CustomData (StateGrammar -> Tree -> String)
 
--- termCommand, "-transform=x"
+-- | termCommand, \"-transform=x\"
 customTermCommand    :: CustomData (StateGrammar -> Tree -> [Tree])
 
--- editCommand, "-edit=x"
+-- | editCommand, \"-edit=x\"
 customEditCommand    :: CustomData (StateGrammar -> Action)
 
--- filterString, "-filter=x"
+-- | filterString, \"-filter=x\"
 customStringCommand  :: CustomData (StateGrammar -> String -> String)
 
--- useParser, "-parser=x"
+-- | useParser, \"-parser=x\"
 customParser         :: CustomData (StateGrammar -> CFCat -> CFParser)
 
--- useTokenizer, "-lexer=x"
+-- | useTokenizer, \"-lexer=x\"
 customTokenizer      :: CustomData (StateGrammar -> String -> [CFTok])  
 
--- useUntokenizer, "-unlexer=x" --- should be from token list to string
+-- | useUntokenizer, \"-unlexer=x\" --- should be from token list to string
 customUntokenizer    :: CustomData (StateGrammar -> String -> String)  
 
--- uniCoding, "-coding=x"
+-- | uniCoding, \"-coding=x\"
+--
 -- contains conversions from different codings to the internal
 -- unicode coding
 customUniCoding :: CustomData (String -> String)
 
--- this is the way of selecting an item
+-- | this is the way of selecting an item
 customOrDefault :: Options -> OptFun -> CustomData a -> a
 customOrDefault opts optfun db = maybe (defaultCustomVal db) id $ 
                                    customAsOptVal opts optfun db
 
--- to produce menus of custom operations
+-- | to produce menus of custom operations
 customInfo :: CustomData a -> (String, [String])
 customInfo c = (titleCustomData c, map (ciStr . fst) (dbCustomData c))
 
 -------------------------------
+-- * types and stuff 
 
 type CommandId = String
 
@@ -170,8 +185,14 @@ ciOpt :: CommandId -> Option
 ciOpt = iOpt
 
 newtype CustomData a = CustomData (String, [(CommandId,a)])
+
+customData :: String -> [(CommandId, a)] -> CustomData a
 customData title db = CustomData (title,db)
+
+dbCustomData :: CustomData a -> [(CommandId, a)]
 dbCustomData (CustomData (_,db)) = db
+
+titleCustomData :: CustomData a -> String
 titleCustomData (CustomData (t,_)) = t
 
 lookupCustom :: CustomData a -> CommandId -> Maybe a
@@ -182,13 +203,13 @@ customAsOptVal opts optfun db = do
   arg <- getOptVal opts optfun
   lookupCustom db (strCI arg)
 
--- take the first entry from the database
+-- | take the first entry from the database
 defaultCustomVal :: CustomData a -> a
 defaultCustomVal (CustomData (s,db)) = 
   ifNull (error ("empty database:" +++ s)) (snd . head) db
 
 -------------------------------------------------------------------------
--- and here's the customizable part:
+-- * and here's the customizable part:
 
 -- grammar parsers: the ID is also used as file name suffix
 customGrammarParser = 

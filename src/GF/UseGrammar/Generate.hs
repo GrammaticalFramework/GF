@@ -1,24 +1,30 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Generate
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:22 $ 
+-- > CVS $Date: 2005/02/24 11:46:38 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Revision: 1.8 $
 --
--- (Description of the module)
+-- Generate all trees of given category and depth. AR 30\/4\/2004
+--
+-- (c) Aarne Ranta 2004 under GNU GPL
+--
+-- Purpose: to generate corpora. We use simple types and don't
+-- guarantee the correctness of bindings\/dependences.
 -----------------------------------------------------------------------------
 
-module Generate where
+module Generate (generateTrees) where
 
 import GFC
 import LookAbs
 import PrGrammar
 import Macros
 import Values
+import Grammar (Cat)
 
 import Operations
 import Zipper
@@ -32,11 +38,8 @@ import List
 -- guarantee the correctness of bindings/dependences.
 
 
--- the main function takes an abstract syntax and returns a list of trees
-
---- if type were shown more modules should be imported
--- generateTrees :: 
--- GFCGrammar -> Bool -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
+-- | the main function takes an abstract syntax and returns a list of trees
+generateTrees :: GFCGrammar -> Bool -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
 generateTrees gr ifm cat n mn mt = map str2tr $ generate gr' ifm cat' n mn mt'
   where
     gr' = gr2sgr gr
