@@ -92,14 +92,19 @@ oper
   last : Tok -> Tok = Predef.dp 1 ;
 
 
--- bind together two tokens in the lexer, either obligatorily or optionally
+-- bind together two tokens in some lexers, either obligatorily or optionally
 
   oper 
     glue : Str -> Str -> Str = \x,y -> x ++ BIND ++ y ;
     glueOpt : Str -> Str -> Str = \x,y -> variants {glue x y ; x ++ y} ;
     noglueOpt : Str -> Str -> Str = \x,y -> variants {x ++ y ; glue x y} ;
 
+-- force capitalization of next word in some unlexers
+
+    capitalize : Str -> Str = \s -> CAPIT ++ s ;
+
 -- these should be hidden, and never changed since it's hardcoded in (un)lexers
     BIND : Str = "&+" ;
     PARA : Str = "&-" ;
+    CAPIT : Str = "&|" ;
 } ;
