@@ -7,6 +7,8 @@
 concrete VerbsFre of VerbsFreAbs = 
   open TypesFre, MorphoFre, CategoriesFre, BeschFre in {
 
+  flags optimize=values ;
+
 lincat
   V  = CategoriesFre.V ;
   V2 = CategoriesFre.V2 ;
