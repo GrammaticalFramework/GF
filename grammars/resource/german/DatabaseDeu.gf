@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../../prelude
+
 concrete DatabaseDeu of Database = 
   open Prelude,Syntax,Deutsch,Predication,Paradigms,DatabaseRes in {
 
@@ -12,7 +14,7 @@ lincat
   Relation   = Adj2 ;
   Feature    = Fun ;
   Value      = NP ;
-  Name       = ProperName ;
+  Name       = PN ;
 
 lin
   LongForm  sent = ss (sent.s ! True ++ "?") ;
@@ -34,7 +36,7 @@ lin
 
   WithProperty A B = ModAdj B A ;
 
-  Individual = nameNounPhrase ;
+  Individual n = nameNounPhrase n ** {lock_NP = <>} ;
 
   AllN = DetNP AllDet ;
   MostN = DetNP MostDet ;
@@ -42,7 +44,7 @@ lin
 
 -- only these are language-dependent
 
-  Any = detNounPhrase einDet ;
+  Any n = detNounPhrase einDet n ** {lock_NP = <>} ;
 
   IsThere A  = mkSentPrel ["gibt es"] (defaultNounPhrase (IndefOneNP A)) ;
   AreThere A = mkSentPrel ["gibt es"] (defaultNounPhrase (IndefManyNP A)) ;

@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../../prelude
+
 --1 German Lexical Paradigms
 --
 -- Aarne Ranta 2003
@@ -192,7 +194,7 @@ oper
 
 -- Three-place verbs require two prepositions and cases.
 
-  mkV3 : V -> Str -> Case -> Str -> Case -> TV ;  -- geben,[],dative,[],accusative
+  mkV3 : V -> Str -> Case -> Str -> Case -> V3 ;  -- geben,[],dative,[],accusative
 
 
 --2 Adverbials
@@ -223,20 +225,21 @@ oper
   -- singular defined in Types
   -- plural defined in Types
 
-  mkN = mkNoun ;
+  mkN a b c d e f g = mkNoun a b c d e f g ** {lock_N = <>} ;
 
   nGen = \punkt, punktes, punkte, g -> let {
       e   = Predef.dp 1 punkte ; 
-      eqy = ifTok (Gender -> N) e ;
-      noN = mkNoun4 punkt punktes punkte punkte
+      eqy = ifTok N e ;
+      noN = mkNoun4 punkt punktes punkte punkte g ** {lock_N = <>}
     } in
     eqy "n" noN (
     eqy "s" noN (
-            mkNoun4 punkt punktes punkte (punkte+"n"))) g ;
+            mkNoun4 punkt punktes punkte (punkte+"n") g ** {lock_N = <>})) ;
 
   nRaum = \raum, räume -> nGen raum (raum + "es") räume masculine ;
   nTisch = \tisch -> 
-    mkNoun4 tisch (tisch + "es") (tisch + "e") (tisch +"en") masculine ;
+    mkNoun4 tisch (tisch + "es") (tisch + "e") (tisch +"en") masculine ** 
+    {lock_N = <>};
   nVater = \vater, väter -> nGen vater (vater + "s") väter masculine ;
   nFehler = \fehler -> nVater fehler fehler ;
 
@@ -249,7 +252,7 @@ oper
   nBuch = \buch, bücher -> nGen buch (buch + "es") bücher neuter ;
   nMesser = \messer -> nGen messer (messer + "s") messer neuter ;
   nAuto = \auto -> let {autos = auto + "s"} in 
-          mkNoun4 auto autos autos autos neuter ;
+          mkNoun4 auto autos autos autos neuter ** {lock_N = <>} ;
 
   nHand = \hand, hände -> nGen hand hand hände feminine ;
 
@@ -259,10 +262,11 @@ oper
     } in
     mkN frau frau frau frau frauen frauen feminine ;
 
-  mkFun = \n -> mkFunCN (n2n n) ;
-  funVon = \n -> funVonCN (n2n n) ;
+  mkFun n = mkFunCN (UseN n) ;
+  funVon n = funVonCN (UseN n) ;
 
-  mkPN = \karolus, karoli -> {s = table {Gen => karoli ; _ => karolus}} ;
+  mkPN = \karolus, karoli -> 
+    {s = table {Gen => karoli ; _ => karolus} ; lock_PN = <>} ;
   pnReg = \horst -> 
     mkPN horst (ifTok Tok (Predef.dp 1 horst) "s" horst (horst + "s")) ;
 
@@ -270,37 +274,37 @@ oper
   mkNP = \x,y -> UsePN (mkPN x y) ;
   npReg = \s -> UsePN (pnReg s) ;
 
-  mkFunCN = mkFunC ;
-  funVonCN = funVonC ;
+  mkFunCN n p c = mkFunC n p c ** {lock_Fun = <>} ;
+  funVonCN n = funVonC n ** {lock_Fun = <>} ;
 
-  mkAdj1 = mkAdjective ;
-  adjInvar = Morpho.adjInvar ;
-  adjGen = Morpho.adjGen ;
-  mkAdj2 = \a,p,c -> a ** {s2 = p ; c = c} ;
+  mkAdj1 x y = mkAdjective x y ** {lock_Adj1 = <>} ;
+  adjInvar a = Morpho.adjInvar a ** {lock_Adj1 = <>} ;
+  adjGen a = Morpho.adjGen a ** {lock_Adj1 = <>} ;
+  mkAdj2 = \a,p,c -> a ** {s2 = p ; c = c ; lock_Adj2 = <>} ;
 
-  mkAdjDeg = mkAdjComp ;
-  aDeg3 = adjCompReg3 ;
-  aReg = adjCompReg ;
-  aPastPart = \v -> {s = table AForm {a => v.s ! VPart a}} ; 
+  mkAdjDeg a b c = mkAdjComp a b c ** {lock_AdjDeg = <>} ;
+  aDeg3 a b c = adjCompReg3 a b c ** {lock_AdjDeg = <>} ;
+  aReg a = adjCompReg a ** {lock_AdjDeg = <>} ;
+  aPastPart = \v -> {s = table AForm {a => v.s ! VPart a} ; lock_Adj1 = <>} ; 
   apReg = \s -> AdjP1 (adjGen s) ;
 
   mkV = \sehen, sieht, sieh, gesehen -> 
-    mkVerbSimple (mkVerbum sehen (Predef.tk 1 sieht) sieh gesehen) ;
-  vReg = \s -> mkVerbSimple (regVerb s) ;
-  vSein = verbSein ;
-  vHaben = verbHaben ;
+    mkVerbSimple (mkVerbum sehen (Predef.tk 1 sieht) sieh gesehen) ** {lock_V = <>} ;
+  vReg = \s -> mkVerbSimple (regVerb s) ** {lock_V = <>} ;
+  vSein = verbSein ** {lock_V = <>} ;
+  vHaben = verbHaben ** {lock_V = <>} ;
   vPart = \sehen, sieht, sieh, gesehen, aus -> 
-    mkVerb (mkVerbum sehen sieht sieh gesehen) aus ;
-  vPartReg = \sehen, aus -> mkVerb (regVerb sehen) aus ;
+    mkVerb (mkVerbum sehen sieht sieh gesehen) aus ** {lock_V = <>} ;
+  vPartReg = \sehen, aus -> mkVerb (regVerb sehen) aus ** {lock_V = <>} ;
 
-  mkTV = mkTransVerb ;
+  mkTV v p c = mkTransVerb v p c  ** {lock_TV = <>} ;
   tvReg = \hören, zu, dat -> mkTV (vReg hören) zu dat ;
   tvDir = \v -> mkTV v [] accusative ;
   tvDirReg = \v -> tvReg v [] accusative ; 
-  mkV3 = mkDitransVerb ;
+  mkV3 v s c t d = mkDitransVerb v s c t d ** {lock_V3 = <>} ;
 
-  mkAdV = ss ;
-  mkPP = prepPhrase ;
-  mkAdA = ss ;
-  mkAdS = ss ;
+  mkAdV a = ss a ** {lock_AdV = <>} ;
+  mkPP x y z = prepPhrase x y z ** {lock_AdV = <>};
+  mkAdA a = ss a ** {lock_AdA = <>} ;
+  mkAdS a = ss a ** {lock_AdS = <>} ;
 } ;

@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../../prelude
+
 concrete RestaurantDeu of Restaurant = 
   DatabaseDeu ** open Prelude,Paradigms,Deutsch,DatabaseRes in {
 
@@ -10,7 +12,7 @@ lin
   Japanese = apReg "Japanisch" ;
 
   address = funVon (nFrau "Adresse") ;
-  phone = funVon (nFrau "Rufnummer") ; ----
+  phone = funVon (nFrau "Rufnummer") ; ---
   priceLevel = funVon (nFrau "Preisstufe") ;
 
   Cheap = aReg "billig" ;

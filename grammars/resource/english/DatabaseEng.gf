@@ -1,4 +1,4 @@
-concrete DatabaseEng of Database = open Prelude,Syntax,English,Predication,Paradigms,DatabaseRes in {
+concrete DatabaseEng of Database = open Prelude,Syntax,English,Predication,Paradigms,DatabaseEngRes in {
 
 flags lexer=text ; unlexer=text ;
 
@@ -11,7 +11,7 @@ lincat
   Relation   = Adj2 ;
   Feature    = Fun ;
   Value      = NP ;
-  Name       = ProperName ;
+  Name       = PN ;
 
 lin
   LongForm  sent = ss (sent.s ! True ++ "?") ;
@@ -41,7 +41,7 @@ lin
 
 -- only these are language-dependent
 
-  Any = detNounPhrase anyPlDet ; ---
+  Any n = detNounPhrase anyPlDet n ** {lock_NP = <>} ; ---
 
   IsThere A  = mkSentPrel ["is there"]  (defaultNounPhrase (IndefOneNP A)) ;
   AreThere A = mkSentPrel ["are there"] (defaultNounPhrase (IndefManyNP A)) ;

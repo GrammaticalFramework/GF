@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../../prelude
+
 -- Slightly ad hoc and formal negation and connectives.
 
 resource Logical = Predication ** open Deutsch, Paradigms in {
@@ -12,7 +14,8 @@ resource Logical = Predication ** open Deutsch, Paradigms in {
     negS = \A -> 
       PredVP ItNP (NegNP (DefOneNP (CNthatS (UseN (nRaum "Fall" "Fälle")) A))) ;
     univS = \A,B ->
-      PredVP ItNP (AdvVP (PosVS (mkV "gelten" "gilt" "gelte" "gegolten") B)
+      PredVP ItNP 
+        (AdvVP (PosVS (mkV "gelten" "gilt" "gelte" "gegolten" ** {lock_VS = <>}) B)
                     (mkPP accusative "für" (DetNP AllDet A))) ;
     existS = \A,B ->
       PredVP ItNP (PosTV (tvDir (mkV "geben" "gibt" "gib" "gegeben"))
