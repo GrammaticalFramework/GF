@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/03 16:10:37 $ 
+-- > CVS $Date: 2005/03/03 16:40:51 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
 -- Generate all trees of given category and depth. AR 30\/4\/2004
 --
@@ -86,14 +86,21 @@ tr2str (Tr (N (_,at,val,_,_),ts)) = case (at,val) of
 -- If a tree is given as argument, generation concerns its metavariables.
 
 generate :: SGrammar -> Bool -> SCat -> Int -> Maybe Int -> Maybe STree -> [STree]
-generate gr ifm cat i _ Nothing = errVal [] $ lookupTree id cat $ genAll i 
+generate gr ifm cat i mn mt = case mt of
+  Nothing -> gen cat
+  Just t  -> genM t
  where
+
+  gen cat = errVal [] $ lookupTree id cat $ allTrees
+
+  allTrees = genAll i
+
   -- lazy bottom-up dynamic generation
   genAll :: Int -> BinTree (SCat,[STree])
   genAll i = iter i genNext (mapTree (\ (c,_) -> (c,[])) gr)
 
   iter 0 f tr = tr
-  iter n f tr = f (iter (n-1) f tr)
+  iter n f tr = iter (n-1) f (f tr)
 
   genNext tr = mapTree (genNew tr) tr
 
@@ -107,30 +114,11 @@ generate gr ifm cat i _ Nothing = errVal [] $ lookupTree id cat $ genAll i
    where
      look c = errVal [] $ lookupTree id c tr
 
-  funs cat = errVal [] $ lookupTree id cat gr
+  funs cat = maybe id take mn $ errVal [] $ lookupTree id cat gr
 
-generate gr ifm cat i mn mt = case mt of
-  Nothing -> [t | (c,t) <- gen i [], c == cat] 
-
-  Just t -> genM i t
-
- where
-
-  gen :: Int -> [(SCat,STree)] -> [(SCat,STree)]
-  gen n cts = if n==0 then cts else
-    gen (n-1) ([(c,SApp (f, xs)) | (f,(cs,c)) <- allRules gr, xs <- args cs cts] ++ cts)
-
-  args :: [SCat] -> [(SCat,STree)] -> [[STree]]
-  args cs cts = combinations 
-    [constr (ifmetas c [t | (k,t) <- cts, k == c]) | c <- cs]
-
-  constr = maybe id take mn
-
-  ifmetas c = if ifm then (SMeta c :) else id
-
-  genM n t = case t of
-    SApp (f,ts) -> [SApp (f,ts') | ts' <- combinations (map (genM (n-1)) ts)]
-    SMeta k -> [t | (c,t) <- gen n [], c == k] 
+  genM t = case t of
+    SApp (f,ts) -> [SApp (f,ts') | ts' <- combinations (map genM ts)]
+    SMeta k     -> gen k 
     _ -> [t]
 
 type SGrammar = BinTree (SCat,[SRule])
