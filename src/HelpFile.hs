@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/25 15:35:48 $
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.25 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -156,6 +156,7 @@ txtHelpFile =
   "\n      -struct  bracketed form" ++
   "\n      -record  record, i.e. explicit GF concrete syntax term" ++
   "\n      -all     show all forms and variants" ++
+  "\n      -multi   linearize to all languages (the other options don't work)" ++
   "\n  flags:" ++
   "\n      -lang    linearize in this grammar" ++
   "\n      -number  give this number of forms at most" ++
@@ -173,6 +174,8 @@ txtHelpFile =
   "\n      -raw     return context-free terms in raw form" ++
   "\n      -v       verbose: give more information if parsing fails" ++
   "\n      -new     use an experimental method (GF 2.0; sometimes very good)" ++
+  "\n      -lines   parse each line of input separately, ignoring empty lines" ++
+  "\n      -all     as -lines, but also parse empty lines" ++
   "\n  flags:" ++
   "\n      -cat     parse in this category" ++
   "\n      -lang    parse in this grammar" ++
@@ -180,7 +183,8 @@ txtHelpFile =
   "\n      -parser  use this context-free parsing method" ++
   "\n      -number  return this many results at most" ++
   "\n  examples:" ++
-  "\n      p -cat=S -new \"jag är gammal\"   -- print an S with the new method" ++
+  "\n      p -cat=S -new \"jag är gammal\"   -- parse an S with the new method" ++
+  "\n      rf examples.txt | p -lines      -- parse each non-empty line of the file" ++
   "\n" ++
   "\ntt, test_tokenizer: tt String" ++
   "\n      Show the token list sent to the parser when String is parsed." ++

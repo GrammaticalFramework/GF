@@ -127,6 +127,7 @@ l,  linearize: l PattList? Tree
       -struct  bracketed form
       -record  record, i.e. explicit GF concrete syntax term
       -all     show all forms and variants
+      -multi   linearize to all languages (the other options don't work)
   flags:
       -lang    linearize in this grammar
       -number  give this number of forms at most
@@ -144,6 +145,8 @@ p,  parse: p String
       -raw     return context-free terms in raw form
       -v       verbose: give more information if parsing fails
       -new     use an experimental method (GF 2.0; sometimes very good)
+      -lines   parse each line of input separately, ignoring empty lines
+      -all     as -lines, but also parse empty lines
   flags:
       -cat     parse in this category
       -lang    parse in this grammar
@@ -151,7 +154,8 @@ p,  parse: p String
       -parser  use this context-free parsing method
       -number  return this many results at most
   examples:
-      p -cat=S -new "jag är gammal"   -- print an S with the new method
+      p -cat=S -new "jag är gammal"   -- parse an S with the new method
+      rf examples.txt | p -lines      -- parse each non-empty line of the file
 
 tt, test_tokenizer: tt String
       Show the token list sent to the parser when String is parsed.

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:37 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.33 $
+-- > CVS $Date: 2005/02/25 15:35:48 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.34 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -145,15 +145,28 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
   CPrintHistory -> (returnArg $ AString $ unlines $ reverse h) sa
   -- good to have here for piping; eh and ec must be done on outer level
 
-  CLinearize [] ->  
-    changeArg (opTS2CommandArg (optLinearizeTreeVal opts gro) . s2t) sa
+  CLinearize [] 
+    | oElem showMulti opts -> 
+       changeArg (opTS2CommandArg (unlines. linearizeToAll
+          (allStateGrammars st)) . s2t) sa 
+    | otherwise -> changeArg (opTS2CommandArg (optLinearizeTreeVal opts gro) . s2t) sa
 ----  CLinearize m -> changeArg (opTS2CommandArg (optLinearizeArgForm opts gro m)) sa
 
-  CParse     -> do
-    warnDiscont opts 
-    case optParseArgErrMsg opts gro (prCommandArg a) of
-      Ok (ts,msg) -> putStrLnFlush msg >> changeArg (const $ ATrms ts) sa
-      Bad msg -> changeArg (const $ AError msg) sa
+  CParse 
+----    | oElem showMulti opts -> do
+    | oElem byLines opts -> do
+        let ss = (if oElem showAll opts then id else filter (not . null)) $ lines $ prCommandArg a
+        mts <- mapM parse ss
+        let a' = ATrms [t | (_,ATrms ts) <- mts, t <- ts]
+        changeArg (const a') sa
+    | otherwise -> parse $ prCommandArg a
+   where 
+      parse x = do
+       warnDiscont opts 
+       let p = optParseArgErrMsg opts gro x
+       case p of
+         Ok (ts,msg) -> putStrLnFlush msg >> changeArg (const $ ATrms ts) sa
+         Bad msg -> changeArg (const $ AError (msg +++ "input" +++ x)) sa
 
   CTranslate il ol -> do
     let a' = opST2CommandArg (optParseArgErr opts (sgr il)) a
