@@ -136,6 +136,8 @@ allLinFields trm = case trm of
 ---- deprecated
 isLinLabel l = case l of
      L (A.IC ('s':cs)) | all isDigit cs -> True
+     -- peb (28/4-04), for MCFG grammars to work:
+     L (A.IC cs) | null cs || head cs `elem` ".!" -> True
      _ -> False
 
 -- to gather ultimate cases in a table; preserves pattern list

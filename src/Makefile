@@ -46,7 +46,7 @@ shell:
 clean: 
 	rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
 hugs:
-	hugs -E"open -a emacs" -P$(HUGSINCLUDE)
+	hugs -h10M -P$(HUGSINCLUDE)
 ghci-nofud:
 	$(GHCI) $(GHCFLAGS) $(GHCINCLUDENOFUD)
 today:
