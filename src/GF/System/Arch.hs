@@ -1,6 +1,6 @@
 module Arch (
  myStdGen, prCPU, selectLater, modifiedFiles, ModTime, getModTime,getNowTime,
- welcomeArch, fetchCommand) where
+ welcomeArch, fetchCommand, laterModTime) where
 
 import Time
 import Random
@@ -52,20 +52,31 @@ selectLater x y = do
           ty <- getModificationTime y
           return $ if tx < ty then y else x
 
--- a file is considered as modified also if it has not been read yet
+-- a file is considered modified also if it has not been read yet
+-- new 23/2/2004: the environment ofs has just module names
 
 modifiedFiles :: [(FilePath,ModTime)] -> [FilePath] -> IO [FilePath]
-modifiedFiles ofs fs = print (map fst ofs) >> filterM isModified fs where
-  isModified file = case lookup file ofs of
+modifiedFiles ofs fs = do
+  filterM isModified fs
+ where
+  isModified file = case lookup (justModName file) ofs of
     Just to -> do
-      t <- getModTime file
+      t <- getModificationTime file
       return $ to < t
     _ -> return True
 
+  justModName = 
+    reverse . takeWhile (/='/') . tail . dropWhile (/='.') . reverse
+
 type ModTime = ClockTime
 
-getModTime :: FilePath -> IO ModTime
-getModTime = getModificationTime
+laterModTime :: ModTime -> ModTime -> Bool
+laterModTime = (>)
+
+getModTime :: FilePath -> IO (Maybe ModTime)
+getModTime f = do
+  b <- doesFileExist f
+  if b then (getModificationTime f >>= return . Just) else return Nothing
 
 getNowTime :: IO ModTime
 getNowTime = getClockTime

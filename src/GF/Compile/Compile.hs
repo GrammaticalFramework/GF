@@ -62,7 +62,7 @@ compileModule opts st0 file | oElem showOld opts = do
   let env = compileEnvShSt st0 []
   (_,sgr,cgr) <- foldM (comp putp path) env mods
   return $ (reverseModules cgr,       -- to preserve dependency order
-            (reverseModules sgr,[]))  
+            (reverseModules sgr,[]))
  where
    comp putp path env sm0 = do
      (k',sm)  <- makeSourceModule opts env sm0
@@ -78,22 +78,23 @@ compileModule opts1 st0 file = do
   let ps = if useFileOpt 
              then (map (prefixPathName fpath) ps0)
              else ps0
-  ioeIO $ print ps ----
+  ioeIO $ putStrLn $ "module search path:" +++ show ps ----
   let putp = putPointE opts
   let st = st0 --- if useFileOpt then emptyShellState else st0
   let rfs = readFiles st
   let file' = if useFileOpt then justFileName file else file -- to find file itself
   files <- getAllFiles ps rfs file'
-  ioeIO $ print files ----
-  let names = map (fileBody . justFileName) files
-  ioeIO $ print names ----
+  ioeIO $ putStrLn $ "files to read:" +++ show files ----
+  let names = map justModuleName files
+  ioeIO $ putStrLn $ "modules to include:" +++ show names ----
   let env0 = compileEnvShSt st names
   (_,sgr,cgr) <- foldM (compileOne opts) env0 files
   t <- ioeIO getNowTime
   return $ (reverseModules cgr,       -- to preserve dependency order
             (reverseModules sgr, --- keepResModules opts sgr, --- keep all so far
-             [])) ---- (f,t) | f <- files]))   -- pass on the time of creation
-
+             [(justModuleName f,t) | f <- files]   -- pass on the time of reading
+          ++ [(resModName (justModuleName f),t)    -- also #file if file.(gf|gfr)
+                                   | f <- files, not (isGFC f)]))
 compileEnvShSt :: ShellState -> [ModName] -> CompileEnv
 compileEnvShSt st fs = (0,sgr,cgr) where
   cgr = MGrammar [m | m@(i,_) <- modules (canModules st), notInc i]

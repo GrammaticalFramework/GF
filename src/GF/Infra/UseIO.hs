@@ -57,6 +57,10 @@ readFileIf f = catch (readFile f) (\_ -> reportOn f) where
    putStrLnFlush ("File " ++ f ++ " does not exist. Returned empty string")
    return ""
 
+type FileName = String
+type InitPath = String
+type FullPath = String
+
 getFilePath :: [FilePath] -> String -> IO (Maybe FilePath)
 getFilePath paths file = get paths where
   get []     = putStrLnFlush ("file" +++ file +++ "not found") >> return Nothing
@@ -103,6 +107,9 @@ justFileName = reverse . takeWhile (/='/') . reverse
 
 suffixFile :: String -> FilePath -> FilePath
 suffixFile suff file = file ++ "." ++ suff
+
+justModuleName :: FilePath -> String
+justModuleName = fileBody . justFileName
 
 --
 
