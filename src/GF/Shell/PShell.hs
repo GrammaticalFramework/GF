@@ -9,7 +9,9 @@ import Option
 import PGrammar (pzIdent, pTrm) --- (string2formsAndTerm)
 import API
 import Arch(fetchCommand)
+
 import Char (isDigit)
+import IO
 
 -- parsing GF shell commands. AR 11/11/2001
 
@@ -19,6 +21,11 @@ getCommandLines :: IO (String,[CommandLine])
 getCommandLines = do
   s <- fetchCommand "> "
   return (s,pCommandLines s)
+
+getCommandLinesBatch :: IO (String,[CommandLine])
+getCommandLinesBatch = do
+  s <- catch getLine (\e -> if IO.isEOFError e then return "q" else ioError e)
+  return $ (s,pCommandLines s)
 
 pCommandLines :: String -> [CommandLine]
 pCommandLines = map pCommandLine . concatMap (chunks ";;" . words) . lines
@@ -80,6 +87,7 @@ pCommand ws = case ws of
   "ma" : s      -> aString CMorphoAnalyse s
   "tt" : s      -> aString CTestTokenizer s
   "cc" : s      -> aUnit   $ CComputeConcrete $ unwords s
+  "so" : s      -> aUnit   $ CShowOpers $ unwords s
 
   "tq" : i:o:[] -> aUnit   (CTranslationQuiz (language i) (language o))
   "tl":i:o:n:[] -> aUnit   (CTranslationList (language i) (language o) (readIntArg n))

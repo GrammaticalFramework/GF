@@ -158,6 +158,17 @@ txtHelpFile =
   "\n  flags:" ++
   "\n     -res      use another module than the topmost one" ++
   "\n" ++
+  "\nso, show_operations: so Type" ++
+  "\n      Show oper operations with the given value type. Uses the topmost " ++
+  "\n      resource module to resolve constant names. " ++
+  "\n      N.B. You need the flag -retain when importing the grammar, if you want " ++
+  "\n      the oper definitions to be retained after compilation; otherwise this" ++
+  "\n      command does not find any oper constants." ++
+  "\n      N.B.' The value type may not be defined in a supermodule of the" ++
+  "\n      topmost resource. In that case, use appropriate qualified name." ++
+  "\n  flags:" ++
+  "\n     -res      use another module than the topmost one" ++
+  "\n" ++
   "\nt,  translate: t Lang Lang String" ++
   "\n      Parses String in Lang1 and linearizes the resulting Trees in Lang2." ++
   "\n  flags:" ++

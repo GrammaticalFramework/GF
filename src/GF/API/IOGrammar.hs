@@ -55,3 +55,8 @@ shellStateFromFiles opts st file = case fileSuffix file of
      grts <- compileModule osb st file
      ioeErr $ updateShellState opts' st grts
      --- liftM (changeModTimes rts) $ grammar2shellState opts gr
+
+getShellStateFromFiles :: Options -> FilePath -> IO ShellState
+getShellStateFromFiles os = 
+  useIOE emptyShellState . 
+  shellStateFromFiles os emptyShellState

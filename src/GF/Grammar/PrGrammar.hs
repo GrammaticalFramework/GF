@@ -224,3 +224,6 @@ prRefinement t = case t of
     Q m c  -> prQIdent (m,c)
     QC m c -> prQIdent (m,c)
     _ -> prt t
+
+prOperSignature :: (QIdent,Type) -> String
+prOperSignature (f, t) = prQIdent f +++ ":" +++ prt t

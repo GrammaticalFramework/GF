@@ -5,6 +5,7 @@ import Str
 import qualified Grammar as G
 import qualified Ident as I
 import qualified Compute as Co
+import qualified Lookup as L
 import qualified GFC
 import Values
 import GetTree
@@ -158,6 +159,16 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
              getOptVal opts useResource             -- flag -res=m
     justOutput (putStrLn (err id (prt . stripTerm) (
                 string2srcTerm src m t >>= Co.computeConcrete src))) sa
+  CShowOpers t -> do
+    m <- return $
+         maybe (I.identC "?") id $  -- meaningful if no opers in t 
+           maybe (resourceOfShellState st) (return . I.identC) $ -- topmost res
+             getOptVal opts useResource             -- flag -res=m
+    justOutput (putStrLn (err id (unlines . map prOperSignature) (
+                string2srcTerm src m t >>= 
+                Co.computeConcrete src >>= 
+                return . L.opersForType src))) sa
+
 
   CTranslationQuiz il ol -> justOutput (teachTranslation opts (sgr il) (sgr ol)) sa
   CTranslationList il ol n -> do 

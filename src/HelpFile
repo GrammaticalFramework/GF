@@ -145,6 +145,17 @@ cc, compute_concrete: cc Term
   flags:
      -res      use another module than the topmost one
 
+so, show_operations: so Type
+      Show oper operations with the given value type. Uses the topmost 
+      resource module to resolve constant names. 
+      N.B. You need the flag -retain when importing the grammar, if you want 
+      the oper definitions to be retained after compilation; otherwise this
+      command does not find any oper constants.
+      N.B.' The value type may not be defined in a supermodule of the
+      topmost resource. In that case, use appropriate qualified name.
+  flags:
+     -res      use another module than the topmost one
+
 t,  translate: t Lang Lang String
       Parses String in Lang1 and linearizes the resulting Trees in Lang2.
   flags:

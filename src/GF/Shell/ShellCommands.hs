@@ -33,6 +33,7 @@ data Command =
  | CMorphoAnalyse
  | CTestTokenizer
  | CComputeConcrete String
+ | CShowOpers String
 
  | CTranslationQuiz Language Language
  | CTranslationList Language Language Int
@@ -98,6 +99,7 @@ testValidFlag :: ShellState -> OptFunId -> String -> Err ()
 testValidFlag st f x = case f of
   "cat"     -> testIn (map prQIdent_ (allCategories st))
   "lang"    -> testIn (map prt (allLanguages st))
+  "res"     -> testIn (map prt (allResources (srcModules st)))
   "number"  -> testN
   "printer" -> testInc customGrammarPrinter
   "lexer"   -> testInc customTokenizer
@@ -143,6 +145,7 @@ optionsOfCommand co = case co of
   CMorphoAnalyse -> both "short" "lang"
   CTestTokenizer -> flags "lexer"
   CComputeConcrete _ -> flags "res"
+  CShowOpers _ -> flags "res"
 
   CTranslationQuiz _ _ -> flags "cat"
   CTranslationList _ _ _ ->  flags "cat"
