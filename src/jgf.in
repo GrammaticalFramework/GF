@@ -8,4 +8,4 @@ GF_LIB_DIR=@libdir@/GF-@PACKAGE_VERSION@
 GF=$GF_BIN_DIR/gf
 JARFILE=$GF_LIB_DIR/gf-java.jar
 
-java -jar $JARFILE "$GF -java $*"
+exec java -jar $JARFILE "$GF -java $*"
