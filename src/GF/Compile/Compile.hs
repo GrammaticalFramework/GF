@@ -54,6 +54,21 @@ batchCompileOld f = compileOld defOpts f
 
 compileModule :: Options -> ShellState -> FilePath -> 
                  IOE (GFC.CanonGrammar, (SourceGrammar,[(FilePath,ModTime)]))
+compileModule opts st0 file | oElem showOld opts = do
+  let putp = putPointE opts
+  let path = [] ----
+  grammar1 <- putp ("- parsing old gf" +++ file) $ getOldGrammar opts file
+  let mods = modules grammar1
+  let env = compileEnvShSt st0 []
+  (_,sgr,cgr) <- foldM (comp putp path) env mods
+  return $ (reverseModules cgr,       -- to preserve dependency order
+            (reverseModules sgr,[]))  
+ where
+   comp putp path env sm0 = do
+     (k',sm)  <- makeSourceModule opts env sm0
+     cm  <- putp "  generating code... " $ generateModuleCode opts path sm
+     extendCompileEnvInt env (k',sm,cm)
+
 compileModule opts1 st0 file = do
   opts0 <- ioeIO $ getOptionsFromFile file
   let useFileOpt = maybe False (const True) $ getOptVal opts0 pathList
@@ -168,7 +183,6 @@ compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
   mo1   <- ioeErr $ rebuildModule mos mo
 
   mo1b  <- ioeErr $ extendModule mos mo1
-  ----  prDebug mo1b
 
   case mo1b of
     (_,ModMod n) | not (isCompleteModule n) -> do
@@ -185,8 +199,8 @@ compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
 
       return (k',mo4)
  where
-   prDebug mo = ioeIO $ putStrLn $ prGrammar $ MGrammar [mo] ---- debug
-
+   ----   prDebug mo = ioeIO $ putStrLn $ prGrammar $ MGrammar [mo] ---- debug
+   prDebug mo = ioeIO $ print $ length $ lines $ prGrammar $ MGrammar [mo]
 
 generateModuleCode :: Options -> InitPath -> SourceModule -> IOE GFC.CanonModule
 generateModuleCode opts path minfo@(name,info) = do
@@ -207,12 +221,14 @@ generateModuleCode opts path minfo@(name,info) = do
       return (gfcFile pname, code)
   if isCompilable info && emit && nomulti 
      then ioeIO $ writeFile file out >> putStr ("  wrote file" +++ file)
-     else ioeIO $ putStrFlush "no need to save for this module "
+     else ioeIO $ putStrFlush $ "no need to save module" +++ prt name
   return minfo'
  where 
-   isCompilable _ = True ---- isCompilableModule ---- emit code for interfaces
+   isCompilable mi = case mi of
+     ModMod m -> not $ isModCnc m && mstatus m == MSIncomplete 
+     _ -> True
    nomulti = not $ oElem makeMulti opts
-   emit  = oElem emitCode opts
+   emit  = oElem emitCode opts && not (oElem notEmitCode opts)
    optim = oElem optimizeCanon opts
 
 -- for old GF: sort into modules, write files, compile as usual
@@ -220,7 +236,7 @@ generateModuleCode opts path minfo@(name,info) = do
 compileOld :: Options -> FilePath -> IOE GFC.CanonGrammar
 compileOld opts file = do
   let putp = putPointE opts
-  grammar1 <- putp ("- parsing old gf" +++ file) $ getOldGrammar file
+  grammar1 <- putp ("- parsing old gf" +++ file) $ getOldGrammar opts file
   files <- mapM writeNewGF $ modules grammar1
   (_,_,grammar) <- foldM (compileOne opts) emptyCompileEnv files
   return grammar

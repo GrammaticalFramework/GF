@@ -88,6 +88,7 @@ patt2term p = case p of
 anyTerm :: Term
 anyTerm  = LI (A.identC "_") --- should not happen
 
+matchPatt cs0 (FV ts) = liftM FV $ mapM (matchPatt cs0) ts
 matchPatt cs0 trm = term2patt trm >>= match cs0 where
   match cs t = 
     case cs of
