@@ -45,14 +45,20 @@ lin
 
   UseV2 = transAsVerb ;
 
--- Formation of infinitival phrases.
+  UseV2V x = x ** {isAux = False} ;
+  UseV2S x = x ;
+  UseV2Q x = x ;
+  UseA2S x = x ;
+  UseA2V x = x ;
 
-  UseCl tp cl = {s = \\o => tp.s ++ cl.s ! tp.b ! ClFinite tp.t tp.a o} ;
-{- ----
+-- Formation of fixed-tense fixed-polarity clauses.
+
+  UseCl tp cl = 
+    {s = \\m => tp.s ++ cl.s ! tp.b ! useClForm tp.t tp.a m} ;
   UseRCl tp cl = 
-    {s = \\gn,p => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! gn ! p} ;
-  UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
--}
+    {s = \\m,g,n,p => tp.s ++ cl.s ! tp.b ! useClForm tp.t tp.a m ! g ! n ! p} ;
+  UseQCl tp cl = 
+    {s = \\q => tp.s ++ cl.s ! tp.b ! useClForm tp.t tp.a Ind ! q} ;
 
   PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
   NegTP t a = {s = t.s ++ a.s ; b = False ; t = t.t ; a = a.a} ;
@@ -77,23 +83,18 @@ lin
   AdvAP = advAdjPhrase ;
   AdvAdv = cc2 ;
 
-{-
 --3 Sentences and relative clauses
 --
 
   SlashV2 = slashTransVerb ;
-  SlashVV2 = slashVerbVerb ;
-  SlashAdv cl p = slashAdverb cl p.s ;
-
-  --PosSlashV2 = slashTransVerb True ;
-  --NegSlashV2 = slashTransVerb False ;
--}
+----  SlashVV2 = slashVerbVerb ;
+----  SlashAdv cl p = slashAdverb cl p.s ;
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
-----  RelSlash = relSlash ;
-----  ModRS = modRelClause ;
-----  RelCl = relSuch ;
+  RelSlash = relSlash ;
+  ModRS = modRelClause ;
+  RelCl = relSuch ;
 
 --!
 --3 Questions and imperatives
@@ -102,9 +103,9 @@ lin
 ----  IDetCN d n = detNounPhrase d n ;
   FunIP = funIntPron ;
 
-----  QuestCl = questClause ;
-----  IntSlash = intSlash ;
-----  QuestAdv = questAdverbial ;
+  QuestCl = questClause ;
+  IntSlash = intSlash ;
+  QuestAdv = questAdverbial ;
 
 ----  PosImpVP = imperVerbPhrase True ;
 ----  NegImpVP = imperVerbPhrase False ;
@@ -131,6 +132,11 @@ lin
   ConsNP = consNounPhrase ;
   ConjNP = conjunctNounPhrase ;
   ConjDNP = conjunctDistrNounPhrase ;
+
+  TwoAdv = twoAdverb ;
+  ConsAdv = consAdverb ;
+  ConjAdv = conjunctAdverb ;
+  ConjDAdv = conjunctDistrAdverb ;
 
   SubjS = subjunctSentence ;       -- stack
   SubjImper = subjunctImperative ; 

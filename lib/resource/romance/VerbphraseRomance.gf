@@ -36,8 +36,8 @@ incomplete concrete VerbphraseRomance of Verbphrase = CategoriesRomance **
   ComplV2A v x y = predClauseGroup v (complDitransAdjVerb v x y) ;
   ComplSubjV2V v x y = predClauseGroup v (complDitransVerbVerb False v x y) ;
   ComplObjV2V v x y = predClauseGroup v (complDitransVerbVerb True v x y) ;
-----  ComplV2S v x y = predClauseGroup v (complDitransSentVerb v x y) ;
-----  ComplV2Q v x y = predClauseGroup v (complDitransQuestVerb v x y) ;
+  ComplV2S v x y = predClauseGroup v (complDitransSentVerb v x y) ;
+  ComplV2Q v x y = predClauseGroup v (complDitransQuestVerb v x y) ;
 
   PredAP v = predClauseBeGroup (complAdjective v) ;
   PredSuperl a = predClauseBeGroup (complAdjective (superlAdjPhrase a)) ;
@@ -46,20 +46,20 @@ incomplete concrete VerbphraseRomance of Verbphrase = CategoriesRomance **
   PredPP v = predClauseBeGroup (complAdverb v) ;
 
   PredAV v x = predClauseBeGroup (complVerbAdj v x) ;
-----  PredObjA2V v x y = predClauseBeGroup (complVerbAdj2 True v x y) ;
+  PredObjA2V v x y = predClauseBeGroup (complVerbAdj2 True v x y) ;
 
-----  PredProgVP = progressiveVerbPhrase ;
+  PredProgVP = progressiveVerbPhrase ;
 
 -- Use VPs
 
   PredVP = predVerbGroupClause ;
 
-----  RelVP = relVerbPhrase ;
-----  IntVP = intVerbPhrase ;
+  RelVP = relVerbPhrase ;
+  IntVP = intVerbPhrase ;
 
   PosVP tp = predVerbGroup True tp ;
   NegVP tp = predVerbGroup False tp ;
 
-----  AdvVP = adVerbPhrase ;
-----  SubjVP = subjunctVerbPhrase ;
+  AdvVP = adVerbPhrase ;
+  SubjVP = subjunctVerbPhrase ;
 }

@@ -315,19 +315,19 @@ oper
 
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {mn,mp = Ind ; lock_VS = <>} ;  ---- more moods
-  mkV2S v p = mkV2 v p ** {lock_V2S = <>} ;
+  mkV2S v p = mkV2 v p ** {mn,mp = Ind ; lock_V2S = <>} ;
   mkVV  v = v ** {c = accusative ; lock_VV = <>} ;
   deVV  v = v ** {c = genitive.p1 ; lock_VV = <>} ;
   aVV  v = v ** {c = dative.p1 ; lock_VV = <>} ;
-  mkV2V v p t = mkV2 v p ** {c3 = t.p1  ; lock_V2V = <>} ;
+  mkV2V v p t = mkV2 v p ** {c3 = t.p1  ; s3 = p.p2 ; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
   mkV2Q v p = mkV2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {mn,mp = Ind ; lock_AS = <>} ; ---- more moods
-  mkA2S v p = mkA2 v p ** {lock_A2S = <>} ;
-  mkAV  v p = v ** {c = p.p1 ; lock_AV = <>} ;
+  mkA2S v p = mkA2 v p ** {mn,mp = Ind ; lock_A2S = <>} ;
+  mkAV  v p = v ** {c = p.p1 ; s2 = p.p2 ; lock_AV = <>} ;
   mkA2V v p q = mkA2 v p ** {s3 = q.p2 ; c3 = q.p1 ; lock_A2V = <>} ;
 
 } ;

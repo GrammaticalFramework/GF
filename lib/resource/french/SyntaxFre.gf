@@ -119,6 +119,11 @@ oper
     AEsse   => verbEtre
     } ;
 
+  progressiveVerbPhrase : VerbPhrase -> VerbGroup = \vp ->
+   predClauseBeGroup
+     (complCopula (\\g,n,p => 
+       "en" ++ "train" ++ elisDe ++ vp.s !  VIInfinit ! g ! n ! p)) ;
+
 -- The "ne - pas" negation.
 
   posNeg = \b,v,c -> 
@@ -179,13 +184,6 @@ oper
 
 -- Questions
 {- ----
-  questVerbPhrase = \jean,dort ->
-    {s = table {
-      DirQ   => optStr (estCeQue Acc) ++ (predVerbPhrase jean dort).s ! Ind ;
-      IndirQ => elisSi ++ (predVerbPhrase jean dort).s ! Ind
-      }
-    } ;
-
   existNounPhraseQuest = \duvin -> {
     s = \\m => 
         case m of {
@@ -194,22 +192,17 @@ oper
           } 
         ++ duvin.s ! stressed accusative  --- il y en a ; have to define "y"
     } ;
-
-  intVerbPhrase = \qui, dormir ->
-    let dort = dormir.s ! qui.g ! VPF Simul (VFin presInd qui.n P3)
-    in
-    {s = table {
-      DirQ => qui.s ! Nom ++ optStr (estCeQue Nom) ++ dort ;
-      IndirQ => "ce" ++ qui.s ! Nom ++ dort
-      }
-    } ;
-
+-}
   intSlash = \Qui, Tuvois ->
-    let {qui = Tuvois.s2 ++ Qui.s ! Tuvois.c ; tuvois = Tuvois.s ! Ind} in
-    {s = table {
-      DirQ   => qui ++ optStr (estCeQue Acc) ++ tuvois ; 
-      IndirQ => ifCe Tuvois.c ++ qui ++ tuvois
-      }
+    {s = \\b,cl =>
+      let 
+        qui = Tuvois.s2 ++ Qui.s ! Tuvois.c ; 
+        tuvois = Tuvois.s ! b ! cl
+      in
+      table {
+        DirQ   => qui ++ optStr (estCeQue Acc) ++ tuvois ; 
+        IndirQ => ifCe Tuvois.c ++ qui ++ tuvois
+        }
     } ;
 
 -- An auxiliary to distinguish between
@@ -221,14 +214,6 @@ oper
     _   => []
     } ;
 
-  questAdverbial = \quand, jean, dort ->
-    let {jeandort = (predVerbPhrase jean dort).s ! Ind} in
-    {s = table {
-      DirQ   => quand.s ++ optStr (estCeQue Acc) ++ jeandort ; 
-      IndirQ => quand.s                          ++ jeandort
-      }
-    } ;
--}
 ----- moved from Morpho
 
 --2 Articles

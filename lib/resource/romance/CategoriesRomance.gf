@@ -48,9 +48,9 @@ lincat
   ADeg   = {s : Degree => AForm => Str ; p : Bool} ;
   AP     = Adjective ;
   AS     = Adjective ** {mp,mn : Mode} ; --- "more difficult for him to come than..."
-  A2S    = Adjective ** {s2 : Preposition} ;
-  AV     = Adjective ** {c : CaseA} ;
-  A2V    = Adjective ** {s2 : Preposition} ;
+  A2S    = Adjective ** {mp,mn : Mode ; c : CaseA ; s2 : Preposition} ;
+  AV     = Adjective ** {c : CaseA ; s2 : Preposition} ;
+  A2V    = Adjective ** {c : CaseA ; s2 : Preposition} ;
 
   V      = Verb ; 
       -- = {s : VF => Str} ;
@@ -64,13 +64,13 @@ lincat
   VQ     = Verb ;
   VA     = Verb ;
 
-  V2S    = TransVerb ;
+  V2S    = TransVerb ** {mp,mn : Mode} ;
   V2Q    = TransVerb ;
-  V2V    = TransVerb ** {c3 : CaseA} ;
+  V2V    = TransVerb ** {c3 : CaseA ; s3 : Preposition} ;
   V2A    = TransVerb ;
   V0     = Verb ;
 
-  TP     = {s : Str ; b : Bool ; t : Tense ; a : Anteriority} ; --- the Str field is dummy
+  TP     = {s : Str ; b : Bool ; t : Tense ; a : Anteriority} ; --- s-field is dummy
   Tense  = {s : Str ; t : Tense} ;
   Ant    = {s : Str ; a : Anteriority} ;
 
@@ -84,7 +84,7 @@ lincat
       -- = {s : Mode => Str} ;
   Cl     = Clause ;
       -- = {s : Bool => ClForm => Str} ;
-  Slash  = Sentence ** {s2 : Preposition ; c : CaseA} ;
+  Slash  = Clause ** {s2 : Preposition ; c : CaseA} ;
 
   RP     = {s : RelForm => Str ; g : RelGen} ;
   RS     = {s :           Mode => Gender => Number => Person => Str} ;

@@ -1122,8 +1122,6 @@ oper
   Question     = {s : Bool => SForm => QuestForm => Str} ;
   QuestionSent = {s :                  QuestForm => Str} ;
 
---- TODO: questions in all tenses.
-
 --3 Yes-no questions 
 --
 -- Yes-no questions are used both independently 
