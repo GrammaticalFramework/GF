@@ -1,18 +1,36 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : PrGrammar
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:13 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.11 $
 --
--- (Description of the module)
+-- AR 7\/12\/1999 - 1\/4\/2000 - 10\/5\/2003
+--
+-- printing and prettyprinting class
+--
+-- 8\/1\/2004:
+-- Usually followed principle: 'prt_' for displaying in the editor, 'prt'
+-- in writing grammars to a file. For some constructs, e.g. 'prMarkedTree',
+-- only the former is ever needed.
 -----------------------------------------------------------------------------
 
-module PrGrammar where
+module PrGrammar (Print(..),
+		  prtBad,
+		  prGrammar, prModule,
+		  prContext, prParam,
+		  prQIdent, prQIdent_,
+		  prRefinement, prTermOpt,
+		  prt_Tree, prMarkedTree, prTree,
+		  tree2string, prprTree,
+		  prConstrs, prConstraints, 
+		  prMetaSubst, prEnv, prMSubst, 
+		  prExp, prPatt, prOperSignature
+		 ) where
 
 import Operations
 import Zipper
@@ -30,15 +48,14 @@ import Str
 
 import List (intersperse)
 
--- AR 7/12/1999 - 1/4/2000 - 10/5/2003
-
--- printing and prettyprinting class
-
 class Print a where
   prt  :: a -> String
-  prt2 :: a -> String   -- printing with parentheses, if needed
-  prpr :: a -> [String] -- pretty printing
-  prt_ :: a -> String   -- printing without ident qualifications
+  -- | printing with parentheses, if needed
+  prt2 :: a -> String
+  -- | pretty printing
+  prpr :: a -> [String]
+  -- | printing without ident qualifications
+  prt_ :: a -> String 
   prt2 = prt
   prt_ = prt
   prpr = return . prt
@@ -48,11 +65,14 @@ class Print a where
 --- in writing grammars to a file. For some constructs, e.g. prMarkedTree,
 --- only the former is ever needed.
 
--- to show terms etc in error messages
+-- | to show terms etc in error messages
 prtBad :: Print a => String -> a -> Err b
 prtBad s a = Bad (s +++ prt a)
 
+prGrammar :: SourceGrammar -> String
 prGrammar = P.printTree . trGrammar
+
+prModule :: (Ident, SourceModInfo) -> String
 prModule  = P.printTree . trModule
 
 instance Print Term where
@@ -108,7 +128,7 @@ instance Print a => Print (Tr a) where
   prt (Tr (n, trees)) = prt n +++ unwords (map prt2 trees)
   prt2 t@(Tr (_,args)) = if null args then prt t else prParenth (prt t)
 
--- we cannot define the method prt_ in this way 
+-- | we cannot define the method prt_ in this way 
 prt_Tree :: Tree -> String
 prt_Tree = prt_ . tree2exp
 
@@ -133,7 +153,8 @@ prMarkedTree = prf 1 where
 prTree :: Tree -> [String]
 prTree = prMarkedTree . mapTr (\n -> (n,False))
 
--- a pretty-printer for parsable output
+-- | a pretty-printer for parsable output
+tree2string :: Tree -> String
 tree2string = unlines . prprTree
 
 prprTree :: Tree -> [String]
@@ -204,8 +225,7 @@ prQIdent (m,f) = prt m ++ "." ++ prt f
 prQIdent_ :: QIdent -> String
 prQIdent_ (_,f) = prt f
 
--- print terms without qualifications
-
+-- | print terms without qualifications
 prExp :: Term -> String
 prExp e = case e of
   App f a    -> pr1 f +++ pr2 a
@@ -232,10 +252,12 @@ prPatt p = case p of
      A.PC _ (_:_) -> prParenth $ prPatt p
      _ -> prPatt p
 
--- option -strip strips qualifications
+-- | option @-strip@ strips qualifications
+prTermOpt :: Options -> Term -> String
 prTermOpt opts = if oElem nostripQualif opts then prt else prExp
 
---- to get rid of brackets in the editor
+-- | to get rid of brackets in the editor
+prRefinement :: Term -> String
 prRefinement t = case t of
     Q m c  -> prQIdent (m,c)
     QC m c -> prQIdent (m,c)

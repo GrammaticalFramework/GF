@@ -1,18 +1,27 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Values
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:13 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Values where
+module Values (-- * values used in TC type checking
+	       Exp, Val(..), Env,
+	       -- * annotated tree used in editing
+	       Tree, TrNode(..), Atom(..), Binds, Constraints, MetaSubst,
+	       -- * for TC
+	       valAbsInt, valAbsString, vType,
+	       isPredefCat,
+	       cType, cPredefAbs, cInt, cString,
+	       eType, tree2exp, loc2treeFocus
+	      ) where
 
 import Operations
 import Zipper
@@ -45,19 +54,28 @@ type MetaSubst = [(MetaSymb,Val)]
 
 -- for TC
 
-valAbsInt, valAbsString :: Val
+valAbsInt :: Val
 valAbsInt = VCn (cPredefAbs, cInt)
+
+valAbsString :: Val
 valAbsString = VCn (cPredefAbs, cString)
 
 vType :: Val
 vType = VType
 
-cType,cPredefAbs,cInt,cString :: Ident
+cType :: Ident
 cType = identC "Type" --- #0
+
+cPredefAbs :: Ident
 cPredefAbs = identC "PredefAbs"
+
+cInt :: Ident
 cInt = identC "Int"
+
+cString :: Ident
 cString = identC "String"
 
+isPredefCat :: Ident -> Bool
 isPredefCat c = elem c [cInt,cString]
 
 eType :: Exp

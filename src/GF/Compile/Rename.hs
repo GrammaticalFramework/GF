@@ -1,15 +1,15 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Rename
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:09 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.17 $
 --
--- AR 14/5/2003
+-- AR 14\/5\/2003
 -- The top-level function 'renameGrammar' does several things:
 --
 --   - extends each module symbol table by indirections to extended module
@@ -22,7 +22,10 @@
 -- Hence we can proceed by @fold@ing "from left to right".
 -----------------------------------------------------------------------------
 
-module Rename where
+module Rename (renameGrammar, 
+	       renameSourceTerm,
+	       renameModule
+	      ) where
 
 import Grammar
 import Values

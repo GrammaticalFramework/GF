@@ -1,19 +1,20 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : VisualizeGrammar
+-- Maintainer  : BB
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:23 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.7 $
 --
--- (Description of the module)
+-- Print a graph of module dependencies in Graphviz DOT format
 -----------------------------------------------------------------------------
 
--- Print a graph of module dependencies in Graphviz DOT format
-module VisualizeGrammar where
+module VisualizeGrammar ( visualizeCanonGrammar, 
+			  visualizeSourceGrammar
+			) where
 
 import qualified Modules as M
 import GFC
@@ -78,7 +79,7 @@ fromModType t = case t of
 		       M.MTReuse rt -> error "Can't visualize reuse modules yet" -- FIXME
 		       M.MTUnion _ _ -> error "Can't visualize union modules yet" -- FIXME
 
--- FIXME: there is something odd about OQualif with 'with' modules,
+-- | FIXME: there is something odd about OQualif with 'with' modules,
 -- both names seem to be the same.
 openName :: M.OpenSpec Ident -> String
 openName (M.OSimple q i) = prIdent i

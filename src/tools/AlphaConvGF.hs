@@ -1,18 +1,18 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : AlphaConvGF
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:23 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.3 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Main where
+module Main (main) where
 
 import LexGF
 import Alex

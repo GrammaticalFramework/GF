@@ -1,18 +1,38 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : CF
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:07 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
--- context-free grammars. AR 15/12/1999 -- 30/3/2000 -- 2/6/2001 -- 3/12/2001
+-- context-free grammars. AR 15\/12\/1999 -- 30\/3\/2000 -- 2\/6\/2001 -- 3\/12\/2001
 -----------------------------------------------------------------------------
 
-module CF where
+module CF (-- * Types
+	   CF(..), CFRule, CFRuleGroup, 
+	   CFItem(..), CFTree(..), CFPredef, CFParser,
+	   RegExp(..), CFWord,
+	   -- * Functions
+	   cfParseResults,
+	   -- ** to construct CF grammars
+	   emptyCF, emptyCFPredef, rules2CF, groupCFRules,
+	   -- ** to construct rules
+	   atomCFRule, atomCFTerm, atomRegExp, altsCFTerm,
+	   -- ** to construct trees
+	   atomCFTree, buildCFTree,
+	   -- ** to decide whether a token matches a terminal item
+	   matchCFTerm, satRegExp,
+	   -- ** to analyse a CF grammar
+	   catsOfCF, rulesOfCF, ruleGroupsOfCF, rulesForCFCat, 
+	   valCatCF, valItemsCF, valFunCF, 
+	   startCat, predefOfCF, appCFPredef, valCFItem,
+	   cfTokens, wordsOfRegExp, forCFItem, 
+	   isCircularCF, predefRules
+	  ) where
 
 import Operations
 import Str
@@ -182,10 +202,10 @@ forCFItem :: CFTok -> CFRule -> Bool
 forCFItem a (_,(_, CFTerm r : _)) = satRegExp r a
 forCFItem _ _ = False
 
+-- | we should make a test of circular chains, too
 isCircularCF :: CFRule -> Bool
 isCircularCF (_,(c', CFNonterm c:[])) = compatCF c' c
 isCircularCF _ = False
---- we should make a test of circular chains, too
 
 -- | coercion to the older predef cf type
 predefRules :: CFPredef -> CFTok -> [CFRule]

@@ -1,15 +1,17 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : TransformCFG
+-- Maintainer  : BB
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:21 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.3 $
 --
--- (Description of the module)
+--  This module does some useful transformations on CFGs.
+--
+-- FIXME: remove cycles
 -----------------------------------------------------------------------------
 
 {- 
@@ -43,10 +45,8 @@ import Data.Maybe (fromJust)
 
 import Debug.Trace
 
--- FIXME: remove cycles
 
-
--- not very nice to get replace the structured CFCat type with a simple string
+-- | not very nice to get replace the structured CFCat type with a simple string
 type CFRule_ = Rule CFName String Token
 
 type CFRules = FiniteMap String [CFRule_]

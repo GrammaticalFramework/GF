@@ -1,18 +1,20 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : GetGrammar
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:08 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.14 $
 --
 -- this module builds the internal GF grammar that is sent to the type checker
 -----------------------------------------------------------------------------
 
-module GetGrammar where
+module GetGrammar (getSourceModule, getOldGrammar, getCFGrammar, getEBNFGrammar,
+		   err2err
+		  ) where
 
 import Operations
 import qualified ErrM as E ----

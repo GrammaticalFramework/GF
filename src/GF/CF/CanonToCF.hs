@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : CanonToCF
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:07 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.11 $
 --
 -- AR 27\/1\/2000 -- 3\/12\/2001 -- 8\/6\/2003 
 -----------------------------------------------------------------------------

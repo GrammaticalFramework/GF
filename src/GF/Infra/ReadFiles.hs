@@ -1,26 +1,28 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : ReadFiles
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:15 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.19 $
 --
 -- Decide what files to read as function of dependencies and time stamps.
+--
+-- make analysis for GF grammar modules. AR 11\/6\/2003--24\/2\/2004
+--
+-- to find all files that have to be read, put them in dependency order, and
+-- decide which files need recompilation. Name @file.gf@ is returned for them,
+-- and @file.gfc@ or @file.gfr@ otherwise.
 -----------------------------------------------------------------------------
 
-module ReadFiles 
---- where 
-
---
-(
---  
-getAllFiles,fixNewlines,ModName,getOptionsFromFile,
---  
-gfcFile,gfFile,gfrFile,isGFC,resModName,isOldFile) where
+module ReadFiles (-- * Heading 1
+		  getAllFiles,fixNewlines,ModName,getOptionsFromFile,
+		  -- * Heading 2
+		  gfcFile,gfFile,gfrFile,isGFC,resModName,isOldFile
+		 ) where
 
 import Arch (selectLater, modifiedFiles, ModTime, getModTime,laterModTime)
 
@@ -33,12 +35,6 @@ import Char
 import Monad
 import List
 import Directory
-
--- make analysis for GF grammar modules. AR 11/6/2003--24/2/2004
-
--- to find all files that have to be read, put them in dependency order, and
--- decide which files need recompilation. Name file.gf is returned for them,
--- and file.gfc or file.gfr otherwise.
 
 type ModName = String
 type ModEnv  = [(ModName,ModTime)]
@@ -292,15 +288,14 @@ lexs s = x:xs where
       (x,y) = head $ lex s
       xs = if null y then [] else lexs y
 
--- options can be passed to the compiler by comments in --#, in the main file
- 
+-- | options can be passed to the compiler by comments in @--#@, in the main file
 getOptionsFromFile ::  FilePath -> IO Options
 getOptionsFromFile file = do
   s <- readFileIf file
   let ls = filter (isPrefixOf "--#") $ lines s
   return $ fst $ getOptions "-" $ map (unwords . words . drop 3) ls
 
--- check if old GF file
+-- | check if old GF file
 isOldFile :: FilePath -> IO Bool
 isOldFile f = do
   s <- readFileIf f
@@ -312,7 +307,7 @@ isOldFile f = do
 
 
 
--- old GF tolerated newlines in quotes. No more supported!
+-- | old GF tolerated newlines in quotes. No more supported!
 fixNewlines :: String -> String
 fixNewlines s = case s of
      '"':cs -> '"':mk cs

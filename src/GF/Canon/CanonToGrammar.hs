@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : CanonToGrammar
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:06 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.12 $
 --
 -- a decompiler. AR 12/6/2003 -- 19/4/2004
 -----------------------------------------------------------------------------

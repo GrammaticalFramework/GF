@@ -1,18 +1,72 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Option
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:15 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.19 $
 --
 -- Options and flags used in GF shell commands and files.
+--
+-- The types 'Option' and 'Options' should be kept abstract, but:
+--
+--   - The constructor 'Opt' is used in "ShellCommands" and "GrammarToSource"
+--
+--   - The constructor 'Opts' us udes in "API", "Shell" and "ShellCommands"
 -----------------------------------------------------------------------------
 
-module Option where
+module Option (-- * all kinds of options, should be kept abstract
+	       Option(..), Options(..), OptFun, OptFunId,
+	       noOptions, iOpt, aOpt, iOpts, oArg, oElem, eqOpt,
+	       getOptVal, getOptInt, optIntOrAll, optIntOrN, optIntOrOne,
+	       changeOptVal, addOption, addOptions, concatOptions,
+	       removeOption, removeOptions, options, unionOptions,
+
+	       -- * parsing options, with prefix pre (e.g. \"-\")
+	       getOptions, pOption, isOption,
+
+	       -- * printing options, without prefix
+	       prOpt, prOpts, 
+
+	       -- * a suggestion for option names 
+	       -- ** parsing
+	       strictParse, forgiveParse, ignoreParse, literalParse,
+	       rawParse, firstParse, dontParse, 
+	       -- ** grammar formats
+	       showAbstr, showXML, showOld, showLatex, showFullForm, 
+	       showEBNF, showCF, showWords, showOpts,
+	       isCompiled, isHaskell, noCompOpers, retainOpers, defaultGrOpts, 
+	       newParser, noCF, checkCirc, noCheckCirc, lexerByNeed,
+	       -- ** linearization
+	       allLin, firstLin, distinctLin, dontLin, showRecord, showStruct,
+	       xmlLin, latexLin, tableLin, defaultLinOpts, useUTF8, showLang, withMetas,
+	       -- ** other
+	       beVerbose, showInfo, beSilent, emitCode, getHelp, doMake, doBatch,
+	       notEmitCode, makeMulti, beShort, wholeGrammar, makeFudget, byLines, byWords,
+	       analMorpho, doTrace, noCPU, doCompute, optimizeCanon, optimizeValues,
+	       stripQualif, nostripQualif, showAll, fromSource,
+	       -- ** mainly for stand-alone
+	       useUnicode, optCompute, optCheck, optParaphrase, forJava,
+	       -- ** for edit session
+	       allLangs, absView,
+	       -- ** options that take arguments
+	       useTokenizer, useUntokenizer, useParser, withFun, firstCat, gStartCat,
+	       useLanguage, useResource, speechLanguage, useFont,
+	       grammarFormat, grammarPrinter, filterString, termCommand, transferFun,
+	       forForms, menuDisplay, sizeDisplay, typeDisplay,
+	       noDepTypes, extractGr, pathList, uniCoding,
+	       useName, useAbsName, useCncName, useResName, useFile, useOptimizer, 
+	       markLin, markOptXML, markOptJava, markOptStruct, markOptFocus,
+	       -- ** refinement order
+	       nextRefine, firstRefine, lastRefine, 
+	       -- ** Boolean flags
+	       flagYes, flagNo, caseYesNo,
+	       -- ** integer flags
+	       flagDepth, flagAlts, flagLength, flagNumber, flagRawtrees
+	      ) where
 
 import List (partition)
 import Char (isDigit)
@@ -25,11 +79,20 @@ newtype Options = Opts [Option] deriving (Eq,Show,Read)
 noOptions :: Options
 noOptions = Opts []
 
-iOpt o   = Opt (o,[])   -- simple option -o
-aOpt o a = Opt (o,[a])  -- option with argument -o=a
+iOpt :: String -> Option
+iOpt o = Opt (o,[])   
+-- ^ simple option -o
+
+aOpt :: String -> String -> Option
+aOpt o a = Opt (o,[a])  
+-- ^ option with argument -o=a
+
+iOpts :: [Option] -> Options
 iOpts = Opts
 
-oArg s = s -- value of option argument
+oArg :: String -> String
+oArg s = s 
+-- ^ value of option argument
 
 oElem :: Option -> Options -> Bool
 oElem o (Opts os) = elem o os

@@ -1,18 +1,29 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Lookup
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:12 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.12 $
 --
 -- Lookup in source (concrete and resource) when compiling.
+--
+-- lookup in resource and concrete in compiling; for abstract, use 'Look'
 -----------------------------------------------------------------------------
 
-module Lookup where
+module Lookup (lookupResDef, 
+	       lookupResType, 
+	       lookupParams, 
+	       lookupParamValues, 
+	       lookupFirstTag, 
+	       allParamValues, 
+	       lookupAbsDef, 
+	       lookupLincat, 
+	       opersForType
+	      ) where
 
 import Operations
 import Abstract
@@ -21,8 +32,6 @@ import Lockfield
 
 import List (nub)
 import Monad
-
--- lookup in resource and concrete in compiling; for abstract, use Look
 
 lookupResDef :: SourceGrammar -> Ident -> Ident -> Err Term
 lookupResDef gr = look True where 

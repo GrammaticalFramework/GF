@@ -1,18 +1,39 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Modules
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:15 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.19 $
 --
 -- Datastructures and functions for modules, common to GF and GFC.
+--
+-- AR 29\/4\/2003
+--
+-- The same structure will be used in both source code and canonical.
+-- The parameters tell what kind of data is involved.
+-- Invariant: modules are stored in dependency order
 -----------------------------------------------------------------------------
 
-module Modules where
+module Modules (MGrammar(..), ModInfo(..), Module(..), ModuleType(..), MReuseType(..),
+		extendm, updateMGrammar, updateModule, replaceJudgements,
+		addOpenQualif, flagsModule, allFlags, mapModules,
+		MainGrammar(..), MainConcreteSpec(..), OpenSpec(..), OpenQualif(..),
+		oSimple, oQualif,
+		ModuleStatus(..),
+		openedModule, allOpens, depPathModule, allDepsModule, partOfGrammar,
+		allExtends, allExtendsPlus, allExtensions, searchPathModule, addModule,
+		emptyMGrammar, emptyModInfo, emptyModule,
+		IdentM(..),
+		typeOfModule, abstractOfConcrete, abstractModOfConcrete,
+		lookupModule, lookupModuleType, lookupModMod, lookupInfo,
+		allModMod, isModAbs, isModRes, isModCnc, isModTrans,
+		sameMType, isCompilableModule, isCompleteModule,
+		allAbstracts, greatestAbstract, allResources, greatestResource, allConcretes
+	       ) where
 
 import Ident
 import Option
@@ -46,25 +67,23 @@ data Module i f a = Module {
   }
   deriving Show
 
--- encoding the type of the module
+-- | encoding the type of the module
 data ModuleType i = 
     MTAbstract 
   | MTTransfer (OpenSpec i) (OpenSpec i) 
   | MTResource
   | MTConcrete i
-
-  -- up to this, also used in GFC. Below, source only.
-
+    -- ^ up to this, also used in GFC. Below, source only.
   | MTInterface
   | MTInstance i 
   | MTReuse (MReuseType i)
-  | MTUnion (ModuleType i) [(i,[i])] --- not meant to be recursive
+  | MTUnion (ModuleType i) [(i,[i])] -- ^ not meant to be recursive
   deriving (Eq,Show)
 
 data MReuseType i = MRInterface i | MRInstance i i | MRResource i
   deriving (Show,Eq)
 
--- previously: single inheritance
+-- | previously: single inheritance
 extendm :: Module i f a -> Maybe i
 extendm m = case extends m of
   [i] -> Just i
@@ -72,7 +91,7 @@ extendm m = case extends m of
 
 -- destructive update
 
---- dep order preserved since old cannot depend on new
+-- | dep order preserved since old cannot depend on new
 updateMGrammar :: Ord i => MGrammar i f a -> MGrammar i f a -> MGrammar i f a
 updateMGrammar old new = MGrammar $ 
   [(i,m) | (i,m) <- os, notElem i (map fst ns)] ++ ns
@@ -114,8 +133,8 @@ data MainGrammar i = MainGrammar {
 data MainConcreteSpec i = MainConcreteSpec {
     concretePrintname :: i ,
     concreteName :: i ,
-    transferIn   :: Maybe (OpenSpec i) ,  -- if there is an in-transfer
-    transferOut  :: Maybe (OpenSpec i)    -- if there is an out-transfer
+    transferIn   :: Maybe (OpenSpec i) ,  -- ^ if there is an in-transfer
+    transferOut  :: Maybe (OpenSpec i)    -- ^ if there is an out-transfer
   }
   deriving Show
 
@@ -147,7 +166,7 @@ allOpens m = case mtype m of
   MTTransfer a b -> a : b : opens m
   _ -> opens m
 
--- initial dependency list
+-- | initial dependency list
 depPathModule :: Ord i => Module i f a -> [OpenSpec i]
 depPathModule m = fors m ++ exts m ++ opens m where
   fors m = case mtype m of
@@ -157,7 +176,7 @@ depPathModule m = fors m ++ exts m ++ opens m where
     _              -> []
   exts m = map oSimple $ extends m
 
--- all dependencies
+-- | all dependencies
 allDepsModule :: Ord i => MGrammar i f a -> Module i f a -> [OpenSpec i]
 allDepsModule gr m = iterFix add os0 where
   os0 = depPathModule m
@@ -165,7 +184,7 @@ allDepsModule gr m = iterFix add os0 where
                 m <- depPathModule n]
   mods = modules gr
 
--- select just those modules that a given one depends on, including itself
+-- | select just those modules that a given one depends on, including itself
 partOfGrammar :: Ord i => MGrammar i f a -> (i,ModInfo i f a) -> MGrammar i f a
 partOfGrammar gr (i,m) = MGrammar [mo | mo@(j,_) <- mods, elem j modsFor] 
   where
@@ -175,7 +194,7 @@ partOfGrammar gr (i,m) = MGrammar [mo | mo@(j,_) <- mods, elem j modsFor]
       _ -> [i] ---- ModWith?
 
 
--- all modules that a module extends, directly or indirectly
+-- | all modules that a module extends, directly or indirectly
 allExtends :: (Show i,Ord i) => MGrammar i f a -> i -> [i]
 allExtends gr i = case lookupModule gr i of
   Ok (ModMod m) -> case extends m of 
@@ -183,7 +202,7 @@ allExtends gr i = case lookupModule gr i of
     is -> i : concatMap (allExtends gr) is
   _ -> []
 
--- this plus that an instance extends its interface
+-- | this plus that an instance extends its interface
 allExtendsPlus :: (Show i,Ord i) => MGrammar i f a -> i -> [i]
 allExtendsPlus gr i = case lookupModule gr i of
   Ok (ModMod m) -> i : concatMap (allExtendsPlus gr) (exts m)
@@ -191,7 +210,7 @@ allExtendsPlus gr i = case lookupModule gr i of
  where
    exts m = extends m ++ [j | MTInstance j <- [mtype m]]
 
--- conversely: all modules that extend a given module, incl. instances of interface
+-- | conversely: all modules that extend a given module, incl. instances of interface
 allExtensions :: (Show i,Ord i) => MGrammar i f a -> i -> [i]
 allExtensions gr i = case lookupModule gr i of
   Ok (ModMod m) -> let es = exts i in es ++ concatMap (allExtensions gr) es
@@ -201,11 +220,11 @@ allExtensions gr i = case lookupModule gr i of
                              || elem (MTInstance i) [mtype m]]
    mods = [(j,m) | (j,ModMod m) <- modules gr]
 
--- initial search path: the nonqualified dependencies
+-- | initial search path: the nonqualified dependencies
 searchPathModule :: Ord i => Module i f a -> [i]
 searchPathModule m = [i | OSimple _ i <- depPathModule m]
 
--- a new module can safely be added to the end, since nothing old can depend on it
+-- | a new module can safely be added to the end, since nothing old can depend on it
 addModule :: Ord i => 
              MGrammar i f a -> i -> ModInfo i f a -> MGrammar i f a
 addModule gr name mi = MGrammar $ (modules gr ++ [(name,mi)])
@@ -219,8 +238,7 @@ emptyModInfo = ModMod emptyModule
 emptyModule :: Module i f a
 emptyModule = Module MTResource MSComplete [] [] [] NT
 
--- we store the module type with the identifier
-
+-- | we store the module type with the identifier
 data IdentM i = IdentM {
   identM :: i ,
   typeM  :: ModuleType i
@@ -310,38 +328,38 @@ sameMType m n = case (m,n) of
   (MTInterface,MTResource) -> True
   _ -> m == n
 
--- don't generate code for interfaces and for incomplete modules
+-- | don't generate code for interfaces and for incomplete modules
 isCompilableModule m = case m of
   ModMod m -> case mtype m of
     MTInterface -> False
     _ -> mstatus m == MSComplete
   _ -> False ---
 
--- interface and "incomplete M" are not complete
+-- | interface and "incomplete M" are not complete
 isCompleteModule :: (Eq i) =>  Module i f a -> Bool
 isCompleteModule m = mstatus m == MSComplete && mtype m /= MTInterface
 
 
--- all abstract modules
+-- | all abstract modules
 allAbstracts :: Eq i => MGrammar i f a -> [i]
 allAbstracts gr = [i | (i,ModMod m) <- modules gr, mtype m == MTAbstract]
 
--- the last abstract in dependency order (head of list)
+-- | the last abstract in dependency order (head of list)
 greatestAbstract :: Eq i => MGrammar i f a -> Maybe i
 greatestAbstract gr = case allAbstracts gr of
   []  -> Nothing
   a:_ -> return a
 
--- all resource modules
+-- | all resource modules
 allResources :: MGrammar i f a -> [i]
 allResources gr = [i | (i,ModMod m) <- modules gr, isModRes m]
 
--- the greatest resource in dependency order
+-- | the greatest resource in dependency order
 greatestResource :: MGrammar i f a -> Maybe i
 greatestResource gr = case allResources gr of
   [] -> Nothing
   a -> return $ head a
 
--- all concretes for a given abstract
+-- | all concretes for a given abstract
 allConcretes :: Eq i => MGrammar i f a -> i -> [i]
 allConcretes gr a = [i | (i, ModMod m) <- modules gr, mtype m == MTConcrete a]

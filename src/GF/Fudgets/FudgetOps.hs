@@ -1,22 +1,20 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : FudgetOps
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:14 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.3 $
 --
--- (Description of the module)
+-- auxiliary Fudgets for GF syntax editor
 -----------------------------------------------------------------------------
 
 module FudgetOps where
 
 import Fudgets
-
--- auxiliary Fudgets for GF syntax editor
 
 -- save and display
 
@@ -35,7 +33,7 @@ saveSP contents = getSP $ \msg -> case msg of
 
 textWindowF = writeOutputF
 
--- to replace stringInputF by a pop-up slot behind a button
+-- | to replace stringInputF by a pop-up slot behind a button
 popupStringInputF :: String -> String -> String -> F String String
 popupStringInputF label deflt msg =
   mapF snd 

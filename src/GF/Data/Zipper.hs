@@ -1,18 +1,57 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Zipper
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:16 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
--- Gérard Huet's zipper (JFP 7 (1997)). AR 10/8/2001
+-- Gérard Huet's zipper (JFP 7 (1997)). AR 10\/8\/2001
 -----------------------------------------------------------------------------
 
-module Zipper where
+module Zipper (-- * types
+	       Tr(..),
+	       Path(..),
+	       Loc(..),
+	       -- * basic (original) functions
+	       leaf,
+	       goLeft, goRight, goUp, goDown,
+	       changeLoc,
+	       changeNode,
+	       forgetNode,
+	       -- * added sequential representation
+	       goAhead,
+	       goBack,
+	       -- ** n-ary versions
+	       goAheadN,
+	       goBackN,
+	       -- * added mappings between locations and trees
+	       loc2tree,
+	       loc2treeMarked,
+	       tree2loc,
+	       goRoot,
+	       goLast,
+	       goPosition,
+	       -- * added some utilities
+	       traverseCollect,
+	       scanTree,
+	       mapTr,
+	       mapTrM,
+	       mapPath,
+	       mapPathM,
+	       mapLoc,
+	       mapLocM,
+	       foldTr,
+	       foldTrM,
+	       mapSubtrees,
+	       mapSubtreesM,
+	       changeRoot,
+	       nthSubtree,
+	       arityTree
+	      ) where
 
 import Operations
 
@@ -56,7 +95,7 @@ forgetNode _ = Bad $ "not a one-branch tree"
 
 -- added sequential representation
 
--- a successor function
+-- | a successor function
 goAhead :: Loc a -> Err (Loc a) 
 goAhead s@(Loc (t,p)) = case (t,p) of
   (Tr (_,_:_),Node (_,_,_:_)) -> goDown s
@@ -67,7 +106,7 @@ goAhead s@(Loc (t,p)) = case (t,p) of
      Ok t' -> return t'
      Bad _ -> goUp t >>= upsRight
 
--- a predecessor function
+-- | a predecessor function
 goBack :: Loc a -> Err (Loc a) 
 goBack s@(Loc (t,p)) = case goLeft s of
   Ok s' -> downRight s'
@@ -183,7 +222,7 @@ mapSubtreesM f t = do
   ts' <- mapM (mapSubtreesM f) ts
   return $ Tr (x, ts')
 
--- change the root without moving the pointer
+-- | change the root without moving the pointer
 changeRoot :: (a -> a) -> Loc a -> Loc a
 changeRoot f loc = case loc of
   Loc (Tr (a,ts),Top) -> Loc (Tr (f a,ts),Top)

@@ -5,9 +5,9 @@
 -- Stability   : Stable
 -- Portability : Haskell 98
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:15 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- Modified version of Osanaki's implementation.
 -----------------------------------------------------------------------------

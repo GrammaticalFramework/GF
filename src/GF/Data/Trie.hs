@@ -2,12 +2,12 @@
 -- |
 -- Module      : Trie
 -- Maintainer  : Markus Forsberg
--- Stability   : Obsolete???
+-- Stability   : Obsolete
 -- Portability : Haskell 98
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:16 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------

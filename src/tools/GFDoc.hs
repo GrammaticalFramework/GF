@@ -1,25 +1,24 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : GFDoc
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:23 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
--- (Description of the module)
+-- produce a HTML document from a list of GF grammar files. AR 6\/10\/2002
+--
+-- Added @--!@ (NewPage) and @--*@ (Item) 21\/11\/2003
 -----------------------------------------------------------------------------
 
-module Main where
+module Main (main) where
 
 import List
 import System
 import Char
-
--- produce a HTML document from a list of GF grammar files. AR 6/10/2002
--- Added --! (NewPage) and --* (Item) 21/11/2003
 
 -- to read files and write a file
 

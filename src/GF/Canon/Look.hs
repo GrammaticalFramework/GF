@@ -1,18 +1,28 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Look
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:06 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.11 $
 --
 -- lookup in GFC. AR 2003
 -----------------------------------------------------------------------------
 
-module Look where
+module Look (lookupCncInfo,
+	     lookupLin,
+	     lookupLincat,
+	     lookupPrintname,
+	     lookupResInfo,
+	     lookupGlobal,
+	     lookupOptionsCan,
+	     lookupParamValues,
+	     allParamValues,
+	     ccompute
+	    ) where
 
 import AbsGFC
 import GFC

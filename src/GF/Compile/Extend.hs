@@ -1,13 +1,13 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Extend
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:08 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.15 $
 --
 -- AR 14\/5\/2003 -- 11\/11
 --
@@ -15,7 +15,8 @@
 -- extends a module symbol table by indirections to the module it extends
 -----------------------------------------------------------------------------
 
-module Extend where
+module Extend (extendModule, extendMod
+	      ) where
 
 import Grammar
 import Ident

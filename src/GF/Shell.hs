@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:20 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.32 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------

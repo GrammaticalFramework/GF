@@ -5,16 +5,31 @@
 -- Stability   : Almost Obsolete
 -- Portability : Haskell 98
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:15 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
 --
--- some parser combinators a` la Wadler and Hutton
+-- some parser combinators a la Wadler and Hutton.
 -- no longer used in many places in GF
--- (only used in EBNF.hs)
+-- (only used in module "EBNF")
 -----------------------------------------------------------------------------
 
-module Parsers where
+module Parsers (-- * Main types and functions
+		Parser, parseResults, parseResultErr,
+		-- * Basic combinators (on any token type)
+		(...), (.>.), (|||), (+||), literal, (***),
+		succeed, fails, (+..), (..+), (<<<), (|>),
+		many, some, longestOfMany, longestOfSome,
+		closure,
+		-- * Specific combinators (for @Char@ token type)
+		pJunk, pJ, jL, pTList, pTJList, pElem,
+		(....), item, satisfy, literals, lits,
+		pParenth, pCommaList, pOptCommaList,
+		pArgList, pArgList2,
+		pIdent, pLetter, pDigit, pLetters,
+		pAlphanum, pAlphaPlusChar,
+		pQuotedString, pIntc
+	       ) where
 
 import Operations
 import Char

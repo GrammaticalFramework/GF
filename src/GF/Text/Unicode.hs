@@ -1,16 +1,16 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Unicode
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:16 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.11 $
 --
--- ad hoc Unicode conversions from different alphabets
--- AR 12/4/2000, 18/9/2001, 30/5/2002, 26/1/2004
+-- ad hoc Unicode conversions from different alphabets.
+-- AR 12\/4\/2000, 18\/9\/2001, 30\/5\/2002, 26\/1\/2004
 -----------------------------------------------------------------------------
 
 module Unicode (mkUnicode, treat) where

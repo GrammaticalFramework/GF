@@ -1,18 +1,19 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : AppPredefined
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:12 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.9 $
 --
 -- Predefined function type signatures and definitions.
 -----------------------------------------------------------------------------
 
-module AppPredefined where
+module AppPredefined (isInPredefined, typPredefined, appPredefined
+		     ) where
 
 import Operations
 import Grammar

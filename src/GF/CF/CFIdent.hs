@@ -1,18 +1,35 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : CFIdent
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:07 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.10 $
 --
 -- symbols (categories, functions) for context-free grammars.
 -----------------------------------------------------------------------------
 
-module CFIdent where
+module CFIdent (-- * Tokens and categories
+		CFTok(..), CFCat(..),
+		tS, tC, tL, tI, tV, tM, tInt,
+		prCFTok,
+		-- * Function names and profiles
+		CFFun(..), Profile,
+		wordsCFTok,
+		-- * CF Functions
+		mkCFFun, varCFFun, consCFFun, string2CFFun, stringCFFun, intCFFun, dummyCFFun,
+		cfFun2String, cfFun2Ident, cfFun2Profile, metaCFFun,
+		-- * CF Categories
+		mkCIdent, ident2CFCat, string2CFCat, catVarCF, cat2CFCat, cfCatString, cfCatInt,
+		moduleOfCFCat, cfCat2Cat, cfCat2Ident, lexCFCat,
+		-- * CF Tokens
+		string2CFTok, str2cftoks,
+		-- * Comparisons
+		compatToks, compatTok, compatCFFun, compatCF
+	       ) where
 
 import Operations
 import GFC
@@ -37,7 +54,13 @@ data CFTok =
 -- | this type should be abstract
 newtype CFCat = CFCat (CIdent,Label) deriving (Eq, Ord, Show)
 
-tS, tC, tL, tI, tV, tM :: String -> CFTok
+tS :: String -> CFTok
+tC :: String -> CFTok
+tL :: String -> CFTok
+tI :: String -> CFTok
+tV :: String -> CFTok
+tM :: String -> CFTok
+
 tS  = TS
 tC  = TC
 tL  = TL
@@ -91,8 +114,9 @@ stringCFFun = mkCFFun . AS
 intCFFun :: Int -> CFFun 
 intCFFun = mkCFFun . AI . toInteger
 
+-- | used in lexer-by-need rules
 dummyCFFun :: CFFun
-dummyCFFun = varCFFun $ identC "_" --- used in lexer-by-need rules
+dummyCFFun = varCFFun $ identC "_"
 
 cfFun2String :: CFFun -> String
 cfFun2String (CFFun (f,_)) = prt f
@@ -134,7 +158,10 @@ cat2CFCat :: (Ident,Ident) -> CFCat
 cat2CFCat = uncurry idents2CFCat
 
 -- | literals
+cfCatString :: CFCat
 cfCatString = string2CFCat (prt cPredefAbs) "String"
+
+cfCatInt :: CFCat
 cfCatInt = string2CFCat (prt cPredefAbs) "Int"
 
 
@@ -170,6 +197,7 @@ str2cftoks = map tS . words . sstr
 compatToks :: [CFTok] -> [CFTok] -> Bool
 compatToks ts us = and [compatTok t u | (t,u) <- zip ts us]
 
+compatTok :: CFTok -> CFTok -> Bool
 compatTok (TM _ _) _ = True --- hack because metas are renamed
 compatTok _ (TM _ _) = True
 compatTok t u = any (`elem` (alts t)) (alts u) where

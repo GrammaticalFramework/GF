@@ -1,24 +1,22 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : ReservedWords
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:13 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
 --
--- (Description of the module)
+-- reserved words of GF. (c) Aarne Ranta 19\/3\/2002 under Gnu GPL.
+-- modified by Markus Forsberg 9\/4. 
+-- modified by AR 12\/6\/2003 for GF2 and GFC
 -----------------------------------------------------------------------------
 
 module ReservedWords (isResWord, isResWordGFC) where
 
 import List
-
--- reserved words of GF. (c) Aarne Ranta 19/3/2002 under Gnu GPL
--- modified by Markus Forsberg 9/4. 
--- modified by AR 12/6/2003 for GF2 and GFC
 
 
 isResWord :: String -> Bool

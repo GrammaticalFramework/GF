@@ -1,18 +1,20 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : GrammarToCanon
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:08 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.16 $
 --
 -- Code generator from optimized GF source code to GFC.
 -----------------------------------------------------------------------------
 
-module GrammarToCanon where
+module GrammarToCanon (showGFC, 
+		       redModInfo, redQIdent
+		      ) where
 
 import Operations
 import Zipper

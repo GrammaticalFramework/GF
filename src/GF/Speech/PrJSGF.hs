@@ -1,15 +1,20 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : PrJSGF
+-- Maintainer  : BB
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:21 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.3 $
 --
--- (Description of the module)
+-- This module prints a CFG as a JSGF grammar.
+--
+-- FIXME: remove \/ warn \/ fail if there are int \/ string literal
+-- categories in the grammar
+--
+-- FIXME: convert to UTF-8
 -----------------------------------------------------------------------------
 
 {- 
@@ -27,11 +32,6 @@
     Modified      : 
    ************************************************************** 
 -}
-
--- FIXME: remove / warn / fail if there are int / string literal
--- categories in the grammar
-
--- FIXME: convert to UTF-8
 
 module PrJSGF (jsgfPrinter) where
 

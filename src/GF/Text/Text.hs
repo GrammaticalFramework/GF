@@ -1,28 +1,37 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : Text
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:16 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
--- (Description of the module)
+-- elementary text postprocessing. AR 21\/11\/2001.
+--
+-- This is very primitive indeed. The functions should work on
+-- token lists and not on strings. AR 5\/12\/2002
+--
+-- XML hack 14\/8\/2004; not in use yet
 -----------------------------------------------------------------------------
 
-module Text where
+module Text (untokWithXML,
+	     exceptXML,
+	     formatAsTextLit,
+	     formatAsCodeLit,
+	     formatAsText,
+	     formatAsCode,
+	     performBinds,
+	     unStringLit,
+	     concatRemSpace
+	    ) where
 
 import Operations
 import Char
 
--- elementary text postprocessing. AR 21/11/2001
--- This is very primitive indeed. The functions should work on
--- token lists and not on strings. AR 5/12/2002
--- XML hack 14/8/2004; not in use yet
-
--- does not apply untokenizer within XML tags --- heuristic "< "
+-- | does not apply untokenizer within XML tags --- heuristic "< "
 -- this function is applied from top level...
 untokWithXML :: (String -> String) -> String -> String
 untokWithXML unt s = case s of
@@ -35,7 +44,7 @@ untokWithXML unt s = case s of
  where
    unto = untokWithXML unt
 
--- ... whereas this one is embedded on a branch
+-- | ... whereas this one is embedded on a branch
 exceptXML :: (String -> String) -> String -> String
 exceptXML unt s = '<':beg ++ ">" ++ unt (drop 1 rest) where 
   (beg,rest) = span (/='>') s

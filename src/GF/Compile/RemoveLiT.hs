@@ -1,19 +1,19 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : (Module)
--- Maintainer  : (Maintainer)
+-- Module      : RemoveLiT
+-- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date $ 
--- > CVS $Author $
--- > CVS $Revision $
+-- > CVS $Date: 2005/02/18 19:21:09 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- remove obsolete (Lin C) expressions before doing anything else. AR 21/6/2003
 --
 -- What the program does is replace the occurrences of Lin C with the actual
 -- definition T given in lincat C = T ; with {s : Str} if no lincat is found.
--- The procedule is uncertain, if T contains another Lin.
+-- The procedure is uncertain, if T contains another Lin.
 -----------------------------------------------------------------------------
 
 module RemoveLiT (removeLiT) where

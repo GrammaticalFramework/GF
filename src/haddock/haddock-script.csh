@@ -2,8 +2,8 @@
 
 ######################################################################
 # Author: Peter Ljunglöf
-# Time-stamp: "2005-02-04, 11:02"
-# CVS $Date: 2005/02/04 10:10:28 $
+# Time-stamp: "2005-02-18, 14:26"
+# CVS $Date: 2005/02/18 19:21:06 $
 # CVS $Author: peb $
 #
 # a script for producing documentation through Haddock
@@ -13,7 +13,9 @@ set base = `pwd`
 set docdir = $base/haddock
 set resourcedir = $base/haddock-resources
 
-set dirs = (. api compile grammar infra shell source canonical useGrammar cf newparsing parsers notrace cfgm speech visualization for-hugs for-ghc)
+#set dirs = (. api compile grammar infra shell source canonical useGrammar cf newparsing parsers notrace cfgm speech visualization for-hugs for-ghc)
+
+set files = (`find $base -name '*.hs' -not -path '*/conversions/*' -not -path '*/parsing/*' -not -path '*/for-*' -not -path '*/haddock*' -not -name 'Lex[GC]*' -not -name 'Par[GC]*'` $base/for-ghc-nofud/*.hs)
 
 ######################################################################
 
@@ -21,20 +23,21 @@ echo 1. Creating and cleaning Haddock directory
 echo -- $docdir
 
 mkdir -p $docdir
-rm $docdir/*
+rm -r $docdir/*
 
 ######################################################################
 
-echo
-echo 2. Selecting and copying Haskell files 
+# echo
+# echo 2. Selecting and soft linking Haskell files 
 
-foreach d ($dirs) 
-    echo -- Directory: $d
-    cd $base/$d
-    foreach f (*.hs) 
-	tr "\240" " " < $f > $docdir/$f
-    end
-end
+# foreach d ($dirs) 
+#     echo -- Directory: $d
+#     cd $base/$d
+#     foreach f (*.hs) 
+#         ln -fs $base/$d/$f $docdir/$f
+# 	# tr "\240" " " < $f > $docdir/$f
+#     end
+# end
 
 ######################################################################
 
@@ -50,15 +53,15 @@ end
 ######################################################################
 
 echo
-echo 3. Invoking Haddock
+echo 2. Invoking Haddock
 
-cd $docdir
-haddock -h -t 'Grammatical Framework' *.hs
+# cd $docdir
+haddock -o $docdir -h -t 'Grammatical Framework' $files
 
 ######################################################################
 
 echo
-echo 4. Restructuring to HTML framesets
+echo 3. Restructuring to HTML framesets
 
 cd $docdir
 echo -- Substituting for frame targets inside html files
@@ -70,13 +73,13 @@ end
 
 cd $resourcedir
 echo -- Copying resource files:
-echo -- `ls`
-cp * $docdir
+echo -- `ls *.*`
+cp *.* $docdir
 
 ######################################################################
 
 echo
-echo 5. Finished
+echo 4. Finished
 echo -- The documentation is located at:
 echo -- $docdir/index.html
 
