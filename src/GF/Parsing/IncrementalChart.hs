@@ -5,21 +5,22 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:42 $ 
+-- > CVS $Date: 2005/03/21 22:31:49 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Implementation of /incremental/ deductive parsing,
 -- i.e. parsing one word at the time.
 -----------------------------------------------------------------------------
 
 
-module GF.Parsing.IncrementalChart (-- * Type definitions
-			 IncrementalChart,
-			 -- * Functions
-			 buildChart,
-			 chartList
-			) where
+module GF.Parsing.IncrementalChart
+    (-- * Type definitions
+     IncrementalChart,
+     -- * Functions
+     buildChart,
+     chartList
+    ) where
 
 import Array
 import GF.Data.SortedList

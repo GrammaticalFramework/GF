@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:43 $ 
+-- > CVS $Date: 2005/03/21 22:31:51 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- The main parsing module, parsing GFC grammars
 -- by translating to simpler formats, such as PMCFG and CFG
@@ -34,11 +34,11 @@ import Operations
 import GF.Data.SortedList 
 -- Conversion and parser modules
 import GF.Data.Assoc
-import GF.Parsing.Parser
+import GF.Parsing.Utilities
 -- import ConvertGrammar
-import GF.Conversion.GrammarTypes
-import qualified GF.Conversion.MCFGrammar as M
-import qualified GF.Conversion.CFGrammar as C
+import GF.Parsing.GrammarTypes
+import qualified GF.Parsing.MCFGrammar as M
+import qualified GF.Parsing.CFGrammar as C
 import qualified GF.Parsing.ParseMCFG as PM
 import qualified GF.Parsing.ParseCFG as PC
 --import MCFRange

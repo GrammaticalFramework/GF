@@ -5,21 +5,21 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:42 $ 
+-- > CVS $Date: 2005/03/21 22:31:55 $ 
 -- > CVS $Author: peb $
 -- > CVS $Revision: 1.1 $
 --
 -- Simplest possible implementation of MCFG chart parsing
 -----------------------------------------------------------------------------
 
-module GF.Parsing.MCFParserBasic (parse
-		      ) where
+module GF.Parsing.ParseMCFG.Basic 
+    (parse) where
 
 import Tracing
 
 import Ix
-import GF.Parsing.Parser
-import GF.Conversion.MCFGrammar
+import GF.Parsing.Utilities
+import GF.Parsing.MCFGrammar
 import GF.Parsing.GeneralChart 
 import GF.Data.Assoc
 import GF.Data.SortedList

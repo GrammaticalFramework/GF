@@ -5,7 +5,7 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 14:17:43 $ 
+-- > CVS $Date: 2005/03/21 22:31:52 $ 
 -- > CVS $Author: peb $
 -- > CVS $Revision: 1.1 $
 --
@@ -13,16 +13,17 @@
 -----------------------------------------------------------------------------
 
 
-module GF.Parsing.Parser ( -- * Symbols
-		Symbol(..), symbol, mapSymbol,
-		-- * Edges
-		Edge(..),
-		-- * Parser input
-		Input(..), makeInput, input, inputMany,
-		-- * charts, parse forests & trees
-		ParseChart, ParseForest(..), ParseTree(..),
-		chart2forests, forest2trees
-	      ) where
+module GF.Parsing.Utilities 
+    ( -- * Symbols
+      Symbol(..), symbol, mapSymbol,
+      -- * Edges
+      Edge(..),
+      -- * Parser input
+      Input(..), makeInput, input, inputMany,
+      -- * charts, parse forests & trees
+      ParseChart, ParseForest(..), ParseTree(..),
+      chart2forests, forest2trees
+    ) where
 
 -- haskell modules:
 import Monad
