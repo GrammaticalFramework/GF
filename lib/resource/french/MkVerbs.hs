@@ -9,19 +9,26 @@ putRule = appendFile "verbs.gf" . mkRule
 
 mkRule s = case s of
   n:v:cs -> 
-    "fun " ++ v ++ cat ++ " : " ++ cat ++ " ;\n" ++ 
-    "lin " ++ v ++ cat ++ 
+    "fun " ++ fv ++ cat ++ " : " ++ cat ++ " ;\n" ++ 
+    "lin " ++ fv ++ cat ++ 
       " = v_nancy" ++ n ++ " \"" ++ v ++ "\"" ++ ext ++ " ;\n"
       where
    (cat,ext) = case cs of
-     "I":"T":_  -> ("VN2", " ** {aux = VHabere ; c = Acc}")
-     "T":_      -> ("VN2", " ** {aux = VHabere ; c = Acc}")
+     _ | elem "T" cs  -> ("VN2", " ** {aux = AHabere ; c = Acc}")
      "a":au     -> ("VN2", " ** {aux = " ++ aux au ++ " ; c = Dat}")
      "de":au    -> ("VN2", " ** {aux = " ++ aux au ++ " ; c = Gen}")
+     "P":_      -> ("VNR", "")
      au         -> ("VN",  " ** {aux = " ++ aux au ++ "}")
+
+   fv = map unhyph v
+
+   unhyph c = case c of
+     '-' -> '_'
+     _   -> c
+
    aux au = case au of
-     "etre":_ -> "VEsse"
-     _        -> "VHabere"
+     "etre":_ -> "AEsse"
+     _        -> "AHabere"
 
 combine ls = case ls of
   l@(n:v:_:c:_):vs -> 
