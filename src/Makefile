@@ -1,7 +1,7 @@
 GHMAKE=ghc 
 GHCFLAGS=-package lang -package util
 GHCFUDFLAG=-package Fudgets
-GHCINCLUDE=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc
+GHCINCLUDE=-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -ifor-ghc -iparsing
 
 all:
 	make today ; make ghc
@@ -16,7 +16,7 @@ shell:
 clean: 
 	rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
 hugs:
-	hugs -P.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile: GF
+	hugs -P.:for-hugs:api:source:canonical:cf:grammar:infra:shell:useGrammar:compile:parsing GF
 today:
 	runhugs util/MkToday
 javac:
