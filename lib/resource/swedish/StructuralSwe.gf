@@ -22,9 +22,9 @@ concrete StructuralSwe of Structural =
   ThisNP = regNameNounPhrase ["det här"] Neutr NoMasc ; 
   ThatNP = regNameNounPhrase ["det där"] Neutr NoMasc ; 
   TheseNumNP n = 
-    {s = \\c => ["det här"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
+    {s = \\c => ["de här"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
   ThoseNumNP n = 
-    {s = \\c => ["det där"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
+    {s = \\c => ["de där"] ++ n.s ! npCase c ; g = Neutr ; n = Pl} ;
 
   EveryDet = varjeDet ; 
   AllMassDet   = mkDeterminerSgGender2 "all" "allt" IndefP ; 
@@ -77,10 +77,10 @@ concrete StructuralSwe of Structural =
   SomethingNP  = nameNounPhrase (mkProperName "någonting" Neutr NoMasc) ; 
   NothingNP    = nameNounPhrase (mkProperName "ingenting" Neutr NoMasc) ; 
 
-----  CanVV     = mkVerb "kunna" "kan" "kunn"  "kunde" "kunnat" ** {isAux = True} ; ---
-----  CanKnowVV = mkVerb "kunna" "kan" "kunn"  "kunde" "kunnat" ** {isAux = True} ; ---
-----  MustVV    = mkVerb "få"    "måste" "få"  "fick"  "måst"   ** {isAux = True} ; ---
-----  WantVV    = mkVerb "vilja" "vill" "vilj" ** {isAux = True} ; ---
+  CanVV     = mkVerb "kunna" "kan" "kunn"  "kunde" "kunnat" "kunnen" ** {isAux = True} ;
+  CanKnowVV = mkVerb "kunna" "kan" "kunn"  "kunde" "kunnat" "kunnen" ** {isAux = True} ;
+  MustVV    = mkVerb "få"    "måste" "få"  "fick"  "måst"   "måst" ** {isAux = True} ; ---
+  WantVV    = mkVerb "vilja" "vill" "vilj" "ville" "velat" "velad" ** {isAux = True} ; ---
 
   EverywhereNP = advPost "varstans" ;
   SomewhereNP = advPost "någonstans" ;
