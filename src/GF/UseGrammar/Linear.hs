@@ -19,6 +19,7 @@ import Operations
 import Zipper
 
 import Monad
+import List (intersperse)
 
 -- Linearization for canonical GF. AR 7/6/2003
 
@@ -143,7 +144,7 @@ allLinsOfTree gr a e = err (singleton . str) id $ do
 
 -- the value is a list of structures arranged as records of tables of terms
 allLinsAsRec :: CanonGrammar -> Ident -> A.Tree -> Err [[(Label,[([Patt],Term)])]]
-allLinsAsRec gr c t = linearizeNoMark gr c t >>= allLinValues
+allLinsAsRec gr c t = linearizeNoMark gr c t >>= expandLinTables gr >>= allLinValues
 
 -- the value is a list of structures arranged as records of tables of strings
 -- only taking into account string fields
@@ -153,7 +154,8 @@ allLinTables gr c t = do
   mapM (mapM getS) r'
  where 
    getS (lab,pss) = liftM (curry id lab) $ mapM gets pss
-   gets (ps,t) = liftM (curry id ps . concat . map str2strings) $ strsFromTerm t
+   gets (ps,t) = liftM (curry id ps . cc . map str2strings) $ strsFromTerm t
+   cc = concat . intersperse ["/"]
 
 prLinTable :: [[(Label,[([Patt],[String])])]] -> [String]
 prLinTable = concatMap prOne . concat where

@@ -14,15 +14,15 @@ resource TypesFin = open Prelude in {
 --2 Enumerated parameter types 
 --
 -- These types are the ones found in school grammars.
--- Their parameter values are atomic. We omit three of the cases, not
--- occurring in the resource syntax. The accusative cases are only
+-- Their parameter values are atomic. The accusative cases are only
 -- defined in syntax; in morphology, there is a special accusative for
 -- pronouns.
 
 param 
   Number = Sg | Pl ;
   Case   = Nom | Gen | Part | Transl | Ess 
-         | Iness | Elat | Illat | Adess | Ablat | Allat ;
+         | Iness | Elat | Illat | Adess | Ablat | Allat 
+         | Abess ; ---- | Comit | Instruct ;
   Person = P1 | P2 | P3 ;
   Degree = Pos | Comp | Sup ;
   Gender = NonHuman | Human ;
@@ -66,10 +66,14 @@ oper
 --
 -- The major division is between the comparison degrees, but it
 -- is also good to leave room for adjectives that cannon be compared.
--- Such adjectives are like common nouns.
+-- Such adjectives are like common nouns, except for the adverbial form.
 
-  Adjective : Type = CommonNoun ;
-  AdjDegr   : Type = {s : Degree => NForm => Str} ;
+param
+  AForm = AN NForm | AAdv ;
+
+oper
+  Adjective : Type = {s : AForm => Str} ;
+  AdjDegr   : Type = {s : Degree => AForm => Str} ;
 
 --3 Verbs
 --
