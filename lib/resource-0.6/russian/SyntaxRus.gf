@@ -152,11 +152,11 @@ oper
   npGenDet : Number -> Numeral -> NounPhrase -> CommNounPhrase -> NounPhrase = 
     \n,dva, masha,mashina -> 
       {s = \\c => case masha.pron of 
-           { True =>  masha.s ! (mkPronForm Nom No (Poss (gNum mashina.g n))) ++ 
-                   dva.s ! Nom ! mashina.g ++ mashina.s ! n ! (extCase c)  ;
-             False => masha.s ! (mkPronForm Gen No (Poss (gNum mashina.g n))) ++ 
-                   dva.s ! Nom ! mashina.g ++ mashina.s ! n ! (extCase c)  
-           } ;
+           { True =>  masha.s ! (mkPronForm  (extCase c) No (Poss (gNum mashina.g n))) ++ 
+                   dva.s ! (extCase c) ! mashina.g ++ mashina.s ! n ! (extCase c)  ;
+             False =>  dva.s ! (extCase c) ! mashina.g ++ mashina.s ! n ! (extCase c)  ++         
+                             masha.s ! (mkPronForm Gen No (Poss (gNum mashina.g n))) 
+       } ;
        n = n ; p = P3 ;  g = mashina.g ; anim = mashina.anim ; pron = False
       } ;
 

@@ -21,9 +21,9 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     public MouseEvent m2;
     public static String selectedText="";
 
-    public static boolean debug = false;
+    public static boolean debug = true;
     public static boolean debug3 = false;
-    public static boolean debug2 = false;
+    public static boolean debug2 = true;
     public static boolean selectionCheck = false;
     public static String focusPosition = "";
     public static String stringToAppend = "";
@@ -692,11 +692,14 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
           //form lang and Menu menu: 
           cbMenuItem = new JCheckBoxMenuItem(result.substring(4));
           if (debug) System.out.println ("menu item: "+result.substring(4));   
-          cbMenuItem.setSelected(true);
+          if ((result.substring(4)).equals("Abstract"))
+            cbMenuItem.setSelected(false);
+          else 
+            cbMenuItem.setSelected(true);
           cbMenuItem.setActionCommand("lang");
           cbMenuItem.addActionListener(myListener);
           langMenu.add(cbMenuItem);
-/*          if ((result.substring(4)).equals("Abstract"))
+/*        
           {
              submenu.add(rbMenuItemAbs);
              if (selectedMenuLanguage.equals("Abstract"))
@@ -770,7 +773,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       // in case focus tag is cut into two lines:
       if (l==-1) l=l2-7;         
       m=result.indexOf("position",l);
-      if (debug2) System.out.println("'POSITION START: "+m); 
+      if (debug2) System.out.println("POSITION START: "+m); 
       n=result.indexOf("]",m);
       if (debug2) System.out.println("POSITION END: "+n); 
       if (debug)
@@ -802,7 +805,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
           result= result.substring(0,i-1)+result.substring(j+2);
         else
           result= result.substring(0,i-2)+result.substring(j+1);
-     j= result.indexOf("<focus");
+      j= result.indexOf("<focus");
       l2 = result.indexOf("focus");    
       // in case focus tag is cut into two lines:
       if ((l2!=-1)&&(j==-1)) j=l2-7;
@@ -1634,6 +1637,10 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     {
       if (debug2) 
         System.out.println("STRING: "+s);
+      if (debug2) 
+        System.out.println("where selection start is: "+selectionStart);
+      if (debug2) 
+        System.out.println("where selection end is: "+selectionEnd);
       currentLength = 0;
       newLength=0;
       oldLength = output.getText().length();               
@@ -1641,13 +1648,14 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
       restString = s;
       int m2, m1;
       String position = "";
-      if ((selectionStart>-1)&&(selectionEnd>selectionStart))
+//      if ((selectionStart>-1)&&(selectionEnd>=selectionStart))
+      if (selectionStart>-1)
       {
         selStart = selectionStart;
         selEnd = selectionEnd;                               
-        //if (debug2) 
+        if (debug2) 
                 System.out.println("SELECTION: " + selStart + " "+selEnd+ "TOTAL: "+s.length());
-        if (selEnd>-1)
+        if (selEnd>selStart)
           selectionCheck = (s.substring(selStart, selEnd).indexOf("<")==-1);
         l = restString.indexOf("<subtree");
         l2 = restString.indexOf("</subtree");
@@ -1739,7 +1747,7 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
             //System.out.println(" STRING: "+restString.substring(currentLength));
           }
         } //while
-        if ((selEnd>-1)&&(outputVector.size()>0))
+        if ((selEnd>=selStart)&&(outputVector.size()>0))
         {
           // exclamation sign etc.:
           if (currentLength>selEnd)
@@ -1763,9 +1771,34 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
           }
         }
       } //if selectionStart>-1    
+      else
+      {
+        System.out.println("NO SELECTION IN THE TEXT TO BE APPENDED!");
+        //cutting tags from previous focuses if any:
+        int r = restString.indexOf("</subtree>");
+        while (r>-1)
+        {
+          // check if punktualtion marks like . ! ? are at the end of a sentence:
+          if (restString.charAt(r+10)==' ')
+            restString = restString.substring(0,r)+restString.substring(r+11);
+          else
+            restString = restString.substring(0,r)+restString.substring(r+10);
+          r = restString.indexOf("</subtree>");
+        }
+        r = restString.indexOf("<subtree");
+        while (r>-1)
+        {
+          int t = restString.indexOf(">",r);
+          if (t<restString.length()-2)
+            restString = restString.substring(0,r)+restString.substring(t+2);
+          else 
+            restString = restString.substring(0,r);
+          r = restString.indexOf("<subtree");
+        }
+      }
       // appending:
       output.append(restString);
-      if (selectionEnd>-1)
+      if ((selectionEnd>=selectionStart)&&(selectionStart>-1))
       try {  
         output.getHighlighter().addHighlight(selStart+oldLength, selEnd+oldLength+1, new DefaultHighlighter.DefaultHighlightPainter(Color.green) );
         selectedText = output.getText().substring(selStart+oldLength, selEnd+oldLength+1);
