@@ -32,11 +32,20 @@ type Ss = [String]
 
 matchPrefix :: Ss -> [(Ss,[String])] -> [String] -> Ss
 matchPrefix s vs t = 
-  head ([u | (u,as) <- vs, any (\c -> isPrefixOf c (concat t)) as] ++ [s])
+  head $ [u | 
+    (u,as) <- vs, 
+    any (\c -> isPrefixOf c (concat (unmarkup t))) as
+  ] ++ [s]
 
 matchSuffix :: String -> Ss -> [(Ss,[String])] -> Ss
 matchSuffix t s vs = 
   head ([u | (u,as) <- vs, any (\c -> isSuffixOf c t) as] ++ [s])
+
+unmarkup :: [String] -> [String]
+unmarkup = filter (not . isXMLtag) where
+  isXMLtag s = case s of
+    '<':cs@(_:_) -> last cs == '>'
+    _ -> False
 
 str2strings :: Str -> Ss
 str2strings (Str st) = alls st where 

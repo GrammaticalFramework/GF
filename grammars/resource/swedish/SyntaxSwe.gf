@@ -507,7 +507,7 @@ oper
   DitransVerb = TransVerb ** {s3 : Preposition} ; 
 
   mkDitransVerb : Verb -> Preposition -> Preposition -> DitransVerb = \v,p1,p2 -> 
-    v ** {s3 = p1 ; s3 = p2} ;
+    v ** {s2 = p1 ; s3 = p2} ;
 
   complDitransVerb : 
     Bool -> DitransVerb -> NounPhrase -> NounPhrase -> VerbPhrase = 
@@ -538,7 +538,7 @@ oper
      s3 = \\g,n => spelar.s3 ! g ! n ++ (if_then_else Str postp bra.s [])
     } ;
 
-  advAdjPhrase : Adverb -> AdjPhrase -> AdjPhrase = \mycket, dyr ->
+  advAdjPhrase : SS -> AdjPhrase -> AdjPhrase = \mycket, dyr ->
     {s = \\a,c => mycket.s ++ dyr.s ! a ! c ;
      p = dyr.p
     } ;
@@ -903,7 +903,7 @@ oper
 -- This class covers adverbials such as "annars", "därför", which are prefixed
 -- to a sentence to form a phrase.
 
-  advSentence : Adverb -> Sentence -> Utterance = \annars,soverhan ->
+  advSentence : SS -> Sentence -> Utterance = \annars,soverhan ->
     ss (annars.s ++ soverhan.s ! Inv ++ ".") ;
 
 

@@ -5,12 +5,14 @@ import Option
 import Ident
 import AbsGFC
 import GFC
+import Values (isPredefCat,cPredefAbs)
 import PrGrammar
 import CMacros
 import qualified Modules as M
 import CF
 import CFIdent
-import List (nub)
+import Morphology
+import List (nub,partition)
 import Monad
 
 -- AR 27/1/2000 -- 3/12/2001 -- 8/6/2003 
@@ -28,8 +30,8 @@ canon2cf opts gr c = do
   rules0 <- liftM concat $ mapM (uncurry (cnc2cfCond opts)) mms
   let rules = filter (not . isCircularCF) rules0 ---- temporarily here
   let grules = groupCFRules rules
-  let predef = mkCFPredef $ map fst grules
-  return $ CF (grules, predef)
+  let predef = mkCFPredef opts grules
+  return $ CF predef
 
 cnc2cfCond :: Options -> Ident -> [(Ident,Info)] -> Err [CFRule]
 cnc2cfCond opts m gr = 
@@ -138,16 +140,40 @@ term2CFItems m t = errIn "forming cf items" $ case t of
     tryMkCFTerm itss = return itss
 
     extrR arg lab = case (arg,lab) of
-      (Arg (A cat pos), l@(L _))  -> return [[PNonterm (CIQ m cat) pos l True]]
-      (Arg (A cat pos), l@(LV _)) -> return [[PNonterm (CIQ m cat) pos l False]]
-      (Arg (AB cat pos b), l@(L _))  -> return [[PNonterm (CIQ m cat) pos l True]]
-      (Arg (AB cat pos b), l@(LV _)) -> return [[PNonterm (CIQ m cat) pos l False]]
+      (Arg (A cat pos), l@(L _))  -> return [[PNonterm (cIQ cat) pos l True]]
+      (Arg (A cat pos), l@(LV _)) -> return [[PNonterm (cIQ cat) pos l False]]
+      (Arg (AB cat pos b), l@(L _))  -> return [[PNonterm (cIQ cat) pos l True]]
+      (Arg (AB cat pos b), l@(LV _)) -> return [[PNonterm (cIQ cat) pos l False]]
                                      ---- ??
       _   -> prtBad "cannot extract record field from" arg
+    cIQ c = if isPredefCat c then CIQ cPredefAbs c else CIQ m c
 
-mkCFPredef :: [CFCat] -> CFPredef
-mkCFPredef cats s = 
-  [(cat,         metaCFFun)     | TM _ _ <- [s], cat <- cats] ++
-  [(cat,         varCFFun x)    | TV x   <- [s], cat <- cats] ++
-  [(cfCatString, stringCFFun t) | TL t   <- [s]]              ++
-  [(cfCatInt,    intCFFun t)    | TI t   <- [s]]
+mkCFPredef :: Options -> [CFRuleGroup] -> ([CFRuleGroup],CFPredef)
+mkCFPredef opts rules = (ruls, \s -> preds0 s ++ look s) where
+  (ruls,preds) = if oElem lexerByNeed opts  -- option -cflexer
+                   then predefLexer rules 
+                   else (rules,NT)
+  preds0 s = 
+    [(cat,         metaCFFun)     | TM _ _ <- [s], cat <- cats] ++
+    [(cat,         varCFFun x)    | TV x   <- [s], cat <- cats] ++
+    [(cfCatString, stringCFFun t) | TL t   <- [s]]              ++
+    [(cfCatInt,    intCFFun t)    | TI t   <- [s]]
+  cats = map fst rules
+  look s = errVal [] $ liftM concat $ 
+             mapM (flip justLookupTree preds . tS) $ wordsCFTok s --- for TC tokens
+
+--- TODO: use trie instead of bintree; integrate with morphology
+predefLexer :: [CFRuleGroup] -> ([CFRuleGroup],BinTree (CFTok,[(CFCat, CFFun)]))
+predefLexer groups = (reverse ruls, sorted2tree $ sortAssocs preds) where
+  (ruls,preds) = foldr mkOne ([],[]) groups
+  mkOne group@(cat,rules) (rs,ps) = (rule:rs,pre ++ ps) where
+    (rule,pre) = case partition isLexical rules of
+      ([],_) -> (group,[])
+      (ls,rest) -> ((cat,rest), concatMap mkLexRule ls) --- useLexRule cat : rest
+  isLexical (f,(c,its)) = case its of
+    [CFTerm (RegAlts ws)] -> True
+    _ -> False
+--  useLexRule cat = (dummyCFFun,(cat,[CFNonterm (lexCFCat cat)])) -- not needed
+  mkLexRule r = case r of
+    (fun,(cat,[CFTerm (RegAlts ws)])) -> [(tS w, (cat,fun)) | w <- ws]
+    _ -> []

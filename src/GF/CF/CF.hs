@@ -15,8 +15,9 @@ import Char (isUpper, isLower, toUpper, toLower)
 -- abstract type CF. 
 -- Invariant: each category has all its rules grouped with it 
 --      also: the list is never empty (the category is just missing then)
-newtype CF  = CF ([(CFCat,[CFRule])], CFPredef) 
+newtype CF  = CF ([CFRuleGroup], CFPredef) 
 type CFRule = (CFFun, (CFCat, [CFItem]))
+type CFRuleGroup = (CFCat,[CFRule])
 
 -- CFPredef is a hack for variable symbols and literals; normally = const []
 data CFItem = CFTerm RegExp | CFNonterm CFCat deriving (Eq, Ord,Show)

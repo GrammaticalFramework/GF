@@ -33,6 +33,7 @@ type BindVs = [[I.Ident]]
 -- (2) term2trm:  restore Bindings from Binds
 
 tree2term :: CFTree -> Err ITerm
+-- tree2term (CFTree (f,(_,[t]))) | f == dummyCFFun = tree2term t -- not used
 tree2term (CFTree (cff@(CFFun (fun,pro)), (_,trees))) = case fun of
   AM _ -> return IMeta
   _ -> do
