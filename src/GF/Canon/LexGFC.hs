@@ -65,20 +65,19 @@ prToken t = case t of
 
   _ -> show t
 
+data BTree = N | B String Tok BTree BTree deriving (Show)
+
 eitherResIdent :: (String -> Tok) -> String -> Tok
-eitherResIdent tv s = if isResWord s then (TS s) else (tv s) where
-  isResWord s = isInTree s $
-    B "lin" (B "concrete" (B "Type" (B "Str" (B "Ints" N N) N) (B "cat" (B "abstract" N N) N)) (B "fun" (B "flags" (B "data" N N) N) (B "in" (B "grammar" N N) N))) (B "pre" (B "open" (B "of" (B "lincat" N N) N) (B "param" (B "oper" N N) N)) (B "transfer" (B "table" (B "resource" N N) N) (B "variants" N N)))
+eitherResIdent tv s = treeFind resWords
+    where 
+    treeFind N = tv s
+    treeFind (B a t left right) | s < a  = treeFind left
+				| s > a  = treeFind right
+				| s == a = t
 
-data BTree = N | B String BTree BTree deriving (Show)
+resWords = b "lin" (b "concrete" (b "Type" (b "Str" (b "Ints" N N) N) (b "cat" (b "abstract" N N) N)) (b "fun" (b "flags" (b "data" N N) N) (b "in" (b "grammar" N N) N))) (b "pre" (b "open" (b "of" (b "lincat" N N) N) (b "param" (b "oper" N N) N)) (b "transfer" (b "table" (b "resource" N N) N) (b "variants" N N)))
+      where b s = B s (TS s)
 
-isInTree :: String -> BTree -> Bool
-isInTree x tree = case tree of
-  N -> False
-  B a left right
-   | x < a  -> isInTree x left
-   | x > a  -> isInTree x right
-   | x == a -> True
 
 unescapeInitTail :: String -> String
 unescapeInitTail = unesc . tail where
@@ -130,7 +129,7 @@ alexGetChar (p, _, (c:s)) =
 alexInputPrevChar :: AlexInput -> Char
 alexInputPrevChar (p, c, s) = c
 
-alex_action_1 = tok (\p s -> PT p (TS (shareString s))) 
+alex_action_1 = tok (\p s -> PT p (TS $ shareString s)) 
 alex_action_2 = tok (\p s -> PT p (eitherResIdent (TV . shareString) s)) 
 alex_action_3 = tok (\p s -> PT p (TL $ unescapeInitTail $ shareString s)) 
 alex_action_4 = tok (\p s -> PT p (TI s))    
