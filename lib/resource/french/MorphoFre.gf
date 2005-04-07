@@ -59,7 +59,7 @@ oper
 
   mkNomReg : Str -> Gender -> CNom = \cas -> 
     let cass = case dp 2 cas of {
-      "al" => init cas ++ "ux" ;
+      "al" => init cas + "ux" ;
       "au" => cas + "x" ;
       "eu" => cas + "x" ;
       "ou" => cas + "x" ;
