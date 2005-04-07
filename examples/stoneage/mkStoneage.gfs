@@ -1,5 +1,6 @@
 i -src -conversion=nondet -optimize=share examples/stoneage/StoneageEng.gf
 i -src -conversion=nondet -optimize=share examples/stoneage/StoneageFre.gf
+i -src -conversion=nondet -optimize=share examples/stoneage/StoneageIta.gf
 i -src -conversion=nondet -optimize=share examples/stoneage/StoneageNor.gf
 i -src -conversion=nondet -optimize=share examples/stoneage/StoneageSwe.gf
 pm -printer=gfcm | wf stoneage.gfcm
