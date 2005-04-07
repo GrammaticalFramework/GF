@@ -2,7 +2,7 @@
 
 concrete SwadeshLexIta of SwadeshLex = CategoriesIta 
   ** open StructuralIta, RulesIta, SyntaxIta, ParadigmsIta,
-          BasicIta, Prelude in {
+          BasicIta, BeschIta, Prelude in {
 
   lin
 
@@ -115,7 +115,7 @@ concrete SwadeshLexIta of SwadeshLex = CategoriesIta
     dust_N = regN "polvere" ;
     ear_N = regN "orecchio" ;
     earth_N = regN "terra" ;
-    egg_N = regN "oeuf" ;--
+    egg_N = mkN "uovo" "uova" masculine ; -- fem in Pl
     eye_N = regN "occhio" ;
     fat_N = regN "grasso" ;
     father_N = UseN2 father_N2 ;
@@ -186,51 +186,51 @@ concrete SwadeshLexIta of SwadeshLex = CategoriesIta
 
     -- Verbs
 
---    bite_V = UseV2 mordre_V2 ;--
+    bite_V = verboV (esplodere_51 "mordere") ;
     blow_V = regV "soffiare" ;
     breathe_V = regV "respirare" ;
     burn_V = regV "bruciare" ;
---    come_V = venir_V ;
+    come_V = BasicIta.come_V ;
     count_V = regV "contare" ;
     cut_V = regV "tagliare" ;
---    die_V = mourir_V ;
+    die_V = BasicIta.die_V ;
     dig_V = regV "scavare" ;
---    drink_V = UseV2 boire_V2 ;--
+    drink_V = drink_V2 ;
     eat_V = regV "mangiare" ;
---    fall_V = regV "cadere" ;--
---    fear_V = UseV2 craindre_V2 ;--
+    fall_V = essereV (verboV (cadere_28 "cadere")) ;
+    fear_V = fear_VS ;
     fight_V = regV "lottare" ;
     float_V = regV "galleggiare" ;
---    flow_V = regV "fluire" ;--
+    flow_V = verboV (finire_100 "fluire") ;
     fly_V = regV "volare" ;
     freeze_V = regV "gelare" ;
---    give_V = regV "dare" ;--
---    hear_V = UseV2 entendre_V2 ;--
+    give_V = verboV (dare_15 "dare") ;
+    hear_V = hear_V2 ;
     hit_V = regV "colpire" ;
---    hold_V = UseV2 tenir_V2 ;--
+    hold_V = verboV (venire_110 "tenire") ;
     hunt_V = regV "cacciare" ;
---    kill_V = regV "uccidere" ;--
---    know_V = UseV2 savoir_V2 ;--
---    laugh_V = UseV2 rire_V2 ;--
---    lie_V = UseV2 étendre_V2 ;--
---    live_V = UseV2 vivre_V2 ;--
+    kill_V = verboV (ridere_74 "uccidere") ;
+    know_V = know_V2 ;
+    laugh_V = verboV (ridere_74 "ridere") ;
+    lie_V = verboV (piacere_64 "giacere") ;
+    live_V = live_V ;
     play_V = regV "giocare" ;
     pull_V = regV "tirare" ;
---    push_V = regV "spingere" ;--
+    push_V = verboV (cingere_31 "spingere") ;
     rub_V = regV "strofinare" ;
---    say_V = UseV2 dire_V2 ;--
+    say_V = say_VS ;
     scratch_V = regV "graffiare" ;
---    see_V = UseV2 voir_V2 ;--
---    sew_V = cucire--
+    see_V = see_V2 ;
+    sew_V = verboV (cucire_103 "cucire") ;
     sing_V = regV "cantare" ;
---    sit_V = UseV2 asseoir_V2 ;--  --- refl
---    sleep_V = UseV2 dormir_V2 ;--
---    smell_V = UseV2 sentir_V2 ;--
+    sit_V = verboV (sedere_84 "sedere") ;  --- refl?
+    sleep_V = sleep_V ;
+    smell_V = verboV (sentire_99 "sentire") ;
     spit_V = regV "sputare" ;
---    split_V = UseV2 dividere ;--
---    squeeze_V = regV "spremere" ;--
+    split_V = verboV (ridere_74 "dividere") ;
+    squeeze_V = verboV (temere_20 "spremere") ;
     stab_V = regV "pugnalare" ;
---    stand_V = regV "stare" ;--   ---- in piedi
+    stand_V = verboV (stare_16 "stare") ;   ---- in piedi
     suck_V = regV "succhiare" ;
     swell_V = regV "gonfiare" ;
     swim_V = regV "nuotare" ;
