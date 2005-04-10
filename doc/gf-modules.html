@@ -46,6 +46,8 @@ module system related to the already familiar uses of GF grammars.
 
 
 
+<h2>The principal module types</h2>
+
 <h3>Abstract syntax</h3>
 
 Any GF grammar that is used in an application
@@ -534,16 +536,142 @@ all refer to the same category, declared in the module
 
 The command <tt>visualize_graph</tt> (<tt>vg</tt>) shows the
 dependency graph in the current GF shell state. The graph can
-also be saved in a file and used e.g. in documentation.
+also be saved in a file and used e.g. in documentation, by the
+command <tt>print_multi -graph</tt> (<tt>pm -graph</tt>).
 
 
 <h3>Reuse of top-level grammars as resources</h3>
 
+Top-level grammars have a straightforward translation to
+<tt>resource</tt> modules. The translation concerns
+pairs of abstract-concrete judgements:
+<pre>
+  cat C ;               ===>  oper C : Type = T ;
+  lincat C = T ;
+
+  fun f : A ;           ===>  oper f : A = t ;
+  lin f = t ;
+</pre>
+Due to this translation, a <tt>concrete</tt> module
+can be <tt>open</tt>ed in the same way as a
+<tt>resource</tt> module; the translation is done
+on the fly (it is computationally very cheap).
+
+<p>
+
+Modular grammar engineering often means that some grammarians
+focus on the semantics of the domain whereas others take care
+of linguistic details. Thus a typical reuse opens a
+linguistically oriented <b>resource grammar</b>,
+<pre>
+  abstract Resource = {
+    cat S ; NP ; A ;
+    fun PredA : NP -> A -> S ;
+    }
+  concrete ResourceEng of Resource = {
+    lincat S = ... ; 
+    lin PredA = ... ;
+    }
+</pre>
+The <b>application grammar</b>, instead of giving linearizations
+explicitly, just reduces them to categories and functions in the
+resource grammar:
+<pre>
+  concrete ArithmeticEng of Arithmetic = LogicEng ** open ResourceEng in {
+    lincat Nat = NP ;
+    lin Even x = PredA x (regA "even") ;
+    }
+</pre>
+If the resource grammar is only capable of generating grammatically
+correct expressions, then the grammaticality of the application
+grammar is also guaranteed: the type checker of GF is used as
+grammar checker.
+To guarantee distinctions between categories that have
+the same linearization type, the actual translation used
+in GF adds to every linearization type and linearization
+a <b>lock field</b>,
+<pre>
+  cat C ;               ===>  oper C : Type = T ** {lock_C : {}} ;
+  lincat C = T ;
+
+  fun f : ... -> C ;    ===>  oper f : A = t ** {lock_C = &lt;>};
+  lin f = t ;
+</pre>
+(Notice that the latter translation is type-correct because of
+record subtyping, which means that <tt>t</tt> can ignore the
+lock fields of its arguments.) An application grammarian who
+only uses resource grammar categories and functions never
+needs to write these lock fields herself. Having to do so
+serves as a warning that the grammaticality guarantee given
+by the resource grammar no longer holds.
+
+
+<h2>Additional module types</h2>
 
 <h3>Interfaces, instances, and incomplete grammars</h3>
 
+One difference between top-level grammars and <tt>resource</tt>
+modules is that the former systematically separete the
+declarations of categories and functions from their definitions.
+In the reuse translation creating and <tt>oper</tt> judgement,
+the declaration coming from the <tt>abstract</tt> module is put
+together with the definition coming from the <tt>concrete</tt>
+module.
+
+<p>
+
+However, the separation of declarations and definitions is so
+useful a notion that GF also has specific modules types that
+<tt>resource</tt> modules into two parts. In this splitting,
+an <tt>interface</tt> module corresponds to an abstract syntax,
+in giving the declarations of operations (and parameter types).
+For instance, a generic markup interface would look as follows:
+<pre>
+  interface Markup = open Util in {
+    oper Boldface : Str -> Str ;
+    oper Heading  : Str -> Str ;
+    oper markupSS : (Str -> Str) -> SS -> SS = \f,r ->
+      ss (f r.s) ;
+    } 
+</pre>
+The definitions of the constants declared in an <tt>interface</tt>
+are given in an <tt>instance</tt> module (which is always <tt>of</tt>
+an interface, in the same way as a <tt>concrete</tt> is always
+<tt>of</tt> an abstract). The following <tt>instance</tt>s
+define markup in HTML and latex.
+<pre>
+  instance MarkupHTML of Markup = open Util in {
+    oper Boldface s = "&lt;b>" ++ s ++ "&lt;/b>" ; 
+    oper Heading  s = "&lt;h2>" ++ s ++ "&lt;/h2>" ; 
+    } 
+
+  instance MarkupLatex of Markup = open Util in {
+    oper Boldface s = "\\textbf{" ++ s ++ "}" ; 
+    oper Heading  s = "\\section{" ++ s ++ "}" ; 
+    } 
+</pre>
+Notice that both <tt>interface</tt>s and <tt>instance</tt>s may
+<tt>open</tt> <tt>resource</tt>s (and also reused top-level grammars).
+An <tt>interface</tt> may moreover define some of the operations it
+declares; these definitions are inherited by all instances and cannot
+be changed in them. Inheritance by module extension
+is possible, as always, between modules of the same type.
+
+
+<h4>Using an interface</h4>
+
+
+<h4>Instantiating an interface</h4>
+
+
+<h4>Compiling interfaces, instances, and parametrized modules</h4>
+
 
 <h3>Transfer modules</h3>
+
+
+
+<h2>Summary of module syntax and semantics</h2>
 
 
 
