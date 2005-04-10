@@ -749,10 +749,22 @@ times. Here is a summary of how they are compiled:
 </ul>
 This means that some generated code is duplicated, because those operations that
 do have complete definitions in an <tt>interface</tt> are copied to each of
-the <tt>instances</tt>
+the <tt>instances</tt>.
 
 
 <h3>Transfer modules</h3>
+
+<b>Translation by transfer</b> means that syntax trees are manipulated
+by non-compositional functions (<b>transfer rules</b>) between the
+source and target languages. They are being introduce to GF as a module
+type of its own, but their development is still in progress. What
+will be available are <i>at least</i> <tt>fun</tt> and <tt>def</tt>
+judgements, but more is needed. It has not yet been defined how
+transfer modules are integrated in multilingual grammars, i.e.\
+where in the grammar it is specified what transfer to use.
+(Both GF and GFC have a syntax for transfer modules and
+multilingual headers, but their compilation further than parsing
+has not been implemented.)
 
 
 
