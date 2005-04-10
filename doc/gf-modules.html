@@ -660,11 +660,96 @@ is possible, as always, between modules of the same type.
 
 <h4>Using an interface</h4>
 
+An <tt>interface</tt> or an <tt>instance</tt>
+can be <tt>open</tt>ed in
+a <tt>concrete</tt> using the same syntax as when opening
+a <tt>resource</tt>. For an <tt>instance</tt>, the semantics
+is the same as when opening the definitions together with
+the type signatures - one can think of an <tt>interface</tt>
+and an <tt>instance</tt> of it forming an ordinary
+<tt>resource</tt>. Opening an <tt>interface</tt>, however,
+is different:  functions that are only declared without
+having a definition cannot be compiled (inlined), and nor
+can functions whose definitions depend on undefined functions.
+
+<p>
+
+A module that <tt>open</tt>s an <tt>interface</tt> is therefore
+<b>incomplete</b>, and has to be <b>completed</b> with an
+<tt>instance</tt> of the interface to become complete. To make
+this situation clear, GF requires any module that opens an
+<tt>interface</tt> to be marked as <tt>incomplete</tt>. Thus
+the module
+<pre>
+  incomplete concrete DocMarkup of Doc = open Markup in {
+    ...
+    }
+</pre>
+uses the interface <tt>Markup</tt> to place markup in
+chosen places in its linearization rules, but the
+implementation of markup - whether in HTML or in LaTeX - is
+left unspecified. This is a powerful way of sharing
+the code of a whole module.
+
+<p>
+
+Another terminology for <tt>incomplete</tt> modules is
+<b>parametrized modules</b> or <b>functors</b>.
+The <tt>interface</tt> gives the list of parameters
+that the functor depends on.
+
 
 <h4>Instantiating an interface</h4>
 
+To complete an <tt>incomplete</tt> module, each <tt>inteface</tt>
+that it opens has to be provided an <tt>instance</tt>. The following
+syntax is used for this:
+<pre>
+  concrete DocHTML of Doc = DocMarkup with (Markup = MarkupHTML) ;
+</pre>
+Instantiation of <tt>Markup</tt> with <tt>MarkupLatex</tt> is
+another one-liner.
+
+<p>
+
+If more interfaces than one are instantiated, a comma-separated
+list of equations in parentheses is used, e.g.
+<pre>
+  concrete RulesIta = CategoriesIta ** RulesRomance with
+    (TypesRomance = TypesIta), (SyntaxRomance = SyntaxIta) ;
+</pre>
+(an example from the GF resource grammar library, where languages for
+Romance languages share two interfaces).
+All interfaces that are <tt>open</tt>ed in the completed model
+must be completed.
+
+<p>
+
+Notice that the completion of an <tt>incomplete</tt> module
+may at the same time extend modules of the same type (which need
+not be completions). But it cannot add new judgements.
+
 
 <h4>Compiling interfaces, instances, and parametrized modules</h4>
+
+Interfaces, instances, and parametric modules are purely a
+front-end feature of GF: these module types do not exist in
+the <tt>gfc</tt> and <tt>gfr</tt> formats. The compiler has
+nevertheless keep track of their dependencies and modification
+times. Here is a summary of how they are compiled:
+<ul>
+<li> an <tt>interface</tt> is compiled into a <tt>resource</tt> with an empty body
+<li> an <tt>instance</tt> is compiled into a <tt>resource</tt> in union with its
+  <tt>interface</tt>
+<li> an <tt>incomplete</tt> module (<tt>concrete</tt> or <tt>resource</tt>) is compiled
+  into a module of the same type with an empty body
+<li> a completion module (<tt>concrete</tt> or <tt>resource</tt>) is compiled
+  into a module of the same type by compiling its functor so that, instead of
+  each <tt>interface</tt>, its given <tt>instance</tt> is used
+</ul>
+This means that some generated code is duplicated, because those operations that
+do have complete definitions in an <tt>interface</tt> are copied to each of
+the <tt>instances</tt>
 
 
 <h3>Transfer modules</h3>
