@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/31 15:47:43 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.50 $
+-- > CVS $Date: 2005/04/11 13:53:39 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.51 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -66,17 +66,24 @@ import GrammarToHaskell
 
 -- the cf parsing algorithms
 import ChartParser -- or some other CF Parser
-import qualified GF.Parsing.ParseCF as PCF
+import qualified GF.OldParsing.ParseCF as PCFOld
 --import qualified ParseGFCviaCFG as PGFC
 --import NewChartParser
 --import NewerChartParser
 
 -- grammar conversions -- peb 19/4-04
 -- see also customGrammarPrinter
-import qualified GF.Parsing.ConvertGrammar as Cnv
+import qualified GF.OldParsing.ConvertGrammar as CnvOld
 import qualified GF.Printing.PrintParser as Prt
-import qualified GF.Data.Assoc as Assoc
-import qualified GF.Parsing.ConvertFiniteGFC as Fin
+--import qualified GF.Data.Assoc as Assoc
+--import qualified GF.OldParsing.ConvertFiniteGFC as Fin
+--import qualified GF.OldParsing.ConvertGFCtoSimple as Simp
+--import qualified GF.OldParsing.ConvertFiniteSimple as FinSimp
+--import qualified GF.OldParsing.ConvertSimpleToMCFG as MCFSimp
+--import qualified GF.Conversion.GFCtoSimple as G2S
+--import qualified GF.Conversion.SimpleToMCFG as S2M
+--import GF.Conversion.FromGFC 
+import qualified GF.Infra.Print as Prt2
 
 import GFC
 import qualified MkGFC as MC
@@ -230,10 +237,10 @@ customGrammarPrinter =
   ,(strCI "srg",     prSRG . stateCF)
   ,(strCI "gsl",     \s -> let opts = stateOptions s
                                name = cncId s
-                            in gslPrinter name opts $ Cnv.cfg $ statePInfo s)
+                            in gslPrinter name opts $ CnvOld.cfg $ statePInfoOld s)
   ,(strCI "jsgf",    \s -> let opts = stateOptions s
                                name = cncId s
-                            in jsgfPrinter name opts $ Cnv.cfg $ statePInfo s)
+                            in jsgfPrinter name opts $ CnvOld.cfg $ statePInfoOld s)
   ,(strCI "plbnf",   prLBNF True)
   ,(strCI "lbnf",    prLBNF False)
   ,(strCI "bnf",     prBNF False)
@@ -250,15 +257,37 @@ customGrammarPrinter =
 -}
 -- add your own grammar printers here
 -- grammar conversions, (peb) 
-  ,(strCI "gfc_show",   show . grammar2canon . stateGrammarST)
-  ,(strCI "mcfg",       Prt.prt . Cnv.mcfg . statePInfo)
-  ,(strCI "cfg",        Prt.prt . Cnv.cfg . statePInfo)
-  ,(strCI "mcfg_show",  show . Cnv.mcfg . statePInfo)
-  ,(strCI "cfg_show",   show . Cnv.cfg . statePInfo)
+--  ,(strCI "gfc_show",   show . grammar2canon . stateGrammarST)
+  ,(strCI "mcfg-old",       Prt.prt . CnvOld.mcfg . statePInfoOld)
+  ,(strCI "cfg-old",        Prt.prt . CnvOld.cfg . statePInfoOld)
+--  ,(strCI "mcfg_show",  show . CnvOld.mcfg . statePInfoOld)
+--  ,(strCI "cfg_show",   show . CnvOld.cfg . statePInfoOld)
 -- hack for printing finiteness of grammar categories:
-  -- ,(strCI "finiteness", Prt.prtAfter "\n" . Assoc.aAssocs . Cnv.fintypes . statePInfo)
-  ,(strCI "finite",     prCanon . Fin.convertGrammar . stateGrammarST)
+-- ,(strCI "finiteness", Prt.prtAfter "\n" . Assoc.aAssocs . CnvOld.fintypes . statePInfoOld)
+--  ,(strCI "finite",     prCanon . Fin.convertGrammar . stateGrammarST)
+--  ,(strCI "simpleMCF",  (\sg -> Prt.prt $ MCFSimp.convertGrammar "nondet" $
+--			 Simp.convertGrammar (stateGrammarST sg, cncId sg)))
+--  ,(strCI "simpleGFC",  (\sg -> Prt.prt $ Simp.convertGrammar (stateGrammarST sg, cncId sg)))
+--  ,(strCI "finiteSimple", (\sg -> Prt.prt $ FinSimp.convertGrammar $ 
+--			   Simp.convertGrammar (stateGrammarST sg, cncId sg)))
 --- also include printing via grammar2syntax!
+--  ,(strCI "g2s", (\sg -> Prt2.prt $ G2S.convertGrammar (stateGrammarST sg, cncId sg)))
+--  ,(strCI "g2s2m", (\sg -> Prt2.prt $ S2M.convertGrammar "nondet" $ 
+--		    G2S.convertGrammar (stateGrammarST sg, cncId sg)))
+  ,(strCI "mcfg", Prt2.prt . stateMCFG)
+  ,(strCI "cfg", Prt2.prt . stateCFG)
+{-
+  ,(strCI "simple", Prt2.prt . convertToSimple "" . stateGrammarLang)
+  ,(strCI "mcfg-nondet", Prt2.prt . convertToMCFG "" "nondet" . stateGrammarLang)
+  ,(strCI "mcfg-strict", Prt2.prt . convertToMCFG "" "strict" . stateGrammarLang)
+  ,(strCI "cfg-nondet", Prt2.prt . convertToCFG "" "nondet" . stateGrammarLang)
+  ,(strCI "cfg-strict", Prt2.prt . convertToCFG "" "strict" . stateGrammarLang)
+  ,(strCI "fin-simple", Prt2.prt . convertToSimple "fin" . stateGrammarLang)
+  ,(strCI "fin-mcfg-nondet", Prt2.prt . convertToMCFG "fin" "nondet" . stateGrammarLang)
+  ,(strCI "fin-mcfg-strict", Prt2.prt . convertToMCFG "fin" "strict" . stateGrammarLang)
+  ,(strCI "fin-cfg-nondet", Prt2.prt . convertToCFG "fin" "nondet" . stateGrammarLang)
+  ,(strCI "fin-cfg-strict", Prt2.prt . convertToCFG "fin" "strict" . stateGrammarLang)
+-}
   ] 
 
 customMultiGrammarPrinter = 
@@ -344,14 +373,14 @@ customStringCommand =
 customParser = 
   customData "Parsers, selected by option -parser=x" $
   [
-   (strCI "chart",  PCF.parse "ibn" . stateCF)
+   (strCI "chart",  PCFOld.parse "ibn" . stateCF)
   ,(strCI "old",    chartParser . stateCF)
   ,(strCI "myparser", myParser)
 -- add your own parsers here
   ]
   -- 31/5-04, peb:
-  ++ [ (strCI ("chart"++name), PCF.parse descr . stateCF) |
-       (descr, names) <- PCF.alternatives, name <- names ]
+  ++ [ (strCI ("chart"++name), PCFOld.parse descr . stateCF) |
+       (descr, names) <- PCFOld.alternatives, name <- names ]
 
 customTokenizer = 
   customData "Tokenizers, selected by option -lexer=x" $

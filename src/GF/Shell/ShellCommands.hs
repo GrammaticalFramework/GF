@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/01 21:24:25 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.27 $
+-- > CVS $Date: 2005/04/11 13:53:38 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.28 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -24,6 +24,7 @@ import Operations
 import Modules
 
 import Char (isDigit)
+import Monad (mplus)
 
 -- shell commands and their options
 -- moved to separate module and added option check: AR 27/5/2004
@@ -122,6 +123,8 @@ testValidFlag st co f x = case f of
   "printer" -> case co of
 		       CPrintGrammar -> testInc customGrammarPrinter
 		       CPrintMultiGrammar -> testInc customMultiGrammarPrinter
+		       CSetFlag -> testInc customGrammarPrinter `mplus` 
+				   testInc customMultiGrammarPrinter
   "lexer"   -> testInc customTokenizer
   "unlexer" -> testInc customUntokenizer
   "depth"   -> testN
@@ -151,6 +154,9 @@ testValidFlag st co f x = case f of
 
 optionsOfCommand :: Command -> ([String],[String])
 optionsOfCommand co = case co of
+  CSetFlag -> both "utf8 table struct record all multi"
+	           "cat lang lexer parser number depth rawtrees unlexer optimize path conversion printer"
+
   CImport _ -> both "old v s src retain nocf nocheckcirc cflexer noemit o"
                     "abs cnc res path optimize conversion"
   CRemoveLanguage _ -> none
@@ -159,7 +165,7 @@ optionsOfCommand co = case co of
   CTransformGrammar _ -> flags "printer"
   CConvertLatex _ -> none
   CLinearize _ -> both "utf8 table struct record all multi" "lang number unlexer"
-  CParse -> both "new n ign raw v lines all" "cat lang lexer parser number rawtrees"
+  CParse -> both "new newer n ign raw v lines all" "cat lang lexer parser number rawtrees"
   CTranslate _ _ -> opts "cat lexer parser"
   CGenerateRandom -> flags "cat lang number depth"
   CGenerateTrees -> both "metas" "depth alts cat lang number"
@@ -195,7 +201,6 @@ optionsOfCommand co = case co of
   _ -> none
 
 {-
-  CSetFlag
   CSetLocalFlag Language
   CPrintGlobalOptions
   CPrintLanguages

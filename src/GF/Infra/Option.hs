@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/18 10:17:10 $ 
+-- > CVS $Date: 2005/04/11 13:53:38 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.23 $
+-- > CVS $Revision: 1.24 $
 --
 -- Options and flags used in GF shell commands and files.
 --
@@ -151,7 +151,7 @@ dontParse    = iOpt "read"
 showAbstr, showXML, showOld, showLatex, showFullForm,
   showEBNF, showCF, showWords, showOpts,
   isCompiled, isHaskell, noCompOpers, retainOpers,
-  newParser, noCF, checkCirc, noCheckCirc, lexerByNeed, useUTF8id :: Option
+  newParser, newerParser, noCF, checkCirc, noCheckCirc, lexerByNeed, useUTF8id :: Option
 defaultGrOpts :: [Option]
 
 showAbstr   = iOpt "abs"
@@ -170,6 +170,7 @@ noCompOpers = iOpt "nocomp"
 retainOpers = iOpt "retain"
 defaultGrOpts = []
 newParser   = iOpt "new"
+newerParser = iOpt "newer"
 noCF        = iOpt "nocf"
 checkCirc   = iOpt "nocirc"
 noCheckCirc = iOpt "nocheckcirc"

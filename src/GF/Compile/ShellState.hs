@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:40:03 $ 
+-- > CVS $Date: 2005/04/11 13:53:38 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.40 $
+-- > CVS $Revision: 1.41 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -34,9 +34,9 @@ import Option
 import Ident
 import Arch (ModTime)
 
--- peb 25/5-04
--- import CFtoCFG
-import qualified GF.Parsing.ConvertGrammar as Cnv
+import qualified GF.OldParsing.ConvertGrammar as CnvOld -- OBSOLETE
+import qualified GF.Conversion.GFC as Cnv
+import qualified GF.NewParsing.GFC as Prs
 
 import List (nub,nubBy)
 
@@ -49,8 +49,12 @@ data ShellState = ShSt {
   concretes  :: [((Ident,Ident),Bool)], -- ^ list of all concretes, and whether active
   canModules :: CanonGrammar ,       -- ^ compiled abstracts and concretes
   srcModules :: G.SourceGrammar ,    -- ^ saved resource modules
-  cfs        :: [(Ident,CF)] ,       -- ^ context-free grammars
-  pInfos     :: [(Ident,Cnv.PInfo)], -- ^ parser information, peb 18\/6-04
+  cfs        :: [(Ident,CF)] ,       -- ^ context-free grammars (small, no parameters, very over-generating)
+  pInfosOld  :: [(Ident,CnvOld.PInfo)], -- ^ parser information, peb 18\/6-04 (OBSOLETE)
+  mcfgs      :: [(Ident, Cnv.MGrammar)], -- ^ MCFG, converted according to Ljunglöf (2004, ch 3)
+  cfgs       :: [(Ident, Cnv.CGrammar)], -- ^ CFG, converted from mcfg 
+                                         -- (large, with parameters, no-so overgenerating)
+  pInfos     :: [(Ident, Prs.PInfo)], -- ^ parsing information (compiled mcfg&cfg grammars)
   morphos    :: [(Ident,Morpho)],    -- ^ morphologies
   gloptions  :: Options,             -- ^ global options
   readFiles  :: [(FilePath,ModTime)],-- ^ files read
@@ -76,7 +80,10 @@ emptyShellState = ShSt {
   canModules = M.emptyMGrammar,
   srcModules = M.emptyMGrammar,
   cfs        = [],
-  pInfos     = [], -- peb 18/6
+  pInfosOld  = [], -- peb 18/6 (OBSOLETE)
+  mcfgs      = [],
+  cfgs       = [],
+  pInfos     = [],
   morphos    = [],
   gloptions  = noOptions,
   readFiles  = [],
@@ -97,23 +104,29 @@ prLanguage = prIdent
 
 -- | grammar for one language in a state, comprising its abs and cnc
 data StateGrammar = StGr {
-  absId   :: Ident,
-  cncId   :: Ident,
-  grammar :: CanonGrammar,
-  cf      :: CF,
-  pInfo   :: Cnv.PInfo, -- peb 8/6
-  morpho  :: Morpho,
+  absId    :: Ident,
+  cncId    :: Ident,
+  grammar  :: CanonGrammar,
+  cf       :: CF,
+  pInfoOld :: CnvOld.PInfo, -- peb 8/6 (OBSOLETE)
+  mcfg     :: Cnv.MGrammar,
+  cfg      :: Cnv.CGrammar,
+  pInfo    :: Prs.PInfo,
+  morpho   :: Morpho,
   loptions :: Options
   }
 
 emptyStateGrammar :: StateGrammar
 emptyStateGrammar = StGr {
-  absId   = identC "#EMPTY", ---
-  cncId   = identC "#EMPTY", ---
-  grammar = M.emptyMGrammar,
-  cf      = emptyCF,
-  pInfo   = Cnv.emptyPInfo, -- peb 18/6
-  morpho  = emptyMorpho,
+  absId    = identC "#EMPTY", ---
+  cncId    = identC "#EMPTY", ---
+  grammar  = M.emptyMGrammar,
+  cf       = emptyCF,
+  pInfoOld = CnvOld.emptyPInfo, -- peb 18/6 (OBSOLETE)
+  mcfg     = [],
+  cfg      = [],
+  pInfo    = Prs.buildPInfo [] [],
+  morpho   = emptyMorpho,
   loptions = noOptions
   }
 
@@ -121,17 +134,25 @@ emptyStateGrammar = StGr {
 
 stateGrammarST    :: StateGrammar -> CanonGrammar
 stateCF           :: StateGrammar -> CF
-statePInfo        :: StateGrammar -> Cnv.PInfo
+statePInfoOld     :: StateGrammar -> CnvOld.PInfo -- OBSOLETE
+stateMCFG         :: StateGrammar -> Cnv.MGrammar
+stateCFG          :: StateGrammar -> Cnv.CGrammar
+statePInfo        :: StateGrammar -> Prs.PInfo
 stateMorpho       :: StateGrammar -> Morpho
 stateOptions      :: StateGrammar -> Options
 stateGrammarWords :: StateGrammar -> [String]
+stateGrammarLang  :: StateGrammar -> (CanonGrammar, Ident)
 
 stateGrammarST = grammar
 stateCF        = cf
+statePInfoOld  = pInfoOld -- OBSOLETE
+stateMCFG      = mcfg
+stateCFG       = cfg
 statePInfo     = pInfo
 stateMorpho    = morpho
 stateOptions   = loptions
 stateGrammarWords = allMorphoWords . stateMorpho
+stateGrammarLang st = (grammar st, cncId st)
 
 cncModuleIdST :: StateGrammar -> CanonGrammar
 cncModuleIdST = stateGrammarST
@@ -166,7 +187,23 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
       notInrts f = notElem f $ map fst rts
   cfs <- mapM (canon2cf opts cgr) concrs --- would not need to update all...
 
-  let pinfos = map (Cnv.pInfo opts cgr) concrs  -- peb 18/6
+  let pinfosOld = map (CnvOld.pInfo opts cgr) concrs  -- peb 18/6 (OBSOLETE)
+
+  let g2s  = Cnv.gfc2simple
+      fin  = Cnv.simple2finite
+      s2mN = Cnv.simple2mcfg_nondet
+      s2mS = Cnv.simple2mcfg_strict
+      --                     ____ kan man ha flera '-conversion=X -conversion=Y'?
+      (simpleCnv, mcfgCnv) = case getOptVal opts gfcConversion of
+			       Just "strict" -> (g2s, s2mS)
+			       Just "finite" -> (fin . g2s, s2mN)
+			       Just "finite-strict" -> (fin . g2s, s2mS)
+			       _             -> (g2s, s2mN)
+      cfgCnv  = Cnv.mcfg2cfg
+
+  let simples = map (curry simpleCnv cgr) concrs 
+      mcfgs   = map mcfgCnv simples
+      cfgs    = map cfgCnv mcfgs
 
   let funs = funRulesOf cgr
   let cats = allCatsOf cgr
@@ -185,7 +222,10 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
     canModules = cgr,
     srcModules = src,
     cfs        = zip concrs cfs,
-    pInfos     = zip concrs pinfos, -- peb 8/6
+    pInfosOld  = zip concrs pinfosOld, -- peb 8/6 (OBSOLETE)
+    mcfgs      = zip concrs mcfgs,
+    cfgs       = zip concrs cfgs,
+    pInfos     = zip concrs $ zipWith Prs.buildPInfo mcfgs cfgs,
     morphos    = zip concrs (map (mkMorpho cgr) concrs),
     gloptions  = gloptions sh, --- opts, -- this would be command-line options
     readFiles  = [ft | ft@(f,_) <- readFiles sh, notInrts f] ++ rts,
@@ -243,6 +283,9 @@ purgeShellState sh = ShSt {
   canModules = M.MGrammar $ purge $ M.modules $ canModules sh,
   srcModules = M.emptyMGrammar,
   cfs        = cfs sh,
+  pInfosOld  = pInfosOld sh, -- OBSOLETE
+  mcfgs      = mcfgs sh,
+  cfgs       = cfgs sh,
   pInfos     = pInfos sh,
   morphos    = morphos sh,
   gloptions  = gloptions sh,
@@ -256,15 +299,15 @@ purgeShellState sh = ShSt {
    acncs = maybe [] singleton (abstract sh) ++ map (snd . fst) (concretes sh)
 
 changeMain :: Maybe Ident -> ShellState -> Err ShellState
-changeMain Nothing (ShSt _ _ cs ms ss cfs pis mos os rs acs s) = 
-  return (ShSt Nothing Nothing [] ms ss cfs pis mos os rs acs s)
-changeMain (Just c) st@(ShSt _ _ cs ms ss cfs pis mos os rs acs s) = 
+changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos os rs acs s) = 
+  return (ShSt Nothing Nothing [] ms ss cfs old_pis mcfgs cfgs pinfos mos os rs acs s)
+changeMain (Just c) st@(ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos os rs acs s) = 
   case lookup c (M.modules ms) of 
     Just _ -> do
       a   <- M.abstractOfConcrete ms c
       let cas = M.allConcretes ms a
       let cs' = [((c,c),True) | c <- cas]
-      return (ShSt (Just a) (Just c) cs' ms ss cfs pis mos os rs acs s) 
+      return (ShSt (Just a) (Just c) cs' ms ss cfs old_pis mcfgs cfgs pinfos mos os rs acs s) 
     _ -> P.prtBad "The state has no concrete syntax named" c
 
 -- | form just one state grammar, if unique, from a canonical grammar
@@ -286,7 +329,10 @@ stateGrammarOfLang st l = StGr {
   cncId    = l,
   grammar  = can,
   cf       = maybe emptyCF id (lookup l (cfs st)),
-  pInfo    = maybe Cnv.emptyPInfo id (lookup l (pInfos st)), -- peb 18/6
+  pInfoOld = maybe CnvOld.emptyPInfo id (lookup l (pInfosOld st)), -- peb 18/6 (OBSOLETE)
+  mcfg     = maybe [] id $ lookup l $ mcfgs st,
+  cfg      = maybe [] id $ lookup l $ cfgs st,
+  pInfo    = maybe (Prs.buildPInfo [] []) id $ lookup l $ pInfos st,
   morpho   = maybe emptyMorpho id (lookup l (morphos st)),
   loptions = errVal noOptions $ lookupOptionsCan can
   }
@@ -316,12 +362,15 @@ mkStateGrammar = stateGrammarOfLang
 
 stateAbstractGrammar :: ShellState -> StateGrammar
 stateAbstractGrammar st = StGr {
-  absId   = maybe (identC "Abs") id (abstract st), ---
-  cncId   = identC "#Cnc", ---
-  grammar = canModules st, ---- only abstarct ones
-  cf      = emptyCF,
-  pInfo   = Cnv.emptyPInfo, -- peb 18/6
-  morpho  = emptyMorpho,
+  absId    = maybe (identC "Abs") id (abstract st), ---
+  cncId    = identC "#Cnc", ---
+  grammar  = canModules st, ---- only abstarct ones
+  cf       = emptyCF,
+  pInfoOld = CnvOld.emptyPInfo, -- peb 18/6 (OBSOLETE)
+  mcfg     = [],
+  cfg      = [],
+  pInfo    = Prs.buildPInfo [] [],
+  morpho   = emptyMorpho,
   loptions = gloptions st ----
   }
 
@@ -459,9 +508,10 @@ languageOn  = languageOnOff True
 languageOff = languageOnOff False
 
 languageOnOff :: Bool -> Language -> ShellStateOper
-languageOnOff b lang (ShSt a c cs cg sg cfs pinfos ms os fs cats sts) =
-  ShSt a c cs' cg sg cfs pinfos ms os fs cats sts where
-  cs' = [if lang==l then ((l,c),b) else i | i@((l,c),_) <- cs]
+---                                         __________ this is OBSOLETE
+languageOnOff b lang (ShSt a c cs cg sg cfs old_pinfos mcfgs cfgs pinfos ms os fs cats sts) =
+  ShSt a c cs' cg sg cfs old_pinfos mcfgs cfgs pinfos ms os fs cats sts where
+  cs' = [if lang==l then (lc,b) else i | i@(lc@(l,c),_) <- cs]
 
 {-
 updateLanguage :: FilePath -> (Language, StateConcrete) -> ShellStateOper
@@ -476,13 +526,16 @@ initWithAbstract ab st@(ShSt (ma,cs,os)) =
 removeLanguage :: Language -> ShellStateOper
 removeLanguage lang (ShSt (ab,gs,os)) = ShSt (ab,removeAssoc lang gs, os)
 -}
+
 changeOptions :: (Options -> Options) -> ShellStateOper
-changeOptions f (ShSt a c cs can src cfs pinfos ms os ff ts ss) = 
-  ShSt a c cs can src cfs pinfos ms (f os) ff ts ss
+---                                      __________ this is OBSOLETE
+changeOptions f (ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms os ff ts ss) = 
+  ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms (f os) ff ts ss
 
 changeModTimes :: [(FilePath,ModTime)] -> ShellStateOper
-changeModTimes mfs (ShSt a c cs can src cfs pinfos ms os ff ts ss) = 
-  ShSt a c cs can src cfs pinfos ms os ff' ts ss
+---                                         __________ this is OBSOLETE
+changeModTimes mfs (ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms os ff ts ss) = 
+  ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms os ff' ts ss
  where
    ff' = mfs ++ [mf | mf@(f,_) <- ff, notElem f (map fst mfs)]
 

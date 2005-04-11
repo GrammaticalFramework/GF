@@ -1,13 +1,12 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : SortedList
 -- Maintainer  : Peter Ljunglöf
 -- Stability   : stable
 -- Portability : portable
 --
--- > CVS $Date: 2005/03/21 14:17:39 $ 
+-- > CVS $Date: 2005/04/11 13:52:49 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Sets as sorted lists
 --
@@ -18,29 +17,37 @@
 --    * /O(n^2)/ fixed point iteration
 -----------------------------------------------------------------------------
 
-module GF.Data.SortedList ( SList, 
-		    nubsort, union, 
-		    (<++>), (<\\>), (<**>), 
-		    limit,
-		    hasCommonElements, subset, 
-		    groupPairs, groupUnion
-		  ) where
+module GF.Data.SortedList 
+    ( -- * type declarations
+      SList, SMap,
+      -- * set operations		    
+      nubsort, union, 
+      (<++>), (<\\>), (<**>), 
+      limit,
+      hasCommonElements, subset, 
+      -- * map operations
+      groupPairs, groupUnion,
+      unionMap, mergeMap
+    ) where
 
 import List (groupBy)
+import GF.Data.Utilities (split, foldMerge)
 
 -- | The list must be sorted and contain no duplicates.
 type SList a = [a]
 
--- | Group a set of key-value pairs into
--- a set of unique keys with sets of values
-groupPairs :: Ord a => SList (a, b) -> SList (a, SList b)
+-- | A sorted map also has unique keys, 
+-- i.e. 'map fst m :: SList a', if 'm :: SMap a b'
+type SMap a b = SList (a, b)
+
+-- | Group a set of key-value pairs into a sorted map
+groupPairs :: Ord a => SList (a, b) -> SMap a (SList b)
 groupPairs = map mapFst . groupBy eqFst
     where mapFst as = (fst (head as), map snd as)
 	  eqFst a b = fst a == fst b
 
--- | Group a set of key-(sets-of-values) pairs into
--- a set of unique keys with sets of values
-groupUnion :: (Ord a, Ord b) => SList (a, SList b) -> SList (a, SList b)
+-- | Group a set of key-(sets-of-values) pairs into a sorted map
+groupUnion :: (Ord a, Ord b) => SList (a, SList b) -> SMap a (SList b)
 groupUnion = map unionSnd . groupPairs
     where unionSnd (a, bs) = (a, union bs)
 
@@ -57,13 +64,25 @@ xs `subset` ys = null (xs <\\> ys)
 nubsort :: Ord a => [a] -> SList a
 nubsort = union . map return
 
+-- | the union of a list of sorted maps
+unionMap :: Ord a => (b -> b -> b) 
+	 -> [SMap a b] -> SMap a b
+unionMap plus = foldMerge (mergeMap plus) []
+
+-- | merging two sorted maps
+mergeMap :: Ord a => (b -> b -> b) 
+	 -> SMap a b -> SMap a b -> SMap a b 
+mergeMap plus [] abs = abs
+mergeMap plus abs [] = abs
+mergeMap plus abs@(ab@(a,bs):abs') cds@(cd@(c,ds):cds')
+    = case compare a c of
+        EQ -> (a, plus bs ds) : mergeMap plus abs' cds'
+	LT -> ab : mergeMap plus abs' cds
+	GT -> cd : mergeMap plus abs  cds'
+
 -- | The union of a list of sets
 union :: Ord a => [SList a] -> SList a
-union []   = []
-union [as] = as
-union abs  = let (as, bs) = split abs in union as <++> union bs
-	      where split (a:b:abs) = let (as, bs) = split abs in (a:as, b:bs)
-		    split as        = (as, [])
+union = foldMerge (<++>) []
 
 -- | The union of two sets
 (<++>) :: Ord a => SList a -> SList a -> SList a 
