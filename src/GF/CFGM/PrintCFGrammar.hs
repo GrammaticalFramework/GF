@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 22:40:03 $ 
+-- > CVS $Date: 2005/04/11 13:53:38 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.12 $
+-- > CVS $Revision: 1.13 $
 --
 -- Handles printing a CFGrammar in CFGM format.
 -----------------------------------------------------------------------------
@@ -19,12 +19,12 @@ import qualified PrintCFG
 import Ident
 import GFC
 import Modules
-import qualified GF.Parsing.ConvertGrammar as Cnv
+import qualified GF.OldParsing.ConvertGrammar as Cnv
 import qualified GF.Printing.PrintParser as Prt
-import qualified GF.Parsing.CFGrammar as CFGrammar
-import qualified GF.Parsing.GrammarTypes as GT
+import qualified GF.OldParsing.CFGrammar as CFGrammar
+import qualified GF.OldParsing.GrammarTypes as GT
 import qualified AbsCFG
-import qualified GF.Parsing.Utilities as Parser
+import qualified GF.OldParsing.Utilities as Parser
 import ErrM
 import qualified Option
 

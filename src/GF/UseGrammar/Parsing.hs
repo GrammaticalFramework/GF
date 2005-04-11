@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/21 13:54:45 $ 
+-- > CVS $Date: 2005/04/11 13:53:39 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -35,7 +35,8 @@ import Custom
 import ShellState
 
 import PPrCF (prCFTree)
-import qualified GF.Parsing.ParseGFC as N
+import qualified GF.OldParsing.ParseGFC as NewOld
+import qualified GF.NewParsing.GFC as New
 
 import Operations
 
@@ -56,12 +57,20 @@ parseStringC :: Options -> StateGrammar -> CFCat -> String -> Check [Tree]
 parseStringC opts0 sg cat s
 
 ---- to test peb's new parser 6/10/2003
+---- (to be obsoleted by "newer" below
  | oElem newParser opts0 = do  
   let pm = maybe "" id $ getOptVal opts0 useParser -- -parser=pm
-      gr = stateGrammarST sg 
       ct = cfCat2Cat cat
-  ts <- checkErr $ N.newParser pm sg ct s -- peb 27/5-04 (changed gr -> sg)
-  mapM (checkErr . (annotate gr)) ts
+  ts <- checkErr $ NewOld.newParser pm sg ct s
+  mapM (checkErr . annotate (stateGrammarST sg)) ts
+
+---- to test peb's newer parser 7/4-05 
+ | oElem newerParser opts0 = do  
+  let opts = unionOptions opts0 $ stateOptions sg
+      pm   = maybe "" id $ getOptVal opts0 useParser -- -parser=pm
+      tok  = customOrDefault opts useTokenizer customTokenizer sg
+  ts <- return $ New.parse pm (pInfo sg) (absId sg) cat (tok s)
+  mapM (checkErr . annotate (stateGrammarST sg)) ts
 
  | otherwise = do
   let opts = unionOptions opts0 $ stateOptions sg
@@ -71,6 +80,7 @@ parseStringC opts0 sg cat s
       tok = customOrDefault opts useTokenizer customTokenizer sg
       parser = customOrDefault opts useParser customParser sg cat
   tokens2trms opts sg cn parser (tok s)
+
 
 tokens2trms :: Options ->StateGrammar ->Ident -> CFParser -> [CFTok] -> Check [Tree]
 tokens2trms opts sg cn parser toks = trees2trms opts sg cn toks trees info

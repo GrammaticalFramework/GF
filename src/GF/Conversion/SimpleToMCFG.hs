@@ -1,0 +1,26 @@
+----------------------------------------------------------------------
+-- |
+-- Maintainer  : PL
+-- Stability   : (stable)
+-- Portability : (portable)
+--
+-- > CVS $Date: 2005/04/11 13:52:48 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.1 $
+--
+-- All different conversions from SimpleGFC to MCFG
+-----------------------------------------------------------------------------
+
+module GF.Conversion.SimpleToMCFG where
+
+import GF.Formalism.SimpleGFC 
+import GF.Conversion.Types
+
+import qualified GF.Conversion.SimpleToMCFG.Strict as Strict
+import qualified GF.Conversion.SimpleToMCFG.Nondet as Nondet
+import qualified GF.Conversion.SimpleToMCFG.Coercions as Coerce
+
+convertGrammarNondet, convertGrammarStrict :: SimpleGrammar -> MGrammar
+convertGrammarNondet = Coerce.addCoercions . Nondet.convertGrammar
+convertGrammarStrict = Strict.convertGrammar
+
