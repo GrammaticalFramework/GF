@@ -407,21 +407,21 @@ from firm principles.
 The typical use is through <tt>open</tt> in a
 <tt>concrete</tt> module, which means that
 <tt>resource</tt> modules are not imported on their own.
-However, when developing and testing phase of grammars, it
+However, in the developing and testing phase of grammars, it
 can be useful to evaluate <tt>oper</tt>s with different
-arguments. To prevent them from being inlined away, the
+arguments. To prevent them from being thrown away after inlining, the
 <tt>-retain</tt> option can be used:
 <pre>
   > i -retain Util.gf
 </pre>
 The command <tt>compute_concrete</tt> (<tt>cc</tt>)
-can now be used for evaluating expressions that may concain
+can now be used for evaluating expressions that may contain
 operations defined in <tt>Util</tt>:
 <pre>
   > cc ss (paren "foo")
   {s = "(" ++ "foo" ++ ")"}
 </pre>
-To find out, what <tt>oper</tt>s are available for a given type,
+To find out what <tt>oper</tt>s are available for a given type,
 the command <tt>show_operations</tt> (<tt>so</tt>) can be used:
 <pre>
   > so SS
@@ -447,7 +447,7 @@ languages.
 
 <p>
 
-In addition to its special modularity, GF provides <b>inheritance</b>,
+In addition to this special kind of modularity, GF provides <b>inheritance</b>,
 which is familiar from other programming languages (in particular,
 object-oriented ones). Inheritance means that a module inherits all
 judgements from another module; we also say that it <b>extends</b>
@@ -524,8 +524,7 @@ Instead, an <b>indirection</b> is created for each inherited name,
 as can be seen by looking into the generated <tt>gfc</tt> (and
 <tt>gfr</tt>) files. Thus for instance the names
 <pre>
-  Mathematics.Prop  Arithmetic.Prop  Logic.Prop
-                    Geometry.Prop 
+  Mathematics.Prop  Arithmetic.Prop  Geometry.Prop Logic.Prop
 </pre>
 all refer to the same category, declared in the module
 <tt>Logic</tt>.
@@ -591,11 +590,11 @@ the same linearization type, the actual translation used
 in GF adds to every linearization type and linearization
 a <b>lock field</b>,
 <pre>
-  cat C ;               ===>  oper C : Type = T ** {lock_C : {}} ;
+  cat C ;                    ===>  oper C : Type = T ** {lock_C : {}} ;
   lincat C = T ;
 
-  fun f : ... -> C ;    ===>  oper f : A = t ** {lock_C = &lt;>};
-  lin f = t ;
+  fun f : C_1 ... C_n -> C ; ===>  oper f : A = \x_1,...,x_n -> 
+  lin f = t ;                        t x_1 ... x_n ** {lock_C = &lt;>};
 </pre>
 (Notice that the latter translation is type-correct because of
 record subtyping, which means that <tt>t</tt> can ignore the
@@ -666,10 +665,10 @@ a <tt>concrete</tt> using the same syntax as when opening
 a <tt>resource</tt>. For an <tt>instance</tt>, the semantics
 is the same as when opening the definitions together with
 the type signatures - one can think of an <tt>interface</tt>
-and an <tt>instance</tt> of it forming an ordinary
+and an <tt>instance</tt> of it together forming an ordinary
 <tt>resource</tt>. Opening an <tt>interface</tt>, however,
 is different:  functions that are only declared without
-having a definition cannot be compiled (inlined), and nor
+having a definition cannot be compiled (inlined); neither
 can functions whose definitions depend on undefined functions.
 
 <p>
@@ -689,7 +688,8 @@ uses the interface <tt>Markup</tt> to place markup in
 chosen places in its linearization rules, but the
 implementation of markup - whether in HTML or in LaTeX - is
 left unspecified. This is a powerful way of sharing
-the code of a whole module.
+the code of a whole module with just differences in
+the definitions of some constants.
 
 <p>
 
@@ -735,7 +735,7 @@ not be completions). But it cannot add new judgements.
 Interfaces, instances, and parametric modules are purely a
 front-end feature of GF: these module types do not exist in
 the <tt>gfc</tt> and <tt>gfr</tt> formats. The compiler has
-nevertheless keep track of their dependencies and modification
+nevertheless to keep track of their dependencies and modification
 times. Here is a summary of how they are compiled:
 <ul>
 <li> an <tt>interface</tt> is compiled into a <tt>resource</tt> with an empty body
