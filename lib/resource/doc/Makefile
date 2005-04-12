@@ -22,6 +22,18 @@ gfdoc:
 	gfdoc ../french/VerbsFre.gf ; mv ../french/VerbsFre.html .
 	gfdoc ../french/BasicFre.gf ; mv ../french/BasicFre.html .
 
+	gfdoc ../norwegian/ParadigmsNor.gf ; mv ../norwegian/ParadigmsNor.html .
+	gfdoc ../norwegian/VerbsNor.gf ; mv ../norwegian/VerbsNor.html .
+	gfdoc ../norwegian/BasicNor.gf ; mv ../norwegian/BasicNor.html .
+
+	gfdoc ../italian/ParadigmsIta.gf ; mv ../italian/ParadigmsIta.html .
+	gfdoc ../italian/BasicIta.gf ; mv ../italian/BasicIta.html .
+	gfdoc ../italian/BeschIta.gf ; mv ../italian/BeschIta.html .
+
+	gfdoc ../spanish/ParadigmsSpa.gf ; mv ../spanish/ParadigmsSpa.html .
+	gfdoc ../spanish/BasicSpa.gf ; mv ../spanish/BasicSpa.html .
+	gfdoc ../spanish/BeschSpa.gf ; mv ../spanish/BeschSpa.html .
+
 gifs: api lang scand low
 
 api:

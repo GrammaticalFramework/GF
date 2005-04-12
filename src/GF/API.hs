@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 15:51:17 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.30 $
+-- > CVS $Date: 2005/04/12 15:20:29 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.31 $
 --
 -- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 -----------------------------------------------------------------------------
@@ -91,28 +91,28 @@ linearize sgr = err id id . optLinearizeTree opts sgr where
 linearizeToAll :: [GFGrammar] -> Tree -> [String]
 linearizeToAll grs t = [linearize gr t | gr <- grs]
 
-parse :: GFGrammar -> CFCat -> String -> [Tree]
+parse :: GFGrammar -> GFCat -> String -> [Tree]
 parse sgr cat = errVal [] . parseString noOptions sgr cat
 
-parseAny :: [GFGrammar] -> CFCat -> String -> [Tree]
+parseAny :: [GFGrammar] -> GFCat -> String -> [Tree]
 parseAny grs cat s = concat [parse gr cat s | gr <- grs]
 
-translate :: GFGrammar -> GFGrammar -> CFCat -> String -> [String]
+translate :: GFGrammar -> GFGrammar -> GFCat -> String -> [String]
 translate ig og cat = map (linearize og) . parse ig cat
 
-translateToAll :: GFGrammar -> [GFGrammar] -> CFCat -> String -> [String]
+translateToAll :: GFGrammar -> [GFGrammar] -> GFCat -> String -> [String]
 translateToAll ig ogs cat = concat . map (linearizeToAll ogs) . parse ig cat
 
-translateFromAny :: [GFGrammar] -> GFGrammar -> CFCat -> String -> [String]
+translateFromAny :: [GFGrammar] -> GFGrammar -> GFCat -> String -> [String]
 translateFromAny igs og cat s = concat [translate ig og cat s | ig <- igs]
 
-translateBetweenAll :: [GFGrammar] -> CFCat -> String -> [String]
+translateBetweenAll :: [GFGrammar] -> GFCat -> String -> [String]
 translateBetweenAll grs cat = concat . map (linearizeToAll grs) . parseAny grs cat
 
-homonyms :: GFGrammar -> CFCat -> Tree -> [Tree]
+homonyms :: GFGrammar -> GFCat -> Tree -> [Tree]
 homonyms gr cat = nub . parse gr cat . linearize gr
 
-hasAmbiguousLin :: GFGrammar -> CFCat -> Tree -> Bool
+hasAmbiguousLin :: GFGrammar -> GFCat -> Tree -> Bool
 hasAmbiguousLin gr cat t = case (homonyms gr cat t) of
   _:_:_ -> True
   _ -> False
