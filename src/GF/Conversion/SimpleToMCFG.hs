@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:48 $ 
+-- > CVS $Date: 2005/04/12 10:49:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- All different conversions from SimpleGFC to MCFG
 -----------------------------------------------------------------------------
@@ -20,7 +20,7 @@ import qualified GF.Conversion.SimpleToMCFG.Strict as Strict
 import qualified GF.Conversion.SimpleToMCFG.Nondet as Nondet
 import qualified GF.Conversion.SimpleToMCFG.Coercions as Coerce
 
-convertGrammarNondet, convertGrammarStrict :: SimpleGrammar -> MGrammar
+convertGrammarNondet, convertGrammarStrict :: SGrammar -> MGrammar
 convertGrammarNondet = Coerce.addCoercions . Nondet.convertGrammar
 convertGrammarStrict = Strict.convertGrammar
 

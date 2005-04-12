@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:49 $ 
+-- > CVS $Date: 2005/04/12 10:49:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Converting SimpleGFC grammars to MCFG grammars, nondeterministically.
 -- Afterwards, the grammar has to be extended with coercion functions,
@@ -40,19 +40,19 @@ import GF.Data.BacktrackM
 
 type CnvMonad a = BacktrackM Env a
 
-type Env    = (MCat, [MCat], LinRec, [LinType])
-type LinRec = [Lin Cat MLabel Token]
+type Env    = (MCat, [MCat], LinRec, [SLinType])
+type LinRec = [Lin SCat MLabel Token]
 
 
 ----------------------------------------------------------------------
 -- main conversion function
 
-convertGrammar :: SimpleGrammar -> MGrammar 
+convertGrammar :: SGrammar -> MGrammar 
 convertGrammar rules = tracePrt "Nondet conversion: #MCFG rules" (prt . length) $
 		       solutions conversion undefined
     where conversion = member rules >>= convertRule
 
-convertRule :: SimpleRule -> CnvMonad MRule
+convertRule :: SRule -> CnvMonad MRule
 convertRule (Rule (Abs decl decls fun) (Cnc ctype ctypes (Just term)))
     = do let cat : args = map decl2cat (decl : decls)
 	 writeState (initialMCat cat, map initialMCat args, [], ctypes)
@@ -68,7 +68,7 @@ convertRule _ = failure
 ----------------------------------------------------------------------
 -- term simplification
 
-simplifyTerm :: Term -> CnvMonad Term
+simplifyTerm :: STerm -> CnvMonad STerm
 simplifyTerm (term :! sel)      
     = do sterm <- simplifyTerm term
 	 ssel <- simplifyTerm sel
@@ -90,17 +90,17 @@ simplifyTerm term              = return term
 --   (LI Ident) - pattern variable
 --   (EInt Integer) - integer
 
-simplifyAssign :: (Label, Term) -> CnvMonad (Label, Term)
+simplifyAssign :: (Label, STerm) -> CnvMonad (Label, STerm)
 simplifyAssign (lbl, term) = liftM ((,) lbl) $ simplifyTerm term
 
-simplifyCase :: (Term, Term) -> CnvMonad (Term, Term)
+simplifyCase :: (STerm, STerm) -> CnvMonad (STerm, STerm)
 simplifyCase (pat, term) = liftM2 (,) (simplifyTerm pat) (simplifyTerm term)
 
 
 ------------------------------------------------------------
 -- reducing simplified terms, collecting MCF rules
 
-reduceTerm :: LinType -> Path -> Term -> CnvMonad ()
+reduceTerm :: SLinType -> SPath -> STerm -> CnvMonad ()
 reduceTerm ctype path (Variants terms) 
     = member terms >>= reduceTerm ctype path
 reduceTerm (StrT)     path term = updateLin (path, term)
@@ -117,7 +117,7 @@ reduceTerm (TblT ptype vtype) path table
 ------------------------------------------------------------
 -- expanding a term to ground terms
 
-expandTerm :: Term -> CnvMonad Term
+expandTerm :: STerm -> CnvMonad STerm
 expandTerm arg@(Arg nr _ path) 
     = do ctypes <- readArgCTypes
 	 pat <- member $ enumeratePatterns $ lintypeFollowPath path $ ctypes !! nr
@@ -128,14 +128,14 @@ expandTerm (Rec record)     = liftM  Rec     $ mapM expandAssign record
 expandTerm (Variants terms) = member terms >>= expandTerm  
 expandTerm term = error $ "expandTerm: " ++ prt term
 
-expandAssign :: (Label, Term) -> CnvMonad (Label, Term)
+expandAssign :: (Label, STerm) -> CnvMonad (Label, STerm)
 expandAssign (lbl, term) = liftM ((,) lbl) $ expandTerm term
 
 
 ------------------------------------------------------------
 -- unification of patterns and selection terms
 
-(=?=) :: Term -> Term -> CnvMonad ()
+(=?=) :: STerm -> STerm -> CnvMonad ()
 Wildcard      =?= _               = return ()
 Rec precord   =?= arg@(Arg _ _ _) = sequence_ [ pat =?= (arg +. lbl) |
 						(lbl, pat) <- precord ]
@@ -151,7 +151,7 @@ pat =?= term = error $ "(=?=): " ++ prt pat ++ " =?= " ++ prt term
 ------------------------------------------------------------
 -- updating the MCF rule
 
-readArgCTypes :: CnvMonad [LinType]
+readArgCTypes :: CnvMonad [SLinType]
 readArgCTypes = do (_, _, _, env) <- readState
 		   return env
 
@@ -174,7 +174,7 @@ updateLin (path, term)
 	 let lins' = lins ++ map (Lin path) newLins
 	 writeState (head, args, lins', env)
 
-term2lins :: Term -> [[Symbol (Cat, Path, Int) Token]]
+term2lins :: STerm -> [[Symbol (SCat, SPath, Int) Token]]
 term2lins (Arg nr cat path) = return [Cat (cat, path, nr)]
 term2lins (Token str)       = return [Tok str]
 term2lins (t1 :++ t2)       = liftM2 (++) (term2lins t1) (term2lins t2)

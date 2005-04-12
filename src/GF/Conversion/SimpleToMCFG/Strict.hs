@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:49 $ 
+-- > CVS $Date: 2005/04/12 10:49:45 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Converting SimpleGFC grammars to MCFG grammars, deterministic.
 --
@@ -37,12 +37,12 @@ import GF.Data.SortedList
 
 type CnvMonad a = BacktrackM () a
 
-convertGrammar :: SimpleGrammar -> MGrammar 
+convertGrammar :: SGrammar -> MGrammar 
 convertGrammar rules = tracePrt "Strict conversion: #MCFG rules" (prt . length) $
 		       solutions conversion undefined
     where conversion = member rules >>= convertRule
 
-convertRule :: SimpleRule -> CnvMonad MRule
+convertRule :: SRule -> CnvMonad MRule
 convertRule (Rule (Abs decl decls fun) (Cnc ctype ctypes (Just term)))
     = do let cat : args  = map decl2cat (decl : decls)
 	     args_ctypes = zip3 [0..] args ctypes
@@ -59,19 +59,19 @@ convertRule _ = failure
 ----------------------------------------------------------------------
 -- category extraction
 
-extractArg :: [Term] -> (Int, Cat, LinType) -> CnvMonad MCat
+extractArg :: [STerm] -> (Int, SCat, SLinType) -> CnvMonad MCat
 extractArg args (nr, cat, ctype) = extractMCat cat ctype (args !! nr)
 
-extractMCat :: Cat -> LinType -> Term -> CnvMonad MCat
+extractMCat :: SCat -> SLinType -> STerm -> CnvMonad MCat
 extractMCat cat ctype term = member $ map (MCat cat) $ parPaths ctype term
 
-enumerateArg :: (Int, Cat, LinType) -> CnvMonad Term
+enumerateArg :: (Int, SCat, SLinType) -> CnvMonad STerm
 enumerateArg (nr, cat, ctype) = member $ enumerateTerms (Just (Arg nr cat emptyPath)) ctype
 
 ----------------------------------------------------------------------
 -- Substitute each instantiated parameter path for its instantiation
 
-substitutePaths :: [Term] -> Term -> Term
+substitutePaths :: [STerm] -> STerm -> STerm
 substitutePaths arguments = subst 
     where subst (Arg nr _ path)  = termFollowPath path (arguments !! nr)
 	  subst (con :^ terms)   = con :^ map subst terms
@@ -87,7 +87,7 @@ substitutePaths arguments = subst
 ----------------------------------------------------------------------
 -- term paths extaction
 
-termPaths :: LinType -> Term -> [(Path, (LinType, Term))]
+termPaths :: SLinType -> STerm -> [(SPath, (SLinType, STerm))]
 termPaths ctype (Variants terms) = terms >>= termPaths ctype
 termPaths (RecT rtype) (Rec record) 
     = [ (path ++. lbl, value) |
@@ -105,19 +105,19 @@ termPaths ctype term | isBaseType ctype = [ (emptyPath, (ctype, term)) ]
 [p=>p1;q=>q1] | [p=>p2;q=>q2]  ==>  [p=>p1|p2;q=>q1|q2]
 -}
 
-parPaths :: LinType -> Term -> [[(Path, Term)]]
+parPaths :: SLinType -> STerm -> [[(SPath, STerm)]]
 parPaths ctype term = mapM (uncurry (map . (,))) $ groupPairs $
 		      nubsort [ (path, value) | 
 				(path, (ConT _ _, value)) <- termPaths ctype term ]
 
-strPaths :: LinType -> Term -> [(Path, Term)]
+strPaths :: SLinType -> STerm -> [(SPath, STerm)]
 strPaths ctype term = [ (path, variants values) | (path, values) <- groupPairs paths ]
     where paths = nubsort [ (path, value) | (path, (StrT, value)) <- termPaths ctype term ]
 
 ----------------------------------------------------------------------
 -- linearization extraction
 
-extractLin :: [MCat] -> (Path, Term) -> [Lin MCat MLabel Token]
+extractLin :: [MCat] -> (SPath, STerm) -> [Lin MCat MLabel Token]
 extractLin args (path, term) = map (Lin path) (convertLin term)
     where convertLin (t1 :++ t2) = liftM2 (++) (convertLin t1) (convertLin t2)
 	  convertLin (Empty) = [[]]

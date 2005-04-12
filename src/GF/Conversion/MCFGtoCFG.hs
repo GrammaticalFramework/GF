@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:48 $ 
+-- > CVS $Date: 2005/04/12 10:49:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Converting MCFG grammars to (possibly overgenerating) CFG
 -----------------------------------------------------------------------------
@@ -30,11 +30,12 @@ convertGrammar gram = tracePrt "#context-free rules" (prt.length) $
 		      concatMap convertRule gram
 
 convertRule :: MRule -> [CRule]
-convertRule (Rule (Abs cat args name) (Cnc _ _ record)) 
-    = [ CFRule (CCat cat lbl) rhs (CName name profile) |
+convertRule (Rule (Abs cat args (Name fun mprofile)) (Cnc _ _ record)) 
+    = [ CFRule (CCat cat lbl) rhs (Name fun profile) |
 	Lin lbl lin <- record,
 	let rhs = map (mapSymbol convertArg id) lin,
-	let profile = map (argPlaces lin) [0 .. length args-1]
+	let cprofile = map (Unify . argPlaces lin) [0 .. length args-1],
+	let profile = mprofile `composeProfiles` cprofile
       ]
 
 convertArg :: (MCat, MLabel, Int) -> CCat

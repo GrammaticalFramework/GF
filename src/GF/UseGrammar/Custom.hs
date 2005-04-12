@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:53:39 $ 
+-- > CVS $Date: 2005/04/12 10:49:45 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.51 $
+-- > CVS $Revision: 1.52 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -84,6 +84,7 @@ import qualified GF.Printing.PrintParser as Prt
 --import qualified GF.Conversion.SimpleToMCFG as S2M
 --import GF.Conversion.FromGFC 
 import qualified GF.Infra.Print as Prt2
+import qualified GF.Conversion.GFC as Cnv
 
 import GFC
 import qualified MkGFC as MC
@@ -255,39 +256,16 @@ customGrammarPrinter =
   ,(strCI "gfc",     GFC.showGFC . stateGrammarST)
   ,(strCI "canonOpt",showCanonOpt "Lang" . stateGrammarST)
 -}
+
 -- add your own grammar printers here
--- grammar conversions, (peb) 
---  ,(strCI "gfc_show",   show . grammar2canon . stateGrammarST)
-  ,(strCI "mcfg-old",       Prt.prt . CnvOld.mcfg . statePInfoOld)
-  ,(strCI "cfg-old",        Prt.prt . CnvOld.cfg . statePInfoOld)
---  ,(strCI "mcfg_show",  show . CnvOld.mcfg . statePInfoOld)
---  ,(strCI "cfg_show",   show . CnvOld.cfg . statePInfoOld)
--- hack for printing finiteness of grammar categories:
--- ,(strCI "finiteness", Prt.prtAfter "\n" . Assoc.aAssocs . CnvOld.fintypes . statePInfoOld)
---  ,(strCI "finite",     prCanon . Fin.convertGrammar . stateGrammarST)
---  ,(strCI "simpleMCF",  (\sg -> Prt.prt $ MCFSimp.convertGrammar "nondet" $
---			 Simp.convertGrammar (stateGrammarST sg, cncId sg)))
---  ,(strCI "simpleGFC",  (\sg -> Prt.prt $ Simp.convertGrammar (stateGrammarST sg, cncId sg)))
---  ,(strCI "finiteSimple", (\sg -> Prt.prt $ FinSimp.convertGrammar $ 
---			   Simp.convertGrammar (stateGrammarST sg, cncId sg)))
---- also include printing via grammar2syntax!
---  ,(strCI "g2s", (\sg -> Prt2.prt $ G2S.convertGrammar (stateGrammarST sg, cncId sg)))
---  ,(strCI "g2s2m", (\sg -> Prt2.prt $ S2M.convertGrammar "nondet" $ 
---		    G2S.convertGrammar (stateGrammarST sg, cncId sg)))
-  ,(strCI "mcfg", Prt2.prt . stateMCFG)
-  ,(strCI "cfg", Prt2.prt . stateCFG)
-{-
-  ,(strCI "simple", Prt2.prt . convertToSimple "" . stateGrammarLang)
-  ,(strCI "mcfg-nondet", Prt2.prt . convertToMCFG "" "nondet" . stateGrammarLang)
-  ,(strCI "mcfg-strict", Prt2.prt . convertToMCFG "" "strict" . stateGrammarLang)
-  ,(strCI "cfg-nondet", Prt2.prt . convertToCFG "" "nondet" . stateGrammarLang)
-  ,(strCI "cfg-strict", Prt2.prt . convertToCFG "" "strict" . stateGrammarLang)
-  ,(strCI "fin-simple", Prt2.prt . convertToSimple "fin" . stateGrammarLang)
-  ,(strCI "fin-mcfg-nondet", Prt2.prt . convertToMCFG "fin" "nondet" . stateGrammarLang)
-  ,(strCI "fin-mcfg-strict", Prt2.prt . convertToMCFG "fin" "strict" . stateGrammarLang)
-  ,(strCI "fin-cfg-nondet", Prt2.prt . convertToCFG "fin" "nondet" . stateGrammarLang)
-  ,(strCI "fin-cfg-strict", Prt2.prt . convertToCFG "fin" "strict" . stateGrammarLang)
--}
+-- grammar conversions:
+  ,(strCI "mcfg",     Prt2.prt . stateMCFG)
+  ,(strCI "cfg",      Prt2.prt . stateCFG)
+-- obsolete, or only for testing:
+  ,(strCI "simple",   Prt2.prt . Cnv.gfc2simple . stateGrammarLang)
+  ,(strCI "finite",   Prt2.prt . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
+  ,(strCI "mcfg-old", Prt.prt . CnvOld.mcfg . statePInfoOld)
+  ,(strCI "cfg-old",  Prt.prt . CnvOld.cfg . statePInfoOld)
   ] 
 
 customMultiGrammarPrinter = 

@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:49 $ 
+-- > CVS $Date: 2005/04/12 10:49:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Adding coercion functions to a MCFG if necessary.
 -----------------------------------------------------------------------------
@@ -45,7 +45,7 @@ addCoercions rules = coercions ++ rules
 combineCoercions [] _ = []
 combineCoercions _ [] = []
 combineCoercions allHeads'@(heads:allHeads) allArgs'@(args:allArgs) 
-    = case compare (mcat2cat $ fst $ head heads) (mcat2cat $ head args) of
+    = case compare (mcat2scat $ fst $ head heads) (mcat2scat $ head args) of
         LT -> combineCoercions allHeads  allArgs'
 	GT -> combineCoercions allHeads' allArgs
 	EQ -> makeCoercion heads args : combineCoercions allHeads allArgs
