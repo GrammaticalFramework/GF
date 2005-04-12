@@ -5,9 +5,9 @@
 -- Stability   : Stable
 -- Portability : Haskell 98
 --
--- > CVS $Date: 2005/03/29 11:17:54 $ 
+-- > CVS $Date: 2005/04/12 10:49:45 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Association lists, or finite maps,
 -- including sets as maps with result type @()@.
@@ -81,7 +81,7 @@ lookupWith :: Ord a => b -> Assoc a b -> a -> b
 ------------------------------------------------------------
 
 data Assoc a b = ANil | ANode (Assoc a b) a b (Assoc a b)
-		 deriving (Eq, Show)
+		 deriving (Eq, Ord, Show)
 
 emptyAssoc = ANil
 emptySet   = emptyAssoc

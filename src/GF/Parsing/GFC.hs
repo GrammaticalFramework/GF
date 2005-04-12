@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:51 $ 
+-- > CVS $Date: 2005/04/12 10:49:45 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- The main parsing module, parsing GFC grammars
 -- by translating to simpler formats, such as PMCFG and CFG
@@ -45,7 +45,7 @@ import qualified GF.NewParsing.CFG as PC
 -- parsing information
 
 data PInfo = PInfo { mcfPInfo :: (), -- ^ not implemented yet
-		     cfPInfo  :: PC.CFPInfo CCat CName Token }
+		     cfPInfo  :: PC.CFPInfo CCat Name Token }
 
 buildPInfo :: MGrammar -> CGrammar -> PInfo
 buildPInfo mcfg cfg = PInfo { mcfPInfo = (),
@@ -77,7 +77,7 @@ parse strategy pinfo abs start = parse ('c':strategy) pinfo abs start
 
 ----------------------------------------------------------------------
 
-parseCFG :: String -> PInfo -> [CCat] -> [Token] -> [SyntaxTree Name]
+parseCFG :: String -> PInfo -> [CCat] -> [Token] -> [SyntaxTree Fun]
 parseCFG strategy pInfo startCats inString = trace2 "Parser" "CFG" $
 					     trees
     where trees    = tracePrt "#trees" (prt . length) $
@@ -144,7 +144,7 @@ newParser (m:strategy) gr (_, startCat) inString
 ----------------------------------------------------------------------
 -- parse trees to GF terms
 
-tree2term :: Ident.Ident -> SyntaxTree Name -> Grammar.Term
+tree2term :: Ident.Ident -> SyntaxTree Fun -> Grammar.Term
 tree2term abs (TNode f ts) = Macros.mkApp (Macros.qq (abs,f)) (map (tree2term abs) ts)
 tree2term abs (TMeta)      = Macros.mkMeta 0
 
@@ -152,19 +152,19 @@ tree2term abs (TMeta)      = Macros.mkMeta 0
 ----------------------------------------------------------------------
 -- conversion and unification of forests
 
-convertFromCFForest :: SyntaxForest CName -> [SyntaxForest Name]
+convertFromCFForest :: SyntaxForest Name -> [SyntaxForest Fun]
 
 -- simplest implementation
-convertFromCFForest (FNode (CName name profile) children) 
+convertFromCFForest (FNode name@(Name fun profile) children) 
     | isCoercion name = concat chForests
-    | otherwise       = [ FNode name chForests | not (null chForests) ]
-    where chForests   = concat [ mapM (checkProfile forests) profile |
+    | otherwise       = [ FNode fun chForests | not (null chForests) ]
+    where chForests   = concat [ applyProfileM unifyManyForests profile forests |
 				 forests0 <- children,
 				 forests <- mapM convertFromCFForest forests0 ]
 
 {-
 -- more intelligent(?) implementation
-convertFromCFForest (FNode (CName name profile) children) 
+convertFromCFForest (FNode (Name name profile) children) 
     | isCoercion name = concat chForests
     | otherwise       = [ FNode name chForests | not (null chForests) ]
     where chForests   = concat [ mapM (checkProfile forests) profile |
@@ -172,16 +172,16 @@ convertFromCFForest (FNode (CName name profile) children)
 				 forests <- mapM convertFromCFForest forests0 ]
 -}
 
-checkProfile forests = unifyManyForests . map (forests !!)
-
-
+{-
 ----------------------------------------------------------------------
 -- conversion and unification for parse trees instead of forests
+-- OBSOLETE!
 
-convertFromCFTree :: SyntaxTree CName -> [SyntaxTree Name]
-convertFromCFTree (TNode (CName name profile) children0) 
-    = [ TNode name children |
-	children1 <- mapM convertFromCFTree children0,
-	children <- mapM (checkProfile children1) profile ]
-    where checkProfile trees = unifyManyTrees . map (trees !!)
-
+convertFromCFTree :: SyntaxTree Name -> [SyntaxTree Fun]
+convertFromCFTree (TNode name@(Name fun profile) children0) 
+    | isCoercion name = concat chTrees
+    | otherwise       = map (TNode fun) chTrees
+    where chTrees = [ children |
+		      children1 <- mapM convertFromCFTree children0,
+		      children <- applyProfileM unifyManyTrees profile children1 ]
+-}

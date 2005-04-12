@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:48 $ 
+-- > CVS $Date: 2005/04/12 10:49:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Calculating the finiteness of each type in a grammar
 -----------------------------------------------------------------------------
@@ -19,6 +19,7 @@ import GF.Infra.Print
 
 import GF.Formalism.GCFG
 import GF.Formalism.SimpleGFC
+import GF.Conversion.Types
 
 import GF.Data.SortedList
 import GF.Data.Assoc
@@ -29,26 +30,27 @@ import Ident (Ident(..))
 
 type CnvMonad a = BacktrackM () a
 
-convertGrammar :: SimpleGrammar -> SimpleGrammar
+convertGrammar :: SGrammar -> SGrammar
 convertGrammar rules = tracePrt "#finite simpleGFC rules" (prt . length) $
 		       solutions cnvMonad ()
     where split = calcSplitable rules
 	  cnvMonad = member rules >>= convertRule split
 
-convertRule :: Splitable -> SimpleRule -> CnvMonad SimpleRule
+convertRule :: Splitable -> SRule -> CnvMonad SRule
 convertRule split (Rule abs cnc) 
     = do newAbs <- convertAbstract split abs
 	 return $ Rule newAbs cnc
 
-convertAbstract :: Splitable -> Abstract Decl Name -> CnvMonad (Abstract Decl Name)
-convertAbstract split (Abs (_ ::: typ) decls fun)
-    = case splitableFun split fun of
-        Just newCat -> return $ Abs (anyVar ::: (newCat :@ [])) decls fun
-	Nothing -> expandTyping split fun [] typ decls []
+convertAbstract :: Splitable -> Abstract SDecl Name
+		-> CnvMonad (Abstract SDecl Name)
+convertAbstract split (Abs (_ ::: typ) decls name)
+    = case splitableFun split (name2fun name) of
+        Just newCat -> return $ Abs (anyVar ::: (newCat :@ [])) decls name
+	Nothing -> expandTyping split name [] typ decls []
 
 
-expandTyping :: Splitable -> Name -> [(Var, Cat)] -> Type -> [Decl] -> [Decl] 
-	     -> CnvMonad (Abstract Decl Name)
+expandTyping :: Splitable -> Name -> [(Var, SCat)] -> SType -> [SDecl] -> [SDecl] 
+	     -> CnvMonad (Abstract SDecl Name)
 expandTyping split fun env (cat :@ atoms) [] decls 
     = return $ Abs decl (reverse decls) fun
     where decl = anyVar ::: substAtoms split env cat atoms []
@@ -61,7 +63,7 @@ expandTyping split fun env typ ((x ::: (xcat :@ xatoms)) : declsToDo) declsDone
 					    return (newCat, (x,newCat) : env)
 			 Nothing -> return (xcat, env)
 
-substAtoms :: Splitable -> [(Var, Cat)] -> Cat -> [Atom] -> [Atom] -> Type
+substAtoms :: Splitable -> [(Var, SCat)] -> SCat -> [Atom] -> [Atom] -> SType
 substAtoms split env cat [] atoms = cat :@ reverse atoms
 substAtoms split env cat (atom:atomsToDo) atomsDone
     = case atomLookup split env atom of
@@ -69,22 +71,22 @@ substAtoms split env cat (atom:atomsToDo) atomsDone
 	Nothing -> substAtoms split env cat atomsToDo (atom : atomsDone)
 
 atomLookup split env (AVar x) = lookup x env 
-atomLookup split env (ACon con) = splitableFun split (constr2name con)
+atomLookup split env (ACon con) = splitableFun split (constr2fun con)
       
 
 ----------------------------------------------------------------------
 -- splitable categories (finite, no dependencies)
 -- they should also be used as some dependency
 
-type Splitable = (Assoc Cat [Cat], Assoc Name Cat)
+type Splitable = (Assoc SCat [SCat], Assoc Fun SCat)
 
-splitableCat :: Splitable -> Cat -> Maybe [Cat]
+splitableCat :: Splitable -> SCat -> Maybe [SCat]
 splitableCat = lookupAssoc . fst 
 
-splitableFun :: Splitable -> Name -> Maybe Cat
+splitableFun :: Splitable -> Fun -> Maybe SCat
 splitableFun = lookupAssoc . snd
 
-calcSplitable :: [SimpleRule] -> Splitable
+calcSplitable :: [SRule] -> Splitable
 calcSplitable rules = (listAssoc splitableCat2Funs, listAssoc splitableFun2Cat)
     where splitableCat2Funs = groupPairs $ nubsort 
 			      [ (cat, mergeFun fun cat) | (cat, fun) <- splitableCatFuns ]
@@ -93,8 +95,8 @@ calcSplitable rules = (listAssoc splitableCat2Funs, listAssoc splitableFun2Cat)
 			     [ (fun, mergeFun fun cat) | (cat, fun) <- splitableCatFuns ]
 
           -- cat-fun pairs that are splitable
-	  splitableCatFuns = [ (cat, fun) |
-			       Rule (Abs (_ ::: (cat :@ [])) [] fun) _ <- rules,
+	  splitableCatFuns = [ (cat, name2fun name) |
+			       Rule (Abs (_ ::: (cat :@ [])) [] name) _ <- rules,
 			       splitableCats ?= cat ]
 
           -- all cats that are splitable
@@ -123,11 +125,11 @@ calcSplitable rules = (listAssoc splitableCat2Funs, listAssoc splitableFun2Cat)
 -- utilities
 -- mergeing categories
 
-mergeCats :: String -> String -> String -> Cat -> Cat -> Cat
+mergeCats :: String -> String -> String -> SCat -> SCat -> SCat
 mergeCats before middle after (IC cat) (IC arg) 
     = IC (before ++ cat ++ middle ++ arg ++ after)
 
-mergeFun, mergeArg :: Cat -> Cat -> Cat
+mergeFun, mergeArg :: SCat -> SCat -> SCat
 mergeFun = mergeCats "{" ":" "}"
 mergeArg = mergeCats "" "" ""
 
