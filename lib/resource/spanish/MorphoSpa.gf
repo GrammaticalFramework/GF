@@ -126,6 +126,18 @@ oper
      c = c
     } ;
 
+  -- used in constructions like "(no) hay ..."
+
+  pronEmpty : Number -> Pronoun = \n -> mkPronoun
+    []
+    []
+    []
+    []
+    [] [] [] []
+    (PGen Masc)
+    n
+    P3
+    Clit2 ;
 
 --2 Reflexive pronouns
 --

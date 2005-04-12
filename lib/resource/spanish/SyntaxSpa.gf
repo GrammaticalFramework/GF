@@ -37,7 +37,48 @@ oper
   npGenPossNum = \nu,ton,mec ->
     \\c => artDef mec.g Pl c ++ ton.s ! Poss Pl mec.g ++ nu.s ! mec.g ++ mec.s ! Pl ; 
 
-  existNounPhrase = variants {} ;
+  existNounPhrase np = 
+    let
+      verbHay =
+        {s = table {
+          VFin (VPres Ind) Sg P3 => "hay" ;
+          v => verbHaber.s ! v
+          } ;
+         aux = verbHaber.aux
+        }
+    in
+    sats2clause (
+      mkSatsObject (pronEmpty Sg) (mkTransVerbCas verbHay accusative) np) ;
+
+  reflPron : Number => Person => NPFormA => Str = \\n,p => 
+    case p of {
+      P3 => table {
+        Ton x => prepCase x ++ "sé" ;
+        Aton _ => "si" ;
+        Poss Sg Masc => "suo" ;
+        Poss Sg Fem  => "sua" ;
+        Poss Pl Masc => "suoi" ;
+        Poss Pl _    => "sue"
+        } ;
+      _ => (personPron Masc n p).s
+    } ;
+
+  personPron : Gender -> Number -> Person -> Pronoun = \g,n,p -> 
+    case <n,p> of {
+      <Sg,P1> => pronJe ;
+      <Sg,P2> => pronTu ;
+      <Sg,P3> => case g of {
+        Masc => pronIl ;
+        Fem  => pronElle 
+        } ;
+      <Pl,P1> => pronNous ;
+      <Pl,P2> => pronVous ;
+      <Pl,P3> => case g of {
+        Masc => pronIls ;
+        Fem  => pronIls 
+        }
+      } ;
+
 {- ----
   existNounPhrase = \delvino -> {
     s = \\m => 

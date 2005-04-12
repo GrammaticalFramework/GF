@@ -278,6 +278,19 @@ oper
         } 
       } ;
 
+  -- used in constructions like "(non) ci sono ..."
+
+  pronEmpty : Number -> Pronoun = \n -> mkPronoun
+    []
+    []
+    []
+    []
+    [] [] [] []
+    (PGen Masc)
+    n
+    P3
+    Clit2 ;
+
 --2 Determiners
 --
 -- Determiners, traditionally called indefinite pronouns, are inflected
