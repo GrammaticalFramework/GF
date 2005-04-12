@@ -1418,7 +1418,7 @@ oper
   artIndef : Gender -> Number -> CaseA -> Str ;
   genForms : Str -> Str -> Gender => Str ;
 
------ moved from Res
+----- moved from Res ; should not be here (pronouns are also in MorphoIta...)
 
   pronJe, pronTu, pronIl, pronElle, pronNous, pronVous, pronIls, pronElles : 
     Pronoun ;

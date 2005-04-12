@@ -40,7 +40,13 @@ oper
   npGenPossNum = \nu,ton,mec ->
     \\c => artDef mec.g Pl c ++ ton.s ! Poss Pl mec.g ++ nu.s ! mec.g ++ mec.s ! Pl ; 
 
-  existNounPhrase = variants {} ; ----
+  existNounPhrase np = 
+    let ci = MorphoIta.pronNous in
+    sats2clause (
+      insertObject (mkSatsObject (pronEmpty np.n) (mkTransVerbCas verbEssere dative) ci) 
+        accusative [] np) ;
+
+
 {- ----
   existNounPhrase = \delvino -> {
     s = \\m => 
@@ -51,15 +57,15 @@ oper
     } ;
 -}
 
+  ---- check this!
   reflPron : Number => Person => NPFormA => Str = \\n,p => 
     case p of {
       P3 => table {
         Ton x => prepCase x ++ "sé" ;
-        Aton _ => "si" ;
-        Poss Sg Masc => "suo" ;
-        Poss Sg Fem  => "sua" ;
-        Poss Pl Masc => "suoi" ;
-        Poss Pl _    => "sue"
+        Aton _ => "se" ;
+        Poss Sg Masc => "su" ;
+        Poss Sg _    => "su" ;
+        Poss Pl _    => "sus"
         } ;
       _ => (personPron Masc n p).s
     } ;
