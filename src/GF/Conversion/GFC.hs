@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 11:42:05 $ 
+-- > CVS $Date: 2005/04/14 18:38:36 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- All conversions from GFC 
 -----------------------------------------------------------------------------
@@ -25,6 +25,9 @@ import qualified GF.Conversion.RemoveSingletons as RemSing
 import qualified GF.Conversion.SimpleToMCFG as S2M
 import qualified GF.Conversion.MCFGtoCFG as M2C
 
+----------------------------------------------------------------------
+-- * single step conversions
+
 gfc2simple :: (CanonGrammar, Ident) -> SGrammar
 gfc2simple = G2S.convertGrammar
 
@@ -42,5 +45,22 @@ simple2mcfg_strict = S2M.convertGrammarStrict
 
 mcfg2cfg :: MGrammar -> CGrammar
 mcfg2cfg = M2C.convertGrammar
+
+----------------------------------------------------------------------
+-- * GFC -> MCFG
+
+-- | default conversion: 
+--
+--  - instantiating finite dependencies ('removeSingletons . simple2finite')
+--  - nondeterministic MCFG conversion ('simple2mcfg_nondet')
+gfc2mcfg :: (CanonGrammar, Ident) -> MGrammar
+gfc2mcfg = simple2mcfg_nondet . removeSingletons . simple2finite . gfc2simple
+
+----------------------------------------------------------------------
+-- * GFC -> CFG
+
+-- | default conversion = default mcfg conversion + trivial cfg conversion
+gfc2cfg :: (CanonGrammar, Ident) -> CGrammar
+gfc2cfg = mcfg2cfg . gfc2mcfg
 
 

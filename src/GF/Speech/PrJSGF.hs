@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:53:39 $ 
+-- > CVS $Date: 2005/04/14 18:38:36 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.9 $
+-- > CVS $Revision: 1.10 $
 --
 -- This module prints a CFG as a JSGF grammar.
 --
@@ -21,14 +21,18 @@ module PrJSGF (jsgfPrinter) where
 
 import SRG
 import Ident
-import GF.OldParsing.CFGrammar
-import GF.OldParsing.Utilities (Symbol(..))
-import GF.OldParsing.GrammarTypes
-import GF.Printing.PrintParser
+-- import GF.OldParsing.CFGrammar
+-- import GF.OldParsing.Utilities (Symbol(..))
+-- import GF.OldParsing.GrammarTypes
+-- import GF.Printing.PrintParser
+import GF.Formalism.CFG
+import GF.Formalism.Utilities (Symbol(..))
+import GF.Conversion.Types
+import GF.Infra.Print
 import Option
 
 jsgfPrinter :: Ident -- ^ Grammar name
-	   -> Options -> CFGrammar -> String
+	   -> Options -> CGrammar -> String
 jsgfPrinter name opts cfg = prJSGF srg ""
     where srg = makeSRG name opts cfg
 
@@ -53,7 +57,7 @@ prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
     prSymbol (Tok t) = wrap "\"" (prtS t) "\""
     prCat c = showChar '<' . showString c . showChar '>'
 
-rmPunct :: [Symbol String Tokn] -> [Symbol String Tokn] 
+rmPunct :: [Symbol String Token] -> [Symbol String Token] 
 rmPunct [] = []
 rmPunct (Tok t:ss) | all isPunct (prt t) = rmPunct ss
 rmPunct (s:ss) = s : rmPunct ss

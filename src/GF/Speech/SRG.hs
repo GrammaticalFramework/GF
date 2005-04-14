@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:53:39 $ 
+-- > CVS $Date: 2005/04/14 18:38:36 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.11 $
+-- > CVS $Revision: 1.12 $
 --
 -- Representation of, conversion to, and utilities for 
 -- printing of a general Speech Recognition Grammar. 
@@ -21,10 +21,14 @@
 module SRG where
 
 import Ident
-import GF.OldParsing.CFGrammar
-import GF.OldParsing.Utilities (Symbol(..))
-import GF.OldParsing.GrammarTypes
-import GF.Printing.PrintParser
+-- import GF.OldParsing.CFGrammar
+-- import GF.OldParsing.Utilities (Symbol(..))
+-- import GF.OldParsing.GrammarTypes
+-- import GF.Printing.PrintParser
+import GF.Formalism.CFG
+import GF.Formalism.Utilities (Symbol(..))
+import GF.Conversion.Types
+import GF.Infra.Print
 import TransformCFG
 import Option
 
@@ -40,7 +44,7 @@ data SRG = SRG { grammarName :: String    -- ^ grammar name
 	       }
 data SRGRule = SRGRule String String [SRGAlt] -- ^ SRG category name, original category name
 	                                      --   and productions
-type SRGAlt = [Symbol String Tokn]
+type SRGAlt = [Symbol String Token]
 
 -- | SRG category name and original name
 type CatName = (String,String) 
@@ -49,7 +53,7 @@ type CatNames = FiniteMap String String
 
 makeSRG :: Ident     -- ^ Grammar name
 	-> Options   -- ^ Grammar options
-	-> CFGrammar -- ^ A context-free grammar
+	-> CGrammar -- ^ A context-free grammar
 	-> SRG
 makeSRG i opts gr = SRG { grammarName = name,
 			  startCat = start,
@@ -71,11 +75,11 @@ cfgRulesToSRGRule names rs@(r:_) = SRGRule cat origCat rhs
 	  renameCat (Cat c) = Cat (lookupFM_ names c)
 	  renameCat t = t
 
-ruleCat :: Rule n c t -> c
-ruleCat (Rule c _ _) = c
+ruleCat :: CFRule c n t -> c
+ruleCat (CFRule c _ _) = c
 
-ruleRhs :: Rule n c t -> [Symbol c t]
-ruleRhs (Rule _ r _) = r
+ruleRhs :: CFRule c n t -> [Symbol c t]
+ruleRhs (CFRule _ r _) = r
 
 mkCatNames :: String   -- ^ Category name prefix
 	   -> [String] -- ^ Original category names

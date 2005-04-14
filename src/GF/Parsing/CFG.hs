@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:51 $ 
+-- > CVS $Date: 2005/04/14 18:38:36 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- CFG parsing
 -----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ import qualified GF.NewParsing.CFG.General     as Gen
 ----------------------------------------------------------------------
 -- parsing
 
---parseCF :: (Ord n, Ord c, Ord t) => String -> CFParser c n t 
+parseCF :: (Ord n, Ord c, Ord t) => String -> CFParser c n t 
 parseCF "gb" = Gen.parse bottomup
 parseCF "gt" = Gen.parse topdown
 parseCF "ib" = Inc.parse (bottomup, noFilter)

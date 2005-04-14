@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 11:42:06 $ 
+-- > CVS $Date: 2005/04/14 18:38:36 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.53 $
+-- > CVS $Revision: 1.54 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -66,14 +66,15 @@ import GrammarToHaskell
 
 -- the cf parsing algorithms
 import ChartParser -- or some other CF Parser
-import qualified GF.OldParsing.ParseCF as PCFOld
+import qualified GF.NewParsing.CF as PCF
+import qualified GF.OldParsing.ParseCF as PCFOld -- OBSOLETE
 --import qualified ParseGFCviaCFG as PGFC
 --import NewChartParser
 --import NewerChartParser
 
 -- grammar conversions -- peb 19/4-04
 -- see also customGrammarPrinter
-import qualified GF.OldParsing.ConvertGrammar as CnvOld
+import qualified GF.OldParsing.ConvertGrammar as CnvOld -- OBSOLETE
 import qualified GF.Printing.PrintParser as Prt
 --import qualified GF.Data.Assoc as Assoc
 --import qualified GF.OldParsing.ConvertFiniteGFC as Fin
@@ -238,10 +239,10 @@ customGrammarPrinter =
   ,(strCI "srg",     prSRG . stateCF)
   ,(strCI "gsl",     \s -> let opts = stateOptions s
                                name = cncId s
-                            in gslPrinter name opts $ CnvOld.cfg $ statePInfoOld s)
+                            in gslPrinter name opts $ stateCFG s)
   ,(strCI "jsgf",    \s -> let opts = stateOptions s
                                name = cncId s
-                            in jsgfPrinter name opts $ CnvOld.cfg $ statePInfoOld s)
+                            in jsgfPrinter name opts $ stateCFG s)
   ,(strCI "plbnf",   prLBNF True)
   ,(strCI "lbnf",    prLBNF False)
   ,(strCI "bnf",     prBNF False)
@@ -266,7 +267,6 @@ customGrammarPrinter =
   ,(strCI "finite",   Prt2.prt . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
   ,(strCI "single",   Prt2.prt . Cnv.removeSingletons . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
   ,(strCI "sg-sg",    Prt2.prt . Cnv.removeSingletons . Cnv.removeSingletons . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
-  ,(strCI "sg-sg-sg", Prt2.prt . Cnv.removeSingletons . Cnv.removeSingletons . Cnv.removeSingletons . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
   ,(strCI "mcfg-old", Prt.prt . CnvOld.mcfg . statePInfoOld)
   ,(strCI "cfg-old",  Prt.prt . CnvOld.cfg . statePInfoOld)
   ] 
@@ -354,14 +354,20 @@ customStringCommand =
 customParser = 
   customData "Parsers, selected by option -parser=x" $
   [
-   (strCI "chart",  PCFOld.parse "ibn" . stateCF)
-  ,(strCI "old",    chartParser . stateCF)
+   (strCI "chart",  PCFOld.parse "ibn" . stateCF) -- DEPRECATED
+  ,(strCI "general",  PCF.parse "gb" . stateCF)
+  ,(strCI "general-bottomup",  PCF.parse "gt" . stateCF)
+  ,(strCI "general-topdown",  PCF.parse "gt" . stateCF)
+  ,(strCI "incremental",  PCF.parse "ib" . stateCF)
+  ,(strCI "incremental-bottomup",  PCF.parse "ib" . stateCF)
+  ,(strCI "incremental-topdown",  PCF.parse "it" . stateCF)
+  ,(strCI "old",    chartParser . stateCF) -- DEPRECATED
   ,(strCI "myparser", myParser)
 -- add your own parsers here
   ]
-  -- 31/5-04, peb:
-  ++ [ (strCI ("chart"++name), PCFOld.parse descr . stateCF) |
-       (descr, names) <- PCFOld.alternatives, name <- names ]
+  -- 31/5-04, peb: (DEPRECATED)
+  -- ++ [ (strCI ("chart"++name), PCFOld.parse descr . stateCF) |
+  --      (descr, names) <- PCFOld.alternatives, name <- names ]
 
 customTokenizer = 
   customData "Tokenizers, selected by option -lexer=x" $
