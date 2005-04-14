@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:53:39 $ 
+-- > CVS $Date: 2005/04/14 11:42:06 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.16 $
+-- > CVS $Revision: 1.17 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -57,12 +57,12 @@ parseStringC :: Options -> StateGrammar -> CFCat -> String -> Check [Tree]
 parseStringC opts0 sg cat s
 
 ---- to test peb's new parser 6/10/2003
----- (to be obsoleted by "newer" below
+---- (to be obsoleted by "newer" below)
  | oElem newParser opts0 = do  
   let pm = maybe "" id $ getOptVal opts0 useParser -- -parser=pm
       ct = cfCat2Cat cat
   ts <- checkErr $ NewOld.newParser pm sg ct s
-  mapM (checkErr . annotate (stateGrammarST sg)) ts
+  mapM (checkErr . annotate (stateGrammarST sg) . refreshMetas []) ts
 
 ---- to test peb's newer parser 7/4-05 
  | oElem newerParser opts0 = do  
@@ -70,7 +70,8 @@ parseStringC opts0 sg cat s
       pm   = maybe "" id $ getOptVal opts0 useParser -- -parser=pm
       tok  = customOrDefault opts useTokenizer customTokenizer sg
   ts <- return $ New.parse pm (pInfo sg) (absId sg) cat (tok s)
-  mapM (checkErr . annotate (stateGrammarST sg)) ts
+  ts' <- mapM (checkErr . annotate (stateGrammarST sg) . refreshMetas []) ts
+  return $ optIntOrAll opts flagNumber ts'
 
  | otherwise = do
   let opts = unionOptions opts0 $ stateOptions sg

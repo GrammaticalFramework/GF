@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:53:38 $ 
+-- > CVS $Date: 2005/04/14 11:42:05 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.41 $
+-- > CVS $Revision: 1.42 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -190,7 +190,7 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
   let pinfosOld = map (CnvOld.pInfo opts cgr) concrs  -- peb 18/6 (OBSOLETE)
 
   let g2s  = Cnv.gfc2simple
-      fin  = Cnv.simple2finite
+      fin  = Cnv.removeSingletons . Cnv.simple2finite
       s2mN = Cnv.simple2mcfg_nondet
       s2mS = Cnv.simple2mcfg_strict
       --                     ____ kan man ha flera '-conversion=X -conversion=Y'?

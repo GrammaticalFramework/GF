@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/12 10:49:44 $ 
+-- > CVS $Date: 2005/04/14 11:42:05 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- All possible instantiations of different grammar formats used in conversion from GFC
 -----------------------------------------------------------------------------
@@ -49,20 +49,31 @@ name2fun (Name fun _) = fun
 data Profile a = Unify [Int] -- ^ The Int's are the argument positions.
 			     -- 'Unify []' will become a metavariable,
 			     -- 'Unify [a,b]' means that the arguments are equal,
-	       | Epsilon a
+	       | Constant a
 		 deriving (Eq, Ord, Show)
+
+instance Functor Profile where
+    fmap f (Constant a) = Constant (f a)
+    fmap f (Unify xs)   = Unify xs
+
+-- | a function name where the profile does not contain
+constantNameToForest :: Name -> SyntaxForest Fun
+constantNameToForest name@(Name fun profile) = FNode fun [map unConstant profile] 
+    where unConstant (Constant a) = a
+	  unConstant (Unify [])   = FMeta
+	  unConstant _ = error $ "constantNameToForest: the profile should not contain arguments: " ++ prt name
 
 -- | profile application; we need some way of unifying a list of arguments
 applyProfile :: ([b] -> a) -> [Profile a] -> [b] -> [a]
 applyProfile unify profile args = map apply profile
     where apply (Unify xs)  = unify $ map (args !!) xs
-	  apply (Epsilon a) = a
+	  apply (Constant a) = a
 
 -- | monadic profile application
 applyProfileM :: Monad m => ([b] -> m a) -> [Profile a] -> [b] -> m [a]
 applyProfileM unify profile args = mapM apply profile
     where apply (Unify xs)  = unify $ map (args !!) xs
-	  apply (Epsilon a) = return a
+	  apply (Constant a) = return a
 
 -- | profile composition: 
 -- 
@@ -76,13 +87,13 @@ applyProfileM unify profile args = mapM apply profile
 -- >      ==
 -- >   p (q arg)
 --
--- Note that composing an 'Epsilon' with two or more arguments returns an error
+-- Note that composing an 'Constant' with two or more arguments returns an error
 -- (since 'Unify' can only take arguments) -- this might change in the future, if there is a need.
 composeProfiles :: [Profile a] -> [Profile a] -> [Profile a]
 composeProfiles ps qs = map compose ps
     where compose (Unify [x]) = qs !! x
 	  compose (Unify xs)  = Unify [ y | x <- xs, let Unify ys = qs !! x, y <- ys ]
-	  compose epsilon     = epsilon
+	  compose constant    = constant
 
 
 
@@ -103,7 +114,6 @@ type SPath    = Path    SCat Token
 type STerm    = Term    SCat Token
 type SLinType = LinType SCat Token
 type SDecl    = Decl    SCat
-type SType    = Type    SCat
 
 ----------------------------------------------------------------------
 -- * MCFG
@@ -159,6 +169,6 @@ instance Print Name where
 instance Print a => Print (Profile a) where
     prt (Unify [])   = "?"
     prt (Unify args) = prtSep "=" args
-    prt (Epsilon a)  = prt a
+    prt (Constant a) = prt a
 
 
