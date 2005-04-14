@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:53:38 $ 
+-- > CVS $Date: 2005/04/14 18:38:36 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- This module prints a CFG as a Nuance GSL 2.0 grammar.
 --
@@ -19,16 +19,20 @@ module PrGSL (gslPrinter) where
 
 import SRG
 import Ident
-import GF.OldParsing.CFGrammar
-import GF.OldParsing.Utilities (Symbol(..))
-import GF.OldParsing.GrammarTypes
-import GF.Printing.PrintParser
+-- import GF.OldParsing.CFGrammar
+-- import GF.OldParsing.Utilities (Symbol(..))
+-- import GF.OldParsing.GrammarTypes
+-- import GF.Printing.PrintParser
+import GF.Formalism.CFG
+import GF.Formalism.Utilities (Symbol(..))
+import GF.Conversion.Types
+import GF.Infra.Print
 import Option
 
 import Data.Char (toUpper,toLower)
 
 gslPrinter :: Ident -- ^ Grammar name
-	   -> Options -> CFGrammar -> String
+	   -> Options -> CGrammar -> String
 gslPrinter name opts cfg = prGSL srg ""
     where srg = makeSRG name opts cfg
 
@@ -55,13 +59,13 @@ firstToUpper :: String -> String
 firstToUpper [] = []
 firstToUpper (x:xs) = toUpper x : xs
 
-rmPunct :: [Symbol String Tokn] -> [Symbol String Tokn] 
+rmPunct :: [Symbol String Token] -> [Symbol String Token] 
 rmPunct [] = []
 rmPunct (Tok t:ss) | all isPunct (prt t) = rmPunct ss
 rmPunct (s:ss) = s : rmPunct ss
 
 -- Nuance does not like upper case characters in tokens
-showToken :: Tokn -> String
+showToken :: Token -> String
 showToken t = map toLower (prt t)
 
 isPunct :: Char -> Bool
