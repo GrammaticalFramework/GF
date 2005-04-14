@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/12 10:49:45 $ 
+-- > CVS $Date: 2005/04/14 11:42:05 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Simplistic GFC format
 -----------------------------------------------------------------------------
@@ -39,16 +39,29 @@ type SimpleRule    c n t = Rule     (Decl c) n (LinType c t) (Maybe (Term c t))
 
 -- ** dependent type declarations
 
-data Decl c = Var ::: Type c
-		   deriving (Eq, Ord, Show)
-data Type c = c :@ [Atom]
-		   deriving (Eq, Ord, Show)
-data Atom   = ACon Constr
-	    | AVar Var
+-- | 'Decl x c ts' == x is of type (c applied to ts)
+data Decl c = Decl Var c [TTerm]
+	      deriving (Eq, Ord, Show)
+data TTerm  = Constr :@ [TTerm]
+	    | TVar Var
 	      deriving (Eq, Ord, Show)
 
 decl2cat :: Decl c -> c
-decl2cat (_ ::: (cat :@ _)) = cat
+decl2cat (Decl _ cat _) = cat
+
+varsInTTerm :: TTerm -> [Var]
+varsInTTerm tterm = vars tterm []
+    where vars (TVar x)  = (x:)
+	  vars (_ :@ ts) = foldr (.) id $ map vars ts
+
+tterm2term :: TTerm -> Term c t
+tterm2term (con :@ terms) = con :^ map tterm2term terms
+tterm2term (TVar x) = Var x
+
+term2tterm :: Term c t -> TTerm
+term2tterm (con :^ terms) = con :@ map term2tterm terms
+term2tterm (Var x) = TVar x
+term2tterm term = error $ "term2tterm: illegal term"
 
 -- ** linearization types and terms
 
@@ -172,37 +185,41 @@ lintype2paths path (TblT pt vt) = concat [ lintype2paths (path ++! pat) vt |
 ----------------------------------------------------------------------
 
 instance Print c => Print (Decl c) where
-    prt (var ::: typ) 
-	| var == anyVar = prt typ
-	| otherwise     = prt var ++ ":" ++ prt typ 
+    prt (Decl var cat args) 
+	| null args = prVar ++ prt cat
+	| otherwise = "(" ++ prVar ++ prt cat ++ prtBefore " " args ++ ")"
+	where prVar | var == anyVar = ""
+		    | otherwise     = "?" ++ prt var ++ ":"
 
-instance Print c => Print (Type c) where
-    prt (cat :@ ats) = prt cat ++ prtList ats
-
-instance Print Atom where
-    prt (ACon con) = prt con
-    prt (AVar var) = "?" ++ prt var
+instance Print TTerm where
+    prt (con :@ args)
+	| null args = prt con
+	| otherwise = "(" ++ prt con ++ prtBefore " " args ++ ")"
+    prt (TVar var)  = "?" ++ prt var
 
 instance (Print c, Print t) => Print (LinType c t) where
-    prt (RecT rec) = "{" ++ concat [ prt l ++ ":" ++ prt t ++ "; " | (l,t) <- rec ] ++ "}"
+    prt (RecT rec) = "{" ++ prtInterior ":" rec ++ "}"
     prt (TblT t1 t2) = "(" ++ prt t1 ++ " => " ++ prt t2 ++ ")"
     prt (ConT t ts) = prt t ++ "[" ++ prtSep "|" ts ++ "]"
     prt (StrT) = "Str"
 
 instance (Print c, Print t) => Print (Term c t) where
-    prt (Arg n c p) = prt c ++ "@" ++ prt n ++ "(" ++ prt p ++ ")"
+    prt (Arg n c p) = prt c ++ prt n ++ prt p
     prt (c :^ [])  = prt c 
-    prt (c :^ ts)  = prt c ++ prtList ts
-    prt (Rec rec)   = "{" ++ concat [ prt l ++ "=" ++ prt t ++ "; " | (l,t) <- rec ] ++ "}"
-    prt (Tbl tbl)   = "[" ++ concat [ prt p ++ "=>" ++ prt t ++ "; " | (p,t) <- tbl ] ++ "]"
+    prt (c :^ ts)  = "(" ++ prt c ++ prtBefore " " ts ++ ")"
+    prt (Rec rec)   = "{" ++ prtInterior "=" rec ++ "}"
+    prt (Tbl tbl)   = "[" ++ prtInterior "=>" tbl ++ "]"
     prt (Variants ts)  = "{| " ++ prtSep " | " ts ++ " |}"
     prt (t1 :++ t2) = prt t1 ++ "++" ++ prt t2
-    prt (Token t)   = prt t
+    prt (Token t)   = "'" ++ prt t ++ "'"
     prt (Empty)     = "[]"
     prt (Wildcard)  = "_"
     prt (term :. lbl) = prt term ++ "." ++ prt lbl
     prt (term :! sel) = prt term ++ "!" ++ prt sel
     prt (Var var) = "?" ++ prt var
+
+prtInterior sep xys = if null str then str else init (init str) 
+    where str = concat [ prt x ++ sep  ++ prt y ++ "; " | (x,y) <- xys ]
 
 instance (Print c, Print t) => Print (Path c t) where
     prt (Path path) = concatMap prtEither (reverse path)

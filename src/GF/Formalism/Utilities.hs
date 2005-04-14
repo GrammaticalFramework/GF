@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:50 $ 
+-- > CVS $Date: 2005/04/14 11:42:05 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Basic type declarations and functions for grammar formalisms
 -----------------------------------------------------------------------------
@@ -259,12 +259,18 @@ instance (Print s) => Print (Edge s) where
     prtList = prtSep ""
 
 instance (Print s) => Print (SyntaxTree s) where
-    prt (TNode s trees) = prt s ++ "^{" ++ prtSep " " trees ++ "}"
+    prt (TNode s trees)
+	| null trees = prt s
+	| otherwise  = "(" ++ prt s ++ prtBefore " " trees ++ ")"
     prt (TMeta) = "?"
     prtList = prtAfter "\n"
 
 instance (Print s) => Print (SyntaxForest s) where
-    prt (FNode s forests) = prt s ++ "^{" ++ prtSep " | " (map (prtSep " ") forests) ++ "}"
+    prt (FNode s []) = "(" ++ prt s ++ " - ERROR: null forests)"
+    prt (FNode s [[]]) = prt s
+    prt (FNode s [forests]) = "(" ++ prt s ++ prtBefore " " forests ++ ")"
+    prt (FNode s children) = "{" ++ prtSep " | " [ prt s ++ prtBefore " " forests | 
+						   forests <- children ] ++ "}"
     prt (FMeta) = "?"
     prtList = prtAfter "\n"
 

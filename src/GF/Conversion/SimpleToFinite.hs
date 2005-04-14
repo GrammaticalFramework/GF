@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/12 10:49:44 $ 
+-- > CVS $Date: 2005/04/14 11:42:05 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Calculating the finiteness of each type in a grammar
 -----------------------------------------------------------------------------
@@ -43,35 +43,35 @@ convertRule split (Rule abs cnc)
 
 convertAbstract :: Splitable -> Abstract SDecl Name
 		-> CnvMonad (Abstract SDecl Name)
-convertAbstract split (Abs (_ ::: typ) decls name)
+convertAbstract split (Abs decl decls name)
     = case splitableFun split (name2fun name) of
-        Just newCat -> return $ Abs (anyVar ::: (newCat :@ [])) decls name
-	Nothing -> expandTyping split name [] typ decls []
+        Just newCat -> return $ Abs (Decl anyVar newCat []) decls name
+	Nothing -> expandTyping split name [] decl decls []
 
 
-expandTyping :: Splitable -> Name -> [(Var, SCat)] -> SType -> [SDecl] -> [SDecl] 
+expandTyping :: Splitable -> Name -> [(Var, SCat)] -> SDecl -> [SDecl] -> [SDecl] 
 	     -> CnvMonad (Abstract SDecl Name)
-expandTyping split fun env (cat :@ atoms) [] decls 
+expandTyping split fun env (Decl x cat args) [] decls 
     = return $ Abs decl (reverse decls) fun
-    where decl = anyVar ::: substAtoms split env cat atoms []
-expandTyping split fun env typ ((x ::: (xcat :@ xatoms)) : declsToDo) declsDone
+    where decl = substArgs split x env cat args []
+expandTyping split fun env typ (Decl x xcat xargs : declsToDo) declsDone
     = do (xcat', env') <- calcNewEnv
-         let decl = x ::: substAtoms split env xcat' xatoms []
+         let decl = substArgs split x env xcat' xargs []
 	 expandTyping split fun env' typ declsToDo (decl : declsDone)
     where calcNewEnv = case splitableCat split xcat of
 		         Just newCats -> do newCat <- member newCats
 					    return (newCat, (x,newCat) : env)
 			 Nothing -> return (xcat, env)
 
-substAtoms :: Splitable -> [(Var, SCat)] -> SCat -> [Atom] -> [Atom] -> SType
-substAtoms split env cat [] atoms = cat :@ reverse atoms
-substAtoms split env cat (atom:atomsToDo) atomsDone
-    = case atomLookup split env atom of
-        Just newCat -> substAtoms split env (mergeArg cat newCat) atomsToDo atomsDone
-	Nothing -> substAtoms split env cat atomsToDo (atom : atomsDone)
+substArgs :: Splitable -> Var -> [(Var, SCat)] -> SCat -> [TTerm] -> [TTerm] -> SDecl
+substArgs split x env cat [] args = Decl x cat (reverse args)
+substArgs split x env cat (arg:argsToDo) argsDone
+    = case argLookup split env arg of
+        Just newCat -> substArgs split x env (mergeArg cat newCat) argsToDo argsDone
+	Nothing     -> substArgs split x env cat argsToDo (arg : argsDone)
 
-atomLookup split env (AVar x) = lookup x env 
-atomLookup split env (ACon con) = splitableFun split (constr2fun con)
+argLookup split env (TVar x)   = lookup x env 
+argLookup split env (con :@ _) = splitableFun split (constr2fun con)
       
 
 ----------------------------------------------------------------------
@@ -96,7 +96,7 @@ calcSplitable rules = (listAssoc splitableCat2Funs, listAssoc splitableFun2Cat)
 
           -- cat-fun pairs that are splitable
 	  splitableCatFuns = [ (cat, name2fun name) |
-			       Rule (Abs (_ ::: (cat :@ [])) [] name) _ <- rules,
+			       Rule (Abs (Decl _ cat []) [] name) _ <- rules,
 			       splitableCats ?= cat ]
 
           -- all cats that are splitable
@@ -105,20 +105,20 @@ calcSplitable rules = (listAssoc splitableCat2Funs, listAssoc splitableFun2Cat)
 			  (nondepCats <**> depCats) <\\> resultCats
 
           -- all result cats for some pure function
-	  resultCats = nubsort [ cat | Rule (Abs (_ ::: (cat :@ _)) decls _) _ <- rules,
+	  resultCats = nubsort [ cat | Rule (Abs (Decl _ cat _) decls _) _ <- rules,
 				 not (null decls) ]
 
           -- all cats in constants without dependencies
-          nondepCats = nubsort [ cat | Rule (Abs (_ ::: (cat :@ [])) [] _) _ <- rules ]
+          nondepCats = nubsort [ cat | Rule (Abs (Decl _ cat []) [] _) _ <- rules ]
 
           -- all cats occurring as some dependency of another cat
 	  depCats = nubsort [ cat | Rule (Abs decl decls _) _ <- rules,
 			      cat <- varCats [] (decls ++ [decl]) ]
 
 	  varCats _ [] = []
-	  varCats env ((x ::: (xcat :@ atoms)) : decls)
+	  varCats env (Decl x xcat args : decls)
 	      = varCats ((x,xcat) : env) decls ++
-		[ cat | AVar y <- atoms, cat <- lookupList y env ]
+		[ cat | arg <- args, y <- varsInTTerm arg, cat <- lookupList y env ]
 
 
 ----------------------------------------------------------------------

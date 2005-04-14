@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/12 10:49:44 $ 
+-- > CVS $Date: 2005/04/14 11:42:05 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Converting GFC to SimpleGFC
 --
@@ -54,23 +54,30 @@ convertAbsFun gram fun typing = Rule abs cnc
 
 convertAbstract :: [SDecl] -> Fun -> A.Exp -> Abstract SDecl Name
 convertAbstract env fun (A.EProd x a b) 
-    = convertAbstract ((x' ::: convertType [] a) : env) fun b
+    = convertAbstract (convertType x' [] a : env) fun b
     where x' = if x==I.identC "h_" then anyVar else x
 convertAbstract env fun a 
-    = Abs (anyVar ::: convertType [] a) (reverse env) name
+    = Abs (convertType anyVar [] a) (reverse env) name
     where name = Name fun [ Unify [n] | n <- [0 .. length env-1] ]
 
-convertType :: [Atom] -> A.Exp -> SType
-convertType args (A.EApp a (A.EAtom at)) = convertType (convertAtom at : args) a
-convertType args (A.EAtom at) = convertCat at :@ args
+convertType :: Var -> [TTerm] -> A.Exp -> SDecl
+convertType x args (A.EApp a b) = convertType x (convertExp [] b : args) a
+convertType x args (A.EAtom at) = Decl x (convertCat at) args
+convertType x args exp = error $ "convertType: " ++ prt exp
 
-convertAtom :: A.Atom -> Atom
-convertAtom (A.AC con) = ACon con
-convertAtom (A.AV var) = AVar var
+convertExp :: [TTerm] -> A.Exp -> TTerm
+convertExp args (A.EAtom at) = convertAtom args at
+convertExp args (A.EApp a b) = convertExp (convertExp [] b : args) a
+convertExp args exp = error $ "convertExp: " ++ prt exp
+
+convertAtom :: [TTerm] -> A.Atom -> TTerm
+convertAtom args (A.AC con) = con :@ reverse args
+convertAtom []   (A.AV var) = TVar var
+convertAtom args atom = error $ "convertAtom: " ++ prt args ++ " " ++ prt atom
 
 convertCat :: A.Atom -> SCat
 convertCat (A.AC (A.CIQ _ cat)) = cat
-convertCat at = error $ "convertCat: " ++ show at
+convertCat atom = error $ "convertCat: " ++ show atom
 
 ----------------------------------------------------------------------
 -- concrete definitions
@@ -101,10 +108,10 @@ convertTerm gram (A.T ctype tbl) = Tbl [ (convertPatt pat, convertTerm gram term
 					A.Cas pats term <- tbl, pat <- pats ]
 convertTerm gram (A.S term sel) = convertTerm gram term +! convertTerm gram sel
 convertTerm gram (A.C term1 term2) = convertTerm gram term1 ?++ convertTerm gram term2
-convertTerm gram (A.FV terms) = Variants (map (convertTerm gram) terms)
+convertTerm gram (A.FV terms) = variants (map (convertTerm gram) terms)
 -- 'pre' tokens are converted to variants (over-generating):
 convertTerm gram (A.K (A.KP [s] vs))
-    = Variants $ Token s : [ Token v | A.Var [v] _ <- vs ]
+    = variants $ Token s : [ Token v | A.Var [v] _ <- vs ]
 convertTerm gram (A.K (A.KP _ _)) = error "convertTerm: don't know how to handle string lists in 'pre' tokens"
 convertTerm gram (A.K (A.KS tok)) = Token tok
 convertTerm gram (A.E) = Empty
