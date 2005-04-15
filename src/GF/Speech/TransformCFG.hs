@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 18:38:36 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.10 $
+-- > CVS $Date: 2005/04/15 09:45:32 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.11 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -19,10 +19,6 @@
 module TransformCFG (makeNice, CFRule_) where
 
 import Ident
--- import GF.OldParsing.CFGrammar
--- import GF.OldParsing.Utilities (Symbol(..))
--- import GF.OldParsing.GrammarTypes
--- import GF.Printing.PrintParser
 import GF.Formalism.CFG 
 import GF.Formalism.Utilities (Symbol(..), mapSymbol)
 import GF.Conversion.Types
@@ -35,7 +31,7 @@ import Data.Maybe (fromJust)
 import Debug.Trace
 
 
--- | not very nice to get replace the structured CFCat type with a simple string
+-- | not very nice to replace the structured CFCat type with a simple string
 type CFRule_ = CFRule Cat_ Name Token
 type Cat_ = String
 
