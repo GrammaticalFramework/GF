@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 11:42:05 $ 
+-- > CVS $Date: 2005/04/16 05:40:49 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- Simplistic GFC format
 -----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ decl2cat (Decl _ cat _) = cat
 varsInTTerm :: TTerm -> [Var]
 varsInTTerm tterm = vars tterm []
     where vars (TVar x)  = (x:)
-	  vars (_ :@ ts) = foldr (.) id $ map vars ts
+	  vars (_ :@ ts) = foldr (.) id $ map vars ts
 
 tterm2term :: TTerm -> Term c t
 tterm2term (con :@ terms) = con :^ map tterm2term terms
@@ -108,9 +108,9 @@ term +. lbl = term :. lbl
 Variants terms +! pat = variants $ map (+! pat) terms 
 term +! Variants pats = variants $ map (term +!) pats 
 term +! arg@(Arg _ _ _) = term :! arg
-Tbl table +! pat = maybe err id $ lookup pat table
-    where err = error $ "(+!): pattern not in table"
 Arg arg cat path +! pat = Arg arg cat (path ++! pat)
+-- cannot handle tables with pattern variales or wildcards (yet):
+term@(Tbl table) +! pat = maybe (term :! pat) id $ lookup pat table
 term +! pat = term :! pat
 
 (?++) :: Term c t -> Term c t -> Term c t
@@ -141,7 +141,7 @@ enumerateTerms arg (TblT ptype ctype)
     where enumCase pat = liftM ((,) pat) $ enumerateTerms (fmap (+! pat) arg) ctype
 
 enumeratePatterns :: (Eq c, Eq t) => LinType c t -> [Term c t]
-enumeratePatterns = enumerateTerms Nothing
+enumeratePatterns t = enumerateTerms Nothing t
 
 ----------------------------------------------------------------------
 
@@ -198,7 +198,7 @@ instance Print TTerm where
     prt (TVar var)  = "?" ++ prt var
 
 instance (Print c, Print t) => Print (LinType c t) where
-    prt (RecT rec) = "{" ++ prtInterior ":" rec ++ "}"
+    prt (RecT rec) = "{" ++ prtPairList ":" "; " rec ++ "}"
     prt (TblT t1 t2) = "(" ++ prt t1 ++ " => " ++ prt t2 ++ ")"
     prt (ConT t ts) = prt t ++ "[" ++ prtSep "|" ts ++ "]"
     prt (StrT) = "Str"
@@ -207,8 +207,8 @@ instance (Print c, Print t) => Print (Term c t) where
     prt (Arg n c p) = prt c ++ prt n ++ prt p
     prt (c :^ [])  = prt c 
     prt (c :^ ts)  = "(" ++ prt c ++ prtBefore " " ts ++ ")"
-    prt (Rec rec)   = "{" ++ prtInterior "=" rec ++ "}"
-    prt (Tbl tbl)   = "[" ++ prtInterior "=>" tbl ++ "]"
+    prt (Rec rec)   = "{" ++ prtPairList "=" "; " rec ++ "}"
+    prt (Tbl tbl)   = "[" ++ prtPairList "=>" "; " tbl ++ "]"
     prt (Variants ts)  = "{| " ++ prtSep " | " ts ++ " |}"
     prt (t1 :++ t2) = prt t1 ++ "++" ++ prt t2
     prt (Token t)   = "'" ++ prt t ++ "'"
@@ -217,9 +217,6 @@ instance (Print c, Print t) => Print (Term c t) where
     prt (term :. lbl) = prt term ++ "." ++ prt lbl
     prt (term :! sel) = prt term ++ "!" ++ prt sel
     prt (Var var) = "?" ++ prt var
-
-prtInterior sep xys = if null str then str else init (init str) 
-    where str = concat [ prt x ++ sep  ++ prt y ++ "; " | (x,y) <- xys ]
 
 instance (Print c, Print t) => Print (Path c t) where
     prt (Path path) = concatMap prtEither (reverse path)

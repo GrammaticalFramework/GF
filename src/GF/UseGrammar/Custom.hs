@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 18:38:36 $ 
+-- > CVS $Date: 2005/04/16 05:40:50 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.54 $
+-- > CVS $Revision: 1.55 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -267,6 +267,8 @@ customGrammarPrinter =
   ,(strCI "finite",   Prt2.prt . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
   ,(strCI "single",   Prt2.prt . Cnv.removeSingletons . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
   ,(strCI "sg-sg",    Prt2.prt . Cnv.removeSingletons . Cnv.removeSingletons . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
+  ,(strCI "mcfg-ne", Prt2.prt . Cnv.removeErasing . stateMCFG)
+  ,(strCI "cfg-ne", Prt2.prt . Cnv.ne_mcfg2cfg . Cnv.removeErasing . stateMCFG)
   ,(strCI "mcfg-old", Prt.prt . CnvOld.mcfg . statePInfoOld)
   ,(strCI "cfg-old",  Prt.prt . CnvOld.cfg . statePInfoOld)
   ] 

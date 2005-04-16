@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:51 $ 
+-- > CVS $Date: 2005/04/16 05:40:49 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Incremental chart parsing for CFG
 -----------------------------------------------------------------------------
@@ -29,7 +29,8 @@ import GF.NewParsing.CFG.PInfo
 import GF.NewParsing.IncrementalChart
 
 
-type Strategy = ((Bool, Bool), (Bool, Bool)) -- ^ (predict:(BU, TD), filter:(BU, TD))
+-- | parsing strategy: (predict:(BU, TD), filter:(BU, TD))
+type Strategy = ((Bool, Bool), (Bool, Bool))
 
 parse :: (Ord n, Ord c, Ord t) => Strategy -> CFParser c n t
 parse strategy grammar start = extract . 

@@ -1,13 +1,12 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : GFT
 -- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:21 $ 
+-- > CVS $Date: 2005/04/16 05:40:50 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------

@@ -1,13 +1,12 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : MkHelpFile
 -- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:23 $ 
+-- > CVS $Date: 2005/04/16 05:40:51 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- Compile @HelpFile.hs@ from the text file @HelpFile@.
 -----------------------------------------------------------------------------
@@ -49,9 +48,9 @@ helpHeader = unlines [
   "-- Stability   : (stable)",
   "-- Portability : (portable)",
   "--",
-  "-- > CVS $Date: 2005/02/18 19:21:23 $", 
+  "-- > CVS $Date: 2005/04/16 05:40:51 $", 
   "-- > CVS $Author: peb $",
-  "-- > CVS $Revision: 1.6 $",
+  "-- > CVS $Revision: 1.7 $",
   "--",
   "-- Help on shell commands. Generated from HelpFile by 'make help'.",
   "-- PLEASE DON'T EDIT THIS FILE.",

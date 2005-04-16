@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:51 $ 
+-- > CVS $Date: 2005/04/16 05:40:49 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- CFG parsing with a general chart
 -----------------------------------------------------------------------------
@@ -24,12 +24,13 @@ import GF.NewParsing.GeneralChart
 import GF.Data.Assoc
 import Monad
 
---parse :: (Ord n, Ord c, Ord t) => Strategy -> CFParser c n t
+parse :: (Ord n, Ord c, Ord t) => Strategy -> CFParser c n t
 parse strategy grammar start = extract .
 			       tracePrt "#internal chart" (prt . length . chartList) .
       			       process strategy grammar start 
 
-type Strategy = (Bool, Bool) -- ^ (isBottomup, isTopdown)
+-- | parsing strategy: (isBottomup, isTopdown)
+type Strategy = (Bool, Bool)
 
 extract :: (Ord n, Ord c, Ord t) =>
 	   IChart n (Symbol c t) -> CFChart c n t

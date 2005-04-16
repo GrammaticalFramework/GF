@@ -4,14 +4,15 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:52 $ 
+-- > CVS $Date: 2005/04/16 05:40:49 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- CFG parsing, parser information
 -----------------------------------------------------------------------------
 
-module GF.NewParsing.CFG.PInfo where
+module GF.NewParsing.CFG.PInfo
+    (CFParser, CFPInfo(..), buildCFPInfo) where
 
 import GF.System.Tracing
 import GF.Infra.Print
@@ -24,9 +25,10 @@ import GF.Data.Assoc
 ----------------------------------------------------------------------
 -- type declarations
 
+-- | the list of categories = possible starting categories
 type CFParser c n t = CFPInfo c n t 
-		    -> [c]             -- ^ possible starting categories
-		    -> Input t         -- ^ the input tokens
+		    -> [c]
+		    -> Input t
 		    -> CFChart c n t
 
 ------------------------------------------------------------
@@ -45,7 +47,7 @@ data CFPInfo c n t
 		-- ^ DOES NOT WORK WITH EMPTY RULES!!!
 	      }
 
---buildCFPInfo :: (Ord n, Ord c, Ord t) => CFGrammar c n t -> CFPInfo c n t
+buildCFPInfo :: (Ord n, Ord c, Ord t) => CFGrammar c n t -> CFPInfo c n t
 
 -- this is not permanent...
 buildCFPInfo grammar = traceCalcFirst grammar $

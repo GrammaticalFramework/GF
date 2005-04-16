@@ -30,10 +30,11 @@ sub check_headerline {
   my ($title, $regexp) = @_;
   if (s/^-- \s $title \s* : \s+ (.+?) \s*\n//sx) {
     $name = $1;
-    print "   > Incorrect ".lcfirst $title.": $name\n" unless $name =~ $regexp;
+    push @ERR, "Incorrect ".lcfirst $title.": $name"
+      unless $name =~ $regexp;
     return $&;
   } else {
-    print "   > Header missing: ".lcfirst $title."\n";
+    push @ERR, "Header missing: ".lcfirst $title."";
   }
 }
 
@@ -43,7 +44,7 @@ if ($#ARGV >= 0) {
   @dirs = qw{. api canonical cf cfgm compile for-ghc-nofud
 	     grammar infra notrace parsers shell
 	     source speech translate useGrammar util visualization
-	     GF GF/* GF/*/*};
+	     GF GF/* GF/*/* GF/*/*/*};
   @FILES = grep(!/\/(Par|Lex)(GF|GFC|CFG)\.hs$/,
 		glob "{".join(",",@dirs)."}/*.hs");
 }
@@ -55,12 +56,12 @@ for $file (@FILES) {
   $_ = join "", <F>;
   close F;
 
-  print "-- $file\n";
+  @ERR = ();
 
   # substituting hard spaces for ordinary spaces
   $nchars = tr/\240/ /;
   if ($nchars > 0) {
-    print "!! > Substituted $nchars hard spaces\n";
+    push @ERR, "!! > Substituted $nchars hard spaces";
     open F, ">$file.hs";
     print F $_;
     close F;
@@ -71,17 +72,17 @@ for $file (@FILES) {
 
   s/^ (--+ \s* \n) +//sx;
   unless (s/^ -- \s \| \s* \n//sx) {
-    print "   > Incorrect module header\n";
+    push @ERR, "Incorrect module header";
   } else {
     $hdr_module = s/^-- \s Module \s* : \s+ (.+?) \s*\n//sx ? $1 : "";
     &check_headerline("Maintainer", qr/^ [\wåäöÅÄÖüÜ\s\@\.]+ $/x);
     &check_headerline("Stability", qr/.*/);
     &check_headerline("Portability", qr/.*/);
     s/^ (--+ \s* \n) +//sx;
-    print "   > Missing CVS information\n"
+    push @ERR, "Missing CVS information"
       unless s/^(-- \s+ \> \s+ CVS \s+ \$ .*? \$ \s* \n)+//sx;
     s/^ (--+ \s* \n) +//sx;
-    print "   > Missing module description\n"
+    push @ERR, "Missing module description"
       unless /^ -- \s+ [^\(]/x;
   }
 
@@ -105,7 +106,7 @@ for $file (@FILES) {
     $module = $1;
 
     # modules without export lists
-    print "   > No export list\n";
+    # push @ERR, "No export list";
 
     # function definitions
     while (/^ (.*? $nonOperCharColon) = (?! $operCharColon)/gmx) {
@@ -120,17 +121,17 @@ for $file (@FILES) {
       } elsif ($defn =~ /^($funSym)/x) {
 	$fn = $1;
       } else {
-	print "!! > Error in function defintion: $defn\n";
+	push @ERR, "!! > Error in function defintion: $defn";
 	next;
       }
 
       $exportlist .= " $fn ";
     }
   } else {
-    print "  > No module header found\n";
+    push @ERR, "No module header found";
   }
 
-  print "  > Module names not matching: $module != $hdr_module\n"
+  push @ERR, "Module names not matching: $module != $hdr_module"
     if $hdr_module && $module !~ /\Q$hdr_module\E$/;
 
   # fixing exportlist (double spaces as separator)
@@ -148,16 +149,18 @@ for $file (@FILES) {
 
   # reporting exported functions without type signatures
   $reported = 0;
+  $untyped = "";
   while ($exportlist =~ /\s ($funOrOper) \s/x) {
     $function = $1;
     $exportlist =~ s/\s \Q$function\E \s/ /gx;
-    print "   > No type signature for function(s):\n    "
-      unless $reported++;
-    print " $function";
+    $reported++;
+    $untyped .= " $function";
   }
-  print "\n     $reported function(s)\n"
+  push @ERR, "No type signature for $reported function(s):\n    " . $untyped
     if $reported;
 
+  print "-- $file\n   > " . join("\n   > ", @ERR) . "\n"
+    if @ERR;
 }
 
 

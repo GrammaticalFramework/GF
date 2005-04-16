@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 11:42:05 $ 
+-- > CVS $Date: 2005/04/16 05:40:49 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Basic type declarations and functions for grammar formalisms
 -----------------------------------------------------------------------------
@@ -150,7 +150,7 @@ compactForests :: Ord n => [SyntaxForest n] -> SList (SyntaxForest n)
 compactForests = map joinForests . groupBy eqNames . sortForests
     where eqNames f g    = forestName f == forestName g
 	  sortForests    = foldMerge mergeForests [] . map return 
-	  mergeForests [] gs = gs
+	  mergeForests [] gs = gs
 	  mergeForests fs [] = fs
 	  mergeForests fs@(f:fs') gs@(g:gs') 
 	      = case forestName f `compare` forestName g of
@@ -163,7 +163,7 @@ compactForests = map joinForests . groupBy eqNames . sortForests
 					  compactDaughters $
 					  concat [ fss | FNode _ fss <- fs ]
 	  compactDaughters fss = case head fss of
-				   []  -> [[]]
+				   []  -> [[]]
 				   [_] -> map return $ compactForests $ concat fss
 				   _   -> nubsort fss
 -}

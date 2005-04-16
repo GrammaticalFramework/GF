@@ -1,13 +1,12 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : GFDoc
 -- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:23 $ 
+-- > CVS $Date: 2005/04/16 05:40:50 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- produce a HTML document from a list of GF grammar files. AR 6\/10\/2002
 --

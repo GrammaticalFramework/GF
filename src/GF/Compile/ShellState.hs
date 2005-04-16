@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 11:42:05 $ 
+-- > CVS $Date: 2005/04/16 05:40:50 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.42 $
+-- > CVS $Revision: 1.43 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -189,21 +189,9 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
 
   let pinfosOld = map (CnvOld.pInfo opts cgr) concrs  -- peb 18/6 (OBSOLETE)
 
-  let g2s  = Cnv.gfc2simple
-      fin  = Cnv.removeSingletons . Cnv.simple2finite
-      s2mN = Cnv.simple2mcfg_nondet
-      s2mS = Cnv.simple2mcfg_strict
-      --                     ____ kan man ha flera '-conversion=X -conversion=Y'?
-      (simpleCnv, mcfgCnv) = case getOptVal opts gfcConversion of
-			       Just "strict" -> (g2s, s2mS)
-			       Just "finite" -> (fin . g2s, s2mN)
-			       Just "finite-strict" -> (fin . g2s, s2mS)
-			       _             -> (g2s, s2mN)
-      cfgCnv  = Cnv.mcfg2cfg
-
-  let simples = map (curry simpleCnv cgr) concrs 
-      mcfgs   = map mcfgCnv simples
-      cfgs    = map cfgCnv mcfgs
+  let fromGFC       = Cnv.gfc2mcfg2cfg opts
+      (mcfgs, cfgs) = unzip $ map (curry fromGFC cgr) concrs 
+      pInfos        = zipWith Prs.buildPInfo mcfgs cfgs
 
   let funs = funRulesOf cgr
   let cats = allCatsOf cgr
@@ -225,7 +213,7 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
     pInfosOld  = zip concrs pinfosOld, -- peb 8/6 (OBSOLETE)
     mcfgs      = zip concrs mcfgs,
     cfgs       = zip concrs cfgs,
-    pInfos     = zip concrs $ zipWith Prs.buildPInfo mcfgs cfgs,
+    pInfos     = zip concrs pInfos,
     morphos    = zip concrs (map (mkMorpho cgr) concrs),
     gloptions  = gloptions sh, --- opts, -- this would be command-line options
     readFiles  = [ft | ft@(f,_) <- readFiles sh, notInrts f] ++ rts,
