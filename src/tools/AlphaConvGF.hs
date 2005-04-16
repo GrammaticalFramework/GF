@@ -1,13 +1,12 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : AlphaConvGF
 -- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:23 $ 
+-- > CVS $Date: 2005/04/16 05:40:50 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/15 09:45:32 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.15 $
+-- > CVS $Date: 2005/04/16 05:40:50 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.16 $
 --
 -- Handles printing a CFGrammar in CFGM format.
 -----------------------------------------------------------------------------
@@ -33,6 +33,8 @@ import qualified Option
 import List (intersperse)
 import Maybe (listToMaybe, maybe)
 
+-- | FIXME: should add an Options argument,
+-- to be able to decide which CFG conversion one wants to use
 prCanonAsCFGM :: CanonGrammar -> String
 prCanonAsCFGM gr = unlines $ map (uncurry (prLangAsCFGM gr)) xs 
     where 
@@ -46,12 +48,15 @@ prCanonAsCFGM gr = unlines $ map (uncurry (prLangAsCFGM gr)) xs
 getFlag :: [Flag] -> String -> Maybe String
 getFlag fs x = listToMaybe [v | Flg (IC k) (IC v) <- fs, k == x]
 
--- | OBS! Should use 'ShellState.statePInfo' or 'ShellState.pInfos'
--- instead of 'Cnv.pInfo' (which recalculates the grammar every time)
+-- | FIXME: (1) Should use 'ShellState.stateCFG'
+-- instead of 'Cnv.gfc2cfg' (which recalculates the grammar every time)
+--
+-- FIXME: (2) Should use the state options, when calculating the CFG
+-- (this is solved automatically if one solves (1) above)
 prLangAsCFGM :: CanonGrammar -> Ident -> Maybe String -> String
-prLangAsCFGM gr i start = prCFGrammarAsCFGM (Cnv.gfc2cfg (gr, i)) i start
+prLangAsCFGM gr i start = prCFGrammarAsCFGM (Cnv.gfc2cfg opts (gr, i)) i start
 -- prLangAsCFGM gr i start = prCFGrammarAsCFGM (Cnv.cfg (Cnv.pInfo opts gr i)) i start
---     where opts = Option.Opts [Option.gfcConversion "nondet"]
+     where opts = Option.Opts [Option.gfcConversion "nondet"]
 
 prCFGrammarAsCFGM :: GT.CGrammar -> Ident -> Maybe String -> String
 prCFGrammarAsCFGM gr i start = PrintCFG.printTree $ cfGrammarToCFGM gr i start

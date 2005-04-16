@@ -5,16 +5,15 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/29 13:26:34 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.8 $
+-- > CVS $Date: 2005/04/16 05:40:50 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.9 $
 --
 -- Bottom-up Kilbury chart parser from "Pure Functional Parsing", chapter 5.
 -- OBSOLETE -- should use new MCFG parsers instead 
 -----------------------------------------------------------------------------
 
-module ChartParser {- # DEPRECATED "Use ParseCF instead" #-} 
-    (chartParser) where
+module ChartParser (chartParser) where
 
 -- import Tracing
 -- import PrintParser

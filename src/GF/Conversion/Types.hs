@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 11:42:05 $ 
+-- > CVS $Date: 2005/04/16 05:40:49 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- All possible instantiations of different grammar formats used in conversion from GFC
 -----------------------------------------------------------------------------
@@ -43,6 +43,8 @@ data Name = Name Fun [Profile (SyntaxForest Fun)]
 
 name2fun :: Name -> Fun
 name2fun (Name fun _) = fun
+
+-- * profiles
 
 -- | A profile is a simple representation of a function on a number of arguments.
 -- We only use lists of profiles
@@ -116,7 +118,7 @@ type SLinType = LinType SCat Token
 type SDecl    = Decl    SCat
 
 ----------------------------------------------------------------------
--- * MCFG
+-- * erasing MCFG
 
 type MGrammar = MCFGrammar MCat Name MLabel Token
 type MRule    = MCFRule    MCat Name MLabel Token
@@ -144,6 +146,17 @@ isCoercion (Name fun [Unify [0]]) = Ident.isWildIdent fun
 isCoercion _ = False
 
 ----------------------------------------------------------------------
+-- * nonerasing MCFG
+
+type NGrammar = MCFGrammar NCat Name NLabel Token
+type NRule    = MCFRule    NCat Name NLabel Token
+data NCat     = NCat MCat [MLabel] deriving (Eq, Ord, Show)
+type NLabel   = MLabel
+
+ncat2mcat :: NCat -> MCat
+ncat2mcat (NCat mcat _) = mcat
+
+----------------------------------------------------------------------
 -- * CFG
 
 type CGrammar = CFGrammar CCat Name Token
@@ -159,6 +172,9 @@ instance Print MCat where
     prt (MCat cat constrs) = prt cat ++ "{" ++ 
 			     concat [ prt path ++ "=" ++ prt term ++ ";" |
 				      (path, term) <- constrs ] ++ "}"
+
+instance Print NCat where
+    prt (NCat cat labels) = prt cat ++ prt labels
 
 instance Print CCat where
     prt (CCat cat label) = prt cat ++ prt label

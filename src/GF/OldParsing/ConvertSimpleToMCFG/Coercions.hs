@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:56 $ 
+-- > CVS $Date: 2005/04/16 05:40:50 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Adding coercion functions to a MCFG if necessary.
 -----------------------------------------------------------------------------
@@ -55,15 +55,15 @@ combineCoercions allHeads'@(heads:allHeads) allArgs'@(args:allArgs)
 
 
 makeCoercion heads args = [ Rule arg [head] lins coercionName |
-			    (head@({-MCFCat-}(_, headCns), lbls) <- heads, 
+			    head@((_, headCns), lbls) <- heads, 
 			    let lins = [ Lin lbl [Cat (head, lbl, 0)] | lbl <- lbls ],
-			    arg@({-MCFCat-} (_, argCns) <- args,
+			    arg@(_, argCns) <- args,
 			    argCns `subset` headCns ]
 
 
 coercionName = Ident.IW
 
-mainCat ({-MCFCat-} (c, _) = c
+mainCat (c, _) = c
 
 sameCat mc1 mc2 = mainCat mc1 == mainCat mc2
 

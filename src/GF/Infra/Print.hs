@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:50 $ 
+-- > CVS $Date: 2005/04/16 05:40:49 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Pretty-printing
 -----------------------------------------------------------------------------
@@ -14,7 +14,7 @@
 module GF.Infra.Print 
     (Print(..),
      prtBefore, prtAfter, prtSep, 
-     prtBeforeAfter,
+     prtBeforeAfter, prtPairList,
      prIO
     ) where
 
@@ -42,6 +42,9 @@ prtSep sep = concat . intersperse sep . map prt
 
 prtBeforeAfter :: Print a => String -> String -> [a] -> String
 prtBeforeAfter before after as = concat [ before ++ prt a ++ after | a <- as ]
+
+prtPairList :: (Print a, Print b) => String -> String -> [(a,b)] -> String
+prtPairList comma sep xys = prtSep sep [ prt x ++ comma ++ prt y | (x,y) <- xys ]
 
 prIO :: Print a => a -> IO ()
 prIO = putStr . prt

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:53:38 $ 
+-- > CVS $Date: 2005/04/16 05:40:50 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.28 $
+-- > CVS $Revision: 1.29 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ testValidFlag st co f x = case f of
   "filter"  -> testInc customStringCommand
   "length"  -> testN
   "optimize"-> testIn $ words "parametrize values all share none"
-  "conversion" -> testIn $ words "strict nondet"
+  "conversion" -> testIn $ words "strict nondet finite finite-strict"
   _ -> return ()
  where
    testInc ci = 

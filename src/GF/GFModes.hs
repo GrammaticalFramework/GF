@@ -1,13 +1,12 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : Main
 -- Maintainer  : Aarne Ranta
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/02/04 10:10:28 $ 
+-- > CVS $Date: 2005/04/16 05:40:48 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
