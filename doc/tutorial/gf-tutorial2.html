@@ -44,7 +44,7 @@ It will guide you
 
 
 <!-- NEW -->
-<h2>The GF program</h2>
+<h3>The GF program</h3>
 
 The program is open-source free software, which you can download from the
 GF Homepage:<br>
@@ -79,7 +79,7 @@ Now you are ready to try out your first grammar.
 We start with one that is not written in GF language, but
 in the EBNF notation (Extended Backus Naur Form), which GF can also
 understand. Type (or copy) the following lines in a file named
-<tt>stoneage.ebnf</tt>:
+<tt>paleolithic.ebnf</tt>:
 <pre>
   S   ::= NP VP ;
   VP  ::= V | TV NP | "is" A ;
@@ -93,12 +93,12 @@ understand. Type (or copy) the following lines in a file named
 
 
 <!-- NEW -->
-<h2>Importing grammars and parsing strings</h2>
+<h3>Importing grammars and parsing strings</h3>
 
 The first GF command when using a grammar is to <b>import</b> it.
 The command has a long name, <tt>import</tt>, and a short name, <tt>i</tt>.
 <pre>
-  import stoneage.gf
+  import paleolithic.gf
 </pre>
 The GF program now <b>compiles</b> your grammar into an internal
 representation, and shows a new prompt when it is ready.
@@ -131,7 +131,7 @@ you imported. Try parsing something else, and you fail
 
 
 <!-- NEW -->
-<h2>Generating trees and strings</h2>
+<h3>Generating trees and strings</h3>
 
 You can also use GF for <b>linearizing</b>
 (<tt>linearize = l</tt>). This is the inverse of
@@ -158,7 +158,7 @@ a <b>pipe</b>.
 
 
 <!-- NEW -->
-<h2>Some random-generated sentences</h2>
+<h3>Some random-generated sentences</h3>
 
 Random generation can be quite amusing. So you may want to
 generate ten strings with one and the same command:
@@ -178,7 +178,7 @@ generate ten strings with one and the same command:
 
 
 <!-- NEW -->
-<h2>Systematic generation</h2>
+<h3>Systematic generation</h3>
 
 To generate <i>all</i> sentence that a grammar
 can generate, use the command <tt>generate_trees = gt</tt>.
@@ -203,7 +203,7 @@ trees in your grammar, it would never terminate. Why?
 
 
 <!-- NEW -->
-<h2>More on pipes; tracing</h2>
+<h3>More on pipes; tracing</h3>
 
 A pipe of GF commands can have any length, but the "output type"
 (either string or tree) of one command must always match the "input type"
@@ -227,7 +227,7 @@ contains strings that can be parsed in more than one way.
 
 
 <!-- NEW -->
-<h2>Writing and reading files</h2>
+<h3>Writing and reading files</h3>
 
 To save the outputs of GF commands into a file, you can
 pipe it to the <tt>write_file = wf</tt> command,
@@ -248,9 +248,7 @@ a sentence but a sequence of ten sentences.
 
 
 <!-- NEW -->
-<h2>Labelled context-free grammars</h2>
-
-<h3>Rules and labels</h3>
+<h3>Labelled context-free grammars</h3>
 
 The syntax trees returned by GF's parser in the previous examples
 are not so nice to look at. The identifiers of form <tt>Mks</tt>
@@ -280,7 +278,313 @@ is the label of the rule prefixing <tt>this</tt> to a common noun,
 <tt>Mks_18</tt> is the label of the adjective <tt>thick</tt>,
 and so on.
 
+<!-- NEW -->
+<h4>The labelled context-free format</h4>
 
+The <b>labelled context-free grammar</b> format permits user-defined
+labels to each rule. GF recognizes files of this format by the suffix
+<tt>.cf</tt>. Let us include the following rules in the file
+<tt>paleolithic.cf</tt>.
+<pre>
+  PredVP.  S   ::= NP VP ;
+  UseV.    VP  ::= V ;
+  ComplTV. VP  ::= TV NP ;
+  UseA.    VP  ::= "is" A ;
+  This.    NP  ::= "this" CN ; 
+  That.    NP  ::= "that" CN ; 
+  Def.     NP  ::= "the" CN ;
+  Indef.   NP  ::= "a" CN ;  
+  ModA.    CN  ::= A CN ;
+  Bird.    CN  ::= "bird" ;
+  Boy.     CN  ::= "boy" ;
+  Man.     CN  ::= "man" ;
+  Louse.   CN  ::= "louse" ;
+  Snake.   CN  ::= "snake" ;
+  Worm.    CN  ::= "worm" ;
+  Big.     A   ::= "big" ;
+  Green.   A   ::= "green" ;
+  Rotten.  A   ::= "rotten" ;
+  Thick.   A   ::= "thick" ;
+  Warm.    A   ::= "warm" ;
+  Laugh.   V   ::= "laughs" ;
+  Sleep.   V   ::= "sleeps" ;
+  Swim.    V   ::= "swims" ;
+  Eat.     TV  ::= "eats" ;
+  Kill.    TV  ::= "kills" 
+  Wash.    TV  ::= "washes" ;
+</pre>
+
+<!-- NEW -->
+<h4>Using the labelled context-free format</h4>
+
+The GF commands for the <tt>.cf</tt> format are
+exactly the same as for the <tt>.ebnf</tt> format.
+Just the syntax trees become nicer to read and
+to remember. Notice that before reading in
+a new grammar in GF you often (but not always,
+as we will see later) have first to give the
+command (<tt>empty = e</tt>), which removes the
+old grammar from the GF shell state.
+<pre>
+  > empty
+
+  > i paleolithic.cf
+
+  > p "the boy eats a snake"
+  PredVP (Def Boy) (ComplTV Eat (Indef Snake))
+
+  > gr -tr | l
+  PredVP (Indef Louse) (UseA Big)
+  a louse is big
+</pre>
+
+
+<!-- NEW -->
+<h2>The GF grammar format</h2>
+
+To see what there really is in GF's shell state when a grammar
+has been imported, you can give the plain command
+<tt>print_grammar = pg</tt>.
+<pre>
+  > print_grammar
+</pre>
+The output is quite unreadable at this stage, and you may feel happy that
+you did not need to write the grammar in that notation, but that the
+GF grammar compiler produced it.
+
+<p>
+
+However, we will now start to show how GF's own notation gives you
+much more expressive power than the <tt>.cf</tt> and <tt>.ebnf</tt>
+formats. We will introduce the <tt>.gf</tt> format by presenting
+one more way of defining the same grammar as in
+<tt>paleolithic.cf</tt> and <tt>paleolithic.ebnf</tt>.
+Then we will show how the full GF grammar format enables you
+to do things that are not possible in the weaker formats.
+
+
+<!-- NEW -->
+<h3>Abstract and concrete syntax</h3>
+
+A GF grammar consists of two main parts:
+<ul>
+<li> <b>abstract syntax</b>, defining what syntax trees there are
+<li> <b>concrete syntax</b>, defining how trees are linearized into strings 
+</ul>
+The EBNF and CF formats fuse these two things together, but it is possible
+to take them apart. For instance, the verb phrase predication rule
+<pre>
+  PredVP. S ::= NP VP ;
+</pre>
+is interpreted as the following pair of rules:
+<pre>
+  fun PredVP : NP -> VP -> S ;
+  lin PredVP x y = {s = x.s ++ y.s} ;
+</pre>
+The former rule, with the keyword <tt>fun</tt>, belongs to the abstract syntax.
+It defines the <b>function</b>
+<tt>PredVP</tt> which constructs syntax trees of form
+(<tt>PredVP</tt> <i>x</i> <i>y</i>). 
+
+<p>
+
+The latter rule, with the keyword <tt>lin</tt>, belongs to the concrete syntax.
+It defines the <b>linearization function</b> for
+syntax trees of form (<tt>PredVP</tt> <i>x</i> <i>y</i>). 
+
+
+<!-- NEW -->
+<h4>Judgement forms</h4>
+
+Rules in a GF grammar are called <b>judgements</b>, and the keywords
+<tt>fun</tt> and <tt>lin</tt> are used for distinguishing between two
+<b>judgement forms</b>. Here is a summary of the most important
+judgement forms:
+<ul>
+  <li> abstract syntax
+  <ul>
+    <li> cat C
+    <li> fun f : A
+  </ul>
+  <li> concrete syntax
+  <ul>
+    <li> lincat C = T
+    <li> lin f x ... y = t
+  </ul>
+</ul>
+We return to the precise meanings of these judgement forms later.
+First we will look at how judgements are grouped into modules, and
+show how the grammar <tt>paleolithic.cf</tt> is
+expressed by using modules and judgements.
+
+
+<!-- NEW -->
+<h4>Module types</h4>
+
+A GF grammar consists of <b>modules</b>, 
+into which judgements are grouped. The most important
+module forms are
+<ul>
+  <li> <tt>abstract</tt> A = M</tt>, abstract syntax A with judgements in
+  the module body M.
+  <li> <tt>concrete</tt> C <tt>of</tt> A = M</tt>, concrete syntax C of the
+       abstract syntax A, with judgements in the module body M.
+</ul>
+
+<!-- NEW -->
+<h4>An abstract syntax example</h4>
+
+Each nonterminal occurring in <tt>paleolithic.cf</tt> is
+introduced by a <tt>cat</tt> judgement. Each
+rule label is introduced by a <tt>fun</tt> judgement.
+<pre>
+abstract Paleolithic = {
+cat 
+  S ; NP ; VP ; CN ; A ; V ; TV ; 
+fun
+  PredVP  : NP -> VP -> S ;
+  UseV    : V -> VP ;
+  ComplTV : TV -> NP -> VP ;
+  UseA    : A -> VP ;
+  ModA    : A -> CN -> CN ;
+  This, That, Def, Indef : CN -> NP ; 
+  Bird, Boy, Man, Louse, Snake, Worm : CN ;
+  Big, Green, Rotten, Thick, Warm : A ;
+  Laugh, Sleep, Swim : V ;
+  Eat, Kill, Wash : TV ;
+}
+</pre>
+Notice the use of shorthands permitting the sharing of
+the keyword in subsequent judgements, and of the type
+in subsequent <tt>fun</tt> judgements.
+
+
+<!-- NEW -->
+<h4>A concrete syntax example</h4>
+
+Each category introduced in <tt>Paleolithic.gf</tt> is
+given a <tt>lincat</tt> rule, and each
+function is given a <tt>fun</tt> rule. Similar shorthands
+apply as in <tt>abstract</tt> modules.
+<pre>
+concrete PaleolithicEng of Paleolithic = {
+lincat 
+  S, NP, VP, CN, A, V, TV = {s : Str} ; 
+lin
+  PredVP np vp  = {s = np.s ++ vp.s} ;
+  UseV   v      = v ;
+  ComplTV tv np = {s = tv.s ++ np.s} ;
+  UseA   a   = {s = "is" ++ a.s} ;
+  This  cn   = {s = "this" ++ cn.s} ; 
+  That  cn   = {s = "that" ++ cn.s} ; 
+  Def   cn   = {s = "the" ++ cn.s} ;
+  Indef cn   = {s = "a" ++ cn.s} ; 
+  ModA  a cn = {s = a.s ++ cn.s} ;
+  Bird   = {s = "bird"} ;
+  Boy    = {s = "boy"} ;
+  Louse  = {s = "louse"} ;
+  Man    = {s = "man"} ;
+  Snake  = {s = "snake"} ;
+  Worm   = {s = "worm"} ;
+  Big    = {s = "big"} ;
+  Green  = {s = "green"} ;
+  Rotten = {s = "rotten"} ;
+  Thick  = {s = "thick"} ;
+  Warm   = {s = "warm"} ;
+  Laugh  = {s = "laughs"} ;
+  Sleep  = {s = "sleeps"} ;
+  Swim   = {s = "swims"} ;
+  Eat    = {s = "eats"} ;
+  Kill   = {s = "kills"} ; 
+  Wash   = {s = "washes"} ;
+}
+</pre>
+
+
+<!-- NEW -->
+<h4>Modules and files</h4>
+
+Module name + <tt>.gf</tt> = file name
+
+<p>
+
+Each module is compiled into a <tt>.gfc</tt> file.
+
+<p>
+
+Import <tt>PaleolithicEng.gf</tt> and try what happens
+<pre>
+
+</pre>
+Nothing more than before, except that the GFC files
+are generated.
+
+
+<!-- NEW -->
+<h4>An Italian concrete syntax</h4>
+
+<pre>
+concrete PaleolithicIta of Paleolithic = {
+lincat 
+  S, NP, VP, CN, A, V, TV = {s : Str} ; 
+lin
+  PredVP np vp  = {s = np.s ++ vp.s} ;
+  UseV   v      = v ;
+  ComplTV tv np = {s = tv.s ++ np.s} ;
+  UseA   a   = {s = "è" ++ a.s} ;
+  This  cn   = {s = "questo" ++ cn.s} ; 
+  That  cn   = {s = "quello" ++ cn.s} ; 
+  Def   cn   = {s = "il" ++ cn.s} ;
+  Indef cn   = {s = "un" ++ cn.s} ; 
+  ModA  a cn = {s = cn.s ++ a.s} ;
+  Bird   = {s = "uccello"} ;
+  Boy    = {s = "ragazzo"} ;
+  Louse  = {s = "pidocchio"} ;
+  Man    = {s = "uomo"} ;
+  Snake  = {s = "serpente"} ;
+  Worm   = {s = "verme"} ;
+  Big    = {s = "grande"} ;
+  Green  = {s = "verde"} ;
+  Rotten = {s = "marcio"} ;
+  Thick  = {s = "grosso"} ;
+  Warm   = {s = "caldo"} ;
+  Laugh  = {s = "ride"} ;
+  Sleep  = {s = "dorme"} ;
+  Swim   = {s = "nuota"} ;
+  Eat    = {s = "mangia"} ;
+  Kill   = {s = "uccide"} ; 
+  Wash   = {s = "lava"} ;
+}
+</pre>
+
+<!-- NEW -->
+<h4>Using a multilingual grammar</h4>
+
+Import without first emptying
+<pre>
+
+</pre>
+Try generation now:
+<pre>
+
+</pre>
+Translate by using a pipe:
+<pre>
+
+</pre>
+Inspect the shell state (<tt>print_options = po</tt>):
+<pre>
+  > print_options
+  main abstract :     Paleolithic
+  main concrete :     PaleolithicIta
+  all concretes :     PaleolithicIta PaleolithicEng
+</pre>
+
+
+<!-- NEW -->
+<h4>Extending the grammar</h4>
+
+Neolithic
 
 
 
