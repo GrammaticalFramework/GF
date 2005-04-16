@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 17:35:42 $ 
+-- > CVS $Date: 2005/04/16 20:24:43 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- chop an HTML file into separate files, each linked to the next and previous.
 -- the names of the files are n-file, with n = 01,02,...
@@ -81,7 +81,7 @@ fileName file n = (if n < 10 then ('0':) else id) $ show n ++ "-" ++ file
 
 pageNum mx num = "<p align=right>" ++ show num ++"/" ++ show mx ++ "</p>"
 
-mkIndex file = unlines . mkInd 0 where
+mkIndex file = unlines . mkInd 1 where
   mkInd n ss = case ss of
     s : rest | (s==separator) -> mkInd (n+1) rest
     s : rest -> case getHeading s of
@@ -94,7 +94,7 @@ mkIndex file = unlines . mkInd 0 where
   mkLine _ '1' t = t ++ " : Table of Contents<p>"       -- heading of whole document
   mkLine n i t = stars i ++ link n t ++ "<br>"
   stars i = case i of
-    '3' -> "*"
-    '4' -> "**"
+    '3' -> "<li> "
+    '4' -> "<li>* "
     _   -> ""
   link n t = "<a href=\"" ++ fileName file n ++ "\">" ++ t ++ "</a>"
