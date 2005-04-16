@@ -1,0 +1,8 @@
+S   ::= NP VP ;
+VP  ::= V | TV NP | "is" A ;
+NP  ::= ("this" | "that" | "the" | "a") CN ;
+CN  ::= A CN ;
+CN  ::= "bird" | "boy" | "man" | "louse" | "snake" | "worm" ;
+A   ::= "big" | "green" | "rotten" | "thick" | "warm" ;
+V   ::= "laughs" | "sleeps" | "swims" ;
+TV  ::= "eats" | "kills" | "washes" ;
