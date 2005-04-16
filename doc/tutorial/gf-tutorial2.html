@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html><head><title></title></head>
+ <body bgcolor="#ffffff" text="#000000">
+<center>
+
+<img src="../gf-logo.gif">
+
+<h1>Grammatical Framework Tutorial</h1>
+
+<p>
+
+<b>3rd Edition, for GF version 2.2 or later</b>
+
+</p><p>
+
+<a href="http://www.cs.chalmers.se/~aarne</a>">Aarne Ranta</a>
+
+</p>
+<p>
+
+<tt>aarne@cs.chalmers.se</tt>
+</p></center>
+
+
+<!-- NEW -->
+<h2>GF = Grammatical Framework</h2>
+
+The term GF is used for different things:
+<ul>
+<li> a <b>program</b> used for working with grammars
+<li> a <b>programming language</b> in which grammars can be written
+<li> a <b>theory</b> about the concepts of grammars and languages
+</ul>
+
+<p>
+
+This tutorial is about the GF program and the GF programming language.
+It will guide you
+<ul>
+<li> to use the GF program
+<li> to write GF grammars
+<li> to write programs in which GF grammars are used as components
+</ul>
+
+
+<!-- NEW -->
+<h2>The GF program</h2>
+
+The program is open-source free software, which you can download from the
+GF Homepage:<br>
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF">
+<tt>http://www.cs.chalmers.se/~aarne/GF</tt></a>
+
+<p>
+
+There you can download
+<ul>
+<li> ready-made binaries for Linux, Solaris, Macintosh, and Windows
+<li> source code and documentation
+<li> grammar libraries and examples
+</ul>
+If you want to compile GF from source, you need Haskell and Java
+compilers. But normally you don't have to compile, and you don't
+need to know Haskell or Java to use GF.
+
+<p>
+
+To start the GF program, assuming you have installed it, just type
+<pre>
+  gf
+</pre>
+in the shell. You will see GF's welcome message and the prompt <tt>></tt>.
+
+
+<!-- NEW -->
+<h2>My first grammar</h2>
+
+Now you are ready to try out your first grammar.
+We start with one that is not written in GF language, but
+in the EBNF notation (Extended Backus Naur Form), which GF can also
+understand. Type (or copy) the following lines in a file named
+<tt>stoneage.ebnf</tt>:
+<pre>
+  S   ::= NP VP ;
+  VP  ::= V | TV NP | "is" A ;
+  NP  ::= ("this" | "that" | "the" | "a") CN ;
+  CN  ::= A CN ;
+  CN  ::= "bird" | "boy" | "man" | "louse" | "snake" | "worm" ;
+  A   ::= "big" | "green" | "rotten" | "thick" | "warm" ;
+  V   ::= "laughs" | "sleeps" | "swims" ;
+  TV  ::= "eats" | "kills" | "washes" ;
+</pre>
+
+
+<!-- NEW -->
+<h2>Importing grammars and parsing strings</h2>
+
+The first GF command when using a grammar is to <b>import</b> it.
+The command has a long name, <tt>import</tt>, and a short name, <tt>i</tt>.
+<pre>
+  import stoneage.gf
+</pre>
+The GF program now <b>compiles</b> your grammar into an internal
+representation, and shows a new prompt when it is ready.
+ 
+<p>
+
+You can use GF for <b>parsing</b>:
+<pre>
+  > parse "the boy eats a snake"
+  Mks_0 (Mks_6 Mks_10) (Mks_2 Mks_23 (Mks_7 Mks_13))
+
+  > parse "the snake eats a boy"
+  Mks_0 (Mks_6 Mks_13) (Mks_2 Mks_23 (Mks_7 Mks_10))
+</pre>
+The <tt>parse</tt> (= <tt>p</tt>) command takes a <b>string</b>
+(in double quotes) and returns an <b>abstract syntax tree</b> - the thing
+with <tt>Mks</tt>s and parentheses. We will see soon how to make sense
+of the abstract syntax trees - now you should just notice that the tree
+is different for the two strings. 
+
+<p>
+
+Strings that return a tree when parsed do so in virtue of the grammar
+you imported. Try parsing something else, and you fail
+<pre>
+  > p "hello world"
+  No success in cf parsing
+  no tree found
+<pre>
+
+
+<!-- NEW -->
+<h2>Generating trees and strings</h2>
+
+You can also use GF for <b>linearizing</b>
+(<tt>linearize = l</tt>). This is the inverse of
+parsing, taking trees into strings:
+<pre>
+  > linearize Mks_0 (Mks_6 Mks_13) (Mks_2 Mks_23 (Mks_7 Mks_10))
+  the snake eats a boy
+</pre>
+What is the use of this? Typically not that you type in a tree at
+the GF prompt. The utility of linearization comes from the fact that
+you can obtain a tree from somewhere else. One way to do so is
+<b>random generation</b> (<tt>generate_random = gr</tt>):
+<pre>
+  > generate_random
+  Mks_0 (Mks_4 Mks_11) (Mks_3 Mks_15)
+</pre>
+Now you can copy the tree and paste it to the <tt>linearize command</tt>.
+Or, more efficiently, feed random generation into parsing by using
+a <b>pipe</b>.
+<pre>
+  > gr | l
+  this man is big
+</pre>
+
+
+<!-- NEW -->
+<h2>Some random-generated sentences</h2>
+
+Random generation can be quite amusing. So you may want to
+generate ten strings with one and the same command:
+<pre>
+  > gr -number=10 | l
+  a snake laughs
+  that man laughs
+  the man swims
+  this man is warm
+  a louse is rotten
+  that worm washes a man
+  a boy swims
+  a snake laughs
+  a man washes this man
+  this louse kills the boy
+</pre>
+
+
+<!-- NEW -->
+<h2>Systematic generation</h2>
+
+To generate <i>all</i> sentence that a grammar
+can generate, use the command <tt>generate_trees = gt</tt>.
+<pre>
+  this boy laughs
+  this boy sleeps
+  this boy swims
+  this boy is big
+  ...
+  a bird is rotten
+  a bird is thick
+  a bird is warm
+</pre>
+You get quite a few trees but not all of them: only up to a given
+<b>depth</b> of trees. To see how you can get more, use the
+<tt>help = h</tt> command,
+<pre>
+  h gr
+</pre>
+<b>Quiz</b>. If the command <tt>gt</tt> generated all
+trees in your grammar, it would never terminate. Why?
+
+
+<!-- NEW -->
+<h2>More on pipes; tracing</h2>
+
+A pipe of GF commands can have any length, but the "output type"
+(either string or tree) of one command must always match the "input type"
+of the next command. 
+
+<p>
+
+The intermediate results in a pipe can be observed by putting the
+<b>tracing</b> flag <tt>-tr</tt> to each command whose output you
+want to see:
+<pre>
+  > gr -tr | l -tr | p
+  Mks_0 (Mks_6 Mks_13) (Mks_1 Mks_20)
+  the snake laughs
+  Mks_0 (Mks_6 Mks_13) (Mks_1 Mks_20)
+</pre>
+This facility is good for test purposes: for instance, you
+may want to see if a grammar is <b>ambiguous</b>, i.e.
+contains strings that can be parsed in more than one way.
+
+
+
+<!-- NEW -->
+<h2>Writing and reading files</h2>
+
+To save the outputs of GF commands into a file, you can
+pipe it to the <tt>write_file = wf</tt> command,
+<pre>
+  > gr -number=10 | l | write_file exx.tmp
+</pre>
+You can read the file back to GF with the
+<tt>read_file = rf</tt> command,
+<pre>
+  > read_file exx.tmp | l -tr | p -lines
+</pre>
+Notice the flag <tt>-lines</tt> given to the parsing
+command. This flag tells GF to parse each line of
+the file separately. Without the flag, the grammar could
+not recognize the string in the file, because it is not
+a sentence but a sequence of ten sentences.
+
+
+
+<!-- NEW -->
+<h2>Labelled context-free grammars</h2>
+
+<h3>Rules and labels</h3>
+
+The syntax trees returned by GF's parser in the previous examples
+are not so nice to look at. The identifiers of form <tt>Mks</tt>
+are <b>labels</b> of the EBNF rules. To see which label corresponds to
+which rule, you can use the <tt>print_grammar = pg</tt> command
+with the <tt>printer</tt> flag set to <tt>cf</tt> (which means context-free):
+<pre>
+  > print_grammar -printer=cf
+  Mks_10. CN ::= "boy" ;
+  Mks_11. CN ::= "man" ;
+  Mks_12. CN ::= "louse" ;
+  Mks_13. CN ::= "snake" ;
+  Mks_14. CN ::= "worm" ;
+  Mks_8.  CN ::= A CN ;
+  Mks_9.  CN ::= "bird" ;
+  Mks_4.  NP ::= "this" CN ;
+  Mks_18. A  ::= "thick" ;
+</pre>
+A syntax tree such as
+<pre>
+  Mks_4 (Mks_8 Mks_18 Mks_14)
+  this thick worm
+</pre>
+encodes the sequence of grammar rules used for building the
+expression. If you look at this tree, you will notice that <tt>Mks_4</tt>
+is the label of the rule prefixing <tt>this</tt> to a common noun,
+<tt>Mks_18</tt> is the label of the adjective <tt>thick</tt>,
+and so on.
+
+
+
+
+
+</body>
+</html>
