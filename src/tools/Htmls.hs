@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 20:24:43 $ 
+-- > CVS $Date: 2005/04/17 17:29:51 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.7 $
+-- > CVS $Revision: 1.8 $
 --
 -- chop an HTML file into separate files, each linked to the next and previous.
 -- the names of the files are n-file, with n = 01,02,...
@@ -74,12 +74,12 @@ link file mx n =
     file' = fileName file (n + 1)
     file0 = fileName file 0
     file1 = fileName file 1
-    file2 = fileName file mx
+    file2 = fileName file (mx - 1)
 
 fileName :: FilePath -> Int -> FilePath
 fileName file n = (if n < 10 then ('0':) else id) $ show n ++ "-" ++ file
 
-pageNum mx num = "<p align=right>" ++ show num ++"/" ++ show mx ++ "</p>"
+pageNum mx num = "<p align=right>" ++ show num ++"/" ++ show (mx-1) ++ "</p>"
 
 mkIndex file = unlines . mkInd 1 where
   mkInd n ss = case ss of
