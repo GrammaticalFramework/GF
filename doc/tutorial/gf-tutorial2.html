@@ -85,8 +85,8 @@ understand. Type (or copy) the following lines in a file named
   VP  ::= V | TV NP | "is" A ;
   NP  ::= ("this" | "that" | "the" | "a") CN ;
   CN  ::= A CN ;
-  CN  ::= "bird" | "boy" | "man" | "louse" | "snake" | "worm" ;
-  A   ::= "big" | "green" | "rotten" | "thick" | "warm" ;
+  CN  ::= "boy" | "louse" | "snake" | "worm" ;
+  A   ::= "green" | "rotten" | "thick" | "warm" ;
   V   ::= "laughs" | "sleeps" | "swims" ;
   TV  ::= "eats" | "kills" | "washes" ;
 </pre>
@@ -186,11 +186,10 @@ can generate, use the command <tt>generate_trees = gt</tt>.
   this boy laughs
   this boy sleeps
   this boy swims
-  this boy is big
   ...
-  a bird is rotten
-  a bird is thick
-  a bird is warm
+  a worm is rotten
+  a worm is thick
+  a worm is warm
 </pre>
 You get quite a few trees but not all of them: only up to a given
 <b>depth</b> of trees. To see how you can get more, use the
@@ -295,13 +294,10 @@ labels to each rule. GF recognizes files of this format by the suffix
   Def.     NP  ::= "the" CN ;
   Indef.   NP  ::= "a" CN ;  
   ModA.    CN  ::= A CN ;
-  Bird.    CN  ::= "bird" ;
   Boy.     CN  ::= "boy" ;
-  Man.     CN  ::= "man" ;
   Louse.   CN  ::= "louse" ;
   Snake.   CN  ::= "snake" ;
   Worm.    CN  ::= "worm" ;
-  Big.     A   ::= "big" ;
   Green.   A   ::= "green" ;
   Rotten.  A   ::= "rotten" ;
   Thick.   A   ::= "thick" ;
@@ -334,8 +330,8 @@ old grammar from the GF shell state.
   PredVP (Def Boy) (ComplTV Eat (Indef Snake))
 
   > gr -tr | l
-  PredVP (Indef Louse) (UseA Big)
-  a louse is big
+  PredVP (Indef Louse) (UseA Thick)
+  a louse is thick
 </pre>
 
 
@@ -448,8 +444,8 @@ fun
   UseA    : A -> VP ;
   ModA    : A -> CN -> CN ;
   This, That, Def, Indef : CN -> NP ; 
-  Bird, Boy, Man, Louse, Snake, Worm : CN ;
-  Big, Green, Rotten, Thick, Warm : A ;
+  Boy, Louse, Snake, Worm : CN ;
+  Green, Rotten, Thick, Warm : A ;
   Laugh, Sleep, Swim : V ;
   Eat, Kill, Wash : TV ;
 }
@@ -480,13 +476,10 @@ lin
   Def   cn   = {s = "the" ++ cn.s} ;
   Indef cn   = {s = "a" ++ cn.s} ; 
   ModA  a cn = {s = a.s ++ cn.s} ;
-  Bird   = {s = "bird"} ;
   Boy    = {s = "boy"} ;
   Louse  = {s = "louse"} ;
-  Man    = {s = "man"} ;
   Snake  = {s = "snake"} ;
   Worm   = {s = "worm"} ;
-  Big    = {s = "big"} ;
   Green  = {s = "green"} ;
   Rotten = {s = "rotten"} ;
   Thick  = {s = "thick"} ;
@@ -537,13 +530,10 @@ lin
   Def   cn   = {s = "il" ++ cn.s} ;
   Indef cn   = {s = "un" ++ cn.s} ; 
   ModA  a cn = {s = cn.s ++ a.s} ;
-  Bird   = {s = "uccello"} ;
   Boy    = {s = "ragazzo"} ;
   Louse  = {s = "pidocchio"} ;
-  Man    = {s = "uomo"} ;
   Snake  = {s = "serpente"} ;
   Worm   = {s = "verme"} ;
-  Big    = {s = "grande"} ;
   Green  = {s = "verde"} ;
   Rotten = {s = "marcio"} ;
   Thick  = {s = "grosso"} ;
