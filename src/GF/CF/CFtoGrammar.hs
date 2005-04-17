@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:07 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/17 19:48:34 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.6 $
 --
 -- 26\/1\/2000 -- 18\/4 -- 24\/3\/2004
 -----------------------------------------------------------------------------
@@ -36,7 +36,7 @@ cf2grammar cf = concatMap S.trAnyDef (abs ++ conc) where
   conc  = lintypes ++ lins
   cats  = [(cat, AbsCat (yes []) (yes [])) | 
              cat <- nub (concat (map cf2cat rules))] ----notPredef cat
-  lintypes = [] ----[(cat, CncCat (yes) nope Nothing) | (cat,AbsCat _ _) <- cats]
+  lintypes = [(cat, CncCat (yes defLinType) nope nope) | (cat,AbsCat _ _) <- cats]
   (funs,lins) = unzip (map cf2rule rules)
 
 cf2cat :: CFRule -> [Ident]

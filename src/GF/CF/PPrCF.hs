@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:07 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.9 $
+-- > CVS $Date: 2005/04/17 19:48:34 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.10 $
 --
 -- printing and parsing CF grammars, rules, and trees AR 26/1/2000 -- 9/6/2003
 --
@@ -48,7 +48,9 @@ prCFFun' profs (CFFun (t, p)) = prt_ t ++ pp p where
     normal p = and [x==y && null b | ((b,x),y) <- zip p (map (:[]) [0..])]
 
 prCFCat :: CFCat -> String
-prCFCat (CFCat (c,l)) = prt_ c ++ "-" ++ prt_ l ----
+prCFCat (CFCat (c,l)) = prt_ c ++ case prt_ l of
+  "s" -> []
+  _   -> "-" ++ prt_ l ----
 
 prCFItem :: CFItem -> String
 prCFItem (CFNonterm c) = prCFCat c
