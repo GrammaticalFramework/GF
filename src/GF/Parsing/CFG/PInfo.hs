@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:49 $ 
+-- > CVS $Date: 2005/04/18 14:55:33 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- CFG parsing, parser information
 -----------------------------------------------------------------------------
@@ -51,7 +51,7 @@ buildCFPInfo :: (Ord n, Ord c, Ord t) => CFGrammar c n t -> CFPInfo c n t
 
 -- this is not permanent...
 buildCFPInfo grammar = traceCalcFirst grammar $
-		       tracePrt "cf parser info" (prt) $
+		       tracePrt "CFG.PInfo - parser info" (prt) $
 		       pInfo' (filter (not . isCyclic) grammar)
 
 pInfo' grammar = CFPInfo grToks nmRules tdRules buRules elcRules emptyCats cyclicCats leftToks 
@@ -84,14 +84,14 @@ isCyclic _ = False
 ----------------------------------------------------------------------
 
 instance (Ord n, Ord c, Ord t) => Print (CFPInfo n c t) where
-    prt pI = "[ tokens=" ++ sl grammarTokens ++
-	     "; names=" ++ sla nameRules ++ 
-	     "; tdCats=" ++ sla topdownRules ++
-	     "; buCats=" ++ sla bottomupRules ++ 
-	     "; elcCats=" ++ sla emptyLeftcornerRules ++
-	     "; eCats=" ++ sla emptyCategories ++
-	     "; cCats=" ++ sl cyclicCategories ++
-	     "; lctokCats=" ++ sla leftcornerTokens ++ 
+    prt pI = "[ nr. tokens=" ++ sl grammarTokens ++
+	     "; nr. names=" ++ sla nameRules ++ 
+	     "; nr. tdCats=" ++ sla topdownRules ++
+	     "; nr. buCats=" ++ sla bottomupRules ++ 
+	     "; nr. elcCats=" ++ sla emptyLeftcornerRules ++
+	     "; nr. eCats=" ++ sla emptyCategories ++
+	     "; nr. cCats=" ++ sl cyclicCategories ++
+	     "; nr. lctokCats=" ++ sla leftcornerTokens ++ 
 	     " ]"
 	where sla f = show $ length $ aElems $ f pI
 	      sl  f = show $ length $ f pI

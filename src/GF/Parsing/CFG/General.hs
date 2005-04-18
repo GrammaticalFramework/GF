@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:49 $ 
+-- > CVS $Date: 2005/04/18 14:55:33 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- CFG parsing with a general chart
 -----------------------------------------------------------------------------
@@ -26,7 +26,8 @@ import Monad
 
 parse :: (Ord n, Ord c, Ord t) => Strategy -> CFParser c n t
 parse strategy grammar start = extract .
-			       tracePrt "#internal chart" (prt . length . chartList) .
+			       tracePrt "Parsing.CFG.General - size internal of chart" 
+					    (prt . length . chartList) .
       			       process strategy grammar start 
 
 -- | parsing strategy: (isBottomup, isTopdown)
@@ -54,8 +55,8 @@ process :: (Ord n, Ord c, Ord t) =>
 	-> Input t          -- ^ input string
 	-> IChart n (Symbol c t)
 process (isBottomup, isTopdown) grammar start
-    = trace2 "CFParserGeneral" ((if isBottomup then " BU" else "") ++ 
-				(if isTopdown  then " TD" else "")) $
+    = trace2 "Parsing.CFG.General - strategy" ((if isBottomup then " BU" else "") ++ 
+					       (if isTopdown  then " TD" else "")) $
       buildChart keyof [predict, combine] . axioms 
     where axioms input = initial ++ scan input
 

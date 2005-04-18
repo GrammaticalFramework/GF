@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 11:42:05 $ 
+-- > CVS $Date: 2005/04/18 14:55:32 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- Calculating the finiteness of each type in a grammar
 -----------------------------------------------------------------------------
@@ -31,7 +31,7 @@ import Ident (Ident(..))
 type CnvMonad a = BacktrackM () a
 
 convertGrammar :: SGrammar -> SGrammar
-convertGrammar rules = tracePrt "#finite simpleGFC rules" (prt . length) $
+convertGrammar rules = tracePrt "SimpleToFinie - nr. 'finite' rules" (prt . length) $
 		       solutions cnvMonad ()
     where split = calcSplitable rules
 	  cnvMonad = member rules >>= convertRule split
@@ -101,7 +101,7 @@ calcSplitable rules = (listAssoc splitableCat2Funs, listAssoc splitableFun2Cat)
 
           -- all cats that are splitable
           splitableCats = listSet $
-			  tracePrt "finite categories to split" prt $
+			  tracePrt "SimpleToFinite - finite categories to split" prt $
 			  (nondepCats <**> depCats) <\\> resultCats
 
           -- all result cats for some pure function

@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 11:42:05 $ 
+-- > CVS $Date: 2005/04/18 14:55:32 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- Converting GFC to SimpleGFC
 --
@@ -37,8 +37,8 @@ import GF.Infra.Print
 type Env = (CanonGrammar, I.Ident)
 
 convertGrammar :: Env -> SGrammar
-convertGrammar gram = trace2 "converting language" (show (snd gram)) $
-		      tracePrt "#simpleGFC rules" (show . length) $
+convertGrammar gram = trace2 "GFCtoSimple - concrete language" (prt (snd gram)) $
+		      tracePrt "GFCtoSimple - nr. simpleGFC rules" (prt . length) $
 		      [ convertAbsFun gram fun typing |
 			A.Mod (A.MTAbs modname) _ _ _ defs <- modules,
 			A.AbsDFun fun typing _ <- defs ]
