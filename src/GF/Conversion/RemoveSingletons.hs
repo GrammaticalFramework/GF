@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 18:41:21 $ 
+-- > CVS $Date: 2005/04/18 14:55:32 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Instantiating all types which only have one single element.
 --
@@ -30,7 +30,7 @@ import List (mapAccumL)
 
 convertGrammar :: SGrammar -> SGrammar
 convertGrammar grammar = if singles == emptyAssoc then grammar
-			 else tracePrt "#singleton-removed rules" (prt . length) $
+			 else tracePrt "RemoveSingletons - nr. non-singleton rules" (prt . length) $
 			      map (convertRule singles) grammar
     where singles = calcSingletons grammar
 
@@ -71,7 +71,7 @@ instantiateLin newArgs = inst
 
 calcSingletons :: SGrammar -> Assoc SCat (SyntaxForest Fun, Maybe STerm)
 calcSingletons rules = listAssoc singleCats
-    where singleCats = tracePrt "singleton cats" (prtSep " ") $
+    where singleCats = tracePrt "RemoveSingletons - singleton cats" (prtSep " ") $
 		       [ (cat, (constantNameToForest name, lin)) | 
 			 (cat, [([], name, lin)]) <- rulesByCat ]
 	  rulesByCat = groupPairs $ nubsort

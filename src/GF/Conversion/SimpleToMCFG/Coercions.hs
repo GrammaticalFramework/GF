@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/12 10:49:44 $ 
+-- > CVS $Date: 2005/04/18 14:55:32 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Adding coercion functions to a MCFG if necessary.
 -----------------------------------------------------------------------------
@@ -27,25 +27,26 @@ import List (groupBy)
 
 ----------------------------------------------------------------------
 
-addCoercions :: MGrammar -> MGrammar
+addCoercions :: EGrammar -> EGrammar
 addCoercions rules = coercions ++ rules
     where (allHeads, allArgs) = unzip [ ((head, lbls), nubsort args) | 
 					Rule (Abs head args _) (Cnc lbls _ _) <- rules ]
 	  allHeadSet = nubsort allHeads
 	  allArgSet  = union   allArgs <\\> map fst allHeadSet
-	  coercions = tracePrt "#MCFG coercions" (prt . length) $
+	  coercions = tracePrt "SimpleToMCFG.Coercions - nr. MCFG coercions" (prt . length) $
 		      concat $
-		      tracePrt "#MCFG coercions per category" (prtList . map length) $
+		      tracePrt "SimpleToMCFG.Coerciions - nr. MCFG coercions per category" 
+				   (prtList . map length) $
 		      combineCoercions 
-		        (groupBy sameCatFst allHeadSet) 
-			(groupBy sameCat    allArgSet)
-	  sameCatFst a b = sameCat (fst a) (fst b)
+		        (groupBy sameECatFst allHeadSet) 
+			(groupBy sameECat    allArgSet)
+	  sameECatFst a b = sameECat (fst a) (fst b)
 
 
 combineCoercions [] _ = []
 combineCoercions _ [] = []
 combineCoercions allHeads'@(heads:allHeads) allArgs'@(args:allArgs) 
-    = case compare (mcat2scat $ fst $ head heads) (mcat2scat $ head args) of
+    = case compare (ecat2scat $ fst $ head heads) (ecat2scat $ head args) of
         LT -> combineCoercions allHeads  allArgs'
 	GT -> combineCoercions allHeads' allArgs
 	EQ -> makeCoercion heads args : combineCoercions allHeads allArgs
@@ -53,9 +54,9 @@ combineCoercions allHeads'@(heads:allHeads) allArgs'@(args:allArgs)
 
 makeCoercion heads args
     = [ Rule (Abs arg [head] coercionName) (Cnc lbls [lbls] lins)  |
-	(head@(MCat _ headCns), lbls) <- heads, 
+	(head@(ECat _ headCns), lbls) <- heads, 
 	let lins = [ Lin lbl [Cat (head, lbl, 0)] | lbl <- lbls ],
-	arg@(MCat _ argCns) <- args,
+	arg@(ECat _ argCns) <- args,
 	argCns `subset` headCns ]
 
 

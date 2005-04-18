@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:49 $ 
+-- > CVS $Date: 2005/04/18 14:55:32 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
 -- All possible instantiations of different grammar formats used in conversion from GFC
 -----------------------------------------------------------------------------
@@ -58,7 +58,8 @@ instance Functor Profile where
     fmap f (Constant a) = Constant (f a)
     fmap f (Unify xs)   = Unify xs
 
--- | a function name where the profile does not contain
+-- | a function name where the profile does not contain arguments 
+-- (i.e. denoting a constant, not a function)
 constantNameToForest :: Name -> SyntaxForest Fun
 constantNameToForest name@(Name fun profile) = FNode fun [map unConstant profile] 
     where unConstant (Constant a) = a
@@ -120,23 +121,23 @@ type SDecl    = Decl    SCat
 ----------------------------------------------------------------------
 -- * erasing MCFG
 
-type MGrammar = MCFGrammar MCat Name MLabel Token
-type MRule    = MCFRule    MCat Name MLabel Token
-data MCat     = MCat SCat [Constraint] deriving (Eq, Ord, Show)
-type MLabel   = SPath
+type EGrammar = MCFGrammar ECat Name ELabel Token
+type ERule    = MCFRule    ECat Name ELabel Token
+data ECat     = ECat SCat [Constraint]   deriving (Eq, Ord, Show)
+type ELabel   = SPath
 
 type Constraint = (SPath, STerm)
 
 -- ** type coercions etc
 
-initialMCat :: SCat -> MCat
-initialMCat cat = MCat cat []
+initialECat :: SCat -> ECat
+initialECat cat = ECat cat []
 
-mcat2scat :: MCat -> SCat
-mcat2scat (MCat cat _) = cat
+ecat2scat :: ECat -> SCat
+ecat2scat (ECat cat _) = cat
 
-sameCat :: MCat -> MCat -> Bool
-sameCat mc1 mc2 = mcat2scat mc1 == mcat2scat mc2
+sameECat :: ECat -> ECat -> Bool
+sameECat ec1 ec2 = ecat2scat ec1 == ecat2scat ec2
 
 coercionName :: Name
 coercionName = Name Ident.wildIdent [Unify [0]]
@@ -148,33 +149,31 @@ isCoercion _ = False
 ----------------------------------------------------------------------
 -- * nonerasing MCFG
 
-type NGrammar = MCFGrammar NCat Name NLabel Token
-type NRule    = MCFRule    NCat Name NLabel Token
-data NCat     = NCat MCat [MLabel] deriving (Eq, Ord, Show)
-type NLabel   = MLabel
+type MGrammar = MCFGrammar MCat Name MLabel Token
+type MRule    = MCFRule    MCat Name MLabel Token
+data MCat     = MCat ECat [ELabel]   deriving (Eq, Ord, Show)
+type MLabel   = ELabel
 
-ncat2mcat :: NCat -> MCat
-ncat2mcat (NCat mcat _) = mcat
+mcat2ecat :: MCat -> ECat
+mcat2ecat (MCat mcat _) = mcat
 
 ----------------------------------------------------------------------
 -- * CFG
 
 type CGrammar = CFGrammar CCat Name Token
 type CRule    = CFRule    CCat Name Token
-
-data CCat     = CCat      MCat MLabel
-		deriving (Eq, Ord, Show)
+data CCat     = CCat      ECat ELabel  deriving (Eq, Ord, Show)
 
 ----------------------------------------------------------------------
 -- * pretty-printing
 
-instance Print MCat where
-    prt (MCat cat constrs) = prt cat ++ "{" ++ 
+instance Print ECat where
+    prt (ECat cat constrs) = prt cat ++ "{" ++ 
 			     concat [ prt path ++ "=" ++ prt term ++ ";" |
 				      (path, term) <- constrs ] ++ "}"
 
-instance Print NCat where
-    prt (NCat cat labels) = prt cat ++ prt labels
+instance Print MCat where
+    prt (MCat cat labels) = prt cat ++ prt labels
 
 instance Print CCat where
     prt (CCat cat label) = prt cat ++ prt label

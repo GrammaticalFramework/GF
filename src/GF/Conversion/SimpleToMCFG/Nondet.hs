@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/12 10:49:44 $ 
+-- > CVS $Date: 2005/04/18 14:55:32 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Converting SimpleGFC grammars to MCFG grammars, nondeterministically.
 -- Afterwards, the grammar has to be extended with coercion functions,
@@ -40,22 +40,22 @@ import GF.Data.BacktrackM
 
 type CnvMonad a = BacktrackM Env a
 
-type Env    = (MCat, [MCat], LinRec, [SLinType])
+type Env    = (ECat, [ECat], LinRec, [SLinType])
 type LinRec = [Lin SCat MLabel Token]
 
 
 ----------------------------------------------------------------------
 -- main conversion function
 
-convertGrammar :: SGrammar -> MGrammar 
-convertGrammar rules = tracePrt "Nondet conversion: #MCFG rules" (prt . length) $
+convertGrammar :: SGrammar -> EGrammar 
+convertGrammar rules = tracePrt "SimpleToMCFG.Nondet - nr. MCFG rules" (prt . length) $
 		       solutions conversion undefined
     where conversion = member rules >>= convertRule
 
-convertRule :: SRule -> CnvMonad MRule
+convertRule :: SRule -> CnvMonad ERule
 convertRule (Rule (Abs decl decls fun) (Cnc ctype ctypes (Just term)))
     = do let cat : args = map decl2cat (decl : decls)
-	 writeState (initialMCat cat, map initialMCat args, [], ctypes)
+	 writeState (initialECat cat, map initialECat args, [], ctypes)
 	 rterm <- simplifyTerm term
 	 reduceTerm ctype emptyPath rterm
 	 (newCat, newArgs, linRec, _) <- readState
@@ -158,13 +158,13 @@ readArgCTypes = do (_, _, _, env) <- readState
 updateArg :: Int -> Constraint -> CnvMonad ()
 updateArg arg cn
     = do (head, args, lins, env) <- readState 
-	 args' <- updateNth (addToMCat cn) arg args
+	 args' <- updateNth (addToECat cn) arg args
 	 writeState (head, args', lins, env)
 
 updateHead :: Constraint -> CnvMonad ()
 updateHead cn
     = do (head, args, lins, env) <- readState
-	 head' <- addToMCat cn head
+	 head' <- addToECat cn head
 	 writeState (head', args, lins, env)
 
 updateLin :: Constraint -> CnvMonad ()
@@ -182,8 +182,8 @@ term2lins (Empty)           = return []
 term2lins (Variants terms)  = terms >>= term2lins
 term2lins term = error $ "term2lins: " ++ show term
 
-addToMCat :: Constraint -> MCat -> CnvMonad MCat
-addToMCat cn (MCat cat cns) = liftM (MCat cat) $ addConstraint cn cns
+addToECat :: Constraint -> ECat -> CnvMonad ECat
+addToECat cn (ECat cat cns) = liftM (ECat cat) $ addConstraint cn cns
 
 addConstraint :: Constraint -> [Constraint] -> CnvMonad [Constraint]
 addConstraint cn0 (cn : cns)

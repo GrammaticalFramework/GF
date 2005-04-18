@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/12 10:49:45 $ 
+-- > CVS $Date: 2005/04/18 14:55:33 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- The main parsing module, parsing GFC grammars
 -- by translating to simpler formats, such as PMCFG and CFG
@@ -67,9 +67,9 @@ parse (c:strategy) pinfo abs startCat
     | c=='c' || c=='C' = map (tree2term abs) .
 			 parseCFG strategy pinfo startCats . 
 			 map prCFTok
-    where startCats = tracePrt "startCats" prt $
+    where startCats = tracePrt "Parsing.GFC - starting categories" prt $
 		      filter isStartCat $ map fst $ aAssocs $ PC.topdownRules $ cfPInfo pinfo
-	  isStartCat (CCat (MCat cat _) _) = cat == cfCat2Ident startCat
+	  isStartCat (CCat (ECat cat _) _) = cat == cfCat2Ident startCat
 
 -- default parser
 parse strategy pinfo abs start = parse ('c':strategy) pinfo abs start
@@ -78,9 +78,9 @@ parse strategy pinfo abs start = parse ('c':strategy) pinfo abs start
 ----------------------------------------------------------------------
 
 parseCFG :: String -> PInfo -> [CCat] -> [Token] -> [SyntaxTree Fun]
-parseCFG strategy pInfo startCats inString = trace2 "Parser" "CFG" $
+parseCFG strategy pInfo startCats inString = trace2 "Parsing.GFC - selected algorithm" "CFG" $
 					     trees
-    where trees    = tracePrt "#trees" (prt . length) $
+    where trees    = tracePrt "Parsing.GFC - nr. trees" (prt . length) $
 		     nubsort $ forests >>= forest2trees
 		     -- compactFs >>= forest2trees
 
@@ -88,19 +88,19 @@ parseCFG strategy pInfo startCats inString = trace2 "Parser" "CFG" $
 	  -- 	       tracePrt "compactForests" (prtBefore "\n") $
 	  -- 	       compactForests forests
 
-	  forests  = tracePrt "#forests" (prt . length) $
+	  forests  = tracePrt "Parsing.GFC - nr. forests" (prt . length) $
 		     cfForests >>= convertFromCFForest
-	  cfForests= tracePrt "#cfForests" (prt . length) $
+	  cfForests= tracePrt "Parsing.GFC - nr. context-free forests" (prt . length) $
 		     chart2forests chart (const False) finalEdges
 
-	  finalEdges = tracePrt "finalChartEdges" prt $
+	  finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
 		       map (uncurry Edge (inputBounds inTokens)) startCats
 	  chart    = --tracePrt "finalChartEdges" (prt . (? finalEdge)) $
-		     tracePrt "#chart" (prt . map (length.snd) . aAssocs) $
+		     tracePrt "Parsing.GFC - size of chart" (prt . map (length.snd) . aAssocs) $
 		     C.grammar2chart cfChart
 	  cfChart  = --tracePrt "finalEdges" 
 		     --(prt . filter (\(Edge i j _) -> (i,j)==inputBounds inTokens)) $
-		     tracePrt "#cfChart" (prt . length) $
+		     tracePrt "Parsing.GFC - size of context-free chart" (prt . length) $
 		     PC.parseCF strategy (cfPInfo pInfo) startCats inTokens
 
 	  inTokens = input inString

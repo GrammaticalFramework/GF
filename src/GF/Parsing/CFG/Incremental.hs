@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:49 $ 
+-- > CVS $Date: 2005/04/18 14:55:33 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Incremental chart parsing for CFG
 -----------------------------------------------------------------------------
@@ -34,7 +34,8 @@ type Strategy = ((Bool, Bool), (Bool, Bool))
 
 parse :: (Ord n, Ord c, Ord t) => Strategy -> CFParser c n t
 parse strategy grammar start = extract . 
-			       tracePrt "#internal chart" (prt . length . flip chartList const) .
+			       tracePrt "Parsing.CFG.Incremental - size of internal chart" 
+					    (prt . length . flip chartList const) .
 			       process strategy grammar start
 
 extract :: (Ord n, Ord c, Ord t) => 
@@ -54,10 +55,10 @@ extract finalChart = [ CFRule (Edge j k cat) daughters name |
 process :: (Ord n, Ord c, Ord t) => 
 	   Strategy -> CFPInfo c n t -> [c] -> Input t -> IChart c n t
 process ((isPredictBU, isPredictTD), (isFilterBU, isFilterTD)) grammar start input
-    = trace2 "CFParserIncremental" ((if isPredictBU then "BU-predict " else "") ++
-				    (if isPredictTD then "TD-predict " else "") ++
-				    (if isFilterBU  then "BU-filter " else "") ++
-				    (if isFilterTD  then "TD-filter " else "")) $
+    = trace2 "Parsing.CFG.Incremental - strategy" ((if isPredictBU then "BU-predict " else "") ++
+						   (if isPredictTD then "TD-predict " else "") ++
+						   (if isFilterBU  then "BU-filter " else "") ++
+						   (if isFilterTD  then "TD-filter " else "")) $
       finalChart
     where finalChart = buildChart keyof rules axioms $ inputBounds input
 

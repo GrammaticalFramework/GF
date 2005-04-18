@@ -35,7 +35,7 @@ GF/
 		CFtoSRG
 		CanonToCF
 		ChartParser		- obsolet.
-		EBNF			- ta bort parserkombinatorerna -- skapa en bncf-fil
+		EBNF			- ta bort parserkombinatorerna -- skapa en bnfc-fil
 		PPrCF
 		PrLBNF
 		Profile
@@ -95,6 +95,8 @@ GF/
 		Zipper
 		CheckM
 		ErrM
+		GenneralInduction
+		IncrementalInduction
 
 	Fudgets/
 		EventF
@@ -159,6 +161,8 @@ GF/
 		Str
 		UseIO
 
+	Formalism/
+	Conversion/
 	Parsing/			dela upp i Grammar och Parsing? 
 					(då måste nuvarande Grammar byta namn)
 		CFGrammar		-> Grammar

@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 18:41:22 $ 
+-- > CVS $Date: 2005/04/18 14:55:33 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Chart parsing of grammars in CF format
 -----------------------------------------------------------------------------
@@ -32,19 +32,18 @@ parse :: String -> CF.CF -> Category -> CF.CFParser
 parse = buildParser . P.parseCF 
 
 buildParser :: P.CFParser Category Name Token -> CF.CF -> Category -> CF.CFParser
-buildParser parser cf start tokens = trace "ParseCF" $
-				     (parseResults, parseInformation)
+buildParser parser cf start tokens = (parseResults, parseInformation)
     where parseInformation = prtSep "\n" trees
 	  parseResults     = [ (tree2cfTree t, []) | t <- trees ]
 	  theInput = input tokens
-	  edges    = tracePrt "#edges" (prt.length) $
+	  edges    = tracePrt "Parsing.CF - nr. edges" (prt.length) $
 		     parser pInf [start] theInput
-	  chart    = tracePrt "#chart" (prt . map (length.snd) . aAssocs) $
+	  chart    = tracePrt "Parsing.CF - size of chart" (prt . map (length.snd) . aAssocs) $
 		     grammar2chart $ map addCategory edges
-	  forests  = tracePrt "#forests" (prt.length) $
+	  forests  = tracePrt "Parsing.CF - nr. forests" (prt.length) $
 		     chart2forests chart (const False) 
 		     [ uncurry Edge (inputBounds theInput) start ]
-	  trees    = tracePrt "#trees" (prt.length) $
+	  trees    = tracePrt "Parsing.CF - nr. trees" (prt.length) $
 		     concatMap forest2trees forests
 	  pInf     = P.buildCFPInfo $ cf2grammar cf (nubsort tokens)
 	  

@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/12 10:49:45 $ 
+-- > CVS $Date: 2005/04/18 14:55:33 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Converting SimpleGFC grammars to MCFG grammars, deterministic.
 --
@@ -16,7 +16,8 @@
 -----------------------------------------------------------------------------
 
 
-module GF.Conversion.SimpleToMCFG.Strict where -- (convertGrammar) where
+module GF.Conversion.SimpleToMCFG.Strict
+    (convertGrammar) where
 
 import GF.System.Tracing
 import GF.Infra.Print
@@ -37,18 +38,18 @@ import GF.Data.SortedList
 
 type CnvMonad a = BacktrackM () a
 
-convertGrammar :: SGrammar -> MGrammar 
-convertGrammar rules = tracePrt "Strict conversion: #MCFG rules" (prt . length) $
+convertGrammar :: SGrammar -> EGrammar 
+convertGrammar rules = tracePrt "SimpleToMCFG.Strict - nr. MCFG rules" (prt . length) $
 		       solutions conversion undefined
     where conversion = member rules >>= convertRule
 
-convertRule :: SRule -> CnvMonad MRule
+convertRule :: SRule -> CnvMonad ERule
 convertRule (Rule (Abs decl decls fun) (Cnc ctype ctypes (Just term)))
     = do let cat : args  = map decl2cat (decl : decls)
 	     args_ctypes = zip3 [0..] args ctypes
 	 instArgs <- mapM enumerateArg args_ctypes
 	 let instTerm = substitutePaths instArgs term
-	 newCat <- extractMCat cat ctype instTerm
+	 newCat <- extractECat cat ctype instTerm
 	 newArgs <- mapM (extractArg instArgs) args_ctypes
 	 let linRec = strPaths ctype instTerm >>= extractLin newArgs
 	 let newLinRec = map (instantiateArgs newArgs) linRec
@@ -59,11 +60,11 @@ convertRule _ = failure
 ----------------------------------------------------------------------
 -- category extraction
 
-extractArg :: [STerm] -> (Int, SCat, SLinType) -> CnvMonad MCat
-extractArg args (nr, cat, ctype) = extractMCat cat ctype (args !! nr)
+extractArg :: [STerm] -> (Int, SCat, SLinType) -> CnvMonad ECat
+extractArg args (nr, cat, ctype) = extractECat cat ctype (args !! nr)
 
-extractMCat :: SCat -> SLinType -> STerm -> CnvMonad MCat
-extractMCat cat ctype term = member $ map (MCat cat) $ parPaths ctype term
+extractECat :: SCat -> SLinType -> STerm -> CnvMonad ECat
+extractECat cat ctype term = member $ map (ECat cat) $ parPaths ctype term
 
 enumerateArg :: (Int, SCat, SLinType) -> CnvMonad STerm
 enumerateArg (nr, cat, ctype) = member $ enumerateTerms (Just (Arg nr cat emptyPath)) ctype
@@ -117,7 +118,7 @@ strPaths ctype term = [ (path, variants values) | (path, values) <- groupPairs p
 ----------------------------------------------------------------------
 -- linearization extraction
 
-extractLin :: [MCat] -> (SPath, STerm) -> [Lin MCat MLabel Token]
+extractLin :: [ECat] -> (SPath, STerm) -> [Lin ECat MLabel Token]
 extractLin args (path, term) = map (Lin path) (convertLin term)
     where convertLin (t1 :++ t2) = liftM2 (++) (convertLin t1) (convertLin t2)
 	  convertLin (Empty) = [[]]
