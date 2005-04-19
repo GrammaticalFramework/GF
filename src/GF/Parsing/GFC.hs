@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:33 $ 
+-- > CVS $Date: 2005/04/19 10:46:07 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- The main parsing module, parsing GFC grammars
 -- by translating to simpler formats, such as PMCFG and CFG
@@ -34,21 +34,25 @@ import GF.Data.SortedList
 import GF.Data.Assoc
 import GF.Formalism.Utilities
 import GF.Conversion.Types
+import GF.Formalism.GCFG
 import GF.Formalism.SimpleGFC
 import qualified GF.Formalism.MCFG as M
 import qualified GF.Formalism.CFG as C
--- import qualified GF.NewParsing.MCFG as PM
+import qualified GF.NewParsing.MCFG as PM
 import qualified GF.NewParsing.CFG as PC
 --import qualified GF.Conversion.FromGFC as From
 
 ----------------------------------------------------------------------
 -- parsing information
 
-data PInfo = PInfo { mcfPInfo :: (), -- ^ not implemented yet
-		     cfPInfo  :: PC.CFPInfo CCat Name Token }
+data PInfo = PInfo { mcfPInfo :: MCFPInfo,
+		     cfPInfo  :: CFPInfo }
+
+type MCFPInfo = MGrammar
+type CFPInfo  = PC.CFPInfo CCat Name Token
 
 buildPInfo :: MGrammar -> CGrammar -> PInfo
-buildPInfo mcfg cfg = PInfo { mcfPInfo = (),
+buildPInfo mcfg cfg = PInfo { mcfPInfo = mcfg,
 			      cfPInfo  = PC.buildCFPInfo cfg }
 
 
@@ -65,20 +69,30 @@ parse :: String         -- ^ parsing strategy
 -- parsing via CFG
 parse (c:strategy) pinfo abs startCat
     | c=='c' || c=='C' = map (tree2term abs) .
-			 parseCFG strategy pinfo startCats . 
+			 parseCFG strategy cfpi startCats . 
 			 map prCFTok
     where startCats = tracePrt "Parsing.GFC - starting categories" prt $
-		      filter isStartCat $ map fst $ aAssocs $ PC.topdownRules $ cfPInfo pinfo
+		      filter isStartCat $ map fst $ aAssocs $ PC.topdownRules cfpi
 	  isStartCat (CCat (ECat cat _) _) = cat == cfCat2Ident startCat
+	  cfpi = cfPInfo pinfo
+
+-- parsing via MCFG
+parse (c:strategy) pinfo abs startCat
+    | c=='m' || c=='M' = map (tree2term abs) .
+			 parseMCFG strategy mcfpi startCats . 
+			 map prCFTok
+    where startCats = tracePrt "Parsing.GFC - starting categories" prt $
+		      filter isStartCat $ nubsort [ c | Rule (Abs c _ _) _ <- mcfpi ]
+	  isStartCat (MCat (ECat cat _) _) = cat == cfCat2Ident startCat
+	  mcfpi = mcfPInfo pinfo
 
 -- default parser
 parse strategy pinfo abs start = parse ('c':strategy) pinfo abs start
 
-
 ----------------------------------------------------------------------
 
-parseCFG :: String -> PInfo -> [CCat] -> [Token] -> [SyntaxTree Fun]
-parseCFG strategy pInfo startCats inString = trace2 "Parsing.GFC - selected algorithm" "CFG" $
+parseCFG :: String -> CFPInfo -> [CCat] -> [Token] -> [SyntaxTree Fun]
+parseCFG strategy pinfo startCats inString = trace2 "Parsing.GFC - selected algorithm" "CFG" $
 					     trees
     where trees    = tracePrt "Parsing.GFC - nr. trees" (prt . length) $
 		     nubsort $ forests >>= forest2trees
@@ -101,44 +115,31 @@ parseCFG strategy pInfo startCats inString = trace2 "Parsing.GFC - selected algo
 	  cfChart  = --tracePrt "finalEdges" 
 		     --(prt . filter (\(Edge i j _) -> (i,j)==inputBounds inTokens)) $
 		     tracePrt "Parsing.GFC - size of context-free chart" (prt . length) $
-		     PC.parseCF strategy (cfPInfo pInfo) startCats inTokens
+		     PC.parseCF strategy pinfo startCats inTokens
 
 	  inTokens = input inString
 
+----------------------------------------------------------------------
 
-{-
--- parsing via MCFG
-newParser (m:strategy) gr (_, startCat) inString 
-    | m=='m' || m=='M' = trace2 "Parser" "MCFG" $ Ok terms
-    where terms    = map (tree2term abstract) trees
-	  trees    = --tracePrt "trees" (prtBefore "\n") $
-		     tracePrt "#trees" (prt . length) $
-		     concatMap forest2trees forests
-	  forests  = --tracePrt "forests" (prtBefore "\n") $
-		     tracePrt "#forests" (prt . length) $
-		     concatMap (chart2forests chart isMeta) finalEdges
-	  isMeta = null . snd
-	  finalEdges = tracePrt "finalEdges" (prtBefore "\n") $
-		       filter isFinalEdge $ aElems chart
--- 		       nubsort [ (cat, [(lbl, E.makeRange [(i,j)])]) | 
--- 				 let (i, j) = inputBounds inTokens,
--- 				 E.Rule cat _ [E.Lin lbl _] _ <- pInf,
--- 				 isStartCat cat ]
-	  isFinalEdge (cat, rows) 
-	      = isStartCat cat && 
-		inputBounds inTokens `elem` concat [ rho | (_, M.Rng rho) <- rows ]
-	  chart    = --tracePrt "chart" (prtBefore "\n" . aAssocs) $
-		     tracePrt "#chart" (prt . map (length.snd) . aAssocs) $
-		     PM.parse strategy pInf starters inTokens
-	  inTokens = input $ map AbsGFC.KS $ words inString
-	  pInf     = -- tracePrt "avg rec" (\gr -> show (sum [ length rec | E.Rule _ _ rec _ <- gr ] % length gr)) $
-		     mcfPInfo $ SS.statePInfo gr
-	  starters = tracePrt "startCats" prt $
-		     filter isStartCat $ nubsort [ cat | M.Rule cat _ _ _ <- pInf ]
-	  isStartCat (MCFCat cat _) = cat == startCat
-	  abstract = tracePrt "abstract module" PrGrammar.prt $
-		     SS.absId gr
--}
+parseMCFG :: String -> MCFPInfo -> [MCat] -> [Token] -> [SyntaxTree Fun]
+parseMCFG strategy pinfo startCats inString = trace2 "Parsing.GFC - selected algorithm" "MCFG" $
+					      trees
+    where trees   = tracePrt "Parsing.GFC - nr. trees" (prt . length) $
+		    forests >>= forest2trees
+
+	  forests  = tracePrt "Parsing.GFC - nr. forests" (prt . length) $
+		     cfForests >>= convertFromCFForest
+	  cfForests= tracePrt "Parsing.GFC - nr. context-free forests" (prt . length) $
+		     chart2forests chart (const False) finalEdges
+
+	  chart   = tracePrt "Parsing.GFC - size of chart" (prt . map (length.snd) . aAssocs) $
+		    PM.parseMCF strategy pinfo inString -- inTokens
+
+	  finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
+		       [ PM.makeFinalEdge cat lbl (inputBounds inTokens) | 
+			  cat@(MCat _ [lbl]) <- startCats ]
+
+	  inTokens = input inString
 
 
 ----------------------------------------------------------------------
