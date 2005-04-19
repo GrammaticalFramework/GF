@@ -21,6 +21,7 @@ d_m	 = { s = table { _ => "maanga" }; n = Pl };
 n_c	 = { s = table { _ => "lejon" }; g = Neu };
 n_f	 = { s = table { Sg => "fisk"; Pl => "fiskar" }; g = Utr };
 v_e	 = { s = "aeter" };
+v_h	 = { s = "jagar" };
 
 }
 

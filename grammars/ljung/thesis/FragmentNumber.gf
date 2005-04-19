@@ -21,6 +21,7 @@ d_m	 = { s = "many"; n = Pl };
 n_c	 = { s = table { Sg => "lion"; Pl => "lions" } };
 n_f	 = { s = table { _ => "fish" } };
 v_e	 = { s = table { Sg => "eats" ; Pl => "eat" } };
+v_h	 = { s = table { Sg => "hunts" ; Pl => "hunt" } };
 
 }
 

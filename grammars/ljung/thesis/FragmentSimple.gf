@@ -12,6 +12,7 @@ d_m	 = { s = "many" };
 n_c	 = { s = variants { "lion" ; "lions" } };
 n_f	 = { s = "fish" };
 v_e	 = { s = variants { "eats" ; "eat" } };
+v_h	 = { s = variants { "hunts" ; "hunt" } };
 
 }
 
