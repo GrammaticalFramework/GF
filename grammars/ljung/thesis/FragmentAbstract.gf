@@ -11,7 +11,7 @@ np_p 	 : N  	    -> NP;
 vp_t 	 : V  -> NP -> VP;
 d_a, d_m : D;
 n_c, n_f : N;
-v_e      : V;
+v_e, v_h : V;
 
 }
 
