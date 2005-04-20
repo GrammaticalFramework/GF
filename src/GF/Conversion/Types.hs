@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:32 $ 
+-- > CVS $Date: 2005/04/20 12:49:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
 -- All possible instantiations of different grammar formats used in conversion from GFC
 -----------------------------------------------------------------------------
@@ -44,6 +44,7 @@ data Name = Name Fun [Profile (SyntaxForest Fun)]
 name2fun :: Name -> Fun
 name2fun (Name fun _) = fun
 
+----------------------------------------------------------------------
 -- * profiles
 
 -- | A profile is a simple representation of a function on a number of arguments.
@@ -155,7 +156,10 @@ data MCat     = MCat ECat [ELabel]   deriving (Eq, Ord, Show)
 type MLabel   = ELabel
 
 mcat2ecat :: MCat -> ECat
-mcat2ecat (MCat mcat _) = mcat
+mcat2ecat (MCat cat _) = cat
+
+mcat2scat :: MCat -> SCat
+mcat2scat = ecat2scat . mcat2ecat
 
 ----------------------------------------------------------------------
 -- * CFG
@@ -163,6 +167,12 @@ mcat2ecat (MCat mcat _) = mcat
 type CGrammar = CFGrammar CCat Name Token
 type CRule    = CFRule    CCat Name Token
 data CCat     = CCat      ECat ELabel  deriving (Eq, Ord, Show)
+
+ccat2ecat :: CCat -> ECat
+ccat2ecat (CCat cat _) = cat
+
+ccat2scat :: CCat -> SCat
+ccat2scat = ecat2scat . ccat2ecat
 
 ----------------------------------------------------------------------
 -- * pretty-printing

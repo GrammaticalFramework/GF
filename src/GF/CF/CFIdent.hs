@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:07 $ 
+-- > CVS $Date: 2005/04/20 12:49:45 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
 -- symbols (categories, functions) for context-free grammars.
 -----------------------------------------------------------------------------
@@ -41,7 +41,7 @@ import PrGrammar
 import Str
 import Char (toLower, toUpper)
 
--- this type should be abstract
+-- | this type should be abstract
 data CFTok = 
    TS String     -- ^ normal strings
  | TC String     -- ^ strings that are ambiguous between upper or lower case

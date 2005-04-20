@@ -4,14 +4,16 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:33 $ 
+-- > CVS $Date: 2005/04/20 12:49:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Chart parsing of grammars in CF format
 -----------------------------------------------------------------------------
 
 module GF.NewParsing.CF (parse) where
+
+import Operations (errVal)
 
 import GF.System.Tracing
 import GF.Infra.Print
@@ -29,7 +31,7 @@ type Name     = CFI.CFFun
 type Category = CFI.CFCat
 
 parse :: String -> CF.CF -> Category -> CF.CFParser
-parse = buildParser . P.parseCF 
+parse = buildParser . errVal (errVal undefined (P.parseCF "")) . P.parseCF 
 
 buildParser :: P.CFParser Category Name Token -> CF.CF -> Category -> CF.CFParser
 buildParser parser cf start tokens = (parseResults, parseInformation)
@@ -38,7 +40,7 @@ buildParser parser cf start tokens = (parseResults, parseInformation)
 	  theInput = input tokens
 	  edges    = tracePrt "Parsing.CF - nr. edges" (prt.length) $
 		     parser pInf [start] theInput
-	  chart    = tracePrt "Parsing.CF - size of chart" (prt . map (length.snd) . aAssocs) $
+	  chart    = tracePrt "Parsing.CF - sz. chart" (prt . map (length.snd) . aAssocs) $
 		     grammar2chart $ map addCategory edges
 	  forests  = tracePrt "Parsing.CF - nr. forests" (prt.length) $
 		     chart2forests chart (const False) 

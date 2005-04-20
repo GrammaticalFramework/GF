@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:51 $ 
+-- > CVS $Date: 2005/04/20 12:49:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Simple implementation of deductive chart parsing
 -----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ module GF.NewParsing.GeneralChart
      emptyChart,
      chartMember,
      chartInsert, chartInsertM,
-     chartList,
+     chartList, chartKeys,
      addToChart, addToChartM
     ) where
 
@@ -35,6 +35,7 @@ import Monad (foldM)
 
 chartLookup :: (Ord item, Ord key) => ParseChart item key -> key -> [item]
 chartList   :: (Ord item, Ord key) => ParseChart item key -> [item]
+chartKeys   :: (Ord item, Ord key) => ParseChart item key -> [key]
 buildChart  :: (Ord item, Ord key) => 
 	       (item -> key)                           -- ^ key lookup function
 	    -> [ParseChart item key -> item -> [item]] -- ^ list of inference rules as functions 
@@ -95,6 +96,7 @@ emptyChart                     = KC rbmEmpty
 chartMember (KC tree) item key = rbmElem key item tree
 chartLookup (KC tree)      key = rbmLookup key tree
 chartList   (KC tree)          = concatMap snd (rbmList tree)
+chartKeys   (KC tree)          = map fst (rbmList tree)
 chartInsert (KC tree) item key = fmap KC (rbmInsert key item tree)
 
 chartInsertM (KC tree) item keys = fmap KC (foldM insertItem tree keys)

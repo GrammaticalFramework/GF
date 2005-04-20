@@ -1,174 +1,186 @@
-{-- Module --------------------------------------------------------------------
-  Filename:    ActiveParse.hs
-  Author:      Håkan Burden
-  Time-stamp:  <2005-04-18, 14:25>
 
-  Description: An agenda-driven implementation of algorithm 4.6, Active parsing
-               of PMCFG, as described in Ljunglöf (2004)   
-------------------------------------------------------------------------------}
+module GF.NewParsing.MCFG.Active (parse) where
 
-module ActiveParse where
+import GF.NewParsing.GeneralChart
+import GF.Formalism.GCFG
+import GF.Formalism.MCFG
+import GF.Formalism.Utilities
+import GF.NewParsing.MCFG.Range
+import GF.NewParsing.MCFG.PInfo
+import GF.System.Tracing
+import Monad (guard)
 
+----------------------------------------------------------------------
+-- * parsing
 
--- GF modules
-import Examples
-import GeneralChart
-import MCFGrammar
-import MCFParser
-import Nondet
-import Parser
-import Range
+parse :: (Ord n, Ord c, Ord l, Ord t) => String -> MCFParser c n l t
+parse strategy mcfg starts toks
+    = [ Abs (cat, found) (zip rhs rrecs) fun |
+	Final (Abs cat rhs fun) found rrecs <- chartLookup chart Fin ]
+    where chart = process strategy mcfg starts toks
 
+process :: (Ord n, Ord c, Ord l, Ord t) => 
+	   String -> MCFGrammar c n l t -> [c] -> Input t -> AChart c n l
+process strategy mcfg starts toks 
+    = trace2 "MCFG.Active - strategy" (if isBU strategy then "BU"
+				       else if isTD strategy then "TD" else "None") $
+      tracePrt "MCFG.Active - chart size" prtSizes $
+      buildChart keyof (complete : combine : convert : rules) axioms
+    where rules  | isNil strategy = [scan]
+		 | isBU  strategy = [predictKilbury mcfg toks]
+		 | isTD  strategy = [predictEarley mcfg toks]
+	  axioms | isNil strategy = predict mcfg toks
+		 | isBU  strategy = terminal mcfg toks
+		 | isTD  strategy = initial mcfg starts toks
 
-{-- Datatypes -----------------------------------------------------------------
-  AChart: A RedBlackMap with Items and Keys
-  Item  :
-  AKey  :  
-------------------------------------------------------------------------------}
-data Item    n c l = Active (AbstractRule n c) 
-                            (RangeRec l)  
-			    Range 
-			    (Lin c l Range) 
-			    (LinRec c l Range) 
-			    [RangeRec l]
-		   | Passive (AbstractRule n c) (RangeRec l) [RangeRec l]
+isNil s = s=="n"
+isBU  s = s=="b"
+isTD  s = s=="t"
+
+----------------------------------------------------------------------
+-- * type definitions
+
+type AChart c n l = ParseChart (Item c n l) (AKey c) 
+
+data Item   c n l = Active (Abstract c n) 
+                           (RangeRec l)  
+			   Range 
+			   (Lin c l Range) 
+			   (LinRec c l Range) 
+			   [RangeRec l]
+		  | Final (Abstract c n) (RangeRec l) [RangeRec l]
+		  | Passive c (RangeRec l)
 		     deriving (Eq, Ord, Show)
-
-type AChart n c l = ParseChart (Item n c l) (AKey c) 
 
 data AKey       c = Act c
 		  | Pass c
 		  | Useless
+		  | Fin
 		    deriving (Eq, Ord, Show)
 
 
-keyof :: Item n c l -> AKey c
+keyof :: Item c n l -> AKey c
 keyof (Active _ _ _ (Lin _ (Cat (next, _, _):_)) _ _) = Act next
-keyof (Passive (_, cat, _) _ _)                       = Pass cat
-keyof _                                               = Useless
+keyof (Final _ _ _) = Fin
+keyof (Passive cat _) = Pass cat
+keyof _ = Useless
+
+-- to be used in prediction
+emptyChildren :: Abstract c n -> [RangeRec l]
+emptyChildren (Abs _ rhs _) = replicate (length rhs) []
+
+-- for tracing purposes
+prtSizes chart = "final=" ++ show (length (chartLookup chart Fin)) ++
+		 ", passive=" ++ show (sum [length (chartLookup chart k) | 
+					    k@(Pass _) <- chartKeys chart ]) ++
+		 ", active=" ++ show (sum [length (chartLookup chart k) | 
+					   k@(Act _) <- chartKeys chart ]) ++
+		 ", useless=" ++ show (length (chartLookup chart Useless)) 
 
 
-{-- Parsing -------------------------------------------------------------------
-  recognize:
-  parse    : Builds a chart from the initial agenda, given by prediction, and
-             the inference rules 
-  keyof    : Given an Item returns an appropriate Key for the Chart
-------------------------------------------------------------------------------}
+----------------------------------------------------------------------
+-- * inference rules
 
-recognize strategy mcfg toks = chartMember 
-			       (parse strategy mcfg toks) item (keyof item)
-    where n  = length toks
-	  n2 = n `div` 2
-	  item =  (Passive ("f", S, [A])
-		    [("s",Range (0,n))] 
-		    [[("p",Range (0,n2)),("q",Range (n2,n))]])
-
-
-parse :: (Ord n, Ord c, Ord l, Eq t) => Strategy -> Grammar n c l t -> [t] 
-      -> ParseChart (Item n c l) (AKey c)
-parse (False,False) mcfg toks = buildChart keyof 
-				[complete, scan, combine, convert]
-				(predict mcfg toks)
-parse (True, False) mcfg toks = buildChart keyof 
-				[predictKilbury mcfg toks, complete, combine, convert] 
-				(terminal mcfg toks)
-parse (False, True) mcfg toks = buildChart keyof
-				[predictEarley mcfg toks, complete, scan, combine, convert]
-				(initial (take 1 mcfg) toks)
-
-predictKilbury mcfg toks _ (Passive (_, cat, _) found _) = 
-    [ Active (f, a, rhs) [] rng lin' lins' daughters |
-      Rule a rhs ((Lin l ((Cat (cat', r, i)):syms)):lins) f <- mcfg,
-      cat == cat',		
-      lin' : lins' <- solutions $ rangeRestRec toks (Lin l syms : lins),
-      -- lins' <- solutions $ rangeRestRec toks lins,
-      rng <- solutions $ projection r found,
-      let daughters = (replaceRec (replicate (length rhs) []) i found) ]  
-predictKilbury _ _ _ _ = []
-
-predictEarley mcfg toks _ item@(Active _ _ _ (Lin _ ((Cat (cat, _, _)):_)) _ _) = 
-    concat [ predEar toks item rule | 
-	     rule@(Rule cat' _ _ _) <- mcfg, cat == cat' ] 
-predictEarley _ _ _ _ = []
-
-predEar toks _ (Rule cat [] lins f) = 
-    [ Passive (f, cat, []) (makeRangeRec lins') [] |
-      lins' <- solutions $ rangeRestRec toks lins ]
-predEar toks (Active _ _ (Range (_,j)) _ _ _) (Rule cat rhs lins f) =
-    [ Active (f, cat, rhs) [] (Range (j, j)) lin' lins' (replicate (length rhs) []) |
-      (lin':lins') <- solutions $ rangeRestRec toks lins ] 
-predEar toks (Active _ _ EmptyRange _ _ _) (Rule cat rhs lins f) =
-    [ Active (f, cat, rhs) [] EmptyRange lin' lins' (replicate (length rhs) []) |
-      (lin':lins') <- solutions $ rangeRestRec toks lins ] 
-
-
-{--Inference rules ------------------------------------------------------------
-  predict : Creates an Active Item of every Rule in the Grammar to give the 
-            initial Agenda
-  complete: 
-  scan    : 
-  combine : Creates an Active Item every time it is possible to combine 
-            an Active Item from the agenda with a Passive Item from the Chart 
-  convert : Active Items with nothing to find are converted to Passive Items
-------------------------------------------------------------------------------}
-
-predict :: Eq t => Grammar n c l t -> [t] -> [Item n c l]
-predict grammar toks = [ Active (f, cat, rhs) [] EmptyRange lin' lins' 
-			 (replicate (length rhs) []) | 
-			 Rule cat rhs lins f <- grammar,
-			 (lin':lins') <- solutions $ rangeRestRec toks lins ]
-
-
-complete :: (Ord n, Ord c, Ord l) => ParseChart (Item n c l) (AKey c) -> Item n c l 
-	 -> [Item n c l]
-complete _ (Active rule found (Range (i, j)) (Lin l []) (lin:lins) recs) = 
-    [ Active rule (found ++ [(l, Range (i,j))]) EmptyRange lin lins recs ]
+-- completion
+complete :: (Ord c, Ord n, Ord l) => AChart c n l -> Item c n l -> [Item c n l]
+complete _ (Active rule found rng (Lin l []) (lin:lins) recs) = 
+    return $ Active rule (found ++ [(l, rng)]) EmptyRange lin lins recs 
 complete _ _ = []
 
-
-scan :: (Ord n, Ord c, Ord l) => ParseChart (Item n c l) (AKey c) -> Item n c l 
-	-> [Item n c l]
-scan _ (Active rule found rng (Lin l ((Tok rng'):syms)) lins recs) = 
-    [ Active rule found rng'' (Lin l syms) lins recs |
-      rng'' <- solutions $ concRanges rng rng' ]
+-- scanning
+scan :: (Ord c, Ord n, Ord l) => AChart c n l -> Item c n l -> [Item c n l]
+scan _ (Active rule found rng (Lin l (Tok rng':syms)) lins recs) = 
+    do rng'' <- concatRange rng rng' 
+       return $ Active rule found rng'' (Lin l syms) lins recs 
 scan _ _ = []
 
-
-combine :: (Ord n, Ord c, Ord l) => ParseChart (Item n c l) (AKey c) -> Item n c l 
-	-> [Item n c l]
-combine chart (Active rule found rng (Lin l ((Cat (c, r, d)):syms)) lins recs) =
-    [ Active rule found rng'' (Lin l syms) lins (replaceRec recs d found') |
-      Passive _ found' _ <- chartLookup chart (Pass c),
-      rng' <- solutions $ projection r found',
-      rng'' <- solutions $ concRanges rng rng',
-      subsumes (recs !! d) found' ]
-combine chart (Passive (_, c, _) found _) = 
-    [ Active rule found' rng (Lin l syms) lins (replaceRec recs' d found) |
-      Active rule found' rng' (Lin l ((Cat (c, r, d)):syms)) lins recs' 
-            <- chartLookup chart (Act c),
-      rng'' <- solutions $ projection r found,
-      rng <- solutions $ concRanges rng' rng'',
-      subsumes (recs' !! d) found ]
+-- | Creates an Active Item every time it is possible to combine 
+-- an Active Item from the agenda with a Passive Item from the Chart 
+combine :: (Ord c, Ord n, Ord l) => AChart c n l -> Item c n l -> [Item c n l]
+combine chart (Active rule found rng (Lin l (Cat (c, r, d):syms)) lins recs) =
+    do Passive _c found' <- chartLookup chart (Pass c)
+       rng' <- projection r found'
+       rng'' <- concatRange rng rng'
+       guard $ subsumes (recs !! d) found' 
+       return $ Active rule found rng'' (Lin l syms) lins (replaceRec recs d found') 
+combine chart (Passive c found) = 
+    do Active rule found' rng' (Lin l ((Cat (_c, r, d)):syms)) lins recs' 
+           <- chartLookup chart (Act c)
+       rng'' <- projection r found
+       rng <- concatRange rng' rng''
+       guard $ subsumes (recs' !! d) found
+       return $ Active rule found' rng (Lin l syms) lins (replaceRec recs' d found) 
 combine _ _ = []      
 
-convert :: (Ord n, Ord c, Ord l) => ParseChart (Item n c l) (AKey c) -> Item n c l 
-	-> [Item n c l]
-convert _ (Active rule found rng (Lin l []) [] recs) = 
-    [ Passive rule (found ++ [(l, rng)]) recs ]
+-- | Active Items with nothing to find are converted to Final items,
+-- which in turn are converted to Passive Items
+convert :: (Ord c, Ord n, Ord l) => AChart c n l -> Item c n l -> [Item c n l]
+convert _ (Active rule found rng (Lin lbl []) [] recs) = 
+    return $ Final rule (found ++ [(lbl,rng)]) recs
+convert _ (Final (Abs cat _ _) found _) = 
+    return $ Passive cat found
 convert _ _ = []
 
+----------------------------------------------------------------------
+-- Naive --
 
+-- | Creates an Active Item of every Rule in the Grammar to give the initial Agenda
+predict :: (Ord c, Ord n, Ord l, Ord t) => MCFGrammar c n l t -> Input t -> [Item c n l]
+predict grammar toks = 
+    do Rule abs (Cnc _ _ lins) <- grammar
+       (lin':lins') <- rangeRestRec toks lins 
+       return $ Active abs [] EmptyRange lin' lins' (emptyChildren abs)
+
+----------------------------------------------------------------------
 -- Earley --
--- anropas med alla startregler
-initial :: Eq t => [Rule n c l t] -> [t] -> [Item n c l]
-initial starts toks = 
-    [ Active (f, s, rhs) [] (Range (0, 0)) lin' lins' (replicate (length rhs) []) |
-      Rule s rhs lins f <- starts,
-      (lin':lins') <- solutions $ rangeRestRec toks lins ]
 
+-- anropas med alla startkategorier
+initial :: (Ord c, Ord n, Ord l, Ord t) => MCFGrammar c n l t -> [c] -> Input t -> [Item c n l]
+initial mcfg starts toks = 
+    do Rule abs@(Abs cat _ _) (Cnc _ _ lins) <- mcfg
+       guard $ cat `elem` starts
+       lin' : lins' <- rangeRestRec toks lins 
+       return $ Active abs [] (Range (0, 0)) lin' lins' (emptyChildren abs)
 
+-- earley prediction
+predictEarley :: (Ord c, Ord n, Ord l, Ord t) => MCFGrammar c n l t -> Input t
+	      -> AChart c n l -> Item c n l -> [Item c n l]
+predictEarley mcfg toks _ (Active _ _ rng (Lin _ (Cat (cat,_,_):_)) _ _) = 
+    do rule@(Rule (Abs cat' _ _) _) <- mcfg
+       guard $ cat == cat' 
+       predEar toks rng rule 
+predictEarley _ _ _ _ = []
+
+predEar :: (Ord c, Ord n, Ord l, Ord t) => 
+	   Input t -> Range -> MCFRule c n l t -> [Item c n l]
+predEar toks _ (Rule abs@(Abs _ [] _) (Cnc _ _ lins)) = 
+    do lins' <- rangeRestRec toks lins 
+       return $ Final abs (makeRangeRec lins') []
+predEar toks rng (Rule abs (Cnc _ _ lins)) =
+    do lin' : lins' <- rangeRestRec toks lins 
+       return $ Active abs [] (makeMaxRange rng) lin' lins' (emptyChildren abs)
+
+makeMaxRange (Range (_, j)) = Range (j, j)
+makeMaxRange EmptyRange     = EmptyRange
+
+----------------------------------------------------------------------
 -- Kilbury --
+
+terminal :: (Ord c, Ord n, Ord l, Ord t) => MCFGrammar c n l t -> Input t -> [Item c n l]
 terminal mcfg toks = 
-    [ Passive (f, cat, []) (makeRangeRec lins') [] | 
-      Rule cat [] lins f <- mcfg,
-      lins' <- solutions $ rangeRestRec toks lins ]
+    do Rule abs@(Abs _ [] _) (Cnc _ _ lins) <- mcfg
+       lins' <- rangeRestRec toks lins 
+       return $ Final abs (makeRangeRec lins') []
+
+-- kilbury prediction
+predictKilbury :: (Ord c, Ord n, Ord l, Ord t) => 
+		  MCFGrammar c n l t -> Input t
+	       -> AChart c n l -> Item c n l -> [Item c n l]
+predictKilbury mcfg toks _ (Passive cat found) = 
+    do Rule abs@(Abs _ rhs _) (Cnc _ _ (Lin l (Cat (cat', r, i):syms) : lins)) <- mcfg
+       guard $ cat == cat'
+       lin' : lins' <- rangeRestRec toks (Lin l syms : lins)
+       rng <- projection r found
+       let children = replaceRec (emptyChildren abs) i found 
+       return $ Active abs [] rng lin' lins' children
+predictKilbury _ _ _ _ = []

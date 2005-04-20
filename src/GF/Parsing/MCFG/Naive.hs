@@ -1,5 +1,5 @@
 
-module GF.NewParsing.MCFG.Naive where
+module GF.NewParsing.MCFG.Naive (parse) where
 
 
 -- GF modules
@@ -8,21 +8,34 @@ import GF.Formalism.GCFG
 import GF.Formalism.MCFG
 import GF.Formalism.Utilities
 import GF.NewParsing.MCFG.Range
+import GF.NewParsing.MCFG.PInfo
 import GF.Data.SortedList
 import GF.Data.Assoc
+import GF.System.Tracing
 
-{-- Datatypes and types -------------------------------------------------------
-  NChart    : A RedBlackMap with Items and Keys 
-  Item      : The parse Items are either Active or Passive
-  NKey      : One for Active Items, one for Passive and one for Active Items 
-              to convert to Passive
-  DottedRule: (function-name, LHS, [Found in RHS], [To find in RHS]) 
-------------------------------------------------------------------------------}
+----------------------------------------------------------------------
+-- * parsing
+
+-- | Builds a chart from the initial agenda, given by prediction, and
+-- the inference rules 
+parse :: (Ord t, Ord n, Ord c, Ord l) => MCFParser c n l t
+parse mcfg starts toks
+    = [ Abs (cat, makeRangeRec lins) (zip rhs rrecs) fun |
+	Active (Abs cat _Nil fun, rhs) lins rrecs <- chartLookup chart Final ]
+    where chart = process mcfg toks
+
+process :: (Ord t, Ord n, Ord c, Ord l) => MCFGrammar c n l t -> Input t -> NChart c n l
+process mcfg toks
+    = tracePrt "MCFG.Naive - chart size" prtSizes $
+      buildChart keyof [convert, combine] (predict toks mcfg)
+
+----------------------------------------------------------------------
+-- * type definitions
 
 type NChart   c n l = ParseChart (Item c n l) (NKey c)
 
 data Item     c n l = Active (DottedRule c n) (LinRec c l Range) [RangeRec l]
-	            | Passive (Abstract c n) (RangeRec l)
+	            | Passive c (RangeRec l)
 	              deriving (Eq, Ord, Show)      
 
 type DottedRule c n = (Abstract c n, [c])
@@ -32,63 +45,43 @@ data NKey         c = Act c
 	            | Final
 	              deriving (Eq, Ord, Show)
 
-
-{-- Parsing -------------------------------------------------------------------
-  recognize: 
-  parse    : Builds a chart from the initial agenda, given by prediction, and
-             the inference rules 
-  keyof    : Given an Item returns an appropriate Key for the Chart
-------------------------------------------------------------------------------}
-
-
-parse :: (Ord t, Ord n, Ord c, Ord l) => MCFGrammar c n l t -> [t] 
-      -> SyntaxChart n (c, RangeRec l)
-parse mcfg toks = chart3
-    where chart3 = assocMap (const groupPairs) chart2
-          chart2 = accumAssoc id $ nubsort chart1
-	  chart1 = [ ((cat, rrec), (fun, zip rhs rrecs)) |
-		     Active (Abs cat _Nil fun, rhs) lins rrecs <- chartLookup chart0 Final,
-		     let rrec = makeRangeRec lins ]
-	  chart0 = process mcfg toks
-
-process :: (Ord t, Ord n, Ord c, Ord l) => MCFGrammar c n l t -> [t] -> NChart c n l
-process mcfg toks = buildChart keyof [convert, combine] (predict toks mcfg)
-
-
 keyof :: Item c n l -> NKey c
 keyof (Active (Abs _ (next:_) _, _) _ _) = Act next 
-keyof (Passive (Abs cat _ _) _)          = Pass cat
+keyof (Passive cat _)                    = Pass cat
 keyof _                                  = Final
 
+-- for tracing purposes
+prtSizes chart = "final=" ++ show (length (chartLookup chart Final)) ++
+		 ", passive=" ++ show (sum [length (chartLookup chart k) | 
+					    k@(Pass _) <- chartKeys chart ]) ++
+		 ", active=" ++ show (sum [length (chartLookup chart k) | 
+					   k@(Act _) <- chartKeys chart ]) 
 
-{--Inference rules ------------------------------------------------------------
-  predict: Creates an Active Item of every Rule in the Grammar to give the 
-           initial Agenda
-  combine: Creates an Active Item every time it is possible to combine 
-           an Active Item from the agenda with a Passive Item from the Chart 
-  convert: Active Items with nothing to find are converted to Passive Items
-------------------------------------------------------------------------------}
+----------------------------------------------------------------------
+-- * inference rules
 
-predict :: (Eq t, Eq c) => [t] -> MCFGrammar c n l t -> [Item c n l]  
+-- Creates an Active Item of every Rule in the Grammar to give the initial Agenda
+predict :: Ord t => Input t -> MCFGrammar c n l t -> [Item c n l]  
 predict toks mcfg = [ Active (abs, []) lins' [] | 
 		      Rule abs (Cnc _ _ lins) <- mcfg,      
 		      lins' <- rangeRestRec toks lins ]
 
-
+-- | Creates an Active Item every time it is possible to combine 
+-- an Active Item from the agenda with a Passive Item from the Chart 
 combine :: (Ord n, Ord c, Ord l) => NChart c n l -> Item c n l -> [Item c n l]
 combine chart (Active (Abs nt (c:find) f, found) lins rrecs) = 
     do Passive _ rrec <- chartLookup chart (Pass c)
        lins' <- concLinRec $ substArgRec (length found) rrec lins
        return $ Active (Abs nt find f, found ++ [c]) lins' (rrecs ++ [rrec])
-combine chart (Passive (Abs c _ _) rrec) = 
+combine chart (Passive c rrec) = 
     do Active (Abs nt (c:find) f, found) lins rrecs <- chartLookup chart (Act c)
        lins' <- concLinRec $ substArgRec (length found) rrec lins
        return $ Active (Abs nt find f, found ++ [c]) lins' (rrecs ++ [rrec])
 combine _ _ = []
 
-
+-- | Active Items with nothing to find are converted to Passive Items
 convert :: (Ord n, Ord c, Ord l) => NChart c n l -> Item c n l -> [Item c n l]
-convert _ (Active (Abs nt [] f, rhs) lins _) = [Passive (Abs nt rhs f) rrec]
+convert _ (Active (Abs cat [] _, _) lins _) = [Passive cat rrec]
     where rrec = makeRangeRec lins
 convert _ _                                  = []
 

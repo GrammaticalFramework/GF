@@ -4,32 +4,39 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/19 10:46:07 $ 
+-- > CVS $Date: 2005/04/20 12:49:45 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- MCFG parsing
 -----------------------------------------------------------------------------
 
-module GF.NewParsing.MCFG where
+module GF.NewParsing.MCFG
+    (parseMCF, module GF.NewParsing.MCFG.PInfo) where
+
+import Operations (Err(..))
 
 import GF.Formalism.Utilities
 import GF.Formalism.GCFG
 import GF.Formalism.MCFG
+import GF.NewParsing.MCFG.PInfo
 
 import qualified GF.NewParsing.MCFG.Naive as Naive
+import qualified GF.NewParsing.MCFG.Active as Active
 import qualified GF.NewParsing.MCFG.Range as Range (makeRange)
 
 ----------------------------------------------------------------------
 -- parsing
 
---parseMCF :: (Ord n, Ord c, Ord t) => String -> CFParser c n t 
-parseMCF "n" = Naive.parse 
--- default parser:
-parseMCF _   = parseMCF "n"
-
-
-makeFinalEdge cat lbl bnds = (cat, [(lbl, Range.makeRange bnds)])
+parseMCF :: (Ord c, Ord n, Ord l, Ord t) => String -> Err (MCFParser c n l t)
+parseMCF "n" = Ok $ Naive.parse 
+parseMCF "an" = Ok $ Active.parse "n"
+parseMCF "ab" = Ok $ Active.parse "b"
+parseMCF "at" = Ok $ Active.parse "t"
+-- default parsers:
+parseMCF "a"   = parseMCF "an"
+-- error parser:
+parseMCF prs = Bad $ "Parser not defined: " ++ prs
 
 
 

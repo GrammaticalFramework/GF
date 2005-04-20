@@ -4,15 +4,17 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 18:38:36 $ 
+-- > CVS $Date: 2005/04/20 12:49:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- CFG parsing
 -----------------------------------------------------------------------------
 
 module GF.NewParsing.CFG 
     (parseCF, module GF.NewParsing.CFG.PInfo) where
+
+import Operations (Err(..))
 
 import GF.Formalism.Utilities
 import GF.Formalism.CFG
@@ -24,17 +26,19 @@ import qualified GF.NewParsing.CFG.General     as Gen
 ----------------------------------------------------------------------
 -- parsing
 
-parseCF :: (Ord n, Ord c, Ord t) => String -> CFParser c n t 
-parseCF "gb" = Gen.parse bottomup
-parseCF "gt" = Gen.parse topdown
-parseCF "ib" = Inc.parse (bottomup, noFilter)
-parseCF "it" = Inc.parse (topdown, noFilter)
-parseCF "ibFT" = Inc.parse (bottomup, topdown)
-parseCF "ibFB" = Inc.parse (bottomup, bottomup)
-parseCF "ibFTB" = Inc.parse (bottomup, bothFilters)
-parseCF "itF" = Inc.parse (topdown, bottomup)
+parseCF :: (Ord n, Ord c, Ord t) => String -> Err (CFParser c n t) 
+parseCF "gb"    = Ok $ Gen.parse bottomup
+parseCF "gt"    = Ok $ Gen.parse topdown
+parseCF "ib"    = Ok $ Inc.parse (bottomup, noFilter)
+parseCF "it"    = Ok $ Inc.parse (topdown, noFilter)
+parseCF "ibFT"  = Ok $ Inc.parse (bottomup, topdown)
+parseCF "ibFB"  = Ok $ Inc.parse (bottomup, bottomup)
+parseCF "ibFTB" = Ok $ Inc.parse (bottomup, bothFilters)
+parseCF "itF"   = Ok $ Inc.parse (topdown, bottomup)
 -- default parser:
-parseCF _ = parseCF "gb"
+parseCF "" = parseCF "gb"
+-- error parser:
+parseCF prs = Bad $ "Parser not defined: " ++ prs
 
 bottomup = (True, False)
 topdown = (False, True)
