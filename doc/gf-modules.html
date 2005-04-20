@@ -775,21 +775,21 @@ has not been implemented.)
 
 Syntax: 
 <p>
-<tt>abstract</tt> A <tt>=</tt> (A_1,...,A_n <tt>**</tt>)?
-<tt>{</tt>J_1 <tt>;</tt> ... <tt>;</tt> J_m <tt>; }</tt>
+<tt>abstract</tt> A <tt>=</tt> (A<sub>1</sub>,...,A<sub>n</sub> <tt>**</tt>)?
+<tt>{</tt>J<sub>1</sub> <tt>;</tt> ... <tt>;</tt> J<sub>m</sub> <tt>; }</tt>
 
 <p>
 
 where
 <ul>
 <li> i >= 0
-<li> each <i>A_i</i> is itself an abstract module
-<li> each <i>J_i</i> is a judgement of one of the forms
+<li> each <i>A<sub>i</sub></i> is itself an abstract module
+<li> each <i>J<sub>i</sub></i> is a judgement of one of the forms
      <tt>cat, fun, def, data</tt>
 </ul>
 Semantic conditions:
 <ul>
-<li> all names declared in each <i>A_i</i> and <i>A</i> must be distinct
+<li> all names declared in each <i>A<sub>i</sub></i> and <i>A</i> must be distinct
 </ul>
 
 <h4>Concrete syntax modules</h4>
@@ -797,9 +797,9 @@ Semantic conditions:
 Syntax: 
 <p>
 <tt>incomplete</tt>? <tt>concrete</tt> C <tt>of</tt> A <tt>=</tt>
-(C_1,...,C_n <tt>**</tt>)?
-(<tt>open</tt> O_1,...,O_k <tt>in</tt>)?
-<tt>{</tt>J_1 <tt>;</tt> ... <tt>;</tt> J_m <tt>; }</tt>
+(C<sub>1</sub>,...,C<sub>n</sub> <tt>**</tt>)?
+(<tt>open</tt> O<sub>1</sub>,...,O<sub>k</sub> <tt>in</tt>)?
+<tt>{</tt>J<sub>1</sub> <tt>;</tt> ... <tt>;</tt> J<sub>m</sub> <tt>; }</tt>
 
 <p>
 
@@ -807,15 +807,15 @@ where
 <ul>
 <li> i >= 0
 <li> <i>A</i> is an abstract module
-<li> each <i>C_i</i> is a concrete module
-<li> each <i>O_i</i> is an open specification, of one of the forms
+<li> each <i>C<sub>i</sub></i> is a concrete module
+<li> each <i>O<sub>i</sub></i> is an open specification, of one of the forms
   <ul>
     <li> <i>R</i> 
     <li> <tt>(</tt><i>Q</i><tt>=</tt><i>R</i><tt>)</tt> 
   </ul>
 where <i>R</i> is a resource, instance, or concrete, and
 <i>Q</i> is any identifier
-<li> each <i>J_i</i> is a judgement of one of the forms
+<li> each <i>J<sub>i</sub></i> is a judgement of one of the forms
      <tt>lincat, lin, lindef, printname</tt>
 </ul>
 
@@ -842,23 +842,23 @@ Semantic conditions:
 Syntax: 
 <p>
 <tt>resource</tt> R <tt>=</tt>
-(R_1,...,R_n <tt>**</tt>)?
-(<tt>open</tt> O_1,...,O_k <tt>in</tt>)?
-<tt>{</tt>J_1 <tt>;</tt> ... <tt>;</tt> J_m <tt>; }</tt>
+(R<sub>1</sub>,...,R<sub>n</sub> <tt>**</tt>)?
+(<tt>open</tt> O<sub>1</sub>,...,O<sub>k</sub> <tt>in</tt>)?
+<tt>{</tt>J<sub>1</sub> <tt>;</tt> ... <tt>;</tt> J<sub>m</sub> <tt>; }</tt>
 
 <p>
 where
 <ul>
 <li> i >= 0
-<li> each <i>R_i</i> is a resource module
-<li> each <i>O_i</i> is an open specification, of one of the forms
+<li> each <i>R<sub>i</sub></i> is a resource module
+<li> each <i>O<sub>i</sub></i> is an open specification, of one of the forms
   <ul>
     <li> <i>P</i> 
     <li> <tt>(</tt><i>Q</i><tt>=</tt><i>R</i><tt>)</tt> 
   </ul>
 where <i>P</i> is a resource, instance, or concrete, and
 <i>Q</i> is any identifier
-<li> each <i>J_i</i> is a judgement of one of the forms
+<li> each <i>J<sub>i</sub></i> is a judgement of one of the forms
      <tt>oper, param</tt>
 </ul>
 
@@ -866,7 +866,7 @@ where <i>P</i> is a resource, instance, or concrete, and
 
 Semantic conditions:
 <ul>
-<li> all names declared in each <i>R_i</i> and <i>R</i> must be distinct
+<li> all names declared in each <i>R<sub>i</sub></i> and <i>R</i> must be distinct
 <li> all constants declared must have a definition
 </ul>
 
@@ -876,23 +876,23 @@ Semantic conditions:
 Syntax: 
 <p>
 <tt>interface</tt> R <tt>=</tt>
-(R_1,...,R_n <tt>**</tt>)?
-(<tt>open</tt> O_1,...,O_k <tt>in</tt>)?
-<tt>{</tt>J_1 <tt>;</tt> ... <tt>;</tt> J_m <tt>; }</tt>
+(R<sub>1</sub>,...,R<sub>n</sub> <tt>**</tt>)?
+(<tt>open</tt> O<sub>1</sub>,...,O<sub>k</sub> <tt>in</tt>)?
+<tt>{</tt>J<sub>1</sub> <tt>;</tt> ... <tt>;</tt> J<sub>m</sub> <tt>; }</tt>
 
 <p>
 where
 <ul>
 <li> i >= 0
-<li> each <i>R_i</i> is an interface module
-<li> each <i>O_i</i> is an open specification, of one of the forms
+<li> each <i>R<sub>i</sub></i> is an interface module
+<li> each <i>O<sub>i</sub></i> is an open specification, of one of the forms
   <ul>
     <li> <i>P</i> 
     <li> <tt>(</tt><i>Q</i><tt>=</tt><i>R</i><tt>)</tt> 
   </ul>
 where <i>P</i> is a resource, instance, or concrete, and
 <i>Q</i> is any identifier
-<li> each <i>J_i</i> is a judgement of one of the forms
+<li> each <i>J<sub>i</sub></i> is a judgement of one of the forms
      <tt>oper, param</tt>
 </ul>
 
@@ -900,7 +900,7 @@ where <i>P</i> is a resource, instance, or concrete, and
 
 Semantic conditions:
 <ul>
-<li> all names declared in each <i>R_i</i> and <i>R</i> must be distinct
+<li> all names declared in each <i>R<sub>i</sub></i> and <i>R</i> must be distinct
 </ul>
 
 
@@ -910,24 +910,24 @@ Semantic conditions:
 Syntax: 
 <p>
 <tt>instance</tt> R <tt>of</tt> I <tt>=</tt>
-(R_1,...,R_n <tt>**</tt>)?
-(<tt>open</tt> O_1,...,O_k <tt>in</tt>)?
-<tt>{</tt>J_1 <tt>;</tt> ... <tt>;</tt> J_m <tt>; }</tt>
+(R<sub>1</sub>,...,R<sub>n</sub> <tt>**</tt>)?
+(<tt>open</tt> O<sub>1</sub>,...,O<sub>k</sub> <tt>in</tt>)?
+<tt>{</tt>J<sub>1</sub> <tt>;</tt> ... <tt>;</tt> J<sub>m</sub> <tt>; }</tt>
 
 <p>
 where
 <ul>
 <li> i >= 0
 <li> <i>I</i> is an interface module
-<li> each <i>R_i</i> is an instance module
-<li> each <i>O_i</i> is an open specification, of one of the forms
+<li> each <i>R<sub>i</sub></i> is an instance module
+<li> each <i>O<sub>i</sub></i> is an open specification, of one of the forms
   <ul>
     <li> <i>P</i> 
     <li> <tt>(</tt><i>Q</i><tt>=</tt><i>R</i><tt>)</tt> 
   </ul>
 where <i>P</i> is a resource, instance, or concrete, and
 <i>Q</i> is any identifier
-<li> each <i>J_i</i> is a judgement of one of the forms
+<li> each <i>J<sub>i</sub></i> is a judgement of one of the forms
      <tt>oper, param</tt>
 </ul>
 
@@ -935,9 +935,9 @@ where <i>P</i> is a resource, instance, or concrete, and
 
 Semantic conditions:
 <ul>
-<li> all names declared in each <i>R_i</i>, <i>I</i>, and <i>R</i> must be distinct
-<li> all constants declared in <tt>I</tt> must have a definition either in
-  <tt>I</tt> or <tt>R</tt>
+<li> all names declared in each <i>R<sub>i</sub></i>, <i>I</i>, and <i>R</i> must be distinct
+<li> all constants declared in <i>I</i> must have a definition either in
+  <i>I</i> or <i>R</i>
 </ul>
 
 
@@ -946,11 +946,11 @@ Semantic conditions:
 Syntax: 
 <p>
 <tt>concrete</tt> C <tt>of</tt> A <tt>=</tt>
-(C_1,...,C_n <tt>**</tt>)?
+(C<sub>1</sub>,...,C<sub>n</sub> <tt>**</tt>)?
 B
 <tt>with</tt>
-<tt>(</tt>I_1 <tt>=</tt>J_1<tt>),</tt> ... 
-<tt>, (</tt>I_m <tt>=</tt>J_m<tt>) ;</tt>
+<tt>(</tt>I<sub>1</sub> <tt>=</tt>J<sub>1</sub><tt>),</tt> ... 
+<tt>, (</tt>I<sub>m</sub> <tt>=</tt>J<sub>m</sub><tt>) ;</tt>
 
 <p>
 
@@ -958,10 +958,10 @@ where
 <ul>
 <li> i >= 0
 <li> <i>A</i> is an abstract module
-<li> each <i>C_i</i> is a concrete module
+<li> each <i>C<sub>i</sub></i> is a concrete module
 <li> <i>B</i> is an incomplete concrete syntax of <i>A</i>
-<li> each <i>I_i</i> is an interface
-<li> each <i>J_i</i> is an instance of <i>I_i</i>
+<li> each <i>I<sub>i</sub></i> is an interface
+<li> each <i>J<sub>i</sub></i> is an instance of <i>I<sub>i</sub></i>
 </ul>
 
 
