@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 18:38:36 $ 
+-- > CVS $Date: 2005/04/20 12:49:45 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.18 $
+-- > CVS $Revision: 1.19 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -69,7 +69,7 @@ parseStringC opts0 sg cat s
   let opts = unionOptions opts0 $ stateOptions sg
       pm   = maybe "" id $ getOptVal opts0 useParser -- -parser=pm
       tok  = customOrDefault opts useTokenizer customTokenizer sg
-  ts <- return $ New.parse pm (pInfo sg) (absId sg) cat (tok s)
+  ts <- checkErr $ New.parse pm (pInfo sg) (absId sg) cat (tok s)
   ts' <- mapM (checkErr . annotate (stateGrammarST sg) . refreshMetas []) ts
   return $ optIntOrAll opts flagNumber ts'
 

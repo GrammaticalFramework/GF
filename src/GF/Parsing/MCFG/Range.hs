@@ -11,7 +11,7 @@ import GF.Formalism.GCFG
 import GF.Formalism.MCFG
 import GF.Formalism.Utilities
 import GF.Infra.Print
-
+import GF.Data.Assoc ((?))
 
 ------------------------------------------------------------
 -- ranges as single pairs
@@ -95,29 +95,29 @@ makeRangeRec lins = map convLin lins
 
 --- Record projection --------------------------------------------------------
 
-projection :: Eq l => l -> RangeRec l -> [Range]
+projection :: Ord l => l -> RangeRec l -> [Range]
 projection l rec = maybe (fail "projection") return $ lookup l rec
 
 
 --- Range restriction --------------------------------------------------------
 
-rangeRestTok :: Eq t => [t] -> t -> [Range]
-rangeRestTok toks tok = do i <- elemIndices tok toks
-			   return (makeRange (i, i+1))
+rangeRestTok :: Ord t => Input t -> t -> [Range]
+rangeRestTok toks tok = do rng <- inputToken toks ? tok
+			   return (makeRange rng)
 
 
-rangeRestSym :: Eq t => [t] -> Symbol a t -> [Symbol a Range]
+rangeRestSym :: Ord t => Input t -> Symbol a t -> [Symbol a Range]
 rangeRestSym toks (Tok tok) = do rng <- rangeRestTok toks tok
 				 return (Tok rng)
 rangeRestSym _ (Cat c)      = return (Cat c)
 
 
-rangeRestLin :: Eq t => [t] -> Lin c l t -> [Lin c l Range]
+rangeRestLin :: Ord t => Input t -> Lin c l t -> [Lin c l Range]
 rangeRestLin toks (Lin lbl syms) = do syms' <- mapM (rangeRestSym toks) syms
 				      return (Lin lbl syms')
 
 
-rangeRestRec :: Eq t => [t] -> LinRec c l t -> [LinRec c l Range]
+rangeRestRec :: Ord t => Input t -> LinRec c l t -> [LinRec c l Range]
 rangeRestRec toks = mapM (rangeRestLin toks)
 
 
@@ -131,7 +131,7 @@ replaceRec recs i rec = (fst tup) ++ [rec] ++ (tail $ snd tup)
 
 --- Argument substitution ----------------------------------------------------
 
-substArgSymbol :: Eq l => Int -> RangeRec l -> Symbol (c, l, Int) Range 
+substArgSymbol :: Ord l => Int -> RangeRec l -> Symbol (c, l, Int) Range 
 	       -> Symbol (c, l, Int) Range
 substArgSymbol i rec (Tok rng) = (Tok rng)
 substArgSymbol i rec (Cat (c, l, j))
@@ -139,13 +139,13 @@ substArgSymbol i rec (Cat (c, l, j))
     | otherwise = (Cat (c, l, j))
 
 
-substArgLin :: Eq l => Int -> RangeRec l -> Lin c l Range 
+substArgLin :: Ord l => Int -> RangeRec l -> Lin c l Range 
 	    -> Lin c l Range
 substArgLin i rec (Lin lbl syms) = 
     (Lin lbl (map (substArgSymbol i rec) syms))
 
 
-substArgRec :: Eq l => Int -> RangeRec l -> LinRec c l Range 
+substArgRec :: Ord l => Int -> RangeRec l -> LinRec c l Range 
 	    -> LinRec c l Range
 substArgRec i rec lins = map (substArgLin i rec) lins
 
@@ -153,7 +153,7 @@ substArgRec i rec lins = map (substArgLin i rec) lins
 --- Subsumation -------------------------------------------------------------
 
 -- "rec' subsumes rec?"
-subsumes :: Eq l => RangeRec l -> RangeRec l -> Bool
+subsumes :: Ord l => RangeRec l -> RangeRec l -> Bool
 subsumes rec rec' = and [elem r rec' | r <- rec]
 
 

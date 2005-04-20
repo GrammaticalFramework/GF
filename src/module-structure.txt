@@ -2,7 +2,7 @@
 
 följande är en föreslagen hierarkisk modulstruktur för GF 2.2
 
-katalogen src kommer att innehålla (åtminstone) följande:
+* katalogen src kommer att innehålla (åtminstone) följande:
   - GF.hs     	     	modulen Main
   - GF/			resten av Haskell-filerna
   - JavaGUI/		java-filer
@@ -12,249 +12,65 @@ katalogen src kommer att innehålla (åtminstone) följande:
   -         run-haddock.csh
   -         check-haddock.perl
 
-modifiera gärna strukturen och kommentarerna nedan
-----------------------------------------------------------------------
 
-GF
+* struktur för haskell-filer:
 
-GF/
-	GFModes				- flyttas till Shell??
+	   	GF.Formalism	(finns redan)
+		GF.Conversion	(...)
+		GF.Parsing	(heter nu GF.NewParsing, bör byta namn)
+		GF.System	(finns redan, för filer som har med
+				operativsystemet att göra, t.ex. Tracing och Arch)
 
-	API/
-		API
-		BatchTranslate
-		GrammarToHaskell
-		IOGrammar
-		MyParser		- obsolet?
+filerna GF.NewParsing.GeneralChart och GF.NewParsing.IncrementalChart 
+flyttas och byter namn till GF.Data.GeneralDeduction och GF.Data.IncrementalDeduction
 
-	CF/				- bör så småningom försvinna
-					(ersättas med mer generell CFG-datatyp)
-		CF
-		CFIdent
-		CFtoGrammar
-		CFtoSRG
-		CanonToCF
-		ChartParser		- obsolet.
-		EBNF			- ta bort parserkombinatorerna -- skapa en bnfc-fil
-		PPrCF
-		PrLBNF
-		Profile
+vart ska filerna GFModes, Help, HelpFile, Today flyttas?
+förslag: Help, HelpFile, Today -> GF.System
 
-	Canon/
-		AbsGFC			[1/2 - AUTO]
-		CMacros
-		CanonToGrammar
-		GFC
-		GetGFC
-		Look
-		MkGFC
-		PrExp
-		Share
-		Unlex
-		LexGFC			[AUTO]
-		ParGFC			[AUTO]
-		PrintGFC		[1/2 - AUTO]
-		SkelGFC			[AUTO]
-		TestGFC			[AUTO]
+api 	   ->	GF.API
+cf	   ->	GF.CF
+canonical  ->	GF.Canon
+compile	   ->	GF.Compile
 
-		[GFC.cf]		bnfc-fil
-		[ParGFC.y]		[AUTO] happy-fil
-		[LexGFC.x]		[AUTO] alex-fil
+infra	   ->	GF.Data	 (datatyper, algoritmer - helst ej direkt beroende av GF)
+	   	GF.Infra (GF-infrastruktur)
+		GF.Text  (t.ex. olika språk, teckenkodningar)
 
-	Compile/
-		CheckGrammar
-		Compile
-		Extend
-		GetGrammar
-		GrammarToCanon
-		MkResource
-		MkUnion
-		ModDeps
-		NewRename
-		Optimize
-		PGrammar
-		PrOld
-		Rebuild
-		RemoveLiT
-		Rename
-		ShellState
-		Update
+(...)	   ->	GF.Fudgets  (alla filer som har med fudgets att göra)
+grammar	   ->	GF.Grammar
+cfgm	   ->	GF.CFGM
+source	   ->	GF.Source
+shell	   ->	GF.Shell
+speech	   ->	GF.Speech
+translate  ->	GF.Translate
+useGrammar ->	GF.UseGrammar
+visuali... ->	GF.Visualization
 
-	Data/
-		Assoc
-		Glue
-		Map			- slås ihop med RedBlackSet
-		OrdMap2			- obsolet - använd Assoc istället
-		OrdSet			- obsolet - använd SortedList istället
-		RedBlack		\ slås samman
-		RedBlackSet		/
-		SharedString 		[AUTO?]
-		SortedList
-		Trie			\ slås samman
-		Trie2			/
-		Zipper
-		CheckM
-		ErrM
-		GenneralInduction
-		IncrementalInduction
+parsers	   ->	filerna (ParGF och ParGFC) flyttas till där GF.cf och GFC.cf finns
 
-	Fudgets/
-		EventF
-		FudgetOps
-		UnicodeF
-		WriteF
-		CommandF
+util	   ->	Extras (kanske på toppnivå - inte GF.Extras)
 
-	Grammar/
-		AbsCompute
-		Abstract
-		AppPredefined
-		Compute
-		Grammar
-		Lockfield
-		LookAbs
-		Lookup
-		MMacros
-		Macros
-		PatternMatch
-		PrGrammar
-		Refresh
-		ReservedWords
-		TC
-		TypeCheck
-		Unify
-		Values
 
-	CFGM/
-		AbsCFG			[AUTO]
-		LexCFG			[AUTO]
-		ParCFG			[AUTO]
-		PrintCFG		[AUTO]
-		PrintCFGrammar
+* java-katalogen byter namn:
 
-		[CFG.cf]		bnfc-fil
-		[ParCFG.y]		[AUTO] happy-fil
-		[LexCFG.x]		[AUTO] alex-fil
+java   ->  JavaGUI
 
-	Source/
-		AbsGF			[AUTO]
-		LexGF			[AUTO]
-		ParGF			[AUTO]
-		PrintGF			[AUTO]
-		SkelGF			[AUTO]
-		TestGF			[AUTO]
-		SourceToGrammar
-		GrammarToSource
 
-		[GF.cf]			bnfc-fil
-		[ParGF.y]		[AUTO] happy-fil
-		[LexGF.x]		[AUTO] alex-fil
+* haddock samlas på ett ställe:
 
-	Infra/
-		Comments
-		Ident
-		Modules
-		Operations
-		Option
-		Parsers			- nästan obsolet (används bara i EBNF)
-		ReadFiles
-		Str
-		UseIO
+haddock-check.perl -> haddock/check-haddock.perl
+haddock-script.csh -> haddock/run-haddock.csh
+haddock-resources/ -> haddock/resources/
+haddock/	   -> haddock/html
 
-	Formalism/
-	Conversion/
-	Parsing/			dela upp i Grammar och Parsing? 
-					(då måste nuvarande Grammar byta namn)
-		CFGrammar		-> Grammar
-		CFParserGeneral
-		CFParserIncremental
-		ConvertGFCtoMCFG	-> Grammar
-		ConvertGrammar		-> Grammar
-		ConvertMCFGtoCFG	-> Grammar
-		GeneralChart
-		GrammarTypes		-> Grammar
-		IncrementalChart
-		MCFGrammar		-> Grammar
-		MCFParserBasic
-		MCFRange                - obsolet
-		ParseCF
-		ParseCFG
-		ParseGFC
-		ParseMCFG
-		Parser
-		PrintParser
-		PrintSimplifiedTerm
 
-	Shell/
-		CommandL
-		Commands
-		JGF
-		PShell
-		Shell
-		ShellCommands
-		SubShell
-		TeachYourself
+* kataloger som kan tas bort?
 
-	Speech/
-		PrGSL
-		PrJSGF
-		SRG
-		TransformCFG
-
-	System/
-		Arch
-		ArchEdit
-		Tracing
-
-	Text/
-		Arabic
-		Devanagari
-		Ethiopic
-		ExtendedArabic
-		ExtraDiacritics
-		Greek
-		Hebrew
-		Hiragana
-		LatinASupplement
-		OCSCyrillic
-		Russian
-		Tamil
-		Text
-		UTF8
-		Unicode
-
-	Translate/
-		GFT
-
-	UseGrammar/
-		Custom
-		Editing
-		Generate
-		GetTree
-		Information
-		Linear
-		MoreCustom		- obsolet?
-		Morphology
-		Paraphrases
-		Parsing
-		Randomized
-		RealMoreCustom		- obsolet?
-		Session
-		TeachYourself
-		Tokenize
-		Transfer
-
-	Util/				byta namn till Extra?
-		Today 			[AUTO]
-		HelpFile 		[AUTO]
-		AlphaConvGF
-		GFDoc
-		Htmls
-		MkHelpFile
-		HelpFile		byta namn till HelpFile.txt?
-
-		[mkHelpFile.perl]	ersättning för MkHelpFile?
-		[mktoday.sh]
-
-	Visualization/
-		VisualizeGrammar
+for-xxx         (obsoleta)
+haddock
+newparsing	(tom)
+notrace		(tom)
+trace		(tom)
+parsers		(tom efter flytt av filer)
+old-stuff	(obsolet)
+GF.OldParsing   (obsolet)

@@ -4,17 +4,18 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:50 $ 
+-- > CVS $Date: 2005/04/20 12:49:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Basic GCFG formalism (derived from Pollard 1984)
 -----------------------------------------------------------------------------
 
-module GF.Formalism.GCFG 
-    ( Grammar, Rule(..), Abstract(..), Concrete(..)
-    ) where
+module GF.Formalism.GCFG where
 
+import GF.Formalism.Utilities (SyntaxChart)
+import GF.Data.Assoc (assocMap, accumAssoc)
+import GF.Data.SortedList (nubsort, groupPairs)
 import GF.Infra.Print
 
 ----------------------------------------------------------------------
@@ -27,6 +28,10 @@ data Abstract cat name = Abs cat [cat] name
 			 deriving (Eq, Ord, Show)
 data Concrete lin term = Cnc lin [lin] term 
 			 deriving (Eq, Ord, Show)
+
+abstract2chart :: (Ord n, Ord e) => [Abstract e n] -> SyntaxChart n e
+abstract2chart rules = accumAssoc groupPairs $
+		       [ (e, (n, es)) | Abs e es n <- rules ]
 
 ----------------------------------------------------------------------
 

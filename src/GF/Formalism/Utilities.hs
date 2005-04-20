@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:49 $ 
+-- > CVS $Date: 2005/04/20 12:49:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- Basic type declarations and functions for grammar formalisms
 -----------------------------------------------------------------------------
@@ -105,7 +105,9 @@ inputMany toks     = MkInput inEdges inBounds inFrom inTo inToken
 
 
 ------------------------------------------------------------
--- * charts, forests & trees
+-- * representations of syntactical analyses
+
+-- ** charts as finite maps over edges
 
 -- | The values of the chart, a list of key-daughters pairs,
 -- has unique keys. In essence, it is a map from 'n' to daughters.
@@ -118,6 +120,8 @@ type SyntaxChart n e = Assoc e [(n, [[e]])]
 -- type Forest n = GeneralTrie n (SList [Forest n]) Bool
 -- (the Bool == isMeta)
 
+-- ** syntax forests
+
 data SyntaxForest n = FMeta 
 		    | FNode n [[SyntaxForest n]]
                       -- ^ The outer list should be a set (not necessarily sorted)
@@ -126,24 +130,28 @@ data SyntaxForest n = FMeta
 		      -- are (conjunctive) concatenative nodes
 		      deriving (Eq, Ord, Show)
 
-data SyntaxTree n = TMeta | TNode n [SyntaxTree n] 
-		    deriving (Eq, Ord, Show)
+instance Functor SyntaxForest where
+    fmap f (FNode n forests) = FNode (f n) $ map (map (fmap f)) forests
+    fmap f (FMeta) = FMeta 
 
 forestName :: SyntaxForest n -> Maybe n
 forestName (FNode n _) = Just n
 forestName (FMeta)     = Nothing
 
-treeName :: SyntaxTree n -> Maybe n
-treeName (TNode n _) = Just n
-treeName (TMeta)     = Nothing
+unifyManyForests :: (Monad m, Eq n) => [SyntaxForest n] -> m (SyntaxForest n)
+unifyManyForests = foldM unifyForests FMeta
 
-instance Functor SyntaxTree where
-    fmap f (TNode n trees) = TNode (f n) $ map (fmap f) trees
-    fmap f (TMeta) = TMeta 
-
-instance Functor SyntaxForest where
-    fmap f (FNode n forests) = FNode (f n) $ map (map (fmap f)) forests
-    fmap f (FMeta) = FMeta 
+-- | two forests can be unified, if either is 'FMeta', or both have the same parent, 
+-- and all children can be unified
+unifyForests :: (Monad m, Eq n) => SyntaxForest n -> SyntaxForest n -> m (SyntaxForest n)
+unifyForests FMeta  forest = return forest
+unifyForests forest FMeta  = return forest
+unifyForests (FNode name1 children1) (FNode name2 children2)
+    | name1 == name2 && not (null children) = return $ FNode name1 children
+    | otherwise    = fail "forest unification failure"
+    where children = [ forests | forests1 <- children1, forests2 <- children2,
+		       sameLength forests1 forests2,
+		       forests <- zipWithM unifyForests forests1 forests2 ]
 
 {- måste tänka mer på detta:
 compactForests :: Ord n => [SyntaxForest n] -> SList (SyntaxForest n)
@@ -168,11 +176,33 @@ compactForests = map joinForests . groupBy eqNames . sortForests
 				   _   -> nubsort fss
 -}
 
--- ** conversions between representations
+-- ** syntax trees
 
-forest2trees :: SyntaxForest n -> SList (SyntaxTree n)
-forest2trees (FNode n forests) = map (TNode n) $ forests >>= mapM forest2trees
-forest2trees (FMeta) = [TMeta]
+data SyntaxTree n = TMeta | TNode n [SyntaxTree n] 
+		    deriving (Eq, Ord, Show)
+
+instance Functor SyntaxTree where
+    fmap f (TNode n trees) = TNode (f n) $ map (fmap f) trees
+    fmap f (TMeta) = TMeta 
+
+treeName :: SyntaxTree n -> Maybe n
+treeName (TNode n _) = Just n
+treeName (TMeta)     = Nothing
+
+unifyManyTrees :: (Monad m, Eq n) => [SyntaxTree n] -> m (SyntaxTree n)
+unifyManyTrees = foldM unifyTrees TMeta
+
+-- | two trees can be unified, if either is 'TMeta', 
+-- or both have the same parent, and their children can be unified
+unifyTrees :: (Monad m, Eq n) => SyntaxTree n -> SyntaxTree n -> m (SyntaxTree n)
+unifyTrees TMeta tree = return tree
+unifyTrees tree TMeta = return tree
+unifyTrees (TNode name1 children1) (TNode name2 children2)
+    | name1 == name2 && sameLength children1 children2 
+	= liftM (TNode name1) $ zipWithM unifyTrees children1 children2 
+    | otherwise = fail "tree unification failure"
+
+-- ** conversions between representations
 
 chart2forests :: (Ord n, Ord e) => 
 		 SyntaxChart n e  -- ^ The complete chart
@@ -203,38 +233,9 @@ chart2forests chart isMeta = es2fs
 -}
 
 
--- ** operations on forests
-
-unifyManyForests :: (Monad m, Eq n) => [SyntaxForest n] -> m (SyntaxForest n)
-unifyManyForests = foldM unifyForests FMeta
-
--- | two forests can be unified, if either is 'FMeta', or both have the same parent, 
--- and all children can be unified
-unifyForests :: (Monad m, Eq n) => SyntaxForest n -> SyntaxForest n -> m (SyntaxForest n)
-unifyForests FMeta  forest = return forest
-unifyForests forest FMeta  = return forest
-unifyForests (FNode name1 children1) (FNode name2 children2)
-    | name1 == name2 && not (null children) = return $ FNode name1 children
-    | otherwise    = fail "forest unification failure"
-    where children = [ forests | forests1 <- children1, forests2 <- children2,
-		       sameLength forests1 forests2,
-		       forests <- zipWithM unifyForests forests1 forests2 ]
-
-
--- ** operations on trees 
-
-unifyManyTrees :: (Monad m, Eq n) => [SyntaxTree n] -> m (SyntaxTree n)
-unifyManyTrees = foldM unifyTrees TMeta
-
--- | two trees can be unified, if either is 'TMeta', 
--- or both have the same parent, and their children can be unified
-unifyTrees :: (Monad m, Eq n) => SyntaxTree n -> SyntaxTree n -> m (SyntaxTree n)
-unifyTrees TMeta tree = return tree
-unifyTrees tree TMeta = return tree
-unifyTrees (TNode name1 children1) (TNode name2 children2)
-    | name1 == name2 && sameLength children1 children2 
-	= liftM (TNode name1) $ zipWithM unifyTrees children1 children2 
-    | otherwise = fail "tree unification failure"
+forest2trees :: SyntaxForest n -> SList (SyntaxTree n)
+forest2trees (FNode n forests) = map (TNode n) $ forests >>= mapM forest2trees
+forest2trees (FMeta) = [TMeta]
 
 
 

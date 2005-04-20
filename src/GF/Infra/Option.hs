@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:53:38 $ 
+-- > CVS $Date: 2005/04/20 12:49:45 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.24 $
+-- > CVS $Revision: 1.25 $
 --
 -- Options and flags used in GF shell commands and files.
 --
@@ -146,12 +146,25 @@ rawParse     = iOpt "raw"
 firstParse   = iOpt "1"
 dontParse    = iOpt "read" 
 
+newParser, newerParser :: Option
+newParser   = iOpt "new"
+newerParser = iOpt "newer"
+
+{-
+useParserMCFG, useParserMCFGviaCFG, useParserCFG, useParserCF :: Option
+
+useParserMCFG = iOpt "mcfg"
+useParserMCFGviaCFG = iOpt "mcfg-via-cfg"
+useParserCFG = iOpt "cfg"
+useParserCF = iOpt "cf"
+-}
+
 -- ** grammar formats
 
 showAbstr, showXML, showOld, showLatex, showFullForm,
   showEBNF, showCF, showWords, showOpts,
   isCompiled, isHaskell, noCompOpers, retainOpers,
-  newParser, newerParser, noCF, checkCirc, noCheckCirc, lexerByNeed, useUTF8id :: Option
+  noCF, checkCirc, noCheckCirc, lexerByNeed, useUTF8id :: Option
 defaultGrOpts :: [Option]
 
 showAbstr   = iOpt "abs"
@@ -169,8 +182,6 @@ isHaskell   = iOpt "gfhs"
 noCompOpers = iOpt "nocomp"
 retainOpers = iOpt "retain"
 defaultGrOpts = []
-newParser   = iOpt "new"
-newerParser = iOpt "newer"
 noCF        = iOpt "nocf"
 checkCirc   = iOpt "nocirc"
 noCheckCirc = iOpt "nocheckcirc"
@@ -264,6 +275,7 @@ gStartCat :: String -> Option
 useTokenizer   = aOpt "lexer"
 useUntokenizer = aOpt "unlexer"
 useParser      = aOpt "parser"
+-- useStrategy    = aOpt "strategy" -- parsing strategy
 withFun        = aOpt "fun"
 firstCat       = aOpt "cat"      
 gStartCat      = aOpt "startcat" 

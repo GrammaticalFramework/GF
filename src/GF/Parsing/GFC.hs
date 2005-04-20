@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/19 10:46:07 $ 
+-- > CVS $Date: 2005/04/20 12:49:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
 -- The main parsing module, parsing GFC grammars
 -- by translating to simpler formats, such as PMCFG and CFG
@@ -19,28 +19,25 @@ import GF.System.Tracing
 import GF.Infra.Print
 import qualified PrGrammar
 
-import Monad
+import Operations (Err(..))
 
 import qualified Grammar 
--- import Values
 import qualified Macros 
--- import qualified Modules 
 import qualified AbsGFC
 import qualified Ident
-import Operations
-import CFIdent (CFCat, cfCat2Ident, CFTok, prCFTok)
+import CFIdent (CFCat, cfCat2Ident, CFTok, wordsCFTok)
 
 import GF.Data.SortedList 
 import GF.Data.Assoc
 import GF.Formalism.Utilities
 import GF.Conversion.Types
-import GF.Formalism.GCFG
-import GF.Formalism.SimpleGFC
+
+import qualified GF.Formalism.GCFG as G
+import qualified GF.Formalism.SimpleGFC as S
 import qualified GF.Formalism.MCFG as M
 import qualified GF.Formalism.CFG as C
 import qualified GF.NewParsing.MCFG as PM
 import qualified GF.NewParsing.CFG as PC
---import qualified GF.Conversion.FromGFC as From
 
 ----------------------------------------------------------------------
 -- parsing information
@@ -64,82 +61,60 @@ parse :: String         -- ^ parsing strategy
       -> Ident.Ident    -- ^ abstract module name
       -> CFCat          -- ^ starting category
       -> [CFTok]        -- ^ input tokens
-      -> [Grammar.Term] -- ^ resulting GF terms
+      -> Err [Grammar.Term] -- ^ resulting GF terms
+
+parse (prs:strategy) pinfo abs startCat inString = 
+    do let inTokens = tracePrt "Parsing.GFC - input tokens" prt $
+		      inputMany (map wordsCFTok inString)
+       forests <- selectParser prs strategy pinfo startCat inTokens
+       traceM "Parsing.GFC - nr. forests" (prt (length forests))
+       let filteredForests = tracePrt "Parsing.GFC - nr. filtered forests" (prt . length) $
+			     forests >>= applyProfileToForest
+	   -- compactFs = tracePrt "#compactForests" (prt . length) $
+	   -- 	          tracePrt "compactForests" (prtBefore "\n") $
+	   -- 	          compactForests forests
+	   trees = tracePrt "Parsing.GFC - nr. trees" (prt . length) $
+		   nubsort $ filteredForests >>= forest2trees
+		   -- compactFs >>= forest2trees
+       return $ map (tree2term abs) trees
+
+-- default parser = CFG (for now)
+parse "" pinfo abs startCat inString = parse "c" pinfo abs startCat inString
+
 
 -- parsing via CFG
-parse (c:strategy) pinfo abs startCat
-    | c=='c' || c=='C' = map (tree2term abs) .
-			 parseCFG strategy cfpi startCats . 
-			 map prCFTok
-    where startCats = tracePrt "Parsing.GFC - starting categories" prt $
-		      filter isStartCat $ map fst $ aAssocs $ PC.topdownRules cfpi
-	  isStartCat (CCat (ECat cat _) _) = cat == cfCat2Ident startCat
-	  cfpi = cfPInfo pinfo
+selectParser prs strategy pinfo startCat inTokens | prs=='c' 
+    = do let startCats = tracePrt "Parsing.GFC - starting CF categories" prt $
+			 filter isStart $ map fst $ aAssocs $ PC.topdownRules cfpi
+	     isStart cat = ccat2scat cat == cfCat2Ident startCat
+	     cfpi = cfPInfo pinfo
+	 cfParser <- PC.parseCF strategy
+	 let cfChart = tracePrt "Parsing.GFC - sz. CF chart" (prt . length) $
+		       cfParser cfpi startCats inTokens
+	     chart = tracePrt "Parsing.GFC - sz. chart" (prt . map (length.snd) . aAssocs) $
+		     C.grammar2chart cfChart
+	     finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
+			  map (uncurry Edge (inputBounds inTokens)) startCats
+	 return $ chart2forests chart (const False) finalEdges
 
 -- parsing via MCFG
-parse (c:strategy) pinfo abs startCat
-    | c=='m' || c=='M' = map (tree2term abs) .
-			 parseMCFG strategy mcfpi startCats . 
-			 map prCFTok
-    where startCats = tracePrt "Parsing.GFC - starting categories" prt $
-		      filter isStartCat $ nubsort [ c | Rule (Abs c _ _) _ <- mcfpi ]
-	  isStartCat (MCat (ECat cat _) _) = cat == cfCat2Ident startCat
-	  mcfpi = mcfPInfo pinfo
+selectParser prs strategy pinfo startCat inTokens | prs=='m' 
+    = do let startCats = tracePrt "Parsing.GFC - starting MCF categories" prt $
+			 filter isStart $ nubsort [ c | G.Rule (G.Abs c _ _) _ <- mcfpi ]
+	     isStart cat = mcat2scat cat == cfCat2Ident startCat
+	     mcfpi = mcfPInfo pinfo
+	 mcfParser <- PM.parseMCF strategy
+	 let mcfChart = tracePrt "Parsing.GFC - sz. MCF chart" (prt . length) $
+			mcfParser mcfpi startCats inTokens
+	     chart = tracePrt "Parsing.GFC - sz. chart" (prt . map (length.snd) . aAssocs) $
+		     G.abstract2chart mcfChart
+	     finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
+			  [ PM.makeFinalEdge cat lbl (inputBounds inTokens) | 
+			    cat@(MCat _ [lbl]) <- startCats ]
+	 return $ chart2forests chart (const False) finalEdges
 
--- default parser
-parse strategy pinfo abs start = parse ('c':strategy) pinfo abs start
-
-----------------------------------------------------------------------
-
-parseCFG :: String -> CFPInfo -> [CCat] -> [Token] -> [SyntaxTree Fun]
-parseCFG strategy pinfo startCats inString = trace2 "Parsing.GFC - selected algorithm" "CFG" $
-					     trees
-    where trees    = tracePrt "Parsing.GFC - nr. trees" (prt . length) $
-		     nubsort $ forests >>= forest2trees
-		     -- compactFs >>= forest2trees
-
-	  -- compactFs  = tracePrt "#compactForests" (prt . length) $
-	  -- 	       tracePrt "compactForests" (prtBefore "\n") $
-	  -- 	       compactForests forests
-
-	  forests  = tracePrt "Parsing.GFC - nr. forests" (prt . length) $
-		     cfForests >>= convertFromCFForest
-	  cfForests= tracePrt "Parsing.GFC - nr. context-free forests" (prt . length) $
-		     chart2forests chart (const False) finalEdges
-
-	  finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
-		       map (uncurry Edge (inputBounds inTokens)) startCats
-	  chart    = --tracePrt "finalChartEdges" (prt . (? finalEdge)) $
-		     tracePrt "Parsing.GFC - size of chart" (prt . map (length.snd) . aAssocs) $
-		     C.grammar2chart cfChart
-	  cfChart  = --tracePrt "finalEdges" 
-		     --(prt . filter (\(Edge i j _) -> (i,j)==inputBounds inTokens)) $
-		     tracePrt "Parsing.GFC - size of context-free chart" (prt . length) $
-		     PC.parseCF strategy pinfo startCats inTokens
-
-	  inTokens = input inString
-
-----------------------------------------------------------------------
-
-parseMCFG :: String -> MCFPInfo -> [MCat] -> [Token] -> [SyntaxTree Fun]
-parseMCFG strategy pinfo startCats inString = trace2 "Parsing.GFC - selected algorithm" "MCFG" $
-					      trees
-    where trees   = tracePrt "Parsing.GFC - nr. trees" (prt . length) $
-		    forests >>= forest2trees
-
-	  forests  = tracePrt "Parsing.GFC - nr. forests" (prt . length) $
-		     cfForests >>= convertFromCFForest
-	  cfForests= tracePrt "Parsing.GFC - nr. context-free forests" (prt . length) $
-		     chart2forests chart (const False) finalEdges
-
-	  chart   = tracePrt "Parsing.GFC - size of chart" (prt . map (length.snd) . aAssocs) $
-		    PM.parseMCF strategy pinfo inString -- inTokens
-
-	  finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
-		       [ PM.makeFinalEdge cat lbl (inputBounds inTokens) | 
-			  cat@(MCat _ [lbl]) <- startCats ]
-
-	  inTokens = input inString
+-- error parser: 
+selectParser prs strategy _ _ _ = Bad $ "Parser not defined: " ++ (prs:strategy)
 
 
 ----------------------------------------------------------------------
@@ -153,36 +128,23 @@ tree2term abs (TMeta)      = Macros.mkMeta 0
 ----------------------------------------------------------------------
 -- conversion and unification of forests
 
-convertFromCFForest :: SyntaxForest Name -> [SyntaxForest Fun]
-
 -- simplest implementation
-convertFromCFForest (FNode name@(Name fun profile) children) 
+applyProfileToForest :: SyntaxForest Name -> [SyntaxForest Fun]
+applyProfileToForest (FNode name@(Name fun profile) children) 
     | isCoercion name = concat chForests
     | otherwise       = [ FNode fun chForests | not (null chForests) ]
     where chForests   = concat [ applyProfileM unifyManyForests profile forests |
 				 forests0 <- children,
-				 forests <- mapM convertFromCFForest forests0 ]
+				 forests <- mapM applyProfileToForest forests0 ]
 
 {-
 -- more intelligent(?) implementation
-convertFromCFForest (FNode (Name name profile) children) 
+applyProfileToForest (FNode (Name name profile) children) 
     | isCoercion name = concat chForests
     | otherwise       = [ FNode name chForests | not (null chForests) ]
     where chForests   = concat [ mapM (checkProfile forests) profile |
 				 forests0 <- children,
-				 forests <- mapM convertFromCFForest forests0 ]
+				 forests <- mapM applyProfileToForest forests0 ]
 -}
 
-{-
-----------------------------------------------------------------------
--- conversion and unification for parse trees instead of forests
--- OBSOLETE!
 
-convertFromCFTree :: SyntaxTree Name -> [SyntaxTree Fun]
-convertFromCFTree (TNode name@(Name fun profile) children0) 
-    | isCoercion name = concat chTrees
-    | otherwise       = map (TNode fun) chTrees
-    where chTrees = [ children |
-		      children1 <- mapM convertFromCFTree children0,
-		      children <- applyProfileM unifyManyTrees profile children1 ]
--}
