@@ -108,10 +108,10 @@ representation, and shows a new prompt when it is ready.
 You can use GF for <b>parsing</b>:
 <pre>
   > parse "the boy eats a snake"
-  Mks_0 (Mks_6 Mks_10) (Mks_2 Mks_23 (Mks_7 Mks_13))
+  Mks_0 (Mks_6 Mks_9) (Mks_2 Mks_20 (Mks_7 Mks_11))
 
   > parse "the snake eats a boy"
-  Mks_0 (Mks_6 Mks_13) (Mks_2 Mks_23 (Mks_7 Mks_10))
+  Mks_0 (Mks_6 Mks_11) (Mks_2 Mks_20 (Mks_7 Mks_9))
 </pre>
 The <tt>parse</tt> (= <tt>p</tt>) command takes a <b>string</b>
 (in double quotes) and returns an <b>abstract syntax tree</b> - the thing
@@ -137,7 +137,7 @@ You can also use GF for <b>linearizing</b>
 (<tt>linearize = l</tt>). This is the inverse of
 parsing, taking trees into strings:
 <pre>
-  > linearize Mks_0 (Mks_6 Mks_13) (Mks_2 Mks_23 (Mks_7 Mks_10))
+  > linearize Mks_0 (Mks_6 Mks_11) (Mks_2 Mks_20 (Mks_7 Mks_9))
   the snake eats a boy
 </pre>
 What is the use of this? Typically not that you type in a tree at
@@ -153,7 +153,7 @@ Or, more efficiently, feed random generation into parsing by using
 a <b>pipe</b>.
 <pre>
   > gr | l
-  this man is big
+  this worm is warm
 </pre>
 
 
@@ -164,16 +164,16 @@ Random generation can be quite amusing. So you may want to
 generate ten strings with one and the same command:
 <pre>
   > gr -number=10 | l
+  this boy is green
   a snake laughs
-  that man laughs
-  the man swims
-  this man is warm
-  a louse is rotten
-  that worm washes a man
-  a boy swims
-  a snake laughs
-  a man washes this man
-  this louse kills the boy
+  the rotten boy is thick
+  a boy washes this worm
+  a boy is warm
+  this green warm boy is rotten
+  the green thick green louse is rotten
+  that boy is green
+  this thick thick boy laughs
+  a boy is green
 </pre>
 
 
@@ -183,13 +183,15 @@ generate ten strings with one and the same command:
 To generate <i>all</i> sentence that a grammar
 can generate, use the command <tt>generate_trees = gt</tt>.
 <pre>
-  this boy laughs
-  this boy sleeps
-  this boy swims
+  this louse laughs
+  this louse sleeps
+  this louse swims
+  this louse is green
+  this louse is rotten
   ...
-  a worm is rotten
-  a worm is thick
-  a worm is warm
+  a boy is rotten
+  a boy is thick
+  a boy is warm
 </pre>
 You get quite a few trees but not all of them: only up to a given
 <b>depth</b> of trees. To see how you can get more, use the
@@ -215,9 +217,9 @@ The intermediate results in a pipe can be observed by putting the
 want to see:
 <pre>
   > gr -tr | l -tr | p
-  Mks_0 (Mks_6 Mks_13) (Mks_1 Mks_20)
-  the snake laughs
-  Mks_0 (Mks_6 Mks_13) (Mks_1 Mks_20)
+  Mks_0 (Mks_7 Mks_10) (Mks_1 Mks_18)
+  a louse sleeps
+  Mks_0 (Mks_7 Mks_10) (Mks_1 Mks_18)
 </pre>
 This facility is good for test purposes: for instance, you
 may want to see if a grammar is <b>ambiguous</b>, i.e.
@@ -256,26 +258,26 @@ which rule, you can use the <tt>print_grammar = pg</tt> command
 with the <tt>printer</tt> flag set to <tt>cf</tt> (which means context-free):
 <pre>
   > print_grammar -printer=cf
-  Mks_10. CN ::= "boy" ;
-  Mks_11. CN ::= "man" ;
-  Mks_12. CN ::= "louse" ;
-  Mks_13. CN ::= "snake" ;
-  Mks_14. CN ::= "worm" ;
+  Mks_10. CN ::= "louse" ;
+  Mks_11. CN ::= "snake" ;
+  Mks_12. CN ::= "worm" ;
   Mks_8.  CN ::= A CN ;
-  Mks_9.  CN ::= "bird" ;
+  Mks_9.  CN ::= "boy" ;
   Mks_4.  NP ::= "this" CN ;
-  Mks_18. A  ::= "thick" ;
+  Mks_15. A  ::= "thick" ;
+  ...
 </pre>
 A syntax tree such as
 <pre>
-  Mks_4 (Mks_8 Mks_18 Mks_14)
+  Mks_4 (Mks_8 Mks_15 Mks_12)
   this thick worm
 </pre>
 encodes the sequence of grammar rules used for building the
 expression. If you look at this tree, you will notice that <tt>Mks_4</tt>
 is the label of the rule prefixing <tt>this</tt> to a common noun,
-<tt>Mks_18</tt> is the label of the adjective <tt>thick</tt>,
+<tt>Mks_15</tt> is the label of the adjective <tt>thick</tt>,
 and so on.
+
 
 <!-- NEW -->
 <h4>The labelled context-free format</h4>
@@ -574,7 +576,7 @@ Inspect the shell state (<tt>print_options = po</tt>):
 <!-- NEW -->
 <h4>Extending the grammar</h4>
 
-Neolithic
+Neolithic: fire, wheel, think,...
 
 
 

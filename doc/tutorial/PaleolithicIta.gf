@@ -11,13 +11,10 @@ lin
   Def   cn   = {s = "il" ++ cn.s} ;
   Indef cn   = {s = "un" ++ cn.s} ; 
   ModA  a cn = {s = cn.s ++ a.s} ;
-  Bird   = {s = "uccello"} ;
   Boy    = {s = "ragazzo"} ;
   Louse  = {s = "pidocchio"} ;
-  Man    = {s = "uomo"} ;
   Snake  = {s = "serpente"} ;
   Worm   = {s = "verme"} ;
-  Big    = {s = "grande"} ;
   Green  = {s = "verde"} ;
   Rotten = {s = "marcio"} ;
   Thick  = {s = "grosso"} ;
