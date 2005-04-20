@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:33 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.56 $
+-- > CVS $Date: 2005/04/20 20:09:19 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.57 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -240,6 +240,7 @@ customGrammarPrinter =
   ,(strCI "fullform",prFullForm . stateMorpho)
   ,(strCI "opts",    prOpts . stateOptions)
   ,(strCI "words",   unwords . stateGrammarWords)
+  ,(strCI "printnames", C.prPrintnamesGrammar . stateGrammarST)
 {- ----
    (strCI "gf",      prt  . st2grammar . stateGrammarST)  -- DEFAULT
   ,(strCI "canon",   showCanon "Lang" . stateGrammarST)

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:13 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/04/20 20:09:19 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.12 $
 --
 -- AR 7\/12\/1999 - 1\/4\/2000 - 10\/5\/2003
 --
@@ -41,6 +41,7 @@ import qualified PrintGFC as C
 import qualified AbsGFC as A
 import Values
 import GrammarToSource
+--- import GFC (CanonGrammar) --- cycle of modules
 
 import Option
 import Ident

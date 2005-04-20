@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 15:51:17 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.10 $
+-- > CVS $Date: 2005/04/20 20:09:19 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.11 $
 --
 -- canonical GF. AR 10\/9\/2002 -- 9\/5\/2003 -- 21\/9
 -----------------------------------------------------------------------------
@@ -19,6 +19,7 @@ module GFC (Context,
 	    CanonAbs,
 	    Info(..),
 	    Printname,
+            prPrintnamesGrammar,
 	    mapInfoTerms,
 	    setFlag
 	   ) where
@@ -69,3 +70,17 @@ mapInfoTerms f i = case i of
 
 setFlag :: String -> String -> [Flag] -> [Flag]
 setFlag n v fs = Flg (IC n) (IC v):[f | f@(Flg (IC n') _) <- fs, n' /= n]
+
+-- for Ha-Jo 20/2/2005
+
+prPrintnamesGrammar :: CanonGrammar -> String
+prPrintnamesGrammar gr = unlines $ filter (not . null) [prPrint j | 
+  (_,M.ModMod m) <- M.modules gr,  
+  M.isModCnc m,
+  j <- tree2list $ M.jments m
+  ]
+  where
+    prPrint j = case j of
+      (c,CncCat _   _ p) -> "printname cat" +++ A.prt_ c +++ "=" +++ A.prt_ p
+      (c,CncFun _ _ _ p) -> "printname fun" +++ A.prt_ c +++ "=" +++ A.prt_ p
+      _ -> []
