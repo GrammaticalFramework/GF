@@ -110,7 +110,9 @@ jar: javac
 tools/MkHelpFile: tools/MkHelpFile.hs
 	$(GHMAKE) -o $@ $^
 
-help: tools/MkHelpFile
+help: GF/Shell/HelpFile.hs
+
+GF/Shell/HelpFile.hs: tools/MkHelpFile HelpFile
 	tools/MkHelpFile
 
 # added by peb:
