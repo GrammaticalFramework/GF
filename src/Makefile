@@ -15,14 +15,8 @@ WINDOWSINCLUDE =-ifor-windows
 
 DIST_DIR=GF-$(PACKAGE_VERSION)
 NOT_IN_DIST= \
-	from-peb \
 	grammars \
 	doc/release2.html \
-	src/old-stuff \
-	src/parsing \
-	src/conversions \
-	src/trace \
-	src/notrace \
 	src/util/AlphaConvGF.hs
 
 BIN_DIST_DIR=$(DIST_DIR)-$(host)
