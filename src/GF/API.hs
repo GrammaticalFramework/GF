@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:03 $ 
+-- > CVS $Date: 2005/04/21 16:45:57 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.32 $
+-- > CVS $Revision: 1.33 $
 --
 -- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 -----------------------------------------------------------------------------
@@ -61,7 +61,7 @@ import GF.UseGrammar.Editing
 
 ----import GrammarToMGrammar as M
 
-import Arch (myStdGen)
+import GF.System.Arch (myStdGen)
 
 import GF.Text.UTF8
 import GF.Data.Operations

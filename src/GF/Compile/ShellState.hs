@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:47 $ 
+-- > CVS $Date: 2005/04/21 16:46:01 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.44 $
+-- > CVS $Revision: 1.45 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -32,7 +32,7 @@ import GF.CF.CanonToCF
 import GF.UseGrammar.Morphology
 import GF.Infra.Option
 import GF.Infra.Ident
-import Arch (ModTime)
+import GF.System.Arch (ModTime)
 
 import qualified GF.OldParsing.ConvertGrammar as CnvOld -- OBSOLETE
 import qualified GF.Conversion.GFC as Cnv

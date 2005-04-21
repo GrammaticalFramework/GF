@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:22 $ 
+-- > CVS $Date: 2005/04/21 16:46:12 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.19 $
+-- > CVS $Revision: 1.20 $
 --
 -- parsing GF shell commands. AR 11\/11\/2001
 -----------------------------------------------------------------------------
@@ -22,7 +22,7 @@ import GF.Shell
 import GF.Infra.Option
 import GF.Compile.PGrammar (pzIdent, pTrm) --- (string2formsAndTerm)
 import GF.API
-import Arch(fetchCommand)
+import GF.System.Arch (fetchCommand)
 
 import Data.Char (isDigit)
 import System.IO.Error

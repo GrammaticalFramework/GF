@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:39 $ 
+-- > CVS $Date: 2005/04/21 16:46:08 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.22 $
+-- > CVS $Revision: 1.23 $
 --
 -- Decide what files to read as function of dependencies and time stamps.
 --
@@ -24,7 +24,7 @@ module GF.Infra.ReadFiles (-- * Heading 1
 		  gfcFile,gfFile,gfrFile,isGFC,resModName,isOldFile
 		 ) where
 
-import Arch (selectLater, modifiedFiles, ModTime, getModTime,laterModTime)
+import GF.System.Arch (selectLater, modifiedFiles, ModTime, getModTime,laterModTime)
 
 import GF.Infra.Option
 import GF.Data.Operations

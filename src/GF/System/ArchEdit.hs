@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/30 12:41:12 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:46:15 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module ArchEdit (
+module GF.System.ArchEdit (
   fudlogueEdit, fudlogueWrite, fudlogueWriteUni
  ) where
 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:40 $ 
+-- > CVS $Date: 2005/04/21 16:46:09 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.11 $
+-- > CVS $Revision: 1.12 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -15,7 +15,7 @@
 module GF.Infra.UseIO where
 
 import GF.Data.Operations
-import Arch (prCPU)
+import GF.System.Arch (prCPU)
 import GF.Infra.Option
 
 import System.IO

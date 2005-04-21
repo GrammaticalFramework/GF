@@ -5,9 +5,9 @@
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/04/21 16:21:02 $ 
+-- > CVS $Date: 2005/04/21 16:45:56 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.21 $
+-- > CVS $Revision: 1.22 $
 --
 -- The Main module of GF program.
 -----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ import GF.Shell.JGF
 import GF.Text.UTF8
 
 import GF.Today (today)
-import Arch
+import GF.System.Arch
 import System (getArgs)
 import Control.Monad (foldM)
 

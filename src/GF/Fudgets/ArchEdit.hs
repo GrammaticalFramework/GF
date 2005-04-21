@@ -5,19 +5,19 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:10 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:46:05 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module ArchEdit (
+module GF.Fudgets.ArchEdit (
   fudlogueEdit, fudlogueWrite, fudlogueWriteUni
  ) where
 
-import CommandF
-import UnicodeF
+import GF.Fudgets.CommandF
+import GF.Fudgets.UnicodeF
 
 -- architecture/compiler dependent definitions for unix/ghc, if Fudgets works.
 -- If not, use the modules in for-ghci

@@ -5,22 +5,22 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:34 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:46:14 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- architecture\/compiler dependent definitions for unix\/hbc
 -----------------------------------------------------------------------------
 
-module Arch (
+module GF.System.Arch (
  myStdGen, prCPU, selectLater, modifiedFiles, ModTime, getModTime,getNowTime,
  welcomeArch, fetchCommand, laterModTime) where
 
-import Time
-import Random
-import CPUTime
-import Monad (filterM)
-import Directory
+import System.Time
+import System.Random
+import System.CPUTime
+import Control.Monad (filterM)
+import System.Directory
 import System.Console.Readline
 
 ---- import qualified UnicodeF as U --(fudlogueWrite)
