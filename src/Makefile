@@ -11,8 +11,9 @@ JAVAFLAGS=-target 1.4 -source 1.4
 DIST_DIR=GF-$(PACKAGE_VERSION)
 NOT_IN_DIST= \
 	grammars \
+	download \
 	doc/release2.html \
-	src/util/AlphaConvGF.hs
+	src/tools/AlphaConvGF.hs
 
 BIN_DIST_DIR=$(DIST_DIR)-$(host)
 
