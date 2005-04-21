@@ -8,12 +8,10 @@ GHCOPTFLAGS=-O2 $(GHCFLAGS)
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
 
-BASICINCLUDE   =-iapi -icompile -igrammar -iinfra -ishell -isource -icanonical -iuseGrammar -icf -inewparsing -iparsers -icfgm -ispeech -ivisualization
-
-GHCINCLUDE     =-ifor-ghc       $(BASICINCLUDE)
-GHCINCLUDENOFUD=-ifor-ghc-nofud $(BASICINCLUDE) 
-GHCINCLUDEGFT  =-ifor-gft       $(BASICINCLUDE) 
-WINDOWSINCLUDE =-ifor-windows   $(BASICINCLUDE) 
+GHCINCLUDE     =-ifor-ghc
+GHCINCLUDENOFUD=-ifor-ghc-nofud
+GHCINCLUDEGFT  =-ifor-gft
+WINDOWSINCLUDE =-ifor-windows
 
 DIST_DIR=GF-$(PACKAGE_VERSION)
 NOT_IN_DIST= \
@@ -100,8 +98,10 @@ distclean: clean
 
 ghci-nofud:
 	$(GHCI) $(GHCFLAGS) $(GHCINCLUDENOFUD)
+
 today:
-	util/mktoday.sh
+	tools/mktoday.sh
+
 javac:
 	$(JAVAC) $(JAVAFLAGS) java/*.java
 
