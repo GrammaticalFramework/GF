@@ -4,14 +4,9 @@ include config.mk
 GHMAKE=$(GHC) --make
 GHCXMAKE=ghcxmake
 GHCFLAGS=-package lang -package util -fglasgow-exts $(CPPFLAGS) $(LDFLAGS)
-GHCOPTFLAGS=-O2 $(GHCFLAGS)
+GHCOPTFLAGS=-O2
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
-
-GHCINCLUDE     =-ifor-ghc
-GHCINCLUDENOFUD=-ifor-ghc-nofud
-GHCINCLUDEGFT  =-ifor-gft
-WINDOWSINCLUDE =-ifor-windows
 
 DIST_DIR=GF-$(PACKAGE_VERSION)
 NOT_IN_DIST= \
@@ -28,59 +23,46 @@ SNAPSHOT_DIR=GF-$(shell date +%Y%m%d)
 
 all: unix tools/gfdoc jar
 
+unix: today touch-files opt
+
+windows: today touch-files justwindows
+
 temp: today touch-files noopt
 
-unix: today touch-files nofud-links opt
 
-windows: today touch-files nofud-links justwindows
 
-install-java: javac
-	-rm -f ../bin/java
-	ln -s ../src/JavaGUI ../bin
-	@echo "PLEASE edit GFHOME in bin/jgf"
-opt:
-	$(GHMAKE) $(GHCOPTFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf-bin
-	strip gf-bin
-	mv gf-bin ../bin/gf
-noopt:
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf-bin
+build: 
+	$(GHMAKE) $(GHCFLAGS) GF.hs -o gf-bin
 	strip gf-bin
 	mv gf-bin ../bin/gf
 
-ghc: nofud
+opt: GHCFLAGS += $(GHCOPTFLAGS)
+opt: build
 
-ghci: touch-files nofud-links ghci-nofud
+noopt: build
+
+ghci: touch-files ghci-nofud
 
 fud:
-	$(GHCXMAKE) $(GHCFLAGS) $(GHCINCLUDE) $(GHCFUDFLAG) GF.hs -o fgf
+	$(GHCXMAKE) $(GHCFLAGS) $(GHCFUDFLAG) GF.hs -o fgf
 	strip fgf
 	mv fgf ../bin/
 
 gft:
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) -itranslate translate/GFT.hs -o gft-bin
+	$(GHMAKE) $(GHCFLAGS) -itranslate translate/GFT.hs -o gft-bin
 	strip gft-bin
 	mv gft-bin ../bin/gft
 
-nofud: nofud-links
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf-bin
-	strip gf-bin
-	mv gf-bin ../bin/gf
-
 justwindows:
-	$(GHMAKE) $(GHCOPTFLAGS) $(WINDOWSINCLUDE) GF.hs -o gf.exe
+	$(GHMAKE) $(GHCOPTFLAGS) GF.hs -o gf.exe
 	strip gf.exe
 	mv gf.exe ../bin/
 
-nofud-links:
-	mkdir -p for-ghc-nofud
-	rm -f for-ghc-nofud/Arch.hs
-	ln -s ../for-ghc/Arch.hs for-ghc-nofud
-
 api: 
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) GF/API.hs
+	$(GHMAKE) $(GHCFLAGS) GF/API.hs
 
 shell: 
-	$(GHMAKE) $(GHCFLAGS) $(GHCINCLUDE) GF/Shell.hs
+	$(GHMAKE) $(GHCFLAGS) GF/Shell.hs
 
 clean: 
 	-rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
@@ -88,7 +70,6 @@ clean:
 	-rm -f JavaGUI/*.class
 
 distclean: clean
-	-rm -f for-ghc-nofud/*.hs
 	-rm -f JavaGUI/gf-java.jar jgf
 	-rm -f tools/gfdoc
 	-rm -f config.status config.mk config.log
@@ -96,7 +77,7 @@ distclean: clean
 	-rm -rf $(DIST_DIR) $(BIN_DIST_DIR)
 
 ghci-nofud:
-	$(GHCI) $(GHCFLAGS) $(GHCINCLUDENOFUD)
+	$(GHCI) $(GHCFLAGS)
 
 today:
 	tools/mktoday.sh
@@ -107,13 +88,7 @@ javac:
 jar: javac
 	cd JavaGUI; $(JAR) -cmf manifest.txt gf-java.jar *.class
 
-tools/MkHelpFile: tools/MkHelpFile.hs
-	$(GHMAKE) -o $@ $^
 
-help: GF/Shell/HelpFile.hs
-
-GF/Shell/HelpFile.hs: tools/MkHelpFile HelpFile
-	tools/MkHelpFile
 
 # added by peb:
 tracing: GHCFLAGS += -DTRACING
@@ -129,31 +104,55 @@ touch-files:
 prof: GHCOPTFLAGS += -prof -auto-all -auto-dicts
 prof: all
 
-lib:
-	cd ../grammars
-	sh mkLib.sh
+
+
+#
+# Help file
+#
+
+tools/MkHelpFile: tools/MkHelpFile.hs
+	$(GHMAKE) -o $@ $^
+
+help: GF/Shell/HelpFile.hs
+
+GF/Shell/HelpFile.hs: tools/MkHelpFile HelpFile
+	tools/MkHelpFile
+
+#
+# Tools
+#
+
+tools/gfdoc: tools/GFDoc.hs
+	$(GHMAKE) -o $@ $^
+
+#
+# Distribution
+#
 
 dist:
 	-rm -rf $(DIST_DIR)
 	mkdir $(DIST_DIR)
-	cvs export -d $(DIST_DIR) -rHEAD GF2.0
+	cvs export -d $(DIST_DIR) -rHEAD GF
 	cd $(DIST_DIR)/src && autoconf && rm -rf autom4te.cache
 	find $(DIST_DIR) -name .cvsignore -exec rm -f {} ';'
-	cd $(DIST_DIR)/grammars && sh mkLib.sh
+#	cd $(DIST_DIR)/grammars && sh mkLib.sh
 	cd $(DIST_DIR) && rm -rf $(NOT_IN_DIST)
 	gtar -zcf $(DIST_DIR).tgz $(DIST_DIR)
 	rm -rf $(DIST_DIR)
 
+snapshot: DIST_DIR=$(SNAPSHOT_DIR)
+snapshot: dist
+
 rpm: dist
 	rpmbuild -ta $(DIST_DIR).tgz
 
-snapshot: DIST_DIR=$(SNAPSHOT_DIR)
-snapshot: dist
 
 binary-dist: 
 	rm -rf $(BIN_DIST_DIR)
 	mkdir $(BIN_DIST_DIR)
-	./configure --host="$(host)" CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
+	./configure --host="$(host)" \
+                    CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" \
+                    LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
 	$(MAKE) all
 	$(INSTALL) ../bin/gf tools/gfdoc $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(BIN_DIST_DIR)
@@ -164,6 +163,10 @@ binary-dist:
 	$(INSTALL) -m 0644 Makefile.binary $(BIN_DIST_DIR)/Makefile
 	gtar -zcf GF-$(PACKAGE_VERSION)-$(host).tgz $(BIN_DIST_DIR)
 	rm -rf $(BIN_DIST_DIR)
+
+#
+# Installation
+#
 
 install: install-gf install-gfdoc install-editor
 
@@ -180,5 +183,7 @@ install-editor:
 	$(INSTALL) jgf $(bindir)
 	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(datadir)/GF-$(PACKAGE_VERSION)
 
-tools/gfdoc: tools/GFDoc.hs
-	$(GHMAKE) -o $@ $^
+install-java: javac
+	-rm -f ../bin/JavaGUI
+	ln -s ../src/JavaGUI ../bin
+	@echo "PLEASE edit GFHOME in bin/jgf"
