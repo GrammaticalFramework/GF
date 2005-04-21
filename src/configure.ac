@@ -1,10 +1,10 @@
 dnl Run autoconf to generate configure from this file
 
-AC_INIT([GF],[2.1],[aarne@cs.chalmers.se],[GF])
+AC_INIT([GF],[2.2],[aarne@cs.chalmers.se],[GF])
 
 AC_PREREQ(2.53)
 
-AC_REVISION($Revision: 1.10 $)
+AC_REVISION($Revision: 1.11 $)
 
 AC_CONFIG_FILES([config.mk jgf])
 
