@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:06 $ 
+-- > CVS $Date: 2005/04/21 16:45:58 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.17 $
+-- > CVS $Revision: 1.18 $
 --
 -- for reading grammars and terms from strings and files
 -----------------------------------------------------------------------------
@@ -27,7 +27,7 @@ import GF.Infra.ReadFiles (isOldFile)
 import GF.Infra.Option
 import GF.Data.Operations
 import GF.Infra.UseIO
-import Arch
+import GF.System.Arch
 
 import Control.Monad (liftM)
 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:24 $ 
+-- > CVS $Date: 2005/04/21 16:46:13 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- translation and morphology quiz. AR 10\/5\/2000 -- 12\/4\/2002
 -----------------------------------------------------------------------------
@@ -20,7 +20,7 @@ import GF.UseGrammar.Linear
 import GF.Grammar.PrGrammar
 
 import GF.Infra.Option
-import Arch (myStdGen)
+import GF.System.Arch (myStdGen)
 import GF.Data.Operations
 import GF.Infra.UseIO
 

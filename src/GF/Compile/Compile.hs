@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:35 $
+-- > CVS $Date: 2005/04/21 16:46:00 $
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.36 $
+-- > CVS $Revision: 1.37 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
@@ -47,7 +47,7 @@ import GF.Canon.GetGFC
 
 import GF.Data.Operations
 import GF.Infra.UseIO
-import Arch
+import GF.System.Arch
 
 import Control.Monad
 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:23 $ 
+-- > CVS $Date: 2005/04/21 16:46:12 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.8 $
+-- > CVS $Revision: 1.9 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ import GF.Infra.Option
 import GF.API
 
 import GF.Shell.CommandL
-import ArchEdit
+import GF.System.ArchEdit
 
 import Data.List
 
