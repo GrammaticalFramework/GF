@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/11 15:37:20 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.22 $
+-- > CVS $Date: 2005/04/21 16:21:34 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.23 $
 --
 -- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
 --
@@ -20,29 +20,29 @@
 --  - tables are type-annotated
 -----------------------------------------------------------------------------
 
-module CheckGrammar (showCheckModule, justCheckLTerm) where
+module GF.Compile.CheckGrammar (showCheckModule, justCheckLTerm) where
 
-import Grammar
-import Ident
-import Modules
-import Refresh ----
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Infra.Modules
+import GF.Grammar.Refresh ----
 
-import TypeCheck
-import Values (cPredefAbs) ---
+import GF.Grammar.TypeCheck
+import GF.Grammar.Values (cPredefAbs) ---
 
-import PrGrammar
-import Lookup
-import LookAbs
-import Macros
-import ReservedWords ----
-import PatternMatch
-import AppPredefined
+import GF.Grammar.PrGrammar
+import GF.Grammar.Lookup
+import GF.Grammar.LookAbs
+import GF.Grammar.Macros
+import GF.Grammar.ReservedWords ----
+import GF.Grammar.PatternMatch
+import GF.Grammar.AppPredefined
 
-import Operations
-import CheckM
+import GF.Data.Operations
+import GF.Infra.CheckM
 
-import List
-import Monad
+import Data.List
+import Control.Monad
 
 showCheckModule :: [SourceModule] -> SourceModule -> Err ([SourceModule],String)
 showCheckModule mos m = do

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:39 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/04/21 16:23:49 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.8 $
 --
 -- Morphological analyser constructed from a GF grammar.
 --
@@ -17,24 +17,24 @@
 -- for decompositions and also want to use it in the parser
 -----------------------------------------------------------------------------
 
-module Morphology where
+module GF.UseGrammar.Morphology where
 
-import AbsGFC
-import GFC
-import PrGrammar
-import CMacros
-import LookAbs
-import Ident
-import qualified Macros as M
-import Linear
+import GF.Canon.AbsGFC
+import GF.Canon.GFC
+import GF.Grammar.PrGrammar
+import GF.Canon.CMacros
+import GF.Grammar.LookAbs
+import GF.Infra.Ident
+import qualified GF.Grammar.Macros as M
+import GF.UseGrammar.Linear
 
-import Operations
-import Glue
+import GF.Data.Operations
+import GF.Data.Glue
 
-import Char
-import List (sortBy, intersperse)
-import Monad (liftM)
-import Trie2
+import Data.Char
+import Data.List (sortBy, intersperse)
+import Control.Monad (liftM)
+import GF.Data.Trie2
 
 -- construct a morphological analyser from a GF grammar. AR 11/4/2001
 

@@ -5,22 +5,22 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:39 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.8 $
+-- > CVS $Date: 2005/04/21 16:23:51 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.9 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Session where
+module GF.UseGrammar.Session where
 
-import Abstract
-import Option
-import Custom
-import Editing
-import ShellState ---- grammar
+import GF.Grammar.Abstract
+import GF.Infra.Option
+import GF.UseGrammar.Custom
+import GF.UseGrammar.Editing
+import GF.Compile.ShellState ---- grammar
 
-import Operations
+import GF.Data.Operations
 
 -- First version 8/2001. Adapted to GFC with modules 19/6/2003.
 -- Nothing had to be changed, which is a sign of good modularity.

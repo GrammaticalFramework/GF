@@ -5,20 +5,20 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:07 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/04/21 16:21:32 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.8 $
 --
 -- elementary text postprocessing. AR 21/11/2001
 -----------------------------------------------------------------------------
 
-module Unlex (formatAsText, unlex, performBinds) where
+module GF.Canon.Unlex (formatAsText, unlex, performBinds) where
 
-import Operations
-import Str
+import GF.Data.Operations
+import GF.Data.Str
 
-import Char
-import List (isPrefixOf)
+import Data.Char
+import Data.List (isPrefixOf)
 
 formatAsText :: String -> String
 formatAsText = unwords . format . cap . words where

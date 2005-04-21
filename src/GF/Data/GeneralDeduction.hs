@@ -4,14 +4,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 12:49:44 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Date: 2005/04/21 16:22:01 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.3 $
 --
 -- Simple implementation of deductive chart parsing
 -----------------------------------------------------------------------------
 
-module GF.NewParsing.GeneralChart 
+module GF.Data.GeneralDeduction
     (-- * Type definition
      ParseChart,
      -- * Main functions
@@ -28,7 +28,7 @@ module GF.NewParsing.GeneralChart
 -- import Trace 
 
 import GF.Data.RedBlackSet
-import Monad (foldM)
+import Control.Monad (foldM)
 
 ----------------------------------------------------------------------
 -- main functions

@@ -5,32 +5,32 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:12 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:22:18 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Abstract (
+module GF.Grammar.Abstract (
 
-module Grammar,
-module Values,
-module Macros,
-module Ident,
-module MMacros,
-module PrGrammar,
+module GF.Grammar.Grammar,
+module GF.Grammar.Values,
+module GF.Grammar.Macros,
+module GF.Infra.Ident,
+module GF.Grammar.MMacros,
+module GF.Grammar.PrGrammar,
 
 Grammar
 
  ) where
 
-import Grammar
-import Values
-import Macros
-import Ident
-import MMacros
-import PrGrammar
+import GF.Grammar.Grammar
+import GF.Grammar.Values
+import GF.Grammar.Macros
+import GF.Infra.Ident
+import GF.Grammar.MMacros
+import GF.Grammar.PrGrammar
 
 type Grammar = SourceGrammar ---
 

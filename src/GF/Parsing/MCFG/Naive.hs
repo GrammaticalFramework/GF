@@ -1,14 +1,14 @@
 
-module GF.NewParsing.MCFG.Naive (parse) where
+module GF.Parsing.MCFG.Naive (parse) where
 
 
 -- GF modules
-import GF.NewParsing.GeneralChart
+import GF.Data.GeneralDeduction
 import GF.Formalism.GCFG
 import GF.Formalism.MCFG
 import GF.Formalism.Utilities
-import GF.NewParsing.MCFG.Range
-import GF.NewParsing.MCFG.PInfo
+import GF.Parsing.MCFG.Range
+import GF.Parsing.MCFG.PInfo
 import GF.Data.SortedList
 import GF.Data.Assoc
 import GF.System.Tracing

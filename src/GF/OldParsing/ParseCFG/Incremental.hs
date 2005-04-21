@@ -5,27 +5,27 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:57 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:23:01 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- Incremental chart parsing for context-free grammars
 -----------------------------------------------------------------------------
 
  
 
-module GF.OldParsing.ParseCFG.Incremental 
+module GF.OldParsing.ParseCFG.Incremental
     (parse, Strategy) where
 
 import GF.System.Tracing
 import GF.Printing.PrintParser
 
 -- haskell modules:
-import Array
+import Data.Array
 -- gf modules:
 import GF.Data.SortedList
 import GF.Data.Assoc
-import Operations
+import GF.Data.Operations
 -- parser modules:
 import GF.OldParsing.Utilities
 import GF.OldParsing.CFGrammar

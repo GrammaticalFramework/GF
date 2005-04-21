@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:54 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:22:49 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- Chart parsing of grammars in CF format
 -----------------------------------------------------------------------------
@@ -20,8 +20,8 @@ import GF.Printing.PrintSimplifiedTerm
 
 import GF.Data.SortedList (nubsort)
 import GF.Data.Assoc
-import qualified CF
-import qualified CFIdent as CFI
+import qualified GF.CF.CF as CF
+import qualified GF.CF.CFIdent as CFI
 import GF.OldParsing.Utilities
 import GF.OldParsing.CFGrammar
 import qualified GF.OldParsing.ParseCFG as P

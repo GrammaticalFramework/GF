@@ -5,15 +5,15 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/04 17:29:18 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/04/21 16:23:52 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.13 $
 --
 -- lexers = tokenizers, to prepare input for GF grammars. AR 4\/1\/2002.
 -- an entry for each is included in 'Custom.customTokenizer'
 -----------------------------------------------------------------------------
 
-module Tokenize ( tokWords,
+module GF.UseGrammar.Tokenize ( tokWords,
 		  tokLits,
 		  tokVars,
 		  lexHaskell,
@@ -24,11 +24,11 @@ module Tokenize ( tokWords,
 		  lexTextLiteral,
 		) where
 
-import Operations
+import GF.Data.Operations
 ---- import UseGrammar (isLiteral,identC)
-import CFIdent
+import GF.CF.CFIdent
 
-import Char
+import Data.Char
 
 -- lexers = tokenizers, to prepare input for GF grammars. AR 4/1/2002
 -- an entry for each is included in Custom.customTokenizer

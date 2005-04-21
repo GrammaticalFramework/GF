@@ -4,22 +4,22 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:52 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:22:43 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- Calculating the finiteness of each type in a grammar
 -----------------------------------------------------------------------------
 
-module GF.OldParsing.ConvertFiniteSimple 
+module GF.OldParsing.ConvertFiniteSimple
     (convertGrammar) where
 
 import GF.System.Tracing
 import GF.Printing.PrintParser
 import GF.Printing.PrintSimplifiedTerm
 
-import Operations
-import Ident (Ident(..))
+import GF.Data.Operations
+import GF.Infra.Ident (Ident(..))
 import GF.OldParsing.SimpleGFC
 import GF.Data.SortedList
 import GF.Data.Assoc

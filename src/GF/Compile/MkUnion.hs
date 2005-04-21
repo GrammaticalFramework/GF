@@ -5,27 +5,27 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:09 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:21:39 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- building union of modules.
 -- AR 1\/3\/2004 --- OBSOLETE 15\/9\/2004 with multiple inheritance
 -----------------------------------------------------------------------------
 
-module MkUnion (makeUnion) where
+module GF.Compile.MkUnion (makeUnion) where
 
-import Grammar
-import Ident
-import Modules
-import Macros
-import PrGrammar
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Infra.Modules
+import GF.Grammar.Macros
+import GF.Grammar.PrGrammar
 
-import Operations
-import Option
+import GF.Data.Operations
+import GF.Infra.Option
 
-import List
-import Monad
+import Data.List
+import Control.Monad
 
 makeUnion :: SourceGrammar -> Ident -> ModuleType Ident -> [(Ident,[Ident])] ->
              Err SourceModule

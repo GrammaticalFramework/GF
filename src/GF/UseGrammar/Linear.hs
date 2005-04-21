@@ -5,35 +5,35 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:38 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.14 $
+-- > CVS $Date: 2005/04/21 16:23:48 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.15 $
 --
 -- Linearization for canonical GF. AR 7\/6\/2003
 -----------------------------------------------------------------------------
 
-module Linear where
+module GF.UseGrammar.Linear where
 
-import GFC
-import AbsGFC
-import qualified Abstract as A
-import MkGFC (rtQIdent) ----
-import Ident
-import PrGrammar
-import CMacros
-import Look
-import LookAbs
-import MMacros
-import TypeCheck (annotate) ----
-import Str
-import Text
+import GF.Canon.GFC
+import GF.Canon.AbsGFC
+import qualified GF.Grammar.Abstract as A
+import GF.Canon.MkGFC (rtQIdent) ----
+import GF.Infra.Ident
+import GF.Grammar.PrGrammar
+import GF.Canon.CMacros
+import GF.Canon.Look
+import GF.Grammar.LookAbs
+import GF.Grammar.MMacros
+import GF.Grammar.TypeCheck (annotate) ----
+import GF.Data.Str
+import GF.Text.Text
 ----import TypeCheck -- to annotate
 
-import Operations
-import Zipper
+import GF.Data.Operations
+import GF.Data.Zipper
 
-import Monad
-import List (intersperse)
+import Control.Monad
+import Data.List (intersperse)
 
 -- Linearization for canonical GF. AR 7/6/2003
 

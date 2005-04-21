@@ -5,26 +5,26 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:13 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:22:26 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- pattern matching for both concrete and abstract syntax. AR -- 16\/6\/2003
 -----------------------------------------------------------------------------
 
-module PatternMatch (matchPattern, 
+module GF.Grammar.PatternMatch (matchPattern,
 		     testOvershadow, 
 		     findMatch
 		    ) where
 
-import Operations
-import Grammar
-import Ident
-import Macros
-import PrGrammar
+import GF.Data.Operations
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Grammar.Macros
+import GF.Grammar.PrGrammar
 
-import List
-import Monad
+import Data.List
+import Control.Monad
 
 
 matchPattern :: [(Patt,Term)] -> Term -> Err (Term, Substitution)

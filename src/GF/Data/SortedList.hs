@@ -4,9 +4,9 @@
 -- Stability   : stable
 -- Portability : portable
 --
--- > CVS $Date: 2005/04/11 13:52:49 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Date: 2005/04/21 16:22:08 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.3 $
 --
 -- Sets as sorted lists
 --
@@ -17,7 +17,7 @@
 --    * /O(n^2)/ fixed point iteration
 -----------------------------------------------------------------------------
 
-module GF.Data.SortedList 
+module GF.Data.SortedList
     ( -- * type declarations
       SList, SMap,
       -- * set operations		    
@@ -30,7 +30,7 @@ module GF.Data.SortedList
       unionMap, mergeMap
     ) where
 
-import List (groupBy)
+import Data.List (groupBy)
 import GF.Data.Utilities (split, foldMerge)
 
 -- | The list must be sorted and contain no duplicates.

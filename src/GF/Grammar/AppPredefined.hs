@@ -5,21 +5,21 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/01 21:24:24 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.10 $
+-- > CVS $Date: 2005/04/21 16:22:19 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.11 $
 --
 -- Predefined function type signatures and definitions.
 -----------------------------------------------------------------------------
 
-module AppPredefined (isInPredefined, typPredefined, appPredefined
+module GF.Grammar.AppPredefined (isInPredefined, typPredefined, appPredefined
 		     ) where
 
-import Operations
-import Grammar
-import Ident
-import Macros
-import PrGrammar (prt,prt_,prtBad)
+import GF.Data.Operations
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Grammar.Macros
+import GF.Grammar.PrGrammar (prt,prt_,prtBad)
 ---- import PGrammar (pTrm)
 
 -- predefined function type signatures and definitions. AR 12/3/2003.

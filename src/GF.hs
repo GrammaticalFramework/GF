@@ -5,32 +5,32 @@
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/02/05 21:52:31 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.20 $
+-- > CVS $Date: 2005/04/21 16:21:02 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.21 $
 --
 -- The Main module of GF program.
 -----------------------------------------------------------------------------
 
 module Main (main) where
 
-import GFModes (gfInteract, gfBatch, batchCompile)
-import Operations
-import UseIO
-import Option
-import IOGrammar
-import ShellState
-import Shell
-import SubShell
-import ShellCommands
-import PShell
-import JGF
-import UTF8
+import GF.GFModes (gfInteract, gfBatch, batchCompile)
+import GF.Data.Operations
+import GF.Infra.UseIO
+import GF.Infra.Option
+import GF.API.IOGrammar
+import GF.Compile.ShellState
+import GF.Shell
+import GF.Shell.SubShell
+import GF.Shell.ShellCommands
+import GF.Shell.PShell
+import GF.Shell.JGF
+import GF.Text.UTF8
 
-import Today (today)
+import GF.Today (today)
 import Arch
 import System (getArgs)
-import Monad (foldM)
+import Control.Monad (foldM)
 
 -- AR 19/4/2000 -- 11/11/2001
 

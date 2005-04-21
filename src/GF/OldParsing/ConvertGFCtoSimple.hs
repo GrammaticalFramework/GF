@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:52 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:22:45 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- Converting GFC to SimpleGFC
 --
@@ -15,16 +15,16 @@
 
 module GF.OldParsing.ConvertGFCtoSimple where
 
-import qualified AbsGFC as A
-import qualified Ident as I
+import qualified GF.Canon.AbsGFC as A
+import qualified GF.Infra.Ident as I
 import GF.OldParsing.SimpleGFC 
 
-import GFC
-import MkGFC (grammar2canon)
-import qualified Look (lookupLin, allParamValues, lookupLincat)
-import qualified CMacros (defLinType)
-import Operations (err, errVal)
-import qualified Modules as M
+import GF.Canon.GFC
+import GF.Canon.MkGFC (grammar2canon)
+import qualified GF.Canon.Look as Look (lookupLin, allParamValues, lookupLincat)
+import qualified GF.Canon.CMacros as CMacros (defLinType)
+import GF.Data.Operations (err, errVal)
+import qualified GF.Infra.Modules as M
 
 import GF.System.Tracing
 import GF.Printing.PrintParser

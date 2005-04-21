@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:13 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:22:34 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- comment removal
 -----------------------------------------------------------------------------
 
-module Comments ( remComments
+module GF.Infra.Comments ( remComments
 		) where
 
 -- | comment removal : line tails prefixed by -- as well as chunks in @{- ... -}@

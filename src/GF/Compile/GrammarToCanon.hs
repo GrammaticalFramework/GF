@@ -5,32 +5,32 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:08 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.16 $
+-- > CVS $Date: 2005/04/21 16:21:38 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.17 $
 --
 -- Code generator from optimized GF source code to GFC.
 -----------------------------------------------------------------------------
 
-module GrammarToCanon (showGFC, 
+module GF.Compile.GrammarToCanon (showGFC,
 		       redModInfo, redQIdent
 		      ) where
 
-import Operations
-import Zipper
-import Option
-import Grammar
-import Ident
-import PrGrammar
-import Modules
-import Macros
-import qualified AbsGFC as G
-import qualified GFC as C
-import MkGFC
+import GF.Data.Operations
+import GF.Data.Zipper
+import GF.Infra.Option
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Grammar.PrGrammar
+import GF.Infra.Modules
+import GF.Grammar.Macros
+import qualified GF.Canon.AbsGFC as G
+import qualified GF.Canon.GFC as C
+import GF.Canon.MkGFC
 ---- import Alias
-import qualified PrintGFC as P
+import qualified GF.Canon.PrintGFC as P
 
-import Monad
+import Control.Monad
 
 -- compilation of optimized grammars to canonical GF. AR 5/10/2001 -- 12/5/2003
 

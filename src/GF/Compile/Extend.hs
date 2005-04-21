@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:08 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.15 $
+-- > CVS $Date: 2005/04/21 16:21:36 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.16 $
 --
 -- AR 14\/5\/2003 -- 11\/11
 --
@@ -15,18 +15,18 @@
 -- extends a module symbol table by indirections to the module it extends
 -----------------------------------------------------------------------------
 
-module Extend (extendModule, extendMod
+module GF.Compile.Extend (extendModule, extendMod
 	      ) where
 
-import Grammar
-import Ident
-import PrGrammar
-import Modules
-import Update
-import Macros
-import Operations
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Grammar.PrGrammar
+import GF.Infra.Modules
+import GF.Compile.Update
+import GF.Grammar.Macros
+import GF.Data.Operations
 
-import Monad
+import Control.Monad
 
 extendModule :: [SourceModule] -> SourceModule -> Err SourceModule
 extendModule ms (name,mod) = case mod of

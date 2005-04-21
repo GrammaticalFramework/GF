@@ -5,26 +5,26 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:07 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/04/21 16:21:26 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.12 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module MkGFC (prCanonModInfo, prCanon, prCanonMGr, 
+module GF.Canon.MkGFC (prCanonModInfo, prCanon, prCanonMGr,
 	      canon2grammar, grammar2canon, 
 	      info2mod,
 	      trExp, rtExp, rtQIdent) where
 
-import GFC
-import AbsGFC
-import qualified Abstract as A
-import PrGrammar
+import GF.Canon.GFC
+import GF.Canon.AbsGFC
+import qualified GF.Grammar.Abstract as A
+import GF.Grammar.PrGrammar
 
-import Ident
-import Operations
-import qualified Modules as M
+import GF.Infra.Ident
+import GF.Data.Operations
+import qualified GF.Infra.Modules as M
 
 prCanonModInfo :: CanonModule -> String
 prCanonModInfo = prt . info2mod

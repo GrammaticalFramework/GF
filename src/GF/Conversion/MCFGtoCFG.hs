@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:32 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:21:51 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- Converting MCFG grammars to (possibly overgenerating) CFG
 -----------------------------------------------------------------------------
@@ -18,7 +18,7 @@ module GF.Conversion.MCFGtoCFG
 import GF.System.Tracing
 import GF.Infra.Print
 
-import Monad
+import Control.Monad
 import GF.Formalism.Utilities
 import GF.Formalism.GCFG
 import GF.Formalism.MCFG

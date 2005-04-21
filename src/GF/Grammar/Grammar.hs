@@ -5,16 +5,16 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:12 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/04/21 16:22:20 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.8 $
 --
 -- GF source abstract syntax used internally in compilation.
 --
 -- AR 23\/1\/2000 -- 30\/5\/2001 -- 4\/5\/2003
 -----------------------------------------------------------------------------
 
-module Grammar (SourceGrammar,
+module GF.Grammar.Grammar (SourceGrammar,
 		SourceModInfo,
 		SourceModule,
 		SourceAbs,
@@ -50,12 +50,12 @@ module Grammar (SourceGrammar,
 		varLabel
 	       ) where
 
-import Str
-import Ident
-import Option ---
-import Modules
+import GF.Data.Str
+import GF.Infra.Ident
+import GF.Infra.Option ---
+import GF.Infra.Modules
 
-import Operations
+import GF.Data.Operations
 
 -- | grammar as presented to the compiler
 type SourceGrammar = MGrammar Ident Option Info

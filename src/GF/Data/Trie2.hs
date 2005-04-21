@@ -5,14 +5,14 @@
 -- Stability   : Stable
 -- Portability : Haskell 98
 --
--- > CVS $Date: 2005/02/18 19:21:16 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:22:10 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Trie2 (
+module GF.Data.Trie2 (
              tcompile,
 	     collapse,
              Trie,
@@ -22,8 +22,8 @@ module Trie2 (
              emptyTrie
 	    ) where
 
-import Map
-import List
+import GF.Data.Map
+import Data.List
 
 newtype TrieT a b = TrieT ([(a,TrieT a b)],[b])
 

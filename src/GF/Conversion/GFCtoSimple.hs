@@ -4,29 +4,29 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:32 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:21:50 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- Converting GFC to SimpleGFC
 --
 -- the conversion might fail if the GFC grammar has dependent or higher-order types
 -----------------------------------------------------------------------------
 
-module GF.Conversion.GFCtoSimple 
+module GF.Conversion.GFCtoSimple
     (convertGrammar) where
 
-import qualified AbsGFC as A
-import qualified Ident as I
+import qualified GF.Canon.AbsGFC as A
+import qualified GF.Infra.Ident as I
 import GF.Formalism.GCFG
 import GF.Formalism.SimpleGFC 
 import GF.Conversion.Types
 
-import GFC (CanonGrammar)
-import MkGFC (grammar2canon)
-import qualified Look (lookupLin, allParamValues, lookupLincat)
-import qualified CMacros (defLinType)
-import Operations (err, errVal)
+import GF.Canon.GFC (CanonGrammar)
+import GF.Canon.MkGFC (grammar2canon)
+import qualified GF.Canon.Look as Look (lookupLin, allParamValues, lookupLincat)
+import qualified GF.Canon.CMacros as CMacros (defLinType)
+import GF.Data.Operations (err, errVal)
 --import qualified Modules as M
 
 import GF.System.Tracing

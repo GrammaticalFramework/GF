@@ -8,19 +8,19 @@
                As described in Ljunglöf (2004)   
 ------------------------------------------------------------------------------}
 
-module IncrementalParse where
+module GF.Parsing.MCFG.Incremental where
 
 
 -- Haskell
-import List
+import Data.List
 
 -- GF modules
 import Examples
-import GeneralChart
-import MCFGrammar
+import GF.OldParsing.GeneralChart
+import GF.OldParsing.MCFGrammar
 import MCFParser
 import Parser
-import Range
+import GF.Parsing.MCFG.Range
 import Nondet
 
 

@@ -1,12 +1,12 @@
 {-# OPTIONS -fglasgow-exts -cpp #-}
 -- parser produced by Happy Version 1.13
 
-module ParGF where
-import AbsGF
-import LexGF
-import ErrM
-import Ident --H
-import Array
+module GF.Source.ParGF where
+import GF.Source.AbsGF
+import GF.Source.LexGF
+import GF.Data.ErrM
+import GF.Infra.Ident --H
+import Data.Array
 #if __GLASGOW_HASKELL__ >= 503
 import GHC.Exts
 #else
@@ -2904,7 +2904,7 @@ happyError ts =
 
 myLexer = tokens
 {-# LINE 1 "GenericTemplate.hs" #-}
--- $Id: ParGF.hs,v 1.9 2005/02/04 20:18:00 aarne Exp $
+-- $Id: ParGF.hs,v 1.10 2005/04/21 16:23:27 bringert Exp $
 
 
 

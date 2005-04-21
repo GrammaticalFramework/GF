@@ -5,31 +5,31 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/14 17:40:10 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.16 $
+-- > CVS $Date: 2005/04/21 16:21:06 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.17 $
 --
 -- for reading grammars and terms from strings and files
 -----------------------------------------------------------------------------
 
-module IOGrammar (shellStateFromFiles, 
+module GF.API.IOGrammar (shellStateFromFiles,
 		  getShellStateFromFiles) where
 
-import Abstract
-import qualified GFC
-import PGrammar
-import TypeCheck
-import Compile
-import ShellState
+import GF.Grammar.Abstract
+import qualified GF.Canon.GFC as GFC
+import GF.Compile.PGrammar
+import GF.Grammar.TypeCheck
+import GF.Compile.Compile
+import GF.Compile.ShellState
 
-import Modules
-import ReadFiles (isOldFile)
-import Option
-import Operations
-import UseIO
+import GF.Infra.Modules
+import GF.Infra.ReadFiles (isOldFile)
+import GF.Infra.Option
+import GF.Data.Operations
+import GF.Infra.UseIO
 import Arch
 
-import Monad (liftM)
+import Control.Monad (liftM)
 
 -- | a heuristic way of renaming constants is used
 string2absTerm :: String -> String -> Term 

@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:14 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:22:16 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module EventF where
+module GF.Fudgets.EventF where
 import AllFudgets
 
 -- | The first string is the name of the key (e.g., "Down" for the down arrow key)

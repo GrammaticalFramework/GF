@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:07 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:21:07 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- context-free grammars. AR 15\/12\/1999 -- 30\/3\/2000 -- 2\/6\/2001 -- 3\/12\/2001
 -----------------------------------------------------------------------------
 
-module CF (-- * Types
+module GF.CF.CF (-- * Types
 	   CF(..), CFRule, CFRuleGroup, 
 	   CFItem(..), CFTree(..), CFPredef, CFParser,
 	   RegExp(..), CFWord,
@@ -34,13 +34,13 @@ module CF (-- * Types
 	   isCircularCF, predefRules
 	  ) where
 
-import Operations
-import Str
-import AbsGFC
-import GFC
-import CFIdent
-import List (nub,nubBy)
-import Char (isUpper, isLower, toUpper, toLower)
+import GF.Data.Operations
+import GF.Data.Str
+import GF.Canon.AbsGFC
+import GF.Canon.GFC
+import GF.CF.CFIdent
+import Data.List (nub,nubBy)
+import Data.Char (isUpper, isLower, toUpper, toLower)
 
 -- CF grammar data types
 

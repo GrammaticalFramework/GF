@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:35 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/04/21 16:22:09 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.8 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Str (
+module GF.Data.Str (
   Str (..), Tok (..),        --- constructors needed in PrGrammar 
   str2strings, str2allStrings, str, sstr, sstrV, 
   isZeroTok, prStr, plusStr, glueStr,
@@ -20,8 +20,8 @@ module Str (
   allItems
 ) where
 
-import Operations
-import List (isPrefixOf, isSuffixOf, intersperse)
+import GF.Data.Operations
+import Data.List (isPrefixOf, isSuffixOf, intersperse)
 
 -- | abstract token list type. AR 2001, revised and simplified 20\/4\/2003
 newtype Str = Str [Tok]  deriving (Read, Show, Eq, Ord)

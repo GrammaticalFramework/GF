@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 11:40:59 $
+-- > CVS $Date: 2005/04/21 16:23:20 $
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -16,7 +16,7 @@
 
 module GF.Shell.HelpFile where
 
-import Operations
+import GF.Data.Operations
 
 txtHelpFileSummary =
   unlines $ map (concat . take 1 . lines) $ paragraphs txtHelpFile

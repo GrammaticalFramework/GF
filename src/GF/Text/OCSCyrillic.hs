@@ -4,14 +4,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/29 11:17:56 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:23:39 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module OCSCyrillic (mkOCSCyrillic) where
+module GF.Text.OCSCyrillic (mkOCSCyrillic) where
 
 mkOCSCyrillic :: String -> String
 mkOCSCyrillic = mkOCSCyrillicWord

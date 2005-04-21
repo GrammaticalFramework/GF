@@ -5,24 +5,24 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/17 19:48:34 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.10 $
+-- > CVS $Date: 2005/04/21 16:21:13 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.11 $
 --
 -- printing and parsing CF grammars, rules, and trees AR 26/1/2000 -- 9/6/2003
 --
 -- use the Print class instead!
 -----------------------------------------------------------------------------
 
-module PPrCF (prCF, prCFTree, prCFRule, prCFFun, prCFCat, prCFItem, prRegExp, pCF) where
+module GF.CF.PPrCF (prCF, prCFTree, prCFRule, prCFFun, prCFCat, prCFItem, prRegExp, pCF) where
 
-import Operations
-import CF
-import CFIdent
-import AbsGFC
-import PrGrammar
+import GF.Data.Operations
+import GF.CF.CF
+import GF.CF.CFIdent
+import GF.Canon.AbsGFC
+import GF.Grammar.PrGrammar
 
-import Char
+import Data.Char
 
 prCF :: CF -> String
 prCF = unlines . (map prCFRule) . rulesOfCF -- hiding the literal recogn function

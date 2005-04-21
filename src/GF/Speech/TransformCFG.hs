@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/15 09:45:32 $ 
+-- > CVS $Date: 2005/04/21 16:23:33 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.11 $
+-- > CVS $Revision: 1.12 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -16,9 +16,9 @@
 -- peb thinks: most of this module should be moved to GF.Conversion...
 -----------------------------------------------------------------------------
 
-module TransformCFG (makeNice, CFRule_) where
+module GF.Speech.TransformCFG (makeNice, CFRule_) where
 
-import Ident
+import GF.Infra.Ident
 import GF.Formalism.CFG 
 import GF.Formalism.Utilities (Symbol(..), mapSymbol)
 import GF.Conversion.Types

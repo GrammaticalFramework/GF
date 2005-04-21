@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:35 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.20 $
+-- > CVS $Date: 2005/04/21 16:22:36 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.21 $
 --
 -- Datastructures and functions for modules, common to GF and GFC.
 --
@@ -18,7 +18,7 @@
 -- Invariant: modules are stored in dependency order
 -----------------------------------------------------------------------------
 
-module Modules (MGrammar(..), ModInfo(..), Module(..), ModuleType(..), MReuseType(..),
+module GF.Infra.Modules (MGrammar(..), ModInfo(..), Module(..), ModuleType(..), MReuseType(..),
 		extendm, updateMGrammar, updateModule, replaceJudgements,
 		addOpenQualif, flagsModule, allFlags, mapModules,
 		MainGrammar(..), MainConcreteSpec(..), OpenSpec(..), OpenQualif(..),
@@ -35,11 +35,11 @@ module Modules (MGrammar(..), ModInfo(..), Module(..), ModuleType(..), MReuseTyp
 		allAbstracts, greatestAbstract, allResources, greatestResource, allConcretes
 	       ) where
 
-import Ident
-import Option
-import Operations
+import GF.Infra.Ident
+import GF.Infra.Option
+import GF.Data.Operations
 
-import List
+import Data.List
 
 
 -- AR 29/4/2003

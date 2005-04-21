@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:13 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/04/21 16:22:30 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.14 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module TypeCheck (-- * top-level type checking functions; TC should not be called directly.
+module GF.Grammar.TypeCheck (-- * top-level type checking functions; TC should not be called directly.
 		  annotate, annotateIn,
 		  justTypeCheck, checkIfValidExp,
 		  reduceConstraints, 
@@ -33,21 +33,21 @@ module TypeCheck (-- * top-level type checking functions; TC should not be calle
 		  tree2termlistCommand
 		 ) where
 
-import Operations
-import Zipper
+import GF.Data.Operations
+import GF.Data.Zipper
 
-import Abstract
-import AbsCompute
-import Refresh
-import LookAbs
-import qualified Lookup ---
+import GF.Grammar.Abstract
+import GF.Grammar.AbsCompute
+import GF.Grammar.Refresh
+import GF.Grammar.LookAbs
+import qualified GF.Grammar.Lookup as Lookup ---
 
-import TC
+import GF.Grammar.TC
 
-import Unify ---
+import GF.Grammar.Unify ---
 
-import Monad (foldM, liftM, liftM2)
-import List (nub) ---
+import Control.Monad (foldM, liftM, liftM2)
+import Data.List (nub) ---
 
 -- top-level type checking functions; TC should not be called directly.
 

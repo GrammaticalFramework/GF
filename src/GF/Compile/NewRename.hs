@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/29 11:17:56 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:21:41 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- AR 14\/5\/2003
 --
@@ -22,20 +22,20 @@
 -- Hence we can proceed by @fold@ing "from left to right".
 -----------------------------------------------------------------------------
 
-module Rename (renameSourceTerm, renameModule) where
+module GF.Compile.NewRename (renameSourceTerm, renameModule) where
 
-import Grammar
-import Values
-import Modules
-import Ident
-import Macros
-import PrGrammar
-import AppPredefined
-import Lookup
-import Extend
-import Operations
+import GF.Grammar.Grammar
+import GF.Grammar.Values
+import GF.Infra.Modules
+import GF.Infra.Ident
+import GF.Grammar.Macros
+import GF.Grammar.PrGrammar
+import GF.Grammar.AppPredefined
+import GF.Grammar.Lookup
+import GF.Compile.Extend
+import GF.Data.Operations
 
-import Monad
+import Control.Monad
 
 -- | this gives top-level access to renaming term input in the cc command
 renameSourceTerm :: SourceGrammar -> Ident -> Term -> Err Term

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/29 11:17:56 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Date: 2005/04/21 16:23:16 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.3 $
 --
 -- Pretty-printing of parser objects
 -----------------------------------------------------------------------------
@@ -19,11 +19,11 @@ module GF.Printing.PrintParser (Print(..),
 		   ) where
 
 -- haskell modules:
-import List (intersperse)
+import Data.List (intersperse)
 -- gf modules:
-import Operations (Err(..))
-import Ident (Ident(..))
-import qualified PrintGFC as P
+import GF.Data.Operations (Err(..))
+import GF.Infra.Ident (Ident(..))
+import qualified GF.Canon.PrintGFC as P
 
 ------------------------------------------------------------
 

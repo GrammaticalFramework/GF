@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:56 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:23:00 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- Converting SimpleGFC grammars to MCFG grammars, deterministic.
 --
@@ -16,12 +16,12 @@
 -----------------------------------------------------------------------------
 
 
-module GF.OldParsing.ConvertGFCtoMCFG.Strict (convertGrammar) where
+module GF.OldParsing.ConvertSimpleToMCFG.Strict (convertGrammar) where
 
 import GF.System.Tracing
 import GF.Infra.Print
 
-import Monad
+import Control.Monad
 
 import GF.Formalism.Utilities
 import GF.Formalism.GCFG 
@@ -32,20 +32,20 @@ import GF.Conversion.Types
 import GF.Data.BacktrackM
 
 {-
-import Ident (Ident(..))
-import AbsGFC
-import GFC
-import Look
-import Operations
-import qualified Modules as M
-import CMacros (defLinType)
-import MkGFC (grammar2canon)
+import GF.Infra.Ident (Ident(..))
+import GF.Canon.AbsGFC
+import GF.Canon.GFC
+import GF.Canon.Look
+import GF.Data.Operations
+import qualified GF.Infra.Modules as M
+import GF.Canon.CMacros (defLinType)
+import GF.Canon.MkGFC (grammar2canon)
 import GF.OldParsing.Utilities
 import GF.OldParsing.GrammarTypes 
 import GF.OldParsing.MCFGrammar (Grammar, Rule(..), Lin(..))
 import GF.Data.SortedList
 -- import Maybe (listToMaybe)
-import List (groupBy) -- , transpose)
+import Data.List (groupBy) -- , transpose)
 
 import GF.Data.BacktrackM
 -}

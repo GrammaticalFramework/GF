@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/10 11:14:11 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.36 $
+-- > CVS $Date: 2005/04/21 16:23:19 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.37 $
 --
 -- temporary hacks for GF 2.0
 --
@@ -16,49 +16,49 @@
 -- See "CommandsL" for a parser of a command language.
 -----------------------------------------------------------------------------
 
-module Commands where
+module GF.Shell.Commands where
 
-import Operations
-import Zipper
+import GF.Data.Operations
+import GF.Data.Zipper
 
-import qualified Grammar as G ---- Cat, Fun, Q, QC
-import GFC
-import CMacros
-import Macros (qq)----
-import LookAbs
-import Look
-import Values (loc2treeFocus,tree2exp)----
+import qualified GF.Grammar.Grammar as G ---- Cat, Fun, Q, QC
+import GF.Canon.GFC
+import GF.Canon.CMacros
+import GF.Grammar.Macros (qq)----
+import GF.Grammar.LookAbs
+import GF.Canon.Look
+import GF.Grammar.Values (loc2treeFocus,tree2exp)----
 
-import GetTree
-import API
-import ShellState
+import GF.UseGrammar.GetTree
+import GF.API
+import GF.Compile.ShellState
 
-import qualified Shell
-import qualified PShell
-import qualified Macros as M
-import PrGrammar
-import PGrammar
-import IOGrammar
-import UseIO
-import Unicode
+import qualified GF.Shell as Shell
+import qualified GF.Shell.PShell as PShell
+import qualified GF.Grammar.Macros as M
+import GF.Grammar.PrGrammar
+import GF.Compile.PGrammar
+import GF.API.IOGrammar
+import GF.Infra.UseIO
+import GF.Text.Unicode
 
-import CF
-import CFIdent (cat2CFCat, cfCat2Cat)
-import PPrCF (prCFCat)
-import Linear
-import Randomized
-import Editing
-import Session
-import Custom
+import GF.CF.CF
+import GF.CF.CFIdent (cat2CFCat, cfCat2Cat)
+import GF.CF.PPrCF (prCFCat)
+import GF.UseGrammar.Linear
+import GF.UseGrammar.Randomized
+import GF.UseGrammar.Editing
+import GF.UseGrammar.Session
+import GF.UseGrammar.Custom
 
-import qualified Ident as I
-import Option
-import Str (sstr) ----
-import UTF8 ----
+import qualified GF.Infra.Ident as I
+import GF.Infra.Option
+import GF.Data.Str (sstr) ----
+import GF.Text.UTF8 ----
 
-import Random (StdGen, mkStdGen, newStdGen)
-import Monad (liftM2, foldM)
-import List (intersperse)
+import System.Random (StdGen, mkStdGen, newStdGen)
+import Control.Monad (liftM2, foldM)
+import Data.List (intersperse)
 
 --- temporary hacks for GF 2.0
 

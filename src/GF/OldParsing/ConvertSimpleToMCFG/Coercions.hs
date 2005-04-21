@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:50 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Date: 2005/04/21 16:22:57 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.3 $
 --
 -- Adding coercion functions to a MCFG if necessary.
 -----------------------------------------------------------------------------
@@ -20,12 +20,12 @@ import GF.Printing.PrintSimplifiedTerm
 -- import PrintGFC
 -- import qualified PrGrammar as PG
 
-import qualified Ident
+import qualified GF.Infra.Ident as Ident
 import GF.OldParsing.Utilities
 --import GF.OldParsing.GrammarTypes 
 import GF.OldParsing.MCFGrammar (Rule(..), Lin(..))
 import GF.Data.SortedList
-import List (groupBy) -- , transpose)
+import Data.List (groupBy) -- , transpose)
 
 ----------------------------------------------------------------------
 

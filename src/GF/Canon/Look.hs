@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:06 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/04/21 16:21:25 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.12 $
 --
 -- lookup in GFC. AR 2003
 -----------------------------------------------------------------------------
 
-module Look (lookupCncInfo,
+module GF.Canon.Look (lookupCncInfo,
 	     lookupLin,
 	     lookupLincat,
 	     lookupPrintname,
@@ -24,20 +24,20 @@ module Look (lookupCncInfo,
 	     ccompute
 	    ) where
 
-import AbsGFC
-import GFC
-import PrGrammar
-import CMacros
+import GF.Canon.AbsGFC
+import GF.Canon.GFC
+import GF.Grammar.PrGrammar
+import GF.Canon.CMacros
 ----import Values
-import MMacros
-import qualified Modules as M
-import qualified CanonToGrammar as CG
+import GF.Grammar.MMacros
+import qualified GF.Infra.Modules as M
+import qualified GF.Canon.CanonToGrammar as CG
 
-import Operations
-import Option
+import GF.Data.Operations
+import GF.Infra.Option
 
-import Monad
-import List
+import Control.Monad
+import Data.List
 
 -- linearization lookup
 

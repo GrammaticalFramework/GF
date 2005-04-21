@@ -4,28 +4,28 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:50 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:23:43 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Main (main) where
+module GF.Translate.GFT (main) where
 
-import ShellState
-import GetGFC
-import API
+import GF.Compile.ShellState
+import GF.Canon.GetGFC
+import GF.API
 
-import Unicode
-import UTF8
-import UseIO
-import Option
-import Modules (emptyMGrammar) ----
-import Operations
+import GF.Text.Unicode
+import GF.Text.UTF8
+import GF.Infra.UseIO
+import GF.Infra.Option
+import GF.Infra.Modules (emptyMGrammar) ----
+import GF.Data.Operations
 
 import System
-import List
+import Data.List
 
 
 main :: IO ()

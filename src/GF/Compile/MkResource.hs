@@ -5,25 +5,25 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:08 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/04/21 16:21:38 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.12 $
 --
 -- Compile a gfc module into a "reuse" gfr resource, interface, or instance.
 -----------------------------------------------------------------------------
 
-module MkResource (makeReuse) where
+module GF.Compile.MkResource (makeReuse) where
 
-import Grammar
-import Ident
-import Modules
-import Macros
-import Lockfield
-import PrGrammar
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Infra.Modules
+import GF.Grammar.Macros
+import GF.Grammar.Lockfield
+import GF.Grammar.PrGrammar
 
-import Operations
+import GF.Data.Operations
 
-import Monad
+import Control.Monad
 
 -- | extracting resource r from abstract + concrete syntax.
 -- AR 21\/8\/2002 -- 22\/6\/2003 for GF with modules

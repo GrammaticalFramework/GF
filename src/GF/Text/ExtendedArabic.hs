@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:14 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:23:36 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module ExtendedArabic (mkArabic0600, mkExtendedArabic) where
+module GF.Text.ExtendedArabic (mkArabic0600, mkExtendedArabic) where
 
 mkArabic0600 :: String -> String
 mkArabic0600 = digraphWordToUnicode . aarnesToDigraphWord

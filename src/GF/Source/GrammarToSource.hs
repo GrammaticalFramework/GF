@@ -5,26 +5,26 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/04 15:50:27 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.18 $
+-- > CVS $Date: 2005/04/21 16:23:25 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.19 $
 --
 -- From internal source syntax to BNFC-generated (used for printing).
 -----------------------------------------------------------------------------
 
-module GrammarToSource ( trGrammar, 
+module GF.Source.GrammarToSource ( trGrammar,
 			 trModule,
 			 trAnyDef,
 			 trLabel,
 			 trt, tri, trp
 		       ) where
 
-import Operations
-import Grammar
-import Modules
-import Option
-import qualified AbsGF as P
-import Ident
+import GF.Data.Operations
+import GF.Grammar.Grammar
+import GF.Infra.Modules
+import GF.Infra.Option
+import qualified GF.Source.AbsGF as P
+import GF.Infra.Ident
 
 -- | AR 13\/5\/2003
 --

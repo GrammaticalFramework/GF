@@ -5,15 +5,15 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:55 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:22:54 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- Basic type declarations and functions to be used when parsing
 -----------------------------------------------------------------------------
 
 
-module GF.OldParsing.Utilities 
+module GF.OldParsing.Utilities
     ( -- * Symbols
       Symbol(..), symbol, mapSymbol,
       -- * Edges
@@ -26,8 +26,8 @@ module GF.OldParsing.Utilities
     ) where
 
 -- haskell modules:
-import Monad
-import Array
+import Control.Monad
+import Data.Array
 -- gf modules:
 import GF.Data.SortedList
 import GF.Data.Assoc

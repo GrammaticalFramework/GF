@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:14 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:23:34 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Devanagari (mkDevanagari) where
+module GF.Text.Devanagari (mkDevanagari) where
 
 mkDevanagari :: String -> String
 mkDevanagari = digraphWordToUnicode . adHocToDigraphWord

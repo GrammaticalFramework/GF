@@ -5,27 +5,27 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:37 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.18 $
+-- > CVS $Date: 2005/04/21 16:23:22 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.19 $
 --
 -- parsing GF shell commands. AR 11\/11\/2001
 -----------------------------------------------------------------------------
 
-module PShell where
+module GF.Shell.PShell where
 
-import Operations
-import UseIO
-import ShellState
-import ShellCommands
-import Shell
-import Option
-import PGrammar (pzIdent, pTrm) --- (string2formsAndTerm)
-import API
+import GF.Data.Operations
+import GF.Infra.UseIO
+import GF.Compile.ShellState
+import GF.Shell.ShellCommands
+import GF.Shell
+import GF.Infra.Option
+import GF.Compile.PGrammar (pzIdent, pTrm) --- (string2formsAndTerm)
+import GF.API
 import Arch(fetchCommand)
 
-import Char (isDigit)
-import IO
+import Data.Char (isDigit)
+import System.IO.Error
 
 -- parsing GF shell commands. AR 11/11/2001
 
@@ -37,7 +37,7 @@ getCommandLines = do
 
 getCommandLinesBatch :: IO (String,[CommandLine])
 getCommandLinesBatch = do
-  s <- catch getLine (\e -> if IO.isEOFError e then return "q" else ioError e)
+  s <- catch getLine (\e -> if isEOFError e then return "q" else ioError e)
   return $ (s,pCommandLines s)
 
 pCommandLines :: String -> [CommandLine]

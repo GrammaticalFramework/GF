@@ -4,18 +4,18 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:49 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:22:13 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- Simplistic GFC format
 -----------------------------------------------------------------------------
 
 module GF.Formalism.SimpleGFC where
 
-import Monad (liftM)
-import qualified AbsGFC 
-import qualified Ident 
+import Control.Monad (liftM)
+import qualified GF.Canon.AbsGFC as AbsGFC
+import qualified GF.Infra.Ident as Ident
 import GF.Formalism.GCFG
 import GF.Infra.Print
 

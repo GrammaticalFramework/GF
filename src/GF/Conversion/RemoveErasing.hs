@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:57:29 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:21:53 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- Removing erasingness from MCFG grammars (as in Ljunglöf 2004, sec 4.5.1)
 -----------------------------------------------------------------------------
@@ -18,16 +18,16 @@ module GF.Conversion.RemoveErasing
 import GF.System.Tracing
 import GF.Infra.Print
 
-import Monad
-import List (mapAccumL)
-import Maybe (mapMaybe)
+import Control.Monad
+import Data.List (mapAccumL)
+import Data.Maybe (mapMaybe)
 import GF.Formalism.Utilities
 import GF.Formalism.GCFG
 import GF.Formalism.MCFG
 import GF.Conversion.Types
 import GF.Data.Assoc
 import GF.Data.SortedList
-import GF.NewParsing.GeneralChart
+import GF.Data.GeneralDeduction
 
 convertGrammar :: EGrammar -> MGrammar
 convertGrammar grammar

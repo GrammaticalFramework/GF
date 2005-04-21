@@ -5,28 +5,28 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/10 11:14:11 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/04/21 16:23:21 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.12 $
 --
 -- GF editing session controlled by e.g. a Java program. AR 16\/11\/2001
 -----------------------------------------------------------------------------
 
-module JGF where
+module GF.Shell.JGF where
 
-import Operations
-import UseIO
-import Unicode
+import GF.Data.Operations
+import GF.Infra.UseIO
+import GF.Text.Unicode
 
-import IOGrammar
-import Option
-import ShellState
-import Session
-import Commands
-import CommandL
+import GF.API.IOGrammar
+import GF.Infra.Option
+import GF.Compile.ShellState
+import GF.UseGrammar.Session
+import GF.Shell.Commands
+import GF.Shell.CommandL
 
 import System
-import UTF8
+import GF.Text.UTF8
 
 
 -- GF editing session controlled by e.g. a Java program. AR 16/11/2001

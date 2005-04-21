@@ -4,22 +4,22 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:54 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:22:52 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- Simplistic GFC format
 -----------------------------------------------------------------------------
 
 module GF.OldParsing.SimpleGFC where
 
-import qualified AbsGFC 
-import qualified Ident 
+import qualified GF.Canon.AbsGFC as AbsGFC
+import qualified GF.Infra.Ident as Ident
 
 import GF.Printing.PrintParser
 import GF.Printing.PrintSimplifiedTerm
 
-import Operations (ifNull)
+import GF.Data.Operations (ifNull)
 
 ----------------------------------------------------------------------
 

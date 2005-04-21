@@ -5,29 +5,29 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/17 19:48:34 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:21:09 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- 26\/1\/2000 -- 18\/4 -- 24\/3\/2004
 -----------------------------------------------------------------------------
 
-module CFtoGrammar (cf2grammar) where
+module GF.CF.CFtoGrammar (cf2grammar) where
 
-import Ident
-import Grammar
-import qualified AbsGF as A
-import qualified GrammarToSource as S
-import Macros
+import GF.Infra.Ident
+import GF.Grammar.Grammar
+import qualified GF.Source.AbsGF as A
+import qualified GF.Source.GrammarToSource as S
+import GF.Grammar.Macros
 
-import CF
-import CFIdent
-import PPrCF
+import GF.CF.CF
+import GF.CF.CFIdent
+import GF.CF.PPrCF
 
-import Operations
+import GF.Data.Operations
 
-import List (nub)
-import Char (isSpace)
+import Data.List (nub)
+import Data.Char (isSpace)
 
 cf2grammar :: CF -> [A.TopDef]
 cf2grammar cf = concatMap S.trAnyDef (abs ++ conc) where

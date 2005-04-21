@@ -5,27 +5,27 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:34 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/04/21 16:22:24 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.8 $
 --
 -- some more abstractions on grammars, esp. for Edit
 -----------------------------------------------------------------------------
 
-module MMacros where
+module GF.Grammar.MMacros where
 
-import Operations
-import Zipper
+import GF.Data.Operations
+import GF.Data.Zipper
 
-import Grammar
-import PrGrammar
-import Ident
-import Refresh
-import Values
+import GF.Grammar.Grammar
+import GF.Grammar.PrGrammar
+import GF.Infra.Ident
+import GF.Grammar.Refresh
+import GF.Grammar.Values
 ----import GrammarST
-import Macros
+import GF.Grammar.Macros
 
-import Monad
+import Control.Monad
 
 nodeTree :: Tree -> TrNode
 argsTree :: Tree -> [Tree]

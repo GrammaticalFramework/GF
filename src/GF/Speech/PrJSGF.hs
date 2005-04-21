@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/15 09:45:32 $ 
+-- > CVS $Date: 2005/04/21 16:23:31 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.11 $
+-- > CVS $Revision: 1.12 $
 --
 -- This module prints a CFG as a JSGF grammar.
 --
@@ -17,15 +17,15 @@
 -- FIXME: convert to UTF-8
 -----------------------------------------------------------------------------
 
-module PrJSGF (jsgfPrinter) where
+module GF.Speech.PrJSGF (jsgfPrinter) where
 
-import SRG
-import Ident
+import GF.Speech.SRG
+import GF.Infra.Ident
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..))
 import GF.Conversion.Types
 import GF.Infra.Print
-import Option
+import GF.Infra.Option
 
 jsgfPrinter :: Ident -- ^ Grammar name
 	   -> Options -> CGrammar -> String

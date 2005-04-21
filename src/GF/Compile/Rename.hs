@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:09 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.17 $
+-- > CVS $Date: 2005/04/21 16:21:46 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.18 $
 --
 -- AR 14\/5\/2003
 -- The top-level function 'renameGrammar' does several things:
@@ -22,23 +22,23 @@
 -- Hence we can proceed by @fold@ing "from left to right".
 -----------------------------------------------------------------------------
 
-module Rename (renameGrammar, 
+module GF.Compile.Rename (renameGrammar,
 	       renameSourceTerm,
 	       renameModule
 	      ) where
 
-import Grammar
-import Values
-import Modules
-import Ident
-import Macros
-import PrGrammar
-import AppPredefined
-import Lookup
-import Extend
-import Operations
+import GF.Grammar.Grammar
+import GF.Grammar.Values
+import GF.Infra.Modules
+import GF.Infra.Ident
+import GF.Grammar.Macros
+import GF.Grammar.PrGrammar
+import GF.Grammar.AppPredefined
+import GF.Grammar.Lookup
+import GF.Compile.Extend
+import GF.Data.Operations
 
-import Monad
+import Control.Monad
 
 renameGrammar :: SourceGrammar -> Err SourceGrammar
 renameGrammar g = liftM (MGrammar . reverse) $ foldM renameModule [] (modules g)

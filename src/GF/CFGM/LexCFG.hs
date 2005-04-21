@@ -1,8 +1,8 @@
 {-# OPTIONS -fglasgow-exts -cpp #-}
 {-# LINE 3 "LexCFG.x" #-}
-module LexCFG where
+module GF.CFGM.LexCFG where
 
-import ErrM
+import GF.Data.ErrM
 
 
 #if __GLASGOW_HASKELL__ >= 503
@@ -10,8 +10,8 @@ import Data.Array
 import Data.Char (ord)
 import Data.Array.Base (unsafeAt)
 #else
-import Array
-import Char (ord)
+import Data.Array
+import Data.Char (ord)
 #endif
 #if __GLASGOW_HASKELL__ >= 503
 import GHC.Exts

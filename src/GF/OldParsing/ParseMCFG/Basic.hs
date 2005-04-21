@@ -5,19 +5,19 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:57 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:23:03 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- Simplest possible implementation of MCFG chart parsing
 -----------------------------------------------------------------------------
 
-module GF.OldParsing.ParseMCFG.Basic 
+module GF.OldParsing.ParseMCFG.Basic
     (parse) where
 
 import GF.System.Tracing
 
-import Ix
+import Data.Ix
 import GF.OldParsing.Utilities
 import GF.OldParsing.MCFGrammar
 import GF.OldParsing.GeneralChart 

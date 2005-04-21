@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:36 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/04/21 16:22:11 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.8 $
 --
 -- Gérard Huet's zipper (JFP 7 (1997)). AR 10\/8\/2001
 -----------------------------------------------------------------------------
 
-module Zipper (-- * types
+module GF.Data.Zipper (-- * types
 	       Tr(..),
 	       Path(..),
 	       Loc(..),
@@ -53,7 +53,7 @@ module Zipper (-- * types
 	       arityTree
 	      ) where
 
-import Operations
+import GF.Data.Operations
 
 newtype Tr a = Tr (a,[Tr a]) deriving (Show,Eq)
     

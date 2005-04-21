@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 20:09:19 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/04/21 16:22:27 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.13 $
 --
 -- AR 7\/12\/1999 - 1\/4\/2000 - 10\/5\/2003
 --
@@ -19,7 +19,7 @@
 -- only the former is ever needed.
 -----------------------------------------------------------------------------
 
-module PrGrammar (Print(..),
+module GF.Grammar.PrGrammar (Print(..),
 		  prtBad,
 		  prGrammar, prModule,
 		  prContext, prParam,
@@ -32,22 +32,22 @@ module PrGrammar (Print(..),
 		  prExp, prPatt, prOperSignature
 		 ) where
 
-import Operations
-import Zipper
-import Grammar
-import Modules
-import qualified PrintGF as P
-import qualified PrintGFC as C
-import qualified AbsGFC as A
-import Values
-import GrammarToSource
+import GF.Data.Operations
+import GF.Data.Zipper
+import GF.Grammar.Grammar
+import GF.Infra.Modules
+import qualified GF.Source.PrintGF as P
+import qualified GF.Canon.PrintGFC as C
+import qualified GF.Canon.AbsGFC as A
+import GF.Grammar.Values
+import GF.Source.GrammarToSource
 --- import GFC (CanonGrammar) --- cycle of modules
 
-import Option
-import Ident
-import Str
+import GF.Infra.Option
+import GF.Infra.Ident
+import GF.Data.Str
 
-import List (intersperse)
+import Data.List (intersperse)
 
 class Print a where
   prt  :: a -> String

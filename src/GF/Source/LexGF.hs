@@ -1,16 +1,16 @@
 {-# OPTIONS -cpp #-}
 {-# LINE 3 "LexGF.x" #-}
-module LexGF where
+module GF.Source.LexGF where
 
-import ErrM
+import GF.Data.ErrM
 
 #if __GLASGOW_HASKELL__ >= 503
 import Data.Array
 import Data.Char (ord)
 import Data.Array.Base (unsafeAt)
 #else
-import Array
-import Char (ord)
+import Data.Array
+import Data.Char (ord)
 #endif
 alex_base :: Array Int Int
 alex_base = listArray (0,27) [1,21,57,58,24,25,26,0,68,69,27,28,29,66,0,38,19,39,0,44,45,156,364,0,279,487,213,51]

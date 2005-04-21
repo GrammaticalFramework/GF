@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:07 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.10 $
+-- > CVS $Date: 2005/04/21 16:21:30 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.11 $
 --
 -- Optimizations on GFC code: sharing, parametrization, value sets.
 --
@@ -15,16 +15,16 @@
 -- following advice of Josef Svenningsson
 -----------------------------------------------------------------------------
 
-module Share (shareModule, OptSpec, shareOpt, paramOpt, valOpt, allOpt) where
+module GF.Canon.Share (shareModule, OptSpec, shareOpt, paramOpt, valOpt, allOpt) where
 
-import AbsGFC
-import Ident
-import GFC
-import qualified CMacros as C
-import PrGrammar (prt)
-import Operations
-import List
-import qualified Modules as M
+import GF.Canon.AbsGFC
+import GF.Infra.Ident
+import GF.Canon.GFC
+import qualified GF.Canon.CMacros as C
+import GF.Grammar.PrGrammar (prt)
+import GF.Data.Operations
+import Data.List
+import qualified GF.Infra.Modules as M
 
 type OptSpec = [Integer] ---
 

@@ -5,40 +5,40 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:50 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.43 $
+-- > CVS $Date: 2005/04/21 16:21:47 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.44 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module ShellState where
+module GF.Compile.ShellState where
 
-import Operations
-import GFC
-import AbsGFC
-import Macros
-import MMacros
+import GF.Data.Operations
+import GF.Canon.GFC
+import GF.Canon.AbsGFC
+import GF.Grammar.Macros
+import GF.Grammar.MMacros
 
-import Look
-import LookAbs
-import ModDeps
-import qualified Modules as M
-import qualified Grammar as G
-import qualified PrGrammar as P
-import CF
-import CFIdent
-import CanonToCF
-import Morphology
-import Option
-import Ident
+import GF.Canon.Look
+import GF.Grammar.LookAbs
+import GF.Compile.ModDeps
+import qualified GF.Infra.Modules as M
+import qualified GF.Grammar.Grammar as G
+import qualified GF.Grammar.PrGrammar as P
+import GF.CF.CF
+import GF.CF.CFIdent
+import GF.CF.CanonToCF
+import GF.UseGrammar.Morphology
+import GF.Infra.Option
+import GF.Infra.Ident
 import Arch (ModTime)
 
 import qualified GF.OldParsing.ConvertGrammar as CnvOld -- OBSOLETE
 import qualified GF.Conversion.GFC as Cnv
-import qualified GF.NewParsing.GFC as Prs
+import qualified GF.Parsing.GFC as Prs
 
-import List (nub,nubBy)
+import Data.List (nub,nubBy)
 
 -- AR 11/11/2001 -- 17/6/2003 (for modules) ---- unfinished
 

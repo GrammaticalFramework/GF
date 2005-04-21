@@ -5,16 +5,16 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:06 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:21:05 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- translate OCL, etc, files in batch mode
 -----------------------------------------------------------------------------
 
-module BatchTranslate (translate) where
+module GF.API.BatchTranslate (translate) where
 
-import API
+import GF.API
 import GetMyTree (file2tree)
 
 translate :: FilePath -> FilePath -> IO ()

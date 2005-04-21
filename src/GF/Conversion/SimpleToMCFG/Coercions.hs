@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:32 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:21:57 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- Adding coercion functions to a MCFG if necessary.
 -----------------------------------------------------------------------------
@@ -23,7 +23,7 @@ import GF.Formalism.GCFG
 import GF.Formalism.MCFG
 import GF.Conversion.Types 
 import GF.Data.SortedList
-import List (groupBy)
+import Data.List (groupBy)
 
 ----------------------------------------------------------------------
 

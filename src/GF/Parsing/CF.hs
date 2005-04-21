@@ -4,27 +4,27 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 12:49:44 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:23:04 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- Chart parsing of grammars in CF format
 -----------------------------------------------------------------------------
 
-module GF.NewParsing.CF (parse) where
+module GF.Parsing.CF (parse) where
 
-import Operations (errVal)
+import GF.Data.Operations (errVal)
 
 import GF.System.Tracing
 import GF.Infra.Print
 
 import GF.Data.SortedList (nubsort)
 import GF.Data.Assoc
-import qualified CF
-import qualified CFIdent as CFI
+import qualified GF.CF.CF as CF
+import qualified GF.CF.CFIdent as CFI
 import GF.Formalism.Utilities
 import GF.Formalism.CFG
-import qualified GF.NewParsing.CFG as P
+import qualified GF.Parsing.CFG as P
 
 type Token    = CFI.CFTok
 type Name     = CFI.CFFun

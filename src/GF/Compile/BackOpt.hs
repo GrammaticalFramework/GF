@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:08 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:21:33 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- Optimizations on GF source code: sharing, parametrization, value sets.
 --
@@ -15,15 +15,15 @@
 -- following advice of Josef Svenningsson
 -----------------------------------------------------------------------------
 
-module BackOpt (shareModule, OptSpec, shareOpt, paramOpt, valOpt, allOpt) where
+module GF.Compile.BackOpt (shareModule, OptSpec, shareOpt, paramOpt, valOpt, allOpt) where
 
-import Grammar
-import Ident
-import qualified Macros as C
-import PrGrammar (prt)
-import Operations
-import List
-import qualified Modules as M
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import qualified GF.Grammar.Macros as C
+import GF.Grammar.PrGrammar (prt)
+import GF.Data.Operations
+import Data.List
+import qualified GF.Infra.Modules as M
 
 type OptSpec = [Integer] ---
 

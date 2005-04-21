@@ -5,33 +5,33 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 18:08:58 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/04/21 16:21:40 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.13 $
 --
 -- Check correctness of module dependencies. Incomplete.
 --
 -- AR 13\/5\/2003
 -----------------------------------------------------------------------------
 
-module ModDeps (mkSourceGrammar,
+module GF.Compile.ModDeps (mkSourceGrammar,
 		moduleDeps,
 		openInterfaces,
 		requiredCanModules
 	       ) where
 
-import Grammar
-import Ident
-import Option
-import PrGrammar
-import Update
-import Lookup
-import Modules
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Infra.Option
+import GF.Grammar.PrGrammar
+import GF.Compile.Update
+import GF.Grammar.Lookup
+import GF.Infra.Modules
 
-import Operations
+import GF.Data.Operations
 
-import Monad
-import List
+import Control.Monad
+import Data.List
 
 -- | to check uniqueness of module names and import names, the
 -- appropriateness of import and extend types,

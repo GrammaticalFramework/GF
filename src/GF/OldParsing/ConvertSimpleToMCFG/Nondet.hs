@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:56 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:22:58 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- Converting SimpleGFC grammars to MCFG grammars, nondeterministically.
 --
@@ -24,14 +24,14 @@ import GF.Printing.PrintSimplifiedTerm
 -- import PrintGFC
 -- import qualified PrGrammar as PG
 
-import Monad
+import Control.Monad
 -- import Ident (Ident(..))
-import qualified AbsGFC 
+import qualified GF.Canon.AbsGFC as AbsGFC
 -- import GFC
-import Look
-import Operations
+import GF.Canon.Look
+import GF.Data.Operations
 -- import qualified Modules as M
-import CMacros (defLinType)
+import GF.Canon.CMacros (defLinType)
 -- import MkGFC (grammar2canon)
 import GF.OldParsing.Utilities
 -- import GF.OldParsing.GrammarTypes 
@@ -39,7 +39,7 @@ import GF.Data.SortedList
 import qualified GF.OldParsing.MCFGrammar as MCF (Grammar, Rule(..), Lin(..)) 
 import GF.OldParsing.SimpleGFC 
 -- import Maybe (listToMaybe)
-import List (groupBy) -- , transpose)
+import Data.List (groupBy) -- , transpose)
 
 import GF.Data.BacktrackM
 

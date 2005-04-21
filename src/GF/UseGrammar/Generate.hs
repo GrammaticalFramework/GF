@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/04 12:05:10 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/04/21 16:23:46 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.14 $
 --
 -- Generate all trees of given category and depth. AR 30\/4\/2004
 --
@@ -17,19 +17,19 @@
 -- guarantee the correctness of bindings\/dependences.
 -----------------------------------------------------------------------------
 
-module Generate (generateTrees) where
+module GF.UseGrammar.Generate (generateTrees) where
 
-import GFC
-import LookAbs
-import PrGrammar
-import Macros
-import Values
-import Grammar (Cat)
+import GF.Canon.GFC
+import GF.Grammar.LookAbs
+import GF.Grammar.PrGrammar
+import GF.Grammar.Macros
+import GF.Grammar.Values
+import GF.Grammar.Grammar (Cat)
 
-import Operations
-import Zipper
+import GF.Data.Operations
+import GF.Data.Zipper
 
-import List
+import Data.List
 
 -- Generate all trees of given category and depth. AR 30/4/2004
 -- (c) Aarne Ranta 2004 under GNU GPL

@@ -1,10 +1,10 @@
 
-module GF.NewParsing.MCFG.Range where
+module GF.Parsing.MCFG.Range where
 
 
 -- Haskell
-import List
-import Monad
+import Data.List
+import Control.Monad
 
 -- GF modules
 import GF.Formalism.GCFG

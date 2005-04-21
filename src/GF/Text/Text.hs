@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/31 16:57:35 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.8 $
+-- > CVS $Date: 2005/04/21 16:23:41 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.9 $
 --
 -- elementary text postprocessing. AR 21\/11\/2001.
 --
@@ -17,7 +17,7 @@
 -- XML hack 14\/8\/2004; not in use yet
 -----------------------------------------------------------------------------
 
-module Text (untokWithXML,
+module GF.Text.Text (untokWithXML,
 	     exceptXML,
 	     formatAsTextLit,
 	     formatAsCodeLit,
@@ -30,8 +30,8 @@ module Text (untokWithXML,
 	     concatRemSpace
 	    ) where
 
-import Operations
-import Char
+import GF.Data.Operations
+import Data.Char
 
 -- | does not apply untokenizer within XML tags --- heuristic "< "
 -- this function is applied from top level...

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:54 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:22:50 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- The main parsing module, parsing GFC grammars
 -- by translating to simpler formats, such as PMCFG and CFG
@@ -17,20 +17,20 @@ module GF.OldParsing.ParseGFC (newParser) where
 
 import GF.System.Tracing 
 import GF.Printing.PrintParser
-import qualified PrGrammar
+import qualified GF.Grammar.PrGrammar as PrGrammar
 
 -- Haskell modules
-import Monad
+import Control.Monad
 -- import Ratio ((%))
 -- GF modules
-import qualified Grammar as GF
-import Values
-import qualified Macros 
-import qualified Modules as Mods
-import qualified AbsGFC
-import qualified Ident
-import qualified ShellState as SS
-import Operations
+import qualified GF.Grammar.Grammar as GF
+import GF.Grammar.Values
+import qualified GF.Grammar.Macros as Macros
+import qualified GF.Infra.Modules as Mods
+import qualified GF.Canon.AbsGFC as AbsGFC
+import qualified GF.Infra.Ident as Ident
+import qualified GF.Compile.ShellState as SS
+import GF.Data.Operations
 import GF.Data.SortedList 
 -- Conversion and parser modules
 import GF.Data.Assoc

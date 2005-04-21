@@ -5,15 +5,15 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:16 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:23:42 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- From the Char module supplied with HBC.
 -- code by Thomas Hallgren (Jul 10 1999)
 -----------------------------------------------------------------------------
 
-module UTF8 (decodeUTF8, encodeUTF8) where
+module GF.Text.UTF8 (decodeUTF8, encodeUTF8) where
 
 -- | Take a Unicode string and encode it as a string
 -- with the UTF8 method.

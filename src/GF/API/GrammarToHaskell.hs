@@ -5,22 +5,22 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:06 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:21:06 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- to write a GF abstract grammar into a Haskell module with translations from
 -- data objects into GF trees. Example: GSyntax for Agda.
 -- AR 11/11/1999 -- 7/12/2000 -- 18/5/2004
 -----------------------------------------------------------------------------
 
-module GrammarToHaskell (grammar2haskell) where
+module GF.API.GrammarToHaskell (grammar2haskell) where
 
-import qualified GFC
-import Macros
+import qualified GF.Canon.GFC as GFC
+import GF.Grammar.Macros
 
-import Modules
-import Operations
+import GF.Infra.Modules
+import GF.Data.Operations
 
 -- | the main function
 grammar2haskell :: GFC.CanonGrammar -> String

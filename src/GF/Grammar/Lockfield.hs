@@ -5,23 +5,23 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:12 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:22:21 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- Creating and using lock fields in reused resource grammars.
 --
 -- AR 8\/2\/2005 detached from 'compile/MkResource'
 -----------------------------------------------------------------------------
 
-module Lockfield (lockRecType, unlockRecord, lockLabel, isLockLabel) where
+module GF.Grammar.Lockfield (lockRecType, unlockRecord, lockLabel, isLockLabel) where
 
-import Grammar
-import Ident
-import Macros
-import PrGrammar
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Grammar.Macros
+import GF.Grammar.PrGrammar
 
-import Operations
+import GF.Data.Operations
 
 lockRecType :: Ident -> Type -> Err Type
 lockRecType c t@(RecType rs) = 

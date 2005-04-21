@@ -5,33 +5,33 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:09 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/04/21 16:21:42 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.14 $
 --
 -- Top-level partial evaluation for GF source modules.
 -----------------------------------------------------------------------------
 
-module Optimize (optimizeModule) where
+module GF.Compile.Optimize (optimizeModule) where
 
-import Grammar
-import Ident
-import Modules
-import PrGrammar
-import Macros
-import Lookup
-import Refresh
-import Compute
-import BackOpt
-import CheckGrammar
-import Update
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Infra.Modules
+import GF.Grammar.PrGrammar
+import GF.Grammar.Macros
+import GF.Grammar.Lookup
+import GF.Grammar.Refresh
+import GF.Grammar.Compute
+import GF.Compile.BackOpt
+import GF.Compile.CheckGrammar
+import GF.Compile.Update
 
-import Operations
-import CheckM
-import Option
+import GF.Data.Operations
+import GF.Infra.CheckM
+import GF.Infra.Option
 
-import Monad
-import List
+import Control.Monad
+import Data.List
 
 -- | partial evaluation of concrete syntax. AR 6\/2001 -- 16\/5\/2003 -- 5\/2\/2005.
 -- only do this for resource: concrete is optimized in gfc form

@@ -5,25 +5,25 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/02 14:25:45 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/04/21 16:23:45 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.14 $
 --
 -- generic tree editing, with some grammar notions assumed. AR 18\/8\/2001.
 -- 19\/6\/2003 for GFC
 -----------------------------------------------------------------------------
 
-module Editing where
+module GF.UseGrammar.Editing where
 
-import Abstract
-import qualified GFC
-import TypeCheck
-import LookAbs
-import AbsCompute
-import Macros (errorCat)
+import GF.Grammar.Abstract
+import qualified GF.Canon.GFC as GFC
+import GF.Grammar.TypeCheck
+import GF.Grammar.LookAbs
+import GF.Grammar.AbsCompute
+import GF.Grammar.Macros (errorCat)
 
-import Operations
-import Zipper
+import GF.Data.Operations
+import GF.Data.Zipper
 
 -- generic tree editing, with some grammar notions assumed. AR 18/8/2001 
 -- 19/6/2003 for GFC

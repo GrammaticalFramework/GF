@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:13 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:23:34 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Arabic (mkArabic) where
+module GF.Text.Arabic (mkArabic) where
 
 mkArabic :: String -> String
 mkArabic = unwords . (map mkArabicWord) . words

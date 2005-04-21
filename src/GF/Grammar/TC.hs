@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/17 09:58:18 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.8 $
+-- > CVS $Date: 2005/04/21 16:22:29 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.9 $
 --
 -- Thierry Coquand's type checking algorithm that creates a trace
 -----------------------------------------------------------------------------
 
-module TC (AExp(..),
+module GF.Grammar.TC (AExp(..),
 	   Theory,
 	   checkExp,
 	   inferExp,
@@ -20,11 +20,11 @@ module TC (AExp(..),
 	   whnf
 	  ) where
 
-import Operations
-import Abstract
-import AbsCompute
+import GF.Data.Operations
+import GF.Grammar.Abstract
+import GF.Grammar.AbsCompute
 
-import Monad
+import Control.Monad
 
 data AExp =
      AVr   Ident Val 

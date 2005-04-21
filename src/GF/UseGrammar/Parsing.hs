@@ -5,43 +5,43 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 12:49:45 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.19 $
+-- > CVS $Date: 2005/04/21 16:23:50 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.20 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Parsing where
+module GF.UseGrammar.Parsing where
 
-import CheckM
-import qualified AbsGFC as C
-import GFC
-import MkGFC (trExp) ----
-import CMacros
-import MMacros (refreshMetas)
-import Linear
-import Str
-import CF
-import CFIdent
-import Ident
-import TypeCheck
-import Values
+import GF.Infra.CheckM
+import qualified GF.Canon.AbsGFC as C
+import GF.Canon.GFC
+import GF.Canon.MkGFC (trExp) ----
+import GF.Canon.CMacros
+import GF.Grammar.MMacros (refreshMetas)
+import GF.UseGrammar.Linear
+import GF.Data.Str
+import GF.CF.CF
+import GF.CF.CFIdent
+import GF.Infra.Ident
+import GF.Grammar.TypeCheck
+import GF.Grammar.Values
 --import CFMethod
-import Tokenize
-import Profile
-import Option
-import Custom
-import ShellState
+import GF.UseGrammar.Tokenize
+import GF.CF.Profile
+import GF.Infra.Option
+import GF.UseGrammar.Custom
+import GF.Compile.ShellState
 
-import PPrCF (prCFTree)
+import GF.CF.PPrCF (prCFTree)
 import qualified GF.OldParsing.ParseGFC as NewOld -- OBSOLETE
-import qualified GF.NewParsing.GFC as New
+import qualified GF.Parsing.GFC as New
 
-import Operations
+import GF.Data.Operations
 
-import List (nub)
-import Monad (liftM)
+import Data.List (nub)
+import Control.Monad (liftM)
 
 -- AR 26/1/2000 -- 8/4 -- 28/1/2001 -- 9/12/2002
 

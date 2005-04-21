@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/15 17:18:52 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.21 $
+-- > CVS $Date: 2005/04/21 16:22:39 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.22 $
 --
 -- Decide what files to read as function of dependencies and time stamps.
 --
@@ -18,7 +18,7 @@
 -- and @file.gfc@ or @file.gfr@ otherwise.
 -----------------------------------------------------------------------------
 
-module ReadFiles (-- * Heading 1
+module GF.Infra.ReadFiles (-- * Heading 1
 		  getAllFiles,fixNewlines,ModName,getOptionsFromFile,
 		  -- * Heading 2
 		  gfcFile,gfFile,gfrFile,isGFC,resModName,isOldFile
@@ -26,15 +26,15 @@ module ReadFiles (-- * Heading 1
 
 import Arch (selectLater, modifiedFiles, ModTime, getModTime,laterModTime)
 
-import Option
-import Operations
-import UseIO
+import GF.Infra.Option
+import GF.Data.Operations
+import GF.Infra.UseIO
 
 import System
-import Char
-import Monad
-import List
-import Directory
+import Data.Char
+import Control.Monad
+import Data.List
+import System.Directory
 
 type ModName = String
 type ModEnv  = [(ModName,ModTime)]

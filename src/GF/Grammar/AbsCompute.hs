@@ -5,31 +5,31 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:12 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:22:18 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- computation in abstract syntax w.r.t. explicit definitions.
 --
 -- old GF computation; to be updated
 -----------------------------------------------------------------------------
 
-module AbsCompute (LookDef, 
+module GF.Grammar.AbsCompute (LookDef,
 		   compute, 
 		   computeAbsTerm, 
 		   computeAbsTermIn, 
 		   beta
 		  ) where
 
-import Operations
+import GF.Data.Operations
 
-import Abstract
-import PrGrammar
-import LookAbs
-import PatternMatch
-import Compute
+import GF.Grammar.Abstract
+import GF.Grammar.PrGrammar
+import GF.Grammar.LookAbs
+import GF.Grammar.PatternMatch
+import GF.Grammar.Compute
 
-import Monad (liftM, liftM2)
+import Control.Monad (liftM, liftM2)
 
 compute :: GFCGrammar -> Exp -> Err Exp
 compute = computeAbsTerm

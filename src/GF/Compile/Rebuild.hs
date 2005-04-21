@@ -5,25 +5,25 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/15 17:18:51 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/04/21 16:21:44 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.12 $
 --
 -- Rebuild a source module from incomplete and its with-instance.
 -----------------------------------------------------------------------------
 
-module Rebuild (rebuildModule) where
+module GF.Compile.Rebuild (rebuildModule) where
 
-import Grammar
-import ModDeps
-import PrGrammar
-import Lookup
-import Extend
-import Macros
+import GF.Grammar.Grammar
+import GF.Compile.ModDeps
+import GF.Grammar.PrGrammar
+import GF.Grammar.Lookup
+import GF.Compile.Extend
+import GF.Grammar.Macros
 
-import Ident
-import Modules
-import Operations
+import GF.Infra.Ident
+import GF.Infra.Modules
+import GF.Data.Operations
 
 -- | rebuilding instance + interface, and "with" modules, prior to renaming. 
 -- AR 24/10/2003
