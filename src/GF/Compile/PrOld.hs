@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:09 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/04/21 16:21:44 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.8 $
 --
 -- a hack to print gf2 into gf1 readable files
 -- Works only for canonical grammars, printed into GFC. Otherwise we would have
@@ -15,21 +15,21 @@
 -- --- printnames are not preserved, nor are lindefs
 -----------------------------------------------------------------------------
 
-module PrOld (printGrammarOld, stripTerm) where
+module GF.Compile.PrOld (printGrammarOld, stripTerm) where
 
-import PrGrammar
-import CanonToGrammar
-import qualified GFC
-import Grammar
-import Ident
-import Macros
-import Modules
-import qualified PrintGF as P
-import GrammarToSource
+import GF.Grammar.PrGrammar
+import GF.Canon.CanonToGrammar
+import qualified GF.Canon.GFC as GFC
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Grammar.Macros
+import GF.Infra.Modules
+import qualified GF.Source.PrintGF as P
+import GF.Source.GrammarToSource
 
-import List
-import Operations
-import UseIO
+import Data.List
+import GF.Data.Operations
+import GF.Infra.UseIO
 
 printGrammarOld :: GFC.CanonGrammar -> String
 printGrammarOld gr = err id id $ do

@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 12:49:44 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:21:56 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- All possible instantiations of different grammar formats used in conversion from GFC
 -----------------------------------------------------------------------------
@@ -14,9 +14,9 @@
 
 module GF.Conversion.Types where
 
-import qualified Ident   (Ident, wildIdent, isWildIdent)
-import qualified AbsGFC  (CIdent(..))
-import qualified Grammar (Term)
+import qualified GF.Infra.Ident as Ident (Ident, wildIdent, isWildIdent)
+import qualified GF.Canon.AbsGFC as AbsGFC (CIdent(..))
+import qualified GF.Grammar.Grammar as Grammar (Term)
 
 import GF.Formalism.GCFG
 import GF.Formalism.SimpleGFC
@@ -26,7 +26,7 @@ import GF.Formalism.Utilities
 import GF.Infra.Print
 import GF.Data.Assoc
 
-import Monad (foldM)
+import Control.Monad (foldM)
 
 ----------------------------------------------------------------------
 -- * basic (leaf) types

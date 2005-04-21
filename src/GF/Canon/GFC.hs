@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 20:09:19 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/04/21 16:21:22 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.12 $
 --
 -- canonical GF. AR 10\/9\/2002 -- 9\/5\/2003 -- 21\/9
 -----------------------------------------------------------------------------
 
-module GFC (Context,
+module GF.Canon.GFC (Context,
 	    CanonGrammar,
 	    CanonModInfo,
 	    CanonModule,
@@ -24,17 +24,17 @@ module GFC (Context,
 	    setFlag
 	   ) where
 
-import AbsGFC
-import PrintGFC
-import qualified Abstract as A
+import GF.Canon.AbsGFC
+import GF.Canon.PrintGFC
+import qualified GF.Grammar.Abstract as A
 
-import Ident
-import Option
-import Zipper
-import Operations
-import qualified Modules as M
+import GF.Infra.Ident
+import GF.Infra.Option
+import GF.Data.Zipper
+import GF.Data.Operations
+import qualified GF.Infra.Modules as M
 
-import Char
+import Data.Char
 import Control.Arrow (first)
 
 type Context = [(Ident,Exp)]

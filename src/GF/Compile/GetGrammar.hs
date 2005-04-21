@@ -5,42 +5,42 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:08 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.14 $
+-- > CVS $Date: 2005/04/21 16:21:37 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.15 $
 --
 -- this module builds the internal GF grammar that is sent to the type checker
 -----------------------------------------------------------------------------
 
-module GetGrammar (getSourceModule, getOldGrammar, getCFGrammar, getEBNFGrammar,
+module GF.Compile.GetGrammar (getSourceModule, getOldGrammar, getCFGrammar, getEBNFGrammar,
 		   err2err
 		  ) where
 
-import Operations
-import qualified ErrM as E ----
+import GF.Data.Operations
+import qualified GF.Data.ErrM as E ----
 
-import UseIO
-import Grammar
-import Modules
-import PrGrammar
-import qualified AbsGF as A
-import SourceToGrammar
+import GF.Infra.UseIO
+import GF.Grammar.Grammar
+import GF.Infra.Modules
+import GF.Grammar.PrGrammar
+import qualified GF.Source.AbsGF as A
+import GF.Source.SourceToGrammar
 ---- import Macros
 ---- import Rename
-import Option
+import GF.Infra.Option
 --- import Custom
-import ParGF
-import qualified LexGF as L
+import GF.Source.ParGF
+import qualified GF.Source.LexGF as L
 
-import PPrCF
-import CFtoGrammar
-import EBNF
+import GF.CF.PPrCF
+import GF.CF.CFtoGrammar
+import GF.CF.EBNF
 
-import ReadFiles ----
+import GF.Infra.ReadFiles ----
 
-import Char (toUpper)
-import List (nub)
-import Monad (foldM)
+import Data.Char (toUpper)
+import Data.List (nub)
+import Control.Monad (foldM)
 
 getSourceModule :: FilePath -> IOE SourceModule
 getSourceModule file = do

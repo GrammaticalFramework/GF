@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:53 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:22:46 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- All possible instantiations of different grammar formats used for parsing
 --
@@ -33,8 +33,8 @@ module GF.OldParsing.GrammarTypes
      (++.), (++!)
     ) where
 
-import Ident (Ident(..))
-import AbsGFC
+import GF.Infra.Ident (Ident(..))
+import GF.Canon.AbsGFC
 -- import qualified GF.OldParsing.FiniteTypes.Calc as Fin
 import qualified GF.OldParsing.CFGrammar as CFG
 import qualified GF.OldParsing.MCFGrammar as MCFG

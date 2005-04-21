@@ -5,57 +5,57 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/12 15:20:29 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.31 $
+-- > CVS $Date: 2005/04/21 16:21:03 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.32 $
 --
 -- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 -----------------------------------------------------------------------------
 
-module API where
+module GF.API where
 
-import qualified AbsGF as GF
-import qualified AbsGFC as A
-import qualified Rename as R
-import GetTree
-import GFC
+import qualified GF.Source.AbsGF as GF
+import qualified GF.Canon.AbsGFC as A
+import qualified GF.Compile.Rename as R
+import GF.UseGrammar.GetTree
+import GF.Canon.GFC
 --- import qualified Values as V
-import Values
+import GF.Grammar.Values
 
 -----import GetGrammar
-import Compile
-import IOGrammar
-import Linear
-import Parsing
-import Morphology
-import PPrCF
-import CFIdent
-import PGrammar
-import Randomized (mkRandomTree)
+import GF.Compile.Compile
+import GF.API.IOGrammar
+import GF.UseGrammar.Linear
+import GF.UseGrammar.Parsing
+import GF.UseGrammar.Morphology
+import GF.CF.PPrCF
+import GF.CF.CFIdent
+import GF.Compile.PGrammar
+import GF.UseGrammar.Randomized (mkRandomTree)
 
-import MMacros
-import qualified Macros as M
-import TypeCheck
-import CMacros
-import Transfer
-import qualified Generate as Gen
+import GF.Grammar.MMacros
+import qualified GF.Grammar.Macros as M
+import GF.Grammar.TypeCheck
+import GF.Canon.CMacros
+import GF.UseGrammar.Transfer
+import qualified GF.UseGrammar.Generate as Gen
 
-import Text (untokWithXML)
-import Option
-import Custom
-import ShellState
-import Linear
-import GFC
-import qualified Grammar as G
-import Modules
-import PrGrammar
-import qualified Compute as Co
-import qualified Ident as I
-import qualified GrammarToCanon as GC
-import qualified CanonToGrammar as CG
-import qualified MkGFC as MC
+import GF.Text.Text (untokWithXML)
+import GF.Infra.Option
+import GF.UseGrammar.Custom
+import GF.Compile.ShellState
+import GF.UseGrammar.Linear
+import GF.Canon.GFC
+import qualified GF.Grammar.Grammar as G
+import GF.Infra.Modules
+import GF.Grammar.PrGrammar
+import qualified GF.Grammar.Compute as Co
+import qualified GF.Infra.Ident as I
+import qualified GF.Compile.GrammarToCanon as GC
+import qualified GF.Canon.CanonToGrammar as CG
+import qualified GF.Canon.MkGFC as MC
 
-import Editing
+import GF.UseGrammar.Editing
 
 ----import GrammarToXML 
 
@@ -63,13 +63,13 @@ import Editing
 
 import Arch (myStdGen)
 
-import UTF8
-import Operations
-import UseIO
-import Zipper
+import GF.Text.UTF8
+import GF.Data.Operations
+import GF.Infra.UseIO
+import GF.Data.Zipper
 
-import List (nub)
-import Monad (liftM)
+import Data.List (nub)
+import Control.Monad (liftM)
 import System (system)
 
 type GFGrammar = StateGrammar

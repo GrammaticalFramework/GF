@@ -5,23 +5,23 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:13 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:22:27 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Refresh (refreshTerm, refreshTermN,
+module GF.Grammar.Refresh (refreshTerm, refreshTermN,
 		refreshModule
 	       ) where
 
-import Operations
-import Grammar
-import Ident
-import Modules
-import Macros
-import Monad
+import GF.Data.Operations
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Infra.Modules
+import GF.Grammar.Macros
+import Control.Monad
 
 refreshTerm :: Term -> Err Term
 refreshTerm = refreshTermN 0

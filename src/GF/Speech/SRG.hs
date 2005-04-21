@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/14 18:38:36 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/04/21 16:23:32 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.13 $
 --
 -- Representation of, conversion to, and utilities for 
 -- printing of a general Speech Recognition Grammar. 
@@ -18,9 +18,9 @@
 -- FIXME: figure out name prefix from grammar name
 -----------------------------------------------------------------------------
 
-module SRG where
+module GF.Speech.SRG where
 
-import Ident
+import GF.Infra.Ident
 -- import GF.OldParsing.CFGrammar
 -- import GF.OldParsing.Utilities (Symbol(..))
 -- import GF.OldParsing.GrammarTypes
@@ -29,8 +29,8 @@ import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..))
 import GF.Conversion.Types
 import GF.Infra.Print
-import TransformCFG
-import Option
+import GF.Speech.TransformCFG
+import GF.Infra.Option
 
 import Data.List
 import Data.Maybe (fromMaybe)

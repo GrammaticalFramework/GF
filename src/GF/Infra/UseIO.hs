@@ -5,22 +5,23 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 18:08:58 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.10 $
+-- > CVS $Date: 2005/04/21 16:22:40 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.11 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module UseIO where
+module GF.Infra.UseIO where
 
-import Operations
+import GF.Data.Operations
 import Arch (prCPU)
-import Option
+import GF.Infra.Option
 
-import IO
-import System
-import Monad
+import System.IO
+import System.IO.Error
+import System.Environment
+import Control.Monad
 
 putShow' :: Show a => (c -> a) -> c -> IO ()
 putShow' f = putStrLn . show . length . show . f

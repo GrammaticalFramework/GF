@@ -5,58 +5,58 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/25 15:35:48 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.34 $
+-- > CVS $Date: 2005/04/21 16:21:04 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.35 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
 
-module Shell where
+module GF.Shell where
 
 --- abstract away from these?
-import Str
-import qualified Grammar as G
-import qualified Ident as I
-import qualified Compute as Co
-import qualified CheckGrammar as Ch
-import qualified Lookup as L
-import qualified GFC
-import qualified Look
-import qualified CMacros
-import qualified GrammarToCanon
-import Values
-import GetTree
+import GF.Data.Str
+import qualified GF.Grammar.Grammar as G
+import qualified GF.Infra.Ident as I
+import qualified GF.Grammar.Compute as Co
+import qualified GF.Compile.CheckGrammar as Ch
+import qualified GF.Grammar.Lookup as L
+import qualified GF.Canon.GFC as GFC
+import qualified GF.Canon.Look as Look
+import qualified GF.Canon.CMacros as CMacros
+import qualified GF.Compile.GrammarToCanon as GrammarToCanon
+import GF.Grammar.Values
+import GF.UseGrammar.GetTree
 
-import ShellCommands
+import GF.Shell.ShellCommands
 
-import VisualizeGrammar (visualizeCanonGrammar, visualizeSourceGrammar)
-import API
-import IOGrammar
-import Compile
+import GF.Visualization.VisualizeGrammar (visualizeCanonGrammar, visualizeSourceGrammar)
+import GF.API
+import GF.API.IOGrammar
+import GF.Compile.Compile
 ---- import GFTex
-import TeachYourself -- also a subshell
+import GF.Shell.TeachYourself -- also a subshell
 
-import Randomized ---
-import Editing (goFirstMeta) ---
+import GF.UseGrammar.Randomized ---
+import GF.UseGrammar.Editing (goFirstMeta) ---
 
-import ShellState
-import Option
-import Information
-import HelpFile
-import PrOld
-import PrGrammar
+import GF.Compile.ShellState
+import GF.Infra.Option
+import GF.UseGrammar.Information
+import GF.Shell.HelpFile
+import GF.Compile.PrOld
+import GF.Grammar.PrGrammar
 
-import Monad (foldM,liftM)
+import Control.Monad (foldM,liftM)
 import System (system)
-import Random (newStdGen) ----
-import Zipper ----
+import System.Random (newStdGen) ----
+import GF.Data.Zipper ----
 
-import Operations
-import UseIO
-import UTF8 (encodeUTF8)
+import GF.Data.Operations
+import GF.Infra.UseIO
+import GF.Text.UTF8 (encodeUTF8)
 
-import VisualizeGrammar (visualizeSourceGrammar)
+import GF.Visualization.VisualizeGrammar (visualizeSourceGrammar)
 
 ---- import qualified GrammarToGramlet as Gr
 ---- import qualified GrammarToCanonXML2 as Canon

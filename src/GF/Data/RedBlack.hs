@@ -5,14 +5,14 @@
 -- Stability   : Stable
 -- Portability : Haskell 98
 --
--- > CVS $Date: 2005/02/18 19:21:15 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:22:07 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- Modified version of Osanaki's implementation.
 -----------------------------------------------------------------------------
 
-module RedBlack (
+module GF.Data.RedBlack (
                 emptyTree,
 		isEmpty,		
 		Tree,

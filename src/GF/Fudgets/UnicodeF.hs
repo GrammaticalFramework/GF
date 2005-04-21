@@ -5,18 +5,18 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:16 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:22:17 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module UnicodeF (fudlogueWriteU) where
+module GF.Fudgets.UnicodeF (fudlogueWriteU) where
 import Fudgets
 
-import Operations
-import Unicode
+import GF.Data.Operations
+import GF.Text.Unicode
 
 -- AR 12/4/2000, 18/9/2001 (added font parameter)
 

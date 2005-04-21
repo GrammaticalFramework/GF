@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 12:49:45 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.25 $
+-- > CVS $Date: 2005/04/21 16:22:37 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.26 $
 --
 -- Options and flags used in GF shell commands and files.
 --
@@ -18,10 +18,10 @@
 --   - The constructor 'Opts' us udes in "API", "Shell" and "ShellCommands"
 -----------------------------------------------------------------------------
 
-module Option where
+module GF.Infra.Option where
 
-import List (partition)
-import Char (isDigit)
+import Data.List (partition)
+import Data.Char (isDigit)
 
 -- * all kinds of options, to be kept abstract
 

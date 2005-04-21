@@ -4,26 +4,26 @@
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/04/16 05:40:48 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:21:04 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GFModes (gfInteract, gfBatch, batchCompile) where
+module GF.GFModes (gfInteract, gfBatch, batchCompile) where
 
-import Operations
-import UseIO
-import Option
-import ShellState
-import ShellCommands
-import Shell
-import CommandL (execCommandHistory)
-import SubShell
-import PShell
-import JGF
-import Char (isSpace)
+import GF.Data.Operations
+import GF.Infra.UseIO
+import GF.Infra.Option
+import GF.Compile.ShellState
+import GF.Shell.ShellCommands
+import GF.Shell
+import GF.Shell.CommandL (execCommandHistory)
+import GF.Shell.SubShell
+import GF.Shell.PShell
+import GF.Shell.JGF
+import Data.Char (isSpace)
 
 -- separated from GF Main 24/6/2003
 

@@ -5,15 +5,15 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:54 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:22:48 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- Definitions of multiple context-free grammars,
 -- parser information and chart conversion
 -----------------------------------------------------------------------------
 
-module GF.OldParsing.MCFGrammar 
+module GF.OldParsing.MCFGrammar
     (-- * Type definitions
      Grammar,
      Rule(..),

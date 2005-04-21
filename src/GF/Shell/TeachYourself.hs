@@ -5,26 +5,26 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:37 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:23:24 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- translation and morphology quiz. AR 10\/5\/2000 -- 12\/4\/2002
 -----------------------------------------------------------------------------
 
-module TeachYourself where
+module GF.Shell.TeachYourself where
 
-import ShellState
-import API
-import Linear
-import PrGrammar
+import GF.Compile.ShellState
+import GF.API
+import GF.UseGrammar.Linear
+import GF.Grammar.PrGrammar
 
-import Option
+import GF.Infra.Option
 import Arch (myStdGen)
-import Operations
-import UseIO
+import GF.Data.Operations
+import GF.Infra.UseIO
 
-import Random --- (randoms)  --- bad import for hbc
+import System.Random --- (randoms) --- bad import for hbc
 import System
 
 -- translation and morphology quiz. AR 10/5/2000 -- 12/4/2002

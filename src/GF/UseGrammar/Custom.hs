@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 20:09:19 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.57 $
+-- > CVS $Date: 2005/04/21 16:23:44 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.58 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -25,48 +25,48 @@
 --  - additions are made to the end of the database
 -----------------------------------------------------------------------------
 
-module Custom where
+module GF.UseGrammar.Custom where
 
-import Operations
-import Text
-import Tokenize
-import Values
-import qualified Grammar as G
-import qualified AbsGFC as A
-import qualified GFC as C
-import qualified AbsGF as GF
-import qualified MMacros as MM
-import AbsCompute
-import TypeCheck
-import Generate
+import GF.Data.Operations
+import GF.Text.Text
+import GF.UseGrammar.Tokenize
+import GF.Grammar.Values
+import qualified GF.Grammar.Grammar as G
+import qualified GF.Canon.AbsGFC as A
+import qualified GF.Canon.GFC as C
+import qualified GF.Source.AbsGF as GF
+import qualified GF.Grammar.MMacros as MM
+import GF.Grammar.AbsCompute
+import GF.Grammar.TypeCheck
+import GF.UseGrammar.Generate
 ------import Compile
-import ShellState
-import Editing
-import Paraphrases
-import Option
-import CF
-import CFIdent
+import GF.Compile.ShellState
+import GF.UseGrammar.Editing
+import GF.UseGrammar.Paraphrases
+import GF.Infra.Option
+import GF.CF.CF
+import GF.CF.CFIdent
 
-import CanonToGrammar
-import PPrCF
-import PrLBNF
-import PrGrammar
-import PrOld
-import MkGFC
-import CFtoSRG
-import PrGSL (gslPrinter)
-import PrJSGF (jsgfPrinter)
+import GF.Canon.CanonToGrammar
+import GF.CF.PPrCF
+import GF.CF.PrLBNF
+import GF.Grammar.PrGrammar
+import GF.Compile.PrOld
+import GF.Canon.MkGFC
+import GF.CF.CFtoSRG
+import GF.Speech.PrGSL (gslPrinter)
+import GF.Speech.PrJSGF (jsgfPrinter)
 
-import Zipper
+import GF.Data.Zipper
 
-import Morphology
-import GrammarToHaskell
+import GF.UseGrammar.Morphology
+import GF.API.GrammarToHaskell
 -----import GrammarToCanon (showCanon, showCanonOpt)
 -----import qualified GrammarToGFC as GFC
 
 -- the cf parsing algorithms
-import ChartParser -- OBSOLETE
-import qualified GF.NewParsing.CF as PCF
+import GF.CF.ChartParser -- OBSOLETE
+import qualified GF.Parsing.CF as PCF
 import qualified GF.OldParsing.ParseCF as PCFOld -- OBSOLETE
 
 -- grammar conversions -- peb 19/4-04
@@ -76,34 +76,34 @@ import qualified GF.Printing.PrintParser as PrtOld -- OBSOLETE
 import qualified GF.Infra.Print as Prt
 import qualified GF.Conversion.GFC as Cnv
 
-import GFC
-import qualified MkGFC as MC
-import PrintCFGrammar (prCanonAsCFGM)
-import VisualizeGrammar (visualizeCanonGrammar, visualizeSourceGrammar)
+import GF.Canon.GFC
+import qualified GF.Canon.MkGFC as MC
+import GF.CFGM.PrintCFGrammar (prCanonAsCFGM)
+import GF.Visualization.VisualizeGrammar (visualizeCanonGrammar, visualizeSourceGrammar)
 
-import MyParser
+import GF.API.MyParser
 
-import UseIO
+import GF.Infra.UseIO
 
-import Monad
-import Char
+import Control.Monad
+import Data.Char
 
 -- character codings
-import Unicode
-import UTF8 (decodeUTF8)
-import Greek (mkGreek)
-import Arabic (mkArabic)
-import Hebrew (mkHebrew)
-import Russian (mkRussian, mkRusKOI8)
-import Ethiopic (mkEthiopic)
-import Tamil (mkTamil)
-import OCSCyrillic (mkOCSCyrillic)
-import LatinASupplement (mkLatinASupplement)
-import Devanagari (mkDevanagari)
-import Hiragana (mkJapanese)
-import ExtendedArabic (mkArabic0600)
-import ExtendedArabic (mkExtendedArabic)
-import ExtraDiacritics (mkExtraDiacritics)
+import GF.Text.Unicode
+import GF.Text.UTF8 (decodeUTF8)
+import GF.Text.Greek (mkGreek)
+import GF.Text.Arabic (mkArabic)
+import GF.Text.Hebrew (mkHebrew)
+import GF.Text.Russian (mkRussian, mkRusKOI8)
+import GF.Text.Ethiopic (mkEthiopic)
+import GF.Text.Tamil (mkTamil)
+import GF.Text.OCSCyrillic (mkOCSCyrillic)
+import GF.Text.LatinASupplement (mkLatinASupplement)
+import GF.Text.Devanagari (mkDevanagari)
+import GF.Text.Hiragana (mkJapanese)
+import GF.Text.ExtendedArabic (mkArabic0600)
+import GF.Text.ExtendedArabic (mkExtendedArabic)
+import GF.Text.ExtraDiacritics (mkExtraDiacritics)
 
 -- minimal version also used in Hugs. AR 2/12/2002. 
 

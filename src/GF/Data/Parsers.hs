@@ -5,16 +5,16 @@
 -- Stability   : Almost Obsolete
 -- Portability : Haskell 98
 --
--- > CVS $Date: 2005/02/24 11:46:35 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:22:06 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- some parser combinators a la Wadler and Hutton.
 -- no longer used in many places in GF
 -- (only used in module "EBNF")
 -----------------------------------------------------------------------------
 
-module Parsers (-- * Main types and functions
+module GF.Data.Parsers (-- * Main types and functions
 		Parser, parseResults, parseResultErr,
 		-- * Basic combinators (on any token type)
 		(...), (.>.), (|||), (+||), literal, (***),
@@ -31,8 +31,8 @@ module Parsers (-- * Main types and functions
 		pQuotedString, pIntc
 	       ) where
 
-import Operations
-import Char
+import GF.Data.Operations
+import Data.Char
 
 
 infixr 2 |||, +||

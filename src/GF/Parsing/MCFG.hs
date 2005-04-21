@@ -4,26 +4,26 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 12:49:45 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Date: 2005/04/21 16:23:07 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.3 $
 --
 -- MCFG parsing
 -----------------------------------------------------------------------------
 
-module GF.NewParsing.MCFG
-    (parseMCF, module GF.NewParsing.MCFG.PInfo) where
+module GF.Parsing.MCFG
+    (parseMCF, module GF.Parsing.MCFG.PInfo) where
 
-import Operations (Err(..))
+import GF.Data.Operations (Err(..))
 
 import GF.Formalism.Utilities
 import GF.Formalism.GCFG
 import GF.Formalism.MCFG
-import GF.NewParsing.MCFG.PInfo
+import GF.Parsing.MCFG.PInfo
 
-import qualified GF.NewParsing.MCFG.Naive as Naive
-import qualified GF.NewParsing.MCFG.Active as Active
-import qualified GF.NewParsing.MCFG.Range as Range (makeRange)
+import qualified GF.Parsing.MCFG.Naive as Naive
+import qualified GF.Parsing.MCFG.Active as Active
+import qualified GF.Parsing.MCFG.Range as Range (makeRange)
 
 ----------------------------------------------------------------------
 -- parsing

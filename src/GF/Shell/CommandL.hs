@@ -5,32 +5,32 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/10 11:14:11 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.15 $
+-- > CVS $Date: 2005/04/21 16:23:19 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.16 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module CommandL where
+module GF.Shell.CommandL where
 
-import Operations
-import UseIO
+import GF.Data.Operations
+import GF.Infra.UseIO
 
-import CMacros
-import Values (Tree)
+import GF.Canon.CMacros
+import GF.Grammar.Values (Tree)
 
-import GetTree
-import ShellState
-import Option
-import Session
-import Commands
+import GF.UseGrammar.GetTree
+import GF.Compile.ShellState
+import GF.Infra.Option
+import GF.UseGrammar.Session
+import GF.Shell.Commands
 
-import Char
-import List (intersperse)
-import Monad (foldM)
+import Data.Char
+import Data.List (intersperse)
+import Control.Monad (foldM)
 
-import UTF8
+import GF.Text.UTF8
 
 -- | a line-based shell
 initEditLoop :: CEnv -> IO () -> IO ()

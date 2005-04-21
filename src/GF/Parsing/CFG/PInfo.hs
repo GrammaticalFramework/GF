@@ -4,14 +4,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:33 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:23:10 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- CFG parsing, parser information
 -----------------------------------------------------------------------------
 
-module GF.NewParsing.CFG.PInfo
+module GF.Parsing.CFG.PInfo
     (CFParser, CFPInfo(..), buildCFPInfo) where
 
 import GF.System.Tracing

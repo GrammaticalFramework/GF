@@ -5,22 +5,22 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:06 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:21:23 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GetGFC (getCanonModule, getCanonGrammar) where
+module GF.Canon.GetGFC (getCanonModule, getCanonGrammar) where
 
-import Operations
-import ParGFC
-import GFC
-import MkGFC
-import Modules
-import GetGrammar (err2err) ---
-import UseIO
+import GF.Data.Operations
+import GF.Canon.ParGFC
+import GF.Canon.GFC
+import GF.Canon.MkGFC
+import GF.Infra.Modules
+import GF.Compile.GetGrammar (err2err) ---
+import GF.Infra.UseIO
 
 getCanonModule :: FilePath -> IOE CanonModule
 getCanonModule file = do

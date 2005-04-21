@@ -5,33 +5,33 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:50 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.16 $
+-- > CVS $Date: 2005/04/21 16:21:19 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.17 $
 --
 -- Handles printing a CFGrammar in CFGM format.
 -----------------------------------------------------------------------------
 
-module PrintCFGrammar (prCanonAsCFGM) where
+module GF.CFGM.PrintCFGrammar (prCanonAsCFGM) where
 
-import AbsGFC
-import qualified PrintCFG
-import Ident
-import GFC
-import Modules
+import GF.Canon.AbsGFC
+import qualified GF.CFGM.PrintCFG as PrintCFG
+import GF.Infra.Ident
+import GF.Canon.GFC
+import GF.Infra.Modules
 
 import qualified GF.Conversion.GFC as Cnv
 import GF.Infra.Print (prt)
 import GF.Formalism.CFG (CFRule(..))
 import qualified GF.Conversion.Types as GT
-import qualified AbsCFG
+import qualified GF.CFGM.AbsCFG as AbsCFG
 import GF.Formalism.Utilities (Symbol(..))
 
-import ErrM
-import qualified Option
+import GF.Data.ErrM
+import qualified GF.Infra.Option as Option
 
-import List (intersperse)
-import Maybe (listToMaybe, maybe)
+import Data.List (intersperse)
+import Data.Maybe (listToMaybe, maybe)
 
 -- | FIXME: should add an Options argument,
 -- to be able to decide which CFG conversion one wants to use

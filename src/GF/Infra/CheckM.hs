@@ -5,24 +5,24 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:13 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:22:33 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module CheckM (Check,
+module GF.Infra.CheckM (Check,
 	       checkError, checkCond, checkWarn, checkUpdate, checkInContext,
 	       checkUpdates, checkReset, checkResets, checkGetContext, 
 	       checkLookup, checkStart, checkErr, checkVal, checkIn, 
 	       prtFail
 	      ) where
 
-import Operations
-import Grammar
-import Ident
-import PrGrammar
+import GF.Data.Operations
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Grammar.PrGrammar
 
 -- | the strings are non-fatal warnings
 type Check a = STM (Context,[String]) a

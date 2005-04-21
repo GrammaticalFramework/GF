@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:49 $
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:22:00 $
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- Backtracking state monad, with r\/o environment
 -----------------------------------------------------------------------------
@@ -29,7 +29,7 @@ module GF.Data.BacktrackM ( -- * the backtracking state monad
 		    finalStates
 		  ) where
 
-import Monad
+import Control.Monad
 
 ------------------------------------------------------------
 -- type declarations

@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:32 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:21:57 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- Converting SimpleGFC grammars to MCFG grammars, nondeterministically.
 -- Afterwards, the grammar has to be extended with coercion functions,
@@ -18,13 +18,13 @@
 -----------------------------------------------------------------------------
 
 
-module GF.Conversion.SimpleToMCFG.Nondet 
+module GF.Conversion.SimpleToMCFG.Nondet
     (convertGrammar) where
 
 import GF.System.Tracing
 import GF.Infra.Print
 
-import Monad
+import Control.Monad
 
 import GF.Formalism.Utilities
 import GF.Formalism.GCFG 

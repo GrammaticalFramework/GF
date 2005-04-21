@@ -5,18 +5,18 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:14 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:22:02 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- AR 8-11-2003, using Markus Forsberg's implementation of Huet's @unglue@
 -----------------------------------------------------------------------------
 
-module Glue (decomposeSimple) where
+module GF.Data.Glue (decomposeSimple) where
 
-import Trie2
-import Operations
-import List
+import GF.Data.Trie2
+import GF.Data.Operations
+import Data.List
 
 decomposeSimple :: Trie Char a -> [Char] -> Err [[Char]]
 decomposeSimple t s = do

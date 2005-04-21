@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:12 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/04/21 16:22:22 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.13 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module LookAbs (GFCGrammar,
+module GF.Grammar.LookAbs (GFCGrammar,
 		lookupAbsDef,
 		lookupFunType,
 		lookupCatContext,
@@ -31,15 +31,15 @@ module LookAbs (GFCGrammar,
 		lookupCatContextSrc
 	       ) where
 
-import Operations
-import qualified GFC as C
-import Abstract
-import Ident
+import GF.Data.Operations
+import qualified GF.Canon.GFC as C
+import GF.Grammar.Abstract
+import GF.Infra.Ident
 
-import Modules
+import GF.Infra.Modules
 
-import List (nub)
-import Monad
+import Data.List (nub)
+import Control.Monad
 
 type GFCGrammar = C.CanonGrammar
 

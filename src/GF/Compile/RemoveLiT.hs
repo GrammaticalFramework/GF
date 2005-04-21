@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:09 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:21:45 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- remove obsolete (Lin C) expressions before doing anything else. AR 21/6/2003
 --
@@ -16,17 +16,17 @@
 -- The procedure is uncertain, if T contains another Lin.
 -----------------------------------------------------------------------------
 
-module RemoveLiT (removeLiT) where
+module GF.Compile.RemoveLiT (removeLiT) where
 
-import Grammar
-import Ident
-import Modules
-import Macros
-import Lookup
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Infra.Modules
+import GF.Grammar.Macros
+import GF.Grammar.Lookup
 
-import Operations
+import GF.Data.Operations
 
-import Monad
+import Control.Monad
 
 removeLiT :: SourceGrammar -> Err SourceGrammar
 removeLiT gr = liftM MGrammar $ mapM (remlModule gr) (modules gr)

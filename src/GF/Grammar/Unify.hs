@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:13 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:22:31 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- (c) Petri Mäenpää & Aarne Ranta, 1998--2001
 --
@@ -15,13 +15,13 @@
 -- the only use is in 'TypeCheck.splitConstraints'
 -----------------------------------------------------------------------------
 
-module Unify (unifyVal) where
+module GF.Grammar.Unify (unifyVal) where
 
-import Abstract
+import GF.Grammar.Abstract
 
-import Operations
+import GF.Data.Operations
 
-import List (partition)
+import Data.List (partition)
 
 unifyVal :: Constraints -> Err (Constraints,MetaSubst)
 unifyVal cs0 = do

@@ -5,19 +5,19 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:07 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:21:28 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- print trees without qualifications
 -----------------------------------------------------------------------------
 
-module PrExp (prExp) where
+module GF.Canon.PrExp (prExp) where
 
-import AbsGFC
-import GFC
+import GF.Canon.AbsGFC
+import GF.Canon.GFC
 
-import Operations
+import GF.Data.Operations
 
 prExp :: Exp -> String
 prExp e = case e of

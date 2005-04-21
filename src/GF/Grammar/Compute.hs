@@ -5,31 +5,31 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/01 21:24:24 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.14 $
+-- > CVS $Date: 2005/04/21 16:22:19 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.15 $
 --
 -- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
 
-module Compute (computeConcrete, computeTerm) where
+module GF.Grammar.Compute (computeConcrete, computeTerm) where
 
-import Operations
-import Grammar
-import Ident
-import Str
-import PrGrammar
-import Modules
-import Macros
-import Lookup
-import Refresh
-import PatternMatch
-import Lockfield (isLockLabel) ----
+import GF.Data.Operations
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Data.Str
+import GF.Grammar.PrGrammar
+import GF.Infra.Modules
+import GF.Grammar.Macros
+import GF.Grammar.Lookup
+import GF.Grammar.Refresh
+import GF.Grammar.PatternMatch
+import GF.Grammar.Lockfield (isLockLabel) ----
 
-import AppPredefined
+import GF.Grammar.AppPredefined
 
-import List (nub,intersperse)
-import Monad (liftM2, liftM)
+import Data.List (nub,intersperse)
+import Control.Monad (liftM2, liftM)
 
 -- | computation of concrete syntax terms into normal form
 -- used mainly for partial evaluation

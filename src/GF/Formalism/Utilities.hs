@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 12:49:44 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:22:14 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- Basic type declarations and functions for grammar formalisms
 -----------------------------------------------------------------------------
@@ -14,9 +14,9 @@
 
 module GF.Formalism.Utilities where
 
-import Monad
-import Array
-import List (groupBy)
+import Control.Monad
+import Data.Array
+import Data.List (groupBy)
 
 import GF.Data.SortedList
 import GF.Data.Assoc

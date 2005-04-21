@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/15 09:45:32 $ 
+-- > CVS $Date: 2005/04/21 16:23:31 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.17 $
+-- > CVS $Revision: 1.18 $
 --
 -- This module prints a CFG as a Nuance GSL 2.0 grammar.
 --
@@ -15,16 +15,16 @@
 -- categories in the grammar
 -----------------------------------------------------------------------------
 
-module PrGSL (gslPrinter) where
+module GF.Speech.PrGSL (gslPrinter) where
 
-import SRG
-import Ident
+import GF.Speech.SRG
+import GF.Infra.Ident
 
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..))
 import GF.Conversion.Types
 import GF.Infra.Print
-import Option
+import GF.Infra.Option
 
 import Data.Char (toUpper,toLower)
 

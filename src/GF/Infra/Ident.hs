@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/15 11:18:07 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:22:35 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Ident (-- * Identifiers
+module GF.Infra.Ident (-- * Identifiers
 	      Ident(..), prIdent,
 	      identC, identV, identA, identAV, identW,
 	      argIdent, strVar, wildIdent, isWildIdent,
@@ -22,7 +22,7 @@ module Ident (-- * Identifiers
 	      lookVar, refVar, refVarPlus
 	     ) where
 
-import Operations
+import GF.Data.Operations
 -- import Monad
 
 

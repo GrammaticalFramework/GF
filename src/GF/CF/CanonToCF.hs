@@ -5,33 +5,33 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/29 11:17:56 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/04/21 16:21:11 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.13 $
 --
 -- AR 27\/1\/2000 -- 3\/12\/2001 -- 8\/6\/2003 
 -----------------------------------------------------------------------------
 
-module CanonToCF (canon2cf) where
+module GF.CF.CanonToCF (canon2cf) where
 
 import GF.System.Tracing -- peb 8/6-04
 
-import Operations
-import Option
-import Ident
-import AbsGFC
-import LookAbs (allBindCatsOf)
-import GFC
-import Values (isPredefCat,cPredefAbs)
-import PrGrammar
-import CMacros
-import qualified Modules as M
-import CF
-import CFIdent
-import Morphology
-import Trie2
-import List (nub,partition)
-import Monad
+import GF.Data.Operations
+import GF.Infra.Option
+import GF.Infra.Ident
+import GF.Canon.AbsGFC
+import GF.Grammar.LookAbs (allBindCatsOf)
+import GF.Canon.GFC
+import GF.Grammar.Values (isPredefCat,cPredefAbs)
+import GF.Grammar.PrGrammar
+import GF.Canon.CMacros
+import qualified GF.Infra.Modules as M
+import GF.CF.CF
+import GF.CF.CFIdent
+import GF.UseGrammar.Morphology
+import GF.Data.Trie2
+import Data.List (nub,partition)
+import Control.Monad
 
 -- | The main function: for a given cnc module 'm', build the CF grammar with all the
 -- rules coming from modules that 'm' extends. The categories are qualified by

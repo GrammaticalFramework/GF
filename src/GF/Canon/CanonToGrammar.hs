@@ -5,28 +5,28 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:06 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/04/21 16:21:21 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.13 $
 --
 -- a decompiler. AR 12/6/2003 -- 19/4/2004
 -----------------------------------------------------------------------------
 
-module CanonToGrammar (canon2sourceGrammar, canon2sourceModule, redFlag) where
+module GF.Canon.CanonToGrammar (canon2sourceGrammar, canon2sourceModule, redFlag) where
 
-import AbsGFC
-import GFC
-import MkGFC
+import GF.Canon.AbsGFC
+import GF.Canon.GFC
+import GF.Canon.MkGFC
 ---import CMacros
-import qualified Modules as M
-import qualified Option  as O
-import qualified Grammar as G
-import qualified Macros  as F
+import qualified GF.Infra.Modules as M
+import qualified GF.Infra.Option as O
+import qualified GF.Grammar.Grammar as G
+import qualified GF.Grammar.Macros as F
 
-import Ident
-import Operations
+import GF.Infra.Ident
+import GF.Data.Operations
 
-import Monad
+import Control.Monad
 
 canon2sourceGrammar :: CanonGrammar -> Err G.SourceGrammar
 canon2sourceGrammar gr = do

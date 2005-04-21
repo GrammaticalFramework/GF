@@ -5,26 +5,26 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:50 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.29 $
+-- > CVS $Date: 2005/04/21 16:23:22 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.30 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
 
-module ShellCommands where
+module GF.Shell.ShellCommands where
 
-import qualified Ident as I
-import ShellState
-import Custom
-import PrGrammar
+import qualified GF.Infra.Ident as I
+import GF.Compile.ShellState
+import GF.UseGrammar.Custom
+import GF.Grammar.PrGrammar
 
-import Option
-import Operations
-import Modules
+import GF.Infra.Option
+import GF.Data.Operations
+import GF.Infra.Modules
 
-import Char (isDigit)
-import Monad (mplus)
+import Data.Char (isDigit)
+import Control.Monad (mplus)
 
 -- shell commands and their options
 -- moved to separate module and added option check: AR 27/5/2004

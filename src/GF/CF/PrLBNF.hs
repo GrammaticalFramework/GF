@@ -5,31 +5,31 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/12 13:01:48 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.9 $
+-- > CVS $Date: 2005/04/21 16:21:14 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.10 $
 --
 -- Printing CF grammars generated from GF as LBNF grammar for BNFC.
 -- AR 26/1/2000 -- 9/6/2003 (PPrCF) -- 8/11/2003 -- 27/9/2004.
 -- With primitive error messaging, by rules and rule tails commented out
 -----------------------------------------------------------------------------
 
-module PrLBNF (prLBNF,prBNF) where
+module GF.CF.PrLBNF (prLBNF,prBNF) where
 
-import CF
-import CFIdent
-import AbsGFC
-import Ident
-import PrGrammar
-import ShellState
-import GFC
-import Look
+import GF.CF.CF
+import GF.CF.CFIdent
+import GF.Canon.AbsGFC
+import GF.Infra.Ident
+import GF.Grammar.PrGrammar
+import GF.Compile.ShellState
+import GF.Canon.GFC
+import GF.Canon.Look
 
-import Operations
-import Modules
+import GF.Data.Operations
+import GF.Infra.Modules
 
-import Char
-import List (nub)
+import Data.Char
+import Data.List (nub)
 
 prLBNF :: Bool -> StateGrammar -> String
 prLBNF new gr = unlines $ pragmas ++ (map (prCFRule cs) rules')

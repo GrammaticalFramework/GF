@@ -4,28 +4,28 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 12:49:44 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:23:06 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- The main parsing module, parsing GFC grammars
 -- by translating to simpler formats, such as PMCFG and CFG
 ----------------------------------------------------------------------
 
-module GF.NewParsing.GFC
+module GF.Parsing.GFC
     (parse, PInfo(..), buildPInfo) where
 
 import GF.System.Tracing 
 import GF.Infra.Print
-import qualified PrGrammar
+import qualified GF.Grammar.PrGrammar as PrGrammar
 
-import Operations (Err(..))
+import GF.Data.Operations (Err(..))
 
-import qualified Grammar 
-import qualified Macros 
-import qualified AbsGFC
-import qualified Ident
-import CFIdent (CFCat, cfCat2Ident, CFTok, wordsCFTok)
+import qualified GF.Grammar.Grammar as Grammar
+import qualified GF.Grammar.Macros as Macros
+import qualified GF.Canon.AbsGFC as AbsGFC
+import qualified GF.Infra.Ident as Ident
+import GF.CF.CFIdent (CFCat, cfCat2Ident, CFTok, wordsCFTok)
 
 import GF.Data.SortedList 
 import GF.Data.Assoc
@@ -36,8 +36,8 @@ import qualified GF.Formalism.GCFG as G
 import qualified GF.Formalism.SimpleGFC as S
 import qualified GF.Formalism.MCFG as M
 import qualified GF.Formalism.CFG as C
-import qualified GF.NewParsing.MCFG as PM
-import qualified GF.NewParsing.CFG as PC
+import qualified GF.Parsing.MCFG as PM
+import qualified GF.Parsing.CFG as PC
 
 ----------------------------------------------------------------------
 -- parsing information

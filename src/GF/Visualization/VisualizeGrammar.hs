@@ -5,21 +5,21 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:23 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/04/21 16:23:54 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.8 $
 --
 -- Print a graph of module dependencies in Graphviz DOT format
 -----------------------------------------------------------------------------
 
-module VisualizeGrammar ( visualizeCanonGrammar, 
+module GF.Visualization.VisualizeGrammar ( visualizeCanonGrammar,
 			  visualizeSourceGrammar
 			) where
 
-import qualified Modules as M
-import GFC
-import Ident
-import Grammar (SourceGrammar)
+import qualified GF.Infra.Modules as M
+import GF.Canon.GFC
+import GF.Infra.Ident
+import GF.Grammar.Grammar (SourceGrammar)
 
 import Data.List (intersperse, nub)
 import Data.Maybe (maybeToList)

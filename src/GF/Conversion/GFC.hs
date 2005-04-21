@@ -4,20 +4,20 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:32 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:21:49 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- All conversions from GFC 
 -----------------------------------------------------------------------------
 
-module GF.Conversion.GFC 
+module GF.Conversion.GFC
     (module GF.Conversion.GFC,
      SGrammar, MGrammar, CGrammar) where
 
-import Option
-import GFC (CanonGrammar)
-import Ident (Ident)
+import GF.Infra.Option
+import GF.Canon.GFC (CanonGrammar)
+import GF.Infra.Ident (Ident)
 import GF.Conversion.Types (CGrammar, MGrammar, EGrammar, SGrammar)
 
 import qualified GF.Conversion.GFCtoSimple as G2S

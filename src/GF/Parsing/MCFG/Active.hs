@@ -1,14 +1,14 @@
 
-module GF.NewParsing.MCFG.Active (parse) where
+module GF.Parsing.MCFG.Active (parse) where
 
-import GF.NewParsing.GeneralChart
+import GF.Data.GeneralDeduction
 import GF.Formalism.GCFG
 import GF.Formalism.MCFG
 import GF.Formalism.Utilities
-import GF.NewParsing.MCFG.Range
-import GF.NewParsing.MCFG.PInfo
+import GF.Parsing.MCFG.Range
+import GF.Parsing.MCFG.PInfo
 import GF.System.Tracing
-import Monad (guard)
+import Control.Monad (guard)
 
 ----------------------------------------------------------------------
 -- * parsing

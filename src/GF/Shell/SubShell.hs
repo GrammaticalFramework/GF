@@ -5,25 +5,25 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:37 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/04/21 16:23:23 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.8 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module SubShell where
+module GF.Shell.SubShell where
 
-import Operations
-import UseIO
-import ShellState
-import Option
-import API
+import GF.Data.Operations
+import GF.Infra.UseIO
+import GF.Compile.ShellState
+import GF.Infra.Option
+import GF.API
 
-import CommandL
+import GF.Shell.CommandL
 import ArchEdit
 
-import List
+import Data.List
 
 -- AR 20/4/2000 -- 12/11/2001
 

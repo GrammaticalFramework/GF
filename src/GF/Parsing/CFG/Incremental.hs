@@ -4,29 +4,29 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:33 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:23:09 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- Incremental chart parsing for CFG
 -----------------------------------------------------------------------------
  
 
-module GF.NewParsing.CFG.Incremental 
+module GF.Parsing.CFG.Incremental
     (parse, Strategy) where
 
 import GF.System.Tracing
 import GF.Infra.Print
 
-import Array
+import Data.Array
 
-import Operations
+import GF.Data.Operations
 import GF.Data.SortedList
 import GF.Data.Assoc
 import GF.Formalism.Utilities
 import GF.Formalism.CFG
-import GF.NewParsing.CFG.PInfo
-import GF.NewParsing.IncrementalChart
+import GF.Parsing.CFG.PInfo
+import GF.Data.IncrementalDeduction
 
 
 -- | parsing strategy: (predict:(BU, TD), filter:(BU, TD))

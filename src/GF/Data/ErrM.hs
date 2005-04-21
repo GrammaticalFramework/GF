@@ -5,15 +5,16 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:14 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:22:00 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- hack for BNFC generated files. AR 21/9/2003
 -----------------------------------------------------------------------------
 
-module ErrM (module Operations
+module GF.Data.ErrM (
+		     module GF.Data.Operations
 	    ) where
 
-import Operations
+import GF.Data.Operations
 

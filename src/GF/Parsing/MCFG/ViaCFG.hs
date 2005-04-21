@@ -8,24 +8,24 @@
 	       Ljunglöf (2004)   
 ------------------------------------------------------------------------------}
 
-module ApproxParse where
+module GF.Parsing.MCFG.ViaCFG where
 
 
 -- Haskell modules
-import List
-import Monad
+import Data.List
+import Control.Monad
 
 -- GF modules 
 import ConvertMCFGtoDecoratedCFG
 import qualified DecoratedCFParser as CFP
 import qualified DecoratedGrammar as CFG
 import Examples
-import GeneralChart
-import qualified MCFGrammar as MCFG 
+import GF.OldParsing.GeneralChart
+import qualified GF.OldParsing.MCFGrammar as MCFG
 import MCFParser
 import Nondet 
 import Parser
-import Range
+import GF.Parsing.MCFG.Range
 
 
 {-- Datatypes -----------------------------------------------------------------

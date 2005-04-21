@@ -5,15 +5,15 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:14 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:23:35 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- Ascii-Unicode decoding for Ethiopian.
 -- Copyright (c) Harald Hammarström 2003 under Gnu General Public License
 -----------------------------------------------------------------------------
 
-module Ethiopic (mkEthiopic) where
+module GF.Text.Ethiopic (mkEthiopic) where
 
 mkEthiopic :: String -> String
 mkEthiopic = digraphWordToUnicode . adHocToDigraphWord

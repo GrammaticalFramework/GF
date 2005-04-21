@@ -4,14 +4,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 12:49:45 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Date: 2005/04/21 16:23:14 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.3 $
 --
 -- MCFG parsing, parser information
 -----------------------------------------------------------------------------
 
-module GF.NewParsing.MCFG.PInfo where
+module GF.Parsing.MCFG.PInfo where
 
 import GF.System.Tracing
 import GF.Infra.Print
@@ -21,7 +21,7 @@ import GF.Formalism.GCFG
 import GF.Formalism.MCFG
 import GF.Data.SortedList
 import GF.Data.Assoc
-import GF.NewParsing.MCFG.Range
+import GF.Parsing.MCFG.Range
 
 ----------------------------------------------------------------------
 -- type declarations

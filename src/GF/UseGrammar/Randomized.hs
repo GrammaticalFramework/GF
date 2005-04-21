@@ -5,24 +5,24 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:39 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/04/21 16:23:51 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.8 $
 --
 -- random generation and refinement. AR 22\/8\/2001.
 -- implemented as sequence of refinement menu selecsions, encoded as integers
 -----------------------------------------------------------------------------
 
-module Randomized where
+module GF.UseGrammar.Randomized where
 
-import Abstract
-import Editing
+import GF.Grammar.Abstract
+import GF.UseGrammar.Editing
 
-import Operations
-import Zipper
+import GF.Data.Operations
+import GF.Data.Zipper
 
 --- import Arch (myStdGen) --- circular for hbc
-import Random --- (mkStdGen, StdGen, randoms) --- bad import for hbc
+import System.Random --- (mkStdGen, StdGen, randoms) --- bad import for hbc
 
 -- random generation and refinement. AR 22/8/2001
 -- implemented as sequence of refinement menu selecsions, encoded as integers

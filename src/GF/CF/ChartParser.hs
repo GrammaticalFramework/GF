@@ -5,29 +5,29 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:50 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.9 $
+-- > CVS $Date: 2005/04/21 16:21:12 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.10 $
 --
 -- Bottom-up Kilbury chart parser from "Pure Functional Parsing", chapter 5.
 -- OBSOLETE -- should use new MCFG parsers instead 
 -----------------------------------------------------------------------------
 
-module ChartParser (chartParser) where
+module GF.CF.ChartParser (chartParser) where
 
 -- import Tracing
 -- import PrintParser
 -- import PrintSimplifiedTerm
 
-import Operations
-import CF
-import CFIdent
-import PPrCF (prCFItem)
+import GF.Data.Operations
+import GF.CF.CF
+import GF.CF.CFIdent
+import GF.CF.PPrCF (prCFItem)
 
-import OrdSet
-import OrdMap2
+import GF.Data.OrdSet
+import GF.Data.OrdMap2
 
-import List (groupBy)
+import Data.List (groupBy)
 
 type Token      = CFTok
 type Name       = CFFun

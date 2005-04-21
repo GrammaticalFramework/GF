@@ -5,16 +5,16 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:12 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/04/21 16:22:23 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.13 $
 --
 -- Lookup in source (concrete and resource) when compiling.
 --
 -- lookup in resource and concrete in compiling; for abstract, use 'Look'
 -----------------------------------------------------------------------------
 
-module Lookup (lookupResDef, 
+module GF.Grammar.Lookup (lookupResDef,
 	       lookupResType, 
 	       lookupParams, 
 	       lookupParamValues, 
@@ -25,13 +25,13 @@ module Lookup (lookupResDef,
 	       opersForType
 	      ) where
 
-import Operations
-import Abstract
-import Modules
-import Lockfield
+import GF.Data.Operations
+import GF.Grammar.Abstract
+import GF.Infra.Modules
+import GF.Grammar.Lockfield
 
-import List (nub)
-import Monad
+import Data.List (nub)
+import Control.Monad
 
 lookupResDef :: SourceGrammar -> Ident -> Ident -> Err Term
 lookupResDef gr = look True where 

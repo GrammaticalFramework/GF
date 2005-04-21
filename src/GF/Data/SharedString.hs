@@ -1,5 +1,5 @@
 
-module SharedString (shareString) where
+module GF.Data.SharedString (shareString) where
 
 import Data.HashTable as H
 import System.IO.Unsafe (unsafePerformIO)

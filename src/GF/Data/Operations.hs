@@ -5,16 +5,16 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/29 11:17:56 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.18 $
+-- > CVS $Date: 2005/04/21 16:22:05 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.19 $
 --
 -- some auxiliary GF operations. AR 19\/6\/1998 -- 6\/2\/2001
 --
 -- Copyright (c) Aarne Ranta 1998-2000, under GNU General Public License (see GPL)
 -----------------------------------------------------------------------------
 
-module Operations (-- * misc functions
+module GF.Data.Operations (-- * misc functions
 		   ifNull, onSnd,
 
 		   -- * the Error monad
@@ -75,9 +75,9 @@ module Operations (-- * misc functions
 
 		  ) where
 
-import Char  (isSpace, toUpper, isSpace, isDigit)
-import List  (nub, sortBy, sort, deleteBy, nubBy)
-import Monad (liftM2, MonadPlus, mzero, mplus)
+import Data.Char (isSpace, toUpper, isSpace, isDigit)
+import Data.List (nub, sortBy, sort, deleteBy, nubBy)
+import Control.Monad (liftM2, MonadPlus, mzero, mplus)
 
 infixr 5 +++
 infixr 5 ++-

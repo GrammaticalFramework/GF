@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/11 13:52:54 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Date: 2005/04/21 16:22:52 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.2 $
 --
 -- Main module for MCFG parsing
 -----------------------------------------------------------------------------
@@ -15,7 +15,7 @@
 
 module GF.OldParsing.ParseMCFG (parse) where
 
-import Char (toLower)
+import Data.Char (toLower)
 import GF.OldParsing.Utilities
 import GF.OldParsing.MCFGrammar
 import qualified GF.OldParsing.ParseMCFG.Basic as PBas

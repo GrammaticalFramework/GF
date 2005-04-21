@@ -5,26 +5,26 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:07 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:21:13 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module EBNF (pEBNFasGrammar) where
+module GF.CF.EBNF (pEBNFasGrammar) where
 
-import Operations
-import Parsers
-import Comments
-import CF
-import CFIdent
-import Grammar
-import PrGrammar
-import CFtoGrammar
-import qualified AbsGF as A
+import GF.Data.Operations
+import GF.Data.Parsers
+import GF.Infra.Comments
+import GF.CF.CF
+import GF.CF.CFIdent
+import GF.Grammar.Grammar
+import GF.Grammar.PrGrammar
+import GF.CF.CFtoGrammar
+import qualified GF.Source.AbsGF as A
 
-import List (nub, partition)
+import Data.List (nub, partition)
 
 -- AR 18/4/2000 - 31/3/2004
 

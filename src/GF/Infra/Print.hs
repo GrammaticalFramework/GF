@@ -4,14 +4,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:49 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Date: 2005/04/21 16:22:38 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.3 $
 --
 -- Pretty-printing
 -----------------------------------------------------------------------------
 
-module GF.Infra.Print 
+module GF.Infra.Print
     (Print(..),
      prtBefore, prtAfter, prtSep, 
      prtBeforeAfter, prtPairList,
@@ -19,15 +19,15 @@ module GF.Infra.Print
     ) where
 
 -- haskell modules:
-import List (intersperse)
-import Char (toUpper)
+import Data.List (intersperse)
+import Data.Char (toUpper)
 -- gf modules:
-import Operations (Err(..))
-import Ident (Ident(..))
-import AbsGFC
-import CF
-import CFIdent
-import qualified PrintGFC as P
+import GF.Data.Operations (Err(..))
+import GF.Infra.Ident (Ident(..))
+import GF.Canon.AbsGFC
+import GF.CF.CF
+import GF.CF.CFIdent
+import qualified GF.Canon.PrintGFC as P
 
 ------------------------------------------------------------
 

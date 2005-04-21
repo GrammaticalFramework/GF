@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:32 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Date: 2005/04/21 16:21:54 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.3 $
 --
 -- Instantiating all types which only have one single element.
 --
@@ -26,7 +26,7 @@ import GF.Conversion.Types
 import GF.Data.SortedList
 import GF.Data.Assoc
 
-import List (mapAccumL)
+import Data.List (mapAccumL)
 
 convertGrammar :: SGrammar -> SGrammar
 convertGrammar grammar = if singles == emptyAssoc then grammar

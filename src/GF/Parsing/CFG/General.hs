@@ -4,14 +4,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:33 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:23:08 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- CFG parsing with a general chart
 -----------------------------------------------------------------------------
 
-module GF.NewParsing.CFG.General
+module GF.Parsing.CFG.General
     (parse, Strategy) where
 
 import GF.System.Tracing
@@ -19,10 +19,10 @@ import GF.Infra.Print
 
 import GF.Formalism.Utilities
 import GF.Formalism.CFG
-import GF.NewParsing.CFG.PInfo
-import GF.NewParsing.GeneralChart 
+import GF.Parsing.CFG.PInfo
+import GF.Data.GeneralDeduction
 import GF.Data.Assoc
-import Monad
+import Control.Monad
 
 parse :: (Ord n, Ord c, Ord t) => Strategy -> CFParser c n t
 parse strategy grammar start = extract .

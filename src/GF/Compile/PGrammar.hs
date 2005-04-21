@@ -5,30 +5,30 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:09 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:21:43 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module PGrammar (pTerm, pTrm, pTrms, 
+module GF.Compile.PGrammar (pTerm, pTrm, pTrms,
 		 pMeta, pzIdent, 
 		 string2ident
 		) where
 
 ---import LexGF
-import ParGF
-import SourceToGrammar
-import Grammar
-import Ident
-import qualified AbsGFC as A
-import qualified GFC as G
-import GetGrammar
-import Macros
-import MMacros
+import GF.Source.ParGF
+import GF.Source.SourceToGrammar
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import qualified GF.Canon.AbsGFC as A
+import qualified GF.Canon.GFC as G
+import GF.Compile.GetGrammar
+import GF.Grammar.Macros
+import GF.Grammar.MMacros
 
-import Operations
+import GF.Data.Operations
 
 pTerm :: String -> Err Term
 pTerm s = do

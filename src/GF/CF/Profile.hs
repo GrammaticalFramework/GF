@@ -5,30 +5,30 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:08 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/04/21 16:21:14 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.8 $
 --
 -- restoring parse trees for discontinuous constituents, bindings, etc. AR 25/1/2001
 -- revised 8/4/2002 for the new profile structure
 -----------------------------------------------------------------------------
 
-module Profile (postParse) where
+module GF.CF.Profile (postParse) where
 
-import AbsGFC
-import GFC
-import qualified Ident as I
-import CMacros
+import GF.Canon.AbsGFC
+import GF.Canon.GFC
+import qualified GF.Infra.Ident as I
+import GF.Canon.CMacros
 ---import MMacros
-import CF
-import CFIdent
-import PPrCF     -- for error msg
-import PrGrammar
+import GF.CF.CF
+import GF.CF.CFIdent
+import GF.CF.PPrCF -- for error msg
+import GF.Grammar.PrGrammar
 
-import Operations
+import GF.Data.Operations
 
-import Monad
-import List (nub)
+import Control.Monad
+import Data.List (nub)
 
 -- | the job is done in two passes: 
 -- 

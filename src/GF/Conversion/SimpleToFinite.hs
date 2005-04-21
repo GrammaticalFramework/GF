@@ -4,14 +4,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/18 14:55:32 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:21:54 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- Calculating the finiteness of each type in a grammar
 -----------------------------------------------------------------------------
 
-module GF.Conversion.SimpleToFinite 
+module GF.Conversion.SimpleToFinite
     (convertGrammar) where
 
 import GF.System.Tracing
@@ -26,7 +26,7 @@ import GF.Data.Assoc
 import GF.Data.BacktrackM
 import GF.Data.Utilities (lookupList)
 
-import Ident (Ident(..))
+import GF.Infra.Ident (Ident(..))
 
 type CnvMonad a = BacktrackM () a
 

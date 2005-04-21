@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:39 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:23:49 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- paraphrases of GF terms. AR 6\/10\/1998 -- 24\/9\/1999 -- 5\/7\/2000 -- 5\/6\/2002
 --
@@ -16,16 +16,16 @@
 -- thus inherited from the old GF. Incomplete and inefficient...
 -----------------------------------------------------------------------------
 
-module Paraphrases (mkParaphrases) where
+module GF.UseGrammar.Paraphrases (mkParaphrases) where
 
-import Abstract
-import PrGrammar
-import LookAbs
-import AbsCompute
+import GF.Grammar.Abstract
+import GF.Grammar.PrGrammar
+import GF.Grammar.LookAbs
+import GF.Grammar.AbsCompute
 
-import Operations
+import GF.Data.Operations
 
-import List (nub)
+import Data.List (nub)
 
 -- paraphrases of GF terms. AR 6/10/1998 -- 24/9/1999 -- 5/7/2000 -- 5/6/2002
 -- Copyright (c) Aarne Ranta 1998--99, under GNU General Public License (see GPL)

@@ -4,24 +4,24 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 12:49:44 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/21 16:23:05 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- CFG parsing
 -----------------------------------------------------------------------------
 
-module GF.NewParsing.CFG 
-    (parseCF, module GF.NewParsing.CFG.PInfo) where
+module GF.Parsing.CFG
+    (parseCF, module GF.Parsing.CFG.PInfo) where
 
-import Operations (Err(..))
+import GF.Data.Operations (Err(..))
 
 import GF.Formalism.Utilities
 import GF.Formalism.CFG
-import GF.NewParsing.CFG.PInfo
+import GF.Parsing.CFG.PInfo
 
-import qualified GF.NewParsing.CFG.Incremental as Inc
-import qualified GF.NewParsing.CFG.General     as Gen
+import qualified GF.Parsing.CFG.Incremental as Inc
+import qualified GF.Parsing.CFG.General as Gen
 
 ----------------------------------------------------------------------
 -- parsing

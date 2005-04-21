@@ -5,51 +5,51 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 18:08:58 $
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.35 $
+-- > CVS $Date: 2005/04/21 16:21:35 $
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.36 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
 
-module Compile (compileModule, compileEnvShSt, compileOne,
+module GF.Compile.Compile (compileModule, compileEnvShSt, compileOne,
 		CompileEnv, TimedCompileEnv
 	       ) where
 
-import Grammar
-import Ident
-import Option
-import PrGrammar
-import Update
-import Lookup
-import Modules
-import ReadFiles
-import ShellState
-import MkResource
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Infra.Option
+import GF.Grammar.PrGrammar
+import GF.Compile.Update
+import GF.Grammar.Lookup
+import GF.Infra.Modules
+import GF.Infra.ReadFiles
+import GF.Compile.ShellState
+import GF.Compile.MkResource
 ---- import MkUnion
 
 -- the main compiler passes
-import GetGrammar
-import Extend
-import Rebuild
-import Rename
-import Refresh
-import CheckGrammar
-import Optimize
-import GrammarToCanon
-import Share
+import GF.Compile.GetGrammar
+import GF.Compile.Extend
+import GF.Compile.Rebuild
+import GF.Compile.Rename
+import GF.Grammar.Refresh
+import GF.Compile.CheckGrammar
+import GF.Compile.Optimize
+import GF.Compile.GrammarToCanon
+import GF.Canon.Share
 
-import qualified CanonToGrammar as CG
+import qualified GF.Canon.CanonToGrammar as CG
 
-import qualified GFC
-import qualified MkGFC
-import GetGFC
+import qualified GF.Canon.GFC as GFC
+import qualified GF.Canon.MkGFC as MkGFC
+import GF.Canon.GetGFC
 
-import Operations
-import UseIO
+import GF.Data.Operations
+import GF.Infra.UseIO
 import Arch
 
-import Monad
+import Control.Monad
 
 -- | environment variable for grammar search path
 gfGrammarPathVar = "GF_LIB_PATH"

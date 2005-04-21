@@ -5,30 +5,30 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/08 15:31:22 $ 
+-- > CVS $Date: 2005/04/21 16:21:21 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.23 $
+-- > CVS $Revision: 1.24 $
 --
 -- Macros for building and analysing terms in GFC concrete syntax.
 --
 -- macros for concrete syntax in GFC that do not need lookup in a grammar
 -----------------------------------------------------------------------------
 
-module CMacros where
+module GF.Canon.CMacros where
 
-import Ident
-import AbsGFC
-import GFC
-import qualified Ident as A ---- no need to qualif? 21/9
-import qualified Values as V
-import qualified MMacros as M
-import PrGrammar
-import Str
+import GF.Infra.Ident
+import GF.Canon.AbsGFC
+import GF.Canon.GFC
+import qualified GF.Infra.Ident as A ---- no need to qualif? 21/9
+import qualified GF.Grammar.Values as V
+import qualified GF.Grammar.MMacros as M
+import GF.Grammar.PrGrammar
+import GF.Data.Str
 
-import Operations
+import GF.Data.Operations
 
-import Char
-import Monad
+import Data.Char
+import Control.Monad
 
 -- | how to mark subtrees, dep. on node, position, whether focus
 type JustMarker = V.TrNode -> [Int] -> Bool -> (String, String)

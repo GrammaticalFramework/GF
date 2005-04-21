@@ -5,24 +5,24 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:36 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:22:15 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- a graphical shell for any kind of GF with Zipper editing. AR 20\/8\/2001
 -----------------------------------------------------------------------------
 
-module CommandF where
+module GF.Fudgets.CommandF where
 
-import Operations
+import GF.Data.Operations
 
-import Session
-import Commands
+import GF.UseGrammar.Session
+import GF.Shell.Commands
 
 import Fudgets
-import FudgetOps
+import GF.Fudgets.FudgetOps
 
-import EventF
+import GF.Fudgets.EventF
 
 -- a graphical shell for any kind of GF with Zipper editing. AR 20/8/2001
 

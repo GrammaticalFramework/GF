@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 12:49:45 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/04/21 16:21:08 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.12 $
 --
 -- symbols (categories, functions) for context-free grammars.
 -----------------------------------------------------------------------------
 
-module CFIdent (-- * Tokens and categories
+module GF.CF.CFIdent (-- * Tokens and categories
 		CFTok(..), CFCat(..),
 		tS, tC, tL, tI, tV, tM, tInt,
 		prCFTok,
@@ -31,15 +31,15 @@ module CFIdent (-- * Tokens and categories
 		compatToks, compatTok, compatCFFun, compatCF
 	       ) where
 
-import Operations
-import GFC
-import Ident
-import Values (cPredefAbs)
-import AbsGFC
-import Macros (ident2label)
-import PrGrammar
-import Str
-import Char (toLower, toUpper)
+import GF.Data.Operations
+import GF.Canon.GFC
+import GF.Infra.Ident
+import GF.Grammar.Values (cPredefAbs)
+import GF.Canon.AbsGFC
+import GF.Grammar.Macros (ident2label)
+import GF.Grammar.PrGrammar
+import GF.Data.Str
+import Data.Char (toLower, toUpper)
 
 -- | this type should be abstract
 data CFTok = 

@@ -5,14 +5,14 @@
 -- Stability   : Obsolete
 -- Portability : Haskell 98
 --
--- > CVS $Date: 2005/02/18 19:21:16 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:22:09 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Trie (
+module GF.Data.Trie (
              tcompile,
 	     collapse,
              Trie,
@@ -22,7 +22,7 @@ module Trie (
              atW, atP, atWP
 	    ) where
 
-import Map
+import GF.Data.Map
 
 --- data Attr = W | P | WP deriving Eq
 type Attr = Int

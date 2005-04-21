@@ -36,7 +36,7 @@ windows: today touch-files nofud-links justwindows
 
 install-java: javac
 	-rm -f ../bin/java
-	ln -s ../src/java ../bin
+	ln -s ../src/JavaGUI ../bin
 	@echo "PLEASE edit GFHOME in bin/jgf"
 opt:
 	$(GHMAKE) $(GHCOPTFLAGS) $(GHCINCLUDENOFUD) GF.hs -o gf-bin
@@ -85,11 +85,11 @@ shell:
 clean: 
 	-rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
 	-rm -f GF/*.{o,hi,ghi} GF/*/*.{o,hi,ghi} GF/*/*/*.{o,hi,ghi}
-	-rm -f java/*.class
+	-rm -f JavaGUI/*.class
 
 distclean: clean
 	-rm -f for-ghc-nofud/*.hs
-	-rm -f java/gf-java.jar jgf
+	-rm -f JavaGUI/gf-java.jar jgf
 	-rm -f tools/gfdoc
 	-rm -f config.status config.mk config.log
 	-rm -f *.tgz *.zip
@@ -102,10 +102,10 @@ today:
 	tools/mktoday.sh
 
 javac:
-	$(JAVAC) $(JAVAFLAGS) java/*.java
+	$(JAVAC) $(JAVAFLAGS) JavaGUI/*.java
 
 jar: javac
-	cd java; $(JAR) -cmf manifest.txt gf-java.jar *.class
+	cd JavaGUI; $(JAR) -cmf manifest.txt gf-java.jar *.class
 
 tools/MkHelpFile: tools/MkHelpFile.hs
 	$(GHMAKE) -o $@ $^
@@ -156,7 +156,7 @@ binary-dist:
 	./configure --host="$(host)" CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
 	$(MAKE) all
 	$(INSTALL) ../bin/gf tools/gfdoc $(BIN_DIST_DIR)
-	$(INSTALL) -m 0644 java/gf-java.jar $(BIN_DIST_DIR)
+	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(BIN_DIST_DIR)
 	$(INSTALL) configure config.guess config.sub install-sh $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 config.mk.in jgf.in $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
@@ -178,7 +178,7 @@ install-gfdoc:
 install-editor:
 	$(INSTALL) -d $(datadir)/GF-$(PACKAGE_VERSION)
 	$(INSTALL) jgf $(bindir)
-	$(INSTALL) -m 0644 java/gf-java.jar $(datadir)/GF-$(PACKAGE_VERSION)
+	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(datadir)/GF-$(PACKAGE_VERSION)
 
 tools/gfdoc: tools/GFDoc.hs
 	$(GHMAKE) -o $@ $^

@@ -1,9 +1,9 @@
 {-# OPTIONS -fglasgow-exts -cpp #-}
-module ParCFG where
-import AbsCFG
-import LexCFG
-import ErrM
-import Array
+module GF.CFGM.ParCFG where
+import GF.CFGM.AbsCFG
+import GF.CFGM.LexCFG
+import GF.Data.ErrM
+import Data.Array
 #if __GLASGOW_HASKELL__ >= 503
 import GHC.Exts
 #else
@@ -476,7 +476,7 @@ happyError ts =
 
 myLexer = tokens
 {-# LINE 1 "GenericTemplate.hs" #-}
--- $Id: ParCFG.hs,v 1.6 2005/03/21 14:27:06 bringert Exp $
+-- $Id: ParCFG.hs,v 1.7 2005/04/21 16:21:17 bringert Exp $
 
 
 

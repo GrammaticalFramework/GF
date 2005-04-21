@@ -5,31 +5,31 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:38 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:23:47 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- how to form linearizable trees from strings and from terms of different levels
 --
 -- 'String' --> raw 'Term' --> annot, qualif 'Term' --> 'Tree'
 -----------------------------------------------------------------------------
 
-module GetTree where
+module GF.UseGrammar.GetTree where
 
-import GFC
-import Values
-import qualified Grammar as G
-import Ident
-import MMacros
-import Macros
-import Rename
-import TypeCheck
-import PGrammar
-import ShellState
+import GF.Canon.GFC
+import GF.Grammar.Values
+import qualified GF.Grammar.Grammar as G
+import GF.Infra.Ident
+import GF.Grammar.MMacros
+import GF.Grammar.Macros
+import GF.Compile.Rename
+import GF.Grammar.TypeCheck
+import GF.Compile.PGrammar
+import GF.Compile.ShellState
 
-import Operations
+import GF.Data.Operations
 
-import Char
+import Data.Char
 
 -- how to form linearizable trees from strings and from terms of different levels
 --

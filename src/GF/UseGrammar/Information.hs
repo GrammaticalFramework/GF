@@ -5,31 +5,31 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:38 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:23:47 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- information on module, category, function, operation, parameter,... 
 -- AR 16\/9\/2003.
 -- uses source grammar
 -----------------------------------------------------------------------------
 
-module Information (showInformation) where
+module GF.UseGrammar.Information (showInformation) where
 
-import Grammar
-import Ident
-import Modules
-import Option
-import CF
-import PPrCF
-import ShellState
-import PrGrammar
-import Lookup
-import qualified GFC
-import qualified AbsGFC
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Infra.Modules
+import GF.Infra.Option
+import GF.CF.CF
+import GF.CF.PPrCF
+import GF.Compile.ShellState
+import GF.Grammar.PrGrammar
+import GF.Grammar.Lookup
+import qualified GF.Canon.GFC as GFC
+import qualified GF.Canon.AbsGFC as AbsGFC
 
-import Operations
-import UseIO
+import GF.Data.Operations
+import GF.Infra.UseIO
 
 -- information on module, category, function, operation, parameter,... AR 16/9/2003
 -- uses source grammar

@@ -5,29 +5,29 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:09 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:21:48 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Update (updateRes, buildAnyTree, combineAnyInfos, unifyAnyInfo,
+module GF.Compile.Update (updateRes, buildAnyTree, combineAnyInfos, unifyAnyInfo,
 	       -- * these auxiliaries should be somewhere else 
 	       -- since they don't use the info types
 	       groupInfos, sortInfos, combineInfos, unifyInfos,
 	       tryInsert, unifAbsDefs, unifConstrs
 	      ) where
 
-import Ident
-import Grammar
-import PrGrammar
-import Modules
+import GF.Infra.Ident
+import GF.Grammar.Grammar
+import GF.Grammar.PrGrammar
+import GF.Infra.Modules
 
-import Operations
+import GF.Data.Operations
 
-import List
-import Monad
+import Data.List
+import Control.Monad
 
 -- | update a resource module by adding a new or changing an old definition
 updateRes :: SourceGrammar -> Ident -> Ident -> Info -> SourceGrammar

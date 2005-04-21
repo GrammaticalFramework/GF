@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:34 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.18 $
+-- > CVS $Date: 2005/04/21 16:22:25 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.19 $
 --
 -- Macros for constructing and analysing source code terms.
 --
@@ -16,16 +16,16 @@
 -- AR 7\/12\/1999 - 9\/5\/2000 -- 4\/6\/2001
 -----------------------------------------------------------------------------
 
-module Macros where
+module GF.Grammar.Macros where
 
-import Operations
-import Str
-import Grammar
-import Ident
-import PrGrammar
+import GF.Data.Operations
+import GF.Data.Str
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Grammar.PrGrammar
 
-import Monad (liftM)
-import Char (isDigit)
+import Control.Monad (liftM)
+import Data.Char (isDigit)
 
 firstTypeForm :: Type -> Err (Context, Type)
 firstTypeForm t = case t of

@@ -5,27 +5,27 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/24 11:46:40 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/04/21 16:23:53 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.5 $
 --
 -- linearize, parse, etc, by transfer. AR 9\/10\/2003
 -----------------------------------------------------------------------------
 
-module Transfer where
+module GF.UseGrammar.Transfer where
 
-import Grammar
-import Values
-import AbsCompute
-import qualified GFC
-import LookAbs
-import MMacros
-import TypeCheck
+import GF.Grammar.Grammar
+import GF.Grammar.Values
+import GF.Grammar.AbsCompute
+import qualified GF.Canon.GFC as GFC
+import GF.Grammar.LookAbs
+import GF.Grammar.MMacros
+import GF.Grammar.TypeCheck
 
-import Ident
-import Operations
+import GF.Infra.Ident
+import GF.Data.Operations
 
-import Monad
+import Control.Monad
 
 -- linearize, parse, etc, by transfer. AR 9/10/2003
 

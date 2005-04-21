@@ -5,19 +5,19 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:06 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/04/21 16:21:07 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.6 $
 --
 -- template to define your own parser (obsolete?)
 -----------------------------------------------------------------------------
 
-module MyParser (myParser) where
+module GF.API.MyParser (myParser) where
 
-import ShellState
-import CFIdent
-import CF
-import Operations
+import GF.Compile.ShellState
+import GF.CF.CFIdent
+import GF.CF.CF
+import GF.Data.Operations
 
 -- type CFParser = [CFTok] -> ([(CFTree,[CFTok])],String)
 

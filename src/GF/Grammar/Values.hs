@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/02/18 19:21:13 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/04/21 16:22:32 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.7 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module Values (-- * values used in TC type checking
+module GF.Grammar.Values (-- * values used in TC type checking
 	       Exp, Val(..), Env,
 	       -- * annotated tree used in editing
 	       Tree, TrNode(..), Atom(..), Binds, Constraints, MetaSubst,
@@ -23,11 +23,11 @@ module Values (-- * values used in TC type checking
 	       eType, tree2exp, loc2treeFocus
 	      ) where
 
-import Operations
-import Zipper
+import GF.Data.Operations
+import GF.Data.Zipper
 
-import Grammar
-import Ident
+import GF.Grammar.Grammar
+import GF.Infra.Ident
 
 -- values used in TC type checking
 

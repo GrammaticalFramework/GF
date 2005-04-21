@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/03/29 11:17:56 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Date: 2005/04/21 16:23:17 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.3 $
 --
 -- Instances for printing terms in a simplified format
 -----------------------------------------------------------------------------
@@ -15,11 +15,11 @@
 
 module GF.Printing.PrintSimplifiedTerm () where
 
-import AbsGFC
-import CF
-import CFIdent
+import GF.Canon.AbsGFC
+import GF.CF.CF
+import GF.CF.CFIdent
 import GF.Printing.PrintParser
-import qualified PrintGFC as P
+import qualified GF.Canon.PrintGFC as P
 
 instance Print Term where
     prt (Arg arg)         = prt arg
