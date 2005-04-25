@@ -329,7 +329,7 @@ oper
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {mn,mp = Ind ; lock_VS = <>} ;  ---- more moods
   mkV2S v p = mkV2 v p ** {mn,mp = Ind ; lock_V2S = <>} ;
-  mkVV  v = v ** {c = accusative ; lock_VV = <>} ;
+  mkVV  v = v ** {c = accusative.p1 ; lock_VV = <>} ;
   deVV  v = v ** {c = genitive.p1 ; lock_VV = <>} ;
   aVV  v = v ** {c = dative.p1 ; lock_VV = <>} ;
   mkV2V v p t = mkV2 v p ** {c3 = t.p1  ; s3 = p.p2 ; lock_V2V = <>} ;

@@ -114,8 +114,6 @@ instance SyntaxNor of SyntaxScand = TypesNor **
   progressiveClause : NounPhrase -> VerbPhrase -> Clause = \np,vp ->
     predVerbGroupClause np
      (complVerbVerb 
-      (verbVara **
-       {isAux = False} ----- {s3 = ["ved at"]}
-      )
+      ({s = verbVara.s ; s1 = "ved" ; isAux = False})
       vp) ;
 }

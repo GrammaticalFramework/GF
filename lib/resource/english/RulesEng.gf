@@ -86,7 +86,7 @@ lin
 
   AdjPart = adjPastPart ;
 
-  UseV2V x = x ** {isAux = False} ;
+  UseV2V x = verb2aux x ** {isAux = False} ;
   UseV2S x = x ;
   UseV2Q x = x ;
   UseA2S x = x ;

@@ -637,7 +637,7 @@ oper
 
   mkVerbGroupCopula : (Gender => Number => Person => Str) -> VerbGroup = 
     \obj ->
-    mkVerbGroupObject (verbVara ** {s1 = []}) obj ;
+    mkVerbGroupObject verbVara obj ;
 
 -----------------------
 
@@ -688,7 +688,7 @@ oper
 -- on semantic grounds.
 
   vara : (Gender => Number => Person => Str) -> VerbGroup = 
-    useVerb (verbVara ** {s1 = []}) ;
+    useVerb verbVara ;
 
   predAdjective : Adjective -> VerbGroup = \arg ->
     vara (\\g,n,_ => arg.s ! predFormAdj g n ! Nom) ;
@@ -1016,7 +1016,7 @@ oper
     insertObject (mkSats subj verb) obj ;
 
   mkSatsCopula : NounPhrase -> Str -> Sats = \subj,obj ->
-    mkSatsObject subj (verbVara ** {s1 = []}) obj ;
+    mkSatsObject subj verbVara obj ;
 
 
 --3 Sentence-complement verbs

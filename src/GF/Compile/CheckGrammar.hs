@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:34 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.23 $
+-- > CVS $Date: 2005/04/25 18:19:32 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.24 $
 --
 -- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
 --
@@ -429,7 +429,7 @@ inferLType gr trm = case trm of
      case (rT', sT') of
        (RecType rs, RecType ss) -> do
          rt <- checkErr $ plusRecType rT' sT'
-         return (trm', rt)
+         check trm' rt ---- return (trm', rt)
        _ | rT' == typeType && sT' == typeType -> return (trm', typeType)
        _ -> prtFail "records or record types expected in" trm
 
@@ -543,21 +543,21 @@ checkLType env trm typ0 = do
          case trm' of
            RecType _ -> termWith trm $ return typeType
            _ -> prtFail "invalid record type extension" trm
-       RecType rr -> checks [
-         do (r',ty) <- infer r
-            case ty of
-              RecType rr1 -> do
-                s' <- justCheck s (minusRecType rr rr1)
-                return $ (ExtR r' s', typ) 
-              _ -> prtFail "record type expected in extension of" r
-         ,
-         do (s',ty) <- infer s
-            case ty of
-              RecType rr2 -> do 
-                r' <- justCheck r (minusRecType rr rr2)
-                return $ (ExtR r' s', typ) 
-              _ -> prtFail "record type expected in extension with" s
-         ]
+       RecType rr -> do
+         (r',ty,s') <- checks [
+            do (r',ty) <- infer r
+               return (r',ty,s)
+           ,
+            do (s',ty) <- infer s
+               return (s',ty,r)
+            ]
+         case ty of
+           RecType rr1 -> do
+                let (rr0,rr2) = recParts rr rr1
+                r2 <- justCheck r' rr0
+                s2 <- justCheck s' rr2
+                return $ (ExtR r2 s2, typ) 
+           _ -> raise ("record type expected in extension of" +++ prt r +++ "but found" +++ prt ty)
        _ -> prtFail "record extension not meaningful for" typ
 
     FV vs -> do
@@ -600,7 +600,8 @@ checkLType env trm typ0 = do
 
    checkEq = checkEqLType env
 
-   minusRecType rr rr1 = RecType [(l,v) | (l,v) <- rr, notElem l (map fst rr1)]
+   recParts rr t = (RecType rr1,RecType rr2) where 
+     (rr1,rr2) = partition (flip elem (map fst t) . fst) rr 
 
    checkM rms (l,ty) = case lookup l rms of
      Just (Just ty0,t) -> do
