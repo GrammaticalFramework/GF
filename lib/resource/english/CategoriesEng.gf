@@ -68,6 +68,7 @@ lincat
   V2S    = TransVerb ;
   V2Q    = TransVerb ;
   V2V    = TransVerb ** {s4 : Str} ;
+----V2V    = {s : VForm => Str ; s1 : Particle ; s3, s4 : Str} ;
   V2A    = TransVerb ;
   V0     = Verb ;
 
