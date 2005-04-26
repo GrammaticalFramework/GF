@@ -6,9 +6,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/16 05:40:50 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/04/26 09:54:11 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.4 $
 --
 -- Tracing utilities for debugging purposes.
 -- If the CPP symbol TRACING is set, then the debugging output is shown.
@@ -18,7 +18,7 @@
 module GF.System.Tracing
     (trace, trace2, traceM, traceCall, tracePrt, traceCalcFirst) where
 
-import qualified IOExts 
+import qualified Debug.Trace as Trace
 
 -- | emit a string inside braces, before(?) calculating the value:
 -- @{str}@
@@ -44,7 +44,7 @@ tracePrt :: String -> (a -> String) -> a -> a
 traceCalcFirst :: a -> b -> b
 
 #if TRACING
-trace str a = IOExts.trace (bold ++ "{" ++ normal ++ str ++ bold ++ "}" ++ normal) a
+trace str a = Trace.trace (bold ++ "{" ++ normal ++ str ++ bold ++ "}" ++ normal) a
 trace2 fun str a = trace (bold ++ fgcol 1 ++ fun ++ ": " ++ normal ++ str) a 
 traceM fun str = trace2 fun str (return ())
 traceCall fun start prt val 

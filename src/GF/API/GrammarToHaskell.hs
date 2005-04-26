@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:06 $ 
+-- > CVS $Date: 2005/04/26 09:54:11 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- to write a GF abstract grammar into a Haskell module with translations from
 -- data objects into GF trees. Example: GSyntax for Agda.
@@ -36,11 +36,11 @@ haskPreamble =
  [
   "module GSyntax where",
   "",
-  "import Ident",
-  "import Grammar",
-  "import PrGrammar",
-  "import Macros",
-  "import Operations",
+  "import GF.Infra.Ident",
+  "import GF.Grammar.Grammar",
+  "import GF.Grammar.PrGrammar",
+  "import GF.Grammar.Macros",
+  "import GF.Data.Operations",
   "----------------------------------------------------",
   "-- automatic translation from GF to Haskell",
   "----------------------------------------------------",
