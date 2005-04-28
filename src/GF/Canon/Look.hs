@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:25 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/04/28 16:42:48 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.13 $
 --
 -- lookup in GFC. AR 2003
 -----------------------------------------------------------------------------
@@ -46,7 +46,7 @@ lookupCncInfo gr f@(CIQ m c) = do
   mt <- M.lookupModule gr m
   case mt of
     M.ModMod a -> errIn ("module" +++ prt m) $ 
-                  lookupTree prt c $ M.jments a 
+                  lookupIdent c $ M.jments a 
     _ -> prtBad "not concrete module" m
 
 lookupLin :: CanonGrammar -> CIdent -> Err Term
@@ -77,7 +77,7 @@ lookupResInfo :: CanonGrammar -> CIdent -> Err Info
 lookupResInfo gr f@(CIQ m c) = do
   mt <- M.lookupModule gr m
   case mt of
-    M.ModMod a -> lookupTree prt c $ M.jments a 
+    M.ModMod a -> lookupIdent c $ M.jments a 
     _ -> prtBad "not resource module" m
 
 lookupGlobal :: CanonGrammar -> CIdent -> Err Term

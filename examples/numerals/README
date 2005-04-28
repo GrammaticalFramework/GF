@@ -21,13 +21,13 @@ To precompile a multilingual numeral grammar:
 To open a translation session,
 
   gf numerals.gfcm  -- in the OS shell
-  trans -lang       -- in the GF shell
+    ts -lang        -- in the GF shell
 
 To create an example HTML page with translations of a numeral:
 
   echo "x=2341" | gft numerals.gfcm >2341.html
 
-(Requires the gft program, produces by "make gft" in GF sources)
+(Requires the gft program, produced by "make gft" in GF sources)
 
 Document last updated August 3, 2004 by Aarne Ranta.
 

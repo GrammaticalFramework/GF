@@ -81,7 +81,7 @@ ghci-nofud:
 	$(GHCI) $(GHCFLAGS)
 
 today:
-	tools/mktoday.sh
+	tools/mktoday.sh $(PACKAGE_VERSION)
 
 javac:
 	$(JAVAC) $(JAVAFLAGS) JavaGUI/*.java

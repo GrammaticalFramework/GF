@@ -19,7 +19,7 @@
 -- one has to know how the syntactic categories are
 -- implemented. The parameter types are defined in $TypesEng.gf$.
 
-concrete CategoriesEng of Categories = open Prelude, SyntaxEng in {
+concrete CategoriesEng of Categories = PredefCnc ** open Prelude, SyntaxEng in {
 
 flags 
   startcat=Phr ; 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:25 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.19 $
+-- > CVS $Date: 2005/04/28 16:42:49 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.20 $
 --
 -- Macros for constructing and analysing source code terms.
 --
@@ -308,6 +308,9 @@ isPredefConstant t = case t of
   Q (IC "Predef") _ -> True
   Q (IC "PredefAbs") _ -> True
   _ -> False
+
+isPredefAbsType :: Ident -> Bool
+isPredefAbsType c = elem c [zIdent "Int", zIdent "String"]
 
 mkSelects :: Term -> [Term] -> Term
 mkSelects t tt = foldl S t tt

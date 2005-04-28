@@ -1,5 +1,5 @@
 incomplete concrete CategoriesScand of Categories = 
-  open Prelude, SyntaxScand in {
+  PredefCnc ** open Prelude, SyntaxScand in {
 
 flags 
   startcat=Phr ; 

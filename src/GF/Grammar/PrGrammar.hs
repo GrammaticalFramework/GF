@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:27 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/04/28 16:42:49 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.14 $
 --
 -- AR 7\/12\/1999 - 1\/4\/2000 - 10\/5\/2003
 --
@@ -29,7 +29,8 @@ module GF.Grammar.PrGrammar (Print(..),
 		  tree2string, prprTree,
 		  prConstrs, prConstraints, 
 		  prMetaSubst, prEnv, prMSubst, 
-		  prExp, prPatt, prOperSignature
+		  prExp, prPatt, prOperSignature,
+                  lookupIdent, lookupIdentInfo
 		 ) where
 
 import GF.Data.Operations
@@ -266,3 +267,13 @@ prRefinement t = case t of
 
 prOperSignature :: (QIdent,Type) -> String
 prOperSignature (f, t) = prQIdent f +++ ":" +++ prt t
+
+-- to look up a constant etc in a search tree
+
+lookupIdent :: Ident -> BinTree (Ident,b) -> Err b
+lookupIdent c t = case lookupTree prt c t of
+  Ok v -> return v
+  _ -> prtBad "unknown identifier" c
+
+lookupIdentInfo :: Module Ident f a -> Ident -> Err a
+lookupIdentInfo mo i = lookupIdent i (jments mo)
