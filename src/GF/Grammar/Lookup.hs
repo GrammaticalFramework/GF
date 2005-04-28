@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:23 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/04/28 16:42:48 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.14 $
 --
 -- Lookup in source (concrete and resource) when compiling.
 --
@@ -39,7 +39,7 @@ lookupResDef gr = look True where
     mi   <- lookupModule gr m
     case mi of
       ModMod mo -> do
-        info <- lookupInfo mo c
+        info <- lookupIdentInfo mo c
         case info of
           ResOper _ (Yes t) -> return $ qualifAnnot m t 
           ResOper _ Nope    -> return (Q m c) ---- if isTop then lookExt m c 
@@ -62,7 +62,7 @@ lookupResType gr m c = do
   mi   <- lookupModule gr m
   case mi of
     ModMod mo -> do
-      info <- lookupInfo mo c
+      info <- lookupIdentInfo mo c
       case info of
         ResOper (Yes t) _ -> return $ qualifAnnot m t
         ResOper (May n) _ -> lookupResType gr n c
@@ -75,7 +75,7 @@ lookupResType gr m c = do
         CncFun _ _ _ -> do
           a  <- abstractOfConcrete gr m
           mu <- lookupModMod gr a
-          info <- lookupInfo mu c
+          info <- lookupIdentInfo mu c
           case info of
             AbsFun (Yes ty) _ -> return $ redirectTerm m ty 
             AbsCat _ _ -> return typeType
@@ -92,7 +92,7 @@ lookupParams gr = look True where
     mi   <- lookupModule gr m
     case mi of
       ModMod mo -> do
-        info <- lookupInfo mo c
+        info <- lookupIdentInfo mo c
         case info of
           ResParam (Yes ps) -> return ps
           ---- ResParam   Nope   -> if isTop then lookExt m c 
@@ -149,7 +149,7 @@ lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
   mi   <- lookupModule gr m
   case mi of
     ModMod mo -> do
-      info <- lookupInfo mo c
+      info <- lookupIdentInfo mo c
       case info of
         AbsFun _ (Yes t)  -> return $ return t
         AnyInd _ n  -> lookupAbsDef gr n c
@@ -165,7 +165,7 @@ lookupLincat gr m c = do
   mi <- lookupModule gr m
   case mi of
     ModMod mo -> do
-      info <- lookupInfo mo c
+      info <- lookupIdentInfo mo c
       case info of
         CncCat (Yes t) _ _ -> return t
         AnyInd _ n         -> lookupLincat gr n c

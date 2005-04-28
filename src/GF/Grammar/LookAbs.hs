@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:22 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/04/28 16:42:48 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.14 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -48,7 +48,7 @@ lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
   mi   <- lookupModule gr m
   case mi of
     ModMod mo -> do
-      info <- lookupInfo mo c
+      info <- lookupIdentInfo mo c
       case info of
         C.AbsFun _ t  -> return $ return t
         C.AnyInd _ n  -> lookupAbsDef gr n c
@@ -60,7 +60,7 @@ lookupFunType gr m c = errIn ("looking up funtype of" +++ prt c +++ "in module" 
   mi   <- lookupModule gr m
   case mi of
     ModMod mo -> do
-      info <- lookupInfo mo c
+      info <- lookupIdentInfo mo c
       case info of
         C.AbsFun t _  -> return t
         C.AnyInd _ n  -> lookupFunType gr n c
@@ -72,7 +72,7 @@ lookupCatContext gr m c = errIn ("looking up context of cat" +++ prt c) $ do
   mi   <- lookupModule gr m
   case mi of
     ModMod mo -> do
-      info <- lookupInfo mo c
+      info <- lookupIdentInfo mo c
       case info of
         C.AbsCat co _ -> return co
         C.AnyInd _ n  -> lookupCatContext gr n c
@@ -85,7 +85,7 @@ lookupTransfer gr m c = errIn ("looking up transfer of cat" +++ prt c) $ do
   mi   <- lookupModule gr m
   case mi of
     ModMod mo -> do
-      info <- lookupInfo mo c
+      info <- lookupIdentInfo mo c
       case info of
         C.AbsTrans t -> return t
         C.AnyInd _ n  -> lookupTransfer gr n c
@@ -168,7 +168,7 @@ lookupFunTypeSrc gr m c = do
   mi   <- lookupModule gr m
   case mi of
     ModMod mo -> do
-      info <- lookupInfo mo c
+      info <- lookupIdentInfo mo c
       case info of
         AbsFun (Yes t) _  -> return t
         AnyInd _ n  -> lookupFunTypeSrc gr n c
@@ -181,7 +181,7 @@ lookupCatContextSrc gr m c = do
   mi   <- lookupModule gr m
   case mi of
     ModMod mo -> do
-      info <- lookupInfo mo c
+      info <- lookupIdentInfo mo c
       case info of
         AbsCat (Yes co) _ -> return co
         AnyInd _ n  -> lookupCatContextSrc gr n c

@@ -1,4 +1,4 @@
---# -path=.:../prelude
+--# -path=.:../../lib/prelude
 concrete ImperC of Imper = open ResImper in {
   flags lexer=codevars ; unlexer=code ; startcat=Program ;
 

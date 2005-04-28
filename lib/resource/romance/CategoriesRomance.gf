@@ -22,7 +22,7 @@
 -- $TypesFra$ and $TypesIta$.
 
 incomplete concrete CategoriesRomance of Categories = 
-  open Prelude, SyntaxRomance in {
+  PredefCnc ** open Prelude, SyntaxRomance in {
 
 flags 
   startcat=Phr ; optimize=all ;

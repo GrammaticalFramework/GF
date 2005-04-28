@@ -5,9 +5,9 @@
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/04/21 16:45:56 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.22 $
+-- > CVS $Date: 2005/04/28 16:42:48 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.23 $
 --
 -- The Main module of GF program.
 -----------------------------------------------------------------------------
@@ -27,12 +27,12 @@ import GF.Shell.PShell
 import GF.Shell.JGF
 import GF.Text.UTF8
 
-import GF.Today (today)
+import GF.Today (today,version)
 import GF.System.Arch
 import System (getArgs)
 import Control.Monad (foldM)
 
--- AR 19/4/2000 -- 11/11/2001
+-- AR 19/4/2000 -- 28/4/2005
 
 main :: IO ()
 main = do
@@ -89,7 +89,7 @@ welcomeMsg =
   "Welcome to " ++ authorMsg ++++ welcomeArch ++ "\n\nType 'h' for help."
 
 authorMsg = unlines [
- "Grammatical Framework, Version 2.1.2b",
+ "Grammatical Framework, Version " ++ version,
  "Compiled " ++ today,
  "Copyright (c)", 
  "Björn Bringert, Markus Forsberg, Thomas Hallgren, Harald Hammarström,",

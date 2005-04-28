@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/25 18:19:32 $ 
+-- > CVS $Date: 2005/04/28 16:42:48 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.24 $
+-- > CVS $Revision: 1.25 $
 --
 -- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
 --
@@ -125,12 +125,12 @@ checkCompleteGrammar abs cnc = do
   foldM checkOne js fs
  where
    checkOne js i@(c,info) = case info of
-     AbsFun (Yes _) _ -> case lookupTree prt c js of
+     AbsFun (Yes _) _ -> case lookupIdent c js of
        Ok _ -> return js
        _ -> do
          checkWarn $ "Warning: no linearization of" +++ prt c
          return js
-     AbsCat (Yes _) _ -> case lookupTree prt c js of
+     AbsCat (Yes _) _ -> case lookupIdent c js of
        Ok _ -> return js
        _ -> do
          checkWarn $ 
@@ -259,7 +259,7 @@ computeLType gr t = do
 
     Q m c | elem c [cPredef,cPredefAbs] -> return ty
 
-    Q m ident -> checkIn ("Q" +++ show m) $ do
+    Q m ident -> checkIn ("module" +++ prt m) $ do
       ty' <- checkErr (lookupResDef gr m ident) 
       if ty' == ty then return ty else comp ty' --- is this necessary to test?
 
@@ -359,7 +359,7 @@ inferLType gr trm = case trm of
      (t',ty) <- infer t   --- ??
      ty' <- comp ty
      termWith (P t' i) $ checkErr $ case ty' of
-       RecType ts -> maybeErr ("unknown label" +++ show i +++ "in" +++ show ty') $ 
+       RecType ts -> maybeErr ("unknown label" +++ prt i +++ "in" +++ prt ty') $ 
                      lookup i ts
        _ -> prtBad ("record type expected for" +++ prt t +++ "instead of") ty'
 
