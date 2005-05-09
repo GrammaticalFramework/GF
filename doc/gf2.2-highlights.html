@@ -1,0 +1,85 @@
+<html>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<center>
+
+<h1>Grammatical Framework Version 2.2</h1>
+
+Highlights of GF version 2.2.
+
+<p>
+
+9/5/2005
+
+<p>
+
+<a href="http://www.cs.chalmers.se/~aarne">Aarne Ranta</a>
+
+</center>
+
+
+<h2>Summary of novelties in Version 2.2 in comparison to 2.1</h2>
+
+<li> New optimizations to reduce the size of GFC files
+<li> Improved parsing algorithms
+<li> Lots of bug fixes
+<li> Separate <tt>reuse</tt> modules no longer needed
+<li> Several new command options
+<li> New documentation: 
+  <ul>
+  <li> <a href="gf-modules.html">module system document</tt>
+  <li> <a href="tutorial/gf-tutorial2.html">new tutorial</tt>, based on the module system (unfinished)
+  </ul>
+<li> New resource libraries
+<li> Visualization of module dependency graph
+<li> In the editor GUI, text corresponding to subtrees with constraints marked with red colour
+<li> Hierarchic modules used in the source code
+<li> <a href="http://www.haskell.org/haddock">haddock</a> documentation available for source code
+
+
+<h3>Compiler optimizations</h3>
+
+The sometimes exploding size of generated <tt>gfc</tt> and
+<tt>gfr</tt> files has made it urgent to find optimizations
+that reduce the size of the code. There are five
+combinations optimizations that can be chosen, as the value of the
+<tt>optimize</tt> flag:
+<ul>
+<li> <tt>share</tt>: group tables so that common branch values are shared
+by the use of disjunctive patterns.
+<li> <tt>parametrize</tt>: if table branches differ at most at the
+occurrence of the pattern, replace the expanded table by a one-branch
+table with a variable. If this fails, perform <tt>share</tt>.
+<li> <tt>values</tt>: only show the values of table branches, not the
+patterns.
+<li> <tt>all</tt>: try <tt>parametrize</tt>; if this fails, do <tt>values</tt>.
+<li> <tt>none</tt>: don't do any optimizations
+</ul>
+The <tt>share</tt> and <tt>parametrize</tt> optimizations are always
+just good, whereas the <tt>values</tt> optimization may slow down the
+use of the table. However, it is very good for grammars mostly consisting
+of the inflection tables of lexical items: it can reduce the file size
+by the factor of 4.
+
+<p>
+
+An optimization can be selected individually for each
+<tt>resource</tt> and <tt>concrete</tt> module by including
+the judgement  
+<pre>
+  flags optimize=(share|parametrize|values|all|none) ;
+</pre>
+in the module body. These flags can be overridden by a flag given
+in the <tt>i</tt> command, e.g.
+<pre>
+  i -src -optimize=none Foo.gf
+</pre>
+Notice that the option <tt>-src</tt> is needed if there already are
+generated files created with other optimization flags.
+
+
+
+
+</body>
+</html>
