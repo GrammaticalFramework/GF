@@ -33,9 +33,9 @@ temp: today touch-files noopt
 
 
 build: 
-	$(GHMAKE) $(GHCFLAGS) GF.hs -o gf-bin
-	strip gf-bin
-	mv gf-bin ../bin/gf
+	$(GHMAKE) $(GHCFLAGS) GF.hs -o gf
+	strip gf
+	mv gf ../bin/gf
 
 opt: GHCFLAGS += $(GHCOPTFLAGS)
 opt: build
@@ -55,15 +55,15 @@ gft:
 	mv gft-bin ../bin/gft
 
 justwindows:
-	$(GHMAKE) $(GHCOPTFLAGS) GF.hs -o gf.exe
+	$(GHMAKE) $(GHCFLAGS) $(GHCOPTFLAGS) GF.hs -o gf.exe
 	strip gf.exe
 	mv gf.exe ../bin/
 
 api: 
-	$(GHMAKE) $(GHCFLAGS) GF/API.hs
+	$(GHMAKE) $(GHCFLAGS) $(GHCOPTFLAGS)GF/API.hs
 
 shell: 
-	$(GHMAKE) $(GHCFLAGS) GF/Shell.hs
+	$(GHMAKE) $(GHCFLAGS) $(GHCOPTFLAGS) GF/Shell.hs
 
 clean: 
 	-rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
