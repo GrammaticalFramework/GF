@@ -15,8 +15,6 @@ lincat Sub10 = LinDigit ;
 lincat Sub100 = {s : Str ; s2 : S100 => Str; size : Size} ;
 lincat Sub1000 = {s : Str ; s2 : Str ; size : Size } ;
 lincat Sub1000000 = {s : Str} ;
-lin num x0 =
-  {s = "/L" ++ x0.s ++ "L/" } ; -- just makes colons into length bar ontop of char
 
 oper mkNumq : Str -> Str -> Str -> Str -> LinDigit = 
   \twul -> \yelqtwul -> \sumul -> \i -> 
@@ -34,7 +32,11 @@ oper mkNum9 : Str -> Str -> Str -> Str -> LinDigit =
   \twul -> \yelqtwul -> \sumul -> \i -> 
   {s = table {unit => twul ; teen => yelqtwul ; ten => sumul ; tenq => sumul + "q" ; chi => i ; chiten => i ++ "sip"} ; size = nine} ;
 
--- lin n1 = mkNum variants{"hana" ; "han } ; variants {"yelhana" ; "yelhan" }
+lin num x0 =
+  {s = "/L" ++ x0.s ++ "L/" } ; -- just makes colons into length bar ontop of char
+
+-- lin n1 = mkNum variants{"hana" ; "han"} ; variants {"yelhana" ;"yelhan"}
+
 lin n2 = mkNumq (variants {"twu:l" ; "twu" }) 
                (variants {"yelqtwul" ; "yelqtwu" }) 
                (variants {"sumul" ; "sumu" })

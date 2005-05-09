@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/28 16:42:49 $ 
+-- > CVS $Date: 2005/05/09 15:45:00 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.20 $
+-- > CVS $Revision: 1.21 $
 --
 -- Macros for constructing and analysing source code terms.
 --
@@ -565,6 +565,7 @@ markLinFields f t = case t of
 strsFromTerm :: Term -> Err [Str]
 strsFromTerm t = case unComputed t of
   K s   -> return [str s]
+  Empty -> return [str []]
   C s t -> do
     s' <- strsFromTerm s
     t' <- strsFromTerm t
