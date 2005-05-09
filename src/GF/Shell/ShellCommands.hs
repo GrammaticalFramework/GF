@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:22 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.30 $
+-- > CVS $Date: 2005/05/09 09:28:46 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.31 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -129,7 +129,9 @@ testValidFlag st co f x = case f of
   "unlexer" -> testInc customUntokenizer
   "depth"   -> testN
   "rawtrees"-> testN
-  "parser"  -> testInc customParser
+  "parser"  -> testInc customParser 
+	       -- hack for the -newer parsers: (to be changed)
+	       `mplus` if not(null x) && head x `elem` "mc" then return () else Bad ""
   "alts"    -> testN
   "transform" -> testInc customTermCommand
   "filter"  -> testInc customStringCommand
@@ -158,7 +160,7 @@ optionsOfCommand co = case co of
 	           "cat lang lexer parser number depth rawtrees unlexer optimize path conversion printer"
 
   CImport _ -> both "old v s src retain nocf nocheckcirc cflexer noemit o"
-                    "abs cnc res path optimize conversion"
+                    "abs cnc res path optimize conversion cat"
   CRemoveLanguage _ -> none
   CEmptyState -> none
   CStripState -> none

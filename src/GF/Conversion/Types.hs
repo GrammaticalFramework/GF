@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:56 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/05/09 09:28:44 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.8 $
 --
 -- All possible instantiations of different grammar formats used in conversion from GFC
 -----------------------------------------------------------------------------
@@ -136,6 +136,9 @@ initialECat cat = ECat cat []
 
 ecat2scat :: ECat -> SCat
 ecat2scat (ECat cat _) = cat
+
+ecatConstraints :: ECat -> [Constraint]
+ecatConstraints (ECat _ cns) = cns
 
 sameECat :: ECat -> ECat -> Bool
 sameECat ec1 ec2 = ecat2scat ec1 == ecat2scat ec2

@@ -5,9 +5,9 @@
 -- Stability   : Stable
 -- Portability : Haskell 98
 --
--- > CVS $Date: 2005/04/12 10:49:45 $ 
+-- > CVS $Date: 2005/05/09 09:28:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- Association lists, or finite maps,
 -- including sets as maps with result type @()@.
@@ -25,6 +25,7 @@ module GF.Data.Assoc ( Assoc,
 		       aAssocs,
 		       aElems,
 		       assocMap,
+		       assocFilter,
 		       lookupAssoc,
 		       lookupWith,
 		       (?),
@@ -62,6 +63,9 @@ aElems  :: Ord a => Assoc a b -> SList a
 -- | mapping values to other values.
 -- the mapping function can take the key as information
 assocMap :: Ord a => (a -> b -> b') -> Assoc a b -> Assoc a b'
+
+assocFilter :: Ord a => (b -> Bool) -> Assoc a b -> Assoc a b
+assocFilter pred = listAssoc . filter (pred . snd) . aAssocs
 
 -- | monadic lookup function,
 -- returning failure if the key does not exist

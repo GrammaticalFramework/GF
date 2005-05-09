@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:06 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/05/09 09:28:45 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.7 $
 --
 -- The main parsing module, parsing GFC grammars
 -- by translating to simpler formats, such as PMCFG and CFG
@@ -45,13 +45,15 @@ import qualified GF.Parsing.CFG as PC
 data PInfo = PInfo { mcfPInfo :: MCFPInfo,
 		     cfPInfo  :: CFPInfo }
 
-type MCFPInfo = MGrammar
+type MCFPInfo = PM.MCFPInfo MCat Name MLabel Token
 type CFPInfo  = PC.CFPInfo CCat Name Token
 
 buildPInfo :: MGrammar -> CGrammar -> PInfo
-buildPInfo mcfg cfg = PInfo { mcfPInfo = mcfg,
+buildPInfo mcfg cfg = PInfo { mcfPInfo = PM.buildMCFPInfo mcfg,
 			      cfPInfo  = PC.buildCFPInfo cfg }
 
+instance Print PInfo where
+    prt (PInfo m c) = prt m ++ "\n" ++ prt c
 
 ----------------------------------------------------------------------
 -- main parsing function
@@ -67,8 +69,9 @@ parse (prs:strategy) pinfo abs startCat inString =
     do let inTokens = tracePrt "Parsing.GFC - input tokens" prt $
 		      inputMany (map wordsCFTok inString)
        forests <- selectParser prs strategy pinfo startCat inTokens
-       traceM "Parsing.GFC - nr. forests" (prt (length forests))
-       let filteredForests = tracePrt "Parsing.GFC - nr. filtered forests" (prt . length) $
+       traceM "Parsing.GFC - nr. unfiltered forests" (prt (length forests))
+       traceM "Parsing.GFC - nr. unfiltered trees" (prt (length (forests >>= forest2trees)))
+       let filteredForests = tracePrt "Parsing.GFC - nr. forests" (prt . length) $
 			     forests >>= applyProfileToForest
 	   -- compactFs = tracePrt "#compactForests" (prt . length) $
 	   -- 	          tracePrt "compactForests" (prtBefore "\n") $
@@ -100,13 +103,12 @@ selectParser prs strategy pinfo startCat inTokens | prs=='c'
 -- parsing via MCFG
 selectParser prs strategy pinfo startCat inTokens | prs=='m' 
     = do let startCats = tracePrt "Parsing.GFC - starting MCF categories" prt $
-			 filter isStart $ nubsort [ c | G.Rule (G.Abs c _ _) _ <- mcfpi ]
+			 filter isStart $ PM.grammarCats mcfpi
 	     isStart cat = mcat2scat cat == cfCat2Ident startCat
 	     mcfpi = mcfPInfo pinfo
-	 mcfParser <- PM.parseMCF strategy
-	 let mcfChart = tracePrt "Parsing.GFC - sz. MCF chart" (prt . length) $
-			mcfParser mcfpi startCats inTokens
-	     chart = tracePrt "Parsing.GFC - sz. chart" (prt . map (length.snd) . aAssocs) $
+	 mcfChart <- PM.parseMCF strategy mcfpi startCats inTokens
+	 traceM "Parsing.GFC - sz. MCF chart" (prt (length mcfChart)) 
+	 let chart = tracePrt "Parsing.GFC - sz. chart" (prt . length . concat . map snd . aAssocs) $
 		     G.abstract2chart mcfChart
 	     finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
 			  [ PM.makeFinalEdge cat lbl (inputBounds inTokens) | 

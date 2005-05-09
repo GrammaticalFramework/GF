@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:51 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/05/09 09:28:43 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
 -- Converting MCFG grammars to (possibly overgenerating) CFG
 -----------------------------------------------------------------------------
@@ -29,7 +29,7 @@ import GF.Conversion.Types
 -- * converting (possibly erasing) MCFG grammars
 
 convertGrammar :: EGrammar -> CGrammar
-convertGrammar gram = tracePrt "MCFGtoCFG - nr. context-free rules" (prt.length) $
+convertGrammar gram = tracePrt "MCFGtoCFG - context-free rules" (prt.length) $
 		       concatMap convertRule gram
 
 convertRule :: ERule -> [CRule]

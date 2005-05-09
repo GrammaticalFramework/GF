@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:57 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/05/09 09:28:44 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- Adding coercion functions to a MCFG if necessary.
 -----------------------------------------------------------------------------
@@ -33,9 +33,9 @@ addCoercions rules = coercions ++ rules
 					Rule (Abs head args _) (Cnc lbls _ _) <- rules ]
 	  allHeadSet = nubsort allHeads
 	  allArgSet  = union   allArgs <\\> map fst allHeadSet
-	  coercions = tracePrt "SimpleToMCFG.Coercions - nr. MCFG coercions" (prt . length) $
+	  coercions = tracePrt "SimpleToMCFG.Coercions - MCFG coercions" (prt . length) $
 		      concat $
-		      tracePrt "SimpleToMCFG.Coerciions - nr. MCFG coercions per category" 
+		      tracePrt "SimpleToMCFG.Coercions - MCFG coercions per category" 
 				   (prtList . map length) $
 		      combineCoercions 
 		        (groupBy sameECatFst allHeadSet) 

@@ -1,5 +1,10 @@
 
-module GF.Parsing.MCFG.Range where
+module GF.Parsing.MCFG.Range
+    ( Range(..), makeRange, concatRange, rangeEdge, edgeRange, minRange, maxRange,
+      LinRec, RangeRec,
+      makeRangeRec, rangeRestRec, rangeRestrictRule, 
+      projection, unifyRec, substArgRec
+    ) where
 
 
 -- Haskell
@@ -12,6 +17,7 @@ import GF.Formalism.MCFG
 import GF.Formalism.Utilities
 import GF.Infra.Print
 import GF.Data.Assoc ((?))
+import GF.Data.Utilities (updateNthM)
 
 ------------------------------------------------------------
 -- ranges as single pairs
@@ -23,6 +29,7 @@ data Range = Range (Int, Int)
 makeRange   :: (Int, Int) -> Range
 concatRange :: Range -> Range -> [Range]
 rangeEdge   :: a -> Range -> Edge a
+edgeRange   :: Edge a -> Range
 minRange    :: Range -> Int
 maxRange    :: Range -> Int
 
@@ -31,6 +38,7 @@ concatRange EmptyRange rng = return rng
 concatRange rng EmptyRange = return rng
 concatRange (Range(i,j)) (Range(j',k)) = [ Range(i,k) | j==j']
 rangeEdge    a           (Range(i,j))  = Edge i j a
+edgeRange   (Edge i j _)               = Range (i,j)
 minRange    (Range rho)                = fst rho
 maxRange    (Range rho)                = snd rho
 
@@ -91,6 +99,8 @@ concLinRec = mapM concLin
 makeRangeRec :: LinRec c l Range -> RangeRec l
 makeRangeRec lins = map convLin lins
     where convLin (Lin lbl [Tok rng]) = (lbl, rng)
+	  convLin (Lin lbl []) = (lbl, EmptyRange)
+	  convLin _ = error "makeRangeRec"
 
 
 --- Record projection --------------------------------------------------------
@@ -114,51 +124,59 @@ rangeRestSym _ (Cat c)      = return (Cat c)
 
 rangeRestLin :: Ord t => Input t -> Lin c l t -> [Lin c l Range]
 rangeRestLin toks (Lin lbl syms) = do syms' <- mapM (rangeRestSym toks) syms
-				      return (Lin lbl syms')
+				      concLin (Lin lbl syms')
+				      -- return (Lin lbl syms')
 
 
 rangeRestRec :: Ord t => Input t -> LinRec c l t -> [LinRec c l Range]
-rangeRestRec toks = mapM (rangeRestLin toks)
+rangeRestRec toks = mapM (rangeRestLin toks) 
 
 
--- Record replacment ---------------------------------------------------------
--- ineffektiv!!
-
-replaceRec :: [RangeRec l] -> Int -> RangeRec l -> [RangeRec l]
-replaceRec recs i rec = (fst tup) ++ [rec] ++ (tail $ snd tup)       
-    where tup = splitAt i recs
-
+rangeRestrictRule :: Ord t => Input t -> MCFRule c n l t -> [MCFRule c n l Range]
+rangeRestrictRule toks (Rule abs (Cnc l ls lins)) = liftM (Rule abs . Cnc l ls) $
+						    rangeRestRec toks lins
 
 --- Argument substitution ----------------------------------------------------
 
 substArgSymbol :: Ord l => Int -> RangeRec l -> Symbol (c, l, Int) Range 
 	       -> Symbol (c, l, Int) Range
-substArgSymbol i rec (Tok rng) = (Tok rng)
-substArgSymbol i rec (Cat (c, l, j))
-    | i==j      = maybe (Cat (c, l, j)) Tok $ lookup l rec 
-    | otherwise = (Cat (c, l, j))
-
+substArgSymbol i rec tok@(Tok rng) = tok
+substArgSymbol i rec cat@(Cat (c, l, j))
+    | i==j      = maybe err Tok $ lookup l rec 
+    | otherwise = cat
+    where err = error "substArg: Label not in range-record"
 
 substArgLin :: Ord l => Int -> RangeRec l -> Lin c l Range 
-	    -> Lin c l Range
+	    -> [Lin c l Range]
 substArgLin i rec (Lin lbl syms) = 
-    (Lin lbl (map (substArgSymbol i rec) syms))
+    concLin (Lin lbl (map (substArgSymbol i rec) syms))
 
 
 substArgRec :: Ord l => Int -> RangeRec l -> LinRec c l Range 
-	    -> LinRec c l Range
-substArgRec i rec lins = map (substArgLin i rec) lins
+	    -> [LinRec c l Range]
+substArgRec i rec lins = mapM (substArgLin i rec) lins
 
 
---- Subsumation -------------------------------------------------------------
+-- Record unification & replacment ---------------------------------------------------------
 
--- "rec' subsumes rec?"
+unifyRec :: Ord l => [RangeRec l] -> Int -> RangeRec l -> [[RangeRec l]]
+unifyRec recs i rec = updateNthM update i recs
+    where update rec' = guard (subsumes rec' rec) >> return rec
+
+-- unifyRec recs i rec = do guard $ subsumes (recs !! i) rec
+-- 			 return $ replaceRec recs i rec
+
+replaceRec :: [RangeRec l] -> Int -> RangeRec l -> [RangeRec l]
+replaceRec recs i rec = before ++ (rec : after)
+    where (before, _ : after) = splitAt i recs
+
 subsumes :: Ord l => RangeRec l -> RangeRec l -> Bool
-subsumes rec rec' = and [elem r rec' | r <- rec]
+subsumes rec rec' = and [r `elem` rec' | r <- rec]
+-- subsumes rec rec' = all (`elem` rec') rec
 
 
+{-
 --- Record unification -------------------------------------------------------
-
 unifyRangeRecs :: Ord l => [RangeRec l] -> [RangeRec l] -> [[RangeRec l]]
 unifyRangeRecs recs recs' = zipWithM unify recs recs'
     where unify :: Ord l => RangeRec l -> RangeRec l -> [RangeRec l]
@@ -173,3 +191,4 @@ unifyRangeRecs recs recs' = zipWithM unify recs recs'
 		EQ -> do guard (r1 == r2)
 			 rec3 <- unify rec1 rec2
 			 return (p1:rec3)
+-}

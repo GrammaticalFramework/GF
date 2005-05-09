@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 12:49:44 $ 
+-- > CVS $Date: 2005/05/09 09:28:44 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Basic GCFG formalism (derived from Pollard 1984)
 -----------------------------------------------------------------------------
@@ -45,6 +45,7 @@ instance (Print c, Print n) => Print (Abstract c n) where
 				else " -> " ++ prtSep " " args )
 
 instance (Print l, Print t) => Print (Concrete l t) where
-    prt (Cnc lcat args term) = prt term ++ " : " ++ prt lcat ++ 
-			      ( if null args then ""
-				else " / " ++ prtSep " " args)
+    prt (Cnc lcat args term) = prt term 
+			       ++ " : " ++ prt lcat ++ 
+			       ( if null args then ""
+			         else " / " ++ prtSep " " args)

@@ -1,14 +1,14 @@
 
 concrete TestVars of TestVarsA = open TestVarsR in {
 
-lincat S = { s : XYZ => Str; p : { s : Str; a : AB } };
+lincat S = {s1:Str; s2:AB => Str};
 
-lin a = { s = table { X _ => variants { "x1" ; "x2" };
-      	      	      Y   => variants { "y1" ; "y2" };
-		      _   => variants { "z1" ; "z2" } };
-          p = variants { { s = "s1" ; a = A } ;
-	      	       	 { s = "s2" ; a = B } };
-        };
+lin
+
+f x = { s1 = x.s2 ! A;
+      	s2 = table{ y => variants{ x.s2 ! A; x.s1 ++ x.s2 ! y } } };
+
+a = { s1 = "a" ++ variants{ "b"; "c" }; 
+      s2 = table{ A => variants{ "A"; "Q" }; B => "B" } };
 
 }
-

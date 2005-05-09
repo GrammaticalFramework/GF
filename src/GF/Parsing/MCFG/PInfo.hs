@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:14 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/05/09 09:28:46 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
 --
 -- MCFG parsing, parser information
 -----------------------------------------------------------------------------
@@ -34,11 +34,130 @@ type MCFParser c n l t = MCFPInfo c n l t
 
 type MCFChart  c n l   = [Abstract (c, RangeRec l) n]
 
-type MCFPInfo  c n l t = MCFGrammar c n l t
-
-buildMCFPInfo :: (Ord n, Ord c, Ord l, Ord t) => MCFGrammar c n l t -> MCFPInfo c n l t
-buildMCFPInfo = id
-
 makeFinalEdge :: c -> l -> (Int, Int) -> (c, RangeRec l)
 makeFinalEdge cat lbl bnds = (cat, [(lbl, makeRange bnds)])
+
+
+------------------------------------------------------------
+-- parser information
+
+data MCFPInfo c n l t
+    = MCFPInfo { grammarTokens :: SList t
+	       , nameRules     :: Assoc n (SList (MCFRule c n l t))
+	       , topdownRules  :: Assoc c (SList (MCFRule c n l t))
+		 -- ^ used in 'GF.Parsing.MCFG.Active' (Earley):
+	       , emptyRules    :: [MCFRule c n l t]
+	       , leftcornerCats :: Assoc c (SList (MCFRule c n l t))
+	       , leftcornerTokens :: Assoc t (SList (MCFRule c n l t))
+		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
+	       , grammarCats   :: SList c
+		 -- ^ used when calculating starting categories
+	       , rulesByToken  :: Assoc t (SList (MCFRule c n l t, SList t))
+	       , rulesWithoutTokens :: SList (MCFRule c n l t)
+		 -- ^ used by 'rulesMatchingInput' 
+	       , allRules :: MCFGrammar c n l t
+		 -- ^ used by any unoptimized algorithm
+
+		 --bottomupRules        :: Assoc (Symbol c t) (SList (CFRule c n t)),
+		 --emptyLeftcornerRules :: Assoc c            (SList (CFRule c n t)),
+		 --emptyCategories      :: Set c,
+	       }
+
+
+rangeRestrictPInfo :: (Ord c, Ord n, Ord l, Ord t) => 
+		      MCFPInfo c n l t -> Input t -> MCFPInfo c n l Range
+rangeRestrictPInfo (pinfo{-::MCFPInfo c n l t-}) inp =
+    tracePrt "MCFG.PInfo - Restricting the parser information" (prt . grammarTokens)
+    MCFPInfo { grammarTokens = nubsort (map edgeRange (inputEdges inp))
+	     , nameRules = rrAssoc (nameRules pinfo)
+	     , topdownRules = rrAssoc (topdownRules pinfo)
+	     , emptyRules = rrRules (emptyRules pinfo)
+	     , leftcornerCats = rrAssoc (leftcornerCats pinfo)
+	     , leftcornerTokens = lctokens
+	     , grammarCats = grammarCats pinfo
+	     , rulesByToken = emptyAssoc -- error "MCFG.PInfo.rulesByToken - no range restriction"
+	     , rulesWithoutTokens = [] -- error "MCFG.PInfo.rulesByToken - no range restriction"
+	     , allRules = allrules -- rrRules (allRules pinfo)
+	     }
+
+    where lctokens = accumAssoc id 
+		     [ (rng, rule) | (tok, rules) <- aAssocs (leftcornerTokens pinfo),
+		       inputToken inp ?= tok,
+		       rule@(Rule _ (Cnc _ _ (Lin _ (Tok rng:_) : _))) 
+		           <- concatMap (rangeRestrictRule inp) rules ]
+
+          allrules = rrRules $ rulesMatchingInput pinfo inp
+
+	  rrAssoc assoc = filterNull $ fmap rrRules assoc
+	  filterNull assoc = assocFilter (not . null) assoc
+	  rrRules rules = concatMap (rangeRestrictRule inp) rules
+
+
+buildMCFPInfo :: (Ord c, Ord n, Ord l, Ord t) => MCFGrammar c n l t -> MCFPInfo c n l t
+buildMCFPInfo grammar = 
+    traceCalcFirst grammar $
+    tracePrt "MCFG.PInfo - parser info" (prt) $
+    MCFPInfo { grammarTokens = grammartokens
+	     , nameRules = namerules
+	     , topdownRules = topdownrules
+	     , emptyRules = emptyrules
+	     , leftcornerCats = leftcorncats
+	     , leftcornerTokens = leftcorntoks
+	     , grammarCats = grammarcats
+	     , rulesByToken = rulesbytoken
+	     , rulesWithoutTokens = ruleswithouttokens
+	     , allRules = allrules
+	     }
+
+    where allrules      = concatMap expandVariants grammar
+	  grammartokens = union (map fst ruletokens)
+	  namerules     = accumAssoc id 
+			  [ (name, rule) | rule@(Rule (Abs _ _ name) _) <- allrules ]
+	  topdownrules  = accumAssoc id
+			  [ (cat, rule) | rule@(Rule (Abs cat _ _) _) <- allrules ]
+	  emptyrules    = [ rule | rule@(Rule (Abs _ [] _) _) <- allrules ]
+	  leftcorncats  = accumAssoc id 
+			  [ (cat, rule) | 
+			    rule@(Rule _ (Cnc _ _ (Lin _ (Cat(cat,_,_):_) : _))) <- allrules ]
+	  leftcorntoks  = accumAssoc id 
+			  [ (tok, rule) | 
+			    rule@(Rule _ (Cnc _ _ (Lin _ (Tok tok:_) : _))) <- allrules ]
+	  grammarcats   = aElems topdownrules
+	  ruletokens    = [ (toksoflins lins, rule) | 
+			    rule@(Rule _ (Cnc _ _ lins)) <- allrules ]
+	  toksoflins lins = nubsort [ tok | Lin _ syms <- lins, Tok tok <- syms ]
+	  rulesbytoken  = accumAssoc id 
+			  [ (tok, (rule, toks)) | (tok:toks, rule) <- ruletokens ]
+	  ruleswithouttokens = nubsort [ rule | ([], rule) <- ruletokens ]
+
+
+-- | return only the rules for which all tokens are in the input string
+rulesMatchingInput :: Ord t => MCFPInfo c n l t -> Input t -> [MCFRule c n l t]
+rulesMatchingInput pinfo inp =
+    [ rule | tok <- toks,
+      (rule, ruletoks) <- rulesByToken pinfo ? tok,
+      ruletoks `subset` toks ]
+    ++ rulesWithoutTokens pinfo
+    where toks = aElems (inputToken inp)
+
+
+----------------------------------------------------------------------
+-- pretty-printing of statistics
+
+instance (Ord c, Ord n, Ord l, Ord t) => Print (MCFPInfo c n l t) where
+    prt pI = "[ tokens=" ++ sl grammarTokens ++
+	     "; categories=" ++ sl grammarCats ++ 
+	     "; nameRules=" ++ sla nameRules ++ 
+	     "; tdRules=" ++ sla topdownRules ++
+	     "; emptyRules=" ++ sl emptyRules ++ 
+	     "; lcCats=" ++ sla leftcornerCats ++
+	     "; lcTokens=" ++ sla leftcornerTokens ++
+	     "; byToken=" ++ sla rulesByToken ++
+	     "; noTokens=" ++ sl rulesWithoutTokens ++
+	     "; allRules=" ++ sl allRules ++
+	     " ]"
+
+	where sl  f = show $ length $ f pI
+	      sla f = let (as, bs) = unzip $ aAssocs $ f pI
+		       in show (length as) ++ "/" ++ show (length (concat bs))
 

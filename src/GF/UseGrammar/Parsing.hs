@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:50 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.20 $
+-- > CVS $Date: 2005/05/09 09:28:46 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.21 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -107,7 +107,7 @@ trees2trms opts sg cn as ts0 info = do
                           show (length ts0) +++ 
                           "considered; use -rawtrees=<Int> to see more"
                      )
-      (ts1,ss) <- checkErr $ mapErrN 10 postParse ts01
+      (ts1,ss) <- checkErr $ mapErrN 1 postParse ts01
       if null ts1 then raise ss else return ()
       ts2 <- mapM (checkErr . annotate gr . refreshMetas [] . trExp) ts1 ---- 
       if forgive then return ts2 else do

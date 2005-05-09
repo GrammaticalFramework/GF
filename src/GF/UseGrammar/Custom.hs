@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:44 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.58 $
+-- > CVS $Date: 2005/05/09 09:28:46 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.59 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -252,8 +252,13 @@ customGrammarPrinter =
 -- grammar conversions:
   ,(strCI "mcfg",     Prt.prt . stateMCFG)
   ,(strCI "cfg",      Prt.prt . stateCFG)
+  ,(strCI "pinfo",    Prt.prt . statePInfo)
+  ,(strCI "abstract", Prt.prtAfter "\n" . Cnv.gfc2abstract . stateGrammarLang)
 -- obsolete, or only for testing:
+  ,(strCI "abs-pl",   Cnv.abstract2prolog . Cnv.gfc2abstract . stateGrammarLang)
+  ,(strCI "cfg-pl",   Cnv.cfg2prolog . stateCFG)
   ,(strCI "simple",   Prt.prt . Cnv.gfc2simple . stateGrammarLang)
+  ,(strCI "mcfg-erasing", Prt.prt . Cnv.simple2mcfg_nondet . Cnv.gfc2simple . stateGrammarLang)
   ,(strCI "finite",   Prt.prt . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
   ,(strCI "single",   Prt.prt . Cnv.removeSingletons . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
   ,(strCI "sg-sg",    Prt.prt . Cnv.removeSingletons . Cnv.removeSingletons . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)

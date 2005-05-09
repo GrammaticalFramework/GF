@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:10 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/05/09 09:28:45 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- CFG parsing, parser information
 -----------------------------------------------------------------------------
@@ -47,7 +47,7 @@ data CFPInfo c n t
 		-- ^ DOES NOT WORK WITH EMPTY RULES!!!
 	      }
 
-buildCFPInfo :: (Ord n, Ord c, Ord t) => CFGrammar c n t -> CFPInfo c n t
+buildCFPInfo :: (Ord c, Ord n, Ord t) => CFGrammar c n t -> CFPInfo c n t
 
 -- this is not permanent...
 buildCFPInfo grammar = traceCalcFirst grammar $
@@ -82,16 +82,17 @@ isCyclic _ = False
 
 
 ----------------------------------------------------------------------
+-- pretty-printing of statistics
 
-instance (Ord n, Ord c, Ord t) => Print (CFPInfo n c t) where
-    prt pI = "[ nr. tokens=" ++ sl grammarTokens ++
-	     "; nr. names=" ++ sla nameRules ++ 
-	     "; nr. tdCats=" ++ sla topdownRules ++
-	     "; nr. buCats=" ++ sla bottomupRules ++ 
-	     "; nr. elcCats=" ++ sla emptyLeftcornerRules ++
-	     "; nr. eCats=" ++ sla emptyCategories ++
-	     "; nr. cCats=" ++ sl cyclicCategories ++
-	     "; nr. lctokCats=" ++ sla leftcornerTokens ++ 
+instance (Ord c, Ord n, Ord t) => Print (CFPInfo c n t) where
+    prt pI = "[ tokens=" ++ sl grammarTokens ++
+	     "; names=" ++ sla nameRules ++ 
+	     "; tdCats=" ++ sla topdownRules ++
+	     "; buCats=" ++ sla bottomupRules ++ 
+	     "; elcCats=" ++ sla emptyLeftcornerRules ++
+	     "; eCats=" ++ sla emptyCategories ++
+	     -- "; cCats=" ++ sl cyclicCategories ++
+	     -- "; lctokCats=" ++ sla leftcornerTokens ++ 
 	     " ]"
 	where sla f = show $ length $ aElems $ f pI
 	      sl  f = show $ length $ f pI

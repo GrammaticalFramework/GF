@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:54 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.3 $
+-- > CVS $Date: 2005/05/09 09:28:44 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
 --
 -- Instantiating all types which only have one single element.
 --
@@ -30,7 +30,7 @@ import Data.List (mapAccumL)
 
 convertGrammar :: SGrammar -> SGrammar
 convertGrammar grammar = if singles == emptyAssoc then grammar
-			 else tracePrt "RemoveSingletons - nr. non-singleton rules" (prt . length) $
+			 else tracePrt "RemoveSingletons - non-singleton rules" (prt . length) $
 			      map (convertRule singles) grammar
     where singles = calcSingletons grammar
 

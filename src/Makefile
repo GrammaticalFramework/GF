@@ -99,6 +99,7 @@ ghci-trace: GHCFLAGS += -DTRACING
 ghci-trace: ghci
 
 touch-files: 
+	rm -f GF/System/Tracing.{hi,o}
 	touch GF/System/Tracing.hs
 
 # profiling

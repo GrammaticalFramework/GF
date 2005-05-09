@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:57 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/05/09 09:28:44 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- Converting SimpleGFC grammars to MCFG grammars, nondeterministically.
 -- Afterwards, the grammar has to be extended with coercion functions,
@@ -33,36 +33,72 @@ import GF.Formalism.SimpleGFC
 import GF.Conversion.Types
 
 import GF.Data.BacktrackM
-
+import GF.Data.Utilities (notLongerThan, updateNthM)
 
 ------------------------------------------------------------
 -- type declarations
 
 type CnvMonad a = BacktrackM Env a
 
-type Env    = (ECat, [ECat], LinRec, [SLinType])
+type Env    = (ECat, [ECat], LinRec, [SLinType]) -- variable bindings: [(Var, STerm)]
 type LinRec = [Lin SCat MLabel Token]
 
 
 ----------------------------------------------------------------------
 -- main conversion function
 
-convertGrammar :: SGrammar -> EGrammar 
-convertGrammar rules = tracePrt "SimpleToMCFG.Nondet - nr. MCFG rules" (prt . length) $
-		       solutions conversion undefined
-    where conversion = member rules >>= convertRule
+maxNrRules :: Int
+maxNrRules = 1000
 
-convertRule :: SRule -> CnvMonad ERule
-convertRule (Rule (Abs decl decls fun) (Cnc ctype ctypes (Just term)))
-    = do let cat : args = map decl2cat (decl : decls)
-	 writeState (initialECat cat, map initialECat args, [], ctypes)
-	 rterm <- simplifyTerm term
-	 reduceTerm ctype emptyPath rterm
-	 (newCat, newArgs, linRec, _) <- readState
-	 let newLinRec = map (instantiateArgs newArgs) linRec
-	     catPaths : argsPaths = map (lintype2paths emptyPath) (ctype : ctypes)
-	 return $ Rule (Abs newCat newArgs fun) (Cnc catPaths argsPaths newLinRec) 
-convertRule _ = failure
+convertGrammar :: SGrammar -> EGrammar 
+convertGrammar rules = traceCalcFirst rules' $
+		       tracePrt "SimpleToMCFG.Nondet - MCFG rules" (prt . length) $
+		       rules'
+    where rules' = rules >>= convertRule
+--		       solutions conversion undefined
+--    where conversion = member rules >>= convertRule
+
+convertRule :: SRule -> [ERule] -- CnvMonad ERule
+convertRule (Rule (Abs decl decls fun) (Cnc ctype ctypes (Just term))) =
+--    | prt(name2fun fun) `elem` 
+--      words "UseCl PosTP TPast ASimul SPredV IndefOneNP DefOneNP UseN2 mother_N2 jump_V" =
+    if notLongerThan maxNrRules rules 
+       then tracePrt ("SimpeToMCFG.Nondet - MCFG rules for " ++ prt fun) (prt . length) $
+	    rules
+       else trace2 "SimpeToMCFG.Nondet - TOO MANY RULES, function not converted" 
+		("More than " ++ show maxNrRules ++ " MCFG rules for " ++ prt fun) $
+            []
+    where rules = flip solutions undefined $
+		  do let cat : args = map decl2cat (decl : decls)
+		     writeState (initialECat cat, map initialECat args, [], ctypes)
+		     rterm <- simplifyTerm term
+		     reduceTerm ctype emptyPath rterm
+		     (newCat, newArgs, linRec, _) <- readState
+		     let newLinRec = map (instantiateArgs newArgs) linRec
+			 catPaths : argsPaths = map (lintype2paths emptyPath) (ctype : ctypes)
+		     -- checkLinRec argsPaths catPaths newLinRec
+		     return $ Rule (Abs newCat newArgs fun) (Cnc catPaths argsPaths newLinRec) 
+convertRule _ = [] -- failure
+
+
+----------------------------------------------------------------------
+-- "type-checking" the resulting linearization
+-- should not be necessary, if the algorithms (type-checking and conversion) are correct
+
+checkLinRec args lbls = mapM (checkLin args lbls) 
+
+checkLin args lbls (Lin lbl lin) 
+    | lbl `elem` lbls = mapM (symbol (checkArg args) (const (return ()))) lin
+    | otherwise = trace2 "SimpleToMCFG.Nondet - ERROR" "Label mismatch" $
+		  failure
+
+checkArg args (_cat, lbl, nr) 
+    | lbl `elem` (args !! nr) = return ()
+--    | otherwise = trace2 "SimpleToMCFG.Nondet - ERROR" ("Label mismatch in arg " ++ prt nr) $
+--		  failure
+    | otherwise = trace2 ("SimpleToMCFG.Nondet - ERROR: Label mismatch in arg " ++ prt nr) 
+		  (prt lbl ++ " `notElem` " ++ prt (args!!nr)) $
+		  failure
 
 
 ----------------------------------------------------------------------
@@ -78,6 +114,7 @@ simplifyTerm (term :! sel)
 			    return val
 	   _ -> do sel' <- expandTerm ssel
 		   return (sterm +! sel')
+-- simplifyTerm (Var x)           = readBinding x
 simplifyTerm (con :^ terms)    = liftM (con :^) $ mapM simplifyTerm terms
 simplifyTerm (Rec record)      = liftM Rec      $ mapM simplifyAssign record
 simplifyTerm (term :. lbl)     = liftM (+. lbl) $      simplifyTerm term
@@ -85,10 +122,6 @@ simplifyTerm (Tbl table)       = liftM Tbl      $ mapM simplifyCase table
 simplifyTerm (Variants terms)  = liftM Variants $ mapM simplifyTerm terms
 simplifyTerm (term1 :++ term2) = liftM2 (:++) (simplifyTerm term1) (simplifyTerm term2)
 simplifyTerm term              = return term
--- error constructors:
---   (I CIdent) - from resource
---   (LI Ident) - pattern variable
---   (EInt Integer) - integer
 
 simplifyAssign :: (Label, STerm) -> CnvMonad (Label, STerm)
 simplifyAssign (lbl, term) = liftM ((,) lbl) $ simplifyTerm term
@@ -101,8 +134,8 @@ simplifyCase (pat, term) = liftM2 (,) (simplifyTerm pat) (simplifyTerm term)
 -- reducing simplified terms, collecting MCF rules
 
 reduceTerm :: SLinType -> SPath -> STerm -> CnvMonad ()
-reduceTerm ctype path (Variants terms) 
-    = member terms >>= reduceTerm ctype path
+--reduceTerm ctype path (Variants terms) 
+--    = member terms >>= reduceTerm ctype path
 reduceTerm (StrT)     path term = updateLin (path, term)
 reduceTerm (ConT _ _) path term = do pat <- expandTerm term
 				     updateHead (path, pat)
@@ -120,23 +153,41 @@ reduceTerm (TblT ptype vtype) path table
 expandTerm :: STerm -> CnvMonad STerm
 expandTerm arg@(Arg nr _ path) 
     = do ctypes <- readArgCTypes
-	 pat <- member $ enumeratePatterns $ lintypeFollowPath path $ ctypes !! nr
-	 pat =?= arg
-	 return pat
+	 unifyPType arg $ lintypeFollowPath path $ ctypes !! nr
+-- expandTerm arg@(Arg nr _ path) 
+--     = do ctypes <- readArgCTypes
+-- 	 pat <- member $ enumeratePatterns $ lintypeFollowPath path $ ctypes !! nr
+-- 	 pat =?= arg
+-- 	 return pat
 expandTerm (con :^ terms)   = liftM (con :^) $ mapM expandTerm terms
 expandTerm (Rec record)     = liftM  Rec     $ mapM expandAssign record
+--expandTerm (Variants terms) = liftM Variants $ mapM expandTerm terms  
 expandTerm (Variants terms) = member terms >>= expandTerm  
 expandTerm term = error $ "expandTerm: " ++ prt term
 
 expandAssign :: (Label, STerm) -> CnvMonad (Label, STerm)
 expandAssign (lbl, term) = liftM ((,) lbl) $ expandTerm term
 
+unifyPType :: STerm -> SLinType -> CnvMonad STerm
+unifyPType arg (RecT prec) = 
+    liftM Rec $
+    sequence [ liftM ((,) lbl) $
+	       unifyPType (arg +. lbl) ptype |
+	       (lbl, ptype) <- prec ]
+unifyPType (Arg nr _ path) (ConT con terms) = 
+    do (_, args, _, _) <- readState
+       case lookup path (ecatConstraints (args !! nr)) of
+         Just term -> return term
+         Nothing -> do term <- member terms
+		       updateArg nr (path, term)
+		       return term
 
 ------------------------------------------------------------
 -- unification of patterns and selection terms
 
 (=?=) :: STerm -> STerm -> CnvMonad ()
-Wildcard      =?= _               = return ()
+-- Wildcard      =?= _               = return ()
+-- Var x         =?= term            = addBinding x term
 Rec precord   =?= arg@(Arg _ _ _) = sequence_ [ pat =?= (arg +. lbl) |
 						(lbl, pat) <- precord ]
 pat           =?= Arg nr _ path   = updateArg nr (path, pat)
@@ -147,6 +198,15 @@ Rec precord   =?= Rec record      = sequence_ [ maybe mzero (pat =?=) mterm |
 						let mterm = lookup lbl record ]
 pat =?= term = error $ "(=?=): " ++ prt pat ++ " =?= " ++ prt term
 
+----------------------------------------------------------------------
+-- variable bindings (does not work correctly)
+{-
+addBinding x term = do (a, b, c, d, bindings) <- readState
+		       writeState (a, b, c, d, (x,term):bindings)
+
+readBinding x = do (_, _, _, _, bindings) <- readState
+		   return $ maybe (Var x) id $ lookup x bindings
+-}
 
 ------------------------------------------------------------
 -- updating the MCF rule
@@ -158,7 +218,7 @@ readArgCTypes = do (_, _, _, env) <- readState
 updateArg :: Int -> Constraint -> CnvMonad ()
 updateArg arg cn
     = do (head, args, lins, env) <- readState 
-	 args' <- updateNth (addToECat cn) arg args
+	 args' <- updateNthM (addToECat cn) arg args
 	 writeState (head, args', lins, env)
 
 updateHead :: Constraint -> CnvMonad ()
@@ -192,12 +252,5 @@ addConstraint cn0 (cn : cns)
 			  return (cn : cns)
 addConstraint cn0 cns   = return (cn0 : cns)
 
-
-----------------------------------------------------------------------
--- utilities 
-
-updateNth :: Monad m => (a -> m a) -> Int -> [a] -> m [a]
-updateNth update 0 (a : as) = liftM (:as) (update a)
-updateNth update n (a : as) = liftM (a:)  (updateNth update (n-1) as)
 
 

@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:58 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/05/09 09:28:44 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- Converting SimpleGFC grammars to MCFG grammars, deterministic.
 --
@@ -39,7 +39,7 @@ import GF.Data.SortedList
 type CnvMonad a = BacktrackM () a
 
 convertGrammar :: SGrammar -> EGrammar 
-convertGrammar rules = tracePrt "SimpleToMCFG.Strict - nr. MCFG rules" (prt . length) $
+convertGrammar rules = tracePrt "SimpleToMCFG.Strict - MCFG rules" (prt . length) $
 		       solutions conversion undefined
     where conversion = member rules >>= convertRule
 
