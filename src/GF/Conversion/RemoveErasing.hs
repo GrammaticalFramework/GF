@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:53 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.2 $
+-- > CVS $Date: 2005/05/09 09:28:44 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.3 $
 --
 -- Removing erasingness from MCFG grammars (as in Ljunglöf 2004, sec 4.5.1)
 -----------------------------------------------------------------------------
@@ -18,7 +18,7 @@ module GF.Conversion.RemoveErasing
 import GF.System.Tracing
 import GF.Infra.Print
 
-import Control.Monad
+import Control.Monad 
 import Data.List (mapAccumL)
 import Data.Maybe (mapMaybe)
 import GF.Formalism.Utilities
@@ -29,18 +29,23 @@ import GF.Data.Assoc
 import GF.Data.SortedList
 import GF.Data.GeneralDeduction
 
-convertGrammar :: EGrammar -> MGrammar
-convertGrammar grammar
-    = tracePrt "RemoveErasing - nr. nonerasing rules" (prt . length) $
-      traceCalcFirst finalChart $
-      trace2 "RemoveErasing - nr. nonerasing cats" (prt $ length $ chartLookup finalChart False) $
-      trace2 "RemoveErasing - nr. initial ne-cats" (prt $ length initialCats) $
-      trace2 "RemoveErasing - nr. erasing rules" (prt $ length grammar) $
-      newGrammar
-    where newGrammar  = [ rule | NR rule <- chartLookup finalChart True ]
-	  finalChart  = buildChart keyof [newRules rulesByCat] initialCats
-	  initialCats = initialCatsBU rulesByCat
-	  rulesByCat  = accumAssoc id [ (cat, rule) | rule@(Rule (Abs cat _ _) _) <- grammar ]
+convertGrammar :: EGrammar -> [SCat] -> MGrammar
+convertGrammar grammar starts = newGrammar
+    where newGrammar  = tracePrt "RemoveErasing - nonerasing rules" (prt . length) $
+			[ rule | NR rule <- chartLookup finalChart True ]
+	  finalChart  = tracePrt "RemoveErasing - nonerasing cats" 
+			(prt . length . flip chartLookup False) $
+			buildChart keyof [newRules rulesByCat] $
+			tracePrt "RemoveErasing - initial ne-cats" (prt . length) $
+			initialCats
+	  initialCats = trace2 "RemoveErasing - starting categories" (prt starts) $
+			if null starts 
+			  then trace2 "RemoveErasing" "initialCatsBU" $
+			       initialCatsBU rulesByCat
+			  else trace2 "RemoveErasing" ("initialCatsTD: " ++ prt starts) $
+			       initialCatsTD rulesByCat starts
+	  rulesByCat  = trace2 "RemoveErasing - erasing rules" (prt $ length grammar) $
+			accumAssoc id [ (cat, rule) | rule@(Rule (Abs cat _ _) _) <- grammar ]
 
 data Item r c = NR r | NC c deriving (Eq, Ord, Show)
 
@@ -77,7 +82,12 @@ newRules grammar chart (NC newCat@(MCat cat lbls))
 	     accumProf nr = maybe (nr, Unify []) $ const (nr+1, Unify [nr])
 	     newName = Name fun (newProfile `composeProfiles` profile)
 
+         guard $ all (not . null) argLbls
 	 return $ NR (Rule (Abs newCat newArgs newName) (Cnc lbls argLbls newLins))
+
+initialCatsTD grammar starts =
+    [ cat | cat@(NC (MCat (ECat start _) _)) <- initialCatsBU grammar,
+      start `elem` starts ]
 
 initialCatsBU grammar 
     = [ NC (MCat cat [lbl]) | (cat, rules) <- aAssocs grammar, 

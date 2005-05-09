@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:03 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.2 $
+-- > CVS $Date: 2005/05/09 09:28:44 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.3 $
 --
 -- Implementation of /incremental/ deductive parsing,
 -- i.e. parsing one word at the time.
@@ -18,7 +18,7 @@ module GF.Data.IncrementalDeduction
      -- * Functions
      chartLookup,
      buildChart,
-     chartList
+     chartList, chartKeys
     ) where
 
 import Data.Array
@@ -45,6 +45,8 @@ chartList :: (Ord item, Ord key) =>
 					  -- the position and the item
 	  -> [edge]
 
+chartKeys :: (Ord item, Ord key) => IncrementalChart item key -> Int -> [key]
+
 type IncrementalChart item key = Array Int (Assoc key (SList item))
 
 ----------
@@ -61,4 +63,5 @@ chartList chart combine = [ combine k item |
 			    (k, state) <- assocs chart, 
 			    item <- concatMap snd $ aAssocs state ]
 
+chartKeys chart k = aElems (chart ! k)
 

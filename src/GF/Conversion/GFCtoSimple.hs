@@ -4,13 +4,17 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:50 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/05/09 09:28:43 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
 -- Converting GFC to SimpleGFC
 --
--- the conversion might fail if the GFC grammar has dependent or higher-order types
+-- the conversion might fail if the GFC grammar has dependent or higher-order types,
+-- or if the grammar contains bound pattern variables
+-- (use -optimize=values/share/none when importing)
+--
+-- TODO: lift all functions to the 'Err' monad
 -----------------------------------------------------------------------------
 
 module GF.Conversion.GFCtoSimple
@@ -38,7 +42,7 @@ type Env = (CanonGrammar, I.Ident)
 
 convertGrammar :: Env -> SGrammar
 convertGrammar gram = trace2 "GFCtoSimple - concrete language" (prt (snd gram)) $
-		      tracePrt "GFCtoSimple - nr. simpleGFC rules" (prt . length) $
+		      tracePrt "GFCtoSimple - simpleGFC rules" (prt . length) $
 		      [ convertAbsFun gram fun typing |
 			A.Mod (A.MTAbs modname) _ _ _ defs <- modules,
 			A.AbsDFun fun typing _ <- defs ]
@@ -63,21 +67,21 @@ convertAbstract env fun a
 convertType :: Var -> [TTerm] -> A.Exp -> SDecl
 convertType x args (A.EApp a b) = convertType x (convertExp [] b : args) a
 convertType x args (A.EAtom at) = Decl x (convertCat at) args
-convertType x args exp = error $ "convertType: " ++ prt exp
+convertType x args exp          = error $ "GFCtoSimple.convertType: " ++ prt exp
 
 convertExp :: [TTerm] -> A.Exp -> TTerm
 convertExp args (A.EAtom at) = convertAtom args at
 convertExp args (A.EApp a b) = convertExp (convertExp [] b : args) a
-convertExp args exp = error $ "convertExp: " ++ prt exp
+convertExp args exp          = error $ "GFCtoSimple.convertExp: " ++ prt exp
 
 convertAtom :: [TTerm] -> A.Atom -> TTerm
 convertAtom args (A.AC con) = con :@ reverse args
 convertAtom []   (A.AV var) = TVar var
-convertAtom args atom = error $ "convertAtom: " ++ prt args ++ " " ++ prt atom
+convertAtom args atom       = error $ "GFCtoSimple.convertAtom: " ++ prt args ++ " " ++ prt atom
 
 convertCat :: A.Atom -> SCat
 convertCat (A.AC (A.CIQ _ cat)) = cat
-convertCat atom = error $ "convertCat: " ++ show atom
+convertCat atom                 = error $ "GFCtoSimple.convertCat: " ++ show atom
 
 ----------------------------------------------------------------------
 -- concrete definitions
@@ -88,45 +92,43 @@ convertConcrete gram (Abs decl args name) = Cnc ltyp largs term
 	  ltyp : largs = map (convertCType gram . lookupCType gram) (decl : args)
 
 convertCType :: Env -> A.CType -> SLinType
-convertCType gram (A.RecType rec) 
-    = RecT [ (lbl, convertCType gram ctype) | A.Lbg lbl ctype <- rec ]
-convertCType gram (A.Table ptype vtype) 
-    = TblT (convertCType gram ptype) (convertCType gram vtype)
-convertCType gram ct@(A.Cn con) = ConT con $ map (convertTerm gram) $ groundTerms gram ct
-convertCType gram (A.TStr) = StrT
-convertCType gram (A.TInts n) = error "convertCType: cannot handle 'TInts' constructor"
+convertCType gram (A.RecType rec) = RecT [ (lbl, convertCType gram ctype) | A.Lbg lbl ctype <- rec ]
+convertCType gram (A.Table pt vt) = TblT (convertCType gram pt) (convertCType gram vt)
+convertCType gram ct@(A.Cn con)   = ConT con $ map (convertTerm gram) $ groundTerms gram ct
+convertCType gram (A.TStr)        = StrT
+convertCType gram (A.TInts n)     = error "GFCtoSimple.convertCType: cannot handle 'TInts' constructor"
 
 convertTerm :: Env -> A.Term -> STerm
-convertTerm gram (A.Arg arg) = convertArgVar arg
+convertTerm gram (A.Arg arg)       = convertArgVar arg
 convertTerm gram (A.Con con terms) = con :^ map (convertTerm gram) terms
-convertTerm gram (A.LI var) = Var var
-convertTerm gram (A.R rec) = Rec [ (lbl, convertTerm gram term) | A.Ass lbl term <- rec ]
-convertTerm gram (A.P term lbl) = convertTerm gram term +. lbl
+-- convertTerm gram (A.LI var)        = Var var
+convertTerm gram (A.R rec)         = Rec [ (lbl, convertTerm gram term) | A.Ass lbl term <- rec ]
+convertTerm gram (A.P term lbl)    = convertTerm gram term +. lbl
 convertTerm gram (A.V ctype terms) = Tbl [ (convertTerm gram pat, convertTerm gram term) |
 					  (pat, term) <- zip (groundTerms gram ctype) terms ]
-convertTerm gram (A.T ctype tbl) = Tbl [ (convertPatt pat, convertTerm gram term) |
-					A.Cas pats term <- tbl, pat <- pats ]
-convertTerm gram (A.S term sel) = convertTerm gram term +! convertTerm gram sel
+convertTerm gram (A.T ctype tbl)   = Tbl [ (convertPatt pat, convertTerm gram term) |
+					   A.Cas pats term <- tbl, pat <- pats ]
+convertTerm gram (A.S term sel)    = convertTerm gram term :! convertTerm gram sel
 convertTerm gram (A.C term1 term2) = convertTerm gram term1 ?++ convertTerm gram term2
-convertTerm gram (A.FV terms) = variants (map (convertTerm gram) terms)
+convertTerm gram (A.FV terms)      = variants (map (convertTerm gram) terms)
+convertTerm gram (A.E)             = Empty
+convertTerm gram (A.K (A.KS tok))  = Token tok
 -- 'pre' tokens are converted to variants (over-generating):
-convertTerm gram (A.K (A.KP [s] vs))
-    = variants $ Token s : [ Token v | A.Var [v] _ <- vs ]
-convertTerm gram (A.K (A.KP _ _)) = error "convertTerm: don't know how to handle string lists in 'pre' tokens"
-convertTerm gram (A.K (A.KS tok)) = Token tok
-convertTerm gram (A.E) = Empty
-convertTerm gram (A.I con) = error "convertTerm: cannot handle 'I' constructor"
-convertTerm gram (A.EInt int) = error "convertTerm: cannot handle 'EInt' constructor"
+convertTerm gram (A.K (A.KP strs vars))
+                                   = variants $ map conc $ strs : [ vs | A.Var vs _ <- vars ]
+    where conc = foldr1 (?++) . map Token 
+convertTerm gram (A.I con)         = error "GFCtoSimple.convertTerm: cannot handle 'I' constructor"
+convertTerm gram (A.EInt int)      = error "GFCtoSimple.convertTerm: cannot handle 'EInt' constructor"
 
 convertArgVar :: A.ArgVar -> STerm
-convertArgVar (A.A cat nr) = Arg (fromInteger nr) cat emptyPath
+convertArgVar (A.A cat nr)           = Arg (fromInteger nr) cat emptyPath
 convertArgVar (A.AB cat bindings nr) = Arg (fromInteger nr) cat emptyPath
 
 convertPatt (A.PC con pats) = con :^ map convertPatt pats
-convertPatt (A.PV x) = Var x
-convertPatt (A.PW) = Wildcard
-convertPatt (A.PR rec) = Rec [ (lbl, convertPatt pat) | A.PAss lbl pat <- rec ]
-convertPatt (A.PI n) = error "convertPatt: cannot handle 'PI' constructor"
+-- convertPatt (A.PV x)        = Var x
+-- convertPatt (A.PW)          = Wildcard
+convertPatt (A.PR rec)      = Rec [ (lbl, convertPatt pat) | A.PAss lbl pat <- rec ]
+convertPatt (A.PI n)        = error "GFCtoSimple.convertPatt: cannot handle 'PI' constructor"
 
 ----------------------------------------------------------------------
 

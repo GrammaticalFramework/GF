@@ -3,7 +3,9 @@ abstract TestVarsA = {
 
 cat S;
 
-fun a : S;
+fun 
+f : S -> S;
+a : S;
 
 }
 

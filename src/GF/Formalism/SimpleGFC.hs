@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:13 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/05/09 09:28:45 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
 -- Simplistic GFC format
 -----------------------------------------------------------------------------
@@ -56,11 +56,12 @@ varsInTTerm tterm = vars tterm []
 
 tterm2term :: TTerm -> Term c t
 tterm2term (con :@ terms) = con :^ map tterm2term terms
-tterm2term (TVar x) = Var x
+-- tterm2term (TVar x) = Var x
+tterm2term term = error $ "tterm2term: illegal term"
 
 term2tterm :: Term c t -> TTerm
 term2tterm (con :^ terms) = con :@ map term2tterm terms
-term2tterm (Var x) = TVar x
+-- term2tterm (Var x) = TVar x
 term2tterm term = error $ "term2tterm: illegal term"
 
 -- ** linearization types and terms
@@ -88,8 +89,8 @@ data Term c t
     | Term c t :++ Term c t      -- ^ concatenation
     | Token t   -- ^ single token
     | Empty     -- ^ empty string
-    | Wildcard  -- ^ wildcard pattern variable
-    | Var Var   -- ^ bound pattern variable
+    ---- | Wildcard  -- ^ wildcard pattern variable
+    ---- | Var Var   -- ^ bound pattern variable
 
      -- Res CIdent        -- ^ resource identifier
      -- Int Integer       -- ^ integer
@@ -112,6 +113,27 @@ Arg arg cat path +! pat = Arg arg cat (path ++! pat)
 -- cannot handle tables with pattern variales or wildcards (yet):
 term@(Tbl table) +! pat = maybe (term :! pat) id $ lookup pat table
 term +! pat = term :! pat
+
+{- does not work correctly:
+lookupTbl term [] _ = term
+lookupTbl _ ((Wildcard, term) : _) _ = term
+lookupTbl _ ((Var x, term) : _) pat = subst x pat term
+lookupTbl _ ((pat', term) : _) pat | pat == pat' = term
+lookupTbl term (_ : tbl) pat = lookupTbl term tbl pat
+
+subst x a (Arg n c (Path path)) = Arg n c (Path (map substP path))
+    where substP (Right (Var y)) | x==y = Right a
+	  substP p = p
+subst x a (con :^ ts) = con :^ map (subst x a) ts
+subst x a (Rec rec) = Rec [ (l, subst x a t) | (l, t) <- rec ]
+subst x a (t :. l) = subst x a t +. l
+subst x a (Tbl tbl) = Tbl [ (subst x a p, subst x a t) | (p, t) <- tbl ]
+subst x a (t :! s) = subst x a t +! subst x a s
+subst x a (Variants ts) = variants $ map (subst x a) ts
+subst x a (t1 :++ t2) = subst x a t1 ?++ subst x a t2
+subst x a (Var y) | x==y = a
+subst x a t = t
+-}
 
 (?++) :: Term c t -> Term c t -> Term c t
 Variants terms ?++ term  = variants $ map (?++ term) terms
@@ -213,10 +235,10 @@ instance (Print c, Print t) => Print (Term c t) where
     prt (t1 :++ t2) = prt t1 ++ "++" ++ prt t2
     prt (Token t)   = "'" ++ prt t ++ "'"
     prt (Empty)     = "[]"
-    prt (Wildcard)  = "_"
     prt (term :. lbl) = prt term ++ "." ++ prt lbl
     prt (term :! sel) = prt term ++ "!" ++ prt sel
-    prt (Var var) = "?" ++ prt var
+--    prt (Wildcard)  = "_"
+--    prt (Var var) = "?" ++ prt var
 
 instance (Print c, Print t) => Print (Path c t) where
     prt (Path path) = concatMap prtEither (reverse path)

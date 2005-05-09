@@ -1,123 +1,163 @@
-{-- Module --------------------------------------------------------------------
-  Filename:    IncrementalParse.hs
-  Author:      Håkan Burden
-  Time-stamp:  <2005-04-18, 15:07>
 
-  Description: An agenda-driven implementation of the incremental algorithm 4.6
-               that handles erasing and suppressing MCFG.
-               As described in Ljunglöf (2004)   
-------------------------------------------------------------------------------}
+module GF.Parsing.MCFG.Incremental (parse, parseR) where
 
-module GF.Parsing.MCFG.Incremental where
-
-
--- Haskell
 import Data.List
+import Control.Monad (guard) 
 
--- GF modules
-import Examples
-import GF.OldParsing.GeneralChart
-import GF.OldParsing.MCFGrammar
-import MCFParser
-import Parser
+import GF.Data.Utilities (select)
+import GF.Data.GeneralDeduction
+
+import GF.Formalism.GCFG
+import GF.Formalism.MCFG
+import GF.Formalism.Utilities
+
 import GF.Parsing.MCFG.Range
-import Nondet
+import GF.Parsing.MCFG.PInfo
+
+import GF.System.Tracing
+import GF.Infra.Print
+
+----------------------------------------------------------------------
+-- parsing
+
+parse :: (Ord n, Ord c, Ord l, Ord t) => MCFParser c n l t
+parse pinfo starts toks =
+    [ Abs (cat, found) (zip rhs rrecs) fun |
+      Final (Abs cat rhs fun) found rrecs <- chartLookup chart Fin ]
+    where chart = process pinfo toks ntoks
+	  ntoks = snd (inputBounds toks)
+
+-- parseR :: (Ord n, Ord c, Ord l, Ord t) => MCFParser c n l t
+parseR pinfo starts ntoks =
+    [ Abs (cat, found) (zip rhs rrecs) fun |
+      Final (Abs cat rhs fun) found rrecs <- chartLookup chart Fin ]
+    where chart = processR pinfo ntoks 
+
+process :: (Ord n, Ord c, Ord l, Ord t) => MCFPInfo c n l t -> Input t -> Int -> IChart c n l
+process pinfo toks ntoks
+    = tracePrt "MCFG.Incremental - chart size" prtSizes $
+      buildChart keyof [complete ntoks, scan, combine, convert] (predict pinfo toks ntoks)
+
+processR :: (Ord n, Ord c, Ord l) => MCFPInfo c n l Range -> Int -> IChart c n l
+processR pinfo ntoks
+    = tracePrt "MCFG.Incremental Range - chart size" prtSizes $
+      buildChart keyof [complete ntoks, scan, combine, convert] (predictR pinfo ntoks)
+
+complete ::  (Ord n, Ord c, Ord l) => Int -> IChart c n l -> Item c n l -> [Item c n l]
+complete ntoks _ (Active rule found rng (Lin l []) lins recs) = 
+    do (lin, lins') <- select lins
+       k <- [minRange rng .. ntoks]
+       return $ Active rule (found ++ [(l, rng)]) (Range (k,k)) lin lins' recs 
+complete _ _ _ = []
 
 
-{-- Datatypes -----------------------------------------------------------------
-  IChart: A RedBlackMap with Items and Keys
-  Item   : One kind of Item since the Passive Items not necessarily need to be 
-           saturated iow, they can still have rows to recognize. 
-  IKey  :  
-------------------------------------------------------------------------------}
+predict :: (Ord n, Ord c, Ord l, Ord t) => MCFPInfo c n l t -> Input t -> Int -> [Item c n l]
+predict pinfo toks n = 
+    tracePrt "MCFG.Incremental - predicted rules" (prt . length) $
+    do Rule abs@(Abs _ rhs _) (Cnc _ _ lins) <- rulesMatchingInput pinfo toks
+       let daughters = replicate (length rhs) []
+       lins' <- rangeRestRec toks lins
+       (lin', lins'') <- select lins'
+       k <- [0..n] 
+       return $ Active abs [] (Range (k,k)) lin' lins'' daughters 
 
-type IChart n c l = ParseChart (Item n c l) (IKey c l) 
 
-data Item   n c l = Active (AbstractRule n c) 
+predictR :: (Ord n, Ord c, Ord l) => MCFPInfo c n l Range -> Int -> [Item c n l]
+predictR pinfo n = 
+    tracePrt "MCFG.Incremental Range - predicted rules" (prt . length) $
+    do Rule abs@(Abs _ rhs _) (Cnc _ _ lins) <- allRules pinfo 
+       let daughters = replicate (length rhs) []
+       (lin, lins') <- select lins
+       k <- [0..n] 
+       return $ Active abs [] (Range (k,k)) lin lins' daughters 
+
+
+scan :: (Ord n, Ord c, Ord l) => IChart c n l -> Item c n l -> [Item c n l]
+scan _ (Active abs found rng (Lin l (Tok rng':syms)) lins recs) = 
+    do rng'' <- concatRange rng rng' 
+       return $ Active abs found rng'' (Lin l syms) lins recs 
+scan _ _ = []
+
+
+combine :: (Ord n, Ord c, Ord l) => IChart c n l -> Item c n l -> [Item c n l]
+combine chart active@(Active _ _ rng (Lin _ (Cat (c,l,_):_)) _ _) = 
+    do passive <- chartLookup chart (Pass c l (maxRange rng))
+       combine2 active passive
+combine chart passive@(Active (Abs c _ _) _ rng (Lin l []) _ _) = 
+    do active <- chartLookup chart (Act c l (minRange rng))
+       combine2 active passive
+combine _ _ = [] 
+
+combine2 (Active abs found rng (Lin l (Cat (c,l',d):syms)) lins recs) 
+	     (Active _ found' rng' _ _ _)
+    = do rng'' <- concatRange rng rng' 
+	 recs' <- unifyRec recs d found''
+	 return $ Active abs found rng'' (Lin l syms) lins recs'
+    where found'' = found' ++ [(l',rng')]
+
+
+convert _ (Active rule found rng (Lin lbl []) [] recs) = 
+    return $ Final rule (found ++ [(lbl,rng)]) recs
+convert _ _ = []
+
+----------------------------------------------------------------------
+-- type definitions
+
+type IChart c n l = ParseChart (Item c n l) (IKey c l) 
+
+data Item   c n l = Active (Abstract c n) 
                            (RangeRec l) 
 			   Range 
 			   (Lin c l Range) 
 			   (LinRec c l Range) 
 			   [RangeRec l]
---		  | Passive (AbstractRule n c) 
---		            (RangeRec l) 
---			    [RangeRec l]
+		  | Final (Abstract c n) (RangeRec l) [RangeRec l]
+--		  | Passive c (RangeRec l) 
 		    deriving (Eq, Ord, Show)
 
 data IKey     c l = Act c l Int
---		  | ActE l
                   | Pass c l Int
---		  | Pred l
 		  | Useless
+		  | Fin
 		    deriving (Eq, Ord, Show)
 
-keyof :: Item n c l -> IKey c l
-keyof (Active _ _ (Range (_,j)) (Lin _ ((Cat (next,lbl,_)):_)) _ _) 
-    = Act next lbl j
-keyof (Active (_, cat, _) found (Range (i,_)) (Lin lbl []) _ _) 
-    = Pass cat lbl i 
+keyof :: Item c n l -> IKey c l
+keyof (Active _ _ rng (Lin _ (Cat (next,lbl,_):_)) _ _) 
+    = Act next lbl (maxRange rng)
+keyof (Active (Abs cat _ _) found rng (Lin lbl []) _ _) 
+    = Pass cat lbl (minRange rng)
+keyof (Final _ _ _) = Fin
 keyof _                                                       
     = Useless
 
 
-{-- Parsing -------------------------------------------------------------------
-  recognize: 
-  parse    : Builds a chart from the initial agenda, given by prediction, and
-             the inference rules 
-  keyof    : Given an Item returns an appropriate Key for the Chart
-------------------------------------------------------------------------------}
+----------------------------------------------------------------------
+-- for tracing purposes
+prtSizes chart = "final=" ++ show (length (chartLookup chart Fin)) ++
+		 ", passive=" ++ show (sum [length (chartLookup chart k) | 
+					    k@(Pass _ _ _) <- chartKeys chart ]) ++
+		 ", active=" ++ show (sum [length (chartLookup chart k) | 
+					   k@(Act _ _ _) <- chartKeys chart ]) ++
+		 ", useless=" ++ show (length (chartLookup chart Useless)) 
 
-recognize mcfg toks = chartMember (parse mcfg toks) item (keyof item)
-    where n = length toks
-	  n2 = n `div` 2
-	  item = Active ("f",S,[A]) 
-		 [] (Range (0, n)) (Lin "s" []) []
-		 [[("p", Range (0, n2)), ("q", Range (n2, n))]]
+prtChart chart = concat [ "\n*** KEY: " ++ prt k ++ 
+			  prtBefore "\n  " (chartLookup chart k) | 
+			  k <- chartKeys chart ] 
 
+instance (Print c, Print n, Print l) => Print (Item c n l) where
+    prt (Active abs found rng lin tofind children) = 
+	"? " ++ prt abs ++ ";\n\t" ++ 
+	"{" ++ prtSep " " found ++ "} " ++ prt rng ++ " . " ++ 
+	prt lin ++ "{" ++ prtSep " " tofind ++ "}" ++
+        ( if null children then ";" else ";\n\t" ++
+	  "{" ++ prtSep "} {" (map (prtSep " ") children) ++ "}" )
+--    prt (Passive c rrec) = "- " ++ prt c ++ "; {" ++ prtSep " " rrec ++ "}"
+    prt (Final abs rr rrs) = ": " ++ prt abs ++ ";\n\t{" ++ prtSep " " rr ++ "}" ++ 
+			     ( if null rrs then ";" else ";\n\t" ++ 
+			       "{" ++ prtSep "} {" (map (prtSep " ") rrs) ++ "}" )
 
-parse :: (Ord n, Ord c, Ord l, Eq t) => Grammar n c l t -> [t] -> IChart n c l
-parse mcfg toks = buildChart keyof [complete ntoks, scan, combine] (predict mcfg toks ntoks)
-    where ntoks = length toks
-
-complete ::  (Ord n, Ord c, Ord l) => Int -> IChart n c l
-	 -> Item n c l -> [Item n c l]
-complete ntoks _ (Active rule found rng@(Range (_,j)) (Lin l []) lins recs) = 
-    [ Active rule (found ++ [(l, rng)]) (Range (k,k)) lin lins' recs  |
-      (lin, lins') <- select lins,
-      k <- [j .. ntoks] ]
-complete _ _ _ = []
-
-
-predict :: (Eq n, Eq c, Eq l, Eq t) => Grammar n c l t -> [t] -> Int -> [Item n c l]
-predict mcfg toks n = [ Active (f, c, rhs) [] (Range (k,k)) lin' lins'' daughters |
-		 	Rule c rhs lins f <- mcfg,
-			let daughters = replicate (length rhs) [],
-			lins' <- solutions $ rangeRestRec toks lins, 
-			(lin', lins'') <- select lins',
-			k <- [0..n] ]
-
-
-scan :: (Ord n, Ord c, Ord l) => IChart n c l -> Item n c l -> [Item n c l]
-scan _ (Active rule found rng (Lin l (Tok rng':syms)) lins recs) = 
-    [ Active rule found rng'' (Lin l syms) lins recs | 
-      rng'' <- solutions $ concRanges rng rng' ]
-scan _ _            = []
-
-
-combine :: (Ord n, Ord c, Ord l) => IChart n c l -> Item n c l -> [Item n c l]
-combine chart (Active rule found rng@(Range (_,j)) (Lin l ((Cat (c,r,d)):syms)) lins recs) = 
-    [ Active rule found rng'' (Lin l syms) lins (replaceRec recs d (found' ++ [(l',rng')])) |
-      Active _ found' rng' (Lin l' []) _ _ <-  chartLookup chart (Pass c r j),
-      subsumes (recs !! d) (found' ++ [(l',rng')]),
-      rng'' <- solutions $ concRanges rng rng' ] 
-combine chart (Active (_,c,_) found rng'@(Range (i,_)) (Lin l []) _ _) = 
-    [ Active rule found' rng'' (Lin l' syms) lins (replaceRec recs d (found ++ [(l,rng')])) |
-      Active rule found' rng (Lin l' ((Cat (c,r,d)):syms)) lins recs
-            <- chartLookup chart (Act c l i),
-      subsumes (recs !! d) (found ++ [(l,rng')]),
-      rng'' <- solutions $ concRanges rng rng' ]
-combine _ _ = [] 
-
-
-
-
+instance (Print c, Print l) => Print (IKey c l) where
+    prt (Act c l i) = "Active " ++ prt c ++ " " ++ prt l ++ " @ " ++ prt i
+    prt (Pass c l i) = "Passive " ++ prt c ++ " " ++ prt l ++ " @ " ++ prt i
+    prt (Fin) = "Final"
+    prt (Useless) = "Useless"
