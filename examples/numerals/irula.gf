@@ -11,7 +11,8 @@ oper
   oper uru : Str = "u:" + pre {"r_u" ; "tti" / cons ; "tt"/ vowel} ;
   laks : Str = "lacca" + T ;
   ayira : Str = "a:yira" + T ;
-  cavira : Str = variants {ayira ; "ca:vira" + T} ;  
+----  cavira : Str = variants {ayira ; "ca:vira" + T} ; ----BUG in Compute (AR 9/5/2005) 
+  cavira : Str = variants {"a:yira" + T ; "ca:vira" + T} ;  
 
   T : Str = pre {[] ; "tt" / vowel ; "tti" / cons} ;
   U : Str = pre {"u" ; [] / vowel } ;-- ; "ï" / cons} ;
@@ -49,7 +50,9 @@ lin n9 = {s = table {unit => "ombadu" ; teen => "pattombad"+U ;
 oper ss : Str -> LinS100 = \s1 -> {s = table {p => s1 ; lak => bind s1 cavira }} ;
 
 lin pot01 =
-  {s = table {unit => pre {[] ; "önr_u" / strs {[]}} ; 
+  {s = table {unit => "önr_u" ; ---- pre {[] ; "önr_u" / strs {[]}} ;
+                                ---- equivalent by the sem. of pre. AR
+
               thou => cavira ;
               thou2 => "or" + ayira ; 
               hund => "n" + uru ; 

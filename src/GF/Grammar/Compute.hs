@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:45:23 $ 
+-- > CVS $Date: 2005/05/09 15:44:59 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.16 $
+-- > CVS $Revision: 1.17 $
 --
 -- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
@@ -167,14 +167,17 @@ computeTerm gr = comp where
          (_,Empty)         -> return x
          (Empty,_)         -> return y
          (K a, K b)        -> return $ K (a ++ b)
-         (K a, Alts (d,vs)) -> do
-----         (_, Alts (d,vs)) -> do
+         (_, Alts (d,vs)) -> do
+----         (K a, Alts (d,vs)) -> do
             let glx = Glue x
             comp g $ Alts (glx d, [(glx v,c) | (v,c) <- vs])
-         (Alts _, K a) -> checks [do
+         (Alts _, ka) -> checks [do
+            y' <- strsFromTerm ka
+----         (Alts _, K a) -> checks [do
             x' <- strsFromTerm x -- this may fail when compiling opers
             return $ variants [
-              foldr1 C (map K (str2strings (glueStr v (str a)))) | v <- x']
+              foldr1 C (map K (str2strings (glueStr v u))) | v <- x', u <- y']
+----              foldr1 C (map K (str2strings (glueStr v (str a)))) | v <- x']
            ,return $ Glue x y
            ]
          (FV ks,_)         -> do

@@ -47,7 +47,8 @@ lin n9 = mkN "oymbadï" ("pattoymbad"+I) "tomb" "oymbayn" "oymbad" ;
 oper ss : Str -> LinS100 = \s1 -> {s = table {p => s1 ; lak => bind s1 ayra }} ;
 
 lin pot01 =
-  {s = table {unit => pre {[] ; "ondï" / strs {[]}} ; 
+  {s = table {unit => "ondï" ; ---- pre {[] ; "ondï" / strs {[]}} ;
+                               ---- equivalent by the sem. of pre. AR
               thou => variants {ayra ; "o:r" + ayra} ; 
               hund => "n" + uri ; 
               _ => "dummy"} };
