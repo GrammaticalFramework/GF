@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:19 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.15 $
+-- > CVS $Date: 2005/05/09 09:45:23 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.16 $
 --
 -- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
@@ -168,6 +168,7 @@ computeTerm gr = comp where
          (Empty,_)         -> return y
          (K a, K b)        -> return $ K (a ++ b)
          (K a, Alts (d,vs)) -> do
+----         (_, Alts (d,vs)) -> do
             let glx = Glue x
             comp g $ Alts (glx d, [(glx v,c) | (v,c) <- vs])
          (Alts _, K a) -> checks [do
