@@ -148,7 +148,7 @@ lin
   rock_N = regN "rock" ;
   roof_N = regN "roof" ;
   rubber_N = regN "rubber" ;
-  run_V = (irregV "run" "ran" "run") ;
+  run_V = (irregDuplV "run" "ran" "run") ;
   say_VS = mkVS (irregV "say" "said" "said") ;
   school_N = regN "school" ;
   science_N = regN "science" ;
