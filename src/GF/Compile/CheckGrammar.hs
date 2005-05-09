@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/28 16:42:48 $ 
+-- > CVS $Date: 2005/05/09 09:45:23 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.25 $
+-- > CVS $Revision: 1.26 $
 --
 -- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
 --
@@ -565,7 +565,7 @@ checkLType env trm typ0 = do
 ---      checkIfComplexVariantType trm typ
       return (FV (map fst ttys), typ) --- typ' ?
 
-    S tab arg -> do
+    S tab arg -> checks [ do
       (tab',ty) <- infer tab
       ty'       <- comp ty
       case ty' of
@@ -574,7 +574,12 @@ checkLType env trm typ0 = do
           checkEq typ t trm
           return (S tab' arg', t)
         _ -> prtFail "table type expected for applied table instead of" ty'
-
+     , do
+      (arg',ty) <- infer arg
+      ty'       <- comp ty
+      (tab',_)  <- check tab (Table ty' typ)
+      return (S tab' arg', typ)
+      ]
     Let (x,(mty,def)) body -> case mty of
       Just ty -> do
         (def',ty') <- check def ty
