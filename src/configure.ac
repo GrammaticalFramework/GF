@@ -4,12 +4,26 @@ AC_INIT([GF],[2.2],[aarne@cs.chalmers.se],[GF])
 
 AC_PREREQ(2.53)
 
-AC_REVISION($Revision: 1.11 $)
+AC_REVISION($Revision: 1.12 $)
 
 AC_CONFIG_FILES([config.mk jgf])
 
 AC_CANONICAL_HOST
 
+dnl ***********************************************
+dnl Executable suffix
+dnl ***********************************************
+
+
+AC_MSG_CHECKING([executable suffix])
+case $host_os in
+      cygwin)
+          EXEEXT='.exe';;
+      *)  
+	  EXEEXT='';;
+esac
+AC_MSG_RESULT(['$EXEEXT'])
+AC_SUBST(EXEEXT)
 
 dnl ***********************************************
 dnl GHC
