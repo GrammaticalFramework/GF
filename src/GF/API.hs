@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:45:57 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.33 $
+-- > CVS $Date: 2005/05/10 12:49:13 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.34 $
 --
 -- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 -----------------------------------------------------------------------------
@@ -87,6 +87,12 @@ file2grammar file = do
 linearize :: GFGrammar -> Tree -> String
 linearize sgr = err id id . optLinearizeTree opts sgr where
   opts = addOption firstLin $ stateOptions sgr
+
+term2tree :: GFGrammar -> G.Term -> Tree
+term2tree gr = errVal uTree . annotate (grammar gr) . qualifTerm (absId gr)
+
+tree2term :: Tree -> G.Term
+tree2term = tree2exp
 
 linearizeToAll :: [GFGrammar] -> Tree -> [String]
 linearizeToAll grs t = [linearize gr t | gr <- grs]
