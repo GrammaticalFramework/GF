@@ -28,12 +28,11 @@ To make and install GF2 (Version 2.1, 8/11/2004).
 
      ./configure CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
 
-5. Compile with make, either of
+5. Compile with make:
 
-     make unix    -- for Linux, Solaris, Mac OSX
-     make windows -- for MS Windows
+     make
 
-   The binary is sent to the file GF-2.1/bin/gf
+   The binary is sent to the file GF/bin/gf
 
 6. For a quick test: load a grammar package from
 
