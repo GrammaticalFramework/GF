@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:46:14 $ 
+-- > CVS $Date: 2005/05/10 14:55:01 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.7 $
+-- > CVS $Revision: 1.8 $
 --
 -- architecture\/compiler dependent definitions for unix\/hbc
 -----------------------------------------------------------------------------
@@ -21,7 +21,8 @@ import System.Random
 import System.CPUTime
 import Control.Monad (filterM)
 import System.Directory
-import System.Console.Readline
+
+import GF.System.Readline (fetchCommand)
 
 ---- import qualified UnicodeF as U --(fudlogueWrite)
 
@@ -43,14 +44,6 @@ prCPU cpu = do
 
 welcomeArch :: String
 welcomeArch = "This is the system compiled with ghc."
-
-fetchCommand :: String -> IO (String)
-fetchCommand s = do
-  res <- readline s
-  case res of
-   Nothing -> return "q"
-   Just s -> do addHistory s
-                return s
 
 -- | selects the one with the later modification time of two
 selectLater :: FilePath -> FilePath -> IO FilePath
