@@ -12,7 +12,7 @@ resource ResImper = open Predef in {
       {s = f ; p = p ; a = a} ;
 
     usePrec : PrecExp -> Prec -> Str = \x,p ->
-      case <x.p,p> of {
+      case <<x.p,p> : Prec * Prec> of {
         <3,4> | <2,3> | <2,4> => paren x.s ;
         <1,1> | <1,0> | <0,0> => x.s ;
         <1,_> | <0,_>         => paren x.s ;
