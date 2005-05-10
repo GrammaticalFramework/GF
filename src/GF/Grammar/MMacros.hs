@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:24 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.8 $
+-- > CVS $Date: 2005/05/10 12:49:13 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.9 $
 --
 -- some more abstractions on grammars, esp. for Edit
 -----------------------------------------------------------------------------
@@ -318,3 +318,23 @@ reindexTerm = qualif (0,[]) where
     _ -> composSafeOp (qualif dg) t
   look x  = maybe x id . lookup x --- if x is not in scope it is unchanged
   ind x d = identC $ prIdent x ++ "_" ++ show d
+
+
+-- this method works for context-free abstract syntax
+-- and is meant to be used in simple embedded GF applications
+
+exp2tree :: Exp -> Err Tree
+exp2tree e = do
+  (bs,f,xs) <- termForm e
+  cont <- case bs of
+    [] -> return []
+    _  -> prtBad "cannot convert bindings in" e
+  at <- case f of
+    Q  m c -> return $ AtC (m,c)
+    QC m c -> return $ AtC (m,c)
+    Meta m -> return $ AtM m
+    K s    -> return $ AtL s
+    EInt n -> return $ AtI n
+    _ -> prtBad "cannot convert to atom" f
+  ts <- mapM exp2tree xs
+  return $ Tr (N (cont,at,uVal,([],[]),True),ts)
