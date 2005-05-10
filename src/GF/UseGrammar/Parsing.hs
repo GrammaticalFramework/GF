@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:28:46 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.21 $
+-- > CVS $Date: 2005/05/10 14:16:59 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.22 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -103,7 +103,7 @@ trees2trms opts sg cn as ts0 info = do
       let num = optIntOrN opts flagRawtrees 99999
       let (ts01,rest) = splitAt num ts0
       if null rest then return () 
-         else checkWarn ("Warning: only" +++ show num +++ "raw parses out of" +++ 
+         else raise ("Warning: only" +++ show num +++ "raw parses out of" +++ 
                           show (length ts0) +++ 
                           "considered; use -rawtrees=<Int> to see more"
                      )
