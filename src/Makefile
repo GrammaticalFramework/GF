@@ -28,7 +28,13 @@ GF_DOC_EXE=gfdoc$(EXEEXT)
         temp install-gfdoc install-editor \
         today help clean
 
-all: unix gfdoc jar
+ifeq ($(ENABLE_JAVA), "yes")
+  BUILD_JAR=jar
+else
+  BUILD_JAR=
+endif
+
+all: unix gfdoc $(BUILD_JAR)
 
 unix: today touch-files opt
 
