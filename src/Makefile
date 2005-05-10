@@ -5,6 +5,7 @@ GHMAKE=$(GHC) --make
 GHCXMAKE=ghcxmake
 GHCFLAGS= -package util -fglasgow-exts $(CPPFLAGS) $(LDFLAGS)
 GHCOPTFLAGS=-O2
+GHCWINFLAGS=-package readline
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
 
@@ -19,23 +20,30 @@ BIN_DIST_DIR=$(DIST_DIR)-$(host)
 
 SNAPSHOT_DIR=GF-$(shell date +%Y%m%d)
 
-.PHONY: all install install-gf install-gfdoc install-editor \
+GF_EXE=gf$(EXEEXT)
+GF_EXE_TMP=gf-bin$(EXEEXT)
+GF_DOC_EXE=gfdoc$(EXEEXT)
+
+.PHONY: all unix jar gfdoc windows install install-gf \
+        temp install-gfdoc install-editor \
         today help clean
 
-all: unix tools/gfdoc jar
+all: unix gfdoc jar
 
 unix: today touch-files opt
 
-windows: today touch-files justwindows
+windows: unix
 
 temp: today touch-files noopt
 
 
 
+# use gf-bin name to not clash with GF/ dir on
+# case insensitive file systems
 build: 
-	$(GHMAKE) $(GHCFLAGS) GF.hs -o gf
-	strip gf
-	mv gf ../bin/gf
+	$(GHMAKE) $(GHCFLAGS) GF.hs -o $(GF_EXE_TMP)
+	strip $(GF_EXE_TMP)
+	mv $(GF_EXE_TMP) ../bin/$(GF_EXE)
 
 opt: GHCFLAGS += $(GHCOPTFLAGS)
 opt: build
@@ -54,13 +62,8 @@ gft:
 	strip gft-bin
 	mv gft-bin ../bin/gft
 
-justwindows:
-	$(GHMAKE) $(GHCFLAGS) $(GHCOPTFLAGS) GF.hs -o gf.exe
-	strip gf.exe
-	mv gf.exe ../bin/
-
 api: 
-	$(GHMAKE) $(GHCFLAGS) $(GHCOPTFLAGS)GF/API.hs
+	$(GHMAKE) $(GHCFLAGS) $(GHCOPTFLAGS) GF/API.hs
 
 shell: 
 	$(GHMAKE) $(GHCFLAGS) $(GHCOPTFLAGS) GF/Shell.hs
@@ -72,7 +75,7 @@ clean:
 
 distclean: clean
 	-rm -f JavaGUI/gf-java.jar jgf
-	-rm -f tools/gfdoc
+	-rm -f tools/$(GF_DOC_EXE)
 	-rm -f config.status config.mk config.log
 	-rm -f *.tgz *.zip
 	-rm -rf $(DIST_DIR) $(BIN_DIST_DIR)
@@ -124,8 +127,10 @@ GF/Shell/HelpFile.hs: tools/MkHelpFile HelpFile
 # Tools
 #
 
-tools/gfdoc: tools/GFDoc.hs
-	$(GHMAKE) -o $@ $^
+gfdoc: tools/$(GF_DOC_EXE)
+
+tools/$(GF_DOC_EXE): tools/GFDoc.hs
+	$(GHMAKE) $(GHCOPTFLAGS) -o $@ $^
 
 #
 # Distribution
@@ -156,7 +161,7 @@ binary-dist:
                     CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" \
                     LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
 	$(MAKE) all
-	$(INSTALL) ../bin/gf tools/gfdoc $(BIN_DIST_DIR)
+	$(INSTALL) ../bin/$(GF_EXE)tools/$(GF_DOC_EXE) $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(BIN_DIST_DIR)
 	$(INSTALL) configure config.guess config.sub install-sh $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 config.mk.in jgf.in $(BIN_DIST_DIR)
@@ -174,11 +179,11 @@ install: install-gf install-gfdoc install-editor
 
 install-gf:
 	$(INSTALL) -d $(bindir)
-	$(INSTALL) ../bin/gf $(bindir)
+	$(INSTALL) ../bin/$(GF_EXE) $(bindir)
 
 install-gfdoc: 
 	$(INSTALL) -d $(bindir)
-	$(INSTALL) tools/gfdoc $(bindir)
+	$(INSTALL) tools/$(GF_DOC_EXE) $(bindir)
 
 install-editor:
 	$(INSTALL) -d $(datadir)/GF-$(PACKAGE_VERSION)
