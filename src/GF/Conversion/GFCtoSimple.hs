@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:28:43 $ 
+-- > CVS $Date: 2005/05/10 12:52:06 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- Converting GFC to SimpleGFC
 --
@@ -116,7 +116,8 @@ convertTerm gram (A.K (A.KS tok))  = Token tok
 -- 'pre' tokens are converted to variants (over-generating):
 convertTerm gram (A.K (A.KP strs vars))
                                    = variants $ map conc $ strs : [ vs | A.Var vs _ <- vars ]
-    where conc = foldr1 (?++) . map Token 
+    where conc [] = Empty
+	  conc ts = foldr1 (?++) $ map Token ts
 convertTerm gram (A.I con)         = error "GFCtoSimple.convertTerm: cannot handle 'I' constructor"
 convertTerm gram (A.EInt int)      = error "GFCtoSimple.convertTerm: cannot handle 'EInt' constructor"
 
