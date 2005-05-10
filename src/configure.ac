@@ -4,7 +4,7 @@ AC_INIT([GF],[2.2],[aarne@cs.chalmers.se],[GF])
 
 AC_PREREQ(2.53)
 
-AC_REVISION($Revision: 1.13 $)
+AC_REVISION($Revision: 1.14 $)
 
 AC_CONFIG_FILES([config.mk jgf])
 
@@ -41,6 +41,34 @@ GHCI=$(dirname $GHC)/ghci
 AC_SUBST(GHC)
 AC_SUBST(GHCI)
 
+dnl ***********************************************
+dnl readline
+dnl ***********************************************
+
+AC_ARG_WITH(readline,
+  AC_HELP_STRING([--with-readline=<readline alternative>],
+               [Select which readline implementation to use. 
+	        Available alternatives are: 'readline' (GNU readline),
+                'no' (don't use readline)
+                (default = readline)]),
+  [if test "$withval" = "yes"; then
+     READLINE="readline"
+   else
+     READLINE="$withval"
+   fi],
+  [READLINE="readline"])
+
+case $READLINE in
+    readline)
+        ;;
+    no)
+        ;;
+    *)
+        AC_MSG_ERROR([Bad value for --with-readline: $READLINE])
+        ;;
+esac
+
+AC_SUBST(READLINE)
 
 dnl ***********************************************
 dnl java stuff

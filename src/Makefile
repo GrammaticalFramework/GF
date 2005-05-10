@@ -5,7 +5,6 @@ GHMAKE=$(GHC) --make
 GHCXMAKE=ghcxmake
 GHCFLAGS= -package util -fglasgow-exts $(CPPFLAGS) $(LDFLAGS)
 GHCOPTFLAGS=-O2
-GHCWINFLAGS=-package readline
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
 
@@ -19,6 +18,10 @@ NOT_IN_DIST= \
 BIN_DIST_DIR=$(DIST_DIR)-$(host)
 
 SNAPSHOT_DIR=GF-$(shell date +%Y%m%d)
+
+ifeq ($(READLINE),readline)
+  GHCFLAGS += -package readline -DUSE_READLINE
+endif
 
 GF_EXE=gf$(EXEEXT)
 GF_EXE_TMP=gf-bin$(EXEEXT)
@@ -98,7 +101,8 @@ javac:
 jar: javac
 	cd JavaGUI; $(JAR) -cmf manifest.txt gf-java.jar *.class
 
-
+showflags:
+	@echo $(GHCFLAGS)
 
 # added by peb:
 tracing: GHCFLAGS += -DTRACING
@@ -108,8 +112,8 @@ ghci-trace: GHCFLAGS += -DTRACING
 ghci-trace: ghci
 
 touch-files: 
-	rm -f GF/System/Tracing.{hi,o}
-	touch GF/System/Tracing.hs
+	rm -f GF/System/Tracing.{hi,o} GF/System/Readline.{hi,o}
+	touch GF/System/Tracing.hs GF/System/Readline.hs
 
 # profiling
 prof: GHCOPTFLAGS += -prof -auto-all -auto-dicts
