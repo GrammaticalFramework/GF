@@ -33,6 +33,7 @@ if [ ! -x "$GF" ]; then
     exit 1
 fi
 
-COMMAND=$JAVA -jar $JARFILE "$GF -java $*"
+COMMAND="$JAVA -jar $JARFILE '$GF -java $*'"
 
+echo $COMMAND
 exec $COMMAND
