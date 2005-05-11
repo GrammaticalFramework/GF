@@ -1,17 +1,17 @@
 #!/bin/sh
 
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-GF_BIN_DIR=@bindir@
-GF_DATA_DIR=@datadir@/GF-@PACKAGE_VERSION@
+prefix= @prefix@
+exec_prefix= @exec_prefix@
+GF_BIN_DIR= @bindir@
+GF_DATA_DIR= @datadir@/GF-@PACKAGE_VERSION@
 
-JAVA=@JAVA@
+JAVA= @JAVA@
 
-GF=$GF_BIN_DIR/gf
-JARFILE=$GF_DATA_DIR/gf-java.jar
+GF= $GF_BIN_DIR/gf
+JARFILE= $GF_DATA_DIR/gf-java.jar
 
 if [ ! -x "$JAVA" ]; then
-    JAVA=`which java`
+    JAVA= `which java`
 fi
 
 if [ ! -x "$JAVA" ]; then
@@ -25,7 +25,7 @@ if [ ! -f "$JARFILE" ]; then
 fi
 
 if [ ! -x "$GF" ]; then
-   GF=`which gf`
+   GF= `which gf`
 fi
 
 if [ ! -x "$GF" ]; then
@@ -33,7 +33,7 @@ if [ ! -x "$GF" ]; then
     exit 1
 fi
 
-COMMAND="$JAVA -jar $JARFILE '$GF -java $*'"
+COMMAND= $JAVA -jar $JARFILE "$GF -java $*"
 
 echo $COMMAND
 exec $COMMAND
