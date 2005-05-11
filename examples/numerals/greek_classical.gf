@@ -17,6 +17,7 @@ lincat Numeral = {s : Str} ;
 oper LinDigit = {s : DForm => Str} ;
 oper LinSub1000 = {s : InterData => Str ; size : Size} ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = LinDigit ;
 lincat Sub10 = {s : DForm => Str ;
 		size : Size} ;

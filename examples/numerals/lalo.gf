@@ -9,6 +9,7 @@ lincat Digit = {s : Str} ;
 lincat Sub10 = {s : Str} ;
 lincat Sub100 = LinS100 ;
 lincat Sub1000 = LinS100 ;
+lincat Sub1000000 = { s : Str } ;
 
 -- TODO encoding
 

@@ -4,10 +4,12 @@ param DForm = u | v ;
 
 oper LinDigit = {s : DForm => Str } ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = LinDigit ;
 lincat Sub10 = LinDigit ;
 lincat Sub100 = LinDigit ;
 lincat Sub1000 = LinDigit ;
+lincat Sub1000000 = { s : Str } ;
 
 oper bind : Str -> Str -> Str = \a -> \b -> a ++ b ;
 

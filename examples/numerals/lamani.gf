@@ -8,10 +8,12 @@ param Size = sg | two | five | seven | nine | e25 | e75 | e50s | e90s | other ;
 oper LinDigit = {s : DForm => Str ; s2 : Str ; size : Size} ;
 oper LinSub100 = {s : Str ; s2 : Str ; s3 : Str ; size : Size} ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = LinDigit ;
 lincat Sub10 = LinDigit ;
 lincat Sub100 = LinSub100 ; 
 lincat Sub1000 = {s : Str ; s2 : Str } ; 
+lincat Sub1000000 = { s : Str } ;
 
 lin num x0 =
   {s = x0.s } ; 

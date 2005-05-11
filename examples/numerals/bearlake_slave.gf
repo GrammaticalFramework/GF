@@ -4,10 +4,12 @@ param DForm = unit | hundred ;
 
 oper LinDigit = {s : Str } ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = LinDigit ;
 lincat Sub10 = LinDigit ;
 lincat Sub100 = {s : Str } ;
 lincat Sub1000 = {s : Str } ; 
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> LinDigit = \two ->  
   {s = two } ;

@@ -4,10 +4,12 @@ param Size = sg | two | pl ;
 
 oper Form = {s : Str ; size : Size} ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = Form ;
 lincat Sub10 = Form ;
 lincat Sub100 = Form ;
 lincat Sub1000 = Form ; 
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> Form = \two ->  
   {s = two ; size = pl} ;

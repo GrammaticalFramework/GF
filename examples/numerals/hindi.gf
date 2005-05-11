@@ -6,10 +6,13 @@ param DSize = sg | r2 | r3 | r4 | r5 | r6 | r7 | r8 | r9 ;
 param Size = sing | less100 | more100 ; 
 
 oper LinDigit = {s : DForm => Str ; size : DSize} ;
+
+lincat Numeral =    { s : Str } ;
 lincat Digit = LinDigit ;
 lincat Sub10 = {s : DForm => Str ; size : DSize} ;
 lincat Sub100 = {s : Str ; size : Size} ;
 lincat Sub1000 = {s : Str ; s2 : Str ; size : Size } ; 
+lincat Sub1000000 = { s : Str } ;
 
 lin num x0 =
   {s = "/&" ++ x0.s ++ "&/"} ; -- the Devana:gari environment

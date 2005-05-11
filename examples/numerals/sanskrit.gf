@@ -27,10 +27,13 @@ oper
   
 
 LinDigit = {s : DForm => Str ; size : DSize} ;
+
+lincat Numeral =    { s : Str } ;
 lincat Digit = LinDigit ;
 lincat Sub10 = {s : DForm => Str ; size : DSize} ;
 lincat Sub100 = {s : Str ; s2 : Str ; size : Size} ;
 lincat Sub1000 = {s : Str ; s2 : Str ; size : Size } ; 
+lincat Sub1000000 = { s : Str } ;
 
 lin num x0 =
   {s = "/&" ++ x0.s ++ "&/"} ; -- the Devanagari environment

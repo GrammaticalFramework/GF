@@ -12,10 +12,12 @@ param Size = sg | pl ;
 -- The hundreds and trheir qualif can be written together e.g ikiyüz
 -- aswelll as ten + unit e.g yirmibir 
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = {s : DForm => Str } ;
 lincat Sub10 = {s : DForm => Str ; size : Size} ;
 lincat Sub100 = {s : Str ; size : Size } ;
 lincat Sub1000 = {s : Str ; size : Size } ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> Str -> Lin Digit = 
   \iki -> \yirmi ->  

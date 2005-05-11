@@ -11,10 +11,12 @@ param DForm = unit | teen | ten | hundred ;
 
 oper LinDigit = {s : DForm => Str ; size : Size } ;
 
-lincat Digit = LinDigit ;     
-lincat Sub10 = LinDigit ;
+lincat Numeral =    { s : Str } ;
+lincat Digit =      LinDigit ;     
+lincat Sub10 =      LinDigit ;
 lincat Sub100 =     {s : Str ; size : Size } ;
 lincat Sub1000 =    {s : Str ; size : Size } ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> Str -> Str -> LinDigit = \tri -> \trijset -> \trista -> 
   { s = table {unit => tri ; teen => variants {tri + "nadeset" ; tri + "najset" }; ten => trijset ; hund => trista} ; size = below10};

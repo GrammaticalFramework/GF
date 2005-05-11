@@ -4,6 +4,7 @@ param DForm = ental Pred | ton | tiotal  ;
 param Num = sg | pl ;
 param Pred = pred | indip ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = {s : DForm => Str} ;
 lincat Sub10 = {s : DForm => Str ; n : Num} ;
 lincat Sub100 = {s : Str ; n : Num} ;

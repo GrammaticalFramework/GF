@@ -4,10 +4,12 @@ param Size = sg | belowten | moreten ;
 
 oper LinDigit = {s : Str ; size : Size} ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = LinDigit ;
 lincat Sub10 = LinDigit ;
 lincat Sub100 = {s : Str ; s2 : Str ; size : Size} ;
 lincat Sub1000 = {s : Str ; s2 : Str ; size : Size} ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> LinDigit = \u -> {s = u ; size = belowten} ;
 
