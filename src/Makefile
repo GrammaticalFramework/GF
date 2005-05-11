@@ -171,7 +171,7 @@ binary-dist:
                     CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" \
                     LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
 	$(MAKE) all
-	$(INSTALL) ../bin/$(GF_EXE)tools/$(GF_DOC_EXE) $(BIN_DIST_DIR)
+	$(INSTALL) ../bin/$(GF_EXE) tools/$(GF_DOC_EXE) $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(BIN_DIST_DIR)
 	$(INSTALL) configure config.guess config.sub install-sh $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 config.mk.in jgf.in $(BIN_DIST_DIR)
