@@ -1,5 +1,5 @@
 %define name GF
-%define version 2.1
+%define version 2.2
 %define release 1
 
 Name: %{name}
@@ -49,7 +49,7 @@ rm -rf $RPM_BUILD_ROOT
 %build
 cd src
 %configure
-make unix gfdoc jar
+make all
 
 %install
 cd src
@@ -68,8 +68,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed May 11 2005 Bjorn Bringert <bringert@cs.chalmers.se> 2.2-1
+- Release of GF 2.2
+
 * Mon Nov  8 2004 Aarne Ranta <aarne@cs.chalmers.se> 2.1-1
-- release of GF 2.1
+- Release of GF 2.1
 
 * Thu Jun 24 2004 Bjorn Bringert <bringert@cs.chalmers.se> 2.0-2
 - Set ownership correctly.
