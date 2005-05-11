@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:28:46 $ 
+-- > CVS $Date: 2005/05/11 10:28:16 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.31 $
+-- > CVS $Revision: 1.32 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -130,8 +130,9 @@ testValidFlag st co f x = case f of
   "depth"   -> testN
   "rawtrees"-> testN
   "parser"  -> testInc customParser 
-	       -- hack for the -newer parsers: (to be changed)
-	       `mplus` if not(null x) && head x `elem` "mc" then return () else Bad ""
+	       -- hack for the -newer parsers: (to be changed in the future)
+	       -- `mplus` testIn (words "mcfg mcfg-bottomup mcfg-topdown cfg cfg-bottomup cfg-topdown bottomup topdown")
+	       -- if not(null x) && head x `elem` "mc" then return () else Bad ""
   "alts"    -> testN
   "transform" -> testInc customTermCommand
   "filter"  -> testInc customStringCommand
@@ -167,7 +168,7 @@ optionsOfCommand co = case co of
   CTransformGrammar _ -> flags "printer"
   CConvertLatex _ -> none
   CLinearize _ -> both "utf8 table struct record all multi" "lang number unlexer"
-  CParse -> both "new newer n ign raw v lines all" "cat lang lexer parser number rawtrees"
+  CParse -> both "new newer cfg mcfg n ign raw v lines all" "cat lang lexer parser number rawtrees"
   CTranslate _ _ -> opts "cat lexer parser"
   CGenerateRandom -> flags "cat lang number depth"
   CGenerateTrees -> both "metas" "depth alts cat lang number"

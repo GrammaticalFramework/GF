@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:28:45 $ 
+-- > CVS $Date: 2005/05/11 10:28:16 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Revision: 1.8 $
 --
 -- The main parsing module, parsing GFC grammars
 -- by translating to simpler formats, such as PMCFG and CFG
@@ -58,14 +58,15 @@ instance Print PInfo where
 ----------------------------------------------------------------------
 -- main parsing function
 
-parse :: String         -- ^ parsing strategy
+parse :: String         -- ^ parsing algorithm (mcfg/cfg)
+      -> String         -- ^ parsing strategy
       -> PInfo          -- ^ compiled grammars (mcfg and cfg) 
       -> Ident.Ident    -- ^ abstract module name
       -> CFCat          -- ^ starting category
       -> [CFTok]        -- ^ input tokens
       -> Err [Grammar.Term] -- ^ resulting GF terms
 
-parse (prs:strategy) pinfo abs startCat inString = 
+parse prs strategy pinfo abs startCat inString = 
     do let inTokens = tracePrt "Parsing.GFC - input tokens" prt $
 		      inputMany (map wordsCFTok inString)
        forests <- selectParser prs strategy pinfo startCat inTokens
@@ -81,34 +82,32 @@ parse (prs:strategy) pinfo abs startCat inString =
 		   -- compactFs >>= forest2trees
        return $ map (tree2term abs) trees
 
--- default parser = CFG (for now)
-parse "" pinfo abs startCat inString = parse "c" pinfo abs startCat inString
-
 
 -- parsing via CFG
-selectParser prs strategy pinfo startCat inTokens | prs=='c' 
+selectParser "c" strategy pinfo startCat inTokens
     = do let startCats = tracePrt "Parsing.GFC - starting CF categories" prt $
 			 filter isStart $ map fst $ aAssocs $ PC.topdownRules cfpi
 	     isStart cat = ccat2scat cat == cfCat2Ident startCat
 	     cfpi = cfPInfo pinfo
 	 cfParser <- PC.parseCF strategy
-	 let cfChart = tracePrt "Parsing.GFC - sz. CF chart" (prt . length) $
+	 let cfChart = tracePrt "Parsing.GFC - CF chart" (prt . length) $
 		       cfParser cfpi startCats inTokens
-	     chart = tracePrt "Parsing.GFC - sz. chart" (prt . map (length.snd) . aAssocs) $
+	     chart = tracePrt "Parsing.GFC - chart" (prt . map (length.snd) . aAssocs) $
 		     C.grammar2chart cfChart
 	     finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
 			  map (uncurry Edge (inputBounds inTokens)) startCats
 	 return $ chart2forests chart (const False) finalEdges
 
 -- parsing via MCFG
-selectParser prs strategy pinfo startCat inTokens | prs=='m' 
+selectParser "m" strategy pinfo startCat inTokens
     = do let startCats = tracePrt "Parsing.GFC - starting MCF categories" prt $
 			 filter isStart $ PM.grammarCats mcfpi
 	     isStart cat = mcat2scat cat == cfCat2Ident startCat
 	     mcfpi = mcfPInfo pinfo
-	 mcfChart <- PM.parseMCF strategy mcfpi startCats inTokens
-	 traceM "Parsing.GFC - sz. MCF chart" (prt (length mcfChart)) 
-	 let chart = tracePrt "Parsing.GFC - sz. chart" (prt . length . concat . map snd . aAssocs) $
+	 mcfParser <- PM.parseMCF strategy
+	 let mcfChart = tracePrt "Parsing.GFC - MCF chart" (prt . length) $
+			mcfParser mcfpi startCats inTokens
+	     chart = tracePrt "Parsing.GFC - chart" (prt . length . concat . map snd . aAssocs) $
 		     G.abstract2chart mcfChart
 	     finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
 			  [ PM.makeFinalEdge cat lbl (inputBounds inTokens) | 
@@ -116,7 +115,7 @@ selectParser prs strategy pinfo startCat inTokens | prs=='m'
 	 return $ chart2forests chart (const False) finalEdges
 
 -- error parser: 
-selectParser prs strategy _ _ _ = Bad $ "Parser not defined: " ++ (prs:strategy)
+selectParser prs strategy _ _ _ = Bad $ "Parser '" ++ prs ++ "' not defined with strategy: " ++ strategy 
 
 
 ----------------------------------------------------------------------

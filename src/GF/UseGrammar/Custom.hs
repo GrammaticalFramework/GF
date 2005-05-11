@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:28:46 $ 
+-- > CVS $Date: 2005/05/11 10:28:16 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.59 $
+-- > CVS $Revision: 1.60 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -349,13 +349,13 @@ customStringCommand =
 customParser = 
   customData "Parsers, selected by option -parser=x" $
   [
-   (strCI "chart",  PCFOld.parse "ibn" . stateCF) -- DEPRECATED
-  ,(strCI "general",  PCF.parse "gb" . stateCF)
-  ,(strCI "general-bottomup",  PCF.parse "gt" . stateCF)
-  ,(strCI "general-topdown",  PCF.parse "gt" . stateCF)
-  ,(strCI "incremental",  PCF.parse "ib" . stateCF)
-  ,(strCI "incremental-bottomup",  PCF.parse "ib" . stateCF)
-  ,(strCI "incremental-topdown",  PCF.parse "it" . stateCF)
+   (strCI "bottomup",  PCF.parse "gb" . stateCF)
+  ,(strCI "topdown",  PCF.parse "gt" . stateCF)
+-- commented for now, since there's a bug in the incremental algorithm:
+--   ,(strCI "incremental",  PCF.parse "ib" . stateCF)
+--   ,(strCI "incremental-bottomup",  PCF.parse "ib" . stateCF)
+--   ,(strCI "incremental-topdown",  PCF.parse "it" . stateCF)
+  ,(strCI "chart",  PCFOld.parse "ibn" . stateCF) -- DEPRECATED
   ,(strCI "old",    chartParser . stateCF) -- DEPRECATED
   ,(strCI "myparser", myParser)
 -- add your own parsers here
