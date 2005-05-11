@@ -2,9 +2,12 @@ include numerals.Abs.gf ;
 
 param DForm = ental  | ton  | tiotal  ;
 
-lincat 
-  Digit = {s : DForm => Str} ;
-  Sub10 = {s : DForm => Str} ;
+lincat Numeral =    { s : Str } ;
+lincat Digit =      {s : DForm => Str} ;
+lincat Sub10 =      {s : DForm => Str} ;
+lincat Sub100 =     { s : Str } ;
+lincat Sub1000 =    { s : Str } ;
+lincat Sub1000000 = { s : Str } ;
 
 oper 
   mkTal : Str -> Str -> Str -> Lin Digit = \två, tolv, tjugo -> 

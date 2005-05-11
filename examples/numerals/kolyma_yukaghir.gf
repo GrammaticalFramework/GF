@@ -6,10 +6,12 @@ param DForm = u | teen ;
 
 oper LinDigit = {s : DForm => Str } ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = LinDigit ;
 lincat Sub10 = LinDigit ;
 lincat Sub100 = {s : Str } ;
 lincat Sub1000 = {s : Str } ;
+lincat Sub1000000 = { s : Str } ;
 
 oper bind : Str -> Str -> Str = \a -> \b -> a ++ b ;
 

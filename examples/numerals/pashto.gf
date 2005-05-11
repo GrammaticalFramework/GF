@@ -17,10 +17,12 @@ param Size = sg | two | less100 | more100 ;
 -- [P] is a Ha with a hamza above
 -- [R] is an r with a ring below
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = {s : DForm => Str ; size : Size} ;
 lincat Sub10 = {s : DForm => Str ; size : Size} ;
 lincat Sub100 = {s : Str ; size : Size} ;
 lincat Sub1000 = {s : Str ; s2 : Str ; size : Size } ; 
+lincat Sub1000000 = { s : Str } ;
 
 lin num x0 =
   {s = "/A" ++ x0.s ++ "A/"} ; -- the Extented-Arabic environment

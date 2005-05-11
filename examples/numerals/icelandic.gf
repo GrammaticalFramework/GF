@@ -6,10 +6,12 @@ param Size = sg | less10 | pl ;
 
 oper LinDigit = {s : DForm => Str} ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = LinDigit ;
 lincat Sub10 = {s : DForm => Str ; size : Size} ;
 lincat Sub100 = {s : Gen => Str ; size : Size} ;
 lincat Sub1000 = {s : Gen => Str ; size : Size} ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> Str -> Str -> Str -> LinDigit = 
   \two -> \twelve -> \twenty -> \tvo -> 

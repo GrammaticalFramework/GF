@@ -14,10 +14,13 @@ param DForm = unit | unite | unitra | teen | ten | tenra | hund | thou;
 
 oper LinDigit = {s : DForm => Str };
 oper LinS100 = {s : Str; s2 : Str } ;
+
+lincat Numeral =    { s : Str } ;
 lincat Digit =      LinDigit ;
 lincat Sub10 =      LinDigit ;
 lincat Sub100 =     LinS100 ;
 lincat Sub1000 =    LinS100 ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> LinDigit = \dwa -> 
   {s = table {unit => dwa ; unite => dwa + "&" ; unitra => dwa + "&ra" ; 

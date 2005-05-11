@@ -11,10 +11,12 @@ flags coding=OCScyrillic ;
 
 param Size = sg | dual | threefour | fiveup ; 
 
+lincat Numeral =    { s : Str } ;
 lincat Digit =      {s : Str ; s2 : Str ; size : Size } ;
 lincat Sub10 =      {s : Str ; s2 : Str ; size : Size } ;
 lincat Sub100 =     {s : Str ; s2 : Str ; size : Size } ;
 lincat Sub1000 =    {s : Str ; s2 : Str ; size : Size } ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> Size -> {s : Str ; s2 : Str ; size : Size} = 
   \petI -> \sz -> { s = petI ; s2 = petI ; size = sz};

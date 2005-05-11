@@ -23,10 +23,13 @@ param DForm = unit  | teen  | ten | hund ;
 param ThForm = onlyone | lastone | twoorthreeorfour | fiveup ;
 
 oper LinDigit = {s : DForm => Str; o : ThForm ; t : ThForm } ;
+
+lincat Numeral =    { s : Str } ;
 lincat Digit =      LinDigit ;
 lincat Sub10 =      {s : DForm => Str; o : ThForm ; t : ThForm } ;
 lincat Sub100 =     {s : Str; t : ThForm } ;
 lincat Sub1000 =    {s : Str; t : ThForm } ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> Str -> Str -> Str -> ThForm -> LinDigit = 
   \dwa -> \dwanascie -> \dwadziescia -> \dwiescie -> \thform ->

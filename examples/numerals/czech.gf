@@ -8,10 +8,12 @@ oper bind : Str -> Str -> Str = \s1 -> \s2 -> s1 ++ s2 ;
 param Size = sg | twothreefour | fiveup ;
 param DForm = unit | teen | ten | hundred ; 
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = {s : DForm => Str ; size : Size} ;
 lincat Sub10 = {s : DForm => Str ; size : Size} ;
 lincat Sub100 = {s : Str; size : Size } ;
 lincat Sub1000 = {s : Str; size : Size } ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> Str -> Str -> Str -> Size -> Lin Digit = 
   \dva -> \dvanast -> \dvadsat -> \dveste -> \sz -> 

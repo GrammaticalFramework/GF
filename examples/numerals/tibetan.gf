@@ -10,10 +10,12 @@ param DForm = unit | teen | bform | ten | hundred | agg ;
 
 oper LinDigit = {s : DForm => Str} ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = LinDigit ;
 lincat Sub10 = LinDigit ;
 lincat Sub100 = {s : Str ; s2 : Str} ;
 lincat Sub1000 = {s : Str ; s2 : Str} ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> Str -> Str -> Str -> LinDigit = 
   \u -> \tn -> \b -> \t ->  

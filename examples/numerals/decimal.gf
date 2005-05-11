@@ -4,6 +4,9 @@ flags lexer=chars ; unlexer=concat ;
 
 param Zeros = noz  | zz  ;
 
+lincat Numeral =    { s : Str } ;
+lincat Digit =      { s : Str } ;
+lincat Sub10 =      { s : Str } ;
 lincat Sub100 = {s : Zeros => Str} ;
 lincat Sub1000 = {s : Zeros => Str} ;
 lincat Sub1000000 = {s : Zeros => Str} ;

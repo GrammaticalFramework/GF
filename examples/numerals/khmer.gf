@@ -6,10 +6,12 @@ param Size = sg | pl ;
 
 oper LinDigit = {s : DForm => Str ; size : Size} ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = LinDigit ;
 lincat Sub10 = LinDigit ;
 lincat Sub100 = {s : Str ; s2 : Str ; size : Size} ;
 lincat Sub1000 = {s : Str ; s2 : Str ; size : Size} ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> Str -> LinDigit = \u -> \t -> {s = table {unit => u ; ten => t} ; size = pl} ;
 

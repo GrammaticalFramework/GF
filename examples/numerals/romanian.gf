@@ -7,10 +7,12 @@ param DForm = unit | teen | ten | attr ;
 param MidForm = indep | det ; 
 param Size = sg | less20 | pl ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit = {s : DForm => Str ; size : Size} ;
 lincat Sub10 = {s : DForm => Str ; size : Size} ;
 lincat Sub100 = {s : MidForm => Str ; size : Size} ;
 lincat Sub1000 = {s : MidForm => Str ; size : Size} ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> Str -> Str -> Lin Digit = 
   \two -> \twelve -> \twenty -> mkNumSpc two twelve twenty two ;

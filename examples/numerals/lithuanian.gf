@@ -15,10 +15,12 @@ param DForm = unit | teen | ten ;
 oper LinDigit = {s : DForm => Str ; size : Size };
 oper LinSub100 = {s : Str ; size : Size } ;
 
+lincat Numeral =    { s : Str } ;
 lincat Digit =      LinDigit ;
 lincat Sub10 =      LinDigit ;
 lincat Sub100 =     LinSub100 ;
 lincat Sub1000 =    LinSub100 ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> Str -> Str -> LinDigit = \tri -> \dvylika -> \tribase ->
   { s = table {unit => tri ; teen => dvylika ; ten => tribase + "des^imt" } ; size = pl};

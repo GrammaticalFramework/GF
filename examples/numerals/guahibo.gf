@@ -6,10 +6,12 @@ param Size = sg | pl ;
 
 oper All = {s : Str ; size : Size};
 
+lincat Numeral =    { s : Str } ;
 lincat Digit =      All ;
 lincat Sub10 =      All ;
 lincat Sub100 =     All ;
 lincat Sub1000 =    All ;
+lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> All = \tri -> 
   { s = tri ; size = pl};
