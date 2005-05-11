@@ -19,23 +19,23 @@ BIN_DIST_DIR=$(DIST_DIR)-$(host)
 
 SNAPSHOT_DIR=GF-$(shell date +%Y%m%d)
 
-ifeq ($(READLINE),readline)
-  GHCFLAGS += -package readline -DUSE_READLINE
-endif
-
 GF_EXE=gf$(EXEEXT)
 GF_EXE_TMP=gf-bin$(EXEEXT)
 GF_DOC_EXE=gfdoc$(EXEEXT)
 
-.PHONY: all unix jar gfdoc windows install install-gf \
-        temp install-gfdoc install-editor \
-        today help clean
+ifeq ("$(READLINE)","readline")
+  GHCFLAGS += -package readline -DUSE_READLINE
+endif
 
-ifeq ($(ENABLE_JAVA), "yes")
+ifeq ("$(ENABLE_JAVA)", "yes")
   BUILD_JAR=jar
 else
   BUILD_JAR=
 endif
+
+.PHONY: all unix jar gfdoc windows install install-gf \
+        temp install-gfdoc install-editor \
+        today help clean
 
 all: unix gfdoc $(BUILD_JAR)
 
