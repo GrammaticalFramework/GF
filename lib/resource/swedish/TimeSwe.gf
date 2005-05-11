@@ -1,3 +1,4 @@
+--# -path=.:../scandinavian:../abstract:../../prelude
 concrete TimeSwe of Time = NumeralsSwe ** 
   open Prelude, MorphoSwe, CategoriesSwe, ParadigmsSwe in {
 
@@ -13,8 +14,8 @@ DayDate day = ss (day.s ! singular ! Indef ! nominative) ;
 DayTimeDate day time = ss (day.s ! singular ! Indef ! nominative ++ "klockan" ++ time.s) ;
 
 FormalTime = infixSS "och" ;
-PastTime h m = ss (m.s ++ "över" ++ h.s) ;
-ToTime h m = ss (m.s ++ "i" ++ h.s) ;
+PastTime h m = ss (m.s ++ variants { "" ; "minuter" } ++ "över" ++ h.s) ;
+ToTime h m = ss (m.s ++ variants { "" ; "minuter" } ++ "i" ++ h.s) ;
 ExactTime h = ss (h.s ++ "prick") ;
 
 NumHour n = {s = n.s ! Neutr} ;

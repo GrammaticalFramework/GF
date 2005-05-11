@@ -36,4 +36,20 @@ friday : Weekday ;
 saturday : Weekday ;
 sunday : Weekday ;
 
+{-
+Add:
+
+years
+
+dates: the x:th of y
+
+relative weeks: next week, last week, in x weeks, x weeks ago
+
+relative days: today, tomorrow, yesterday, the day before yesterday,
+the day after tomorrow, in x days, x days ago
+
+relative time: in x minutes, in x hours
+
+-}
+
 } ;
