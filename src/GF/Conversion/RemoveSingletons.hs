@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:28:44 $ 
+-- > CVS $Date: 2005/05/11 10:28:16 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
 -- Instantiating all types which only have one single element.
 --
@@ -57,7 +57,7 @@ instantiateLin newArgs = inst
 	      = case newArgs !! nr of
 		  Unify [nr']          -> Arg nr' cat path
 		  Constant (Just term) -> termFollowPath path term
-		  Constant Nothing     -> error "instantiateLin: argument has no linearization"
+		  Constant Nothing     -> error "RemoveSingletons.instantiateLin: This should not happen (argument has no linearization)"
 	  inst (cn :^ terms) = cn :^ map inst terms
 	  inst (Rec rec)     = Rec [ (lbl, inst term) | (lbl, term) <- rec ]
 	  inst (term :. lbl) = inst term +. lbl

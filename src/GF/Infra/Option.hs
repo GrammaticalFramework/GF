@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:37 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.26 $
+-- > CVS $Date: 2005/05/11 10:28:16 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.27 $
 --
 -- Options and flags used in GF shell commands and files.
 --
@@ -146,9 +146,11 @@ rawParse     = iOpt "raw"
 firstParse   = iOpt "1"
 dontParse    = iOpt "read" 
 
-newParser, newerParser :: Option
+newParser, newerParser, newCParser, newMParser :: Option
 newParser   = iOpt "new"
 newerParser = iOpt "newer"
+newCParser  = iOpt "cfg"
+newMParser  = iOpt "mcfg"
 
 {-
 useParserMCFG, useParserMCFGviaCFG, useParserCFG, useParserCF :: Option

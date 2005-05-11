@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/10 14:16:59 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.22 $
+-- > CVS $Date: 2005/05/11 10:28:16 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.23 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -35,7 +35,7 @@ import GF.UseGrammar.Custom
 import GF.Compile.ShellState
 
 import GF.CF.PPrCF (prCFTree)
-import qualified GF.OldParsing.ParseGFC as NewOld -- OBSOLETE
+-- import qualified GF.OldParsing.ParseGFC as NewOld -- OBSOLETE
 import qualified GF.Parsing.GFC as New
 
 import GF.Data.Operations
@@ -54,26 +54,30 @@ parseStringMsg os sg cat s = do
   return (ts,unlines ss)
 
 parseStringC :: Options -> StateGrammar -> CFCat -> String -> Check [Tree]
-parseStringC opts0 sg cat s
 
 ---- to test peb's new parser 6/10/2003
----- (to be obsoleted by "newer" below)
- | oElem newParser opts0 = do  
-  let pm = maybe "" id $ getOptVal opts0 useParser -- -parser=pm
-      ct = cfCat2Cat cat
-  ts <- checkErr $ NewOld.newParser pm sg ct s
-  mapM (checkErr . annotate (stateGrammarST sg) . refreshMetas []) ts
+---- (obsoleted by "newer" below)
+-- parseStringC opts0 sg cat s
+--  | oElem newParser opts0 = do  
+--   let pm = maybe "" id $ getOptVal opts0 useParser -- -parser=pm
+--       ct = cfCat2Cat cat
+--   ts <- checkErr $ NewOld.newParser pm sg ct s
+--   mapM (checkErr . annotate (stateGrammarST sg) . refreshMetas []) ts
 
----- to test peb's newer parser 7/4-05 
- | oElem newerParser opts0 = do  
-  let opts = unionOptions opts0 $ stateOptions sg
-      pm   = maybe "" id $ getOptVal opts0 useParser -- -parser=pm
-      tok  = customOrDefault opts useTokenizer customTokenizer sg
-  ts <- checkErr $ New.parse pm (pInfo sg) (absId sg) cat (tok s)
+-- to use peb's newer parser 7/4-05 
+parseStringC opts0 sg cat s
+ | oElem newCParser opts0 || oElem newMParser opts0 || oElem newParser opts0 || oElem newerParser opts0 = do  
+  let opts      = unionOptions opts0 $ stateOptions sg
+      algorithm | oElem newCParser opts0 = "c"
+		| oElem newMParser opts0 = "m"
+		| otherwise              = "c" -- default algorithm
+      strategy  = maybe "bottomup" id $ getOptVal opts useParser -- -parser=bottomup/topdown
+      tokenizer = customOrDefault opts useTokenizer customTokenizer sg
+  ts <- checkErr $ New.parse algorithm strategy (pInfo sg) (absId sg) cat (tokenizer s)
   ts' <- mapM (checkErr . annotate (stateGrammarST sg) . refreshMetas []) ts
   return $ optIntOrAll opts flagNumber ts'
 
- | otherwise = do
+parseStringC opts0 sg cat s = do
   let opts = unionOptions opts0 $ stateOptions sg
       cf  = stateCF sg
       gr  = stateGrammarST sg

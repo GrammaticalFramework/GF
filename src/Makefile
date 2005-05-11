@@ -19,6 +19,8 @@ BIN_DIST_DIR=$(DIST_DIR)-$(host)
 
 SNAPSHOT_DIR=GF-$(shell date +%Y%m%d)
 
+# use the temporary binary file name 'gf-bin' name to not clash with directory 'GF' 
+# on case insensitive file systems (such as MacOSX)
 GF_EXE=gf$(EXEEXT)
 GF_EXE_TMP=gf-bin$(EXEEXT)
 GF_DOC_EXE=gfdoc$(EXEEXT)
@@ -39,16 +41,14 @@ endif
 
 all: unix gfdoc $(BUILD_JAR)
 
-unix: today touch-files opt
+unix: today opt
 
 windows: unix
 
-temp: today touch-files noopt
+temp: today noopt
 
 
 
-# use gf-bin name to not clash with GF/ dir on
-# case insensitive file systems
 build: 
 	$(GHMAKE) $(GHCFLAGS) GF.hs -o $(GF_EXE_TMP)
 	strip $(GF_EXE_TMP)
@@ -59,7 +59,7 @@ opt: build
 
 noopt: build
 
-ghci: touch-files ghci-nofud
+ghci: ghci-nofud
 
 fud:
 	$(GHCXMAKE) $(GHCFLAGS) $(GHCFUDFLAG) GF.hs -o fgf
@@ -111,9 +111,9 @@ tracing: temp
 ghci-trace: GHCFLAGS += -DTRACING
 ghci-trace: ghci
 
-touch-files: 
-	rm -f GF/System/Tracing.{hi,o}
-	touch GF/System/Tracing.hs
+#touch-files: 
+#	rm -f GF/System/Tracing.{hi,o}
+#	touch GF/System/Tracing.hs
 
 # profiling
 prof: GHCOPTFLAGS += -prof -auto-all -auto-dicts

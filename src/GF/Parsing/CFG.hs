@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:05 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.4 $
+-- > CVS $Date: 2005/05/11 10:28:16 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
 --
 -- CFG parsing
 -----------------------------------------------------------------------------
@@ -27,6 +27,10 @@ import qualified GF.Parsing.CFG.General as Gen
 -- parsing
 
 parseCF :: (Ord n, Ord c, Ord t) => String -> Err (CFParser c n t) 
+
+parseCF "bottomup" = Ok $ Gen.parse bottomup
+parseCF "topdown"  = Ok $ Gen.parse topdown
+
 parseCF "gb"    = Ok $ Gen.parse bottomup
 parseCF "gt"    = Ok $ Gen.parse topdown
 parseCF "ib"    = Ok $ Inc.parse (bottomup, noFilter)
@@ -35,10 +39,9 @@ parseCF "ibFT"  = Ok $ Inc.parse (bottomup, topdown)
 parseCF "ibFB"  = Ok $ Inc.parse (bottomup, bottomup)
 parseCF "ibFTB" = Ok $ Inc.parse (bottomup, bothFilters)
 parseCF "itF"   = Ok $ Inc.parse (topdown, bottomup)
--- default parser:
-parseCF "" = parseCF "gb"
+
 -- error parser:
-parseCF prs = Bad $ "Parser not defined: " ++ prs
+parseCF prs = Bad $ "CFG parsing strategy not defined: " ++ prs
 
 bottomup = (True, False)
 topdown = (False, True)
