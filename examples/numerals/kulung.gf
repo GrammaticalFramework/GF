@@ -12,7 +12,7 @@ lincat Numeral =    { s : Str } ;
 lincat Digit = {s : DForm => Str} ;
 lincat Sub10 = {s : DForm => Str ; size : Size} ;
 lincat Sub100 = {s : Str ; size : Size} ;
-lincat Sub1000 = {s : Scale => Str ; size : Size} 
+lincat Sub1000 = {s : Scale => Str ; size : Size} ;
 lincat Sub1000000 = { s : Str } ;
 
 oper mkNum : Str -> Str -> Str -> Str -> Lin Digit = 

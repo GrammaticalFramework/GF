@@ -7,6 +7,8 @@ flags coding=latinasupplement ;
 param Size = sg | two | three | other ;
 
 oper LinDigit = {s : Str ; size : Size} ;
+
+lincat Numeral = {s : Str} ;
 lincat Digit = LinDigit ;
 lincat Sub10 = LinDigit ;
 lincat Sub100 = LinDigit ;
