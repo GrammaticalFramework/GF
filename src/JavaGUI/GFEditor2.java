@@ -588,7 +588,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
     { 
         Locale.setDefault(Locale.US);
         try {
-            Process extProc = Runtime.getRuntime().exec(args[0]); 
+            commandPath = args[0];
+            Process extProc = Runtime.getRuntime().exec(commandPath); 
             InputStreamReader isr = new InputStreamReader(
                            extProc.getInputStream(),"UTF8");
                        // extProc.getInputStream());
@@ -607,7 +608,8 @@ public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
             GFEditor2 gui = new GFEditor2();
             
         } catch (IOException e) {
-            System.out.println("Could not start " + commandPath);
+            System.out.println("Could not start " + commandPath 
+                               + ": " + e);
         }
     }
 
