@@ -17,6 +17,8 @@ NOT_IN_DIST= \
 
 BIN_DIST_DIR=$(DIST_DIR)-$(host)
 
+GRAMMAR_DIST_DIR=GF-grammars-$(PACKAGE_VERSION)
+
 SNAPSHOT_DIR=GF-$(shell date +%Y%m%d)
 
 # use the temporary binary file name 'gf-bin' name to not clash with directory 'GF' 
@@ -189,6 +191,15 @@ binary-dist:
 	$(INSTALL) -m 0644 Makefile.binary $(BIN_DIST_DIR)/Makefile
 	gtar -zcf GF-$(PACKAGE_VERSION)-$(host).tgz $(BIN_DIST_DIR)
 	rm -rf $(BIN_DIST_DIR)
+
+grammar-dist:
+	-rm -rf $(GRAMMAR_DIST_DIR)
+	mkdir $(GRAMMAR_DIST_DIR)
+	cvs export -d $(GRAMMAR_DIST_DIR) -rHEAD GF/{lib,examples}
+	mv $(GRAMMAR_DIST_DIR)/GF/* $(GRAMMAR_DIST_DIR)
+	rmdir $(GRAMMAR_DIST_DIR)/GF
+	gtar -zcf $(GRAMMAR_DIST_DIR).tgz $(GRAMMAR_DIST_DIR)
+	rm -rf $(GRAMMAR_DIST_DIR)
 
 #
 # Installation
