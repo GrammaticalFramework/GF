@@ -62,8 +62,7 @@ buildarchtranslate: i686: i586
     Build the RPM:
 
    $ cd src 
-   $ ./configure
-   $ make rpm
+   $ ./configure && make rpm
 
 11. Build a generic binary x86/linux (should be done on a Linux box,
     e.g. banded.medic.chalmers.se):
