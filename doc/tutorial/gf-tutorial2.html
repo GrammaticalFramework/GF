@@ -11,15 +11,18 @@
 
 <b>3rd Edition, for GF version 2.2 or later</b>
 
-</p><p>
+<p>
 
 <a href="http://www.cs.chalmers.se/~aarne">Aarne Ranta</a>
 
-</p>
 <p>
 
 <tt>aarne@cs.chalmers.se</tt>
-</p></center>
+
+<p>
+
+12 May 2005
+</center>
 
 
 <!-- NEW -->
@@ -29,12 +32,13 @@ The term GF is used for different things:
 <ul>
 <li> a <b>program</b> used for working with grammars
 <li> a <b>programming language</b> in which grammars can be written
-<li> a <b>theory</b> about the concepts of grammars and languages
+<li> a <b>theory</b> about grammars and languages
 </ul>
 
 <p>
 
-This tutorial is about the GF program and the GF programming language.
+This tutorial is primarily about the GF program and 
+the GF programming language.
 It will guide you
 <ul>
 <li> to use the GF program
@@ -43,8 +47,9 @@ It will guide you
 </ul>
 
 
+
 <!-- NEW -->
-<h3>The GF program</h3>
+<h3>Getting the GF program</h3>
 
 The program is open-source free software, which you can download from the
 GF Homepage:<br>
@@ -60,8 +65,8 @@ There you can download
 <li> grammar libraries and examples
 </ul>
 If you want to compile GF from source, you need Haskell and Java
-compilers. But normally you don't have to compile, and you don't
-need to know Haskell or Java to use GF.
+compilers. But normally you don't have to compile, and you definitely
+don't need to know Haskell or Java to use GF.
 
 <p>
 
@@ -127,7 +132,7 @@ you imported. Try parsing something else, and you fail
   > p "hello world"
   No success in cf parsing
   no tree found
-<pre>
+</pre>
 
 
 <!-- NEW -->
@@ -183,6 +188,7 @@ generate ten strings with one and the same command:
 To generate <i>all</i> sentence that a grammar
 can generate, use the command <tt>generate_trees = gt</tt>.
 <pre>
+  > generate_trees | l
   this louse laughs
   this louse sleeps
   this louse swims
@@ -197,10 +203,11 @@ You get quite a few trees but not all of them: only up to a given
 <b>depth</b> of trees. To see how you can get more, use the
 <tt>help = h</tt> command,
 <pre>
-  h gr
+  help gr
 </pre>
 <b>Quiz</b>. If the command <tt>gt</tt> generated all
 trees in your grammar, it would never terminate. Why?
+
 
 
 <!-- NEW -->
@@ -509,10 +516,38 @@ Each module is compiled into a <tt>.gfc</tt> file.
 
 Import <tt>PaleolithicEng.gf</tt> and try what happens
 <pre>
-
+  > i PaleolithicEng.gf
 </pre>
-Nothing more than before, except that the GFC files
-are generated.
+The GF program does not only read the file 
+<tt>PaleolithicEng.gf</tt>, but also all other files that it
+depends on - in this case,  <tt>Paleolithic.gf</tt>.
+
+<p>
+
+For each file that is compiles, a <tt>.gfc</tt> file
+is generated. The GFC format (="GF Canonical") is the
+"machine code" of GF, which is faster to process than
+GF source files. When reading a module, GF knows whether
+to use an existing <tt>.gfc</tt> file or to generate
+a new one, by looking at modification times.
+
+
+
+<!-- NEW -->
+<h4>Multilingual grammar</h4>
+
+The main advantage of separating abstract from concrete syntax is that
+one abstract syntax can be equipped with many concrete syntaxes.
+A system with this property is called a <b>multilingual grammar</b>.
+
+<p>
+
+Multilingual grammars can be used for applications such as
+translation. Let us buid an Italian concrete syntax for
+<tt>Paleolithic</tt> and then test the resulting 
+multilingual grammar.
+
+
 
 
 <!-- NEW -->
@@ -554,17 +589,39 @@ lin
 
 Import without first emptying
 <pre>
-
+  > i PaleolithicEng.gf
+  > i PaleolithicIta.gf
 </pre>
 Try generation now:
 <pre>
+  > gr | l
+  un pidocchio uccide questo ragazzo
 
+  > gr | l -lang=PaleolithicEng
+  that louse eats a louse
 </pre>
 Translate by using a pipe:
 <pre>
-
+  > p -lang=PaleolithicEng "the boy eats the snake" | l -lang=PaleolithicIta
+  il ragazzo mangia il serpente
 </pre>
-Inspect the shell state (<tt>print_options = po</tt>):
+
+
+<!-- NEW -->
+<h4>The multilingual shell state</h4>
+
+A GF shell is at any time in a state, which 
+contains a multilingual grammar. One of the concrete
+syntaxes is the "main" one, which means that parsing and linearization
+are performed by using it. By default, the main concrete syntax is the
+last-imported one. As we saw on previous slide, the <tt>lang</tt> flag
+can be used to change the linearization and parsing grammar.
+
+<p>
+
+To see what the multilingual grammar is (as well as some other
+things), you can use the command
+<tt>print_options = po</tt>:
 <pre>
   > print_options
   main abstract :     Paleolithic
@@ -574,11 +631,86 @@ Inspect the shell state (<tt>print_options = po</tt>):
 
 
 <!-- NEW -->
-<h4>Extending the grammar</h4>
+<h4>Extending a grammar</h4>
 
-Neolithic: fire, wheel, think,...
+The module system of GF makes it possible to <b>extend</b> a
+grammar in different ways. The syntax of extension is
+shown by the following example.
+<pre>
+  abstract Neolithic = Paleolithic ** {
+    fun
+      Fire, Wheel : CN ;
+      Think : V ;
+  }
+</pre>
+Parallel to the abstract syntax, extensions can
+be built for concrete syntaxes:
+<pre>
+  concrete NeolithicEng of Neolithic = PaleolithicEng ** {
+    lin
+      Fire  = {s = "fire"} ;
+      Wheel = {s = "wheel"} ;
+      Think = {s = "thinks"} ;
+  }
+</pre>
+The effect of extension is that all of the contents of the extended
+and extending module are put together.
 
 
+
+<!-- NEW -->
+<h4>Multiple inheritance</h4>
+
+Specialized vocabularies can be represented as small grammars that
+only do "one thing" each, e.g.
+<pre>
+  abstract Fish = {
+    cat Fish ;
+    fun Salmon, Perch : Fish ;
+  }
+
+  abstract Mushrooms = {
+    cat Mushroom ;
+    fun Cep, Agaric : Mushroom ;
+  }
+</pre>
+They can afterwards be combined in bigger grammars by using
+<b>multiple inheritance</b>, i.e. extension of several grammars at the
+same time:
+<pre>
+  abstract Gatherer = Paleolithic, Fish, Mushrooms ** {
+    fun 
+      UseFish     : Fish     -> CN ;
+      UseMushroom : Mushroom -> CN ;
+    }
+</pre>
+
+
+
+<!-- NEW -->
+<h4>Visualizing module structure</h4>
+
+When you have created all the abstract syntaxes and
+one set of concrete syntaxes needed for <tt>Gatherer</tt>,
+your grammar consists of eight GF modules. To see how their
+dependences look like, you can use the command 
+<tt>visualize_graph = vg</tt>,
+<pre>
+  > visualize_graph
+</pre>
+and the graph will pop up in a separate window. It can also
+be printed out into a file, e.g. a <tt>.gif</tt> file that
+can be included in an HTML document
+<pre>
+  > pm -printer=graph | wf Gatherer.dot
+  > ! dot -Tgif Gatherer.dot > Gatherer.gif
+</pre>
+The latter command is a Unix command, issued from GF by using the
+shell escape symbol <tt>!</tt>. The resulting graph is shown below.
+
+<p>
+
+<img src="Gatherer.gif">
 
 </body>
 </html>
