@@ -1,4 +1,4 @@
-%define name gf
+%define name GF
 %define version 2.2pre2
 %define release 1
 
@@ -46,7 +46,7 @@ GF particularly addresses the following aspects of grammars:
 %package editor
 Summary: Java syntax editor for Grammatical Framework (GF).
 Group: Sciences/Other
-Requires: gf
+Requires: %{name}
 
 %description editor
 This package contains the syntax editor GUI for GF.
@@ -81,7 +81,6 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Thu May 12 2005 Bjorn Bringert <bringert@cs.chalmers.se> 2.2pre2-1
 - Split package into gf and gf-editor packages.
-- Changed package name to gf (lower case)
 
 * Wed May 11 2005 Bjorn Bringert <bringert@cs.chalmers.se> 2.2pre1-1
 - Release of GF 2.2
