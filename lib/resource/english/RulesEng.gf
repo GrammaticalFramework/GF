@@ -22,10 +22,6 @@
 concrete RulesEng of Rules = CategoriesEng ** open Prelude, SyntaxEng in {
 
 flags 
-  startcat=Phr ; 
-  lexer=text ;
-  unlexer=text ;
-
   optimize=all ;
 
 lin 

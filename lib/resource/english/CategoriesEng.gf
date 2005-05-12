@@ -21,11 +21,6 @@
 
 concrete CategoriesEng of Categories = PredefCnc ** open Prelude, SyntaxEng in {
 
-flags 
-  startcat=Phr ; 
-  lexer=text ;
-  unlexer=text ;
-
 lincat 
   N      = CommNoun ;         
       -- = {s : Number => Case => Str}
