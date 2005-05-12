@@ -17,7 +17,7 @@ lin
   Finnish = noun2adj (sNainen "suomalaista") ;
   Happy = regAdjDegr (sNainen "onnellista") "onnellisempaa" "onnellisinta" ;
 
-  Married = sKukko "vihitty" "vihityn" "vihittyjä" ** {c = NPCase Illat} ; 
+  Married = noun2adj (sKukko "vihitty" "vihityn" "vihittyjä") ** {c = NPCase Illat} ; 
             --- naimisissa !
 
   Man = cnHum (mkNoun "mies" "miehen" "miehenä" "miestä" "mieheen" "miehinä" 
