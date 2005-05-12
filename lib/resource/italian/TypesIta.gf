@@ -44,6 +44,8 @@ oper
   CaseA = Case ;
   NPFormA = NPForm ;
 
+  prepositional = accusative ;
+
   nominative = Nom ;
   accusative = Acc ;
   genitive = CPrep P_di ;
