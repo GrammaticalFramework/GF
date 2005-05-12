@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/11 10:28:16 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.32 $
+-- > CVS $Date: 2005/05/12 10:03:33 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.33 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -173,7 +173,7 @@ optionsOfCommand co = case co of
   CGenerateRandom -> flags "cat lang number depth"
   CGenerateTrees -> both "metas" "depth alts cat lang number"
   CPutTerm -> flags "transform number"
-  CWrapTerm _ -> none
+  CWrapTerm _ -> opts "c"
   CMorphoAnalyse -> both "short" "lang"
   CTestTokenizer -> flags "lexer"
   CComputeConcrete _ -> flags "res"

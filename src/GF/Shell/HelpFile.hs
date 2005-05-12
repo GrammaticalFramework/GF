@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:20 $
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.2 $
+-- > CVS $Date: 2005/05/12 10:03:33 $
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.3 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -297,13 +297,16 @@ txtHelpFile =
   "\n  examples:" ++
   "\n      p \"zero is even\" | pt -transform=solve  -- solve ?'s in parse result" ++
   "\n" ++
-  "\n" ++
   "\n* st, show_tree: st Tree" ++
   "\n      Prints the tree as a string. Unlike pt, this command cannot be" ++
   "\n      used in a pipe to produce a tree, since its output is a string." ++
   "\n  flags:" ++
   "\n      -printer     show the tree in a special format (-printer=xml supported)" ++
   "\n" ++
+  "\nwt, wrap_tree: wt Fun" ++
+  "\n      Wraps the tree as the sole argument of Fun." ++
+  "\n  flags:" ++
+  "\n      -c           compute the resulting new tree to normal form" ++
   "\n" ++
   "\n-- subshells" ++
   "\n" ++

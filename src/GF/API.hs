@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/10 12:49:13 $ 
+-- > CVS $Date: 2005/05/12 10:03:33 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.34 $
+-- > CVS $Revision: 1.35 $
 --
 -- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 -----------------------------------------------------------------------------
@@ -50,6 +50,7 @@ import qualified GF.Grammar.Grammar as G
 import GF.Infra.Modules
 import GF.Grammar.PrGrammar
 import qualified GF.Grammar.Compute as Co
+import qualified GF.Grammar.AbsCompute as AC
 import qualified GF.Infra.Ident as I
 import qualified GF.Compile.GrammarToCanon as GC
 import qualified GF.Canon.CanonToGrammar as CG
@@ -335,23 +336,24 @@ optTermCommand opts st =
   customOrDefault opts termCommand customTermCommand st
 
 
-{-
 -- wraps term in a function and optionally computes the result
 
 wrapByFun :: Options -> GFGrammar -> Ident -> Tree -> Tree
 wrapByFun opts gr f t = 
   if oElem doCompute opts 
-  then err (const t) id $ computeAbsTerm (stateAbstract g) (appCons f' [t])
-  else appCons f' [t]
+  then err (const t) id $ AC.computeAbsTerm (grammar gr) t' >>= annotate g
+  else err (const t) id $ annotate g t'
  where
-   qualifTerm (absId gr) $ 
+   t' = qualifTerm (absId gr) $ M.appCons f [tree2exp t]
+   g = grammar gr
 
-
-optTransfer :: Options -> StateGrammar -> Term -> Term
+{-
+optTransfer :: Options -> StateGrammar -> G.Term -> G.Term
 optTransfer opts g = case getOptVal opts transferFun of
-  Just f -> wrapByFun (addOption doCompute opts) g (string2id f)
+  Just f -> wrapByFun (addOption doCompute opts) g (M.zIdent f)
   _ -> id
 -}
+
 optTokenizer :: Options -> GFGrammar -> String -> String
 optTokenizer opts gr = show . customOrDefault opts useTokenizer customTokenizer gr
 
