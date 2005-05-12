@@ -1,11 +1,6 @@
 incomplete concrete CategoriesScand of Categories = 
   PredefCnc ** open Prelude, SyntaxScand in {
 
-flags 
-  startcat=Phr ; 
-  lexer=text ;
-  unlexer=text ;
-
 lincat 
   CN     = {s : Number => SpeciesP => Case => Str ; g : NounGender ; 
             p : IsComplexCN} ;
