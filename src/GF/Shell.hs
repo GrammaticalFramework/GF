@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:04 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.35 $
+-- > CVS $Date: 2005/05/12 10:03:33 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.36 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -205,7 +205,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
 
   CPutTerm -> changeArg (opTT2CommandArg (optTermCommand opts gro)  . s2t) sa
 
-----  CWrapTerm f -> changeArg (opTT2CommandArg (return . wrapByFun opts gro f)) sa
+  CWrapTerm f -> changeArg (opTT2CommandArg (return . wrapByFun opts gro f)) sa
   CMorphoAnalyse -> changeArg (AString . morphoAnalyse opts gro . prCommandArg) sa
   CTestTokenizer -> changeArg (AString . optTokenizer opts gro . prCommandArg) sa
 

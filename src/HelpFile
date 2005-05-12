@@ -268,13 +268,16 @@ pt, put_tree: pt Tree
   examples:
       p "zero is even" | pt -transform=solve  -- solve ?'s in parse result
 
-
 * st, show_tree: st Tree
       Prints the tree as a string. Unlike pt, this command cannot be
       used in a pipe to produce a tree, since its output is a string.
   flags:
       -printer     show the tree in a special format (-printer=xml supported)
 
+wt, wrap_tree: wt Fun
+      Wraps the tree as the sole argument of Fun.
+  flags:
+      -c           compute the resulting new tree to normal form
 
 -- subshells
 

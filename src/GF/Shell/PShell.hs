@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:46:12 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.20 $
+-- > CVS $Date: 2005/05/12 10:03:33 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.21 $
 --
 -- parsing GF shell commands. AR 11\/11\/2001
 -----------------------------------------------------------------------------
@@ -97,7 +97,7 @@ pCommand ws = case ws of
   "gt" : []     -> aUnit   CGenerateTrees
   "gt" : t      -> aTerm   CGenerateTrees t
   "pt" : s      -> aTerm   CPutTerm s
------  "wt" : f : s  -> aTerm   (CWrapTerm (string2id f)) s
+  "wt" : f : s  -> aTerm   (CWrapTerm (pzIdent f)) s
   "ma" : s      -> aString CMorphoAnalyse s
   "tt" : s      -> aString CTestTokenizer s
   "cc" : s      -> aUnit   $ CComputeConcrete $ unwords s
