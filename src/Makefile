@@ -3,8 +3,7 @@ include config.mk
 
 GHMAKE=$(GHC) --make
 GHCXMAKE=ghcxmake
-#GHCFLAGS= -package util -fglasgow-exts -optP'$(CPPFLAGS)' -optl'$(LDFLAGS)'
-GHCFLAGS= -package util -fglasgow-exts
+GHCFLAGS= -fglasgow-exts -package util
 GHCOPTFLAGS=-O2
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
@@ -29,6 +28,15 @@ GF_DOC_EXE=gfdoc$(EXEEXT)
 ifeq ("$(READLINE)","readline")
   GHCFLAGS += -package readline -DUSE_READLINE
 endif
+
+ifneq ("$(CPPFLAGS)","")
+  GHCFLAGS += -optP'$(CPPFLAGS)'
+endif
+
+ifneq ("$(LDFLAGS)","")
+  GHCFLAGS += -optl'$(LDFLAGS)'
+endif
+
 
 ifeq ("$(ENABLE_JAVA)", "yes")
   BUILD_JAR=jar
