@@ -1,4 +1,4 @@
-%define name GF
+%define name gf
 %define version 2.2pre2
 %define release 1
 
@@ -10,7 +10,7 @@ License: GPL
 Group: Sciences/Other
 Vendor: The Language Technology Group
 URL: http://www.cs.chalmers.se/~aarne/GF/
-Source: %{name}-%{version}.tgz
+Source: GF-%{version}.tgz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: ghc
 
@@ -42,6 +42,15 @@ GF particularly addresses the following aspects of grammars:
     * grammar engineering (modularity, information hiding, reusable
       libraries)
 
+
+%package editor
+Summary: Java syntax editor for Grammatical Framework (GF).
+Group: Sciences/Other
+Requires: gf
+
+%description editor
+This package contains the syntax editor GUI for GF.
+
 %prep
 rm -rf $RPM_BUILD_ROOT
 %setup -q
@@ -62,12 +71,18 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,0755) 
 %{_bindir}/gf
 %{_bindir}/gfdoc
+%doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html}
+
+%files editor
 %{_bindir}/jgf
 %{_datadir}/%{name}-%{version}/gf-java.jar
-%doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html}
 
 
 %changelog
+* Thu May 12 2005 Bjorn Bringert <bringert@cs.chalmers.se> 2.2pre2-1
+- Split package into gf and gf-editor packages.
+- Changed package name to gf (lower case)
+
 * Wed May 11 2005 Bjorn Bringert <bringert@cs.chalmers.se> 2.2pre1-1
 - Release of GF 2.2
 
