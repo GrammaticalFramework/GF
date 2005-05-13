@@ -74,6 +74,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc LICENSE README doc/{DocGF.pdf,gf2-highlights.html,index.html}
 
 %files editor
+%defattr(-,root,root,0755) 
 %{_bindir}/jgf
 %{_datadir}/%{name}-%{version}/gf-java.jar
 
