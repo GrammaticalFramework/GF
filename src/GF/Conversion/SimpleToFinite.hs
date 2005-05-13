@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:54 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/05/13 12:40:19 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.6 $
 --
 -- Calculating the finiteness of each type in a grammar
 -----------------------------------------------------------------------------
@@ -19,6 +19,7 @@ import GF.Infra.Print
 
 import GF.Formalism.GCFG
 import GF.Formalism.SimpleGFC
+import GF.Formalism.Utilities 
 import GF.Conversion.Types
 
 import GF.Data.SortedList

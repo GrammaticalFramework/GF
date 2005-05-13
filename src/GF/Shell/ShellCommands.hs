@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/12 10:03:33 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.33 $
+-- > CVS $Date: 2005/05/13 12:40:20 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.34 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -132,7 +132,7 @@ testValidFlag st co f x = case f of
   "parser"  -> testInc customParser 
 	       -- hack for the -newer parsers: (to be changed in the future)
 	       -- `mplus` testIn (words "mcfg mcfg-bottomup mcfg-topdown cfg cfg-bottomup cfg-topdown bottomup topdown")
-	       -- if not(null x) && head x `elem` "mc" then return () else Bad ""
+	       -- if not(null x) && head x `elem` "mc" then return () else Bad ""
   "alts"    -> testN
   "transform" -> testInc customTermCommand
   "filter"  -> testInc customStringCommand

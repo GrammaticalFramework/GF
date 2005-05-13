@@ -2,21 +2,19 @@
 
 ######################################################################
 # Author: Peter Ljunglöf
-# Time-stamp: "2005-03-29, 14:04"
-# CVS $Date: 2005/04/11 13:53:37 $
+# Time-stamp: "2005-05-12, 23:17"
+# CVS $Date: 2005/05/13 12:40:20 $
 # CVS $Author: peb $
 #
-# a script for producing documentation through Haddock
+# a script for producing documentation through Haddock 
 ######################################################################
 
-# set base = `pwd`
-set docdir = haddock
-set tempdir = .haddock-temp-files
-set resourcedir = haddock-resources
+set basedir = `pwd`
+set docdir = haddock/html
+set tempdir = haddock/.temp-files
+set resourcedir = haddock/resources
 
-#set dirs = (. api compile grammar infra shell source canonical useGrammar cf newparsing parsers notrace cfgm speech visualization for-hugs for-ghc)
-
-set files = (`find * -name '*.hs' -not -path 'old-stuff/*' -not -path 'for-*' -not -path 'haddock*'` for-ghc-nofud/*.hs)
+set files = (`find GF -name '*.hs'` GF.hs)
 
 ######################################################################
 
@@ -24,14 +22,14 @@ echo 1. Creating and cleaning Haddock directory
 echo -- $docdir 
 
 mkdir -p $docdir
-rm -r $docdir/*
+rm -rf $docdir/*
 
 ######################################################################
 
 echo
 echo 2. Copying Haskell files to temporary directory: $tempdir
 
-rm -r $tempdir
+rm -rf $tempdir
 
 foreach f ($files) 
     # echo -- $f
@@ -45,8 +43,8 @@ echo
 echo 3. Invoking Haddock
 
 cd $tempdir
-haddock -o ../$docdir -h -t 'Grammatical Framework' $files
-cd ..
+haddock -o $basedir/$docdir -h -t 'Grammatical Framework' $files
+cd $basedir
 
 ######################################################################
 
