@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/12 10:03:33 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.61 $
+-- > CVS $Date: 2005/05/13 12:40:20 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.62 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -75,6 +75,7 @@ import qualified GF.OldParsing.ConvertGrammar as CnvOld -- OBSOLETE
 import qualified GF.Printing.PrintParser as PrtOld -- OBSOLETE
 import qualified GF.Infra.Print as Prt
 import qualified GF.Conversion.GFC as Cnv
+import qualified GF.Conversion.Types as CnvTypes
 
 import GF.Canon.GFC
 import qualified GF.Canon.MkGFC as MC
@@ -254,6 +255,13 @@ customGrammarPrinter =
   ,(strCI "cfg",      Prt.prt . stateCFG)
   ,(strCI "pinfo",    Prt.prt . statePInfo)
   ,(strCI "abstract", Prt.prtAfter "\n" . Cnv.gfc2abstract . stateGrammarLang)
+
+  ,(strCI "simple-haskell", CnvTypes.prtHsSGrammar . Cnv.gfc2simple . stateGrammarLang)
+  ,(strCI "mcfg-haskell", CnvTypes.prtHsMGrammar . stateMCFG)
+  ,(strCI "cfg-haskell", CnvTypes.prtHsCGrammar . stateCFG)
+  -- ,(strCI "simple-prolog", CnvTypes.prtHsSGrammar . Cnv.gfc2simple . stateGrammarLang)
+  ,(strCI "mcfg-prolog", CnvTypes.prtPlMGrammar . stateMCFG)
+  ,(strCI "cfg-prolog", CnvTypes.prtPlCGrammar . stateCFG)
 -- obsolete, or only for testing:
   ,(strCI "abs-pl",   Cnv.abstract2prolog . Cnv.gfc2abstract . stateGrammarLang)
   ,(strCI "cfg-pl",   Cnv.cfg2prolog . stateCFG)

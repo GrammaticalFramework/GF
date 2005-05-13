@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:28:43 $ 
+-- > CVS $Date: 2005/05/13 12:40:19 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.8 $
+-- > CVS $Revision: 1.9 $
 --
 -- All conversions from GFC 
 -----------------------------------------------------------------------------
@@ -22,7 +22,7 @@ import GF.Infra.Ident (Ident, identC)
 import GF.Formalism.GCFG (Rule(..), Abstract(..))
 import GF.Formalism.SimpleGFC (decl2cat)
 import GF.Formalism.CFG (CFRule(..))
-import GF.Formalism.Utilities (symbol)
+import GF.Formalism.Utilities (symbol, name2fun)
 import GF.Conversion.Types
 
 import qualified GF.Conversion.GFCtoSimple as G2S
@@ -89,7 +89,7 @@ gfc2abstract :: (CanonGrammar, Ident) -> [Abstract SCat Fun]
 gfc2abstract gr = [ Abs (decl2cat decl) (map decl2cat decls) (name2fun name) |
 		    Rule (Abs decl decls name) _ <- gfc2simple gr ]
 
-abstract2prolog :: [Abstract SCat Fun] -> String
+abstract2prolog :: [Abstract SCat Fun] -> String
 abstract2prolog gr = skvatt_hdr ++ concatMap abs2pl gr
     where abs2pl (Abs cat [] fun) = prtQuoted cat ++ " ---> " ++ 
 				    "\"" ++ prt fun ++ "\".\n"

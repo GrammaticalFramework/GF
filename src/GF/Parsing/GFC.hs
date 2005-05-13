@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/11 10:28:16 $ 
+-- > CVS $Date: 2005/05/13 12:40:19 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.8 $
+-- > CVS $Revision: 1.9 $
 --
 -- The main parsing module, parsing GFC grammars
 -- by translating to simpler formats, such as PMCFG and CFG
@@ -58,7 +58,7 @@ instance Print PInfo where
 ----------------------------------------------------------------------
 -- main parsing function
 
-parse :: String         -- ^ parsing algorithm (mcfg/cfg)
+parse :: String         -- ^ parsing algorithm (mcfg or cfg)
       -> String         -- ^ parsing strategy
       -> PInfo          -- ^ compiled grammars (mcfg and cfg) 
       -> Ident.Ident    -- ^ abstract module name

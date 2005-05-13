@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:28:46 $ 
+-- > CVS $Date: 2005/05/13 12:40:19 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
 -- MCFG parsing, parser information
 -----------------------------------------------------------------------------
@@ -76,7 +76,7 @@ rangeRestrictPInfo (pinfo{-::MCFPInfo c n l t-}) inp =
 	     , leftcornerTokens = lctokens
 	     , grammarCats = grammarCats pinfo
 	     , rulesByToken = emptyAssoc -- error "MCFG.PInfo.rulesByToken - no range restriction"
-	     , rulesWithoutTokens = [] -- error "MCFG.PInfo.rulesByToken - no range restriction"
+	     , rulesWithoutTokens = [] -- error "MCFG.PInfo.rulesByToken - no range restriction"
 	     , allRules = allrules -- rrRules (allRules pinfo)
 	     }
 
@@ -114,7 +114,7 @@ buildMCFPInfo grammar =
 	  namerules     = accumAssoc id 
 			  [ (name, rule) | rule@(Rule (Abs _ _ name) _) <- allrules ]
 	  topdownrules  = accumAssoc id
-			  [ (cat, rule) | rule@(Rule (Abs cat _ _) _) <- allrules ]
+			  [ (cat, rule) | rule@(Rule (Abs cat _ _) _) <- allrules ]
 	  emptyrules    = [ rule | rule@(Rule (Abs _ [] _) _) <- allrules ]
 	  leftcorncats  = accumAssoc id 
 			  [ (cat, rule) | 

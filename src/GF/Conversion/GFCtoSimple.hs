@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/10 12:52:06 $ 
+-- > CVS $Date: 2005/05/13 12:40:19 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
+-- > CVS $Revision: 1.8 $
 --
 -- Converting GFC to SimpleGFC
 --
@@ -24,6 +24,7 @@ import qualified GF.Canon.AbsGFC as A
 import qualified GF.Infra.Ident as I
 import GF.Formalism.GCFG
 import GF.Formalism.SimpleGFC 
+import GF.Formalism.Utilities
 import GF.Conversion.Types
 
 import GF.Canon.GFC (CanonGrammar)

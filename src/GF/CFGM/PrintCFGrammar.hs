@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:19 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.17 $
+-- > CVS $Date: 2005/05/13 12:40:18 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.18 $
 --
 -- Handles printing a CFGrammar in CFGM format.
 -----------------------------------------------------------------------------
@@ -23,6 +23,7 @@ import GF.Infra.Modules
 import qualified GF.Conversion.GFC as Cnv
 import GF.Infra.Print (prt)
 import GF.Formalism.CFG (CFRule(..))
+import qualified GF.Formalism.Utilities as GU
 import qualified GF.Conversion.Types as GT
 import qualified GF.CFGM.AbsCFG as AbsCFG
 import GF.Formalism.Utilities (Symbol(..))
@@ -66,7 +67,7 @@ cfGrammarToCFGM gr i start = AbsCFG.Grammar (identToCFGMIdent i) flags (map rule
     where flags = maybe [] (\c -> [AbsCFG.StartCat $ strToCFGMCat (c++"{}.s")]) start
 
 ruleToCFGMRule :: GT.CRule -> AbsCFG.Rule
-ruleToCFGMRule (CFRule c rhs (GT.Name fun profile)) 
+ruleToCFGMRule (CFRule c rhs (GU.Name fun profile)) 
     = AbsCFG.Rule fun' p' c' rhs'
     where 
     fun' = identToFun fun
@@ -74,10 +75,10 @@ ruleToCFGMRule (CFRule c rhs (GT.Name fun profile))
     c' = catToCFGMCat c
     rhs' = map symbolToGFCMSymbol rhs
 
-profileToCFGMProfile :: [GT.Profile a] -> AbsCFG.Profile
+profileToCFGMProfile :: [GU.Profile a] -> AbsCFG.Profile
 profileToCFGMProfile = AbsCFG.Profile . map cnvProfile
-    where cnvProfile (GT.Unify ns)   = AbsCFG.Ints $ map fromIntegral ns
-	  cnvProfile (GT.Constant a) = AbsCFG.Ints []
+    where cnvProfile (GU.Unify ns)   = AbsCFG.Ints $ map fromIntegral ns
+	  cnvProfile (GU.Constant a) = AbsCFG.Ints []
 	  -- FIXME: this should be replaced with a new constructor in 'AbsCFG'
 
 identToCFGMIdent :: Ident -> AbsCFG.Ident

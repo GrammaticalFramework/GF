@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:28:44 $ 
+-- > CVS $Date: 2005/05/13 12:40:19 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
 -- Converting SimpleGFC grammars to MCFG grammars, nondeterministically.
 -- Afterwards, the grammar has to be extended with coercion functions,
@@ -60,7 +60,7 @@ convertGrammar rules = traceCalcFirst rules' $
 
 convertRule :: SRule -> [ERule] -- CnvMonad ERule
 convertRule (Rule (Abs decl decls fun) (Cnc ctype ctypes (Just term))) =
---    | prt(name2fun fun) `elem` 
+--    | prt(name2fun fun) `elem` 
 --      words "UseCl PosTP TPast ASimul SPredV IndefOneNP DefOneNP UseN2 mother_N2 jump_V" =
     if notLongerThan maxNrRules rules 
        then tracePrt ("SimpeToMCFG.Nondet - MCFG rules for " ++ prt fun) (prt . length) $
@@ -78,7 +78,7 @@ convertRule (Rule (Abs decl decls fun) (Cnc ctype ctypes (Just term))) =
 			 catPaths : argsPaths = map (lintype2paths emptyPath) (ctype : ctypes)
 		     -- checkLinRec argsPaths catPaths newLinRec
 		     return $ Rule (Abs newCat newArgs fun) (Cnc catPaths argsPaths newLinRec) 
-convertRule _ = [] -- failure
+convertRule _ = [] -- failure
 
 
 ----------------------------------------------------------------------

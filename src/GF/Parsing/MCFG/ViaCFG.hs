@@ -161,7 +161,7 @@ convert _ _                      = []
 ----------------------------------------------------------------------------------}
 
 -- FULKOD !
-nrOfCats :: Eq c => MCFG.Lin c l t  -> Int
+nrOfCats :: Eq c => MCFG.Lin c l t  -> Int
 nrOfCats (MCFG.Lin l syms) = length $ nub [(c, i) | Cat (c, l, i) <- syms]
 
 

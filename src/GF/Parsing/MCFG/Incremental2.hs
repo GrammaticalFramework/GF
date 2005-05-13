@@ -92,12 +92,12 @@ data Item   c n l t = Active (Abstract c n)
 			     (LinRec c l t) 
 			     [RangeRec l]
 		    | Final (Abstract c n) (RangeRec l) [RangeRec l]
-		    -- | Passive c (RangeRec l) 
+		    ---- | Passive c (RangeRec l) 
 		      deriving (Eq, Ord, Show)
 
 data IKey     c l t = Act c l 
 		    | ActTok t
-		    -- | Useless
+		    ---- | Useless
 		    | Pass
 		    | Fin
 		      deriving (Eq, Ord, Show)
