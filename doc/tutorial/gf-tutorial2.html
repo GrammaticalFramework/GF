@@ -706,11 +706,69 @@ can be included in an HTML document
   > ! dot -Tgif Gatherer.dot > Gatherer.gif
 </pre>
 The latter command is a Unix command, issued from GF by using the
-shell escape symbol <tt>!</tt>. The resulting graph is shown below.
+shell escape symbol <tt>!</tt>. The resulting graph is shown in the next section.
+
+<p>
+
+The command <tt>print_multi = pm</tt> is used for printing the current multilingual
+grammar in various formats, of which the format <tt>-printer=graph</tt> just
+shows the module dependencies.
+
+
+<!-- NEW -->
+<h4>The module structure of <tt>GathererEng</tt></h4>
+
+The graph uses
+<ul>
+<li> oval boxes for abstract modules
+<li> square boxes  for concrete modules
+<li> black-headed arrows for inheritance
+<li> white-headed arrows for the concrete-of-abstract relation
+</ul>
 
 <p>
 
 <img src="Gatherer.gif">
+
+
+<!-- NEW -->
+<h3>Topics still to be written</h3>
+
+Resource modules, parameter, linearization types, operations
+
+<p>
+
+Morpho and translation quiz
+
+<p>
+
+Predefined types and operations
+
+<p>
+
+Lexers and unlexers
+
+<p>
+
+Grammars of formal languages
+
+<p>
+
+Resource grammars and their reuse
+
+<p>
+
+Embedded grammars in Haskell and Java
+
+<p>
+
+Dependent types, variable bindings, semantic definitions
+
+<p>
+
+Transfer rules
+
+
 
 </body>
 </html>

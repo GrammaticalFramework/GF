@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:36 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.21 $
+-- > CVS $Date: 2005/05/14 08:38:55 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.22 $
 --
 -- Datastructures and functions for modules, common to GF and GFC.
 --
@@ -116,7 +116,7 @@ flagsModule (_,mi) = case mi of
   _ -> []
 
 allFlags :: MGrammar i f a -> [f]
-allFlags gr = concat $ map flags $ reverse [m | (_, ModMod m) <- modules gr]
+allFlags gr = concat $ map flags $ [m | (_, ModMod m) <- modules gr]
 
 mapModules :: (Module i f a -> Module i f a) 
 	   -> MGrammar i f a -> MGrammar i f a 
