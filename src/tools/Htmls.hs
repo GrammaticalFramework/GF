@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/20 20:09:19 $ 
+-- > CVS $Date: 2005/05/14 08:38:55 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.9 $
+-- > CVS $Revision: 1.10 $
 --
 -- chop an HTML file into separate files, each linked to the next and previous.
 -- the names of the files are n-file, with n = 01,02,...
@@ -67,6 +67,7 @@ link file mx n =
   (if n >= mx-1 then "" else ("   <a href=\"" ++ file' ++ "\">Next</a>")) ++
   (if n == 1  then "" else ("   <a href=\"" ++ file_ ++ "\">Previous</a>")) ++
                            ("   <a href=\"" ++ file0 ++ "\">Contents</a>") ++
+                           ("   <a href=\"" ++ file  ++ "\">Fulltext</a>") ++
                            ("   <a href=\"" ++ file1 ++ "\">First</a>") ++
                            ("   <a href=\"" ++ file2 ++ "\">Last</a>")
   where
