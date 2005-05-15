@@ -732,11 +732,248 @@ The graph uses
 
 
 <!-- NEW -->
-<h3>Topics still to be written</h3>
+<h3>Resource modules</h3>
 
-Resource modules, parameter, linearization types, operations
+Suppose we want to say, with the vocabulary included in
+<tt>Paleolithic.gf</tt>, things like
+<pre>
+  the boy eats two snakes
+  all boys sleep  
+</pre>
+The new grammatical facility we need are the plural forms
+of nouns and verbs (<i>boys, sleep</i>), as opposed to their
+singular forms.
 
 <p>
+
+The introduction of plural forms requires two things:
+<ul>
+<li> to <b>inflect</b> nouns and verbs in singular and plural number
+<li> to describe the <b>agreement</b> of the verb to subject: the
+  rule that the verb must have the same number as the subject
+</ul>
+Different languages have different rules of inflection and agreement.
+For instance, Italian has also agreement in gender (masculine vs. feminine).
+We want to be able to ignore such differences in the abstract
+syntax.
+
+<p>
+
+To be able to do all this, we need a couple of new judgement forms,
+a new module form, and a more powerful way of expressing linearization
+rules.
+
+
+<!-- NEW -->
+<h4>Parameters and tables</h4>
+
+We define the <b>parameter type</b> of number in Englisn by
+using a new form of judgement:
+<pre>
+  param Number = Sg | Pl ;
+</pre>
+To express that nouns in English have a linearization
+depending on number, we replace the linearization type <tt>{s : Str}</tt>
+with a type where the <tt>s</tt> field is a <b>table</b> depending on number:
+<pre>
+  lincat CN = {s : Number => Str} ;
+</pre>
+The <b>table type</b> <tt>Number => Str</tt> is in many respects similar to
+a function type (<tt>Number -> Str</tt>). The main restriction is that the
+argument type of a table type must always be a parameter type. This means
+that the argument-value pairs can be listed in a finite table. The following
+example shows such a table:
+<pre>
+  lin Boy = {s = table {
+    Sg => "boy" ;
+    Pl => "boys"
+    }
+  } ;
+</pre>
+The application of a table to a parameter is done by the <b>selection</b>
+operator <tt>!</tt>. For instance,
+<pre>
+  Boy.s ! Pl
+</pre>
+is a selection, whose value is <tt>"boys"</tt>.
+
+
+<!-- NEW -->
+<h4>Inflection tables, paradigms, and <tt>oper</tt> definitions</h4>
+
+All English common nouns are inflected in number, most of them in the
+same way: the plural form is formed from the singular form by adding the
+ending <i>s</i>. This rule is an example of 
+a <b>paradigm</b> - a formula telling how the inflection
+forms of a word are formed.
+
+<p>
+
+From GF point of view, a paradigm is a function that takes a <b>lemma</b> -
+a string also known as a <b>dictionary form</b> - and returns an inflection
+table of desired type. Paradigms are not functions in the sense of the
+<tt>fun</tt> judgements of abstract syntax (which operate on trees and not
+on strings). Thus we call them <b>operations</b> for the sake of clarity,
+introduce one one form of judgement, with the keyword <tt>oper</tt>. As an
+example, the following operation defines the regular noun paradigm of English:
+<pre>
+  oper regNoun : Str -> {s : Number => Str} = \x -> {
+    s = table {
+      Sg => x ;
+      Pl => x + "s"
+      }
+    } ;
+</pre>
+Thus an <tt>oper</tt> judgement includes the name of the defined operation,
+its type, and an expression defining it. As for the syntax of the defining
+expression, notice the <b>lambda abstraction</b> form <tt>\x -> t</tt> of
+the function, and the <b>glueing</b> operator <tt>+</tt> telling that
+the string held in the variable <tt>x</tt> and the ending <tt>"s"</tt> 
+are written together to form one <b>token</b>.
+
+
+<!-- NEW -->
+<h4>The <tt>resource</tt> module type</h4>
+
+Parameter and operator definitions do not belong to the abstract syntax.
+They can be used when defining concrete syntax - but they are not
+tied to a particular set of linearization rules.
+The proper way to see them is as auxiliary concepts, as <b>resources</b>
+usable in many concrete syntaxes.
+
+<p>
+
+The <tt>resource</tt> module type thus consists of
+<tt>param</tt> and <tt>oper</tt> definitions. Here is an
+example.
+<pre>
+  resource MorphoEng = {
+    param
+      Number = Sg | Pl ;
+    oper
+      Noun  : Type = {s : Number => Str} ;
+      regNoun : Str -> Noun = \x -> {
+        s = table {
+          Sg => x ;
+          Pl => x + "s"
+          }
+        } ;
+  }
+</pre>
+Resource modules can extend other resource modules, in the
+same way as modules of other types can extend modules of the
+same type.
+
+
+
+<!-- NEW -->
+<h3>Opening a <tt>resource</tt></h3>
+
+Any number of <tt>resource</tt> modules can be
+<b>opened</b> in a <tt>concrete</tt> syntax, which
+makes the parameter and operation definitions contained
+in the resource usable in the concrete syntax. Here is
+an example, where the resource <tt>MorphoEng</tt> is
+open in (the fragment of) a new version of <tt>PaleolithicEng</tt>.
+<pre>
+concrete PaleolithicEng of Paleolithic = open MorphoEng in {
+  lincat 
+    CN = Noun ;
+  lin
+    Boy   = regNoun "boy" ;
+    Snake = regNoun "snake" ;
+    Worm  = regNoun "worm" ;
+  }
+</pre>
+Notice that, just like in abstract syntax, function application
+is written by juxtaposition of the function and the argument.
+
+<p>
+
+Using operations defined in resource modules is clearly a concise
+way of giving e.g. inflection tables and other repeated patterns
+of expression. In addition, it enables a new kind of modularity
+and division of labour in grammar writing: grammarians familiar with
+the linguistic details of a language can put this knowledge
+available through resource grammars, whose users only need
+to pick the right operations and not to know their implementation
+details.
+
+
+
+<!-- NEW -->
+<h4>Worst-case macros and data abstraction</h4>
+
+Some English nouns, such as <tt>louse</tt>, are so irregular that
+it makes little sense to see them as instances of a paradigm. Even
+then, it is useful to perform <b>data abstraction</b> from the
+definition of the type <tt>Noun</tt>, and introduce a constructor
+operation, a <b>worst-case macro</b> for nouns:
+<pre>
+  oper mkNoun : Str -> Str -> Noun = \x,y -> {
+    s = table {
+      Sg => x ;
+      Pl => y
+      }
+    } ;
+</pre>
+Thus we define
+<pre>
+  lin Louse = mkNoun "louse" "lice" ;
+</pre>
+instead of writing the inflection table explicitly.
+
+<p>
+
+The grammar engineering advantage of worst-case macros is that
+the author of the resource module may change the definitions of
+<tt>Noun</tt> and <tt>mkNoun</tt>, and still retain the
+interface (i.e. the system of type signatures) that makes it
+correct to use these functions in concrete modules. In programming
+terms, <tt>Noun</tt> is then treated as an <b>abstract datatype</b>.
+
+
+
+<!-- NEW -->
+<h4>A system of paradigms using <tt>Prelude</tt> operations</h4>
+
+The regular noun paradigm <tt>regNoun</tt> can - and should - of course be defined
+by the worst-case macro <tt>mkNoun</tt>.  In addition, some more noun paradigms
+could be defined, for instance,
+<pre>
+  regNoun : Str -> Noun = \snake -> mkNoun snake (snake + "s") ;
+  sNoun   : Str -> Noun = \kiss  -> mkNoun kiss  (kiss  + "es") ;
+</pre>
+What about nouns like <i>fly</i>, with the plural <i>flies</i>? The already
+available solution is to use the so-called "technical stem" <i>fl</i> as
+argument, and define
+<pre>
+  yNoun   : Str -> Noun = \fl -> mkNoun (fl  + "y") (fl  + "ies") ;
+</pre>
+But this paradigm would be very unintuitive to use, because the "technical stem"
+is not even an existing form of the word. A better solution is to use
+the string operator <tt>init</tt>, which returns the initial segment (i.e.
+all characters but the last) of a string:
+<pre>
+  yNoun   : Str -> Noun = \fly -> mkNoun fly (init fly  + "ies") ;  
+</pre>
+The operator <tt>init</tt> belongs to a set of operations in the
+resource module <tt>Prelude</tt>, which therefore has to be
+<tt>open</tt>ed so that <tt>init</tt> can be used.
+
+
+
+<!-- NEW -->
+<h4>An intelligent noun paradigm using <tt>case</tt> expressions</h4>
+
+
+
+
+
+
+<!-- NEW -->
+<h2>Topics still to be written</h2>
+
 
 Morpho and translation quiz
 
