@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/14 08:38:55 $ 
+-- > CVS $Date: 2005/05/16 17:07:18 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
 -- chop an HTML file into separate files, each linked to the next and previous.
 -- the names of the files are n-file, with n = 01,02,...
@@ -19,6 +19,7 @@
 module Main (main) where
 
 import System
+import Char
 
 main :: IO ()
 main = do

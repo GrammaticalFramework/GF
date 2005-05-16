@@ -607,6 +607,38 @@ Translate by using a pipe:
 </pre>
 
 
+
+<!-- NEW -->
+<h4>Translation quiz</h4>
+
+This is a simple kind of language exercises that can be automatically
+generated from a multilingual grammar. The system generates a set of
+random sentence, displays them in one language, and checks the user's
+answer given in another language. The command <tt>translation_quiz = tq</tt>
+makes this in a subshell of GF.
+<pre>
+  > translation_quiz PaleolithicEng PaleolithicIta
+
+  Welcome to GF Translation Quiz.
+  The quiz is over when you have done at least 10 examples
+  with at least 75 % success.
+  You can interrupt the quiz by entering a line consisting of a dot ('.').
+
+  a green boy washes the louse
+  un ragazzo verde lava il gatto
+
+  No, not un ragazzo verde lava il gatto, but
+  un ragazzo verde lava il pidocchio
+  Score 0/1
+</pre>
+You can also generate a list of translation exercises and save it in a
+file for later use, by the command <tt>translation_list = tl</tt>
+<pre>
+  > translation_list PaleolithicEng PaleolithicIta 25
+</pre>
+(The number 25 is the number of sentences generated.)
+
+
 <!-- NEW -->
 <h4>The multilingual shell state</h4>
 
@@ -966,8 +998,130 @@ resource module <tt>Prelude</tt>, which therefore has to be
 <!-- NEW -->
 <h4>An intelligent noun paradigm using <tt>case</tt> expressions</h4>
 
+It may be hard for the user of a resource morphology to pick the right
+inflection paradigm. A way to help this is to define a more intelligent
+paradigms, which chooses the ending by first analysing the lemma.
+The following variant for English regular nouns puts together all the
+previously shown paradigms, and chooses one of them on the basis of
+the final letter of the lemma.
+<pre>
+  regNoun : Str -> Noun = \s -> case last s of {
+    "s" | "z" => mkNoun s (s + "es") ;
+    "y"       => mkNoun s (init s + "ies") ;
+    _         => mkNoun s (s + "s")
+    } ;
+</pre>
+This definition displays many GF expression forms not shown befores;
+these forms are explained in the following section.
+
+<p>
+
+The paradigms <tt>regNoun</tt> does not give the correct forms for
+all nouns. For instance, <i>louse - lice</i> and
+<i>fish - fish</i> must be given by using <tt>mkNoun</i>.
+Also the word <i>boy</i> would be inflected incorrectly; to prevent
+this, either use <tt>mkNoun</i> or modify 
+<tt>regNoun</tt> so that the <tt>"y"</tt> case does not
+apply if the second-last character is a vowel.
 
 
+
+<!-- NEW -->
+<h4>Pattern matching</h4>
+
+Expressions of the <tt>table</tt> form are built from lists of
+argument-value pairs. These pairs are called the <b>branches</b>
+of the table. In addition to constants introduced in
+<tt>param</tt> definitions, the left-hand side of a branch can more
+generally be a <b>pattern</b>, and the computation of selection is
+then performed by <b>pattern matching</b>:
+<ul>
+<li> a variable pattern (identifier other than constant parameter) matches anything
+<li> the wild card <tt>_</tt> matches anything
+<li> a string literal pattern, e.g. <tt>"s"</tt>, matches the same string 
+<li> a disjunctive pattern <tt>P | ... | Q</tt> matches anything that
+     one of the disjuncts matches
+</ul>
+Pattern matching is performed in the order in which the branches
+appear in the table.
+
+<p>
+
+As syntactic sugar, one-branch tables can be written concisely,
+<pre>
+  \\P,...,Q => t  ===  table {P => ... table {Q => t} ...}
+</pre>
+Finally, the <tt>case</tt> expressions common in functional
+programming languages are syntactic sugar for table selections:
+<pre>
+  case e of {...} ===  table {...} ! e
+</pre>
+
+
+
+<!-- NEW -->
+<h4>Parametric vs. inherent features, agreement</h4>
+
+The rule of subject-verb agreement in English says that the verb
+phrase must be inflected in the number of the subject. This
+means that a noun phrase (functioning as a subject), in some sense
+<i>has</i> a number, which it "sends" to the verb. The verb does not
+have a number, but must be able to receive whatever number the
+subject has. This distinction is nicely represented by the
+different linearization types of noun phrases and verb phrases:
+<pre>
+  lincat NP = {s : Str ; n : Number} ;
+  lincat VP = {s : Number => Str} ;
+</pre>
+We say that the number of <tt>NP</tt> is an <b>inherent feature</b>,
+whereas the number of  <tt>NP</tt> is <b>parametric</b>.
+
+<p>
+
+The agreement rule itself is expressed in the linearization rule of
+the predication structure:
+<pre>
+  lin PredVP np vp = {s = np.s ++ vp.s ! np.n} ;
+</pre>
+The following page will present a new version of
+<tt>PaleolithingEng</tt>, assuming an abstract syntax 
+xextended with <tt>All</tt> and <tt>Two</tt>.
+It also assumes that <tt>MorphoEng</tt> has a paradigm
+<tt>regVerb</tt> for regular verbs (which need only be
+regular only in the present tensse).
+The reader is invited to inspect the way in which agreement works in
+the formation of noun phrases and verb phrases.
+
+
+
+<!-- NEW -->
+<h4>English concrete syntax with parameters</h4>
+
+<pre>
+concrete PaleolithicEng of Paleolithic = open MorphoEng in {
+lincat 
+  S, A          = {s : Str} ; 
+  VP, CN, V, TV = {s : Number => Str} ; 
+  NP            = {s : Str ; n : Number} ; 
+lin
+  PredVP np vp  = {s = np.s ++ vp.s ! np.n} ;
+  UseV   v      = v ;
+  ComplTV tv np = {s = \\n => tv.s ! n ++ np.s} ;
+  UseA   a   = {s = \\n => case n of {Sg => "is" ; Pl => "are"} ++ a.s} ;
+  This  cn   = {s = "this" ++ cn.s ! Sg } ; 
+  Indef cn   = {s = "a" ++ cn.s ! Sg} ; 
+  All   cn   = {s = "all" ++ cn.s ! Pl} ; 
+  Two   cn   = {s = "two" ++ cn.s ! Pl} ; 
+  ModA  a cn = {s = \\n => a.s ++ cn.s ! n} ;
+  Louse  = mkNoun "louse" "lice" ;
+  Snake  = regNoun "snake" ;
+  Green  = {s = "green"} ;
+  Warm   = {s = "warm"} ;
+  Laugh  = regVerb "laugh" ;
+  Sleep  = regVerb "sleep" ;
+  Kill   = regVerb "kill" ;
+}
+</pre>
 
 
 
@@ -975,7 +1129,7 @@ resource module <tt>Prelude</tt>, which therefore has to be
 <h2>Topics still to be written</h2>
 
 
-Morpho and translation quiz
+Morpho quiz
 
 <p>
 
