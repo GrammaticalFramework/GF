@@ -36,7 +36,13 @@ Procedure for making a GF release:
    $ ./configure
    $ make dist
 
-10. Build an x86/linux RPM (should be done on a Mandrake Linux box):
+10. (Only if releasing a new grammars distribution)
+    Build a grammar tarball:
+
+   $ cd src
+   $ ./configure && make grammar-dist
+
+11. Build an x86/linux RPM (should be done on a Mandrake Linux box):
 
     Setup for building RPMs (first time only):
 
@@ -64,19 +70,19 @@ buildarchtranslate: i686: i586
    $ cd src 
    $ ./configure && make rpm
 
-11. Build a generic binary x86/linux (should be done on a Linux box,
+12. Build a generic binary x86/linux (should be done on a Linux box,
     e.g. banded.medic.chalmers.se):
 
    $ cd src
    $ ./configure --host=i386-pc-linux-gnu && make binary-dist
 
-12. Build a generic binary sparc/solaris package (should be done 
+13. Build a generic binary sparc/solaris package (should be done 
     on a Solaris box, e.g. remote1.cs.chalmers.se):
 
    $ cd src
    $ ./configure --host=sparc-sun-solaris2 && gmake binary-dist
 
-13. Build a Mac OS X package (should be done on a Mac OS X box, 
+14. Build a Mac OS X package (should be done on a Mac OS X box, 
     e.g. csmisc99.cs.chalmers.se):
 
     $ cd src
@@ -89,10 +95,48 @@ buildarchtranslate: i686: i586
     TODO: Use OS X PackageMaker to build  a .pkg-file which can
     be installed using the standard OS X Installer program. 
 
-14. Build a Windows package:
+15. Build a Windows package:
 
     ???
 
-15. Update website.
+16. Add new GF package release to SourceForge:
 
-16. Party!
+    - Project page -> Admin -> File releases -> Add release (for the
+      GF package)
+
+    - New release name: X.X (just the version number, e.g. 2.2)
+
+    - Paste in release notes
+
+    - Upload files using anonymous FTP to upload.sourceforge.net 
+      in the incoming directory.
+
+    - Add the files to the release and set the processor 
+      and file type for each file (remember to press 
+      Update/Refresh for each file):
+      * x86 rpm -> i386/.rpm
+      * source rpm -> Any/Source .rpm
+      * x86 binary tarball -> i386/.gz
+      * sparc binary tarball -> Sparc/.gz
+      * source package -> Any/Source .gz
+
+17. Add new GF-editor release. Repeat the steps above, but
+    with GF-editor:
+
+     - Add files and set properties:
+
+      * editor rpm -> i386/.rpm (not really true, but I haven't
+        figured out how to make noarch rpms from the same spec as 
+	arch-specific ones)
+
+18. (Only if releasing a new grammars distribution)
+    Add new GF-grammars release. Repeat the steps above, but with
+    GF-grammars:
+
+      - Add files and set properties:
+
+      * grammar tarball -> Platform independent/Source .gz
+
+19. Update website.
+
+20. Party!
