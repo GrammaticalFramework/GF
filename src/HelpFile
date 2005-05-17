@@ -310,11 +310,13 @@ tq, translation_quiz: tq Lang Lang
   examples:
       tq -cat=NP TestResourceEng TestResourceSwe  -- quiz for NPs
 
-tl, translation_list: tl Lang Lang Int
-      Random-generates a list of Int translation exercises from Lang1 to Lang2.
+tl, translation_list: tl Lang Lang
+      Random-generates a list of ten translation exercises from Lang1
+      to Lang2. The number can be changed by a flag.
       HINT: use wf to save the exercises in a file.
   flags:
       -cat
+      -number
   examples:
       tl -cat=NP TestResourceEng TestResourceSwe  -- quiz list for NPs
 
@@ -330,13 +332,14 @@ mq, morphology_quiz: mq
   examples:
       mq -cat=N -lang=TestResourceSwe  -- quiz for Swedish nouns
 
-ml, morphology_list: ml Int
-      Random-generates a list of Int morphological exercises,
-      keeping score of success.
+ml, morphology_list: ml
+      Random-generates a list of ten morphological exercises,
+      keeping score of success. The number can be changed with a flag.
       HINT: use wf to save the exercises in a file.
   flags:
       -cat
       -lang
+      -number
   examples:
       ml -cat=N -lang=TestResourceSwe  -- quiz list for Swedish nouns
 

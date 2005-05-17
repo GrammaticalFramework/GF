@@ -21,7 +21,7 @@
 
 <p>
 
-12 May 2005
+17 May 2005
 </center>
 
 
@@ -634,9 +634,9 @@ makes this in a subshell of GF.
 You can also generate a list of translation exercises and save it in a
 file for later use, by the command <tt>translation_list = tl</tt>
 <pre>
-  > translation_list PaleolithicEng PaleolithicIta 25
+  > translation_list -number=25 PaleolithicEng PaleolithicIta
 </pre>
-(The number 25 is the number of sentences generated.)
+The number flag gives the number of sentences generated.
 
 
 <!-- NEW -->
@@ -1124,6 +1124,47 @@ lin
 </pre>
 
 
+
+<!-- NEW -->
+<h4>Hierarchic parameter types</h4>
+
+The reader familiar with a functional programming language such as
+<a href="www.haskell.org">Haskell</a> must have noticed the similarity
+between parameter types in GF and algebraic datatypes (<tt>data</tt> definitions
+in Haskell). The GF parameter types are actually a special case of algebraic
+datatypes: the main restriction is that in GF, these types must be finite.
+(This restriction makes it possible to invert linearization rules into
+parsing methods.)
+
+<p>
+
+However, finite is not the same thing as enumerated. Even in GF, parameter
+constructors can take arguments, provided these arguments are from other
+parameter types (recursion is forbidden). Such parameter types impose a
+hierarchic order among parameters. They are often useful to define
+linguistically accurate parameter systems.
+
+<p>
+
+To give an example, Swedish adjectives
+are inflected in number (singular or plural) and
+gender (uter or neuter). These parameters would suggest 2*2=4 different
+forms. However, the gender distinction is done only in the singular. Therefore,
+it would be inaccurate to define adjective paradigms using the type
+<tt>Gender => Number => Str</tt>. The following hierarchic definition
+yields an accurate system of three adjectival forms.
+<pre>
+  param AdjForm = ASg Gender | APl ;
+  param Gender  = Uter | Neuter ;
+</pre>
+In pattern matching, a constructor can have patterns as arguments. For instance,
+the adjectival paradigm in which the two singular forms are the same, can be defined
+<pre>
+  oper plattAdj : Str -> AdjForm => Str = \x -> table {
+    ASg _ => x ;
+    APl   => x + "a" ;
+    }
+</pre>
 
 <!-- NEW -->
 <h2>Topics still to be written</h2>

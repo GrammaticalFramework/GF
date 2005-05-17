@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/12 10:03:33 $ 
+-- > CVS $Date: 2005/05/17 12:37:17 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.21 $
+-- > CVS $Revision: 1.22 $
 --
 -- parsing GF shell commands. AR 11\/11\/2001
 -----------------------------------------------------------------------------
@@ -104,9 +104,9 @@ pCommand ws = case ws of
   "so" : s      -> aUnit   $ CShowOpers $ unwords s
 
   "tq" : i:o:[] -> aUnit   (CTranslationQuiz (language i) (language o))
-  "tl":i:o:n:[] -> aUnit   (CTranslationList (language i) (language o) (readIntArg n))
+  "tl":i:o:[]   -> aUnit   (CTranslationList (language i) (language o))
   "mq" : []     -> aUnit   CMorphoQuiz
-  "ml" : n : [] -> aUnit   (CMorphoList (readIntArg n))
+  "ml" : []     -> aUnit   CMorphoList
 
   "wf" : f : s  -> aString (CWriteFile f) s
   "af" : f : s  -> aString (CAppendFile f) s

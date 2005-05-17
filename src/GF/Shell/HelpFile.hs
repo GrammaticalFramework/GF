@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/12 10:03:33 $
+-- > CVS $Date: 2005/05/17 12:37:17 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -339,11 +339,13 @@ txtHelpFile =
   "\n  examples:" ++
   "\n      tq -cat=NP TestResourceEng TestResourceSwe  -- quiz for NPs" ++
   "\n" ++
-  "\ntl, translation_list: tl Lang Lang Int" ++
-  "\n      Random-generates a list of Int translation exercises from Lang1 to Lang2." ++
+  "\ntl, translation_list: tl Lang Lang" ++
+  "\n      Random-generates a list of ten translation exercises from Lang1" ++
+  "\n      to Lang2. The number can be changed by a flag." ++
   "\n      HINT: use wf to save the exercises in a file." ++
   "\n  flags:" ++
   "\n      -cat" ++
+  "\n      -number" ++
   "\n  examples:" ++
   "\n      tl -cat=NP TestResourceEng TestResourceSwe  -- quiz list for NPs" ++
   "\n" ++
@@ -359,13 +361,14 @@ txtHelpFile =
   "\n  examples:" ++
   "\n      mq -cat=N -lang=TestResourceSwe  -- quiz for Swedish nouns" ++
   "\n" ++
-  "\nml, morphology_list: ml Int" ++
-  "\n      Random-generates a list of Int morphological exercises," ++
-  "\n      keeping score of success." ++
+  "\nml, morphology_list: ml" ++
+  "\n      Random-generates a list of ten morphological exercises," ++
+  "\n      keeping score of success. The number can be changed with a flag." ++
   "\n      HINT: use wf to save the exercises in a file." ++
   "\n  flags:" ++
   "\n      -cat" ++
   "\n      -lang" ++
+  "\n      -number" ++
   "\n  examples:" ++
   "\n      ml -cat=N -lang=TestResourceSwe  -- quiz list for Swedish nouns" ++
   "\n" ++
