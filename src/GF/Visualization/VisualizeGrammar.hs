@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:54 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.8 $
+-- > CVS $Date: 2005/05/17 11:20:26 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.9 $
 --
 -- Print a graph of module dependencies in Graphviz DOT format
 -----------------------------------------------------------------------------
@@ -19,6 +19,7 @@ module GF.Visualization.VisualizeGrammar ( visualizeCanonGrammar,
 import qualified GF.Infra.Modules as M
 import GF.Canon.GFC
 import GF.Infra.Ident
+import GF.Infra.Option
 import GF.Grammar.Grammar (SourceGrammar)
 
 import Data.List (intersperse, nub)
@@ -42,8 +43,8 @@ data Node = Node {
 		  deriving Show
 
 
-visualizeCanonGrammar :: CanonGrammar -> String
-visualizeCanonGrammar = prGraph . canon2graph
+visualizeCanonGrammar :: Options -> CanonGrammar -> String
+visualizeCanonGrammar opts = prGraph . canon2graph
 
 visualizeSourceGrammar :: SourceGrammar -> String
 visualizeSourceGrammar = prGraph . source2graph

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/13 12:40:20 $ 
+-- > CVS $Date: 2005/05/17 11:20:25 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.62 $
+-- > CVS $Revision: 1.63 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -128,7 +128,7 @@ customGrammarParser :: CustomData (FilePath -> IOE C.CanonGrammar)
 customGrammarPrinter :: CustomData (StateGrammar -> String)             
 
 -- | multiGrammarPrinter, \"-printer=x\"
-customMultiGrammarPrinter :: CustomData (CanonGrammar -> String)    
+customMultiGrammarPrinter :: CustomData (Options -> CanonGrammar -> String)    
 
 -- | syntaxPrinter, \"-printer=x\"
 customSyntaxPrinter  :: CustomData (GF.Grammar -> String)        
@@ -277,8 +277,8 @@ customGrammarPrinter =
 customMultiGrammarPrinter = 
   customData "Printers for multiple grammars, selected by option -printer=x" $
   [
-   (strCI "gfcm", MC.prCanon)
-  ,(strCI "header", MC.prCanonMGr)
+   (strCI "gfcm", const MC.prCanon)
+  ,(strCI "header", const MC.prCanonMGr)
   ,(strCI "cfgm", prCanonAsCFGM)
   ,(strCI "graph", visualizeCanonGrammar)
   ]

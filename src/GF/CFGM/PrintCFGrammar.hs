@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/13 12:40:18 $ 
+-- > CVS $Date: 2005/05/17 11:20:25 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.18 $
+-- > CVS $Revision: 1.19 $
 --
 -- Handles printing a CFGrammar in CFGM format.
 -----------------------------------------------------------------------------
@@ -32,32 +32,37 @@ import GF.Data.ErrM
 import qualified GF.Infra.Option as Option
 
 import Data.List (intersperse)
-import Data.Maybe (listToMaybe, maybe)
+import Data.Maybe (listToMaybe, maybeToList, maybe)
+
+import GF.Infra.Print
+import GF.System.Tracing
 
 -- | FIXME: should add an Options argument,
 -- to be able to decide which CFG conversion one wants to use
-prCanonAsCFGM :: CanonGrammar -> String
-prCanonAsCFGM gr = unlines $ map (uncurry (prLangAsCFGM gr)) xs 
+prCanonAsCFGM :: Option.Options -> CanonGrammar -> String
+prCanonAsCFGM opts gr = unlines $ map (prLangAsCFGM gr) xs 
     where 
     cncs = maybe [] (allConcretes gr) (greatestAbstract gr)
     cncms = map (\i -> (i,fromOk (lookupModule gr i))) cncs
     fromOk (Ok x) = x
     fromOk (Bad y) = error y
-    xs = [(i,getFlag fs "startcat") | (i,ModMod (Module{flags=fs})) <- cncms]
+    xs = tracePrt "CFGM languages" (prtBefore "\n") 
+	 [ (i, getFlag fs "startcat", getFlag fs "conversion") | 
+	   (i, ModMod (Module{flags=fs})) <- cncms ]
 
 -- | FIXME: need to look in abstract module too
 getFlag :: [Flag] -> String -> Maybe String
 getFlag fs x = listToMaybe [v | Flg (IC k) (IC v) <- fs, k == x]
 
--- | FIXME: (1) Should use 'ShellState.stateCFG'
+-- FIXME: (1) Should use 'ShellState.stateCFG'
 -- instead of 'Cnv.gfc2cfg' (which recalculates the grammar every time)
 --
 -- FIXME: (2) Should use the state options, when calculating the CFG
 -- (this is solved automatically if one solves (1) above)
-prLangAsCFGM :: CanonGrammar -> Ident -> Maybe String -> String
-prLangAsCFGM gr i start = prCFGrammarAsCFGM (Cnv.gfc2cfg opts (gr, i)) i start
+prLangAsCFGM :: CanonGrammar -> (Ident, Maybe String, Maybe String) -> String
+prLangAsCFGM gr (i, start, cnv) = prCFGrammarAsCFGM (Cnv.gfc2cfg opts (gr, i)) i start
 -- prLangAsCFGM gr i start = prCFGrammarAsCFGM (Cnv.cfg (Cnv.pInfo opts gr i)) i start
-     where opts = Option.Opts [Option.gfcConversion "nondet"]
+     where opts = Option.Opts $ maybeToList $ fmap Option.gfcConversion cnv
 
 prCFGrammarAsCFGM :: GT.CGrammar -> Ident -> Maybe String -> String
 prCFGrammarAsCFGM gr i start = PrintCFG.printTree $ cfGrammarToCFGM gr i start

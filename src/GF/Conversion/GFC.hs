@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/13 12:40:19 $ 
+-- > CVS $Date: 2005/05/17 11:20:25 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.9 $
+-- > CVS $Revision: 1.10 $
 --
 -- All conversions from GFC 
 -----------------------------------------------------------------------------
@@ -34,11 +34,13 @@ import qualified GF.Conversion.MCFGtoCFG as M2C
 
 import GF.Infra.Print
 
+import GF.System.Tracing
+
 ----------------------------------------------------------------------
 -- * GFC -> MCFG & CFG, using options to decide which conversion is used
 
 gfc2mcfg2cfg :: Options -> (CanonGrammar, Ident) -> (MGrammar, CGrammar)
-gfc2mcfg2cfg opts = \g -> let e = g2e g in (e2m e, e2c e)
+gfc2mcfg2cfg opts = \g -> let e = g2e g in trace2 "Options" (show opts) (e2m e, e2c e)
     where e2c = mcfg2cfg
 	  e2m = case getOptVal opts firstCat of
 		  Just cat -> flip removeErasing [identC cat]
