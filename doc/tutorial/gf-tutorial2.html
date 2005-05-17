@@ -1060,6 +1060,42 @@ programming languages are syntactic sugar for table selections:
 
 
 <!-- NEW -->
+<h4>Morphological analysis and morphology quiz</h4>
+
+Even though in GF morphology
+is mostly seen as an auxiliary of syntax, a morphology once defined
+can be used on its own right. The command <tt>morpho_analyse = ma</tt>
+can be used to read a text and return for each word the analyses that
+it has in the current concrete syntax.
+<pre>
+  > rf bible.txt | morpho_analyse
+</pre>
+Similarly to translation exercises, morphological exercises can
+be generated, by the command <tt>morpho_quiz = mq</tt>. Usually,
+the category is set to be something else than <tt>S</tt>. For instance,
+<pre>
+  > i lib/resource/french/VerbsFre.gf
+  > morpho_quiz -cat=V
+
+  Welcome to GF Morphology Quiz.
+  ...
+
+  réapparaître : VFin VCondit  Pl  P2
+  réapparaitriez
+  > No, not réapparaitriez, but
+  réapparaîtriez
+  Score 0/1
+</pre>
+Finally, a list of morphological exercises and save it in a
+file for later use, by the command <tt>translation_list = tl</tt>
+<pre>
+  > translation_list -number=25 PaleolithicEng PaleolithicIta
+</pre>
+The number flag gives the number of sentences generated.
+
+
+
+<!-- NEW -->
 <h4>Parametric vs. inherent features, agreement</h4>
 
 The rule of subject-verb agreement in English says that the verb
@@ -1170,7 +1206,7 @@ the adjectival paradigm in which the two singular forms are the same, can be def
 <h2>Topics still to be written</h2>
 
 
-Morpho quiz
+Discontinuous constituents
 
 <p>
 
