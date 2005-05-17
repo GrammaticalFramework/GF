@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/12 10:03:33 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.36 $
+-- > CVS $Date: 2005/05/17 11:20:25 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.37 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -272,7 +272,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
     returnArg (AString (optPrintMultiGrammar opts cgr)) sa'
   CShowGrammarGraph  -> do
     ---- sa' <- changeState purgeShellState sa
-    let g0 = writeFile "grphtmp.dot" $ visualizeCanonGrammar cgr
+    let g0 = writeFile "grphtmp.dot" $ visualizeCanonGrammar opts cgr
         g1 = system "dot -Tps grphtmp.dot >grphtmp.ps" 
         g2 = system "gv grphtmp.ps &" 
         g3 = return () ---- system "rm -f grphtmp.*"

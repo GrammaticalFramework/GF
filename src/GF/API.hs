@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/12 10:03:33 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.35 $
+-- > CVS $Date: 2005/05/17 11:20:25 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.36 $
 --
 -- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 -----------------------------------------------------------------------------
@@ -305,7 +305,7 @@ optPrintGrammar :: Options -> StateGrammar -> String
 optPrintGrammar opts = customOrDefault opts grammarPrinter customGrammarPrinter
 
 optPrintMultiGrammar :: Options -> CanonGrammar -> String
-optPrintMultiGrammar opts = encodeId . pmg . encode
+optPrintMultiGrammar opts = encodeId . pmg opts . encode
     where 
     pmg = customOrDefault opts grammarPrinter customMultiGrammarPrinter
     -- if -utf8 was given, convert from language specific codings
