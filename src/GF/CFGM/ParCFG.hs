@@ -3,7 +3,7 @@ module GF.CFGM.ParCFG where
 import GF.CFGM.AbsCFG
 import GF.CFGM.LexCFG
 import GF.Data.ErrM
-import Data.Array
+import Array
 #if __GLASGOW_HASKELL__ >= 503
 import GHC.Exts
 #else
@@ -12,144 +12,144 @@ import GlaExts
 
 -- parser produced by Happy Version 1.15
 
-newtype HappyAbsSyn t4 t5 t6 t7 = HappyAbsSyn (() -> ())
-happyIn4 :: t4 -> (HappyAbsSyn t4 t5 t6 t7)
+newtype HappyAbsSyn  = HappyAbsSyn (() -> ())
+happyIn4 :: (Ident) -> (HappyAbsSyn )
 happyIn4 x = unsafeCoerce# x
 {-# INLINE happyIn4 #-}
-happyOut4 :: (HappyAbsSyn t4 t5 t6 t7) -> t4
+happyOut4 :: (HappyAbsSyn ) -> (Ident)
 happyOut4 x = unsafeCoerce# x
 {-# INLINE happyOut4 #-}
-happyIn5 :: t5 -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn5 :: (Integer) -> (HappyAbsSyn )
 happyIn5 x = unsafeCoerce# x
 {-# INLINE happyIn5 #-}
-happyOut5 :: (HappyAbsSyn t4 t5 t6 t7) -> t5
+happyOut5 :: (HappyAbsSyn ) -> (Integer)
 happyOut5 x = unsafeCoerce# x
 {-# INLINE happyOut5 #-}
-happyIn6 :: t6 -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn6 :: (String) -> (HappyAbsSyn )
 happyIn6 x = unsafeCoerce# x
 {-# INLINE happyIn6 #-}
-happyOut6 :: (HappyAbsSyn t4 t5 t6 t7) -> t6
+happyOut6 :: (HappyAbsSyn ) -> (String)
 happyOut6 x = unsafeCoerce# x
 {-# INLINE happyOut6 #-}
-happyIn7 :: t7 -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn7 :: (SingleQuoteString) -> (HappyAbsSyn )
 happyIn7 x = unsafeCoerce# x
 {-# INLINE happyIn7 #-}
-happyOut7 :: (HappyAbsSyn t4 t5 t6 t7) -> t7
+happyOut7 :: (HappyAbsSyn ) -> (SingleQuoteString)
 happyOut7 x = unsafeCoerce# x
 {-# INLINE happyOut7 #-}
-happyIn8 :: (Grammars) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn8 :: (Grammars) -> (HappyAbsSyn )
 happyIn8 x = unsafeCoerce# x
 {-# INLINE happyIn8 #-}
-happyOut8 :: (HappyAbsSyn t4 t5 t6 t7) -> (Grammars)
+happyOut8 :: (HappyAbsSyn ) -> (Grammars)
 happyOut8 x = unsafeCoerce# x
 {-# INLINE happyOut8 #-}
-happyIn9 :: (Grammar) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn9 :: (Grammar) -> (HappyAbsSyn )
 happyIn9 x = unsafeCoerce# x
 {-# INLINE happyIn9 #-}
-happyOut9 :: (HappyAbsSyn t4 t5 t6 t7) -> (Grammar)
+happyOut9 :: (HappyAbsSyn ) -> (Grammar)
 happyOut9 x = unsafeCoerce# x
 {-# INLINE happyOut9 #-}
-happyIn10 :: ([Grammar]) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn10 :: ([Grammar]) -> (HappyAbsSyn )
 happyIn10 x = unsafeCoerce# x
 {-# INLINE happyIn10 #-}
-happyOut10 :: (HappyAbsSyn t4 t5 t6 t7) -> ([Grammar])
+happyOut10 :: (HappyAbsSyn ) -> ([Grammar])
 happyOut10 x = unsafeCoerce# x
 {-# INLINE happyOut10 #-}
-happyIn11 :: (Flag) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn11 :: (Flag) -> (HappyAbsSyn )
 happyIn11 x = unsafeCoerce# x
 {-# INLINE happyIn11 #-}
-happyOut11 :: (HappyAbsSyn t4 t5 t6 t7) -> (Flag)
+happyOut11 :: (HappyAbsSyn ) -> (Flag)
 happyOut11 x = unsafeCoerce# x
 {-# INLINE happyOut11 #-}
-happyIn12 :: ([Flag]) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn12 :: ([Flag]) -> (HappyAbsSyn )
 happyIn12 x = unsafeCoerce# x
 {-# INLINE happyIn12 #-}
-happyOut12 :: (HappyAbsSyn t4 t5 t6 t7) -> ([Flag])
+happyOut12 :: (HappyAbsSyn ) -> ([Flag])
 happyOut12 x = unsafeCoerce# x
 {-# INLINE happyOut12 #-}
-happyIn13 :: (Rule) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn13 :: (Rule) -> (HappyAbsSyn )
 happyIn13 x = unsafeCoerce# x
 {-# INLINE happyIn13 #-}
-happyOut13 :: (HappyAbsSyn t4 t5 t6 t7) -> (Rule)
+happyOut13 :: (HappyAbsSyn ) -> (Rule)
 happyOut13 x = unsafeCoerce# x
 {-# INLINE happyOut13 #-}
-happyIn14 :: ([Rule]) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn14 :: ([Rule]) -> (HappyAbsSyn )
 happyIn14 x = unsafeCoerce# x
 {-# INLINE happyIn14 #-}
-happyOut14 :: (HappyAbsSyn t4 t5 t6 t7) -> ([Rule])
+happyOut14 :: (HappyAbsSyn ) -> ([Rule])
 happyOut14 x = unsafeCoerce# x
 {-# INLINE happyOut14 #-}
-happyIn15 :: (Fun) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn15 :: (Fun) -> (HappyAbsSyn )
 happyIn15 x = unsafeCoerce# x
 {-# INLINE happyIn15 #-}
-happyOut15 :: (HappyAbsSyn t4 t5 t6 t7) -> (Fun)
+happyOut15 :: (HappyAbsSyn ) -> (Fun)
 happyOut15 x = unsafeCoerce# x
 {-# INLINE happyOut15 #-}
-happyIn16 :: (Profile) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn16 :: (Profiles) -> (HappyAbsSyn )
 happyIn16 x = unsafeCoerce# x
 {-# INLINE happyIn16 #-}
-happyOut16 :: (HappyAbsSyn t4 t5 t6 t7) -> (Profile)
+happyOut16 :: (HappyAbsSyn ) -> (Profiles)
 happyOut16 x = unsafeCoerce# x
 {-# INLINE happyOut16 #-}
-happyIn17 :: (Ints) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn17 :: ([Profile]) -> (HappyAbsSyn )
 happyIn17 x = unsafeCoerce# x
 {-# INLINE happyIn17 #-}
-happyOut17 :: (HappyAbsSyn t4 t5 t6 t7) -> (Ints)
+happyOut17 :: (HappyAbsSyn ) -> ([Profile])
 happyOut17 x = unsafeCoerce# x
 {-# INLINE happyOut17 #-}
-happyIn18 :: ([Ints]) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn18 :: (Profile) -> (HappyAbsSyn )
 happyIn18 x = unsafeCoerce# x
 {-# INLINE happyIn18 #-}
-happyOut18 :: (HappyAbsSyn t4 t5 t6 t7) -> ([Ints])
+happyOut18 :: (HappyAbsSyn ) -> (Profile)
 happyOut18 x = unsafeCoerce# x
 {-# INLINE happyOut18 #-}
-happyIn19 :: ([Integer]) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn19 :: ([Integer]) -> (HappyAbsSyn )
 happyIn19 x = unsafeCoerce# x
 {-# INLINE happyIn19 #-}
-happyOut19 :: (HappyAbsSyn t4 t5 t6 t7) -> ([Integer])
+happyOut19 :: (HappyAbsSyn ) -> ([Integer])
 happyOut19 x = unsafeCoerce# x
 {-# INLINE happyOut19 #-}
-happyIn20 :: (Symbol) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn20 :: (Symbol) -> (HappyAbsSyn )
 happyIn20 x = unsafeCoerce# x
 {-# INLINE happyIn20 #-}
-happyOut20 :: (HappyAbsSyn t4 t5 t6 t7) -> (Symbol)
+happyOut20 :: (HappyAbsSyn ) -> (Symbol)
 happyOut20 x = unsafeCoerce# x
 {-# INLINE happyOut20 #-}
-happyIn21 :: ([Symbol]) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn21 :: ([Symbol]) -> (HappyAbsSyn )
 happyIn21 x = unsafeCoerce# x
 {-# INLINE happyIn21 #-}
-happyOut21 :: (HappyAbsSyn t4 t5 t6 t7) -> ([Symbol])
+happyOut21 :: (HappyAbsSyn ) -> ([Symbol])
 happyOut21 x = unsafeCoerce# x
 {-# INLINE happyOut21 #-}
-happyIn22 :: (Category) -> (HappyAbsSyn t4 t5 t6 t7)
+happyIn22 :: (Category) -> (HappyAbsSyn )
 happyIn22 x = unsafeCoerce# x
 {-# INLINE happyIn22 #-}
-happyOut22 :: (HappyAbsSyn t4 t5 t6 t7) -> (Category)
+happyOut22 :: (HappyAbsSyn ) -> (Category)
 happyOut22 x = unsafeCoerce# x
 {-# INLINE happyOut22 #-}
-happyInTok :: Token -> (HappyAbsSyn t4 t5 t6 t7)
+happyInTok :: Token -> (HappyAbsSyn )
 happyInTok x = unsafeCoerce# x
 {-# INLINE happyInTok #-}
-happyOutTok :: (HappyAbsSyn t4 t5 t6 t7) -> Token
+happyOutTok :: (HappyAbsSyn ) -> Token
 happyOutTok x = unsafeCoerce# x
 {-# INLINE happyOutTok #-}
 
 happyActOffsets :: HappyAddr
-happyActOffsets = HappyA# "\x00\x00\x37\x00\x00\x00\x31\x00\x34\x00\x00\x00\x30\x00\x00\x00\x2e\x00\x36\x00\x17\x00\x2c\x00\x00\x00\x00\x00\x00\x00\x00\x00\x35\x00\x33\x00\x00\x00\x2a\x00\x00\x00\x00\x00\x2d\x00\x00\x00\x2f\x00\x2b\x00\x27\x00\x29\x00\x21\x00\x1e\x00\x28\x00\x22\x00\x24\x00\x00\x00\x00\x00\x23\x00\x00\x00\x00\x00\x11\x00\x0b\x00\x00\x00\x0b\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"#
+happyActOffsets = HappyA# "\x00\x00\x36\x00\x00\x00\x29\x00\x35\x00\x00\x00\x32\x00\x00\x00\x30\x00\x38\x00\x19\x00\x2e\x00\x00\x00\x00\x00\x00\x00\x00\x00\x37\x00\x34\x00\x00\x00\x2d\x00\x00\x00\x00\x00\x2f\x00\x00\x00\x31\x00\xfd\xff\x00\x00\x2c\x00\x2a\x00\x23\x00\x22\x00\x2b\x00\x25\x00\x20\x00\x00\x00\xfd\xff\x00\x00\x00\x00\x00\x00\x17\x00\x1c\x00\x00\x00\x1c\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"#
 
 happyGotoOffsets :: HappyAddr
-happyGotoOffsets = HappyA# "\x19\x00\x00\x00\x00\x00\x00\x00\x20\x00\x00\x00\x0c\x00\x05\x00\x01\x00\x00\x00\x1b\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xf7\xff\x00\x00\x00\x00\x1a\x00\x00\x00\x00\x00\x09\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x14\x00\x00\x00\x00\x00\x08\x00\x02\x00\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"#
+happyGotoOffsets = HappyA# "\x28\x00\x00\x00\x00\x00\x00\x00\x1e\x00\x00\x00\x21\x00\x05\x00\x01\x00\x00\x00\x1d\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x14\x00\x00\x00\x00\x00\x0c\x00\x00\x00\x00\x00\x00\x00\x1a\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0a\x00\x00\x00\x00\x00\x00\x00\x0d\x00\x02\x00\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"#
 
 happyDefActions :: HappyAddr
-happyDefActions = HappyA# "\xf8\xff\x00\x00\xfe\xff\x00\x00\xfa\xff\xf7\xff\x00\x00\xf5\xff\xf2\xff\x00\x00\x00\x00\x00\x00\xe1\xff\xf6\xff\xfb\xff\xf0\xff\x00\x00\x00\x00\xef\xff\x00\x00\xf4\xff\xf9\xff\x00\x00\xf1\xff\x00\x00\xec\xff\xeb\xff\x00\x00\xe9\xff\x00\x00\x00\x00\xe8\xff\x00\x00\xfd\xff\xee\xff\xec\xff\xea\xff\xed\xff\xe9\xff\x00\x00\xe5\xff\xe3\xff\xf3\xff\xe6\xff\xe4\xff\xfc\xff\xe7\xff\xe2\xff"#
+happyDefActions = HappyA# "\xf8\xff\x00\x00\xfe\xff\x00\x00\xfa\xff\xf7\xff\x00\x00\xf5\xff\xf2\xff\x00\x00\x00\x00\x00\x00\xe0\xff\xf6\xff\xfb\xff\xf0\xff\x00\x00\x00\x00\xef\xff\x00\x00\xf4\xff\xf9\xff\x00\x00\xf1\xff\x00\x00\xed\xff\xe9\xff\x00\x00\xec\xff\xe8\xff\x00\x00\x00\x00\xe7\xff\x00\x00\xfd\xff\xed\xff\xee\xff\xeb\xff\xea\xff\xe8\xff\x00\x00\xe4\xff\xe2\xff\xf3\xff\xe5\xff\xe3\xff\xfc\xff\xe6\xff\xe1\xff"#
 
 happyCheck :: HappyAddr
-happyCheck = HappyA# "\xff\xff\x02\x00\x03\x00\x0c\x00\x02\x00\x03\x00\x03\x00\x03\x00\x07\x00\x01\x00\x01\x00\x0a\x00\x00\x00\x08\x00\x03\x00\x10\x00\x11\x00\x12\x00\x10\x00\x11\x00\x12\x00\x12\x00\x12\x00\x0f\x00\x0f\x00\x0e\x00\x0f\x00\x00\x00\x05\x00\x04\x00\x0d\x00\x06\x00\x09\x00\x0d\x00\x0e\x00\x0c\x00\x09\x00\x05\x00\x0b\x00\x0d\x00\x0e\x00\x06\x00\x08\x00\x07\x00\x04\x00\x0f\x00\x0d\x00\x08\x00\x07\x00\x06\x00\x03\x00\x06\x00\x0a\x00\x02\x00\x01\x00\x01\x00\xff\xff\x0b\x00\xff\xff\x0f\x00\x0c\x00\xff\xff\x0a\x00\xff\xff\xff\xff\xff\xff\x11\x00\x0c\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"#
+happyCheck = HappyA# "\xff\xff\x02\x00\x03\x00\x06\x00\x02\x00\x03\x00\x03\x00\x03\x00\x07\x00\x0c\x00\x00\x00\x0a\x00\x00\x00\x08\x00\x01\x00\x10\x00\x11\x00\x12\x00\x10\x00\x11\x00\x12\x00\x12\x00\x12\x00\x0d\x00\x0e\x00\x0d\x00\x0e\x00\x01\x00\x0f\x00\x00\x00\x05\x00\x03\x00\x0c\x00\x00\x00\x09\x00\x05\x00\x0d\x00\x0c\x00\x09\x00\x07\x00\x0b\x00\x0f\x00\x0e\x00\x0f\x00\x04\x00\x08\x00\x06\x00\x04\x00\x0d\x00\x0f\x00\x08\x00\x07\x00\x03\x00\x06\x00\x02\x00\x0a\x00\x01\x00\x01\x00\x11\x00\x0b\x00\xff\xff\x0f\x00\x0c\x00\x0a\x00\xff\xff\xff\xff\x0c\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"#
 
 happyTable :: HappyAddr
-happyTable = HappyA# "\x00\x00\x28\x00\x0c\x00\x18\x00\x28\x00\x0c\x00\x0c\x00\x0c\x00\x09\x00\x1f\x00\x1f\x00\x0a\x00\x07\x00\x08\x00\x2d\x00\x29\x00\x2f\x00\x2b\x00\x29\x00\x2a\x00\x2b\x00\x1e\x00\x0d\x00\x2e\x00\x20\x00\x2e\x00\x0f\x00\x0f\x00\x13\x00\x03\x00\x22\x00\x04\x00\x14\x00\x1a\x00\x24\x00\x03\x00\x10\x00\x05\x00\x11\x00\x1a\x00\x1b\x00\x1d\x00\x27\x00\x26\x00\x28\x00\x0f\x00\x22\x00\x24\x00\x23\x00\x1d\x00\x1e\x00\x1a\x00\x16\x00\x17\x00\x18\x00\x15\x00\x00\x00\x0c\x00\x00\x00\x0f\x00\x03\x00\x00\x00\x07\x00\x00\x00\x00\x00\x00\x00\xff\xff\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"#
+happyTable = HappyA# "\x00\x00\x29\x00\x0c\x00\x1e\x00\x29\x00\x0c\x00\x0c\x00\x0c\x00\x09\x00\x03\x00\x1a\x00\x0a\x00\x1a\x00\x08\x00\x20\x00\x2a\x00\x30\x00\x2c\x00\x2a\x00\x2b\x00\x2c\x00\x1f\x00\x0d\x00\x25\x00\x1c\x00\x1b\x00\x1c\x00\x20\x00\x2f\x00\x0f\x00\x13\x00\x2e\x00\x18\x00\x07\x00\x14\x00\x05\x00\x23\x00\x03\x00\x10\x00\x27\x00\x11\x00\x21\x00\x2f\x00\x0f\x00\x03\x00\x28\x00\x04\x00\x29\x00\x23\x00\x0f\x00\x24\x00\x25\x00\x1f\x00\x1a\x00\x17\x00\x16\x00\x18\x00\x15\x00\xff\xff\x0c\x00\x00\x00\x0f\x00\x03\x00\x07\x00\x00\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"#
 
-happyReduceArr = array (1, 30) [
+happyReduceArr = array (1, 31) [
 	(1 , happyReduce_1),
 	(2 , happyReduce_2),
 	(3 , happyReduce_3),
@@ -179,7 +179,8 @@ happyReduceArr = array (1, 30) [
 	(27 , happyReduce_27),
 	(28 , happyReduce_28),
 	(29 , happyReduce_29),
-	(30 , happyReduce_30)
+	(30 , happyReduce_30),
+	(31 , happyReduce_31)
 	]
 
 happy_n_terms = 18 :: Int
@@ -321,56 +322,63 @@ happyReduce_17 = happySpecReduce_3 12# happyReduction_17
 happyReduction_17 happy_x_3
 	happy_x_2
 	happy_x_1
-	 =  case happyOut18 happy_x_2 of { happy_var_2 -> 
+	 =  case happyOut17 happy_x_2 of { happy_var_2 -> 
 	happyIn16
-		 (Profile happy_var_2
+		 (Profiles happy_var_2
 	)}
 
-happyReduce_18 = happySpecReduce_3 13# happyReduction_18
-happyReduction_18 happy_x_3
-	happy_x_2
-	happy_x_1
-	 =  case happyOut19 happy_x_2 of { happy_var_2 -> 
-	happyIn17
-		 (Ints happy_var_2
-	)}
-
-happyReduce_19 = happySpecReduce_0 14# happyReduction_19
-happyReduction_19  =  happyIn18
+happyReduce_18 = happySpecReduce_0 13# happyReduction_18
+happyReduction_18  =  happyIn17
 		 ([]
 	)
 
-happyReduce_20 = happySpecReduce_1 14# happyReduction_20
-happyReduction_20 happy_x_1
-	 =  case happyOut17 happy_x_1 of { happy_var_1 -> 
-	happyIn18
+happyReduce_19 = happySpecReduce_1 13# happyReduction_19
+happyReduction_19 happy_x_1
+	 =  case happyOut18 happy_x_1 of { happy_var_1 -> 
+	happyIn17
 		 ((:[]) happy_var_1
 	)}
+
+happyReduce_20 = happySpecReduce_3 13# happyReduction_20
+happyReduction_20 happy_x_3
+	happy_x_2
+	happy_x_1
+	 =  case happyOut18 happy_x_1 of { happy_var_1 -> 
+	case happyOut17 happy_x_3 of { happy_var_3 -> 
+	happyIn17
+		 ((:) happy_var_1 happy_var_3
+	)}}
 
 happyReduce_21 = happySpecReduce_3 14# happyReduction_21
 happyReduction_21 happy_x_3
 	happy_x_2
 	happy_x_1
-	 =  case happyOut17 happy_x_1 of { happy_var_1 -> 
-	case happyOut18 happy_x_3 of { happy_var_3 -> 
+	 =  case happyOut19 happy_x_2 of { happy_var_2 -> 
 	happyIn18
-		 ((:) happy_var_1 happy_var_3
-	)}}
+		 (UnifyProfile happy_var_2
+	)}
 
-happyReduce_22 = happySpecReduce_0 15# happyReduction_22
-happyReduction_22  =  happyIn19
+happyReduce_22 = happySpecReduce_1 14# happyReduction_22
+happyReduction_22 happy_x_1
+	 =  case happyOut4 happy_x_1 of { happy_var_1 -> 
+	happyIn18
+		 (ConstProfile happy_var_1
+	)}
+
+happyReduce_23 = happySpecReduce_0 15# happyReduction_23
+happyReduction_23  =  happyIn19
 		 ([]
 	)
 
-happyReduce_23 = happySpecReduce_1 15# happyReduction_23
-happyReduction_23 happy_x_1
+happyReduce_24 = happySpecReduce_1 15# happyReduction_24
+happyReduction_24 happy_x_1
 	 =  case happyOut5 happy_x_1 of { happy_var_1 -> 
 	happyIn19
 		 ((:[]) happy_var_1
 	)}
 
-happyReduce_24 = happySpecReduce_3 15# happyReduction_24
-happyReduction_24 happy_x_3
+happyReduce_25 = happySpecReduce_3 15# happyReduction_25
+happyReduction_25 happy_x_3
 	happy_x_2
 	happy_x_1
 	 =  case happyOut5 happy_x_1 of { happy_var_1 -> 
@@ -379,35 +387,35 @@ happyReduction_24 happy_x_3
 		 ((:) happy_var_1 happy_var_3
 	)}}
 
-happyReduce_25 = happySpecReduce_1 16# happyReduction_25
-happyReduction_25 happy_x_1
+happyReduce_26 = happySpecReduce_1 16# happyReduction_26
+happyReduction_26 happy_x_1
 	 =  case happyOut22 happy_x_1 of { happy_var_1 -> 
 	happyIn20
 		 (CatS happy_var_1
 	)}
 
-happyReduce_26 = happySpecReduce_1 16# happyReduction_26
-happyReduction_26 happy_x_1
+happyReduce_27 = happySpecReduce_1 16# happyReduction_27
+happyReduction_27 happy_x_1
 	 =  case happyOut6 happy_x_1 of { happy_var_1 -> 
 	happyIn20
 		 (TermS happy_var_1
 	)}
 
-happyReduce_27 = happySpecReduce_1 17# happyReduction_27
-happyReduction_27 happy_x_1
+happyReduce_28 = happySpecReduce_1 17# happyReduction_28
+happyReduction_28 happy_x_1
 	 =  happyIn21
 		 ([]
 	)
 
-happyReduce_28 = happySpecReduce_1 17# happyReduction_28
-happyReduction_28 happy_x_1
+happyReduce_29 = happySpecReduce_1 17# happyReduction_29
+happyReduction_29 happy_x_1
 	 =  case happyOut20 happy_x_1 of { happy_var_1 -> 
 	happyIn21
 		 ((:[]) happy_var_1
 	)}
 
-happyReduce_29 = happySpecReduce_2 17# happyReduction_29
-happyReduction_29 happy_x_2
+happyReduce_30 = happySpecReduce_2 17# happyReduction_30
+happyReduction_30 happy_x_2
 	happy_x_1
 	 =  case happyOut20 happy_x_1 of { happy_var_1 -> 
 	case happyOut21 happy_x_2 of { happy_var_2 -> 
@@ -415,8 +423,8 @@ happyReduction_29 happy_x_2
 		 ((:) happy_var_1 happy_var_2
 	)}}
 
-happyReduce_30 = happySpecReduce_1 18# happyReduction_30
-happyReduction_30 happy_x_1
+happyReduce_31 = happySpecReduce_1 18# happyReduction_31
+happyReduction_31 happy_x_1
 	 =  case happyOut7 happy_x_1 of { happy_var_1 -> 
 	happyIn22
 		 (Category happy_var_1
@@ -476,7 +484,7 @@ happyError ts =
 
 myLexer = tokens
 {-# LINE 1 "GenericTemplate.hs" #-}
--- $Id: ParCFG.hs,v 1.7 2005/04/21 16:21:17 bringert Exp $
+-- $Id: ParCFG.hs,v 1.8 2005/05/17 14:04:37 bringert Exp $
 
 
 

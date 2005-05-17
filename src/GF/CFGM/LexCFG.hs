@@ -10,8 +10,8 @@ import Data.Array
 import Data.Char (ord)
 import Data.Array.Base (unsafeAt)
 #else
-import Data.Array
-import Data.Char (ord)
+import Array
+import Char (ord)
 #endif
 #if __GLASGOW_HASKELL__ >= 503
 import GHC.Exts

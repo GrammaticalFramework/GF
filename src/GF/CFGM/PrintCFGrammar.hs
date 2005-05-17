@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/17 11:20:25 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.19 $
+-- > CVS $Date: 2005/05/17 14:04:38 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.20 $
 --
 -- Handles printing a CFGrammar in CFGM format.
 -----------------------------------------------------------------------------
@@ -80,11 +80,12 @@ ruleToCFGMRule (CFRule c rhs (GU.Name fun profile))
     c' = catToCFGMCat c
     rhs' = map symbolToGFCMSymbol rhs
 
-profileToCFGMProfile :: [GU.Profile a] -> AbsCFG.Profile
-profileToCFGMProfile = AbsCFG.Profile . map cnvProfile
-    where cnvProfile (GU.Unify ns)   = AbsCFG.Ints $ map fromIntegral ns
-	  cnvProfile (GU.Constant a) = AbsCFG.Ints []
-	  -- FIXME: this should be replaced with a new constructor in 'AbsCFG'
+profileToCFGMProfile :: [GU.Profile (GU.SyntaxForest GT.Fun)] -> AbsCFG.Profiles
+profileToCFGMProfile = AbsCFG.Profiles . map cnvProfile
+    where cnvProfile (GU.Unify ns)   = AbsCFG.UnifyProfile $ map fromIntegral ns
+	  -- FIXME: is it always FNode?
+	  cnvProfile (GU.Constant (GU.FNode c _)) = AbsCFG.ConstProfile $ identToCFGMIdent c
+						  
 
 identToCFGMIdent :: Ident -> AbsCFG.Ident
 identToCFGMIdent = AbsCFG.Ident . prt

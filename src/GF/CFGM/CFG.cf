@@ -8,16 +8,19 @@ separator Grammar "";
 StartCat. Flag ::= "startcat" Category;
 terminator Flag ";";
 
-Rule. Rule ::= Fun ":" Profile "." Category "->" [Symbol];
+Rule. Rule ::= Fun ":" Profiles "." Category "->" [Symbol];
 terminator Rule ";";
 
 Cons. Fun ::= Ident ;
 Coerce. Fun ::= "_" ;
 
-Profile. Profile ::= "[" [Ints] "]";
+Profiles. Profiles ::= "[" [Profile] "]";
 
-Ints. Ints ::= "[" [Integer] "]";
-separator Ints ",";
+separator Profile ",";
+
+UnifyProfile. Profile ::= "[" [Integer] "]";
+ConstProfile. Profile ::= Ident ;
+
 separator Integer ",";
 
 CatS. Symbol ::= Category;
