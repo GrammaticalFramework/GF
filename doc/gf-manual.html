@@ -1,14 +1,310 @@
--- GF help file updated for GF 2.2, 17/5/2005.
--- *: Commands and options marked with * are not yet implemented.
---
--- Each command has a long and a short name, options, and zero or more
--- arguments. Commands are sorted by functionality. The short name is
--- given first.
+<html>
+<body bgcolor="#FFFFFF" text="#000000" >
+<center>
+<IMG SRC="gf-logo.gif">
 
--- Type "h -all" for full help file, "h <CommandName>" for full help on a command.  
 
--- commands that change the state
+<h1>Grammatical Framework User Manual</h1>
 
+</center>
+
+<a href="http://www.cs.chalmers.se/~aarne">
+Aarne Ranta</a>, 
+May 17, 2005, for GF Version 2.2
+
+<p>
+
+Third version: June 25, 2003, for GF Version 1.2.<br>
+Second version: June 17, 2002, for GF Version 1.0.<br>
+First version: April 19, 2002.
+
+<p>
+
+This document describes
+the command language available for the user of GF.
+The GF grammar language is described in other documents.
+
+<p>
+
+There is a separate
+<a href="javaGUImanual/javaGUImanual.htm">GF Java GUI Manual</a>.
+
+
+
+
+<h2>Levels of commands</h2>
+
+<b>GF commands</b> appear on three levels:
+
+<ol>
+<li> <b>top-level shell commands</b>, 
+     used for calling GF from Unix/Windows/Mac.
+     
+<li> <b>internal shell commands</b>, 
+     available in the shell entered by the top-level shell command <tt>gf</tt>.
+
+<li> <b>internal subshell commands</b>, 
+     such as the editor commands,
+     entered by certain internal shell commands.
+</ol>
+
+By the <b>GF command language</b> we mean the internal shell
+commands, which the most part of this document is about; 
+the sections describing the other levels are much shorter.
+
+
+
+<h2>Top-level shell commands</h2>
+
+The compiled GF program is invoked by a command that has the syntax
+<pre>
+  gf Option* File*
+</pre>
+The files should contain GF 
+grammars, each of which is <b>imported</b> in the environment in which
+GF starts, in the same way as if GF were first started and 
+the import command <tt>i</tt> then executed for each of the files.
+The currently available options are:
+<ul>
+<li> <tt>-java</tt>, which enters directly an editor session designed
+     for communicating with and external java GUI (see <tt>jgf</tt> below).
+</ul>
+
+<p>
+
+Like any program in Unix, GF can be used in a pipeline or
+a redirection. For instance,
+<pre>
+  echo "h" | gf
+</pre>
+starts GF and executes the help command.
+<pre>
+  gf &lt;script
+</pre>
+starts GF and executes the commands in the file <tt>script</tt>.
+
+<p>
+
+The Java GUI is started with the command
+<pre>
+  jgf File+
+</pre>
+which executes a simple shell script. The effect is to start
+GF, import each grammar in the files, and enter the
+Editor subshell (see below), with which the GUI then communicates.
+
+<p>
+
+If a compiled version of GF is not available, GF can be started within
+the Haskell interpreter GHCI, by the command
+<pre>
+  make ghci 
+</pre>
+in the GF source directory, followed by ":l GF" in GHCI.
+Unfortunately, the standard binary of the light-weight Hugs interpreter
+has insufficient code space for GF.
+
+
+<h2>Batch mode</h2>
+
+A simple protocol has been defined to run GF in batch mode, e.g. from another
+program. The command line syntax is
+<pre>
+  gf -batch (-s) (-[flag])* 
+</pre>
+It reads standard input, which is typically directed from a
+script file containing GF commands.
+Every command read by GF, GF's reply, and
+the whole run, are enclosed in XML tags:
+<ul>
+<li> tag <tt>gfcommand</tt> encloses a command in the script
+<li> tag <tt>gfreply</tt> encloses GF's reply to a command
+<li> tag <tt>gfbatch</tt> encloses the whole run of the script
+</ul>
+The DTD is the following:
+<pre>
+  &lt;!ELEMENT gfbatch ((gfcommand, gfreply)*) >
+  &lt;!ELEMENT gfcommand (#PCDATA) >
+  &lt;!ELEMENT gfreply (#PCDATA) >
+</pre>
+The optional <tt>+s</tt> (silence) flag turns off showing 
+commands and the XML structure of the run; it is moreove sent
+as a global flag to the environment in which the run is 
+performed, together with the other flags appearing in the
+command line.
+
+<p>
+
+Another version of the batch mode is the compiler. Thus
+<pre>
+  gf -make -s file.gf
+</pre>
+silently compiles the file <tt>file.gf</tt> (as well as
+all other files that it depends on).
+All flags to the command <tt>i</tt> are recognized.
+
+
+
+
+
+<h2>Library path</h2>
+
+(Not available in Version 2.2 for the moment - sorry.)
+
+
+<h3>Command line syntax</h3>
+
+The syntax of the individual commands is described in later sections.
+The general structure of a command line is defined by the following
+grammar:
+<pre>
+  CommandLine ::= Pipeline (";;" Pipeline)*
+  Pipeline    ::= Command 
+               |  Command Arg ("|" Command)*
+  Command     ::= CommandId (Option | Flag)* Arg*
+  Arg         ::= QuotedString | Tree | File | Lang | Int
+</pre>
+Several commands can be collected on one line, separated by a double
+semicolon. The effect is that each of the commands is executed;
+the same effect is achieved in a script by putting the commands on
+consecutive lines. Thus
+<pre>
+  i LangEng.gf ;; p -cat=AP "black or green" ;; q
+</pre>
+is equivalent to
+<pre>
+  i LangEng.gf  
+  p -cat=AP "black or green"
+  q
+</pre>
+The one-line variant is handy to use as an argument of the <tt>echo</tt>
+command in Unix, to define simple shell scripts using GF.
+
+<p>
+
+A <b>pipeline</b> consists of a first command with an argument, 
+producing a result which is sent as argument to the next command.
+For example,
+<pre>
+  gr -cat=Phrase | l | sa 
+</pre>
+generates a random Phrase, linearizes it, and speaks aloud the
+resulting string. No result is seen in the output, but the
+phrase is heard spoken.
+
+<p>
+
+The <b>trace</b> option <tt>-tr</tt> can be used to show intermediate 
+results in a pipeline:
+<pre>
+  rf -tr bible.txt | p -lang=Eng -cat=Text | l -lang=Chi
+</pre>
+reads a string from the file <tt>bible.txt</tt> (displaying the result), 
+parses it as an English text (without displaying the parse tree),
+and linearizes the tree into Chinese (displaying the result, as the
+last command in a pipeline always does).
+
+<p>
+
+The Unix <b>Readline</b> facility makes arrow keys, file name completions,
+etc, available in the GF shell, but only in the GHC-compiled variant.
+For instance, the up-arrow goes backwards in the command history.
+If Readline is not available,
+a command line consisting of an integer <tt>n</tt> 
+repeats a command <tt>n</tt> lines back in the history.
+For instance, 0 repeats the last command, 1 the second-last, etc.
+
+
+
+
+<h3>Options and flags</h3>
+
+An <b>option</b> consist of a hyphen and an option identifier, e.g.
+<pre>
+  -retain
+</pre>
+What options belong to what commands is explained below.
+
+<p>
+
+A <b>flag</b> consists of a hyphen, a flag identifier, an equality sign,
+and a value identifier, e.g.
+<pre>
+  -lang=Eng
+</pre>
+What flags belong to what commands is explained below.
+In addition to command lines, flags can be set globally with the
+<tt>sf</tt> command (see below), as well as
+in grammars, using a <tt>flags</tt> directive, e.g.
+<pre>
+  flags lexer=code ; startcat=Exp ;
+</pre>
+either first in a file or immediately after an <tt>include</tt> directive.
+In case of conflicts arising from this, the descending order of priority is:
+command line, grammar, global. 
+The global state is initialized by <b>default values</b> to
+all available flags.
+
+
+
+<h3>Environment</h3>
+
+To understand the semantics of commands in a GF session,
+one must know their dependence on and their effects to an
+<b>environment</b>. The environment consists of 
+<ul>
+<li> main abstract syntax (if any) - pointer to a compiled module
+<li> main concrete syntax (if any) - pointer to a compiled module
+<li> a list of pointers to other concrete syntaxes, for the same abstract
+<li> a list of compiled modules
+<li> a list of source modules
+<li> values of flags. 
+</ul>
+Normally, the main concrete syntax is the last-imported one.
+The name of this is the
+value of the flag <tt>-lang</tt>, which can be reset by the
+<tt>sf</tt> command.
+
+
+
+
+<h3>Command arguments</h3>
+
+Unlike Unix, where command arguments and values are strings,
+GF uses a primitive type system, distinguishing between
+<ul>
+<li> strings,
+<li> (lists of) terms (= syntax trees),
+<li> names of languages,
+<li> names of files,
+<li> integers,
+<li> void values (e.g. the result of speaking aloud a string),
+<li> error values.
+</ul>
+A pipeline is only meaningful among strings and terms, and
+only if the
+argument type of a command matches with the value type of the
+preceding one. For instance,
+<pre>
+  p "hello world" | l -lang=Swe
+</pre>
+sends a list of terms (the parsing result) to the linearizer,
+which expects terms, so that the types match. But
+<pre>
+  p "hello world" | p -lang=Swe
+</pre>
+tries to parse arguments which are already terms, and this is a 
+type error. An error value is also displayed as a string
+(an error message), but this string is never a meaningful 
+input for a command, so the pipe breaks there.
+
+
+
+
+<h3>Descriptions with the individual commands</h3>
+
+The following is a copy of the current <tt>HelpFile</tt>.
+<pre>
 i,  import: i File
       Reads a grammar from File and compiles it into a GF runtime grammar.
       Files "include"d in File are read recursively, nubbing repetitions.
@@ -493,3 +789,81 @@ q, quit: q
     -unlexer=bind        like identity, but bind at "&+"
 
 -- *: Commands and options marked with * are not yet implemented.
+</pre>
+
+
+
+<h2>Commands in subshells</h2>
+
+<h3>The interactive editor</h3>
+
+The command <tt>es</tt> (edit session) opens a subshell, where editing is
+commenced by selecting a new category, which initializes a syntax tree
+with a metavariable. Editing has its own <b>state</b>, expressed by a Tree
+Zipper, where the <b>current subtree</b> is marked by a star <tt>*</tt>.
+A subtree that is a <b>metavariable</b> (of form <tt>?n</tt>) is
+a <b>subgoal</b>.
+
+<p>
+
+There are currently three interfaces to the editor: a line-based GF subshell,
+a Fudget GUI, and a Java GUI. They all use the same abstract command language,
+the difference being that the subshell has a string syntax for each command,
+whereas the GUIs mostly use menus and buttons to issue commands. 
+There is a separate
+<a href="javaGUImanual/javaGUImanual.htm">GF Java GUI Manual</a>.
+
+<p>
+
+The command syntax for the string-based editor is the following:
+
+<p>
+
+Start/finish editing:
+<ul>
+<li> <tt>n Cat</tt> start new goal of type Cat
+<li> <tt>t Tree</tt> start editing with Tree
+<li> <tt>q</tt> quit the editor
+</ul>
+Navigation (change current subtree):
+<ul>
+<li> <tt>&lt;&lt;</tt> go to previous metavariable
+<li> <tt>&lt; Int</tt> go Int steps back in the tree
+<li> <tt>'</tt> go to the top of the tree
+<li> <tt>> Int</tt>  go Int steps ahead in the tree
+<li> <tt>>></tt> go to next metavariable
+</ul>
+Refinement and wrapping (of current subtree):
+<ul>
+<li> <tt>r (Fun | Var)</tt> refine with function Fun or variable Var
+<li> <tt>w Fun Int</tt> wrap subterm by Fun into its argument place Int
+<li> <tt>s Int</tt> select candidate nr. Int (result of ambiguous parsing)
+<li> <tt>x Var Var</tt> change (alpha convert) bound variable Var1 to Var2
+<li> <tt>d</tt> delete subtree
+<li> <tt>g Tree</tt> refine current subgoal with Tree
+<li> <tt>p String</tt> parse String as refinement of current subgoal
+<li> <tt>a</tt> aleatory: find random refinement
+<li> <tt>u</tt> undo: go back in refinement history
+<li> <tt>c Transform</tt> apply Transform (one of the -transform values) to subtree
+<li> <tt>f Filter</tt> apply Filter 
+     (one of the -filter values) to linearization output
+</ul>
+Information and display:
+<ul>
+<li> <tt>m</tt> show refinement/wrapping menu
+<li> <tt>v</tt> toggle the pretty-printer view (Tree or grammar)
+<li> <tt>h</tt> show command help
+</ul>
+
+
+
+
+<h3>Translate, parse, and teach yourself sessions</h3>
+
+The system expects a string which it then tries to parse. A string consisting
+of a dot (.) serves as exit command. The graphical translation session has a 
+Quit button.
+
+
+</body>
+</html>
