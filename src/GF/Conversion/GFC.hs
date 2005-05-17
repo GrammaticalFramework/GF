@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/17 11:20:25 $ 
+-- > CVS $Date: 2005/05/17 13:38:46 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
 -- All conversions from GFC 
 -----------------------------------------------------------------------------
@@ -46,10 +46,12 @@ gfc2mcfg2cfg opts = \g -> let e = g2e g in trace2 "Options" (show opts) (e2m e, 
 		  Just cat -> flip removeErasing [identC cat]
 		  Nothing  -> flip removeErasing []
 	  g2e = case getOptVal opts gfcConversion of
-		  Just "strict" -> simple2mcfg_strict . gfc2simple
-		  Just "finite" -> simple2mcfg_nondet . gfc2finite
-		  Just "finite-strict" -> simple2mcfg_strict . gfc2finite
-		  _ -> simple2mcfg_nondet . gfc2simple
+		  Just "strict"            -> simple2mcfg_strict .                                    gfc2simple
+		  Just "finite"            -> simple2mcfg_nondet .                    simple2finite . gfc2simple
+		  Just "singletons"        -> simple2mcfg_nondet . removeSingletons .                 gfc2simple
+		  Just "finite-singletons" -> simple2mcfg_nondet . removeSingletons . simple2finite . gfc2simple
+		  Just "finite-strict"     -> simple2mcfg_strict .                    simple2finite . gfc2simple
+		  _                        -> simple2mcfg_nondet .                                    gfc2simple
 
 gfc2mcfg :: Options -> (CanonGrammar, Ident) -> MGrammar
 gfc2mcfg opts = fst . gfc2mcfg2cfg opts
@@ -68,9 +70,6 @@ simple2finite = S2Fin.convertGrammar
 
 removeSingletons :: SGrammar -> SGrammar
 removeSingletons = RemSing.convertGrammar
-
-gfc2finite :: (CanonGrammar, Ident) -> SGrammar
-gfc2finite = removeSingletons . simple2finite . gfc2simple
 
 simple2mcfg_nondet :: SGrammar -> EGrammar
 simple2mcfg_nondet = S2M.convertGrammarNondet
