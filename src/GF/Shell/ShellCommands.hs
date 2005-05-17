@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/13 12:40:20 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.34 $
+-- > CVS $Date: 2005/05/17 12:37:17 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.35 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -53,9 +53,9 @@ data Command =
  | CShowOpers String
 
  | CTranslationQuiz Language Language
- | CTranslationList Language Language Int
+ | CTranslationList Language Language
  | CMorphoQuiz
- | CMorphoList Int
+ | CMorphoList
 
  | CReadFile   FilePath
  | CWriteFile  FilePath
@@ -180,9 +180,9 @@ optionsOfCommand co = case co of
   CShowOpers _ -> flags "res"
 
   CTranslationQuiz _ _ -> flags "cat"
-  CTranslationList _ _ _ ->  flags "cat"
+  CTranslationList _ _ ->  flags "cat number"
   CMorphoQuiz -> flags "cat lang"
-  CMorphoList _ -> flags "cat lang"
+  CMorphoList -> flags "cat lang number"
 
   CReadFile _  -> none
   CWriteFile  _ -> none

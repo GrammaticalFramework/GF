@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/17 11:20:25 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.37 $
+-- > CVS $Date: 2005/05/17 12:37:17 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.38 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -232,15 +232,17 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
   CTranslationQuiz il ol -> do
     warnDiscont opts 
     justOutput opts (teachTranslation opts (sgr il) (sgr ol)) sa
-  CTranslationList il ol n -> do
-    warnDiscont opts 
+  CTranslationList il ol -> do
+    warnDiscont opts
+    let n = optIntOrN opts flagNumber 10 
     qs <- transTrainList opts (sgr il) (sgr ol) (toInteger n)
     returnArg (AString $ foldr (+++++) [] [unlines (s:ss) | (s,ss) <- qs]) sa
 
   CMorphoQuiz -> do
     warnDiscont opts 
     justOutput opts (teachMorpho opts gro) sa
-  CMorphoList n -> do 
+  CMorphoList -> do
+    let n = optIntOrN opts flagNumber 10  
     warnDiscont opts 
     qs <- useIOE [] $ morphoTrainList opts gro (toInteger n)
     returnArg (AString $ foldr (+++++) [] [unlines (s:ss) | (s,ss) <- qs]) sa
