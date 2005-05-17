@@ -8,6 +8,7 @@ import ErrM
 
 %name pGrammars Grammars
 
+-- no lexer declaration
 %monad { Err } { thenM } { returnM }
 %tokentype { Token }
 
@@ -33,10 +34,10 @@ L_err    { _ }
 
 %%
 
-Ident   : L_ident  { Ident $1 }
-Integer : L_integ  { (read $1) :: Integer }
-String  : L_quoted { $1 }
-SingleQuoteString    : L_SingleQuoteString { SingleQuoteString ($1)}
+Ident   :: { Ident }   : L_ident  { Ident $1 }
+Integer :: { Integer } : L_integ  { (read $1) :: Integer }
+String  :: { String }  : L_quoted { $1 }
+SingleQuoteString    :: { SingleQuoteString} : L_SingleQuoteString { SingleQuoteString ($1)}
 
 Grammars :: { Grammars }
 Grammars : ListGrammar { Grammars (reverse $1) } 
@@ -61,7 +62,7 @@ ListFlag : {- empty -} { [] }
 
 
 Rule :: { Rule }
-Rule : Fun ':' Profile '.' Category '->' ListSymbol { Rule $1 $3 $5 $7 } 
+Rule : Fun ':' Profiles '.' Category '->' ListSymbol { Rule $1 $3 $5 $7 } 
 
 
 ListRule :: { [Rule] }
@@ -74,18 +75,19 @@ Fun : Ident { Cons $1 }
   | '_' { Coerce }
 
 
+Profiles :: { Profiles }
+Profiles : '[' ListProfile ']' { Profiles $2 } 
+
+
+ListProfile :: { [Profile] }
+ListProfile : {- empty -} { [] } 
+  | Profile { (:[]) $1 }
+  | Profile ',' ListProfile { (:) $1 $3 }
+
+
 Profile :: { Profile }
-Profile : '[' ListInts ']' { Profile $2 } 
-
-
-Ints :: { Ints }
-Ints : '[' ListInteger ']' { Ints $2 } 
-
-
-ListInts :: { [Ints] }
-ListInts : {- empty -} { [] } 
-  | Ints { (:[]) $1 }
-  | Ints ',' ListInts { (:) $1 $3 }
+Profile : '[' ListInteger ']' { UnifyProfile $2 } 
+  | Ident { ConstProfile $1 }
 
 
 ListInteger :: { [Integer] }

@@ -17,7 +17,7 @@ data Flag =
   deriving (Eq,Ord,Show)
 
 data Rule =
-   Rule Fun Profile Category [Symbol]
+   Rule Fun Profiles Category [Symbol]
   deriving (Eq,Ord,Show)
 
 data Fun =
@@ -25,12 +25,13 @@ data Fun =
  | Coerce
   deriving (Eq,Ord,Show)
 
-data Profile =
-   Profile [Ints]
+data Profiles =
+   Profiles [Profile]
   deriving (Eq,Ord,Show)
 
-data Ints =
-   Ints [Integer]
+data Profile =
+   UnifyProfile [Integer]
+ | ConstProfile Ident
   deriving (Eq,Ord,Show)
 
 data Symbol =
