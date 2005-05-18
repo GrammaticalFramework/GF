@@ -2,7 +2,7 @@ include numerals.Abs.gf ;
 
 oper bind : Str -> Str -> Str = \s1 -> \s2 -> s1 ++ s2 ;
 
-param DForm = unit | teen | ten | hundred | vint ;
+param DForm = unit | teen | ten | hundred | vint | null ;
 param Size = sg | two | pl ;
 
 lincat Numeral = {s : Str} ;
@@ -14,12 +14,13 @@ lincat Sub1000000 = {s : Str} ;
 
 oper mkNum : Str -> Str -> Str -> Lin Digit = 
   \dois -> \doze -> \vinte -> 
-  {s = table {unit => dois ; teen => doze ; ten => vinte ; hundred => dois + "-" + "cents" ; vint => "vint-i-" + dois } ; size = pl} ;
+  {s = table {unit => dois ; teen => doze ; ten => vinte ; hundred => dois + "-" + "cents" ; vint => "vint-i-" + dois ; null => [] } ; size = pl} ;
 
 lin num x0 =
   {s = x0.s} ;
 
-lin n2 = {s = table {unit => "dos" ; teen => "dotze" ; ten => "vint" ; hundred => "dos-cents" ; vint => "vint-i-" + "dos" } ; size = two } ; 
+lin n2 = {s = table {unit => "dos" ; teen => "dotze" ; ten => "vint" ;
+hundred => "dos-cents" ; vint => "vint-i-" + "dos" ; null => []} ; size = two } ; 
 lin n3 = mkNum "tres" "tretze" "trenta" ;
 lin n4 = mkNum "quatre" "catorze" "quaranta" ;
 lin n5 = mkNum "cinc" "quinze" "cinqanta" ;
@@ -41,7 +42,8 @@ lin pot0as1 n =
 lin pot1 d =
   {s = d.s ! ten ; size = pl} ;
 lin pot1plus d e =
-  {s = table {two => e.s ! vint ; _ => bind (bind (d.s ! ten) "-") (e.s ! unit) } ! d.size ; size = pl} ;  
+  {s = table {two => e.s ! vint ++ d.s ! null ; _ => bind (bind (d.s ! ten) "-") (e.s ! unit) } ! d.size ; size = pl} ;  
+--{s = table {two => e.s ! vint ; _ => bind (bind (d.s ! ten) "-") (e.s ! unit) } ! d.size ; size = pl} ;  
 lin pot1as2 n = n ;
 lin pot2 d =
   {s = d.s ! hundred ; size = pl} ;  
