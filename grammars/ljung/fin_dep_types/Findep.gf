@@ -1,6 +1,8 @@
 
 concrete Findep of FindepAbs = {
 
+flags conversion = finite;
+
 lin 
 
 Sg = {s = "SINGULAR"};
