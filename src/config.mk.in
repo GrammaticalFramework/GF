@@ -11,6 +11,7 @@ datadir = @datadir@
 
 host = @host@
 
+GHCFLAGS = @GHCFLAGS@
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 
