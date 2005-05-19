@@ -3,7 +3,7 @@ include config.mk
 
 GHMAKE=$(GHC) --make
 GHCXMAKE=ghcxmake
-GHCFLAGS= -fglasgow-exts -package util
+GHCFLAGS+= -fglasgow-exts -package util
 GHCOPTFLAGS=-O2
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
@@ -21,8 +21,8 @@ GRAMMAR_DIST_DIR=GF-grammars-$(PACKAGE_VERSION)
 
 SNAPSHOT_DIR=GF-$(shell date +%Y%m%d)
 
-# use the temporary binary file name 'gf-bin' name to not clash with directory 'GF' 
-# on case insensitive file systems (such as MacOSX)
+# use the temporary binary file name 'gf-bin' to not clash with directory 'GF' 
+# on case insensitive file systems (such as FAT)
 GF_EXE=gf$(EXEEXT)
 GF_EXE_TMP=gf-bin$(EXEEXT)
 GF_DOC_EXE=gfdoc$(EXEEXT)

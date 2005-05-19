@@ -4,7 +4,7 @@ AC_INIT([GF],[2.2],[aarne@cs.chalmers.se],[GF])
 
 AC_PREREQ(2.53)
 
-AC_REVISION($Revision: 1.18 $)
+AC_REVISION($Revision: 1.19 $)
 
 AC_CONFIG_FILES([config.mk jgf])
 
@@ -130,6 +130,7 @@ dnl ***********************************************
 dnl Program flags
 dnl ***********************************************
 
+AC_SUBST(GHCFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(LDFLAGS)
 
