@@ -48,7 +48,7 @@ endif
 
 .PHONY: all unix jar gfdoc windows install install-gf \
         temp install-gfdoc install-editor \
-        today help clean
+        today help clean windows-msi
 
 all: unix gfdoc $(BUILD_JAR)
 
@@ -92,6 +92,7 @@ clean:
 	-rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
 	-rm -f GF/*.{o,hi,ghi} GF/*/*.{o,hi,ghi} GF/*/*/*.{o,hi,ghi}
 	-rm -f JavaGUI/*.class
+	-rm -f gf.wixobj
 
 distclean: clean
 	-rm -f JavaGUI/gf-java.jar jgf
@@ -99,6 +100,7 @@ distclean: clean
 	-rm -f config.status config.mk config.log
 	-rm -f *.tgz *.zip
 	-rm -rf $(DIST_DIR) $(BIN_DIST_DIR)
+	-rm -rf gf.msi
 
 ghci-nofud:
 	$(GHCI) $(GHCFLAGS)
@@ -200,6 +202,10 @@ grammar-dist:
 	rmdir $(GRAMMAR_DIST_DIR)/GF
 	gtar -zcf $(GRAMMAR_DIST_DIR).tgz $(GRAMMAR_DIST_DIR)
 	rm -rf $(GRAMMAR_DIST_DIR)
+
+windows-msi: 
+	candle -nologo gf.wxs
+	light -nologo gf.wixobj
 
 #
 # Installation
