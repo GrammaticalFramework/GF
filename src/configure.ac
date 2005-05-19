@@ -4,9 +4,9 @@ AC_INIT([GF],[2.2],[aarne@cs.chalmers.se],[GF])
 
 AC_PREREQ(2.53)
 
-AC_REVISION($Revision: 1.22 $)
+AC_REVISION($Revision: 1.23 $)
 
-AC_CONFIG_FILES([config.mk jgf gf.wxs])
+AC_CONFIG_FILES([config.mk jgf])
 
 AC_CANONICAL_HOST
 

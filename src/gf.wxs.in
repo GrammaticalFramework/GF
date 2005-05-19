@@ -36,8 +36,8 @@
                       WorkingDirectory="INSTALLDIR" />
           </Component>
 
-          <Directory Id="GFDocDir" Name="doc" DiskId="1">
-            <Component Id="GFDoc" Guid="23BEEBBF-F9AB-459F-B8D2-8414BB47834A">
+          <Directory Id="GFDocDir" Name="doc">
+            <Component Id="GFDoc" Guid="23BEEBBF-F9AB-459F-B8D2-8414BB47834A" DiskId="1">
               <File Id="GFReadme" Name="README.txt" src="../README" />
               <File Id="GFLicenee" Name="LICENSE.txt" src="../LICENSE" />
             </Component>
