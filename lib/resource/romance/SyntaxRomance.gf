@@ -1560,4 +1560,10 @@ oper
 
 negNe, negPas : Str ;
 
+
+  sats2quest : Sats -> Question = \x ->
+    let cl = sats2clause x
+    in
+    {s = \\b,f,_ => cl.s ! b ! f} ;
+
 }
