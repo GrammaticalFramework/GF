@@ -4,7 +4,7 @@ AC_INIT([GF],[2.2],[aarne@cs.chalmers.se],[GF])
 
 AC_PREREQ(2.53)
 
-AC_REVISION($Revision: 1.20 $)
+AC_REVISION($Revision: 1.21 $)
 
 AC_CONFIG_FILES([config.mk jgf gf.wxs])
 
@@ -38,6 +38,11 @@ AC_ARG_WITH(ghc,
 
 GHCI=$(dirname $GHC)/ghci
 
+GHC_VERSION=`$GHC --version | sed -e 's/.*version //'`
+AC_MSG_CHECKING([GHC version])
+AC_MSG_RESULT($GHC_VERSION)
+
+
 AC_SUBST(GHC)
 AC_SUBST(GHCI)
 
@@ -56,7 +61,14 @@ AC_ARG_WITH(readline,
    else
      READLINE="$withval"
    fi],
-  [READLINE="readline"])
+  [if test "$GHC_VERSION" = "6.4" && test "$host_os" = "cygwin"; then
+     AC_MSG_WARN([There are problems with readline on 6.4 for Windows, 
+                    disabling readline support. 
+                    Use --with-readline to override.])
+     READLINE="no"
+   else
+     READLINE="readline"
+   fi])
 
 case $READLINE in
     readline)

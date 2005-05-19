@@ -5,7 +5,7 @@ exec_prefix=@exec_prefix@
 GF_BIN_DIR=@bindir@
 GF_DATA_DIR=@datadir@/GF-@PACKAGE_VERSION@
 
-JAVA=@JAVA@
+JAVA="@JAVA@"
 
 GF=$GF_BIN_DIR/gf
 JARFILE=$GF_DATA_DIR/gf-java.jar
