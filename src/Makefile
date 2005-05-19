@@ -168,7 +168,7 @@ dist:
 	find $(DIST_DIR) -name .cvsignore -exec rm -f {} ';'
 #	cd $(DIST_DIR)/grammars && sh mkLib.sh
 	cd $(DIST_DIR) && rm -rf $(NOT_IN_DIST)
-	gtar -zcf $(DIST_DIR).tgz $(DIST_DIR)
+	$(TAR) -zcf $(DIST_DIR).tgz $(DIST_DIR)
 	rm -rf $(DIST_DIR)
 
 snapshot: DIST_DIR=$(SNAPSHOT_DIR)
@@ -192,7 +192,7 @@ binary-dist:
 	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 INSTALL.binary $(BIN_DIST_DIR)/INSTALL
 	$(INSTALL) -m 0644 Makefile.binary $(BIN_DIST_DIR)/Makefile
-	gtar -zcf GF-$(PACKAGE_VERSION)-$(host).tgz $(BIN_DIST_DIR)
+	$(TAR) -zcf GF-$(PACKAGE_VERSION)-$(host).tgz $(BIN_DIST_DIR)
 	rm -rf $(BIN_DIST_DIR)
 
 grammar-dist:
@@ -201,7 +201,7 @@ grammar-dist:
 	cvs export -d $(GRAMMAR_DIST_DIR) -rHEAD GF/{lib,examples}
 	mv $(GRAMMAR_DIST_DIR)/GF/* $(GRAMMAR_DIST_DIR)
 	rmdir $(GRAMMAR_DIST_DIR)/GF
-	gtar -zcf $(GRAMMAR_DIST_DIR).tgz $(GRAMMAR_DIST_DIR)
+	$(TAR) -zcf $(GRAMMAR_DIST_DIR).tgz $(GRAMMAR_DIST_DIR)
 	rm -rf $(GRAMMAR_DIST_DIR)
 
 windows-msi:
