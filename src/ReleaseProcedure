@@ -97,7 +97,8 @@ buildarchtranslate: i686: i586
 
 15. Build a Windows package:
 
-    ???
+    $ cd src
+    $ ./configure && make all windows-msi
 
 16. Add new GF package release to SourceForge:
 

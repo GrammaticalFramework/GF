@@ -89,8 +89,7 @@ shell:
 	$(GHMAKE) $(GHCFLAGS) $(GHCOPTFLAGS) GF/Shell.hs
 
 clean: 
-	-rm -rf */*.o */*.hi *.o *.hi */*.ghi *.ghi *~ */*~
-	-rm -f GF/*.{o,hi,ghi} GF/*/*.{o,hi,ghi} GF/*/*/*.{o,hi,ghi}
+	find . '(' -name '*~' -o -name '*.hi' -o -name '*.ghi' -o -name '*.o' ')' -exec rm -f '{}' ';'
 	-rm -f JavaGUI/*.class
 	-rm -f gf.wixobj
 
@@ -203,7 +202,10 @@ grammar-dist:
 	gtar -zcf $(GRAMMAR_DIST_DIR).tgz $(GRAMMAR_DIST_DIR)
 	rm -rf $(GRAMMAR_DIST_DIR)
 
-windows-msi: 
+jgf.bat:
+	echo 'java -jar gf-java.jar gf.exe' > jgf.bat
+
+windows-msi: jgf.bat
 	candle -nologo gf.wxs
 	light -nologo gf.wixobj
 
