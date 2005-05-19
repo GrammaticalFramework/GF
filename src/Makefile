@@ -21,6 +21,8 @@ GRAMMAR_DIST_DIR=GF-grammars-$(PACKAGE_VERSION)
 
 SNAPSHOT_DIR=GF-$(shell date +%Y%m%d)
 
+MSI_FILE=gf-$(subst .,_,$(PACKAGE_VERSION)).msi
+
 # use the temporary binary file name 'gf-bin' to not clash with directory 'GF' 
 # on case insensitive file systems (such as FAT)
 GF_EXE=gf$(EXEEXT)
@@ -99,7 +101,7 @@ distclean: clean
 	-rm -f config.status config.mk config.log
 	-rm -f *.tgz *.zip
 	-rm -rf $(DIST_DIR) $(BIN_DIST_DIR)
-	-rm -rf gf.msi
+	-rm -rf gf.wxs *.msi
 
 ghci-nofud:
 	$(GHCI) $(GHCFLAGS)
@@ -202,12 +204,9 @@ grammar-dist:
 	gtar -zcf $(GRAMMAR_DIST_DIR).tgz $(GRAMMAR_DIST_DIR)
 	rm -rf $(GRAMMAR_DIST_DIR)
 
-jgf.bat:
-	echo 'java -jar gf-java.jar gf.exe' > jgf.bat
-
-windows-msi: jgf.bat
+windows-msi:
 	candle -nologo gf.wxs
-	light -nologo gf.wixobj
+	light -nologo -o $(MSI_FILE) gf.wixobj
 
 #
 # Installation

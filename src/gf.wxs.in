@@ -27,6 +27,8 @@
           </Component>
 
           <Component Id="GFEditor" Guid="39F885F7-BC49-4CBC-9DCD-569C95AA3364">
+            <Environment Id="GFHomeEnv" Name="GF_HOME" Action="create" Part="all" Permanent="no" 
+                         Value="[INSTALLDIR]" />
             <File Id="GFEditorBat" Name="jgf.bat" DiskId="1" src="jgf.bat" />
             <File Id="GFEditorJar" Name="gf-java.jar" DiskId="1" src="JavaGUI/gf-java.jar" />
             <Shortcut Id="GFEditorStartMenu" Directory="GFProgramMenuDir" 
