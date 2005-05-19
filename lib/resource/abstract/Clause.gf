@@ -37,6 +37,7 @@ fun
   QPredV       : IP -> V  -> QCl ;             -- "who walks"
   QPredPassV   : IP -> V  -> QCl ;             -- "who is seen"
   QPredV2      : IP -> V2 -> NP -> QCl ;       -- "who sees Mary"
+----  QPredV3      : IP -> V3 -> NP -> NP -> QCl ;       -- "who gives Mary food"
   QPredReflV2  : IP -> V2 -> QCl ;             -- "who loves himself"
   QPredVS      : IP -> VS -> S  -> QCl ;       -- "who says that Mary runs"
   QPredVV      : IP -> VV -> VPI -> QCl ;      -- "who must walk"
