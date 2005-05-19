@@ -204,7 +204,10 @@ grammar-dist:
 	$(TAR) -zcf $(GRAMMAR_DIST_DIR).tgz $(GRAMMAR_DIST_DIR)
 	rm -rf $(GRAMMAR_DIST_DIR)
 
-windows-msi:
+gf.wxs: config.status gf.wxs.in
+	./config.status --file=$@
+
+windows-msi: gf.wxs
 	candle -nologo gf.wxs
 	light -nologo -o $(MSI_FILE) gf.wixobj
 
