@@ -70,7 +70,7 @@ buildarchtranslate: i686: i586
    $ cd src 
    $ ./configure && make rpm
 
-12. Build a generic binary x86/linux (should be done on a Linux box,
+12. Build a generic binary x86/linux package (should be done on a Linux box,
     e.g. banded.medic.chalmers.se):
 
    $ cd src
@@ -95,12 +95,21 @@ buildarchtranslate: i686: i586
     TODO: Use OS X PackageMaker to build  a .pkg-file which can
     be installed using the standard OS X Installer program. 
 
-15. Build a Windows package:
+15. Build a binary Cygwin package (should be done on a Windows
+    machine with Cygwin):
+
+    $ cd src
+    $ ./configure && make binary-dist
+
+16. Build a Windows MSI package (FIXME: This doesn't work right,
+    pathnames with backslashes and spaces are not handled 
+    correctly in Windows. We only release abinary tarball
+    for Cygwin right now.):
 
     $ cd src
     $ ./configure && make all windows-msi
 
-16. Add new GF package release to SourceForge:
+17. Add new GF package release to SourceForge:
 
     - Project page -> Admin -> File releases -> Add release (for the
       GF package)
@@ -121,7 +130,7 @@ buildarchtranslate: i686: i586
       * sparc binary tarball -> Sparc/.gz
       * source package -> Any/Source .gz
 
-17. Add new GF-editor release. Repeat the steps above, but
+18. Add new GF-editor release. Repeat the steps above, but
     with GF-editor:
 
      - Add files and set properties:
@@ -130,7 +139,7 @@ buildarchtranslate: i686: i586
         figured out how to make noarch rpms from the same spec as 
 	arch-specific ones)
 
-18. (Only if releasing a new grammars distribution)
+19. (Only if releasing a new grammars distribution)
     Add new GF-grammars release. Repeat the steps above, but with
     GF-grammars:
 
@@ -138,6 +147,6 @@ buildarchtranslate: i686: i586
 
       * grammar tarball -> Platform independent/Source .gz
 
-19. Update website.
+20. Update website.
 
-20. Party!
+21. Party!

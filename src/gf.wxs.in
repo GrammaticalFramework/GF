@@ -16,30 +16,30 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="INSTALLDIR" Name="GF-@PACKAGE_VERSION@">
 
-          <Component Id="GFBinary" Guid="E2A44A6C-0252-4346-85AE-BC6A16BFB0FC">
-            <File Id="GFEXE" Name="gf.exe" DiskId="1" src="../bin/gf.exe" />
+          <Component Id="GFBinary" Guid="E2A44A6C-0252-4346-85AE-BC6A16BFB0FC" DiskId="1">
+            <File Id="GFEXE" Name="gf.exe" src="../bin/gf.exe" />
             <Shortcut Id="GFStartMenu" Directory="GFProgramMenuDir" 
-                Name="GF" Target="[!GFEXE]" />
+                      Name="GF" Target="[!GFEXE]" />
           </Component>
 
-          <Component Id="GFDocBinary" Guid="BDCA6F34-EE0A-4E72-8D00-CB7CAF3CEAEA">
-            <File Id="GFDocEXE" Name="gfdoc.exe" DiskId="1" src="tools/gfdoc.exe" />
+          <Component Id="GFDocBinary" Guid="BDCA6F34-EE0A-4E72-8D00-CB7CAF3CEAEA" DiskId="1">
+            <File Id="GFDocEXE" Name="gfdoc.exe" src="tools/gfdoc.exe" />
           </Component>
 
-          <Component Id="GFEditor" Guid="39F885F7-BC49-4CBC-9DCD-569C95AA3364">
-            <Environment Id="GFHomeEnv" Name="GF_HOME" Action="create" Part="all" Permanent="no" 
-                         Value="[INSTALLDIR]" />
-            <File Id="GFEditorBat" Name="jgf.bat" DiskId="1" src="jgf.bat" />
-            <File Id="GFEditorJar" Name="gf-java.jar" DiskId="1" src="JavaGUI/gf-java.jar" />
+          <Component Id="GFEditor" Guid="39F885F7-BC49-4CBC-9DCD-569C95AA3364" DiskId="1">
+            <Environment Id="GFHomeEnv" Name="GF_HOME" Action="create" Part="all" 
+                         Permanent="no" Value="[INSTALLDIR]" />
+            <File Id="GFEditorBat" Name="jgf.bat" src="jgf.bat" />
+            <File Id="GFEditorJar" Name="gf-java.jar" src="JavaGUI/gf-java.jar" />
             <Shortcut Id="GFEditorStartMenu" Directory="GFProgramMenuDir" 
-                Name="GFEditor" LongName="GF Editor" Target="[!GFEditorBat]" 
-                WorkingDirectory="INSTALLDIR" />
+                      Name="GFEditor" LongName="GF Editor" Target="[!GFEditorBat]" 
+                      WorkingDirectory="INSTALLDIR" />
           </Component>
 
-          <Directory Id="GFDocDir" Name="doc">
+          <Directory Id="GFDocDir" Name="doc" DiskId="1">
             <Component Id="GFDoc" Guid="23BEEBBF-F9AB-459F-B8D2-8414BB47834A">
-              <File Id="GFReadme" Name="README.txt" DiskId="1" src="../README" />
-              <File Id="GFLicenee" Name="LICENSE.txt" DiskId="1" src="../LICENSE" />
+              <File Id="GFReadme" Name="README.txt" src="../README" />
+              <File Id="GFLicenee" Name="LICENSE.txt" src="../LICENSE" />
             </Component>
           </Directory>
 

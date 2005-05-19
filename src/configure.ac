@@ -4,7 +4,7 @@ AC_INIT([GF],[2.2],[aarne@cs.chalmers.se],[GF])
 
 AC_PREREQ(2.53)
 
-AC_REVISION($Revision: 1.21 $)
+AC_REVISION($Revision: 1.22 $)
 
 AC_CONFIG_FILES([config.mk jgf gf.wxs])
 
@@ -131,6 +131,12 @@ fi
 
 AC_SUBST(ENABLE_JAVA)
 
+
+dnl ***********************************************
+dnl TAR
+dnl ***********************************************
+
+AC_CHECK_PROGS(TAR, gtar tar)
 
 dnl ***********************************************
 dnl Other programs
