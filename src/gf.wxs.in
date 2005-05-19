@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+  <Product Id="4717AF5D-52AC-4D13-85E6-D87278CE9BBC" UpgradeCode="0BB7BB08-1A79-4981-A03F-32B401B01010" Name="Grammatical Framework, version @PACKAGE_VERSION@" 
+Language="1033" 
+Version="2.2" Manufacturer="The GF Developers">
+    <Package Id="????????-????-????-????-????????????" 
+Description="Grammatical Framework, version @PACKAGE_VERSION@" Comments="This package contains the Grammatical Framework system, version @PACKAGE_VERSION@." 
+InstallerVersion="200" Compressed="yes" />
+
+    <Media Id="1" Cabinet="gf.cab" EmbedCab="yes" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLLOCATION" Name="GF-@PACKAGE_VERSION@">
+          <Directory Id="GFBinFolder" Name="bin">
+
+        <Component Id="GFBinary" Guid="E2A44A6C-0252-4346-85AE-BC6A16BFB0FC">
+            <File Id="GF" Name="gf.exe" 
+             LongName="gf.exe" DiskId="1" src="../bin/gf.exe"/>
+            <Shortcut Id="GFStartMenuLink" Directory="ProgramMenuDir" 
+                Name="GF-@PACKAGE_VERSION@" Advertise="yes"
+                WorkingDirectory='INSTALLDIR'
+                />
+        </Component>
+
+          </Directory>
+        </Directory>
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder" Name="PMenu" LongName="Programs">
+        <Directory Id="ProgramMenuDir" Name='GF-@PACKAGE_VERSION@' />
+      </Directory>
+
+    </Directory>
+
+    <Feature Id="ProductFeature" Title="Feature Title" Level="1">
+      <ComponentRef Id="GFBinary" />
+    </Feature>
+
+  </Product>
+</Wix>
