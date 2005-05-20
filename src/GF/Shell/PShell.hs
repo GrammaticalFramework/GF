@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/17 12:37:17 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.22 $
+-- > CVS $Date: 2005/05/20 14:18:15 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.23 $
 --
 -- parsing GF shell commands. AR 11\/11\/2001
 -----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ import GF.Compile.PGrammar (pzIdent, pTrm) --- (string2formsAndTerm)
 import GF.API
 import GF.System.Arch (fetchCommand)
 
-import Data.Char (isDigit)
+import Data.Char (isDigit, isSpace)
 import System.IO.Error
 
 -- parsing GF shell commands. AR 11/11/2001
@@ -41,7 +41,19 @@ getCommandLinesBatch = do
   return $ (s,pCommandLines s)
 
 pCommandLines :: String -> [CommandLine]
-pCommandLines = map pCommandLine . concatMap (chunks ";;" . words) . lines
+pCommandLines = map pCommandLine . concatMap (chunks ";;" . wordsLits) . lines
+
+-- | Like 'words', but does not split on whitespace inside
+--   double quotes.
+wordsLits :: String -> [String]
+wordsLits [] = []
+wordsLits (c:cs) | isSpace c = wordsLits (dropWhile isSpace cs)
+		 | c == '\'' || c == '"' 
+		     = let (l,rs) = break (==c) cs
+			   rs' = drop 1 rs
+			   in ([c]++l++[c]):wordsLits rs'
+		 | otherwise = let (w,rs) = break isSpace cs
+				   in (c:w):wordsLits rs
 
 pCommandLine :: [String] -> CommandLine
 pCommandLine s = pFirst (chks s) where
