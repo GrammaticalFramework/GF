@@ -83,12 +83,91 @@ generated files created with other optimization flags.
 
 <p>
 
-<b>Notice</b>: If you use the
+<b>Important notice</b>: If you use the
 <a href="http://www.cs.chalmers.se/~bringert/gf/gf-java.html">
-Embedded GF Interpreter</a>, only the values <tt>none</tt> and
-<tt>share</tt> can be used; the stronger optimizations are not
+Embedded GF Interpreter</a>,
+or the improved parsing algorithms described below,
+only the values <tt>none</tt>,
+<tt>share</tt> and <tt>values</tt> can be used; the stronger optimizations are not
 supported yet.
+Also note that currently, GF aborts and reports an error if the stronger optimizations are used
+when creating the grammar for the Embedded GF Interpreter, or when trying to parse.
 
+
+<h3>Improved parsing algorithms</h3>
+
+We have implemented some of the suggested parsing algorithms described in
+Peter Ljunglöf's <a href="http://www.cs.chalmers.se/~peb/pubs.html">PhD thesis</a>.
+So now there are the following options for parsing:
+<ul>
+  <li>The default parser. It uses a (possibly) very overgenerating context-free grammar, and filters the resulting parse trees by type-checking.
+  <li>The <tt>-cfg</tt> flag. It uses a much less overgenerating context-free grammar, and filters as above.
+  <li>The <tt>-mcfg</tt> flag. It uses an even less overgenerating <em>multiple context-free grammar</em>.
+  If the abstract syntax is context-free, meaning that there are no dependent types and only first-order functions,
+  the trees do not have to be filtered at all.
+</ul>
+The option <tt>-parser=X</tt> selects the parsing strategy. The default parser has the strategies
+<tt>chart</tt>, <tt>bottomup</tt>, <tt>topdown</tt>, <tt>old</tt>, with the first one being the default.
+The <tt>-cfg</tt> and <tt>-mcfg</tt> parsers only recognize the <tt>bottomup</tt> and <tt>topdown</tt> strategies.
+
+<p>
+
+<b>Note</b> that the <tt>-cfg</tt> and <tt>-mcfg</tt> parsers can take a very long time on their first call, since
+they have to convert the GF grammar. This will only happen once in a GF run, provided the GF files are not changed.
+
+<p>
+
+<b>Tips</b> for choosing the best parser for your grammar. Try with the default parser; if it is too slow, try the other two.
+Remember that the first time you parse they will be very slow, since they have to build parsing information.
+the <tt>-cfg</tt> parser is best on grammars with many parameters and inflection tables, and
+The <tt>-mcfg</tt> parser is even better when the grammar also has discontinuous constituents.
+
+<p>
+
+Here is a small example from the resource library:
+<pre>
+> i -src -optimize=share lib/resource/english/LangEng.gf
+> p -cat=S ""
+> p -cat=S -cfg ""
+> p -cat=S -mcfg ""
+{Comment: Just some dummy parsing calls to calculate the parsing information}
+
+> p -cat=S -rawtrees=200000 "you will be running"
+{Comment: Nr of unfiltered trees: 169296 -- 99,996% av the trees are ill-typed}
+
+UseCl (PosTP TFuture ASimul) (SPredProgVP thou_NP (IPredV AAnter run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP thou_NP (IPredV ASimul run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP ye_NP (IPredV AAnter run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP ye_NP (IPredV ASimul run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP you_NP (IPredV AAnter run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP you_NP (IPredV ASimul run_V))
+
+17730 msec
+
+> p -cat=S -cfg "you will be running"
+{Comment: Nr of unfiltered trees: 246 -- 97,5% of the trees are ill-typed}
+
+UseCl (PosTP TFuture ASimul) (SPredProgVP thou_NP (IPredV AAnter run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP thou_NP (IPredV ASimul run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP ye_NP (IPredV AAnter run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP ye_NP (IPredV ASimul run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP you_NP (IPredV AAnter run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP you_NP (IPredV ASimul run_V))
+
+1580 msec
+
+> p -cat=S -mcfg "you will be running"
+{Comment: Nr of unfiltered trees: 6 -- all trees are type-corrent}
+
+UseCl (PosTP TFuture ASimul) (SPredProgVP thou_NP (IPredV AAnter run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP thou_NP (IPredV ASimul run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP ye_NP (IPredV AAnter run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP ye_NP (IPredV ASimul run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP you_NP (IPredV AAnter run_V))
+UseCl (PosTP TFuture ASimul) (SPredProgVP you_NP (IPredV ASimul run_V))
+
+470 msec
+</pre>
 
 </body>
 </html>
