@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/20 13:12:33 $ 
+-- > CVS $Date: 2005/05/20 13:31:28 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.13 $
+-- > CVS $Revision: 1.14 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -80,6 +80,12 @@ type FileName = String
 type InitPath = String
 type FullPath = String
 
+isPathSep :: Char -> Bool
+isPathSep c = c == ':' || c == ';'
+
+isSep :: Char -> Bool
+isSep c = c == '/' || c == '\\'
+
 getFilePath :: [FilePath] -> String -> IO (Maybe FilePath)
 getFilePath paths file = get paths where
   get []     = putStrLnFlush ("file" +++ file +++ "not found") >> return Nothing
@@ -107,30 +113,26 @@ extendPathEnv var ps = do
   let fs = pFilePaths s
   return $ ps ++ fs
 
--- FIXME: unix-specific, : is ; on Windows
 pFilePaths :: String -> [FilePath]
-pFilePaths s = case span (/=':') s of
+pFilePaths s = case break isPathSep s of
   (f,_:cs) -> f : pFilePaths cs
   (f,_)    -> [f]
 
--- FIXME: unix-specific, / is \ on Windows
 prefixPathName :: String -> FilePath -> FilePath
 prefixPathName p f = case f of
-    '/':_ -> f  -- do not prefix [Unix style] absolute paths
+    c:_ | isSep c -> f  -- do not prefix [Unix style] absolute paths
     _ -> case p of
         "" -> f
-        _  -> p ++ "/" ++ f
+        _  -> p ++ "/" ++ f -- / actually works on windows
 
--- FIXME: unix-specific, / is \ on Windows
 justInitPath :: FilePath -> FilePath
-justInitPath = reverse . drop 1 . dropWhile (/='/') . reverse
+justInitPath = reverse . drop 1 . dropWhile (not . isSep) . reverse
 
--- FIXME: unix-specific, / is \ on Windows
 nameAndSuffix :: FilePath -> (String,String)
 nameAndSuffix file = case span (/='.') (reverse file) of
   (_,[])      -> (file,[])
-  (xet,deman) -> if elem '/' xet 
-                   then (file,[])
+  (xet,deman) -> if any isSep xet 
+                   then (file,[]) -- cover cases like "foo.bar/baz"
                    else (reverse $ drop 1 deman,reverse xet)
 
 unsuffixFile, fileBody :: FilePath -> String
@@ -140,9 +142,8 @@ fileBody = unsuffixFile
 fileSuffix :: FilePath -> String
 fileSuffix = snd . nameAndSuffix
 
--- FIXME: unix-specific, / is \ on Windows
 justFileName :: FilePath -> String
-justFileName = reverse . takeWhile (/='/') . reverse
+justFileName = reverse . takeWhile (not . isSep) . reverse
 
 suffixFile :: String -> FilePath -> FilePath
 suffixFile suff file = file ++ "." ++ suff
