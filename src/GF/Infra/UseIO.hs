@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:46:09 $ 
+-- > CVS $Date: 2005/05/20 13:12:33 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.12 $
+-- > CVS $Revision: 1.13 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -107,11 +107,13 @@ extendPathEnv var ps = do
   let fs = pFilePaths s
   return $ ps ++ fs
 
+-- FIXME: unix-specific, : is ; on Windows
 pFilePaths :: String -> [FilePath]
 pFilePaths s = case span (/=':') s of
   (f,_:cs) -> f : pFilePaths cs
   (f,_)    -> [f]
 
+-- FIXME: unix-specific, / is \ on Windows
 prefixPathName :: String -> FilePath -> FilePath
 prefixPathName p f = case f of
     '/':_ -> f  -- do not prefix [Unix style] absolute paths
@@ -119,9 +121,11 @@ prefixPathName p f = case f of
         "" -> f
         _  -> p ++ "/" ++ f
 
+-- FIXME: unix-specific, / is \ on Windows
 justInitPath :: FilePath -> FilePath
 justInitPath = reverse . drop 1 . dropWhile (/='/') . reverse
 
+-- FIXME: unix-specific, / is \ on Windows
 nameAndSuffix :: FilePath -> (String,String)
 nameAndSuffix file = case span (/='.') (reverse file) of
   (_,[])      -> (file,[])
@@ -136,6 +140,7 @@ fileBody = unsuffixFile
 fileSuffix :: FilePath -> String
 fileSuffix = snd . nameAndSuffix
 
+-- FIXME: unix-specific, / is \ on Windows
 justFileName :: FilePath -> String
 justFileName = reverse . takeWhile (/='/') . reverse
 
@@ -271,6 +276,7 @@ readFileIOE f = ioe $ catch (readFile f >>= return . return)
 -- intended semantics: if file is not found, try @\$GF_LIB_PATH\/file@
 -- (even if file is an absolute path, but this should always fail)
 -- it returns not only contents of the file, but also the path used
+-- FIXME: unix-specific, / is \ on Windows
 readFileLibraryIOE :: String -> FilePath -> IOE (FilePath, String)
 readFileLibraryIOE ini f = 
 	ioe $ catch ((do {s <- readFile initPath; return (return (initPath,s))}))
