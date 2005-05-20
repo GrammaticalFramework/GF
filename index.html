@@ -20,7 +20,6 @@ May 17, 2005.
 
 </p><h2>News</h2>
 
-
 <i>May 17, 2005</i>. Version 2.2 released. See
 <a href="doc/gf2.2-highlights.html">highlights</a>.
 Download from
@@ -147,22 +146,56 @@ French, Swedish, and Russian with a few mouse clicks.
 
 <a href="lib/resource/doc/gf-resource.html">Resource grammar library</a>: 
 basic structures of ten languages
-(Danish, English, Finnish, French, German, Italian, Norwegian, Russian, Spanish, Swedish).
+(Danish, English, Finnish, French, German,
+Italian, Norwegian, Russian, Spanish, Swedish).
 Resource grammars can be used as libraries for writing GF
 applications,
 but they can also be useful for language training.
 
 
+
 <h2>Executable programs</h2>
 
-GF is available precompiled for
+GF is available for
 several platforms: Linux, Mac OS X, Microsoft Windows, and Sun OS.
-For more information, see the <a href="http://sourceforge.net/project/showfiles.php?group_id=132285">Download Page</a> (at SourceForge).
+To get GF, go to the
+<a href="http://sourceforge.net/project/showfiles.php?group_id=132285">Download Page</a>
+(at SourceForge).
 
-<p>
 
-GF grammars can be embedded in Java programs by using the
-<a href="http://www.cs.chalmers.se/~bringert/gf/gf-java.html">Embedded GF Interpreter</a>.
+<h2>Quick start</h2>
+
+When you have downloaded and installed GF:
+
+<ol>
+<li> Copy the files
+<a href="doc/tutorial/Paleolithic.gf"><tt>Paleolithic.gf</tt></a>,
+<a href="doc/tutorial/PaleolithicEng.gf"><tt>PaleolithicEng.gf</tt></a>, and
+<a href="doc/tutorial/PaleolithicIta.gf"><tt>PaleolithicIta.gf</tt></a>.
+
+ <li> Start GF with the command
+<pre>
+  gf PaleolithicIta.gf PaleolithicEng.gf
+</pre>
+
+<li> <b>Translation</b>. Try your first translation by giving the GF command
+<pre>
+  t PaleolithicEng PaleolithicIta "the boy eats the snake"
+</pre>
+
+<li> <b>Generation</b>. Random-generate sentences in two languages:
+<pre>
+  gr | l -multi
+</pre>
+
+<li> <b>Grammar development</b>. Add words to the <tt>Paleolithic</tt>
+grammars and try the above commands again.
+</ol>
+
+To lear more on grammar development (and other aspects), go to the
+<a href="doc/tutorial/01-gf-tutorial2.html">New Grammarian's Tutorial</a>.
+
+
 
 <h2>Source code</h2>
 
@@ -177,8 +210,17 @@ The platform-independent graphical user interface is written in
 
 </p><p>
 
-The <a href="http://sourceforge.net/project/showfiles.php?group_id=132285">Download Page</a> (at SourceForge) gives links to source and binary packages, as well as
+The <a href="http://sourceforge.net/project/showfiles.php?group_id=132285">
+Download Page</a> (at SourceForge) gives links to source and binary packages, as well as
 information on compiler requirements.
+
+<p>
+
+For Java programmers: GF grammars can be embedded in Java programs by using the
+<a href="http://www.cs.chalmers.se/~bringert/gf/gf-java.html">
+Embedded GF Interpreter</a>.
+
+
 
 
 </p><h2>Documents</h2>
