@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/20 14:18:15 $ 
+-- > CVS $Date: 2005/05/20 14:34:11 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.23 $
+-- > CVS $Revision: 1.24 $
 --
 -- parsing GF shell commands. AR 11\/11\/2001
 -----------------------------------------------------------------------------
@@ -55,6 +55,11 @@ wordsLits (c:cs) | isSpace c = wordsLits (dropWhile isSpace cs)
 		 | otherwise = let (w,rs) = break isSpace cs
 				   in (c:w):wordsLits rs
 
+-- | Remove single or double quotes around a string
+unquote :: String -> String
+unquote (x:xs@(_:_)) | x `elem` "\"'" && x == last xs = init xs
+unquote s = s
+
 pCommandLine :: [String] -> CommandLine
 pCommandLine s = pFirst (chks s) where
   pFirst cos = case cos of
@@ -89,7 +94,7 @@ abbrevCommand = hds . words . map u2sp where
 pCommand :: [String] -> (Command, [CommandArg])
 pCommand ws = case ws of
 
-  "i"  : f : [] -> aUnit   (CImport f)
+  "i"  : f : [] -> aUnit   (CImport (unquote f))
   "rl" : l : [] -> aUnit   (CRemoveLanguage (language l))
   "e"  : []     -> aUnit   CEmptyState
   "cm" : a : [] -> aUnit   (CChangeMain (Just (pzIdent a)))
@@ -120,9 +125,9 @@ pCommand ws = case ws of
   "mq" : []     -> aUnit   CMorphoQuiz
   "ml" : []     -> aUnit   CMorphoList
 
-  "wf" : f : s  -> aString (CWriteFile f) s
-  "af" : f : s  -> aString (CAppendFile f) s
-  "rf" : f : [] -> aUnit   (CReadFile f)
+  "wf" : f : s  -> aString (CWriteFile (unquote f)) s
+  "af" : f : s  -> aString (CAppendFile (unquote f)) s
+  "rf" : f : [] -> aUnit   (CReadFile (unquote f))
   "sa" : s      -> aString CSpeakAloud s
   "ps" : s      -> aString CPutString s
   "st" : s      -> aTerm   CShowTerm s
