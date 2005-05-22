@@ -505,20 +505,21 @@ Test with random generation, translation, morphological analysis...
 <!-- NEW -->
 <h2>Use as top-level grammar: language learning quizzes</h2>
 
-Morpho quiz with words:
+Morpho quiz with words (e.g. French verbs):
 <pre>
-  i 
-
+  i french/VerbsFre.gf
+  mq -cat=V
 </pre>
-Morpho quiz with phrases:
+Morpho quiz with phrases (e.g. Swedish clauses):
 <pre>
-
-
+  i swedish/LangSwe.gf
+  mq -cat=Cl
 </pre>
-Translation quiz with sentences:
+Translation quiz with sentences (e.g. sentences from English to Swedish):
 <pre>
-
-
+  i swedish/LangEng.gf
+  i swedish/LangSwe.gf
+  tq -cat=S LangEng LangSwe
 </pre>
 
 
@@ -580,19 +581,33 @@ Source modules:
 
 <p>
 
+Abstract syntax:
+<a href=example/Questions.gf>Questions</a>,
 <a href=example/Animals.gf>Animals</a>
 
 <p>
 
+Concrete syntax of questions parametrized on the resource API:
+<a href=example/QuestionsI.gf>QuestionsI</a>
+
+<p>
+
+English concrete syntax:
+<a href=example/QuestionsEng.gf>QuestionsEng</a>,
 <a href=example/AnimalsEng.gf>AnimalsEng</a>
 
 <p>
 
+French concrete syntax:
+<a href=example/QuestionsFre.gf>QuestionsFre</a>,
 <a href=example/AnimalsFre.gf>AnimalsFre</a>
 
 <p>
 
+Swedish concrete syntax:
+<a href=example/QuestionsSwe.gf>QuestionsSwe</a>,
 <a href=example/AnimalsSwe.gf>AnimalsSwe</a>
+
 
 
 <!-- NEW -->
@@ -667,18 +682,23 @@ In two language families:
 <h2>Current status</h2>
 
 <table border=1>
-<tr><td>Language</td> <td>v0.6</td> <td>API</td> <td>Paradigms</td> <td>Basic lex</td> <td>Verbs</td></tr>
-<tr><td>Danish</td>    <td> </td> <td>X</td> <td> </td> <td> </td> <td> </tr>
+<tr><td>Language</td> <td>v0.6</td> <td>v0.9 API</td> <td>Paradigms</td> <td>Basic lex</td> <td>Verbs</td></tr>
+<tr><td>Danish</td>    <td>-</td> <td>X</td> <td>-</td> <td>-</td> <td>-</tr>
 <tr><td>English</td>   <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</tr>
-<tr><td>Finnish</td>   <td>X</td> <td> </td> <td> </td> <td> </td> <td> </tr>
+<tr><td>Finnish</td>   <td>X</td> <td>-</td> <td>-</td> <td>-</td> <td>-</tr>
 <tr><td>French</td>    <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</tr>
-<tr><td>German</td>    <td>X</td> <td> </td> <td>*</td> <td> </td> <td> </tr>
+<tr><td>German</td>    <td>X</td> <td>-</td> <td>*</td> <td>-</td> <td>-</tr>
 <tr><td>Italian</td>   <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</tr>
-<tr><td>Norwegian</td> <td> </td> <td>X</td> <td>X</td> <td>X</td> <td>X</tr>
-<tr><td>Russian</td>   <td>X</td> <td>*</td> <td>*</td> <td> </td> <td> </tr>
-<tr><td>Spanish</td>   <td> </td> <td>X</td> <td>X</td> <td> </td> <td>X</tr>
+<tr><td>Norwegian</td> <td>-</td> <td>X</td> <td>X</td> <td>X</td> <td>X</tr>
+<tr><td>Russian</td>   <td>X</td> <td>*</td> <td>*</td> <td>-</td> <td>-</tr>
+<tr><td>Spanish</td>   <td>-</td> <td>X</td> <td>X</td> <td>X</td> <td>X</tr>
 <tr><td>Swedish</td>   <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</tr>
 </table>
+X = implemented (few exceptions may occur)
+<br>
+* = linguistic material ready for implementation
+<br>
+- = not implemented
 
 
 <!-- NEW -->
@@ -720,15 +740,10 @@ Swedish
 <!-- NEW -->
 <h2>Obtaining it</h2>
 
-Now on CVS at Chalmers:
-<pre>
-  cvs -d /users/cs/aarne/cvs checkout GF2.0/lib
-</pre>
+Get the grammar package atDownload from
+<a href="http://sourceforge.net/project/showfiles.php?group_id=132285">
+GF Download Page</a>. The current libraries are in
+<tt>lib/resource</tt>. Version 0.6 is in
+<tt>lib/resource-0.6</tt>.
 
-<p>
-
-To appear later at GF Homepage:<p>
-
-<a href="http://www.cs.chalmers.se/%7Eaarne/GF">
-<tt>http://www.cs.chalmers.se/~aarne/GF</tt></a>
-</p></body></html>
+</body></html>

@@ -1,12 +1,10 @@
-abstract Animals = {
-  cat 
-    Phrase ; Animal ; Action ;
-  fun
-    Who    : Action -> Animal -> Phrase ;
-    Whom   : Animal -> Action -> Phrase ;
-    Answer : Animal -> Action -> Animal -> Phrase ;
+-- The Question grammar specialized to animals.
 
-    Dog, Cat, Mouse, Lion, Zebra : Animal ;
+abstract Animals = Questions ** {
+
+  fun
+    -- a lexicon of animals and actions among them
+    Dog, Cat, Mouse, Lion, Zebra : Entity ;
     Chase, Eat, Like : Action ;
 }
 

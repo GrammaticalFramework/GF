@@ -1,3 +1,3 @@
 --# -path=.:../romance:../abstract:../../prelude
 
-instance ResourceSpa of Resource = reuse AllResourceSpa ;
+concrete ResourceSpa of Resource = RulesSpa, ClauseSpa, StructuralSpa ** {} ;
