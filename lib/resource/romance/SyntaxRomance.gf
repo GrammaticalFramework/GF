@@ -1566,4 +1566,7 @@ negNe, negPas : Str ;
     in
     {s = \\b,f,_ => cl.s ! b ! f} ;
 
+predVerb0 : Verb ->  Clause ;
+
+
 }

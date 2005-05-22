@@ -48,7 +48,7 @@ lin
   SuperlADeg = superlAdjPhrase ;
 
   PredAS = predAdjSent ;
-  PredV0 rain = predVerbClause (pronNounPhrase pronImpers) rain (complVerb rain) ;
+  PredV0 rain = predVerb0 rain ;
 
 -- Partial saturation.
 
