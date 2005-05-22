@@ -40,7 +40,7 @@ lincat
       -- = CommNoun ** {s2 : Preposition ; c : CaseA} ;
   N3     = Function ** {s3 : Preposition ; c3 : CaseA} ;
   Prep   = {s : Preposition ; c : CaseA} ; 
-  Num    = {s : Gender => Str ; n : Number} ;
+  Num    = {s : Gender => Str ; n : Number ; isNo : Bool} ;
 
   A      = Adjective ;
       -- = {s : AForm => Str ; p : Bool} ;

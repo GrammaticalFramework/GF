@@ -11,5 +11,5 @@ concrete AnimalsFre of Animals = QuestionsFre **
     Zebra = regN "zèbre" masculine ;
     Chase = dirV2 (regV "chasser") ;
     Eat   = dirV2 (regV "manger") ;
-    Like  = dirV2 (regV "aimer") ;
+    See   = voir_V2 ;
 }

@@ -5,7 +5,7 @@ concrete StructuralIta of Structural = CategoriesIta, NumeralsIta **
 
 lin
 
-  UseNumeral n = {s = \\g => n.s !g ; n = n.n} ;
+  UseNumeral n = {s = \\g => n.s !g ; n = n.n ; isNo = False} ;
 
   above_Prep = justPrep "sopra" ;
   after_Prep = justPrep "dopo" ;

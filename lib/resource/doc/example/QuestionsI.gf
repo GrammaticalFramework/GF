@@ -1,6 +1,6 @@
 --# -path=.:resource/abstract:resource/../prelude
 
--- Language-independent question grammar parametwized on Resource.
+-- Language-independent question grammar parametrized on Resource.
 
 incomplete concrete QuestionsI of Questions = open Resource in {
   lincat

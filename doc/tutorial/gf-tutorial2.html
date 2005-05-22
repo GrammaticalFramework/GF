@@ -51,7 +51,7 @@ It will guide you
 <!-- NEW -->
 <h3>Getting the GF program</h3>
 
-The program is open-source free software, which you can download from the
+The program is open-source free software, which you can download via the
 GF Homepage:<br>
 <a href="http://www.cs.chalmers.se/%7Eaarne/GF">
 <tt>http://www.cs.chalmers.se/~aarne/GF</tt></a>
@@ -290,8 +290,10 @@ and so on.
 <h4>The labelled context-free format</h4>
 
 The <b>labelled context-free grammar</b> format permits user-defined
-labels to each rule. GF recognizes files of this format by the suffix
-<tt>.cf</tt>. Let us include the following rules in the file
+labels to each rule.
+GF recognizes files of this format by the suffix
+<tt>.cf</tt>. It is intermediate between EBNF and full GF format.
+Let us include the following rules in the file
 <tt>paleolithic.cf</tt>.
 <pre>
   PredVP.  S   ::= NP VP ;
@@ -407,16 +409,20 @@ Rules in a GF grammar are called <b>judgements</b>, and the keywords
 judgement forms:
 <ul>
   <li> abstract syntax
-  <ul>
-    <li> cat C
-    <li> fun f : A
-  </ul>
+  <p>
+  <table>
+    <tr> <td>form </td><td>reading        </td></tr>
+    <tr> <td><tt>cat</tt> C</td><td>C is a category</td></tr>
+    <tr> <td><tt>fun</tt> f <tt>:</tt> A</td><td>f is a function of type A</td></tr>
+  </table>
   <li> concrete syntax
-  <ul>
-    <li> lincat C = T
-    <li> lin f x ... y = t
+  <p>
+    <table>
+    <tr> <td>form </td><td>reading        </td></tr>
+    <tr> <td><tt>lincat</tt> C <tt>=</tt> T</td><td>category C has linearization type T</td></tr>
+    <tr> <td><tt>lin</tt> f <tt>=</tt> t</td><td>function f has linearization t</td></tr>
+  </table>
   </ul>
-</ul>
 We return to the precise meanings of these judgement forms later.
 First we will look at how judgements are grouped into modules, and
 show how the grammar <tt>paleolithic.cf</tt> is
@@ -436,10 +442,41 @@ module forms are
        abstract syntax A, with judgements in the module body M.
 </ul>
 
+
+<!-- NEW -->
+<h4>Record types, records, and <tt>Str</tt>s</h4>
+
+The linearization type of a category is a <b>record type</b>, with
+zero of more <b>fields</b> of different types. The simplest record
+type used for linearization in GF is
+<pre>
+  {s : Str}
+</pre>
+which has one field, with <b>label</b> <tt>s</tt> and type <tt>Str</tt>.
+
+<p>
+
+Examples of records of this type are
+<pre>
+  [s = "foo"}
+  [s = "hello" ++ "world"}
+</pre>
+The type <tt>Str</tt> is really the type of <b>token lists</b>, but
+most of the time one can conveniently think of it as the type of strings,
+denoted by string literals in double quotes.
+
+<p>
+
+Whenever a record <tt>r</tt> of type <tt>{s : Str}</tt> is given,
+<tt>r.s</tt> is an object of type <tt>Str</tt>. This is of course
+a special case of the <b>projection</b> rule, allowing the extraction
+of fields from a record.
+
+
 <!-- NEW -->
 <h4>An abstract syntax example</h4>
 
-Each nonterminal occurring in <tt>paleolithic.cf</tt> is
+Each nonterminal occurring in the grammar <tt>paleolithic.cf</tt> is
 introduced by a <tt>cat</tt> judgement. Each
 rule label is introduced by a <tt>fun</tt> judgement.
 <pre>
@@ -520,11 +557,11 @@ Import <tt>PaleolithicEng.gf</tt> and try what happens
 </pre>
 The GF program does not only read the file 
 <tt>PaleolithicEng.gf</tt>, but also all other files that it
-depends on - in this case,  <tt>Paleolithic.gf</tt>.
+depends on - in this case, <tt>Paleolithic.gf</tt>.
 
 <p>
 
-For each file that is compiles, a <tt>.gfc</tt> file
+For each file that is compiled, a <tt>.gfc</tt> file
 is generated. The GFC format (="GF Canonical") is the
 "machine code" of GF, which is faster to process than
 GF source files. When reading a module, GF knows whether
@@ -611,7 +648,7 @@ Translate by using a pipe:
 <!-- NEW -->
 <h4>Translation quiz</h4>
 
-This is a simple kind of language exercises that can be automatically
+This is a simple language exercise that can be automatically
 generated from a multilingual grammar. The system generates a set of
 random sentence, displays them in one language, and checks the user's
 answer given in another language. The command <tt>translation_quiz = tq</tt>
@@ -706,7 +743,7 @@ only do "one thing" each, e.g.
     fun Cep, Agaric : Mushroom ;
   }
 </pre>
-They can afterwards be combined in bigger grammars by using
+They can afterwards be combined into bigger grammars by using
 <b>multiple inheritance</b>, i.e. extension of several grammars at the
 same time:
 <pre>
@@ -786,14 +823,14 @@ The introduction of plural forms requires two things:
 </ul>
 Different languages have different rules of inflection and agreement.
 For instance, Italian has also agreement in gender (masculine vs. feminine).
-We want to be able to ignore such differences in the abstract
-syntax.
+We want to express such special features of languages precisely in
+concrete syntax while ignoring them in abstract syntax.
 
 <p>
 
-To be able to do all this, we need a couple of new judgement forms,
-a new module form, and a more powerful way of expressing linearization
-rules.
+To be able to do all this, we need two new judgement forms,
+a new module form, and a generalizarion of linearization types
+from strings to more complex types.
 
 
 <!-- NEW -->
@@ -1018,7 +1055,7 @@ these forms are explained in the following section.
 
 The paradigms <tt>regNoun</tt> does not give the correct forms for
 all nouns. For instance, <i>louse - lice</i> and
-<i>fish - fish</i> must be given by using <tt>mkNoun</i>.
+<i>fish - fish</i> must be given by using <tt>mkNoun</tt>.
 Also the word <i>boy</i> would be inflected incorrectly; to prevent
 this, either use <tt>mkNoun</tt> or modify 
 <tt>regNoun</tt> so that the <tt>"y"</tt> case does not
@@ -1165,7 +1202,7 @@ lin
 <h4>Hierarchic parameter types</h4>
 
 The reader familiar with a functional programming language such as
-<a href="www.haskell.org">Haskell</a> must have noticed the similarity
+<a href="http://www.haskell.org">Haskell</a> must have noticed the similarity
 between parameter types in GF and algebraic datatypes (<tt>data</tt> definitions
 in Haskell). The GF parameter types are actually a special case of algebraic
 datatypes: the main restriction is that in GF, these types must be finite.

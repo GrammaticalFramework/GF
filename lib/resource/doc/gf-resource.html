@@ -9,9 +9,11 @@
 
 <p>
 
-Second Version, Gothenburg, 1 March 2005
+Third Version, 22 May 2005
 <br>
-First Draft, Gothenburg, 7 February 2005
+Second Version, 1 March 2005
+<br>
+First Draft, 7 February 2005
 
 </p><p>
 
@@ -31,7 +33,8 @@ A grammar formalism based on functional programming and type theory.
 
 <p>
 
-Designed to be nice for <i>ordinary programmers</i> to use.
+Designed to be nice for <i>ordinary programmers</i> to use: by this
+we mean programmers without training in linguistics.
 
 <p>
 
@@ -45,6 +48,7 @@ ordinary programmers, in tasks like
 </ul>
 Thus <i>not</i> primarily another theoretical framework for
 linguists.
+
 
 
 <!-- NEW -->
@@ -89,6 +93,7 @@ la somme de 3 et de 5 est pair<br>
 wenn 2 ist gerade, dann 2+2 ist gerade<br>
 om 2 är jämnt, 2+2 är jämnt<br>
 </i>
+
 
 <!-- NEW -->
 <h2>Solving the difficulties</h2>
@@ -197,17 +202,15 @@ Where do we get the data from?
 <li> automatic extraction or hand-writing?
 <br>
 <li> reuse of existing resources?
-
-<p>
-
-Extra constraint: we want open-source free software.
-
+<br>
+Extra constraint: we want open-source free software and
+hence cannot use existing proprietary resources.
 
 
 
 
 <!-- NEW -->
-<h2>The scope of the resource grammar library</h2>
+<h2>The scope of a resource grammar library for a language</h2>
 
 All morphological paradigms
 
@@ -224,6 +227,7 @@ Basic syntactic structures
 Currently,<br>
 <li> <i>no</i> semantics,<br>  
 <li> <i>no</i> language-specific structures if not necessary for expressivity.
+
 
 
 
@@ -251,24 +255,33 @@ families, using the module system of GF.
 <!-- NEW -->
 <h2>These are not our success criteria</h2>
 
-Language coverage: you can parse all expressions. Example:
+Language coverage: to be able to parse all expressions.
+<br>
+Example:
 the French <i>passé simple</i> tense, although covered by the
-morhology, is not used in the language-independent API, but
-only the <i>passé composé</i> is.
+morphology, is not used in the language-independent API, but
+only the <i>passé composé</i> is. However, an application
+accessing the French-specific (or Romance-specific)
+modules can use the passé simple.
 
 <p>
 
-Semantic correctness
+Semantic correctness: only to produce meaningful expressions.
+<br>
+Example: the following sentences can be generated
 <pre>
   colourless green ideas sleep furiously
 
   the time is seventy past forty-two
 </pre>
+However, an applicatio grammar can use a domain-specific
+semantics to guarantee semantic well-formedness.
 
 <p>
 
 (Warning for linguists:) theoretical innovation in
-syntax (and it will all be hidden anyway!)
+syntax is not among the goals
+(and it would be hidden from users anyway!).
 
 
 
@@ -334,6 +347,7 @@ The current GF Resource Project covers ten languages:
 The first three letters (<tt>Dan</tt> etc) are used in grammar module names
 
 
+
 <!-- NEW -->
 <h2>Library structure 1: language-independent API</h2>
 
@@ -350,6 +364,7 @@ conjunctions, pronouns), e.g.
 <pre>
   and_Conj : Conj ;
 </pre>
+
 
 <!-- NEW -->
 <h2>Library structure 2: language-dependent modules</h2>
@@ -477,6 +492,8 @@ Alternative views on sentence formation:
 
 <a href="ParadigmsSpa.html">Spanish paradigms</a>
 <br>
+<a href="BasicSpa.html">example use of Spanish paradigms</a>
+<br>
 <a href="BeschSpa.html">Spanish verb conjugations</a>
 <p>
 
@@ -491,7 +508,7 @@ Alternative views on sentence formation:
 <!-- NEW -->
 <h2>Use as top-level grammar: testing</h2>
 
-Import a set of $LangX$ grammars:
+Import a set of <tt>LangX</tt> grammars:
 <pre>
   i english/LangEng.gf
   i swedish/LangSwe.gf
@@ -532,11 +549,14 @@ Import directly by <tt>open</tt>:
 <pre>
   concrete AppNor of App = open LangNor, ParadigmsNor in {...}
 </pre>
-No more dummy <tt>reuse</tt> modules and bulky <tt>.gfr</tt> files!
+(Note for the users of GF 2.1 and older:
+the dummy <tt>reuse</tt> modules and their bulky <tt>.gfr</tt> versions
+are no longer needed!)
 
 <p>
 
-If you need to convert resource category records to/from strings, use
+If you need to convert resource records to strings, and don't want to know
+the concrete type (as you never should), you can use
 <pre>
   Predef.toStr : (L : Type) -> L -> Str ; 
 </pre>
@@ -548,65 +568,99 @@ If you need to convert resource category records to/from strings, use
 
 
 
+
 <!-- NEW -->
 <h2>Use as library through parser</h2>
 
-Use the parser when developing a resource.
+You can use the parser with a <tt>LangX</tt> grammar
+when developing a resource.
+
+<p>
+
+Using the <tt>-v</tt> option shows if the parser fails because
+of unknown words.
 <pre>
   > p -cat=S -v "jag ska åka till Chalmers"
   unknown tokens [TS "åka",TS "Chalmers"]
-
+</pre>
+Then try to select words that <tt>LangX</tt> recognizes:
+<pre>
   > p -cat=S "jag ska gå till Danmark"
   UseCl (PosTP TFuture ASimul)
     (AdvCl (SPredV i_NP go_V)
     (AdvPP (PrepNP to_Prep (UsePN (PNCountry Denmark)))))
 </pre>
-Extend vocabulary at need.
+Use these API structures and extend vocabulary to match your need.
 <pre>
   åka_V = lexV "åker" ; 
   Chalmers = regPN "Chalmers" neutrum ;
 </pre>
 
+<!-- NEW -->
+<h2>Syntax editor as library browser</h2>
+
+You can run the syntax editor on <tt>LangX</tt> to
+find resource API functions through context-sensitive menus.
+For instance, the shell command
+<pre>
+  jgf LangEng.gf LangFre.gf
+</pre>
+opens the editor with English and French views. The
+<a href="http://www.cs.chalmers.se/%7Eaarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm">
+Editor User Manual</a> gives more information on the use of the editor.
+
+<p>
+
+A restriction of the editor is that it does not give access to
+<tt>ParadigmsX</tt> modules. An IDE environment extending the editor
+to a grammar programming tool is work in progress.
+
+
+
 
 <!-- NEW -->
 <h2>Example application: a small translation system</h2>
 
-You can say things like the following:
+In this system, you can express questions and answers of
+the following forms:
 <pre>
-  who chases mice ?
-  whom does the lion chase ?
-  the dog chases cats
+  Who chases mice ?
+  Whom does the lion chase ?
+  The dog chases cats.
 </pre>
-Source modules:
+We build the abstract syntax in two phases:
+<ul>
+<li> <a href=example/Questions.gf>Questions</a> defines question and
+  answer forms independently of domain
+<li> <a href=example/Animals.gf>Animals</a> defines a lexicon with
+  animals and things that animals do.
+</ul>
 
 <p>
 
-Abstract syntax:
-<a href=example/Questions.gf>Questions</a>,
-<a href=example/Animals.gf>Animals</a>
+The concrete syntax of English is built in three phases:
+<ul>
+<li> <a href="example/QuestionsI.gf">QuestionsI</a> is a parametrized module
+  using the API module <tt>Resource</tt>.
+<li> <a href="example/QuestionsEng.gf">QuestionsEng</a> is an instantiation
+  of the API with <tt>ResourceEng</tt>.
+<li> <a href="example/AnimalsEng.gf">AnimalsEng</a> is a concrete syntax
+  of <tt>Animals</tt> using <tt>ParadigmsEng</tt> and <tt>VerbsEng</tt>.
+</ul>
 
 <p>
 
-Concrete syntax of questions parametrized on the resource API:
-<a href=example/QuestionsI.gf>QuestionsI</a>
+The concrete syntax of Swedish is built upon <tt>QuestionsI</tt>
+in a similar way, with the modules
+<a href=example/QuestionsSwe.gf>QuestionsSwe</a> and.
+<a href=example/AnimalsSwe.gf>AnimalsSwe</a>.
 
 <p>
 
-English concrete syntax:
-<a href=example/QuestionsEng.gf>QuestionsEng</a>,
-<a href=example/AnimalsEng.gf>AnimalsEng</a>
+The concrete syntax of French consists similarly of the modules
+<a href=example/QuestionsFre.gf>QuestionsFre</a> and
+<a href=example/AnimalsFre.gf>AnimalsFre</a>.
 
-<p>
-
-French concrete syntax:
-<a href=example/QuestionsFre.gf>QuestionsFre</a>,
-<a href=example/AnimalsFre.gf>AnimalsFre</a>
-
-<p>
-
-Swedish concrete syntax:
-<a href=example/QuestionsSwe.gf>QuestionsSwe</a>,
-<a href=example/AnimalsSwe.gf>AnimalsSwe</a>
 
 
 
@@ -635,26 +689,12 @@ and you get an end-user grammar <tt>animals.gfcm</tt>.
 
 You can also write the commands in a <tt>gfs</tt> (<b>GF script</b>)
 file, say
-<a href=mkAnimals.gfc><tt>mkAnimals.gfs</tt></a>,
+<a href="example/mkAnimals.gfs"><tt>mkAnimals.gfs</tt></a>,
 and then call GF with
 <pre>
   gf &lt;mkAnimals.gfs
 </pre>
 
-
-<!-- NEW -->
-<h2>Further simplifications of the application grammar</h2>
-
-Step 1: use a simplified access to present-tense sentences,
-<tt>SentenceX</tt> (to be written...)
-
-<p>
-
-Step 2: factor out the categories and purely combinational
-rules into an <tt>incomplete</tt> module (to be shown... but
-this does not work for French, which uses different structures:
-e.g. <i>Qui aime les lions ?</i> with a definite phrase
-where English has <i>Who loves lions?</i>
 
 
 <!-- NEW -->
@@ -678,6 +718,7 @@ In two language families:
 </center>
 
 
+
 <!-- NEW -->
 <h2>Current status</h2>
 
@@ -699,6 +740,7 @@ X = implemented (few exceptions may occur)
 * = linguistic material ready for implementation
 <br>
 - = not implemented
+
 
 
 <!-- NEW -->
@@ -737,10 +779,11 @@ some verbs in Basic should be reflexive
 Swedish      
 
 
+
 <!-- NEW -->
 <h2>Obtaining it</h2>
 
-Get the grammar package atDownload from
+Get the grammar package from
 <a href="http://sourceforge.net/project/showfiles.php?group_id=132285">
 GF Download Page</a>. The current libraries are in
 <tt>lib/resource</tt>. Version 0.6 is in
