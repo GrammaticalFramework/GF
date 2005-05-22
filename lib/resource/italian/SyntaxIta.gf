@@ -275,5 +275,7 @@ oper
 
   negNe = "non" ; negPas = [] ;
 
+  predVerb0 rain = predVerbClause (mkNameNounPhrase [] Masc) rain (complVerb rain) ;
+
 }
 

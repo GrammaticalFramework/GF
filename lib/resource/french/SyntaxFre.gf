@@ -328,4 +328,6 @@ oper
 
   negNe = elisNe ; negPas = "pas" ;
 
+  predVerb0 rain = predVerbClause (pronNounPhrase pronImpers) rain (complVerb rain) ;
+
 }
