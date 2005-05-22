@@ -6,7 +6,7 @@ concrete StructuralSpa of Structural = CategoriesSpa, NumeralsSpa **
   
 lin
 
-  UseNumeral n = {s = \\g => n.s !g ; n = n.n} ;
+  UseNumeral n = {s = \\g => n.s !g ; n = n.n ; isNo = False} ;
 
   above_Prep = justPrep "sobre" ;
   after_Prep = {s = "después" ; c = genitive} ;

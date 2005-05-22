@@ -5,6 +5,6 @@ abstract Animals = Questions ** {
   fun
     -- a lexicon of animals and actions among them
     Dog, Cat, Mouse, Lion, Zebra : Entity ;
-    Chase, Eat, Like : Action ;
+    Chase, Eat, See : Action ;
 }
 

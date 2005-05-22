@@ -31,7 +31,7 @@ gfdoc:
 	gfdoc ../italian/BeschIta.gf ; mv ../italian/BeschIta.html .
 
 	gfdoc ../spanish/ParadigmsSpa.gf ; mv ../spanish/ParadigmsSpa.html .
-#	gfdoc ../spanish/BasicSpa.gf ; mv ../spanish/BasicSpa.html .
+	gfdoc ../spanish/BasicSpa.gf ; mv ../spanish/BasicSpa.html .
 	gfdoc ../spanish/BeschSpa.gf ; mv ../spanish/BeschSpa.html .
 
 gifs: api lang scand low

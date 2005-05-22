@@ -11,5 +11,5 @@ concrete AnimalsSwe of Animals = QuestionsSwe **
     Zebra = regN "zebra" utrum ;
     Chase = dirV2 (regV "jaga") ;
     Eat = dirV2 äta_V ;
-    Like = mkV2 (mk2V "tycka" "tycker") "om" ;
+    See = dirV2 se_V ;
 }

@@ -11,5 +11,5 @@ concrete AnimalsEng of Animals = QuestionsEng **
     Zebra = regN "zebra" ;
     Chase = dirV2 (regV "chase") ;
     Eat = dirV2 eat_V ;
-    Like = dirV2 (regV "like") ;
+    See = dirV2 see_V ;
 }

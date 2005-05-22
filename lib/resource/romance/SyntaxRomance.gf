@@ -60,9 +60,10 @@ oper
   pronNounPhrase : Pronoun -> NounPhrase = \pro -> pro ;
 
 -- Many determiners can be modified with numerals, which may be inflected in
--- gender.
+-- gender. The label $isNo$ is a hack used to force $des$ for plural
+-- indefinite with $noNum$.
 
-  Numeral : Type = {s : Gender => Str ; n : Number} ;
+  Numeral : Type = {s : Gender => Str ; n : Number ; isNo : Bool} ;
 
   pronWithNum : Pronoun -> Numeral -> Pronoun = \nous,deux ->
     {s = \\c => nous.s ! c ++ deux.s ! pgen2gen nous.g ; 
@@ -72,7 +73,7 @@ oper
      c = nous.c
     } ;
 
-  noNum : Numeral = {s = \\_ => [] ; n = Pl} ;
+  noNum : Numeral = {s = \\_ => [] ; n = Pl ; isNo = True} ;
 
 -- The existence construction "il y a", "c'è / ci sono" is defined separately,
 -- and ad hoc, in each language.
@@ -138,7 +139,11 @@ oper
 
   indefNounPhraseNum : Numeral -> CommNounPhrase -> NounPhrase = \nu,mec -> 
     normalNounPhrase 
-      (\\c => prepCase c ++ nu.s ! mec.g ++ mec.s ! nu.n)
+      (\\c => case nu.isNo of {
+                True => artIndef mec.g Pl c ++ mec.s ! Pl ;
+                _ => prepCase c ++ nu.s ! mec.g ++ mec.s ! nu.n
+                }
+      )
       mec.g 
       nu.n ; 
 
