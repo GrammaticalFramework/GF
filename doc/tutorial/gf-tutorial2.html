@@ -1251,21 +1251,21 @@ a sentence may place the object between the verb and the particle:
 
 <p>
 
-The following grammar defines transitive verbs as a
+The first of the following judgements defines transitive verbs as a
 <b>discontinuous constituents</b>, i.e. as having a linearization
-type with two strings and not just one:
+type with two strings and not just one. The second judgement
+shows how the constituents are separated by the object in complementization.
 <pre>
-  
+  lincat TV = {s : Number => Str ; s2 : Str} ;
+  lin ComplTV tv obj = {s = \\n => tv.s ! n ++ obj.s ++ tv.s2} ;
 </pre>
 
+<p>
 
+GF currently requires that all fields in linearization records that
+have a table with value type <tt>Str</tt> have as labels
+either <tt>s</tt> or <tt>s</tt> with an integer index.
 
-<!-- NEW -->
-<h4></h4>
-
-
-<!-- NEW -->
-<h4></h4>
 
 
 
