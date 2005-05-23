@@ -11,10 +11,10 @@ flags
 
 lin
    airplane_N = regN "aeroplano" ;	-- avión  is masculine
-   answer_V2S = mkV2S (regV "responder") dative ; ----V 
+   answer_V2S = mkV2S (regV "responder") dative ;
    apartment_N = regN "apartamento" ;
    apple_N = regN "manzana" ;
-   art_N = regN "arte" ;		-- masculine
+   art_N = regN "arte" ;	
    ask_V2Q = mkV2Q (regV "preguntar") dative ;
    baby_N = regN "bebé" ;		-- can be used for both fem. & masc.
    bad_ADeg = prefADeg (mkADeg (regA "malo") (regA "peor")) ;
@@ -34,7 +34,7 @@ lin
    boss_N = regN "jefe" ;
    boy_N = regN "niño" ;
    bread_N = regN "pan" ;
-   break_V2 = dirV2 (regV "romper") ; ----V
+   break_V2 = dirV2 (special_ppV (regV "romper") "roto") ;
    broad_ADeg = regADeg "ancho" ;
    brother_N2 = deN2 (regN "hermano") ;
    brown_ADeg = regADeg "marrón" ;
@@ -61,18 +61,18 @@ lin
    country_N = regN "país" ;		-- masc
    cousin_N = regN "primo" ;
    cow_N = regN "vaca" ;
-   die_V = regV "morir" ; ----V verboV (morire_105 "morir") ;
+   die_V = verboV (morir_35b "morir") ;
    dirty_ADeg = regADeg "sucio" ;
    doctor_N = regN "médico" ;		-- médica
    dog_N = regN "perro" ;		-- perra
    door_N = regN "puerta" ;
    drink_V2 = dirV2 (regV "tomar") ;     -- beber
    easy_A2V = mkA2V (regA "fácil") dative genitive ;
-   eat_V2 = dirV2 (regV "comer") ; ----V
+   eat_V2 = dirV2 (regV "comer") ;
    enemy_N = regN "enemigo" ;		-- enemiga
    factory_N = regN "fábrica" ;	
    father_N2 = deN2 (regN "padre") ;
-   fear_VS = mkVS (regV "temer") ; ----V mkVS (verboV (temere_20 "temer")) ;
+   fear_VS = mkVS (regV "temer") ;
    find_V2 = dirV2 (regV "encontrar") ;
    fish_N = regN "pez" ;
    floor_N = regN "suelo" ;		-- piso
@@ -92,7 +92,7 @@ lin
    hate_V2 = dirV2 (regV "odiar") ;
    hat_N = regN "sombrero" ;
    have_V2 = dirV2 (verboV (tener_4 "tener")) ;
-   hear_V2 = dirV2 (regV "oir") ; ----V	-- escuchar
+   hear_V2 = dirV2 (regV "escuchar") ; -- oír_51 
    hill_N = regN "colina" ;
    hope_VS = mkVS (regV "esperar") ;
    horse_N = regN "caballo" ;
@@ -105,14 +105,14 @@ lin
    know_V2 = dirV2 (verboV (saber_71 "saber")) ; --   conocer
    lake_N = regN "lago" ;
    lamp_N = regN "lámpara" ;
-   learn_V2 = dirV2 (regV "aprender") ; ----V
+   learn_V2 = dirV2 (regV "aprender") ;
    leather_N = regN "cuero" ;
    leave_V2 = dirV2 (regV "partir") ;	-- irse, dejar
    like_V2 = dirV2 (regV "gustar") ;
    listen_V2 = dirV2 (regV "escuchar") ;
    live_V = verboV (vivir_7 "vivir") ;
    long_ADeg = regADeg "largo" ;
-   lose_V2 = dirV2 (regV "perder") ; ----V
+   lose_V2 = dirV2 (verboV (defender_29 "perder")) ;
    love_N = regN "amor" ;
    love_V2 = dirV2 (regV "amar") ;
    man_N = regN "hombre" ;		-- masc
@@ -128,7 +128,7 @@ lin
    newspaper_N = regN "periódico" ;		-- diario  
    oil_N = regN "aceite" ;
    old_ADeg =  prefADeg (regADeg "viejo") ;
-   open_V2 = dirV2 (regV "abrir") ; ----V
+   open_V2 = dirV2 (special_ppV (regV "abrir") "abierto") ;
    paint_V2A = mkV2A (regV "pintar") accusative ;
    paper_N = regN "papel" ;
    peace_N = femN (regN "paz") ;
@@ -142,7 +142,7 @@ lin
    queen_N = regN "reina" ;
    radio_N = mkN "radio" "radio" feminine ;
    rain_V0 = mkV0 (verboV (llover_89 "llover")) ;
-   read_V2 = dirV2 (regV "leer") ; ----V
+   read_V2 = dirV2 (verboV (creer_26 "leer")) ;
    red_ADeg = regADeg "rojo" ;
    religion_N = femN (regN "religión") ;
    restaurant_N = regN "restaurante" ;		-- restorán, restaurán, masc
@@ -150,14 +150,14 @@ lin
    rock_N = regN "roca" ;
    roof_N = regN "techo" ;
    rubber_N = regN "goma" ;
-   run_V = regV "correr" ; ----V verboV (correre_38 "correr") ; 
+   run_V = regV "correr" ;
    say_VS = mkVS (verboV (decir_28 "decir")) ;
    school_N = regN "escuela" ;
    science_N = regN "ciencia" ;
    sea_N = regN "mar" ;			-- masc & fem 
    seek_V2 = dirV2 (regV "buscar") ;
    see_V2 = dirV2 (verboV (ver_83 "ver")) ;
-   sell_V3 = dirV3 (regV "vender") dative ; ----V
+   sell_V3 = dirV3 (regV "vender") dative ;
    send_V3 = dirV3 (regV "mandar") dative ;
    sheep_N = regN "oveja" ;
    ship_N = femN (regN "nave") ;
@@ -180,7 +180,7 @@ lin
    stupid_ADeg = regADeg "estúpido" ;
    sun_N = regN "sol" ;	
    switch8off_V2 = dirV2 (regV "apagar") ;
-   switch8on_V2 = dirV2 (regV "prender") ; ----V
+   switch8on_V2 = dirV2 (regV "prender") ;
    table_N = regN "mesa" ; 
    talk_V3 = mkV3 (regV "hablar") dative genitive ;
    teacher_N = regN "maestro" ;		-- maestra
@@ -209,7 +209,7 @@ lin
    woman_N = regN "mujer" ;		-- fem
    wonder_VQ = mkVQ (regV "preguntar") ; ---- preguntarse 
    wood_N = regN "madera" ;
-   write_V2 = dirV2 (regV "escribir") ; ----V
+   write_V2 = dirV2 (special_ppV (regV "escribir") "escrito") ;
    yellow_ADeg = regADeg "amarillo" ;
    young_ADeg = prefADeg (regADeg "joven") ;
 

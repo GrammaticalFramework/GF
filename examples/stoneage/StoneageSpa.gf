@@ -1,7 +1,7 @@
 --# -path=.:../../lib/resource/romance:../../lib/resource/abstract:../../lib/resource/spanish:../../lib/prelude
 
 concrete StoneageSpa of Stoneage 
-  = open SyntaxSpa, RulesSpa, StructuralSpa, ParadigmsSpa, SwadeshLexSpa,
+  = open SyntaxSpa, RulesSpa, StructuralSpa, ClauseSpa, ParadigmsSpa, SwadeshLexSpa,
   StoneageResSpa in {
 
 flags
@@ -68,7 +68,9 @@ lin
   Come = PresV come_V ;
   Lie = PresReflV lie_V ;
   Sit = PresReflV sit_V ;
-  Stand = PresReflV stand_V ;
+--  Stand = PresV stand_V ; ---- "estar de pie"
+  Stand x = IndicPhrase (UseCl (PosTP TPresent ASimul) (AdvCl (SPredV  x stand_V) 
+              (AdvPP (PrepNP part_Prep (MassNP (UseN foot_N)))))) ;
   Turn = PresV turn_V ;
   Fall = PresV fall_V ;
   Sing = PresV sing_V ;
