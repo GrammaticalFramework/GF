@@ -204,6 +204,10 @@ oper
 
   verboV : Verbum -> V ;
 
+-- Verbs with a deviant passive participle: just give the participle
+-- in masculine singular form as second argument.
+
+  special_ppV : V -> Str -> V ; 
 
 --3 Two-place verbs
 --
@@ -325,6 +329,15 @@ oper
     in verbPres verb AHabere ** {lock_V = <>} ;
 
   verboV ve = verbPres ve AHabere ** {lock_V = <>} ;
+
+  special_ppV ve pa = {
+    s = table {
+      VPart g n => (adjSolo pa).s ! AF g n ;
+      p => ve.s ! p
+      } ;
+    lock_V = <> ;
+    aux = AHabere
+    } ;
 
   mkV2 v p = {s = v.s ; aux = v.aux ;  s2 = p.p2 ; c = p.p1 ; lock_V2 = <>} ;
   dirV2 v = mkV2 v accusative ;

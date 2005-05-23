@@ -189,7 +189,7 @@ concrete SwadeshLexSpa of SwadeshLex = CategoriesSpa
 
      -- Verbs
 
-     bite_V = regV "morder" ; ----V
+     bite_V = verboV (morder_50b "morder") ;
      blow_V = regV "soplar" ;
      breathe_V = regV "respirar" ;
      burn_V = regV "quemar" ;
@@ -214,7 +214,7 @@ concrete SwadeshLexSpa of SwadeshLex = CategoriesSpa
      hunt_V = regV "cazar" ;
      kill_V = regV "matar" ;
      know_V = know_V2 ;
-     laugh_V = regV "reir" ; ----V verboV (ridere_74 "reir") ;
+     laugh_V = regV "reir" ; ----V reír_67 
      lie_V = regV "mentir" ; --  "acostarse"
      live_V = live_V ;
      play_V = regV "jugar" ;
@@ -224,14 +224,14 @@ concrete SwadeshLexSpa of SwadeshLex = CategoriesSpa
      say_V = say_VS ;
      scratch_V = regV "rascar" ;
      see_V = see_V2 ;
-     sew_V = regV "coser" ; ----V verboV (cucire_103 "coser") ;
+     sew_V = regV "coser" ;
      sing_V = regV "cantar" ;
      sit_V = regV "sentar" ; ----V verboV (sedere_84 "sentarse") ;
      sleep_V = sleep_V ;
      smell_V = verboV (oler_52 "oler") ;
      spit_V = regV "escupir" ;
      split_V = regV "separar" ;	-- dividir, partir
-     squeeze_V = regV "exprimir" ; ----V verboV (temere_20 "exprimir") ;
+     squeeze_V = regV "exprimir" ;
      stab_V = regV "apuñalar" ;	
      stand_V = verboV (estar_2 "estar") ; ---- "estar de pie" ;  
      suck_V = regV "chupar" ;
