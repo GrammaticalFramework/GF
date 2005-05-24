@@ -74,7 +74,7 @@ lin
    father_N2 = deN2 (regN "padre") ;
    fear_VS = mkVS (regV "temer") ;
    find_V2 = dirV2 (regV "encontrar") ;
-   fish_N = regN "pez" ;
+   fish_N = mascN (regN "pez") ;
    floor_N = regN "suelo" ;		-- piso
    forget_V2 = dirV2 (regV "olvidar") ;
    fridge_N = regN "heladera" ;
@@ -92,7 +92,7 @@ lin
    hate_V2 = dirV2 (regV "odiar") ;
    hat_N = regN "sombrero" ;
    have_V2 = dirV2 (verboV (tener_4 "tener")) ;
-   hear_V2 = dirV2 (regV "escuchar") ; -- oír_51 
+   hear_V2 = mkV2 (regV "escuchar") dative ; -- oír_51 
    hill_N = regN "colina" ;
    hope_VS = mkVS (regV "esperar") ;
    horse_N = regN "caballo" ;
@@ -135,12 +135,12 @@ lin
    pen_N = regN "lapicera" ;
    planet_N = mascN (regN "planeta") ;
    plastic_N = regN "plástico" ;
-   play_V2 = dirV2 (regV "jugar") ;
+   play_V2 = dirV2 (verboV (jugar_47 "jugar")) ;
    policeman_N = mascN (regN "policía") ;	-- fem refers to the institution
    priest_N = mascN (regN "cura") ;		-- masc
    probable_AS = mkAS (regA "probable") ;	
    queen_N = regN "reina" ;
-   radio_N = mkN "radio" "radio" feminine ;
+   radio_N = femN (regN "radio") ;
    rain_V0 = mkV0 (verboV (llover_89 "llover")) ;
    read_V2 = dirV2 (verboV (creer_26 "leer")) ;
    red_ADeg = regADeg "rojo" ;
