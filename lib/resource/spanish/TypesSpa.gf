@@ -116,7 +116,9 @@ oper
     VFin VPasse n p        => amare.s ! VP (Pret n p) ;
     VFin VFut n p          => amare.s ! VP (Fut  Ind n p) ;
     VFin VCondit n p       => amare.s ! VP (Cond n p) ;
-    VImper np              => amare.s ! VP (Imp  Sg P2) ; ---- n p ;
+    VImper SgP2            => amare.s ! VP (Imp  Sg P2) ;
+    VImper PlP1            => amare.s ! VP (Imp  Pl P1) ;
+    VImper PlP2            => amare.s ! VP (Imp  Pl P2) ;
     VPart g n              => amare.s ! VP (Pass n g)
     } ;
   aux = a
