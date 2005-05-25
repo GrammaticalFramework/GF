@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:25 $ 
+-- > CVS $Date: 2005/05/25 10:41:59 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.19 $
+-- > CVS $Revision: 1.20 $
 --
 -- From internal source syntax to BNFC-generated (used for printing).
 -----------------------------------------------------------------------------
@@ -72,16 +72,16 @@ mkTopDefs ds = ds
 
 trAnyDef :: (Ident,Info) -> [P.TopDef]
 trAnyDef (i,info) = let i' = tri i in case info of
-  AbsCat (Yes co) pd -> [P.DefCat [P.CatDef i' (map trDecl co)]] ++ case pd of
+  AbsCat (Yes co) pd -> [P.DefCat [P.SimpleCatDef i' (map trDecl co)]] ++ case pd of
     Yes fs -> [P.DefData [P.DataDef i' [P.DataQId (tri m) (tri c) | QC m c <- fs]]]
     _ -> []
   AbsFun (Yes ty) pt -> [P.DefFun [P.FunDef [i'] (trt ty)]] ++ case pt of
     Yes EData -> [] -- keep this information in data defs only
-    Yes t -> [P.DefDef [P.DDef [i'] (trt t)]]
+    Yes t -> [P.DefDef [P.DDef [mkName i'] (trt t)]]
     _ -> []
   AbsFun (May b)  _ -> [P.DefFun [P.FunDef [i'] (P.EIndir (tri b))]]
   ---- don't destroy definitions!
-  AbsTrans f -> [P.DefTrans [P.DDef [i'] (trt f)]]
+  AbsTrans f -> [P.DefTrans [P.DDef [mkName i'] (trt f)]]
 
   ResOper pty ptr -> [P.DefOper [trDef i' pty ptr]]
   ResParam pp -> [P.DefPar [case pp of
@@ -90,7 +90,7 @@ trAnyDef (i,info) = let i' = tri i in case info of
     _      -> P.ParDefAbs i']]
 
   CncCat (Yes ty) Nope _ -> 
-    [P.DefLincat [P.PrintDef [i'] (trt ty)]] 
+    [P.DefLincat [P.PrintDef [mkName i'] (trt ty)]] 
   CncCat pty ptr ppr -> 
     [P.DefLindef [trDef i' pty ptr]] 
     ---- P.DefPrintCat [P.PrintDef i' (trt pr)]]
@@ -101,10 +101,10 @@ trAnyDef (i,info) = let i' = tri i in case info of
 
 trDef :: Ident -> Perh Type -> Perh Term -> P.Def
 trDef i pty ptr = case (pty,ptr) of
-  (Nope,     Nope) -> P.DDef  [i] (P.EMeta) ---
-  (_,        Nope) -> P.DDecl [i] (trPerh pty)
-  (Nope,     _   ) -> P.DDef  [i] (trPerh ptr)
-  (_,        _   ) -> P.DFull [i] (trPerh pty) (trPerh ptr)
+  (Nope,     Nope) -> P.DDef  [mkName i] (P.EMeta) ---
+  (_,        Nope) -> P.DDecl [mkName i] (trPerh pty)
+  (Nope,     _   ) -> P.DDef  [mkName i] (trPerh ptr)
+  (_,        _   ) -> P.DFull [mkName i] (trPerh pty) (trPerh ptr)
 
 trPerh p = case p of
   Yes t -> trt t
@@ -221,3 +221,5 @@ trLabelIdent i = identC $ case i of
   LIdent s -> s
   LVar i -> "v" ++ show i --- should not happen
 
+mkName :: Ident -> P.Name
+mkName = P.IdentName
