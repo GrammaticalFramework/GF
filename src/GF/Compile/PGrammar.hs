@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:43 $ 
+-- > CVS $Date: 2005/05/25 10:27:12 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.7 $
+-- > CVS $Revision: 1.8 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -19,7 +19,7 @@ module GF.Compile.PGrammar (pTerm, pTrm, pTrms,
 
 ---import LexGF
 import GF.Source.ParGF
-import GF.Source.SourceToGrammar
+import GF.Source.SourceToGrammar (transExp)
 import GF.Grammar.Grammar
 import GF.Infra.Ident
 import qualified GF.Canon.AbsGFC as A
