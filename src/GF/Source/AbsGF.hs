@@ -79,10 +79,10 @@ data Included =
   deriving (Eq,Ord,Show)
 
 data Def =
-   DDecl [Ident] Exp
- | DDef [Ident] Exp
- | DPatt Ident [Patt] Exp
- | DFull [Ident] Exp Exp
+   DDecl [Name] Exp
+ | DDef [Name] Exp
+ | DPatt Name [Patt] Exp
+ | DFull [Name] Exp Exp
   deriving (Eq,Ord,Show)
 
 data TopDef =
@@ -109,7 +109,9 @@ data TopDef =
   deriving (Eq,Ord,Show)
 
 data CatDef =
-   CatDef Ident [DDecl]
+   SimpleCatDef Ident [DDecl]
+ | ListCatDef Ident [DDecl]
+ | ListSizeCatDef Ident [DDecl] Integer
   deriving (Eq,Ord,Show)
 
 data FunDef =
@@ -136,11 +138,16 @@ data ParConstr =
   deriving (Eq,Ord,Show)
 
 data PrintDef =
-   PrintDef [Ident] Exp
+   PrintDef [Name] Exp
   deriving (Eq,Ord,Show)
 
 data FlagDef =
    FlagDef Ident Ident
+  deriving (Eq,Ord,Show)
+
+data Name =
+   IdentName Ident
+ | ListName Ident
   deriving (Eq,Ord,Show)
 
 data LocDef =
@@ -159,6 +166,7 @@ data Exp =
  | EMeta
  | EEmpty
  | EData
+ | EList Ident Exps
  | EStrings String
  | ERecord [LocDef]
  | ETuple [TupleComp]
@@ -169,8 +177,8 @@ data Exp =
  | EQCons Ident Ident
  | EApp Exp Exp
  | ETable [Case]
- | EVTable Exp [Exp]
  | ETTable Exp [Case]
+ | EVTable Exp [Exp]
  | ECase Exp [Case]
  | EVariants [Exp]
  | EPre Exp [Altern]
@@ -191,6 +199,11 @@ data Exp =
  | EEqs [Equation]
  | ELString LString
  | ELin Ident
+  deriving (Eq,Ord,Show)
+
+data Exps =
+   NilExp
+ | ConsExp Exp Exps
   deriving (Eq,Ord,Show)
 
 data Patt =

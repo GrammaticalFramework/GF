@@ -198,10 +198,10 @@ instance Print Included where
 
 instance Print Def where
   prt i e = case e of
-   DDecl ids exp -> prPrec i 0 (concatD [prt 0 ids , doc (showString ":") , prt 0 exp])
-   DDef ids exp -> prPrec i 0 (concatD [prt 0 ids , doc (showString "=") , prt 0 exp])
-   DPatt id patts exp -> prPrec i 0 (concatD [prt 0 id , prt 0 patts , doc (showString "=") , prt 0 exp])
-   DFull ids exp0 exp -> prPrec i 0 (concatD [prt 0 ids , doc (showString ":") , prt 0 exp0 , doc (showString "=") , prt 0 exp])
+   DDecl names exp -> prPrec i 0 (concatD [prt 0 names , doc (showString ":") , prt 0 exp])
+   DDef names exp -> prPrec i 0 (concatD [prt 0 names , doc (showString "=") , prt 0 exp])
+   DPatt name patts exp -> prPrec i 0 (concatD [prt 0 name , prt 0 patts , doc (showString "=") , prt 0 exp])
+   DFull names exp0 exp -> prPrec i 0 (concatD [prt 0 names , doc (showString ":") , prt 0 exp0 , doc (showString "=") , prt 0 exp])
 
   prtList es = case es of
    [x] -> (concatD [prt 0 x , doc (showString ";")])
@@ -236,7 +236,9 @@ instance Print TopDef where
 
 instance Print CatDef where
   prt i e = case e of
-   CatDef id ddecls -> prPrec i 0 (concatD [prt 0 id , prt 0 ddecls])
+   SimpleCatDef id ddecls -> prPrec i 0 (concatD [prt 0 id , prt 0 ddecls])
+   ListCatDef id ddecls -> prPrec i 0 (concatD [doc (showString "[") , prt 0 id , prt 0 ddecls , doc (showString "]")])
+   ListSizeCatDef id ddecls n -> prPrec i 0 (concatD [doc (showString "[") , prt 0 id , prt 0 ddecls , doc (showString "]") , doc (showString "{") , prt 0 n , doc (showString "}")])
 
   prtList es = case es of
    [x] -> (concatD [prt 0 x , doc (showString ";")])
@@ -289,7 +291,7 @@ instance Print ParConstr where
 
 instance Print PrintDef where
   prt i e = case e of
-   PrintDef ids exp -> prPrec i 0 (concatD [prt 0 ids , doc (showString "=") , prt 0 exp])
+   PrintDef names exp -> prPrec i 0 (concatD [prt 0 names , doc (showString "=") , prt 0 exp])
 
   prtList es = case es of
    [x] -> (concatD [prt 0 x , doc (showString ";")])
@@ -302,6 +304,15 @@ instance Print FlagDef where
   prtList es = case es of
    [x] -> (concatD [prt 0 x , doc (showString ";")])
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
+
+instance Print Name where
+  prt i e = case e of
+   IdentName id -> prPrec i 0 (concatD [prt 0 id])
+   ListName id -> prPrec i 0 (concatD [doc (showString "[") , prt 0 id , doc (showString "]")])
+
+  prtList es = case es of
+   [x] -> (concatD [prt 0 x])
+   x:xs -> (concatD [prt 0 x , doc (showString ",") , prt 0 xs])
 
 instance Print LocDef where
   prt i e = case e of
@@ -318,13 +329,14 @@ instance Print Exp where
   prt i e = case e of
    EIdent id -> prPrec i 4 (concatD [prt 0 id])
    EConstr id -> prPrec i 4 (concatD [doc (showString "{0") , prt 0 id , doc (showString "}0")]) -- H
-   ECons id -> prPrec i 4 (concatD [doc (showString "[") , prt 0 id , doc (showString "]")])
+   ECons id -> prPrec i 4 (concatD [doc (showString "%") , prt 0 id , doc (showString "%")])
    ESort sort -> prPrec i 4 (concatD [prt 0 sort])
    EString str -> prPrec i 4 (concatD [prt 0 str])
    EInt n -> prPrec i 4 (concatD [prt 0 n])
    EMeta  -> prPrec i 4 (concatD [doc (showString "?")])
    EEmpty  -> prPrec i 4 (concatD [doc (showString "[") , doc (showString "]")])
    EData  -> prPrec i 4 (concatD [doc (showString "data")])
+   EList id exps -> prPrec i 4 (concatD [doc (showString "[") , prt 0 id , prt 0 exps , doc (showString "]")])
    EStrings str -> prPrec i 4 (concatD [doc (showString "[") , prt 0 str , doc (showString "]")])
    ERecord locdefs -> prPrec i 4 (concatD [doc (showString "{") , prt 0 locdefs , doc (showString "}")])
    ETuple tuplecomps -> prPrec i 4 (concatD [doc (showString "<") , prt 0 tuplecomps , doc (showString ">")])
@@ -332,7 +344,7 @@ instance Print Exp where
    ETyped exp0 exp -> prPrec i 4 (concatD [doc (showString "<") , prt 0 exp0 , doc (showString ":") , prt 0 exp , doc (showString ">")])
    EProj exp label -> prPrec i 3 (concatD [prt 3 exp , doc (showString ".") , prt 0 label])
    EQConstr id0 id -> prPrec i 3 (concatD [doc (showString "{0") , prt 0 id0 , doc (showString ".") , prt 0 id , doc (showString "}0")]) -- H
-   EQCons id0 id -> prPrec i 3 (concatD [doc (showString "[") , prt 0 id0 , doc (showString ".") , prt 0 id , doc (showString "]")])
+   EQCons id0 id -> prPrec i 3 (concatD [doc (showString "%") , prt 0 id0 , doc (showString ".") , prt 0 id , doc (showString "%")])
    EApp exp0 exp -> prPrec i 2 (concatD [prt 2 exp0 , prt 3 exp])
    ETable cases -> prPrec i 2 (concatD [doc (showString "table") , doc (showString "{") , prt 0 cases , doc (showString "}")])
    ETTable exp cases -> prPrec i 2 (concatD [doc (showString "table") , prt 4 exp , doc (showString "{") , prt 0 cases , doc (showString "}")])
@@ -362,6 +374,12 @@ instance Print Exp where
    [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
+
+instance Print Exps where
+  prt i e = case e of
+   NilExp  -> prPrec i 0 (concatD [])
+   ConsExp exp exps -> prPrec i 0 (concatD [prt 4 exp , prt 0 exps])
+
 
 instance Print Patt where
   prt i e = case e of
