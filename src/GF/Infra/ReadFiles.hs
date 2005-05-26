@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:46:08 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.23 $
+-- > CVS $Date: 2005/05/26 14:34:21 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.24 $
 --
 -- Decide what files to read as function of dependencies and time stamps.
 --
@@ -236,7 +236,7 @@ importsOfFile =
   unComm                     -- ignore comments before the headed line
  where
     term = flip elem ["{",";"]
-    spec = flip elem ["of", "open","in",":", "->","=", "(", ")",",","**","union"]
+    spec = flip elem ["of", "open","in",":", "->","=", "-","(", ")",",","**","union"]
     unqual ws = case ws of
       "(":q:ws' -> unqual ws'
       w:ws' -> w:unqual ws'
