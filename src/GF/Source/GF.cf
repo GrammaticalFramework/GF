@@ -71,10 +71,10 @@ ISome. Included ::= Ident "[" [Ident] "]" ;
 
 -- definitions after the $oper$ keywords
 
-DDecl.  Def ::= [Ident] ":" Exp ;
-DDef.   Def ::= [Ident] "=" Exp ;
-DPatt.  Def ::= Ident [Patt] "=" Exp ;  -- non-empty pattern list
-DFull.  Def ::= [Ident] ":" Exp "=" Exp ;
+DDecl.  Def ::= [Name] ":" Exp ;
+DDef.   Def ::= [Name] "=" Exp ;
+DPatt.  Def ::= Name [Patt] "=" Exp ;  -- non-empty pattern list
+DFull.  Def ::= [Name] ":" Exp "=" Exp ;
 
 -- top-level definitions
 
@@ -97,7 +97,10 @@ DefPrintCat. TopDef ::= "printname" "cat" [PrintDef] ;
 DefPrintFun. TopDef ::= "printname" "fun" [PrintDef] ;
 DefFlag.     TopDef ::= "flags" [FlagDef] ;
 
-CatDef.    CatDef ::= Ident [DDecl] ;
+SimpleCatDef.   CatDef ::= Ident [DDecl] ;
+ListCatDef.     CatDef ::= "[" Ident [DDecl] "]" ;
+ListSizeCatDef. CatDef ::= "[" Ident [DDecl] "]" "{" Integer "}" ;
+
 FunDef.    FunDef ::= [Ident] ":" Exp ;
 
 DataDef.   DataDef    ::= Ident "=" [DataConstr] ;
@@ -112,7 +115,7 @@ ParDefAbs.   ParDef ::= Ident ;
 
 ParConstr. ParConstr ::= Ident [DDecl] ;
 
-PrintDef. PrintDef ::= [Ident] "=" Exp ;
+PrintDef. PrintDef ::= [Name] "=" Exp ;
 
 FlagDef. FlagDef ::= Ident "=" Ident ;
 
@@ -129,6 +132,13 @@ separator ParConstr "|" ;
 
 separator nonempty Ident "," ;
 
+-- names of categories and functions in definition LHS
+
+IdentName. Name ::= Ident ;
+ListName.  Name ::= "[" Ident "]" ;
+
+separator nonempty Name "," ;
+
 -- definitions in records and $let$ expressions
 
 LDDecl.  LocDef ::= [Ident] ":" Exp ;
@@ -141,13 +151,14 @@ separator LocDef ";" ;
 
 EIdent.    Exp4 ::= Ident ;
 EConstr.   Exp4 ::= "{" Ident "}" ;
-ECons.     Exp4 ::= "[" Ident "]" ;
+ECons.     Exp4 ::= "%" Ident "%" ;
 ESort.     Exp4 ::= Sort ;
 EString.   Exp4 ::= String ;
 EInt.      Exp4 ::= Integer ;
 EMeta.     Exp4 ::= "?" ;
 EEmpty.    Exp4 ::= "[" "]" ;
 EData.     Exp4 ::= "data" ;
+EList.     Exp4 ::= "[" Ident Exps "]" ;
 EStrings.  Exp4 ::= "[" String "]" ;
 ERecord.   Exp4 ::= "{" [LocDef] "}" ; -- !
 ETuple.    Exp4 ::= "<" [TupleComp] ">" ;  --- needed for separator ","
@@ -156,7 +167,7 @@ ETyped.    Exp4 ::= "<" Exp ":" Exp ">" ;  -- typing, used for annotations
 
 EProj.     Exp3 ::= Exp3 "." Label ;
 EQConstr.  Exp3 ::= "{" Ident "." Ident "}" ;  -- qualified constructor
-EQCons.    Exp3 ::= "[" Ident "." Ident "]" ;  -- qualified constant
+EQCons.    Exp3 ::= "%" Ident "." Ident "%" ;  -- qualified constant
 
 EApp.      Exp2 ::= Exp2 Exp3 ;
 ETable.    Exp2 ::= "table" "{" [Case] "}" ;
@@ -186,6 +197,10 @@ EEqs.      Exp  ::= "fn" "{" [Equation] "}" ;
 coercions Exp 4 ;
 
 separator Exp ";" ; -- in variants
+
+-- list of arguments to category
+NilExp. Exps ::= ;
+ConsExp. Exps ::= Exp4 Exps ; -- Exp4 to force parantheses
 
 -- patterns
 
