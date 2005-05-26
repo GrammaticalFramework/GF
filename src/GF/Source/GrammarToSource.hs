@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/25 10:41:59 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.20 $
+-- > CVS $Date: 2005/05/26 14:18:17 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.21 $
 --
 -- From internal source syntax to BNFC-generated (used for printing).
 -----------------------------------------------------------------------------
@@ -50,7 +50,7 @@ trModule (i,mo) = case mo of
              (mkTopDefs (concatMap trAnyDef (tree2list (jments m)) ++ map trFlag (flags m)))
 
 trExtend :: [Ident] -> P.Extend
-trExtend i = ifNull P.NoExt (P.Ext . map tri) i
+trExtend i = ifNull P.NoExt (P.Ext . map (P.IAll . tri)) i ---- IAll
 
 ---- this has to be completed with other mtys
 forName (MTConcrete a) = tri a

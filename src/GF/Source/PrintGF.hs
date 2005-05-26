@@ -147,14 +147,14 @@ instance Print ModBody where
   prt i e = case e of
    MBody extend opens topdefs -> prPrec i 0 (concatD [prt 0 extend , prt 0 opens , doc (showString "{") , prt 0 topdefs , doc (showString "}")])
    MWith id opens -> prPrec i 0 (concatD [prt 0 id , doc (showString "with") , prt 0 opens])
-   MWithE ids id opens -> prPrec i 0 (concatD [prt 0 ids , doc (showString "**") , prt 0 id , doc (showString "with") , prt 0 opens])
+   MWithE includeds id opens -> prPrec i 0 (concatD [prt 0 includeds , doc (showString "**") , prt 0 id , doc (showString "with") , prt 0 opens])
    MReuse id -> prPrec i 0 (concatD [doc (showString "reuse") , prt 0 id])
    MUnion includeds -> prPrec i 0 (concatD [doc (showString "union") , prt 0 includeds])
 
 
 instance Print Extend where
   prt i e = case e of
-   Ext ids -> prPrec i 0 (concatD [prt 0 ids , doc (showString "**")])
+   Ext includeds -> prPrec i 0 (concatD [prt 0 includeds , doc (showString "**")])
    NoExt  -> prPrec i 0 (concatD [])
 
 
@@ -346,6 +346,7 @@ instance Print Exp where
    ETyped exp0 exp -> prPrec i 4 (concatD [doc (showString "<") , prt 0 exp0 , doc (showString ":") , prt 0 exp , doc (showString ">")])
    EProj exp label -> prPrec i 3 (concatD [prt 3 exp , doc (showString ".") , prt 0 label])
    EQConstr id0 id -> prPrec i 3 (concatD [doc (showString "{0") , prt 0 id0 , doc (showString ".") , prt 0 id , doc (showString "}0")]) -- H
+   EQCons id0 id -> prPrec i 3 (concatD [doc (showString "%") , prt 0 id0 , doc (showString ".") , prt 0 id])
    EQCons id0 id -> prPrec i 3 (concatD [doc (showString "%") , prt 0 id0 , doc (showString ".") , prt 0 id , doc (showString "%")])
    EApp exp0 exp -> prPrec i 2 (concatD [prt 2 exp0 , prt 3 exp])
    ETable cases -> prPrec i 2 (concatD [doc (showString "table") , doc (showString "{") , prt 0 cases , doc (showString "}")])
