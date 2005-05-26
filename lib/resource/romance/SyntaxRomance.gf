@@ -1121,8 +1121,8 @@ oper
     } ;
 
 -- There are uniformly two variant word orders, e.g. 
--- "si tu fume je m'en vais"
--- and "je m'en vais si tu fume".
+-- "si tu fumes je m'en vais"
+-- and "je m'en vais si tu fumes".
 
   subjunctVariants : Subjunction -> Sentence -> Str -> Str = \si,A,B ->
     let {As = A.s ! si.m} in 
@@ -1311,6 +1311,41 @@ negNe, negPas : Str ;
     let cl = sats2clause x
     in
     {s = \\b,f,_ => cl.s ! b ! f} ;
+
+--  VIForm = VIInfinit | VIImperat Bool Number ;
+--  VerbPhrase = {s : VIForm => Gender => Number => Person => Str} ;
+
+  sats2verbPhrase : Sats -> VerbPhrase = 
+    \sats -> {s = \\vi,g,n,p => ---- b,cf =>
+      let
+        b = True ; ----
+        lui  = sats.s3 ;
+        dire = verbVIForm {s = sats.s4 ; aux = sats.aux}
+                 vi sats.g sats.n sats.p sats.g2 sats.n2 ;
+        ai   = dire.p1 ;
+        dit  = dire.p2 ;
+        toujours = sats.s5 ;
+        directement = sats.s6 ;
+        ne  = if_then_Str b [] negNe ;
+        pas = if_then_Str b [] negPas ;
+        oui = sats.s7 ! b
+      in 
+      ne ++ lui ++ ai ++ toujours ++ pas ++ dit ++ directement ++ oui
+    } ;
+
+---- What happens to polarity and anteriority ?
+
+  verbVIForm : 
+    Verb -> VIForm -> Gender -> Number -> Person -> Gender -> Number -> (Str * Str) = 
+    \verb,cl,g,n,p,g2,n2 -> 
+      let 
+        aime  : Number -> Str = \t -> verb.s ! vImper n P2 ;
+        aimer = verb.s ! VInfin
+      in
+      case cl of {
+        VIImperat _ n => <aime n ,[]> ;
+        VlInfinit     => <aimer,  []>
+        } ;
 
 predVerb0 : Verb ->  Clause = \rain ->
   sats2clause (mkSats (pronNounPhrase pronImpers) rain) ;
