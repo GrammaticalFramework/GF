@@ -14,7 +14,7 @@ oper
 
   nounPhraseOn = mkNameNounPhrase "si" Masc ; --- can be plural dep. on object
 
-  pronImpers : NounPhrase = pronNounPhrase pronIl ; ---- should be empty
+  pronImpers : NounPhrase = mkNameNounPhrase [] Masc ;
 
   partitiveNounPhrase = \n,vino ->
     normalNounPhrase 
@@ -275,7 +275,4 @@ oper
 
   negNe = "non" ; negPas = [] ;
 
-  predVerb0 rain = predVerbClause (mkNameNounPhrase [] Masc) rain (complVerb rain) ;
-
 }
-
