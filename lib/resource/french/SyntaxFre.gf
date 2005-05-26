@@ -114,10 +114,12 @@ oper
     AEsse   => verbEtre
     } ;
 
+{- ---G
   progressiveVerbPhrase : VerbPhrase -> VerbGroup = \vp ->
    predClauseBeGroup
      (complCopula (\\g,n,p => 
        "en" ++ "train" ++ elisDe ++ vp.s !  VIInfinit ! g ! n ! p)) ;
+-}
 
 -- The "ne - pas" negation.
 
@@ -327,7 +329,5 @@ oper
   nonPhr = ss ["Non ."] ; --- and also Si!
 
   negNe = elisNe ; negPas = "pas" ;
-
-  predVerb0 rain = predVerbClause (pronNounPhrase pronImpers) rain (complVerb rain) ;
 
 }

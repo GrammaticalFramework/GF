@@ -44,6 +44,11 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
   SPredVA subj verb adj = 
    sats2clause (
      insertExtrapos (mkSats subj verb) (\\_ => adj.s ! AF (pgen2gen subj.g) subj.n)) ;
+  SPredV2A subj verb obj adj = 
+    sats2clause (
+      insertExtrapos 
+        (mkSatsObject subj verb obj)
+        (\\_ =>  adj.s ! AF (pgen2gen obj.g) obj.n)) ;
 
   SPredVV subj verb vp = 
    sats2clause (
@@ -52,13 +57,20 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
        (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen subj.g ! subj.n ! subj.p)
      ) ;
 
---  SPredObjV2V 
+  SPredObjV2V subj verb obj vp = 
+    sats2clause (
+      insertExtrapos 
+        (mkSatsObject subj verb obj)
+        (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen obj.g ! obj.n ! obj.p)
+      ) ;
+  SPredSubjV2V subj verb obj vp = 
+    sats2clause (
+      insertExtrapos 
+        (mkSatsObject subj verb obj)
+        (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen subj.g ! subj.n ! subj.p)
+      ) ;
 
 --  SPredProgVP
-
---  SPredSubjV2V
-
---  SPredV2A
 
 
   SPredAP subj adj = 
@@ -112,6 +124,12 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
    sats2quest (
      insertExtrapos (mkSats (intNounPhrase subj) verb) (\\_ => adj.s ! AF subj.g subj.n)) ;
 
+  QPredV2A subj verb obj adj = 
+    sats2quest (
+      insertExtrapos 
+        (mkSatsObject (intNounPhrase subj) verb obj)
+        (\\_ =>  adj.s ! AF (pgen2gen obj.g) obj.n)) ;
+
   QPredVV subj verb vp = 
    sats2quest (
      insertExtrapos 
@@ -119,14 +137,20 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
        (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! subj.g ! (intNounPhrase subj).n ! P3)
      ) ;
 
---  QPredObjV2V 
+  QPredObjV2V subj verb obj vp = 
+    sats2quest (
+      insertExtrapos 
+        (mkSatsObject (intNounPhrase subj) verb obj)
+        (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen obj.g ! obj.n ! obj.p)
+      ) ;
+  QPredSubjV2V subj verb obj vp = 
+    sats2quest (
+      insertExtrapos 
+        (mkSatsObject (intNounPhrase subj) verb obj)
+        (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! subj.g ! subj.n ! P3)
+      ) ;
 
 --  QPredProgVP
-
---  QPred(IntNounPhrase Subj)V2V
-
---  QPredV2A
-
 
   QPredAP subj adj = 
     sats2quest (mkSatsCopula (intNounPhrase subj) (adj.s ! AF subj.g subj.n)) ;
