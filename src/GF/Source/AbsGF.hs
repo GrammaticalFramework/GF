@@ -41,13 +41,13 @@ data ModType =
 data ModBody =
    MBody Extend Opens [TopDef]
  | MWith Ident [Open]
- | MWithE [Ident] Ident [Open]
+ | MWithE [Included] Ident [Open]
  | MReuse Ident
  | MUnion [Included]
   deriving (Eq,Ord,Show)
 
 data Extend =
-   Ext [Ident]
+   Ext [Included]
  | NoExt
   deriving (Eq,Ord,Show)
 
@@ -76,6 +76,7 @@ data QualOpen =
 data Included =
    IAll Ident
  | ISome Ident [Ident]
+ | IMinus Ident [Ident]
   deriving (Eq,Ord,Show)
 
 data Def =

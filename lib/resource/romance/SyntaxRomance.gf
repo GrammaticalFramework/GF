@@ -430,7 +430,7 @@ oper
 param
   VPForm = VPF Anteriority VF ;
   Anteriority = Simul | Anter ;
-  VIForm = VIInfinit | VIImperat Bool Number ;
+  VIForm = VIInfinit | VIImperat Bool Number ; ---- | VIGerund ;
 
 oper
   VerbPhrase = {s : VIForm => Gender => Number => Person => Str} ;
@@ -1312,16 +1312,13 @@ negNe, negPas : Str ;
     in
     {s = \\b,f,_ => cl.s ! b ! f} ;
 
---  VIForm = VIInfinit | VIImperat Bool Number ;
---  VerbPhrase = {s : VIForm => Gender => Number => Person => Str} ;
-
   sats2verbPhrase : Sats -> VerbPhrase = 
     \sats -> {s = \\vi,g,n,p => ---- b,cf =>
       let
         b = True ; ----
         lui  = sats.s3 ;
         dire = verbVIForm {s = sats.s4 ; aux = sats.aux}
-                 vi sats.g sats.n sats.p sats.g2 sats.n2 ;
+                 vi g n p sats.g2 sats.n2 ;
         ai   = dire.p1 ;
         dit  = dire.p2 ;
         toujours = sats.s5 ;

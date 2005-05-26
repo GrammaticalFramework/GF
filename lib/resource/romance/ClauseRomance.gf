@@ -161,6 +161,16 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
   QPredAdv subj adv = 
     sats2quest (mkSatsCopula (intNounPhrase subj) adv.s) ;
 
+----- anteriority _ ; gender and number of Adj
+
+  IPredV _ v = 
+    sats2verbPhrase (mkSats pronImpers v) ;
+  IPredV2 _ v y = 
+    sats2verbPhrase (mkSatsObject pronImpers v y) ;
+  IPredAP _ adj = 
+    sats2verbPhrase (mkSatsCopula pronImpers (adj.s ! AF Masc Sg)) ;
+
+
 
 {-
 -- Use VPs

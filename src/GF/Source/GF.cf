@@ -40,13 +40,13 @@ MTTransfer.  ModType ::= "transfer" Ident ":" Open "->" Open ;
 
 MBody.  ModBody ::= Extend Opens "{" [TopDef] "}" ;
 MWith.  ModBody ::=              Ident "with" [Open] ;
-MWithE. ModBody ::= [Ident] "**" Ident "with" [Open] ;
+MWithE. ModBody ::= [Included] "**" Ident "with" [Open] ;
 MReuse. ModBody ::= "reuse" Ident ;
 MUnion. ModBody ::= "union" [Included] ;
 
 separator TopDef "" ;
 
-Ext.   Extend ::= [Ident] "**" ;
+Ext.   Extend ::= [Included] "**" ;
 NoExt. Extend ::= ;
 
 separator Open "," ;
@@ -66,8 +66,9 @@ QOInterface. QualOpen ::= "interface" ;
 
 separator Included "," ;
 
-IAll.  Included ::= Ident ;
-ISome. Included ::= Ident "[" [Ident] "]" ;
+IAll.   Included ::= Ident ;
+ISome.  Included ::= Ident "[" [Ident] "]" ;
+IMinus. Included ::= Ident "-" "[" [Ident] "]" ;
 
 -- definitions after the $oper$ keywords
 
@@ -167,7 +168,7 @@ ETyped.    Exp4 ::= "<" Exp ":" Exp ">" ;  -- typing, used for annotations
 
 EProj.     Exp3 ::= Exp3 "." Label ;
 EQConstr.  Exp3 ::= "{" Ident "." Ident "}" ;  -- qualified constructor
-EQCons.    Exp3 ::= "%" Ident "." Ident "%" ;  -- qualified constant
+EQCons.    Exp3 ::= "%" Ident "." Ident  ;     -- qualified constant
 
 EApp.      Exp2 ::= Exp2 Exp3 ;
 ETable.    Exp2 ::= "table" "{" [Case] "}" ;
