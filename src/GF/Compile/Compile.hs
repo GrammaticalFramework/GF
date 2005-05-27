@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:46:00 $
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.37 $
+-- > CVS $Date: 2005/05/27 08:13:35 $
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.38 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ import GF.System.Arch
 import Control.Monad
 
 -- | environment variable for grammar search path
-gfGrammarPathVar = "GF_LIB_PATH"
+gfGrammarPathVar = "GF_GRAMMAR_PATH"
 
 -- | in batch mode: write code in a file
 batchCompile f = liftM fst $ compileModule defOpts emptyShellState f
@@ -101,12 +101,12 @@ compileModule opts1 st0 file = do
   let useLineOpt = maybe False (const True) $ getOptVal opts1 pathList
   let opts = addOptions opts1 opts0 
   let fpath = justInitPath file
-  let ps0  = pathListOpts opts fpath
+  ps0 <- ioeIO $ pathListOpts opts fpath
 
   let ps1 = if (useFileOpt && not useLineOpt) 
               then (map (prefixPathName fpath) ps0)
               else ps0
-  ps <- ioeIO $ extendPathEnv gfGrammarPathVar ps1
+  ps <- ioeIO $ extendPathEnv gfLibraryPath gfGrammarPathVar ps1
   let ioeIOIf = if oElem beVerbose opts then ioeIO else (const (return ()))
   ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
   let st = st0 --- if useFileOpt then emptyShellState else st0
@@ -134,8 +134,8 @@ compileEnvShSt st fs = ((0,sgr,cgr),fts) where
   notIns i = notElem (prt i) $ map fileBody fs
   fts = readFiles st
 
-pathListOpts :: Options -> FileName -> [InitPath]
-pathListOpts opts file = maybe [file] pFilePaths $ getOptVal opts pathList
+pathListOpts :: Options -> FileName -> IO [InitPath]
+pathListOpts opts file = maybe (return [file]) getFilePaths $ getOptVal opts pathList
 
 reverseModules (MGrammar ms) = MGrammar $ reverse ms
 

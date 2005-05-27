@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/20 13:31:28 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.14 $
+-- > CVS $Date: 2005/05/27 08:13:35 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.15 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -18,6 +18,7 @@ import GF.Data.Operations
 import GF.System.Arch (prCPU)
 import GF.Infra.Option
 
+import System.Directory
 import System.IO
 import System.IO.Error
 import System.Environment
@@ -106,17 +107,40 @@ doesFileExistPath paths file = do
   mpfile <- ioeIO $ getFilePath paths file
   return $ maybe False (const True) mpfile
 
+-- | first var is lib prefix, second is like class path
 -- | path in environment variable has lower priority
-extendPathEnv :: String -> [FilePath] -> IO [FilePath]
-extendPathEnv var ps = do
-  s <- catch (getEnv var) (const (return ""))
-  let fs = pFilePaths s
-  return $ ps ++ fs
+extendPathEnv :: String -> String -> [FilePath] -> IO [FilePath]
+extendPathEnv lib var ps = do
+  b <- catch (getEnv lib) (const (return "")) -- e.g. GF_LIB_PATH
+  s <- catch (getEnv var) (const (return "")) -- e.g. GF_GRAMMAR_PATH
+  fs <- getFilePaths s
+  let ss = ps ++ fs
+  return $ ss ++ [b ++ "/" ++ s | s <- ss]
 
 pFilePaths :: String -> [FilePath]
 pFilePaths s = case break isPathSep s of
   (f,_:cs) -> f : pFilePaths cs
   (f,_)    -> [f]
+
+getFilePaths :: String -> IO [FilePath]
+getFilePaths s = do
+  let ps = pFilePaths s
+  liftM concat $ mapM allSubdirs ps
+
+getSubdirs :: FilePath -> IO [FilePath]
+getSubdirs p = do
+  fs  <- catch (getDirectoryContents p) (const $ return [])
+  fps <- mapM getPermissions (map (prefixPathName p) fs)
+  let ds = [f | (f,p) <- zip fs fps, searchable p, not (take 1 f==".")]
+  return ds
+
+allSubdirs :: FilePath -> IO [FilePath]
+allSubdirs [] = return [[]]
+allSubdirs p = case last p of
+  '*' -> do
+    fs <- getSubdirs (init p)
+    return [prefixPathName (init p) f | f <- fs]
+  _ -> return [p]
 
 prefixPathName :: String -> FilePath -> FilePath
 prefixPathName p f = case f of
@@ -266,6 +290,8 @@ putPointE opts msg act = do
 putPointEVerb :: Options -> String -> IOE a -> IOE a
 putPointEVerb opts = putPointE (addOption beVerbose opts)
 
+gfLibraryPath = "GF_LIB_PATH"
+
 -- ((do {s <- readFile f; return (return s)}) ) 
 readFileIOE :: FilePath -> IOE (String)
 readFileIOE f = ioe $ catch (readFile f >>= return . return)
@@ -292,13 +318,13 @@ readFileLibraryIOE ini f =
 		initPath = addInitFilePath ini f
 		getLibPath :: IO String
 		getLibPath = do {
-			lp <- getEnv "GF_LIB_PATH";
-			return (if last lp == '/' then lp else lp ++ ['/']);
+			lp <- getEnv gfLibraryPath;
+			return (if isSep (last lp) then lp else lp ++ ['/']);
 		} 
 		reportOn f = "File " ++ f ++ " not found."
 		libPath ini f = f
 		addInitFilePath ini file = case file of
-			'/':_ -> file        -- absolute path name
+			c:_ | isSep c -> file        -- absolute path name
 			_     -> ini ++ file -- relative path name
 
 
