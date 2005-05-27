@@ -2,10 +2,20 @@
 
 -- Canonical GF. AR 27/4/2003
 
-entrypoints Canon ;
+entrypoints Canon, Line ;
+
+-- old approach: read in a whole grammar
 
 MGr. Canon ::= "grammar" [Ident] "of" Ident ";" [Module] ;
 Gr.  Canon ::= [Module] ;
+
+-- new approach: read line by line
+
+LMulti.  Line ::= "grammar" [Ident] "of" Ident ";" ;
+LHeader. Line ::= ModType "=" Extend Open "{" ;
+LFlag.   Line ::= Flag ";" ;
+LDef.    Line ::= Def ";" ;
+LEnd.    Line ::= "}" ;    
 
 Mod. Module ::= ModType "=" Extend Open "{" [Flag] [Def] "}" ;
 

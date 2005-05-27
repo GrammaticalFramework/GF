@@ -5,15 +5,15 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:26 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/05/27 21:05:17 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.13 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
 module GF.Canon.MkGFC (prCanonModInfo, prCanon, prCanonMGr,
-	      canon2grammar, grammar2canon, 
+	      canon2grammar, grammar2canon, buildCanonGrammar,
 	      info2mod,
 	      trExp, rtExp, rtQIdent) where
 
@@ -40,8 +40,9 @@ prCanonMGr g = header ++++ prCanon g where
 
 canon2grammar :: Canon -> CanonGrammar
 canon2grammar (MGr _ _ modules) = canon2grammar (Gr modules) ---- ignoring the header
-canon2grammar (Gr modules) = M.MGrammar $ map mod2info modules where
-  mod2info m = case m of
+canon2grammar (Gr modules) = M.MGrammar $ map mod2info modules
+
+mod2info m = case m of
     Mod mt e os flags defs -> 
       let defs' = buildTree $ map def2info defs
           (a,mt') = case mt of
@@ -50,6 +51,7 @@ canon2grammar (Gr modules) = M.MGrammar $ map mod2info modules where
             MTCnc a x -> (a,M.MTConcrete x)
             MTTrans a x y -> (a,M.MTTransfer (M.oSimple x) (M.oSimple y))
       in (a,M.ModMod (M.Module mt' M.MSComplete flags (ee e) (oo os) defs'))
+ where
   ee (Ext m) = m
   ee _ = []
   oo (Opens ms) = map M.oSimple ms
@@ -170,3 +172,58 @@ rtQIdent (m,c) = CIQ (rtIdent m) (rtIdent c)
 rtIdent x 
   | isWildIdent x = identC "h_" --- needed in declarations
   | otherwise = identC $ prt x ---
+
+-- the following is called in GetGFC to read gfc files line
+-- by line. It does not save memory, though, and is therefore
+-- not used.
+
+buildCanonGrammar :: Int -> CanonGrammar -> Line -> (CanonGrammar,Int)
+buildCanonGrammar n gr0 line = mgr $ case line of
+-- LMulti ids id
+  LHeader mt ext op -> newModule mt ext op
+  LFlag f@(Flg (IC "modulesize") (IC n)) -> initModule f $ read $ tail n
+  LFlag flag        -> newFlag flag
+  LDef def          -> newDef $ def2info def
+  LEnd              -> cleanNames
+  _                 -> M.modules gr0
+ where
+   newModule mt ext op = mod2info (Mod mt ext op [] []) : mods
+   initModule f i = case actm of
+     (name, M.ModMod (M.Module mt com flags ee oo defs)) ->
+       (name, M.ModMod (M.Module mt com (f:flags) ee oo (newtree i))) : tmods
+   newFlag f = case actm of
+     (name, M.ModMod (M.Module mt com flags ee oo defs)) ->
+       (name, M.ModMod (M.Module mt com (f:flags) ee oo defs)) : tmods
+   newDef d = case actm of
+     (name, M.ModMod (M.Module mt com flags ee oo defs)) ->
+       (name, M.ModMod (M.Module mt com flags ee oo 
+          (upd (padd 8 n) d defs))) : tmods
+   cleanNames = case actm of
+     (name, M.ModMod (M.Module mt com flags ee oo defs)) ->
+       (name, M.ModMod (M.Module mt com (reverse flags) ee oo 
+          (mapTree (\ (IC f,t) -> (IC (drop 8 f),t)) defs))) : tmods
+
+   actm = head mods -- only used when a new mod has been created
+   mods = M.modules gr0
+   tmods = tail mods
+
+   mgr ms = (M.MGrammar ms, case line of
+     LDef _ -> n+1
+     LEnd   -> 1
+     _ -> n
+     )
+
+   -- create an initial tree with who-cares value
+   newtree (i :: Int) = sorted2tree [
+     (padd 8 k, ResPar []) | 
+     k <- [1..i]] --- padd (length (show i))
+
+   padd l k = let sk = show k in identC (replicate (l - length sk) '0' ++ sk)
+
+   upd n d@(f,t) defs = case defs of
+     NT -> BT (merg n f,t) NT NT --- should not happen
+     BT c@(a,_) left right 
+       | n < a  -> let left'  = upd n d left  in BT c left' right 
+       | n > a  -> let right' = upd n d right in BT c left right' 
+       | otherwise -> BT (merg n f,t) left right
+   merg (IC n) (IC f) = IC (n ++ f)

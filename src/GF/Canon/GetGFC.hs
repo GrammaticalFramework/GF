@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:23 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/05/27 21:05:17 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.8 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -22,6 +22,10 @@ import GF.Infra.Modules
 import GF.Compile.GetGrammar (err2err) ---
 import GF.Infra.UseIO
 
+import System.IO
+import System.Directory
+import Control.Monad
+
 getCanonModule :: FilePath -> IOE CanonModule
 getCanonModule file = do
   gr <- getCanonGrammar file
@@ -32,6 +36,41 @@ getCanonModule file = do
 getCanonGrammar :: FilePath -> IOE CanonGrammar
 getCanonGrammar file = do
   s <- ioeIO $ readFileIf file
-  -- c <- ioeErr $ err2err $ pCanon $ myLexer s
   c <- ioeErr $ pCanon $ myLexer s
   return $ canon2grammar c
+
+-- the following surprisingly does not save memory so it is
+-- not in use
+
+getCanonGrammarByLine :: FilePath -> IOE CanonGrammar
+getCanonGrammarByLine file = do
+  b <- ioeIO $ doesFileExist file
+  if not b 
+    then ioeErr $ Bad $ "file" +++ file +++ "does not exist"
+    else do
+   ioeIO $ putStrLn ""
+   hand <- ioeIO $ openFile file ReadMode ---- err
+   size <- ioeIO $ hFileSize hand
+   gr <- addNextLine (size,0) 1 hand emptyMGrammar
+   ioeIO $ hClose hand
+   return $ MGrammar $ reverse $ modules gr
+
+ where
+   addNextLine (size,act) d hand gr = do
+     eof <- ioeIO $ hIsEOF hand 
+     if eof 
+       then return gr 
+       else do
+         s <- ioeIO  $ hGetLine hand
+         let act' = act + toInteger (length s)
+--         if isHash act act' then (ioeIO $ putChar '#') else return () 
+         updGrammar act' d gr $ pLine $ myLexer s
+    where     
+      updGrammar a d gr (Ok t) = case buildCanonGrammar d gr t of 
+        (gr',d') -> addNextLine (size,a) d' hand gr'
+      updGrammar _ _ gr (Bad s) = do
+        ioeIO $ putStrLn s
+        return emptyMGrammar
+
+      isHash a b = a `div` step < b `div` step
+      step = size `div` 50
