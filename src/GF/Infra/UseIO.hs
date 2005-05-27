@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/27 08:13:35 $ 
+-- > CVS $Date: 2005/05/27 11:37:57 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -113,9 +113,9 @@ extendPathEnv :: String -> String -> [FilePath] -> IO [FilePath]
 extendPathEnv lib var ps = do
   b <- catch (getEnv lib) (const (return "")) -- e.g. GF_LIB_PATH
   s <- catch (getEnv var) (const (return "")) -- e.g. GF_GRAMMAR_PATH
-  fs <- getFilePaths s
+  let fs = pFilePaths s
   let ss = ps ++ fs
-  return $ ss ++ [b ++ "/" ++ s | s <- ss]
+  liftM concat $ mapM allSubdirs $ ss ++ [b ++ "/" ++ s | s <- ss]
 
 pFilePaths :: String -> [FilePath]
 pFilePaths s = case break isPathSep s of

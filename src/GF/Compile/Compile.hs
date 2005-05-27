@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/27 08:13:35 $
+-- > CVS $Date: 2005/05/27 11:37:57 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.38 $
+-- > CVS $Revision: 1.39 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ compileEnvShSt st fs = ((0,sgr,cgr),fts) where
   fts = readFiles st
 
 pathListOpts :: Options -> FileName -> IO [InitPath]
-pathListOpts opts file = maybe (return [file]) getFilePaths $ getOptVal opts pathList
+pathListOpts opts file = return $ maybe [file] pFilePaths $ getOptVal opts pathList
 
 reverseModules (MGrammar ms) = MGrammar $ reverse ms
 
