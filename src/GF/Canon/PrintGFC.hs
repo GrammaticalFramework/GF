@@ -19,7 +19,7 @@ doc = (:)
 render :: Doc -> String
 render d = rend 0 (map ($ "") $ d []) "" where
   rend i ss = case ss of
-    "NEW"    :ts -> realnew . rend i ts --H
+    "*NEW"   :ts -> realnew . rend i ts --H
     "<"      :ts -> showString "<" . rend i ts --H
     "$"      :ts -> showString "$" . rend i ts --H
     "?"      :ts -> showString "?" . rend i ts --H
@@ -99,10 +99,17 @@ instance Print Canon where
    MGr ids id modules -> prPrec i 0 (concatD [doc (showString "grammar") , prt 0 ids , doc (showString "of") , prt 0 id , doc (showString ";") , prt 0 modules])
    Gr modules -> prPrec i 0 (concatD [prt 0 modules])
 
+instance Print Line where
+  prt i e = case e of
+   LMulti ids id -> prPrec i 0 (concatD [doc (showString "grammar") , prt 0 ids , doc (showString "of") , prt 0 id , doc (showString ";") , doc (showString "*NEW")])
+   LHeader modtype extend open -> prPrec i 0 (concatD [prt 0 modtype , doc (showString "=") , prt 0 extend , prt 0 open , doc (showString "{"), doc (showString "*NEW")])
+   LFlag flag -> prPrec i 0 (concatD [prt 0 flag , doc (showString ";") , doc (showString "*NEW")])
+   LDef def -> prPrec i 0 (concatD [prt 0 def , doc (showString ";") , doc (showString "*NEW")])
+   LEnd  -> prPrec i 0 (concatD [doc (showString "}")])
 
 instance Print Module where
   prt i e = case e of
-   Mod modtype extend open flags defs -> prPrec i 0 (concatD [prt 0 modtype , doc (showString "=") , prt 0 extend , prt 0 open , doc (showString "{") , prt 0 flags , prt 0 defs , doc (showString "}")])
+   Mod modtype extend open flags defs -> prPrec i 0 (concatD [prt 0  modtype , doc (showString "=") , prt 0 extend , prt 0 open , doc (showString "{") , doc (showString "*NEW") , prt 0 flags , prt 0 defs , doc (showString "}")])
 
   prtList es = case es of
    [] -> (concatD [])
@@ -134,7 +141,7 @@ instance Print Flag where
 
   prtList es = case es of
    [] -> (concatD [])
-   x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
+   x:xs -> (concatD [prt 0 x , doc (showString ";") , doc (showString "*NEW") , prt 0 xs])
 
 instance Print Def where
   prt i e = case e of
@@ -149,7 +156,7 @@ instance Print Def where
 
   prtList es = case es of
    [] -> (concatD [])
-   x:xs -> (concatD [prt 0 x , doc (showString ";"), doc (showString "NEW") , prt 0 xs]) -- H
+   x:xs -> (concatD [prt 0 x , doc (showString ";"), doc (showString "*NEW") , prt 0 xs]) -- H
 
 instance Print ParDef where
   prt i e = case e of

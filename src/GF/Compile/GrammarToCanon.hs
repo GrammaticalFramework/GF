@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:38 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.17 $
+-- > CVS $Date: 2005/05/27 21:05:17 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.18 $
 --
 -- Code generator from optimized GF source code to GFC.
 -----------------------------------------------------------------------------
@@ -69,8 +69,11 @@ redModInfo (c,info) = do
           mt = mt0 ---- if isIncompl then MTResource else mt0
 
       defss <- mapM (redInfo a) $ tree2list $ js
-      defs  <- return $ sorted2tree $ concat defss  -- sorted, but reduced
-      return $ ModMod $ Module mt MSComplete flags e os defs
+      let defs0 = concat defss
+      let lgh = length defs0
+      defs  <- return $ sorted2tree $ defs0  -- sorted, but reduced
+      let flags' = G.Flg (identC "modulesize") (identC ("n"++show lgh)) : flags
+      return $ ModMod $ Module mt MSComplete flags' e os defs
   return (c',info')
  where
    redExtOpen m = do

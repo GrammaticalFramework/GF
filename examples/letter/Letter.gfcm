@@ -1,4 +1,10 @@
-concrete Russian of Letter = open ResRusU in {flags startcat = Letter ;flags lexer = textlit ;flags unlexer = textlit ;flags coding = utf8 ;lincat Author = {s : (ResRusU.Num => (ResRusU.Gen => Str)) ;n : ResRusU.DepNum ;g : ResRusU.DepGen }= {s = table ResRusU.Num {(ResRusU.sg)(ResRusU.pl)=> table ResRusU.Gen {(ResRusU.masc)(ResRusU.fem)=> str @ 0 }} ;n = <ResRusU.depnum>;g = <ResRusU.depgen>} ;"Author" ;
+concrete Russian of Letter = open ResRusU in {
+flags modulesize = n42 ;
+flags startcat = Letter ;
+flags lexer = textlit ;
+flags unlexer = textlit ;
+flags coding = utf8 ;
+lincat Author = {s : (ResRusU.Num => (ResRusU.Gen => Str)) ;n : ResRusU.DepNum ;g : ResRusU.DepGen }= {s = table ResRusU.Num {(ResRusU.sg)(ResRusU.pl)=> table ResRusU.Gen {(ResRusU.masc)(ResRusU.fem)=> str @ 0 }} ;n = <ResRusU.depnum>;g = <ResRusU.depgen>} ;"Author" ;
 lin BePromoted : Letter.Sentence = \ Position @ 0 -> {s = table ResRusU.DepNum {(ResRusU.depnum)(ResRusU.cnum (ResRusU.sg)) (ResRusU.cnum (ResRusU.pl)) => table ResRusU.DepGen {(ResRusU.depgen)(ResRusU.cgen (ResRusU.masc)) (ResRusU.cgen (ResRusU.fem)) => table ResRusU.Num {(ResRusU.pl)=> table ResRusU.Gen {(ResRusU.fem)=> "вы" ++ "были" ++ ("назначены" ++ Position @ 0.s ! <ResRusU.pl>! <ResRusU.fem>) ;(ResRusU.masc)=> "вы" ++ "были" ++ ("назначены" ++ Position @ 0.s ! <ResRusU.pl>! <ResRusU.masc>) } ;(ResRusU.sg)=> table ResRusU.Gen {(ResRusU.masc)=> "ты" ++ "был" ++ ("назначен" ++ Position @ 0.s ! <ResRusU.sg>! <ResRusU.masc>) ;(ResRusU.fem)=> "ты" ++ "была" ++ ("назначена" ++ Position @ 0.s ! <ResRusU.sg>! <ResRusU.fem>) }}}}} ;"(ты был)назначен Position_0" ;
 lin ColleagueHe : Letter.Recipient = \ -> {s = "коллега" ;n = <ResRusU.sg>;g = <ResRusU.masc>} ;"коллега" ;
 lin ColleagueShe : Letter.Recipient = \ -> {s = "коллега" ;n = <ResRusU.sg>;g = <ResRusU.fem>} ;"коллега" ;
@@ -41,13 +47,17 @@ lin Senior : Letter.Position = \ -> {s = table ResRusU.Num {(ResRusU.sg)=> table
 lincat Sentence = {s : (ResRusU.DepNum => (ResRusU.DepGen => (ResRusU.Num => (ResRusU.Gen => Str)))) }= {s = table ResRusU.DepNum {(ResRusU.depnum)(ResRusU.cnum (ResRusU.sg)) (ResRusU.cnum (ResRusU.pl)) => table ResRusU.DepGen {(ResRusU.depgen)(ResRusU.cgen (ResRusU.masc)) (ResRusU.cgen (ResRusU.fem)) => table ResRusU.Num {(ResRusU.sg)(ResRusU.pl)=> table ResRusU.Gen {(ResRusU.masc)(ResRusU.fem)=> str @ 0 }}}}} ;"Sentence" ;
 lin Spouse : Letter.Author = \ -> {s = table ResRusU.Num {(ResRusU.sg)=> table ResRusU.Gen {(ResRusU.fem)=> "твой" ++ "муж" ;(ResRusU.masc)=> "твоя" ++ "жена" } ;(ResRusU.pl)=> table ResRusU.Gen {(ResRusU.masc)=> "ваши" ++ "жены" ;(ResRusU.fem)=> "ваши" ++ "мужья" }} ;n = <ResRusU.depnum>;g = <ResRusU.depgen>} ;"твоя жена" ;
 }
-resource ResRusU = {param DepGen = depgen | cgen ResRusU.Gen ;
+resource ResRusU = {
+flags modulesize = n5 ;
+param DepGen = depgen | cgen ResRusU.Gen ;
 param DepNum = depnum | cnum ResRusU.Num ;
 param Gen = masc | fem ;
 param Kas = nom | acc ;
 param Num = sg | pl ;
 }
-abstract Letter = {cat Author [] = ;
+abstract Letter = {
+flags modulesize = n42 ;
+cat Author [] = ;
 fun BePromoted : (h_ : Letter.Position)-> Letter.Sentence = {} ;
 fun ColleagueHe : Letter.Recipient = {} ;
 fun ColleagueShe : Letter.Recipient = {} ;
@@ -90,7 +100,12 @@ fun Senior : Letter.Position = {} ;
 cat Sentence [] = ;
 fun Spouse : Letter.Author = {} ;
 }
-concrete Finnish of Letter = open ResFin in {flags startcat = Letter ;flags lexer = textlit ;flags unlexer = textlit ;lincat Author = {s : (ResFin.Num => (ResFin.Gen => Str)) ;n : ResFin.DepNum ;g : ResFin.DepGen }= {s = table ResFin.Num {(ResFin.sg)(ResFin.pl)=> table ResFin.Gen {(ResFin.masc)(ResFin.fem)=> str @ 0 }} ;n = <ResFin.depnum>;g = <ResFin.depgen>} ;"Author" ;
+concrete Finnish of Letter = open ResFin in {
+flags modulesize = n42 ;
+flags startcat = Letter ;
+flags lexer = textlit ;
+flags unlexer = textlit ;
+lincat Author = {s : (ResFin.Num => (ResFin.Gen => Str)) ;n : ResFin.DepNum ;g : ResFin.DepGen }= {s = table ResFin.Num {(ResFin.sg)(ResFin.pl)=> table ResFin.Gen {(ResFin.masc)(ResFin.fem)=> str @ 0 }} ;n = <ResFin.depnum>;g = <ResFin.depgen>} ;"Author" ;
 lin BePromoted : Letter.Sentence = \ Position @ 0 -> {s = table ResFin.DepNum {(ResFin.depnum)(ResFin.cnum (ResFin.sg)) (ResFin.cnum (ResFin.pl)) => table ResFin.DepGen {(ResFin.depgen)(ResFin.cgen (ResFin.masc)) (ResFin.cgen (ResFin.fem)) => table ResFin.Num {(ResFin.sg)=> table ResFin.Gen {(ResFin.fem)=> "sinut" ++ "on" ++ ("ylennetty" ++ Position @ 0.s ! <ResFin.sg>! <ResFin.fem>) ;(ResFin.masc)=> "sinut" ++ "on" ++ ("ylennetty" ++ Position @ 0.s ! <ResFin.sg>! <ResFin.masc>) } ;(ResFin.pl)=> table ResFin.Gen {(ResFin.fem)=> "teid�t" ++ "on" ++ ("ylennetty" ++ Position @ 0.s ! <ResFin.pl>! <ResFin.fem>) ;(ResFin.masc)=> "teid�t" ++ "on" ++ ("ylennetty" ++ Position @ 0.s ! <ResFin.pl>! <ResFin.masc>) }}}}} ;"(sinut on)ylennetty Position_0" ;
 lin ColleagueHe : Letter.Recipient = \ -> {s = "kollega" ;n = <ResFin.sg>;g = <ResFin.masc>} ;"kollega" ;
 lin ColleagueShe : Letter.Recipient = \ -> {s = "kollega" ;n = <ResFin.sg>;g = <ResFin.fem>} ;"kollega" ;
@@ -133,13 +148,20 @@ lin Senior : Letter.Position = \ -> {s = table ResFin.Num {(ResFin.sg)=> table R
 lincat Sentence = {s : (ResFin.DepNum => (ResFin.DepGen => (ResFin.Num => (ResFin.Gen => Str)))) }= {s = table ResFin.DepNum {(ResFin.depnum)(ResFin.cnum (ResFin.sg)) (ResFin.cnum (ResFin.pl)) => table ResFin.DepGen {(ResFin.depgen)(ResFin.cgen (ResFin.masc)) (ResFin.cgen (ResFin.fem)) => table ResFin.Num {(ResFin.sg)(ResFin.pl)=> table ResFin.Gen {(ResFin.masc)(ResFin.fem)=> str @ 0 }}}}} ;"Sentence" ;
 lin Spouse : Letter.Author = \ -> {s = table ResFin.Num {(ResFin.pl)=> table ResFin.Gen {(ResFin.fem)=> "miehenne" ;(ResFin.masc)=> "vaimonne" } ;(ResFin.sg)=> table ResFin.Gen {(ResFin.fem)=> "miehesi" ;(ResFin.masc)=> "vaimosi" }} ;n = <ResFin.depnum>;g = <ResFin.depgen>} ;"vaimosi" ;
 }
-resource ResFin = {param DepGen = depgen | cgen ResFin.Gen ;
+resource ResFin = {
+flags modulesize = n5 ;
+param DepGen = depgen | cgen ResFin.Gen ;
 param DepNum = depnum | cnum ResFin.Num ;
 param Gen = masc | fem ;
 param Kas = nom | acc ;
 param Num = sg | pl ;
 }
-concrete Swedish of Letter = open ResSve in {flags startcat = Letter ;flags lexer = textlit ;flags unlexer = textlit ;lincat Author = {s : (ResSve.Num => (ResSve.Sex => Str)) ;n : ResSve.DepNum ;x : ResSve.Sex }= {s = table ResSve.Num {(ResSve.sg)(ResSve.pl)=> table ResSve.Sex {(ResSve.masc)(ResSve.fem)=> str @ 0 }} ;n = <ResSve.depnum>;x = <ResSve.masc>} ;"Author" ;
+concrete Swedish of Letter = open ResSve in {
+flags modulesize = n42 ;
+flags startcat = Letter ;
+flags lexer = textlit ;
+flags unlexer = textlit ;
+lincat Author = {s : (ResSve.Num => (ResSve.Sex => Str)) ;n : ResSve.DepNum ;x : ResSve.Sex }= {s = table ResSve.Num {(ResSve.sg)(ResSve.pl)=> table ResSve.Sex {(ResSve.masc)(ResSve.fem)=> str @ 0 }} ;n = <ResSve.depnum>;x = <ResSve.masc>} ;"Author" ;
 lin BePromoted : Letter.Sentence = \ Position @ 0 -> {s = table ResSve.DepNum {(ResSve.depnum)(ResSve.cnum (ResSve.sg)) (ResSve.cnum (ResSve.pl)) => table ResSve.Sex {(ResSve.masc)(ResSve.fem)=> table ResSve.Num {(ResSve.sg)=> table ResSve.Sex {(ResSve.fem)=> "du" ++ ("har" ++ "blivit" ++ ("befordrad" ++ ("till" ++ Position @ 0.s ! <ResSve.sg>! <ResSve.fem>))) ;(ResSve.masc)=> "du" ++ ("har" ++ "blivit" ++ ("befordrad" ++ ("till" ++ Position @ 0.s ! <ResSve.sg>! <ResSve.masc>))) } ;(ResSve.pl)=> table ResSve.Sex {(ResSve.fem)=> "ni" ++ ("har" ++ "blivit" ++ ("befordrade" ++ ("till" ++ Position @ 0.s ! <ResSve.pl>! <ResSve.fem>))) ;(ResSve.masc)=> "ni" ++ ("har" ++ "blivit" ++ ("befordrade" ++ ("till" ++ Position @ 0.s ! <ResSve.pl>! <ResSve.masc>))) }}}}} ;"du (har blivit)befordrad till Position_0" ;
 lin ColleagueHe : Letter.Recipient = \ -> {s = "kollega" ;n = <ResSve.sg>;x = <ResSve.masc>} ;"kollega" ;
 lin ColleagueShe : Letter.Recipient = \ -> {s = "kollega" ;n = <ResSve.sg>;x = <ResSve.fem>} ;"kollega" ;
@@ -182,13 +204,20 @@ lin Senior : Letter.Position = \ -> {s = table ResSve.Num {(ResSve.sg)(ResSve.pl
 lincat Sentence = {s : (ResSve.DepNum => (ResSve.Sex => (ResSve.Num => (ResSve.Sex => Str)))) }= {s = table ResSve.DepNum {(ResSve.depnum)(ResSve.cnum (ResSve.sg)) (ResSve.cnum (ResSve.pl)) => table ResSve.Sex {(ResSve.masc)(ResSve.fem)=> table ResSve.Num {(ResSve.sg)(ResSve.pl)=> table ResSve.Sex {(ResSve.masc)(ResSve.fem)=> str @ 0 }}}}} ;"Sentence" ;
 lin Spouse : Letter.Author = \ -> {s = table ResSve.Num {(ResSve.sg)=> table ResSve.Sex {(ResSve.masc)=> "din" ++ "hustru" ;(ResSve.fem)=> "din" ++ "man" } ;(ResSve.pl)=> table ResSve.Sex {(ResSve.masc)=> "era" ++ "hustrur" ;(ResSve.fem)=> "era" ++ "m�n" }} ;n = <ResSve.depnum>;x = <ResSve.masc>} ;"din hustru" ;
 }
-resource ResSve = {param DepNum = depnum | cnum ResSve.Num ;
+resource ResSve = {
+flags modulesize = n5 ;
+param DepNum = depnum | cnum ResSve.Num ;
 param Gen = en | ett ;
 param Kas = nom | acc ;
 param Num = sg | pl ;
 param Sex = masc | fem ;
 }
-concrete French of Letter = open ResFra in {flags startcat = Letter ;flags lexer = textlit ;flags unlexer = textlit ;lincat Author = {s : (ResFra.Num => (ResFra.Gen => Str)) ;n : ResFra.DepNum ;g : ResFra.DepGen }= {s = table ResFra.Num {(ResFra.sg)(ResFra.pl)=> table ResFra.Gen {(ResFra.masc)(ResFra.fem)=> str @ 0 }} ;n = <ResFra.depnum>;g = <ResFra.depgen>} ;"Author" ;
+concrete French of Letter = open ResFra in {
+flags modulesize = n42 ;
+flags startcat = Letter ;
+flags lexer = textlit ;
+flags unlexer = textlit ;
+lincat Author = {s : (ResFra.Num => (ResFra.Gen => Str)) ;n : ResFra.DepNum ;g : ResFra.DepGen }= {s = table ResFra.Num {(ResFra.sg)(ResFra.pl)=> table ResFra.Gen {(ResFra.masc)(ResFra.fem)=> str @ 0 }} ;n = <ResFra.depnum>;g = <ResFra.depgen>} ;"Author" ;
 lin BePromoted : Letter.Sentence = \ Position @ 0 -> {s = table ResFra.DepNum {(ResFra.depnum)(ResFra.cnum (ResFra.sg)) (ResFra.cnum (ResFra.pl)) => table ResFra.DepGen {(ResFra.depgen)(ResFra.cgen (ResFra.masc)) (ResFra.cgen (ResFra.fem)) => table ResFra.Num {(ResFra.pl)=> table ResFra.Gen {(ResFra.fem)=> "vous" ++ ("avez" ++ "�t�")++ ("promues" ++ Position @ 0.s ! <ResFra.pl>! <ResFra.fem>) ;(ResFra.masc)=> "vous" ++ ("avez" ++ "�t�")++ ("promus" ++ Position @ 0.s ! <ResFra.pl>! <ResFra.masc>) } ;(ResFra.sg)=> table ResFra.Gen {(ResFra.masc)=> "tu" ++ ("as" ++ "�t�")++ ("promu" ++ Position @ 0.s ! <ResFra.sg>! <ResFra.masc>) ;(ResFra.fem)=> "tu" ++ ("as" ++ "�t�")++ ("promue" ++ Position @ 0.s ! <ResFra.sg>! <ResFra.fem>) }}}}} ;"(tu as �t�)promu Position_0" ;
 lin ColleagueHe : Letter.Recipient = \ -> {s = "coll�gue" ;n = <ResFra.sg>;g = <ResFra.masc>} ;"coll�gue" ;
 lin ColleagueShe : Letter.Recipient = \ -> {s = "coll�gue" ;n = <ResFra.sg>;g = <ResFra.fem>} ;"coll�gue" ;
@@ -231,13 +260,20 @@ lin Senior : Letter.Position = \ -> {s = table ResFra.Num {(ResFra.sg)=> table R
 lincat Sentence = {s : (ResFra.DepNum => (ResFra.DepGen => (ResFra.Num => (ResFra.Gen => Str)))) }= {s = table ResFra.DepNum {(ResFra.depnum)(ResFra.cnum (ResFra.sg)) (ResFra.cnum (ResFra.pl)) => table ResFra.DepGen {(ResFra.depgen)(ResFra.cgen (ResFra.masc)) (ResFra.cgen (ResFra.fem)) => table ResFra.Num {(ResFra.sg)(ResFra.pl)=> table ResFra.Gen {(ResFra.masc)(ResFra.fem)=> str @ 0 }}}}} ;"Sentence" ;
 lin Spouse : Letter.Author = \ -> {s = table ResFra.Num {(ResFra.sg)=> table ResFra.Gen {(ResFra.masc)=> "ta" ++ "femme" ;(ResFra.fem)=> "ton" ++ "mari" } ;(ResFra.pl)=> table ResFra.Gen {(ResFra.masc)=> "vos" ++ "femmes" ;(ResFra.fem)=> "vos" ++ "maris" }} ;n = <ResFra.depnum>;g = <ResFra.depgen>} ;"ta femme" ;
 }
-resource ResFra = {param DepGen = depgen | cgen ResFra.Gen ;
+resource ResFra = {
+flags modulesize = n5 ;
+param DepGen = depgen | cgen ResFra.Gen ;
 param DepNum = depnum | cnum ResFra.Num ;
 param Gen = masc | fem ;
 param Kas = nom | acc ;
 param Num = sg | pl ;
 }
-concrete English of Letter = open ResEng in {flags startcat = Letter ;flags lexer = textlit ;flags unlexer = textlit ;lincat Author = {s : (ResEng.Num => (ResEng.Sex => Str)) ;n : ResEng.DepNum ;x : ResEng.Sex }= {s = table ResEng.Num {(ResEng.sg)(ResEng.pl)=> table ResEng.Sex {(ResEng.masc)(ResEng.fem)=> str @ 0 }} ;n = <ResEng.depnum>;x = <ResEng.masc>} ;"Author" ;
+concrete English of Letter = open ResEng in {
+flags modulesize = n42 ;
+flags startcat = Letter ;
+flags lexer = textlit ;
+flags unlexer = textlit ;
+lincat Author = {s : (ResEng.Num => (ResEng.Sex => Str)) ;n : ResEng.DepNum ;x : ResEng.Sex }= {s = table ResEng.Num {(ResEng.sg)(ResEng.pl)=> table ResEng.Sex {(ResEng.masc)(ResEng.fem)=> str @ 0 }} ;n = <ResEng.depnum>;x = <ResEng.masc>} ;"Author" ;
 lin BePromoted : Letter.Sentence = \ Position @ 0 -> {s = table ResEng.DepNum {(ResEng.depnum)(ResEng.cnum (ResEng.sg)) (ResEng.cnum (ResEng.pl)) => table ResEng.Sex {(ResEng.masc)(ResEng.fem)=> table ResEng.Num {(ResEng.pl)=> table ResEng.Sex {(ResEng.fem)=> "you" ++ ("have" ++ ("been" ++ ("promoted" ++ "to")))++ Position @ 0.s ! <ResEng.pl>! <ResEng.fem>;(ResEng.masc)=> "you" ++ ("have" ++ ("been" ++ ("promoted" ++ "to")))++ Position @ 0.s ! <ResEng.pl>! <ResEng.masc>} ;(ResEng.sg)=> table ResEng.Sex {(ResEng.fem)=> "you" ++ ("have" ++ ("been" ++ ("promoted" ++ "to")))++ Position @ 0.s ! <ResEng.sg>! <ResEng.fem>;(ResEng.masc)=> "you" ++ ("have" ++ ("been" ++ ("promoted" ++ "to")))++ Position @ 0.s ! <ResEng.sg>! <ResEng.masc>}}}}} ;"(you have been promoted to)Position_0" ;
 lin ColleagueHe : Letter.Recipient = \ -> {s = "colleague" ;n = <ResEng.sg>;x = <ResEng.masc>} ;"colleague" ;
 lin ColleagueShe : Letter.Recipient = \ -> {s = "colleague" ;n = <ResEng.sg>;x = <ResEng.fem>} ;"colleague" ;
@@ -280,7 +316,9 @@ lin Senior : Letter.Position = \ -> {s = table ResEng.Num {(ResEng.sg)=> table R
 lincat Sentence = {s : (ResEng.DepNum => (ResEng.Sex => (ResEng.Num => (ResEng.Sex => Str)))) }= {s = table ResEng.DepNum {(ResEng.depnum)(ResEng.cnum (ResEng.sg)) (ResEng.cnum (ResEng.pl)) => table ResEng.Sex {(ResEng.masc)(ResEng.fem)=> table ResEng.Num {(ResEng.sg)(ResEng.pl)=> table ResEng.Sex {(ResEng.masc)(ResEng.fem)=> str @ 0 }}}}} ;"Sentence" ;
 lin Spouse : Letter.Author = \ -> {s = table ResEng.Num {(ResEng.sg)=> table ResEng.Sex {(ResEng.fem)=> "your" ++ "husband" ;(ResEng.masc)=> "your" ++ "wife" } ;(ResEng.pl)=> table ResEng.Sex {(ResEng.fem)=> "your" ++ "husbands" ;(ResEng.masc)=> "your" ++ "wives" }} ;n = <ResEng.depnum>;x = <ResEng.masc>} ;"your wife" ;
 }
-resource ResEng = {param DepNum = depnum | cnum ResEng.Num ;
+resource ResEng = {
+flags modulesize = n4 ;
+param DepNum = depnum | cnum ResEng.Num ;
 param Kas = nom | acc ;
 param Num = sg | pl ;
 param Sex = masc | fem ;
