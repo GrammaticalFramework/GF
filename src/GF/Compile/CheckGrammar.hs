@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:45:23 $ 
+-- > CVS $Date: 2005/05/30 18:39:43 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.26 $
+-- > CVS $Revision: 1.27 $
 --
 -- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
 --
@@ -118,7 +118,7 @@ checkAbsInfo st m (c,info) = do
      _ -> composOp (compAbsTyp g) t
 
 
-checkCompleteGrammar :: SourceAbs -> SourceCnc -> Check (BinTree (Ident,Info))
+checkCompleteGrammar :: SourceAbs -> SourceCnc -> Check (BinTree Ident Info)
 checkCompleteGrammar abs cnc = do
   let js = jments cnc
   let fs = tree2list $ jments abs

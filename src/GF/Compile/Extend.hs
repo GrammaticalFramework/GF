@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:36 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.16 $
+-- > CVS $Date: 2005/05/30 18:39:43 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.17 $
 --
 -- AR 14\/5\/2003 -- 11\/11
 --
@@ -60,8 +60,8 @@ extendModule ms (name,mod) = case mod of
 -- | When extending a complete module: new information is inserted,
 -- and the process is interrupted if unification fails.
 -- If the extended module is incomplete, its judgements are just copied.
-extendMod :: Bool -> Ident -> Ident -> BinTree (Ident,Info) -> BinTree (Ident,Info) -> 
-             Err (BinTree (Ident,Info))
+extendMod :: Bool -> Ident -> Ident -> BinTree Ident Info -> BinTree Ident Info -> 
+             Err (BinTree Ident Info)
 extendMod isCompl name base old new = foldM try new $ tree2list old where
   try t i@(c,_) = errIn ("constant" +++ prt c) $
                   tryInsert (extendAnyInfo isCompl name base) indirIf t i

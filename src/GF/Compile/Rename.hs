@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:46 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.18 $
+-- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.19 $
 --
 -- AR 14\/5\/2003
 -- The top-level function 'renameGrammar' does several things:
@@ -61,7 +61,7 @@ renameModule ms (name,mod) = errIn ("renaming module" +++ prt name) $ case mod o
 
 type Status = (StatusTree, [(OpenSpec Ident, StatusTree)])
 
-type StatusTree = BinTree (Ident,StatusInfo)
+type StatusTree = BinTree Ident StatusInfo
 
 type StatusInfo = Ident -> Term
 
@@ -114,7 +114,7 @@ info2status mq (c,i) = (c, case i of
   _           -> maybe Cn  Q mq
   )
 
-tree2status :: OpenSpec Ident -> BinTree (Ident,Info) -> BinTree (Ident,StatusInfo)
+tree2status :: OpenSpec Ident -> BinTree Ident Info -> BinTree Ident StatusInfo
 tree2status o = case o of
   OSimple _ i   -> mapTree (info2status (Just i))
   OQualif _ i j -> mapTree (info2status (Just j))
@@ -127,7 +127,7 @@ buildStatus gr c mo = let mo' = self2status c mo in case mo of
     mods <- mapM (lookupModule gr1 . openedModule) ops
     let sts = map modInfo2status $ zip ops mods    
     return $ if isModCnc m
-      then (NT, reverse sts) -- the module itself does not define any names
+      then (emptyBinTree, reverse sts) -- the module itself does not define any names
       else (mo',reverse sts) -- so the empty ident is not needed
 
 modInfo2status :: (OpenSpec Ident,SourceModInfo) -> (OpenSpec Ident, StatusTree)

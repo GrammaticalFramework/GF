@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:42 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.14 $
+-- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.15 $
 --
 -- Top-level partial evaluation for GF source modules.
 -----------------------------------------------------------------------------
@@ -157,7 +157,7 @@ recordExpand typ trm = case unComputed typ of
 
 
 -- | auxiliaries for compiling the resource
-allOperDependencies :: Ident -> BinTree (Ident,Info) -> [(Ident,[Ident])]
+allOperDependencies :: Ident -> BinTree Ident Info -> [(Ident,[Ident])]
 allOperDependencies m b = 
   [(f, nub (opty pty ++ opty pt)) | (f, ResOper pty pt) <- tree2list b]
   where

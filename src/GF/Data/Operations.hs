@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:05 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.19 $
+-- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.20 $
 --
 -- some auxiliary GF operations. AR 19\/6\/1998 -- 6\/2\/2001
 --
@@ -32,12 +32,12 @@ module GF.Data.Operations (-- * misc functions
 		   mapP,
 		   unifPerhaps, updatePerhaps, updatePerhapsHard,
 
-		   -- * binary search trees
-		   BinTree(..), isInBinTree, commonsInTree, justLookupTree,
-		   lookupTree, lookupTreeEq, lookupTreeMany, updateTree,
-		   updateTreeGen, updateTreeEq, updatesTree, updatesTreeNondestr, buildTree,
+		   -- * binary search trees; now with FiniteMap
+		   BinTree, emptyBinTree, isInBinTree, justLookupTree,
+		   lookupTree, lookupTreeMany, updateTree,
+		   buildTree, filterBinTree,
 		   sorted2tree, mapTree, mapMTree, tree2list,
-		   depthTree, mergeTrees, 
+ 
 
 		   -- * parsing
 		   WParser, wParseResults, paragraphs,
@@ -77,7 +77,8 @@ module GF.Data.Operations (-- * misc functions
 
 import Data.Char (isSpace, toUpper, isSpace, isDigit)
 import Data.List (nub, sortBy, sort, deleteBy, nubBy)
-import Control.Monad (liftM2, MonadPlus, mzero, mplus)
+--import Data.FiniteMap
+import Control.Monad (liftM,liftM2, MonadPlus, mzero, mplus)
 
 infixr 5 +++
 infixr 5 ++-
@@ -288,59 +289,46 @@ updatePerhapsHard old p1 p2 = case (p1,p2) of
   _ -> unifPerhaps p1 p2
 
 -- binary search trees
+--- FiniteMap implementation is slower in crucial tests
 
-data BinTree a = NT | BT a !(BinTree a) !(BinTree a) deriving (Show,Read)
+data BinTree a b = NT | BT (a,b) !(BinTree a b) !(BinTree a b) deriving (Show)
+-- type BinTree a b = FiniteMap a b
 
-isInBinTree :: (Ord a) => a -> BinTree a -> Bool
-isInBinTree x tree = case tree of
- NT -> False
- BT a left right 
-   | x < a  -> isInBinTree x left
-   | x > a  -> isInBinTree x right
-   | x == a -> True
+emptyBinTree :: BinTree a b
+emptyBinTree = NT
+-- emptyBinTree = emptyFM
 
--- | quick method to see if two trees have common elements
---
--- the complexity is O(log |old|, |new|) so the heuristic is that new is smaller
-commonsInTree :: (Ord a) => BinTree (a,b) -> BinTree (a,b) -> [(a,(b,b))]
-commonsInTree old new = foldr inOld [] new' where
-  new' = tree2list new
-  inOld (x,v) xs = case justLookupTree x old of
-    Ok v' -> (x,(v',v)) : xs
-    _ -> xs
+isInBinTree :: (Ord a) => a -> BinTree a b -> Bool
+isInBinTree x = err (const False) (const True) .  justLookupTree x
+-- isInBinTree = elemFM
 
-justLookupTree :: (Ord a) => a -> BinTree (a,b) -> Err b
+justLookupTree :: (Ord a) => a -> BinTree a b -> Err b
 justLookupTree = lookupTree (const [])
 
-lookupTree :: (Ord a) => (a -> String) -> a -> BinTree (a,b) -> Err b
+lookupTree :: (Ord a) => (a -> String) -> a -> BinTree a b -> Err b
 lookupTree pr x tree = case tree of
  NT -> Bad ("no occurrence of element" +++ pr x)
  BT (a,b) left right 
    | x < a  -> lookupTree pr x left
    | x > a  -> lookupTree pr x right
    | x == a -> return b
+--lookupTree pr x tree = case lookupFM tree x of
+--  Just y -> return y
+--  _ -> Bad ("no occurrence of element" +++ pr x)
 
-lookupTreeEq :: (Ord a) => 
-     (a -> String) -> (a -> a -> Bool) -> a -> BinTree (a,b) -> Err b
-lookupTreeEq pr eq x tree = case tree of
- NT -> Bad ("no occurrence of element equal to" +++ pr x)
- BT (a,b) left right 
-   | eq x a -> return b     -- a weaker equality relation than ==
-   | x < a  -> lookupTreeEq pr eq x left
-   | x > a  -> lookupTreeEq pr eq x right
-
-lookupTreeMany :: Ord a => (a -> String) -> [BinTree (a,b)] -> a -> Err b
+lookupTreeMany :: Ord a => (a -> String) -> [BinTree a b] -> a -> Err b
 lookupTreeMany pr (t:ts) x = case lookupTree pr x t of
   Ok v -> return v
   _ -> lookupTreeMany pr ts x
 lookupTreeMany pr [] x = Bad $ "failed to find" +++ pr x
 
 -- | destructive update
-updateTree :: (Ord a) => (a,b) -> BinTree (a,b) -> BinTree (a,b)
+updateTree :: (Ord a) => (a,b) -> BinTree a b -> BinTree a b
+-- updateTree (a,b) tr = addToFM tr a b
 updateTree = updateTreeGen True
 
 -- | destructive or not
-updateTreeGen :: (Ord a) => Bool -> (a,b) -> BinTree (a,b) -> BinTree (a,b)
+updateTreeGen :: (Ord a) => Bool -> (a,b) -> BinTree a b -> BinTree a b
 updateTreeGen destr z@(x,y) tree = case tree of
  NT -> BT z NT NT
  BT c@(a,b) left right 
@@ -350,67 +338,44 @@ updateTreeGen destr z@(x,y) tree = case tree of
                     then BT z left right -- removing the old value of a
                     else tree            -- retaining the old value if one exists
 
-updateTreeEq :: 
-  (Ord a) => (a -> a -> Bool) -> (a,b) -> BinTree (a,b) -> BinTree (a,b)
-updateTreeEq eq z@(x,y) tree = case tree of
- NT -> BT z NT NT
- BT c@(a,b) left right
-   | eq x a -> BT (a,y) left right -- removing the old value of a 
-   | x < a  -> let left' = updateTree z left in   BT c left' right 
-   | x > a  -> let right' = updateTree z right in BT c left right' 
-
-updatesTree :: (Ord a) => [(a,b)] -> BinTree (a,b) -> BinTree (a,b)
-updatesTree (z:zs) tr = updateTree z t where t = updatesTree zs tr
-updatesTree [] tr = tr
-
-updatesTreeNondestr :: (Ord a) => [(a,b)] -> BinTree (a,b) -> BinTree (a,b)
-updatesTreeNondestr xs tr = case xs of
-  (z:zs) -> updateTreeGen False z t where t = updatesTreeNondestr zs tr
-  _ -> tr
-
-buildTree :: (Ord a) => [(a,b)] -> BinTree (a,b)
+buildTree :: (Ord a) => [(a,b)] -> BinTree a b
 buildTree = sorted2tree . sortBy fs where
   fs (x,_) (y,_) 
     | x < y = LT
     | x > y = GT
     | True  = EQ 
--- buildTree zz = updatesTree zz NT
+-- buildTree = listToFM
 
-sorted2tree :: [(a,b)] -> BinTree (a,b)
+sorted2tree :: Ord a => [(a,b)] -> BinTree a b
 sorted2tree [] = NT
 sorted2tree xs = BT x (sorted2tree t1) (sorted2tree t2) where
   (t1,(x:t2)) = splitAt (length xs `div` 2) xs
+--sorted2tree = listToFM
 
-mapTree :: (a -> b) -> BinTree a -> BinTree b
+--- dm less general than orig
+mapTree :: ((a,b) -> (a,c)) -> BinTree a b -> BinTree a c
 mapTree f NT = NT
 mapTree f (BT a left right) = BT (f a) (mapTree f left) (mapTree f right)
+--mapTree f = mapFM (\k v -> snd (f (k,v)))
 
-mapMTree :: Monad m => (a -> m b) -> BinTree a -> m (BinTree b)
+--- fm less efficient than orig?
+mapMTree :: (Ord a,Monad m) => ((a,b) -> m (a,c)) -> BinTree a b -> m (BinTree a c)
 mapMTree f NT = return NT
 mapMTree f (BT a left right) = do
- a'     <- f a
- left'  <- mapMTree f left 
- right' <- mapMTree f right
- return $ BT a' left' right'
+  a'     <- f a
+  left'  <- mapMTree f left 
+  right' <- mapMTree f right
+  return $ BT a' left' right'
+--mapMTree f t = liftM listToFM $ mapM f $ fmToList t
 
-tree2list :: BinTree a -> [a] -- inorder
+filterBinTree :: Ord a => (a -> b -> Bool) -> BinTree a b -> BinTree a b
+-- filterFM f t
+filterBinTree f = sorted2tree . filter (uncurry f) . tree2list
+
+tree2list :: BinTree a b -> [(a,b)] -- inorder
 tree2list NT = []
 tree2list (BT z left right) = tree2list left ++ [z] ++ tree2list right
-
-depthTree :: BinTree a -> Int
-depthTree NT = 0
-depthTree (BT _ left right) = 1 + max (depthTree left) (depthTree right)
-
-mergeTrees :: Ord a => BinTree (a,b) -> BinTree (a,b) -> BinTree (a,[b])
-mergeTrees old new = foldr upd new' (tree2list old) where
-  upd xy@(x,y) tree = case tree of
-    NT -> BT (x,[y]) NT NT
-    BT (a,bs) left right 
-      | x < a  -> let left'  = upd xy left  in BT (a,bs) left' right 
-      | x > a  -> let right' = upd xy right in BT (a,bs) left  right' 
-      | otherwise -> BT (a, y:bs) left right -- adding the new value
-  new' = mapTree (\ (i,d) -> (i,[d])) new
-
+--tree2list = fmToList
 
 -- parsing
 

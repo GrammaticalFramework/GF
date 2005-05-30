@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/14 08:38:55 $ 
+-- > CVS $Date: 2005/05/30 18:39:44 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.22 $
+-- > CVS $Revision: 1.23 $
 --
 -- Datastructures and functions for modules, common to GF and GFC.
 --
@@ -61,11 +61,13 @@ data Module i f a = Module {
     mtype   :: ModuleType i ,
     mstatus :: ModuleStatus ,
     flags   :: [f] ,
-    extends :: [i],
+    extends :: [i], ---- [(i,MInclude i)],
     opens   :: [OpenSpec i] ,
-    jments  :: BinTree (i,a)
+    jments  :: BinTree i a
   }
-  deriving Show
+---  deriving Show
+instance Show (Module i f a) where
+  show _ = "cannot show Module with FiniteMap"
 
 -- | encoding the type of the module
 data ModuleType i = 
@@ -81,6 +83,9 @@ data ModuleType i =
   deriving (Eq,Show)
 
 data MReuseType i = MRInterface i | MRInstance i i | MRResource i
+  deriving (Show,Eq)
+
+data MInclude i = MIAll | MIOnly [i] | MIExcept [i]
   deriving (Show,Eq)
 
 -- | previously: single inheritance
@@ -103,7 +108,7 @@ updateModule :: Ord i => Module i f t -> i -> t -> Module i f t
 updateModule (Module  mt ms fs me ops js) i t = 
   Module mt ms fs me ops (updateTree (i,t) js)
 
-replaceJudgements :: Module i f t -> BinTree (i,t) -> Module i f t
+replaceJudgements :: Module i f t -> BinTree i t -> Module i f t
 replaceJudgements (Module mt ms fs me ops _) js = Module mt ms fs me ops js
 
 addOpenQualif :: i -> i -> Module i f t -> Module i f t
@@ -240,7 +245,7 @@ emptyModInfo :: ModInfo i f a
 emptyModInfo = ModMod emptyModule
 
 emptyModule :: Module i f a
-emptyModule = Module MTResource MSComplete [] [] [] NT
+emptyModule = Module MTResource MSComplete [] [] [] emptyBinTree
 
 -- | we store the module type with the identifier
 data IdentM i = IdentM {

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:38 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.13 $
 --
 -- Compile a gfc module into a "reuse" gfr resource, interface, or instance.
 -----------------------------------------------------------------------------
@@ -46,7 +46,8 @@ makeReuse gr r me mrc = do
       (ops,jms) <- case mc of 
         ModMod m -> case mtype m of
           MTAbstract -> liftM ((,) (opens m)) $ 
-                          mkResDefs True False gr r c me (extends m) (jments m) NT
+                          mkResDefs True False gr r c me 
+                            (extends m) (jments m) emptyBinTree
           _ -> prtBad "expected abstract to be the type of" c
         _ -> prtBad "expected abstract to be the type of" c
 
@@ -73,8 +74,8 @@ makeReuse gr r me mrc = do
 -- the second Boolean indicates if the definition needs be given
 mkResDefs :: Bool -> Bool -> 
              SourceGrammar -> Ident -> Ident -> [Ident] -> [Ident] -> 
-             BinTree (Ident,Info) -> BinTree (Ident,Info) -> 
-             Err (BinTree (Ident,Info))
+             BinTree Ident Info -> BinTree Ident Info -> 
+             Err (BinTree Ident Info)
 mkResDefs hasT isC gr r a mext maext abs cnc = mapMTree (mkOne a maext) abs where
 
   ifTyped  = yes --- if hasT then yes else const nope --- needed for TC
