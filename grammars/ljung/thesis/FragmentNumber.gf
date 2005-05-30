@@ -1,6 +1,8 @@
 
 concrete FragmentNumber of FragmentAbstract = open FragmentResource in {
 
+flags startcat= S;
+
 lincat 
 
 N  = { s : Num => Str };
