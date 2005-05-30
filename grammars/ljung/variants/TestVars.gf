@@ -5,7 +5,7 @@ lincat S = {s1:Str; s2:AB => Str};
 
 lin
 
-f x = { s1 = x.s2 ! A;
+f x = { s1 = [];
       	s2 = table{ y => variants{ x.s2 ! A; x.s1 ++ x.s2 ! y } } };
 
 a = { s1 = "a" ++ variants{ "b"; "c" }; 

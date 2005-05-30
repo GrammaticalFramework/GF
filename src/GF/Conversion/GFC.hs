@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/17 13:38:46 $ 
+-- > CVS $Date: 2005/05/30 08:11:32 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.11 $
+-- > CVS $Revision: 1.12 $
 --
 -- All conversions from GFC 
 -----------------------------------------------------------------------------
@@ -29,6 +29,7 @@ import qualified GF.Conversion.GFCtoSimple as G2S
 import qualified GF.Conversion.SimpleToFinite as S2Fin
 import qualified GF.Conversion.RemoveSingletons as RemSing
 import qualified GF.Conversion.RemoveErasing as RemEra
+import qualified GF.Conversion.RemoveEpsilon as RemEps
 import qualified GF.Conversion.SimpleToMCFG as S2M
 import qualified GF.Conversion.MCFGtoCFG as M2C
 
@@ -49,6 +50,7 @@ gfc2mcfg2cfg opts = \g -> let e = g2e g in trace2 "Options" (show opts) (e2m e, 
 		  Just "strict"            -> simple2mcfg_strict .                                    gfc2simple
 		  Just "finite"            -> simple2mcfg_nondet .                    simple2finite . gfc2simple
 		  Just "singletons"        -> simple2mcfg_nondet . removeSingletons .                 gfc2simple
+		  Just "epsilon"           -> removeEpsilon      . simple2mcfg_nondet .               gfc2simple
 		  Just "finite-singletons" -> simple2mcfg_nondet . removeSingletons . simple2finite . gfc2simple
 		  Just "finite-strict"     -> simple2mcfg_strict .                    simple2finite . gfc2simple
 		  _                        -> simple2mcfg_nondet .                                    gfc2simple
@@ -82,6 +84,9 @@ mcfg2cfg = M2C.convertGrammar
 
 removeErasing :: EGrammar -> [SCat] -> MGrammar
 removeErasing = RemEra.convertGrammar 
+
+removeEpsilon :: EGrammar -> EGrammar
+removeEpsilon = RemEps.convertGrammar 
 
 ----------------------------------------------------------------------
 -- * converting to some obscure formats
