@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:21 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/05/30 21:08:14 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.14 $
 --
 -- a decompiler. AR 12/6/2003 -- 19/4/2004
 -----------------------------------------------------------------------------
@@ -53,7 +53,7 @@ canon2sourceModule (i,mi) = do
   return (i',info')
  where
    redExtOpen m = do
-     e' <- mapM redIdent $ M.extends m
+     e'  <- return $ M.extend m
      os' <- mapM (\ (M.OSimple q i) -> liftM (\i -> M.OQualif q i i) (redIdent i)) $ 
                  M.opens m
      return (e',os')

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Date: 2005/05/30 21:08:14 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.23 $
+-- > CVS $Revision: 1.24 $
 --
 -- Datastructures and functions for modules, common to GF and GFC.
 --
@@ -18,8 +18,11 @@
 -- Invariant: modules are stored in dependency order
 -----------------------------------------------------------------------------
 
-module GF.Infra.Modules (MGrammar(..), ModInfo(..), Module(..), ModuleType(..), MReuseType(..),
-		extendm, updateMGrammar, updateModule, replaceJudgements,
+module GF.Infra.Modules (
+		MGrammar(..), ModInfo(..), Module(..), ModuleType(..),
+		MReuseType(..), MInclude (..),
+		extends, isInherited,inheritAll, 
+                updateMGrammar, updateModule, replaceJudgements,
 		addOpenQualif, flagsModule, allFlags, mapModules,
 		MainGrammar(..), MainConcreteSpec(..), OpenSpec(..), OpenQualif(..),
 		oSimple, oQualif,
@@ -61,7 +64,7 @@ data Module i f a = Module {
     mtype   :: ModuleType i ,
     mstatus :: ModuleStatus ,
     flags   :: [f] ,
-    extends :: [i], ---- [(i,MInclude i)],
+    extend  :: [(i,MInclude i)],
     opens   :: [OpenSpec i] ,
     jments  :: BinTree i a
   }
@@ -88,11 +91,17 @@ data MReuseType i = MRInterface i | MRInstance i i | MRResource i
 data MInclude i = MIAll | MIOnly [i] | MIExcept [i]
   deriving (Show,Eq)
 
--- | previously: single inheritance
-extendm :: Module i f a -> Maybe i
-extendm m = case extends m of
-  [i] -> Just i
-  _   -> Nothing
+extends :: Module i f a -> [i]
+extends = map fst . extend
+
+isInherited :: Eq i => MInclude i -> i -> Bool
+isInherited c i = case c of
+  MIAll -> True
+  MIOnly is -> elem i is
+  MIExcept is -> notElem i is
+
+inheritAll :: i -> (i,MInclude i)
+inheritAll i = (i,MIAll)
 
 -- destructive update
 

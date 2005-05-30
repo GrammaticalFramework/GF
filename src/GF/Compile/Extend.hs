@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 18:39:43 $ 
+-- > CVS $Date: 2005/05/30 21:08:14 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.17 $
+-- > CVS $Revision: 1.18 $
 --
 -- AR 14\/5\/2003 -- 11\/11
 --
@@ -37,10 +37,10 @@ extendModule ms (name,mod) = case mod of
   ModMod m | mstatus m == MSIncomplete && isModCnc m -> return (name,mod)
 
   ModMod m -> do
-    mod' <- foldM extOne m (extends m) 
+    mod' <- foldM extOne m (extend m) 
     return (name,ModMod mod') 
  where
-   extOne mod@(Module mt st fs es ops js) n = do
+   extOne mod@(Module mt st fs es ops js) (n,cond) = do
         (m0,isCompl) <- do
           m <- lookupModMod  (MGrammar ms) n
 
@@ -51,18 +51,20 @@ extendModule ms (name,mod) = case mod of
 ----       return (m, if (isCompleteModule m) then True else not (isCompleteModule mod))
 
         -- build extension in a way depending on whether the old module is complete
-        js1 <- extendMod isCompl n name (jments m0) js
+        js1 <- extendMod isCompl (n, isInherited cond) name (jments m0) js
 
         -- if incomplete, throw away extension information
-        let me' = if isCompl then es else (filter (/=n) es) 
+        let me' = if isCompl then es else (filter ((/=n) . fst) es) 
         return $ Module mt st fs me' ops js1
 
 -- | When extending a complete module: new information is inserted,
 -- and the process is interrupted if unification fails.
 -- If the extended module is incomplete, its judgements are just copied.
-extendMod :: Bool -> Ident -> Ident -> BinTree Ident Info -> BinTree Ident Info -> 
+extendMod :: Bool -> (Ident,Ident -> Bool) -> Ident -> 
+             BinTree Ident Info -> BinTree Ident Info -> 
              Err (BinTree Ident Info)
-extendMod isCompl name base old new = foldM try new $ tree2list old where
+extendMod isCompl (name,cond) base old new = foldM try new $ tree2list old where
+  try t i@(c,_) | not (cond c) = return t
   try t i@(c,_) = errIn ("constant" +++ prt c) $
                   tryInsert (extendAnyInfo isCompl name base) indirIf t i
   indirIf = if isCompl then indirInfo name else id

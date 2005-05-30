@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/26 14:18:17 $ 
+-- > CVS $Date: 2005/05/30 21:08:15 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.21 $
+-- > CVS $Revision: 1.22 $
 --
 -- From internal source syntax to BNFC-generated (used for printing).
 -----------------------------------------------------------------------------
@@ -45,12 +45,17 @@ trModule (i,mo) = case mo of
       MTInstance a -> P.MTInstance i' (tri a)
       MTInterface -> P.MTInterface i'
     body = P.MBody 
-             (trExtend (extends m)) 
+             (trExtends (extend m)) 
              (mkOpens (map trOpen (opens m)))
              (mkTopDefs (concatMap trAnyDef (tree2list (jments m)) ++ map trFlag (flags m)))
 
-trExtend :: [Ident] -> P.Extend
-trExtend i = ifNull P.NoExt (P.Ext . map (P.IAll . tri)) i ---- IAll
+trExtends :: [(Ident,MInclude Ident)] -> P.Extend
+trExtends [] = P.NoExt 
+trExtends es = (P.Ext $ map tre es) where
+  tre (i,c) = case c of 
+    MIAll       -> P.IAll   (tri i)
+    MIOnly is   -> P.ISome  (tri i) (map tri is)
+    MIExcept is -> P.IMinus (tri i) (map tri is)
 
 ---- this has to be completed with other mtys
 forName (MTConcrete a) = tri a
