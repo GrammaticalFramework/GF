@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:44 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.13 $
 --
 -- Rebuild a source module from incomplete and its with-instance.
 -----------------------------------------------------------------------------
@@ -51,8 +51,8 @@ rebuildModule ms mo@(i,mi) = do
               [] -> return $ replaceJudgements m js'
               j0:jj -> do 
                 m0 <- lookupModMod gr j0
-                let notInM0 c = not $ isInBinTree (fst c) $ mapTree fst $ jments m0
-                let js2 = sorted2tree $ filter notInM0 $ tree2list js'
+                let notInM0 c _  = not $ isInBinTree c $ jments m0
+                let js2 = filterBinTree notInM0 js'
                 if null jj 
                   then return $ replaceJudgements m js2
                   else Bad "FIXME: handle multiple inheritance in instance"
@@ -84,7 +84,7 @@ checkCompleteInstance abs cnc = ifNull (return ()) (Bad . unlines) $
   checkComplete [f | (f, ResOper (Yes _) _) <- abs'] cnc'
    where
      abs' = tree2list $ jments abs
-     cnc' = mapTree fst $ jments cnc
+     cnc' = jments cnc
      checkComplete sought given = foldr ckOne [] sought
        where
          ckOne f = if isInBinTree f given 

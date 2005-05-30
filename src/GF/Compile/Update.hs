@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:48 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.8 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -39,7 +39,7 @@ updateRes gr@(MGrammar ms) m i info = MGrammar $ map upd ms where
        _ -> (n,mod) --- no error msg
 
 -- | combine a list of definitions into a balanced binary search tree
-buildAnyTree :: [(Ident,Info)] -> Err (BinTree (Ident, Info))
+buildAnyTree :: [(Ident,Info)] -> Err (BinTree Ident Info)
 buildAnyTree ias = do
   ias' <- combineAnyInfos ias
   return $ buildTree ias'
@@ -94,9 +94,17 @@ unifyInfos unif ris = do
   info <- foldM (unif c) i is
   return (c,info)
 
+
 tryInsert :: Ord a => (b -> b -> Err b) -> (b -> b) ->
-             BinTree (a,b) -> (a,b) -> Err (BinTree (a,b))
-tryInsert unif indir tree z@(x, info) = case tree of
+             BinTree a b -> (a,b) -> Err (BinTree a b)
+tryInsert unif indir tree z@(x, info) = case justLookupTree x tree of
+  Ok info0 -> do
+    info1 <- unif info info0
+    return $ updateTree (x,info1) tree 
+  _ -> return $ updateTree (x,indir info) tree
+
+{- ----
+case tree of
  NT -> return $ BT (x, indir info) NT NT
  BT c@(a,info0) left right 
    | x < a  -> do
@@ -108,6 +116,7 @@ tryInsert unif indir tree z@(x, info) = case tree of
    | x == a -> do
        info' <- unif info info0
        return $ BT (x,info') left right
+-}
 
 --- addToMaybeList m c = maybe (return c) (\old -> return (c ++ old)) m
 

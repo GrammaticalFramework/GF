@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:46 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.14 $
+-- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.15 $
 --
 -- Generate all trees of given category and depth. AR 30\/4\/2004
 --
@@ -101,7 +101,7 @@ generate gr ifm cat i mn mt = case mt of
   allTrees = genAll i
 
   -- dynamic generation
-  genAll :: Int -> BinTree (SCat,[[STree]])
+  genAll :: Int -> BinTree SCat [[STree]]
   genAll i = iter i genNext (mapTree (\ (c,_) -> (c,[[]])) gr)
 
   iter 0 f tr = tr
@@ -126,7 +126,7 @@ generate gr ifm cat i mn mt = case mt of
     SMeta k     -> gen k 
     _ -> [t]
 
-type SGrammar = BinTree (SCat,[SRule])
+type SGrammar = BinTree SCat [SRule]
 type SIdent = String
 type SRule = (SFun,SType)
 type SType = ([SCat],SCat)

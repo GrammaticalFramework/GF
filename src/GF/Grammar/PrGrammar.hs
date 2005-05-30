@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/28 16:42:49 $ 
+-- > CVS $Date: 2005/05/30 18:39:44 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.14 $
+-- > CVS $Revision: 1.15 $
 --
 -- AR 7\/12\/1999 - 1\/4\/2000 - 10\/5\/2003
 --
@@ -270,7 +270,7 @@ prOperSignature (f, t) = prQIdent f +++ ":" +++ prt t
 
 -- to look up a constant etc in a search tree
 
-lookupIdent :: Ident -> BinTree (Ident,b) -> Err b
+lookupIdent :: Ident -> BinTree Ident b -> Err b
 lookupIdent c t = case lookupTree prt c t of
   Ok v -> return v
   _ -> prtBad "unknown identifier" c

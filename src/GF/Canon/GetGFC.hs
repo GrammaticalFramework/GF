@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/27 21:05:17 $ 
+-- > CVS $Date: 2005/05/30 18:39:43 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.8 $
+-- > CVS $Revision: 1.9 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -34,11 +34,13 @@ getCanonModule file = do
     _ -> ioeErr $ Bad "expected exactly one module in a file"
 
 getCanonGrammar :: FilePath -> IOE CanonGrammar
+-- getCanonGrammar = getCanonGrammarByLine
 getCanonGrammar file = do
   s <- ioeIO $ readFileIf file
   c <- ioeErr $ pCanon $ myLexer s
   return $ canon2grammar c
 
+{-
 -- the following surprisingly does not save memory so it is
 -- not in use
 
@@ -74,3 +76,4 @@ getCanonGrammarByLine file = do
 
       isHash a b = a `div` step < b `div` step
       step = size `div` 50
+-}

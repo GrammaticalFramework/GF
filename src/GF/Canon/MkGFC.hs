@@ -5,15 +5,15 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/27 21:05:17 $ 
+-- > CVS $Date: 2005/05/30 18:39:43 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.13 $
+-- > CVS $Revision: 1.14 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
 module GF.Canon.MkGFC (prCanonModInfo, prCanon, prCanonMGr,
-	      canon2grammar, grammar2canon, buildCanonGrammar,
+	      canon2grammar, grammar2canon, -- buildCanonGrammar,
 	      info2mod,
 	      trExp, rtExp, rtQIdent) where
 
@@ -173,6 +173,7 @@ rtIdent x
   | isWildIdent x = identC "h_" --- needed in declarations
   | otherwise = identC $ prt x ---
 
+{-
 -- the following is called in GetGFC to read gfc files line
 -- by line. It does not save memory, though, and is therefore
 -- not used.
@@ -184,7 +185,7 @@ buildCanonGrammar n gr0 line = mgr $ case line of
   LFlag f@(Flg (IC "modulesize") (IC n)) -> initModule f $ read $ tail n
   LFlag flag        -> newFlag flag
   LDef def          -> newDef $ def2info def
-  LEnd              -> cleanNames
+--  LEnd              -> cleanNames
   _                 -> M.modules gr0
  where
    newModule mt ext op = mod2info (Mod mt ext op [] []) : mods
@@ -198,10 +199,11 @@ buildCanonGrammar n gr0 line = mgr $ case line of
      (name, M.ModMod (M.Module mt com flags ee oo defs)) ->
        (name, M.ModMod (M.Module mt com flags ee oo 
           (upd (padd 8 n) d defs))) : tmods
-   cleanNames = case actm of
-     (name, M.ModMod (M.Module mt com flags ee oo defs)) ->
-       (name, M.ModMod (M.Module mt com (reverse flags) ee oo 
-          (mapTree (\ (IC f,t) -> (IC (drop 8 f),t)) defs))) : tmods
+
+--   cleanNames = case actm of
+--     (name, M.ModMod (M.Module mt com flags ee oo defs)) ->
+--       (name, M.ModMod (M.Module mt com (reverse flags) ee oo 
+--          (mapTree (\ (IC f,t) -> (IC (drop 8 f),t)) defs))) : tmods
 
    actm = head mods -- only used when a new mod has been created
    mods = M.modules gr0
@@ -214,16 +216,20 @@ buildCanonGrammar n gr0 line = mgr $ case line of
      )
 
    -- create an initial tree with who-cares value
-   newtree (i :: Int) = sorted2tree [
-     (padd 8 k, ResPar []) | 
-     k <- [1..i]] --- padd (length (show i))
+   newtree (i :: Int) = emptyBinTree
+--   newtree (i :: Int) = sorted2tree [
+--     (padd 8 k, ResPar []) | 
+--     k <- [1..i]] --- padd (length (show i))
 
-   padd l k = let sk = show k in identC (replicate (l - length sk) '0' ++ sk)
+   padd l k = 0
+--   padd l k = let sk = show k in identC (replicate (l - length sk) '0' ++ sk)
 
-   upd n d@(f,t) defs = case defs of
-     NT -> BT (merg n f,t) NT NT --- should not happen
-     BT c@(a,_) left right 
-       | n < a  -> let left'  = upd n d left  in BT c left' right 
-       | n > a  -> let right' = upd n d right in BT c left right' 
-       | otherwise -> BT (merg n f,t) left right
-   merg (IC n) (IC f) = IC (n ++ f)
+   upd _ d defs = updateTree d defs
+--   upd n d@(f,t) defs = case defs of
+--     NT -> BT (merg n f,t) NT NT --- should not happen
+--     BT c@(a,_) left right 
+--       | n < a  -> let left'  = upd n d left  in BT c left' right 
+--       | n > a  -> let right' = upd n d right in BT c left right' 
+--       | otherwise -> BT (merg n f,t) left right
+--   merg (IC n) (IC f) = IC (n ++ f)
+-}

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/27 21:05:17 $ 
+-- > CVS $Date: 2005/05/30 18:39:43 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.18 $
+-- > CVS $Revision: 1.19 $
 --
 -- Code generator from optimized GF source code to GFC.
 -----------------------------------------------------------------------------
@@ -65,7 +65,7 @@ redModInfo (c,info) = do
          MTTransfer x y -> return (c',MTTransfer (om x) (om y)) --- c' not needed
 
       --- this generates empty GFC reosurce for interface and incomplete
-      let js = if isIncompl then NT else jments m
+      let js = if isIncompl then emptyBinTree else jments m
           mt = mt0 ---- if isIncompl then MTResource else mt0
 
       defss <- mapM (redInfo a) $ tree2list $ js

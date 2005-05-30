@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:47 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.5 $
+-- > CVS $Date: 2005/05/30 18:39:45 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.6 $
 --
 -- information on module, category, function, operation, parameter,... 
 -- AR 16\/9\/2003.
@@ -135,7 +135,7 @@ getInformation opts st c = allChecks $ [
    cs  = [(i,m) | (i,ModMod m) <- modules can]
    cf  = concatMap ruleGroupsOfCF $ map snd $ cfs st
 
-ownConstants :: BinTree (Ident, Info) -> [Ident]
+ownConstants :: BinTree Ident Info -> [Ident]
 ownConstants = map fst . filter isOwn . tree2list where
   isOwn (c,i) = case i of
     AnyInd _ _ -> False
