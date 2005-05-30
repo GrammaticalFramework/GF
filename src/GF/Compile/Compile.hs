@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/27 11:37:57 $
+-- > CVS $Date: 2005/05/30 21:08:14 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.39 $
+-- > CVS $Revision: 1.40 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
@@ -221,7 +221,7 @@ makeSourceModule opts env@(k,gr,can) mo@(i,mi) = case mi of
 
   ModMod m -> case mtype m of
     MTReuse c -> do
-      sm <- ioeErr $ makeReuse gr i (extends m) c
+      sm <- ioeErr $ makeReuse gr i (extend m) c
       let mo2 = (i, ModMod sm)
           mos = modules gr
       --- putp "  type checking reused" $ ioeErr $ showCheckModule mos mo2

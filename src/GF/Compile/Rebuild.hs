@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Date: 2005/05/30 21:08:14 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.13 $
+-- > CVS $Revision: 1.14 $
 --
 -- Rebuild a source module from incomplete and its with-instance.
 -----------------------------------------------------------------------------
@@ -45,7 +45,7 @@ rebuildModule ms mo@(i,mi) = do
           m1 <- lookupModMod gr i0
           testErr (isModRes m1) ("interface expected instead of" +++ prt i0)
           m' <- do
-            js' <- extendMod False i0 i (jments m1) (jments m)
+            js' <- extendMod False (i0,const True) i (jments m1) (jments m)
             --- to avoid double inclusions, in instance I of I0 = J0 ** ...
             case extends m of
               [] -> return $ replaceJudgements m js'
@@ -72,8 +72,8 @@ rebuildModule ms mo@(i,mi) = do
                      ++ [oQualif i i | i <- map snd insts] ----
                      ++ [oSimple i   | i <- map snd insts] ----
                ----      ++ [oSimple ext] ---- to encode dependence
-      --- check if me is incomplete
-      return $ ModMod $ Module mt0 stat' fs me ops1 js 
+      --- check if me is incomplete; --- why inherit all forced by syntax
+      return $ ModMod $ Module mt0 stat' fs (map inheritAll me) ops1 js 
                           ---- (mapTree (qualifInstanceInfo insts) js) -- not needed
 
     _ -> return mi

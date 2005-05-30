@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Date: 2005/05/30 21:08:14 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.13 $
+-- > CVS $Revision: 1.14 $
 --
 -- Compile a gfc module into a "reuse" gfr resource, interface, or instance.
 -----------------------------------------------------------------------------
@@ -27,7 +27,7 @@ import Control.Monad
 
 -- | extracting resource r from abstract + concrete syntax.
 -- AR 21\/8\/2002 -- 22\/6\/2003 for GF with modules
-makeReuse :: SourceGrammar -> Ident -> [Ident] -> 
+makeReuse :: SourceGrammar -> Ident -> [(Ident,MInclude Ident)] -> 
              MReuseType Ident -> Err SourceRes
 makeReuse gr r me mrc = do
   flags <- return [] --- no flags are passed: they would not make sense
@@ -47,7 +47,7 @@ makeReuse gr r me mrc = do
         ModMod m -> case mtype m of
           MTAbstract -> liftM ((,) (opens m)) $ 
                           mkResDefs True False gr r c me 
-                            (extends m) (jments m) emptyBinTree
+                            (extend m) (jments m) emptyBinTree
           _ -> prtBad "expected abstract to be the type of" c
         _ -> prtBad "expected abstract to be the type of" c
 
@@ -65,7 +65,7 @@ makeReuse gr r me mrc = do
                ModMod m' -> return $ jments m'
                _ -> prtBad "expected abstract to be the type of" a
             liftM ((,) (opens m)) $ 
-               mkResDefs hasT True gr r a me (extends m) jmsA (jments m)
+               mkResDefs hasT True gr r a me (extend m) jmsA (jments m)
           _ -> prtBad "expected concrete to be the type of" c
         _ -> prtBad "expected concrete to be the type of" c
 
@@ -73,7 +73,8 @@ makeReuse gr r me mrc = do
 -- | the first  Boolean indicates if the type needs be given
 -- the second Boolean indicates if the definition needs be given
 mkResDefs :: Bool -> Bool -> 
-             SourceGrammar -> Ident -> Ident -> [Ident] -> [Ident] -> 
+             SourceGrammar -> Ident -> Ident -> 
+             [(Ident,MInclude Ident)] -> [(Ident,MInclude Ident)] -> 
              BinTree Ident Info -> BinTree Ident Info -> 
              Err (BinTree Ident Info)
 mkResDefs hasT isC gr r a mext maext abs cnc = mapMTree (mkOne a maext) abs where
@@ -98,7 +99,7 @@ mkResDefs hasT isC gr r a mext maext abs cnc = mapMTree (mkOne a maext) abs wher
       AnyInd b n -> do
         mo    <- lookupModMod gr n
         info' <- lookupInfo mo f
-        mkOne n (extends mo) (f,info')
+        mkOne n (extend mo) (f,info')
 
   look cnc f = do
      info <- lookupTree prt f cnc
@@ -109,13 +110,13 @@ mkResDefs hasT isC gr r a mext maext abs cnc = mapMTree (mkOne a maext) abs wher
        AnyInd _ n -> do 
          mo    <- lookupModMod gr n
          t <- look (jments mo) f
-         redirTyp False n (extends mo) t
+         redirTyp False n (extend mo) t
        _ -> prtBad "not enough information to reuse" f
 
   -- type constant qualifications changed from abstract to resource
   redirTyp always a mae ty = case ty of
     Q _ c | always -> return $ Q r c
-    Q n c | n == a || [n] == mae -> return $ Q r c ---- FIX for non-singleton exts
+    Q n c | n == a || [n] == map fst mae -> return $ Q r c ---- FIX for non-singleton exts
     _ -> composOp (redirTyp always a mae) ty
 
 -- | no reuse for functions of HO\/dep types

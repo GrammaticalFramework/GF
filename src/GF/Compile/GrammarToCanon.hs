@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 18:39:43 $ 
+-- > CVS $Date: 2005/05/30 21:08:14 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.19 $
+-- > CVS $Revision: 1.20 $
 --
 -- Code generator from optimized GF source code to GFC.
 -----------------------------------------------------------------------------
@@ -78,7 +78,7 @@ redModInfo (c,info) = do
  where
    redExtOpen m = do
      e' <- case extends m of
-       es -> mapM redIdent es
+       es -> mapM (liftM inheritAll . redIdent) es
      os' <- mapM (\o -> case o of 
               OQualif q _ i -> liftM (OSimple q) (redIdent i)
               _ -> prtBad "cannot translate unqualified open in" c) $ opens m

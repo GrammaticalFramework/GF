@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 18:39:43 $ 
+-- > CVS $Date: 2005/05/30 21:08:14 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.14 $
+-- > CVS $Revision: 1.15 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ mod2info m = case m of
             MTTrans a x y -> (a,M.MTTransfer (M.oSimple x) (M.oSimple y))
       in (a,M.ModMod (M.Module mt' M.MSComplete flags (ee e) (oo os) defs'))
  where
-  ee (Ext m) = m
+  ee (Ext m) = map M.inheritAll m
   ee _ = []
   oo (Opens ms) = map M.oSimple ms
   oo _ = []
@@ -72,7 +72,7 @@ info2mod m = case m of
       in
         Mod mt' (gfcE me) (gfcO os) flags defs'
  where
-  gfcE = ifNull NoExt Ext
+  gfcE = ifNull NoExt Ext . map fst
   gfcO os = if null os then NoOpens else Opens [m | M.OSimple _ m <- os]
 
 
