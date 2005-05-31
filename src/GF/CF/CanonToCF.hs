@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:11 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/05/31 12:47:52 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.14 $
 --
 -- AR 27\/1\/2000 -- 3\/12\/2001 -- 8\/6\/2003 
 -----------------------------------------------------------------------------
@@ -42,17 +42,22 @@ canon2cf opts gr c = tracePrt "#size of CF" (err id (show.length.rulesOfCF)) $ d
   a <- M.abstractOfConcrete gr c
   let cncs = [m | (n, M.ModMod m) <- M.modules gr, elem n ms]
   let mms  = [(a, tree2list (M.jments m)) | m <- cncs]
-  rules0 <- liftM concat $ mapM (uncurry (cnc2cfCond opts)) mms
+  cnc <- liftM M.jments $ M.lookupModMod gr c
+  rules0 <- liftM concat $ mapM (uncurry (cnc2cfCond opts cnc)) mms
   let bindcats = map snd $ allBindCatsOf gr 
   let rules = filter (not . isCircularCF) rules0 ---- temporarily here
   let grules = groupCFRules rules
   let predef = mkCFPredef opts bindcats grules
   return $ CF predef
 
-cnc2cfCond :: Options -> Ident -> [(Ident,Info)] -> Err [CFRule]
-cnc2cfCond opts m gr = 
+cnc2cfCond :: Options -> BinTree Ident Info -> 
+              Ident -> [(Ident,Info)] -> Err [CFRule]
+cnc2cfCond opts cnc m gr = 
   liftM concat $ 
-  mapM lin2cf [(m,fun,cat,args,lin) | (fun, CncFun cat args lin _) <- gr] 
+  mapM lin2cf [(m,fun,cat,args,lin) | 
+                 (fun, CncFun cat args lin _) <- gr, is fun] 
+ where
+   is f = isInBinTree f cnc
 
 type IFun = Ident
 type ICat = CIdent

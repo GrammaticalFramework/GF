@@ -111,7 +111,7 @@ lin
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
   AdvAdv = cc2 ;
-
+  AdvPN pn pp = nameNounPhrase {s = \\c => pn.s ! c ++ pp.s ; g = pn.g} ;
 
 --3 Sentences and relative clauses
 --
@@ -180,6 +180,7 @@ lin
   SubjS = subjunctSentence ;
   SubjImper = subjunctImperative ;
   SubjQS = subjunctQuestion ;
+  AdvSubj if A = ss (if.s ++ A.s) ;
 
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase singular ;
