@@ -1,7 +1,7 @@
 --# -path=.:../romance:../../prelude
 
 instance SyntaxSpa of SyntaxRomance = 
-  TypesSpa ** open Prelude, (CO=Coordination), MorphoSpa in {
+  TypesSpa ** open Prelude, (CO=Coordination), MorphoSpa, BeschSpa in {
 oper
   nameNounPhrase = \jean -> 
     normalNounPhrase
@@ -357,6 +357,12 @@ oper
   nonPhr = ss ["No ."] ;
 
   negNe = "no" ; negPas = [] ;
+
+  progressiveSats subj vp =     
+    mkSatsObject subj 
+      (mkTransVerbDir (verbPres (estar_2 "estar") AHabere))     --- hack to reuse  
+      (nameNounPhrase (mkProperName (                          --- this function
+         vp.s ! VIGerund ! (pgen2gen subj.g) ! subj.n ! subj.p) Masc)) ;
 
 }
 

@@ -430,7 +430,7 @@ oper
 param
   VPForm = VPF Anteriority VF ;
   Anteriority = Simul | Anter ;
-  VIForm = VIInfinit | VIImperat Bool Number ; ---- | VIGerund ;
+  VIForm = VIInfinit | VIImperat Bool Number | VIGerund ;
 
 oper
   VerbPhrase = {s : VIForm => Gender => Number => Person => Str} ;
@@ -1304,7 +1304,7 @@ oper
       je ++ ne ++ lui ++ ai ++ toujours ++ pas ++ dit ++ directement ++ oui
     } ;
 
-negNe, negPas : Str ;
+  negNe, negPas : Str ;
 
 
   sats2quest : Sats -> Question = \x ->
@@ -1312,12 +1312,12 @@ negNe, negPas : Str ;
     in
     {s = \\b,f,_ => cl.s ! b ! f} ;
 
-  sats2verbPhrase : Sats -> VerbPhrase = 
-    \sats -> {s = \\vi,g,n,p => ---- b,cf =>
+  sats2verbPhrase : {s : Str ; a : Anteriority} -> Sats -> VerbPhrase = 
+    \ant,sats -> {s = \\vi,g,n,p => ---- b,cf =>
       let
         b = True ; ----
         lui  = sats.s3 ;
-        dire = verbVIForm {s = sats.s4 ; aux = sats.aux}
+        dire = verbVIForm {s = sats.s4 ; aux = sats.aux} ant.a
                  vi g n p sats.g2 sats.n2 ;
         ai   = dire.p1 ;
         dit  = dire.p2 ;
@@ -1328,23 +1328,31 @@ negNe, negPas : Str ;
         oui = sats.s7 ! b
       in 
       ne ++ lui ++ ai ++ toujours ++ pas ++ dit ++ directement ++ oui
+      ++ ant.s --- always [] ; hack to avoid ? in parsing
     } ;
 
 ---- What happens to polarity and anteriority ?
 
   verbVIForm : 
-    Verb -> VIForm -> Gender -> Number -> Person -> Gender -> Number -> (Str * Str) = 
-    \verb,cl,g,n,p,g2,n2 -> 
+    Verb -> Anteriority -> 
+    VIForm -> Gender -> Number -> Person -> Gender -> Number -> (Str * Str) = 
+    \verb,ant,cl,g,n,p,g2,n2 -> 
       let 
-        aime  : Number -> Str = \t -> verb.s ! vImper n P2 ;
-        aimer = verb.s ! VInfin
+        aime  : Number -> Str = \t -> verb.s ! vImper t P2 ;
+        aimee = case ant of {Simul => [] ; _ => verb.s ! VPart Masc Sg} ; ---- g n
+        finverb = case ant of {Simul => verb.s ; _ => (auxVerb verb).s} ;
+        aimer = finverb ! VInfin ;
+        aimant = finverb ! VGer
       in
       case cl of {
-        VIImperat _ n => <aime n ,[]> ;
-        VlInfinit     => <aimer,  []>
+        VIImperat _ n => <aime n, []> ;        -- no imperative perfect
+        VIGerund      => <aimant, aimee> ;
+        VIInfinit     => <aimer,  aimee>
         } ;
 
 predVerb0 : Verb ->  Clause = \rain ->
   sats2clause (mkSats (pronNounPhrase pronImpers) rain) ;
+
+progressiveSats : NounPhrase -> VerbPhrase -> Sats ;
 
 }

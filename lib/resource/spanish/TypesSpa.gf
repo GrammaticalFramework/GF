@@ -119,7 +119,8 @@ oper
     VImper SgP2            => amare.s ! VP (Imp  Sg P2) ;
     VImper PlP1            => amare.s ! VP (Imp  Pl P1) ;
     VImper PlP2            => amare.s ! VP (Imp  Pl P2) ;
-    VPart g n              => amare.s ! VP (Pass n g)
+    VPart g n              => amare.s ! VP (Pass n g) ;
+    VGer                   => amare.s ! VI Ger
     } ;
   aux = a
   } ;

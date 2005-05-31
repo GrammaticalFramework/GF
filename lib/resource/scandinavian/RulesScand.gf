@@ -100,6 +100,8 @@ lin
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
   AdvAdv = cc2 ;
+  AdvNP np adv = <np : {g : Gender ; n : Number ; p : Person}> **
+                 {s = \\f => np.s ! f ++ adv.s} ;
 
 --3 Sentences and relative clauses
 --
@@ -167,6 +169,7 @@ lin
   SubjS = subjunctSentence ;
   SubjImper = subjunctImperative ;
   SubjQS = subjunctQuestion ;
+  AdvSubj if A = {s = if.s ++ A.s ! Sub} ;
 
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase singular ;

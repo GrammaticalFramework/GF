@@ -111,7 +111,7 @@ lin
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
   AdvAdv = cc2 ;
-  AdvPN pn pp = nameNounPhrase {s = \\c => pn.s ! c ++ pp.s ; g = pn.g} ;
+  AdvNP pn pp = {s = \\c => pn.s ! c ++ pp.s ; a = pn.a} ;
 
 --3 Sentences and relative clauses
 --

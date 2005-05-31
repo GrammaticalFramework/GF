@@ -1,7 +1,7 @@
 --# -path=.:../romance:../../prelude
 
 instance SyntaxIta of SyntaxRomance = 
-  TypesIta ** open Prelude, (CO=Coordination), MorphoIta in {
+  TypesIta ** open Prelude, (CO=Coordination), MorphoIta, BeschIta in {
 
 flags optimize=all ;
 
@@ -274,5 +274,11 @@ oper
   nonPhr = ss ["No ."] ;
 
   negNe = "non" ; negPas = [] ;
+
+  progressiveSats subj vp =     
+    mkSatsObject subj 
+      (mkTransVerbDir (verbPres (stare_16 "stare") AEsse))     --- hack to reuse  
+      (nameNounPhrase (mkProperName (                          --- this function
+         vp.s ! VIGerund ! (pgen2gen subj.g) ! subj.n ! subj.p) Masc)) ;
 
 }

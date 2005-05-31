@@ -121,7 +121,8 @@ oper
     VFin VFut n p          => amare.s ! Fut  n p ;
     VFin VCondit n p       => amare.s ! Cond n p ;
     VImper np              => amare.s ! Imper np ;
-    VPart g n              => amare.s ! Part PassP g n
+    VPart g n              => amare.s ! Part PassP g n ;
+    VGer                   => amare.s ! Ger
     } ;
   aux = a
   } ;
