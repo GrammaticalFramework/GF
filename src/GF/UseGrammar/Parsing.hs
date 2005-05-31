@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/11 10:28:16 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.23 $
+-- > CVS $Date: 2005/05/31 12:47:52 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.24 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -104,7 +104,7 @@ trees2trms opts sg cn as ts0 info = do
         ,checkWarn (unlines ("Raw CF trees:":(map prCFTree ts0))) >> return []
         ]
     _ -> do
-      let num = optIntOrN opts flagRawtrees 99999
+      let num = optIntOrN opts flagRawtrees 999999
       let (ts01,rest) = splitAt num ts0
       if null rest then return () 
          else raise ("Warning: only" +++ show num +++ "raw parses out of" +++ 

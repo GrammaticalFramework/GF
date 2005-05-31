@@ -111,8 +111,10 @@ fun
   PrepNP : Prep -> NP -> PP ;          -- "in London", "after the war"
 
   AdvCN  : CN -> PP -> CN ;            -- "house in London"
+  AdvPN  : PN -> PP -> NP ;            -- "x to the power of k"
   AdvAP  : AdA -> AP -> AP ;           -- "very good"
   AdvAdv : AdA -> Adv -> Adv ;         -- "very well"
+
 
 --!
 --3 Sentences and relative clauses
@@ -194,6 +196,12 @@ fun
   SubjS     : Subj -> S -> S -> S ;        -- "if 2 is odd, 3 is even"
   SubjImper : Subj -> S -> Imp -> Imp ;    -- "if it is hot, use a glove!"
   SubjQS    : Subj -> S -> QS -> QS ;      -- "if you are new, who are you?"
+
+-- This rule makes a subordinate clause into a sentence adverb, which
+-- can be attached to e.g. noun phrases. It might even replace the
+-- previous subjunction rules.
+
+  AdvSubj   : Subj -> S -> Adv ;           -- "when he arrives"
 
 --!
 --2 One-word utterances

@@ -83,7 +83,7 @@ trees2trms opts sg cn as ts0 info = do
         ,checkWarn (unlines ("Raw CF trees:":(map prCFTree ts0))) >> return []
         ]
     _ -> do
-      let num = optIntOrN opts flagRawtrees 99999
+      let num = optIntOrN opts flagRawtrees 999999
       let (ts01,rest) = splitAt num ts0
       if null rest then return () 
          else checkWarn ("Warning: only" +++ show num +++ "raw parses out of" +++ 
