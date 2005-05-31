@@ -330,4 +330,9 @@ oper
 
   negNe = elisNe ; negPas = "pas" ;
 
+  progressiveSats subj vp =    
+    mkSatsCopula subj 
+      (["en train"] ++ elisDe ++
+       vp.s ! VIInfinit ! (pgen2gen subj.g) ! subj.n ! subj.p) ;
+
 }

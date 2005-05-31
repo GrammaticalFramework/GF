@@ -158,6 +158,7 @@ param
    | VFin   TMode Number Person 
    | VImper NumPersI 
    | VPart  Gender Number 
+   | VGer
    ;
 
   TMode = 

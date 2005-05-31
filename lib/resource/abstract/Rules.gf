@@ -110,8 +110,8 @@ fun
   AdvPP  : PP -> Adv ;                 -- "in London", "after the war"
   PrepNP : Prep -> NP -> PP ;          -- "in London", "after the war"
 
-  AdvCN  : CN -> PP -> CN ;            -- "house in London"
-  AdvPN  : PN -> PP -> NP ;            -- "x to the power of k"
+  AdvCN  : CN  -> Adv -> CN ;          -- "house in London"
+  AdvNP  : NP  -> Adv -> NP ;          -- "the house in London"
   AdvAP  : AdA -> AP -> AP ;           -- "very good"
   AdvAdv : AdA -> Adv -> Adv ;         -- "very well"
 
@@ -148,7 +148,7 @@ fun
   QuestPhrase : QS -> Phr ;                 -- "Do I walk?"
   ImperOne, ImperMany : Imp -> Phr ;        -- "Be a man!", "Be men!"
 
-  AdvCl  : Cl -> Adv -> Cl ;                -- "John walks in the park"
+  AdvCl  : Cl  -> Adv -> Cl ;               -- "John walks in the park"
   AdvVPI : VPI -> Adv -> VPI ;              -- "walk in the park"
   AdCPhr : AdC -> S -> Phr ;                -- "Therefore, 2 is prime."
   AdvPhr : Adv -> S -> Phr ;                -- "In India, there are tigers."

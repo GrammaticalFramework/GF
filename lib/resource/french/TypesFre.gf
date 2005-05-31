@@ -153,7 +153,8 @@ oper
     VFin VFut n p    => aller ! Indic Futur n p ;
     VFin VCondit n p => aller ! Cond n p ;
     VImper np    => aller ! Imper np ;
-    VPart g n    => aller ! Part (PPasse g n)
+    VPart g n    => aller ! Part (PPasse g n) ;
+    VGer         => aller ! Part PPres -- *en* allant
     } ;
 
 -- The full conjunction is a table on $VForm$:

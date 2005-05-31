@@ -96,6 +96,11 @@ lin
   AdvAP = advAdjPhrase ;
   AdvAdv = cc2 ;
 
+--- Here the $np$ should become always stressed.
+
+  AdvNP np adv = <np : {g : PronGen ; n : Number ; p : Person}> **
+                 {s = \\f => np.s ! f ++ adv.s ; c = Clit0} ;
+
 --3 Sentences and relative clauses
 --
 
@@ -162,6 +167,7 @@ lin
   SubjImper = subjunctImperative ; 
   SubjQS = subjunctQuestion ;
  ----- SubjVP = subjunctVerbPhrase ;
+  AdvSubj if A = {s = if.s ++ A.s ! if.m} ;
 
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase singular ;
