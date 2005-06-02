@@ -5,9 +5,9 @@
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/05/12 10:03:33 $ 
+-- > CVS $Date: 2005/06/02 10:23:52 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.24 $
+-- > CVS $Revision: 1.25 $
 --
 -- The Main module of GF program.
 -----------------------------------------------------------------------------
@@ -20,6 +20,7 @@ import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.API.IOGrammar
 import GF.Compile.ShellState
+import GF.Compile.MkConcrete
 import GF.Shell
 import GF.Shell.SubShell
 import GF.Shell.ShellCommands
@@ -58,6 +59,9 @@ main = do
         [f] -> batchCompile os f
         _ -> putStrLnFlush "expecting exactly one gf file to compile"
 
+    _ | opt makeConcrete -> do
+        mapM_ mkConcrete fs
+
     _ | opt doBatch -> do
       if opt beSilent then return () else putStrLnFlush "<gfbatch>"
       st <- useIOE st0 $ 
@@ -77,11 +81,12 @@ main = do
 helpMsg = unlines [
   "Usage: gf <option>* <file>*",
   "Options:",
-  "  -make    batch-compile files",
-  "   -noemit do not emit code when compiling",
-  "   -v      be verbose when compiling",
-  "  -batch   structure session by XML tags (use > to send into a file)",
-  "  -help    show this message",
+  "  -make         batch-compile files",
+  "     -noemit      do not emit code when compiling",
+  "     -v           be verbose when compiling",
+  "  -batch        structure session by XML tags (use > to send into a file)",
+  "  -makeconcrete batch-compile .gfp file to concrete syntax using parser",
+  "  -help         show this message",
   "To use the GUI: jgf <option>* <file>*"
   ]
 

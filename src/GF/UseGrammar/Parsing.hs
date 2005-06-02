@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/31 12:47:52 $ 
+-- > CVS $Date: 2005/06/02 10:23:52 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.24 $
+-- > CVS $Revision: 1.25 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -127,7 +127,7 @@ trees2trms opts sg cn as ts0 info = do
            else return ps
 
   if verb 
-     then checkWarn $ " the token list" +++ show as ++++ unknown as +++++ info
+     then checkWarn $ " the token list" +++ show as ++++ unknownWords sg as +++++ info
      else return ()
 
   return $ optIntOrAll opts flagNumber $ nub ts
@@ -138,9 +138,10 @@ trees2trms opts sg cn as ts0 info = do
    verb    = oElem beVerbose opts
    forgive = oElem forgiveParse opts
 
-   unknown ts = case filter noMatch [t | t@(TS _) <- ts] of
+unknownWords sg ts = case filter noMatch [t | t@(TS _) <- ts] of
      [] -> "where all words are known"
      us -> "with the unknown tokens" +++ show us --- needs to be fixed for literals
+  where
    terminals = map TS $ stateGrammarWords sg
    noMatch t = all (not . compatTok t) terminals 
      
