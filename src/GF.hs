@@ -5,9 +5,9 @@
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/06/02 10:23:52 $ 
+-- > CVS $Date: 2005/06/02 17:31:56 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.25 $
+-- > CVS $Revision: 1.26 $
 --
 -- The Main module of GF program.
 -----------------------------------------------------------------------------
@@ -85,7 +85,7 @@ helpMsg = unlines [
   "     -noemit      do not emit code when compiling",
   "     -v           be verbose when compiling",
   "  -batch        structure session by XML tags (use > to send into a file)",
-  "  -makeconcrete batch-compile .gfp file to concrete syntax using parser",
+  "  -makeconcrete batch-compile .gfe file to concrete syntax using parser",
   "  -help         show this message",
   "To use the GUI: jgf <option>* <file>*"
   ]

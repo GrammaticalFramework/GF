@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/17 11:20:25 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.36 $
+-- > CVS $Date: 2005/06/02 17:31:57 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.37 $
 --
 -- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 -----------------------------------------------------------------------------
@@ -55,6 +55,7 @@ import qualified GF.Infra.Ident as I
 import qualified GF.Compile.GrammarToCanon as GC
 import qualified GF.Canon.CanonToGrammar as CG
 import qualified GF.Canon.MkGFC as MC
+import qualified GF.Embed.EmbedAPI as EA
 
 import GF.UseGrammar.Editing
 
@@ -145,9 +146,11 @@ string2GFCat = string2CFCat
 -- then stg for customizable and internal use
 
 optFile2grammar :: Options -> FilePath -> IOE GFGrammar
-optFile2grammar os f = do
-  ((_,_,gr),_) <- compileModule os emptyShellState f
-  ioeErr $ grammar2stateGrammar os gr
+optFile2grammar os f  
+  | fileSuffix f == "gfcm" = ioeIO $ liftM firstStateGrammar $ EA.file2grammar f
+  | otherwise = do
+      ((_,_,gr),_) <- compileModule os emptyShellState f
+      ioeErr $ grammar2stateGrammar os gr
 
 optFile2grammarE :: Options -> FilePath -> IOE GFGrammar
 optFile2grammarE = optFile2grammar
@@ -291,6 +294,11 @@ morphoAnalyse opts gr
   | otherwise = morphoText mo 
  where
   mo = morpho gr
+
+isKnownWord :: GFGrammar -> String -> Bool
+isKnownWord gr s = case morphoAnalyse (options [beShort]) gr s of
+  a@(_:_:_) -> last (init a) /= '*'  -- [word *]
+  _ -> False
 
 {-
 prExpXML :: StateGrammar -> Term -> [String]

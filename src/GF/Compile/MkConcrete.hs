@@ -16,11 +16,13 @@ module GF.Compile.MkConcrete (mkConcrete) where
 
 import GF.Grammar.Values (Tree,tree2exp)
 import GF.Grammar.PrGrammar (prt_)
-import GF.Compile.ShellState (absId,stateGrammarWords)
+import GF.Compile.ShellState (absId,firstStateGrammar)
 import GF.API
+import qualified GF.Embed.EmbedAPI as EA
 
 import GF.Data.Operations
 import GF.Infra.UseIO
+import GF.Infra.Option
 
 import Data.Char
 import Control.Monad
@@ -33,26 +35,31 @@ import Control.Monad
 -- Format of resource path (on first line):
 --    --# -resource=PATH
 -- Other lines are copied verbatim.
+-- Assumes: resource has been built with 
+--    i -src -optimize=share SOURCE
+-- because mcfg parsing is used.
 
 
 mkConcrete :: FilePath -> IO ()
 mkConcrete file = do
   cont <- liftM lines $ readFileIf file
   let res = getResPath cont
-  gr   <- file2grammar res
+  egr <- appIOE $ optFile2grammar (options [useOptimizer "share"]) res --- for -mcfg
+  gr  <- err (\s -> putStrLn s >> error "resource file rejected") return egr
   let abs = prt_ $ absId gr
-  let parser cat = parse gr (string2GFCat abs cat)
-  let mor = \w -> isInBinTree w $ sorted2tree [(w,()) | w <- stateGrammarWords gr]
+  let parser cat = errVal ([],"No parse") . 
+                   optParseArgErrMsg (options [newMParser, firstCat cat, beVerbose]) gr
+  let morpho = isKnownWord gr
   writeFile (suffixFile "gf" (justModuleName file)) $ unlines $ 
-    map (mkCnc parser mor) cont
+    map (mkCnc parser morpho) cont
 
 getResPath :: [String] -> String
 getResPath s = case head (dropWhile (all isSpace) s) of
   '-':'-':'#':path -> reverse (takeWhile (not . (=='=')) (reverse path))
   _ -> error "first line must be --# -resource=<PATH>" 
 
-mkCnc :: (String -> String -> [Tree]) -> (String -> Bool) -> String -> String
-mkCnc parser morph line = case words line of
+mkCnc :: (String -> String -> ([Tree],String)) -> (String -> Bool) -> String -> String
+mkCnc parser morpho line = case words line of
   "lin" : rest -> mkLinRule rest
   _ -> line
  where
@@ -61,11 +68,14 @@ mkCnc parser morph line = case words line of
        (pre,str)  = span (/= "in") s
        ([cat],rest) = splitAt 1 $ tail str
        lin        = init (tail (unwords (init rest))) -- unquote
-       def = case parser cat lin of 
-         [t] -> prt_ $ tree2exp t 
-         t:_ -> prt_ (tree2exp t) +++ "{- AMBIGUOUS -}"
-         []  -> ""
+       def 
+        | last pre /= "=" = line  -- ordinary lin rule
+        | otherwise  = case parser cat lin of 
+           ([t],_)  -> "lin " ++ unwords pre +++ prt_ (tree2exp t) +++ ";" 
+           (t:_,_)  -> "lin " ++ unwords pre +++ prt_ (tree2exp t) +++ "{- AMBIGUOUS -} ;"
+           ([],msg) -> "{-" ++ line ++++ morph lin ++++ "-}" 
     in
-     if null def
-       then "-- NO PARSE " ++ line
-       else "lin " ++ unwords pre +++ def +++ ";"
+     def
+   morph s = case [w | w <- words s, not (morpho w)] of
+     [] -> ""
+     ws -> "unknown words: " ++ unwords ws
