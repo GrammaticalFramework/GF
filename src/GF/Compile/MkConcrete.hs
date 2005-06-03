@@ -12,11 +12,14 @@
 -- Compile a gfl file into a concrete syntax by using the parser on a resource grammar.
 -----------------------------------------------------------------------------
 
-module GF.Compile.MkConcrete (mkConcrete) where
+module GF.Compile.MkConcrete (mkConcretes,mkCncLine) where
 
 import GF.Grammar.Values (Tree,tree2exp)
 import GF.Grammar.PrGrammar (prt_)
-import GF.Compile.ShellState (absId,firstStateGrammar)
+import GF.Grammar.Grammar (Term(Q,QC)) ---
+import GF.Grammar.Macros (composSafeOp, record2subst)
+import GF.Compile.ShellState (firstStateGrammar)
+import GF.Compile.PGrammar (pTerm)
 import GF.API
 import qualified GF.Embed.EmbedAPI as EA
 
@@ -35,22 +38,32 @@ import Control.Monad
 -- Format of resource path (on first line):
 --    --# -resource=PATH
 -- Other lines are copied verbatim.
--- Assumes: resource has been built with 
+-- The resource has to be built with 
 --    i -src -optimize=share SOURCE
 -- because mcfg parsing is used.
+-- A sequence of files can be processed with the same resource without
+-- rebuilding the grammar and parser.
 
-
-mkConcrete :: FilePath -> IO ()
-mkConcrete file = do
+mkConcretes :: [FilePath] -> IO ()
+mkConcretes [] = putStrLn "no files to process"
+mkConcretes files@(file:_) = do
   cont <- liftM lines $ readFileIf file
   let res = getResPath cont
   egr <- appIOE $ 
-    optFile2grammar (options [useOptimizer "share",fromSource,beSilent,notEmitCode]) res --- for -mcfg
+    optFile2grammar (options 
+      [useOptimizer "share",fromSource,beSilent,notEmitCode]) res --- for -mcfg
   gr  <- err (\s -> putStrLn s >> error "resource file rejected") return egr
-  let abs = prt_ $ absId gr
   let parser cat = errVal ([],"No parse") . 
                    optParseArgErrMsg (options [newMParser, firstCat cat, beVerbose]) gr
   let morpho = isKnownWord gr
+  mapM_ (mkConcrete parser morpho) files
+
+type Parser = String -> String -> ([Tree],String)
+type Morpho = String -> Bool 
+
+mkConcrete :: Parser -> Morpho -> FilePath -> IO ()
+mkConcrete parser morpho file = do
+  cont <- liftM lines $ readFileIf file
   let out = suffixFile "gf" $ justModuleName file
   writeFile out ""
   mapM_ (mkCnc out parser morpho) cont
@@ -60,8 +73,7 @@ getResPath s = case head (dropWhile (all isSpace) s) of
   '-':'-':'#':path -> reverse (takeWhile (not . (=='=')) (reverse path))
   _ -> error "first line must be --# -resource=<PATH>" 
 
-mkCnc :: FilePath -> (String -> String -> ([Tree],String)) -> (String -> Bool) -> 
-         String -> IO ()
+mkCnc :: FilePath -> Parser -> Morpho -> String -> IO ()
 mkCnc out parser morpho line = do
   let (res,msg) = mkCncLine parser morpho line
   appendFile out res
@@ -77,15 +89,15 @@ mkCncLine parser morpho line = case words line of
  where
    mkLinRule key s = 
     let
-       (pre,str)  = span (/= "in") s
+       (pre,str)    = span (/= "in") s
        ([cat],rest) = splitAt 1 $ tail str
-       lin        = init (tail (unwords (init rest))) -- unquote
+       (lin,subst)  = span (/= '"') $ tail $ unwords rest
        def
         | last pre /= "=" = line  -- ordinary lin rule
         | otherwise  = case parser cat lin of 
-           ([t],_)  -> ind ++ key +++ unwords pre +++ prt_ (tree2exp t) +++ ";" 
-           (t:_,_)  -> ind ++ key +++ unwords pre +++ prt_ (tree2exp t) +++ ";" 
-                        +++ "-- AMBIGUOUS"
+           (t:ts,_) -> ind ++ key +++ unwords pre +++ 
+                       doSubst (init (tail subst)) (tree2exp t) +++ ";" ++
+                       if null ts then [] else " -- AMBIGUOUS"
            ([],msg) -> "{-" ++ line ++++ morph lin ++++ "-}" 
     in
      (def,def)
@@ -93,3 +105,13 @@ mkCncLine parser morpho line = case words line of
      [] -> ""
      ws -> "unknown words: " ++ unwords ws
    ind = takeWhile isSpace line
+
+doSubst :: String -> Term -> String
+doSubst subst0 trm = prt_ $ subt subst trm where
+  subst 
+    | all isSpace subst0 = []
+    | otherwise = err error id $ pTerm subst0 >>= record2subst
+  subt g t = case t of
+    Q  _ c -> maybe t id $ lookup c g
+    QC _ c -> maybe t id $ lookup c g
+    _      -> composSafeOp (subt g) t

@@ -1,6 +1,6 @@
 --# -resource=../../english/LangEng.gf
 
--- to compile: gf -makeconcrete QuestionsI.gfe
+-- to compile: gf -examples QuestionsI.gfe
 
 incomplete concrete QuestionsI of Questions = open Resource in {
   lincat
