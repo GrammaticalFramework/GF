@@ -14,22 +14,50 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
+3/6 (AR) The format <tt>.gfe</tt> defined to support
+<b>grammar writing by examples</b>. Files of this format are first
+converted to <tt>.gf</tt> files by the command
+<pre>
+  gf -makeconcrete File.gfe
+</pre>
+See <a href="../lib/resource/doc/examples/QuestionsExI.gfe">
+<tt>../lib/resource/doc/examples/QuestionsExI.gfe</tt></a>
+for an example.
+
+<p>
+
 31/5 (AR) Default of p -rawtrees=k changed to 999999.
 
 <p>
 
-31/5 (AR) Support for restricted inheritance.
+31/5 (AR) Support for restricted inheritance. Syntax:
+<pre>
+  M          -- inherit everything from M, as before
+  M [a,b,c]  -- only inherit constants a,b,c
+  M-[a,b,c]  -- inherit everything except a,b,c
+</pre>
+Caution: there is no check yet for completeness and
+consistency, but restricted inheritance can create
+run-time failures.
 
 <p>
 
 29/5 (AR) Parser support for reading GFC files line per line.
+The category <tt>Line</tt> in <tt>GFC.cf</tt> can be used
+as entrypoint instead of <tt>Grammar</tt> to achieve this.
 
 <p>
 
 28/5 (AR) Environment variables and path wild cards.
-GF_LIB_PATH and GF_GRAMMAR_PATH.
-
+<ul>
+<li> <tt>GF_LIB_PATH</tt> gives the location of <tt>GF/lib</tt>
+<li> <tt>GF_GRAMMAR_PATH</tt> gives a list of directories appended
+     to the explicitly given path
+<li> <tt>DIR/*</tt> is expanded to the union of all subdirectories
+     of <tt>DIR</tt>
+</ul>
 <p>
+
 
 26/5/2005 (BB) Notation for list categories.
 
