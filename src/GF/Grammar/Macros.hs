@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 15:45:00 $ 
+-- > CVS $Date: 2005/06/03 21:51:58 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.21 $
+-- > CVS $Revision: 1.22 $
 --
 -- Macros for constructing and analysing source code terms.
 --
@@ -279,6 +279,11 @@ mkRecTypeN int lab typs = RecType [ (lab i, t) | (i,t) <- zip [int..] typs]
 
 mkRecType :: (Int -> Label) -> [Type] -> Type
 mkRecType = mkRecTypeN 0
+
+record2subst :: Term -> Err Substitution
+record2subst t = case t of
+  R fs -> return [(zIdent x, t) | (LIdent x,(_,t)) <- fs]
+  _ -> prtBad "record expected, found" t
 
 typeType, typePType, typeStr, typeTok, typeStrs :: Term
 

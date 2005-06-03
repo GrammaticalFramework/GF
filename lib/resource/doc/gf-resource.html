@@ -710,12 +710,80 @@ generates
 <a href="example/QuestionsI.gf">QuestionsI.gf</a>,
 when you execute the command
 <pre>
-  gf -makeconcrete QuestionsI.gfe
+  gf -examples QuestionsI.gfe
 </pre>
 Of course, the grammar of any language can be created by
 parsing any language, as long as they have a common resource API.
 The use of English resource is generally recommended, because it
 is smaller and faster to parse than the other languages.
+
+
+<!-- NEW -->
+<h2>Constants and variables in examples</h2>
+
+The file <a href="example/QuestionsI.gfe">QuestionsI.gfe</a> uses
+as resource <tt>LangEng</tt>, which contains all resource syntax and
+a lexicon of ca. 300 words. A linearization rule, such as
+<pre>
+  lin Who love_V2 man_N = in Phr "who loves men ?" ;
+</pre>
+uses as argument variables constants for words that can be found in
+the lexicon. It is due to this that the example can be parsed.
+When the resulting rule,
+<pre>
+  lin Who love_V2 man_N =
+    QuestPhrase (UseQCl (PosTP TPresent ASimul)
+      (QPredV2 who8one_IP love_V2 (IndefNumNP NoNum (UseN man_N)))) ;
+</pre>
+is read by the GF compiler, the identifiers <tt>love_V2</tt> and
+<tt>man_N</tt> are not treated as constants, but, following
+the normal binding rules of functional languages, as bound variables.
+This is what gives the example method the generality that is needed.
+
+<p>
+
+To write linearization rules by examples one thus has to know at
+least one abstract syntax constant for each category for which
+one needs a variable.
+
+
+
+<!-- NEW -->
+<h2>Extending the lexicon on the fly</h2>
+
+The greatest limitation of the example method is that the lexicon
+may lack many of the words that are needed in examples. If parsing
+fails because of this, the compiler gives a list of unknown words
+in its error message. An obvious solution is, 
+of course, to extend the resource lexicon and try again. 
+A more light-weight solution is to add a <b>substitution</b> to
+the example. For instance, if you want the example "the pope"
+but the lexicon does not have the word "pope", you can write
+<pre>
+  lin Pope = in NP "the man" {man_N = regN "pope"} ;
+</pre>
+The resulting linearization rule is initially
+<pre>
+  lin Pope = DefOneNP (UseN man_N) ;
+</pre>
+but the substitution changes this to
+<pre>
+  lin Pope = DefOneNP (UseN (regN "pope")) ;
+</pre>
+In this way, you do not have to extend the resource lexicon, but you
+need to open the Paradigms module to compile the resulting term.
+
+<p>
+
+Of course, the substituted expressions may come from another language
+than the main language of the example:
+<pre>
+  lin Pope = in NP "the man" {man_N = regN "pape" masculine} ;
+</pre>
+If many substitutions are needed, semicolons are used as separators:
+<pre>
+  {man_N = regN "pope" ; walk_N = regV "pray"} ;
+</pre>
 
 
 <!-- NEW -->

@@ -5,9 +5,9 @@
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/06/02 17:31:56 $ 
+-- > CVS $Date: 2005/06/03 21:51:58 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.26 $
+-- > CVS $Revision: 1.27 $
 --
 -- The Main module of GF program.
 -----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ main = do
         _ -> putStrLnFlush "expecting exactly one gf file to compile"
 
     _ | opt makeConcrete -> do
-        mapM_ mkConcrete fs
+        mkConcretes fs
 
     _ | opt doBatch -> do
       if opt beSilent then return () else putStrLnFlush "<gfbatch>"
@@ -85,7 +85,7 @@ helpMsg = unlines [
   "     -noemit      do not emit code when compiling",
   "     -v           be verbose when compiling",
   "  -batch        structure session by XML tags (use > to send into a file)",
-  "  -makeconcrete batch-compile .gfe file to concrete syntax using parser",
+  "  -examples     batch-compile .gfe file by parsing examples",
   "  -help         show this message",
   "To use the GUI: jgf <option>* <file>*"
   ]

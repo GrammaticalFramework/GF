@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:47 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/06/03 21:51:59 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.8 $
 --
 -- how to form linearizable trees from strings and from terms of different levels
 --
@@ -39,6 +39,7 @@ string2tree :: StateGrammar -> String -> Tree
 string2tree gr = errVal uTree . string2treeErr gr
 
 string2treeErr :: StateGrammar -> String -> Err Tree
+string2treeErr _ "" = Bad "empty string"
 string2treeErr gr s = do
   t <- pTerm s
   let t1 = refreshMetas [] t
