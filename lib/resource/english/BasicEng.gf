@@ -61,12 +61,14 @@ lin
   cow_N = regN "cow" ;
   die_V = (regV "die") ;
   dirty_ADeg = regADeg "dirty" ;
+  distance_N3 = mkN3 (regN "distance") "from" "to" ;
   doctor_N = regN "doctor" ;
   dog_N = regN "dog" ;
   door_N = regN "door" ;
   drink_V2 = dirV2 (irregV "drink" "drank" "drunk") ;
   easy_A2V = mkA2V (regA "easy") "for" ;
   eat_V2 = dirV2 (irregV "eat" "ate" "eaten") ;
+  empty_ADeg = regADeg "empty" ;
   enemy_N = regN "enemy" ;
   factory_N = regN "factory" ;
   father_N2 = regN2 "father" ;

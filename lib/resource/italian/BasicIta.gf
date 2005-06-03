@@ -60,12 +60,14 @@ lin
   cow_N = regN "vacca" ;
   die_V = verboV (morire_105 "morire") ;
   dirty_ADeg = regADeg "sporco" ;
+  distance_N3 = mkN3 (regN "distanza") genitive dative ;
   doctor_N = mkN "medico" "medici" masculine ;
   dog_N = regN "cane" ;
   door_N = regN "porta" ;
   drink_V2 = dirV2 (verboV (bere_27 "bere")) ;
   easy_A2V = mkA2V (regA "facile") dative genitive ;
   eat_V2 = dirV2 (regV "mangiare") ;
+  empty_ADeg = regADeg "vuoto" ;
   enemy_N = regN "nemico" ;
   factory_N = regN "stabilimento" ;
   father_N2 = diN2 (regN "padre") ;

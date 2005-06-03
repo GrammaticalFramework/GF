@@ -63,12 +63,14 @@ lin
    cow_N = regN "vaca" ;
    die_V = verboV (morir_35b "morir") ;
    dirty_ADeg = regADeg "sucio" ;
+   distance_N3 = mkN3 (regN "distancia") genitive dative ;
    doctor_N = regN "médico" ;		-- médica
    dog_N = regN "perro" ;		-- perra
    door_N = regN "puerta" ;
    drink_V2 = dirV2 (regV "tomar") ;     -- beber
    easy_A2V = mkA2V (regA "fácil") dative genitive ;
    eat_V2 = dirV2 (regV "comer") ;
+   empty_ADeg = regADeg "vacío" ;
    enemy_N = regN "enemigo" ;		-- enemiga
    factory_N = regN "fábrica" ;	
    father_N2 = deN2 (regN "padre") ;

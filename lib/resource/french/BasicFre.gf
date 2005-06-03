@@ -61,12 +61,14 @@ lin
   cow_N = regN "vache" feminine ;
   die_V = mourir_V ;
   dirty_ADeg = regADeg "sale" ;
+  distance_N3 = mkN3 (regN "distance" feminine) genitive dative ;
   doctor_N = regN "médecin" masculine ;
   dog_N = regN "chien" masculine ;
   door_N = regN "porte" feminine ;
   drink_V2 = boire_V2 ;
   easy_A2V = mkA2V (regA "facile") dative genitive ;
   eat_V2 = dirV2 (regV "manger") ;
+  empty_ADeg = regADeg "vide" ;
   enemy_N = regN "ennemi" masculine ;
   factory_N = regN "usine" feminine ;
   father_N2 = deN2 (regN "père" masculine) ;
