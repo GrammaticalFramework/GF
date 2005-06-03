@@ -58,6 +58,7 @@ lin
   cousin_N = mk2N "kusin" "kusinerna" ;
   cow_N = mk2N "ko" "kor" ;
   die_V = (mkV "dö" "dör" "dö" "dog" "dött" "dödd") ; ----
+  distance_N3 = mkN3 (mk2N "avstånd" "avstånd") "från" "till" ;
   dirty_ADeg = regADeg "smutsig" ;
   doctor_N = mk2N "läkare" "läkare" ;
   dog_N = regN "hund" utrum ;
@@ -65,6 +66,7 @@ lin
   drink_V2 = dirV2 (irregV "dricka" "drack" "druckit") ;
   easy_A2V = mkA2V (mk2A "lätt" "lätt") "för" ;
   eat_V2 = dirV2 (irregV "äta" "åt" "ätit") ;
+  empty_ADeg = mkADeg "tom" "tomt" "tomma" "tomma" "tommare" "tommast" "tommaste" ;
   enemy_N = regN "fiende" neutrum ;
   factory_N = mk2N "fabrik" "fabriker" ;
   father_N2 = mkN2 (mascN (mkN "far" "fadern" "fäder" "fäderna")) "till" ;

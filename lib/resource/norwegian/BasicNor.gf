@@ -60,12 +60,14 @@ lin
   cow_N = mkN "ku" "kua" "kyr" "kyrne" ; ----
   die_V = dø_V ;
   dirty_ADeg = mk3ADeg "skitten" "skittent" "skitne" ; ----
+  distance_N3 = mkN3 (regN "avstand" masculine) "fra" "til" ;
   doctor_N = mk2N "lege" "legen" ;
   dog_N = regN "hund" masculine ;
   door_N = regN "dør" feminine ;
   drink_V2 = dirV2 drikke_V ;
   easy_A2V = mkA2V (regA "grei") "før" ;
   eat_V2 = dirV2 (mk2V "spise" "spiste") ;
+  empty_ADeg = mkADeg "tom" "tomt" "tomme" "tommere" "tommest" ;
   enemy_N = regN "fiende" masculine ;
   factory_N = mk2N "fabrikk" "fabrikken" ;
   father_N2 = mkN2 ( (mkN "far" "faren" "fedre" "fedrene")) "til" ;

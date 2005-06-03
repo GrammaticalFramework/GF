@@ -53,6 +53,7 @@ abstract Basic = Categories ** {
   cow_N : N ;
   die_V : V ;
   dirty_ADeg : ADeg ;
+  distance_N3 : N3 ;
   doctor_N : N ;
   dog_N : N ;
   door_N : N ;
@@ -60,6 +61,7 @@ abstract Basic = Categories ** {
   easy_A2V : A2V ;
   eat_V2 : V2 ;
   enemy_N : N ;
+  empty_ADeg : ADeg ;
   factory_N : N ;
   father_N2 : N2 ;
   fear_VS : VS ;

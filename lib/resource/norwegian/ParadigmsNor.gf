@@ -271,7 +271,7 @@ oper
   Gender = SyntaxNor.NounGender ; 
   Number = TypesNor.Number ;
   Case = TypesNor.Case ;
-  masculine = NUtr NoMasc ; 
+  masculine = NUtr Masc ; 
   feminine = NUtr NoMasc ; 
   neutrum = NNeutr ;
   singular = Sg ;
