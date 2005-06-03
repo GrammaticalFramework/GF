@@ -1,2 +1,2 @@
-concrete QuestionsEng of Questions = QuestionsExI with 
+concrete QuestionsEng of Questions = QuestionsI with 
   (Resource = ResourceEng) ;

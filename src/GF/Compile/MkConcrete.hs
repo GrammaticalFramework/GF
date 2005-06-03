@@ -44,13 +44,15 @@ mkConcrete :: FilePath -> IO ()
 mkConcrete file = do
   cont <- liftM lines $ readFileIf file
   let res = getResPath cont
-  egr <- appIOE $ optFile2grammar (options [useOptimizer "share"]) res --- for -mcfg
+  egr <- appIOE $ 
+    optFile2grammar (options [useOptimizer "share",fromSource,beSilent,notEmitCode]) res --- for -mcfg
   gr  <- err (\s -> putStrLn s >> error "resource file rejected") return egr
   let abs = prt_ $ absId gr
   let parser cat = errVal ([],"No parse") . 
                    optParseArgErrMsg (options [newMParser, firstCat cat, beVerbose]) gr
   let morpho = isKnownWord gr
   let out = suffixFile "gf" $ justModuleName file
+  writeFile out ""
   mapM_ (mkCnc out parser morpho) cont
 
 getResPath :: [String] -> String
