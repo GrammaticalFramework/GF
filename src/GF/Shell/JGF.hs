@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:21 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/06/03 22:44:36 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.13 $
 --
 -- GF editing session controlled by e.g. a Java program. AR 16\/11\/2001
 -----------------------------------------------------------------------------
@@ -24,9 +24,11 @@ import GF.Compile.ShellState
 import GF.UseGrammar.Session
 import GF.Shell.Commands
 import GF.Shell.CommandL
-
-import System
 import GF.Text.UTF8
+
+import Control.Monad (foldM)
+import System
+
 
 
 -- GF editing session controlled by e.g. a Java program. AR 16/11/2001
@@ -43,22 +45,30 @@ sessionLineJ isNew env = do
 -- the Boolean is a temporary hack to have two parallel GUIs
 editLoopJnewX :: Bool -> CEnv -> SState -> IO ()
 editLoopJnewX isNew env state = do
-  (m,c) <- getCommandUTF (isCEnvUTF8 env state) ----
-  case c of
-    CQuit -> return ()
-
-    c -> do
-      (env',state') <- execCommand env c state
-      let inits = initAndEditMsgJavaX isNew env' state' m
-      let package = case c of
-            CCEnvImport _         -> inits
-            CCEnvEmptyAndImport _ -> inits
-            CCEnvOpenTerm _       -> inits
-            CCEnvOpenString _     -> inits
-            CCEnvEmpty            -> initEditMsgJavaX env'
-            _ -> displaySStateJavaX isNew env' state' m
-      putStrLnFlush package
-      editLoopJnewX isNew env' state'
+  mscs <- getCommandUTF (isCEnvUTF8 env state) ----
+  let (ms,cs) = unzip mscs
+      m = unlines ms --- ?
+  if null cs 
+    then editLoopJnewX isNew env state
+    else
+      case cs of
+        [CQuit] -> return ()
+        _ -> do
+          (env',state') <- foldM exec (env,state) cs
+          let inits = initAndEditMsgJavaX isNew env' state' m
+          let 
+            package = case last cs of
+              CCEnvImport _         -> inits
+              CCEnvEmptyAndImport _ -> inits
+              CCEnvOpenTerm _       -> inits
+              CCEnvOpenString _     -> inits
+              CCEnvEmpty            -> initEditMsgJavaX env'
+              _ -> displaySStateJavaX isNew env' state' m
+          putStrLnFlush package
+          editLoopJnewX isNew env' state'
+ where
+  exec (env,state) c = do
+    execCommand env c state
 
 welcome :: String
 welcome = 

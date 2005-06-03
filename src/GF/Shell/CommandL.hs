@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:19 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.16 $
+-- > CVS $Date: 2005/06/03 22:44:36 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.17 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -25,6 +25,7 @@ import GF.Compile.ShellState
 import GF.Infra.Option
 import GF.UseGrammar.Session
 import GF.Shell.Commands
+import GF.Shell.PShell (wordsLits)
 
 import Data.Char
 import Data.List (intersperse)
@@ -77,13 +78,17 @@ getCommand = do
 
 -- | decodes UTF8 if u==False, i.e. if the grammar does not use UTF8;
 -- used in the Java GUI, which always uses UTF8
-getCommandUTF :: Bool -> IO (String,Command)
+getCommandUTF :: Bool -> IO [(String,Command)]
 getCommandUTF u = do
   s <- getLine
-  return $ pCommandMsg $ if u then s else decodeUTF8 s 
+  return $ pCommandMsgs $ if u then s else decodeUTF8 s 
+
+pCommandMsgs :: String -> [(String,Command)]
+pCommandMsgs = map (pCommandMsg . unwords) . concatMap (chunks ";;" . words) . lines
 
 pCommand :: String -> Command
 pCommand = snd . pCommandMsg
+
 
 pCommandMsg :: String -> (String,Command)
 pCommandMsg s = (m,pCommandWords $ words c) where
