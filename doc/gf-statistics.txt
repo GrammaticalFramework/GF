@@ -1,0 +1,289 @@
+(Adapted from KeY statistics by Vladimir Klebanov)
+
+This is GF right now:
+
+Total Physical Source Lines of Code (SLOC)                = 42,467
+
+Development Effort Estimate, Person-Years (Person-Months) = 10.24 (122.932)
+ (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+
+Schedule Estimate, Years (Months)                         = 1.30 (15.56)
+ (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+
+Estimated Average Number of Developers (Effort/Schedule)  = 7.90
+
+Total Estimated Cost to Develop                           = $ 1,383,870
+ (average salary = $56,286/year, overhead = 2.40).
+
+SLOCCount, Copyright (C) 2001-2004 David A. Wheeler
+
+
+
+----------- basis of counting: Haskell code + BNFC code - generated Happy parsers
+
+-- GF/src% wc -l *.hs GF/*.hs GF/*/*.hs GF/*/*/*.hs GF/*/*.cf JavaGUI/*.java
+-- date Fri Jun  3 10:00:31 CEST 2005
+
+    104 GF.hs
+    402 GF/API.hs
+     98 GF/GFModes.hs
+    379 GF/Shell.hs
+      4 GF/Today.hs
+     43 GF/API/BatchTranslate.hs
+    145 GF/API/GrammarToHaskell.hs
+     77 GF/API/IOGrammar.hs
+     25 GF/API/MyParser.hs
+    177 GF/Canon/AbsGFC.hs
+     37 GF/Canon/ByLine.hs
+    192 GF/Canon/CanonToGrammar.hs
+    293 GF/Canon/CMacros.hs
+     79 GF/Canon/GetGFC.hs
+     86 GF/Canon/GFC.hs
+    291 GF/Canon/LexGFC.hs
+    201 GF/Canon/Look.hs
+    235 GF/Canon/MkGFC.hs
+     46 GF/Canon/PrExp.hs
+    352 GF/Canon/PrintGFC.hs
+    147 GF/Canon/Share.hs
+    207 GF/Canon/SkelGFC.hs
+     46 GF/Canon/TestGFC.hs
+     49 GF/Canon/Unlex.hs
+    202 GF/CF/CanonToCF.hs
+    213 GF/CF/CF.hs
+    217 GF/CF/CFIdent.hs
+     62 GF/CF/CFtoGrammar.hs
+     47 GF/CF/CFtoSRG.hs
+    206 GF/CF/ChartParser.hs
+    191 GF/CF/EBNF.hs
+     45 GF/CFGM/AbsCFG.hs
+    312 GF/CFGM/LexCFG.hs
+    157 GF/CFGM/PrintCFG.hs
+    109 GF/CFGM/PrintCFGrammar.hs
+     85 GF/CF/PPrCF.hs
+    150 GF/CF/PrLBNF.hs
+    106 GF/CF/Profile.hs
+    141 GF/Compile/BackOpt.hs
+    763 GF/Compile/CheckGrammar.hs
+    337 GF/Compile/Compile.hs
+    136 GF/Compile/Extend.hs
+    124 GF/Compile/GetGrammar.hs
+    282 GF/Compile/GrammarToCanon.hs
+     93 GF/Compile/MkConcrete.hs
+    128 GF/Compile/MkResource.hs
+     83 GF/Compile/MkUnion.hs
+    146 GF/Compile/ModDeps.hs
+    294 GF/Compile/NewRename.hs
+    227 GF/Compile/Optimize.hs
+     76 GF/Compile/PGrammar.hs
+     84 GF/Compile/PrOld.hs
+    119 GF/Compile/Rebuild.hs
+     63 GF/Compile/RemoveLiT.hs
+    274 GF/Compile/Rename.hs
+    535 GF/Compile/ShellState.hs
+    135 GF/Compile/Update.hs
+    129 GF/Conversion/GFC.hs
+    149 GF/Conversion/GFCtoSimple.hs
+     53 GF/Conversion/MCFGtoCFG.hs
+     46 GF/Conversion/RemoveEpsilon.hs
+    102 GF/Conversion/RemoveErasing.hs
+     82 GF/Conversion/RemoveSingletons.hs
+    137 GF/Conversion/SimpleToFinite.hs
+     26 GF/Conversion/SimpleToMCFG.hs
+    230 GF/Conversion/Types.hs
+    143 GF/Data/Assoc.hs
+    118 GF/Data/BacktrackM.hs
+     20 GF/Data/ErrM.hs
+    119 GF/Data/GeneralDeduction.hs
+     30 GF/Data/Glue.hs
+     67 GF/Data/IncrementalDeduction.hs
+     61 GF/Data/Map.hs
+    662 GF/Data/Operations.hs
+    127 GF/Data/OrdMap2.hs
+    120 GF/Data/OrdSet.hs
+    193 GF/Data/Parsers.hs
+     64 GF/Data/RedBlack.hs
+    150 GF/Data/RedBlackSet.hs
+     19 GF/Data/SharedString.hs
+    127 GF/Data/SortedList.hs
+    134 GF/Data/Str.hs
+    120 GF/Data/Trie2.hs
+    129 GF/Data/Trie.hs
+     71 GF/Data/Utilities.hs
+    243 GF/Data/Zipper.hs
+     78 GF/Embed/EmbedAPI.hs
+    113 GF/Embed/EmbedCustom.hs
+    137 GF/Embed/EmbedParsing.hs
+     50 GF/Formalism/CFG.hs
+     51 GF/Formalism/GCFG.hs
+     58 GF/Formalism/MCFG.hs
+    246 GF/Formalism/SimpleGFC.hs
+    349 GF/Formalism/Utilities.hs
+     30 GF/Fudgets/ArchEdit.hs
+    134 GF/Fudgets/CommandF.hs
+     51 GF/Fudgets/EventF.hs
+     59 GF/Fudgets/FudgetOps.hs
+     37 GF/Fudgets/UnicodeF.hs
+     86 GF/Grammar/AbsCompute.hs
+     38 GF/Grammar/Abstract.hs
+    149 GF/Grammar/AppPredefined.hs
+    312 GF/Grammar/Compute.hs
+    215 GF/Grammar/Grammar.hs
+     46 GF/Grammar/Lockfield.hs
+    189 GF/Grammar/LookAbs.hs
+    182 GF/Grammar/Lookup.hs
+    745 GF/Grammar/Macros.hs
+    340 GF/Grammar/MMacros.hs
+    115 GF/Grammar/PatternMatch.hs
+    279 GF/Grammar/PrGrammar.hs
+    121 GF/Grammar/Refresh.hs
+     44 GF/Grammar/ReservedWords.hs
+    251 GF/Grammar/TC.hs
+    301 GF/Grammar/TypeCheck.hs
+     96 GF/Grammar/Unify.hs
+    101 GF/Grammar/Values.hs
+     89 GF/Infra/CheckM.hs
+     43 GF/Infra/Comments.hs
+    152 GF/Infra/Ident.hs
+    390 GF/Infra/Modules.hs
+    358 GF/Infra/Option.hs
+    179 GF/Infra/Print.hs
+    331 GF/Infra/ReadFiles.hs
+    337 GF/Infra/UseIO.hs
+    153 GF/OldParsing/CFGrammar.hs
+    283 GF/OldParsing/ConvertFiniteGFC.hs
+    121 GF/OldParsing/ConvertFiniteSimple.hs
+     34 GF/OldParsing/ConvertGFCtoMCFG.hs
+    122 GF/OldParsing/ConvertGFCtoSimple.hs
+     44 GF/OldParsing/ConvertGrammar.hs
+     52 GF/OldParsing/ConvertMCFGtoCFG.hs
+     30 GF/OldParsing/ConvertSimpleToMCFG.hs
+     43 GF/OldParsing/GCFG.hs
+     86 GF/OldParsing/GeneralChart.hs
+    148 GF/OldParsing/GrammarTypes.hs
+     50 GF/OldParsing/IncrementalChart.hs
+    206 GF/OldParsing/MCFGrammar.hs
+     43 GF/OldParsing/ParseCFG.hs
+     82 GF/OldParsing/ParseCF.hs
+    177 GF/OldParsing/ParseGFC.hs
+     37 GF/OldParsing/ParseMCFG.hs
+    161 GF/OldParsing/SimpleGFC.hs
+    188 GF/OldParsing/Utilities.hs
+     51 GF/Parsing/CFG.hs
+     66 GF/Parsing/CF.hs
+    151 GF/Parsing/GFC.hs
+     64 GF/Parsing/MCFG.hs
+     83 GF/Printing/PrintParser.hs
+    127 GF/Printing/PrintSimplifiedTerm.hs
+    190 GF/Shell/CommandL.hs
+    556 GF/Shell/Commands.hs
+    524 GF/Shell/HelpFile.hs
+     79 GF/Shell/JGF.hs
+    171 GF/Shell/PShell.hs
+    221 GF/Shell/ShellCommands.hs
+     66 GF/Shell/SubShell.hs
+     87 GF/Shell/TeachYourself.hs
+    296 GF/Source/AbsGF.hs
+    229 GF/Source/GrammarToSource.hs
+    312 GF/Source/LexGF.hs
+    528 GF/Source/PrintGF.hs
+    353 GF/Source/SkelGF.hs
+    657 GF/Source/SourceToGrammar.hs
+     58 GF/Source/TestGF.hs
+     72 GF/Speech/PrGSL.hs
+     65 GF/Speech/PrJSGF.hs
+    128 GF/Speech/SRG.hs
+    103 GF/Speech/TransformCFG.hs
+     30 GF/System/ArchEdit.hs
+     90 GF/System/Arch.hs
+     27 GF/System/NoReadline.hs
+     27 GF/System/Readline.hs
+     73 GF/System/Tracing.hs
+     25 GF/System/UseReadline.hs
+     63 GF/Text/Arabic.hs
+     97 GF/Text/Devanagari.hs
+     72 GF/Text/Ethiopic.hs
+     99 GF/Text/ExtendedArabic.hs
+     37 GF/Text/ExtraDiacritics.hs
+    172 GF/Text/Greek.hs
+     53 GF/Text/Hebrew.hs
+     95 GF/Text/Hiragana.hs
+     69 GF/Text/LatinASupplement.hs
+     47 GF/Text/OCSCyrillic.hs
+     45 GF/Text/Russian.hs
+     77 GF/Text/Tamil.hs
+    125 GF/Text/Text.hs
+     69 GF/Text/Unicode.hs
+     47 GF/Text/UTF8.hs
+     56 GF/Translate/GFT.hs
+    427 GF/UseGrammar/Custom.hs
+    435 GF/UseGrammar/Editing.hs
+    180 GF/UseGrammar/Generate.hs
+     71 GF/UseGrammar/GetTree.hs
+    143 GF/UseGrammar/Information.hs
+    228 GF/UseGrammar/Linear.hs
+    130 GF/UseGrammar/Morphology.hs
+     70 GF/UseGrammar/Paraphrases.hs
+    157 GF/UseGrammar/Parsing.hs
+     66 GF/UseGrammar/Randomized.hs
+    170 GF/UseGrammar/Session.hs
+    186 GF/UseGrammar/Tokenize.hs
+     43 GF/UseGrammar/Transfer.hs
+    122 GF/Visualization/NewVisualizationGrammar.hs
+    123 GF/Visualization/VisualizeGrammar.hs
+     63 GF/Conversion/SimpleToMCFG/Coercions.hs
+    256 GF/Conversion/SimpleToMCFG/Nondet.hs
+    129 GF/Conversion/SimpleToMCFG/Strict.hs
+     71 GF/OldParsing/ConvertGFCtoMCFG/Coercions.hs
+    281 GF/OldParsing/ConvertGFCtoMCFG/Nondet.hs
+    277 GF/OldParsing/ConvertGFCtoMCFG/Old.hs
+    189 GF/OldParsing/ConvertGFCtoMCFG/Strict.hs
+     70 GF/OldParsing/ConvertSimpleToMCFG/Coercions.hs
+    245 GF/OldParsing/ConvertSimpleToMCFG/Nondet.hs
+    277 GF/OldParsing/ConvertSimpleToMCFG/Old.hs
+    139 GF/OldParsing/ConvertSimpleToMCFG/Strict.hs
+     83 GF/OldParsing/ParseCFG/General.hs
+    142 GF/OldParsing/ParseCFG/Incremental.hs
+    156 GF/OldParsing/ParseMCFG/Basic.hs
+    103 GF/Parsing/CFG/General.hs
+    150 GF/Parsing/CFG/Incremental.hs
+     98 GF/Parsing/CFG/PInfo.hs
+    226 GF/Parsing/MCFG/Active2.hs
+    304 GF/Parsing/MCFG/Active.hs
+    144 GF/Parsing/MCFG/Incremental2.hs
+    163 GF/Parsing/MCFG/Incremental.hs
+    128 GF/Parsing/MCFG/Naive.hs
+    163 GF/Parsing/MCFG/PInfo.hs
+    194 GF/Parsing/MCFG/Range.hs
+    183 GF/Parsing/MCFG/ViaCFG.hs
+    167 GF/Canon/GFC.cf
+     36 GF/CFGM/CFG.cf
+    321 GF/Source/GF.cf
+    272 JavaGUI/DynamicTree2.java
+    272 JavaGUI/DynamicTree.java
+   2357 JavaGUI/GFEditor2.java
+   1420 JavaGUI/GFEditor.java
+     30 JavaGUI/GrammarFilter.java
+     13 JavaGUI/LinPosition.java
+     18 JavaGUI/MarkedArea.java
+   1552 JavaGUI/Numerals.java
+     22 JavaGUI/Utils.java
+   5956 total
+  48713 total
+
+-  2131 GF/Canon/ParGFC.hs   
+   3336 GF/Source/ParGF.hs
+    779 GF/CFGM/ParCFG.hs
+
+  42467 total
+
+--------
+
+sloccount sloc = 
+  let
+    ksloc    = sloc / 1000
+    effort   = 2.4 * (ksloc ** 1.05)
+    schedule = 2.5 * (effort ** 0.38)
+    develops = effort / schedule
+    cost     = 56286 * (effort/12) * 2.4
+  in
+    [sloc,ksloc,effort,effort/12,schedule,schedule/12,develops,cost]
