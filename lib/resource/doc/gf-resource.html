@@ -640,7 +640,7 @@ We build the abstract syntax in two phases:
 
 The concrete syntax of English is built in three phases:
 <ul>
-<li> <a href="example/QuestionsI.gf">QuestionsI</a> is a parametrized module
+<li> <a href="example/HandQuestionsI.gf">QuestionsI</a> is a parametrized module
   using the API module <tt>Resource</tt>.
 <li> <a href="example/QuestionsEng.gf">QuestionsEng</a> is an instantiation
   of the API with <tt>ResourceEng</tt>.
@@ -695,6 +695,27 @@ and then call GF with
   gf &lt;mkAnimals.gfs
 </pre>
 
+
+<!-- NEW -->
+<h2>Grammar writing by examples</h2>
+
+(New in GF 3/6/2005)
+
+<p>
+
+You can use the resource grammar as a parser on a special file format,
+<tt>.gfe</tt> ("GF examples"). Here is the new source,
+<a href="example/QuestionsI.gfe">QuestionsI.gfe</a>, which
+generates
+<a href="example/QuestionsI.gf">QuestionsI.gf</a>,
+when you execute the command
+<pre>
+  gf -makeconcrete QuestionsI.gfe
+</pre>
+Of course, the grammar of any language can be created by
+parsing any language, as long as they have a common resource API.
+The use of English resource is generally recommended, because it
+is smaller and faster to parse than the other languages.
 
 
 <!-- NEW -->
