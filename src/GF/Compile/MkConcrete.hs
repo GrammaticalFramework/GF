@@ -9,7 +9,7 @@
 -- > CVS $Author: 
 -- > CVS $Revision: 
 --
--- Compile a gfl file into a concrete syntax by using the parser on a resource grammar.
+-- Compile a gfe file into a concrete syntax by using the parser on a resource grammar.
 -----------------------------------------------------------------------------
 
 module GF.Compile.MkConcrete (mkConcretes,mkCncLine) where
@@ -44,6 +44,10 @@ import Control.Monad
 -- A sequence of files can be processed with the same resource without
 -- rebuilding the grammar and parser.
 
+-- notice: we use a hand-crafted lexer and parser in order to preserve
+-- the layout and comments in the rest of the file.
+
+
 mkConcretes :: [FilePath] -> IO ()
 mkConcretes [] = putStrLn "no files to process"
 mkConcretes files@(file:_) = do
@@ -63,7 +67,7 @@ type Morpho = String -> Bool
 
 mkConcrete :: Parser -> Morpho -> FilePath -> IO ()
 mkConcrete parser morpho file = do
-  cont <- liftM lines $ readFileIf file
+  cont <- liftM getExLines $ readFileIf file
   let out = suffixFile "gf" $ justModuleName file
   writeFile out ""
   mapM_ (mkCnc out parser morpho) cont
@@ -73,7 +77,23 @@ getResPath s = case head (dropWhile (all isSpace) s) of
   '-':'-':'#':path -> reverse (takeWhile (not . (=='=')) (reverse path))
   _ -> error "first line must be --# -resource=<PATH>" 
 
-mkCnc :: FilePath -> Parser -> Morpho -> String -> IO ()
+getExLines :: String -> [Either String String]
+getExLines = getl . lines where
+  getl ls = case ls of
+    s:ss | begEx (words s) -> case break endEx ls of
+      (x,y:z) -> Left (unwords (x ++ [y])) : getl z
+      _ -> Left s : getl ss
+    s:ss -> Right s : getl ss
+    [] -> []
+  begEx s = case s of
+    "=":"in":_ -> True
+    _:ws -> begEx ws
+    _ -> False
+  endEx s = case dropWhile isSpace (reverse s) of
+    ';':_ -> True
+    _ -> False
+
+mkCnc :: FilePath -> Parser -> Morpho -> Either String String -> IO ()
 mkCnc out parser morpho line = do
   let (res,msg) = mkCncLine parser morpho line
   appendFile out res
@@ -81,30 +101,29 @@ mkCnc out parser morpho line = do
   ifNull (return ()) putStrLnFlush msg
 
 mkCncLine :: (String -> String -> ([Tree],String)) -> (String -> Bool) -> 
-             String -> (String,String)
-mkCncLine parser morpho line = case words line of
-  "lin"  : rest | elem "in" rest -> mkLinRule "lin" rest
-  "oper" : rest | elem "in" rest -> mkLinRule "oper" rest
-  _ -> (line,[])
- where
-   mkLinRule key s = 
+             Either String String -> (String,String)
+mkCncLine parser morpho (Right line) = (line,[])
+mkCncLine parser morpho (Left line) = mkLinRule (words line) where
+  mkLinRule s = 
     let
        (pre,str)    = span (/= "in") s
        ([cat],rest) = splitAt 1 $ tail str
        (lin,subst)  = span (/= '"') $ tail $ unwords rest
+       substs = doSubst (init (tail subst))
        def
         | last pre /= "=" = line  -- ordinary lin rule
         | otherwise  = case parser cat lin of 
-           (t:ts,_) -> ind ++ key +++ unwords pre +++ 
-                       doSubst (init (tail subst)) (tree2exp t) +++ ";" ++
-                       if null ts then [] else " -- AMBIGUOUS"
+           (t:ts,_) -> ind ++ unwords pre +++ 
+                       substs (tree2exp t) +++ ";" ++
+                       if null ts then [] else (" -- AMBIGUOUS:" ++++
+                         unlines ["-- " ++ substs (tree2exp s) +++ ";" | s <- ts])
            ([],msg) -> "{-" ++ line ++++ morph lin ++++ "-}" 
     in
      (def,def)
-   morph s = case [w | w <- words s, not (morpho w)] of
-     [] -> ""
-     ws -> "unknown words: " ++ unwords ws
-   ind = takeWhile isSpace line
+  morph s = case [w | w <- words s, not (morpho w)] of
+    [] -> ""
+    ws -> "unknown words: " ++ unwords ws
+  ind = takeWhile isSpace line
 
 doSubst :: String -> Term -> String
 doSubst subst0 trm = prt_ $ subt subst trm where
