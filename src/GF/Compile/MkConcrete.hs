@@ -106,9 +106,10 @@ mkCncLine parser morpho (Right line) = (line,[])
 mkCncLine parser morpho (Left line) = mkLinRule (words line) where
   mkLinRule s = 
     let
-       (pre,str)    = span (/= "in") s
-       ([cat],rest) = splitAt 1 $ tail str
-       (lin,subst)  = span (/= '"') $ tail $ unwords rest
+       (pre,str)     = span (/= "in") s
+       ([mcat],rest) = splitAt 1 $ tail str
+       (lin,subst)   = span (/= '"') $ tail $ unwords rest
+       cat = reverse $ takeWhile (/= '.') $ reverse mcat
        substs = doSubst (init (tail subst))
        def
         | last pre /= "=" = line  -- ordinary lin rule
