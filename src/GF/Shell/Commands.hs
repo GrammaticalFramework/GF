@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:19 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.37 $
+-- > CVS $Date: 2005/06/10 15:59:58 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.38 $
 --
 -- temporary hacks for GF 2.0
 --
@@ -91,6 +91,7 @@ data Command =
  | CRemoveOption Option
  | CDelete
  | CAddClip
+ | CRemoveClip Int
  | CUndo
  | CView
  | CMenu
@@ -284,6 +285,7 @@ execECommand env c = case c of
   CRemoveOption o    -> changeStOptions (removeOption o)
   CDelete            -> action2commandNext $ deleteSubTree cgr
   CAddClip           -> \s -> (addtoClip (actTree (stateSState s))) s
+  CRemoveClip n      -> \s -> (removeClip n) s
   CUndo              -> undoCommand
   CMenu              -> \s -> changeMsg (menuState env s) s
   CView              -> changeView

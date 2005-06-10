@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/03 22:44:36 $ 
+-- > CVS $Date: 2005/06/10 15:59:58 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.17 $
+-- > CVS $Revision: 1.18 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -122,6 +122,7 @@ pCommandMsg s = (m,pCommandWords $ words c) where
     "u" : _       -> CUndo
     "d" : _       -> CDelete
     "ac" : _      -> CAddClip
+    "pc": i : _   -> CRemoveClip (readIntArg i)
     "c" : s : _   -> CTermCommand s
     "a" : _       -> CRefineRandom --- *a*leatoire
     "m" :  _      -> CMenu

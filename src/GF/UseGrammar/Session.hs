@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:51 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.9 $
+-- > CVS $Date: 2005/06/10 15:59:59 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.10 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -81,6 +81,9 @@ changeCands ts ss@((s,(_,cb),(_,b)):_) = (s,(ts,cb),(candInfo ts,b)) : ss
 
 addtoClip :: Clip -> ECommand
 addtoClip t ss@((s,(ts,cb),(i,b)):_) = (s,(ts,t:cb),(i,b)) : ss   
+
+removeClip :: Int -> ECommand
+removeClip n ss@((s,(ts,cb),(i,b)):_) = (s,(ts, drop n cb),(i,b)) : ss   
 
 changeMsg :: [String] -> ECommand
 changeMsg m ((s,ts,(_,b)):ss) = (s,ts,(m,b)) : ss   -- just change message
