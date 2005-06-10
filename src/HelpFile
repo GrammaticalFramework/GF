@@ -19,6 +19,7 @@ i,  import: i File
         .gfc   canonical GF
         .gfr   precompiled GF resource  
         .gfcm  multilingual canonical GF
+        .gfe   example-based grammar files (only with the -ex option)
         .ebnf  Extended BNF format
         .cf    Context-free (BNF) format
   options:
@@ -32,6 +33,7 @@ i,  import: i File
       -cflexer      build an optimized parser with separate lexer trie
       -noemit       do not emit code (default with old grammar format)
       -o            do emit code (default with new grammar format)
+      -ex           preprocess .gfe files if needed
   flags:
       -abs          set the name used for abstract syntax (with -old option)
       -cnc          set the name used for concrete syntax (with -old option)

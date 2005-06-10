@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/17 12:37:17 $
+-- > CVS $Date: 2005/06/10 21:04:01 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -27,7 +27,7 @@ txtHelpCommand c =
     _ -> "Command not found."
 
 txtHelpFile =
-  "\n-- GF help file updated for GF 2.0, 24/3/2004." ++
+  "\n-- GF help file updated for GF 2.2, 17/5/2005." ++
   "\n-- *: Commands and options marked with * are not yet implemented." ++
   "\n--" ++
   "\n-- Each command has a long and a short name, options, and zero or more" ++
@@ -48,6 +48,7 @@ txtHelpFile =
   "\n        .gfc   canonical GF" ++
   "\n        .gfr   precompiled GF resource  " ++
   "\n        .gfcm  multilingual canonical GF" ++
+  "\n        .gfe   example-based grammar files (only with the -ex option)" ++
   "\n        .ebnf  Extended BNF format" ++
   "\n        .cf    Context-free (BNF) format" ++
   "\n  options:" ++
@@ -61,6 +62,7 @@ txtHelpFile =
   "\n      -cflexer      build an optimized parser with separate lexer trie" ++
   "\n      -noemit       do not emit code (default with old grammar format)" ++
   "\n      -o            do emit code (default with new grammar format)" ++
+  "\n      -ex           preprocess .gfe files if needed" ++
   "\n  flags:" ++
   "\n      -abs          set the name used for abstract syntax (with -old option)" ++
   "\n      -cnc          set the name used for concrete syntax (with -old option)" ++

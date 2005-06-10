@@ -5,9 +5,9 @@
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/06/03 21:51:58 $ 
+-- > CVS $Date: 2005/06/10 21:04:01 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.27 $
+-- > CVS $Revision: 1.28 $
 --
 -- The Main module of GF program.
 -----------------------------------------------------------------------------
@@ -20,6 +20,7 @@ import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.API.IOGrammar
 import GF.Compile.ShellState
+import GF.Compile.Compile
 import GF.Compile.MkConcrete
 import GF.Shell
 import GF.Shell.SubShell
@@ -30,19 +31,22 @@ import GF.Text.UTF8
 
 import GF.Today (today,version)
 import GF.System.Arch
-import System (getArgs)
-import Control.Monad (foldM)
+import System (getArgs,system)
+import Control.Monad (foldM,liftM)
+import Data.List (nub)
 
 -- AR 19/4/2000 -- 28/4/2005
 
 main :: IO ()
 main = do
   xs <- getArgs
-  let (os,fs) = getOptions "-" xs
-      opt j   = oElem j os
-      st0     = optInitShellState os
-      ifNotSil c = if oElem beSilent os then return () else c 
-  case 0 of
+  let 
+   (os,fs) = getOptions "-" xs
+   opt j   = oElem j os
+   st0     = optInitShellState os
+   ifNotSil c = if oElem beSilent os then return () else c 
+
+   doGF os fs = case 0 of
 
     _ | opt getHelp -> do
       putStrLnFlush $ encodeUTF8 helpMsg
@@ -62,6 +66,10 @@ main = do
     _ | opt makeConcrete -> do
         mkConcretes fs
 
+    _ | opt openEditor -> do
+        system $ "jgf" +++ unwords xs
+        return ()
+
     _ | opt doBatch -> do
       if opt beSilent then return () else putStrLnFlush "<gfbatch>"
       st <- useIOE st0 $ 
@@ -77,17 +85,26 @@ main = do
       if null fs then return () else (ifNotSil putCPU) 
       gfInteract (initHState st) 
       return ()
+  -- preprocessing gfe
+  if opt fromExamples 
+    then do
+        es <- liftM (nub . concat) $ mapM (getGFEFiles os) fs
+        mkConcretes es
+        doGF (removeOption fromExamples os) fs
+    else doGF os fs
 
 helpMsg = unlines [
   "Usage: gf <option>* <file>*",
   "Options:",
+  "  -batch        structure session by XML tags (use > to send into a file)",
+  "  -edit         start the editor GUI (same as command 'jgf')",
+  "  -ex           first compile .gfe files as needed, then .gf files",
+  "  -examples     batch-compile .gfe files by parsing examples",
+  "  -help         show this message",
   "  -make         batch-compile files",
   "     -noemit      do not emit code when compiling",
   "     -v           be verbose when compiling",
-  "  -batch        structure session by XML tags (use > to send into a file)",
-  "  -examples     batch-compile .gfe file by parsing examples",
-  "  -help         show this message",
-  "To use the GUI: jgf <option>* <file>*"
+  "Also all flags for import (i) are interpreted; see 'help i'."
   ]
 
 welcomeMsg = 

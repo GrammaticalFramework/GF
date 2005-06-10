@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/03 21:51:59 $ 
+-- > CVS $Date: 2005/06/10 21:04:01 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.29 $
+-- > CVS $Revision: 1.30 $
 --
 -- Options and flags used in GF shell commands and files.
 --
@@ -245,6 +245,8 @@ showAll      = iOpt "all"
 showMulti    = iOpt "multi"
 fromSource   = iOpt "src"
 makeConcrete = iOpt "examples"
+fromExamples = iOpt "ex"
+openEditor = iOpt "edit"
 
 -- ** mainly for stand-alone
 

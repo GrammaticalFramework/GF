@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/17 12:37:17 $ 
+-- > CVS $Date: 2005/06/10 21:04:01 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.38 $
+-- > CVS $Revision: 1.39 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -50,6 +50,7 @@ import GF.Grammar.PrGrammar
 import Control.Monad (foldM,liftM)
 import System (system)
 import System.Random (newStdGen) ----
+import Data.List (nub)
 import GF.Data.Zipper ----
 
 import GF.Data.Operations
@@ -126,9 +127,14 @@ execLine put (c@(co, os), arg, cs) (outps,st) = do
 execC :: CommandOpt -> ShellIO
 execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
 
+  CImport file | oElem fromExamples opts -> do
+    es <- liftM nub $ getGFEFiles opts file
+    system $ "gf -examples" +++ unlines es
+    execC (comm, removeOption fromExamples opts) sa
   CImport file -> useIOE sa $ do
     st1 <- shellStateFromFiles opts st file
     ioeIO $ changeState (const st1) sa --- \ ((_,h),a) -> ((st,h), a))
+
   CEmptyState    -> changeState reinitShellState sa
   CChangeMain ma -> changeStateErr (changeMain ma) sa
   CStripState    -> changeState purgeShellState sa
