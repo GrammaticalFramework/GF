@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/17 13:38:46 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.36 $
+-- > CVS $Date: 2005/06/10 21:04:01 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.37 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -160,7 +160,7 @@ optionsOfCommand co = case co of
   CSetFlag -> both "utf8 table struct record all multi"
 	           "cat lang lexer parser number depth rawtrees unlexer optimize path conversion printer"
 
-  CImport _ -> both "old v s src retain nocf nocheckcirc cflexer noemit o"
+  CImport _ -> both "old v s src retain nocf nocheckcirc cflexer noemit o ex"
                     "abs cnc res path optimize conversion cat"
   CRemoveLanguage _ -> none
   CEmptyState -> none

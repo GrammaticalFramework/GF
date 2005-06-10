@@ -14,6 +14,24 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
+10/6 (AR) Preprocessor of <tt>.gfe</tt> files can now be performed as part of
+any grammar compilation. The flag <tt>-ex</tt> causes GF to look for
+the <tt>.gfe</tt> files and preprocess those that are younger
+than the corresponding <tt>.gf</tt> files. The files are first sorted
+and group by the resource, so that each resource only need be compiled once.
+
+<p>
+
+10/6 (AR) Editor GUI can now be alternatively invoked by the shell
+command <tt>gf -edit</tt> (equivalent to <tt>jgf</tt>).
+
+<p>
+
+10/6 (AR) Editor GUI command <tt>pc Int</tt> to pop <tt>Int</tt>
+items from the clip board.
+
+<p>
+
 4/6 (AR) Sequence of commands in the Java editor GUI now possible.
 The commands are separated by <tt> ;; </tt> (notice the space on
 both sides of the two semicolons). Such a sequence can be sent

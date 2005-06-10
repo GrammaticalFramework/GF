@@ -5,16 +5,16 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 21:08:14 $
+-- > CVS $Date: 2005/06/10 21:04:01 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.40 $
+-- > CVS $Revision: 1.41 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
 
 module GF.Compile.Compile (compileModule, compileEnvShSt, compileOne,
-		CompileEnv, TimedCompileEnv
-	       ) where
+		CompileEnv, TimedCompileEnv,gfGrammarPathVar,pathListOpts,
+	       getGFEFiles) where
 
 import GF.Grammar.Grammar
 import GF.Infra.Ident
@@ -50,6 +50,7 @@ import GF.Infra.UseIO
 import GF.System.Arch
 
 import Control.Monad
+import System.Directory
 
 -- | environment variable for grammar search path
 gfGrammarPathVar = "GF_GRAMMAR_PATH"
@@ -335,3 +336,27 @@ writeNewGF m@(i,_) = do
   ioeIO $ writeFile file $ prGrammar (MGrammar [m])
   ioeIO $ putStrLn $ "wrote file" +++ file
   return file
+
+--- this function duplicates a lot of code from compileModule.
+--- It does not really belong here either.
+-- It selects those .gfe files that a grammar depends on and that
+-- are younger than corresponding gf
+
+getGFEFiles :: Options -> FilePath -> IO [FilePath]
+getGFEFiles opts1 file = useIOE [] $ do
+  opts0 <- ioeIO $ getOptionsFromFile file
+  let useFileOpt = maybe False (const True) $ getOptVal opts0 pathList
+  let useLineOpt = maybe False (const True) $ getOptVal opts1 pathList
+  let opts = addOptions opts1 opts0 
+  let fpath = justInitPath file
+  ps0 <- ioeIO $ pathListOpts opts fpath
+
+  let ps1 = if (useFileOpt && not useLineOpt) 
+              then (map (prefixPathName fpath) ps0)
+              else ps0
+  ps <- ioeIO $ extendPathEnv gfLibraryPath gfGrammarPathVar ps1
+  let file' = if useFileOpt then justFileName file else file -- to find file itself
+  files <- getAllFiles opts ps [] file'
+  efiles <- ioeIO $ filterM doesFileExist [suffixFile "gfe" (unsuffixFile f) | f <- files]
+  es <- ioeIO $ mapM (uncurry selectLater) [(f, init f) | f <- efiles] -- init gfe == gf
+  return $ filter ((=='e') . last) es
