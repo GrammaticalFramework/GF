@@ -54,9 +54,9 @@ oper
   nominative : Case ;
   genitive   : Case ;
 
--- Prepositions used in many-argument functions are just strings.
+-- Prepositions are used in many-argument functions for rection.
 
-  Preposition : Type = Str ;
+  Preposition : Type ;
 
 
 --2 Nouns
@@ -187,9 +187,13 @@ oper
 
 --2 Prepositions
 --
--- A preposition is just a string.
+-- A preposition as used for rection in the lexicon, as well as to
+-- build $PP$s in the resource API, just requires a string.
 
   mkPreposition : Str -> Preposition ;
+  mkPrep        : Str -> Prep ;
+
+-- (These two functions are synonyms.)
 
 --2 Verbs
 --
@@ -282,6 +286,8 @@ oper
   nominative = Nom ;
   genitive = Gen ;
 
+  Preposition = Str ;
+
   regN = \ray -> 
     let
       ra  = Predef.tk 1 ray ; 
@@ -360,6 +366,7 @@ oper
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
   mkPreposition p = p ;
+  mkPrep p = ss p ** {lock_Prep = <>} ;
 
   mkV a b c d e = mkVerbP3worst a b c d e ** {s1 = [] ; lock_V = <>} ;
 

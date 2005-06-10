@@ -294,7 +294,7 @@ oper
   vOlla = verbOlla ** {lock_V = <>} ;
   vEi = verbEi ** {lock_V = <>} ;
 
-  mkTV = \v,c,p,o -> v ** {s3 = p ; s4 = o ; c = c ; lock_TV = <>} ;
+----  mkTV = \v,c,p,o -> v ** {s3 = p ; s4 = o ; c = c ; lock_TV = <>} ;
   tvCase = \v,c -> mkTV v c [] [] ; 
   tvDir v = mkTransVerbDir v ** {lock_TV = <>} ;
 } ;
