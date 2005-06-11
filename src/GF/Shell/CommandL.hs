@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/10 15:59:58 $ 
+-- > CVS $Date: 2005/06/11 20:27:05 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.18 $
+-- > CVS $Revision: 1.19 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -119,7 +119,8 @@ pCommandMsg s = (m,pCommandWords $ words c) where
     "f" : "unstructured" : _ -> CRemoveOption showStruct --- hmmm
     "f" : "structured" : _ -> CAddOption showStruct --- hmmm
     "f" : s : _   -> CAddOption (filterString s)
-    "u" : _       -> CUndo
+    "u" : i : _   -> CUndo (readIntArg i)
+    "u" : _       -> CUndo 1
     "d" : _       -> CDelete
     "ac" : _      -> CAddClip
     "pc": i : _   -> CRemoveClip (readIntArg i)

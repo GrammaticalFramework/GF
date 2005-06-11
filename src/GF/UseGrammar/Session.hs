@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/10 15:59:59 $ 
+-- > CVS $Date: 2005/06/11 20:27:05 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -21,6 +21,7 @@ import GF.UseGrammar.Editing
 import GF.Compile.ShellState ---- grammar
 
 import GF.Data.Operations
+import GF.Data.Zipper (keepPosition) ---
 
 -- First version 8/2001. Adapted to GFC with modules 19/6/2003.
 -- Nothing had to be changed, which is a sign of good modularity.
@@ -118,9 +119,15 @@ action2command act state = case act (stateSState state) of
 action2commandNext :: Action -> ECommand -- move to next meta after execution
 action2commandNext act = action2command (\s -> act s >>= goNextMetaIfCan)
 
-undoCommand :: ECommand
-undoCommand ss@[_] = changeMsg ["cannot go back"] ss
-undoCommand (_:ss) = changeMsg ["successful undo"] ss
+action2commandKeep :: Action -> ECommand -- keep old position after execution
+action2commandKeep act = action2command (\s -> keepPosition act s)
+
+undoCommand :: Int -> ECommand
+undoCommand n ss =
+  let k = length ss in
+  if k < n 
+     then changeMsg ["cannot go all the way back"] []
+     else changeMsg ["successful undo"] (drop n ss)
 
 selectCand :: CGrammar -> Int -> ECommand
 selectCand gr i state = err (\m -> changeMsg [m] state) id $ do
@@ -149,7 +156,7 @@ replaceByTrees gr trees = case trees of
 
 replaceByEditCommand :: StateGrammar -> String -> ECommand
 replaceByEditCommand gr co = 
-  action2command $
+  action2commandKeep $
   maybe return ($ gr) $
   lookupCustom customEditCommand (strCI co) 
 

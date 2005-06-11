@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:11 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.8 $
+-- > CVS $Date: 2005/06/11 20:27:05 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.9 $
 --
 -- Gérard Huet's zipper (JFP 7 (1997)). AR 10\/8\/2001
 -----------------------------------------------------------------------------
@@ -35,6 +35,8 @@ module GF.Data.Zipper (-- * types
 	       goRoot,
 	       goLast,
 	       goPosition,
+	       getPosition,
+	       keepPosition,
 	       -- * added some utilities
 	       traverseCollect,
 	       scanTree,
@@ -159,6 +161,18 @@ goPosition :: [Int] -> Loc a -> Err (Loc a)
 goPosition p = go p . goRoot where
   go []     s = return s
   go (p:ps) s = goDown s >>= apply p goRight >>= go ps
+
+getPosition :: Loc a -> [Int]
+getPosition = reverse . getp where 
+  getp (Loc (t,p)) = case p of
+    Top -> []
+    Node (left,(p',v),_) -> length left : getp (Loc (Tr (v, []),p'))
+
+keepPosition :: (Loc a -> Err (Loc a)) -> (Loc a -> Err (Loc a))
+keepPosition f s = do
+  let p = getPosition s
+  s' <- f s
+  goPosition p s'
 
 apply :: Monad m => Int -> (a -> m a) -> a -> m a
 apply n f a = case n of
