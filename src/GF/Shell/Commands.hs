@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/10 15:59:58 $ 
+-- > CVS $Date: 2005/06/11 20:27:05 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.38 $
+-- > CVS $Revision: 1.39 $
 --
 -- temporary hacks for GF 2.0
 --
@@ -92,7 +92,7 @@ data Command =
  | CDelete
  | CAddClip
  | CRemoveClip Int
- | CUndo
+ | CUndo Int
  | CView
  | CMenu
  | CQuit
@@ -241,11 +241,11 @@ execECommand env c = case c of
                           t  <- string2ref gr s
                           s' <- refineWithAtom der cgr t x
                           uniqueRefinements cgr s'
-  CWrapWithFun (f,i) -> action2commandNext $ wrapWithFun cgr (qualif f, i)
-  CChangeHead f      -> action2commandNext $ changeFunHead cgr (qualif f)
-  CPeelHead (f,i)    -> action2commandNext $ peelFunHead cgr (qualif f,i)
+  CWrapWithFun (f,i) -> action2commandKeep $ wrapWithFun cgr (qualif f, i)
+  CChangeHead f      -> action2commandKeep $ changeFunHead cgr (qualif f)
+  CPeelHead (f,i)    -> action2commandKeep $ peelFunHead cgr (qualif f,i)
 
-  CAlphaConvert s    -> action2commandNext $ \x ->
+  CAlphaConvert s    -> action2commandKeep $ \x ->
                           string2varPair s >>= \xy -> alphaConvert cgr xy x
 
   CRefineWithTree s  -> action2commandNext $ \x -> 
@@ -283,10 +283,10 @@ execECommand env c = case c of
 
   CAddOption o       -> changeStOptions (addOption o)
   CRemoveOption o    -> changeStOptions (removeOption o)
-  CDelete            -> action2commandNext $ deleteSubTree cgr
+  CDelete            -> action2commandKeep $ deleteSubTree cgr
   CAddClip           -> \s -> (addtoClip (actTree (stateSState s))) s
   CRemoveClip n      -> \s -> (removeClip n) s
-  CUndo              -> undoCommand
+  CUndo n            -> undoCommand n
   CMenu              -> \s -> changeMsg (menuState env s) s
   CView              -> changeView
   CHelp h            -> changeMsg [h env]
