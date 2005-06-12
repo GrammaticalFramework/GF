@@ -1006,4 +1006,40 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
   koPart = suff "ko" ;
 
+-- For $NumeralsFin$.
+
+  param NumPlace = NumIndep | NumAttr  ;
+
+oper
+  yksiN = mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
+                "yksien" "yksiä" "yksiin" ;
+  kymmenenN = mkSubst "ä" "kymmenen" "kymmene" "kymmene" "kymmenee" 
+     "kymmeneen" "kymmeni" "kymmeni" "kymmenien" "kymmeniä"
+     "kymmeniin" ;
+  sataN = regNoun "sata" ;
+
+  tuhatN = mkSubst "a" "tuhat" "tuhanne" "tuhanne" "tuhantee" "tuhanteen"
+    "tuhansi" "tuhansi" "tuhansien" "tuhansia" "tuhansiin" ;
+
+  kymmentaN = {s = table {
+    NCase Sg Nom => "kymmentä" ;
+    c => kymmenenN.s ! c
+    }
+  } ;
+  sataaN = {s = table {
+    Sg => sataN.s ;
+    Pl => table {
+      NCase Sg Nom => "sataa" ;
+      c => sataN.s ! c
+      }
+    }
+  } ;
+  tuhattaN = {s = table {
+    Sg => tuhatN.s ;
+    Pl => table {
+      NCase Sg Nom => "tuhatta" ;
+      c => tuhatN.s ! c
+      }
+    }
+  } ;
 } ;
