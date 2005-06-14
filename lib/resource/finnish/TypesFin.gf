@@ -89,9 +89,12 @@ param
      Inf
    | Pres Number Person
    | Impf Number Person
+   | Cond Number Person
    | Imper Number
    | ImpNegPl
    | Pass Bool 
+   | PastPartAct  NForm
+   | PastPartPass NForm
    ;
 
 oper
