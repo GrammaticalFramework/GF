@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 15:44:59 $ 
+-- > CVS $Date: 2005/06/14 20:09:57 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.17 $
+-- > CVS $Revision: 1.18 $
 --
 -- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
 
-module GF.Grammar.Compute (computeConcrete, computeTerm) where
+module GF.Grammar.Compute (computeConcrete, computeTerm,computeConcreteRec) where
 
 import GF.Data.Operations
 import GF.Grammar.Grammar
@@ -34,10 +34,17 @@ import Control.Monad (liftM2, liftM)
 -- | computation of concrete syntax terms into normal form
 -- used mainly for partial evaluation
 computeConcrete :: SourceGrammar -> Term -> Err Term
-computeConcrete g t = {- refreshTerm t >>= -} computeTerm g [] t
+computeConcrete    g t = {- refreshTerm t >>= -} computeTerm g [] t
+computeConcreteRec g t = {- refreshTerm t >>= -} computeTermOpt True g [] t
 
 computeTerm :: SourceGrammar -> Substitution -> Term -> Err Term
-computeTerm gr = comp where
+computeTerm = computeTermOpt False
+
+-- rec=True is used if it cannot be assumed that looked-up constants
+-- have already been computed (mainly with -optimize=noexpand in .gfr)
+
+computeTermOpt :: Bool -> SourceGrammar -> Substitution -> Term -> Err Term
+computeTermOpt rec gr = comp where
 
    comp g t = ---- errIn ("subterm" +++ prt t) $ --- for debugging 
               case t of
@@ -263,7 +270,9 @@ computeTerm gr = comp where
 
     where
 
-     look = lookupResDef gr
+     look p c
+       | rec       = lookupResDef gr p c >>= comp []
+       | otherwise = lookupResDef gr p c
 
      ext x a g = (x,a):g
 

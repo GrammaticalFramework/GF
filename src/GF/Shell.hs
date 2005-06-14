@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/10 21:04:01 $ 
+-- > CVS $Date: 2005/06/14 20:09:57 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.39 $
+-- > CVS $Revision: 1.40 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -224,6 +224,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
                 string2srcTerm src m t >>= 
                 Ch.justCheckLTerm src  >>=
                 Co.computeConcrete src))) sa
+---                Co.computeConcreteRec src))) sa
   CShowOpers t -> do
     m <- return $
          maybe (I.identC "?") id $  -- meaningful if no opers in t 

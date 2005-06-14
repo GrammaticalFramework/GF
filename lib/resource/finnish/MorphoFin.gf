@@ -11,8 +11,7 @@
 
 resource MorphoFin = TypesFin ** open Prelude in {
 
-flags optimize=none ;
---flags optimize=noexpand ;
+--- flags optimize=noexpand ;
 
 --2 Nouns
 --
@@ -1126,12 +1125,12 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 oper
   yksiN = mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
                 "yksien" "yksiä" "yksiin" ;
-  kymmenenN = mkSubst "ä" "kymmenen" "kymmene" "kymmene" "kymmenee" 
+  kymmenenN = mkSubst "ä" "kymmenen" "kymmene" "kymmene" "kymmentä" 
      "kymmeneen" "kymmeni" "kymmeni" "kymmenien" "kymmeniä"
      "kymmeniin" ;
   sataN = regNoun "sata" ;
 
-  tuhatN = mkSubst "a" "tuhat" "tuhanne" "tuhanne" "tuhantee" "tuhanteen"
+  tuhatN = mkSubst "a" "tuhat" "tuhanne" "tuhante" "tuhatta" "tuhanteen"
     "tuhansi" "tuhansi" "tuhansien" "tuhansia" "tuhansiin" ;
 
   kymmentaN = {s = table {
