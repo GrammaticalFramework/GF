@@ -11,7 +11,8 @@
 
 resource MorphoFin = TypesFin ** open Prelude in {
 
-flags optimize=all ;
+flags optimize=none ;
+--flags optimize=noexpand ;
 
 --2 Nouns
 --
@@ -521,7 +522,7 @@ getHarmony : Str -> Str = \u -> case u of {
 
 -- The following function defines how grade alternation works if it is active.
 -- In general, *whether there is* grade alternation must be given in the lexicon
--- (cf. "auto" - "auton", not "audon").
+-- (cf. "auto - auton" not "audon"; "vihje - vihjeen" not "vihkeen").
 
   weakGrade : Str -> Str = \kukko -> 
     let {
@@ -851,30 +852,129 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
 --3 Verbs
 --
+-- The present, past, conditional. and infinitive stems, acc. to Koskenniemi.
+-- Unfortunately not enough (without complicated processes).
 
-  mkVerb : (_,_,_,_,_,_ : Str) -> Verb = 
-    \tulla,tulen,tulee,tulevat,tulkaa,tullaan -> 
-    let {
-      tule = Predef.tk 1 tulen ;
-      a = Predef.dp 1 tulkaa
-    } in
+  mkVerb : (_,_,_,_,_,_,_,_ : Str) -> Verb = 
+    \tulla,tulee,tulkaa,tullaan,tuli,tulisi,tullut,tultu -> 
+    let
+      tule = case Predef.tk 2 tulee of {
+        "ie" | "uo" | "yö" => tulee ;
+        _ => Predef.tk 1 tulee
+        } ;
+      tuje = weakGrade tule ;
+      tuji = weakGrade (init tuli) + "i" ; ---
+      a = Predef.dp 1 tulkaa ;
+      vat = "v" + a + "t" ;
+    in
     {s = table {
       Inf => tulla ;
-      Pres Sg P1 => tulen ;
-      Pres Sg P2 => tule + "t" ;
+      Pres Sg P1 => tuje + "n" ;
+      Pres Sg P2 => tuje + "t" ;
       Pres Sg P3 => tulee ;
-      Pres Pl P1 => tule + "mme" ;
-      Pres Pl P2 => tule + "tte" ;
-      Pres Pl P3 => tulevat ;
-      Imper Sg  => tule ;
-      Imper Pl  => tulkaa ;
-      ImpNegPl  => Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "ö") ;
-      Pass True => tullaan ;
+      Pres Pl P1 => tuje + "mme" ;
+      Pres Pl P2 => tuje + "tte" ;
+      Pres Pl P3 => tule + vat ;
+      Impf Sg P1 => tuji + "n" ;
+      Impf Sg P2 => tuji + "t" ;
+      Impf Sg P3 => tuli ;
+      Impf Pl P1 => tuji + "mme" ;
+      Impf Pl P2 => tuji + "tte" ;
+      Impf Pl P3 => tuli + vat ;
+      Cond Sg P1 => tulisi + "n" ;
+      Cond Sg P2 => tulisi + "t" ;
+      Cond Sg P3 => tulisi ;
+      Cond Pl P1 => tulisi + "mme" ;
+      Cond Pl P2 => tulisi + "tte" ;
+      Cond Pl P3 => tulisi + vat ;
+      Imper Sg   => tuje ;
+      Imper Pl   => tulkaa ;
+      ImpNegPl   => Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "ö") ;
+      Pass True  => tullaan ;
       Pass False => Predef.tk 2 tullaan ;
-      p => tulla + Predef.show VForm p ----
+      PastPartAct n => tullut ; ---- (regNoun tullut).s ! n ; ---- 
+      PastPartPass n => tultu   ---- (sLukko tultu).s ! n
       }
     } ;
 
+{- ----
+  mk4Verb : (_,_,_,_,_ : Str) -> Verb = 
+    \tulla,tulen,tulee,tuli,tulisi -> 
+    let
+      tuje = init tulen ;
+      tuj  = init tuje ;
+      tule = case Predef.dp 2 tulee of {
+        "ie" | "uo" | "yö" => tulee ;
+        _ => init tulee
+        } ;
+      tuji = weakGrade tuli ; ---
+      a = Predef.dp 1 tulla ;
+      aa = a + a ;
+      vat = "v" + a + "t" ;
+      y = case a of {"a" => "u" ; _ => "y"} ;
+
+    in
+    {s = table {
+      Inf => tulla ;
+      Pres Sg P1 => tuje + "n" ;
+      Pres Sg P2 => tuje + "t" ;
+      Pres Sg P3 => tulee ;
+      Pres Pl P1 => tuje + "mme" ;
+      Pres Pl P2 => tuje + "tte" ;
+      Pres Pl P3 => tule + vat ;
+      Impf Sg P1 => tuji + "n" ;
+      Impf Sg P2 => tuji + "t" ;
+      Impf Sg P3 => tuli ;
+      Impf Pl P1 => tuji + "mme" ;
+      Impf Pl P2 => tuji + "tte" ;
+      Impf Pl P3 => tuli + vat ;
+      Cond Sg P1 => tulisi + "n" ;
+      Cond Sg P2 => tulisi + "t" ;
+      Cond Sg P3 => tulisi ;
+      Cond Pl P1 => tulisi + "mme" ;
+      Cond Pl P2 => tulisi + "tte" ;
+      Cond Pl P3 => tulisi + vat ;
+      Imper Sg   => tuje ;
+      Imper Pl   => tule + "k" + a + a ;
+      ImpNegPl   => tule + "k" + (ifTok Str a "a" "o" "ö") ;
+      Pass True  => tuj + "et" + aa + "n" ;
+      Pass False => tuj + "et" + a ;
+      PastPartAct n => tule + "n" + y + "t" ; ---- (regNoun tullut).s ! n ; ---- 
+      PastPartPass n => tuj + "ett" + y       ---- (sLukko tultu).s ! n
+      }
+    } ;
+
+-}
+
+  regVerb : Str -> Verb = \haukkua -> 
+    let
+      ua = Predef.dp 2 haukkua ;
+      a  = last ua ;
+      haukku = init haukkua ;
+      hauku  = weakGrade haukku ;
+      haukk = init haukku ;
+      hauk = init hauku ;
+      hau = init hauk ;
+      aa = a + a ;
+      u  = last haukku ;
+      y = case a of {"a" => "u" ; _ => "y"} ;
+    in 
+    case ua of {
+      "aa" | "ää" => 
+        mkVerb 
+          haukkua (haukku + u) (haukku +"k"+aa) 
+          (hauk + "et"+aa+"n") (haukk +"i") (haukku +"isi")
+          (haukku + "n"+y+"t") (hauk + "ett"+y) ;
+      "ua" | "yä" | "oa" | "öä" => 
+        mkVerb 
+          haukkua (haukku + u) (haukku +"k"+aa) 
+          (hauku + "t"+aa+"n") (haukku +"i") (haukku +"isi")
+          (haukku + "n"+y+"t") (hauku + "tt"+y) ;
+      _ => variants {}
+      }
+       ;
+
+{-
 -- For "harppoa", "hukkua", "löytyä", with grade alternation.
 
   vHukkua : (_,_ : Str) -> Verb = \hukkua,huku -> 
@@ -963,21 +1063,34 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (juo + (("v" + a) + "t"))
       (juo + (("k" + a) + a)) 
       (juoda + (a + "n")) ;
+-}
 
+  verbOlla : Verb = 
+    let olla = 
+      mkVerb "olla" "olee" "olkaa" "ollaan" "oli" "olisi" "ollut" "oltu"
+    in
+    {s = table {
+      Pres Sg P3 => "on" ;
+      Pres Pl P3 => "ovat" ;
+      v => olla.s ! v
+      }
+    } ;
 
-  verbOlla : Verb = mkVerb "olla" "olen" "on" "ovat" "olkaa" "ollaan" ;
 
 -- The negating operator "ei" is actually a verb, which has present 
 -- active indicative and imperative forms, but no infinitive.
 
   verbEi : Verb = 
-    let {ei = mkVerb nonExist "en" "ei" "eivät" "älkää" "ei"} in
+    let ei = 
+      mkVerb "ei" "ei" "älkää" "ei" "ei" "ei" "ei" "ei"
+    in
     {s = table {
+      Pres Sg P1 => "en" ;
       Pres Pl P3 => "eivät" ;
+      Imper Sg => "älä" ;
       v => ei.s ! v
       }
     } ;
-
 
 --2 Some structural words
 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Date: 2005/06/14 15:43:03 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- Top-level partial evaluation for GF source modules.
 -----------------------------------------------------------------------------
@@ -39,9 +39,7 @@ optimizeModule :: Options -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) ->
                   Err (Ident,SourceModInfo)
 optimizeModule opts ms mo@(_,mi) = case mi of
   ModMod m0@(Module mt st fs me ops js) | st == MSComplete && isModRes m0 -> do
-      mo1 <- evalModule ms mo
-      let oopts = addOptions opts (iOpts (flagsModule mo1))
-          optim = maybe "none" id $ getOptVal oopts useOptimizer
+      mo1 <- evalModule optres ms mo
       return $ case optim of
         "parametrize" -> shareModule paramOpt mo1  -- parametrization and sharing
         "values"      -> shareModule valOpt mo1    -- tables as courses-of-values
@@ -49,11 +47,17 @@ optimizeModule opts ms mo@(_,mi) = case mi of
         "all"         -> shareModule allOpt mo1    -- first parametrize then values
         "none"        -> mo1                       -- no optimization
         _             -> mo1                       -- none; default for src
-  _ -> evalModule ms mo
+  _ -> evalModule optres ms mo
+ where
+   oopts = addOptions opts (iOpts (flagsModule mo))
+   optim = maybe "none" id $ getOptVal oopts useOptimizer
+   optres = case optim of
+     "noexpand" -> False
+     _ -> True
 
-evalModule :: [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
+evalModule :: Bool -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
                Err (Ident,SourceModInfo)
-evalModule ms mo@(name,mod) = case mod of
+evalModule optres ms mo@(name,mod) = case mod of
 
   ModMod m0@(Module mt st fs me ops js) | st == MSComplete -> case mt of
     _ | isModRes m0 -> do
@@ -73,17 +77,17 @@ evalModule ms mo@(name,mod) = case mod of
 
    evalOp g@(MGrammar ((_, ModMod m) : _)) i = do
      info  <- lookupTree prt i $ jments m
-     info' <- evalResInfo gr (i,info)
+     info' <- evalResInfo optres gr (i,info)
      return $ updateRes g name i info'
 
 -- | only operations need be compiled in a resource, and this is local to each
 -- definition since the module is traversed in topological order
-evalResInfo :: SourceGrammar -> (Ident,Info) -> Err Info
-evalResInfo gr (c,info) = case info of
+evalResInfo :: Bool -> SourceGrammar -> (Ident,Info) -> Err Info
+evalResInfo optres gr (c,info) = case info of
 
   ResOper pty pde -> eIn "operation" $ do
     pde' <- case pde of
-       Yes de -> liftM yes $ comp de
+       Yes de | optres -> liftM yes $ comp de 
        _ -> return pde
     return $ ResOper pty pde'
 
