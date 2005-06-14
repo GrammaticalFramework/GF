@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/14 15:43:03 $ 
+-- > CVS $Date: 2005/06/14 20:09:57 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.16 $
+-- > CVS $Revision: 1.17 $
 --
 -- Top-level partial evaluation for GF source modules.
 -----------------------------------------------------------------------------
@@ -93,7 +93,7 @@ evalResInfo optres gr (c,info) = case info of
 
   _ ->  return info
  where
-   comp = computeConcrete gr
+   comp = if optres then computeConcrete gr else computeConcreteRec gr
    eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
 
 
@@ -127,7 +127,6 @@ evalCncInfo gr cnc abs (c,info) = case info of
 
   _ ->  return (c,info)
  where
-   comp = computeConcrete gr
    pEval = partEval gr
    eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
 
