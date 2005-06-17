@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:17 $ 
+-- > CVS $Date: 2005/06/17 14:15:19 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- Instances for printing terms in a simplified format
 -----------------------------------------------------------------------------
@@ -23,8 +23,8 @@ import qualified GF.Canon.PrintGFC as P
 
 instance Print Term where
     prt (Arg arg)         = prt arg
-    prt (con `Con` [])    = prt con
-    prt (con `Con` terms) = prt con ++ "(" ++ prtSep ", " terms ++ ")"
+    prt (con `Par` [])    = prt con
+    prt (con `Par` terms) = prt con ++ "(" ++ prtSep ", " terms ++ ")"
     prt (LI ident)        = prt ident
     prt (R record)        = "{" ++ prtSep ";" record ++ "}"
     prt (term `P` lbl)    = prt term ++ "." ++ prt lbl
@@ -112,7 +112,7 @@ sizeCT (Cn cn) = 1
 sizeCT (TStr) = 1
 
 sizeT :: Term -> Int
-sizeT (_ `Con` ts) = 2 + sum (map sizeT ts)
+sizeT (_ `Par` ts) = 2 + sum (map sizeT ts)
 sizeT (R rec) = 1 + sum [ sizeT t | _ `Ass` t <- rec ]
 sizeT (t `P` _) = 1 + sizeT t
 sizeT (T _ tbl) = 1 + sum [ sum (map sizeP ps) + sizeT t | ps `Cas` t <- tbl ]

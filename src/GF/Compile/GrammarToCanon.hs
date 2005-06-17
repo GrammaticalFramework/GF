@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 21:08:14 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.20 $
+-- > CVS $Date: 2005/06/17 14:15:18 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.21 $
 --
 -- Code generator from optimized GF source code to GFC.
 -----------------------------------------------------------------------------
@@ -197,10 +197,10 @@ redCTerm t = case t of
     (_,c,xx) <- termForm t
     xx' <- mapM redCTerm xx
     case c of
-      QC p c -> liftM2 G.Con (redQIdent (p,c)) (return xx')
+      QC p c -> liftM2 G.Par (redQIdent (p,c)) (return xx')
       _ -> prtBad "expected constructor head instead of" c
   Q p c  -> liftM G.I (redQIdent (p,c))
-  QC p c -> liftM2 G.Con (redQIdent (p,c)) (return [])
+  QC p c -> liftM2 G.Par (redQIdent (p,c)) (return [])
   R rs     -> do
     let (ls,tts) = unzip rs
         ls' = map redLabel ls

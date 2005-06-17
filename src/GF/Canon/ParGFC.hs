@@ -2,9 +2,9 @@
 module GF.Canon.ParGFC where
 import GF.Canon.AbsGFC
 import GF.Canon.LexGFC
-import GF.Data.ErrM
-import GF.Infra.Ident --H
-import Data.Array
+import GF.Data.ErrM -- H
+import GF.Infra.Ident -- H
+import Array
 #if __GLASGOW_HASKELL__ >= 503
 import GHC.Exts
 #else
@@ -511,7 +511,7 @@ happyReduce_2 = happySpecReduce_1 0# happyReduction_2
 happyReduction_2 happy_x_1
 	 =  case happyOutTok happy_x_1 of { (PT _ (TV happy_var_1)) -> 
 	happyIn5
-		 (identC happy_var_1 --H
+		 (identC happy_var_1
 	)}
 
 happyReduce_3 = happySpecReduce_1 1# happyReduction_3
@@ -1194,7 +1194,7 @@ happyReduction_75 (happy_x_4 `HappyStk`
 	 = case happyOut19 happy_x_2 of { happy_var_2 -> 
 	case happyOut53 happy_x_3 of { happy_var_3 -> 
 	happyIn33
-		 (Con happy_var_2 (reverse happy_var_3)
+		 (Par happy_var_2 (reverse happy_var_3)
 	) `HappyStk` happyRest}}
 
 happyReduce_76 = happySpecReduce_2 28# happyReduction_76
@@ -1836,7 +1836,7 @@ happyError ts =
 
 myLexer = tokens
 {-# LINE 1 "GenericTemplate.hs" #-}
--- $Id: ParGFC.hs,v 1.10 2005/05/27 21:05:17 aarne Exp $
+-- $Id: ParGFC.hs,v 1.11 2005/06/17 14:15:17 bringert Exp $
 
 
 

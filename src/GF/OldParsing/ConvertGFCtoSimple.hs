@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:45 $ 
+-- > CVS $Date: 2005/06/17 14:15:18 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Converting GFC to SimpleGFC
 --
@@ -81,7 +81,7 @@ convertCType gram (A.TInts n) = error "convertCType: cannot handle 'TInts' const
 
 convertTerm :: Env -> A.Term -> Term
 convertTerm gram (A.Arg arg) = convertArgVar arg
-convertTerm gram (A.Con con terms) = con :^ map (convertTerm gram) terms
+convertTerm gram (A.Par con terms) = con :^ map (convertTerm gram) terms
 convertTerm gram (A.LI var) = Var var
 convertTerm gram (A.R rec) = Rec [ (lbl, convertTerm gram term) | A.Ass lbl term <- rec ]
 convertTerm gram (A.P term lbl) = convertTerm gram term +. lbl

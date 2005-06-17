@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:55 $ 
+-- > CVS $Date: 2005/06/17 14:15:18 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Converting GFC grammars to MCFG grammars, nondeterministically.
 --
@@ -98,7 +98,7 @@ simplTerm env = simplifyTerm
  where
   simplifyTerm :: Term -> CnvMonad STerm
   simplifyTerm (Arg (A cat nr))  = return (SArg (fromInteger nr) cat emptyPath)
-  simplifyTerm (Con con terms)   = liftM (SCon con) $ mapM simplifyTerm terms
+  simplifyTerm (Par con terms)   = liftM (SCon con) $ mapM simplifyTerm terms
   simplifyTerm (R record)        = liftM SRec       $ mapM simplifyAssign record
   simplifyTerm (P term lbl)      = liftM (+. lbl)   $      simplifyTerm term
   simplifyTerm (T ct table)      = liftM STbl $ sequence $ concatMap simplifyCase table
@@ -277,5 +277,5 @@ cTypeForArg env (SArg nr cat (Path path))
 			             " results in " ++ show err
 
 term2spattern (R rec)         = SRec [ (lbl, term2spattern term) | Ass lbl term <- rec ]
-term2spattern (Con con terms) = SCon con $ map term2spattern terms
+term2spattern (Par con terms) = SCon con $ map term2spattern terms
 

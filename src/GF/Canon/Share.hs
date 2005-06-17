@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:30 $ 
+-- > CVS $Date: 2005/06/17 14:15:18 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.11 $
+-- > CVS $Revision: 1.12 $
 --
 -- Optimizations on GFC code: sharing, parametrization, value sets.
 --
@@ -128,8 +128,8 @@ replace old new trm = case trm of
   FV ts   -> FV (map repl ts)
   
   -- these are the important cases, since they can correspond to patterns  
-  Con c ts | trm == old -> new
-  Con c ts            -> Con c (map repl ts)
+  Par c ts | trm == old -> new
+  Par c ts            -> Par c (map repl ts)
   R _ | isRec && trm == old -> new
   R lts   -> R [Ass l (repl t) | Ass l t <- lts]
 

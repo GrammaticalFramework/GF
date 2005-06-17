@@ -109,7 +109,7 @@ Lbg.  Labelling ::= Label ":" CType ;
 
 Arg.  Term2 ::= ArgVar ;
 I.    Term2 ::= CIdent ; -- from resources
-Con.  Term2 ::= "<" CIdent [Term2] ">" ;
+Par.  Term2 ::= "<" CIdent [Term2] ">" ;
 LI.   Term2 ::= "$" Ident ;  -- from pattern variables
 
 R.    Term2 ::= "{" [Assign] "}" ;

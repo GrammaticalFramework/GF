@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:21 $ 
+-- > CVS $Date: 2005/06/17 14:15:17 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.24 $
+-- > CVS $Revision: 1.25 $
 --
 -- Macros for building and analysing terms in GFC concrete syntax.
 --
@@ -121,7 +121,7 @@ tM = K . KM
 
 term2patt :: Term -> Err Patt
 term2patt trm = case trm of
-  Con c aa -> do
+  Par c aa -> do
     aa' <- mapM term2patt aa
     return (PC c aa')
   R r -> do
@@ -135,7 +135,7 @@ term2patt trm = case trm of
 
 patt2term :: Patt -> Term
 patt2term p = case p of
-  PC x ps -> Con x (map patt2term ps)
+  PC x ps -> Par x (map patt2term ps)
   PV x    -> LI x
   PW      -> anyTerm ----
   PR pas  -> R [ Ass lbl (patt2term q) | PAss lbl q <- pas ]
@@ -258,10 +258,10 @@ composSafeOp op trm = case composOp (mkMonadic op) trm of
 composOp :: Monad m => (Term -> m Term) -> Term -> m Term
 composOp co trm = 
  case trm of
-  Con x as ->
+  Par x as ->
       do
       as' <- mapM co as
-      return (Con x as')
+      return (Par x as')
   R as -> 
       do
       let onAss (Ass l t) = liftM (Ass l) (co t)

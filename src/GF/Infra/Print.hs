@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:38 $ 
+-- > CVS $Date: 2005/06/17 14:15:18 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- Pretty-printing
 -----------------------------------------------------------------------------
@@ -91,8 +91,8 @@ instance Print Ident where
 
 instance Print Term where
     prt (Arg arg)         = prt arg
-    prt (con `Con` [])    = prt con
-    prt (con `Con` terms) = prt con ++ "(" ++ prtSep ", " terms ++ ")"
+    prt (con `Par` [])    = prt con
+    prt (con `Par` terms) = prt con ++ "(" ++ prtSep ", " terms ++ ")"
     prt (LI ident)        = "$" ++ prt ident
     prt (R record)        = "{" ++ prtSep "; " record ++ "}"
     prt (term `P` lbl)    = prt term ++ "." ++ prt lbl
