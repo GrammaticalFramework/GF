@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:32 $ 
+-- > CVS $Date: 2005/06/17 12:46:05 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.13 $
+-- > CVS $Revision: 1.14 $
 --
 -- Representation of, conversion to, and utilities for 
 -- printing of a general Speech Recognition Grammar. 
@@ -53,7 +53,7 @@ type CatNames = FiniteMap String String
 
 makeSRG :: Ident     -- ^ Grammar name
 	-> Options   -- ^ Grammar options
-	-> CGrammar -- ^ A context-free grammar
+	-> [CFRule_] -- ^ A context-free grammar
 	-> SRG
 makeSRG i opts gr = SRG { grammarName = name,
 			  startCat = start,
@@ -63,9 +63,8 @@ makeSRG i opts gr = SRG { grammarName = name,
     name = prIdent i
     origStart = fromMaybe "S" (getOptVal opts gStartCat) ++ "{}.s"
     start = lookupFM_ names origStart
-    gr' = makeNice gr
-    names = mkCatNames name (nub $ map ruleCat gr')
-    rs = map (cfgRulesToSRGRule names) (sortAndGroupBy ruleCat gr')
+    names = mkCatNames name (nub $ map ruleCat gr)
+    rs = map (cfgRulesToSRGRule names) (sortAndGroupBy ruleCat gr)
 
 cfgRulesToSRGRule :: FiniteMap String String -> [CFRule_] -> SRGRule
 cfgRulesToSRGRule names rs@(r:_) = SRGRule cat origCat rhs

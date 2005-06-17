@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:31 $ 
+-- > CVS $Date: 2005/06/17 12:46:05 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.12 $
+-- > CVS $Revision: 1.13 $
 --
 -- This module prints a CFG as a JSGF grammar.
 --
@@ -20,6 +20,7 @@
 module GF.Speech.PrJSGF (jsgfPrinter) where
 
 import GF.Speech.SRG
+import GF.Speech.TransformCFG
 import GF.Infra.Ident
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..))
@@ -30,7 +31,7 @@ import GF.Infra.Option
 jsgfPrinter :: Ident -- ^ Grammar name
 	   -> Options -> CGrammar -> String
 jsgfPrinter name opts cfg = prJSGF srg ""
-    where srg = makeSRG name opts cfg
+    where srg = makeSRG name opts (makeNice cfg)
 
 prJSGF :: SRG -> ShowS
 prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:33 $ 
+-- > CVS $Date: 2005/06/17 12:46:05 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.12 $
+-- > CVS $Revision: 1.13 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -16,7 +16,7 @@
 -- peb thinks: most of this module should be moved to GF.Conversion...
 -----------------------------------------------------------------------------
 
-module GF.Speech.TransformCFG (makeNice, CFRule_) where
+module GF.Speech.TransformCFG (makeNice, CFRule_, makeRegular) where
 
 import GF.Infra.Ident
 import GF.Formalism.CFG 
@@ -37,6 +37,8 @@ type Cat_ = String
 
 type CFRules = FiniteMap Cat_ [CFRule_]
 
+-- | Remove left-recursion and categories with no productions
+--   from a context-free grammar.
 makeNice :: CGrammar -> [CFRule_]
 makeNice = concat . eltsFM . makeNice' . groupProds . cfgToCFRules
     where makeNice' = removeLeftRecursion . removeEmptyCats
@@ -92,6 +94,27 @@ removeDirectLeftRecursion (a,rs) | null dr = [(a,rs)]
 isDirectLeftRecursive :: CFRule_ -> Bool
 isDirectLeftRecursive (CFRule c (Cat c':_) _) = c == c'
 isDirectLeftRecursive _ = False
+
+
+-- Use the transformation algorithm from \"Regular Approximation of Context-free
+-- Grammars through Approximation\", Mohri and Nederhof, 2000
+-- to create an over-generating regular frammar for a context-free 
+-- grammar
+makeRegular :: [CFRule_] -> [CFRule_]
+makeRegular = undefined
+
+{-
+isRightLinear :: [Cat_] -- ^ The categories to consider
+	      -> CFRule_ 
+	      -> Bool
+isRightLinear _  (CFRule _ ss _) | all isTerminal ss = True
+isRightLinear cs 
+-}
+
+-- Use the strongly regular grammar to finite automaton
+-- compilation algorithm from \"Regular Approximation of Context-free
+-- Grammars through Approximation\", Mohri and Nederhof, 2000
+-- compileAutomaton :: 
 
 
 
