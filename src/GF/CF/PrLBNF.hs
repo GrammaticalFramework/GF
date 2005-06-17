@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:14 $ 
+-- > CVS $Date: 2005/06/17 14:15:16 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
 -- Printing CF grammars generated from GF as LBNF grammar for BNFC.
 -- AR 26/1/2000 -- 9/6/2003 (PPrCF) -- 8/11/2003 -- 27/9/2004.
@@ -68,7 +68,7 @@ mkLBNF gr rules = (coercions, nub $ concatMap mkRule rules) where
     (f,CncFun _ _ (R lin) _) <- tree2list $ jments m,
     (Just prec, Just assoc) <- [(
        lookup "p" [(lab,p) | Ass (L (IC lab)) (EInt p) <- lin],
-       lookup "a" [(lab,a) | Ass (L (IC lab)) (Con (CIQ _ (IC a)) []) <- lin]
+       lookup "a" [(lab,a) | Ass (L (IC lab)) (Par (CIQ _ (IC a)) []) <- lin]
        )]
     ]
   precfuns = map fst precedences

@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/13 12:40:19 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.8 $
+-- > CVS $Date: 2005/06/17 14:15:18 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.9 $
 --
 -- Converting GFC to SimpleGFC
 --
@@ -101,7 +101,7 @@ convertCType gram (A.TInts n)     = error "GFCtoSimple.convertCType: cannot hand
 
 convertTerm :: Env -> A.Term -> STerm
 convertTerm gram (A.Arg arg)       = convertArgVar arg
-convertTerm gram (A.Con con terms) = con :^ map (convertTerm gram) terms
+convertTerm gram (A.Par con terms) = con :^ map (convertTerm gram) terms
 -- convertTerm gram (A.LI var)        = Var var
 convertTerm gram (A.R rec)         = Rec [ (lbl, convertTerm gram term) | A.Ass lbl term <- rec ]
 convertTerm gram (A.P term lbl)    = convertTerm gram term +. lbl

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:56 $ 
+-- > CVS $Date: 2005/06/17 14:15:18 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Converting GFC grammars to MCFG grammars. (Old variant)
 --
@@ -66,7 +66,7 @@ cnvXMCFLin (Lin lbl lin) = Lin (cnvXMCFLabel lbl) $
 cnvTerm (R rec) = SRec [ (lbl, cnvTerm term) | Ass lbl term <- rec ]
 cnvTerm (T _ tbl) = STbl [ (cnvPattern pat, cnvTerm term) | 
 			   Cas pats term <- tbl, pat <- pats ]
-cnvTerm (Con con terms) = SCon con $ map cnvTerm terms
+cnvTerm (Par con terms) = SCon con $ map cnvTerm terms
 cnvTerm term
     | isArgPath term = cnvArgPath term
 
@@ -208,7 +208,7 @@ strPaths gr l ctype term = [ (path, evalFV values) | (path, values) <- groupPair
 -- Substitute each instantiated parameter path for its instantiation
 substitutePaths :: CanonGrammar -> Ident -> [Term] -> Term -> Term
 substitutePaths gr l arguments trm  = subst trm
-    where subst (con `Con` terms) = con `Con` map subst terms
+    where subst (con `Par` terms) = con `Par` map subst terms
 	  subst (R record)        = R $ map substAss record
 	  subst (term `P` lbl)    = subst term `evalP` lbl
 	  subst (T ptype table)   = T ptype $ map substCas table
@@ -264,11 +264,11 @@ matchesPats term patterns = or [ term == pattern2term pattern | pattern <- patte
 pattern2term :: Patt -> Term
 term2pattern :: Term -> Patt
 
-pattern2term (con `PC` patterns) = con `Con` map pattern2term patterns
+pattern2term (con `PC` patterns) = con `Par` map pattern2term patterns
 pattern2term (PR record) = R [ lbl `Ass` pattern2term pattern | 
 			       lbl `PAss` pattern <- record ]
 
-term2pattern (con `Con` terms) = con `PC` map term2pattern terms
+term2pattern (con `Par` terms) = con `PC` map term2pattern terms
 term2pattern (R record) = PR [ lbl `PAss` term2pattern term |
 			       lbl `Ass` term <- record ]
 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:56 $ 
+-- > CVS $Date: 2005/06/17 14:15:18 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Converting GFC grammars to MCFG grammars, nondeterministically.
 --
@@ -106,7 +106,7 @@ enumerateArg env (A cat nr) = let ctype = lookupCType env cat
 -- Substitute each instantiated parameter path for its instantiation
 substitutePaths :: Env -> [STerm] -> Term -> STerm
 substitutePaths env arguments trm  = subst trm
-    where subst (con `Con` terms) = con `SCon` map subst terms
+    where subst (con `Par` terms) = con `SCon` map subst terms
 	  subst (R record)        = SRec [ (lbl, subst term) | lbl `Ass` term <- record ]
 	  subst (term `P` lbl)    = subst term +. lbl
 	  subst (T ptype table)   = STbl [ (pattern2sterm pat, subst term) | 
@@ -180,7 +180,7 @@ groundTerms env ctype = err error (map term2spattern) $
 			allParamValues (fst env) ctype
 
 term2spattern (R rec)         = SRec [ (lbl, term2spattern term) | Ass lbl term <- rec ]
-term2spattern (Con con terms) = SCon con $ map term2spattern terms
+term2spattern (Par con terms) = SCon con $ map term2spattern terms
 
 pattern2sterm :: Patt -> STerm
 pattern2sterm (con `PC` patterns) = con `SCon` map pattern2sterm patterns

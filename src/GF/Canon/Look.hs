@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/28 16:42:48 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/06/17 14:15:17 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.14 $
 --
 -- lookup in GFC. AR 2003
 -----------------------------------------------------------------------------
@@ -104,7 +104,7 @@ lookupParamValues gr pt@(CIQ m _) = do
  where
    mkPar (ParD f co) = do
      vs <- liftM combinations $ mapM (allParamValues gr) co
-     return $ map (Con (CIQ m f)) vs
+     return $ map (Par (CIQ m f)) vs
 
 -- this is needed since param type can also be a record type
 
@@ -179,7 +179,7 @@ ccompute cnc = comp []
       let cc = [Cas [p] u | (p,u) <- zip vs ts]
       compt $ T ptyp cc
 
-    Con c xs -> liftM (Con c) $ mapM compt xs
+    Par c xs -> liftM (Par c) $ mapM compt xs
 
     K (KS []) -> return E --- should not be needed
 
@@ -195,7 +195,7 @@ ccompute cnc = comp []
      noVar v = case v of
        LI _ -> False
        R rs -> all noVar [t | Ass _ t <- rs]
-       Con _ ts -> all noVar ts
+       Par _ ts -> all noVar ts
        FV ts -> all noVar ts
        S x y -> noVar x && noVar y
        _    -> True --- other cases that can be values to pattern match?

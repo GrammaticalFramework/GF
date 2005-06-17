@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 21:08:14 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.14 $
+-- > CVS $Date: 2005/06/17 14:15:17 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.15 $
 --
 -- a decompiler. AR 12/6/2003 -- 19/4/2004
 -----------------------------------------------------------------------------
@@ -129,7 +129,7 @@ redCTerm :: Term -> Err G.Term
 redCTerm x = case x of
   Arg argvar  -> liftM G.Vr $ redArgVar argvar
   I cident  -> liftM (uncurry G.Q) $ redQIdent cident
-  Con cident terms  -> liftM2 F.mkApp 
+  Par cident terms  -> liftM2 F.mkApp 
                          (liftM (uncurry G.QC) $ redQIdent cident) 
                          (mapM redCTerm terms)
   LI id  -> liftM G.Vr $ redIdent id
