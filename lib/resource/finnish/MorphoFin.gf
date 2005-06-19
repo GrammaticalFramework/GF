@@ -435,25 +435,16 @@ reg3Noun : (_,_,_ : Str) -> CommonNoun = \vesi,veden,vesiä ->
     ve  = init ves ;
     ved = Predef.tk 2 veden ;
     sRae_vesi = sRae vesi (veden + a) ;
-    sKukko_vesi = sKukko vesi veden vesiä
   in 
        case si of {
     "aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" => sPuu vesi ;
     "ie" | "uo" | "yö" => sSuo vesi ;
     "is" => sNauris (vesi + ("t" + a)) ;
     "ut" | "yt" => sRae vesi (ves + ("en" + a)) ;
-    "si" => 
-      ifTok CommonNoun d s 
-        sKukko_vesi
-        (sSusi vesi veden (ve + ("ten" + a))) ; 
     "us" | "ys" => 
       ifTok CommonNoun d "s" 
         (sTilaus vesi (veden + a))
         (sRakkaus vesi) ; 
-    "ki" | "pi" | "ti" => 
-      ifTok CommonNoun d s 
-        sKukko_vesi
-        (sKorpi vesi veden (ves + ("en" + a))) ;
   _ => case esi of {
     "nen" => sNainen (Predef.tk 3 vesi + ("st" + a)) ;
   _ => case esiä of {
@@ -462,14 +453,15 @@ reg3Noun : (_,_,_ : Str) -> CommonNoun = \vesi,veden,vesiä ->
     "een" => sRae_vesi ;
   _ => case i of {
     "a" | "ä" => sKukko vesi veden vesiä ;
-    "i" => sBaari (vesi + a) ;
+    "i" => case (last (init vesiä)) of {
+      "i" => case s of {
+         "s" => sSusi vesi veden (ve + ("ten" + a)) ; 
+         _   => sKorpi vesi veden (veden + a)
+         } ;
+      _ => sBaari (vesi + a)
+      } ;
     "o" | "u" | "y" | "ö" => sKukko vesi veden vesiä ;
   _ => sLinux (vesi + "i" + a)
-{-
-  _ => case i of {
-    "b" | "c" | "d" | "f" | "g" | "h" | "j" | "k" | "l" | "m" | "n" | 
-    "p" | "q" | "r" | "s" | "t" | "v" | "w" | "x" | "z" => sLinux (vesi + "i" + a)
--}
   }
   }
   }
@@ -864,7 +856,10 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       tuje = weakGrade tule ;
       tuji = weakGrade (init tuli) + "i" ; ---
       a = Predef.dp 1 tulkaa ;
-      vat = "v" + a + "t" ;
+      tulleena = Predef.tk 2 tullut + ("een" + a) ;
+      tulleen = (sRae tullut tulleena).s ;
+      tullun = (sKukko tultu (weakGrade tultu + "n") (tultu + ("j"+a))).s  ;
+      vat = "v" + a + "t"
     in
     {s = table {
       Inf => tulla ;
@@ -891,88 +886,12 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       ImpNegPl   => Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "ö") ;
       Pass True  => tullaan ;
       Pass False => Predef.tk 2 tullaan ;
-      PastPartAct n => tullut ; ---- (regNoun tullut).s ! n ; ---- 
-      PastPartPass n => tultu   ---- (sLukko tultu).s ! n
+      PastPartAct n => tulleen ! n ;
+      PastPartPass n => tullun ! n
       }
     } ;
 
-{- ----
-  mk4Verb : (_,_,_,_,_ : Str) -> Verb = 
-    \tulla,tulen,tulee,tuli,tulisi -> 
-    let
-      tuje = init tulen ;
-      tuj  = init tuje ;
-      tule = case Predef.dp 2 tulee of {
-        "ie" | "uo" | "yö" => tulee ;
-        _ => init tulee
-        } ;
-      tuji = weakGrade tuli ; ---
-      a = Predef.dp 1 tulla ;
-      aa = a + a ;
-      vat = "v" + a + "t" ;
-      y = case a of {"a" => "u" ; _ => "y"} ;
-
-    in
-    {s = table {
-      Inf => tulla ;
-      Pres Sg P1 => tuje + "n" ;
-      Pres Sg P2 => tuje + "t" ;
-      Pres Sg P3 => tulee ;
-      Pres Pl P1 => tuje + "mme" ;
-      Pres Pl P2 => tuje + "tte" ;
-      Pres Pl P3 => tule + vat ;
-      Impf Sg P1 => tuji + "n" ;
-      Impf Sg P2 => tuji + "t" ;
-      Impf Sg P3 => tuli ;
-      Impf Pl P1 => tuji + "mme" ;
-      Impf Pl P2 => tuji + "tte" ;
-      Impf Pl P3 => tuli + vat ;
-      Cond Sg P1 => tulisi + "n" ;
-      Cond Sg P2 => tulisi + "t" ;
-      Cond Sg P3 => tulisi ;
-      Cond Pl P1 => tulisi + "mme" ;
-      Cond Pl P2 => tulisi + "tte" ;
-      Cond Pl P3 => tulisi + vat ;
-      Imper Sg   => tuje ;
-      Imper Pl   => tule + "k" + a + a ;
-      ImpNegPl   => tule + "k" + (ifTok Str a "a" "o" "ö") ;
-      Pass True  => tuj + "et" + aa + "n" ;
-      Pass False => tuj + "et" + a ;
-      PastPartAct n => tule + "n" + y + "t" ; ---- (regNoun tullut).s ! n ; ---- 
-      PastPartPass n => tuj + "ett" + y       ---- (sLukko tultu).s ! n
-      }
-    } ;
-
--}
-
-  regVerb : Str -> Verb = \haukkua -> 
-    let
-      ua = Predef.dp 2 haukkua ;
-      a  = last ua ;
-      haukku = init haukkua ;
-      hauku  = weakGrade haukku ;
-      haukk = init haukku ;
-      hauk = init hauku ;
-      hau = init hauk ;
-      aa = a + a ;
-      u  = last haukku ;
-      y = case a of {"a" => "u" ; _ => "y"} ;
-    in 
-    case ua of {
-      "aa" | "ää" => 
-        mkVerb 
-          haukkua (haukku + u) (haukku +"k"+aa) 
-          (hauk + "et"+aa+"n") (haukk +"i") (haukku +"isi")
-          (haukku + "n"+y+"t") (hauk + "ett"+y) ;
-      "ua" | "yä" | "oa" | "öä" => 
-        mkVerb 
-          haukkua (haukku + u) (haukku +"k"+aa) 
-          (hauku + "t"+aa+"n") (haukku +"i") (haukku +"isi")
-          (haukku + "n"+y+"t") (hauku + "tt"+y) ;
-      _ => variants {}
-      }
-       ;
-
+--- the following are correct, but blow up the size
 {-
 -- For "harppoa", "hukkua", "löytyä", with grade alternation.
 
@@ -984,39 +903,53 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     } in
     mkVerb
       hukkua
-      (huku + "n")
       (hukku + u)
-      (hukku + (("v" + a) + "t"))
       (hukku + (("k" + a) + a))
-      (huku + ((("t" + a) + a) + "n")) ;
+      (huku + ((("t" + a) + a) + "n"))
+      (hukku + "i")
+      (hukku + "isi")
+      (hukku + "n" + u + "t")
+      (huku + "tt" + u) ;
 
--- For cases without alternation: "sanoa", "valua", "kysyä".
+
+-- For cases with or without alternation: "sanoa", "valua", "kysyä".
 
   vSanoa : Str -> Verb = \sanoa ->
-    vHukkua sanoa (Predef.tk 1 sanoa) ;
+    vHukkua sanoa (weakGrade (Predef.tk 1 sanoa)) ;
 
 -- For "ottaa", "käyttää", "löytää", "huoltaa", "hiihtää", "siirtää".
 
-  vOttaa : (_,_ : Str) -> Verb = \ottaa,otan -> 
+  vHuoltaa : (_,_,_ : Str) -> Verb = \ottaa,otan,otti -> 
     let {
       a    = Predef.dp 1 ottaa ;
+      u    = case a of {"a" => "u" ; _ => "y"} ;
       ota  = Predef.tk 1 otan ;
       otta = Predef.tk 1 ottaa ;
       ote  = Predef.tk 1 ota + "e"
     } in
     mkVerb
       ottaa
-      (ota + "n")
       ottaa
-      (otta + (("v" + a) + "t"))
       (otta + (("k" + a) + a)) 
-      (ote  + ((("t" + a) + a) + "n")) ;
+      (ote  + ((("t" + a) + a) + "n"))
+      otti
+      (otta + "isi")
+      (otta + "n" + u + "t")
+      (ote + "tt" + u) ;
+
+-- For cases where grade alternation is not affected by the imperfect "i".
+
+  vOttaa : (_,_ : Str) -> Verb = \ottaa,otan -> 
+    vHuoltaa ottaa otan (Predef.tk 2 ottaa + "i") ;
 
 -- For "poistaa", "ryystää".
 
   vPoistaa : Str -> Verb = \poistaa -> 
-    vOttaa poistaa (Predef.tk 1 poistaa + "n") ;
+    vOttaa poistaa (weakGrade (Predef.tk 2 poistaa + "n")) ;
+-}
 
+
+{-
 -- For "osata", "lisätä"
 
   vOsata : Str -> Verb = \osata -> 
