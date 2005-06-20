@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/10 21:04:01 $ 
+-- > CVS $Date: 2005/06/20 16:14:20 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.37 $
+-- > CVS $Revision: 1.38 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -75,6 +75,7 @@ data Command =
  | CPrintMultiGrammar
  | CPrintSourceGrammar
  | CShowGrammarGraph
+ | CShowTreeGraph
  | CPrintGramlet 
  | CPrintCanonXML
  | CPrintCanonXMLStruct 
@@ -190,6 +191,7 @@ optionsOfCommand co = case co of
   CSpeakAloud -> flags "language"
   CPutString -> both "utf8" "filter length"
   CShowTerm -> flags "printer"
+  CShowTreeGraph -> opts "c f g"
   CSystemCommand _ -> none
 
   CPrintGrammar -> both "utf8" "printer lang"

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/10 21:04:01 $
+-- > CVS $Date: 2005/06/20 16:14:19 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -309,6 +309,14 @@ txtHelpFile =
   "\n      Wraps the tree as the sole argument of Fun." ++
   "\n  flags:" ++
   "\n      -c           compute the resulting new tree to normal form" ++
+  "\n" ++
+  "\nvt, visualize_tree: vt Tree" ++
+  "\n      Shows the abstract syntax tree via dot and gv (via temporary files" ++
+  "\n      grphtmp.dot, grphtmp.ps)." ++
+  "\n  flags:" ++
+  "\n      -c           show categories only (no functions)" ++
+  "\n      -f           show functions only (no categories)" ++
+  "\n      -g           show as graph (sharing uses of the same function)" ++
   "\n" ++
   "\n-- subshells" ++
   "\n" ++

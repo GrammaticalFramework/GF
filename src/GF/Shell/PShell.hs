@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/20 14:34:11 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.24 $
+-- > CVS $Date: 2005/06/20 16:14:20 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.25 $
 --
 -- parsing GF shell commands. AR 11\/11\/2001
 -----------------------------------------------------------------------------
@@ -145,6 +145,7 @@ pCommand ws = case ws of
   "px"  : []     -> aUnit CPrintCanonXML
   "pm"  : []     -> aUnit CPrintMultiGrammar
   "vg"  : []     -> aUnit CShowGrammarGraph
+  "vt"  : s      -> aTerm CShowTreeGraph s
   "sg"  : []     -> aUnit CPrintSourceGrammar
   "po"  : []     -> aUnit CPrintGlobalOptions
   "pl"  : []     -> aUnit CPrintLanguages
