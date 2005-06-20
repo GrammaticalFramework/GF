@@ -1,5 +1,80 @@
 --# -path=.:../abstract:../../prelude
 
+resource ParadigmsFin = 
+  open (Predef=Predef), Prelude, TypesFin, MorphoFin in {
+
+-- The regular noun heuristic takes just one form and analyses its suffixes.
+
+  oper
+
+  regNoun : (talo : Str) -> CommonNoun ;
+
+  regVerb : (soutaa : Str) -> Verb ;
+
+
+
+--.
+
+regNoun = \vesi -> 
+  let
+    esi = Predef.dp 3 vesi ;   -- analysis: suffixes      
+    si  = Predef.dp 2 esi ;
+    i   = last si ;
+    s   = init si ;
+    occ : Str -> Bool = \a -> pbool2bool (Predef.occur a vesi) ; 
+    a   = if_then_Str (orB (occ "a") (orB (occ "o") (occ "u"))) "a" "ä" ;
+    ves = init vesi ;          -- synthesis: prefixes
+    ve  = init ves ;
+  in 
+       case esi of {
+    "uus" | "yys" => sRakkaus vesi ;
+    "nen" =>       sNainen (Predef.tk 3 vesi + ("st" + a)) ;
+
+  _ => case si of {
+    "aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" => sPuu vesi ;
+    "ie" | "uo" | "yö" => sSuo vesi ;
+    "is"        => sNauris (vesi + ("t" + a)) ;
+    "ut" | "yt" => sRae vesi (ves + ("en" + a)) ;
+    "uus" | "yys" => sRakkaus vesi ;
+    "us" | "ys"   => sTilaus vesi (ves + ("ksen" + a)) ;
+  _ => case i of {
+    "i" =>         sBaari (vesi + a) ;
+    "e" =>         sRae vesi (strongGrade ves + ("een" + a)) ;
+    "a" | "o" | "u" | "y" | "ä" | "ö" => sLukko vesi ;
+  _ =>             sLinux (vesi + "i" + a)
+  }
+  }
+  } ;
+
+
+regVerb soutaa = 
+  let
+    taa = Predef.dp 3 soutaa ;
+    aa  = Predef.dp 2 taa ;
+---    souda = weakGrade (init soutaa) ;
+    juo = Predef.dp 2 soutaa ;
+    o  = Predef.dp 1 juo ;
+    joi = Predef.tk 2 juo + (o + "i")
+  in case taa of {
+    "taa" | "tää" => vPoistaa soutaa ;
+---    "taa" | "tää" => vOttaa soutaa (souda + "n") ;
+---    "sta" | "stä" => vJuosta ottaa otan ottanut otettu
+---    "nna" | "nnä" => vJuosta ottaa otan ottanut otettu
+      _ => case aa of {
+    "da" | "dä" => vJuoda soutaa joi ;
+    "ta" | "tä" => vOsata soutaa ;
+    _ => vSanoa soutaa
+---    _ => vHukkua soutaa souda
+    }} ;
+
+
+  
+} ;
+
+
+
+
+{-
 --1 Finnish Lexical Paradigms
 --
 -- Aarne Ranta 2005
@@ -381,3 +456,4 @@ oper
   mkA2V v p q = mkA2 v p ** {s3 = q.p2 ; c3 = q.p1 ; lock_A2V = <>} ;
 
 } ;
+-}
