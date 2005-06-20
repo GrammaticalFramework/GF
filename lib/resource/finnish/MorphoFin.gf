@@ -468,39 +468,6 @@ reg3Noun : (_,_,_ : Str) -> CommonNoun = \vesi,veden,vesiä ->
   }
   } ;
 
--- The regular heuristic takes just one form and analyses its suffixes.
-
-regNoun : Str -> CommonNoun = \vesi -> 
-  let
-    esi = Predef.dp 3 vesi ;   -- analysis: suffixes      
-    si  = Predef.dp 2 esi ;
-    i   = last si ;
-    s   = init si ;
-    occ : Str -> Bool = \a -> pbool2bool (Predef.occur a vesi) ; 
-    a   = if_then_Str (orB (occ "a") (orB (occ "o") (occ "u"))) "a" "ä" ;
-    ves = init vesi ;          -- synthesis: prefixes
-    ve  = init ves ;
-  in 
-       case esi of {
-    "uus" | "yys" => sRakkaus vesi ;
-    "nen" =>       sNainen (Predef.tk 3 vesi + ("st" + a)) ;
-
-  _ => case si of {
-    "aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" => sPuu vesi ;
-    "ie" | "uo" | "yö" => sSuo vesi ;
-    "is"        => sNauris (vesi + ("t" + a)) ;
-    "ut" | "yt" => sRae vesi (ves + ("en" + a)) ;
-    "uus" | "yys" => sRakkaus vesi ;
-    "us" | "ys"   => sTilaus vesi (ves + ("ksen" + a)) ;
-  _ => case i of {
-    "i" =>         sBaari (vesi + a) ;
-    "e" =>         sRae vesi (strongGrade ves + ("een" + a)) ;
-    "a" | "o" | "u" | "y" | "ä" | "ö" => sLukko vesi ;
-  _ =>             sLinux (vesi + "i" + a)
-  }
-  }
-  } ;
-
 -- This auxiliary resolves vowel harmony from a given letter.
 
 getHarmony : Str -> Str = \u -> case u of {
@@ -845,20 +812,18 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 --
 -- The present, past, conditional. and infinitive stems, acc. to Koskenniemi.
 -- Unfortunately not enough (without complicated processes).
+--- We moreover give grade alternation forms as arguments, to avoid
+--- code exposion in gfr.
 
-  mkVerb : (_,_,_,_,_,_,_,_ : Str) -> Verb = 
-    \tulla,tulee,tulkaa,tullaan,tuli,tulisi,tullut,tultu -> 
+  mkVerb : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Verb = 
+    \tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun -> 
     let
-      tule = case Predef.tk 2 tulee of {
-        "ie" | "uo" | "yö" => tulee ;
-        _ => Predef.tk 1 tulee
-        } ;
-      tuje = weakGrade tule ;
-      tuji = weakGrade (init tuli) + "i" ; ---
+      tuje = init tulen ;
+      tuji = init tulin ;
       a = Predef.dp 1 tulkaa ;
       tulleena = Predef.tk 2 tullut + ("een" + a) ;
       tulleen = (sRae tullut tulleena).s ;
-      tullun = (sKukko tultu (weakGrade tultu + "n") (tultu + ("j"+a))).s  ;
+      tullun = (sKukko tultu tullun (tultu + ("j"+a))).s  ;
       vat = "v" + a + "t"
     in
     {s = table {
@@ -868,7 +833,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       Pres Sg P3 => tulee ;
       Pres Pl P1 => tuje + "mme" ;
       Pres Pl P2 => tuje + "tte" ;
-      Pres Pl P3 => tule + vat ;
+      Pres Pl P3 => tulevat ;
       Impf Sg P1 => tuji + "n" ;
       Impf Sg P2 => tuji + "t" ;
       Impf Sg P3 => tuli ;
@@ -891,8 +856,6 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       }
     } ;
 
---- the following are correct, but blow up the size
-{-
 -- For "harppoa", "hukkua", "löytyä", with grade alternation.
 
   vHukkua : (_,_ : Str) -> Verb = \hukkua,huku -> 
@@ -904,22 +867,27 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     mkVerb
       hukkua
       (hukku + u)
+      (huku + "n")
+      (hukku + "v" + a + "t")
       (hukku + (("k" + a) + a))
       (huku + ((("t" + a) + a) + "n"))
       (hukku + "i")
+      (huku + "in")
       (hukku + "isi")
       (hukku + "n" + u + "t")
-      (huku + "tt" + u) ;
-
+      (huku + "tt" + u)
+      (huku + "t" + u + "t") ;
 
 -- For cases with or without alternation: "sanoa", "valua", "kysyä".
 
   vSanoa : Str -> Verb = \sanoa ->
-    vHukkua sanoa (weakGrade (Predef.tk 1 sanoa)) ;
+    vHukkua sanoa (Predef.tk 1 sanoa) ;
+----    vHukkua sanoa (weakGrade (Predef.tk 1 sanoa)) ;
+---- The gfr file becomes 6* bigger if this change is done
 
 -- For "ottaa", "käyttää", "löytää", "huoltaa", "hiihtää", "siirtää".
 
-  vHuoltaa : (_,_,_ : Str) -> Verb = \ottaa,otan,otti -> 
+  vHuoltaa : (_,_,_,_ : Str) -> Verb = \ottaa,otan,otti,otin -> 
     let {
       a    = Predef.dp 1 ottaa ;
       u    = case a of {"a" => "u" ; _ => "y"} ;
@@ -930,95 +898,113 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     mkVerb
       ottaa
       ottaa
+      otan
+      (otta + (("v" + a) + "t")) 
       (otta + (("k" + a) + a)) 
       (ote  + ((("t" + a) + a) + "n"))
       otti
+      otin
       (otta + "isi")
       (otta + "n" + u + "t")
-      (ote + "tt" + u) ;
+      (ote + "tt" + u)
+      (ote + "t" + u + "n") ;
 
 -- For cases where grade alternation is not affected by the imperfect "i".
 
   vOttaa : (_,_ : Str) -> Verb = \ottaa,otan -> 
-    vHuoltaa ottaa otan (Predef.tk 2 ottaa + "i") ;
+    vHuoltaa ottaa otan (Predef.tk 2 ottaa + "i") (Predef.tk 2 otan + "in") ;
 
 -- For "poistaa", "ryystää".
 
   vPoistaa : Str -> Verb = \poistaa -> 
-    vOttaa poistaa (weakGrade (Predef.tk 2 poistaa + "n")) ;
--}
+    vOttaa poistaa ((Predef.tk 2 poistaa + "n")) ;
 
 
-{-
 -- For "osata", "lisätä"
 
   vOsata : Str -> Verb = \osata -> 
-    let {
+    let
       a   = Predef.dp 1 osata ;
-      osa = Predef.tk 2 osata
-    } in
+      osa = Predef.tk 2 osata ;
+      u   = case a of {"a" => "u" ; _ => "y"}
+    in
     mkVerb
       osata
-      (osa + (a + "n"))
       (osa + a)
-      (osa + ((("a" + "v") + a) + "t"))
+      (osa + (a + "n"))
+      (osa + (((a + "v") + a) + "t"))
       (osa + ((("t" + "k") + a) + a)) 
-      (osata + (a + "n")) ;
+      (osata + (a + "n"))
+      (osa + "si")
+      (osa + "sin")
+      (osa + "isi")
+      (osa + "nn" + u + "t")
+      (osa + "tt" + u)
+      (osa + "t" + u + "n") ;
+
+
+----- tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun
 
 -- For "juosta", "piestä", "nousta", "rangaista", "kävellä", "surra", "panna".
 
-  vJuosta : (_,_ : Str) -> Verb = \juosta,juoksen -> 
-    let {
+  vJuosta : (_,_,_,_ : Str) -> Verb = \juosta,juoksen,juossut,juostu -> 
+    let
       a      = Predef.dp 1 juosta ;
       juokse = Predef.tk 1 juoksen ;
+      juoksi = Predef.tk 2 juoksen + "i" ;
       juos   = Predef.tk 2 juosta
-    } in
+    in
     mkVerb
       juosta
-      juoksen
       (juokse + "e")
+      juoksen
       (juokse + (("v" + a) + "t"))
       (juos + (("k" + a) + a)) 
-      (juosta + (a + "n")) ;
+      (juosta + (a + "n")) 
+      juoksi
+      (juoksi + "n")
+      (juoksi + "sin")
+      juossut
+      juostu
+      (init juossut + "n") ;
 
--- For "juoda", "syödä".
+-- For "juoda", "syödä", "viedä", "naida", "saada".
 
-  vJuoda : Str -> Verb = \juoda -> 
-    let {
+  vJuoda : (_,_ : Str) -> Verb = \juoda, joi -> 
+    let
       a   = Predef.dp 1 juoda ;
-      juo = Predef.tk 2 juoda
-    } in
+      juo = Predef.tk 2 juoda ;
+      u   = case a of {"a" => "u" ; _ => "y"}
+    in
     mkVerb
       juoda
-      (juo + "n")
       juo
+      (juo + "n")
       (juo + (("v" + a) + "t"))
       (juo + (("k" + a) + a)) 
-      (juoda + (a + "n")) ;
--}
+      (juoda + (a + "n")) 
+      joi
+      (joi + "n")
+      (joi + "sin")
+      (juo + "n" + u + "t")
+      (juo + "t" + u)
+      (juo + "d" + u + "n") ;
 
   verbOlla : Verb = 
-    let olla = 
-      mkVerb "olla" "olee" "olkaa" "ollaan" "oli" "olisi" "ollut" "oltu"
-    in
-    {s = table {
-      Pres Sg P3 => "on" ;
-      Pres Pl P3 => "ovat" ;
-      v => olla.s ! v
-      }
-    } ;
-
+    mkVerb 
+      "olla" "on" "olen" "ovat" "olkaa" "ollaan" 
+      "oli" "olin" "olisi" "ollut" "oltu" "ollun" ;
 
 -- The negating operator "ei" is actually a verb, which has present 
 -- active indicative and imperative forms, but no infinitive.
 
   verbEi : Verb = 
     let ei = 
-      mkVerb "ei" "ei" "älkää" "ei" "ei" "ei" "ei" "ei"
+      mkVerb 
+        "ei" "ei" "en" "eivät" "älkää" 
+        "ei" "ei" "ei" "ei" "ei" "ei" "ei"
     in
     {s = table {
-      Pres Sg P1 => "en" ;
-      Pres Pl P3 => "eivät" ;
       Imper Sg => "älä" ;
       v => ei.s ! v
       }
@@ -1061,7 +1047,7 @@ oper
   kymmenenN = mkSubst "ä" "kymmenen" "kymmene" "kymmene" "kymmentä" 
      "kymmeneen" "kymmeni" "kymmeni" "kymmenien" "kymmeniä"
      "kymmeniin" ;
-  sataN = regNoun "sata" ;
+  sataN = sLukko "sata" ;
 
   tuhatN = mkSubst "a" "tuhat" "tuhanne" "tuhante" "tuhatta" "tuhanteen"
     "tuhansi" "tuhansi" "tuhansien" "tuhansia" "tuhansiin" ;
