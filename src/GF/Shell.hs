@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/14 20:09:57 $ 
+-- > CVS $Date: 2005/06/20 16:14:19 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.40 $
+-- > CVS $Revision: 1.41 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -31,6 +31,7 @@ import GF.UseGrammar.GetTree
 import GF.Shell.ShellCommands
 
 import GF.Visualization.VisualizeGrammar (visualizeCanonGrammar, visualizeSourceGrammar)
+import GF.Visualization.VisualizeTree (visualizeTrees)
 import GF.API
 import GF.API.IOGrammar
 import GF.Compile.Compile
@@ -57,7 +58,6 @@ import GF.Data.Operations
 import GF.Infra.UseIO
 import GF.Text.UTF8 (encodeUTF8)
 
-import GF.Visualization.VisualizeGrammar (visualizeSourceGrammar)
 
 ---- import qualified GrammarToGramlet as Gr
 ---- import qualified GrammarToCanonXML2 as Canon
@@ -208,6 +208,12 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
         _ -> Nothing
     returnArg (ATrms $ generateTrees opts gro mt) sa
 
+  CShowTreeGraph  -> do
+    let g0 = writeFile "grphtmp.dot" $ visualizeTrees opts $ strees $ s2t a
+        g1 = system "dot -Tps grphtmp.dot >grphtmp.ps" 
+        g2 = system "gv grphtmp.ps &" 
+        g3 = return () ---- system "rm -f grphtmp.*"
+    justOutput opts (g0 >> g1 >> g2 >> g3 >> return ()) sa
 
   CPutTerm -> changeArg (opTT2CommandArg (optTermCommand opts gro)  . s2t) sa
 
@@ -305,6 +311,10 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
      ASTrm s  -> err AError (ATrms . return) $ string2treeErr gro s
      AString s  -> err AError (ATrms . return) $ string2treeErr gro s
      _ -> a
+
+   strees a = case a of
+     ATrms ts -> ts
+     _ -> [] 
 
    warnDiscont os = err putStrLn id $ do
      let c0 = firstAbsCat os gro

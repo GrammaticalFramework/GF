@@ -281,6 +281,14 @@ wt, wrap_tree: wt Fun
   flags:
       -c           compute the resulting new tree to normal form
 
+vt, visualize_tree: vt Tree
+      Shows the abstract syntax tree via dot and gv (via temporary files
+      grphtmp.dot, grphtmp.ps).
+  flags:
+      -c           show categories only (no functions)
+      -f           show functions only (no categories)
+      -g           show as graph (sharing uses of the same function)
+
 -- subshells
 
 es, editing_session: es
