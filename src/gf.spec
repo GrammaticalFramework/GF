@@ -51,6 +51,15 @@ Requires: %{name}
 %description editor
 This package contains the syntax editor GUI for GF.
 
+%package editor2
+Summary: Java syntax editor for Grammatical Framework (GF).
+Group: Sciences/Other
+Requires: %{name}
+
+%description editor2
+This package contains the syntax editor GUI for GF with printname enhancements and HTML support.
+
+
 %prep
 rm -rf $RPM_BUILD_ROOT
 %setup -q
@@ -78,8 +87,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/jgf
 %{_datadir}/%{name}-%{version}/gf-java.jar
 
+%files editor2
+%defattr(-,root,root,0755) 
+%{_bindir}/gfeditor
+%{_datadir}/%{name}-%{version}/gfeditor.jar
+
 
 %changelog
+* Tue June 21 2005 Hans-Joachim Daniels <daniels@ira.uka.de> 2.3pre
+- added the printnames and HTML enhanced editor as editor2
 * Thu May 12 2005 Bjorn Bringert <bringert@cs.chalmers.se> 2.2pre2-1
 - Split package into gf and gf-editor packages.
 
