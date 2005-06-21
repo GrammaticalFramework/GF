@@ -65,9 +65,9 @@ lincat
   V2A    = TransVerb ; ----
   V0     = Verb ;
 
-----  TP     = {s : Str ; b : Bool ; t : Tense ; a : Anteriority} ; --- the Str field is dummy
-----  Tense  = {s : Str ; t : Tense} ;
-----  Ant    = {s : Str ; a : Anteriority} ;
+  TP     = {s : Str ; b : Bool ; t : Tense ; a : Anteriority} ; --- the Str field is dummy
+  Tense  = {s : Str ; t : Tense} ;
+  Ant    = {s : Str ; a : Anteriority} ;
 
   PP     = {s : Str} ;
   Adv    = {s : Str} ;
@@ -76,8 +76,8 @@ lincat
   AdC    = {s : Str} ;
 
   S      = {s : Str} ; 
-----  Cl     = Clause ;
-      -- = {s : Order => Bool => SForm => Str} ;
+  Cl     = Clause ;
+      -- = {s : SType => Bool => SForm => Str} ;
 
   Slash  = Sentence ** {s2 : Str ; c : Case} ;
 

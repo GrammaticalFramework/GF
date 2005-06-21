@@ -458,12 +458,31 @@ oper
 --
 --3 Verb phrases
 --
+-- These are parameters for clauses and sentences.
+
+  param
+
+  Tense = Present | Past | Future | Conditional ;
+  Anteriority = Simul | Anter ;
+
+  SForm = 
+     VFinite  Tense Anteriority
+   | VInfinit Anteriority
+   | VPresPart
+   ;
+  
+  SType = SDecl | SQuest ;
+
+  oper
+  Clause : Type = {s : SType => Bool => SForm => Str} ;
+
 -- Verb phrases are discontinuous: the two parts of a verb phrase are
 -- (s) an inflected verb, (s2) a complement.
 -- For instance: "on" - "kaunis" ; "ei" - "ole kaunis" ; "sisältää" - "rikkiä".
 -- Moreover, a subject case is needed, because of passive and 'have' verb
 -- phrases ("minä uin" ; "minut valitaan" ; "minua odotetaan" ; "minulla on jano").
 
+  oper
   VerbPhrase = Verb ** {s2 : VForm => Str ; c : ComplCase} ;
   VerbGroup   = {s,s2 : Bool => VForm => Str ; c : ComplCase} ;
 
