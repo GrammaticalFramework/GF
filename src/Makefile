@@ -195,7 +195,7 @@ binary-dist:
 	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 $(GFEDITOR)/gfeditor.jar $(BIN_DIST_DIR)
 	$(INSTALL) configure config.guess config.sub install-sh $(BIN_DIST_DIR)
-	$(INSTALL) -m 0644 config.mk.in jgf.in $(BIN_DIST_DIR)
+	$(INSTALL) -m 0644 config.mk.in jgf.in gfeditor.in $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 INSTALL.binary $(BIN_DIST_DIR)/INSTALL
 	$(INSTALL) -m 0644 Makefile.binary $(BIN_DIST_DIR)/Makefile
