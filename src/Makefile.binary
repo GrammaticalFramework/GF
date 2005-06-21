@@ -14,3 +14,4 @@ uninstall:
 	-rm -f $(bindir)/gf$(EXEEXT) $(bindir)/gfdoc$(EXEEXT) $(bindir)/jgf $(bindir)/gfeditor
 	-rm -f $(GF_DATA_DIR)/gf-java.jar
 	-rm -f $(GF_DATA_DIR)/gfeditor.jar
+	-rmdir $(INSTALL) -d $(GF_DATA_DIR)
