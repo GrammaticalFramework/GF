@@ -1,7 +1,7 @@
 --# -path=.:../abstract:../../prelude
 
 resource ParadigmsFin = 
-  open (Predef=Predef), Prelude, TypesFin, MorphoFin in {
+  open (Predef=Predef), Prelude, SyntaxFin, CategoriesFin in {
 
 -- The regular noun heuristic takes just one form and analyses its suffixes.
 

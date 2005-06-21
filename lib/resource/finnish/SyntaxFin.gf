@@ -1,11 +1,12 @@
+--# -path=.:../../prelude
+
 --1 A Small Finnish Resource Syntax
 --
--- Aarne Ranta 2003
+-- Aarne Ranta 2003-2005
 --
 -- This resource grammar contains definitions needed to construct 
 -- indicative, interrogative, and imperative sentences in Finnish.
 --
--- The following files are presupposed:
 
 resource SyntaxFin = MorphoFin ** open Prelude, (CO = Coordination) in {
 
@@ -490,7 +491,7 @@ oper
 -- of person and number:
 
   indicVerb : Verb -> Person -> Number -> Str = \v,p,n -> 
-    v.s ! Ind n p ;
+    v.s ! Pres n p ;
 
 -- A simple verb can be made into a verb phrase with an empty complement, e.g.
 -- "ui" - [].
@@ -598,12 +599,9 @@ oper
     CCase k => NPCase k ;
     CAcc => case b of {
       True => case v of {
-        Inf => NPAccNom ;
-        Ind _ _ => NPAccGen ;
-        Imper _ => NPAccNom ;
-        ImpNegPl => NPCase Part ;
-        Pass True => NPAccNom ;
-        Pass False => NPCase Part
+        Pres _ _ | Impf _ _ | PastPartAct _ => NPAccGen ;
+        ImpNegPl | Pass False => NPCase Part ;
+        _ => NPAccNom   -- Inf | Imper _ | PastPartPass _ 
         } ;
       _ => NPCase Part
       }
@@ -738,7 +736,7 @@ oper
       c = complementCase True uida.c Inf --- True,Inf don't matter here
     } 
     in
-    ss (jussi.s ! c ++ uida.s ! Ind jussi.n p ++ uida.s2 ! Ind jussi.n p) ;
+    ss (jussi.s ! c ++ uida.s ! Pres jussi.n p ++ uida.s2 ! Pres jussi.n p) ;
 
 --3 Sentence-complement verbs
 --
@@ -775,7 +773,7 @@ oper
         _ => predVerb {s = table {
                Imper Sg => haluta.s ! Imper Sg ;
                ImpNegPl => haluta.s ! ImpNegPl ;
-               _ => haluta.s ! Ind Sg P3
+               _ => haluta.s ! Pres Sg P3
                }
              }
        }
@@ -811,7 +809,7 @@ nomVerbVerb : Verb -> VerbVerb = \v -> v ** {c = CCase Nom} ;
     predVerbPhrase jussi (predVerbGroup b (predVerb ostaa)) ** {
       s2 = ostaa.s3 ++ ostaa.s4 ;
       c  = npForm2Case jussi.n 
-                       (complementCase b ostaa.c (Ind jussi.n (np2Person jussi.p)))
+                       (complementCase b ostaa.c (Pres jussi.n (np2Person jussi.p)))
       } ;
 
 --2 Relative pronouns and relative clauses
@@ -833,7 +831,7 @@ nomVerbVerb : Verb -> VerbVerb = \v -> v ** {c = CCase Nom} ;
 
   relVerbPhrase : RelPron -> VerbPhrase -> RelClause = \joka,ui ->
     {s = \\n => joka.s ! n ! npForm2Case n (complementCase True ui.c Inf) ++ 
-                ui.s ! Ind n P3 ++ ui.s2 ! Ind n P3} ;
+                ui.s ! Pres n P3 ++ ui.s2 ! Pres n P3} ;
 
   relSlash : RelPron -> SentenceSlashNounPhrase -> RelClause = \joka,saat ->
     {s = \\n => joka.s ! n ! saat.c ++ saat.s2 ++ saat.s} ;
@@ -933,7 +931,7 @@ oper
 -- particle attached to the verb part of the verb phrase.
 
   questVerbPhrase : NounPhrase -> VerbPhrase -> Question = \jussi,ui ->
-    let {np = Ind jussi.n (np2Person jussi.p)} in
+    let {np = Pres jussi.n (np2Person jussi.p)} in
     ss (ui.s ! np ++ koPart ++ jussi.s ! complementCase True ui.c Inf ++ ui.s2 ! np);
 
   onkoNounPhrase : NounPhrase -> Question = \kaljaa ->
