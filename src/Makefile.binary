@@ -5,12 +5,12 @@ GF_DATA_DIR=$(datadir)/GF-$(PACKAGE_VERSION)
 .PHONY: install
 install: 
 	$(INSTALL) -d $(bindir)
-	$(INSTALL) gf$(EXEEXT) gfdoc$(EXEEXT) jgf $(bindir)
+	$(INSTALL) gf$(EXEEXT) gfdoc$(EXEEXT) jgf gfeditor $(bindir)
 	$(INSTALL) -d $(GF_DATA_DIR)
 	$(INSTALL) -m 0644 gf-java.jar $(GF_DATA_DIR)
 	$(INSTALL) -m 0644 gfeditor.jar $(GF_DATA_DIR)
 
 uninstall:
-	-rm -f $(bindir)/gf$(EXEEXT) $(bindir)/gfdoc$(EXEEXT) $(bindir)/jgf
+	-rm -f $(bindir)/gf$(EXEEXT) $(bindir)/gfdoc$(EXEEXT) $(bindir)/jgf $(bindir)/gfeditor
 	-rm -f $(GF_DATA_DIR)/gf-java.jar
 	-rm -f $(GF_DATA_DIR)/gfeditor.jar
