@@ -21,6 +21,54 @@ command.
 
 <p>
 
+17/6 (BB) There is now support for lists in GF abstract syntax.
+A list category is declared as:
+<pre>
+cat [C]
+</pre>
+or
+<pre>
+cat [C]{n}
+</pre>
+where <tt>C</tt> is a category and <tt>n</tt> is a non-negative integer.
+<tt>cat [C]</tt> is equivalent to <tt>cat [C]{0}</tt>. List category
+syntax can be used whereever categories are used.
+
+<p>
+
+<tt>cat [C]{n}</tt> is equivalent to the declarations:
+<pre>
+cat ListC
+fun BaseC : C^n -&gt; ListC
+fun ConsC : C -&gt; ListC -&gt; ListC
+</pre>
+
+where <tt>C^0 -&gt; X</tt> means <tt>X</tt>, and <tt>C^m</tt> (where
+m &gt; 0) means <tt>C -&gt; C^(m-1)</tt>.
+
+<p>
+
+A lincat declaration on the form:
+<pre>
+lincat [C] = T
+</pre>
+is equivalent to
+<pre>
+lincat ListC = T
+</pre>
+
+The linearizations of the list constructors are written
+just like they would be if the function declarations above
+had been made manually, e.g.:
+<pre>
+lin BaseC x_1 ... x_n = t
+lin ConsC x xs = t'
+</pre>
+
+
+
+<p>
+
 10/6 (AR) Preprocessor of <tt>.gfe</tt> files can now be performed as part of
 any grammar compilation. The flag <tt>-ex</tt> causes GF to look for
 the <tt>.gfe</tt> files and preprocess those that are younger
