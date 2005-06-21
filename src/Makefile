@@ -7,6 +7,7 @@ GHCFLAGS+= -fglasgow-exts -package util
 GHCOPTFLAGS=-O2
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
+GFEDITOR=JavaGUI2
 
 DIST_DIR=GF-$(PACKAGE_VERSION)
 NOT_IN_DIST= \
@@ -93,10 +94,12 @@ shell:
 clean: 
 	find . '(' -name '*~' -o -name '*.hi' -o -name '*.ghi' -o -name '*.o' ')' -exec rm -f '{}' ';'
 	-rm -f JavaGUI/*.class
+	-rm -f $(GFEDITOR)/de/uka/ilkd/key/ocl/gf/*.class
 	-rm -f gf.wixobj
 
 distclean: clean
 	-rm -f JavaGUI/gf-java.jar jgf
+	-rm -f $(GFEDITOR)/gfeditor.jar jgf
 	-rm -f tools/$(GF_DOC_EXE)
 	-rm -f config.status config.mk config.log
 	-rm -f *.tgz *.zip
@@ -111,9 +114,12 @@ today:
 
 javac:
 	$(JAVAC) $(JAVAFLAGS) JavaGUI/*.java
+	$(JAVAC) $(JAVAFLAGS) -classpath $(GFEDITOR):$(GFEDITOR)/log4j-1.2.8.jar:$(GFEDITOR)/jargs-1.0.jar $(GFEDITOR)/de/uka/ilkd/key/ocl/gf/*.java
+	
 
 jar: javac
-	cd JavaGUI; $(JAR) -cmf manifest.txt gf-java.jar *.class
+	cd JavaGUI; $(JAR) -cmf manifest.txt gf-java.jar *.class ; cd ..
+	cd $(GFEDITOR) ; rm -rf jarcontents ; mkdir jarcontents ; cp -r de/ ManifestMain.txt jarcontents ; cat jargs-1.0.jar | (cd jarcontents; jar -x jargs) ; cat log4j-1.2.8.jar | (cd jarcontents; jar -x org) ; cd jarcontents ; $(JAR) -cmf ManifestMain.txt ../gfeditor.jar  de/uka/ilkd/key/ocl/gf/*.class org jargs ; cd .. ; rm -rf jarcontents ; cd ..
 
 showflags:
 	@echo $(GHCFLAGS)
@@ -187,6 +193,7 @@ binary-dist:
 	$(MAKE) all
 	$(INSTALL) ../bin/$(GF_EXE) tools/$(GF_DOC_EXE) $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(BIN_DIST_DIR)
+	$(INSTALL) -m 0644 $(GFEDITOR)/gfeditor.jar $(BIN_DIST_DIR)
 	$(INSTALL) configure config.guess config.sub install-sh $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 config.mk.in jgf.in $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
@@ -229,8 +236,13 @@ install-editor:
 	$(INSTALL) -d $(datadir)/GF-$(PACKAGE_VERSION)
 	$(INSTALL) jgf $(bindir)
 	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(datadir)/GF-$(PACKAGE_VERSION)
+	$(INSTALL) gfeditor $(bindir)
+	$(INSTALL) -m 0644 $(GFEDITOR)/gfeditor.jar $(datadir)/GF-$(PACKAGE_VERSION)
 
 install-java: javac
 	-rm -f ../bin/JavaGUI
 	ln -s ../src/JavaGUI ../bin
 	@echo "PLEASE edit GFHOME in bin/jgf"
+	-rm -f ../bin/$(GFEDITOR)
+	ln -s ../src/$(GFEDITOR) ../bin
+
