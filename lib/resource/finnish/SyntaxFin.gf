@@ -130,7 +130,7 @@ oper
   partNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n, cn ->
     {s = \\f => cn.s ! False ! n ! (npForm2CasePart f) ; n = n ; p = NP3} ;
 
-  Numeral : Type = {s : NPForm => Str ; isNum : Bool} ;
+  Numeral : Type = {s : NPForm => Str ; isNum : Bool ; n : Number} ;
 
   pronWithNum : Pronoun -> Numeral -> NounPhrase = \me,kaksi ->
     let meihin = pronNounPhraseNP me 
@@ -140,7 +140,7 @@ oper
      p = NPP me.p  --- meidän kahden talo (*talomme)
     } ;
 
-  noNum : Numeral = {s = \\_ => [] ; isNum = False} ;
+  noNum : Numeral = {s = \\_ => [] ; isNum = False ; n = Pl} ;
 
 
 --2 Determiners
