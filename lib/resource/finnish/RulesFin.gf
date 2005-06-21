@@ -73,24 +73,25 @@ lin
 
 ----  PredAS = predAdjSent ;
 ----  PredV0 rain = predVerbClause (pronNounPhrase pronIt) rain (complVerb rain) ;
-{-
+
 -- Partial saturation.
 
-  UseV2 = transAsVerb ;
+  UseV2 v = v ;
 
-  ComplA2S = predAdjSent2 ;
+----  ComplA2S = predAdjSent2 ;
 
-  AdjPart = adjPastPart ;
+----  AdjPart = adjPastPart ;
 
-  UseV2V x = verb2aux x ** {isAux = False} ;
+----  UseV2V x = verb2aux x ** {isAux = False} ;
+
   UseV2S x = x ;
   UseV2Q x = x ;
   UseA2S x = x ;
   UseA2V x = x ;
 
-  UseCl  tp cl = {s = tp.s ++ cl.s ! Dir ! tp.b ! VFinite tp.t tp.a} ;
-  UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
-  UseRCl tp cl = {s = \\a => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! a} ;
+  UseCl  tp cl = {s = tp.s ++ cl.s ! SDecl ! tp.b ! VFinite tp.t tp.a} ;
+----  UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
+----  UseRCl tp cl = {s = \\a => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! a} ;
 
   PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
   NegTP t a = {s = t.s ++ a.s ; b = False ; t = t.t ; a = a.a} ;
@@ -102,7 +103,7 @@ lin
 
   ASimul = {s = [] ; a = Simul} ;
   AAnter = {s = [] ; a = Anter} ;
--}
+
 -- Adverbs.
 
 ----  AdjAdv a = ss (a.s ! AAttr ! AAdv) ; --- also APred?

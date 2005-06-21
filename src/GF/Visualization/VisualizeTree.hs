@@ -26,28 +26,31 @@ import Data.List (intersperse, nub)
 import Data.Maybe (maybeToList)
 
 visualizeTrees :: Options -> [Tree] -> String
-visualizeTrees opts = unlines . map (prGraph . tree2graph opts)
+visualizeTrees opts = unlines . map (prGraph opts . tree2graph opts)
 
 tree2graph :: Options -> Tree -> [String]
-tree2graph opts = prf (0,0) where
-  prf (i,j) t@(Tr (node, trees)) = 
-    let nod = prn (i,j) node in
-      (nod ++ " [style = \"solid\", shape = \"plaintext\"] ;") : 
-      [pra (i+1,j) nod t    | (j,t) <- zip [0..] trees] ++
-      concat [prf (i+1,j) t | (j,t) <- zip [0..] trees]
-  prn (i,j) (N (bi,at,val,_,_)) = 
-    "\"" ++ prs i ++ 
-    prb bi ++ 
-    prc at val ++ 
-    prs j ++ "\""
+tree2graph opts = prf [] where
+  prf ps t@(Tr (node, trees)) = 
+    let (nod,lab) = prn ps node in
+      (nod ++ " [label = " ++ lab ++ ", style = \"solid\", shape = \"plaintext\"] ;") : 
+      [       pra (j:ps) nod t | (j,t) <- zip [0..] trees] ++
+      concat [prf (j:ps) t     | (j,t) <- zip [0..] trees]
+  prn ps (N (bi,at,val,_,_)) = 
+    let 
+      lab = 
+        "\"" ++ 
+        prb bi ++ 
+        prc at val ++ 
+        "\""
+    in if oElem (iOpt "g") opts then (lab,lab) else (show(show (ps :: [Int])),lab)
   prb [] = ""
   prb bi = "\\" ++ concat (intersperse "," (map (prt_ . fst) bi)) ++ " -> "
-  pra i nod t@(Tr (node,_)) =  nod ++ " -- " ++ prn i node ++ " [style = \"solid\"];"
-
-  prs k = if oElem (iOpt "g") opts then "" else replicate k ' '
+  pra i nod t@(Tr (node,_)) =  nod ++ arr ++ fst (prn i node) ++ " [style = \"solid\"];"
   prc a v 
     | oElem (iOpt "c") opts = prt_ v
     | oElem (iOpt "f") opts = prt_ a
     | otherwise             = prt_ a ++ " : " ++ prt_ v
+  arr = if oElem (iOpt "g") opts then " -> " else " -- "
 
-prGraph ns = concat $ map (++"\n") $ ["graph {\n"] ++ ns ++ ["}"]
+prGraph opts ns = concat $ map (++"\n") $ [graph ++ "{\n"] ++ ns ++ ["}"] where
+  graph = if oElem (iOpt "g") opts then "digraph" else "graph"
