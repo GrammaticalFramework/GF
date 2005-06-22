@@ -276,9 +276,16 @@ KeyListener, FocusListener {
         private JMenu fileMenu= new JMenu("File");
         /** stores whether the refinement list should be in 'long' format */
         private JRadioButtonMenuItem rbMenuItemLong;
+        /** stores whether the refinement list should be in 'short' format */
+        private JRadioButtonMenuItem rbMenuItemShort;
         // private JRadioButtonMenuItem rbMenuItemAbs;
         /** stores whether the refinement list should be in 'untyped' format */
         private JRadioButtonMenuItem rbMenuItemUnTyped;
+        /** 
+         * linked to rbMenuItemUnTyped. 
+         * Is true if type information should be appended in the refinement menu
+         */
+        private boolean typedMenuItems = false;
         /** stores whether the AST is visible or not */
         private JCheckBoxMenuItem treeCbMenuItem;
         /** in the save dialog whether to save as a Term or as linearized Text */
@@ -523,7 +530,7 @@ KeyListener, FocusListener {
          */
         private void resetPrintnames(boolean replayState) {
                 this.printnameManager = new PrintnameManager();
-                PrintnameLoader pl = new PrintnameLoader(this.fromProc, this.toProc, this.printnameManager);
+                PrintnameLoader pl = new PrintnameLoader(this.fromProc, this.toProc, this.printnameManager, this.typedMenuItems);
                 if (!selectedMenuLanguage.equals("Abstract")) {
                         String sendString = selectedMenuLanguage;
                         pl.readPrintnames(sendString);
@@ -766,16 +773,16 @@ KeyListener, FocusListener {
                 menuGroup = new ButtonGroup();
                 rbMenuItemLong = new JRadioButtonMenuItem("long");
                 rbMenuItemLong.setActionCommand("long");
-                rbMenuItemLong.setSelected(true);
                 rbMenuItemLong.addActionListener(longShortListener);
                 menuGroup.add(rbMenuItemLong);
                 modeMenu.add(rbMenuItemLong);
-                rbMenuItem = new JRadioButtonMenuItem("short");
-                rbMenuItem.setActionCommand("short");
-                rbMenuItem.addActionListener(longShortListener);
-                menuGroup.add(rbMenuItem);
-                modeMenu.add(rbMenuItem);
-                modeMenu.addSeparator();              
+                rbMenuItemShort = new JRadioButtonMenuItem("short");
+                rbMenuItemShort.setActionCommand("short");
+                rbMenuItemShort.setSelected(true);
+                rbMenuItemShort.addActionListener(longShortListener);
+                menuGroup.add(rbMenuItemShort);
+                modeMenu.add(rbMenuItemShort);
+                modeMenu.addSeparator();
                 
                 /**
                  * switches GF to either display the refinement menu with or 
@@ -786,6 +793,12 @@ KeyListener, FocusListener {
                                 String action = e.getActionCommand();
                                 if ((action.equals("typed")) || (action.equals("untyped"))) {
                                         send("mt " + action);
+                                        if ((action.equals("typed"))) {
+                                                typedMenuItems = true;
+                                        } else {
+                                                typedMenuItems = false;
+                                        }
+                                        resetPrintnames(true);
                                         return;
                                 } else {
                                         logger.error("RadioListener on wrong object: " + action + "should either be 'typed' or 'untyped'");
@@ -1617,7 +1630,18 @@ KeyListener, FocusListener {
          * possibly sending something back to KeY 
          */
         protected void endProgram(){
-                int returnStatus = JOptionPane.showConfirmDialog(this, "Save constraint?", "Save before quitting?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE  );
+                String saveQuestion;
+                if (this.callback == null) {
+                        saveQuestion = "Save text before exiting?";
+                } else {
+                        saveQuestion = "Save constraint before exiting?";
+                }
+                int returnStatus;
+                if (this.newObject) {
+                        returnStatus = JOptionPane.showConfirmDialog(this, saveQuestion, "Save before quitting?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE  );
+                } else {
+                        returnStatus = JOptionPane.NO_OPTION;
+                }
                 if (returnStatus == JOptionPane.CANCEL_OPTION) {
                         return;
                 } else if (returnStatus == JOptionPane.NO_OPTION) {
@@ -3572,8 +3596,9 @@ KeyListener, FocusListener {
                                         resetNewCategoryMenu();                                        
                                         langMenuModel.resetLanguages();
                                         selectedMenuLanguage = "Abstract";
-                                        rbMenuItemLong.setSelected(true);
+                                        rbMenuItemShort.setSelected(true);
                                         rbMenuItemUnTyped.setSelected(true);
+                                        typedMenuItems = false;
                                         
                                         fileString="";
                                         grammar.setText("No Topic          ");
@@ -3611,8 +3636,9 @@ KeyListener, FocusListener {
                                 resetNewCategoryMenu();
                                 selectedMenuLanguage = "Abstract";
                                 
-                                rbMenuItemLong.setSelected(true);
+                                rbMenuItemShort.setSelected(true);
                                 rbMenuItemUnTyped.setSelected(true);
+                                typedMenuItems = false;
                                 
                                 fileString="";
                                 grammar.setText("No Topic          ");

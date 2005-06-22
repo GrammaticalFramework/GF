@@ -1,6 +1,5 @@
 package de.uka.ilkd.key.ocl.gf;
 import java.util.Hashtable;
-
 import org.apache.log4j.Logger;
 
 /**
@@ -35,21 +34,23 @@ class PrintnameManager {
          * printname fun neq = "<>," ++ ("parametrized" ++ ("disequality$to" ++ ("compare" ++ ("two" ++ ("instances" ++ ("on" ++ ("a" ++ ("specific" ++ "type%COMP"))))))))
          * and needs to get like
          * printname fun neq = "<>, parametrized disequality$to compare two instances on a specific type%COMP"
+         * @param funTypes contains funs, mapped to their types
          */
-        public void addNewPrintnameLine(String line) {
+        public void addNewPrintnameLine(String line, Hashtable funTypes) {
                 line = removePluses(line);
                 
             	//remove "printname fun " (the frontMatter)
-            	int index = line.indexOf(frontMatter);
+            	final int index = line.indexOf(frontMatter);
             	line = line.substring(index + frontMatter.length()).trim();
 
             	//extract fun name
-            	int endFun = line.indexOf(' ');
-            	String fun = line.substring(0, endFun);
+            	final int endFun = line.indexOf(' ');
+            	final String fun = line.substring(0, endFun);
+            	final String type = (String)funTypes.get(fun);
             	//extract printname
             	String printname = line.substring(line.indexOf('"') + 1, line.lastIndexOf('"'));
 
-            	addNewPrintname(fun, printname);
+            	addNewPrintname(fun, printname, type);
         }
         
         /**
@@ -71,11 +72,11 @@ class PrintnameManager {
          * @param myFun the GF abstract fun name
          * @param myPrintname the printname given by GF
          */
-        protected void addNewPrintname(String myFun, String myPrintname) {
+        protected void addNewPrintname(String myFun, String myPrintname, String type) {
                 if (logger.isDebugEnabled()) {
                         logger.debug("addNewPrintname, myFun = '" + myFun + "' , myPrintname = '" + myPrintname + "'");
                 }
-                Printname printname = new Printname(myFun, myPrintname, this.subcatNames);
+                Printname printname = new Printname(myFun, myPrintname, this.subcatNames, type);
                 if (logger.isDebugEnabled()) {
                         logger.debug("printname = '" + printname + "'");
                 }
@@ -109,7 +110,7 @@ class PrintnameManager {
                         // which does not occur in the refinement menu.
                         // if that is not wanted, don't call this method!
                         if (!myFun.startsWith("?")) {
-                                logger.warn("no printname for '" + myFun + "', pretend that it is a bound variable");
+                                logger.info("no printname for '" + myFun + "', pretend that it is a bound variable");
                                 return new Printname(myFun);
                         }
                 }
