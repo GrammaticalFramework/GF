@@ -331,7 +331,7 @@ regV soutaa =
     taa = Predef.dp 3 soutaa ;
     aa  = Predef.dp 2 taa ;
 ---    souda = weakGrade (init soutaa) ;
-    juo = Predef.dp 2 soutaa ;
+    juo = Predef.tk 2 soutaa ;
     o  = Predef.dp 1 juo ;
     joi = Predef.tk 2 juo + (o + "i")
   in case taa of {
