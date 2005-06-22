@@ -4,8 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Hashtable;
-import org.apache.log4j.Logger;
-
+import java.util.logging.*;
 /**
  * @author daniels
  * asks GF to print all available printnames, parses that list and generates
@@ -37,8 +36,8 @@ public class PrintnameLoader extends AbstractProber {
         protected void readMessage() {
                 try {
                         String result = this.fromProc.readLine();
-                        if (nogger.isDebugEnabled()) {
-                                nogger.debug("1 " + result);
+                        if (nogger.isLoggable(Level.FINER)) {
+                                nogger.finer("1 " + result);
                         }
                         //first read line is <message>, but this one gets filtered out in the next line
                         while (result.indexOf("/message")==-1){       
@@ -50,12 +49,12 @@ public class PrintnameLoader extends AbstractProber {
                                 }
                                 
                                 result = this.fromProc.readLine();
-                                if (nogger.isDebugEnabled()) {
-                                        nogger.debug("1 " + result);
+                                if (nogger.isLoggable(Level.FINER)) {
+                                        nogger.finer("1 " + result);
                                 }
                         }
-                        if (nogger.isDebugEnabled()) {
-                                nogger.debug("finished loading printnames");
+                        if (nogger.isLoggable(Level.FINER)) {
+                                nogger.finer("finished loading printnames");
                         }
                 } catch(IOException e){
                         System.err.println(e.getMessage());

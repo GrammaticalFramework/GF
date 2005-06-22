@@ -1,6 +1,6 @@
 package de.uka.ilkd.key.ocl.gf;
 
-import org.apache.log4j.Logger;
+import java.util.logging.*;
 
 /**
  * @author daniels

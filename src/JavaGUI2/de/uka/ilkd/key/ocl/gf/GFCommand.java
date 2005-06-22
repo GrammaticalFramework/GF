@@ -1,11 +1,4 @@
-/*
- * Created on 20.04.2005
- */
 package de.uka.ilkd.key.ocl.gf;
-
-
-import org.apache.log4j.Logger;
-
 /**
  * @author daniels
  * A class that represents a GF command together with its printname.
@@ -20,8 +13,6 @@ import org.apache.log4j.Logger;
  *
  */
 abstract class GFCommand implements Comparable{
-        
-        protected static Logger subcatLogger = Logger.getLogger(GFEditor2.class.getName() + "_subcat");
         
         /** the subcategory of this command */
         public abstract String getSubcat();

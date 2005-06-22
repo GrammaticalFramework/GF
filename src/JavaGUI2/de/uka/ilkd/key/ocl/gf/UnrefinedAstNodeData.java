@@ -1,7 +1,3 @@
-/*
- * Created on 27.04.2005
- *
- */
 package de.uka.ilkd.key.ocl.gf;
 
 /**

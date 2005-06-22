@@ -11,14 +11,13 @@ package de.uka.ilkd.key.ocl.gf;
 
 
 import java.io.File;
-
+import java.util.logging.*;
 import javax.swing.ProgressMonitor;
-
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 public class Utils {
-        protected static Logger timeLogger = Logger.getLogger("de.uka.ilkd.key.ocl.gf.utils.timer");
-        protected static Logger deleteLogger = Logger.getLogger("de.uka.ilkd.key.ocl.gf.utils.delete");
+        protected static Logger timeLogger = Logger.getLogger(Utils.class.getName() + ".timer");
+        protected static Logger deleteLogger = Logger.getLogger(Utils.class.getName() + ".delete");
         
         private Utils() {
                 //non-instantiability enforced
@@ -48,8 +47,8 @@ public class Utils {
          */
         public static void tickProgress(ProgressMonitor pm, int progress, String note) {
                 if (note != null) {
-                        if (timeLogger.isDebugEnabled()) {
-                                timeLogger.debug(System.currentTimeMillis() + " : " + note);
+                        if (timeLogger.isLoggable(Level.FINER)) {
+                                timeLogger.finer(System.currentTimeMillis() + " : " + note);
                         }
                 }
                 if (pm == null) {
@@ -71,8 +70,8 @@ public class Utils {
                         String filename = grammarsDir + File.separator + GFEditor2.modelModulName + endings[i];
                         File file = new File(filename);
                         file.deleteOnExit();
-                        if (deleteLogger.isDebugEnabled()) {
-                                deleteLogger.debug("scheduled for deletion: " + filename);
+                        if (deleteLogger.isLoggable(Level.FINER)) {
+                                deleteLogger.fine("scheduled for deletion: " + filename);
                         }
                 }
                 File file = new File(grammarsDir);
@@ -95,13 +94,13 @@ public class Utils {
          * Only gets called in stand-alone mode, not when run with KeY.
          */
         public static void configureLogger() {
-                if ((new File(LOGGER_CONFIGURATION)).exists())
-                        org.apache.log4j.PropertyConfigurator.configureAndWatch(
-                                        LOGGER_CONFIGURATION, 1500);
-                else {
-                        org.apache.log4j.BasicConfigurator.configure();
-                        Logger.getRootLogger().setLevel(org.apache.log4j.Level.ERROR);
-                }
+//                if ((new File(LOGGER_CONFIGURATION)).exists())
+//                        org.apache.log4j.PropertyConfigurator.configureAndWatch(
+//                                        LOGGER_CONFIGURATION, 1500);
+//                else {
+//                        org.apache.log4j.BasicConfigurator.configure();
+//                        Logger.getRootLogger().setLevel(org.apache.log4j.Level.ERROR);
+//                }
         }
 
         /**

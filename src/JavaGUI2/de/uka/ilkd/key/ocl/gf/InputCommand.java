@@ -1,7 +1,5 @@
 package de.uka.ilkd.key.ocl.gf;
 
-import org.apache.log4j.Logger;
-
 /**
  * @author daniels
  *
@@ -11,7 +9,6 @@ import org.apache.log4j.Logger;
  *  Reason: No GUI stuff in the command.
  */
 class InputCommand extends GFCommand {
-        protected final static Logger logger = Logger.getLogger(Printname.class.getName());
         public static InputCommand intInputCommand = new InputCommand("read in Integer", 
                         "opens a dialog window in which an Integer can be entered", 
                         int.class, 

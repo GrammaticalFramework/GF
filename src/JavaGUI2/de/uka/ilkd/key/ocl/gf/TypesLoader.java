@@ -4,8 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Hashtable;
-
-import org.apache.log4j.Logger;
+import java.util.logging.*;
 
 /**
  * @author daniels
@@ -14,7 +13,7 @@ import org.apache.log4j.Logger;
  */
 public class TypesLoader extends AbstractProber {
         protected final Hashtable hashtable;
-        protected static Logger nogger = Logger.getLogger(Printname.class.getName());
+        protected static Logger nogger = Logger.getLogger(TypesLoader.class.getName());
         /**
          * @param fromGf The GF process
          * @param toGf The GF process
@@ -33,8 +32,8 @@ public class TypesLoader extends AbstractProber {
         protected void readMessage() {
                 try {
                         String result = this.fromProc.readLine();
-                        if (nogger.isDebugEnabled()) {
-                                nogger.debug("7 " + result);
+                        if (nogger.isLoggable(Level.FINER)) {
+                                nogger.finer("7 " + result);
                         }
                         //first read line is <message>, but this one gets filtered out in the next line
                         while (result.indexOf("/message")==-1){       
@@ -45,12 +44,12 @@ public class TypesLoader extends AbstractProber {
                                 }
                                 
                                 result = this.fromProc.readLine();
-                                if (nogger.isDebugEnabled()) {
-                                        nogger.debug("7 " + result);
+                                if (nogger.isLoggable(Level.FINER)) {
+                                        nogger.finer("7 " + result);
                                 }
                         }
-                        if (nogger.isDebugEnabled()) {
-                                nogger.debug("finished loading printnames");
+                        if (nogger.isLoggable(Level.FINER)) {
+                                nogger.finer("finished loading printnames");
                         }
                 } catch(IOException e){
                         System.err.println(e.getMessage());
@@ -66,7 +65,9 @@ public class TypesLoader extends AbstractProber {
         public void readTypes() {
                 //prints the last loaded grammar,
                 String sendString = "gf pg";
-                nogger.info("collecting types :" + sendString);
+                if (nogger.isLoggable(Level.FINE)) {
+                        nogger.fine("collecting types :" + sendString);
+                }
                 send(sendString);
                 readGfedit();
         }
@@ -82,8 +83,8 @@ public class TypesLoader extends AbstractProber {
                 final int typeStartIndex = line.indexOf(" : ") + 3;
                 final int typeEndIndex = line.lastIndexOf(" = ");
                 try {
-                final String type = line.substring(typeStartIndex, typeEndIndex);
-                this.hashtable.put(fun, type);
+		                final String type = line.substring(typeStartIndex, typeEndIndex);
+		                this.hashtable.put(fun, type);
                 } catch (StringIndexOutOfBoundsException e) {
                         System.err.println("line: '" + line + "'");
                         System.err.println("fun: '" + fun + "'");                        
