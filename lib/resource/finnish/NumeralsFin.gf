@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../../prelude
 
-concrete NumeralsFin of Numerals = open TypesFin, MorphoFin in {
+concrete NumeralsFin of Numerals = open TypesFin, MorphoFin, ParadigmsFin in {
 
 lincat 
   Numeral, Sub1000000 = {s : NForm => Str ; n : Number} ;
@@ -13,7 +13,7 @@ lin
     "kaksien" "kaksia" "kaksiin" ;
   n3 = mkSubst "a" "kolme" "kolme" "kolme" "kolmea" "kolmeen" "kolmi" "kolmi"
     "kolmien" "kolmia" "kolmiin" ;
-  n4 = regNoun "nelj‰" ;
+  n4 = regN "nelj‰" ;
   n5 = reg3Noun "viisi" "viiden" "viisi‰" ;
   n6 = reg3Noun "kuusi" "kuuden" "kuutta" ; 
   n7 = mkSubst "‰" "seitsem‰n" "seitsem‰" "seitsem‰" "seitsem‰‰" 
