@@ -113,7 +113,7 @@ class Printname {
                 try {
                 name = (String)this.paramNames.get(n);
                 } catch (ArrayIndexOutOfBoundsException e) {
-                        subcatLogger.warning(e.getLocalizedMessage());
+                        subcatLogger.fine(e.getLocalizedMessage());
                 }
                 return name;
         }
@@ -393,7 +393,7 @@ class Printname {
                         + "<dd>" + this.paramTexts.get(which) + "</dd>";
                         return result;
                 } catch (ArrayIndexOutOfBoundsException e) {
-                        subcatLogger.warning(e.getLocalizedMessage());
+                        subcatLogger.fine(e.getLocalizedMessage());
                         return "";
                 }
                 
