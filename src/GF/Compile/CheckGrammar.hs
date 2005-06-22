@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 18:39:43 $ 
+-- > CVS $Date: 2005/06/22 08:52:02 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.27 $
+-- > CVS $Revision: 1.28 $
 --
 -- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
 --
@@ -131,7 +131,12 @@ checkCompleteGrammar abs cnc = do
          checkWarn $ "Warning: no linearization of" +++ prt c
          return js
      AbsCat (Yes _) _ -> case lookupIdent c js of
-       Ok _ -> return js
+       Ok (CncCat (Yes _) _ _) -> return js
+       Ok (CncCat _ mt mp) -> do
+         checkWarn $ 
+           "Warning: no linearization type for" +++ prt c ++ 
+           ", inserting default {s : Str}" 
+         return $ updateTree (c,CncCat (Yes defLinType) mt mp) js
        _ -> do
          checkWarn $ 
            "Warning: no linearization type for" +++ prt c ++ 
