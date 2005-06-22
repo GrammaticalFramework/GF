@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/17 14:15:18 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.21 $
+-- > CVS $Date: 2005/06/22 08:52:02 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.22 $
 --
 -- Code generator from optimized GF source code to GFC.
 -----------------------------------------------------------------------------
@@ -112,7 +112,7 @@ redInfo am (c,info) = errIn ("translating definition of" +++ prt c) $ do
         trm' <- redCTerm t
         pr'  <- redCTerm pr 
         return [(c', C.CncCat ty' trm' pr')]
-      _ -> prtBad "cannot reduce rule for" c
+      _ -> prtBad ("cannot reduce rule for") c
       
     CncFun mt ptr ppr -> case (mt,ptr,ppr) of
       (Just (cat,_), Yes trm, Yes pr) -> do
