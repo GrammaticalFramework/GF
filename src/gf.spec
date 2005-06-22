@@ -94,8 +94,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Tue June 21 2005 Hans-Joachim Daniels <daniels@ira.uka.de> 2.3pre
+* Tue Jun 21 2005 Hans-Joachim Daniels <daniels@ira.uka.de> 2.3pre
 - added the printnames and HTML enhanced editor as editor2
+
 * Thu May 12 2005 Bjorn Bringert <bringert@cs.chalmers.se> 2.2pre2-1
 - Split package into gf and gf-editor packages.
 
