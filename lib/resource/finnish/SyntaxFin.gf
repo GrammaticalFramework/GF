@@ -468,13 +468,111 @@ oper
   SForm = 
      VFinite  Tense Anteriority
    | VInfinit Anteriority
-   | VPresPart
+   | VImperat 
    ;
   
   SType = SDecl | SQuest ;
 
   oper
   Clause : Type = {s : SType => Bool => SForm => Str} ;
+
+  Sats : Type = {
+    subj : Str ;
+    pred : Bool => SForm => {
+      fin : Str ;
+      inf : Str
+      } ;
+    comp : Bool => Str
+    } ;
+
+  sats2clause : Sats -> Clause = \sats -> 
+    {s = \\st,b,sf => 
+     let
+       subj = sats.subj ;
+       pred = sats.pred ! b ! sf ;
+       fin  = pred.fin ;
+       inf  = pred.inf ;
+       comp = sats.comp ! b
+     in
+     case st of {
+       SDecl  => subj ++ fin ++ inf ++ comp ;
+       SQuest => questPart fin ++ subj ++ inf ++ comp
+       }
+    } ;
+
+  questPart : Str -> Str = \s -> glue s "ko" ; --- "kö"
+
+  mkSats : NounPhrase -> Verb -> Sats = \subj,verb ->
+    {subj = subj.s ! NPCase Nom ; --- "minusta tulee poliisi"
+     pred = inflectVerb verb subj.n (np2Person subj.p) ;
+     comp = \\_ => []
+    } ;
+
+  inflectVerb : Verb -> Number -> Person -> Bool => SForm => {fin, inf : Str} = 
+    \verb,n,p -> \\b,sf => 
+    let
+      vs   = verb.s ;
+      olla = verbOlla.s ;
+      eis  = verbEi.s ;
+      part = PastPartAct (NCase n Nom) ;
+      ei : Anteriority -> VForm -> VForm  -> {fin,inf : Str} =
+        \a,vf,neg -> case <b,a> of {
+           <True, Simul> => {fin = vs   ! vf ; inf = []} ; 
+           <True, Anter> => {fin = olla ! vf ; inf = vs ! part} ;
+           <False,Simul> => {fin = eis  ! vf ; inf = vs ! neg} ; 
+           <False,Anter> => {fin = eis  ! vf ; inf = olla ! neg ++ vs ! part}
+           } ;
+      älä = case b of {
+        True  => {fin = vs  ! Imper n ; inf = []} ;
+        False => {fin = eis ! Imper n ; 
+                  inf = vs ! case n of {
+                    Sg => Imper n ; 
+                    Pl => ImpNegPl}
+                 } 
+       } ;
+    in case sf of {
+      VFinite Past        a => ei a (Impf n p) (part) ;
+      VFinite Conditional a => ei a (Cond n p) (Cond Sg P3) ;
+      VFinite _           a => ei a (Pres n p) (Imper Sg) ; -- both Present and Future
+      VInfinit            a => ei a (Inf)      (Inf) ;      --- olla tulematta
+      VImperat              => älä
+      } ;
+
+{-
+  predVerb : Verb -> VerbGroup = \walk ->
+     let {
+       noCompl  : {s2 : VForm => Str} = {s2 = \\_ => []} ;
+       infCompl : {s2 : VForm => Str} = {s2 = table {
+                                                Imper Pl => walk.s ! ImpNegPl ;
+                                                _ => walk.s ! vFormNeg
+                                                }
+                                        }
+       } 
+     in
+       nomVerbPhrase (walk ** noCompl) (verbEi ** infCompl) ; 
+
+  predVerbPhrase : NounPhrase -> VerbPhrase -> Sentence = \jussi,uida ->
+    let {
+      p = np2Person jussi.p ;
+      c = complementCase True uida.c Inf --- True,Inf don't matter here
+    } 
+    in
+    ss (jussi.s ! c ++ uida.s ! Pres jussi.n p ++ uida.s2 ! Pres jussi.n p) ;
+
+
+oper
+  npForm2Case : Number -> NPForm -> Case = \n,f -> case f of {
+    NPCase c => c ;
+    NPAccNom => Nom ;
+    NPAccGen => case n of {
+      Sg => Gen ;
+      Pl => Nom
+      } 
+    } ;
+
+  NounPhrase : Type = {s : NPForm => Str ; n : Number ; p : NPPerson} ;
+-}
+
 
 -- Verb phrases are discontinuous: the two parts of a verb phrase are
 -- (s) an inflected verb, (s2) a complement.
