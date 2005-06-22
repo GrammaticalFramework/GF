@@ -1,12 +1,8 @@
-/*
- * Created on 21.04.2005
- *
- */
 package de.uka.ilkd.key.ocl.gf;
 
 import java.util.HashSet;
 import java.util.HashMap;
-import org.apache.log4j.Logger;
+import java.util.logging.*;
 
 /**
  * @author daniels
@@ -36,8 +32,8 @@ class RealCommand extends GFCommand {
                         fullnames.put("ch", "change head");
                         fullnames.put("rc", "refine from history:");
                 }
-                if (logger.isDebugEnabled()) {
-                        logger.debug("new RealCommand: " + myCommand);                        
+                if (logger.isLoggable(Level.FINEST)) {
+                        logger.finest("new RealCommand: " + myCommand);                        
                 }
                 this.command = myCommand.trim();
                 this.showText = myShowText;

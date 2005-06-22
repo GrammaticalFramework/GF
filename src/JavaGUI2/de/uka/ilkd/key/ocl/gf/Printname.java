@@ -2,8 +2,7 @@ package de.uka.ilkd.key.ocl.gf;
 
 import java.util.Hashtable;
 import java.util.Vector;
-
-import org.apache.log4j.Logger;
+import java.util.logging.*;
 
 /**
  * @author daniels
@@ -114,7 +113,7 @@ class Printname {
                 try {
                 name = (String)this.paramNames.get(n);
                 } catch (ArrayIndexOutOfBoundsException e) {
-                        subcatLogger.warn(e.getLocalizedMessage());
+                        subcatLogger.warning(e.getLocalizedMessage());
                 }
                 return name;
         }
@@ -204,8 +203,8 @@ class Printname {
                                 String fullName = subcatPart.substring(indFull + 1, indFullEnd);
                                 this.subcat = subcatPart.substring(0, indFull).trim();
                                 this.subcatNameHashtable.put(this.subcat, fullName);
-                                if (subcatLogger.isDebugEnabled()) {
-                                        subcatLogger.debug("new fullname '" + fullName + "' for category (shortname) '" + this.subcat + "'");
+                                if (subcatLogger.isLoggable(Level.FINER)) {
+                                        subcatLogger.finer("new fullname '" + fullName + "' for category (shortname) '" + this.subcat + "'");
                                 }
                         } else {
                                 subcat = subcatPart.trim();
@@ -394,7 +393,7 @@ class Printname {
                         + "<dd>" + this.paramTexts.get(which) + "</dd>";
                         return result;
                 } catch (ArrayIndexOutOfBoundsException e) {
-                        subcatLogger.warn(e.getLocalizedMessage());
+                        subcatLogger.warning(e.getLocalizedMessage());
                         return "";
                 }
                 

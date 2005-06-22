@@ -11,7 +11,7 @@ import java.util.*;
 import java.net.URL;
 import javax.swing.text.html.HTMLDocument;
 import java.net.MalformedURLException;
-import org.apache.log4j.Logger;
+import java.util.logging.*;
 import jargs.gnu.CmdLineParser;
 
 public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
@@ -482,7 +482,7 @@ KeyListener, FocusListener {
                 readAndDisplay();
                 Utils.tickProgress(pm, 9700, "Loading finished");
                 pm.close();
-                logger.debug("GFEditor2 constructor finished");
+                logger.finer("GFEditor2 constructor finished");
         }
 
         /**
@@ -497,14 +497,14 @@ KeyListener, FocusListener {
         private void initializeGF(String gfcmd, ProgressMonitor pm){
                 try {
                         Utils.tickProgress(pm, 5250, "Starting GF");
-                        logger.debug("Trying: "+gfcmd);
+                        logger.fine("Trying: "+gfcmd);
                         Process extProc = Runtime.getRuntime().exec(gfcmd); 
                         InputStreamReader isr = new InputStreamReader(
                                         extProc.getInputStream(),"UTF8");
                         this.fromProc = new BufferedReader (isr);
                         String defaultEncoding = isr.getEncoding();
-                        if (logger.isDebugEnabled()) {
-                                logger.debug("encoding "+defaultEncoding);
+                        if (logger.isLoggable(Level.FINER)) {
+                                logger.finer("encoding "+defaultEncoding);
                         }
                         this.toProc = new BufferedWriter(new OutputStreamWriter(extProc.getOutputStream(),"UTF8"));
                         
@@ -583,7 +583,7 @@ KeyListener, FocusListener {
                 final ActionListener showTreeListener = new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                                 if (!((JCheckBoxMenuItem)e.getSource()).isSelected()){
-                                        if (logger.isDebugEnabled()) logger.debug("showTree was selected");
+                                        if (logger.isLoggable(Level.FINER)) logger.finer("showTree was selected");
                                         treeCbMenuItem.setSelected(false);
                                         if (((JRadioButtonMenuItem)viewMenu.getItem(2)).isSelected()) {      
                                                 centerPanel.remove(treePanel);
@@ -595,7 +595,7 @@ KeyListener, FocusListener {
                                         }
                                 }
                                 else { 
-                                        if (logger.isDebugEnabled()) logger.debug("showTree was not selected");
+                                        if (logger.isLoggable(Level.FINER)) logger.finer("showTree was not selected");
                                         treeCbMenuItem.setSelected(true);
                                         if (((JRadioButtonMenuItem)viewMenu.getItem(2)).isSelected()) {      
                                                 centerPanel.remove(outputPanelUp);
@@ -694,7 +694,7 @@ KeyListener, FocusListener {
                                                 font = new Font(source.getText(), Font.PLAIN, font.getSize());
                                                 fontEveryWhere(font);
                                         } catch (ClassCastException e) {
-                                                logger.warn("Font change started on strange object\n" + e.getLocalizedMessage());
+                                                logger.warning("Font change started on strange object\n" + e.getLocalizedMessage());
                                         }
                                 }
                         };                        
@@ -714,9 +714,9 @@ KeyListener, FocusListener {
                                                 font = new Font(font.getFontName(), Font.PLAIN, Integer.parseInt(source.getText()));
                                                 fontEveryWhere(font);
                                         } catch (ClassCastException e) {
-                                                logger.warn("Font change started on strange object\n" + e.getLocalizedMessage());
+                                                logger.warning("Font change started on strange object\n" + e.getLocalizedMessage());
                                         } catch (NumberFormatException e) {
-                                                logger.warn("strange size entry\n" + e.getLocalizedMessage());
+                                                logger.warning("strange size entry\n" + e.getLocalizedMessage());
                                         }
                                 }
                         };
@@ -730,7 +730,6 @@ KeyListener, FocusListener {
                 }
                 //font stuff over
 
-                //TODO filter menu
                 filterMenu.setToolTipText("Choosing the linearization representation format");
                 {
 		                ActionListener filterActionListener = new ActionListener() {
@@ -764,7 +763,7 @@ KeyListener, FocusListener {
                                         send("ms " + action);
                                         return;
                                 } else {
-                                        logger.error("RadioListener on wrong object: " + action + "should either be 'typed' or 'untyped'");
+                                        logger.warning("RadioListener on wrong object: " + action + "should either be 'typed' or 'untyped'");
                                 }
                         }
                 };
@@ -801,7 +800,7 @@ KeyListener, FocusListener {
                                         resetPrintnames(true);
                                         return;
                                 } else {
-                                        logger.error("RadioListener on wrong object: " + action + "should either be 'typed' or 'untyped'");
+                                        logger.warning("RadioListener on wrong object: " + action + "should either be 'typed' or 'untyped'");
                                 }
                         }
                 };
@@ -872,15 +871,15 @@ KeyListener, FocusListener {
                                 } else {
                                         base = baseURL;
                                 }
-                                if (logger.isDebugEnabled()) {
-                                        logger.debug("base for HTML: " + base);
+                                if (logger.isLoggable(Level.FINER)) {
+                                        logger.finer("base for HTML: " + base);
                                 }
                                 ((HTMLDocument)this.htmlLinPane.getDocument()).setBase(base);
                         } catch (MalformedURLException me) {
-                                logger.error(me.getLocalizedMessage());
+                                logger.severe(me.getLocalizedMessage());
                         }
 	            } else {
-	                    logger.error("No HTMLDocument: " + this.htmlLinPane.getDocument().getClass().getName());
+	                    logger.warning("No HTMLDocument: " + this.htmlLinPane.getDocument().getClass().getName());
 	            }
                 this.htmlLinPane.addCaretListener(new CaretListener() {
                         /**
@@ -895,25 +894,25 @@ KeyListener, FocusListener {
                                 int i = htmlOutputVector.size()-1;
                                 int start = htmlLinPane.getSelectionStart(); 
                                 int end   = htmlLinPane.getSelectionEnd();
-                                if (popUpLogger.isDebugEnabled()) {
-                                        popUpLogger.debug("CARET POSITION: " + htmlLinPane.getCaretPosition()
+                                if (popUpLogger.isLoggable(Level.FINER)) {
+                                        popUpLogger.finer("CARET POSITION: " + htmlLinPane.getCaretPosition()
                                                         + "\n-> SELECTION START POSITION: "+start
                                                         + "\n-> SELECTION END POSITION: "+end);
                                 }
-                                if (linMarkingLogger.isDebugEnabled()) {
+                                if (linMarkingLogger.isLoggable(Level.FINER)) {
                                         if (end > 0 && (end < htmlLinPane.getDocument().getLength())) {
                                                 try {
-                                                        linMarkingLogger.debug("CHAR: " + htmlLinPane.getDocument().getText(end, 1));
+                                                        linMarkingLogger.finer("CHAR: " + htmlLinPane.getDocument().getText(end, 1));
                                                 } catch (BadLocationException ble) {
-                                                        linMarkingLogger.warn(ble.getLocalizedMessage());
+                                                        linMarkingLogger.warning(ble.getLocalizedMessage());
                                                 }
                                         }
                                 }
                                 // not null selection:
                                 if ((i > -1) && (start < htmlLinPane.getDocument().getLength())) {
-                                        if (linMarkingLogger.isDebugEnabled())
+                                        if (linMarkingLogger.isLoggable(Level.FINER))
                                                 for (int k=0; k < htmlOutputVector.size(); k++) { 
-                                                        linMarkingLogger.debug("element: "+k+" begin "+((HtmlMarkedArea)htmlOutputVector.elementAt(k)).htmlBegin+" "
+                                                        linMarkingLogger.finer("element: "+k+" begin "+((HtmlMarkedArea)htmlOutputVector.elementAt(k)).htmlBegin+" "
                                                                         + "\n-> end: "+((HtmlMarkedArea)htmlOutputVector.elementAt(k)).htmlEnd+" "       
                                                                         + "\n-> position: "+(((HtmlMarkedArea)htmlOutputVector.elementAt(k)).position).position+" "   
                                                                         + "\n-> words: "+((HtmlMarkedArea)htmlOutputVector.elementAt(k)).words);   
@@ -926,8 +925,8 @@ KeyListener, FocusListener {
                                         while ((i >= 0) && (((HtmlMarkedArea)htmlOutputVector.elementAt(i)).htmlBegin > start)) {
                                                 i--;
                                         }
-                                        if (linMarkingLogger.isDebugEnabled()) { 
-                                                linMarkingLogger.debug("i: "+i+" j: "+j);
+                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                linMarkingLogger.finer("i: "+i+" j: "+j);
                                         }
                                         if ((j < htmlOutputVector.size())) {
                                                 jElement = (HtmlMarkedArea)htmlOutputVector.elementAt(j);
@@ -937,29 +936,29 @@ KeyListener, FocusListener {
                                                         if (end>=jElement.htmlBegin) {
                                                                 iElement = (HtmlMarkedArea)htmlOutputVector.elementAt(0);
                                                                 iPosition = iElement.position.position;
-                                                                if (linMarkingLogger.isDebugEnabled()) { 
-                                                                        linMarkingLogger.debug("Less: "+jPosition+" and "+iPosition);
+                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                        linMarkingLogger.finer("Less: "+jPosition+" and "+iPosition);
                                                                 }
                                                                 position = findMaxHtml(0,j);
-                                                                if (linMarkingLogger.isDebugEnabled()) { 
-                                                                        linMarkingLogger.debug("SELECTEDTEXT: "+position+"\n");
+                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
                                                                 }
                                                                 treeChanged = true; 
                                                                 send("mp "+position);
                                                         } else { // before: 
-                                                                if (linMarkingLogger.isDebugEnabled()) { 
-                                                                        linMarkingLogger.debug("BEFORE vector of size: "+htmlOutputVector.size());
+                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                        linMarkingLogger.finer("BEFORE vector of size: "+htmlOutputVector.size());
                                                                 }
                                                         }
                                                 } else { // just: 
                                                         iElement = (HtmlMarkedArea)htmlOutputVector.elementAt(i);
                                                         iPosition = iElement.position.position;
-                                                        if (linMarkingLogger.isDebugEnabled()) { 
-                                                                linMarkingLogger.debug("SELECTED TEXT Just: "+iPosition +" and "+jPosition+"\n");
+                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                linMarkingLogger.finer("SELECTED TEXT Just: "+iPosition +" and "+jPosition+"\n");
                                                         }
                                                         position = findMax(i,j);
-                                                        if (linMarkingLogger.isDebugEnabled()) { 
-                                                                linMarkingLogger.debug("SELECTEDTEXT: "+position+"\n");
+                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
                                                         }
                                                         treeChanged = true; 
                                                         send("mp "+position);
@@ -971,26 +970,26 @@ KeyListener, FocusListener {
                                                 if (start<=iElement.htmlEnd) { 
                                                         jElement = (HtmlMarkedArea)htmlOutputVector.elementAt(htmlOutputVector.size()-1);
                                                         jPosition = jElement.position.position;
-                                                        if (linMarkingLogger.isDebugEnabled()) { 
-                                                                linMarkingLogger.debug("MORE: "+iPosition+ " and "+jPosition);
+                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                linMarkingLogger.finer("MORE: "+iPosition+ " and "+jPosition);
                                                         }
                                                         position = findMax(i,htmlOutputVector.size()-1);
-                                                        if (linMarkingLogger.isDebugEnabled()) { 
-                                                                linMarkingLogger.debug("SELECTEDTEXT: "+position+"\n");
+                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
                                                         }
                                                         treeChanged = true; 
                                                         send("mp "+position);
                                                         // after:
-                                                } else if (linMarkingLogger.isDebugEnabled()) { 
-                                                        linMarkingLogger.debug("AFTER vector of size: "+htmlOutputVector.size());
+                                                } else if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                        linMarkingLogger.finer("AFTER vector of size: "+htmlOutputVector.size());
                                                 }
                                         } else { // bigger:
                                                 iElement = (HtmlMarkedArea)htmlOutputVector.elementAt(0);
                                                 iPosition = iElement.position.position;
                                                 jElement = (HtmlMarkedArea)htmlOutputVector.elementAt(htmlOutputVector.size()-1);
                                                 jPosition = jElement.position.position;
-                                                if (linMarkingLogger.isDebugEnabled()) { 
-                                                        linMarkingLogger.debug("BIGGER: "+iPosition +" and "+jPosition+"\n"         
+                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                        linMarkingLogger.finer("BIGGER: "+iPosition +" and "+jPosition+"\n"         
                                                                         + "\n-> SELECTEDTEXT: []\n");
                                                 }
                                                 treeChanged = true; 
@@ -1267,14 +1266,14 @@ KeyListener, FocusListener {
          * @param andRead if true, the returned XML will be read an displayed accordingly
          */
         protected void send(String text, boolean andRead) {
-                if (sendLogger.isDebugEnabled()) {
-                        sendLogger.debug("## send: '" + text + "'");
+                if (sendLogger.isLoggable(Level.FINER)) {
+                        sendLogger.finer("## send: '" + text + "'");
                 }
                 try {
                         this.display = new Display(displayType);
                         display(true, false);
-                        if (xmlLogger.isDebugEnabled()) {
-                                xmlLogger.debug("output cleared\n\n\n");
+                        if (xmlLogger.isLoggable(Level.FINER)) {
+                                xmlLogger.finer("output cleared\n\n\n");
                         }
                         this.htmlOutputVector = new Vector();
                         this.textOutputVector = new Vector();
@@ -1313,7 +1312,7 @@ KeyListener, FocusListener {
                 } else {
                         try {
 	                        next = fromProc.readLine();
-	                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("1 " + next);
+	                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("1 " + next);
                         } catch (IOException e) {
                                 System.err.println("Could not read from external process:\n" + e);
                         }
@@ -1335,11 +1334,11 @@ KeyListener, FocusListener {
                         String readresult = "";
                         StringBuffer outputStringBuffer = new StringBuffer();
                         readresult = fromProc.readLine();
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("1 "+readresult);
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("1 "+readresult);
                         while ((readresult.indexOf("gf")==-1) && (readresult.trim().indexOf("<") < 0)){                          
                                 outputStringBuffer.append(readresult).append("\n");
                                 readresult = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("1 "+readresult);
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("1 "+readresult);
                         }
                         this.display.addToStages(outputStringBuffer.toString(), outputStringBuffer.toString().replaceAll("\\n", "<br>"));
                         display(true, false);
@@ -1364,7 +1363,7 @@ KeyListener, FocusListener {
                         int progress = 5300;
                         while (!(readresult.indexOf("<gfinit>") > -1 || (readresult.indexOf("<gfmenu>") > -1))){
                                 readresult = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("1 "+readresult);
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("1 "+readresult);
                                 textPure.append(readresult).append("\n");
                                 textHtml.append(readresult).append("<br>\n");
                                 progress += 12;
@@ -1398,12 +1397,12 @@ KeyListener, FocusListener {
                 try {
                         //read <hmsg> or <newcat> or <topic> (in case of no grammar loaded)
                         String readresult = fromProc.readLine();
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("12 "+readresult);
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("12 "+readresult);
                         //when old grammars are loaded, the first line looks like
                         //"reading grammar of old format letter.Abs.gfreading old file letter.Abs.gf<gfinit>"
                         if (readresult.indexOf("<gfinit>") > -1) {
                                 readresult = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("12 "+readresult);
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("12 "+readresult);
                         }
                         String next = readHmsg(readresult);
 
@@ -1427,10 +1426,10 @@ KeyListener, FocusListener {
                         String next = "";
                         //read <gfedit>
                         String readresult = fromProc.readLine();
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("11 "+readresult);
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("11 "+readresult);
                         //read either <hsmg> or <lineatization>
                         readresult = fromProc.readLine();
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("11 "+readresult);
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("11 "+readresult);
                         
                         //hmsg stuff
                         next = readHmsg(readresult);
@@ -1440,7 +1439,7 @@ KeyListener, FocusListener {
                         while ((next!=null)&&((next.length()==0)||(next.indexOf("<lin ")==-1))) {
                                 next = fromProc.readLine();
                                 if (next!=null){
-                                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("10 "+next);
+                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("10 "+next);
                                 } else {
                                         System.exit(0);
                                 }
@@ -1455,12 +1454,12 @@ KeyListener, FocusListener {
                         } else {
                                 while(result.indexOf("</menu")==-1) {
                                         result = fromProc.readLine();
-                                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("12 "+result);                    
+                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("12 "+result);                    
                                 }
                         }
                         for (int i=0; i<3 && !result.equals(""); i++){ 
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("11 "+result);                    
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("11 "+result);                    
                         }
                         return result;
                         
@@ -1580,7 +1579,7 @@ KeyListener, FocusListener {
 		                try {
 		                        myBaseURL = new URL(baseString);
 		                } catch (MalformedURLException me) {
-		                        logger.error(me.getLocalizedMessage());
+		                        logger.warning(me.getLocalizedMessage());
 		                        me.printStackTrace();
 		                        myBaseURL = null;
 		                }
@@ -1588,8 +1587,8 @@ KeyListener, FocusListener {
                         myBaseURL = null;
                 }
                 
-//                if (logger.isDebugEnabled()) {
-//                        logger.debug(isHtml + " : " + baseString + " : " + otherArgs);
+//                if (logger.isLoggable(Level.FINER)) {
+//                        logger.finer(isHtml + " : " + baseString + " : " + otherArgs);
 //                }
                 //construct the call to GF
                 String gfCall = ((gfBinString != null && !gfBinString.equals(""))? gfBinString : "gf");
@@ -1600,8 +1599,8 @@ KeyListener, FocusListener {
                 Locale.setDefault(Locale.US);
                 logger.info("call to GF: " + gfCall);
                 GFEditor2 gui = new GFEditor2(gfCall, isHtml.booleanValue(), myBaseURL);
-                if (logger.isDebugEnabled()) {
-                        logger.debug("main finished");
+                if (logger.isLoggable(Level.FINER)) {
+                        logger.finer("main finished");
                 }
         }
 
@@ -1730,7 +1729,7 @@ KeyListener, FocusListener {
          * seems to expect the starting menu tag to be already read
          */
     	protected void readRefinementMenu (){
-                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("list model changing! ");      
+                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("list model changing! ");      
                 String s ="";
                 Vector printnameVector = new Vector();
                 Vector commandVector = new Vector();
@@ -1739,14 +1738,14 @@ KeyListener, FocusListener {
                 try {
                         //read item
                         result = fromProc.readLine();
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("8 "+result);
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);
                         while (result.indexOf("/menu")==-1){
                                 //read show
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("8 "+result);
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);
                                 while (result.indexOf("/show")==-1){          
                                         result = fromProc.readLine();
-                                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("9 "+result);
+                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("9 "+result);
                                         if (result.indexOf("/show")==-1) 
                                         {
                                                 if (result.length()>8)
@@ -1764,20 +1763,20 @@ KeyListener, FocusListener {
                                 //read /show
                                 //read send
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("8 "+result);
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("8 "+result);
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);
                                 String myCommand = result;
                                 commandVector.add(this.result);
                                 //read /send (discarded)
                                 result = fromProc.readLine();             
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("8 "+result);          
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);          
                                 
                                 // read /item
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("8 "+result);
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("8 "+result);
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);
                                 
                                 final boolean isAbstract = "Abstract".equals(this.selectedMenuLanguage);
                                 RealCommand gfc = new RealCommand(myCommand, processedSubcats, this.printnameManager, showText, isAbstract);
@@ -1878,11 +1877,11 @@ KeyListener, FocusListener {
     	                StringBuffer s =new StringBuffer("");
     	                try {
     	                        String readresult = fromProc.readLine();
-    	                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("7 "+readresult);
+    	                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 "+readresult);
     	                        while (readresult.indexOf("/hmsg")==-1){       
     	                                s.append(readresult).append('\n');           
     	                                readresult = fromProc.readLine();
-    	                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("7 "+readresult);                     
+    	                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 "+readresult);                     
     	                        }
     	                        if (s.indexOf("c") > -1) {
     	                                //clear output before linearization
@@ -1900,7 +1899,7 @@ KeyListener, FocusListener {
     	                                this.newObject = true;
     	                        }
     	                        result = fromProc.readLine();             
-    	                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("7 "+result);
+    	                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 "+result);
     	                        return result;
     	                } catch(IOException e){
     	                        System.err.println(e.getMessage());
@@ -1924,15 +1923,15 @@ KeyListener, FocusListener {
                         linearization="";  
                         linearization += result+"\n";           
                         result = fromProc.readLine();
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("6 "+result);
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 "+result);
                         while ((result!=null)&&(result.indexOf("/linearization")==-1)){       
                                 linearization += result+"\n";           
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("6 "+result);                     
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 "+result);                     
                         }
                         if (newObject) formLin();     
                         result = fromProc.readLine();             
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("6 "+result);          
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 "+result);          
                 } catch(IOException e){
                         System.err.println(e.getMessage());
                         e.printStackTrace();
@@ -1947,11 +1946,11 @@ KeyListener, FocusListener {
                 String treeString = "";
                 try {
                         result = fromProc.readLine();
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("6 "+result);
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 "+result);
                         while (result.indexOf("/tree")==-1){       
                                 treeString += result+"\n";           
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("6 "+result);                     
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 "+result);                     
                         }
                         if (treeChanged && (newObject)) {
                                 formTree(tree, treeString); 
@@ -1959,7 +1958,7 @@ KeyListener, FocusListener {
                         } 
                         treeString="";                     
                         result = fromProc.readLine();             
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("6 "+result);          
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 "+result);          
                 } catch(IOException e){
                         System.err.println(e.getMessage());
                         e.printStackTrace();
@@ -1975,11 +1974,11 @@ KeyListener, FocusListener {
                 String s ="";
                 try {
                         result = fromProc.readLine();
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("7 "+result);
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 "+result);
                         while (result.indexOf("/message")==-1){       
                                 s += result+"\n";           
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("7 "+result);                     
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 "+result);                     
                         }
                         if (s.length()>1) {
                                 this.display.addToStages("-------------\n" + s, "<hr>" + s);
@@ -1987,7 +1986,7 @@ KeyListener, FocusListener {
                                 display(false, false);
                         }
                         result = fromProc.readLine();             
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("7 "+result);          
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 "+result);          
                 } catch(IOException e){
                         System.err.println(e.getMessage());
                         e.printStackTrace();
@@ -2005,8 +2004,8 @@ KeyListener, FocusListener {
                 try {
                         //read first cat
                         result = fromProc.readLine();
-                        if (xmlLogger.isDebugEnabled()) {
-                                xmlLogger.debug("2 "+result);
+                        if (xmlLogger.isLoggable(Level.FINER)) {
+                                xmlLogger.finer("2 "+result);
                         }
                         if (result.indexOf("(none)") > -1) {
                                 //no topics present
@@ -2022,29 +2021,29 @@ KeyListener, FocusListener {
                                         more = false;
                                 //read </newcat
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("2 "+result);
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("2 "+result);
                                 //read <newcat (normally)
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("3 "+result); 
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("3 "+result); 
                                 if (result.indexOf("topic")!=-1) {
                                         //no more categories
                                         more = false; 
                                 }
                                 //read next cat / topic
                                 result = fromProc.readLine();             
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("4 "+result);       
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("4 "+result);       
                         }
                         //set topic
                         grammar.setText(result.substring(4)+"          ");
                         //read </topic>
                         result = fromProc.readLine();
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("2 "+result);
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("2 "+result);
                         //read <language>
                         result = fromProc.readLine();
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("3 "+result);
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("3 "+result);
                         //read actual language
                         result = fromProc.readLine();             
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("4 "+result);       
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("4 "+result);       
                         
                         //read the languages and select the last non-abstract
                         more = true;
@@ -2071,10 +2070,10 @@ KeyListener, FocusListener {
                                 }
                                 // read </language>
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("2 "+result); 
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("2 "+result); 
                                 // read <language> or </gfinit...>
                                 result = fromProc.readLine();
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("3 "+result); 
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("3 "+result); 
                                 if ((result.indexOf("/gfinit")!=-1)||(result.indexOf("lin")!=-1)) 
                                         more = false; 
                                 if (result.indexOf("/gfinit")!=-1)
@@ -2084,7 +2083,7 @@ KeyListener, FocusListener {
                                         String path = result.substring(result.indexOf('=')+1,
                                                         result.indexOf('>')); 
                                         path =path.substring(path.lastIndexOf('/')+1);
-                                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("name: "+path);
+                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("name: "+path);
                                         fileString +="--" + path +"\n";
                                         if (path.lastIndexOf('.')!=path.indexOf('.'))
                                                 grammar.setText(path.substring(0,
@@ -2092,10 +2091,10 @@ KeyListener, FocusListener {
                                 }
                                 //TODO in case of finished, read "", otherwise ...
                                 result = fromProc.readLine();             
-                                if (xmlLogger.isDebugEnabled()) xmlLogger.debug("4 "+result);               
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("4 "+result);               
                         }
                 } catch(IOException e){
-                        logger.warn(e.getMessage());
+                        logger.warning(e.getMessage());
                 }
         }
         
@@ -2113,8 +2112,8 @@ KeyListener, FocusListener {
         protected StringBuffer outputAppend(boolean clickable, boolean doDisplay){
                 final StringBuffer linCollector = new StringBuffer();
                 //result=result.replace('\n',' ');
-                if (linMarkingLogger.isDebugEnabled()) { 
-                        linMarkingLogger.debug("INPUT:"+result);
+                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                        linMarkingLogger.finer("INPUT:"+result);
                 }
                 int focusTagBegin = this.result.indexOf("<focus");
                 int typeBegin=this.result.indexOf("type=",focusTagBegin);
@@ -2134,12 +2133,12 @@ KeyListener, FocusListener {
                         }
                         final int positionBegin=this.result.indexOf("position",focusTagBegin);
                         final int positionEnd=this.result.indexOf("]",positionBegin);
-                        if (linMarkingLogger.isDebugEnabled()) { 
-                                linMarkingLogger.debug("POSITION START: "+positionBegin 
+                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                linMarkingLogger.finer("POSITION START: "+positionBegin 
                                                 + "\n-> POSITION END: "+positionEnd);
                         }
-                        if (xmlLogger.isDebugEnabled()) {
-                                xmlLogger.debug("form Lin1: "+this.result);
+                        if (xmlLogger.isLoggable(Level.FINER)) {
+                                xmlLogger.finer("form Lin1: "+this.result);
                         }
                         this.focusPosition = new LinPosition(result.substring(positionBegin+9,positionEnd+1),
                                         this.result.substring(positionBegin,focusTagEnd).indexOf("incorrect")==-1);
@@ -2155,8 +2154,8 @@ KeyListener, FocusListener {
 //                      beware the side-effects! They are, what counts
                         linCollector.append(appendMarked(this.result + '\n', clickable, doDisplay));
                 }
-//                if (logger.isDebugEnabled()) {
-//                        logger.debug("collected appended linearizations:\n" + linCollector.toString());
+//                if (logger.isLoggable(Level.FINER)) {
+//                        logger.finer("collected appended linearizations:\n" + linCollector.toString());
 //                }
                 return linCollector;
         }
@@ -2216,8 +2215,8 @@ KeyListener, FocusListener {
 								// appending sth. linearizationArea
 								this.display.addToStages("\n************\n", "<br><hr><br>");
                         }
-                        if (xmlLogger.isDebugEnabled()) {
-                                xmlLogger.debug("linearization for the language: "+result);
+                        if (xmlLogger.isLoggable(Level.FINER)) {
+                                xmlLogger.finer("linearization for the language: "+result);
                         }
                         // we want the side-effects of outputAppend
                         final boolean isAbstract = "Abstract".equals(language);
@@ -2255,8 +2254,8 @@ KeyListener, FocusListener {
                         //check, if and how ma should be highlighted
                         boolean incorrect = false;
                         boolean focused = false;
-                        if (redLogger.isDebugEnabled()) {
-                                redLogger.debug("Highlighting: " + ma);
+                        if (redLogger.isLoggable(Level.FINER)) {
+                                redLogger.finer("Highlighting: " + ma);
                         }
                         if (!ma.position.correctPosition) {
                                 incorrectMA.add(ma);
@@ -2290,8 +2289,8 @@ KeyListener, FocusListener {
                         }
                 }
                 
-//                if (logger.isDebugEnabled()) {
-//                        logger.debug("completeLin: \n" + completeLin);
+//                if (logger.isLoggable(Level.FINER)) {
+//                        logger.finer("completeLin: \n" + completeLin);
 //                }
         }
         
@@ -2340,11 +2339,11 @@ KeyListener, FocusListener {
                                 end = this.htmlLinPane.getDocument().getLength();
                         }
                         this.htmlLinPane.getHighlighter().addHighlight(begin, end, new DefaultHighlighter.DefaultHighlightPainter(color));
-                        if (redLogger.isDebugEnabled()) {
-                                redLogger.debug("HTML HIGHLIGHT: " + this.htmlLinPane.getDocument().getText(begin, end - begin) + "; Color:" + color);
+                        if (redLogger.isLoggable(Level.FINER)) {
+                                redLogger.finer("HTML HIGHLIGHT: " + this.htmlLinPane.getDocument().getText(begin, end - begin) + "; Color:" + color);
                         }
                 } catch (BadLocationException e) {
-                        redLogger.warn("HTML highlighting problem!\n" + e.getLocalizedMessage() + " : " + e.offsetRequested() + "\nHtmlMarkedArea: " + ma + "\nhtmlLinPane length: " + this.htmlLinPane.getDocument().getLength());
+                        redLogger.warning("HTML highlighting problem!\n" + e.getLocalizedMessage() + " : " + e.offsetRequested() + "\nHtmlMarkedArea: " + ma + "\nhtmlLinPane length: " + this.htmlLinPane.getDocument().getLength());
                 }
         }
 
@@ -2363,11 +2362,11 @@ KeyListener, FocusListener {
                                 end = this.linearizationArea.getText().length() + 1;
                         }
                         this.linearizationArea.getHighlighter().addHighlight(begin, end, new DefaultHighlighter.DefaultHighlightPainter(color));
-                        if (redLogger.isDebugEnabled()) {
-                                redLogger.debug("HIGHLIGHT: " + this.linearizationArea.getText(begin, end - begin) + "; Color:" + color);
+                        if (redLogger.isLoggable(Level.FINER)) {
+                                redLogger.finer("HIGHLIGHT: " + this.linearizationArea.getText(begin, end - begin) + "; Color:" + color);
                         }
                 } catch (BadLocationException e) {
-                        redLogger.warn("highlighting problem!\n" + e.getLocalizedMessage() + " : " + e.offsetRequested() + "\nMarkedArea: " + ma + "\nlinearizationArea length: " + this.linearizationArea.getText().length());
+                        redLogger.warning("highlighting problem!\n" + e.getLocalizedMessage() + " : " + e.offsetRequested() + "\nMarkedArea: " + ma + "\nlinearizationArea length: " + this.linearizationArea.getText().length());
                 }
         }
         
@@ -2471,7 +2470,7 @@ KeyListener, FocusListener {
                                         item.setFont(font);
                                 }
                                 //String name = item.getClass().getName();
-                                //if (logger.isDebugEnabled()) logger.debug(name);
+                                //if (logger.isLoggable(Level.FINER)) logger.finer(name);
                         }
                 }
         }
@@ -2523,8 +2522,8 @@ KeyListener, FocusListener {
          * @param treeString the string representation for the XML tree
          */
         protected void formTree(DynamicTree2 myTreePanel, String treeString) {
-                if (treeLogger.isDebugEnabled()) {
-                        treeLogger.debug("treeString: "+ treeString);
+                if (treeLogger.isLoggable(Level.FINER)) {
+                        treeLogger.finer("treeString: "+ treeString);
                 }
                 
                 /** 
@@ -2623,8 +2622,8 @@ KeyListener, FocusListener {
                                                 }
                                                 //if tooltip turns out to be null that's OK 
                                                 String paramTooltip = parentPrintname.htmlifySingleParam(paramPosition);
-//                                                if (logger.isDebugEnabled()) {
-//                                                        logger.debug("new node-parsing: '" + name + "', fun: '" + fun + "', type: '" + paramType + "'");
+//                                                if (logger.isLoggable(Level.FINER)) {
+//                                                        logger.finer("new node-parsing: '" + name + "', fun: '" + fun + "', type: '" + paramType + "'");
 //                                                }
                                                 and = new UnrefinedAstNodeData(paramTooltip, node);
 
@@ -2649,8 +2648,8 @@ KeyListener, FocusListener {
                                         //show the selected as the 'selected' one in the JTree
                                         myTreePanel.tree.setSelectionPath(path);              
                                         myTreePanel.oldSelection = index;
-                                        if (treeLogger.isDebugEnabled()) {
-                                                treeLogger.debug("new selected index "+ index);
+                                        if (treeLogger.isLoggable(Level.FINER)) {
+                                                treeLogger.finer("new selected index "+ index);
                                         }
                                 }
                         }
@@ -2667,8 +2666,8 @@ KeyListener, FocusListener {
         public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();   
                 Object obj = e.getSource();
-                if (keyLogger.isDebugEnabled()) {
-                        keyLogger.debug("Key pressed: " + e.toString());
+                if (keyLogger.isLoggable(Level.FINER)) {
+                        keyLogger.finer("Key pressed: " + e.toString());
                 }
 
                 if  (obj==refinementSubcatList) {
@@ -2701,7 +2700,7 @@ KeyListener, FocusListener {
 		                        getLayeredPane().remove(parseField); 
 		                        treeChanged = true;
 		                        send("p "+parseField.getText());        
-		                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("sending parse string: "+parseField.getText());
+		                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("sending parse string: "+parseField.getText());
 		                        repaint();
 		                } else if  (keyCode == KeyEvent.VK_ESCAPE) { 
 		                        getLayeredPane().remove(parseField);   
@@ -2789,22 +2788,22 @@ KeyListener, FocusListener {
                 int i = this.htmlOutputVector.size()-1;
                 int start = linearizationArea.getSelectionStart();
                 int end = linearizationArea.getSelectionEnd();
-                if (popUpLogger.isDebugEnabled()) {
-                        popUpLogger.debug("CARET POSITION: "+linearizationArea.getCaretPosition()
+                if (popUpLogger.isLoggable(Level.FINER)) {
+                        popUpLogger.finer("CARET POSITION: "+linearizationArea.getCaretPosition()
                                         + "\n-> SELECTION START POSITION: "+start
                                         + "\n-> SELECTION END POSITION: "+end);
                 }
-                if (linMarkingLogger.isDebugEnabled()) {
+                if (linMarkingLogger.isLoggable(Level.FINER)) {
                         if (end>0&&(end<linearizationArea.getText().length())) { 
-                                linMarkingLogger.debug("CHAR: "+linearizationArea.getText().charAt(end));
+                                linMarkingLogger.finer("CHAR: "+linearizationArea.getText().charAt(end));
                         }
                 }
                 // not null selection:
                 if ((i>-1)&&(start<linearizationArea.getText().length()-1)) 
                 {
-                        if (linMarkingLogger.isDebugEnabled())
+                        if (linMarkingLogger.isLoggable(Level.FINER))
                                 for (int k=0; k<this.htmlOutputVector.size(); k++) { 
-                                        linMarkingLogger.debug("element: "+k+" begin "+((MarkedArea)this.htmlOutputVector.elementAt(k)).begin+" "
+                                        linMarkingLogger.finer("element: "+k+" begin "+((MarkedArea)this.htmlOutputVector.elementAt(k)).begin+" "
                                         + "\n-> end: "+((MarkedArea)this.htmlOutputVector.elementAt(k)).end+" "       
                                         + "\n-> position: "+(((MarkedArea)this.htmlOutputVector.elementAt(k)).position).position+" "   
                                         + "\n-> words: "+((MarkedArea)this.htmlOutputVector.elementAt(k)).words);   
@@ -2815,8 +2814,8 @@ KeyListener, FocusListener {
                         // localising start:
                         while ((i>=0)&&(((MarkedArea)this.htmlOutputVector.elementAt(i)).begin > start))
                                 i--;
-                        if (linMarkingLogger.isDebugEnabled()) { 
-                                linMarkingLogger.debug("i: "+i+" j: "+j);
+                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                linMarkingLogger.finer("i: "+i+" j: "+j);
                         }
                         if ((j<this.htmlOutputVector.size()))
                         {
@@ -2829,20 +2828,20 @@ KeyListener, FocusListener {
                                         {
                                                 iElement = (MarkedArea)this.htmlOutputVector.elementAt(0);
                                                 iPosition = iElement.position.position;
-                                                if (linMarkingLogger.isDebugEnabled()) { 
-                                                        linMarkingLogger.debug("Less: "+jPosition+" and "+iPosition);
+                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                        linMarkingLogger.finer("Less: "+jPosition+" and "+iPosition);
                                                 }
                                                 position = findMax(0,j);
-                                                if (linMarkingLogger.isDebugEnabled()) { 
-                                                        linMarkingLogger.debug("SELECTEDTEXT: "+position+"\n");
+                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
                                                 }
                                                 treeChanged = true; 
                                                 send("mp "+position);
                                         }
                                         // before:
                                         else 
-                                                if (linMarkingLogger.isDebugEnabled()) { 
-                                                        linMarkingLogger.debug("BEFORE vector of size: "+this.htmlOutputVector.size());
+                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                        linMarkingLogger.finer("BEFORE vector of size: "+this.htmlOutputVector.size());
                                                 }
                                 }
                                 // just:
@@ -2850,12 +2849,12 @@ KeyListener, FocusListener {
                                 { 
                                         iElement = (MarkedArea)this.htmlOutputVector.elementAt(i);
                                         iPosition = iElement.position.position;
-                                        if (linMarkingLogger.isDebugEnabled()) { 
-                                                linMarkingLogger.debug("SELECTED TEXT Just: "+iPosition +" and "+jPosition+"\n");
+                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                linMarkingLogger.finer("SELECTED TEXT Just: "+iPosition +" and "+jPosition+"\n");
                                         }
                                         position = findMax(i,j);
-                                        if (linMarkingLogger.isDebugEnabled()) { 
-                                                linMarkingLogger.debug("SELECTEDTEXT: "+position+"\n");
+                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
                                         }
                                         treeChanged = true; 
                                         send("mp "+position);
@@ -2872,20 +2871,20 @@ KeyListener, FocusListener {
                                         { 
                                                 jElement = (MarkedArea)this.htmlOutputVector.elementAt(this.htmlOutputVector.size()-1);
                                                 jPosition = jElement.position.position;
-                                                if (linMarkingLogger.isDebugEnabled()) { 
-                                                        linMarkingLogger.debug("MORE: "+iPosition+ " and "+jPosition);
+                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                        linMarkingLogger.finer("MORE: "+iPosition+ " and "+jPosition);
                                                 }
                                                 position = findMax(i,this.htmlOutputVector.size()-1);
-                                                if (linMarkingLogger.isDebugEnabled()) { 
-                                                        linMarkingLogger.debug("SELECTEDTEXT: "+position+"\n");
+                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
                                                 }
                                                 treeChanged = true; 
                                                 send("mp "+position);
                                         }
                                         else
                                                 // after:
-                                                if (linMarkingLogger.isDebugEnabled()) { 
-                                                        linMarkingLogger.debug("AFTER vector of size: "+this.htmlOutputVector.size());
+                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                        linMarkingLogger.finer("AFTER vector of size: "+this.htmlOutputVector.size());
                                                 }
                                 } 
                                 else
@@ -2895,8 +2894,8 @@ KeyListener, FocusListener {
                                         iPosition = iElement.position.position;
                                         jElement = (MarkedArea)this.htmlOutputVector.elementAt(this.htmlOutputVector.size()-1);
                                         jPosition = jElement.position.position;
-                                        if (linMarkingLogger.isDebugEnabled()) { 
-                                                linMarkingLogger.debug("BIGGER: "+iPosition +" and "+jPosition+"\n"         
+                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                linMarkingLogger.finer("BIGGER: "+iPosition +" and "+jPosition+"\n"         
                                                                 + "\n-> SELECTEDTEXT: []\n");
                                         }
                                         treeChanged = true; 
@@ -2955,8 +2954,8 @@ KeyListener, FocusListener {
                                                 // is something before the tag?
                                                 // is the case in the first run
                                                 if (subtreeBegin-currentLength>1) {
-                                                        if (linMarkingLogger.isDebugEnabled()) {
-                                                                linMarkingLogger.debug("SOMETHING BEFORE THE TAG");
+                                                        if (linMarkingLogger.isLoggable(Level.FINER)) {
+                                                                linMarkingLogger.finer("SOMETHING BEFORE THE TAG");
                                                         }
                                                         if (this.currentPosition.size()>0)
                                                                 newLength = register(currentLength, subtreeBegin, (LinPosition)this.currentPosition.elementAt(this.currentPosition.size()-1), restString);
@@ -2965,8 +2964,8 @@ KeyListener, FocusListener {
                                                                                 restString.substring(subtreeBegin,subtreeTagEnd).indexOf("incorrect")==-1), restString);
                                                 } else {       // nothing before the tag:
                                                         //the case in the beginning
-                                                        if (linMarkingLogger.isDebugEnabled()) {
-                                                                linMarkingLogger.debug("NOTHING BEFORE THE TAG");             
+                                                        if (linMarkingLogger.isLoggable(Level.FINER)) {
+                                                                linMarkingLogger.finer("NOTHING BEFORE THE TAG");             
                                                         }
                                                         if (nextOpeningTagBegin>0) {
                                                                 newLength = register(subtreeTagEnd+2, nextOpeningTagBegin, position, restString);
@@ -2979,8 +2978,8 @@ KeyListener, FocusListener {
                                         } else {// l<l2
                                                 // something before the </subtree> tag:
                                                 if (subtreeEnd-currentLength>1) {
-                                                        if (linMarkingLogger.isDebugEnabled()) {
-                                                                linMarkingLogger.debug("SOMETHING BEFORE THE </subtree> TAG");
+                                                        if (linMarkingLogger.isLoggable(Level.FINER)) {
+                                                                linMarkingLogger.finer("SOMETHING BEFORE THE </subtree> TAG");
                                                         }
                                                         if (this.currentPosition.size()>0)
                                                                 newLength = register(currentLength, subtreeEnd, (LinPosition)this.currentPosition.elementAt(this.currentPosition.size()-1), restString);
@@ -2994,8 +2993,8 @@ KeyListener, FocusListener {
                                                         // punctuation after the </subtree> tag:
                                                         if (restString.substring(subtreeEnd+10,subtreeEnd+11).trim().length()>0)
                                                         {
-                                                                if (linMarkingLogger.isDebugEnabled()) {
-                                                                        linMarkingLogger.debug("PUNCTUATION AFTER THE </subtree> TAG"
+                                                                if (linMarkingLogger.isLoggable(Level.FINER)) {
+                                                                        linMarkingLogger.finer("PUNCTUATION AFTER THE </subtree> TAG"
                                                                                         + "/n" + "STRING: " + restString);
                                                                 }
                                                                 //cutting the tag first!:
@@ -3004,8 +3003,8 @@ KeyListener, FocusListener {
                                                                 } else {
                                                                         restString = removeSubTreeTag(restString,subtreeEnd, subtreeEnd+9);
                                                                 }
-                                                                if (linMarkingLogger.isDebugEnabled()) {
-                                                                        linMarkingLogger.debug("STRING after cutting the </subtree> tag: "+restString);
+                                                                if (linMarkingLogger.isLoggable(Level.FINER)) {
+                                                                        linMarkingLogger.finer("STRING after cutting the </subtree> tag: "+restString);
                                                                 }
                                                                 // cutting the space in the last registered component:
                                                                 if (this.htmlOutputVector.size()>0) {
@@ -3014,8 +3013,8 @@ KeyListener, FocusListener {
                                                                                 currentLength -=1; 
                                                                         }
                                                                 }
-                                                                if (linMarkingLogger.isDebugEnabled()) {
-                                                                        linMarkingLogger.debug("currentLength: " + currentLength);
+                                                                if (linMarkingLogger.isLoggable(Level.FINER)) {
+                                                                        linMarkingLogger.finer("currentLength: " + currentLength);
                                                                 }
                                                                 // register the punctuation:
                                                                 if (this.currentPosition.size()>0) {
@@ -3034,15 +3033,15 @@ KeyListener, FocusListener {
                                         subtreeBegin = Utils.indexOfNotEscaped(restString, "<subtree");
                                         //          if (debug2) 
                                         //                System.out.println("/subtree index: "+l2 + "<subtree"+l);
-                                        if (linMarkingLogger.isDebugEnabled()) { 
-                                                linMarkingLogger.debug("<-POSITION: "+subtreeBegin+" CURRLENGTH: "+currentLength
+                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                linMarkingLogger.finer("<-POSITION: "+subtreeBegin+" CURRLENGTH: "+currentLength
                                                                 + "\n STRING: "+restString.substring(currentLength));
                                         }
                                 } //while
                         } else { //no focus, no selection enabled (why ever)
                                 //that means, that all subtree tags are removed here.
-                                if (linMarkingLogger.isDebugEnabled()) {
-                                        linMarkingLogger.debug("NO SELECTION IN THE TEXT TO BE APPENDED!");
+                                if (linMarkingLogger.isLoggable(Level.FINER)) {
+                                        linMarkingLogger.finer("NO SELECTION IN THE TEXT TO BE APPENDED!");
                                 }
                                 //cutting tags from previous focuses if any:
                                 int r = Utils.indexOfNotEscaped(restString, "</subtree>");
@@ -3066,8 +3065,8 @@ KeyListener, FocusListener {
                         }
                         // appending:
                         restString = unescapeTextFromGF(restString);
-                        if (redLogger.isDebugEnabled()) {
-                                redLogger.debug(restString);
+                        if (redLogger.isLoggable(Level.FINER)) {
+                                redLogger.finer(restString);
                         }
                         appendedPureText = restString.replaceAll("&-","\n ");
                         //display the text if not already done in case of clickable
@@ -3155,10 +3154,10 @@ KeyListener, FocusListener {
                         String toAdd = unescapeTextFromGF(stringToAppend);
                         final HtmlMarkedArea hma = this.display.addAsMarked(toAdd, position);
                         this.htmlOutputVector.add(hma);
-                        if (htmlLogger.isDebugEnabled()) {
-                                htmlLogger.debug("HTML added  :      " + hma);
-                        }                        //} else if (linMarkingLogger.isDebugEnabled()) {
-                        //        linMarkingLogger.debug("whiteSpaces: " + newLength);
+                        if (htmlLogger.isLoggable(Level.FINER)) {
+                                htmlLogger.finer("HTML added  :      " + hma);
+                        }                        //} else if (linMarkingLogger.isLoggable(Level.FINER)) {
+                        //        linMarkingLogger.finer("whiteSpaces: " + newLength);
                         //}
                 } //some words to register
                 return newLength;
@@ -3176,8 +3175,8 @@ KeyListener, FocusListener {
          */
         private String removeSubTreeTag (final String s, final int start, final int end) {
                 String restString = s;
-                if (linMarkingLogger.isDebugEnabled()) { 
-                        linMarkingLogger.debug("removing: "+ start +" to "+ end);
+                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                        linMarkingLogger.finer("removing: "+ start +" to "+ end);
                 }
                 int difference =end-start+1;
                 int positionStart, positionEnd;
@@ -3209,7 +3208,7 @@ KeyListener, FocusListener {
          */
         protected void listAction(JList list, int index, boolean doubleClick) {
                 if (index == -1) {
-                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("no selection");
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("no selection");
                 } else {
                         GFCommand command;
                         if (list == refinementList) {
@@ -3259,8 +3258,8 @@ KeyListener, FocusListener {
                 if (value != null) {
                         treeChanged = true;
                         send("g "+value); 
-                        if (logger.isDebugEnabled()) {
-                                logger.debug("sending string " + value);
+                        if (logger.isLoggable(Level.FINER)) {
+                                logger.finer("sending string " + value);
                         }
                 } else {
                         this.display.addToStages("\n" + reason.toString(), "<p>" + reason.toString() + "</p>");
@@ -3375,8 +3374,8 @@ KeyListener, FocusListener {
                 public void mousePressed(MouseEvent e) {
                         //            int selStart = tree.getRowForLocation(e.getX(), e.getY());
                         //            output.setSelectionRow(selStart);
-                        if (popUpLogger.isDebugEnabled()) {
-                                popUpLogger.debug("mouse pressed2: "+linearizationArea.getSelectionStart()+" "+linearizationArea.getSelectionEnd());
+                        if (popUpLogger.isLoggable(Level.FINER)) {
+                                popUpLogger.finer("mouse pressed2: "+linearizationArea.getSelectionStart()+" "+linearizationArea.getSelectionEnd());
                         }
                         maybeShowPopup(e);
                 }
@@ -3388,8 +3387,8 @@ KeyListener, FocusListener {
                         //int i=outputVector.size()-1;
                         // right click:
                         if (e.isPopupTrigger()) {
-                                if (popUpLogger.isDebugEnabled()) {
-                                        popUpLogger.debug("changing pop-up menu2!");
+                                if (popUpLogger.isLoggable(Level.FINER)) {
+                                        popUpLogger.finer("changing pop-up menu2!");
                                 }
                                 popup2 = producePopup();
                                 popup2.show(e.getComponent(), e.getX(), e.getY());
@@ -3401,8 +3400,8 @@ KeyListener, FocusListener {
                                 // selection Exists:
                                 if (!selectedText.equals(""))
                                 {
-                                        if (popUpLogger.isDebugEnabled()) {
-                                                popUpLogger.debug(e.getX() + " " + e.getY());
+                                        if (popUpLogger.isLoggable(Level.FINER)) {
+                                                popUpLogger.finer(e.getX() + " " + e.getY());
                                         }
                                         if (selectedText.length()<5)
                                                 if (treeCbMenuItem.isSelected())
@@ -3460,13 +3459,13 @@ KeyListener, FocusListener {
                                 
                                 File file = saveFc.getSelectedFile();
                                 // opening the file for editing :
-                                if (logger.isDebugEnabled()) logger.debug("opening: "+ file.getPath().replace('\\', File.separatorChar));
+                                if (logger.isLoggable(Level.FINER)) logger.finer("opening: "+ file.getPath().replace('\\', File.separatorChar));
                                 if (saveTypeGroup.getSelection().getActionCommand().equals("term")) {
-                                        if (logger.isDebugEnabled()) logger.debug(" opening as a term ");
+                                        if (logger.isLoggable(Level.FINER)) logger.finer(" opening as a term ");
                                         send("open "+ file.getPath().replace('\\', File.separatorChar));         
                                 }
                                 else {
-                                        if (logger.isDebugEnabled()) logger.debug(" opening as a linearization ");
+                                        if (logger.isLoggable(Level.FINER)) logger.finer(" opening as a linearization ");
                                         send("openstring "+ file.getPath().replace('\\', File.separatorChar));
                                 }
                                 
@@ -3495,7 +3494,7 @@ KeyListener, FocusListener {
                         int returnVal = saveFc.showSaveDialog(GFEditor2.this);
                         if (returnVal == JFileChooser.APPROVE_OPTION) {
                                 File file = saveFc.getSelectedFile();
-                                if (logger.isDebugEnabled()) logger.debug("saving as " + file);
+                                if (logger.isLoggable(Level.FINER)) logger.finer("saving as " + file);
                                 final String abstractLin = linearizations.get("Abstract").toString();
 
                                 if (saveTypeGroup.getSelection().getActionCommand().equals("term")) {
@@ -3519,11 +3518,11 @@ KeyListener, FocusListener {
                                         }
                                         if (sthAtAll) {
                                                 writeOutput(text.toString(), file.getPath());
-                                                if (logger.isDebugEnabled()) logger.debug(file + " saved.");
+                                                if (logger.isLoggable(Level.FINER)) logger.finer(file + " saved.");
                                         } else {
-                                                if (logger.isDebugEnabled()) logger.warn("no concrete language shown, saving abstract");
+                                                if (logger.isLoggable(Level.FINER)) logger.warning("no concrete language shown, saving abstract");
                                                 writeOutput(abstractLin, file.getPath());
-                                                if (logger.isDebugEnabled()) logger.debug(file + " saved.");
+                                                if (logger.isLoggable(Level.FINER)) logger.finer(file + " saved.");
                                         }
                                 }
                         }           
@@ -3555,7 +3554,7 @@ KeyListener, FocusListener {
                                         resetNewCategoryMenu();
                                         langMenuModel.resetLanguages();
                                         // importing a new language :
-                                        if (logger.isDebugEnabled()) logger.debug("importing: "+ file.getPath().replace('\\','/'));
+                                        if (logger.isLoggable(Level.FINER)) logger.finer("importing: "+ file.getPath().replace('\\','/'));
                                         fileString ="";
                                         send("i "+ file.getPath().replace('\\',File.separatorChar), false);
                                         readGfinit();
@@ -3749,7 +3748,7 @@ KeyListener, FocusListener {
                                 commandInput = s;
                                 //s = "gf "+s; This is for debugging, otherwise shift the comment to the next line.
                                 treeChanged = true; 
-                                if (logger.isDebugEnabled()) logger.debug("sending: "+ s);
+                                if (logger.isLoggable(Level.FINER)) logger.finer("sending: "+ s);
                                 send(s);
                         }                }
                         
@@ -3879,7 +3878,7 @@ KeyListener, FocusListener {
                                 if (!alreadyPresent) {
                                         //add item to the language list:
                                         JCheckBoxMenuItem cbMenuItem = new JCheckBoxMenuItem(lat.lang);
-                                        if (menuLogger.isDebugEnabled()) menuLogger.debug("menu item: " + lat.lang);   
+                                        if (menuLogger.isLoggable(Level.FINER)) menuLogger.finer("menu item: " + lat.lang);   
                                         cbMenuItem.setSelected(lat.active);
                                         cbMenuItem.setActionCommand("lang");
                                         cbMenuItem.addActionListener(this.langDisplayListener);
@@ -3890,8 +3889,8 @@ KeyListener, FocusListener {
                                         rbMenuItem.addActionListener(this.menuLanguageListener);
                                         languageGroup.add(rbMenuItem);
                                         if (lat.lang.equals(selectedMenuLanguage)) {
-                                                if (menuLogger.isDebugEnabled()) {
-                                                        menuLogger.debug("Selecting " + selectedMenuLanguage);
+                                                if (menuLogger.isLoggable(Level.FINER)) {
+                                                        menuLogger.finer("Selecting " + selectedMenuLanguage);
                                                 }
                                                 rbMenuItem.setSelected(true);
                                         }
@@ -3920,7 +3919,7 @@ KeyListener, FocusListener {
                                 }
                         }
                         if (!alreadyThere) {
-                                menuLogger.warn(myLang + " not yet known");
+                                menuLogger.warning(myLang + " not yet known");
                         }
                 }
                 
@@ -3939,8 +3938,8 @@ KeyListener, FocusListener {
                                 }
                         }
                         if (!alreadyThere) {
-                                if (menuLogger.isDebugEnabled()) {
-                                        menuLogger.debug(myLang + " added");
+                                if (menuLogger.isLoggable(Level.FINER)) {
+                                        menuLogger.finer(myLang + " added");
                                 }
                                 LangActiveTuple lat = new LangActiveTuple(myLang, myActive);
                                 this.languages.add(lat);
@@ -4006,8 +4005,8 @@ KeyListener, FocusListener {
                                 } else {
                                         sendLang = action;
                                 }
-                                if (xmlLogger.isDebugEnabled()){
-                                        xmlLogger.debug("sending "+sendLang);
+                                if (xmlLogger.isLoggable(Level.FINER)){
+                                        xmlLogger.finer("sending "+sendLang);
                                 }
                                 send("ml " + sendLang);
                                 resetPrintnames(true);
@@ -4031,15 +4030,15 @@ KeyListener, FocusListener {
                                 }
                                 final String lang = ((JCheckBoxMenuItem)e.getSource()).getText();
                                 if (((JCheckBoxMenuItem)e.getSource()).isSelected()){
-                                        if (menuLogger.isDebugEnabled()) {
-                                                menuLogger.debug("turning on language '" + lang + "'");
+                                        if (menuLogger.isLoggable(Level.FINER)) {
+                                                menuLogger.finer("turning on language '" + lang + "'");
                                         }
                                         setActive(lang, true);
                                         send("on " + lang);
                                 }
                                 else{
-                                        if (menuLogger.isDebugEnabled()) {
-                                                menuLogger.debug("turning off language '" + lang + "'");
+                                        if (menuLogger.isLoggable(Level.FINER)) {
+                                                menuLogger.finer("turning off language '" + lang + "'");
                                         }
                                         setActive(lang, false);
                                         send("off " + lang);

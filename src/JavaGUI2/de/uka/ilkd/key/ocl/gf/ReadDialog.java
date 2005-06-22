@@ -1,9 +1,3 @@
-/*
- * Created on 13.05.2005
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package de.uka.ilkd.key.ocl.gf;
 
 import java.awt.BorderLayout;
@@ -23,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
+import java.util.logging.*;
 
 /**
  * Takes care of reading in Strings that are to be parsed and terms.
@@ -166,23 +160,23 @@ class ReadDialog implements ActionListener{
                                 termInput = inputField.getText();
                                 if (termInput.indexOf(File.separatorChar)==-1){
                                         owner.send("g "+termInput); 
-                                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("sending term  string");
+                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("sending term  string");
                                 }
                                 else {
                                         owner.send("tfile "+termInput);                           
-                                        if (xmlLogger.isDebugEnabled()) {
-                                                xmlLogger.debug("sending file term: "+termInput);
+                                        if (xmlLogger.isLoggable(Level.FINER)) {
+                                                xmlLogger.finer("sending file term: "+termInput);
                                         }
                                 }
                         } else { //String selected
                                 parseInput = inputField.getText();
                                 if (parseInput.indexOf(File.separatorChar)==-1){
                                         owner.send("p "+parseInput);        
-                                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("sending parse string: "+parseInput);
+                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("sending parse string: "+parseInput);
                                 }   
                                 else {
                                         owner.send("pfile "+parseInput);           
-                                        if (xmlLogger.isDebugEnabled()) xmlLogger.debug("sending file parse string: "+parseInput);        
+                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("sending file parse string: "+parseInput);        
                                 }
                         }
                         readDialog.setVisible(false);

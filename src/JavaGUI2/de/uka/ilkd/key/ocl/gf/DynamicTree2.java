@@ -9,7 +9,7 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 
-import org.apache.log4j.Logger;
+import java.util.logging.*;
 
 //import de.uka.ilkd.key.util.KeYResourceManager;
 
@@ -61,21 +61,21 @@ ActionListener{
                         public void valueChanged(TreeSelectionEvent e) {
                                 if (tree.getSelectionRows() != null) {
                                         if (gfeditor.nodeTable == null) {
-                                                if (GFEditor2.treeLogger.isDebugEnabled()) {
-                                                        GFEditor2.treeLogger.debug("null node table");
+                                                if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
+                                                        GFEditor2.treeLogger.finer("null node table");
                                                 }
                                         } else {
-                                                if (GFEditor2.treeLogger.isDebugEnabled()) {
-                                                        GFEditor2.treeLogger.debug("node table: " + gfeditor.nodeTable.contains(new Integer(0)) + " " + gfeditor.nodeTable.keys().nextElement());
+                                                if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
+                                                        GFEditor2.treeLogger.finer("node table: " + gfeditor.nodeTable.contains(new Integer(0)) + " " + gfeditor.nodeTable.keys().nextElement());
                                                 }
                                         }
                                         if (tree.getSelectionPath() == null) {
-                                                if (GFEditor2.treeLogger.isDebugEnabled()) {
-                                                        GFEditor2.treeLogger.debug("null root path");
+                                                if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
+                                                        GFEditor2.treeLogger.finer("null root path");
                                                 }
                                         } else {
-                                                if (GFEditor2.treeLogger.isDebugEnabled()) {
-                                                        GFEditor2.treeLogger.debug("selected path" + tree.getSelectionPath());
+                                                if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
+                                                        GFEditor2.treeLogger.finer("selected path" + tree.getSelectionPath());
                                                 }
                                         }
                                         int i = ((Integer) gfeditor.nodeTable.get(tree.getSelectionPath())).intValue();
@@ -166,8 +166,8 @@ ActionListener{
          * as the parent
          */
         public DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent, Object child, boolean shouldBeVisible) {
-                if (logger.isDebugEnabled()) {
-                        logger.debug("node added: '" + child + "', parent: '" + parent + "'");
+                if (logger.isLoggable(Level.FINER)) {
+                        logger.finer("node added: '" + child + "', parent: '" + parent + "'");
                 }
                 DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
                 
@@ -205,9 +205,9 @@ ActionListener{
                                 exc.printStackTrace();
                         }
                         
-                        if (GFEditor2.treeLogger.isDebugEnabled()) {
-                                GFEditor2.treeLogger.debug("The user has finished editing the node.");
-                                GFEditor2.treeLogger.debug("New value: " + node.getUserObject());
+                        if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
+                                GFEditor2.treeLogger.finer("The user has finished editing the node.");
+                                GFEditor2.treeLogger.finer("New value: " + node.getUserObject());
                         }
                 }
                 public void treeNodesInserted(TreeModelEvent e) {
@@ -298,8 +298,8 @@ ActionListener{
                 public void mousePressed(MouseEvent e) {
                         int selRow = tree.getRowForLocation(e.getX(), e.getY());
                         tree.setSelectionRow(selRow);
-                        if (GFEditor2.treeLogger.isDebugEnabled()) {
-                                GFEditor2.treeLogger.debug("selection changed!");
+                        if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
+                                GFEditor2.treeLogger.finer("selection changed!");
                         }
                         maybeShowPopup(e);
                 }
@@ -308,12 +308,12 @@ ActionListener{
                         //nothing to be done here
                 }
                 void maybeShowPopup(MouseEvent e) {
-                        if (GFEditor2.treeLogger.isDebugEnabled()) {
-                                GFEditor2.treeLogger.debug("may be show Popup!");        
+                        if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
+                                GFEditor2.treeLogger.finer("may be show Popup!");        
                         }
                         if (e.isPopupTrigger()) {
-                                if (GFEditor2.treeLogger.isDebugEnabled()) {
-                                        GFEditor2.treeLogger.debug("changing menu!");
+                                if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
+                                        GFEditor2.treeLogger.finer("changing menu!");
                                 }
                                 popup = gfeditor.producePopup();
                                 popup.show(e.getComponent(), e.getX(), e.getY());

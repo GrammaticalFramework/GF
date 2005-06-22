@@ -3,8 +3,7 @@ package de.uka.ilkd.key.ocl.gf;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-
-import org.apache.log4j.Logger;
+import java.util.logging.*;
 
 /**
  * A class that offers a basic readGfEdit method with a lot of
@@ -38,8 +37,8 @@ abstract class AbstractProber {
                         skipChild("<hmsg>");
                         try {
                                 String next = fromProc.readLine();
-                                if (logger.isDebugEnabled()) {
-                                        logger.debug("2 " + next);
+                                if (logger.isLoggable(Level.FINER)) {
+                                        logger.finer("2 " + next);
                                 }
                                 return next;
                         } catch (IOException e) {
@@ -84,13 +83,13 @@ abstract class AbstractProber {
                         String next = "";
                         //read <gfedit>
                         String readresult = fromProc.readLine();
-                        if (logger.isDebugEnabled()) {
-                                logger.debug("1 " + next);
+                        if (logger.isLoggable(Level.FINER)) {
+                                logger.finer("1 " + next);
                         }
                         //read either <hsmg> or <lineatization>
                         readresult = fromProc.readLine();
-                        if (logger.isDebugEnabled()) {
-                                logger.debug("1 " + next);
+                        if (logger.isLoggable(Level.FINER)) {
+                                logger.finer("1 " + next);
                         }
                         
                         next = readHmsg(readresult);
@@ -101,8 +100,8 @@ abstract class AbstractProber {
                         while ((next!=null)&&((next.length()==0)||(!next.trim().equals("<linearizations>")))) {
                                 next = fromProc.readLine();
                                 if (next!=null){
-                                        if (logger.isDebugEnabled()) {
-                                                logger.debug("1 " + next);
+                                        if (logger.isLoggable(Level.FINER)) {
+                                                logger.finer("1 " + next);
                                         }
                                 } else {
                                         System.exit(0);
@@ -115,8 +114,8 @@ abstract class AbstractProber {
                         
                         for (int i=0; i<3 && !next.equals(""); i++){ 
                                 next = fromProc.readLine();
-                                if (logger.isDebugEnabled()) {
-                                        logger.debug("1 " + next);
+                                if (logger.isLoggable(Level.FINER)) {
+                                        logger.finer("1 " + next);
                                 }
                         }
                         
@@ -135,13 +134,13 @@ abstract class AbstractProber {
                 String closing = (new StringBuffer(opening)).insert(1, '/').toString();
                 try {
                         String nextRead = fromProc.readLine();
-                        if (logger.isDebugEnabled()) {
-                                logger.debug("3 " + nextRead);
+                        if (logger.isLoggable(Level.FINER)) {
+                                logger.finer("3 " + nextRead);
                         }
                         while (!nextRead.trim().equals(closing)) {
                                 nextRead = fromProc.readLine();
-                                if (logger.isDebugEnabled()) {
-                                        logger.debug("3 " + nextRead);
+                                if (logger.isLoggable(Level.FINER)) {
+                                        logger.finer("3 " + nextRead);
                                 }
                         }
                 } catch (IOException e) {
@@ -156,8 +155,8 @@ abstract class AbstractProber {
          * @param text the command, exactly the string that is going to be sent
          */
         protected void send(String text) {
-                if (logger.isDebugEnabled()) {
-                        logger.debug("## send: '" + text + "'");
+                if (logger.isLoggable(Level.FINER)) {
+                        logger.finer("## send: '" + text + "'");
                 }
                 try {
                         toProc.write(text, 0, text.length());

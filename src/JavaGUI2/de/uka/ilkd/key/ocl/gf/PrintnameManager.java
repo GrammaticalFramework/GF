@@ -1,6 +1,6 @@
 package de.uka.ilkd.key.ocl.gf;
 import java.util.Hashtable;
-import org.apache.log4j.Logger;
+import java.util.logging.*;
 
 /**
  * @author daniels
@@ -73,12 +73,12 @@ class PrintnameManager {
          * @param myPrintname the printname given by GF
          */
         protected void addNewPrintname(String myFun, String myPrintname, String type) {
-                if (logger.isDebugEnabled()) {
-                        logger.debug("addNewPrintname, myFun = '" + myFun + "' , myPrintname = '" + myPrintname + "'");
+                if (logger.isLoggable(Level.FINER)) {
+                        logger.finer("addNewPrintname, myFun = '" + myFun + "' , myPrintname = '" + myPrintname + "'");
                 }
                 Printname printname = new Printname(myFun, myPrintname, this.subcatNames, type);
-                if (logger.isDebugEnabled()) {
-                        logger.debug("printname = '" + printname + "'");
+                if (logger.isLoggable(Level.FINER)) {
+                        logger.finer("printname = '" + printname + "'");
                 }
                 this.printnames.put(myFun, printname);
         }
@@ -110,7 +110,7 @@ class PrintnameManager {
                         // which does not occur in the refinement menu.
                         // if that is not wanted, don't call this method!
                         if (!myFun.startsWith("?")) {
-                                logger.info("no printname for '" + myFun + "', pretend that it is a bound variable");
+                                logger.fine("no printname for '" + myFun + "', pretend that it is a bound variable");
                                 return new Printname(myFun);
                         }
                 }
