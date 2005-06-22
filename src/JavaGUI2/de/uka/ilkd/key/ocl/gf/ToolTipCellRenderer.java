@@ -22,8 +22,7 @@ public class ToolTipCellRenderer extends JLabel implements ListCellRenderer {
         protected static Logger logger = Logger.getLogger(ToolTipCellRenderer.class.getName());
         
         /**
-         * Returns a JLabel with a tooltip in which everything after the 
-         * first '$' character is.
+         * Returns a JLabel with a tooltip, which is given by the GFCommand
          * @param list Well, the list this cell belongs to
          * @param value value to display
          * @param index cell index

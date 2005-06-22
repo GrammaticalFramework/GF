@@ -11,11 +11,11 @@ import org.apache.log4j.Logger;
  * A Printname allows easy access for all the information that is crammed
  * into a printname in the GF grammars.
  * This information consists of (in this order!)
- *   The tooltip text which is started with $
- * 	 The subcategory which is started with %
+ *   The tooltip text which is started with \\$
+ * 	 The subcategory which is started with \\%
  *   The longer explanation for the subcategory which directly follows the
  *     subcategory and is put into parantheses
- *   The parameter descriptions, which start with #name and is followed
+ *   The parameter descriptions, which start with \\#name and is followed
  *     by their actual description.
  * HTML can be used inside the descriptions and the tooltip text 
  */
@@ -25,6 +25,8 @@ class Printname {
         public static final Printname delete = new Printname("d", "delete current sub-tree");
         public static final Printname addclip = new Printname("ac", "add to clipboard\\$<html>adds the current subtree to the clipboard.<br>It is offered in the refinement menu if the expected type fits to the one of the current sub-tree.</html>");
         public static final Printname printhistory = new Printname("ph", "print history\\$prints all previous command in the linearization area");
+        
+        protected final String type;
 
         /** 
          * The character that is the borderline between the text that
@@ -128,13 +130,15 @@ class Printname {
          * @param myFun the function name
          * @param myPrintname the printname given for this function
          * @param myFullnames the Hashtable for the full names for the category
-         * names for the shortnames like %PREDEF
+         * names for the shortnames like \\%PREDEF
+         * @param type TODO
          */
-        public Printname(String myFun, String myPrintname, Hashtable myFullnames) {
+        public Printname(String myFun, String myPrintname, Hashtable myFullnames, String type) {
                 myFun = myFun.trim();
                 myPrintname = myPrintname.trim();
                 this.printname = myPrintname;
                 this.subcatNameHashtable = myFullnames;
+                this.type = type;
 
                 //parse the fun name
                 {
@@ -225,6 +229,7 @@ class Printname {
                 this.subcat = null;
                 this.module = "";
                 this.printname = explanation;
+                this.type = null;
         }
         
         /**
@@ -238,7 +243,8 @@ class Printname {
                 this.subcatNameHashtable =  null;
                 this.subcat = null;
                 this.module = null;
-                this.printname = bound + "$insert the bound variable" + bound;
+                this.printname = bound;
+                this.type = null;
         }
         
         /** the text that is to be displayed in the refinement lists */
@@ -277,7 +283,7 @@ class Printname {
          * @return the tooltip
          */
         public static String extractTooltipText(String myPrintname) {
-                //if the description part of the fun has no \$ to denote a tooltip,
+                //if the description part of the fun has no \\$ to denote a tooltip,
                 //but the subcat description has one, than we must take extra
                 //caution
                 final int indTT = Utils.indexOfNotEscaped(myPrintname, TT_START);
@@ -439,7 +445,7 @@ class Printname {
                 String SandS = "boolean 'and' for sentences$true iff both of the two given sentences is equivalent to true%BOOL#alpha the first of the two and-conjoined sentences#beta the second of the and-conjoined sentences";
                 String FandS = "andS";
                 Hashtable ht = new Hashtable();
-                Printname pn = new Printname(FandS, SandS, ht);
+                Printname pn = new Printname(FandS, SandS, ht, null);
                 System.out.println(pn);
                 for (int i = 0; i < pn.paramNames.size(); i++) {
                         System.out.println(pn.htmlifySingleParam(i));
@@ -447,7 +453,7 @@ class Printname {
                 System.out.println(pn.getTooltipText());
                 SandS = "boolean 'and' for sentences$true iff both of the two given sentences is equivalent to true%BOOL";
                 FandS = "andS";
-                pn = new Printname(FandS, SandS, ht);
+                pn = new Printname(FandS, SandS, ht, null);
                 System.out.println("*" + pn.getTooltipText());
         }
         

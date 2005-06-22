@@ -30,7 +30,7 @@ class RealCommand extends GFCommand {
          * @param mlAbstract is true, iff the menu language is set to Abstract
          * Then no preloaded printnames are used.
          */
-        public RealCommand(final String myCommand, HashSet processedSubcats, final PrintnameManager manager, final String myShowText, boolean mlAbstract) {
+        public RealCommand(final String myCommand, final HashSet processedSubcats, final PrintnameManager manager, final String myShowText, final boolean mlAbstract) {
                 if (fullnames.isEmpty()) {
                         fullnames.put("w", "wrap");
                         fullnames.put("ch", "change head");
@@ -91,10 +91,10 @@ class RealCommand extends GFCommand {
                         this.printname = Printname.printhistory;
                 } else if (this.commandType.equals("rc")) {
                         String subtree = this.showText.substring(3);
-                        this.printname = new Printname(this.getCommand(), subtree + "$paste the previously copied subtree here<br>" + subtree);
+                        this.printname = new Printname(this.getCommand(), subtree + "\\$paste the previously copied subtree here<br>" + subtree);
                 } else if (mlAbstract) {
                         //create a new Printname
-                        this.printname = new Printname(funName, myShowText, null);
+                        this.printname = new Printname(funName, myShowText, null, null);
                 } else {
                         this.printname = manager.getPrintname(funName);
                 }
@@ -123,6 +123,9 @@ class RealCommand extends GFCommand {
                 if (this.commandType.equals("w")) {
                         String insertion = " as argument " + (this.argument + 1);
                         result = result + insertion;
+                }
+                if (this.printname.type != null) {
+                        result = result + " : " + this.printname.type;
                 }
                 return result;
         }
