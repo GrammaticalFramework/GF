@@ -963,7 +963,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (juosta + (a + "n")) 
       juoksi
       (juoksi + "n")
-      (juoksi + "sin")
+      (juoksi + "si")
       juossut
       juostu
       (init juossut + "n") ;
@@ -985,7 +985,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (juoda + (a + "n")) 
       joi
       (joi + "n")
-      (joi + "sin")
+      (joi + "si")
       (juo + "n" + u + "t")
       (juo + "t" + u)
       (juo + "d" + u + "n") ;
@@ -1002,10 +1002,11 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     let ei = 
       mkVerb 
         "ei" "ei" "en" "eivät" "älkää" 
-        "ei" "ei" "ei" "ei" "ei" "ei" "ei"
+        "ei" "e" "en" "e" "ei" "ei" "ei"
     in
     {s = table {
       Imper Sg => "älä" ;
+      Impf n p | Cond n p => ei.s ! Pres n p ;
       v => ei.s ! v
       }
     } ;

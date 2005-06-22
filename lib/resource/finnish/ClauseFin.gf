@@ -8,11 +8,11 @@ concrete ClauseFin of Clause = CategoriesFin **
   lin
   SPredV  np v   = 
     sats2clause (mkSats np v) ;
-{-
-  SPredPassV subj v = 
-    sats2clause (mkSatsCopula subj (v.s ! VPart (pgen2gen subj.g) subj.n)) ;
+----  SPredPassV subj v = 
+----    sats2clause (mkSatsCopula subj (v.s ! VPart (pgen2gen subj.g) subj.n)) ;
   SPredV2 np v y = 
     sats2clause (mkSatsObject np v y) ;
+{-
   SPredV3 subj verb obj1 obj2 = 
     sats2clause (insertObject (mkSatsObject subj verb obj1) verb.c3 verb.s3 obj2) ;
   SPredReflV2 subj verb = 

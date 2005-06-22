@@ -479,10 +479,11 @@ oper
   Sats : Type = {
     subj : Str ;
     pred : Bool => SForm => {
-      fin : Str ;
-      inf : Str
+      fin  : Str ;
+      inf  : Str ;
+      obj  : Str    -- object case depends on both
       } ;
-    comp : Bool => Str
+    comp : Str
     } ;
 
   sats2clause : Sats -> Clause = \sats -> 
@@ -492,11 +493,12 @@ oper
        pred = sats.pred ! b ! sf ;
        fin  = pred.fin ;
        inf  = pred.inf ;
-       comp = sats.comp ! b
+       obj  = pred.obj ;
+       comp = sats.comp
      in
      case st of {
-       SDecl  => subj ++ fin ++ inf ++ comp ;
-       SQuest => questPart fin ++ subj ++ inf ++ comp
+       SDecl  => subj ++ fin ++ inf ++ obj ++ comp ;
+       SQuest => questPart fin ++ subj ++ inf ++ obj ++ comp
        }
     } ;
 
@@ -504,12 +506,40 @@ oper
 
   mkSats : NounPhrase -> Verb -> Sats = \subj,verb ->
     {subj = subj.s ! NPCase Nom ; --- "minusta tulee poliisi"
-     pred = inflectVerb verb subj.n (np2Person subj.p) ;
-     comp = \\_ => []
+     pred = \\b,sf => 
+              inflectVerb verb subj.n (np2Person subj.p) b sf ** {obj = []} ;
+     comp = []
     } ;
 
-  inflectVerb : Verb -> Number -> Person -> Bool => SForm => {fin, inf : Str} = 
-    \verb,n,p -> \\b,sf => 
+  mkSatsObject : NounPhrase -> TransVerb -> NounPhrase -> Sats = \subj,verb,obj ->
+    insertObject (mkSats subj verb) verb.c verb.s3 verb.s4 obj ;
+
+  insertObject : Sats -> ComplCase -> Str -> Str -> NounPhrase -> Sats = 
+     \sats, c, prep, postp, obj -> 
+     {subj = sats.subj ;
+      pred = \\b,sf => 
+        let spred = sats.pred ! b ! sf in
+        {fin = spred.fin ; 
+         inf = spred.inf ; 
+         obj = spred.obj ++ prep ++ obj.s ! complCase b c sf ++ postp
+        } ;
+      comp = sats.comp
+      } ;
+
+  complCase : Bool -> ComplCase -> SForm -> NPForm = \b,c,v -> case c of {
+    CCase k => NPCase k ;
+    CAcc => case b of {
+      True => case v of {
+        VFinite _ _ => NPAccGen ;
+        _ => NPAccNom
+        } ;
+      _ => NPCase Part
+      }
+    } ;
+
+
+  inflectVerb : Verb -> Number -> Person -> Bool -> SForm -> {fin, inf : Str} = 
+    \verb,n,p,b,sf -> 
     let
       vs   = verb.s ;
       olla = verbOlla.s ;
@@ -538,40 +568,6 @@ oper
       VImperat              => älä
       } ;
 
-{-
-  predVerb : Verb -> VerbGroup = \walk ->
-     let {
-       noCompl  : {s2 : VForm => Str} = {s2 = \\_ => []} ;
-       infCompl : {s2 : VForm => Str} = {s2 = table {
-                                                Imper Pl => walk.s ! ImpNegPl ;
-                                                _ => walk.s ! vFormNeg
-                                                }
-                                        }
-       } 
-     in
-       nomVerbPhrase (walk ** noCompl) (verbEi ** infCompl) ; 
-
-  predVerbPhrase : NounPhrase -> VerbPhrase -> Sentence = \jussi,uida ->
-    let {
-      p = np2Person jussi.p ;
-      c = complementCase True uida.c Inf --- True,Inf don't matter here
-    } 
-    in
-    ss (jussi.s ! c ++ uida.s ! Pres jussi.n p ++ uida.s2 ! Pres jussi.n p) ;
-
-
-oper
-  npForm2Case : Number -> NPForm -> Case = \n,f -> case f of {
-    NPCase c => c ;
-    NPAccNom => Nom ;
-    NPAccGen => case n of {
-      Sg => Gen ;
-      Pl => Nom
-      } 
-    } ;
-
-  NounPhrase : Type = {s : NPForm => Str ; n : Number ; p : NPPerson} ;
--}
 
 
 -- Verb phrases are discontinuous: the two parts of a verb phrase are
