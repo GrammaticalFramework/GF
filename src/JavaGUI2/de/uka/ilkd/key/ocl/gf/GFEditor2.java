@@ -589,6 +589,7 @@ KeyListener, FocusListener {
                 //Add listener to components that can bring up popup menus.
                 MouseListener popupListener2 = new PopupListener();
                 linearizationArea.addMouseListener(popupListener2);
+                htmlLinPane.addMouseListener(popupListener2);
                 
                 //now for the menus
                 
