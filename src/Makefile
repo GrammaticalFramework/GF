@@ -119,7 +119,7 @@ javac:
 
 jar: javac
 	cd JavaGUI; $(JAR) -cmf manifest.txt gf-java.jar *.class ; cd ..
-	cd $(GFEDITOR) ; rm -rf jarcontents ; mkdir jarcontents ; cp -r de/ ManifestMain.txt jarcontents ; cat jargs-1.0.jar | (cd jarcontents; jar -x jargs) ; cd jarcontents ; $(JAR) -cmf ManifestMain.txt ../gfeditor.jar  de/uka/ilkd/key/ocl/gf/*.class jargs ; cd .. ; rm -rf jarcontents ; cd ..
+	cd $(GFEDITOR) ; rm -rf jarcontents ; mkdir jarcontents ; cp -r de/ ManifestMain.txt ../../LICENSE LICENCE_jargs jarcontents ; cat jargs-1.0.jar | (cd jarcontents; jar -x jargs) ; cd jarcontents ; $(JAR) -cmf ManifestMain.txt ../gfeditor.jar  de/uka/ilkd/key/ocl/gf/*.class jargs LICENSE LICENCE_jargs ; cd .. ; cd ..
 
 showflags:
 	@echo $(GHCFLAGS)

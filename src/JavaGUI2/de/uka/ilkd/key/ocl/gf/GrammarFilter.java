@@ -1,12 +1,18 @@
-// This file is part of KeY - Integrated Deductive Software Design
-// Copyright (C) 2001-2005 Universitaet Karlsruhe, Germany
-//                         Universitaet Koblenz-Landau, Germany
-//                         Chalmers University of Technology, Sweden
+//Copyright (c) Janna Khegai 2004, Hans-Joachim Daniels 2005
 //
-// The KeY system is protected by the GNU General Public License. 
-// See LICENSE.TXT for details.
+//This program is free software; you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation; either version 2 of the License, or
+//(at your option) any later version.
 //
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
 //
+//You can either finde the file LICENSE or LICENSE.TXT in the source 
+//distribution or in the .jar file of this application
+
 package de.uka.ilkd.key.ocl.gf;
 
 import java.io.File;
