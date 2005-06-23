@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/17 12:46:05 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.64 $
+-- > CVS $Date: 2005/06/23 14:32:44 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.65 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -404,6 +404,7 @@ customUntokenizer =
   ,(strCI "codelit",   const $ formatAsCodeLit)
   ,(strCI "concat",    const $ concatRemSpace)
   ,(strCI "glue",      const $ performBinds)
+  ,(strCI "finnish",   const $ performBindsFinnish)
   ,(strCI "reverse",   const $ reverse)
   ,(strCI "bind",      const $ performBinds) -- backward compat
 -- add your own untokenizers here

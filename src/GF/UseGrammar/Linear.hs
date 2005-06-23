@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/23 09:43:40 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.16 $
+-- > CVS $Date: 2005/06/23 14:32:44 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.17 $
 --
 -- Linearization for canonical GF. AR 7\/6\/2003
 -----------------------------------------------------------------------------
@@ -93,6 +93,7 @@ linearizeNoMark gr = linearizeToRecord gr noMark
 -- | expand tables in linearized term to full, normal-order tables
 --
 -- NB expand from inside-out so that values are not looked up in copies of branches
+
 expandLinTables :: CanonGrammar -> Term -> Err Term
 expandLinTables gr t = case t of
   R rs -> liftM (R . map (uncurry Ass)) $ mapPairsM exp [(l,r) | Ass l r <- rs]

@@ -10,6 +10,11 @@
 
 resource SyntaxFin = MorphoFin ** open Prelude, (CO = Coordination) in {
 
+-- To glue a particle to the preceding word. The lexer and unlexer
+-- are expected to deal with actual gluing and vowel harmony.
+
+ glueParticle : Str -> Str -> Str = \word,part -> word ++ "&*" ++ part ;
+
 --2 Common Nouns
 --
 -- Simple common nouns are defined as the type $CommNoun$ in $MorphoFin$.
@@ -502,7 +507,7 @@ oper
        }
     } ;
 
-  questPart : Str -> Str = \s -> glue s "ko" ; --- "kö"
+  questPart : Str -> Str = \s -> glueParticle s "ko" ; --- "kö"
 
   mkSats : NounPhrase -> Verb -> Sats = \subj,verb ->
     {subj = subj.s ! NPCase Nom ; --- "minusta tulee poliisi"

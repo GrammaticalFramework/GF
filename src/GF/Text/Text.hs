@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:41 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.9 $
+-- > CVS $Date: 2005/06/23 14:32:44 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.10 $
 --
 -- elementary text postprocessing. AR 21\/11\/2001.
 --
@@ -26,6 +26,7 @@ module GF.Text.Text (untokWithXML,
 	     formatAsLatex,
 	     formatAsCode,
 	     performBinds,
+	     performBindsFinnish,
 	     unStringLit,
 	     concatRemSpace
 	    ) where
@@ -101,11 +102,32 @@ formatAsCode = rend 0 . words where
   space t s = if null s then t else t ++ " " ++ s
 
 performBinds :: String -> String
-performBinds = unwords . format . words where
+performBinds = performBindsOpt (\x y -> y) 
+
+
+-- The function defines an effect of the former on the latter part,
+-- such as in vowel harmony. It is triggered by the binder token "&*"
+
+performBindsOpt :: (String -> String -> String) -> String -> String
+performBindsOpt harm = unwords . format . words where
   format ws = case ws of
-    w : "&+" : u : ws -> format ((w ++ u) : ws)
+    w : "&+" : u : ws -> format ((w ++        u) : ws)
+    w : "&*" : u : ws -> format ((w ++ harm w u) : ws)
     w : ws            -> w : format ws
     []                -> []
+
+-- unlexer for Finnish particles
+-- Notice: left associativity crucial for "tie &* ko &* han" --> "tieköhän"
+
+performBindsFinnish :: String -> String
+performBindsFinnish = performBindsOpt vowelHarmony where
+  vowelHarmony w p = if any (flip elem "aouAOU") w then p else map toFront p
+  toFront c = case c of
+    'A' -> 'Ä'
+    'O' -> 'Ö'
+    'a' -> 'ä'
+    'o' -> 'ö'
+    _ -> c
 
 unStringLit :: String -> String
 unStringLit s = case s of

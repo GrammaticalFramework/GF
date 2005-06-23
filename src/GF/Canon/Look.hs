@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/17 14:15:17 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.14 $
+-- > CVS $Date: 2005/06/23 14:32:43 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.15 $
 --
 -- lookup in GFC. AR 2003
 -----------------------------------------------------------------------------
@@ -125,8 +125,8 @@ ccompute :: CanonGrammar -> [Term] -> Term -> Err Term
 ccompute cnc = comp [] 
  where
   comp g xs t = case t of
-    Arg (A _ i)    -> errIn ("argument list") $ xs !? fromInteger i
-    Arg (AB _ _ i) -> errIn ("argument list for binding") $ xs !? fromInteger i
+    Arg (A _ i)    -> err (const (return t)) return $ xs !? fromInteger i
+    Arg (AB _ _ i) -> err (const (return t)) return $ xs !? fromInteger i
     I c     -> look c 
     LI c    -> lookVar c g
 
@@ -194,8 +194,10 @@ ccompute cnc = comp []
 
      noVar v = case v of
        LI _ -> False
+       Arg _ -> False
        R rs -> all noVar [t | Ass _ t <- rs]
        Par _ ts -> all noVar ts
        FV ts -> all noVar ts
        S x y -> noVar x && noVar y
+       P t _ -> noVar t
        _    -> True --- other cases that can be values to pattern match?

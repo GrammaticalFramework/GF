@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/23 13:23:01 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/06/23 14:32:44 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.12 $
 --
 -- Converting GFC to SimpleGFC
 --
@@ -138,6 +138,7 @@ convertPatt (A.PC con pats) = con :^ map convertPatt pats
 -- convertPatt (A.PW)          = Wildcard
 convertPatt (A.PR rec)      = Rec [ (lbl, convertPatt pat) | A.PAss lbl pat <- rec ]
 convertPatt (A.PI n)        = error "GFCtoSimple.convertPatt: cannot handle 'PI' constructor"
+convertPatt p               = error $ "GFCtoSimple.convertPatt: cannot handle " ++ show p
 
 ----------------------------------------------------------------------
 
