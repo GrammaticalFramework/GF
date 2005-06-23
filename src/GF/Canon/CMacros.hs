@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/17 14:15:17 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.25 $
+-- > CVS $Date: 2005/06/23 13:23:01 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.26 $
 --
 -- Macros for building and analysing terms in GFC concrete syntax.
 --
@@ -290,4 +290,7 @@ composOp co trm =
       do
       as' <- mapM co as
       return (FV as')
+  -- peb tried to do this, but then there were errors in GF.Canon.Look.ccompute:
+  -- V x as -> do as' <- mapM co as
+  -- 	       return (V x as')
   _ -> return trm -- covers Arg, I, LI, K, E
