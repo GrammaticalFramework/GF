@@ -468,10 +468,10 @@ KeyListener, FocusListener {
                 this.commandPath = gfcmd;
                 Image icon = null;
                 try {
-                final URL iconURL = ClassLoader.getSystemResource("gf-logo-64.gif");
+                final URL iconURL = ClassLoader.getSystemResource("gf-icon.gif");
                 icon = Toolkit.getDefaultToolkit().getImage(iconURL);
                 } catch (NullPointerException npe) {
-                        logger.info("gf-logo-64.gif could not be found.\n" + npe.getLocalizedMessage());
+                        logger.info("gf-icon.gif could not be found.\n" + npe.getLocalizedMessage());
                 }
                 initializeGUI(baseURL, isHtml, icon);
                 initializeGF(gfcmd, null);                
