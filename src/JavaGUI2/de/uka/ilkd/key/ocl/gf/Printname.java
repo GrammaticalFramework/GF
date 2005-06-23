@@ -429,6 +429,15 @@ class Printname {
                 String result = "<html><dl>" + text + "</dl></html>";
                 return result;
         }
+        /**
+         * looks up the description for parameter number 'which' and returns it. 
+         * Returns null, if no parameter description is present.
+         * @param which The number of the parameter
+         * @return s.a.
+         */
+        public String getParamDescription(int which) {
+                 return (String)paramTexts.get(which);
+        }
         
         /**
          * wraps all parameters together with their explanatory text into
