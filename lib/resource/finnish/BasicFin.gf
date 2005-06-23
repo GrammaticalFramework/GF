@@ -170,8 +170,8 @@ lin
   shop_N = regN "shop" ;
   short_ADeg = regADeg "short" ;
   silver_N = regN "silver" ;
-  sister_N = regN "sister" ;
 -}
+  sister_N = regN "sisko" ;
   sleep_V = regV "uinua" ;
 {-
   small_ADeg = regADeg "small" ;
