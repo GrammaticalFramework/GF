@@ -13,7 +13,8 @@ resource SyntaxFin = MorphoFin ** open Prelude, (CO = Coordination) in {
 -- To glue a particle to the preceding word. The lexer and unlexer
 -- are expected to deal with actual gluing and vowel harmony.
 
- glueParticle : Str -> Str -> Str = \word,part -> word ++ "&*" ++ part ;
+  oper
+  glueParticle : Str -> Str -> Str = \word,part -> word ++ "&*" ++ part ;
 
 --2 Common Nouns
 --
@@ -262,7 +263,7 @@ oper
   ifPossSuffix : CommNounPhrase -> NPPerson -> Number -> Case -> Str = 
     \talo,np,n,c -> case np of {
       NP3   => talo.s ! False ! n ! c ;
-      NPP p => talo.s ! True ! n ! c ++ possSuffix ! n ! p
+      NPP p => glueParticle (talo.s ! True ! n ! c) (possSuffix ! n ! p)
     } ;
 
 -- *Bare plural noun phrases*, like "koivut" in "koivut ovat valkoisia", 

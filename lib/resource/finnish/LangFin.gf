@@ -9,6 +9,9 @@ concrete LangFin of Lang =
 ----  CountryEng
 
    ** open Prelude, ParadigmsFin in {
+
+flags unlexer=finnish ;
+
 {-
 lin
   AdvDate d = prefixSS "on" d ;
