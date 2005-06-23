@@ -1,19 +1,25 @@
-// This file is part of KeY - Integrated Deductive Software Design
-// Copyright (C) 2001-2005 Universitaet Karlsruhe, Germany
-//                         Universitaet Koblenz-Landau, Germany
-//                         Chalmers University of Technology, Sweden
+//Copyright (c) Kristofer Johanisson 2005, Hans-Joachim Daniels 2005
 //
-// The KeY system is protected by the GNU General Public License. 
-// See LICENSE.TXT for details.
+//This program is free software; you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation; either version 2 of the License, or
+//(at your option) any later version.
 //
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
 //
+//You can either finde the file LICENSE or LICENSE.TXT in the source 
+//distribution or in the .jar file of this application
+
+
 package de.uka.ilkd.key.ocl.gf;
 
 
 import java.io.File;
 import java.util.logging.*;
 import javax.swing.ProgressMonitor;
-//import org.apache.log4j.Logger;
 
 public class Utils {
         protected static Logger timeLogger = Logger.getLogger(Utils.class.getName() + ".timer");
@@ -80,29 +86,6 @@ public class Utils {
                 file.deleteOnExit();
         }
         
-        /** 
-         * shamelessly copied from de.uka.ilkd.key.gui.Main
-         * With that, the editor is compilable without changes.
-         */
-        private static final String LOGGER_CONFIGURATION = 
-            	System.getProperty("user.home")+
-            	 File.separator+".key"+File.separator+"logger.props";
-
-        /** 
-         * shamelessly copied from de.uka.ilkd.key.gui.Main
-         * With that, the editor is compilable without changes.
-         * Only gets called in stand-alone mode, not when run with KeY.
-         */
-        public static void configureLogger() {
-//                if ((new File(LOGGER_CONFIGURATION)).exists())
-//                        org.apache.log4j.PropertyConfigurator.configureAndWatch(
-//                                        LOGGER_CONFIGURATION, 1500);
-//                else {
-//                        org.apache.log4j.BasicConfigurator.configure();
-//                        Logger.getRootLogger().setLevel(org.apache.log4j.Level.ERROR);
-//                }
-        }
-
         /**
          * Searches for the first occurace not escaped with '\' of toBeFound in s.
          * Works like String::indexOf otherwise
