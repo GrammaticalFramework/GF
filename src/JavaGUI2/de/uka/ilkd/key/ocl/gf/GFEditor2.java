@@ -217,7 +217,9 @@ KeyListener, FocusListener {
         private JButton right = new JButton(">");
         /** Moving the focus to the next metavariable */
         private JButton rightMeta = new JButton(">?");
-        private JLabel actionOnSubterm = new JLabel("Select Action on Subterm");
+        private final static String actionOnSubtermString = "Select Action on Subterm";
+        private JLabel subtermNameLabel = new JLabel();
+        private JLabel subtermDescLabel = new JLabel();
         /** Refining with term or linearization from typed string or file */
         private JButton read = new JButton("Read");   
         //  private JButton parse = new JButton("Parse");   
@@ -249,7 +251,7 @@ KeyListener, FocusListener {
         /** the panel that contains only the navigation buttons */
         private JPanel middlePanelUp = new JPanel();
         /** the panel that vontains the the explanatory text for the refinement menu */
-        private JPanel middlePanelDown = new JPanel();
+        private JPanel middlePanelDown = new JPanel(new BorderLayout());
         /** splits between tree and lin above and nav buttons and refinements below */
         private JSplitPane centerPanel;
         /** the window that contains the refinements when in split mode */
@@ -1071,7 +1073,8 @@ KeyListener, FocusListener {
                 middlePanelUp.add(top);
                 middlePanelUp.add(right);
                 middlePanelUp.add(rightMeta);
-                middlePanelDown.add(actionOnSubterm);
+                middlePanelDown.add(subtermNameLabel, BorderLayout.WEST);
+                middlePanelDown.add(subtermDescLabel, BorderLayout.CENTER);
                 middlePanel.setLayout(new BorderLayout());
                 middlePanel.add(middlePanelUp, BorderLayout.NORTH);
                 middlePanel.add(middlePanelDown, BorderLayout.CENTER);
@@ -2444,7 +2447,8 @@ KeyListener, FocusListener {
                 top.setFont(newFont);  
                 right.setFont(newFont);  
                 rightMeta.setFont(newFont);
-                actionOnSubterm.setFont(newFont);
+                subtermDescLabel.setFont(newFont);
+                subtermNameLabel.setFont(newFont);
                 read.setFont(newFont);
                 alpha.setFont(newFont);  
                 random.setFont(newFont);  
@@ -2630,13 +2634,13 @@ KeyListener, FocusListener {
                                 if (!node.isMeta()) {
                                         childPrintname = this.printnameManager.getPrintname(node.getFun());
                                 }
+                                Printname parentPrintname = null;
                                 if (childPrintname != null) {
                                         //we know this one
                                         and = new RefinedAstNodeData(childPrintname, node);
                                 } else if (parent != null && node.isMeta()) {
                                         //new child without refinement
                                         AstNodeData parentAnd = (AstNodeData)parent.getUserObject();
-                                        Printname parentPrintname = null;
                                         if (parentAnd != null) {
                                                 parentPrintname = parentAnd.getPrintname();
                                         }
@@ -2676,6 +2680,27 @@ KeyListener, FocusListener {
                                         myTreePanel.oldSelection = index;
                                         if (treeLogger.isLoggable(Level.FINER)) {
                                                 treeLogger.finer("new selected index "+ index);
+                                        }
+                                        
+                                        // set the description of the crrent parameter to a more
+                                        // prominent place
+                                        String paramName = null;
+                                        int paramPosition = -1;
+                                        if (parentPrintname != null) {
+		                                        paramPosition = parent.getChildCount() - 1;
+		                                        paramName = parentPrintname.getParamName(paramPosition);
+                                        }
+                                        if (paramName == null) {
+                                                subtermNameLabel.setText(actionOnSubtermString);
+                                                subtermDescLabel.setText("");
+                                        } else {
+                                                subtermNameLabel.setText("<html><b>" + paramName + ": </b></html>");
+                                                String paramDesc = parentPrintname.getParamDescription(paramPosition);
+                                                if (paramDesc == null) {
+                                                        subtermDescLabel.setText("");
+                                                } else {
+                                                        subtermDescLabel.setText("<html>" + paramDesc + "</html>");
+                                                }
                                         }
                                 }
                         }
@@ -3615,7 +3640,9 @@ KeyListener, FocusListener {
                                         File file = fc.getSelectedFile();
                                         // importing a new grammar :                
                                         newObject = false; 
-                                        statusLabel.setText(status); 
+                                        statusLabel.setText(status);
+                                        subtermDescLabel.setText("");
+                                        subtermNameLabel.setText("");
                                         listModel.clear();
                                         resetTree(tree);
                                         resetNewCategoryMenu();                                        
@@ -3654,7 +3681,9 @@ KeyListener, FocusListener {
                 
                 public void actionPerformed(ActionEvent e) {
                                 newObject = false; 
-                                statusLabel.setText(status); 
+                                statusLabel.setText(status);
+                                subtermDescLabel.setText("");
+                                subtermNameLabel.setText("");
                                 listModel.clear();
                                 resetTree(tree);
                                 langMenuModel.resetLanguages();
