@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/23 09:43:40 $ 
+-- > CVS $Date: 2005/06/23 13:23:01 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
 -- Converting GFC to SimpleGFC
 --
@@ -94,7 +94,10 @@ convertConcrete gram (Abs decl args name) = Cnc ltyp largs term
 	  ltyp : largs = map (convertCType gram . lookupCType gram) (decl : args)
 
 expandTerm :: Env -> A.Term -> A.Term
-expandTerm gram term = err error id $ expandLinTables (fst gram) term
+expandTerm gram term = tracePrt "expanded term" prt $
+		       err error id $ expandLinTables (fst gram) $
+		       tracePrt "initial term" prt $ 
+		       term
 
 convertCType :: Env -> A.CType -> SLinType
 convertCType gram (A.RecType rec) = RecT [ (lbl, convertCType gram ctype) | A.Lbg lbl ctype <- rec ]
