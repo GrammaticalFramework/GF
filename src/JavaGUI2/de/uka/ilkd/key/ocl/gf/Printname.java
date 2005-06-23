@@ -38,10 +38,15 @@ class Printname {
         
         public static final Printname delete = new Printname("d", "delete current sub-tree");
         public static final Printname addclip = new Printname("ac", "add to clipboard\\$<html>adds the current subtree to the clipboard.<br>It is offered in the refinement menu if the expected type fits to the one of the current sub-tree.</html>");
-        public static final Printname printhistory = new Printname("ph", "print history\\$prints all previous command in the linearization area");
+        public static final Printname printhistory = new Printname("ph", "peel head\\$removes this fun and moves its first argument at its place instead");
         
         protected final String type;
 
+        /** 
+         * If  the command type will already
+         * be present in the display name and does not need to be added. 
+         */
+        protected final boolean funPresent;
         /** 
          * The character that is the borderline between the text that
          * is to be displayed in the JList and the ToolTip text
@@ -145,7 +150,8 @@ class Printname {
          * @param myPrintname the printname given for this function
          * @param myFullnames the Hashtable for the full names for the category
          * names for the shortnames like \\%PREDEF
-         * @param type TODO
+         * @param type The type of this fun. 
+         * If null, it won't be displayed in the refinement menu.
          */
         public Printname(String myFun, String myPrintname, Hashtable myFullnames, String type) {
                 myFun = myFun.trim();
@@ -153,7 +159,14 @@ class Printname {
                 this.printname = myPrintname;
                 this.subcatNameHashtable = myFullnames;
                 this.type = type;
-
+                if (myFullnames == null) {
+                        //if the menu language is abstract, no fullnames are loaded
+                        //and the fun will be in the used showname
+                        this.funPresent = true;
+                } else {
+                        this.funPresent = false;
+                }
+               
                 //parse the fun name
                 {
                 int index = myFun.indexOf('.');
@@ -244,6 +257,7 @@ class Printname {
                 this.module = "";
                 this.printname = explanation;
                 this.type = null;
+                this.funPresent = false;
         }
         
         /**
@@ -259,6 +273,7 @@ class Printname {
                 this.module = null;
                 this.printname = bound;
                 this.type = null;
+                this.funPresent = false;
         }
         
         /** the text that is to be displayed in the refinement lists */

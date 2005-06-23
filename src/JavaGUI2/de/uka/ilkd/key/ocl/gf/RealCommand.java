@@ -44,6 +44,7 @@ class RealCommand extends GFCommand {
         public RealCommand(final String myCommand, final HashSet processedSubcats, final PrintnameManager manager, final String myShowText, final boolean mlAbstract) {
                 if (fullnames.isEmpty()) {
                         fullnames.put("w", "wrap");
+                        fullnames.put("r", "refine");
                         fullnames.put("ch", "change head");
                         fullnames.put("rc", "refine from history:");
                 }
@@ -124,12 +125,16 @@ class RealCommand extends GFCommand {
         /** the text that is to be displayed in the refinement lists */
         public String getDisplayText() {
                 String result = "";
-                if (fullnames.containsKey(this.commandType)) {
-                        result = fullnames.get(this.commandType) + " '";
-                }
-                result = result + this.printname.getDisplayText();
-                if (fullnames.containsKey(this.commandType)) {
-                        result = result + "'";
+                if (this.printname.funPresent) {
+                        result = this.printname.getDisplayText();
+                } else {
+		                if (fullnames.containsKey(this.commandType)) {
+		                        result = fullnames.get(this.commandType) + " '";
+		                }
+		                result = result + this.printname.getDisplayText();
+		                if (fullnames.containsKey(this.commandType)) {
+		                        result = result + "'";
+		                }
                 }
                 if (this.commandType.equals("w")) {
                         String insertion = " as argument " + (this.argument + 1);
