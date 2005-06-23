@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/17 14:15:18 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.9 $
+-- > CVS $Date: 2005/06/23 09:43:40 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.10 $
 --
 -- Converting GFC to SimpleGFC
 --
@@ -27,6 +27,7 @@ import GF.Formalism.SimpleGFC
 import GF.Formalism.Utilities
 import GF.Conversion.Types
 
+import GF.UseGrammar.Linear (expandLinTables)
 import GF.Canon.GFC (CanonGrammar)
 import GF.Canon.MkGFC (grammar2canon)
 import qualified GF.Canon.Look as Look (lookupLin, allParamValues, lookupLincat)
@@ -89,8 +90,11 @@ convertCat atom                 = error $ "GFCtoSimple.convertCat: " ++ show ato
 
 convertConcrete :: Env -> Abstract SDecl Name -> Concrete SLinType (Maybe STerm)
 convertConcrete gram (Abs decl args name) = Cnc ltyp largs term
-    where term = fmap (convertTerm gram) $ lookupLin gram $ name2fun name
+    where term = fmap (convertTerm gram . expandTerm gram) $ lookupLin gram $ name2fun name
 	  ltyp : largs = map (convertCType gram . lookupCType gram) (decl : args)
+
+expandTerm :: Env -> A.Term -> A.Term
+expandTerm gram term = err error id $ expandLinTables (fst gram) term
 
 convertCType :: Env -> A.CType -> SLinType
 convertCType gram (A.RecType rec) = RecT [ (lbl, convertCType gram ctype) | A.Lbg lbl ctype <- rec ]

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:48 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.15 $
+-- > CVS $Date: 2005/06/23 09:43:40 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.16 $
 --
 -- Linearization for canonical GF. AR 7\/6\/2003
 -----------------------------------------------------------------------------
@@ -104,7 +104,7 @@ expandLinTables gr t = case t of
     ts' <- mapM (comp . S t') $ vs
     return $ T ty [Cas [p] t | (p,t) <- zip ps ts']
   FV ts -> liftM FV $ mapM exp ts
-  _ -> return t
+  _ -> composOp exp t
  where
    alls = allParamValues gr
    exp  = expandLinTables gr
