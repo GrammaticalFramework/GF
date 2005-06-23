@@ -3444,8 +3444,8 @@ KeyListener, FocusListener {
          */
         class OpenAction extends AbstractAction {
                 public OpenAction() {
-                        super("Open", null);
-                        putValue(SHORT_DESCRIPTION, "Opens abstract syntax trees or linearizations");
+                        super("Open Text", null);
+                        putValue(SHORT_DESCRIPTION, "Opens abstract syntax trees or linearizations for the current grammar");
                         putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_O));
                         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
                 }
@@ -3586,10 +3586,10 @@ KeyListener, FocusListener {
          */
         class NewTopicAction extends AbstractAction {
                 public NewTopicAction() {
-                        super("New Topic", null);
+                        super("New Grammar", null);
                         putValue(SHORT_DESCRIPTION, "dismiss current editing and load a new grammar");
-                        putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_T));
-                        putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));
+                        putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_N));
+                        putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
                 }
                 
                 public void actionPerformed(ActionEvent e) {
