@@ -466,7 +466,14 @@ KeyListener, FocusListener {
         public GFEditor2(String gfcmd, boolean isHtml, URL baseURL) {
                 this.callback = null;
                 this.commandPath = gfcmd;
-                initializeGUI(baseURL, isHtml);
+                Image icon = null;
+                try {
+                final URL iconURL = ClassLoader.getSystemResource("gf-logo-64.gif");
+                icon = Toolkit.getDefaultToolkit().getImage(iconURL);
+                } catch (NullPointerException npe) {
+                        logger.info("gf-logo-64.gif could not be found.\n" + npe.getLocalizedMessage());
+                }
+                initializeGUI(baseURL, isHtml, icon);
                 initializeGF(gfcmd, null);                
                 //readAndDisplay();
         }
@@ -488,7 +495,7 @@ KeyListener, FocusListener {
                 Utils.tickProgress(pm, 5220, "Loading grammars");
                 initializeGF(gfcmd, pm);
                 Utils.tickProgress(pm, 9350, "Initializing GUI");
-                initializeGUI(null, true);
+                initializeGUI(null, true, null);
                 
                 // send correct term (syntax tree)
                 //The initial GF constraint has until now always been 
@@ -561,16 +568,20 @@ KeyListener, FocusListener {
         /**
          * reliefs the constructor from setting up the GUI stuff
          * @param baseURL the base URL for relative links in the HTML view
-         * @param showHtml TODO
+         * @param showHtml if the linearization area for HTML should be active
+         * instead of the pure text version
+         * @param icon The icon in the title bar of the main window.
+         * For KeY-usage, no icon is given and the Swing default is chosen
+         * instead. 
          */
-        private void initializeGUI(URL baseURL, boolean showHtml) {
+        private void initializeGUI(URL baseURL, boolean showHtml, Image icon) {
                 this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
                 this.addWindowListener(new WindowAdapter() {
                         public void windowClosing(WindowEvent e) {
                                 endProgram();
                         }
                 });
-                
+                setIconImage(icon);
                 this.readDialog = new ReadDialog(this);
                 
                 //Add listener to components that can bring up popup menus.
