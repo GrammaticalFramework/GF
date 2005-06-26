@@ -14,8 +14,8 @@ lin
   n3 = mkSubst "a" "kolme" "kolme" "kolme" "kolmea" "kolmeen" "kolmi" "kolmi"
     "kolmien" "kolmia" "kolmiin" ;
   n4 = regN "neljä" ;
-  n5 = reg3Noun "viisi" "viiden" "viisiä" ;
-  n6 = reg3Noun "kuusi" "kuuden" "kuutta" ; 
+  n5 = reg3N "viisi" "viiden" "viisiä" ;
+  n6 = reg3N "kuusi" "kuuden" "kuusia" ; 
   n7 = mkSubst "ä" "seitsemän" "seitsemä" "seitsemä" "seitsemää" 
     "seitsemään" "seitsemi" "seitsemi" "seitsemien" "seitsemiä"
     "seitsemiin" ;

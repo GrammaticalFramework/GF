@@ -419,55 +419,6 @@ oper
             (suurimpi + a)
             (suurimpi + "in") ;
 
--- The almost-regular heuristic analyses three forms.
-
-reg3Noun : (_,_,_ : Str) -> CommonNoun = \vesi,veden,vesiä -> 
-  let
-    esi = Predef.dp 3 vesi ;   -- analysis: suffixes      
-    si  = Predef.dp 2 esi ;
-    i   = last si ;
-    s   = init si ;
-    den = Predef.dp 3 veden ;
-    d   = Predef.tk 2 den ; 
-    esiä = Predef.dp 4 vesiä ;
-    a   = last vesiä ;
-    ves = init vesi ;          -- synthesis: prefixes
-    ve  = init ves ;
-    ved = Predef.tk 2 veden ;
-    sRae_vesi = sRae vesi (veden + a) ;
-  in 
-       case si of {
-    "aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" => sPuu vesi ;
-    "ie" | "uo" | "yö" => sSuo vesi ;
-    "is" => sNauris (vesi + ("t" + a)) ;
-    "ut" | "yt" => sRae vesi (ves + ("en" + a)) ;
-    "us" | "ys" => 
-      ifTok CommonNoun d "s" 
-        (sTilaus vesi (veden + a))
-        (sRakkaus vesi) ; 
-  _ => case esi of {
-    "nen" => sNainen (Predef.tk 3 vesi + ("st" + a)) ;
-  _ => case esiä of {
-    "oita" | "öitä" => sPeruna vesi ;
-  _ => case den of {
-    "een" => sRae_vesi ;
-  _ => case i of {
-    "a" | "ä" => sKukko vesi veden vesiä ;
-    "i" => case (last (init vesiä)) of {
-      "i" => case s of {
-         "s" => sSusi vesi veden (ve + ("ten" + a)) ; 
-         _   => sKorpi vesi veden (veden + a)
-         } ;
-      _ => sBaari (vesi + a)
-      } ;
-    "o" | "u" | "y" | "ö" => sKukko vesi veden vesiä ;
-  _ => sLinux (vesi + "i" + a)
-  }
-  }
-  }
-  }
-  } ;
-
 -- This auxiliary resolves vowel harmony from a given letter.
 
 getHarmony : Str -> Str = \u -> case u of {
@@ -917,7 +868,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 -- For "poistaa", "ryystää".
 
   vPoistaa : Str -> Verb = \poistaa -> 
-    vOttaa poistaa ((Predef.tk 2 poistaa + "n")) ;
+    vOttaa poistaa ((Predef.tk 1 poistaa + "n")) ;
 
 
 -- For "osata", "lisätä"

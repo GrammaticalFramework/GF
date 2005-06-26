@@ -9,40 +9,40 @@ flags
 
 lin
 
+  airplane_N = regN "lentokone" ;
+----  answer_V2S = mkV2S (regV "answer") "to" ;
+  apartment_N = reg3N "asunto" "asunnon" "asuntoja" ;
+  apple_N = reg3N "omena" "omenan" "omenoita" ;
+  art_N = reg3N "taide" "taiteen" "taiteita" ;
+----  ask_V2Q = mkV2Q (regV "ask") [] ;
+  baby_N = regN "vauva" ;
+  bad_ADeg = mkADeg (regN "paha") "pahempi" "pahin" ;
+  bank_N = reg3N "pankki" "pankin" "pankkeja" ;
+  beautiful_ADeg = mkADeg (regN "kaunis") "kauniimpi" "kaunein" ;
+----  become_VA = mkVA (irregV "become" "became" "become") ;
+  beer_N = reg3N "olut" "oluen" "oluita" ;
+----  beg_V2V = mkV2V (regDuplV "beg") [] "to" ;
+  big_ADeg = mkADeg (reg3N "suuri" "suuren" "suuria") "suurempi" "suurin" ;
+  bike_N = regN "polkupyörä" ;
+  bird_N = reg3N "lintu" "linnun" "lintuja" ;
+  black_ADeg = mkADeg (reg3N "musta" "mustan" "mustia") "mustempi" "mustin" ;
+  blue_ADeg = mkADeg (regN "sininen") "sinisempi" "sinisin" ;
+  boat_N = regN "vene" ;
+  book_N = regN "kirja" ;
+  boot_N = reg3N "saapas" "saappaan" "saappaita" ;
+  boss_N = regN "pomo" ;
+  boy_N = reg3N "poika" "pojan" "poikia" ;
+  bread_N = reg3N "leipä" "leivän" "leipiä" ;
+  break_V2 = dirV2 (reg3V "rikkoa" "rikon" "rikoin") ;
+  broad_ADeg = mkADeg (regN "leveä") "leveämpi" "levein" ;
+----  brother_N2 = regN2 "brother" ;
+  brown_ADeg = mkADeg (regN "ruskea") "ruskeampi" "ruskein" ;
+  butter_N = reg3N "voi" "voin" "voita" ;
+  buy_V2 = dirV2 (regV "ostaa") ;
+  camera_N = regN "kamera" ;
+  cap_N = reg3N "lakki" "lakin" "lakkeja" ;
+  car_N = regN "auto" ;
 {-
-  airplane_N = regN "airplane" ;
-  answer_V2S = mkV2S (regV "answer") "to" ;
-  apartment_N = regN "apartment" ;
-  apple_N = regN "apple" ;
-  art_N = regN "art" ;
-  ask_V2Q = mkV2Q (regV "ask") [] ;
-  baby_N = regN "baby" ;
-  bad_ADeg = regADeg "bad" ;
-  bank_N = regN "bank" ;
-  beautiful_ADeg = regADeg "beautiful" ;
-  become_VA = mkVA (irregV "become" "became" "become") ;
-  beer_N = regN "beer" ;
-  beg_V2V = mkV2V (regDuplV "beg") [] "to" ;
-  big_ADeg = regADeg "big" ;
-  bike_N = regN "bike" ;
-  bird_N = regN "bird" ;
-  black_ADeg = regADeg "black" ;
-  blue_ADeg = regADeg "blue" ;
-  boat_N = regN "boat" ;
-  book_N = regN "book" ;
-  boot_N = regN "boot" ;
-  boss_N = regN "boss" ;
-  boy_N = regN "boy" ;
-  bread_N = regN "bread" ;
-  break_V2 = dirV2 (irregV "break" "broke" "broken") ;
-  broad_ADeg = regADeg "broad" ;
-  brother_N2 = regN2 "brother" ;
-  brown_ADeg = regADeg "brown" ;
-  butter_N = regN "butter" ;
-  buy_V2 = dirV2 (irregV "buy" "bought" "bought") ;
-  camera_N = regN "camera" ;
-  cap_N = regN "cap" ;
-  car_N = regN "car" ;
   carpet_N = regN "carpet" ;
   cat_N = regN "cat" ;
   ceiling_N = regN "ceiling" ;
@@ -68,7 +68,7 @@ lin
   dog_N = regN "dog" ;
   door_N = regN "door" ;
 -}
-  drink_V2 = tvDir (regV "juoda") ;
+  drink_V2 = dirV2 (regV "juoda") ;
 {-
   easy_A2V = mkA2V (regA "easy") "for" ;
   eat_V2 = dirV2 (irregV "eat" "ate" "eaten") ;

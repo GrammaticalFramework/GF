@@ -20,6 +20,7 @@ resource Predef = {
   oper plus   : Int -> Int -> Int      = variants {} ; -- add integers
   oper eqStr  : Tok -> Tok -> PBool    = variants {} ; -- test if equal strings
   oper occur  : Tok -> Tok -> PBool    = variants {} ; -- test if occurs as substring
+  oper occurs : Tok -> Tok -> PBool    = variants {} ; -- test if any char occurs
   oper show   : (P : Type) -> P -> Tok = variants {} ; -- convert param to string
   oper read   : (P : Type) -> Tok -> P = variants {} ; -- convert string to param
   oper toStr  : (L : Type) -> L -> Str = variants {} ; -- find the "first" string

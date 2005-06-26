@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:19 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/06/26 20:40:33 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.12 $
 --
 -- Predefined function type signatures and definitions.
 -----------------------------------------------------------------------------
@@ -41,6 +41,7 @@ typPredefined c@(IC f) = case f of
   "eqStr"  -> return $ mkFunType [typeTok,typeTok] (cnPredef "PBool")
   "length" -> return $ mkFunType [typeTok] (cnPredef "Int")
   "occur"  -> return $ mkFunType [typeTok,typeTok] (cnPredef "PBool")
+  "occurs" -> return $ mkFunType [typeTok,typeTok] (cnPredef "PBool")
   "plus"   -> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "Int")
 ----  "read"   -> (P : Type) -> Tok -> P
   "show"   -> return $ mkProd -- (P : PType) -> P -> Tok
@@ -77,6 +78,7 @@ appPredefined t = case t of
       ("dp",   EInt i, K s) -> retb $ K (drop (max 0 (length s - i)) s)
       ("eqStr",K s,    K t) -> retb $ if s == t then predefTrue else predefFalse
       ("occur",K s,    K t) -> retb $ if substring s t then predefTrue else predefFalse
+      ("occurs",K s,   K t) -> retb $ if any (flip elem t) s then predefTrue else predefFalse
       ("eqInt",EInt i, EInt j) -> retb $ if i==j then predefTrue else predefFalse
       ("lessInt",EInt i, EInt j) -> retb $ if i<j then predefTrue else predefFalse
       ("plus", EInt i, EInt j) -> retb $ EInt $ i+j
