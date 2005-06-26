@@ -12,76 +12,74 @@ concrete ClauseFin of Clause = CategoriesFin **
 ----    sats2clause (mkSatsCopula subj (v.s ! VPart (pgen2gen subj.g) subj.n)) ;
   SPredV2 np v y = 
     sats2clause (mkSatsObject np v y) ;
-{-
   SPredV3 subj verb obj1 obj2 = 
-    sats2clause (insertObject (mkSatsObject subj verb obj1) verb.c3 verb.s3 obj2) ;
-  SPredReflV2 subj verb = 
     sats2clause (
-      mkSatsObject subj
-        {s = verb.s ; s2 = [] ; c = accusative ; aux = AEsse}
-        ---- {s = verb.s ; s2 = verb.s2 ; c = verb.c ; aux = AEsse}
-        ---- this produces huge cf - find out why! AR 16/3/2005 
-        (reflPronNounPhrase (pgen2gen subj.g) subj.n subj.p)) ;
+      insertObject (mkSatsObject subj verb obj1) verb.c2 verb.s5 verb.s6 obj2) ;
+----  SPredReflV2 subj verb = 
+----    sats2clause (
+----      mkSatsObject subj
+----        {s = verb.s ; s2 = [] ; c = accusative ; aux = AEsse}
+----        (reflPronNounPhrase (pgen2gen subj.g) subj.n subj.p)) ;
   SPredVS subj verb sent = 
     sats2clause (
-      insertExtrapos (mkSats subj verb) 
-        (\\b => embedConj ++ sent.s ! subordMode verb b)) ; ---- mn
+      insertComplement (mkSats subj verb) sent.s) ;
   SPredVQ subj verb quest = 
     sats2clause (
-      insertExtrapos (mkSats subj verb) (\\_ => quest.s ! IndirQ)) ;
+      insertComplement (mkSats subj verb) quest.s) ;
   SPredV2S subj verb obj sent = 
     sats2clause (
-      insertExtrapos 
+      insertComplement
         (mkSatsObject subj verb obj)
-        (\\b => embedConj ++ sent.s ! subordMode verb b)
-        ) ; ---- mn ;
+        sent.s
+        ) ;
   SPredV2Q subj verb obj quest = 
     sats2clause (
-      insertExtrapos 
+      insertComplement 
         (mkSatsObject subj verb obj) 
-        (\\_ => quest.s ! IndirQ)) ;
+        quest.s
+        ) ;
   SPredVA subj verb adj = 
    sats2clause (
-     insertExtrapos (mkSats subj verb) (\\_ => adj.s ! AF (pgen2gen subj.g) subj.n)) ;
+     insertComplement (mkSats subj verb) (adj.s ! APred ! AN (NCase subj.n verb.c))) ;
   SPredV2A subj verb obj adj = 
     sats2clause (
-      insertExtrapos 
+      insertComplement 
         (mkSatsObject subj verb obj)
-        (\\_ =>  adj.s ! AF (pgen2gen obj.g) obj.n)) ;
+        (adj.s ! APred ! AN (NCase subj.n verb.c2))
+      ) ;
   SPredVV subj verb vp = 
    sats2clause (
-     insertExtrapos 
+     insertComplement 
        (mkSats subj verb) 
-       (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen subj.g ! subj.n ! subj.p)
+       (vp.s ! VIInfinit)
      ) ;
-
   SPredObjV2V subj verb obj vp = 
     sats2clause (
-      insertExtrapos 
+      insertComplement 
         (mkSatsObject subj verb obj)
-        (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen obj.g ! obj.n ! obj.p)
+        (vp.s ! VIInfinit)
       ) ;
   SPredSubjV2V subj verb obj vp = 
     sats2clause (
-      insertExtrapos 
+      insertComplement 
         (mkSatsObject subj verb obj)
-        (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen subj.g ! subj.n ! subj.p)
+        (vp.s ! VIInfinit)
       ) ;
-
+{-
   SPredProgVP np vp = sats2clause (progressiveSats np vp) ;
-
+-}
 
   SPredAP subj adj = 
-    sats2clause (mkSatsCopula subj (adj.s ! AF (pgen2gen subj.g) subj.n)) ;
+    sats2clause (mkSatsCopula subj (complAdjPhrase subj.n adj)) ;
   SPredCN subj cn = 
-    sats2clause (mkSatsCopula subj (indefNoun subj.n cn)) ;
+    sats2clause (mkSatsCopula subj (complCommNoun subj.n cn)) ;
   SPredNP subj np = 
-    sats2clause (mkSatsCopula subj (np.s ! stressed nominative)) ;
+    sats2clause (mkSatsCopula subj (np.s ! NPCase Nom)) ;
   SPredAdv subj adv = 
     sats2clause (mkSatsCopula subj adv.s) ;
 
 --------
-
+{-
   QPredV  np v   = 
     sats2quest (mkSats (intNounPhrase np) v) ;
   QPredPassV subj v = 
