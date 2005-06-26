@@ -105,6 +105,8 @@ oper
   nameNounPhrase : ProperName -> NounPhrase = \jussi -> 
     {s = \\f => jussi.s ! npForm2Case Sg f ; n = Sg ; p = NP3} ;
 
+  impersNounPhrase : NounPhrase = nameNounPhrase {s = \\_ => []} ;
+
   singularNounPhrase : CommNounPhrase -> NounPhrase = \cn ->
     {s = \\f => cn.s ! False ! Sg ! (npForm2Case Sg f) ; n = Sg ; p = NP3} ;
 
@@ -342,6 +344,10 @@ oper
      p = NP3
     } ;
 
+  superlAdjPhrase : AdjDegr -> AdjPhrase = \iso ->
+    {s = \\_,a => iso.s ! Sup ! a ;
+    } ;
+
 --3 Two-place adjectives
 --
 -- A two-place adjective is an adjective with a case used after (or before)
@@ -468,19 +474,22 @@ oper
 
   param
 
-  Tense = Present | Past | Future | Conditional ;
+  Tense = Present | Past | Conditional ;
   Anteriority = Simul | Anter ;
 
   SForm = 
-     VFinite  Tense Anteriority
+     VFinite  SType Tense Anteriority
    | VInfinit Anteriority
    | VImperat 
    ;
   
   SType = SDecl | SQuest ;
 
+  VIForm = VIInfinit | VIImperat Bool Number ;
+
   oper
-  Clause : Type = {s : SType => Bool => SForm => Str} ;
+  Clause : Type = {s : Bool => SForm => Str} ;
+  VerbPhraseInf : Type = {s : VIForm => Str} ;
 
   Sats : Type = {
     subj : Str ;
@@ -493,7 +502,7 @@ oper
     } ;
 
   sats2clause : Sats -> Clause = \sats -> 
-    {s = \\st,b,sf => 
+    {s = \\b,sf => 
      let
        subj = sats.subj ;
        pred = sats.pred ! b ! sf ;
@@ -502,9 +511,9 @@ oper
        obj  = pred.obj ;
        comp = sats.comp
      in
-     case st of {
-       SDecl  => subj ++ fin ++ inf ++ obj ++ comp ;
-       SQuest => questPart fin ++ subj ++ inf ++ obj ++ comp
+     case sf of {
+       VFinite SQuest _ _ => questPart fin ++ subj ++ inf ++ obj ++ comp ;
+       _                  => subj ++ fin ++ inf ++ obj ++ comp
        }
     } ;
 
@@ -520,6 +529,9 @@ oper
   mkSatsObject : NounPhrase -> TransVerb -> NounPhrase -> Sats = \subj,verb,obj ->
     insertObject (mkSats subj verb) verb.c verb.s3 verb.s4 obj ;
 
+  mkSatsCopula : NounPhrase -> Str -> Sats = \subj,comp ->
+    insertComplement (mkSats subj verbOlla) comp ;
+
   insertObject : Sats -> ComplCase -> Str -> Str -> NounPhrase -> Sats = 
      \sats, c, prep, postp, obj -> 
      {subj = sats.subj ;
@@ -532,11 +544,18 @@ oper
       comp = sats.comp
       } ;
 
+  insertComplement : Sats -> Str -> Sats = 
+     \sats, comp -> 
+     {subj = sats.subj ;
+      pred = sats.pred ;
+      comp = sats.comp ++ comp
+      } ;
+
   complCase : Bool -> ComplCase -> SForm -> NPForm = \b,c,v -> case c of {
     CCase k => NPCase k ;
     CAcc => case b of {
       True => case v of {
-        VFinite _ _ => NPAccGen ;
+        VFinite _ _ _ => NPAccGen ;
         _ => NPAccNom
         } ;
       _ => NPCase Part
@@ -567,11 +586,11 @@ oper
                  } 
        } ;
     in case sf of {
-      VFinite Past        a => ei a (Impf n p) (part) ;
-      VFinite Conditional a => ei a (Cond n p) (Cond Sg P3) ;
-      VFinite _           a => ei a (Pres n p) (Imper Sg) ; -- both Present and Future
-      VInfinit            a => ei a (Inf)      (Inf) ;      --- olla tulematta
-      VImperat              => älä
+      VFinite _ Past        a => ei a (Impf n p) (part) ;
+      VFinite _ Conditional a => ei a (Cond n p) (Cond Sg P3) ;
+      VFinite _ _           a => ei a (Pres n p) (Imper Sg) ; -- Present
+      VInfinit              a => ei a (Inf)      (Inf) ;      --- olla tulematta
+      VImperat                => älä
       } ;
 
 
@@ -583,28 +602,8 @@ oper
 -- phrases ("minä uin" ; "minut valitaan" ; "minua odotetaan" ; "minulla on jano").
 
   oper
-  VerbPhrase = Verb ** {s2 : VForm => Str ; c : ComplCase} ;
-  VerbGroup   = {s,s2 : Bool => VForm => Str ; c : ComplCase} ;
-
-  predVerbGroup : Bool -> VerbGroup -> VerbPhrase = \b,vg -> {
-    s  = vg.s ! b ;
-    s2 = vg.s2 ! b ;
-    c  = vg.c
-    } ;
-
-  vp2vg : (Bool -> VerbPhrase) -> VerbGroup = \f -> {
-    s  = \\b => (f b).s ;
-    s2 = \\b => (f b).s2 ;
-    c  = (f True).c
-    } ;
 
 -- The normal subject case is the nominative.
-
-  nomVerbPhrase : (p,n : {s,s2 : VForm => Str}) -> VerbGroup = \pos,neg ->
-    {s  = table {True => pos.s  ; False => neg.s} ;
-     s2 = table {True => pos.s2 ; False => neg.s2} ;
-     c  = CCase Nom
-    } ;
 
 -- From the inflection table, we select the finite form as function 
 -- of person and number:
@@ -622,24 +621,12 @@ oper
 -- N.B. negation is *not* a function applicable to a verb phrase, since
 -- double negations with "ei" are not grammatical.
 
-  predVerb : Verb -> VerbGroup = \walk ->
-     let {
-       noCompl  : {s2 : VForm => Str} = {s2 = \\_ => []} ;
-       infCompl : {s2 : VForm => Str} = {s2 = table {
-                                                Imper Pl => walk.s ! ImpNegPl ;
-                                                _ => walk.s ! vFormNeg
-                                                }
-                                        }
-       } 
-     in
-       nomVerbPhrase (walk ** noCompl) (verbEi ** infCompl) ; 
 
 -- (N.B. local definitions workaround for poor type inference in GF 1.2).
 
 -- Sometimes we want to extract the verb part of a verb phrase. Not strictly
 -- necessary since this is a consequence of record subtyping.
 
-  verbOfPhrase : VerbPhrase -> Verb = \v -> {s = v.s} ;
 
 -- Verb phrases can also be formed from adjectives ("on vanha"),
 -- common nouns ("on mies"), and noun phrases ("on Jussi").
@@ -652,32 +639,18 @@ oper
 -- constructions of the "plurale tantum" kind. The adjective rule can be defined
 -- in terms of the common noun rule.
 
-  predAdjective : AdjPhrase -> VerbGroup = \iso ->
-    let 
-      isot : CommNounPhrase = {
-        s = \\_,n,c => iso.s ! APred ! AN (NCase n c) ; 
-        g = NonHuman
-        } 
-    in predCommNoun isot ;
 
-  predCommNoun : CommNounPhrase -> VerbGroup = \mies ->
-    let {
-      miehia : VForm => Str = \\v => case vform2number v of {
-        Sg => mies.s ! False ! Sg ! Nom ; 
-        Pl => mies.s ! False ! Pl ! Part
-        } ;
-      olemiehia : VForm => Str = 
-        \\v => verbOlla.s ! vFormNeg ++ miehia ! v
-      }
-    in nomVerbPhrase (verbOlla ** {s2 = miehia}) (verbEi ** {s2 = olemiehia}) ;
+  complCommNoun : Number -> CommNounPhrase -> Str = \n,mies ->
+    case n of {
+      Sg => mies.s ! False ! Sg ! Nom ; 
+      Pl => mies.s ! False ! Pl ! Part
+      } ;
 
-  predNounPhrase : NounPhrase -> VerbGroup = \jussi ->
-    let {jussia : Bool => Number => Case => Str = \\_,_,_ => jussi.s ! NPCase Nom}
-    in predCommNoun {s = jussia ; g = Human} ; --- gender does not matter
-
-  predAdverb : Adverb -> VerbGroup = \pois ->
-    let {poissa : Bool => Number => Case => Str = \\_,_,_ => pois.s}
-    in predCommNoun {s = poissa ; g = NonHuman} ; --- gender does not matter
+  complAdjPhrase : Number -> AdjPhrase -> Str = \n,hieno ->
+    case n of {
+      Sg => hieno.s ! APred ! AN (NCase Sg Nom) ; 
+      Pl => hieno.s ! APred ! AN (NCase Pl Part) 
+      } ;
 
 --3 Transitive verbs
 --
@@ -698,17 +671,6 @@ oper
 --
 -- N.B. One or both of the pre- and postposition are empty.
 
-  complTransVerb : TransVerb -> NounPhrase -> VerbGroup = \ostaa,talo ->
-    let {
-      ostan = predVerb ostaa ;
-      talon : Bool => VForm => Str = \\b,v => 
-                ostaa.s3 ++ talo.s ! complementCase b ostaa.c v ++ ostaa.s4
-      }
-    in 
-     {s  = ostan.s ;
-      s2 = \\b,v => ostan.s2 ! b ! v ++ talon ! b ! v ;
-      c  = CCase Nom
-     } ;
 
 -- N.B. If the case is accusative, it becomes partitive in negated verb phrases.
 -- The choice between the nominative and genitive accusatives depends on the verb
@@ -736,7 +698,7 @@ oper
 
   mkTransVerbDir : Verb -> TransVerb = \ostaa -> 
     ostaa ** {s3 = [] ; s4 = [] ; c = CAcc} ;
-
+{-
 -- Most two-place verbs can be used passively; the object case need not be
 -- the accusative, and it becomes the subject case in the passive sentence.
 
@@ -751,7 +713,7 @@ oper
 
   passVerb : Verb -> VerbGroup = \uida ->
     passTransVerb (mkTransVerbDir uida) ;
-
+-}
 -- Transitive verbs can be used elliptically as verbs. The semantics
 -- is left to applications. The definition is trivial, due to record
 -- subtyping.
@@ -764,30 +726,12 @@ oper
 -- bare verb phrase in passive, and putting the complement before
 -- the verb ("auttaa minua" - "minua autetaan").
 
-  passPredVerbPhrase : VerbPhrase -> Sentence = \auttaaminua ->
-    let {p = Pass True} in
-    {s = auttaaminua.s2 ! p ++ auttaaminua.s ! p} ;
 
 -- *Ditransitive verbs* are verbs with three argument places.
 -- We treat so far only the rule in which the ditransitive
 -- verb takes both complements to form a verb phrase.
 
   DitransVerb = TransVerb  ** {s5, s6 : Str ; c2 : ComplCase} ;
-
-  complDitransVerb : DitransVerb -> NounPhrase -> NounPhrase -> VerbGroup = 
-    \ostaa,talo,me ->
-    let {
-      ostan = predVerb ostaa ;
-      talon : Bool => VForm => Str = \\b,v => 
-                ostaa.s3 ++ talo.s ! complementCase b ostaa.c v ++ ostaa.s4 ;
-      meille : Bool => VForm => Str = \\b,v => 
-                ostaa.s5 ++ me.s ! complementCase b ostaa.c2 v ++ ostaa.s6
-      }
-    in {
-      s  = ostan.s ;
-      s2 = \\b,v => ostan.s2 ! b ! v ++ talon ! b ! v ++ meille ! b ! v ;
-      c  = CCase Nom  
-      } ;
 
 
 --2 Adverbials
@@ -799,13 +743,13 @@ oper
 
 -- This rule adds the adverbial as a prefix or a suffix to the complement,
 -- in free variation.
-
+{-
   adVerbPhrase : VerbPhrase -> Adverb -> VerbPhrase = \laulaa, hyvin ->
     {s = laulaa.s ;
      s2 = \\v => bothWays (laulaa.s2 ! v) hyvin.s ;
      c = laulaa.c
     } ;
-
+-}
   advAdjPhrase : Adverb -> AdjPhrase -> AdjPhrase = \liian, iso ->
     {s = \\p,a => liian.s ++ iso.s ! p ! a
     } ;
@@ -849,13 +793,6 @@ oper
 -- agreement between subject and verb. Recall that the VP may already
 -- contain negation. 
 
-  predVerbPhrase : NounPhrase -> VerbPhrase -> Sentence = \jussi,uida ->
-    let {
-      p = np2Person jussi.p ;
-      c = complementCase True uida.c Inf --- True,Inf don't matter here
-    } 
-    in
-    ss (jussi.s ! c ++ uida.s ! Pres jussi.n p ++ uida.s2 ! Pres jussi.n p) ;
 
 --3 Sentence-complement verbs
 --
@@ -865,16 +802,6 @@ oper
 
 -- To generate "sanoo että Jussi ui" / "ei sano että Jussi ui"
 
-  complSentVerb : SentenceVerb -> Sentence -> VerbGroup = 
-    \sanoa,jussiui ->
-    let {
-      sanon = predVerb sanoa
-      }
-    in {
-      s  = sanon.s ;
-      s2 = \\b,v => sanon.s2 ! b ! v ++ conjEtta ++ jussiui.s ;
-      c  = CCase Nom
-      } ;
 
 --3 Verb-complement verbs
 --
@@ -883,7 +810,7 @@ oper
 -- also verbs with a special subject case ("täytyy", "on pakko").
 
   VerbVerb : Type = Verb ** {c : ComplCase} ;
-
+{-
   complVerbVerb : VerbVerb -> VerbGroup -> VerbGroup = \haluta, uida ->
     let
       hc = haluta.c ;
@@ -902,7 +829,7 @@ oper
                     uida.s2 ! True ! Inf ;
       c  = hc
       } ;
-
+-}
 nomVerbVerb : Verb -> VerbVerb = \v -> v ** {c = CCase Nom} ;
 
 --2 Sentences missing noun phrases
@@ -922,7 +849,7 @@ nomVerbVerb : Verb -> VerbVerb = \v -> v ** {c = CCase Nom} ;
 -- fixed by the Boolean parameter and the subject.
 
   SentenceSlashNounPhrase = Sentence ** {s2 : Str ; c : Case} ;
-
+{-
   slashTransVerb : Bool -> NounPhrase -> TransVerb -> SentenceSlashNounPhrase = 
     \b,jussi,ostaa ->
     predVerbPhrase jussi (predVerbGroup b (predVerb ostaa)) ** {
@@ -930,7 +857,7 @@ nomVerbVerb : Verb -> VerbVerb = \v -> v ** {c = CCase Nom} ;
       c  = npForm2Case jussi.n 
                        (complementCase b ostaa.c (Pres jussi.n (np2Person jussi.p)))
       } ;
-
+-}
 --2 Relative pronouns and relative clauses
 --
 -- As described in $types.Fin.gf$, relative pronouns are inflected like 
@@ -947,11 +874,11 @@ nomVerbVerb : Verb -> VerbVerb = \v -> v ** {c = CCase Nom} ;
 -- slash expressions ("jonka sinä näet", "jonka kautta sinä käyt"). 
 
   RelClause : Type = {s : Number => Str} ;
-
+{-
   relVerbPhrase : RelPron -> VerbPhrase -> RelClause = \joka,ui ->
     {s = \\n => joka.s ! n ! npForm2Case n (complementCase True ui.c Inf) ++ 
                 ui.s ! Pres n P3 ++ ui.s2 ! Pres n P3} ;
-
+-}
   relSlash : RelPron -> SentenceSlashNounPhrase -> RelClause = \joka,saat ->
     {s = \\n => joka.s ! n ! saat.c ++ saat.s2 ++ saat.s} ;
 
@@ -1043,15 +970,12 @@ nomVerbVerb : Verb -> VerbVerb = \v -> v ** {c = CCase Nom} ;
 
 oper
   Question = SS ;
+  QuestClause = Clause ; ---- too many forms
 
 --3 Yes-no questions 
 --
 -- Yes-no questions are formed by inversed predication, with the clitic "ko" / "kö"
 -- particle attached to the verb part of the verb phrase.
-
-  questVerbPhrase : NounPhrase -> VerbPhrase -> Question = \jussi,ui ->
-    let {np = Pres jussi.n (np2Person jussi.p)} in
-    ss (ui.s ! np ++ koPart ++ jussi.s ! complementCase True ui.c Inf ++ ui.s2 ! np);
 
   onkoNounPhrase : NounPhrase -> Question = \kaljaa ->
     ss ("onko" ++ kaljaa.s ! NPCase Nom) ;
@@ -1061,8 +985,8 @@ oper
 -- Wh-questions are of two kinds: ones that are like $NP - VP$ sentences
 -- ("kuka ui?") others that are line $S/NP - NP$ sentences ("kenet sinä tapaat?").
 
-  intVerbPhrase : IntPron -> VerbPhrase -> Question = \kuka,ui ->
-    predVerbPhrase (kuka ** {p = NP3}) ui ;
+--  intVerbPhrase : IntPron -> VerbPhrase -> Question = \kuka,ui ->
+--    predVerbPhrase (kuka ** {p = NP3}) ui ;
 
   intSlash : IntPron -> SentenceSlashNounPhrase -> Question = \kuka,tapaat ->
     ss (kuka.s ! NPCase tapaat.c ++ tapaat.s2 ++ tapaat.s) ;
@@ -1086,9 +1010,9 @@ oper
 -- sense is a semantic question. The syntax is very simple: just prefix the
 -- adverbial to the predication.
 
-  questAdverbial : IntAdverb -> NounPhrase -> VerbPhrase -> Question = 
-    \miksi, jussi, ui ->
-    cc2 miksi (predVerbPhrase jussi ui) ;
+  questAdverbial : IntAdverb -> Clause -> QuestClause = 
+    \miksi, cl ->
+    {s = \\b,f => miksi.s ++ cl.s ! b ! f} ;
 
 --2 Imperatives
 --
@@ -1096,8 +1020,8 @@ oper
 
   Imperative = SS1 Number ;
 
-  imperVerbPhrase : VerbPhrase -> Imperative = \ui -> 
-    {s = \\n => ui.s ! Imper n ++ ui.s2 ! Imper n} ;
+  imperVerbPhrase : Bool -> VerbPhraseInf -> Imperative = \b,ui -> 
+    {s = \\n => ui.s ! VIImperat b n} ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
     ss (I.s ! n ++ exclPunct) ;
@@ -1245,11 +1169,11 @@ oper
 
   subjunctVariants : Subjunction -> Str -> Str -> Str = \if,A,B ->
     variants {if.s ++ A ++ commaPunct ++ B ; B ++ commaPunct ++ if.s ++ A} ;
-
+{-
   subjunctVerbPhrase : VerbPhrase -> Subjunction -> Sentence -> VerbPhrase =
     \V, if, A -> 
     adVerbPhrase V (ss (if.s ++ A.s)) ;
-
+-}
 --2 One-word utterances
 -- 
 -- An utterance can consist of one phrase of almost any category, 

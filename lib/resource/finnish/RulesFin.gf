@@ -62,17 +62,21 @@ lin
   UseA = adj2adjPhrase ;
   ComplA2 = complAdj ;
 
-----  ComplAV v x = complVerbAdj v x ;
-----  ComplObjA2V v x y = complVerbAdj2 True v x y ;
+  ComplAV av vpi = {s = \\_,a => av.s ! a ++ vpi.s ! VIInfinit} ;
+  ComplObjA2V av obj vpi = {s = \\_,a => av.s ! a ++ obj.s ! av.c ++ vpi.s ! VIInfinit} ;
 
   PositADeg  = positAdjPhrase ;
   ComparADeg = comparAdjPhrase ;
-----  SuperlADeg = superlAdjPhrase ;
+  SuperlADeg = superlAdjPhrase ;
 
 -- verbs and verb prases
 
-----  PredAS = predAdjSent ;
-----  PredV0 rain = predVerbClause (pronNounPhrase pronIt) rain (complVerb rain) ;
+  PredAS adj sent = sats2clause (
+    insertComplement 
+      (mkSats impersNounPhrase verbOlla)
+      (complAdjPhrase Sg (adj2adjPhrase adj) ++ sent.s)
+      ) ; 
+  PredV0 rain = sats2clause (mkSats impersNounPhrase rain) ;
 
 -- Partial saturation.
 
@@ -89,8 +93,8 @@ lin
   UseA2S x = x ;
   UseA2V x = x ;
 
-  UseCl  tp cl = {s = tp.s ++ cl.s ! SDecl ! tp.b ! VFinite tp.t tp.a} ;
-----  UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
+  UseCl  tp cl = {s = tp.s ++ cl.s ! tp.b ! VFinite SDecl  tp.t tp.a} ;
+  UseQCl tp cl = {s = tp.s ++ cl.s ! tp.b ! VFinite SQuest tp.t tp.a} ;
 ----  UseRCl tp cl = {s = \\a => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! a} ;
 
   PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
@@ -98,7 +102,7 @@ lin
 
   TPresent     = {s = [] ; t = Present} ;
   TPast        = {s = [] ; t = Past} ;
-  TFuture      = {s = [] ; t = Future} ;
+  TFuture      = {s = [] ; t = Present} ;
   TConditional = {s = [] ; t = Conditional} ;
 
   ASimul = {s = [] ; a = Simul} ;
@@ -106,13 +110,13 @@ lin
 
 -- Adverbs.
 
-----  AdjAdv a = ss (a.s ! AAttr ! AAdv) ; --- also APred?
+  AdjAdv a = ss (a.s ! AAdv) ; --- also APred?
   AdvPP p = p ;
   PrepNP = prepPhrase ;
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
   AdvAdv = cc2 ;
-----  AdvNP pn pp = {s = \\c => pn.s ! c ++ pp.s ; a = pn.a} ;
+  AdvNP pn pp = {s = \\c => pn.s ! c ++ pp.s ; n = pn.n ; p = pn.p} ;
 
 --3 Sentences and relative clauses
 --
@@ -135,12 +139,12 @@ lin
 ----  IDetCN d n = nounPhraseInt (detNounPhrase d n) ;
   FunIP = funIntPron ;
 
-----  QuestCl = questClause ;
+  QuestCl cl = cl ;
 ----  IntSlash = intSlash ;
-----  QuestAdv = questAdverbial ;
+  QuestAdv = questAdverbial ;
 
-----  PosImpVP = imperVerbPhrase True ;
-----  NegImpVP = imperVerbPhrase False ;
+  PosImpVP = imperVerbPhrase True ;
+  NegImpVP = imperVerbPhrase False ;
 
   IndicPhrase = indicUtt ;
   QuestPhrase = interrogUtt ;
