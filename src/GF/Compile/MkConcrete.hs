@@ -63,8 +63,8 @@ mkCncGroups (res,files) = do
   putStrLnFlush $ "Going to preprocess examples in " ++ unwords files
   putStrLn $ "Compiling resource " ++ res
   egr <- appIOE $ 
-    optFile2grammar (options 
-      [useOptimizer "share",fromSource,beSilent,notEmitCode]) res --- for -mcfg
+    optFile2grammar (options [beSilent]) res
+  --    [useOptimizer "share",fromSource,beSilent,notEmitCode]) res --- for -mcfg
   gr  <- err (\s -> putStrLn s >> error "resource file rejected") return egr
   let parser cat = errVal ([],"No parse") . 
                    optParseArgErrMsg (options [newMParser, firstCat cat, beVerbose]) gr
