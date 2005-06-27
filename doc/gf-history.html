@@ -12,9 +12,37 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 </center>
 
+27/6 (AR) The flag <tt>flags optimize=noexpand</tt> placed in a
+resource module prevents the optimization phase of the compiler when
+the <tt>.gfr</tt> file is created. This can prevent serious code
+explosion, but it will also make the processing of modules using the
+resource slowwer. A favourable example is <tt>lib/resource/finnish/ParadigmsFin</tt>.
+
 <p>
 
-20/6 (AR) Added the command <tt>visialize_tree</tt> = <tt>vt</tt>, to
+23/6 (HD,AR) The new editor GUI <tt>gfeditor</tt> by Hans-Joachim
+Daniels can now be used. It is based on Janna Khegai's <tt>jgf</tt>.
+New functionality include HTML display (<tt>gfeditor -h</tt>) and
+programmable refinement tooltips.
+
+<p>
+
+23/6 (AR) The flag <tt>unlexer=finnish</tt> can be used to bind
+Finnish suffixes (e.g. possessives) to preceding words. The GF source
+notation is e.g. <tt>"isä" ++ "&*" ++ "nsa" ++ "&*" ++ "ko"</tt>,
+which unlexes to <tt>"isänsäkö"</tt>. There is no corresponding lexer
+support yet.
+
+
+<p>
+
+22/6 (PL,AR) The MCFG parser (<tt>p -mcfg</tt>) now works on all
+optimized grammars - hence you need not select a weaker optimization
+to use this parser. The same concerns the CFGM printer (<tt>pm -printer=cfgm</tt>).
+
+<p>
+
+20/6 (AR) Added the command <tt>visualize_tree</tt> = <tt>vt</tt>, to
 display syntax trees graphically. Like <tt>vg</tt>, this command uses
 GraphViz and Ghostview. The foremost use is to pipe the parser to this
 command.
@@ -65,15 +93,13 @@ lin BaseC x_1 ... x_n = t
 lin ConsC x xs = t'
 </pre>
 
-
-
 <p>
 
 10/6 (AR) Preprocessor of <tt>.gfe</tt> files can now be performed as part of
 any grammar compilation. The flag <tt>-ex</tt> causes GF to look for
 the <tt>.gfe</tt> files and preprocess those that are younger
 than the corresponding <tt>.gf</tt> files. The files are first sorted
-and group by the resource, so that each resource only need be compiled once.
+and grouped by the resource, so that each resource only need be compiled once.
 
 <p>
 
