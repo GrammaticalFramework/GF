@@ -373,6 +373,26 @@ oper
             (naurei + ("t" + a))
             (naurei + "siin") ;
 
+-- The following covers adjectives like "kapea", "leveä".
+
+  sKapea : (_ : Str) -> CommonNoun = \kapea ->
+    let
+      a        = last kapea ;
+      kape     = init kapea ;
+      kapei    = kape + "i"
+    in
+    mkSubst a 
+            kapea
+            kapea
+            kapea
+            (kapea + a) 
+            (kapea + a+"n")
+            kapei
+            kapei
+            (kapei + "den")
+            (kapei + ("t" + a))
+            (kapei + "siin") ;
+
 -- The following two are used for adjective comparison.
 
   sSuurempi : Str -> CommonNoun = \suurempaa ->
@@ -458,7 +478,7 @@ getHarmony : Str -> Str = \u -> case u of {
            "i" => "j" ;
            _   => ""
            } ;
-        "hk" => kukk ;  -- *tahko-tahon
+        "hk" | "tk" => kukk ;  -- *tahko-tahon, *pitkä-pitkän
         "sk" => kukk ;  -- *lasku-lasvun
         "sp" => kukk ;  -- *raspi-rasvin
         "st" => kukk ;  -- *lastu-lasdun
