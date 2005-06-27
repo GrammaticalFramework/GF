@@ -20,6 +20,8 @@
 resource ParadigmsFin = 
   open (Predef=Predef), Prelude, SyntaxFin, CategoriesFin in {
 
+  flags optimize=values ;
+
 --2 Parameters 
 --
 -- To abstract over gender, number, and (some) case names, 
@@ -324,7 +326,7 @@ reg3N = \vesi,veden,vesiä ->
     "aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" => sPuu vesi ;
     "ie" | "uo" | "yö" => sSuo vesi ;
     "is" => sNauris (vesi + ("t" + a)) ;
-    "ut" | "yt" => sRae vesi (ves + ("en" + a)) ;
+    "ut" | "yt" | "as" | "äs" => sRae_vesi ; ---- (ves + ("en" + a)) ;
     "us" | "ys" => 
       ifTok CommonNoun d "s" 
         (sTilaus vesi (veden + a))
