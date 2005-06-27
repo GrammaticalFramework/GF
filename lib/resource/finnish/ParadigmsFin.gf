@@ -20,7 +20,8 @@
 resource ParadigmsFin = 
   open (Predef=Predef), Prelude, SyntaxFin, CategoriesFin in {
 
-  flags optimize=values ;
+--  flags optimize=values ;
+  flags optimize=noexpand ;
 
 --2 Parameters 
 --
@@ -187,9 +188,9 @@ oper
 
   mkADeg : (kiva : N) -> (kivempaa,kivinta : Str) -> ADeg ;
 
---- Unfortunately, this function expands to enormous size.
+-- Without $optimize=noexpand$, this function would expands to enormous size.
 
-----  regADeg : (suuri : Str) -> ADeg ;
+  regADeg : (suuri : Str) -> ADeg ;
 
 --2 Verbs
 --
@@ -390,14 +391,12 @@ reg3N = \vesi,veden,vesiä ->
     in
     regAdjDegr x kivempaa kivinta ** {lock_ADeg = <>} ;
 
-{- ----
   regADeg suuri =
     let suur = regN suuri in
     mkADeg 
       suur 
       (init (suur.s ! NCase Sg Gen) + "mpi")
       (init (suur.s ! NCase Pl Ess)) ;
--}
 
   mkV a b c d e f g h i j k l = mkVerb a b c d e f g h i j k l ** {lock_V = <>} ;
 
@@ -406,20 +405,21 @@ regV soutaa =
     taa = Predef.dp 3 soutaa ;
     ta  = init taa ;
     aa  = Predef.dp 2 taa ;
-    soudan = Predef.tk 2 soutaa + "en" ;
     juo = Predef.tk 2 soutaa ;
+    souda = weakGrade (init soutaa) ;
+    soudan = juo + "en" ;
     o  = Predef.dp 1 juo ;
     a = last aa ;
     u = ifTok Str a "a" "u" "y" ;
     joi = Predef.tk 2 juo + (o + "i")
   in case ta of {
-    "ta" | "tä" => vPoistaa soutaa ;
+    "ta" | "tä" => vOttaa soutaa (souda + "n") ;
     "st"        => vJuosta soutaa soudan (juo + "s"+u+"t") (juo + "t"+u) ;
     "nn" | "rr" | "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
       _ => case aa of {
     "da" | "dä" => vJuoda soutaa joi ;
     "ta" | "tä" => vOsata soutaa ;
-    _ => vSanoa soutaa
+    _ => vHukkua soutaa souda
     }} ** {lock_V = <>} ;
 
 reg3V soutaa soudan soudin = 
