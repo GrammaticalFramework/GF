@@ -172,7 +172,7 @@ oper
             (linux + "ei")
             (linux + "ei")
             (linux + "ien")
-            (linux + "eja")
+            (linux + "ej" + a)
             (linux + "eihin") ;
 
 -- Nouns of at least 3 syllables ending with "a" or "ä", like "peruna", "rytinä".
@@ -372,6 +372,26 @@ oper
             (naurei + "den")
             (naurei + ("t" + a))
             (naurei + "siin") ;
+
+-- Words of the form "siitin", "avain".
+
+  sLiitin : Str -> CommonNoun = \liitin ->
+    let
+      liitti = strongGrade (init liitin) ;
+      liittime = liitti + "me" ;
+      a = if_then_Str (pbool2bool (Predef.occurs "aou" liitin)) "a" "ä"
+    in 
+    mkSubst a 
+            liitin
+            liittime
+            liittime
+            (liitin + "t" + a) 
+            (liittime + "en")
+            (liitti + "mi")
+            (liitti + "mi")
+            (liitti + "mien")
+            (liitti + "mi" + a)
+            (liitti + "miin") ;
 
 -- The following covers adjectives like "kapea", "leveä".
 

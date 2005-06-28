@@ -164,7 +164,7 @@ oper
 -- the genitive.
 
   mkN2 : N -> Case -> N2 ;
-  fGen  : N -> N2 ;
+  genN2  : N -> N2 ;
 
 -- Proper names can be formed by using declensions for nouns.
 -- The plural forms are filtered away by the compiler.
@@ -294,17 +294,17 @@ regN = \vesi ->
         vesi (vesi + "n") (vesi + "n"+a)  (vesi + a)  (vesi + a+"n")
         (ves + "in"+a) (ves + "iss"+a) (ves + "iden")  (ves + "it"+a)
         (ves + "isiin") ;
+    "in"        => sLiitin vesi ;
     "is"        => sNauris (vesi + ("t" + a)) ;
     "ut" | "yt" => sRae vesi (ves + ("en" + a)) ;
     "as" | "äs" => sRae vesi (strongGrade ves + (a + "n" + a)) ;
     "ar" | "är" => sRae vesi (strongGrade ves + ("ren" + a)) ;
-    "uus" | "yys" => sRakkaus vesi ;
-    "us" | "ys"   => sTilaus vesi (ves + ("ksen" + a)) ;
   _ => case i of {
+    "s"         => sTilaus vesi (ves + ("ksen" + a)) ;
     "i" =>         sBaari (vesi + a) ;
     "e" =>         sRae vesi (strongGrade (ves + "e") + "en" + a) ;
     "a" | "o" | "u" | "y" | "ä" | "ö" => sLukko vesi ;
-  _ =>             sLinux (vesi + "i" + a)
+    _ =>             sLinux (vesi + "i" + a)
   }
   }
   }  ** {g = NonHuman ; lock_N = <>} ;
@@ -339,6 +339,7 @@ reg3N = \vesi,veden,vesiä ->
     "si" => sSusi vesi veden (Predef.tk 2 vesi + ("ten" + a)) ; 
     _ => case i of {
       "a" | "o" | "u" | "y" | "ä" | "ö" => sKukko vesi veden vesiä ;
+      "i" => sKorpi vesi veden (init veden + "n" + a) ;
       _ => vesit
       }
     } ** {g = NonHuman ; lock_N = <>} ;
@@ -366,7 +367,7 @@ reg3N = \vesi,veden,vesiä ->
 
   nComp = \s,n -> {s = \\c => s ++ n.s ! c ; g = n.g ; lock_N = <>} ;
   mkN2 = \n,c -> n2n n ** {c = NPCase c ; lock_N2 = <>} ;
-  fGen = \n -> mkN2 n genitive ;
+  genN2 = \n -> mkN2 n genitive ;
   mkPN n = mkProperName n ** {lock_PN = <>} ;
 
   mkA = \x -> noun2adj x ** {lock_A = <>} ;
