@@ -35,7 +35,7 @@ lin
   bread_N = regN "leipä" ;
   break_V2 = dirV2 (regV "rikkoa") ;
   broad_ADeg = mkADeg (regN "leveä") "leveämpi" "levein" ;
-----  brother_N2 = regN2 "brother" ;
+  brother_N2 = genN2 (reg3N "veli" "veljen" "veljiä") ; ---- errors in Pl
   brown_ADeg = mkADeg (regN "ruskea") "ruskeampi" "ruskein" ;
 --3  butter_N = reg3N "voi" "voin" "voita" ;
   buy_V2 = dirV2 (regV "ostaa") ;
@@ -73,7 +73,7 @@ lin
   empty_ADeg = mkADeg (regN "tyhjä") "tyhjempi" "tyhjin" ;
   enemy_N = regN "vihollinen" ;
   factory_N = regN "tehdas" ;
-----  father_N2 = regN2 "father" ;
+  father_N2 = genN2 (regN "isä") ;
 ----  fear_VS = mkVS (reg2V "pelätä" "pelkäsi") ;
   find_V2 = dirV2 (reg2V "löytää" "löysi") ;
   fish_N = regN "kala" ;
@@ -125,7 +125,7 @@ lin
   meat_N = regN "liha" ;
   milk_N = regN "maito" ;
   moon_N = regN "kuu" ;
-----  mother_N2 = regN2 "äiti" ;
+  mother_N2 = genN2 (regN "äiti") ;
   mountain_N = reg2N "vuori" "vuoria" ;
   music_N = regN "musiikki" ;
   narrow_ADeg = mkADeg (regN "kapea") "kapeampi" "kapein" ;
