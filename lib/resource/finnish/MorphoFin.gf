@@ -49,8 +49,8 @@ oper
       NCase Pl Allat  => vesii + "lle" ;
       NCase Pl Abess  => vesii + ("tt" + a) ;
 
-      NComit    => Predef.tk 2 vesia + "ine" ;
-      NInstruct => Predef.tk 2 vesia + "in" ;
+      NComit    => vetii + "ne" ;
+      NInstruct => vesii + "n" ;
 
       NPossNom       => vete ;
       NPossGenPl     => Predef.tk 1 vesien ;
@@ -105,7 +105,7 @@ oper
      lukk = init lukko ; 
      a = getHarmony o ;
      lukkoja = case o of {
-       "a" => lukk + "oja" ;
+       "a" => lukk + if_then_Str (pbool2bool (Predef.occurs "ou" lukk)) "ia" "oja" ;
        "ä" => lukk + "iä" ;
        _   => lukko + "j" + a 
        }
@@ -122,7 +122,7 @@ oper
       baar = Predef.tk 1 baari ; 
       a = getHarmony (Predef.dp 1 baaria) 
     in
-      sKukko baari (baari + "n") (baar + ("ej" + a)) ;
+      sKukko baari (weakGrade baari + "n") (baar + ("ej" + a)) ;
 
   sKorpi : (_,_,_ : Str) -> CommonNoun = \korpi,korven,korpena ->
     let {
@@ -471,11 +471,11 @@ getHarmony : Str -> Str = \u -> case u of {
         "rt" => ku + "rr" ;
         "lt" => ku + "ll" ;
         "lk" => kul + case o of {
-           "i" => "j" ;
+           "i" | "e" => "j" ;
            _   => ""
            } ;
         "rk" => kul + case o of {
-           "i" => "j" ;
+           "i" | "e" => "j" ;
            _   => ""
            } ;
         "hk" | "tk" => kukk ;  -- *tahko-tahon, *pitkä-pitkän
@@ -497,20 +497,23 @@ getHarmony : Str -> Str = \u -> case u of {
 
 --- This is only used to analyse nouns "rae", "hake", etc.
 
-  strongGrade : Str -> Str = \hak -> 
+  strongGrade : Str -> Str = \hake -> 
     let
+      hak = init hake ;
       ha = init hak ;
       k  = last hak ;
+      e  = last hake ;
       ly = Predef.tk 2 hak ;
-      hd = Predef.dp 2 hak
-    in 
+      hd = Predef.dp 2 hak ;
+      ifE : Str -> Str = \hant -> ifTok Str e "e" hant hak ;
+      hakk =
       case hd of {
-        "ng" => ha + "nk" ;
-        "nn" => ha + "nt" ;
-        "mm" => ha + "mp" ;
-        "rr" => ha + "rt" ;
-        "ll" => ha + "lt" ;
-        "lj" => ha + "lk" ;
+        "ng" => ha + "k" ;
+        "nn" => ha + "t" ;
+        "mm" => ha + "p" ;
+        "rr" => ha + "t" ;
+        "ll" => ha + "t" ;
+        "lj" => ifE (ha + "k") ; -- paljas-paljaan
         "hk" | "sk" | "sp" | "st" => hak ;
         _ =>     -- vihje/pohje: impossible to infer
       case k of {
@@ -518,11 +521,12 @@ getHarmony : Str -> Str = \u -> case u of {
         "p" => hak + "p" ;
         "t" => hak + "t" ;
         "d" => ha + "t" ;
-        "v" => ha + "p" ;
+        "v" => ha + "p" ;  -- rove/hyve impossible
         "a" | "ä" => hak + "k" ;
         _ => hak
         }
-    } ; 
+     }
+     in hakk + e ;  
 
 
 --3 Proper names
@@ -833,7 +837,17 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     let {
       a     = Predef.dp 1 hukkua ;
       hukku = Predef.tk 1 hukkua ;
-      u     = Predef.dp 1 huku 
+      u     = Predef.dp 1 huku ;
+      i = case u of {
+        "e" | "i" => [] ;
+        _ => u
+        } ;
+      y = case a of {
+        "a" => "u" ;
+        _ => "y"
+        } ;
+      hukkui = init hukku + i + "i" ; 
+      hukui  = init huku + i + "i" ; 
     } in
     mkVerb
       hukkua
@@ -842,12 +856,12 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (hukku + "v" + a + "t")
       (hukku + (("k" + a) + a))
       (huku + ((("t" + a) + a) + "n"))
-      (hukku + "i")
-      (huku + "in")
-      (hukku + "isi")
-      (hukku + "n" + u + "t")
-      (huku + "tt" + u)
-      (huku + "t" + u + "t") ;
+      (hukkui)
+      (hukui + "n")
+      (hukkui + "si")
+      (hukku + "n" + y + "t")
+      (huku + "tt" + y)
+      (huku + "t" + y + "t") ;
 
 -- For cases with or without alternation: "sanoa", "valua", "kysyä".
 
@@ -891,27 +905,33 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     vOttaa poistaa ((Predef.tk 1 poistaa + "n")) ;
 
 
--- For "osata", "lisätä"
+-- For "osata", "lisätä"; grade alternation is unpredictable, as seen
+-- from "pelätä-pelkäsi" vs. "palata-palasi"
+
 
   vOsata : Str -> Verb = \osata -> 
+    vPalkata osata (Predef.tk 2 osata + "si") ;
+
+  vPalkata : Str -> Str -> Verb = \palkata,palkkasi -> 
     let
-      a   = Predef.dp 1 osata ;
-      osa = Predef.tk 2 osata ;
+      a   = Predef.dp 1 palkata ;
+      palka = Predef.tk 2 palkata ;
+      palkka = Predef.tk 2 palkkasi ;
       u   = case a of {"a" => "u" ; _ => "y"}
     in
     mkVerb
-      osata
-      (osa + a)
-      (osa + (a + "n"))
-      (osa + (((a + "v") + a) + "t"))
-      (osa + ((("t" + "k") + a) + a)) 
-      (osata + (a + "n"))
-      (osa + "si")
-      (osa + "sin")
-      (osa + "isi")
-      (osa + "nn" + u + "t")
-      (osa + "tt" + u)
-      (osa + "t" + u + "n") ;
+      palkata
+      (palkka + a)
+      (palkka + (a + "n"))
+      (palkka + (((a + "v") + a) + "t"))
+      (palka + ((("t" + "k") + a) + a)) 
+      (palkata + (a + "n"))
+      (palkka + "si")
+      (palkka + "sin")
+      (palkka + "isi")
+      (palka + "nn" + u + "t")
+      (palka + "tt" + u)
+      (palka + "t" + u + "n") ;
 
 
 ----- tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun
