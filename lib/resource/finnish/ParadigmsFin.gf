@@ -462,5 +462,7 @@ reg3V soutaa soudan soudin =
   mkV2 = \v,c,p,o -> v ** {s3 = p ; s4 = o ; c = CCase c ; lock_V2 = <>} ;
   caseV2 = \v,c -> mkV2 v c [] [] ; 
   dirV2 v = mkTransVerbDir v ** {lock_V2 = <>} ;
+
+  mkAdv : Str -> Adv = \s -> {s = s ; lock_Adv = <>} ;
 } ;
 

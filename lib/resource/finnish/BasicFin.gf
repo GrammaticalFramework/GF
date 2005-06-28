@@ -65,7 +65,7 @@ lin
   dirty_ADeg = mkADeg (regN "likainen") "likaisempi" "likaisin" ;
 ----  distance_N3 = mkN3 (regN "distance") "from" "to" ;
 --3  doctor_N = reg3N "tohtori" "tohtorin" "tohtoreita" ;
-  dog_N = reg3N "koira" ;
+  dog_N = regN "koira" ;
   door_N = reg2N "ovi" "ovia" ;
   drink_V2 = dirV2 (regV "juoda") ;
 ----  easy_A2V = mkA2V (regA "easy") "for" ;
@@ -104,7 +104,7 @@ lin
   industry_N = regN "teollisuus" ;
   iron_N = regN "rauta" ;
   king_N = regN "kuningas" ;
-  know_V2 = dirV2 (reg3V "tiet‰‰" "tiesi") ; --- tuntea; gives tiet‰nyt
+  know_V2 = dirV2 (reg2V "tiet‰‰" "tiesi") ; --- tuntea; gives tiet‰nyt
   lake_N = reg2N "j‰rvi" "j‰rvi‰" ;
   lamp_N = regN "lamppu" ;
   learn_V2 = 
@@ -176,7 +176,7 @@ lin
 ----  small_ADeg = regADeg "small" ;
   snake_N = regN "k‰‰rme" ;
   sock_N = regN "sukka" ;
-  speak_V2 = dirV2 (irregV "puhua") ;
+  speak_V2 = dirV2 (regV "puhua") ;
   star_N = reg2N "t‰hti" "t‰hti‰" ;
 ----  steel_N = regN "ter‰s" ;
   stone_N = reg2N "kivi" "kivi‰" ;
@@ -189,7 +189,7 @@ lin
   table_N = regN "pˆyt‰" ;
 ----  talk_V3 = mkV3 (regV "puhua") allative elative ;
   teacher_N = regN "opettaja" ;
-  teach_V2 = dirV2 (irregV "opettaa") ;
+  teach_V2 = dirV2 (regV "opettaa") ;
 --3  television_N = reg2N "televisio" "telievisioita" ;
   thick_ADeg = regADeg "paksu" ;
   thin_ADeg = regADeg "ohut" ;
@@ -201,7 +201,7 @@ lin
   understand_V2 = dirV2 (reg3V "ymm‰rt‰‰" "ymm‰rr‰n" "ymm‰rsin") ;
   university_N = regN "yliopisto" ;
   village_N = regN "kyl‰" ;
-  wait_V2 = mkV2 (regV "odottaa") partitive ;
+  wait_V2 = caseV2 (regV "odottaa") partitive ;
   walk_V = (regV "k‰vell‰") ;
 ----  warm_ADeg = regADeg "warm" ;
   war_N = regN "sota" ;
@@ -210,11 +210,11 @@ lin
   white_ADeg = regADeg "valkoinen" ;
   window_N = reg2N "ikkuna" "ikkunoita" ;
   wine_N = regN "viini" ;
-  win_V2 = dirV2 (irregV "voittaa") ;
+  win_V2 = dirV2 (regV "voittaa") ;
   woman_N = regN "nainen" ;
 --3  wonder_VQ = mkVQ (regV "ihmetell‰") ;
   wood_N = regN "puu" ;
-  write_V2 = dirV2 (irregV "kirjoittaa") ;
+  write_V2 = dirV2 (regV "kirjoittaa") ;
   yellow_ADeg = regADeg "keltainen" ;
   young_ADeg = mkADeg (reg2N "nuori" "nuoria") "nuorempi" "nuorin" ;
 
@@ -223,9 +223,9 @@ lin
   already_Adv = mkAdv "jo" ;
   song_N = regN "laulu" ;
 ----  add_V3 = dirV3 (regV "lis‰t‰") illative ;
-----  number_N = regN "numero" ; ---
+  number_N = reg2N "numero" "numeroita" ;
   put_V2 = dirV2 (regV "panna") ;
-  stop_V = regDuplV "pys‰hty‰" ;
+  stop_V = regV "pys‰hty‰" ;
   jump_V = regV "hyp‰t‰" ;
   here_Adv = mkAdv "t‰‰ll‰" ;
   here7to_Adv = mkAdv "t‰nne" ;
