@@ -157,12 +157,22 @@ oper
 -- that is given to the noun that is being determined.
 
   Determiner : Type = {s : Gender => Case => Str ; n : Number ; isNum : Bool} ;
+  DeterminerNum : Type = {s : Gender => Case => Str ; isNum : Bool} ;
 
   detNounPhrase : Determiner -> CommNounPhrase -> NounPhrase = \joku, mies -> 
     {s = \\f => let {c = npForm2Case joku.n f} in 
                 joku.s ! mies.g ! c ++ 
                 mkCaseNum joku.isNum joku.n c (mies.s ! False) ;
      n = joku.n ; 
+     p = NP3
+    } ;
+
+  numDetNounPhrase : DeterminerNum -> Numeral -> CommNounPhrase -> NounPhrase = 
+    \joku, viisi, mies -> 
+    {s = \\f => let {c = npForm2Case Pl f} in 
+                joku.s ! mies.g ! c ++ viisi.s ! NPCase c ++ 
+                mkCaseNum joku.isNum Pl c (mies.s ! False) ;
+     n = Pl ; 
      p = NP3
     } ;
 
@@ -183,28 +193,20 @@ oper
      isNum = False
     } ;
 
-  mkDeterminerGenNum : Numeral -> (_,_ : Case => Str) -> Determiner = 
-    \n,mika,kuka -> 
-    {s = table {
-           NonHuman => \\c => mika ! c ++ n.s ! NPCase c ;
-           Human    => \\c => kuka ! c ++ n.s ! NPCase c
-         } ; 
-     n = Pl ;
-     isNum = n.isNum
-    } ;
-
   mkDeterminer : Number -> (Case => Str) -> Determiner = \n,kaikki -> 
     mkDeterminerGen n kaikki kaikki ;
 
-  mkDeterminerNum : Numeral -> (Case => Str) -> Determiner = \n,kaikki -> 
-    mkDeterminerGenNum n kaikki kaikki ;
+  mkDeterminerNum : (Case => Str) -> DeterminerNum = 
+    mkDeterminer Pl ;
+  mkDeterminerGenNum : (_,_ : Case => Str) -> DeterminerNum = 
+    mkDeterminerGen Pl ;
 
   jokainenDet = mkDeterminer Sg (caseTable Sg (sNainen "jokaista")) ;
-  kaikkiDet : Numeral -> Determiner = \n -> mkDeterminerNum n (kaikkiPron Pl) ;
+  kaikkiDet : DeterminerNum = mkDeterminerNum (kaikkiPron Pl) ;
   useimmatDet = mkDeterminer Pl (caseTable Pl (sSuurin "useinta")) ;
   mikaDet     = mkDeterminerGen Sg (mikaInt ! Sg) (kukaInt ! Sg) ;
-  mitkaDet : Numeral -> Determiner = \n -> 
-    mkDeterminerGenNum n (mikaInt ! Pl) (kukaInt ! Pl) ;
+  mitkaDet : DeterminerNum = 
+    mkDeterminerGenNum (mikaInt ! Pl) (kukaInt ! Pl) ;
 
   indefNounPhrase : Number -> CommNounPhrase -> NounPhrase = \n,mies -> 
     case n of {

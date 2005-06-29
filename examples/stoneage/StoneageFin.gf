@@ -27,7 +27,7 @@ lin
   Eat = PresV2 (dirV2 eat_V) ;
   Bite = PresV2 (dirV2 bite_V) ;
   Suck = PresV2 (dirV2 suck_V) ;
------  See = PresV2 (dirV2 see_V) ;
+  See = PresV2 (dirV2 see_V) ;
   Hear = PresV2 (dirV2 hear_V) ;
   Know = PresV2 (dirV2 know_V) ;
   Smell = PresV2 (dirV2 smell_V) ;
@@ -37,7 +37,7 @@ lin
   Hunt = PresV2 (dirV2 hunt_V) ;
   Hit = PresV2 (dirV2 hit_V) ;
   Cut = PresV2 (dirV2 cut_V) ;
------  Split = PresV2 (dirV2 split_V) ;
+  Split = PresV2 (dirV2 split_V) ;
   Stab = PresV2 (dirV2 stab_V) ;
   Scratch = PresV2 (dirV2 scratch_V) ;
   Hold = PresV2 (dirV2 hold_V) ;
@@ -47,11 +47,11 @@ lin
   Wipe = PresV2 (dirV2 wipe_V) ;
   Pull = PresV2 (dirV2 pull_V) ;
   Push = PresV2 (dirV2 push_V) ;
------  Throw = PresV2 (dirV2 throw_V) ;
------  Tie = PresV2 (dirV2 tie_V) ;
------  Count = PresV2 (dirV2 count_V) ;
+  Throw = PresV2 (dirV2 throw_V) ;
+  Tie = PresV2 (dirV2 tie_V) ;
+  Count = PresV2 (dirV2 count_V) ;
 
------  Think = PresV think_V ;
+  Think = PresV think_V ;
   Spit = PresV spit_V ;
   Vomit = PresV vomit_V ;
   Blow = PresV blow_V ;
@@ -61,13 +61,13 @@ lin
   Live = PresV live_V ;
   Die = PresV die_V ;
   Dig = PresV dig_V ;
------  Swim = PresV swim_V ;
+  Swim = PresV swim_V ;
   Fly = PresV fly_V ;
   Walk = PresV walk_V ;
   Come = PresV come_V ;
   Lie = PresV lie_V ;
   Sit = PresV sit_V ;
------  Stand = PresV stand_V ;
+  Stand = PresV stand_V ;
   Turn = PresV turn_V ;
   Fall = PresV fall_V ;
   Sing = PresV sing_V ;
@@ -76,24 +76,24 @@ lin
   Float = PresV float_V ;
   Flow = PresV flow_V ;
   Freeze = PresV freeze_V ;
------  Swell = PresV swell_V ;
+  Swell = PresV swell_V ;
   Burn = PresV burn_V ;
 
------  Give = PresV3 (dirV3 give_V "to") ;
+  Give = PresV3 (dirV3 give_V "to") ;
 
 --  Say = ;
 
   The_One = DefOneNP ;
------  The_Many = DefNumNP NoNum ;
+  The_Many = DefNumNP NoNum ;
   A = IndefOneNP ;
   This = DetNP this_Det ;
   That = DetNP that_Det ;
------  All = NDetNP all_NDet NoNum ;
+  All = NDetNP all_NDet NoNum ;
   Many = DetNP many_Det ;
   Some_One = DetNP some_Det ;
------  Some_Many = NDetNP some_NDet NoNum ;
------  Few = DetNP few_Det ;
------  Other = DetNP other_Det ;
+  Some_Many = NDetNP some_NDet NoNum ;
+  Few = DetNP few_Det ;
+  Other = DetNP other_Det ;
 
   One = IndefNumNP one_Num ;
   Two = IndefNumNP two_Num ;
@@ -106,8 +106,8 @@ lin
   I = i_NP ;
   You_One = thou_NP ;
   He = he_NP ;
------  We = we_NP ;
------  You_Many = you_NP ;
+  We = we_NP ;
+  You_Many = you_NP ;
   They = they_NP ;
 
   -- Nouns
@@ -118,8 +118,8 @@ lin
   Child = UseN child_N ;
   Wife = UseN wife_N ;
   Husband = UseN husband_N ;
------  Mother = UseN mother_N ;
------  Father = UseN father_N ;
+  Mother = UseN mother_N ;
+  Father = UseN father_N ;
   Animal = UseN animal_N ;
   Fish = UseN fish_N ;
   Bird = UseN bird_N ;
@@ -173,7 +173,7 @@ lin
   Star = UseN star_N ;
   Water = UseN water_N ;
   Rain = UseN rain_N ;
------  River = UseN river_N ;
+  River = UseN river_N ;
   Lake = UseN lake_N ;
   Sea = UseN sea_N ;
   Salt = UseN salt_N ;
@@ -206,7 +206,7 @@ lin
   Wide = ModPosA wide_ADeg ;
   Thick = ModPosA thick_ADeg ;
   Heavy = ModPosA heavy_ADeg ;
------  Small = ModPosA small_ADeg ;
+  Small = ModPosA small_ADeg ;
   Short = ModPosA short_ADeg ;
   Narrow = ModPosA narrow_ADeg ;
   Thin = ModPosA thin_ADeg ;
@@ -215,7 +215,7 @@ lin
   Yellow = ModPosA yellow_ADeg ;
   White = ModPosA white_ADeg ;
   Black = ModPosA black_ADeg ;
------  Warm = ModPosA warm_ADeg ;
+  Warm = ModPosA warm_ADeg ;
   Cold = ModPosA cold_ADeg ;
   Full = ModPosA full_ADeg ;
   New = ModPosA new_ADeg ;

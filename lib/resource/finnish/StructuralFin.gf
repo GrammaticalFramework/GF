@@ -15,11 +15,12 @@ concrete StructuralFin of Structural =
   above_Prep = prepPostpGen "yläpuolella" ;
   after_Prep = prepPostpGen "jälkeen" ;
   all8mass_Det = mkDeterminer singular (kaikkiPron Sg) ;
-----  all_NDet = kaikkiDet ;
+  all_NDet =  mkDeterminerNum (kaikkiPron Pl) ;
   almost_Adv = ss "melkein" ;
   although_Subj = ss "vaikka" ;
   although_Subj = ss "vaikka" ;
   and_Conj = ss "ja" ** {n = Pl} ;
+  because_Subj = ss "koska" ;
   before_Prep = prepPrep "ennen" Part ;
   behind_Prep = prepPostpGen "takana" ;
   between_Prep = prepPostpGen "välissä" ;
@@ -63,13 +64,14 @@ concrete StructuralFin of Structural =
   possess_Prep = prepCase Gen ;
   quite_Adv = ss "aika" ;
   she_NP = pronNounPhrase pronHan ;
+  so_Adv = ss "niin" ;
   somebody_NP = {
     s = \\f => jokuPron ! Sg ! (npForm2Case Sg f) ;
     n = Sg ;
     p = NP3
     } ;
   some_Det = mkDeterminerGen Sg (jokinPron ! Sg) (jokuPron ! Sg) ;
-----  some_NDet n = mkDeterminerGenNum n (jokinPron ! Pl) (jokuPron ! Pl) ;
+  some_NDet = mkDeterminerGenNum (jokinPron ! Pl) (jokuPron ! Pl) ;
   something_NP = {
     s = \\f => jokinPron ! Sg ! (npForm2Case Sg f) ; -- näin kaiken
     n = Sg ;
@@ -79,11 +81,11 @@ concrete StructuralFin of Structural =
   that_Det = mkDeterminer Sg (\\c => pronTuo.s ! PCase c) ;
   that_NP = pronNounPhraseNP pronTuo ;
   therefore_Adv = ss "siksi" ;
-----  these_NDet n = mkDeterminerNum n (\\c => pronNama.s ! PCase c) ;
+  these_NDet = mkDeterminerNum (\\c => pronNama.s ! PCase c) ;
   they_NP = pronNounPhrase pronHe ; --- ne
   this_Det = mkDeterminer Sg (\\c => pronTama.s ! PCase c) ;
   this_NP = pronNounPhraseNP pronTama ;
-----  those_NDet n = mkDeterminerNum n (\\c => pronNuo.s ! PCase c) ;
+  those_NDet = mkDeterminerNum (\\c => pronNuo.s ! PCase c) ;
   thou_NP = pronNounPhrase pronSina ;
   through_Prep = prepPostpGen "kautta" ;
   too_Adv = ss "liian" ;
@@ -91,16 +93,21 @@ concrete StructuralFin of Structural =
   under_Prep = prepPostpGen "alla" ;
   very_Adv = ss "hyvin" ;
   want_VV = nomVerbVerb (vOsata "haluta") ;
-----  we_NP = pronWithNum pronMe ;
+  we_NP = pronNounPhrase pronMe ;
+  what8many_IP = intPronWhat Pl ;
+  what8one_IP = intPronWhat Sg ;
   when_IAdv = ss "koska" ;
   when_Subj = ss "kun" ;
   where_IAdv = ss "missä" ;
   which8one_IDet = mikaDet ;
 ----  which8many_IDet n = mkDeterminerGenNum n (mikaInt ! Pl) (kukaInt ! Pl) ;
+  who8many_IP = intPronWho Pl ;
+  who8one_IP = intPronWho Sg ;
+
   why_IAdv = ss "miksi" ;
   without_Prep = prepPrep "ilman" Part ;
   with_Prep = prepPostpGen "kanssa" ;
-----  ye_NP = pronWithNum pronTe ;
+  ye_NP = pronNounPhrase pronTe ;
   yes_Phr = ss ("Kyllä" ++ stopPunct) ;
   you_NP = pronNounPhrase pronTe ;
 

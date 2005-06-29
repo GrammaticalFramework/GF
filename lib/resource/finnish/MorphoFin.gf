@@ -807,8 +807,11 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 --
 -- The present, past, conditional. and infinitive stems, acc. to Koskenniemi.
 -- Unfortunately not enough (without complicated processes).
---- We moreover give grade alternation forms as arguments, to avoid
---- code exposion in gfr.
+-- We moreover give grade alternation forms as arguments, since it does not
+-- happen automatically.
+--- A problem remains with the verb "seist‰", where the infinitive
+--- stem has vowel harmony "‰" but the others "a", thus "seisoivat" but "seisk‰‰".
+
 
   mkVerb : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Verb = 
     \tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun -> 
@@ -917,7 +920,10 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 -- For cases where grade alternation is not affected by the imperfect "i".
 
   vOttaa : (_,_ : Str) -> Verb = \ottaa,otan -> 
-    vHuoltaa ottaa otan (Predef.tk 2 ottaa + "i") (Predef.tk 2 otan + "in") ;
+    let 
+      i = if_then_Str (pbool2bool (Predef.occurs "ou" ottaa)) "i" "oi"
+    in
+    vHuoltaa ottaa otan (Predef.tk 2 ottaa + i) (Predef.tk 2 otan + i + "n") ;
 
 -- For "poistaa", "ryyst‰‰".
 
