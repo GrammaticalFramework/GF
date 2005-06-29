@@ -36,9 +36,10 @@ class HtmlMarkedArea extends MarkedArea {
          * @param w The actual text of this area
          * @param hb the start index in the HTML area
          * @param he the end index in the HTML area
+         * @param lang the language of the current linearization
          */
-        public HtmlMarkedArea(int b, int e, LinPosition p, String w, int hb, int he) {
-                super(b, e, p, w);
+        public HtmlMarkedArea(int b, int e, LinPosition p, String w, int hb, int he, String lang) {
+                super(b, e, p, w, lang);
                 this.htmlBegin = hb;
                 this.htmlEnd = he;
         }
@@ -51,7 +52,7 @@ class HtmlMarkedArea extends MarkedArea {
          * @param he the end index in the HTML area
          */
         HtmlMarkedArea(final MarkedArea orig, final int hb, final int he) {
-                super(orig.begin, orig.end, orig.position, orig.words);
+                super(orig.begin, orig.end, orig.position, orig.words, orig.language);
                 this.htmlBegin = hb;
                 this.htmlEnd = he;
         }
