@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/23 14:32:44 $ 
+-- > CVS $Date: 2005/06/29 16:27:56 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.17 $
+-- > CVS $Revision: 1.18 $
 --
 -- Linearization for canonical GF. AR 7\/6\/2003
 -----------------------------------------------------------------------------
@@ -31,6 +31,7 @@ import GF.Text.Text
 
 import GF.Data.Operations
 import GF.Data.Zipper
+import qualified GF.Infra.Modules as M
 
 import Control.Monad
 import Data.List (intersperse)
@@ -104,12 +105,50 @@ expandLinTables gr t = case t of
     ps  <- mapM term2patt vs
     ts' <- mapM (comp . S t') $ vs
     return $ T ty [Cas [p] t | (p,t) <- zip ps ts']
+  V ty ts0 -> do
+    ts  <- mapM exp ts0 -- expand from inside-out
+    vs  <- alls ty
+    ps  <- mapM term2patt vs
+    return $ T ty [Cas [p] t | (p,t) <- zip ps ts]
   FV ts -> liftM FV $ mapM exp ts
   _ -> composOp exp t
  where
    alls = allParamValues gr
    exp  = expandLinTables gr
    comp = ccompute gr []
+
+-- Do this for an entire grammar:
+
+unoptimizeCanon :: CanonGrammar -> CanonGrammar
+unoptimizeCanon g@(M.MGrammar ms) = M.MGrammar $ map convMod ms where
+  convMod (m, M.ModMod (M.Module (M.MTConcrete a) x flags me os defs)) = 
+    (m, M.ModMod (M.Module (M.MTConcrete a) x flags me os (mapTree convDef defs)))
+  convMod mm = mm
+  convDef (c,CncCat ty df pr) = (c,CncCat ty (convT df) (convT pr))
+  convDef (f,CncFun c xs li pr) = (f,CncFun c xs (convT li) (convT pr))
+  convDef cd = cd
+  convT = err error id . exp
+  -- a version of expandLinTables that does not destroy share optimization
+  exp t = case t of
+    R rs -> liftM (R . map (uncurry Ass)) $ mapPairsM exp [(l,r) | Ass l r <- rs]
+    T ty rs@[Cas [_] _] -> do
+      rs' <- mapPairsM exp [(l,r) | Cas l r <- rs] -- expand from inside-out
+      let t' = T ty $ map (uncurry Cas) rs'
+      vs  <- alls ty
+      ps  <- mapM term2patt vs
+      ts' <- mapM (comp . S t') $ vs
+      return $ T ty [Cas [p] t | (p,t) <- zip ps ts']
+    V ty ts0 -> do
+      ts  <- mapM exp ts0 -- expand from inside-out
+      vs  <- alls ty
+      ps  <- mapM term2patt vs
+      return $ T ty [Cas [p] t | (p,t) <- zip ps ts]
+    FV ts -> liftM FV $ mapM exp ts
+    _ -> composOp exp t
+   where
+     alls = allParamValues g
+     comp = ccompute g []
+
 
 -- | from records, one can get to records of tables of strings
 rec2strTables :: Term -> Err [[(Label,[([Patt],[Str])])]]

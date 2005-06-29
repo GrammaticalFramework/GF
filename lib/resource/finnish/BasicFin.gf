@@ -113,7 +113,7 @@ lin
   leather_N = regN "nahka" ; --- nahan
   leave_V2 = dirV2 (regV "j‰tt‰‰") ;
   like_V2 = caseV2 (regV "pit‰‰") elative ;
-  listen_V2 = caseV2 (reg3V "kuunnella" "kuuntelen" "kuuntelin") partitive ;
+  listen_V2 = caseV2 (reg3V "kuunnella" "kuuntelen" "kuunteli") partitive ;
   live_V = regV "el‰‰" ;
   long_ADeg = mkADeg (regN "pitk‰") "pitempi" "pisin" ;
   lose_V2 = dirV2 (regV "h‰vit‰") ; --- hukata
@@ -200,7 +200,7 @@ lin
   tree_N = regN "puu" ;
  ---- trousers_N = regN "trousers" ;
   ugly_ADeg = mkADeg (regN "ruma") "rumempi" "rumin" ;
-  understand_V2 = dirV2 (reg3V "ymm‰rt‰‰" "ymm‰rr‰n" "ymm‰rsin") ;
+  understand_V2 = dirV2 (reg3V "ymm‰rt‰‰" "ymm‰rr‰n" "ymm‰rsi") ;
   university_N = regN "yliopisto" ;
   village_N = regN "kyl‰" ;
   wait_V2 = caseV2 (regV "odottaa") partitive ;

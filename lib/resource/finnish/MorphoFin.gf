@@ -921,7 +921,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
   vOttaa : (_,_ : Str) -> Verb = \ottaa,otan -> 
     let 
-      i = if_then_Str (pbool2bool (Predef.occurs "ou" ottaa)) "i" "oi"
+      i = "i" ; --- wrong rule if_then_Str (pbool2bool (Predef.occurs "ou" ottaa)) "i" "oi"
     in
     vHuoltaa ottaa otan (Predef.tk 2 ottaa + i) (Predef.tk 2 otan + i + "n") ;
 

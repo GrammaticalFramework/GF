@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/23 14:32:44 $ 
+-- > CVS $Date: 2005/06/29 16:27:56 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.65 $
+-- > CVS $Revision: 1.66 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -39,6 +39,7 @@ import qualified GF.Grammar.MMacros as MM
 import GF.Grammar.AbsCompute
 import GF.Grammar.TypeCheck
 import GF.UseGrammar.Generate
+import GF.UseGrammar.Linear (unoptimizeCanon)
 ------import Compile
 import GF.Compile.ShellState
 import GF.UseGrammar.Editing
@@ -282,7 +283,7 @@ customMultiGrammarPrinter =
   customData "Printers for multiple grammars, selected by option -printer=x" $
   [
    (strCI "gfcm", const MC.prCanon)
-  ,(strCI "header", const MC.prCanonMGr)
+  ,(strCI "header", const (MC.prCanonMGr . unoptimizeCanon))
   ,(strCI "cfgm", prCanonAsCFGM)
   ,(strCI "graph", visualizeCanonGrammar)
   ]
