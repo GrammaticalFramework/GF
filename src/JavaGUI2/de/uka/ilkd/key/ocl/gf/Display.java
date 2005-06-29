@@ -153,10 +153,11 @@ class Display {
          * create an HtmlMarkedArea object, which is ready to be used in GFEditor2.
          * @param toAdd The String that the to-be-produced MarkedArea should represent
          * @param position The position String in Haskell notation
+         * @param language the language of the current linearization
          * @return the HtmlMarkedArea object that represents the given information
          * and knows about its beginning and end in the display areas.
          */
-        protected HtmlMarkedArea addAsMarked(String toAdd, LinPosition position) {
+        protected HtmlMarkedArea addAsMarked(String toAdd, LinPosition position, String language) {
                 /** the length of the displayed HTML before the current append */
                 int oldLengthHtml = 0;
                 if (doHtml) {
@@ -198,7 +199,7 @@ class Display {
                 if (doText) {
                         newLengthText = this.linStagesText.lastElement().toString().length();
                 }
-                final HtmlMarkedArea hma = new HtmlMarkedArea(oldLengthText, newLengthText, position, toAdd, oldLengthHtml, newLengthHtml);
+                final HtmlMarkedArea hma = new HtmlMarkedArea(oldLengthText, newLengthText, position, toAdd, oldLengthHtml, newLengthHtml, language);
                 return hma;
         }
         /**

@@ -316,23 +316,12 @@ ActionListener{
                         if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
                                 GFEditor2.treeLogger.finer("selection changed!");
                         }
-                        maybeShowPopup(e);
+                        //for the popup or parse field, do the same as for the linearization areas
+                        gfeditor.maybeShowPopup(e);
                 }
                 
                 public void mouseReleased(MouseEvent e) {
                         //nothing to be done here
-                }
-                void maybeShowPopup(MouseEvent e) {
-                        if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
-                                GFEditor2.treeLogger.finer("may be show Popup!");        
-                        }
-                        if (e.isPopupTrigger()) {
-                                if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
-                                        GFEditor2.treeLogger.finer("changing menu!");
-                                }
-                                popup = gfeditor.producePopup();
-                                popup.show(e.getComponent(), e.getX(), e.getY());
-                        } 
                 }
         }
 

@@ -30,8 +30,7 @@ import java.net.MalformedURLException;
 import java.util.logging.*;
 import jargs.gnu.CmdLineParser;
 
-public class GFEditor2 extends JFrame implements ActionListener, CaretListener,
-KeyListener, FocusListener {
+public class GFEditor2 extends JFrame {
         
         /** the main logger for this class */
         protected static Logger logger = Logger.getLogger(GFEditor2.class.getName());
@@ -83,12 +82,6 @@ KeyListener, FocusListener {
          */
         public JTextField parseField = new JTextField("textField!"); 
 
-        /**
-         * to save the old selection before editing i field
-         * or the new selection?
-         */
-        public String selectedText="";
-        
         /**
          * The position of the focus, that is, the currently selected node in the AST
          */
@@ -969,7 +962,7 @@ KeyListener, FocusListener {
                                                                 if (linMarkingLogger.isLoggable(Level.FINER)) { 
                                                                         linMarkingLogger.finer("Less: "+jPosition+" and "+iPosition);
                                                                 }
-                                                                position = findMaxHtml(0,j);
+                                                                position = findMax(0,j);
                                                                 if (linMarkingLogger.isLoggable(Level.FINER)) { 
                                                                         linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
                                                                 }
@@ -1036,15 +1029,164 @@ KeyListener, FocusListener {
                 this.getContentPane().add(cpPanelScroll);
                 coverPanel.setLayout(new BorderLayout());
                 linearizationArea.setToolTipText("Linearizations' display area");   
-                linearizationArea.addCaretListener(this);
+                linearizationArea.addCaretListener(new CaretListener() {
+                        /**
+                         * One can either click on a leaf in the lin area, or select a larger subtree.
+                         * The corresponding tree node is selected.
+                         */
+                        public void caretUpdate(CaretEvent e) {
+                                String jPosition ="", iPosition="", position="";
+                                MarkedArea jElement = null;
+                                MarkedArea iElement = null;
+                                int j = 0;
+                                int i = htmlOutputVector.size() - 1;
+                                int start = linearizationArea.getSelectionStart();
+                                int end = linearizationArea.getSelectionEnd();
+                                if (popUpLogger.isLoggable(Level.FINER)) {
+                                        popUpLogger.finer("CARET POSITION: "+linearizationArea.getCaretPosition()
+                                                        + "\n-> SELECTION START POSITION: "+start
+                                                        + "\n-> SELECTION END POSITION: "+end);
+                                }
+                                if (linMarkingLogger.isLoggable(Level.FINER)) {
+                                        if (end>0&&(end<linearizationArea.getText().length())) { 
+                                                linMarkingLogger.finer("CHAR: "+linearizationArea.getText().charAt(end));
+                                        }
+                                }
+                                // not null selection:
+                                if ((i>-1)&&(start<linearizationArea.getText().length()-1)) {
+                                        if (linMarkingLogger.isLoggable(Level.FINER))
+                                                for (int k = 0; k < htmlOutputVector.size(); k++) { 
+                                                        linMarkingLogger.finer("element: " + k + " begin " + ((MarkedArea)htmlOutputVector.elementAt(k)).begin + " "
+                                                        + "\n-> end: " + ((MarkedArea)htmlOutputVector.elementAt(k)).end+" "       
+                                                        + "\n-> position: " + (((MarkedArea)htmlOutputVector.elementAt(k)).position).position+" "   
+                                                        + "\n-> words: " + ((MarkedArea)htmlOutputVector.elementAt(k)).words);   
+                                                }
+                                        // localizing end:
+                                        while ((j < htmlOutputVector.size()) && (((MarkedArea)htmlOutputVector.elementAt(j)).end < end)) {
+                                                j++;
+                                        }
+                                        // localising start:
+                                        while ((i >= 0) && (((MarkedArea)htmlOutputVector.elementAt(i)).begin > start))
+                                                i--;
+                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                linMarkingLogger.finer("i: " + i + " j: " + j);
+                                        }
+                                        if ((j < htmlOutputVector.size())) {
+                                                jElement = (MarkedArea)htmlOutputVector.elementAt(j);
+                                                jPosition = jElement.position.position;
+                                                // less & before:
+                                                if (i==-1) { // less:
+                                                        if (end>=jElement.begin) {
+                                                                iElement = (MarkedArea)htmlOutputVector.elementAt(0);
+                                                                iPosition = iElement.position.position;
+                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                        linMarkingLogger.finer("Less: "+jPosition+" and "+iPosition);
+                                                                }
+                                                                position = findMax(0,j);
+                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
+                                                                }
+                                                                treeChanged = true; 
+                                                                send("mp "+position);
+                                                        } else  if (linMarkingLogger.isLoggable(Level.FINER)) { // before: 
+                                                                        linMarkingLogger.finer("BEFORE vector of size: " + htmlOutputVector.size());
+                                                                }
+                                                } else { // just: 
+                                                        iElement = (MarkedArea)htmlOutputVector.elementAt(i);
+                                                        iPosition = iElement.position.position;
+                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                linMarkingLogger.finer("SELECTED TEXT Just: "+iPosition +" and "+jPosition+"\n");
+                                                        }
+                                                        position = findMax(i,j);
+                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
+                                                        }
+                                                        treeChanged = true; 
+                                                        send("mp "+position);
+                                                }
+                                        } else if (i>=0) { // more && after:
+                                                        iElement = (MarkedArea)htmlOutputVector.elementAt(i);
+                                                        iPosition = iElement.position.position;
+                                                        // more
+                                                        if (start<=iElement.end) { 
+                                                                jElement = (MarkedArea)htmlOutputVector.elementAt(htmlOutputVector.size() - 1);
+                                                                jPosition = jElement.position.position;
+                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                        linMarkingLogger.finer("MORE: "+iPosition+ " and "+jPosition);
+                                                                }
+                                                                position = findMax(i, htmlOutputVector.size()-1);
+                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
+                                                                }
+                                                                treeChanged = true; 
+                                                                send("mp "+position);
+                                                        } else if (linMarkingLogger.isLoggable(Level.FINER)) { // after: 
+                                                                linMarkingLogger.finer("AFTER vector of size: " + htmlOutputVector.size());
+                                                        }
+                                                } else {
+                                                        // bigger:
+                                                        iElement = (MarkedArea)htmlOutputVector.elementAt(0);
+                                                        iPosition = iElement.position.position;
+                                                        jElement = (MarkedArea)htmlOutputVector.elementAt(htmlOutputVector.size()-1);
+                                                        jPosition = jElement.position.position;
+                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                                linMarkingLogger.finer("BIGGER: "+iPosition +" and "+jPosition+"\n"         
+                                                                                + "\n-> SELECTEDTEXT: []\n");
+                                                        }
+                                                        treeChanged = true; 
+                                                        send("mp []");
+                                                }
+                                }//not null selection
+                        }
+                        
+                });
                 linearizationArea.setEditable(false);
                 linearizationArea.setLineWrap(true);
                 linearizationArea.setWrapStyleWord(true);
-                //linearizationArea.setSelectionColor(Color.green);
 
                 parseField.setFocusable(true);
-                parseField.addKeyListener(this);
-                parseField.addFocusListener(this);
+                parseField.addKeyListener(new KeyListener() {
+                        /** Handle the key pressed event. */
+                        public void keyPressed(KeyEvent e) {
+                                int keyCode = e.getKeyCode();   
+                                if (keyLogger.isLoggable(Level.FINER)) {
+                                        keyLogger.finer("Key pressed: " + e.toString());
+                                }
+
+        		                if  (keyCode == KeyEvent.VK_ENTER) { 
+        		                        getLayeredPane().remove(parseField); 
+        		                        treeChanged = true;
+        		                        send("p "+parseField.getText());        
+        		                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("sending parse string: "+parseField.getText());
+        		                        repaint();
+        		                } else if  (keyCode == KeyEvent.VK_ESCAPE) { 
+        		                        getLayeredPane().remove(parseField);   
+        		                        repaint();
+        		                }
+                        }
+
+                        /** 
+                         * Handle the key typed event.
+                         * We are not really interested in typed characters, thus empty
+                         */
+                        public void keyTyped(KeyEvent e) {
+                                //needed for KeyListener, but not used                
+                        }
+
+                        /** Handle the key released event. */
+                        public void keyReleased(KeyEvent e) {
+                                //needed for KeyListener, but not used
+                        }
+                });
+                parseField.addFocusListener(new FocusListener() {
+                        public void focusGained(FocusEvent e) {
+                                //do nothing
+                        }
+                        public void focusLost(FocusEvent e) {
+                                getLayeredPane().remove(parseField);
+                                repaint();
+                        }
+                });
                 //                System.out.println(output.getFont().getFontName());
                 
                 //Now for the command buttons in the lower part
@@ -1156,7 +1298,45 @@ KeyListener, FocusListener {
                         }
                 };
                 refinementList.addMouseListener(mlRefinementList);
-                refinementList.addKeyListener(this);
+                refinementList.addKeyListener(new KeyListener() {
+                        /** Handle the key pressed event for the refinement list. */
+                        public void keyPressed(KeyEvent e) {
+                                int keyCode = e.getKeyCode();   
+                                if (keyLogger.isLoggable(Level.FINER)) {
+                                        keyLogger.finer("Key pressed: " + e.toString());
+                                }
+
+                                int index = refinementList.getSelectedIndex();                        
+                                if (index == -1) {
+                                        //nothing selected, so nothing to be seen here, please move along
+                                } else if (keyCode == KeyEvent.VK_ENTER) { 
+                                        listAction(refinementList, refinementList.getSelectedIndex(), true);
+                                } else if (keyCode == KeyEvent.VK_DOWN && index < listModel.getSize() - 1) {
+                                        listAction(refinementList, index + 1, false);
+                                } else if (keyCode == KeyEvent.VK_UP && index > 0) {
+                                        listAction(refinementList, index - 1, false);
+                                } else if (keyCode == KeyEvent.VK_RIGHT) {
+                                        if (refinementSubcatList.getModel().getSize() > 0) {
+                                                refinementSubcatList.requestFocusInWindow();
+                                                refinementSubcatList.setSelectedIndex(0);
+                                                refinementList.setSelectionBackground(Color.GRAY);
+                                        }
+                                }
+                        }
+
+                        /** 
+                         * Handle the key typed event.
+                         * We are not really interested in typed characters, thus empty
+                         */
+                        public void keyTyped(KeyEvent e) {
+                                //needed for KeyListener, but not used                
+                        }
+
+                        /** Handle the key released event. */
+                        public void keyReleased(KeyEvent e) {
+                                //needed for KeyListener, but not used
+                        }
+                });
 
                 refinementSubcatList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                 
@@ -1168,7 +1348,35 @@ KeyListener, FocusListener {
                         }
                 };
                 refinementSubcatList.addMouseListener(mlRefinementSubcatList);
-                refinementSubcatList.addKeyListener(this);
+                refinementSubcatList.addKeyListener(new KeyListener() {
+                        /** Handle the key pressed event. */
+                        public void keyPressed(KeyEvent e) {
+                                int keyCode = e.getKeyCode();   
+                                if (keyLogger.isLoggable(Level.FINER)) {
+                                        keyLogger.finer("Key pressed: " + e.toString());
+                                }
+                                if (keyCode == KeyEvent.VK_ENTER) {
+                                        listAction(refinementSubcatList, refinementSubcatList.getSelectedIndex(), true);
+                                } else if (keyCode == KeyEvent.VK_LEFT) {
+                                        refinementList.requestFocusInWindow();
+                                        refinementSubcatList.clearSelection();
+                                        refinementList.setSelectionBackground(refinementSubcatList.getSelectionBackground());
+                                }
+                        }
+
+                        /** 
+                         * Handle the key typed event.
+                         * We are not really interested in typed characters, thus empty
+                         */
+                        public void keyTyped(KeyEvent e) {
+                                //needed for KeyListener, but not used                
+                        }
+
+                        /** Handle the key released event. */
+                        public void keyReleased(KeyEvent e) {
+                                //needed for KeyListener, but not used
+                        }
+                });
                 
                 
                 newCategoryMenu.addActionListener(new ActionListener() {
@@ -1184,7 +1392,6 @@ KeyListener, FocusListener {
                 });
                 save.setAction(saveAction);
                 open.setAction(openAction);     
-                gfCommand.addActionListener(this);     
                 
                 newCategoryMenu.setFocusable(false);
                 save.setFocusable(false); 
@@ -1230,20 +1437,15 @@ KeyListener, FocusListener {
                 rightMeta.addActionListener(naviActionListener);     
                 leftMeta.addActionListener(naviActionListener);     
                 left.addActionListener(naviActionListener);
-                read.addActionListener(this);     
                 modify.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent ae) {
-                        if (!modify.getSelectedItem().equals("Modify")) { 
-                                treeChanged = true; 
-                                send("c " + modify.getSelectedItem());
-                                modify.setSelectedIndex(0);
+                                if (!modify.getSelectedItem().equals("Modify")) { 
+                                        treeChanged = true; 
+                                        send("c " + modify.getSelectedItem());
+                                        modify.setSelectedIndex(0);
+                                }
                         }
-                }
-
                 }); 
-                //mode.addActionListener(this);     
-                alpha.addActionListener(this);     
-                random.addActionListener(this);     
                 
                 top.setFocusable(false);  
                 right.setFocusable(false);  
@@ -1893,6 +2095,13 @@ KeyListener, FocusListener {
                         Object next = it.next();
                         this.listModel.addElement(next);
                 }
+                //select the first command in the refinement menu, if available
+                if (this.listModel.size() > 0) {
+                        this.refinementList.setSelectedIndex(0);
+                } else {
+                        this.refinementList.setSelectedIndex(-1);
+                }
+                this.refinementList.setSelectionBackground(refinementSubcatList.getSelectionBackground());
     	}
         
     	/**
@@ -2138,8 +2347,9 @@ KeyListener, FocusListener {
          * Then control is given to appendMarked, which does the display
          * @param clickable true iff the correspondent display area should be clickable
          * @param doDisplay true iff the linearization should be displayed.
+         * @param language the current linearization language
          */
-        protected StringBuffer outputAppend(boolean clickable, boolean doDisplay){
+        protected StringBuffer outputAppend(boolean clickable, boolean doDisplay, String language){
                 final StringBuffer linCollector = new StringBuffer();
                 //result=result.replace('\n',' ');
                 if (linMarkingLogger.isLoggable(Level.FINER)) { 
@@ -2177,12 +2387,12 @@ KeyListener, FocusListener {
                         this.result = replaceNotEscaped(this.result, "<focus", "<subtree");
                         this.result = replaceNotEscaped(this.result, "</focus", "</subtree");
                         
-                        String appended = appendMarked(this.result + '\n', clickable, doDisplay);
+                        String appended = appendMarked(this.result + '\n', clickable, doDisplay, language);
                         linCollector.append(appended);
                 } else {//no focus at all (message?):
                         this.focusPosition = null;
 //                      beware the side-effects! They are, what counts
-                        linCollector.append(appendMarked(this.result + '\n', clickable, doDisplay));
+                        linCollector.append(appendMarked(this.result + '\n', clickable, doDisplay, language));
                 }
 //                if (logger.isLoggable(Level.FINER)) {
 //                        logger.finer("collected appended linearizations:\n" + linCollector.toString());
@@ -2250,7 +2460,7 @@ KeyListener, FocusListener {
                         }
                         // we want the side-effects of outputAppend
                         final boolean isAbstract = "Abstract".equals(language);
-                        String linResult = outputAppend(!isAbstract, visible).toString();
+                        String linResult = outputAppend(!isAbstract, visible, language).toString();
                         if (visible) {
                                 firstLin = false;
                         }
@@ -2507,14 +2717,6 @@ KeyListener, FocusListener {
         }
         
         /**
-         * the big ActionListener method that does nearly all user interaction
-         */
-        public void actionPerformed(ActionEvent ae) {
-                //all gone into smaller inner classes
-        }
-        
-        
-        /**
          * Writes the given String to the given Filename
          * @param str the text to be written
          * @param fileName the name of the file that is to be filled
@@ -2714,66 +2916,6 @@ KeyListener, FocusListener {
         }
         
         
-        /** Handle the key pressed event. */
-        public void keyPressed(KeyEvent e) {
-                int keyCode = e.getKeyCode();   
-                Object obj = e.getSource();
-                if (keyLogger.isLoggable(Level.FINER)) {
-                        keyLogger.finer("Key pressed: " + e.toString());
-                }
-
-                if  (obj==refinementSubcatList) {
-                        if (keyCode == KeyEvent.VK_ENTER) {
-                                listAction(refinementSubcatList, refinementSubcatList.getSelectedIndex(), true);
-                        } else if (keyCode == KeyEvent.VK_LEFT) {
-                                refinementList.requestFocusInWindow();
-                                refinementSubcatList.clearSelection();
-                                refinementList.setSelectionBackground(refinementSubcatList.getSelectionBackground());
-                        }
-                } else if (obj == refinementList) {
-                        int index = refinementList.getSelectedIndex();                        
-                        if (index == -1) {
-                                //nothing selected, so nothing to be seen here, please move along
-                        } else if (keyCode == KeyEvent.VK_ENTER) { 
-                                listAction(refinementList, refinementList.getSelectedIndex(), true);
-                        } else if (keyCode == KeyEvent.VK_DOWN && index < listModel.getSize() - 1) {
-                                listAction(refinementList, index + 1, false);
-                        } else if (keyCode == KeyEvent.VK_UP && index > 0) {
-                                listAction(refinementList, index - 1, false);
-                        } else if (keyCode == KeyEvent.VK_RIGHT) {
-                                if (refinementSubcatList.getModel().getSize() > 0) {
-                                        refinementSubcatList.requestFocusInWindow();
-                                        refinementSubcatList.setSelectedIndex(0);
-                                        refinementList.setSelectionBackground(Color.GRAY);
-                                }
-                        }
-                } else if (obj==parseField) {                
-		                if  (keyCode == KeyEvent.VK_ENTER) { 
-		                        getLayeredPane().remove(parseField); 
-		                        treeChanged = true;
-		                        send("p "+parseField.getText());        
-		                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("sending parse string: "+parseField.getText());
-		                        repaint();
-		                } else if  (keyCode == KeyEvent.VK_ESCAPE) { 
-		                        getLayeredPane().remove(parseField);   
-		                        repaint();
-		                }
-                }
-        }
-
-        /** 
-         * Handle the key typed event.
-         * We are not really interested in typed characters, thus empty
-         */
-        public void keyTyped(KeyEvent e) {
-                //needed for KeyListener, but not used                
-        }
-
-        /** Handle the key released event. */
-        public void keyReleased(KeyEvent e) {
-                //needed for KeyListener, but not used
-        }
-        
         /** 
          * Returns the biggest position of first and second.
          * Each word in the linearization area has the corresponding
@@ -2813,148 +2955,7 @@ KeyListener, FocusListener {
                 return max;
         }
         
-        /**
-         * Returns the widest position (see comments to comparePositions) 
-         * covered in the string from begin to end in htmlLinPane 
-         * @param begin
-         * @param end
-         * @return the position in GF Haskell notation (hdaniels guesses)
-         */
-        private String findMaxHtml(int begin, int end) {
-                String max = (((HtmlMarkedArea)this.htmlOutputVector.elementAt(begin)).position).position;
-                for (int i = begin+1; i <= end; i++)
-                        max =  comparePositions(max,(((MarkedArea)htmlOutputVector.elementAt(i)).position).position);
-                return max;
-        }
-        
-        /**
-         * One can either click on a leaf in the lin area, or select a larger subtree.
-         * The corresponding tree node is selected.
-         */
-        public void caretUpdate(CaretEvent e)
-        {
-                String jPosition ="", iPosition="", position="";
-                MarkedArea jElement = null;
-                MarkedArea iElement = null;
-                int j = 0;
-                int i = this.htmlOutputVector.size()-1;
-                int start = linearizationArea.getSelectionStart();
-                int end = linearizationArea.getSelectionEnd();
-                if (popUpLogger.isLoggable(Level.FINER)) {
-                        popUpLogger.finer("CARET POSITION: "+linearizationArea.getCaretPosition()
-                                        + "\n-> SELECTION START POSITION: "+start
-                                        + "\n-> SELECTION END POSITION: "+end);
-                }
-                if (linMarkingLogger.isLoggable(Level.FINER)) {
-                        if (end>0&&(end<linearizationArea.getText().length())) { 
-                                linMarkingLogger.finer("CHAR: "+linearizationArea.getText().charAt(end));
-                        }
-                }
-                // not null selection:
-                if ((i>-1)&&(start<linearizationArea.getText().length()-1)) 
-                {
-                        if (linMarkingLogger.isLoggable(Level.FINER))
-                                for (int k=0; k<this.htmlOutputVector.size(); k++) { 
-                                        linMarkingLogger.finer("element: "+k+" begin "+((MarkedArea)this.htmlOutputVector.elementAt(k)).begin+" "
-                                        + "\n-> end: "+((MarkedArea)this.htmlOutputVector.elementAt(k)).end+" "       
-                                        + "\n-> position: "+(((MarkedArea)this.htmlOutputVector.elementAt(k)).position).position+" "   
-                                        + "\n-> words: "+((MarkedArea)this.htmlOutputVector.elementAt(k)).words);   
-                                }
-                        // localizing end:
-                        while ((j< this.htmlOutputVector.size())&&(((MarkedArea)this.htmlOutputVector.elementAt(j)).end < end))
-                                j++;
-                        // localising start:
-                        while ((i>=0)&&(((MarkedArea)this.htmlOutputVector.elementAt(i)).begin > start))
-                                i--;
-                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                linMarkingLogger.finer("i: "+i+" j: "+j);
-                        }
-                        if ((j<this.htmlOutputVector.size()))
-                        {
-                                jElement = (MarkedArea)this.htmlOutputVector.elementAt(j);
-                                jPosition = jElement.position.position;
-                                // less & before:
-                                if (i==-1)
-                                { // less:
-                                        if (end>=jElement.begin)
-                                        {
-                                                iElement = (MarkedArea)this.htmlOutputVector.elementAt(0);
-                                                iPosition = iElement.position.position;
-                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                        linMarkingLogger.finer("Less: "+jPosition+" and "+iPosition);
-                                                }
-                                                position = findMax(0,j);
-                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
-                                                }
-                                                treeChanged = true; 
-                                                send("mp "+position);
-                                        }
-                                        // before:
-                                        else 
-                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                        linMarkingLogger.finer("BEFORE vector of size: "+this.htmlOutputVector.size());
-                                                }
-                                }
-                                // just:
-                                else
-                                { 
-                                        iElement = (MarkedArea)this.htmlOutputVector.elementAt(i);
-                                        iPosition = iElement.position.position;
-                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                linMarkingLogger.finer("SELECTED TEXT Just: "+iPosition +" and "+jPosition+"\n");
-                                        }
-                                        position = findMax(i,j);
-                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
-                                        }
-                                        treeChanged = true; 
-                                        send("mp "+position);
-                                }
-                        } 
-                        else 
-                                // more && after:
-                                if (i>=0)
-                                {
-                                        iElement = (MarkedArea)this.htmlOutputVector.elementAt(i);
-                                        iPosition = iElement.position.position;
-                                        // more
-                                        if (start<=iElement.end)
-                                        { 
-                                                jElement = (MarkedArea)this.htmlOutputVector.elementAt(this.htmlOutputVector.size()-1);
-                                                jPosition = jElement.position.position;
-                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                        linMarkingLogger.finer("MORE: "+iPosition+ " and "+jPosition);
-                                                }
-                                                position = findMax(i,this.htmlOutputVector.size()-1);
-                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
-                                                }
-                                                treeChanged = true; 
-                                                send("mp "+position);
-                                        }
-                                        else
-                                                // after:
-                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                        linMarkingLogger.finer("AFTER vector of size: "+this.htmlOutputVector.size());
-                                                }
-                                } 
-                                else
-                                        // bigger:
-                                {
-                                        iElement = (MarkedArea)this.htmlOutputVector.elementAt(0);
-                                        iPosition = iElement.position.position;
-                                        jElement = (MarkedArea)this.htmlOutputVector.elementAt(this.htmlOutputVector.size()-1);
-                                        jPosition = jElement.position.position;
-                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                linMarkingLogger.finer("BIGGER: "+iPosition +" and "+jPosition+"\n"         
-                                                                + "\n-> SELECTEDTEXT: []\n");
-                                        }
-                                        treeChanged = true; 
-                                        send("mp []");
-                                }
-                }//not null selection
-        }
+       
         
         /**
          * Appends the string s to the text in the linearization area
@@ -2965,8 +2966,9 @@ KeyListener, FocusListener {
          * parsed. If false, the text is appended, but the subtree tags are ignored. 
          * @param doDisplay true iff the output is to be displayed. 
          * Implies, if false, that clickable is treated as false.
+         * @param language the current linearization language
          */
-        protected String appendMarked(String restString, final boolean clickable, boolean doDisplay) {
+        protected String appendMarked(String restString, final boolean clickable, boolean doDisplay, String language) {
                 String appendedPureText = "";
                 if (restString.length()>0) {
                         /** 
@@ -3010,19 +3012,19 @@ KeyListener, FocusListener {
                                                                 linMarkingLogger.finer("SOMETHING BEFORE THE TAG");
                                                         }
                                                         if (this.currentPosition.size()>0)
-                                                                newLength = register(currentLength, subtreeBegin, (LinPosition)this.currentPosition.elementAt(this.currentPosition.size()-1), restString);
+                                                                newLength = register(currentLength, subtreeBegin, (LinPosition)this.currentPosition.elementAt(this.currentPosition.size()-1), restString, language);
                                                         else
                                                                 newLength = register(currentLength, subtreeBegin, new LinPosition("[]",
-                                                                                restString.substring(subtreeBegin,subtreeTagEnd).indexOf("incorrect")==-1), restString);
+                                                                                restString.substring(subtreeBegin,subtreeTagEnd).indexOf("incorrect")==-1), restString, language);
                                                 } else {       // nothing before the tag:
                                                         //the case in the beginning
                                                         if (linMarkingLogger.isLoggable(Level.FINER)) {
                                                                 linMarkingLogger.finer("NOTHING BEFORE THE TAG");             
                                                         }
                                                         if (nextOpeningTagBegin>0) {
-                                                                newLength = register(subtreeTagEnd+2, nextOpeningTagBegin, position, restString);
+                                                                newLength = register(subtreeTagEnd+2, nextOpeningTagBegin, position, restString, language);
                                                         } else {
-                                                                newLength = register(subtreeTagEnd+2, restString.length(), position, restString);
+                                                                newLength = register(subtreeTagEnd+2, restString.length(), position, restString, language);
                                                         }
                                                         restString = removeSubTreeTag(restString,subtreeBegin, subtreeTagEnd+1);
                                                 }
@@ -3034,10 +3036,10 @@ KeyListener, FocusListener {
                                                                 linMarkingLogger.finer("SOMETHING BEFORE THE </subtree> TAG");
                                                         }
                                                         if (this.currentPosition.size()>0)
-                                                                newLength = register(currentLength, subtreeEnd, (LinPosition)this.currentPosition.elementAt(this.currentPosition.size()-1), restString);
+                                                                newLength = register(currentLength, subtreeEnd, (LinPosition)this.currentPosition.elementAt(this.currentPosition.size()-1), restString, language);
                                                         else
                                                                 newLength = register(currentLength, subtreeEnd, new LinPosition("[]",
-                                                                                restString.substring(subtreeBegin,subtreeEnd).indexOf("incorrect")==-1), restString);
+                                                                                restString.substring(subtreeBegin,subtreeEnd).indexOf("incorrect")==-1), restString, language);
                                                         currentLength += newLength ;
                                                 }
                                                 // nothing before the tag:
@@ -3070,10 +3072,10 @@ KeyListener, FocusListener {
                                                                 }
                                                                 // register the punctuation:
                                                                 if (this.currentPosition.size()>0) {
-                                                                        newLength = register(currentLength, currentLength+2, (LinPosition)this.currentPosition.elementAt(this.currentPosition.size()-1), restString);
+                                                                        newLength = register(currentLength, currentLength+2, (LinPosition)this.currentPosition.elementAt(this.currentPosition.size()-1), restString, language);
                                                                 } else {
                                                                         newLength = register(currentLength, currentLength+2, new LinPosition("[]",
-                                                                                        true), restString);
+                                                                                        true), restString, language);
                                                                 }
                                                                 currentLength += newLength ;
                                                         } else {
@@ -3190,9 +3192,10 @@ KeyListener, FocusListener {
          * the to be registered text
          * @param workingString the String from which the displayed
          * characters are taken from
+         * @param language the current linearization language
          * @return newLength, the difference between end and start
          */
-        private int register(int start, int end, LinPosition position, String workingString) {
+        private int register(int start, int end, LinPosition position, String workingString, String language) {
                 /**
                  * the length of the piece of text that is to be appended now
                  */
@@ -3204,7 +3207,7 @@ KeyListener, FocusListener {
 
                         //get oldLength and add the new text
                         String toAdd = unescapeTextFromGF(stringToAppend);
-                        final HtmlMarkedArea hma = this.display.addAsMarked(toAdd, position);
+                        final HtmlMarkedArea hma = this.display.addAsMarked(toAdd, position, language);
                         this.htmlOutputVector.add(hma);
                         if (htmlLogger.isLoggable(Level.FINER)) {
                                 htmlLogger.finer("HTML added  :      " + hma);
@@ -3400,13 +3403,6 @@ KeyListener, FocusListener {
                 return tempMenu;
         }
         
-        public void focusGained(FocusEvent e) {
-                //do nothing
-        }
-        public void focusLost(FocusEvent e) {
-                getLayeredPane().remove(parseField);
-                repaint();
-        }
         
         /**
          * 
@@ -3418,9 +3414,247 @@ KeyListener, FocusListener {
         }
 
         /**
+         * Handles the showing of the popup menu and the parse field
+         * @param e the MouseEvent, that caused the call of this function
+         */
+        protected void maybeShowPopup(MouseEvent e) {
+                //int i=outputVector.size()-1;
+                // right click:
+                if (e.isPopupTrigger()) {
+                        if (popUpLogger.isLoggable(Level.FINER)) {
+                                popUpLogger.finer("changing pop-up menu2!");
+                        }
+                        popup2 = producePopup();
+                        popup2.show(e.getComponent(), e.getX(), e.getY());
+                } 
+                // middle click
+                //TODO parsing via middle click
+                if (e.getButton() == MouseEvent.BUTTON2) {
+                        // selection Exists:
+                        if (popUpLogger.isLoggable(Level.FINER)) {
+                                popUpLogger.finer(e.getX() + " " + e.getY());
+                        }
+                        String selectedText;
+                        
+                        if (currentNode.isMeta()) {
+                                // we do not want the ?3 to be in parseField, that disturbs
+                                selectedText = "";
+                        } else {
+                                final String language;
+                                //put together the currently focused text
+                                if (e.getComponent() instanceof JTextComponent) {
+                                        JTextComponent jtc = (JTextComponent)e.getComponent();
+                                        int pos = jtc.viewToModel(e.getPoint());
+                                        MarkedArea ma = null;
+                                        if (jtc instanceof JTextPane) {
+                                                //HTML
+                                                for (int i = 0; i < htmlOutputVector.size(); i++) {
+                                                        if ((pos >= ((HtmlMarkedArea)htmlOutputVector.get(i)).htmlBegin) && (pos <= ((HtmlMarkedArea)htmlOutputVector.get(i)).htmlEnd)) {
+                                                                ma = (HtmlMarkedArea)htmlOutputVector.get(i);
+                                                                break;
+                                                        }
+                                                }
+                                        } else {
+                                                //assumably pure text
+                                                for (int i = 0; i < htmlOutputVector.size(); i++) {
+                                                        if ((pos >= ((MarkedArea)htmlOutputVector.get(i)).begin) && (pos <= ((MarkedArea)htmlOutputVector.get(i)).end)) {
+                                                                ma = (MarkedArea)htmlOutputVector.get(i);
+                                                                break;
+                                                        }
+                                                }
+                                                
+                                        }
+                                        if (ma != null && ma.language != null) {
+                                                language = ma.language;
+                                        } else {
+                                                language = "Abstract";
+                                        }
+                                } else {
+                                        language = "Abstract";
+                                }
+                                StringBuffer sel = new StringBuffer();
+                                for (int i = 0; i<htmlOutputVector.size(); i++)  {
+                                        final HtmlMarkedArea ma = (HtmlMarkedArea)htmlOutputVector.elementAt(i);
+                                        if (language.equals(ma.language) && isSubtreePosition(focusPosition, ma.position)) {
+                                                sel.append(ma.words);
+                                        }
+                                }
+                                selectedText = sel.toString();
+                                
+                        }
+                        //compute the size of parseField
+                        if (selectedText.length()<5)
+//                                if (treeCbMenuItem.isSelected())
+//                                        parseField.setBounds(e.getX()+(int)Math.round(tree.getBounds().getWidth()), e.getY()+80, 400, 40);
+//                                else
+                                        parseField.setBounds(e.getX(), e.getY()+80, 400, 40); 
+                        else
+//                                if (treeCbMenuItem.isSelected())
+//                                          parseField.setBounds(e.getX()+(int)Math.round(tree.getBounds().getWidth()), e.getY()+80, selectedText.length()*20, 40);
+//                                else
+                                        parseField.setBounds(e.getX(), e.getY()+80, selectedText.length()*20, 40);
+                        getLayeredPane().add(parseField, new Integer(1), 0);  
+                        parseField.setText(selectedText);
+                        parseField.requestFocusInWindow();
+                }
+        }
+        
+        /**
+         * gets the LinPosition according to the given start and end of 
+         * the selection in comp.
+         * Is meant as a unified replacement of large parts of caretUpdate
+         * @param start start of the selection in comp
+         * @param end end of the selection in comp
+         * @param comp either a JTextArea or a JTextPane
+         * @return s.a.
+         */
+        String getLinPosition(int start, int end, JTextComponent comp) {
+                final int maType;
+                if (comp instanceof JTextPane) {
+                        //if a JTextPane is given, calculate for HTML
+                        maType = 1;
+                } else {
+                        maType = 0;
+                }
+                String jPosition ="", iPosition="", position="", resultPosition = null;
+                MarkedArea jElement = null;
+                MarkedArea iElement = null;
+                int j = 0;
+                int i = htmlOutputVector.size() - 1;
+                if (popUpLogger.isLoggable(Level.FINER)) {
+                        popUpLogger.finer("CARET POSITION: "+comp.getCaretPosition()
+                                        + "\n-> SELECTION START POSITION: "+start
+                                        + "\n-> SELECTION END POSITION: "+end);
+                }
+                if (linMarkingLogger.isLoggable(Level.FINER)) {
+                        if (end > 0 && (end < comp.getDocument().getLength())) {
+                                try {
+                                linMarkingLogger.finer("CHAR: "+comp.getDocument().getText(end, 1));
+                                } catch (BadLocationException ble) {
+                                        linMarkingLogger.fine(ble.getLocalizedMessage());
+                                        ble.printStackTrace();
+                                }
+                        }
+                }
+                // not null selection:
+                if ((i>-1)&&(start<comp.getDocument().getLength()-1)) {
+                        if (linMarkingLogger.isLoggable(Level.FINER))
+                                for (int k = 0; k < htmlOutputVector.size(); k++) {
+                                        MarkedArea kma = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(k), maType);
+                                        linMarkingLogger.finer("element: " + k + " begin " + kma.begin + " "
+                                        + "\n-> end: " + kma.end+" "       
+                                        + "\n-> position: " + (kma.position).position+" "   
+                                        + "\n-> words: " + kma.words);   
+                                }
+                        // localizing end:
+                        while ((j < htmlOutputVector.size()) && (normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(j), maType).end < end)) {
+                                j++;
+                        }
+                        // localising start:
+                        while ((i >= 0) && (normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(i), maType).begin > start))
+                                i--;
+                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                linMarkingLogger.finer("i: " + i + " j: " + j);
+                        }
+                        if ((j < htmlOutputVector.size())) {
+                                jElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(j), maType);
+                                jPosition = jElement.position.position;
+                                // less & before:
+                                if (i == -1) { // less:
+                                        if (end >= jElement.begin) {
+                                                iElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(0), maType);
+                                                iPosition = iElement.position.position;
+                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                        linMarkingLogger.finer("Less: "+jPosition+" and "+iPosition);
+                                                }
+                                                position = findMax(0,j);
+                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
+                                                }
+                                                treeChanged = true; 
+                                                resultPosition = position;
+                                        } else  if (linMarkingLogger.isLoggable(Level.FINER)) { // before: 
+                                                        linMarkingLogger.finer("BEFORE vector of size: " + htmlOutputVector.size());
+                                                }
+                                } else { // just: 
+                                        iElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(i), maType);
+                                        iPosition = iElement.position.position;
+                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                linMarkingLogger.finer("SELECTED TEXT Just: "+iPosition +" and "+jPosition+"\n");
+                                        }
+                                        position = findMax(i,j);
+                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
+                                        }
+                                        treeChanged = true; 
+                                        resultPosition = position;
+                                }
+                        } else if (i>=0) { // more && after:
+                                        iElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(i), maType);
+                                        iPosition = iElement.position.position;
+                                        // more
+                                        if (start<=iElement.end) { 
+                                                jElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(htmlOutputVector.size() - 1), maType);
+                                                jPosition = jElement.position.position;
+                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                        linMarkingLogger.finer("MORE: "+iPosition+ " and "+jPosition);
+                                                }
+                                                position = findMax(i, htmlOutputVector.size()-1);
+                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
+                                                }
+                                                treeChanged = true; 
+                                                resultPosition = position;
+                                        } else if (linMarkingLogger.isLoggable(Level.FINER)) { // after: 
+                                                linMarkingLogger.finer("AFTER vector of size: " + htmlOutputVector.size());
+                                        }
+                                } else {
+                                        // bigger:
+                                        iElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(0), maType);
+                                        iPosition = iElement.position.position;
+                                        jElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(htmlOutputVector.size() - 1), maType);
+                                        jPosition = jElement.position.position;
+                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
+                                                linMarkingLogger.finer("BIGGER: "+iPosition +" and "+jPosition+"\n"         
+                                                                + "\n-> SELECTEDTEXT: []\n");
+                                        }
+                                        treeChanged = true; 
+                                        resultPosition = "[]";
+                                }
+                }//not null selection
+                return resultPosition;
+        }
+
+        /**
+         * Takes a MarkedArea and transforms it into a MarkedArea,
+         * that has begin and and set as the valid fields.
+         * If a HtmlMarkedArea is given and type == 1, then the htmlBegin
+         * and htmlEnd fields are used as begin and end.
+         * For type == 0, the normal begin and end fields are used.
+         * @param ma The MarkedArea to 'normalize' 
+         * @param type 0 for pure text, 1 for HTML. begin and end will be -1 for other values.
+         * @return a MarkedArea as described above
+         */
+        private MarkedArea normalizeMarkedArea(MarkedArea ma, int type) {
+                int begin, end;
+                if (type == 0) {
+                        begin = ma.begin;
+                        end = ma.end;
+                } else if (type == 1 && (ma instanceof HtmlMarkedArea)) {
+                        HtmlMarkedArea hma = (HtmlMarkedArea)ma;
+                        begin = hma.htmlBegin;
+                        end = hma.htmlEnd;
+                } else {
+                        begin = -1;
+                        end = -1;
+                        linMarkingLogger.info("Illegal number-code of MarkedArea encountered: " + type + "\nor alternatively, HTML is expected, but a " + ma.getClass().getName() + " was given");
+                }
+                return new MarkedArea(begin, end, ma.position, ma.words, ma.language);
+        }
+
+        /**
          * pop-up menu (adapted from DynamicTree2):
          * @author janna
-         *
          */ 
         class PopupListener extends MouseAdapter {
                 public void mousePressed(MouseEvent e) {
@@ -3435,43 +3669,6 @@ KeyListener, FocusListener {
                 public void mouseReleased(MouseEvent e) {
                         //nothing to be done here
                 }
-                protected void maybeShowPopup(MouseEvent e) {
-                        //int i=outputVector.size()-1;
-                        // right click:
-                        if (e.isPopupTrigger()) {
-                                if (popUpLogger.isLoggable(Level.FINER)) {
-                                        popUpLogger.finer("changing pop-up menu2!");
-                                }
-                                popup2 = producePopup();
-                                popup2.show(e.getComponent(), e.getX(), e.getY());
-                        } 
-                        // middle click
-                        //TODO strange code here, that doesn't work
-                        if (e.getButton() == MouseEvent.BUTTON2) 
-                        {
-                                // selection Exists:
-                                if (!selectedText.equals(""))
-                                {
-                                        if (popUpLogger.isLoggable(Level.FINER)) {
-                                                popUpLogger.finer(e.getX() + " " + e.getY());
-                                        }
-                                        if (selectedText.length()<5)
-                                                if (treeCbMenuItem.isSelected())
-                                                        parseField.setBounds(e.getX()+(int)Math.round(tree.getBounds().getWidth()), e.getY()+80, 400, 40);
-                                                else
-                                                        parseField.setBounds(e.getX(), e.getY()+80, 400, 40); 
-                                        else
-                                                if (treeCbMenuItem.isSelected())
-                                                        parseField.setBounds(e.getX()+(int)Math.round(tree.getBounds().getWidth()), e.getY()+80, selectedText.length()*20, 40);
-                                                else
-                                                        parseField.setBounds(e.getX(), e.getY()+80, selectedText.length()*20, 40);
-                                        getLayeredPane().add(parseField, new Integer(1), 0);  
-                                        parseField.setText(selectedText);
-                                        parseField.requestFocusInWindow();
-                                }
-                        }
-                }
-
         }
 
         /**
