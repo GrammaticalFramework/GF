@@ -11,23 +11,23 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
     i_NP = i_NP ;
     thou_NP = thou_NP ;
     he_NP = he_NP ;
-----    we_NP = we_NP ;
+    we_NP = we_NP ;
     you_NP = you_NP ;
     they_NP = they_NP ;
-----    who8many_IP = who8many_IP ;
-----    who8one_IP = who8one_IP ;
-----    what8many_IP = what8many_IP ;
-----    what8one_IP = what8one_IP ;
+    who8many_IP = who8many_IP ;
+    who8one_IP = who8one_IP ;
+    what8many_IP = what8many_IP ;
+    what8one_IP = what8one_IP ;
 
     -- Determiners
 
     this_Det = this_Det ;
     that_Det = that_Det ;
-----    all_NDet = all_NDet ;
+    all_NDet = all_NDet ;
     many_Det = many_Det ;
     some_Det = some_Det ;
-----    few_Det = mkDeterminer Pl "few" ;
-----    other_Det = mkDeterminer Pl "other" ;
+    few_Det = mkDeterminer Pl (\\c => (sTalo "muutama").s ! NCase Pl c) ;
+    other_Det = mkDeterminer Pl  (\\c => (sPuu "muu").s ! NCase Pl c) ;
 
 
     -- Adverbs
@@ -46,9 +46,9 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
 
     -- Prepositions
 
-----    at_Prep = ss "at" ;
-----    in_Prep = ss "in" ;
-----    with_Prep = ss "with" ;
+    at_Prep = prepCase Adess ;
+    in_Prep = prepCase Iness ;
+    with_Prep = prepPostpGen "kanssa" ;
 
     -- Numerals
 
@@ -83,12 +83,12 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
     round_ADeg = regADeg "pyöreä" ;
     sharp_ADeg = regADeg "terävä" ;
     short_ADeg = short_ADeg ;
-----    small_ADeg = small_ADeg ;
+    small_ADeg = small_ADeg ;
     smooth_ADeg = regADeg "sileä" ;
     straight_ADeg = mkADeg (regN "suora") "suorempi" "suorin" ;
     thick_ADeg = thick_ADeg ;
     thin_ADeg = thin_ADeg ;
-----    warm_ADeg = warm_ADeg ;
+    warm_ADeg = warm_ADeg ;
     wet_ADeg = mkADeg (regN "märkä") "märempi" "märin" ;
     white_ADeg = white_ADeg ;
     wide_ADeg = regADeg "leveä" ;
@@ -118,7 +118,7 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
     egg_N = regN "muna" ;
     eye_N = regN "silmä" ;
     fat_N = regN "rasva" ;
-----    father_N = UseN2 father_N2 ;
+    father_N = UseN2 father_N2 ;
     feather_N = reg3N "höyhen" "höyhenen" "höyheniä" ; -----
     fingernail_N = reg3N "kynsi" "kynnen" "kynsiä" ;
     fire_N = reg2N "tuli" "tulia" ;
@@ -133,7 +133,7 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
     hair_N = regN "hius" ;
     hand_N = reg3N "käsi" "käden" "käsiä" ;
     head_N = regN "pää" ;
-    heart_N = regN "sydän" ; -----
+    heart_N = regN "sydän" ; --- *sytämen
     horn_N = reg2N "sarvi" "sarvia" ;
     husband_N = man_N ; --- aviomies
     ice_N = regN "jää" ;
@@ -146,7 +146,7 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
     man_N = man_N ;
     meat_N = meat_N ;
     moon_N = moon_N ;
-----    mother_N = UseN2 mother_N2 ;
+    mother_N = UseN2 mother_N2 ;
     mountain_N = mountain_N ;
     mouth_N = regN "suu" ;
     name_N = reg2N "nimi" "nimiä" ;
@@ -155,19 +155,19 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
     nose_N = regN "nenä" ;
     person_N = regN "henkilö" ;
     rain_N = regN "sade" ;
-----    river_N = river_N ;
+    river_N = river_N ;
     road_N = regN "tie" ;
-    root_N = regN "juuri" ; -----
+    root_N = reg3N "juuri" "juuren" "juuria" ; --- juurta *juurea
     rope_N = reg3N "köysi" "köyden" "köysiä" ;
     salt_N = regN "suola" ;
     sand_N = regN "hiekka" ;
     sea_N = sea_N ;
     seed_N = regN "seed" ;
     skin_N = regN "skin" ;
-    sky_N = regN "sky" ; -----
+    sky_N = regN "sky" ; --- taivaan *taipaan
     smoke_N = regN "savu" ;
     snake_N = snake_N ;
-    snow_N = regN "lumi" ; -----
+    snow_N = reg3N "lumi" "lumen" "lumia" ; --- lunta *lumea
     star_N = star_N ;
     stick_N = regN "keppi" ;
     stone_N = stone_N ;
@@ -211,7 +211,7 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
     hunt_V = regV "metsästää" ;
     kill_V = regV "tappaa" ;
     know_V =reg2V "tietää" "tiesin" ;
-    laugh_V = regV "nauraa" ; -----
+    laugh_V = reg3V "nauraa" "nauran" "nauroin" ;
     lie_V = regV "maata" ;
     live_V = live_V ;
     play_V = UseV2 play_V2 ;
@@ -220,22 +220,24 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
     rub_V = regV "hieroa" ;
     say_V = regV "sanoa" ;
     scratch_V = regV "raapia" ;
------    see_V = UseV2 see_V2 ;
+    see_V = UseV2 see_V2 ;
     sew_V = regV "kylvää" ;
     sing_V = regV "laulaa" ;
     sit_V = regV "istua" ;
     sleep_V = sleep_V ;
     smell_V = regV "haista" ;
     spit_V = regV "sylkeä" ;
-----    split_V = split_V ;
+    split_V = reg2V "halkaista" "halkaisi" ;
     squeeze_V = regV "puristaa" ;
     stab_V = regV "pistää" ;
-----    stand_V = stand_V ;
+    stand_V = mkV "seistä" "seisoo" "seison" "seisovat" "seiskää" "seistään"
+      "seisoi" "seisoin" "seisoisi" "seissyt" "seisty" "seistyn" ; --- *seisoivät
     suck_V = regV "imeä" ;
-----    swell_V = swell_V ;
-----    swim_V = swim_V ;
-----    think_V = think_V ;
-----    throw_V = throw_V ;
+    swell_V = mkV "turvota" "turpoaa" "turpoan" "turpoavat" "turvotkaa" "turvotaan"
+      "turposi" "turposin" "turpoaisi" "turvonnut" "turvottu" "turvotun" ;
+    swim_V = reg3V "uida" "uin" "uin" ;
+    think_V = reg3V "ajatella" "ajattelen" "ajattelin" ;
+    throw_V = regV "heittää" ;
     tie_V = regV "sitoa" ;
     turn_V = regV "kääntyä" ;
     vomit_V = regV "oksentaa" ;

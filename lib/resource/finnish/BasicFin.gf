@@ -113,7 +113,7 @@ lin
   leather_N = regN "nahka" ; --- nahan
   leave_V2 = dirV2 (regV "j‰tt‰‰") ;
   like_V2 = caseV2 (regV "pit‰‰") elative ;
---3  listen_V2 = caseV2 (reg3V "kuunnella" "kuuntelen" "kuuntelin") partitive ;
+  listen_V2 = caseV2 (reg3V "kuunnella" "kuuntelen" "kuuntelin") partitive ;
   live_V = regV "el‰‰" ;
   long_ADeg = mkADeg (regN "pitk‰") "pitempi" "pisin" ;
   lose_V2 = dirV2 (regV "h‰vit‰") ; --- hukata
@@ -151,7 +151,7 @@ lin
   red_ADeg = regADeg "punainen" ;
   religion_N = regN "uskonto" ;
   restaurant_N = regN "ravintola" ;
-----  river_N = reg3N "joki" "joen" "jokia" ;
+  river_N = nArpi "joki" ;
 ----  rock_N = regN "kallio" ;
   roof_N = regN "katto" ;
   rubber_N = regN "kumi" ;
@@ -161,7 +161,9 @@ lin
   science_N = regN "tiede" ;
   sea_N = reg2N "meri" "meri‰" ;
   seek_V2 = dirV2 (regV "etsi‰") ;
-----  see_V2 = dirV2 (irregV "see" "saw" "seen") ;
+  see_V2 = dirV2 (
+    mkV "n‰hd‰" "n‰kee" "n‰en" "n‰kev‰t" "n‰hk‰‰" "n‰hd‰‰n"
+      "n‰ki" "n‰in" "n‰kisi" "n‰hnyt" "n‰hty" "n‰hdyn") ; 
 ----  sell_V3 = dirV3 (regV "myyd‰") allative ;
 ----  send_V3 = dirV3 (regV "l‰hett‰‰") allative ;
   sheep_N = regN "lammas" ;
@@ -173,12 +175,12 @@ lin
   silver_N = regN "hopea" ;
   sister_N = regN "sisko" ;
   sleep_V = regV "nukkua" ;
-----  small_ADeg = regADeg "small" ;
+  small_ADeg = mkADeg (reg3N "pieni" "pienen" "pieni‰") "pienempi" "pienin" ;
   snake_N = regN "k‰‰rme" ;
   sock_N = regN "sukka" ;
   speak_V2 = dirV2 (regV "puhua") ;
   star_N = reg2N "t‰hti" "t‰hti‰" ;
-----  steel_N = regN "ter‰s" ;
+  steel_N = regN "ter‰s" ;
   stone_N = reg2N "kivi" "kivi‰" ;
   stove_N = reg3N "liesi" "lieden" "liesi‰" ;
   student_N = reg2N "opiskelija" "opiskelijoita" ;
@@ -202,8 +204,12 @@ lin
   university_N = regN "yliopisto" ;
   village_N = regN "kyl‰" ;
   wait_V2 = caseV2 (regV "odottaa") partitive ;
-  walk_V = (regV "k‰vell‰") ;
-----  warm_ADeg = regADeg "warm" ;
+  walk_V = regV "k‰vell‰" ;
+  warm_ADeg = mkADeg 
+    (mkN "l‰mmin" "l‰mpim‰n" "l‰mpim‰n‰" "l‰mmint‰" "l‰mpim‰‰n" 
+         "l‰mpimin‰" "l‰mpimiss‰" "l‰mpimien" "l‰mpimi‰" "l‰mpimiin"
+	 nonhuman) 
+    "l‰mpim‰mpi" "l‰mpimin" ;
   war_N = regN "sota" ;
   watch_V2 = dirV2 (regV "katsella") ;
   water_N = reg3N "vesi" "veden" "vesi‰" ;
@@ -218,7 +224,10 @@ lin
   yellow_ADeg = regADeg "keltainen" ;
   young_ADeg = mkADeg (reg2N "nuori" "nuoria") "nuorempi" "nuorin" ;
 
-----  do_V2 = dirV2 (mkV "do" "does" "did" "done" "doing") ;
+  do_V2 = dirV2 (
+    mkV "tehd‰" "tekee" "teen" "tekev‰t" "tehk‰‰" "tehd‰‰n"
+      "teki" "tein" "tekisi" "tehnyt" "tehty" "tehdyn") ; 
+
   now_Adv = mkAdv "nyt" ;
   already_Adv = mkAdv "jo" ;
   song_N = regN "laulu" ;

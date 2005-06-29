@@ -294,12 +294,12 @@ regN = \vesi ->
         vesi (vesi + "n") (vesi + "n"+a)  (vesi + a)  (vesi + a+"n")
         (ves + "in"+a) (ves + "iss"+a) (ves + "iden")  (ves + "it"+a)
         (ves + "isiin") ;
-    "in"        => sLiitin vesi ;
     "is"        => sNauris (vesi + ("t" + a)) ;
     "ut" | "yt" => sRae vesi (ves + ("en" + a)) ;
     "as" | "äs" => sRae vesi (strongGrade ves + (a + "n" + a)) ;
     "ar" | "är" => sRae vesi (strongGrade ves + ("ren" + a)) ;
   _ => case i of {
+    "n"         => sLiitin vesi ;
     "s"         => sTilaus vesi (ves + ("ksen" + a)) ;
     "i" =>         sBaari (vesi + a) ;
     "e" =>         sRae vesi (strongGrade (ves + "e") + "en" + a) ;
@@ -402,10 +402,10 @@ regV soutaa =
     u = ifTok Str a "a" "u" "y" ;
     joi = Predef.tk 2 juo + (o + "i")
   in case ta of {
-    "ta" | "tä" => vOttaa soutaa (souda + "n") ;
     "st"        => vJuosta soutaa soudan (juo + "s"+u+"t") (juo + "t"+u) ;
     "nn" | "rr" | "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
       _ => case aa of {
+    "aa" | "ää" => vOttaa soutaa (souda + "n") ;
     "da" | "dä" => vJuoda soutaa joi ;
     "ta" | "tä" => vOsata soutaa ;
     _ => vHukkua soutaa souda
@@ -441,10 +441,10 @@ reg3V soutaa soudan soudin =
     u = ifTok Str a "a" "u" "y" ;
     joi = init soudin
   in case ta of {
-    "ta" | "tä" => vHuoltaa soutaa soudan (init soudin) soudin ;
     "st" => vJuosta soutaa soudan (juo + "s"+u+"t") (juo + "t"+u) ;
     "nn" | "rr" | "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
       _ => case aa of {
+    "aa" | "ää" => vHuoltaa soutaa soudan (init soudin) soudin ;
     "da" | "dä" => vJuoda soutaa joi ;
     "ta" | "tä" => vOsata soutaa ;
     _ => vHukkua soudan souda
