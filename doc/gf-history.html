@@ -12,6 +12,17 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 </center>
 
+29/6 (AR) The printer used by Embedded Java GF Interpreter 
+(<tt>pm -header</tt>) now produces
+working code from all optimized grammars - hence you need not select a 
+weaker optimization just to use the interpreter. However, the
+optimization <tt>-optimize=share</tt> usually produces smaller object
+grammars because the "unoptimizer" just undoes all optimizations.
+(This is to be considered a temporary solution until the interpreter
+knows how to handle stronger optimizations.)
+
+<p>
+
 27/6 (AR) The flag <tt>flags optimize=noexpand</tt> placed in a
 resource module prevents the optimization phase of the compiler when
 the <tt>.gfr</tt> file is created. This can prevent serious code

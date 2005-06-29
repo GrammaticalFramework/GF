@@ -402,8 +402,7 @@ regV soutaa =
     u = ifTok Str a "a" "u" "y" ;
     joi = Predef.tk 2 juo + (o + "i")
   in case ta of {
-    "st"        => vJuosta soutaa soudan (juo + "s"+u+"t") (juo + "t"+u) ;
-    "nn" | "rr" | "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
+    "st" | "nn" | "rr" | "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
       _ => case aa of {
     "aa" | "ää" => vOttaa soutaa (souda + "n") ;
     "da" | "dä" => vJuoda soutaa joi ;
@@ -429,7 +428,7 @@ reg2V : (soutaa,souti : Str) -> V = \soutaa,souti ->
     _ => soudat
     } ** {lock_V = <>} ;
 
-reg3V soutaa soudan soudin = 
+reg3V soutaa soudan souti = 
   let
     taa   = Predef.dp 3 soutaa ;
     ta    = init taa ;
@@ -439,15 +438,14 @@ reg3V soutaa soudan soudin =
     o  = last juo ;
     a = last aa ;
     u = ifTok Str a "a" "u" "y" ;
-    joi = init soudin
+    soudin = weakGrade souti + "n" ;
+    soudat = reg2V soutaa souti ;
   in case ta of {
-    "st" => vJuosta soutaa soudan (juo + "s"+u+"t") (juo + "t"+u) ;
-    "nn" | "rr" | "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
+    "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
       _ => case aa of {
-    "aa" | "ää" => vHuoltaa soutaa soudan (init soudin) soudin ;
-    "da" | "dä" => vJuoda soutaa joi ;
-    "ta" | "tä" => vOsata soutaa ;
-    _ => vHukkua soudan souda
+    "aa" | "ää" => vHuoltaa soutaa soudan souti soudin ;
+    "da" | "dä" => vJuoda soutaa souti ;
+    _ => soudat
     }} ** {lock_V = <>} ;
 
   vValua v = vSanoa v ** {lock_V = <>} ;
