@@ -286,7 +286,7 @@ oper
 -- first place as common nouns, so that one can also have "ett förslag att...".
 
   nounThatSentence : CommNounPhrase -> Sentence -> CommNounPhrase = \tanke,x -> 
-    {s = \\n,d,c => tanke.s ! n ! d ! c ++ infinAtt ++ x.s ! Sub ; 
+    {s = \\n,d,c => tanke.s ! n ! d ! c ++ subordAtt ++ x.s ! Sub ; 
      g = tanke.g ;
      p = tanke.p
     } ;
@@ -709,7 +709,7 @@ oper
     predVerbGroupClause
       npDet
       (vara (
-        \\g,n,_ => bra.s ! predFormAdj g n ! Nom ++ infinAtt ++ hansover.s ! Sub)) ;
+        \\g,n,_ => bra.s ! predFormAdj g n ! Nom ++ subordAtt ++ hansover.s ! Sub)) ;
 
   predAdjSent2 : AdjCompl -> NounPhrase -> Adjective = \bra,han ->
    {s = \\af,c => bra.s ! af ! c ++ {-strPrep-} bra.s2 ++ han.s ! PAcc} ;
@@ -1026,7 +1026,7 @@ oper
   SentenceVerb : Type = Verb ;
 
   complSentVerb : SentenceVerb -> Sentence -> VerbGroup = \se,duler ->
-    useVerb se (\\_,_,_ => optStr infinAtt ++ duler.s ! Sub) ;
+    useVerb se (\\_,_,_ => optStr subordAtt ++ duler.s ! Sub) ;
 
   complQuestVerb : SentenceVerb -> QuestionSent -> VerbGroup = \se,omduler ->
     useVerb se (\\_,_,_ => omduler.s ! IndirQ) ;
@@ -1034,7 +1034,7 @@ oper
   complDitransSentVerb : TransVerb -> NounPhrase -> Sentence -> VerbGroup = 
     \sa,honom,duler ->
       useVerb sa 
-        (\\_,_,_ => {-strPrep-} sa.s2 ++ honom.s ! PAcc ++ optStr infinAtt ++ duler.s ! Main) ;
+        (\\_,_,_ => {-strPrep-} sa.s2 ++ honom.s ! PAcc ++ optStr subordAtt ++ duler.s ! Main) ;
 
   complDitransQuestVerb : TransVerb -> NounPhrase -> QuestionSent -> VerbGroup = 
     \sa,honom,omduler ->
@@ -1212,7 +1212,7 @@ oper
 -- "tal x sådant att x är primt".
 
   relSuch : Clause -> RelClause = \A ->
-    {s = \\b,sf,g,p => pronSådan ! g ++ infinAtt ++ A.s ! b ! s2cl sf Sub} ;
+    {s = \\b,sf,g,p => pronSådan ! g ++ subordAtt ++ A.s ! b ! s2cl sf Sub} ;
 
 -- The main use of relative clauses is to modify common nouns.
 -- The result is a common noun, out of which noun phrases can be formed
@@ -1687,7 +1687,7 @@ oper
 
   auxHar, auxHade, auxHa, auxSka, auxSkulle : Str ;
 
-  infinAtt : Str ;
+  infinAtt, subordAtt : Str ;
   prepÄn : Str ;
   negInte : Str ;
   conjOm : Str ;

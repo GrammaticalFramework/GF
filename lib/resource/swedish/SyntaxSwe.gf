@@ -73,7 +73,7 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
   auxSka = "ska" ;
   auxSkulle = "skulle" ;
 
-  infinAtt = "att" ;
+  infinAtt,subordAtt = "att" ;
 
   varjeDet : Determiner = mkDeterminerSg (detSgInvar "varje") IndefP ;
   allaDet  : Determiner = mkDeterminerPl "alla" IndefP ;

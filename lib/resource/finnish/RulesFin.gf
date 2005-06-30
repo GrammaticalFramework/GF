@@ -63,7 +63,8 @@ lin
   ComplA2 = complAdj ;
 
   ComplAV av vpi = {s = \\_,a => av.s ! a ++ vpi.s ! VIInfinit} ;
-  ComplObjA2V av obj vpi = {s = \\_,a => av.s ! a ++ obj.s ! av.c ++ vpi.s ! VIInfinit} ;
+  ComplObjA2V av obj vpi = {s = \\_,a => av.s ! a ++ obj.s ! complCase
+  True av.c VImperat ++ vpi.s ! VIInfinit} ;
 
   PositADeg  = positAdjPhrase ;
   ComparADeg = comparAdjPhrase ;
@@ -73,10 +74,10 @@ lin
 
   PredAS adj sent = sats2clause (
     insertComplement 
-      (mkSats impersNounPhrase verbOlla)
+      (mkSats impersNounPhrase (vNom verbOlla))
       (complAdjPhrase Sg (adj2adjPhrase adj) ++ sent.s)
       ) ; 
-  PredV0 rain = sats2clause (mkSats impersNounPhrase rain) ;
+  PredV0 rain = sats2clause (mkSats impersNounPhrase (vNom rain)) ;
 
 -- Partial saturation.
 

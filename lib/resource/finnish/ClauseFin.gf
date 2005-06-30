@@ -14,7 +14,7 @@ concrete ClauseFin of Clause = CategoriesFin **
     sats2clause (mkSatsObject np v y) ;
   SPredV3 subj verb obj1 obj2 = 
     sats2clause (
-      insertObject (mkSatsObject subj verb obj1) verb.c2 verb.s5 verb.s6 obj2) ;
+      insertObject (mkSatsObject subj verb obj1) verb.c2 verb.s5 verb.p obj2) ;
 ----  SPredReflV2 subj verb = 
 ----    sats2clause (
 ----      mkSatsObject subj

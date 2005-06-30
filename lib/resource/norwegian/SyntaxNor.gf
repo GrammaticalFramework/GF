@@ -74,6 +74,7 @@ instance SyntaxNor of SyntaxScand = TypesNor **
   auxSkulle = "ville" ;
 
   infinAtt = "å" ;
+  subordAtt = "at" ;
 
   varjeDet : Determiner = mkDeterminerSg (detSgInvar "hver") IndefP ;
   allaDet  : Determiner = mkDeterminerPl "alle" IndefP ;

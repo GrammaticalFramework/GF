@@ -30,7 +30,7 @@ public class Utils {
         }
         
         public static final String gf = "gf";
-        public static final String gfm = "gfm";
+        public static final String gfcm = "gfcm";
         
         /*
          * Get the extension of a file.

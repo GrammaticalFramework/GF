@@ -20,7 +20,7 @@ import javax.swing.filechooser.*;
 
 public class GrammarFilter extends FileFilter {
         
-        // Accept all directories and all gf, gfm files.
+        // Accept all directories and all gf, gfcm files.
         public boolean accept(File f) {
                 if (f.isDirectory()) {
                         return true;
@@ -29,7 +29,7 @@ public class GrammarFilter extends FileFilter {
                 String extension = Utils.getExtension(f);
                 if (extension != null) {
                         if (extension.equals(Utils.gf) ||
-                                        extension.equals(Utils.gfm)) {
+                                        extension.equals(Utils.gfcm)) {
                                 return true;
                         } else {
                                 return false;
@@ -41,6 +41,6 @@ public class GrammarFilter extends FileFilter {
         
         // The description of this filter
         public String getDescription() {
-                return "Just Grammars (*.gf, *.gfm)";
+                return "Just Grammars (*.gf, *.gfcm)";
         }
 }

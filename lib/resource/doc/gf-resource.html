@@ -815,7 +815,7 @@ In two language families:
 <tr><td>Language</td> <td>v0.6</td> <td>v0.9 API</td> <td>Paradigms</td> <td>Basic lex</td> <td>Verbs</td></tr>
 <tr><td>Danish</td>    <td>-</td> <td>X</td> <td>-</td> <td>-</td> <td>-</tr>
 <tr><td>English</td>   <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</tr>
-<tr><td>Finnish</td>   <td>X</td> <td>-</td> <td>-</td> <td>-</td> <td>-</tr>
+<tr><td>Finnish</td>   <td>X</td> <td>+</td> <td>X</td> <td>X</td> <td>0</tr>
 <tr><td>French</td>    <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</tr>
 <tr><td>German</td>    <td>X</td> <td>-</td> <td>*</td> <td>-</td> <td>-</tr>
 <tr><td>Italian</td>   <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</tr>
@@ -826,10 +826,13 @@ In two language families:
 </table>
 X = implemented (few exceptions may occur)
 <br>
++ = implemented for a large part
+<br>
 * = linguistic material ready for implementation
 <br>
 - = not implemented
-
+<br>
+0 = not applicable
 
 
 <!-- NEW -->
@@ -842,7 +845,10 @@ Danish
 <p>
 English:      
 <p>
-Finnish           
+Finnish:
+missing many nominal forms of verbs;
+the basic lexicon has some erroneous inflectional patterns;
+possessive and interrogative suffixes have no proper lexer.
 <p>
 French:
 no inverted questions;

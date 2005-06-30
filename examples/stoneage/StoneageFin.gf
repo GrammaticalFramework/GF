@@ -25,24 +25,24 @@ lin
 
   Drink = PresV2 (dirV2 drink_V) ;
   Eat = PresV2 (dirV2 eat_V) ;
-  Bite = PresV2 (dirV2 bite_V) ;
+  Bite = PresV2 (partV2 bite_V) ;
   Suck = PresV2 (dirV2 suck_V) ;
   See = PresV2 (dirV2 see_V) ;
   Hear = PresV2 (dirV2 hear_V) ;
   Know = PresV2 (dirV2 know_V) ;
   Smell = PresV2 (dirV2 smell_V) ;
-  Fear = PresV2 (dirV2 fear_V) ;
+  Fear = PresV2 (partV2 fear_V) ;
   Kill = PresV2 (dirV2 kill_V) ;
-  Fight = PresV2 (dirV2 fight_V) ;
-  Hunt = PresV2 (dirV2 hunt_V) ;
-  Hit = PresV2 (dirV2 hit_V) ;
+  Fight = PresV2 (mkV2 fight_V (postpP partitive "vastaan")) ;
+  Hunt = PresV2 (partV2 hunt_V) ;
+  Hit = PresV2 (partV2 hit_V) ;
   Cut = PresV2 (dirV2 cut_V) ;
   Split = PresV2 (dirV2 split_V) ;
-  Stab = PresV2 (dirV2 stab_V) ;
-  Scratch = PresV2 (dirV2 scratch_V) ;
-  Hold = PresV2 (dirV2 hold_V) ;
+  Stab = PresV2 (partV2 stab_V) ;
+  Scratch = PresV2 (partV2 scratch_V) ;
+  Hold = PresV2 (partV2 hold_V) ;
   Squeeze = PresV2 (dirV2 squeeze_V) ;
-  Rub = PresV2 (dirV2 rub_V) ;
+  Rub = PresV2 (partV2 rub_V) ;
   Wash = PresV2 (dirV2 wash_V) ;
   Wipe = PresV2 (dirV2 wipe_V) ;
   Pull = PresV2 (dirV2 pull_V) ;
@@ -79,7 +79,7 @@ lin
   Swell = PresV swell_V ;
   Burn = PresV burn_V ;
 
-----  Give = PresV3 (dirV3 give_V "to") ;
+  Give = PresV3 (dirV3 give_V allative) ;
 
 --  Say = ;
 
@@ -198,8 +198,8 @@ lin
   Name = UseN name_N ;
 
 --  NameOf = AppN2 name_N2 ;
------  MotherOf = AppN2 (mkN2 mother_N "of") ;
------  FatherOf = AppN2 (mkN2 father_N "of") ;
+  MotherOf = AppN2 (genN2 mother_N) ;
+  FatherOf = AppN2 (genN2 father_N) ;
 
   Big = ModPosA big_ADeg ;
   Long = ModPosA long_ADeg ;

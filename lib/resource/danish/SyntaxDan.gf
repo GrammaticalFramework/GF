@@ -71,7 +71,7 @@ instance SyntaxDan of SyntaxScand = TypesDan **
   auxSka = "vil" ;
   auxSkulle = "ville" ;
 
-  infinAtt = "at" ;
+  infinAtt, subordAtt = "at" ;
 
   varjeDet : Determiner = mkDeterminerSg (detSgInvar "hver") IndefP ;
   allaDet  : Determiner = mkDeterminerPl "alle" IndefP ;
