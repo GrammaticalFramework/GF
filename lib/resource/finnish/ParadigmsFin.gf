@@ -50,6 +50,10 @@ oper
   ablative   : Case ; 
   allative   : Case ;
 
+  PPosition  : Type ;
+  PPrep  : Case -> Str -> PPosition ;
+  PPostp : Case -> Str -> PPosition ;
+
 --2 Nouns
 
 -- Worst case: give ten forms and the semantic gender.
@@ -65,8 +69,9 @@ oper
 
   regN : (talo : Str) -> N ;
 
--- The almost-regular heuristic analyses three forms.
+-- The almost-regular heuristics analyse two or three forms.
 
+  reg2N : (savi,savia : Str) -> N ;
   reg3N : (vesi,veden,vesiä : Str) -> N ;
 
 -- Nouns with partitive "a"/"ä" are a large group. 
@@ -195,13 +200,13 @@ oper
 --2 Verbs
 --
 -- The fragment only has present tense so far, but in all persons.
--- The worst case needs five forms, as shown in the following.
+-- The worst case needs twelve forms, as shown in the following.
 
   mkV   : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,
            tuli,tulin,tulisi,tullut,tultu,tullun : Str) -> V ;
   regV  : (soutaa : Str) -> V ;
-  reg3V : (soutaa,soudan,soudin : Str) -> V ;
-
+  reg2V : (soutaa,souti : Str) -> V ;
+  reg3V : (soutaa,soudan,souti : Str) -> V ;
 
 -- A simple special case is the one with just one stem and no grade alternation.
 -- It covers e.g. "sanoa", "valua", "kysyä".
@@ -235,7 +240,7 @@ oper
 -- Two-place verbs need a case, and can have a pre- or postposition.
 -- At least one of the latter is empty, $[]$.
 
-  mkV2 : V -> Case -> (prep,postp : Str) -> V2 ;
+  mkV2 : V -> PPostp -> V2 ;
 
 -- If both are empty, the following special function can be used.
 
@@ -245,6 +250,36 @@ oper
 -- are special, since their complement case is finally decided in syntax.
 
   dirV2 : V -> V2 ;
+
+--3 Three-place verbs
+--
+-- Three-place (ditransitive) verbs need two prepositions, of which
+-- the first one or both can be absent.
+
+  mkV3     : V -> PPosition -> PPosition -> V3 ;    -- speak, with, about
+  dirV3    : V -> PPosition -> V3 ;                 -- give,_,to
+  dirdirV3 : V              -> V3 ;                 -- acc, allat
+
+--3 Other complement patterns
+--
+-- Verbs and adjectives can take complements such as sentences,
+-- questions, verb phrases, and adjectives.
+
+  mkV0  : V  -> V0 ;
+  mkVS  : V  -> VS ;
+  mkV2S : V2 -> V2S ;
+  mkVV  : V  -> VV ;
+  mkV2V : V2 -> V2V ;
+  mkVA  : V  -> Case -> VA ;
+  mkV2A : V2 -> Case -> V2A ;
+  mkVQ  : V  -> VQ ;
+  mkV2Q : V2 -> V2Q ;
+
+  mkAS  : A -> AS ;
+  mkA2S : A -> Str -> A2S ;
+  mkAV  : A -> AV ;
+  mkA2V : A -> Str -> A2V ;
+
 
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
@@ -268,6 +303,12 @@ oper
   adessive = Adess ;
   ablative = Ablat ;
   allative = Allat ;
+
+  PPosition : Type = {c : Case ; s1,s2 : Str} ;
+  PPrep  : Case -> Str -> PPosition = 
+    \c,p -> {c = c ; s1 = p ; s2 = []} ;
+  PPostp : Case -> Str -> PPosition =
+    \c,p -> {c = c ; s1 = [] ; s2 = p} ;
 
   mkN = \a,b,c,d,e,f,g,h,i,j,k -> 
     mkNoun a b c d e f g h i j ** {g = k ; lock_N = <>} ;
@@ -314,12 +355,17 @@ reg2N : (savi,savia : Str) -> N = \savi,savia ->
     savit = regN savi ;
     ia = Predef.dp 2 savia ;
     i  = init ia ;
-    a  = last ia
+    a  = last ia ;
+    o  = last savi ;
+    savin = weakGrade savi + "n" ;
   in
-  case ia of {
-    "ia" => sArpi  savi ;
-    "iä" => sSylki savi ;
-    "ta" | "tä" => sPeruna savi ;
+  case <o,ia> of {
+    <"i","ia">              => sArpi  savi ;
+    <"i","iä">              => sSylki savi ;
+    <"i","ta"> | <"i","tä"> => sTohtori (savi + a) ;
+    <"o","ta"> | <"ö","tä"> => sRadio savi ;  
+    <"a","ta"> | <"ä","tä"> => sPeruna savi ;  
+    <"a","ia"> | <"a","ja"> => sKukko savi savin savia ;
     _ => savit
     }  ** {g = NonHuman ; lock_N = <>} ;
 
@@ -336,6 +382,7 @@ reg3N = \vesi,veden,vesiä ->
        ifTok CommonNoun (Predef.dp 3 veden) "den" 
          (sRakkaus vesi)
          (sTilaus vesi (veden + a)) ;
+    "li" | "ni" | "ri" => sSusi vesi veden (Predef.tk 1 vesi + ("en" + a)) ; 
     "si" => sSusi vesi veden (Predef.tk 2 vesi + ("ten" + a)) ; 
     _ => case i of {
       "a" | "o" | "u" | "y" | "ä" | "ö" => sKukko vesi veden vesiä ;
@@ -419,14 +466,17 @@ reg2V : (soutaa,souti : Str) -> V = \soutaa,souti ->
     juo = Predef.tk 2 soutaa ;
     o  = Predef.dp 1 juo ;
     u = ifTok Str (last soutaa) "a" "u" "y" ;
-    taa = Predef.dp 3 soutaa
+    aa  = Predef.dp 2 soutaa ;
+    taa = Predef.dp 3 soutaa ;
+    ta  = Predef.tk 1 taa ;
   in 
-  case taa of {
-    "taa" | "tää" => vHuoltaa soutaa soudan souti soudin ;
-    "ata" | "ätä" => vPalkata soutaa souti ;
-    "sta" | "stä" => vJuosta soutaa souden (juo +   o+u+"t") (juo + "t"+u) ;
+  case aa of {
+    "aa" | "ää" => vHuoltaa soutaa soudan souti soudin ;
+     _ => case ta of {
+    "at" | "ät" => vPalkata soutaa souti ;
+    "st"        => vJuosta soutaa souden (juo +   o+u+"t") (juo + "t"+u) ;
     _ => soudat
-    } ** {lock_V = <>} ;
+    }} ** {lock_V = <>} ;
 
 reg3V soutaa soudan souti = 
   let
@@ -458,10 +508,41 @@ reg3V soutaa soudan souti =
 
   vHuoltaa : (_,_,_,_ : Str) -> Verb = \ottaa,otan,otti,otin -> 
     SyntaxFin.vHuoltaa ottaa otan otti otin  ** {lock_V = <>} ;
-  mkV2 = \v,c,p,o -> v ** {s3 = p ; s4 = o ; c = CCase c ; lock_V2 = <>} ;
-  caseV2 = \v,c -> mkV2 v c [] [] ; 
+--  mkV2 = \v,c,p,o -> v ** {s3 = p ; s4 = o ; c = CCase c ; lock_V2 = <>} ;
+--  caseV2 = \v,c -> mkV2 v c [] [] ; 
   dirV2 v = mkTransVerbDir v ** {lock_V2 = <>} ;
 
   mkAdv : Str -> Adv = \s -> {s = s ; lock_Adv = <>} ;
+
+
+--  mkV3     : V -> PPosition -> PPosition -> V3 ;    -- speak, with, about
+--  dirV3    : V -> PPosition -> V3 ;                 -- give,_,to
+--  dirdirV3 : V ->           -> V3 ;                 -- acc, allat
+
+  mkV0  v = v ** {lock_V0 = <>} ;
+  mkVS  v = v ** {lock_VS = <>} ;
+  mkV2S v = v ** {lock_V2S = <>} ;
+--  mkVV  v = v ** {lock_VV = <>} ;
+  mkV2V v = v ** {lock_V2V = <>} ;
+--  mkVA  v c = v ** {c = c ; lock_V0 = <>} ;
+--  mkV2A v c = v ** {c2 = c ; lock_V0 = <>} ;
+  mkVQ  v = v ** {lock_VQ = <>} ;
+  mkV2Q v = v ** {lock_V2Q = <>} ;
+
+  mkAS  v = v ** {lock_AS = <>} ;
+--  mkA2S v c = v ** {c = c ; lock_AS = <>} ;
+  mkAV  v = v ** {lock_AV = <>} ;
+--  mkA2V v c = v ** {c = c ; lock_AS = <>} ;
+
+--  inf_illative
+--  infinitive
+
+
+--  V3     = TransVerb ** {s5, s6 : Str ; c2 : ComplCase} ;
+--           Verb ** {s3, s4 : Str ; c : ComplCase} ;
+--  mkN3 n c1 c2
+-- {c : NPForm} ;
+--  N3     = Function ** {c2 : NPForm} ;
+
 } ;
 

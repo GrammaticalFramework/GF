@@ -79,7 +79,7 @@ lin
   Swell = PresV swell_V ;
   Burn = PresV burn_V ;
 
-  Give = PresV3 (dirV3 give_V "to") ;
+----  Give = PresV3 (dirV3 give_V "to") ;
 
 --  Say = ;
 

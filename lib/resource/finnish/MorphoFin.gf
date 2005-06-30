@@ -196,6 +196,42 @@ oper
             (perunoi + ("t" + a))
             (perunoi + "hin") ;
 
+  sTohtori : Str -> CommonNoun = \tohtoria ->
+    let
+      a  = last tohtoria ;
+      tohtori = init tohtoria ;
+      tohtorei = init tohtori + "ei" ;
+    in
+    mkSubst a 
+            tohtori
+            tohtori
+            tohtori
+            tohtoria
+            (tohtori + "in")
+            tohtorei
+            tohtorei
+            (tohtorei + "den")
+            (tohtorei + "t" + a)
+            (tohtorei + "hin") ;
+
+  sRadio : Str -> CommonNoun = \radio ->
+    let
+      o  = last radio ;
+      a  = getHarmony o ;
+      radioi = radio + "i" ;
+    in
+    mkSubst a 
+            radio
+            radio
+            radio
+            (radio + "t" + a)
+            (radio + o + "n")
+            radioi
+            radioi
+            (radioi + "den")
+            (radioi + "t" + a)
+            (radioi + "hin") ;
+
 -- Surpraisingly, making the test for the partitive, this not only covers
 -- "rae", "perhe", "savuke", but also "rengas", "lyhyt" (except $Sg Illat$), etc.
 
@@ -220,21 +256,21 @@ oper
             (rakei + "siin") ;
 
   sSusi : (_,_,_ : Str) -> CommonNoun = \susi,suden,sutena ->
-    let {
+    let
       a      = Predef.dp 1 sutena ;
       sude   = Predef.tk 1 suden ;
-      sute   = Predef.tk 2 sutena
-    } 
+      sute   = Predef.tk 2 sutena ;
+      sutt   = Predef.tk 1 sute + "t" 
     in
     mkSubst a 
             susi
             sude 
             sute
-            (Predef.tk 1 sute + ("t" + a)) 
+            (sutt + a) 
             (sute + "en")
             susi
             susi
-            (susi + "en") 
+            (sutt + "en") --- var susi + "en" bad with suuri 
             (susi + a)
             (susi + "in") ;
 
@@ -898,6 +934,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
   vHuoltaa : (_,_,_,_ : Str) -> Verb = \ottaa,otan,otti,otin -> 
     let {
       a    = Predef.dp 1 ottaa ;
+      aa   = a + a ;
       u    = case a of {"a" => "u" ; _ => "y"} ;
       ota  = Predef.tk 1 otan ;
       otta = Predef.tk 1 ottaa ;
@@ -907,9 +944,9 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       ottaa
       ottaa
       otan
-      (otta + (("v" + a) + "t")) 
-      (otta + (("k" + a) + a)) 
-      (ote  + ((("t" + a) + a) + "n"))
+      (otta + "v" + a + "t") 
+      (otta + "k" + aa) 
+      (ote  + "t" + aa + "n")
       otti
       otin
       (otta + "isi")
@@ -967,9 +1004,11 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
   vJuosta : (_,_,_,_ : Str) -> Verb = \juosta,juoksen,juossut,juostu -> 
     let
       a      = Predef.dp 1 juosta ;
+      t      = last (init juosta) ;
       juokse = Predef.tk 1 juoksen ;
       juoksi = Predef.tk 2 juoksen + "i" ;
-      juos   = Predef.tk 2 juosta
+      juos   = Predef.tk 2 juosta ;
+      juostun = ifTok Str t "t" (juostu + "n") (init juossut + "n") ;
     in
     mkVerb
       juosta
@@ -983,7 +1022,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (juoksi + "si")
       juossut
       juostu
-      (init juossut + "n") ;
+      juostun ;
 
 -- For "juoda", "syödä", "viedä", "naida", "saada".
 
