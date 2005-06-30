@@ -27,8 +27,8 @@ concrete StructuralFin of Structural =
   both_AndConjD = sd2 "sekä" "että" ** {n = Pl} ;
   by8agent_Prep = prepPostpGen "toimesta" ;
   by8means_Prep = prepPostpGen "avulla" ;
-  can8know_VV = nomVerbVerb (vOsata "osata") ;
-  can_VV = nomVerbVerb (vJuoda "voida" "voi") ;
+----  can8know_VV = nomVerbVerb (vOsata "osata") ;
+----  can_VV = nomVerbVerb (vJuoda "voida" "voi") ;
   during_Prep = prepPostpGen "aikana" ;
   either8or_ConjD = sd2 "joko" "tai" ** {n = Sg} ;
   everybody_NP = {
@@ -55,7 +55,7 @@ concrete StructuralFin of Structural =
   most8many_Det = useimmatDet ;
   most_Det = mkDeterminer singular (caseTable singular (sSuurin "enintä")) ;
   much_Det = mkDeterminer singular (caseTable singular (sNauris "runsasta")) ;
-  must_VV = vHukkua "täytyä" "täydy" ** {c = CCase Gen} ;
+----  must_VV = vHukkua "täytyä" "täydy" ** {c = CCase Gen} ;
   no_Phr = ss ("Ei" ++ stopPunct) ;
   on_Prep = prepCase Adess ;
   or_Conj = ss "tai" ** {n = Sg} ;
@@ -92,7 +92,7 @@ concrete StructuralFin of Structural =
   to_Prep = prepCase Illat ; --- allat
   under_Prep = prepPostpGen "alla" ;
   very_Adv = ss "hyvin" ;
-  want_VV = nomVerbVerb (vOsata "haluta") ;
+----  want_VV = nomVerbVerb (vOsata "haluta") ;
   we_NP = pronNounPhrase pronMe ;
   what8many_IP = intPronWhat Pl ;
   what8one_IP = intPronWhat Sg ;

@@ -37,27 +37,27 @@ lincat
 
   A      = Adjective ; 
       -- = CommonNoun ;
-  A2     = Adjective ** {c : NPForm} ;
+  A2     = Adjective ** {c : ComplCase} ;
   ADeg   = {s : Degree => AForm => Str} ;
   AP     = {s : AdjPos => AForm => Str} ;
   AS     = Adjective ; --- "more difficult for him to come than..."
-  A2S    = Adjective ** {c : NPForm} ;
+  A2S    = Adjective ** {c : ComplCase} ;
   AV     = Adjective ;
-  A2V    = Adjective ** {c : NPForm} ;
+  A2V    = Adjective ** {c : ComplCase} ;
 
-  V      = Verb ; 
+  V      = Verb1 ; 
       -- = {s : VForm => Str}
 ----  VP     = {s,s2 : Bool => SForm => Agr => Str ; isAux : Bool} ;
   VPI    = {s : VIForm => Str} ; 
 -----  VP     = Verb ** {s2 : VForm => Str ; c : ComplCase} ;
 ----  VG     = {s,s2 : Bool => VForm => Str ; c : ComplCase} ;
   V2     = TransVerb ;
-      -- = Verb ** {s3, s4 : Str ; c : ComplCase} ;
-  V3     = TransVerb ** {s5, s6 : Str ; c2 : ComplCase} ;
-  VS     = Verb ;
-  VV     = Verb ** {c : ComplCase} ;
-  VQ     = Verb ;
-  VA     = Verb ** {c : Case} ;
+      -- = Verb ** {s3 : Str ; p : Bool ; c : ComplCase} ;
+  V3     = TransVerb ** {s5 : Str ; p2 : Bool ; c2 : ComplCase} ;
+  VS     = Verb1 ;
+  VV     = Verb1 ** {i : VIForm} ;
+  VQ     = Verb1 ;
+  VA     = Verb1 ** {c : Case} ;
 
   V2S    = TransVerb ;
   V2Q    = TransVerb ;

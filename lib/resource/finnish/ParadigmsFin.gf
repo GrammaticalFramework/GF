@@ -43,6 +43,7 @@ oper
   nominative : Case ; 
   genitive   : Case ; 
   partitive  : Case ; 
+  translative : Case ; 
   inessive   : Case ; 
   elative    : Case ; 
   illative   : Case ; 
@@ -51,8 +52,10 @@ oper
   allative   : Case ;
 
   PPosition  : Type ;
-  PPrep  : Case -> Str -> PPosition ;
-  PPostp : Case -> Str -> PPosition ;
+  prepP  : Case -> Str -> PPosition ;
+  postpP : Case -> Str -> PPosition ;
+  caseP  : Case ->        PPosition ;
+  accusative : PPosition ;
 
 --2 Nouns
 
@@ -171,6 +174,8 @@ oper
   mkN2 : N -> Case -> N2 ;
   genN2  : N -> N2 ;
 
+  mkN3 : N -> Case -> Case -> N3 ;
+
 -- Proper names can be formed by using declensions for nouns.
 -- The plural forms are filtered away by the compiler.
 
@@ -185,7 +190,7 @@ oper
 
 -- Two-place adjectives need a case for the second argument.
 
-  mkA2 : N -> Case -> A2 ;
+  mkA2 : A -> Case -> A2 ;
 
 -- Comparison adjectives have three forms. The comparative and the superlative
 -- are always inflected in the same way, so the nominative of them is actually
@@ -232,6 +237,11 @@ oper
 
   vTuoda : (tuoda : Str) -> V ;
 
+-- All the patterns above have $nominative$ as subject case.
+-- If another case is wanted, use the following.
+
+  caseV : Case -> V -> V ;
+
 -- The verbs "be" and the negative auxiliary are special.
 
   vOlla : V ;
@@ -240,7 +250,7 @@ oper
 -- Two-place verbs need a case, and can have a pre- or postposition.
 -- At least one of the latter is empty, $[]$.
 
-  mkV2 : V -> PPostp -> V2 ;
+  mkV2 : V -> PPosition -> V2 ;
 
 -- If both are empty, the following special function can be used.
 
@@ -257,7 +267,7 @@ oper
 -- the first one or both can be absent.
 
   mkV3     : V -> PPosition -> PPosition -> V3 ;    -- speak, with, about
-  dirV3    : V -> PPosition -> V3 ;                 -- give,_,to
+  dirV3    : V -> Case      -> V3 ;                 -- give,_,to
   dirdirV3 : V              -> V3 ;                 -- acc, allat
 
 --3 Other complement patterns
@@ -275,10 +285,10 @@ oper
   mkVQ  : V  -> VQ ;
   mkV2Q : V2 -> V2Q ;
 
-  mkAS  : A -> AS ;
-  mkA2S : A -> Str -> A2S ;
-  mkAV  : A -> AV ;
-  mkA2V : A -> Str -> A2V ;
+  mkAS  : A  -> AS ;
+  mkA2S : A2 -> A2S ;
+  mkAV  : A  -> AV ;
+  mkA2V : A2 -> A2V ;
 
 
 -- The definitions should not bother the user of the API. So they are
@@ -297,6 +307,7 @@ oper
   nominative = Nom ;
   genitive = Gen ;
   partitive = Part ;
+  translative = Transl ;
   inessive = Iness ;
   elative = Elat ;
   illative = Illat ;
@@ -304,11 +315,14 @@ oper
   ablative = Ablat ;
   allative = Allat ;
 
-  PPosition : Type = {c : Case ; s1,s2 : Str} ;
-  PPrep  : Case -> Str -> PPosition = 
-    \c,p -> {c = c ; s1 = p ; s2 = []} ;
-  PPostp : Case -> Str -> PPosition =
-    \c,p -> {c = c ; s1 = [] ; s2 = p} ;
+  PPosition : Type = {c : ComplCase ; s3 : Str ; p : Bool} ;
+  prepP  : Case -> Str -> PPosition = 
+    \c,p -> {c = CCase c ; s3 = p ; p = True} ;
+  postpP : Case -> Str -> PPosition =
+    \c,p -> {c = CCase c ; s3 = p ; p = False} ;
+  caseP : Case -> PPosition =
+    \c -> {c = CCase c ; s3 = [] ; p = True} ;
+  accusative =  {c = CAcc ; s3 = [] ; p = True} ;
 
   mkN = \a,b,c,d,e,f,g,h,i,j,k -> 
     mkNoun a b c d e f g h i j ** {g = k ; lock_N = <>} ;
@@ -414,11 +428,12 @@ reg3N = \vesi,veden,vesiä ->
 
   nComp = \s,n -> {s = \\c => s ++ n.s ! c ; g = n.g ; lock_N = <>} ;
   mkN2 = \n,c -> n2n n ** {c = NPCase c ; lock_N2 = <>} ;
+  mkN3 = \n,c,e -> n2n n ** {c = NPCase c ; c2 = NPCase e ; lock_N3 = <>} ;
   genN2 = \n -> mkN2 n genitive ;
   mkPN n = mkProperName n ** {lock_PN = <>} ;
 
   mkA = \x -> noun2adj x ** {lock_A = <>} ;
-  mkA2 = \x,c -> mkA x ** {c = NPCase c ; lock_A2 = <>} ;
+  mkA2 = \x,c -> x ** {c = CCase c ; lock_A2 = <>} ;
   mkADeg x kivempi kivin = 
     let
       a = last (x.s ! ((NCase Sg Part))) ; ---- gives "kivinta"
@@ -434,7 +449,8 @@ reg3N = \vesi,veden,vesiä ->
       (init (suur.s ! NCase Sg Gen) + "mpi")
       (init (suur.s ! NCase Pl Ess)) ;
 
-  mkV a b c d e f g h i j k l = mkVerb a b c d e f g h i j k l ** {lock_V = <>} ;
+  mkV a b c d e f g h i j k l = mkVerb a b c d e f g h i j k l ** 
+    {sc = Nom ; lock_V = <>} ;
 
 regV soutaa = 
   let
@@ -455,7 +471,7 @@ regV soutaa =
     "da" | "dä" => vJuoda soutaa joi ;
     "ta" | "tä" => vOsata soutaa ;
     _ => vHukkua soutaa souda
-    }} ** {lock_V = <>} ;
+    }} ** {sc = Nom ; lock_V = <>} ;
 
 reg2V : (soutaa,souti : Str) -> V = \soutaa,souti ->
   let
@@ -476,7 +492,7 @@ reg2V : (soutaa,souti : Str) -> V = \soutaa,souti ->
     "at" | "ät" => vPalkata soutaa souti ;
     "st"        => vJuosta soutaa souden (juo +   o+u+"t") (juo + "t"+u) ;
     _ => soudat
-    }} ** {lock_V = <>} ;
+    }} ** {sc = Nom ; lock_V = <>} ;
 
 reg3V soutaa soudan souti = 
   let
@@ -496,43 +512,48 @@ reg3V soutaa soudan souti =
     "aa" | "ää" => vHuoltaa soutaa soudan souti soudin ;
     "da" | "dä" => vJuoda soutaa souti ;
     _ => soudat
-    }} ** {lock_V = <>} ;
+    }} ** {sc = Nom ; lock_V = <>} ;
 
-  vValua v = vSanoa v ** {lock_V = <>} ;
-  vKattaa v u = vOttaa v u ** {lock_V = <>} ;
-  vOstaa v = vPoistaa v ** {lock_V = <>} ;
-  vNousta v u = vJuosta v u [] [] ** {lock_V = <>} ; -----
-  vTuoda v = vJuoda v [] ** {lock_V = <>} ; -----
-  vOlla = verbOlla ** {lock_V = <>} ;
-  vEi = verbEi ** {lock_V = <>} ;
+  vValua v = vSanoa v ** {sc = Nom ; lock_V = <>} ;
+  vKattaa v u = vOttaa v u ** {sc = Nom ; lock_V = <>} ;
+  vOstaa v = vPoistaa v ** {sc = Nom ; lock_V = <>} ;
+  vNousta v u = vJuosta v u [] [] ** {sc = Nom ; lock_V = <>} ; -----
+  vTuoda v = vJuoda v [] ** {sc = Nom ; lock_V = <>} ; -----
+  caseV c v = {s = v.s ; sc = c ; lock_V = <>} ;
+
+  vOlla = verbOlla ** {sc = Nom ; lock_V = <>} ;
+  vEi = verbEi ** {sc = Nom ; lock_V = <>} ;
+
 
   vHuoltaa : (_,_,_,_ : Str) -> Verb = \ottaa,otan,otti,otin -> 
-    SyntaxFin.vHuoltaa ottaa otan otti otin  ** {lock_V = <>} ;
---  mkV2 = \v,c,p,o -> v ** {s3 = p ; s4 = o ; c = CCase c ; lock_V2 = <>} ;
---  caseV2 = \v,c -> mkV2 v c [] [] ; 
+    SyntaxFin.vHuoltaa ottaa otan otti otin  ** {sc = Nom ; lock_V = <>} ;
+  mkV2 = \v,c -> v ** {s3 = c.s3 ; p = c.p ; c = c.c ; lock_V2 = <>} ;
+  caseV2 = \v,c -> mkV2 v (caseP c) ; 
   dirV2 v = mkTransVerbDir v ** {lock_V2 = <>} ;
 
   mkAdv : Str -> Adv = \s -> {s = s ; lock_Adv = <>} ;
 
 
---  mkV3     : V -> PPosition -> PPosition -> V3 ;    -- speak, with, about
---  dirV3    : V -> PPosition -> V3 ;                 -- give,_,to
---  dirdirV3 : V ->           -> V3 ;                 -- acc, allat
+  mkV3 v p q = v ** 
+    {s3 = p.s3 ; p = p.p ; c = p.c ; s5 = q.s3 ; p2 = q.p ; c2 = q.c ;
+    lock_V3 = <>} ; 
+  dirV3 v p = mkV3 v accusative (caseP p) ;
+  dirdirV3 v = dirV3 v allative ;
 
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {lock_VS = <>} ;
   mkV2S v = v ** {lock_V2S = <>} ;
 --  mkVV  v = v ** {lock_VV = <>} ;
   mkV2V v = v ** {lock_V2V = <>} ;
---  mkVA  v c = v ** {c = c ; lock_V0 = <>} ;
---  mkV2A v c = v ** {c2 = c ; lock_V0 = <>} ;
+  mkVA  v c = v ** {c = c ; lock_VA = <>} ;
+  mkV2A v c = v ** {c2 = c ; lock_V2A = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
   mkV2Q v = v ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_AS = <>} ;
---  mkA2S v c = v ** {c = c ; lock_AS = <>} ;
+  mkA2S v = v ** {lock_A2S = <>} ;
   mkAV  v = v ** {lock_AV = <>} ;
---  mkA2V v c = v ** {c = c ; lock_AS = <>} ;
+  mkA2V v = v ** {lock_A2V = <>} ;
 
 --  inf_illative
 --  infinitive

@@ -367,23 +367,22 @@ oper
 -- "tyytyväinen vaalitulokseen", "jaollinen kolmella"), which is not a possible
 -- order for the accusative case.
 
-  AdjCompl = Adjective ** {c : NPForm} ;
+  AdjCompl = Adjective ** {c : ComplCase} ;
+
+--- Only the middle argument of $complCase$ matters, since
+--- no accusatives come into question.
 
   complAdj : AdjCompl -> NounPhrase -> AdjPhrase = \hyva,paini ->
-    let {
+    let
       hyvat : AForm => Str = \\a => hyva.s ! a ;
-      painissa : Str = paini.s ! hyva.c
-      }
+      c : NPForm = complCase True hyva.c VImperat ;
+      painissa : Str = paini.s ! c
     in
     {s = table {
            AAttr => \\a => painissa ++ hyvat ! a ; 
            APred => \\a => if_then_else Str 
-                               (isLocalNPForm hyva.c)
-                               (variants {
-                                  hyvat ! a ++ painissa ;
-                                  painissa ++ hyvat ! a
-                                  }
-                               )
+                               (isLocalNPForm c)
+                               (hyvat ! a ++ painissa)
                                (painissa ++ hyvat ! a)
            }
      } ;
@@ -479,6 +478,14 @@ oper
 --
 --3 Verb phrases
 --
+-- In Finnish, verbs can have nominative subjects, but there are
+-- also verbs with a special subject case ("täytyy").
+
+  Verb1 : Type = Verb ** {sc : Case} ;
+
+  vCase : Verb -> Case -> Verb1 = \v,c -> v ** {sc = c} ;
+  vNom  : Verb -> Verb1 = \v -> vCase v Nom ;
+
 -- These are parameters for clauses and sentences.
 
   param
@@ -528,27 +535,33 @@ oper
 
   questPart : Str -> Str = \s -> glueParticle s "ko" ; --- "kö"
 
-  mkSats : NounPhrase -> Verb -> Sats = \subj,verb ->
-    {subj = subj.s ! NPCase Nom ; --- "minusta tulee poliisi"
+  mkSats : NounPhrase -> Verb1 -> Sats = \subj,verb ->
+    let 
+      np = case verb.sc of {
+        Nom => <subj.n, np2Person subj.p> ;
+        _   => <Sg,     P3>
+        }
+    in
+    {subj = subj.s ! NPCase verb.sc ; -- "minusta tulee poliisi"
      pred = \\b,sf => 
-              inflectVerb verb subj.n (np2Person subj.p) b sf ** {obj = []} ;
+              inflectVerb verb np.p1 np.p2 b sf ** {obj = []} ;
      comp = []
     } ;
 
   mkSatsObject : NounPhrase -> TransVerb -> NounPhrase -> Sats = \subj,verb,obj ->
-    insertObject (mkSats subj verb) verb.c verb.s3 verb.s4 obj ;
+    insertObject (mkSats subj verb) verb.c verb.s3 verb.p obj ;
 
   mkSatsCopula : NounPhrase -> Str -> Sats = \subj,comp ->
-    insertComplement (mkSats subj verbOlla) comp ;
+    insertComplement (mkSats subj (vNom verbOlla)) comp ;
 
-  insertObject : Sats -> ComplCase -> Str -> Str -> NounPhrase -> Sats = 
-     \sats, c, prep, postp, obj -> 
+  insertObject : Sats -> ComplCase -> Str -> Bool -> NounPhrase -> Sats = 
+     \sats, c, prep, pos, obj -> 
      {subj = sats.subj ;
       pred = \\b,sf => 
         let spred = sats.pred ! b ! sf in
         {fin = spred.fin ; 
          inf = spred.inf ; 
-         obj = spred.obj ++ prep ++ obj.s ! complCase b c sf ++ postp
+         obj = spred.obj ++ pPosit prep pos (obj.s ! complCase b c sf)
         } ;
       comp = sats.comp
       } ;
@@ -664,7 +677,7 @@ oper
 --3 Transitive verbs
 --
 -- Transitive verbs are verbs with a case and, possibly, a preposition
--- or a postposition for the complement,
+-- or a postposition for the complement ($True$ = preposition),
 -- in analogy with two-place adjectives and functions.
 -- One might prefer to use the term "2-place verb", since
 -- "transitive" traditionally means that the inherent preposition is empty.
@@ -674,7 +687,10 @@ param
   ComplCase = CCase Case | CAcc ;
 
 oper
-  TransVerb : Type = Verb ** {s3, s4 : Str ; c : ComplCase} ;
+  TransVerb : Type = Verb1 ** {s3 : Str ; p : Bool ; c : ComplCase} ;
+
+  pPosit : Str -> Bool -> Str -> Str = \p,b,s -> 
+    if_then_Str b (p ++ s) (s ++ p) ;
 
 -- The rule for using transitive verbs is the complementization rule.
 --
@@ -700,13 +716,13 @@ oper
 -- Verbs that take their object with a case other than the accusative, 
 -- without pre- or postposition:
 
-  mkTransVerbCase : Verb -> Case -> TransVerb = \nauraa,c -> 
-    nauraa ** {s3 = [] ; s4 = [] ; c = CCase c} ;
+  mkTransVerbCase : Verb1 -> Case -> TransVerb = \nauraa,c -> 
+    nauraa ** {s3 = [] ; p = True ; c = CCase c} ;
 
 -- Verbs that take direct object with the accusative:
 
-  mkTransVerbDir : Verb -> TransVerb = \ostaa -> 
-    ostaa ** {s3 = [] ; s4 = [] ; c = CAcc} ;
+  mkTransVerbDir : Verb1 -> TransVerb = \ostaa -> 
+    ostaa ** {s3 = [] ; p = True ; c = CAcc} ;
 {-
 -- Most two-place verbs can be used passively; the object case need not be
 -- the accusative, and it becomes the subject case in the passive sentence.
@@ -727,7 +743,7 @@ oper
 -- is left to applications. The definition is trivial, due to record
 -- subtyping.
 
-  transAsVerb : TransVerb -> Verb = \juoda -> 
+  transAsVerb : TransVerb -> Verb1 = \juoda -> 
     juoda ;
 
 -- The 'real' Finnish passive is unpersonal, equivalent to the
@@ -740,7 +756,7 @@ oper
 -- We treat so far only the rule in which the ditransitive
 -- verb takes both complements to form a verb phrase.
 
-  DitransVerb = TransVerb  ** {s5, s6 : Str ; c2 : ComplCase} ;
+  DitransVerb = TransVerb  ** {s5 : Str ; p2 : Bool ; c2 : ComplCase} ;
 
 
 --2 Adverbials
@@ -807,7 +823,7 @@ oper
 --
 -- Sentence-complement verbs take sentences as complements.
 
-  SentenceVerb : Type = Verb ;
+  SentenceVerb : Type = Verb1 ;
 
 -- To generate "sanoo että Jussi ui" / "ei sano että Jussi ui"
 
@@ -815,10 +831,8 @@ oper
 --3 Verb-complement verbs
 --
 -- Verb-complement verbs take verb phrases as complements.
--- In Finnish, they can be ordinary verbs ("haluta", "yrittää"), but
--- also verbs with a special subject case ("täytyy", "on pakko").
 
-  VerbVerb : Type = Verb ** {c : ComplCase} ;
+  VerbVerb : Type = Verb1 ** {i : VIForm} ;
 {-
   complVerbVerb : VerbVerb -> VerbGroup -> VerbGroup = \haluta, uida ->
     let
@@ -839,7 +853,7 @@ oper
       c  = hc
       } ;
 -}
-nomVerbVerb : Verb -> VerbVerb = \v -> v ** {c = CCase Nom} ;
+
 
 --2 Sentences missing noun phrases
 --
