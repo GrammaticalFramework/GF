@@ -5,9 +5,9 @@
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/06/10 21:04:01 $ 
+-- > CVS $Date: 2005/06/30 11:36:49 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.28 $
+-- > CVS $Revision: 1.29 $
 --
 -- The Main module of GF program.
 -----------------------------------------------------------------------------
@@ -114,8 +114,9 @@ authorMsg = unlines [
  "Grammatical Framework, Version " ++ version,
  "Compiled " ++ today,
  "Copyright (c)", 
- "Björn Bringert, Håkan Burden, Markus Forsberg, Thomas Hallgren, Harald Hammarström,",
- "Kristofer Johannisson, Janna Khegai, Peter Ljunglöf, Petri Mäenpää,", 
- "and Aarne Ranta, 1998-2005, under GNU General Public License (GPL)",
+ "Björn Bringert, Håkan Burden, Hans-Joachim Daniels, Markus Forsberg",
+ "Thomas Hallgren, Harald Hammarström, Kristofer Johannisson,", 
+ "Janna Khegai, Peter Ljunglöf, Petri Mäenpää, and", 
+ "Aarne Ranta, 1998-2005, under GNU General Public License (GPL)",
  "Bug reports to aarne@cs.chalmers.se"
  ]
