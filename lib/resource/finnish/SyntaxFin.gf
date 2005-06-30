@@ -221,10 +221,17 @@ oper
     \isDef,n,mies -> 
     case n.isNum of {
       True => {
-        s = table {
-              NPCase Nom => n.s ! NPCase Nom ++ mies.s ! False ! Sg ! Part ;
-              c   => n.s ! c ++ mies.s ! False ! Sg ! npForm2Case Sg c
+        s = case n.n of {
+              Sg => table {
+                NPCase Nom => n.s ! NPCase Nom ++ mies.s ! False ! Sg ! Nom ;
+                c   => n.s ! c ++ mies.s ! False ! Sg ! npForm2Case Sg c
               } ;
+              _ => table {
+                NPAccGen   => n.s ! NPCase Nom ++ mies.s ! False ! Sg ! Part ;
+                NPCase Nom => n.s ! NPCase Nom ++ mies.s ! False ! Sg ! Part ;
+                c   => n.s ! c ++ mies.s ! False ! Sg ! npForm2Case Sg c
+              }
+            } ;
         n = if_then_else Number isDef Pl Sg ; 
         p = NP3
         } ; 

@@ -42,7 +42,7 @@ lin
   DefNumNP = nounPhraseNum True ;
 
   DetNP = detNounPhrase ;
-----  NDetNP = numDetNounPhrase ;
+  NDetNP = numDetNounPhrase ;
 ----  NDetNum = justNumDetNounPhrase ; 
   MassNP = partNounPhrase singular ;
 
