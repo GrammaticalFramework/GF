@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/07/01 08:16:32 $
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/07/01 17:14:26 $
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.8 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -172,22 +172,27 @@ txtHelpFile =
   "\n      Shows all Trees returned for String by the actual" ++
   "\n      grammar (overridden by the -lang flag), in the category S (overridden" ++
   "\n      by the -cat flag)." ++
-  "\n  options:" ++
+  "\n  options for batch input:" ++
+  "\n      -lines   parse each line of input separately, ignoring empty lines" ++
+  "\n      -all     as -lines, but also parse empty lines" ++
+  "\n  options for selecting parsing method:" ++
+  "\n      (default)parse using an overgenerating CFG" ++
+  "\n      -cfg     parse using a much less overgenerating CFG" ++
+  "\n      -mcfg    parse using an even less overgenerating MCFG" ++
+  "\n      Note:    the first time parsing with -cfg or -mcfg might take a long time" ++
+  "\n  options that only work for the default parsing method:" ++
   "\n      -n       non-strict: tolerates morphological errors" ++
   "\n      -ign     ignore unknown words when parsing" ++
   "\n      -raw     return context-free terms in raw form" ++
   "\n      -v       verbose: give more information if parsing fails" ++
-  "\n      -new     use an experimental method (GF 2.0; sometimes very good)" ++
-  "\n      -lines   parse each line of input separately, ignoring empty lines" ++
-  "\n      -all     as -lines, but also parse empty lines" ++
   "\n  flags:" ++
   "\n      -cat     parse in this category" ++
   "\n      -lang    parse in this grammar" ++
   "\n      -lexer   filter input through this lexer" ++
-  "\n      -parser  use this context-free parsing method" ++
+  "\n      -parser  use this parsing strategy" ++
   "\n      -number  return this many results at most" ++
   "\n  examples:" ++
-  "\n      p -cat=S -new \"jag är gammal\"   -- parse an S with the new method" ++
+  "\n      p -cat=S -mcfg \"jag är gammal\"   -- parse an S with the MCFG" ++
   "\n      rf examples.txt | p -lines      -- parse each non-empty line of the file" ++
   "\n" ++
   "\ntt, test_tokenizer: tt String" ++
@@ -496,8 +501,11 @@ txtHelpFile =
   "\n    -optimize=all          first try parametrize then do values with the rest" ++
   "\n    -optimize=none         no optimization" ++
   "\n" ++
-  "\n-parser, Context-free    parsing algorithm. Under construction." ++
-  "\n       The default is a chart parser via context-free approximation." ++
+  "\n-parser, parsing strategy. The default is chart. If -cfg or -mcfg are selected, only bottomup and topdown are recognized." ++
+  "\n    -parser=chart          bottom-up chart parsing" ++
+  "\n    -parser=bottomup       a more up to date bottom-up strategy" ++
+  "\n    -parser=topdown        top-down strategy" ++
+  "\n    -parser=old            an old bottom-up chart parser" ++
   "\n" ++
   "\n-printer, format in which the grammar is printed. The default is gfc." ++
   "\n    -printer=gfc            GFC grammar" ++
