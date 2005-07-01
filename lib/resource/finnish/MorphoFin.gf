@@ -409,13 +409,15 @@ oper
             (naurei + ("t" + a))
             (naurei + "siin") ;
 
--- Words of the form "siitin", "avain".
+-- Words of the form "siitin", "avain", "höyhen" (w or wo grade alternation).
 
-  sLiitin : Str -> CommonNoun = \liitin ->
+  sLiitin : Str -> Str -> CommonNoun = \liitin,liittimen ->
     let
-      liitti = strongGrade (init liitin) ;
-      liittime = liitti + "me" ;
-      a = if_then_Str (pbool2bool (Predef.occurs "aou" liitin)) "a" "ä"
+      liittime = init liittimen ;
+      liitti = Predef.tk 2 liittime ;
+      m = last (init liittime) ;
+      liittimi = liitti + m + "i" ;
+      a = vowelHarmony liitin ;
     in 
     mkSubst a 
             liitin
@@ -423,11 +425,11 @@ oper
             liittime
             (liitin + "t" + a) 
             (liittime + "en")
-            (liitti + "mi")
-            (liitti + "mi")
-            (liitti + "mien")
-            (liitti + "mi" + a)
-            (liitti + "miin") ;
+            (liittimi)
+            (liittimi)
+            (liittimi + "en")
+            (liittimi + a)
+            (liittimi + "in") ;
 
 -- The following covers adjectives like "kapea", "leveä".
 
@@ -504,6 +506,10 @@ getHarmony : Str -> Str = \u -> case u of {
   _   => "ä"
   } ;
 
+-- This function inspects the whole word.
+
+vowelHarmony : Str -> Str = \liitin ->
+  if_then_Str (pbool2bool (Predef.occurs "aou" liitin)) "a" "ä" ;
 
 -- The following function defines how grade alternation works if it is active.
 -- In general, *whether there is* grade alternation must be given in the lexicon
@@ -1001,6 +1007,28 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (palka + "nn" + u + "t")
       (palka + "tt" + u)
       (palka + "t" + u + "n") ;
+
+  vPudota : Str -> Str -> Verb = \pudota, putosi -> 
+    let
+      a    = Predef.dp 1 pudota ;
+      pudo = Predef.tk 2 pudota ;
+      puto = Predef.tk 2 putosi ;
+      putoa = puto + a ;
+      u   = case a of {"a" => "u" ; _ => "y"}
+    in
+    mkVerb
+      pudota
+      (putoa  + a)
+      (putoa  + "n")
+      (putoa  + "v"  + a + "t")
+      (pudo   + "tk" + a + a) 
+      (pudota + a + "n")
+      (puto   + "si")
+      (puto   + "sin")
+      (puto   + a + "isi")
+      (pudo   + "nn" + u + "t")
+      (pudo   + "tt" + u)
+      (pudo   + "t" + u + "n") ;
 
   vHarkita : Str -> Verb = \harkita -> 
     let

@@ -163,6 +163,11 @@ oper
 
   nNauris : (naurista : Str) -> N ;
 
+-- Some nouns have an unexpected singular partitive, e.g. "meri", "juuri".
+
+  sgpartN : N -> Str -> N ;
+  nMeri   : Str -> N ;
+
 -- Separately-written compound nouns, like "sambal oelek", "Urho Kekkonen",
 -- have only their last part inflected.
 
@@ -354,7 +359,7 @@ regN = \vesi ->
     "as" | "äs" => sRae vesi (strongGrade ves + (a + "n" + a)) ;
     "ar" | "är" => sRae vesi (strongGrade ves + ("ren" + a)) ;
   _ => case i of {
-    "n"         => sLiitin vesi ;
+    "n"         => sLiitin vesi (strongGrade (init vesi) + "men") ;
     "s"         => sTilaus vesi (ves + ("ksen" + a)) ;
     "i" =>         sBaari (vesi + a) ;
     "e" =>         sRae vesi (strongGrade (ves + "e") + "en" + a) ;
@@ -396,8 +401,10 @@ reg3N = \vesi,veden,vesiä ->
        ifTok CommonNoun (Predef.dp 3 veden) "den" 
          (sRakkaus vesi)
          (sTilaus vesi (veden + a)) ;
+    "as" | "äs" => sRae vesi (veden + a) ;
     "li" | "ni" | "ri" => sSusi vesi veden (Predef.tk 1 vesi + ("en" + a)) ; 
     "si" => sSusi vesi veden (Predef.tk 2 vesi + ("ten" + a)) ; 
+    "in" | "en" | "än" => sLiitin vesi veden ;
     _ => case i of {
       "a" | "o" | "u" | "y" | "ä" | "ö" => sKukko vesi veden vesiä ;
       "i" => sKorpi vesi veden (init veden + "n" + a) ;
@@ -424,7 +431,17 @@ reg3N = \vesi,veden,vesiä ->
   nKulaus = \a -> nTilaus a (init a + "ksen" + getHarmony (last
   (init a))) ;
   nNauris = \a -> sNauris a ** {g = nonhuman ; lock_N = <>} ;
-
+  sgpartN noun part = {
+    s = table { 
+      NCase Sg Part => part ;
+      c => noun.s ! c
+      } ;
+    g = noun.g ;
+    lock_N = noun.lock_N
+    } ;
+  nMeri meri = 
+    let a = vowelHarmony meri in
+    sgpartN (reg2N meri (meri + a)) (init meri + "ta") ;
 
   nComp = \s,n -> {s = \\c => s ++ n.s ! c ; g = n.g ; lock_N = <>} ;
   mkN2 = \n,c -> n2n n ** {c = NPCase c ; lock_N2 = <>} ;
@@ -509,6 +526,7 @@ reg3V soutaa soudan souti =
     soudat = reg2V soutaa souti ;
   in case ta of {
     "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
+    "ot" | "öt" => vPudota soutaa souti ;
       _ => case aa of {
     "aa" | "ää" => vHuoltaa soutaa soudan souti soudin ;
     "da" | "dä" => vJuoda soutaa souti ;

@@ -37,7 +37,7 @@ lin
    break_V2 = dirV2 (special_ppV (regV "romper") "roto") ;
    broad_ADeg = regADeg "ancho" ;
    brother_N2 = deN2 (regN "hermano") ;
-   brown_ADeg = regADeg "marrón" ;
+   brown_ADeg = regADeg "marrón" ; --- *
    butter_N = regN "manteca" ;
    buy_V2 = dirV2 (regV "comprar") ;
    camera_N = regN "cámara" ; -- ["máquina fotográfica"]
@@ -146,7 +146,7 @@ lin
    rain_V0 = mkV0 (verboV (llover_89 "llover")) ;
    read_V2 = dirV2 (verboV (creer_26 "leer")) ;
    red_ADeg = regADeg "rojo" ;
-   religion_N = femN (regN "religión") ;
+   religion_N = mkN "religión" "religiones" feminine ;
    restaurant_N = regN "restaurante" ;		-- restorán, restaurán, masc
    river_N = regN "río" ;
    rock_N = regN "roca" ;
@@ -187,7 +187,7 @@ lin
    talk_V3 = mkV3 (regV "hablar") dative genitive ;
    teacher_N = regN "maestro" ;		-- maestra
    teach_V2 = dirV2 (regV "enseñar") ;
-   television_N = femN (regN "televisión") ;	-- fem, televisor masc
+   television_N = mkN "televisión" "televisiones" feminine ;	-- televisor masc
    thick_ADeg = regADeg "grueso" ;
    thin_ADeg = regADeg "fino" ;			-- delgado
    train_N = regN "tren" ;
@@ -218,7 +218,7 @@ lin
    do_V2 =  dirV2 (verboV (hacer_44 "hacer")) ;
    now_Adv = mkAdv "ahora" ;
    already_Adv = mkAdv "ya" ;
-   song_N = femN (regN "canción") ;
+   song_N = mkN "canción" "canciones" feminine ;
    add_V3 = dirV3 (regV "sumar") dative ;
    number_N = regN "número" ;
    put_V2 = dirV2 (verboV (poner_60 "poner")) ;
