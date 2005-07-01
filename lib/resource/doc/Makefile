@@ -26,6 +26,9 @@ gfdoc:
 	gfdoc ../norwegian/VerbsNor.gf ; mv ../norwegian/VerbsNor.html .
 	gfdoc ../norwegian/BasicNor.gf ; mv ../norwegian/BasicNor.html .
 
+	gfdoc ../finnish/ParadigmsFin.gf ; mv ../finnish/ParadigmsFin.html .
+	gfdoc ../finnish/BasicFin.gf ; mv ../finnish/BasicFin.html .
+
 	gfdoc ../italian/ParadigmsIta.gf ; mv ../italian/ParadigmsIta.html .
 	gfdoc ../italian/BasicIta.gf ; mv ../italian/BasicIta.html .
 	gfdoc ../italian/BeschIta.gf ; mv ../italian/BeschIta.html .

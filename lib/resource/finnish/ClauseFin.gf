@@ -51,23 +51,22 @@ concrete ClauseFin of Clause = CategoriesFin **
    sats2clause (
      insertComplement 
        (mkSats subj verb) 
-       (vp.s ! VIInfinit)
+       (vp.s ! True ! VIInfinit Simul)
      ) ;
   SPredObjV2V subj verb obj vp = 
     sats2clause (
       insertComplement 
         (mkSatsObject subj verb obj)
-        (vp.s ! VIInfinit)
+        (vp.s ! True ! VIInfinit Simul)
       ) ;
   SPredSubjV2V subj verb obj vp = 
     sats2clause (
       insertComplement 
         (mkSatsObject subj verb obj)
-        (vp.s ! VIInfinit)
+        (vp.s ! True ! VIInfinit Simul)
       ) ;
-{-
+
   SPredProgVP np vp = sats2clause (progressiveSats np vp) ;
--}
 
   SPredAP subj adj = 
     sats2clause (mkSatsCopula subj (complAdjPhrase subj.n adj)) ;
@@ -154,7 +153,7 @@ concrete ClauseFin of Clause = CategoriesFin **
     sats2quest (mkSatsCopula (intNounPhrase subj) adv.s) ;
 
   QPredProgVP np vp = sats2quest (progressiveSats (intNounPhrase np) vp) ;
-
+-}
 
 ----- gender and number of Adj
 
@@ -163,11 +162,14 @@ concrete ClauseFin of Clause = CategoriesFin **
   IPredV2 a v y = 
     sats2verbPhrase a (mkSatsObject pronImpers v y) ;
   IPredAP a adj = 
-    sats2verbPhrase a (mkSatsCopula pronImpers (adj.s ! AF Masc Sg)) ;
-  IPredPassV a v = 
-    sats2verbPhrase a (mkSatsCopula pronImpers (v.s ! VPart (pgen2gen pronImpers.g) pronImpers.n)) ;
+    sats2verbPhrase a (mkSatsCopula pronImpers (complAdjPhrase Sg adj)) ; ---
   IPredV3 a verb obj1 obj2 = 
-    sats2verbPhrase a (insertObject (mkSatsObject pronImpers verb obj1) verb.c3 verb.s3 obj2) ;
+    sats2verbPhrase a (insertObject (mkSatsObject pronImpers verb obj1) verb.c2 verb.s5 verb.p obj2) ;
+
+{-
+  IPredPassV a v = 
+    sats2verbPhrase a (mkSatsCopula pronImpers (v.s ! VPart (pgen2gen
+  pronImpers.g) pronImpers.n)) ;
   IPredReflV2 a verb = 
     sats2verbPhrase a (
       mkSatsObject pronImpers

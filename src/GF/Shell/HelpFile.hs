@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/07/01 17:14:26 $
--- > CVS $Author: peb $
--- > CVS $Revision: 1.8 $
+-- > CVS $Date: 2005/07/01 19:54:09 $
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.9 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
