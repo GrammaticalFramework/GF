@@ -2,7 +2,7 @@
 //              Hans-Joachim Daniels 2005
 //
 //This program is free software; you can redistribute it and/or modify
-//it under the terms of the GNU General Public License as published by
+//it under the terms of the GNU General Public License as publisrhed by
 //the Free Software Foundation; either version 2 of the License, or
 //(at your option) any later version.
 //
@@ -131,7 +131,7 @@ public class GFEditor2 extends JFrame {
         protected String selectedMenuLanguage = "Abstract";
         /**
          * the GF-output between <linearization> </linearization>  tags is stored here.
-         * must be saved in case the displayed languages are changed.
+         * Must be saved in case the displayed languages are changed.
          * Only written in readLin
          */
         private String linearization = "";
@@ -161,14 +161,10 @@ public class GFEditor2 extends JFrame {
          * Avoids a time-consuming reconstruction and flickering.
          */
         public boolean treeChanged = true;
-        /** the most common use is to store here what is read from GF */
-        private String result;
         /** The output from GF is in here */
         private BufferedReader fromProc;
         /** leave messages for GF here. */
         private BufferedWriter toProc;
-        /** used to print error messages */
-        private final String commandPath;
         /** Linearizations' display area */
         private JTextArea linearizationArea = new JTextArea();
         /** the content of the refinementMenu */
@@ -372,14 +368,6 @@ public class GFEditor2 extends JFrame {
          * most often null, except for Int and String, which can be parsed.
          */
         private GfAstNode currentNode = null;
-        /**
-         * Here the node is stored that introduces the bound variables
-         * self and possibly result.
-         * This knowledge is read in formTree and used in probeProbability,
-         * which is called by readAndDisplay which again is called by a 
-         * number of functions. Thus a 'global' variable.
-         */
-        private GfAstNode constraintNode = null;
         /** stores the displayed parts of the linearization */
         private Display display = new Display(3);
 
@@ -460,7 +448,6 @@ public class GFEditor2 extends JFrame {
          */
         public GFEditor2(String gfcmd, boolean isHtml, URL baseURL) {
                 this.callback = null;
-                this.commandPath = gfcmd;
                 Image icon = null;
                 try {
                 final URL iconURL = ClassLoader.getSystemResource("gf-icon.gif");
@@ -485,7 +472,6 @@ public class GFEditor2 extends JFrame {
          */
         public GFEditor2(String gfcmd, ConstraintCallback callback, String initAbs, ProgressMonitor pm) {
                 this.callback = callback;
-                this.commandPath = gfcmd;
                 
                 Utils.tickProgress(pm, 5220, "Loading grammars");
                 initializeGF(gfcmd, pm);
@@ -1652,9 +1638,8 @@ public class GFEditor2 extends JFrame {
         /**
          * reads the output from GF starting with &gt;gfedit&lt; and last reads &gt;/gfedit&lt;. 
          * Feeds the editor with what was read.
-         * @return the last read line, should be ""
          */
-        protected String readGfedit() {
+        protected void readGfedit() {
                 try {
                         String next = "";
                         //read <gfedit>
@@ -1669,7 +1654,8 @@ public class GFEditor2 extends JFrame {
                         
                         //reading <linearizations>
                         //seems to be the only line read here
-                        while ((next!=null)&&((next.length()==0)||(next.indexOf("<lin ")==-1))) {
+                        //this is here to give as some sort of catch clause.
+                        while ((next!=null)&&((next.length()==0)||(next.indexOf("<linearizations>")==-1))) {
                                 next = fromProc.readLine();
                                 if (next!=null){
                                         if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("10 "+next);
@@ -1677,7 +1663,7 @@ public class GFEditor2 extends JFrame {
                                         System.exit(0);
                                 }
                         }
-                        result = next;
+                        readresult = next;
                         readLin();
                         readTree();
                         readMessage();
@@ -1685,20 +1671,20 @@ public class GFEditor2 extends JFrame {
                         if (newObject) {
                                 readRefinementMenu();
                         } else {
-                                while(result.indexOf("</menu")==-1) {
-                                        result = fromProc.readLine();
-                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("12 "+result);                    
+                                while(readresult.indexOf("</menu")==-1) {
+                                        readresult = fromProc.readLine();
+                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("12 " + readresult);                    
                                 }
                         }
-                        for (int i=0; i<3 && !result.equals(""); i++){ 
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("11 "+result);                    
+                        // "" should occur quite fast, but it has not already been read,
+                        // since the last read line is "</menu>"
+                        for (int i = 0; i < 3 && !readresult.equals(""); i++){ 
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("11 " + readresult);                    
                         }
-                        return result;
                         
                 } catch (IOException e) {
                         System.err.println("Could not read from external process:\n" + e);
-                        return result;
                 }
                 
         }        
@@ -1706,67 +1692,29 @@ public class GFEditor2 extends JFrame {
         /**
          * checks if result and self make sense in the current context.
          * if not, they are removed from the list
-         *
          */
         protected void probeCompletability() {
-                if (!showSelfResult) {
+                if (!showSelfResult || (this.focusPosition == null)) {
                         return;
                 }
-                final String varself = "VarSelf";
-                final String varresult = "VarResult";
+                /**
+                 * self and result both take two arguments.
+                 * The first is the type, which is fixed
+                 * if the second argument is refineable.
+                 * Important is the second. 
+                 * This only is refineable for the real type of self/result 
+                 */ 
+                final String childPos = this.focusPosition.childPosition(1);
+                final AutoCompletableProber cp = new AutoCompletableProber(fromProc, toProc);
                 for (int i = 0; i < listModel.size(); i++) {
                         String cmd = ((GFCommand)listModel.elementAt(i)).getCommand();
-                        //can we check the types at all?
-                        if ((cmd != null) && (this.currentNode != null) && (this.constraintNode != null)) {
-                                if ((cmd.indexOf("r core.self") > -1)) {
-                                        if (checkTypeSelfResult(i, varself) ){
-                                                i -=1;
-                                        }
-                                }
-                                if ((cmd.indexOf("r core.result") > -1)) {
-                                        if (checkTypeSelfResult(i, varresult)) {
-                                                i -= 1;
-                                        }
+                        if ((cmd != null) && ((cmd.indexOf("r core.self") > -1) || (cmd.indexOf("r core.result") > -1))) {
+                                String newCommand = cmd + " ;; mp " + childPos;
+                                if (!cp.isAutoCompletable(newCommand, 2)) {
+                                        listModel.remove(i);
+                                        i -=1;
                                 }
                         }
-
-                        //(cmd.indexOf("r core.result") > -1)
-                }
-                
-        }
-        
-        /**
-         * Compares the type of the currently offered self or result and 
-         * removes this command from the list, if it doesn't match
-         * the type of the on the top level introduced bound variable
-         * for self resp. result
-         * @param i The number of the current cmd in this.listModel
-         * @param boundVar indicates whether self or result is to be
-         * checked. 
-         * if boundVar is "VarResult", result is checked, if boundVar is
-         * "VarSelf", self.
-         * Use nothing else!
-         * @return true iff a command was removed from listModel  
-         */
-        private boolean checkTypeSelfResult(int i, String boundVar) {
-                //assert "VarSelf".equals(boundVar) || "VarResult".equals(boundVar);
-                final String instance = "Instance";
-                
-                String selfType = null;
-                //find the bound VarSelf variable
-                for (int j = 0; j < this.constraintNode.boundNames.length; j++) {
-                        if (this.constraintNode.boundTypes[j].startsWith(boundVar)) {
-                                selfType = this.constraintNode.boundTypes[j].substring(boundVar.length()).trim();
-                        }
-                }
-                // check if the current node can be refined with sth
-                // of type Instance WhatEverClassSelfHas
-                if ((selfType == null) || (!(instance + " " + selfType).equals(this.currentNode.getType()))) {
-                        //remove it from the list of offered commands
-                        listModel.remove(i);
-                        return true;
-                } else {
-                        return false;
                 }
         }
         
@@ -1968,22 +1916,24 @@ public class GFEditor2 extends JFrame {
                 Vector gfCommandVector = new Vector();
                 HashSet processedSubcats = new HashSet();
                 try {
+                        //read <menu>
+                        String readresult = fromProc.readLine();             
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 " + readresult);          
                         //read item
-                        result = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);
-                        while (result.indexOf("/menu")==-1){
+                        readresult = fromProc.readLine();
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);
+                        while (readresult.indexOf("/menu")==-1){
                                 //read show
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);
-                                while (result.indexOf("/show")==-1){          
-                                        result = fromProc.readLine();
-                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("9 "+result);
-                                        if (result.indexOf("/show")==-1) 
-                                        {
-                                                if (result.length()>8)
-                                                        s+=result.trim();
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);
+                                while (readresult.indexOf("/show") == -1){          
+                                        readresult = fromProc.readLine();
+                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("9 " + readresult);
+                                        if (readresult.indexOf("/show") == -1) {
+                                                if (readresult.length()>8)
+                                                        s += readresult.trim();
                                                 else
-                                                        s+=result;    
+                                                        s += readresult;    
                                         }
                                 }            
                                 //          if (s.charAt(0)!='d')
@@ -1991,24 +1941,24 @@ public class GFEditor2 extends JFrame {
                                 //          else 
                                 String showText = s;
                                 printnameVector.addElement(s);
-                                s="";
+                                s = "";
                                 //read /show
                                 //read send
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);
-                                String myCommand = result;
-                                commandVector.add(this.result);
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);
+                                String myCommand = readresult;
+                                commandVector.add(readresult);
                                 //read /send (discarded)
-                                result = fromProc.readLine();             
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);          
+                                readresult = fromProc.readLine();             
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);          
                                 
                                 // read /item
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 "+result);
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);
                                 
                                 final boolean isAbstract = "Abstract".equals(this.selectedMenuLanguage);
                                 RealCommand gfc = new RealCommand(myCommand, processedSubcats, this.printnameManager, showText, isAbstract);
@@ -2137,9 +2087,7 @@ public class GFEditor2 extends JFrame {
     	                                //a new object has been created
     	                                this.newObject = true;
     	                        }
-    	                        result = fromProc.readLine();             
-    	                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 "+result);
-    	                        return result;
+    	                        return readresult;
     	                } catch(IOException e){
     	                        System.err.println(e.getMessage());
     	                        e.printStackTrace();
@@ -2159,18 +2107,19 @@ public class GFEditor2 extends JFrame {
          */
         protected void readLin(){
                 try {
-                        linearization="";  
-                        linearization += result+"\n";           
-                        result = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 "+result);
-                        while ((result!=null)&&(result.indexOf("/linearization")==-1)){       
-                                linearization += result+"\n";           
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 "+result);                     
+                        linearization="";
+                        //read <linearizations>
+                        String readresult = fromProc.readLine();             
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 " + readresult);
+                        linearization += readresult + "\n";           
+                        readresult = fromProc.readLine();
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);
+                        while ((readresult != null) && (readresult.indexOf("/linearization") == -1)){       
+                                linearization += readresult + "\n";           
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);                     
                         }
-                        if (newObject) formLin();     
-                        result = fromProc.readLine();             
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 "+result);          
+                        if (newObject) formLin();
                 } catch(IOException e){
                         System.err.println(e.getMessage());
                         e.printStackTrace();
@@ -2184,20 +2133,21 @@ public class GFEditor2 extends JFrame {
         protected void readTree(){
                 String treeString = "";
                 try {
-                        result = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 "+result);
-                        while (result.indexOf("/tree")==-1){       
-                                treeString += result+"\n";           
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 "+result);                     
+                        //read <tree>
+                        String readresult = fromProc.readLine();             
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);          
+                        readresult = fromProc.readLine();
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);
+                        while (readresult.indexOf("/tree") == -1){       
+                                treeString += readresult + "\n";           
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);                     
                         }
                         if (treeChanged && (newObject)) {
                                 formTree(tree, treeString); 
                                 treeChanged = false;  
                         } 
-                        treeString="";                     
-                        result = fromProc.readLine();             
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 "+result);          
+                        treeString=""; 
                 } catch(IOException e){
                         System.err.println(e.getMessage());
                         e.printStackTrace();
@@ -2212,20 +2162,21 @@ public class GFEditor2 extends JFrame {
         protected void readMessage(){
                 String s ="";
                 try {
-                        result = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 "+result);
-                        while (result.indexOf("/message")==-1){       
-                                s += result+"\n";           
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 "+result);                     
+                        // read <message>
+                        String readresult = fromProc.readLine();             
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);          
+                        readresult = fromProc.readLine();
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 " + readresult);
+                        while (readresult.indexOf("/message") == -1){       
+                                s += readresult + "\n";           
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 " + readresult);                     
                         }
                         if (s.length()>1) {
                                 this.display.addToStages("-------------\n" + s, "<hr>" + s);
                                 //in case no language is displayed
                                 display(false, false);
                         }
-                        result = fromProc.readLine();             
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 "+result);          
                 } catch(IOException e){
                         System.err.println(e.getMessage());
                         e.printStackTrace();
@@ -2242,54 +2193,54 @@ public class GFEditor2 extends JFrame {
                 boolean more = true;
                 try {
                         //read first cat
-                        result = fromProc.readLine();
+                        String readresult = fromProc.readLine();
                         if (xmlLogger.isLoggable(Level.FINER)) {
-                                xmlLogger.finer("2 "+result);
+                                xmlLogger.finer("2 " + readresult);
                         }
-                        if (result.indexOf("(none)") > -1) {
+                        if (readresult.indexOf("(none)") > -1) {
                                 //no topics present
                                 more = false;
                         }
                         
                         while (more){
                                 //adds new cat s to the menu
-                                if (result.indexOf("topic")==-1) {
-                                        newCategoryMenu.addItem(result.substring(6));                       
+                                if (readresult.indexOf("topic") == -1) {
+                                        newCategoryMenu.addItem(readresult.substring(6));                       
                                 } 
                                 else 
                                         more = false;
                                 //read </newcat
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("2 "+result);
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("2 " + readresult);
                                 //read <newcat (normally)
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("3 "+result); 
-                                if (result.indexOf("topic")!=-1) {
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("3 " + readresult); 
+                                if (readresult.indexOf("topic") != -1) {
                                         //no more categories
                                         more = false; 
                                 }
                                 //read next cat / topic
-                                result = fromProc.readLine();             
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("4 "+result);       
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("4 " + readresult);       
                         }
                         //set topic
-                        grammar.setText(result.substring(4)+"          ");
+                        grammar.setText(readresult.substring(4)+"          ");
                         //read </topic>
-                        result = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("2 "+result);
+                        readresult = fromProc.readLine();
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("2 " + readresult);
                         //read <language>
-                        result = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("3 "+result);
+                        readresult = fromProc.readLine();
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("3 " + readresult);
                         //read actual language
-                        result = fromProc.readLine();             
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("4 "+result);       
+                        readresult = fromProc.readLine();             
+                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("4 " + readresult);       
                         
                         //read the languages and select the last non-abstract
                         more = true;
                         while (more){
-                                if ((result.indexOf("/gfinit")==-1)&&(result.indexOf("lin")==-1)) {         
+                                if ((readresult.indexOf("/gfinit") == -1) && (readresult.indexOf("lin") == -1)) {         
                                         //form lang and Menu menu:
-                                        final String langName = result.substring(4);
+                                        final String langName = readresult.substring(4);
                                         final boolean active;
                                         if (langName.equals("Abstract")) {
                                                 active = false;
@@ -2308,29 +2259,30 @@ public class GFEditor2 extends JFrame {
                                         more = false;
                                 }
                                 // read </language>
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("2 "+result); 
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("2 " + readresult); 
                                 // read <language> or </gfinit...>
-                                result = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("3 "+result); 
-                                if ((result.indexOf("/gfinit")!=-1)||(result.indexOf("lin")!=-1)) 
+                                readresult = fromProc.readLine();
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("3 " + readresult); 
+                                if ((readresult.indexOf("/gfinit") != -1) || (readresult.indexOf("lin") != -1)) 
                                         more = false; 
-                                if (result.indexOf("/gfinit")!=-1)
+                                if (readresult.indexOf("/gfinit") != -1)
                                         finished = true;
                                 // registering the file name:
-                                if (result.indexOf("language")!=-1) {
-                                        String path = result.substring(result.indexOf('=')+1,
-                                                        result.indexOf('>')); 
-                                        path =path.substring(path.lastIndexOf('/')+1);
-                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("name: "+path);
+                                if (readresult.indexOf("language") != -1) {
+                                        String path = readresult.substring(readresult.indexOf('=') + 1,
+                                                        readresult.indexOf('>')); 
+                                        path = path.substring(path.lastIndexOf('/') + 1);
+                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("name: " + path);
                                         fileString +="--" + path +"\n";
                                         if (path.lastIndexOf('.')!=path.indexOf('.'))
                                                 grammar.setText(path.substring(0,
                                                                 path.indexOf('.')).toUpperCase()+"          ");
                                 }
-                                //TODO in case of finished, read "", otherwise ...
-                                result = fromProc.readLine();             
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("4 "+result);               
+                                // in case of finished, read the final "" after </gfinit>, 
+                                // otherwise the name of the next language
+                                readresult = fromProc.readLine();             
+                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("4 " + readresult);               
                         }
                 } catch(IOException e){
                         logger.warning(e.getMessage());
@@ -2342,57 +2294,56 @@ public class GFEditor2 extends JFrame {
          * Sets the current focusPosition, then changes all &lt;focus&gt; tags
          * into regular &lt;subtree&gt; tags.
          * 
-         * Expects its argument in this.result
-         * 
          * Then control is given to appendMarked, which does the display
+         * @param readLin The text between &lt;lin&gt; &lt;/lin&gt;  tags.
          * @param clickable true iff the correspondent display area should be clickable
          * @param doDisplay true iff the linearization should be displayed.
          * @param language the current linearization language
          */
-        protected StringBuffer outputAppend(boolean clickable, boolean doDisplay, String language){
+        protected StringBuffer outputAppend(String readLin, boolean clickable, boolean doDisplay, String language){
                 final StringBuffer linCollector = new StringBuffer();
                 //result=result.replace('\n',' ');
                 if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                        linMarkingLogger.finer("INPUT:"+result);
+                        linMarkingLogger.finer("INPUT:" + readLin);
                 }
-                int focusTagBegin = this.result.indexOf("<focus");
-                int typeBegin=this.result.indexOf("type=",focusTagBegin);
-                int focusTagEnd = this.result.indexOf('>',typeBegin);
+                int focusTagBegin = readLin.indexOf("<focus");
+                int typeBegin=readLin.indexOf("type=",focusTagBegin);
+                int focusTagEnd = readLin.indexOf('>',typeBegin);
                 // status incorrect ?:
                 final int typeEnd;
-                if ((typeBegin > -1) && (this.result.substring(typeBegin,focusTagEnd).indexOf("incorrect")!=-1)) {  
-                        typeEnd = result.indexOf("status");
+                if ((typeBegin > -1) && (readLin.substring(typeBegin,focusTagEnd).indexOf("incorrect")!=-1)) {  
+                        typeEnd = readLin.indexOf("status");
                 } else {
                         typeEnd = focusTagEnd;
                 }
-                int focusTextBegin = this.result.indexOf("focus");    
+                int focusTextBegin = readLin.indexOf("focus");    
                 if (focusTagBegin!=-1){
                         // in case focus tag is cut into two lines:
                         if (focusTagBegin==-1){
                                 focusTagBegin = focusTextBegin - 7;         
                         }
-                        final int positionBegin=this.result.indexOf("position",focusTagBegin);
-                        final int positionEnd=this.result.indexOf("]",positionBegin);
+                        final int positionBegin=readLin.indexOf("position",focusTagBegin);
+                        final int positionEnd=readLin.indexOf("]",positionBegin);
                         if (linMarkingLogger.isLoggable(Level.FINER)) { 
                                 linMarkingLogger.finer("POSITION START: "+positionBegin 
                                                 + "\n-> POSITION END: "+positionEnd);
                         }
                         if (xmlLogger.isLoggable(Level.FINER)) {
-                                xmlLogger.finer("form Lin1: "+this.result);
+                                xmlLogger.finer("form Lin1: " + readLin);
                         }
-                        this.focusPosition = new LinPosition(result.substring(positionBegin+9,positionEnd+1),
-                                        this.result.substring(positionBegin,focusTagEnd).indexOf("incorrect")==-1);
-                        statusLabel.setText(" "+result.substring(typeBegin+5,typeEnd));
+                        this.focusPosition = new LinPosition(readLin.substring(positionBegin + 9, positionEnd+1),
+                                        readLin.substring(positionBegin, focusTagEnd).indexOf("incorrect") == -1);
+                        statusLabel.setText(" " + readLin.substring(typeBegin + 5, typeEnd));
                         //changing <focus> to <subtree>
-                        this.result = replaceNotEscaped(this.result, "<focus", "<subtree");
-                        this.result = replaceNotEscaped(this.result, "</focus", "</subtree");
+                        readLin = replaceNotEscaped(readLin, "<focus", "<subtree");
+                        readLin = replaceNotEscaped(readLin, "</focus", "</subtree");
                         
-                        String appended = appendMarked(this.result + '\n', clickable, doDisplay, language);
+                        String appended = appendMarked(readLin + '\n', clickable, doDisplay, language);
                         linCollector.append(appended);
                 } else {//no focus at all (message?):
                         this.focusPosition = null;
 //                      beware the side-effects! They are, what counts
-                        linCollector.append(appendMarked(this.result + '\n', clickable, doDisplay, language));
+                        linCollector.append(appendMarked(readLin + '\n', clickable, doDisplay, language));
                 }
 //                if (logger.isLoggable(Level.FINER)) {
 //                        logger.finer("collected appended linearizations:\n" + linCollector.toString());
@@ -2426,7 +2377,9 @@ public class GFEditor2 extends JFrame {
          * Parses the GF-output between <linearization> </linearization>  tags
          * 
          * pseudo-parses the XML lins and fills the output text area
-         * with the lin in all enabled languages
+         * with the lin in all enabled languages.
+         * 
+         * Expects the linearization string to be in this.linearization.
          */
         protected void formLin(){
                 //reset previous output
@@ -2435,19 +2388,19 @@ public class GFEditor2 extends JFrame {
                 
                 boolean firstLin=true; 
                 //read first line like '    <lin lang=Abstract>'
-                result = linearization.substring(0,linearization.indexOf('\n'));
+                String readResult = linearization.substring(0,linearization.indexOf('\n'));
                 //the rest of the linearizations
                 String lin = linearization.substring(linearization.indexOf('\n')+1);
-                //extract the language from result
-                int ind = Utils.indexOfNotEscaped(result, "=");
-                int ind2 = Utils.indexOfNotEscaped(result, ">");
+                //extract the language from readResult
+                int ind = Utils.indexOfNotEscaped(readResult, "=");
+                int ind2 = Utils.indexOfNotEscaped(readResult, ">");
                 /** The language of the linearization */
-                String language = result.substring(ind+1,ind2);
+                String language = readResult.substring(ind+1,ind2);
                 //the first direct linearization
-                result = lin.substring(0,lin.indexOf("</lin>"));
+                readResult = lin.substring(0,lin.indexOf("</lin>"));
                 //the rest
                 lin = lin.substring(lin.indexOf("</lin>"));
-                while (result.length()>1) {
+                while (readResult.length()>1) {
                         this.langMenuModel.add(language,true);
                         // selected?
                         boolean visible = this.langMenuModel.isLangActive(language);
@@ -2456,11 +2409,11 @@ public class GFEditor2 extends JFrame {
 								this.display.addToStages("\n************\n", "<br><hr><br>");
                         }
                         if (xmlLogger.isLoggable(Level.FINER)) {
-                                xmlLogger.finer("linearization for the language: "+result);
+                                xmlLogger.finer("linearization for the language: "+readResult);
                         }
                         // we want the side-effects of outputAppend
                         final boolean isAbstract = "Abstract".equals(language);
-                        String linResult = outputAppend(!isAbstract, visible, language).toString();
+                        String linResult = outputAppend(readResult, !isAbstract, visible, language).toString();
                         if (visible) {
                                 firstLin = false;
                         }
@@ -2472,14 +2425,14 @@ public class GFEditor2 extends JFrame {
                                 break;
                         }
                         
-                        result = lin.substring(0,lin.indexOf('\n'));
+                        readResult = lin.substring(0,lin.indexOf('\n'));
                         lin = lin.substring(lin.indexOf('\n')+1);
-                        if (result.indexOf("<lin ")!=-1){
-                                //extract the language from result
-                                ind = result.indexOf('=');
-                                ind2 = result.indexOf('>');
-                                language = result.substring(ind+1,ind2);
-                                result = lin.substring(0,lin.indexOf("</lin>"));
+                        if (readResult.indexOf("<lin ")!=-1){
+                                //extract the language from readResult
+                                ind = readResult.indexOf('=');
+                                ind2 = readResult.indexOf('>');
+                                language = readResult.substring(ind+1,ind2);
+                                readResult = lin.substring(0,lin.indexOf("</lin>"));
                                 lin = lin.substring(lin.indexOf("</lin>"));
                         }  
                 }
@@ -2507,12 +2460,12 @@ public class GFEditor2 extends JFrame {
                                 HtmlMarkedArea incMA;
                                 for (Iterator it = incorrectMA.iterator(); !incorrect && it.hasNext();) {
                                         incMA = (HtmlMarkedArea)it.next();
-                                        if (isSubtreePosition(incMA.position, ma.position)) {
+                                        if (LinPosition.isSubtreePosition(incMA.position, ma.position)) {
                                                 incorrect = true;
                                         }
                                 }
                         }
-                        if (isSubtreePosition(this.focusPosition, ma.position)) {
+                        if (LinPosition.isSubtreePosition(this.focusPosition, ma.position)) {
                                 focused = true;
                         }
 
@@ -2528,10 +2481,6 @@ public class GFEditor2 extends JFrame {
                                 highlightHtml(ma, Color.RED);
                         }
                 }
-                
-//                if (logger.isLoggable(Level.FINER)) {
-//                        logger.finer("completeLin: \n" + completeLin);
-//                }
         }
         
 
@@ -2610,31 +2559,6 @@ public class GFEditor2 extends JFrame {
                 }
         }
         
-        
-        /**
-         * compares two position strings and returns true, if superPosition is
-         * a prefix of subPosition, that is, if subPosition is in a subtree of
-         * superPosition
-         * @param superPosition the position String in Haskell notation 
-         * ([0,1,0,4]) of the to-be super-branch of subPosition
-         * @param subPosition the position String in Haskell notation 
-         * ([0,1,0,4]) of the to-be (grand-)child-branch of superPosition
-         * @return true iff superPosition denotes an ancestor of subPosition 
-         */
-        private static boolean isSubtreePosition(final LinPosition superPosition, final LinPosition subPosition) {
-                if (superPosition == null || subPosition == null) {
-                        return false;
-                }
-                String superPos = superPosition.position;
-                String subPos = subPosition.position;
-                if (superPos.length() < 2 || subPos.length() < 2 ) {
-                        return false;
-                }
-                superPos = superPos.substring(1, superPos.length() - 1);
-                subPos = subPos.substring(1, subPos.length() - 1);
-                boolean result = subPos.startsWith(superPos);
-                return result;
-        }
         
         /**
          * Sets the font on all the GUI-elements to font.
@@ -2782,14 +2706,6 @@ public class GFEditor2 extends JFrame {
                 if (s.indexOf('*')!=-1) {
                         star = 1;
                 }
-                /** 
-                 * only the first node in the AST that introduces an oper
-                 * constraint brings with it the bound variables for self 
-                 * and result.
-                 * At least for single context constraints, but that is exactly 
-                 * that what the editor is for.
-                 */
-                boolean boundVarsEncountered = false;
                 while (s.length()>0) {
                         /** 
                          * every two ' ' indicate one tree depth level
@@ -2813,11 +2729,6 @@ public class GFEditor2 extends JFrame {
                                 GfAstNode node = new GfAstNode(gfline);
                                 if (selected) {
                                         this.currentNode = node;
-                                }
-                                //get the node that introduces self and result
-                                if ((!boundVarsEncountered) && ("OperConstraintBody".equals(node.getType()) || "ClassConstraintBody".equals(node.getType()))) {
-                                        this.constraintNode = node;
-                                        boundVarsEncountered = true;
                                 }
                                 
                                 index++;
@@ -2868,9 +2779,6 @@ public class GFEditor2 extends JFrame {
                                         //or refined and not described
                                         and = new RefinedAstNodeData(null, node);
                                 }
-
-                                
-
                                 
                                 newChildNode = myTreePanel.addObject(parent, and);  
                                 parentNodes.put(new Integer(shift+1), newChildNode);
@@ -2885,7 +2793,7 @@ public class GFEditor2 extends JFrame {
                                                 treeLogger.finer("new selected index "+ index);
                                         }
                                         
-                                        // set the description of the crrent parameter to a more
+                                        // set the description of the current parameter to a more
                                         // prominent place
                                         String paramName = null;
                                         int paramPosition = -1;
@@ -2915,47 +2823,20 @@ public class GFEditor2 extends JFrame {
                 }
         }
         
-        
-        /** 
-         * Returns the biggest position of first and second.
-         * Each word in the linearization area has the corresponding
-         * position in the tree. The position-notion is taken from 
-         * GF-Haskell, where empty position ("[]") 
-         * represents tree-root, "[0]" represents  first child of the root,
-         * "[0,0]" represents the first grandchild of the root etc.
-         * So comparePositions("[0]","[0,0]")="[0]"
-         */
-        private  String comparePositions(String first, String second) {
-                String common ="[]";
-                int i = 1; 
-                while ((i<Math.min(first.length()-1,second.length()-1))&&(first.substring(0,i+1).equals(second.substring(0,i+1))))
-                {
-                        common=first.substring(0,i+1); 
-                        i+=2;
-                }
-                if (common.charAt(common.length()-1)==']') {
-                        return common;
-                } else { 
-                        return common+"]";
-                }
-        }
-        
         /**
          * Returns the widest position (see comments to comparePositions) 
          * covered in the string from begin to end in the 
-         * linearization area
-         * @param begin
-         * @param end
+         * linearization area.
+         * @param begin The index in htmlOutputVector of the first MarkedArea, that is possibly the max
+         * @param end The index in htmlOutputVector of the last MarkedArea, that is possibly the max
          * @return the position in GF Haskell notation (hdaniels guesses)
          */
         private String findMax(int begin, int end) {
                 String max = (((MarkedArea)this.htmlOutputVector.elementAt(begin)).position).position;
                 for (int i = begin+1; i <= end; i++)
-                        max =  comparePositions(max,(((MarkedArea)this.htmlOutputVector.elementAt(i)).position).position);
+                        max = LinPosition.maxPosition(max,(((MarkedArea)this.htmlOutputVector.elementAt(i)).position).position);
                 return max;
         }
-        
-       
         
         /**
          * Appends the string s to the text in the linearization area
@@ -3156,29 +3037,6 @@ public class GFEditor2 extends JFrame {
         
 
 
-        /**
-         * Finding position of the searchString not starting with escape symbol (\\) 
-         * in the string s from position. 
-         * @param s the String that is to be checked.
-         * @param searchString
-         * @param position
-         * @return the position of the first such a char after position
-         */
-        private int getCharacter(String s, String searchString, int position) {
-                int t = s.indexOf(searchString, position);
-                int i = t-1;
-                int k = 0;
-                while ((i>-1)&&(s.charAt(i)=='\\')) {
-                        k++;
-                        i--;
-                }
-                if (k % 2 == 0) {
-                        return t;
-                } else {
-                        return getCharacter(s, searchString, t+1);
-                }
-        }
-        
         /**
          * The substring from start to end in workingString, together with
          * position is saved as a MarkedArea in this.htmlOutputVector.
@@ -3428,7 +3286,6 @@ public class GFEditor2 extends JFrame {
                         popup2.show(e.getComponent(), e.getX(), e.getY());
                 } 
                 // middle click
-                //TODO parsing via middle click
                 if (e.getButton() == MouseEvent.BUTTON2) {
                         // selection Exists:
                         if (popUpLogger.isLoggable(Level.FINER)) {
@@ -3475,7 +3332,7 @@ public class GFEditor2 extends JFrame {
                                 StringBuffer sel = new StringBuffer();
                                 for (int i = 0; i<htmlOutputVector.size(); i++)  {
                                         final HtmlMarkedArea ma = (HtmlMarkedArea)htmlOutputVector.elementAt(i);
-                                        if (language.equals(ma.language) && isSubtreePosition(focusPosition, ma.position)) {
+                                        if (language.equals(ma.language) && LinPosition.isSubtreePosition(focusPosition, ma.position)) {
                                                 sel.append(ma.words);
                                         }
                                 }

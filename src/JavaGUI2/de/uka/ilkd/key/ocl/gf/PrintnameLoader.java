@@ -95,7 +95,7 @@ public class PrintnameLoader extends AbstractProber {
                 if (lang != null && !("".equals(lang))) {
                         sendString = sendString + " -lang=" + lang;
                 }
-                nogger.info("collecting printnames :" + sendString);
+                nogger.fine("collecting printnames :" + sendString);
                 send(sendString);
                 readGfedit();
         }

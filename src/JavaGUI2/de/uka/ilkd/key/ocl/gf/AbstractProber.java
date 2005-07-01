@@ -170,8 +170,8 @@ abstract class AbstractProber {
          * @param text the command, exactly the string that is going to be sent
          */
         protected void send(String text) {
-                if (logger.isLoggable(Level.FINER)) {
-                        logger.finer("## send: '" + text + "'");
+                if (logger.isLoggable(Level.FINE)) {
+                        logger.fine("## send: '" + text + "'");
                 }
                 try {
                         toProc.write(text, 0, text.length());
@@ -182,5 +182,24 @@ abstract class AbstractProber {
                 }  
         }
 
-        
+        /**
+         * Just reads the complete output of a GF run and ignores it.	 
+         * @param fromProc The process from which the GFEDIT should be read.
+         */	 
+        static void readAndIgnore(BufferedReader fromProc) {	 
+                try {	 
+                        String readresult = fromProc.readLine();	 
+                        if (logger.isLoggable(Level.FINER)) logger.finer("14 "+readresult);	 
+                        while (readresult.indexOf("</gfedit>") == -1) {	 
+                                readresult = fromProc.readLine();	 
+                                if (logger.isLoggable(Level.FINER)) logger.finer("14 "+readresult);	 
+                        }	 
+                        //read trailing newline:	 
+                        readresult = fromProc.readLine();	 
+                        if (logger.isLoggable(Level.FINER)) logger.finer("14 "+readresult);
+                        
+                } catch (IOException e) {	 
+                        System.err.println("Could not read from external process:\n" + e);	 
+                }	 
+        }
 }
