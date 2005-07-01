@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/20 16:14:19 $
+-- > CVS $Date: 2005/07/01 08:16:32 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -317,6 +317,11 @@ txtHelpFile =
   "\n      -c           show categories only (no functions)" ++
   "\n      -f           show functions only (no categories)" ++
   "\n      -g           show as graph (sharing uses of the same function)" ++
+  "\n      -o           just generate the .dot file" ++
+  "\n  examples:" ++
+  "\n    p \"hello world\" | vt -o | wf my.dot ;; ! open -a GraphViz my.dot" ++
+  "\n    -- This writes the parse tree into my.dot and opens the .dot file" ++
+  "\n    -- with another application without generating .ps." ++
   "\n" ++
   "\n-- subshells" ++
   "\n" ++

@@ -856,8 +856,9 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       tuji = init tulin ;
       a = Predef.dp 1 tulkaa ;
       tulleena = Predef.tk 2 tullut + ("een" + a) ;
-      tulleen = (sRae tullut tulleena).s ;
-      tullun = (sKukko tultu tullun (tultu + ("j"+a))).s  ;
+      tulleen = (noun2adj (sRae tullut tulleena)).s ;
+      tullun = (noun2adj (sKukko tultu tullun (tultu + ("j"+a)))).s  ;
+      tulema = Predef.tk 3 tulevat + "m" + a ;
       vat = "v" + a + "t"
     in
     {s = table {
@@ -886,7 +887,12 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       Pass True  => tullaan ;
       Pass False => Predef.tk 2 tullaan ;
       PastPartAct n => tulleen ! n ;
-      PastPartPass n => tullun ! n
+      PastPartPass n => tullun ! n ;
+      Inf3Iness => tulema + "ss" + a ;
+      Inf3Elat  => tulema + "st" + a ;
+      Inf3Illat => tulema +  a   + "n" ;
+      Inf3Adess => tulema + "ll" + a ;
+      Inf3Ablat => tulema + "tt" + a 
       }
     } ;
 
@@ -995,6 +1001,28 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (palka + "nn" + u + "t")
       (palka + "tt" + u)
       (palka + "t" + u + "n") ;
+
+  vHarkita : Str -> Verb = \harkita -> 
+    let
+      a      = Predef.dp 1 harkita ;
+      harki  = Predef.tk 2 harkita ;
+      harkitse = harki + "tse" ;
+      harkitsi = harki + "tsi" ;
+      u   = case a of {"a" => "u" ; _ => "y"}
+    in
+    mkVerb
+      harkita
+      (harkitse + "e")
+      (harkitse + "n")
+      (harkitse + "v" + a + "t")
+      (harki    + "tk"+ a + a) 
+      (harkita  +  a + "n")
+      (harkitsi)
+      (harkitsi + "n")
+      (harkitsi + "si")
+      (harki + "nn" + u + "t")
+      (harki + "tt" + u)
+      (harki + "t" + u + "n") ;
 
 
 ----- tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun
