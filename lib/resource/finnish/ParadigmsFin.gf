@@ -9,9 +9,10 @@
 -- expressions of basic categories: nouns, adjectives, verbs.
 -- 
 -- Closed categories (determiners, pronouns, conjunctions) are
--- accessed through the resource syntax API, $Structural.gf$. 
+-- accessed through the resource syntax API, $Structural$. 
 --
--- The main difference with $MorphoFin.gf$ is that the types
+-- The low-level definitions of inflectional patterns are in
+-- $MorphoFin$. The main difference with that module is that here the types
 -- referred to are compiled resource grammar types. We have moreover
 -- had the design principle of always having existing forms, not
 -- stems, as string arguments of the paradigms, not stems.
@@ -26,7 +27,9 @@ resource ParadigmsFin =
 --2 Parameters 
 --
 -- To abstract over gender, number, and (some) case names, 
--- we define the following identifiers.
+-- we define the following identifiers. The application programmer
+-- should always use these constants instead of their definitions
+-- in $TypesInf$.
 
 oper
   Gender   : Type;
@@ -39,44 +42,65 @@ oper
   singular : Number ;
   plural   : Number ;
 
-  Case     : Type ;
-  nominative : Case ; 
-  genitive   : Case ; 
-  partitive  : Case ; 
+  Case        : Type ;
+  nominative  : Case ; 
+  genitive    : Case ; 
+  partitive   : Case ; 
   translative : Case ; 
-  inessive   : Case ; 
-  elative    : Case ; 
-  illative   : Case ; 
-  adessive   : Case ; 
-  ablative   : Case ; 
-  allative   : Case ;
+  inessive    : Case ; 
+  elative     : Case ; 
+  illative    : Case ; 
+  adessive    : Case ; 
+  ablative    : Case ; 
+  allative    : Case ;
+
+-- The following type is used for defining *rection*, i.e. complements
+-- of many-place verbs and adjective. A complement can be defined by
+-- just a case, or a pre/postposition and a case.
 
   PPosition  : Type ;
-  prepP  : Case -> Str -> PPosition ;
-  postpP : Case -> Str -> PPosition ;
-  caseP  : Case ->        PPosition ;
+
+  prepP      : Case -> Str -> PPosition ;
+  postpP     : Case -> Str -> PPosition ;
+  caseP      : Case ->        PPosition ;
   accusative : PPosition ;
 
 --2 Nouns
 
--- Worst case: give ten forms and the semantic gender.
+-- The worst case gives ten forms and the semantic gender.
 -- In practice just a couple of forms are needed, to define the different
 -- stems, vowel alternation, and vowel harmony.
 
 oper
-  mkN : 
-    (talo,talon,talona,taloa,taloon,taloina,taloissa,talojen,taloja,taloihin 
-          : Str) -> Gender -> N ;
+  mkN : (talo,   talon,   talona, taloa, taloon,
+         taloina,taloissa,talojen,taloja,taloihin : Str) -> Gender -> N ;
 
--- The regular noun heuristic takes just one form and analyses its suffixes.
+-- The regular noun heuristic takes just one form (singular
+-- nominative) and analyses it to pick the correct paradigm.
+-- It does automatic grade alternation, and is hence not usable
+-- for words like "auto" (whose genitive would become "audon").
 
   regN : (talo : Str) -> N ;
 
--- The almost-regular heuristics analyse two or three forms.
+-- If $regN$ does not give the correct result, one can try and give 
+-- two or three forms as follows. Examples of the use of these
+-- functions are given in $BasicFin$. Most notably, $reg2N$ is used
+-- for nouns like "kivi - kiviä", which would otherwise become like
+-- "rivi - rivejä". $regN3$ is used e.g. for 
+-- "sydän - sydämen - sydämiä", which would otherwise become
+-- "sydän - sytämen".
 
   reg2N : (savi,savia : Str) -> N ;
   reg3N : (vesi,veden,vesiä : Str) -> N ;
 
+-- Some nouns have an unexpected singular partitive, e.g. "meri", "lumi".
+
+  sgpartN : (meri : N) -> (merta : Str) -> N ;
+  nMeri   : (meri : Str) -> N ;
+
+-- The rest of the noun paradigms are mostly covered by the three
+-- heuristics.
+--
 -- Nouns with partitive "a"/"ä" are a large group. 
 -- To determine for grade and vowel alternation, three forms are usually needed:
 -- singular nominative and genitive, and plural partitive.
@@ -163,11 +187,6 @@ oper
 
   nNauris : (naurista : Str) -> N ;
 
--- Some nouns have an unexpected singular partitive, e.g. "meri", "juuri".
-
-  sgpartN : N -> Str -> N ;
-  nMeri   : Str -> N ;
-
 -- Separately-written compound nouns, like "sambal oelek", "Urho Kekkonen",
 -- have only their last part inflected.
 
@@ -203,23 +222,29 @@ oper
 
   mkADeg : (kiva : N) -> (kivempaa,kivinta : Str) -> ADeg ;
 
--- Without $optimize=noexpand$, this function would expands to enormous size.
+-- The regular adjectives are based on $regN$ in the positive.
 
-  regADeg : (suuri : Str) -> ADeg ;
+  regADeg : (punainen : Str) -> ADeg ;
+
 
 --2 Verbs
 --
--- The fragment only has present tense so far, but in all persons.
+-- The grammar does not cover the potential mood and some nominal
+-- forms. One way to see the coverage is to linearize a verb to
+-- a table.
 -- The worst case needs twelve forms, as shown in the following.
 
   mkV   : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,
            tuli,tulin,tulisi,tullut,tultu,tullun : Str) -> V ;
+
+-- The following heuristics cover more and more verbs.
+
   regV  : (soutaa : Str) -> V ;
   reg2V : (soutaa,souti : Str) -> V ;
   reg3V : (soutaa,soudan,souti : Str) -> V ;
 
--- A simple special case is the one with just one stem and no grade alternation.
--- It covers e.g. "sanoa", "valua", "kysyä".
+-- The rest of the paradigms are special cases mostly covered by the heuristics.
+-- A simple special case is the one with just one stem and without grade alternation.
 
   vValua : (valua : Str) -> V ;
 
@@ -253,18 +278,19 @@ oper
   vEi   : V ;
 
 -- Two-place verbs need a case, and can have a pre- or postposition.
--- At least one of the latter is empty, $[]$.
 
   mkV2 : V -> PPosition -> V2 ;
 
--- If both are empty, the following special function can be used.
+-- If the complement needs just a case, the following special function can be used.
 
   caseV2 : V -> Case -> V2 ;
 
 -- Verbs with a direct (accusative) object
 -- are special, since their complement case is finally decided in syntax.
+-- But this is taken care of by $ClauseFin$.
 
   dirV2 : V -> V2 ;
+
 
 --3 Three-place verbs
 --
@@ -274,6 +300,7 @@ oper
   mkV3     : V -> PPosition -> PPosition -> V3 ;    -- speak, with, about
   dirV3    : V -> Case      -> V3 ;                 -- give,_,to
   dirdirV3 : V              -> V3 ;                 -- acc, allat
+
 
 --3 Other complement patterns
 --
@@ -294,7 +321,6 @@ oper
   mkA2S : A2 -> A2S ;
   mkAV  : A  -> AV ;
   mkA2V : A2 -> A2V ;
-
 
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.

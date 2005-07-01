@@ -48,7 +48,7 @@ lincat
   V      = Verb1 ; 
       -- = {s : VForm => Str}
 ----  VP     = {s,s2 : Bool => SForm => Agr => Str ; isAux : Bool} ;
-  VPI    = {s : VIForm => Str} ; 
+  VPI    = {s : Bool => VIForm => Str ; sc : Case} ; 
 -----  VP     = Verb ** {s2 : VForm => Str ; c : ComplCase} ;
 ----  VG     = {s,s2 : Bool => VForm => Str ; c : ComplCase} ;
   V2     = TransVerb ;

@@ -58,9 +58,9 @@ lin
   UseA = adj2adjPhrase ;
   ComplA2 = complAdj ;
 
-  ComplAV av vpi = {s = \\_,a => av.s ! a ++ vpi.s ! VIInfinit} ;
-  ComplObjA2V av obj vpi = {s = \\_,a => av.s ! a ++ obj.s ! complCase
-  True av.c VImperat ++ vpi.s ! VIInfinit} ;
+----  ComplAV av vpi = {s = \\_,a => av.s ! a ++ vpi.s ! VIInfinit} ;
+----  ComplObjA2V av obj vpi = {s = \\_,a => av.s ! a ++ obj.s ! complCase
+----    True av.c (SVI VIInf3Iness) ++ vpi.s ! VIInfinit} ;
 
   PositADeg  = positAdjPhrase ;
   ComparADeg = comparAdjPhrase ;
