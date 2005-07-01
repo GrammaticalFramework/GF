@@ -24,6 +24,7 @@ import javax.swing.ProgressMonitor;
 public class Utils {
         protected static Logger timeLogger = Logger.getLogger(Utils.class.getName() + ".timer");
         protected static Logger deleteLogger = Logger.getLogger(Utils.class.getName() + ".delete");
+        protected static Logger stringLogger = Logger.getLogger(Utils.class.getName() + ".string");
         
         private Utils() {
                 //non-instantiability enforced
@@ -134,5 +135,28 @@ public class Utils {
                         sb.replace(i, i + toReplace.length(), replacement);
                 }
                 return sb.toString();
+        }
+        
+        /**
+         * Removes all parts, that are inside "quotation marks" from s.
+         * Assumes no nesting of those, like in Java.
+         * " escaped with \ like \" do not count as quotation marks
+         * @param s The String, that possibly contains quotations
+         * @return a String described above, s without quotations.
+         */
+        public static String removeQuotations(String s) {
+                if (s.indexOf('"') == -1) {
+                        return s;
+                }
+                for (int begin = indexOfNotEscaped(s, "\""); begin > -1 ;  begin = indexOfNotEscaped(s, "\"", begin)) {//yes, I want an unescaped '"'!
+                        int end = indexOfNotEscaped(s, "\"", begin + 1);
+                        if (end > -1) {
+                                s = s.substring(0, begin) + s.substring(end + 1);
+                        } else {
+                                stringLogger.info("Strange String given: '" + s + "'");
+                                s = s.substring(0, begin);
+                        }
+                }
+                return s;
         }
 }

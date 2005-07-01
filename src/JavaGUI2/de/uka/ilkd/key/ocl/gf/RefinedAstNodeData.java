@@ -14,7 +14,7 @@
 //distribution or in the .jar file of this application
 
 package de.uka.ilkd.key.ocl.gf;
-
+import java.util.logging.*;
 /**
  * @author daniels
  * An object of this class represents a line in the GF abstract syntax tree
@@ -23,10 +23,11 @@ package de.uka.ilkd.key.ocl.gf;
  * RefinedAstNodeData has its tooltip from the function it represents, not
  * from its parent node.
  */
-class RefinedAstNodeData implements AstNodeData {
+class RefinedAstNodeData extends AstNodeData {
 
         protected final Printname printname;
         protected final GfAstNode node;
+        protected final String position;
 
         /**
          * all we have to know about an already refined node is its Printname
@@ -34,10 +35,15 @@ class RefinedAstNodeData implements AstNodeData {
          * @param pname the suiting Printname, may be null if the line could 
          * not be parsed
          * @param node the GfAstNode for the current line
+         * @param pos The position in the GF AST of this node in Haskell notation
          */
-        public RefinedAstNodeData(Printname pname, GfAstNode node) {
+        public RefinedAstNodeData(Printname pname, GfAstNode node, String pos) {
                 this.printname = pname;
                 this.node = node;
+                this.position = pos;
+                if (logger.isLoggable(Level.FINEST)) {
+                        logger.finest(this.toString() + " - " + getPosition());
+                }
         }
         
         /**
@@ -62,6 +68,11 @@ class RefinedAstNodeData implements AstNodeData {
         public boolean isMeta() {
                 return this.node.isMeta();
         }
+        
+        public String getPosition() {
+                return this.position;
+        }
+
         
         public String toString() {
                 return this.node.getLine();

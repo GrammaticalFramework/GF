@@ -15,13 +15,16 @@
 
 package de.uka.ilkd.key.ocl.gf;
 
+import java.util.logging.*;
+
 /**
  * @author hdaniels
  * An object of this type knows how it self should be rendered,
  * via Printname how its children should be rendered.
  * This means the tooltip information it got from there.
  */
-interface AstNodeData {
+abstract class AstNodeData {
+        protected static Logger logger = Logger.getLogger(DynamicTree2.class.getName());
         /**
          * @return the printname associated with this object
          */
@@ -38,4 +41,15 @@ interface AstNodeData {
          * @return true iff this node represents an open leaf
          */
         public abstract boolean isMeta();
+        /**
+         * keeps track of the number of children of this node.
+         * It has to be increased whenever a new child of this node is
+         * added.
+         */
+        public int childNum = 0;
+        /**
+         * @return The position String in the GF AST for this node
+         * in Haskell notation.
+         */
+        public abstract String getPosition();
 }

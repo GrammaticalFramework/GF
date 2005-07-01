@@ -141,11 +141,8 @@ public class GFEditor2 extends JFrame {
          */
         private String fileString = "";
         /**
-         * In GF the nodes in the AST are numbered in a linear fashion.
-         * When reading a from GF, we assign each tree node in the Java AST
-         * the position in the 'flattened' GF tree.
-         * The mapping between Java tree pathes and GF node numbering is stored 
-         * here.
+         * The mapping between Java tree pathes and GF AST positions 
+         * is stored here.
          */
         public Hashtable nodeTable = new Hashtable();
         /**this FileChooser gets enriched with the Term/Text option */
@@ -400,7 +397,13 @@ public class GFEditor2 extends JFrame {
          * 1 for text, 2 for HTML, 3 for both 
          */
         private int displayType = 1;
+        /**
+         * rbText, rbHtml and rbTextHtml are grouped here.
+         */
         private ButtonGroup bgDisplayType = new ButtonGroup();
+        /**
+         * The button that switches the linearization view to text only
+         */
         private JRadioButtonMenuItem rbText = new JRadioButtonMenuItem(new AbstractAction("pure text") {
                 public void actionPerformed(ActionEvent ae) {
                         int oldDisplayType = displayType;
@@ -414,6 +417,9 @@ public class GFEditor2 extends JFrame {
                         outputPanelUp.validate();
                 }
         });
+        /**
+         * The button that switches the linearization view to HTML only
+         */
         private JRadioButtonMenuItem rbHtml = new JRadioButtonMenuItem(new AbstractAction("HTML") {
                 public void actionPerformed(ActionEvent ae) {
                         int oldDisplayType = displayType;
@@ -427,6 +433,10 @@ public class GFEditor2 extends JFrame {
                         outputPanelUp.validate();
                 }
         });
+        /**
+         * The button that switches the linearization view to both text and 
+         * HTML separated with a JSplitpane
+         */
         private JRadioButtonMenuItem rbTextHtml = new JRadioButtonMenuItem(new AbstractAction("text and HTML") {
                 public void actionPerformed(ActionEvent ae) {
                         int oldDisplayType = displayType;
@@ -442,7 +452,16 @@ public class GFEditor2 extends JFrame {
                         outputPanelUp.validate();
                 }
         });
-        
+        /**
+         * Since the user will be able to send chain commands to GF,
+         * the editor has to keep track of them, sinve GF does not undo
+         * all parts with one undo, instead 'u n' with n as the number of
+         * individual commands, has to be sent.
+         * This array keeps track of the last 21 such chain commands.
+         * Farther back does the memory of the user probably not reach,
+         * after that only 'u 1' is offered.
+         */
+        final private int[] undoRecord = new int[21];
         
         /**
          * Initializes GF with the given command, sets up the GUI
@@ -1455,7 +1474,7 @@ public class GFEditor2 extends JFrame {
                 this.setSize(800,600);
                 outputPanelUp.setPreferredSize(new Dimension(400,230));
                 treePanel.setDividerLocation(0.3);
-                nodeTable.put(new TreePath(tree.rootNode.getPath()), new Integer(0));
+                nodeTable.put(new TreePath(tree.rootNode.getPath()), "");
                 
                 JRadioButton termButton = new JRadioButton("Term");
                 termButton.setActionCommand("term");
@@ -1505,7 +1524,7 @@ public class GFEditor2 extends JFrame {
                         toProc.write(text, 0, text.length());
                         toProc.newLine();
                         toProc.flush();
-                        //run();
+
                         if (andRead) {
                                 readAndDisplay();
                         }
@@ -2766,8 +2785,18 @@ public class GFEditor2 extends JFrame {
                                  * for the next child (the parent knows how many it has already)
                                  * and save it in an AstNodeData
                                  */
-                                
                                 DefaultMutableTreeNode parent = (DefaultMutableTreeNode)parentNodes.get(new Integer(shift));
+                                
+                                // compute the now childs position
+                                String newPos;
+                                if ((parent != null) && (parent.getUserObject() instanceof AstNodeData) && parent.getUserObject() != null) {
+                                        AstNodeData pand = (AstNodeData)parent.getUserObject();
+                                        newPos = LinPosition.calculateChildPosition(pand.getPosition(), pand.childNum++);
+                                } else {
+                                        //only the case for the root node
+                                        newPos = "[]";
+                                }
+                                
                                 //default case, if we can get more information, this is overwritten
                                 AstNodeData and;
                                 Printname childPrintname = null;
@@ -2777,7 +2806,7 @@ public class GFEditor2 extends JFrame {
                                 Printname parentPrintname = null;
                                 if (childPrintname != null) {
                                         //we know this one
-                                        and = new RefinedAstNodeData(childPrintname, node);
+                                        and = new RefinedAstNodeData(childPrintname, node, newPos);
                                 } else if (parent != null && node.isMeta()) {
                                         //new child without refinement
                                         AstNodeData parentAnd = (AstNodeData)parent.getUserObject();
@@ -2795,21 +2824,21 @@ public class GFEditor2 extends JFrame {
 //                                                if (logger.isLoggable(Level.FINER)) {
 //                                                        logger.finer("new node-parsing: '" + name + "', fun: '" + fun + "', type: '" + paramType + "'");
 //                                                }
-                                                and = new UnrefinedAstNodeData(paramTooltip, node);
+                                                and = new UnrefinedAstNodeData(paramTooltip, node, newPos);
 
                                         } else {
-                                                and = new RefinedAstNodeData(null, node);
+                                                and = new RefinedAstNodeData(null, node, newPos);
                                         }
                                 } else {
                                         //something unparsable, bad luck
                                         //or refined and not described
-                                        and = new RefinedAstNodeData(null, node);
+                                        and = new RefinedAstNodeData(null, node, newPos);
                                 }
                                 
                                 newChildNode = myTreePanel.addObject(parent, and);  
                                 parentNodes.put(new Integer(shift+1), newChildNode);
                                 path = new TreePath(newChildNode.getPath());
-                                nodeTable.put(path, new Integer(index));
+                                nodeTable.put(path, newPos);
 
                                 if (selected) {                        
                                         //show the selected as the 'selected' one in the JTree

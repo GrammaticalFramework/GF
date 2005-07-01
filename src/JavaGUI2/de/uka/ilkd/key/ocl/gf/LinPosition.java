@@ -49,7 +49,22 @@ class LinPosition {
          * @return the position string for the nrth child
          */
         public String childPosition(int nr) {
-                return this.position.substring(0, this.position.length() - 1) + "," + nr + "]";
+                return calculateChildPosition(this.position, nr);
+        }
+        
+        /**
+         * Creates a position string in Haskell notation for the argument 
+         * number nr for the position pos
+         * @param pos The position of the to be parent
+         * @param nr The number of the wanted argument
+         * @return the position string for the nrth child of pos
+         */
+        protected static String calculateChildPosition(String pos, int nr) {
+                if ("[]".equals(pos)) {
+                        return "[" + nr + "]";
+                } else {
+                        return pos.substring(0, pos.length() - 1) + "," + nr + "]";
+                }
         }
 
         /**
