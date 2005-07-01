@@ -161,9 +161,15 @@ public class GFEditor2 extends JFrame {
          * Avoids a time-consuming reconstruction and flickering.
          */
         public boolean treeChanged = true;
-        /** The output from GF is in here */
+        /** 
+         * The output from GF is in here.
+         * Only the read methods, initializeGF and the prober objects access this. 
+         */
         private BufferedReader fromProc;
-        /** leave messages for GF here. */
+        /** Used to leave messages for GF here. 
+         * But <b>only</b> in send and special probers that clean up with undo
+         * after them (or don't change the state like PrintnameLoader).
+         */
         private BufferedWriter toProc;
         /** Linearizations' display area */
         private JTextArea linearizationArea = new JTextArea();
@@ -1665,16 +1671,18 @@ public class GFEditor2 extends JFrame {
                         }
                         readresult = next;
                         readLin();
-                        readTree();
-                        readMessage();
+                        final String treeString = readTree();
+                        final String message = readMessage();
                         //read the menu stuff
+                        Vector gfCommandVector;
                         if (newObject) {
-                                readRefinementMenu();
+                                gfCommandVector = readRefinementMenu();
                         } else {
                                 while(readresult.indexOf("</menu")==-1) {
                                         readresult = fromProc.readLine();
                                         if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("12 " + readresult);                    
                                 }
+                                gfCommandVector = null;
                         }
                         // "" should occur quite fast, but it has not already been read,
                         // since the last read line is "</menu>"
@@ -1682,6 +1690,25 @@ public class GFEditor2 extends JFrame {
                                 readresult = fromProc.readLine();
                                 if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("11 " + readresult);                    
                         }
+                        
+                        //now the form methods are called:
+                        if (treeChanged && (newObject)) {
+                                formTree(tree, treeString);
+                        }
+                        if (gfCommandVector != null) {
+                                formRefinementMenu(gfCommandVector);
+                        }
+                        if (newObject) {
+                                //MUST come after readLin, but since formLin is called later too,
+                                //this cannot be enforced with a local this.linearization
+                                formLin();
+                        }
+                        if (message != null && message.length()>1) {
+                                this.display.addToStages("\n-------------\n" + message, "<br><hr>" + message);
+                                //in case no language is displayed
+                                display(false, false);
+                        }
+
                         
                 } catch (IOException e) {
                         System.err.println("Could not read from external process:\n" + e);
@@ -1907,8 +1934,10 @@ public class GFEditor2 extends JFrame {
          * Parses the GF-output between <menu> and </menu>  tags
          * and fills the corrsponding GUI list -"Select Action".
          * seems to expect the starting menu tag to be already read
+         * @return A Vector of GfCommand, that contains all commands,
+         * already parsed, but not grouped or otherwise treated.
          */
-    	protected void readRefinementMenu (){
+    	protected Vector readRefinementMenu (){
                 if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("list model changing! ");      
                 String s ="";
                 Vector printnameVector = new Vector();
@@ -1968,7 +1997,7 @@ public class GFEditor2 extends JFrame {
                         System.err.println(e.getMessage());
                         e.printStackTrace();
                 }
-                formRefinementMenu(gfCommandVector);
+                return gfCommandVector;
         }
     	
     	/**
@@ -1978,6 +2007,8 @@ public class GFEditor2 extends JFrame {
     	 * character in the printname will be used as the display name
     	 * for this subcategory. If this displayname is defined a second time,
     	 * it will get overwritten.
+    	 * Sorting is also done here.
+    	 * Adding additional special commands like InputCommand happens here too.
     	 * @param gfCommandVector contains all RealCommands, that are available
     	 * at the moment
     	 */
@@ -2119,7 +2150,6 @@ public class GFEditor2 extends JFrame {
                                 readresult = fromProc.readLine();
                                 if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);                     
                         }
-                        if (newObject) formLin();
                 } catch(IOException e){
                         System.err.println(e.getMessage());
                         e.printStackTrace();
@@ -2129,8 +2159,9 @@ public class GFEditor2 extends JFrame {
         /**
          * reads in the tree and calls formTree without start end end tag of tree
          * expects the first starting XML tag tree to be already read
+         * @return the read tags for the tree or null if a read error occurs
          */
-        protected void readTree(){
+        protected String readTree(){
                 String treeString = "";
                 try {
                         //read <tree>
@@ -2143,23 +2174,20 @@ public class GFEditor2 extends JFrame {
                                 readresult = fromProc.readLine();
                                 if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);                     
                         }
-                        if (treeChanged && (newObject)) {
-                                formTree(tree, treeString); 
-                                treeChanged = false;  
-                        } 
-                        treeString=""; 
+                        return treeString;
                 } catch(IOException e){
                         System.err.println(e.getMessage());
                         e.printStackTrace();
+                        return null;
                 }
         }
         
         /**
          * Parses the GF-output between <message> </message>  tags
-         * and puts it in the linearization area.
-         * seems to expect the opening message tag to be already read
+         * and returns it.
+         * @return The read message.
          */
-        protected void readMessage(){
+        protected String readMessage(){
                 String s ="";
                 try {
                         // read <message>
@@ -2172,14 +2200,11 @@ public class GFEditor2 extends JFrame {
                                 readresult = fromProc.readLine();
                                 if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 " + readresult);                     
                         }
-                        if (s.length()>1) {
-                                this.display.addToStages("-------------\n" + s, "<hr>" + s);
-                                //in case no language is displayed
-                                display(false, false);
-                        }
+                        return s;
                 } catch(IOException e){
-                        System.err.println(e.getMessage());
+                        System.err.println(e.getLocalizedMessage());
                         e.printStackTrace();
+                        return e.getLocalizedMessage();
                 }
         }
  
@@ -2188,6 +2213,7 @@ public class GFEditor2 extends JFrame {
          * the names of the languages and puts them into the language menu
          * Parses the GF-output between <gfinit> tags
          * and fill the New combobox in the GUI.
+         * Reading and forming is mixed, since forming is quite primitive.
          */
         protected void formNewMenu () {
                 boolean more = true;
@@ -2730,7 +2756,7 @@ public class GFEditor2 extends JFrame {
                                 if (selected) {
                                         this.currentNode = node;
                                 }
-                                
+                                // use indentation to calculate the parent
                                 index++;
                                 s = s.substring(j+1);    
                                 shift = (shift - star)/2;
@@ -2821,6 +2847,7 @@ public class GFEditor2 extends JFrame {
                         gui2.toFront();
                         index = 0;
                 }
+                treeChanged = false;
         }
         
         /**
