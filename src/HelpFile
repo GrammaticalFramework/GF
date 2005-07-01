@@ -288,6 +288,11 @@ vt, visualize_tree: vt Tree
       -c           show categories only (no functions)
       -f           show functions only (no categories)
       -g           show as graph (sharing uses of the same function)
+      -o           just generate the .dot file
+  examples:
+    p "hello world" | vt -o | wf my.dot ;; ! open -a GraphViz my.dot
+    -- This writes the parse tree into my.dot and opens the .dot file
+    -- with another application without generating .ps.
 
 -- subshells
 

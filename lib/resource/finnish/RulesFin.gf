@@ -6,18 +6,14 @@
 --
 -- This is the Finnish concrete syntax of the multilingual resource
 -- grammar. Most of the work is done in the file $SyntaxFin.gf$.
--- However, for the purpose of documentation, we make here explicit the
--- linearization types of each category, so that their structures and
--- dependencies can be seen.
--- Another substantial part are the linearization rules of some
--- structural words.
 --
 -- The users of the resource grammar should not look at this file for the
 -- linearization rules, which are in fact hidden in the document version.
--- They should use $resource.Abs.gf$ to access the syntactic rules.
+-- They should use $Rules.gf$ to access the syntactic rules.
 -- This file can be consulted in those, hopefully rare, occasions in which
--- one has to know how the syntactic categories are
--- implemented. The parameter types are defined in $TypesFin.gf$.
+-- one has to know how the rules are
+-- implemented. The parameter types are defined in $TypesFin.gf$. For
+-- parameter values, access through $ParadigmFin$ is recommended.
 
 concrete RulesFin of Rules = CategoriesFin ** open Prelude, SyntaxFin in {
 
@@ -103,7 +99,7 @@ lin
 
   TPresent     = {s = [] ; t = Present} ;
   TPast        = {s = [] ; t = Past} ;
-  TFuture      = {s = [] ; t = Present} ;
+  TFuture      = {s = [] ; t = Future} ;
   TConditional = {s = [] ; t = Conditional} ;
 
   ASimul = {s = [] ; a = Simul} ;

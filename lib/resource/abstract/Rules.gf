@@ -84,7 +84,7 @@ fun
 
 -- Formation of infinitival phrases.
 
-  AdjPart : V -> A ;                     -- forgotten
+  AdjPart : V -> A ;                       -- past participle, e.g. "forgotten"
 
   UseCl  : TP -> Cl  -> S ;
   UseRCl : TP -> RCl -> RS ;

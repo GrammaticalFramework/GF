@@ -490,7 +490,7 @@ oper
 
   param
 
-  Tense = Present | Past | Conditional ;
+  Tense = Present | Past | Future | Conditional ;
   Anteriority = Simul | Anter ;
 
   SForm = 
@@ -501,7 +501,14 @@ oper
   
   SType = SDecl | SQuest ;
 
-  VIForm = VIInfinit | VIImperat Bool Number ;
+  VIForm = 
+     VIInfinit 
+   | VIImperat Bool Number
+   | VIInf3Iness
+   | VIInf3Elat
+   | VIInf3Illat
+   | VIInf3Adess
+   | VIInf3Abess ;
 
   oper
   Clause : Type = {s : Bool => SForm => Str} ;
@@ -584,20 +591,37 @@ oper
       }
     } ;
 
-
   inflectVerb : Verb -> Number -> Person -> Bool -> SForm -> {fin, inf : Str} = 
     \verb,n,p,b,sf -> 
     let
       vs   = verb.s ;
       olla = verbOlla.s ;
+      tulla = (vJuosta "tulla" "tulen" "tullut" "tultu").s ;
       eis  = verbEi.s ;
-      part = PastPartAct (NCase n Nom) ;
+      part = PastPartAct (AN (NCase n Nom)) ;
+      abess = vs ! Inf3Abess ;
+      illat = vs ! Inf3Illat ;
       ei : Anteriority -> VForm -> VForm  -> {fin,inf : Str} =
         \a,vf,neg -> case <b,a> of {
            <True, Simul> => {fin = vs   ! vf ; inf = []} ; 
            <True, Anter> => {fin = olla ! vf ; inf = vs ! part} ;
            <False,Simul> => {fin = eis  ! vf ; inf = vs ! neg} ; 
            <False,Anter> => {fin = eis  ! vf ; inf = olla ! neg ++ vs ! part}
+           } ;
+      inf : Anteriority -> {fin,inf : Str} =
+        \a -> case <b,a> of {
+           <True, Simul> => {fin = vs   ! Inf ; inf = []} ; 
+           <True, Anter> => {fin = olla ! Inf ; inf = vs ! part} ;
+           <False,Simul> => {fin = olla ! Inf ; inf = abess} ; 
+           <False,Anter> => {fin = olla ! Inf ; inf = olla ! part ++ abess}
+           } ;
+      fut : Anteriority -> VForm -> VForm  -> {fin,inf : Str} =
+        \a,vf,neg -> case <b,a> of {
+           <True, Simul> => {fin = tulla ! vf ; inf = illat} ; 
+           <True, Anter> => {fin = olla  ! vf ; inf = tulla ! part ++ illat} ;
+           <False,Simul> => {fin = eis   ! vf ; inf = tulla ! neg ++ illat} ; 
+           <False,Anter> => {fin = eis   ! vf ; 
+                             inf = olla ! neg ++ tulla ! part ++ illat}
            } ;
       älä = case b of {
         True  => {fin = vs  ! Imper n ; inf = []} ;
@@ -610,8 +634,9 @@ oper
     in case sf of {
       VFinite _ Past        a => ei a (Impf n p) (part) ;
       VFinite _ Conditional a => ei a (Cond n p) (Cond Sg P3) ;
-      VFinite _ _           a => ei a (Pres n p) (Imper Sg) ; -- Present
-      VInfinit              a => ei a (Inf)      (Inf) ;      --- olla tulematta
+      VFinite _ Present     a => ei a (Pres n p) (Imper Sg) ;
+      VFinite _ Future      a => fut a  (Pres n p) (Imper Sg) ;
+      VInfinit              a => inf a ;
       VImperat                => älä
       } ;
 

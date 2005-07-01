@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/20 16:14:19 $ 
+-- > CVS $Date: 2005/07/01 08:16:32 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.41 $
+-- > CVS $Revision: 1.42 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -208,6 +208,8 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
         _ -> Nothing
     returnArg (ATrms $ generateTrees opts gro mt) sa
 
+  CShowTreeGraph | oElem emitCode opts -> do -- -o
+    returnArg (AString $ visualizeTrees opts $ strees $ s2t a) sa
   CShowTreeGraph  -> do
     let g0 = writeFile "grphtmp.dot" $ visualizeTrees opts $ strees $ s2t a
         g1 = system "dot -Tps grphtmp.dot >grphtmp.ps" 

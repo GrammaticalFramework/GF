@@ -465,6 +465,7 @@ regV soutaa =
     u = ifTok Str a "a" "u" "y" ;
     joi = Predef.tk 2 juo + (o + "i")
   in case ta of {
+    "it" => vHarkita soutaa ;
     "st" | "nn" | "rr" | "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
       _ => case aa of {
     "aa" | "הה" => vOttaa soutaa (souda + "n") ;

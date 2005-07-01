@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/20 16:14:20 $ 
+-- > CVS $Date: 2005/07/01 08:16:32 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.38 $
+-- > CVS $Revision: 1.39 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -191,7 +191,7 @@ optionsOfCommand co = case co of
   CSpeakAloud -> flags "language"
   CPutString -> both "utf8" "filter length"
   CShowTerm -> flags "printer"
-  CShowTreeGraph -> opts "c f g"
+  CShowTreeGraph -> opts "c f g o"
   CSystemCommand _ -> none
 
   CPrintGrammar -> both "utf8" "printer lang"

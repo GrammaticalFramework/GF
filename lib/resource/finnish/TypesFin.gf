@@ -93,8 +93,14 @@ param
    | Imper Number
    | ImpNegPl
    | Pass Bool 
-   | PastPartAct  NForm
-   | PastPartPass NForm
+   | PastPartAct  AForm
+   | PastPartPass AForm
+   | Inf3Iness  -- 5 forms acc. to Karlsson
+   | Inf3Elat
+   | Inf3Illat
+   | Inf3Adess
+   | Inf3Abess
+
    ;
 
 oper
