@@ -15,25 +15,33 @@
 
 package de.uka.ilkd.key.ocl.gf;
 
+import java.util.logging.*;
+
 /**
  * @author daniels
  *
  * represents an open, unrefined node in the AST.
  * It knows, how it is called and described (tooltip).
  */
-public class UnrefinedAstNodeData implements AstNodeData {
+public class UnrefinedAstNodeData extends AstNodeData {
         protected final GfAstNode node;
         protected final String paramTooltip;
+        protected final String position;
         
         /**
          * For a child we have to know its name, its type and the tooltip
          * @param pTooltip
          * @param node The GfAstNode for the current AST node, for which
          * this AstNodeData is the data for.
+         * @param pos The position in the GF AST of this node in Haskell notation
          */
-        public UnrefinedAstNodeData(String pTooltip, GfAstNode node) {
+        public UnrefinedAstNodeData(String pTooltip, GfAstNode node, String pos) {
                 this.node = node;
                 this.paramTooltip = pTooltip;
+                this.position = pos;
+                if (logger.isLoggable(Level.FINEST)) {
+                        logger.finest(this.toString() + " - " + getPosition());
+                }
         }
         /**
          * @return no refinement, no printname, thus null
@@ -53,6 +61,11 @@ public class UnrefinedAstNodeData implements AstNodeData {
         public boolean isMeta() {
                 return this.node.isMeta();
         }
+
+        public String getPosition() {
+                return this.position;
+        }
+        
         
         public String toString() {
                 return this.node.toString();

@@ -67,11 +67,9 @@ ActionListener{
                 
                 tree.addTreeSelectionListener(new TreeSelectionListener() {
                         /**
+                         * Moves to the position of the selected node in GF.
                          * the following is assumed:
-                         * in GF we can only switch to the last or the next editing position.
-                         * In the displayed tree, we can click everywhere.
-                         * We navigate through the GF tree by giving the direction 
-                         * and the number of steps
+                         * gfeditor.nodeTable contains the positions for all selectionPathes.
                          */
                         public void valueChanged(TreeSelectionEvent e) {
                                 if (tree.getSelectionRows() != null) {
@@ -93,13 +91,13 @@ ActionListener{
                                                         GFEditor2.treeLogger.finer("selected path" + tree.getSelectionPath());
                                                 }
                                         }
-                                        int i = ((Integer) gfeditor.nodeTable.get(tree.getSelectionPath())).intValue();
-                                        int j = oldSelection;
+                                        String pos = (String)gfeditor.nodeTable.get(tree.getSelectionPath());
+                                        if (pos == null || "".equals(pos)) {
+                                                //default to sth. sensible
+                                                pos = "[]";
+                                        }
                                         gfeditor.treeChanged = true;
-                                        if (i > j)
-                                                gfeditor.send("> " + String.valueOf(i - j));
-                                        else
-                                                gfeditor.send("< " + String.valueOf(j - i));
+                                        gfeditor.send("mp " + pos);
                                 }
                         }
                 });
