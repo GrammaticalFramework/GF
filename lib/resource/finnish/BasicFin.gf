@@ -159,7 +159,7 @@ lin
   say_VS = mkVS (regV "sanoa") ;
   school_N = regN "koulu" ;
   science_N = regN "tiede" ;
-  sea_N = reg2N "meri" "meri‰" ; ---- *merea
+  sea_N = nMeri "meri" ;
   seek_V2 = dirV2 (regV "etsi‰") ;
   see_V2 = dirV2 (
     mkV "n‰hd‰" "n‰kee" "n‰en" "n‰kev‰t" "n‰hk‰‰" "n‰hd‰‰n"
