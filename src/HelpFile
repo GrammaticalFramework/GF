@@ -143,22 +143,27 @@ p,  parse: p String
       Shows all Trees returned for String by the actual
       grammar (overridden by the -lang flag), in the category S (overridden
       by the -cat flag).
-  options:
+  options for batch input:
+      -lines   parse each line of input separately, ignoring empty lines
+      -all     as -lines, but also parse empty lines
+  options for selecting parsing method:
+      (default)parse using an overgenerating CFG
+      -cfg     parse using a much less overgenerating CFG
+      -mcfg    parse using an even less overgenerating MCFG
+      Note:    the first time parsing with -cfg or -mcfg might take a long time
+  options that only work for the default parsing method:
       -n       non-strict: tolerates morphological errors
       -ign     ignore unknown words when parsing
       -raw     return context-free terms in raw form
       -v       verbose: give more information if parsing fails
-      -new     use an experimental method (GF 2.0; sometimes very good)
-      -lines   parse each line of input separately, ignoring empty lines
-      -all     as -lines, but also parse empty lines
   flags:
       -cat     parse in this category
       -lang    parse in this grammar
       -lexer   filter input through this lexer
-      -parser  use this context-free parsing method
+      -parser  use this parsing strategy
       -number  return this many results at most
   examples:
-      p -cat=S -new "jag är gammal"   -- parse an S with the new method
+      p -cat=S -mcfg "jag är gammal"   -- parse an S with the MCFG
       rf examples.txt | p -lines      -- parse each non-empty line of the file
 
 tt, test_tokenizer: tt String
@@ -467,8 +472,11 @@ q, quit: q
     -optimize=all          first try parametrize then do values with the rest
     -optimize=none         no optimization
 
--parser, Context-free    parsing algorithm. Under construction.
-       The default is a chart parser via context-free approximation.
+-parser, parsing strategy. The default is chart. If -cfg or -mcfg are selected, only bottomup and topdown are recognized.
+    -parser=chart          bottom-up chart parsing
+    -parser=bottomup       a more up to date bottom-up strategy
+    -parser=topdown        top-down strategy
+    -parser=old            an old bottom-up chart parser
 
 -printer, format in which the grammar is printed. The default is gfc.
     -printer=gfc            GFC grammar
