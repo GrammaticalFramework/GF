@@ -113,7 +113,7 @@ today:
 	tools/mktoday.sh $(PACKAGE_VERSION)
 
 javac:
-	$(JAVAC) $(JAVAFLAGS) -classpath $(GFEDITOR):$(GFEDITOR)/log4j-1.2.8.jar:$(GFEDITOR)/jargs-1.0.jar $(GFEDITOR)/de/uka/ilkd/key/ocl/gf/*.java
+	$(JAVAC) $(JAVAFLAGS) -classpath $(GFEDITOR)/jargs-1.0.jar $(GFEDITOR)/de/uka/ilkd/key/ocl/gf/*.java
 	$(JAVAC) $(JAVAFLAGS) JavaGUI/*.java
 
 jar: javac
