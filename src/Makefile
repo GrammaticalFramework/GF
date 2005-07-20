@@ -24,6 +24,8 @@ SNAPSHOT_DIR=GF-$(shell date +%Y%m%d)
 
 MSI_FILE=gf-$(subst .,_,$(PACKAGE_VERSION)).msi
 
+GF_DATA_DIR=$(datadir)/GF-$(PACKAGE_VERSION)
+
 # use the temporary binary file name 'gf-bin' to not clash with directory 'GF' 
 # on case insensitive file systems (such as FAT)
 GF_EXE=gf$(EXEEXT)
@@ -232,11 +234,11 @@ install-gfdoc:
 	$(INSTALL) tools/$(GF_DOC_EXE) $(bindir)
 
 install-editor:
-	$(INSTALL) -d $(datadir)/GF-$(PACKAGE_VERSION)
+	$(INSTALL) -d $(GF_DATA_DIR)
 	$(INSTALL) jgf $(bindir)
-	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(datadir)/GF-$(PACKAGE_VERSION)
+	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(GF_DATA_DIR)
 	$(INSTALL) gfeditor $(bindir)
-	$(INSTALL) -m 0644 $(GFEDITOR)/gfeditor.jar $(datadir)/GF-$(PACKAGE_VERSION)
+	$(INSTALL) -m 0644 $(GFEDITOR)/gfeditor.jar $(GF_DATA_DIR)
 
 install-java: javac
 	-rm -f ../bin/JavaGUI
@@ -244,4 +246,3 @@ install-java: javac
 	@echo "PLEASE edit GFHOME in bin/jgf"
 	-rm -f ../bin/$(GFEDITOR)
 	ln -s ../src/$(GFEDITOR) ../bin
-
