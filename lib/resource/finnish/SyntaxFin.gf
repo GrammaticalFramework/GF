@@ -124,7 +124,7 @@ oper
            f => pron.s ! npForm2PForm f 
            } ; 
      n = pron.n ; 
-     p = NPP pron.p
+     p = NP3
     } ;
 
 -- *Partitive noun phrases* use the partitive instead of the nominative
@@ -202,9 +202,9 @@ oper
   mkDeterminerGenNum : (_,_ : Case => Str) -> DeterminerNum = 
     mkDeterminerGen Pl ;
 
-  jokainenDet = mkDeterminer Sg (caseTable Sg (sNainen "jokaista")) ;
+  jokainenDet = mkDeterminer Sg (caseTable Sg (nhn (sNainen "jokaista"))) ;
   kaikkiDet : DeterminerNum = mkDeterminerNum (kaikkiPron Pl) ;
-  useimmatDet = mkDeterminer Pl (caseTable Pl (sSuurin "useinta")) ;
+  useimmatDet = mkDeterminer Pl (caseTable Pl (nhn (sSuurin "useinta"))) ;
   mikaDet     = mkDeterminerGen Sg (mikaInt ! Sg) (kukaInt ! Sg) ;
   mitkaDet : DeterminerNum = 
     mkDeterminerGenNum (mikaInt ! Pl) (kukaInt ! Pl) ;
@@ -435,7 +435,7 @@ oper
   appFunComm : Function -> NounPhrase -> CommNounPhrase = \vaimo, jussi -> 
     {s = \\p,n,c => case vaimo.c of {
            NPCase Gen => jussi.s ! NPCase Gen ++ 
-                         ifPossSuffix vaimo jussi.p jussi.n c ;
+                         ifPossSuffix vaimo jussi.p n c ;
            h => vaimo.s ! False ! n ! c ++ jussi.s ! h
           } ;  
      g = vaimo.g
@@ -636,7 +636,7 @@ oper
     let
       vs   = verb.s ;
       olla = verbOlla.s ;
-      tulla = (vJuosta "tulla" "tulen" "tullut" "tultu").s ;
+      tulla = (v2v (vJuosta "tulla" "tulen" "tullut" "tultu")).s ;
       eis  = verbEi.s ;
       part = PastPartAct (AN (NCase n Nom)) ;
       abess = vs ! Inf3Abess ;
@@ -903,6 +903,7 @@ oper
 
 -- To generate "sanoo että Jussi ui" / "ei sano että Jussi ui"
 
+  embedConj : Str = "," ++ "että" ;
 
 --3 Verb-complement verbs
 --

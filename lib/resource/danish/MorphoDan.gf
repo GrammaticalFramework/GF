@@ -29,6 +29,11 @@ oper
     Gen => bil + "s"   --- but: hus --> hus
     } ;
 
+  extNGen : Str -> NounGender = \s -> case last s of {
+    "n" => NUtr ;
+    _   => NNeutr
+    } ; 
+
   nDreng : Str -> Subst = \dreng ->
     mkSubstantive dreng (dreng + "en") (dreng + "e")  (dreng + "ene") **
       {h1 = Utr} ;
@@ -67,6 +72,9 @@ oper
   aRask : Str -> Adj = \rask -> 
     mkAdjective rask rask (rask + "e") (rask + "ere") (rask + "est") ;
 
+  extractPositive : Adj -> {s : AdjFormPos => Case => Str} = \adj ->
+    {s = \\a,c => adj.s ! (AF (Posit a) c)} ;
+
 -- verbs
 
   mkVerb : (_,_,_,_,_,_ : Str) -> Verbum = 
@@ -80,6 +88,31 @@ oper
        VF (Imper v)     => mkVoice v spis
        }
      } ;
+
+  irregVerb : (drikke,drakk,drukket : Str) -> Verbum = 
+    \drikke,drakk,drukket ->
+    let
+      drikk = init drikke ;
+      drikker = case last (init drikke) of {
+        "r" => drikk ;
+        _   => drikke + "r"
+        }
+    in 
+    mkVerb drikke drikker  (drikke + "s") drakk drukket drikk ; 
+
+  regVerb : Str -> Str -> Verbum = \spise, spiste -> 
+    let
+      spis = init spise ;
+      te   = Predef.dp 2 spiste
+    in
+    case te of {
+      "te" => vSpis spis ;
+      "de" => case last spise of {
+         "e" => vHusk spis ;
+         _   => vBo spise
+         } ;
+      _  => vHusk spis 
+      } ;
 
   mkVoice : Voice -> Str -> Str = \v,s -> case v of {
     Act => s ;

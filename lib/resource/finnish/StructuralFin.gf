@@ -53,8 +53,8 @@ concrete StructuralFin of Structural =
   it_NP = nameNounPhrase pronSe ;
   many_Det = mkDeterminer singular moniPron ;
   most8many_Det = useimmatDet ;
-  most_Det = mkDeterminer singular (caseTable singular (sSuurin "enintä")) ;
-  much_Det = mkDeterminer singular (caseTable singular (sNauris "runsasta")) ;
+  most_Det = mkDeterminer singular (caseTable singular (nhn (sSuurin "enintä"))) ;
+  much_Det = mkDeterminer singular (caseTable singular (nhn (sNauris "runsasta"))) ;
 ----  must_VV = vHukkua "täytyä" "täydy" ** {c = CCase Gen} ;
   no_Phr = ss ("Ei" ++ stopPunct) ;
   on_Prep = prepCase Adess ;

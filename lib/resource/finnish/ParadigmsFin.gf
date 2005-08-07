@@ -358,7 +358,8 @@ oper
   mkN = \a,b,c,d,e,f,g,h,i,j,k -> 
     mkNoun a b c d e f g h i j ** {g = k ; lock_N = <>} ;
 
-regN = \vesi -> 
+  regN = \vesi -> 
+  ----  nhn (regNounH vesi) **  {g = NonHuman ; lock_N = <>} ;
   let
     esi = Predef.dp 3 vesi ;   -- analysis: suffixes      
     si  = Predef.dp 2 esi ;
@@ -366,8 +367,9 @@ regN = \vesi ->
     s   = init si ;
     a   = if_then_Str (pbool2bool (Predef.occurs "aou" vesi)) "a" "ä" ;
     ves = init vesi ;          -- synthesis: prefixes
+    vet = strongGrade ves ;
     ve  = init ves ;
-  in 
+  in nhn (
        case esi of {
     "uus" | "yys" => sRakkaus vesi ;
     "nen" =>       sNainen (Predef.tk 3 vesi + ("st" + a)) ;
@@ -376,26 +378,29 @@ regN = \vesi ->
     "aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" => sPuu vesi ;
     "ie" | "uo" | "yö" => sSuo vesi ;
     "ea" | "eä" => 
-      mkNoun 
-        vesi (vesi + "n") (vesi + "n"+a)  (vesi + a)  (vesi + a+"n")
-        (ves + "in"+a) (ves + "iss"+a) (ves + "iden")  (ves + "it"+a)
+      mkSubst
+        a
+        vesi (vesi) (vesi) (vesi + a)  (vesi + a+"n")
+        (ves + "i") (ves + "i") (ves + "iden")  (ves + "it"+a)
         (ves + "isiin") ;
     "is"        => sNauris (vesi + ("t" + a)) ;
     "ut" | "yt" => sRae vesi (ves + ("en" + a)) ;
-    "as" | "äs" => sRae vesi (strongGrade ves + (a + "n" + a)) ;
-    "ar" | "är" => sRae vesi (strongGrade ves + ("ren" + a)) ;
+    "as" | "äs" => sRae vesi (vet + (a + "n" + a)) ;
+    "ar" | "är" => sRae vesi (vet + ("ren" + a)) ;
   _ => case i of {
-    "n"         => sLiitin vesi (strongGrade (init vesi) + "men") ;
+    "n"         => sLiitin vesi (vet + "men") ;
     "s"         => sTilaus vesi (ves + ("ksen" + a)) ;
     "i" =>         sBaari (vesi + a) ;
-    "e" =>         sRae vesi (strongGrade (ves + "e") + "en" + a) ;
+    "e" =>         sRae vesi (strongGrade vesi + "en" + a) ;
     "a" | "o" | "u" | "y" | "ä" | "ö" => sLukko vesi ;
-    _ =>             sLinux (vesi + "i" + a)
+    _ =>           sLinux (vesi + "i" + a)
   }
   }
-  }  ** {g = NonHuman ; lock_N = <>} ;
+  }
+  ) **  {g = NonHuman ; lock_N = <>} ;
 
-reg2N : (savi,savia : Str) -> N = \savi,savia -> 
+  reg2N : (savi,savia : Str) -> N = \savi,savia -> 
+  ----  nhn (reg2NounH savi savia) 
   let
     savit = regN savi ;
     ia = Predef.dp 2 savia ;
@@ -405,14 +410,15 @@ reg2N : (savi,savia : Str) -> N = \savi,savia ->
     savin = weakGrade savi + "n" ;
   in
   case <o,ia> of {
-    <"i","ia">              => sArpi  savi ;
-    <"i","iä">              => sSylki savi ;
-    <"i","ta"> | <"i","tä"> => sTohtori (savi + a) ;
-    <"o","ta"> | <"ö","tä"> => sRadio savi ;  
-    <"a","ta"> | <"ä","tä"> => sPeruna savi ;  
-    <"a","ia"> | <"a","ja"> => sKukko savi savin savia ;
+    <"i","ia">              => nhn (sArpi  savi) ;
+    <"i","iä">              => nhn (sSylki savi) ;
+    <"i","ta"> | <"i","tä"> => nhn (sTohtori (savi + a)) ;
+    <"o","ta"> | <"ö","tä"> => nhn (sRadio savi) ;  
+    <"a","ta"> | <"ä","tä"> => nhn (sPeruna savi) ;  
+    <"a","ia"> | <"a","ja"> => nhn (sKukko savi savin savia) ;
     _ => savit
-    }  ** {g = NonHuman ; lock_N = <>} ;
+    } 
+    **  {g = NonHuman ; lock_N = <>} ;
 
 reg3N = \vesi,veden,vesiä -> 
   let
@@ -425,38 +431,38 @@ reg3N = \vesi,veden,vesiä ->
   case si of {
     "us" | "ys" =>
        ifTok CommonNoun (Predef.dp 3 veden) "den" 
-         (sRakkaus vesi)
-         (sTilaus vesi (veden + a)) ;
-    "as" | "äs" => sRae vesi (veden + a) ;
-    "li" | "ni" | "ri" => sSusi vesi veden (Predef.tk 1 vesi + ("en" + a)) ; 
-    "si" => sSusi vesi veden (Predef.tk 2 vesi + ("ten" + a)) ; 
-    "in" | "en" | "än" => sLiitin vesi veden ;
+         (nhn (sRakkaus vesi))
+         (nhn (sTilaus vesi (veden + a))) ;
+    "as" | "äs" => nhn (sRae vesi (veden + a)) ;
+    "li" | "ni" | "ri" => nhn (sSusi vesi veden (Predef.tk 1 vesi + ("en" + a))) ; 
+    "si" => nhn (sSusi vesi veden (Predef.tk 2 vesi + ("ten" + a))) ; 
+    "in" | "en" | "än" => nhn (sLiitin vesi veden) ;
     _ => case i of {
-      "a" | "o" | "u" | "y" | "ä" | "ö" => sKukko vesi veden vesiä ;
-      "i" => sKorpi vesi veden (init veden + "n" + a) ;
+      "a" | "o" | "u" | "y" | "ä" | "ö" => nhn (sKukko vesi veden vesiä) ;
+      "i" => nhn (sKorpi vesi veden (init veden + "n" + a)) ;
       _ => vesit
       }
     } ** {g = NonHuman ; lock_N = <>} ;
 
-  nKukko = \a,b,c -> sKukko a b c ** {g = nonhuman ; lock_N = <>} ;
+  nKukko = \a,b,c -> nhn (sKukko a b c) ** {g = nonhuman ; lock_N = <>} ;
 
   humanN = \n -> {s = n.s ; lock_N = n.lock_N ; g = human} ;
 
-  nLukko = \a -> sLukko a ** {g = nonhuman ; lock_N = <>} ;
-  nTalo = \a -> sTalo a ** {g = nonhuman ; lock_N = <>} ;
-  nArpi = \a -> sArpi a ** {g = nonhuman ; lock_N = <>} ;
-  nSylki = \a -> sSylki a ** {g = nonhuman ; lock_N = <>} ;
-  nLinux = \a -> sLinux a ** {g = nonhuman ; lock_N = <>} ;
-  nPeruna = \a -> sPeruna a ** {g = nonhuman ; lock_N = <>} ;
-  nRae = \a,b -> sRae a b ** {g = nonhuman ; lock_N = <>} ;
-  nSusi = \a,b,c -> sSusi a b c ** {g = nonhuman ; lock_N = <>} ;
-  nPuu = \a -> sPuu a ** {g = nonhuman ; lock_N = <>} ;
-  nSuo = \a -> sSuo a ** {g = nonhuman ; lock_N = <>} ;
-  nNainen = \a -> sNainen a ** {g = nonhuman ; lock_N = <>} ;
-  nTilaus = \a,b -> sTilaus a b ** {g = nonhuman ; lock_N = <>} ;
+  nLukko = \a -> nhn (sLukko a) ** {g = nonhuman ; lock_N = <>} ;
+  nTalo = \a -> nhn (sTalo a) ** {g = nonhuman ; lock_N = <>} ;
+  nArpi = \a -> nhn (sArpi a) ** {g = nonhuman ; lock_N = <>} ;
+  nSylki = \a -> nhn (sSylki a) ** {g = nonhuman ; lock_N = <>} ;
+  nLinux = \a -> nhn (sLinux a) ** {g = nonhuman ; lock_N = <>} ;
+  nPeruna = \a -> nhn (sPeruna a) ** {g = nonhuman ; lock_N = <>} ;
+  nRae = \a,b -> nhn (sRae a b) ** {g = nonhuman ; lock_N = <>} ;
+  nSusi = \a,b,c -> nhn (sSusi a b c) ** {g = nonhuman ; lock_N = <>} ;
+  nPuu = \a -> nhn (sPuu a) ** {g = nonhuman ; lock_N = <>} ;
+  nSuo = \a -> nhn (sSuo a) ** {g = nonhuman ; lock_N = <>} ;
+  nNainen = \a -> nhn (sNainen a) ** {g = nonhuman ; lock_N = <>} ;
+  nTilaus = \a,b -> nhn (sTilaus a b) ** {g = nonhuman ; lock_N = <>} ;
   nKulaus = \a -> nTilaus a (init a + "ksen" + getHarmony (last
   (init a))) ;
-  nNauris = \a -> sNauris a ** {g = nonhuman ; lock_N = <>} ;
+  nNauris = \a -> nhn (sNauris a) ** {g = nonhuman ; lock_N = <>} ;
   sgpartN noun part = {
     s = table { 
       NCase Sg Part => part ;
@@ -495,83 +501,26 @@ reg3N = \vesi,veden,vesiä ->
   mkV a b c d e f g h i j k l = mkVerb a b c d e f g h i j k l ** 
     {sc = Nom ; lock_V = <>} ;
 
-regV soutaa = 
-  let
-    taa = Predef.dp 3 soutaa ;
-    ta  = init taa ;
-    aa  = Predef.dp 2 taa ;
-    juo = Predef.tk 2 soutaa ;
-    souda = weakGrade (init soutaa) ;
-    soudan = juo + "en" ;
-    o  = Predef.dp 1 juo ;
-    a = last aa ;
-    u = ifTok Str a "a" "u" "y" ;
-    joi = Predef.tk 2 juo + (o + "i")
-  in case ta of {
-    "it" => vHarkita soutaa ;
-    "st" | "nn" | "rr" | "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
-      _ => case aa of {
-    "aa" | "ää" => vOttaa soutaa (souda + "n") ;
-    "da" | "dä" => vJuoda soutaa joi ;
-    "ta" | "tä" => vOsata soutaa ;
-    _ => vHukkua soutaa souda
-    }} ** {sc = Nom ; lock_V = <>} ;
+  regV soutaa = v2v (regVerbH soutaa) ** {sc = Nom ; lock_V = <>} ;
 
-reg2V : (soutaa,souti : Str) -> V = \soutaa,souti ->
-  let
-    soudat = regV soutaa ;
-    soudan = weakGrade (init soutaa) + "n" ;
-    soudin = weakGrade souti + "n" ;
-    souden = init souti + "en" ;
-    juo = Predef.tk 2 soutaa ;
-    o  = Predef.dp 1 juo ;
-    u = ifTok Str (last soutaa) "a" "u" "y" ;
-    aa  = Predef.dp 2 soutaa ;
-    taa = Predef.dp 3 soutaa ;
-    ta  = Predef.tk 1 taa ;
-  in 
-  case aa of {
-    "aa" | "ää" => vHuoltaa soutaa soudan souti soudin ;
-     _ => case ta of {
-    "at" | "ät" => vPalkata soutaa souti ;
-    "st"        => vJuosta soutaa souden (juo +   o+u+"t") (juo + "t"+u) ;
-    _ => soudat
-    }} ** {sc = Nom ; lock_V = <>} ;
+  reg2V : (soutaa,souti : Str) -> V = \soutaa,souti ->
+    v2v (reg2VerbH soutaa souti) ** {sc = Nom ; lock_V = <>} ;
 
-reg3V soutaa soudan souti = 
-  let
-    taa   = Predef.dp 3 soutaa ;
-    ta    = init taa ;
-    aa    = Predef.dp 2 taa ;
-    souda = init soudan ;
-    juo = Predef.tk 2 soutaa ;
-    o  = last juo ;
-    a = last aa ;
-    u = ifTok Str a "a" "u" "y" ;
-    soudin = weakGrade souti + "n" ;
-    soudat = reg2V soutaa souti ;
-  in case ta of {
-    "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
-    "ot" | "öt" => vPudota soutaa souti ;
-      _ => case aa of {
-    "aa" | "ää" => vHuoltaa soutaa soudan souti soudin ;
-    "da" | "dä" => vJuoda soutaa souti ;
-    _ => soudat
-    }} ** {sc = Nom ; lock_V = <>} ;
+  reg3V soutaa soudan souti = 
+    v2v (reg3VerbH soutaa soudan souti) ** {sc = Nom ; lock_V = <>} ;
 
-  vValua v = vSanoa v ** {sc = Nom ; lock_V = <>} ;
-  vKattaa v u = vOttaa v u ** {sc = Nom ; lock_V = <>} ;
-  vOstaa v = vPoistaa v ** {sc = Nom ; lock_V = <>} ;
-  vNousta v u = vJuosta v u [] [] ** {sc = Nom ; lock_V = <>} ; -----
-  vTuoda v = vJuoda v [] ** {sc = Nom ; lock_V = <>} ; -----
+  vValua v = v2v (vSanoa v) ** {sc = Nom ; lock_V = <>} ;
+  vKattaa v u = v2v (vOttaa v u) ** {sc = Nom ; lock_V = <>} ;
+  vOstaa v = v2v (vPoistaa v) ** {sc = Nom ; lock_V = <>} ;
+  vNousta v u = v2v (vJuosta v u [] []) ** {sc = Nom ; lock_V = <>} ; -----
+  vTuoda v = v2v (vJuoda v []) ** {sc = Nom ; lock_V = <>} ; -----
   caseV c v = {s = v.s ; sc = c ; lock_V = <>} ;
 
   vOlla = verbOlla ** {sc = Nom ; lock_V = <>} ;
   vEi = verbEi ** {sc = Nom ; lock_V = <>} ;
 
-
   vHuoltaa : (_,_,_,_ : Str) -> Verb = \ottaa,otan,otti,otin -> 
-    SyntaxFin.vHuoltaa ottaa otan otti otin  ** {sc = Nom ; lock_V = <>} ;
+    v2v (SyntaxFin.vHuoltaa ottaa otan otti otin)  ** {sc = Nom ; lock_V = <>} ;
   mkV2 = \v,c -> v ** {s3 = c.s3 ; p = c.p ; c = c.c ; lock_V2 = <>} ;
   caseV2 = \v,c -> mkV2 v (caseP c) ; 
   dirV2 v = mkTransVerbDir v ** {lock_V2 = <>} ;

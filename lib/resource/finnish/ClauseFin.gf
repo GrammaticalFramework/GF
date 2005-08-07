@@ -22,7 +22,7 @@ concrete ClauseFin of Clause = CategoriesFin **
 ----        (reflPronNounPhrase (pgen2gen subj.g) subj.n subj.p)) ;
   SPredVS subj verb sent = 
     sats2clause (
-      insertComplement (mkSats subj verb) sent.s) ;
+      insertComplement (mkSats subj verb) (embedConj ++ sent.s)) ;
   SPredVQ subj verb quest = 
     sats2clause (
       insertComplement (mkSats subj verb) quest.s) ;
@@ -30,7 +30,7 @@ concrete ClauseFin of Clause = CategoriesFin **
     sats2clause (
       insertComplement
         (mkSatsObject subj verb obj)
-        sent.s
+        (embedConj ++ sent.s)
         ) ;
   SPredV2Q subj verb obj quest = 
     sats2clause (
