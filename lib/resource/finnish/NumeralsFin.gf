@@ -9,21 +9,21 @@ lincat
 
 lin 
   num x = x ;
-  n2 = mkSubst "a" "kaksi" "kahde" "kahte" "kahta" "kahteen" "kaksi" "kaksi"
-    "kaksien" "kaksia" "kaksiin" ;
-  n3 = mkSubst "a" "kolme" "kolme" "kolme" "kolmea" "kolmeen" "kolmi" "kolmi"
-    "kolmien" "kolmia" "kolmiin" ;
+  n2 = nhn (mkSubst "a" "kaksi" "kahde" "kahte" "kahta" "kahteen" "kaksi" "kaksi"
+    "kaksien" "kaksia" "kaksiin") ;
+  n3 = nhn (mkSubst "a" "kolme" "kolme" "kolme" "kolmea" "kolmeen" "kolmi" "kolmi"
+    "kolmien" "kolmia" "kolmiin") ;
   n4 = regN "nelj‰" ;
   n5 = reg3N "viisi" "viiden" "viisi‰" ;
   n6 = reg3N "kuusi" "kuuden" "kuusia" ; 
-  n7 = mkSubst "‰" "seitsem‰n" "seitsem‰" "seitsem‰" "seitsem‰‰" 
+  n7 = nhn (mkSubst "‰" "seitsem‰n" "seitsem‰" "seitsem‰" "seitsem‰‰" 
     "seitsem‰‰n" "seitsemi" "seitsemi" "seitsemien" "seitsemi‰"
-    "seitsemiin" ;
-  n8 = mkSubst "a" "kahdeksan" "kahdeksa" "kahdeksa" "kahdeksaa" 
+    "seitsemiin") ;
+  n8 = nhn (mkSubst "a" "kahdeksan" "kahdeksa" "kahdeksa" "kahdeksaa" 
     "kahdeksaan" "kahdeksi" "kahdeksi" "kahdeksien" "kahdeksia"
-    "kahdeksiin" ;
-  n9 = mkSubst "‰" "yhdeks‰n" "yhdeks‰" "yhdeks‰" "yhdeks‰‰" 
-    "yhdeks‰‰n" "yhdeksi" "yhdeksi" "yhdeksien" "yhdeksi‰" "yhdeksiin" ;
+    "kahdeksiin") ;
+  n9 = nhn (mkSubst "‰" "yhdeks‰n" "yhdeks‰" "yhdeks‰" "yhdeks‰‰" 
+    "yhdeks‰‰n" "yhdeksi" "yhdeksi" "yhdeksien" "yhdeksi‰" "yhdeksiin") ;
 
   pot01 = 
    {s = table {

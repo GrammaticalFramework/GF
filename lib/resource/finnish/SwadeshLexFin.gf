@@ -4,6 +4,8 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
   ** open ResourceFin, SyntaxFin, ParadigmsFin, 
           BasicFin, Prelude in {
 
+  flags optimize=values ;
+
   lin
 
     -- Pronouns
@@ -26,8 +28,8 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
     all_NDet = ResourceFin.all_NDet ;
     many_Det = many_Det ;
     some_Det = some_Det ;
-    few_Det = mkDeterminer Pl (\\c => (sTalo "muutama").s ! NCase Pl c) ;
-    other_Det = mkDeterminer Pl  (\\c => (sPuu "muu").s ! NCase Pl c) ;
+    few_Det = mkDeterminer Pl (\\c => (nhn (sTalo "muutama")).s ! NCase Pl c) ;
+    other_Det = mkDeterminer Pl  (\\c => (nhn (sPuu "muu")).s ! NCase Pl c) ;
 
 
     -- Adverbs
@@ -157,7 +159,7 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
     rain_N = regN "sade" ;
     river_N = river_N ;
     road_N = regN "tie" ;
-    root_N = reg3N "juuri" "juuren" "juuria" ;
+    root_N = reg2N "juuri" "juuria" ;
     rope_N = reg3N "köysi" "köyden" "köysiä" ;
     salt_N = regN "suola" ;
     sand_N = regN "hiekka" ;
@@ -206,7 +208,7 @@ concrete SwadeshLexFin of SwadeshLex = CategoriesFin
     freeze_V = regV "jäätyä" ;
     give_V = regV "antaa" ;
     hear_V = UseV2 hear_V2 ;
-    hit_V = regV "syödä" ;
+    hit_V = regV "lyödä" ;
     hold_V = regV "pitää" ;
     hunt_V = regV "metsästää" ;
     kill_V = regV "tappaa" ;

@@ -91,6 +91,8 @@ param
    | Impf Number Person
    | Cond Number Person
    | Imper Number
+   | ImperP3 Number
+   | ImperP1Pl
    | ImpNegPl
    | Pass Bool 
    | PastPartAct  AForm

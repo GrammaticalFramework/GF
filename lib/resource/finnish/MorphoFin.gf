@@ -18,10 +18,41 @@ resource MorphoFin = TypesFin ** open Prelude in {
 
 oper
 
+  NounH : Type = {
+    a,vesi,vede,vete,vetta,veteen,vetii,vesii,vesien,vesia,vesiin : Str
+    } ;
+
 -- worst-case macro
 
-  mkSubst : Str -> (_,_,_,_,_,_,_,_,_,_ : Str) -> CommonNoun = 
+  mkSubst : Str -> (_,_,_,_,_,_,_,_,_,_ : Str) -> NounH = 
     \a,vesi,vede,vete,vetta,veteen,vetii,vesii,vesien,vesia,vesiin -> 
+    {a = a ;
+     vesi = vesi ;
+     vede = vede ;
+     vete = vete ;
+     vetta = vetta ;
+     veteen = veteen ;
+     vetii = vetii ;
+     vesii = vesii ;
+     vesien = vesien ;
+     vesia = vesia ;
+     vesiin = vesiin
+    } ;
+
+  nhn : NounH -> CommonNoun = \nh ->
+    let
+     a = nh.a ;
+     vesi = nh.vesi ;
+     vede = nh.vede ;
+     vete = nh.vete ;
+     vetta = nh.vetta ;
+     veteen = nh.veteen ;
+     vetii = nh.vetii ;
+     vesii = nh.vesii ;
+     vesien = nh.vesien ;
+     vesia = nh.vesia ;
+     vesiin = nh.vesiin
+    in
     {s = table {
       NCase Sg Nom    => vesi ;
       NCase Sg Gen    => vede + "n" ;
@@ -65,9 +96,71 @@ oper
 
   mkNoun : (_,_,_,_,_,_,_,_,_,_ : Str) -> CommonNoun =
     \talo,talon,talona,taloa,taloon,taloina,taloissa,talojen,taloja,taloihin ->
-    mkSubst (ifTok Str (Predef.dp 1 talona) "a" "a" "ä")
+    nhn (mkSubst (ifTok Str (Predef.dp 1 talona) "a" "a" "ä")
       talo (Predef.tk 1 talon) (Predef.tk 2 talona) taloa taloon
-      (Predef.tk 2 taloina) (Predef.tk 3 taloissa) talojen taloja taloihin ;
+      (Predef.tk 2 taloina) (Predef.tk 3 taloissa) talojen taloja taloihin) ;
+
+-- Regular heuristics.
+
+{-
+  regNounH : Str -> NounH = \vesi -> 
+  let
+    esi = Predef.dp 3 vesi ;   -- analysis: suffixes      
+    si  = Predef.dp 2 esi ;
+    i   = last si ;
+    s   = init si ;
+    a   = if_then_Str (pbool2bool (Predef.occurs "aou" vesi)) "a" "ä" ;
+    ves = init vesi ;          -- synthesis: prefixes
+    vet = strongGrade ves ;
+    ve  = init ves ;
+  in 
+       case esi of {
+    "uus" | "yys" => sRakkaus vesi ;
+    "nen" =>       sNainen (Predef.tk 3 vesi + ("st" + a)) ;
+
+  _ => case si of {
+    "aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" => sPuu vesi ;
+    "ie" | "uo" | "yö" => sSuo vesi ;
+    "ea" | "eä" => 
+      mkSubst
+        a
+        vesi (vesi) (vesi) (vesi + a)  (vesi + a+"n")
+        (ves + "i") (ves + "i") (ves + "iden")  (ves + "it"+a)
+        (ves + "isiin") ;
+    "is"        => sNauris (vesi + ("t" + a)) ;
+    "ut" | "yt" => sRae vesi (ves + ("en" + a)) ;
+    "as" | "äs" => sRae vesi (vet + (a + "n" + a)) ;
+    "ar" | "är" => sRae vesi (vet + ("ren" + a)) ;
+  _ => case i of {
+    "n"         => sLiitin vesi (vet + "men") ;
+    "s"         => sTilaus vesi (ves + ("ksen" + a)) ;
+    "i" =>         sBaari (vesi + a) ;
+    "e" =>         sRae vesi (strongGrade vesi + "en" + a) ;
+    "a" | "o" | "u" | "y" | "ä" | "ö" => sLukko vesi ;
+    _ =>           sLinux (vesi + "i" + a)
+  }
+  }
+  } ;
+
+  reg2NounH : (savi,savia : Str) -> NounH = \savi,savia -> 
+  let
+    savit = regNounH savi ;
+    ia = Predef.dp 2 savia ;
+    i  = init ia ;
+    a  = last ia ;
+    o  = last savi ;
+    savin = weakGrade savi + "n" ;
+  in
+  case <o,ia> of {
+    <"i","ia">              => sArpi  savi ;
+    <"i","iä">              => sSylki savi ;
+    <"i","ta"> | <"i","tä"> => sTohtori (savi + a) ;
+    <"o","ta"> | <"ö","tä"> => sRadio savi ;  
+    <"a","ta"> | <"ä","tä"> => sPeruna savi ;  
+    <"a","ia"> | <"a","ja"> => sKukko savi savin savia ;
+    _ => savit
+    } ;
+-}
 
 -- Here some useful special cases; more will be given in $paradigms.Fin.gf$.
 --         
@@ -75,7 +168,7 @@ oper
 -- to account for grade and vowel alternation, three forms are usually enough
 -- Examples: "talo", "kukko", "huippu", "koira", "kukka", "syylä",...
 
-  sKukko : (_,_,_ : Str) -> CommonNoun = \kukko,kukon,kukkoja ->
+  sKukko : (_,_,_ : Str) -> NounH = \kukko,kukon,kukkoja ->
     let {
       o      = Predef.dp 1 kukko ;
       a      = Predef.dp 1 kukkoja ;
@@ -99,7 +192,7 @@ oper
             kukkoja
             (kukkoi + ifi "in" "ihin") ;
 
-  sLukko : Str -> CommonNoun = \lukko -> 
+  sLukko : Str -> NounH = \lukko -> 
    let
      o = last lukko ;
      lukk = init lukko ; 
@@ -114,9 +207,9 @@ oper
 
 -- The special case with no alternations.
 
-  sTalo : Str -> CommonNoun = sLukko ;
+  sTalo : Str -> NounH = sLukko ;
 
-  sBaari : Str -> CommonNoun = \baaria ->
+  sBaari : Str -> NounH = \baaria ->
     let
       baari = Predef.tk 1 baaria ; 
       baar = Predef.tk 1 baari ; 
@@ -124,32 +217,40 @@ oper
     in
       sKukko baari (weakGrade baari + "n") (baar + ("ej" + a)) ;
 
-  sKorpi : (_,_,_ : Str) -> CommonNoun = \korpi,korven,korpena ->
-    let {
+  sKorpi : (_,_,_ : Str) -> NounH = \korpi,korven,korpena ->
+    let
       a      = Predef.dp 1 korpena ;
       korpe  = Predef.tk 2 korpena ;
+      korp   = init korpi ;
+      korpea = case last korp of {
+        "r" | "l" | "n" => korp + "t" + a ;
+        _ => korpe + a
+        } ;        
       korve  = Predef.tk 1 korven ;
-      korvi  = Predef.tk 1 korve + "i"
-    } 
+      korvi  = Predef.tk 1 korve + "i" ;
+      korpien = case last korp of {
+        "r" | "l" | "n" => korp + "ten" ;
+        _ => korpi + "en"
+        } ;        
     in
     mkSubst a 
             korpi
             korve
             korpe
-            (korpe + a) 
+            korpea 
             (korpe + "en")
             korpi
             korvi
-            (korpi + "en") 
+            korpien 
             (korpi + a)
             (korpi + "in") ;
 
-  sArpi : Str -> CommonNoun = \arpi -> 
+  sArpi : Str -> NounH = \arpi -> 
     sKorpi arpi (init (weakGrade arpi) + "en") (init arpi + "ena") ;
-  sSylki : Str -> CommonNoun = \sylki -> 
+  sSylki : Str -> NounH = \sylki -> 
     sKorpi sylki (init (weakGrade sylki) + "en") (init sylki + "enä") ;
 
-  sKoira : Str -> CommonNoun = \koira ->
+  sKoira : Str -> NounH = \koira ->
     let a = getHarmony (last koira) in
     sKukko koira (koira + "n") (init koira + "i" + a) ;
 
@@ -157,7 +258,7 @@ oper
 -- "malli"/"mallin"/"malleja", with the exception that the "i" is not attached
 -- to the singular nominative.
 
-  sLinux : Str -> CommonNoun = \linuxia ->
+  sLinux : Str -> NounH = \linuxia ->
     let {
        linux = Predef.tk 2 linuxia ; 
        a = getHarmony (Predef.dp 1 linuxia) ;
@@ -177,7 +278,7 @@ oper
 
 -- Nouns of at least 3 syllables ending with "a" or "ä", like "peruna", "rytinä".
 
-  sPeruna : Str -> CommonNoun = \peruna ->
+  sPeruna : Str -> NounH = \peruna ->
     let {
       a  = Predef.dp 1 peruna ;
       perun = Predef.tk 1 peruna ;
@@ -196,7 +297,7 @@ oper
             (perunoi + ("t" + a))
             (perunoi + "hin") ;
 
-  sTohtori : Str -> CommonNoun = \tohtoria ->
+  sTohtori : Str -> NounH = \tohtoria ->
     let
       a  = last tohtoria ;
       tohtori = init tohtoria ;
@@ -214,7 +315,7 @@ oper
             (tohtorei + "t" + a)
             (tohtorei + "hin") ;
 
-  sRadio : Str -> CommonNoun = \radio ->
+  sRadio : Str -> NounH = \radio ->
     let
       o  = last radio ;
       a  = getHarmony o ;
@@ -235,7 +336,7 @@ oper
 -- Surpraisingly, making the test for the partitive, this not only covers
 -- "rae", "perhe", "savuke", but also "rengas", "lyhyt" (except $Sg Illat$), etc.
 
-  sRae : (_,_ : Str) -> CommonNoun = \rae,rakeena ->
+  sRae : (_,_ : Str) -> NounH = \rae,rakeena ->
     let {
       a      = Predef.dp 1 rakeena ;
       rakee  = Predef.tk 2 rakeena ;
@@ -255,7 +356,7 @@ oper
             (rakei + ("t" + a))
             (rakei + "siin") ;
 
-  sSusi : (_,_,_ : Str) -> CommonNoun = \susi,suden,sutena ->
+  sSusi : (_,_,_ : Str) -> NounH = \susi,suden,sutena ->
     let
       a      = Predef.dp 1 sutena ;
       sude   = Predef.tk 1 suden ;
@@ -274,7 +375,7 @@ oper
             (susi + a)
             (susi + "in") ;
 
-  sPuu : Str -> CommonNoun = \puu ->
+  sPuu : Str -> NounH = \puu ->
     let {
       u  = Predef.dp 1 puu ;
       a  = getHarmony u ;
@@ -294,7 +395,7 @@ oper
             (pui + ("t" + a))
             (pui + "hin") ;
 
-  sSuo : Str -> CommonNoun = \suo ->
+  sSuo : Str -> NounH = \suo ->
     let {
       o  = Predef.dp 1 suo ;
       a  = getHarmony o ;
@@ -315,7 +416,7 @@ oper
 
 -- Here in fact it is handy to use the partitive form as the only stem.
 
-  sNainen : Str -> CommonNoun = \naista ->
+  sNainen : Str -> NounH = \naista ->
     let {
       nainen = Predef.tk 3 naista + "nen" ;
       nais   = Predef.tk 2 naista ;
@@ -339,7 +440,7 @@ oper
 -- The following covers: "tilaus", "kaulin", "paimen", "laidun", "sammal",
 -- "kyynel" (excep $Sg Iness$ for the last two?).
 
-  sTilaus : (_,_ : Str) -> CommonNoun = \tilaus, tilauksena ->
+  sTilaus : (_,_ : Str) -> NounH = \tilaus, tilauksena ->
     let {
       tilauks  = Predef.tk 3 tilauksena ;
       tilaukse = tilauks + "e" ;
@@ -362,7 +463,7 @@ oper
 -- Some words have the three grades ("rakkaus","rakkauden","rakkautena"), which
 -- are however derivable from the stem.
 
-  sRakkaus : Str -> CommonNoun = \rakkaus ->
+  sRakkaus : Str -> NounH = \rakkaus ->
     let {
       rakkau    = Predef.tk 1 rakkaus ;
       rakkaut   = rakkau + "t" ;
@@ -387,7 +488,7 @@ oper
 
 -- The following covers nouns like "nauris" and adjectives like "kallis", "tyyris".
 
-  sNauris : (_ : Str) -> CommonNoun = \naurista ->
+  sNauris : (_ : Str) -> NounH = \naurista ->
     let {
       a        = Predef.dp 1 naurista ;
       nauris   = Predef.tk 2 naurista ;
@@ -411,7 +512,7 @@ oper
 
 -- Words of the form "siitin", "avain", "höyhen" (w or wo grade alternation).
 
-  sLiitin : Str -> Str -> CommonNoun = \liitin,liittimen ->
+  sLiitin : Str -> Str -> NounH = \liitin,liittimen ->
     let
       liittime = init liittimen ;
       liitti = Predef.tk 2 liittime ;
@@ -433,7 +534,7 @@ oper
 
 -- The following covers adjectives like "kapea", "leveä".
 
-  sKapea : (_ : Str) -> CommonNoun = \kapea ->
+  sKapea : (_ : Str) -> NounH = \kapea ->
     let
       a        = last kapea ;
       kape     = init kapea ;
@@ -453,7 +554,7 @@ oper
 
 -- The following two are used for adjective comparison.
 
-  sSuurempi : Str -> CommonNoun = \suurempaa ->
+  sSuurempi : Str -> NounH = \suurempaa ->
     let {
       a        = Predef.dp 1 suurempaa ;
       suure    = Predef.tk 4 suurempaa ;
@@ -474,7 +575,7 @@ oper
             (suurempi + a)
             (suurempi + "in") ;
 
-  sSuurin : Str -> CommonNoun = \suurinta ->
+  sSuurin : Str -> NounH = \suurinta ->
     let {
       a        = Predef.dp 1 suurinta ;
       suuri    = Predef.tk 3 suurinta ;
@@ -682,7 +783,7 @@ vowelHarmony : Str -> Str = \liitin ->
 -- The inflextion shows a surprising similarity with "suo".
 
   relPron : RelPron = 
-    let {jo = sSuo "jo"} in {s = 
+    let {jo = nhn (sSuo "jo")} in {s = 
     table {
       Sg => table {
         Nom => "joka" ;
@@ -698,7 +799,7 @@ vowelHarmony : Str -> Str = \liitin ->
   
   mikaInt : Number => Case => Str = 
     let {
-      mi  = sSuo "mi"
+      mi  = nhn (sSuo "mi")
     } in
     table {
       Sg => table {
@@ -715,8 +816,8 @@ vowelHarmony : Str -> Str = \liitin ->
 
   kukaInt : Number => Case => Str = 
     let {
-      ku = sRae "kuka" "kenenä" ;
-      ket = sRae "kuka" "keinä"} in
+      ku = nhn (sRae "kuka" "kenenä") ;
+      ket = nhn (sRae "kuka" "keinä")} in
     table {
       Sg => table {
         Nom => "kuka" ;
@@ -773,8 +874,8 @@ vowelHarmony : Str -> Str = \liitin ->
 
   jokuPron : Number => Case => Str =
     let 
-      ku = sPuu "ku" ;
-      kui = sPuu "kuu" 
+      ku = nhn (sPuu "ku") ;
+      kui = nhn (sPuu "kuu") 
     in
     table {
       Sg => table {
@@ -801,7 +902,7 @@ vowelHarmony : Str -> Str = \liitin ->
         }
       } ;
 
-moniPron : Case => Str = caseTable singular (sSusi "moni" "monen" "monena") ;
+moniPron : Case => Str = caseTable singular (nhn (sSusi "moni" "monen" "monena")) ;
 
 caseTable : Number -> CommonNoun -> Case => Str = \n,cn -> 
   \\c => cn.s ! NCase n c ;
@@ -841,8 +942,8 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
   regAdjDegr : CommonNoun -> Str -> Str -> AdjDegr = \kiva, kivempaa, kivinta ->
     mkAdjDegr 
       (noun2adj kiva) 
-      (noun2adjComp False (sSuurempi kivempaa)) 
-      (noun2adjComp False (sSuurin kivinta)) ;
+      (noun2adjComp False (nhn (sSuurempi kivempaa))) 
+      (noun2adjComp False (nhn (sSuurin kivinta))) ;
 
 
 --3 Verbs
@@ -857,13 +958,33 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
   mkVerb : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Verb = 
     \tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun -> 
+    v2v (mkVerbH 
+     tulla tulee tulen tulevat tulkaa tullaan tuli tulin tulisi tullut tultu tullun
+      ) ;
+
+  v2v : VerbH -> Verb = \vh -> 
     let
+      tulla = vh.tulla ; 
+      tulee = vh.tulee ; 
+      tulen = vh.tulen ; 
+      tulevat = vh.tulevat ;
+      tulkaa = vh.tulkaa ; 
+      tullaan = vh.tullaan ; 
+      tuli = vh.tuli ; 
+      tulin = vh.tulin ;
+      tulisi = vh.tulisi ;
+      tullut = vh.tullut ;
+      tultu = vh.tultu ;
+      tultu = vh.tultu ;
+      tullun = vh.tullun ;
       tuje = init tulen ;
       tuji = init tulin ;
       a = Predef.dp 1 tulkaa ;
+      tulko = Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "ö") ;
+      o = last tulko ;
       tulleena = Predef.tk 2 tullut + ("een" + a) ;
-      tulleen = (noun2adj (sRae tullut tulleena)).s ;
-      tullun = (noun2adj (sKukko tultu tullun (tultu + ("j"+a)))).s  ;
+      tulleen = (noun2adj (nhn (sRae tullut tulleena))).s ;
+      tullun = (noun2adj (nhn (sKukko tultu tullun (tultu + ("j"+a))))).s  ;
       tulema = Predef.tk 3 tulevat + "m" + a ;
       vat = "v" + a + "t"
     in
@@ -889,7 +1010,10 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       Cond Pl P3 => tulisi + vat ;
       Imper Sg   => tuje ;
       Imper Pl   => tulkaa ;
-      ImpNegPl   => Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "ö") ;
+      ImperP3 Sg => tulko + o + "n" ;
+      ImperP3 Pl => tulko + o + "t" ;
+      ImperP1Pl  => tulkaa + "mme" ;
+      ImpNegPl   => tulko ;
       Pass True  => tullaan ;
       Pass False => Predef.tk 2 tullaan ;
       PastPartAct n => tulleen ! n ;
@@ -902,9 +1026,95 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       }
     } ;
 
+  VerbH : Type = {
+    tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun
+      : Str
+    } ;
+
+  mkVerbH : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> VerbH = 
+    \tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun -> 
+    {tulla = tulla ; 
+     tulee = tulee ; 
+     tulen = tulen ; 
+     tulevat = tulevat ;
+     tulkaa = tulkaa ; 
+     tullaan = tullaan ; 
+     tuli = tuli ; 
+     tulin = tulin ;
+     tulisi = tulisi ;
+     tullut = tullut ;
+     tultu = tultu ;
+     tullun = tullun
+     } ; 
+
+  regVerbH : Str -> VerbH = \soutaa -> 
+  let
+    taa = Predef.dp 3 soutaa ;
+    ta  = init taa ;
+    aa  = Predef.dp 2 taa ;
+    juo = Predef.tk 2 soutaa ;
+    souda = weakGrade (init soutaa) ;
+    soudan = juo + "en" ;
+    o  = Predef.dp 1 juo ;
+    a = last aa ;
+    u = ifTok Str a "a" "u" "y" ;
+    joi = Predef.tk 2 juo + (o + "i")
+  in case ta of {
+    "it" => vHarkita soutaa ;
+    "st" | "nn" | "rr" | "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
+      _ => case aa of {
+    "aa" | "ää" => vOttaa soutaa (souda + "n") ;
+    "da" | "dä" => vJuoda soutaa joi ;
+    "ta" | "tä" => vOsata soutaa ;
+    _ => vHukkua soutaa souda
+    }} ;
+
+  reg2VerbH : (soutaa,souti : Str) -> VerbH = \soutaa,souti ->
+  let
+    soudat = regVerbH soutaa ;
+    soudan = weakGrade (init soutaa) + "n" ;
+    soudin = weakGrade souti + "n" ;
+    souden = init souti + "en" ;
+    juo = Predef.tk 2 soutaa ;
+    o  = Predef.dp 1 juo ;
+    u = ifTok Str (last soutaa) "a" "u" "y" ;
+    aa  = Predef.dp 2 soutaa ;
+    taa = Predef.dp 3 soutaa ;
+    ta  = Predef.tk 1 taa ;
+  in 
+  case aa of {
+    "aa" | "ää" => vHuoltaa soutaa soudan souti soudin ;
+     _ => case ta of {
+    "at" | "ät" => vPalkata soutaa souti ;
+    "st"        => vJuosta soutaa souden (juo +   o+u+"t") (juo + "t"+u) ;
+    _ => soudat
+    }} ** {sc = Nom ; lock_V = <>} ;
+
+  reg3VerbH : (_,_,_ : Str) -> VerbH = \soutaa,soudan,souti -> 
+  let
+    taa   = Predef.dp 3 soutaa ;
+    ta    = init taa ;
+    aa    = Predef.dp 2 taa ;
+    souda = init soudan ;
+    juo = Predef.tk 2 soutaa ;
+    o  = last juo ;
+    a = last aa ;
+    u = ifTok Str a "a" "u" "y" ;
+    soudin = weakGrade souti + "n" ;
+    soudat = reg2VerbH soutaa souti ;
+  in case ta of {
+    "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
+    "ot" | "öt" => vPudota soutaa souti ;
+      _ => case aa of {
+    "aa" | "ää" => vHuoltaa soutaa soudan souti soudin ;
+    "da" | "dä" => vJuoda soutaa souti ;
+    _ => soudat
+    }} ** {sc = Nom ; lock_V = <>} ;
+
+
 -- For "harppoa", "hukkua", "löytyä", with grade alternation.
 
-  vHukkua : (_,_ : Str) -> Verb = \hukkua,huku -> 
+  vHukkua : (_,_ : Str) -> VerbH = \hukkua,huku -> 
     let {
       a     = Predef.dp 1 hukkua ;
       hukku = Predef.tk 1 hukkua ;
@@ -920,7 +1130,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       hukkui = init hukku + i + "i" ; 
       hukui  = init huku + i + "i" ; 
     } in
-    mkVerb
+    mkVerbH
       hukkua
       (hukku + u)
       (huku + "n")
@@ -936,14 +1146,14 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
 -- For cases with or without alternation: "sanoa", "valua", "kysyä".
 
-  vSanoa : Str -> Verb = \sanoa ->
+  vSanoa : Str -> VerbH = \sanoa ->
     vHukkua sanoa (Predef.tk 1 sanoa) ;
 ----    vHukkua sanoa (weakGrade (Predef.tk 1 sanoa)) ;
 ---- The gfr file becomes 6* bigger if this change is done
 
 -- For "ottaa", "käyttää", "löytää", "huoltaa", "hiihtää", "siirtää".
 
-  vHuoltaa : (_,_,_,_ : Str) -> Verb = \ottaa,otan,otti,otin -> 
+  vHuoltaa : (_,_,_,_ : Str) -> VerbH = \ottaa,otan,otti,otin -> 
     let {
       a    = Predef.dp 1 ottaa ;
       aa   = a + a ;
@@ -952,7 +1162,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       otta = Predef.tk 1 ottaa ;
       ote  = Predef.tk 1 ota + "e"
     } in
-    mkVerb
+    mkVerbH
       ottaa
       ottaa
       otan
@@ -968,7 +1178,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
 -- For cases where grade alternation is not affected by the imperfect "i".
 
-  vOttaa : (_,_ : Str) -> Verb = \ottaa,otan -> 
+  vOttaa : (_,_ : Str) -> VerbH = \ottaa,otan -> 
     let 
       i = "i" ; --- wrong rule if_then_Str (pbool2bool (Predef.occurs "ou" ottaa)) "i" "oi"
     in
@@ -976,7 +1186,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
 -- For "poistaa", "ryystää".
 
-  vPoistaa : Str -> Verb = \poistaa -> 
+  vPoistaa : Str -> VerbH = \poistaa -> 
     vOttaa poistaa ((Predef.tk 1 poistaa + "n")) ;
 
 
@@ -984,17 +1194,17 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 -- from "pelätä-pelkäsi" vs. "palata-palasi"
 
 
-  vOsata : Str -> Verb = \osata -> 
+  vOsata : Str -> VerbH = \osata -> 
     vPalkata osata (Predef.tk 2 osata + "si") ;
 
-  vPalkata : Str -> Str -> Verb = \palkata,palkkasi -> 
+  vPalkata : Str -> Str -> VerbH = \palkata,palkkasi -> 
     let
       a   = Predef.dp 1 palkata ;
       palka = Predef.tk 2 palkata ;
       palkka = Predef.tk 2 palkkasi ;
       u   = case a of {"a" => "u" ; _ => "y"}
     in
-    mkVerb
+    mkVerbH
       palkata
       (palkka + a)
       (palkka + (a + "n"))
@@ -1008,7 +1218,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (palka + "tt" + u)
       (palka + "t" + u + "n") ;
 
-  vPudota : Str -> Str -> Verb = \pudota, putosi -> 
+  vPudota : Str -> Str -> VerbH = \pudota, putosi -> 
     let
       a    = Predef.dp 1 pudota ;
       pudo = Predef.tk 2 pudota ;
@@ -1016,7 +1226,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       putoa = puto + a ;
       u   = case a of {"a" => "u" ; _ => "y"}
     in
-    mkVerb
+    mkVerbH
       pudota
       (putoa  + a)
       (putoa  + "n")
@@ -1030,7 +1240,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (pudo   + "tt" + u)
       (pudo   + "t" + u + "n") ;
 
-  vHarkita : Str -> Verb = \harkita -> 
+  vHarkita : Str -> VerbH = \harkita -> 
     let
       a      = Predef.dp 1 harkita ;
       harki  = Predef.tk 2 harkita ;
@@ -1038,7 +1248,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       harkitsi = harki + "tsi" ;
       u   = case a of {"a" => "u" ; _ => "y"}
     in
-    mkVerb
+    mkVerbH
       harkita
       (harkitse + "e")
       (harkitse + "n")
@@ -1057,7 +1267,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
 -- For "juosta", "piestä", "nousta", "rangaista", "kävellä", "surra", "panna".
 
-  vJuosta : (_,_,_,_ : Str) -> Verb = \juosta,juoksen,juossut,juostu -> 
+  vJuosta : (_,_,_,_ : Str) -> VerbH = \juosta,juoksen,juossut,juostu -> 
     let
       a      = Predef.dp 1 juosta ;
       t      = last (init juosta) ;
@@ -1066,7 +1276,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       juos   = Predef.tk 2 juosta ;
       juostun = ifTok Str t "t" (juostu + "n") (init juossut + "n") ;
     in
-    mkVerb
+    mkVerbH
       juosta
       (juokse + "e")
       juoksen
@@ -1082,13 +1292,13 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
 -- For "juoda", "syödä", "viedä", "naida", "saada".
 
-  vJuoda : (_,_ : Str) -> Verb = \juoda, joi -> 
+  vJuoda : (_,_ : Str) -> VerbH = \juoda, joi -> 
     let
       a   = Predef.dp 1 juoda ;
       juo = Predef.tk 2 juoda ;
       u   = case a of {"a" => "u" ; _ => "y"}
     in
-    mkVerb
+    mkVerbH
       juoda
       juo
       (juo + "n")
@@ -1137,7 +1347,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     } ;
 
   kaikkiPron : Number -> Case => Str = \n -> 
-    let {kaiket = caseTable n (sKorpi "kaikki" "kaiken" "kaikkena")} in
+    let {kaiket = caseTable n (nhn (sKorpi "kaikki" "kaiken" "kaikkena"))} in
     table {
       Nom => "kaikki" ;
       c => kaiket ! c
@@ -1155,21 +1365,22 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
   param NumPlace = NumIndep | NumAttr  ;
 
 oper
-  yksiN = mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
-                "yksien" "yksiä" "yksiin" ;
-  kymmenenN = mkSubst "ä" "kymmenen" "kymmene" "kymmene" "kymmentä" 
+  yksiN = nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
+                "yksien" "yksiä" "yksiin") ;
+  kymmenenN = nhn (mkSubst "ä" "kymmenen" "kymmene" "kymmene" "kymmentä" 
      "kymmeneen" "kymmeni" "kymmeni" "kymmenien" "kymmeniä"
-     "kymmeniin" ;
-  sataN = sLukko "sata" ;
+     "kymmeniin") ;
+  sataN = nhn (sLukko "sata") ;
 
-  tuhatN = mkSubst "a" "tuhat" "tuhanne" "tuhante" "tuhatta" "tuhanteen"
-    "tuhansi" "tuhansi" "tuhansien" "tuhansia" "tuhansiin" ;
+  tuhatN = nhn (mkSubst "a" "tuhat" "tuhanne" "tuhante" "tuhatta" "tuhanteen"
+    "tuhansi" "tuhansi" "tuhansien" "tuhansia" "tuhansiin") ;
 
   kymmentaN = {s = table {
     NCase Sg Nom => "kymmentä" ;
     c => kymmenenN.s ! c
     }
   } ;
+
   sataaN = {s = table {
     Sg => sataN.s ;
     Pl => table {
