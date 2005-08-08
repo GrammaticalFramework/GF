@@ -1,3 +1,15 @@
+---------------------------------------------------------------------
+-- |
+-- Maintainer  : PL
+-- Stability   : (stable)
+-- Portability : (portable)
+--
+-- > CVS $Date: 2005/08/08 09:01:25 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
+--
+-- Definitions of ranges, and operations on ranges
+-----------------------------------------------------------------------------
 
 module GF.Parsing.MCFG.Range
     ( Range(..), makeRange, concatRange, rangeEdge, edgeRange, minRange, maxRange,

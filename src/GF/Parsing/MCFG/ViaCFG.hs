@@ -1,12 +1,15 @@
-{-- Module --------------------------------------------------------------------
-  Filename:    ApproxParse.hs
-  Author:      Håkan Burden
-  Time-stamp:  <2005-04-18, 14:56>
-
-  Description: An agenda-driven implementation of the active algorithm 4.3.4,
-               parsing through context-free approximation as described in 
-	       Ljunglöf (2004)   
-------------------------------------------------------------------------------}
+----------------------------------------------------------------------
+-- |
+-- Maintainer  : PL
+-- Stability   : (stable)
+-- Portability : (portable)
+--
+-- > CVS $Date: 2005/08/08 09:01:25 $
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.4 $
+--
+-- MCFG parsing, through context-free approximation
+-----------------------------------------------------------------------------
 
 module GF.Parsing.MCFG.ViaCFG where
 

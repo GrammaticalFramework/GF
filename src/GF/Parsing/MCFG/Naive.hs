@@ -1,3 +1,15 @@
+----------------------------------------------------------------------
+-- |
+-- Maintainer  : PL
+-- Stability   : (stable)
+-- Portability : (portable)
+--
+-- > CVS $Date: 2005/08/08 09:01:25 $
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
+--
+-- MCFG parsing, the naive algorithm
+-----------------------------------------------------------------------------
 
 module GF.Parsing.MCFG.Naive (parse, parseR) where
 

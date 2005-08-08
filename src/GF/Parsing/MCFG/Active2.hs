@@ -1,3 +1,15 @@
+----------------------------------------------------------------------
+-- |
+-- Maintainer  : PL
+-- Stability   : (stable)
+-- Portability : (portable)
+--
+-- > CVS $Date: 2005/08/08 09:01:25 $
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.2 $
+--
+-- MCFG parsing, the active algorithm (alternative version)
+-----------------------------------------------------------------------------
 
 module GF.Parsing.MCFG.Active2 (parse) where
 

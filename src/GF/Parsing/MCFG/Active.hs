@@ -1,3 +1,15 @@
+----------------------------------------------------------------------
+-- |
+-- Maintainer  : PL
+-- Stability   : (stable)
+-- Portability : (portable)
+--
+-- > CVS $Date: 2005/08/08 09:01:25 $
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.5 $
+--
+-- MCFG parsing, the active algorithm
+-----------------------------------------------------------------------------
 
 module GF.Parsing.MCFG.Active (parse, parseR) where
 
@@ -20,7 +32,7 @@ import GF.Infra.Print
 ----------------------------------------------------------------------
 -- * parsing
 
---parse :: (Ord n, Ord c, Ord l, Ord t) => String -> MCFParser c n l t
+parse :: (Ord n, Ord c, Ord l, Ord t) => String -> MCFParser c n l t
 parse strategy pinfo starts toks =
     trace2 "MCFG.Active - strategy" (if isBU strategy then "BU"
 				     else if isTD strategy then "TD" else "None") $
@@ -28,7 +40,7 @@ parse strategy pinfo starts toks =
       Final (Abs cat rhs fun) found rrecs <- chartLookup chart Fin ]
     where chart = process strategy pinfo starts toks
 
---parse :: (Ord n, Ord c, Ord l, Ord t) => String -> MCFParser c n l t
+-- parseR :: (Ord n, Ord c, Ord l, Ord t) => String -> MCFParser c n l t
 parseR strategy pinfo starts =
     trace2 "MCFG.Active Range - strategy" (if isBU strategy then "BU"
 					   else if isTD strategy then "TD" else "None") $

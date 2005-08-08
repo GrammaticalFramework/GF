@@ -41,10 +41,11 @@ sub check_headerline {
 if ($#ARGV >= 0) {
   @FILES = @ARGV;
 } else {
-  @dirs = qw{. api canonical cf cfgm compile for-ghc-nofud
-	     grammar infra notrace parsers shell
-	     source speech translate useGrammar util visualization
-	     GF GF/* GF/*/* GF/*/*/*};
+#   @dirs = qw{. api canonical cf cfgm compile for-ghc-nofud
+# 	     grammar infra notrace parsers shell
+# 	     source speech translate useGrammar util visualization
+# 	     GF GF/* GF/*/* GF/*/*/*};
+  @dirs = qw{GF GF/* GF/*/* GF/*/*/*};
   @FILES = grep(!/\/(Par|Lex)(GF|GFC|CFG)\.hs$/,
 		glob "{".join(",",@dirs)."}/*.hs");
 }
@@ -70,7 +71,9 @@ for $file (@FILES) {
   # the module header
   $hdr_module = $module = "";
 
-  s/^ (--+ \s* \n) +//sx;
+  s/^ \{-\# \s+ OPTIONS \s+ -cpp \s+ \#-\} //sx;  # removing ghc options (cpp)
+  s/^ \s+ //sx;  # removing initial whitespace
+  s/^ (--+ \s* \n) +//sx;  # removing initial comment lines
   unless (s/^ -- \s \| \s* \n//sx) {
     push @ERR, "Incorrect module header";
   } else {
