@@ -1,3 +1,15 @@
+----------------------------------------------------------------------
+-- |
+-- Maintainer  : PL
+-- Stability   : (stable)
+-- Portability : (portable)
+--
+-- > CVS $Date: 2005/08/08 09:01:25 $
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.3 $
+--
+-- MCFG parsing, the incremental algorithm (alternative version)
+-----------------------------------------------------------------------------
 
 module GF.Parsing.MCFG.Incremental2 (parse) where
 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/27 11:37:57 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.16 $
+-- > CVS $Date: 2005/08/08 09:01:25 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.17 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -147,7 +147,7 @@ prefixPathName p f = case f of
     c:_ | isSep c -> f  -- do not prefix [Unix style] absolute paths
     _ -> case p of
         "" -> f
-        _  -> p ++ "/" ++ f -- / actually works on windows
+        _  -> p ++ "/" ++ f -- note: / actually works on windows
 
 justInitPath :: FilePath -> FilePath
 justInitPath = reverse . drop 1 . dropWhile (not . isSep) . reverse
@@ -303,7 +303,8 @@ readFileIOE f = ioe $ catch (readFile f >>= return . return)
 -- intended semantics: if file is not found, try @\$GF_LIB_PATH\/file@
 -- (even if file is an absolute path, but this should always fail)
 -- it returns not only contents of the file, but also the path used
--- FIXME: unix-specific, / is \ on Windows
+--
+-- FIXME: unix-specific, \/ is \\ on Windows
 readFileLibraryIOE :: String -> FilePath -> IOE (FilePath, String)
 readFileLibraryIOE ini f = 
 	ioe $ catch ((do {s <- readFile initPath; return (return (initPath,s))}))
