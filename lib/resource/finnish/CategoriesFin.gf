@@ -37,13 +37,13 @@ lincat
 
   A      = Adjective ; 
       -- = CommonNoun ;
-  A2     = Adjective ** {c : ComplCase} ;
+  A2     = Adjective ** {s3 : Str ; p : Bool ; c : ComplCase} ;
   ADeg   = {s : Degree => AForm => Str} ;
   AP     = {s : AdjPos => AForm => Str} ;
   AS     = Adjective ; --- "more difficult for him to come than..."
-  A2S    = Adjective ** {c : ComplCase} ;
+  A2S    = Adjective ** {s3 : Str ; p : Bool ; c : ComplCase} ;
   AV     = Adjective ;
-  A2V    = Adjective ** {c : ComplCase} ;
+  A2V    = Adjective ** {s3 : Str ; p : Bool ; c : ComplCase} ;
 
   V      = Verb1 ; 
       -- = {s : VForm => Str}

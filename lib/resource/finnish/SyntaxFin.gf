@@ -366,23 +366,23 @@ oper
 -- The order of the adjective and its argument depends on the case: the local
 -- cases favour Adj + Noun in the predicative position ("hyvä painissa",
 -- "tyytyväinen vaalitulokseen", "jaollinen kolmella"), which is not a possible
--- order for the accusative case.
+-- order for the accusative case. A preposition seems not to seem affect
+-- the rule: ("yhtäsuuri kuin sinä", "sinua vastaan suunnattu").
 
-  AdjCompl = Adjective ** {c : ComplCase} ;
 
---- Only the middle argument of $complCase$ matters, since
---- no accusatives come into question.
+  AdjCompl = Adjective ** {s3 : Str ; p : Bool ; c : ComplCase} ;
 
   complAdj : AdjCompl -> NounPhrase -> AdjPhrase = \hyva,paini ->
     let
       hyvat : AForm => Str = \\a => hyva.s ! a ;
       c : NPForm = complCase True hyva.c (SVI VIInf3Iness) ;
-      painissa : Str = paini.s ! c
+      painissa : Str = pPosit hyva.s3 hyva.p (paini.s ! c) ;
+      haspp : Bool = notB (isNil hyva.s3)
     in
     {s = table {
            AAttr => \\a => painissa ++ hyvat ! a ; 
            APred => \\a => if_then_else Str 
-                               (isLocalNPForm c)
+                               (orB (isLocalNPForm c) haspp)
                                (hyvat ! a ++ painissa)
                                (painissa ++ hyvat ! a)
            }

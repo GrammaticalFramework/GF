@@ -374,7 +374,7 @@ oper
 
   superlAdjPhrase : AdjDegr -> AdjPhrase = \ung ->
     {s = \\a,c => ung.s ! AF (Super SupWeak) c ;
-     p = True
+     p = False
     } ;
 
 {-

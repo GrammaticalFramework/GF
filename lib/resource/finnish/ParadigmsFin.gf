@@ -37,7 +37,7 @@ oper
   human    : Gender ;
   nonhuman : Gender ;
 
-  Number   : Type;
+  Number   : Type ;
 
   singular : Number ;
   plural   : Number ;
@@ -214,7 +214,7 @@ oper
 
 -- Two-place adjectives need a case for the second argument.
 
-  mkA2 : A -> Case -> A2 ;
+  mkA2 : A -> PPosition -> A2 ;
 
 -- Comparison adjectives have three forms. The comparative and the superlative
 -- are always inflected in the same way, so the nominative of them is actually
@@ -482,7 +482,7 @@ reg3N = \vesi,veden,vesiä ->
   mkPN n = mkProperName n ** {lock_PN = <>} ;
 
   mkA = \x -> noun2adj x ** {lock_A = <>} ;
-  mkA2 = \x,c -> x ** {c = CCase c ; lock_A2 = <>} ;
+  mkA2 = \x,c -> x ** {s3 = c.s3 ; p = c.p ; c = c.c ; lock_A2 = <>} ;
   mkADeg x kivempi kivin = 
     let
       a = last (x.s ! ((NCase Sg Part))) ; ---- gives "kivinta"

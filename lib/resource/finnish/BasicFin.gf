@@ -69,7 +69,7 @@ lin
   dog_N = nLukko "koira" ;
   door_N = nArpi "ovi" ;
   drink_V2 = dirV2 (regV "juoda") ;
-  easy_A2V = mkA2V (mkA2 (mkA (nLukko "helppo")) allative) ;
+  easy_A2V = mkA2V (mkA2 (mkA (nLukko "helppo")) (caseP allative)) ;
   eat_V2 = dirV2 (regV "syödä") ;
   empty_ADeg = mkADeg (nLukko "tyhjä") "tyhjempi" "tyhjin" ;
   enemy_N = regN "vihollinen" ;
@@ -122,7 +122,7 @@ lin
   love_V2 = caseV2 (regV "rakastaa") partitive ;
   man_N = mkN "mies" "miehen" "miehenä" "miestä" "mieheen" 
             "miehinä" "miehissä" "miesten" "miehiä" "miehiin" human ;
-----  married_A2 = mkA2 (regA "married") "to" ;
+  married_A2 = mkA2 (mkA (regN "avioitunut")) (postpP genitive "kanssa") ;
   meat_N = nLukko "liha" ;
   milk_N = nLukko "maito" ;
   moon_N = regN "kuu" ;
