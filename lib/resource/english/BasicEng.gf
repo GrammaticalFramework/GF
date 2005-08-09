@@ -85,7 +85,7 @@ lin
   girl_N = regN "girl" ;
   glove_N = regN "glove" ;
   gold_N = regN "gold" ;
-  good_ADeg = mkADeg "good" "better" "best" "well" ;
+  good_ADeg = mkADeg "good" "well" "better" "best" ;
   go_V = (mkV "go" "goes" "went" "gone" "going") ;
   green_ADeg = regADeg "green" ;
   harbour_N = regN "harbour" ;
