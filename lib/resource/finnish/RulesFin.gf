@@ -204,6 +204,10 @@ lin
       mkSatsCopula impersNounPhrase ("olemassa" ++ (singularNounPhrase cn).s ! NPCase Nom)
       ) ;
 
-----  ExistNumCN nu cn = nounPhraseNum False cn
+  ExistNumCN nu cn = 
+    sats2clause (
+      mkSatsCopula impersNounPhrase (
+        "olemassa" ++ (nounPhraseNum False nu cn).s ! NPCase Nom)
+      ) ;
 
 } ;
