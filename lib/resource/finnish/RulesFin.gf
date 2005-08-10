@@ -56,7 +56,7 @@ lin
   NoNum = noNum ;
 
   UseA = adj2adjPhrase ;
-  ComplA2 = complAdj ;
+-----  ComplA2 = complAdj ;
 
 ----  ComplAV av vpi = {s = \\_,a => av.s ! a ++ vpi.s ! VIInfinit} ;
 ----  ComplObjA2V av obj vpi = {s = \\_,a => av.s ! a ++ obj.s ! complCase
@@ -193,18 +193,17 @@ lin
 
   OnePhr p = p ;
   ConsPhr = cc2 ;
-{-
+
 -----------------------
 -- special constructions
 
-  OneNP = nameNounPhrase (nameReg "one" human) ;
+----  OneNP = nameNounPhrase (nameReg "one" human) ;
 
-  ExistCN A = predBeGroup
-                (nameNounPhrase (nameReg "there" Neutr))
-                (complNounPhrase (indefNounPhrase singular A)) ;
-  ExistNumCN nu A = 
-              predBeGroup 
-                (nameNounPhrasePl (nameReg "there" Neutr))
-                (complNounPhrase (indefNounPhraseNum plural nu A)) ;
--}
+  ExistCN cn = 
+    sats2clause (
+      mkSatsCopula impersNounPhrase ("olemassa" ++ (singularNounPhrase cn).s ! NPCase Nom)
+      ) ;
+
+----  ExistNumCN nu cn = nounPhraseNum False cn
+
 } ;
