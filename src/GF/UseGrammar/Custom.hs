@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/29 16:27:56 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.66 $
+-- > CVS $Date: 2005/08/11 14:11:46 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.67 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -78,6 +78,8 @@ import qualified GF.Printing.PrintParser as PrtOld -- OBSOLETE
 import qualified GF.Infra.Print as Prt
 import qualified GF.Conversion.GFC as Cnv
 import qualified GF.Conversion.Types as CnvTypes
+import qualified GF.Conversion.Haskell as CnvHaskell
+import qualified GF.Conversion.Prolog as CnvProlog
 
 import GF.Canon.GFC
 import qualified GF.Canon.MkGFC as MC
@@ -255,21 +257,23 @@ customGrammarPrinter =
 -}
 
 -- add your own grammar printers here
+
 -- grammar conversions:
   ,(strCI "mcfg",     Prt.prt . stateMCFG)
   ,(strCI "cfg",      Prt.prt . stateCFG)
   ,(strCI "pinfo",    Prt.prt . statePInfo)
   ,(strCI "abstract", Prt.prtAfter "\n" . Cnv.gfc2abstract . stateGrammarLang)
 
-  ,(strCI "simple-haskell", CnvTypes.prtHsSGrammar . Cnv.gfc2simple . stateGrammarLang)
-  ,(strCI "mcfg-haskell", CnvTypes.prtHsMGrammar . stateMCFG)
-  ,(strCI "cfg-haskell", CnvTypes.prtHsCGrammar . stateCFG)
-  -- ,(strCI "simple-prolog", CnvTypes.prtHsSGrammar . Cnv.gfc2simple . stateGrammarLang)
-  ,(strCI "mcfg-prolog", CnvTypes.prtPlMGrammar . stateMCFG)
-  ,(strCI "cfg-prolog", CnvTypes.prtPlCGrammar . stateCFG)
+  ,(strCI "gfc-haskell",  CnvHaskell.prtSGrammar . Cnv.gfc2simple . stateGrammarLang)
+  ,(strCI "mcfg-haskell", CnvHaskell.prtMGrammar . stateMCFG)
+  ,(strCI "cfg-haskell",  CnvHaskell.prtCGrammar . stateCFG)
+  ,(strCI "gfc-prolog",   CnvProlog.prtSGrammar . Cnv.gfc2simple . stateGrammarLang)
+  ,(strCI "mcfg-prolog",  CnvProlog.prtMGrammar . stateMCFG)
+  ,(strCI "cfg-prolog",   CnvProlog.prtCGrammar . stateCFG)
+
 -- obsolete, or only for testing:
-  ,(strCI "abs-pl",   Cnv.abstract2prolog . Cnv.gfc2abstract . stateGrammarLang)
-  ,(strCI "cfg-pl",   Cnv.cfg2prolog . stateCFG)
+  ,(strCI "abs-skvatt", Cnv.abstract2skvatt . Cnv.gfc2abstract . stateGrammarLang)
+  ,(strCI "cfg-skvatt", Cnv.cfg2skvatt . stateCFG)
   ,(strCI "simple",   Prt.prt . Cnv.gfc2simple . stateGrammarLang)
   ,(strCI "mcfg-erasing", Prt.prt . Cnv.simple2mcfg_nondet . Cnv.gfc2simple . stateGrammarLang)
   ,(strCI "finite",   Prt.prt . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
@@ -286,6 +290,12 @@ customMultiGrammarPrinter =
   ,(strCI "header", const (MC.prCanonMGr . unoptimizeCanon))
   ,(strCI "cfgm", prCanonAsCFGM)
   ,(strCI "graph", visualizeCanonGrammar)
+
+-- to prolog format:
+  ,(strCI "gfc-prolog", CnvProlog.prtSMulti)
+  ,(strCI "mcfg-prolog", CnvProlog.prtMMulti)
+  ,(strCI "cfg-prolog", CnvProlog.prtCMulti)
+  ,(strCI "prolog", CnvProlog.prtSM_Multi)
   ]
 
 

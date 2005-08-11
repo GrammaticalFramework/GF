@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 08:11:32 $ 
+-- > CVS $Date: 2005/08/11 14:11:46 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.12 $
+-- > CVS $Revision: 1.13 $
 --
 -- All conversions from GFC 
 -----------------------------------------------------------------------------
@@ -95,8 +95,8 @@ gfc2abstract :: (CanonGrammar, Ident) -> [Abstract SCat Fun]
 gfc2abstract gr = [ Abs (decl2cat decl) (map decl2cat decls) (name2fun name) |
 		    Rule (Abs decl decls name) _ <- gfc2simple gr ]
 
-abstract2prolog :: [Abstract SCat Fun] -> String
-abstract2prolog gr = skvatt_hdr ++ concatMap abs2pl gr
+abstract2skvatt :: [Abstract SCat Fun] -> String
+abstract2skvatt gr = skvatt_hdr ++ concatMap abs2pl gr
     where abs2pl (Abs cat [] fun) = prtQuoted cat ++ " ---> " ++ 
 				    "\"" ++ prt fun ++ "\".\n"
 	  abs2pl (Abs cat cats fun) =
@@ -104,8 +104,8 @@ abstract2prolog gr = skvatt_hdr ++ concatMap abs2pl gr
 	      "\"(" ++ prt fun ++ "\"" ++
 	      prtBefore ", \" \", " (map prtQuoted cats) ++ ", \")\".\n"
 
-cfg2prolog :: CGrammar -> String
-cfg2prolog gr = skvatt_hdr ++ concatMap cfg2pl gr
+cfg2skvatt :: CGrammar -> String
+cfg2skvatt gr = skvatt_hdr ++ concatMap cfg2pl gr
     where cfg2pl (CFRule cat syms _name) =
 	      prtQuoted cat ++ " ---> " ++
 	      if null syms then "\"\".\n" else
