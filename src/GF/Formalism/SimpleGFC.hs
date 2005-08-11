@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:28:45 $ 
+-- > CVS $Date: 2005/08/11 14:11:46 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- Simplistic GFC format
 -----------------------------------------------------------------------------
@@ -20,7 +20,6 @@ import GF.Formalism.GCFG
 import GF.Infra.Print
 
 ----------------------------------------------------------------------
-
 -- * basic (leaf) types
 
 type Constr = AbsGFC.CIdent
@@ -31,7 +30,6 @@ anyVar :: Var
 anyVar = Ident.wildIdent
 
 ----------------------------------------------------------------------
-
 -- * simple GFC
 
 type SimpleGrammar c n t = Grammar  (Decl c) n (LinType c t) (Maybe (Term c t))
@@ -166,7 +164,6 @@ enumeratePatterns :: (Eq c, Eq t) => LinType c t -> [Term c t]
 enumeratePatterns t = enumerateTerms Nothing t
 
 ----------------------------------------------------------------------
-
 -- * paths of record projections and table selections
 
 newtype Path c t = Path [Either Label (Term c t)] deriving (Eq, Ord, Show)
@@ -205,6 +202,7 @@ lintype2paths path (TblT pt vt) = concat [ lintype2paths (path ++! pat) vt |
 					   pat <- enumeratePatterns pt ]
 
 ----------------------------------------------------------------------
+-- * pretty-printing
 
 instance Print c => Print (Decl c) where
     prt (Decl var cat args) 
