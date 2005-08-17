@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/08/17 14:43:50 $ 
+-- > CVS $Date: 2005/08/17 15:13:55 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.40 $
+-- > CVS $Revision: 1.41 $
 --
 -- temporary hacks for GF 2.0
 --
@@ -76,7 +76,7 @@ data Command =
  | CTop
  | CLast
  | CMovePosition [Int]
- | CCopyPosition [Int]
+ | CCopyPosition [Int] [Int]
  | CRefineWithTree String
  | CRefineWithClip Int
  | CRefineWithAtom String
@@ -257,12 +257,13 @@ execECommand env c = case c of
                           in (case et of 
                                 Ok t -> refineByTrees der cgr [t] s
                                 Bad m -> changeMsg [m] s)
-  CCopyPosition p  -> action2command $ \s -> do
+  CCopyPosition p q -> action2command $ \s -> do
                         s1    <- goPosition p s
                         let t  = actTree s1
-                        let compat = actVal s1 == actVal s
+                        s2    <- goPosition q s1
+                        let compat = actVal s1 == actVal s2
                         if compat 
-                          then refineWithTree der cgr t s 
+                          then refineWithTree der cgr t s2
                           else return s 
 
   CRefineParse str   -> \s -> 

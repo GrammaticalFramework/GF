@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/08/17 14:43:50 $ 
+-- > CVS $Date: 2005/08/17 15:13:55 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.20 $
+-- > CVS $Revision: 1.21 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -110,7 +110,7 @@ pCommandMsg s = (m,pCommandWords $ words c) where
     "'" : _       -> CTop
     "+" : _       -> CLast
     "mp" : p      -> CMovePosition (readIntList (unwords p))
-    "ct" : p      -> CCopyPosition (readIntList (unwords p))
+    "ct" : p:q:_  -> CCopyPosition (readIntList p) (readIntList q)
     "r" : f : _   -> CRefineWithAtom f
     "w" : f:i : _ -> CWrapWithFun (f, readIntArg i)
     "ch": f : _   -> CChangeHead f

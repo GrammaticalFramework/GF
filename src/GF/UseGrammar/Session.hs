@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/11 20:27:05 $ 
+-- > CVS $Date: 2005/08/17 15:13:55 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.11 $
+-- > CVS $Revision: 1.12 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -88,6 +88,7 @@ removeClip n ss@((s,(ts,cb),(i,b)):_) = (s,(ts, drop n cb),(i,b)) : ss
 
 changeMsg :: [String] -> ECommand
 changeMsg m ((s,ts,(_,b)):ss) = (s,ts,(m,b)) : ss   -- just change message
+changeMsg m _                 = (s,ts,(m,b)) : []  where [(s,ts,(_,b))] = initSState
 
 changeView :: ECommand
 changeView ((s,ts,(m,(v,b))):ss) = (s,ts,(m,(v+1,b))) : ss    -- toggle view
@@ -126,7 +127,7 @@ undoCommand :: Int -> ECommand
 undoCommand n ss =
   let k = length ss in
   if k < n 
-     then changeMsg ["cannot go all the way back"] []
+     then changeMsg ["cannot go all the way back"] [last ss]
      else changeMsg ["successful undo"] (drop n ss)
 
 selectCand :: CGrammar -> Int -> ECommand
