@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/13 12:40:19 $ 
+-- > CVS $Date: 2005/08/17 08:27:29 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- Converting SimpleGFC grammars to MCFG grammars, nondeterministically.
 -- Afterwards, the grammar has to be extended with coercion functions,
@@ -48,7 +48,7 @@ type LinRec = [Lin SCat MLabel Token]
 -- main conversion function
 
 maxNrRules :: Int
-maxNrRules = 1000
+maxNrRules = 5000
 
 convertGrammar :: SGrammar -> EGrammar 
 convertGrammar rules = traceCalcFirst rules' $
@@ -196,6 +196,8 @@ pat           =?= Arg nr _ path   = updateArg nr (path, pat)
 Rec precord   =?= Rec record      = sequence_ [ maybe mzero (pat =?=) mterm |
 						(lbl, pat) <- precord,
 						let mterm = lookup lbl record ]
+-- variants are not allowed in patterns, but in selection terms:
+term =?= Variants terms = member terms >>= (term =?=)
 pat =?= term = error $ "(=?=): " ++ prt pat ++ " =?= " ++ prt term
 
 ----------------------------------------------------------------------
