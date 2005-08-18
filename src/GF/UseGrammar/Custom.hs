@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/08/11 14:11:46 $ 
+-- > CVS $Date: 2005/08/18 13:18:10 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.67 $
+-- > CVS $Revision: 1.68 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -295,7 +295,6 @@ customMultiGrammarPrinter =
   ,(strCI "gfc-prolog", CnvProlog.prtSMulti)
   ,(strCI "mcfg-prolog", CnvProlog.prtMMulti)
   ,(strCI "cfg-prolog", CnvProlog.prtCMulti)
-  ,(strCI "prolog", CnvProlog.prtSM_Multi)
   ]
 
 

@@ -1,6 +1,8 @@
 
 abstract FragmentAbstract = {
 
+flags startcat=NP;
+
 cat S; NP; VP; D; N; V;
 
 fun
