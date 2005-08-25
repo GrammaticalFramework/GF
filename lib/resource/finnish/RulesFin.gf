@@ -56,7 +56,7 @@ lin
   NoNum = noNum ;
 
   UseA = adj2adjPhrase ;
------  ComplA2 = complAdj ;
+  ComplA2 = complAdj ;
 
 ----  ComplAV av vpi = {s = \\_,a => av.s ! a ++ vpi.s ! VIInfinit} ;
 ----  ComplObjA2V av obj vpi = {s = \\_,a => av.s ! a ++ obj.s ! complCase
@@ -125,8 +125,8 @@ lin
   IdRP = identRelPron ;
   FunRP = funRelPron ;
 ----  RelSlash = relSlash ;
-----  ModRS = modRelClause ;
-----  RelCl = relSuch ;
+  ModRS = modRelClause ;
+  RelCl = relSuch ;
 
 
 --!

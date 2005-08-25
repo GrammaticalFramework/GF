@@ -82,7 +82,7 @@ lincat
   Slash  = Sentence ** {s2 : Str ; c : Case} ;
 
   RP     = {s : Number => Case => Str} ;
-----  RCl    = {s : Bool => SForm => Agr => Str} ;
+  RCl    = {s : Bool   => SForm => Number => Str} ;
   RS     = {s : Number => Str} ;
 
   IP     = {s : NPForm => Str ; n : Number} ;

@@ -10,6 +10,10 @@
 
 resource SyntaxFin = MorphoFin ** open Prelude, (CO = Coordination) in {
 
+  flags 
+----    optimize=noexpand ;
+    optimize=all ;
+
 -- To glue a particle to the preceding word. The lexer and unlexer
 -- are expected to deal with actual gluing and vowel harmony.
 
@@ -366,8 +370,8 @@ oper
 -- The order of the adjective and its argument depends on the case: the local
 -- cases favour Adj + Noun in the predicative position ("hyvä painissa",
 -- "tyytyväinen vaalitulokseen", "jaollinen kolmella"), which is not a possible
--- order for the accusative case. A preposition seems not to seem affect
--- the rule: ("yhtäsuuri kuin sinä", "sinua vastaan suunnattu").
+-- order for the accusative case. A preposition seems not to affect
+-- the rule: "yhtäsuuri kuin sinä", "sinua vastaan suunnattu".
 
 
   AdjCompl = Adjective ** {s3 : Str ; p : Bool ; c : ComplCase} ;
@@ -377,7 +381,7 @@ oper
       hyvat : AForm => Str = \\a => hyva.s ! a ;
       c : NPForm = complCase True hyva.c (SVI VIInf3Iness) ;
       painissa : Str = pPosit hyva.s3 hyva.p (paini.s ! c) ;
-      haspp : Bool = notB (isNil hyva.s3)
+      haspp : Bool = notB hyva.p
     in
     {s = table {
            AAttr => \\a => painissa ++ hyvat ! a ; 
@@ -958,6 +962,8 @@ oper
                        (complementCase b ostaa.c (Pres jussi.n (np2Person jussi.p)))
       } ;
 -}
+
+
 --2 Relative pronouns and relative clauses
 --
 -- As described in $types.Fin.gf$, relative pronouns are inflected like 
@@ -970,23 +976,30 @@ oper
   funRelPron : Function -> RelPron -> RelPron = \vaimo, joka -> 
     {s = \\n,c => joka.s ! n ! npForm2Case n vaimo.c ++ vaimo.s ! False ! n ! c} ;
 
+-- To use a relative pronoun as a noun phrase.
+
+  relNounPhrase : Number -> RelPron -> NounPhrase = \n,rel -> 
+    {s = \\f => rel.s ! n ! npForm2Case n f ; n = n ; p = NP3} ;
+
+
 -- Relative clauses can be formed from both verb phrases ("joka ui") and
 -- slash expressions ("jonka sinä näet", "jonka kautta sinä käyt"). 
 
-  RelClause : Type = {s : Number => Str} ;
+  RelClause   : Type = {s : Bool => SForm => Number => Str} ;
+  RelSentence : Type = {s : Number => Str} ;
 {-
   relVerbPhrase : RelPron -> VerbPhrase -> RelClause = \joka,ui ->
     {s = \\n => joka.s ! n ! npForm2Case n (complementCase True ui.c Inf) ++ 
                 ui.s ! Pres n P3 ++ ui.s2 ! Pres n P3} ;
--}
+
   relSlash : RelPron -> SentenceSlashNounPhrase -> RelClause = \joka,saat ->
     {s = \\n => joka.s ! n ! saat.c ++ saat.s2 ++ saat.s} ;
-
+-}
 -- A 'degenerate' relative clause is the one often used in mathematics, e.g.
 -- "luku x siten että x on parillinen".
 
-  relSuch : Sentence -> RelClause = \A ->
-    {s = \\_ => advSiten ++ conjEtta ++ A.s} ;
+  relSuch : Clause -> RelClause = \A ->
+    {s = \\b,s,_ => advSiten ++ conjEtta ++ A.s ! b ! s} ;
 
 -- N.B. the construction "sellainen että" is not possible with the present
 -- typing of the relative clause, since it should also be inflected in
@@ -997,7 +1010,7 @@ oper
 -- by determiners. We use no comma before these relative clauses, even though
 -- conservative standard Finnish does.
 
-  modRelClause : CommNounPhrase -> RelClause -> CommNounPhrase = \mies,jokaui ->
+  modRelClause : CommNounPhrase -> RelSentence -> CommNounPhrase = \mies,jokaui ->
     {s = \\b,n,c => mies.s ! b ! n ! c ++ jokaui.s ! n ;
      g = mies.g
     } ;

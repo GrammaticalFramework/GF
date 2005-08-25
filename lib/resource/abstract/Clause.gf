@@ -54,7 +54,29 @@ fun
   QPredAdv     : IP -> Adv -> QCl ;               -- "who is in France"
 
   QPredProgVP  : IP -> VPI -> QCl ;               -- "who is eating"
+{-
+  RPredV       : RP -> V  -> RCl ;                -- "who walks"
+  RPredPassV   : RP -> V  -> RCl ;                -- "who is seen"
+  RPredV2      : RP -> V2 -> NP -> RCl ;          -- "who sees Mary"
+  RPredV3      : RP -> V3 -> NP -> NP -> RCl ;    -- "who gives Mary food"
+  RPredReflV2  : RP -> V2 -> RCl ;                -- "who loves himself"
+  RPredVS      : RP -> VS -> S  -> RCl ;          -- "who says that Mary runs"
+  RPredVV      : RP -> VV -> VPI -> RCl ;         -- "who must walk"
+  RPredVQ      : RP -> VQ -> QS -> RCl ;          -- "who asks who will come"
+  RPredVA      : RP -> VA -> AP -> RCl ;          -- "who looks ill"
+  RPredV2A     : RP -> V2A -> NP ->AP ->RCl ;     -- "who paints the house red"
+  RPredSubjV2V : RP -> V2V -> NP ->VPI ->RCl ;    -- "who promises Mary to leave"
+  RPredObjV2V  : RP -> V2V  -> NP -> VPI -> RCl ; -- "who asks me to come"
+  RPredV2S     : RP -> V2S  -> NP -> S   -> RCl ; -- "who told me that it is good"
+  RPredV2Q     : RP -> V2Q  -> NP -> QS  -> RCl ; -- "who asked me if it is good"
 
+  RPredAP      : RP -> AP -> RCl ;                -- "who is old"
+  RPredCN      : RP -> CN -> RCl ;                -- "who is a man"
+  RPredNP      : RP -> NP -> RCl ;                -- "who is Bill"
+  RPredAdv     : RP -> Adv -> RCl ;               -- "who is in France"
+
+  RPredProgVP  : RP -> VPI -> RCl ;               -- "who is eating"
+-}
   IPredV       : Ant -> V  -> VPI ;               -- "walk"
   IPredPassV   : Ant -> V  -> VPI ;               -- "be seen"
   IPredV2      : Ant -> V2 -> NP -> VPI ;         -- "see Mary"
