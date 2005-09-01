@@ -137,6 +137,14 @@ oper
 
   param RelForm = RSimple Case | RComplex Gender Number Case ;
 
+  oper  RelFormA = RelForm ;
+  npRelForm : NPFormA -> RelFormA = \np -> case np of {
+    Ton c => RSimple c ;
+    Aton c => RSimple c ;
+    Poss _ _ => RSimple genitive
+    } ;
+
+
   oper RelFormA = RelForm ;
 
 -- Verbs: conversion from full verbs to present-tense verbs.

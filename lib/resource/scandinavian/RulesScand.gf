@@ -79,6 +79,9 @@ lin
   UseRCl tp cl = 
     {s = \\gn,p => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! gn ! p} ;
   UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
+  UseVCl po a cl = {
+    s  = \\v,g,n,p => po.s ++ a.s ++ cl.s ! po.p ! a.a ! v ! g ! n ! p ; 
+    } ;
 
   PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
   NegTP t a = {s = t.s ++ a.s ; b = False ; t = t.t ; a = a.a} ;
@@ -90,6 +93,9 @@ lin
 
   ASimul = {s = [] ; a = Simul} ;
   AAnter = {s = [] ; a = Anter} ;
+
+  PPos = {s = [] ; p = True} ;
+  PNeg = {s = [] ; p = False} ;
 
 -- Adverbs.
 

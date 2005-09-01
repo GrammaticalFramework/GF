@@ -434,6 +434,7 @@ param
 
 oper
   VerbPhrase = {s : VIForm => Gender => Number => Person => Str} ;
+  VerbClause = {s : Bool => Anteriority => VIForm => Gender => Number => Person => Str} ;
 
   vpf2vf : VPForm -> VF = \vpf -> case vpf of {
     VPF _ vf => vf
@@ -737,7 +738,7 @@ oper
   RelSentence : Type = {s :         Mode   => Gender => Number => Person => Str} ;
 
   mkGenRel : RelGen -> Gender -> Gender = \rg,g -> case rg of {
-    RG gen => gen ;
+    PGen gen => gen ;
     _      => g
     } ;
 
@@ -1312,12 +1313,32 @@ oper
     in
     {s = \\b,f,_ => cl.s ! b ! f} ;
 
-  sats2verbPhrase : {s : Str ; a : Anteriority} -> Sats -> VerbPhrase = 
-    \ant,sats -> {s = \\vi,g,n,p => ---- b,cf =>
+
+{- ---- this does not yet get agrement right; have to integrate these two
+  RP     = {s : RelForm => Str ; g : RelGen} ;
+  NP     = {s : NPFormA => Str ; g : PronGen ; 
+            n : Number ; p : Person ; c : ClitType} ;
+  RCl    = {s : Bool => ClForm => Gender => Number => Person => Str} ;
+  RelGen = RNoGen | RG Gender ;
+
+-}
+  sats2rel : Sats -> RelClause = \x ->
+    let cl = sats2clause x
+    in
+    {s = \\b,f,_,_,_ => cl.s ! b ! f} ;
+  relNounPhrase : RelPron -> NounPhrase = \r -> {
+    s = \\np => r.s ! npRelForm np ;
+    g = r.g ;
+    n = Sg ; ----
+    p = P3 ; ----
+    c = Clit0 ;
+    } ;
+
+  sats2verbPhrase : Sats -> VerbClause = 
+    \sats -> {s = \\b,ant,vi,g,n,p =>
       let
-        b = True ; ----
         lui  = sats.s3 ;
-        dire = verbVIForm {s = sats.s4 ; aux = sats.aux} ant.a
+        dire = verbVIForm {s = sats.s4 ; aux = sats.aux} ant
                  vi g n p sats.g2 sats.n2 ;
         ai   = dire.p1 ;
         dit  = dire.p2 ;
@@ -1328,7 +1349,6 @@ oper
         oui = sats.s7 ! b
       in 
       ne ++ lui ++ ai ++ toujours ++ pas ++ dit ++ directement ++ oui
-      ++ ant.s --- always [] ; hack to avoid ? in parsing
     } ;
 
 ---- What happens to polarity and anteriority ?

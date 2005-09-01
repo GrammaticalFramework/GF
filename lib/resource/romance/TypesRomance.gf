@@ -25,8 +25,10 @@ param
 -- language. The same concerns those parameter types that depend on case.
 -- Certain cases can however be defined.
 
-param
-  RelGen = RNoGen | RG Gender ;
+oper
+  RelGen = PronGen ;
+  RNoGen = PNoGen ;
+  RG = PGen ;
 
 oper
   CaseA : PType ;
@@ -42,6 +44,8 @@ oper
   unstressed : CaseA -> NPFormA ;
 
   RelFormA : PType ; 
+
+  npRelForm : NPFormA -> RelFormA ; 
 
 -- The genitive and dative cases are expressed by prepositions, except for
 -- clitic pronouns. The accusative case only makes a difference for pronouns.

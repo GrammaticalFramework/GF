@@ -51,27 +51,50 @@ concrete ClauseEng of Clause = CategoriesEng **
 
   QPredProgVP np vp = predBeGroupQ np (vp.s ! VIPresPart) ;
 
-  IPredV a v = predVerbI True a v (complVerb v) ;
-  IPredPassV a v = predVerbI True a v (passVerb v) ;
-  IPredV2 a v x = predVerbI True a v (complTransVerb v x) ;
-  IPredReflV2 a v = predVerbI True a v (reflTransVerb v) ;
-  IPredV3 a v x y = predVerbI True a v (complDitransVerb v x y) ;
-  IPredVS a v x = predVerbI True a v (complSentVerb v x) ;
-  IPredVV a v x = predVerbI True a (aux2verb v) (complVerbVerb v x) ;
-  IPredVQ a v x = predVerbI True a v (complQuestVerb v x) ;
-  IPredVA a v x = predVerbI True a v (complAdjVerb v x) ;
-  IPredV2A a v x y = predVerbI True a v (complDitransAdjVerb v x y) ;
-  IPredSubjV2V a v x y = predVerbI True a v (complDitransVerbVerb False v x y) ;
-  IPredObjV2V a v x y = predVerbI True a v (complDitransVerbVerb True v x y) ;
-  IPredV2S a v x y = predVerbI True a v (complDitransSentVerb v x y) ;
-  IPredV2Q a v x y = predVerbI True a v (complDitransQuestVerb v x y) ;
 
-  IPredAP a v = predBeGroupI True a v.s ;
-  IPredCN a v = predBeGroupI True a (complCommNoun v) ;
-  IPredNP a v = predBeGroupI True a (complNounPhrase v) ;
-  IPredAdv a v = predBeGroupI True a (complAdverb v) ;
+  RPredV np v = relVerbClause np v (complVerb v) ;
+  RPredPassV np v = predBeGroupR np (passVerb v) ;
+  RPredV2 np v x = relVerbClause np v (complTransVerb v x) ;
+  RPredReflV2 np v = relVerbClause np v (reflTransVerb v) ;
+  RPredV3 np v x y = relVerbClause np v (complDitransVerb v x y) ;
+  RPredVS np v x = relVerbClause np v (complSentVerb v x) ;
+  RPredVV np v x = relVerbClause np (aux2verb v) (complVerbVerb v x) ;
+  RPredVQ np v x = relVerbClause np v (complQuestVerb v x) ;
+  RPredVA np v x = relVerbClause np v (complAdjVerb v x) ;
+  RPredV2A np v x y = relVerbClause np v (complDitransAdjVerb v x y) ;
+  RPredSubjV2V np v x y = relVerbClause np v (complDitransVerbVerb False v x y) ;
+  RPredObjV2V np v x y = relVerbClause np v (complDitransVerbVerb True v x y) ;
+  RPredV2S np v x y = relVerbClause np v (complDitransSentVerb v x y) ;
+  RPredV2Q np v x y = relVerbClause np v (complDitransQuestVerb v x y) ;
 
-  IPredProgVP a vp = predBeGroupI True a (vp.s ! VIPresPart) ;
+  RPredAP np v = predBeGroupR np v.s ;
+  RPredCN np v = predBeGroupR np (complCommNoun v) ;
+  RPredNP np v = predBeGroupR np (complNounPhrase v) ;
+  RPredAdv np v = predBeGroupR np (complAdverb v) ;
+
+  RPredProgVP np vp = predBeGroupR np (vp.s ! VIPresPart) ;
+
+  IPredV v = predVerbI v (complVerb v) ;
+  IPredPassV v = predVerbI v (passVerb v) ;
+  IPredV2 v x = predVerbI v (complTransVerb v x) ;
+  IPredReflV2 v = predVerbI v (reflTransVerb v) ;
+  IPredV3 v x y = predVerbI v (complDitransVerb v x y) ;
+  IPredVS v x = predVerbI v (complSentVerb v x) ;
+  IPredVV v x = predVerbI (aux2verb v) (complVerbVerb v x) ;
+  IPredVQ v x = predVerbI v (complQuestVerb v x) ;
+  IPredVA v x = predVerbI v (complAdjVerb v x) ;
+  IPredV2A v x y = predVerbI v (complDitransAdjVerb v x y) ;
+  IPredSubjV2V v x y = predVerbI v (complDitransVerbVerb False v x y) ;
+  IPredObjV2V v x y = predVerbI v (complDitransVerbVerb True v x y) ;
+  IPredV2S v x y = predVerbI v (complDitransSentVerb v x y) ;
+  IPredV2Q v x y = predVerbI v (complDitransQuestVerb v x y) ;
+
+  IPredAP v = predBeGroupI v.s ;
+  IPredCN v = predBeGroupI (complCommNoun v) ;
+  IPredNP v = predBeGroupI (complNounPhrase v) ;
+  IPredAdv v = predBeGroupI (complAdverb v) ;
+
+  IPredProgVP vp = predBeGroupI (vp.s ! VIPresPart) ;
 
 {-
 -- Use VPs

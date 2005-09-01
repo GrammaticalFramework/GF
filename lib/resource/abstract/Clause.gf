@@ -2,11 +2,40 @@
 --1 Rules for predication forming clauses
 --
 -- This module treats predications in a shallow way, without right-branching
--- $VP$ structures, which have the disadvantage of duplicating rules but the
--- advantage of fast parsing due to elimination of discontinuous constituents.
+-- $VP$ structures. This has the disadvantage of duplicating rules but the
+-- advantage of fast parsing due to elimination of discontinuous
+-- constituents. Also the canonical GF structures (in $.gfc$) files
+-- get smaller, because much more pruning of case alternatives can
+-- be performed at compile time.
 --
--- The principal way of forming sentences ($S$) is by combining a noun phrase
--- with a verb and its complements.
+-- Each of the rules below has the following structure:
+-- 
+--  "Subject -> Verb -> Complements -> Clause"
+-- 
+-- What complements are needed depends on the type of the verb.
+-- For instance, $V$ takes no complement, $V2$ takes one $NP$
+-- complement, $VS$ takes an $S$ complement, etc. There is an elegant
+-- way of expressing this using dependent types:
+--
+  --  (v : VType) -> Subj -> Verb v -> Compl v -> Clause
+--
+-- Since there are 12 verb types in our category system, using this
+-- rule would be economical. The effect is amplified by another
+-- distinction that the rules make: there are separate sets of
+-- rules just differing in what type the subject and 
+-- the resulting clause have. There are four different types:
+--
+--* $SPred$ (declarative clause, from $NP$ to $Cl$),
+--* $QPred$ (interrogative clause, from $IP$ to $QCl$),
+--* $RPred$ (relative clause, from $RP$ to $RCl$),
+--* $IPred$ (infinitive clause, from no subject to $VCl$).
+--
+-- The ultimate dependent type formalization of all the 4x12 rules is
+--
+  --  (n : NType) -> (v : VType) -> Subj n -> Verb v -> Compl v -> Clause n
+--
+-- In the following, however, an expanded set of rules with no
+-- dependent types is shown.
 
 abstract Clause = Categories ** {
 
@@ -20,11 +49,11 @@ fun
   SPredVV      : NP -> VV -> VPI -> Cl ;          -- "John must walk"
   SPredVQ      : NP -> VQ -> QS -> Cl ;           -- "John asks who will come"
   SPredVA      : NP -> VA -> AP -> Cl ;           -- "John looks ill"
-  SPredV2A     : NP -> V2A -> NP ->AP ->Cl ;      -- "John paints the house red"
-  SPredSubjV2V : NP -> V2V -> NP ->VPI ->Cl ;     -- "John promises Mary to leave"
-  SPredObjV2V  : NP -> V2V  -> NP -> VPI -> Cl ;  -- "John asks me to come"
-  SPredV2S     : NP -> V2S  -> NP -> S   -> Cl ;  -- "John told me that it is good"
-  SPredV2Q     : NP -> V2Q  -> NP -> QS  -> Cl ;  -- "John asked me if it is good"
+  SPredV2A     : NP -> V2A -> NP -> AP  -> Cl ;   -- "John paints the house red"
+  SPredSubjV2V : NP -> V2V -> NP -> VPI -> Cl ;   -- "John promises Mary to leave"
+  SPredObjV2V  : NP -> V2V -> NP -> VPI -> Cl ;   -- "John asks me to come"
+  SPredV2S     : NP -> V2S -> NP -> S   -> Cl ;   -- "John told me that it is good"
+  SPredV2Q     : NP -> V2Q -> NP -> QS  -> Cl ;   -- "John asked me if it is good"
 
   SPredAP      : NP -> AP -> Cl ;                 -- "John is old"
   SPredCN      : NP -> CN -> Cl ;                 -- "John is a man"
@@ -54,7 +83,7 @@ fun
   QPredAdv     : IP -> Adv -> QCl ;               -- "who is in France"
 
   QPredProgVP  : IP -> VPI -> QCl ;               -- "who is eating"
-{-
+
   RPredV       : RP -> V  -> RCl ;                -- "who walks"
   RPredPassV   : RP -> V  -> RCl ;                -- "who is seen"
   RPredV2      : RP -> V2 -> NP -> RCl ;          -- "who sees Mary"
@@ -64,11 +93,11 @@ fun
   RPredVV      : RP -> VV -> VPI -> RCl ;         -- "who must walk"
   RPredVQ      : RP -> VQ -> QS -> RCl ;          -- "who asks who will come"
   RPredVA      : RP -> VA -> AP -> RCl ;          -- "who looks ill"
-  RPredV2A     : RP -> V2A -> NP ->AP ->RCl ;     -- "who paints the house red"
-  RPredSubjV2V : RP -> V2V -> NP ->VPI ->RCl ;    -- "who promises Mary to leave"
-  RPredObjV2V  : RP -> V2V  -> NP -> VPI -> RCl ; -- "who asks me to come"
-  RPredV2S     : RP -> V2S  -> NP -> S   -> RCl ; -- "who told me that it is good"
-  RPredV2Q     : RP -> V2Q  -> NP -> QS  -> RCl ; -- "who asked me if it is good"
+  RPredV2A     : RP -> V2A -> NP -> AP -> RCl ;   -- "who paints the house red"
+  RPredSubjV2V : RP -> V2V -> NP -> VPI -> RCl ;  -- "who promises Mary to leave"
+  RPredObjV2V  : RP -> V2V -> NP -> VPI -> RCl ;  -- "who asks me to come"
+  RPredV2S     : RP -> V2S -> NP -> S   -> RCl ;  -- "who told me that it is good"
+  RPredV2Q     : RP -> V2Q -> NP -> QS  -> RCl ;  -- "who asked me if it is good"
 
   RPredAP      : RP -> AP -> RCl ;                -- "who is old"
   RPredCN      : RP -> CN -> RCl ;                -- "who is a man"
@@ -76,28 +105,28 @@ fun
   RPredAdv     : RP -> Adv -> RCl ;               -- "who is in France"
 
   RPredProgVP  : RP -> VPI -> RCl ;               -- "who is eating"
--}
-  IPredV       : Ant -> V  -> VPI ;               -- "walk"
-  IPredPassV   : Ant -> V  -> VPI ;               -- "be seen"
-  IPredV2      : Ant -> V2 -> NP -> VPI ;         -- "see Mary"
-  IPredV3      : Ant -> V3 -> NP -> NP -> VPI ;   -- "give Mary food"
-  IPredReflV2  : Ant -> V2 -> VPI ;               -- "love himself"
-  IPredVS      : Ant -> VS -> S  -> VPI ;         -- "say that Mary runs"
-  IPredVV      : Ant -> VV -> VPI -> VPI ;        -- "want to walk"
-  IPredVQ      : Ant -> VQ -> QS -> VPI ;         -- "ask who will come"
-  IPredVA      : Ant -> VA -> AP -> VPI ;         -- "look ill"
-  IPredV2A     : Ant -> V2A -> NP ->AP ->VPI ;    -- "paint the house red"
-  IPredSubjV2V : Ant -> V2V -> NP ->VPI ->VPI ;   -- "promise Mary to leave"
-  IPredObjV2V  : Ant -> V2V  -> NP -> VPI ->VPI ; -- "ask me to come"
-  IPredV2S     : Ant -> V2S  -> NP -> S  -> VPI ; -- "tell me that it is good"
-  IPredV2Q     : Ant -> V2Q  -> NP -> QS -> VPI ; -- "ask me if it is good"
 
-  IPredAP      : Ant -> AP -> VPI ;               -- "be old"
-  IPredCN      : Ant -> CN -> VPI ;               -- "be a man"
-  IPredNP      : Ant -> NP -> VPI ;               -- "be Bill"
-  IPredAdv     : Ant -> Adv -> VPI ;              -- "be in France"
+  IPredV       : V   -> VCl ;                     -- "walk"
+  IPredPassV   : V   -> VCl ;                     -- "be seen"
+  IPredV2      : V2  -> NP -> VCl ;               -- "see Mary"
+  IPredV3      : V3  -> NP -> NP -> VCl ;         -- "give Mary food"
+  IPredReflV2  : V2  -> VCl ;                     -- "love himself"
+  IPredVS      : VS  -> S   -> VCl ;              -- "say that Mary runs"
+  IPredVV      : VV  -> VPI -> VCl ;              -- "want to walk"
+  IPredVQ      : VQ  -> QS -> VCl ;               -- "ask who will come"
+  IPredVA      : VA  -> AP -> VCl ;               -- "look ill"
+  IPredV2A     : V2A -> NP -> AP  -> VCl ;        -- "paint the house red"
+  IPredSubjV2V : V2V -> NP -> VPI -> VCl ;        -- "promise Mary to leave"
+  IPredObjV2V  : V2V -> NP -> VPI -> VCl ;        -- "ask me to come"
+  IPredV2S     : V2S -> NP -> S   -> VCl ;        -- "tell me that it is good"
+  IPredV2Q     : V2Q -> NP -> QS  -> VCl ;        -- "ask me if it is good"
 
-  IPredProgVP  : Ant -> VPI -> VPI ;              -- "be eating"
+  IPredAP      : AP -> VCl ;                      -- "be old"
+  IPredCN      : CN -> VCl ;                      -- "be a man"
+  IPredNP      : NP -> VCl ;                      -- "be Bill"
+  IPredAdv     : Adv -> VCl ;                     -- "be in France"
+
+  IPredProgVP  : VPI -> VCl ;                     -- "be eating"
 
 
 {-

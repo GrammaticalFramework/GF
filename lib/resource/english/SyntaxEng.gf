@@ -428,7 +428,14 @@ oper
     s1 : Str -- "not" or []
     } ;
 
+  VerbClause = {
+    s  : Bool => Anteriority => VIForm => Agr => Str ;
+    s1 : Bool => Str -- "not" or []
+    } ;
+
 -- To form an infinitival group
+
+{- ---- obsolete
   predVerbGroup : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase =
     \b,ant,vg -> {
     s  = table {
@@ -437,23 +444,22 @@ oper
            } ;
     s1 = if_then_Str b [] "not"
     } ;
+-}
 
--- All negative verb phrase behave as auxiliary ones in questions.
-
-  predVerbI : Bool -> {s : Str ; a : Anteriority} -> Verb -> Complement -> VerbPhrase = 
-    \b,ant,verb,comp -> 
-    let
-      ans = ant.s ; --- just to avoid ? in parsing
-      inf = case ant.a of {
-        Simul => verb.s ! InfImp ;
-        Anter => "have" ++ verb.s ! PPart 
-        }
-      in
-      {s = table {
-           VIInfinit  => \\a => ans ++ inf ++ verb.s1 ++ comp ! a ;
-           VIPresPart => \\a => ans ++ verb.s ! PresPart ++ comp ! a
+  predVerbI : Verb -> Complement -> VerbClause = 
+    \verb,comp -> 
+    {s = \\p,a =>
+         let
+           inf = case a of {
+             Simul => verb.s ! InfImp ;
+             Anter => "have" ++ verb.s ! PPart 
+             }
+           in
+           table {
+             VIInfinit  => \\ag => inf ++ verb.s1 ++ comp ! ag ;
+             VIPresPart => \\ag => verb.s ! PresPart ++ comp ! ag
            } ;
-       s1 = if_then_Str b [] "not"
+       s1 = \\b => if_then_Str b [] "not"
       } ;
 
 -- A simple verb can be made into a verb phrase with an empty complement.
@@ -489,16 +495,16 @@ oper
 
   Complement = Agr => Str ;
 
-  predBeGroupI : Bool -> {s : Str ; a : Anteriority} -> Complement -> VerbPhrase = 
-    \b,ant,vg ->
-    {s = table {
-       VIInfinit => \\a => ant.s ++ case ant.a of {
+  predBeGroupI : Complement -> VerbClause = 
+    \vg ->
+    {s = \\b,ant => table {
+       VIInfinit => \\a => case ant of {
          Simul => "be" ++ vg ! a ;
          Anter => "have" ++ "been" ++ vg ! a
          } ;
        VIPresPart => \\a => "being" ++ vg ! a
        } ; 
-    s1 = if_then_Str b [] "not" ;
+    s1 = \\b => if_then_Str b [] "not" ;
     } ;
 
 
@@ -981,9 +987,12 @@ oper
 
   slashVerbVerb : NounPhrase -> VerbVerb -> TransVerb -> ClauseSlashNounPhrase = 
     \you,want,lookat ->
-    let youlookat = (predVerbClause you (aux2verb want) 
-                      (complVerbVerb want (predVerbI True {s = [] ; a = Simul} lookat
-                        (complVerb lookat)))).s
+    let
+      tolook = predVerbI lookat (complVerb lookat) ; 
+      youlookat = 
+      (predVerbClause you (aux2verb want) 
+        (complVerbVerb want 
+           {s = tolook.s ! True ! Simul ; s1 = tolook.s1 ! True})).s
     in 
     {s = table {
        DirQ   => youlookat ! Inv ;
@@ -1034,6 +1043,25 @@ oper
     {s = \\b,sf,a => 
       let wa = fromAgr a in
       (predVerbGroupClause (relNounPhrase who wa.g wa.n) walks).s  ! Dir ! b ! sf
+    } ;
+
+  relVerbClause : RelPron -> Verb -> Complement -> RelClause = \who,walk,here ->
+    {s = \\b,sf,a => 
+    let 
+      wa = fromAgr a ;
+      who : NounPhrase = relNounPhrase who wa.g wa.n ;
+      whowalks : Clause = predVerbClause who walk here
+    in
+    whowalks.s ! Dir ! b ! sf
+    } ;
+
+  predBeGroupR : RelPron -> Complement -> RelClause = \who,old ->
+    {s = \\b,sf,a => 
+      let 
+        wa = fromAgr a ;
+        whoisold = predBeGroup (relNounPhrase who wa.g wa.n) old
+      in
+      whoisold.s ! Dir ! b ! sf
     } ;
 
   relSlash : RelPron -> ClauseSlashNounPhrase -> RelClause = \who,yousee ->

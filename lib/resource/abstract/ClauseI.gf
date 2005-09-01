@@ -50,27 +50,49 @@ incomplete concrete ClauseI of Clause = open Rules, Verbphrase in {
 
   QPredProgVP np vp = IntVP np (PredProgVP vp) ;
 
-  IPredV a v = PosVP a (UseV v) ;
-  IPredV2 a v x = PosVP a (ComplV2 v x) ;
-  IPredPassV a v = PosVP a (UsePassV v) ;
-  IPredV3 a v x y = PosVP a (ComplV3 v x y) ;
-  IPredReflV2 a v = PosVP a (ComplReflV2 v) ;
-  IPredVS a v x = PosVP a (ComplVS v x) ;
-  IPredVV a v x = PosVP a (ComplVV v x) ;
-  IPredVQ a v x = PosVP a (ComplVQ v x) ;
-  IPredVA a v x = PosVP a (ComplVA v x) ;
-  IPredV2A a v x y = PosVP a (ComplV2A v x y) ;
-  IPredSubjV2V a v x y = PosVP a (ComplSubjV2V v x y) ;
-  IPredObjV2V a v x y = PosVP a (ComplObjV2V v x y) ;
-  IPredV2S a v x y = PosVP a (ComplV2S v x y) ;
-  IPredV2Q a v x y = PosVP a (ComplV2Q v x y) ;
+  RPredV np v = RelVP np (UseV v) ;
+  RPredPassV np v = RelVP np (UsePassV v) ;
+  RPredV2 np v x = RelVP np (ComplV2 v x) ;
+  RPredV3 np v x y = RelVP np (ComplV3 v x y) ;
+  RPredReflV2 np v = RelVP np (ComplReflV2 v) ;
+  RPredVS np v x = RelVP np (ComplVS v x) ;
+  RPredVV np v x = RelVP np (ComplVV v x) ;
+  RPredVQ np v x = RelVP np (ComplVQ v x) ;
+  RPredVA np v x = RelVP np (ComplVA v x) ;
+  RPredV2A np v x y = RelVP np (ComplV2A v x y) ;
+  RPredSubjV2V np v x y = RelVP np (ComplSubjV2V v x y) ;
+  RPredObjV2V np v x y = RelVP np (ComplObjV2V v x y) ;
+  RPredV2S np v x y = RelVP np (ComplV2S v x y) ;
+  RPredV2Q np v x y = RelVP np (ComplV2Q v x y) ;
 
-  IPredAP a v = PosVP a (PredAP v) ;
-  IPredCN a v = PosVP a (PredCN v) ;
-  IPredNP a v = PosVP a (PredNP v) ;
-  IPredAdv a v = PosVP a (PredAdv v) ;
+  RPredAP np v = RelVP np (PredAP v) ;
+  RPredCN np v = RelVP np (PredCN v) ;
+  RPredNP np v = RelVP np (PredNP v) ;
+  RPredAdv np v = RelVP np (PredAdv v) ;
 
-  IPredProgVP a vp = PosVP a (PredProgVP vp) ;
+  RPredProgVP np vp = RelVP np (PredProgVP vp) ;
+
+  IPredV v = UseVP (UseV v) ;
+  IPredV2 v x = UseVP (ComplV2 v x) ;
+  IPredPassV v = UseVP (UsePassV v) ;
+  IPredV3 v x y = UseVP (ComplV3 v x y) ;
+  IPredReflV2 v = UseVP (ComplReflV2 v) ;
+  IPredVS v x = UseVP (ComplVS v x) ;
+  IPredVV v x = UseVP (ComplVV v x) ;
+  IPredVQ v x = UseVP (ComplVQ v x) ;
+  IPredVA v x = UseVP (ComplVA v x) ;
+  IPredV2A v x y = UseVP (ComplV2A v x y) ;
+  IPredSubjV2V v x y = UseVP (ComplSubjV2V v x y) ;
+  IPredObjV2V v x y = UseVP (ComplObjV2V v x y) ;
+  IPredV2S v x y = UseVP (ComplV2S v x y) ;
+  IPredV2Q v x y = UseVP (ComplV2Q v x y) ;
+
+  IPredAP v = UseVP (PredAP v) ;
+  IPredCN v = UseVP (PredCN v) ;
+  IPredNP v = UseVP (PredNP v) ;
+  IPredAdv v = UseVP (PredAdv v) ;
+
+  IPredProgVP vp = UseVP (PredProgVP vp) ;
 
 {-
 -- Use VPs

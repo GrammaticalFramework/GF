@@ -101,6 +101,7 @@ cat
 
   VP ;     -- verb phrase,           e.g. "switch the light on"
   VPI ;    -- infinitive verb phrase e.g. "switch the light on", "not have run"
+  VCl ;    -- same (variable ant.)   e.g. "walk"/"have walked"
 
 --!
 --3 Adverbs and prepositions/cases
@@ -184,5 +185,6 @@ cat
   TP ;          -- tense x polarity selector
   Tense ;       -- (abstract) tense
   Ant ;         -- (abstract) anteriority
+  Pol ;         -- polarity (positive or negative)
 
 }

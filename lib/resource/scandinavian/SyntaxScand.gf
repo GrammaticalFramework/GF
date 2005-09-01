@@ -559,6 +559,9 @@ oper
   VerbPhrase : Type = {
     s : VIForm => Gender => Number => Person => Str
     } ;
+  VerbClause : Type = {
+    s : Bool => Anteriority => VIForm => Gender => Number => Person => Str
+    } ;
 
 -------------------------
 
@@ -659,8 +662,21 @@ oper
           } ---- bo shadows b
     } ;
 
-  predVerbGroupI : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase = 
-    predVerbGroup ;
+  predVerbGroupI : VerbGroup -> VerbClause = \vg -> 
+    let 
+       vgs  = vg.s1 ;
+       vgs3 : SForm => Gender => Number => Person => Str = \\sf,g,n,p => 
+         vg.s4 ! sf ++ vg.s5 ! g ! n ! p ++ vg.s6 ++ vg.s7 ;
+    in
+   {s = \\b,a => 
+        table {
+          VIInfinit => \\g,n,p => 
+            vgs ! VInfinit a ++ vg.s3 ! b ++ vgs3 ! VInfinit a ! g ! n ! p ;
+          VIImperat bo =>  \\g,n,p => 
+            vgs ! VImperat ++ vg.s3 ! b ++ vgs3 ! VImperat ! g ! n ! p
+          }
+    } ;
+
 {- ----
     \b,ant,vg -> 
     let vp = predVerbGroup b ant vg in
