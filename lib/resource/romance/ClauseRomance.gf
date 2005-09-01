@@ -143,8 +143,6 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
         (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! subj.g ! subj.n ! P3)
       ) ;
 
---  QPredProgVP
-
   QPredAP subj adj = 
     sats2quest (mkSatsCopula (intNounPhrase subj) (adj.s ! AF subj.g subj.n)) ;
   QPredCN subj cn = 
@@ -156,81 +154,159 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
 
   QPredProgVP np vp = sats2quest (progressiveSats (intNounPhrase np) vp) ;
 
+-----------
+
+  RPredV  np v   = 
+    sats2rel (mkSats (relNounPhrase np) v) ;
+  RPredPassV subj v = 
+    sats2rel (mkSatsCopula  (relNounPhrase subj) (v.s ! VPart
+    (pgen2gen subj.g) Sg)) ; ---- subj.n
+  RPredV2 np v y = 
+    sats2rel (mkSatsObject (relNounPhrase np) v y) ;
+  RPredV3 subj verb obj1 obj2 = 
+    sats2rel (
+      insertObject (mkSatsObject (relNounPhrase subj) verb obj1) verb.c3 verb.s3 obj2
+      ) ;
+  RPredReflV2 subj verb = 
+    sats2rel (
+      mkSatsObject (relNounPhrase subj)
+        {s = verb.s ; s2 = [] ; c = accusative ; aux = AEsse}
+        (reflPronNounPhrase (pgen2gen subj.g) Sg P3)) ;
+  RPredVS subj verb sent = 
+    sats2rel (
+      insertExtrapos (mkSats (relNounPhrase subj) verb) 
+        (\\b => embedConj ++ sent.s ! subordMode verb b)) ; ---- mn
+  RPredVQ subj verb quest = 
+    sats2rel (
+      insertExtrapos (mkSats (relNounPhrase subj) verb) (\\_ => quest.s ! IndirQ)) ;
+  RPredV2S subj verb obj sent = 
+    sats2rel (
+      insertExtrapos 
+        (mkSatsObject (relNounPhrase subj) verb obj)
+        (\\b => embedConj ++ sent.s ! subordMode verb b)
+        ) ; ---- mn ;
+  RPredV2Q subj verb obj quest = 
+    sats2rel (
+      insertExtrapos 
+        (mkSatsObject (relNounPhrase subj) verb obj) 
+        (\\_ => quest.s ! IndirQ)) ;
+  RPredVA subj verb adj = 
+   sats2rel (
+     insertExtrapos (mkSats (relNounPhrase subj) verb) 
+       (\\_ => adj.s ! AF (pgen2gen subj.g) Sg)) ; ---- subj.n, etc
+  RPredV2A subj verb obj adj = 
+    sats2rel (
+      insertExtrapos 
+        (mkSatsObject (relNounPhrase subj) verb obj)
+        (\\_ =>  adj.s ! AF (pgen2gen obj.g) obj.n)) ;
+  RPredVV subj verb vp = 
+   sats2rel (
+     insertExtrapos 
+       (mkSats (relNounPhrase subj) verb) 
+       (\\_ =>  prepCase verb.c ++ 
+                vp.s ! VIInfinit ! (pgen2gen subj.g) ! (relNounPhrase subj).n ! P3)
+     ) ;
+  RPredObjV2V subj verb obj vp = 
+    sats2rel (
+      insertExtrapos 
+        (mkSatsObject (relNounPhrase subj) verb obj)
+        (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen obj.g ! obj.n ! obj.p)
+      ) ;
+  RPredSubjV2V subj verb obj vp = 
+    sats2rel (
+      insertExtrapos 
+        (mkSatsObject (relNounPhrase subj) verb obj)
+        (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! (pgen2gen subj.g) ! Sg ! P3)
+      ) ;
+
+  RPredAP subj adj = 
+    sats2rel (mkSatsCopula (relNounPhrase subj) (adj.s ! AF (pgen2gen subj.g) Sg)) ;
+  RPredCN subj cn = 
+    sats2rel (mkSatsCopula (relNounPhrase subj) (indefNoun Sg cn)) ;
+  RPredNP subj np = 
+    sats2rel (mkSatsCopula (relNounPhrase subj) (np.s ! stressed nominative)) ;
+  RPredAdv subj adv = 
+    sats2rel (mkSatsCopula (relNounPhrase subj) adv.s) ;
+
+  RPredProgVP np vp = sats2rel (progressiveSats (relNounPhrase np) vp) ;
+
+
+
 
 ----- gender and number of Adj
 
-  IPredV a v = 
-    sats2verbPhrase a (mkSats pronImpers v) ;
-  IPredV2 a v y = 
-    sats2verbPhrase a (mkSatsObject pronImpers v y) ;
-  IPredAP a adj = 
-    sats2verbPhrase a (mkSatsCopula pronImpers (adj.s ! AF Masc Sg)) ;
-  IPredPassV a v = 
-    sats2verbPhrase a (mkSatsCopula pronImpers (v.s ! VPart (pgen2gen pronImpers.g) pronImpers.n)) ;
-  IPredV3 a verb obj1 obj2 = 
-    sats2verbPhrase a (insertObject (mkSatsObject pronImpers verb obj1) verb.c3 verb.s3 obj2) ;
-  IPredReflV2 a verb = 
-    sats2verbPhrase a (
+  IPredV v = 
+    sats2verbPhrase (mkSats pronImpers v) ;
+  IPredV2 v y = 
+    sats2verbPhrase (mkSatsObject pronImpers v y) ;
+  IPredAP adj = 
+    sats2verbPhrase (mkSatsCopula pronImpers (adj.s ! AF Masc Sg)) ;
+  IPredPassV v = 
+    sats2verbPhrase (mkSatsCopula pronImpers (v.s ! VPart (pgen2gen pronImpers.g) pronImpers.n)) ;
+  IPredV3 verb obj1 obj2 = 
+    sats2verbPhrase (insertObject (mkSatsObject pronImpers verb obj1) verb.c3 verb.s3 obj2) ;
+  IPredReflV2 verb = 
+    sats2verbPhrase (
       mkSatsObject pronImpers
         {s = verb.s ; s2 = [] ; c = accusative ; aux = AEsse}
         ---- {s = verb.s ; s2 = verb.s2 ; c = verb.c ; aux = AEsse}
         ---- this produces huge cf - find out why! AR 16/3/2005 
         (reflPronNounPhrase (pgen2gen pronImpers.g) pronImpers.n pronImpers.p)) ;
-  IPredVS a verb sent = 
-    sats2verbPhrase a (
+  IPredVS verb sent = 
+    sats2verbPhrase (
       insertExtrapos (mkSats pronImpers verb) 
         (\\b => embedConj ++ sent.s ! subordMode verb b)) ; ---- mn
-  IPredVQ a verb quest = 
-    sats2verbPhrase a (
+  IPredVQ verb quest = 
+    sats2verbPhrase (
       insertExtrapos (mkSats pronImpers verb) (\\_ => quest.s ! IndirQ)) ;
-  IPredV2S a verb obj sent = 
-    sats2verbPhrase a (
+  IPredV2S verb obj sent = 
+    sats2verbPhrase (
       insertExtrapos 
         (mkSatsObject pronImpers verb obj)
         (\\b => embedConj ++ sent.s ! subordMode verb b)
         ) ; ---- mn ;
-  IPredV2Q a verb obj quest = 
-    sats2verbPhrase a (
+  IPredV2Q verb obj quest = 
+    sats2verbPhrase (
       insertExtrapos 
         (mkSatsObject pronImpers verb obj) 
         (\\_ => quest.s ! IndirQ)) ;
-  IPredVA a verb adj = 
-   sats2verbPhrase a (
+  IPredVA verb adj = 
+   sats2verbPhrase (
      insertExtrapos (mkSats pronImpers verb) (\\_ => adj.s ! AF (pgen2gen pronImpers.g) pronImpers.n)) ;
-  IPredV2A a verb obj adj = 
-    sats2verbPhrase a (
+  IPredV2A verb obj adj = 
+    sats2verbPhrase (
       insertExtrapos 
         (mkSatsObject pronImpers verb obj)
         (\\_ =>  adj.s ! AF (pgen2gen obj.g) obj.n)) ;
-  IPredVV a verb vp = 
-   sats2verbPhrase a (
+  IPredVV verb vp = 
+   sats2verbPhrase (
      insertExtrapos 
        (mkSats pronImpers verb) 
        (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen pronImpers.g ! pronImpers.n ! pronImpers.p)
      ) ;
 
-  IPredObjV2V a verb obj vp = 
-    sats2verbPhrase a (
+  IPredObjV2V verb obj vp = 
+    sats2verbPhrase (
       insertExtrapos 
         (mkSatsObject pronImpers verb obj)
         (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen obj.g ! obj.n ! obj.p)
       ) ;
-  IPredSubjV2V a verb obj vp = 
-    sats2verbPhrase a (
+  IPredSubjV2V verb obj vp = 
+    sats2verbPhrase (
       insertExtrapos 
         (mkSatsObject pronImpers verb obj)
         (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen pronImpers.g ! pronImpers.n ! pronImpers.p)
       ) ;
 
 
-  IPredCN a cn = 
-    sats2verbPhrase a (mkSatsCopula pronImpers (indefNoun pronImpers.n cn)) ;
-  IPredNP a np = 
-    sats2verbPhrase a (mkSatsCopula pronImpers (np.s ! stressed nominative)) ;
-  IPredAdv a adv = 
-    sats2verbPhrase a (mkSatsCopula pronImpers adv.s) ;
+  IPredCN cn = 
+    sats2verbPhrase (mkSatsCopula pronImpers (indefNoun pronImpers.n cn)) ;
+  IPredNP np = 
+    sats2verbPhrase (mkSatsCopula pronImpers (np.s ! stressed nominative)) ;
+  IPredAdv adv = 
+    sats2verbPhrase (mkSatsCopula pronImpers adv.s) ;
 
-  IPredProgVP a vp = sats2verbPhrase a (progressiveSats pronImpers vp) ;
+  IPredProgVP vp = sats2verbPhrase (progressiveSats pronImpers vp) ;
 
 
 

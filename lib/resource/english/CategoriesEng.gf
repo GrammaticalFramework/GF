@@ -50,6 +50,7 @@ lincat
       -- = {s : VForm => Str ; s1 : Particle}
   VP     = {s,s2 : Bool => SForm => Agr => Str ; isAux : Bool} ;
   VPI    = {s : VIForm => Agr => Str ; s1 : Str} ; -- s1 is "not" or []
+  VCl    = {s : Bool => Anteriority => VIForm => Agr => Str ; s1 : Bool => Str} ;
   V2     = TransVerb ; 
       -- = Verb ** {s3 : Preposition} ;
   V3     = TransVerb ** {s4 : Preposition} ;
@@ -69,6 +70,7 @@ lincat
 
   TP     = {s : Str ; b : Bool ; t : Tense ; a : Anteriority} ; --- the Str field is dummy
   Tense  = {s : Str ; t : Tense} ;
+  Pol    = {s : Str ; p : Bool} ;
   Ant    = {s : Str ; a : Anteriority} ;
 
   PP     = {s : Str} ;

@@ -84,6 +84,9 @@ lin
   ASimul = {s = [] ; a = Simul} ;
   AAnter = {s = [] ; a = Anter} ;
 
+  PPos = {s = [] ; p = True} ;
+  PNeg = {s = [] ; p = False} ;
+
 -- Adverbs.
 
   AdjAdv a = {s = a.s ! AA} ;

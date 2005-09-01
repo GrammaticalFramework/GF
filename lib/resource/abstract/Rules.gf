@@ -82,13 +82,15 @@ fun
   UseA2S : A2S -> AS ;
   UseA2V : A2V -> AV ;
 
--- Formation of infinitival phrases.
+-- Formation of tensed phrases.
 
   AdjPart : V -> A ;                       -- past participle, e.g. "forgotten"
 
   UseCl  : TP -> Cl  -> S ;
   UseRCl : TP -> RCl -> RS ;
   UseQCl : TP -> QCl -> QS ;
+
+  UseVCl : Pol -> Ant -> VCl -> VPI ;
 
   PosTP  : Tense -> Ant -> TP ;
   NegTP  : Tense -> Ant -> TP ;
@@ -100,6 +102,9 @@ fun
 
   ASimul   : Ant ;
   AAnter   : Ant ;
+
+  PPos : Pol ;
+  PNeg : Pol ;
 
 --!
 --3 Adverbs

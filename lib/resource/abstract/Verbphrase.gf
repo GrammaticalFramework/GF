@@ -46,7 +46,7 @@ abstract Verbphrase = Categories ** {
   RelVP        : RP -> VP -> RCl ;        -- "who walks", "who doesn't walk"
   IntVP        : IP -> VP -> QCl ;        -- "who walks"
 
-  PosVP, NegVP : Ant -> VP  -> VPI ;      -- to eat, not to eat
+  UseVP        : VP  -> VCl ;             -- to eat, not to eat
 
   AdvVP        : VP -> AdV -> VP ;        -- "always walks"
   SubjVP       : VP -> Subj -> S -> VP ;  -- "(a man who) sings when he runs"

@@ -20,13 +20,13 @@ ExactTime h = ss (h.s ++ "akkurat") ;
 NumHour n = {s = n.s ! Neutr} ;
 NumMinute n = {s = n.s ! Neutr} ;
 
-monday = regN "mandag" masculine ;
-tuesday = regN "tirsdag" masculine ;
-wednesday = regN "onsdag" masculine ;
-thursday = regN "torsdag" masculine ;
-friday = regN "fredag" masculine ;
-saturday = regN "lørdag" masculine ;
-sunday = regN "søndag" masculine ;
+monday = regN "mandag" utrum ;
+tuesday = regN "tirsdag" utrum ;
+wednesday = regN "onsdag" utrum ;
+thursday = regN "torsdag" utrum ;
+friday = regN "fredag" utrum ;
+saturday = regN "lørdag" utrum ;
+sunday = regN "søndag" utrum ;
 
 
 

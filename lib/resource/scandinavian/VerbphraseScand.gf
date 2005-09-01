@@ -51,8 +51,9 @@ incomplete concrete VerbphraseScand of Verbphrase = CategoriesScand **
   RelVP = relVerbPhrase ;
   IntVP = intVerbPhrase ;
 
-  PosVP tp = predVerbGroup True tp ;
-  NegVP tp = predVerbGroup False tp ;
+--  PosVP tp = predVerbGroup True tp ;
+--  NegVP tp = predVerbGroup False tp ;
+  UseVP =  predVerbGroupI ;
 
   AdvVP = adVerbPhrase ;
   SubjVP = subjunctVerbPhrase ;

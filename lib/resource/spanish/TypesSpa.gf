@@ -93,6 +93,12 @@ oper
 
   oper RelFormA = RelForm ;
 
+  npRelForm : NPFormA -> RelFormA = \np -> case np of {
+    Ton c => RSimple c ;
+    Aton c => RSimple c ;
+    Poss _ _ => RSimple genitive
+    } ;
+
 --2 Relative pronouns
 --
 -- The simple (atonic) relative pronoun shows genuine variation in all of the

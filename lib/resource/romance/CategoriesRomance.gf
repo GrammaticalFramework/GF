@@ -56,6 +56,7 @@ lincat
       -- = {s : VF => Str} ;
   VP     = {s : Bool => Gender => VPForm => Str} ;
   VPI    = {s : VIForm => Gender => Number => Person => Str} ;
+  VCl    = {s : Bool => Anteriority => VIForm => Gender => Number => Person => Str} ;
   V2     = TransVerb ;
       -- = Verb ** {s2 : Preposition ; c : CaseA} ; 
   V3     = TransVerb ** {s3 : Preposition ; c3 : CaseA} ;
@@ -73,6 +74,7 @@ lincat
   TP     = {s : Str ; b : Bool ; t : Tense ; a : Anteriority} ; --- s-field is dummy
   Tense  = {s : Str ; t : Tense} ;
   Ant    = {s : Str ; a : Anteriority} ;
+  Pol    = {s : Str ; p : Bool} ;
 
   Adv    = {s : Str} ;
   AdV    = {s : Str} ;

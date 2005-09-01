@@ -30,6 +30,7 @@ lincat
   V      = Verb ;
       -- = {s : VerbForm => Str ; s1 : Str} ;
   VP     = VerbGroup ;
+  VCl    = {s  : Bool => Anteriority => VIForm => Gender => Number => Person => Str} ;
   VPI    = {s  : VIForm => Gender => Number => Person => Str} ;
   V2     = TransVerb ; 
       -- = Verb ** {s2 : Preposition} ;
@@ -48,6 +49,7 @@ lincat
 
   TP     = {s : Str ; b : Bool ; t : Tense ; a : Anteriority} ; --- the Str field is dummy
   Tense  = {s : Str ; t : Tense} ;
+  Pol    = {s : Str ; p : Bool} ;
   Ant    = {s : Str ; a : Anteriority} ;
   
 
@@ -68,7 +70,7 @@ lincat
   RS     = {s :                  GenNum => Person => Str} ;
   RCl    = {s : Bool => SForm => GenNum => Person => Str} ;
 
-  IP     = NounPhrase ;
+  IP     = IntPron ; -- = NounPhrase ;
   IDet   = {s : NounGender => Str ; n : Number ; b : SpeciesP} ;
   QS     = {s :                  QuestForm => Str} ;
   QCl    = {s : Bool => SForm => QuestForm => Str} ;
