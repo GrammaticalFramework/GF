@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/13 12:40:19 $ 
+-- > CVS $Date: 2005/09/01 09:53:19 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- Calculating the finiteness of each type in a grammar
 -----------------------------------------------------------------------------
@@ -56,13 +56,13 @@ expandTyping split fun env (Decl x cat args) [] decls
     = return $ Abs decl (reverse decls) fun
     where decl = substArgs split x env cat args []
 expandTyping split fun env typ (Decl x xcat xargs : declsToDo) declsDone
-    = do (xcat', env') <- calcNewEnv
-         let decl = substArgs split x env xcat' xargs []
+    = do (x', xcat', env') <- calcNewEnv
+         let decl = substArgs split x' env xcat' xargs []
 	 expandTyping split fun env' typ declsToDo (decl : declsDone)
     where calcNewEnv = case splitableCat split xcat of
 		         Just newCats -> do newCat <- member newCats
-					    return (newCat, (x,newCat) : env)
-			 Nothing -> return (xcat, env)
+					    return (anyVar, newCat, (x,newCat) : env)
+			 Nothing -> return (x, xcat, env)
 
 substArgs :: Splitable -> Var -> [(Var, SCat)] -> SCat -> [TTerm] -> [TTerm] -> SDecl
 substArgs split x env cat [] args = Decl x cat (reverse args)
@@ -96,7 +96,8 @@ calcSplitable rules = (listAssoc splitableCat2Funs, listAssoc splitableFun2Cat)
 			     [ (fun, mergeFun fun cat) | (cat, fun) <- splitableCatFuns ]
 
           -- cat-fun pairs that are splitable
-	  splitableCatFuns = [ (cat, name2fun name) |
+	  splitableCatFuns = tracePrt "SimpleToFinite - splitable functions" prt $
+                             [ (cat, name2fun name) |
 			       Rule (Abs (Decl _ cat []) [] name) _ <- rules,
 			       splitableCats ?= cat ]
 

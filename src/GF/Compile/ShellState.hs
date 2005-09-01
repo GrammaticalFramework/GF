@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:46:01 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.45 $
+-- > CVS $Date: 2005/09/01 09:53:18 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.46 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -189,7 +189,7 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
 
   let pinfosOld = map (CnvOld.pInfo opts cgr) concrs  -- peb 18/6 (OBSOLETE)
 
-  let fromGFC       = Cnv.gfc2mcfg2cfg opts
+  let fromGFC       = snd . snd . Cnv.convertGFC opts
       (mcfgs, cfgs) = unzip $ map (curry fromGFC cgr) concrs 
       pInfos        = zipWith Prs.buildPInfo mcfgs cfgs
 
