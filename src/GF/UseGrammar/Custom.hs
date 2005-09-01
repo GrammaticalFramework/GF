@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/08/18 13:18:10 $ 
+-- > CVS $Date: 2005/09/01 09:53:19 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.68 $
+-- > CVS $Revision: 1.69 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -264,24 +264,23 @@ customGrammarPrinter =
   ,(strCI "pinfo",    Prt.prt . statePInfo)
   ,(strCI "abstract", Prt.prtAfter "\n" . Cnv.gfc2abstract . stateGrammarLang)
 
-  ,(strCI "gfc-haskell",  CnvHaskell.prtSGrammar . Cnv.gfc2simple . stateGrammarLang)
+  ,(strCI "gfc-haskell",  CnvHaskell.prtSGrammar . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
   ,(strCI "mcfg-haskell", CnvHaskell.prtMGrammar . stateMCFG)
   ,(strCI "cfg-haskell",  CnvHaskell.prtCGrammar . stateCFG)
-  ,(strCI "gfc-prolog",   CnvProlog.prtSGrammar . Cnv.gfc2simple . stateGrammarLang)
+  ,(strCI "gfc-prolog",   CnvProlog.prtSGrammar . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
   ,(strCI "mcfg-prolog",  CnvProlog.prtMGrammar . stateMCFG)
   ,(strCI "cfg-prolog",   CnvProlog.prtCGrammar . stateCFG)
 
 -- obsolete, or only for testing:
   ,(strCI "abs-skvatt", Cnv.abstract2skvatt . Cnv.gfc2abstract . stateGrammarLang)
   ,(strCI "cfg-skvatt", Cnv.cfg2skvatt . stateCFG)
-  ,(strCI "simple",   Prt.prt . Cnv.gfc2simple . stateGrammarLang)
-  ,(strCI "mcfg-erasing", Prt.prt . Cnv.simple2mcfg_nondet . Cnv.gfc2simple . stateGrammarLang)
-  ,(strCI "finite",   Prt.prt . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
-  ,(strCI "single",   Prt.prt . Cnv.removeSingletons . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
-  ,(strCI "sg-sg",    Prt.prt . Cnv.removeSingletons . Cnv.removeSingletons . Cnv.simple2finite . Cnv.gfc2simple . stateGrammarLang)
+  ,(strCI "simple",   Prt.prt . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
+  ,(strCI "mcfg-erasing", Prt.prt . fst . snd . uncurry Cnv.convertGFC . stateGrammarLangOpts)
   ,(strCI "mcfg-old", PrtOld.prt . CnvOld.mcfg . statePInfoOld)
   ,(strCI "cfg-old",  PrtOld.prt . CnvOld.cfg . statePInfoOld)
   ] 
+  where stateGrammarLangOpts s = (stateOptions s, stateGrammarLang s)
+
 
 customMultiGrammarPrinter = 
   customData "Printers for multiple grammars, selected by option -printer=x" $
