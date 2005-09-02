@@ -2,6 +2,8 @@
 --# -opt
 
 concrete ClauseEng of Clause = CategoriesEng ** 
+----  ClausePredI with (Predic = PredicEng) ;
+
   open Prelude, SyntaxEng in {
 
   flags optimize=all ;
@@ -95,6 +97,8 @@ concrete ClauseEng of Clause = CategoriesEng **
   IPredAdv v = predBeGroupI (complAdverb v) ;
 
   IPredProgVP vp = predBeGroupI (vp.s ! VIPresPart) ;
+}
+
 
 {-
 -- Use VPs
@@ -110,5 +114,3 @@ concrete ClauseEng of Clause = CategoriesEng **
   AdvVP = adVerbPhrase ;
   SubjVP = subjunctVerbPhrase ;
 -}
-
-}
