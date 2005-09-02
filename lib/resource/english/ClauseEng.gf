@@ -2,7 +2,7 @@
 --# -opt
 
 concrete ClauseEng of Clause = CategoriesEng ** 
-----  ClausePredI with (Predic = PredicEng) ;
+----  ClausePredI with (Predic = PredicEng) ; {-
 
   open Prelude, SyntaxEng in {
 
@@ -98,19 +98,3 @@ concrete ClauseEng of Clause = CategoriesEng **
 
   IPredProgVP vp = predBeGroupI (vp.s ! VIPresPart) ;
 }
-
-
-{-
--- Use VPs
-
-  PredVP = predVerbGroupClause ;
-  IntVP = intVerbPhrase ;
-  RelVP = relVerbPhrase ;
-
-
-  PosVP tp = predVerbGroup True tp.a ;
-  NegVP tp = predVerbGroup False tp.a ;
-
-  AdvVP = adVerbPhrase ;
-  SubjVP = subjunctVerbPhrase ;
--}

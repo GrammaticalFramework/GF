@@ -39,11 +39,11 @@ abstract Predic = Categories ** {
 -}
 
 
-    UseV1  : V   -> Verb Vt_ ;
-    UseV2  : V2  -> Verb (Vt CtN) ;
-    UseVS  : VS  -> Verb (Vt CtS) ;
-    UseV3  : V3  -> Verb (VtN CtN) ;
-    UseV2S : V2S -> Verb (VtN CtS) ;
-    UseV2Q : V2Q -> Verb (VtN CtQ) ;
+    VeV1  : V   -> Verb Vt_ ;
+    VeV2  : V2  -> Verb (Vt CtN) ;
+    VeVS  : VS  -> Verb (Vt CtS) ;
+    VeV3  : V3  -> Verb (VtN CtN) ;
+    VeV2S : V2S -> Verb (VtN CtS) ;
+    VeV2Q : V2Q -> Verb (VtN CtQ) ;
     ---- etc
 }
