@@ -208,7 +208,7 @@ lin
    window_N = regN "ventana" ;
    wine_N = regN "vino" ;
    win_V2 = dirV2 (regV "ganar") ;
-   woman_N = regN "mujer" ;		-- fem
+   woman_N = femN (regN "mujer") ;
    wonder_VQ = mkVQ (regV "preguntar") ; ---- preguntarse 
    wood_N = regN "madera" ;
    write_V2 = dirV2 (special_ppV (regV "escribir") "escrito") ;

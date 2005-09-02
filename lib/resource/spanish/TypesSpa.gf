@@ -105,10 +105,9 @@ oper
 -- cases. 
 
   relPronForms = table {
-    Nom => "che" ; 
-    Acc => "che" ;
-    CPrep P_a => "cui" ;    --- variant a cui
-    CPrep p => strPrep p ++ "cui"
+    Nom | Acc => "que" ; 
+    CPrep P_a => "cuyo" ;
+    CPrep p => strPrep p ++ "cuyo"
     } ;
 
 -- Verbs: conversion from full verbs to present-tense verbs.

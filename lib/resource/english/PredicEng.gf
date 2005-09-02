@@ -12,7 +12,6 @@ concrete PredicEng of Predic = CategoriesEng **
     Compl = {s1, s2 : Agr => Str} ; 
 
   lin
-
     CtN, CtV, CtS, CtQ, CtA = ss [] ;
     Vt, VtN = \x -> x ;
     Vt_ = ss [] ;
