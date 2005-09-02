@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/17 12:46:05 $ 
+-- > CVS $Date: 2005/09/02 15:47:47 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.13 $
+-- > CVS $Revision: 1.14 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -40,7 +40,7 @@ type CFRules = FiniteMap Cat_ [CFRule_]
 -- | Remove left-recursion and categories with no productions
 --   from a context-free grammar.
 makeNice :: CGrammar -> [CFRule_]
-makeNice = concat . eltsFM . makeNice' . groupProds . cfgToCFRules
+makeNice = ungroupProds . makeNice' . groupProds . cfgToCFRules
     where makeNice' = removeLeftRecursion . removeEmptyCats
 
 cfgToCFRules :: CGrammar -> [CFRule_]
@@ -55,6 +55,9 @@ groupProds :: [CFRule_] -> CFRules
 groupProds = addListToFM_C (++) emptyFM . map (\rs -> (ruleCat rs,[rs]))
     where ruleCat (CFRule c _ _) = c
 
+ungroupProds :: CFRules -> [CFRule_]
+ungroupProds = concat . eltsFM
+
 -- | Remove productions which use categories which have no productions
 removeEmptyCats :: CFRules -> CFRules
 removeEmptyCats rss = listToFM $ fix removeEmptyCats' $ fmToList rss
@@ -66,9 +69,6 @@ removeEmptyCats rss = listToFM $ fix removeEmptyCats' $ fmToList rss
 	allCats = nub [c | (_,r) <- rs, CFRule _ rhs _ <- r, Cat c <- rhs]
 	emptyCats = filter (nothingOrNull . flip lookup rs) allCats
 	k' = map (\ (c,xs) -> (c, filter (not . anyUsedBy emptyCats) xs)) keep
-
-anyUsedBy :: [Cat_] -> CFRule_ -> Bool
-anyUsedBy ss (CFRule _ r _) = or [c `elem` ss | Cat c <- r]
 
 removeLeftRecursion :: CFRules -> CFRules
 removeLeftRecursion rs = listToFM $ concatMap removeDirectLeftRecursion $ map handleProds $ fmToList rs
@@ -104,19 +104,50 @@ makeRegular :: [CFRule_] -> [CFRule_]
 makeRegular = undefined
 
 {-
-isRightLinear :: [Cat_] -- ^ The categories to consider
-	      -> CFRule_ 
-	      -> Bool
-isRightLinear _  (CFRule _ ss _) | all isTerminal ss = True
-isRightLinear cs 
+-- | Get the sets of mutually recursive non-terminals for a grammar.
+mutRecCats :: Eq c => [CFRule c n t] -> [[c]]
+mutRecCats = 
 -}
 
--- Use the strongly regular grammar to finite automaton
--- compilation algorithm from \"Regular Approximation of Context-free
--- Grammars through Approximation\", Mohri and Nederhof, 2000
+{-
+-- | Get a map of categories to all categories which can occur in 
+--   the result of rewriting each category.
+allCatsTrans :: CFRules -> FinitMap 
+allCatsTrans g c = 
+-}
+
+-- Convert a strongly regular grammar to a finite automaton.
 -- compileAutomaton :: 
 
+--
+-- CFG rule utilities
+--
 
+-- | Checks if a context-free rule is right-linear.
+isRightLinear :: Eq c => [c]  -- ^ The categories to consider
+	      -> CFRule c n t -- ^ The rule to check for right-linearity
+	      -> Bool
+isRightLinear cs (CFRule _ ss _) = all (not . catElem cs) (safeInit ss)
+
+-- | Checks if a context-free rule is left-linear.
+isLeftLinear ::  Eq c => [c]  -- ^ The categories to consider
+	      -> CFRule c n t -- ^ The rule to check for right-linearity
+	      -> Bool
+isLeftLinear cs (CFRule _ ss _) = all (not . catElem cs) (drop 1 ss)
+
+-- | Checks if a symbol is a non-terminal of one of the given categories.
+catElem :: Eq c => [c] -> Symbol c t -> Bool
+catElem cs (Tok _) = False
+catElem cs (Cat c) = c `elem` cs
+
+-- | Check if any of the categories used on the right-hand side
+--   are in the given list of categories.
+anyUsedBy :: Eq c => [c] -> CFRule c n t -> Bool
+anyUsedBy cs (CFRule _ ss _) = any (catElem cs) ss
+
+--
+-- * Utilities
+--
 
 fix :: Eq a => (a -> a) -> a -> a
 fix f x = let x' = f x in if x' == x then x else fix f x'
@@ -124,3 +155,7 @@ fix f x = let x' = f x in if x' == x then x else fix f x'
 nothingOrNull :: Maybe [a] -> Bool
 nothingOrNull Nothing = True
 nothingOrNull (Just xs) = null xs
+
+safeInit :: [a] -> [a]
+safeInit [] = []
+safeInit xs = init xs

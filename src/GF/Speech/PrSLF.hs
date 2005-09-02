@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/17 12:46:05 $ 
+-- > CVS $Date: 2005/09/02 15:47:46 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- This module converts a CFG to an SLF finite-state network
 -- for use with the ATK recognizer. The SLF format is described
@@ -32,38 +32,36 @@ import GF.Infra.Option
 
 import Data.Char (toUpper,toLower)
 
-data SLF = SLF [SLFNode] [SLFEdge]
+data SLF = SLF { slfNodes :: [SLFNode], slfEdges :: [SLFEdge] }
 
-data SLFNode = SLFNode Int SLFWord
+data SLFNode = SLFNode { nId :: Int, nWord :: SLFWord }
 
-type SLFWord = Maybe String
+-- | An SLF word is a word, or the empty string.
+type SLFWord = String
 
-data SLFEdge = SLFEdge Int Int Int
+data SLFEdge = SLFEdge { eId :: Int, eStart :: Int, eEnd :: Int }
 
 
 slfPrinter :: Ident -- ^ Grammar name
 	   -> Options -> CGrammar -> String
 slfPrinter name opts cfg = prSLF slf ""
-    where gr = makeNice cfg
-	  gr' = makeRegular gr
-	  srg = makeSRG name opts gr'
-	  slf = srg2slf srg
+    where slf = srg2slf $ makeSRG name opts $ makeRegular $ makeNice cfg
 
 srg2slf :: SRG -> SLF
-srg2slf = undefined
+srg2slf = undefined -- should use TransformCFG.compileAutomaton
 
 prSLF :: SLF -> ShowS
-prSLF (SLF ns es) = header . unlinesS (map prNode ns) . unlinesS (map prEdge es)
+prSLF (SLF { slfNodes = ns, slfEdges = es}) = header . unlinesS (map prNode ns) . unlinesS (map prEdge es)
     where
     header = showString "VERSION=1.0" . nl 
 	     . prFields [("N",show (length ns)),("L", show (length es))] . nl
-    prNode (SLFNode i w) = prFields [("I",show i),("W",showWord w)]
-    prEdge (SLFEdge i s e) = prFields [("J",show i),("S",show s),("E",show e)]
+    prNode n = prFields [("I",show (nId n)),("W",showWord (nWord n))]
+    prEdge e = prFields [("J",show (eId e)),("S",show (eStart e)),("E",show (eEnd e))]
 
 
 showWord :: SLFWord -> String
-showWord Nothing = "!NULL"
-showWord (Just w) = w -- FIXME: convert words to upper case
+showWord "" = "!NULL"
+showWord w = w -- FIXME: convert words to upper case
 
 prFields :: [(String,String)] -> ShowS
 prFields fs = unwordsS [ showString l . showChar '=' . showString v | (l,v) <- fs ]
