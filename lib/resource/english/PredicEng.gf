@@ -53,8 +53,8 @@ concrete PredicEng of Predic = CategoriesEng **
                 cprep2 verb.c (compl.s2 ! a)
         ) ; 
 
-    UseV1 v = v ** {isAux = False ; c = CVt_} ;
-    UseV2 v = v ** {isAux = False ; c = CVt (CCtN CP_)} ; ---- other preps
+    VeV1 v = v ** {isAux = False ; c = CVt_} ;
+    VeV2 v = v ** {isAux = False ; c = CVt (CCtN CP_)} ; ---- other preps
 
 {-
     Walk = {s = "walks" ; c = VC_} ;
