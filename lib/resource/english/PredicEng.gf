@@ -38,12 +38,14 @@ concrete PredicEng of Predic = CategoriesEng **
                 cprep1 verb.c (compl.s1 ! a) ++
                 cprep2 verb.c (compl.s2 ! a)
         ) ; 
+{- takes 80% !
     RPredVerb vt np verb compl = 
       relVerbClause np verb 
         (\\a => vt.s ++
                 cprep1 verb.c (compl.s1 ! a) ++
                 cprep2 verb.c (compl.s2 ! a)
         ) ; 
+-}
     IPredVerb vt verb compl = 
       predVerbI verb 
         (\\a => vt.s ++
