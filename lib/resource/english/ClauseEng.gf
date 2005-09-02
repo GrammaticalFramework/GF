@@ -53,7 +53,6 @@ concrete ClauseEng of Clause = CategoriesEng **
 
   QPredProgVP np vp = predBeGroupQ np (vp.s ! VIPresPart) ;
 
-
   RPredV np v = relVerbClause np v (complVerb v) ;
   RPredPassV np v = predBeGroupR np (passVerb v) ;
   RPredV2 np v x = relVerbClause np v (complTransVerb v x) ;

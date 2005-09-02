@@ -157,78 +157,91 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
 -----------
 
   RPredV  np v   = 
-    sats2rel (mkSats (relNounPhrase np) v) ;
+    sats2rel 
+      (\g,n,p -> mkSats (relNounPhrase np g n p) v) ;
   RPredPassV subj v = 
-    sats2rel (mkSatsCopula  (relNounPhrase subj) (v.s ! VPart
-    (pgen2gen subj.g) Sg)) ; ---- subj.n
+    sats2rel 
+      (\g,n,p -> mkSatsCopula  (relNounPhrase subj g n p) 
+        (v.s ! VPart g n)) ;
   RPredV2 np v y = 
-    sats2rel (mkSatsObject (relNounPhrase np) v y) ;
+    sats2rel 
+      (\g,n,p -> mkSatsObject (relNounPhrase np g n p) v y) ;
+
   RPredV3 subj verb obj1 obj2 = 
-    sats2rel (
-      insertObject (mkSatsObject (relNounPhrase subj) verb obj1) verb.c3 verb.s3 obj2
+    sats2rel 
+      (\g,n,p -> 
+        insertObject (mkSatsObject (relNounPhrase subj g n p) verb
+           obj1) verb.c3 verb.s3 obj2
       ) ;
   RPredReflV2 subj verb = 
-    sats2rel (
-      mkSatsObject (relNounPhrase subj)
+    sats2rel (\g,n,p ->
+      mkSatsObject (relNounPhrase subj g n p)
         {s = verb.s ; s2 = [] ; c = accusative ; aux = AEsse}
-        (reflPronNounPhrase (pgen2gen subj.g) Sg P3)) ;
+        (reflPronNounPhrase g n p)) ;
   RPredVS subj verb sent = 
-    sats2rel (
-      insertExtrapos (mkSats (relNounPhrase subj) verb) 
+    sats2rel (\g,n,p ->
+      insertExtrapos (mkSats (relNounPhrase subj g n p) verb) 
         (\\b => embedConj ++ sent.s ! subordMode verb b)) ; ---- mn
   RPredVQ subj verb quest = 
-    sats2rel (
-      insertExtrapos (mkSats (relNounPhrase subj) verb) (\\_ => quest.s ! IndirQ)) ;
+    sats2rel (\g,n,p ->
+      insertExtrapos (mkSats (relNounPhrase subj g n p) verb) (\\_ => quest.s ! IndirQ)) ;
   RPredV2S subj verb obj sent = 
-    sats2rel (
+    sats2rel (\g,n,p ->
       insertExtrapos 
-        (mkSatsObject (relNounPhrase subj) verb obj)
+        (mkSatsObject (relNounPhrase subj g n p) verb obj)
         (\\b => embedConj ++ sent.s ! subordMode verb b)
         ) ; ---- mn ;
   RPredV2Q subj verb obj quest = 
-    sats2rel (
+    sats2rel (\g,n,p ->
       insertExtrapos 
-        (mkSatsObject (relNounPhrase subj) verb obj) 
+        (mkSatsObject (relNounPhrase subj g n p) verb obj) 
         (\\_ => quest.s ! IndirQ)) ;
   RPredVA subj verb adj = 
-   sats2rel (
-     insertExtrapos (mkSats (relNounPhrase subj) verb) 
-       (\\_ => adj.s ! AF (pgen2gen subj.g) Sg)) ; ---- subj.n, etc
+   sats2rel (\g,n,p ->
+     insertExtrapos (mkSats (relNounPhrase subj g n p) verb) 
+       (\\_ => adj.s ! AF g n)) ;
   RPredV2A subj verb obj adj = 
-    sats2rel (
+    sats2rel (\g,n,p ->
       insertExtrapos 
-        (mkSatsObject (relNounPhrase subj) verb obj)
+        (mkSatsObject (relNounPhrase subj g n p) verb obj)
         (\\_ =>  adj.s ! AF (pgen2gen obj.g) obj.n)) ;
   RPredVV subj verb vp = 
-   sats2rel (
+   sats2rel (\g,n,p ->
      insertExtrapos 
-       (mkSats (relNounPhrase subj) verb) 
+       (mkSats (relNounPhrase subj g n p) verb) 
        (\\_ =>  prepCase verb.c ++ 
-                vp.s ! VIInfinit ! (pgen2gen subj.g) ! (relNounPhrase subj).n ! P3)
+                vp.s ! VIInfinit ! g ! n ! p)
      ) ;
   RPredObjV2V subj verb obj vp = 
-    sats2rel (
+    sats2rel (\g,n,p ->
       insertExtrapos 
-        (mkSatsObject (relNounPhrase subj) verb obj)
+        (mkSatsObject (relNounPhrase subj g n p) verb obj)
         (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen obj.g ! obj.n ! obj.p)
       ) ;
+{- ----
   RPredSubjV2V subj verb obj vp = 
-    sats2rel (
+    sats2rel (\g,n,p ->
       insertExtrapos 
-        (mkSatsObject (relNounPhrase subj) verb obj)
-        (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! (pgen2gen subj.g) ! Sg ! P3)
+        (mkSatsObject (relNounPhrase subj g n p) verb obj)
+        (\\_ => prepCase verb.c ++ vp.s ! VIInfinit ! g ! n ! p)
       ) ;
-
+-}
   RPredAP subj adj = 
-    sats2rel (mkSatsCopula (relNounPhrase subj) (adj.s ! AF (pgen2gen subj.g) Sg)) ;
+    sats2rel 
+      (\g,n,p -> mkSatsCopula (relNounPhrase subj g n p) (adj.s ! AF g n)) ;
   RPredCN subj cn = 
-    sats2rel (mkSatsCopula (relNounPhrase subj) (indefNoun Sg cn)) ;
+    sats2rel 
+      (\g,n,p -> mkSatsCopula (relNounPhrase subj g n p) (indefNoun n cn)) ;
   RPredNP subj np = 
-    sats2rel (mkSatsCopula (relNounPhrase subj) (np.s ! stressed nominative)) ;
+    sats2rel 
+      (\g,n,p -> mkSatsCopula (relNounPhrase subj g n p) (np.s ! stressed nominative)) ;
   RPredAdv subj adv = 
-    sats2rel (mkSatsCopula (relNounPhrase subj) adv.s) ;
+    sats2rel 
+      (\g,n,p -> mkSatsCopula (relNounPhrase subj g n p) adv.s) ;
 
-  RPredProgVP np vp = sats2rel (progressiveSats (relNounPhrase np) vp) ;
+  RPredProgVP np vp = 
+    sats2rel 
+      (\g,n,p -> progressiveSats (relNounPhrase np g n p) vp) ;
 
 
 

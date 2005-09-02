@@ -1313,24 +1313,17 @@ oper
     in
     {s = \\b,f,_ => cl.s ! b ! f} ;
 
+  sats2rel : (Gender -> Number -> Person -> Sats) -> RelClause = \sats ->
+    {s = \\b,f,g,n,p => 
+         (sats2clause (sats g n p)).s ! b ! f
+    } ;
 
-{- ---- this does not yet get agrement right; have to integrate these two
-  RP     = {s : RelForm => Str ; g : RelGen} ;
-  NP     = {s : NPFormA => Str ; g : PronGen ; 
-            n : Number ; p : Person ; c : ClitType} ;
-  RCl    = {s : Bool => ClForm => Gender => Number => Person => Str} ;
-  RelGen = RNoGen | RG Gender ;
-
--}
-  sats2rel : Sats -> RelClause = \x ->
-    let cl = sats2clause x
-    in
-    {s = \\b,f,_,_,_ => cl.s ! b ! f} ;
-  relNounPhrase : RelPron -> NounPhrase = \r -> {
+  relNounPhrase : RelPron -> Gender -> Number -> Person -> NounPhrase = 
+   \r,g,n,p -> {
     s = \\np => r.s ! npRelForm np ;
-    g = r.g ;
-    n = Sg ; ----
-    p = P3 ; ----
+    g = PGen g ; --- r.g
+    n = n ; 
+    p = p ;
     c = Clit0 ;
     } ;
 
