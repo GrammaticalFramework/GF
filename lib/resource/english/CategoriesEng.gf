@@ -84,8 +84,8 @@ lincat
       -- = {s : Order => Bool => SForm => Str} ;
   Slash  = {s : QuestForm => Bool => SForm => Str ; s2 : Preposition} ;
   RP     = {s : Gender => Number => NPForm => Str} ;
-  RCl    = {s : Bool => SForm => Agr => Str} ;
-  RS     = {s :                  Agr => Str} ;
+  RCl    = {s : (Bool * SForm * Agr) => Str} ;
+  RS     = {s :                 Agr  => Str} ;
 
   IP     = {s : NPForm => Str ; n : Number ; g : Gender} ;
   IDet   = {s : Str ; n : Number} ;

@@ -166,13 +166,14 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
   RPredV2 np v y = 
     sats2rel 
       (\g,n,p -> mkSatsObject (relNounPhrase np g n p) v y) ;
-
   RPredV3 subj verb obj1 obj2 = 
     sats2rel 
       (\g,n,p -> 
         insertObject (mkSatsObject (relNounPhrase subj g n p) verb
            obj1) verb.c3 verb.s3 obj2
       ) ;
+---- bracket these just because they are so expensive (25% of gfc)
+{- ----
   RPredReflV2 subj verb = 
     sats2rel (\g,n,p ->
       mkSatsObject (relNounPhrase subj g n p)
@@ -218,7 +219,8 @@ incomplete concrete ClauseRomance of Clause = CategoriesRomance **
         (mkSatsObject (relNounPhrase subj g n p) verb obj)
         (\\_ =>  prepCase verb.c ++ vp.s ! VIInfinit ! pgen2gen obj.g ! obj.n ! obj.p)
       ) ;
-{- ----
+-}
+{- ---- some type error/bug here
   RPredSubjV2V subj verb obj vp = 
     sats2rel (\g,n,p ->
       insertExtrapos 

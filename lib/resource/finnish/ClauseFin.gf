@@ -153,7 +153,7 @@ concrete ClauseFin of Clause = CategoriesFin **
     sats2quest (mkSatsCopula (intNounPhrase subj) adv.s) ;
 
   QPredProgVP np vp = sats2quest (progressiveSats (intNounPhrase np) vp) ;
--}
+
 
 ----- gender and number of Adj
 
@@ -166,7 +166,7 @@ concrete ClauseFin of Clause = CategoriesFin **
   IPredV3 a verb obj1 obj2 = 
     sats2verbPhrase a (insertObject (mkSatsObject pronImpers verb obj1) verb.c2 verb.s5 verb.p obj2) ;
 
-{-
+
   IPredPassV a v = 
     sats2verbPhrase a (mkSatsCopula pronImpers (v.s ! VPart (pgen2gen
   pronImpers.g) pronImpers.n)) ;

@@ -16,8 +16,8 @@ concrete PredicEng of Predic = CategoriesEng **
     Vt, VtN = \x -> x ;
     Vt_ = ss [] ;
 
-    ComplNil    = {s1, s2 = \\_ => []} ;
-    ComplNP  np = {s1 = \\_ => np.s ! AccP   ; s2 = \\_ => []} ;
+    Compl_      = {s1, s2 = \\_ => []} ;
+    ComplN   np = {s1 = \\_ => np.s ! AccP   ; s2 = \\_ => []} ;
     ComplA   ap = {s1 = ap.s                 ; s2 = \\_ => []} ;
     ComplQ   q  = {s1 = \\_ => q.s ! DirQ    ; s2 = \\_ => []} ;
     ComplS   s  = {s1 = \\_ => "that" ++ s.s ; s2 = \\_ => []} ;
@@ -37,14 +37,14 @@ concrete PredicEng of Predic = CategoriesEng **
                 cprep1 verb.c (compl.s1 ! a) ++
                 cprep2 verb.c (compl.s2 ! a)
         ) ; 
-{- takes 80% !
+
     RPredVerb vt np verb compl = 
       relVerbClause np verb 
         (\\a => vt.s ++
                 cprep1 verb.c (compl.s1 ! a) ++
                 cprep2 verb.c (compl.s2 ! a)
         ) ; 
--}
+
     IPredVerb vt verb compl = 
       predVerbI verb 
         (\\a => vt.s ++
