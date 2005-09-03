@@ -90,8 +90,12 @@ lincat
 
   RP     = {s : RelForm => Str ; g : RelGen} ;
   RS     = {s :           Mode => Gender => Number => Person => Str} ;
-  RCl    = {s : Bool => ClForm => Gender => Number => Person => Str} ;
-
+----  RCl    = {s : Bool => ClForm => Gender => Number => Person => Str} ;
+  RCl = {
+    s1 : Gender => Number => Person => Str ;
+    s2 : Bool => ClForm => Gender => Number => Person => Str ;
+    s3 : Bool => Str
+    } ;
   IP     = {s : CaseA => Str ; g : Gender ; n : Number} ;
   IDet   = {s : Gender => Str ; n : Number} ;
   QS     = {s :                   QuestForm => Str} ;

@@ -1036,39 +1036,41 @@ oper
 -- Relative clauses can be formed from both verb phrases ("who walks") and
 -- slash expressions ("whom you see", "on which you sit" / "that you sit on"). 
 
-  RelClause   : Type = {s : Bool => SForm => Agr => Str} ;
-  RelSentence : Type = {s :                  Agr => Str} ;
+  RelClause   : Type = {s : (Bool * SForm * Agr) => Str} ;
+  RelSentence : Type = {s :                 Agr  => Str} ;
 
   relVerbPhrase : RelPron -> VerbGroup -> RelClause = \who,walks ->
-    {s = \\b,sf,a => 
-      let wa = fromAgr a in
-      (predVerbGroupClause (relNounPhrase who wa.g wa.n) walks).s  ! Dir ! b ! sf
+    {s = \\bsfa => 
+      let wa = fromAgr (bsfa.p3) in
+      (predVerbGroupClause (relNounPhrase who wa.g wa.n) walks).s ! 
+         Dir ! bsfa.p1 ! bsfa.p2
     } ;
 
   relVerbClause : RelPron -> Verb -> Complement -> RelClause = \who,walk,here ->
-    {s = \\b,sf,a => 
+    {s = \\bsfa => 
     let 
-      wa = fromAgr a ;
+      wa = fromAgr bsfa.p3 ;
       who : NounPhrase = relNounPhrase who wa.g wa.n ;
       whowalks : Clause = predVerbClause who walk here
     in
-    whowalks.s ! Dir ! b ! sf
+    whowalks.s ! Dir ! bsfa.p1 ! bsfa.p2
     } ;
 
   predBeGroupR : RelPron -> Complement -> RelClause = \who,old ->
-    {s = \\b,sf,a => 
+    {s = \\bsfa => 
       let 
-        wa = fromAgr a ;
+        wa = fromAgr bsfa.p3 ;
         whoisold = predBeGroup (relNounPhrase who wa.g wa.n) old
       in
-      whoisold.s ! Dir ! b ! sf
+      whoisold.s ! Dir ! bsfa.p1 ! bsfa.p2
     } ;
 
   relSlash : RelPron -> ClauseSlashNounPhrase -> RelClause = \who,yousee ->
-    {s = \\b,sf,a => 
+    {s = \\bsfa => 
            let
-             whom = who.s ! (fromAgr a).g ! (fromAgr a).n ; 
-             youSee = yousee.s ! IndirQ ! b ! sf
+             a = fromAgr bsfa.p3 ;
+             whom = who.s ! a.g ! a.n ; 
+             youSee = yousee.s ! IndirQ ! bsfa.p1 ! bsfa.p2
            in
            variants {
              whom ! AccP ++ youSee ++ yousee.s2 ;
@@ -1080,7 +1082,7 @@ oper
 -- "number x such that x is even".
 
   relSuch : Clause -> RelClause = \A ->
-    {s = \\b,sf,_ => "such" ++ "that" ++ A.s ! Dir ! b ! sf} ;
+    {s = \\bsfa => "such" ++ "that" ++ A.s ! Dir ! bsfa.p1 ! bsfa.p2} ;
 
 -- The main use of relative clauses is to modify common nouns.
 -- The result is a common noun, out of which noun phrases can be formed

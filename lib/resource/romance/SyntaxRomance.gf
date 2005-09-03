@@ -725,7 +725,7 @@ oper
 --
 -- Relative pronouns are inflected in
 -- gender, number, and case. They can also have an inherent case,
--- but this case if 'variable' in the sense that it
+-- but this case is 'variable' in the sense that it
 -- is sometimes just mediated from the correlate
 -- ("homme qui est bon"), sometimes inherent to the
 -- pronominal phrase itself ("homme dont la mère est bonne").
@@ -734,7 +734,13 @@ oper
 
   RelPron   : Type = {s : RelFormA => Str ; g : RelGen} ;
 
-  RelClause   : Type = {s : Bool => ClForm => Gender => Number => Person => Str} ;
+----  RelClause   : Type = {s : Bool => ClForm => Gender => Number => Person => Str} ;
+  RelClause   : Type = {
+    s1 : Gender => Number => Person => Str ;
+    s2 : Bool => ClForm => Gender => Number => Person => Str ;
+    s3 : Bool => Str
+    } ;
+
   RelSentence : Type = {s :         Mode   => Gender => Number => Person => Str} ;
 
   mkGenRel : RelGen -> Gender -> Gender = \rg,g -> case rg of {
@@ -762,15 +768,18 @@ oper
 -- slash expressions ("que je vois", "dont je parle"). 
 
   relSlash : RelPron -> ClauseSlashNounPhrase -> RelClause = \dont,jeparle ->
-    {s = \\b,cl,g,n,p => 
-         jeparle.s2 ++ allRelForms dont g n jeparle.c ++ jeparle.s ! b ! cl
+    {s1 = \\g,n,p      => jeparle.s2 ++ allRelForms dont g n jeparle.c ; 
+     s2 = \\b,cl,g,n,p => jeparle.s ! b ! cl ;
+     s3 = \\_ => [] ---- should be parts of jeparle
     } ;
 
 -- A 'degenerate' relative clause is the one often used in mathematics, e.g.
 -- "nombre x tel que x soit pair".
 
   relSuch : Clause -> RelClause = \A ->
-    {s = \\b,cl,g,n,p => suchPron g n ++ embedConj ++ A.s ! b ! cl
+    {s1 = \\g,n,p => suchPron g n ; 
+     s2 = \\b,cl,g,n,p => embedConj ++ A.s ! b ! cl ;
+     s3 = \\_ => [] ---- should be parts of A
     } ;
 
   suchPron : Gender -> Number -> Str ;
@@ -1307,17 +1316,46 @@ oper
 
   negNe, negPas : Str ;
 
-
   sats2quest : Sats -> Question = \x ->
     let cl = sats2clause x
     in
     {s = \\b,f,_ => cl.s ! b ! f} ;
 
+  sats2rel : (Gender -> Number -> Person -> Sats) -> RelClause = \s ->
+    {s1 = \\g,n,p => 
+       let
+         sats = s g n p ;
+       in 
+       sats.s1 ;
+     s2 = \\b,cf,g,n,p => 
+      let
+        sats = s g n p ;
+     
+        lui  = sats.s3 ;
+        dire = verbClForm {s = sats.s4 ; aux = sats.aux}
+                 cf sats.g sats.n sats.p sats.g2 sats.n2 ;
+        ai   = dire.p1 ;
+        toujours = sats.s5 ;
+        dit  = dire.p2 ;
+        ne  = if_then_Str b [] negNe ;
+        pas = if_then_Str b [] negPas ;
+      in
+      ne ++ lui ++ ai ++ toujours ++ pas ++ dit ;
+     s3 = \\b =>
+      let
+        sats = s Masc Sg P3 ;
+        directement = sats.s6 ;
+        oui = sats.s7 ! b
+      in 
+      directement ++ oui
+    } ;
+
+{-
   sats2rel : (Gender -> Number -> Person -> Sats) -> RelClause = \sats ->
     {s = \\b,f,g,n,p => 
          (sats2clause (sats g n p)).s ! b ! f
     } ;
-
+-}
   relNounPhrase : RelPron -> Gender -> Number -> Person -> NounPhrase = 
    \r,g,n,p -> {
     s = \\np => r.s ! npRelForm np ;

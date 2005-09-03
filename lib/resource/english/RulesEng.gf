@@ -90,7 +90,7 @@ lin
 
   UseCl  tp cl = {s = tp.s ++ cl.s ! Dir ! tp.b ! VFinite tp.t tp.a} ;
   UseQCl tp cl = {s = \\q => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! q} ;
-  UseRCl tp cl = {s = \\a => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! a} ;
+  UseRCl tp cl = {s = \\a => tp.s ++ cl.s ! <tp.b, VFinite tp.t tp.a, a>} ;
   UseVCl p a cl = {
     s  = \\v,ag => p.s ++ a.s ++ cl.s ! p.p ! a.a ! v ! ag ; 
     s1 = cl.s1 ! p.p
