@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/07/01 19:54:09 $
+-- > CVS $Date: 2005/09/04 11:45:38 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.9 $
+-- > CVS $Revision: 1.10 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -523,6 +523,7 @@ txtHelpFile =
   "\n    -printer=fullform       full-form lexicon, short format" ++
   "\n   *-printer=xml            XML: DTD for the pg command, object for st" ++
   "\n    -printer=old            old GF: file readable by GF 1.2" ++
+  "\n    -printer=stat           show some statistics of generated GFC" ++
   "\n" ++
   "\n-startcat, like -cat, but used in grammars (to avoid clash with keyword cat)" ++
   "\n" ++

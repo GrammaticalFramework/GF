@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Date: 2005/09/04 11:45:38 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- AR 7\/12\/1999 - 1\/4\/2000 - 10\/5\/2003
 --
@@ -107,6 +107,7 @@ instance Print A.Case where prt = C.printTree
 instance Print A.CType where prt = C.printTree
 instance Print A.Label where prt = C.printTree
 instance Print A.Module where prt = C.printTree
+instance Print A.Def where prt = C.printTree
 instance Print A.Canon where prt = C.printTree
 instance Print A.Sort where prt = C.printTree
 

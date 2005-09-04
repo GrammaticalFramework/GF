@@ -1278,13 +1278,13 @@ oper
 
   Imperative = SS1 Number ;
 
-  imperVerbPhrase : Bool -> VerbPhrase -> Imperative = \b,walk -> 
+  imperVerbPhrase : Bool -> VerbClause -> Imperative = \b,walk -> 
     {s = \\n => 
        let 
          a = toAgr n P2 human ;
          dont = if_then_Str b [] "don't" 
        in
-       dont ++ walk.s ! VIInfinit ! a
+       dont ++ walk.s ! b ! Simul ! VIInfinit ! a
     } ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->

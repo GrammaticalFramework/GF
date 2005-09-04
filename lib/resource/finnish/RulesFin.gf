@@ -39,7 +39,7 @@ lin
 
   DetNP = detNounPhrase ;
   NDetNP = numDetNounPhrase ;
-----  NDetNum = justNumDetNounPhrase ; 
+  NDetNum d n = numDetNounPhrase d n emptyCommNounPhrase ; 
   MassNP = partNounPhrase singular ;
 
   AppN2 = appFunComm ;
@@ -81,7 +81,7 @@ lin
 
 ----  ComplA2S = predAdjSent2 ;
 
-----  AdjPart = adjPastPart ;
+  AdjPart verb = {s = \\a => verb.s ! PastPartPass a} ;
 
 ----  UseV2V x = verb2aux x ** {isAux = False} ;
 
@@ -92,7 +92,7 @@ lin
 
   UseCl  tp cl = {s = tp.s ++ cl.s ! tp.b ! VFinite SDecl  tp.t tp.a} ;
   UseQCl tp cl = {s = tp.s ++ cl.s ! tp.b ! VFinite SQuest tp.t tp.a} ;
-----  UseRCl tp cl = {s = \\a => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! a} ;
+  UseRCl tp cl = {s = \\n => tp.s ++ cl.s ! tp.b ! VFinite SDecl  tp.t tp.a ! n} ;
 
   PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
   NegTP t a = {s = t.s ++ a.s ; b = False ; t = t.t ; a = a.a} ;
@@ -101,6 +101,9 @@ lin
   TPast        = {s = [] ; t = Past} ;
   TFuture      = {s = [] ; t = Future} ;
   TConditional = {s = [] ; t = Conditional} ;
+  PPos         = {s = [] ; p = True} ;
+  PNeg         = {s = [] ; p = False} ;
+
 
   ASimul = {s = [] ; a = Simul} ;
   AAnter = {s = [] ; a = Anter} ;

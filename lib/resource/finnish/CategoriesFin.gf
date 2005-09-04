@@ -47,8 +47,8 @@ lincat
 
   V      = Verb1 ; 
       -- = {s : VForm => Str}
-----  VP     = {s,s2 : Bool => SForm => Agr => Str ; isAux : Bool} ;
-  VPI    = {s : Bool => VIForm => Str ; sc : Case} ; 
+  VPI    = {s :                        VIForm => Number => Str ; sc : Case} ; 
+  VCl    = {s : Bool => Anteriority => VIForm => Number => Str ; sc : Case} ; 
 -----  VP     = Verb ** {s2 : VForm => Str ; c : ComplCase} ;
 ----  VG     = {s,s2 : Bool => VForm => Str ; c : ComplCase} ;
   V2     = TransVerb ;
@@ -67,6 +67,7 @@ lincat
 
   TP     = {s : Str ; b : Bool ; t : Tense ; a : Anteriority} ; --- the Str field is dummy
   Tense  = {s : Str ; t : Tense} ;
+  Pol    = {s : Str ; p : Bool} ;
   Ant    = {s : Str ; a : Anteriority} ;
 
   PP     = {s : Str} ;
