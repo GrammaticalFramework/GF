@@ -1427,9 +1427,9 @@ oper
 
   Imperative = {s : Number => Str} ;
 
-  imperVerbPhrase : Bool -> VerbPhrase -> Imperative = \b,titta -> 
+  imperVerbPhrase : Bool -> VerbClause -> Imperative = \b,titta -> 
     {s = \\n => 
-       titta.s ! VIImperat b ! utrum ! n ! P2
+       titta.s ! b ! Simul ! VIImperat b ! utrum ! n ! P2
     } ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->

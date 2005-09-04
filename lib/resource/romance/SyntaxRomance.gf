@@ -927,8 +927,8 @@ oper
 
   Imperative = {s : Gender => Number => Str} ;
 
-  imperVerbPhrase : Bool -> VerbPhrase -> Imperative = \b,dormir -> 
-    {s = \\g,n => dormir.s ! VIImperat b n ! g ! n ! P2
+  imperVerbPhrase : Bool -> VerbClause -> Imperative = \b,dormir -> 
+    {s = \\g,n => dormir.s ! b ! Simul ! VIImperat b n ! g ! n ! P2
     } ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->

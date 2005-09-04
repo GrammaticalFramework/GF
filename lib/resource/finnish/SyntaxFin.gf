@@ -42,6 +42,8 @@ oper
 
   CommNounPhrase = {s : Bool => Number => Case =>  Str ; g : Gender} ;
 
+  emptyCommNounPhrase : CommNounPhrase = {s = \\_,_,_ => [] ; g = NonHuman} ;
+
   noun2CommNounPhrase : CommNoun -> CommNounPhrase = \man ->
     useCN man ** {g = man.g} ;
 
@@ -323,7 +325,6 @@ oper
   adj2adjPhrase : Adjective -> AdjPhrase = \uusi -> 
     {s = \\_ => uusi.s} ;
 
-
 --3 Comparison adjectives
 --
 -- Each of the comparison forms has a characteristic use:
@@ -503,8 +504,8 @@ oper
   SType = SDecl | SQuest ;
 
   VIForm = 
-     VIInfinit Anteriority
-   | VIImperat Number
+     VIInfinit
+   | VIImperat
    | VIInf3Iness
    | VIInf3Elat
    | VIInf3Illat
@@ -517,7 +518,8 @@ oper
 
   oper
   Clause : Type = {s : Bool => SForm => Str} ;
-  VerbPhraseInf : Type = {s : Bool => VIForm => Str ; sc : Case} ;
+  VerbPhraseInf : Type = {s :                        VIForm => Number => Str ; sc : Case} ;
+  VerbClauseInf : Type = {s : Bool => Anteriority => VIForm => Number => Str ; sc : Case} ;
 
   Sats : Type = {
     subj : Str ;
@@ -527,7 +529,7 @@ oper
       } ;
     obj  : Bool => SVIForm => Str ;
     comp : Str ;
-    vpi  : VerbPhraseInf
+    vpi  : Bool => VerbPhraseInf
     } ;
 
   sats2clause : Sats -> Clause = \sats -> 
@@ -546,7 +548,8 @@ oper
        }
     } ;
 
-  sats2verbPhrase : {s : Str ; a : Anteriority} -> Sats -> VerbPhraseInf = \a,sats -> 
+{-
+  sats2verbClause : {s : Str ; a : Anteriority} -> Sats -> VerbPhraseInf = \a,sats -> 
     {s = \\b,vi => 
      let
        inf  = sats.vpi.s ! b ! vi ;
@@ -556,7 +559,7 @@ oper
      a.s ++ inf ++ obj ++ comp ;
      sc = sats.vpi.sc
     } ;
-
+-}
   questPart : Str -> Str = \s -> glueParticle s "ko" ; --- "kö"
 
   mkSats : NounPhrase -> Verb1 -> Sats = \subj,verb ->
@@ -572,12 +575,12 @@ oper
      pred = \\b,sf => vi b (SCl sf) ;
      obj = \\_,_ => [] ;
      comp = [] ;
-     vpi  = {
-       s = \\b,f => let vp = vi b (SVI f) in vp.fin ++ vp.inf ; 
+     vpi  = \\b => {
+       s = \\f,n => let vp = vi b (SVI f) in vp.fin ++ vp.inf ; 
        sc = sc
        }
     } ;
-
+{- ----
   progressiveSats : NounPhrase -> VerbPhraseInf -> Sats = \subj,vp ->
     let 
       np = case vp.sc of {
@@ -590,12 +593,12 @@ oper
      pred = \\b,sf => vi b (SCl sf) ;
      obj  = \\_,_ => [] ;
      comp = vp.s ! True ! VIInf3Iness ;
-     vpi  = {
-       s = \\b,f => let vv = vi b (SVI f) in vv.fin ++ vv.inf ; 
+     vpi  = \\b => {
+       s = \\f => let vv = vi b (SVI f) in vv.fin ++ vv.inf ; 
        sc = Nom
        }
     } ;
-
+-}
   mkSatsObject : NounPhrase -> TransVerb -> NounPhrase -> Sats = \subj,verb,obj ->
     insertObject (mkSats subj verb) verb.c verb.s3 verb.p obj ;
 
@@ -691,7 +694,7 @@ oper
       SCl (VFinite _ Conditional a) => ei a   (Cond n p) (Cond Sg P3) ;
       SCl (VFinite _ Present     a) => ei a   (Pres n p) (Imper Sg) ;
       SCl (VFinite _ Future      a) => fut a  (Pres n p) (Imper Sg) ;
-      SVI (VIImperat n            ) => älä n ;
+      SVI (VIImperat              ) => älä n ;
       SVI i                         => inf i Simul ---- Anter
       } ;
 
@@ -1133,8 +1136,8 @@ oper
 
   Imperative = SS1 Number ;
 
-  imperVerbPhrase : Bool -> VerbPhraseInf -> Imperative = \b,ui -> 
-    {s = \\n => ui.s ! b ! VIImperat n} ;
+  imperVerbPhrase : Bool -> VerbClauseInf -> Imperative = \b,ui -> 
+    {s = ui.s ! b ! Simul ! VIImperat} ;
 
   imperUtterance : Number -> Imperative -> Utterance = \n,I ->
     ss (I.s ! n ++ exclPunct) ;

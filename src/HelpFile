@@ -494,6 +494,7 @@ q, quit: q
     -printer=fullform       full-form lexicon, short format
    *-printer=xml            XML: DTD for the pg command, object for st
     -printer=old            old GF: file readable by GF 1.2
+    -printer=stat           show some statistics of generated GFC
 
 -startcat, like -cat, but used in grammars (to avoid clash with keyword cat)
 

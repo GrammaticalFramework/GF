@@ -5,16 +5,16 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 21:08:14 $ 
+-- > CVS $Date: 2005/09/04 11:45:38 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
 module GF.Canon.MkGFC (prCanonModInfo, prCanon, prCanonMGr,
 	      canon2grammar, grammar2canon, -- buildCanonGrammar,
-	      info2mod,
+	      info2mod,info2def,
 	      trExp, rtExp, rtQIdent) where
 
 import GF.Canon.GFC

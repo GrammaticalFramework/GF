@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/01 09:53:19 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.69 $
+-- > CVS $Date: 2005/09/04 11:45:38 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.70 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -61,6 +61,7 @@ import GF.Speech.PrSLF (slfPrinter)
 
 import GF.Data.Zipper
 
+import GF.UseGrammar.Statistics
 import GF.UseGrammar.Morphology
 import GF.API.GrammarToHaskell
 -----import GrammarToCanon (showCanon, showCanonOpt)
@@ -249,6 +250,7 @@ customGrammarPrinter =
   ,(strCI "opts",    prOpts . stateOptions)
   ,(strCI "words",   unwords . stateGrammarWords)
   ,(strCI "printnames", C.prPrintnamesGrammar . stateGrammarST)
+  ,(strCI "stat",    prStatistics . stateGrammarST)
 {- ----
    (strCI "gf",      prt  . st2grammar . stateGrammarST)  -- DEFAULT
   ,(strCI "canon",   showCanon "Lang" . stateGrammarST)

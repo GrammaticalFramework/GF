@@ -146,7 +146,7 @@ fun
   IntSlash   : IP -> Slash -> QCl ;         -- "whom does John see"
   QuestAdv   : IAdv -> Cl -> QCl ;          -- "why do you walk"
 
-  PosImpVP, NegImpVP : VPI -> Imp ;         -- "(don't) be a man"
+  PosImpVP, NegImpVP : VCl -> Imp ;         -- "(don't) be a man"
 
 ----rename these ??
   IndicPhrase : S -> Phr ;                  -- "I walk."
