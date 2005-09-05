@@ -985,7 +985,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       tulleena = Predef.tk 2 tullut + ("een" + a) ;
       tulleen = (noun2adj (nhn (sRae tullut tulleena))).s ;
       tullun = (noun2adj (nhn (sKukko tultu tullun (tultu + ("j"+a))))).s  ;
-      tulema = Predef.tk 3 tulevat + "m" + a ;
+      tulema = tuje + "m" + a ;
       vat = "v" + a + "t"
     in
     {s = table {
@@ -1022,7 +1022,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       Inf3Elat  => tulema + "st" + a ;
       Inf3Illat => tulema +  a   + "n" ;
       Inf3Adess => tulema + "ll" + a ;
-      Inf3Ablat => tulema + "tt" + a 
+      Inf3Abess => tulema + "tt" + a 
       }
     } ;
 

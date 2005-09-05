@@ -51,22 +51,22 @@ concrete ClauseFin of Clause = CategoriesFin **
    sats2clause (
      insertComplement 
        (mkSats subj verb) 
-       (vp.s ! True ! VIInfinit Simul)
+       (vp.s ! VIInfinit ! subj.n)
      ) ;
   SPredObjV2V subj verb obj vp = 
     sats2clause (
       insertComplement 
         (mkSatsObject subj verb obj)
-        (vp.s ! True ! VIInfinit Simul)
+        (vp.s ! VIInfinit ! subj.n)
       ) ;
   SPredSubjV2V subj verb obj vp = 
     sats2clause (
       insertComplement 
         (mkSatsObject subj verb obj)
-        (vp.s ! True ! VIInfinit Simul)
+        (vp.s ! VIInfinit ! subj.n)
       ) ;
 
-  SPredProgVP np vp = sats2clause (progressiveSats np vp) ;
+-----  SPredProgVP np vp = sats2clause (progressiveSats np vp) ;
 
   SPredAP subj adj = 
     sats2clause (mkSatsCopula subj (complAdjPhrase subj.n adj)) ;
