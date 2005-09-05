@@ -78,7 +78,7 @@ lincat
 
   S      = {s : Str} ; 
   Cl     = Clause ;
-      -- = {s : Bool => SForm => Str} ;
+      -- = {s : Str ; s1,s2 : Bool => SForm => Str ; s3 : Str} ;
 
   Slash  = Sentence ** {s2 : Str ; c : Case} ;
 
@@ -89,7 +89,7 @@ lincat
   IP     = {s : NPForm => Str ; n : Number} ;
   IDet   = {s : Gender => Case => Str ; n : Number} ;
   IAdv   = {s : Str} ;
-  QCl    = {s : Bool => SForm => Str} ;
+  QCl    = Clause ;
   QS     = {s : Str} ;
   Imp    = {s : Number => Str} ;
   Phr    = {s : Str} ;

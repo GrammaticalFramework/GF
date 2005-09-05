@@ -499,7 +499,7 @@ oper
   Tense = Present | Past | Future | Conditional ;
   Anteriority = Simul | Anter ;
 
-  SForm = VFinite SType Tense Anteriority ;
+  SForm = VFinite Tense Anteriority ;
   
   SType = SDecl | SQuest ;
 
@@ -517,7 +517,7 @@ oper
   SVIForm = SCl SForm | SVI VIForm ;
 
   oper
-  Clause : Type = {s : Bool => SForm => Str} ;
+  Clause : Type = {s : Str ; s1,s2 : Bool => SForm => Str ; s3 : Str} ;
   VerbPhraseInf : Type = {s :                        VIForm => Number => Str ; sc : Case} ;
   VerbClauseInf : Type = {s : Bool => Anteriority => VIForm => Number => Str ; sc : Case} ;
 
@@ -528,24 +528,18 @@ oper
       inf  : Str 
       } ;
     obj  : Bool => SVIForm => Str ;
-    comp : Str ;
-    vpi  : Bool => VerbPhraseInf
+    comp : Str
     } ;
 
   sats2clause : Sats -> Clause = \sats -> 
-    {s = \\b,sf => 
-     let
-       subj = sats.subj ;
-       pred = sats.pred ! b ! sf ;
-       fin  = pred.fin ;
-       inf  = pred.inf ;
-       obj  = sats.obj ! b ! (SCl sf) ;
-       comp = sats.comp
-     in
-     case sf of {
-       VFinite SQuest _ _ => questPart fin ++ subj ++ inf ++ obj ++ comp ;
-       _                  => subj ++ fin ++ inf ++ obj ++ comp
-       }
+    let
+      subj = sats.subj ;
+      pred = sats.pred ;
+    in
+    {s  = subj ;
+     s1 = \\b,sf => (pred ! b ! sf).fin ;
+     s2 = \\b,sf => (pred ! b ! sf).inf ++ sats.obj ! b ! (SCl sf) ;
+     s3 = sats.comp
     } ;
 
 {-
@@ -574,11 +568,7 @@ oper
     {subj = subj.s ! NPCase sc ; -- "minusta tulee poliisi"
      pred = \\b,sf => vi b (SCl sf) ;
      obj = \\_,_ => [] ;
-     comp = [] ;
-     vpi  = \\b => {
-       s = \\f,n => let vp = vi b (SVI f) in vp.fin ++ vp.inf ; 
-       sc = sc
-       }
+     comp = []
     } ;
 {- ----
   progressiveSats : NounPhrase -> VerbPhraseInf -> Sats = \subj,vp ->
@@ -614,8 +604,7 @@ oper
          inf = spred.inf
         } ;
       obj = \\b,f => sats.obj ! b ! f ++ pPosit prep pos (obj.s ! complCase b c f) ;
-      comp = sats.comp ;
-      vpi = sats.vpi
+      comp = sats.comp
       } ;
 
   insertComplement : Sats -> Str -> Sats = 
@@ -623,8 +612,7 @@ oper
      {subj = sats.subj ;
       pred = sats.pred ;
       obj  = sats.obj ;
-      comp = sats.comp ++ comp ;
-      vpi = sats.vpi
+      comp = sats.comp ++ comp
       } ;
 
   complCase : Bool -> ComplCase -> SVIForm -> NPForm = \b,c,v -> case c of {
@@ -641,21 +629,21 @@ oper
   inflectVerb : Verb -> Number -> Person -> Bool -> SVIForm -> {fin, inf : Str} = 
     \verb,n,p,b,sf -> 
     let
-      vs   = verb.s ;
-      olla = verbOlla.s ;
-      tulla = (v2v (vJuosta "tulla" "tulen" "tullut" "tultu")).s ;
-      eis  = verbEi.s ;
-      part = PastPartAct (AN (NCase n Nom)) ;
-      abess = vs ! Inf3Abess ;
-      illat = vs ! Inf3Illat ;
-      ei : Anteriority -> VForm -> VForm  -> {fin,inf : Str} =
+      vs : VAuxForm => Str = \\f => verb.s ! verbAuxForm f ;
+      olla = verbAuxOlla ;
+      tulla = table {ANF f => verbAuxNegTulla ! f ; _ => []} ;
+      eis  = table {ANF f => verbAuxNegEi ! f ; _ => []} ;
+      part = APastPart n ;
+      abess = vs ! AInf3Abess ;
+      illat = vs ! AInf3Illat ;
+      ei : Anteriority -> VAuxForm -> VAuxForm  -> {fin,inf : Str} =
         \a,vf,neg -> case <b,a> of {
            <True, Simul> => {fin = vs   ! vf ; inf = []} ; 
            <True, Anter> => {fin = olla ! vf ; inf = vs ! part} ;
            <False,Simul> => {fin = eis  ! vf ; inf = vs ! neg} ; 
            <False,Anter> => {fin = eis  ! vf ; inf = olla ! neg ++ vs ! part}
            } ;
-      fut : Anteriority -> VForm -> VForm  -> {fin,inf : Str} =
+      fut : Anteriority -> VAuxForm -> VAuxForm  -> {fin,inf : Str} =
         \a,vf,neg -> case <b,a> of {
            <True, Simul> => {fin = tulla ! vf ; inf = illat} ; 
            <True, Anter> => {fin = olla  ! vf ; inf = tulla ! part ++ illat} ;
@@ -665,7 +653,9 @@ oper
            } ;
       inf : VIForm -> Anteriority -> {fin,inf : Str} =
         \if,a ->
-        let i = case if of {
+        let i = AInf ---- is this ever needed?
+{-
+        case if of {
           VIInf3Iness => Inf3Iness ; 
           VIInf3Elat  => Inf3Elat ; 
           VIInf3Illat => Inf3Illat ; 
@@ -673,6 +663,7 @@ oper
           VIInf3Abess => Inf3Abess ; 
           _           => Inf --- not used for imperative
           }
+-}
         in
         case <b,a> of {
            <True, Simul> => {fin = vs   ! i ; inf = []} ; 
@@ -682,22 +673,68 @@ oper
            } ;
       älä : Number -> {fin,inf : Str} = 
         \nu -> case b of {
-        True  => {fin = vs  ! Imper nu ; inf = []} ;
-        False => {fin = eis ! Imper nu ; 
+        True  => {fin = vs  ! ANF (AImper nu) ; inf = []} ;
+        False => {fin = eis ! ANF (AImper nu) ; 
                   inf = vs ! case nu of {
-                    Sg => Imper n ; 
-                    Pl => ImpNegPl}
+                    Sg => ANF (AImper n) ; 
+                    Pl => AImpNegPl}
                  }
        } ;
     in case sf of {
-      SCl (VFinite _ Past        a) => ei a   (Impf n p) (part) ;
-      SCl (VFinite _ Conditional a) => ei a   (Cond n p) (Cond Sg P3) ;
-      SCl (VFinite _ Present     a) => ei a   (Pres n p) (Imper Sg) ;
-      SCl (VFinite _ Future      a) => fut a  (Pres n p) (Imper Sg) ;
+      SCl (VFinite Present     a) => ei a   (ANF (APres n p)) (ANF (AImper Sg)) ;
+      SCl (VFinite Past        a) => ei a   (AImpf n p) (part) ;
+      SCl (VFinite Conditional a) => ei a   (ACond n p) (ACond Sg P3) ;
+      SCl (VFinite Future      a) => fut a  (ANF (APres n p)) (ANF (AImper Sg)) ;
       SVI (VIImperat              ) => älä n ;
       SVI i                         => inf i Simul ---- Anter
       } ;
 
+
+--- these are the only forms needed in auxiliary positions.
+
+param 
+  VAuxForm =
+     ANF VAuxNegForm
+   | AImpf Number Person
+   | ACond Number Person
+   | AInf
+   | APastPart Number
+   | AImpNegPl
+   | AInf3Illat
+   | AInf3Abess
+   ;
+
+  VAuxNegForm =
+     APres Number Person
+   | AImper Number
+   | AImperP3 Number
+   | AImperP1Pl
+   ;
+
+oper
+
+  verbAuxNegEi : VAuxNegForm => Str = \\f => verbEi.s ! verbAuxNegForm f ;
+  verbAuxOlla  : VAuxForm => Str = \\f => verbOlla.s ! verbAuxForm f ;
+  verbAuxNegTulla  : VAuxNegForm => Str = \\f => 
+    (v2v (vJuosta "tulla" "tulen" "tullut" "tultu")).s ! verbAuxNegForm f ;
+
+  verbAuxForm : VAuxForm -> VForm = \f -> case f of {
+     ANF a  => verbAuxNegForm a ;
+     AImpf n p   => Impf n p ;
+     ACond n p   => Cond n p ;
+     AInf        => Inf ;
+     APastPart n => PastPartAct (AN (NCase n Nom)) ;
+     AImpNegPl   => ImpNegPl ;
+     AInf3Illat  => Inf3Illat ;
+     AInf3Abess  => Inf3Abess 
+     } ;
+
+  verbAuxNegForm : VAuxNegForm -> VForm = \f -> case f of {
+     APres n p   => Pres  n p ;
+     AImper n    => Imper n ;
+     AImperP3 n  => ImperP3 n ;
+     AImperP1Pl  => ImperP1Pl
+     } ;
 
 
 -- Verb phrases are discontinuous: the two parts of a verb phrase are
@@ -1002,7 +1039,7 @@ oper
 -- "luku x siten että x on parillinen".
 
   relSuch : Clause -> RelClause = \A ->
-    {s = \\b,s,_ => advSiten ++ conjEtta ++ A.s ! b ! s} ;
+    {s = \\b,s,_ => A.s ++ advSiten ++ conjEtta ++ A.s1 ! b ! s ++ A.s2 ! b ! s ++ A.s3} ;
 
 -- N.B. the construction "sellainen että" is not possible with the present
 -- typing of the relative clause, since it should also be inflected in
@@ -1128,7 +1165,11 @@ oper
 
   questAdverbial : IntAdverb -> Clause -> QuestClause = 
     \miksi, cl ->
-    {s = \\b,f => miksi.s ++ cl.s ! b ! f} ;
+    {s  = miksi.s ++ cl.s ; 
+     s1 = cl.s1 ; 
+     s2 = cl.s2 ;
+     s3 = cl.s3
+    } ;
 
 --2 Imperatives
 --

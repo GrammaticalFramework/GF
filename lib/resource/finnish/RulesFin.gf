@@ -90,9 +90,15 @@ lin
   UseA2S x = x ;
   UseA2V x = x ;
 
-  UseCl  tp cl = {s = tp.s ++ cl.s ! tp.b ! VFinite SDecl  tp.t tp.a} ;
-  UseQCl tp cl = {s = tp.s ++ cl.s ! tp.b ! VFinite SQuest tp.t tp.a} ;
-  UseRCl tp cl = {s = \\n => tp.s ++ cl.s ! tp.b ! VFinite SDecl  tp.t tp.a ! n} ;
+  UseCl  tp cl = {s = 
+    tp.s ++ cl.s ++ cl.s1 ! tp.b ! VFinite tp.t tp.a ++ 
+                    cl.s2 ! tp.b ! VFinite tp.t tp.a ++ cl.s3
+    } ;
+  UseQCl tp cl = {s = 
+    tp.s ++ questPart (cl.s1 ! tp.b ! VFinite tp.t tp.a) ++ cl.s ++  
+                    cl.s2 ! tp.b ! VFinite tp.t tp.a ++ cl.s3
+    } ;
+  UseRCl tp cl = {s = \\n => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! n} ;
 
   PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
   NegTP t a = {s = t.s ++ a.s ; b = False ; t = t.t ; a = a.a} ;
