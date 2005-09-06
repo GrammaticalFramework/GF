@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/02 15:47:47 $ 
+-- > CVS $Date: 2005/09/06 08:06:42 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.14 $
+-- > CVS $Revision: 1.15 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -20,10 +20,11 @@ module GF.Speech.TransformCFG (makeNice, CFRule_, makeRegular) where
 
 import GF.Infra.Ident
 import GF.Formalism.CFG 
-import GF.Formalism.Utilities (Symbol(..), mapSymbol)
+import GF.Formalism.Utilities (Symbol(..), mapSymbol, filterCats, symbol, NameProfile(..))
 import GF.Conversion.Types
 import GF.Infra.Print
 
+import Control.Monad
 import Data.FiniteMap
 import Data.List
 import Data.Maybe (fromJust)
@@ -52,8 +53,7 @@ cfgToCFRules cfg = [CFRule (catToString c) (map symb r) n | CFRule c r n <- cfg]
 
 -- | Group productions by their lhs categories
 groupProds :: [CFRule_] -> CFRules
-groupProds = addListToFM_C (++) emptyFM . map (\rs -> (ruleCat rs,[rs]))
-    where ruleCat (CFRule c _ _) = c
+groupProds = addListToFM_C (++) emptyFM . map (\r -> (lhsCat r,[r]))
 
 ungroupProds :: CFRules -> [CFRule_]
 ungroupProds = concat . eltsFM
@@ -101,49 +101,103 @@ isDirectLeftRecursive _ = False
 -- to create an over-generating regular frammar for a context-free 
 -- grammar
 makeRegular :: [CFRule_] -> [CFRule_]
-makeRegular = undefined
+makeRegular g = concatMap trSet (mutRecCats g)
+  where trSet cs | allXLinear cs rs = rs
+		 | otherwise = concatMap handleCat cs
+	    where rs = concatMap (catRules g) cs
+		  handleCat c = [CFRule c' [] (mkName (c++"-empty"))] -- introduce A' -> e
+				++ concatMap (makeRightLinearRules c) crs
+				-- FIXME: add more rules here, see pg 255, item 2
+		      where crs = catRules rs c
+			    c' = newCat c
+		  makeRightLinearRules b' (CFRule c ss n) = 
+		      case ys of
+			      [] -> [CFRule b' (xs ++ [Cat (newCat c)]) n] -- no non-terminals left
+			      (Cat b:zs) -> CFRule b' (xs ++ [Cat b]) n 
+					: makeRightLinearRules (newCat b) (CFRule c zs n)
+		      where (xs,ys) = break (`catElem` cs) ss
+	newCat c = c ++ "$"
 
-{-
+
+-- | Check if all the rules are right-linear, or all the rules are
+--   left-linear, with respect to given categories.
+allXLinear :: Eq c => [c] -> [CFRule c n t] -> Bool
+allXLinear cs rs = all (isRightLinear cs) rs || all (isLeftLinear cs) rs
+
 -- | Get the sets of mutually recursive non-terminals for a grammar.
 mutRecCats :: Eq c => [CFRule c n t] -> [[c]]
-mutRecCats = 
--}
-
-{-
--- | Get a map of categories to all categories which can occur in 
---   the result of rewriting each category.
-allCatsTrans :: CFRules -> FinitMap 
-allCatsTrans g c = 
--}
+mutRecCats g = equivalenceClasses $ symmetricSubrelation $ transitiveClosure $ reflexiveClosure allCats r
+  where r = nub [(c,c') | CFRule c ss _ <- g, Cat c' <- ss]
+	allCats = nub [c | CFRule c _ _ <- g]
 
 -- Convert a strongly regular grammar to a finite automaton.
 -- compileAutomaton :: 
 
 --
--- CFG rule utilities
+-- * CFG rule utilities
 --
+
+-- | Get all the rules for a given category.
+catRules :: Eq c => [CFRule c n t] -> c -> [CFRule c n t]
+catRules rs c = [r | r@(CFRule c' _ _) <- rs, c' == c]
+
+-- | Gets the set of LHS categories of a set of rules.
+lhsCats :: Eq c => [CFRule c n t] -> [c]
+lhsCats = nub . map lhsCat
+
+lhsCat :: CFRule c n t -> c
+lhsCat (CFRule c _ _) = c
 
 -- | Checks if a context-free rule is right-linear.
 isRightLinear :: Eq c => [c]  -- ^ The categories to consider
 	      -> CFRule c n t -- ^ The rule to check for right-linearity
 	      -> Bool
-isRightLinear cs (CFRule _ ss _) = all (not . catElem cs) (safeInit ss)
+isRightLinear cs (CFRule _ ss _) = all (not . (`catElem` cs)) (safeInit ss)
 
 -- | Checks if a context-free rule is left-linear.
 isLeftLinear ::  Eq c => [c]  -- ^ The categories to consider
 	      -> CFRule c n t -- ^ The rule to check for right-linearity
 	      -> Bool
-isLeftLinear cs (CFRule _ ss _) = all (not . catElem cs) (drop 1 ss)
+isLeftLinear cs (CFRule _ ss _) = all (not . (`catElem` cs)) (drop 1 ss)
 
 -- | Checks if a symbol is a non-terminal of one of the given categories.
-catElem :: Eq c => [c] -> Symbol c t -> Bool
-catElem cs (Tok _) = False
-catElem cs (Cat c) = c `elem` cs
+catElem :: Eq c => Symbol c t -> [c] -> Bool
+catElem s cs = symbol (`elem` cs) (const False) s
 
 -- | Check if any of the categories used on the right-hand side
 --   are in the given list of categories.
 anyUsedBy :: Eq c => [c] -> CFRule c n t -> Bool
-anyUsedBy cs (CFRule _ ss _) = any (catElem cs) ss
+anyUsedBy cs (CFRule _ ss _) = any (`elem` cs) (filterCats ss)
+
+mkName :: String -> Name
+mkName n = Name (IC n) []
+
+--
+-- * Relations
+--
+
+-- FIXME: these could use a more efficent data structures and algorithms.
+
+isRelatedTo :: Eq a => [(a,a)] -> a  -> a -> Bool
+isRelatedTo r x y = (x,y) `elem` r
+
+transitiveClosure :: Eq a => [(a,a)] -> [(a,a)]
+transitiveClosure r = fix (\r -> r `union` [ (x,w) | (x,y) <- r, (z,w) <- r, y == z ]) r
+
+reflexiveClosure :: Eq a => [a] -- ^ The set over which the relation is defined.
+		 -> [(a,a)] -> [(a,a)]
+reflexiveClosure u r = [(x,x) | x <- u] `union` r
+
+symmetricSubrelation :: Eq a => [(a,a)] -> [(a,a)]
+symmetricSubrelation r = [p | p@(x,y) <- r, (y,x) `elem` r]
+
+-- | Get the equivalence classes from an equivalence relation. Since
+--   the relation is relexive, the set can be recoved from the relation.
+equivalenceClasses :: Eq a => [(a,a)] -> [[a]]
+equivalenceClasses r = equivalenceClasses_ (nub (map fst r)) r
+ where equivalenceClasses_ [] _ = []
+       equivalenceClasses_ (x:xs) r = (x:ys):equivalenceClasses_ zs r
+	   where (ys,zs) = partition (isRelatedTo r x) xs
 
 --
 -- * Utilities
@@ -159,3 +213,23 @@ nothingOrNull (Just xs) = null xs
 safeInit :: [a] -> [a]
 safeInit [] = []
 safeInit xs = init xs
+
+unionAll :: Eq a => [[a]] -> [a]
+unionAll = nub . concat
+
+whenMP :: MonadPlus m => Bool -> a -> m a
+whenMP b x = if b then return x else mzero
+
+--
+-- * Testing stuff, can be removed
+-- 
+
+c --> ss = CFRule c ss (mkName "")
+
+prGr g = putStrLn $ showGr g
+
+showGr g = unlines $ map showRule g
+
+showRule (CFRule c ss _) = c ++ " --> " ++ unwords (map showSym ss) 
+
+showSym s = symbol id show s
