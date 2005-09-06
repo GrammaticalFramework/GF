@@ -91,12 +91,10 @@ lin
   UseA2V x = x ;
 
   UseCl  tp cl = {s = 
-    tp.s ++ cl.s ++ cl.s1 ! tp.b ! VFinite tp.t tp.a ++ 
-                    cl.s2 ! tp.b ! VFinite tp.t tp.a ++ cl.s3
+    tp.s ++ cl.s ! <SDecl,tp.b,VFinite tp.t tp.a>
     } ;
   UseQCl tp cl = {s = 
-    tp.s ++ questPart (cl.s1 ! tp.b ! VFinite tp.t tp.a) ++ cl.s ++  
-                    cl.s2 ! tp.b ! VFinite tp.t tp.a ++ cl.s3
+    tp.s ++ cl.s ! <tp.b,VFinite tp.t tp.a>
     } ;
   UseRCl tp cl = {s = \\n => tp.s ++ cl.s ! tp.b ! VFinite tp.t tp.a ! n} ;
 
@@ -145,7 +143,7 @@ lin
 ----  IDetCN d n = nounPhraseInt (detNounPhrase d n) ;
   FunIP = funIntPron ;
 
-  QuestCl cl = cl ;
+  QuestCl cl = {s = \\bsf => cl.s ! <SQuest,bsf.p1,bsf.p2>} ;
 ----  IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
 
