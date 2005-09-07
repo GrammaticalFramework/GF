@@ -3,7 +3,7 @@ include config.mk
 
 GHMAKE=$(GHC) --make
 GHCXMAKE=ghcxmake
-GHCFLAGS+= -fglasgow-exts
+GHCFLAGS+= -fglasgow-exts -package fgl
 GHCOPTFLAGS=-O2
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4

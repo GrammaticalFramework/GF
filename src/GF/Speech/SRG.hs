@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/17 12:46:05 $ 
+-- > CVS $Date: 2005/09/07 14:21:30 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.14 $
+-- > CVS $Revision: 1.15 $
 --
 -- Representation of, conversion to, and utilities for 
 -- printing of a general Speech Recognition Grammar. 
@@ -21,10 +21,6 @@
 module GF.Speech.SRG where
 
 import GF.Infra.Ident
--- import GF.OldParsing.CFGrammar
--- import GF.OldParsing.Utilities (Symbol(..))
--- import GF.OldParsing.GrammarTypes
--- import GF.Printing.PrintParser
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..))
 import GF.Conversion.Types
@@ -53,18 +49,18 @@ type CatNames = FiniteMap String String
 
 makeSRG :: Ident     -- ^ Grammar name
 	-> Options   -- ^ Grammar options
-	-> [CFRule_] -- ^ A context-free grammar
+	-> CGrammar -- ^ A context-free grammar
 	-> SRG
 makeSRG i opts gr = SRG { grammarName = name,
-			  startCat = start,
+			  startCat = lookupFM_ names origStart,
 			  origStartCat = origStart,
-			  rules = rs }
+			  rules = map (cfgRulesToSRGRule names) cfgRules }
     where 
     name = prIdent i
-    origStart = fromMaybe "S" (getOptVal opts gStartCat) ++ "{}.s"
-    start = lookupFM_ names origStart
-    names = mkCatNames name (nub $ map ruleCat gr)
-    rs = map (cfgRulesToSRGRule names) (sortAndGroupBy ruleCat gr)
+    origStart = getStartCat opts
+    gr' = removeLeftRecursion $ removeEmptyCats $ cfgToCFRules gr
+    (cats,cfgRules) = unzip gr'
+    names = mkCatNames name cats
 
 cfgRulesToSRGRule :: FiniteMap String String -> [CFRule_] -> SRGRule
 cfgRulesToSRGRule names rs@(r:_) = SRGRule cat origCat rhs
@@ -110,15 +106,6 @@ unlinesS = join "\n"
 
 join :: String -> [ShowS] -> ShowS
 join glue = concatS . intersperse (showString glue)
-
-sortAndGroupBy :: Ord b => 
-		  (a -> b) -- ^ Gets the value to sort and group by
-	       -> [a] 
-	       -> [[a]]
-sortAndGroupBy f = groupBy (both (==) f) . sortBy (both compare f)
-
-both :: (b -> b -> c) -> (a -> b) -> a -> a -> c
-both f g x y = f (g x) (g y)
 
 prtS :: Print a => a -> ShowS
 prtS = showString . prt
