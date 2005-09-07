@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/06 08:06:42 $ 
+-- > CVS $Date: 2005/09/07 14:21:31 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -16,18 +16,25 @@
 -- peb thinks: most of this module should be moved to GF.Conversion...
 -----------------------------------------------------------------------------
 
-module GF.Speech.TransformCFG (makeNice, CFRule_, makeRegular) where
+module GF.Speech.TransformCFG (CFRule_, CFRules, 
+			       cfgToCFRules, getStartCat,
+			       removeLeftRecursion,
+			       removeEmptyCats,
+			       makeRegular, 
+			       compileAutomaton) where
 
 import GF.Infra.Ident
 import GF.Formalism.CFG 
 import GF.Formalism.Utilities (Symbol(..), mapSymbol, filterCats, symbol, NameProfile(..))
 import GF.Conversion.Types
 import GF.Infra.Print
+import GF.Infra.Option
+import GF.Speech.FiniteState
 
 import Control.Monad
 import Data.FiniteMap
 import Data.List
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust, fromMaybe)
 
 import Debug.Trace
 
@@ -36,33 +43,33 @@ import Debug.Trace
 type CFRule_ = CFRule Cat_ Name Token
 type Cat_ = String
 
-type CFRules = FiniteMap Cat_ [CFRule_]
+type CFRules = [(Cat_,[CFRule_])]
 
--- | Remove left-recursion and categories with no productions
---   from a context-free grammar.
-makeNice :: CGrammar -> [CFRule_]
-makeNice = ungroupProds . makeNice' . groupProds . cfgToCFRules
-    where makeNice' = removeLeftRecursion . removeEmptyCats
-
-cfgToCFRules :: CGrammar -> [CFRule_]
-cfgToCFRules cfg = [CFRule (catToString c) (map symb r) n | CFRule c r n <- cfg]
+cfgToCFRules :: CGrammar -> CFRules
+cfgToCFRules cfg = groupProds [CFRule (catToString c) (map symb r) n | CFRule c r n <- cfg]
     where symb = mapSymbol catToString id
           -- symb (Cat c) = Cat (catToString c)
 	  -- symb (Tok t) = Tok t
 	  catToString = prt
 
+getStartCat :: Options -> String
+getStartCat opts = fromMaybe "S" (getOptVal opts gStartCat) ++ "{}.s"
+
 -- | Group productions by their lhs categories
 groupProds :: [CFRule_] -> CFRules
-groupProds = addListToFM_C (++) emptyFM . map (\r -> (lhsCat r,[r]))
+groupProds = fmToList . addListToFM_C (++) emptyFM . map (\r -> (lhsCat r,[r]))
 
 ungroupProds :: CFRules -> [CFRule_]
-ungroupProds = concat . eltsFM
+ungroupProds = concat . map snd
+
+catRules :: CFRules -> Cat_ -> [CFRule_]
+catRules rs c = fromMaybe [] (lookup c rs)
 
 -- | Remove productions which use categories which have no productions
 removeEmptyCats :: CFRules -> CFRules
-removeEmptyCats rss = listToFM $ fix removeEmptyCats' $ fmToList rss
+removeEmptyCats = fix removeEmptyCats'
     where
-    removeEmptyCats' :: [(Cat_,[CFRule_])] -> [(Cat_,[CFRule_])]
+    removeEmptyCats' :: CFRules -> CFRules
     removeEmptyCats' rs = k'
 	where
 	keep = filter (not . null . snd) rs
@@ -71,16 +78,16 @@ removeEmptyCats rss = listToFM $ fix removeEmptyCats' $ fmToList rss
 	k' = map (\ (c,xs) -> (c, filter (not . anyUsedBy emptyCats) xs)) keep
 
 removeLeftRecursion :: CFRules -> CFRules
-removeLeftRecursion rs = listToFM $ concatMap removeDirectLeftRecursion $ map handleProds $ fmToList rs
+removeLeftRecursion rs = concatMap removeDirectLeftRecursion $ map handleProds rs
     where 
     handleProds (c, r) = (c, concatMap handleProd r)
     handleProd (CFRule ai (Cat aj:alpha) n) | aj < ai  =
               -- FIXME: this will give multiple rules with the same name
-             [CFRule ai (beta ++ alpha) n | CFRule _ beta _ <- fromJust (lookupFM rs aj)]
+             [CFRule ai (beta ++ alpha) n | CFRule _ beta _ <- fromJust (lookup aj rs)]
     handleProd r = [r]
 
 removeDirectLeftRecursion :: (Cat_,[CFRule_]) -- ^ All productions for a category
-			  -> [(Cat_,[CFRule_])]
+			  -> CFRules
 removeDirectLeftRecursion (a,rs) | null dr = [(a,rs)]
 				 | otherwise = [(a, as), (a', a's)]
     where 
@@ -100,16 +107,14 @@ isDirectLeftRecursive _ = False
 -- Grammars through Approximation\", Mohri and Nederhof, 2000
 -- to create an over-generating regular frammar for a context-free 
 -- grammar
-makeRegular :: [CFRule_] -> [CFRule_]
-makeRegular g = concatMap trSet (mutRecCats g)
+makeRegular :: CFRules -> CFRules
+makeRegular g = groupProds $ concatMap trSet (mutRecCats g)
   where trSet cs | allXLinear cs rs = rs
 		 | otherwise = concatMap handleCat cs
 	    where rs = concatMap (catRules g) cs
 		  handleCat c = [CFRule c' [] (mkName (c++"-empty"))] -- introduce A' -> e
-				++ concatMap (makeRightLinearRules c) crs
-				-- FIXME: add more rules here, see pg 255, item 2
-		      where crs = catRules rs c
-			    c' = newCat c
+				++ concatMap (makeRightLinearRules c) (catRules g c)
+		      where c' = newCat c
 		  makeRightLinearRules b' (CFRule c ss n) = 
 		      case ys of
 			      [] -> [CFRule b' (xs ++ [Cat (newCat c)]) n] -- no non-terminals left
@@ -119,27 +124,29 @@ makeRegular g = concatMap trSet (mutRecCats g)
 	newCat c = c ++ "$"
 
 
--- | Check if all the rules are right-linear, or all the rules are
---   left-linear, with respect to given categories.
-allXLinear :: Eq c => [c] -> [CFRule c n t] -> Bool
-allXLinear cs rs = all (isRightLinear cs) rs || all (isLeftLinear cs) rs
-
 -- | Get the sets of mutually recursive non-terminals for a grammar.
-mutRecCats :: Eq c => [CFRule c n t] -> [[c]]
+mutRecCats :: CFRules -> [[Cat_]]
 mutRecCats g = equivalenceClasses $ symmetricSubrelation $ transitiveClosure $ reflexiveClosure allCats r
-  where r = nub [(c,c') | CFRule c ss _ <- g, Cat c' <- ss]
-	allCats = nub [c | CFRule c _ _ <- g]
+  where r = nub [(c,c') | (_,rs) <- g, CFRule c ss _ <- rs, Cat c' <- ss]
+	allCats = map fst g
+
+
 
 -- Convert a strongly regular grammar to a finite automaton.
--- compileAutomaton :: 
+compileAutomaton :: Cat_ -- ^ Start category
+		    -> CFRules
+		    -> FA () (Maybe Token)
+compileAutomaton s g = undefined
 
 --
 -- * CFG rule utilities
 --
 
+{-
 -- | Get all the rules for a given category.
 catRules :: Eq c => [CFRule c n t] -> c -> [CFRule c n t]
 catRules rs c = [r | r@(CFRule c' _ _) <- rs, c' == c]
+-}
 
 -- | Gets the set of LHS categories of a set of rules.
 lhsCats :: Eq c => [CFRule c n t] -> [c]
@@ -147,6 +154,11 @@ lhsCats = nub . map lhsCat
 
 lhsCat :: CFRule c n t -> c
 lhsCat (CFRule c _ _) = c
+
+-- | Check if all the rules are right-linear, or all the rules are
+--   left-linear, with respect to given categories.
+allXLinear :: Eq c => [c] -> [CFRule c n t] -> Bool
+allXLinear cs rs = all (isRightLinear cs) rs || all (isLeftLinear cs) rs
 
 -- | Checks if a context-free rule is right-linear.
 isRightLinear :: Eq c => [c]  -- ^ The categories to consider
