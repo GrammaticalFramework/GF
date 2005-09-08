@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/07 14:21:31 $ 
+-- > CVS $Date: 2005/09/08 15:39:12 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.16 $
+-- > CVS $Revision: 1.17 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -134,9 +134,22 @@ mutRecCats g = equivalenceClasses $ symmetricSubrelation $ transitiveClosure $ r
 
 -- Convert a strongly regular grammar to a finite automaton.
 compileAutomaton :: Cat_ -- ^ Start category
-		    -> CFRules
-		    -> FA () (Maybe Token)
-compileAutomaton s g = undefined
+		 -> CFRules
+		 -> FA () (Maybe Token)
+compileAutomaton start g = make_fa s [Cat start] f g fa''
+  where fa = newFA ()
+	s = startState fa
+	(fa',f) = newState () fa
+	fa'' = addFinalState f fa'
+
+-- | The make_fa algorithm from \"Regular approximation of CFLs: a grammatical view\",
+--   Mark-Jan Nederhof. International Workshop on Parsing Technologies, 1997.
+make_fa :: State -> [Symbol Cat_ Token] -> State 
+	-> CFRules -> FA () (Maybe Token) -> FA () (Maybe Token)
+make_fa q0 a q1 g fa = 
+    case a of
+	   [] -> newTrans q0 Nothing q1 fa
+	   [Tok t] -> newTrans q0 (Just t) q1 fa
 
 --
 -- * CFG rule utilities
