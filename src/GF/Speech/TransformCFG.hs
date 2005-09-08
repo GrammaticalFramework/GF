@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/08 15:39:12 $ 
+-- > CVS $Date: 2005/09/08 15:40:49 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.17 $
+-- > CVS $Revision: 1.18 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -148,8 +148,8 @@ make_fa :: State -> [Symbol Cat_ Token] -> State
 	-> CFRules -> FA () (Maybe Token) -> FA () (Maybe Token)
 make_fa q0 a q1 g fa = 
     case a of
-	   [] -> newTrans q0 Nothing q1 fa
-	   [Tok t] -> newTrans q0 (Just t) q1 fa
+	   [] -> newTrans q0 q1 Nothing fa
+	   [Tok t] -> newTrans q0 q1 (Just t) fa
 
 --
 -- * CFG rule utilities
