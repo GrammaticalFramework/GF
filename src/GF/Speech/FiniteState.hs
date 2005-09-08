@@ -1,6 +1,8 @@
 module GF.Speech.FiniteState (FA, State,
 			      startState, finalStates,
 			      states, transitions,
+			      newFA, addFinalState,
+			      newState, newTrans,
 			      moveLabelsToNodes) where
 
 import Data.Graph.Inductive
@@ -25,15 +27,29 @@ states (FA g _ _) = labNodes g
 transitions :: FA a b -> [(State,State,b)]
 transitions (FA g _ _) = labEdges g
 
-onGraph :: (Gr a b -> Gr c d) -> FA a b -> FA c d
-onGraph f (FA g s ss) = FA (f g) s ss
+newFA :: a -- ^ Start node label
+      -> FA a b
+newFA l = FA g' s []
+    where g = empty
+	  s = freshNode g
+	  g' = insNode (s,l) g
+
+addFinalState :: Node -> FA a b -> FA a b
+addFinalState f (FA g s ss) = FA g s (f:ss)
 
 newState :: a -> FA a b -> (FA a b, State)
 newState x (FA g s ss) = (FA g' s ss, n)
     where (g',n) = addNode x g
 
-newEdge :: Node -> Node -> b -> FA a b -> FA a b
-newEdge f t l = onGraph (insEdge (f,t,l))
+newTrans :: Node -> Node -> b -> FA a b -> FA a b
+newTrans f t l = onGraph (insEdge (f,t,l))
+
+--
+-- * Graph functions
+--
+
+onGraph :: (Gr a b -> Gr c d) -> FA a b -> FA c d
+onGraph f (FA g s ss) = FA (f g) s ss
 
 addNode :: DynGraph gr => a -> gr a b -> (gr a b, Node)
 addNode x g = let s = freshNode g in (insNode (s,x) g, s)
