@@ -63,8 +63,28 @@ class LinPosition {
                 if ("[]".equals(pos)) {
                         return "[" + nr + "]";
                 } else {
-                        return pos.substring(0, pos.length() - 1) + "," + nr + "]";
+                        return pos.trim().substring(0, pos.length() - 1) + "," + nr + "]";
                 }
+        }
+
+        /**
+         * Creates a position string in Haskell notation for the argument 
+         * number nr for the position pos' parent, i.e. brethren number nr.
+         * Example: calculateBrethrenPosition("[0,0,1]", 3).equals("[0,0,3]")
+         * @param pos The position of a brethren of the wanted
+         * @param nr The number of the wanted brethren
+         * @return the position string for the nrth brother of pos
+         */
+        protected static String calculateBrethrenPosition(String pos, int nr) {
+                if ("[]".equals(pos)) {
+                        return "[]"; //no brethren possible here
+                } else if (pos.lastIndexOf(',') == -1) {
+                        return "[" + nr + "]"; //one below top
+                } else {
+                        final String newPos = pos.substring(0, pos.lastIndexOf(',') + 1) + nr + "]";  
+                        return newPos;
+                }
+                
         }
 
         /**
@@ -112,6 +132,21 @@ class LinPosition {
                         return common;
                 } else { 
                         return common+"]";
+                }
+        }
+        
+        /**
+         * @return The Haskell position string for the parent of this position.
+         * If self is already the top node, [] is returned.
+         */
+        public String parentPosition() {
+                if (this.position.equals("[]")) {
+                        return this.position;
+                } else if (this.position.lastIndexOf(',') == -1) {
+                        return "[]"; //one below top
+                } else {
+                        final String newPos = this.position.substring(0, this.position.lastIndexOf(',')) + "]";  
+                        return newPos;
                 }
         }
         

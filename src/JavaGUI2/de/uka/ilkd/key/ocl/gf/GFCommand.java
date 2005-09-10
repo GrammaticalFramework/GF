@@ -29,51 +29,78 @@ package de.uka.ilkd.key.ocl.gf;
  */
 abstract class GFCommand implements Comparable{
         
-        /** the subcategory of this command */
+        /** 
+         * the subcategory of this command
+         */
         public abstract String getSubcat();
-        /** the type of the command, r,w,ch,d,ac,... */
+        /** 
+         * the type of the command, r,w,ch,d,ac,... 
+         */
         protected String commandType;
-        /** the type of the command, r,w,ch,d,ac,... */
+        /** 
+         * the type of the command, r,w,ch,d,ac,... 
+         */
         public String getCommandType(){
                 return commandType;
         }
-        /** for wrap, the number of the argument the current node should become */
+        /** 
+         * for wrap, the number of the argument the current node should become 
+         */
         protected int argument;
         
-        /**the actual command that this object should represent */
+        /**
+         * the actual command that this object should represent 
+         */
         protected String command;
-        /**the actual command that this object should represent */
+        /**
+         * the actual command that this object should represent 
+         */
         public String getCommand() {
                 return command;
         }
         
-        /**the Printname corresponding to the GF fun of this command*/
+        /**
+         * the Printname corresponding to the GF fun of this command
+         */
         protected Printname printname;
-        /**the Printname corresponding to the GF fun of this command*/
+        /**
+         * the Printname corresponding to the GF fun of this command
+         */
         public Printname getPrintname(){
                 return printname;
         }
         
-        /**the text that is to be displayed as the tooltip */
+        /**
+         * the text that is to be displayed as the tooltip 
+         */
         public abstract String getTooltipText();
         
-        /** the text that is to be displayed in the refinement lists */
+        /**
+         * the text that is to be displayed in the refinement lists 
+         */
         public abstract String getDisplayText();
         
-        /** the name of the fun that is used in this command */
+        /** 
+         * the name of the fun that is used in this command 
+         */
         protected String funName;
         
-        /** if this is the first occurence of the current subcat */
+        /** 
+         * if this is the first occurence of the current subcat 
+         */
         protected boolean newSubcat;
-        /** if this is the first occurence of the current subcat */
+        
+        /** 
+         * if this is the first occurence of the current subcat 
+         */
         public boolean isNewSubcat() {
                 return newSubcat;
         }
         
         /**
          * Compares two GFCommands.
-         * LinkCommands are the least. InputCommands the greatest. If that does not decide,
-         * the display name as a String does.
+         * LinkCommands are the least. Then the InputCommand (more than one
+         * does not happen). If that does not decide, the display name as a String does.
          * @param o the other command.
          * @return see above.
          */
@@ -87,11 +114,12 @@ abstract class GFCommand implements Comparable{
                 if (!(this instanceof LinkCommand) && (o instanceof LinkCommand)) {
                         return 1;
                 }
+                //LinkCommands are dealt with, so from now on, they don't occur
                 if (this instanceof InputCommand && !(o instanceof InputCommand)) {
-                        return 1;
+                        return -1;
                 }
                 if (!(this instanceof InputCommand) && (o instanceof InputCommand)) {
-                        return -1;
+                        return 1;
                 }
                 if (! (o instanceof GFCommand)) {
                         //This should never occur!
@@ -100,7 +128,6 @@ abstract class GFCommand implements Comparable{
                         GFCommand ocmd = (GFCommand)o;
                         return this.getDisplayText().compareTo(ocmd.getDisplayText());
                 }
-                
         }
         
         public String toString() {

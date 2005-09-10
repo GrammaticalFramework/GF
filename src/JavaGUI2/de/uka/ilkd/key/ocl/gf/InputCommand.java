@@ -14,13 +14,14 @@
 //distribution or in the .jar file of this application
 
 package de.uka.ilkd.key.ocl.gf;
+import java.util.HashSet;
 
 /**
  * @author daniels
  *
- *	This class represents a fake command, i.e. nothing is send to GF here.
- *	Instead this class acts more like a placeholder for the input dialog.
- *	This dialog is handled in GFEditor2 when a InputCommand is executed.
+ *  This class represents a fake command, i.e. nothing is send to GF here.
+ *  Instead this class acts more like a placeholder for the input dialog.
+ *  This dialog is handled in GFEditor2 when a InputCommand is executed.
  *  Reason: No GUI stuff in the command.
  */
 class InputCommand extends GFCommand {
@@ -43,35 +44,56 @@ class InputCommand extends GFCommand {
         
         protected Class type;
 
-        /**the text that is to be displayed as the title in the input window */        
+        /**
+         * the text that is to be displayed as the title in the input window 
+         */        
         protected final String titleText;
-        /**the text that is to be displayed as the title in the input window */
+        /**
+         * the text that is to be displayed as the title in the input window 
+         */
         public String getTitleText() {
                 return titleText;
         }
         
+        /**
+         * stores the entered values, so they can be offered to the user
+         * the next time, in case, he wants them again.
+         */
+        protected final HashSet enteredValues = new HashSet();
         
-        /**the text that is to be displayed as the tooltip */        
+        /**
+         * the text that is to be displayed as the tooltip 
+         */        
         protected final String tooltipText;
-        /**the text that is to be displayed as the tooltip */
+        /**
+         * the text that is to be displayed as the tooltip 
+         */
         public String getTooltipText() {
                 return tooltipText;
         }
         
-        /** the text that is to be displayed in the refinement lists */
+        /** 
+         * the text that is to be displayed in the refinement lists 
+         */
         protected final String displayText;
-        /** the text that is to be displayed in the refinement lists */
+        /** 
+         * the text that is to be displayed in the refinement lists 
+         */
         public String getDisplayText() {
                 return displayText;
         }
-        /** the subcategory of this command */
+        /** 
+         * the subcategory of this command 
+         */
         public String getSubcat() {
                 return null;
         }
         
         /**
          * Checks if the given String can be converted into
-         * the Type of this InputCommand (int or String)
+         * the Type of this InputCommand (int or String).
+         * If that is possible, the converted object is saved
+         * in enteredValues for later redisplay for the user.
          * @param o The String the user has typed
          * @param reason If the entered String is not parseable as the expected
          * type, an error message is appended to this StringBuffer, so better
@@ -94,6 +116,9 @@ class InputCommand extends GFCommand {
                         if (o != null) {
                                 result = "\"" + o.toString() + "\"";
                         }
+                }
+                if (result != null) {
+                        this.enteredValues.add(result);
                 }
                 return result;
         }

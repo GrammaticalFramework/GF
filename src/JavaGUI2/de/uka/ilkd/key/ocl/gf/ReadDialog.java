@@ -41,11 +41,11 @@ import java.util.logging.*;
  */
 class ReadDialog implements ActionListener{
         /** XML parsing debug messages  */
-        protected static Logger xmlLogger = Logger.getLogger(GFEditor2.class.getName() + "_XML");
+        private static Logger xmlLogger = Logger.getLogger(GFEditor2.class.getName() + "_XML");
         /** The window to which this class belongs */
-        protected final GFEditor2 owner;
+        private final GFEditor2 owner;
         /** is the main thing of this class */
-        protected final JDialog readDialog;
+        private final JDialog readDialog;
         /** main area of the Read dialog (content pane)*/
         private final JPanel inputPanel = new JPanel();
         /** OK, Cancel, Browse in the Read dialog */
@@ -69,7 +69,7 @@ class ReadDialog implements ActionListener{
         /** to select to input a String in the Read dialog */
         private final JRadioButton stringReadButton = new JRadioButton("String");
         /** used for new Topic, Import and Browse (readDialog) */
-        protected final JFileChooser fc = new  JFileChooser("./");
+        private final JFileChooser fc = new  JFileChooser("./");
         /**
          * if a user sends a custom command to GF, he might want to do this 
          * again with the same command.
@@ -170,15 +170,13 @@ class ReadDialog implements ActionListener{
                 }
                 
                 if ( obj == ok ) {
-                        owner.treeChanged = true; 
                         if (termReadButton.isSelected()) { 
                                 termInput = inputField.getText();
                                 if (termInput.indexOf(File.separatorChar)==-1){
-                                        owner.send("g "+termInput); 
+                                        owner.send("[t] g "+termInput); 
                                         if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("sending term  string");
-                                }
-                                else {
-                                        owner.send("tfile "+termInput);                           
+                                } else {
+                                        owner.send("[t] tfile "+termInput);                           
                                         if (xmlLogger.isLoggable(Level.FINER)) {
                                                 xmlLogger.finer("sending file term: "+termInput);
                                         }
@@ -186,11 +184,11 @@ class ReadDialog implements ActionListener{
                         } else { //String selected
                                 parseInput = inputField.getText();
                                 if (parseInput.indexOf(File.separatorChar)==-1){
-                                        owner.send("p "+parseInput);        
+                                        owner.send("[t] p "+parseInput);        
                                         if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("sending parse string: "+parseInput);
                                 }   
                                 else {
-                                        owner.send("pfile "+parseInput);           
+                                        owner.send("[t] pfile "+parseInput);           
                                         if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("sending file parse string: "+parseInput);        
                                 }
                         }

@@ -34,12 +34,31 @@ import java.util.logging.*;
  * HTML can be used inside the descriptions and the tooltip text 
  */
 class Printname {
-        protected static Logger subcatLogger = Logger.getLogger(Printname.class.getName());
+        private static Logger subcatLogger = Logger.getLogger(Printname.class.getName());
         
-        public static final Printname delete = new Printname("d", "delete current sub-tree");
-        public static final Printname addclip = new Printname("ac", "add to clipboard\\$<html>adds the current subtree to the clipboard.<br>It is offered in the refinement menu if the expected type fits to the one of the current sub-tree.</html>");
-        public static final Printname printhistory = new Printname("ph", "peel head\\$removes this fun and moves its first argument at its place instead");
+        /**
+         * delete is always the same and only consists of one letter, therefore static.
+         */
+        public static final Printname delete = new Printname("d", "delete current sub-tree", false);
+        /**
+         * The ac command i always the same, therefore static
+         */
+        public static final Printname addclip = new Printname("ac", "add to clipboard\\$<html>adds the current subtree to the clipboard.<br>It is offered in the refinement menu if the expected type fits to the one of the current sub-tree.</html>", false);
+
+        /**
+         * @param arg The number of the argument, 
+         * that will take the place of the selected fun
+         * @return a Printname for the 'ph arg' command
+         */
+        public static Printname peelHead(int arg) {
+                final String cmd = "ph " + arg;
+                final String show = "peel head " + arg + "\\$removes this fun and moves its " + (arg + 1) + ". argument at its place instead";
+                return new Printname(cmd, show, true);
+        }
         
+        /**
+         * the type of the fun behind that printname (if applicable)
+         */
         protected final String type;
 
         /** 
@@ -61,18 +80,26 @@ class Printname {
          * The string that is followed by a new parameter to the GF function
          */
         public final static String PARAM = "\\#";
+        /**
+         * If that follows "\#" in the parameter descriptions, then do an
+         * auto-coerce when this param is meta and selected 
+         */
+        public final static String AUTO_COERCE = "!";
         
-        
-        /** the name of the fun that is used in this command */
+        /** 
+         * the name of the fun that is used in this command 
+         */
         protected final String fun;
 
-        /** the printname of this function */
+        /** 
+         * the printname of this function 
+         */
         protected final String printname;
         
-        /** to cache the printname, once it is constructed */
+        /** 
+         * to cache the printname, once it is constructed 
+         */
         protected String displayedPrintname = null;
-        
-        
         /** 
          * the name of the module the fun belongs to
          * null means that the function is saved without module information,
@@ -100,9 +127,13 @@ class Printname {
         }
         */
         
-        /** the subcategory of this command */
+        /** 
+         * the subcategory of this command 
+         */
         protected final String subcat;
-        /** the subcategory of this command */
+        /** 
+         * the subcategory of this command 
+         */
         public String getSubcat() {
                 return subcat;
         }
@@ -131,7 +162,7 @@ class Printname {
         public String getParamName(int n) {
                 String name = null;
                 try {
-                name = (String)this.paramNames.get(n);
+                        name = (String)this.paramNames.get(n);
                 } catch (ArrayIndexOutOfBoundsException e) {
                         subcatLogger.fine(e.getLocalizedMessage());
                 }
@@ -143,6 +174,26 @@ class Printname {
          */
         protected final Vector paramTexts = new Vector();
 
+        /**
+         * tells, whether the nth parameter should be auto-coerced
+         * @param n the number of the parameter in question
+         * @return whether the nth parameter should be auto-coerced
+         */
+        public boolean getParamAutoCoerce(int n) {
+                boolean result = false;
+                try {
+                        result = ((Boolean)this.paramAutoCoerce.get(n)).booleanValue();
+                } catch (ArrayIndexOutOfBoundsException e) {
+                        subcatLogger.fine(e.getLocalizedMessage());
+                }
+                return result;
+        }
+        
+        /**
+         * stores for the parameters whether they should be auto-coerced or not.
+         * parallel with paramNames
+         */
+        protected final Vector paramAutoCoerce = new Vector();
         
         /**
          * Creates a Printname for a normal GF function
@@ -166,81 +217,88 @@ class Printname {
                 } else {
                         this.funPresent = false;
                 }
-               
+                
                 //parse the fun name
                 {
-                int index = myFun.indexOf('.');
-                if (index > -1) {
-                        //a valid fun name must not be empty
-                        this.fun = myFun.substring(index + 1);
-                        this.module = myFun.substring(0, index);
-                } else {
-                        this.fun = myFun;
-                        this.module = null;
-                }
+                        int index = myFun.indexOf('.');
+                        if (index > -1) {
+                                //a valid fun name must not be empty
+                                this.fun = myFun.substring(index + 1);
+                                this.module = myFun.substring(0, index);
+                        } else {
+                                this.fun = myFun;
+                                this.module = null;
+                        }
                 }
                 
                 //parse the parameters and cut that part
                 {
-                int index = Utils.indexOfNotEscaped(myPrintname, PARAM);
-                if (index > -1) {
-                        String paramPart = myPrintname.substring(index);
-                        String splitString;
-                        //split takes a regexp as an argument. So we have to escape the '\' again.
-                        if (PARAM.startsWith("\\")) {
-                                splitString = "\\" + PARAM;
-                        } else {
-                                splitString = PARAM;
-                        }
-                        String[] params = paramPart.split(splitString);
-                        //don't use the first split part, since it's empty
-                        for (int i = 1; i < params.length; i++) {
-                                String current = params[i];
-                                int nameEnd = current.indexOf(' ');
-                                int nameEnd2 = Utils.indexOfNotEscaped(current, PARAM);
-                                if (nameEnd == -1) {
-                                        nameEnd = current.length();
-                                }
-                                String name = current.substring(0, nameEnd);
-                                String description;
-                                if (nameEnd < current.length() - 1) {
-                                        description = current.substring(nameEnd + 1).trim();
+                        int index = Utils.indexOfNotEscaped(myPrintname, PARAM);
+                        if (index > -1) {
+                                String paramPart = myPrintname.substring(index);
+                                String splitString;
+                                //split takes a regexp as an argument. So we have to escape the '\' again.
+                                if (PARAM.startsWith("\\")) {
+                                        splitString = "\\" + PARAM;
                                 } else {
-                                        description = "";
+                                        splitString = PARAM;
                                 }
-                                this.paramNames.addElement(name);
-                                this.paramTexts.addElement(description);
+                                String[] params = paramPart.split(splitString);
+                                //don't use the first split part, since it's empty
+                                for (int i = 1; i < params.length; i++) {
+                                        String current = params[i];
+                                        boolean autocoerce = false;
+                                        if (AUTO_COERCE.equals(current.substring(0,1))) {
+                                                autocoerce = true;
+                                                //cut the !
+                                                current = current.substring(1);
+                                        }
+                                        int nameEnd = current.indexOf(' ');
+                                        int nameEnd2 = Utils.indexOfNotEscaped(current, PARAM);
+                                        if (nameEnd == -1) {
+                                                nameEnd = current.length();
+                                        }
+                                        String name = current.substring(0, nameEnd);
+                                        String description;
+                                        if (nameEnd < current.length() - 1) {
+                                                description = current.substring(nameEnd + 1).trim();
+                                        } else {
+                                                description = "";
+                                        }
+                                        this.paramNames.addElement(name);
+                                        this.paramTexts.addElement(description);
+                                        this.paramAutoCoerce.addElement(new Boolean(autocoerce));
+                                }
+                                myPrintname = myPrintname.substring(0, index);
                         }
-                        myPrintname = myPrintname.substring(0, index);
-                }
                 }
                 
                 
                 //extract the subcategory part and cut that part
                 {
-                int index = Utils.indexOfNotEscaped(myPrintname, SUBCAT);
-                if (index > -1) {
-                        String subcatPart = myPrintname.substring(index);
-                        myPrintname = myPrintname.substring(0, index);
-                        int indFull = subcatPart.indexOf('{');
-                        if (indFull > -1) {
-                                int indFullEnd = subcatPart.indexOf('}', indFull + 1);
-                                if (indFullEnd == -1) {
-                                        indFullEnd = subcatPart.length();
+                        int index = Utils.indexOfNotEscaped(myPrintname, SUBCAT);
+                        if (index > -1) {
+                                String subcatPart = myPrintname.substring(index);
+                                myPrintname = myPrintname.substring(0, index);
+                                int indFull = subcatPart.indexOf('{');
+                                if (indFull > -1) {
+                                        int indFullEnd = subcatPart.indexOf('}', indFull + 1);
+                                        if (indFullEnd == -1) {
+                                                indFullEnd = subcatPart.length();
+                                        }
+                                        String fullName = subcatPart.substring(indFull + 1, indFullEnd);
+                                        this.subcat = subcatPart.substring(0, indFull).trim();
+                                        this.subcatNameHashtable.put(this.subcat, fullName);
+                                        if (subcatLogger.isLoggable(Level.FINER)) {
+                                                subcatLogger.finer("new fullname '" + fullName + "' for category (shortname) '" + this.subcat + "'");
+                                        }
+                                } else {
+                                        subcat = subcatPart.trim();
                                 }
-                                String fullName = subcatPart.substring(indFull + 1, indFullEnd);
-                                this.subcat = subcatPart.substring(0, indFull).trim();
-                                this.subcatNameHashtable.put(this.subcat, fullName);
-                                if (subcatLogger.isLoggable(Level.FINER)) {
-                                        subcatLogger.finer("new fullname '" + fullName + "' for category (shortname) '" + this.subcat + "'");
-                                }
+                                
                         } else {
-                                subcat = subcatPart.trim();
+                                this.subcat = null; 
                         }
-                        
-                } else {
-                        this.subcat = null; 
-                }
                 }
         }
 
@@ -249,15 +307,17 @@ class Printname {
          * like d, ph, ac
          * @param command the GF command
          * @param explanation an explanatory text what this command does
+         * @param funPresent If explanation already contains the fun.
+         * If true, the fun won't be printed in the refinement menu.
          */
-        protected Printname(String command, String explanation) {
+        protected Printname(String command, String explanation, boolean funPresent) {
                 this.fun = command;
                 this.subcatNameHashtable = null;
                 this.subcat = null;
                 this.module = "";
                 this.printname = explanation;
                 this.type = null;
-                this.funPresent = false;
+                this.funPresent = funPresent;
         }
         
         /**
@@ -276,7 +336,9 @@ class Printname {
                 this.funPresent = false;
         }
         
-        /** the text that is to be displayed in the refinement lists */
+        /** 
+         * the text that is to be displayed in the refinement lists 
+         */
         public String getDisplayText() {
                 String result;
                 result = extractDisplayText(this.printname);
@@ -376,7 +438,12 @@ class Printname {
          * @return the aforementioned result.
          */
         public static String htmlAppend(String original, String insertion) {
-                StringBuffer result = new StringBuffer(original);
+                StringBuffer result;
+                if (original != null) {
+                        result = new StringBuffer(original);
+                } else {
+                        result = new StringBuffer();
+                }
                 int htmlindex = result.indexOf("</html>");
                 
                 if (htmlindex > -1) {

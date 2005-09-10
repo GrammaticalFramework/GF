@@ -14,7 +14,7 @@
 //You can either finde the file LICENSE or LICENSE.TXT in the source 
 //distribution or in the .jar file of this application
 
-package de.uka.ilkd.key.ocl.gf;                       
+package de.uka.ilkd.key.ocl.gf;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -31,33 +31,37 @@ import java.util.logging.*;
 import jargs.gnu.CmdLineParser;
 
 public class GFEditor2 extends JFrame {
-        
-        /** the main logger for this class */
-        protected static Logger logger = Logger.getLogger(GFEditor2.class.getName());
         /** 
-         * logs the time at several stages when starting the editor. 
-         * For calibrating the ProgressMonitor
+         * the main logger for this class 
          */
-        protected static Logger timeLogger = Logger.getLogger("de.uka.ilkd.key.ocl.gf.Timer");
-        /** print MarkedAreas */
-        protected static Logger markedAreaLogger = Logger.getLogger(GFEditor2.class.getName() + "_MarkedArea");
-        /** print MarkedAreas */
-        protected static Logger htmlLogger = Logger.getLogger(GFEditor2.class.getName() + "_HTML");
-        /** debug stuff for the tree */
-        public static Logger treeLogger = Logger.getLogger(GFEditor2.class.getName() + "_Tree");
-        /** red mark-up && html debug messages */
-        protected static Logger redLogger = Logger.getLogger(GFEditor2.class.getName() + "_Red");
-        /** pop-up/mouse handling debug messages */
-        protected static Logger popUpLogger = Logger.getLogger(GFEditor2.class.getName() + "_PopUp");
-        /** linearization marking debug messages */
-        protected static Logger linMarkingLogger = Logger.getLogger(GFEditor2.class.getName() + "_LinMarking");
-        /** XML parsing debug messages  */
-        protected static Logger xmlLogger = Logger.getLogger(GFEditor2.class.getName() + "_XML");
-        /** keyPressedEvents & Co. */
-        protected static Logger keyLogger = Logger.getLogger(GFEditor2.class.getName() + "_key");
-        /** keyPressedEvents & Co. */
-        protected static Logger sendLogger = Logger.getLogger(GFEditor2.class.getName() + ".send");
-
+        private static Logger logger = Logger.getLogger(GFEditor2.class.getName());
+        /** 
+         * debug stuff for the tree 
+         */
+        private static Logger treeLogger = Logger.getLogger(DynamicTree2.class.getName());
+        /** 
+         * red mark-up && html debug messages 
+         */
+        private static Logger redLogger = Logger.getLogger(GFEditor2.class.getName() + "_Red");
+        /** 
+         * pop-up/mouse handling debug messages 
+         */
+        private static Logger popUpLogger = Logger.getLogger(GFEditor2.class.getName() + "_PopUp");
+        /** 
+         * linearization marking debug messages 
+         */
+        private static Logger linMarkingLogger = Logger.getLogger(GFEditor2.class.getName() + "_LinMarking");
+        /** 
+         * keyPressedEvents & Co. 
+         */
+        private static Logger keyLogger = Logger.getLogger(GFEditor2.class.getName() + "_key");
+        /** 
+         * everything that is sent to GF
+         */
+        private static Logger sendLogger = Logger.getLogger(GFEditor2.class.getName() + ".send");
+        /**
+         * the first part of the name of the GF grammar file
+         */
         public final static String modelModulName = "FromUMLTypes";
         /** 
          * Does the saving of constraints in Together.
@@ -65,50 +69,46 @@ public class GFEditor2 extends JFrame {
          * Only its subclasses. That way it can be compiled without KeY. 
          */
         final private ConstraintCallback callback;
+        /**
+         * if the OCL features should be switched on
+         */
+        final private boolean oclMode;
         
-        /** to collect the linearization strings */
-        private HashMap linearizations = new HashMap();
-        /** current Font */
+        /**
+         * does all direct interaction with GF
+         * (except for the probers)
+         */
+        private GfCapsule gfCapsule = null;
+        /** 
+         * current Font 
+         */
         private Font font;
-        /** contains the offered fonts by name */
+        /** 
+         * contains the offered fonts by name 
+         */
         private JMenu fontMenu;
-        /** offers a list of font sizes */
+        /** 
+         * offers a list of font sizes 
+         */
         private JMenu sizeMenu;
-        
-        public JPopupMenu popup2 = new JPopupMenu();
+
         /**
          * what is written here is parsed and the result inserted instead of tbe selection.
          * No idea how this element is displayed
          */
-        public JTextField parseField = new JTextField("textField!"); 
+        private JTextField parseField = new JTextField("textField!"); 
 
         /**
          * The position of the focus, that is, the currently selected node in the AST
          */
-        public LinPosition focusPosition ;
-        /** 
-         * stack for storing the current position:
-         * When displaying, we start with the root of the AST.
-         * Whenever we start to display a node, it is pushed, and when it is completely displayed, we pop it.
-         * Only LinPositions are stored in here
-         * local in formLin?
-         * */
-        public Vector currentPosition = new Vector();
- 
+        private LinPosition focusPosition ;
         /**
          * When a new category is chosen, it is set to true. 
          * In the reset or a completely new state it is falsed.
          * The structure of the GF output is different then and this must be taken
          * care of.
          */
-        public boolean newObject = false;
-        /**
-         * the opposite of newObject
-         * is only true, when we don't have a chosen category.
-         * false: reading lins and tree
-         * true: reading categories from GF
-         */
-        public boolean finished = false;
+        private boolean newObject = false;
         /**
          * if the user enters text for the alpha conversion, he perhaps wants to input the same text again.
          * Therefore it is saved.
@@ -128,13 +128,7 @@ public class GFEditor2 extends JFrame {
         /**
          * the language the possible actions are displayed 
          */
-        protected String selectedMenuLanguage = "Abstract";
-        /**
-         * the GF-output between <linearization> </linearization>  tags is stored here.
-         * Must be saved in case the displayed languages are changed.
-         * Only written in readLin
-         */
-        private String linearization = "";
+        private String selectedMenuLanguage = "Abstract";
         /**
          * write-only variable, stores the current import paths
          * reset after each reset.
@@ -144,42 +138,40 @@ public class GFEditor2 extends JFrame {
          * The mapping between Java tree pathes and GF AST positions 
          * is stored here.
          */
-        public Hashtable nodeTable = new Hashtable();
-        /**this FileChooser gets enriched with the Term/Text option */
-        JFileChooser saveFc = new  JFileChooser("./");
+        private Hashtable nodeTable = new Hashtable();
+        /**
+         * This is necessary to map clicks in the tree, where in the event handler
+         * only the selection path is availble, to AST positions which can be
+         * sent to GF. 
+         * @param key The TreeSelectionPath, that identifies the wanted node
+         * @return The AST position string of the given TreePath in the table
+         * of stored nodes.
+         */
+        protected String getNodePosition(Object key) {
+                return nodeTable.get(key).toString();
+        }
+        /**
+         * this FileChooser gets enriched with the Term/Text option 
+         */
+        private JFileChooser saveFc = new  JFileChooser("./");
         /** used for new Topic, Import and Browse (readDialog) */
-        JFileChooser fc = new  JFileChooser("./");
+        private JFileChooser fc = new  JFileChooser("./");
         private final static String [] modifyMenu = {"Modify", "identity","transfer", 
                         "compute", "paraphrase", "generate","typecheck", "solve", "context" };
         private static final String [] newMenu = {"New"};
         
-        /**
-         * if treeChanged is false, we don't have to rebuild it.
-         * Avoids a time-consuming reconstruction and flickering.
-         */
-        public boolean treeChanged = true;
         /** 
-         * The output from GF is in here.
-         * Only the read methods, initializeGF and the prober objects access this. 
+         * Linearizations' display area 
          */
-        private BufferedReader fromProc;
-        /** Used to leave messages for GF here. 
-         * But <b>only</b> in send and special probers that clean up with undo
-         * after them (or don't change the state like PrintnameLoader).
-         */
-        private BufferedWriter toProc;
-        /** Linearizations' display area */
         private JTextArea linearizationArea = new JTextArea();
-        /** the content of the refinementMenu */
-        public DefaultListModel listModel= new DefaultListModel();
-        /** The list of current refinement options */       
-        private JList refinementList = new JList(this.listModel);
         /**
          * The abstract syntax tree representation of the current editing object
          */
         private DynamicTree2 tree = new DynamicTree2(this);
         
-        /** Current Topic */
+        /** 
+         * Current Topic 
+         */
         private JLabel grammar = new JLabel("No topic          ");
         /**
          * Writing the current editing object to file in the term or text 
@@ -214,8 +206,6 @@ public class GFEditor2 extends JFrame {
         private JLabel subtermDescLabel = new JLabel();
         /** Refining with term or linearization from typed string or file */
         private JButton read = new JButton("Read");   
-        //  private JButton parse = new JButton("Parse");   
-        //  private JButton term = new JButton("Term");
         /** Performing alpha-conversion of bound variables */
         private JButton alpha;
         /** Generating random refinement */
@@ -231,7 +221,6 @@ public class GFEditor2 extends JFrame {
         private JComboBox newCategoryMenu = new JComboBox(newMenu);
         /** Choosing a linearization method */
         private JComboBox modify = new JComboBox(modifyMenu);   
-        //  private JComboBox mode = new JComboBox(modeMenu);   
         /** the panel with the more general command buttons */
         private JPanel downPanel = new JPanel();
         /** the splitpane containing tree on the left and linearization area on the right*/
@@ -252,8 +241,6 @@ public class GFEditor2 extends JFrame {
         private JPanel centerPanel2= new JPanel();
         /** contains refinment list and navigation buttons */
         private JPanel centerPanelDown = new JPanel();
-        /** the scrollpane containing the refinements */
-        private JScrollPane refinementPanel = new JScrollPane(this.refinementList);
         /** only contains the linearization area */
         private JScrollPane outputPanelText = new JScrollPane(this.linearizationArea);
         /** HTML Linearizations' display area */
@@ -270,7 +257,6 @@ public class GFEditor2 extends JFrame {
         private JLabel statusLabel = new JLabel(status);
         /** the main menu in the top */
         private JMenuBar menuBar= new JMenuBar();
-        //private ButtonGroup menuGroup = new ButtonGroup();
         /** View settings */
         private JMenu viewMenu= new JMenu("View");
         /**
@@ -288,7 +274,6 @@ public class GFEditor2 extends JFrame {
         private JRadioButtonMenuItem rbMenuItemLong;
         /** stores whether the refinement list should be in 'short' format */
         private JRadioButtonMenuItem rbMenuItemShort;
-        // private JRadioButtonMenuItem rbMenuItemAbs;
         /** stores whether the refinement list should be in 'untyped' format */
         private JRadioButtonMenuItem rbMenuItemUnTyped;
         /** 
@@ -308,7 +293,6 @@ public class GFEditor2 extends JFrame {
         private JMenu filterMenu = new JMenu("Filter");
         /** for managing the filter menu entries*/
         private ButtonGroup filterButtonGroup = new ButtonGroup();
-        //now for stuff that is more or less OCL specific
         
         /** Some usability things can be switched off here for testing */
         private JMenu usabilityMenu= new JMenu("Usability");
@@ -321,6 +305,18 @@ public class GFEditor2 extends JFrame {
         private JCheckBoxMenuItem subcatCbMenuItem;
         /** to switch sorting of entries in the refinement menu on and off */
         private JCheckBoxMenuItem sortCbMenuItem;
+        /** to switch autocoercing */
+        private JCheckBoxMenuItem coerceCbMenuItem;
+        /** to switch reducing the argument 3 refinement menu of coerce on or off */
+        private JCheckBoxMenuItem coerceReduceCbMenuItem;
+        /** to switch highlighting subtyping errors on or off */
+        private JCheckBoxMenuItem highlightSubtypingErrorsCbMenuItem;
+        /** to switch hiding coerce on or off */
+        private JCheckBoxMenuItem hideCoerceCbMenuItem;
+        /** to switch hiding coerce even if parts are unrefined on or off */
+        private JCheckBoxMenuItem hideCoerceAggressiveCbMenuItem;
+        /** to switch the attributes of self in the refinement menu on or off */
+        private JCheckBoxMenuItem easyAttributesCbMenuItem;
         
         /** 
          * if true, self and result are only shown if applicable, 
@@ -329,42 +325,66 @@ public class GFEditor2 extends JFrame {
         private boolean showSelfResult = true;
         /** 
          * if true, refinements are grouped by subcat 
-         * tied to @see subcatCbMenuItem
+         * tied to @see subcatCbMenuItem.
          */  
         private boolean groupSubcat = true;
+        /**
+         * @return Returns whether subcategories should be grouped or not
+         */
+        protected boolean isGroupSubcat() {
+                return groupSubcat;
+        }        
         /** 
-         * if true, refinements are grouped by subcat 
-         * tied to @see subcatCbMenuItem
+         * if true, refinements are grouped by subcat. 
+         * tied to @see subcatCbMenuItem.
          */  
         private boolean sortRefinements = true;
         /**
-         * to store the Vectors which contain the display names for the
-         * ListModel for refinementSubcatList for the different 
-         * subcategory menus.
-         * The key is the shortname String, the value the Vector with the
-         * display Strings
+         * @return Returns if the refinements should get sorted.
          */
-        private Hashtable subcatListModelHashtable = new Hashtable(); 
+        protected boolean isSortRefinements() {
+                return sortRefinements;
+        }
+        /**
+         * if true, then Instances will automatically get wrapped with a coerce
+         * if encountered as meta in the active node
+         */
+        private boolean autoCoerce = false;
+        /**
+         * If this is true, the refinementmenu for argument 3 of coerce
+         * will be populated only with suiting refinements.
+         */
+        private boolean coerceReduceRM = false;
+        /**
+         * If true, then the AST will be checked for missing subtyping witnesses
+         */
+        private boolean highlightSubtypingErrors = false;
+        /**
+         * if true, filled in coercions will be hidden from the user
+         */
+        private boolean hideCoerce = false;
+        /**
+         * if true, filled in coercions will be hidden from the user
+         * even if they lack filled in type arguments
+         */
+        private boolean hideCoerceAggressive = false;
+        /**
+         * offer the attributes of self directly in the refinement menu
+         */
+        private boolean easyAttributes = false;
+        
+        
         /** 
-         * this ListModel gets refilled every time a %WHATEVER command, 
-         * which stands for a shortname for a subcategory of commands
-         * in the ListModel of refinementList, is selected there
+         * handles all the Printname naming and so on.
          */
-        private DefaultListModel refinementSubcatListModel = new DefaultListModel();
-        /** The list of current refinement options in the subcategory menu*/       
-        private JList refinementSubcatList = new JList(this.refinementSubcatListModel);
-        /** the scrollpane containing the refinement subcategory*/
-        private JScrollPane refinementSubcatPanel = new JScrollPane(this.refinementSubcatList);
-        /** store what the shorthand name for the current subcat is */
-        private String whichSubcat;
-        /** stores the two refinement JLists */
-        private JSplitPane refinementListsContainer;
-        
-        /** here the GFCommand objects are stored*/
-        private Vector gfcommands = new Vector();
-        
-        /** handles all the Printname naming a.s.o */
         private PrintnameManager printnameManager;
+        /**
+         * @return Returns the printnameManager.
+         */
+        protected PrintnameManager getPrintnameManager() {
+                return printnameManager;
+        }
+
         
         /** 
          * stores the current type. Since the parsing often fails, this is
@@ -373,21 +393,6 @@ public class GFEditor2 extends JFrame {
         private GfAstNode currentNode = null;
         /** stores the displayed parts of the linearization */
         private Display display = new Display(3);
-
-        /**
-         * contains all the linearization pieces as HtmlMarkedArea
-         * Needed to know to which node in the AST a word in the linHtmlPane 
-         * area belongs.
-         */
-        public Vector htmlOutputVector = new Vector();
-        /**
-         * contains all the linearization pieces as MarkedArea
-         * Needed to know to which node in the AST a word in the linearization 
-         * area belongs.
-         * At the moment, this is double effort, but the old way of generating
-         * MarkedAreas should go away.
-         */
-        public Vector textOutputVector = new Vector();
 
         /** takes care of the menus that display the available languages */
         private LangMenuModel langMenuModel = new LangMenuModel();
@@ -408,6 +413,7 @@ public class GFEditor2 extends JFrame {
                 public void actionPerformed(ActionEvent ae) {
                         int oldDisplayType = displayType;
                         displayType = 1;
+                        display.setDisplayType(displayType);
                         outputPanelUp.removeAll();
                         outputPanelUp.add(outputPanelText, BorderLayout.CENTER);
                         outputPanelUp.add(statusPanel, BorderLayout.SOUTH);
@@ -424,6 +430,7 @@ public class GFEditor2 extends JFrame {
                 public void actionPerformed(ActionEvent ae) {
                         int oldDisplayType = displayType;
                         displayType = 2;
+                        display.setDisplayType(displayType);
                         outputPanelUp.removeAll();
                         outputPanelUp.add(outputPanelHtml, BorderLayout.CENTER);
                         outputPanelUp.add(statusPanel, BorderLayout.SOUTH);
@@ -441,6 +448,7 @@ public class GFEditor2 extends JFrame {
                 public void actionPerformed(ActionEvent ae) {
                         int oldDisplayType = displayType;
                         displayType = 3;
+                        display.setDisplayType(displayType);
                         linSplitPane.setLeftComponent(outputPanelText);
                         linSplitPane.setRightComponent(outputPanelHtml);
                         outputPanelUp.removeAll();
@@ -452,16 +460,30 @@ public class GFEditor2 extends JFrame {
                         outputPanelUp.validate();
                 }
         });
+        
         /**
          * Since the user will be able to send chain commands to GF,
-         * the editor has to keep track of them, sinve GF does not undo
+         * the editor has to keep track of them, since GF does not undo
          * all parts with one undo, instead 'u n' with n as the number of
          * individual commands, has to be sent.
-         * This array keeps track of the last 21 such chain commands.
-         * Farther back does the memory of the user probably not reach,
-         * after that only 'u 1' is offered.
          */
-        final private int[] undoRecord = new int[21];
+        private final Stack undoStack = new Stack();
+        
+        /**
+         * for starting a SubtypingProber run
+         */
+        private JButton checkSubtyping;
+        
+        /**
+         * handles the commands and how they are presented to the user
+         */
+        private RefinementMenu refinementMenu;
+        /**
+         * handles parsing and preparing for display
+         * of the linearization XML from GF.
+         * Also takes care of the click-in functionality.
+         */
+        private Linearization linearization;
         
         /**
          * Initializes GF with the given command, sets up the GUI
@@ -470,9 +492,11 @@ public class GFEditor2 extends JFrame {
          * that is to be executed. Will set up the GF side of this session.
          * @param isHtml true iff the editor should start in HTML mode.
          * @param baseURL the URL that is the base for all relative links in HTML
+         * @param isOcl if the OCL special features should be available
          */
-        public GFEditor2(String gfcmd, boolean isHtml, URL baseURL) {
+        public GFEditor2(String gfcmd, boolean isHtml, URL baseURL, boolean isOcl) {
                 this.callback = null;
+                this.oclMode = isOcl;
                 Image icon = null;
                 try {
                 final URL iconURL = ClassLoader.getSystemResource("gf-icon.gif");
@@ -482,7 +506,6 @@ public class GFEditor2 extends JFrame {
                 }
                 initializeGUI(baseURL, isHtml, icon);
                 initializeGF(gfcmd, null);                
-                //readAndDisplay();
         }
         
         /**
@@ -496,6 +519,7 @@ public class GFEditor2 extends JFrame {
          * @param pm to monitor the loading progress. May be null
          */
         public GFEditor2(String gfcmd, ConstraintCallback callback, String initAbs, ProgressMonitor pm) {
+                this.oclMode = true;
                 this.callback = callback;
                 
                 Utils.tickProgress(pm, 5220, "Loading grammars");
@@ -507,8 +531,8 @@ public class GFEditor2 extends JFrame {
                 //The initial GF constraint has until now always been 
                 //automatically solvable. So don't startle the user
                 //with painting everything red.
-                send(initAbs + " ;; c solve ", false);
-                readAndDisplay();
+                send(initAbs + " ;; c solve ", false, 2);
+                processGfedit();
                 Utils.tickProgress(pm, 9700, "Loading finished");
                 pm.close();
                 logger.finer("GFEditor2 constructor finished");
@@ -524,42 +548,23 @@ public class GFEditor2 extends JFrame {
          * @param pm to monitor the loading progress. May be null
          */
         private void initializeGF(String gfcmd, ProgressMonitor pm){
-                try {
                         Utils.tickProgress(pm, 5250, "Starting GF");
                         logger.fine("Trying: "+gfcmd);
-                        Process extProc = Runtime.getRuntime().exec(gfcmd); 
-                        InputStreamReader isr = new InputStreamReader(
-                                        extProc.getInputStream(),"UTF8");
-                        this.fromProc = new BufferedReader (isr);
-                        String defaultEncoding = isr.getEncoding();
-                        if (logger.isLoggable(Level.FINER)) {
-                                logger.finer("encoding "+defaultEncoding);
-                        }
-                        this.toProc = new BufferedWriter(new OutputStreamWriter(extProc.getOutputStream(),"UTF8"));
-                        
-                        readInit(pm, true);
+                        gfCapsule = new GfCapsule(gfcmd);
+                        processInit(pm, true);
                         resetPrintnames(false);
-                } catch (IOException e) {
-                        JOptionPane.showMessageDialog(new JFrame(), "Could not start " + gfcmd+
-                                        "\nCheck your $PATH", "Error", 
-                                        JOptionPane.ERROR_MESSAGE);
-                        throw new RuntimeException("Could not start " + gfcmd+
-                        "\nCheck your $PATH");
-                }
-
         }
-        
+
         /**
          * (re-)initializes this.printnameManager and loads the printnames from
          * GF.
          * @param replayState If GF should be called to give the same state as before,
          * but without the message. Is needed, when this function is started by the user.
          * If sth. else is sent to GF automatically, this is not needed.
-         *
          */
         private void resetPrintnames(boolean replayState) {
                 this.printnameManager = new PrintnameManager();
-                PrintnameLoader pl = new PrintnameLoader(this.fromProc, this.toProc, this.printnameManager, this.typedMenuItems);
+                PrintnameLoader pl = new PrintnameLoader(gfCapsule, this.printnameManager, this.typedMenuItems);
                 if (!selectedMenuLanguage.equals("Abstract")) {
                         String sendString = selectedMenuLanguage;
                         pl.readPrintnames(sendString);
@@ -567,7 +572,7 @@ public class GFEditor2 extends JFrame {
                         //are not printed again when for example a 'ml' command comes
                         //next
                         if (replayState) {
-                                send("gf ");
+                                send("gf ", true, 0);
                         }
                 }
         }
@@ -581,6 +586,7 @@ public class GFEditor2 extends JFrame {
          * instead. 
          */
         private void initializeGUI(URL baseURL, boolean showHtml, Image icon) {
+                refinementMenu = new RefinementMenu(this);
                 this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
                 this.addWindowListener(new WindowAdapter() {
                         public void windowClosing(WindowEvent e) {
@@ -785,6 +791,7 @@ public class GFEditor2 extends JFrame {
                 viewMenu.addSeparator();
                 viewMenu.add(filterMenu);
                 
+                mlMenu.setToolTipText("the language of the entries in the refinement menu");
                 modeMenu.add(mlMenu);
                 /**
                  * switches GF to either display the refinement menu commands
@@ -805,11 +812,13 @@ public class GFEditor2 extends JFrame {
                 modeMenu.addSeparator();              
                 menuGroup = new ButtonGroup();
                 rbMenuItemLong = new JRadioButtonMenuItem("long");
+                rbMenuItemLong.setToolTipText("long format in the refinement menu, e.g. 'refine' instead of 'r'");
                 rbMenuItemLong.setActionCommand("long");
                 rbMenuItemLong.addActionListener(longShortListener);
                 menuGroup.add(rbMenuItemLong);
                 modeMenu.add(rbMenuItemLong);
                 rbMenuItemShort = new JRadioButtonMenuItem("short");
+                rbMenuItemShort.setToolTipText("short format in the refinement menu, e.g. 'r' instead of 'refine'");
                 rbMenuItemShort.setActionCommand("short");
                 rbMenuItemShort.setSelected(true);
                 rbMenuItemShort.addActionListener(longShortListener);
@@ -840,35 +849,25 @@ public class GFEditor2 extends JFrame {
                 };
                 menuGroup = new ButtonGroup();
                 rbMenuItem = new JRadioButtonMenuItem("typed");
+                rbMenuItem.setToolTipText("append the respective types to the entries of the refinement menu");
                 rbMenuItem.setActionCommand("typed");
                 rbMenuItem.addActionListener(unTypedListener);
                 rbMenuItem.setSelected(false);
                 menuGroup.add(rbMenuItem);
                 modeMenu.add(rbMenuItem);
                 rbMenuItemUnTyped = new JRadioButtonMenuItem("untyped");
+                rbMenuItemUnTyped.setToolTipText("omit the types of the entries of the refinement menu");
                 rbMenuItemUnTyped.setSelected(true);
                 rbMenuItemUnTyped.setActionCommand("untyped");
                 rbMenuItemUnTyped.addActionListener(unTypedListener);
                 menuGroup.add(rbMenuItemUnTyped);
                 modeMenu.add(rbMenuItemUnTyped);
                 
-                //OCL specific stuff
-                selfresultCbMenuItem = new JCheckBoxMenuItem("skip self&result if possible");
-                selfresultCbMenuItem.setActionCommand("selfresult");
-                selfresultCbMenuItem.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                                showSelfResult = selfresultCbMenuItem.isSelected();
-                                send("gf");
-                        }
-                });
-                selfresultCbMenuItem.setSelected(showSelfResult);
-                if (this.callback != null || this.linearizations.containsKey("FromUMLTypesOCL")) {
-                        // only visible, if we really do OCL constraints
-                        usabilityMenu.add(selfresultCbMenuItem);
-                }
                 
+                //usability menu
                 subcatCbMenuItem = new JCheckBoxMenuItem("group possible refinements");
                 subcatCbMenuItem.setActionCommand("subcat");
+                subcatCbMenuItem.setToolTipText("group the entries of the refinement menus as defined in the printnames for the selected menu language");
                 subcatCbMenuItem.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                                 groupSubcat = subcatCbMenuItem.isSelected();
@@ -880,6 +879,7 @@ public class GFEditor2 extends JFrame {
                 
                 sortCbMenuItem = new JCheckBoxMenuItem("sort refinements");
                 sortCbMenuItem.setActionCommand("sortRefinements");
+                sortCbMenuItem.setToolTipText("sort the entries of the refinement menu");
                 sortCbMenuItem.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                                 sortRefinements = sortCbMenuItem.isSelected();
@@ -888,13 +888,134 @@ public class GFEditor2 extends JFrame {
                 });
                 sortCbMenuItem.setSelected(sortRefinements);
                 usabilityMenu.add(sortCbMenuItem);
+                
+                //OCL specific stuff
+                
+                if (oclMode) {
+                        usabilityMenu.addSeparator();
+                }
+                selfresultCbMenuItem = new JCheckBoxMenuItem("skip self&result if possible");
+                selfresultCbMenuItem.setToolTipText("do not display self and result in the refinement menu, if they don't fit");
+                selfresultCbMenuItem.setActionCommand("selfresult");
+                selfresultCbMenuItem.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                                showSelfResult = selfresultCbMenuItem.isSelected();
+                                send("gf");
+                        }
+                });
+                selfresultCbMenuItem.setSelected(showSelfResult);
+                if (oclMode) {
+                        // only visible, if we really do OCL constraints
+                        usabilityMenu.add(selfresultCbMenuItem);
+                }
 
+                coerceReduceCbMenuItem = new JCheckBoxMenuItem("only suiting subtype instances for coerce");
+                coerceReduceCbMenuItem.setToolTipText("For coerce, where the target type is already known, show only the functions that return a subtype of this type.");
+                coerceReduceCbMenuItem.setActionCommand("coercereduce");
+                coerceReduceCbMenuItem.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                                coerceReduceRM = coerceReduceCbMenuItem.isSelected();
+                        }
+                });
+                if (oclMode) {
+                        // only visible, if we really do OCL constraints
+                        usabilityMenu.add(coerceReduceCbMenuItem);
+                        coerceReduceRM = true;
+                }
+                coerceReduceCbMenuItem.setSelected(coerceReduceRM);
+                
+                coerceCbMenuItem = new JCheckBoxMenuItem("coerce automatically");
+                coerceCbMenuItem.setToolTipText("Fill in coerce automatically where applicable");
+                coerceCbMenuItem.setActionCommand("autocoerce");
+                coerceCbMenuItem.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                                autoCoerce = coerceCbMenuItem.isSelected();
+                        }
+                });
+                if (oclMode) {
+                        // only visible, if we really do OCL constraints
+                        usabilityMenu.add(coerceCbMenuItem);
+                        autoCoerce = true;
+                }
+                coerceCbMenuItem.setSelected(autoCoerce);
+                
+                highlightSubtypingErrorsCbMenuItem = new JCheckBoxMenuItem("highlight suptyping errors");
+                highlightSubtypingErrorsCbMenuItem.setToolTipText("Mark nodes in situations, if where a non-existing subtyping is expected.");
+                highlightSubtypingErrorsCbMenuItem.setActionCommand("highlightsubtypingerrors");
+                highlightSubtypingErrorsCbMenuItem.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                                highlightSubtypingErrors = highlightSubtypingErrorsCbMenuItem.isSelected();
+                                send("[t] gf");
+                        }
+                });
+                if (oclMode) {
+                        // only visible, if we really do OCL constraints
+                        usabilityMenu.add(highlightSubtypingErrorsCbMenuItem);
+                        highlightSubtypingErrors = true;
+                }
+                highlightSubtypingErrorsCbMenuItem.setSelected(highlightSubtypingErrors);
+                
+                hideCoerceCbMenuItem = new JCheckBoxMenuItem("hide coerce if completely refined");
+                hideCoerceCbMenuItem.setToolTipText("<html>Hide coerce functions when all arguments are filled in.<br>Note that, when a subtyping error is introduced, they will be shown.</html>");
+                hideCoerceCbMenuItem.setActionCommand("hideCoerce");
+                hideCoerceCbMenuItem.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                                hideCoerce = hideCoerceCbMenuItem.isSelected();
+                                //hideCoerceAggressiveCbMenuItem can only be used,
+                                //if hideCoerce is active. But its state should survive.
+                                hideCoerceAggressiveCbMenuItem.setEnabled(hideCoerce);
+                                if (hideCoerce) {
+                                        hideCoerceAggressive = hideCoerceAggressiveCbMenuItem.isSelected();
+                                } else {
+                                        hideCoerceAggressive = false;
+                                }
+                                send("[t] gf ", true, 0);
+                        }
+                });
+                if (oclMode) {
+                        // only visible, if we really do OCL constraints
+                        usabilityMenu.add(hideCoerceCbMenuItem);
+                        hideCoerce = true;
+                }
+                hideCoerceCbMenuItem.setSelected(hideCoerce);
+
+                
+                hideCoerceAggressiveCbMenuItem = new JCheckBoxMenuItem("hide coerce always");
+                hideCoerceAggressiveCbMenuItem.setActionCommand("hideCoerceAggressive");
+                hideCoerceAggressiveCbMenuItem.setToolTipText("<html>Hide coerce functions even if the type arguments are incomplete.<br>Note that, when a subtyping error is introduced, they will be shown.</html>");
+                hideCoerceAggressiveCbMenuItem.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                                hideCoerceAggressive = hideCoerceAggressiveCbMenuItem.isSelected();
+                                send("[t] gf ", true, 0);
+                        }
+                });
+                if (oclMode) {
+                        // only visible, if we really do OCL constraints
+                        usabilityMenu.add(hideCoerceAggressiveCbMenuItem);
+                        hideCoerceAggressive = true;
+                }
+                hideCoerceAggressiveCbMenuItem.setSelected(hideCoerceAggressive);                
+              
+
+                easyAttributesCbMenuItem = new JCheckBoxMenuItem("directly offer attributes of 'self'");
+                easyAttributesCbMenuItem.setActionCommand("easyAttributes");
+                easyAttributesCbMenuItem.setToolTipText("list suiting attributes of self directly in the refinement menu");
+                easyAttributesCbMenuItem.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                                easyAttributes = easyAttributesCbMenuItem.isSelected();
+                                send("[t] gf ", true, 0);
+                        }
+                });
+                if (oclMode) {
+                        // only visible, if we really do OCL constraints
+                        usabilityMenu.add(easyAttributesCbMenuItem);
+                        easyAttributes = true;
+                }
+                easyAttributesCbMenuItem.setSelected(easyAttributes);                
                 
                 //now for the other elements
                 
                 //HTML components
-
-                
                 this.htmlLinPane.setContentType("text/html");
                 this.htmlLinPane.setEditable(false);
                 if (this.htmlLinPane.getStyledDocument() instanceof HTMLDocument) {
@@ -921,11 +1042,6 @@ public class GFEditor2 extends JFrame {
                          * The corresponding tree node is selected.
                          */
                         public void caretUpdate(CaretEvent e) {
-                                String jPosition ="", iPosition="", position="";
-                                HtmlMarkedArea jElement = null;
-                                HtmlMarkedArea iElement = null;
-                                int j = 0;
-                                int i = htmlOutputVector.size()-1;
                                 int start = htmlLinPane.getSelectionStart(); 
                                 int end   = htmlLinPane.getSelectionEnd();
                                 if (popUpLogger.isLoggable(Level.FINER)) {
@@ -943,94 +1059,14 @@ public class GFEditor2 extends JFrame {
                                         }
                                 }
                                 // not null selection:
-                                if ((i > -1) && (start < htmlLinPane.getDocument().getLength())) {
-                                        if (linMarkingLogger.isLoggable(Level.FINER))
-                                                for (int k=0; k < htmlOutputVector.size(); k++) { 
-                                                        linMarkingLogger.finer("element: "+k+" begin "+((HtmlMarkedArea)htmlOutputVector.elementAt(k)).htmlBegin+" "
-                                                                        + "\n-> end: "+((HtmlMarkedArea)htmlOutputVector.elementAt(k)).htmlEnd+" "       
-                                                                        + "\n-> position: "+(((HtmlMarkedArea)htmlOutputVector.elementAt(k)).position).position+" "   
-                                                                        + "\n-> words: "+((HtmlMarkedArea)htmlOutputVector.elementAt(k)).words);   
-                                                }
-                                        // localizing end:
-                                        while ((j < htmlOutputVector.size()) && (((HtmlMarkedArea)htmlOutputVector.elementAt(j)).htmlEnd < end)) {
-                                                j++;
-                                        }
-                                        // localising start:
-                                        while ((i >= 0) && (((HtmlMarkedArea)htmlOutputVector.elementAt(i)).htmlBegin > start)) {
-                                                i--;
-                                        }
-                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                linMarkingLogger.finer("i: "+i+" j: "+j);
-                                        }
-                                        if ((j < htmlOutputVector.size())) {
-                                                jElement = (HtmlMarkedArea)htmlOutputVector.elementAt(j);
-                                                jPosition = jElement.position.position;
-                                                // less & before:
-                                                if (i == -1) { // less:
-                                                        if (end>=jElement.htmlBegin) {
-                                                                iElement = (HtmlMarkedArea)htmlOutputVector.elementAt(0);
-                                                                iPosition = iElement.position.position;
-                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                        linMarkingLogger.finer("Less: "+jPosition+" and "+iPosition);
-                                                                }
-                                                                position = findMax(0,j);
-                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
-                                                                }
-                                                                treeChanged = true; 
-                                                                send("mp "+position);
-                                                        } else { // before: 
-                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                        linMarkingLogger.finer("BEFORE vector of size: "+htmlOutputVector.size());
-                                                                }
-                                                        }
-                                                } else { // just: 
-                                                        iElement = (HtmlMarkedArea)htmlOutputVector.elementAt(i);
-                                                        iPosition = iElement.position.position;
-                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                linMarkingLogger.finer("SELECTED TEXT Just: "+iPosition +" and "+jPosition+"\n");
-                                                        }
-                                                        position = findMax(i,j);
-                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
-                                                        }
-                                                        treeChanged = true; 
-                                                        send("mp "+position);
-                                                }
-                                        }  else if (i>=0) { // more && after:
-                                                iElement = (HtmlMarkedArea)htmlOutputVector.elementAt(i);
-                                                iPosition = iElement.position.position;
-                                                // more
-                                                if (start<=iElement.htmlEnd) { 
-                                                        jElement = (HtmlMarkedArea)htmlOutputVector.elementAt(htmlOutputVector.size()-1);
-                                                        jPosition = jElement.position.position;
-                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                linMarkingLogger.finer("MORE: "+iPosition+ " and "+jPosition);
-                                                        }
-                                                        position = findMax(i,htmlOutputVector.size()-1);
-                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
-                                                        }
-                                                        treeChanged = true; 
-                                                        send("mp "+position);
-                                                        // after:
-                                                } else if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                        linMarkingLogger.finer("AFTER vector of size: "+htmlOutputVector.size());
-                                                }
-                                        } else { // bigger:
-                                                iElement = (HtmlMarkedArea)htmlOutputVector.elementAt(0);
-                                                iPosition = iElement.position.position;
-                                                jElement = (HtmlMarkedArea)htmlOutputVector.elementAt(htmlOutputVector.size()-1);
-                                                jPosition = jElement.position.position;
-                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                        linMarkingLogger.finer("BIGGER: "+iPosition +" and "+jPosition+"\n"         
-                                                                        + "\n-> SELECTEDTEXT: []\n");
-                                                }
-                                                treeChanged = true; 
-                                                send("mp []");
+                                if (start < htmlLinPane.getDocument().getLength()) {
+                                        String position = linearization.markedAreaForPosHtml(start, end);
+                                        if (position != null) {
+                                                send("[t] mp " + position);
                                         }
                                 }//not null selection
                         }
+
                 });
                 this.linSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                 this.outputPanelText, outputPanelHtml);
@@ -1046,11 +1082,6 @@ public class GFEditor2 extends JFrame {
                          * The corresponding tree node is selected.
                          */
                         public void caretUpdate(CaretEvent e) {
-                                String jPosition ="", iPosition="", position="";
-                                MarkedArea jElement = null;
-                                MarkedArea iElement = null;
-                                int j = 0;
-                                int i = htmlOutputVector.size() - 1;
                                 int start = linearizationArea.getSelectionStart();
                                 int end = linearizationArea.getSelectionEnd();
                                 if (popUpLogger.isLoggable(Level.FINER)) {
@@ -1058,95 +1089,18 @@ public class GFEditor2 extends JFrame {
                                                         + "\n-> SELECTION START POSITION: "+start
                                                         + "\n-> SELECTION END POSITION: "+end);
                                 }
+                                final int displayedTextLength = linearizationArea.getText().length();
                                 if (linMarkingLogger.isLoggable(Level.FINER)) {
-                                        if (end>0&&(end<linearizationArea.getText().length())) { 
+                                        if (end>0&&(end<displayedTextLength)) { 
                                                 linMarkingLogger.finer("CHAR: "+linearizationArea.getText().charAt(end));
                                         }
                                 }
                                 // not null selection:
-                                if ((i>-1)&&(start<linearizationArea.getText().length()-1)) {
-                                        if (linMarkingLogger.isLoggable(Level.FINER))
-                                                for (int k = 0; k < htmlOutputVector.size(); k++) { 
-                                                        linMarkingLogger.finer("element: " + k + " begin " + ((MarkedArea)htmlOutputVector.elementAt(k)).begin + " "
-                                                        + "\n-> end: " + ((MarkedArea)htmlOutputVector.elementAt(k)).end+" "       
-                                                        + "\n-> position: " + (((MarkedArea)htmlOutputVector.elementAt(k)).position).position+" "   
-                                                        + "\n-> words: " + ((MarkedArea)htmlOutputVector.elementAt(k)).words);   
-                                                }
-                                        // localizing end:
-                                        while ((j < htmlOutputVector.size()) && (((MarkedArea)htmlOutputVector.elementAt(j)).end < end)) {
-                                                j++;
+                                if (start < displayedTextLength) { //TODO was -1 before, why?
+                                        String position = linearization.markedAreaForPosPureText(start, end);
+                                        if (position != null) {
+                                                send("[t] mp " + position);
                                         }
-                                        // localising start:
-                                        while ((i >= 0) && (((MarkedArea)htmlOutputVector.elementAt(i)).begin > start))
-                                                i--;
-                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                linMarkingLogger.finer("i: " + i + " j: " + j);
-                                        }
-                                        if ((j < htmlOutputVector.size())) {
-                                                jElement = (MarkedArea)htmlOutputVector.elementAt(j);
-                                                jPosition = jElement.position.position;
-                                                // less & before:
-                                                if (i==-1) { // less:
-                                                        if (end>=jElement.begin) {
-                                                                iElement = (MarkedArea)htmlOutputVector.elementAt(0);
-                                                                iPosition = iElement.position.position;
-                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                        linMarkingLogger.finer("Less: "+jPosition+" and "+iPosition);
-                                                                }
-                                                                position = findMax(0,j);
-                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
-                                                                }
-                                                                treeChanged = true; 
-                                                                send("mp "+position);
-                                                        } else  if (linMarkingLogger.isLoggable(Level.FINER)) { // before: 
-                                                                        linMarkingLogger.finer("BEFORE vector of size: " + htmlOutputVector.size());
-                                                                }
-                                                } else { // just: 
-                                                        iElement = (MarkedArea)htmlOutputVector.elementAt(i);
-                                                        iPosition = iElement.position.position;
-                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                linMarkingLogger.finer("SELECTED TEXT Just: "+iPosition +" and "+jPosition+"\n");
-                                                        }
-                                                        position = findMax(i,j);
-                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
-                                                        }
-                                                        treeChanged = true; 
-                                                        send("mp "+position);
-                                                }
-                                        } else if (i>=0) { // more && after:
-                                                        iElement = (MarkedArea)htmlOutputVector.elementAt(i);
-                                                        iPosition = iElement.position.position;
-                                                        // more
-                                                        if (start<=iElement.end) { 
-                                                                jElement = (MarkedArea)htmlOutputVector.elementAt(htmlOutputVector.size() - 1);
-                                                                jPosition = jElement.position.position;
-                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                        linMarkingLogger.finer("MORE: "+iPosition+ " and "+jPosition);
-                                                                }
-                                                                position = findMax(i, htmlOutputVector.size()-1);
-                                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
-                                                                }
-                                                                treeChanged = true; 
-                                                                send("mp "+position);
-                                                        } else if (linMarkingLogger.isLoggable(Level.FINER)) { // after: 
-                                                                linMarkingLogger.finer("AFTER vector of size: " + htmlOutputVector.size());
-                                                        }
-                                                } else {
-                                                        // bigger:
-                                                        iElement = (MarkedArea)htmlOutputVector.elementAt(0);
-                                                        iPosition = iElement.position.position;
-                                                        jElement = (MarkedArea)htmlOutputVector.elementAt(htmlOutputVector.size()-1);
-                                                        jPosition = jElement.position.position;
-                                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                                linMarkingLogger.finer("BIGGER: "+iPosition +" and "+jPosition+"\n"         
-                                                                                + "\n-> SELECTEDTEXT: []\n");
-                                                        }
-                                                        treeChanged = true; 
-                                                        send("mp []");
-                                                }
                                 }//not null selection
                         }
                         
@@ -1166,9 +1120,8 @@ public class GFEditor2 extends JFrame {
 
         		                if  (keyCode == KeyEvent.VK_ENTER) { 
         		                        getLayeredPane().remove(parseField); 
-        		                        treeChanged = true;
-        		                        send("p "+parseField.getText());        
-        		                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("sending parse string: "+parseField.getText());
+        		                        send("[t] p "+parseField.getText());        
+        		                        if (logger.isLoggable(Level.FINE)) logger.fine("sending parse string: "+parseField.getText());
         		                        repaint();
         		                } else if  (keyCode == KeyEvent.VK_ESCAPE) { 
         		                        getLayeredPane().remove(parseField);   
@@ -1199,6 +1152,7 @@ public class GFEditor2 extends JFrame {
                         }
                 });
                 //                System.out.println(output.getFont().getFontName());
+
                 
                 //Now for the command buttons in the lower part
                 gfCommand = new JButton(gfCommandAction);
@@ -1207,14 +1161,17 @@ public class GFEditor2 extends JFrame {
                 alpha = new JButton(alphaAction);
                 random = new JButton(randomAction);
                 undo = new JButton(undoAction);
+                checkSubtyping = new JButton(new SubtypeAction());
                 downPanel.add(gfCommand);
                 downPanel.add(read);  
                 downPanel.add(modify);   
                 downPanel.add(alpha);     
                 downPanel.add(random);
                 downPanel.add(undo);
-                //downPanel.add(parse);
-                //downPanel.add(term);
+                if (oclMode) {
+                        // only visible, if we really do OCL constraints
+                        downPanel.add(checkSubtyping);
+                }
                 
                 //now for the navigation buttons
                 leftMeta.setToolTipText("Moving the focus to the previous metavariable");
@@ -1247,13 +1204,9 @@ public class GFEditor2 extends JFrame {
                 upPanel.add(newTopic);
                 
                 statusLabel.setToolTipText("The current focus type");
-                refinementList.setToolTipText("The list of current refinement options");
-                refinementList.setCellRenderer(new ToolTipCellRenderer());
-                refinementSubcatList.setToolTipText("The list of current refinement options");
-                refinementSubcatList.setCellRenderer(new ToolTipCellRenderer());
                 
                 tree.setToolTipText("The abstract syntax tree representation of the current editing object");
-                resetTree(tree); 
+                tree.resetTree(); 
 
                 bgDisplayType.add(rbText);
                 bgDisplayType.add(rbHtml);
@@ -1271,6 +1224,7 @@ public class GFEditor2 extends JFrame {
                 viewMenu.add(rbHtml);
                 viewMenu.add(rbTextHtml);
                 display = new Display(displayType);
+                linearization = new Linearization(display);
                 
                 statusPanel.setLayout(new GridLayout(1,1));
                 statusPanel.add(statusLabel);
@@ -1290,112 +1244,20 @@ public class GFEditor2 extends JFrame {
                 centerPanel.addKeyListener(tree);      
                 centerPanel.setOneTouchExpandable(true);
                 
-                refinementListsContainer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,refinementPanel, refinementSubcatPanel);
+                
                 
                 centerPanelDown.add(middlePanel, BorderLayout.NORTH);
-                centerPanelDown.add(refinementListsContainer, BorderLayout.CENTER);
-                //centerPanelDown.add(refinementSubcatPanel, BorderLayout.EAST);
+                centerPanelDown.add(refinementMenu.getRefinementListsContainer(), BorderLayout.CENTER);
                 coverPanel.add(centerPanel, BorderLayout.CENTER);
                 coverPanel.add(upPanel, BorderLayout.NORTH);
                 coverPanel.add(downPanel, BorderLayout.SOUTH);
                 
-                refinementList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-                
-                final MouseListener mlRefinementList = new MouseAdapter() {
-                        public void mouseClicked(MouseEvent e) {
-                                refinementList.setSelectionBackground(refinementSubcatList.getSelectionBackground());
-                                boolean doubleClick = (e.getClickCount() == 2); 
-                                listAction(refinementList, refinementList.locationToIndex(e.getPoint()), doubleClick);
-                        }
-                };
-                refinementList.addMouseListener(mlRefinementList);
-                refinementList.addKeyListener(new KeyListener() {
-                        /** Handle the key pressed event for the refinement list. */
-                        public void keyPressed(KeyEvent e) {
-                                int keyCode = e.getKeyCode();   
-                                if (keyLogger.isLoggable(Level.FINER)) {
-                                        keyLogger.finer("Key pressed: " + e.toString());
-                                }
-
-                                int index = refinementList.getSelectedIndex();                        
-                                if (index == -1) {
-                                        //nothing selected, so nothing to be seen here, please move along
-                                } else if (keyCode == KeyEvent.VK_ENTER) { 
-                                        listAction(refinementList, refinementList.getSelectedIndex(), true);
-                                } else if (keyCode == KeyEvent.VK_DOWN && index < listModel.getSize() - 1) {
-                                        listAction(refinementList, index + 1, false);
-                                } else if (keyCode == KeyEvent.VK_UP && index > 0) {
-                                        listAction(refinementList, index - 1, false);
-                                } else if (keyCode == KeyEvent.VK_RIGHT) {
-                                        if (refinementSubcatList.getModel().getSize() > 0) {
-                                                refinementSubcatList.requestFocusInWindow();
-                                                refinementSubcatList.setSelectedIndex(0);
-                                                refinementList.setSelectionBackground(Color.GRAY);
-                                        }
-                                }
-                        }
-
-                        /** 
-                         * Handle the key typed event.
-                         * We are not really interested in typed characters, thus empty
-                         */
-                        public void keyTyped(KeyEvent e) {
-                                //needed for KeyListener, but not used                
-                        }
-
-                        /** Handle the key released event. */
-                        public void keyReleased(KeyEvent e) {
-                                //needed for KeyListener, but not used
-                        }
-                });
-
-                refinementSubcatList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-                
-                final MouseListener mlRefinementSubcatList = new MouseAdapter() {
-                        public void mouseClicked(MouseEvent e) {
-                                boolean doubleClick = (e.getClickCount() == 2);
-                                listAction(refinementSubcatList, refinementSubcatList.locationToIndex(e.getPoint()), doubleClick);
-                                refinementList.setSelectionBackground(Color.GRAY);
-                        }
-                };
-                refinementSubcatList.addMouseListener(mlRefinementSubcatList);
-                refinementSubcatList.addKeyListener(new KeyListener() {
-                        /** Handle the key pressed event. */
-                        public void keyPressed(KeyEvent e) {
-                                int keyCode = e.getKeyCode();   
-                                if (keyLogger.isLoggable(Level.FINER)) {
-                                        keyLogger.finer("Key pressed: " + e.toString());
-                                }
-                                if (keyCode == KeyEvent.VK_ENTER) {
-                                        listAction(refinementSubcatList, refinementSubcatList.getSelectedIndex(), true);
-                                } else if (keyCode == KeyEvent.VK_LEFT) {
-                                        refinementList.requestFocusInWindow();
-                                        refinementSubcatList.clearSelection();
-                                        refinementList.setSelectionBackground(refinementSubcatList.getSelectionBackground());
-                                }
-                        }
-
-                        /** 
-                         * Handle the key typed event.
-                         * We are not really interested in typed characters, thus empty
-                         */
-                        public void keyTyped(KeyEvent e) {
-                                //needed for KeyListener, but not used                
-                        }
-
-                        /** Handle the key released event. */
-                        public void keyReleased(KeyEvent e) {
-                                //needed for KeyListener, but not used
-                        }
-                });
                 
                 
                 newCategoryMenu.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent ae) {
                                 if (!newCategoryMenu.getSelectedItem().equals("New")) { 
-                                        treeChanged = true;
-                                        newObject = true;
-                                        send("n " + newCategoryMenu.getSelectedItem());
+                                        send("[nt] n " + newCategoryMenu.getSelectedItem());
                                         newCategoryMenu.setSelectedIndex(0);
                                 }
                         }
@@ -1421,24 +1283,19 @@ public class GFEditor2 extends JFrame {
                         public void actionPerformed(ActionEvent ae) {  
                                 Object obj = ae.getSource();
                                 if ( obj == leftMeta ) {
-                                        treeChanged = true; 
-                                        send("<<");
+                                        send("[t] <<");
                                 }
                                 if ( obj == left ) {
-                                        treeChanged = true; 
-                                        send("<");
+                                        send("[t] <");
                                 }
                                 if ( obj == top ) {
-                                        treeChanged = true; 
-                                        send("'");
+                                        send("[t] '");
                                 }
                                 if ( obj == right ) {
-                                        treeChanged = true; 
-                                        send(">");
+                                        send("[t] >");
                                 }
                                 if ( obj == rightMeta ) {
-                                        treeChanged = true; 
-                                        send(">>");
+                                        send("[t] >>");
                                 }
                         }
                 };
@@ -1451,8 +1308,7 @@ public class GFEditor2 extends JFrame {
                 modify.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent ae) {
                                 if (!modify.getSelectedItem().equals("Modify")) { 
-                                        treeChanged = true; 
-                                        send("c " + modify.getSelectedItem());
+                                        send("[t] c " + modify.getSelectedItem());
                                         modify.setSelectedIndex(0);
                                 }
                         }
@@ -1461,20 +1317,17 @@ public class GFEditor2 extends JFrame {
                 top.setFocusable(false);  
                 right.setFocusable(false);  
                 rightMeta.setFocusable(false);  
-                //parse.setFocusable(false);  
-                //term.setFocusable(false);  
                 read.setFocusable(false);  
                 modify.setFocusable(false);  
-                //mode.setFocusable(false);  
                 alpha.setFocusable(false);  
                 random.setFocusable(false);  
                 undo.setFocusable(false);  
                 
                 linearizationArea.addKeyListener(tree);            
-                this.setSize(800,600);
+                this.setSize(800, 600);
                 outputPanelUp.setPreferredSize(new Dimension(400,230));
                 treePanel.setDividerLocation(0.3);
-                nodeTable.put(new TreePath(tree.rootNode.getPath()), "");
+                //nodeTable.put(new TreePath(tree.rootNode.getPath()), "");
                 
                 JRadioButton termButton = new JRadioButton("Term");
                 termButton.setActionCommand("term");
@@ -1501,274 +1354,154 @@ public class GFEditor2 extends JFrame {
          * @param text the command, exacltly the string that is going to be sent
          */
         protected void send(String text){
-                send(text, true);
+                send(text, true, 1);
         }
         
         /**
-         * send a command to GF.
-         * @param text the command, exacltly the string that is going to be sent
+         * send a command to GF (indirectly).
+         * @param text the command, exactly the string that is going to be sent
          * @param andRead if true, the returned XML will be read an displayed accordingly
+         * @param undoSteps How many undo steps need to be done to undo this command.
+         * If undoSteps == 0, then nothing is done. If it is &lt; 0, it gets 
+         * subtracted from the last number on the undoStack. That way, both
+         * this command and the last one get undone together (since the undo
+         * value is actually increased). 
          */
-        protected void send(String text, boolean andRead) {
-                if (sendLogger.isLoggable(Level.FINER)) {
-                        sendLogger.finer("## send: '" + text + "'");
+        protected void send(String text, boolean andRead, int undoSteps) {
+                if (sendLogger.isLoggable(Level.FINE)) {
+                        sendLogger.fine("## send: '" + text + "', undo steps: " + undoSteps);
                 }
-                try {
-                        this.display = new Display(displayType);
-                        display(true, false);
-                        if (xmlLogger.isLoggable(Level.FINER)) {
-                                xmlLogger.finer("output cleared\n\n\n");
-                        }
-                        this.htmlOutputVector = new Vector();
-                        this.textOutputVector = new Vector();
-                        toProc.write(text, 0, text.length());
-                        toProc.newLine();
-                        toProc.flush();
 
-                        if (andRead) {
-                                readAndDisplay();
+                this.display.resetLin();
+                display(false, true, false);
+                linearization.reset();
+                if (undoSteps > 0) { //undo itself should not push sth. on the stack, only pop
+                        undoStack.push(new Integer(undoSteps));
+                } else if (undoSteps < 0) {
+                        final int oldUndo = ((Integer)undoStack.pop()).intValue();
+                        final int newUndo = oldUndo - undoSteps;
+                        if (sendLogger.isLoggable(Level.FINER)) {
+                                sendLogger.finer("modified undoStack, top was " + oldUndo + ", but is now: " + newUndo);
                         }
-                } catch (IOException e) {
-                        System.err.println("Could not write to external process " + e);
-                }  
+                        undoStack.push(new Integer(newUndo));
+                }
+                gfCapsule.realSend(text);
+
+                if (andRead) {
+                        processGfedit();
+                }
         }
         
-        /**
-         * a simple wrapper around readGfedit that also probes
-         * for unneccessary commands
-         */
-        protected void readAndDisplay() {
-                readGfedit();
-                probeCompletability();
-                refinementList.requestFocusInWindow();
-        }
 
+        
         /**
-         * reads the front matter that GF returns when freshly started and loading a grammar.
-         * When &lt;gfinit&gt; is read, the function returns.  
+         * Asks the respective read methods to read the front matter of GF.
+         * That can be the greetings and loading messages.
+         * The latter are always read.
+         * When &lt;gfinit&gt; is read, the function returns.
          * @param pm to monitor the loading progress. May be null
          * @param greetingsToo if the greeting text from GF is expected
          */
-        protected void readInit(ProgressMonitor pm, boolean greetingsToo) {
-                String next = "";
+        private void processInit(ProgressMonitor pm, boolean greetingsToo) {
+                String next = null;
                 if (greetingsToo) {
-                        next = readGfGreetings();
-                } else {
-                        try {
-	                        next = fromProc.readLine();
-	                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("1 " + next);
-                        } catch (IOException e) {
-                                System.err.println("Could not read from external process:\n" + e);
-                        }
+                        StringTuple greetings = gfCapsule.readGfGreetings(); 
+                        next = greetings.first;
+                        this.display.addToStages(greetings.second, greetings.second.replaceAll("\\n", "<br>"));
+                        display(true, true, false);
                 }
                 Utils.tickProgress(pm, 5300, null);
-                next = readGfLoading(next, pm);
+                StringTuple loading = gfCapsule.readGfLoading(next, pm); 
+                next = loading.first;
+                this.display.addToStages(loading.second, Utils.replaceAll(loading.second, "\n", "<br>\n"));
+                display(true, true, false);
+
                 if (next.equals("<gfinit>")) {
-                        readGfinit();
+                        processGfinit();
                 }
         }
         
         
         /**
-         * reads the greeting text from GF
-         * @return the last read GF line, which should be the first loading line
+         * Takes care of reading the &lt;gfinit&gt; part
+         * Fills the new category menu.
          */
-        protected String readGfGreetings() {
-                try {
-                        String readresult = "";
-                        StringBuffer outputStringBuffer = new StringBuffer();
-                        readresult = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("1 "+readresult);
-                        while ((readresult.indexOf("gf")==-1) && (readresult.trim().indexOf("<") < 0)){                          
-                                outputStringBuffer.append(readresult).append("\n");
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("1 "+readresult);
-                        }
-                        this.display.addToStages(outputStringBuffer.toString(), outputStringBuffer.toString().replaceAll("\\n", "<br>"));
-                        display(true, false);
-                        return readresult;
-                } catch (IOException e) {
-                        System.err.println("Could not read from external process:\n" + e);
-                        return "";
+        private void processGfinit() {
+                NewCategoryMenuResult ncmr = gfCapsule.readGfinit();
+                if (ncmr != null) {
+                        formNewMenu(ncmr);
                 }
-                
         }
 
         /**
-         * reads the loading and compiling messages from GF
-         * @param readresult the first loading line
-         * @param pm to monitor the loading progress. May be null
-         * @return the first line from &gt;gfinit&lt; or &gt;gfedit&lt;
-         */
-        protected String readGfLoading(String readresult, ProgressMonitor pm) {
-                try {
-                        StringBuffer textPure = new StringBuffer();
-                        StringBuffer textHtml = new StringBuffer();
-                        int progress = 5300;
-                        while (!(readresult.indexOf("<gfinit>") > -1 || (readresult.indexOf("<gfmenu>") > -1))){
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("1 "+readresult);
-                                textPure.append(readresult).append("\n");
-                                textHtml.append(readresult).append("<br>\n");
-                                progress += 12;
-                                Utils.tickProgress(pm, progress, null);
-                        }
-                        //when old grammars are loaded, the first line looks like
-                        //"reading grammar of old format letter.Abs.gfreading old file letter.Abs.gf<gfinit>"
-                        //without newlines
-                        final int beginInit = readresult.indexOf("<gfinit>"); 
-                        if (beginInit > 0) {
-                                textPure.append(readresult.substring(0, beginInit)).append("\n");
-                                textPure.append(readresult.substring(0, beginInit)).append("<br>\n");
-                                //that is the expected result
-                                readresult = "<gfinit>";
-                        }
-                        this.display.addToStages(textPure.toString(), textHtml.toString());
-                        display(true, false);
-                        return readresult;
-                } catch (IOException e) {
-                        System.err.println("Could not read from external process:\n" + e);
-                        return "";
-                }
-
-        }
-
-        /**
-         * reads the part between &gt;gfinit&lt; and &gt;/gfinit&lt; 
-         * and feeds the editor with what was read
-         */
-        protected void readGfinit() {
-                try {
-                        //read <hmsg> or <newcat> or <topic> (in case of no grammar loaded)
-                        String readresult = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("12 "+readresult);
-                        //when old grammars are loaded, the first line looks like
-                        //"reading grammar of old format letter.Abs.gfreading old file letter.Abs.gf<gfinit>"
-                        if (readresult.indexOf("<gfinit>") > -1) {
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("12 "+readresult);
-                        }
-                        String next = readHmsg(readresult);
-
-                        if ((next!=null) && ((next.indexOf("newcat") > -1) || (next.indexOf("topic") > -1))) {
-                                formNewMenu();
-                        }
-                        
-                } catch (IOException e) {
-                        System.err.println("Could not read from external process:\n" + e);
-                }
-                
-        }
-
-        /**
-         * reads the output from GF starting with &gt;gfedit&lt; and last reads &gt;/gfedit&lt;. 
+         * Takes care of reading the output from GF starting with 
+         * &gt;gfedit&lt; and last reads &gt;/gfedit&lt;. 
          * Feeds the editor with what was read.
+         * This makes this method nearly the central method of the editor.
          */
-        protected void readGfedit() {
-                try {
-                        String next = "";
-                        //read <gfedit>
-                        String readresult = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("11 "+readresult);
-                        //read either <hsmg> or <lineatization>
-                        readresult = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("11 "+readresult);
+        private void processGfedit() {
+                final GfeditResult gfedit = gfCapsule.readGfedit(newObject);
+                formHmsg(gfedit.hmsg);
+                //now the form methods are called:
+                DefaultMutableTreeNode topNode = null;
+                TreeAnalysisResult tar = new TreeAnalysisResult(null, -1, false, true, false, false, null, null);
+                TreeAnalyser treeAnalyser = new TreeAnalyser(autoCoerce, coerceReduceRM, easyAttributes, hideCoerce, hideCoerceAggressive, highlightSubtypingErrors, showSelfResult);
+                if (gfedit.hmsg.treeChanged && newObject) {
+                        topNode = formTree(gfedit.treeString); 
+                        tar = treeAnalyser.analyseTree(topNode);
+                        focusPosition = tar.focusPosition;
+                        currentNode = tar.currentNode;
+                }
+                //only sent sth. to GF directly, if we have sth. to send, and if it is not forbidden
+                if (tar.command == null || !gfedit.hmsg.recurse) {
+                        //for normal grammars (not the OCL ones),
+                        //the nextCommand feature is not used, thus
+                        //only this branch is executed.
                         
-                        //hmsg stuff
-                        next = readHmsg(readresult);
+                        // nothing special is to be done here, 
+                        // the tree analysis has
+                        // not told us to send sth. to GF,
+                        // so display the rest and do most of the 
+                        // expensive stuff
                         
-                        //reading <linearizations>
-                        //seems to be the only line read here
-                        //this is here to give as some sort of catch clause.
-                        while ((next!=null)&&((next.length()==0)||(next.indexOf("<linearizations>")==-1))) {
-                                next = fromProc.readLine();
-                                if (next!=null){
-                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("10 "+next);
-                                } else {
-                                        System.exit(0);
-                                }
-                        }
-                        readresult = next;
-                        readLin();
-                        final String treeString = readTree();
-                        final String message = readMessage();
-                        //read the menu stuff
-                        Vector gfCommandVector;
-                        if (newObject) {
-                                gfCommandVector = readRefinementMenu();
-                        } else {
-                                while(readresult.indexOf("</menu")==-1) {
-                                        readresult = fromProc.readLine();
-                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("12 " + readresult);                    
-                                }
-                                gfCommandVector = null;
-                        }
-                        // "" should occur quite fast, but it has not already been read,
-                        // since the last read line is "</menu>"
-                        for (int i = 0; i < 3 && !readresult.equals(""); i++){ 
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("11 " + readresult);                    
+                        if (topNode != null) { //the case of !treeChanged or !newObject
+                                DefaultMutableTreeNode transformedTreeRoot = TreeAnalyser.transformTree(topNode);
+                                showTree(tree, transformedTreeRoot);
                         }
                         
-                        //now the form methods are called:
-                        if (treeChanged && (newObject)) {
-                                formTree(tree, treeString);
-                        }
-                        if (gfCommandVector != null) {
-                                formRefinementMenu(gfCommandVector);
+                        
+                        if (gfedit.gfCommands != null) {
+                                final Vector usedCommandVector = RefinementMenuTransformer.transformRefinementMenu(tar, gfedit.gfCommands, gfCapsule);
+                                final boolean isAbstract = "Abstract".equals(selectedMenuLanguage);
+                                refinementMenu.formRefinementMenu(usedCommandVector, gfedit.hmsg.appendix, currentNode, isAbstract, tar.easyAttributes && tar.reduceCoerce, focusPosition, gfCapsule);
                         }
                         if (newObject) {
-                                //MUST come after readLin, but since formLin is called later too,
+                                //MUST come after readLin, but since formLin is called later on too,
                                 //this cannot be enforced with a local this.linearization
+                                String linString = gfedit.linearizations;
+                                //is set only here, when it is fresh
+                                linearization.setLinearization(linString);
                                 formLin();
                         }
-                        if (message != null && message.length()>1) {
-                                this.display.addToStages("\n-------------\n" + message, "<br><hr>" + message);
+                        if (gfedit.message != null && gfedit.message.length()>1) {
+                                logger.fine("message found: '" + gfedit.message + "'");
+                                this.display.addToStages("\n-------------\n" + gfedit.message, "<br><hr>" + gfedit.message);
                                 //in case no language is displayed
-                                display(false, false);
+                                display(true, false, false);
                         }
-
-                        
-                } catch (IOException e) {
-                        System.err.println("Could not read from external process:\n" + e);
+                } else {
+                        // OK, sth. has to be sent to GF without displaying 
+                        // the linearization of this run
+                        send(tar.command, true, - tar.undoSteps);
                 }
-                
-        }        
-        
-        /**
-         * checks if result and self make sense in the current context.
-         * if not, they are removed from the list
-         */
-        protected void probeCompletability() {
-                if (!showSelfResult || (this.focusPosition == null)) {
-                        return;
-                }
-                /**
-                 * self and result both take two arguments.
-                 * The first is the type, which is fixed
-                 * if the second argument is refineable.
-                 * Important is the second. 
-                 * This only is refineable for the real type of self/result 
-                 */ 
-                final String childPos = this.focusPosition.childPosition(1);
-                final AutoCompletableProber cp = new AutoCompletableProber(fromProc, toProc);
-                for (int i = 0; i < listModel.size(); i++) {
-                        String cmd = ((GFCommand)listModel.elementAt(i)).getCommand();
-                        if ((cmd != null) && ((cmd.indexOf("r core.self") > -1) || (cmd.indexOf("r core.result") > -1))) {
-                                String newCommand = cmd + " ;; mp " + childPos;
-                                if (!cp.isAutoCompletable(newCommand, 2)) {
-                                        listModel.remove(i);
-                                        i -=1;
-                                }
-                        }
-                }
+                refinementMenu.requestFocus();
         }
-        
+
         /**
          * prints the available command line options
          */
         private static void printUsage() {                                          
-                System.err.println("Usage: java -jar [-h/--html] [-b/--base baseURL] [grammarfile(s)]");
+                System.err.println("Usage: java -jar [-h/--html] [-b/--base baseURL] [-o/--ocl] [grammarfile(s)]");
                 System.err.println("where -h activates the HTML mode");
                 System.err.println("and -b sets the base location to which links in HTML are relative to. "
                                 + "Default is the current directory.");
@@ -1784,6 +1517,7 @@ public class GFEditor2 extends JFrame {
                 CmdLineParser parser = new CmdLineParser();                             
                 CmdLineParser.Option optHtml = parser.addBooleanOption('h', "html");
                 CmdLineParser.Option optBase = parser.addStringOption('b', "base");
+                CmdLineParser.Option optOcl = parser.addBooleanOption('o', "ocl");
                 CmdLineParser.Option gfBin = parser.addStringOption('g', "gfbin");
                 // Parse the command line options.                                      
                 
@@ -1798,6 +1532,7 @@ public class GFEditor2 extends JFrame {
                 Boolean isHtml = (Boolean)parser.getOptionValue(optHtml, Boolean.FALSE);
                 String baseString = (String)parser.getOptionValue(optBase, null);
                 String gfBinString = (String)parser.getOptionValue(gfBin, null);
+                Boolean isOcl = (Boolean)parser.getOptionValue(optOcl, Boolean.FALSE);
                 String[] otherArgs = parser.getRemainingArgs();
                 
                 URL myBaseURL;
@@ -1824,7 +1559,7 @@ public class GFEditor2 extends JFrame {
                 }
                 Locale.setDefault(Locale.US);
                 logger.info("call to GF: " + gfCall);
-                GFEditor2 gui = new GFEditor2(gfCall, isHtml.booleanValue(), myBaseURL);
+                GFEditor2 gui = new GFEditor2(gfCall, isHtml.booleanValue(), myBaseURL, isOcl.booleanValue());
                 if (logger.isLoggable(Level.FINER)) {
                         logger.finer("main finished");
                 }
@@ -1854,12 +1589,17 @@ public class GFEditor2 extends JFrame {
          * we should not end the program, just close the GF editor
          * possibly sending something back to KeY 
          */
-        protected void endProgram(){
+        private void endProgram(){
                 String saveQuestion;
                 if (this.callback == null) {
                         saveQuestion = "Save text before exiting?";
                 } else {
-                        saveQuestion = "Save constraint before exiting?";
+                        send("' ;; >>");
+                        if (this.currentNode.isMeta()) { 
+                                saveQuestion = "Incomplete OCL found.\nThis can only be saved (and loaded again) in an internal representation.\nStill save before exiting?";
+                        } else {
+                                saveQuestion = "Save constraint before exiting?";
+                        }
                 }
                 int returnStatus;
                 if (this.newObject) {
@@ -1879,16 +1619,29 @@ public class GFEditor2 extends JFrame {
                                 // back to Together/KeY.
                                 // Hence this try-catch
                                 if (returnStatus == JOptionPane.YES_OPTION) {
-                                        String ocl = (String)linearizations.get(modelModulName + "OCL");
-                                        if (ocl == null) {
-                                                //OCL not present, so switch it on
-                                                langMenuModel.setActive(modelModulName + "OCL", true);
-                                                send("on " + modelModulName + "OCL");
-                                                ocl = (String)linearizations.get(modelModulName + "OCL");
-                                        } 
-                                        ocl = compactSpaces(ocl.trim()).trim();
-                                        
-                                        this.callback.sendConstraint(ocl);
+                                        //check, if there are open metavariables
+                                        //send("' ;; >>"); already done above
+                                        if (!this.currentNode.isMeta()) {
+                                                logger.info("No metavariables found, saving OCL");
+                                                //no open nodes, we can save OCL
+                                                String ocl = (String)linearization.getLinearizations().get(modelModulName + "OCL");
+                                                if (ocl == null) {
+                                                        //OCL not present, so switch it on
+                                                        langMenuModel.setActive(modelModulName + "OCL", true);
+                                                        send("on " + modelModulName + "OCL");
+                                                        ocl = (String)linearization.getLinearizations().get(modelModulName + "OCL");
+                                                } 
+                                                ocl = Utils.compactSpaces(ocl.trim()).trim();
+                                                
+                                                this.callback.sendConstraint(ocl);
+                                        } else {
+                                                logger.info("Metavariables found, saving AST");
+                                                //Abstract is always present
+                                                String abs = (String)linearization.getLinearizations().get("Abstract");
+                                                //then remove duplicate white space
+                                                abs = removeMetavariableNumbers(abs).replaceAll("\\s+", " ").trim();
+                                                this.callback.sendAbstract(abs);
+                                        }
                                         
                                 }
                         } catch (Exception e) { // just print information about the exception
@@ -1910,13 +1663,25 @@ public class GFEditor2 extends JFrame {
                 }
         }
 
+        /**
+         * In the GF AST, all metavariables have numbers behind them,
+         * like ?4. But GF cannot parse these, so the numbers have to be
+         * removed.
+         * Be aware, that this method also replaces ?n inside String literals!
+         * @param abs The GF AST
+         * @return abs, but without numbers behind the '?'
+         */
+        private static String removeMetavariableNumbers(String abs) {
+                return abs.replaceAll("\\?\\d+", "\\?");
+        }
+
         
         /**
          * Shuts down GF and terminates the edior
          */
         private void shutDown() {
                 try {
-                        send("q", false); // tell external GF process to quit
+                        send("q", false, 1); // tell external GF process to quit
                 } finally {
 		                removeAll();
 		                dispose();
@@ -1924,636 +1689,139 @@ public class GFEditor2 extends JFrame {
         }
 
         /**
-         * just replace sequences of spaces with one space
-         * @param s The string to be compacted
-         * @return the compacted result
+         * Performs some global settings like setting treeChanged and newObject,
+         * which can depend on the hmsg.
+         * Also the display gets cleared of wished so.
+         * @param hmsg The parsed hmsg.
          */
-        static String compactSpaces(String s) {
-                String localResult = new String();
-                boolean spaceIncluded = false;
-                
-                for (int i = 0; i < s.length(); i++) {
-                        char c = s.charAt(i);
-                        if (c != ' ') { // include all non-spaces
-                                localResult += String.valueOf(c);
-                                spaceIncluded = false;
-                        } else {// we have a space
-                                if (!spaceIncluded) {
-                                        localResult += " ";
-                                        spaceIncluded = true;
-                                } // else just skip
-                        }
+        private void formHmsg(Hmsg hmsg){
+                if (hmsg.clear) {
+                        //clear output before linearization
+                        this.display.resetLin();
+                        display(true, false, false);
+                        linearization.reset();
                 }
-                return localResult;
-        }	
+                if (hmsg.newObject) {
+                        this.newObject = true;
+                }
+        }
         
         /**
-         * fills the menu with the possible actions like refinements
-         * with the available ones.
-         * Parses the GF-output between <menu> and </menu>  tags
-         * and fills the corrsponding GUI list -"Select Action".
-         * seems to expect the starting menu tag to be already read
-         * @return A Vector of GfCommand, that contains all commands,
-         * already parsed, but not grouped or otherwise treated.
+         * Fills the new category menu and sets the label 'grammar' to
+         * display the name of the abstract grammar.
+         * Fills langMenuModel and registers the presence of the
+         * loaded languages in linearization.linearizations.
          */
-    	protected Vector readRefinementMenu (){
-                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("list model changing! ");      
-                String s ="";
-                Vector printnameVector = new Vector();
-                Vector commandVector = new Vector();
-                Vector gfCommandVector = new Vector();
-                HashSet processedSubcats = new HashSet();
-                try {
-                        //read <menu>
-                        String readresult = fromProc.readLine();             
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 " + readresult);          
-                        //read item
-                        readresult = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);
-                        while (readresult.indexOf("/menu")==-1){
-                                //read show
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);
-                                while (readresult.indexOf("/show") == -1){          
-                                        readresult = fromProc.readLine();
-                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("9 " + readresult);
-                                        if (readresult.indexOf("/show") == -1) {
-                                                if (readresult.length()>8)
-                                                        s += readresult.trim();
-                                                else
-                                                        s += readresult;    
-                                        }
-                                }            
-                                //          if (s.charAt(0)!='d')
-                                //            listModel.addElement("Refine " + s);
-                                //          else 
-                                String showText = s;
-                                printnameVector.addElement(s);
-                                s = "";
-                                //read /show
-                                //read send
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);
-                                String myCommand = readresult;
-                                commandVector.add(readresult);
-                                //read /send (discarded)
-                                readresult = fromProc.readLine();             
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);          
-                                
-                                // read /item
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("8 " + readresult);
-                                
-                                final boolean isAbstract = "Abstract".equals(this.selectedMenuLanguage);
-                                RealCommand gfc = new RealCommand(myCommand, processedSubcats, this.printnameManager, showText, isAbstract);
-                                gfCommandVector.addElement(gfc);
-                        }
-                } catch(IOException e){
-                        System.err.println(e.getMessage());
-                        e.printStackTrace();
+        private void formNewMenu (NewCategoryMenuResult nmr) {
+                //fill newCategoryMenu
+                for (int i = 0; i < nmr.menuContent.length; i++) {
+                        newCategoryMenu.addItem(nmr.menuContent[i]);
                 }
-                return gfCommandVector;
+                //add the languages to the menu
+                for (int i = 0; i < nmr.languages.length; i++) {
+                        final boolean active;
+                        if (nmr.languages[i].equals("Abstract")) {
+                                active = false;
+                        } else { 
+                                active = true;
+                        }
+                        this.langMenuModel.add(nmr.languages[i], active);
+
+                        //select FromUMLTypesOCL by default
+                        if (nmr.languages[i].equals(modelModulName + "OCL")) {
+                                this.selectedMenuLanguage = modelModulName + "OCL";
+                                //TODO select OCL also in the menu
+                        }
+                        //'register' the presence of this language if possible
+                        if (linearization != null) {
+                                linearization.getLinearizations().put(nmr.languages[i], null);
+                        }
+                }
+                //tell the user, which abstract grammar is used
+                //and save the import path
+                grammar.setText(nmr.grammarName);
+                for (int i = 0; i < nmr.paths.length; i++) {
+                        fileString +="--" + nmr.paths[i] +"\n";
+                        if (nmr.paths[i].lastIndexOf('.')!=nmr.paths[i].indexOf('.'))
+                                grammar.setText(nmr.paths[i].substring(0,
+                                                nmr.paths[i].indexOf('.')).toUpperCase()+"          ");
+                }
+                
         }
-    	
-    	/**
-    	 * Goes through the list of possible refinements and groups them
-    	 * according to their subcategory tag (which starts with %)
-    	 * If there is a "(" afterwards, everything until the before last
-    	 * character in the printname will be used as the display name
-    	 * for this subcategory. If this displayname is defined a second time,
-    	 * it will get overwritten.
-    	 * Sorting is also done here.
-    	 * Adding additional special commands like InputCommand happens here too.
-    	 * @param gfCommandVector contains all RealCommands, that are available
-    	 * at the moment
-    	 */
-    	protected void formRefinementMenu(Vector gfCommandVector) {
-                this.listModel.clear();
-                this.refinementSubcatListModel.clear();
-                this.gfcommands.clear();
-                this.subcatListModelHashtable.clear();
-                this.whichSubcat = null;
-                this.popup2.removeAll();
-                Vector prelListModel = new Vector();
-                
-                //at the moment, we don't know yet, which subcats are
-                //nearly empty
-                for (Iterator it = gfCommandVector.iterator(); it.hasNext();) {
-                        GFCommand gfcommand = (GFCommand)it.next();
-                        if ((!this.groupSubcat) || (gfcommand.getSubcat() == null)) {
-                                prelListModel.addElement(gfcommand);
-                        } else {
-                                //put stuff in the correct Vector for the refinementSubcatListModel
-                                Vector lm;
-                                if (subcatListModelHashtable.containsKey(gfcommand.getSubcat())) {
-                                        lm = (Vector)this.subcatListModelHashtable.get(gfcommand.getSubcat());
-                                } else {
-                                        lm = new Vector();
-                                        this.subcatListModelHashtable.put(gfcommand.getSubcat(), lm);
-                                }
-                                lm.addElement(gfcommand);
-                                if (gfcommand.isNewSubcat()) {
-		                                GFCommand linkCmd = new LinkCommand(gfcommand.getSubcat(), this.printnameManager);
-		                                prelListModel.addElement(linkCmd);
-                                }
-                        }
-                }
-                
-                //so we remove empty subcats now and replace them by their RealCommand
-                for (int i = 0; i < prelListModel.size(); i++) {
-                        if (prelListModel.get(i) instanceof LinkCommand) {
-                                LinkCommand lc = (LinkCommand) prelListModel.get(i);
-                                Vector subcatMenu = (Vector)this.subcatListModelHashtable.get(lc.getSubcat());
-                                if (subcatMenu.size() == 1) {
-                                        RealCommand rc = (RealCommand)subcatMenu.get(0);
-                                        prelListModel.set(i, rc);
-                                }
-                        }
-                }
-                
-                
-                // Some types invite special treatment, like Int and String 
-                // which can be read from the user.
-                if (this.currentNode.isMeta()) {
-	                if (this.currentNode.getType().equals("Int")) {
-	                        prelListModel.addElement(InputCommand.intInputCommand);
-	                } if (this.currentNode.getType().equals("String")) {
-	                        prelListModel.addElement(InputCommand.stringInputCommand);
-	                }
-                }
-                
-                //now sort the preliminary listmodel
-                if (sortRefinements) {
-                        Collections.sort(prelListModel);
-                }
-                //now fill this.listModel
-                for (Iterator it = prelListModel.iterator(); it.hasNext();) {
-                        Object next = it.next();
-                        this.listModel.addElement(next);
-                }
-                //select the first command in the refinement menu, if available
-                if (this.listModel.size() > 0) {
-                        this.refinementList.setSelectedIndex(0);
-                } else {
-                        this.refinementList.setSelectedIndex(-1);
-                }
-                this.refinementList.setSelectionBackground(refinementSubcatList.getSelectionBackground());
-    	}
         
-    	/**
-    	 * Reads the hmsg part of the XML that is put out from GF.
-    	 * Everything in [] given in front of a GF command will be rewritten here.
-    	 * This method does nothing when no hmsg part is present.
-    	 * @param prevreadresult The last line read from GF
-    	 * @return the last line this method has read
-    	 */
-        protected String readHmsg(String prevreadresult){
-    	        if ((prevreadresult!=null)&&(prevreadresult.indexOf("<hmsg>") > -1)) {
-    	                StringBuffer s =new StringBuffer("");
-    	                try {
-    	                        String readresult = fromProc.readLine();
-    	                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 "+readresult);
-    	                        while (readresult.indexOf("/hmsg")==-1){       
-    	                                s.append(readresult).append('\n');           
-    	                                readresult = fromProc.readLine();
-    	                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 "+readresult);                     
-    	                        }
-    	                        if (s.indexOf("c") > -1) {
-    	                                //clear output before linearization
-    	                                this.display = new Display(displayType);
-    	                                display(false, false);
-    	                                this.htmlOutputVector = new Vector();
-    	                                this.textOutputVector = new Vector();
-    	                        }
-    	                        if (s.indexOf("t") > -1) {
-    	                                //tree has changed
-    	                                this.treeChanged = true;
-    	                        }
-    	                        if (s.indexOf("n") > -1) {
-    	                                //a new object has been created
-    	                                this.newObject = true;
-    	                        }
-    	                        return readresult;
-    	                } catch(IOException e){
-    	                        System.err.println(e.getMessage());
-    	                        e.printStackTrace();
-    	                        return "";
-    	                }
-    	        } else {
-    	                return prevreadresult;
-    	        }
-        }
+        
 
         
-        /**
-         * reads the linearizations in all language.
-         * seems to expect the first line of the XML structure 
-         * (< lin) already to be read
-         * Accumulates the GF-output between <linearization> </linearization>  tags
-         */
-        protected void readLin(){
-                try {
-                        linearization="";
-                        //read <linearizations>
-                        String readresult = fromProc.readLine();             
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 " + readresult);
-                        linearization += readresult + "\n";           
-                        readresult = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);
-                        while ((readresult != null) && (readresult.indexOf("/linearization") == -1)){       
-                                linearization += readresult + "\n";           
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);                     
-                        }
-                } catch(IOException e){
-                        System.err.println(e.getMessage());
-                        e.printStackTrace();
-                }
-        }
-        
-        /**
-         * reads in the tree and calls formTree without start end end tag of tree
-         * expects the first starting XML tag tree to be already read
-         * @return the read tags for the tree or null if a read error occurs
-         */
-        protected String readTree(){
-                String treeString = "";
-                try {
-                        //read <tree>
-                        String readresult = fromProc.readLine();             
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);          
-                        readresult = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);
-                        while (readresult.indexOf("/tree") == -1){       
-                                treeString += readresult + "\n";           
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);                     
-                        }
-                        return treeString;
-                } catch(IOException e){
-                        System.err.println(e.getMessage());
-                        e.printStackTrace();
-                        return null;
-                }
-        }
-        
-        /**
-         * Parses the GF-output between <message> </message>  tags
-         * and returns it.
-         * @return The read message.
-         */
-        protected String readMessage(){
-                String s ="";
-                try {
-                        // read <message>
-                        String readresult = fromProc.readLine();             
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("6 " + readresult);          
-                        readresult = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 " + readresult);
-                        while (readresult.indexOf("/message") == -1){       
-                                s += readresult + "\n";           
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("7 " + readresult);                     
-                        }
-                        return s;
-                } catch(IOException e){
-                        System.err.println(e.getLocalizedMessage());
-                        e.printStackTrace();
-                        return e.getLocalizedMessage();
-                }
-        }
- 
-        /**
-         * reads the cat entries and puts them into menu, and after that reads
-         * the names of the languages and puts them into the language menu
-         * Parses the GF-output between <gfinit> tags
-         * and fill the New combobox in the GUI.
-         * Reading and forming is mixed, since forming is quite primitive.
-         */
-        protected void formNewMenu () {
-                boolean more = true;
-                try {
-                        //read first cat
-                        String readresult = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) {
-                                xmlLogger.finer("2 " + readresult);
-                        }
-                        if (readresult.indexOf("(none)") > -1) {
-                                //no topics present
-                                more = false;
-                        }
-                        
-                        while (more){
-                                //adds new cat s to the menu
-                                if (readresult.indexOf("topic") == -1) {
-                                        newCategoryMenu.addItem(readresult.substring(6));                       
-                                } 
-                                else 
-                                        more = false;
-                                //read </newcat
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("2 " + readresult);
-                                //read <newcat (normally)
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("3 " + readresult); 
-                                if (readresult.indexOf("topic") != -1) {
-                                        //no more categories
-                                        more = false; 
-                                }
-                                //read next cat / topic
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("4 " + readresult);       
-                        }
-                        //set topic
-                        grammar.setText(readresult.substring(4)+"          ");
-                        //read </topic>
-                        readresult = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("2 " + readresult);
-                        //read <language>
-                        readresult = fromProc.readLine();
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("3 " + readresult);
-                        //read actual language
-                        readresult = fromProc.readLine();             
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("4 " + readresult);       
-                        
-                        //read the languages and select the last non-abstract
-                        more = true;
-                        while (more){
-                                if ((readresult.indexOf("/gfinit") == -1) && (readresult.indexOf("lin") == -1)) {         
-                                        //form lang and Menu menu:
-                                        final String langName = readresult.substring(4);
-                                        final boolean active;
-                                        if (langName.equals("Abstract")) {
-                                                active = false;
-                                        } else { 
-                                                active = true;
-                                        }
-                                        this.langMenuModel.add(langName, active);
-
-                                        //select FromUMLTypesOCL by default
-                                        if (langName.equals(modelModulName + "OCL")) {
-                                                this.selectedMenuLanguage = modelModulName + "OCL"; 
-                                        }
-                                        //'register' the presence of this language.
-                                        this.linearizations.put(langName, null);
-                                } else { 
-                                        more = false;
-                                }
-                                // read </language>
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("2 " + readresult); 
-                                // read <language> or </gfinit...>
-                                readresult = fromProc.readLine();
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("3 " + readresult); 
-                                if ((readresult.indexOf("/gfinit") != -1) || (readresult.indexOf("lin") != -1)) 
-                                        more = false; 
-                                if (readresult.indexOf("/gfinit") != -1)
-                                        finished = true;
-                                // registering the file name:
-                                if (readresult.indexOf("language") != -1) {
-                                        String path = readresult.substring(readresult.indexOf('=') + 1,
-                                                        readresult.indexOf('>')); 
-                                        path = path.substring(path.lastIndexOf('/') + 1);
-                                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("name: " + path);
-                                        fileString +="--" + path +"\n";
-                                        if (path.lastIndexOf('.')!=path.indexOf('.'))
-                                                grammar.setText(path.substring(0,
-                                                                path.indexOf('.')).toUpperCase()+"          ");
-                                }
-                                // in case of finished, read the final "" after </gfinit>, 
-                                // otherwise the name of the next language
-                                readresult = fromProc.readLine();             
-                                if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("4 " + readresult);               
-                        }
-                } catch(IOException e){
-                        logger.warning(e.getMessage());
-                }
-        }
-        
-        /**
-         * Parses the GF-output between &lt;lin&gt; &lt;/lin&gt;  tags.
-         * Sets the current focusPosition, then changes all &lt;focus&gt; tags
-         * into regular &lt;subtree&gt; tags.
-         * 
-         * Then control is given to appendMarked, which does the display
-         * @param readLin The text between &lt;lin&gt; &lt;/lin&gt;  tags.
-         * @param clickable true iff the correspondent display area should be clickable
-         * @param doDisplay true iff the linearization should be displayed.
-         * @param language the current linearization language
-         */
-        protected StringBuffer outputAppend(String readLin, boolean clickable, boolean doDisplay, String language){
-                final StringBuffer linCollector = new StringBuffer();
-                //result=result.replace('\n',' ');
-                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                        linMarkingLogger.finer("INPUT:" + readLin);
-                }
-                int focusTagBegin = readLin.indexOf("<focus");
-                int typeBegin=readLin.indexOf("type=",focusTagBegin);
-                int focusTagEnd = readLin.indexOf('>',typeBegin);
-                // status incorrect ?:
-                final int typeEnd;
-                if ((typeBegin > -1) && (readLin.substring(typeBegin,focusTagEnd).indexOf("incorrect")!=-1)) {  
-                        typeEnd = readLin.indexOf("status");
-                } else {
-                        typeEnd = focusTagEnd;
-                }
-                int focusTextBegin = readLin.indexOf("focus");    
-                if (focusTagBegin!=-1){
-                        // in case focus tag is cut into two lines:
-                        if (focusTagBegin==-1){
-                                focusTagBegin = focusTextBegin - 7;         
-                        }
-                        final int positionBegin=readLin.indexOf("position",focusTagBegin);
-                        final int positionEnd=readLin.indexOf("]",positionBegin);
-                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                linMarkingLogger.finer("POSITION START: "+positionBegin 
-                                                + "\n-> POSITION END: "+positionEnd);
-                        }
-                        if (xmlLogger.isLoggable(Level.FINER)) {
-                                xmlLogger.finer("form Lin1: " + readLin);
-                        }
-                        this.focusPosition = new LinPosition(readLin.substring(positionBegin + 9, positionEnd+1),
-                                        readLin.substring(positionBegin, focusTagEnd).indexOf("incorrect") == -1);
-                        statusLabel.setText(" " + readLin.substring(typeBegin + 5, typeEnd));
-                        //changing <focus> to <subtree>
-                        readLin = replaceNotEscaped(readLin, "<focus", "<subtree");
-                        readLin = replaceNotEscaped(readLin, "</focus", "</subtree");
-                        
-                        String appended = appendMarked(readLin + '\n', clickable, doDisplay, language);
-                        linCollector.append(appended);
-                } else {//no focus at all (message?):
-                        this.focusPosition = null;
-//                      beware the side-effects! They are, what counts
-                        linCollector.append(appendMarked(readLin + '\n', clickable, doDisplay, language));
-                }
-//                if (logger.isLoggable(Level.FINER)) {
-//                        logger.finer("collected appended linearizations:\n" + linCollector.toString());
-//                }
-                return linCollector;
-        }
-
     	/**
-    	 * Replaces all occurances of toBeReplaced, that are not escaped by '\'
-    	 * with replacement
-    	 * @param working the String in which substrings should be replaced
-    	 * @param toBeReplaced The substring, that should be replaced by replacement
-    	 * @param replacement well, the replacement string
-    	 * @return The String with the replaced parts
-    	 */
-        private static String replaceNotEscaped(String working, String toBeReplaced, String replacement) {
-    			StringBuffer w = new StringBuffer(working);
-    	                for (int i = w.indexOf(toBeReplaced); i > -1 && i < w.length(); i = w.indexOf(toBeReplaced, i)) {
-    	                        if (i == 0 || w.charAt(i - 1) != '\\') {
-    					w.replace(i, i + toBeReplaced.length(), replacement);
-    					i += replacement.length();
-    				} else {
-    					i += 1;
-    				}
-    	                }
-    			return w.toString();
-    	}
-        
-        
-        /**
          * Parses the GF-output between <linearization> </linearization>  tags
          * 
-         * pseudo-parses the XML lins and fills the output text area
-         * with the lin in all enabled languages.
-         * 
-         * Expects the linearization string to be in this.linearization.
+         * Expects the linearization string to be given to this.linearization.
          */
-        protected void formLin(){
+        private void formLin(){
                 //reset previous output
-                this.display = new Display(displayType);
-                this.linearizations.clear();
+                this.display.resetLin();
                 
-                boolean firstLin=true; 
-                //read first line like '    <lin lang=Abstract>'
-                String readResult = linearization.substring(0,linearization.indexOf('\n'));
-                //the rest of the linearizations
-                String lin = linearization.substring(linearization.indexOf('\n')+1);
-                //extract the language from readResult
-                int ind = Utils.indexOfNotEscaped(readResult, "=");
-                int ind2 = Utils.indexOfNotEscaped(readResult, ">");
-                /** The language of the linearization */
-                String language = readResult.substring(ind+1,ind2);
-                //the first direct linearization
-                readResult = lin.substring(0,lin.indexOf("</lin>"));
-                //the rest
-                lin = lin.substring(lin.indexOf("</lin>"));
-                while (readResult.length()>1) {
-                        this.langMenuModel.add(language,true);
-                        // selected?
-                        boolean visible = this.langMenuModel.isLangActive(language);
-                        if (visible && !firstLin) {   
-								// appending sth. linearizationArea
-								this.display.addToStages("\n************\n", "<br><hr><br>");
-                        }
-                        if (xmlLogger.isLoggable(Level.FINER)) {
-                                xmlLogger.finer("linearization for the language: "+readResult);
-                        }
-                        // we want the side-effects of outputAppend
-                        final boolean isAbstract = "Abstract".equals(language);
-                        String linResult = outputAppend(readResult, !isAbstract, visible, language).toString();
-                        if (visible) {
-                                firstLin = false;
-                        }
-                        linearizations.put(language, linResult);
-                        // read </lin>
-                        lin = lin.substring(lin.indexOf('\n')+1);
-                        // read lin or 'end'
-                        if (lin.length()<1) {
-                                break;
-                        }
-                        
-                        readResult = lin.substring(0,lin.indexOf('\n'));
-                        lin = lin.substring(lin.indexOf('\n')+1);
-                        if (readResult.indexOf("<lin ")!=-1){
-                                //extract the language from readResult
-                                ind = readResult.indexOf('=');
-                                ind2 = readResult.indexOf('>');
-                                language = readResult.substring(ind+1,ind2);
-                                readResult = lin.substring(0,lin.indexOf("</lin>"));
-                                lin = lin.substring(lin.indexOf("</lin>"));
-                        }  
-                }
-                display(true, true);
+                linearization.parseLin(langMenuModel);
+                display(true, false, true);
 
                 //do highlighting
                 this.linearizationArea.getHighlighter().removeAllHighlights();
                 this.htmlLinPane.getHighlighter().removeAllHighlights();
-                final HashSet incorrectMA = new HashSet();
-                for (int i = 0; i<htmlOutputVector.size(); i++)  {
-                        final HtmlMarkedArea ma = (HtmlMarkedArea)this.htmlOutputVector.elementAt(i);
-                        //check, if and how ma should be highlighted
-                        boolean incorrect = false;
-                        boolean focused = false;
-                        if (redLogger.isLoggable(Level.FINER)) {
-                                redLogger.finer("Highlighting: " + ma);
-                        }
-                        if (!ma.position.correctPosition) {
-                                incorrectMA.add(ma);
-                                incorrect = true;
-                        } else {
-                                //This could be quadratic, but normally on very
-                                //few nodes constraints are introduced, so
-                                //incorrectMA should not contain many elements.
-                                HtmlMarkedArea incMA;
-                                for (Iterator it = incorrectMA.iterator(); !incorrect && it.hasNext();) {
-                                        incMA = (HtmlMarkedArea)it.next();
-                                        if (LinPosition.isSubtreePosition(incMA.position, ma.position)) {
-                                                incorrect = true;
-                                        }
-                                }
-                        }
-                        if (LinPosition.isSubtreePosition(this.focusPosition, ma.position)) {
-                                focused = true;
-                        }
 
+                Vector mahsVector = linearization.calculateHighlights(focusPosition); 
+                for (Iterator it = mahsVector.iterator(); it.hasNext();)  {
+                        MarkedAreaHighlightingStatus mahs = (MarkedAreaHighlightingStatus)it.next();
                         //now highlight
-                        if (focused && incorrect) {
-                                highlight(ma, Color.ORANGE);
-                                highlightHtml(ma, Color.ORANGE);
-                        } else if (focused) {
-                                highlight(ma, linearizationArea.getSelectionColor());
-                                highlightHtml(ma, linearizationArea.getSelectionColor());
-                        } else if (incorrect) {
-                                highlight(ma, Color.RED);
-                                highlightHtml(ma, Color.RED);
+                        if (mahs.focused && mahs.incorrect) {
+                                highlight(mahs.ma, Color.ORANGE);
+                                highlightHtml(mahs.ma, Color.ORANGE);
+                        } else if (mahs.focused) {
+                                highlight(mahs.ma, linearizationArea.getSelectionColor());
+                                highlightHtml(mahs.ma, linearizationArea.getSelectionColor());
+                        } else if (mahs.incorrect) {
+                                highlight(mahs.ma, Color.RED);
+                                highlightHtml(mahs.ma, Color.RED);
                         }
                 }
         }
+
+        
         
 
         
         /**
          * Small method that takes this.display and displays its content 
          * accordingly to what it is (pure text/HTML)
+         * @param doDisplay If the text should get displayed
          * @param saveScroll if the old scroll state should be saved
          * @param restoreScroll if the old scroll state should be restored
          */
-        private void display(boolean saveScroll, boolean restoreScroll) {
+        private void display(boolean doDisplay, boolean saveScroll, boolean restoreScroll) {
                 //Display the pure text
                 final String text = this.display.getText();
-                this.linearizationArea.setText(text);
+                if (doDisplay) {
+                        this.linearizationArea.setText(text);
+                }
                 if (restoreScroll) {
+                        //this.outputPanelText.getVerticalScrollBar().setValue(this.display.scrollText);
                         this.linearizationArea.scrollRectToVisible(this.display.recText);
                 }
                 if (saveScroll) {
+                        //this.display.scrollText = this.outputPanelText.getVerticalScrollBar().getValue();
                         this.display.recText = this.linearizationArea.getVisibleRect();
                 }
                 
                 //Display the HTML
                 final String html = this.display.getHtml(this.font);
-                this.htmlLinPane.setText(html);
+                if (doDisplay) {
+                        this.htmlLinPane.setText(html);
+                }
                 if (restoreScroll) {
+                        //this.outputPanelHtml.getVerticalScrollBar().setValue(this.display.scrollHtml);
                         this.htmlLinPane.scrollRectToVisible(this.display.recHtml);
                 }
                 if (saveScroll) {
+                        //this.display.scrollHtml = this.outputPanelHtml.getVerticalScrollBar().getValue();
                         this.display.recHtml = this.htmlLinPane.getVisibleRect();
                 }
         }
@@ -2563,7 +1831,7 @@ public class GFEditor2 extends JFrame {
          * @param ma the MarkedArea
          * @param color the color the highlight should get
          */
-        private void highlightHtml(final HtmlMarkedArea ma, Color color) {
+        private void highlightHtml(final MarkedArea ma, Color color) {
                 try {
                         int begin = ma.htmlBegin;
                         int end = ma.htmlEnd;
@@ -2590,7 +1858,7 @@ public class GFEditor2 extends JFrame {
                 try {
                         int begin = ma.begin;
                         int end = ma.end ;
-                        //When creating the HtmlMarkedArea, we don't know, if
+                        //When creating the MarkedArea, we don't know, if
                         //it is going to be the last or not.
                         if (end > this.linearizationArea.getText().length()) {
                                 end = this.linearizationArea.getText().length() + 1;
@@ -2609,14 +1877,12 @@ public class GFEditor2 extends JFrame {
          * Sets the font on all the GUI-elements to font.
          * @param newFont the font everything should have afterwards
          */
-        protected void fontEveryWhere(Font newFont) {                          
+        private void fontEveryWhere(Font newFont) {                          
                 linearizationArea.setFont(newFont);
                 htmlLinPane.setFont(newFont);
                 parseField.setFont(newFont);  
-                tree.tree.setFont(newFont);  
-                refinementList.setFont(newFont);
-                refinementSubcatList.setFont(newFont);
-                popup2.setFont(newFont);  
+                tree.tree.setFont(newFont);
+                refinementMenu.setFont(newFont);
                 save.setFont(newFont);  
                 grammar.setFont(newFont);  
                 open.setFont(newFont);  
@@ -2633,29 +1899,30 @@ public class GFEditor2 extends JFrame {
                 alpha.setFont(newFont);  
                 random.setFont(newFont);  
                 undo.setFont(newFont);  
+                checkSubtyping.setFont(newFont);
                 filterMenu.setFont(newFont);
-                setFontRecursive(filterMenu, newFont, false);
+                setSubmenuFont(filterMenu, newFont, false);
                 modify.setFont(newFont);  
                 statusLabel.setFont(newFont);  
                 menuBar.setFont(newFont);
                 newCategoryMenu.setFont(newFont);
                 readDialog.setFont(newFont);
                 mlMenu.setFont(newFont);  
-                setFontRecursive(mlMenu, newFont, false);
+                setSubmenuFont(mlMenu, newFont, false);
                 modeMenu.setFont(newFont);  
-                setFontRecursive(modeMenu, newFont, false);
+                setSubmenuFont(modeMenu, newFont, false);
                 langMenu.setFont(newFont);
-                setFontRecursive(langMenu, newFont, false);
+                setSubmenuFont(langMenu, newFont, false);
                 fileMenu.setFont(newFont);
-                setFontRecursive(fileMenu, newFont, false);
+                setSubmenuFont(fileMenu, newFont, false);
                 usabilityMenu.setFont(newFont);
-                setFontRecursive(usabilityMenu, newFont, false);
+                setSubmenuFont(usabilityMenu, newFont, false);
                 viewMenu.setFont(newFont);  
-                setFontRecursive(viewMenu, newFont, false);
-                setFontRecursive(sizeMenu, newFont, false);
-                setFontRecursive(fontMenu, newFont, true);
+                setSubmenuFont(viewMenu, newFont, false);
+                setSubmenuFont(sizeMenu, newFont, false);
+                setSubmenuFont(fontMenu, newFont, true);
                 //update also the HTML with the new size
-                display(false, true);
+                display(true, false, true);
         }
         
         /**
@@ -2666,8 +1933,7 @@ public class GFEditor2 extends JFrame {
          * @param onlySize If only the font size or the whole font should
          * be changed
          */
-        private void setFontRecursive(JMenu subMenu, Font font, boolean onlySize)
-        {  
+        private void setSubmenuFont(JMenu subMenu, Font font, boolean onlySize) {  
                 for (int i = 0; i<subMenu.getItemCount(); i++)
                 { 
                         JMenuItem item = subMenu.getItem(i);
@@ -2704,44 +1970,33 @@ public class GFEditor2 extends JFrame {
         }
         
         /**
-         * Remove all nodes in the tree and
-         * form a dummy tree in treePanel
-         * @param myTreePanel the aforementioned treePanel
-         */
-        protected void resetTree(DynamicTree2 myTreePanel) {
-                tree.clear();
-                String p1Name = new String("Root");
-                myTreePanel.addObject(null, p1Name);
-        }
-        
-        /**
          * Parses the GF-output between <tree> </tree>  tags
          * and build the corresponding tree.
          * 
          * parses the already read XML for the tree and stores the tree nodes
          * in nodeTable with their numbers as keys
-         * @param myTreePanel the panel of GFEditor2
+         * 
+         * Also does some tree analyzing, if other actions have to be taken.
+         * 
          * @param treeString the string representation for the XML tree
+         * @return null, if no commands have to be executed afterwards.
+         * If the result is non-null, then result.s should be sent to GF
+         * afterwards, and no other form-method on this read-run is to be executed.
+         * result.i is the amount of undo steps that this command needs.
          */
-        protected void formTree(DynamicTree2 myTreePanel, String treeString) {
+        private DefaultMutableTreeNode formTree(String treeString) {
                 if (treeLogger.isLoggable(Level.FINER)) {
                         treeLogger.finer("treeString: "+ treeString);
                 }
-                
+
                 /** 
                  * stores the nodes and the indention of their children.
-                 * Works stack like, so when all children of a node are read,
+                 * When all children of a node are read,
                  * the next brethren / uncle node 'registers' with the same
                  * indention depth to show that the next children are his.
                  */
                 Hashtable parentNodes = new Hashtable();
-                /** 
-                 * the path in the JTree (not in GF repesentation!) to the
-                 * current new node.
-                 */ 
-                TreePath path=null;
                 String s = treeString;
-                myTreePanel.clear();
                 /** consecutive node numbering */
                 int index = 0;
                 /** the node that gets created from the current line */
@@ -2751,6 +2006,7 @@ public class GFEditor2 extends JFrame {
                 if (s.indexOf('*')!=-1) {
                         star = 1;
                 }
+                DefaultMutableTreeNode topNode = null;
                 while (s.length()>0) {
                         /** 
                          * every two ' ' indicate one tree depth level
@@ -2767,34 +2023,33 @@ public class GFEditor2 extends JFrame {
                                 shift++;  
                         }             
                         if (s.length()>0) {
-                                                               
+                                /** to save the top node*/
+                                boolean isTop = false;                      
                                 int j = s.indexOf("\n");
                                 //is sth like "andS : Sent ", i.e. "fun : type " before trimming  
                                 String gfline = s.substring(0, j).trim();
                                 GfAstNode node = new GfAstNode(gfline);
-                                if (selected) {
-                                        this.currentNode = node;
-                                }
                                 // use indentation to calculate the parent
                                 index++;
                                 s = s.substring(j+1);    
                                 shift = (shift - star)/2;
                                 
-                                /*
+                                /**
                                  * we know the parent, so we can ask it for the param information
                                  * for the next child (the parent knows how many it has already)
                                  * and save it in an AstNodeData
                                  */
                                 DefaultMutableTreeNode parent = (DefaultMutableTreeNode)parentNodes.get(new Integer(shift));
                                 
-                                // compute the now childs position
+                                /** compute the now child's position */
                                 String newPos;
                                 if ((parent != null) && (parent.getUserObject() instanceof AstNodeData) && parent.getUserObject() != null) {
                                         AstNodeData pand = (AstNodeData)parent.getUserObject();
-                                        newPos = LinPosition.calculateChildPosition(pand.getPosition(), pand.childNum++);
+                                        newPos = LinPosition.calculateChildPosition(pand.position, pand.childNum++);
                                 } else {
                                         //only the case for the root node
                                         newPos = "[]";
+                                        isTop = true;
                                 }
                                 
                                 //default case, if we can get more information, this is overwritten
@@ -2804,12 +2059,19 @@ public class GFEditor2 extends JFrame {
                                         childPrintname = this.printnameManager.getPrintname(node.getFun());
                                 }
                                 Printname parentPrintname = null;
+                                AstNodeData parentAnd = null;
+                                String parentConstraint = "";
+                                if (parent != null) {
+                                        parentAnd = (AstNodeData)parent.getUserObject();
+                                        if (parentAnd != null) {
+                                                parentConstraint = parentAnd.constraint;
+                                        }
+                                }
                                 if (childPrintname != null) {
                                         //we know this one
-                                        and = new RefinedAstNodeData(childPrintname, node, newPos);
+                                        and = new RefinedAstNodeData(childPrintname, node, newPos, selected, parentConstraint);
                                 } else if (parent != null && node.isMeta()) {
                                         //new child without refinement
-                                        AstNodeData parentAnd = (AstNodeData)parent.getUserObject();
                                         if (parentAnd != null) {
                                                 parentPrintname = parentAnd.getPrintname();
                                         }
@@ -2824,37 +2086,89 @@ public class GFEditor2 extends JFrame {
 //                                                if (logger.isLoggable(Level.FINER)) {
 //                                                        logger.finer("new node-parsing: '" + name + "', fun: '" + fun + "', type: '" + paramType + "'");
 //                                                }
-                                                and = new UnrefinedAstNodeData(paramTooltip, node, newPos);
+                                                and = new UnrefinedAstNodeData(paramTooltip, node, newPos, selected, parentConstraint);
 
                                         } else {
-                                                and = new RefinedAstNodeData(null, node, newPos);
+                                                and = new RefinedAstNodeData(null, node, newPos, selected, parentConstraint);
                                         }
                                 } else {
                                         //something unparsable, bad luck
                                         //or refined and not described
-                                        and = new RefinedAstNodeData(null, node, newPos);
+                                        and = new RefinedAstNodeData(null, node, newPos, selected, parentConstraint);
                                 }
                                 
-                                newChildNode = myTreePanel.addObject(parent, and);  
+                                //add to the parent node
+                                newChildNode = new DefaultMutableTreeNode(and);
+                                if ((parent != null) && (newChildNode != null)) {
+                                        parent.add(newChildNode);
+                                }
                                 parentNodes.put(new Integer(shift+1), newChildNode);
-                                path = new TreePath(newChildNode.getPath());
-                                nodeTable.put(path, newPos);
+                                if (isTop) {
+                                        topNode = newChildNode;
+                                }
+                        }
+                }
+                //to be deferred to later step in readGfEdit
+                return topNode;
+        }
+        
+        /**
+         * Shows the tree, scrolls to the selected node and updates the
+         * mapping table between displayed node paths and AST positions.
+         * @param myTreePanel the panel of GFEditor2
+         * @param topNode The root node of the tree, that has the other nodes
+         * already as its children
+         */
+        private void showTree(DynamicTree2 myTreePanel, DefaultMutableTreeNode topNode) {
+                myTreePanel.clear();
+                nodeTable.clear();
+                //the rootNode is not shown, therefore, a dummy node plays this role
+                final DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode();
+                rootNode.add(topNode);
+                ((DefaultTreeModel)(myTreePanel.tree.getModel())).setRoot(rootNode);
+                /** 
+                 * the path in the JTree (not in GF repesentation!) to the
+                 * current new node.
+                 */ 
+                TreePath path=null;
+                TreePath selectionPath = null;
+                // now fill nodeTable
+                for (Enumeration e = rootNode.breadthFirstEnumeration() ; e.hasMoreElements() ;) {
+                        DefaultMutableTreeNode currNode = (DefaultMutableTreeNode)e.nextElement();
+                        AstNodeData and = (AstNodeData)currNode.getUserObject();
 
-                                if (selected) {                        
-                                        //show the selected as the 'selected' one in the JTree
-                                        myTreePanel.tree.setSelectionPath(path);              
-                                        myTreePanel.oldSelection = index;
-                                        if (treeLogger.isLoggable(Level.FINER)) {
-                                                treeLogger.finer("new selected index "+ index);
+                        path = new TreePath(currNode.getPath());
+                        if (and == null) {
+                                //only the case for the root node
+                                nodeTable.put(path, "[]");
+                        } else {
+                                nodeTable.put(path, and.position);
+                                if (and.selected) {
+                                        selectionPath = path;
+                                        if (treeLogger.isLoggable(Level.FINE)) {
+                                                treeLogger.fine("new selectionPath: " + selectionPath);
                                         }
                                         
+                                        DefaultMutableTreeNode parent = null;
+                                        if (currNode.getParent() instanceof DefaultMutableTreeNode) {
+                                                parent = (DefaultMutableTreeNode)currNode.getParent();
+                                        }
+                                        Printname parentPrintname = null;
+                                        //display the current refinement description
+                                        if ((parent != null) 
+                                                        && (parent.getUserObject() != null) 
+                                                        && (parent.getUserObject() instanceof AstNodeData)
+                                                        ) {
+                                                AstNodeData parentAnd = (AstNodeData)parent.getUserObject();
+                                                parentPrintname = parentAnd.getPrintname();
+                                        }
                                         // set the description of the current parameter to a more
                                         // prominent place
                                         String paramName = null;
                                         int paramPosition = -1;
                                         if (parentPrintname != null) {
-		                                        paramPosition = parent.getChildCount() - 1;
-		                                        paramName = parentPrintname.getParamName(paramPosition);
+                                                paramPosition = parent.getIndex(currNode);
+                                                paramName = parentPrintname.getParamName(paramPosition);
                                         }
                                         if (paramName == null) {
                                                 subtermNameLabel.setText(actionOnSubtermString);
@@ -2868,352 +2182,39 @@ public class GFEditor2 extends JFrame {
                                                         subtermDescLabel.setText("<html>" + paramDesc + "</html>");
                                                 }
                                         }
+                                        statusLabel.setText(and.node.getType());
                                 }
                         }
                 }
-                if ((newChildNode!=null)) {
-                        myTreePanel.tree.makeVisible(path); 
-                        gui2.toFront();
-                        index = 0;
-                }
-                treeChanged = false;
+                //also set the old selectionPath since we know that we do know,
+                //that the selectionChanged event is bogus.
+                myTreePanel.oldSelection = selectionPath;
+                myTreePanel.tree.setSelectionPath(selectionPath);
+                myTreePanel.tree.scrollPathToVisible(selectionPath);
+                //show the selected as the 'selected' one in the JTree
+                myTreePanel.tree.makeVisible(selectionPath);
+                gui2.toFront();
         }
         
-        /**
-         * Returns the widest position (see comments to comparePositions) 
-         * covered in the string from begin to end in the 
-         * linearization area.
-         * @param begin The index in htmlOutputVector of the first MarkedArea, that is possibly the max
-         * @param end The index in htmlOutputVector of the last MarkedArea, that is possibly the max
-         * @return the position in GF Haskell notation (hdaniels guesses)
-         */
-        private String findMax(int begin, int end) {
-                String max = (((MarkedArea)this.htmlOutputVector.elementAt(begin)).position).position;
-                for (int i = begin+1; i <= end; i++)
-                        max = LinPosition.maxPosition(max,(((MarkedArea)this.htmlOutputVector.elementAt(i)).position).position);
-                return max;
-        }
         
         /**
-         * Appends the string s to the text in the linearization area
-         * on the screen. It parses the subtree tags and registers them.
-         * The focus tag is expected to be replaced by subtree.
-         * @param restString string to append, with tags in it.
-         * @param clickable if true, the text is appended and the subtree tags are
-         * parsed. If false, the text is appended, but the subtree tags are ignored. 
-         * @param doDisplay true iff the output is to be displayed. 
-         * Implies, if false, that clickable is treated as false.
-         * @param language the current linearization language
+         * Removes anything but the "new" from the new category menu
          */
-        protected String appendMarked(String restString, final boolean clickable, boolean doDisplay, String language) {
-                String appendedPureText = "";
-                if (restString.length()>0) {
-                        /** 
-                         * the length of what is already displayed of the linearization.
-                         * Alternatively: What has been processed in restString since
-                         * subtreeBegin
-                         */
-                        int currentLength = 0;
-                        /** position of &lt;subtree */
-                        int subtreeBegin;
-                        /** position of &lt;/subtree */
-                        int subtreeEnd;
-                        
-                        if (clickable && doDisplay) {
-                                subtreeBegin = Utils.indexOfNotEscaped(restString, "<subtree");
-                                subtreeEnd = Utils.indexOfNotEscaped(restString, "</subtree");
-                                // cutting subtree-tags:
-                                while ((subtreeEnd>-1)||(subtreeBegin>-1)) {
-                                        /** 
-                                         * length of the portion that is to be displayed
-                                         * in the current run of appendMarked.
-                                         * For HTML this would have to be calculated
-                                         * in another way.
-                                         */
-                                        final int newLength;
+        private void resetNewCategoryMenu() {
+                //remove everything except "New"
+                while (1< newCategoryMenu.getItemCount())
+                        newCategoryMenu.removeItemAt(1);
+        }
 
-                                        if ((subtreeEnd==-1)||((subtreeBegin<subtreeEnd)&&(subtreeBegin>-1))) {
-                                                final int subtreeTagEnd = Utils.indexOfNotEscaped(restString, ">",subtreeBegin);                                      
-                                                final int nextOpeningTagBegin = Utils.indexOfNotEscaped(restString, "<", subtreeTagEnd);
-                                                
-                                                //getting position:
-                                                final int posStringBegin = Utils.indexOfNotEscaped(restString, "[",subtreeBegin);
-                                                final int posStringEnd = Utils.indexOfNotEscaped(restString, "]",subtreeBegin);
-                                                final LinPosition position = new LinPosition(restString.substring(posStringBegin,posStringEnd+1),
-                                                                restString.substring(subtreeBegin,subtreeTagEnd).indexOf("incorrect")==-1);
-                                                
-                                                // is something before the tag?
-                                                // is the case in the first run
-                                                if (subtreeBegin-currentLength>1) {
-                                                        if (linMarkingLogger.isLoggable(Level.FINER)) {
-                                                                linMarkingLogger.finer("SOMETHING BEFORE THE TAG");
-                                                        }
-                                                        if (this.currentPosition.size()>0)
-                                                                newLength = register(currentLength, subtreeBegin, (LinPosition)this.currentPosition.elementAt(this.currentPosition.size()-1), restString, language);
-                                                        else
-                                                                newLength = register(currentLength, subtreeBegin, new LinPosition("[]",
-                                                                                restString.substring(subtreeBegin,subtreeTagEnd).indexOf("incorrect")==-1), restString, language);
-                                                } else {       // nothing before the tag:
-                                                        //the case in the beginning
-                                                        if (linMarkingLogger.isLoggable(Level.FINER)) {
-                                                                linMarkingLogger.finer("NOTHING BEFORE THE TAG");             
-                                                        }
-                                                        if (nextOpeningTagBegin>0) {
-                                                                newLength = register(subtreeTagEnd+2, nextOpeningTagBegin, position, restString, language);
-                                                        } else {
-                                                                newLength = register(subtreeTagEnd+2, restString.length(), position, restString, language);
-                                                        }
-                                                        restString = removeSubTreeTag(restString,subtreeBegin, subtreeTagEnd+1);
-                                                }
-                                                currentLength += newLength ;
-                                        } else {// l<l2
-                                                // something before the </subtree> tag:
-                                                if (subtreeEnd-currentLength>1) {
-                                                        if (linMarkingLogger.isLoggable(Level.FINER)) {
-                                                                linMarkingLogger.finer("SOMETHING BEFORE THE </subtree> TAG");
-                                                        }
-                                                        if (this.currentPosition.size()>0)
-                                                                newLength = register(currentLength, subtreeEnd, (LinPosition)this.currentPosition.elementAt(this.currentPosition.size()-1), restString, language);
-                                                        else
-                                                                newLength = register(currentLength, subtreeEnd, new LinPosition("[]",
-                                                                                restString.substring(subtreeBegin,subtreeEnd).indexOf("incorrect")==-1), restString, language);
-                                                        currentLength += newLength ;
-                                                }
-                                                // nothing before the tag:
-                                                else 
-                                                        // punctuation after the </subtree> tag:
-                                                        if (restString.substring(subtreeEnd+10,subtreeEnd+11).trim().length()>0)
-                                                        {
-                                                                if (linMarkingLogger.isLoggable(Level.FINER)) {
-                                                                        linMarkingLogger.finer("PUNCTUATION AFTER THE </subtree> TAG"
-                                                                                        + "/n" + "STRING: " + restString);
-                                                                }
-                                                                //cutting the tag first!:
-                                                                if (subtreeEnd>0) {
-                                                                        restString =  removeSubTreeTag(restString,subtreeEnd-1, subtreeEnd+9); 
-                                                                } else {
-                                                                        restString = removeSubTreeTag(restString,subtreeEnd, subtreeEnd+9);
-                                                                }
-                                                                if (linMarkingLogger.isLoggable(Level.FINER)) {
-                                                                        linMarkingLogger.finer("STRING after cutting the </subtree> tag: "+restString);
-                                                                }
-                                                                // cutting the space in the last registered component:
-                                                                if (this.htmlOutputVector.size()>0) {
-                                                                        ((MarkedArea)this.htmlOutputVector.elementAt(this.htmlOutputVector.size()-1)).end -=1; 
-                                                                        if (currentLength>0) {
-                                                                                currentLength -=1; 
-                                                                        }
-                                                                }
-                                                                if (linMarkingLogger.isLoggable(Level.FINER)) {
-                                                                        linMarkingLogger.finer("currentLength: " + currentLength);
-                                                                }
-                                                                // register the punctuation:
-                                                                if (this.currentPosition.size()>0) {
-                                                                        newLength = register(currentLength, currentLength+2, (LinPosition)this.currentPosition.elementAt(this.currentPosition.size()-1), restString, language);
-                                                                } else {
-                                                                        newLength = register(currentLength, currentLength+2, new LinPosition("[]",
-                                                                                        true), restString, language);
-                                                                }
-                                                                currentLength += newLength ;
-                                                        } else {
-                                                                // just cutting the </subtree> tag:
-                                                                restString = removeSubTreeTag(restString,subtreeEnd, subtreeEnd+10);
-                                                        }
-                                        }
-                                        subtreeEnd = Utils.indexOfNotEscaped(restString, "</subtree");
-                                        subtreeBegin = Utils.indexOfNotEscaped(restString, "<subtree");
-                                        //          if (debug2) 
-                                        //                System.out.println("/subtree index: "+l2 + "<subtree"+l);
-                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                linMarkingLogger.finer("<-POSITION: "+subtreeBegin+" CURRLENGTH: "+currentLength
-                                                                + "\n STRING: "+restString.substring(currentLength));
-                                        }
-                                } //while
-                        } else { //no focus, no selection enabled (why ever)
-                                //that means, that all subtree tags are removed here.
-                                if (linMarkingLogger.isLoggable(Level.FINER)) {
-                                        linMarkingLogger.finer("NO SELECTION IN THE TEXT TO BE APPENDED!");
-                                }
-                                //cutting tags from previous focuses if any:
-                                int r = Utils.indexOfNotEscaped(restString, "</subtree>");
-                                while (r>-1) {
-                                        // check if punktualtion marks like . ! ? are at the end of a sentence:
-                                        if (restString.charAt(r+10)==' ')
-                                                restString = restString.substring(0,r)+restString.substring(r+11);
-                                        else
-                                                restString = restString.substring(0,r)+restString.substring(r+10);
-                                        r = Utils.indexOfNotEscaped(restString, "</subtree>");
-                                }
-                                r = Utils.indexOfNotEscaped(restString, "<subtree");
-                                while (r>-1) {
-                                        int t = Utils.indexOfNotEscaped(restString, ">", r);
-                                        if (t<restString.length()-2)
-                                                restString = restString.substring(0,r)+restString.substring(t+2);
-                                        else 
-                                                restString = restString.substring(0,r);
-                                        r = Utils.indexOfNotEscaped(restString, "<subtree");
-                                }
-                        }
-                        // appending:
-                        restString = unescapeTextFromGF(restString);
-                        if (redLogger.isLoggable(Level.FINER)) {
-                                redLogger.finer(restString);
-                        }
-                        appendedPureText = restString.replaceAll("&-","\n ");
-                        //display the text if not already done in case of clickable
-                        if (!clickable && doDisplay) {
-                                // the text has only been pruned from markup, but still needs
-                                // to be displayed
-                                this.display.addToStages(appendedPureText, appendedPureText);
-                        }
-                } // else: nothing to append
-                return appendedPureText;
-        }
-        
-        /**
-         * Replaces a number of escaped characters by an unescaped version
-         * of the same length
-         * @param string The String with '\' as the escape character
-         * @return the same String, but with escaped characters removed
-         * 
-         */
-        static String unescapeTextFromGF(String string) {
-                final String more = "\\"+">";
-                final String less = "\\"+"<";
-                //%% by daniels, linearization output will be changed drastically 
-                //(or probably will), so for now some hacks for -> and >=
-                string = Utils.replaceAll(string, "-" + more, "-> ");
-                string = Utils.replaceAll(string, "-" + more,"-> ");
-                string = Utils.replaceAll(string, more," >");
-                string = Utils.replaceAll(string, less," <");
-                //an escaped \ becomes a single \
-                string = Utils.replaceAll(string, "\\\\"," \\");
-                return string;
-        }
-        
-
-
-        /**
-         * The substring from start to end in workingString, together with
-         * position is saved as a MarkedArea in this.htmlOutputVector.
-         * The information from where to where the to be created MarkedArea
-         * extends, is calculated in this method.
-         * @param start The position of the first character in workingString
-         * of the part, that is to be registered.
-         * @param end The position of the last character in workingString
-         * of the part, that is to be registered.
-         * @param position the position in the tree that corresponds to
-         * the to be registered text
-         * @param workingString the String from which the displayed
-         * characters are taken from
-         * @param language the current linearization language
-         * @return newLength, the difference between end and start
-         */
-        private int register(int start, int end, LinPosition position, String workingString, String language) {
-                /**
-                 * the length of the piece of text that is to be appended now
-                 */
-                final int newLength = end-start;
-                // the tag has some words to register:
-                if (newLength>0) {
-                        final String stringToAppend = workingString.substring(start,end);
-                        //if (stringToAppend.trim().length()>0) {
-
-                        //get oldLength and add the new text
-                        String toAdd = unescapeTextFromGF(stringToAppend);
-                        final HtmlMarkedArea hma = this.display.addAsMarked(toAdd, position, language);
-                        this.htmlOutputVector.add(hma);
-                        if (htmlLogger.isLoggable(Level.FINER)) {
-                                htmlLogger.finer("HTML added  :      " + hma);
-                        }                        //} else if (linMarkingLogger.isLoggable(Level.FINER)) {
-                        //        linMarkingLogger.finer("whiteSpaces: " + newLength);
-                        //}
-                } //some words to register
-                return newLength;
-        }
-        
-        /**
-         * removing subtree-tag in the interval start-end 
-         * and updating the coordinates after that
-         * basically part of appendMarked
-         * No subtree is removed, just the tag. 
-         * @param s The String in which the subtree tag should be removed
-         * @param start position in restString
-         * @param end position in restString
-         * @return the String without the subtree-tags in the given interval
-         */
-        private String removeSubTreeTag (final String s, final int start, final int end) {
-                String restString = s;
-                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                        linMarkingLogger.finer("removing: "+ start +" to "+ end);
-                }
-                int difference =end-start+1;
-                int positionStart, positionEnd;
-                if (difference>20) {
-                        positionStart = Utils.indexOfNotEscaped(restString, "[", start);
-                        positionEnd = Utils.indexOfNotEscaped(restString, "]", start);
-                        
-                        currentPosition.addElement(new LinPosition(
-                                        restString.substring(positionStart, positionEnd+1),
-                                        restString.substring(start,end).indexOf("incorrect")==-1));
-                } else if (currentPosition.size()>0) {
-                                currentPosition.removeElementAt(currentPosition.size()-1);
-                }
-                if (start>0) {
-                        restString = restString.substring(0,start)+restString.substring(end+1);
-                } else{
-                        restString = restString.substring(end+1);
-                }
-                return restString;
-        }
-        
-        /**
-         * handling the event of choosing the action at index from the list.
-         * That is either giving commands to GF or displaying the subcat menus
-         * @param list The list that generated this action
-         * @param index the index of the selected element in list
-         * @param doubleClick true iff a command should be sent to GF, 
-         * false if only a new subcat menu should be opened. 
-         */
-        protected void listAction(JList list, int index, boolean doubleClick) {
-                if (index == -1) {
-                        if (xmlLogger.isLoggable(Level.FINER)) xmlLogger.finer("no selection");
-                } else {
-                        GFCommand command;
-                        if (list == refinementList) {
-                                command = (GFCommand)listModel.elementAt(index); 
-                        } else {
-                                Vector cmdvector = (Vector)this.subcatListModelHashtable.get(this.whichSubcat);
-                                command = (GFCommand)(cmdvector.get(index));
-                        }
-                        if (command instanceof LinkCommand) {
-                                this.whichSubcat = command.getSubcat();
-                                refinementSubcatListModel.clear();
-                                Vector currentCommands = (Vector)this.subcatListModelHashtable.get(this.whichSubcat);
-                                for (Iterator it = currentCommands.iterator(); it.hasNext();) {
-                                        this.refinementSubcatListModel.addElement(it.next());
-                                }
-                        } else if (doubleClick && command instanceof InputCommand) {
-                                InputCommand ic = (InputCommand)command;
-                                executeInputCommand(ic);
-                                
-                        } else if (doubleClick){
-                                refinementSubcatListModel.clear();
-                                treeChanged = true; 
-                                send(command.getCommand());
-                        } else if (list == refinementList){
-                                refinementSubcatListModel.clear();
-                        }
-                }
-        }
         
         /**
          * Pops up a window for input of the wanted data and asks ic
          * afterwards, if the data has the right format.
-         * Then gives that to GF
+         * Then gives that to GF.
+         * TODO Is called from RefinementMenu, but uses display. Where to put?
          * @param ic the InputCommand that specifies the wanted format/type
          */
-        private void executeInputCommand(InputCommand ic) {
+        protected void executeInputCommand(InputCommand ic) {
                 String s = (String)JOptionPane.showInputDialog(
                                 this,
                                 ic.getTitleText(),
@@ -3225,107 +2226,17 @@ public class GFEditor2 extends JFrame {
                 StringBuffer reason = new StringBuffer();
                 Object value = ic.validate(s, reason);
                 if (value != null) {
-                        treeChanged = true;
-                        send("g "+value); 
+                        send("[t] g "+value); 
                         if (logger.isLoggable(Level.FINER)) {
                                 logger.finer("sending string " + value);
                         }
                 } else {
                         this.display.addToStages("\n" + reason.toString(), "<p>" + reason.toString() + "</p>");
-                        display(false, false);
+                        display(true, false, false);
                 }
         }
 
         
-        /**
-         * Produces the popup menu that represents the current refinements.
-         * An alternative to the refinement list.
-         * @return s.a.
-         */
-        JPopupMenu producePopup() {
-                if (popup2.getComponentCount() > 0) {
-                        return popup2;
-                }
-                for (int i = 0; i < this.listModel.size(); i++) {
-                        GFCommand gfcmd = (GFCommand)this.listModel.get(i);
-                        if (gfcmd instanceof LinkCommand) {
-                                LinkCommand lc = (LinkCommand)gfcmd;
-                                Vector subcatMenu = (Vector)this.subcatListModelHashtable.get(lc.getSubcat());
-                                JMenu tempMenu = new JMenu(lc.getDisplayText());
-                                tempMenu.setToolTipText(lc.getTooltipText());
-                                tempMenu.setFont(font);
-                                JMenuItem tempMenuItem;
-                                for (Iterator it = subcatMenu.iterator(); it.hasNext();) {
-                                        GFCommand subgfcmd = (GFCommand)it.next();
-                                        tempMenuItem = menuForCommand(subgfcmd);
-                                        if (tempMenuItem != null) {
-                                                tempMenu.add(tempMenuItem);
-                                        }
-                                }
-                                popup2.add(tempMenu);
-                        } else { 
-                                JMenuItem tempMenu = menuForCommand(gfcmd);
-                                if (tempMenu != null) {
-                                        popup2.add(tempMenu);
-                                }
-                        }
-                }
-                return popup2;
-        }
-        
-        /**
-         * takes a GFCommand and "transforms" it in a JMenuItem.
-         * These JMenuItems have their own listeners that take care of
-         * doing what is right ...
-         * @param gfcmd a RealCommand or an InputCommand
-         * (LinkCommand is ignored and produces null as the result)
-         * @return either the correspondend JMenuItem or null.
-         */
-        private JMenuItem menuForCommand(GFCommand gfcmd) {
-                JMenuItem tempMenu = null;
-                if (gfcmd instanceof RealCommand){
-                        tempMenu = new JMenuItem(gfcmd.getDisplayText());
-                        tempMenu.setFont(font);
-                        tempMenu.setActionCommand(gfcmd.getCommand());
-                        tempMenu.setToolTipText(gfcmd.getTooltipText());
-                        tempMenu.addActionListener(new ActionListener() {
-                                public void actionPerformed(ActionEvent ae) {
-                                        JMenuItem mi = (JMenuItem)ae.getSource();
-                                        refinementSubcatListModel.clear();
-                                        treeChanged = true;
-                                        String command = mi.getActionCommand();
-                                        send(command);
-                                }
-                        });
-                } else if (gfcmd instanceof InputCommand) {
-                        tempMenu = new JMenuItem(gfcmd.getDisplayText());
-                        tempMenu.setFont(font);
-                        tempMenu.setActionCommand(gfcmd.getCommand());
-                        tempMenu.setToolTipText(gfcmd.getTooltipText());
-                        tempMenu.addActionListener(new ActionListener() {
-                                public void actionPerformed(ActionEvent ae) {
-                                        JMenuItem mi = (JMenuItem)ae.getSource();
-                                        String command = mi.getActionCommand();
-                                        InputCommand ic = InputCommand.forTypeName(command);
-                                        if (ic != null) {
-                                                executeInputCommand(ic);
-                                        }
-                                }
-                        });
-                        
-                }
-                return tempMenu;
-        }
-        
-        
-        /**
-         * 
-         */
-        private void resetNewCategoryMenu() {
-                //remove everything except "New"
-                while (1< newCategoryMenu.getItemCount())
-                        newCategoryMenu.removeItemAt(1);
-        }
 
         /**
          * Handles the showing of the popup menu and the parse field
@@ -3338,7 +2249,7 @@ public class GFEditor2 extends JFrame {
                         if (popUpLogger.isLoggable(Level.FINER)) {
                                 popUpLogger.finer("changing pop-up menu2!");
                         }
-                        popup2 = producePopup();
+                        JPopupMenu popup2 = refinementMenu.producePopup();
                         popup2.show(e.getComponent(), e.getX(), e.getY());
                 } 
                 // middle click
@@ -3358,41 +2269,12 @@ public class GFEditor2 extends JFrame {
                                 if (e.getComponent() instanceof JTextComponent) {
                                         JTextComponent jtc = (JTextComponent)e.getComponent();
                                         int pos = jtc.viewToModel(e.getPoint());
-                                        MarkedArea ma = null;
-                                        if (jtc instanceof JTextPane) {
-                                                //HTML
-                                                for (int i = 0; i < htmlOutputVector.size(); i++) {
-                                                        if ((pos >= ((HtmlMarkedArea)htmlOutputVector.get(i)).htmlBegin) && (pos <= ((HtmlMarkedArea)htmlOutputVector.get(i)).htmlEnd)) {
-                                                                ma = (HtmlMarkedArea)htmlOutputVector.get(i);
-                                                                break;
-                                                        }
-                                                }
-                                        } else {
-                                                //assumably pure text
-                                                for (int i = 0; i < htmlOutputVector.size(); i++) {
-                                                        if ((pos >= ((MarkedArea)htmlOutputVector.get(i)).begin) && (pos <= ((MarkedArea)htmlOutputVector.get(i)).end)) {
-                                                                ma = (MarkedArea)htmlOutputVector.get(i);
-                                                                break;
-                                                        }
-                                                }
-                                                
-                                        }
-                                        if (ma != null && ma.language != null) {
-                                                language = ma.language;
-                                        } else {
-                                                language = "Abstract";
-                                        }
+                                        final boolean htmlClicked = (jtc instanceof JTextPane); 
+                                        language = linearization.getLanguageForPos(pos, htmlClicked);
                                 } else {
                                         language = "Abstract";
                                 }
-                                StringBuffer sel = new StringBuffer();
-                                for (int i = 0; i<htmlOutputVector.size(); i++)  {
-                                        final HtmlMarkedArea ma = (HtmlMarkedArea)htmlOutputVector.elementAt(i);
-                                        if (language.equals(ma.language) && LinPosition.isSubtreePosition(focusPosition, ma.position)) {
-                                                sel.append(ma.words);
-                                        }
-                                }
-                                selectedText = sel.toString();
+                                selectedText = linearization.getSelectedLinearization(language, focusPosition);
                                 
                         }
                         //compute the size of parseField
@@ -3411,158 +2293,22 @@ public class GFEditor2 extends JFrame {
                         parseField.requestFocusInWindow();
                 }
         }
-        
-        /**
-         * gets the LinPosition according to the given start and end of 
-         * the selection in comp.
-         * Is meant as a unified replacement of large parts of caretUpdate
-         * @param start start of the selection in comp
-         * @param end end of the selection in comp
-         * @param comp either a JTextArea or a JTextPane
-         * @return s.a.
-         */
-        String getLinPosition(int start, int end, JTextComponent comp) {
-                final int maType;
-                if (comp instanceof JTextPane) {
-                        //if a JTextPane is given, calculate for HTML
-                        maType = 1;
-                } else {
-                        maType = 0;
-                }
-                String jPosition ="", iPosition="", position="", resultPosition = null;
-                MarkedArea jElement = null;
-                MarkedArea iElement = null;
-                int j = 0;
-                int i = htmlOutputVector.size() - 1;
-                if (popUpLogger.isLoggable(Level.FINER)) {
-                        popUpLogger.finer("CARET POSITION: "+comp.getCaretPosition()
-                                        + "\n-> SELECTION START POSITION: "+start
-                                        + "\n-> SELECTION END POSITION: "+end);
-                }
-                if (linMarkingLogger.isLoggable(Level.FINER)) {
-                        if (end > 0 && (end < comp.getDocument().getLength())) {
-                                try {
-                                linMarkingLogger.finer("CHAR: "+comp.getDocument().getText(end, 1));
-                                } catch (BadLocationException ble) {
-                                        linMarkingLogger.fine(ble.getLocalizedMessage());
-                                        ble.printStackTrace();
-                                }
-                        }
-                }
-                // not null selection:
-                if ((i>-1)&&(start<comp.getDocument().getLength()-1)) {
-                        if (linMarkingLogger.isLoggable(Level.FINER))
-                                for (int k = 0; k < htmlOutputVector.size(); k++) {
-                                        MarkedArea kma = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(k), maType);
-                                        linMarkingLogger.finer("element: " + k + " begin " + kma.begin + " "
-                                        + "\n-> end: " + kma.end+" "       
-                                        + "\n-> position: " + (kma.position).position+" "   
-                                        + "\n-> words: " + kma.words);   
-                                }
-                        // localizing end:
-                        while ((j < htmlOutputVector.size()) && (normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(j), maType).end < end)) {
-                                j++;
-                        }
-                        // localising start:
-                        while ((i >= 0) && (normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(i), maType).begin > start))
-                                i--;
-                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                linMarkingLogger.finer("i: " + i + " j: " + j);
-                        }
-                        if ((j < htmlOutputVector.size())) {
-                                jElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(j), maType);
-                                jPosition = jElement.position.position;
-                                // less & before:
-                                if (i == -1) { // less:
-                                        if (end >= jElement.begin) {
-                                                iElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(0), maType);
-                                                iPosition = iElement.position.position;
-                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                        linMarkingLogger.finer("Less: "+jPosition+" and "+iPosition);
-                                                }
-                                                position = findMax(0,j);
-                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
-                                                }
-                                                treeChanged = true; 
-                                                resultPosition = position;
-                                        } else  if (linMarkingLogger.isLoggable(Level.FINER)) { // before: 
-                                                        linMarkingLogger.finer("BEFORE vector of size: " + htmlOutputVector.size());
-                                                }
-                                } else { // just: 
-                                        iElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(i), maType);
-                                        iPosition = iElement.position.position;
-                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                linMarkingLogger.finer("SELECTED TEXT Just: "+iPosition +" and "+jPosition+"\n");
-                                        }
-                                        position = findMax(i,j);
-                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
-                                        }
-                                        treeChanged = true; 
-                                        resultPosition = position;
-                                }
-                        } else if (i>=0) { // more && after:
-                                        iElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(i), maType);
-                                        iPosition = iElement.position.position;
-                                        // more
-                                        if (start<=iElement.end) { 
-                                                jElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(htmlOutputVector.size() - 1), maType);
-                                                jPosition = jElement.position.position;
-                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                        linMarkingLogger.finer("MORE: "+iPosition+ " and "+jPosition);
-                                                }
-                                                position = findMax(i, htmlOutputVector.size()-1);
-                                                if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                        linMarkingLogger.finer("SELECTEDTEXT: "+position+"\n");
-                                                }
-                                                treeChanged = true; 
-                                                resultPosition = position;
-                                        } else if (linMarkingLogger.isLoggable(Level.FINER)) { // after: 
-                                                linMarkingLogger.finer("AFTER vector of size: " + htmlOutputVector.size());
-                                        }
-                                } else {
-                                        // bigger:
-                                        iElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(0), maType);
-                                        iPosition = iElement.position.position;
-                                        jElement = normalizeMarkedArea((MarkedArea)htmlOutputVector.elementAt(htmlOutputVector.size() - 1), maType);
-                                        jPosition = jElement.position.position;
-                                        if (linMarkingLogger.isLoggable(Level.FINER)) { 
-                                                linMarkingLogger.finer("BIGGER: "+iPosition +" and "+jPosition+"\n"         
-                                                                + "\n-> SELECTEDTEXT: []\n");
-                                        }
-                                        treeChanged = true; 
-                                        resultPosition = "[]";
-                                }
-                }//not null selection
-                return resultPosition;
-        }
 
         /**
-         * Takes a MarkedArea and transforms it into a MarkedArea,
-         * that has begin and and set as the valid fields.
-         * If a HtmlMarkedArea is given and type == 1, then the htmlBegin
-         * and htmlEnd fields are used as begin and end.
-         * For type == 0, the normal begin and end fields are used.
-         * @param ma The MarkedArea to 'normalize' 
-         * @param type 0 for pure text, 1 for HTML. begin and end will be -1 for other values.
-         * @return a MarkedArea as described above
+         * Adds toHmsg to the [hmsg] part of command, if that is present.
+         * If not, prepends toHmsg in square brackets to command
+         * @param command The command for GF
+         * @param toHmsg the text, that should occur inside [] before the command
+         * @return the updated command (s.a.)
          */
-        private MarkedArea normalizeMarkedArea(MarkedArea ma, int type) {
-                int begin, end;
-                if (type == 0) {
-                        begin = ma.begin;
-                        end = ma.end;
-                } else if (type == 1 && (ma instanceof HtmlMarkedArea)) {
-                        HtmlMarkedArea hma = (HtmlMarkedArea)ma;
-                        begin = hma.htmlBegin;
-                        end = hma.htmlEnd;
+        private static String addToHmsg(String command, String toHmsg) {
+                command = command.trim();
+                if (command.startsWith("[")) {
+                        command = "[" + toHmsg + command.substring(1);
                 } else {
-                        begin = -1;
-                        end = -1;
-                        linMarkingLogger.info("Illegal number-code of MarkedArea encountered: " + type + "\nor alternatively, HTML is expected, but a " + ma.getClass().getName() + " was given");
+                        command = "[" + toHmsg + "] " + command; 
                 }
-                return new MarkedArea(begin, end, ma.position, ma.words, ma.language);
+                return command;
         }
 
         /**
@@ -3602,20 +2348,6 @@ public class GFEditor2 extends JFrame {
                                 saveFc.addChoosableFileFilter(new GrammarFilter()); 
                         int returnVal = saveFc.showOpenDialog(GFEditor2.this);
                         if (returnVal == JFileChooser.APPROVE_OPTION) {
-                                
-                                /* "sending" should be fixed on the GF side:
-                                 rbMenuItemLong.setSelected(true);
-                                 send("ms long");
-                                 rbMenuItemUnTyped.setSelected(true);
-                                 send("mt untyped");
-                                 selectedMenuLanguage = "Abstract";
-                                 rbMenuItemAbs.setSelected(true);
-                                 send("ml Abs");
-                                 */
-                                
-                                treeChanged = true; 
-                                newObject = true;
-
                                 resetNewCategoryMenu();
                                 langMenuModel.resetLanguages();
                                 
@@ -3624,11 +2356,11 @@ public class GFEditor2 extends JFrame {
                                 if (logger.isLoggable(Level.FINER)) logger.finer("opening: "+ file.getPath().replace('\\', File.separatorChar));
                                 if (saveTypeGroup.getSelection().getActionCommand().equals("term")) {
                                         if (logger.isLoggable(Level.FINER)) logger.finer(" opening as a term ");
-                                        send("open "+ file.getPath().replace('\\', File.separatorChar));         
+                                        send("[nt] open "+ file.getPath().replace('\\', File.separatorChar));         
                                 }
                                 else {
                                         if (logger.isLoggable(Level.FINER)) logger.finer(" opening as a linearization ");
-                                        send("openstring "+ file.getPath().replace('\\', File.separatorChar));
+                                        send("[nt] openstring "+ file.getPath().replace('\\', File.separatorChar));
                                 }
                                 
                                 fileString ="";
@@ -3657,24 +2389,24 @@ public class GFEditor2 extends JFrame {
                         if (returnVal == JFileChooser.APPROVE_OPTION) {
                                 File file = saveFc.getSelectedFile();
                                 if (logger.isLoggable(Level.FINER)) logger.finer("saving as " + file);
-                                final String abstractLin = linearizations.get("Abstract").toString();
+                                final String abstractLin = linearization.getLinearizations().get("Abstract").toString();
 
                                 if (saveTypeGroup.getSelection().getActionCommand().equals("term")) {
                                         // saving as a term                                        
-                                        writeOutput(abstractLin, file.getPath());
+                                        writeOutput(removeMetavariableNumbers(abstractLin), file.getPath());
                                 } else {
                                         // saving as a linearization:
                                         /** collects the show linearizations */
                                         StringBuffer text = new StringBuffer();
                                         /** if sth. at all is shown already*/
                                         boolean sthAtAll = false;
-                                        for (Iterator it = linearizations.keySet().iterator(); it.hasNext();) {
+                                        for (Iterator it = linearization.getLinearizations().keySet().iterator(); it.hasNext();) {
                                                 Object key = it.next();
                                                 if (!key.equals("Abstract")) {
                                                         if (sthAtAll) {
                                                                 text.append("\n\n");
                                                         }
-                                                        text.append(linearizations.get(key));
+                                                        text.append(linearization.getLinearizations().get(key));
                                                         sthAtAll = true;
                                                 }
                                         }
@@ -3683,7 +2415,7 @@ public class GFEditor2 extends JFrame {
                                                 if (logger.isLoggable(Level.FINER)) logger.finer(file + " saved.");
                                         } else {
                                                 if (logger.isLoggable(Level.FINER)) logger.warning("no concrete language shown, saving abstract");
-                                                writeOutput(abstractLin, file.getPath());
+                                                writeOutput(removeMetavariableNumbers(abstractLin), file.getPath());
                                                 if (logger.isLoggable(Level.FINER)) logger.finer(file + " saved.");
                                         }
                                 }
@@ -3718,9 +2450,10 @@ public class GFEditor2 extends JFrame {
                                         // importing a new language :
                                         if (logger.isLoggable(Level.FINER)) logger.finer("importing: "+ file.getPath().replace('\\','/'));
                                         fileString ="";
-                                        send("i "+ file.getPath().replace('\\',File.separatorChar), false);
-                                        readGfinit();
-                                        readAndDisplay();
+                                        //TODO does that load paths in UNIX-notation under windows? 
+                                        send("i "+ file.getPath().replace('\\',File.separatorChar), false, 1);
+                                        processGfinit();
+                                        processGfedit();
                                 }           
                         }
                         
@@ -3754,8 +2487,8 @@ public class GFEditor2 extends JFrame {
                                         statusLabel.setText(status);
                                         subtermDescLabel.setText("");
                                         subtermNameLabel.setText("");
-                                        listModel.clear();
-                                        resetTree(tree);
+                                        refinementMenu.reset();
+                                        tree.resetTree();
                                         resetNewCategoryMenu();                                        
                                         langMenuModel.resetLanguages();
                                         selectedMenuLanguage = "Abstract";
@@ -3765,11 +2498,12 @@ public class GFEditor2 extends JFrame {
                                         
                                         fileString="";
                                         grammar.setText("No Topic          ");
-                                        display = new Display(displayType);
-                                        display(true, false);
-                                        send(" e "+ file.getPath().replace('\\',File.separatorChar), false);
-                                        readInit(null, false);
-                                        readAndDisplay();
+                                        display.resetLin();
+                                        display(true, true, false);
+                                        undoStack.clear();
+                                        send(" e "+ file.getPath().replace('\\',File.separatorChar), false, 1);
+                                        processInit(null, false);
+                                        processGfedit();
                                         resetPrintnames(true);
                                 }
                         }           
@@ -3795,8 +2529,8 @@ public class GFEditor2 extends JFrame {
                                 statusLabel.setText(status);
                                 subtermDescLabel.setText("");
                                 subtermNameLabel.setText("");
-                                listModel.clear();
-                                resetTree(tree);
+                                refinementMenu.reset();
+                                tree.resetTree();
                                 langMenuModel.resetLanguages();
                                 resetNewCategoryMenu();
                                 selectedMenuLanguage = "Abstract";
@@ -3807,8 +2541,9 @@ public class GFEditor2 extends JFrame {
                                 
                                 fileString="";
                                 grammar.setText("No Topic          ");
-                                send("e", false);
-                                readGfinit();
+                                undoStack.clear();
+                                send("e", false, 1);
+                                processGfinit();
                 }
                         
         }
@@ -3846,8 +2581,7 @@ public class GFEditor2 extends JFrame {
                 }
                 
                 public void actionPerformed(ActionEvent e) {
-                        treeChanged = true;
-                        send("a");
+                        send("[t] a");
                 }
                         
         }
@@ -3866,8 +2600,11 @@ public class GFEditor2 extends JFrame {
                 }
                 
                 public void actionPerformed(ActionEvent e) {
-                        treeChanged = true;
-                        send("u");
+                        int undoSteps = 1;
+                        if (!undoStack.empty()) {
+                                undoSteps = ((Integer)undoStack.pop()).intValue();
+                        }
+                        send("[t] u " + undoSteps, true, 0);
                 }
         }       
 
@@ -3888,8 +2625,7 @@ public class GFEditor2 extends JFrame {
                         String s = JOptionPane.showInputDialog("Type string:", alphaInput);
                         if (s!=null) {
                                 alphaInput = s;
-                                treeChanged = true; 
-                                send("x "+s);
+                                send("[t] x "+s);
                         }      
                 }
                         
@@ -3912,12 +2648,11 @@ public class GFEditor2 extends JFrame {
                         String s = JOptionPane.showInputDialog("Command:", commandInput);
                         if (s!=null) {
                                 commandInput = s;
-                                //s = "gf "+s; This is for debugging, otherwise shift the comment to the next line.
-                                treeChanged = true; 
+                                s = addToHmsg(s, "t");
                                 if (logger.isLoggable(Level.FINER)) logger.finer("sending: "+ s);
                                 send(s);
-                        }                }
-                        
+                        }
+                }
         }     
         
         /**
@@ -3962,7 +2697,7 @@ public class GFEditor2 extends JFrame {
                                 centerPanel2.add(outputPanelUp, BorderLayout.CENTER);
                         } 
                         coverPanel.add(centerPanel2, BorderLayout.CENTER);                 
-                        gui2.getContentPane().add(refinementListsContainer);
+                        gui2.getContentPane().add(refinementMenu.getRefinementListsContainer());
                         gui2.setVisible(true);
                         pack();
                         repaint();
@@ -3994,20 +2729,51 @@ public class GFEditor2 extends JFrame {
                                 gui2.setVisible(false);
                         } 
                         coverPanel.add(centerPanel, BorderLayout.CENTER);
-                        centerPanelDown.add(refinementListsContainer, BorderLayout.CENTER);
-                        centerPanelDown.add(refinementSubcatPanel, BorderLayout.EAST);
+                        centerPanelDown.add(refinementMenu.getRefinementListsContainer(), BorderLayout.CENTER);
+                        //centerPanelDown.add(refinementMenu.refinementSubcatPanel, BorderLayout.EAST);
                         pack();
                         repaint();
                 }
                         
         }
 
+        /**
+         * Starts a run on the AST to hunt down open subtyping witnesses 
+         * Is not local in initializeGUI because jswat cannot have active breakpoints in such a class, whyever. 
+         * @author daniels
+         */
+        class SubtypeAction extends AbstractAction {
+                public SubtypeAction() {
+                        super("Close Subtypes", null);
+                        putValue(SHORT_DESCRIPTION, "try to automatically refine Subtype relations");
+                        //putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_U));
+                        putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));
+                }
+                
+                public void actionPerformed(ActionEvent e) {
+                        String resetCommand;
+                        int  usteps ;
+                        if (focusPosition != null) {
+                                //go back to where we come from
+                                resetCommand = "[t] mp " + focusPosition.position;
+                                usteps = 1;
+                        } else {
+                                resetCommand = "[t] gf";
+                               usteps = 0;
+                        }
+                        SubtypingProber sp = new SubtypingProber(gfCapsule);
+                        int undos = sp.checkSubtyping();
+                        send(resetCommand , true, undos + usteps); 
+                }
+        }       
+        
+        
         
         /**
          * Takes care, which classes are present and which states they have.
          * @author daniels
          */
-        class LangMenuModel {
+        class LangMenuModel implements LanguageManager{
                 Logger menuLogger = Logger.getLogger("de.uka.ilkd.key.ocl.gf.GFEditor2.MenuModel");
                 /**
                  * Just a mutable tuple of language name and whether this language
@@ -4065,8 +2831,8 @@ public class GFEditor2 extends JFrame {
                                 }
                         }
                         //stolen from fontEverywhere
-                        setFontRecursive(langMenu, font, false);
-                        setFontRecursive(mlMenu, font, false);
+                        setSubmenuFont(langMenu, font, false);
+                        setSubmenuFont(mlMenu, font, false);
                 }
                 
                 /**
@@ -4095,7 +2861,7 @@ public class GFEditor2 extends JFrame {
                  * @param myLang The name of the language
                  * @param myActive whether the language is displayed or not
                  */
-                void add(String myLang, boolean myActive) {
+                public void add(String myLang, boolean myActive) {
                         boolean alreadyThere = false;
                         for (Iterator it = this.languages.iterator(); it.hasNext(); ) {
                                 LangActiveTuple current = (LangActiveTuple)it.next();
@@ -4118,7 +2884,7 @@ public class GFEditor2 extends JFrame {
                  * @return true iff the language is present and set to active,
                  * false otherwise.
                  */
-                boolean isLangActive(String myLang) {
+                public boolean isLangActive(String myLang) {
                         for (Iterator it = this.languages.iterator(); it.hasNext(); ) {
                                 LangActiveTuple current = (LangActiveTuple)it.next();
                                 if (current.lang.equals(myLang)) {
@@ -4171,14 +2937,10 @@ public class GFEditor2 extends JFrame {
                                 } else {
                                         sendLang = action;
                                 }
-                                if (xmlLogger.isLoggable(Level.FINER)){
-                                        xmlLogger.finer("sending "+sendLang);
-                                }
                                 send("ml " + sendLang);
                                 resetPrintnames(true);
 
                                 return;
-
                         }
                 };
                 
@@ -4190,8 +2952,8 @@ public class GFEditor2 extends JFrame {
                         public void actionPerformed(ActionEvent e) {
                                 if (newObject) {
                                         //clear display of text and HTML
-                                        display = new Display(displayType);
-                                        display(true, true);
+                                        display.resetLin();
+                                        display(true, false, true);
                                         formLin();
                                 }
                                 final String lang = ((JCheckBoxMenuItem)e.getSource()).getText();
@@ -4212,13 +2974,5 @@ public class GFEditor2 extends JFrame {
                                 return;
                         }
                 };
-                
-                
-                
         }
-
 }
-
-
-
-

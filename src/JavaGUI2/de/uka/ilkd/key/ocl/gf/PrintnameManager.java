@@ -25,7 +25,24 @@ import java.util.logging.*;
  * counterpart is done here.
  */
 class PrintnameManager {
-        protected static Logger logger = Logger.getLogger(Printname.class.getName());
+        /**
+        * This constructor is a bit of a hack.
+        * It puts the \%SELF subcat into this.printnames.
+        * This subcat does not appear in the grammars and thus is
+        * introduced here. If it is defined there although, this
+        * definition is used. So it does not hurt.
+        */
+        public PrintnameManager() {
+                this.subcatNames.put(SELF_SUBCAT, "properties of self\\$shortcuts to the properties of self, that have a fitting type");
+        }
+        
+        /**
+         * The name of the subcat, that is used for the easy property access
+         * of self. 
+         */
+        static final String SELF_SUBCAT = "\\%SELF";
+        
+        private static Logger logger = Logger.getLogger(Printname.class.getName());
         
         protected final static String frontMatter = "printname fun ";
         
@@ -39,7 +56,9 @@ class PrintnameManager {
          */
         protected final Hashtable subcatNames = new Hashtable();
         
-        /** contains all the Printnames with the fun names as keys */
+        /** 
+         * contains all the Printnames with the fun names as keys 
+         */
         protected final Hashtable printnames = new Hashtable();
 
         /**

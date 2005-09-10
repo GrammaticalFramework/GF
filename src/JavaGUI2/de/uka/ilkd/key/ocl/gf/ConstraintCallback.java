@@ -21,8 +21,7 @@ import java.util.logging.*;
  * @author daniels
  * Offers the interface that GFEditor2 uses to send back the constraint after editing.
  * Has no dependancies on KeY or TogetherCC.
- *
- */
+  */
 abstract class ConstraintCallback {
 
         /**
@@ -30,6 +29,9 @@ abstract class ConstraintCallback {
          */
         protected static Logger logger = Logger.getLogger(ConstraintCallback.class.getName());
 
+        /**
+         * The path name of the directory where the grammars reside
+         */
         String grammarsDir;
         /**
          * sets the directory where the grammars reside
@@ -38,6 +40,7 @@ abstract class ConstraintCallback {
         void setGrammarsDir(final String grammarsDir)  {
                 this.grammarsDir = grammarsDir;
         }
+        
         /**
          * gets the directory where the grammars reside
          */
@@ -51,5 +54,11 @@ abstract class ConstraintCallback {
          * @param constraint The OCL constraint in question.
          */
         abstract void sendConstraint(String constraint);
-
+        
+        /**
+         * Sends the unfinished OCL constraint back to Together to save it 
+         * as a GF tree as a JavaDoc comment.
+         * @param abs The GF tree in question
+         */
+        abstract void sendAbstract(String abs);
 }

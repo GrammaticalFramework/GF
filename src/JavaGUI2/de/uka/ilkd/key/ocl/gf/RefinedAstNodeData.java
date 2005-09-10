@@ -26,8 +26,6 @@ import java.util.logging.*;
 class RefinedAstNodeData extends AstNodeData {
 
         protected final Printname printname;
-        protected final GfAstNode node;
-        protected final String position;
 
         /**
          * all we have to know about an already refined node is its Printname
@@ -36,13 +34,15 @@ class RefinedAstNodeData extends AstNodeData {
          * not be parsed
          * @param node the GfAstNode for the current line
          * @param pos The position in the GF AST of this node in Haskell notation
+         * @param selected if this is the selected node in the GF AST
+         * @param constraint A constraint from a parent node, that also
+         * applies for this node.
          */
-        public RefinedAstNodeData(Printname pname, GfAstNode node, String pos) {
+        public RefinedAstNodeData(Printname pname, GfAstNode node, String pos, boolean selected, String constraint) {
+                super(node, pos, selected, constraint);
                 this.printname = pname;
-                this.node = node;
-                this.position = pos;
                 if (logger.isLoggable(Level.FINEST)) {
-                        logger.finest(this.toString() + " - " + getPosition());
+                        logger.finest(this.toString() + " - " + position);
                 }
         }
         
@@ -65,17 +65,4 @@ class RefinedAstNodeData extends AstNodeData {
                 }
         }
         
-        public boolean isMeta() {
-                return this.node.isMeta();
-        }
-        
-        public String getPosition() {
-                return this.position;
-        }
-
-        
-        public String toString() {
-                return this.node.getLine();
-        }
-
 }

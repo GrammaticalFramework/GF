@@ -25,8 +25,14 @@ import javax.swing.JEditorPane;
  * Takes care of collecting the linearized text and the length calculations
  */
 class Display {
-        private final boolean doText;
-        private final boolean doHtml;
+        /**
+         * If the linearization should be displayed as pure text
+         */
+        private boolean doText;
+        /**
+         * If the linearization should be displayed as HTML
+         */
+        private boolean doHtml;
         /** 
          * collects the linearization after each append.
          * what's in here are Strings 
@@ -46,33 +52,49 @@ class Display {
          */
         private JEditorPane htmlLengthPane = new JEditorPane();
         
-        /** initializes this object, nothing special 
+        /** 
+         * initializes this object, nothing special 
          * @param dt 1 if only text is to be shown, 2 for only HTML, 3 for both.
          * Other values are forbidden.
          */
         public Display(int dt) {
-                switch (dt) {
-                        case 1: 
-                                doText = true;
-                        		doHtml = false;
-                        		break;
-                        case 2: 
-                                doText = false;
-                        		doHtml = true;
-                        		break;
-                        case 3: 
-                                doText = true;
-                				doHtml = true;
-                				break;
-                       	default: 
-                       	        doText = true;
-                       			doHtml = true;
-                       			break;
-                }
+                setDisplayType(dt);
                 this.htmlLengthPane.setContentType("text/html");
                 this.htmlLengthPane.setEditable(false);
         }
 
+        /**
+         * (de-)activates display of text and HTML according to dt
+         * @param dt 1 if only text is to be shown, 2 for only HTML, 3 for both.
+         */
+        protected void setDisplayType(int dt) {
+                switch (dt) {
+                        case 1: 
+                                doText = true;
+                                        doHtml = false;
+                                        break;
+                        case 2: 
+                                doText = false;
+                                        doHtml = true;
+                                        break;
+                        case 3: 
+                                doText = true;
+                                                doHtml = true;
+                                                break;
+                        default: 
+                                doText = true;
+                                        doHtml = true;
+                                        break;
+                }
+        }
+        /**
+         * Resets the stored text, but leaves the scroll markers untouched.
+         */
+        public void resetLin() {
+                linStagesHtml.clear();
+                linStagesText.clear();
+                htmlLengthPane.setText("");
+        }
         
         /**
          * @param font The Font, that is to be used. If null, the default of JTextPane is taken.
@@ -157,7 +179,7 @@ class Display {
          * @return the HtmlMarkedArea object that represents the given information
          * and knows about its beginning and end in the display areas.
          */
-        protected HtmlMarkedArea addAsMarked(String toAdd, LinPosition position, String language) {
+        protected MarkedArea addAsMarked(String toAdd, LinPosition position, String language) {
                 /** the length of the displayed HTML before the current append */
                 int oldLengthHtml = 0;
                 if (doHtml) {
@@ -187,7 +209,7 @@ class Display {
                 if (doHtml) {
 		                final String newStageHtml = this.linStagesHtml.lastElement().toString();
 		                final String newHtml = Printname.htmlPrepend(newStageHtml, "");
-		                //yeah, daniels admits, this IS probably expensive
+		                //yeah, daniels admits, this IS expensive
 		                this.htmlLengthPane.setText(newHtml);
 		                newLengthHtml = htmlLengthPane.getDocument().getLength();
 		                if (newLengthHtml < oldLengthHtml) {
@@ -199,7 +221,7 @@ class Display {
                 if (doText) {
                         newLengthText = this.linStagesText.lastElement().toString().length();
                 }
-                final HtmlMarkedArea hma = new HtmlMarkedArea(oldLengthText, newLengthText, position, toAdd, oldLengthHtml, newLengthHtml, language);
+                final MarkedArea hma = new MarkedArea(oldLengthText, newLengthText, position, toAdd, oldLengthHtml, newLengthHtml, language);
                 return hma;
         }
         /**
@@ -210,6 +232,15 @@ class Display {
          * To store the scroll state of the HTML linearization area
          */
         Rectangle recHtml = new Rectangle();
+        /**
+         * To store the scroll state of the pure text linearization area
+         */
+        int scrollText = 0;
+        /**
+         * To store the scroll state of the HTML linearization area
+         */
+        int scrollHtml = 0;
+
         
         
         public String toString() {
