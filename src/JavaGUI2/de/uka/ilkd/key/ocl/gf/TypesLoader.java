@@ -15,28 +15,35 @@
 
 package de.uka.ilkd.key.ocl.gf;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.logging.*;
 
 /**
  * @author daniels
- * asks GF to print all available printnames, parses that list and generates
- * the suiting Printname objects.
+ * If the entries of the refinement menu should have to appear there with
+ * type information appended to them, then the printnames have to get this
+ * knowledge at the time of their creation.
+ * When the entries are displayed, the display text line of GF is *not* looked
+ * at. And even if it would be, it would mess up the architecture, that the 
+ * printnames, and only they, are responsible for their linearization.
+ * Appending their type later on would break that architecture.
+ * So they have to be prepared.
  */
 public class TypesLoader extends AbstractProber {
-        protected final Hashtable hashtable;
-        protected static Logger nogger = Logger.getLogger(TypesLoader.class.getName());
         /**
-         * @param fromGf The GF process
-         * @param toGf The GF process
+         * The hash in which the funs as keys and 
+         * types as values get saved. Both are Strings.
+         */
+        protected final Hashtable hashtable;
+        private static Logger nogger = Logger.getLogger(TypesLoader.class.getName());
+        /**
+         * @param gfCapsule the read/write encapsulation of the running GF
          * @param myHashMap The hash in which the funs as keys and 
          * types as values get saved. Both are Strings.
          */
-        public TypesLoader(BufferedReader fromGf, BufferedWriter toGf, Hashtable myHashMap) {
-                super(fromGf, toGf);
+        public TypesLoader(GfCapsule gfCapsule, Hashtable myHashMap) {
+                super(gfCapsule);
                 this.hashtable = myHashMap;
         }
         
@@ -46,7 +53,7 @@ public class TypesLoader extends AbstractProber {
          */
         protected void readMessage() {
                 try {
-                        String result = this.fromProc.readLine();
+                        String result = gfCapsule.fromProc.readLine();
                         if (nogger.isLoggable(Level.FINER)) {
                                 nogger.finer("7 " + result);
                         }
@@ -58,7 +65,7 @@ public class TypesLoader extends AbstractProber {
                                         readType(result);
                                 }
                                 
-                                result = this.fromProc.readLine();
+                                result = gfCapsule.fromProc.readLine();
                                 if (nogger.isLoggable(Level.FINER)) {
                                         nogger.finer("7 " + result);
                                 }

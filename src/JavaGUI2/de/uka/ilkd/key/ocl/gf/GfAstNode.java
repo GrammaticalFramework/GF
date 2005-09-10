@@ -18,11 +18,21 @@ package de.uka.ilkd.key.ocl.gf;
 /**
  * @author daniels
  * This Class represents a parsed node in the GF AST.
+ * It knows about types, bound variables, funs.
+ * But nothing about printnames. That's what AstNodeData is for.
  */
 class GfAstNode {
+        /**
+         * contains the types of the bound variables in the order of their occurence
+         */
         protected final String[] boundTypes;
+        /**
+         * contains the names of the bound variables in the order of their occurence
+         */
         protected final String[] boundNames;
-        /** The type of this AST node */
+        /** 
+         * The type of this AST node 
+         */
         private final String type;
         /**
          * @return The type of this AST node
@@ -30,8 +40,11 @@ class GfAstNode {
         protected String getType() {
                 return type;
         }
-        /** the fun represented in this AST node */
+        /** 
+         * the fun represented in this AST node 
+         */
         private final String fun;
+
         /**
          * @return the fun represented in this AST node.
          * Can be a metavariable like "?1"
@@ -39,6 +52,7 @@ class GfAstNode {
         protected String getFun() {
                 return fun;
         }
+        
         /**
          * @return true iff the node is a metavariable, i.e. open and not
          * yet refined.
@@ -46,7 +60,9 @@ class GfAstNode {
         protected boolean isMeta() {
                 return fun.startsWith("?");
         }
-        /** the line that was used to build this node */
+        /** 
+         * the line that was used to build this node 
+         */
         private final String line;
         /**
          * @return the line that was used to build this node
@@ -54,6 +70,11 @@ class GfAstNode {
         protected String getLine() {
                 return line;
         }
+        
+        /**
+         * The constraint attached to this node
+         */
+        public final String constraint;
 
         /**
          * feed this constructor the line that appears in the GF AST and
@@ -63,7 +84,15 @@ class GfAstNode {
         protected GfAstNode(final String line) {
                 this.line = line.trim();
                 final int index = this.line.lastIndexOf(" : ");
-                this.type = this.line.substring(index + 3);
+                String typeString = this.line.substring(index + 3);
+                final int constraintIndex = typeString.indexOf(" {");
+                if (constraintIndex > -1) {
+                        this.constraint = typeString.substring(constraintIndex + 1).trim();
+                        this.type = typeString.substring(0, constraintIndex).trim();
+                } else {
+                        this.constraint = "";
+                        this.type = typeString;
+                }
                 String myFun = this.line.substring(0, index);
                 if (myFun.startsWith("\\(")) {
                         final int end = myFun.lastIndexOf(") -> ");
@@ -88,47 +117,5 @@ class GfAstNode {
         
         public String toString() {
                 return this.line;
-        }
-        
-        public static void main(String[] args) {
-               String[] lines = {"?1 : Sent",
-                               "Two : Instance Integer",
-                               "?3 : Instance (Collection (?{this:=this{-0-}}))",
-                               "NOPACKAGEP_StartC_Constr : Constraint {Constraint<>NOPACKAGEP_StartC_Constr (\\this -> invCt ?)}",
-                               "\\(this : VarSelf NOPACKAGEP_StartC) -> invCt : ClassConstraintBody",
-                               "\\(x_0 : Instance Integer) -> ?6 : Sent",
-                               "\\(selfGF : VarSelf NOPACKAGEP_PayCardC),(amount : Instance Integer) -> preC : OperConstraintBody",
-               				   "\\(selfGF : VarSelf NOPACKAGEP_PayCardC),(amount : Instance Integer) -> ?0 : OperConstraintBody"
-                               };
-               String[] funs = {"?1",
-                               	"Two",
-                               	"?3",
-                               	"NOPACKAGEP_StartC_Constr",
-                               	"invCt",
-                               	"?6",
-                               	"preC",
-                               	"?0" 
-                               	};
-               String[] types = {"Sent",
-                               "Instance Integer",
-                               "Instance (Collection (?{this:=this{-0-}}))",
-                               "Constraint {Constraint<>NOPACKAGEP_StartC_Constr (\\this -> invCt ?)}",
-                               "ClassConstraintBody",
-                               "Sent",
-                               "OperConstraintBody",
-                               "OperConstraintBody" 
-                               };
-               
-               for (int i = 0; i < lines.length; i++) {
-                       System.out.println("* " + lines[i]);
-                       GfAstNode gfa = new GfAstNode(lines[i]);
-                       if (!gfa.getFun().equals(funs[i])) {
-                               System.out.println("  fun mismatch: expected '" + funs[i] + "', got '" + gfa.getFun() + "'");
-                       }
-                       if (!gfa.getType().equals(types[i])) {
-                               System.out.println("  type mismatch: expected '" + types[i] + "', got '" + gfa.getType() + "'");
-                       }
-
-               }
         }
 }

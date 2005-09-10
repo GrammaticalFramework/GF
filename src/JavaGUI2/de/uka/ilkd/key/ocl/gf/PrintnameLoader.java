@@ -15,8 +15,6 @@
 
 package de.uka.ilkd.key.ocl.gf;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.logging.*;
@@ -26,20 +24,30 @@ import java.util.logging.*;
  * the suiting Printname objects.
  */
 public class PrintnameLoader extends AbstractProber {
-        protected final PrintnameManager printnameManager;
-        protected final static Logger nogger = Logger.getLogger(Printname.class.getName());
-        protected final Hashtable funTypes = new Hashtable();
-        protected final boolean loadTypes;
+        private final static Logger nogger = Logger.getLogger(Printname.class.getName());
         /**
-         * @param fromGf The GF process
-         * @param toGf The GF process
+         * The PrintnameManager on which the read Printnames
+         * will be registered with their fun name.
+         */
+        private final PrintnameManager printnameManager;
+        /**
+         * Here, the funs with their types get stored
+         */
+        private final Hashtable funTypes = new Hashtable();
+        /**
+         * if the Printnames should have their type appended to their display names
+         */
+        private final boolean loadTypes;
+        /**
+         * an initializing constructor, does nothing except setting fields
+         * @param gfCapsule the read/write encapsulation of GF
          * @param pm The PrintnameManager on which the read Printnames
          * will be registered with their fun name.
          * @param withTypes true iff the Printnames should have their type 
          * appended to their display names
          */
-        public PrintnameLoader(BufferedReader fromGf, BufferedWriter toGf, PrintnameManager pm, boolean withTypes) {
-                super(fromGf, toGf);
+        public PrintnameLoader(GfCapsule gfCapsule, PrintnameManager pm, boolean withTypes) {
+                super(gfCapsule);
                 this.printnameManager = pm;
                 this.loadTypes = withTypes;
         }
@@ -50,7 +58,7 @@ public class PrintnameLoader extends AbstractProber {
          */
         protected void readMessage() {
                 try {
-                        String result = this.fromProc.readLine();
+                        String result = gfCapsule.fromProc.readLine();
                         if (nogger.isLoggable(Level.FINER)) {
                                 nogger.finer("1 " + result);
                         }
@@ -59,11 +67,11 @@ public class PrintnameLoader extends AbstractProber {
                                 result = result.trim();
                                 if (result.startsWith("printname fun ")) {
                                         //unescape backslashes. Probably there are more
-                                        result = GFEditor2.unescapeTextFromGF(result);
+                                        result = Linearization.unescapeTextFromGF(result);
                                         this.printnameManager.addNewPrintnameLine(result, this.funTypes);
                                 }
                                 
-                                result = this.fromProc.readLine();
+                                result = gfCapsule.fromProc.readLine();
                                 if (nogger.isLoggable(Level.FINER)) {
                                         nogger.finer("1 " + result);
                                 }
@@ -84,10 +92,10 @@ public class PrintnameLoader extends AbstractProber {
          * @param lang The module for which the grammars should be printed. 
          * If lang is "" or null, the last read grammar module is used. 
          */
-        public void readPrintnames(String lang) {
+        protected void readPrintnames(String lang) {
                 //before, we want the types to be read.
                 if (this.loadTypes) {
-		                TypesLoader tl = new TypesLoader(fromProc, toProc, this.funTypes);
+		                TypesLoader tl = new TypesLoader(gfCapsule, this.funTypes);
 		                tl.readTypes();
                 }
                 //prints the printnames of the last loaded grammar,

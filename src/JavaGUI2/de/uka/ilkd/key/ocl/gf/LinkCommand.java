@@ -23,6 +23,14 @@ package de.uka.ilkd.key.ocl.gf;
  */
 public class LinkCommand extends GFCommand {
         
+        /**
+         * Since LinkCommand is not a real command, that is sent to GF,
+         * most fields are given dummy values here.
+         * The subcat is assigned its full display name and tooltip
+         * @param subcat The subcategory of the menu behind this command
+         * @param manager The PrintnameManager, that can map subcat to its
+         * full name
+         */
         public LinkCommand(final String subcat, final PrintnameManager manager) {
                 this.command = subcat;
                 this.newSubcat = false;
@@ -46,20 +54,30 @@ public class LinkCommand extends GFCommand {
                 
         }
         
-        /**the text that is to be displayed as the tooltip */        
+        /**
+         * the text that is to be displayed as the tooltip 
+         */        
         protected final String tooltipText;
-        /**the text that is to be displayed as the tooltip */
+        /**
+         * the text that is to be displayed as the tooltip 
+         */
         public String getTooltipText() {
                 return tooltipText;
         }
         
-        /** the text that is to be displayed in the refinement lists */
+        /** 
+         * the text that is to be displayed in the refinement lists 
+         */
         protected final String displayText;
-        /** the text that is to be displayed in the refinement lists */
+        /** 
+         * the text that is to be displayed in the refinement lists 
+         */
         public String getDisplayText() {
                 return displayText;
         }
-        /** the subcategory of this command */
+        /** 
+         * the subcategory of this command 
+         */
         public String getSubcat() {
                 return this.command;
         }

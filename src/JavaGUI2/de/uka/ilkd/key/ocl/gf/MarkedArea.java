@@ -20,7 +20,7 @@ package de.uka.ilkd.key.ocl.gf;
  * and an end in the linearization area and a position in the AST. It is used
  * for clicking in the text
  * 
- * @author janna
+ * @author janna, daniels
  */
 class MarkedArea {
         /** 
@@ -46,24 +46,39 @@ class MarkedArea {
          * this MarkedArea belongs to
          */
         final public String language;
-        /**
-         * Creates a new MarkedArea and initializes the fields with the parameters
-         * @param b The starting position of the stored words
-         * @param e The ending position of the stored words
-         * @param p The position in the AST
-         * @param w The actual text of this area
-         * @param lang the language of the current linearization
+        
+        /** 
+         * the start index in the HTML area 
          */
-        MarkedArea(int b, int e, LinPosition p, String w, String lang) {
-                begin = b;
-                end = e;
-                position = p;
-                words = w;
-                language = lang;
+        final public int htmlBegin;
+        /** 
+         * the end index in the HTML area 
+         */
+        final public int htmlEnd;
+        
+        /**
+         * A stand-alone constuctor which takes all values as arguments
+         * @param begin The starting position of the stored words
+         * @param end The ending position of the stored words
+         * @param position The position in the AST
+         * @param words The actual text of this area
+         * @param htmlBegin the start index in the HTML area
+         * @param htmlEnd the end index in the HTML area
+         * @param language the language of the current linearization
+         */
+        public MarkedArea(int begin, int end, LinPosition position, String words, int htmlBegin, int htmlEnd, String language) {
+                this.begin = begin;
+                this.end = end;
+                this.position = position;
+                this.words = words;
+                this.language = language;
+                this.htmlBegin = htmlBegin;
+                this.htmlEnd = htmlEnd;
         }
         
+        
         public String toString() {
-                return begin + " - " + end + " : " + position + " = '" + words + "'";
+                return begin + " - " + end + " : " + position + " = '" + words + "' ; HTML: " + htmlBegin + " - " + htmlEnd;
         }
 }
 

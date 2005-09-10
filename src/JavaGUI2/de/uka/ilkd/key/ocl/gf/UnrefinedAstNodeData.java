@@ -24,23 +24,26 @@ import java.util.logging.*;
  * It knows, how it is called and described (tooltip).
  */
 public class UnrefinedAstNodeData extends AstNodeData {
-        protected final GfAstNode node;
+        /**
+         * The tooltip that this node as a parameter should get
+         */
         protected final String paramTooltip;
-        protected final String position;
         
         /**
          * For a child we have to know its name, its type and the tooltip
-         * @param pTooltip
+         * @param pTooltip The tooltip that this node as a parameter should get
          * @param node The GfAstNode for the current AST node, for which
          * this AstNodeData is the data for.
          * @param pos The position in the GF AST of this node in Haskell notation
+         * @param selected if this is the selected node in the GF AST
+         * @param constraint A constraint from a parent node, that also
+         * applies for this node.
          */
-        public UnrefinedAstNodeData(String pTooltip, GfAstNode node, String pos) {
-                this.node = node;
+        public UnrefinedAstNodeData(String pTooltip, GfAstNode node, String pos, boolean selected, String constraint) {
+                super(node, pos, selected, constraint);
                 this.paramTooltip = pTooltip;
-                this.position = pos;
                 if (logger.isLoggable(Level.FINEST)) {
-                        logger.finest(this.toString() + " - " + getPosition());
+                        logger.finest(this.toString() + " - " + position);
                 }
         }
         /**
@@ -56,19 +59,6 @@ public class UnrefinedAstNodeData extends AstNodeData {
          */
         public String getParamTooltip() {
                 return this.paramTooltip;
-        }
-        
-        public boolean isMeta() {
-                return this.node.isMeta();
-        }
-
-        public String getPosition() {
-                return this.position;
-        }
-        
-        
-        public String toString() {
-                return this.node.toString();
         }
 
 }

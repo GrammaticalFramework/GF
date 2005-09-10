@@ -29,21 +29,28 @@ import java.util.logging.*;
 //import de.uka.ilkd.key.util.KeYResourceManager;
 
 import java.awt.event.*;
-//import java.net.URL;
 
-public class DynamicTree2 extends JPanel implements KeyListener,
-ActionListener{
+/**
+ * A GUI class, does store the tree, but does not create it.
+ * The tree is created in GFEditor2.
+ * This class displays the tree and let the user interact with it via mouse clicks.
+ */
+public class DynamicTree2 extends JPanel implements KeyListener {
         protected static Logger logger = Logger.getLogger(DynamicTree2.class.getName());
-        
+
         public DefaultMutableTreeNode rootNode;
-        protected DefaultTreeModel treeModel;
+        private DefaultTreeModel treeModel;
         public JTree tree;
-        public int oldSelection = 0;
         private Toolkit toolkit = Toolkit.getDefaultToolkit();
-        public JPopupMenu popup = new JPopupMenu();
-        JMenuItem menuItem;
         private GFEditor2 gfeditor;
+        protected TreePath oldSelection = null;
         
+        /**
+         * Initializes the display state of the tree panel, sets up the 
+         * event handlers.
+         * Does not initialize the tree.
+         * @param gfe The editor object this object belongs to.
+         */
         public DynamicTree2(GFEditor2 gfe) {
                 
                 this.gfeditor = gfe;
@@ -54,12 +61,8 @@ ActionListener{
                 tree = new JTree(treeModel);
                 tree.setRootVisible(false);
                 tree.setEditable(false);
-                tree.getSelectionModel().setSelectionMode
-                (TreeSelectionModel.SINGLE_TREE_SELECTION);
+                tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
                 tree.addKeyListener(this);
-                menuItem = new JMenuItem("Paste");
-                menuItem.addActionListener(this);
-                popup.add(menuItem);                         
                 
                 //Add listener to components that can bring up popup menus.
                 MouseListener popupListener = new PopupListener();
@@ -72,33 +75,29 @@ ActionListener{
                          * gfeditor.nodeTable contains the positions for all selectionPathes.
                          */
                         public void valueChanged(TreeSelectionEvent e) {
+                                if ((tree.getSelectionPath() != null) && tree.getSelectionPath().equals(oldSelection)) {
+                                        //nothing to be done here, probably
+                                        //triggered by showTree
+                                        return;
+                                }
                                 if (tree.getSelectionRows() != null) {
-                                        if (gfeditor.nodeTable == null) {
-                                                if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
-                                                        GFEditor2.treeLogger.finer("null node table");
-                                                }
-                                        } else {
-                                                if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
-                                                        GFEditor2.treeLogger.finer("node table: " + gfeditor.nodeTable.contains(new Integer(0)) + " " + gfeditor.nodeTable.keys().nextElement());
-                                                }
-                                        }
                                         if (tree.getSelectionPath() == null) {
-                                                if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
-                                                        GFEditor2.treeLogger.finer("null root path");
+                                                if (logger.isLoggable(Level.FINER)) {
+                                                        logger.finer("null root path");
                                                 }
                                         } else {
-                                                if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
-                                                        GFEditor2.treeLogger.finer("selected path" + tree.getSelectionPath());
+                                                if (logger.isLoggable(Level.FINER)) {
+                                                        logger.finer("selected path" + tree.getSelectionPath());
                                                 }
                                         }
-                                        String pos = (String)gfeditor.nodeTable.get(tree.getSelectionPath());
+                                        String pos = gfeditor.getNodePosition(tree.getSelectionPath());
                                         if (pos == null || "".equals(pos)) {
                                                 //default to sth. sensible
                                                 pos = "[]";
                                         }
-                                        gfeditor.treeChanged = true;
-                                        gfeditor.send("mp " + pos);
+                                        gfeditor.send("[t] mp " + pos);
                                 }
+                                oldSelection = tree.getSelectionPath();
                         }
                 });
                 
@@ -112,10 +111,20 @@ ActionListener{
                 add(scrollPane);
         }
         
+        /**
+         * Remove all nodes in the tree and
+         * form a dummy tree in treePanel
+         */
+        protected void resetTree() {
+                ((DefaultTreeModel)(tree.getModel())).setRoot(new DefaultMutableTreeNode("Root"));
+                ((DefaultTreeModel)(tree.getModel())).reload();
+        }
+        
         /** Remove all nodes except the root node. */
         public void clear() {
-                rootNode.removeAllChildren();
-                treeModel.reload();
+                ((DefaultTreeModel)(tree.getModel())).setRoot(null);
+                oldSelection = null;
+                //((DefaultTreeModel)(tree.getModel())).reload();
         }
         
         /** Remove the currently selected node. */
@@ -218,9 +227,9 @@ ActionListener{
                                 exc.printStackTrace();
                         }
                         
-                        if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
-                                GFEditor2.treeLogger.finer("The user has finished editing the node.");
-                                GFEditor2.treeLogger.finer("New value: " + node.getUserObject());
+                        if (logger.isLoggable(Level.FINER)) {
+                                logger.finer("The user has finished editing the node.");
+                                logger.finer("New value: " + node.getUserObject());
                         }
                 }
                 public void treeNodesInserted(TreeModelEvent e) {
@@ -234,6 +243,10 @@ ActionListener{
                 }
         }
         
+        /**
+         * This tree cell renderer got overwritten to make it possible to show
+         * tooltips according to the user object
+         */
         private class MyRenderer extends DefaultTreeCellRenderer {
                 //int counter = 0;
                 //final ImageIcon iconFilled;
@@ -245,7 +258,11 @@ ActionListener{
 //                        iconOpen = new ImageIcon(urlOpen);
 //                        iconFilled = new ImageIcon(urlFilled);
 //                }
-               
+
+                /**
+                 * The heart of this class, sets display and tooltip text
+                 * depending on the user data
+                 */
                 public Component getTreeCellRendererComponent(
                                 JTree tree,
                                 Object value,
@@ -264,6 +281,10 @@ ActionListener{
                                 if (node.getUserObject() instanceof AstNodeData) {
 				                        AstNodeData and = (AstNodeData)node.getUserObject();
 				                        String ptt = and.getParamTooltip();
+				                        if (!and.subtypingStatus ) {
+				                                this.setForeground(Color.RED);
+				                                ptt = Printname.htmlAppend(ptt, "<p>Subtyping proof is missing. <br>If no refinements are offered here, then there is a subtyping error.");
+				                        }
 				                        this.setToolTipText(ptt);
 				                        this.setText(and.toString());
 //				                        if (and.isMeta()) {
@@ -309,12 +330,6 @@ ActionListener{
         
         class PopupListener extends MouseAdapter {
                 public void mousePressed(MouseEvent e) {
-                        int selRow = tree.getRowForLocation(e.getX(), e.getY());
-                        tree.setSelectionRow(selRow);
-                        if (GFEditor2.treeLogger.isLoggable(Level.FINER)) {
-                                GFEditor2.treeLogger.finer("selection changed!");
-                        }
-                        //for the popup or parse field, do the same as for the linearization areas
                         gfeditor.maybeShowPopup(e);
                 }
                 
@@ -323,11 +338,9 @@ ActionListener{
                 }
         }
 
-        public void actionPerformed(ActionEvent ae) {
-                //nothing to be done here
-        }
-        
-        /** Handle the key pressed event. */
+        /** 
+         * Handle the key pressed event. 
+         */
         public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();   
                 switch (keyCode){ 
@@ -335,11 +348,15 @@ ActionListener{
                         case KeyEvent.VK_DELETE	: gfeditor.send("d"); break;
                 }
         }
-        /** Handle the key typed event. */
+        /** 
+         * Handle the key typed event. 
+         */
         public void keyTyped(KeyEvent e) {
                 //nothing to be done here
         }
-        /** Handle the key released event. */
+        /** 
+         * Handle the key released event. 
+         */
         public void keyReleased(KeyEvent e) {
                 //nothing to be done here
         }

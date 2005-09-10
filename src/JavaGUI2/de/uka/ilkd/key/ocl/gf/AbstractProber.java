@@ -15,8 +15,6 @@
 
 package de.uka.ilkd.key.ocl.gf;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.logging.*;
 
@@ -27,18 +25,18 @@ import java.util.logging.*;
  *
  */
 abstract class AbstractProber {
-        protected final BufferedReader fromProc;
-        protected final BufferedWriter toProc;
+        /**
+         * reference to the editor whose readRefinementMenu method is used
+         */
+        protected final GfCapsule gfCapsule;
         protected static Logger logger = Logger.getLogger(AbstractProber.class.getName());        
         
         /**
          * A constructor which sets some fields
-         * @param fromGf the stdout from the GF process
-         * @param toGf the stdin from the GF process
+         * @param gfCapsule The encapsulation of GF
          */
-        public AbstractProber(BufferedReader fromGf, BufferedWriter toGf) {
-                this.fromProc = fromGf;
-                this.toProc = toGf;
+        public AbstractProber(GfCapsule gfCapsule) {
+                this.gfCapsule = gfCapsule;
         }
         
         /**
@@ -49,9 +47,9 @@ abstract class AbstractProber {
          */
         protected String readHmsg(String readresult) {
                 if (readresult.equals("<hmsg>")) {
-                        skipChild("<hmsg>");
+                        gfCapsule.skipChild("<hmsg>");
                         try {
-                                String next = fromProc.readLine();
+                                String next = gfCapsule.fromProc.readLine();
                                 if (logger.isLoggable(Level.FINER)) {
                                         logger.finer("2 " + next);
                                 }
@@ -71,22 +69,28 @@ abstract class AbstractProber {
          * @param readresult the first line with the opening tag
          */
         protected void readLinearizations(String readresult) {
-                skipChild("<linearizations>");
+                gfCapsule.skipChild("<linearizations>");
         }
 
-        /** Reads the tree child of the XML from beginning to end */
+        /** 
+         * Reads the tree child of the XML from beginning to end 
+         */
         protected void readTree() {
-                skipChild("<tree>");
+                gfCapsule.skipChild("<tree>");
         }
 
-        /** Reads the message child of the XML from beginning to end */
+        /** 
+         * Reads the message child of the XML from beginning to end 
+         */
         protected void readMessage() {
-                skipChild("<message>");
+                gfCapsule.skipChild("<message>");
         }
         
-        /** Reads the menu child of the XML from beginning to end */
+        /** 
+         * Reads the menu child of the XML from beginning to end 
+         */
         protected void readMenu() {
-                skipChild("<menu>");
+                gfCapsule.skipChild("<menu>");
         }
         
         /**
@@ -97,23 +101,24 @@ abstract class AbstractProber {
                 try {
                         String next = "";
                         //read <gfedit>
-                        String readresult = fromProc.readLine();
+                        String readresult = gfCapsule.fromProc.readLine();
                         if (logger.isLoggable(Level.FINER)) {
                                 logger.finer("1 " + next);
                         }
                         //read either <hsmg> or <lineatization>
-                        readresult = fromProc.readLine();
+                        readresult = gfCapsule.fromProc.readLine();
                         if (logger.isLoggable(Level.FINER)) {
                                 logger.finer("1 " + next);
                         }
                         
-                        next = readHmsg(readresult);
+                        Hmsg hmsg = gfCapsule.readHmsg(readresult); 
+                        next = hmsg.lastline;
                         
                         //in case there comes sth. unexpected before <linearizations>
                         //usually the while body is never entered
                         // %%%
                         while ((next!=null)&&((next.length()==0)||(!next.trim().equals("<linearizations>")))) {
-                                next = fromProc.readLine();
+                                next = gfCapsule.fromProc.readLine();
                                 if (next!=null){
                                         if (logger.isLoggable(Level.FINER)) {
                                                 logger.finer("1 " + next);
@@ -128,7 +133,7 @@ abstract class AbstractProber {
                         readMenu();
                         
                         for (int i=0; i<3 && !next.equals(""); i++){ 
-                                next = fromProc.readLine();
+                                next = gfCapsule.fromProc.readLine();
                                 if (logger.isLoggable(Level.FINER)) {
                                         logger.finer("1 " + next);
                                 }
@@ -141,31 +146,6 @@ abstract class AbstractProber {
         }
         
         /**
-         * Reads the output from GF until the ending tag corresponding to the
-         * given opening tag is read. 
-         * @param opening tag in the format of &gt;gfinit&lt;
-         */
-        protected void skipChild(String opening) {
-                String closing = (new StringBuffer(opening)).insert(1, '/').toString();
-                try {
-                        String nextRead = fromProc.readLine();
-                        if (logger.isLoggable(Level.FINER)) {
-                                logger.finer("3 " + nextRead);
-                        }
-                        while (!nextRead.trim().equals(closing)) {
-                                nextRead = fromProc.readLine();
-                                if (logger.isLoggable(Level.FINER)) {
-                                        logger.finer("3 " + nextRead);
-                                }
-                        }
-                } catch (IOException e) {
-                        System.err.println("Could not read from external process:\n" + e);
-                }
-                
-                
-        }
-        
-        /**
          * send a command to GF
          * @param text the command, exactly the string that is going to be sent
          */
@@ -173,29 +153,26 @@ abstract class AbstractProber {
                 if (logger.isLoggable(Level.FINE)) {
                         logger.fine("## send: '" + text + "'");
                 }
-                try {
-                        toProc.write(text, 0, text.length());
-                        toProc.newLine();
-                        toProc.flush();
-                } catch (IOException e) {
-                        System.err.println("Could not write to external process " + e);
-                }  
+                gfCapsule.realSend(text);
         }
 
         /**
          * Just reads the complete output of a GF run and ignores it.	 
-         * @param fromProc The process from which the GFEDIT should be read.
          */	 
-        static void readAndIgnore(BufferedReader fromProc) {	 
-                try {	 
-                        String readresult = fromProc.readLine();	 
-                        if (logger.isLoggable(Level.FINER)) logger.finer("14 "+readresult);	 
-                        while (readresult.indexOf("</gfedit>") == -1) {	 
-                                readresult = fromProc.readLine();	 
+        protected void readAndIgnore() {	 
+                try {
+                        StringBuffer debugCollector = new StringBuffer();
+                        String readresult = gfCapsule.fromProc.readLine();
+                        debugCollector.append(readresult).append('\n');
+                        if (logger.isLoggable(Level.FINER)) logger.finer("14 "+readresult);
+                        while (readresult.indexOf("</gfedit>") == -1) {
+                                readresult = gfCapsule.fromProc.readLine();
+                                debugCollector.append(readresult).append('\n');
                                 if (logger.isLoggable(Level.FINER)) logger.finer("14 "+readresult);	 
-                        }	 
+                        }
                         //read trailing newline:	 
-                        readresult = fromProc.readLine();	 
+                        readresult = gfCapsule.fromProc.readLine();
+                        debugCollector.append(readresult).append('\n');
                         if (logger.isLoggable(Level.FINER)) logger.finer("14 "+readresult);
                         
                 } catch (IOException e) {	 

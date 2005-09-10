@@ -20,11 +20,17 @@ package de.uka.ilkd.key.ocl.gf;
 import java.io.File;
 import java.util.logging.*;
 import javax.swing.ProgressMonitor;
+import java.util.Vector;
 
+/**
+ * consists of a bunch of static methods, mostly for String
+ * @author daniels
+ *
+ */
 public class Utils {
-        protected static Logger timeLogger = Logger.getLogger(Utils.class.getName() + ".timer");
-        protected static Logger deleteLogger = Logger.getLogger(Utils.class.getName() + ".delete");
-        protected static Logger stringLogger = Logger.getLogger(Utils.class.getName() + ".string");
+        private static Logger timeLogger = Logger.getLogger(Utils.class.getName() + ".timer");
+        private static Logger deleteLogger = Logger.getLogger(Utils.class.getName() + ".delete");
+        private static Logger stringLogger = Logger.getLogger(Utils.class.getName() + ".string");
         
         private Utils() {
                 //non-instantiability enforced
@@ -33,7 +39,7 @@ public class Utils {
         public static final String gf = "gf";
         public static final String gfcm = "gfcm";
         
-        /*
+        /**
          * Get the extension of a file.
          */
         public static String getExtension(File f) {
@@ -131,7 +137,7 @@ public class Utils {
          */
         public static String replaceAll(String original, String toReplace, String replacement) {
                 StringBuffer sb = new StringBuffer(original);
-                for (int i = sb.indexOf(toReplace); i >= 0; i = sb.indexOf(toReplace)) {
+                for (int i = sb.indexOf(toReplace); i >= 0; i = sb.indexOf(toReplace, i + replacement.length())) {
                         sb.replace(i, i + toReplace.length(), replacement);
                 }
                 return sb.toString();
@@ -158,5 +164,80 @@ public class Utils {
                         }
                 }
                 return s;
+        }
+        
+        /**
+         * counts the occurances of toSearch in s
+         * @param s The String in which the search shall take place
+         * @param toSearch The String that should be counted
+         * @return the number of occurances, 0 if s is null
+         */
+        public static int countOccurances(String s, String toSearch) {
+                if (s == null) {
+                        return 0;
+                }
+                int result = 0;
+                for (int i = s.indexOf(toSearch); i > -1; i = s.indexOf(toSearch, i)) {
+                        result++;
+                        i += toSearch.length();
+                }
+                return result;
+        }
+        
+        /**
+         * Takes an arbitrary Vector and executes toString on each element and
+         * puts these into a String[] of the same size as the Vector
+         * @param strings A Vector of Object, preferably String
+         * @return The Vector as a String[]
+         */
+        public static String[] vector2Array(Vector strings) {
+                String[] result = new String[strings.size()];
+                for (int i = 0; i < strings.size(); i++) {
+                        result[i] = strings.get(i).toString();
+                }
+                return result;
+        }
+        /**
+         * just replace sequences of spaces with one space
+         * @param s The string to be compacted
+         * @return the compacted result
+         */
+        static String compactSpaces(String s) {
+                String localResult = new String();
+                boolean spaceIncluded = false;
+                
+                for (int i = 0; i < s.length(); i++) {
+                        char c = s.charAt(i);
+                        if (c != ' ') { // include all non-spaces
+                                localResult += String.valueOf(c);
+                                spaceIncluded = false;
+                        } else {// we have a space
+                                if (!spaceIncluded) {
+                                        localResult += " ";
+                                        spaceIncluded = true;
+                                } // else just skip
+                        }
+                }
+                return localResult;
+        }
+        /**
+         * Replaces all occurances of toBeReplaced, that are not escaped by '\'
+         * with replacement
+         * @param working the String in which substrings should be replaced
+         * @param toBeReplaced The substring, that should be replaced by replacement
+         * @param replacement well, the replacement string
+         * @return The String with the replaced parts
+         */
+        public static String replaceNotEscaped(String working, String toBeReplaced, String replacement) {
+        		StringBuffer w = new StringBuffer(working);
+                        for (int i = w.indexOf(toBeReplaced); i > -1 && i < w.length(); i = w.indexOf(toBeReplaced, i)) {
+                                if (i == 0 || w.charAt(i - 1) != '\\') {
+        				w.replace(i, i + toBeReplaced.length(), replacement);
+        				i += replacement.length();
+        			} else {
+        				i += 1;
+        			}
+                        }
+        		return w.toString();
         }
 }

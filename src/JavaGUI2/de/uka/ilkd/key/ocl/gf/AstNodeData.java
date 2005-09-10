@@ -22,6 +22,8 @@ import java.util.logging.*;
  * An object of this type knows how it self should be rendered,
  * via Printname how its children should be rendered.
  * This means the tooltip information it got from there.
+ * Knows nothing directly of the type of the node, which an object of this class
+ * represents. That's whats GfAstNode is for.
  */
 abstract class AstNodeData {
         protected static Logger logger = Logger.getLogger(DynamicTree2.class.getName());
@@ -37,19 +39,67 @@ abstract class AstNodeData {
         public abstract String getParamTooltip();
 
         /**
-         * 
-         * @return true iff this node represents an open leaf
-         */
-        public abstract boolean isMeta();
-        /**
          * keeps track of the number of children of this node.
          * It has to be increased whenever a new child of this node is
          * added.
          */
         public int childNum = 0;
         /**
-         * @return The position String in the GF AST for this node
+         * The position String in the GF AST for this node
          * in Haskell notation.
          */
-        public abstract String getPosition();
+        public final String position;
+        /**
+         * the GF node connected to this NodeData, not the JTree node
+         */
+        public final GfAstNode node;
+        
+        /**
+         * If a subtyping witness is missing, then this flag is false
+         */
+        public boolean subtypingStatus = true;
+        
+        /**
+         * if this is the active, selected, focused node
+         */
+        public final boolean selected;
+        
+        /**
+         * The constraint, that is valid on this node.
+         * If this node introduced a node itself and did not just inherit
+         * one, they are just concatenated.
+         * Until now, only the presence of a non-empty string here is used,
+         * so that is not important yet.
+         */
+        public final String constraint;
+
+        /**
+         * some nodes like coerce should, if possible, be covered from the
+         * users eyes. If this variable is greater than -1, the child
+         * with that number is shown instead of this node.
+         * This node will not appear in the tree.
+         */
+        public int showInstead = -1;
+        
+        /**
+         * A simple setter constructor, that sets the fields of this class (except showInstead)
+         * @param node the GF node connected to this NodeData, not the JTree node
+         * @param pos The position String in the GF AST for this node
+         * in Haskell notation.
+         * @param selected if this is the active, selected, focused node
+         * @param constraint The GF constraint introduced in this node
+         */
+        protected AstNodeData(GfAstNode node, String pos, boolean selected, String constraint) {
+                this.node = node;
+                this.position = pos;
+                this.selected = selected;
+                // I have no better idea, how to clutch them together, since
+                // I don't need the content of this field right now.
+                this.constraint = node.constraint + constraint; 
+        }
+        
+        public String toString() {
+                return this.node.getLine();
+        }
+
 }
