@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/07 14:21:30 $ 
+-- > CVS $Date: 2005/09/12 15:46:44 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- Representation of, conversion to, and utilities for 
 -- printing of a general Speech Recognition Grammar. 
@@ -58,23 +58,17 @@ makeSRG i opts gr = SRG { grammarName = name,
     where 
     name = prIdent i
     origStart = getStartCat opts
-    gr' = removeLeftRecursion $ removeEmptyCats $ cfgToCFRules gr
+    gr' = removeLeftRecursion $ removeIdenticalRules $ removeEmptyCats $ cfgToCFRules gr
     (cats,cfgRules) = unzip gr'
     names = mkCatNames name cats
 
 cfgRulesToSRGRule :: FiniteMap String String -> [CFRule_] -> SRGRule
 cfgRulesToSRGRule names rs@(r:_) = SRGRule cat origCat rhs
-    where origCat = ruleCat r
+    where origCat = lhsCat r
 	  cat = lookupFM_ names origCat
 	  rhs = nub $ map (map renameCat . ruleRhs) rs
 	  renameCat (Cat c) = Cat (lookupFM_ names c)
 	  renameCat t = t
-
-ruleCat :: CFRule c n t -> c
-ruleCat (CFRule c _ _) = c
-
-ruleRhs :: CFRule c n t -> [Symbol c t]
-ruleRhs (CFRule _ r _) = r
 
 mkCatNames :: String   -- ^ Category name prefix
 	   -> [String] -- ^ Original category names

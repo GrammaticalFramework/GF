@@ -1,9 +1,22 @@
+----------------------------------------------------------------------
+-- |
+-- Module      : FiniteState
+-- Maintainer  : BB
+-- Stability   : (stable)
+-- Portability : (portable)
+--
+-- > CVS $Date: 2005/09/12 15:46:44 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.3 $
+--
+-- A simple finite state network module.
+-----------------------------------------------------------------------------
 module GF.Speech.FiniteState (FA, State,
 			      startState, finalStates,
 			      states, transitions,
 			      newFA, addFinalState,
-			      newState, newTrans,
-			      moveLabelsToNodes) where
+			      newState, newTransition, newTransitions,
+			      moveLabelsToNodes, minimize, asGraph) where
 
 import Data.Graph.Inductive
 import Data.List (nub,partition)
@@ -41,8 +54,20 @@ newState :: a -> FA a b -> (FA a b, State)
 newState x (FA g s ss) = (FA g' s ss, n)
     where (g',n) = addNode x g
 
-newTrans :: Node -> Node -> b -> FA a b -> FA a b
-newTrans f t l = onGraph (insEdge (f,t,l))
+newTransition :: Node -> Node -> b -> FA a b -> FA a b
+newTransition f t l = onGraph (insEdge (f,t,l))
+
+newTransitions :: [(Node,Node,b)] -> FA a b -> FA a b
+newTransitions ts = onGraph (insEdges ts)
+
+mapStates :: (a -> c) -> FA a b -> FA c b
+mapStates f (FA g s ss) = FA (nmap f g) s ss
+
+asGraph :: FA a b -> Gr a b
+asGraph (FA g _ _) = g
+
+minimize :: FA () (Maybe a) -> FA () (Maybe a)
+minimize = onGraph mimimizeGr1
 
 --
 -- * Graph functions
@@ -110,6 +135,17 @@ ledgeToEdge (f,t,_) = (f,t)
 
 addContexts :: DynGraph gr => [Context a b] -> gr a b -> gr a b
 addContexts cs gr = foldr (&) gr cs
+
+mimimizeGr1 :: DynGraph gr => gr () (Maybe a) -> gr () (Maybe a)
+mimimizeGr1 = removeEmptyLoops 
+
+removeEmptyLoops :: DynGraph gr => gr () (Maybe a) -> gr () (Maybe a)
+removeEmptyLoops = gmap (\ (i,n,(),o) -> (filter (r n) i,n,(),filter (r n) o))
+  where r n (Nothing,n') | n' == n = False
+	r _ _ = True
+
+mimimizeGr2 :: DynGraph gr => gr (Maybe a) () -> gr (Maybe a) ()
+mimimizeGr2 gr = gr 
 
 --
 -- * Utilities
