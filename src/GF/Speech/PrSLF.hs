@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/12 15:46:44 $ 
+-- > CVS $Date: 2005/09/12 16:10:23 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
 -- This module converts a CFG to an SLF finite-state network
 -- for use with the ATK recognizer. The SLF format is described
@@ -18,7 +18,7 @@
 -- categories in the grammar
 -----------------------------------------------------------------------------
 
-module GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter,faGraphvizPrinter) where
+module GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter,faGraphvizPrinter,regularPrinter) where
 
 import GF.Speech.SRG
 import GF.Speech.TransformCFG
@@ -27,12 +27,13 @@ import GF.Speech.FiniteState
 import GF.Infra.Ident
 
 import GF.Formalism.CFG
-import GF.Formalism.Utilities (Symbol(..))
+import GF.Formalism.Utilities (Symbol(..),symbol)
 import GF.Conversion.Types
 import GF.Infra.Print
 import GF.Infra.Option
 
 import Data.Char (toUpper,toLower)
+import Data.List
 import Data.Maybe (fromMaybe)
 
 import Data.Graph.Inductive (emap,nmap)
@@ -61,6 +62,15 @@ faGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 faGraphvizPrinter name opts cfg = 
     graphviz (nmap (const "") $ emap (fromMaybe "") $ asGraph $ cfgToFA name opts cfg) (prIdent name) (8.5,11.0) (1,1) Landscape
+
+-- | Convert the grammar to a regular grammar and print it in BNF
+regularPrinter :: CGrammar -> String
+regularPrinter = prCFRules . makeSimpleRegular
+  where
+  prCFRules :: CFRules -> String
+  prCFRules g = unlines [ c ++ " ::= " ++ join " | " (map (showRhs . ruleRhs) rs) | (c,rs) <- g]
+  join g = concat . intersperse g
+  showRhs = unwords . map (symbol id show)
 
 automatonToSLF :: FA (Maybe String) () -> SLF
 automatonToSLF fa = 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/12 15:46:44 $ 
+-- > CVS $Date: 2005/09/12 16:10:23 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.20 $
+-- > CVS $Revision: 1.21 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -134,7 +134,6 @@ anyUsedBy cs (CFRule _ ss _) = any (`elem` cs) (filterCats ss)
 
 mkName :: String -> Name
 mkName n = Name (IC n) []
-
 
 --
 -- * Utilities
