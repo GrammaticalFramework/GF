@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/12 21:54:32 $ 
+-- > CVS $Date: 2005/09/12 22:32:24 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
 -- A simple finite state network module.
 -----------------------------------------------------------------------------
@@ -17,8 +17,9 @@ module GF.Speech.FiniteState (FA, State,
 			      newFA, 
 			      addFinalState,
 			      newState, newTransition,
-			      moveLabelsToNodes, minimize, asGraph,
-			      Graph, prGraphGraphviz, nmap, emap) where
+			      mapStates, mapTransitions,
+			      moveLabelsToNodes, minimize,
+			      prGraphGraphviz) where
 
 import Data.List
 import Data.Maybe (fromJust)
@@ -57,7 +58,10 @@ newTransition :: Node -> Node -> b -> FA a b -> FA a b
 newTransition f t l = onGraph (newEdge f t l)
 
 mapStates :: (a -> c) -> FA a b -> FA c b
-mapStates f (FA g s ss) = FA (nmap f g) s ss
+mapStates f = onGraph (nmap f)
+
+mapTransitions :: (b -> c) -> FA a b -> FA a c
+mapTransitions f = onGraph (emap f)
 
 asGraph :: FA a b -> Graph a b
 asGraph (FA g _ _) = g
@@ -70,6 +74,15 @@ minimize = onGraph mimimizeGr1
 --   up to one extra node per edge.
 moveLabelsToNodes :: Eq a => FA () (Maybe a) -> FA (Maybe a) ()
 moveLabelsToNodes = onGraph moveLabelsToNodes_
+
+prGraphGraphviz :: FA String String -> String
+prGraphGraphviz (FA (Graph _ ns es) _ _) = 
+    "digraph {\n" ++ unlines (map prNode ns)
+		  ++ "\n"
+		  ++ unlines (map prEdge es)
+			 ++ "\n}\n"
+    where prNode (n,l) = show n ++ " [label = " ++ show l ++ "]"
+	  prEdge (f,t,l) = show f ++ " -> " ++ show t ++ " [label = " ++ show l ++ "]"
 
 --
 -- * Graphs 
@@ -152,14 +165,7 @@ mimimizeGr2 = id
 removeDuplicateEdges :: Ord b => Graph a b -> Graph a b
 removeDuplicateEdges (Graph c ns es) = Graph c ns (sortNub es)
 
-prGraphGraphviz :: Graph String String -> String
-prGraphGraphviz (Graph _ ss ts) = 
-    "digraph {\n" ++ unlines (map prNode ss)
-		  ++ "\n"
-		  ++ unlines (map prEdge ts)
-			 ++ "\n}\n"
-    where prNode (n,l) = show n ++ " [label = " ++ show l ++ "]"
-	  prEdge (f,t,l) = show f ++ " -> " ++ show t ++ " [label = " ++ show l ++ "]"
+
 
 
 --
