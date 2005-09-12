@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/12 21:41:19 $ 
+-- > CVS $Date: 2005/09/12 22:32:24 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- This module converts a CFG to an SLF finite-state network
 -- for use with the ATK recognizer. The SLF format is described
@@ -53,12 +53,12 @@ slfPrinter name opts cfg = prSLF (automatonToSLF $ moveLabelsToNodes $ cfgToFA n
 slfGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 slfGraphvizPrinter name opts cfg = 
-    prGraphGraphviz (nmap (fromMaybe "") $ emap (const "") $ asGraph $ moveLabelsToNodes $ cfgToFA name opts cfg)
+    prGraphGraphviz (mapStates (fromMaybe "") $ makeTransitions (const "") $ moveLabelsToNodes $ cfgToFA name opts cfg)
 
 faGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 faGraphvizPrinter name opts cfg = 
-    prGraphGraphviz (nmap (const "") $ emap (fromMaybe "") $ asGraph $ cfgToFA name opts cfg)
+    prGraphGraphviz (mapStates (const "") $ makeTransitions (fromMaybe "") $ cfgToFA name opts cfg)
 
 -- | Convert the grammar to a regular grammar and print it in BNF
 regularPrinter :: CGrammar -> String
