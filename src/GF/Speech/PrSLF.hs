@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/12 16:10:23 $ 
+-- > CVS $Date: 2005/09/12 21:41:19 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
 -- This module converts a CFG to an SLF finite-state network
 -- for use with the ATK recognizer. The SLF format is described
@@ -36,9 +36,6 @@ import Data.Char (toUpper,toLower)
 import Data.List
 import Data.Maybe (fromMaybe)
 
-import Data.Graph.Inductive (emap,nmap)
-import Data.Graph.Inductive.Graphviz
-
 data SLF = SLF { slfNodes :: [SLFNode], slfEdges :: [SLFEdge] }
 
 data SLFNode = SLFNode { nId :: Int, nWord :: SLFWord }
@@ -56,12 +53,12 @@ slfPrinter name opts cfg = prSLF (automatonToSLF $ moveLabelsToNodes $ cfgToFA n
 slfGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 slfGraphvizPrinter name opts cfg = 
-    graphviz (nmap (fromMaybe "") $ asGraph $ moveLabelsToNodes $ cfgToFA name opts cfg) (prIdent name) (8.5,11.0) (1,1) Landscape
+    prGraphGraphviz (nmap (fromMaybe "") $ emap (const "") $ asGraph $ moveLabelsToNodes $ cfgToFA name opts cfg)
 
 faGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 faGraphvizPrinter name opts cfg = 
-    graphviz (nmap (const "") $ emap (fromMaybe "") $ asGraph $ cfgToFA name opts cfg) (prIdent name) (8.5,11.0) (1,1) Landscape
+    prGraphGraphviz (nmap (const "") $ emap (fromMaybe "") $ asGraph $ cfgToFA name opts cfg)
 
 -- | Convert the grammar to a regular grammar and print it in BNF
 regularPrinter :: CGrammar -> String

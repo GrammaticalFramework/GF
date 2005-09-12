@@ -5,26 +5,27 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/12 15:46:44 $ 
+-- > CVS $Date: 2005/09/12 21:41:19 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- A simple finite state network module.
 -----------------------------------------------------------------------------
 module GF.Speech.FiniteState (FA, State,
 			      startState, finalStates,
 			      states, transitions,
-			      newFA, addFinalState,
-			      newState, newTransition, newTransitions,
-			      moveLabelsToNodes, minimize, asGraph) where
+			      newFA, 
+			      addFinalState,
+			      newState, newTransition,
+			      moveLabelsToNodes, minimize, asGraph,
+			      Graph, prGraphGraphviz, nmap, emap) where
 
-import Data.Graph.Inductive
-import Data.List (nub,partition)
+import Data.List
 import Data.Maybe (fromJust)
 
 import Debug.Trace
 
-data FA a b = FA (Gr a b) Node [Node]
+data FA a b = FA (Graph a b) State [State]
 
 type State = Node
 
@@ -35,56 +36,34 @@ finalStates :: FA a b -> [State]
 finalStates (FA _ _ ss) = ss
 
 states :: FA a b -> [(State,a)]
-states (FA g _ _) = labNodes g
+states (FA g _ _) = nodes g
 
 transitions :: FA a b -> [(State,State,b)]
-transitions (FA g _ _) = labEdges g
+transitions (FA g _ _) = edges g
 
 newFA :: a -- ^ Start node label
       -> FA a b
-newFA l = FA g' s []
-    where g = empty
-	  s = freshNode g
-	  g' = insNode (s,l) g
+newFA l = FA g s []
+    where (g,s) = newNode l newGraph
 
 addFinalState :: Node -> FA a b -> FA a b
 addFinalState f (FA g s ss) = FA g s (f:ss)
 
 newState :: a -> FA a b -> (FA a b, State)
 newState x (FA g s ss) = (FA g' s ss, n)
-    where (g',n) = addNode x g
+    where (g',n) = newNode x g
 
 newTransition :: Node -> Node -> b -> FA a b -> FA a b
-newTransition f t l = onGraph (insEdge (f,t,l))
-
-newTransitions :: [(Node,Node,b)] -> FA a b -> FA a b
-newTransitions ts = onGraph (insEdges ts)
+newTransition f t l = onGraph (newEdge f t l)
 
 mapStates :: (a -> c) -> FA a b -> FA c b
 mapStates f (FA g s ss) = FA (nmap f g) s ss
 
-asGraph :: FA a b -> Gr a b
+asGraph :: FA a b -> Graph a b
 asGraph (FA g _ _) = g
 
 minimize :: FA () (Maybe a) -> FA () (Maybe a)
 minimize = onGraph mimimizeGr1
-
---
--- * Graph functions
---
-
-onGraph :: (Gr a b -> Gr c d) -> FA a b -> FA c d
-onGraph f (FA g s ss) = FA (f g) s ss
-
-addNode :: DynGraph gr => a -> gr a b -> (gr a b, Node)
-addNode x g = let s = freshNode g in (insNode (s,x) g, s)
-
-freshNode :: Graph gr => gr a b -> Node
-freshNode = succ . snd . nodeRange 
-
--- | Get an infinte supply of new nodes.
-freshNodes :: Graph gr => gr a b -> [Node]
-freshNodes g = [snd (nodeRange g)+1..]
 
 -- | Transform a standard finite automaton with labelled edges
 --   to one where the labels are on the nodes instead. This can add
@@ -92,66 +71,90 @@ freshNodes g = [snd (nodeRange g)+1..]
 moveLabelsToNodes :: Eq a => FA () (Maybe a) -> FA (Maybe a) ()
 moveLabelsToNodes = onGraph moveLabelsToNodes_
 
-moveLabelsToNodes_ :: (DynGraph gr, Eq a) => gr () (Maybe a) -> gr (Maybe a) ()
-moveLabelsToNodes_ g = gmap f g'
-    where g' = sameLabelIncoming g
-          f (to,n,(),fr) = (removeAdjLabels to, n, l, removeAdjLabels fr)
-	      where l | not (allEqual ls)
-			   = error $ "moveLabelsToNodes: not all incoming labels are equal"
-		      | null ls = Nothing
-		      | otherwise = head ls
-		    ls = map snd $ lpre g' n
-	  removeAdjLabels = map (\ (_,n) -> ((),n))
+--
+-- * Graphs 
+--
+type Node = Int
 
--- | Add the extra nodes needed to make sure that all edges to a node
---   have the same label.
-sameLabelIncoming :: (DynGraph gr, Eq b) => gr () (Maybe b) -> gr () (Maybe b)
-sameLabelIncoming gr = foldr fixIncoming gr (nodes gr)
+data Graph a b = Graph Node [(Node,a)] [(Node,Node,b)]
+		 deriving (Eq,Show)
 
-fixIncoming :: (DynGraph gr, Eq b) => Node -> gr () (Maybe b) -> gr () (Maybe b)
-fixIncoming n gr | allLabelsEqual to' = gr
-		 | otherwise = addContexts newContexts $ delNode n gr
-    where (to,_,_,fr) = context gr n
-	  -- move cyclic edges to the list of incoming edges
-	  (cyc,fr') = partition (\ (_,t) -> t == n) fr
-	  to' = to ++ cyc
-	  -- make new nodes for each unique label
-	  newNodes = zip (nub $ map fst to') (freshNodes gr) 
-	  -- for each cyclic edge, add an edge to the node for 
-	  -- that label (could be the current node).
-	  fr'' = fr' ++ [ (l',fromJust (lookup l' newNodes)) | (l',f) <- to', f == n ]
-	  -- keep all incoming non-cyclic edges with the right label.
-	  to'' l = [ e | e@(l',f) <- to', l'==l, f /= n ]
-	  newContexts = [ (to'' l,n',(),fr'') | (l,n') <- newNodes]
+onGraph :: (Graph a b -> Graph c d) -> FA a b -> FA c d
+onGraph f (FA g s ss) = FA (f g) s ss
 
-allLabelsEqual :: Eq b => Adj b -> Bool
-allLabelsEqual = allEqual . map fst
+-- graphToFA :: State -> [State] -> Graph a b -> FA a b
+-- graphToFA s fs (Graph _ ss ts) = buildFA s fs ss ts
 
-edgeLabel :: LEdge b -> b
-edgeLabel (_,_,l) = l
+newGraph :: Graph a b
+newGraph = Graph 0 [] []
 
-ledgeToEdge ::  LEdge b -> Edge
-ledgeToEdge (f,t,_) = (f,t)
+nodes :: Graph a b -> [(Node,a)]
+nodes (Graph _ ns _) = ns
 
-addContexts :: DynGraph gr => [Context a b] -> gr a b -> gr a b
-addContexts cs gr = foldr (&) gr cs
+edges :: Graph a b -> [(Node,Node,b)]
+edges (Graph _ _ es) = es
 
-mimimizeGr1 :: DynGraph gr => gr () (Maybe a) -> gr () (Maybe a)
-mimimizeGr1 = removeEmptyLoops 
+nmap :: (a -> c) -> Graph a b -> Graph c b
+nmap f (Graph c ns es) = Graph c [(n,f l) | (n,l) <- ns] es
 
-removeEmptyLoops :: DynGraph gr => gr () (Maybe a) -> gr () (Maybe a)
-removeEmptyLoops = gmap (\ (i,n,(),o) -> (filter (r n) i,n,(),filter (r n) o))
-  where r n (Nothing,n') | n' == n = False
-	r _ _ = True
+emap :: (b -> c) -> Graph a b -> Graph a c
+emap f (Graph c ns es) = Graph c ns [(x,y,f l) | (x,y,l) <- es]
 
-mimimizeGr2 :: DynGraph gr => gr (Maybe a) () -> gr (Maybe a) ()
+newNode :: a -> Graph a b -> (Graph a b,State)
+newNode l (Graph c ns es) = (Graph s ((s,l):ns) es, s)
+  where s = c+1
+
+newEdge :: State -> State -> b -> Graph a b -> Graph a b
+newEdge f t l (Graph c ns es) = Graph c ns ((f,t,l):es)
+
+incoming :: Graph a b -> [(Node,a,[(Node,Node,b)])]
+incoming (Graph _ ns es) = snd $ mapAccumL f (sortBy compareDest es) (sortBy compareFst ns)
+  where destIs d (_,t,_) = t == d
+        compareDest (_,t1,_) (_,t2,_) = compare t1 t2
+	compareFst p1 p2 = compare (fst p1) (fst p2)
+	f es' (n,l) = let (nes,es'') = span (destIs n) es' in (es'',(n,l,nes))
+
+moveLabelsToNodes_ :: Eq a => Graph () (Maybe a) -> Graph (Maybe a) ()
+moveLabelsToNodes_ gr@(Graph c _ _) = Graph c' (zip ns ls) (concat ess)
+  where is = incoming gr
+	(c',is') = mapAccumL fixIncoming c is
+	(ns,ls,ess) = unzip3 (concat is')
+
+fixIncoming :: Eq a => Node -> (Node,(),[(Node,Node,Maybe a)]) -> (Node,[(Node,Maybe a,[(Node,Node,())])])
+fixIncoming next c@(n,(),es) = (next', (n,Nothing,es'):newContexts)
+  where ls = nub $ map getLabel es
+	next' = next + length ls
+	newNodes = zip [next..next'-1] ls
+	es' = [ (x,n,()) | x <- map fst newNodes ]
+	-- separate cyclic and non-cyclic edges
+	(cyc,ncyc) = partition (\ (f,_,_) -> f == n) es
+	       -- keep all incoming non-cyclic edges with the right label
+	to x l = [ (f,x,()) | (f,_,l') <- ncyc, l == l']
+	       -- for each cyclic edge with the right label, 
+	       -- add an edge from each of the new nodes (including this one)
+		 ++ [ (y,x,()) | (f,_,l') <- cyc, l == l', (y,_) <- newNodes]
+	newContexts = [ (x, l, to x l) | (x,l) <- newNodes ]
+
+getLabel :: (Node,Node,b) -> b
+getLabel (_,_,l) = l
+
+mimimizeGr1 :: Graph () (Maybe a) -> Graph () (Maybe a)
+mimimizeGr1 = removeEmptyLoops1
+
+removeEmptyLoops1 :: Graph () (Maybe a) -> Graph () (Maybe a)
+removeEmptyLoops1 (Graph c ns es) = Graph c ns (filter (not . isEmptyLoop) es)
+    where isEmptyLoop (f,t,Nothing) | f == t = True
+	  isEmptyLoop _ = False
+
+mimimizeGr2 :: Graph (Maybe a) () -> Graph (Maybe a) ()
 mimimizeGr2 gr = gr 
 
---
--- * Utilities
---
 
-allEqual :: Eq a => [a] -> Bool
-allEqual [] = True
-allEqual (x:xs) = all (==x) xs
-
+prGraphGraphviz :: Graph String String -> String
+prGraphGraphviz (Graph _ ss ts) = 
+    "digraph {\n" ++ unlines (map prNode ss)
+		  ++ "\n"
+		  ++ unlines (map prEdge ts)
+			 ++ "\n}\n"
+    where prNode (n,l) = show n ++ " [label = " ++ show l ++ "]"
+	  prEdge (f,t,l) = show f ++ " -> " ++ show t ++ " [label = " ++ show l ++ "]"
