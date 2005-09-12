@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/12 21:41:19 $ 
+-- > CVS $Date: 2005/09/12 21:54:32 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
 -- A simple finite state network module.
 -----------------------------------------------------------------------------
@@ -115,7 +115,7 @@ incoming (Graph _ ns es) = snd $ mapAccumL f (sortBy compareDest es) (sortBy com
 	f es' (n,l) = let (nes,es'') = span (destIs n) es' in (es'',(n,l,nes))
 
 moveLabelsToNodes_ :: Eq a => Graph () (Maybe a) -> Graph (Maybe a) ()
-moveLabelsToNodes_ gr@(Graph c _ _) = Graph c' (zip ns ls) (concat ess)
+moveLabelsToNodes_ gr@(Graph c _ _) = mimimizeGr2 $ Graph c' (zip ns ls) (concat ess)
   where is = incoming gr
 	(c',is') = mapAccumL fixIncoming c is
 	(ns,ls,ess) = unzip3 (concat is')
@@ -147,8 +147,10 @@ removeEmptyLoops1 (Graph c ns es) = Graph c ns (filter (not . isEmptyLoop) es)
 	  isEmptyLoop _ = False
 
 mimimizeGr2 :: Graph (Maybe a) () -> Graph (Maybe a) ()
-mimimizeGr2 gr = gr 
+mimimizeGr2 = id
 
+removeDuplicateEdges :: Ord b => Graph a b -> Graph a b
+removeDuplicateEdges (Graph c ns es) = Graph c ns (sortNub es)
 
 prGraphGraphviz :: Graph String String -> String
 prGraphGraphviz (Graph _ ss ts) = 
@@ -158,3 +160,11 @@ prGraphGraphviz (Graph _ ss ts) =
 			 ++ "\n}\n"
     where prNode (n,l) = show n ++ " [label = " ++ show l ++ "]"
 	  prEdge (f,t,l) = show f ++ " -> " ++ show t ++ " [label = " ++ show l ++ "]"
+
+
+--
+-- * Utilities
+-- 
+
+sortNub :: Ord a => [a] -> [a]
+sortNub = map head . group . sort
