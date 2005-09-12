@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/07 14:21:30 $ 
+-- > CVS $Date: 2005/09/12 15:46:44 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- This module converts a CFG to an SLF finite-state network
 -- for use with the ATK recognizer. The SLF format is described
@@ -18,10 +18,11 @@
 -- categories in the grammar
 -----------------------------------------------------------------------------
 
-module GF.Speech.PrSLF (slfPrinter) where
+module GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter,faGraphvizPrinter) where
 
 import GF.Speech.SRG
 import GF.Speech.TransformCFG
+import GF.Speech.CFGToFiniteState
 import GF.Speech.FiniteState
 import GF.Infra.Ident
 
@@ -33,6 +34,9 @@ import GF.Infra.Option
 
 import Data.Char (toUpper,toLower)
 import Data.Maybe (fromMaybe)
+
+import Data.Graph.Inductive (emap,nmap)
+import Data.Graph.Inductive.Graphviz
 
 data SLF = SLF { slfNodes :: [SLFNode], slfEdges :: [SLFEdge] }
 
@@ -46,30 +50,34 @@ data SLFEdge = SLFEdge { eId :: Int, eStart :: Int, eEnd :: Int }
 
 slfPrinter :: Ident -- ^ Grammar name
 	   -> Options -> CGrammar -> String
-slfPrinter name opts cfg = prSLF (regularToSLF start rgr) ""
-  where start = getStartCat opts
-	rgr = makeRegular $ removeEmptyCats $ cfgToCFRules cfg
+slfPrinter name opts cfg = prSLF (automatonToSLF $ moveLabelsToNodes $ cfgToFA name opts cfg) ""
 
-regularToSLF :: String -> CFRules -> SLF
-regularToSLF s rs = automatonToSLF $ compileAutomaton s rs
+slfGraphvizPrinter :: Ident -- ^ Grammar name
+		   -> Options -> CGrammar -> String
+slfGraphvizPrinter name opts cfg = 
+    graphviz (nmap (fromMaybe "") $ asGraph $ moveLabelsToNodes $ cfgToFA name opts cfg) (prIdent name) (8.5,11.0) (1,1) Landscape
 
-automatonToSLF :: FA () (Maybe String) -> SLF
+faGraphvizPrinter :: Ident -- ^ Grammar name
+		   -> Options -> CGrammar -> String
+faGraphvizPrinter name opts cfg = 
+    graphviz (nmap (const "") $ emap (fromMaybe "") $ asGraph $ cfgToFA name opts cfg) (prIdent name) (8.5,11.0) (1,1) Landscape
+
+automatonToSLF :: FA (Maybe String) () -> SLF
 automatonToSLF fa = 
-    SLF { slfNodes = map mkSLFNode (states fa'), 
-	  slfEdges = zipWith mkSLFEdge [0..] (transitions fa') }
-    where fa' = moveLabelsToNodes fa
-	  mkSLFNode (i,w) = SLFNode { nId = i, nWord = w }
+    SLF { slfNodes = map mkSLFNode (states fa), 
+	  slfEdges = zipWith mkSLFEdge [0..] (transitions fa) }
+    where mkSLFNode (i,w) = SLFNode { nId = i, nWord = w }
 	  mkSLFEdge i (f,t,()) = SLFEdge { eId = i, eStart = f, eEnd = t }
 
 
 prSLF :: SLF -> ShowS
-prSLF (SLF { slfNodes = ns, slfEdges = es}) = header . unlinesS (map prNode ns) . unlinesS (map prEdge es)
+prSLF (SLF { slfNodes = ns, slfEdges = es}) 
+    = header . unlinesS (map prNode ns) . nl . unlinesS (map prEdge es) . nl
     where
     header = showString "VERSION=1.0" . nl 
 	     . prFields [("N",show (length ns)),("L", show (length es))] . nl
     prNode n = prFields [("I",show (nId n)),("W",showWord (nWord n))]
     prEdge e = prFields [("J",show (eId e)),("S",show (eStart e)),("E",show (eEnd e))]
-
 
 showWord :: SLFWord -> String
 showWord Nothing = "!NULL"
