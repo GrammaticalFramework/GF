@@ -5,14 +5,14 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/12 15:46:44 $ 
+-- > CVS $Date: 2005/09/12 16:10:23 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Approximates CFGs with finite state networks.
 -----------------------------------------------------------------------------
 
-module GF.Speech.CFGToFiniteState (cfgToFA) where
+module GF.Speech.CFGToFiniteState (cfgToFA, makeSimpleRegular) where
 
 import Data.List
 
@@ -27,10 +27,11 @@ import GF.Speech.TransformCFG
 
 cfgToFA :: Ident -- ^ Grammar name
 	-> Options -> CGrammar -> FA () (Maybe String)
-cfgToFA name opts cfg = minimize $ compileAutomaton start rgr
+cfgToFA name opts = minimize . compileAutomaton start . makeSimpleRegular
   where start = getStartCat opts
-	rgr = makeRegular $ removeIdenticalRules $ removeEmptyCats $ cfgToCFRules cfg
 
+makeSimpleRegular :: CGrammar -> CFRules
+makeSimpleRegular = makeRegular . removeIdenticalRules . removeEmptyCats . cfgToCFRules
 
 -- Use the transformation algorithm from \"Regular Approximation of Context-free
 -- Grammars through Approximation\", Mohri and Nederhof, 2000
@@ -99,7 +100,7 @@ compileAutomaton start g = make_fa s [Cat start] f fa''
 							in newTransition (getState a) q1 Nothing fa'''
 				-- a is not recursive
 				Nothing -> let rs = catRules g a
-					       in foldr (\ (CFRule _ b _) -> make_fa q0 b q1) fa rs
+					       in foldl (\fa -> \ (CFRule _ b _) -> make_fa q0 b q1 fa) fa rs
 		   (x:beta) -> let (fa',q) = newState () fa
 				in make_fa q beta q1 $ make_fa q0 [x] q fa'
 	addStatesForCats [] fa = (fa,[])
@@ -164,7 +165,7 @@ equivalenceClasses r = equivalenceClasses_ (nub (map fst r)) r
 --
 
 foldFuns :: [a -> a] -> a -> a
-foldFuns fs x = foldr ($) x fs
+foldFuns fs x = foldl (flip ($)) x fs
 
 safeInit :: [a] -> [a]
 safeInit [] = []
