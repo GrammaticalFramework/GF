@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:30 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.14 $
+-- > CVS $Date: 2005/09/13 22:05:32 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.15 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -243,7 +243,14 @@ cont2val = type2val . cont2exp
 justTypeCheckSrc :: Grammar -> Exp -> Val -> Err Constraints
 justTypeCheckSrc gr e v = do
   (_,constrs0) <- checkExp (grammar2theorySrc gr) (initTCEnv []) e v
-  return $ fst $ splitConstraintsSrc gr constrs0
+  return $ filter notJustMeta constrs0
+----  return $ fst $ splitConstraintsSrc gr constrs0
+---- this change was to force proper tc of abstract modules. 
+---- May not be quite right. AR 13/9/2005 
+ where 
+   notJustMeta (c,k) = case (c,k) of
+     (VClos g1 (Meta m1), VClos g2 (Meta m2)) -> False
+     _ -> True
 
 grammar2theorySrc :: Grammar -> Theory
 grammar2theorySrc gr (m,f) = case lookupFunTypeSrc gr m f of

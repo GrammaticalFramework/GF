@@ -739,7 +739,10 @@ oper
 -}
 
   complCase : Bool -> ComplCase -> SVIForm -> NPForm = \b,c,v -> case c of {
-    CCase k => NPCase k ;
+    CCase k => case <k,b> of {
+      <Nom,False> => NPCase Part ;
+      _ => NPCase k
+      } ;
     CAcc => case b of {
       True => case v of {
         SCl _ => NPAccGen ;
