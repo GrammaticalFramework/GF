@@ -77,6 +77,12 @@ concrete ClauseFin of Clause = CategoriesFin **
   SPredAdv subj adv = 
     sats2clause (mkSatsCopula subj adv.s) ;
 
+
+  QPredV  np v   = 
+    sats2quest (mkSats (intNounPhrase np) v) ;
+  QPredV2 np v y = 
+    sats2quest (mkSatsObject (intNounPhrase np) v y) ;
+
 --------
 {-
   QPredV  np v   = 
@@ -153,10 +159,24 @@ concrete ClauseFin of Clause = CategoriesFin **
     sats2quest (mkSatsCopula (intNounPhrase subj) adv.s) ;
 
   QPredProgVP np vp = sats2quest (progressiveSats (intNounPhrase np) vp) ;
+-}
 
 
------ gender and number of Adj
+  RPredV  np v   = 
+    sats2rel (mkSatsRel np v) ;
+  RPredV2 np v y = 
+    sats2rel (mkSatsObjectRel np v y) ;
 
+  RPredAP subj adj = 
+    sats2rel (\num -> mkSatsCopulaRel subj (complAdjPhrase num adj) num) ;
+  RPredCN subj cn = 
+    sats2rel (\num -> mkSatsCopulaRel subj (complCommNoun num cn) num) ;
+  RPredNP subj np = 
+    sats2rel (mkSatsCopulaRel subj (np.s ! NPCase Nom)) ;
+  RPredAdv subj adv = 
+    sats2rel (mkSatsCopulaRel subj adv.s) ;
+
+{-
   IPredV a v = 
     sats2verbPhrase a (mkSats pronImpers v) ;
   IPredV2 a v y = 
@@ -234,6 +254,8 @@ concrete ClauseFin of Clause = CategoriesFin **
   IPredProgVP a vp = sats2verbPhrase a (progressiveSats pronImpers vp) ;
 
 -}
+
+
 
 {-
 -- Use VPs

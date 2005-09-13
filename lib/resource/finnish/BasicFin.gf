@@ -94,7 +94,7 @@ lin
   harbour_N = nKukko "satama" "sataman" "satamia" ;
   hate_V2 = dirV2 (regV "vihata") ;
   hat_N = nLukko "hattu" ;
-  have_V2 = dirV2 (caseV adessive vOlla) ;
+  have_V2 = caseV2 (caseV adessive vOlla) nominative ;
   hear_V2 = dirV2 (regV "kuulla") ;
   hill_N = nLukko "kukkula" ;
   hope_VS = mkVS (regV "toivoa") ;
