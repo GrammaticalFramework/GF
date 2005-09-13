@@ -595,6 +595,20 @@ oper
 -}
 ----
 
+
+-- This is for questions with $IP$, thus with normal word order and no "ko".
+
+  sats2quest : Sats -> QuestClause = \sats -> 
+    {s = \\bsf => sats.s ! <SDecl, bsf.p1, bsf.p2>} ;
+
+-- This is a nice and natural hack with higher-order functions, for $ClauseFin$.
+
+  sats2rel : (Number -> Sats) -> RelClause = \fsats -> 
+    {s = \\b,sf,n => (fsats n).s ! <SDecl,b,sf>} ;
+
+  mkSatsRel : RelPron -> Verb1 -> Number -> Sats = \rel,verb,n -> 
+    mkSats (relNounPhrase n rel) verb ;
+
   mkSats : NounPhrase -> Verb1 -> Sats = \subj,verb -> {s = 
     \\stbsf => 
     let 
@@ -679,9 +693,14 @@ oper
 -}
   mkSatsObject : NounPhrase -> TransVerb -> NounPhrase -> Sats = \subj,verb,obj ->
     insertObject (mkSats subj verb) verb.c verb.s3 verb.p obj ;
+  mkSatsObjectRel : RelPron -> TransVerb -> NounPhrase -> Number -> Sats =
+     \subj,verb,obj,n ->
+    insertObject (mkSatsRel subj verb n) verb.c verb.s3 verb.p obj ;
 
   mkSatsCopula : NounPhrase -> Str -> Sats = \subj,comp ->
     insertComplement (mkSats subj (vNom verbOlla)) comp ;
+  mkSatsCopulaRel : RelPron -> Str -> Number -> Sats = \subj,comp,n ->
+    insertComplement (mkSatsRel subj (vNom verbOlla) n) comp ;
 
   insertObject : Sats -> ComplCase -> Str -> Bool -> NounPhrase -> Sats = 
      \sats, c, prep, pos, obj -> {s =
@@ -1205,6 +1224,10 @@ oper
 -- not needed, since it is uniformly $NP3$.
 
   IntPron : Type = {s : NPForm => Str ; n : Number} ; 
+
+-- Thus it is simple to make $IP $ into $NP$ (used as auxiliary in predication).
+
+  intNounPhrase : IntPron -> NounPhrase = \ip -> ip ** {p = NP3} ;
 
 -- In analogy with relative pronouns, we have a rule for applying a function
 -- to a relative pronoun to create a new one. 
