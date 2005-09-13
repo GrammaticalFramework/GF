@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/04 11:45:38 $
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.10 $
+-- > CVS $Date: 2005/09/13 08:33:58 $
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.11 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -524,6 +524,12 @@ txtHelpFile =
   "\n   *-printer=xml            XML: DTD for the pg command, object for st" ++
   "\n    -printer=old            old GF: file readable by GF 1.2" ++
   "\n    -printer=stat           show some statistics of generated GFC" ++
+  "\n    -printer=gsl            Nuance GSL speech recognition grammar" ++
+  "\n    -printer=jsgf           Java Speech Grammar Format" ++
+  "\n    -printer=slf            a finite automaton in the HTK SLF format" ++
+  "\n    -printer=slf_graphviz   the same automaton as in SLF, but in Graphviz format" ++
+  "\n    -printer=fa_graphviz    a finite automaton with labelled edges" ++
+  "\n    -printer=regular        a regular grammar in a simple BNF" ++
   "\n" ++
   "\n-startcat, like -cat, but used in grammars (to avoid clash with keyword cat)" ++
   "\n" ++
