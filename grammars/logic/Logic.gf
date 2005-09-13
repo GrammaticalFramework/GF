@@ -73,7 +73,8 @@ fun
   Pron : (A : Dom) -> Elem A -> Elem A ;
 
 def 
-  -- proof normalization
+  -- proof normalization; does not tc 13/9/2005
+
   ConjEl _ _ (ConjI _ _ a _) = a ;
   ConjEr _ _ (ConjI _ _ _ b) = b ;
   DisjE _ _ _ (DisjIl _ _ a) d _ = d a ;
@@ -81,7 +82,11 @@ def
   ImplE _ _ (ImplI _ _ b) a = b a ;
   NegE _ (NegI _ b) a = b a ;
   UnivE _ _ (UnivI _ _ b) a = b a ;
-  ExistE _ _ _ (ExistI _ _ a b) d = d a b ;
+---  ExistE _ _ _ (ExistI _ _ a b) d = d a b ; 
+--- does not tc 13/9/2005: {a{-2-}<>a{-0-}}
+--- moreover: no problem with
+--- ConjEr _ _ (ConjI _ _ a _) = a ;
+--- But this changes when A B are used instead of _ _
 
   -- Hypo and Pron are identities
   Hypo _ a = a ;
