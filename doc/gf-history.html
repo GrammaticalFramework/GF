@@ -12,6 +12,20 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 </center>
 
+14/9 (AR) Added printing of grammars to a format without parameters, in
+the spirit of Peanos "Latino sine flexione". The command <tt>pg -unpar</tt>
+does the trick, and the result can be saved in a <tt>gfcm</tt> file. The generated
+concrete syntax modules get the prefix <tt>UP_</tt>. The translation is briefly:
+<pre>
+  (P => T)*               =  T*
+  (t ! p)*                =  t*
+  (table {p => t ; ...})* =  t*
+</pre>
+In order for this to be maximally useful, the grammar should be written in such
+a way that the first value of every parameter type is the desired one. For
+instance, in Peano's case it would be the ablative for noun cases, the singular for
+numbers, and the 2nd person singular imperative for verb forms.
+
 <p>
 
 14/9 (BB) Added finite state approximation of grammars. 
