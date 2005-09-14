@@ -1193,10 +1193,15 @@ oper
   relVerbPhrase : RelPron -> VerbPhrase -> RelClause = \joka,ui ->
     {s = \\n => joka.s ! n ! npForm2Case n (complementCase True ui.c Inf) ++ 
                 ui.s ! Pres n P3 ++ ui.s2 ! Pres n P3} ;
-
-  relSlash : RelPron -> SentenceSlashNounPhrase -> RelClause = \joka,saat ->
-    {s = \\n => joka.s ! n ! saat.c ++ saat.s2 ++ saat.s} ;
 -}
+
+  relSlash : RelPron -> SentenceSlashNounPhrase -> RelClause = \joka,tapaat ->
+    {s = \\b,sf,n => 
+       joka.s ! n ! npForm2Case n (complCase b tapaat.c (SCl sf)) ++ tapaat.s2 ++ 
+       tapaat.s ! <b,sf>
+    } ;
+
+
 -- A 'degenerate' relative clause is the one often used in mathematics, e.g.
 -- "luku x siten että x on parillinen".
 
@@ -1307,9 +1312,11 @@ oper
 --  intVerbPhrase : IntPron -> VerbPhrase -> Question = \kuka,ui ->
 --    predVerbPhrase (kuka ** {p = NP3}) ui ;
 
---  intSlash : IntPron -> SentenceSlashNounPhrase -> QuestClause = \kuka,tapaat ->
---    ss (kuka.s ! NPCase tapaat.c ++ tapaat.s2 ++ tapaat.s) ;
-
+  intSlash : IntPron -> SentenceSlashNounPhrase -> QuestClause = \kuka,tapaat ->
+    {s = \\bsf => 
+       kuka.s ! complCase bsf.p1 tapaat.c (SCl bsf.p2) ++ tapaat.s2 ++ 
+       tapaat.s ! bsf
+    } ;
 
 --3 Interrogative adverbials
 --

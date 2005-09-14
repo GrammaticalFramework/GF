@@ -131,7 +131,7 @@ lin
 
   IdRP = identRelPron ;
   FunRP = funRelPron ;
-----  RelSlash = relSlash ;
+  RelSlash = relSlash ;
   ModRS = modRelClause ;
   RelCl = relSuch ;
 
@@ -144,7 +144,7 @@ lin
   FunIP = funIntPron ;
 
   QuestCl cl = {s = \\bsf => cl.s ! <SQuest,bsf.p1,bsf.p2>} ;
-----  IntSlash = intSlash ;
+  IntSlash = intSlash ;
   QuestAdv = questAdverbial ;
 
   PosImpVP = imperVerbPhrase True ;
