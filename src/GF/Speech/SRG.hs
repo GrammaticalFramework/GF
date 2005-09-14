@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/12 15:46:44 $ 
+-- > CVS $Date: 2005/09/14 15:17:30 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.16 $
+-- > CVS $Revision: 1.17 $
 --
 -- Representation of, conversion to, and utilities for 
 -- printing of a general Speech Recognition Grammar. 
@@ -20,6 +20,7 @@
 
 module GF.Speech.SRG where
 
+import GF.Data.Utilities
 import GF.Infra.Ident
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..))
@@ -80,29 +81,8 @@ mkCatNames prefix origNames = listToFM (zip origNames names)
 -- * Utilities for building and printing SRGs
 --
 
-nl :: ShowS
-nl = showChar '\n'
-
-sp :: ShowS
-sp = showChar ' '
-
-wrap :: String -> ShowS -> String -> ShowS
-wrap o s c = showString o . s . showString c
-
-concatS :: [ShowS] -> ShowS
-concatS = foldr (.) id
-
-unwordsS :: [ShowS] -> ShowS
-unwordsS = join " "
-
-unlinesS :: [ShowS] -> ShowS
-unlinesS = join "\n"
-
-join :: String -> [ShowS] -> ShowS
-join glue = concatS . intersperse (showString glue)
+lookupFM_ :: (Ord key, Show key) => FiniteMap key elt -> key -> elt
+lookupFM_ fm k = lookupWithDefaultFM fm (error $ "Key not found: " ++ show k) k
 
 prtS :: Print a => a -> ShowS
 prtS = showString . prt
-
-lookupFM_ :: (Ord key, Show key) => FiniteMap key elt -> key -> elt
-lookupFM_ fm k = lookupWithDefaultFM fm (error $ "Key not found: " ++ show k) k

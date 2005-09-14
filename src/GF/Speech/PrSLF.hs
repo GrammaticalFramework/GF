@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/13 08:20:20 $ 
+-- > CVS $Date: 2005/09/14 15:17:30 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.8 $
+-- > CVS $Revision: 1.9 $
 --
 -- This module converts a CFG to an SLF finite-state network
 -- for use with the ATK recognizer. The SLF format is described
@@ -21,17 +21,17 @@
 module GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter,
                         faGraphvizPrinter,regularPrinter) where
 
-import GF.Speech.SRG
-import GF.Speech.TransformCFG
-import GF.Speech.CFGToFiniteState
-import GF.Speech.FiniteState
-import GF.Infra.Ident
-
+import GF.Data.Utilities
+import GF.Conversion.Types
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..),symbol)
-import GF.Conversion.Types
-import GF.Infra.Print
+import GF.Infra.Ident
 import GF.Infra.Option
+import GF.Infra.Print
+import GF.Speech.CFGToFiniteState
+import GF.Speech.FiniteState
+import GF.Speech.SRG
+import GF.Speech.TransformCFG
 
 import Data.Char (toUpper,toLower)
 import Data.List
@@ -54,12 +54,13 @@ slfPrinter name opts cfg = prSLF (automatonToSLF $ moveLabelsToNodes $ cfgToFA n
 slfGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 slfGraphvizPrinter name opts cfg = 
-    prGraphGraphviz (mapStates (fromMaybe "") $ mapTransitions (const "") $ moveLabelsToNodes $ cfgToFA name opts cfg)
+    prFAGraphviz (mapStates (fromMaybe "") $ mapTransitions (const "") $ moveLabelsToNodes $ cfgToFA name opts cfg)
 
 faGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 faGraphvizPrinter name opts cfg = 
-    prGraphGraphviz (mapStates (const "") $ mapTransitions (fromMaybe "") $ cfgToFA name opts cfg)
+    prFAGraphviz (mapStates (const "") $ mapTransitions (fromMaybe "") $ cfgToFA name opts cfg)
+
 
 -- | Convert the grammar to a regular grammar and print it in BNF
 regularPrinter :: CGrammar -> String

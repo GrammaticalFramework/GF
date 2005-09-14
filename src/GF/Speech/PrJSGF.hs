@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/07 14:21:30 $ 
+-- > CVS $Date: 2005/09/14 15:17:29 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.14 $
+-- > CVS $Revision: 1.15 $
 --
 -- This module prints a CFG as a JSGF grammar.
 --
@@ -19,13 +19,14 @@
 
 module GF.Speech.PrJSGF (jsgfPrinter) where
 
-import GF.Speech.SRG
-import GF.Infra.Ident
+import GF.Conversion.Types
+import GF.Data.Utilities
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..))
-import GF.Conversion.Types
+import GF.Infra.Ident
 import GF.Infra.Print
 import GF.Infra.Option
+import GF.Speech.SRG
 
 jsgfPrinter :: Ident -- ^ Grammar name
 	   -> Options -> CGrammar -> String
@@ -45,7 +46,7 @@ prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
 	      . showString "public <MAIN> = " . prCat start . showChar ';' . nl . nl
     prRule (SRGRule cat origCat rhs) = 
 	comments [origCat] . nl
-        . prCat cat . showString " = " . join " | " (map prAlt rhs) . nl
+        . prCat cat . showString " = " . joinS " | " (map prAlt rhs) . nl
     prAlt rhs | null rhs' = showString "<NULL>"
 	      | otherwise = wrap "(" (unwordsS (map prSymbol rhs')) ")"
 		   where rhs' = rmPunct rhs

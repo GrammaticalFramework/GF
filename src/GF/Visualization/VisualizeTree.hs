@@ -11,6 +11,8 @@
 --
 -- Print a graph of an abstract syntax tree in Graphviz DOT format
 -- Based on BB's VisualizeGrammar
+-- FIXME: change this to use GF.Visualization.Graphviz, 
+--        instead of rolling its own.
 -----------------------------------------------------------------------------
 
 module GF.Visualization.VisualizeTree ( visualizeTrees

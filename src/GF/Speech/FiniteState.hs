@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/12 22:32:24 $ 
+-- > CVS $Date: 2005/09/14 15:17:29 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- A simple finite state network module.
 -----------------------------------------------------------------------------
@@ -19,12 +19,14 @@ module GF.Speech.FiniteState (FA, State,
 			      newState, newTransition,
 			      mapStates, mapTransitions,
 			      moveLabelsToNodes, minimize,
-			      prGraphGraphviz) where
+			      prFAGraphviz) where
 
 import Data.List
 import Data.Maybe (fromJust)
 
-import Debug.Trace
+import GF.Data.Utilities
+import qualified GF.Visualization.Graphviz as Dot
+
 
 data FA a b = FA (Graph a b) State [State]
 
@@ -75,14 +77,15 @@ minimize = onGraph mimimizeGr1
 moveLabelsToNodes :: Eq a => FA () (Maybe a) -> FA (Maybe a) ()
 moveLabelsToNodes = onGraph moveLabelsToNodes_
 
-prGraphGraphviz :: FA String String -> String
-prGraphGraphviz (FA (Graph _ ns es) _ _) = 
-    "digraph {\n" ++ unlines (map prNode ns)
-		  ++ "\n"
-		  ++ unlines (map prEdge es)
-			 ++ "\n}\n"
-    where prNode (n,l) = show n ++ " [label = " ++ show l ++ "]"
-	  prEdge (f,t,l) = show f ++ " -> " ++ show t ++ " [label = " ++ show l ++ "]"
+prFAGraphviz :: FA String String -> String
+prFAGraphviz  = Dot.prGraphviz . mkGraphviz
+ where
+ mkGraphviz (FA (Graph _ ns es) s f) = Dot.Graph Dot.Directed [] (map mkNode ns) (map mkEdge es)
+   where mkNode (n,l) = Dot.Node (show n) attrs
+	     where attrs = [("label",l)] 
+			   ++ if n == s then [("shape","box")] else []
+			   ++ if n `elem` f then [("style","bold")] else []
+	 mkEdge (x,y,l) = Dot.Edge (show x) (show y) [("label",l)]
 
 --
 -- * Graphs 
@@ -165,12 +168,5 @@ mimimizeGr2 = id
 removeDuplicateEdges :: Ord b => Graph a b -> Graph a b
 removeDuplicateEdges (Graph c ns es) = Graph c ns (sortNub es)
 
-
-
-
---
--- * Utilities
--- 
-
-sortNub :: Ord a => [a] -> [a]
-sortNub = map head . group . sort
+reverseGraph :: Graph a b -> Graph a b
+reverseGraph (Graph c ns es) = Graph c ns [ (t,f,l) | (f,t,l) <- es ]
