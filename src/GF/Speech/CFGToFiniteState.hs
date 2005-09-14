@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 15:17:29 $ 
+-- > CVS $Date: 2005/09/14 16:08:35 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- Approximates CFGs with finite state networks.
 -----------------------------------------------------------------------------
@@ -27,7 +27,7 @@ import GF.Speech.FiniteState
 import GF.Speech.TransformCFG
 
 cfgToFA :: Ident -- ^ Grammar name
-	-> Options -> CGrammar -> FA () (Maybe String)
+	-> Options -> CGrammar -> NFA String
 cfgToFA name opts = minimize . compileAutomaton start . makeSimpleRegular
   where start = getStartCat opts
 
@@ -67,7 +67,7 @@ mutRecCats incAll g = equivalenceClasses $ symmetricSubrelation $ transitiveClos
 -- Convert a strongly regular grammar to a finite automaton.
 compileAutomaton :: Cat_ -- ^ Start category
 		 -> CFRules
-		 -> FA () (Maybe Token)
+		 -> NFA Token
 compileAutomaton start g = make_fa s [Cat start] f fa''
   where fa = newFA ()
 	s = startState fa
@@ -77,7 +77,7 @@ compileAutomaton start g = make_fa s [Cat start] f fa''
 	-- | The make_fa algorithm from \"Regular approximation of CFLs: a grammatical view\",
 	--   Mark-Jan Nederhof. International Workshop on Parsing Technologies, 1997.
 	make_fa :: State -> [Symbol Cat_ Token] -> State 
-		-> FA () (Maybe Token) -> FA () (Maybe Token)
+		-> NFA Token -> NFA Token
 	make_fa q0 alpha q1 fa = 
 	    case alpha of
 		   []       -> newTransition q0 q1 Nothing fa
