@@ -80,7 +80,7 @@ lincat
   Cl     = Clause ;
       -- = {s : SType => Bool => SForm => Str} ;
 
-  Slash  = Sentence ** {s2 : Str ; c : Case} ;
+  Slash  = QuestClause ** {s2 : Str ; c : ComplCase} ;
 
   RP     = {s : Number => Case => Str} ;
   RCl    = {s : Bool   => SForm => Number => Str} ;

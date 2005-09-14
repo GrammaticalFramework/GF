@@ -125,7 +125,7 @@ lin
 --3 Sentences and relative clauses
 --
 
-----  SlashV2 = slashTransVerbCl ;
+  SlashV2 = slashTransVerbCl ;
 ----  SlashVV2 = slashVerbVerb ;
 ----  SlashAdv cl p = slashAdverb cl p.s ;
 
