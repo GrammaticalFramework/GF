@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 15:17:30 $ 
+-- > CVS $Date: 2005/09/14 16:08:35 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.9 $
+-- > CVS $Revision: 1.10 $
 --
 -- This module converts a CFG to an SLF finite-state network
 -- for use with the ATK recognizer. The SLF format is described
@@ -71,7 +71,7 @@ regularPrinter = prCFRules . makeSimpleRegular
   join g = concat . intersperse g
   showRhs = unwords . map (symbol id show)
 
-automatonToSLF :: FA (Maybe String) () -> SLF
+automatonToSLF :: FA State (Maybe String) () -> SLF
 automatonToSLF fa = 
     SLF { slfNodes = map mkSLFNode (states fa), 
 	  slfEdges = zipWith mkSLFEdge [0..] (transitions fa) }
