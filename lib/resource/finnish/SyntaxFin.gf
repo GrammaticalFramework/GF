@@ -1150,18 +1150,20 @@ oper
 -- neutralizes: even prepositions are attached after relative and interrogative
 -- pronouns: "jota ennen" cf. "ennen talvea". Otherwise, the category and
 -- the rules are very similar to transitive verbs. Notice that the case gets
--- fixed by the Boolean parameter and the subject.
+-- fixed by the Boolean parameter and the subject, when the slash is
+-- used: "talo jonka ostin - talo jota en ostanut" ; 
+-- "talo joka minulla on - talo jota minulla ei ole".
 
-  SentenceSlashNounPhrase = Sentence ** {s2 : Str ; c : Case} ;
-{-
-  slashTransVerb : Bool -> NounPhrase -> TransVerb -> SentenceSlashNounPhrase = 
-    \b,jussi,ostaa ->
-    predVerbPhrase jussi (predVerbGroup b (predVerb ostaa)) ** {
-      s2 = ostaa.s3 ++ ostaa.s4 ;
-      c  = npForm2Case jussi.n 
-                       (complementCase b ostaa.c (Pres jussi.n (np2Person jussi.p)))
+
+  SentenceSlashNounPhrase = QuestClause ** {s2 : Str ; c : ComplCase} ;
+
+  slashTransVerbCl : NounPhrase -> TransVerb -> SentenceSlashNounPhrase = 
+    \jussi,ostaa -> {
+      s  = \\p => (sats2clause (mkSats jussi ostaa)).s ! <SDecl,p.p1,p.p2> ; 
+      s2 = ostaa.s3 ;
+      c  = ostaa.c
       } ;
--}
+
 
 
 --2 Relative pronouns and relative clauses
@@ -1305,8 +1307,8 @@ oper
 --  intVerbPhrase : IntPron -> VerbPhrase -> Question = \kuka,ui ->
 --    predVerbPhrase (kuka ** {p = NP3}) ui ;
 
-  intSlash : IntPron -> SentenceSlashNounPhrase -> Question = \kuka,tapaat ->
-    ss (kuka.s ! NPCase tapaat.c ++ tapaat.s2 ++ tapaat.s) ;
+--  intSlash : IntPron -> SentenceSlashNounPhrase -> QuestClause = \kuka,tapaat ->
+--    ss (kuka.s ! NPCase tapaat.c ++ tapaat.s2 ++ tapaat.s) ;
 
 
 --3 Interrogative adverbials
