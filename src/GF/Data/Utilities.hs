@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 15:17:29 $ 
+-- > CVS $Date: 2005/09/14 18:00:19 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- Basic functions not in the standard libraries
 -----------------------------------------------------------------------------
@@ -84,6 +84,14 @@ unionAll = nub . concat
 --   instead of returning Nothing.
 lookup' :: Eq a => a -> [(a,b)] -> b
 lookup' x = fromJust . lookup x
+
+-- * ordering functions
+
+compareBy :: Ord b => (a -> b) -> a -> a -> Ordering
+compareBy f = both f compare
+
+both :: (a -> b) -> (b -> b -> c) -> a -> a -> c
+both f g x y = g (f x) (f y)
 
 -- * functions on pairs
 
