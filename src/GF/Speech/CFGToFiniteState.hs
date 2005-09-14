@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/12 16:10:23 $ 
+-- > CVS $Date: 2005/09/14 15:17:29 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Approximates CFGs with finite state networks.
 -----------------------------------------------------------------------------
@@ -16,6 +16,7 @@ module GF.Speech.CFGToFiniteState (cfgToFA, makeSimpleRegular) where
 
 import Data.List
 
+import GF.Data.Utilities
 import GF.Formalism.CFG 
 import GF.Formalism.Utilities (Symbol(..), mapSymbol, filterCats, symbol, NameProfile(..))
 import GF.Conversion.Types
@@ -160,13 +161,3 @@ equivalenceClasses r = equivalenceClasses_ (nub (map fst r)) r
        equivalenceClasses_ (x:xs) r = (x:ys):equivalenceClasses_ zs r
 	   where (ys,zs) = partition (isRelatedTo r x) xs
 
---
--- * Utilities
---
-
-foldFuns :: [a -> a] -> a -> a
-foldFuns fs x = foldl (flip ($)) x fs
-
-safeInit :: [a] -> [a]
-safeInit [] = []
-safeInit xs = init xs

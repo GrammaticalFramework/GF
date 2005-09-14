@@ -5,11 +5,13 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/17 11:20:26 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.9 $
+-- > CVS $Date: 2005/09/14 15:17:30 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.10 $
 --
 -- Print a graph of module dependencies in Graphviz DOT format
+-- FIXME: change this to use GF.Visualization.Graphviz, 
+--        instead of rolling its own.
 -----------------------------------------------------------------------------
 
 module GF.Visualization.VisualizeGrammar ( visualizeCanonGrammar,

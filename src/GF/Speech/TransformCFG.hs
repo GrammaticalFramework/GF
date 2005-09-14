@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/12 16:10:23 $ 
+-- > CVS $Date: 2005/09/14 15:17:30 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.21 $
+-- > CVS $Revision: 1.22 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -23,20 +23,19 @@ module GF.Speech.TransformCFG {- (CFRule_, CFRules,
 			       removeLeftRecursion,
 			       removeEmptyCats, removeIdenticalRules) -} where
 
-import GF.Infra.Ident
+import GF.Conversion.Types
+import GF.Data.Utilities
 import GF.Formalism.CFG 
 import GF.Formalism.Utilities (Symbol(..), mapSymbol, filterCats, symbol, NameProfile(..))
-import GF.Conversion.Types
-import GF.Infra.Print
+import GF.Infra.Ident
 import GF.Infra.Option
+import GF.Infra.Print
 import GF.Speech.FiniteState
 
 import Control.Monad
 import Data.FiniteMap
 import Data.List
 import Data.Maybe (fromJust, fromMaybe)
-
-import Debug.Trace
 
 
 -- | not very nice to replace the structured CFCat type with a simple string
@@ -135,26 +134,4 @@ anyUsedBy cs (CFRule _ ss _) = any (`elem` cs) (filterCats ss)
 mkName :: String -> Name
 mkName n = Name (IC n) []
 
---
--- * Utilities
---
-
-findSet :: Eq c => c -> [[c]] -> Maybe [c]
-findSet x = find (x `elem`)
-
-fix :: Eq a => (a -> a) -> a -> a
-fix f x = let x' = f x in if x' == x then x else fix f x'
-
-nothingOrNull :: Maybe [a] -> Bool
-nothingOrNull Nothing = True
-nothingOrNull (Just xs) = null xs
-
-unionAll :: Eq a => [[a]] -> [a]
-unionAll = nub . concat
-
-whenMP :: MonadPlus m => Bool -> a -> m a
-whenMP b x = if b then return x else mzero
-
-lookup' :: Eq a => a -> [(a,b)] -> b
-lookup' x = fromJust . lookup x
 
