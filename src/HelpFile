@@ -501,6 +501,7 @@ q, quit: q
     -printer=slf_graphviz   the same automaton as in SLF, but in Graphviz format
     -printer=fa_graphviz    a finite automaton with labelled edges
     -printer=regular        a regular grammar in a simple BNF
+    -printer=unpar          a gfc grammar with parameters eliminated
 
 -startcat, like -cat, but used in grammars (to avoid clash with keyword cat)
 

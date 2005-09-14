@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/13 08:33:58 $
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/09/14 16:26:22 $
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.12 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -530,6 +530,7 @@ txtHelpFile =
   "\n    -printer=slf_graphviz   the same automaton as in SLF, but in Graphviz format" ++
   "\n    -printer=fa_graphviz    a finite automaton with labelled edges" ++
   "\n    -printer=regular        a regular grammar in a simple BNF" ++
+  "\n    -printer=unpar          a gfc grammar with parameters eliminated" ++
   "\n" ++
   "\n-startcat, like -cat, but used in grammars (to avoid clash with keyword cat)" ++
   "\n" ++
