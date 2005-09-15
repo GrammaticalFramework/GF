@@ -6,7 +6,8 @@ abstract Lang =
   Structural, 
   Basic, 
   Time, 
-  Country 
+  Country,
+  Math
 
   ** {
   fun

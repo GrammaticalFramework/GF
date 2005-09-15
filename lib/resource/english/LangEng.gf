@@ -6,7 +6,8 @@ concrete LangEng of Lang =
   StructuralEng,  
   BasicEng,
   TimeEng,
-  CountryEng
+  CountryEng,
+  MathEng
 
    ** open Prelude, ParadigmsEng in {
 

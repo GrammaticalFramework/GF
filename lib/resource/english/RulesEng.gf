@@ -28,14 +28,6 @@ lin
   UseN  = noun2CommNounPhrase ;
   UsePN = nameNounPhrase ;
 
-  SymbPN i = {s = table {Nom => i.s ; Gen => i.s ++ "'s"} ; g = Neutr} ; ---
-  SymbCN cn s =
-    {s = \\n,c => cn.s ! n ! c ++ s.s ; 
-     g = cn.g} ;
-  IntCN cn s =
-    {s = \\n,c => cn.s ! n ! c ++ s.s ; 
-     g = cn.g} ;
-
   IndefOneNP = indefNounPhrase singular ;
   IndefNumNP = indefNounPhraseNum plural ;
   DefOneNP = defNounPhrase singular ;

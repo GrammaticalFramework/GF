@@ -24,14 +24,6 @@ lin
   UseN  = noun2CommNounPhrase ;
   UsePN = nameNounPhrase ;
 
-  SymbPN i = {s = \\_ => i.s} ;  --- case endings often needed
-  SymbCN cn s =
-    {s = \\f,n,c => cn.s ! f ! n ! c ++ s.s ; 
-     g = cn.g} ;
-  IntCN cn s =
-    {s = \\f,n,c => cn.s ! f ! n ! c ++ s.s ; 
-     g = cn.g} ;
-
   IndefOneNP = indefNounPhrase singular ;
   IndefNumNP = nounPhraseNum False ;
   DefOneNP = defNounPhrase singular ;
@@ -205,6 +197,8 @@ lin
 -- special constructions
 
 ----  OneNP = nameNounPhrase (nameReg "one" human) ;
+
+--- should be partitive in negative forms: "ei ole olemassa puista autoa"
 
   ExistCN cn = 
     sats2clause (

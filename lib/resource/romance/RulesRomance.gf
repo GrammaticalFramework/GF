@@ -7,14 +7,6 @@ lin
   UseN = noun2CommNounPhrase ;
   UsePN = nameNounPhrase ;
 
-  SymbPN i = {s = i.s ; g = Masc} ; --- cannot know gender
-  SymbCN cn s =
-    {s = \\n => cn.s ! n ++ s.s ; 
-     g = cn.g} ;
-  IntCN cn i =
-    {s = \\n => cn.s ! n ++ i.s ; 
-     g = cn.g} ;
-
   IndefOneNP = indefNounPhrase singular ;
   IndefNumNP = indefNounPhraseNum ;
   DefOneNP = defNounPhrase singular ;

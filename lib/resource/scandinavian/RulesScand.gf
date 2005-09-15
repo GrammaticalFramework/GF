@@ -10,16 +10,13 @@ lin
   UsePN = nameNounPhrase ;
 
   SymbPN i = {s = \\_ => i.s ; g = NNeutr} ;
+
   SymbCN cn s =
-    {s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ; 
-     g = cn.g ;
-     p = cn.p
-     } ;
-  IntCN cn s =
-    {s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ; 
-     g = cn.g ;
-     p = cn.p
-     } ;
+    {s = \\n => cn.s ! n ++ s.s ; 
+     g = cn.g} ;
+  IntCN cn i =
+    {s = \\n => cn.s ! n ++ i.s ; 
+     g = cn.g} ;
 
   IndefOneNP = indefNounPhrase singular ;
   IndefNumNP = indefNounPhraseNum plural ;

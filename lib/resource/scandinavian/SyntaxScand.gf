@@ -122,6 +122,11 @@ oper
 
   npDet : NounPhrase ;
 
+
+  addSymbNounPhrase : NounPhrase -> Str -> NounPhrase = \np,x -> 
+    {s = \\c => np.s ! c ++ x ; g = np.g ; n = np.n ; p = np.p} ;
+
+
 --2 Determiners
 --
 -- Determiners are inflected according to noun in gender and sex. 
@@ -1710,4 +1715,7 @@ oper
 
   pronVars, pronVem, pronVems : Str ;
 
+  conjEt : Str ;
+
+  letImp : Str = "låt" ; ---- check for all scand
 } ;

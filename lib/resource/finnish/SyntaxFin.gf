@@ -157,6 +157,14 @@ oper
 
   noNum : Numeral = {s = \\_ => [] ; isNum = False ; n = Pl} ;
 
+-- To add a symbol, such as a variable or variable list, to the end of
+-- an NP.
+
+  addSymbNounPhrase : NounPhrase -> Str -> NounPhrase = \np,x ->
+    {s = \\c => np.s ! c ++ x ;
+     n = np.n ;
+     p = np.p 
+    } ;
 
 --2 Determiners
 --

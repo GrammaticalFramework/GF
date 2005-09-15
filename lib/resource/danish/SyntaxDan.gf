@@ -116,4 +116,5 @@ instance SyntaxDan of SyntaxScand = TypesDan **
       {s = verbVara.s ; s1 = "ved" ; isAux = False}
       vp) ;
 
+  conjEt = "og" ;
 }
