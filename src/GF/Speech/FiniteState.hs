@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 18:00:19 $ 
+-- > CVS $Date: 2005/09/15 18:10:44 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
 -- A simple finite state network module.
 -----------------------------------------------------------------------------
@@ -125,11 +125,10 @@ prFAGraphviz  = Dot.prGraphviz . toGraphviz
 toGraphviz :: (Eq n,Show n) => FA n String String -> Dot.Graph
 toGraphviz (FA (Graph _ ns es) s f) = Dot.Graph Dot.Directed [] (map mkNode ns) (map mkEdge es)
    where mkNode (n,l) = Dot.Node (show n) attrs
-	     where attrs = [("label",l)] 
+	     where attrs = [("label",l)]
 			   ++ if n == s then [("shape","box")] else []
 			   ++ if n `elem` f then [("style","bold")] else []
 	 mkEdge (x,y,l) = Dot.Edge (show x) (show y) [("label",l)]
-
 
 --
 -- * Graphs 
