@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/03 21:51:59 $ 
+-- > CVS $Date: 2005/09/15 16:22:02 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.8 $
+-- > CVS $Revision: 1.9 $
 --
 -- how to form linearizable trees from strings and from terms of different levels
 --
@@ -24,6 +24,7 @@ import GF.Grammar.MMacros
 import GF.Grammar.Macros
 import GF.Compile.Rename
 import GF.Grammar.TypeCheck
+import GF.Grammar.AbsCompute (beta)
 import GF.Compile.PGrammar
 import GF.Compile.ShellState
 
@@ -42,7 +43,8 @@ string2treeErr :: StateGrammar -> String -> Err Tree
 string2treeErr _ "" = Bad "empty string"
 string2treeErr gr s = do
   t <- pTerm s
-  let t1 = refreshMetas [] t
+  let t0 = beta [] t
+  let t1 = refreshMetas [] t0
   let t2 = qualifTerm abstr t1
   annotate grc t2
  where

@@ -4,9 +4,10 @@ concrete LangFin of Lang =
   RulesFin, 
   ClauseFin, 
   StructuralFin,  
-  BasicFin
+  BasicFin,
 ----  TimeEng,
 ----  CountryEng
+  MathFin
 
    ** open Prelude, ParadigmsFin in {
 

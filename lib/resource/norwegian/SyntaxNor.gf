@@ -117,4 +117,7 @@ instance SyntaxNor of SyntaxScand = TypesNor **
      (complVerbVerb 
       ({s = verbVara.s ; s1 = "ved" ; isAux = False})
       vp) ;
+
+  conjEt = "og" ;
+
 }

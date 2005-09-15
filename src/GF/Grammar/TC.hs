@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:29 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.9 $
+-- > CVS $Date: 2005/09/15 16:22:02 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.10 $
 --
 -- Thierry Coquand's type checking algorithm that creates a trace
 -----------------------------------------------------------------------------
@@ -16,6 +16,7 @@ module GF.Grammar.TC (AExp(..),
 	   Theory,
 	   checkExp,
 	   inferExp,
+           checkEqs,
 	   eqVal,
 	   whnf
 	  ) where
@@ -25,6 +26,7 @@ import GF.Grammar.Abstract
 import GF.Grammar.AbsCompute
 
 import Control.Monad
+import Data.List (sortBy)
 
 data AExp =
      AVr   Ident Val 
@@ -36,7 +38,7 @@ data AExp =
    | AApp  AExp AExp Val 
    | AAbs  Ident Val AExp 
    | AProd Ident AExp AExp 
-   | AEqs  [([Exp],AExp)] ---
+   | AEqs  [([Exp],AExp)] --- not used
    | AData Val
   deriving (Eq,Show)
 
@@ -119,11 +121,12 @@ checkExp th tenv@(k,rho,gamma) e ty = do
 	return (AAbs x a' t', cs)
       _ -> prtBad ("function type expected for" +++ prt e +++ "instead of") typ
 
+-- {- --- to get deprec when checkEqs works (15/9/2005)
     Eqs es -> do
       bcs <- mapM (\b -> checkBranch th tenv b typ) es
       let (bs,css) = unzip bcs
       return (AEqs bs, concat css) 
-
+-- - }
     Prod x a b -> do
       testErr (typ == vType) "expected Type"
       (a',csa) <- checkType th tenv a
@@ -165,7 +168,42 @@ inferExp th tenv@(k,rho,gamma) e = case e of
      IC "String" -> return $ const $ Q cPredefAbs cString
      _ -> Bad s
 
----- this is an unreliable function which should be rewritten (AR)
+checkEqs :: Theory -> TCEnv -> (Fun,Trm) -> Val -> Err [(Val,Val)]
+checkEqs th tenv@(k,rho,gamma) (fun@(m,f),def) val = case def of
+  Eqs es -> liftM concat $ mapM checkBranch es
+  _      -> liftM snd $ checkExp th tenv def val
+ where
+  checkBranch (ps,df) = 
+   let
+      (ps',_,vars) = foldr p2t ([],0,[]) ps
+      fps        = mkApp (Q m f) ps'
+   in errIn ("branch" +++ prt fps) $ do
+    (aexp, typ, cs1) <- inferExp th tenv fps
+    let
+      bds = binds vars aexp 
+      tenv' = (k, rho, bds ++ gamma) 
+    (_,cs2)  <- errIn (show bds) $ checkExp th tenv' df typ
+    return $ (cs1 ++ cs2)
+  p2t p (ps,i,g) = case p of
+     PW      -> (meta (MetaSymb i) : ps, i+1,        g) 
+     PV IW   -> (meta (MetaSymb i) : ps, i+1,        g) 
+     PV x    -> (meta (MetaSymb i) : ps, i+1,upd x i g)
+     PString s -> (            K s : ps, i,          g)
+     PInt i -> (EInt i : ps, i, g)
+     PP m c xs -> (mkApp (qq (m,c)) xss : ps, i', g') 
+                    where (xss,i',g') = foldr p2t ([],i,g) xs
+     _ -> error $ "undefined p2t case" +++ prt p +++ "in checkBranch"
+  upd x i g = (x,i) : g --- to annotate pattern variables: treat as metas
+  
+  -- notice: in vars, the sequence 0.. is sorted. In subst aexp, all
+  -- this occurs and nothing else.
+  binds vars aexp = [(x,v) | ((x,_),v) <- zip vars metas] where
+    metas = map snd $ sortBy (\ (x,_) (y,_) -> compare x y) $ subst aexp
+  subst aexp = case aexp of
+   AMeta (MetaSymb i) v -> [(i,v)]
+   AApp  c a _ -> subst c ++ subst a
+   _ -> [] -- never matter in patterns
+
 checkBranch :: Theory -> TCEnv -> Equation -> Val -> Err (([Exp],AExp),[(Val,Val)])
 checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $ 
                                   chB tenv' ps' ty 
@@ -206,6 +244,7 @@ checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $
      _ -> error $ "undefined p2t case" +++ prt p +++ "in checkBranch"
 
   upd x k g = (x, VGen k x) : g --- hack to recognize pattern variables
+
 
 checkPatt :: Theory -> TCEnv -> Exp -> Val -> Err (Binds,[(Val,Val)])
 checkPatt th tenv exp val = do

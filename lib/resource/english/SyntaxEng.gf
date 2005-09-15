@@ -66,11 +66,17 @@ oper
         APl   p => {n = Pl ; p = p ; g = human}
         } ;
 
-  nameNounPhrase : ProperName -> NounPhrase = \john -> 
-    {s = \\c => john.s ! toCase c ; a = toAgr Sg P3 john.g} ;
+  caseSymb : Case -> Str -> Str = \c,i -> case c of {
+    Nom => i ; 
+    Gen => glue i "'s"
+    } ;
 
-  nameNounPhrasePl : ProperName -> NounPhrase = \john -> 
-    {s = \\c => john.s ! toCase c ; a = toAgr Pl P3 john.g} ;
+  nameNounPhrase : ProperName -> NounPhrase = 
+    nameNounPhraseN Sg ;
+  nameNounPhrasePl : ProperName -> NounPhrase = 
+    nameNounPhraseN Pl ;
+  nameNounPhraseN : Number -> ProperName -> NounPhrase = \n,john -> 
+    {s = \\c => john.s ! toCase c ; a = toAgr n P3 john.g} ;
 
 -- The following construction has to be refined for genitive forms:
 -- "we two", "us two" are OK, but "our two" is not.
@@ -85,6 +91,14 @@ oper
 
   pronNounPhrase : Pronoun -> NounPhrase = \pro -> 
     {s = pro.s ; a = toAgr pro.n pro.p pro.g} ;
+
+-- To add a symbol, such as a variable or variable list, to the end of
+-- an NP.
+
+  addSymbNounPhrase : NounPhrase -> Str -> NounPhrase = \np,x ->
+    {s = \\c => np.s ! c ++ x ;
+     a = np.a
+    } ;
 
 --2 Determiners
 --

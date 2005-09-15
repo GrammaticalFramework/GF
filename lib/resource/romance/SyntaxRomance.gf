@@ -80,6 +80,17 @@ oper
 
   existNounPhrase : NounPhrase -> Clause ;
 
+-- To add a symbol, such as a variable or variable list, to the end of
+-- an NP.
+
+  addSymbNounPhrase : NounPhrase -> Str -> NounPhrase = \np,x ->
+    {s = \\c => np.s ! c ++ x ;
+     g = np.g ;
+     n = np.n ;
+     p = np.p ;
+     c = np.c
+    } ;
+
 
 --2 Determiners
 --

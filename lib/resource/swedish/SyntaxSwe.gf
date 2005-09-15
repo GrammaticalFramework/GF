@@ -132,4 +132,7 @@ instance SyntaxSwe of SyntaxScand = TypesSwe **
     CPpå => "på" ;
     CPtill => "till"
     } ;
+
+  conjEt = "och" ;
+
 }

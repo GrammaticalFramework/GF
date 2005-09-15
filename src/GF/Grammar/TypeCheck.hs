@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/13 22:05:32 $ 
+-- > CVS $Date: 2005/09/15 16:22:02 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -247,8 +247,8 @@ justTypeCheckSrc gr e v = do
 ----  return $ fst $ splitConstraintsSrc gr constrs0
 ---- this change was to force proper tc of abstract modules. 
 ---- May not be quite right. AR 13/9/2005 
- where 
-   notJustMeta (c,k) = case (c,k) of
+
+notJustMeta (c,k) = case (c,k) of
      (VClos g1 (Meta m1), VClos g2 (Meta m2)) -> False
      _ -> True
 
@@ -268,8 +268,9 @@ checkTyp gr typ = err singleton prConstrs $ justTypeCheckSrc gr typ vType
 checkEquation :: Grammar -> Fun -> Trm -> [String]
 checkEquation gr (m,fun) def = err singleton id $ do
   typ  <- lookupFunTypeSrc gr m fun
+----  cs   <- checkEqs (grammar2theorySrc gr) (initTCEnv []) ((m,fun),def) (vClos typ)
   cs   <- justTypeCheckSrc gr def (vClos typ)
-  let cs1 = cs ----- filter (not . possibleConstraint gr) cs ----
+  let cs1 = filter notJustMeta cs ----- filter (not . possibleConstraint gr) cs ----
   return $ ifNull [] (singleton . prConstraints) cs1
 
 checkConstrs :: Grammar -> Cat -> [Ident] -> [String]
