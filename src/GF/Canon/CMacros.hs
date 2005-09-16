@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/23 14:32:43 $ 
+-- > CVS $Date: 2005/09/16 13:56:12 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.27 $
+-- > CVS $Revision: 1.28 $
 --
 -- Macros for building and analysing terms in GFC concrete syntax.
 --
@@ -198,6 +198,11 @@ allLinFields trm = case trm of
   FV ts -> do
     lts <- mapM allLinFields ts
     return $ concat lts
+
+  T _ ts -> liftM concat $ mapM allLinFields [t | Cas _ t <- ts]
+  V _ ts -> liftM concat $ mapM allLinFields ts
+  S t _  -> allLinFields t
+
   _ -> prtBad "fields can only be sought in a record not in" trm
 
 -- | deprecated

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/14 20:09:57 $ 
+-- > CVS $Date: 2005/09/16 13:56:13 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.17 $
+-- > CVS $Revision: 1.18 $
 --
 -- Top-level partial evaluation for GF source modules.
 -----------------------------------------------------------------------------
@@ -39,7 +39,7 @@ optimizeModule :: Options -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) ->
                   Err (Ident,SourceModInfo)
 optimizeModule opts ms mo@(_,mi) = case mi of
   ModMod m0@(Module mt st fs me ops js) | st == MSComplete && isModRes m0 -> do
-      mo1 <- evalModule optres ms mo
+      mo1 <- evalModule oopts ms mo
       return $ case optim of
         "parametrize" -> shareModule paramOpt mo1  -- parametrization and sharing
         "values"      -> shareModule valOpt mo1    -- tables as courses-of-values
@@ -47,17 +47,14 @@ optimizeModule opts ms mo@(_,mi) = case mi of
         "all"         -> shareModule allOpt mo1    -- first parametrize then values
         "none"        -> mo1                       -- no optimization
         _             -> mo1                       -- none; default for src
-  _ -> evalModule optres ms mo
+  _ -> evalModule oopts ms mo
  where
    oopts = addOptions opts (iOpts (flagsModule mo))
    optim = maybe "none" id $ getOptVal oopts useOptimizer
-   optres = case optim of
-     "noexpand" -> False
-     _ -> True
 
-evalModule :: Bool -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
+evalModule :: Options -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
                Err (Ident,SourceModInfo)
-evalModule optres ms mo@(name,mod) = case mod of
+evalModule oopts ms mo@(name,mod) = case mod of
 
   ModMod m0@(Module mt st fs me ops js) | st == MSComplete -> case mt of
     _ | isModRes m0 -> do
@@ -66,7 +63,7 @@ evalModule optres ms mo@(name,mod) = case mod of
       MGrammar (mod' : _) <- foldM evalOp gr ids
       return $ mod'
     MTConcrete a -> do
-      js' <- mapMTree (evalCncInfo gr0 name a) js
+      js' <- mapMTree (evalCncInfo oopts gr0 name a) js
       return $ (name, ModMod (Module mt st fs me ops js'))
 
     _ -> return $ (name,mod)
@@ -77,13 +74,13 @@ evalModule optres ms mo@(name,mod) = case mod of
 
    evalOp g@(MGrammar ((_, ModMod m) : _)) i = do
      info  <- lookupTree prt i $ jments m
-     info' <- evalResInfo optres gr (i,info)
+     info' <- evalResInfo oopts gr (i,info)
      return $ updateRes g name i info'
 
 -- | only operations need be compiled in a resource, and this is local to each
 -- definition since the module is traversed in topological order
-evalResInfo :: Bool -> SourceGrammar -> (Ident,Info) -> Err Info
-evalResInfo optres gr (c,info) = case info of
+evalResInfo :: Options -> SourceGrammar -> (Ident,Info) -> Err Info
+evalResInfo oopts gr (c,info) = case info of
 
   ResOper pty pde -> eIn "operation" $ do
     pde' <- case pde of
@@ -95,11 +92,15 @@ evalResInfo optres gr (c,info) = case info of
  where
    comp = if optres then computeConcrete gr else computeConcreteRec gr
    eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
+   optim = maybe "none" id $ getOptVal oopts useOptimizer
+   optres = case optim of
+     "noexpand" -> False
+     _ -> True
 
 
 evalCncInfo :: 
-  SourceGrammar -> Ident -> Ident -> (Ident,Info) -> Err (Ident,Info)
-evalCncInfo gr cnc abs (c,info) = case info of
+  Options -> SourceGrammar -> Ident -> Ident -> (Ident,Info) -> Err (Ident,Info)
+evalCncInfo opts gr cnc abs (c,info) = errIn ("optimizing" +++ prt c) $ case info of
 
   CncCat ptyp pde ppr -> do
 
@@ -107,7 +108,7 @@ evalCncInfo gr cnc abs (c,info) = case info of
       (Yes typ, Yes de) -> 
         liftM yes $ pEval ([(strVar, typeStr)], typ) de
       (Yes typ, Nope)   -> 
-        liftM yes $ mkLinDefault gr typ >>= pEval ([(strVar, typeStr)],typ)
+        liftM yes $ mkLinDefault gr typ >>= partEval noOptions gr ([(strVar, typeStr)],typ)
       (May b, Nope) ->
         return $ May b
       _ -> return pde   -- indirection
@@ -127,25 +128,74 @@ evalCncInfo gr cnc abs (c,info) = case info of
 
   _ ->  return (c,info)
  where
-   pEval = partEval gr
+   pEval = partEval opts gr
    eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
 
 -- | the main function for compiling linearizations
-partEval :: SourceGrammar -> (Context,Type) -> Term -> Err Term
-partEval gr (context, val) trm = do
+partEval :: Options -> SourceGrammar -> (Context,Type) -> Term -> Err Term
+partEval opts gr (context, val) trm = errIn ("parteval" +++ prt_ trm) $ do
   let vars  = map fst context
       args  = map Vr vars
       subst = [(v, Vr v) | v <- vars]
       trm1  = mkApp trm args
-  trm2 <- etaExpand val trm1 
-  trm3 <- comp subst trm2
+  trm3 <- if globalTable 
+             then etaExpand trm1 >>= comp subst >>= outCase subst
+             else etaExpand trm1 >>= comp subst
   return $ mkAbs vars trm3
 
  where 
 
+   globalTable = oElem showAll opts --- i -all
+
    comp g t = {- refreshTerm t >>= -} computeTerm gr g t
 
-   etaExpand val t = recordExpand val t   --- >>= caseEx  -- done by comp
+   etaExpand t = recordExpand val t   --- >>= caseEx  -- done by comp
+
+   outCase subst t = do
+     pts <- getParams context
+     let (args,ptyps) = unzip $ filter (flip occur t . fst) pts
+     if null args 
+       then return t 
+       else do 
+         let argtyp = RecType $ tuple2recordType ptyps
+         let pvars = map (Vr . zIdent . prt) args -- gets eliminated
+         patt <- term2patt $ R $ tuple2record $ pvars
+         let t' = replace (zip args pvars) t
+         t1 <- comp subst $ T (TTyped argtyp) [(patt, t')]
+         return $ S t1 $ R $ tuple2record args
+
+   --- notice: this assumes that all lin types follow the "old JFP style" 
+   getParams = liftM concat . mapM getParam 
+   getParam (argv,RecType rs) = return 
+     [(P (Vr argv) lab, ptyp) | (lab,ptyp) <- rs,  not (isLinLabel lab)] 
+   ---getParam (_,ty) | ty==typeStr = return [] --- in lindef 
+   getParam (av,ty) = 
+     Bad ("record type expected not" +++ prt ty +++ "for" +++ prt av) 
+     --- all lin types are rec types
+
+   replace :: [(Term,Term)] -> Term -> Term
+   replace reps trm = case trm of  
+     -- this is the important case
+     P _ _ -> maybe trm id $ lookup trm reps
+     _ -> composSafeOp (replace reps) trm
+
+   occur t trm = case trm of
+
+     -- this is the important case
+     P _ _   -> t == trm
+     S x y   -> occur t y || occur t x
+     App f x -> occur t x || occur t f
+     Abs _ f -> occur t f
+     R rs    -> any (occur t) (map (snd . snd) rs)
+     T _ cs  -> any (occur t) (map snd cs)
+     C x y   -> occur t x || occur t y
+     Glue x y -> occur t x || occur t y
+     ExtR x y -> occur t x || occur t y
+     FV ts   -> any (occur t) ts
+     V _ ts   -> any (occur t) ts
+     Let (_,(_,x)) y -> occur t x || occur t y
+     _ -> False
+
 
 -- here we must be careful not to reduce
 --   variants {{s = "Auto" ; g = N} ; {s = "Wagen" ; g = M}}
