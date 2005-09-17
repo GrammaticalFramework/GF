@@ -28,10 +28,11 @@ fun
 
 --3 Special forms of expression
 
--- These expression forms are typical of mathematical texts.
+-- This expression form is typical of mathematical texts.
+-- It is realized with different constructs in different languages, typically
+-- some kind of 3rd person imperative of the verb "be".
 
-  LetCN    : String   -> CN -> Imp ;         -- Let x be a number.
-  LetNumCN : SymbList -> Num -> CN -> Imp ;  -- Let x and y be (2) numbers.
+  LetImp   : NP -> NP -> Imp ;         -- let x be a number
 
 -- This rule is slightly overgenerating: "there exists every number x". 
 -- The problem seems to be of semantic nature. By this we avoid having many rules.

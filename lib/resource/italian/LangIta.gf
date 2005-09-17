@@ -6,7 +6,8 @@ concrete LangIta of Lang =
   StructuralIta,  
   BasicIta,
   TimeIta,
-  CountryIta
+  CountryIta,
+  MathIta
 
    ** open Prelude, ParadigmsIta in {
 

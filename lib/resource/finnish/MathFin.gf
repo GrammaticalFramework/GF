@@ -3,9 +3,9 @@
 concrete MathFin of Math = CategoriesFin **  open Prelude, SyntaxFin, ParadigmsFin in {
 
 lin
-  SymbPN i = {s = \\c => i.s} ;  --- case endings often needed
-  IntPN i  = {s = \\c => i.s} ;
-  IntNP cn i = nameNounPhrase {
+  SymbPN i = symbProperName i.s ;  --- case ending not always correct
+  IntPN i  = symbProperName i.s ;  --- case ending not always correct
+  IntNP cn i = nameNounPhrase {    --  here the CN gets the (correct) ending
     s = \\c => cn.s ! False ! Sg ! c ++ i.s
     } ;
 
@@ -23,14 +23,9 @@ lin
   SymbTwo  = infixSS "ja" ;
   SymbMore = infixSS "," ;
 
-
-  LetCN x cn = {
-    s = \\_ => "olkoon" ++ x.s ++ (indefNounPhrase singular cn).s !
-    NPCase Nom
-    } ;
-  LetNumCN x nu cn = {
-    s = \\_ => "olkoot" ++ x.s ++ (nounPhraseNum False nu cn).s
-    ! NPCase Part
+  LetImp x np = {
+    s = \\_ => 
+        verbOlla.s ! ImperP3 x.n ++ x.s ! NPCase Nom ++ np.s ! NPCase Nom
     } ;
 
   ExistNP np = 

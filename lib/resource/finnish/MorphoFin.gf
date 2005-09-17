@@ -699,6 +699,33 @@ vowelHarmony : Str -> Str = \liitin ->
   mkProperName : CommonNoun -> ProperName = \jussi -> 
     {s = \\c => jussi.s ! NCase Sg c} ;
 
+-- An ending given to a symbol cannot really be decided
+-- independently. The string $a$ gives the vowel harmony.
+-- Only some South-West dialects have the generally valid
+-- Illative form.
+
+  caseEnding : Str -> Case -> Str = \a,c -> case c of {
+    Nom => [] ;
+    Gen => "n" ;
+    Part => a ; --- 
+    Transl => "ksi" ; 
+    Ess => "n" + a ;
+    Iness => "ss" + a ;
+    Elat => "st" + a ;
+    Illat => "sse" ; ---
+    Adess => "ll" + a ;
+    Ablat => "lt" + a ;
+    Allat => "lle" ;
+    Abess => "tt" + a
+    } ;
+
+  symbProperName : Str -> ProperName = \x -> 
+    {s = table {
+       Nom => x ;
+       c => glue x (":" + caseEnding "a" c)
+       }
+    } ;
+
 --2 Pronouns
 --
 -- Here we define personal and relative pronouns.

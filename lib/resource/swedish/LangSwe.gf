@@ -6,7 +6,8 @@ concrete LangSwe of Lang =
   StructuralSwe,  
   BasicSwe,
   TimeSwe,
-  CountrySwe
+  CountrySwe,
+  MathSwe
 
    ** open Prelude, ResourceSwe, ParadigmsSwe in {
 

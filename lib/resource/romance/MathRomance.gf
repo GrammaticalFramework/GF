@@ -26,13 +26,9 @@ lin
   SymbMore = infixSS "," ;
 
 
-  LetCN x cn = {
-    s = \\_,_ => copula.s ! VFin (VPres Con) Sg P3 ++ x.s ++ (indefNounPhrase singular cn).s !
-    unstressed nominative
-    } ;
-  LetNumCN x nu cn = {
-    s = \\_,_ => copula.s ! VFin (VPres Con) Pl P3 ++ x.s ++ (indefNounPhraseNum nu cn).s
-    ! unstressed nominative
+  LetImp x cn = {
+    s = \\_,_ => copula.s ! VFin (VPres Con) x.n P3 ++ 
+    x.s ! unstressed nominative ++ cn.s ! unstressed nominative
     } ;
 
 --- to be replaced by "il existe", "esiste", etc.

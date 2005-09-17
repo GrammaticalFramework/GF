@@ -6,7 +6,8 @@ concrete LangFre of Lang =
   StructuralFre,  
   BasicFre,
   TimeFre,
-  CountryFre
+  CountryFre,
+  MathFre
 
    ** open Prelude, ParadigmsFre in {
 
