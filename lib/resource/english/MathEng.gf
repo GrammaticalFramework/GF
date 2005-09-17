@@ -24,13 +24,7 @@ lin
   SymbTwo  = infixSS "and" ;
   SymbMore = infixSS "," ;
 
-
-  LetCN x cn = {
-    s = \\_ => "let" ++ x.s ++ "be" ++ (indefNounPhrase singular cn).s ! NomP
-    } ;
-  LetNumCN x nu cn = {
-    s = \\_ => "let" ++ x.s ++ "be" ++ (indefNounPhraseNum plural nu cn).s ! NomP
-    } ;
+  LetImp x np = {s = \\_ => "let" ++ x.s ! NomP ++ "be" ++ np.s ! NomP} ;
   ExistNP np = predVerbClause
                  (nameNounPhraseN (fromAgr np.a).n (nameReg "there" Neutr))
                  (regV "exist")

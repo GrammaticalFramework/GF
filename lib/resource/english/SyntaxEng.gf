@@ -1195,7 +1195,7 @@ oper
   questClause : Clause -> Question = \cl -> 
     {s = \\b,c => table {
        DirQ   => cl.s ! Inv ! b ! c ;
-       IndirQ => cl.s ! Dir ! b ! c
+       IndirQ => "if" ++ cl.s ! Dir ! b ! c
        }
     } ;
 {- --vg

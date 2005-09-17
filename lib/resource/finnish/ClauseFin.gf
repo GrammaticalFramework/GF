@@ -148,15 +148,17 @@ concrete ClauseFin of Clause = CategoriesFin **
       ) ;
 
 --  QPredProgVP
-
+-}
   QPredAP subj adj = 
-    sats2quest (mkSatsCopula (intNounPhrase subj) (adj.s ! AF subj.g subj.n)) ;
+    sats2quest (mkSatsCopula (intNounPhrase subj) (complAdjPhrase subj.n adj)) ;
   QPredCN subj cn = 
-    sats2quest (mkSatsCopula (intNounPhrase subj) (indefNoun subj.n cn)) ;
+    sats2quest (mkSatsCopula (intNounPhrase subj) (complCommNoun subj.n cn)) ;
   QPredNP subj np = 
-    sats2quest (mkSatsCopula (intNounPhrase subj) (np.s ! stressed nominative)) ;
+    sats2quest (mkSatsCopula (intNounPhrase subj) (np.s ! NPCase Nom)) ;
   QPredAdv subj adv = 
     sats2quest (mkSatsCopula (intNounPhrase subj) adv.s) ;
+
+{-
 
   QPredProgVP np vp = sats2quest (progressiveSats (intNounPhrase np) vp) ;
 -}
@@ -176,9 +178,20 @@ concrete ClauseFin of Clause = CategoriesFin **
   RPredAdv subj adv = 
     sats2rel (mkSatsCopulaRel subj adv.s) ;
 
+  IPredV v = 
+    mkClauseInf v ;
+  IPredV2 verb y = 
+    insertObjectInf (mkClauseInf verb) verb.c verb.s3 verb.p y ;
+  IPredV3 verb y z = 
+    insertObjectInf 
+      (insertObjectInf (mkClauseInf verb) verb.c verb.s3 verb.p y)
+        verb.c2 verb.s5 verb.p2 z ;
+  IPredVS verb sent = 
+    insertComplementInf (mkClauseInf verb) sent.s ;
+  IPredVQ verb quest = 
+    insertComplementInf (mkClauseInf verb) quest.s ;
+
 {-
-  IPredV a v = 
-    sats2verbPhrase a (mkSats pronImpers v) ;
   IPredV2 a v y = 
     sats2verbPhrase a (mkSatsObject pronImpers v y) ;
   IPredAP a adj = 

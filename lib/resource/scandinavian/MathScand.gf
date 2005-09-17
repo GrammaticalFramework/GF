@@ -26,14 +26,8 @@ lin
   SymbMore = infixSS "," ;
 
 
-  LetCN x cn = {
-    s = \\_ => letImp ++ x.s ++ verbVara.s ! VI (Inf Act) ++ (indefNounPhrase singular cn).s !
-    PNom
-    } ;
-  LetNumCN x nu cn = {
-    s = \\_ => letImp ++ x.s ++ verbVara.s ! VI (Inf Act) ++
-    (indefNounPhraseNum plural nu cn).s
-    ! PNom
+  LetImp x np = {
+    s = \\_ => letImp ++ x.s ! PNom ++ verbVara.s ! VI (Inf Act) ++ np.s ! PNom
     } ;
 
 --- to be replaced by "det existerar", etc.

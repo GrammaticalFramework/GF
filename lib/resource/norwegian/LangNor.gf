@@ -6,7 +6,8 @@ concrete LangNor of Lang =
   StructuralNor,  
   BasicNor,
   TimeNor,
-  CountryNor
+  CountryNor,
+  MathNor
 
    ** open Prelude, ParadigmsNor in {
 

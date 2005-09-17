@@ -532,76 +532,7 @@ oper
   Sats : Type = Clause ;
   sats2clause : Sats -> Clause = \sats -> sats ;
 
-  ----
-{-
-  Clause : Type = {s,s2 : Bool => SForm => Str ; s1 : Str} ;
-
-  Sats : Type = {v : Bool => SForm => Str => {fin,inf : Str} ; s1 : Str} ;
-  sats2clause : Sats -> Clause = \sats -> {
-    s  = \\b,sf => (sats.v ! b ! sf).fin ;
-    s2 = \\b,sf => (sats.v ! b ! sf).inf ;
-    s1 = sats.s1
-    }
--}
-  ----
-{-
-  Sats : Type = {
-    subj : Str ;
-    pred : Bool => SForm => {
-      fin  : Str ;
-      inf  : Str 
-      } ;
-    obj  : Bool => SVIForm => Str ;
-    comp : Str
-    } ;
-
-  sats2clause : Sats -> Clause = \sats -> 
-    let
-      subj = sats.subj ;
-      pred = sats.pred ;
-    in
-    {s  = subj ;
-     s1 = \\b,sf => (pred ! b ! sf).fin ;
-     s2 = \\b,sf => (pred ! b ! sf).inf ++ sats.obj ! b ! (SCl sf) ;
-     s3 = sats.comp
-    } ;
-
-  sats2verbClause : {s : Str ; a : Anteriority} -> Sats -> VerbPhraseInf = \a,sats -> 
-    {s = \\b,vi => 
-     let
-       inf  = sats.vpi.s ! b ! vi ;
-       obj  = sats.obj   ! b ! (SVI vi) ;
-       comp = sats.comp
-     in
-     a.s ++ inf ++ obj ++ comp ;
-     sc = sats.vpi.sc
-    } ;
--}
-
   questPart : Str -> Str = \s -> glueParticle s "ko" ; --- "kˆ"
-
-{-
-  mkSats : NounPhrase -> Verb1 -> Sats = \subj,verb -> {s = 
-    \\st,b,sf => 
-    let 
-      sc = verb.sc ;
-      np = case sc of {
-        Nom => <subj.n, np2Person subj.p> ;
-        _   => <Sg,     P3>
-        } ;
-      su  = subj.s ! NPCase sc ;
-
-      vi = inflectVerb verb np.p1 np.p2 b sf ;
-      inf = vi.inf ;
-      fin = vi.fin ;
-
-    in case st of {
-      SQuest => questPart fin ++ su ++ inf ; 
-      _ =>  su ++ fin ++ inf 
-      }
-    } ;
--}
-----
 
 
 -- This is for questions with $IP$, thus with normal word order and no "ko".
@@ -664,41 +595,6 @@ oper
        fininf ! nsu ! psu 
     } ;
 
-
-{- ----
-  mkSats : NounPhrase -> Verb1 -> Sats = \subj,verb ->
-    let 
-      sc = verb.sc ;
-      np = case sc of {
-        Nom => <subj.n, np2Person subj.p> ;
-        _   => <Sg,     P3>
-        } ;
-      vi = inflectVerb verb np.p1 np.p2
-    in
-    {subj = subj.s ! NPCase sc ; -- "minusta tulee poliisi"
-     pred = \\b,sf => vi b (SCl sf) ;
-     obj = \\_,_ => [] ;
-     comp = []
-    } ;
-
-  progressiveSats : NounPhrase -> VerbPhraseInf -> Sats = \subj,vp ->
-    let 
-      np = case vp.sc of {
-        Nom => <subj.n, np2Person subj.p> ;
-        _   => <Sg,     P3>
-        } ;
-      vi = inflectVerb verbOlla np.p1 np.p2
-    in
-    {subj = subj.s ! NPCase vp.sc ; -- "minusta on tulossa poliisi"
-     pred = \\b,sf => vi b (SCl sf) ;
-     obj  = \\_,_ => [] ;
-     comp = vp.s ! True ! VIInf3Iness ;
-     vpi  = \\b => {
-       s = \\f => let vv = vi b (SVI f) in vv.fin ++ vv.inf ; 
-       sc = Nom
-       }
-    } ;
--}
   mkSatsObject : NounPhrase -> TransVerb -> NounPhrase -> Sats = \subj,verb,obj ->
     insertObject (mkSats subj verb) verb.c verb.s3 verb.p obj ;
   mkSatsObjectRel : RelPron -> TransVerb -> NounPhrase -> Number -> Sats =
@@ -724,27 +620,53 @@ oper
           comp
         } ;
 
-{-
-  insertObject : Sats -> ComplCase -> Str -> Bool -> NounPhrase -> Sats = 
-     \sats, c, prep, pos, obj -> 
-     {subj = sats.subj ;
-      pred = \\b,sf => 
-        let spred = sats.pred ! b ! sf in
-        {fin = spred.fin ; 
-         inf = spred.inf
-        } ;
-      obj = \\b,f => sats.obj ! b ! f ++ pPosit prep pos (obj.s ! complCase b c f) ;
-      comp = sats.comp
-      } ;
 
-  insertComplement : Sats -> Str -> Sats = 
-     \sats, comp -> 
-     {subj = sats.subj ;
-      pred = sats.pred ;
-      obj  = sats.obj ;
-      comp = sats.comp ++ comp
+-- This is for infinitive clauses, $VCl$.
+
+  mkClauseInf : Verb1 -> VerbClauseInf = \verb -> {
+    s = \\b,ant,i,n => 
+      let 
+        part = verb.s ! PastPartAct (AN (NCase n Nom)) ;
+        vi = case i of {
+          VIInfinit   => Inf ;
+          VIImperat   => Imper n ;
+          VIInf3Iness => Inf3Iness ;
+          VIInf3Elat  => Inf3Elat ;
+          VIInf3Illat => Inf3Illat ;
+          VIInf3Adess => Inf3Adess ;
+          VIInf3Abess => Inf3Abess
+         }
+      in
+      case <b,ant,i,n> of {
+      <False,Simul,VIImperat,Sg> => "‰l‰" ++ verb.s ! Imper Sg ;
+      <False,Simul,VIImperat,Pl> => "‰lk‰‰" ++ verb.s ! ImpNegPl ;
+      <True, Simul,_,_> => verb.s ! vi ;
+      <False,Simul,_,_> => verbOlla.s ! vi ++ verb.s ! Inf3Abess ;
+
+      <False,Anter,VIImperat,Sg> => "‰l‰" ++ "ole" ++ part ;
+      <False,Anter,VIImperat,Pl> => "‰lk‰‰" ++ "olko" ++ part ;
+      <True, Anter,_,_> => verbOlla.s ! vi ++ part ;
+      <False,Anter,_,_> => verbOlla.s ! vi ++ "olematta" ++ part
       } ;
--}
+    sc = verb.sc
+    } ;
+
+  insertObjectInf : 
+    VerbClauseInf -> ComplCase -> Str -> Bool -> NounPhrase -> VerbClauseInf = 
+     \sats, c, prep, pos, obj -> {s =
+       \\b,a,i,n => 
+          sats.s ! b ! a ! i ! n ++ 
+          pPosit prep pos (obj.s ! complCase b c (SVI i)) ;
+       sc = sats.sc
+        } ;
+
+  insertComplementInf : VerbClauseInf -> Str -> VerbClauseInf = 
+     \sats, comp -> {s =
+       \\b,a,i,n => 
+          sats.s ! b ! a ! i ! n ++ 
+          comp ;
+       sc = sats.sc
+        } ;
 
   complCase : Bool -> ComplCase -> SVIForm -> NPForm = \b,c,v -> case c of {
     CCase k => case <k,b> of {
@@ -759,104 +681,6 @@ oper
       _ => NPCase Part
       }
     } ;
-
-
-{-
-  inflectVerb : Verb -> Number -> Person -> Bool -> SForm -> {fin, inf : Str} = 
-    \verb,n,p,b,sf -> 
-    let
-      vs : VAuxForm => Str = \\f => verb.s ! verbAuxForm f ;
-      olla = verbAuxOlla ;
-
-      fei  = verbAuxNegEi ! APres n p ;
-      
-      at : Tense -> VAuxForm = \t -> case t of {
-        Past        => AImpf n p ;
-        Conditional => ACond n p ;
-        _           => ANF (APres n p) ---- inc. Present, Future
-        } ;
-
-      nat : Tense -> VAuxForm = \t -> case t of {
-        Past        => APastPart n ;
-        Conditional => ACond Sg P3 ;
-        _           => ANF (AImper Sg)
-        } ;
-
-      pverb = vs ! APastPart n ;
-
-    in
-    case <b,sf> of {
-
-      <True,  VFinite t Simul> => {fin = vs   ! (at t) ; inf = []} ;
-      <False, VFinite t Simul> => {fin = fei ;           inf = vs ! (nat t)} ;
-      <True,  VFinite t Anter> => {fin = olla ! (at t) ; inf = pverb} ;
-      <False, VFinite t Anter> => {fin = fei ;           inf = olla ! (nat t) ++ pverb}
-
-      } ;
- ----
-  inflectVerb : Verb -> Number -> Person -> Bool -> SVIForm -> {fin, inf : Str} = 
-    \verb,n,p,b,sf -> 
-    let
-      vs : VAuxForm => Str = \\f => verb.s ! verbAuxForm f ;
-      olla = verbAuxOlla ;
-      tulla = table {ANF f => verbAuxNegTulla ! f ; _ => []} ;
-      eis  = table {ANF f => verbAuxNegEi ! f ; _ => []} ;
-      part = APastPart n ;
-      abess = vs ! AInf3Abess ;
-      illat = vs ! AInf3Illat ;
-      ei : Anteriority -> VAuxForm -> VAuxForm  -> {fin,inf : Str} =
-        \a,vf,neg -> case <b,a> of {
-           <True, Simul> => {fin = vs   ! vf ; inf = []} ; 
-           <True, Anter> => {fin = olla ! vf ; inf = vs ! part} ;
-           <False,Simul> => {fin = eis  ! vf ; inf = vs ! neg} ; 
-           <False,Anter> => {fin = eis  ! vf ; inf = olla ! neg ++ vs ! part}
-           } ;
-      fut : Anteriority -> VAuxForm -> VAuxForm  -> {fin,inf : Str} =
-        \a,vf,neg -> case <b,a> of {
-           <True, Simul> => {fin = tulla ! vf ; inf = illat} ; 
-           <True, Anter> => {fin = olla  ! vf ; inf = tulla ! part ++ illat} ;
-           <False,Simul> => {fin = eis   ! vf ; inf = tulla ! neg ++ illat} ; 
-           <False,Anter> => {fin = eis   ! vf ; 
-                             inf = olla ! neg ++ tulla ! part ++ illat}
-           } ;
-      inf : VIForm -> Anteriority -> {fin,inf : Str} =
-        \if,a ->
-        let i = AInf ---- is this ever needed?
-{ -
-        case if of {
-          VIInf3Iness => Inf3Iness ; 
-          VIInf3Elat  => Inf3Elat ; 
-          VIInf3Illat => Inf3Illat ; 
-          VIInf3Adess => Inf3Adess ; 
-          VIInf3Abess => Inf3Abess ; 
-          _           => Inf --- not used for imperative
-          }
-- }
-        in
-        case <b,a> of {
-           <True, Simul> => {fin = vs   ! i ; inf = []} ; 
-           <True, Anter> => {fin = olla ! i ; inf = vs ! part} ;
-           <False,Simul> => {fin = olla ! i ; inf = abess} ; 
-           <False,Anter> => {fin = olla ! i ; inf = olla ! part ++ abess}
-           } ;
-      ‰l‰ : Number -> {fin,inf : Str} = 
-        \nu -> case b of {
-        True  => {fin = vs  ! ANF (AImper nu) ; inf = []} ;
-        False => {fin = eis ! ANF (AImper nu) ; 
-                  inf = vs ! case nu of {
-                    Sg => ANF (AImper n) ; 
-                    Pl => AImpNegPl}
-                 }
-       } ;
-    in case sf of {
-      SCl (VFinite Present     a) => ei a   (ANF (APres n p)) (ANF (AImper Sg)) ;
-      SCl (VFinite Past        a) => ei a   (AImpf n p) (part) ;
-      SCl (VFinite Conditional a) => ei a   (ACond n p) (ACond Sg P3) ;
-      SCl (VFinite Future      a) => fut a  (ANF (APres n p)) (ANF (AImper Sg)) ;
-      SVI (VIImperat              ) => ‰l‰ n ;
-      SVI i                         => inf i Simul ---- Anter
-      } ;
--}
 
 --- these are the only forms needed in auxiliary positions.
 

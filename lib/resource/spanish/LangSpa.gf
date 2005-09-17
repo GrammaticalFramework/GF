@@ -6,7 +6,8 @@ concrete LangSpa of Lang =
   StructuralSpa,  
   BasicSpa,
   TimeSpa,
-  CountrySpa
+  CountrySpa,
+  MathSpa
 
    ** open Prelude, ParadigmsSpa in {
 
