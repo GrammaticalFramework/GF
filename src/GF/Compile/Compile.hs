@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/10 21:04:01 $
+-- > CVS $Date: 2005/09/18 22:55:46 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.41 $
+-- > CVS $Revision: 1.42 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
@@ -38,6 +38,7 @@ import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
 import GF.Compile.GrammarToCanon
 import GF.Canon.Share
+import GF.Canon.Subexpressions (elimSubtermsMod)
 
 import qualified GF.Canon.CanonToGrammar as CG
 
@@ -283,7 +284,7 @@ generateModuleCode opts path minfo@(name,info) = do
   minfo0     <- ioeErr $ redModInfo minfo
   let oopts = addOptions opts (iOpts (flagsModule minfo))
       optim = maybe "share" id $ getOptVal oopts useOptimizer
-  minfo'     <- return $ 
+  minfo1     <- return $ 
     case optim of
       "parametrize" -> shareModule paramOpt minfo0  -- parametrization and sharing
       "values"      -> shareModule valOpt minfo0    -- tables as courses-of-values
@@ -291,6 +292,12 @@ generateModuleCode opts path minfo@(name,info) = do
       "all"         -> shareModule allOpt minfo0    -- first parametrize then values
       "none"        -> minfo0                       -- no optimization
       _             -> shareModule shareOpt minfo0  -- sharing; default
+
+  -- do common subexpression elimination if required by flag "subs"
+  minfo' <- 
+    if oElem elimSubs opts
+      then ioeErr $ elimSubtermsMod minfo1
+      else return minfo1
 
   -- for resource, also emit gfr. 
   --- Also for incomplete, to create timestamped gfc/gfr files

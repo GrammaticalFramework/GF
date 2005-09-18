@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 16:26:22 $ 
+-- > CVS $Date: 2005/09/18 22:55:46 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.73 $
+-- > CVS $Revision: 1.74 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -82,6 +82,7 @@ import qualified GF.Conversion.Types as CnvTypes
 import qualified GF.Conversion.Haskell as CnvHaskell
 import qualified GF.Conversion.Prolog as CnvProlog
 import GF.Canon.Unparametrize
+import GF.Canon.Subexpressions
 
 import GF.Canon.GFC
 import qualified GF.Canon.MkGFC as MC
@@ -260,6 +261,7 @@ customGrammarPrinter =
   ,(strCI "printnames", C.prPrintnamesGrammar . stateGrammarST)
   ,(strCI "stat",    prStatistics . stateGrammarST)
   ,(strCI "unpar",   prCanon . unparametrizeCanon . stateGrammarST)
+  ,(strCI "subs",    prSubtermStat . stateGrammarST)
 
 {- ----
    (strCI "gf",      prt  . st2grammar . stateGrammarST)  -- DEFAULT
