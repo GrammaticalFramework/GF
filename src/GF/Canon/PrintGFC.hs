@@ -16,6 +16,22 @@ type Doc = [ShowS] -> [ShowS]
 doc :: ShowS -> Doc
 doc = (:)
 
+docs :: ShowS -> Doc
+docs x y = concatD [spc, doc x, spc ] y
+
+spc = doc (showString "&")
+
+render :: Doc -> String
+render d = rend 0 (map ($ "") $ d []) "" where
+  rend i ss = case ss of
+    "*"    :ts -> realnew . rend i ts --H
+    "&":"&":ts -> showChar ' ' . rend i ts --H
+    "&"    :ts -> rend i ts --H
+    t      :ts -> showString t . rend i ts
+    _          -> id
+  realnew = showChar '\n' --H
+
+{-
 render :: Doc -> String
 render d = rend 0 (map ($ "") $ d []) "" where
   rend i ss = case ss of
@@ -26,20 +42,24 @@ render d = rend 0 (map ($ "") $ d []) "" where
     "["      :ts -> showChar '[' . rend i ts
     "("      :ts -> showChar '(' . rend i ts
     "{"      :ts -> showChar '{' . new (i+1) . rend (i+1) ts
-    "}" : ";":ts -> new (i-1) . space "}" . showChar ';' . new (i-1) . rend (i-1) ts
+    "}" : ";":ts -> new (i-1) . showChar '}' . showChar ';' . new (i-1) . rend (i-1) ts
     "}"      :ts -> new (i-1) . showChar '}' . new (i-1) . rend (i-1) ts
     ";"      :ts -> showChar ';' . new i . rend i ts
-    t  : "," :ts -> showString t . space "," . rend i ts
+    t  : "@" :ts -> showString t . showChar '@' . rend i ts
+    t  : "," :ts -> showString t . showChar ',' . rend i ts
     t  : ")" :ts -> showString t . showChar ')' . rend i ts
     t  : "]" :ts -> showString t . showChar ']' . rend i ts
-    t  : ">" :ts -> showString t . showString ">" . rend i ts --H
-    t  : "." :ts -> showString t . showString "." . rend i ts --H
+    t  : ">" :ts -> showString t . showChar '>' . rend i ts --H
+    t  : "." :ts -> showString t . showChar '.' . rend i ts --H
+    t@"=>"   :ts -> showString t . rend i ts --H
+    t@"->"   :ts -> showString t . rend i ts --H
     t        :ts -> realspace t . rend i ts --H
     _            -> id
   space t = showString t . showChar ' ' -- H
   realspace t = showString t . (\s -> if null s then "" else (' ':s)) -- H
   new i s   = s  -- H
   realnew = showChar '\n' --H
+-}
 
 parenth :: Doc -> Doc
 parenth ss = doc (showChar '(') . ss . doc (showChar ')')
@@ -79,14 +99,14 @@ prPrec i j = if j<i then parenth else id
 
 
 instance Print Integer where
-  prt _ x = doc (shows x)
+  prt _ x = docs (shows x)
 
 
 instance Print Double where
-  prt _ x = doc (shows x)
+  prt _ x = docs (shows x)
 
 instance Print Ident where
-  prt _ i = doc (showString $ prIdent i) -- H
+  prt _ i = docs (showString $ prIdent i) -- H
   prtList es = case es of
    [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
@@ -94,13 +114,13 @@ instance Print Ident where
 
 instance Print Canon where
   prt i e = case e of
-   MGr ids id modules -> prPrec i 0 (concatD [doc (showString "grammar") , prt 0 ids , doc (showString "of") , prt 0 id , doc (showString ";") , prt 0 modules])
+   MGr ids id modules -> prPrec i 0 (concatD [spc, doc (showString "grammar") , spc, prt 0 ids , spc , doc (showString "of") , spc, prt 0 id , doc (showString ";") , prt 0 modules])
    Gr modules -> prPrec i 0 (concatD [prt 0 modules])
 
 
 instance Print Line where
   prt i e = case e of
-   LMulti ids id -> prPrec i 0 (concatD [doc (showString "grammar") , prt 0 ids , doc (showString "of") , prt 0 id , doc (showString ";")])
+   LMulti ids id -> prPrec i 0 (concatD [spc, doc (showString "grammar") , spc, prt 0 ids , spc, doc (showString "of") , spc, prt 0 id , doc (showString ";")])
    LHeader modtype extend open -> prPrec i 0 (concatD [prt 0 modtype , doc (showString "=") , prt 0 extend , prt 0 open , doc (showString "{")])
    LFlag flag -> prPrec i 0 (concatD [prt 0 flag , doc (showString ";")])
    LDef def -> prPrec i 0 (concatD [prt 0 def , doc (showString ";")])
@@ -117,10 +137,10 @@ instance Print Module where
 
 instance Print ModType where
   prt i e = case e of
-   MTAbs id -> prPrec i 0 (concatD [doc (showString "abstract") , prt 0 id])
-   MTCnc id0 id -> prPrec i 0 (concatD [doc (showString "concrete") , prt 0 id0 , doc (showString "of") , prt 0 id])
-   MTRes id -> prPrec i 0 (concatD [doc (showString "resource") , prt 0 id])
-   MTTrans id0 id1 id -> prPrec i 0 (concatD [doc (showString "transfer") , prt 0 id0 , doc (showString ":") , prt 0 id1 , doc (showString "->") , prt 0 id])
+   MTAbs id -> prPrec i 0 (concatD [spc, doc (showString "abstract") , spc , prt 0 id])
+   MTCnc id0 id -> prPrec i 0 (concatD [spc, doc (showString "concrete") , spc, prt 0 id0 , spc, doc (showString "of") , spc, prt 0 id])
+   MTRes id -> prPrec i 0 (concatD [spc, doc (showString "resource") , spc, prt 0 id])
+   MTTrans id0 id1 id -> prPrec i 0 (concatD [spc, doc (showString "transfer") , spc, prt 0 id0 , doc (showString ":") , prt 0 id1 , doc (showString "->") , prt 0 id])
 
 
 instance Print Extend where
@@ -131,13 +151,13 @@ instance Print Extend where
 
 instance Print Open where
   prt i e = case e of
-   Opens ids -> prPrec i 0 (concatD [doc (showString "open") , prt 0 ids , doc (showString "in")])
+   Opens ids -> prPrec i 0 (concatD [spc, doc (showString "open") , spc, prt 0 ids , docs (showString "in")])
    NoOpens  -> prPrec i 0 (concatD [])
 
 
 instance Print Flag where
   prt i e = case e of
-   Flg id0 id -> prPrec i 0 (concatD [doc (showString "flags") , prt 0 id0 , doc (showString "=") , prt 0 id])
+   Flg id0 id -> prPrec i 0 (concatD [spc, doc (showString "flags") , spc, prt 0 id0 , doc (showString "=") , prt 0 id])
 
   prtList es = case es of
    [] -> (concatD [])
@@ -145,18 +165,18 @@ instance Print Flag where
 
 instance Print Def where
   prt i e = case e of
-   AbsDCat id decls cidents -> prPrec i 0 (concatD [doc (showString "cat") , prt 0 id , doc (showString "[") , prt 0 decls , doc (showString "]") , doc (showString "=") , prt 0 cidents])
-   AbsDFun id exp0 exp -> prPrec i 0 (concatD [doc (showString "fun") , prt 0 id , doc (showString ":") , prt 0 exp0 , doc (showString "=") , prt 0 exp])
-   AbsDTrans id exp -> prPrec i 0 (concatD [doc (showString "transfer") , prt 0 id , doc (showString "=") , prt 0 exp])
-   ResDPar id pardefs -> prPrec i 0 (concatD [doc (showString "param") , prt 0 id , doc (showString "=") , prt 0 pardefs])
-   ResDOper id ctype term -> prPrec i 0 (concatD [doc (showString "oper") , prt 0 id , doc (showString ":") , prt 0 ctype , doc (showString "=") , prt 0 term])
-   CncDCat id ctype term0 term -> prPrec i 0 (concatD [doc (showString "lincat") , prt 0 id , doc (showString "=") , prt 0 ctype , doc (showString "=") , prt 0 term0 , doc (showString ";") , prt 0 term])
-   CncDFun id cident argvars term0 term -> prPrec i 0 (concatD [doc (showString "lin") , prt 0 id , doc (showString ":") , prt 0 cident , doc (showString "=") , doc (showString "\\") , prt 0 argvars , doc (showString "->") , prt 0 term0 , doc (showString ";") , prt 0 term])
-   AnyDInd id0 status id -> prPrec i 0 (concatD [prt 0 id0 , prt 0 status , doc (showString "in") , prt 0 id])
+   AbsDCat id decls cidents -> prPrec i 0 (concatD [docs (showString "cat") , prt 0 id , doc (showString "[") , prt 0 decls , doc (showString "]") , doc (showString "=") , prt 0 cidents])
+   AbsDFun id exp0 exp -> prPrec i 0 (concatD [docs (showString "fun") , prt 0 id , doc (showString ":") , prt 0 exp0 , doc (showString "=") , prt 0 exp])
+   AbsDTrans id exp -> prPrec i 0 (concatD [docs (showString "transfer") , prt 0 id , doc (showString "=") , prt 0 exp])
+   ResDPar id pardefs -> prPrec i 0 (concatD [docs (showString "param") , prt 0 id , doc (showString "=") , prt 0 pardefs])
+   ResDOper id ctype term -> prPrec i 0 (concatD [docs (showString "oper") , prt 0 id , doc (showString ":") , prt 0 ctype , doc (showString "=") , prt 0 term])
+   CncDCat id ctype term0 term -> prPrec i 0 (concatD [docs (showString "lincat") , prt 0 id , doc (showString "=") , prt 0 ctype , doc (showString "=") , prt 0 term0 , doc (showString ";") , prt 0 term])
+   CncDFun id cident argvars term0 term -> prPrec i 0 (concatD [docs (showString "lin") , prt 0 id , doc (showString ":") , prt 0 cident , doc (showString "=") , doc (showString "\\") , prt 0 argvars , doc (showString "->") , prt 0 term0 , doc (showString ";") , prt 0 term])
+   AnyDInd id0 status id -> prPrec i 0 (concatD [prt 0 id0 , prt 0 status , docs (showString "in") , prt 0 id])
 
   prtList es = case es of
    [] -> (concatD [])
-   x:xs -> (concatD [prt 0 x , doc (showString ";"), doc (showString "*NEW") , prt 0 xs]) -- H
+   x:xs -> (concatD [prt 0 x , doc (showString ";"), doc (showString "*") , prt 0 xs]) -- H
 
 
 instance Print ParDef where
@@ -170,7 +190,7 @@ instance Print ParDef where
 
 instance Print Status where
   prt i e = case e of
-   Canon  -> prPrec i 0 (concatD [doc (showString "data")])
+   Canon  -> prPrec i 0 (concatD [docs (showString "data")])
    NonCan  -> prPrec i 0 (concatD [])
 
 
@@ -188,13 +208,13 @@ instance Print Exp where
    EProd id exp0 exp -> prPrec i 0 (concatD [doc (showString "(") , prt 0 id , doc (showString ":") , prt 0 exp0 , doc (showString ")") , doc (showString "->") , prt 0 exp])
    EAbs id exp -> prPrec i 0 (concatD [doc (showString "\\") , prt 0 id , doc (showString "->") , prt 0 exp])
    EAtom atom -> prPrec i 2 (concatD [prt 0 atom])
-   EData  -> prPrec i 2 (concatD [doc (showString "data")])
+   EData  -> prPrec i 2 (concatD [docs (showString "data")])
    EEq equations -> prPrec i 0 (concatD [doc (showString "{") , prt 0 equations , doc (showString "}")])
 
 
 instance Print Sort where
   prt i e = case e of
-   SType  -> prPrec i 0 (concatD [doc (showString "Type")])
+   SType  -> prPrec i 0 (concatD [docs (showString "Type")])
 
 
 instance Print Equation where
@@ -242,8 +262,8 @@ instance Print CType where
    RecType labellings -> prPrec i 0 (concatD [doc (showString "{") , prt 0 labellings , doc (showString "}")])
    Table ctype0 ctype -> prPrec i 0 (concatD [doc (showString "(") , prt 0 ctype0 , doc (showString "=>") , prt 0 ctype , doc (showString ")")])
    Cn cident -> prPrec i 0 (concatD [prt 0 cident])
-   TStr  -> prPrec i 0 (concatD [doc (showString "Str")])
-   TInts n -> prPrec i 0 (concatD [doc (showString "Ints") , prt 0 n])
+   TStr  -> prPrec i 0 (concatD [docs (showString "Str")])
+   TInts n -> prPrec i 0 (concatD [docs (showString "Ints") , prt 0 n])
 
   prtList es = case es of
    [] -> (concatD [])
@@ -266,11 +286,11 @@ instance Print Term where
    LI id -> prPrec i 2 (concatD [doc (showString "$") , prt 0 id])
    R assigns -> prPrec i 2 (concatD [doc (showString "{") , prt 0 assigns , doc (showString "}")])
    P term label -> prPrec i 1 (concatD [prt 2 term , doc (showString ".") , prt 0 label])
-   T ctype cases -> prPrec i 1 (concatD [doc (showString "table") , prt 0 ctype , doc (showString "{") , prt 0 cases , doc (showString "}")])
-   V ctype terms -> prPrec i 1 (concatD [doc (showString "table") , prt 0 ctype , doc (showString "[") , prt 2 terms , doc (showString "]")])
+   T ctype cases -> prPrec i 1 (concatD [docs (showString "table") , prt 0 ctype , doc (showString "{") , prt 0 cases , doc (showString "}")])
+   V ctype terms -> prPrec i 1 (concatD [docs (showString "table") , prt 0 ctype , doc (showString "[") , prt 2 terms , doc (showString "]")])
    S term0 term -> prPrec i 1 (concatD [prt 1 term0 , doc (showString "!") , prt 2 term])
    C term0 term -> prPrec i 0 (concatD [prt 0 term0 , doc (showString "++") , prt 1 term])
-   FV terms -> prPrec i 1 (concatD [doc (showString "variants") , doc (showString "{") , prt 2 terms , doc (showString "}")])
+   FV terms -> prPrec i 1 (concatD [docs (showString "variants") , doc (showString "{") , prt 2 terms , doc (showString "}")])
    EInt n -> prPrec i 2 (concatD [prt 0 n])
    K tokn -> prPrec i 2 (concatD [prt 0 tokn])
    E  -> prPrec i 2 (concatD [doc (showString "[") , doc (showString "]")])
@@ -282,7 +302,7 @@ instance Print Term where
 instance Print Tokn where
   prt i e = case e of
    KS str -> prPrec i 0 (concatD [prt 0 str])
-   KP strs variants -> prPrec i 0 (concatD [doc (showString "[") , doc (showString "pre") , prt 0 strs , doc (showString "{") , prt 0 variants , doc (showString "}") , doc (showString "]")])
+   KP strs variants -> prPrec i 0 (concatD [doc (showString "[") , docs (showString "pre") , prt 0 strs , doc (showString "{") , prt 0 variants , doc (showString "}") , doc (showString "]")])
    KM str -> prPrec i 0 (concatD [prt 0 str])
 
 
@@ -333,7 +353,7 @@ instance Print Patt where
   prt i e = case e of
    PC cident patts -> prPrec i 0 (concatD [doc (showString "(") , prt 0 cident , prt 0 patts , doc (showString ")")])
    PV id -> prPrec i 0 (concatD [prt 0 id])
-   PW  -> prPrec i 0 (concatD [doc (showString "_")])
+   PW  -> prPrec i 0 (concatD [docs (showString "_")])
    PR pattassigns -> prPrec i 0 (concatD [doc (showString "{") , prt 0 pattassigns , doc (showString "}")])
    PI n -> prPrec i 0 (concatD [prt 0 n])
 

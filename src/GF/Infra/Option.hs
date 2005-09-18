@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/10 21:04:01 $ 
+-- > CVS $Date: 2005/09/18 22:55:46 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.30 $
+-- > CVS $Revision: 1.31 $
 --
 -- Options and flags used in GF shell commands and files.
 --
@@ -189,6 +189,7 @@ checkCirc   = iOpt "nocirc"
 noCheckCirc = iOpt "nocheckcirc"
 lexerByNeed = iOpt "cflexer"
 useUTF8id   = iOpt "utf8id"
+elimSubs    = iOpt "subs"
 
 -- ** linearization
 

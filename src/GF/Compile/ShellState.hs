@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/01 09:53:18 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.46 $
+-- > CVS $Date: 2005/09/18 22:55:46 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.47 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -21,6 +21,7 @@ import GF.Grammar.Macros
 import GF.Grammar.MMacros
 
 import GF.Canon.Look
+import GF.Canon.Subexpressions
 import GF.Grammar.LookAbs
 import GF.Compile.ModDeps
 import qualified GF.Infra.Modules as M
@@ -185,7 +186,8 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
   let concrs = maybe [] (M.allConcretes cgr) abstr0
       concr0 = ifNull Nothing (return . head) concrs
       notInrts f = notElem f $ map fst rts
-  cfs <- mapM (canon2cf opts cgr) concrs --- would not need to update all...
+      sub = if oElem elimSubs opts then unSubelimCanon else id
+  cfs <- mapM (canon2cf opts (sub cgr)) concrs --- why need to update all...
 
   let pinfosOld = map (CnvOld.pInfo opts cgr) concrs  -- peb 18/6 (OBSOLETE)
 
