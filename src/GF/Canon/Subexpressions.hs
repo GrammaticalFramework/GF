@@ -5,16 +5,16 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/19 10:05:48 $ 
+-- > CVS $Date: 2005/09/19 13:01:18 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Common subexpression elimination.
 -- all tables. AR 18\/9\/2005.
 -----------------------------------------------------------------------------
 
 module GF.Canon.Subexpressions (
-  elimSubtermsMod, prSubtermStat, unSubelimCanon
+  elimSubtermsMod, prSubtermStat, unSubelimCanon, unSubelimModule
   ) where
 
 import GF.Canon.AbsGFC
@@ -76,17 +76,24 @@ prSubtermStat gr = unlines [prt mo ++++ expsIn mo js | (mo,js) <- mos] where
 
 unSubelimCanon :: CanonGrammar -> CanonGrammar
 unSubelimCanon gr@(M.MGrammar modules) = 
-    M.MGrammar $ map unparModule modules where 
-  unparModule (i,m) = case m of
+    M.MGrammar $ map unSubelimModule modules 
+ 
+unSubelimModule :: CanonModule -> CanonModule
+unSubelimModule mo@(i,m) = case m of
     M.ModMod (M.Module mt@(M.MTConcrete _) st fs me ops js) ->
-      (i, M.ModMod (M.Module mt st fs me ops (mapTree unparInfo js)))
+      (i, M.ModMod (M.Module mt st fs me ops 
+                     (rebuild (map unparInfo (tree2list js)))))
     _ -> (i,m)
-  unparInfo (c,info) = case info of
-    CncFun k xs t m -> (c, CncFun k xs (unparTerm t) m)
-    _ -> (c,info)
-  unparTerm t = case t of
-    I c -> errVal t $ liftM unparTerm $ lookupGlobal gr c 
-    _ -> C.composSafeOp unparTerm t
+  where
+    unparInfo (c,info) = case info of
+      CncFun k xs t m -> [(c, CncFun k xs (unparTerm t) m)]
+      ResOper _ _ -> []
+      _ -> [(c,info)]
+    unparTerm t = case t of
+      I c -> errVal t $ liftM unparTerm $ lookupGlobal gr c 
+      _ -> C.composSafeOp unparTerm t
+    gr = M.MGrammar [mo] 
+    rebuild = buildTree . concat
 
 -- implementation
 

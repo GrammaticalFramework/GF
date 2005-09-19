@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/18 22:55:46 $
+-- > CVS $Date: 2005/09/19 13:01:18 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.42 $
+-- > CVS $Revision: 1.43 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
@@ -38,7 +38,7 @@ import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
 import GF.Compile.GrammarToCanon
 import GF.Canon.Share
-import GF.Canon.Subexpressions (elimSubtermsMod)
+import GF.Canon.Subexpressions (elimSubtermsMod,unSubelimModule)
 
 import qualified GF.Canon.CanonToGrammar as CG
 
@@ -189,7 +189,7 @@ compileOne opts env@((_,srcgr,_),_) file = do
     -- for canonical gf, read the file and update environment, also source env
     "gfc" -> do
        cm <- putp ("+ reading" +++ file) $ getCanonModule file
-       sm <- ioeErr $ CG.canon2sourceModule cm
+       sm <- ioeErr $ CG.canon2sourceModule $ unSubelimModule cm
        ft <- getReadTimes file
        extendCompileEnv env (sm, cm) ft
 
