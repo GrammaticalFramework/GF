@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/23 14:32:43 $ 
+-- > CVS $Date: 2005/09/19 16:11:06 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- lookup in GFC. AR 2003
 -----------------------------------------------------------------------------
@@ -174,10 +174,11 @@ ccompute cnc = comp []
                   mapPairsM compt [(l,r) | Cas l r <- rs]
 
     V ptyp ts -> do
+      ts' <- mapM compt ts
       vs0 <- allParamValues cnc ptyp
       vs  <- mapM term2patt vs0
-      let cc = [Cas [p] u | (p,u) <- zip vs ts]
-      compt $ T ptyp cc
+      let cc = [Cas [p] u | (p,u) <- zip vs ts']
+      return $ T ptyp cc
 
     Par c xs -> liftM (Par c) $ mapM compt xs
 
