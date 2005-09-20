@@ -22,7 +22,7 @@
 concrete RulesEng of Rules = CategoriesEng ** open Prelude, SyntaxEng in {
 
 flags 
-  optimize=all ;
+  optimize=all_subs ;
 
 lin 
   UseN  = noun2CommNounPhrase ;

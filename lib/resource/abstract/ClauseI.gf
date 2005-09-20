@@ -2,7 +2,7 @@
 
 incomplete concrete ClauseI of Clause = open Rules, Verbphrase in {
 
-  flags optimize=all ;
+  flags optimize=all_subs ;
 
   lin
 

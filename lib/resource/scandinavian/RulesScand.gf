@@ -3,7 +3,7 @@
 incomplete concrete RulesScand of Rules = CategoriesScand ** 
   open Prelude, SyntaxScand in {
 
-flags optimize=all ;
+flags optimize=all_subs ;
 
 lin 
   UseN = noun2CommNounPhrase ;
