@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 16:26:22 $
+-- > CVS $Date: 2005/09/20 09:32:56 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.12 $
+-- > CVS $Revision: 1.13 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -495,6 +495,10 @@ txtHelpFile =
   "\n" ++
   "\n-optimize, optimization on generated code." ++
   "\n       The default is share for concrete, none for resource modules." ++
+  "\n       Each of the flags can have the suffix _subs, which performs" ++
+  "\n       common subexpression elimination after the main optimization." ++
+  "\n       Thus, -optimize=all_subs is the most aggressive one." ++
+  "\n" ++
   "\n    -optimize=share        share common branches in tables" ++
   "\n    -optimize=parametrize  first try parametrize then do share with the rest" ++
   "\n    -optimize=values       represent tables as courses-of-values" ++

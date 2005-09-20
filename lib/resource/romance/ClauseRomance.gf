@@ -3,7 +3,7 @@
 incomplete concrete ClauseRomance of Clause = CategoriesRomance ** 
   open Prelude, SyntaxRomance in {
 
-  flags optimize=all ; --- parametrize much worse, 15/2
+  flags optimize=all_subs ; --- parametrize much worse, 15/2
 
   lin
   SPredV  np v   = 

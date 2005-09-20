@@ -3,6 +3,8 @@
 incomplete concrete RulesRomance of Rules = CategoriesRomance ** 
   open Prelude, SyntaxRomance in {
 
+  flags optimize = all_subs ;
+
 lin 
   UseN = noun2CommNounPhrase ;
   UsePN = nameNounPhrase ;

@@ -3,7 +3,7 @@
 concrete ClauseFin of Clause = CategoriesFin ** 
   open Prelude, SyntaxFin in {
 
-  flags optimize=all ;
+  flags optimize=all_subs ;
 
   lin
   SPredV  np v   = 

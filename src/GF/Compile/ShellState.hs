@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/18 22:55:46 $ 
+-- > CVS $Date: 2005/09/20 09:32:56 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.47 $
+-- > CVS $Revision: 1.48 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -186,8 +186,10 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
   let concrs = maybe [] (M.allConcretes cgr) abstr0
       concr0 = ifNull Nothing (return . head) concrs
       notInrts f = notElem f $ map fst rts
-      sub = if oElem elimSubs opts then unSubelimCanon else id
-  cfs <- mapM (canon2cf opts (sub cgr)) concrs --- why need to update all...
+      subcgr = unSubelimCanon cgr
+  cfs <- mapM (canon2cf opts subcgr) concrs --- why need to update all...
+
+  let morphos = map (mkMorpho subcgr) concrs
 
   let pinfosOld = map (CnvOld.pInfo opts cgr) concrs  -- peb 18/6 (OBSOLETE)
 
@@ -216,7 +218,7 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
     mcfgs      = zip concrs mcfgs,
     cfgs       = zip concrs cfgs,
     pInfos     = zip concrs pInfos,
-    morphos    = zip concrs (map (mkMorpho cgr) concrs),
+    morphos    = zip concrs morphos,
     gloptions  = gloptions sh, --- opts, -- this would be command-line options
     readFiles  = [ft | ft@(f,_) <- readFiles sh, notInrts f] ++ rts,
     absCats    = csi,

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/19 13:01:18 $ 
+-- > CVS $Date: 2005/09/20 09:32:56 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- Common subexpression elimination.
 -- all tables. AR 18\/9\/2005.
@@ -80,11 +80,14 @@ unSubelimCanon gr@(M.MGrammar modules) =
  
 unSubelimModule :: CanonModule -> CanonModule
 unSubelimModule mo@(i,m) = case m of
-    M.ModMod (M.Module mt@(M.MTConcrete _) st fs me ops js) ->
+    M.ModMod (M.Module mt@(M.MTConcrete _) st fs me ops js) | hasSub ljs ->
       (i, M.ModMod (M.Module mt st fs me ops 
-                     (rebuild (map unparInfo (tree2list js)))))
+                     (rebuild (map unparInfo ljs)))) 
+                        where ljs = tree2list js
     _ -> (i,m)
   where
+    -- perform this iff the module has opers
+    hasSub ljs = not $ null [c | (c,ResOper _ _) <- ljs]
     unparInfo (c,info) = case info of
       CncFun k xs t m -> [(c, CncFun k xs (unparTerm t) m)]
       ResOper _ _ -> []

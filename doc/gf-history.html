@@ -12,6 +12,32 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 </center>
 
+20/9 (AR) Added optimization by <b>common subexpression elimination</b>.
+It works on GFC modules and creates $oper$ definitions for
+subterms that occur more than once in $lin$ definitions. These
+$oper$ definitions are automatically reinlined in functionalities
+that don't support $oper$s in GFC. This conversion is done by
+module and the $oper$s are not inherited. Moreover, the subterms
+can contain free variables which means that the $oper$s are not
+always well typed. However, since all variables in GFC are type-specific
+(and local variables are $lin$-specific), this does not destroy
+subject reduction or cause illegal captures. 
+<br>
+The optimization is triggered by the flag <tt>optimize=OPT_subs</tt>,
+where <tt>OPT</tt> is any of the other optimizations (see <tt>h -optimize</tt>).
+The most aggressive value of the flag is <tt>all_subs</tt>. In experiments,
+the size of a GFC module can shrink by 80% compared to plain <tt>all</tt>.
+
+<p>
+
+15/9 (AR) Fixed some bugs in dependent-type type checking of abstract
+modules at compile time. The type checker is more severe now, which means
+that some old grammars may fail to compile - but this is usually the
+right result. However, the type checker of <tt>def</tt> judgements still
+needs work.
+
+<p>
+
 14/9 (AR) Added printing of grammars to a format without parameters, in
 the spirit of Peanos "Latino sine flexione". The command <tt>pg -unpar</tt>
 does the trick, and the result can be saved in a <tt>gfcm</tt> file. The generated
