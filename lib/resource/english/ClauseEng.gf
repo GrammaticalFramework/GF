@@ -6,7 +6,7 @@ concrete ClauseEng of Clause = CategoriesEng **
 
   open Prelude, SyntaxEng in {
 
-  flags optimize=all ;
+  flags optimize=all_subs ;
 
   lin
   SPredV np v = predVerbClause np v (complVerb v) ;
