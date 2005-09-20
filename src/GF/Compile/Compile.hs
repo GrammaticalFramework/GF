@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/19 13:01:18 $
+-- > CVS $Date: 2005/09/20 09:32:56 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.43 $
+-- > CVS $Revision: 1.44 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
@@ -282,8 +282,10 @@ generateModuleCode :: Options -> InitPath -> SourceModule -> IOE GFC.CanonModule
 generateModuleCode opts path minfo@(name,info) = do
   let pname = prefixPathName path (prt name)
   minfo0     <- ioeErr $ redModInfo minfo
-  let oopts = addOptions opts (iOpts (flagsModule minfo))
-      optim = maybe "share" id $ getOptVal oopts useOptimizer
+  let oopts  = addOptions opts (iOpts (flagsModule minfo))
+      optims = maybe "share" id $ getOptVal oopts useOptimizer
+      optim  = takeWhile (/='_') optims
+      subs   = drop 1 (dropWhile (/='_') optims) == "subs"
   minfo1     <- return $ 
     case optim of
       "parametrize" -> shareModule paramOpt minfo0  -- parametrization and sharing
@@ -295,7 +297,7 @@ generateModuleCode opts path minfo@(name,info) = do
 
   -- do common subexpression elimination if required by flag "subs"
   minfo' <- 
-    if oElem elimSubs opts
+    if subs
       then ioeErr $ elimSubtermsMod minfo1
       else return minfo1
 

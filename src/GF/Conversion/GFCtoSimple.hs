@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/08/08 08:09:49 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/09/20 09:32:56 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.14 $
 --
 -- Converting GFC to SimpleGFC
 --
@@ -30,6 +30,7 @@ import GF.Conversion.Types
 import GF.UseGrammar.Linear (expandLinTables)
 import GF.Canon.GFC (CanonGrammar)
 import GF.Canon.MkGFC (grammar2canon)
+import GF.Canon.Subexpressions (unSubelimCanon)
 import qualified GF.Canon.Look as Look (lookupLin, allParamValues, lookupLincat)
 import qualified GF.Canon.CMacros as CMacros (defLinType)
 import GF.Data.Operations (err, errVal)
@@ -43,12 +44,13 @@ import GF.Infra.Print
 type Env = (CanonGrammar, I.Ident)
 
 convertGrammar :: Env -> SGrammar
-convertGrammar gram = trace2 "GFCtoSimple - concrete language" (prt (snd gram)) $
-		      tracePrt "GFCtoSimple - simpleGFC rules" (prt . length) $
-		      [ convertAbsFun gram fun typing |
-			A.Mod (A.MTAbs modname) _ _ _ defs <- modules,
-			A.AbsDFun fun typing _ <- defs ]
+convertGrammar (g,i) = trace2 "GFCtoSimple - concrete language" (prt (snd gram)) $
+		        tracePrt "GFCtoSimple - simpleGFC rules" (prt . length) $
+		         [ convertAbsFun gram fun typing |
+			  A.Mod (A.MTAbs modname) _ _ _ defs <- modules,
+			  A.AbsDFun fun typing _ <- defs ]
     where A.Gr modules = grammar2canon (fst gram)
+          gram = (unSubelimCanon g,i)
 
 convertAbsFun :: Env -> I.Ident -> A.Exp -> SRule
 convertAbsFun gram fun typing = Rule abs cnc

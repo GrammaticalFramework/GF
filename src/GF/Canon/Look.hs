@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/19 16:11:06 $ 
+-- > CVS $Date: 2005/09/20 09:32:56 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.16 $
+-- > CVS $Revision: 1.17 $
 --
 -- lookup in GFC. AR 2003
 -----------------------------------------------------------------------------
@@ -187,7 +187,7 @@ ccompute cnc = comp []
     _        -> return t  
    where
      compt = comp g xs
-     look c = lookupGlobal cnc c
+     look c = lookupGlobal cnc c >>= compt
 
      lookVar c co = case lookup c co of
        Just t -> return t

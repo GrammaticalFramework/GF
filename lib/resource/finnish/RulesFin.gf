@@ -18,7 +18,7 @@
 concrete RulesFin of Rules = CategoriesFin ** open Prelude, SyntaxFin in {
 
 flags 
-  optimize=all ;
+  optimize=all_subs ;
 
 lin 
   UseN  = noun2CommNounPhrase ;
