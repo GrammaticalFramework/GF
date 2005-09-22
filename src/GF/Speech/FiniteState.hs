@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/15 18:10:44 $ 
+-- > CVS $Date: 2005/09/22 16:56:05 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.11 $
+-- > CVS $Revision: 1.12 $
 --
 -- A simple finite state network module.
 -----------------------------------------------------------------------------
@@ -21,7 +21,6 @@ module GF.Speech.FiniteState (FA, State, NFA, DFA,
 			      moveLabelsToNodes, minimize,
 			      prFAGraphviz) where
 
-import GF.Data.Utilities
 import Data.List
 import Data.Maybe (catMaybes,fromJust)
 
@@ -62,7 +61,7 @@ newState x (FA g s ss) = (FA g' s ss, n)
     where (g',n) = newNode x g
 
 newTransition :: n -> n -> b -> FA n a b -> FA n a b
-newTransition f t l = onGraph (newEdge f t l)
+newTransition f t l = onGraph (newEdge (f,t,l))
 
 mapStates :: (a -> c) -> FA n a b -> FA n c b
 mapStates f = onGraph (nmap f)
@@ -70,8 +69,9 @@ mapStates f = onGraph (nmap f)
 mapTransitions :: (b -> c) -> FA n a b -> FA n a c
 mapTransitions f = onGraph (emap f)
 
-minimize :: NFA a -> NFA a
-minimize = onGraph id
+minimize :: Eq a => NFA a -> NFA a
+minimize = dfa2nfa . determinize . reverseNFA . dfa2nfa . determinize . reverseNFA
+
 
 onGraph :: (Graph n a b -> Graph n c d) -> FA n a b -> FA n c d
 onGraph f (FA g s ss) = FA (f g) s ss
@@ -104,16 +104,49 @@ fixIncoming cs c@((n,()),es) = (cs'', ((n,Nothing),es'):newContexts)
 alphabet :: Eq b => Graph n a (Maybe b) -> [b]
 alphabet = nub . catMaybes . map getLabel . edges
 
-
-reachable :: (Eq b, Ord n) => Graph n a (Maybe b) -> n -> b -> [n]
-reachable g s c = fix reachable_ [s]
-  where reachable_ r = r `union` [y | x <- r, es <- outf x, (_,y,l) <- es, maybe True (==c) l]
-	out = outgoing g
-	outf x = [ es | ((y,_),es) <- out, x == y ]
-
 determinize :: Eq a => NFA a -> DFA a
-determinize (FA g s f) = undefined
+determinize (FA g s f) = let (ns,es) = h [start] [] []
+			     in FA (Graph (freshDFANodes g) [(n,()) | n <- ns] es) start (filter isDFAFinal ns)
   where sigma = alphabet g
+	out = outgoing g
+	start = closure out [s]
+	isDFAFinal n = not (null (f `intersect` n))
+	freshDFANodes (Graph ns _ _) = map (:[]) ns
+	-- Get the new DFA states and edges produced by a set of DFA states.
+	new ns = unzip [ (s, (n,s,c)) | n <- ns, c <- sigma, let s = sort (reachable out c n), not (null s) ]
+	h currentStates oldStates oldEdges 
+	    | null currentStates = (oldStates,oldEdges)
+	    | otherwise = h newStates' allOldStates (newEdges++oldEdges)
+	    where (newStates,newEdges) = new currentStates
+		  allOldStates = currentStates ++ oldStates
+		  newStates' = nub newStates \\ allOldStates
+
+-- | Get all the nodes reachable from a set of nodes by only empty edges.
+closure :: Eq n => Outgoing n a (Maybe b) -> [n] -> [n]
+closure out = fix closure_
+    where closure_ r = r `union` [y | x <- r, (_,y,Nothing) <- getOutgoing out x]
+
+-- | Get all nodes reachable from a set of nodes by one edge with the given 
+--   label and then any number of empty edges.
+reachable :: (Eq n, Eq b) => Outgoing n a (Maybe b) -> b -> [n] -> [n]
+reachable out c ns = closure out [y | n <- ns, (_,y,Just c') <- getOutgoing out n, c' == c]
+
+reverseNFA :: NFA a -> NFA a
+reverseNFA (FA g s fs) = FA g''' s' [s]
+    where g' = reverseGraph g
+	  (g'',s') = newNode () g'
+	  g''' = newEdges [(s',f,Nothing) | f <- fs] g''
+
+dfa2nfa :: DFA a -> NFA a
+dfa2nfa (FA (Graph _ ns es) s fs) = FA (Graph c ns' es') s' fs'
+    where newNodes = zip (map fst ns) [0..]
+	  newNode n = lookup' n newNodes
+	  c = [length ns..]  
+	  ns' = [ (n,()) | (_,n) <- newNodes ]
+	  es' = [ (newNode f, newNode t,Just l) | (f,t,l) <- es]
+	  s' = newNode s
+	  fs' = map newNode fs
+	  
 
 --
 -- * Visualization
@@ -121,6 +154,9 @@ determinize (FA g s f) = undefined
 
 prFAGraphviz :: (Eq n,Show n) => FA n String String -> String
 prFAGraphviz  = Dot.prGraphviz . toGraphviz
+
+prFAGraphviz_ :: (Eq n,Show n,Show a, Show b) => FA n a b -> String
+prFAGraphviz_  = Dot.prGraphviz . toGraphviz . mapStates show . mapTransitions show
 
 toGraphviz :: (Eq n,Show n) => FA n String String -> Dot.Graph
 toGraphviz (FA (Graph _ ns es) s f) = Dot.Graph Dot.Directed [] (map mkNode ns) (map mkEdge es)
@@ -140,6 +176,9 @@ data Graph n a b = Graph [n] [Node n a] [Edge n b]
 type Node n a = (n,a)
 type Edge n b = (n,n,b)
 
+type Incoming n a b = [(Node n a,[Edge n b])]
+type Outgoing n a b = [(Node n a,[Edge n b])]
+
 newGraph :: [n] -> Graph n a b
 newGraph ns = Graph ns [] []
 
@@ -158,14 +197,22 @@ emap f (Graph c ns es) = Graph c ns [(x,y,f l) | (x,y,l) <- es]
 newNode :: a -> Graph n a b -> (Graph n a b,n)
 newNode l (Graph (c:cs) ns es) = (Graph cs ((c,l):ns) es, c)
 
-newEdge :: n -> n -> b -> Graph n a b -> Graph n a b
-newEdge f t l (Graph c ns es) = Graph c ns ((f,t,l):es)
+newEdge :: Edge n b -> Graph n a b -> Graph n a b
+newEdge e (Graph c ns es) = Graph c ns (e:es)
 
-incoming :: Ord n => Graph n a b -> [(Node n a,[Edge n b])]
+newEdges :: [Edge n b] -> Graph n a b -> Graph n a b
+newEdges es' (Graph c ns es) = Graph c ns (es'++es)
+
+-- | Get a list of all nodes and their incoming edges.
+incoming :: Ord n => Graph n a b -> Incoming n a b
 incoming = groupEdgesBy getTo
 
-outgoing :: Ord n => Graph n a b -> [(Node n a,[Edge n b])]
-outgoing = groupEdgesBy getTo
+-- | Get a list of all nodes and their outgoing edges.
+outgoing :: Ord n => Graph n a b -> Outgoing n a b
+outgoing = groupEdgesBy getFrom
+
+getOutgoing :: Eq n => Outgoing n a b -> n -> [Edge n b]
+getOutgoing out x = head [ es | ((y,_),es) <- out, x == y ]
 
 groupEdgesBy :: (Ord n) => (Edge n b -> n) -> Graph n a b -> [(Node n a,[Edge n b])]
 groupEdgesBy h (Graph _ ns es) = 

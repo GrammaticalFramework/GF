@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 18:00:19 $ 
+-- > CVS $Date: 2005/09/22 16:56:05 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
 -- Basic functions not in the standard libraries
 -----------------------------------------------------------------------------
@@ -80,10 +80,14 @@ sortNub = map head . group . sort
 unionAll :: Eq a => [[a]] -> [a]
 unionAll = nub . concat
 
--- | Like lookup, but fails if the argument is not found,
+-- | Like 'lookup', but fails if the argument is not found,
 --   instead of returning Nothing.
 lookup' :: Eq a => a -> [(a,b)] -> b
 lookup' x = fromJust . lookup x
+
+-- | Like 'find', but fails if nothing is found.
+find' :: (a -> Bool) -> [a] -> a
+find' p = fromJust . find p
 
 -- * ordering functions
 
