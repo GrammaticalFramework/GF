@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/22 16:56:05 $ 
+-- > CVS $Date: 2005/09/22 17:08:48 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.12 $
+-- > CVS $Revision: 1.13 $
 --
 -- A simple finite state network module.
 -----------------------------------------------------------------------------
@@ -80,11 +80,16 @@ onGraph f (FA g s ss) = FA (f g) s ss
 --   to one where the labels are on the nodes instead. This can add
 --   up to one extra node per edge.
 moveLabelsToNodes :: (Ord n,Eq a) => FA n () (Maybe a) -> FA n (Maybe a) ()
-moveLabelsToNodes = onGraph moveLabelsToNodes_
-  where moveLabelsToNodes_ gr@(Graph c _ _) = Graph c' ns (concat ess)
+moveLabelsToNodes = removeTrivialEmptyNodes . onGraph f
+  where f gr@(Graph c _ _) = Graph c' ns (concat ess)
 	    where is = incoming gr
 		  (c',is') = mapAccumL fixIncoming c is
 		  (ns,ess) = unzip (concat is')
+
+-- | Remove nodes which are not start or final, and have
+--   exactly one incoming or exactly one outgoing edge.
+removeTrivialEmptyNodes :: FA n (Maybe a) () -> FA n (Maybe a) ()
+removeTrivialEmptyNodes = id -- FIXME: implement
 
 fixIncoming :: (Eq n, Eq a) => [n] -> (Node n (),[Edge n (Maybe a)]) -> ([n],[(Node n (Maybe a),[Edge n ()])])
 fixIncoming cs c@((n,()),es) = (cs'', ((n,Nothing),es'):newContexts)
