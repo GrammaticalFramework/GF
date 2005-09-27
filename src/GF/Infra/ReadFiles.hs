@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/26 14:34:21 $ 
+-- > CVS $Date: 2005/09/27 10:25:07 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.24 $
+-- > CVS $Revision: 1.25 $
 --
 -- Decide what files to read as function of dependencies and time stamps.
 --
@@ -78,7 +78,10 @@ data CompStatus =
  | CSRes  -- read gfr
   deriving (Eq,Show)
 
-selectFormat :: ModEnv -> (InitPath,ModName) -> IO (ModName,(InitPath,CompStatus))
+-- for gfc, we also return ModTime to cope with earlier compilation of libs
+
+selectFormat :: ModEnv -> (InitPath,ModName) -> 
+                IO (ModName,(InitPath,(CompStatus,Maybe ModTime)))
 selectFormat env (p,f) = do
   let pf = prefixPathName p f
   let mtenv = lookup f env   -- Nothing if f is not in env
@@ -86,43 +89,54 @@ selectFormat env (p,f) = do
   mtgfc <- getModTime $ gfcFile pf
   mtgf  <- getModTime $ gfFile pf
   let stat = case (rtenv,mtenv,mtgfc,mtgf) of
-        (Just tenv,_,_,Just tgf) | laterModTime tenv tgf -> CSEnvR
-        (_,Just tenv,_,Just tgf) | laterModTime tenv tgf -> CSEnv
-        (_,_,Just tgfc,Just tgf) | laterModTime tgfc tgf -> CSRead
-        (_,_,_,        Nothing) -> CSRead -- source does not exist
-        _ -> CSComp
+        (Just tenv,_,_,Just tgf) | laterModTime tenv tgf -> (CSEnvR,Just tenv)
+        (_,Just tenv,_,Just tgf) | laterModTime tenv tgf -> (CSEnv, Just tenv)
+        (_,_,Just tgfc,Just tgf) | laterModTime tgfc tgf -> (CSRead,Just tgfc)
+        (_,_,_,        Nothing) -> (CSRead,Nothing) -- source does not exist
+        _ -> (CSComp,Nothing)
   return $ (f, (p,stat))
 
 
 needCompile :: Options -> 
-               [ModuleHeader] -> [(ModName,(InitPath,CompStatus))] -> [FullPath]
+               [ModuleHeader] -> 
+               [(ModName,(InitPath,(CompStatus,Maybe ModTime)))] -> [FullPath]
 needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
 
   deps = [(snd m,map fst ms) | (m,ms) <- headers]
   typ m = maybe MTyOther id $ lookup m [(m,t) | ((t,m),_) <- headers]
   uses m = [(n,u) | ((_,n),ms) <- headers, (k,u) <- ms, k==m]
-  stat0 m = maybe CSComp snd $ lookup m sfiles0
+  stat0 m = maybe CSComp (fst . snd) $ lookup m sfiles0
 
   allDeps = [(m,iterFix add ms) | (m,ms) <- deps] where
     add os = [m | o <- os, Just n <- [lookup o deps],m <- n]
 
   -- only treat reused, interface, or instantiation if needed
   sfiles = map relevant sfiles0
-  relevant fp@(f,(p,st)) = 
+  relevant fp@(f,(p,(st,_))) = 
     let us = uses f in
     if not (all noComp us) then
       fp else 
     if (elem (typ f) [] ---- MTyIncomplete, MTyIncResource]
         || 
         (not (null us) && all isAux us)) then
-      (f,(p,CSDont)) else
+      (f,(p,(CSDont,Nothing))) else
       fp
 
   isAux = flip elem [MUReuse,MUInstance,MUComplete] . snd
   noComp = flip elem [CSRead,CSEnv,CSEnvR] . stat0 . fst
 
+  -- mark as to be compiled those whose gfc is earlier than a deeper gfc
+  sfiles1 = map compTimes sfiles
+  compTimes fp@(f,(p,(_, Just t))) =
+    if any (> t) [t' | Just fs <- [lookup f deps], 
+                       f0 <- fs,
+                       Just (_,(_,Just t')) <- [lookup f0 sfiles]]
+    then (f,(p,(CSComp, Nothing)))
+    else fp
+  compTimes fp = fp
+
   -- start with the changed files themselves; returns [ModName]
-  changed = [f | (f,(_,CSComp)) <- sfiles] 
+  changed = [f | (f,(_,(CSComp,_))) <- sfiles1] 
 
   -- add other files that depend on some changed file; returns [ModName]
   iter np = let new = [f | (f,fs) <- deps, 
@@ -132,7 +146,7 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
   -- for each module in the full list, compile if depends on what needs compile
   -- returns [FullPath]
   mark cs = [(f,(path,st)) | 
-                (f,(path,st0)) <- sfiles, 
+                (f,(path,(st0,_))) <- sfiles1, 
                 let st = if (elem f cs) then CSComp else st0]
 
 
