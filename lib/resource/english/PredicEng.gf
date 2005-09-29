@@ -4,7 +4,7 @@
 concrete PredicEng of Predic = CategoriesEng ** 
   open Prelude, SyntaxEng, DeptypEng in {
 
-  flags optimize=all ;
+  flags optimize=all_subs ;
 
   lincat
     VType, CType = SS ;

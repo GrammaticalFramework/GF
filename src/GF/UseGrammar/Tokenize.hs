@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:23:52 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/09/29 13:20:08 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.14 $
 --
 -- lexers = tokenizers, to prepare input for GF grammars. AR 4\/1\/2002.
 -- an entry for each is included in 'Custom.customTokenizer'
@@ -22,6 +22,7 @@ module GF.UseGrammar.Tokenize ( tokWords,
 		  lexText,
 		  lexC2M, lexC2M',
 		  lexTextLiteral,
+                  lexIgnore
 		) where
 
 import GF.Data.Operations
@@ -184,3 +185,11 @@ lexHaskellVar     isKnown = unknown2var isKnown . lexHaskell
 eitherUpper isKnown w@(c:cs) = isKnown (toLower c : cs) || isKnown (toUpper c : cs)
 eitherUpper isKnown w = isKnown w
 
+-- ignore unknown tokens (e.g. keyword spotting)
+
+lexIgnore :: (String -> Bool) -> [CFTok] -> [CFTok]
+lexIgnore isKnown = concatMap mkOne where
+  mkOne t@(TS s) 
+    | isKnown s = [t]
+    | otherwise = []
+  mkOne t       = [t]
