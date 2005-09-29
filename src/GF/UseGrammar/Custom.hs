@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/18 22:55:46 $ 
+-- > CVS $Date: 2005/09/29 13:20:08 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.74 $
+-- > CVS $Revision: 1.75 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -410,6 +410,7 @@ customTokenizer =
   ,(strCI "codelit",   lexHaskellLiteral . stateIsWord)
   ,(strCI "textlit",   lexTextLiteral . stateIsWord)
   ,(strCI "codeC",     const $ lexC2M)
+  ,(strCI "ignore",    \gr -> lexIgnore (stateIsWord gr) . tokLits)
   ,(strCI "codeCHigh", const $ lexC2M' True)
 -- add your own tokenizers here
   ]
