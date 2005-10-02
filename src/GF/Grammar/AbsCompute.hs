@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:18 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/10/02 20:50:19 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.8 $
 --
 -- computation in abstract syntax w.r.t. explicit definitions.
 --
@@ -72,11 +72,14 @@ computeAbsTermIn lookd xs e = errIn ("computing" +++ prt e) $ compt xs e where
        Ok (Just EData) -> Nothing  -- canonical --- should always be QC
        Ok md -> md
        _ -> Nothing
+     Eqs _ -> return t ---- for nested fn
      _ -> Nothing
 
 beta :: [Ident] -> Exp -> Exp
 beta vv c = case c of
   App (Abs x b) a -> beta vv $ substTerm vv [xvv] (beta (x:vv) b) 
+                                                    where xvv = (x,beta vv a) 
+  Let (x,(_,a)) b -> beta vv $ substTerm vv [xvv] (beta (x:vv) b) 
                                                     where xvv = (x,beta vv a) 
   App f         a -> let (a',f') = (beta vv a, beta vv f) in 
                      (if a'==a && f'==f then id else beta vv) $ App f' a'

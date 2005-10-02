@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/03 21:51:58 $ 
+-- > CVS $Date: 2005/10/02 20:50:19 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.22 $
+-- > CVS $Revision: 1.23 $
 --
 -- Macros for constructing and analysing source code terms.
 --
@@ -654,6 +654,10 @@ composOp co trm =
      do cc' <- mapPairListM (co . snd) cc
         i'  <- changeTableType co i
         return (TSh i' cc')
+
+   Eqs cc -> 
+     do cc' <- mapPairListM (co . snd) cc
+        return (Eqs cc')
 
    V ty vs ->
      do ty' <- co ty

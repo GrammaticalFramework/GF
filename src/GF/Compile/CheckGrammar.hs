@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/22 08:52:02 $ 
+-- > CVS $Date: 2005/10/02 20:50:19 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.28 $
+-- > CVS $Revision: 1.29 $
 --
 -- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
 --
@@ -93,18 +93,25 @@ checkAbsInfo st m (c,info) = do
      checkContext st cont ---- also cstrs
    AbsFun (Yes typ0) md -> do
     typ <- compAbsTyp [] typ0   -- to calculate let definitions
-    mkCheck "function" $
-       checkTyp st typ ++ 
-       case md of
-         Yes d ->  checkEquation st (m,c) d
-         _ -> []
-    return $ (c,AbsFun (Yes typ) md)
+    mkCheck "type of function" $ checkTyp st typ 
+    md' <- case md of
+       Yes d -> do
+         let d' = elimTables d
+         mkCheckWarn "definition of function" $ checkEquation st (m,c) d'
+         return $ Yes d'
+       _ -> return md
+    return $ (c,AbsFun (Yes typ) md')
    _ -> return (c,info)
  where
    mkCheck cat ss = case ss of
      [] -> return (c,info)
      ["[]"] -> return (c,info) ----
      _  -> checkErr $ prtBad (unlines ss ++++ "in" +++ cat) c
+   ---- temporary solution when tc of defs is incomplete
+   mkCheckWarn cat ss = case ss of
+     [] -> return (c,info)
+     ["[]"] -> return (c,info) ----
+     _  -> checkWarn (unlines ss ++++ "in" +++ cat +++ prt c) >> return (c,info)
    compAbsTyp g t = case t of
      Vr x -> maybe (fail ("no value given to variable" +++ prt x)) return $ lookup x g
      Let (x,(_,a)) b -> do
@@ -117,6 +124,16 @@ checkAbsInfo st m (c,info) = do
      Abs _ _ -> return t
      _ -> composOp (compAbsTyp g) t
 
+   elimTables e = case e of
+     S t a  -> elimSel (elimTables t) (elimTables a)
+     T _ cs -> Eqs [(elimPatt p, elimTables t) | (p,t) <- cs]
+     _ -> composSafeOp elimTables e
+   elimPatt p = case p of
+     PR lps -> map snd lps
+     _ -> [p]
+   elimSel t a = case a of
+     R fs -> mkApp t (map (snd . snd) fs)
+     _ -> mkApp t [a]
 
 checkCompleteGrammar :: SourceAbs -> SourceCnc -> Check (BinTree Ident Info)
 checkCompleteGrammar abs cnc = do
