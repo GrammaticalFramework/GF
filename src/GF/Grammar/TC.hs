@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/15 16:22:02 $ 
+-- > CVS $Date: 2005/10/02 20:50:19 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
 -- Thierry Coquand's type checking algorithm that creates a trace
 -----------------------------------------------------------------------------
@@ -261,6 +261,9 @@ checkPatt th tenv exp val = do
    checkExpP tenv@(k,rho,gamma) exp val = case exp of
      Meta m -> return $ (AMeta m val, val, [])
      Vr x   -> return $ (AVr   x val, val, [])
+     EInt i -> return (AInt i, valAbsInt, [])
+     K s    -> return (AStr s, valAbsString, [])
+
      Q m c  -> do
        typ <- lookupConst th (m,c)
        return $ (ACn (m,c) typ, typ, [])
