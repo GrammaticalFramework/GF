@@ -2,9 +2,8 @@
 
 concrete BasicNor of Basic = CategoriesNor ** open ParadigmsNor,VerbsNor in {
 
-flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
+flags startcat=Phr ; lexer=textlit ; unlexer=text ;
   optimize=values ;
-
 
 lin
   airplane_N = mk2N "fly" "flyet" ;

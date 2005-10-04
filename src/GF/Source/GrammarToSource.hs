@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 21:08:15 $ 
+-- > CVS $Date: 2005/10/04 11:05:07 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.22 $
+-- > CVS $Revision: 1.23 $
 --
 -- From internal source syntax to BNFC-generated (used for printing).
 -----------------------------------------------------------------------------
@@ -77,11 +77,9 @@ mkTopDefs ds = ds
 
 trAnyDef :: (Ident,Info) -> [P.TopDef]
 trAnyDef (i,info) = let i' = tri i in case info of
-  AbsCat (Yes co) pd -> [P.DefCat [P.SimpleCatDef i' (map trDecl co)]] ++ case pd of
-    Yes fs -> [P.DefData [P.DataDef i' [P.DataQId (tri m) (tri c) | QC m c <- fs]]]
-    _ -> []
+  AbsCat (Yes co) pd -> [P.DefCat [P.SimpleCatDef i' (map trDecl co)]]
+  AbsFun (Yes ty) (Yes EData) -> [P.DefFunData [P.FunDef [i'] (trt ty)]]
   AbsFun (Yes ty) pt -> [P.DefFun [P.FunDef [i'] (trt ty)]] ++ case pt of
-    Yes EData -> [] -- keep this information in data defs only
     Yes t -> [P.DefDef [P.DDef [mkName i'] (trt t)]]
     _ -> []
   AbsFun (May b)  _ -> [P.DefFun [P.FunDef [i'] (P.EIndir (tri b))]]

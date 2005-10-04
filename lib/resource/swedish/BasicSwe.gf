@@ -2,7 +2,7 @@
 
 concrete BasicSwe of Basic = CategoriesSwe ** open ParadigmsSwe in {
 
-flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
+flags startcat=Phr ; lexer=textlit ; unlexer=text ;
   optimize=values ;
 
 lin
