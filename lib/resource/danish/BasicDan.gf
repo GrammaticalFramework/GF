@@ -2,9 +2,8 @@
 
 concrete BasicDan of Basic = CategoriesDan ** open ParadigmsDan,VerbsDan in {
 
-flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
+flags startcat=Phr ; lexer=textlit ; unlexer=text ;
   optimize=values ;
-
 
 lin
   airplane_N = mk2N "fly" "flyet" ;
