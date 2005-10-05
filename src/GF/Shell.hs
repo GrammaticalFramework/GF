@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/07/01 08:16:32 $ 
+-- > CVS $Date: 2005/10/05 20:02:19 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.42 $
+-- > CVS $Revision: 1.43 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -51,7 +51,7 @@ import GF.Grammar.PrGrammar
 import Control.Monad (foldM,liftM)
 import System (system)
 import System.Random (newStdGen) ----
-import Data.List (nub)
+import Data.List (nub,isPrefixOf)
 import GF.Data.Zipper ----
 
 import GF.Data.Operations
@@ -269,6 +269,8 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
   CSystemCommand s -> justOutput    opts (system s >> return ()) sa
   CPutString       -> changeArg    (opSS2CommandArg (optStringCommand opts gro)) sa
 -----  CShowTerm        -> changeArg  (opTS2CommandArg (optPrintTerm opts gro) . s2t) sa
+  CGrep ms -> changeArg (AString . unlines . filter (grep ms) . lines . prCommandArg) sa
+
 
   CSetFlag           -> changeState (addGlobalOptions opts0) sa
 ---- deprec!  CSetLocalFlag lang -> changeState (addLocalOptions lang opts0) sa
@@ -326,6 +328,11 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
      return $ if CMacros.isDiscontinuousCType t 
        then (putStrLn ("Warning: discontinuous category" +++ prt_ c))
        else (return ())
+
+   grep ms s = (if oElem beVerbose opts then not else id) $ grepv ms s --- -v
+   grepv ms s = case s of
+     _:cs -> isPrefixOf ms s || grepv ms cs
+     _ -> isPrefixOf ms s
 
 -- commands either change the state or process the argument, but not both
 -- some commands just do output

@@ -1,5 +1,7 @@
 --# -path=.:../abstract:../../prelude
 
+-- # -path=.:resource/english:resource/abstract:prelude
+
 concrete LangEng of Lang = 
   RulesEng, 
   ClauseEng, 

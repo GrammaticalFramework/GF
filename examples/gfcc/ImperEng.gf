@@ -1,3 +1,4 @@
+-- # -path=.:prelude
 --# -path=.:../../lib/prelude
 
 -- Toy English phrasing of C programs. Intended use is with 

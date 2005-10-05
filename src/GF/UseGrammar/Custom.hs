@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/05 11:56:42 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.76 $
+-- > CVS $Date: 2005/10/05 20:02:20 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.77 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -63,6 +63,7 @@ import GF.Data.Zipper
 
 import GF.UseGrammar.Statistics
 import GF.UseGrammar.Morphology
+import GF.UseGrammar.Information
 import GF.API.GrammarToHaskell
 -----import GrammarToCanon (showCanon, showCanonOpt)
 -----import qualified GrammarToGFC as GFC
@@ -307,6 +308,7 @@ customMultiGrammarPrinter =
   ,(strCI "header", const (MC.prCanonMGr . unoptimizeCanon))
   ,(strCI "cfgm", prCanonAsCFGM)
   ,(strCI "graph", visualizeCanonGrammar)
+  ,(strCI "missing", const missingLinCanonGrammar)
 
 -- to prolog format:
   ,(strCI "gfc-prolog", CnvProlog.prtSMulti)

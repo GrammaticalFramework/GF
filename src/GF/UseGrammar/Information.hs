@@ -5,16 +5,19 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 18:39:45 $ 
+-- > CVS $Date: 2005/10/05 20:02:20 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.6 $
+-- > CVS $Revision: 1.7 $
 --
 -- information on module, category, function, operation, parameter,... 
 -- AR 16\/9\/2003.
 -- uses source grammar
 -----------------------------------------------------------------------------
 
-module GF.UseGrammar.Information (showInformation) where
+module GF.UseGrammar.Information (
+   showInformation,
+   missingLinCanonGrammar
+   ) where
 
 import GF.Grammar.Grammar
 import GF.Infra.Ident
@@ -25,6 +28,7 @@ import GF.CF.PPrCF
 import GF.Compile.ShellState
 import GF.Grammar.PrGrammar
 import GF.Grammar.Lookup
+import GF.Grammar.Macros (zIdent)
 import qualified GF.Canon.GFC as GFC
 import qualified GF.Canon.AbsGFC as AbsGFC
 
@@ -141,3 +145,11 @@ ownConstants = map fst . filter isOwn . tree2list where
     AnyInd _ _ -> False
     _ -> True
 
+missingLinCanonGrammar :: GFC.CanonGrammar -> String
+missingLinCanonGrammar cgr = 
+  unlines $ concat [prt_ c : missing js | (c,js) <- concretes] where
+  missing js = map (("  " ++) . prt_) $ filter (not . flip isInBinTree js) abstract
+  abstract = err (const []) (map fst . tree2list . jments) $ lookupModMod cgr absId
+  absId = maybe (zIdent "") id $ greatestAbstract cgr
+  concretes = [(cnc,jments mo) | 
+    cnc <- allConcretes cgr absId, Ok mo <- [lookupModMod cgr cnc]]

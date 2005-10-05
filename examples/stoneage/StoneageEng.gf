@@ -1,4 +1,5 @@
---# -path=.:../../lib/resource/abstract:../../lib/resource/english:../../lib/prelude
+--# -path=.:resource/english:resource/abstract:prelude
+-- # -path=.:../../lib/resource/abstract:../../lib/resource/english:../../lib/prelude
 concrete StoneageEng of Stoneage 
   = open SyntaxEng, ResourceEng, ParadigmsEng, SwadeshLexEng,
   StoneageResEng in {
