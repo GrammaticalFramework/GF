@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/29 13:20:08 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.75 $
+-- > CVS $Date: 2005/10/05 11:56:42 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.76 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -81,6 +81,7 @@ import qualified GF.Conversion.GFC as Cnv
 import qualified GF.Conversion.Types as CnvTypes
 import qualified GF.Conversion.Haskell as CnvHaskell
 import qualified GF.Conversion.Prolog as CnvProlog
+import qualified GF.Conversion.TypeGraph as CnvTypeGraph
 import GF.Canon.Unparametrize
 import GF.Canon.Subexpressions
 
@@ -277,6 +278,9 @@ customGrammarPrinter =
   ,(strCI "cfg",      Prt.prt . stateCFG)
   ,(strCI "pinfo",    Prt.prt . statePInfo)
   ,(strCI "abstract", Prt.prtAfter "\n" . Cnv.gfc2abstract . stateGrammarLang)
+
+  ,(strCI "functiongraph",CnvTypeGraph.prtFunctionGraph . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
+  ,(strCI "typegraph",    CnvTypeGraph.prtTypeGraph . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
 
   ,(strCI "gfc-haskell",  CnvHaskell.prtSGrammar . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
   ,(strCI "mcfg-haskell", CnvHaskell.prtMGrammar . stateMCFG)
