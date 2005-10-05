@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/07/01 08:16:32 $ 
+-- > CVS $Date: 2005/10/05 20:02:20 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.39 $
+-- > CVS $Revision: 1.40 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -64,6 +64,7 @@ data Command =
  | CPutString
  | CShowTerm
  | CSystemCommand String
+ | CGrep String
 
  | CSetFlag
  | CSetLocalFlag Language
@@ -193,6 +194,7 @@ optionsOfCommand co = case co of
   CShowTerm -> flags "printer"
   CShowTreeGraph -> opts "c f g o"
   CSystemCommand _ -> none
+  CGrep _ -> opts "v"
 
   CPrintGrammar -> both "utf8" "printer lang"
   CPrintMultiGrammar -> both "utf8 utf8id" "printer"

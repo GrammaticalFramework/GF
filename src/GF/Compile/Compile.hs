@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/20 09:32:56 $
+-- > CVS $Date: 2005/10/05 20:02:19 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.44 $
+-- > CVS $Revision: 1.45 $
 --
 -- The top-level compilation chain from source file to gfc\/gfr.
 -----------------------------------------------------------------------------
@@ -106,7 +106,7 @@ compileModule opts1 st0 file = do
   ps0 <- ioeIO $ pathListOpts opts fpath
 
   let ps1 = if (useFileOpt && not useLineOpt) 
-              then (map (prefixPathName fpath) ps0)
+              then (ps0 ++ map (prefixPathName fpath) ps0)
               else ps0
   ps <- ioeIO $ extendPathEnv gfLibraryPath gfGrammarPathVar ps1
   let ioeIOIf = if oElem beVerbose opts then ioeIO else (const (return ()))

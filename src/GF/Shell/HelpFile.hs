@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/20 09:32:56 $
+-- > CVS $Date: 2005/10/05 20:02:19 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.13 $
+-- > CVS $Revision: 1.14 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -115,7 +115,6 @@ txtHelpFile =
   "\n  options:" ++
   "\n      -utf8  apply UTF8 encoding to the tokens in the grammar" ++
   "\n      -utf8id apply UTF8 encoding to the identifiers in the grammar" ++
-  "\n      -graph print module dependency graph in 'dot' format" ++
   "\n  examples:" ++
   "\n      pm | wf Letter.gfcm  -- print the grammar into the file Letter.gfcm" ++
   "\n      pm -printer=graph | wf D.dot  -- then do 'dot -Tps D.dot > D.ps'" ++
@@ -202,6 +201,14 @@ txtHelpFile =
   "\n     -lexer    use this lexer" ++
   "\n  examples:" ++
   "\n     tt -lexer=codelit \"2*(x + 3)\"  -- a favourite lexer for program code" ++
+  "\n" ++
+  "\ng, grep: g String1 String2" ++
+  "\n      Grep the String1 in the String2. String2 is read line by line," ++
+  "\n      and only those lines that contain String1 are returned." ++
+  "\n  flags:" ++
+  "\n     -v  return those lines that do not contain String1." ++
+  "\n  examples:" ++
+  "\n     pg -printer=cf | grep \"mother\"  -- show cf rules with word mother" ++
   "\n" ++
   "\ncc, compute_concrete: cc Term" ++
   "\n      Compute a term by concrete syntax definitions. Uses the topmost" ++
@@ -505,13 +512,16 @@ txtHelpFile =
   "\n    -optimize=all          first try parametrize then do values with the rest" ++
   "\n    -optimize=none         no optimization" ++
   "\n" ++
-  "\n-parser, parsing strategy. The default is chart. If -cfg or -mcfg are selected, only bottomup and topdown are recognized." ++
+  "\n-parser, parsing strategy. The default is chart. If -cfg or -mcfg are" ++
+  "\n       selected, only bottomup and topdown are recognized." ++
   "\n    -parser=chart          bottom-up chart parsing" ++
   "\n    -parser=bottomup       a more up to date bottom-up strategy" ++
   "\n    -parser=topdown        top-down strategy" ++
   "\n    -parser=old            an old bottom-up chart parser" ++
   "\n" ++
-  "\n-printer, format in which the grammar is printed. The default is gfc." ++
+  "\n-printer, format in which the grammar is printed. The default is" ++
+  "\n       gfc. Those marked with M are (only) available for pm, the rest" ++
+  "\n       for pg." ++
   "\n    -printer=gfc            GFC grammar" ++
   "\n    -printer=gf             GF grammar" ++
   "\n    -printer=old            old GF grammar" ++
@@ -535,6 +545,15 @@ txtHelpFile =
   "\n    -printer=fa_graphviz    a finite automaton with labelled edges" ++
   "\n    -printer=regular        a regular grammar in a simple BNF" ++
   "\n    -printer=unpar          a gfc grammar with parameters eliminated" ++
+  "\n    -printer=functiongraph  abstract syntax functions in 'dot' format" ++
+  "\n    -printer=typegraph      abstract syntax categories in 'dot' format" ++
+  "\n    -printer=gfcm        M  gfcm file (default for pm)" ++
+  "\n    -printer=header      M  gfcm file with header (for GF embedded in Java)" ++
+  "\n    -printer=graph       M  module dependency graph in 'dot' (graphviz) format" ++
+  "\n    -printer=missing     M  the missing linearizations of each concrete" ++
+  "\n    -printer=gfc-prolog  M  gfc in prolog format (also pg)" ++
+  "\n    -printer=mcfg-prolog M  mcfg in prolog format (also pg)" ++
+  "\n    -printer=cfg-prolog  M  cfg in prolog format (also pg)" ++
   "\n" ++
   "\n-startcat, like -cat, but used in grammars (to avoid clash with keyword cat)" ++
   "\n" ++

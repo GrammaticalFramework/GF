@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/20 16:14:20 $ 
+-- > CVS $Date: 2005/10/05 20:02:20 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.25 $
+-- > CVS $Revision: 1.26 $
 --
 -- parsing GF shell commands. AR 11\/11\/2001
 -----------------------------------------------------------------------------
@@ -133,6 +133,7 @@ pCommand ws = case ws of
   "st" : s      -> aTerm   CShowTerm s
   "!"  : s      -> aUnit   (CSystemCommand (unwords s))
   "sc" : s      -> aUnit   (CSystemCommand (unwords s))
+  "g"  : f : s  -> aString (CGrep (unquote f)) s
   
   "sf" : l : [] -> aUnit (CSetLocalFlag (language l))
   "sf" : []     -> aUnit CSetFlag

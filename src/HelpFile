@@ -86,7 +86,6 @@ pm, print_multigrammar: pm
   options:
       -utf8  apply UTF8 encoding to the tokens in the grammar
       -utf8id apply UTF8 encoding to the identifiers in the grammar
-      -graph print module dependency graph in 'dot' format
   examples:
       pm | wf Letter.gfcm  -- print the grammar into the file Letter.gfcm
       pm -printer=graph | wf D.dot  -- then do 'dot -Tps D.dot > D.ps'
@@ -173,6 +172,14 @@ tt, test_tokenizer: tt String
      -lexer    use this lexer
   examples:
      tt -lexer=codelit "2*(x + 3)"  -- a favourite lexer for program code
+
+g, grep: g String1 String2
+      Grep the String1 in the String2. String2 is read line by line,
+      and only those lines that contain String1 are returned.
+  flags:
+     -v  return those lines that do not contain String1.
+  examples:
+     pg -printer=cf | grep "mother"  -- show cf rules with word mother
 
 cc, compute_concrete: cc Term
       Compute a term by concrete syntax definitions. Uses the topmost
@@ -476,13 +483,16 @@ q, quit: q
     -optimize=all          first try parametrize then do values with the rest
     -optimize=none         no optimization
 
--parser, parsing strategy. The default is chart. If -cfg or -mcfg are selected, only bottomup and topdown are recognized.
+-parser, parsing strategy. The default is chart. If -cfg or -mcfg are
+       selected, only bottomup and topdown are recognized.
     -parser=chart          bottom-up chart parsing
     -parser=bottomup       a more up to date bottom-up strategy
     -parser=topdown        top-down strategy
     -parser=old            an old bottom-up chart parser
 
--printer, format in which the grammar is printed. The default is gfc.
+-printer, format in which the grammar is printed. The default is
+       gfc. Those marked with M are (only) available for pm, the rest
+       for pg.
     -printer=gfc            GFC grammar
     -printer=gf             GF grammar
     -printer=old            old GF grammar
@@ -506,6 +516,15 @@ q, quit: q
     -printer=fa_graphviz    a finite automaton with labelled edges
     -printer=regular        a regular grammar in a simple BNF
     -printer=unpar          a gfc grammar with parameters eliminated
+    -printer=functiongraph  abstract syntax functions in 'dot' format
+    -printer=typegraph      abstract syntax categories in 'dot' format
+    -printer=gfcm        M  gfcm file (default for pm)
+    -printer=header      M  gfcm file with header (for GF embedded in Java)
+    -printer=graph       M  module dependency graph in 'dot' (graphviz) format
+    -printer=missing     M  the missing linearizations of each concrete
+    -printer=gfc-prolog  M  gfc in prolog format (also pg)
+    -printer=mcfg-prolog M  mcfg in prolog format (also pg)
+    -printer=cfg-prolog  M  cfg in prolog format (also pg)
 
 -startcat, like -cat, but used in grammars (to avoid clash with keyword cat)
 
