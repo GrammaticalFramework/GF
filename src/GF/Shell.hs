@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/06 10:02:33 $ 
+-- > CVS $Date: 2005/10/06 14:21:34 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.44 $
+-- > CVS $Revision: 1.45 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -313,7 +313,9 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
   CWriteFile file  -> justOutputArg opts (writeFile file) sa
   CAppendFile file -> justOutputArg opts (appendFile file) sa
   CSpeakAloud      -> justOutputArg opts (speechGenerate opts) sa
-  CSystemCommand s -> justOutput    opts (system s >> return ()) sa
+  CSystemCommand s -> case a of
+    AUnit -> justOutput opts (system s >> return ()) sa
+    _     -> systemArg  opts a s sa 
   CPutString       -> changeArg    (opSS2CommandArg (optStringCommand opts gro)) sa
 -----  CShowTerm        -> changeArg  (opTS2CommandArg (optPrintTerm opts gro) . s2t) sa
   CGrep ms -> changeArg (AString . unlines . filter (grep ms) . lines . prCommandArg) sa
@@ -416,6 +418,16 @@ justOutputArg opts f sa@(st,a) = f (utf (prCommandArg a)) >> return (st, AUnit)
 
 justOutput :: Options -> IO () -> ShellIO
 justOutput opts = justOutputArg opts . const
+
+systemArg :: Options -> CommandArg -> String -> ShellIO
+systemArg _ cont syst sa = do
+  writeFile tmpi $ prCommandArg cont
+  system $ syst ++ " <" ++ tmpi ++ " >" ++ tmpo 
+  s <- readFile tmpo
+  returnArg (AString s) sa
+ where
+   tmpi = "_tmpi" ---
+   tmpo = "_tmpo"
 
 -- | type system for command arguments; instead of plain strings...
 data CommandArg = 
