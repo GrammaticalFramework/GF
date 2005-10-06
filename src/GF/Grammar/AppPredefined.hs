@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/26 20:40:33 $ 
+-- > CVS $Date: 2005/10/06 14:21:34 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.12 $
+-- > CVS $Revision: 1.13 $
 --
 -- Predefined function type signatures and definitions.
 -----------------------------------------------------------------------------
@@ -71,7 +71,7 @@ appPredefined t = case t of
     -- two-place functions
     App (Q (IC "Predef") (IC f)) z0 -> do
      (z,_) <- appPredefined z0
-     case (f, z, x) of
+     case (f, norm z, norm x) of
       ("drop", EInt i, K s) -> retb $ K (drop i s)
       ("take", EInt i, K s) -> retb $ K (take i s)
       ("tk",   EInt i, K s) -> retb $ K (take (max 0 (length s - i)) s)
@@ -102,6 +102,9 @@ appPredefined t = case t of
  where
    retb t = return (t,True)  -- no further computing needed
    retf t = return (t,False) -- must be computed further
+   norm t = case t of
+     Empty -> K []
+     _ -> t
 
 -- read makes variables into constants
 

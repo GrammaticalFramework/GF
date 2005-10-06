@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/06 10:02:34 $
+-- > CVS $Date: 2005/10/06 14:21:34 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -93,16 +93,19 @@ txtHelpFile =
   "\ndc, define_command Name Anything" ++
   "\n      Add a new defined command. The Name must star with '%'. Later," ++
   "\n      if 'Name X' is used, it is replaced by Anything where #1 is replaced" ++
-  "\n      by X. Currently at most one argument is possible. To see" ++
-  "\n      definitions in scope, use help -defs." ++
+  "\n      by X. " ++
+  "\n      Restrictions: Currently at most one argument is possible, and a defined" ++
+  "\n      command cannot appear in a pipe.     " ++
+  "\n      To see what definitions are in scope, use help -defs." ++
   "\n  examples:" ++
   "\n      dc %tnp p -cat=NP -lang=Eng #1 | l -lang=Swe    -- translate NPs" ++
-  "\n      %tnp \"this man\" | p -lang=Swe                   -- translate and parse" ++
+  "\n      %tnp \"this man\"                                 -- translate and parse" ++
   "\n" ++
   "\ndt, define_term Name Tree" ++
   "\n      Add a constant for a tree. The constant can later be called by" ++
-  "\n      prefixing it with '$'. It is not yet usable as a subterm. To see" ++
-  "\n      definitions in scope, use help -defs." ++
+  "\n      prefixing it with '$'. " ++
+  "\n      Restriction: These terms are not yet usable as a subterm. " ++
+  "\n      To see what definitions are in scope, use help -defs." ++
   "\n  examples:" ++
   "\n      p -cat=NP \"this man\" | dt tm    -- define tm as parse result" ++
   "\n      l -all $tm                      -- linearize tm in all forms" ++
@@ -475,6 +478,12 @@ txtHelpFile =
   "\n      Issues a system command. No value is returned to GF." ++
   "\n   example:" ++
   "\n      ! ls" ++
+  "\n" ++
+  "\n?, system_command: ? String" ++
+  "\n      Issues a system command that receives its arguments from GF pipe" ++
+  "\n      and returns a value to GF." ++
+  "\n   example:" ++
+  "\n      h | ? 'wc -l' | p -cat=Num" ++
   "\n" ++
   "\n" ++
   "\n-- Flags. The availability of flags is defined separately for each command." ++

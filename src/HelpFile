@@ -64,16 +64,19 @@ s,  strip: s
 dc, define_command Name Anything
       Add a new defined command. The Name must star with '%'. Later,
       if 'Name X' is used, it is replaced by Anything where #1 is replaced
-      by X. Currently at most one argument is possible. To see
-      definitions in scope, use help -defs.
+      by X. 
+      Restrictions: Currently at most one argument is possible, and a defined
+      command cannot appear in a pipe.     
+      To see what definitions are in scope, use help -defs.
   examples:
       dc %tnp p -cat=NP -lang=Eng #1 | l -lang=Swe    -- translate NPs
-      %tnp "this man" | p -lang=Swe                   -- translate and parse
+      %tnp "this man"                                 -- translate and parse
 
 dt, define_term Name Tree
       Add a constant for a tree. The constant can later be called by
-      prefixing it with '$'. It is not yet usable as a subterm. To see
-      definitions in scope, use help -defs.
+      prefixing it with '$'. 
+      Restriction: These terms are not yet usable as a subterm. 
+      To see what definitions are in scope, use help -defs.
   examples:
       p -cat=NP "this man" | dt tm    -- define tm as parse result
       l -all $tm                      -- linearize tm in all forms
@@ -446,6 +449,12 @@ q, quit: q
       Issues a system command. No value is returned to GF.
    example:
       ! ls
+
+?, system_command: ? String
+      Issues a system command that receives its arguments from GF pipe
+      and returns a value to GF.
+   example:
+      h | ? 'wc -l' | p -cat=Num
 
 
 -- Flags. The availability of flags is defined separately for each command.

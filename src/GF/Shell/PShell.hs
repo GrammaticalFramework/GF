@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/06 10:02:34 $ 
+-- > CVS $Date: 2005/10/06 14:21:34 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.27 $
+-- > CVS $Revision: 1.28 $
 --
 -- parsing GF shell commands. AR 11\/11\/2001
 -----------------------------------------------------------------------------
@@ -62,6 +62,7 @@ unquote (x:xs@(_:_)) | x `elem` "\"'" && x == last xs = init xs
 unquote s = s
 
 pCommandLine :: HState -> [String] -> CommandLine
+pCommandLine st (c@('%':_):args) = pCommandLine st $ resolveShMacro st c args 
 pCommandLine st (dc:c:def) | abbrevCommand dc == "dc" = ((CDefineCommand c def, noOptions),AUnit,[])
 pCommandLine st s = pFirst (chks s) where
   pFirst cos = case cos of
@@ -73,7 +74,6 @@ pCommandLine st s = pFirst (chks s) where
   chks = map (pCommandOpt st) . chunks "|"
 
 pCommandOpt :: HState -> [String] -> (Command, Options, [CommandArg])
-pCommandOpt st (c@('%':_):args) = pCommandOpt st $ resolveShMacro st c args 
 pCommandOpt _ (w:ws) = let 
   (os, co)     = getOptions "-" ws
   (comm, args) = pCommand (abbrevCommand w:co)
@@ -136,6 +136,7 @@ pCommand ws = case ws of
   "ps" : s      -> aString CPutString s
   "st" : s      -> aTerm   CShowTerm s
   "!"  : s      -> aUnit   (CSystemCommand (unwords s))
+  "?"  : s : x  -> aString (CSystemCommand (unquote s)) x
   "sc" : s      -> aUnit   (CSystemCommand (unwords s))
   "g"  : f : s  -> aString (CGrep (unquote f)) s
   
