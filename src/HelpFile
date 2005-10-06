@@ -61,6 +61,23 @@ sf, set_flags: sf Flag*
 s,  strip: s
       Prune the state by removing source and resource modules.
 
+dc, define_command Name Anything
+      Add a new defined command. The Name must star with '%'. Later,
+      if 'Name X' is used, it is replaced by Anything where #1 is replaced
+      by X. Currently at most one argument is possible. To see
+      definitions in scope, use help -defs.
+  examples:
+      dc %tnp p -cat=NP -lang=Eng #1 | l -lang=Swe    -- translate NPs
+      %tnp "this man" | p -lang=Swe                   -- translate and parse
+
+dt, define_term Name Tree
+      Add a constant for a tree. The constant can later be called by
+      prefixing it with '$'. It is not yet usable as a subterm. To see
+      definitions in scope, use help -defs.
+  examples:
+      p -cat=NP "this man" | dt tm    -- define tm as parse result
+      l -all $tm                      -- linearize tm in all forms
+
 -- commands that give information about the state
 
 pg, print_grammar: pg
@@ -416,7 +433,8 @@ h, help: h Command?
       Displays the paragraph concerning the command from this help file.
       Without the argument, shows the first lines of all paragraphs.
   options
-       -all  show the whole help file
+       -all   show the whole help file
+       -defs  show user-defined commands and terms
   examples:
        h print_grammar  -- show all information on the pg command
 

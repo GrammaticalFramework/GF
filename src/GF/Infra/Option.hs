@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/18 22:55:46 $ 
+-- > CVS $Date: 2005/10/06 10:02:33 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.31 $
+-- > CVS $Revision: 1.32 $
 --
 -- Options and flags used in GF shell commands and files.
 --
@@ -210,6 +210,7 @@ tableLin    = iOpt "table"
 defaultLinOpts = [firstLin]
 useUTF8     = iOpt "utf8"
 showLang    = iOpt "lang"
+showDefs    = iOpt "defs"
 withMetas   = iOpt "metas"
 
 -- ** other
@@ -221,6 +222,7 @@ beVerbose, showInfo, beSilent, emitCode, getHelp,
   stripQualif, nostripQualif, showAll, fromSource :: Option
 
 beVerbose    = iOpt "v"
+invertGrep   = iOpt "v" --- same letter in unix
 showInfo     = iOpt "i"
 beSilent     = iOpt "s"
 emitCode     = iOpt "o"

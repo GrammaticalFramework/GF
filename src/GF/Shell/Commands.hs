@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/08/17 15:13:55 $ 
+-- > CVS $Date: 2005/10/06 10:02:33 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.41 $
+-- > CVS $Revision: 1.42 $
 --
 -- temporary hacks for GF 2.0
 --
@@ -162,8 +162,9 @@ execCommand env c s = case c of
     return (startEditEnv emptyShellState, initSState)
 
   CCEnvGFShell command -> do
-    let cs = PShell.pCommandLines command
-    (msg,(env',_)) <- Shell.execLines False cs (Shell.initHState env)
+    let hs = Shell.initHState env
+    let cs = PShell.pCommandLines hs command
+    (msg,(env',_)) <- Shell.execLines False cs hs
     return (env', changeMsg msg s) ----
 
   CCEnvOpenTerm file -> do
