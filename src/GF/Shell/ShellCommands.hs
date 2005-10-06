@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/05 20:02:20 $ 
+-- > CVS $Date: 2005/10/06 10:02:34 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.40 $
+-- > CVS $Revision: 1.41 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -39,6 +39,9 @@ data Command =
  | CStripState
  | CTransformGrammar FilePath
  | CConvertLatex FilePath
+
+ | CDefineCommand String [String]
+ | CDefineTerm String
 
  | CLinearize [()] ---- parameters
  | CParse
@@ -200,7 +203,7 @@ optionsOfCommand co = case co of
   CPrintMultiGrammar -> both "utf8 utf8id" "printer"
   CPrintSourceGrammar -> both "utf8" "printer"
 
-  CHelp _ -> opts "all filter length lexer unlexer printer transform depth number"
+  CHelp _ -> opts "all defs filter length lexer unlexer printer transform depth number"
 
   CImpure ICEditSession -> both "f" "file"
   CImpure ICTranslateSession -> both "f langs" "cat"

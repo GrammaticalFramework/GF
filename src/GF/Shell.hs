@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/05 20:02:19 $ 
+-- > CVS $Date: 2005/10/06 10:02:33 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.43 $
+-- > CVS $Revision: 1.44 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -57,7 +57,7 @@ import GF.Data.Zipper ----
 import GF.Data.Operations
 import GF.Infra.UseIO
 import GF.Text.UTF8 (encodeUTF8)
-
+import Data.Char (isDigit)
 
 ---- import qualified GrammarToGramlet as Gr
 ---- import qualified GrammarToCanonXML2 as Canon
@@ -72,31 +72,67 @@ type CommandLine = (CommandOpt, CommandArg,  [CommandOpt])
 type SrcTerm = G.Term 
 
 -- | history & CPU
-type HState  = (ShellState,([String],Integer)) 
+type HState  = (ShellState,([String],Integer,ShMacros,ShTerms)) 
+
+type ShMacros = [(String,[String])] -- dc %c = ... #1 ... #2 ...
+type ShTerms  = [(String,Tree)]     -- dt $e = f ...
 
 type ShellIO = (HState, CommandArg) -> IO (HState, CommandArg)
 
 initHState :: ShellState -> HState
-initHState st = (st,([],0))
+initHState st = (st,([],0,[],[]))
 
 cpuHState :: HState -> Integer
-cpuHState (_,(_,i)) = i
+cpuHState (_,(_,i,_,_)) = i
 
 optsHState :: HState -> Options
 optsHState (st,_) = globalOptions st
 
 putHStateCPU :: Integer -> HState -> HState
-putHStateCPU cpu (st,(h,_)) = (st,(h,cpu))
+putHStateCPU cpu (st,(h,_,c,t)) = (st,(h,cpu,c,t))
 
 updateHistory :: String -> HState -> HState
-updateHistory s (st,(h,cpu)) = (st,(s:h,cpu))
+updateHistory s (st,(h,cpu,c,t)) = (st,(s:h,cpu,c,t))
+
+addShMacro :: (String,[String]) -> HState -> HState
+addShMacro m (st,(h,cpu,c,t)) = (st,(h,cpu,m:c,t))
+
+addShTerm :: (String,Tree) -> HState -> HState
+addShTerm m (st,(h,cpu,c,t)) = (st,(h,cpu,c,m:t))
+
+resolveShMacro :: HState -> String -> [String] -> [String]
+resolveShMacro st@(_,(_,_,cs,_)) c args = case lookup c cs of
+  Just def -> map subst def
+  _ -> [] ----
+ where
+   subst s = case s of
+     "#1" -> unwords args
+     _ -> s
+ --- so far only one arg allowed - how to determine arg boundaries?
+{-
+   subst s = case s of
+     '#':d@(_:_) | all isDigit d -> 
+        let i = read d in if i > lg then s else args !! (i-1) -- #1 is first
+     _ -> s
+   lg = length args
+-}
+
+lookupShTerm :: HState -> String -> Maybe Tree
+lookupShTerm st@(_,(_,_,_,ts)) c = lookup c ts
+
+txtHelpMacros :: HState -> String
+txtHelpMacros (_,(_,_,cs,ts)) = unlines $
+  ["Defined commands:",""] ++
+  [c +++ "=" +++ unwords def | (c,def) <- cs] ++
+  ["","Defined terms:",""] ++
+  [c +++ "=" +++ prt_ def | (c,def) <- ts]
 
 -- | empty command if index over
 earlierCommandH :: HState -> Int -> String
-earlierCommandH (_,(h,_)) = ((h ++ repeat "") !!) 
+earlierCommandH (_,(h,_,_,_)) = ((h ++ repeat "") !!) 
 
 execLinesH :: String -> [CommandLine] -> HState -> IO HState
-execLinesH s cs hst@(st, (h, _)) = do
+execLinesH s cs hst@(st, (h,_,_,_)) = do
   (_,st') <- execLines True cs hst
   cpu     <- prOptCPU (optsHState st') (cpuHState hst)
   return $ putHStateCPU cpu $ updateHistory s st'
@@ -125,7 +161,7 @@ execLine put (c@(co, os), arg, cs) (outps,st) = do
 
 -- | individual commands possibly piped: value returned; this is not a state monad
 execC :: CommandOpt -> ShellIO
-execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
+execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case comm of
 
   CImport file | oElem fromExamples opts -> do
     es <- liftM nub $ getGFEFiles opts file
@@ -150,6 +186,17 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
 -}
   CPrintHistory -> (returnArg $ AString $ unlines $ reverse h) sa
   -- good to have here for piping; eh and ec must be done on outer level
+
+  CDefineCommand c args -> return (addShMacro (c,args) sh, AUnit)
+  CDefineTerm c -> do 
+    let 
+      a' = case a of
+        ASTrm _ -> s2t a
+        AString _ -> s2t a
+        _ -> a
+    case a' of
+      ATrms [trm] -> return (addShTerm (c,trm) sh, AUnit) 
+      _ ->  returnArg (AError "illegal term definition") sa
 
   CLinearize [] 
     | oElem showMulti opts -> 
@@ -277,7 +324,8 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
 
   CHelp (Just c) -> returnArg   (AString (txtHelpCommand c)) sa
   CHelp _ -> case opts0 of
-    Opts [o] | o == showAll -> returnArg   (AString txtHelpFile) sa
+    Opts [o] | o == showAll  -> returnArg   (AString txtHelpFile) sa
+    Opts [o] | o == showDefs -> returnArg   (AString (txtHelpMacros sh)) sa
     Opts [o]        -> returnArg   (AString (txtHelpCommand ('-':prOpt o))) sa
     _               -> returnArg   (AString txtHelpFileSummary) sa
 
@@ -312,6 +360,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
    cgr = canModules st
 
    s2t a = case a of
+     ASTrm ('$':c) -> maybe (AError "undefined term") (ATrms . return) $ lookupShTerm sh c
      ASTrm s  -> err AError (ATrms . return) $ string2treeErr gro s
      AString s  -> err AError (ATrms . return) $ string2treeErr gro s
      _ -> a
@@ -329,7 +378,7 @@ execC co@(comm, opts0) sa@((st,(h,_)),a) = checkOptions st co >> case comm of
        then (putStrLn ("Warning: discontinuous category" +++ prt_ c))
        else (return ())
 
-   grep ms s = (if oElem beVerbose opts then not else id) $ grepv ms s --- -v
+   grep ms s = (if oElem invertGrep opts then not else id) $ grepv ms s --- -v
    grepv ms s = case s of
      _:cs -> isPrefixOf ms s || grepv ms cs
      _ -> isPrefixOf ms s

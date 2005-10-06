@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/05 20:02:19 $
+-- > CVS $Date: 2005/10/06 10:02:34 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.14 $
+-- > CVS $Revision: 1.15 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -89,6 +89,23 @@ txtHelpFile =
   "\n" ++
   "\ns,  strip: s" ++
   "\n      Prune the state by removing source and resource modules." ++
+  "\n" ++
+  "\ndc, define_command Name Anything" ++
+  "\n      Add a new defined command. The Name must star with '%'. Later," ++
+  "\n      if 'Name X' is used, it is replaced by Anything where #1 is replaced" ++
+  "\n      by X. Currently at most one argument is possible. To see" ++
+  "\n      definitions in scope, use help -defs." ++
+  "\n  examples:" ++
+  "\n      dc %tnp p -cat=NP -lang=Eng #1 | l -lang=Swe    -- translate NPs" ++
+  "\n      %tnp \"this man\" | p -lang=Swe                   -- translate and parse" ++
+  "\n" ++
+  "\ndt, define_term Name Tree" ++
+  "\n      Add a constant for a tree. The constant can later be called by" ++
+  "\n      prefixing it with '$'. It is not yet usable as a subterm. To see" ++
+  "\n      definitions in scope, use help -defs." ++
+  "\n  examples:" ++
+  "\n      p -cat=NP \"this man\" | dt tm    -- define tm as parse result" ++
+  "\n      l -all $tm                      -- linearize tm in all forms" ++
   "\n" ++
   "\n-- commands that give information about the state" ++
   "\n" ++
@@ -445,7 +462,8 @@ txtHelpFile =
   "\n      Displays the paragraph concerning the command from this help file." ++
   "\n      Without the argument, shows the first lines of all paragraphs." ++
   "\n  options" ++
-  "\n       -all  show the whole help file" ++
+  "\n       -all   show the whole help file" ++
+  "\n       -defs  show user-defined commands and terms" ++
   "\n  examples:" ++
   "\n       h print_grammar  -- show all information on the pg command" ++
   "\n" ++

@@ -4,9 +4,9 @@
 -- Stability   : (stability)
 -- Portability : (portability)
 --
--- > CVS $Date: 2005/04/21 16:21:04 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/10/06 10:02:33 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.8 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -30,7 +30,7 @@ import Data.Char (isSpace)
 gfInteract :: HState -> IO HState
 gfInteract st@(env,hist) = do
   -- putStrFlush "> " M.F 25/01-02 prompt moved to Arch.
-  (s,cs) <- getCommandLines
+  (s,cs) <- getCommandLines st
   case ifImpure cs of
 
     -- these are the three impure commands
@@ -39,12 +39,12 @@ gfInteract st@(env,hist) = do
       return st
     Just (ICExecuteHistory file,_) -> do
       ss  <- readFileIf file
-      let co = pCommandLines ss
+      let co = pCommandLines st ss
       st' <- execLinesH s co st      
       gfInteract st'      
     Just (ICEarlierCommand i,_) -> do
       let line = earlierCommandH st i
-          co   = pCommandLine $ words line
+          co   = pCommandLine st $ words line
       st' <- execLinesH line [co] st       -- s would not work in execLinesH
       gfInteract st'
 
@@ -69,7 +69,7 @@ gfInteract st@(env,hist) = do
 
 gfBatch :: HState -> IO HState
 gfBatch st@(sh,_) = do
-  (s,cs) <- getCommandLinesBatch
+  (s,cs) <- getCommandLinesBatch st
   if s == "q" then return st else do
     st' <- if all isSpace s then return st else do
         putVe "<gfcommand>"
@@ -90,9 +90,10 @@ putVerb st@(sh,_) s = if (oElem beSilent (globalOptions sh))
 batchCompile :: Options -> FilePath -> IO ()
 batchCompile os file = do
   let file' = mkGFC file
+  let st    = initHState emptyShellState
   let s     = "i -o" +++ (unwords $ map ('-':) $ words $ prOpts os) +++ file
-  let cs    = pCommandLines s
-  execLines True cs (initHState emptyShellState)
+  let cs    = pCommandLines st s
+  execLines True cs st
   return ()
 
 mkGFC = reverse . ("cfg" ++) . dropWhile (/='.') . reverse

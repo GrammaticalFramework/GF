@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/05 20:02:20 $ 
+-- > CVS $Date: 2005/10/06 10:02:34 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.26 $
+-- > CVS $Revision: 1.27 $
 --
 -- parsing GF shell commands. AR 11\/11\/2001
 -----------------------------------------------------------------------------
@@ -30,18 +30,19 @@ import System.IO.Error
 -- parsing GF shell commands. AR 11/11/2001
 
 -- | getting a sequence of command lines as input
-getCommandLines :: IO (String,[CommandLine])
-getCommandLines = do
+getCommandLines :: HState -> IO (String,[CommandLine])
+getCommandLines st = do
   s <- fetchCommand "> "
-  return (s,pCommandLines s)
+  return (s,pCommandLines st s)
 
-getCommandLinesBatch :: IO (String,[CommandLine])
-getCommandLinesBatch = do
+getCommandLinesBatch :: HState -> IO (String,[CommandLine])
+getCommandLinesBatch st = do
   s <- catch getLine (\e -> if isEOFError e then return "q" else ioError e)
-  return $ (s,pCommandLines s)
+  return $ (s,pCommandLines st s)
 
-pCommandLines :: String -> [CommandLine]
-pCommandLines = map pCommandLine . concatMap (chunks ";;" . wordsLits) . lines
+pCommandLines :: HState -> String -> [CommandLine]
+pCommandLines st = 
+  map (pCommandLine st) . concatMap (chunks ";;" . wordsLits) . lines
 
 -- | Like 'words', but does not split on whitespace inside
 --   double quotes.
@@ -60,23 +61,25 @@ unquote :: String -> String
 unquote (x:xs@(_:_)) | x `elem` "\"'" && x == last xs = init xs
 unquote s = s
 
-pCommandLine :: [String] -> CommandLine
-pCommandLine s = pFirst (chks s) where
+pCommandLine :: HState -> [String] -> CommandLine
+pCommandLine st (dc:c:def) | abbrevCommand dc == "dc" = ((CDefineCommand c def, noOptions),AUnit,[])
+pCommandLine st s = pFirst (chks s) where
   pFirst cos = case cos of
     (c,os,[a]) : cs -> ((c,os), a, pCont cs)
     _               -> ((CVoid,noOptions), AError "no parse", [])
   pCont cos = case cos of
     (c,os,_)   : cs -> (c,os) : pCont cs
     _               -> []
-  chks = map pCommandOpt . chunks "|"
+  chks = map (pCommandOpt st) . chunks "|"
 
-pCommandOpt :: [String] -> (Command, Options, [CommandArg])
-pCommandOpt (w:ws) = let 
+pCommandOpt :: HState -> [String] -> (Command, Options, [CommandArg])
+pCommandOpt st (c@('%':_):args) = pCommandOpt st $ resolveShMacro st c args 
+pCommandOpt _ (w:ws) = let 
   (os, co)     = getOptions "-" ws
   (comm, args) = pCommand (abbrevCommand w:co)
   in
   (comm, os, args)
-pCommandOpt s = (CVoid, noOptions, [AError "no parse"])
+pCommandOpt _ s = (CVoid, noOptions, [AError "no parse"])
 
 pInputString :: String -> [CommandArg]
 pInputString s = case s of
@@ -104,6 +107,7 @@ pCommand ws = case ws of
   "cl" : f : [] -> aUnit   (CConvertLatex f)
 
   "ph" : []     -> aUnit   CPrintHistory
+  "dt" : f : t  -> aTerm   (CDefineTerm (unquote f)) t
 
   "l"  : s      -> aTermLi CLinearize s
 
