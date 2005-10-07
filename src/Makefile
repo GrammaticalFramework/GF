@@ -26,6 +26,8 @@ MSI_FILE=gf-$(subst .,_,$(PACKAGE_VERSION)).msi
 
 GF_DATA_DIR=$(datadir)/GF-$(PACKAGE_VERSION)
 
+EMBED = GF/Embed/TemplateApp
+
 # use the temporary binary file name 'gf-bin' to not clash with directory 'GF' 
 # on case insensitive file systems (such as FAT)
 GF_EXE=gf$(EXEEXT)
@@ -72,6 +74,11 @@ build:
 
 opt: GHCFLAGS += $(GHCOPTFLAGS)
 opt: build
+
+embed: GHCFLAGS += $(GHCOPTFLAGS)
+embed:
+	$(GHMAKE) $(GHCFLAGS) $(EMBED) -o $(EMBED)
+	strip $(EMBED)
 
 noopt: build
 
