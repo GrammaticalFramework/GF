@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/20 09:32:56 $ 
+-- > CVS $Date: 2005/10/07 11:24:51 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.14 $
+-- > CVS $Revision: 1.15 $
 --
 -- Converting GFC to SimpleGFC
 --
@@ -71,6 +71,7 @@ convertAbstract env fun a
 convertType :: Var -> [TTerm] -> A.Exp -> SDecl
 convertType x args (A.EApp a b) = convertType x (convertExp [] b : args) a
 convertType x args (A.EAtom at) = Decl x (convertCat at) args
+convertType x args (A.EProd _ _ b) = convertType x args b ---- AR 7/10 workaround
 convertType x args exp          = error $ "GFCtoSimple.convertType: " ++ prt exp
 
 convertExp :: [TTerm] -> A.Exp -> TTerm
