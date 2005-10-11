@@ -118,3 +118,20 @@ lin2fun s = case words s of
   _ -> s 
  where
    cat fun = reverse (takeWhile (/='_') (reverse fun))
+
+-- filter from a given file those lines whose first word is in a sought-set
+
+allThose :: [String] -> [String] -> [String]
+allThose soughts givens = concatMap seek soughts where
+  seek w = let s = [line | line <- givens, w':_ <- [words line], w == w']
+           in if null s then ["-- " ++ w] else s
+
+-- do this with files
+-- example: getAllThose "abstract/Mtmp" "english/BasicEng.gf"
+
+getAllThose :: FilePath -> FilePath -> IO ()
+getAllThose sought given = do
+  s  <- readFile sought
+  gi <- readFile given
+  let so = [w | l <- lines s, w:_ <- [words l]] 
+  mapM_ putStrLn $ allThose so $ lines gi
