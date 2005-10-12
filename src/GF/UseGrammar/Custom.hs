@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/05 20:02:20 $ 
+-- > CVS $Date: 2005/10/12 12:38:30 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.77 $
+-- > CVS $Revision: 1.78 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -344,7 +344,7 @@ customTermCommand =
   ,(strCI "generate",   \g t -> let gr = grammar g
                                     cat = actCat $ tree2loc t --- not needed
                                 in
-                         [tr | t <- generateTrees gr False cat 2 Nothing (Just t), 
+                         [tr | t <- generateTrees noOptions gr cat 2 Nothing (Just t), 
                                Ok tr <- [annotate gr $ MM.qualifTerm (absId g) t]])
   ,(strCI "typecheck",   \g t -> err (const []) (return . loc2tree)
                                     (reCheckStateReject (grammar g) (tree2loc t)))

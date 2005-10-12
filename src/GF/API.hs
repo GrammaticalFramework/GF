@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/02 17:31:57 $ 
+-- > CVS $Date: 2005/10/12 12:38:29 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.37 $
+-- > CVS $Revision: 1.38 $
 --
 -- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 -----------------------------------------------------------------------------
@@ -189,14 +189,13 @@ randomTreesIO opts gr n = do
 generateTrees :: Options -> GFGrammar -> Maybe Tree -> [Tree]
 generateTrees opts gr mt =
   optIntOrAll opts flagNumber  
-    [tr | t <- Gen.generateTrees gr' ifm cat dpt mn mt, Ok tr <- [mkTr t]]
+    [tr | t <- Gen.generateTrees opts gr' cat dpt mn mt, Ok tr <- [mkTr t]]
   where
     mkTr = annotate gr' . qualifTerm (absId gr) 
     gr' = grammar gr
     cat = firstAbsCat opts gr
     dpt = maybe 3 id $ getOptInt opts flagDepth
     mn  = getOptInt opts flagAlts
-    ifm = oElem withMetas opts
 
 speechGenerate :: Options -> String -> IO ()
 speechGenerate opts str = do

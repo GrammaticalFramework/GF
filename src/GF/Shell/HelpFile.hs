@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/06 14:21:34 $
+-- > CVS $Date: 2005/10/12 12:38:30 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.16 $
+-- > CVS $Revision: 1.17 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -289,6 +289,7 @@ txtHelpFile =
   "\n      -metas   also return trees that include metavariables" ++
   "\n  flags:" ++
   "\n      -depth   generate to this depth (default 3)" ++
+  "\n      -atoms   take this number of atomic rules of each category (default unlimited)" ++
   "\n      -alts    take this number of alternatives at each branch (default unlimited)" ++
   "\n      -cat     generate in this category" ++
   "\n      -lang    use the abstract syntax of this grammar" ++
