@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 18:39:44 $ 
+-- > CVS $Date: 2005/10/12 12:38:30 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- Generate all trees of given category and depth. AR 30\/4\/2004
 --
@@ -28,6 +28,7 @@ import GF.Grammar.Grammar (Cat)
 
 import GF.Data.Operations
 import GF.Data.Zipper
+import GF.Infra.Option
 
 import Data.List
 
@@ -39,18 +40,20 @@ import Data.List
 
 
 -- | the main function takes an abstract syntax and returns a list of trees
-generateTrees :: GFCGrammar -> Bool -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
-generateTrees gr ifm cat n mn mt = map str2tr $ generate gr' ifm cat' n mn mt'
+generateTrees :: Options -> GFCGrammar -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
+generateTrees opts gr cat n mn mt = map str2tr $ generate gr' ifm cat' n mn mt'
   where
-    gr' = gr2sgr gr
+    gr'  = gr2sgr ats gr
     cat' = prt $ snd cat
-    mt' = maybe Nothing (return . tr2str) mt
+    mt'  = maybe Nothing (return . tr2str) mt
+    ifm  = oElem withMetas opts
+    ats  = getOptInt opts (aOpt "atoms")
 
 ------------------------------------------
 -- translate grammar to simpler form and generated trees back
 
-gr2sgr :: GFCGrammar -> SGrammar
-gr2sgr gr = buildTree [(c,rs) | rs@((_,(_,c)):_) <- rules] where
+gr2sgr :: Maybe Int -> GFCGrammar -> SGrammar
+gr2sgr un gr = buildTree [(c,rs) | rs@((_,(_,c)):_) <- prune rules] where
   rules =
     groupBy (\x y -> scat x == scat y) $
       sortBy (\x y -> compare (scat x) (scat y)) 
@@ -61,6 +64,12 @@ gr2sgr gr = buildTree [(c,rs) | rs@((_,(_,c)):_) <- rules] where
     _ -> []
   trCat (m,c) = prt c ---
   scat (_,(_,c)) = c
+
+  prune rs = maybe rs (\n -> map (onlyAtoms n) rs) $ un
+  onlyAtoms n rs = 
+    let (rs1,rs2) = partition atom rs 
+    in take n rs1 ++ rs2
+  atom = null . fst . snd
 
 -- str2tr :: STree -> Exp
 str2tr t = case t of

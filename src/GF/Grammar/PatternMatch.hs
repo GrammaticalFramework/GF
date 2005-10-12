@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:26 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/10/12 12:38:29 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.7 $
 --
 -- pattern matching for both concrete and abstract syntax. AR -- 16\/6\/2003
 -----------------------------------------------------------------------------
@@ -65,12 +65,14 @@ tryMatch (p,t) = do
          do matches <- mapM tryMatch (zip pp tt)
             return (concat matches)
       (PP q p pp, ([], QC r f, tt)) | 
-            q `eqStrIdent` r && p `eqStrIdent` f && length pp == length tt ->
+            -- q `eqStrIdent` r &&  --- not for inherited AR 10/10/2005
+            p `eqStrIdent` f && length pp == length tt ->
          do matches <- mapM tryMatch (zip pp tt)
             return (concat matches)
       ---- hack for AppPredef bug
       (PP q p pp, ([], Q r f, tt)) | 
-            q `eqStrIdent` r && p `eqStrIdent` f && length pp == length tt ->
+            -- q `eqStrIdent` r && --- 
+            p `eqStrIdent` f && length pp == length tt ->
          do matches <- mapM tryMatch (zip pp tt)
             return (concat matches)
 

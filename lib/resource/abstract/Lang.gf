@@ -10,6 +10,9 @@ abstract Lang =
   Math
 
   ** {
+
+  flags startcat=Phr ;
+
   fun
 
 -- Mount $Time$.

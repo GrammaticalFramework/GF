@@ -260,6 +260,7 @@ gt, generate_trees: gt Tree?
       -metas   also return trees that include metavariables
   flags:
       -depth   generate to this depth (default 3)
+      -atoms   take this number of atomic rules of each category (default unlimited)
       -alts    take this number of alternatives at each branch (default unlimited)
       -cat     generate in this category
       -lang    use the abstract syntax of this grammar
