@@ -10,7 +10,7 @@
 --
 -- The following files are presupposed:
 
-interface SyntaxRomance = TypesRomance ** open Prelude, (CO=Coordination) in {
+interface SyntaxRomanceVP = TypesRomance ** open Prelude, (CO=Coordination) in {
 
 --2 Common Nouns
 --

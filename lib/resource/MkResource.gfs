@@ -1,0 +1,12 @@
+i finnish/LangFin.gf 
+s
+i french/LangFre.gf 
+i italian/LangIta.gf 
+i spanish/LangSpa.gf 
+s
+i norwegian/LangNor.gf 
+i swedish/LangSwe.gf 
+s
+i english/LangEng.gf
+s
+pm | wf langs.gfcm

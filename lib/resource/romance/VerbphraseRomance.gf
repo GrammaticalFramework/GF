@@ -20,9 +20,9 @@
 -- implemented. The parameter types are defined in $TypesEng.gf$.
 
 incomplete concrete VerbphraseRomance of Verbphrase = CategoriesRomance ** 
-  open Prelude, SyntaxRomance in {
+  open Prelude, SyntaxRomanceVP in {
 
-  flags optimize=all ;
+  flags optimize=all_subs ;
 
   lin
   UseV v = predClauseGroup v (complVerb v) ;
@@ -54,8 +54,8 @@ incomplete concrete VerbphraseRomance of Verbphrase = CategoriesRomance **
   RelVP = relVerbPhrase ;
   IntVP = intVerbPhrase ;
 
-  PosVP tp = predVerbGroup True tp ;
-  NegVP tp = predVerbGroup False tp ;
+--  PosVP tp = predVerbGroup True tp ;
+--  NegVP tp = predVerbGroup False tp ;
 
   AdvVP = adVerbPhrase ;
   SubjVP = subjunctVerbPhrase ;
