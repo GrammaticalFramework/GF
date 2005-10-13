@@ -122,7 +122,7 @@ lin
   love_V2 = caseV2 (regV "rakastaa") partitive ;
   man_N = mkN "mies" "miehen" "miehenä" "miestä" "mieheen" 
             "miehinä" "miehissä" "miesten" "miehiä" "miehiin" human ;
-  married_A2 = mkA2 (mkA (regN "avioitunut")) (postpP genitive "kanssa") ;
+  married_A2 = mkA2 (mkA (nRae "avioitunut" "avioituneena")) (postpP genitive "kanssa") ;
   meat_N = nLukko "liha" ;
   milk_N = nLukko "maito" ;
   moon_N = regN "kuu" ;
