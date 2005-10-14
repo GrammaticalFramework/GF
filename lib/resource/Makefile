@@ -1,2 +1,4 @@
 all:
-	gf  -src +RTS -K10M <MkResource.gfs
+	gf +RTS -K10M <MkResource.gfs
+clean:
+	rm -f */*.gfc */*.gfr
