@@ -1,7 +1,7 @@
 -- UTF-8 version currently differs from non-UTF-8 !!!
 
 -- use this path to read the grammar from the same directory
---# -path=.:../newresource/abstract:../prelude:../newresource/french:../newresource/romance
+--# -path=.:../../lib/resource-0.6/abstract:../../lib/prelude:../../lib/resource-0.6/french:../../lib/resource-0.6/romance
 
 concrete HealthFre of Health = open PredicationFre, ParadigmsFre, ResourceFre, Prelude, SyntaxFre, MorphoFre, ExtraFre, ParadigmsFre, ResourceExtFre in {
 

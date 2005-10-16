@@ -1,5 +1,5 @@
 -- use this path to read the grammar from the same directory
---# -path=.:../newresource/abstract:../prelude:../newresource/italian:../newresource/romance
+--# -path=.:../../lib/resource-0.6/abstract:../../lib/prelude:../../lib/resource-0.6/italian:../../lib/resource-0.6/romance
 
 concrete HealthIta of Health = open ResourceIta, Prelude, SyntaxIta, ExtraIta, MorphoIta, ParadigmsIta, ResourceExtIta, PredicationIta in {
 

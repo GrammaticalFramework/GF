@@ -1,5 +1,5 @@
 -- use this path to read the grammar from the same directory
---# -path=.:../newresource/abstract:../prelude:../newresource/russian
+--# -path=.:../../lib/resource-0.6/abstract:../../lib/prelude:../../lib/resource-0.6/russian
 
 concrete HealthRus of Health = open PredicationRus, ResourceRus, SyntaxRus, ExtraRus, ResourceExtRus, ParadigmsRus in {
 

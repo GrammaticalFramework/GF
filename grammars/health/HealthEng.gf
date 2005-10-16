@@ -1,5 +1,5 @@
 -- use this path to read the grammar from the same directory
---# -path=.:../newresource/abstract:../prelude:../newresource/english
+--# -path=.:../../lib/resource-0.6/abstract:../prelude:../../lib/resource-0.6/english
 concrete HealthEng of Health = open PredicationEng, ResourceEng, ResourceExtEng, Prelude, Predef, SyntaxEng, ExtraEng, ParadigmsEng in {
 
 flags 

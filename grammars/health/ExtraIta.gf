@@ -1,4 +1,7 @@
---1 Functions that are not in the API, but common in Russian 
+-- use this path to read the grammar from the same directory
+--# -path=.:../../lib/resource-0.6/abstract:../../lib/prelude:../../lib/resource-0.6/italian:../../lib/resource-0.6/romance
+
+--1 Functions that are not in the API, but common in Italian
 --
 -- Aarne Ranta, Janna Khegai 2003
 
