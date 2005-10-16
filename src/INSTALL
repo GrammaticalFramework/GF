@@ -28,6 +28,14 @@ To make and install GF2 (Version 2.1, 8/11/2004).
 
      ./configure CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
 
+   If you experience problems with readline, try:
+
+   ./configure --with-readline=no
+   
+   You may need to run "make clean" after ./configure when you change the 
+   readline setting.
+
+
 5. Compile with make:
 
      make

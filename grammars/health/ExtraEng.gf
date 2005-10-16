@@ -1,5 +1,5 @@
 -- use this path to read the grammar from the same directory
---# -path=.:../abstract:../../prelude:../english
+--# -path=.:../../lib/resource-0.6/abstract:../../lib/prelude:../../lib/resource-0.6/english
 
 --1 Functions that are not in the API, but common in Russian 
 --

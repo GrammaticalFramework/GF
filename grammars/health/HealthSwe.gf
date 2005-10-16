@@ -8,7 +8,7 @@
 
 -- use this path to read the grammar from the same directory
 
---# -path=.:../newresource/abstract:../prelude:../newresource/swedish
+--# -path=.:../../lib/resource-0.6/abstract:../../lib/prelude:../../lib/resource-0.6/swedish
 concrete HealthSwe of Health = open PredicationSwe, ResourceSwe, Prelude, SyntaxSwe, ExtraSwe, ParadigmsSwe, ResourceExtSwe in {
 
 flags 

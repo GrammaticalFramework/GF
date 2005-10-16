@@ -1,7 +1,7 @@
 -- use this path to read the grammar from the same directory
---# -path=.:../abstract:../../prelude:../swedish
+--# -path=.:../../lib/resource-0.6/abstract:../../lib/prelude:../../lib/resource-0.6/swedish
 
---1 Functions that are not in the API, but common in Russian 
+--1 Functions that are not in the API, but common in Swedish
 --
 -- Aarne Ranta, Janna Khegai 2003
 
