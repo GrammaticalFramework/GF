@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 16:08:35 $ 
+-- > CVS $Date: 2005/10/26 17:13:13 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
 -- Approximates CFGs with finite state networks.
 -----------------------------------------------------------------------------
@@ -24,6 +24,7 @@ import GF.Infra.Ident (Ident)
 import GF.Infra.Option (Options)
 
 import GF.Speech.FiniteState
+import GF.Speech.Relation
 import GF.Speech.TransformCFG
 
 cfgToFA :: Ident -- ^ Grammar name
@@ -59,10 +60,10 @@ makeRegular g = groupProds $ concatMap trSet (mutRecCats True g)
 mutRecCats :: Bool    -- ^ If true, all categories will be in some set.
                       --   If false, only recursive categories will be included.
 	   -> CFRules -> [[Cat_]]
-mutRecCats incAll g = equivalenceClasses $ symmetricSubrelation $ transitiveClosure r'
-  where r = nub [(c,c') | (_,rs) <- g, CFRule c ss _ <- rs, Cat c' <- ss]
+mutRecCats incAll g = equivalenceClasses $ refl $ symmetricSubrelation $ transitiveClosure r
+  where r = mkRel [(c,c') | (_,rs) <- g, CFRule c ss _ <- rs, Cat c' <- ss]
 	allCats = map fst g
-	r' = (if incAll then reflexiveClosure allCats else id) r
+	refl = if incAll then reflexiveClosure_ allCats else reflexiveSubrelation
 
 -- Convert a strongly regular grammar to a finite automaton.
 compileAutomaton :: Cat_ -- ^ Start category
@@ -130,34 +131,3 @@ isLeftLinear ::  Eq c => [c]  -- ^ The categories to consider
 	      -> CFRule c n t -- ^ The rule to check for right-linearity
 	      -> Bool
 isLeftLinear cs = noCatsInSet cs . drop 1 . ruleRhs
-
-
---
--- * Relations
---
-
--- FIXME: these could use a more efficent data structures and algorithms.
-
-type Rel a = [(a,a)]
-
-isRelatedTo :: Eq a => Rel a -> a  -> a -> Bool
-isRelatedTo r x y = (x,y) `elem` r
-
-transitiveClosure :: Eq a => Rel a -> Rel a
-transitiveClosure r = fix (\r -> r `union` [ (x,w) | (x,y) <- r, (z,w) <- r, y == z ]) r
-
-reflexiveClosure :: Eq a => [a] -- ^ The set over which the relation is defined.
-		 -> Rel a -> Rel a
-reflexiveClosure u r = [(x,x) | x <- u] `union` r
-
-symmetricSubrelation :: Eq a => Rel a -> Rel a
-symmetricSubrelation r = [p | p@(x,y) <- r, (y,x) `elem` r]
-
--- | Get the equivalence classes from an equivalence relation. Since
---   the relation is relexive, the set can be recoved from the relation.
-equivalenceClasses :: Eq a => Rel a -> [[a]]
-equivalenceClasses r = equivalenceClasses_ (nub (map fst r)) r
- where equivalenceClasses_ [] _ = []
-       equivalenceClasses_ (x:xs) r = (x:ys):equivalenceClasses_ zs r
-	   where (ys,zs) = partition (isRelatedTo r x) xs
-
