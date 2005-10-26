@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 15:17:30 $ 
+-- > CVS $Date: 2005/10/26 18:47:16 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.22 $
+-- > CVS $Revision: 1.23 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -76,8 +76,11 @@ removeEmptyCats = fix removeEmptyCats'
 
 -- | Remove rules which are identical, not caring about the rule names.
 removeIdenticalRules :: CFRules -> CFRules
-removeIdenticalRules g = [(c,nubBy sameCatAndRhs rs) | (c,rs) <- g]
-    where sameCatAndRhs (CFRule c1 ss1 _) (CFRule c2 ss2 _) = c1 == c2 && ss1 == ss2
+removeIdenticalRules g = [(c,sortNubBy compareCatAndRhs rs) | (c,rs) <- g]
+    where compareCatAndRhs (CFRule c1 ss1 _) (CFRule c2 ss2 _) = 
+              case c1 `compare` c2 of
+                                   EQ -> ss1 `compare` ss2
+                                   o  -> o
 
 removeLeftRecursion :: CFRules -> CFRules
 removeLeftRecursion rs = concatMap removeDirectLeftRecursion $ map handleProds rs
