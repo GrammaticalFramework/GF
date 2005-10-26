@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 15:17:30 $ 
+-- > CVS $Date: 2005/10/26 17:13:13 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.17 $
+-- > CVS $Revision: 1.18 $
 --
 -- Representation of, conversion to, and utilities for 
 -- printing of a general Speech Recognition Grammar. 
@@ -33,6 +33,7 @@ import Data.List
 import Data.Maybe (fromMaybe)
 import Data.FiniteMap
 
+import Debug.Trace
 
 data SRG = SRG { grammarName :: String    -- ^ grammar name
 		 , startCat :: String     -- ^ start category name
