@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/22 16:56:05 $ 
+-- > CVS $Date: 2005/10/26 18:47:16 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
 -- Basic functions not in the standard libraries
 -----------------------------------------------------------------------------
@@ -76,6 +76,10 @@ safeInit xs = init xs
 sortNub :: Ord a => [a] -> [a]
 sortNub = map head . group . sort
 
+-- | Like 'nubBy', but more efficient as it uses sorting internally.
+sortNubBy :: (a -> a -> Ordering) -> [a] -> [a]
+sortNubBy f = map head . groupBy (compareEq f) . sortBy f
+
 -- | Take the union of a list of lists.
 unionAll :: Eq a => [[a]] -> [a]
 unionAll = nub . concat
@@ -88,6 +92,14 @@ lookup' x = fromJust . lookup x
 -- | Like 'find', but fails if nothing is found.
 find' :: (a -> Bool) -> [a] -> a
 find' p = fromJust . find p
+
+-- * equality functions
+
+-- | Use an ordering function as an equality predicate.
+compareEq :: (a -> a -> Ordering) -> a -> a -> Bool
+compareEq f x y = case f x y of
+                             EQ -> True
+                             _ -> False
 
 -- * ordering functions
 
