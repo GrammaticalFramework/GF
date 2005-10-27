@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/26 17:13:13 $ 
+-- > CVS $Date: 2005/10/27 09:16:30 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.14 $
+-- > CVS $Revision: 1.15 $
 --
 -- A simple finite state network module.
 -----------------------------------------------------------------------------
@@ -23,6 +23,8 @@ module GF.Speech.FiniteState (FA, State, NFA, DFA,
 
 import Data.List
 import Data.Maybe (catMaybes,fromJust)
+import Data.Map (Map)
+import qualified Data.Map as Map
 
 import GF.Data.Utilities
 import GF.Speech.Graph
@@ -70,9 +72,8 @@ mapStates f = onGraph (nmap f)
 mapTransitions :: (b -> c) -> FA n a b -> FA n a c
 mapTransitions f = onGraph (emap f)
 
-minimize :: Eq a => NFA a -> NFA a
+minimize :: Ord a => NFA a -> NFA a
 minimize = dfa2nfa . determinize . reverseNFA . dfa2nfa . determinize . reverseNFA
-
 
 onGraph :: (Graph n a b -> Graph n c d) -> FA n a b -> FA n c d
 onGraph f (FA g s ss) = FA (f g) s ss
@@ -110,16 +111,16 @@ fixIncoming cs c@((n,()),es) = (cs'', ((n,Nothing),es'):newContexts)
 alphabet :: Eq b => Graph n a (Maybe b) -> [b]
 alphabet = nub . catMaybes . map getLabel . edges
 
-determinize :: Eq a => NFA a -> DFA a
+determinize :: Ord a => NFA a -> DFA a
 determinize (FA g s f) = let (ns,es) = h [start] [] []
-			     in FA (Graph (freshDFANodes g) [(n,()) | n <- ns] es) start (filter isDFAFinal ns)
-  where sigma = alphabet g
-	out = outgoing g
+                             final = filter (not . null . (f `intersect`)) ns
+ 		          in FA (Graph (freshDFANodes g) [(n,()) | n <- ns] es) start final
+  where out = outgoing g
 	start = closure out [s]
 	isDFAFinal n = not (null (f `intersect` n))
 	freshDFANodes (Graph ns _ _) = map (:[]) ns
 	-- Get the new DFA states and edges produced by a set of DFA states.
-	new ns = unzip [ (s, (n,s,c)) | n <- ns, c <- sigma, let s = sort (reachable out c n), not (null s) ]
+	new ns = unzip [ (s, (n,s,c)) | n <- ns, (c,s) <- reachable out n]
 	h currentStates oldStates oldEdges 
 	    | null currentStates = (oldStates,oldEdges)
 	    | otherwise = h newStates' allOldStates (newEdges++oldEdges)
@@ -132,10 +133,11 @@ closure :: Eq n => Outgoing n a (Maybe b) -> [n] -> [n]
 closure out = fix closure_
     where closure_ r = r `union` [y | x <- r, (_,y,Nothing) <- getOutgoing out x]
 
--- | Get all nodes reachable from a set of nodes by one edge with the given 
+-- | Get a map which maps labels to a sort list of all nodes reachable 
+--   from a given set of nodes by one edge with the given 
 --   label and then any number of empty edges.
-reachable :: (Eq n, Eq b) => Outgoing n a (Maybe b) -> b -> [n] -> [n]
-reachable out c ns = closure out [y | n <- ns, (_,y,Just c') <- getOutgoing out n, c' == c]
+reachable :: (Ord n, Ord b) => Outgoing n a (Maybe b) -> [n] -> [(b,[n])]
+reachable out ns = Map.toList $ Map.map (sort . closure out) $ Map.fromListWith union [(c,[y]) | n <- ns, (_,y,Just c) <- getOutgoing out n]
 
 reverseNFA :: NFA a -> NFA a
 reverseNFA (FA g s fs) = FA g''' s' [s]
