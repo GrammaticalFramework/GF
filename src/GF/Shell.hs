@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/06 14:21:34 $ 
+-- > CVS $Date: 2005/10/27 13:21:53 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.45 $
+-- > CVS $Revision: 1.46 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -286,9 +286,9 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
            maybe (resourceOfShellState st) (return . I.identC) $ -- topmost res
              getOptVal opts useResource             -- flag -res=m
     justOutput opts (putStrLn (err id (unlines . map prOperSignature) (
-                string2srcTerm src m t >>= 
-                Co.computeConcrete src >>= 
-                return . L.opersForType src))) sa
+                string2srcTerm src m t >>= (\t' -> 
+                Co.computeConcrete src t' >>=  (\v -> 
+                return (L.opersForType src t' v)))))) sa
 
 
   CTranslationQuiz il ol -> do

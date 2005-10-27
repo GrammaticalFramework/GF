@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/28 16:42:48 $ 
+-- > CVS $Date: 2005/10/27 13:21:53 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.14 $
+-- > CVS $Revision: 1.15 $
 --
 -- Lookup in source (concrete and resource) when compiling.
 --
@@ -173,10 +173,23 @@ lookupLincat gr m c = do
     _ -> Bad $ prt m +++ "is not concrete"
 
 
-opersForType :: SourceGrammar -> Type -> [(QIdent,Term)]
-opersForType gr val = 
-  [((i,f),ty) | (i,m) <- allModMod gr, 
-                (f,ResOper (Yes ty) _) <- tree2list $ jments m,
-                Ok valt <- [valTypeCnc ty],
-                valt == val
-  ]
+-- The first type argument is uncomputed, usually a category symbol.
+-- This is a hack to find implicit (= reused) opers.
+
+opersForType :: SourceGrammar -> Type -> Type -> [(QIdent,Term)]
+opersForType gr orig val = 
+  [((i,f),ty) | (i,m) <- allModMod gr, (f,ty) <- opers i m val] where
+    opers i m val = 
+      [(f,ty) |
+        (f,ResOper (Yes ty) _) <- tree2list $ jments m,
+        Ok valt <- [valTypeCnc ty],
+        elem valt [val,orig]
+        ] ++
+      let cat = err zIdent snd (valCat orig) in --- ignore module
+      [(f,ty) |
+        Ok a <- [abstractOfConcrete gr i >>= lookupModMod gr],
+        (f, AbsFun (Yes ty0) _) <- tree2list $ jments a,
+        let ty = redirectTerm i ty0,
+        Ok valt  <- [valCat ty],
+        cat == snd valt ---
+        ]
