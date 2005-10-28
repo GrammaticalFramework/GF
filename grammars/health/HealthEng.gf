@@ -28,18 +28,18 @@ lin
 
   And x y = ConjS AndConj (TwoS x y) ; 
 
-  Influenza = cnNonhuman "influenza" ; 
-  Malaria = cnNonhuman "malaria" ; 
-  Diarrhea = cnNonhuman "diarrhea" ; 
-  SkinAllergy = AppFun (mkFun (nNonhuman "skin") []) (MassNP (cnNonhuman "allergy")) ;  
-  Heartburn = cnNonhuman "heartburn" ;  
-  Rheumatism = cnNonhuman "rheumatism" ;  
-  Cystitis = cnNonhuman "cystitis" ;  
-  Asthma = cnNonhuman "asthma" ; 
-  Arthritis = cnNonhuman "arthritis" ; 
-  Diabetes = cnNonhuman "diabetes" ; 
-  Tonsillitis = cnNonhuman "tonsillitis" ; 
-  Constipation = cnNonhuman "constipation" ; 
+--  Influenza = cnNonhuman "influenza" ; 
+--  Malaria = cnNonhuman "malaria" ; 
+--  Diarrhea = cnNonhuman "diarrhea" ; 
+--  SkinAllergy = AppFun (mkFun (nNonhuman "skin") []) (MassNP (cnNonhuman "allergy")) ;  
+--  Heartburn = cnNonhuman "heartburn" ;  
+--  Rheumatism = cnNonhuman "rheumatism" ;  
+--  Cystitis = cnNonhuman "cystitis" ;  
+--  Asthma = cnNonhuman "asthma" ; 
+--  Arthritis = cnNonhuman "arthritis" ; 
+--  Diabetes = cnNonhuman "diabetes" ; 
+--  Tonsillitis = cnNonhuman "tonsillitis" ; 
+--  Constipation = cnNonhuman "constipation" ; 
   
   Dentist  = cnHuman "dentist" ; 
   Gynecologist = cnHuman "gynecologist" ;
@@ -95,7 +95,8 @@ lin
 
   Fever = DetNP (aDet** {lock_Det = <>}) (cnNoHum (nounReg "fever")** {lock_CN = <>}) ;
 
-  HaveIllness patient illness = predV2 tvHave patient (DetNP (nullDet** {lock_Det = <>}) illness) ; 
+--  HaveIllness patient illness = predV2 tvHave patient (DetNP (nullDet** {lock_Det = <>}) illness) ; 
+  HaveAsthma patient = predV2 tvHave patient (DetNP (nullDet** {lock_Det = <>}) (cnNonhuman "asthma")) ; 
   Complain = predV2 tvHave ;
 
   NeedDoctor patient doctor = predV2 (mkTransVerbDir (regVerbP3 "need")**{lock_TV = <>}) 
