@@ -182,8 +182,8 @@ oper
   npGenDet : Number -> Numeral -> NounPhrase -> CommNounPhrase -> NounPhrase = 
     \n,two,john,car -> 
       {s = \\c => variants {
-             artDef ++ two.s ! Nom ++ car.s ! n ! Nom ++ "of" ++ john.s ! GenSP ; 
-             john.s ! GenP ++ two.s ! Nom ++ car.s ! n ! toCase c
+             john.s ! GenP ++ two.s ! Nom ++ car.s ! n ! toCase c ;
+             artDef ++ two.s ! Nom ++ car.s ! n ! Nom ++ "of" ++ john.s ! GenSP 
              } ;
        a = toAgr n P3 car.g
       } ;

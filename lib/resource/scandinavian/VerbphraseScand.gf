@@ -22,6 +22,8 @@
 incomplete concrete VerbphraseScand of Verbphrase = CategoriesScand ** 
   open Prelude, SyntaxScand in {
 
+  flags optimize=all_subs ;
+
   lin
   UseV  = predVerb ;
   UsePassV = passVerb ;

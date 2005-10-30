@@ -35,32 +35,28 @@ To make and install GF2 (Version 2.1, 8/11/2004).
    You may need to run "make clean" after ./configure when you change the 
    readline setting.
 
-
 5. Compile with make:
 
      make
 
    The binary is sent to the file GF/bin/gf
 
-6. For a quick test: load a grammar package from
+6. Move files to their right places:
 
-     http://www.cs.chalmers.se/~aarne/GF/download/gf-lib.tgz
+     make install
 
-   Open the package under GF-2.0
+7. For a quick test: 
+   Start gf, load a grammar and parse a string:
 
-     tar xvfz gf-lib.tgz
-
-   Then start gf, load a grammar and parse a string:
-
-     cd ../lib/basic
-     ../../bin/gf English.gf
+     cd GF/grammars/basic
+     gf English.gf
 
      -- when gf has started and shows the prompt >:
      > p "every number is even or odd"
-     -- this is the response from GF2:
+     -- this is the response from GF:
      PredA1 (Every Number) (DisjA1 Even Odd)
 
-7. If you want to run the Java GUI, go back to GF2/src and also do
+8. If you want to run the Java GUI, go back to GF2/src and also do
 
      make install-java
 
@@ -68,11 +64,11 @@ To make and install GF2 (Version 2.1, 8/11/2004).
    the value of GFHOME to the location of your GF2/bin directory. Test the
    GUI with some grammars:
 
-     cd ../lib/letter
-     ../../bin/gf <mkLetter.gfs
-     ../../bin/jgf Letter.gfcm
+     cd ../examples/letter
+     gf <mkLetter.gfs
+     jgf Letter.gfcm
 
    When the window opens, push the Random button. 
 
-Author: Aarne Ranta, 8/11/2004
+Author: Aarne Ranta, Björn Bringert 8/11/2004 -- 18/10/2005
 
