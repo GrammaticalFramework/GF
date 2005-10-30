@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/06 10:02:33 $ 
+-- > CVS $Date: 2005/10/30 23:44:00 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.32 $
+-- > CVS $Revision: 1.33 $
 --
 -- Options and flags used in GF shell commands and files.
 --
@@ -61,6 +61,12 @@ getOptVal (Opts os) fopt =
   case [a | opt@(Opt (o,[a])) <- os, opt == fopt a] of
     a:_ -> Just a
     _ -> Nothing
+
+isSetFlag :: Options -> OptFun -> Bool
+isSetFlag (Opts os) fopt = 
+  case [a | opt@(Opt (o,[a])) <- os, opt == fopt a] of
+    a:_ -> True
+    _ -> False
 
 getOptInt :: Options -> OptFun -> Maybe Int
 getOptInt opts f = do
@@ -304,6 +310,7 @@ noDepTypes     = aOpt "nodeptypes"
 extractGr      = aOpt "extract"
 pathList       = aOpt "path"
 uniCoding      = aOpt "coding"
+probFile       = aOpt "probs"
 
 -- peb 16/3-05:
 gfcConversion :: String -> Option

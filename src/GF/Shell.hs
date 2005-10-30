@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/27 13:21:53 $ 
+-- > CVS $Date: 2005/10/30 23:44:00 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.46 $
+-- > CVS $Revision: 1.47 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -40,6 +40,8 @@ import GF.Shell.TeachYourself -- also a subshell
 
 import GF.UseGrammar.Randomized ---
 import GF.UseGrammar.Editing (goFirstMeta) ---
+
+import GF.Probabilistic.Probabilistic
 
 import GF.Compile.ShellState
 import GF.Infra.Option
@@ -208,7 +210,8 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
   CParse 
 ----    | oElem showMulti opts -> do
     | oElem byLines opts -> do
-        let ss = (if oElem showAll opts then id else filter (not . null)) $ lines $ prCommandArg a
+        let ss = (if oElem showAll opts then id else filter (not . null)) $ 
+                     lines $ prCommandArg a
         mts <- mapM parse ss
         let a' = ATrms [t | (_,ATrms ts) <- mts, t <- ts]
         changeArg (const a') sa
@@ -218,12 +221,29 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
        warnDiscont opts 
        let p = optParseArgErrMsg opts gro x
        case p of
-         Ok (ts,msg) -> putStrLnFlush msg >> changeArg (const $ ATrms ts) sa
+         Ok (ts,msg) 
+           | isSetFlag opts probFile -> do
+                probs <- getProbsFromFile opts
+                let tps = rankByScore [(t,computeProbTree probs t) | t <- ts]
+                putStrLnFlush msg
+                mapM_ putStrLnFlush [show p +++ prt_ t | (t,p) <- tps]
+                changeArg (const $ ATrms (map fst tps)) sa
+           | otherwise -> putStrLnFlush msg >> changeArg (const $ ATrms ts) sa
          Bad msg -> changeArg (const $ AError (msg +++ "input" +++ x)) sa
 
   CTranslate il ol -> do
     let a' = opST2CommandArg (optParseArgErr opts (sgr il)) a
     returnArg (opTS2CommandArg (optLinearizeTreeVal opts (sgr ol)) a') sa
+
+
+  CGenerateRandom | isSetFlag opts probFile -> do
+    probs <- getProbsFromFile opts
+    let cat = firstAbsCat opts gro
+    let n = optIntOrN opts flagNumber 1
+    gen    <- newStdGen
+    let ts = take n $ generateRandomTreesProb opts gen cgr probs cat
+    returnArg (ATrms (map (term2tree gro) ts)) sa
+
   CGenerateRandom -> do
     let 
       a' = case a of

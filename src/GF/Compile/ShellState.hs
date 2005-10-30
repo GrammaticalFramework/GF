@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/20 09:32:56 $ 
+-- > CVS $Date: 2005/10/30 23:44:00 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.48 $
+-- > CVS $Revision: 1.49 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -31,6 +31,7 @@ import GF.CF.CF
 import GF.CF.CFIdent
 import GF.CF.CanonToCF
 import GF.UseGrammar.Morphology
+import GF.Probabilistic.Probabilistic
 import GF.Infra.Option
 import GF.Infra.Ident
 import GF.System.Arch (ModTime)
@@ -57,6 +58,7 @@ data ShellState = ShSt {
                                          -- (large, with parameters, no-so overgenerating)
   pInfos     :: [(Ident, Prs.PInfo)], -- ^ parsing information (compiled mcfg&cfg grammars)
   morphos    :: [(Ident,Morpho)],    -- ^ morphologies
+  probss     :: [(Ident,Probs)],     -- ^ probability distributions
   gloptions  :: Options,             -- ^ global options
   readFiles  :: [(FilePath,ModTime)],-- ^ files read
   absCats    :: [(G.Cat,(G.Context,
@@ -86,6 +88,7 @@ emptyShellState = ShSt {
   cfgs       = [],
   pInfos     = [],
   morphos    = [],
+  probss     = [],
   gloptions  = noOptions,
   readFiles  = [],
   absCats    = [],
@@ -114,6 +117,7 @@ data StateGrammar = StGr {
   cfg      :: Cnv.CGrammar,
   pInfo    :: Prs.PInfo,
   morpho   :: Morpho,
+  probs    :: Probs,
   loptions :: Options
   }
 
@@ -128,6 +132,7 @@ emptyStateGrammar = StGr {
   cfg      = [],
   pInfo    = Prs.buildPInfo [] [],
   morpho   = emptyMorpho,
+  probs    = emptyProbs,
   loptions = noOptions
   }
 
@@ -140,6 +145,7 @@ stateMCFG         :: StateGrammar -> Cnv.MGrammar
 stateCFG          :: StateGrammar -> Cnv.CGrammar
 statePInfo        :: StateGrammar -> Prs.PInfo
 stateMorpho       :: StateGrammar -> Morpho
+stateProbs        :: StateGrammar -> Probs
 stateOptions      :: StateGrammar -> Options
 stateGrammarWords :: StateGrammar -> [String]
 stateGrammarLang  :: StateGrammar -> (CanonGrammar, Ident)
@@ -151,6 +157,7 @@ stateMCFG      = mcfg
 stateCFG       = cfg
 statePInfo     = pInfo
 stateMorpho    = morpho
+stateProbs     = probs
 stateOptions   = loptions
 stateGrammarWords = allMorphoWords . stateMorpho
 stateGrammarLang st = (grammar st, cncId st)
@@ -190,6 +197,7 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
   cfs <- mapM (canon2cf opts subcgr) concrs --- why need to update all...
 
   let morphos = map (mkMorpho subcgr) concrs
+  let probss = [] -----
 
   let pinfosOld = map (CnvOld.pInfo opts cgr) concrs  -- peb 18/6 (OBSOLETE)
 
@@ -219,6 +227,7 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
     cfgs       = zip concrs cfgs,
     pInfos     = zip concrs pInfos,
     morphos    = zip concrs morphos,
+    probss     = zip concrs probss,
     gloptions  = gloptions sh, --- opts, -- this would be command-line options
     readFiles  = [ft | ft@(f,_) <- readFiles sh, notInrts f] ++ rts,
     absCats    = csi,
@@ -280,6 +289,7 @@ purgeShellState sh = ShSt {
   cfgs       = cfgs sh,
   pInfos     = pInfos sh,
   morphos    = morphos sh,
+  probss     = probss sh,
   gloptions  = gloptions sh,
   readFiles  = [],
   absCats    = absCats sh,
@@ -291,15 +301,17 @@ purgeShellState sh = ShSt {
    acncs = maybe [] singleton (abstract sh) ++ map (snd . fst) (concretes sh)
 
 changeMain :: Maybe Ident -> ShellState -> Err ShellState
-changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos os rs acs s) = 
-  return (ShSt Nothing Nothing [] ms ss cfs old_pis mcfgs cfgs pinfos mos os rs acs s)
-changeMain (Just c) st@(ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos os rs acs s) = 
-  case lookup c (M.modules ms) of 
+changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s) = 
+  return (ShSt Nothing Nothing [] ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s)
+changeMain 
+  (Just c) st@(ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s) = 
+   case lookup c (M.modules ms) of 
     Just _ -> do
       a   <- M.abstractOfConcrete ms c
       let cas = M.allConcretes ms a
       let cs' = [((c,c),True) | c <- cas]
-      return (ShSt (Just a) (Just c) cs' ms ss cfs old_pis mcfgs cfgs pinfos mos os rs acs s) 
+      return (ShSt (Just a) (Just c) cs' ms ss cfs old_pis mcfgs cfgs
+        pinfos mos pbs os rs acs s) 
     _ -> P.prtBad "The state has no concrete syntax named" c
 
 -- | form just one state grammar, if unique, from a canonical grammar
@@ -326,6 +338,7 @@ stateGrammarOfLang st l = StGr {
   cfg      = maybe [] id $ lookup l $ cfgs st,
   pInfo    = maybe (Prs.buildPInfo [] []) id $ lookup l $ pInfos st,
   morpho   = maybe emptyMorpho id (lookup l (morphos st)),
+  probs    = maybe emptyProbs id (lookup l (probss st)),
   loptions = errVal noOptions $ lookupOptionsCan can
   }
  where
@@ -336,11 +349,13 @@ stateGrammarOfLang st l = StGr {
 grammarOfLang :: ShellState -> Language -> CanonGrammar
 cfOfLang      :: ShellState -> Language -> CF
 morphoOfLang  :: ShellState -> Language -> Morpho
+probsOfLang   :: ShellState -> Language -> Probs
 optionsOfLang :: ShellState -> Language -> Options
 
 grammarOfLang st = stateGrammarST . stateGrammarOfLang st
 cfOfLang st      = stateCF        . stateGrammarOfLang st
 morphoOfLang st  = stateMorpho    . stateGrammarOfLang st
+probsOfLang st   = stateProbs     . stateGrammarOfLang st
 optionsOfLang st = stateOptions   . stateGrammarOfLang st
 
 -- | the last introduced grammar, stored in options, is the default for operations
@@ -363,6 +378,7 @@ stateAbstractGrammar st = StGr {
   cfg      = [],
   pInfo    = Prs.buildPInfo [] [],
   morpho   = emptyMorpho,
+  probs    = emptyProbs,
   loptions = gloptions st ----
   }
 
@@ -501,8 +517,9 @@ languageOff = languageOnOff False
 
 languageOnOff :: Bool -> Language -> ShellStateOper
 ---                                         __________ this is OBSOLETE
-languageOnOff b lang (ShSt a c cs cg sg cfs old_pinfos mcfgs cfgs pinfos ms os fs cats sts) =
-  ShSt a c cs' cg sg cfs old_pinfos mcfgs cfgs pinfos ms os fs cats sts where
+languageOnOff b lang 
+ (ShSt a c cs cg sg cfs old_pinfos mcfgs cfgs pinfos ms pbs os fs cats sts) =
+  ShSt a c cs' cg sg cfs old_pinfos mcfgs cfgs pinfos ms pbs os fs cats sts where
   cs' = [if lang==l then (lc,b) else i | i@(lc@(l,c),_) <- cs]
 
 {-
@@ -521,13 +538,15 @@ removeLanguage lang (ShSt (ab,gs,os)) = ShSt (ab,removeAssoc lang gs, os)
 
 changeOptions :: (Options -> Options) -> ShellStateOper
 ---                                      __________ this is OBSOLETE
-changeOptions f (ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms os ff ts ss) = 
-  ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms (f os) ff ts ss
+changeOptions f
+ (ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms pbs os ff ts ss) = 
+  ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms pbs (f os) ff ts ss
 
 changeModTimes :: [(FilePath,ModTime)] -> ShellStateOper
 ---                                         __________ this is OBSOLETE
-changeModTimes mfs (ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms os ff ts ss) = 
-  ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms os ff' ts ss
+changeModTimes mfs
+ (ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms pbs os ff ts ss) = 
+  ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms pbs os ff' ts ss
  where
    ff' = mfs ++ [mf | mf@(f,_) <- ff, notElem f (map fst mfs)]
 
