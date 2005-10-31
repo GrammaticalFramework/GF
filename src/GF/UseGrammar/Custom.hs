@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/12 12:38:30 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.78 $
+-- > CVS $Date: 2005/10/31 16:48:10 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.79 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -57,6 +57,7 @@ import GF.Canon.MkGFC
 import GF.CF.CFtoSRG
 import GF.Speech.PrGSL (gslPrinter)
 import GF.Speech.PrJSGF (jsgfPrinter)
+import GF.Speech.PrSRGS (srgsXmlPrinter)
 import GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter,faGraphvizPrinter,regularPrinter)
 
 import GF.Data.Zipper
@@ -242,6 +243,9 @@ customGrammarPrinter =
   ,(strCI "jsgf",    \s -> let opts = stateOptions s
                                name = cncId s
                             in jsgfPrinter name opts $ stateCFG s)
+  ,(strCI "srgs_xml", \s -> let opts = stateOptions s
+                                name = cncId s
+                             in srgsXmlPrinter name opts $ stateCFG s)
   ,(strCI "slf",     \s -> let opts = stateOptions s
                                name = cncId s
                             in slfPrinter name opts $ stateCFG s)
