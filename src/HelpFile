@@ -34,6 +34,7 @@ i,  import: i File
       -noemit       do not emit code (default with old grammar format)
       -o            do emit code (default with new grammar format)
       -ex           preprocess .gfe files if needed
+      -prob         read probabilities from top grammar file  (format --# prob Fun Double)
   flags:
       -abs          set the name used for abstract syntax (with -old option)
       -cnc          set the name used for concrete syntax (with -old option)
@@ -41,6 +42,7 @@ i,  import: i File
       -path         use the (colon-separated) search path to find modules
       -optimize     select an optimization to override file-defined flags
       -conversion   select parsing method (values strict|nondet)
+      -probs        read probabilities from file (format (--# prob) Fun Double)
   examples:
       i English.gf                      -- ordinary import of Concrete
       i -retain german/ParadigmsGer.gf  -- import of Resource to test
@@ -165,6 +167,7 @@ p,  parse: p String
   options for batch input:
       -lines   parse each line of input separately, ignoring empty lines
       -all     as -lines, but also parse empty lines
+      -prob    rank results by probability
   options for selecting parsing method:
       (default)parse using an overgenerating CFG
       -cfg     parse using a much less overgenerating CFG
@@ -241,6 +244,9 @@ gr, generate_random: gr Tree?
       Generates a random Tree of a given category. If a Tree
       argument is given, the command completes the Tree with values to
       the metavariables in the tree. 
+  options:
+      -prob    use probabilities (works for nondep types only)
+      -cf      use a very fast method (works for nondep types only)
   flags:
       -cat     generate in this category
       -lang    use the abstract syntax of this grammar
@@ -537,6 +543,7 @@ q, quit: q
    *-printer=xml            XML: DTD for the pg command, object for st
     -printer=old            old GF: file readable by GF 1.2
     -printer=stat           show some statistics of generated GFC
+    -printer=probs          show probabilities of all functions
     -printer=gsl            Nuance GSL speech recognition grammar
     -printer=jsgf           Java Speech Grammar Format
     -printer=slf            a finite automaton in the HTK SLF format

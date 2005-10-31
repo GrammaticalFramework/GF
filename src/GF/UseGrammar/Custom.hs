@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/31 16:48:10 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.79 $
+-- > CVS $Date: 2005/10/31 19:02:35 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.80 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -68,6 +68,7 @@ import GF.UseGrammar.Information
 import GF.API.GrammarToHaskell
 -----import GrammarToCanon (showCanon, showCanonOpt)
 -----import qualified GrammarToGFC as GFC
+import GF.Probabilistic.Probabilistic (prProbs)
 
 -- the cf parsing algorithms
 import GF.CF.ChartParser -- OBSOLETE
@@ -266,6 +267,7 @@ customGrammarPrinter =
   ,(strCI "words",   unwords . stateGrammarWords)
   ,(strCI "printnames", C.prPrintnamesGrammar . stateGrammarST)
   ,(strCI "stat",    prStatistics . stateGrammarST)
+  ,(strCI "probs",   prProbs . stateProbs)
   ,(strCI "unpar",   prCanon . unparametrizeCanon . stateGrammarST)
   ,(strCI "subs",    prSubtermStat . stateGrammarST)
 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/30 23:44:00 $ 
+-- > CVS $Date: 2005/10/31 19:02:35 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.49 $
+-- > CVS $Revision: 1.50 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -462,6 +462,13 @@ abstractOfState = maybe emptyAbstractST id . maybeStateAbstract
 stateIsWord :: StateGrammar -> String -> Bool
 stateIsWord sg = isKnownWord (stateMorpho sg)
 
+addProbs :: (Ident,Probs) -> ShellState -> Err ShellState
+addProbs ip@(lang,probs) 
+     sh@(ShSt x y cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s) = do
+  let gr = grammarOfLang sh lang
+  probs' <- checkGrammarProbs gr probs
+  let pbs' = (lang,probs') : filter ((/= lang) . fst) pbs
+  return (ShSt x y cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs' os rs acs s)
 
 
 {-

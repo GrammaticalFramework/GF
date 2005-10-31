@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:45:58 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.18 $
+-- > CVS $Date: 2005/10/31 19:02:35 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.19 $
 --
 -- for reading grammars and terms from strings and files
 -----------------------------------------------------------------------------
@@ -21,6 +21,7 @@ import GF.Compile.PGrammar
 import GF.Grammar.TypeCheck
 import GF.Compile.Compile
 import GF.Compile.ShellState
+import GF.Probabilistic.Probabilistic
 
 import GF.Infra.Modules
 import GF.Infra.ReadFiles (isOldFile)
@@ -50,7 +51,9 @@ string2annotTree gr m = annotate gr . string2absTerm (prt m) ---- prt
 ---string2paramList st = map (renameTrm (lookupConcrete st) . patt2term) . pPattList
 
 shellStateFromFiles :: Options -> ShellState -> FilePath -> IOE ShellState
-shellStateFromFiles opts st file = case fileSuffix file of
+shellStateFromFiles opts st file = do
+ let top = identC $ justModuleName file
+ sh <- case fileSuffix file of
   "gfcm" -> do
      cenv <- compileOne opts (compileEnvShSt st []) file
      ioeErr $ updateShellState opts Nothing st cenv
@@ -66,10 +69,14 @@ shellStateFromFiles opts st file = case fileSuffix file of
                  then addOptions (options []) opts' -- for old no emit
                  else addOptions (options [emitCode]) opts'
      grts <- compileModule osb st file
-     let top = identC $ justModuleName file
-         mtop = if oElem showOld opts' then Nothing else Just top
+     let mtop = if oElem showOld opts' then Nothing else Just top
      ioeErr $ updateShellState opts' mtop st grts
-     --- liftM (changeModTimes rts) $ grammar2shellState opts gr
+ if (isSetFlag opts probFile || oElem (iOpt "prob") opts)
+       then do 
+         probs <- ioeIO $ getProbsFromFile opts file
+         let lang = maybe top id $ concrete sh --- to work with cf, too
+         ioeErr $ addProbs (lang,probs) sh
+       else return sh
 
 getShellStateFromFiles :: Options -> FilePath -> IO ShellState
 getShellStateFromFiles os = 

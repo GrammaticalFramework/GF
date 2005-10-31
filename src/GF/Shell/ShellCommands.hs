@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/31 08:12:18 $ 
+-- > CVS $Date: 2005/10/31 19:02:35 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.44 $
+-- > CVS $Revision: 1.45 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -165,18 +165,18 @@ optionsOfCommand co = case co of
   CSetFlag -> both "utf8 table struct record all multi"
 	           "cat lang lexer parser number depth rawtrees unlexer optimize path conversion printer"
 
-  CImport _ -> both "old v s src retain nocf nocheckcirc cflexer noemit o ex"
-                    "abs cnc res path optimize conversion cat"
+  CImport _ -> both "old v s src retain nocf nocheckcirc cflexer noemit o ex prob"
+                    "abs cnc res path optimize conversion cat probs"
   CRemoveLanguage _ -> none
   CEmptyState -> none
   CStripState -> none
   CTransformGrammar _ -> flags "printer"
   CConvertLatex _ -> none
   CLinearize _ -> both "utf8 table struct record all multi" "lang number unlexer"
-  CParse -> both "new newer cfg mcfg n ign raw v lines all" 
-                 "cat lang lexer parser number rawtrees probs"
+  CParse -> both "new newer cfg mcfg n ign raw v lines all prob" 
+                 "cat lang lexer parser number rawtrees"
   CTranslate _ _ -> opts "cat lexer parser"
-  CGenerateRandom -> flags "cat lang number depth probs"
+  CGenerateRandom -> both "cf prob" "cat lang number depth"
   CGenerateTrees -> both "metas" "atoms depth alts cat lang number"
   CPutTerm -> flags "transform number"
   CWrapTerm _ -> opts "c"

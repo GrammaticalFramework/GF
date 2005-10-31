@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/31 08:12:18 $ 
+-- > CVS $Date: 2005/10/31 19:02:35 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.2 $
+-- > CVS $Revision: 1.3 $
 --
 -- Probabilistic abstract syntax. AR 30\/10\/2005
 --
@@ -26,6 +26,7 @@ module GF.Probabilistic.Probabilistic (
  ,Probs                   -- = BinTree Ident Double
  ,getProbsFromFile        -- :: Opts -> IO Probs
  ,emptyProbs              -- :: Probs
+ ,prProbs                 -- :: Probs -> String
   ) where
 
 import GF.Canon.GFC
@@ -54,8 +55,10 @@ generateRandomTreesProb opts gen gr probs cat =
     cat' = prt $ snd cat
 
 -- | check that probabilities attached to a grammar make sense
-checkGrammarProbs :: GFCGrammar -> Probs -> Err ()
-checkGrammarProbs gr probs = err Bad (const (return ())) $ checkSGrammar $ gr2sgr gr probs
+checkGrammarProbs :: GFCGrammar -> Probs -> Err Probs
+checkGrammarProbs gr probs = 
+  err Bad (return . gr2probs) $ checkSGrammar $ gr2sgr gr probs where
+    gr2probs sgr = buildTree [(zIdent f,p) | (_,rs) <- tree2list sgr, ((p,f),_) <- rs]
 
 -- | compute the probability of a given tree
 computeProbTree :: Probs -> Tree -> Double
@@ -71,14 +74,14 @@ computeProbTree probs (Tr (N (_,at,_,_,_),ts)) = case at of
 rankByScore :: Ord n => [(a,n)] -> [(a,n)]
 rankByScore = sortBy (\ (_,p) (_,q) -> compare q p)
 
-getProbsFromFile :: Options -> IO Probs
-getProbsFromFile opts = do 
-  s <- maybe (return "") readFile $ getOptVal opts probFile
+getProbsFromFile :: Options -> FilePath -> IO Probs
+getProbsFromFile opts file = do 
+  s <- maybe (readFile file) readFile $ getOptVal opts probFile
   return $ buildTree $ concatMap pProb $ lines s
  where
    pProb s = case words s of
-     "--":f:p:_ | isDouble p -> [(zIdent f, read p)]
-     f:p:_      | isDouble p -> [(zIdent f, read p)]
+     "--#":"prob":f:p:_ | isDouble p -> [(zIdent f, read p)]
+     f:p:_  | isDouble p -> [(zIdent f, read p)]
      _ -> []
    isDouble = all (flip elem ('.':['0'..'9']))
 
@@ -86,7 +89,11 @@ type Probs = BinTree Ident Double
 
 emptyProbs :: Probs
 emptyProbs = emptyBinTree
- 
+
+prProbs :: Probs -> String
+prProbs = unlines . map pr . tree2list where
+  pr (f,p) = prt f ++ "\t" ++ show p
+
 ------------------------------------------
 -- translate grammar to simpler form and generated trees back
 
@@ -151,21 +158,14 @@ genTree :: [Double] -> SGrammar -> SCat -> (STree,Int)
 genTree rs gr = gett rs where
   gett ds "String" = (SString "foo",1)
   gett ds "Int" = (SInt 1978,1)
-  gett ds cat = let 
+  gett ds cat = case look cat of
+    [] -> (SMeta cat,1) -- if no productions, return ? 
+    fs -> let 
         d:ds2     = ds
-        (pf,args) = getf d cat
+        (pf,args) = getf d fs
         (ts,k)    = getts ds2 args
       in (SApp (pf,ts), k+1)
-  getf d cat = 
-    let 
-      regs0 = [(p,(pf,args)) | (pf@(p,_),(args,_)) <- look cat]
-{- not needed
-      pstd  = 1.0 / genericLength regs
-      regs  = if any (>1.0) (map fst regs0) 
-                then [(pstd,pa) | (_,pa) <- regs0]
-                else regs0
--}
-    in hitRegion d regs0
+  getf d fs = hitRegion d [(p,(pf,args)) | (pf@(p,_),(args,_)) <- fs]
   getts ds cats = case cats of
     c:cs -> let 
         (t, k)  = gett ds c
