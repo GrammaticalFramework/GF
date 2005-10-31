@@ -12,6 +12,14 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 </center>
 
+31/10 (AR) Probabilistic grammars. Probabilities can be used to
+weight random generation (<tt>gr -prob</tt>) and to rank parse
+results (<tt>p -prob</tt>). They are read from a separate file
+(flag <tt>i -probs=File</tt>, format <tt>--# prob Fun Double</tt>)
+or from the top-level grammar file itself (option <tt>i -prob</tt>).
+
+<p>
+
 12/10 (AR) Flag <tt>-atoms=Int</tt> to the command <tt>gt = generate_trees</tt>
 takes away all zero-argument functions except Int per category. In
 this way, it is possible to generate a corpus illustrating each

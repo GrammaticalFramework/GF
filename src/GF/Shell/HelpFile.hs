@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/12 12:38:30 $
+-- > CVS $Date: 2005/10/31 19:02:35 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.17 $
+-- > CVS $Revision: 1.18 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -63,6 +63,7 @@ txtHelpFile =
   "\n      -noemit       do not emit code (default with old grammar format)" ++
   "\n      -o            do emit code (default with new grammar format)" ++
   "\n      -ex           preprocess .gfe files if needed" ++
+  "\n      -prob         read probabilities from top grammar file  (format --# prob Fun Double)" ++
   "\n  flags:" ++
   "\n      -abs          set the name used for abstract syntax (with -old option)" ++
   "\n      -cnc          set the name used for concrete syntax (with -old option)" ++
@@ -70,6 +71,7 @@ txtHelpFile =
   "\n      -path         use the (colon-separated) search path to find modules" ++
   "\n      -optimize     select an optimization to override file-defined flags" ++
   "\n      -conversion   select parsing method (values strict|nondet)" ++
+  "\n      -probs        read probabilities from file (format (--# prob) Fun Double)" ++
   "\n  examples:" ++
   "\n      i English.gf                      -- ordinary import of Concrete" ++
   "\n      i -retain german/ParadigmsGer.gf  -- import of Resource to test" ++
@@ -194,6 +196,7 @@ txtHelpFile =
   "\n  options for batch input:" ++
   "\n      -lines   parse each line of input separately, ignoring empty lines" ++
   "\n      -all     as -lines, but also parse empty lines" ++
+  "\n      -prob    rank results by probability" ++
   "\n  options for selecting parsing method:" ++
   "\n      (default)parse using an overgenerating CFG" ++
   "\n      -cfg     parse using a much less overgenerating CFG" ++
@@ -270,6 +273,9 @@ txtHelpFile =
   "\n      Generates a random Tree of a given category. If a Tree" ++
   "\n      argument is given, the command completes the Tree with values to" ++
   "\n      the metavariables in the tree. " ++
+  "\n  options:" ++
+  "\n      -prob    use probabilities (works for nondep types only)" ++
+  "\n      -cf      use a very fast method (works for nondep types only)" ++
   "\n  flags:" ++
   "\n      -cat     generate in this category" ++
   "\n      -lang    use the abstract syntax of this grammar" ++
@@ -566,6 +572,7 @@ txtHelpFile =
   "\n   *-printer=xml            XML: DTD for the pg command, object for st" ++
   "\n    -printer=old            old GF: file readable by GF 1.2" ++
   "\n    -printer=stat           show some statistics of generated GFC" ++
+  "\n    -printer=probs          show probabilities of all functions" ++
   "\n    -printer=gsl            Nuance GSL speech recognition grammar" ++
   "\n    -printer=jsgf           Java Speech Grammar Format" ++
   "\n    -printer=slf            a finite automaton in the HTK SLF format" ++
