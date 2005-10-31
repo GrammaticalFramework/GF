@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/13 13:43:47 $ 
+-- > CVS $Date: 2005/10/31 08:12:18 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.43 $
+-- > CVS $Revision: 1.44 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -173,9 +173,10 @@ optionsOfCommand co = case co of
   CTransformGrammar _ -> flags "printer"
   CConvertLatex _ -> none
   CLinearize _ -> both "utf8 table struct record all multi" "lang number unlexer"
-  CParse -> both "new newer cfg mcfg n ign raw v lines all" "cat lang lexer parser number rawtrees"
+  CParse -> both "new newer cfg mcfg n ign raw v lines all" 
+                 "cat lang lexer parser number rawtrees probs"
   CTranslate _ _ -> opts "cat lexer parser"
-  CGenerateRandom -> flags "cat lang number depth"
+  CGenerateRandom -> flags "cat lang number depth probs"
   CGenerateTrees -> both "metas" "atoms depth alts cat lang number"
   CPutTerm -> flags "transform number"
   CWrapTerm _ -> opts "c"
