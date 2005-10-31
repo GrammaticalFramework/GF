@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/30 23:44:00 $ 
+-- > CVS $Date: 2005/10/31 08:12:18 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Probabilistic abstract syntax. AR 30\/10\/2005
 --
@@ -33,7 +33,7 @@ import GF.Grammar.LookAbs
 import GF.Grammar.PrGrammar
 import GF.Grammar.Macros
 import GF.Grammar.Values
-import GF.Grammar.Grammar (Cat)
+import GF.Grammar.Grammar -- (Cat,EInt,K)
 
 import GF.Infra.Ident
 import GF.Data.Zipper
@@ -74,9 +74,13 @@ rankByScore = sortBy (\ (_,p) (_,q) -> compare q p)
 getProbsFromFile :: Options -> IO Probs
 getProbsFromFile opts = do 
   s <- maybe (return "") readFile $ getOptVal opts probFile
-  return $ buildTree $ pProbs $ lines s
+  return $ buildTree $ concatMap pProb $ lines s
  where
-   pProbs ss = [(zIdent f, read p) | s <- ss, [f,p] <- [words s]]
+   pProb s = case words s of
+     "--":f:p:_ | isDouble p -> [(zIdent f, read p)]
+     f:p:_      | isDouble p -> [(zIdent f, read p)]
+     _ -> []
+   isDouble = all (flip elem ('.':['0'..'9']))
 
 type Probs = BinTree Ident Double
 
@@ -87,7 +91,7 @@ emptyProbs = emptyBinTree
 -- translate grammar to simpler form and generated trees back
 
 gr2sgr :: GFCGrammar -> Probs -> SGrammar
-gr2sgr gr probs = buildTree [(c,{- fillProb -} rs) | rs@((_,(_,c)):_) <- rules] where
+gr2sgr gr probs = buildTree [(c,fillProb rs) | rs@((_,(_,c)):_) <- rules] where
   rules =
     groupBy (\x y -> scat x == scat y) $
       sortBy (\x y -> compare (scat x) (scat y)) 
@@ -105,7 +109,8 @@ str2tr :: STree -> Exp
 str2tr t = case t of
   SApp ((_,f),ts) -> mkApp (trId f) (map str2tr ts) 
   SMeta _     -> mkMeta 0
-----  SString s   -> K s
+  SString s   -> K s
+  SInt i      -> EInt i
  where
    trId = cn . zIdent
 
@@ -144,12 +149,23 @@ genTrees ds gr cat =
 
 genTree :: [Double] -> SGrammar -> SCat -> (STree,Int)
 genTree rs gr = gett rs where
+  gett ds "String" = (SString "foo",1)
+  gett ds "Int" = (SInt 1978,1)
   gett ds cat = let 
         d:ds2     = ds
         (pf,args) = getf d cat
         (ts,k)    = getts ds2 args
       in (SApp (pf,ts), k+1)
-  getf d cat = hitRegion d [(p,(pf,args)) | (pf@(p,_),(args,_)) <- look cat]
+  getf d cat = 
+    let 
+      regs0 = [(p,(pf,args)) | (pf@(p,_),(args,_)) <- look cat]
+{- not needed
+      pstd  = 1.0 / genericLength regs
+      regs  = if any (>1.0) (map fst regs0) 
+                then [(pstd,pa) | (_,pa) <- regs0]
+                else regs0
+-}
+    in hitRegion d regs0
   getts ds cats = case cats of
     c:cs -> let 
         (t, k)  = gett ds c

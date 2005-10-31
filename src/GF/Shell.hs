@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/30 23:44:00 $ 
+-- > CVS $Date: 2005/10/31 08:12:18 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.47 $
+-- > CVS $Revision: 1.48 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -226,7 +226,7 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
                 probs <- getProbsFromFile opts
                 let tps = rankByScore [(t,computeProbTree probs t) | t <- ts]
                 putStrLnFlush msg
-                mapM_ putStrLnFlush [show p +++ prt_ t | (t,p) <- tps]
+                mapM_ putStrLnFlush [show p | (t,p) <- tps]
                 changeArg (const $ ATrms (map fst tps)) sa
            | otherwise -> putStrLnFlush msg >> changeArg (const $ ATrms ts) sa
          Bad msg -> changeArg (const $ AError (msg +++ "input" +++ x)) sa
@@ -238,6 +238,14 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
 
   CGenerateRandom | isSetFlag opts probFile -> do
     probs <- getProbsFromFile opts
+    let cat = firstAbsCat opts gro
+    let n = optIntOrN opts flagNumber 1
+    gen    <- newStdGen
+    let ts = take n $ generateRandomTreesProb opts gen cgr probs cat
+    returnArg (ATrms (map (term2tree gro) ts)) sa
+
+  CGenerateRandom | oElem showCF opts -> do
+    let probs = emptyProbs ---
     let cat = firstAbsCat opts gro
     let n = optIntOrN opts flagNumber 1
     gen    <- newStdGen
