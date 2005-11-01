@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 15:17:29 $ 
+-- > CVS $Date: 2005/11/01 20:09:04 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- This module prints a CFG as a JSGF grammar.
 --
@@ -26,12 +26,13 @@ import GF.Formalism.Utilities (Symbol(..))
 import GF.Infra.Ident
 import GF.Infra.Print
 import GF.Infra.Option
+import GF.Probabilistic.Probabilistic (Probs)
 import GF.Speech.SRG
 
 jsgfPrinter :: Ident -- ^ Grammar name
-	   -> Options -> CGrammar -> String
-jsgfPrinter name opts cfg = prJSGF srg ""
-    where srg = makeSRG name opts cfg
+	   -> Options -> Maybe Probs -> CGrammar -> String
+jsgfPrinter name opts probs cfg = prJSGF srg ""
+    where srg = makeSRG name opts probs cfg
 
 prJSGF :: SRG -> ShowS
 prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
@@ -47,9 +48,11 @@ prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
     prRule (SRGRule cat origCat rhs) = 
 	comments [origCat] . nl
         . prCat cat . showString " = " . joinS " | " (map prAlt rhs) . nl
-    prAlt rhs | null rhs' = showString "<NULL>"
-	      | otherwise = wrap "(" (unwordsS (map prSymbol rhs')) ")"
-		   where rhs' = rmPunct rhs
+    -- FIXME: use the probability
+    prAlt (SRGAlt mp rhs)
+	| null rhs' = showString "<NULL>"
+	| otherwise = wrap "(" (unwordsS (map prSymbol rhs')) ")"
+	    where rhs' = rmPunct rhs
     prSymbol (Cat c) = prCat c
     prSymbol (Tok t) = wrap "\"" (prtS t) "\""
     prCat c = showChar '<' . showString c . showChar '>'

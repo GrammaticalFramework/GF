@@ -546,6 +546,7 @@ q, quit: q
     -printer=probs          show probabilities of all functions
     -printer=gsl            Nuance GSL speech recognition grammar
     -printer=jsgf           Java Speech Grammar Format
+    -printer=srgs_xml       SRGS XML format
     -printer=slf            a finite automaton in the HTK SLF format
     -printer=slf_graphviz   the same automaton as in SLF, but in Graphviz format
     -printer=fa_graphviz    a finite automaton with labelled edges

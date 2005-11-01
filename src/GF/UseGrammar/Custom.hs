@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/31 19:02:35 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.80 $
+-- > CVS $Date: 2005/11/01 20:09:04 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.81 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -240,13 +240,17 @@ customGrammarPrinter =
   ,(strCI "srg",     prSRG . stateCF)
   ,(strCI "gsl",     \s -> let opts = stateOptions s
                                name = cncId s
-                            in gslPrinter name opts $ stateCFG s)
+                            in gslPrinter name opts Nothing $ stateCFG s)
   ,(strCI "jsgf",    \s -> let opts = stateOptions s
                                name = cncId s
-                            in jsgfPrinter name opts $ stateCFG s)
+                            in jsgfPrinter name opts Nothing $ stateCFG s)
   ,(strCI "srgs_xml", \s -> let opts = stateOptions s
                                 name = cncId s
-                             in srgsXmlPrinter name opts $ stateCFG s)
+                             in srgsXmlPrinter name opts Nothing $ stateCFG s)
+  ,(strCI "srgs_xml_prob", \s -> let opts = stateOptions s
+                                     name = cncId s
+                                     probs = stateProbs s
+                             in srgsXmlPrinter name opts (Just probs) $ stateCFG s)
   ,(strCI "slf",     \s -> let opts = stateOptions s
                                name = cncId s
                             in slfPrinter name opts $ stateCFG s)

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 15:17:29 $ 
+-- > CVS $Date: 2005/11/01 20:09:04 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.21 $
+-- > CVS $Revision: 1.22 $
 --
 -- This module prints a CFG as a Nuance GSL 2.0 grammar.
 --
@@ -26,13 +26,14 @@ import GF.Formalism.Utilities (Symbol(..))
 import GF.Conversion.Types
 import GF.Infra.Print
 import GF.Infra.Option
+import GF.Probabilistic.Probabilistic (Probs)
 
 import Data.Char (toUpper,toLower)
 
 gslPrinter :: Ident -- ^ Grammar name
-	   -> Options -> CGrammar -> String
-gslPrinter name opts cfg = prGSL srg ""
-    where srg = makeSRG name opts cfg
+	   -> Options -> Maybe Probs -> CGrammar -> String
+gslPrinter name opts probs cfg = prGSL srg ""
+    where srg = makeSRG name opts probs cfg
 
 prGSL :: SRG -> ShowS
 prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
@@ -46,8 +47,9 @@ prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
     prRule (SRGRule cat origCat rhs) = 
 	showString "; " . prtS origCat . nl
         . prCat cat . sp . wrap "[" (unwordsS (map prAlt rhs)) "]" . nl
-    prAlt rhs = wrap "(" (unwordsS (map prSymbol rhs')) ")"
-		   where rhs' = rmPunct rhs
+    -- FIXME: use the probability
+    prAlt (SRGAlt mp rhs) = wrap "(" (unwordsS (map prSymbol rhs')) ")"
+	where rhs' = rmPunct rhs
     prSymbol (Cat c) = prCat c
     prSymbol (Tok t) = wrap "\"" (showString (showToken t)) "\""
     -- GSL requires an upper case letter in category names

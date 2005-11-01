@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/31 19:02:35 $
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.18 $
+-- > CVS $Date: 2005/11/01 20:09:04 $
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.19 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -575,6 +575,7 @@ txtHelpFile =
   "\n    -printer=probs          show probabilities of all functions" ++
   "\n    -printer=gsl            Nuance GSL speech recognition grammar" ++
   "\n    -printer=jsgf           Java Speech Grammar Format" ++
+  "\n    -printer=srgs_xml       SRGS XML format" ++
   "\n    -printer=slf            a finite automaton in the HTK SLF format" ++
   "\n    -printer=slf_graphviz   the same automaton as in SLF, but in Graphviz format" ++
   "\n    -printer=fa_graphviz    a finite automaton with labelled edges" ++

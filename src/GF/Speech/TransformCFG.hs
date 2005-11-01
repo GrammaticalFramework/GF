@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/26 18:47:16 $ 
+-- > CVS $Date: 2005/11/01 20:09:04 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.23 $
+-- > CVS $Revision: 1.24 $
 --
 --  This module does some useful transformations on CFGs.
 --
@@ -26,7 +26,8 @@ module GF.Speech.TransformCFG {- (CFRule_, CFRules,
 import GF.Conversion.Types
 import GF.Data.Utilities
 import GF.Formalism.CFG 
-import GF.Formalism.Utilities (Symbol(..), mapSymbol, filterCats, symbol, NameProfile(..))
+import GF.Formalism.Utilities (Symbol(..), mapSymbol, filterCats, symbol, 
+			       NameProfile(..), name2fun)
 import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.Print
@@ -75,6 +76,7 @@ removeEmptyCats = fix removeEmptyCats'
 	k' = map (\ (c,xs) -> (c, filter (not . anyUsedBy emptyCats) xs)) keep
 
 -- | Remove rules which are identical, not caring about the rule names.
+--   FIXME: this messes up probabilities
 removeIdenticalRules :: CFRules -> CFRules
 removeIdenticalRules g = [(c,sortNubBy compareCatAndRhs rs) | (c,rs) <- g]
     where compareCatAndRhs (CFRule c1 ss1 _) (CFRule c2 ss2 _) = 
@@ -87,7 +89,11 @@ removeLeftRecursion rs = concatMap removeDirectLeftRecursion $ map handleProds r
     where 
     handleProds (c, r) = (c, concatMap handleProd r)
     handleProd (CFRule ai (Cat aj:alpha) n) | aj < ai  =
-              -- FIXME: this will give multiple rules with the same name
+              -- FIXME: for non-recursive categories, this changes
+	      -- the grammar unneccessarily, maybe we can use mutRecCats
+	      -- to make this less invasive
+              -- FIXME: this will give multiple rules with the same name,
+	      -- which may mess up the probabilities.
              [CFRule ai (beta ++ alpha) n | CFRule _ beta _ <- lookup' aj rs]
     handleProd r = [r]
 
@@ -124,6 +130,8 @@ lhsCat (CFRule c _ _) = c
 ruleRhs :: CFRule c n t ->  [Symbol c t]
 ruleRhs (CFRule _ ss _) = ss
 
+ruleFun :: CFRule_ -> Fun
+ruleFun (CFRule _ _ n) = name2fun n 
 
 -- | Checks if a symbol is a non-terminal of one of the given categories.
 catElem :: Eq c => Symbol c t -> [c] -> Bool
