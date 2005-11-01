@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/31 19:02:35 $ 
+-- > CVS $Date: 2005/11/01 09:10:54 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.4 $
 --
 -- Probabilistic abstract syntax. AR 30\/10\/2005
 --
@@ -78,12 +78,19 @@ getProbsFromFile :: Options -> FilePath -> IO Probs
 getProbsFromFile opts file = do 
   s <- maybe (readFile file) readFile $ getOptVal opts probFile
   return $ buildTree $ concatMap pProb $ lines s
- where
-   pProb s = case words s of
+-- where
+pProb s = case words s of
      "--#":"prob":f:p:_ | isDouble p -> [(zIdent f, read p)]
-     f:p:_  | isDouble p -> [(zIdent f, read p)]
+     f:ps@(g:rest) -> case span (/= "--#") ps of
+       (_,_:"prob":p:_) | isDouble p -> [(zIdent f', readD p)] where 
+         f' = if f=="fun" then ident g else ident f
+       _ -> []
      _ -> []
+  where
    isDouble = all (flip elem ('.':['0'..'9']))
+   ident = takeWhile (flip notElem ".:")
+   readD :: String -> Double
+   readD = read
 
 type Probs = BinTree Ident Double
 
