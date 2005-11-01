@@ -12,11 +12,24 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 </center>
 
+1/11 (AR) Yet another method for adding probabilities: append
+<tt> --# prob Double</tt> to the end of a line defining a function.
+This can be (1) a <tt>.cf</tt> rule (2) a <tt>fun</tt> rule, or
+(3) a <tt>lin</tt> rule. The probability is attached to the
+first identifier on the line.
+
+<p>
+
 31/10 (AR) Probabilistic grammars. Probabilities can be used to
 weight random generation (<tt>gr -prob</tt>) and to rank parse
 results (<tt>p -prob</tt>). They are read from a separate file
 (flag <tt>i -probs=File</tt>, format <tt>--# prob Fun Double</tt>)
 or from the top-level grammar file itself (option <tt>i -prob</tt>).
+<br>
+As a by-product, the probabilistic random generation algorithm is
+available for any context-free abstract syntax. Use the flag
+<tt>gr -cf<&tt>. This algorithm is much more efficient than the
+old (more general) one.
 
 <p>
 
