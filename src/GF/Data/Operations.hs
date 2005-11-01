@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 18:39:44 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.20 $
+-- > CVS $Date: 2005/11/01 20:09:04 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.21 $
 --
 -- some auxiliary GF operations. AR 19\/6\/1998 -- 6\/2\/2001
 --
@@ -100,6 +100,7 @@ data Err a = Ok a | Bad String
 
 instance Monad Err where
   return      = Ok
+  fail        = Bad
   Ok a  >>= f = f a
   Bad s >>= f = Bad s
 
@@ -302,19 +303,19 @@ isInBinTree :: (Ord a) => a -> BinTree a b -> Bool
 isInBinTree x = err (const False) (const True) .  justLookupTree x
 -- isInBinTree = elemFM
 
-justLookupTree :: (Ord a) => a -> BinTree a b -> Err b
+justLookupTree :: (Monad m,Ord a) => a -> BinTree a b -> m b
 justLookupTree = lookupTree (const [])
 
-lookupTree :: (Ord a) => (a -> String) -> a -> BinTree a b -> Err b
+lookupTree :: (Monad m,Ord a) => (a -> String) -> a -> BinTree a b -> m b
 lookupTree pr x tree = case tree of
- NT -> Bad ("no occurrence of element" +++ pr x)
+ NT -> fail ("no occurrence of element" +++ pr x)
  BT (a,b) left right 
    | x < a  -> lookupTree pr x left
    | x > a  -> lookupTree pr x right
    | x == a -> return b
 --lookupTree pr x tree = case lookupFM tree x of
 --  Just y -> return y
---  _ -> Bad ("no occurrence of element" +++ pr x)
+--  _ -> fail ("no occurrence of element" +++ pr x)
 
 lookupTreeMany :: Ord a => (a -> String) -> [BinTree a b] -> a -> Err b
 lookupTreeMany pr (t:ts) x = case lookupTree pr x t of
