@@ -49,5 +49,5 @@ I.   Pro ::= "I" ; --# prob 0.60
 -- [0.15,  0.40,0.40, 0.40, 0.05,  0.30,  0.35,   0.40, 0.05,  0.75,   0.50]
 --
 -- J&M have different figures, but they seem to be wrong. For
--- instance, the products have 12 terms although the trees have only
+-- instance, their products have 12 terms although the trees have only
 -- 11 constructors.

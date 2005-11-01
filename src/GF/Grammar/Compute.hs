@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/14 20:09:57 $ 
+-- > CVS $Date: 2005/11/01 15:39:12 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.18 $
+-- > CVS $Revision: 1.19 $
 --
 -- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
@@ -81,8 +81,8 @@ computeTermOpt rec gr = comp where
        case (f',a') of
          (Abs x b,_) -> comp (ext x a' g) b
          (QC _ _,_)  -> returnC $ App f' a'
-         (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . FV
-         (_, FV as)  -> mapM (\c -> comp g (App f' c)) as >>= return . FV
+         (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . variants
+         (_, FV as)  -> mapM (\c -> comp g (App f' c)) as >>= return . variants
 
          (Alias _ _ d, _) -> comp g (App d a')
 
@@ -100,7 +100,7 @@ computeTermOpt rec gr = comp where
      P t l  -> do
        t' <- comp g t
        case t' of
-         FV rs -> mapM (\c -> comp g (P c l)) rs >>= returnC . FV
+         FV rs -> mapM (\c -> comp g (P c l)) rs >>= returnC . variants
          R r   -> maybe (prtBad "no value for label" l) (comp g . snd) $ 
                     lookup l $ reverse r 
 
@@ -132,21 +132,21 @@ computeTermOpt rec gr = comp where
          T _ [(PV z,c)] -> comp (ext z v' g) c --- another optimization
          T _ [(PT _ (PV z),c)] -> comp (ext z v' g) c
 
-         FV ccs -> mapM (\c -> comp g (S c v')) ccs >>= returnC . FV
+         FV ccs -> mapM (\c -> comp g (S c v')) ccs >>= returnC . variants
 
          V ptyp ts -> do
            vs <- allParamValues gr ptyp
            ps <- mapM term2patt vs
            let cc = zip ps ts
            case v' of
-             FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . FV
+             FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . variants
              _ -> case matchPattern cc v' of
                Ok (c,g') -> comp (g' ++ g) c
                _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
                _ -> return $ S t' v' -- if v' is not canonical
 
          T _ cc -> case v' of
-	   FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . FV
+	   FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . variants
            _ -> case matchPattern cc v' of
              Ok (c,g') -> comp (g' ++ g) c
              _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
@@ -189,10 +189,10 @@ computeTermOpt rec gr = comp where
            ]
          (FV ks,_)         -> do
            kys <- mapM (comp g . flip Glue y) ks
-           return $ FV kys
+           return $ variants kys
          (_,FV ks)         -> do
            xks <- mapM (comp g . Glue x) ks
-           return $ FV xks
+           return $ variants xks
 
          _ -> do
            mapM_ checkNoArgVars [x,y]
@@ -220,7 +220,7 @@ computeTermOpt rec gr = comp where
          _     -> returnC $ C a' b'
 
      -- reduce free variation as much as you can
-     FV [t] -> comp g t
+     FV ts -> mapM (comp g) ts >>= returnC . variants
 
      -- merge record extensions if you can
      ExtR r s -> do
@@ -278,8 +278,9 @@ computeTermOpt rec gr = comp where
 
      returnC = return --- . computed
 
-     variants [t] = t
-     variants ts = FV ts
+     variants ts = case nub ts of
+       [t] -> t
+       ts  -> FV ts
 
      isCan v = case v of
        Con _    -> True
