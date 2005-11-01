@@ -1,4 +1,5 @@
 -- example of probabilistic grammar from Jurafsky & Martin p. 449
+-- AR 1/11/2005
 
 PredVP.  S   ::= NP VP ; --# prob 0.80 
 PredAux. S   ::= Aux NP VP ; --# prob 0.15

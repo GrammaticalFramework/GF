@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/01 09:10:54 $ 
+-- > CVS $Date: 2005/11/01 09:20:09 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.4 $
+-- > CVS $Revision: 1.5 $
 --
 -- Probabilistic abstract syntax. AR 30\/10\/2005
 --
@@ -83,7 +83,7 @@ pProb s = case words s of
      "--#":"prob":f:p:_ | isDouble p -> [(zIdent f, read p)]
      f:ps@(g:rest) -> case span (/= "--#") ps of
        (_,_:"prob":p:_) | isDouble p -> [(zIdent f', readD p)] where 
-         f' = if f=="fun" then ident g else ident f
+         f' = if elem f ["fun","lin","data"] then ident g else ident f
        _ -> []
      _ -> []
   where
