@@ -5,15 +5,17 @@
 
 <img src="gf-logo.gif">
 
-<h1>GF Resource Grammar Library</h1>
+<h1>The GF Resource Grammar Library</h1>
 
 <p>
 
+<font size=2>
+Fourth Version, 2 November 2005.
+<br>
 Third Version, 22 May 2005. Completed 1 July.
-<br>
 Second Version, 1 March 2005
-<br>
 First Draft, 7 February 2005
+</font>
 
 </p><p>
 
@@ -29,16 +31,16 @@ Aarne Ranta
 <!-- NEW -->
 <h2>GF = Grammatical Framework</h2>
 
-A grammar formalism based on functional programming and type theory.
+GF is a grammar formalism based on functional programming and type theory.
 
 <p>
 
-Designed to be nice for <i>ordinary programmers</i> to use: by this
-we mean programmers without training in linguistics.
+GF was designed to be nice for <i>ordinary programmers</i> to use: by this
+we mean programmers without training in linguistics. 
 
 <p>
 
-Mission: to make natural-language applications available for
+The mission of GF is to make natural-language applications available for
 ordinary programmers, in tasks like
 <ul>
 <li> software documentation
@@ -46,7 +48,7 @@ ordinary programmers, in tasks like
 <li> human-computer interaction
 <li> dialogue systems
 </ul>
-Thus <i>not</i> primarily another theoretical framework for
+Thus GF is <i>not</i> primarily another theoretical framework for
 linguists.
 
 
@@ -54,10 +56,16 @@ linguists.
 <!-- NEW -->
 <h2>Multilingual grammars</h2>
 
+A GF grammar consists of an abstract syntax and a set
+of concrete syntaxes.
+
+<p>
+
 <b>Abstract syntax</b>: language-independent representation
 <pre>
   cat Prop ; Nat ;
   fun Even : Nat -> Prop ;
+  fun NInt : Int -> Nat ;
 </pre>
 <b>Concrete syntax</b>: mapping from abstract syntax trees to strings in a language
 (English, French, German, Swedish,...)
@@ -70,11 +78,18 @@ linguists.
 
   lin Even x = {s = x.s ++ "är" ++ "jämnt"} ;
 </pre>
-We can <b>translate</b> between language via the abstract syntax.
+We can <b>translate</b> between languages via the abstract syntax:
+<pre>
+  4 is even                  4 ist gerade
+             \              /
+               Even (NInt 4)
+             /              \
+  4 est pair                  4 är jämnt
+</pre>
 
 <p>
 
-Is it really so simple?
+But is it really so simple?
 
 
 <!-- NEW -->
@@ -93,6 +108,8 @@ la somme de 3 et de 5 est pair<br>
 wenn 2 ist gerade, dann 2+2 ist gerade<br>
 om 2 är jämnt, 2+2 är jämnt<br>
 </i>
+All these sentences are grammatically incorrect.
+
 
 
 <!-- NEW -->
@@ -120,7 +137,10 @@ and <b>record types</b>. For instance, French:
       }
     } ;
 </pre>
-
+To learn more about these constructs, consult GF documentation, e.g. the
+<a href="../../../doc/tutorial/01-gf-tutorial2.html">New Grammarian's Tutorial</a>.
+However, in what follows we will show how to avoid learning them and
+still write linguistically correct grammars.
 
 
 <!-- NEW -->
@@ -131,7 +151,7 @@ theoretical knowledge about the language.
 
 <p>
 
-Which kind of a programmer is easier to find?
+Which kind of a programmer is it easier to find?
 <ul>
 <li> one who can write a sorting algorithm 
 <li> one who can write a grammar for Swedish determiners
@@ -177,6 +197,10 @@ To use library functions for syntax and morphology:
 <pre>
   Even = predA (regA "jämn") ;
 </pre>
+For the French version, we write
+<pre>
+  Even = predA (regA "pair") ;
+</pre>
 
 
 
@@ -205,6 +229,44 @@ Where do we get the data from?
 <br>
 Extra constraint: we want open-source free software and
 hence cannot use existing proprietary resources.
+
+
+<!-- NEW -->
+<h2>Answers to questions in grammar library design</h2>
+
+The current GF resource grammar library has
+made the following decisions:
+<p>
+The library has, for each language
+<br>
+<li> complete morphology, some lexicon (500 words), representative fragment of syntax,
+very little semantics,
+
+<p>
+
+Organization and presentation:
+<br>
+<li> division into top-level (API) modules, and internal modules (only
+interesting for resource implementors)
+<br>
+<li> the API is, as much as possible, common in different languages
+<br>
+<li> we favour "school grammar" concepts rather than innovative linguistic theory
+
+<p>
+
+Where do we get the data from?
+<br>
+<li> morphology and syntax are hand-written
+<br>
+<li> the 500-word lexicon is hand-written, but a tool is provided
+     for automatic lexicon extraction
+<br>
+<li> we have not reused existing resources
+<br>
+The resource grammar library is entirely
+open-source free software (under GNU GPL license).
+
 
 
 
@@ -351,6 +413,11 @@ The first three letters (<tt>Dan</tt> etc) are used in grammar module names
 <!-- NEW -->
 <h2>Library structure 1: language-independent API</h2>
 
+
+<li> <tt>Lang</tt> is the top module collecting all of the following.
+
+<p>
+
 <li> syntactic <tt>Categories</tt> (parts of speech, word classes), e.g.
 <pre>
   V ; NP ; CN ; Det ;  -- verb, noun phrase, common noun, determiner
@@ -360,29 +427,44 @@ The first three letters (<tt>Dan</tt> etc) are used in grammar module names
   DetNP : Det -> CN -> NP ; -- combine Det and CN into NP
 </pre>
 <li> the most common <tt>Structural</tt> words (determiners,
-conjunctions, pronouns), e.g.
+conjunctions, pronouns) (now 83), e.g.
 <pre>
   and_Conj : Conj ;
+</pre
+<li> <tt>Numerals</tt>, number words from 1 to 999,999 with their
+inflections, e.g.
+<pre>
+  n8 : Digit ;
+</pre
+<li> <tt>Basic</tt> lexicon of (now 218) frequent everyday words
+<pre>
+  man_N : N ;
 </pre>
+
+<p>
+
+In addition, and not included in <tt>Lang</tt>, there is
+<li> <tt>SwadeshLex</tt>, lexicon of (now 206) words from the
+<a href="http://en.wiktionary.org/wiki/Swadesh_List">Swadesh list</a>, e.g.
+<pre>
+  squeeze_V : V ;
+</pre>
+Of course, there is some overlap between <tt>SwadeshLex</tt> and the other modules.
 
 
 <!-- NEW -->
 <h2>Library structure 2: language-dependent modules</h2>
 
-<li> morphological <tt>Paradigms</tt>, e.g.
+<li> morphological <tt>Paradigms</tt>, e.g. Swedish
 <pre>
   mkN : Str -> Str -> Str -> Str -> Gender -> N ; -- worst-case nouns
   mkN : Str -> N ;                                -- regular nouns
 </pre>
-<li> irregular <tt>Verbs</tt>, e.g.
+<li> (in some languages) irregular <tt>Verbs</tt>, e.g.
 <pre>
   angripa_V = irregV "angripa" "angrep" "angripit" ;
 </pre>
-<li> <tt>Lexicon</tt> of frequent words
-<pre>
-  man_N = mkN "man" "mannen" "män" "männen" masculine ;
-</pre>
-<li> <tt>Ext</tt>ended syntax with language-specific rules
+<li> (not yet available) <tt>Ext</tt>ended syntax with language-specific rules
 <pre>
   PassBli : V2 -> NP -> VP ;  -- bli överkörd av ngn
 </pre>
@@ -399,27 +481,19 @@ to implement the current API.
 
 Reservations:
 <ul>
-<li> does not necessarily extend to all other languages
-<li> does not necessarily cover the most idiomatic expressions
+<li> this does not necessarily extend to all other languages
+<li> this does not necessarily cover the most idiomatic expressions
      of each language
-<li> may not be the easiest API to implement (e.g. negation and
+<li> this may not be the easiest API to implement (e.g. negation and
 inversion with  <i>do</i> in English suggest that some other
 structure would be more natural)
-<li> does not guarantee that same structure has the same semantics
-in different languages
+<li> it is not guaranteed that same structure has the same semantics
+in all different languages
 <p>
 
 
 <!-- NEW -->
 <h2>Library structure: language-independent API</h2>
-
-<center>
-<img src="Resource.gif">
-</center>
-
-
-<!-- NEW -->
-<h2>Library structure: test bed for the language-independent API</h2>
 
 <center>
 <img src="Lang.gif">
@@ -435,7 +509,7 @@ in different languages
 <a href="Rules.html">Rules</a>
 
 <p>
-Alternative views on sentence formation:
+Two alternative views on sentence formation by predication:
 <a href="Clause.html">Clause</a>,
 <a href="Verbphrase.html">Verbphrase</a>
 
@@ -519,11 +593,27 @@ Import a set of <tt>LangX</tt> grammars:
   i english/LangEng.gf
   i swedish/LangSwe.gf
 </pre>
-Test with random generation, translation, morphological analysis...
+Alternatively, you can <tt>make</tt> a precompiled package of
+all the languages by using <tt>lib/resource/Makefile</tt>:
 <pre>
-
-
+  make
+  gf langs.gfcm
 </pre>
+Then you can test with translation, random generation, morphological analysis...
+<pre>
+  > p -lang=LangEng "I have loved her." | l -lang=LangFre
+  Je l' ai aimée.
+
+  > gr -cat=NP | l -multi
+  The sock
+  Strumpan
+  Strømpen
+  La media
+  La calza
+  La chaussette
+  Sukka
+</pre>
+
 
 <!-- NEW -->
 <h2>Use as top-level grammar: language learning quizzes</h2>
@@ -586,14 +676,14 @@ when developing a resource.
 Using the <tt>-v</tt> option shows if the parser fails because
 of unknown words.
 <pre>
-  > p -cat=S -v "jag ska åka till Chalmers"
+  > p -cat=S -v -lexer=words "jag ska åka till Chalmers"
   unknown tokens [TS "åka",TS "Chalmers"]
 </pre>
 Then try to select words that <tt>LangX</tt> recognizes:
 <pre>
-  > p -cat=S "jag ska gå till Danmark"
+  > p -cat=S "jag ska springa till Danmark"
   UseCl (PosTP TFuture ASimul)
-    (AdvCl (SPredV i_NP go_V)
+    (AdvCl (SPredV i_NP run_V)
     (AdvPP (PrepNP to_Prep (UsePN (PNCountry Denmark)))))
 </pre>
 Use these API structures and extend vocabulary to match your need.
@@ -609,7 +699,7 @@ You can run the syntax editor on <tt>LangX</tt> to
 find resource API functions through context-sensitive menus.
 For instance, the shell command
 <pre>
-  jgf LangEng.gf LangFre.gf
+  gfeditor LangEng.gf LangFre.gf
 </pre>
 opens the editor with English and French views. The
 <a href="http://www.cs.chalmers.se/%7Eaarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm">
@@ -682,42 +772,48 @@ for this set of grammars.
 
 <p>
 
-Just issue the following GF commands 
-<pre>
-  i -src AnimalsEng.gf ;; s
-  i -src AnimalsFre.gf ;; s
-  i -src AnimalsSwe.gf ;; s
-  pm | wf animals.gfcm
-</pre>
-and you get an end-user grammar <tt>animals.gfcm</tt>.
-
-<p>
-
-You can also write the commands in a <tt>gfs</tt> (<b>GF script</b>)
+To produce an end-user multilingual grammar <tt>animals.gfcm</tt>,
+write the sequence of compilation commands in a <tt>gfs</tt> (<b>GF script</b>)
 file, say
 <a href="example/mkAnimals.gfs"><tt>mkAnimals.gfs</tt></a>,
 and then call GF with
 <pre>
   gf &lt;mkAnimals.gfs
 </pre>
+To try out the grammar,
+<pre>
+  > i animals.gfcm
+
+  > gr | l -multi
+  vem jagar hundar ?
+  qui chasse des chiens ?
+  who chases dogs ?
+</pre>
 
 
 <!-- NEW -->
+
 <h2>Grammar writing by examples</h2>
 
-(New in GF 3/6/2005)
+(New in GF 2.3)
 
 <p>
 
 You can use the resource grammar as a parser on a special file format,
-<tt>.gfe</tt> ("GF examples"). Here is the new source,
+<tt>.gfe</tt> ("GF examples"). Here is the real source,
 <a href="example/QuestionsI.gfe">QuestionsI.gfe</a>, which
-generates
-<a href="example/QuestionsI.gf">QuestionsI.gf</a>,
-when you execute the command
+generated
+<a href="example/QuestionsI.gf">QuestionsI.gf</a>.
+when you executed the GF command
 <pre>
-  gf -examples QuestionsI.gfe
+  i -ex AnimalsEng.gf
 </pre>
+Since <tt>QuestionsI</tt> is an incomplete module ("functor"),
+it need only be built once. This is why only the first
+command in <tt>mkAnimals.gfs</tt> needs the flag <tt>-ex</tt>.
+
+<p>
+
 Of course, the grammar of any language can be created by
 parsing any language, as long as they have a common resource API.
 The use of English resource is generally recommended, because it
@@ -793,6 +889,30 @@ If many substitutions are needed, semicolons are used as separators:
 
 
 <!-- NEW -->
+<h2>Implementation details: low-level files</h2>
+
+<b>For developers of resource grammars.</b>
+The modules listed in this section should never be imported in application
+grammars.
+
+<p>
+
+Each of the API implementations uses the following auxiliary resource modules:
+<ul>
+<li> <tt>Types</tt>, the morphological paradigms and word classes
+<li> <tt>Morpho</tt>, inflection machinery
+<li> <tt>Syntax</tt>, complex categories and their combinations
+</ul>
+In addition, the following language-independent modules from <tt>lib/prelude</tt>
+are used.
+<ul>
+<li> <tt>Predef</tt>, operations whose definitions are hard-coded in GF
+<li> <tt>Prelude</tt>, generic string and boolean operations
+<li> <tt>Coordination</tt>, coordination structures for arbitrary categories
+</ul>
+
+
+<!-- NEW -->
 <h2>Implementation details: the structure of low-level files</h2>
 
 <center>
@@ -801,13 +921,52 @@ If many substitutions are needed, semicolons are used as separators:
 
 
 <!-- NEW -->
+<h2>How to change a resource grammar?</h2>
+
+In many cases, the source of a bug is in one of
+the low-level modules. Try to trace it back there
+by starting from the high-level module.
+
+<p>
+
+(Much more to be written...)
+
+
+<!-- NEW -->
+<h2>How to write a resource grammar?</h2>
+
+Start with a more limited goal, e.g. to implement
+the <tt>stoneage</tt> grammar (<tt>examples/stoneage</tt>)
+for your language.
+
+<p>
+
+For this, you need
+<ul>
+<li> most of <tt>Types</tt>
+<li> most of <tt>Morpho</tt>
+<li> some of <tt>Syntax</tt>
+<li> most of <tt>Paradigms</tt>
+</ul>
+
+<p>
+
+A useful command to test <tt>oper</tt>s:
+<pre>
+  i -retain MorphoRot.gf
+  cc regNoun "foo"
+</pre>
+
+
+<!-- NEW -->
 <h2>The use of parametrized modules</h2>
 
-In two language families:
+In two language families, a lot of code is shared.
 <ul>
 <li> Romance: French, Italian, Spanish
 <li> Scandinavian: Danish, Norwegian, Swedish
 </ul>
+The structure looks like this.
 <center>
 <img src="Scand.gif">
 </center>
@@ -850,11 +1009,10 @@ the previous page</i>.)
 Danish            
 <p>
 English:      
+missing uncontracted negations.
 <p>
 Finnish:
-missing many nominal forms of verbs;
 compiling the heuristic paradigms is slow;
-the basic lexicon has some erroneous inflectional forms;
 possessive and interrogative suffixes have no proper lexer.
 <p>
 French:
@@ -869,7 +1027,7 @@ some verbs in Basic should be reflexive;
 bad forms of reflexive infinitives
 <p>
 Norwegian:
-possessives <i>bilen min</i> not included
+possessives of type <i>bilen min</i> not included
 <p>
 Russian
 <p>
@@ -893,5 +1051,10 @@ Get the grammar package from
 GF Download Page</a>. The current libraries are in
 <tt>lib/resource</tt>. Version 0.6 is in
 <tt>lib/resource-0.6</tt>.
+
+<p>
+
+The very very latest version of GF and its libraries is in
+<a href="http://www.cs.chalmers.se/~bringert/gf/downloads/snapshots/">Snapshots</a>.
 
 </body></html>

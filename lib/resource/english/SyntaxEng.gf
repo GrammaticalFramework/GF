@@ -62,7 +62,7 @@ oper
       case a of {
         ASgP1   => {n = Sg ; p = P1 ; g = human} ;
         ASgP2   => {n = Sg ; p = P2 ; g = human} ;
-        ASgP3 g => {n = Sg ; p = P1 ; g = g} ;
+        ASgP3 g => {n = Sg ; p = P3 ; g = g} ;
         APl   p => {n = Pl ; p = p ; g = human}
         } ;
 
