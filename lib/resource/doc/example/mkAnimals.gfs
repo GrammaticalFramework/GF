@@ -1,4 +1,4 @@
-  i -src AnimalsEng.gf ;; s
-  i -src AnimalsFre.gf ;; s
-  i -src AnimalsSwe.gf ;; s
+  i -ex AnimalsEng.gf ;; s
+  i AnimalsFre.gf ;; s
+  i AnimalsSwe.gf ;; s
   pm | wf animals.gfcm

@@ -2,6 +2,8 @@
 
 abstract Animals = Questions ** {
 
+  flags startcat=Phrase ;
+
   fun
     -- a lexicon of animals and actions among them
     Dog, Cat, Mouse, Lion, Zebra : Entity ;
