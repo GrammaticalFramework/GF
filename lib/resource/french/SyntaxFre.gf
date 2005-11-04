@@ -335,4 +335,6 @@ oper
       (["en train"] ++ elisDe ++
        vp.s ! VIInfinit ! (pgen2gen subj.g) ! subj.n ! subj.p) ;
 
+  conjunctCase : CaseA -> CaseA = \c -> c ;
+
 }

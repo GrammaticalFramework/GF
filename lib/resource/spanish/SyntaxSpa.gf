@@ -345,8 +345,16 @@ oper
   ouAdv = ss "donde" ;
   pourquoiAdv = ss "porqué" ;
 
-  etConj = ss "y" ** {n = Pl} ;
-  ouConj = ss "o" ** {n = Sg}  ;
+-- The forms of "y" and "o" depend on the prefix of the word that
+-- follows.
+
+  etConj = {s = pre {
+    "y" ; 
+    "y" / strs {"ya" ; "ye" ; "yo" ; "yu"} ;
+    "e" / strs {"i" ; "hi" ; "y"}
+    }} ** {n = Pl} ;
+  ouConj = {s = pre {"o" ; "u" / strs {"o" ; "ho"}}} ** {n = Sg} ;
+
   etetConj = sd2 "y" "y" ** {n = Pl}  ;
   ououConj = sd2 "o" "o" ** {n = Sg}  ;
   niniConj = sd2 "no" "ni" ** {n = Sg}  ; ----
@@ -363,6 +371,11 @@ oper
       (mkTransVerbDir (verbPres (estar_2 "estar") AHabere))     --- hack to reuse  
       (nameNounPhrase (mkProperName (                          --- this function
          vp.s ! VIGerund ! (pgen2gen subj.g) ! subj.n ! subj.p) Masc)) ;
+
+  conjunctCase : CaseA -> CaseA = \c -> case c of {
+    CPrep _ => accusative ;
+    _ => c
+    } ;
 
 }
 

@@ -1039,13 +1039,21 @@ oper
     {s1,s2 : CaseA => Str ; g : PronGen ; n : Number ; p : Person} ;
 
   twoNounPhrase : (_,_ : NounPhrase) -> ListNounPhrase = \x,y ->
-    {s1 = \\c => x.s ! stressed c ; s2 = \\c => y.s ! stressed c} ** 
+    {s1 = \\c => x.s ! stressed c ; 
+     s2 = \\c => y.s ! stressed (conjunctCase c)} ** 
     {n = conjNumber x.n y.n ; g = conjGender x.g y.g ; p = conjPers x.p y.p} ;
 
   consNounPhrase : ListNounPhrase -> NounPhrase -> ListNounPhrase =  \xs,x ->
-    {s1 = \\c => xs.s1 ! c ++ CO.comma ++ xs.s2 ! c ; 
-     s2 = \\c => x.s ! stressed c} ** 
+    {s1 = \\c => xs.s1 ! c ++ CO.comma ++ xs.s2 ! conjunctCase c ; 
+     s2 = \\c => x.s ! stressed (conjunctCase c)} ** 
     {n = conjNumber xs.n x.n ; g = conjGender xs.g x.g ; p =conjPers xs.p x.p} ;
+
+-- French says "la somme de x et de y" whereas 
+-- Italian says "la somma di x e y" and similarly for Spanish.
+
+  conjunctCase : CaseA -> CaseA ;
+--  conjunctCase c = nominative ; -- Spanish, Italian
+--  conjunctCase c = c ; -- French
 
   conjunctNounPhrase : Conjunction -> ListNounPhrase -> NounPhrase = \co,xs ->
     {s = \\c => xs.s1 ! pform2case c ++ co.s ++ xs.s2 ! pform2case c} ** 
