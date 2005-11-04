@@ -281,4 +281,10 @@ oper
       (nameNounPhrase (mkProperName (                          --- this function
          vp.s ! VIGerund ! (pgen2gen subj.g) ! subj.n ! subj.p) Masc)) ;
 
+  conjunctCase : CaseA -> CaseA = \c -> case c of {
+    CPrep _ => accusative ;
+    _ => c
+    } ;
+
 }
+

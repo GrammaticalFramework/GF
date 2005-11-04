@@ -268,7 +268,7 @@ oper
 
   npGenDet : Number -> NounPhrase -> CommNounPhrase -> NounPhrase = \n,jussi,talo ->
     {s = \\c => jussi.s ! NPCase Gen ++ 
-                ifPossSuffix talo jussi.p jussi.n (npForm2Case n c) ;
+                ifPossSuffix talo jussi.p n (npForm2Case n c) ;
      n = n ; 
      p = NP3
     } ;
@@ -276,7 +276,7 @@ oper
   npGenDetNum : Numeral -> NounPhrase -> CommNounPhrase -> NounPhrase = 
     \viisi,jussi,talo ->
     {s = \\c => jussi.s ! NPCase Gen ++ viisi.s ! c ++ 
-                ifPossSuffix talo jussi.p jussi.n (
+                ifPossSuffix talo jussi.p Pl (
                   case viisi.isNum of {
                     True => Part ;
                     _ => npForm2Case Pl c
