@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/30 21:08:14 $ 
+-- > CVS $Date: 2005/11/06 22:00:37 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.24 $
+-- > CVS $Revision: 1.25 $
 --
 -- Datastructures and functions for modules, common to GF and GFC.
 --
@@ -349,6 +349,8 @@ sameMType m n = case (m,n) of
   (MTInstance _, MTInterface) -> True
   (MTResource, MTInstance _) -> True
   (MTResource, MTInterface) -> True
+  (MTAbstract, MTInterface) -> True    -- for reuse
+  (MTConcrete _, MTResource) -> True -- for reuse
   (MTInterface,MTResource) -> True
   _ -> m == n
 

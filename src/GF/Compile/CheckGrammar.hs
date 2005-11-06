@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/02 20:50:19 $ 
+-- > CVS $Date: 2005/11/06 22:00:37 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.29 $
+-- > CVS $Revision: 1.30 $
 --
 -- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
 --
@@ -564,6 +564,7 @@ checkLType env trm typ0 = do
          trm' <- comp trm
          case trm' of
            RecType _ -> termWith trm $ return typeType
+           ExtR (Vr _) (RecType _) -> termWith trm $ return typeType -- ext t = t ** ...
            _ -> prtFail "invalid record type extension" trm
        RecType rr -> do
          (r',ty,s') <- checks [
