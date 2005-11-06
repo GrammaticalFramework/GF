@@ -223,7 +223,7 @@ lin
   stop_V = regDuplV "stop" ;
   jump_V = regV "jump" ;
   here_Adv = mkAdv "here" ;
-  here7to_Adv = mkAdv "here" ;
+  here7to_Adv = mkAdv ["to here"] ;
   here7from_Adv = mkAdv ["from here"] ;
   there_Adv = mkAdv "there" ;
   there7to_Adv = mkAdv "there" ;
