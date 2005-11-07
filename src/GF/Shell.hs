@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/31 19:02:35 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.49 $
+-- > CVS $Date: 2005/11/07 20:15:05 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.50 $
 --
 -- GF shell command interpreter.
 -----------------------------------------------------------------------------
@@ -52,6 +52,7 @@ import GF.Grammar.PrGrammar
 
 import Control.Monad (foldM,liftM)
 import System (system)
+import System.IO (hPutStrLn, stderr)
 import System.Random (newStdGen) ----
 import Data.List (nub,isPrefixOf)
 import GF.Data.Zipper ----
@@ -60,6 +61,9 @@ import GF.Data.Operations
 import GF.Infra.UseIO
 import GF.Text.UTF8 (encodeUTF8)
 import Data.Char (isDigit)
+import Data.Maybe (fromMaybe)
+
+import GF.System.Signal (runInterruptibly)
 
 ---- import qualified GrammarToGramlet as Gr
 ---- import qualified GrammarToCanonXML2 as Canon
@@ -135,9 +139,20 @@ earlierCommandH (_,(h,_,_,_)) = ((h ++ repeat "") !!)
 
 execLinesH :: String -> [CommandLine] -> HState -> IO HState
 execLinesH s cs hst@(st, (h,_,_,_)) = do
-  (_,st') <- execLines True cs hst
+  (_,st') <- execLinesI True cs hst
   cpu     <- prOptCPU (optsHState st') (cpuHState hst)
   return $ putHStateCPU cpu $ updateHistory s st'
+
+-- | Like 'execLines', but can be interrupted by SIGINT.
+execLinesI :: Bool -> [CommandLine] -> HState -> IO ([String],HState)
+execLinesI put cs st = 
+    do
+    x <- runInterruptibly (execLines put cs st)
+    case x of
+           Left ex -> do hPutStrLn stderr ""
+                         hPutStrLn stderr $ show ex
+                         return ([],st)
+           Right y -> return y
 
 ifImpure :: [CommandLine] -> Maybe (ImpureCommand,Options)
 ifImpure cls = foldr (const . Just) Nothing [(c,os) | ((CImpure c,os),_,_) <- cls]
