@@ -4,10 +4,11 @@ incomplete concrete DemonstrativeI of Demonstrative =
   open Prelude, Resource, Basic, DemRes in {
 
   lincat
-    MS = MultiSentence ;
-    MQ = MultiQuestion ;
-    Dem = Demonstrative ;
-    DAdv = DemAdverb ;
+    MS    = MultiSentence ;
+    MQS   = MultiQuestion ;
+    MImp  = MultiImperative ;
+    DNP   = Demonstrative ;
+    DAdv  = DemAdverb ;
     Point = Pointing ;
 
   lin
@@ -26,12 +27,13 @@ incomplete concrete DemonstrativeI of Demonstrative =
       mkDemQ (QPredV ip verb) adv noPointing ;
     QDemV2 verb ip ob adv = 
       mkDemQ (QPredV2 ip verb ob) adv ob ;
+    QDemSlashV2 verb su ip adv = 
+      mkDemQ (IntSlash ip (SlashV2 su verb)) adv su ;
 
-
-    this_Dem  p = this_NP ** p ;
-    that_Dem  p = this_NP ** p ;
-    thisDet_Dem p cn = DetNP this_Det cn ** p ;
-    thatDet_Dem p cn = DetNP that_Det cn ** p ;
+    this_DNP  p = this_NP ** p ;
+    that_DNP  p = this_NP ** p ;
+    thisDet_DNP p cn = DetNP this_Det cn ** p ;
+    thatDet_DNP p cn = DetNP that_Det cn ** p ;
 
     here_DAdv p = addDAdv here_Adv p ;
     here7from_DAdv p = addDAdv here7from_Adv p ;

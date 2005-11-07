@@ -7,13 +7,19 @@ interface DemRes = open Prelude, Resource in {
 
     mkDemS  : Cl -> DemAdverb -> Pointing -> MultiSentence = \cl,adv,p ->
     {s = table {
-       MInd   => msS  (UseCl  (PosTP TPresent ASimul) (AdvCl cl adv)) ;
-       MQuest => msQS (UseQCl (PosTP TPresent ASimul) (QuestCl (AdvCl cl adv)))
+       MInd   b => msS  (UseCl  (polar b) (AdvCl cl adv)) ;
+       MQuest b => msQS (UseQCl (polar b) (QuestCl (AdvCl cl adv)))
        } ;
      s5 = p.s5 ++ adv.s5
     } ;
+
+    polar : Bool -> TP = \b -> case b of {
+      True  => PosTP TPresent ASimul ;
+      False => NegTP TPresent ASimul
+      } ;
+
     mkDemQ  : QCl -> DemAdverb -> Pointing -> MultiQuestion = \cl,adv,p ->
-    {s = msQS (UseQCl (PosTP TPresent ASimul) cl) ++ adv.s ; --- (AdvQCl cl adv)) ;
+    {s = \\b => msQS (UseQCl (polar b) cl) ++ adv.s ; --- (AdvQCl cl adv)) ;
      s5 = p.s5 ++ adv.s5
     } ;
 
@@ -27,15 +33,17 @@ interface DemRes = open Prelude, Resource in {
 
     mkDemType : Type -> Type = \t -> t ** Pointing ;
 
-    Demonstrative : Type = mkDemType NP ;
-    MultiSentence : Type = mkDemType {s : MSForm => Str} ;
-    MultiQuestion : Type = mkDemType SS ;
-    DemAdverb     : Type = mkDemType Adv ;
+    MultiSentence   : Type = mkDemType {s : MSForm => Str} ;
+    MultiQuestion   : Type = mkDemType {s : Bool   => Str} ;
+    MultiImperative : Type = mkDemType {s : Bool   => Str} ;
+
+    Demonstrative   : Type = mkDemType NP ;
+    DemAdverb       : Type = mkDemType Adv ;
 
     addDAdv : Adv -> Pointing -> DemAdverb -> DemAdverb = \a,p,d ->
       {s = a.s ++ d.s ; s5 = p.s5 ++ d.s5 ; lock_Adv = a.lock_Adv} ;
 
   param
-    MSForm = MInd | MQuest ;
+    MSForm = MInd Bool | MQuest Bool ;
 
 }

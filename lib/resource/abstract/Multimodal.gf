@@ -15,11 +15,11 @@ abstract Multimodal =
 
 -- Interface to $Demonstrative$.
 
-   DemNP   : NP -> Dem ; 
-   DemAdv  : Adv -> DAdv -> DAdv ; 
-   SentMS  : MS -> Phr ;
-   QuestMS : MS -> Phr ;
-   QuestMQ : MQ -> Phr ;
+   DemNP    : NP  -> DNP ; 
+   DemAdv   : Adv -> DAdv -> DAdv ; 
+   SentMS   : Pol -> MS  -> Phr ;
+   QuestMS  : Pol -> MS  -> Phr ;
+   QuestMQS : Pol -> MQS -> Phr ;
 
 -- Mount $Time$.
 

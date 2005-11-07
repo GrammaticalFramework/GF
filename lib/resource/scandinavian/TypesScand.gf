@@ -129,7 +129,7 @@ oper
 
 oper 
   PNm    : Type = {s : Case => Str ; h1 : Gender} ;
-  Adv    : Type = {s : Degree => Str} ;
+---  Adv    : Type = {s : Degree => Str} ;
   AdvInv : Type = {s : Str} ;
   Interj : Type = {s : Str} ;
   
