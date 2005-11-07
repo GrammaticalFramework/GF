@@ -1,27 +1,35 @@
 abstract Demonstrative = Categories ** {
 
   cat
-    MS ;
-    MQ ;
-    Dem ;
-    DAdv ;
-    Point ;
+    MS ;    -- multimodal sentence or question
+    MQS ;   -- multimodal wh question
+    MImp ;  -- multimodal imperative
+    DNP ;   -- demonstrative noun phrase
+    DAdv ;  -- demonstrative adverbial
+    Point ; -- pointing gesture
 
   fun
     MkPoint : String -> Point ;
 
-    DemV  : V  -> Dem -> DAdv -> MS ;
-    DemV2 : V2 -> Dem -> Dem -> DAdv -> MS ;
-    ModDemV  : VV -> V  -> Dem -> DAdv -> MS ;
-    ModDemV2 : VV -> V2 -> Dem -> Dem -> DAdv -> MS ;
+    DemV     : V  -> DNP -> DAdv -> MS ;              -- this flies (here)
+    DemV2    : V2 -> DNP -> DNP -> DAdv -> MS ;       -- this takes that
+    ModDemV  : VV -> V  -> DNP -> DAdv -> MS ;        -- this wants to fly
+    ModDemV2 : VV -> V2 -> DNP -> DNP -> DAdv -> MS ; -- this wants to take that
 
-    QDemV    : V  -> IP -> DAdv -> MQ ;
-    QDemV2   : V2 -> IP -> Dem -> DAdv -> MQ ;
+    ImpDemV     : V  -> DAdv -> MImp ;                -- fly (here)
+    ImpDemV2    : V2 -> DNP -> DAdv -> MImp ;         -- take that
 
-    this_Dem    : Point -> Dem ;
-    that_Dem    : Point -> Dem ;
-    thisDet_Dem : Point -> CN -> Dem ;
-    thatDet_Dem : Point -> CN -> Dem ;
+    QDemV       : V  -> IP -> DAdv -> MQS ;            -- who flies (here)  
+    QDemV2      : V2 -> IP -> DNP -> DAdv -> MQS ;     -- who takes that
+    QDemSlashV2 : V2 -> DNP -> IP -> DAdv -> MQS ;     -- whom does that take
+    QModDemV       : VV -> V  -> IP -> DAdv -> MQS ;        -- who wants to fly (here)  
+    QModDemV2      : VV -> V2 -> IP -> DNP -> DAdv -> MQS ; -- who wants to take that
+    QModDemSlashV2 : VV -> V2 -> DNP -> IP -> DAdv -> MQS ; -- whom does that want to take
+
+    this_DNP    : Point -> DNP ;
+    that_DNP    : Point -> DNP ;
+    thisDet_DNP : Point -> CN -> DNP ;
+    thatDet_DNP : Point -> CN -> DNP ;
 
     here_DAdv      : Point -> DAdv -> DAdv ;
     here7from_DAdv : Point -> DAdv -> DAdv ;
