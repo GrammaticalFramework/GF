@@ -4,12 +4,13 @@ incomplete concrete DemonstrativeI of Demonstrative =
   open Prelude, Resource, Basic, DemRes in {
 
   lincat
-    MS    = MultiSentence ;
-    MQS   = MultiQuestion ;
-    MImp  = MultiImperative ;
-    DNP   = Demonstrative ;
-    DAdv  = DemAdverb ;
-    Point = Pointing ;
+    MS     = MultiSentence ;
+    MQS    = MultiQuestion ;
+    MImp   = MultiImperative ;
+    DNP    = Demonstrative ;
+    DAdv   = DemAdverb ;
+    [DAdv] = DemAdverb ;
+    Point  = Pointing ;
 
   lin
     MkPoint s = {s5 = s.s} ;
@@ -46,10 +47,16 @@ incomplete concrete DemonstrativeI of Demonstrative =
     thisDet_DNP p cn = DetNP this_Det cn ** p ;
     thatDet_DNP p cn = DetNP that_Det cn ** p ;
 
-    here_DAdv p = addDAdv here_Adv p ;
-    here7from_DAdv p = addDAdv here7from_Adv p ;
-    here7to_DAdv p = addDAdv here7to_Adv p ;
+    here_DAdv p = mkDAdv here_Adv p ;
+    here7from_DAdv p = mkDAdv here7from_Adv p ;
+    here7to_DAdv p = mkDAdv here7to_Adv p ;
 
-    NoDAdv = {s,s5 = [] ; lock_Adv = <>} ;
+    BaseDAdv = {s,s5 = [] ; lock_Adv = <>} ;
+    ConsDAdv a as = {s = a.s ++ as.s ; s5 = a.s5 ++ as.s5 ; lock_Adv = <>} ;
+
+    PrepDNP p np = mkDAdv (AdvPP (PrepNP p np)) np ;
+
+    point1 = {s5 = "p1"} ;
+    point2 = {s5 = "p2"} ;
 
 }
