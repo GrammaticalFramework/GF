@@ -47,8 +47,8 @@ interface DemRes = open Prelude, Resource in {
     Demonstrative   : Type = mkDemType NP ;
     DemAdverb       : Type = mkDemType Adv ;
 
-    addDAdv : Adv -> Pointing -> DemAdverb -> DemAdverb = \a,p,d ->
-      {s = a.s ++ d.s ; s5 = p.s5 ++ d.s5 ; lock_Adv = a.lock_Adv} ;
+    mkDAdv : Adv -> Pointing -> DemAdverb = \a,p ->
+      a ** p ** {lock_Adv = a.lock_Adv} ;
 
   param
     MSForm = MInd Bool | MQuest Bool ;
