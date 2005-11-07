@@ -23,15 +23,26 @@ incomplete concrete DemonstrativeI of Demonstrative =
     ModDemV2 vv verb su ob adv = 
       mkDemS (SPredVV su vv (UseVCl PPos ASimul (IPredV2 verb ob))) adv (concatDem su ob) ;
 
+    ImpDemV verb adv = 
+      mkDemImp (IPredV verb) adv noPointing ;
+    ImpDemV2 verb ob adv = 
+      mkDemImp (IPredV2 verb ob) adv ob ;
+
     QDemV verb ip adv = 
       mkDemQ (QPredV ip verb) adv noPointing ;
     QDemV2 verb ip ob adv = 
       mkDemQ (QPredV2 ip verb ob) adv ob ;
     QDemSlashV2 verb su ip adv = 
       mkDemQ (IntSlash ip (SlashV2 su verb)) adv su ;
+    QModDemV vv verb ip adv = 
+      mkDemQ (QPredVV ip vv (UseVCl PPos ASimul (IPredV verb))) adv noPointing ;
+    QModDemV2 vv verb ip ob adv = 
+      mkDemQ (QPredVV ip vv (UseVCl PPos ASimul (IPredV2 verb ob))) adv ob ;
+    QModDemSlashV2 vv verb su ip adv = 
+      mkDemQ (IntSlash ip (SlashVV2 su vv verb)) adv su ;
 
     this_DNP  p = this_NP ** p ;
-    that_DNP  p = this_NP ** p ;
+    that_DNP  p = that_NP ** p ;
     thisDet_DNP p cn = DetNP this_Det cn ** p ;
     thatDet_DNP p cn = DetNP that_Det cn ** p ;
 

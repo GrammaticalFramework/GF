@@ -22,6 +22,13 @@ interface DemRes = open Prelude, Resource in {
     {s = \\b => msQS (UseQCl (polar b) cl) ++ adv.s ; --- (AdvQCl cl adv)) ;
      s5 = p.s5 ++ adv.s5
     } ;
+    mkDemImp : VCl -> DemAdverb -> Pointing -> MultiImperative = \cl,adv,p ->
+    {s = table { 
+           True  => msImp (PosImpVP cl) ++ adv.s ;
+           False => msImp (NegImpVP cl) ++ adv.s
+           } ;
+     s5 = p.s5 ++ adv.s5
+    } ;
 
     msS   : S  -> Str ;
     msQS  : QS -> Str ;

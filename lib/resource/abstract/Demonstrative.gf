@@ -26,14 +26,14 @@ abstract Demonstrative = Categories ** {
     QModDemV2      : VV -> V2 -> IP -> DNP -> DAdv -> MQS ; -- who wants to take that
     QModDemSlashV2 : VV -> V2 -> DNP -> IP -> DAdv -> MQS ; -- whom does that want to take
 
-    this_DNP    : Point -> DNP ;
-    that_DNP    : Point -> DNP ;
-    thisDet_DNP : Point -> CN -> DNP ;
-    thatDet_DNP : Point -> CN -> DNP ;
+    this_DNP    : Point -> DNP ;        -- this
+    that_DNP    : Point -> DNP ;        -- that
+    thisDet_DNP : Point -> CN -> DNP ;  -- this car
+    thatDet_DNP : Point -> CN -> DNP ;  -- that car
 
-    here_DAdv      : Point -> DAdv -> DAdv ;
-    here7from_DAdv : Point -> DAdv -> DAdv ;
-    here7to_DAdv   : Point -> DAdv -> DAdv ;
+    here_DAdv      : Point -> DAdv -> DAdv ; -- here
+    here7from_DAdv : Point -> DAdv -> DAdv ; -- from here
+    here7to_DAdv   : Point -> DAdv -> DAdv ; -- to here
     NoDAdv         : DAdv ;
 
 }

@@ -20,11 +20,12 @@ abstract Multimodal =
    SentMS   : Pol -> MS  -> Phr ;
    QuestMS  : Pol -> MS  -> Phr ;
    QuestMQS : Pol -> MQS -> Phr ;
+   ImpMImp  : Pol -> MImp -> Phr ;
 
 -- Mount $Time$.
 
-  AdvDate : Date -> Adv ;
-  AdvTime : Time -> Adv ;
+   AdvDate : Date -> Adv ;
+   AdvTime : Time -> Adv ;
 
 }
 
