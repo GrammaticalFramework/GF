@@ -7,6 +7,7 @@ incomplete concrete MultimodalI of Multimodal =
     SentMS  p ms = {s = p.s ++ ms.s ! MInd (p.p) ++ ";" ++ ms.s5} ;
     QuestMS p ms = {s = p.s ++ ms.s ! MQuest (p.p) ++ ";" ++ ms.s5} ;
     QuestMQS p ms = {s = p.s ++ ms.s ! p.p  ++ ";" ++ ms.s5} ;
+    ImpMImp p ms = {s = p.s ++ ms.s ! p.p  ++ ";" ++ ms.s5} ;
 
     AdvDate = AdvDate ;
     AdvTime = AdvTime ;
