@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/06 22:00:37 $ 
+-- > CVS $Date: 2005/11/09 15:14:30 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.25 $
+-- > CVS $Revision: 1.26 $
 --
 -- Datastructures and functions for modules, common to GF and GFC.
 --
@@ -389,4 +389,5 @@ greatestResource gr = case allResources gr of
 
 -- | all concretes for a given abstract
 allConcretes :: Eq i => MGrammar i f a -> i -> [i]
-allConcretes gr a = [i | (i, ModMod m) <- modules gr, mtype m == MTConcrete a]
+allConcretes gr a = 
+  [i | (i, ModMod m) <- modules gr, mtype m == MTConcrete a, isCompleteModule m]

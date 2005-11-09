@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/01 20:09:04 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.81 $
+-- > CVS $Date: 2005/11/09 15:14:30 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.82 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -305,8 +305,8 @@ customGrammarPrinter =
   ,(strCI "cfg-skvatt", Cnv.cfg2skvatt . stateCFG)
   ,(strCI "simple",   Prt.prt . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
   ,(strCI "mcfg-erasing", Prt.prt . fst . snd . uncurry Cnv.convertGFC . stateGrammarLangOpts)
-  ,(strCI "mcfg-old", PrtOld.prt . CnvOld.mcfg . statePInfoOld)
-  ,(strCI "cfg-old",  PrtOld.prt . CnvOld.cfg . statePInfoOld)
+--  ,(strCI "mcfg-old", PrtOld.prt . CnvOld.mcfg . statePInfoOld)
+--  ,(strCI "cfg-old",  PrtOld.prt . CnvOld.cfg . statePInfoOld)
   ] 
   where stateGrammarLangOpts s = (stateOptions s, stateGrammarLang s)
 
