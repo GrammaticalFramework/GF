@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/31 19:02:35 $ 
+-- > CVS $Date: 2005/11/09 22:34:01 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.50 $
+-- > CVS $Revision: 1.51 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ data ShellState = ShSt {
   canModules :: CanonGrammar ,       -- ^ compiled abstracts and concretes
   srcModules :: G.SourceGrammar ,    -- ^ saved resource modules
   cfs        :: [(Ident,CF)] ,       -- ^ context-free grammars (small, no parameters, very over-generating)
-  pInfosOld  :: [(Ident,CnvOld.PInfo)], -- ^ parser information, peb 18\/6-04 (OBSOLETE)
+  abstracts  :: [(Ident,[Ident])],   -- ^ abstracts and their associated concretes
   mcfgs      :: [(Ident, Cnv.MGrammar)], -- ^ MCFG, converted according to Ljunglöf (2004, ch 3)
   cfgs       :: [(Ident, Cnv.CGrammar)], -- ^ CFG, converted from mcfg 
                                          -- (large, with parameters, no-so overgenerating)
@@ -69,6 +69,16 @@ data ShellState = ShSt {
   statistics :: [Statistics]         -- ^ statistics on grammars
   }                             
 
+actualConcretes :: ShellState -> [((Ident,Ident),Bool)]
+actualConcretes sh = nub [((c,c),b) | 
+  Just a <- [abstract sh],
+  c <- concretesOfAbstract sh a,
+  let b = True -----
+  ]
+
+concretesOfAbstract :: ShellState -> Ident -> [Ident]
+concretesOfAbstract sh a = [c | (b,cs) <- abstracts sh, b == a, c <- cs]
+
 data Statistics = 
     StDepTypes Bool        -- ^ whether there are dependent types      
   | StBoundVars [G.Cat]    -- ^ which categories have bound variables
@@ -83,7 +93,7 @@ emptyShellState = ShSt {
   canModules = M.emptyMGrammar,
   srcModules = M.emptyMGrammar,
   cfs        = [],
-  pInfosOld  = [], -- peb 18/6 (OBSOLETE)
+  abstracts  = [],
   mcfgs      = [],
   cfgs       = [],
   pInfos     = [],
@@ -112,7 +122,6 @@ data StateGrammar = StGr {
   cncId    :: Ident,
   grammar  :: CanonGrammar,
   cf       :: CF,
-  pInfoOld :: CnvOld.PInfo, -- peb 8/6 (OBSOLETE)
   mcfg     :: Cnv.MGrammar,
   cfg      :: Cnv.CGrammar,
   pInfo    :: Prs.PInfo,
@@ -127,7 +136,6 @@ emptyStateGrammar = StGr {
   cncId    = identC "#EMPTY", ---
   grammar  = M.emptyMGrammar,
   cf       = emptyCF,
-  pInfoOld = CnvOld.emptyPInfo, -- peb 18/6 (OBSOLETE)
   mcfg     = [],
   cfg      = [],
   pInfo    = Prs.buildPInfo [] [],
@@ -140,7 +148,6 @@ emptyStateGrammar = StGr {
 
 stateGrammarST    :: StateGrammar -> CanonGrammar
 stateCF           :: StateGrammar -> CF
-statePInfoOld     :: StateGrammar -> CnvOld.PInfo -- OBSOLETE
 stateMCFG         :: StateGrammar -> Cnv.MGrammar
 stateCFG          :: StateGrammar -> Cnv.CGrammar
 statePInfo        :: StateGrammar -> Prs.PInfo
@@ -152,7 +159,6 @@ stateGrammarLang  :: StateGrammar -> (CanonGrammar, Ident)
 
 stateGrammarST = grammar
 stateCF        = cf
-statePInfoOld  = pInfoOld -- OBSOLETE
 stateMCFG      = mcfg
 stateCFG       = cfg
 statePInfo     = pInfo
@@ -177,20 +183,30 @@ updateShellState :: Options -> Maybe Ident -> ShellState ->
                     Err ShellState 
 updateShellState opts mcnc sh ((_,sgr,gr),rts) = do 
   let cgr0 = M.updateMGrammar (canModules sh) gr
-  a' <- return $ case mcnc of
+
+  -- a0 = abstract of old state
+  -- a1 = abstract of compiled grammar
+
+  let a0 = abstract sh
+  a1 <- return $ case mcnc of
     Just cnc -> err (const Nothing) Just $ M.abstractOfConcrete cgr0 cnc
     _ -> M.greatestAbstract cgr0
-  abstr0 <- case abstract sh of
-    Just a -> do
-      -- test that abstract is compatible --- unsafe exception for old? 
-      --- if True oElem showOld opts then return () else
-      case a' of
-        Nothing -> return ()
-        Just b -> testErr (a==b) ("expected abstract" +++ P.prt a +++ "but found " +++ P.prt b) 
-      return $ Just a
-    _ -> return a'
-  let cgr = filterAbstracts abstr0 cgr0
-  let concrs = maybe [] (M.allConcretes cgr) abstr0
+
+  -- abstr0 = a1 if it exists
+
+  let (abstr0,isNew) = case (a0,a1) of
+        (Just a,  Just b) | a /= b -> (a1, True)
+        (Nothing, Just _)          -> (a1, True)
+        _                          -> (a0, False)
+
+  let concrs0 = maybe [] (M.allConcretes cgr0) abstr0
+
+  let abstrs = nubBy (\ (x,_) (y,_) -> x == y) $ 
+               maybe id (\a -> ((a,concrs0):)) abstr0 $ abstracts sh
+
+  let cgr = filterAbstracts (map fst abstrs) cgr0
+
+  let concrs = nub $ concrs0 ++ map (snd . fst) (concretes sh)
       concr0 = ifNull Nothing (return . head) concrs
       notInrts f = notElem f $ map fst rts
       subcgr = unSubelimCanon cgr
@@ -199,7 +215,6 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
   let morphos = map (mkMorpho subcgr) concrs
   let probss = [] -----
 
-  let pinfosOld = map (CnvOld.pInfo opts cgr) concrs  -- peb 18/6 (OBSOLETE)
 
   let fromGFC       = snd . snd . Cnv.convertGFC opts
       (mcfgs, cfgs) = unzip $ map (curry fromGFC cgr) concrs 
@@ -222,7 +237,7 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
     canModules = cgr,
     srcModules = src,
     cfs        = zip concrs cfs,
-    pInfosOld  = zip concrs pinfosOld, -- peb 8/6 (OBSOLETE)
+    abstracts  = abstrs,
     mcfgs      = zip concrs mcfgs,
     cfgs       = zip concrs cfgs,
     pInfos     = zip concrs pInfos,
@@ -238,7 +253,9 @@ prShellStateInfo :: ShellState -> String
 prShellStateInfo sh = unlines [
   "main abstract :    " +++ abstractName sh,
   "main concrete :    " +++ maybe "(none)" P.prt (concrete sh),
-  "all concretes :    " +++ unwords (map (P.prt . fst) (map fst (concretes sh))),
+  "actual concretes : " +++ unwords (map (P.prt . fst . fst) (actualConcretes sh)),
+  "all abstracts :    " +++ unwords (map (P.prt . fst) (abstracts sh)),
+  "all concretes :    " +++ unwords (map (P.prt . fst . fst) (concretes sh)),
   "canonical modules :" +++ unwords (map (P.prt .fst) (M.modules (canModules sh))),
   "source modules :   " +++ unwords (map (P.prt .fst) (M.modules (srcModules sh))),
   "global options :   " +++ prOpts (gloptions sh)
@@ -262,13 +279,11 @@ abstractName :: ShellState -> String
 abstractName sh = maybe "(none)" P.prt (abstract sh)
 
 -- | throw away those abstracts that are not needed --- could be more aggressive
-filterAbstracts :: Maybe Ident -> CanonGrammar -> CanonGrammar
-filterAbstracts abstr cgr = M.MGrammar (nubBy (\x y -> fst x == fst y) [m | m <- ms, needed m]) where
+filterAbstracts :: [Ident] -> CanonGrammar -> CanonGrammar
+filterAbstracts absts cgr = M.MGrammar (nubBy (\x y -> fst x == fst y) [m | m <- ms, needed m]) where
   ms = M.modules cgr
-  needed (i,_) = case abstr of
-    Just a -> elem i $ needs a
-    _ -> True
-  needs a = [i | (i,M.ModMod m) <- ms, not (M.isModAbs m) || dep i a]
+  needed (i,_) = elem i needs
+  needs   = [i | (i,M.ModMod m) <- ms, not (M.isModAbs m) || any (dep i) absts]
   dep i a = elem i (ext mse a)
   mse = [(i,me) | (i,M.ModMod m) <- ms, M.isModAbs m, me <- [M.extends m]]
   ext es a = case lookup a es of
@@ -278,13 +293,13 @@ filterAbstracts abstr cgr = M.MGrammar (nubBy (\x y -> fst x == fst y) [m | m <-
 
 purgeShellState :: ShellState -> ShellState
 purgeShellState sh = ShSt {
-  abstract   = abstract sh,
+  abstract   = abstr,
   concrete   = concrete sh,
-  concretes  = [((a,i),b) | ((a,i),b) <- concretes sh, elem i needed],
+  concretes  = concrs,
   canModules = M.MGrammar $ purge $ M.modules $ canModules sh,
   srcModules = M.emptyMGrammar,
   cfs        = cfs sh,
-  pInfosOld  = pInfosOld sh, -- OBSOLETE
+  abstracts  = maybe [] (\a -> [(a,map (snd . fst) concrs)]) abstr,
   mcfgs      = mcfgs sh,
   cfgs       = cfgs sh,
   pInfos     = pInfos sh,
@@ -296,9 +311,11 @@ purgeShellState sh = ShSt {
   statistics = statistics sh
   }
  where
+   abstr = abstract sh
+   concrs = [((a,i),b) | ((a,i),b) <- concretes sh, elem i needed]
    needed = nub $ concatMap (requiredCanModules (canModules sh)) acncs
    purge = nubBy (\x y -> fst x == fst y) . filter (flip elem needed . fst)
-   acncs = maybe [] singleton (abstract sh) ++ map (snd . fst) (concretes sh)
+   acncs = maybe [] singleton (abstract sh) ++ map (snd . fst) (actualConcretes sh)
 
 changeMain :: Maybe Ident -> ShellState -> Err ShellState
 changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s) = 
@@ -333,7 +350,6 @@ stateGrammarOfLang st l = StGr {
   cncId    = l,
   grammar  = can,
   cf       = maybe emptyCF id (lookup l (cfs st)),
-  pInfoOld = maybe CnvOld.emptyPInfo id (lookup l (pInfosOld st)), -- peb 18/6 (OBSOLETE)
   mcfg     = maybe [] id $ lookup l $ mcfgs st,
   cfg      = maybe [] id $ lookup l $ cfgs st,
   pInfo    = maybe (Prs.buildPInfo [] []) id $ lookup l $ pInfos st,
@@ -373,7 +389,6 @@ stateAbstractGrammar st = StGr {
   cncId    = identC "#Cnc", ---
   grammar  = canModules st, ---- only abstarct ones
   cf       = emptyCF,
-  pInfoOld = CnvOld.emptyPInfo, -- peb 18/6 (OBSOLETE)
   mcfg     = [],
   cfg      = [],
   pInfo    = Prs.buildPInfo [] [],
@@ -401,12 +416,12 @@ allCategories = map fst . allCatsOf . canModules
 allStateGrammars = map snd . allStateGrammarsWithNames
 
 allStateGrammarsWithNames st = 
-  [(c, mkStateGrammar st c) | ((c,_),_) <- concretes st]
+  [(c, mkStateGrammar st c) | ((c,_),_) <- actualConcretes st]
 
-allGrammarFileNames st = [prLanguage c ++ ".gf" | ((c,_),_) <- concretes st] ---
+allGrammarFileNames st = [prLanguage c ++ ".gf" | ((c,_),_) <- actualConcretes st]
 
 allActiveStateGrammarsWithNames st =   
-  [(c, mkStateGrammar st c) | ((c,_),True) <- concretes st]
+  [(c, mkStateGrammar st c) | ((c,_),True) <- concretes st] --- actual
 
 allActiveGrammars = map snd . allActiveStateGrammarsWithNames
 
