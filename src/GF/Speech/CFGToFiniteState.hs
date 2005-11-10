@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/26 17:13:13 $ 
+-- > CVS $Date: 2005/11/10 16:43:44 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.5 $
+-- > CVS $Revision: 1.6 $
 --
 -- Approximates CFGs with finite state networks.
 -----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ import GF.Speech.Relation
 import GF.Speech.TransformCFG
 
 cfgToFA :: Ident -- ^ Grammar name
-	-> Options -> CGrammar -> NFA String
+	-> Options -> CGrammar -> DFA String
 cfgToFA name opts = minimize . compileAutomaton start . makeSimpleRegular
   where start = getStartCat opts
 

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/10 14:19:33 $ 
+-- > CVS $Date: 2005/11/10 16:43:44 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- This module prints finite automata and regular grammars 
 -- for a context-free grammar.
@@ -16,7 +16,7 @@
 -- categories in the grammar
 -----------------------------------------------------------------------------
 
-module GF.Speech.PrFA (faGraphvizPrinter,regularPrinter) where
+module GF.Speech.PrFA (faGraphvizPrinter,regularPrinter,faCPrinter) where
 
 import GF.Data.Utilities
 import GF.Conversion.Types
@@ -37,7 +37,7 @@ import Data.Maybe (fromMaybe)
 faGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 faGraphvizPrinter name opts cfg = 
-    prFAGraphviz (mapStates (const "") $ mapTransitions (fromMaybe "") $ cfgToFA name opts cfg)
+    prFAGraphviz $ mapStates (const "") $ cfgToFA name opts cfg
 
 
 -- | Convert the grammar to a regular grammar and print it in BNF
@@ -48,3 +48,10 @@ regularPrinter = prCFRules . makeSimpleRegular
   prCFRules g = unlines [ c ++ " ::= " ++ join " | " (map (showRhs . ruleRhs) rs) | (c,rs) <- g]
   join g = concat . intersperse g
   showRhs = unwords . map (symbol id show)
+
+faCPrinter :: Ident -- ^ Grammar name
+	   -> Options -> CGrammar -> String
+faCPrinter name opts cfg = fa2c $ cfgToFA name opts cfg
+
+fa2c :: DFA String -> String
+fa2c fa = undefined
