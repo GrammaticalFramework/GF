@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/14 16:08:35 $ 
+-- > CVS $Date: 2005/11/10 14:19:33 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.10 $
+-- > CVS $Revision: 1.11 $
 --
 -- This module converts a CFG to an SLF finite-state network
 -- for use with the ATK recognizer. The SLF format is described
@@ -18,8 +18,7 @@
 -- categories in the grammar
 -----------------------------------------------------------------------------
 
-module GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter,
-                        faGraphvizPrinter,regularPrinter) where
+module GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter) where
 
 import GF.Data.Utilities
 import GF.Conversion.Types
@@ -55,21 +54,6 @@ slfGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 slfGraphvizPrinter name opts cfg = 
     prFAGraphviz (mapStates (fromMaybe "") $ mapTransitions (const "") $ moveLabelsToNodes $ cfgToFA name opts cfg)
-
-faGraphvizPrinter :: Ident -- ^ Grammar name
-		   -> Options -> CGrammar -> String
-faGraphvizPrinter name opts cfg = 
-    prFAGraphviz (mapStates (const "") $ mapTransitions (fromMaybe "") $ cfgToFA name opts cfg)
-
-
--- | Convert the grammar to a regular grammar and print it in BNF
-regularPrinter :: CGrammar -> String
-regularPrinter = prCFRules . makeSimpleRegular
-  where
-  prCFRules :: CFRules -> String
-  prCFRules g = unlines [ c ++ " ::= " ++ join " | " (map (showRhs . ruleRhs) rs) | (c,rs) <- g]
-  join g = concat . intersperse g
-  showRhs = unwords . map (symbol id show)
 
 automatonToSLF :: FA State (Maybe String) () -> SLF
 automatonToSLF fa = 

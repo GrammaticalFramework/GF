@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/09 15:14:30 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.82 $
+-- > CVS $Date: 2005/11/10 14:19:33 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.83 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -58,7 +58,8 @@ import GF.CF.CFtoSRG
 import GF.Speech.PrGSL (gslPrinter)
 import GF.Speech.PrJSGF (jsgfPrinter)
 import GF.Speech.PrSRGS (srgsXmlPrinter)
-import GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter,faGraphvizPrinter,regularPrinter)
+import GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter)
+import GF.Speech.PrFA (faGraphvizPrinter,regularPrinter)
 
 import GF.Data.Zipper
 
