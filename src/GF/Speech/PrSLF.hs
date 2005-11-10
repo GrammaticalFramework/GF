@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/10 14:19:33 $ 
+-- > CVS $Date: 2005/11/10 16:43:44 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.11 $
+-- > CVS $Revision: 1.12 $
 --
 -- This module converts a CFG to an SLF finite-state network
 -- for use with the ATK recognizer. The SLF format is described
@@ -48,12 +48,12 @@ data SLFEdge = SLFEdge { eId :: Int, eStart :: Int, eEnd :: Int }
 
 slfPrinter :: Ident -- ^ Grammar name
 	   -> Options -> CGrammar -> String
-slfPrinter name opts cfg = prSLF (automatonToSLF $ moveLabelsToNodes $ cfgToFA name opts cfg) ""
+slfPrinter name opts cfg = prSLF (automatonToSLF $ moveLabelsToNodes $ dfa2nfa $ cfgToFA name opts cfg) ""
 
 slfGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 slfGraphvizPrinter name opts cfg = 
-    prFAGraphviz (mapStates (fromMaybe "") $ mapTransitions (const "") $ moveLabelsToNodes $ cfgToFA name opts cfg)
+    prFAGraphviz $ mapStates (fromMaybe "") $ mapTransitions (const "") $ moveLabelsToNodes $ dfa2nfa $ cfgToFA name opts cfg
 
 automatonToSLF :: FA State (Maybe String) () -> SLF
 automatonToSLF fa = 

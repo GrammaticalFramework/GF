@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/26 17:13:13 $ 
+-- > CVS $Date: 2005/11/10 16:43:44 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- A simple graph module.
 -----------------------------------------------------------------------------
@@ -16,7 +16,7 @@ module GF.Speech.Graph ( Graph(..), Node, Edge, Incoming, Outgoing
                         , nmap, emap, newNode, newEdge, newEdges
                         , incoming, outgoing, getOutgoing
                         , getFrom, getTo, getLabel
-                        , reverseGraph                             
+                        , reverseGraph, renameNodes
                        ) where
 
 import GF.Data.Utilities
@@ -41,9 +41,11 @@ nodes (Graph _ ns _) = ns
 edges :: Graph n a b -> [Edge n b]
 edges (Graph _ _ es) = es
 
+-- | Map a function over the node label.s
 nmap :: (a -> c) -> Graph n a b -> Graph n c b
 nmap f (Graph c ns es) = Graph c [(n,f l) | (n,l) <- ns] es
 
+-- | Map a function over the edge labels.
 emap :: (b -> c) -> Graph n a b -> Graph n a c
 emap f (Graph c ns es) = Graph c ns [(x,y,f l) | (x,y,l) <- es]
 
@@ -86,3 +88,12 @@ getLabel (_,_,l) = l
 reverseGraph :: Graph n a b -> Graph n a b
 reverseGraph (Graph c ns es) = Graph c ns [ (t,f,l) | (f,t,l) <- es ]
 
+
+-- | Re-name the nodes in the graph.
+renameNodes :: (n -> m) -- ^ renaming function
+            -> [m] -- ^ infinite supply of fresh node names, to
+                   --   use when adding nodes in the future.
+            -> Graph n a b -> Graph m a b
+renameNodes newName c (Graph _ ns es) = Graph c ns' es'
+    where ns' = [ (newName n,x) | (n,x) <- ns ]
+	  es' = [ (newName f, newName t, l) | (f,t,l) <- es]

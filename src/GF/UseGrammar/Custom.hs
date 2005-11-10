@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/10 14:19:33 $ 
+-- > CVS $Date: 2005/11/10 16:43:45 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.83 $
+-- > CVS $Revision: 1.84 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -59,7 +59,7 @@ import GF.Speech.PrGSL (gslPrinter)
 import GF.Speech.PrJSGF (jsgfPrinter)
 import GF.Speech.PrSRGS (srgsXmlPrinter)
 import GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter)
-import GF.Speech.PrFA (faGraphvizPrinter,regularPrinter)
+import GF.Speech.PrFA (faGraphvizPrinter,regularPrinter,faCPrinter)
 
 import GF.Data.Zipper
 
@@ -261,6 +261,9 @@ customGrammarPrinter =
   ,(strCI "fa_graphviz", \s -> let opts = stateOptions s
                                    name = cncId s
                                  in faGraphvizPrinter name opts $ stateCFG s)
+  ,(strCI "fa_c", \s -> let opts = stateOptions s
+                            name = cncId s
+                        in faCPrinter name opts $ stateCFG s)
   ,(strCI "regular", regularPrinter . stateCFG)
   ,(strCI "plbnf",   prLBNF True)
   ,(strCI "lbnf",    prLBNF False)

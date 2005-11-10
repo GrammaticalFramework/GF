@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/27 09:16:30 $ 
+-- > CVS $Date: 2005/11/10 16:43:44 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.15 $
+-- > CVS $Revision: 1.16 $
 --
 -- A simple finite state network module.
 -----------------------------------------------------------------------------
@@ -19,6 +19,7 @@ module GF.Speech.FiniteState (FA, State, NFA, DFA,
 			      newState, newTransition,
 			      mapStates, mapTransitions,
 			      moveLabelsToNodes, minimize,
+                              dfa2nfa,
 			      prFAGraphviz) where
 
 import Data.List
@@ -36,7 +37,7 @@ data FA n a b = FA (Graph n a b) n [n]
 
 type NFA a = FA State () (Maybe a)
 
-type DFA a = FA [State] () a
+type DFA a = FA State () a
 
 
 startState :: FA n a b -> n
@@ -72,8 +73,8 @@ mapStates f = onGraph (nmap f)
 mapTransitions :: (b -> c) -> FA n a b -> FA n a c
 mapTransitions f = onGraph (emap f)
 
-minimize :: Ord a => NFA a -> NFA a
-minimize = dfa2nfa . determinize . reverseNFA . dfa2nfa . determinize . reverseNFA
+minimize :: Ord a => NFA a -> DFA a
+minimize = determinize . reverseNFA . dfa2nfa . determinize . reverseNFA
 
 onGraph :: (Graph n a b -> Graph n c d) -> FA n a b -> FA n c d
 onGraph f (FA g s ss) = FA (f g) s ss
@@ -114,11 +115,11 @@ alphabet = nub . catMaybes . map getLabel . edges
 determinize :: Ord a => NFA a -> DFA a
 determinize (FA g s f) = let (ns,es) = h [start] [] []
                              final = filter (not . null . (f `intersect`)) ns
- 		          in FA (Graph (freshDFANodes g) [(n,()) | n <- ns] es) start final
+                             fa = FA (Graph undefined [(n,()) | n <- ns] es) start final
+ 		          in numberStates fa
   where out = outgoing g
 	start = closure out [s]
 	isDFAFinal n = not (null (f `intersect` n))
-	freshDFANodes (Graph ns _ _) = map (:[]) ns
 	-- Get the new DFA states and edges produced by a set of DFA states.
 	new ns = unzip [ (s, (n,s,c)) | n <- ns, (c,s) <- reachable out n]
 	h currentStates oldStates oldEdges 
@@ -127,6 +128,14 @@ determinize (FA g s f) = let (ns,es) = h [start] [] []
 	    where (newStates,newEdges) = new currentStates
 		  allOldStates = currentStates ++ oldStates
 		  newStates' = nub newStates \\ allOldStates
+
+numberStates :: (Ord x,Enum y) => FA x a b -> FA y a b
+numberStates (FA g s fs) = FA (renameNodes newName rest g) s' fs'
+    where (ns,rest) = splitAt (length (nodes g)) $ [toEnum 0 .. ]
+          newNodes = zip (map fst (nodes g)) ns
+	  newName n = lookup' n newNodes
+          s' = newName s
+          fs' = map newName fs
 
 -- | Get all the nodes reachable from a set of nodes by only empty edges.
 closure :: Eq n => Outgoing n a (Maybe b) -> [n] -> [n]
@@ -146,15 +155,7 @@ reverseNFA (FA g s fs) = FA g''' s' [s]
 	  g''' = newEdges [(s',f,Nothing) | f <- fs] g''
 
 dfa2nfa :: DFA a -> NFA a
-dfa2nfa (FA (Graph _ ns es) s fs) = FA (Graph c ns' es') s' fs'
-    where newNodes = zip (map fst ns) [0..]
-	  newNode n = lookup' n newNodes
-	  c = [length ns..]  
-	  ns' = [ (n,()) | (_,n) <- newNodes ]
-	  es' = [ (newNode f, newNode t,Just l) | (f,t,l) <- es]
-	  s' = newNode s
-	  fs' = map newNode fs
-	  
+dfa2nfa = mapTransitions Just
 
 --
 -- * Visualization
