@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/01 20:09:04 $ 
+-- > CVS $Date: 2005/11/11 16:12:41 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.21 $
+-- > CVS $Revision: 1.22 $
 --
 -- some auxiliary GF operations. AR 19\/6\/1998 -- 6\/2\/2001
 --
@@ -176,15 +176,10 @@ updateLookupList ab abs = insert ab [] abs where
                                  else insert (a,b) (cc ++ [(a',b')]) cc'
 
 mapPairListM :: Monad m => ((a,b) -> m c) -> [(a,b)] -> m [(a,c)]
-mapPairListM f xys =
-  do yy' <- mapM f xys
-     return (zip (map fst xys) yy')
+mapPairListM f xys = mapM (\ p@(x,_) -> liftM ((,) x) (f p)) xys
 
 mapPairsM :: Monad m => (b -> m c) -> [(a,b)] -> m [(a,c)]
-mapPairsM f xys =
-  do let (xx,yy) = unzip xys
-     yy' <- mapM f yy
-     return (zip xx yy')
+mapPairsM f xys = mapM (\ (x,y) -> liftM ((,) x) (f y)) xys
 
 pairM :: Monad a => (b -> a c) -> (b,b) -> a (c,c)
 pairM op (t1,t2) = liftM2 (,) (op t1) (op t2)
