@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/02 20:50:19 $ 
--- > CVS $Author: aarne $
--- > CVS $Revision: 1.23 $
+-- > CVS $Date: 2005/11/11 16:38:00 $ 
+-- > CVS $Author: bringert $
+-- > CVS $Revision: 1.24 $
 --
 -- Macros for constructing and analysing source code terms.
 --
@@ -24,7 +24,7 @@ import GF.Grammar.Grammar
 import GF.Infra.Ident
 import GF.Grammar.PrGrammar
 
-import Control.Monad (liftM)
+import Control.Monad (liftM, liftM2)
 import Data.Char (isDigit)
 
 firstTypeForm :: Type -> Err (Context, Type)
@@ -259,14 +259,8 @@ prLabel :: Label -> String
 prLabel = prt
 
 mapAssignM :: Monad m => (Term -> m c) -> [Assign] -> m [(Label,(Maybe c,c))]
-mapAssignM f ltvs = do
-  let (ls,tvs) = unzip ltvs
-      (ts, vs) = unzip  tvs  
-  ts' <- mapM (\t -> case t of
-            Nothing -> return Nothing
-            Just y  -> f y >>= return . Just) ts
-  vs' <- mapM f vs
-  return (zip ls (zip ts' vs'))
+mapAssignM f = mapM (\ (ls,tv) -> liftM ((,) ls) (g tv))
+  where g (t,v) = liftM2 (,) (maybe (return Nothing) (liftM Just . f) t) (f v)
 
 mkRecordN :: Int -> (Int -> Label) -> [Term] -> Term
 mkRecordN int lab typs = R [ assign (lab i) t | (i,t) <- zip [int..] typs]
