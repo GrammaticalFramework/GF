@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/27 10:25:07 $ 
+-- > CVS $Date: 2005/11/11 23:24:34 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.25 $
+-- > CVS $Revision: 1.26 $
 --
 -- Decide what files to read as function of dependencies and time stamps.
 --
@@ -111,14 +111,16 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
     add os = [m | o <- os, Just n <- [lookup o deps],m <- n]
 
   -- only treat reused, interface, or instantiation if needed
-  sfiles = map relevant sfiles0
+  sfiles = sfiles0 ---- map relevant sfiles0
   relevant fp@(f,(p,(st,_))) = 
-    let us = uses f in
-    if not (all noComp us) then
+    let us = uses f
+        isUsed = not (null us)
+    in
+    if not (isUsed && all noComp us) then
       fp else 
     if (elem (typ f) [] ---- MTyIncomplete, MTyIncResource]
         || 
-        (not (null us) && all isAux us)) then
+        (isUsed && all isAux us)) then
       (f,(p,(CSDont,Nothing))) else
       fp
 

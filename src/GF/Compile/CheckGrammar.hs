@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/06 22:00:37 $ 
+-- > CVS $Date: 2005/11/11 23:24:33 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.30 $
+-- > CVS $Revision: 1.31 $
 --
 -- AR 4\/12\/1999 -- 1\/4\/2000 -- 8\/9\/2001 -- 15\/5\/2002 -- 27\/11\/2002 -- 18\/6\/2003
 --
@@ -148,6 +148,7 @@ checkCompleteGrammar abs cnc = do
          checkWarn $ "Warning: no linearization of" +++ prt c
          return js
      AbsCat (Yes _) _ -> case lookupIdent c js of
+       Ok (AnyInd _ _) -> return js
        Ok (CncCat (Yes _) _ _) -> return js
        Ok (CncCat _ mt mp) -> do
          checkWarn $ 

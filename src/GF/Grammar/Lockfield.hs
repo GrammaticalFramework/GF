@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:21 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.6 $
+-- > CVS $Date: 2005/11/11 23:24:34 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.7 $
 --
 -- Creating and using lock fields in reused resource grammars.
 --
@@ -26,8 +26,8 @@ import GF.Data.Operations
 lockRecType :: Ident -> Type -> Err Type
 lockRecType c t@(RecType rs) = 
   let lab = lockLabel c in
-  return $ if elem lab (map fst rs) 
-    then t --- don't add an extra copy of the lock field
+  return $ if elem lab (map fst rs) || elem (prt c) ["String","Int"]
+    then t --- don't add an extra copy of lock field, nor predef cats
     else RecType (rs ++ [(lockLabel c,  RecType [])])
 lockRecType c t = plusRecType t $ RecType [(lockLabel c,  RecType [])]
 

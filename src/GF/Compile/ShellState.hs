@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/09 22:34:01 $ 
+-- > CVS $Date: 2005/11/11 23:24:34 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.51 $
+-- > CVS $Revision: 1.52 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -313,9 +313,10 @@ purgeShellState sh = ShSt {
  where
    abstr = abstract sh
    concrs = [((a,i),b) | ((a,i),b) <- concretes sh, elem i needed]
-   needed = nub $ concatMap (requiredCanModules (canModules sh)) acncs
+   isSingle = length (abstracts sh) == 1
+   needed = nub $ concatMap (requiredCanModules isSingle (canModules sh)) acncs
    purge = nubBy (\x y -> fst x == fst y) . filter (flip elem needed . fst)
-   acncs = maybe [] singleton (abstract sh) ++ map (snd . fst) (actualConcretes sh)
+   acncs = maybe [] singleton abstr ++ map (snd . fst) (actualConcretes sh)
 
 changeMain :: Maybe Ident -> ShellState -> Err ShellState
 changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s) = 
@@ -345,8 +346,8 @@ qualifTop :: StateGrammar -> G.QIdent -> G.QIdent
 qualifTop gr (_,c) = (absId gr,c)
 
 stateGrammarOfLang :: ShellState -> Language -> StateGrammar
-stateGrammarOfLang st l = StGr {
-  absId    = maybe (identC "Abs") id (abstract st), ---
+stateGrammarOfLang st0 l = StGr {
+  absId    = err (const (identC "Abs")) id  $ M.abstractOfConcrete allCan l, ---
   cncId    = l,
   grammar  = can,
   cf       = maybe emptyCF id (lookup l (cfs st)),
@@ -358,9 +359,11 @@ stateGrammarOfLang st l = StGr {
   loptions = errVal noOptions $ lookupOptionsCan can
   }
  where
+   st = purgeShellState $ st0 {concrete = Just l}
    allCan = canModules st
-   can = M.partOfGrammar allCan 
-           (l, maybe M.emptyModInfo id (lookup l (M.modules allCan)))
+   can = allCan
+----   can = M.partOfGrammar allCan 
+----           (l, maybe M.emptyModInfo id (lookup l (M.modules allCan)))
 
 grammarOfLang :: ShellState -> Language -> CanonGrammar
 cfOfLang      :: ShellState -> Language -> CF
