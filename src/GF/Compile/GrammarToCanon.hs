@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/22 08:52:02 $ 
+-- > CVS $Date: 2005/11/11 23:24:33 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.22 $
+-- > CVS $Revision: 1.23 $
 --
 -- Code generator from optimized GF source code to GFC.
 -----------------------------------------------------------------------------
@@ -31,6 +31,7 @@ import GF.Canon.MkGFC
 import qualified GF.Canon.PrintGFC as P
 
 import Control.Monad
+import Data.List (nub)
 
 -- compilation of optimized grammars to canonical GF. AR 5/10/2001 -- 12/5/2003
 
@@ -82,7 +83,7 @@ redModInfo (c,info) = do
      os' <- mapM (\o -> case o of 
               OQualif q _ i -> liftM (OSimple q) (redIdent i)
               _ -> prtBad "cannot translate unqualified open in" c) $ opens m
-     return (e',os')
+     return (e',nub os')
    om = oSimple . openedModule --- normalizing away qualif
 
 redInfo :: Ident -> (Ident,Info) -> Err [(Ident,C.Info)]

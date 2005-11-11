@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:40 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.13 $
+-- > CVS $Date: 2005/11/11 23:24:34 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.14 $
 --
 -- Check correctness of module dependencies. Incomplete.
 --
@@ -120,13 +120,17 @@ openInterfaces ds m = do
   let mods = iterFix (concatMap more) (more (m,undefined))
   return $ [i | (i,MTInterface) <- mods]
 
--- | this function finds out what modules are really needed in the canoncal gr.
+-- | this function finds out what modules are really needed in the canonical gr.
 -- its argument is typically a concrete module name
-requiredCanModules :: (Ord i, Show i) => MGrammar i f a -> i -> [i]
-requiredCanModules gr = nub . iterFix (concatMap more) . allExtends gr where
+requiredCanModules :: (Ord i, Show i) => Bool -> MGrammar i f a -> i -> [i]
+requiredCanModules isSingle gr c = nub $ filter notReuse ops ++ exts where
+  exts = allExtends gr c
+  ops  = if isSingle 
+         then map fst (modules gr) 
+         else iterFix (concatMap more) $ exts
   more i = errVal [] $ do
     m <- lookupModMod gr i
-    return $ extends m ++ [o | o <- map openedModule (opens m), notReuse o]
+    return $ extends m ++ [o | o <- map openedModule (opens m)]
   notReuse i = errVal True $ do
     m <- lookupModMod gr i
     return $ isModRes m -- to exclude reused Cnc and Abs from required
