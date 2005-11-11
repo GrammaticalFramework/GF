@@ -46,6 +46,9 @@ ifneq ("$(LDFLAGS)","")
   GHCFLAGS += -optl'$(LDFLAGS)'
 endif
 
+ifeq ("$(INTERRUPT)","yes")
+  GHCFLAGS += -DUSE_INTERRUPT
+endif
 
 ifeq ("$(ENABLE_JAVA)", "yes")
   BUILD_JAR=jar

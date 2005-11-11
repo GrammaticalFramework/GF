@@ -1,27 +1,21 @@
-{-# OPTIONS -cpp #-}
-
 ----------------------------------------------------------------------
 -- |
--- Module      : GF.System.Signal
+-- Module      : GF.System.NoSignal
 -- Maintainer  : Bjorn Bringert
 -- Stability   : (stability)
 -- Portability : (portability)
 --
 -- > CVS $Date: 2005/11/11 11:12:50 $ 
 -- > CVS $Author: bringert $
--- > CVS $Revision: 1.3 $
+-- > CVS $Revision: 1.1 $
 --
--- Import the right singal handling module.
+-- Dummy implementation of signal handling.
 -----------------------------------------------------------------------------
 
-module GF.System.Signal (runInterruptibly) where
+module GF.System.NoSignal where
 
-#ifdef USE_INTERRUPT
+import Control.Exception (Exception)
 
-import GF.System.UseSignal (runInterruptibly)
-
-#else
-
-import GF.System.NoSignal (runInterruptibly)
-
-#endif
+{-# NOINLINE runInterruptibly #-}
+runInterruptibly :: IO a -> IO (Either Exception a)
+runInterruptibly = fmap Right

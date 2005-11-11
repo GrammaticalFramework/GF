@@ -4,7 +4,7 @@ AC_INIT([GF],[2.3],[aarne@cs.chalmers.se],[GF])
 
 AC_PREREQ(2.53)
 
-AC_REVISION($Revision: 1.25 $)
+AC_REVISION($Revision: 1.26 $)
 
 AC_CONFIG_FILES([config.mk jgf gfeditor])
 
@@ -81,6 +81,39 @@ case $READLINE in
 esac
 
 AC_SUBST(READLINE)
+
+dnl ***********************************************
+dnl command interruption
+dnl ***********************************************
+
+AC_ARG_WITH(interrupt,
+  AC_HELP_STRING([--with-interrupt=<allow command interruption>],
+               [Choose whether to enable interruption of commands
+	        with SIGINT (Ctrl-C)
+	        Available alternatives are: 'yes', 'no'
+		(default = yes)]),
+  [INTERRUPT="$withval"],
+  [if test "$host_os" = "cygwin"; then
+     AC_MSG_WARN([Command interruption does not work under
+                  Cygwin, because of missing signal handler support.
+                  Disabling command interruption support. 
+                  Use --with-interrupt to override.])
+     INTERRUPT="no"
+   else
+     INTERRUPT="yes"
+   fi])
+
+case $INTERRUPT in
+    yes)
+        ;;
+    no)
+        ;;
+    *)
+        AC_MSG_ERROR([Bad value for --with-interrupt: $INTERRUPT])
+        ;;
+esac
+
+AC_SUBST(INTERRUPT)
 
 dnl ***********************************************
 dnl java stuff
