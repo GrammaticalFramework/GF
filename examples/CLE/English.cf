@@ -1,0 +1,194 @@
+-- SLT book, chapter 9
+
+-- p. 164
+
+utterance_phrase.      UTTERANCE ::= PHRASE ;
+utterance_conj_phrase. UTTERANCE ::= CONJ Phrase ;
+utterance_whatabout.   UTTERANCE ::= "what" "about" PHRASE ;
+utterance_howabout.    UTTERANCE ::= "how" "about" PHRASE ;
+
+phrase_pp.   PHRASE ::= PP ;
+phrase_advp. PHRASE ::= ADVP ;
+phrase_np.   PHRASE ::= NP ;
+
+utterance_s_imp.      UTTERANCE ::= S_imp ;
+utterance_s_moved.    UTTERANCE ::= S_moved ;
+utterance_s_q.        UTTERANCE ::= S_q ;
+utterance_s_norm_inv. UTTERANCE ::= S_norm_inv ;
+utterance_s_norm.     UTTERANCE ::= S_norm ;
+
+-- p. 162
+
+s_norm_NP_VP. S_norm ::= NP_norm VP ; -- these 3 are 1 in CLE
+s_q_NP_VP.    S_q    ::= NP_q    VP ;
+s_r_NP_VP.    S_r    ::= NP_r    VP ;
+
+s_imp_NP_VP.  S_imp  ::= NP_imp  VP ;
+
+s_advp_s. S ::= ADVP_sent S ; 
+s_s_advp. S ::= S ADVP_sent ;
+s_conj_s. S ::= S CONJ S ;
+
+-- p. 163: 6 wh-move-rules
+
+-- p. 160
+
+vp_vp_pp.    VP ::= VP PP ;
+vp_vp_advp.  VP ::= VP ADVP ;
+vp_advp_vp.  VP ::= ADVP VP ;
+advp_vp_ing. ADVP ::= VP_ing ;
+advp_vp_to.  ADVP ::= VP_to ;
+vp_conj_vp.  VP ::= VP CONJ VP ;
+vp_not_vp.   VP ::= "not" VP ;
+
+np_gaps.   NP_gaps ::= ;
+pp_gaps.   PP_gaps ::= ;
+adjp_gaps. ADJP_gaps ::= ;
+advp_gaps. ADVP_gaps ::= ;
+
+-- p. 157
+
+vp_be_comp. VP ::= V_be COMP ;       -- 1 rule VP ::= V COMPS
+vp_tr.      VP ::= V_tr NP ;  
+vp_ditr.    VP ::= V_ditr NP NP ;
+vp_intr.    VP ::= V_intr ;
+vp_mod.     VP ::= V_mod VP ; -- would, could, can, may, will
+vp_do.      VP ::= V_do VP ;
+vp_be_pass. VP ::= V_be VP_pass ;
+vp_be_ing.  VP ::= V_be VP_ing ;
+vp_part.    VP ::= V_part ;   -- particle verb
+vp_s.       VP ::= V_s S ;
+vp_vp_to.   VP ::= V_vp VP_to  ; -- "how much does it cost to fly..."
+vp_ditrq.   VP ::= V_ditrq NP S_q ;
+vp_ditrpp.  VP ::= V_ditrpp NP PP ;
+vp_trq.     VP ::= V_trq S_q ;
+
+-- p. 159
+
+comp_np.   COMP ::= NP ;
+comp_adjp. COMP ::= ADJP ;
+comp_pp.   COMP ::= PP ;
+
+-- p. 156
+
+pp_pp. PP ::= PP PP ; -- big PP --- unnecessary ambiguity?
+
+pp_p_np.        PP ::= P NP ;
+pp_np_temporal. PP ::= NP_temporal ;
+pp_name_p_name. PP ::= NP_name P NP_name ; -- Baltimore to Philadelpia
+pp_conj_pp.     PP ::= PP CONJ PP ;
+
+-- p. 157; the numeral rules are not shown
+
+number_digit.    NUMBER   ::= DIGIT ;   --- and more
+ordinal_first.   ORDINAL  ::= "first" ; --- and more
+code_digit.      CODE     ::= DIGIT ;
+code_digit_code. CODE     ::= DIGIT CODE ;
+
+digit_1.  DIGIT ::= "one" ;
+digit_2.  DIGIT ::= "two" ;
+digit_3.  DIGIT ::= "three" ;
+digit_4.  DIGIT ::= "four" ;
+digit_5.  DIGIT ::= "five" ;
+digit_6.  DIGIT ::= "six" ;
+digit_7.  DIGIT ::= "seven" ;
+digit_8.  DIGIT ::= "eight" ;
+digit_9.  DIGIT ::= "nine" ;
+digit_0.  DIGIT ::= "zero" ;
+
+-- p. 154 "recursive NPs"
+
+np_np_pp.  NP ::= NP PP ;
+np_np_rel. NP ::= NP REL ;
+
+np_np_vp_ing.  NP ::= NP VP_ing ; -- these 2 are 1 with \/
+np_np_vp_pass. NP ::= NP VP_pass ;
+
+np_np_adjp.    NP ::= NP ADJP_post ;  --- restr. acc to text
+
+rel_s_rel.  REL ::= S_rel ;
+rel_s_norm. REL ::= S_normal_gap ; --- type normal=norm ?? 
+--- they cannot be showing their real code here
+
+adjp_nocomp. ADJP ::= ADJ_nocomp ;  -- ADJP ::= ADJ COMPS
+adjp_pp.     ADJP ::= ADJ_pp PP ;   -- only "available" in corpus
+
+np_conj_np. NP ::= NP CONJ NP ;  --- curious analysis of conj lists...
+np_np_np.   NP ::= NP NP ;       -- Boston Atlanta and Denver 
+
+s_vp_inf.   S_norm ::= VP_inf ; -- "to get from X to Y (is...)"
+np_s_q.     NP ::= S_q ;        -- "what city they stop in (is...)"
+np_s_norm.  NP ::= S_norm ;     
+np_compl_s. NP ::= COMPLEMENTISER S_norm ; --- they don't tell what CO... is
+
+np_np_code. NP ::= NP CODE ;  --- unnec. source of ambiguity
+
+
+-- p. 150
+
+np_det_nbar. NP ::= DET NBAR ;
+np_nbar.     NP ::= NBAR ;     -- "information", "travel arrangements"
+
+nbar_adjp_nbar. NBAR ::= ADJP NBAR ;
+nbar_nbar_nbar. NBAR ::= NBAR NBAR ; --- unnec. ambiguity
+nbar_name_nbar. NBAR ::= NP_name NBAR ; -- "Delta flights"
+nbar_conj_nbar. NBAR ::= NBAR CONJ NBAR ;
+
+adjp_most_adj.       ADJP ::= "most" ADJ ;
+adjp_least_adj.      ADJP ::= "least" ADJ ;
+ordinal_adjp_superl. ORDINAL ::= ADJP_superlative ;
+
+det_the_ordinal. DET ::= "the" ORDINAL ;
+det_ordinal.     DET ::= ORDINAL ;  -- common in spoken language
+det_predet_det.  DET ::= PREDET DET ;
+det_numer.       DET ::= NUMBER ;               --- NUMBER in book
+det_less_than.   DET ::= "less" "than" NUMBER ; --- NUMBER
+det_more_than.   DET ::= "more" "than" NUMBER ; --- NUMBER
+det_possessive.  DET ::= POSSESSIVE ;
+
+
+-- p. 152 time and date NPs not given
+
+np_code.      NP ::= CODE ;
+np_nbar_code. NP ::= NBAR CODE ;
+
+--- CODE ::= NUMBER already covered above
+--  letter codes added from corpus
+
+np_det. NP ::= DET_bare ; -- any, which, one, both, the same, the latest,...
+
+nbar_comp. NBAR ::= NBAR_of "of" NBAR ; -- only ex of NBAR COMP; (kind | type) of plane
+
+
+-- lexicon; picked from examples and explanations
+
+possessive_my. POSSESSIVE ::= "my" ;
+
+predet_all.  PREDET ::= "all" ; 
+predet_only. PREDET ::= "only" ;
+predet_just. PREDET ::= "just" ;
+
+nbar_flight.   NBAR ::= "flight" ;
+nbar_aircraft. NBAR ::= "aircraft" ;
+
+name_Delta.    NP_name ::= "Delta" ;
+name_Dallas.   NP_name ::= "Dallas" ;
+name_Boston.   NP_name ::= "Boston" ;
+
+conj_and.  CONJ ::= "and" ;
+
+det_any.  DET_bare ::= "any" ;
+
+v_is.    V_be   ::= "is" ;
+v_leave. V_intr ::= "leaves" ;
+v_have. V_tr   ::= "has" ;
+
+nbar_of_type. NBAR_of ::= "type" ;
+
+adj_cheap. ADJ ::= "cheap" ;
+
+
+--- ad hoc coercions to make cf grammar work
+
+det_bare. DET ::= DET_bare ;
+
