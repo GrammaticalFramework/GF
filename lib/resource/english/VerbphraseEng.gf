@@ -22,6 +22,8 @@
 concrete VerbphraseEng of Verbphrase = CategoriesEng ** 
   open Prelude, SyntaxEng in {
 
+  flags optimize=all_subs ;
+
   lin
   UseV v = predClauseGroup v (complVerb v) ;
   UsePassV v = predClauseBeGroup (passVerb v) ;
@@ -45,8 +47,6 @@ concrete VerbphraseEng of Verbphrase = CategoriesEng **
 
   PredProgVP = progressiveVerbPhrase ;
 
-----  SPredProgVP = progressiveClause ;
-
 -- Use VPs
 
   PredVP = predVerbGroupClause ;
@@ -54,8 +54,9 @@ concrete VerbphraseEng of Verbphrase = CategoriesEng **
   RelVP = relVerbPhrase ;
   IntVP = intVerbPhrase ;
 
-  PosVP = predVerbGroup True ;
-  NegVP = predVerbGroup False ;
+--  PosVP = predVerbGroup True ;
+--  NegVP = predVerbGroup False ;
+  UseVP = predVerbGroup ;
 
   AdvVP = adVerbPhrase ;
   SubjVP = subjunctVerbPhrase ;

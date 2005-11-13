@@ -448,9 +448,8 @@ oper
     } ;
 
 -- To form an infinitival group
-
-{- ---- obsolete
-  predVerbGroup : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase =
+{-
+  predVerbGroupOld : Bool -> {s : Str ; a : Anteriority} -> VerbGroup -> VerbPhrase =
     \b,ant,vg -> {
     s  = table {
            VIInfinit  => \\a => ant.s ++ vg.s2 ! b ! VInfinit ant.a ! a ;
@@ -459,6 +458,16 @@ oper
     s1 = if_then_Str b [] "not"
     } ;
 -}
+  predVerbGroup : VerbGroup -> VerbClause = \vg ->
+    {s = \\p,a =>
+           table {
+             VIInfinit  => \\ag => 
+               vg.s ! p ! VInfinit a ! ag ++ vg.s2 ! p ! VInfinit a ! ag ;
+             VIPresPart => \\ag => 
+               vg.s ! p ! VPresPart ! ag  ++ vg.s2 ! p ! VPresPart ! ag
+           } ;
+       s1 = \\b => if_then_Str b [] "not"
+      } ;
 
   predVerbI : Verb -> Complement -> VerbClause = 
     \verb,comp -> 

@@ -1,8 +1,6 @@
 --# -path=.:../abstract:../../prelude
---# -opt
 
 concrete ClauseEng of Clause = CategoriesEng ** 
-----  ClausePredI with (Predic = PredicEng) ; {-
 
   open Prelude, SyntaxEng in {
 
