@@ -2,7 +2,7 @@
 
 --1 The Top-Level Russian Resource Grammar: Combination Rules
 --
--- Aarne Ranta, Janna Khegai 2003 -- 2004
+-- Aarne Ranta, Janna Khegai 2003 -- 2005
 --
 -- This is the Russian concrete syntax of the multilingual resource
 -- grammar. Most of the work is done in the file $SyntaxRus.gf$.
@@ -36,7 +36,7 @@ lincat
       --     g: PronGen ; anim : Animacy ;  pron: Bool} ;     
   PN     = ProperName ;
       -- = {s :  Case => Str ; g : Gender ; anim : Animacy} ;
-  A    = Adjective ;
+  A      = Adjective ;
       -- = {s : AdjForm => Str} ;
   A2   = AdjCompl ;
       -- = Adjective ** Complement ;
@@ -47,10 +47,12 @@ lincat
 
   Det    = Determiner ;
       -- = Adjective ** {n: Number; g: PronGen; c: Case} ; 
-  
-  N2    = Function ;  
+  NDet   = Adjective ** {g: PronGen; c: Case} ; 
+      -- "Det" without "Number" field
+
+  N2     = Function ;  
       -- = CommNounPhrase ** Complement ;
-  N3   = Function ** {s3 : Str; c2: Case} ; 
+  N3     = Function ** {s3 : Str; c2: Case} ; 
   Num    = Numeral ;
       -- = {s : Case => Gender => Str} ;
   
@@ -63,7 +65,7 @@ lincat
       -- = Verb ** {s2 : Str ; s3 : Gender => Number => Str ;
       --            negBefore: Bool} ;
   V2     = TransVerb ; 
-      -- = Verbum ** {s2 : Str ; c: Case } ; 
+      -- = Verbum ** Complement ; 
   V3     = DitransVerb ;
       -- = TransVerb ** {s4 : Str; c2: Case} ;
   VS     = SentenceVerb ;
@@ -71,32 +73,52 @@ lincat
   VV     = VerbVerb ; 
       -- = Verbum ;
    
+  VCl    = {s  : Bool => Anteriority => Str} ;
+     -- infinitive verb phrase (in other languages very similar to VPI,
+     -- but without Bool=>Anteriority)
+  VPI    = VerbPhraseInf ;
+     -- {s  : Str; a: Aspect; w:Voice; s2 : Str ; 
+     --  s3 : Gender => Number => Str ; negBefore: Bool} ;
+     -- almost the same as VP, but VF is fixed to the infinitive form
+     -- and the tense field is supressed
 
-  AdV    = Adverb ;
+  Adv    = Adverb ;    -- sentence adverb e.g. "now", "in the house"
       -- = {s : Str} ;
+  AdV    = Adverb ;
+  AdA    = Adverb ;    -- ad-adjective           e.g. "very"
+  AdC    = Adverb ;    -- conjoining adverb      e.g. "therefore", "otherwise"
   Prep   = Preposition;
       -- = {s : Str ; c: Case } ;
- 
+  PP     = Adverb ;
 
-
+  Cl     = Clause ; -- clause (variable tense) e.g. "John walks"/"John walked"
+      -- = {s : Bool => ClForm => Str} ;
   S      = Sentence ; 
       -- = {s : Str} ;
   Slash  = SentenceSlashNounPhrase ; 
+      -- sentence without NP, e.g. "John waits for (...)"
       -- = Sentence ** Complement ;
   
   RP     = RelPron ;
-      -- = {s : GenNum => Case => Animacy => Str} ;
-  RC     = RelClause ;
-      -- = RelPron ;
+      -- = {s :                   GenNum => Case => Animacy => Str} ;
+  RS     = RelPron ;          
+  RCl    = RelClause ;
+      -- = {s :  Bool => ClForm => GenNum => Case => Animacy => Str} ;
 
   IP     = IntPron ;
       -- = NounPhrase ;
-  Qu     = Question ;
-      -- = {s : QuestForm => Str} ;
+  IDet   = Determiner ;
+      -- = Adjective ** {n: Number; g: PronGen; c: Case} ; 
+
+  IAdv   = Adverb ;   
+      -- = {s : Str} ;
+
+  QS     = Question ;     -- question w. fixed tense
+      -- = {s :                 QuestForm => Str} ;
+  QCl    = {s :Bool => ClForm => QuestForm => Str};  
+
   Imp    = Imperative ;
       -- = { s: Gender => Number => Str } ;
-  Phr    = Utterance ;
-      -- = {s : Str} ;
   
   Conj   = Conjunction ;
       -- = {s : Str ; n : Number} ;
@@ -110,10 +132,44 @@ lincat
   ListNP = ListNounPhrase ;
       -- = { s1,s2 : PronForm => Str ; g: Gender ; anim : Animacy ;
       --     n : Number ; p : Person ;  pron : Bool } ;
+  ListAdv= {s1 : Str ; s2 : Str} ;
 
-  PP     = Adverb ;
-  Cl     = Clause ;
-      -- = {s : Bool => ClForm => Str} ;
+  Phr    = Utterance ;
+      -- = {s : Str} ;
+  Text   = {s : Str} ;
 
+---- next
+
+  VQ     = Verbum ; 
+      -- = {s : VerbForm => Str ; asp : Aspect } ;
+  VA     = Verbum ; 
+  V0     = Verbum ; 
+  V2A    = TransVerb ;   
+      -- = Verbum ** Complement ; 
+  V2V    = TransVerb ;   
+  V2S    = TransVerb ;   
+  V2Q    = TransVerb ; 
+
+  AS     = Adverb ;   
+      -- = {s : Str} ;
+  A2S    = Adverb ** Complement;       
+  AV     = Adjective ;
+      -- = {s : AdjForm => Str} ;      
+  A2V    = AdjCompl ;
+      -- = Adjective ** Complement ;
+ 
+-- NB: it is difficult to play the sonata 
+-- vs. it (the sonata) is difficult to play
+
+-- also : John is easy (for you) to please vs. John is eager to please
+
+
+-- similar implementation in all the languages, s-field is dummy:
+
+  TP     = {s : Str ; b : Bool ; t : ClTense ; a : Anteriority} ; -- combination of the three below
+  Tense  = {s : Str ; t : ClTense} ;                                 
+  Ant    = {s : Str ; a : Anteriority} ; --For time agreement:
+  Pol    = {s : Str ; p : Bool} ;  --Positive or negative statement
+  Subj   = {s : Str} ;
 }
 

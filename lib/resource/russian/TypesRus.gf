@@ -24,7 +24,7 @@ param
   Case       = Nom | Gen | Dat | Acc | Inst | Prepos ;
   Voice        = Act | Pass ;
   Aspect     = Imperfective | Perfective ;
-  Tense      = Present | Past | Future ;
+  RusTense      = Present | Past | Future ;
   Degree     = Pos | Comp | Super ;
   Person     = P1 | P2 | P3 ;
   AfterPrep  = Yes | No ; 
@@ -236,7 +236,7 @@ param
   VTense   = VPresent Person | VPast | VFuture Person ;
 
 oper 
-   getVTense : Tense -> Person -> VTense= \t,p ->
+   getVTense : RusTense -> Person -> VTense= \t,p ->
    case t of { Present => VPresent p ; Past => VPast; Future => VFuture p } ;
   
    getVoice: VerbForm -> Voice = \vf ->
@@ -248,7 +248,7 @@ oper
 -- For writing an application grammar one usually doesn't need
 -- the whole inflection table, since each verb is used in 
 -- a particular context that determines some of the parameters
--- (Tense and Voice while Aspect is fixed from the beginning) for certain usage. 
+-- (RusTense and Voice while Aspect is fixed from the beginning) for certain usage. 
 -- So we define the "Verb" type, that have these parameters fixed. 
 -- The conjugation parameters left (Gender, Number, Person)
 -- are combined in the "VF" type:
@@ -258,9 +258,9 @@ param VF =
    VFin  GenNum Person | VImper Number Person | VInf | VSubj GenNum;
 
 oper 
-  Verb : Type = {s : VF => Str ; t: Tense ; a : Aspect ; w: Voice} ;
+  Verb : Type = {s : VF => Str ; t: RusTense ; a : Aspect ; w: Voice} ;
 
-  extVerb : Verbum -> Voice -> Tense -> Verb = \aller, vox, t -> 
+  extVerb : Verbum -> Voice -> RusTense -> Verb = \aller, vox, t -> 
     { s = table { 
        VFin gn p => case t of { 
            Present => aller.s ! VFORM vox (VIND gn (VPresent p)) ;
@@ -299,7 +299,7 @@ oper
 -- gender, number, and case just like adjectives.
 
   RelPron : Type = {s : GenNum => Case => Animacy => Str} ;
-
+ 
  
 --3 Prepositions
 -- the same as "Complement" category. Renaming the field "s2" into "s" has lead to 
