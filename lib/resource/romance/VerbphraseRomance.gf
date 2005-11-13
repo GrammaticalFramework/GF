@@ -51,11 +51,13 @@ incomplete concrete VerbphraseRomance of Verbphrase = CategoriesRomance **
 
   PredVP = predVerbGroupClause ;
 
-  RelVP = relVerbPhrase ;
+  RelVP = variants {} ; ----- relVerbPhrase ;
   IntVP = intVerbPhrase ;
 
 --  PosVP tp = predVerbGroup True tp ;
 --  NegVP tp = predVerbGroup False tp ;
+  UseVP = variants {} ;
+
 
   AdvVP = adVerbPhrase ;
   SubjVP = subjunctVerbPhrase ;
