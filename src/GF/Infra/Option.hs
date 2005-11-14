@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/30 23:44:00 $ 
+-- > CVS $Date: 2005/11/14 16:03:41 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.33 $
+-- > CVS $Revision: 1.34 $
 --
 -- Options and flags used in GF shell commands and files.
 --
@@ -251,6 +251,7 @@ optimizeValues = iOpt "val"
 stripQualif   = iOpt "strip"
 nostripQualif = iOpt "nostrip"
 showAll      = iOpt "all"
+showFields   = iOpt "fields"
 showMulti    = iOpt "multi"
 fromSource   = iOpt "src"
 makeConcrete = iOpt "examples"
@@ -311,6 +312,7 @@ extractGr      = aOpt "extract"
 pathList       = aOpt "path"
 uniCoding      = aOpt "coding"
 probFile       = aOpt "probs"
+noparseFile    = aOpt "noparse"
 
 -- peb 16/3-05:
 gfcConversion :: String -> Option

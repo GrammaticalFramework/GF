@@ -43,6 +43,7 @@ i,  import: i File
       -optimize     select an optimization to override file-defined flags
       -conversion   select parsing method (values strict|nondet)
       -probs        read probabilities from file (format (--# prob) Fun Double)
+      -noparse      read nonparsable functions from file (format --# noparse Funs) 
   examples:
       i English.gf                      -- ordinary import of Concrete
       i -retain german/ParadigmsGer.gf  -- import of Resource to test

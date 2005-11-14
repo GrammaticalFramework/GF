@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/09 22:34:01 $ 
+-- > CVS $Date: 2005/11/14 16:03:41 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Commands usable in grammar-writing IDE.
 -----------------------------------------------------------------------------
@@ -57,6 +57,10 @@ execIDECommand c state = case c of
     return $ emptyIDEState env
   IDEAbstract a -> 
     return $ state {ideAbstract = Just a} ---- check a exists or import it
+  IDEConcrete a -> 
+    return $ state {ideCurrentCnc = Just a} ---- check a exists or import it
+  IDELin a -> 
+    return $ state {ideCurrentLin = Just a} ---- check a exists
   IDEEdit s ->
     execEdit s
   IDEShell s ->

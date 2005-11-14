@@ -11,6 +11,34 @@
 Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 </center>
+<p>
+
+14/11 (AR) Functions can be made unparsable (or "internal" as
+in BNFC). This is done by <tt>i -noparse=file</tt>, where
+the nonparsable functions are given in <tt>file</tt> using the
+line format <tt>--# noparse Funs</tt>. This can be used e.g. to
+rule out expensive parsing rules. It is used in 
+<tt>lib/resource/abstract/LangVP.gf</tt> to get parse values 
+structured with <tt>VP</tt>, which is obtained via transfer.
+So far only the default (= old) parser generator supports this.
+
+<p>
+
+14/11 (AR) Removed the restrictions how a lincat may look like.
+Now any record type that has a value in GFC (i.e. without any
+functions in it) can be used, e.g. {np : NP ; cn : Bool => CN}.
+To display linearization values, only <tt>l -record</tt> shows
+nice results.
+
+<p>
+
+9/11 (AR) GF shell state can now have several abstract syntaxes with
+their associated concrete syntaxes. This allows e.g. parsing with
+resource while testing an application. One can also have a
+parse-transfer-lin chain from one abstract syntax to another.
+
+<p>
+
 
 1/11 (AR) Yet another method for adding probabilities: append
 <tt> --# prob Double</tt> to the end of a line defining a function.

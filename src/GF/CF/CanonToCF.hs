@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/31 12:47:52 $ 
+-- > CVS $Date: 2005/11/14 16:03:41 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.14 $
+-- > CVS $Revision: 1.15 $
 --
 -- AR 27\/1\/2000 -- 3\/12\/2001 -- 8\/6\/2003 
 -----------------------------------------------------------------------------
@@ -36,28 +36,30 @@ import Control.Monad
 -- | The main function: for a given cnc module 'm', build the CF grammar with all the
 -- rules coming from modules that 'm' extends. The categories are qualified by
 -- the abstract module name 'a' that 'm' is of.
-canon2cf :: Options -> CanonGrammar -> Ident -> Err CF
-canon2cf opts gr c = tracePrt "#size of CF" (err id (show.length.rulesOfCF)) $ do -- peb 8/6-04
+-- The ign argument tells what rules not to generate a parser for.
+canon2cf :: Options -> (Ident -> Bool) -> CanonGrammar -> Ident -> Err CF
+canon2cf opts ign gr c = tracePrt "#size of CF" (err id (show.length.rulesOfCF)) $ do -- peb 8/6-04
   let ms = M.allExtends gr c
   a <- M.abstractOfConcrete gr c
   let cncs = [m | (n, M.ModMod m) <- M.modules gr, elem n ms]
   let mms  = [(a, tree2list (M.jments m)) | m <- cncs]
   cnc <- liftM M.jments $ M.lookupModMod gr c
-  rules0 <- liftM concat $ mapM (uncurry (cnc2cfCond opts cnc)) mms
+  rules0 <- liftM concat $ mapM (uncurry (cnc2cfCond opts ign cnc)) mms
   let bindcats = map snd $ allBindCatsOf gr 
   let rules = filter (not . isCircularCF) rules0 ---- temporarily here
   let grules = groupCFRules rules
   let predef = mkCFPredef opts bindcats grules
   return $ CF predef
 
-cnc2cfCond :: Options -> BinTree Ident Info -> 
+cnc2cfCond :: Options -> (Ident -> Bool) -> BinTree Ident Info -> 
               Ident -> [(Ident,Info)] -> Err [CFRule]
-cnc2cfCond opts cnc m gr = 
+cnc2cfCond opts ign cnc m gr = 
   liftM concat $ 
   mapM lin2cf [(m,fun,cat,args,lin) | 
-                 (fun, CncFun cat args lin _) <- gr, is fun] 
+                 (fun, CncFun cat args lin _) <- gr, notign fun, is fun] 
  where
    is f = isInBinTree f cnc
+   notign = not . ign
 
 type IFun = Ident
 type ICat = CIdent
@@ -65,24 +67,24 @@ type ICat = CIdent
 -- | all CF rules corresponding to a linearization rule
 lin2cf :: (Ident, IFun, ICat, [ArgVar], Term) -> Err [CFRule]
 lin2cf (m,fun,cat,args,lin) = errIn ("building CF rule for" +++ prt fun) $ do
-  rhss0  <- allLinValues lin                   -- :: [(Label, [([Patt],Term)])]
-  rhss1  <- mapM (mkCFItems m) (concat rhss0)  -- :: [(Label, [[PreCFItem]])]
+  let rhss0 = allLinBranches lin          -- :: [([Label], Term)]
+  rhss1  <- mapM (mkCFItems m) rhss0    -- :: [([Label], [[PreCFItem]])]
   mapM (mkCfRules m fun cat args) rhss1 >>= return . nub . concat
 
 -- | making sequences of CF items from every branch in a linearization
-mkCFItems :: Ident -> (Label, [([Patt],Term)]) -> Err (Label, [[PreCFItem]])
-mkCFItems m (lab,pts) = do
-  itemss <- mapM (term2CFItems m) (map snd pts)
-  return (lab, concat itemss) ---- combinations? (test!)
+mkCFItems :: Ident -> ([Label], Term) -> Err ([Label], [[PreCFItem]])
+mkCFItems m (labs,t) = do
+  items <- term2CFItems m t
+  return (labs, items)
 
 -- | making CF rules from sequences of CF items
-mkCfRules :: Ident -> IFun -> ICat -> [ArgVar] -> (Label, [[PreCFItem]]) -> Err [CFRule]
+mkCfRules :: Ident -> IFun -> ICat -> [ArgVar] -> ([Label], [[PreCFItem]]) -> Err [CFRule]
 mkCfRules m fun cat args (lab, itss) = mapM mkOneRule itss
  where
   mkOneRule its = do
     let nonterms = zip [0..] [(pos,d,v) | PNonterm _ pos d v <- its]
         profile  = mkProfile nonterms
-	cfcat    = CFCat (redirectIdent m cat,lab)
+	cfcat    = labels2CFCat (redirectIdent m cat) lab
         cffun    = CFFun (AC (CIQ m fun), profile)
         cfits    = map precf2cf its
     return (cffun,(cfcat,cfits))
@@ -91,17 +93,17 @@ mkCfRules m fun cat args (lab, itss) = mapM mkOneRule itss
       mkOne (A  c i) = mkOne (AB c 0 i)
       mkOne (AB _ b i) = (map mkB [0..b-1], [k | (k,(j,_,True)) <- nonterms, j==i])
         where
-          mkB x = [k | (k,(j, LV y,False)) <- nonterms, j == i, y == x]
+          mkB x = [k | (k,(j, [LV y], False)) <- nonterms, j == i, y == x]
 
 -- | intermediate data structure of CFItems with information for profiles
 data PreCFItem = 
-    PTerm RegExp                       -- ^ like ordinary Terminal 
-  | PNonterm CIdent Integer Label Bool -- ^ cat, position, part\/bind, whether arg
+    PTerm RegExp                         -- ^ like ordinary Terminal 
+  | PNonterm CIdent Integer [Label] Bool -- ^ cat, position, part\/bind, whether arg
    deriving Eq                    
 
 precf2cf :: PreCFItem -> CFItem
 precf2cf (PTerm r) = CFTerm r
-precf2cf (PNonterm cm _ (L c) True) = CFNonterm (ident2CFCat cm c)
+precf2cf (PNonterm cm _ ls True) = CFNonterm (labels2CFCat cm ls)
 precf2cf (PNonterm _ _ _ False) = CFNonterm catVarCF
 
 
@@ -137,7 +139,7 @@ term2CFItems m t = errIn "forming cf items" $ case t of
      let itss = [[PTerm (RegAlts [s]) | s <- t] | Var t _ <- vs]
      tryMkCFTerm (its : itss)
 
-   _ -> prtBad "no cf for" t ----
+   _ -> return [] ---- prtBad "no cf for" t ----
 
   where 
 
@@ -163,13 +165,19 @@ term2CFItems m t = errIn "forming cf items" $ case t of
          counterparts ll = [map (!! i) ll | i <- [0..length (head ll) - 1]]
     tryMkCFTerm itss = return itss
 
-    extrR arg lab = case (arg,lab) of
-      (Arg (A  cat pos),   l@(L _))  -> return [[PNonterm (cIQ cat) pos l True]]
-      (Arg (A  cat pos),   l@(LV _)) -> return [[PNonterm (cIQ cat) pos l False]]
-      (Arg (AB cat b pos), l@(L _))  -> return [[PNonterm (cIQ cat) pos l True]]
-      (Arg (AB cat b pos), l@(LV _)) -> return [[PNonterm (cIQ cat) pos l False]]
+    extrR arg lab = case (arg0,labs) of
+      (Arg (A  cat pos),   [(LV _)]) -> return [[PNonterm (cIQ cat) pos labs False]]
+      (Arg (AB cat b pos), [(LV _)]) -> return [[PNonterm (cIQ cat) pos labs False]]
+      (Arg (A  cat pos),   _)  -> return [[PNonterm (cIQ cat) pos labs True]]
+      (Arg (AB cat b pos), _)  -> return [[PNonterm (cIQ cat) pos labs True]]
                                      ---- ??
       _   -> prtBad "cannot extract record field from" arg
+     where 
+       (arg0,labs) = headProj arg [lab]
+
+    headProj r ls = case r of
+      P r0 l0 -> headProj r0 (l0:ls)
+      _ -> (r,ls)
     cIQ c = if isPredefCat c then CIQ cPredefAbs c else CIQ m c
 
 mkCFPredef :: Options -> [Ident] -> [CFRuleGroup] -> ([CFRuleGroup],CFPredef)

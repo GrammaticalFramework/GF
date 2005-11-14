@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/31 19:02:35 $ 
+-- > CVS $Date: 2005/11/14 16:03:41 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.45 $
+-- > CVS $Revision: 1.46 $
 --
 -- The datatype of shell commands and the list of their options.
 -----------------------------------------------------------------------------
@@ -166,7 +166,7 @@ optionsOfCommand co = case co of
 	           "cat lang lexer parser number depth rawtrees unlexer optimize path conversion printer"
 
   CImport _ -> both "old v s src retain nocf nocheckcirc cflexer noemit o ex prob"
-                    "abs cnc res path optimize conversion cat probs"
+                    "abs cnc res path optimize conversion cat probs noparse"
   CRemoveLanguage _ -> none
   CEmptyState -> none
   CStripState -> none

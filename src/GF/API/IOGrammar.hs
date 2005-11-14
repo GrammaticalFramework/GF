@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/31 19:02:35 $ 
+-- > CVS $Date: 2005/11/14 16:03:40 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.19 $
+-- > CVS $Revision: 1.20 $
 --
 -- for reading grammars and terms from strings and files
 -----------------------------------------------------------------------------
@@ -21,6 +21,7 @@ import GF.Compile.PGrammar
 import GF.Grammar.TypeCheck
 import GF.Compile.Compile
 import GF.Compile.ShellState
+import GF.Compile.NoParse
 import GF.Probabilistic.Probabilistic
 
 import GF.Infra.Modules
@@ -52,15 +53,16 @@ string2annotTree gr m = annotate gr . string2absTerm (prt m) ---- prt
 
 shellStateFromFiles :: Options -> ShellState -> FilePath -> IOE ShellState
 shellStateFromFiles opts st file = do
+ ign <- ioeIO $ getNoparseFromFile opts file
  let top = identC $ justModuleName file
  sh <- case fileSuffix file of
   "gfcm" -> do
      cenv <- compileOne opts (compileEnvShSt st []) file
-     ioeErr $ updateShellState opts Nothing st cenv
+     ioeErr $ updateShellState opts ign Nothing st cenv
   s | elem s ["cf","ebnf"] -> do
      let osb = addOptions (options []) opts
      grts <- compileModule osb st file
-     ioeErr $ updateShellState opts Nothing st grts
+     ioeErr $ updateShellState opts ign Nothing st grts
   _ -> do
      b <- ioeIO $ isOldFile file
      let opts' = if b then (addOption showOld opts) else opts
@@ -70,7 +72,7 @@ shellStateFromFiles opts st file = do
                  else addOptions (options [emitCode]) opts'
      grts <- compileModule osb st file
      let mtop = if oElem showOld opts' then Nothing else Just top
-     ioeErr $ updateShellState opts' mtop st grts
+     ioeErr $ updateShellState opts' ign mtop st grts
  if (isSetFlag opts probFile || oElem (iOpt "prob") opts)
        then do 
          probs <- ioeIO $ getProbsFromFile opts file
