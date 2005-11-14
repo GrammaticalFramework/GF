@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/12 12:38:29 $ 
+-- > CVS $Date: 2005/11/14 16:03:40 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.38 $
+-- > CVS $Revision: 1.39 $
 --
 -- Application Programmer's Interface to GF; also used by Shell. AR 10/11/2001
 -----------------------------------------------------------------------------
@@ -226,6 +226,8 @@ optLinearizeTree opts0 gr t = case getOptVal opts transferFun of
     | oElem showRecord opts = liftM prt . linearizeNoMark g c
     | oElem tableLin opts   = liftM (unlines . map untok . prLinTable True) . 
                                 allLinTables g c
+    | oElem showFields opts = liftM (unlines . map untok) .
+                                allLinBranchFields g c
     | oElem showAll opts    = liftM (unlines . map untok . prLinTable False) . 
                                 allLinTables g c
     | otherwise = return . unlines . map untok . optIntOrOne . linTree2strings mk g c

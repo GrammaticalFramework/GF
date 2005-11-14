@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:08 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.12 $
+-- > CVS $Date: 2005/11/14 16:03:40 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.13 $
 --
 -- symbols (categories, functions) for context-free grammars.
 -----------------------------------------------------------------------------
@@ -23,7 +23,8 @@ module GF.CF.CFIdent (-- * Tokens and categories
 		mkCFFun, varCFFun, consCFFun, string2CFFun, stringCFFun, intCFFun, dummyCFFun,
 		cfFun2String, cfFun2Ident, cfFun2Profile, metaCFFun,
 		-- * CF Categories
-		mkCIdent, ident2CFCat, string2CFCat, catVarCF, cat2CFCat, cfCatString, cfCatInt,
+		mkCIdent, ident2CFCat, labels2CFCat, string2CFCat, 
+                catVarCF, cat2CFCat, cfCatString, cfCatInt,
 		moduleOfCFCat, cfCat2Cat, cfCat2Ident, lexCFCat,
 		-- * CF Tokens
 		string2CFTok, str2cftoks,
@@ -40,6 +41,7 @@ import GF.Grammar.Macros (ident2label)
 import GF.Grammar.PrGrammar
 import GF.Data.Str
 import Data.Char (toLower, toUpper)
+import Data.List (intersperse)
 
 -- | this type should be abstract
 data CFTok = 
@@ -143,6 +145,9 @@ mkCIdent m c = CIQ (identC m) (identC c)
 
 ident2CFCat :: CIdent -> Ident -> CFCat
 ident2CFCat mc d = CFCat (mc, L d)
+
+labels2CFCat :: CIdent -> [Label] -> CFCat
+labels2CFCat mc d = CFCat (mc, L (identC (concat (intersperse "." (map prt d))))) ----
 
 -- | standard way of making cf cat: label s
 string2CFCat :: String -> String -> CFCat

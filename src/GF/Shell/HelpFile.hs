@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/01 20:09:04 $
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.19 $
+-- > CVS $Date: 2005/11/14 16:03:41 $
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.20 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -72,6 +72,7 @@ txtHelpFile =
   "\n      -optimize     select an optimization to override file-defined flags" ++
   "\n      -conversion   select parsing method (values strict|nondet)" ++
   "\n      -probs        read probabilities from file (format (--# prob) Fun Double)" ++
+  "\n      -noparse      read nonparsable functions from file (format --# noparse Funs) " ++
   "\n  examples:" ++
   "\n      i English.gf                      -- ordinary import of Concrete" ++
   "\n      i -retain german/ParadigmsGer.gf  -- import of Resource to test" ++

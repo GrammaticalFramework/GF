@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/09/16 13:56:12 $ 
+-- > CVS $Date: 2005/11/14 16:03:41 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.28 $
+-- > CVS $Revision: 1.29 $
 --
 -- Macros for building and analysing terms in GFC concrete syntax.
 --
@@ -224,6 +224,15 @@ allLinValues :: Term -> Err [[(Label,[([Patt],Term)])]]
 allLinValues trm = do
   lts <- allLinFields trm
   mapM (mapPairsM (return . allCaseValues)) lts
+
+-- | to gather all linearizations, even from nested records; params ignored
+allLinBranches :: Term -> [([Label],Term)]
+allLinBranches trm = case trm of
+  R rs   -> [(l:ls,u) | Ass l t <- rs, (ls,u) <- allLinBranches t] 
+  FV ts  -> concatMap allLinBranches ts
+  T _ ts -> concatMap allLinBranches [t | Cas _ t <- ts]
+  V _ ts -> concatMap allLinBranches ts
+  _ -> [([],trm)]
 
 redirectIdent :: A.Ident -> CIdent -> CIdent
 redirectIdent n f@(CIQ _ c) = CIQ n c

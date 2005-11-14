@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/11 23:24:34 $ 
+-- > CVS $Date: 2005/11/14 16:03:41 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.52 $
+-- > CVS $Revision: 1.53 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -32,6 +32,7 @@ import GF.CF.CFIdent
 import GF.CF.CanonToCF
 import GF.UseGrammar.Morphology
 import GF.Probabilistic.Probabilistic
+import GF.Compile.NoParse
 import GF.Infra.Option
 import GF.Infra.Ident
 import GF.System.Arch (ModTime)
@@ -174,14 +175,14 @@ cncModuleIdST = stateGrammarST
 -- | form a shell state from a canonical grammar
 grammar2shellState :: Options -> (CanonGrammar, G.SourceGrammar) -> Err ShellState 
 grammar2shellState opts (gr,sgr) = 
-  updateShellState opts Nothing emptyShellState ((0,sgr,gr),[]) --- is 0 safe?
+  updateShellState opts doParseAll Nothing emptyShellState ((0,sgr,gr),[]) --- is 0 safe?
 
 -- | update a shell state from a canonical grammar
-updateShellState :: Options -> Maybe Ident -> ShellState -> 
+updateShellState :: Options -> NoParse -> Maybe Ident -> ShellState -> 
                     ((Int,G.SourceGrammar,CanonGrammar),[(FilePath,ModTime)]) ->
                ---- (CanonGrammar,(G.SourceGrammar,[(FilePath,ModTime)])) -> 
                     Err ShellState 
-updateShellState opts mcnc sh ((_,sgr,gr),rts) = do 
+updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do 
   let cgr0 = M.updateMGrammar (canModules sh) gr
 
   -- a0 = abstract of old state
@@ -210,7 +211,7 @@ updateShellState opts mcnc sh ((_,sgr,gr),rts) = do
       concr0 = ifNull Nothing (return . head) concrs
       notInrts f = notElem f $ map fst rts
       subcgr = unSubelimCanon cgr
-  cfs <- mapM (canon2cf opts subcgr) concrs --- why need to update all...
+  cfs <- mapM (canon2cf opts ign subcgr) concrs --- why need to update all...
 
   let morphos = map (mkMorpho subcgr) concrs
   let probss = [] -----

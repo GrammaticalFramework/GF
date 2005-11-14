@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/06/29 16:27:56 $ 
+-- > CVS $Date: 2005/11/14 16:03:41 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.18 $
+-- > CVS $Revision: 1.19 $
 --
 -- Linearization for canonical GF. AR 7\/6\/2003
 -----------------------------------------------------------------------------
@@ -210,6 +210,16 @@ allLinTables gr c t = do
  where 
    getS (lab,pss) = liftM (curry id lab) $ mapM gets pss
    gets (ps,t) = liftM (curry id ps . cc . map str2strings) $ strsFromTerm t
+   cc = concat . intersperse ["/"]
+
+-- | the value is a list of strings gathered from all fields
+
+allLinBranchFields :: CanonGrammar -> Ident -> A.Tree -> Err [String]
+allLinBranchFields gr c trm = do
+  r <- linearizeNoMark gr c trm >>= expandLinTables gr
+  return [s | (_,t) <- allLinBranches r, s <- gets t]
+ where 
+   gets t = concat [cc (map str2strings s) | Ok s <- [strsFromTerm t]]
    cc = concat . intersperse ["/"]
 
 prLinTable :: Bool -> [[(Label,[([Patt],[String])])]] -> [String]
