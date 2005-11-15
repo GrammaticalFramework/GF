@@ -5,9 +5,8 @@ lin
 
   UsePN = nameNounPhrase ;
   ComplA2 = complAdj ;
---  ComplAV    : AV  -> VPI -> AP ;         -- "eager to leave"
---  ComplObjA2V : A2V -> NP -> VPI -> AP ;   -- "easy for us to convince"
-  PredVP = predVerbPhrase ;
+  ComplAV = complVerbAdj ; 
+  ComplObjA2V = complObjA2V ; 
   UseA = adj2adjPhrase ; 
   ModAP = modCommNounPhrase ;
   UseN  = noun2CommNounPhrase ;
@@ -18,8 +17,7 @@ lin
   AppN3 = appFun2 ;
   PositADeg = positAdjPhrase ;
   ComparADeg = comparAdjPhrase ;
-  --- SuperlNP = superlNounPhrase ;
---  SuperlADeg  : ADeg -> AP ;               -- "the oldest"
+  SuperlADeg = superlAdjPhrase ; 
 
 
   CNthatS = nounThatSentence ;
@@ -33,23 +31,23 @@ lin
   DefOneNP = indefNounPhrase Sg ;
   DefNumNP = indefNounPhraseNum Pl ;
   MassNP = indefNounPhrase Sg;
---  NDetNP     : NDet -> Num -> CN -> NP ;  -- "these (5) cars"
---  NDetNum    : NDet -> Num ->       NP ;  -- "these (5)"
+  NDetNP = nDetNP ;
+  NDetNum = nDetNum ;
 
-  PosVG  = predVerbGroup True Present ;
-  NegVG  = predVerbGroup False Present ;
-
-  PredV  = predVerb ;
-  PredAP = predAdjective ;
-  PredCN = predCommNoun ;
-  PredV2 = complTransVerb ;
-  PredV3 = complDitransVerb ;
-  PredPassV = predPassVerb ;
-  PredNP = predNounPhrase ;
-  PredPP = predAdverb ;
-  PredVS = complSentVerb ;
-  PredVV = complVerbVerb ;
-  VTrans = verbOfTransVerb ;
+---  PosVG  = predVerbGroup True Present ;
+---  NegVG  = predVerbGroup False Present ;
+---  PredVP = predVerbPhrase ;
+---  PredV  = predVerb ;
+---  PredAP = predAdjective ;
+---  PredCN = predCommNoun ;
+---  PredV2 = complTransVerb ;
+---  PredV3 = complDitransVerb ;
+---  PredPassV = predPassVerb ;
+---  PredNP = predNounPhrase ;
+---  PredPP = predAdverb ;
+---  PredVS = complSentVerb ;
+---  PredVV = complVerbVerb ;
+---  VTrans = verbOfTransVerb ;
 
 -- The main uses of verbs and verb phrases have been moved to the
 -- module $Verbphrase$ (deep $VP$ nesting) and its alternative,
@@ -97,65 +95,67 @@ lin
   PNeg = {s = [] ; p = False} ;
 
 
---  AdvPP   : PP -> Adv ;                 -- "in London", "after the war"
---  AdvAdv  : AdA -> Adv -> Adv ;         -- "very well"
+  AdvPP x = x ;
+  AdvAdv  = advAdv ;   
 
   AdjAdv a = mkAdverb (a.s ! AdvF) ;
   PrepNP p = prepPhrase p ;
   AdvVPI = adVerbPhraseInf ;
-  ---AdvVP    = adVerbPhrase ;
-  ---LocNP = locativeNounPhrase ;
   AdvCN = advCommNounPhrase ;
   AdvAP = advAdjPhrase ;
 
+  AdvCl = advClause ;
+  AdCPhr = advSentencePhr ;
+  AdvPhr = advSentencePhr ;
+
+---AdvVP    = adVerbPhrase ;
+---LocNP = locativeNounPhrase ;
+
+
+  IdRP = identRelPron ;
+  FunRP = funRelPron ;
+
+  RelCl = relCl;
+  RelSlash = relSlash ;
+
+---  ModRC = modRelClause ;
+---  RelSuch = relSuch ;
+---  RelVP = relVerbPhrase ;
+---  PosSlashV2 = slashTransVerb True ;
+---  NegSlashV2 = slashTransVerb False ;
+---  OneVP = predVerbPhrase (pron2NounPhrase pronKtoTo Animate) ;
+---  ThereNP = thereIs ;
+
+---  WhoOne = intPronKto Sg ;
+---  WhoMany = intPronKto Pl ;
+---  WhatOne = intPronChto Sg ;
+---  WhatMany = intPronChto Pl ;
+---  NounIPOne = nounIntPron Sg ;
+---  NounIPMany = nounIntPron Pl ;
+---  SuperlNP = superlNounPhrase ;
+---  QuestVP = questVerbPhrase ;
+---  IntVP = intVerbPhrase ;
+---  ImperVP = imperVerbPhrase ;
+
+  FunIP = funIntPron ;
+  QuestAdv = questAdverbial ;
+
+  IndicPhrase = indicUtt ;
+  QuestPhrase = interrogUtt ;
+  ImperOne = imperUtterance Masc Sg ;
+  ImperMany = imperUtterance Masc Pl ;
+
+--  IDetCN : IDet -> CN -> IP ;               -- "which car", "which cars"
 
 --  SlashV2   : NP -> V2 -> Slash ;       -- "(whom) John doesn't love"
 --  SlashVV2  : NP -> VV -> V2 -> Slash ; -- "(which song do you) want to play"
 --  SlashAdv  : Cl -> Prep -> Slash ;     -- "(whom) John walks with"
 
-  PosSlashV2 = slashTransVerb True ;
-  NegSlashV2 = slashTransVerb False ;
-  OneVP = predVerbPhrase (pron2NounPhrase pronKtoTo Animate) ;
-  ThereNP = thereIs ;
+--  IntSlash = intSlash ;
+--  QuestCl    : Cl -> QCl ;                  -- "does John walk"; "doesn't John walk"
 
-  IdRP = identRelPron ;
-  FunRP = funRelPron ;
-  RelVP = relVerbPhrase ;
-  RelSlash = relSlash ;
-  ModRC = modRelClause ;
-  RelSuch = relSuch ;
---  RelCl     : Cl -> RCl ;               -- "such that it is even"
-
-
-  WhoOne = intPronKto Sg ;
-  WhoMany = intPronKto Pl ;
-  WhatOne = intPronChto Sg ;
-  WhatMany = intPronChto Pl ;
-  FunIP = funIntPron ;
---  IDetCN : IDet -> CN -> IP ;               -- "which car", "which cars"
-
-  NounIPOne = nounIntPron Sg ;
-  NounIPMany = nounIntPron Pl ;
-
-  QuestVP = questVerbPhrase ;
-  ---IntVP = intVerbPhrase ;
-  IntSlash = intSlash ;
--- QuestCl    : Cl -> QCl ;                  -- "does John walk"; "doesn't John walk"
-
-
-  QuestAdv = questAdverbial ;
-
-
-  ---ImperVP = imperVerbPhrase ;
 --  PosImpVP, NegImpVP  : VCl -> Imp ;         -- "(don't) be a man"
   
-  IndicPhrase = indicUtt ;
-  QuestPhrase = interrogUtt ;
-  ImperOne = imperUtterance Masc Sg ;
-  ImperMany = imperUtterance Masc Pl ;
-  AdvCl = advClause ;
---  AdCPhr  : AdC -> S -> Phr ;                -- "Therefore, 2 is prime."
---  AdvPhr  : Adv -> S -> Phr ;                -- "In India, there are tigers."
 
   TwoS = twoSentence ;
   ConsS = consSentence ;
@@ -172,23 +172,24 @@ lin
   ConjNP = conjunctNounPhrase ;
   ConjDNP = conjunctDistrNounPhrase ;
 
---  ConjAdv   : Conj -> ListAdv -> Adv ;        -- "quickly or slowly"
---  ConjDAdv  : ConjD -> ListAdv -> Adv ;       -- "both badly and slowly"
---  TwoAdv   : Adv -> Adv -> ListAdv ;
---  ConsAdv  : ListAdv -> Adv -> ListAdv ;
+  ConjAdv = conjAdverb ; 
+  ConjDAdv  = conjDAdverb ;
+  TwoAdv = twoAdverb ;
+  ConsAdv = consAdverb ;
 
 
-  SubjS = subjunctSentence ;
-  SubjImper = subjunctImperative ;
-  SubjQu = subjunctQuestion ;
---  SubjQS    : Subj -> S -> QS -> QS ;      -- "if you are new, who are you?"
-  SubjVP = subjunctVerbPhrase ;
+  SubjQS  = subjQS ;
 
 -- This rule makes a subordinate clause into a sentence adverb, which
 -- can be attached to e.g. noun phrases. It might even replace the
 -- previous subjunction rules.
 
---  AdvSubj    : Subj -> S -> Adv ;           -- "when he arrives"
+  AdvSubj = advSubj ;
+
+---  SubjS = subjunctSentence ;
+---  SubjImper = subjunctImperative ;
+---  SubjQu = subjunctQuestion ;
+---  SubjVP = subjunctVerbPhrase ;
 
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase Sg ;
@@ -197,8 +198,7 @@ lin
   PhrIAdv ia = postfixSS "?" ia ;
   OnePhr p = p ;
   ConsPhr = cc2 ;  
-  
---  PhrVPI   : VPI -> Phr ;                   -- "Tända ljus."
+  PhrVPI  =  phrVPI ;
 
 --2 Special constructs.
 --
@@ -209,13 +209,6 @@ lin
 --  ExistNumCN = existNumCN ;
 
   OneNP  = npOne ;  
-
---New in the "lib"-version from Swedish:
-
-  AdvPP p = p ;
-  PredSuperl a = predAdjective (superlAdjPhrase a) ;
-  PrepS p = ss (p.s ++ ",") ;
-  PredVG = predVerbGroupClause ;  
 
 } ;
 

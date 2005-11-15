@@ -47,7 +47,7 @@ lincat
 
   Det    = Determiner ;
       -- = Adjective ** {n: Number; g: PronGen; c: Case} ; 
-  NDet   = Adjective ** {g: PronGen; c: Case} ; 
+  NDet   = NoNumberDeterminer ;
       -- "Det" without "Number" field
 
   N2     = Function ;  
@@ -95,9 +95,9 @@ lincat
       -- = {s : Bool => ClForm => Str} ;
   S      = Sentence ; 
       -- = {s : Str} ;
-  Slash  = SentenceSlashNounPhrase ; 
-      -- sentence without NP, e.g. "John waits for (...)"
-      -- = Sentence ** Complement ;
+  Slash  = SlashNounPhrase ; 
+      -- = Clause ** Complement ;
+      -- = {s : Bool => ClForm => Str; s2: Str; c: Case} ;
   
   RP     = RelPron ;
       -- = {s :                   GenNum => Case => Animacy => Str} ;
@@ -109,13 +109,14 @@ lincat
       -- = NounPhrase ;
   IDet   = Determiner ;
       -- = Adjective ** {n: Number; g: PronGen; c: Case} ; 
-
+  
   IAdv   = Adverb ;   
       -- = {s : Str} ;
 
   QS     = Question ;     -- question w. fixed tense
       -- = {s :                 QuestForm => Str} ;
-  QCl    = {s :Bool => ClForm => QuestForm => Str};  
+  QCl    = QuestionCl ;
+      -- = {s :Bool => ClForm => QuestForm => Str};  
 
   Imp    = Imperative ;
       -- = { s: Gender => Number => Str } ;
@@ -132,7 +133,8 @@ lincat
   ListNP = ListNounPhrase ;
       -- = { s1,s2 : PronForm => Str ; g: Gender ; anim : Animacy ;
       --     n : Number ; p : Person ;  pron : Bool } ;
-  ListAdv= {s1 : Str ; s2 : Str} ;
+  ListAdv= ListAdverb ; 
+      -- = {s1, s2 : Str} ;
 
   Phr    = Utterance ;
       -- = {s : Str} ;
@@ -153,7 +155,7 @@ lincat
   AS     = Adverb ;   
       -- = {s : Str} ;
   A2S    = Adverb ** Complement;       
-  AV     = Adjective ;
+  AV     = Adjective ;    --- "eager to leave"
       -- = {s : AdjForm => Str} ;      
   A2V    = AdjCompl ;
       -- = Adjective ** Complement ;
