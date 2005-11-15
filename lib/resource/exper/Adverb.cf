@@ -1,0 +1,22 @@
+-- adverbs
+
+AdjAdv. Adv ::= A "+ly" ;
+AdvPP.  Adv ::= PP ;
+PrepNP. Adv ::= Prep NP ;
+
+-- NO AdvCN
+AdvVP.  VP  ::= VP Adv ;
+AdvNP.  NP  ::= NP Adv ;
+AdvAP.  AP  ::= AdA AP ;
+AdvAdv. Adv ::= AdA Adv ;
+
+-- different from AdvVP!
+
+VP ::= AdV VP ;
+
+-- lexicon
+
+Prep ::= "of" | "to" ;
+Adv  ::= "here" ;
+AdA  ::= "very" ;
+AdV  ::= "always" ;

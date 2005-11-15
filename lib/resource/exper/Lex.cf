@@ -1,0 +1,9 @@
+-- a bigger lexicon
+
+Pron ::= "I" | "me" | "he" | "she" ;
+Pron ::= "us" | "we" ;
+Poss ::= "your" | "his" | "her" | "our" ;
+Prep ::= "about" | "for" | "from" | "in" ;
+
+N    ::= "car" | "house" | "flight" | "aircraft" ;
+N_Pl ::= "cars" | "houses" | "flights" | "aircraft" ;
