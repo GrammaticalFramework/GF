@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/15 11:43:33 $ 
+-- > CVS $Date: 2005/11/15 17:56:13 $ 
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.12 $
+-- > CVS $Revision: 1.13 $
 --
 -- printing and parsing CF grammars, rules, and trees AR 26/1/2000 -- 9/6/2003
 --
@@ -89,11 +89,11 @@ getCFRule mo s = getcf (wrds s) where
   clean = filter isAlphaNum -- to form valid identifiers
   wrds = takeWhile (/= ";") . words -- to permit semicolon in the end
 
-pCF :: String -> String -> Err CF
+pCF :: String -> String -> Err [CFRule]
 pCF mo s = do
   rules <- mapM (getCFRule mo) $ filter isRule $ lines s
-  return $ rules2CF $ concat rules
+  return $ concat rules
  where
-   isRule line = case line of
+   isRule line = case dropWhile isSpace line of
      '-':'-':_ -> False
      _ -> not $ all isSpace line
