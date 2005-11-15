@@ -108,8 +108,57 @@ Numeral : Type = {s : Case => Gender => Str} ;
 -- The determined noun has the case parameter specific for the determiner:
 
   Determiner : Type = Adjective ** { n: Number; g: PronGen; c : Case } ;
+  NoNumberDeterminer = Adjective ** {g: PronGen; c: Case} ; 
 
   anyPlDet = kakojNibudDet ** {n = Pl;  c= Nom} ; 
+ 
+  iDetCN : Determiner -> CommNounPhrase -> IntPron = \kakoj, okhotnik -> 
+    {s = \\c => case kakoj.c of {
+       Nom => 
+        kakoj.s ! AF (extCase c) okhotnik.anim (gNum okhotnik.g kakoj.n) ++ 
+         okhotnik.s ! kakoj.n ! (extCase c) ; 
+       _ => 
+        kakoj.s ! AF (extCase c) okhotnik.anim (gNum okhotnik.g kakoj.n) ++ 
+         okhotnik.s ! kakoj.n ! kakoj.c };
+     n = kakoj.n ; 
+     p = P3 ;
+     pron = False;
+     g = kakoj.g ;
+     anim = okhotnik.anim 
+    } ;
+
+nDetNP : NoNumberDeterminer  -> Numeral -> CommNounPhrase -> NounPhrase =\eti,pyat, okhotnik ->
+  { s=\\c => case eti.c of {
+       Nom => 
+        eti.s ! AF (extCase c) Inanimate (gNum (pgen2gen eti.g) Pl) ++ 
+         pyat.s ! (extCase c) ! (pgen2gen eti.g)++ okhotnik.s ! Pl ! (extCase c); 
+       _ => 
+        eti.s ! AF (extCase c) Inanimate (gNum (pgen2gen eti.g) Pl) ++ 
+         pyat.s ! eti.c ! (pgen2gen eti.g) ++ okhotnik.s ! Pl ! eti.c };
+
+     n = Pl ; 
+     p = P3 ;
+     pron = False;
+     g = eti.g ;
+     anim = okhotnik.anim 
+  };  
+
+  nDetNum: NoNumberDeterminer  -> Numeral ->  NounPhrase =\eti,pyat ->
+  { s=\\c => case eti.c of {
+       Nom => 
+        eti.s ! AF (extCase c) Inanimate (gNum (pgen2gen eti.g) Pl) ++ 
+         pyat.s ! (extCase c) ! (pgen2gen eti.g); 
+       _ => 
+        eti.s ! AF (extCase c) Inanimate (gNum (pgen2gen eti.g) Pl) ++ 
+         pyat.s ! eti.c ! (pgen2gen eti.g) };
+
+     n = Pl ; 
+     p = P3 ;
+     pron = False;
+     g = eti.g ;
+     anim = Inanimate 
+  };  
+
 
   mkDeterminerNum : Determiner -> Numeral -> Determiner = \vse,dva -> 
     {s =\\af => vse.s ! af ++ dva.s ! (caseAF af) ! (genAF af) ; 
@@ -279,6 +328,18 @@ pgNum : PronGen -> Number -> GenNum = \g,n ->
      p = True
     } ;
 
+  complVerbAdj : Adjective -> VerbPhraseInf -> AdjPhrase = \zhazhduuchii,zhit ->
+    {s = \\af => zhazhduuchii.s ! af ++ zhit.s2 ++ zhit.s ;
+     p = True
+    } ;
+
+
+complObjA2V: AdjCompl -> NounPhrase -> VerbPhraseInf -> AdjPhrase =
+\ legkii, mu, zapomnit ->
+{ s = \\af => legkii.s ! AdvF ++ zapomnit.s2 ++ zapomnit.s ++ 
+    mu. s ! (mkPronForm legkii.c No NonPoss);
+     p = True
+    };   
 --3 Complements
 --
 
@@ -547,6 +608,9 @@ let {n = ivan.n ; nf = if_then_else Number coll Sg n} in
   locativeNounPhrase : NounPhrase -> Adverb = \ivan ->
     {s = "в" ++ ivan.s ! (mkPronForm Prepos Yes NonPoss) } ;
 
+  advAdv  : Adverb -> Adverb -> Adverb =\ochen, khorosho ->
+  {s = ochen.s ++ khorosho.s}; 
+
    mkAdverb : Str -> Adverb = \well   -> ss well  ;
 -- This is a source of the "man with a telescope" ambiguity, and may produce
 -- strange things, like "машины всегда".
@@ -563,6 +627,8 @@ let {n = ivan.n ; nf = if_then_else Number coll Sg n} in
      p = khorosho.p
     } ; 
 
+
+
 --2 Sentences
 --
 -- We do not introduce the word order parameter for sentences in Russian
@@ -574,8 +640,8 @@ oper
 
 -- This is the traditional $S -> NP VP$ rule. 
 
-    predVerbPhrase : NounPhrase -> VerbPhrase -> Sentence = 
-    \Ya, tebyaNeVizhu -> { s =
+    predVerbPhrase : NounPhrase -> VerbPhrase -> SlashNounPhrase = 
+    \Ya, tebyaNeVizhu -> { s = \\b,clf =>
        let 
        { ya = Ya.s ! (mkPronForm Nom No NonPoss);
          ne = tebyaNeVizhu.s2;
@@ -585,20 +651,20 @@ oper
        in
        if_then_else Str tebyaNeVizhu.negBefore  
         (ya ++ ne ++ vizhu ++ tebya)
-        (ya ++ vizhu ++ ne ++ tebya)
-    } ;
+        (ya ++ vizhu ++ ne ++ tebya);
+       s2= "";
+       c = Nom
+} ;
 
 param
   Anteriority = Simul | Anter ; 
    -- for compatibility with Rules.gf:
   ClTense    = ClPresent | ClPast | ClFuture | ClConditional;
-
   ClForm =  ClIndic RusTense Anteriority | ClCondit  | ClInfinit ;      
   -- "naked infinitive" clauses
     
 oper
   Clause = {s : Bool => ClForm => Str} ;
-
   predVerbGroupClause : NounPhrase -> VerbGroup -> Clause = 
   \Ya, tebyaNeVizhu -> { s = \\b,c =>
        let  { 
@@ -623,7 +689,7 @@ oper
   -- This is a macro for simultaneous predication and complementation.
 
   predTransVerb : Bool -> TransVerb -> NounPhrase -> NounPhrase -> Sentence = 
-    \b,vizhu,ya,tu -> predVerbPhrase ya (predVerbGroup b Present (complTransVerb vizhu tu)) ;
+    \b,vizhu,ya,tu -> {s= (predVerbPhrase ya (predVerbGroup b Present (complTransVerb vizhu tu))).s!True!ClIndic Present Simul};
  
 --3 Sentence-complement verbs
 --
@@ -678,9 +744,9 @@ oper
 -- Notice that the slash category has the same relation to sentences as
 -- transitive verbs have to verbs: it's like a *sentence taking a complement*.
 
-  SentenceSlashNounPhrase = Sentence ** Complement ;
+  SlashNounPhrase = Clause ** Complement ;
 
-  slashTransVerb : Bool -> NounPhrase -> TransVerb -> SentenceSlashNounPhrase = 
+  slashTransVerb : Bool -> NounPhrase -> TransVerb -> SlashNounPhrase = 
     \b,ivan,lubit ->
     predVerbPhrase ivan (predVerbGroup b Present ((verbOfTransVerb lubit)**
      { s2 =   table{True => ""; False => "не"};
@@ -709,7 +775,7 @@ thereIs : NounPhrase -> Sentence = \bar ->
 --
 -- Coordinated phrases are built by using conjunctions, which are either
 -- simple ("и", "или") or distributed ("как - так", "либо - либо").
---
+--f
 -- The conjunction has an inherent number, which is used when conjoining
 -- noun phrases: "Иван и Маша поют" vs. "Иван или Маша поет"; in the
 -- case of "или", the result is however plural if any of the disjuncts is.
@@ -742,10 +808,10 @@ oper
        gulyaet.s3 ! genGNum gn ! nu
     } ;
 
-  relSlash : RelPron -> SentenceSlashNounPhrase -> RelClause = 
+  relSlash : RelPron -> SlashNounPhrase -> RelClause = 
    \kotoruj, yaVizhu ->
     {s = \\b,clf,gn, _ , anim => yaVizhu.s2 ++ kotoruj.s ! gn ! yaVizhu.c ! anim 
-         ++ yaVizhu.s 
+         ++ yaVizhu.s!b!clf 
     } ;
 
 -- A 'degenerate' relative clause is the one often used in mathematics, e.g.
@@ -753,6 +819,9 @@ oper
 
   relSuch : Sentence -> RelClause = \A ->
     {s = \\b,clf,gn,c, anim => takoj.s ! AF c anim gn ++ "что" ++ A.s } ;
+
+relCl : Clause -> RelClause =\ A ->
+    {s = \\b,clf,gn,c, anim => takoj.s ! AF c anim gn ++ "что" ++ A.s !b!clf}; 
 
 -- The main use of relative clauses is to modify common nouns.
 -- The result is a common noun, out of which noun phrases can be formed
@@ -843,6 +912,12 @@ oper
   indicUtt : Sentence -> Utterance = \x -> postfixSS "." (defaultSentence x) ;
   interrogUtt : Question -> Utterance = \x -> postfixSS "?" (defaultQuestion x) ;
 
+advSentencePhr  : Adverb -> Sentence -> Utterance =\ a,sen ->
+{s = a.s ++ ","++ sen.s};  
+
+phrVPI: VerbPhraseInf -> Utterance =  \v ->
+{s = v.s ++ v.s2 ++ v.s3!Masc!Sg} ;
+
 --2 Questions
 --
 -- Questions are either direct ("Ты счастлив?") 
@@ -851,8 +926,10 @@ oper
 param 
   QuestForm = DirQ | IndirQ ;
 
+  
 oper
   Question = SS1 QuestForm ;
+  QuestionCl = {s :Bool => ClForm => QuestForm => Str};  
 
 --3 Yes-no questions 
 --
@@ -885,12 +962,12 @@ isThere : NounPhrase -> Question = \bar ->
 -- others that are like $S/NP - NP$ sentences.
 
   intVerbPhrase : IntPron -> VerbPhrase -> Question = \kto,spit ->
-    {s = table { _  => (predVerbPhrase kto spit).s }
+    {s = table { _  => (predVerbPhrase kto spit).s!True!ClIndic Present Simul}
     } ;
 
-  intSlash : IntPron -> SentenceSlashNounPhrase -> Question = \Kto, yaGovoru ->
-    let {  kom = Kto.s ! (mkPronForm yaGovoru.c No NonPoss) ; o = yaGovoru.s2 } in
-    {s = table {  _ => o ++ kom ++ yaGovoru.s  } 
+  intSlash : IntPron -> SlashNounPhrase -> QuestionCl = \Kto, yaGovoruO ->
+    let {  kom = Kto.s ! (mkPronForm yaGovoruO.c No NonPoss) ; o = yaGovoruO.s2 } in 
+    {s =  \\b,clf,_ => o ++ kom ++ yaGovoruO.s ! b ! clf  
     } ;
 
 --3 Interrogative adverbials
@@ -907,11 +984,15 @@ isThere : NounPhrase -> Question = \bar ->
 -- A question adverbial can be applied to anything, and whether this makes
 -- sense is a semantic question.
 
-  questAdverbial : IntAdverb -> NounPhrase -> VerbPhrase -> Question = 
+  questAdverbial_1 : IntAdverb -> NounPhrase -> VerbPhrase -> Question = 
     \kak, tu, pozhivaesh ->
     {s = \\q => kak.s ++ tu.s ! (mkPronForm Nom No NonPoss) ++ 
        pozhivaesh.s2 ++ pozhivaesh.s ! VFin (gNum (pgen2gen tu.g) tu.n) tu.p ++ 
        pozhivaesh.s3 ! (pgen2gen tu.g) ! tu.n } ; 
+ 
+   questAdverbial : IntAdverb -> Clause -> QuestionCl = 
+    \kak, tuPozhivaesh ->
+    {s = \\b,clf,q => kak.s ++ tuPozhivaesh.s!b!clf } ; 
  
 --2 Imperatives
 --
@@ -951,7 +1032,7 @@ isThere : NounPhrase -> Question = \bar ->
 
 -- To coordinate a list of sentences by a simple conjunction, we place
 -- it between the last two elements; commas are put in the other slots,
--- e.g. "ты куришь, вы пьете и я ем".
+-- e.g. "ты куришь, вы пьете и я ем".
 
   conjunctSentence : Conjunction -> ListSentence -> Sentence = \c,xs ->
     ss (CO.conjunctX c xs) ;
@@ -963,6 +1044,20 @@ isThere : NounPhrase -> Question = \bar ->
 
   conjunctDistrSentence : ConjunctionDistr -> ListSentence -> Sentence = 
     \c,xs ->
+    ss (CO.conjunctDistrX c xs) ;
+
+--3 Coordinating adverbs
+--
+  ListAdverb : Type = CO.ListX ; 
+
+  twoAdverb   : (_,_ : Adverb) -> ListAdverb = CO.twoSS;
+
+  consAdverb  : ListAdverb -> Adverb -> ListAdverb = 
+  CO.consSS  CO.comma ; 
+
+  conjAdverb   : Conjunction -> ListAdverb -> Adverb = \c,xs ->
+    ss (CO.conjunctX c xs) ;
+  conjDAdverb  : ConjunctionDistr -> ListAdverb -> Adverb =    \c,xs ->
     ss (CO.conjunctDistrX c xs) ;
 
 --3 Coordinating adjective phrases
@@ -1074,13 +1169,20 @@ isThere : NounPhrase -> Question = \bar ->
     \if, A, B ->
     {s = \\q => subjunctVariants if A.s (B.s ! q)} ;
 
+  subjQS    : Subjunction -> Sentence -> Question -> Question = 
+    \ if, sen, que ->
+     {s = \\qf => if.s ++ sen.s ++ que.s ! qf };      
+
   subjunctVerbPhrase: VerbPhrase -> Subjunction -> Sentence -> VerbPhrase =
    \V, if, A -> adVerbPhrase V (mkAdverb (if.s ++ A.s)) ;
 
   subjunctVariants : Subjunction -> Str -> Str -> Str = \if,A,B ->
     variants {if.s ++ A ++ "," ++ B ; B ++ "," ++ if.s ++ A} ;
 
---2 One-word utterances
+  advSubj    : Subjunction -> Sentence -> Adverb = \ if, sen ->
+   {s = if.s ++ sen.s} ;
+
+ --2 One-word utterances
 -- 
 -- An utterance can consist of one phrase of almost any category, 
 -- the limiting case being one-word utterances. These
