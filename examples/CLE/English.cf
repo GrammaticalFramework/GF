@@ -3,7 +3,7 @@
 -- p. 164
 
 utterance_phrase.      UTTERANCE ::= PHRASE ;
-utterance_conj_phrase. UTTERANCE ::= CONJ Phrase ;
+utterance_conj_phrase. UTTERANCE ::= CONJ PHRASE ;
 utterance_whatabout.   UTTERANCE ::= "what" "about" PHRASE ;
 utterance_howabout.    UTTERANCE ::= "how" "about" PHRASE ;
 
@@ -106,7 +106,7 @@ np_np_vp_pass. NP ::= NP VP_pass ;
 
 np_np_adjp.    NP ::= NP ADJP_post ;  --- restr. acc to text
 
-rel_s_rel.  REL ::= S_rel ;
+rel_s_rel.  REL ::= S_r ;
 rel_s_norm. REL ::= S_normal_gap ; --- type normal=norm ?? 
 --- they cannot be showing their real code here
 

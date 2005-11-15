@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:21:13 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.11 $
+-- > CVS $Date: 2005/11/15 11:43:33 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.12 $
 --
 -- printing and parsing CF grammars, rules, and trees AR 26/1/2000 -- 9/6/2003
 --
@@ -23,6 +23,7 @@ import GF.Canon.AbsGFC
 import GF.Grammar.PrGrammar
 
 import Data.Char
+import Data.List
 
 prCF :: CF -> String
 prCF = unlines . (map prCFRule) . rulesOfCF -- hiding the literal recogn function
@@ -65,20 +66,33 @@ prRegExp (RegAlts tt) = case tt of
 -- fun. C -> item1 item2 ... where unquoted items are treated as cats
 -- Actually would be nice to add profiles to this.
 
-getCFRule :: String -> String -> Err CFRule
+getCFRule :: String -> String -> Err [CFRule]
 getCFRule mo s = getcf (wrds s) where
-  getcf ww | length ww > 2 && ww !! 2 `elem` ["->", "::="] = 
-       Ok (string2CFFun mo (init fun), (string2CFCat mo cat, map mkIt its)) where
-    fun : cat : _ : its = ww
-    mkIt ('"':w@(_:_)) = atomCFTerm (string2CFTok (init w))
-    mkIt w = CFNonterm (string2CFCat mo w)
-  getcf _ = Bad (" invalid rule:" +++ s)
+  getcf ws = case ws of
+    fun : cat : a : its | isArrow a -> 
+      Ok [(string2CFFun mo (init fun), 
+            (string2CFCat mo cat, map mkIt its))]
+    cat : a : its | isArrow a -> 
+      Ok [(string2CFFun mo (mkFun cat it), 
+            (string2CFCat mo cat, map mkIt it)) | it <- chunk its]
+    _ -> Bad (" invalid rule:" +++ s)
+  isArrow a = elem a ["->", "::="] 
+  mkIt w = case w of
+    ('"':w@(_:_)) -> atomCFTerm (string2CFTok (init w))
+    _             -> CFNonterm (string2CFCat mo w)
+  chunk its = case its of
+    [] -> [[]]
+    _ -> chunks "|" its
+  mkFun cat its = case its of
+    [] -> cat ++ "_"
+    _ -> concat $ intersperse "_" (cat : map clean its) -- CLE style
+  clean = filter isAlphaNum -- to form valid identifiers
   wrds = takeWhile (/= ";") . words -- to permit semicolon in the end
 
 pCF :: String -> String -> Err CF
 pCF mo s = do
   rules <- mapM (getCFRule mo) $ filter isRule $ lines s
-  return $ rules2CF rules
+  return $ rules2CF $ concat rules
  where
    isRule line = case line of
      '-':'-':_ -> False

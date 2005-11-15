@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/04/21 16:22:35 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.7 $
+-- > CVS $Date: 2005/11/15 11:43:33 $ 
+-- > CVS $Author: aarne $
+-- > CVS $Revision: 1.8 $
 --
 -- (Description of the module)
 -----------------------------------------------------------------------------
@@ -73,7 +73,10 @@ wildIdent :: Ident
 wildIdent = identW
 
 isWildIdent :: Ident -> Bool
-isWildIdent = (== wildIdent)
+isWildIdent x = case x of
+  IW -> True
+  IC "_" -> True
+  _ -> False
 
 newIdent :: Ident
 newIdent = identC "#h"
