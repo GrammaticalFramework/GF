@@ -1,0 +1,49 @@
+--- just one tense considered; no agreement forced
+
+S  ::= NP Do VP ;
+S  ::= Adv "," S ;
+
+-- slash category instead of gaps
+
+Slash ::= NP V2 ;
+Slash ::= NP VV "to" V2 ;
+Slash ::= NP Cop A2 Prep ;
+Slash ::= S Prep ;
+Slash ::= Slash Adv ; -- who does my son love here
+
+-- questions
+
+QS ::= Do NP VP ;
+
+-- this will be eliminated via richer lintypes
+QS ::= Cop NP Comp ;
+
+IntVP.    QS ::= IP VP ;
+QS           ::= IP Do VP ;
+IntSlash. QS ::= IP Do Slash ;
+
+-- general: QuestAdv : IAdv -> Cl -> QCl ;
+QS ::= IAdv Do NP VP ;
+QS ::= IAdv Cop NP ;
+
+IAdv ::= "why" | "where" | "when" ;
+
+-- relatives
+
+RelVP. RS ::= RP VP ;
+RS ::= RP "doesn't" VP ;
+RelSlash. RS ::= RP Slash ;
+
+-- CLE syntax of relatives
+NP ::= NP RS ;
+
+IP ::= "who" ;
+FunIP. IP ::= "the" N2 "of" IP ;
+
+RP ::= "which" ;
+FunRP. RP ::= "the" N2 "of" RP ; -- ?
+
+-- imperative
+
+PosImpVP. Imp ::= VP ;
+NegImpVP. Imp ::= "don't" VP ;

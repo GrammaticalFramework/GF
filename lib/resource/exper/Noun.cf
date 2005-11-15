@@ -1,0 +1,78 @@
+NP  ::= Det CN ;
+NP  ::= PN ;
+NP  ::= Pron ;
+Det ::= Predet Quant Num ;
+Det ::= Predet Quant ;
+
+Predet ::= ;
+
+Predet ::= "only" | "just" ;
+Quant  ::= "this" | "the" | "a" | "every" | "some" ;
+
+Num ::= "one" ;
+
+Quant  ::= Poss ;
+
+Quant ::= ; -- for NMass
+
+---NP ::= DetMass NMass ;
+---DetMass ::= Predet Quant ;
+---DetMass ::= Predet ;
+---NMass ::= "wine" ;
+Pron ::= "you" ;
+
+NP     ::= Det_Pl CN_Pl ;
+NP     ::= Predet_Pl Quant_Pl Num_Pl ; -- nonempty det
+
+Det_Pl ::= Predet_Pl Quant_Pl Num_Pl ;
+Det_Pl ::= Predet_Pl Quant_Pl ;
+
+Predet_Pl ::= ;
+Quant_Pl  ::= ;
+
+Predet_Pl ::= "all" | "only" | "just" ;
+
+Quant_Pl ::= "these" | "many" | "some" ;
+
+Quant_Pl  ::= Poss ;
+
+Poss ::= NP "'s" | "my" ;
+
+Num_Pl ::= Int ;
+Num_Pl ::= "four" ;
+
+CN_Pl ::= N_Pl ;
+CN    ::= N ;
+
+-- prepositions cannot be expressed generally here
+-- NB relational nouns explain why complements are closer than adjuncts
+
+CN ::= N2 "for" NP ;
+N2 ::= N3 "of" NP ;
+
+-- elliptical constructions
+
+N2 ::= N3 ;
+CN ::= N2 ;
+
+-- these need other modules to produce anything
+
+CN ::= AP CN ;
+CN ::= CN AP_post ;
+CN ::= CN "that" S ;
+
+CN_Pl ::= AP CN_Pl ;
+CN_Pl ::= CN_Pl AP_post ;
+
+-- some open lexicon
+
+N_Pl ::= "sons" ;
+N    ::= "son" ;
+
+N2 ::= "plan" ;
+N3 ::= "value" ;
+
+N  ::= "wine" ;
+
+PN ::= "John" ;
+

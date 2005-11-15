@@ -1,0 +1,26 @@
+PositA.  AP ::= A ;
+ComplA2. AP_post ::= A2 Prep NP ;
+ComparA. AP_post ::= "more" A "than" NP ;
+
+-- superlatives à la CLE
+
+Num    ::= "most" A ;
+Num_Pl ::= "most" A ;
+
+ComplAV.  AP_post ::= AV Prep VP ;
+UseA2V.   AV      ::= A2V Prep NP ;
+
+PredAS.   Cl      ::= "it" "be" AS "that" S ;
+
+ComplAQ.  AP      ::= AQ "of" QS ;
+
+---- TODO: comparison of AV etc
+
+-- lexicon
+
+A  ::= "intelligent" ;
+A2 ::= "devoted" ;
+AV ::= "tedious" ;
+AV ::= "difficult" ;
+AS ::= "marvellous" ;
+AQ ::= "independent" ;
