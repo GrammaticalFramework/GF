@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/10 16:43:45 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.84 $
+-- > CVS $Date: 2005/11/16 10:21:21 $ 
+-- > CVS $Author: peb $
+-- > CVS $Revision: 1.85 $
 --
 -- A database for customizable GF shell commands. 
 --
@@ -294,8 +294,8 @@ customGrammarPrinter =
   ,(strCI "pinfo",    Prt.prt . statePInfo)
   ,(strCI "abstract", Prt.prtAfter "\n" . Cnv.gfc2abstract . stateGrammarLang)
 
-  ,(strCI "functiongraph",CnvTypeGraph.prtFunctionGraph . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
-  ,(strCI "typegraph",    CnvTypeGraph.prtTypeGraph . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
+  ,(strCI "functiongraph",CnvTypeGraph.prtFunctionGraph . Cnv.gfc2simple noOptions . stateGrammarLang)
+  ,(strCI "typegraph",    CnvTypeGraph.prtTypeGraph . Cnv.gfc2simple noOptions . stateGrammarLang)
 
   ,(strCI "gfc-haskell",  CnvHaskell.prtSGrammar . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
   ,(strCI "mcfg-haskell", CnvHaskell.prtMGrammar . stateMCFG)

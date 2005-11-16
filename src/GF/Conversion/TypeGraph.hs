@@ -4,9 +4,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/10/05 11:56:42 $ 
+-- > CVS $Date: 2005/11/16 10:21:21 $ 
 -- > CVS $Author: peb $
--- > CVS $Revision: 1.1 $
+-- > CVS $Revision: 1.2 $
 --
 -- Printing the type hierarchy of an abstract module in GraphViz format
 -----------------------------------------------------------------------------
@@ -35,8 +35,9 @@ prtTypeGraph rules = "digraph TypeGraph {" ++++
                      "}"
 
 prtTypeGraphRule :: SRule -> String
-prtTypeGraphRule (Rule (Abs cat cats (Name fun _prof)) _)
-    = unlines [ prtSCat c ++ " -> " ++ prtSCat cat ++ ";" | c <- cats ]
+prtTypeGraphRule (Rule abs@(Abs cat cats (Name fun _prof)) _)
+    = "// " ++ prt abs ++++
+      unlines [ prtSCat c ++ " -> " ++ prtSCat cat ++ ";" | c <- cats ]
 
 prtFunctionGraph :: SGrammar -> String
 prtFunctionGraph rules = "digraph FunctionGraph {" ++++ 
@@ -45,10 +46,12 @@ prtFunctionGraph rules = "digraph FunctionGraph {" ++++
                          "}"
 
 prtFunctionGraphRule :: SRule -> String
-prtFunctionGraphRule (Rule (Abs cat cats (Name fun _prof)) _)
-    = prt fun ++ " [shape=box, style=dashed];" ++++
-      prt fun ++ " -> " ++ prtSCat cat ++ ";" ++++
-      unlines [ prtSCat c ++ " -> " ++ prt fun ++ ";" | c <- cats ]
+prtFunctionGraphRule (Rule abs@(Abs cat cats (Name fun _prof)) _)
+    = "// " ++ prt abs ++++
+      pfun ++ " [label=\"" ++ prt fun ++ "\", shape=box, style=dashed];" ++++
+      pfun ++ " -> " ++ prtSCat cat ++ ";" ++++
+      unlines [ prtSCat c ++ " -> " ++ pfun ++ ";" | c <- cats ]
+    where pfun = "GF_FUNCTION_" ++ prt fun
 
 prtSCat (Decl var cat args) = prt cat
 
