@@ -1,5 +1,5 @@
 concrete TimeEng of Time = NumeralsEng ** 
-  open Prelude, CategoriesEng, ParadigmsEng in {
+  open Prelude, CategoriesEng, ParadigmsEng, MorphoEng in {
 
 lincat
 Date = SS ;
@@ -17,8 +17,8 @@ PastTime h m = ss (m.s ++ "past" ++ h.s) ;
 ToTime h m = ss (m.s ++ "to" ++ h.s) ;
 ExactTime h = ss (h.s ++ "sharp") ;
 
-NumHour n = n ;
-NumMinute n = n ;
+NumHour n = {s = n.s ! NCard} ;
+NumMinute n = {s = n.s ! NCard} ;
 
 monday = regN "Monday" ;
 tuesday = regN "Tuesday" ;

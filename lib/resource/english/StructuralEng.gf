@@ -10,7 +10,8 @@ concrete StructuralEng of Structural =
   flags optimize=all ;
 
   lin
-  UseNumeral i = {s = table {Nom => i.s ; Gen => i.s ++ "'s"} ; n = i.n} ; ---
+  UseNumeral i = {
+   s = table {Nom => i.s ! NCard ; Gen => i.s ! NCard ++ "'s"} ; n = i.n} ; ---
 
 
   above_Prep = ss "above" ;

@@ -2,7 +2,7 @@
 
 AdjAdv. Adv ::= A "+ly" ;
 AdvPP.  Adv ::= PP ;
-PrepNP. Adv ::= Prep NP ;
+PrepNP. PP  ::= Prep NP ;
 
 -- NO AdvCN
 AdvVP.  VP  ::= VP Adv ;
@@ -14,9 +14,4 @@ AdvAdv. Adv ::= AdA Adv ;
 
 VP ::= AdV VP ;
 
--- lexicon
 
-Prep ::= "of" | "to" ;
-Adv  ::= "here" ;
-AdA  ::= "very" ;
-AdV  ::= "always" ;

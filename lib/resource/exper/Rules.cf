@@ -1,2 +1,2 @@
--- include Det.cf Adj.cf Verb.cf Sent.cf Adverb.cf Phrase.cf   Lex.cf
+-- include Noun.cf Adj.cf Verb.cf Sent.cf Adverb.cf Phrase.cf Numeral.cf Structural.cf Lex.cf
 

@@ -1,0 +1,31 @@
+-- structural words
+
+Predet ::= "only" | "just" ;
+
+Quant  ::= "this" | "that" | "the" | "a" | "every" | "some" ;
+
+Predet_Pl ::= "all" | "only" | "just" | "most" "of" ;
+
+Quant_Pl ::= "these" | "those" | "the" | "many" | "some" ;
+
+Pron   ::= "I" | "you" | "he" | "she" | "we" | "they" ;
+Pron   ::= "me" | "him" | "her" | "us" | "them" ;
+Poss   ::= "my" | "your" | "his" | "her" | "our" | "their" ;
+
+Prep ::= "about" | "at" | "by" | "for" | "from" | "in" | "on" | "to" | "with" ;
+
+IAdv ::= "why" | "where" | "when" | "how" ;
+
+IP ::= "who" | "what" ;
+
+IDet ::= "which" | "how" "many" | "whose" ;
+
+RP ::= "which" | "who" | "that" | "whom" ;
+
+PConj ::= | "and" | "but" | "therefore" ;
+
+-- these may be eliminated in gf
+
+Cop ::= "is" | "are" | "isn't" | "aren't" | "be" | "am" | "am" "not" ;
+Do  ::= "do" | "does" | "doesn't" | "don't" ;
+Mod ::= "can" | "can't" | "would" | "wouldn't" | "will" | "won't" ;

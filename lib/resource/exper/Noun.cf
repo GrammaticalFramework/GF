@@ -1,45 +1,49 @@
 NP  ::= Det CN ;
 NP  ::= PN ;
 NP  ::= Pron ;
-Det ::= Predet Quant Num ;
-Det ::= Predet Quant ;
+NP  ::= Predet Quant Num ;
+Det ::= Predet Quant OptNum ;
 
 Predet ::= ;
 
-Predet ::= "only" | "just" ;
-Quant  ::= "this" | "the" | "a" | "every" | "some" ;
-
-Num ::= "one" ;
+-- examples
+-- Predet ::= "only" | "just" ;
+-- Quant  ::= "this" | "the" | "a" | "every" | "some" ;
+-- Num ::= "one" ;
 
 Quant  ::= Poss ;
 
-Quant ::= ; -- for NMass
+OptNum ::=  | Num ;
+
+Num ::= Ordinal ;
+
+-- instead of NMass
+Quant  ::= ; 
 
 ---NP ::= DetMass NMass ;
 ---DetMass ::= Predet Quant ;
 ---DetMass ::= Predet ;
 ---NMass ::= "wine" ;
-Pron ::= "you" ;
+
+
 
 NP     ::= Det_Pl CN_Pl ;
 NP     ::= Predet_Pl Quant_Pl Num_Pl ; -- nonempty det
 
-Det_Pl ::= Predet_Pl Quant_Pl Num_Pl ;
-Det_Pl ::= Predet_Pl Quant_Pl ;
+Det_Pl ::= Predet_Pl Quant_Pl OptNum_Pl ;
 
 Predet_Pl ::= ;
 Quant_Pl  ::= ;
 
-Predet_Pl ::= "all" | "only" | "just" ;
-
-Quant_Pl ::= "these" | "many" | "some" ;
-
 Quant_Pl  ::= Poss ;
 
-Poss ::= NP "'s" | "my" ;
+Poss ::= NP "'s" ; -- also "my" ;
 
+OptNum_Pl ::= | Num_Pl ;
+
+Num_Pl ::= Ordinal ;
 Num_Pl ::= Int ;
-Num_Pl ::= "four" ;
+Num_Pl ::= Numeral ;
 
 CN_Pl ::= N_Pl ;
 CN    ::= N ;
@@ -47,8 +51,8 @@ CN    ::= N ;
 -- prepositions cannot be expressed generally here
 -- NB relational nouns explain why complements are closer than adjuncts
 
-CN ::= N2 "for" NP ;
-N2 ::= N3 "of" NP ;
+CN ::= N2 Prep NP ;
+N2 ::= N3 Prep NP ;
 
 -- elliptical constructions
 
@@ -63,16 +67,4 @@ CN ::= CN "that" S ;
 
 CN_Pl ::= AP CN_Pl ;
 CN_Pl ::= CN_Pl AP_post ;
-
--- some open lexicon
-
-N_Pl ::= "sons" ;
-N    ::= "son" ;
-
-N2 ::= "plan" ;
-N3 ::= "value" ;
-
-N  ::= "wine" ;
-
-PN ::= "John" ;
 
