@@ -1,8 +1,10 @@
-Phr ::= PConj Imp ;
 Phr ::= PConj S ;
-Phr ::= PConj QS ;
 
-Phr ::= PConj "please" Imp | PConj QS "please" ;
-Phr ::= PConj NP | PConj NP "please" ;
+Phr ::= PConj Imp Please ;
+Phr ::= PConj QS  Please ;
+Phr ::= PConj NP  Please ;
+Phr ::= PConj PP  Please ;
+Phr ::= PConj "to" VP  Please ;
 
-PConj ::= | "and" | "but" | "therefore" ;
+
+Please ::= | "please" ;

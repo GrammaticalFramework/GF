@@ -1,6 +1,7 @@
 --- just one tense considered; no agreement forced
 
-S  ::= NP Do VP ;
+S  ::= NP VP ;
+S  ::= NP Mod VP ;
 S  ::= Adv "," S ;
 
 -- slash category instead of gaps
@@ -13,35 +14,40 @@ Slash ::= Slash Adv ; -- who does my son love here
 
 -- questions
 
-QS ::= Do NP VP ;
+QS ::= Mod NP VP ;
 
 -- this will be eliminated via richer lintypes
 QS ::= Cop NP Comp ;
 
 IntVP.    QS ::= IP VP ;
-QS           ::= IP Do VP ;
-IntSlash. QS ::= IP Do Slash ;
+QS           ::= IP Mod VP ;
+IntSlash. QS ::= IP Mod Slash ;
 
 -- general: QuestAdv : IAdv -> Cl -> QCl ;
-QS ::= IAdv Do NP VP ;
+QS ::= IAdv Mod NP VP ;
 QS ::= IAdv Cop NP ;
 
-IAdv ::= "why" | "where" | "when" ;
+IAdv ::= Prep IP ;
 
 -- relatives
 
 RelVP. RS ::= RP VP ;
-RS ::= RP "doesn't" VP ;
+RS        ::= RP Mod VP ;
 RelSlash. RS ::= RP Slash ;
+RS           ::= Slash ; 
 
 -- CLE syntax of relatives
 NP ::= NP RS ;
 
-IP ::= "who" ;
-FunIP. IP ::= "the" N2 "of" IP ;
+FunIP. IP ::= "the" N2 Prep IP ;
 
-RP ::= "which" ;
-FunRP. RP ::= "the" N2 "of" RP ; -- ?
+IP ::= IDet OptNum    CN ;
+IP ::= IDet OptNum_Pl CN_Pl ;
+IP ::= IP PP ;
+
+FunRP. RP ::= "the" N2 Prep RP ; -- ?
+RP ::= "whose" OptNum    CN ;
+RP ::= "whose" OptNum_Pl CN_Pl ;
 
 -- imperative
 

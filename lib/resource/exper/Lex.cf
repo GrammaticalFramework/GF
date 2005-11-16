@@ -1,9 +1,36 @@
--- a bigger lexicon
+-- some open lexicon
 
-Pron ::= "I" | "me" | "he" | "she" ;
-Pron ::= "us" | "we" ;
-Poss ::= "your" | "his" | "her" | "our" ;
-Prep ::= "about" | "for" | "from" | "in" ;
+N_Pl ::= "sons" ;
+N    ::= "son" ;
+
+N  ::= "wine" ;
+
+N2 ::= "plan" ;
+N3 ::= "value" ;
+
+PN ::= "John" ;
+
+A  ::= "intelligent" ;
+A2 ::= "devoted" ;
+AV ::= "tedious" ;
+AV ::= "difficult" ;
+AS ::= "marvellous" ;
+AQ ::= "independent" ;
+
+V0 ::= "rain" | "rains" ;
+V  ::= "sleeps" | "sleep" ;
+V2 ::= "loves" | "love" ;
+V3 ::= "sends" | "send" ;
+VV ::= "wants" | "want" ;
+
+Adv  ::= "here" ;
+AdA  ::= "very" ;
+AdV  ::= "always" ;
+
+
+-- a bigger lexicon
 
 N    ::= "car" | "house" | "flight" | "aircraft" ;
 N_Pl ::= "cars" | "houses" | "flights" | "aircraft" ;
+
+PN ::= "Boston" | "New" "York" | "Baltimore" ;
