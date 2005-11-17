@@ -333,6 +333,31 @@ zsh:bringert:[~]>
 ```
 
 
+= Technical Information =
+
+This section contains information about how the repository is set
+up. It might be useful for troubleshooting the repository setup
+or creating a similiar setup for another repository.
+
+The main repository is in
+``/users/cs/www/Research/Language-technology/darcs/GF``, which is
+visible to the web server. The repository and all files and
+directories in it group writable, owned by the group ``langtech``, and
+all directories have the setgid bit set:
+
+```
+drwxrwsr-x  10 bringert langtech 512 Nov 17 19:00 /users/cs/www/Research/Language-technology/darcs/GF
+```
+
+The repo has this in ``_darcs/prefs/defaults``:
+
+```
+apply posthook find . -user "$USER" -a ! -perm +g+w -exec chmod g+w '{}' ';'
+apply run-posthook
+```
+
+The server which we push to has darcs 1.0.4, which is needed for
+posthook support.
 
 
 = Further information about Darcs =
