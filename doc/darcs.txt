@@ -26,7 +26,7 @@ the reasons for switching GF from CVS to Darcs:
 - it is possible and easy to rename and remove both files and directories.
 
 
-For more information about Darcs, see http://darcs.net/
+For more information about Darcs, see http://darcs.net/.
 
 
 
