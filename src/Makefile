@@ -179,10 +179,8 @@ tools/$(GF_DOC_EXE): tools/GFDoc.hs
 
 dist:
 	-rm -rf $(DIST_DIR)
-	mkdir $(DIST_DIR)
-	cvs export -d $(DIST_DIR) -rHEAD GF
+	cp -r ../_darcs/current $(DIST_DIR)
 	cd $(DIST_DIR)/src && autoconf && rm -rf autom4te.cache
-	find $(DIST_DIR) -name .cvsignore -exec rm -f {} ';'
 #	cd $(DIST_DIR)/grammars && sh mkLib.sh
 	cd $(DIST_DIR) && rm -rf $(NOT_IN_DIST)
 	$(TAR) -zcf $(DIST_DIR).tgz $(DIST_DIR)
@@ -216,9 +214,7 @@ binary-dist:
 grammar-dist:
 	-rm -rf $(GRAMMAR_DIST_DIR)
 	mkdir $(GRAMMAR_DIST_DIR)
-	cvs export -d $(GRAMMAR_DIST_DIR) -rHEAD GF/{lib,examples}
-	mv $(GRAMMAR_DIST_DIR)/GF/* $(GRAMMAR_DIST_DIR)
-	rmdir $(GRAMMAR_DIST_DIR)/GF
+	cp -r ../_darcs/current/{lib,examples} $(GRAMMAR_DIST_DIR)
 	$(TAR) -zcf $(GRAMMAR_DIST_DIR).tgz $(GRAMMAR_DIST_DIR)
 	rm -rf $(GRAMMAR_DIST_DIR)
 
