@@ -43,7 +43,8 @@ GF has now been moved to a Darcs repository. No changes should be committed to t
       <LI><A HREF="#toc22">Using ssh-agent</A>
       </UL>
     </UL>
-  <LI><A HREF="#toc23">Further information about Darcs</A>
+  <LI><A HREF="#toc23">Technical Information</A>
+  <LI><A HREF="#toc24">Further information about Darcs</A>
   </UL>
 
 <P></P>
@@ -402,6 +403,36 @@ Try to use it to log in (with your own username again):
 </PRE>
 <P></P>
 <A NAME="toc23"></A>
+<H1>Technical Information</H1>
+<P>
+This section contains information about how the repository is set
+up. It might be useful for troubleshooting the repository setup
+or creating a similiar setup for another repository.
+</P>
+<P>
+The main repository is in
+<CODE>/users/cs/www/Research/Language-technology/darcs/GF</CODE>, which is
+visible to the web server. The repository and all files and
+directories in it group writable, owned by the group <CODE>langtech</CODE>, and
+all directories have the setgid bit set:
+</P>
+<PRE>
+  drwxrwsr-x  10 bringert langtech 512 Nov 17 19:00 /users/cs/www/Research/Language-technology/darcs/GF
+</PRE>
+<P></P>
+<P>
+The repo has this in <CODE>_darcs/prefs/defaults</CODE>:
+</P>
+<PRE>
+  apply posthook find . -user "$USER" -a ! -perm +g+w -exec chmod g+w '{}' ';'
+  apply run-posthook
+</PRE>
+<P></P>
+<P>
+The server which we push to has darcs 1.0.4, which is needed for
+posthook support.
+</P>
+<A NAME="toc24"></A>
 <H1>Further information about Darcs</H1>
 <P>
 For more info about what you can do with darcs, see <A HREF="http://darcs.net/manual/">http://darcs.net/manual/</A>
