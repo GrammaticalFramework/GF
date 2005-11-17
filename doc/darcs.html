@@ -19,30 +19,31 @@ GF has now been moved to a Darcs repository. No changes should be committed to t
     <UL>
     <LI><A HREF="#toc4">Getting a fresh copy for read-only access</A>
     <LI><A HREF="#toc5">Updating your copy</A>
-    <LI><A HREF="#toc6">Submitting patches</A>
+    <LI><A HREF="#toc6">Recording local changes</A>
+    <LI><A HREF="#toc7">Submitting patches</A>
     </UL>
-  <LI><A HREF="#toc7">Read-write access</A>
+  <LI><A HREF="#toc8">Read-write access</A>
     <UL>
-    <LI><A HREF="#toc8">Setting up your $PATH on the Chalmers system</A>
-    <LI><A HREF="#toc9">Setting up ssh alias and ControlMaster</A>
-    <LI><A HREF="#toc10">Setting up an ssh ControlMaster connection</A>
-    <LI><A HREF="#toc11">Getting a fresh copy</A>
-    <LI><A HREF="#toc12">Getting other people's changes?</A>
-    <LI><A HREF="#toc13">Commit your changes</A>
-    <LI><A HREF="#toc14">Apply a patch from someone else</A>
+    <LI><A HREF="#toc9">Setting up your $PATH on the Chalmers system</A>
+    <LI><A HREF="#toc10">Setting up ssh alias and ControlMaster</A>
+    <LI><A HREF="#toc11">Setting up an ssh ControlMaster connection</A>
+    <LI><A HREF="#toc12">Getting a fresh copy</A>
+    <LI><A HREF="#toc13">Getting other people's changes?</A>
+    <LI><A HREF="#toc14">Commit your changes</A>
+    <LI><A HREF="#toc15">Apply a patch from someone else</A>
     </UL>
-  <LI><A HREF="#toc15">Troubleshooting</A>
+  <LI><A HREF="#toc16">Troubleshooting</A>
     <UL>
-    <LI><A HREF="#toc16">I get the error "darcs not found" when pushing</A>
-    <LI><A HREF="#toc17">I get the error "(sftp) failed to fetch files."</A>
-    <LI><A HREF="#toc18">I get the error "Not a repository: gfreposerver:..."</A>
-    <LI><A HREF="#toc19">How do I avoid typing in my password so many times?</A>
+    <LI><A HREF="#toc17">I get the error "darcs not found" when pushing</A>
+    <LI><A HREF="#toc18">I get the error "(sftp) failed to fetch files."</A>
+    <LI><A HREF="#toc19">I get the error "Not a repository: gfreposerver:..."</A>
+    <LI><A HREF="#toc20">How do I avoid typing in my password so many times?</A>
       <UL>
-      <LI><A HREF="#toc20">Using ssh ControlMaster</A>
-      <LI><A HREF="#toc21">Using ssh-agent</A>
+      <LI><A HREF="#toc21">Using ssh ControlMaster</A>
+      <LI><A HREF="#toc22">Using ssh-agent</A>
       </UL>
     </UL>
-  <LI><A HREF="#toc22">Further information about Darcs</A>
+  <LI><A HREF="#toc23">Further information about Darcs</A>
   </UL>
 
 <P></P>
@@ -111,10 +112,25 @@ Get all new patches from the main repo:
 Without <CODE>-a</CODE>, you can choose which patches you want to get.
 </P>
 <A NAME="toc6"></A>
+<H2>Recording local changes</H2>
+<P>
+Since every copy is a repository, you can have local version control
+of your changes. To record some changes, use:
+</P>
+<PRE>
+  $ darcs record
+</PRE>
+<P></P>
+<P>
+This creates a patch against the previous version and stores it in your
+local repository. 
+</P>
+<A NAME="toc7"></A>
 <H2>Submitting patches</H2>
 <P>
 If you are using read-only access, send your patches by email to
-someone with write-access. Create the patch with:
+someone with write-access. First record your changes in your local 
+repository, as described above. Then create the patch with:
 </P>
 <PRE>
   $ darcs send -o mypatch.patch
@@ -127,7 +143,7 @@ sendmail or something equivalent installed, it is possible to send the
 patch directly from darcs. If so, replace <CODE>-o mypatch.patch</CODE> with
 <CODE>--to=EMAIL</CODE> where <CODE>EMAIL</CODE> is the address to send it to.
 </P>
-<A NAME="toc7"></A>
+<A NAME="toc8"></A>
 <H1>Read-write access</H1>
 <P>
 If you have an account on the Chalmers system and want read-write
@@ -135,7 +151,7 @@ access, you can access the repository using ssh.
 You need to be a member of the <CODE>langtech</CODE> group to push changes to
 the repository.
 </P>
-<A NAME="toc8"></A>
+<A NAME="toc9"></A>
 <H2>Setting up your $PATH on the Chalmers system</H2>
 <P>
 The <CODE>darcs</CODE> program has to be on your <CODE>$PATH</CODE> on the Chalmers
@@ -150,7 +166,7 @@ repository. To fix this, log in to your Chalmers account and run:
 Note that the path setup works differently on different Chalmers machines.
 The command above will setup you path on the newer machines correctly.
 </P>
-<A NAME="toc9"></A>
+<A NAME="toc10"></A>
 <H2>Setting up ssh alias and ControlMaster</H2>
 <P>
 In order to avoid typing in you password multiple times for each
@@ -188,7 +204,7 @@ with an earlier Darcs version you can mess up the repository.
 More information about the ControlMaster feature is available in 
 <CODE>man ssh_config</CODE>.
 </P>
-<A NAME="toc10"></A>
+<A NAME="toc11"></A>
 <H2>Setting up an ssh ControlMaster connection</H2>
 <P>
 Before connecting to the remote server, you need to set up a master
@@ -206,7 +222,7 @@ Start the master connection:
 <B>NOTE: You need to have a ControlMaster connection running whenever you want to access the repo using ssh.</B>
 You may want to create a script or alias for starting the connection.
 </P>
-<A NAME="toc11"></A>
+<A NAME="toc12"></A>
 <H2>Getting a fresh copy</H2>
 <P>
 Get your copy with (all on one line):
@@ -221,7 +237,7 @@ history for the repository. This saves space, bandwidth and CPU time,
 and most people don't need the full history of all changes in the
 past.
 </P>
-<A NAME="toc12"></A>
+<A NAME="toc13"></A>
 <H2>Getting other people's changes?</H2>
 <P>
 Get all new patches from the main repo:
@@ -233,7 +249,7 @@ Get all new patches from the main repo:
 <P>
 Without <CODE>-a</CODE>, you can choose which patches you want to get.
 </P>
-<A NAME="toc13"></A>
+<A NAME="toc14"></A>
 <H2>Commit your changes</H2>
 <P>
 There are two steps to commiting a change to the main repo. First you
@@ -244,7 +260,7 @@ have to record the changes that you want to commit:
 </PRE>
 <P></P>
 <P>
-This creates a patch against the previous version and stores it in you
+This creates a patch against the previous version and stores it in your
 local repository. You can record any number of changesets before
 pushing them to the main repo. In fact, you don't have to push them at
 all if you want to keep the changes only in your local repo.
@@ -267,7 +283,7 @@ ssh-access, all you need to do is:
 If you use the <CODE>-a</CODE> flag to push, all local patches which are not in
 the main repo are pushed.
 </P>
-<A NAME="toc14"></A>
+<A NAME="toc15"></A>
 <H2>Apply a patch from someone else</H2>
 <P>
 Use:
@@ -280,16 +296,16 @@ Use:
 This applies the patch to your local repository. To commit it to the
 main repo, use <CODE>darcs push</CODE>.
 </P>
-<A NAME="toc15"></A>
-<H1>Troubleshooting</H1>
 <A NAME="toc16"></A>
+<H1>Troubleshooting</H1>
+<A NAME="toc17"></A>
 <H2>I get the error "darcs not found" when pushing</H2>
 <P>
 If you get <CODE>darcs not found</CODE> when you try to push your changes, you
 don't have darcs on your <CODE>$PATH</CODE> on the Chalmers system. See
 the section above on setting up your <CODE>$PATH</CODE> on the Chalmers system.
 </P>
-<A NAME="toc17"></A>
+<A NAME="toc18"></A>
 <H2>I get the error "(sftp) failed to fetch files."</H2>
 <P>
 There seems to be a problem with how darcs 1.0.4 calls sftp, which
@@ -297,7 +313,7 @@ means that normal password authentication does not work. Either use
 Darcs 1.0.3 on your client, and be prepared to enter your password
 many times, or use the ssh ControlMaster feature as described above.
 </P>
-<A NAME="toc18"></A>
+<A NAME="toc19"></A>
 <H2>I get the error "Not a repository: gfreposerver:..."</H2>
 <P>
 You get this error when you have set up ControlMaster, but don't have a master
@@ -315,14 +331,14 @@ run some program with outputs something once in a while, e.g.:
   $ ssh -M gfreposerver "bash -c 'while true; do echo -n .; sleep 30; done'"
 </PRE>
 <P></P>
-<A NAME="toc19"></A>
-<H2>How do I avoid typing in my password so many times?</H2>
 <A NAME="toc20"></A>
+<H2>How do I avoid typing in my password so many times?</H2>
+<A NAME="toc21"></A>
 <H3>Using ssh ControlMaster</H3>
 <P>
 See above.
 </P>
-<A NAME="toc21"></A>
+<A NAME="toc22"></A>
 <H3>Using ssh-agent</H3>
 <P>
 <B>NOTE: the method below will not work with <CODE>momo.medic.chalmers.se</CODE></B>.
@@ -385,7 +401,7 @@ Try to use it to log in (with your own username again):
   zsh:bringert:[~]&gt;
 </PRE>
 <P></P>
-<A NAME="toc22"></A>
+<A NAME="toc23"></A>
 <H1>Further information about Darcs</H1>
 <P>
 For more info about what you can do with darcs, see <A HREF="http://darcs.net/manual/">http://darcs.net/manual/</A>

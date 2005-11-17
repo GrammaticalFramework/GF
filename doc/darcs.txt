@@ -67,10 +67,23 @@ $ darcs pull -a
 Without ``-a``, you can choose which patches you want to get.
 
 
+== Recording local changes ==
+
+Since every copy is a repository, you can have local version control
+of your changes. To record some changes, use:
+
+```
+$ darcs record
+```
+
+This creates a patch against the previous version and stores it in your
+local repository. 
+
 == Submitting patches ==
 
 If you are using read-only access, send your patches by email to
-someone with write-access. Create the patch with:
+someone with write-access. First record your changes in your local 
+repository, as described above. Then create the patch with:
 
 ```
 $ darcs send -o mypatch.patch
@@ -191,7 +204,7 @@ have to record the changes that you want to commit:
 $ darcs record
 ```
 
-This creates a patch against the previous version and stores it in you
+This creates a patch against the previous version and stores it in your
 local repository. You can record any number of changesets before
 pushing them to the main repo. In fact, you don't have to push them at
 all if you want to keep the changes only in your local repo.
