@@ -3,6 +3,11 @@ GF Darcs repository
 GF has now been moved to a Darcs repository. No changes should be committed to the CVS repository from now on.
 
 
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags -t html --toc darcs.txt
+
+
 = What is darcs? =
 
 Darcs is a decentralized revision control system. These are some of
@@ -61,6 +66,7 @@ $ darcs pull -a
 
 Without ``-a``, you can choose which patches you want to get.
 
+
 == Submitting patches ==
 
 If you are using read-only access, send your patches by email to
@@ -82,6 +88,24 @@ patch directly from darcs. If so, replace ``-o mypatch.patch`` with
 
 = Read-write access =
 
+If you have an account on the Chalmers system and want read-write
+access, you can access the repository using ssh.
+You need to be a member of the ``langtech`` group to push changes to
+the repository.
+
+== Setting up your $PATH on the Chalmers system ==
+
+The ``darcs`` program has to be on your ``$PATH`` on the Chalmers
+system to make it possible for you to push changes to the main
+repository. To fix this, log in to your Chalmers account and run:
+
+```
+echo unsup >> $HOME/.vcs4/pathsetup
+```
+
+Note that the path setup works differently on different Chalmers machines.
+The command above will setup you path on the newer machines correctly.
+
 == Setting up ssh alias and ControlMaster ==
 
 In order to avoid typing in you password multiple times for each
@@ -97,19 +121,20 @@ Chalmers system):
 Host gfreposerver
 HostName momo.medic.chalmers.se
 User bringert
-ControlPath /tmp/bringert@momo.medic.chalmers.se:22
+ControlPath /tmp/ssh-gfreposerver
 ```
 
-This sets up an alias ``gfreposerver`` for the machine we use 
-to access the Darcs repository. Note that you really need to use 
+This sets up an alias ``gfreposerver`` for the server we use 
+for the Darcs repository. Note that you really need to use 
 ``momo.medic.chalmers.se`` (or some other server with the new Linux system)
-since we need to have a server with Darcs 1.0.4.
+since we need to have a server with Darcs 1.0.4. If you use some server
+with an earlier Darcs version you can mess up the repository.
 
-More information about the ControlMaster feature is available in ``man
-ssh_config``.
+More information about the ControlMaster feature is available in 
+``man ssh_config``.
 
 
-== Setting up an ssh connection ==
+== Setting up an ssh ControlMaster connection ==
 
 Before connecting to the remote server, you need to set up a master
 ssh connection to it. As long as this connection is up, you don't
@@ -121,10 +146,12 @@ Start the master connection:
 $ ssh -M gfreposerver
 ```
 
+**NOTE: You need to have a ControlMaster connection running whenever you want to access the repo using ssh.**
+You may want to create a script or alias for starting the connection.
+
 == Getting a fresh copy ==
 
-If you have an account on the Chalmers system and want read-write
-access, you can get your copy with (all on one line):
+Get your copy with (all on one line):
 
 ```
 $ darcs get --partial --set-scripts-executable gfreposerver:/users/cs/www/Research/Language-technology/darcs/GF/
@@ -175,9 +202,6 @@ ssh-access, all you need to do is:
 If you use the ``-a`` flag to push, all local patches which are not in
 the main repo are pushed.
 
-You need to be a member of the ``langtech`` group to push to the
-repository.
-
 
 
 == Apply a patch from someone else ==
@@ -193,6 +217,12 @@ main repo, use ``darcs push``.
 
 
 = Troubleshooting =
+
+== I get the error "darcs not found" when pushing ==
+
+If you get ``darcs not found`` when you try to push your changes, you
+don't have darcs on your ``$PATH`` on the Chalmers system. See
+the section above on setting up your ``$PATH`` on the Chalmers system.
 
 == I get the error "(sftp) failed to fetch files." ==
 
@@ -218,18 +248,18 @@ $ ssh -M gfreposerver "bash -c 'while true; do echo -n .; sleep 30; done'"
 ```
 
 
-= How do I avoid typing in my password so many times? =
+== How do I avoid typing in my password so many times? ==
 
-== Using ssh ControlMaster ==
+=== Using ssh ControlMaster ===
 
 See above.
 
 
-== Using ssh-agent ==
+=== Using ssh-agent ===
 
-*NOTE: the method below will not work with MEDIC's new systems, such as
+**NOTE: the method below will not work with MEDIC's new systems, such as
  momo.medic.chalmers.se since MEDIC has decided to disable public key
- authentication on all new machines. *
+ authentication on all new machines. **
 
 With the ssh access method, Darcs needs to log in with ssh. For some
 reason it needs to do this several times for each operation. You can
@@ -279,18 +309,12 @@ $ ssh bringert@remote.cs.chalmers.se
 zsh:bringert:[~]>
 ```
 
-= I get "darcs not found" when pushing =
-
-If you get ``darcs not found`` when you try to push your changes, you
-don't have darcs on your ``$PATH`` on the Chalmers system. To fix
-this, log in to your Chalmers account and run:
-
-```
-echo unsup >> $HOME/.vcs4/pathsetup
-```
 
 
-= Further information =
+
+= Further information about Darcs =
 
 
 For more info about what you can do with darcs, see http://darcs.net/manual/
+
+
