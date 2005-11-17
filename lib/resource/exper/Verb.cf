@@ -1,10 +1,15 @@
 
-PredV0.  S  ::= "it" V0 ;
+-- PredV0.  S  ::= "it" V0 ;
+V ::= V0 ;
 
 UseV.    VP ::= V ;
 ComplV2. VP ::= V2 NP ;
-ComplV3. VP ::= V3 NP NP ;
-ComplVV. VP ::= VV "to" VP ;
+
+-- ComplV3. VP ::= V3 NP NP ;
+V2 ::= V3 ; -- via pp's
+
+-- ComplVV. VP ::= VV "to" VP ;
+V2 ::= VV ; -- I want (a house | to swim)
 
 VP ::= Cop Comp ;
 

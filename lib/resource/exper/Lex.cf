@@ -13,9 +13,11 @@ PN ::= "John" ;
 A  ::= "intelligent" ;
 A2 ::= "devoted" ;
 AV ::= "tedious" ;
-AV ::= "difficult" ;
-AS ::= "marvellous" ;
-AQ ::= "independent" ;
+A2V ::= "difficult" ;
+-- AS ::= "marvellous" ;
+A  ::= "marvellous" ;
+-- AQ ::= "independent" ;
+A2 ::= "independent" ;
 
 V0 ::= "rain" | "rains" ;
 V  ::= "sleeps" | "sleep" ;
@@ -23,10 +25,13 @@ V2 ::= "loves" | "love" ;
 V3 ::= "sends" | "send" ;
 VV ::= "wants" | "want" ;
 
-Adv  ::= "here" ;
-AdA  ::= "very" ;
-AdV  ::= "always" ;
+V2 ::= "says" | "say" ;
+V2 ::= "asks" | "ask" ;
 
+Adv  ::= "here" | "there" ;
+AdA  ::= "very" | "too" | "quite" | "much" "too" ;
+AdV  ::= "always" | "almost" ;
+AdN  ::= "less" "than" | "more" "than" | "almost" | "exactly" | "about" ;
 
 -- a bigger lexicon
 

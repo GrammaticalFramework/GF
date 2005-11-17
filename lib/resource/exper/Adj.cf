@@ -8,12 +8,14 @@ AP_post ::= "less" A "than" NP ;
 Num    ::= "most" A ;
 Num_Pl ::= "most" A ;
 
-ComplAV.  AP_post ::= AV Prep VP ;
+ComplAV.  AP_post ::= AV  "to" VP ;
 UseA2V.   AV      ::= A2V Prep NP ;
 
-PredAS.   Cl      ::= "it" Cop AS "that" S ;
+-- is this much too general?
+SentAP.   AP_post ::= AP SC ;
+AP_post           ::= AP_post SC ;
 
-ComplAQ.  AP      ::= AQ "of" QS ;
+-- replace this by NP ::= S
+-- ComplAQ.  AP_post      ::= AQ "of" QS ;
 
 ---- TODO: comparison of AV etc
-
