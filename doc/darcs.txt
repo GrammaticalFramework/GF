@@ -197,7 +197,9 @@ repository.
 Then you can push the patch(es) to the main repo. If you are using
 ssh-access, all you need to do is:
 
-``` $ darcs push ```
+```
+$ darcs push
+```
 
 If you use the ``-a`` flag to push, all local patches which are not in
 the main repo are pushed.
@@ -257,9 +259,10 @@ See above.
 
 === Using ssh-agent ===
 
-**NOTE: the method below will not work with MEDIC's new systems, such as
- momo.medic.chalmers.se since MEDIC has decided to disable public key
- authentication on all new machines. **
+**NOTE: the method below will not work with ``momo.medic.chalmers.se``**.
+MEDIC has decided to disable public key authentication on all new machines.
+This section is included just for reference in case they decide to enable
+it again.
 
 With the ssh access method, Darcs needs to log in with ssh. For some
 reason it needs to do this several times for each operation. You can
