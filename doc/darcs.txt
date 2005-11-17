@@ -1,0 +1,296 @@
+GF Darcs repository
+
+GF has now been moved to a Darcs repository. No changes should be committed to the CVS repository from now on.
+
+
+= What is darcs? =
+
+Darcs is a decentralized revision control system. These are some of
+the reasons for switching GF from CVS to Darcs:
+
+- you can keep local revision control in your checked-out copy, since
+  each checked-out copy is a repository in itself. For example, this
+  allows the WebALT project to keep a local GF repository for working
+  on the resource grammars, and submit patches to the main repo when
+  that is convenient. It also allows individual developers to keep
+  revision control over their own modifications before they are ready
+  to submit them, or if they are temporarily without net access.
+
+- we can provide read-only access over HTTP using the existing CS web server.
+
+- it is possible and easy to rename and remove both files and directories.
+
+
+For more information about Darcs, see http://darcs.net/
+
+
+
+= How do I install Darcs? =
+
+There are precompiled packages for many platforms available at
+http://darcs.net/DarcsWiki/CategoryBinaries.
+
+There is also source code if you want to compile it yourself. Darcs is
+written in Haskell and you need GHC to compile it.
+
+
+
+= Read-only access =
+
+== Getting a fresh copy for read-only access ==
+
+Anyone can get the latest development version of GF by running (all on one line):
+
+```
+$ darcs get --partial --set-scripts-executable http://www.cs.chalmers.se/Cs/Research/Language-technology/darcs/GF/
+```
+
+This will create a directory called ``GF`` in the current
+directory. See ``GF/src/INSTALL`` for instructions on compiling. The
+main difference to compiling a GF release from sources is that you
+need to run ``autoconf`` before ``configure``.
+
+
+== Updating your copy ==
+
+Get all new patches from the main repo:
+
+```
+$ darcs pull -a
+```
+
+Without ``-a``, you can choose which patches you want to get.
+
+== Submitting patches ==
+
+If you are using read-only access, send your patches by email to
+someone with write-access. Create the patch with:
+
+```
+$ darcs send -o mypatch.patch
+```
+
+(where ``mypatch`` is hopefully replaced by a slightly more
+descriptive name). Send it as an e-mail attachment. If you have
+sendmail or something equivalent installed, it is possible to send the
+patch directly from darcs. If so, replace ``-o mypatch.patch`` with
+``--to=EMAIL`` where ``EMAIL`` is the address to send it to.
+
+
+
+
+
+= Read-write access =
+
+== Setting up ssh alias and ControlMaster ==
+
+In order to avoid typing in you password multiple times for each
+action on the remote repository, you can use ssh's ControlMaster
+functionality. This allows several ssh instances to use the connection
+established by one existing instance.
+
+Add this to ``~/.ssh/config`` (create the file if it does not exist,
+replace ``bringert`` with your own username on the
+Chalmers system):
+
+```
+Host gfreposerver
+HostName momo.medic.chalmers.se
+User bringert
+ControlPath /tmp/bringert@momo.medic.chalmers.se:22
+```
+
+This sets up an alias ``gfreposerver`` for the machine we use 
+to access the Darcs repository. Note that you really need to use 
+``momo.medic.chalmers.se`` (or some other server with the new Linux system)
+since we need to have a server with Darcs 1.0.4.
+
+More information about the ControlMaster feature is available in ``man
+ssh_config``.
+
+
+== Setting up an ssh connection ==
+
+Before connecting to the remote server, you need to set up a master
+ssh connection to it. As long as this connection is up, you don't
+need to enter your password when connecting to the GF repository server.
+
+Start the master connection:
+
+```
+$ ssh -M gfreposerver
+```
+
+== Getting a fresh copy ==
+
+If you have an account on the Chalmers system and want read-write
+access, you can get your copy with (all on one line):
+
+```
+$ darcs get --partial --set-scripts-executable gfreposerver:/users/cs/www/Research/Language-technology/darcs/GF/
+```
+
+The option ``--partial`` means that you do not download all of the
+history for the repository. This saves space, bandwidth and CPU time,
+and most people don't need the full history of all changes in the
+past.
+
+
+== Getting other people's changes? ==
+
+Get all new patches from the main repo:
+
+```
+$ darcs pull -a
+```
+
+Without ``-a``, you can choose which patches you want to get.
+
+
+
+== Commit your changes ==
+
+There are two steps to commiting a change to the main repo. First you
+have to record the changes that you want to commit:
+
+```
+$ darcs record
+```
+
+This creates a patch against the previous version and stores it in you
+local repository. You can record any number of changesets before
+pushing them to the main repo. In fact, you don't have to push them at
+all if you want to keep the changes only in your local repo.
+
+If you think there are too many questions about what to record, you
+can use the ``-a`` flag to ``record``. Or answer ``a`` to the first
+question. Both of these record all the changes you have in your local
+repository.
+
+Then you can push the patch(es) to the main repo. If you are using
+ssh-access, all you need to do is:
+
+``` $ darcs push ```
+
+If you use the ``-a`` flag to push, all local patches which are not in
+the main repo are pushed.
+
+You need to be a member of the ``langtech`` group to push to the
+repository.
+
+
+
+== Apply a patch from someone else ==
+
+Use:
+
+```
+$ darcs apply < mypatch.patch
+```
+
+This applies the patch to your local repository. To commit it to the
+main repo, use ``darcs push``.
+
+
+= Troubleshooting =
+
+== I get the error "(sftp) failed to fetch files." ==
+
+There seems to be a problem with how darcs 1.0.4 calls sftp, which
+means that normal password authentication does not work. Either
+use Darcs 1.0.3, and be prepared to enter your password many times,
+or use the ssh ControlMaster feature as desctribed above.
+
+== I get the error "Not a repository: gfreposerver:..." ==
+
+You get this error when you have set up ControlMaster, but don't have a master
+connection running. Start a master connection:
+
+```
+$ ssh -M gfreposerver
+```
+
+If your master connection keeps dying because of inactivity, you can have it
+run some program with outputs something once in a while, e.g.:
+
+```
+$ ssh -M gfreposerver "bash -c 'while true; do echo -n .; sleep 30; done'"
+```
+
+
+= How do I avoid typing in my password so many times? =
+
+== Using ssh ControlMaster ==
+
+See above.
+
+
+== Using ssh-agent ==
+
+*NOTE: the method below will not work with MEDIC's new systems, such as
+ momo.medic.chalmers.se since MEDIC has decided to disable public key
+ authentication on all new machines. *
+
+With the ssh access method, Darcs needs to log in with ssh. For some
+reason it needs to do this several times for each operation. You can
+avoid this by setting up public-key authentication for ssh.
+
+Here is a guide to setting this up:
+http://cfm.gs.washington.edu/security/ssh/client-pkauth/
+
+Short summary (should on most modern Linux distros, maybe other
+platforms too):
+
+Generate a key pair:
+
+```
+$ mkdir -p ~/.ssh
+$ chmod 700 ~/.ssh
+$ ssh-keygen -q -f ~/.ssh/id_rsa -t rsa
+Enter passphrase (empty for no passphrase): ...
+Enter same passphrase again: ...
+```
+
+Upload the public key to your Chalmers account (replace ``bringert`` with
+your username):
+
+```
+$ ssh-copy-id -i ~/.ssh/id_rsa.pub bringert@remote.cs.chalmers.se
+```
+
+Add the key to ssh-agent (ssh-agent then remembers your key for a
+while, so that you don't have to type in the passphrase again):
+
+```
+$ ssh-add
+Enter passphrase for /home/bjorn/.ssh/id_rsa: ...
+```
+
+This is the part that is most likely to fail. If ssh-add says that it
+couldn't find ssh-agent, you need to follow the instructions linked to
+above to start ssh-agent.
+
+
+Try to use it to log in (with your own username again):
+
+```
+$ ssh bringert@remote.cs.chalmers.se
+...
+zsh:bringert:[~]>
+```
+
+= I get "darcs not found" when pushing =
+
+If you get ``darcs not found`` when you try to push your changes, you
+don't have darcs on your ``$PATH`` on the Chalmers system. To fix
+this, log in to your Chalmers account and run:
+
+```
+echo unsup >> $HOME/.vcs4/pathsetup
+```
+
+
+= Further information =
+
+
+For more info about what you can do with darcs, see http://darcs.net/manual/
