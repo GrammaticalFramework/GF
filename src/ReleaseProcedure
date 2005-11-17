@@ -15,7 +15,7 @@ Procedure for making a GF release:
 
 5. Commit configure.ac and gf.spec:
 
-   $ cvs commit -m 'Updated version numbers.' configure.ac gf.spec
+   $ darcs record -m 'Updated version numbers.' configure.ac gf.spec
 
 6. Run autoconf to generate configure with the right version number:
 
@@ -28,21 +28,25 @@ Procedure for making a GF release:
 8. Tag the release. (X_X should be replaced by the version number, with
    _ instead of ., e.g. 2_0)
 
-   $ cvs tag RELEASE-X_X
+   $ darcs tag -m RELEASE-X_X
 
-9. Build a source package:
+9. Push the changes that you made for the release to the main repo:
+
+   $ darcs push
+
+10. Build a source package:
 
    $ cd src
    $ ./configure
    $ make dist
 
-10. (Only if releasing a new grammars distribution)
+11. (Only if releasing a new grammars distribution)
     Build a grammar tarball:
 
    $ cd src
    $ ./configure && make grammar-dist
 
-11. Build an x86/linux RPM (should be done on a Mandrake Linux box):
+12. Build an x86/linux RPM (should be done on a Mandrake Linux box):
 
     Setup for building RPMs (first time only):
 
@@ -70,19 +74,19 @@ buildarchtranslate: i686: i586
    $ cd src 
    $ ./configure && make rpm
 
-12. Build a generic binary x86/linux package (should be done on a Linux box,
+13. Build a generic binary x86/linux package (should be done on a Linux box,
     e.g. banded.medic.chalmers.se):
 
    $ cd src
    $ ./configure --host=i386-pc-linux-gnu && make binary-dist
 
-13. Build a generic binary sparc/solaris package (should be done 
+14. Build a generic binary sparc/solaris package (should be done 
     on a Solaris box, e.g. remote1.cs.chalmers.se):
 
    $ cd src
    $ ./configure --host=sparc-sun-solaris2 && gmake binary-dist
 
-14. Build a Mac OS X package (should be done on a Mac OS X box, 
+15. Build a Mac OS X package (should be done on a Mac OS X box, 
     e.g. csmisc99.cs.chalmers.se):
 
     $ cd src
@@ -95,21 +99,21 @@ buildarchtranslate: i686: i586
     TODO: Use OS X PackageMaker to build  a .pkg-file which can
     be installed using the standard OS X Installer program. 
 
-15. Build a binary Cygwin package (should be done on a Windows
+16. Build a binary Cygwin package (should be done on a Windows
     machine with Cygwin):
 
     $ cd src
     $ ./configure && make binary-dist
 
-16. Build a Windows MSI package (FIXME: This doesn't work right,
+17. Build a Windows MSI package (FIXME: This doesn't work right,
     pathnames with backslashes and spaces are not handled 
-    correctly in Windows. We only release abinary tarball
+    correctly in Windows. We only release a binary tarball
     for Cygwin right now.):
 
     $ cd src
     $ ./configure && make all windows-msi
 
-17. Add new GF package release to SourceForge:
+18. Add new GF package release to SourceForge:
 
     - Project page -> Admin -> File releases -> Add release (for the
       GF package)
@@ -130,7 +134,7 @@ buildarchtranslate: i686: i586
       * sparc binary tarball -> Sparc/.gz
       * source package -> Any/Source .gz
 
-18. Add new GF-editor release. Repeat the steps above, but
+19. Add new GF-editor release. Repeat the steps above, but
     with GF-editor:
 
      - Add files and set properties:
@@ -139,7 +143,7 @@ buildarchtranslate: i686: i586
         figured out how to make noarch rpms from the same spec as 
 	arch-specific ones)
 
-19. (Only if releasing a new grammars distribution)
+20. (Only if releasing a new grammars distribution)
     Add new GF-grammars release. Repeat the steps above, but with
     GF-grammars:
 
@@ -147,6 +151,6 @@ buildarchtranslate: i686: i586
 
       * grammar tarball -> Platform independent/Source .gz
 
-20. Update website.
+21. Update website.
 
-21. Party!
+22. Party!
