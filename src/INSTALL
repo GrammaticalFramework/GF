@@ -11,7 +11,7 @@ To make and install GF2 (Version 2.1, 8/11/2004).
 
      ghc --version
 
-3. If you are building from CVS, run autoconf (in src/):
+3. If you are building the darcs version, run autoconf (in src/):
 
      autoconf
 
