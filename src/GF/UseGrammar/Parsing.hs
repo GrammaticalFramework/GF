@@ -40,7 +40,7 @@ import qualified GF.Parsing.GFC as New
 
 import GF.Data.Operations
 
-import Data.List (nub)
+import Data.List (nub,sortBy)
 import Control.Monad (liftM)
 
 -- AR 26/1/2000 -- 8/4 -- 28/1/2001 -- 9/12/2002
@@ -51,7 +51,7 @@ parseString os sg cat = liftM fst . parseStringMsg os sg cat
 parseStringMsg :: Options -> StateGrammar -> CFCat -> String -> Err ([Tree],String)
 parseStringMsg os sg cat s = do
   (ts,(_,ss)) <- checkStart $ parseStringC os sg cat s
-  return (ts,unlines ss)
+  return (ts, unlines $ reverse ss)
 
 parseStringC :: Options -> StateGrammar -> CFCat -> String -> Check [Tree]
 
@@ -73,7 +73,10 @@ parseStringC opts0 sg cat s
 		| otherwise              = "c" -- default algorithm
       strategy  = maybe "bottomup" id $ getOptVal opts useParser -- -parser=bottomup/topdown
       tokenizer = customOrDefault opts useTokenizer customTokenizer sg
-  ts <- checkErr $ New.parse algorithm strategy (pInfo sg) (absId sg) cat (tokenizer s)
+      toks = case tokenizer s of
+               t:_ -> t
+               _ -> [] ---- no support for undet. tok.
+  ts <- checkErr $ New.parse algorithm strategy (pInfo sg) (absId sg) cat toks
   ts' <- mapM (checkErr . annotate (stateGrammarST sg) . refreshMetas []) ts
   return $ optIntOrAll opts flagNumber ts'
 
@@ -82,10 +85,11 @@ parseStringC opts0 sg cat s = do
       cf  = stateCF sg
       gr  = stateGrammarST sg
       cn  = cncId sg
-      tok = customOrDefault opts useTokenizer customTokenizer sg
+      toks = customOrDefault opts useTokenizer customTokenizer sg s
       parser = customOrDefault opts useParser customParser sg cat
-  tokens2trms opts sg cn parser (tok s)
-
+  if oElem (iOpt "cut") opts 
+    then doUntil (not . null) $ map (tokens2trms opts sg cn parser) toks
+    else mapM (tokens2trms opts sg cn parser) toks >>= return . concat
 
 tokens2trms :: Options ->StateGrammar ->Ident -> CFParser -> [CFTok] -> Check [Tree]
 tokens2trms opts sg cn parser toks = trees2trms opts sg cn toks trees info
@@ -93,10 +97,12 @@ tokens2trms opts sg cn parser toks = trees2trms opts sg cn toks trees info
 	  info   = snd result
 	  trees  = {- nub $ -} cfParseResults result -- peb 25/5-04: removed nub (O(n^2))
 
-trees2trms :: Options -> StateGrammar -> Ident -> [CFTok] -> [CFTree] -> String -> Check [Tree]
+trees2trms :: 
+  Options -> StateGrammar -> Ident -> [CFTok] -> [CFTree] -> String -> Check [Tree]
 trees2trms opts sg cn as ts0 info = do
+  let s = unwords $ map prCFTok as
   ts  <- case () of
-    _ | null ts0 -> checkWarn "No success in cf parsing" >> return []
+    _ | null ts0 -> checkWarn ("No success in cf parsing" +++ s) >> return []
     _ | raw      -> do
       ts1 <- return (map cf2trm0 ts0) ----- should not need annot
       checks [

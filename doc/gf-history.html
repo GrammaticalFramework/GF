@@ -13,6 +13,19 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 </center>
 <p>
 
+17/11 (AR) Made it possible for lexers to be nondeterministic.
+Now with a simple-minded implementation that the parser is sent
+each lexing result in turn. The option <tt>-cut</tt> is used for
+breaking after first lexing leading to successful parse. The only
+nondeterministic lexer right now is <tt>-lexer=subseqs</tt>, which
+first filters with <tt>-lexer=ignore</tt> (dropping words neither in
+the grammar nor literals) and then starts ignoring other words from
+longest to shortest subsequence. This is usable for parser tasks
+of keyword spotting type, but expensive (2<sup>n</sup>) in long input.
+A smarter implementation is therefore desirable.
+
+<p>
+
 14/11 (AR) Functions can be made unparsable (or "internal" as
 in BNFC). This is done by <tt>i -noparse=file</tt>, where
 the nonparsable functions are given in <tt>file</tt> using the

@@ -5,9 +5,9 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/14 16:03:41 $
+-- > CVS $Date: 2005/05/12 10:03:34 $
 -- > CVS $Author: aarne $
--- > CVS $Revision: 1.20 $
+-- > CVS $Revision: 1.9 $
 --
 -- Help on shell commands. Generated from HelpFile by 'make help'.
 -- PLEASE DON'T EDIT THIS FILE.
@@ -198,6 +198,7 @@ txtHelpFile =
   "\n      -lines   parse each line of input separately, ignoring empty lines" ++
   "\n      -all     as -lines, but also parse empty lines" ++
   "\n      -prob    rank results by probability" ++
+  "\n      -cut     stop after first lexing result leading to parser success" ++
   "\n  options for selecting parsing method:" ++
   "\n      (default)parse using an overgenerating CFG" ++
   "\n      -cfg     parse using a much less overgenerating CFG" ++
@@ -531,6 +532,8 @@ txtHelpFile =
   "\n    -lexer=codelit       like code, but treat unknown words as string literals" ++
   "\n    -lexer=textlit       like text, but treat unknown words as string literals" ++
   "\n    -lexer=codeC         use a C-like lexer" ++
+  "\n    -lexer=ignore        like literals, but ignore unknown words" ++
+  "\n    -lexer=subseqs       like ignore, but then try all subsequences from longest" ++
   "\n" ++
   "\n-number, the maximum number of generated items in a list. " ++
   "\n       The default is unlimited." ++

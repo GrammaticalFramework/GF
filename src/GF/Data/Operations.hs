@@ -65,14 +65,14 @@ module GF.Data.Operations (-- * misc functions
 		   updateAssoc, removeAssoc,
 
 		   -- * chop into separator-separated parts
-		   chunks, readIntArg,
+		   chunks, readIntArg, subSequences,
 
 		   -- * state monad with error; from Agda 6\/11\/2001
 		   STM(..), appSTM, stm, stmr, readSTM, updateSTM, writeSTM, done,
 
 		   -- * error monad class
-		   ErrorMonad(..), checkAgain, checks, allChecks
-
+		   ErrorMonad(..), checkAgain, checks, allChecks, doUntil
+                
 		  ) where
 
 import Data.Char (isSpace, toUpper, isSpace, isDigit)
@@ -656,3 +656,16 @@ allChecks ms = case ms of
   (m: ms) -> let rs = allChecks ms in handle_ (liftM2 (:) m rs) rs
   _ -> return []
 
+doUntil :: ErrorMonad m => (a -> Bool) -> [m a] -> m a
+doUntil cond ms = case ms of
+  a:as -> do
+    v <- a
+    if cond v then return v else doUntil cond as
+  _ -> raise "no result"
+
+-- subsequences sorted from longest to shortest ; their number is 2^n
+subSequences :: [a] -> [[a]]
+subSequences = sortBy (\x y -> compare (length y) (length x)) . subs where
+  subs xs = case xs of
+    [] -> [[]]
+    x:xs -> let xss = subs xs in [x:y | y <- xss] ++ xss

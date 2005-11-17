@@ -169,6 +169,7 @@ p,  parse: p String
       -lines   parse each line of input separately, ignoring empty lines
       -all     as -lines, but also parse empty lines
       -prob    rank results by probability
+      -cut     stop after first lexing result leading to parser success
   options for selecting parsing method:
       (default)parse using an overgenerating CFG
       -cfg     parse using a much less overgenerating CFG
@@ -502,6 +503,8 @@ q, quit: q
     -lexer=codelit       like code, but treat unknown words as string literals
     -lexer=textlit       like text, but treat unknown words as string literals
     -lexer=codeC         use a C-like lexer
+    -lexer=ignore        like literals, but ignore unknown words
+    -lexer=subseqs       like ignore, but then try all subsequences from longest
 
 -number, the maximum number of generated items in a list. 
        The default is unlimited.
