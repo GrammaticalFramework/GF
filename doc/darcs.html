@@ -159,6 +159,13 @@ functionality. This allows several ssh instances to use the connection
 established by one existing instance.
 </P>
 <P>
+<B>NOTE: You need OpenSSH version 4 or newer for this to work.</B> You
+can check your OpenSSH version with <CODE>ssh -V</CODE>. If you have an older
+version of OpenSSH, you need to remove the ControlPath line below,
+and you can skip the "Setting up an ssh ControlMaster connection"
+step. You will be typing in your password a lot...
+</P>
+<P>
 Add this to <CODE>~/.ssh/config</CODE> (create the file if it does not exist,
 replace <CODE>bringert</CODE> with your own username on the
 Chalmers system):
@@ -286,9 +293,9 @@ the section above on setting up your <CODE>$PATH</CODE> on the Chalmers system.
 <H2>I get the error "(sftp) failed to fetch files."</H2>
 <P>
 There seems to be a problem with how darcs 1.0.4 calls sftp, which
-means that normal password authentication does not work. Either
-use Darcs 1.0.3, and be prepared to enter your password many times,
-or use the ssh ControlMaster feature as desctribed above.
+means that normal password authentication does not work. Either use
+Darcs 1.0.3 on your client, and be prepared to enter your password
+many times, or use the ssh ControlMaster feature as described above.
 </P>
 <A NAME="toc18"></A>
 <H2>I get the error "Not a repository: gfreposerver:..."</H2>
