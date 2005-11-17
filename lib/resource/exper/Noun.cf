@@ -25,8 +25,6 @@ Quant  ::= ;
 ---DetMass ::= Predet ;
 ---NMass ::= "wine" ;
 
-
-
 NP     ::= Det_Pl CN_Pl ;
 NP     ::= Predet_Pl Quant_Pl Num_Pl ; -- nonempty det
 
@@ -45,19 +43,23 @@ Num_Pl ::= Ordinal ;
 Num_Pl ::= Int ;
 Num_Pl ::= Numeral ;
 
+-- less than, exactly, almost,...
+Numeral ::= AdN Numeral ;
+
 CN_Pl ::= N_Pl ;
 CN    ::= N ;
 
 -- prepositions cannot be expressed generally here
 -- NB relational nouns explain why complements are closer than adjuncts
-
-CN ::= N2 Prep NP ;
-N2 ::= N3 Prep NP ;
+-- But let us make the resource simpler by excluding them
+-- CN ::= N2 Prep NP ;
+-- N2 ::= N3 Prep NP ;
 
 -- elliptical constructions
+-- with exclusion of rel nouns, they just help reuse the old lexicon
 
 N2 ::= N3 ;
-CN ::= N2 ;
+N  ::= N2 ;
 
 -- these need other modules to produce anything
 

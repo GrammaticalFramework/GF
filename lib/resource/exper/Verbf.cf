@@ -1,0 +1,15 @@
+-- flat structure for verbs; use instead of Verb.cf ?
+
+V ::= V0 | V2 | V3 | VV ;
+
+UseV. VP ::= OptAdV V ;
+VP       ::= Cop OptAdV Comp ;
+
+VP ::= VP NP ;
+VP ::= VP Adv ;
+
+Comp ::= AP | NP | Adv ; 
+Comp ::= AP_post ; -- not needed in gf
+
+Mod ::= Do ;
+
