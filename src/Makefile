@@ -178,14 +178,15 @@ tools/$(GF_DOC_EXE): tools/GFDoc.hs
 dist:
 	-rm -rf $(DIST_DIR)
 	cp -r ../_darcs/current $(DIST_DIR)
-	cd $(DIST_DIR)/src && perl -pi -e "s/^AC_INIT\(\[GF\],\[[^\]]*\]/AC_INIT([GF],[$PACKAGE_VERSION]/" configure.ac
+	cd $(DIST_DIR)/src && perl -pi -e "s/^AC_INIT\(\[GF\],\[[^\]]*\]/AC_INIT([GF],[$(PACKAGE_VERSION)]/" configure.ac
 	cd $(DIST_DIR)/src && autoconf && rm -rf autom4te.cache
 #	cd $(DIST_DIR)/grammars && sh mkLib.sh
 	cd $(DIST_DIR) && rm -rf $(NOT_IN_DIST)
 	$(TAR) -zcf $(DIST_DIR).tgz $(DIST_DIR)
 	rm -rf $(DIST_DIR)
 
-snapshot: PACKAGE_VERSION=$(shell date +%Y%m%d) DIST_DIR=GF-$(PACKAGE_VERSION)
+snapshot: PACKAGE_VERSION=$(shell date +%Y%m%d)
+snapshot: DIST_DIR=GF-$(PACKAGE_VERSION)
 snapshot: dist
 
 rpm: dist
