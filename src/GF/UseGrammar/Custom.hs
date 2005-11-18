@@ -161,7 +161,7 @@ customStringCommand  :: CustomData (StateGrammar -> String -> String)
 customParser         :: CustomData (StateGrammar -> CFCat -> CFParser)
 
 -- | useTokenizer, \"-lexer=x\"
-customTokenizer      :: CustomData (StateGrammar -> String -> [CFTok])  
+customTokenizer      :: CustomData (StateGrammar -> String -> [[CFTok]])  
 
 -- | useUntokenizer, \"-unlexer=x\" --- should be from token list to string
 customUntokenizer    :: CustomData (StateGrammar -> String -> String)  
@@ -416,22 +416,24 @@ customParser =
 -- add your own parsers here
   ]
 
-customTokenizer = 
+customTokenizer =
+  let sg = singleton in 
   customData "Tokenizers, selected by option -lexer=x" $
   [
-   (strCI "words",     const $ tokWords)
-  ,(strCI "literals",  const $ tokLits)
-  ,(strCI "vars",      const $ tokVars)
-  ,(strCI "chars",     const $ map (tS . singleton))
-  ,(strCI "code",      const $ lexHaskell)
-  ,(strCI "codevars",  lexHaskellVar . stateIsWord)
-  ,(strCI "text",      const $ lexText)
-  ,(strCI "unglue",    \gr -> map tS . decomposeWords (stateMorpho gr))
-  ,(strCI "codelit",   lexHaskellLiteral . stateIsWord)
-  ,(strCI "textlit",   lexTextLiteral . stateIsWord)
-  ,(strCI "codeC",     const $ lexC2M)
-  ,(strCI "ignore",    \gr -> lexIgnore (stateIsWord gr) . tokLits)
-  ,(strCI "codeCHigh", const $ lexC2M' True)
+   (strCI "words",     const $ sg . tokWords)
+  ,(strCI "literals",  const $ sg . tokLits)
+  ,(strCI "vars",      const $ sg . tokVars)
+  ,(strCI "chars",     const $ sg . map (tS . singleton))
+  ,(strCI "code",      const $ sg . lexHaskell)
+  ,(strCI "codevars",  \gr -> sg . (lexHaskellVar $ stateIsWord gr))
+  ,(strCI "text",      const $ sg . lexText)
+  ,(strCI "unglue",    \gr -> sg . map tS . decomposeWords (stateMorpho gr))
+  ,(strCI "codelit",   \gr -> sg . (lexHaskellLiteral $ stateIsWord gr))
+  ,(strCI "textlit",   \gr -> sg . (lexTextLiteral $ stateIsWord gr))
+  ,(strCI "codeC",     const $ sg . lexC2M)
+  ,(strCI "ignore",    \gr -> sg . lexIgnore (stateIsWord gr) . tokLits)
+  ,(strCI "subseqs",   \gr -> subSequences . lexIgnore (stateIsWord gr) . tokLits)
+  ,(strCI "codeCHigh", const $ sg . lexC2M' True)
 -- add your own tokenizers here
   ]
 
