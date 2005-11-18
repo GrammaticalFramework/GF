@@ -59,6 +59,7 @@ tryMatch (p,t) = do
       (PV IW, _) | isInConstantForm t -> return [] -- optimization with wildcard
       (PV x,  _) | isInConstantForm t -> return [(x,t)]
       (PString s, ([],K i,[])) | s==i -> return []
+      (PString "",([],Empty,[]))      -> return [] -- because "" = [""] = []
       (PInt s, ([],EInt i,[])) | s==i -> return []
       (PC p pp, ([], Con f, tt)) | 
             p `eqStrIdent` f && length pp == length tt ->
