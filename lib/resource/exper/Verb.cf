@@ -5,6 +5,8 @@ V ::= V0 ;
 UseV.    VP ::= V ;
 ComplV2. VP ::= V2 NP ;
 
+VP ::= VP SC ;
+
 -- ComplV3. VP ::= V3 NP NP ;
 V2 ::= V3 ; -- via pp's
 
@@ -19,3 +21,5 @@ Comp ::= AP_post ; -- not needed in gf
 Mod ::= Do ;
 
 -- partial saturation
+
+V ::= V2 ;

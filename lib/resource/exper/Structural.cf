@@ -13,6 +13,7 @@ Pron   ::= "me" | "him" | "her" | "us" | "them" ;
 Poss   ::= "my" | "your" | "his" | "her" | "our" | "their" | "its" ;
 
 Prep ::= "about" | "at" | "by" | "for" | "from" | "in" | "of" | "on" | "to" | "with" ;
+Prep ::= "after" | "before" | "despite" | "during" ;
 
 IAdv ::= "why" | "where" | "when" | "how" ;
 
@@ -29,6 +30,7 @@ NP ::= "this" | "that" | "those" | "these" ;
 Conj ::= "and" | "or" ;
 
 Subj ::= "if" | "when" | "although" | "though" ;
+Subj ::= "before" | "after" | "while" | "because" ;
 
 -- these may be eliminated in gf
 
