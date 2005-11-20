@@ -19,23 +19,24 @@ A  ::= "marvellous" ;
 -- AQ ::= "independent" ;
 A2 ::= "independent" ;
 
-V0 ::= "rain" | "rains" ;
-V  ::= "sleeps" | "sleep" ;
-V2 ::= "loves" | "love" ;
-V3 ::= "sends" | "send" ;
-VV ::= "wants" | "want" ;
+V0 ::= "rain" | "rains" | "rained" ;
+V  ::= "sleeps" | "sleep" | "slept" ;
+V2 ::= "loves" | "love" | "loved" ;
+V3 ::= "sends" | "send" | "sent" ;
+VV ::= "wants" | "want" | "wanted" ;
 
-V2 ::= "says" | "say" ;
-V2 ::= "asks" | "ask" ;
+V2 ::= "says" | "say" | "said" ;
+V2 ::= "asks" | "ask" | "asked" ;
 
 Adv  ::= "here" | "there" ;
+Adv  ::= "from" "here" | "from" "there" ;
+Adv  ::= "today" | "tomorrow" | "yesterday" ; 
 AdA  ::= "very" | "too" | "quite" | "much" "too" ;
-AdV  ::= "always" | "almost" ;
+AdV  ::= "always" | "almost" | "just" ;
 AdN  ::= "less" "than" | "more" "than" | "almost" | "exactly" | "about" ;
 
--- a bigger lexicon
 
-N    ::= "car" | "house" | "flight" | "aircraft" ;
-N_Pl ::= "cars" | "houses" | "flights" | "aircraft" ;
+--- does this give too much?
+Adv ::= "last" N | "next" N ;
 
 PN ::= "Boston" | "New" "York" | "Baltimore" ;
