@@ -51,13 +51,26 @@ resource while testing an application. One can also have a
 parse-transfer-lin chain from one abstract syntax to another.
 
 <p>
+7/11 (BB) Running commands can now be interrupted with Ctrl-C, without
+killing the GF process. This feature is not supported on Windows.
 
+<p>
 
 1/11 (AR) Yet another method for adding probabilities: append
 <tt> --# prob Double</tt> to the end of a line defining a function.
 This can be (1) a <tt>.cf</tt> rule (2) a <tt>fun</tt> rule, or
 (3) a <tt>lin</tt> rule. The probability is attached to the
 first identifier on the line.
+
+<p>
+1/11 (BB) Added generation of weighted SRGS grammars. The weights
+are calculated from the function probabilities. The algorithm
+for calculating the weights is not yet very good.
+Use <tt>pg -printer=srgs_xml_prob</tt>.
+
+<p>
+31/10 (BB) Added option for converting grammars to SRGS grammars in XML format.
+Use <tt>pg -printer=srgs_xml</tt>.
 
 <p>
 
