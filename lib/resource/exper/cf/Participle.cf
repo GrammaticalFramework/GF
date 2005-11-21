@@ -1,0 +1,3 @@
+-- to recognize passives and present participles; overgen now
+Comp ::= VP ;
+
