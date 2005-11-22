@@ -177,6 +177,7 @@ term2CFItems m t = errIn "forming cf items" $ case t of
 
     headProj r ls = case r of
       P r0 l0 -> headProj r0 (l0:ls)
+      S r0 _  -> headProj r0 ls
       _ -> (r,ls)
     cIQ c = if isPredefCat c then CIQ cPredefAbs c else CIQ m c
 
