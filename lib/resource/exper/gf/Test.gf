@@ -1,0 +1,1 @@
+abstract Test = Fun, Lex ** {} ;

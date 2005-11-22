@@ -266,7 +266,7 @@ checkIfLinType st typ0 = do
 
  where
    checkInh (label,typ) = checkIfParType st typ
-   checkLin (label,typ) = checkIfStrType st typ
+   checkLin (label,typ) = return () ---- checkIfStrType st typ
 
 
 computeLType :: SourceGrammar -> Type -> Check Type
