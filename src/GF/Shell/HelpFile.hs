@@ -580,6 +580,7 @@ txtHelpFile =
   "\n    -printer=gsl            Nuance GSL speech recognition grammar" ++
   "\n    -printer=jsgf           Java Speech Grammar Format" ++
   "\n    -printer=srgs_xml       SRGS XML format" ++
+  "\n    -printer=srgs_xml_prob  SRGS XML format, with weights" ++
   "\n    -printer=slf            a finite automaton in the HTK SLF format" ++
   "\n    -printer=slf_graphviz   the same automaton as in SLF, but in Graphviz format" ++
   "\n    -printer=fa_graphviz    a finite automaton with labelled edges" ++
