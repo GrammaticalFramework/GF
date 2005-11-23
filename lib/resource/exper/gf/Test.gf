@@ -1,1 +1,8 @@
-abstract Test = Fun, Lex ** {} ;
+abstract Test = 
+  Noun,
+  Verb, 
+  Sentence, 
+  Untensed, 
+  -- Tensed,
+  Lex 
+  ** {} ;
