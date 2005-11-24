@@ -233,42 +233,11 @@ You may want to create a script or alias for starting the connection.
 <A NAME="toc12"></A>
 <H3>Automating the ControlMaster connection</H3>
 <P>
-You can create a darcs wrapper which sets up a ControlMaster connection
-if there isn't one already. Put the code below in for example <CODE>~bin/darcs-cm</CODE>, 
-and use that program instead of <CODE>darcs</CODE> to work with the repository.
+You can use a darcs wrapper which sets up a ControlMaster connection
+if there isn't one already. Put the script <A HREF="darcs-cm">darcs-cm</A>
+somewhere on your path and use it instead of <CODE>darcs</CODE> to work with 
+the remote repository.
 </P>
-<PRE>
-  #!/bin/bash
-  
-  DARCS=`which darcs`
-  SSH=`which ssh`
-  REPOSERVER=gfreposerver
-  
-  if [ ! -x "$SSH" ]; then
-    echo "ssh ($SSH): command not found" 1&gt;&amp;2
-    exit 1
-  fi
-  
-  if [ "$1" = "--stop" ]; then
-    $SSH -O exit "$REPOSERVER"
-    exit $?
-  fi
-  
-  if [ ! -x "$DARCS" ]; then
-    echo "darcs ($DARCS): command not found" 1&gt;&amp;2
-    exit 1
-  fi
-  
-  if ! $SSH -O check "$REPOSERVER" &gt;&amp; /dev/null; then
-    echo "Connection to $REPOSERVER is down, connecting..."
-    $SSH -f -M "$REPOSERVER" \
-       "bash -c 'while true; do echo -n .; sleep 30; done'" &gt; /dev/null
-    sleep 1
-  fi
-  
-  exec $DARCS "$@"
-</PRE>
-<P></P>
 <A NAME="toc13"></A>
 <H2>Getting a fresh copy</H2>
 <P>

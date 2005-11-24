@@ -1,0 +1,29 @@
+#!/bin/bash
+
+DARCS=`which darcs`
+SSH=`which ssh`
+REPOSERVER=gfreposerver
+
+if [ ! -x "$SSH" ]; then
+  echo "ssh ($SSH): command not found" 1>&2
+  exit 1
+fi
+
+if [ "$1" = "--stop" ]; then
+  $SSH -O exit "$REPOSERVER"
+  exit $?
+fi
+
+if [ ! -x "$DARCS" ]; then
+  echo "darcs ($DARCS): command not found" 1>&2
+  exit 1
+fi
+
+if ! $SSH -O check "$REPOSERVER" >& /dev/null; then
+  echo "Connection to $REPOSERVER is down, connecting..."
+  $SSH -f -M "$REPOSERVER" \
+     "bash -c 'while true; do echo -n .; sleep 30; done'" > /dev/null
+  sleep 1
+fi
+
+exec $DARCS "$@"
