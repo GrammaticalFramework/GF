@@ -172,6 +172,45 @@ somewhere.
 **NOTE: You need to have a ControlMaster connection running whenever you want to access the repo using ssh.**
 You may want to create a script or alias for starting the connection.
 
+=== Automating the ControlMaster connection ===
+
+You can create a darcs wrapper which sets up a ControlMaster connection
+if there isn't one already. Put the code below in, for example, ``~bin/darcs-cm``, 
+and use that program instead of ``darcs`` to work with the repository.
+
+
+```
+#!/bin/bash
+
+DARCS=`which darcs`
+SSH=`which ssh`
+REPOSERVER=gfreposerver
+
+if [ ! -x "$SSH" ]; then
+  echo "ssh ($SSH): command not found" 1>&2
+  exit 1
+fi
+
+if [ "$1" = "--stop" ]; then
+  $SSH -O exit "$REPOSERVER"
+  exit $?
+fi
+
+if [ ! -x "$DARCS" ]; then
+  echo "darcs ($DARCS): command not found" 1>&2
+  exit 1
+fi
+
+if ! $SSH -O check "$REPOSERVER" >& /dev/null; then
+  echo "Connection to $REPOSERVER is down, connecting..."
+  $SSH -f -M "$REPOSERVER" \
+     "bash -c 'while true; do echo -n .; sleep 30; done'" > /dev/null
+  sleep 1
+fi
+
+exec $DARCS "$@"
+```
+
 == Getting a fresh copy ==
 
 Get your copy with (all on one line):
@@ -265,12 +304,7 @@ connection running. Start a master connection:
 $ ssh -M gfreposerver
 ```
 
-If your master connection keeps dying because of inactivity, you can have it
-run some program with outputs something once in a while, e.g.:
-
-```
-$ ssh -M gfreposerver "bash -c 'while true; do echo -n .; sleep 30; done'"
-```
+or use the ``darcs-cm`` script shown above.
 
 
 == How do I avoid typing in my password so many times? ==
