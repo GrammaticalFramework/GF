@@ -146,10 +146,8 @@ ControlPath /tmp/ssh-gfreposerver
 ```
 
 This sets up an alias ``gfreposerver`` for the server we use 
-for the Darcs repository. Note that you really need to use 
-``momo.medic.chalmers.se`` (or some other server with the new Linux system)
-since we need to have a server with Darcs 1.0.4. If you use some server
-with an earlier Darcs version you can mess up the repository.
+for the Darcs repository. 
+Note that **you really need to use ``momo.medic.chalmers.se``** (or some other server with the new Linux system) since we need to have a server with Darcs 1.0.4. If you use some server with an earlier Darcs version you can mess up the repository.
 
 More information about the ControlMaster feature is available in 
 ``man ssh_config``.
