@@ -166,6 +166,7 @@ enumeratePatterns t = enumerateTerms Nothing t
 ----------------------------------------------------------------------
 -- * paths of record projections and table selections
 
+-- | Note that the list of labels/selection terms is /reversed/
 newtype Path c t = Path [Either Label (Term c t)] deriving (Eq, Ord, Show)
 
 emptyPath :: Path c t
@@ -180,20 +181,20 @@ Path path ++. lbl = Path (Left lbl : path)
 Path path ++! sel = Path (Right sel : path)
 
 lintypeFollowPath :: (Print c,Print t) => Path c t -> LinType c t -> LinType c t
-lintypeFollowPath (Path path0) ctype0 = follow path0 ctype0 
+lintypeFollowPath (Path path0) ctype0 = follow (reverse path0) ctype0
     where follow [] ctype = ctype
 	  follow (Right pat : path) (TblT _ ctype) = follow path ctype
 	  follow (Left  lbl : path) (RecT rec)
 	      = maybe err (follow path) $ lookup lbl rec
 	      where err = error $ "lintypeFollowPath: label not in record type"
-                            ++ "\nLabel: " ++ prt lbl
-			    ++ "\nPath: " ++ prt (Path path0)
-			    ++ "\nCType: " ++ prt ctype0
-                            ++ "\nRType: " ++ prt (RecT rec)
+			    ++ "\nOriginal Path:  " ++ prt (Path path0)
+			    ++ "\nOriginal CType: " ++ prt ctype0
+                            ++ "\nCurrent Label:  " ++ prt lbl
+                            ++ "\nCurrent RType:  " ++ prt (RecT rec)
                           --- by AR for debugging 23/11/2005
 
 termFollowPath :: (Eq c, Eq t) => Path c t -> Term c t -> Term c t
-termFollowPath (Path path) = follow (reverse path)
+termFollowPath (Path path0) = follow (reverse path0)
     where follow [] term = term
 	  follow (Right pat : path) term = follow path (term +! pat)
 	  follow (Left  lbl : path) term = follow path (term +. lbl)
