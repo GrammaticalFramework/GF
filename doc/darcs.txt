@@ -165,6 +165,10 @@ Start the master connection:
 $ ssh -M gfreposerver
 ```
 
+This looks just like a normal ssh login, and you get a shell on the server.
+Put this connection in the background, or keep it open in a window
+somewhere.
+
 **NOTE: You need to have a ControlMaster connection running whenever you want to access the repo using ssh.**
 You may want to create a script or alias for starting the connection.
 
