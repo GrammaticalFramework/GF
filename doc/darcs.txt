@@ -113,6 +113,7 @@ system to make it possible for you to push changes to the main
 repository. To fix this, log in to your Chalmers account and run:
 
 ```
+mkdir -p $HOME/.vcs4
 echo unsup >> $HOME/.vcs4/pathsetup
 ```
 
