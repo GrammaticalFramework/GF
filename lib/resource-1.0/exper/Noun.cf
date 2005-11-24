@@ -1,0 +1,72 @@
+NP  ::= Det CN ;
+NP  ::= PN ;
+NP  ::= Pron ;
+NP  ::= Predet Quant Num ;
+Det ::= Predet Quant OptNum ;
+
+Predet ::= ;
+
+-- examples
+-- Predet ::= "only" | "just" ;
+-- Quant  ::= "this" | "the" | "a" | "every" | "some" ;
+-- Num ::= "one" ;
+
+Quant  ::= Poss ;
+
+OptNum ::=  | Num ;
+
+Num ::= Ordinal ;
+
+-- instead of NMass
+Quant  ::= ; 
+
+---NP ::= DetMass NMass ;
+---DetMass ::= Predet Quant ;
+---DetMass ::= Predet ;
+---NMass ::= "wine" ;
+
+NP     ::= Det_Pl CN_Pl ;
+NP     ::= Predet_Pl Quant_Pl Num_Pl ; -- nonempty det
+
+Det_Pl ::= Predet_Pl Quant_Pl OptNum_Pl ;
+
+Predet_Pl ::= ;
+Quant_Pl  ::= ;
+
+Quant_Pl  ::= Poss ;
+
+Poss ::= NP "'s" ; -- also "my" ;
+
+OptNum_Pl ::= | Num_Pl ;
+
+Num_Pl ::= Ordinal ;
+Num_Pl ::= Int ;
+Num_Pl ::= Numeral ;
+
+-- less than, exactly, almost,...
+Numeral ::= AdN Numeral ;
+
+CN_Pl ::= N_Pl ;
+CN    ::= N ;
+
+-- prepositions cannot be expressed generally here
+-- NB relational nouns explain why complements are closer than adjuncts
+-- But let us make the resource simpler by excluding them
+-- CN ::= N2 Prep NP ;
+-- N2 ::= N3 Prep NP ;
+
+-- elliptical constructions
+-- with exclusion of rel nouns, they just help reuse the old lexicon
+
+N2 ::= N3 ;
+N  ::= N2 ;
+
+-- these need other modules to produce anything
+
+CN ::= AP CN ;
+CN ::= CN AP_post ;
+CN ::= CN "that" S ;
+
+CN_Pl ::= AP CN_Pl ;
+CN_Pl ::= CN_Pl AP_post ;
+

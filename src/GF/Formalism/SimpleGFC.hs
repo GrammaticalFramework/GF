@@ -179,15 +179,17 @@ Path path ++. lbl = Path (Left lbl : path)
 (++!) :: Path c t -> Term c t -> Path c t 
 Path path ++! sel = Path (Right sel : path)
 
-lintypeFollowPath :: (Show c,Show t) => Path c t -> LinType c t -> LinType c t
-lintypeFollowPath (Path path) = follow path 
+lintypeFollowPath :: (Print c,Print t) => Path c t -> LinType c t -> LinType c t
+lintypeFollowPath (Path path0) ctype0 = follow path0 ctype0 
     where follow [] ctype = ctype
 	  follow (Right pat : path) (TblT _ ctype) = follow path ctype
 	  follow (Left  lbl : path) (RecT rec)
 	      = maybe err (follow path) $ lookup lbl rec
 	      where err = error $ "lintypeFollowPath: label not in record type"
-                            ++ "\n" ++ show lbl
-                            ++ "\n" ++ show rec
+                            ++ "\nLabel: " ++ prt lbl
+			    ++ "\nPath: " ++ prt (Path path0)
+			    ++ "\nCType: " ++ prt ctype0
+                            ++ "\nRType: " ++ prt (RecT rec)
                           --- by AR for debugging 23/11/2005
 
 termFollowPath :: (Eq c, Eq t) => Path c t -> Term c t -> Term c t

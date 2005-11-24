@@ -4,6 +4,7 @@ abstract Noun = Cat ** {
     DetCN   : Det -> CN -> NP ;
     UsePN   : PN -> NP ;
     UsePron : Pron -> NP ;
+    UsePron2 : Pron -> NP ;
 
     MkDet : Predet -> Quant -> Num -> Det ;
     
