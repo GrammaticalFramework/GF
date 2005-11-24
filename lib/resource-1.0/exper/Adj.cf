@@ -1,0 +1,21 @@
+PositA.  AP ::= A ;
+ComplA2. AP_post ::= A2 Prep NP ;
+ComparA. AP_post ::= "more" A "than" NP ;
+AP_post ::= "less" A "than" NP ;
+
+-- superlatives à la CLE
+
+Num    ::= "most" A ;
+Num_Pl ::= "most" A ;
+
+ComplAV.  AP_post ::= AV  "to" VP ;
+UseA2V.   AV      ::= A2V Prep NP ;
+
+-- is this much too general?
+SentAP.   AP_post ::= AP SC ;
+AP_post           ::= AP_post SC ;
+
+-- replace this by NP ::= S
+-- ComplAQ.  AP_post      ::= AQ "of" QS ;
+
+---- TODO: comparison of AV etc

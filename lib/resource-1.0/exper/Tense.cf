@@ -1,0 +1,27 @@
+-- this is superfluous in gf
+
+VP ::= Have V ;
+VP ::= Have V2 NP ;
+VP ::= Have Been Comp ;
+
+S  ::= "there" Have Been NP ;
+QS ::= Have "there" Been NP ;
+
+Slash ::= NP Have OptAdV V2 ;
+Slash ::= NP Have OptAdV VV "to" V2 ;
+Slash ::= NP Have Cop OptAdV A2 Prep ;
+QS    ::= Have NP Been Comp ;
+
+QS ::= IAdv Mod NP VP ;
+QS ::= IAdv Have NP Been ;
+
+IAdv ::= Prep IP ;
+
+-- 
+
+Cop ::= "was" | "were" | "wasn't" | "weren't" ;
+Do  ::= "did" | "didn't" ;
+Mod ::= "could" | "couldn't" ;
+
+Have ::= "has" | "have" | "had" | "hasn't" | "haven't" | "hadn't" ;
+Been ::= "been" ;
