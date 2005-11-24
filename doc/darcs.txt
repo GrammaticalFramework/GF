@@ -274,6 +274,24 @@ $ ssh -M gfreposerver
 
 or use the ``darcs-cm`` script shown above.
 
+== I'm using Cygwin and I get "mm_receive_fd: no fd" ==
+
+It seems like ssh connection multiplexing doesn't work under Cygwin:
+http://www.mail-archive.com/cygwin@cygwin.com/msg61323.html.
+
+The workaround is to use password authentication. Just remove the
+ControlPath line in ``.ssh/config``, and don't setup a ControlMaster
+connection (and don't use darcs-cm).
+
+You should then be able to checkout using just:
+
+```
+$ darcs get --partial --set-scripts-executable gfreposerver:/users/cs/www/Research/Language-technology/darcs/GF/
+```
+
+The problem is that when you pull and push, you have to enter your
+password quite a few times.
+
 
 == How do I avoid typing in my password so many times? ==
 
