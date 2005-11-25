@@ -250,6 +250,20 @@ oper pronOni: Pronoun =
     pron = True 
   } ;
 
+oper pronKto: Pronoun = 
+  { s = table {
+    PF Nom _ _  => "кто"  ; 
+    PF Gen _ _ => "кого" ;
+    PF Dat _  _ => "кому" ; 
+    PF Acc _  _ => "кого" ; 
+    PF Inst _ _ => "кем" ;
+    PF Prepos _ _ => "ком" 
+    } ;
+    g = PGen  Masc;
+    n = Sg ;
+    p = P3 ;
+    pron = False
+  } ;
 oper pronKtoTo: Pronoun = 
   { s = table {
     PF Nom _ _  => "кто-то"  ; 
@@ -272,6 +286,20 @@ oper pronChtoTo: Pronoun =
     PF Acc _  _ => "что-то" ; 
     PF Inst _ _ => "чем-то" ;
     PF Prepos _ _ => "чём-то" 
+    } ;
+    g = PGen  Masc;
+    n = Sg ;
+    p = P3 ;
+    pron = False
+  } ;
+ oper pronChto: Pronoun = 
+  { s = table {
+    PF Nom _ _  => "что"  ; 
+    PF Gen _ _ => "чего" ;
+    PF Dat _  _ => "чему" ; 
+    PF Acc _  _ => "что" ; 
+    PF Inst _ _ => "чем" ;
+    PF Prepos _ _ => "чём" 
     } ;
     g = PGen  Masc;
     n = Sg ;
@@ -302,7 +330,7 @@ oper pronNichto: Pronoun =
     PF Inst _ _ => "ничем" ;
     PF Prepos _ _ => ["ни о чём"] -- only together with preposition  
     } ;
-    g = PGen  Masc;
+    g = PGen  Masc;
     n = Sg ;
     p = P3 ;
     pron = False
@@ -341,7 +369,9 @@ oper grud : CommNoun = softSignEndDeclFem "груд" ;
 oper ruka : CommNoun = aEndG_K_KH_Decl "рук" ;
 oper spina : CommNoun = aEndInAnimateDecl "спин" ;
 oper stopa : CommNoun = aEndInAnimateDecl "стоп" ;
-
+oper sreda : CommNoun = aEndInAnimateDecl "сред" ;
+oper pyatnica : CommNoun = aEndInAnimateDecl "пятниц" ;
+oper subbota : CommNoun = aEndInAnimateDecl "суббот" ;
 oper astma : CommNoun = aEndInAnimateDecl "астм" ;
 oper angina : CommNoun = aEndInAnimateDecl "ангин" ;
 oper revmatizm : CommNoun = nullEndInAnimateDecl1 "ревматизм" ; 
@@ -358,6 +388,11 @@ oper antidepressant : CommNoun = nullEndInAnimateDecl1 "антидепресса
 oper insulin : CommNoun = nullEndInAnimateDecl1 "инсулин" ;
 oper vitamin : CommNoun = nullEndInAnimateDecl1 "витамин" ;
 oper antibiotik : CommNoun = nullEndInAnimateDecl3 "антибиотик" ; 
+oper ponedelnik : CommNoun = nullEndInAnimateDecl3 "понедельник" ; 
+oper vtornik : CommNoun = nullEndInAnimateDecl3 "вторник" ; 
+oper chetverg : CommNoun = nullEndInAnimateDecl3 "четверг" ; 
+
+
 oper kaplya : CommNoun = (l_yaEndInAnimateDecl  "кап") ** {g = Fem; anim = Inanimate}  ;
 oper snotvornoe : CommNoun = oeEndInAnimateDecl "снотворн" ;
 oper uspokoitelnoe : CommNoun = oeEndInAnimateDecl "успокоительн" ;
@@ -395,6 +430,23 @@ oper aEndAnimateDecl: Str -> SubstFormDecl =  \muzhchin ->
   } ;
 
 oper stomatolog : CommNoun = nullEndAnimateDecl "стоматолог" ;
+oper nullEndInAnimateDecl: Str -> CommNoun =  \stomatolog ->
+  {s  =  table  
+      { SF Sg Nom =>  stomatolog ; 
+        SF Sg Gen => stomatolog+"а" ;
+        SF Sg Dat => stomatolog+"у" ; 
+        SF Sg Acc => stomatolog +"а" ; 
+        SF Sg Inst => stomatolog+"ом" ;
+        SF Sg Prepos => stomatolog+"е" ; 
+        SF Pl  Nom => stomatolog+"и" ; 
+        SF Pl Gen => stomatolog+"ов" ;
+        SF Pl Dat => stomatolog+"ам" ; 
+        SF Pl Acc => stomatolog+"ов" ; 
+        SF Pl Inst => stomatolog+"ами" ;
+        SF Pl Prepos => stomatolog+"ах"    } ;
+    g = Masc  ; anim = Inanimate 
+  } ;
+
 oper nullEndAnimateDecl: Str -> CommNoun =  \stomatolog ->
   {s  =  table  
       { SF Sg Nom =>  stomatolog ; 
@@ -454,6 +506,43 @@ oper nullEndInAnimateDecl1: Str -> CommNoun =  \gripp ->
     g = Masc   ; anim = Inanimate 
 
   } ;
+oper nullEndInAnimateDeclStul: Str -> CommNoun =  \brat ->
+  {s  =  table  
+      { SF Sg Nom =>  brat ; 
+        SF Sg Gen => brat+"а" ;
+        SF Sg Dat => brat+"у" ; 
+        SF Sg Acc => brat +"а"; 
+        SF Sg Inst => brat+"ом" ;
+        SF Sg Prepos => brat+"е" ; 
+        SF Pl Nom => brat+"ья" ; 
+        SF Pl Gen => brat+"ьев" ;
+        SF Pl Dat => brat+"ьям" ; 
+        SF Pl Acc => brat +"ьев"; 
+        SF Pl Inst => brat+"ьями" ;
+        SF Pl Prepos => brat+"ьяах"
+    } ;
+    g = Masc   ; anim = Inanimate 
+
+  } ;
+oper nullEndAnimateDeclBrat: Str -> CommNoun =  \brat ->
+  {s  =  table  
+      { SF Sg Nom =>  brat ; 
+        SF Sg Gen => brat+"а" ;
+        SF Sg Dat => brat+"у" ; 
+        SF Sg Acc => brat +"а"; 
+        SF Sg Inst => brat+"ом" ;
+        SF Sg Prepos => brat+"е" ; 
+        SF Pl Nom => brat+"ья" ; 
+        SF Pl Gen => brat+"ьев" ;
+        SF Pl Dat => brat+"ьям" ; 
+        SF Pl Acc => brat +"ьев"; 
+        SF Pl Inst => brat+"ьями" ;
+        SF Pl Prepos => brat+"ьяах"
+    } ;
+    g = Masc   ; anim = Animate 
+
+  } ;
+
 
 oper adres: CommNoun = nullEndInAnimateDecl2 "адрес" ;
 oper  dom : CommNoun = nullEndInAnimateDecl2 "дом" ;
@@ -531,7 +620,24 @@ oper oeEndInAnimateDecl: Str -> CommNoun =  \snotvorn ->
     } ;
     g = Neut  ; anim = Inanimate 
   } ; 
-
+oper voskresenje : CommNoun = soft_eEndInAnimateDecl "воскресен" ;
+oper soft_eEndInAnimateDecl: Str -> CommNoun =  \proizvedeni ->
+  {  s  =  table  
+      { SF Sg Nom =>  proizvedeni +"ье"; 
+        SF Sg Gen => proizvedeni+"ья" ;
+        SF Sg Dat => proizvedeni+"ью" ; 
+        SF Sg Acc => proizvedeni +"ье"; 
+        SF Sg Inst => proizvedeni+"ьем" ;
+        SF Sg Prepos => proizvedeni+"ье" ; 
+        SF Pl Nom => proizvedeni+"ья" ; 
+        SF Pl Gen => proizvedeni+"ий" ;
+        SF Pl Dat => proizvedeni+"ьям" ; 
+        SF Pl Acc => proizvedeni+"ья" ; 
+        SF Pl Inst => proizvedeni+"ьями" ;
+        SF Pl Prepos => proizvedeni+"ьях"
+    } ;
+    g = Neut  ; anim = Inanimate 
+  } ;
 oper proizvedenie : CommNoun = eEndInAnimateDecl "произведени" ;
 oper eEndInAnimateDecl: Str -> CommNoun =  \proizvedeni ->
   {  s  =  table  
@@ -608,8 +714,19 @@ oper oEnd_KH_InAnimateDecl: Str -> CommNoun =  \u ->
     g = Neut  ; anim = Inanimate 
   } ;
 
-
 oper malaria : CommNoun = i_yaEndDecl "маляри" ;
+
+oper daniya : ProperName = mkCNProperName(i_yaEndDecl "Дани" );
+oper angliya : ProperName = mkCNProperName(i_yaEndDecl "Англи") ;
+oper finlyandiya : ProperName = mkCNProperName(i_yaEndDecl "Финлянди") ;
+oper franciya : ProperName = mkCNProperName(i_yaEndDecl "Франци" );
+oper germaniya : ProperName = mkCNProperName(i_yaEndDecl "Германи") ;
+oper italiya : ProperName = mkCNProperName(i_yaEndDecl "Итали" );
+oper norvegiya : ProperName = mkCNProperName(i_yaEndDecl "Норвеги") ;
+oper rossiya : ProperName = mkCNProperName(i_yaEndDecl "Росси") ;
+oper ispaniya : ProperName = mkCNProperName(i_yaEndDecl "Испани") ;
+oper shveciya : ProperName = mkCNProperName(i_yaEndDecl "Швеци") ;
+
 oper i_yaEndDecl: Str -> CommNoun =  \malar ->
   { s  =  table  
       { SF Sg Nom =>  malar+"я" ; 
@@ -663,6 +780,42 @@ oper softSignEndDeclMasc: Str -> CommNoun =  \nol ->
         SF Pl Acc => nol+"и" ; 
         SF Pl Inst => nol+"ями" ;
         SF Pl Prepos => nol+"ях"           
+       } ;
+    g = Masc ; anim = Inanimate 
+  } ;
+oper okEndDeclMasc: Str -> CommNoun =  \potol ->
+  {s  =  table  
+      { SF Sg  Nom =>  potol+"ок" ; 
+        SF Sg Gen => potol+"ка" ;
+        SF Sg Dat => potol+"ку" ; 
+        SF Sg Acc => potol+"ок" ; 
+        SF Sg Inst => potol+"ком" ;
+        SF Sg Prepos => potol+"ке" ; 
+        SF Pl  Nom => potol+"ки" ; 
+        SF Pl Gen => potol+"ков" ;
+        SF Pl Dat => potol+"кам" ; 
+        SF Pl Acc => potol+"ки" ; 
+        SF Pl Inst => potol+"ками" ;
+        SF Pl Prepos => potol+"ках"           
+       } ;
+    g = Masc ; anim = Inanimate 
+  } ;
+
+
+oper shEndDeclMasc: Str -> CommNoun =  \malush ->
+  {s  =  table  
+      { SF Sg  Nom =>  malush ; 
+        SF Sg Gen => malush+"а" ;
+        SF Sg Dat => malush+"у" ; 
+        SF Sg Acc => malush+"а" ; 
+        SF Sg Inst => malush+"ом" ;
+        SF Sg Prepos => malush+"е" ; 
+        SF Pl  Nom => malush+"и" ; 
+        SF Pl Gen => malush+"ей" ;
+        SF Pl Dat => malush+"ам" ; 
+        SF Pl Acc => malush+"ей" ; 
+        SF Pl Inst => malush+"ами" ;
+        SF Pl Prepos => malush+"ах"           
        } ;
     g = Masc ; anim = Inanimate 
   } ;
@@ -857,6 +1010,25 @@ oper eEnd_Decl: Str -> CommNoun =  \vs ->
     g = Neut  ; anim = Inanimate 
 } ;
   
+mkAdjCommNounMascInanim: Adjective -> CommNoun =
+\a ->
+{ s = table {
+      SF Sg Nom =>  a.s ! AF Nom Inanimate (ASg Masc) ; 
+      SF Sg Gen => a.s ! AF Gen Inanimate (ASg Masc) ;
+      SF Sg Dat => a.s ! AF Dat Inanimate (ASg Masc) ; 
+      SF Sg Acc => a.s ! AF Acc Inanimate (ASg Masc) ; 
+      SF Sg Inst => a.s ! AF Inst Inanimate (ASg Masc) ;
+      SF Sg Prepos => a.s ! AF Prepos Inanimate (ASg Masc) ;
+      SF Pl Nom => a.s ! AF Nom Inanimate APl ; 
+      SF Pl Gen => a.s ! AF Gen Inanimate APl;
+      SF Pl Dat => a.s ! AF Dat Inanimate APl ; 
+      SF Pl  Acc => a.s ! AF Acc Inanimate APl ; 
+      SF Pl Inst => a.s ! AF Inst Inanimate APl ;
+      SF Pl Prepos => a.s ! AF Prepos Inanimate APl 
+  };
+ g = Masc ; 
+ anim = Inanimate 
+};
 --2 Adjectives
 
 -- Type Adjective only has positive degree while AdjDegr type 
@@ -1021,6 +1193,8 @@ oper uy_j_EndDecl : Str -> Adjective = \s ->{s = table {
   } ;
 oper indijskij: Adjective = ij_EndK_G_KH_Decl "индийск" ;
 oper francuzskij: Adjective = ij_EndK_G_KH_Decl "французск" ;
+oper anglijskij: Adjective = ij_EndK_G_KH_Decl "английск" ;
+oper datskij: Adjective = ij_EndK_G_KH_Decl "датск" ;
 oper russkij: Adjective = ij_EndK_G_KH_Decl "русск" ;
 oper italyanskij: Adjective = ij_EndK_G_KH_Decl "итальянск" ;
 oper yaponskij: Adjective = ij_EndK_G_KH_Decl "японск" ;
@@ -1162,6 +1336,7 @@ param Conjugation = First | FirstE | Second | Mixed | Dolzhen;
 
 oper verbGulyat : Verbum = verbDecl Imperfective First "гуля" "ю" "гулял" "гуляй" "гулять";
 oper verbVkluchat : Verbum = verbDecl Imperfective First "включа" "ю" "включал" "включай" "включать";
+oper verbSuchestvovat : Verbum = verbDecl Imperfective First "существу" "ю" "существовал" "существуй" "существовать";
 oper verbVukluchat : Verbum = verbDecl Imperfective First "выключа" "ю" "выключал" "выключай" "выключать";
 oper verbZhdat : Verbum = verbDecl Imperfective First "жд" "у" "ждал" "жди" "ждать" ;
 oper verbBegat : Verbum = verbDecl Imperfective First "бега" "ю" "бегал" "бегай" "бегать";
@@ -1442,6 +1617,9 @@ oper
 
   ProperName : Type = {s :  Case => Str ; g : Gender ; anim : Animacy} ;
 
+  mkCNProperName : CommNoun -> ProperName = \cn ->
+{s = \\c => cn.s! (SF Sg c); g=cn.g; anim = cn.anim }; 
+  
   mkProperNameMasc : Str -> Animacy -> ProperName = \ivan, anim -> 
        { s =  table { Nom => ivan ; 
                       Gen => ivan + "а";
@@ -1475,6 +1653,13 @@ oper mille : Size => Str = table {
 
 oper gg : Str -> Gender => Str = \s -> table {_ => s} ;
 
+oper sebya : Case => Str =table {
+Nom => "";
+Gen => "себя";
+Dat=> "себе";
+Acc => "себя";
+Instr => "собой";
+Prep =>"себе"};
 
-   };
+ };
 

@@ -14,7 +14,8 @@
 --
 -- The following files are presupposed:
 
-resource ParadigmsRus = open (Predef=Predef), Prelude, SyntaxRus, ResourceRus in {
+resource ParadigmsRus = open (Predef=Predef), Prelude, SyntaxRus, 
+CategoriesRus, RulesRus in {
  
 flags  coding=utf8 ;
 
@@ -77,42 +78,47 @@ oper
 
 -- Feminine patterns.
 
-  nMashina   : Str -> N ;    -- feminine, inanimate, ending with "-а", Inst -"машин-ой"
-  nEdinica   : Str -> N ;    -- feminine, inanimate, ending with "-а", Inst -"единиц-ей"
-  nZhenchina : Str -> N ;    -- feminine, animate, ending with "-a"
-  nNoga      : Str -> N ;    -- feminine, inanimate, ending with "г_к_х-a"
-  nMalyariya  : Str -> N ;    -- feminine, inanimate, ending with "-ия"   
-  nTetya     : Str -> N ;    -- feminine, animate, ending with "-я"   
-  nBol       : Str -> N ;    -- feminine, inanimate, ending with "-ь"(soft sign)     
+  nMashina   : Str -> N ;    -- inanimate, ending with "-а", Inst -"машин-ой"
+  nEdinica   : Str -> N ;    -- inanimate, ending with "-а", Inst -"единиц-ей"
+  nZhenchina : Str -> N ;    -- animate, ending with "-a"
+  nNoga      : Str -> N ;    -- inanimate, ending with "г_к_х-a"
+  nMalyariya  : Str -> N ;    -- inanimate, ending with "-ия"   
+  nTetya     : Str -> N ;    -- animate, ending with "-я"   
+  nBol       : Str -> N ;    -- inanimate, ending with "-ь"(soft sign)     
 
 -- Neuter patterns. 
 
-  nObezbolivauchee : Str -> N ;   -- neutral, inanimate, ending with "-ee" 
-  nProizvedenie : Str -> N ;   -- neutral, inanimate, ending with "-e" 
-  nChislo : Str -> N ;   -- neutral, inanimate, ending with "-o" 
+  nObezbolivauchee : Str -> N ;   -- inanimate, ending with "-ee" 
+  nProizvedenie : Str -> N ;   -- inanimate, ending with "-e" 
+  nChislo : Str -> N ;   -- inanimate, ending with "-o" 
 
 -- Masculine patterns. 
 
-  nStomatolog : Str -> N ;    -- masculine, animate, ending with consonant
-                              
-                              -- the next two differ only in 
-                              -- plural nominative (= accusative) form(s) :
-  nAdres     : Str -> N ;     -- адрес-а
-  nTelefon   : Str -> N ;     -- телефон-ы
-                              -- masculine, inanimate, ending with consonant
+Ending with consonant: 
+  nBrat: Str -> N ;   -- animate, брат-ья
+  nStul: Str -> N ;    -- same as above, but inanimate
+  nMalush : St -> N ; -- малышей
+  nPotolok : St -> N ; -- потол-ок - потол-ка
 
-  nNol       : Str -> N ;    -- masculine, inanimate, ending with "-ь" (soft sign)
-  nUroven    : Str -> N ;    -- masculine, inanimate, ending with "-ень"
+ -- the next four differ in plural nominative and/or accusative form(s) :
+  nBank: Str -> N ;    -- банк-и (Nom=Acc)
+  nStomatolog : Str -> N ;  -- same as above, but animate
+  nAdres     : Str -> N ;     -- адрес-а (Nom=Acc)
+  nTelefon   : Str -> N ;     -- телефон-ы (Nom=Acc)
+
+  nNol       : Str -> N ;    -- inanimate, ending with "-ь" (soft sign)
+  nUroven    : Str -> N ;    -- inanimate, ending with "-ень"
 
 -- Nouns used as functions need a preposition. The most common is with Genitive.
 
-  mkFun  : N -> Preposition -> Case -> Fun ;
-  funGen : N -> Fun ;
+  mkFun  : N -> Preposition -> Case -> N2 ;
+  funGen : N -> N2 ;
 
 -- Proper names.
 
   mkPN  : Str -> Gender -> Animacy -> PN ;          -- "Иван", "Маша"
-
+  nounPN : N -> PN ;
+  
 -- On the top level, it is maybe $CN$ that is used rather than $N$, and
 -- $NP$ rather than $PN$.
 
@@ -140,24 +146,24 @@ oper
 -- in the current description, otherwise there would be 32 forms for 
 -- positive degree.
 
--- mkAdj1 : ( : Str) -> Adj1 ;
+-- mkA : ( : Str) -> A ;
 
 -- Invariable adjective is a special case.
 
-   adjInvar : Str -> Adj1 ;          -- khaki, mini, hindi, netto
+   adjInvar : Str -> A ;          -- khaki, mini, hindi, netto
 
 -- Some regular patterns depending on the ending.
 
-   adj1Staruyj : Str -> Adj1 ;             -- ending with "-ый"
-   adj1Malenkij : Str -> Adj1 ;            -- endign with "-ий"
-   adj1Molodoj : Str -> Adj1 ;             -- ending with "-ой", 
+   AStaruyj : Str -> A ;             -- ending with "-ый"
+   AMalenkij : Str -> A ;            -- endign with "-ий"
+   AMolodoj : Str -> A ;             -- ending with "-ой", 
                                            -- plural - молод-ые"
-   adj1Kakoj_Nibud : Str -> Str -> Adj1 ;  -- ending with "-ой", 
+   AKakoj_Nibud : Str -> Str -> A ;  -- ending with "-ой", 
                                            -- plural - "как-ие"
 
 -- Two-place adjectives need a preposition and a case as extra arguments.
 
-   mkAdj2 : Adj1 -> Str -> Case -> Adj2 ;  -- "делим на"
+   mkA2 : A -> Str -> Case -> A2 ;  -- "делим на"
 
 -- Comparison adjectives need a positive adjective 
 -- (28 forms without short forms). 
@@ -168,12 +174,12 @@ oper
 -- Syntaxic forms are based on the positive forms.
 
 
-   mkAdjDeg : Adj1 -> Str -> AdjDeg ;
+   mkADeg : A -> Str -> ADeg ;
 
 -- On top level, there are adjectival phrases. The most common case is
 -- just to use a one-place adjective. 
 
-   ap : Adj1  -> IsPostfixAdj -> AP ;
+   ap : A  -> IsPostfixAdj -> AP ;
 
 
 --2 Verbs
@@ -231,15 +237,15 @@ past : Tense ;
 -- The "V" type, that have these parameters fixed. 
 -- We can extract the "V" from the lexicon.
 
-   mkV: Verbum -> Voice -> Tense -> V ;
-   mkPresentV: Verbum -> Voice -> V ;
+--   mkV: Verbum -> Voice ->  V ;
+--   mkPresentV: Verbum -> Voice -> V ;
 
 
 -- Two-place verbs, and the special case with direct object. Notice that
 -- a particle can be included in a $V$.
 
-   mkTV     : V   -> Str -> Case -> TV ;   -- "войти в дом"; "в", accusative
-   tvDir    : V -> TV ;                    -- "видеть", "любить"
+   mkTV     : V   -> Str -> Case -> V2 ;   -- "войти в дом"; "в", accusative
+   tvDir    : V -> V2 ;                    -- "видеть", "любить"
                                
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
@@ -250,7 +256,7 @@ past : Tense ;
   Animacy = SyntaxRus.Animacy;
   Aspect = SyntaxRus.Aspect;
   Voice = SyntaxRus.Voice ;
-  Tense = SyntaxRus.Tense ;
+  Tense = SyntaxRus.RusTense ;
    Bool = Prelude.Bool ;
 
   true = True;
@@ -326,9 +332,14 @@ past : Tense ;
 
 
 -- Masculine patterns. 
+  nBank = \s -> nullEndInAnimateDecl s ** {lock_N = <>}; 
+  nStomatolog = \s -> nullEndAnimateDecl s ** {lock_N = <>};
+  nMalush = \s -> shEndDeclMasc s ** {lock_N = <>};
+  nPotolok = \s ->okEndDeclMasc s ** {lock_N = <>};
 
-  nStomatolog = \s -> nullEndAnimateDecl s ** {lock_N = <>}; 
-                              
+  nBrat = \s -> nullEndAnimateDeclBrat s** {lock_N = <>}; 
+  nStul = \s -> nullEndInAnimateDeclStul s** {lock_N = <>}; 
+   
   nAdres     = \s -> nullEndInAnimateDecl2 s ** {lock_N = <>}; 
   nTelefon   = \s -> nullEndInAnimateDecl1 s ** {lock_N = <>}; 
 
@@ -343,20 +354,22 @@ past : Tense ;
        Masc => mkProperNameMasc ivan anim ; 
        _ => mkProperNameFem ivan anim
     } ** {lock_PN =<>};
+  nounPN  n = (mkCNProperName n)**{lock_PN=<>};
+
   mkCN = UseN ;
   mkNP = \x,y,z -> UsePN (mkPN x y z) ;
 
 -- Adjective definitions
 
-  adjInvar = \s -> { s = \\af => s } ** {lock_Adj1= <>};
+  adjInvar = \s -> { s = \\af => s } ** {lock_A= <>};
 
-  adj1Staruyj s = uy_j_EndDecl s ** {lock_Adj1 = <>} ;       
-  adj1Malenkij s = ij_EndK_G_KH_Decl s ** {lock_Adj1= <>};       
-  adj1Molodoj s = uy_oj_EndDecl s ** {lock_Adj1= <>};        
-  adj1Kakoj_Nibud s t = i_oj_EndDecl s t ** {lock_Adj1= <>}; 
+  AStaruyj s = uy_j_EndDecl s ** {lock_A = <>} ;       
+  AMalenkij s = ij_EndK_G_KH_Decl s ** {lock_A= <>};       
+  AMolodoj s = uy_oj_EndDecl s ** {lock_A= <>};        
+  AKakoj_Nibud s t = i_oj_EndDecl s t ** {lock_A= <>}; 
 
-  mkAdj2 a p c= mkAdjective2 a p c ** {lock_Adj2 = <>};
-  -- mkAdjDeg defined in morpho.RusU
+  mkA2 a p c= mkAdjective2 a p c ** {lock_A2 = <>};
+  -- mkADeg defined in morpho.RusU
 
   ap a p = mkAdjPhrase a p ** {lock_AP = <>};  -- defined in syntax module
 
@@ -387,8 +400,8 @@ past : Tense ;
 
 
    mkRegVerb = verbDecl ;                  -- defined in morpho.RusU.gf
-
-   mkV a b c = extVerb a b c ** {lock_V = <>};                         -- defined in types.RusU.gf
+{-
+   mkV a b = extVerb a b ** {lock_V = <>};                         -- defined in types.RusU.gf
 
    mkPresentV = \aller, vox -> 
     { s = table { 
@@ -397,8 +410,8 @@ past : Tense ;
        VInf => aller.s ! VFORM vox VINF ;
        VSubj gn => aller.s ! VFORM vox (VSUB gn)
        }; t = Present ; a = aller.asp ; w = vox ; lock_V = <>} ;
-
-   mkTV a b c = mkTransVerb a b c ** {lock_TV = <>};                    -- defined in syntax.RusU.gf
-   tvDir v = mkDirectVerb v ** {lock_TV = <>};                           -- defined in syntax.RusU.gf
+-}
+   mkTV a b c = mkTransVerb a b c ** {lock_V2 = <>};                    -- defined in syntax.RusU.gf
+   tvDir v = mkDirectVerb v ** {lock_V2 = <>};                           -- defined in syntax.RusU.gf
 
 } ;
