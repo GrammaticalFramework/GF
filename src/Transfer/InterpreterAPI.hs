@@ -1,4 +1,7 @@
-module Transfer.InterpreterAPI (Env, load, loadFile, evaluateString) where
+module Transfer.InterpreterAPI (Env, builtin,
+                                load, loadFile, 
+                                evaluateString, evaluateExp
+                               ) where
 
 import Transfer.Core.Abs
 import Transfer.Core.Lex
@@ -17,6 +20,7 @@ load n s = case pModule (myLexer s) of
               Ok  m -> return $ addModuleEnv builtin m
 
 -- | Read a transfer module in core format from a file.
+--   Fails in the IO monad if there is a problem loading the file.
 loadFile :: FilePath -> IO Env
 loadFile f = readFile f >>= load f
 
@@ -29,3 +33,7 @@ evaluateString env s =
         Ok  e -> do
                  let v = eval env e
                  return $ printValue v
+
+-- | Evaluate an expression in the given environment.
+evaluateExp :: Env -> Exp -> Exp
+evaluateExp env exp = valueToExp $ eval env exp
