@@ -1,0 +1,109 @@
+entrypoints Module, Exp ;
+
+layout "let", "where", "of" ;
+layout stop "in" ;
+layout toplevel ;
+
+comment "--" ;
+comment "{-" "-}" ;
+
+Module. Module ::= [Import] [Decl] ;
+
+Import. Import ::= "import" Ident ;
+separator Import ";" ;
+
+DataDecl.  Decl ::= "data" Ident ":" Exp "where" "{" [ConsDecl] "}" ;
+TypeDecl.  Decl ::= Ident ":" Exp ;
+ValueDecl. Decl ::= Ident [Pattern] "=" Exp ;
+DeriveDecl. Decl ::= "derive" Ident Ident ;
+separator Decl ";" ;
+
+ConsDecl. ConsDecl ::= Ident ":" Exp ;
+separator ConsDecl ";" ;
+
+-- Hack: constructor applied to at least one pattern
+-- this is to separate it from variable patterns
+PConsTop. Pattern ::= Ident Pattern1 [Pattern] ;
+_.        Pattern ::= Pattern1 ;
+-- Constructor pattern with parantheses
+PCons.    Pattern1 ::= "(" Ident [Pattern] ")" ;
+-- Record patterns
+PRec.     Pattern1 ::= "{" [FieldPattern] "}";
+-- The pattern matching the Type constant
+PType.    Pattern1 ::= "Type" ;
+-- String literal patterns
+PStr.     Pattern1 ::= String ;
+-- Integer literal patterns
+PInt.     Pattern1 ::= Integer ;
+-- Variable patterns
+PVar.     Pattern1 ::= Ident ;
+-- Wild card patterns
+PWild.    Pattern1 ::= "_" ;
+
+[].  [Pattern] ::= ;
+(:). [Pattern] ::= Pattern1 [Pattern] ;
+
+FieldPattern. FieldPattern ::= Ident "=" Pattern ;
+separator FieldPattern ";" ;
+
+ELet.      Exp  ::= "let" "{" [LetDef] "}" "in" Exp ;
+LetDef.    LetDef ::= Ident ":" Exp "=" Exp ;
+separator LetDef ";" ;
+
+ECase.     Exp  ::= "case" Exp "of" "{" [Case] "}" ;
+Case. Case ::= Pattern "->" Exp ;
+separator Case ";" ;
+
+EIf.       Exp  ::= "if" Exp "then" Exp "else" Exp ;
+
+EAbs.      Exp2 ::= "\\" VarOrWild "->" Exp ;
+EPi.       Exp2 ::= "(" VarOrWild ":" Exp ")" "->" Exp ;
+EPiNoVar.  Exp2 ::= Exp3 "->" Exp ;
+VVar.      VarOrWild ::= Ident ;
+VWild.     VarOrWild ::= "_" ;
+
+EOr.       Exp3 ::= Exp4 "||" Exp3 ;
+EAnd.      Exp4 ::= Exp5 "&&" Exp4 ;
+
+EEq.       Exp5 ::= Exp6 "==" Exp6 ;
+ENe.       Exp5 ::= Exp6 "/=" Exp6 ;
+ELt.       Exp5 ::= Exp6 "<"  Exp6 ;
+ELe.       Exp5 ::= Exp6 "<=" Exp6 ;
+EGt.       Exp5 ::= Exp6 ">"  Exp6 ;
+EGe.       Exp5 ::= Exp6 ">=" Exp6 ;
+
+EAdd.      Exp6 ::= Exp6 "+" Exp7 ;
+ESub.      Exp6 ::= Exp6 "-" Exp7 ;
+
+EMul.      Exp7 ::= Exp7 "*" Exp8 ;
+EDiv.      Exp7 ::= Exp7 "/" Exp8 ;
+EMod.      Exp7 ::= Exp7 "%" Exp8 ;
+
+EProj.     Exp8 ::= Exp8 "." Ident ;
+
+ENeg.      Exp9 ::= "-" Exp9 ;
+
+EApp.      Exp10 ::= Exp10 Exp11 ;
+
+EEmptyRec. Exp11 ::= "{" "}" ;
+
+ERecType.  Exp11 ::= "{" [FieldType] "}" ;
+FieldType. FieldType  ::= Ident ":" Exp ;
+separator nonempty FieldType ";" ;
+
+ERec.      Exp11 ::= "{" [FieldValue] "}" ;
+FieldValue.FieldValue ::= Ident "=" Exp ;
+separator nonempty FieldValue ";" ;
+
+EVar.      Exp11 ::= Ident ;
+EType.     Exp11 ::= "Type" ;
+EStr.      Exp11 ::= String ;
+EInt.      Exp11 ::= Integer ;
+
+coercions Exp 11 ;
+
+
+
+
+
+

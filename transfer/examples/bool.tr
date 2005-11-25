@@ -1,0 +1,8 @@
+data Bool : Type where { True : Bool; False : Bool; } ;
+
+depif : (A:Type) -> (B:Type) -> (b:Bool) -> A -> B -> if Type b then A else B ;
+depif _ _ True x _ = x ;
+depif _ _ False _ y = y ;
+
+not : Bool -> Bool ;
+not b = if b then False else True ;

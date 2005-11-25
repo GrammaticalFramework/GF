@@ -1,0 +1,5 @@
+const : (A:Type) -> (B:Type) -> A -> B -> A ;
+const _ _ x _ = x ;
+
+id : (A:Type) -> A -> A ;
+id A x = x ;
