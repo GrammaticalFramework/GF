@@ -119,6 +119,7 @@ pCommand ws = case ws of
   "gt" : t      -> aTerm   CGenerateTrees t
   "pt" : s      -> aTerm   CPutTerm s
   "wt" : f : s  -> aTerm   (CWrapTerm (pzIdent f)) s
+  "at" : f : s  -> aTerm   (CApplyTransfer (pmIdent f)) s
   "ma" : s      -> aString CMorphoAnalyse s
   "tt" : s      -> aString CTestTokenizer s
   "cc" : s      -> aUnit   $ CComputeConcrete $ unwords s
@@ -175,4 +176,7 @@ pCommand ws = case ws of
 
    aTermLi c ss = (c [], [ASTrm $ unwords ss])
    ---- (c forms, [ASTrms [term]]) where
-   ----  (forms,term) = ([], s2t (unwords ss)) ---- string2formsAndTerm (unwords ss)
+   ----  (forms,term) = ([], s2t (unwords ss)) ----string2formsAndTerm(unwords ss)
+   pmIdent m = case span (/='.') m of
+     (k,_:f) -> (Just (pzIdent k), pzIdent f)
+     _ -> (Nothing,pzIdent m)

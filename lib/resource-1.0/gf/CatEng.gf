@@ -1,21 +1,25 @@
 concrete CatEng of Cat = open ResEng in {
 
   lincat
-    S     = {s : Str} ;
+    S  = {s : Str} ;
+    QS = {s : QForm => Str} ;
+
     Cl    = {s : Tense => Anteriority => Polarity => Ord => Str} ;
     Slash = {s : Tense => Anteriority => Polarity => Ord => Str} ** {c2 : Str} ;
+
+    QCl   = {s : Tense => Anteriority => Polarity => QForm => Str} ;
 
     VP = {
       s  : Tense => Anteriority => Polarity => Ord => Agr => {fin, inf : Str} ; 
       s2 : Agr => Str
       } ;
 
-    AP = {s : Str} ; 
-    Comp = {s : Agr => Str} ; 
-
     V, VS, VQ = Verb ; -- = {s : VForm => Str} ;
     V2, VV = Verb ** {c2 : Str} ;
     V3 = Verb ** {c2, c3 : Str} ;
+
+    AP = {s : Str} ; 
+    Comp = {s : Agr => Str} ; 
 
     Adv = {s : Str} ;
 
@@ -27,5 +31,9 @@ concrete CatEng of Cat = open ResEng in {
     Pron, NP = {s : Case => Str ; a : Agr} ;
     N2 = {s : Number => Case => Str} ** {c2 : Str} ;
     N3 = {s : Number => Case => Str} ** {c2,c3 : Str} ;
+
+    IP = {s : Case => Str ; n : Number} ;
+    IDet = {s : Str ; n : Number} ;
+    IAdv = {s : Str} ;    
 
 }

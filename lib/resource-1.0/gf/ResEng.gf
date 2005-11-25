@@ -36,6 +36,9 @@ resource ResEng = ParamX ** {
         }
       } ;
 
+    mkIP : (i,me,my : Str) -> Number -> {s : Case => Str ; n : Number} =
+     \i,me,my,n -> let who = mkNP i me my n P3 in {s = who.s ; n = n} ;
+
     mkNP : (i,me,my : Str) -> Number -> Person -> {s : Case => Str ; a : Agr} =
      \i,me,my,n,p -> {
      s = table {

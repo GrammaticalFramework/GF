@@ -37,6 +37,8 @@ import GF.Infra.Option
 import GF.Infra.Ident
 import GF.System.Arch (ModTime)
 
+import qualified Transfer.InterpreterAPI as T
+
 import qualified GF.OldParsing.ConvertGrammar as CnvOld -- OBSOLETE
 import qualified GF.Conversion.GFC as Cnv
 import qualified GF.Parsing.GFC as Prs
@@ -67,7 +69,8 @@ data ShellState = ShSt {
                   [((G.Fun,Int),G.Type)]))],   -- ^ cats, (their contexts, 
                                                -- functions to them,
                                                -- functions on them)
-  statistics :: [Statistics]         -- ^ statistics on grammars
+  statistics :: [Statistics],        -- ^ statistics on grammars
+  transfers  :: [(Ident,T.Env)]      -- ^ transfer modules
   }                             
 
 actualConcretes :: ShellState -> [((Ident,Ident),Bool)]
@@ -103,7 +106,8 @@ emptyShellState = ShSt {
   gloptions  = noOptions,
   readFiles  = [],
   absCats    = [],
-  statistics = []
+  statistics = [],
+  transfers  = []
   }
 
 optInitShellState :: Options -> ShellState
@@ -247,7 +251,8 @@ updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do
     gloptions  = gloptions sh, --- opts, -- this would be command-line options
     readFiles  = [ft | ft@(f,_) <- readFiles sh, notInrts f] ++ rts,
     absCats    = csi,
-    statistics = [StDepTypes deps,StBoundVars binds]
+    statistics = [StDepTypes deps,StBoundVars binds],
+    transfers  = transfers sh
     }            
 
 prShellStateInfo :: ShellState -> String
@@ -259,7 +264,8 @@ prShellStateInfo sh = unlines [
   "all concretes :    " +++ unwords (map (P.prt . fst . fst) (concretes sh)),
   "canonical modules :" +++ unwords (map (P.prt .fst) (M.modules (canModules sh))),
   "source modules :   " +++ unwords (map (P.prt .fst) (M.modules (srcModules sh))),
-  "global options :   " +++ prOpts (gloptions sh)
+  "global options :   " +++ prOpts (gloptions sh),
+  "transfer modules : " +++ unwords (map (P.prt . fst) (transfers sh))
   ]
 
 {- ---- should be called from IOGrammar *before* compiling
@@ -309,7 +315,8 @@ purgeShellState sh = ShSt {
   gloptions  = gloptions sh,
   readFiles  = [],
   absCats    = absCats sh,
-  statistics = statistics sh
+  statistics = statistics sh,
+  transfers  = transfers sh
   }
  where
    abstr = abstract sh
@@ -320,17 +327,17 @@ purgeShellState sh = ShSt {
    acncs = maybe [] singleton abstr ++ map (snd . fst) (actualConcretes sh)
 
 changeMain :: Maybe Ident -> ShellState -> Err ShellState
-changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s) = 
-  return (ShSt Nothing Nothing [] ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s)
+changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s trs) = 
+  return (ShSt Nothing Nothing [] ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s trs)
 changeMain 
-  (Just c) st@(ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s) = 
+  (Just c) st@(ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s trs) = 
    case lookup c (M.modules ms) of 
     Just _ -> do
       a   <- M.abstractOfConcrete ms c
       let cas = M.allConcretes ms a
       let cs' = [((c,c),True) | c <- cas]
       return (ShSt (Just a) (Just c) cs' ms ss cfs old_pis mcfgs cfgs
-        pinfos mos pbs os rs acs s) 
+        pinfos mos pbs os rs acs s trs) 
     _ -> P.prtBad "The state has no concrete syntax named" c
 
 -- | form just one state grammar, if unique, from a canonical grammar
@@ -482,13 +489,14 @@ stateIsWord :: StateGrammar -> String -> Bool
 stateIsWord sg = isKnownWord (stateMorpho sg)
 
 addProbs :: (Ident,Probs) -> ShellState -> Err ShellState
-addProbs ip@(lang,probs) 
-     sh@(ShSt x y cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s) = do
+addProbs ip@(lang,probs) sh = do
   let gr = grammarOfLang sh lang
   probs' <- checkGrammarProbs gr probs
-  let pbs' = (lang,probs') : filter ((/= lang) . fst) pbs
-  return (ShSt x y cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs' os rs acs s)
+  let pbs' = (lang,probs') : filter ((/= lang) . fst) (probss sh)
+  return $ sh{probss = pbs'}
 
+addTransfer :: (Ident,T.Env) -> ShellState -> ShellState
+addTransfer it sh = sh {transfers = it : transfers sh}
 
 {-
 
@@ -543,10 +551,8 @@ languageOff = languageOnOff False
 
 languageOnOff :: Bool -> Language -> ShellStateOper
 ---                                         __________ this is OBSOLETE
-languageOnOff b lang 
- (ShSt a c cs cg sg cfs old_pinfos mcfgs cfgs pinfos ms pbs os fs cats sts) =
-  ShSt a c cs' cg sg cfs old_pinfos mcfgs cfgs pinfos ms pbs os fs cats sts where
-  cs' = [if lang==l then (lc,b) else i | i@(lc@(l,c),_) <- cs]
+languageOnOff b lang sh = sh {concretes = cs'} where
+  cs' = [if lang==l then (lc,b) else i | i@(lc@(l,c),_) <- concretes sh]
 
 {-
 updateLanguage :: FilePath -> (Language, StateConcrete) -> ShellStateOper
@@ -564,15 +570,13 @@ removeLanguage lang (ShSt (ab,gs,os)) = ShSt (ab,removeAssoc lang gs, os)
 
 changeOptions :: (Options -> Options) -> ShellStateOper
 ---                                      __________ this is OBSOLETE
-changeOptions f
- (ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms pbs os ff ts ss) = 
-  ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms pbs (f os) ff ts ss
+changeOptions f sh = sh {gloptions = f (gloptions sh)}
 
 changeModTimes :: [(FilePath,ModTime)] -> ShellStateOper
 ---                                         __________ this is OBSOLETE
 changeModTimes mfs
- (ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms pbs os ff ts ss) = 
-  ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms pbs os ff' ts ss
+ (ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms pbs os ff ts ss trs) = 
+  ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms pbs os ff' ts ss trs
  where
    ff' = mfs ++ [mf | mf@(f,_) <- ff, notElem f (map fst mfs)]
 

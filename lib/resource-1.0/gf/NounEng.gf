@@ -5,8 +5,7 @@ concrete NounEng of Noun = CatEng ** open ResEng in {
   lin
     DetCN det cn = {s = \\c => det.s ++ cn.s ! det.n ! c} ** agrP3 det.n ;
     UsePN pn = pn ** agrP3 Sg ;
---    UsePron p = p ; --- causes mcfg error, even if expanded
-    UsePron2 p = {s=p.s; a={n=p.a.n;p=p.a.p}} ; --- causes mcfg error, even if expanded
+    UsePron p = p ;
 
     MkDet pred quant num = {
       s = pred.s ++ quant.s ++ num.s ; 
@@ -30,8 +29,5 @@ concrete NounEng of Noun = CatEng ** open ResEng in {
     ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c} ;
     ComplN3 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; c2 = f.c3} ;
 
--- structural
-
-    only_Predet = {s = "only"} ;
 
 }

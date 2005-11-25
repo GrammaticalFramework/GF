@@ -14,11 +14,14 @@ concrete LexEng of Lex = CatEng ** open ResEng in {
 
     here_Adv = {s = "here"} ;
 
--- structural
+    only_Predet = {s = "only"} ;
+    this_Quant = {s = "this" ; n = Sg} ;
     
     i_Pron  = mkNP "I"  "me"  "my"  Sg P1 ;
     he_Pron = mkNP "he" "him" "his" Sg P3 ;
     we_Pron = mkNP "we" "us"  "our" Pl P1 ;
 
+    whoSg_IP = mkIP "who" "whom" "whose" Sg ;
+    whoPl_IP = mkIP "who" "whom" "whose" Pl ;
 
 }
