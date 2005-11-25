@@ -31,6 +31,8 @@ import GF.Data.Operations
 import GF.Infra.UseIO
 import GF.System.Arch
 
+import qualified Transfer.InterpreterAPI as T
+
 import Control.Monad (liftM)
 
 -- | a heuristic way of renaming constants is used
@@ -56,6 +58,9 @@ shellStateFromFiles opts st file = do
  ign <- ioeIO $ getNoparseFromFile opts file
  let top = identC $ justModuleName file
  sh <- case fileSuffix file of
+  "trc" -> do
+     env <- ioeIO $ T.loadFile file
+     return $ addTransfer (top,env) st
   "gfcm" -> do
      cenv <- compileOne opts (compileEnvShSt st []) file
      ioeErr $ updateShellState opts ign Nothing st cenv

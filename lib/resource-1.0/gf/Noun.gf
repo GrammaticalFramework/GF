@@ -4,7 +4,6 @@ abstract Noun = Cat ** {
     DetCN   : Det -> CN -> NP ;
     UsePN   : PN -> NP ;
     UsePron : Pron -> NP ;
-    UsePron2 : Pron -> NP ;
 
     MkDet : Predet -> Quant -> Num -> Det ;
     
@@ -30,10 +29,5 @@ abstract Noun = Cat ** {
     QuestCN : CN -> QS -> CN ;
 
     UseN : N -> CN ;
-
--- structural
-
-    only_Predet : Predet ;
-    this_Quant  : Quant ;
 
 } ;

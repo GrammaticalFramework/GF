@@ -63,6 +63,8 @@ import GF.UseGrammar.Editing
 
 ----import GrammarToMGrammar as M
 
+import qualified Transfer.InterpreterAPI as T
+
 import GF.System.Arch (myStdGen)
 
 import GF.Text.UTF8
@@ -355,6 +357,23 @@ wrapByFun opts gr f t =
  where
    t' = qualifTerm (absId gr) $ M.appCons f [tree2exp t]
    g = grammar gr
+
+applyTransfer :: Options -> GFGrammar -> [(Ident,T.Env)] ->
+                 (Maybe Ident,Ident) -> Tree -> Tree
+applyTransfer opts gr trs (mm,f) t = 
+  err (const t) id $ annotate g t'
+ where
+   t' = qualifTerm (absId gr) $ trans tr f $ tree2exp t
+   g = grammar gr
+   tr = case mm of
+     Just m -> maybe empty id $ lookup m trs
+     _ -> ifNull empty (snd . head) trs
+
+   -- these are missing
+   trans = error "no transfer yet" 
+           ----- core2exp . T.appTransfer tr . exp2core
+   empty = error "emptyEnv" 
+           ---- T.emptyEnv
 
 {-
 optTransfer :: Options -> StateGrammar -> G.Term -> G.Term

@@ -50,6 +50,7 @@ data Command =
  | CGenerateTrees
  | CPutTerm
  | CWrapTerm I.Ident
+ | CApplyTransfer (Maybe I.Ident, I.Ident)
  | CMorphoAnalyse
  | CTestTokenizer
  | CComputeConcrete String

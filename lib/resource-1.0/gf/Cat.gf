@@ -1,15 +1,13 @@
 abstract Cat = {
   cat
     S ;
-    Cl ;
     QS ;
+
+    Cl ;
     QCl ;
     Slash ;
 
-
     VP ;
-    AP ; 
-    Comp ;
 
     V ;
     V2 ;
@@ -17,6 +15,9 @@ abstract Cat = {
     VV ;
     VS ;
     VQ ;
+
+    AP ; 
+    Comp ;
 
     Adv ;
 
@@ -32,5 +33,13 @@ abstract Cat = {
     Predet ;
     Quant ;
     Num ;
+
+    Prep ;
+
+    IP ;
+    IAdv ;
+    IDet ;
+
+    RP ;
 
 }
