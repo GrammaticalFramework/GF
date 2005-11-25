@@ -1,0 +1,5 @@
+x : Apa
+x = let x : T = y 
+     in case y of
+         f -> q
+         _ -> a

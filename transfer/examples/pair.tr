@@ -1,0 +1,11 @@
+Pair : Type -> Type -> Type ;
+Pair A B = { p1 : A; p2 : B } ;
+
+pair : (A:Type) -> (B:Type) -> A -> B -> Pair A B ;
+pair _ _ x y = { p1 = x; p2 = y } ;
+
+fst : (A:Type) -> (B:Type) -> Pair A B -> A ;
+fst _ _ p = case p of { (Pair _ _ x _) -> x } ;
+
+snd : (A:Type) -> (B:Type) -> Pair A B -> B ;
+snd _ _ p = case p of { (Pair _ _ x _) -> x } ;

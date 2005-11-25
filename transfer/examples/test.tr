@@ -1,0 +1,3 @@
+import nat ;
+
+main = natToInt (intToNat 100) ;

@@ -1,0 +1,23 @@
+--
+-- Primitives
+--
+
+
+String : Type ;
+
+Int : Type ;
+
+prim_add_Int : (_:Int) -> (_:Int) -> Int ;
+prim_sub_Int : (_:Int) -> (_:Int) -> Int ;
+prim_mul_Int : (_:Int) -> (_:Int) -> Int ;
+prim_div_Int : (_:Int) -> (_:Int) -> Int ;
+prim_mod_Int : (_:Int) -> (_:Int) -> Int ;
+
+prim_neg_Int : (_:Int) -> Int ;
+
+prim_lt_Int : (_:Int) -> (_:Int) -> Bool ;
+prim_le_Int : (_:Int) -> (_:Int) -> Bool ;
+prim_gt_Int : (_:Int) -> (_:Int) -> Bool ;
+prim_ge_Int : (_:Int) -> (_:Int) -> Bool ;
+prim_eq_Int : (_:Int) -> (_:Int) -> Bool ;
+prim_ne_Int : (_:Int) -> (_:Int) -> Bool ;

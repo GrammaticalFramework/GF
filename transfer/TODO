@@ -1,0 +1,57 @@
+* Improve front-end language
+
+- Tuple syntax in expressions, types and patterns. Implemented with records.
+
+- List syntax in expressions, types and patterns. Implemented with List.
+
+- operators for primitive string operations: 
+
+- list operators: ++, :
+
+- overloaded operators?
+
+- implicit arguments?
+
+- layout syntax?
+
+- composOp generation
+
+- show generation
+
+- eq generation
+
+- better module system
+
+- Disjunctive patterns
+
+- Negated patterns?
+
+- Fix BNFC layout resolver to not insert double ; (instead of removing them)
+
+* Improve interpreter
+
+- More efficient handling of constructor application
+
+* Improve interpreter API
+
+- Allow passing terms as some structured type.
+
+* Improve the core language
+
+* Improve compilation
+
+- Eta-expand constructor applications and use the core feature for them.
+
+* Add primitive operations to core
+
+- primitive operations on strings:
+
+- add floating-point numbers with primitive oeprations?
+
+* Implement module system in interpreter
+
+* Add type checker for core
+
+* Add friendly type checker for front-end language
+
+* Add termination checker
