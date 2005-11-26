@@ -87,10 +87,15 @@ repository, as described above. Then create the patch with:
 
 ```
 $ darcs send -o mypatch.patch
+$ gzip mypatch.patch
 ```
 
 (where ``mypatch`` is hopefully replaced by a slightly more
-descriptive name). Send it as an e-mail attachment. If you have
+descriptive name). Since some e-mail setups change text attachments
+(most likely by changing the newline characters) you need to send
+the patch in some compressed format, such as GZIP, BZIP2 or ZIP.
+
+Send it as an e-mail attachment. If you have
 sendmail or something equivalent installed, it is possible to send the
 patch directly from darcs. If so, replace ``-o mypatch.patch`` with
 ``--to=EMAIL`` where ``EMAIL`` is the address to send it to.
