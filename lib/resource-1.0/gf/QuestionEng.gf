@@ -8,7 +8,7 @@ concrete QuestionEng of Question = CatEng, SentenceEng ** open ResEng in {
             in table {
               QDir   => cls ! OQuest ;
               QIndir => "if" ++ cls ! ODir
-              } ---- "whether" in exts
+              } ---- "whether" in ExtEng
       } ;
 
     QuestVP qp vp = {
@@ -22,16 +22,40 @@ concrete QuestionEng of Question = CatEng, SentenceEng ** open ResEng in {
         subj ++ verb.fin ++ verb.inf ++ compl
     } ;
 
-{-
-    QuestSlash : IP -> Slash -> QCl ;
-    QuestIAdv  : IAdv -> Cl -> QCl ;
+    QuestSlash ip slash = {
+      s = \\t,a,p => 
+            let 
+              cls = slash.s ! t ! a ! p ;
+              who = slash.c2 ++ ip.s ! Acc --- stranding in ExtEng 
+            in table {
+              QDir   => who ++ cls ! OQuest ;
+              QIndir => who ++ cls ! ODir
+              }
+      } ;
 
-    PrepIP : Prep -> IP -> IAdv ;
-    FunIP  : N2 -> IP -> IP ;
-    AdvIP  : IP -> Adv -> IP ;
+    QuestIAdv iadv cl = {
+      s = \\t,a,p => 
+            let 
+              cls = cl.s ! t ! a ! p ;
+              why = iadv.s
+            in table {
+              QDir   => why ++ cls ! OQuest ;
+              QIndir => why ++ cls ! ODir
+              }
+      } ;
+
+    PrepIP p ip = {s = p.s ++ ip.s ! Nom} ;
+
+----    FunIP  : N2 -> IP -> IP ;
+    AdvIP ip adv = {
+      s = \\c => ip.s ! c ++ adv.s ;
+      n = ip.n
+      } ;
  
-    IDetCN : IDet -> Num -> IP ;
--}
+    IDetCN idet num cn = {
+      s = \\c => idet.s ++ num.s ++ cn.s ! idet.n ! c ; 
+      n = idet.n
+      } ;
 
 }
    

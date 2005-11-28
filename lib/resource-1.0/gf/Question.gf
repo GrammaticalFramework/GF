@@ -11,7 +11,7 @@ abstract Question = Cat, Sentence ** {
     FunIP  : N2 -> IP -> IP ;
     AdvIP  : IP -> Adv -> IP ;
  
-    IDetCN : IDet -> Num -> IP ;
+    IDetCN : IDet -> Num -> CN -> IP ;
 
 }
    
