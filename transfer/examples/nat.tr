@@ -1,23 +1,22 @@
-data Nat : Type where { 
-	Zero : Nat ;
-  	Succ : (n:Nat) -> Nat ;
- } ;
+data Nat : Type where
+	Zero : Nat
+  	Succ : (n:Nat) -> Nat
 
-plus : Nat -> Nat -> Nat ;
-plus Zero y = y ;
-plus (Succ x) y = Succ (plus x y) ;
+plus : Nat -> Nat -> Nat
+plus Zero y = y
+plus (Succ x) y = Succ (plus x y)
 
-pred : Nat -> Nat ;
-pred Zero = Zero ;
-pred (Succ n) = n ;
+pred : Nat -> Nat
+pred Zero = Zero
+pred (Succ n) = n
 
-natToInt : Nat -> Int ;
-natToInt Zero = 0 ;
-natToInt (Succ n) = 1 + natToInt n ;
+natToInt : Nat -> Int
+natToInt Zero = 0
+natToInt (Succ n) = 1 + natToInt n
 
-plus : Nat -> Nat -> Nat ;
-plus Zero y = y ;
-plus (Succ x) y = Succ (plus x y) ;
+plus : Nat -> Nat -> Nat
+plus Zero y = y
+plus (Succ x) y = Succ (plus x y)
 
-intToNat : Int -> Nat ;
-intToNat n = if n == 0 then Zero else Succ (intToNat (n-1)) ;
+intToNat : Int -> Nat
+intToNat n = if n == 0 then Zero else Succ (intToNat (n-1))

@@ -1,3 +1,3 @@
-import nat ;
+import nat
 
-main = natToInt (intToNat 100) ;
+main = natToInt (intToNat 100)
