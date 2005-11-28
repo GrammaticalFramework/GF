@@ -1,4 +1,5 @@
 concrete LexEng of Lex = CatEng ** open ResEng in {
+
   lin
     walk_V  = regV "walk" ;
     kill_V2 = regV "kill" ** {c2 = []} ;
@@ -23,5 +24,9 @@ concrete LexEng of Lex = CatEng ** open ResEng in {
 
     whoSg_IP = mkIP "who" "whom" "whose" Sg ;
     whoPl_IP = mkIP "who" "whom" "whose" Pl ;
+
+    when_IAdv = {s = "when"} ;
+
+    whichSg_IDet = {s = "which" ; n = Sg} ;
 
 }
