@@ -67,23 +67,31 @@ resolveLayout tp = res Nothing [if tl then Implicit 1 else Explicit]
 
   -- We are in an implicit layout block
   res pt st@(Implicit n:ns) (t0:ts)
+
+      -- End of implicit block by a layout stop word
+    | isStop t0 = 
+           -- Insert a closing brace after the previous token.
+       let b:t0':ts' = addToken (afterPrev pt) layoutClose (t0:ts)
+           -- and exit the current block.
+           -- NOTE: we don't care about the column of the
+           -- stop word.
+        in moveAlong ns [b,t0'] ts'
+
     -- End of an implicit layout block
-    | isStop t0 || column t0 < n  = 
-           -- Insert a closing brace before the current token.
-       let b:t0':ts' = addToken (position t0) layoutClose (t0:ts)
-           -- Exit the current block and all implicit blocks 
-           -- such that the current token is less indented than them.
-           st' = dropWhile (isLessIndentedThan t0) ns
-        in moveAlong st' [b,t0'] ts'
+    | column t0 < n  = 
+           -- Insert a closing brace after the previous token.
+       let b:t0':ts' = addToken (afterPrev pt) layoutClose (t0:ts)
+           -- Repeat, with the current block removed from the stack
+        in moveAlong ns [b] (t0':ts')
 
     -- Encounted a new line in an implicit layout block.
     | column t0 == n = 
-       -- Insert a semicolon before the start of the next line, 
+       -- Insert a semicolon after the previous token.
        -- unless we are the beginning of the file,
        -- or the previous token is a semicolon or open brace.
        if isNothing pt || isTokenIn [layoutSep,layoutOpen] (fromJust pt) 
           then moveAlong st [t0] ts
-          else let b:t0':ts' = addToken (position t0) layoutSep (t0:ts)
+          else let b:t0':ts' = addToken (afterPrev pt) layoutSep (t0:ts)
                 in moveAlong st [b,t0'] ts'
 
   -- Nothing to see here, move along.
@@ -105,8 +113,6 @@ resolveLayout tp = res Nothing [if tl then Implicit 1 else Explicit]
   moveAlong st [] ts = error $ "Layout error: moveAlong got [] as old tokens"
   moveAlong st ot ts = ot ++ res (Just $ last ot) st ts
 
-
- 
 data Block = Implicit Int -- ^ An implicit layout block with its start column.
            | Explicit 
              deriving Show
@@ -117,13 +123,6 @@ type Position = Posn
 isImplicit :: Block -> Bool
 isImplicit (Implicit _) = True
 isImplicit _ = False
-
--- | Checks if the given token is less indented than the given
---   block. For explicit blocks, False is always returned.
-isLessIndentedThan :: Token -> Block -> Bool
-isLessIndentedThan t (Implicit n) = column t < n
-isLessIndentedThan _ Explicit = False
-
 
 -- | Insert a number of tokens at the begninning of a list of tokens.
 addTokens :: Position -- ^ Position of the first new token.
@@ -140,6 +139,11 @@ addToken :: Position -- ^ Position of the new token.
                      --   positions updated to make room for the new token.
          -> [Token]
 addToken p s ts = sToken p s : map (incrGlobal p (length s)) ts
+
+-- | Get the position immediately to the right of the given token.
+--   If no token is given, gets the first position in the file.
+afterPrev :: Maybe Token -> Position
+afterPrev = maybe (Pn 0 1 1) nextPos
 
 -- | Get the position immediately to the right of the given token.
 nextPos :: Token -> Position 
