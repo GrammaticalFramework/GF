@@ -13,7 +13,7 @@ data Value = VStr String
            | VInt Integer
            | VType
            | VRec [(CIdent,Value)]
-           | VClos Env PatternVariable Exp
+           | VClos Env Exp
            | VCons CIdent [Value]
            | VPrim (Value -> Value)
   deriving (Show)
@@ -71,10 +71,11 @@ builtin =
   toBool b = VCons (CIdent (if b then "True" else "False")) []
   appInt1 f x = case x of
                          VInt n -> f n
-                         _ -> error $ printValue x ++ " is not an integer" -- VCons c [x]
+                         _ -> error $ printValue x ++ " is not an integer"
   appInt2 f x y = case (x,y) of
                          (VInt n,VInt m) -> f n m
-                         _ -> error $ printValue x ++ " and " ++ printValue y ++ " are not both integers" -- VCons c [x,y]
+                         _ -> error $ printValue x ++ " and " ++ printValue y 
+                                      ++ " are not both integers"
 
 addModuleEnv :: Env -> Module -> Env
 addModuleEnv env (Module ds) = 
@@ -101,24 +102,28 @@ eval env x = case x of
                   Nothing -> error $ "No pattern matched " ++ printValue v
                   Just (e,bs) -> eval (bs `addToEnv` env) e
        in v `seq` r
-  EAbs id exp -> VClos env id $! exp
-  -- FIXME: what to do?
-  -- EPi id _ exp  -> VClos env id $! exp
-  EApp exp1 exp2 -> let v1 = eval env exp1
-                        v2 = eval env exp2
-                     in case v1 of
-                               VClos env' id e -> eval (bind id v2 `addToEnv` env') e
-                               VPrim f -> f $! v2
-                               VCons c vs -> (VCons $! c) $! ((++) $! vs) $! [v2]
-                               _ -> error $ "Bad application (" ++ printValue v1 ++ ") (" ++ printValue v2 ++ ")"
+  EAbs _ _ -> VClos env $! x
+  EPi _ _ _  -> VClos env $! x
+  EApp exp1 exp2 -> 
+      let v1 = eval env exp1
+          v2 = eval env exp2
+       in case v1 of
+                  VClos env' (EAbs id e) -> eval (bind id v2 `addToEnv` env') e
+                  VPrim f -> f $! v2
+                  VCons c vs -> (VCons $! c) $! ((++) $! vs) $! [v2]
+                  _ -> error $ "Bad application (" ++ printValue v1
+                                ++ ") (" ++ printValue v2 ++ ")"
   EProj exp id  -> let v = eval env exp
                     in case v of
                                VRec fs -> recLookup id fs
-                               _ -> error $ printValue v ++ " is not a record, cannot get field " ++ printTree id
+                               _ -> error $ printValue v ++ " is not a record, "
+                                            ++ "cannot get field " ++ printTree id
 
   EEmptyRec  -> VRec []
-  ERecType fts -> VRec $! deepSeqList $! [ v `seq` (f,v) | FieldType  f e <- fts, let v = eval env e]
-  ERec fvs     -> VRec $! deepSeqList $! [ v `seq` (f,v) | FieldValue f e <- fvs, let v = eval env e]
+  ERecType fts -> VRec $! deepSeqList $! [v `seq` (f,v) | FieldType  f e <- fts,
+                                                          let v = eval env e]
+  ERec fvs     -> VRec $! deepSeqList $! [v `seq` (f,v) | FieldValue f e <- fvs,
+                                                          let v = eval env e]
   EVar id  -> lookupEnv env id
   EType  -> VType
   EStr str  -> VStr str
@@ -176,9 +181,7 @@ valueToExp v =
            VInt i     -> EInt i
            VType      -> EType
            VRec fs    -> ERec [ FieldValue f (valueToExp v) | (f,v) <- fs]
-           VClos _ id e  -> EAbs id e
-           -- FIXME: what do we do with VPi?
-           -- VPi id e   -> EPi id (EVar (CIdent "_")) e -- FIXME: should be a meta variable or something
+           VClos env e  -> e
            VCons c vs -> foldl EApp (EVar c) (map valueToExp vs)
            VPrim _    -> EVar (CIdent "<<primitive>>") -- FIXME: what to return here?
 
@@ -188,31 +191,3 @@ valueToExp v =
 
 printValue :: Value -> String
 printValue v = printTree (valueToExp v)
-{-
-  prValue 0 0 v ""
-  where
-  prValue p n v = case v of
-              VStr s     -> shows s
-              VInt i     -> shows i
-              VType      -> showString "Type"
-              VRec cs    -> showChar '{' . joinS (showChar ';') 
-                               (map prField cs) . showChar '}'
-              VAbs id e  -> showString "<<function>>"
-                            -- let x = "$"++show n
-                            -- in showChar '\\' . showString (x++" -> ") 
-                            --        . prValue 0 (n+1) (f (VCons (CIdent x) [])) -- hacky to use VCons
-
-              VPi f      -> showString "<<function type>>"
-              VCons c [] -> showIdent c
-              VCons c vs -> parenth (showIdent c . concatS (map (\v -> spaceS . prValue 1 n v) vs))
-              VPrim _    -> "<<primitive>>"
-   where prField (i,v) = showIdent i . showChar '=' . prValue 0 n v
-         parenth s = if p > 0 then showChar '(' . s . showChar ')' else s
-  showIdent (CIdent i) = showString i
--}
-
-spaceS :: ShowS
-spaceS = showChar ' '
-
-joinS :: ShowS -> [ShowS] -> ShowS
-joinS glue = concatS . intersperse glue
