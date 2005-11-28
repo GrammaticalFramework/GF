@@ -34,50 +34,35 @@ lin
   NDetNP = nDetNP ;
   NDetNum = nDetNum ;
 
----  PosVG  = predVerbGroup True Present ;
----  NegVG  = predVerbGroup False Present ;
----  PredVP = predVerbPhrase ;
----  PredV  = predVerb ;
----  PredAP = predAdjective ;
----  PredCN = predCommNoun ;
----  PredV2 = complTransVerb ;
----  PredV3 = complDitransVerb ;
----  PredPassV = predPassVerb ;
----  PredNP = predNounPhrase ;
----  PredPP = predAdverb ;
----  PredVS = complSentVerb ;
----  PredVV = complVerbVerb ;
----  VTrans = verbOfTransVerb ;
 
 -- The main uses of verbs and verb phrases have been moved to the
 -- module $Verbphrase$ (deep $VP$ nesting) and its alternative,
 -- $Clause$ (shallow many-place predication structure).
 
---  PredAS     : AS -> S  -> Cl ;          -- "it is good that he comes"                
---  PredV0     : V0 -> Cl ;                -- "it is raining"
+  PredAS = predAS ;       
+  PredV0 = predV0 ;
 
 -- Partial saturation.
 
---  UseV2     : V2 -> V ;                 -- "loves"
+  ComplA2S  = complA2S ;
 
---  ComplA2S   : A2S -> NP  -> AS ;        -- "good for John"
-
---  UseV2V  : V2V -> VV ;
---  UseV2S  : V2S -> VS ;
---  UseV2Q  : V2Q -> VQ ;
---  UseA2S  : A2S -> AS ;
---  UseA2V  : A2V -> AV ;
+---  VTrans = verbOfTransVerb ;
+  UseV2  = verbOfTransVerb ;
+  UseV2V = verbOfTransVerb ;
+  UseV2S = verbOfTransVerb ; 
+  UseV2Q = verbOfTransVerb ;
+  UseA2S = useA2S ;
+  UseA2V = useA2V;
 
 
 -- Formation of tensed phrases.
 
---  AdjPart : V -> A ;                       -- past participle, e.g. "forgotten"
+  AdjPart = adjPart ;
           
---  UseCl   : TP -> Cl  -> S ;
---  UseRCl  : TP -> RCl -> RS ;
---  UseQCl  : TP -> QCl -> QS ;
-
---  UseVCl  : Pol -> Ant -> VCl -> VPI ;
+  UseCl = useCl ;
+  UseRCl = useRCl ;
+  UseQCl  = useQCl ;
+  UseVCl = useVCl ;
 
   -- s field is superficial:
   PosTP t a = {s = t.s ++ a.s ; b = True  ; t = t.t ; a = a.a} ;
@@ -102,14 +87,12 @@ lin
   PrepNP p = prepPhrase p ;
   AdvVPI = adVerbPhraseInf ;
   AdvCN = advCommNounPhrase ;
+  AdvNP = advNP ; 
   AdvAP = advAdjPhrase ;
 
   AdvCl = advClause ;
   AdCPhr = advSentencePhr ;
   AdvPhr = advSentencePhr ;
-
----AdvVP    = adVerbPhrase ;
----LocNP = locativeNounPhrase ;
 
 
   IdRP = identRelPron ;
@@ -118,24 +101,8 @@ lin
   RelCl = relCl;
   RelSlash = relSlash ;
 
----  ModRC = modRelClause ;
----  RelSuch = relSuch ;
----  RelVP = relVerbPhrase ;
----  PosSlashV2 = slashTransVerb True ;
----  NegSlashV2 = slashTransVerb False ;
----  OneVP = predVerbPhrase (pron2NounPhrase pronKtoTo Animate) ;
----  ThereNP = thereIs ;
+  ModRS  = modRS ;    
 
----  WhoOne = intPronKto Sg ;
----  WhoMany = intPronKto Pl ;
----  WhatOne = intPronChto Sg ;
----  WhatMany = intPronChto Pl ;
----  NounIPOne = nounIntPron Sg ;
----  NounIPMany = nounIntPron Pl ;
----  SuperlNP = superlNounPhrase ;
----  QuestVP = questVerbPhrase ;
----  IntVP = intVerbPhrase ;
----  ImperVP = imperVerbPhrase ;
 
   FunIP = funIntPron ;
   QuestAdv = questAdverbial ;
@@ -145,17 +112,17 @@ lin
   ImperOne = imperUtterance Masc Sg ;
   ImperMany = imperUtterance Masc Pl ;
 
---  IDetCN : IDet -> CN -> IP ;               -- "which car", "which cars"
+  IDetCN = iDetCN;
 
---  SlashV2   : NP -> V2 -> Slash ;       -- "(whom) John doesn't love"
---  SlashVV2  : NP -> VV -> V2 -> Slash ; -- "(which song do you) want to play"
---  SlashAdv  : Cl -> Prep -> Slash ;     -- "(whom) John walks with"
+  SlashV2  = slashV2 ;
+  SlashVV2  = slashVV2 ;
+  SlashAdv = slashAdv ; 
 
---  IntSlash = intSlash ;
---  QuestCl    : Cl -> QCl ;                  -- "does John walk"; "doesn't John walk"
+  IntSlash = intSlash ;
+  QuestCl  = questCl ; 
 
---  PosImpVP, NegImpVP  : VCl -> Imp ;         -- "(don't) be a man"
-  
+  PosImpVP = posImpVP ;
+  NegImpVP = negImpVP ;  
 
   TwoS = twoSentence ;
   ConsS = consSentence ;
@@ -186,10 +153,9 @@ lin
 
   AdvSubj = advSubj ;
 
----  SubjS = subjunctSentence ;
----  SubjImper = subjunctImperative ;
----  SubjQu = subjunctQuestion ;
----  SubjVP = subjunctVerbPhrase ;
+  SubjS = subjunctSentence ;
+  SubjImper = subjunctImperative ;
+
 
   PhrNP = useNounPhrase ;
   PhrOneCN = useCommonNounPhrase Sg ;
@@ -205,10 +171,31 @@ lin
 -- These constructs tend to have language-specific syntactic realizations.
 
 ---  IsThereNP = isThere ;
---  ExistCN = existCN ;   
---  ExistNumCN = existNumCN ;
+  ExistCN = existCN ;   
+  ExistNumCN = existNumCN ;
 
   OneNP  = npOne ;  
+
+---  ThereNP = thereIs ;
+
+---  WhoOne = intPronKto Sg ;
+---  WhoMany = intPronKto Pl ;
+---  WhatOne = intPronChto Sg ;
+---  WhatMany = intPronChto Pl ;
+---  NounIPOne = nounIntPron Sg ;
+---  NounIPMany = nounIntPron Pl ;
+---  SuperlNP = superlNounPhrase ;
+---  QuestVP = questVerbPhrase ;
+---  IntVP = intVerbPhrase ;
+---  ImperVP = imperVerbPhrase ;
+
+---  SubjQu = subjunctQuestion ;
+
+---  ModRC = modRelClause ;
+---  RelSuch = relSuch ;
+---  PosSlashV2 = slashTransVerb True ;
+---  NegSlashV2 = slashTransVerb False ;
+
 
 } ;
 

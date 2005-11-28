@@ -25,7 +25,7 @@ boy_N
 bread_N
 break_V2
 broad_ADeg
-brother_N
+brother_N2
 brown_ADeg
 butter_N
 buy_V2
@@ -59,7 +59,7 @@ drink_V2
 eat_V2
 enemy_N
 factory_N
-father_N
+father_N2
 fear_VS
 find_V2
 fish_N
@@ -106,7 +106,7 @@ man_N
 meat_N
 milk_N
 moon_N
-mother_N
+mother_N2
 mountain_N
 music_N
 narrow_ADeg
@@ -162,8 +162,8 @@ stove_N
 student_N
 stupid_ADeg
 sun_N
-switch8off_V
-switch8on_V
+switch8off_V2
+switch8on_V2
 table_N
 teacher_N
 teach_V2
@@ -173,7 +173,7 @@ thin_ADeg
 train_N
 travel_V
 tree_N
-trousers_N
+--trousers_N
 ugly_ADeg
 understand_V2
 university_N

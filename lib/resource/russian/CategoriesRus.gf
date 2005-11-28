@@ -52,18 +52,19 @@ lincat
 
   N2     = Function ;  
       -- = CommNounPhrase ** Complement ;
-  N3     = Function ** {s3 : Str; c2: Case} ; 
+  N3     = CommNoun3;
+      -- = Function ** {s3 : Str; c2: Case} ; 
   Num    = Numeral ;
       -- = {s : Case => Gender => Str} ;
   
   V      = Verbum ; 
       -- = {s : VerbForm => Str ; asp : Aspect } ;
-  VG     = VerbGroup ;
+--  VG     = VerbGroup ;
       -- = Verbum ** { w: Voice; s2 : Bool => Str ; 
       --      s3 : Gender => Number => Str ; negBefore: Bool} ;
   VP     = VerbPhrase ; 
-      -- = Verb ** {s2 : Str ; s3 : Gender => Number => Str ;
-      --            negBefore: Bool} ;
+      -- = {s : Bool => ClForm => GenNum => Person => Str ; a : Aspect ; w: Voice} ;
+      --    ** {s2 : Str ; s3 : Gender => Number => Str ; negBefore: Bool} ;
   V2     = TransVerb ; 
       -- = Verbum ** Complement ; 
   V3     = DitransVerb ;
@@ -73,14 +74,12 @@ lincat
   VV     = VerbVerb ; 
       -- = Verbum ;
    
-  VCl    = {s  : Bool => Anteriority => Str} ;
+  VCl    = VerbPhraseClause ;
+     -- {s  : Bool =>	 Anteriority => Str} 
+     -- fixed tense:
      -- infinitive verb phrase (in other languages very similar to VPI,
      -- but without Bool=>Anteriority)
-  VPI    = VerbPhraseInf ;
-     -- {s  : Str; a: Aspect; w:Voice; s2 : Str ; 
-     --  s3 : Gender => Number => Str ; negBefore: Bool} ;
-     -- almost the same as VP, but VF is fixed to the infinitive form
-     -- and the tense field is supressed
+  VPI    = VerbPhrase ;
 
   Adv    = Adverb ;    -- sentence adverb e.g. "now", "in the house"
       -- = {s : Str} ;
@@ -154,9 +153,13 @@ lincat
 
   AS     = Adverb ;   
       -- = {s : Str} ;
-  A2S    = Adverb ** Complement;       
-  AV     = Adjective ;    --- "eager to leave"
+  A2S    = Adverb2 ;
+      -- = Adverb ** Complement;       
+  AV     = Adjective ;    
       -- = {s : AdjForm => Str} ;      
+      --- "eager to leave", 
+      -- most combinations with verbs in Russian 
+      -- are expressed by adverb: "easy to understand"
   A2V    = AdjCompl ;
       -- = Adjective ** Complement ;
  
@@ -168,10 +171,10 @@ lincat
 
 -- similar implementation in all the languages, s-field is dummy:
 
-  TP     = {s : Str ; b : Bool ; t : ClTense ; a : Anteriority} ; -- combination of the three below
+  TP     = TensePolarity; -- combination of the three below
   Tense  = {s : Str ; t : ClTense} ;                                 
-  Ant    = {s : Str ; a : Anteriority} ; --For time agreement:
-  Pol    = {s : Str ; p : Bool} ;  --Positive or negative statement
+  Ant    = Anterior ; --For time agreement:
+  Pol    = Polarity ;  --Positive or negative statement
   Subj   = {s : Str} ;
 }
 
