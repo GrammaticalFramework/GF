@@ -30,10 +30,6 @@
 
 - More efficient handling of constructor application
 
-* Improve interpreter API
-
-- Allow passing terms as some structured type.
-
 * Improve the core language
 
 * Improve compilation
