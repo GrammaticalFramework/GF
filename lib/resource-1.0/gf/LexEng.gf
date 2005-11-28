@@ -1,19 +1,22 @@
-concrete LexEng of Lex = CatEng ** open ResEng in {
+concrete LexEng of Lex = CatEng ** open ResEng, Prelude in {
 
   lin
     walk_V  = regV "walk" ;
-    kill_V2 = regV "kill" ** {c2 = []} ;
+    help_V2 = regV "help" ** {c2 = []} ;
     show_V3 = regV "show" ** {c2 = [] ; c3 = "to"} ;
     want_VV = regV "want" ** {c2 = "to"} ;
     claim_VS = regV "claim" ;
     ask_VQ = regV "ask" ;
 
-    big_AP = {s = "big"} ;
     dog_N  = regN "dog" ;
     son_N2 = regN "son" ** {c2 = "of"} ;
     way_N3 = regN "way" ** {c2 = "from" ; c3 = "to"} ;
 
+    warm_A = regA "warm" ;
+    close_A2 = regA "close" ** {c2 = "to"} ;
+
     here_Adv = {s = "here"} ;
+    very_AdA = {s = "very"} ;
 
     only_Predet = {s = "only"} ;
     this_Quant = {s = "this" ; n = Sg} ;

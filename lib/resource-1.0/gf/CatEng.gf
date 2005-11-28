@@ -1,4 +1,4 @@
-concrete CatEng of Cat = open ResEng in {
+concrete CatEng of Cat = open ResEng, Prelude in {
 
   lincat
     S  = {s : Str} ;
@@ -18,10 +18,13 @@ concrete CatEng of Cat = open ResEng in {
     V2, VV = Verb ** {c2 : Str} ;
     V3 = Verb ** {c2, c3 : Str} ;
 
-    AP = {s : Str} ; 
+    AP = {s : Str ; isPre : Bool} ; 
     Comp = {s : Agr => Str} ; 
 
-    Adv = {s : Str} ;
+    A  = {s : AForm => Str} ;
+    A2 = {s : AForm => Str ; c2 : Str} ;
+
+    Adv, AdV, AdA, AdS = {s : Str} ;
 
     Det, Quant = {s : Str ; n : Number} ;
     Predet, Num = {s : Str} ;
@@ -35,5 +38,7 @@ concrete CatEng of Cat = open ResEng in {
     IP = {s : Case => Str ; n : Number} ;
     IDet = {s : Str ; n : Number} ;
     IAdv = {s : Str} ;    
+
+    Numeral = {s : CardOrd => Str ; n : Number} ;
 
 }

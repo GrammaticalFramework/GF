@@ -1,4 +1,4 @@
-concrete NounEng of Noun = CatEng ** open ResEng in {
+concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -18,16 +18,25 @@ concrete NounEng of Noun = CatEng ** open ResEng in {
     NoNum, NoPredet = {s = []} ;
     NumInt n = n ;
 
+    CardNumeral numeral = {s = numeral.s ! NCard} ;
+    OrdNumeral  numeral = {s = numeral.s ! NOrd} ;
+
+    NumSuperl a = {s = a.s ! AAdj Superl} ;
+
     DefSg = {s = "the" ; n = Sg} ;
     DefPl = {s = "the" ; n = Pl} ;
 
     IndefSg = {s = "a" ; n = Sg} ;
     IndefPl = {s = []  ; n = Pl} ;
 
-    UseN n = n ;
-
     ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c} ;
     ComplN3 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; c2 = f.c3} ;
 
+    AdjCN ap cn = {s = \\n,c => preOrPost ap.isPre ap.s (cn.s ! n ! c)} ;
+
+    SentCN cn s = {s = \\n,c => cn.s ! n ! c ++ conjThat ++ s.s} ;
+    QuestCN cn qs = {s = \\n,c => cn.s ! n ! c ++ qs.s ! QIndir} ;
+
+    UseN n = n ;
 
 }

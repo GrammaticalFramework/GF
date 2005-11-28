@@ -1,4 +1,4 @@
-resource ResEng = ParamX ** {
+resource ResEng = ParamX ** open Prelude in {
 
   param
 
@@ -160,5 +160,49 @@ resource ResEng = ParamX ** {
     } ;
 
   conjThat : Str = "that" ;
+
+-- For $Adjective$.
+
+param 
+  AForm = AAdj Degree | AAdv ;
+
+oper
+  regA : Str -> {s : AForm => Str} = \warm -> {
+    s = table {
+      AAdj Posit  => warm ;
+      AAdj Compar => warm + "er" ;
+      AAdj Superl => warm + "est" ;
+      AAdv        => warm + "ly"
+      }
+    } ;
+
+-- For $Numeral$.
+
+param 
+  DForm = unit  | teen  | ten  ;
+  CardOrd = NCard | NOrd ;
+
+oper 
+  mkNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} = 
+  \two -> \twelve -> \twenty -> \second ->
+  {s = table {
+     unit => table {NCard => two ; NOrd => second} ; 
+     teen => \\c => mkCard c twelve ; 
+     ten  => \\c => mkCard c twenty
+     }
+   } ;
+
+  regNum : Str -> {s : DForm => CardOrd => Str} = 
+    \six -> mkNum six (six + "teen") (six + "ty") (regOrd six) ;
+
+  regCardOrd : Str -> {s : CardOrd => Str} = \ten ->
+    {s = table {NCard => ten ; NOrd => regOrd ten}} ;
+
+  mkCard : CardOrd -> Str -> Str = \c,ten -> (regCardOrd ten).s ! c ; 
+
+  regOrd : Str -> Str = \ten -> case last ten of {
+    "y" => init ten + "ieth" ;
+    _   => ten + "th"
+    } ;
 
 }
