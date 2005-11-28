@@ -19,7 +19,13 @@ abstract Cat = {
     AP ; 
     Comp ;
 
+    A ;
+    A2 ;
+
     Adv ;
+    AdV ;
+    AdA ;
+    AdS ;
 
     CN ;
     N ;
@@ -41,5 +47,7 @@ abstract Cat = {
     IDet ;
 
     RP ;
+
+    Numeral ;
 
 }

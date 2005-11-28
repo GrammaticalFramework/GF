@@ -1,3 +1,5 @@
+--1 The construction of nouns, noun phrases, and determiners
+
 abstract Noun = Cat ** {
 
   fun
@@ -12,14 +14,15 @@ abstract Noun = Cat ** {
     NoNum  : Num ;
     NumInt : Int -> Num ;
 
+    CardNumeral : Numeral -> Num ;
+    OrdNumeral  : Numeral -> Num ;
+    
+    NumSuperl : A -> Num ;
+
     NoPredet : Predet ;
 
-    DefSg, DefPl : Quant ;
+    DefSg,   DefPl   : Quant ;
     IndefSg, IndefPl : Quant ;
-
-
---    Num_Pl ::= Ordinal ;
---    Num_Pl ::= Numeral ;
 
     ComplN2 : N2 -> NP -> CN ;
     ComplN3 : N3 -> NP -> N2 ;
