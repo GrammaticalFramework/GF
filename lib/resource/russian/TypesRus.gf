@@ -30,6 +30,10 @@ param
   AfterPrep  = Yes | No ; 
   Possessive = NonPoss | Poss GenNum ;
   Animacy    = Animate | Inanimate ;
+  Anteriority = Simul | Anter ; 
+  ClForm =  ClIndic RusTense Anteriority | ClCondit  | ClInfinit | ClImper;      
+  -- "naked infinitive" clauses
+    
 
 -- A number of Russian nouns have common gender. They can
 -- denote both males and females: "умница" (a clever person), "инженер" (an engineer).
@@ -144,6 +148,31 @@ param
 
   GenNum = ASg Gender | APl ;
 
+  -- Coercions between the compound gen-num type and gender and number:
+oper
+  gNum : Gender -> Number -> GenNum = \g,n -> 
+    case n of 
+   {   Sg => case g of 
+                 { Fem => ASg Fem ;
+                   Masc => ASg Masc ;
+                   Neut => ASg Neut  } ;
+       Pl => APl
+   } ;
+
+pgNum : PronGen -> Number -> GenNum = \g,n -> 
+    case n of 
+   {   Sg => case g of 
+                 { PGen Fem => ASg Fem ;
+                   PGen Masc => ASg Masc ;
+                   PGen Neut => ASg Neut ;
+                   _ => ASg Masc } ; 
+        Pl => APl
+   } ;
+              --    _  => variants {ASg Masc ; ASg Fem}  } ; 
+              --  "variants" version cause "no term variants" error during linearization
+
+
+
 oper numGNum : GenNum -> Number = \gn ->
    case gn of { APl => Pl ; _ => Sg } ;
 
@@ -190,6 +219,12 @@ oper
 
   Adjective : Type = {s : AdjForm => Str} ;
 
+-- A special type of adjectives just having positive forms 
+-- (for semantic reasons)  is useful, e.g. "русский".
+ 
+oper 
+   extAdjective : AdjDegr -> Adjective = \adj ->
+    { s = \\af => adj.s ! Pos ! af } ;
 
 --3 Verbs
 
@@ -253,24 +288,25 @@ oper
 -- The conjugation parameters left (Gender, Number, Person)
 -- are combined in the "VF" type:
 
-
-param VF =
-   VFin  GenNum Person | VImper Number Person | VInf | VSubj GenNum;
+--param VF =    VFin  GenNum Person | VImper Number Person | VInf | VSubj GenNum;
 
 oper 
-  Verb : Type = {s : VF => Str ; t: RusTense ; a : Aspect ; w: Voice} ;
+--   Verb : Type = {s : VF => Str ; t: RusTense ; a : Aspect ; w: Voice} ;
+  Verb : Type = {s : ClForm => GenNum => Person => Str ; asp : Aspect ; w: Voice} ;
 
-  extVerb : Verbum -> Voice -> RusTense -> Verb = \aller, vox, t -> 
-    { s = table { 
-       VFin gn p => case t of { 
-           Present => aller.s ! VFORM vox (VIND gn (VPresent p)) ;
-           Past =>   aller.s ! VFORM vox (VIND gn VPast ) ;
-           Future =>   aller.s ! VFORM vox (VIND gn (VFuture p)) 
-           } ; 
-       VImper n p => aller.s ! VFORM vox (VIMP n p) ;
-       VInf => aller.s ! VFORM vox VINF ;
-       VSubj gn => aller.s ! VFORM vox (VSUB gn)
-       }; t = t ; a = aller.asp ; w = vox } ;
+  extVerb : Verbum -> Voice -> Verb = \aller, vox, -> 
+    { s = \\clf, gn,p => case clf of
+       {
+  ClIndic Present _ => aller.s ! VFORM vox (VIND gn (VPresent p)) ;
+  ClIndic Past _ => aller.s ! VFORM vox (VIND  gn VPast ) ;
+  ClIndic Future _ => aller.s ! VFORM vox (VIND gn (VFuture p)) ;
+  ClCondit => aller.s ! VFORM vox (VSUB gn);
+  ClImper => aller.s ! VFORM vox (VIMP (numGNum gn) p) ;
+  ClInfinit => aller.s ! VFORM vox VINF 
+       } ;
+   asp = aller.asp ; 
+   w = vox 
+  } ;
 
 
 --3 Other open classes

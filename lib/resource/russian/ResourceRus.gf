@@ -1,3 +1,4 @@
 --# -path=.:../abstract:../../prelude
 
-instance ResourceRus of Resource = reuse AllResourceRus ;
+concrete ResourceRus of Resource = RulesRus, ClauseRus,     StructuralRus ** {} ;
+---- concrete ResourceRus of Resource = RulesRus, VerbphraseRus ** {} ;

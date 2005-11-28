@@ -1191,6 +1191,37 @@ oper uy_j_EndDecl : Str -> Adjective = \s ->{s = table {
       AdvF => "о"
       } 
   } ;
+oper shi_j_EndDecl : Str -> Adjective = \s ->{s = table {
+      AF Nom _ (ASg Masc) => s+"ий"; 
+      AF Nom _ (ASg Fem) => s+"ая"; 
+      AF Nom _ (ASg Neut) => s+"ое";
+      AF Nom _ APl => s+"ие";
+      AF Acc  Inanimate (ASg Masc) => s+"ий"; 
+      AF Acc  Animate (ASg Masc) => s+"его"; 
+      AF Acc  _ (ASg Fem) => s+"ую"; 
+      AF Acc  _ (ASg Neut) => s+"ое";
+      AF Acc  Inanimate APl => s+"ие";
+      AF Acc  Animate APl => s+"их";
+      AF Gen  _ (ASg Masc) => s+"его"; 
+      AF Gen  _ (ASg Fem) => s+"ей"; 
+      AF Gen  _ (ASg Neut) => s+"его";
+      AF Gen  _ APl => s+"их";
+      AF Inst _ (ASg Masc) => s+"им"; 
+      AF Inst _ (ASg Fem) => s+"ей"; 
+      AF Inst _ (ASg Neut) => s+"им";
+      AF Inst _ APl => s+"ими";
+      AF Dat  _ (ASg Masc) => s+"ему"; 
+      AF Dat  _ (ASg Fem) => s+"ей"; 
+      AF Dat  _ (ASg Neut) => s+"ему";
+      AF Dat  _ APl => s+"им";
+      AF Prepos _ (ASg Masc) => s+"ем"; 
+      AF Prepos _ (ASg Fem) => s+"ей"; 
+      AF Prepos _ (ASg Neut) => s+"ем";
+      AF Prepos _ APl => s+"их";
+      AdvF => "о"
+      } 
+  } ;
+
 oper indijskij: Adjective = ij_EndK_G_KH_Decl "индийск" ;
 oper francuzskij: Adjective = ij_EndK_G_KH_Decl "французск" ;
 oper anglijskij: Adjective = ij_EndK_G_KH_Decl "английск" ;
@@ -1226,6 +1257,36 @@ oper ij_EndK_G_KH_Decl : Str -> Adjective = \s ->{s = table {
     AF Prepos _ (ASg Masc) => s+"ом"; 
     AF Prepos _ (ASg Fem) => s+"ой"; 
     AF Prepos _ (ASg Neut) => s+"ом";
+    AF Prepos _ APl => s+"их";
+     AdvF => "о"
+    }
+  } ;
+oper shij_End_Decl : Str -> Adjective = \s ->{s = table {
+    AF Nom _ (ASg Masc) => s+"ий"; 
+    AF Nom _ (ASg Fem) => s+"ая"; 
+    AF Nom _ (ASg Neut) => s+"ое";
+    AF Nom _ APl => s+"ие";
+    AF Acc Animate (ASg Masc) => s+"его"; 
+    AF Acc Inanimate (ASg Masc) => s+"ий"; 
+    AF Acc  _ (ASg Fem) => s+"ую"; 
+    AF Acc  _ (ASg Neut) => s+"ое";
+    AF Acc  Animate APl => s+"их";
+    AF Acc  Inanimate APl => s+"ие";
+    AF Gen  _ (ASg Masc) => s+"его"; 
+    AF Gen  _ (ASg Fem) => s+"ей"; 
+    AF Gen  _ (ASg Neut) => s+"его";
+    AF Gen  _ APl => s+"их";
+    AF Inst _ (ASg Masc) => s+"им"; 
+    AF Inst _ (ASg Fem) => s+"ей"; 
+    AF Inst _ (ASg Neut) => s+"им";
+    AF Inst _ APl => s+"ими";
+    AF Dat  _ (ASg Masc) => s+"ему"; 
+    AF Dat  _ (ASg Fem) => s+"ей"; 
+    AF Dat  _ (ASg Neut) => s+"ему";
+    AF Dat  _ APl => s+"им";
+    AF Prepos _ (ASg Masc) => s+"ем"; 
+    AF Prepos _ (ASg Fem) => s+"ей"; 
+    AF Prepos _ (ASg Neut) => s+"ем";
     AF Prepos _ APl => s+"их";
      AdvF => "о"
     }

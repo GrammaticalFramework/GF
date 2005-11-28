@@ -14,7 +14,7 @@
 --
 -- The following files are presupposed:
 
-resource ParadigmsRus = open (Predef=Predef), Prelude, SyntaxRus, 
+resource ParadigmsRus = open (Predef=Predef), Prelude, MorphoRus, SyntaxRus, 
 CategoriesRus, RulesRus in {
  
 flags  coding=utf8 ;
@@ -78,27 +78,27 @@ oper
 
 -- Feminine patterns.
 
-  nMashina   : Str -> N ;    -- inanimate, ending with "-а", Inst -"машин-ой"
-  nEdinica   : Str -> N ;    -- inanimate, ending with "-а", Inst -"единиц-ей"
-  nZhenchina : Str -> N ;    -- animate, ending with "-a"
-  nNoga      : Str -> N ;    -- inanimate, ending with "г_к_х-a"
-  nMalyariya  : Str -> N ;    -- inanimate, ending with "-ия"   
-  nTetya     : Str -> N ;    -- animate, ending with "-я"   
-  nBol       : Str -> N ;    -- inanimate, ending with "-ь"(soft sign)     
+  nMashina   : Str -> N ;    -- feminine, inanimate, ending with "-а", Inst -"машин-ой"
+  nEdinica   : Str -> N ;    -- feminine, inanimate, ending with "-а", Inst -"единиц-ей"
+  nZhenchina : Str -> N ;    -- feminine, animate, ending with "-a"
+  nNoga      : Str -> N ;    -- feminine, inanimate, ending with "г_к_х-a"
+  nMalyariya  : Str -> N ;    -- feminine, inanimate, ending with "-ия"   
+  nTetya     : Str -> N ;    -- feminine, animate, ending with "-я"   
+  nBol       : Str -> N ;    -- feminine, inanimate, ending with "-ь"(soft sign)     
 
 -- Neuter patterns. 
 
-  nObezbolivauchee : Str -> N ;   -- inanimate, ending with "-ee" 
-  nProizvedenie : Str -> N ;   -- inanimate, ending with "-e" 
-  nChislo : Str -> N ;   -- inanimate, ending with "-o" 
+  nObezbolivauchee : Str -> N ;   -- neutral, inanimate, ending with "-ee" 
+  nProizvedenie : Str -> N ;   -- neutral, inanimate, ending with "-e" 
+  nChislo : Str -> N ;   -- neutral, inanimate, ending with "-o" 
 
 -- Masculine patterns. 
 
-Ending with consonant: 
+--Ending with consonant: 
   nBrat: Str -> N ;   -- animate, брат-ья
   nStul: Str -> N ;    -- same as above, but inanimate
-  nMalush : St -> N ; -- малышей
-  nPotolok : St -> N ; -- потол-ок - потол-ка
+  nMalush : Str -> N ; -- малышей
+  nPotolok : Str -> N ; -- потол-ок - потол-ка
 
  -- the next four differ in plural nominative and/or accusative form(s) :
   nBank: Str -> N ;    -- банк-и (Nom=Acc)
@@ -106,13 +106,14 @@ Ending with consonant:
   nAdres     : Str -> N ;     -- адрес-а (Nom=Acc)
   nTelefon   : Str -> N ;     -- телефон-ы (Nom=Acc)
 
-  nNol       : Str -> N ;    -- inanimate, ending with "-ь" (soft sign)
-  nUroven    : Str -> N ;    -- inanimate, ending with "-ень"
+  nNol       : Str -> N ;    -- masculine, inanimate, ending with "-ь" (soft sign)
+  nUroven    : Str -> N ;    -- masculine, inanimate, ending with "-ень"
 
 -- Nouns used as functions need a preposition. The most common is with Genitive.
 
   mkFun  : N -> Preposition -> Case -> N2 ;
-  funGen : N -> N2 ;
+  mkN2 : N -> N2 ;
+  mkN3 : N -> Preposition -> Preposition -> N3 ;
 
 -- Proper names.
 
@@ -155,8 +156,9 @@ Ending with consonant:
 -- Some regular patterns depending on the ending.
 
    AStaruyj : Str -> A ;             -- ending with "-ый"
-   AMalenkij : Str -> A ;            -- endign with "-ий"
-   AMolodoj : Str -> A ;             -- ending with "-ой", 
+   AMalenkij : Str -> A ;            -- ending with "-ий", Gen - "маленьк-ого"
+   AKhoroshij : Str -> A ;         --  ending with "-ий", Gen - "хорош-его"
+     AMolodoj : Str -> A ;             -- ending with "-ой", 
                                            -- plural - молод-ые"
    AKakoj_Nibud : Str -> Str -> A ;  -- ending with "-ой", 
                                            -- plural - "как-ие"
@@ -181,6 +183,12 @@ Ending with consonant:
 
    ap : A  -> IsPostfixAdj -> AP ;
 
+--2 Adverbs
+
+-- Adverbs are not inflected. Most lexical ones have position
+-- after the verb. Some can be preverbal (e.g. "always").
+
+  mkAdv : Str -> Adv ;
 
 --2 Verbs
 --
@@ -197,6 +205,13 @@ Voice: Type;
 Aspect: Type; 
 Tense : Type;  
 Bool: Type;
+Conjugation: Type ;
+
+first: Conjugation;
+firstE: Conjugation;
+second: Conjugation;
+mixed: Conjugation;
+dolzhen: Conjugation;
 
 true: Bool;
 false: Bool;
@@ -215,7 +230,7 @@ past : Tense ;
 -- (singular, second person: "беги"), an infinitive ("бежать").
 -- Inherent aspect should also be specified.
 
-   mkVerbum : Aspect -> (_,_,_,_,_,_,_,_,_ : Str) -> Verbum ;
+   mkVerbum : Aspect -> (_,_,_,_,_,_,_,_,_ : Str) -> V ;
 
 -- Common conjugation patterns are two conjugations: 
 --  first - verbs ending with "-ать/-ять" and second - "-ить/-еть".
@@ -228,7 +243,7 @@ past : Tense ;
 -- So the definition for verb "любить"  looks like:
 -- mkRegVerb Imperfective Second "люб" "лю" "любил" "люби" "любить";
 
-   mkRegVerb :Aspect -> Conjugation -> (_,_,_,_,_ : Str) -> Verbum ; 
+   mkRegVerb :Aspect -> Conjugation -> (_,_,_,_,_ : Str) -> V ; 
 
 -- For writing an application grammar one usualy doesn't need
 -- the whole inflection table, since each verb is used in 
@@ -245,8 +260,10 @@ past : Tense ;
 -- a particle can be included in a $V$.
 
    mkTV     : V   -> Str -> Case -> V2 ;   -- "войти в дом"; "в", accusative
+   mkV3  : V -> Str -> Str -> Case -> Case -> V3 ; -- "сложить письмо в конверт"
    tvDir    : V -> V2 ;                    -- "видеть", "любить"
-                               
+   tvDirDir : V -> V3 ; 
+                            
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
@@ -258,6 +275,12 @@ past : Tense ;
   Voice = SyntaxRus.Voice ;
   Tense = SyntaxRus.RusTense ;
    Bool = Prelude.Bool ;
+  Conjugation = MorphoRus.Conjugation;
+first = First ;
+firstE = FirstE ;
+second = Second ;
+mixed = Mixed ;
+dolzhen = Dolzhen; 
 
   true = True;
   false = False ;
@@ -339,7 +362,7 @@ past : Tense ;
 
   nBrat = \s -> nullEndAnimateDeclBrat s** {lock_N = <>}; 
   nStul = \s -> nullEndInAnimateDeclStul s** {lock_N = <>}; 
-   
+
   nAdres     = \s -> nullEndInAnimateDecl2 s ** {lock_N = <>}; 
   nTelefon   = \s -> nullEndInAnimateDecl1 s ** {lock_N = <>}; 
 
@@ -347,7 +370,9 @@ past : Tense ;
   nUroven    = \s -> EN_softSignEndDeclMasc s ** {lock_N = <>};
 
 -- mkFun     defined in syntax.RusU
--- funGen    defined in syntax.RusU 
+ mkN2 n = funGen n ** {lock_N2 = <>} ; --   defined in syntax.RusU 
+
+mkN3 n p r = mkCommNoun3 n p r ** {lock_N3 = <>} ; --   defined in syntax.RusU 
 
   mkPN = \ivan, g, anim -> 
     case g of { 
@@ -364,14 +389,17 @@ past : Tense ;
   adjInvar = \s -> { s = \\af => s } ** {lock_A= <>};
 
   AStaruyj s = uy_j_EndDecl s ** {lock_A = <>} ;       
-  AMalenkij s = ij_EndK_G_KH_Decl s ** {lock_A= <>};       
+    AKhoroshij s = shij_End_Decl s ** {lock_A= <>}; 
+AMalenkij s = ij_EndK_G_KH_Decl s ** {lock_A= <>};       
   AMolodoj s = uy_oj_EndDecl s ** {lock_A= <>};        
   AKakoj_Nibud s t = i_oj_EndDecl s t ** {lock_A= <>}; 
 
   mkA2 a p c= mkAdjective2 a p c ** {lock_A2 = <>};
-  -- mkADeg defined in morpho.RusU
+  mkADeg a s = mkAdjDeg a s ** {lock_ADeg = <>}; -- defined in morpho.RusU
 
   ap a p = mkAdjPhrase a p ** {lock_AP = <>};  -- defined in syntax module
+
+  mkAdv x = ss x ** {lock_Adv = <>} ;
 
 -- Verb definitions 
 
@@ -380,12 +408,12 @@ past : Tense ;
        Perfective  =>  
          mkVerb (perfectiveActivePattern inf imperSgP2 
          (presentConj sgP1 sgP2 sgP3 plP1 plP2 plP3) (pastConj sgMascPast))
-         (pastConj sgMascPast);
+         (pastConj sgMascPast) ** {    lock_V=<> };
        Imperfective  =>  
          mkVerb (imperfectiveActivePattern inf imperSgP2 
          (presentConj sgP1 sgP2 sgP3 plP1 plP2 plP3) (pastConj sgMascPast))
-         (pastConj sgMascPast)
-     }; 
+         (pastConj sgMascPast) ** {    lock_V=<> }
+        }; 
 
    oper presentConj: (_,_,_,_,_,_: Str) -> PresentVerb = 
      \sgP1, sgP2, sgP3, plP1, plP2, plP3 ->
@@ -398,8 +426,8 @@ past : Tense ;
        PRF APl P3 => plP3   
      };
 
-
-   mkRegVerb = verbDecl ;                  -- defined in morpho.RusU.gf
+    mkRegVerb a b c d e f g = verbDecl a b c d e f g ** {lock_V = <>} ;
+   -- defined in morpho.RusU.gf
 {-
    mkV a b = extVerb a b ** {lock_V = <>};                         -- defined in types.RusU.gf
 
@@ -413,5 +441,7 @@ past : Tense ;
 -}
    mkTV a b c = mkTransVerb a b c ** {lock_V2 = <>};                    -- defined in syntax.RusU.gf
    tvDir v = mkDirectVerb v ** {lock_V2 = <>};                           -- defined in syntax.RusU.gf
+   tvDirDir v = mkDirDirectVerb v ** {lock_V3 = <>};                  -- defined in syntax.RusU.gf
+mkV3 v s w c d = mkDitransVerb v s w c d ** {lock_V3 = <>};  -- defined in syntax.RusU.gf
 
 } ;
