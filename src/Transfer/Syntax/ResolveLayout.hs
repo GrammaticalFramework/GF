@@ -9,11 +9,18 @@ prTokens :: [Token] -> String
 prTokens = prTokens_ 1 1
   where 
   prTokens_ _ _ [] = ""
-  prTokens_ l c (PT p t:ts) = 
+  prTokens_ l c (t@(PT (Pn _ l' c') _):ts) = 
+      replicate (l'-l) '\n' 
+       ++ replicate (if l' == l then c'-c else c'-1) ' '
+       ++ s ++ prTokens_ l' (c'+length s) ts
+    where s = prToken t
 --  prTokens_ l c (Err p:ts) = 
 
 layout :: String -> String
-layout s = prTokens . resolveLayout True . tokens
+layout s = prTokens ts'
+--           ++ "\n" ++ show ts'
+  where ts = tokens s
+        ts' = resolveLayout True ts
 
 main :: IO ()
 main = do args <- getArgs
