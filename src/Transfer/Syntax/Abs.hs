@@ -69,9 +69,9 @@ data Tree :: * -> * where
     EMul :: Exp -> Exp -> Tree Exp_
     EDiv :: Exp -> Exp -> Tree Exp_
     EMod :: Exp -> Exp -> Tree Exp_
-    EProj :: Exp -> Ident -> Tree Exp_
     ENeg :: Exp -> Tree Exp_
     EApp :: Exp -> Exp -> Tree Exp_
+    EProj :: Exp -> Ident -> Tree Exp_
     EEmptyRec :: Tree Exp_
     ERecType :: [FieldType] -> Tree Exp_
     ERec :: [FieldValue] -> Tree Exp_
@@ -132,9 +132,9 @@ composOpM f t = case t of
     EMul exp0 exp1 -> return EMul `ap` f exp0 `ap` f exp1
     EDiv exp0 exp1 -> return EDiv `ap` f exp0 `ap` f exp1
     EMod exp0 exp1 -> return EMod `ap` f exp0 `ap` f exp1
-    EProj exp i -> return EProj `ap` f exp `ap` f i
     ENeg exp -> return ENeg `ap` f exp
     EApp exp0 exp1 -> return EApp `ap` f exp0 `ap` f exp1
+    EProj exp i -> return EProj `ap` f exp `ap` f i
     ERecType fieldtypes -> return ERecType `ap` mapM f fieldtypes
     ERec fieldvalues -> return ERec `ap` mapM f fieldvalues
     EVar i -> return EVar `ap` f i
@@ -178,9 +178,9 @@ composOpFold zero combine f t = case t of
     EMul exp0 exp1 -> f exp0 `combine` f exp1
     EDiv exp0 exp1 -> f exp0 `combine` f exp1
     EMod exp0 exp1 -> f exp0 `combine` f exp1
-    EProj exp i -> f exp `combine` f i
     ENeg exp -> f exp
     EApp exp0 exp1 -> f exp0 `combine` f exp1
+    EProj exp i -> f exp `combine` f i
     ERecType fieldtypes -> foldr combine zero (map f fieldtypes)
     ERec fieldvalues -> foldr combine zero (map f fieldvalues)
     EVar i -> f i
@@ -228,9 +228,9 @@ instance Show (Tree c) where
     EMul exp0 exp1 -> opar n . showString "EMul" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EDiv exp0 exp1 -> opar n . showString "EDiv" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EMod exp0 exp1 -> opar n . showString "EMod" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
-    EProj exp i -> opar n . showString "EProj" . showChar ' ' . showsPrec 1 exp . showChar ' ' . showsPrec 1 i . cpar n
     ENeg exp -> opar n . showString "ENeg" . showChar ' ' . showsPrec 1 exp . cpar n
     EApp exp0 exp1 -> opar n . showString "EApp" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
+    EProj exp i -> opar n . showString "EProj" . showChar ' ' . showsPrec 1 exp . showChar ' ' . showsPrec 1 i . cpar n
     EEmptyRec -> showString "EEmptyRec"
     ERecType fieldtypes -> opar n . showString "ERecType" . showChar ' ' . showsPrec 1 fieldtypes . cpar n
     ERec fieldvalues -> opar n . showString "ERec" . showChar ' ' . showsPrec 1 fieldvalues . cpar n
@@ -286,9 +286,9 @@ johnMajorEq (ESub exp0 exp1) (ESub exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EMul exp0 exp1) (EMul exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EDiv exp0 exp1) (EDiv exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EMod exp0 exp1) (EMod exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
-johnMajorEq (EProj exp i) (EProj exp_ i_) = exp == exp_ && i == i_
 johnMajorEq (ENeg exp) (ENeg exp_) = exp == exp_
 johnMajorEq (EApp exp0 exp1) (EApp exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
+johnMajorEq (EProj exp i) (EProj exp_ i_) = exp == exp_ && i == i_
 johnMajorEq EEmptyRec EEmptyRec = True
 johnMajorEq (ERecType fieldtypes) (ERecType fieldtypes_) = fieldtypes == fieldtypes_
 johnMajorEq (ERec fieldvalues) (ERec fieldvalues_) = fieldvalues == fieldvalues_
@@ -343,9 +343,9 @@ instance Ord (Tree c) where
     index (EMul _ _) = 32
     index (EDiv _ _) = 33
     index (EMod _ _) = 34
-    index (EProj _ _) = 35
-    index (ENeg _) = 36
-    index (EApp _ _) = 37
+    index (ENeg _) = 35
+    index (EApp _ _) = 36
+    index (EProj _ _) = 37
     index (EEmptyRec ) = 38
     index (ERecType _) = 39
     index (ERec _) = 40
@@ -395,9 +395,9 @@ instance Ord (Tree c) where
     compareSame (EMul exp0 exp1) (EMul exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
     compareSame (EDiv exp0 exp1) (EDiv exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
     compareSame (EMod exp0 exp1) (EMod exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
-    compareSame (EProj exp i) (EProj exp_ i_) = mappend (compare exp exp_) (compare i i_)
     compareSame (ENeg exp) (ENeg exp_) = compare exp exp_
     compareSame (EApp exp0 exp1) (EApp exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
+    compareSame (EProj exp i) (EProj exp_ i_) = mappend (compare exp exp_) (compare i i_)
     compareSame EEmptyRec EEmptyRec = EQ
     compareSame (ERecType fieldtypes) (ERecType fieldtypes_) = compare fieldtypes fieldtypes_
     compareSame (ERec fieldvalues) (ERec fieldvalues_) = compare fieldvalues fieldvalues_

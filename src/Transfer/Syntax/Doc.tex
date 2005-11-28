@@ -213,17 +213,17 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp8}} & {\arrow}  &{\nonterminal{Exp8}} {\terminal{.}} {\nonterminal{Ident}}  \\
+{\nonterminal{Exp8}} & {\arrow}  &{\terminal{{$-$}}} {\nonterminal{Exp8}}  \\
  & {\delimit}  &{\nonterminal{Exp9}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp9}} & {\arrow}  &{\terminal{{$-$}}} {\nonterminal{Exp9}}  \\
+{\nonterminal{Exp9}} & {\arrow}  &{\nonterminal{Exp9}} {\nonterminal{Exp10}}  \\
  & {\delimit}  &{\nonterminal{Exp10}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp10}} & {\arrow}  &{\nonterminal{Exp10}} {\nonterminal{Exp11}}  \\
+{\nonterminal{Exp10}} & {\arrow}  &{\nonterminal{Exp10}} {\terminal{.}} {\nonterminal{Ident}}  \\
  & {\delimit}  &{\nonterminal{Exp11}}  \\
 \end{tabular}\\
 
