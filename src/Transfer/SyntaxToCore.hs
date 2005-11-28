@@ -33,6 +33,7 @@ declsToCore_ =     deriveDecls
 
 optimize :: [Decl] -> C [Decl]
 optimize =     removeUselessMatch
+           >>> removeUnusedVariables
            >>> betaReduce
 
 newState :: CState
@@ -232,7 +233,19 @@ removeUselessMatch = return . map f
  isSingleFieldPattern x p = case p of
                                 PRec [FieldPattern y _] -> x == y
                                 _ -> False
+--
+-- * Change varibles which are not used to wildcards.
+--
 
+-- FIXME: extend to variables bound in case expressions.
+removeUnusedVariables :: [Decl] -> C [Decl]
+removeUnusedVariables = return . map f
+  where
+  f :: Tree a -> Tree a
+  f x = case x of
+           EAbs (VVar id) e  | not (id `isFreeIn` e) -> EAbs VWild (f e)
+           EPi (VVar id) t e | not (id `isFreeIn` e) -> EPi VWild (f t) (f e)
+           _ -> composOp f x
 --
 -- * Remove simple syntactic sugar.
 --
