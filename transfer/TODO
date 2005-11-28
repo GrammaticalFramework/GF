@@ -26,8 +26,6 @@
 
 - Negated patterns?
 
-- Fix BNFC layout resolver to not insert double ; (instead of removing them)
-
 * Improve interpreter
 
 - More efficient handling of constructor application
