@@ -5,7 +5,7 @@ data Cat : Type where
   Typ : Cat
   ListStm : Cat
 
-data Tree : Type -> Type where
+data Tree : Cat -> Type where
   SDecl   : Tree Typ -> Tree Var -> Tree Stm
   SAss    : Tree Var -> Tree Exp -> Tree Stm
   SBlock  : Tree ListStm -> Tree Stm

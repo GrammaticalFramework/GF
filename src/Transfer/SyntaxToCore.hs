@@ -61,7 +61,7 @@ mergeDecls ds@(ValueDecl x p _:_)
              n = length p
          when (not (all ((== n) . length) pss))
               $ fail $ "Pattern count mismatch for " ++ printTree x
-         vs <- replicateM n freshIdent
+         vs <- freshIdents n
          let cases = map (\ (ps,rhs) -> Case (mkPRec ps) rhs) cs
              c = ECase (mkERec (map EVar vs)) cases
              f = foldr (EAbs . VVar) c vs
@@ -99,8 +99,6 @@ derivators = [
 deriveComposOp :: Derivator
 deriveComposOp t k cs = 
     do
-    a <- freshIdent
-    c <- freshIdent
     f <- freshIdent
     x <- freshIdent
     let co = Ident ("composOp_" ++ printTree t)
@@ -108,13 +106,11 @@ deriveComposOp t k cs =
         pv = VVar
         infixr 3 -->
         (-->) = EPiNoVar
-        ta = EApp (e t) (e a)
-        tc = EApp (e t) (e c)
         infixr 3 \->
         (\->) = EAbs
         mkCase ci ct = 
             do
-            vars <- replicateM (arity ct) freshIdent
+            vars <- freshIdents (arity ct)
             -- FIXME: the type argument to f is wrong if the constructor
             -- has a dependent type
             -- FIXME: make a special case for lists?
@@ -123,10 +119,15 @@ deriveComposOp t k cs =
                                    _ -> e v
                 calls = zipWith rec vars (argumentTypes ct)
             return $ Case (PCons ci (map PVar vars)) (apply (e ci) calls)
+    ift <- abstractType (argumentTypes k) (\vs -> 
+             let tc = apply (EVar t) vs in tc --> tc)
+    ft <- abstractType (argumentTypes k) (\vs -> 
+             let tc = apply (EVar t) vs in ift --> tc --> tc)
     cases <- mapM (uncurry mkCase) cs
     let cases' = cases ++ [Case PWild (e x)]
-    return $ [TypeDecl co $ EPi (pv c) EType $ (EPi (pv a) EType $ ta --> ta) --> tc --> tc,
-              ValueDecl co [] $ VWild \-> pv f \-> pv x \-> ECase (e x) cases']
+    fb <- abstract (arity k) $ const $ pv f \-> pv x \-> ECase (e x) cases'
+    return $ [TypeDecl co ft,
+              ValueDecl co [] fb]
 
 deriveShow :: Derivator
 deriveShow t k cs = fail $ "derive show not implemented"
@@ -176,7 +177,7 @@ replaceCons ds = mapM f ds
         -- redexes produced here.
         EVar id | isCons id -> do
                                let Just n = Map.lookup id cs
-                               vs <- replicateM n freshIdent
+                               vs <- freshIdents n
                                let c = apply t (map EVar vs)
                                return $ foldr (EAbs . VVar) c vs
         _ -> composOpM f t
@@ -312,6 +313,24 @@ var s = EVar (Ident s)
 apply :: Exp -> [Exp] -> Exp
 apply = foldl EApp
 
+-- | Abstract a value over some arguments.
+abstract :: Int -- ^ number of arguments
+         -> ([Exp] -> Exp) -> C Exp
+abstract n f = 
+    do
+    vs <- freshIdents n
+    return $ foldr EAbs (f (map EVar vs)) (map VVar vs)
+
+-- | Abstract a type over some arguments.
+abstractType :: [Exp] -- ^ argument types
+             -> ([Exp] -> Exp)
+             -> C Exp
+abstractType ts f = 
+    do
+    vs <- freshIdents (length ts)
+    let pi (v,t) e = EPi (VVar v) t e
+    return $ foldr pi (f (map EVar vs)) (zip vs ts)
+
 -- | Get an identifier which cannot occur in user-written
 --   code, and which has not been generated before.
 freshIdent :: C Ident
@@ -319,6 +338,9 @@ freshIdent = do
              i <- get
              put (i+1)
              return (Ident ("x_"++show i))
+
+freshIdents :: Int -> C [Ident]
+freshIdents n = replicateM n freshIdent
 
 -- | Get the variables bound by a set of let definitions.
 letDefBinds :: [LetDef] -> Set Ident
