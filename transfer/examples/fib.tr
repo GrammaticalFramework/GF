@@ -1,11 +1,11 @@
-import nat ;
+import nat
 
-fib : Int -> Int ;
-fib 0 = 1 ;
-fib 1 = 1 ;
-fib n = fib (n-1) + fib (n-2) ;
+fib : Int -> Int
+fib 0 = 1
+fib 1 = 1
+fib n = fib (n-1) + fib (n-2)
 
-fibNat : Nat -> Nat ;
-fibNat Zero = Succ Zero ;
-fibNat (Succ Zero) = Succ Zero ;
-fibNat (Succ (Succ n)) = plus (fibNat (Succ n)) (fibNat n) ;
+fibNat : Nat -> Nat
+fibNat Zero = Succ Zero
+fibNat (Succ Zero) = Succ Zero
+fibNat (Succ (Succ n)) = plus (fibNat (Succ n)) (fibNat n)

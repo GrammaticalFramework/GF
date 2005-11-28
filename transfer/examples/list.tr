@@ -1,17 +1,17 @@
-import nat ;
+import nat
 
 data List : (_:Type) -> Type where 
-	{ Nil : (A:Type) -> List A ;
-          Cons : (A:Type) -> A -> List A -> List A ; } ;
+	Nil : (A:Type) -> List A
+        Cons : (A:Type) -> A -> List A -> List A
 
-size : (A:Type) -> List A -> Nat ;
-size _ (Nil _) = Zero ;
-size A (Cons _ x xs) = Succ (size A xs) ;
+size : (A:Type) -> List A -> Nat
+size _ (Nil _) = Zero
+size A (Cons _ x xs) = Succ (size A xs)
 
-map : (A:Type) -> (B:Type) -> (A -> B) -> List A -> List B ;
-map _ B _ (Nil _) = Nil B ;
-map A B f (Cons _ x xs) = Cons B (f x) (map A B f xs) ;
+map : (A:Type) -> (B:Type) -> (A -> B) -> List A -> List B
+map _ B _ (Nil _) = Nil B
+map A B f (Cons _ x xs) = Cons B (f x) (map A B f xs)
 
-append : (A:Type) -> (xs:List A) -> List A -> List A ;
-append _ (Nil _) ys = ys ;
-append A (Cons _ x xs) ys = Cons A x (append A xs ys) ;
+append : (A:Type) -> (xs:List A) -> List A -> List A
+append _ (Nil _) ys = ys
+append A (Cons _ x xs) ys = Cons A x (append A xs ys)
