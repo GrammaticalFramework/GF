@@ -79,11 +79,11 @@ EMul.      Exp7 ::= Exp7 "*" Exp8 ;
 EDiv.      Exp7 ::= Exp7 "/" Exp8 ;
 EMod.      Exp7 ::= Exp7 "%" Exp8 ;
 
-EProj.     Exp8 ::= Exp8 "." Ident ;
+ENeg.      Exp8 ::= "-" Exp8 ;
 
-ENeg.      Exp9 ::= "-" Exp9 ;
+EApp.      Exp9 ::= Exp9 Exp10 ;
 
-EApp.      Exp10 ::= Exp10 Exp11 ;
+EProj.     Exp10 ::= Exp10 "." Ident ;
 
 EEmptyRec. Exp11 ::= "{" "}" ;
 

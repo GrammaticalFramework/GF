@@ -203,17 +203,17 @@ Exp7 : Exp7 '*' Exp8 { EMul $1 $3 }
 
 
 Exp8 :: { Exp }
-Exp8 : Exp8 '.' Ident { EProj $1 $3 } 
+Exp8 : '-' Exp8 { ENeg $2 } 
   | Exp9 { $1 }
 
 
 Exp9 :: { Exp }
-Exp9 : '-' Exp9 { ENeg $2 } 
+Exp9 : Exp9 Exp10 { EApp $1 $2 } 
   | Exp10 { $1 }
 
 
 Exp10 :: { Exp }
-Exp10 : Exp10 Exp11 { EApp $1 $2 } 
+Exp10 : Exp10 '.' Ident { EProj $1 $3 } 
   | Exp11 { $1 }
 
 
