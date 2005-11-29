@@ -18,14 +18,14 @@ abstract Lex = Cat ** {
 -- structural
 
 
-    only_Predet : Predet ;
+    only_Predet, all_Predet : Predet ;
 
-    this_Quant  : Quant ;
+    this_Quant, these_Quant  : Quant ;
 
     
     i_Pron, he_Pron, we_Pron : Pron ;
 
-    whoSg_IP, whoPl_IP, whatSg_IP, whatPl_IP : IP ;
+    whoSg_IP, whoPl_IP : IP ;
 
     when_IAdv, where_IAdv, why_IAdv : IAdv ;
 
@@ -34,4 +34,8 @@ abstract Lex = Cat ** {
     here_Adv : Adv ;
 
     very_AdA : AdA ;
+
+    one_Numeral, forty_Numeral : Numeral ;
+
+    in_Prep, of_Prep : Prep ;
 }

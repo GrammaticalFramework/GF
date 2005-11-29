@@ -7,5 +7,7 @@ abstract Sentence = Cat ** {
     SlashV2 : NP -> V2 -> Slash ;
 
     AdvSlash : Slash -> Adv -> Slash ;
+
+    SlashPrep : Cl -> Prep -> Slash ;
 }
    

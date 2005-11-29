@@ -36,4 +36,7 @@ concrete SentenceEng of Sentence = CatEng ** open ResEng in {
       s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
       c2 = slash.c2
     } ;
+
+    SlashPrep cl prep = cl ** {c2 = prep.s} ;
+
 }

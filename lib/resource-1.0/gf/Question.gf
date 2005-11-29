@@ -8,10 +8,9 @@ abstract Question = Cat, Sentence ** {
     QuestIAdv  : IAdv -> Cl -> QCl ;
 
     PrepIP : Prep -> IP -> IAdv ;
-    FunIP  : N2 -> IP -> IP ;
     AdvIP  : IP -> Adv -> IP ;
  
-    IDetCN : IDet -> Num -> CN -> IP ;
+    IDetCN : IDet -> Num -> Ord -> CN -> IP ;
 
 }
    

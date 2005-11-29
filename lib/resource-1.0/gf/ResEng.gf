@@ -176,6 +176,11 @@ oper
       }
     } ;
 
+-- For $Relative$.
+
+param 
+  RAgr = RNoAg | RAg {n : Number ; p : Person} ;
+
 -- For $Numeral$.
 
 param 

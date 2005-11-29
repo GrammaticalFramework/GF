@@ -46,16 +46,14 @@ concrete QuestionEng of Question = CatEng, SentenceEng ** open ResEng in {
 
     PrepIP p ip = {s = p.s ++ ip.s ! Nom} ;
 
-----    FunIP  : N2 -> IP -> IP ;
     AdvIP ip adv = {
       s = \\c => ip.s ! c ++ adv.s ;
       n = ip.n
       } ;
  
-    IDetCN idet num cn = {
-      s = \\c => idet.s ++ num.s ++ cn.s ! idet.n ! c ; 
+    IDetCN idet num ord cn = {
+      s = \\c => idet.s ++ num.s ++ ord.s ++ cn.s ! idet.n ! c ; 
       n = idet.n
       } ;
 
 }
-   
