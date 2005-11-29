@@ -49,9 +49,9 @@ cats2cat :: CIdent -- ^ the name of the Cat type
          -> [(A.Ident,A.Context)] -> Decl
 cats2cat cat tree = C.DataDecl cat C.EType . map (uncurry catCons)
   where
-  catCons i c = C.ConsDecl (id2id i) (addTree tree $ catConsType c)
+  catCons i c = C.ConsDecl (id2id i) (catConsType c)
   catConsType = foldr pi (C.EVar cat)
-  pi (i,x) t = C.EPi (id2pv i) (term2exp x) t
+  pi (i,x) t = C.EPi (id2pv i) (addTree tree $ term2exp x) t
 
 funs2tree :: CIdent -- ^ the name of the Cat type
           -> CIdent -- ^ the name of the Tree type
