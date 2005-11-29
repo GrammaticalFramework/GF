@@ -79,7 +79,7 @@ eitherResIdent tv s = treeFind resWords
                               | s > a  = treeFind right
                               | s == a = t
 
-resWords = b "import" (b "derive" (b "case" (b "Type" N N) (b "data" N N)) (b "if" (b "else" N N) N)) (b "of" (b "let" (b "in" N N) N) (b "where" (b "then" N N) N))
+resWords = b "in" (b "derive" (b "case" (b "Type" N N) (b "data" N N)) (b "if" (b "else" N N) (b "import" N N))) (b "sig" (b "of" (b "let" N N) (b "rec" N N)) (b "where" (b "then" N N) N))
    where b s = B s (TS s)
 
 unescapeInitTail :: String -> String

@@ -123,7 +123,6 @@ eval env x = case x of
                                _ -> error $ printValue v ++ " is not a record, "
                                             ++ "cannot get field " ++ printTree id
 
-  EEmptyRec  -> VRec []
   ERecType fts -> VRec $! deepSeqList $! [v `seq` (f,v) | FieldType  f e <- fts,
                                                           let v = eval env e]
   ERec fvs     -> VRec $! deepSeqList $! [v `seq` (f,v) | FieldValue f e <- fvs,

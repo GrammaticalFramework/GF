@@ -91,8 +91,7 @@ mergeDecls ds@(ValueDecl x p _:_)
          return $ ValueDecl x [] f
   where mkRec r f = r . zipWith (\i e -> f (Ident ("p"++show i)) e) [0..]
         mkPRec = mkRec PRec FieldPattern
-        mkERec xs | null xs = EEmptyRec
-                  | otherwise = mkRec ERec FieldValue xs
+        mkERec = mkRec ERec FieldValue
 
 --
 -- * Derived function definitions
@@ -284,7 +283,7 @@ removeUselessMatch = return . map f
                     e -> EAbs (VVar x) e
        -- for value declarations without patterns, compilePattDecls 
        -- generates pattern matching on the empty record, remove these
-       ECase EEmptyRec [Case (PRec []) e] -> f e
+       ECase (ERec []) [Case (PRec []) e] -> f e
        -- if the pattern matching is on a single field of a record expression
        -- with only one field, there is no need to wrap it in a record
        ECase (ERec [FieldValue x e]) cs | all (isSingleFieldPattern x) [ p | Case p _ <- cs]

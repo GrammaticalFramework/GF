@@ -31,6 +31,8 @@ import Transfer.ErrM
  'in' { PT _ (TS "in") }
  'let' { PT _ (TS "let") }
  'of' { PT _ (TS "of") }
+ 'rec' { PT _ (TS "rec") }
+ 'sig' { PT _ (TS "sig") }
  'where' { PT _ (TS "where") }
 
 L_quoted { PT _ (TL $$) }
@@ -81,7 +83,7 @@ ListPattern : {- empty -} { [] }
 Pattern :: { Pattern }
 Pattern : '(' CIdent ListPattern ')' { PCons $2 (reverse $3) } 
   | PatternVariable { PVar $1 }
-  | '{' ListFieldPattern '}' { PRec $2 }
+  | 'rec' '{' ListFieldPattern '}' { PRec $3 }
   | 'Type' { PType }
   | String { PStr $1 }
   | Integer { PInt $1 }
@@ -135,15 +137,34 @@ Exp4 : Exp4 '.' CIdent { EProj $1 $3 }
 
 
 Exp5 :: { Exp }
-Exp5 : '{' '}' { EEmptyRec } 
-  | '{' ListFieldType '}' { ERecType $2 }
-  | '{' ListFieldValue '}' { ERec $2 }
+Exp5 : 'sig' '{' ListFieldType '}' { ERecType $3 } 
+  | 'rec' '{' ListFieldValue '}' { ERec $3 }
   | CIdent { EVar $1 }
   | 'Type' { EType }
   | String { EStr $1 }
   | Integer { EInt $1 }
   | TMeta { EMeta $1 }
   | '(' Exp ')' { $2 }
+
+
+FieldType :: { FieldType }
+FieldType : CIdent ':' Exp { FieldType $1 $3 } 
+
+
+ListFieldType :: { [FieldType] }
+ListFieldType : {- empty -} { [] } 
+  | FieldType { (:[]) $1 }
+  | FieldType ';' ListFieldType { (:) $1 $3 }
+
+
+FieldValue :: { FieldValue }
+FieldValue : CIdent '=' Exp { FieldValue $1 $3 } 
+
+
+ListFieldValue :: { [FieldValue] }
+ListFieldValue : {- empty -} { [] } 
+  | FieldValue { (:[]) $1 }
+  | FieldValue ';' ListFieldValue { (:) $1 $3 }
 
 
 Exp1 :: { Exp }
@@ -158,24 +179,6 @@ ListCase :: { [Case] }
 ListCase : {- empty -} { [] } 
   | Case { (:[]) $1 }
   | Case ';' ListCase { (:) $1 $3 }
-
-
-FieldType :: { FieldType }
-FieldType : CIdent ':' Exp { FieldType $1 $3 } 
-
-
-ListFieldType :: { [FieldType] }
-ListFieldType : FieldType { (:[]) $1 } 
-  | FieldType ';' ListFieldType { (:) $1 $3 }
-
-
-FieldValue :: { FieldValue }
-FieldValue : CIdent '=' Exp { FieldValue $1 $3 } 
-
-
-ListFieldValue :: { [FieldValue] }
-ListFieldValue : FieldValue { (:[]) $1 } 
-  | FieldValue ';' ListFieldValue { (:) $1 $3 }
 
 
 

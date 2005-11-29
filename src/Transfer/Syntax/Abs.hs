@@ -72,7 +72,6 @@ data Tree :: * -> * where
     ENeg :: Exp -> Tree Exp_
     EApp :: Exp -> Exp -> Tree Exp_
     EProj :: Exp -> Ident -> Tree Exp_
-    EEmptyRec :: Tree Exp_
     ERecType :: [FieldType] -> Tree Exp_
     ERec :: [FieldValue] -> Tree Exp_
     EVar :: Ident -> Tree Exp_
@@ -232,7 +231,6 @@ instance Show (Tree c) where
     ENeg exp -> opar n . showString "ENeg" . showChar ' ' . showsPrec 1 exp . cpar n
     EApp exp0 exp1 -> opar n . showString "EApp" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EProj exp i -> opar n . showString "EProj" . showChar ' ' . showsPrec 1 exp . showChar ' ' . showsPrec 1 i . cpar n
-    EEmptyRec -> showString "EEmptyRec"
     ERecType fieldtypes -> opar n . showString "ERecType" . showChar ' ' . showsPrec 1 fieldtypes . cpar n
     ERec fieldvalues -> opar n . showString "ERec" . showChar ' ' . showsPrec 1 fieldvalues . cpar n
     EVar i -> opar n . showString "EVar" . showChar ' ' . showsPrec 1 i . cpar n
@@ -291,7 +289,6 @@ johnMajorEq (EMod exp0 exp1) (EMod exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (ENeg exp) (ENeg exp_) = exp == exp_
 johnMajorEq (EApp exp0 exp1) (EApp exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EProj exp i) (EProj exp_ i_) = exp == exp_ && i == i_
-johnMajorEq EEmptyRec EEmptyRec = True
 johnMajorEq (ERecType fieldtypes) (ERecType fieldtypes_) = fieldtypes == fieldtypes_
 johnMajorEq (ERec fieldvalues) (ERec fieldvalues_) = fieldvalues == fieldvalues_
 johnMajorEq (EVar i) (EVar i_) = i == i_
@@ -349,21 +346,20 @@ instance Ord (Tree c) where
     index (ENeg _) = 35
     index (EApp _ _) = 36
     index (EProj _ _) = 37
-    index (EEmptyRec ) = 38
-    index (ERecType _) = 39
-    index (ERec _) = 40
-    index (EVar _) = 41
-    index (EType ) = 42
-    index (EStr _) = 43
-    index (EInt _) = 44
-    index (EMeta ) = 45
-    index (LetDef _ _ _) = 46
-    index (Case _ _) = 47
-    index (VVar _) = 48
-    index (VWild ) = 49
-    index (FieldType _ _) = 50
-    index (FieldValue _ _) = 51
-    index (Ident _) = 52
+    index (ERecType _) = 38
+    index (ERec _) = 39
+    index (EVar _) = 40
+    index (EType ) = 41
+    index (EStr _) = 42
+    index (EInt _) = 43
+    index (EMeta ) = 44
+    index (LetDef _ _ _) = 45
+    index (Case _ _) = 46
+    index (VVar _) = 47
+    index (VWild ) = 48
+    index (FieldType _ _) = 49
+    index (FieldValue _ _) = 50
+    index (Ident _) = 51
     compareSame (Module imports decls) (Module imports_ decls_) = mappend (compare imports imports_) (compare decls decls_)
     compareSame (Import i) (Import i_) = compare i i_
     compareSame (DataDecl i exp consdecls) (DataDecl i_ exp_ consdecls_) = mappend (compare i i_) (mappend (compare exp exp_) (compare consdecls consdecls_))
@@ -402,7 +398,6 @@ instance Ord (Tree c) where
     compareSame (ENeg exp) (ENeg exp_) = compare exp exp_
     compareSame (EApp exp0 exp1) (EApp exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
     compareSame (EProj exp i) (EProj exp_ i_) = mappend (compare exp exp_) (compare i i_)
-    compareSame EEmptyRec EEmptyRec = EQ
     compareSame (ERecType fieldtypes) (ERecType fieldtypes_) = compare fieldtypes fieldtypes_
     compareSame (ERec fieldvalues) (ERec fieldvalues_) = compare fieldvalues fieldvalues_
     compareSame (EVar i) (EVar i_) = compare i i_

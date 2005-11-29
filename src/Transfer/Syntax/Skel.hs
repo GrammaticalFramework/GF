@@ -49,7 +49,6 @@ transTree t = case t of
   ENeg exp -> failure t
   EApp exp0 exp1 -> failure t
   EProj exp i -> failure t
-  EEmptyRec  -> failure t
   ERecType fieldtypes -> failure t
   ERec fieldvalues -> failure t
   EVar i -> failure t
@@ -123,7 +122,6 @@ transExp t = case t of
   ENeg exp -> failure t
   EApp exp0 exp1 -> failure t
   EProj exp i -> failure t
-  EEmptyRec  -> failure t
   ERecType fieldtypes -> failure t
   ERec fieldvalues -> failure t
   EVar i -> failure t

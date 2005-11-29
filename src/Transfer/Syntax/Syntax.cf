@@ -1,6 +1,6 @@
 entrypoints Module, Exp ;
 
-layout "let", "where", "of" ;
+layout "let", "where", "of","rec", "sig" ;
 layout stop "in" ;
 layout toplevel ;
 
@@ -28,7 +28,7 @@ _.        Pattern ::= Pattern1 ;
 -- Constructor pattern with parantheses
 PCons.    Pattern1 ::= "(" Ident [Pattern] ")" ;
 -- Record patterns
-PRec.     Pattern1 ::= "{" [FieldPattern] "}";
+PRec.     Pattern1 ::= "rec" "{" [FieldPattern] "}";
 -- The pattern matching the Type constant
 PType.    Pattern1 ::= "Type" ;
 -- String literal patterns
@@ -85,15 +85,13 @@ EApp.      Exp9 ::= Exp9 Exp10 ;
 
 EProj.     Exp10 ::= Exp10 "." Ident ;
 
-EEmptyRec. Exp11 ::= "{" "}" ;
-
-ERecType.  Exp11 ::= "{" [FieldType] "}" ;
+ERecType.  Exp11 ::= "sig" "{" [FieldType] "}" ;
 FieldType. FieldType  ::= Ident ":" Exp ;
-separator nonempty FieldType ";" ;
+separator FieldType ";" ;
 
-ERec.      Exp11 ::= "{" [FieldValue] "}" ;
+ERec.      Exp11 ::= "rec" "{" [FieldValue] "}" ;
 FieldValue.FieldValue ::= Ident "=" Exp ;
-separator nonempty FieldValue ";" ;
+separator FieldValue ";" ;
 
 EVar.      Exp11 ::= Ident ;
 EType.     Exp11 ::= "Type" ;
