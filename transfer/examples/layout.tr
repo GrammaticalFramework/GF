@@ -4,6 +4,6 @@ x = let x : T = y
          f -> q
          _ -> a
 
-f = \x -> case x of
-	        { r = _ } -> 0
+f = apa 
 
+g = bepa
