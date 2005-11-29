@@ -12,8 +12,6 @@
 
 - implicit arguments?
 
-- layout syntax?
-
 - composOp generation
 
 - show generation
@@ -35,8 +33,6 @@
 * Improve the core language
 
 * Improve compilation
-
-- Eta-expand constructor applications and use the core feature for them.
 
 * Add primitive operations to core
 
