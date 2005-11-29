@@ -32,8 +32,8 @@ declsToCore_ =     deriveDecls
                >>> optimize
 
 optimize :: [Decl] -> C [Decl]
-optimize =     removeUselessMatch
-           >>> removeUnusedVariables
+optimize =     removeUnusedVariables
+           >>> removeUselessMatch
            >>> betaReduce
 
 newState :: CState
@@ -237,7 +237,6 @@ removeUselessMatch = return . map f
 -- * Change varibles which are not used to wildcards.
 --
 
--- FIXME: extend to variables bound in case expressions.
 removeUnusedVariables :: [Decl] -> C [Decl]
 removeUnusedVariables = return . map f
   where
@@ -245,7 +244,14 @@ removeUnusedVariables = return . map f
   f x = case x of
            EAbs (VVar id) e  | not (id `isFreeIn` e) -> EAbs VWild (f e)
            EPi (VVar id) t e | not (id `isFreeIn` e) -> EPi VWild (f t) (f e)
+           Case p e -> Case (g (freeVars e) p) (f e)
            _ -> composOp f x
+  -- replace pattern variables not in the given set with wildcards
+  g :: Set Ident -> Tree a -> Tree a
+  g keep x = case x of
+                    PVar id | not (id `Set.member` keep) -> PWild
+                    _ -> composOp (g keep) x    
+
 --
 -- * Remove simple syntactic sugar.
 --
