@@ -2,13 +2,14 @@ resource ResEng = ParamX ** open Prelude in {
 
   param
 
-    Case   = Nom | Acc | Gen ;
+    Case = Nom | Acc | Gen ;
 
     VForm = VInf | VPres | VPast | VPPart | VPresPart ;
 
     Ord = ODir | OQuest ;
 
   oper
+
     Agr = {n : Number ; p : Person} ;
 
     agrP3 : Number -> {a : Agr} = \n -> {a = {n = n ; p = P3}} ;
@@ -52,6 +53,8 @@ resource ResEng = ParamX ** open Prelude in {
        }
      } ;
 
+-- For $Verb$.
+
   Verb : Type = {
     s : VForm => Str
     } ;
@@ -63,7 +66,7 @@ resource ResEng = ParamX ** open Prelude in {
 
   predV : Verb -> VP = \verb -> {
     s = \\t,ant,b,ord,agr => 
-      let 
+      let
         inf  = verb.s ! VInf ;
         fin  = presVerb verb agr ;
         past = verb.s ! VPast ;
@@ -105,10 +108,10 @@ resource ResEng = ParamX ** open Prelude in {
           {fin = x ; inf = y} ;
       in
       case <t,ant,b,ord> of {
-        <Pres,Simul,_,   _>      => vf fin          [] ;
+        <Pres,Simul,_,  _>      => vf fin          [] ;
         <Pres,Anter,Pos,_>      => vf (have agr)   part ;
         <Pres,Anter,Neg,_>      => vf (havent agr) part ;
-        <Past,Simul,_,   _>      => vf fin          [] ;
+        <Past,Simul,_,  _>      => vf fin          [] ;
         <Past,Anter,Pos,_>      => vf "had"        part ;
         <Past,Anter,Neg,_>      => vf "hadn't"     part ;
         <Fut, Simul,Pos,_>      => vf "will"       inf ;
@@ -126,6 +129,11 @@ resource ResEng = ParamX ** open Prelude in {
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
     s2 = \\a => vp.s2 ! a ++ obj ! a
+    } ;
+
+  insertAdV : Str -> VP -> VP = \adv,vp -> {
+    s = vp.s ;
+    s2 = vp.s2
     } ;
 
   presVerb : {s : VForm => Str} -> Agr -> Str = \verb -> 
@@ -148,7 +156,11 @@ resource ResEng = ParamX ** open Prelude in {
   Aux = {pres,past : Polarity => Agr => Str ; inf,ppart : Str} ;
 
   auxBe : Aux = {
-    pres = \\b,a => agrVerb (posneg b "is")  (posneg b "are")  a ;
+    pres = \\b,a => case <b,a> of {
+      <Pos,{n = Sg ; p = P1}> => "am" ; 
+      <Neg,{n = Sg ; p = P1}> => ["am not"] ; --- am not I
+      _ => agrVerb (posneg b "is")  (posneg b "are") a
+      } ;
     past = \\b,a => agrVerb (posneg b "was") (posneg b "were") a ;
     inf  = "be" ;
     ppart = "been"
@@ -160,6 +172,15 @@ resource ResEng = ParamX ** open Prelude in {
     } ;
 
   conjThat : Str = "that" ;
+
+  reflPron : Agr => Str = table {
+    {n = Sg ; p = P1} => "myself" ;
+    {n = Sg ; p = P2} => "yourself" ;
+    {n = Sg ; p = P3} => "itself" ; ----
+    {n = Pl ; p = P1} => "ourselves" ;
+    {n = Pl ; p = P2} => "yourselves" ;
+    {n = Pl ; p = P3} => "themselves"
+    } ;
 
 -- For $Adjective$.
 
@@ -180,6 +201,15 @@ oper
 
 param 
   RAgr = RNoAg | RAg {n : Number ; p : Person} ;
+
+-- For $Coord$.
+
+oper
+  conjAgr : Agr -> Agr -> Agr = \a,b -> {
+    n = conjNumber a.n b.n ;
+    p = conjPerson a.p b.p
+    } ;
+
 
 -- For $Numeral$.
 

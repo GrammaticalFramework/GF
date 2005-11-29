@@ -9,12 +9,25 @@ concrete SentenceEng of Sentence = CatEng ** open ResEng in {
           agr   = np.a ;
           verb  = vp.s ! t ! a ! b ! o ! agr ;
           subj  = np.s ! Nom ;
-          compl = vp.s2 ! agr
+          compl = vp.s2 ! agr 
         in
         case o of {
           ODir   => subj ++ verb.fin ++ verb.inf ++ compl ;
           OQuest => verb.fin ++ subj ++ verb.inf ++ compl
           }
+    } ;
+
+    ImpVP vp = {
+      s = \\pol,n => 
+        let 
+          agr   = {n = n ; p = P2} ;
+          verb  = infVP vp agr ;
+          dont  = case pol of {
+            Neg => "don't" ;
+            _ => []
+            }
+        in
+        dont ++ verb
     } ;
 
     SlashV2 np v2 = {

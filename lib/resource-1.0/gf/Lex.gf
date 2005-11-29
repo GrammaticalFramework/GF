@@ -35,7 +35,20 @@ abstract Lex = Cat ** {
 
     very_AdA : AdA ;
 
+    always_AdV : AdV ;
+
     one_Numeral, forty_Numeral : Numeral ;
 
     in_Prep, of_Prep : Prep ;
+
+    and_Conj : Conj ;
+    either7or_DConj : DConj ;
+
+    but_PConj : PConj ;
+
+    if_Subj, because_Subj : Subj ;
+   
+    please_Voc : Voc ;
+
+    more_CAdv, less_CAdv : CAdv ;
 }

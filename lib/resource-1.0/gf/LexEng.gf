@@ -17,6 +17,7 @@ concrete LexEng of Lex = CatEng ** open ResEng, Prelude in {
 
     here_Adv = {s = "here"} ;
     very_AdA = {s = "very"} ;
+    always_AdV = {s = "always"} ;
 
     only_Predet = {s = "only"} ;
     all_Predet = {s = "only"} ;
@@ -42,5 +43,18 @@ concrete LexEng of Lex = CatEng ** open ResEng, Prelude in {
 
     in_Prep = {s = "in"} ;
     of_Prep = {s = "of"} ;
+
+    and_Conj = {s = "and" ; n = Pl} ;
+    either7or_DConj = {s1 = "either" ; s2 = "or" ; n = Sg} ;
+
+    if_Subj = ss "if" ;
+    because_Subj = ss "because" ;
+
+    but_PConj = {s = "but"} ;
+   
+    please_Voc = {s = "," ++ "please"} ;
+
+    more_CAdv = ss "more" ;
+    less_CAdv = ss "less" ;
 
 }

@@ -1,6 +1,10 @@
 concrete CatEng of Cat = open ResEng, Prelude in {
 
   lincat
+    Text, Phr, Utt = {s : Str} ;
+
+    Imp = {s : Polarity => Number => Str} ;
+
     S  = {s : Str} ;
     QS = {s : QForm => Str} ;
     RS = {s : Agr => Str} ;
@@ -20,7 +24,7 @@ concrete CatEng of Cat = open ResEng, Prelude in {
     V2, VV = Verb ** {c2 : Str} ;
     V3 = Verb ** {c2, c3 : Str} ;
 
-    AP = {s : Str ; isPre : Bool} ; 
+    AP = {s : Agr => Str ; isPre : Bool} ; 
     Comp = {s : Agr => Str} ; 
 
     A  = {s : AForm => Str} ;
@@ -45,5 +49,15 @@ concrete CatEng of Cat = open ResEng, Prelude in {
     RP = {s : Case => Str ; a : RAgr} ;
 
     Numeral = {s : CardOrd => Str ; n : Number} ;
+
+    CAdv = {s : Str} ;    
+
+    Conj = {s : Str ; n : Number} ;
+    DConj = {s1,s2 : Str ; n : Number} ;
+
+    SeqS = {s1,s2 : Str} ;
+    SeqAdv = {s1,s2 : Str} ;
+    SeqNP = {s1,s2 : Case => Str ; a : Agr} ;
+    SeqAP = {s1,s2 : Agr => Str ; isPre : Bool} ;
 
 }

@@ -1,5 +1,12 @@
 abstract Cat = {
+
   cat
+
+    Text ;
+    Phr ;
+    Utt ;
+    Imp ;
+
     S ;
     QS ;
     RS ;
@@ -50,8 +57,22 @@ abstract Cat = {
     IAdv ;
     IDet ;
 
-    RP ;
+    RP ;      -- relative pronoun
 
-    Numeral ;
+    Numeral ; -- cardinal or ordinal,   e.g. "five/fifth"
+
+    Conj ;    -- conjunction,           e.g. "and"
+    DConj ;   -- distributed conj.      e.g. "both - and"
+    PConj ;   -- phrase-beginning conj.
+    CAdv ;    -- comparative adverb     e.g. "more", "less"
+    Subj ;    -- subjunction,           e.g. "if", "when"
+
+    SeqS ;    -- sequence of sentences
+    SeqVP ;   -- sequence of verb phrases
+    SeqAP ;   -- sequence of adjectival phrases
+    SeqNP ;   -- sequence of noun phrases
+    SeqAdv ;  -- sequence of adverbs
+
+    Voc ;     -- vocative or "please"
 
 }

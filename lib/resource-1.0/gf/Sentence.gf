@@ -4,10 +4,10 @@ abstract Sentence = Cat ** {
 
     PredVP : NP -> VP -> Cl ;
 
-    SlashV2 : NP -> V2 -> Slash ;
+    ImpVP : VP -> Imp ;
 
-    AdvSlash : Slash -> Adv -> Slash ;
-
+    SlashV2   : NP -> V2 -> Slash ;
+    AdvSlash  : Slash -> Adv -> Slash ;
     SlashPrep : Cl -> Prep -> Slash ;
 }
    
