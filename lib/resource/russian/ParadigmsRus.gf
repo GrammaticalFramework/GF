@@ -91,10 +91,13 @@ oper
   nObezbolivauchee : Str -> N ;   -- neutral, inanimate, ending with "-ee" 
   nProizvedenie : Str -> N ;   -- neutral, inanimate, ending with "-e" 
   nChislo : Str -> N ;   -- neutral, inanimate, ending with "-o" 
+  nZhivotnoe : Str -> N ;    -- masculine, inanimate, ending with "-ень"
 
 -- Masculine patterns. 
 
 --Ending with consonant: 
+nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-ла"
+
   nBrat: Str -> N ;   -- animate, брат-ья
   nStul: Str -> N ;    -- same as above, but inanimate
   nMalush : Str -> N ; -- малышей
@@ -207,11 +210,11 @@ Tense : Type;
 Bool: Type;
 Conjugation: Type ;
 
-first: Conjugation;
-firstE: Conjugation;
-second: Conjugation;
-mixed: Conjugation;
-dolzhen: Conjugation;
+first: Conjugation; -- "гуля-Ешь, гуля-Ем"
+firstE: Conjugation; -- Verbs with vowel "ё": "даёшь" (give), "пьёшь" (drink)  
+second: Conjugation; -- "вид-Ишь, вид-Им"
+mixed: Conjugation; -- "хоч-Ешь - хот-Им"
+dolzhen: Conjugation; -- irregular
 
 true: Bool;
 false: Bool;
@@ -350,6 +353,7 @@ dolzhen = Dolzhen;
 -- Neuter patterns. 
 
   nObezbolivauchee = \s -> eeEndInAnimateDecl s ** {lock_N = <>};
+  nZhivotnoe = \s -> oeEndAnimateDecl s ** {lock_N = <>};
   nProizvedenie = \s -> eEndInAnimateDecl s ** {lock_N = <>};
   nChislo = \s -> oEndInAnimateDecl s ** {lock_N = <>};
 
@@ -365,6 +369,7 @@ dolzhen = Dolzhen;
 
   nAdres     = \s -> nullEndInAnimateDecl2 s ** {lock_N = <>}; 
   nTelefon   = \s -> nullEndInAnimateDecl1 s ** {lock_N = <>}; 
+  nPepel   = \s -> nullEndInAnimateDeclPepel s ** {lock_N = <>}; 
 
   nNol       = \s -> softSignEndDeclMasc s ** {lock_N = <>};
   nUroven    = \s -> EN_softSignEndDeclMasc s ** {lock_N = <>};
