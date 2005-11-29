@@ -67,6 +67,7 @@ import GF.UseGrammar.Statistics
 import GF.UseGrammar.Morphology
 import GF.UseGrammar.Information
 import GF.API.GrammarToHaskell
+import GF.API.GrammarToTransfer
 -----import GrammarToCanon (showCanon, showCanonOpt)
 -----import qualified GrammarToGFC as GFC
 import GF.Probabilistic.Probabilistic (prProbs)
@@ -269,6 +270,7 @@ customGrammarPrinter =
   ,(strCI "lbnf",    prLBNF False)
   ,(strCI "bnf",     prBNF False)
   ,(strCI "haskell", grammar2haskell . stateGrammarST)
+  ,(strCI "transfer", grammar2transfer . stateGrammarST)
   ,(strCI "morpho",  prMorpho . stateMorpho)
   ,(strCI "fullform",prFullForm . stateMorpho)
   ,(strCI "opts",    prOpts . stateOptions)
