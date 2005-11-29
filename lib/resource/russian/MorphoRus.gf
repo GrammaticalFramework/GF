@@ -342,7 +342,7 @@ oper pronVseInanimate: Pronoun =
     PF Gen _ _ => "всего" ;
     PF Dat _  _ => "всему" ; 
     PF Acc _  _ => "всё" ; 
-    PF Inst _ _ => "всем" ;
+    PF Inst _ _ => "всем" ;
     PF Prepos _ _ => "всём" 
     } ;
     g = PGen  Neut;
@@ -488,6 +488,24 @@ oper restoran : CommNoun = nullEndInAnimateDecl1 "ресторан" ;
 -- Note: Plural form of the "грипп" (influenza) is a bit doubious
 -- However, according to http://starling.rinet.ru/morph.htm it exists.
 -- so we also keep it.
+oper nullEndInAnimateDeclPepel: Str -> CommNoun =  \gripp ->
+  {s  =  table  
+      { SF Sg Nom =>  gripp +"ел"; 
+        SF Sg Gen => gripp+"ла" ;
+        SF Sg Dat => gripp+"лу" ; 
+        SF Sg Acc => gripp +"ел"; 
+        SF Sg Inst => gripp+"лом" ;
+        SF Sg Prepos => gripp+"ле" ; 
+        SF Pl Nom => gripp+"лы" ; 
+        SF Pl Gen => gripp+"лов" ;
+        SF Pl Dat => gripp+"лам" ; 
+        SF Pl Acc => gripp +"лы"; 
+        SF Pl Inst => gripp+"лами" ;
+        SF Pl Prepos => gripp+"лах"
+    } ;
+    g = Masc   ; anim = Inanimate 
+
+  } ;
 oper nullEndInAnimateDecl1: Str -> CommNoun =  \gripp ->
   {s  =  table  
       { SF Sg Nom =>  gripp ; 
@@ -620,6 +638,24 @@ oper oeEndInAnimateDecl: Str -> CommNoun =  \snotvorn ->
     } ;
     g = Neut  ; anim = Inanimate 
   } ; 
+oper oeEndAnimateDecl: Str -> CommNoun =  \snotvorn ->
+  {  s  =  table  
+      { SF Sg Nom =>  snotvorn +"ое"; 
+        SF Sg Gen => snotvorn+"ого" ;
+        SF Sg Dat => snotvorn+"ому" ; 
+        SF Sg Acc => snotvorn +"ое"; 
+        SF Sg Inst => snotvorn+"ым" ;
+        SF Sg Prepos => snotvorn+"ом" ; 
+        SF Pl Nom => snotvorn+"ые" ; 
+        SF Pl Gen => snotvorn+"ых" ;
+        SF Pl Dat => snotvorn+"ым" ; 
+        SF Pl Acc => snotvorn+"ые" ; 
+        SF Pl Inst => snotvorn+"ыми" ;
+        SF Pl Prepos => snotvorn+"ых"
+    } ;
+    g = Neut  ; anim = Animate 
+  } ; 
+
 oper voskresenje : CommNoun = soft_eEndInAnimateDecl "воскресен" ;
 oper soft_eEndInAnimateDecl: Str -> CommNoun =  \proizvedeni ->
   {  s  =  table  
@@ -887,7 +923,7 @@ oper ej_aEndInAnimateDecl: Str -> CommNoun =  \ediniz ->
       { SF Sg Nom =>  ediniz+"а" ; 
         SF Sg Gen => ediniz+"ы" ;
         SF Sg Dat => ediniz+"е" ; 
-        SF Sg Acc => ediniz+"у" ; 
+        SF Sg Acc => ediniz+"у" ; 
         SF Sg Inst => ediniz+"ей" ;
         SF Sg Prepos => ediniz+"е" ;
         SF Pl Nom => ediniz+"ы" ; 
@@ -1043,6 +1079,7 @@ oper
    kazhdujDet: Adjective = uy_j_EndDecl "кажд" ;
    samuj: Adjective = uy_j_EndDecl "сам" ;
    lubojDet: Adjective = uy_oj_EndDecl "люб" ;
+   drugojDet: Adjective = uy_oj_EndDecl "друг" ;
    glaznoj: Adjective = uy_oj_EndDecl "глазн" ;
    kotorujDet: Adjective = uy_j_EndDecl "котор"; 
    nekotorujDet: Adjective = uy_j_EndDecl "некотор"; 
@@ -1188,7 +1225,7 @@ oper uy_j_EndDecl : Str -> Adjective = \s ->{s = table {
       AF Prepos _ (ASg Fem) => s+"ой"; 
       AF Prepos _ (ASg Neut) => s+"ом";
       AF Prepos _ APl => s+"ых";
-      AdvF => "о"
+      AdvF => "о"
       } 
   } ;
 oper shi_j_EndDecl : Str -> Adjective = \s ->{s = table {
@@ -1513,7 +1550,7 @@ oper pastConj: Str -> PastVerb = \del ->
 
 oper pastConjDolzhen: Str -> PastVerb = \del ->
   table {
-    PSF  (ASg Masc) => ["был "] + del + "ен" ;
+    PSF  (ASg Masc) => ["был "] + del + "ен" ;
     PSF  (ASg Fem)  => ["была "] + del + "на" ;
     PSF  (ASg Neut)  => ["было "] + del + "но" ;
     PSF  APl => ["были "] + del + "ны" 
@@ -1521,7 +1558,7 @@ oper pastConjDolzhen: Str -> PastVerb = \del ->
 
 -- "verbDecl" sorts out verbs according to the aspect and voice parameters.
 -- It produces the full conjugation table for a verb entry
-
+
 oper verbDecl: Aspect -> Conjugation -> Str -> Str -> Str -> Str ->Str -> Verbum = 
    \a, c, del, sgP1End, sgMascPast, imperSgP2, inf -> case a of 
 {  Perfective  =>  case c of  {
@@ -1547,6 +1584,7 @@ oper verbDeclMoch: Aspect -> Conjugation -> Str -> Str -> Str -> Str ->Str -> St
 {  Perfective  => mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj1Moch del sgP1End altRoot) (pastConj sgMascPast))  (pastConj sgMascPast);
     Imperfective  => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj1Moch del sgP1End altRoot) (pastConj sgMascPast))  (pastConj sgMascPast)
  };
+
 
 -- "mkVerb" produce the passive forms from 
 -- the active forms using the "mkPassive" method.
