@@ -19,7 +19,9 @@ concrete LexEng of Lex = CatEng ** open ResEng, Prelude in {
     very_AdA = {s = "very"} ;
 
     only_Predet = {s = "only"} ;
+    all_Predet = {s = "only"} ;
     this_Quant = {s = "this" ; n = Sg} ;
+    these_Quant = {s = "these" ; n = Pl} ;
     
     i_Pron  = mkNP "I"  "me"  "my"  Sg P1 ;
     he_Pron = mkNP "he" "him" "his" Sg P3 ;
@@ -29,7 +31,16 @@ concrete LexEng of Lex = CatEng ** open ResEng, Prelude in {
     whoPl_IP = mkIP "who" "whom" "whose" Pl ;
 
     when_IAdv = {s = "when"} ;
+    where_IAdv = {s = "where"} ;
+    why_IAdv = {s = "why"} ;
 
     whichSg_IDet = {s = "which" ; n = Sg} ;
+    whichPl_IDet = {s = "which" ; n = Pl} ;
+
+    one_Numeral = {s = table {NCard => "one" ; NOrd => "first"} ; n = Sg} ;
+    forty_Numeral = {s = table {NCard => "forty" ; NOrd => "fortieth"} ; n = Pl} ;
+
+    in_Prep = {s = "in"} ;
+    of_Prep = {s = "of"} ;
 
 }

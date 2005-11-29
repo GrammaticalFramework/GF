@@ -2,9 +2,10 @@ abstract Test =
   Noun,
   Verb, 
   Adjective,
-  Numeral,
+  -- Numeral,
   Sentence, 
   Question,
+  Relative,
   Untensed, 
   -- Tensed,
   Lex 

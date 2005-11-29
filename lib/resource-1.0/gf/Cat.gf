@@ -2,9 +2,12 @@ abstract Cat = {
   cat
     S ;
     QS ;
+    RS ;
 
     Cl ;
     QCl ;
+    RCl ;
+
     Slash ;
 
     VP ;
@@ -39,6 +42,7 @@ abstract Cat = {
     Predet ;
     Quant ;
     Num ;
+    Ord ;
 
     Prep ;
 

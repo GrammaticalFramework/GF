@@ -9,4 +9,7 @@ concrete UntensedEng of Untensed = CatEng ** open ResEng in {
     PosQCl cl = {s = cl.s ! Pres ! Simul ! Pos} ;
     NegQCl cl = {s = cl.s ! Pres ! Simul ! Neg} ;
 
+    PosRCl cl = {s = cl.s ! Pres ! Simul ! Pos} ;
+    NegRCl cl = {s = cl.s ! Pres ! Simul ! Neg} ;
+
 }

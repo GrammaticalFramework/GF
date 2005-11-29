@@ -4,9 +4,10 @@ concrete TestEng of Test =
   NounEng, 
   VerbEng, 
   AdjectiveEng,
-  NumeralEng,
+  -- NumeralEng,
   SentenceEng,
   QuestionEng,
+  RelativeEng,
   UntensedEng,
   -- TensedEng,
   LexEng 
