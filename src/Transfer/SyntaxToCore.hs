@@ -138,7 +138,7 @@ deriveComposOp t k cs =
             -- has a dependent type
             -- FIXME: make a special case for lists?
             let rec v at = case at of
-                                   EApp (EVar t') _ | t' == t -> apply (e f) [at, e v]
+                                   EApp (EVar t') c | t' == t -> apply (e f) [c, e v]
                                    _ -> e v
                 calls = zipWith rec vars (argumentTypes ct)
             return $ Case (PCons ci (map PVar vars)) (apply (e ci) calls)
