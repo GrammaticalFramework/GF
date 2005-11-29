@@ -114,6 +114,7 @@ type Derivator = Ident -> Exp -> [(Ident,Exp)] -> C [Decl]
 derivators :: [(String, Derivator)]
 derivators = [
               ("composOp", deriveComposOp),
+              ("composFold", deriveComposFold),
               ("show", deriveShow),
               ("eq", deriveEq),
               ("ord", deriveOrd)
@@ -151,6 +152,45 @@ deriveComposOp t k cs =
     fb <- abstract (arity k) $ const $ pv f \-> pv x \-> ECase (e x) cases'
     return $ [TypeDecl co ft,
               ValueDecl co [] fb]
+
+deriveComposFold :: Derivator
+deriveComposFold t k cs = 
+    do
+    f <- freshIdent
+    x <- freshIdent
+    b <- freshIdent
+    r <- freshIdent
+    let co = Ident ("composFold_" ++ printTree t)
+        e = EVar
+        pv = VVar
+        infixr 3 -->
+        (-->) = EPiNoVar
+        infixr 3 \->
+        (\->) = EAbs
+        mkCase ci ct = 
+            do
+            vars <- freshIdents (arity ct)
+            -- FIXME: the type argument to f is wrong if the constructor
+            -- has a dependent type
+            -- FIXME: make a special case for lists?
+            let rec v at = case at of
+                                   EApp (EVar t') c | t' == t -> apply (e f) [c, e v]
+                                   _ -> e v
+                calls = zipWith rec vars (argumentTypes ct)
+                z = EProj (e r) (Ident "zero")
+                p = EProj (e r) (Ident "plus")
+                joinCalls [] = z
+                joinCalls cs = foldr1 (\x y -> apply p [x,y]) cs
+            return $ Case (PCons ci (map PVar vars)) (joinCalls calls)
+    let rt = ERecType [FieldType (Ident "zero") (e b), 
+                       FieldType (Ident "plus") (e b --> e b --> e b)]
+    ift <- abstractType (argumentTypes k) (\vs -> apply (EVar t) vs --> e b)
+    ft <- abstractType (argumentTypes k) (\vs -> ift --> apply (EVar t) vs --> e b)
+    cases <- mapM (uncurry mkCase) cs
+    let cases' = cases ++ [Case PWild (e x)]
+    fb <- abstract (arity k) $ const $ pv f \-> pv x \-> ECase (e x) cases'
+    return $ [TypeDecl co $ EPi (VVar b) EType $ rt --> ft,
+              ValueDecl co [] $ VWild \-> pv r \-> fb]
 
 deriveShow :: Derivator
 deriveShow t k cs = fail $ "derive show not implemented"
