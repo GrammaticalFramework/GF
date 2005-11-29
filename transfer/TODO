@@ -1,5 +1,9 @@
 * Improve front-end language
 
+- Layout syntax, this program is not handled correctly:
+   f = \x -> case x of
+	        { r = _ } -> 0
+
 - Tuple syntax in expressions, types and patterns. Implemented with records.
 
 - List syntax in expressions, types and patterns. Implemented with List.
