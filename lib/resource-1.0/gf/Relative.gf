@@ -1,4 +1,4 @@
-abstract Relative = Cat, Sentence ** {
+abstract Relative = Cat ** {
 
   fun
 

@@ -1,4 +1,4 @@
-concrete RelativeEng of Relative = CatEng, SentenceEng ** open ResEng in {
+concrete RelativeEng of Relative = CatEng ** open ResEng in {
 
   lin
 

@@ -19,14 +19,14 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
     NumInt n = n ;
 
     NumNumeral numeral = {s = numeral.s ! NCard} ;
-    OrdNumeral  numeral = {s = numeral.s ! NOrd} ;
+    OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 
     OrdSuperl a = {s = a.s ! AAdj Superl} ;
 
-    DefSg = {s = "the" ; n = Sg} ;
-    DefPl = {s = "the" ; n = Pl} ;
+    DefSg = {s = artDef ; n = Sg} ;
+    DefPl = {s = artDef ; n = Pl} ;
 
-    IndefSg = {s = "a" ; n = Sg} ;
+    IndefSg = {s = artIndef ; n = Sg} ;
     IndefPl = {s = []  ; n = Pl} ;
 
     ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c} ;

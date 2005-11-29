@@ -1,20 +1,16 @@
-resource ResEng = ParamX ** open Prelude in {
+--1 English auxiliary operations.
 
-  param
+-- This module contains operations that are needed to make the
+-- resource syntax work. To define everything that is needed to
+-- implement $Test$, it moreover contains regular lexical
+-- patterns needed for $Lex$.
 
-    Case = Nom | Acc | Gen ;
-
-    VForm = VInf | VPres | VPast | VPPart | VPresPart ;
-
-    Ord = ODir | OQuest ;
+resource ResEng = ParamEng ** open Prelude in {
 
   oper
 
-    Agr = {n : Number ; p : Person} ;
+-- For $Lex$.
 
-    agrP3 : Number -> {a : Agr} = \n -> {a = {n = n ; p = P3}} ;
-
-    
     regN : Str -> {s : Number => Case => Str} = \car -> {
       s = table {
         Sg => table {
@@ -27,6 +23,16 @@ resource ResEng = ParamX ** open Prelude in {
           }
         }
       } ;
+
+    regA : Str -> {s : AForm => Str} = \warm -> {
+      s = table {
+        AAdj Posit  => warm ;
+        AAdj Compar => warm + "er" ;
+        AAdj Superl => warm + "est" ;
+        AAdv        => warm + "ly"
+        }
+      } ;
+
 
     regV : Str -> {s : VForm => Str} = \walk -> {
       s = table {
@@ -52,6 +58,17 @@ resource ResEng = ParamX ** open Prelude in {
        p = p
        }
      } ;
+
+-- We have just a heuristic definition of the indefinite article.
+-- There are lots of exceptions: consonantic "e" ("euphemism"), consonantic
+-- "o" ("one-sided"), vocalic "u" ("umbrella").
+
+    artIndef = pre {
+      "a" ; 
+      "an" / strs {"a" ; "e" ; "i" ; "o" ; "A" ; "E" ; "I" ; "O" }
+      } ;
+
+    artDef = "the" ;
 
 -- For $Verb$.
 
@@ -94,8 +111,8 @@ resource ResEng = ParamX ** open Prelude in {
         <Cond,Anter,Pos,_>      => vf "would"      ("have" ++ part) ;
         <Cond,Anter,Neg,_>      => vf "wouldn't"   ("have" ++ part)
         } ;
-  s2 = \\_ => []
-  } ;
+    s2 = \\_ => []
+    } ;
 
   predAux : Aux -> VP = \verb -> {
     s = \\t,ant,b,ord,agr => 
@@ -123,13 +140,15 @@ resource ResEng = ParamX ** open Prelude in {
         <Cond,Anter,Pos,_>      => vf "would"      ("have" ++ part) ;
         <Cond,Anter,Neg,_>      => vf "wouldn't"   ("have" ++ part)
         } ;
-  s2 = \\_ => []
-  } ;
+    s2 = \\_ => []
+    } ;
 
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
     s2 = \\a => vp.s2 ! a ++ obj ! a
     } ;
+
+--- This is not functional.
 
   insertAdV : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
@@ -182,50 +201,16 @@ resource ResEng = ParamX ** open Prelude in {
     {n = Pl ; p = P3} => "themselves"
     } ;
 
--- For $Adjective$.
-
-param 
-  AForm = AAdj Degree | AAdv ;
-
-oper
-  regA : Str -> {s : AForm => Str} = \warm -> {
-    s = table {
-      AAdj Posit  => warm ;
-      AAdj Compar => warm + "er" ;
-      AAdj Superl => warm + "est" ;
-      AAdv        => warm + "ly"
-      }
-    } ;
-
--- For $Relative$.
-
-param 
-  RAgr = RNoAg | RAg {n : Number ; p : Person} ;
-
--- For $Coord$.
-
-oper
-  conjAgr : Agr -> Agr -> Agr = \a,b -> {
-    n = conjNumber a.n b.n ;
-    p = conjPerson a.p b.p
-    } ;
-
-
 -- For $Numeral$.
 
-param 
-  DForm = unit  | teen  | ten  ;
-  CardOrd = NCard | NOrd ;
-
-oper 
   mkNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} = 
-  \two -> \twelve -> \twenty -> \second ->
-  {s = table {
-     unit => table {NCard => two ; NOrd => second} ; 
-     teen => \\c => mkCard c twelve ; 
-     ten  => \\c => mkCard c twenty
-     }
-   } ;
+    \two, twelve, twenty, second ->
+    {s = table {
+       unit => table {NCard => two ; NOrd => second} ; 
+       teen => \\c => mkCard c twelve ; 
+       ten  => \\c => mkCard c twenty
+       }
+    } ;
 
   regNum : Str -> {s : DForm => CardOrd => Str} = 
     \six -> mkNum six (six + "teen") (six + "ty") (regOrd six) ;
@@ -233,11 +218,13 @@ oper
   regCardOrd : Str -> {s : CardOrd => Str} = \ten ->
     {s = table {NCard => ten ; NOrd => regOrd ten}} ;
 
-  mkCard : CardOrd -> Str -> Str = \c,ten -> (regCardOrd ten).s ! c ; 
+  mkCard : CardOrd -> Str -> Str = \c,ten -> 
+    (regCardOrd ten).s ! c ; 
 
-  regOrd : Str -> Str = \ten -> case last ten of {
-    "y" => init ten + "ieth" ;
-    _   => ten + "th"
-    } ;
+  regOrd : Str -> Str = \ten -> 
+    case last ten of {
+      "y" => init ten + "ieth" ;
+      _   => ten + "th"
+      } ;
 
 }
