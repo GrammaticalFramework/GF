@@ -17,7 +17,10 @@ import Debug.Trace
 
 type C a = State CState a
 
-type CState = Integer
+data CState = CState {
+                      nextVar :: Integer,
+                      nextMeta :: Integer
+                     }
 
 
 
@@ -25,7 +28,8 @@ declsToCore :: [Decl] -> [Decl]
 declsToCore m = evalState (declsToCore_ m) newState
 
 declsToCore_ :: [Decl] -> C [Decl]
-declsToCore_ =     deriveDecls
+declsToCore_ =     numberMetas
+               >>> deriveDecls
                >>> replaceCons 
                >>> compilePattDecls 
                >>> desugar 
@@ -37,7 +41,25 @@ optimize =     removeUnusedVariables
            >>> betaReduce
 
 newState :: CState
-newState = 0
+newState = CState {
+                   nextVar = 0,
+                   nextMeta = 0
+                  }
+
+--
+-- * Number meta variables
+--
+
+numberMetas :: [Decl] -> C [Decl]
+numberMetas = mapM f
+  where
+  f :: Tree a -> C (Tree a)
+  f t = case t of
+               EMeta -> do
+                        st <- get
+                        put (st { nextMeta = nextMeta st + 1})
+                        return $ EVar $ Ident $ "?" ++ show (nextMeta st)
+               _ -> composOpM f t
 
 --
 -- * Pattern equations
@@ -178,6 +200,7 @@ replaceCons ds = mapM f ds
         -- redexes produced here.
         EVar id | isCons id -> do
                                let Just n = Map.lookup id cs
+                               -- abstract n (apply t)
                                vs <- freshIdents n
                                let c = apply t (map EVar vs)
                                return $ foldr (EAbs . VVar) c vs
@@ -354,9 +377,9 @@ abstractType ts f =
 --   code, and which has not been generated before.
 freshIdent :: C Ident
 freshIdent = do
-             i <- get
-             put (i+1)
-             return (Ident ("x_"++show i))
+             st <- get
+             put (st { nextVar = nextVar st + 1 })
+             return (Ident ("x_"++show (nextVar st)))
 
 freshIdents :: Int -> C [Ident]
 freshIdents n = replicateM n freshIdent

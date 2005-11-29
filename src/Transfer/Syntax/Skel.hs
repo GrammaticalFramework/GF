@@ -56,6 +56,7 @@ transTree t = case t of
   EType  -> failure t
   EStr str -> failure t
   EInt n -> failure t
+  EMeta  -> failure t
   LetDef i exp0 exp1 -> failure t
   Case pattern exp -> failure t
   VVar i -> failure t
@@ -129,6 +130,7 @@ transExp t = case t of
   EType  -> failure t
   EStr str -> failure t
   EInt n -> failure t
+  EMeta  -> failure t
 
 transLetDef :: LetDef -> Result
 transLetDef t = case t of

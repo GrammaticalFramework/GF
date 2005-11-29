@@ -107,10 +107,12 @@ instance Print (Tree c) where
     EType  -> prPrec _i 5 (concatD [doc (showString "Type")])
     EStr str -> prPrec _i 5 (concatD [prt 0 str])
     EInt n -> prPrec _i 5 (concatD [prt 0 n])
+    EMeta tmeta -> prPrec _i 5 (concatD [prt 0 tmeta])
     LetDef cident exp0 exp1 -> prPrec _i 0 (concatD [prt 0 cident , doc (showString ":") , prt 0 exp0 , doc (showString "=") , prt 0 exp1])
     Case pattern exp -> prPrec _i 0 (concatD [prt 0 pattern , doc (showString "->") , prt 0 exp])
     FieldType cident exp -> prPrec _i 0 (concatD [prt 0 cident , doc (showString ":") , prt 0 exp])
     FieldValue cident exp -> prPrec _i 0 (concatD [prt 0 cident , doc (showString "=") , prt 0 exp])
+    TMeta str -> prPrec _i 0 (doc (showString str))
     CIdent str -> prPrec _i 0 (doc (showString str))
 
 instance Print [Decl] where

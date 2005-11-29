@@ -35,6 +35,7 @@ import Transfer.ErrM
 
 L_quoted { PT _ (TL $$) }
 L_integ  { PT _ (TI $$) }
+L_TMeta { PT _ (T_TMeta $$) }
 L_CIdent { PT _ (T_CIdent $$) }
 L_err    { _ }
 
@@ -43,6 +44,7 @@ L_err    { _ }
 
 String  :: { String }  : L_quoted { $1 }
 Integer :: { Integer } : L_integ  { (read $1) :: Integer }
+TMeta    :: { TMeta} : L_TMeta { TMeta ($1)}
 CIdent    :: { CIdent} : L_CIdent { CIdent ($1)}
 
 Module :: { Module }
@@ -140,6 +142,7 @@ Exp5 : '{' '}' { EEmptyRec }
   | 'Type' { EType }
   | String { EStr $1 }
   | Integer { EInt $1 }
+  | TMeta { EMeta $1 }
   | '(' Exp ')' { $2 }
 
 

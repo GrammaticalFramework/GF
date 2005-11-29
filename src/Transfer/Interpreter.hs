@@ -16,6 +16,7 @@ data Value = VStr String
            | VClos Env Exp
            | VCons CIdent [Value]
            | VPrim (Value -> Value)
+           | VMeta Integer
   deriving (Show)
 
 instance Show (a -> b) where
@@ -128,6 +129,7 @@ eval env x = case x of
   EType  -> VType
   EStr str  -> VStr str
   EInt n  -> VInt n
+  EMeta (TMeta t) -> VMeta (read $ drop 1 t)
 
 firstMatch :: Value -> [Case] -> Maybe (Exp,[(CIdent,Value)])
 firstMatch _ [] = Nothing

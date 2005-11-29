@@ -99,6 +99,7 @@ EVar.      Exp11 ::= Ident ;
 EType.     Exp11 ::= "Type" ;
 EStr.      Exp11 ::= String ;
 EInt.      Exp11 ::= Integer ;
+EMeta.     Exp11 ::= "?" ;
 
 coercions Exp 11 ;
 

@@ -38,10 +38,12 @@ transTree t = case t of
   EType  -> failure t
   EStr str -> failure t
   EInt n -> failure t
+  EMeta tmeta -> failure t
   LetDef cident exp0 exp1 -> failure t
   Case pattern exp -> failure t
   FieldType cident exp -> failure t
   FieldValue cident exp -> failure t
+  TMeta str -> failure t
   CIdent str -> failure t
 
 transModule :: Module -> Result
@@ -91,6 +93,7 @@ transExp t = case t of
   EType  -> failure t
   EStr str -> failure t
   EInt n -> failure t
+  EMeta tmeta -> failure t
 
 transLetDef :: LetDef -> Result
 transLetDef t = case t of
@@ -107,6 +110,10 @@ transFieldType t = case t of
 transFieldValue :: FieldValue -> Result
 transFieldValue t = case t of
   FieldValue cident exp -> failure t
+
+transTMeta :: TMeta -> Result
+transTMeta t = case t of
+  TMeta str -> failure t
 
 transCIdent :: CIdent -> Result
 transCIdent t = case t of
