@@ -1,5 +1,8 @@
+Monoid : Type -> Type
+Monoid A = sig { zero : A; plus : A -> A -> A }
+
 Additive : Type -> Type
-Additive A = sig { zero : A; plus : A -> A -> A }
+Additive = Monoid
 
 additive_Integer : Additive Integer
 additive_Integer = rec { zero = 0; plus = prim_add_Int }
@@ -8,9 +11,27 @@ sum : (A:Type) -> Additive A -> List A -> A
 sum _ d (Nil _) = d.zero
 sum A d (Cons _ x xs) = d.plus x (sum A d xs)
 
-Showable : Type -> Type
-Showable A = sig { show : A -> String }
 
 
---Compositional : Type -> Type
---Compositional A = { composOp : }
+
+Show : Type -> Type
+Show A = sig { show : A -> String }
+
+show : (A : Type) -> Show A -> A -> String
+show _  rec{show = show} x = show x
+
+
+
+
+
+
+Compos : (C : Type) -> (C -> Type) -> Type
+Compos C T = sig 
+      composOp : (c : C) -> ((d : C) -> T d -> T d) -> T c -> T c
+      composFold : (B : Type) -> Monoid B -> (c : C) -> ((d : C) -> T d -> b) -> T c -> b
+
+composOp : (T : Type) -> (C : Type) -> Compos C T -> (c : C) -> ((d : C) -> T d -> T d) -> T c -> T c
+composOp _ _ rec{composOp=composOp} c f t = composOp c f t
+
+composFold : (T : Type) -> (C : Type) -> Compos C T -> (B : Type) -> Monoid B -> ((d : C) -> T d -> b) -> T c -> b
+composFold _ _ rec{composFold=composFold} b m c f t = composFold b m c f t
