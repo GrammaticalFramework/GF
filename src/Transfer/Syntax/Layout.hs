@@ -38,7 +38,7 @@ resolveLayout tp = res Nothing [if tl then Implicit 1 else Explicit]
     -- We found an open brace in the input,
     -- put an explicit layout block on the stack.
     -- This is done even if there was no layout word,
-    -- to keep of opening and closing braces.
+    -- to keep opening and closing braces.
     | isLayoutOpen t0 = moveAlong (Explicit:st) [t0] ts
 
   res _ st (t0:ts)

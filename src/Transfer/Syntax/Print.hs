@@ -125,6 +125,7 @@ instance Print (Tree c) where
     EType  -> prPrec _i 11 (concatD [doc (showString "Type")])
     EStr str -> prPrec _i 11 (concatD [prt 0 str])
     EInt n -> prPrec _i 11 (concatD [prt 0 n])
+    EMeta  -> prPrec _i 11 (concatD [doc (showString "?")])
     LetDef i exp0 exp1 -> prPrec _i 0 (concatD [prt 0 i , doc (showString ":") , prt 0 exp0 , doc (showString "=") , prt 0 exp1])
     Case pattern exp -> prPrec _i 0 (concatD [prt 0 pattern , doc (showString "->") , prt 0 exp])
     VVar i -> prPrec _i 0 (concatD [prt 0 i])

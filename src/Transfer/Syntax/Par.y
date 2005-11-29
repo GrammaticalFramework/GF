@@ -38,6 +38,7 @@ import Transfer.ErrM
  '/' { PT _ (TS "/") }
  '%' { PT _ (TS "%") }
  '.' { PT _ (TS ".") }
+ '?' { PT _ (TS "?") }
  'Type' { PT _ (TS "Type") }
  'case' { PT _ (TS "case") }
  'data' { PT _ (TS "data") }
@@ -225,6 +226,7 @@ Exp11 : '{' '}' { EEmptyRec }
   | 'Type' { EType }
   | String { EStr $1 }
   | Integer { EInt $1 }
+  | '?' { EMeta }
   | '(' Exp ')' { $2 }
 
 

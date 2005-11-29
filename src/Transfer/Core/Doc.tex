@@ -34,6 +34,10 @@ Integer literals \nonterminal{Int}\ are nonempty sequences of digits.
 
 
 
+
+TMeta literals are recognized by the regular expression
+\(\mbox{`?'} {\nonterminal{digit}}+\)
+
 CIdent literals are recognized by the regular expression
 \(({\nonterminal{letter}} \mid \mbox{`\_'}) ({\nonterminal{letter}} \mid {\nonterminal{digit}} \mid \mbox{`\_'} \mid \mbox{`''})*\)
 
@@ -162,6 +166,7 @@ All other symbols are terminals.\\
  & {\delimit}  &{\terminal{Type}}  \\
  & {\delimit}  &{\nonterminal{String}}  \\
  & {\delimit}  &{\nonterminal{Integer}}  \\
+ & {\delimit}  &{\nonterminal{TMeta}}  \\
  & {\delimit}  &{\terminal{(}} {\nonterminal{Exp}} {\terminal{)}}  \\
 \end{tabular}\\
 

@@ -72,6 +72,10 @@ EType.     Exp5 ::= "Type" ;
 EStr.      Exp5 ::= String ;
 -- Integer literal expressions.
 EInt.      Exp5 ::= Integer ;
+-- Meta variables
+EMeta.     Exp5 ::= TMeta ;
+
+token TMeta ('?' digit+) ;
 
 coercions Exp 5 ;
 
