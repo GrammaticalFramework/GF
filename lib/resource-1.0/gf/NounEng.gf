@@ -32,7 +32,9 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
     ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c} ;
     ComplN3 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; c2 = f.c3} ;
 
-    AdjCN ap cn = {s = \\n,c => preOrPost ap.isPre ap.s (cn.s ! n ! c)} ;
+    AdjCN ap cn = {
+      s = \\n,c => preOrPost ap.isPre (ap.s ! (agrP3 n).a) (cn.s ! n ! c)
+      } ;
     RelCN cn rs = {s = \\n,c => cn.s ! n ! c ++ rs.s ! {n = n ; p = P3}} ;
 
     SentCN cn s = {s = \\n,c => cn.s ! n ! c ++ conjThat ++ s.s} ;

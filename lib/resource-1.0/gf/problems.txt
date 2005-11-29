@@ -1,0 +1,6 @@
+Serious problems with resource.
+
+29/11: Can't lin AdV properly (parsing; adverbs "always" relative to auxiliary)
+
+29/11/2005: ResEng.reflPron - not enough agreement features.
+

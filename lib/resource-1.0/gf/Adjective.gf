@@ -9,6 +9,8 @@ abstract Adjective = Cat ** {
 
     ComplA2 : A2 -> NP -> AP ;
 
+    ReflA2  : A2 -> AP ;
+
     SentAP  : AP -> S  -> AP ;
     QuestAP : AP -> QS -> AP ;
 
