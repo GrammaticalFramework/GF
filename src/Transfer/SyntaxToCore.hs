@@ -186,22 +186,27 @@ argumentTypes e = case e of
 
 -- | Fix up constructor patterns and applications.
 replaceCons :: [Decl] -> C [Decl]
-replaceCons ds = mapM f ds
+replaceCons ds = mapM (f cs) ds
   where
   cs = consArities ds 
-  isCons id = id `Map.member` cs 
-  f :: Tree a -> C (Tree a)
-  f t = case t of
+  f :: DataConsInfo -> Tree a -> C (Tree a)
+  f cs x = case x of
         -- get rid of the PConsTop hack
-        PConsTop id p1 ps -> f (PCons id (p1:ps))
+        PConsTop id p1 ps -> f cs (PCons id (p1:ps))
         -- replace patterns C where C is a constructor with (C)
         PVar id | isCons id -> return $ PCons id []
+        -- don't eta-expand overshadowed constructors
+        EAbs (VVar id) e | isCons id -> 
+                  liftM (EAbs (VVar id)) (f (Map.delete id cs) e)
+        EPi (VVar id) t e | isCons id -> 
+                  liftM2 (EPi (VVar id)) (f cs t) (f (Map.delete id cs) e)
         -- eta-expand constructors. betaReduce will remove any beta 
         -- redexes produced here.
         EVar id | isCons id -> do
                                let Just n = Map.lookup id cs
-                               abstract n (apply t)
-        _ -> composOpM f t
+                               abstract n (apply x)
+        _ -> composOpM (f cs) x
+    where isCons = (`Map.member` cs)
 
 --
 -- * Do simple beta reductions.
