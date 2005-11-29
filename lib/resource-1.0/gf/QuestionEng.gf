@@ -1,4 +1,4 @@
-concrete QuestionEng of Question = CatEng, SentenceEng ** open ResEng in {
+concrete QuestionEng of Question = CatEng ** open ResEng in {
 
   lin
 

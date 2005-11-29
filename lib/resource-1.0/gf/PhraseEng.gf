@@ -11,6 +11,7 @@ concrete PhraseEng of Phrase = CatEng, TenseX ** open ResEng in {
     UttIP ip = {s = ip.s ! Nom} ; --- Acc also
     UttIAdv iadv = iadv ;
     UttNP np = {s = np.s ! Acc} ;
+    UttVP vp = {s = "to" ++ infVP vp (agrP3 Sg).a} ;
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;

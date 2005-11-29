@@ -1,4 +1,4 @@
-abstract Question = Cat, Sentence ** {
+abstract Question = Cat ** {
 
   fun
 
