@@ -26,6 +26,8 @@
 
 - Negated patterns?
 
+- Patterns with guards
+
 * Improve interpreter
 
 - More efficient handling of constructor application
