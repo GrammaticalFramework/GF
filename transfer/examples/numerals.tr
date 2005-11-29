@@ -1,0 +1,61 @@
+data Cat : Type where {
+  Digit : Cat ;
+  Numeral : Cat ;
+  Sub10 : Cat ;
+  Sub100 : Cat ;
+  Sub1000 : Cat ;
+  Sub1000000 : Cat
+} ;
+
+data Tree : (_ : Cat)-> Type where {
+  n2 : Tree Digit ;
+  n3 : Tree Digit ;
+  n4 : Tree Digit ;
+  n5 : Tree Digit ;
+  n6 : Tree Digit ;
+  n7 : Tree Digit ;
+  n8 : Tree Digit ;
+  n9 : Tree Digit ;
+  num : (_ : Tree Sub1000000)-> Tree Numeral ;
+  pot0 : (_ : Tree Digit)-> Tree Sub10 ;
+  pot01 : Tree Sub10 ;
+  pot0as1 : (_ : Tree Sub10)-> Tree Sub100 ;
+  pot1 : (_ : Tree Digit)-> Tree Sub100 ;
+  pot110 : Tree Sub100 ;
+  pot111 : Tree Sub100 ;
+  pot1as2 : (_ : Tree Sub100)-> Tree Sub1000 ;
+  pot1plus : (_ : Tree Digit)-> (_ : Tree Sub10)-> Tree Sub100 ;
+  pot1to19 : (_ : Tree Digit)-> Tree Sub100 ;
+  pot2 : (_ : Tree Sub10)-> Tree Sub1000 ;
+  pot2as3 : (_ : Tree Sub1000)-> Tree Sub1000000 ;
+  pot2plus : (_ : Tree Sub10)-> (_ : Tree Sub100)-> Tree Sub1000 ;
+  pot3 : (_ : Tree Sub1000)-> Tree Sub1000000 ;
+  pot3plus : (_ : Tree Sub1000)-> (_ : Tree Sub1000)-> Tree Sub1000000
+}
+
+
+num2int : (A : Cat) -> Tree A -> Integer
+num2int _ n = case n of
+		n2 -> 2
+		n3 -> 3
+		n4 -> 4
+		n5 -> 5
+		n6 -> 6
+		n7 -> 7
+		n8 -> 8
+		n9 -> 9
+		num x -> num2int ? x
+		pot0 x -> num2int ? x
+		pot01 -> 1
+		pot0as1 x -> num2int ? x
+		pot1 x -> 10 * num2int ? x
+		pot110 -> 10
+		pot111 -> 11
+		pot1as2 x -> num2int ? x
+		pot1plus x y -> 10 * num2int ? x + num2int ? y
+		pot1to19 x -> 10 + num2int ? x
+		pot2 x -> 100 * num2int ? x
+		pot2as3 x -> 10 * num2int ? x
+		pot2plus x y -> 100 * num2int ? x + num2int ? y
+		pot3 x -> 1000 * num2int ? x
+		pot3plus x y -> 1000 * num2int ? x + num2int ? y
