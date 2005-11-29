@@ -1,15 +1,15 @@
 Additive : Type -> Type
-Additive A = { zero : A; plus : A -> A -> A }
+Additive A = sig { zero : A; plus : A -> A -> A }
 
 additive_Integer : Additive Integer
-additive_Integer = { zero = 0; plus = prim_add_Int }
+additive_Integer = rec { zero = 0; plus = prim_add_Int }
 
 sum : (A:Type) -> Additive A -> List A -> A
 sum _ d (Nil _) = d.zero
 sum A d (Cons _ x xs) = d.plus x (sum A d xs)
 
 Showable : Type -> Type
-Showable A = { show : A -> String }
+Showable A = sig { show : A -> String }
 
 
 --Compositional : Type -> Type
