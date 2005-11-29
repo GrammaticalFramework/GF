@@ -200,10 +200,7 @@ replaceCons ds = mapM f ds
         -- redexes produced here.
         EVar id | isCons id -> do
                                let Just n = Map.lookup id cs
-                               -- abstract n (apply t)
-                               vs <- freshIdents n
-                               let c = apply t (map EVar vs)
-                               return $ foldr (EAbs . VVar) c vs
+                               abstract n (apply t)
         _ -> composOpM f t
 
 --
@@ -215,7 +212,10 @@ betaReduce = return . map f
  where
  f :: Tree a -> Tree a
  f t = case t of
-              EApp (EAbs (VVar x) b) e | countFreeOccur x b == 1 -> f (subst x e b)
+              EApp e1 e2 -> 
+                  case (f e1, f e2) of
+                       (EAbs (VVar x) b, e) | countFreeOccur x b == 1 -> f (subst x e b)
+                       (e1',e2') -> EApp e1' e2'
               _ -> composOp f t
 
 --
