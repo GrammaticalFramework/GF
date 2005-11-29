@@ -45,6 +45,9 @@ lookupEnv (Env e) id =
 prEnv :: Env -> String
 prEnv (Env e) = unlines [ printTree id ++ ": " ++ printValue v | (id,v) <- e ]
 
+seqEnv :: Env -> Env
+seqEnv (Env e) = Env $! deepSeqList [ fst p `seq` p | p <- e ]
+
 -- | The built-in types and functions.
 builtin :: Env
 builtin = 
@@ -93,18 +96,18 @@ addModuleEnv env (Module ds) =
 eval :: Env -> Exp -> Value
 eval env x = case x of
   ELet defs exp2 -> 
-      let env' = deepSeqList [ v `seq` (id, v) | LetDef id _ e <- defs, 
-                                                 let v = eval env' e] 
+      let env' = [ (id, v) | LetDef id _ e <- defs, 
+                                     let v = eval env' e] 
                  `addToEnv` env
-       in eval env' exp2
+       in eval (seqEnv env') exp2
   ECase exp cases -> 
       let v = eval env exp
           r = case firstMatch v cases of
                   Nothing -> error $ "No pattern matched " ++ printValue v
                   Just (e,bs) -> eval (bs `addToEnv` env) e
        in v `seq` r
-  EAbs _ _ -> VClos env $! x
-  EPi _ _ _  -> VClos env $! x
+  EAbs _ _ -> VClos env x
+  EPi _ _ _  -> VClos env x
   EApp exp1 exp2 -> 
       let v1 = eval env exp1
           v2 = eval env exp2
