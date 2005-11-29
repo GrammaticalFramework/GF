@@ -186,6 +186,7 @@ valueToExp v =
            VClos env e  -> e
            VCons c vs -> foldl EApp (EVar c) (map valueToExp vs)
            VPrim _    -> EVar (CIdent "<<primitive>>") -- FIXME: what to return here?
+           VMeta n    -> EMeta $ TMeta $ "?" ++ show n
 
 --
 -- * Pretty printing of values
