@@ -49,6 +49,8 @@ import Transfer.ErrM
  'in' { PT _ (TS "in") }
  'let' { PT _ (TS "let") }
  'of' { PT _ (TS "of") }
+ 'rec' { PT _ (TS "rec") }
+ 'sig' { PT _ (TS "sig") }
  'then' { PT _ (TS "then") }
  'where' { PT _ (TS "where") }
 
@@ -108,7 +110,7 @@ Pattern : Ident Pattern1 ListPattern { PConsTop $1 $2 (reverse $3) }
 
 Pattern1 :: { Pattern }
 Pattern1 : '(' Ident ListPattern ')' { PCons $2 (reverse $3) } 
-  | '{' ListFieldPattern '}' { PRec $2 }
+  | 'rec' '{' ListFieldPattern '}' { PRec $3 }
   | 'Type' { PType }
   | String { PStr $1 }
   | Integer { PInt $1 }
@@ -219,9 +221,8 @@ Exp10 : Exp10 '.' Ident { EProj $1 $3 }
 
 
 Exp11 :: { Exp }
-Exp11 : '{' '}' { EEmptyRec } 
-  | '{' ListFieldType '}' { ERecType $2 }
-  | '{' ListFieldValue '}' { ERec $2 }
+Exp11 : 'sig' '{' ListFieldType '}' { ERecType $3 } 
+  | 'rec' '{' ListFieldValue '}' { ERec $3 }
   | Ident { EVar $1 }
   | 'Type' { EType }
   | String { EStr $1 }
@@ -235,7 +236,8 @@ FieldType : Ident ':' Exp { FieldType $1 $3 }
 
 
 ListFieldType :: { [FieldType] }
-ListFieldType : FieldType { (:[]) $1 } 
+ListFieldType : {- empty -} { [] } 
+  | FieldType { (:[]) $1 }
   | FieldType ';' ListFieldType { (:) $1 $3 }
 
 
@@ -244,7 +246,8 @@ FieldValue : Ident '=' Exp { FieldValue $1 $3 }
 
 
 ListFieldValue :: { [FieldValue] }
-ListFieldValue : FieldValue { (:[]) $1 } 
+ListFieldValue : {- empty -} { [] } 
+  | FieldValue { (:[]) $1 }
   | FieldValue ';' ListFieldValue { (:) $1 $3 }
 
 

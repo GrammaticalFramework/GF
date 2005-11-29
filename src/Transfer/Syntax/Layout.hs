@@ -10,7 +10,7 @@ import Data.Maybe (isNothing, fromJust)
 -- local parameters
 
 topLayout = True
-layoutWords = ["let","where","of"]
+layoutWords = ["let","where","of","rec","sig"]
 layoutStopWords = ["in"]
 
 -- layout separators

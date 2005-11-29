@@ -89,7 +89,7 @@ instance Print (Tree c) where
     ConsDecl i exp -> prPrec _i 0 (concatD [prt 0 i , doc (showString ":") , prt 0 exp])
     PConsTop i pattern patterns -> prPrec _i 0 (concatD [prt 0 i , prt 1 pattern , prt 0 patterns])
     PCons i patterns -> prPrec _i 1 (concatD [doc (showString "(") , prt 0 i , prt 0 patterns , doc (showString ")")])
-    PRec fieldpatterns -> prPrec _i 1 (concatD [doc (showString "{") , prt 0 fieldpatterns , doc (showString "}")])
+    PRec fieldpatterns -> prPrec _i 1 (concatD [doc (showString "rec") , doc (showString "{") , prt 0 fieldpatterns , doc (showString "}")])
     PType  -> prPrec _i 1 (concatD [doc (showString "Type")])
     PStr str -> prPrec _i 1 (concatD [prt 0 str])
     PInt n -> prPrec _i 1 (concatD [prt 0 n])
@@ -118,9 +118,8 @@ instance Print (Tree c) where
     ENeg exp -> prPrec _i 8 (concatD [doc (showString "-") , prt 8 exp])
     EApp exp0 exp1 -> prPrec _i 9 (concatD [prt 9 exp0 , prt 10 exp1])
     EProj exp i -> prPrec _i 10 (concatD [prt 10 exp , doc (showString ".") , prt 0 i])
-    EEmptyRec  -> prPrec _i 11 (concatD [doc (showString "{") , doc (showString "}")])
-    ERecType fieldtypes -> prPrec _i 11 (concatD [doc (showString "{") , prt 0 fieldtypes , doc (showString "}")])
-    ERec fieldvalues -> prPrec _i 11 (concatD [doc (showString "{") , prt 0 fieldvalues , doc (showString "}")])
+    ERecType fieldtypes -> prPrec _i 11 (concatD [doc (showString "sig") , doc (showString "{") , prt 0 fieldtypes , doc (showString "}")])
+    ERec fieldvalues -> prPrec _i 11 (concatD [doc (showString "rec") , doc (showString "{") , prt 0 fieldvalues , doc (showString "}")])
     EVar i -> prPrec _i 11 (concatD [prt 0 i])
     EType  -> prPrec _i 11 (concatD [doc (showString "Type")])
     EStr str -> prPrec _i 11 (concatD [prt 0 str])
@@ -170,9 +169,11 @@ instance Print [Case] where
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
 instance Print [FieldType] where
   prt _ es = case es of
+   [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
 instance Print [FieldValue] where
   prt _ es = case es of
+   [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])

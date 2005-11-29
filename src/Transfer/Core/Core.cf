@@ -24,7 +24,7 @@ PCons.     Pattern ::= "(" CIdent [Pattern] ")" ;
 -- constructor patterns must have parantheses.
 PVar.      Pattern ::= PatternVariable ;
 -- Record patterns.
-PRec.      Pattern ::= "{" [FieldPattern] "}";
+PRec.      Pattern ::= "rec" "{" [FieldPattern] "}";
 -- Patterns matching the constant Type.
 PType.     Pattern ::= "Type" ;
 -- String literal patterns.
@@ -59,11 +59,17 @@ EApp.      Exp3 ::= Exp3 Exp4 ;
 -- Record field projection.
 EProj.     Exp4 ::= Exp4 "." CIdent ;
 
-EEmptyRec. Exp5 ::= "{" "}" ;
 -- Record types.
-ERecType.  Exp5 ::= "{" [FieldType] "}" ;
+ERecType.  Exp5 ::= "sig" "{" [FieldType] "}" ;
+FieldType. FieldType  ::= CIdent ":" Exp ;
+separator FieldType ";" ;
+
 -- Record expressions.
-ERec.      Exp5 ::= "{" [FieldValue] "}" ;
+ERec.      Exp5 ::= "rec" "{" [FieldValue] "}" ;
+FieldValue.FieldValue ::= CIdent "=" Exp ;
+separator FieldValue ";" ;
+
+
 -- Functions, constructors and local variables.
 EVar.      Exp5 ::= CIdent ;
 -- The constant Type.
@@ -79,22 +85,9 @@ token TMeta ('?' digit+) ;
 
 coercions Exp 5 ;
 
-{-
--- Hack to make lists of function arguments not conflict with
--- application.
-[].  [Exp] ::= ;
-(:). [Exp] ::= Exp4 [Exp] ;
--}
 
 Case. Case ::= Pattern "->" Exp ;
 separator Case ";" ;
-
-
-FieldType.  FieldType  ::= CIdent ":" Exp ;
-separator nonempty FieldType ";" ;
-
-FieldValue. FieldValue ::= CIdent "=" Exp ;
-separator nonempty FieldValue ";" ;
 
 
 -- Identifiers in core can start with underscore to allow

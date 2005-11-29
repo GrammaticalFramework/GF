@@ -87,7 +87,7 @@ instance Print (Tree c) where
     ConsDecl cident exp -> prPrec _i 0 (concatD [prt 0 cident , doc (showString ":") , prt 0 exp])
     PCons cident patterns -> prPrec _i 0 (concatD [doc (showString "(") , prt 0 cident , prt 0 patterns , doc (showString ")")])
     PVar patternvariable -> prPrec _i 0 (concatD [prt 0 patternvariable])
-    PRec fieldpatterns -> prPrec _i 0 (concatD [doc (showString "{") , prt 0 fieldpatterns , doc (showString "}")])
+    PRec fieldpatterns -> prPrec _i 0 (concatD [doc (showString "rec") , doc (showString "{") , prt 0 fieldpatterns , doc (showString "}")])
     PType  -> prPrec _i 0 (concatD [doc (showString "Type")])
     PStr str -> prPrec _i 0 (concatD [prt 0 str])
     PInt n -> prPrec _i 0 (concatD [prt 0 n])
@@ -100,18 +100,17 @@ instance Print (Tree c) where
     EPi patternvariable exp0 exp1 -> prPrec _i 2 (concatD [doc (showString "(") , prt 0 patternvariable , doc (showString ":") , prt 0 exp0 , doc (showString ")") , doc (showString "->") , prt 0 exp1])
     EApp exp0 exp1 -> prPrec _i 3 (concatD [prt 3 exp0 , prt 4 exp1])
     EProj exp cident -> prPrec _i 4 (concatD [prt 4 exp , doc (showString ".") , prt 0 cident])
-    EEmptyRec  -> prPrec _i 5 (concatD [doc (showString "{") , doc (showString "}")])
-    ERecType fieldtypes -> prPrec _i 5 (concatD [doc (showString "{") , prt 0 fieldtypes , doc (showString "}")])
-    ERec fieldvalues -> prPrec _i 5 (concatD [doc (showString "{") , prt 0 fieldvalues , doc (showString "}")])
+    ERecType fieldtypes -> prPrec _i 5 (concatD [doc (showString "sig") , doc (showString "{") , prt 0 fieldtypes , doc (showString "}")])
+    ERec fieldvalues -> prPrec _i 5 (concatD [doc (showString "rec") , doc (showString "{") , prt 0 fieldvalues , doc (showString "}")])
     EVar cident -> prPrec _i 5 (concatD [prt 0 cident])
     EType  -> prPrec _i 5 (concatD [doc (showString "Type")])
     EStr str -> prPrec _i 5 (concatD [prt 0 str])
     EInt n -> prPrec _i 5 (concatD [prt 0 n])
     EMeta tmeta -> prPrec _i 5 (concatD [prt 0 tmeta])
     LetDef cident exp0 exp1 -> prPrec _i 0 (concatD [prt 0 cident , doc (showString ":") , prt 0 exp0 , doc (showString "=") , prt 0 exp1])
-    Case pattern exp -> prPrec _i 0 (concatD [prt 0 pattern , doc (showString "->") , prt 0 exp])
     FieldType cident exp -> prPrec _i 0 (concatD [prt 0 cident , doc (showString ":") , prt 0 exp])
     FieldValue cident exp -> prPrec _i 0 (concatD [prt 0 cident , doc (showString "=") , prt 0 exp])
+    Case pattern exp -> prPrec _i 0 (concatD [prt 0 pattern , doc (showString "->") , prt 0 exp])
     TMeta str -> prPrec _i 0 (doc (showString str))
     CIdent str -> prPrec _i 0 (doc (showString str))
 
@@ -139,16 +138,18 @@ instance Print [LetDef] where
    [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
-instance Print [Case] where
+instance Print [FieldType] where
   prt _ es = case es of
    [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
-instance Print [FieldType] where
-  prt _ es = case es of
-   [x] -> (concatD [prt 0 x])
-   x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
 instance Print [FieldValue] where
   prt _ es = case es of
+   [] -> (concatD [])
+   [x] -> (concatD [prt 0 x])
+   x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
+instance Print [Case] where
+  prt _ es = case es of
+   [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])

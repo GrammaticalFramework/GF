@@ -48,7 +48,8 @@ The reserved words used in Syntax are the following: \\
 {\reserved{Type}} &{\reserved{case}} &{\reserved{data}} \\
 {\reserved{derive}} &{\reserved{else}} &{\reserved{if}} \\
 {\reserved{import}} &{\reserved{in}} &{\reserved{let}} \\
-{\reserved{of}} &{\reserved{then}} &{\reserved{where}} \\
+{\reserved{of}} &{\reserved{rec}} &{\reserved{sig}} \\
+{\reserved{then}} &{\reserved{where}} & \\
 \end{tabular}\\
 
 The symbols used in Syntax are the following: \\
@@ -118,7 +119,7 @@ All other symbols are terminals.\\
 
 \begin{tabular}{lll}
 {\nonterminal{Pattern1}} & {\arrow}  &{\terminal{(}} {\nonterminal{Ident}} {\nonterminal{ListPattern}} {\terminal{)}}  \\
- & {\delimit}  &{\terminal{\{}} {\nonterminal{ListFieldPattern}} {\terminal{\}}}  \\
+ & {\delimit}  &{\terminal{rec}} {\terminal{\{}} {\nonterminal{ListFieldPattern}} {\terminal{\}}}  \\
  & {\delimit}  &{\terminal{Type}}  \\
  & {\delimit}  &{\nonterminal{String}}  \\
  & {\delimit}  &{\nonterminal{Integer}}  \\
@@ -229,9 +230,8 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp11}} & {\arrow}  &{\terminal{\{}} {\terminal{\}}}  \\
- & {\delimit}  &{\terminal{\{}} {\nonterminal{ListFieldType}} {\terminal{\}}}  \\
- & {\delimit}  &{\terminal{\{}} {\nonterminal{ListFieldValue}} {\terminal{\}}}  \\
+{\nonterminal{Exp11}} & {\arrow}  &{\terminal{sig}} {\terminal{\{}} {\nonterminal{ListFieldType}} {\terminal{\}}}  \\
+ & {\delimit}  &{\terminal{rec}} {\terminal{\{}} {\nonterminal{ListFieldValue}} {\terminal{\}}}  \\
  & {\delimit}  &{\nonterminal{Ident}}  \\
  & {\delimit}  &{\terminal{Type}}  \\
  & {\delimit}  &{\nonterminal{String}}  \\
@@ -245,7 +245,8 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{ListFieldType}} & {\arrow}  &{\nonterminal{FieldType}}  \\
+{\nonterminal{ListFieldType}} & {\arrow}  &{\emptyP} \\
+ & {\delimit}  &{\nonterminal{FieldType}}  \\
  & {\delimit}  &{\nonterminal{FieldType}} {\terminal{;}} {\nonterminal{ListFieldType}}  \\
 \end{tabular}\\
 
@@ -254,7 +255,8 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{ListFieldValue}} & {\arrow}  &{\nonterminal{FieldValue}}  \\
+{\nonterminal{ListFieldValue}} & {\arrow}  &{\emptyP} \\
+ & {\delimit}  &{\nonterminal{FieldValue}}  \\
  & {\delimit}  &{\nonterminal{FieldValue}} {\terminal{;}} {\nonterminal{ListFieldValue}}  \\
 \end{tabular}\\
 

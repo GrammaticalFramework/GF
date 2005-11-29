@@ -22,12 +22,12 @@ data Exp_
 type Exp = Tree Exp_
 data LetDef_
 type LetDef = Tree LetDef_
-data Case_
-type Case = Tree Case_
 data FieldType_
 type FieldType = Tree FieldType_
 data FieldValue_
 type FieldValue = Tree FieldValue_
+data Case_
+type Case = Tree Case_
 data TMeta_
 type TMeta = Tree TMeta_
 data CIdent_
@@ -54,7 +54,6 @@ data Tree :: * -> * where
     EPi :: PatternVariable -> Exp -> Exp -> Tree Exp_
     EApp :: Exp -> Exp -> Tree Exp_
     EProj :: Exp -> CIdent -> Tree Exp_
-    EEmptyRec :: Tree Exp_
     ERecType :: [FieldType] -> Tree Exp_
     ERec :: [FieldValue] -> Tree Exp_
     EVar :: CIdent -> Tree Exp_
@@ -63,9 +62,9 @@ data Tree :: * -> * where
     EInt :: Integer -> Tree Exp_
     EMeta :: TMeta -> Tree Exp_
     LetDef :: CIdent -> Exp -> Exp -> Tree LetDef_
-    Case :: Pattern -> Exp -> Tree Case_
     FieldType :: CIdent -> Exp -> Tree FieldType_
     FieldValue :: CIdent -> Exp -> Tree FieldValue_
+    Case :: Pattern -> Exp -> Tree Case_
     TMeta :: String -> Tree TMeta_
     CIdent :: String -> Tree CIdent_
 
@@ -104,9 +103,9 @@ composOpM f t = case t of
     EVar cident -> return EVar `ap` f cident
     EMeta tmeta -> return EMeta `ap` f tmeta
     LetDef cident exp0 exp1 -> return LetDef `ap` f cident `ap` f exp0 `ap` f exp1
-    Case pattern exp -> return Case `ap` f pattern `ap` f exp
     FieldType cident exp -> return FieldType `ap` f cident `ap` f exp
     FieldValue cident exp -> return FieldValue `ap` f cident `ap` f exp
+    Case pattern exp -> return Case `ap` f pattern `ap` f exp
     _ -> return t
 
 composOpFold :: b -> (b -> b -> b) -> (forall a. Tree a -> b) -> Tree c -> b
@@ -132,9 +131,9 @@ composOpFold zero combine f t = case t of
     EVar cident -> f cident
     EMeta tmeta -> f tmeta
     LetDef cident exp0 exp1 -> f cident `combine` f exp0 `combine` f exp1
-    Case pattern exp -> f pattern `combine` f exp
     FieldType cident exp -> f cident `combine` f exp
     FieldValue cident exp -> f cident `combine` f exp
+    Case pattern exp -> f pattern `combine` f exp
     _ -> zero
 
 instance Show (Tree c) where
@@ -159,7 +158,6 @@ instance Show (Tree c) where
     EPi patternvariable exp0 exp1 -> opar n . showString "EPi" . showChar ' ' . showsPrec 1 patternvariable . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EApp exp0 exp1 -> opar n . showString "EApp" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EProj exp cident -> opar n . showString "EProj" . showChar ' ' . showsPrec 1 exp . showChar ' ' . showsPrec 1 cident . cpar n
-    EEmptyRec -> showString "EEmptyRec"
     ERecType fieldtypes -> opar n . showString "ERecType" . showChar ' ' . showsPrec 1 fieldtypes . cpar n
     ERec fieldvalues -> opar n . showString "ERec" . showChar ' ' . showsPrec 1 fieldvalues . cpar n
     EVar cident -> opar n . showString "EVar" . showChar ' ' . showsPrec 1 cident . cpar n
@@ -168,9 +166,9 @@ instance Show (Tree c) where
     EInt n -> opar n . showString "EInt" . showChar ' ' . showsPrec 1 n . cpar n
     EMeta tmeta -> opar n . showString "EMeta" . showChar ' ' . showsPrec 1 tmeta . cpar n
     LetDef cident exp0 exp1 -> opar n . showString "LetDef" . showChar ' ' . showsPrec 1 cident . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
-    Case pattern exp -> opar n . showString "Case" . showChar ' ' . showsPrec 1 pattern . showChar ' ' . showsPrec 1 exp . cpar n
     FieldType cident exp -> opar n . showString "FieldType" . showChar ' ' . showsPrec 1 cident . showChar ' ' . showsPrec 1 exp . cpar n
     FieldValue cident exp -> opar n . showString "FieldValue" . showChar ' ' . showsPrec 1 cident . showChar ' ' . showsPrec 1 exp . cpar n
+    Case pattern exp -> opar n . showString "Case" . showChar ' ' . showsPrec 1 pattern . showChar ' ' . showsPrec 1 exp . cpar n
     TMeta str -> opar n . showString "TMeta" . showChar ' ' . showsPrec 1 str . cpar n
     CIdent str -> opar n . showString "CIdent" . showChar ' ' . showsPrec 1 str . cpar n
    where opar n = if n > 0 then showChar '(' else id
@@ -199,7 +197,6 @@ johnMajorEq (EAbs patternvariable exp) (EAbs patternvariable_ exp_) = patternvar
 johnMajorEq (EPi patternvariable exp0 exp1) (EPi patternvariable_ exp0_ exp1_) = patternvariable == patternvariable_ && exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EApp exp0 exp1) (EApp exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EProj exp cident) (EProj exp_ cident_) = exp == exp_ && cident == cident_
-johnMajorEq EEmptyRec EEmptyRec = True
 johnMajorEq (ERecType fieldtypes) (ERecType fieldtypes_) = fieldtypes == fieldtypes_
 johnMajorEq (ERec fieldvalues) (ERec fieldvalues_) = fieldvalues == fieldvalues_
 johnMajorEq (EVar cident) (EVar cident_) = cident == cident_
@@ -208,9 +205,9 @@ johnMajorEq (EStr str) (EStr str_) = str == str_
 johnMajorEq (EInt n) (EInt n_) = n == n_
 johnMajorEq (EMeta tmeta) (EMeta tmeta_) = tmeta == tmeta_
 johnMajorEq (LetDef cident exp0 exp1) (LetDef cident_ exp0_ exp1_) = cident == cident_ && exp0 == exp0_ && exp1 == exp1_
-johnMajorEq (Case pattern exp) (Case pattern_ exp_) = pattern == pattern_ && exp == exp_
 johnMajorEq (FieldType cident exp) (FieldType cident_ exp_) = cident == cident_ && exp == exp_
 johnMajorEq (FieldValue cident exp) (FieldValue cident_ exp_) = cident == cident_ && exp == exp_
+johnMajorEq (Case pattern exp) (Case pattern_ exp_) = pattern == pattern_ && exp == exp_
 johnMajorEq (TMeta str) (TMeta str_) = str == str_
 johnMajorEq (CIdent str) (CIdent str_) = str == str_
 johnMajorEq _ _ = False
@@ -238,20 +235,19 @@ instance Ord (Tree c) where
     index (EPi _ _ _) = 17
     index (EApp _ _) = 18
     index (EProj _ _) = 19
-    index (EEmptyRec ) = 20
-    index (ERecType _) = 21
-    index (ERec _) = 22
-    index (EVar _) = 23
-    index (EType ) = 24
-    index (EStr _) = 25
-    index (EInt _) = 26
-    index (EMeta _) = 27
-    index (LetDef _ _ _) = 28
-    index (Case _ _) = 29
-    index (FieldType _ _) = 30
-    index (FieldValue _ _) = 31
-    index (TMeta _) = 32
-    index (CIdent _) = 33
+    index (ERecType _) = 20
+    index (ERec _) = 21
+    index (EVar _) = 22
+    index (EType ) = 23
+    index (EStr _) = 24
+    index (EInt _) = 25
+    index (EMeta _) = 26
+    index (LetDef _ _ _) = 27
+    index (FieldType _ _) = 28
+    index (FieldValue _ _) = 29
+    index (Case _ _) = 30
+    index (TMeta _) = 31
+    index (CIdent _) = 32
     compareSame (Module decls) (Module decls_) = compare decls decls_
     compareSame (DataDecl cident exp consdecls) (DataDecl cident_ exp_ consdecls_) = mappend (compare cident cident_) (mappend (compare exp exp_) (compare consdecls consdecls_))
     compareSame (TypeDecl cident exp) (TypeDecl cident_ exp_) = mappend (compare cident cident_) (compare exp exp_)
@@ -272,7 +268,6 @@ instance Ord (Tree c) where
     compareSame (EPi patternvariable exp0 exp1) (EPi patternvariable_ exp0_ exp1_) = mappend (compare patternvariable patternvariable_) (mappend (compare exp0 exp0_) (compare exp1 exp1_))
     compareSame (EApp exp0 exp1) (EApp exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
     compareSame (EProj exp cident) (EProj exp_ cident_) = mappend (compare exp exp_) (compare cident cident_)
-    compareSame EEmptyRec EEmptyRec = EQ
     compareSame (ERecType fieldtypes) (ERecType fieldtypes_) = compare fieldtypes fieldtypes_
     compareSame (ERec fieldvalues) (ERec fieldvalues_) = compare fieldvalues fieldvalues_
     compareSame (EVar cident) (EVar cident_) = compare cident cident_
@@ -281,9 +276,9 @@ instance Ord (Tree c) where
     compareSame (EInt n) (EInt n_) = compare n n_
     compareSame (EMeta tmeta) (EMeta tmeta_) = compare tmeta tmeta_
     compareSame (LetDef cident exp0 exp1) (LetDef cident_ exp0_ exp1_) = mappend (compare cident cident_) (mappend (compare exp0 exp0_) (compare exp1 exp1_))
-    compareSame (Case pattern exp) (Case pattern_ exp_) = mappend (compare pattern pattern_) (compare exp exp_)
     compareSame (FieldType cident exp) (FieldType cident_ exp_) = mappend (compare cident cident_) (compare exp exp_)
     compareSame (FieldValue cident exp) (FieldValue cident_ exp_) = mappend (compare cident cident_) (compare exp exp_)
+    compareSame (Case pattern exp) (Case pattern_ exp_) = mappend (compare pattern pattern_) (compare exp exp_)
     compareSame (TMeta str) (TMeta str_) = compare str str_
     compareSame (CIdent str) (CIdent str_) = compare str str_
     compareSame x y = error "BNFC error:" compareSame
