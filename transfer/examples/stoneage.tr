@@ -1,0 +1,223 @@
+import bool
+
+data Cat : Type where {
+  CN : Cat ;
+  NP : Cat ;
+  S : Cat
+} ;
+data Tree : (_ : Cat)-> Type where {
+  A : (h_ : Tree CN)-> Tree NP ;
+  All : (h_ : Tree CN)-> Tree NP ;
+  Animal : Tree CN ;
+  Ashes : Tree CN ;
+  Back : Tree CN ;
+  Bad : (h_ : Tree CN)-> Tree CN ;
+  Bark : Tree CN ;
+  Belly : Tree CN ;
+  Big : (h_ : Tree CN)-> Tree CN ;
+  Bird : Tree CN ;
+  Bite : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Black : (h_ : Tree CN)-> Tree CN ;
+  Blood : Tree CN ;
+  Blow : (h_ : Tree NP)-> Tree S ;
+  Bone : Tree CN ;
+  Breast : Tree CN ;
+  Breathe : (h_ : Tree NP)-> Tree S ;
+  Burn : (h_ : Tree NP)-> Tree S ;
+  Child : Tree CN ;
+  Cloud : Tree CN ;
+  Cold : (h_ : Tree CN)-> Tree CN ;
+  Come : (h_ : Tree NP)-> Tree S ;
+  Correct : (h_ : Tree CN)-> Tree CN ;
+  Count : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Cut : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Day : Tree CN ;
+  Die : (h_ : Tree NP)-> Tree S ;
+  Dig : (h_ : Tree NP)-> Tree S ;
+  Dirty : (h_ : Tree CN)-> Tree CN ;
+  Dog : Tree CN ;
+  Drink : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Dry : (h_ : Tree CN)-> Tree CN ;
+  Dull : (h_ : Tree CN)-> Tree CN ;
+  Dust : Tree CN ;
+  Ear : Tree CN ;
+  Earth : Tree CN ;
+  Eat : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Egg : Tree CN ;
+  Eye : Tree CN ;
+  Fall : (h_ : Tree NP)-> Tree S ;
+  Fat : Tree CN ;
+  Father : Tree CN ;
+  FatherOf : (h_ : Tree NP)-> Tree CN ;
+  Fear : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Feather : Tree CN ;
+  Few : (h_ : Tree CN)-> Tree NP ;
+  Fight : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Fingernail : Tree CN ;
+  Fire : Tree CN ;
+  Fish : Tree CN ;
+  Five : (h_ : Tree CN)-> Tree NP ;
+  Float : (h_ : Tree NP)-> Tree S ;
+  Flow : (h_ : Tree NP)-> Tree S ;
+  Flower : Tree CN ;
+  Fly : (h_ : Tree NP)-> Tree S ;
+  Fog : Tree CN ;
+  Foot : Tree CN ;
+  Forest : Tree CN ;
+  Four : (h_ : Tree CN)-> Tree NP ;
+  Freeze : (h_ : Tree NP)-> Tree S ;
+  Fruit : Tree CN ;
+  Full : (h_ : Tree CN)-> Tree CN ;
+  Give : (h_ : Tree NP)-> (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Good : (h_ : Tree CN)-> Tree CN ;
+  Grass : Tree CN ;
+  Green : (h_ : Tree CN)-> Tree CN ;
+  Guts : Tree CN ;
+  Hair : Tree CN ;
+  Hand : Tree CN ;
+  He : Tree NP ;
+  Head : Tree CN ;
+  Hear : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Heart : Tree CN ;
+  Heavy : (h_ : Tree CN)-> Tree CN ;
+  Hit : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Hold : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Horn : Tree CN ;
+  Hunt : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Husband : Tree CN ;
+  I : Tree NP ;
+  Ice : Tree CN ;
+  Kill : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Knee : Tree CN ;
+  Know : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Lake : Tree CN ;
+  Laugh : (h_ : Tree NP)-> Tree S ;
+  Leaf : Tree CN ;
+  Left : (h_ : Tree CN)-> Tree CN ;
+  Leg : Tree CN ;
+  Lie : (h_ : Tree NP)-> Tree S ;
+  Live : (h_ : Tree NP)-> Tree S ;
+  Liver : Tree CN ;
+  Long : (h_ : Tree CN)-> Tree CN ;
+  Louse : Tree CN ;
+  Man : Tree CN ;
+  Many : (h_ : Tree CN)-> Tree NP ;
+  Meat : Tree CN ;
+  Moon : Tree CN ;
+  Mother : Tree CN ;
+  MotherOf : (h_ : Tree NP)-> Tree CN ;
+  Mountain : Tree CN ;
+  Mouth : Tree CN ;
+  Name : Tree CN ;
+  Narrow : (h_ : Tree CN)-> Tree CN ;
+  Near : (h_ : Tree CN)-> Tree CN ;
+  Neck : Tree CN ;
+  New : (h_ : Tree CN)-> Tree CN ;
+  Night : Tree CN ;
+  Nose : Tree CN ;
+  Old : (h_ : Tree CN)-> Tree CN ;
+  One : (h_ : Tree CN)-> Tree NP ;
+  Other : (h_ : Tree CN)-> Tree NP ;
+  Person : Tree CN ;
+  Play : (h_ : Tree NP)-> Tree S ;
+  Pull : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Push : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Rain : Tree CN ;
+  Red : (h_ : Tree CN)-> Tree CN ;
+  Right : (h_ : Tree CN)-> Tree CN ;
+  River : Tree CN ;
+  Road : Tree CN ;
+  Root : Tree CN ;
+  Rope : Tree CN ;
+  Rotten : (h_ : Tree CN)-> Tree CN ;
+  Round : (h_ : Tree CN)-> Tree CN ;
+  Rub : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Salt : Tree CN ;
+  Sand : Tree CN ;
+  Scratch : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Sea : Tree CN ;
+  See : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Seed : Tree CN ;
+  Sew : (h_ : Tree NP)-> Tree S ;
+  Sharp : (h_ : Tree CN)-> Tree CN ;
+  Short : (h_ : Tree CN)-> Tree CN ;
+  Sing : (h_ : Tree NP)-> Tree S ;
+  Sit : (h_ : Tree NP)-> Tree S ;
+  Skin : Tree CN ;
+  Sky : Tree CN ;
+  Sleep : (h_ : Tree NP)-> Tree S ;
+  Small : (h_ : Tree CN)-> Tree CN ;
+  Smell : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Smoke : Tree CN ;
+  Smooth : (h_ : Tree CN)-> Tree CN ;
+  Snake : Tree CN ;
+  Snow : Tree CN ;
+  Some_Many : (h_ : Tree CN)-> Tree NP ;
+  Some_One : (h_ : Tree CN)-> Tree NP ;
+  Spit : (h_ : Tree NP)-> Tree S ;
+  Split : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Squeeze : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Stab : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Stand : (h_ : Tree NP)-> Tree S ;
+  Star : Tree CN ;
+  Stick : Tree CN ;
+  Stone : Tree CN ;
+  Straight : (h_ : Tree CN)-> Tree CN ;
+  Suck : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Sun : Tree CN ;
+  Swell : (h_ : Tree NP)-> Tree S ;
+  Swim : (h_ : Tree NP)-> Tree S ;
+  Tail : Tree CN ;
+  That : (h_ : Tree CN)-> Tree NP ;
+  The_Many : (h_ : Tree CN)-> Tree NP ;
+  The_One : (h_ : Tree CN)-> Tree NP ;
+  They : Tree NP ;
+  Thick : (h_ : Tree CN)-> Tree CN ;
+  Thin : (h_ : Tree CN)-> Tree CN ;
+  Think : (h_ : Tree NP)-> Tree S ;
+  This : (h_ : Tree CN)-> Tree NP ;
+  Three : (h_ : Tree CN)-> Tree NP ;
+  Throw : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Tie : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Tongue : Tree CN ;
+  Tooth : Tree CN ;
+  Tree : Tree CN ;
+  Turn : (h_ : Tree NP)-> Tree S ;
+  Two : (h_ : Tree CN)-> Tree NP ;
+  Vomit : (h_ : Tree NP)-> Tree S ;
+  Walk : (h_ : Tree NP)-> Tree S ;
+  Warm : (h_ : Tree CN)-> Tree CN ;
+  Wash : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Water : Tree CN ;
+  We : Tree NP ;
+  Wet : (h_ : Tree CN)-> Tree CN ;
+  White : (h_ : Tree CN)-> Tree CN ;
+  Wide : (h_ : Tree CN)-> Tree CN ;
+  Wife : Tree CN ;
+  Wind : Tree CN ;
+  Wing : Tree CN ;
+  Wipe : (h_ : Tree NP)-> (h_ : Tree NP)-> Tree S ;
+  Woman : Tree CN ;
+  Worm : Tree CN ;
+  Year : Tree CN ;
+  Yellow : (h_ : Tree CN)-> Tree CN ;
+  You_Many : Tree NP ;
+  You_One : Tree NP
+}
+
+derive composOp Tree
+derive composFold Tree
+
+monoid_Bool = { zero = False; plus = \x -> \y -> x && y }
+
+isSnake : (A : Tree) -> Tree A -> Bool
+isSnake _ x = case x of
+		Snake -> True
+		_ -> composFold_Tree Bool monoid_Bool ? isSnake x
+
+wideSnake : (A : Cat) -> Tree A -> Tree A
+wideSnake _ x = case x of
+		    Wide y -> let y' : CN = wideSnake ? y
+                               in if isSnake CN y' then Thick y' else Wide y'
+		    _ -> composOp_Tree ? wideSnake x
+		
