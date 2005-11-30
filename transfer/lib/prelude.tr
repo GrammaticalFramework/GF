@@ -299,17 +299,32 @@ Monoid = sig mzero : A
 -- The Compos class
 --
 
-Compos : Type -> Type
-Compos T = sig 
-  C : Type
+Compos : (C : Type) -> (C -> Type) -> Type
+Compos C T = sig 
   composOp : (c : C) -> ((a : C) -> T a -> T a) -> T c -> T c
   composFold : (B : Type) -> Monoid B -> (c : C) -> ((a : C) -> T a -> b) -> T c -> b
 
-composOp : (T : Type) -> (d : Compos T) 
-        -> (c : d.C) -> ((a : d.C) -> T a -> T a) -> T c -> T c
-composOp _ d = d.composOp
+composOp : (C : Type) -> (T : C -> Type) -> (d : Compos C T) 
+        -> (c : C) -> ((a : C) -> T a -> T a) -> T c -> T c
+composOp _ _ d = d.composOp
 
-composFold : (T : Type) -> (d : Compos T) -> (B : Type) -> Monoid B 
-          -> (c : d.C) -> ((a : d.C) -> T a -> b) -> T c -> b
+composFold : (C : Type) -> (T : C -> Type) -> (d : Compos C T) -> (B : Type) -> Monoid B 
+          -> (c : C) -> ((a : C) -> T a -> b) -> T c -> b
 composFold _ _ d = d.composFold
+
+
+--
+-- The Monad class
+--
+
+Monad : (Type -> Type) -> Type
+Monad M = sig return : (A : Type) -> M A
+	      bind : (A : Type) -> (B : Type) -> M A -> (A -> M B) -> M B
+
+return : (M : Type -> Type) -> Monad M -> M A
+return _ d = d.return
+
+bind : (M : Type -> Type) -> Monad M 
+    -> (A : Type) -> (B : Type) -> M A -> (A -> M B) -> M B
+bind _ d = d.bind
 
