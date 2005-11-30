@@ -369,11 +369,8 @@ applyTransfer opts gr trs (mm,f) t =
      Just m -> maybe empty id $ lookup m trs
      _ -> ifNull empty (snd . head) trs
 
-   -- these are missing
-   trans = error "no transfer yet" 
-           ----- core2exp . T.appTransfer tr . exp2core
-   empty = error "emptyEnv" 
-           ---- T.emptyEnv
+   trans tr f = core2exp . T.evaluateExp tr . exp2core f
+   empty = T.builtin
 
 {-
 optTransfer :: Options -> StateGrammar -> G.Term -> G.Term
