@@ -1,5 +1,217 @@
+--
+-- Prelude for the transfer language.
+--
+
+
+--
+-- Basic functions
+--
+
 const : (A:Type) -> (B:Type) -> A -> B -> A
 const _ _ x _ = x
 
 id : (A:Type) -> A -> A
 id _ x = x
+
+
+
+--
+-- The Add class
+--
+
+Add : Type -> Type
+Add = sig zero : A
+	  plus : A -> A -> A
+
+zero : (A : Type) -> Add A -> A
+zero _ d = d.zero
+
+plus : (A : Type) -> Add A -> A -> A -> A
+plus _ d = d.plus
+
+sum : (A:Type) -> Add A -> List A -> A
+sum _ d (Nil _) = d.zero
+sum A d (Cons _ x xs) = d.plus x (sum A d xs)
+
+-- Operators:
+
+{-
+  (x + y) => (plus ? ? x y)
+-}
+
+-- Instances:
+
+add_Integer : Add Integer
+add_Integer = rec zero = 0
+		  plus = prim_add_Int
+
+add_String : Add String
+add_String = rec zero = ""
+		 plus = prim_add_Str
+
+
+
+--
+-- The Prod class
+--
+
+Prod : Type -> Type
+Prod = sig one : A
+	   times : A -> A -> A
+
+one : (A : Type) -> Prod A -> A
+one _ d = d.one
+
+times : (A : Type) -> Prod A -> A -> A -> A
+times _ d = d.times
+
+product : (A:Type) -> Prod A -> List A -> A
+product _ d (Nil _) = d.one
+product A d (Cons _ x xs) = d.times x (product A d xs)
+
+-- Operators:
+
+{- 
+  (x * y) => (times ? ? x y)
+-}
+
+-- Instances:
+
+prod_Integer : Add Integer
+prod_Integer = rec one = 1
+              	   times = prim_mul_Int
+
+
+
+--
+-- The Eq class
+--
+
+Eq : Type -> Type
+Eq A = sig eq : A -> A -> Bool
+
+eq : (A : Type) -> Eq A -> A -> A -> Bool
+eq _ d = d.eq
+
+neq : (A : Type) -> Eq A -> A -> A -> Bool
+neq A d x y = not (eq A d x y)
+
+
+-- Operators:
+
+{-
+  (x == y) => (eq ? ? x y)
+  (x /= y) => (neq ? ? x y)
+-}
+
+-- Instances:
+
+eq_Integer : Eq Integer
+eq_Integer = rec eq = prim_eq_Int
+
+eq_String : Eq String
+eq_String = rec eq = prim_eq_Str
+
+
+
+--
+-- The Ord class
+--
+
+data Ordering : Type where
+	LT : Ordering
+	EQ : Ordering
+	GT : Ordering
+
+Ord : Type -> Type
+Ord A = sig eq : A -> A -> Bool
+	    compare : A -> A -> Ordering
+
+compare : (A : Type) -> Ord A -> A -> A -> Ordering
+compare _ d = d.compare
+
+ordOp : (Ordering -> Bool) -> (A : Type) -> Ord A -> A -> A -> Bool
+ordOp f A d x y = f (compare A d x y)
+
+lt : (A : Type) -> Ord A -> A -> A -> Bool
+lt = ordOp (\o -> case o of { LT -> True; _ -> False })
+
+le : (A : Type) -> Ord A -> A -> A -> Bool
+le = ordOp (\o -> case o of { GT -> False; _ -> True })
+
+ge : (A : Type) -> Ord A -> A -> A -> Bool
+ge = ordOp (\o -> case o of { LT -> False; _ -> True })
+
+gt : (A : Type) -> Ord A -> A -> A -> Bool
+gt = ordOp (\o -> case o of { GT -> True; _ -> False })
+
+-- Operators
+
+{- 
+  (x < y) => (lt ? ? x y)
+  (x <= y) => (le ? ? x y)
+  (x >= y) => (ge ? ? x y)
+  (x > y) => (gt ? ? x y)
+-}
+
+-- Instances
+
+ord_Integer : Ord Integer
+ord_Integer = rec eq = prim_eq_Int
+		  compare = prim_cmp_Int
+
+ord_String : Ord String
+ord_String = rec eq = prim_eq_Str
+		 compare = prim_cmp_Str
+
+
+
+--
+-- The Show class
+--
+
+Show : Type -> Type
+Show A = sig show : A -> String
+
+show : (A : Type) -> Show A -> A -> String
+show _ d = d.show
+
+
+-- Instances
+
+show_Integer : Show Integer
+show_Integer = rec show = prim_show_Int
+
+show_String : Show String
+show_String = rec show = prim_show_Str
+
+
+
+--
+-- The Monoid class
+--
+
+Monoid : Type -> Type
+Monoid = sig mzero : A
+	     mplus : A -> A -> A
+
+
+
+--
+-- The Compos class
+--
+
+Compos : Type -> Type
+Compos T = sig 
+  C : Type
+  composOp : (c : C) -> ((a : C) -> T a -> T a) -> T c -> T c
+  composFold : (B : Type) -> Monoid B -> (c : C) -> ((a : C) -> T a -> b) -> T c -> b
+
+composOp : (T : Type) -> (d : Compos T) 
+        -> (c : d.C) -> ((a : d.C) -> T a -> T a) -> T c -> T c
+composOp _ d = d.composOp
+
+composFold : (T : Type) -> (d : Compos T) -> (B : Type) -> Monoid B 
+          -> (c : d.C) -> ((a : d.C) -> T a -> b) -> T c -> b
+composFold _ _ d = d.composFold
+
