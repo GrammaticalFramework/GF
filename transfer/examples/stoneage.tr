@@ -203,5 +203,5 @@ data Tree : (_ : Cat)-> Type where {
   You_One : Tree NP
 }
 
-derive composOp Tree
-derive composFold Tree
+derive Compos Tree
+

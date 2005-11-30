@@ -9,11 +9,11 @@ monoid_Bool = rec
 isSnake : (A : Tree) -> Tree A -> Bool
 isSnake _ x = case x of
 		Snake -> True
-		_ -> composFold_Tree Bool monoid_Bool ? isSnake x
+		_ -> composFold ? ? compos_Tree Bool monoid_Bool ? isSnake x
 
 wideSnake : (A : Cat) -> Tree A -> Tree A
 wideSnake _ x = case x of
 		    Wide y -> let y' : CN = wideSnake ? y
                                in if isSnake CN y' then Thick y' else Wide y'
-		    _ -> composOp_Tree ? wideSnake x
+		    _ -> composOp ? ? compos_Tree ? wideSnake x
 		

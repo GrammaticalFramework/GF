@@ -1,3 +1,5 @@
+import prelude
+
 data Cat : Type where
   Stm : Cat
   Exp : Cat
@@ -20,11 +22,12 @@ data Tree : Cat -> Type where
   NilStm  : Tree ListStm
   ConsStm : Tree Stm -> Tree ListStm -> Tree ListStm
 
-derive composOp Tree
+derive Compos Tree
 
 rename : (String -> String) -> (C : Type) -> Tree C -> Tree C
 rename f C t = case t of
 		   V x -> V (f x)
-		   _ -> composOp_Tree C (rename f) t
+		   _ -> composOp ? ? compos_Tree C (rename f) t
 
 
+main = rename (const ? ? "apa") Stm (SAss (V "y") (EAdd (EVar (V "x")) (EInt 2)))
