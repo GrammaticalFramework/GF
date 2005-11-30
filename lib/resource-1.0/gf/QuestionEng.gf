@@ -1,5 +1,7 @@
 concrete QuestionEng of Question = CatEng ** open ResEng in {
 
+  flags optimize=all_subs ;
+
   lin
 
     QuestCl cl = {

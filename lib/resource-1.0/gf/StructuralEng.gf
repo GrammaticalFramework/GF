@@ -1,5 +1,5 @@
-concrete StructuralEng of Structural = CatEng ** open MorphoEng, Prelude in {
-
+concrete StructuralEng of Structural = CatEng ** 
+  open MorphoEng, Prelude in {
 
   flags optimize=all ;
 
@@ -19,8 +19,8 @@ concrete StructuralEng of Structural = CatEng ** open MorphoEng, Prelude in {
   but_PConj = ss "but" ;
   by8agent_Prep = ss "by" ;
   by8means_Prep = ss "by" ;
-----  can8know_VV = vvCan ;
-----  can_VV = vvCan ;
+  can8know_VV = verbPart (mkVerbIrreg "know" "knew" "known") "how"** {c2 = "to"} ;---
+  can_VV = verbGen "manage" ** {c2 = "to"} ; ---
   during_Prep = ss "during" ;
   either7or_DConj = sd2 "either" "or" ** {n = Sg} ;
   everybody_NP = regNP "everybody" Sg ;
@@ -42,7 +42,7 @@ concrete StructuralEng of Structural = CatEng ** open MorphoEng, Prelude in {
   more_CAdv = ss "more" ;
   most_Predet = ss "most" ;
   much_Det = mkDeterminer Sg "much" ;
-----  must_VV = vvMust ;
+  must_VV = mkVerb4 "have" "has" "had" "had" ** {c2 = "to"} ; ---
   no_Phr = ss "no" ;
   on_Prep = ss "on" ;
   only_Predet = ss "only" ;
@@ -73,7 +73,7 @@ concrete StructuralEng of Structural = CatEng ** open MorphoEng, Prelude in {
   to_Prep = ss "to" ;
   under_Prep = ss "under" ;
   very_AdA = ss "very" ;
-----  want_VV = verb2aux (verbNoPart (regVerbP3 "want")) ** {isAux = False} ;
+  want_VV = verbGen "want" ** {c2 = "to"} ;
   we_Pron = mkNP "we" "us"  "our" Pl P1 ;
   whatPl_IP = mkIP "what" "what" "what's" Sg ;
   whatSg_IP = mkIP "what" "what" "what's" Sg ;
