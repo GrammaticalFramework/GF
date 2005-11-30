@@ -93,7 +93,7 @@ Ord : Type -> Type
 Ord A = sig { compare : A -> A -> Ordering }
 
 compare : (A : Type) -> Ord A -> A -> A -> Ordering
-compare _ d = compare
+compare _ d = d.compare
 
 ordOp : (Ordering -> Bool) -> (A : Type) -> Ord A -> A -> A -> Bool
 ordOp f A d x y = f (compare A d x y)
