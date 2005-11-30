@@ -16,8 +16,9 @@ abstract Noun = Cat ** {
 
     NoNum  : Num ;
     NumInt : Int -> Num ;
-
     NumNumeral : Numeral -> Num ;
+
+    AdNum : AdN -> Num -> Num ;
 
     OrdNumeral  : Numeral -> Ord ;
     

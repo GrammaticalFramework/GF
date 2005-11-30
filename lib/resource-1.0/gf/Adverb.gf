@@ -12,4 +12,6 @@ abstract Adverb = Cat ** {
 
     SubjS : Subj -> S -> Adv ;
 
+    AdnCAdv : CAdv -> AdN ;
+
 }

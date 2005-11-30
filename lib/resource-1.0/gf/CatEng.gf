@@ -30,7 +30,7 @@ concrete CatEng of Cat = open ResEng, Prelude in {
     A  = {s : AForm => Str} ;
     A2 = {s : AForm => Str ; c2 : Str} ;
 
-    Adv, AdV, AdA, AdS = {s : Str} ;
+    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
     Prep = {s : Str} ;
 
     Det, Quant = {s : Str ; n : Number} ;
