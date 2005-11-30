@@ -70,22 +70,27 @@ resolveLayout tp = res Nothing [if tl then Implicit 1 else Explicit]
 
       -- End of implicit block by a layout stop word
     | isStop t0 = 
-           -- Insert a closing brace after the previous token.
-       let b:t0':ts' = addToken (afterPrev pt) layoutClose (t0:ts)
-           -- and exit the current block.
-           -- NOTE: we don't care about the column of the
-           -- stop word.
-        in moveAlong ns [b,t0'] ts'
+           -- Exit the current block and all implicit blocks 
+           -- more indented than the current token
+       let (ebs,ns') = span (`moreIndent` column t0) ns
+           moreIndent (Implicit x) y = x > y
+           moreIndent Explicit _ = False
+           -- the number of blocks exited
+           b = 1 + length ebs
+           bs = replicate b layoutClose
+           -- Insert closing braces after the previous token.
+           (ts1,ts2) = splitAt (1+b) $ addTokens (afterPrev pt) bs (t0:ts)
+        in moveAlong ns' ts1 ts2
 
     -- End of an implicit layout block
-    | column t0 < n  = 
+    | newLine && column t0 < n  = 
            -- Insert a closing brace after the previous token.
        let b:t0':ts' = addToken (afterPrev pt) layoutClose (t0:ts)
            -- Repeat, with the current block removed from the stack
         in moveAlong ns [b] (t0':ts')
 
     -- Encounted a new line in an implicit layout block.
-    | column t0 == n = 
+    | newLine && column t0 == n = 
        -- Insert a semicolon after the previous token.
        -- unless we are the beginning of the file,
        -- or the previous token is a semicolon or open brace.
@@ -93,6 +98,9 @@ resolveLayout tp = res Nothing [if tl then Implicit 1 else Explicit]
           then moveAlong st [t0] ts
           else let b:t0':ts' = addToken (afterPrev pt) layoutSep (t0:ts)
                 in moveAlong st [b,t0'] ts'
+   where newLine = case pt of
+                           Nothing -> True
+                           Just t  -> line t /= line t0
 
   -- Nothing to see here, move along.
   res _ st (t:ts)  = moveAlong st [t] ts

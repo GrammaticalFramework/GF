@@ -26,13 +26,6 @@
 
 - Patterns with guards
 
-- Layout syntax resolver gets this wrong:
-
-main = let x : Type = case n of
-		n2 -> 2
-		n3 -> 3
-        in f Numeral
-
 * Improve interpreter
 
 - More efficient handling of constructor application
