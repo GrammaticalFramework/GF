@@ -1,3 +1,5 @@
+import prelude
+
 data Cat : Type where {
   Digit : Cat ;
   Numeral : Cat ;
@@ -35,13 +37,28 @@ data Tree : (_ : Cat)-> Type where {
 
 derive Compos Tree
 
+
+data Binary_Cat : Type where {
+  Bin : Binary_Cat
+} ;
+data Binary_Tree : (_ : Binary_Cat)-> Type where {
+  End : Binary_Tree Bin ;
+  One : (_ : Binary_Tree Bin)-> Binary_Tree Bin ;
+  Zero : (_ : Binary_Tree Bin)-> Binary_Tree Bin
+}
+
+
+
 monoid_plus_Int : Monoid Integer
 monoid_plus_Int = rec mzero = 0
 		      mplus = (\x -> \y -> x + y)
 
 
-num2int : (C : Cat) -> Tree C -> Integer
-num2int C n = case n of
+num2int : Tree Numeral -> Integer
+num2int = tree2int ?
+
+tree2int : (C : Cat) -> Tree C -> Integer 
+tree2int _ n = case n of
 		n2 -> 2
 		n3 -> 3
 		n4 -> 4
@@ -51,15 +68,27 @@ num2int C n = case n of
 		n8 -> 8
 		n9 -> 9
 		pot01 -> 1
-		pot1 x -> 10 * num2int ? x
+		pot1 x -> 10 * tree2int ? x
 		pot110 -> 10
 		pot111 -> 11
-		pot1plus x y -> 10 * num2int ? x + num2int ? y
-		pot1to19 x -> 10 + num2int ? x
-		pot2 x -> 100 * num2int ? x
-		pot2as3 x -> 10 * num2int ? x
-		pot2plus x y -> 100 * num2int ? x + num2int ? y
-		pot3 x -> 1000 * num2int ? x
-		pot3plus x y -> 1000 * num2int ? x + num2int ? y
-                _ -> composFold ? ? compos_Tree ? monoid_plus_Int C num2int n
+		pot1plus x y -> 10 * tree2int ? x + tree2int ? y
+		pot1to19 x -> 10 + tree2int ? x
+		pot2 x -> 100 * tree2int ? x
+		pot2as3 x -> 10 * tree2int ? x
+		pot2plus x y -> 100 * tree2int ? x + tree2int ? y
+		pot3 x -> 1000 * tree2int ? x
+		pot3plus x y -> 1000 * tree2int ? x + tree2int ? y
+                _ -> composFold ? ? compos_Tree ? monoid_plus_Int C tree2int n
+
+int2bin : Integer -> Binary_Tree Bin
+int2bin = int2bin_ End
+
+int2bin_ : Binary_Tree Bin -> Integer -> Binary_Tree Bin
+int2bin_ b 0 = b
+int2bin_ b n = let d : Integer = if n % 2 == 0 then Zero else One
+		   q : Integer = n / 2
+                in int2bin_ (d b) q
+
+num2bin : Tree Numeral -> Binary_Tree Bin
+num2bin n = int2bin (num2int n)
 
