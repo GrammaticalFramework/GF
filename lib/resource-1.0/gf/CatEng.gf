@@ -1,4 +1,4 @@
-concrete CatEng of Cat = open ResEng, Prelude in {
+concrete CatEng of Cat = open ResEng, Prelude, (R = ParamX) in {
 
   lincat
     Text, Phr, Utt = {s : Str} ;

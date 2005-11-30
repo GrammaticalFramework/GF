@@ -1,0 +1,257 @@
+<html>
+<body>
+
+<center>
+<h1>HOW TO WRITE A RESOURCE GRAMMAR</h1>
+
+<p>
+
+<a href="http://www.cs.chalmers.se/~aarne/">Aarne Ranta</a>
+<p>
+30 November 2005
+</center>
+
+<p>
+
+The purpose of this document is to tell how to implement the GF
+resource grammar API for a new language. We will <i>not</i> cover how
+to use the resource grammar, nor how to change the API. But we
+will give some hints how to extend the API.
+
+<p>
+
+<b>Notice</b>. This document concerns the API V. 1.0 which has not
+yet been released. You can find the beginnings of it
+in <tt>GF/lib/resource-1.0/gf</tt>, but the locations of
+files are not yet final.
+
+
+<h2>The resource grammar API</h2>
+
+The API is divided into a bunch of <tt>abstract</tt> modules.
+The following figure gives the dependencies of these modules.
+
+<center>
+<img width=1000 src="Lang.png">
+</center>
+
+It is advisable to start with a simpler subset of the API, which
+leaves out certain complicated but not always necessary things:
+tenses and most part of the lexicon.
+
+<center>
+<img width=1000 src="Test.png">
+</center>
+
+The module structure is rather flat: almost every module is a direct
+parent of the top module (<tt>Lang</tt> or <tt>Test</tt>). The idea
+is that you can concentrate on one linguistic aspect at a time, or
+also distribute the work among several authors.
+
+
+<h3>Phrase modules</h3>
+
+The direct parents of the top could be called <b>phrase</b>,
+since each of them concentrates on a particular phrase category (nouns, verbs,
+adjectives, sentences,...). A phrase module tells 
+<i>how to construct phrases in that category</i>. You will find out that
+all functions in any of these modules have the same value type (or maybe
+one of a small number of different types). Thus we have
+<ul>
+<li> <tt>Noun</tt>: constuction of nouns and noun phrases
+<li> <tt>Adjective</tt>: construction of adjectival phrases
+<li> <tt>Verb</tt>: construction of verb phrases
+<li> <tt>Adverb</tt>: construction of adverbial phrases
+<li> <tt>Numeral</tt>: construction of cardinal and ordinal numerals
+<li> <tt>Sentence</tt>: construction of sentences and imperatives
+<li> <tt>Question</tt>: construction of questions
+<li> <tt>Relative</tt>: construction of relative clauses
+<li> <tt>Conjunction</tt>: coordination of phrases
+<li> <tt>Phrase</tt>: construction of the major units of text and speech
+</ul>
+
+
+<h3>Infrastructure modules</h3>
+
+Expressions of each phrase category are constructed in the corresponding
+phrase module. But their <i>use</i> takes mostly place in other modules.
+For instance, noun phrases, which are constructed in <tt>Noun</tt>, are
+used as arguments of functions of almost all other phrase modules. 
+How can we build all these modules independently of each other?
+
+<p>
+
+As usual in typeful programming, the <i>only</i> thing you need to know
+about an object you use is its type. When writing a linearization rule
+for a GF abstract syntax function, the only thing you need to know is
+the linearization types of its value and argument categories. To achieve
+the division of the resource grammar to several parallel phrase modules,
+what we need is an underlying definition of the linearization types. This
+definition is given as the implementation of
+<ul>
+<li> <tt>Cat</tt>: syntactic categories of the resource grammar
+</ul>
+Any resource grammar implementation has first to agree on how to implement
+<tt>Cat</tt>. Luckily enough, even this can be done incrementally: you
+can skip the <tt>lincat</tt> definition of a category and use the default
+<tt>{s : Str}</tt> until you need to change it to something else. In
+English, for instance, most categories do have this linearization type!
+
+<p>
+
+As a slight asymmetry in the module diagrams, you find the following
+modules:
+<ul>
+<li> <tt>Tense</tt>: defines the parameters of polarity, anteriority, and tense
+<li> <tt>Tensed</tt>: defines how sentences use those parameters
+<li> <tt>Untensed</tt>: makes sentences use the polarity parameter only
+</ul>
+The full resource API (<tt>Lang</tt>) uses <tt>Tensed</tt>, whereas the
+restricted <tt>Test</tt> API uses <tt>Untensed</tt>. 
+
+
+
+<h3>Lexical modules</h3>
+
+What is lexical and what is syntactic is not as clearcut in GF as in
+some other grammar formalisms. Logically, however, lexical means 
+<tt>fun</tt> with no arguments. Linguistically, one may add to this
+that the <tt>lin</tt> consists of only one token (or of a table whose values
+are single tokens). Even in the restricted lexicon included in the resource
+API, the latter rule is sometimes violated in some languages.
+
+<p>
+
+Another characterization of lexical is that lexical units can be added
+almost <i>ad libitum</i>, and they cannot be defined in terms of already
+given rules. The lexical modules of the resource API are thus more like
+samples than complete lists. There are three such modules:
+<ul>
+<li> <tt>Structural</tt>: structural words (determiners, conjunctions,...)
+<li> <tt>Basic</tt>: basic everyday content words (nouns, verbs,...)
+<li> <tt>Lex</tt>: a very small sample of both structural and content words
+</ul>
+The module <tt>Structural</tt> aims for completeness, and is likely to
+be extended in future releases of the resource. The module <tt>Basic</tt>
+gives a "random" list of words, which enable interesting testing of syntax,
+and also a check list for morphology, since those words are likely to include
+most morphological patterns of the language.
+
+<p>
+
+The module <tt>Lex</tt> is used in <tt>Test</tt> instead of the two
+larger modules. Its purpose is to provide a quick way to test the
+syntactic structures of the phrase modules without having to implement
+the larger lexica.
+
+<p>
+
+In the case of <tt>Basic</tt> it may come out clearer than anywhere else
+in the API that it is impossible to give exact translation equivalents in
+different languages on the level of a resource grammar. In other words,
+application grammars are likely to use the resource in different ways for
+different languages.
+
+
+
+<h2>How to start</h2>
+
+<h3>Putting up a directory</h3>
+
+Unless you are writing an instance of a parametrized implementation
+(Romance or Scandinavian), which will be covered later, the most
+simple way is to follow roughly the following procedure. Assume you
+are building a grammar for the Dutch language. Here are the first steps.
+<ol>
+<li> Create a sister directory for <tt>GF/lib/resource/english</tt>, named
+     <tt>dutch</tt>.
+     <pre>
+       cd GF/lib/resource/
+       mkdir dutch
+       cd dutch
+     </pre>
+
+<li> Check out the <a href="http://www.w3.org/WAI/ER/IG/ert/iso639.htm">
+     ISO 639 3-letter language code</a> for Dutch: it is <tt>Dut</tt>.
+
+<li> Copy the <tt>*Eng.gf</tt> files from <tt>english</tt> <tt>dutch</tt>,
+     and rename them:
+     <pre>
+       cp ../english/*Eng.gf .
+       rename -n 's/Eng/Dut/' *Eng.gf
+     </pre>
+
+<li> Change the <tt>Eng</tt> module references to <tt>Dut</tt> references
+     in all files:
+     <pre>
+       sed -i 's/Eng/Dut/g' *Dut.gf
+     </pre>
+
+<li> This may of course change unwanted occurrences of the 
+     string <tt>Eng</tt> - verify this by
+     <pre>
+       grep Dut *.gf
+     </pre>
+     But you will have to make lots of manual changes in all files anyway!
+
+<li> Comment out the contents of these files, except their headers and module
+     brackets.
+
+</ol>
+
+
+<h3>The develop-test cycle</h3>
+
+Now starts the real work. The order in which the <tt>Phrase</tt> modules
+were introduced above is a natural order to proceed, even though not the
+only one. So you will find yourseld iterating the following steps:
+
+<ol>
+<li> Select a phrase module, e.g. <tt>NounDut</tt>, and uncomment one
+     linearization rule (for instance, <tt>DefSg</tt>, which is
+     not too complicated).
+
+<li> Write down some Dutch examples of this rule, in this case translations
+     of "the dog", "the house", "the big house", etc.
+
+<li> Think about the categories involved (<tt>CN, NP, N</tt>) and the
+     variations they have. Encode this in the lincats of <tt>CatDut</tt>.
+     You may have to define some new parameter types in <tt>ResDut</tt>.
+
+<li> To be able to test the construction, 
+     define some words you need to instantiate it
+     in <tt>LexDut</tt>. Again, it can be helpful to define some simple-minded
+     morphological paradigms in <tt>ResDut</tt>, e.g. corresponding to
+     <tt>ResEng.regN</tt>.
+
+<li> Doing this, you may want to test the resource independently. Do this by
+     <pre>
+       i -retain ResDut
+       cc regN "huis"
+     </pre>
+
+<li> Uncomment <tt>NounDut</tt> and <tt>LexDut</tt> in <tt>TestDut</tt>,
+     and compile <tt>TestDut</tt> in GF. Then test by parsing, linearization,
+     and random generation. In particular, linearization to a table should
+     be used so that you see all forms produced:
+     <pre>
+       gr -cat=NP -number=20 -tr | l -table
+     </pre>
+
+<li> Spare some tree-linearization pairs for later regression testing.
+
+</ol>
+You are likely to run this cycle a few times for each linearization rule
+you implement, and some hundreds of times altogether. There are 159
+<tt>funs</tt> in <tt>Test</tt> (at the moment).
+
+<p>
+
+Of course, you don't need to complete one phrase module before starting
+with the next one. Actually, a suitable subset of <tt>Noun</tt>,
+<tt>Verb</tt>, and <tt>Adjective</tt> will lead to a reasonable coverage
+very soon, keep you motivated, and reveal errors.
+
+
+</body>
+</html>
