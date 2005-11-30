@@ -59,6 +59,9 @@ resource ResEng = ParamEng ** open Prelude in {
        }
      } ;
 
+    regNP : Str -> Number -> {s : Case => Str ; a : Agr} = \that,n ->
+      mkNP that that (that + "'s") n P3 ;
+
 -- We have just a heuristic definition of the indefinite article.
 -- There are lots of exceptions: consonantic "e" ("euphemism"), consonantic
 -- "o" ("one-sided"), vocalic "u" ("umbrella").

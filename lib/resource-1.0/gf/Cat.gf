@@ -36,6 +36,7 @@ abstract Cat = {
     AdV ;
     AdA ;
     AdS ;
+    AdN ;
 
     CN ;
     N ;

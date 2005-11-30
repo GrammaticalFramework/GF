@@ -21,6 +21,8 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
     NumNumeral numeral = {s = numeral.s ! NCard} ;
     OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 
+    AdNum adn num = {s = adn.s ++ num.s} ;
+
     OrdSuperl a = {s = a.s ! AAdj Superl} ;
 
     DefSg = {s = artDef ; n = Sg} ;

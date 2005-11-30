@@ -27,7 +27,6 @@ oper
     } ;
 
 
-
 --2 Nouns
 --
 -- For conciseness and abstraction, we define a worst-case macro for
@@ -43,20 +42,21 @@ oper
        Pl => table {Gen => mens ; _ => men}
       }} ;
 
-  nounReg : Str -> CommonNoun = \dog -> 
-    mkNoun dog (dog + "s") (dog + "'s") (dog + "s'");
-
-  nounS   : Str -> CommonNoun = \kiss -> 
-    mkNoun kiss (kiss + "es") (kiss + "'s") (kiss + "es'") ;
-
-  nounY   : Str -> CommonNoun = \fl -> 
-    mkNoun (fl + "y") (fl + "ies") (fl + "y's") (fl + "ies'") ;
-
   nounGen : Str -> CommonNoun = \dog -> case last dog of {
     "y" => nounY "dog" ;
     "s" => nounS (init "dog") ;
     _   => nounReg "dog"
     } ;
+
+-- These are auxiliaries to $nounGen$.
+
+  nounReg : Str -> CommonNoun = \dog -> 
+    mkNoun dog (dog + "s") (dog + "'s") (dog + "s'");
+  nounS   : Str -> CommonNoun = \kiss -> 
+    mkNoun kiss (kiss + "es") (kiss + "'s") (kiss + "es'") ;
+  nounY   : Str -> CommonNoun = \fl -> 
+    mkNoun (fl + "y") (fl + "ies") (fl + "y's") (fl + "ies'") ;
+
 
 --3 Proper names
 --
@@ -65,6 +65,10 @@ oper
   nameReg : Str -> Gender -> {s : Case => Str} = \john,g -> 
     {s = table {Gen => john + "'s" ; _ => john} ; g = g} ;
 
+--2 Determiners
+
+  mkDeterminer : Number -> Str -> {s : Str ; n : Number} = \n,s ->
+    {s = s ; n = n} ;
 
 --2 Pronouns
 --
@@ -191,18 +195,6 @@ oper
   mkVerb : (_,_,_ : Str) -> Verb = \ring,rang,rung ->
     mkVerb4 ring (ring + "s") rang rung ;
 
-  regVerbP3 : Str -> Verb = \walk -> 
-    mkVerb walk (walk + "ed") (walk + "ed") ;
-
-  verbP3s   : Str -> Verb = \kiss -> 
-    mkVerb4 kiss (kiss + "es") (kiss + "ed") (kiss + "ed") ;
-
-  verbP3e   : Str -> Verb = \love -> 
-    mkVerb4 love (love + "s") (love + "d") (love + "d") ;
-
-  verbP3y   : Str -> Verb = \cr -> 
-    mkVerb4 (cr + "y") (cr + "ies") (cr + "ied") (cr + "ied") ;
-
   verbGen : Str -> Verb = \kill -> case last kill of {
     "y" => verbP3y (init kill) ;
     "e" => verbP3y (init kill) ;
@@ -210,10 +202,21 @@ oper
     _   => regVerbP3 kill
     } ;
 
---- These are for later use.
+-- These are just auxiliary to $verbGen$.
+
+  regVerbP3 : Str -> Verb = \walk -> 
+    mkVerb walk (walk + "ed") (walk + "ed") ;
+  verbP3s   : Str -> Verb = \kiss -> 
+    mkVerb4 kiss (kiss + "es") (kiss + "ed") (kiss + "ed") ;
+  verbP3e   : Str -> Verb = \love -> 
+    mkVerb4 love (love + "s") (love + "d") (love + "d") ;
+  verbP3y   : Str -> Verb = \cr -> 
+    mkVerb4 (cr + "y") (cr + "ies") (cr + "ied") (cr + "ied") ;
+
+--- The particle always appears right after the verb.
 
   verbPart : Verb -> Str -> Verb = \v,p ->
-    v ** {s1 = p} ;
+    {s = \\f => v.s ! f ++ p} ;
 
   verbNoPart : Verb -> Verb = \v -> verbPart v [] ;
 
