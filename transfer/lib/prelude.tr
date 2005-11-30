@@ -26,6 +26,35 @@ not : Bool -> Bool
 not b = if b then False else True
 
 
+--
+-- The Num class
+--
+
+Num : Type -> Type
+Num = sig zero : A
+	  plus : A -> A -> A
+	  minus : A -> A -> A
+	  one : A
+	  times : A -> A -> A
+	  div : A -> A -> A
+	  mod : A -> A -> A
+	  negate : A -> A
+	  eq : A -> A -> Bool
+	  compare : A -> A -> Ordering
+
+-- Instances:
+
+num_Integer : Num Integer
+num_Integer = rec zero = 0
+		  plus = prim_add_Int
+		  minus = prim_sub_Int
+		  one = 1
+              	  times = prim_mul_Int
+		  div = prim_div_Int
+              	  mod = prim_mod_Int
+		  negate = prim_neg_Int
+		  eq = prim_eq_Int
+		  compare = prim_cmp_Int
 
 --
 -- The Add class
@@ -53,31 +82,42 @@ sum A d (Cons _ x xs) = d.plus x (sum A d xs)
 
 -- Instances:
 
-add_Integer : Add Integer
-add_Integer = rec zero = 0
-		  plus = prim_add_Int
+-- num_Integer
 
 add_String : Add String
 add_String = rec zero = ""
 		 plus = prim_add_Str
 
+--
+-- The Sub class
+--
+
+Sub : Type -> Type
+Sub = sig minus : A -> A -> A
+
+minus : (A : Type) -> Sub A -> A
+minus _ d = d.minus
+
+-- Instances:
+
+-- num_Integer
 
 
 --
--- The Prod class
+-- The Mul class
 --
 
-Prod : Type -> Type
-Prod = sig one : A
-	   times : A -> A -> A
+Mul : Type -> Type
+Mul = sig one : A
+	  times : A -> A -> A
 
-one : (A : Type) -> Prod A -> A
+one : (A : Type) -> Mul A -> A
 one _ d = d.one
 
-times : (A : Type) -> Prod A -> A -> A -> A
+times : (A : Type) -> Mul A -> A -> A -> A
 times _ d = d.times
 
-product : (A:Type) -> Prod A -> List A -> A
+product : (A:Type) -> Mul A -> List A -> A
 product _ d (Nil _) = d.one
 product A d (Cons _ x xs) = d.times x (product A d xs)
 
@@ -89,9 +129,34 @@ product A d (Cons _ x xs) = d.times x (product A d xs)
 
 -- Instances:
 
-prod_Integer : Add Integer
-prod_Integer = rec one = 1
-              	   times = prim_mul_Int
+-- num_Integer
+
+
+--
+-- The Div class
+--
+
+Div : Type -> Type
+Div = sig div : A -> A -> A
+	  mod : A -> A -> A
+
+div : (A : Type) -> Div A -> A -> A -> A
+div _ d = d.div
+
+mod : (A : Type) -> Div A -> A -> A -> A
+mod _ d = d.mod
+
+-- Operators:
+
+{- 
+  (x / y) => (div ? ? x y)
+  (x % y) => (mod ? ? x y)
+-}
+
+-- Instances:
+
+-- num_Integer
+
 
 
 --
@@ -112,8 +177,7 @@ negate _ d = d.neg
 
 -- Instances:
 
-neg_Integer : Neg Integer
-neg_Integer = rec negate = prim_neg_Int
+-- num_Integer
 
 neg_Bool : Neg Bool
 neg_Bool = rec negate = not
@@ -143,8 +207,7 @@ neq A d x y = not (eq A d x y)
 
 -- Instances:
 
-eq_Integer : Eq Integer
-eq_Integer = rec eq = prim_eq_Int
+-- num_Integer
 
 eq_String : Eq String
 eq_String = rec eq = prim_eq_Str
@@ -193,9 +256,7 @@ gt = ordOp (\o -> case o of { GT -> True; _ -> False })
 
 -- Instances:
 
-ord_Integer : Ord Integer
-ord_Integer = rec eq = prim_eq_Int
-		  compare = prim_cmp_Int
+-- num_Integer
 
 ord_String : Ord String
 ord_String = rec eq = prim_eq_Str

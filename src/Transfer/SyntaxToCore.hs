@@ -28,11 +28,11 @@ declsToCore :: [Decl] -> [Decl]
 declsToCore m = evalState (declsToCore_ m) newState
 
 declsToCore_ :: [Decl] -> C [Decl]
-declsToCore_ =     numberMetas
+declsToCore_ =     desugar 
+               >>> numberMetas
                >>> deriveDecls
                >>> replaceCons 
                >>> compilePattDecls 
-               >>> desugar 
                >>> optimize
 
 optimize :: [Decl] -> C [Decl]
@@ -361,20 +361,30 @@ desugar = return . map f
               EPiNoVar exp0 exp1 -> EPi VWild       <| exp0 <| exp1
               EOr  exp0 exp1     -> andBool         <| exp0 <| exp1
               EAnd exp0 exp1     -> orBool          <| exp0 <| exp1
-              EEq  exp0 exp1     -> appIntBin "eq"  <| exp0 <| exp1
-              ENe  exp0 exp1     -> appIntBin "ne"  <| exp0 <| exp1
-              ELt  exp0 exp1     -> appIntBin "lt"  <| exp0 <| exp1
-              ELe  exp0 exp1     -> appIntBin "le"  <| exp0 <| exp1
-              EGt  exp0 exp1     -> appIntBin "gt"  <| exp0 <| exp1
-              EGe  exp0 exp1     -> appIntBin "ge"  <| exp0 <| exp1
-              EAdd exp0 exp1     -> appIntBin "add" <| exp0 <| exp1
-              ESub exp0 exp1     -> appIntBin "sub" <| exp0 <| exp1
-              EMul exp0 exp1     -> appIntBin "mul" <| exp0 <| exp1
-              EDiv exp0 exp1     -> appIntBin "div" <| exp0 <| exp1
-              EMod exp0 exp1     -> appIntBin "mod" <| exp0 <| exp1
-              ENeg exp0          -> appIntUn  "neg" <| exp0
+              EEq  exp0 exp1     -> overlBin "eq"    <| exp0 <| exp1
+              ENe  exp0 exp1     -> overlBin "ne"    <| exp0 <| exp1
+              ELt  exp0 exp1     -> overlBin "lt"    <| exp0 <| exp1
+              ELe  exp0 exp1     -> overlBin "le"    <| exp0 <| exp1
+              EGt  exp0 exp1     -> overlBin "gt"    <| exp0 <| exp1
+              EGe  exp0 exp1     -> overlBin "ge"    <| exp0 <| exp1
+              EAdd exp0 exp1     -> overlBin "plus"  <| exp0 <| exp1
+              ESub exp0 exp1     -> overlBin "minus" <| exp0 <| exp1
+              EMul exp0 exp1     -> overlBin "times" <| exp0 <| exp1
+              EDiv exp0 exp1     -> overlBin "div"   <| exp0 <| exp1
+              EMod exp0 exp1     -> overlBin "mod"   <| exp0 <| exp1
+              ENeg exp0          -> overlUn  "neg"   <| exp0
               _                  -> composOp f x
     where g <| x = g (f x)
+
+--
+-- * Use an overloaded function.
+--
+
+overlUn :: String -> Exp -> Exp
+overlUn f e1 = apply (EVar (Ident f)) [EMeta,EVar (Ident "num_Integer"),e1] -- FIXME: hack, should be ?
+
+overlBin :: String -> Exp -> Exp -> Exp
+overlBin f e1 e2 = apply (EVar (Ident f)) [EMeta,EVar (Ident "num_Integer"),e1,e2] -- FIXME: hack, should be ?
 
 --
 -- * Integers
