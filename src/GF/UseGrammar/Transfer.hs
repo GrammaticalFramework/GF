@@ -53,6 +53,9 @@ core2exp e = case e of
   T.EApp f a -> App (core2exp f) (core2exp a)
   T.EAbs (T.PVVar x) b -> Abs (var x) (core2exp b) ---- only from syntactic abstr
   T.EVar c   -> Vr (var c)               -- GF annotates to Q or QC
+  T.EStr s   -> K s
+  T.EInt i   -> EInt $ fromInteger i
+  T.EMeta _  -> uExp  -- meta symbol 0, refreshed by GF
  where
    var (T.CIdent x) = zIdent x
 
