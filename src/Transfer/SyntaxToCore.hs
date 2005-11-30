@@ -57,7 +57,7 @@ numberMetas = mapM f
                EMeta -> do
                         st <- get
                         put (st { nextMeta = nextMeta st + 1})
-                        return $ EVar $ Ident $ "?" ++ show (nextMeta st)
+                        return $ EVar $ Ident $ "?" ++ show (nextMeta st) -- FIXME: hack
                _ -> composOpM f t
 
 --
