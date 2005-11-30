@@ -111,23 +111,31 @@ type Derivator = Ident -> Exp -> [(Ident,Exp)] -> C [Decl]
 
 derivators :: [(String, Derivator)]
 derivators = [
-              ("composOp", deriveComposOp),
-              ("composFold", deriveComposFold),
-              ("show", deriveShow),
-              ("eq", deriveEq),
-              ("ord", deriveOrd)
+              ("Compos", deriveCompos),
+              ("Show", deriveShow),
+              ("Eq", deriveEq),
+              ("Ord", deriveOrd)
              ]
 
-deriveComposOp :: Derivator
+deriveCompos :: Derivator
+deriveCompos t@(Ident ts) k cs = 
+    do
+    co <- deriveComposOp t k cs
+    cf <- deriveComposFold t k cs
+    let [c] = argumentTypes k -- FIXME: what if there is not exactly one argument to t?
+        d = Ident ("compos_"++ts)
+        dt = apply (EVar (Ident "Compos")) [c, EVar t]
+        r = ERec [FieldValue (Ident "composOp") co,
+                  FieldValue (Ident "composFold") cf]
+    return [TypeDecl d dt, ValueDecl d [] r]
+
+deriveComposOp :: Ident -> Exp -> [(Ident,Exp)] -> C Exp
 deriveComposOp t k cs = 
     do
     f <- freshIdent
     x <- freshIdent
-    let co = Ident ("composOp_" ++ printTree t)
-        e = EVar
+    let e = EVar
         pv = VVar
-        infixr 3 -->
-        (-->) = EPiNoVar
         infixr 3 \->
         (\->) = EAbs
         mkCase ci ct = 
@@ -141,28 +149,20 @@ deriveComposOp t k cs =
                                    _ -> e v
                 calls = zipWith rec vars (argumentTypes ct)
             return $ Case (PCons ci (map PVar vars)) (apply (e ci) calls)
-    ift <- abstractType (argumentTypes k) (\vs -> 
-             let tc = apply (EVar t) vs in tc --> tc)
-    ft <- abstractType (argumentTypes k) (\vs -> 
-             let tc = apply (EVar t) vs in ift --> tc --> tc)
     cases <- mapM (uncurry mkCase) cs
     let cases' = cases ++ [Case PWild (e x)]
     fb <- abstract (arity k) $ const $ pv f \-> pv x \-> ECase (e x) cases'
-    return $ [TypeDecl co ft,
-              ValueDecl co [] fb]
+    return fb
 
-deriveComposFold :: Derivator
+deriveComposFold :: Ident -> Exp -> [(Ident,Exp)] -> C Exp
 deriveComposFold t k cs = 
     do
     f <- freshIdent
     x <- freshIdent
     b <- freshIdent
     r <- freshIdent
-    let co = Ident ("composFold_" ++ printTree t)
-        e = EVar
+    let e = EVar
         pv = VVar
-        infixr 3 -->
-        (-->) = EPiNoVar
         infixr 3 \->
         (\->) = EAbs
         mkCase ci ct = 
@@ -175,29 +175,24 @@ deriveComposFold t k cs =
                                    EApp (EVar t') c | t' == t -> apply (e f) [c, e v]
                                    _ -> e v
                 calls = zipWith rec vars (argumentTypes ct)
-                z = EProj (e r) (Ident "zero")
-                p = EProj (e r) (Ident "plus")
+                z = EProj (e r) (Ident "mzero")
+                p = EProj (e r) (Ident "mplus")
                 joinCalls [] = z
                 joinCalls cs = foldr1 (\x y -> apply p [x,y]) cs
             return $ Case (PCons ci (map PVar vars)) (joinCalls calls)
-    let rt = ERecType [FieldType (Ident "zero") (e b), 
-                       FieldType (Ident "plus") (e b --> e b --> e b)]
-    ift <- abstractType (argumentTypes k) (\vs -> apply (EVar t) vs --> e b)
-    ft <- abstractType (argumentTypes k) (\vs -> ift --> apply (EVar t) vs --> e b)
     cases <- mapM (uncurry mkCase) cs
     let cases' = cases ++ [Case PWild (e x)]
     fb <- abstract (arity k) $ const $ pv f \-> pv x \-> ECase (e x) cases'
-    return $ [TypeDecl co $ EPi (VVar b) EType $ rt --> ft,
-              ValueDecl co [] $ VWild \-> pv r \-> fb]
+    return $ VWild \-> pv r \-> fb
 
 deriveShow :: Derivator
-deriveShow t k cs = fail $ "derive show not implemented"
+deriveShow t k cs = fail $ "derive Show not implemented"
 
 deriveEq :: Derivator
-deriveEq t k cs = fail $ "derive eq not implemented"
+deriveEq t k cs = fail $ "derive Eq not implemented"
 
 deriveOrd :: Derivator
-deriveOrd t k cs = fail $ "derive ord not implemented"
+deriveOrd t k cs = fail $ "derive Ord not implemented"
 
 --
 -- * Constructor patterns and applications.

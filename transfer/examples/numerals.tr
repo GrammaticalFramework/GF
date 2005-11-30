@@ -33,9 +33,15 @@ data Tree : (_ : Cat)-> Type where {
   pot3plus : (_ : Tree Sub1000)-> (_ : Tree Sub1000)-> Tree Sub1000000
 }
 
+derive Compos Tree
 
-num2int : (A : Cat) -> Tree A -> Integer
-num2int _ n = case n of
+monoid_plus_Int : Monoid Integer
+monoid_plus_Int = rec mzero = 0
+		      mplus = (\x -> \y -> x + y)
+
+
+num2int : (C : Cat) -> Tree C -> Integer
+num2int C n = case n of
 		n2 -> 2
 		n3 -> 3
 		n4 -> 4
@@ -44,14 +50,10 @@ num2int _ n = case n of
 		n7 -> 7
 		n8 -> 8
 		n9 -> 9
-		num x -> num2int ? x
-		pot0 x -> num2int ? x
 		pot01 -> 1
-		pot0as1 x -> num2int ? x
 		pot1 x -> 10 * num2int ? x
 		pot110 -> 10
 		pot111 -> 11
-		pot1as2 x -> num2int ? x
 		pot1plus x y -> 10 * num2int ? x + num2int ? y
 		pot1to19 x -> 10 + num2int ? x
 		pot2 x -> 100 * num2int ? x
@@ -59,3 +61,5 @@ num2int _ n = case n of
 		pot2plus x y -> 100 * num2int ? x + num2int ? y
 		pot3 x -> 1000 * num2int ? x
 		pot3plus x y -> 1000 * num2int ? x + num2int ? y
+                _ -> composFold ? ? compos_Tree ? monoid_plus_Int C num2int n
+
