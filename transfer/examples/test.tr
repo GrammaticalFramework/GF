@@ -1,3 +1,4 @@
-import prelude 
-
-main = x :: y :: z :: []
+main = let x : Type = case n of
+		n2 -> 2
+		n3 -> 3
+        in f Numeral
