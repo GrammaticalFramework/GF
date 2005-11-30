@@ -14,6 +14,18 @@ id : (A:Type) -> A -> A
 id _ x = x
 
 
+--
+-- The Bool type
+--
+
+data Bool : Type where 
+	True : Bool
+	False : Bool
+
+not : Bool -> Bool
+not b = if b then False else True
+
+
 
 --
 -- The Add class
@@ -82,6 +94,31 @@ prod_Integer = rec one = 1
               	   times = prim_mul_Int
 
 
+--
+-- The Neg class
+--
+
+Neg : Type -> Type
+Neg = sig negate : A -> A
+
+negate : (A : Type) -> Neg A -> A -> A
+negate _ d = d.neg
+
+-- Operators:
+
+{-
+  (-x) => negate ? ? x
+-}
+
+-- Instances:
+
+neg_Integer : Neg Integer
+neg_Integer = rec negate = prim_neg_Int
+
+neg_Bool : Neg Bool
+neg_Bool = rec negate = not
+
+
 
 --
 -- The Eq class
@@ -145,7 +182,7 @@ ge = ordOp (\o -> case o of { LT -> False; _ -> True })
 gt : (A : Type) -> Ord A -> A -> A -> Bool
 gt = ordOp (\o -> case o of { GT -> True; _ -> False })
 
--- Operators
+-- Operators:
 
 {- 
   (x < y) => (lt ? ? x y)
@@ -154,7 +191,7 @@ gt = ordOp (\o -> case o of { GT -> True; _ -> False })
   (x > y) => (gt ? ? x y)
 -}
 
--- Instances
+-- Instances:
 
 ord_Integer : Ord Integer
 ord_Integer = rec eq = prim_eq_Int
@@ -177,7 +214,7 @@ show : (A : Type) -> Show A -> A -> String
 show _ d = d.show
 
 
--- Instances
+-- Instances:
 
 show_Integer : Show Integer
 show_Integer = rec show = prim_show_Int
