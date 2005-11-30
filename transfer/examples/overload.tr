@@ -90,7 +90,8 @@ data Ordering : Type where
 	GT : Ordering
 
 Ord : Type -> Type
-Ord A = sig { compare : A -> A -> Ordering }
+Ord A = sig eq : A -> A -> Bool
+	    compare : A -> A -> Ordering
 
 compare : (A : Type) -> Ord A -> A -> A -> Ordering
 compare _ d = d.compare
