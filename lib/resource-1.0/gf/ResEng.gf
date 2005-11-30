@@ -7,6 +7,8 @@
 
 resource ResEng = ParamEng ** open Prelude in {
 
+  flags optimize=all ;
+
   oper
 
 -- For $Lex$.

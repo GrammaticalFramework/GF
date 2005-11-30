@@ -1,5 +1,7 @@
 concrete RelativeEng of Relative = CatEng ** open ResEng in {
 
+  flags optimize=all_subs ;
+
   lin
 
     RelCl cl = {

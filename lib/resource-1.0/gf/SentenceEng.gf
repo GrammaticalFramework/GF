@@ -43,7 +43,23 @@ concrete SentenceEng of Sentence = CatEng ** open ResEng in {
           } ;
       c2 = v2.c2 
     } ;
---- PredVP (np ** {lock_NP =<>}) (UseV (v2 ** {lock_V = <>})) ** {c2 = v2.c2} ;
+    --- not possible:
+    --- PredVP (np ** {lock_NP =<>}) (UseV (v2 ** {lock_V = <>})) ** {c2 = v2.c2} ;
+
+    SlashVVV2 np vv v2 = {
+      s = \\t,a,b,o => 
+        let 
+          agr   = np.a ;
+          verb  = (predV vv).s ! t ! a ! b ! o ! agr ;
+          inf   = "to" ++ v2.s ! VInf ;
+          subj  = np.s ! Nom
+        in
+        case o of {
+          ODir   => subj ++ verb.fin ++ verb.inf ++ inf ;
+          OQuest => verb.fin ++ subj ++ verb.inf ++ inf
+          } ;
+      c2 = v2.c2 
+    } ;
 
     AdvSlash slash adv = {
       s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;

@@ -5,11 +5,12 @@
 -- Aarne Ranta 2002 -- 2005
 --
 -- This resource morphology contains definitions needed in the resource
--- syntax. It moreover contains the most usual inflectional patterns.
---
--- We use the parameter types and word classes defined in $Types.gf$.
+-- syntax. To build a lexicon, it is better to use $ParadigmsEng$, which
+-- gives a higher-level access to this module.
 
 resource MorphoEng = ResEng ** open Prelude, (Predef=Predef) in {
+
+  flags optimize=all ;
 
 --2 Phonology
 --
@@ -197,7 +198,7 @@ oper
 
   verbGen : Str -> Verb = \kill -> case last kill of {
     "y" => verbP3y (init kill) ;
-    "e" => verbP3y (init kill) ;
+    "e" => verbP3e (init kill) ;
     "s" => verbP3s (init kill) ;
     _   => regVerbP3 kill
     } ;
