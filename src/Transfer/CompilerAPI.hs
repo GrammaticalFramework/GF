@@ -11,6 +11,7 @@ import Transfer.SyntaxToCore
 
 import Transfer.PathUtil
 
+import Data.List
 import System.Directory
 
 
@@ -33,16 +34,18 @@ compile m = return (printTree $ declsToCore m)
 loadModule :: [FilePath] -- ^ directories to look for imported modules in
            -> FilePath   -- ^ source module file
            -> IO [Decl]
-loadModule path f = 
+loadModule = loadModule_ []
+  where 
+  loadModule_ ms path f =
     do
     s <- readFile f
     Module is ds <- case pModule (myLLexer s) of
                      Bad e    -> fail $ "Parse error in " ++ f ++ ": " ++ e
                      Ok  m    -> return m 
-    let deps = [ i | Import (Ident i) <- is ]
+    let load = [ i | Import (Ident i) <- is ] \\ ms
     let path' = directoryOf f : path
-    files <- mapM (findFile path' . (++".tr")) deps
-    dss <- mapM (loadModule path) files
+    files <- mapM (findFile path' . (++".tr")) load
+    dss <- mapM (loadModule_ (load++ms) path) files
     return $ concat (dss++[ds])
 
 myLLexer :: String -> [Token]
