@@ -1,3 +1,5 @@
+import prelude
+
 data Maybe : Type -> Type where
 	Nothing : (A : Type) -> Maybe A
 	Just : (A : Type) -> A -> Maybe A
@@ -9,3 +11,14 @@ fromMaybe _ _ (Just x) = x
 maybe : (A : Type) -> (B : Type) -> B -> (A -> B) -> Maybe A -> A
 maybe _ _ x _ Nothing = x
 maybe _ _ _ f (Just x) = f x
+
+-- Instances:
+
+monad_Maybe : Monad Maybe
+monad_Maybe = 
+  rec return = Just
+      bind = \A -> \B -> \m -> \k -> 
+         case m of
+		Nothing _ -> Nothing B
+		Just _ x  -> k x
+

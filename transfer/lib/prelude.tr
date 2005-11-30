@@ -327,4 +327,3 @@ return _ d = d.return
 bind : (M : Type -> Type) -> Monad M 
     -> (A : Type) -> (B : Type) -> M A -> (A -> M B) -> M B
 bind _ d = d.bind
-
