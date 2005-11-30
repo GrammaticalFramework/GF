@@ -83,7 +83,8 @@ local repository.
 
 If you are using read-only access, send your patches by email to
 someone with write-access. First record your changes in your local 
-repository, as described above. Then create the patch with:
+repository, as described above. You can send any number of recorded
+patches as one patch bundle. You create the patch bundle with:
 
 ```
 $ darcs send -o mypatch.patch
