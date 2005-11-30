@@ -53,33 +53,47 @@ builtin :: Env
 builtin = 
     mkEnv [(CIdent "Int",VType),
            (CIdent "String",VType),
-           mkIntUn  "neg" negate,
-           mkIntBin "add" (+),
-           mkIntBin "sub" (-),
-           mkIntBin "mul" (*),
-           mkIntBin "div" div,
-           mkIntBin "mod" mod,
-           mkIntCmp "lt"  (<),
-           mkIntCmp "le"  (<=),
-           mkIntCmp "gt"  (>),
-           mkIntCmp "ge"  (>=),
-           mkIntCmp "eq"  (==),
-           mkIntCmp "ne"  (/=)]
+           mkIntUn  "neg"  negate  toInt,
+           mkIntBin "add"  (+)     toInt,
+           mkIntBin "sub"  (-)     toInt,
+           mkIntBin "mul"  (*)     toInt,
+           mkIntBin "div"  div     toInt,
+           mkIntBin "mod"  mod     toInt,
+           mkIntBin "eq"   (==)    toBool,
+           mkIntBin "cmp"  compare toOrd,
+           mkIntUn  "show" show    toStr,
+           mkStrBin "add"  (++)    toStr,
+           mkStrBin "eq"   (==)    toBool,
+           mkStrBin "cmp"  compare toOrd,
+           mkStrUn  "show" show    toStr
+          ]
   where 
-  mkIntUn x f = let c = CIdent ("prim_"++x++"_Int")
-                 in (c, VPrim (\n -> appInt1 (VInt . f) n))
-  mkIntBin x f = let c = CIdent ("prim_"++x++"_Int")
-                  in (c, VPrim (\n -> VPrim (\m -> appInt2 (\n m -> VInt (f n m)) n m )))
-  mkIntCmp x f = let c = CIdent ("prim_"++x++"_Int")
-                  in (c, VPrim (\n -> VPrim (\m -> appInt2 (\n m -> toBool (f n m)) n m)))
-  toBool b = VCons (CIdent (if b then "True" else "False")) []
-  appInt1 f x = case x of
-                         VInt n -> f n
+  toInt i  = VInt i
+  toBool b = VCons (CIdent (show b)) []
+  toOrd o  = VCons (CIdent (show o)) []
+  toStr s  = VStr s
+  mkIntUn x f g = let c = CIdent ("prim_"++x++"_Int")
+                   in (c, VPrim (\n -> appInt1 f g n))
+  mkIntBin x f g = let c = CIdent ("prim_"++x++"_Int")
+                    in (c, VPrim (\n -> VPrim (\m -> appInt2 f g n m )))
+  appInt1 f g x = case x of
+                         VInt n -> g (f n)
                          _ -> error $ printValue x ++ " is not an integer"
-  appInt2 f x y = case (x,y) of
-                         (VInt n,VInt m) -> f n m
+  appInt2 f g x y = case (x,y) of
+                         (VInt n,VInt m) -> g (f n m)
                          _ -> error $ printValue x ++ " and " ++ printValue y 
                                       ++ " are not both integers"
+  mkStrUn x f g = let c = CIdent ("prim_"++x++"_Str")
+                   in (c, VPrim (\n -> appStr1 f g n))
+  mkStrBin x f g = let c = CIdent ("prim_"++x++"_Str")
+                    in (c, VPrim (\n -> VPrim (\m -> appStr2 f g n m )))
+  appStr1 f g x = case x of
+                         VStr n -> g (f n)
+                         _ -> error $ printValue x ++ " is not an integer"
+  appStr2 f g x y = case (x,y) of
+                         (VStr n,VStr m) -> g (f n m)
+                         _ -> error $ printValue x ++ " and " ++ printValue y 
+                                      ++ " are not both strings"
 
 addModuleEnv :: Env -> Module -> Env
 addModuleEnv env (Module ds) = 
