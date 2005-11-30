@@ -23,7 +23,10 @@ import Transfer.ErrM
  ')' { PT _ (TS ")") }
  '_' { PT _ (TS "_") }
  '->' { PT _ (TS "->") }
+ '<-' { PT _ (TS "<-") }
  '\\' { PT _ (TS "\\") }
+ '>>=' { PT _ (TS ">>=") }
+ '>>' { PT _ (TS ">>") }
  '||' { PT _ (TS "||") }
  '&&' { PT _ (TS "&&") }
  '==' { PT _ (TS "==") }
@@ -32,17 +35,22 @@ import Transfer.ErrM
  '<=' { PT _ (TS "<=") }
  '>' { PT _ (TS ">") }
  '>=' { PT _ (TS ">=") }
+ '::' { PT _ (TS "::") }
  '+' { PT _ (TS "+") }
  '-' { PT _ (TS "-") }
  '*' { PT _ (TS "*") }
  '/' { PT _ (TS "/") }
  '%' { PT _ (TS "%") }
  '.' { PT _ (TS ".") }
+ '[' { PT _ (TS "[") }
+ ']' { PT _ (TS "]") }
  '?' { PT _ (TS "?") }
+ ',' { PT _ (TS ",") }
  'Type' { PT _ (TS "Type") }
  'case' { PT _ (TS "case") }
  'data' { PT _ (TS "data") }
  'derive' { PT _ (TS "derive") }
+ 'do' { PT _ (TS "do") }
  'else' { PT _ (TS "else") }
  'if' { PT _ (TS "if") }
  'import' { PT _ (TS "import") }
@@ -137,6 +145,7 @@ Exp :: { Exp }
 Exp : 'let' '{' ListLetDef '}' 'in' Exp { ELet $3 $6 } 
   | 'case' Exp 'of' '{' ListCase '}' { ECase $2 $5 }
   | 'if' Exp 'then' Exp 'else' Exp { EIf $2 $4 $6 }
+  | 'do' '{' ListBind Exp '}' { EDo (reverse $3) $4 }
   | Exp1 { $1 }
 
 
@@ -160,6 +169,16 @@ ListCase : {- empty -} { [] }
   | Case ';' ListCase { (:) $1 $3 }
 
 
+Bind :: { Bind }
+Bind : VarOrWild '<-' Exp { BindVar $1 $3 } 
+  | Exp { BindNoVar $1 }
+
+
+ListBind :: { [Bind] }
+ListBind : {- empty -} { [] } 
+  | ListBind Bind ';' { flip (:) $1 $2 }
+
+
 Exp2 :: { Exp }
 Exp2 : '\\' VarOrWild '->' Exp { EAbs $2 $4 } 
   | '(' VarOrWild ':' Exp ')' '->' Exp { EPi $2 $4 $7 }
@@ -173,56 +192,68 @@ VarOrWild : Ident { VVar $1 }
 
 
 Exp3 :: { Exp }
-Exp3 : Exp4 '||' Exp3 { EOr $1 $3 } 
+Exp3 : Exp3 '>>=' Exp4 { EBind $1 $3 } 
+  | Exp3 '>>' Exp4 { EBindC $1 $3 }
   | Exp4 { $1 }
 
 
 Exp4 :: { Exp }
-Exp4 : Exp5 '&&' Exp4 { EAnd $1 $3 } 
+Exp4 : Exp5 '||' Exp4 { EOr $1 $3 } 
   | Exp5 { $1 }
 
 
 Exp5 :: { Exp }
-Exp5 : Exp6 '==' Exp6 { EEq $1 $3 } 
-  | Exp6 '/=' Exp6 { ENe $1 $3 }
-  | Exp6 '<' Exp6 { ELt $1 $3 }
-  | Exp6 '<=' Exp6 { ELe $1 $3 }
-  | Exp6 '>' Exp6 { EGt $1 $3 }
-  | Exp6 '>=' Exp6 { EGe $1 $3 }
+Exp5 : Exp6 '&&' Exp5 { EAnd $1 $3 } 
   | Exp6 { $1 }
 
 
 Exp6 :: { Exp }
-Exp6 : Exp6 '+' Exp7 { EAdd $1 $3 } 
-  | Exp6 '-' Exp7 { ESub $1 $3 }
+Exp6 : Exp7 '==' Exp7 { EEq $1 $3 } 
+  | Exp7 '/=' Exp7 { ENe $1 $3 }
+  | Exp7 '<' Exp7 { ELt $1 $3 }
+  | Exp7 '<=' Exp7 { ELe $1 $3 }
+  | Exp7 '>' Exp7 { EGt $1 $3 }
+  | Exp7 '>=' Exp7 { EGe $1 $3 }
   | Exp7 { $1 }
 
 
 Exp7 :: { Exp }
-Exp7 : Exp7 '*' Exp8 { EMul $1 $3 } 
-  | Exp7 '/' Exp8 { EDiv $1 $3 }
-  | Exp7 '%' Exp8 { EMod $1 $3 }
+Exp7 : Exp8 '::' Exp7 { EListCons $1 $3 } 
   | Exp8 { $1 }
 
 
 Exp8 :: { Exp }
-Exp8 : '-' Exp8 { ENeg $2 } 
+Exp8 : Exp8 '+' Exp9 { EAdd $1 $3 } 
+  | Exp8 '-' Exp9 { ESub $1 $3 }
   | Exp9 { $1 }
 
 
 Exp9 :: { Exp }
-Exp9 : Exp9 Exp10 { EApp $1 $2 } 
+Exp9 : Exp9 '*' Exp10 { EMul $1 $3 } 
+  | Exp9 '/' Exp10 { EDiv $1 $3 }
+  | Exp9 '%' Exp10 { EMod $1 $3 }
   | Exp10 { $1 }
 
 
 Exp10 :: { Exp }
-Exp10 : Exp10 '.' Ident { EProj $1 $3 } 
+Exp10 : '-' Exp10 { ENeg $2 } 
   | Exp11 { $1 }
 
 
 Exp11 :: { Exp }
-Exp11 : 'sig' '{' ListFieldType '}' { ERecType $3 } 
+Exp11 : Exp11 Exp12 { EApp $1 $2 } 
+  | Exp12 { $1 }
+
+
+Exp12 :: { Exp }
+Exp12 : Exp12 '.' Ident { EProj $1 $3 } 
+  | Exp13 { $1 }
+
+
+Exp13 :: { Exp }
+Exp13 : 'sig' '{' ListFieldType '}' { ERecType $3 } 
   | 'rec' '{' ListFieldValue '}' { ERec $3 }
+  | '[' ListExp ']' { EList $2 }
   | Ident { EVar $1 }
   | 'Type' { EType }
   | String { EStr $1 }
@@ -253,6 +284,12 @@ ListFieldValue : {- empty -} { [] }
 
 Exp1 :: { Exp }
 Exp1 : Exp2 { $1 } 
+
+
+ListExp :: { [Exp] }
+ListExp : {- empty -} { [] } 
+  | Exp { (:[]) $1 }
+  | Exp ',' ListExp { (:) $1 $3 }
 
 
 

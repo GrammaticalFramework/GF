@@ -1,1 +1,3 @@
-main = ?
+import prelude 
+
+main = x :: y :: z :: []

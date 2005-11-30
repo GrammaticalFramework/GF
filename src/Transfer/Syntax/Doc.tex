@@ -46,10 +46,10 @@ The reserved words used in Syntax are the following: \\
 
 \begin{tabular}{lll}
 {\reserved{Type}} &{\reserved{case}} &{\reserved{data}} \\
-{\reserved{derive}} &{\reserved{else}} &{\reserved{if}} \\
-{\reserved{import}} &{\reserved{in}} &{\reserved{let}} \\
-{\reserved{of}} &{\reserved{rec}} &{\reserved{sig}} \\
-{\reserved{then}} &{\reserved{where}} & \\
+{\reserved{derive}} &{\reserved{do}} &{\reserved{else}} \\
+{\reserved{if}} &{\reserved{import}} &{\reserved{in}} \\
+{\reserved{let}} &{\reserved{of}} &{\reserved{rec}} \\
+{\reserved{sig}} &{\reserved{then}} &{\reserved{where}} \\
 \end{tabular}\\
 
 The symbols used in Syntax are the following: \\
@@ -58,12 +58,14 @@ The symbols used in Syntax are the following: \\
 {\symb{;}} &{\symb{:}} &{\symb{\{}} \\
 {\symb{\}}} &{\symb{{$=$}}} &{\symb{(}} \\
 {\symb{)}} &{\symb{\_}} &{\symb{{$-$}{$>$}}} \\
-{\symb{$\backslash$}} &{\symb{{$|$}{$|$}}} &{\symb{\&\&}} \\
+{\symb{{$<$}{$-$}}} &{\symb{$\backslash$}} &{\symb{{$>$}{$>$}{$=$}}} \\
+{\symb{{$>$}{$>$}}} &{\symb{{$|$}{$|$}}} &{\symb{\&\&}} \\
 {\symb{{$=$}{$=$}}} &{\symb{/{$=$}}} &{\symb{{$<$}}} \\
 {\symb{{$<$}{$=$}}} &{\symb{{$>$}}} &{\symb{{$>$}{$=$}}} \\
-{\symb{{$+$}}} &{\symb{{$-$}}} &{\symb{*}} \\
-{\symb{/}} &{\symb{\%}} &{\symb{.}} \\
-{\symb{?}} & & \\
+{\symb{::}} &{\symb{{$+$}}} &{\symb{{$-$}}} \\
+{\symb{*}} &{\symb{/}} &{\symb{\%}} \\
+{\symb{.}} &{\symb{[}} &{\symb{]}} \\
+{\symb{?}} &{\symb{,}} & \\
 \end{tabular}\\
 
 \subsection*{Comments}
@@ -146,6 +148,7 @@ All other symbols are terminals.\\
 {\nonterminal{Exp}} & {\arrow}  &{\terminal{let}} {\terminal{\{}} {\nonterminal{ListLetDef}} {\terminal{\}}} {\terminal{in}} {\nonterminal{Exp}}  \\
  & {\delimit}  &{\terminal{case}} {\nonterminal{Exp}} {\terminal{of}} {\terminal{\{}} {\nonterminal{ListCase}} {\terminal{\}}}  \\
  & {\delimit}  &{\terminal{if}} {\nonterminal{Exp}} {\terminal{then}} {\nonterminal{Exp}} {\terminal{else}} {\nonterminal{Exp}}  \\
+ & {\delimit}  &{\terminal{do}} {\terminal{\{}} {\nonterminal{ListBind}} {\nonterminal{Exp}} {\terminal{\}}}  \\
  & {\delimit}  &{\nonterminal{Exp1}}  \\
 \end{tabular}\\
 
@@ -170,6 +173,16 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
+{\nonterminal{Bind}} & {\arrow}  &{\nonterminal{VarOrWild}} {\terminal{{$<$}{$-$}}} {\nonterminal{Exp}}  \\
+ & {\delimit}  &{\nonterminal{Exp}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
+{\nonterminal{ListBind}} & {\arrow}  &{\emptyP} \\
+ & {\delimit}  &{\nonterminal{Bind}} {\terminal{;}} {\nonterminal{ListBind}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
 {\nonterminal{Exp2}} & {\arrow}  &{\terminal{$\backslash$}} {\nonterminal{VarOrWild}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
  & {\delimit}  &{\terminal{(}} {\nonterminal{VarOrWild}} {\terminal{:}} {\nonterminal{Exp}} {\terminal{)}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
  & {\delimit}  &{\nonterminal{Exp3}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
@@ -182,56 +195,68 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp3}} & {\arrow}  &{\nonterminal{Exp4}} {\terminal{{$|$}{$|$}}} {\nonterminal{Exp3}}  \\
+{\nonterminal{Exp3}} & {\arrow}  &{\nonterminal{Exp3}} {\terminal{{$>$}{$>$}{$=$}}} {\nonterminal{Exp4}}  \\
+ & {\delimit}  &{\nonterminal{Exp3}} {\terminal{{$>$}{$>$}}} {\nonterminal{Exp4}}  \\
  & {\delimit}  &{\nonterminal{Exp4}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp4}} & {\arrow}  &{\nonterminal{Exp5}} {\terminal{\&\&}} {\nonterminal{Exp4}}  \\
+{\nonterminal{Exp4}} & {\arrow}  &{\nonterminal{Exp5}} {\terminal{{$|$}{$|$}}} {\nonterminal{Exp4}}  \\
  & {\delimit}  &{\nonterminal{Exp5}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp5}} & {\arrow}  &{\nonterminal{Exp6}} {\terminal{{$=$}{$=$}}} {\nonterminal{Exp6}}  \\
- & {\delimit}  &{\nonterminal{Exp6}} {\terminal{/{$=$}}} {\nonterminal{Exp6}}  \\
- & {\delimit}  &{\nonterminal{Exp6}} {\terminal{{$<$}}} {\nonterminal{Exp6}}  \\
- & {\delimit}  &{\nonterminal{Exp6}} {\terminal{{$<$}{$=$}}} {\nonterminal{Exp6}}  \\
- & {\delimit}  &{\nonterminal{Exp6}} {\terminal{{$>$}}} {\nonterminal{Exp6}}  \\
- & {\delimit}  &{\nonterminal{Exp6}} {\terminal{{$>$}{$=$}}} {\nonterminal{Exp6}}  \\
+{\nonterminal{Exp5}} & {\arrow}  &{\nonterminal{Exp6}} {\terminal{\&\&}} {\nonterminal{Exp5}}  \\
  & {\delimit}  &{\nonterminal{Exp6}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp6}} & {\arrow}  &{\nonterminal{Exp6}} {\terminal{{$+$}}} {\nonterminal{Exp7}}  \\
- & {\delimit}  &{\nonterminal{Exp6}} {\terminal{{$-$}}} {\nonterminal{Exp7}}  \\
+{\nonterminal{Exp6}} & {\arrow}  &{\nonterminal{Exp7}} {\terminal{{$=$}{$=$}}} {\nonterminal{Exp7}}  \\
+ & {\delimit}  &{\nonterminal{Exp7}} {\terminal{/{$=$}}} {\nonterminal{Exp7}}  \\
+ & {\delimit}  &{\nonterminal{Exp7}} {\terminal{{$<$}}} {\nonterminal{Exp7}}  \\
+ & {\delimit}  &{\nonterminal{Exp7}} {\terminal{{$<$}{$=$}}} {\nonterminal{Exp7}}  \\
+ & {\delimit}  &{\nonterminal{Exp7}} {\terminal{{$>$}}} {\nonterminal{Exp7}}  \\
+ & {\delimit}  &{\nonterminal{Exp7}} {\terminal{{$>$}{$=$}}} {\nonterminal{Exp7}}  \\
  & {\delimit}  &{\nonterminal{Exp7}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp7}} & {\arrow}  &{\nonterminal{Exp7}} {\terminal{*}} {\nonterminal{Exp8}}  \\
- & {\delimit}  &{\nonterminal{Exp7}} {\terminal{/}} {\nonterminal{Exp8}}  \\
- & {\delimit}  &{\nonterminal{Exp7}} {\terminal{\%}} {\nonterminal{Exp8}}  \\
+{\nonterminal{Exp7}} & {\arrow}  &{\nonterminal{Exp8}} {\terminal{::}} {\nonterminal{Exp7}}  \\
  & {\delimit}  &{\nonterminal{Exp8}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp8}} & {\arrow}  &{\terminal{{$-$}}} {\nonterminal{Exp8}}  \\
+{\nonterminal{Exp8}} & {\arrow}  &{\nonterminal{Exp8}} {\terminal{{$+$}}} {\nonterminal{Exp9}}  \\
+ & {\delimit}  &{\nonterminal{Exp8}} {\terminal{{$-$}}} {\nonterminal{Exp9}}  \\
  & {\delimit}  &{\nonterminal{Exp9}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp9}} & {\arrow}  &{\nonterminal{Exp9}} {\nonterminal{Exp10}}  \\
+{\nonterminal{Exp9}} & {\arrow}  &{\nonterminal{Exp9}} {\terminal{*}} {\nonterminal{Exp10}}  \\
+ & {\delimit}  &{\nonterminal{Exp9}} {\terminal{/}} {\nonterminal{Exp10}}  \\
+ & {\delimit}  &{\nonterminal{Exp9}} {\terminal{\%}} {\nonterminal{Exp10}}  \\
  & {\delimit}  &{\nonterminal{Exp10}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp10}} & {\arrow}  &{\nonterminal{Exp10}} {\terminal{.}} {\nonterminal{Ident}}  \\
+{\nonterminal{Exp10}} & {\arrow}  &{\terminal{{$-$}}} {\nonterminal{Exp10}}  \\
  & {\delimit}  &{\nonterminal{Exp11}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp11}} & {\arrow}  &{\terminal{sig}} {\terminal{\{}} {\nonterminal{ListFieldType}} {\terminal{\}}}  \\
+{\nonterminal{Exp11}} & {\arrow}  &{\nonterminal{Exp11}} {\nonterminal{Exp12}}  \\
+ & {\delimit}  &{\nonterminal{Exp12}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
+{\nonterminal{Exp12}} & {\arrow}  &{\nonterminal{Exp12}} {\terminal{.}} {\nonterminal{Ident}}  \\
+ & {\delimit}  &{\nonterminal{Exp13}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
+{\nonterminal{Exp13}} & {\arrow}  &{\terminal{sig}} {\terminal{\{}} {\nonterminal{ListFieldType}} {\terminal{\}}}  \\
  & {\delimit}  &{\terminal{rec}} {\terminal{\{}} {\nonterminal{ListFieldValue}} {\terminal{\}}}  \\
+ & {\delimit}  &{\terminal{[}} {\nonterminal{ListExp}} {\terminal{]}}  \\
  & {\delimit}  &{\nonterminal{Ident}}  \\
  & {\delimit}  &{\terminal{Type}}  \\
  & {\delimit}  &{\nonterminal{String}}  \\
@@ -262,6 +287,12 @@ All other symbols are terminals.\\
 
 \begin{tabular}{lll}
 {\nonterminal{Exp1}} & {\arrow}  &{\nonterminal{Exp2}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
+{\nonterminal{ListExp}} & {\arrow}  &{\emptyP} \\
+ & {\delimit}  &{\nonterminal{Exp}}  \\
+ & {\delimit}  &{\nonterminal{Exp}} {\terminal{,}} {\nonterminal{ListExp}}  \\
 \end{tabular}\\
 
 

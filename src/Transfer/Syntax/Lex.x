@@ -16,7 +16,7 @@ $i = [$l $d _ ']          -- identifier character
 $u = [\0-\255]          -- universal: any character
 
 @rsyms =    -- reserved words consisting of special symbols
-   \; | \: | \{ | \} | \= | \( | \) | \_ | \- \> | \\ | \| \| | \& \& | \= \= | \/ \= | \< | \< \= | \> | \> \= | \+ | \- | \* | \/ | \% | \. | \?
+   \; | \: | \{ | \} | \= | \( | \) | \_ | \- \> | \< \- | \\ | \> \> \= | \> \> | \| \| | \& \& | \= \= | \/ \= | \< | \< \= | \> | \> \= | \: \: | \+ | \- | \* | \/ | \% | \. | \[ | \] | \? | \,
 
 :-
 "--" [.]* ; -- Toss single line comments
@@ -79,7 +79,7 @@ eitherResIdent tv s = treeFind resWords
                               | s > a  = treeFind right
                               | s == a = t
 
-resWords = b "in" (b "derive" (b "case" (b "Type" N N) (b "data" N N)) (b "if" (b "else" N N) (b "import" N N))) (b "sig" (b "of" (b "let" N N) (b "rec" N N)) (b "where" (b "then" N N) N))
+resWords = b "import" (b "derive" (b "case" (b "Type" N N) (b "data" N N)) (b "else" (b "do" N N) (b "if" N N))) (b "rec" (b "let" (b "in" N N) (b "of" N N)) (b "then" (b "sig" N N) (b "where" N N)))
    where b s = B s (TS s)
 
 unescapeInitTail :: String -> String

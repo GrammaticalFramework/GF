@@ -24,6 +24,8 @@ data LetDef_
 type LetDef = Tree LetDef_
 data Case_
 type Case = Tree Case_
+data Bind_
+type Bind = Tree Bind_
 data VarOrWild_
 type VarOrWild = Tree VarOrWild_
 data FieldType_
@@ -53,9 +55,12 @@ data Tree :: * -> * where
     ELet :: [LetDef] -> Exp -> Tree Exp_
     ECase :: Exp -> [Case] -> Tree Exp_
     EIf :: Exp -> Exp -> Exp -> Tree Exp_
+    EDo :: [Bind] -> Exp -> Tree Exp_
     EAbs :: VarOrWild -> Exp -> Tree Exp_
     EPi :: VarOrWild -> Exp -> Exp -> Tree Exp_
     EPiNoVar :: Exp -> Exp -> Tree Exp_
+    EBind :: Exp -> Exp -> Tree Exp_
+    EBindC :: Exp -> Exp -> Tree Exp_
     EOr :: Exp -> Exp -> Tree Exp_
     EAnd :: Exp -> Exp -> Tree Exp_
     EEq :: Exp -> Exp -> Tree Exp_
@@ -64,6 +69,7 @@ data Tree :: * -> * where
     ELe :: Exp -> Exp -> Tree Exp_
     EGt :: Exp -> Exp -> Tree Exp_
     EGe :: Exp -> Exp -> Tree Exp_
+    EListCons :: Exp -> Exp -> Tree Exp_
     EAdd :: Exp -> Exp -> Tree Exp_
     ESub :: Exp -> Exp -> Tree Exp_
     EMul :: Exp -> Exp -> Tree Exp_
@@ -74,6 +80,7 @@ data Tree :: * -> * where
     EProj :: Exp -> Ident -> Tree Exp_
     ERecType :: [FieldType] -> Tree Exp_
     ERec :: [FieldValue] -> Tree Exp_
+    EList :: [Exp] -> Tree Exp_
     EVar :: Ident -> Tree Exp_
     EType :: Tree Exp_
     EStr :: String -> Tree Exp_
@@ -81,6 +88,8 @@ data Tree :: * -> * where
     EMeta :: Tree Exp_
     LetDef :: Ident -> Exp -> Exp -> Tree LetDef_
     Case :: Pattern -> Exp -> Tree Case_
+    BindVar :: VarOrWild -> Exp -> Tree Bind_
+    BindNoVar :: Exp -> Tree Bind_
     VVar :: Ident -> Tree VarOrWild_
     VWild :: Tree VarOrWild_
     FieldType :: Ident -> Exp -> Tree FieldType_
@@ -116,9 +125,12 @@ composOpM f t = case t of
     ELet letdefs exp -> return ELet `ap` mapM f letdefs `ap` f exp
     ECase exp cases -> return ECase `ap` f exp `ap` mapM f cases
     EIf exp0 exp1 exp2 -> return EIf `ap` f exp0 `ap` f exp1 `ap` f exp2
+    EDo binds exp -> return EDo `ap` mapM f binds `ap` f exp
     EAbs varorwild exp -> return EAbs `ap` f varorwild `ap` f exp
     EPi varorwild exp0 exp1 -> return EPi `ap` f varorwild `ap` f exp0 `ap` f exp1
     EPiNoVar exp0 exp1 -> return EPiNoVar `ap` f exp0 `ap` f exp1
+    EBind exp0 exp1 -> return EBind `ap` f exp0 `ap` f exp1
+    EBindC exp0 exp1 -> return EBindC `ap` f exp0 `ap` f exp1
     EOr exp0 exp1 -> return EOr `ap` f exp0 `ap` f exp1
     EAnd exp0 exp1 -> return EAnd `ap` f exp0 `ap` f exp1
     EEq exp0 exp1 -> return EEq `ap` f exp0 `ap` f exp1
@@ -127,6 +139,7 @@ composOpM f t = case t of
     ELe exp0 exp1 -> return ELe `ap` f exp0 `ap` f exp1
     EGt exp0 exp1 -> return EGt `ap` f exp0 `ap` f exp1
     EGe exp0 exp1 -> return EGe `ap` f exp0 `ap` f exp1
+    EListCons exp0 exp1 -> return EListCons `ap` f exp0 `ap` f exp1
     EAdd exp0 exp1 -> return EAdd `ap` f exp0 `ap` f exp1
     ESub exp0 exp1 -> return ESub `ap` f exp0 `ap` f exp1
     EMul exp0 exp1 -> return EMul `ap` f exp0 `ap` f exp1
@@ -137,9 +150,12 @@ composOpM f t = case t of
     EProj exp i -> return EProj `ap` f exp `ap` f i
     ERecType fieldtypes -> return ERecType `ap` mapM f fieldtypes
     ERec fieldvalues -> return ERec `ap` mapM f fieldvalues
+    EList exps -> return EList `ap` mapM f exps
     EVar i -> return EVar `ap` f i
     LetDef i exp0 exp1 -> return LetDef `ap` f i `ap` f exp0 `ap` f exp1
     Case pattern exp -> return Case `ap` f pattern `ap` f exp
+    BindVar varorwild exp -> return BindVar `ap` f varorwild `ap` f exp
+    BindNoVar exp -> return BindNoVar `ap` f exp
     VVar i -> return VVar `ap` f i
     FieldType i exp -> return FieldType `ap` f i `ap` f exp
     FieldValue i exp -> return FieldValue `ap` f i `ap` f exp
@@ -162,9 +178,12 @@ composOpFold zero combine f t = case t of
     ELet letdefs exp -> foldr combine zero (map f letdefs) `combine` f exp
     ECase exp cases -> f exp `combine` foldr combine zero (map f cases)
     EIf exp0 exp1 exp2 -> f exp0 `combine` f exp1 `combine` f exp2
+    EDo binds exp -> foldr combine zero (map f binds) `combine` f exp
     EAbs varorwild exp -> f varorwild `combine` f exp
     EPi varorwild exp0 exp1 -> f varorwild `combine` f exp0 `combine` f exp1
     EPiNoVar exp0 exp1 -> f exp0 `combine` f exp1
+    EBind exp0 exp1 -> f exp0 `combine` f exp1
+    EBindC exp0 exp1 -> f exp0 `combine` f exp1
     EOr exp0 exp1 -> f exp0 `combine` f exp1
     EAnd exp0 exp1 -> f exp0 `combine` f exp1
     EEq exp0 exp1 -> f exp0 `combine` f exp1
@@ -173,6 +192,7 @@ composOpFold zero combine f t = case t of
     ELe exp0 exp1 -> f exp0 `combine` f exp1
     EGt exp0 exp1 -> f exp0 `combine` f exp1
     EGe exp0 exp1 -> f exp0 `combine` f exp1
+    EListCons exp0 exp1 -> f exp0 `combine` f exp1
     EAdd exp0 exp1 -> f exp0 `combine` f exp1
     ESub exp0 exp1 -> f exp0 `combine` f exp1
     EMul exp0 exp1 -> f exp0 `combine` f exp1
@@ -183,9 +203,12 @@ composOpFold zero combine f t = case t of
     EProj exp i -> f exp `combine` f i
     ERecType fieldtypes -> foldr combine zero (map f fieldtypes)
     ERec fieldvalues -> foldr combine zero (map f fieldvalues)
+    EList exps -> foldr combine zero (map f exps)
     EVar i -> f i
     LetDef i exp0 exp1 -> f i `combine` f exp0 `combine` f exp1
     Case pattern exp -> f pattern `combine` f exp
+    BindVar varorwild exp -> f varorwild `combine` f exp
+    BindNoVar exp -> f exp
     VVar i -> f i
     FieldType i exp -> f i `combine` f exp
     FieldValue i exp -> f i `combine` f exp
@@ -212,9 +235,12 @@ instance Show (Tree c) where
     ELet letdefs exp -> opar n . showString "ELet" . showChar ' ' . showsPrec 1 letdefs . showChar ' ' . showsPrec 1 exp . cpar n
     ECase exp cases -> opar n . showString "ECase" . showChar ' ' . showsPrec 1 exp . showChar ' ' . showsPrec 1 cases . cpar n
     EIf exp0 exp1 exp2 -> opar n . showString "EIf" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . showChar ' ' . showsPrec 1 exp2 . cpar n
+    EDo binds exp -> opar n . showString "EDo" . showChar ' ' . showsPrec 1 binds . showChar ' ' . showsPrec 1 exp . cpar n
     EAbs varorwild exp -> opar n . showString "EAbs" . showChar ' ' . showsPrec 1 varorwild . showChar ' ' . showsPrec 1 exp . cpar n
     EPi varorwild exp0 exp1 -> opar n . showString "EPi" . showChar ' ' . showsPrec 1 varorwild . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EPiNoVar exp0 exp1 -> opar n . showString "EPiNoVar" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
+    EBind exp0 exp1 -> opar n . showString "EBind" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
+    EBindC exp0 exp1 -> opar n . showString "EBindC" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EOr exp0 exp1 -> opar n . showString "EOr" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EAnd exp0 exp1 -> opar n . showString "EAnd" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EEq exp0 exp1 -> opar n . showString "EEq" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
@@ -223,6 +249,7 @@ instance Show (Tree c) where
     ELe exp0 exp1 -> opar n . showString "ELe" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EGt exp0 exp1 -> opar n . showString "EGt" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EGe exp0 exp1 -> opar n . showString "EGe" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
+    EListCons exp0 exp1 -> opar n . showString "EListCons" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EAdd exp0 exp1 -> opar n . showString "EAdd" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     ESub exp0 exp1 -> opar n . showString "ESub" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     EMul exp0 exp1 -> opar n . showString "EMul" . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
@@ -233,6 +260,7 @@ instance Show (Tree c) where
     EProj exp i -> opar n . showString "EProj" . showChar ' ' . showsPrec 1 exp . showChar ' ' . showsPrec 1 i . cpar n
     ERecType fieldtypes -> opar n . showString "ERecType" . showChar ' ' . showsPrec 1 fieldtypes . cpar n
     ERec fieldvalues -> opar n . showString "ERec" . showChar ' ' . showsPrec 1 fieldvalues . cpar n
+    EList exps -> opar n . showString "EList" . showChar ' ' . showsPrec 1 exps . cpar n
     EVar i -> opar n . showString "EVar" . showChar ' ' . showsPrec 1 i . cpar n
     EType -> showString "EType"
     EStr str -> opar n . showString "EStr" . showChar ' ' . showsPrec 1 str . cpar n
@@ -240,6 +268,8 @@ instance Show (Tree c) where
     EMeta -> showString "EMeta"
     LetDef i exp0 exp1 -> opar n . showString "LetDef" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     Case pattern exp -> opar n . showString "Case" . showChar ' ' . showsPrec 1 pattern . showChar ' ' . showsPrec 1 exp . cpar n
+    BindVar varorwild exp -> opar n . showString "BindVar" . showChar ' ' . showsPrec 1 varorwild . showChar ' ' . showsPrec 1 exp . cpar n
+    BindNoVar exp -> opar n . showString "BindNoVar" . showChar ' ' . showsPrec 1 exp . cpar n
     VVar i -> opar n . showString "VVar" . showChar ' ' . showsPrec 1 i . cpar n
     VWild -> showString "VWild"
     FieldType i exp -> opar n . showString "FieldType" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 exp . cpar n
@@ -270,9 +300,12 @@ johnMajorEq (FieldPattern i pattern) (FieldPattern i_ pattern_) = i == i_ && pat
 johnMajorEq (ELet letdefs exp) (ELet letdefs_ exp_) = letdefs == letdefs_ && exp == exp_
 johnMajorEq (ECase exp cases) (ECase exp_ cases_) = exp == exp_ && cases == cases_
 johnMajorEq (EIf exp0 exp1 exp2) (EIf exp0_ exp1_ exp2_) = exp0 == exp0_ && exp1 == exp1_ && exp2 == exp2_
+johnMajorEq (EDo binds exp) (EDo binds_ exp_) = binds == binds_ && exp == exp_
 johnMajorEq (EAbs varorwild exp) (EAbs varorwild_ exp_) = varorwild == varorwild_ && exp == exp_
 johnMajorEq (EPi varorwild exp0 exp1) (EPi varorwild_ exp0_ exp1_) = varorwild == varorwild_ && exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EPiNoVar exp0 exp1) (EPiNoVar exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
+johnMajorEq (EBind exp0 exp1) (EBind exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
+johnMajorEq (EBindC exp0 exp1) (EBindC exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EOr exp0 exp1) (EOr exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EAnd exp0 exp1) (EAnd exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EEq exp0 exp1) (EEq exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
@@ -281,6 +314,7 @@ johnMajorEq (ELt exp0 exp1) (ELt exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (ELe exp0 exp1) (ELe exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EGt exp0 exp1) (EGt exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EGe exp0 exp1) (EGe exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
+johnMajorEq (EListCons exp0 exp1) (EListCons exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EAdd exp0 exp1) (EAdd exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (ESub exp0 exp1) (ESub exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EMul exp0 exp1) (EMul exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
@@ -291,6 +325,7 @@ johnMajorEq (EApp exp0 exp1) (EApp exp0_ exp1_) = exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (EProj exp i) (EProj exp_ i_) = exp == exp_ && i == i_
 johnMajorEq (ERecType fieldtypes) (ERecType fieldtypes_) = fieldtypes == fieldtypes_
 johnMajorEq (ERec fieldvalues) (ERec fieldvalues_) = fieldvalues == fieldvalues_
+johnMajorEq (EList exps) (EList exps_) = exps == exps_
 johnMajorEq (EVar i) (EVar i_) = i == i_
 johnMajorEq EType EType = True
 johnMajorEq (EStr str) (EStr str_) = str == str_
@@ -298,6 +333,8 @@ johnMajorEq (EInt n) (EInt n_) = n == n_
 johnMajorEq EMeta EMeta = True
 johnMajorEq (LetDef i exp0 exp1) (LetDef i_ exp0_ exp1_) = i == i_ && exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (Case pattern exp) (Case pattern_ exp_) = pattern == pattern_ && exp == exp_
+johnMajorEq (BindVar varorwild exp) (BindVar varorwild_ exp_) = varorwild == varorwild_ && exp == exp_
+johnMajorEq (BindNoVar exp) (BindNoVar exp_) = exp == exp_
 johnMajorEq (VVar i) (VVar i_) = i == i_
 johnMajorEq VWild VWild = True
 johnMajorEq (FieldType i exp) (FieldType i_ exp_) = i == i_ && exp == exp_
@@ -327,39 +364,46 @@ instance Ord (Tree c) where
     index (ELet _ _) = 16
     index (ECase _ _) = 17
     index (EIf _ _ _) = 18
-    index (EAbs _ _) = 19
-    index (EPi _ _ _) = 20
-    index (EPiNoVar _ _) = 21
-    index (EOr _ _) = 22
-    index (EAnd _ _) = 23
-    index (EEq _ _) = 24
-    index (ENe _ _) = 25
-    index (ELt _ _) = 26
-    index (ELe _ _) = 27
-    index (EGt _ _) = 28
-    index (EGe _ _) = 29
-    index (EAdd _ _) = 30
-    index (ESub _ _) = 31
-    index (EMul _ _) = 32
-    index (EDiv _ _) = 33
-    index (EMod _ _) = 34
-    index (ENeg _) = 35
-    index (EApp _ _) = 36
-    index (EProj _ _) = 37
-    index (ERecType _) = 38
-    index (ERec _) = 39
-    index (EVar _) = 40
-    index (EType ) = 41
-    index (EStr _) = 42
-    index (EInt _) = 43
-    index (EMeta ) = 44
-    index (LetDef _ _ _) = 45
-    index (Case _ _) = 46
-    index (VVar _) = 47
-    index (VWild ) = 48
-    index (FieldType _ _) = 49
-    index (FieldValue _ _) = 50
-    index (Ident _) = 51
+    index (EDo _ _) = 19
+    index (EAbs _ _) = 20
+    index (EPi _ _ _) = 21
+    index (EPiNoVar _ _) = 22
+    index (EBind _ _) = 23
+    index (EBindC _ _) = 24
+    index (EOr _ _) = 25
+    index (EAnd _ _) = 26
+    index (EEq _ _) = 27
+    index (ENe _ _) = 28
+    index (ELt _ _) = 29
+    index (ELe _ _) = 30
+    index (EGt _ _) = 31
+    index (EGe _ _) = 32
+    index (EListCons _ _) = 33
+    index (EAdd _ _) = 34
+    index (ESub _ _) = 35
+    index (EMul _ _) = 36
+    index (EDiv _ _) = 37
+    index (EMod _ _) = 38
+    index (ENeg _) = 39
+    index (EApp _ _) = 40
+    index (EProj _ _) = 41
+    index (ERecType _) = 42
+    index (ERec _) = 43
+    index (EList _) = 44
+    index (EVar _) = 45
+    index (EType ) = 46
+    index (EStr _) = 47
+    index (EInt _) = 48
+    index (EMeta ) = 49
+    index (LetDef _ _ _) = 50
+    index (Case _ _) = 51
+    index (BindVar _ _) = 52
+    index (BindNoVar _) = 53
+    index (VVar _) = 54
+    index (VWild ) = 55
+    index (FieldType _ _) = 56
+    index (FieldValue _ _) = 57
+    index (Ident _) = 58
     compareSame (Module imports decls) (Module imports_ decls_) = mappend (compare imports imports_) (compare decls decls_)
     compareSame (Import i) (Import i_) = compare i i_
     compareSame (DataDecl i exp consdecls) (DataDecl i_ exp_ consdecls_) = mappend (compare i i_) (mappend (compare exp exp_) (compare consdecls consdecls_))
@@ -379,9 +423,12 @@ instance Ord (Tree c) where
     compareSame (ELet letdefs exp) (ELet letdefs_ exp_) = mappend (compare letdefs letdefs_) (compare exp exp_)
     compareSame (ECase exp cases) (ECase exp_ cases_) = mappend (compare exp exp_) (compare cases cases_)
     compareSame (EIf exp0 exp1 exp2) (EIf exp0_ exp1_ exp2_) = mappend (compare exp0 exp0_) (mappend (compare exp1 exp1_) (compare exp2 exp2_))
+    compareSame (EDo binds exp) (EDo binds_ exp_) = mappend (compare binds binds_) (compare exp exp_)
     compareSame (EAbs varorwild exp) (EAbs varorwild_ exp_) = mappend (compare varorwild varorwild_) (compare exp exp_)
     compareSame (EPi varorwild exp0 exp1) (EPi varorwild_ exp0_ exp1_) = mappend (compare varorwild varorwild_) (mappend (compare exp0 exp0_) (compare exp1 exp1_))
     compareSame (EPiNoVar exp0 exp1) (EPiNoVar exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
+    compareSame (EBind exp0 exp1) (EBind exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
+    compareSame (EBindC exp0 exp1) (EBindC exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
     compareSame (EOr exp0 exp1) (EOr exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
     compareSame (EAnd exp0 exp1) (EAnd exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
     compareSame (EEq exp0 exp1) (EEq exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
@@ -390,6 +437,7 @@ instance Ord (Tree c) where
     compareSame (ELe exp0 exp1) (ELe exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
     compareSame (EGt exp0 exp1) (EGt exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
     compareSame (EGe exp0 exp1) (EGe exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
+    compareSame (EListCons exp0 exp1) (EListCons exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
     compareSame (EAdd exp0 exp1) (EAdd exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
     compareSame (ESub exp0 exp1) (ESub exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
     compareSame (EMul exp0 exp1) (EMul exp0_ exp1_) = mappend (compare exp0 exp0_) (compare exp1 exp1_)
@@ -400,6 +448,7 @@ instance Ord (Tree c) where
     compareSame (EProj exp i) (EProj exp_ i_) = mappend (compare exp exp_) (compare i i_)
     compareSame (ERecType fieldtypes) (ERecType fieldtypes_) = compare fieldtypes fieldtypes_
     compareSame (ERec fieldvalues) (ERec fieldvalues_) = compare fieldvalues fieldvalues_
+    compareSame (EList exps) (EList exps_) = compare exps exps_
     compareSame (EVar i) (EVar i_) = compare i i_
     compareSame EType EType = EQ
     compareSame (EStr str) (EStr str_) = compare str str_
@@ -407,6 +456,8 @@ instance Ord (Tree c) where
     compareSame EMeta EMeta = EQ
     compareSame (LetDef i exp0 exp1) (LetDef i_ exp0_ exp1_) = mappend (compare i i_) (mappend (compare exp0 exp0_) (compare exp1 exp1_))
     compareSame (Case pattern exp) (Case pattern_ exp_) = mappend (compare pattern pattern_) (compare exp exp_)
+    compareSame (BindVar varorwild exp) (BindVar varorwild_ exp_) = mappend (compare varorwild varorwild_) (compare exp exp_)
+    compareSame (BindNoVar exp) (BindNoVar exp_) = compare exp exp_
     compareSame (VVar i) (VVar i_) = compare i i_
     compareSame VWild VWild = EQ
     compareSame (FieldType i exp) (FieldType i_ exp_) = mappend (compare i i_) (compare exp exp_)

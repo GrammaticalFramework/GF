@@ -15,7 +15,7 @@ id _ x = x
 
 
 --
--- The Bool type
+-- The List type
 --
 
 data Bool : Type where 
@@ -24,6 +24,46 @@ data Bool : Type where
 
 not : Bool -> Bool
 not b = if b then False else True
+
+
+data List : (_:Type) -> Type where 
+	Nil : (A:Type) -> List A
+        Cons : (A:Type) -> A -> List A -> List A
+
+size : (A:Type) -> List A -> Nat
+size _ (Nil _) = Zero
+size A (Cons _ x xs) = Succ (size A xs)
+
+map : (A:Type) -> (B:Type) -> (A -> B) -> List A -> List B
+map _ B _ (Nil _) = Nil B
+map A B f (Cons _ x xs) = Cons B (f x) (map A B f xs)
+
+append : (A:Type) -> (xs:List A) -> List A -> List A
+append A xs ys = foldr A (List A) (Cons A) ys xs
+
+concat : (A : Type) -> List (List A) -> List A
+concat A = foldr (List A) (List A) (append A) (Nil A)
+
+foldr : (A : Type) -> (B : Type) -> (A -> B -> B) -> B -> List A -> B
+foldr _ _ _ x (Nil _) = x
+foldr A B f x (Cons _ y ys) = f y (foldr A B f x ys)
+
+
+--
+-- The Maybe type
+--
+
+data Maybe : Type -> Type where
+	Nothing : (A : Type) -> Maybe A
+	Just : (A : Type) -> A -> Maybe A
+
+fromMaybe : (A : Type) -> A -> Maybe A -> A
+fromMaybe _ x Nothing = x
+fromMaybe _ _ (Just x) = x
+
+maybe : (A : Type) -> (B : Type) -> B -> (A -> B) -> Maybe A -> A
+maybe _ _ x _ Nothing = x
+maybe _ _ _ f (Just x) = f x
 
 
 --
@@ -327,3 +367,24 @@ return _ d = d.return
 bind : (M : Type -> Type) -> Monad M 
     -> (A : Type) -> (B : Type) -> M A -> (A -> M B) -> M B
 bind _ d = d.bind
+
+-- Operators:
+
+{-
+  (x >>= y) => bind ? ? ? ? x y
+  (x >>  y) => bind ? ? ? ? x (\_ -> y)
+-}
+
+-- Instances:
+
+monad_List : Monad List
+monad_list = rec return = \A -> \x -> Cons A x (Nil A)
+		 bind = \A -> \B -> \m -> \k -> concat B (map A B k m)
+
+monad_Maybe : Monad Maybe
+monad_Maybe = 
+  rec return = Just
+      bind = \A -> \B -> \m -> \k -> 
+         case m of
+		Nothing _ -> Nothing B
+		Just _ x  -> k x
