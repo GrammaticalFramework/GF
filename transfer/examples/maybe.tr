@@ -1,0 +1,11 @@
+data Maybe : Type -> Type where
+	Nothing : (A : Type) -> Maybe A
+	Just : (A : Type) -> A -> Maybe A
+
+fromMaybe : (A : Type) -> A -> Maybe A -> A
+fromMaybe _ x Nothing = x
+fromMaybe _ _ (Just x) = x
+
+maybe : (A : Type) -> (B : Type) -> B -> (A -> B) -> Maybe A -> A
+maybe _ _ x _ Nothing = x
+maybe _ _ _ f (Just x) = f x
