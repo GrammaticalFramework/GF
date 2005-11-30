@@ -1,6 +1,6 @@
 entrypoints Module, Exp ;
 
-layout "let", "where", "of","rec", "sig" ;
+layout "let", "where", "of","rec", "sig", "do" ;
 layout stop "in" ;
 layout toplevel ;
 
@@ -56,53 +56,62 @@ separator Case ";" ;
 
 EIf.       Exp  ::= "if" Exp "then" Exp "else" Exp ;
 
+EDo.       Exp  ::= "do" "{" [Bind] Exp "}" ;
+BindVar.   Bind ::= VarOrWild "<-" Exp ;
+BindNoVar. Bind ::= Exp ;
+terminator Bind ";" ;
+
 EAbs.      Exp2 ::= "\\" VarOrWild "->" Exp ;
 EPi.       Exp2 ::= "(" VarOrWild ":" Exp ")" "->" Exp ;
 EPiNoVar.  Exp2 ::= Exp3 "->" Exp ;
 VVar.      VarOrWild ::= Ident ;
 VWild.     VarOrWild ::= "_" ;
 
-EOr.       Exp3 ::= Exp4 "||" Exp3 ;
-EAnd.      Exp4 ::= Exp5 "&&" Exp4 ;
+EBind.     Exp3 ::= Exp3 ">>=" Exp4 ;
+EBindC.    Exp3 ::= Exp3 ">>"  Exp4 ;
 
-EEq.       Exp5 ::= Exp6 "==" Exp6 ;
-ENe.       Exp5 ::= Exp6 "/=" Exp6 ;
-ELt.       Exp5 ::= Exp6 "<"  Exp6 ;
-ELe.       Exp5 ::= Exp6 "<=" Exp6 ;
-EGt.       Exp5 ::= Exp6 ">"  Exp6 ;
-EGe.       Exp5 ::= Exp6 ">=" Exp6 ;
+EOr.       Exp4 ::= Exp5 "||" Exp4 ;
 
-EAdd.      Exp6 ::= Exp6 "+" Exp7 ;
-ESub.      Exp6 ::= Exp6 "-" Exp7 ;
+EAnd.      Exp5 ::= Exp6 "&&" Exp5 ;
 
-EMul.      Exp7 ::= Exp7 "*" Exp8 ;
-EDiv.      Exp7 ::= Exp7 "/" Exp8 ;
-EMod.      Exp7 ::= Exp7 "%" Exp8 ;
+EEq.       Exp6 ::= Exp7 "==" Exp7 ;
+ENe.       Exp6 ::= Exp7 "/=" Exp7 ;
+ELt.       Exp6 ::= Exp7 "<"  Exp7 ;
+ELe.       Exp6 ::= Exp7 "<=" Exp7 ;
+EGt.       Exp6 ::= Exp7 ">"  Exp7 ;
+EGe.       Exp6 ::= Exp7 ">=" Exp7 ;
 
-ENeg.      Exp8 ::= "-" Exp8 ;
+EListCons. Exp7 ::= Exp8 "::" Exp7 ;
 
-EApp.      Exp9 ::= Exp9 Exp10 ;
+EAdd.      Exp8 ::= Exp8 "+" Exp9 ;
+ESub.      Exp8 ::= Exp8 "-" Exp9 ;
 
-EProj.     Exp10 ::= Exp10 "." Ident ;
+EMul.      Exp9 ::= Exp9 "*" Exp10 ;
+EDiv.      Exp9 ::= Exp9 "/" Exp10 ;
+EMod.      Exp9 ::= Exp9 "%" Exp10 ;
 
-ERecType.  Exp11 ::= "sig" "{" [FieldType] "}" ;
+ENeg.      Exp10 ::= "-" Exp10 ;
+
+EApp.      Exp11 ::= Exp11 Exp12 ;
+
+EProj.     Exp12 ::= Exp12 "." Ident ;
+
+ERecType.  Exp13 ::= "sig" "{" [FieldType] "}" ;
 FieldType. FieldType  ::= Ident ":" Exp ;
 separator FieldType ";" ;
 
-ERec.      Exp11 ::= "rec" "{" [FieldValue] "}" ;
+ERec.      Exp13 ::= "rec" "{" [FieldValue] "}" ;
 FieldValue.FieldValue ::= Ident "=" Exp ;
 separator FieldValue ";" ;
 
-EVar.      Exp11 ::= Ident ;
-EType.     Exp11 ::= "Type" ;
-EStr.      Exp11 ::= String ;
-EInt.      Exp11 ::= Integer ;
-EMeta.     Exp11 ::= "?" ;
+EList.     Exp13 ::= "[" [Exp] "]" ;
 
-coercions Exp 11 ;
+EVar.      Exp13 ::= Ident ;
+EType.     Exp13 ::= "Type" ;
+EStr.      Exp13 ::= String ;
+EInt.      Exp13 ::= Integer ;
+EMeta.     Exp13 ::= "?" ;
 
+coercions Exp 13 ;
 
-
-
-
-
+separator Exp "," ;

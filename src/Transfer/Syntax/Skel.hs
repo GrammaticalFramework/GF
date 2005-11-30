@@ -30,9 +30,12 @@ transTree t = case t of
   ELet letdefs exp -> failure t
   ECase exp cases -> failure t
   EIf exp0 exp1 exp2 -> failure t
+  EDo binds exp -> failure t
   EAbs varorwild exp -> failure t
   EPi varorwild exp0 exp1 -> failure t
   EPiNoVar exp0 exp1 -> failure t
+  EBind exp0 exp1 -> failure t
+  EBindC exp0 exp1 -> failure t
   EOr exp0 exp1 -> failure t
   EAnd exp0 exp1 -> failure t
   EEq exp0 exp1 -> failure t
@@ -41,6 +44,7 @@ transTree t = case t of
   ELe exp0 exp1 -> failure t
   EGt exp0 exp1 -> failure t
   EGe exp0 exp1 -> failure t
+  EListCons exp0 exp1 -> failure t
   EAdd exp0 exp1 -> failure t
   ESub exp0 exp1 -> failure t
   EMul exp0 exp1 -> failure t
@@ -51,6 +55,7 @@ transTree t = case t of
   EProj exp i -> failure t
   ERecType fieldtypes -> failure t
   ERec fieldvalues -> failure t
+  EList exps -> failure t
   EVar i -> failure t
   EType  -> failure t
   EStr str -> failure t
@@ -58,6 +63,8 @@ transTree t = case t of
   EMeta  -> failure t
   LetDef i exp0 exp1 -> failure t
   Case pattern exp -> failure t
+  BindVar varorwild exp -> failure t
+  BindNoVar exp -> failure t
   VVar i -> failure t
   VWild  -> failure t
   FieldType i exp -> failure t
@@ -103,9 +110,12 @@ transExp t = case t of
   ELet letdefs exp -> failure t
   ECase exp cases -> failure t
   EIf exp0 exp1 exp2 -> failure t
+  EDo binds exp -> failure t
   EAbs varorwild exp -> failure t
   EPi varorwild exp0 exp1 -> failure t
   EPiNoVar exp0 exp1 -> failure t
+  EBind exp0 exp1 -> failure t
+  EBindC exp0 exp1 -> failure t
   EOr exp0 exp1 -> failure t
   EAnd exp0 exp1 -> failure t
   EEq exp0 exp1 -> failure t
@@ -114,6 +124,7 @@ transExp t = case t of
   ELe exp0 exp1 -> failure t
   EGt exp0 exp1 -> failure t
   EGe exp0 exp1 -> failure t
+  EListCons exp0 exp1 -> failure t
   EAdd exp0 exp1 -> failure t
   ESub exp0 exp1 -> failure t
   EMul exp0 exp1 -> failure t
@@ -124,6 +135,7 @@ transExp t = case t of
   EProj exp i -> failure t
   ERecType fieldtypes -> failure t
   ERec fieldvalues -> failure t
+  EList exps -> failure t
   EVar i -> failure t
   EType  -> failure t
   EStr str -> failure t
@@ -137,6 +149,11 @@ transLetDef t = case t of
 transCase :: Case -> Result
 transCase t = case t of
   Case pattern exp -> failure t
+
+transBind :: Bind -> Result
+transBind t = case t of
+  BindVar varorwild exp -> failure t
+  BindNoVar exp -> failure t
 
 transVarOrWild :: VarOrWild -> Result
 transVarOrWild t = case t of
