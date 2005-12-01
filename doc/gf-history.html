@@ -13,6 +13,37 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 </center>
 <p>
 
+1/12 (BB,AR) The command <tt>at = apply_transfer</tt>, which applies
+a transfer function to a term. This is used for noncompositional
+translation. Transfer functions are defined in a special transfer
+language (file suffix <tt>.tr</tt>), which is compiled into a
+run-time transfer core language (file suffix <tt>.trc</tt>).
+The compiler is included in <tt>GF/transfer</tt>. The following is
+a complete example of how to try out transfer:
+<pre>
+  % cd GF/transfer
+  % make                            -- compile the trc compiler
+  % cd examples                     -- GF/transfer/examples
+  % ../compile_to_core -i../lib numerals.tr
+  % mv numerals.trc ../../examples/numerals
+  % cd ../../examples/numerals      -- GF/examples/numerals
+  % gf
+     > i decimal.gf
+     > i BinaryDigits.gf
+     > i numerals.trc
+     > p -lang=Cncdecimal "123" | at num2bin | l
+     1 0 0 1 1 0 0 1 1 1 0
+</pre>
+Other relevant commands are:
+<ul>
+<li> <tt>i file.trc</tt>: import a transfer module
+<li> <tt>pg -printer=transfer</tt>: create a syntax datatype in <tt>.tr</tt> format 
+</ul>
+For more information on the commands, see <tt>help</tt>. Documentation on
+the transfer language: to appear. 
+
+<p>
+
 17/11 (AR) Made it possible for lexers to be nondeterministic.
 Now with a simple-minded implementation that the parser is sent
 each lexing result in turn. The option <tt>-cut</tt> is used for

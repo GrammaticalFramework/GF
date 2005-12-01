@@ -357,21 +357,18 @@ stateGrammarOfLang :: ShellState -> Language -> StateGrammar
 stateGrammarOfLang st0 l = StGr {
   absId    = err (const (identC "Abs")) id  $ M.abstractOfConcrete allCan l, ---
   cncId    = l,
-  grammar  = can,
+  grammar  = allCan,
   cf       = maybe emptyCF id (lookup l (cfs st)),
   mcfg     = maybe [] id $ lookup l $ mcfgs st,
   cfg      = maybe [] id $ lookup l $ cfgs st,
   pInfo    = maybe (Prs.buildPInfo [] []) id $ lookup l $ pInfos st,
   morpho   = maybe emptyMorpho id (lookup l (morphos st)),
   probs    = maybe emptyProbs id (lookup l (probss st)),
-  loptions = errVal noOptions $ lookupOptionsCan can
+  loptions = errVal noOptions $ lookupOptionsCan allCan
   }
  where
-   st = purgeShellState $ st0 {concrete = Just l}
+   st = purgeShellState $ errVal st0 $ changeMain (Just l) st0
    allCan = canModules st
-   can = allCan
-----   can = M.partOfGrammar allCan 
-----           (l, maybe M.emptyModInfo id (lookup l (M.modules allCan)))
 
 grammarOfLang :: ShellState -> Language -> CanonGrammar
 cfOfLang      :: ShellState -> Language -> CF
@@ -413,6 +410,7 @@ stateAbstractGrammar st = StGr {
 
 globalOptions                   :: ShellState -> Options
 allLanguages                    :: ShellState -> [Language]
+allTransfers                    :: ShellState -> [Ident]
 allCategories                   :: ShellState -> [G.Cat]
 allStateGrammars                :: ShellState -> [StateGrammar]
 allStateGrammarsWithNames       :: ShellState -> [(Language, StateGrammar)]
@@ -421,7 +419,9 @@ allActiveStateGrammarsWithNames :: ShellState -> [(Language, StateGrammar)]
 allActiveGrammars               :: ShellState -> [StateGrammar]
 
 globalOptions = gloptions
-allLanguages  = map (fst . fst) . concretes
+--allLanguages  = map (fst . fst) . concretes
+allLanguages  = M.allConcreteModules . canModules
+allTransfers  = map fst . transfers
 allCategories = map fst . allCatsOf . canModules
 
 allStateGrammars = map snd . allStateGrammarsWithNames

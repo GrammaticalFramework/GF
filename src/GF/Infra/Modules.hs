@@ -35,7 +35,8 @@ module GF.Infra.Modules (
 		lookupModule, lookupModuleType, lookupModMod, lookupInfo,
 		allModMod, isModAbs, isModRes, isModCnc, isModTrans,
 		sameMType, isCompilableModule, isCompleteModule,
-		allAbstracts, greatestAbstract, allResources, greatestResource, allConcretes
+		allAbstracts, greatestAbstract, allResources,
+		greatestResource, allConcretes, allConcreteModules
 	       ) where
 
 import GF.Infra.Ident
@@ -391,3 +392,8 @@ greatestResource gr = case allResources gr of
 allConcretes :: Eq i => MGrammar i f a -> i -> [i]
 allConcretes gr a = 
   [i | (i, ModMod m) <- modules gr, mtype m == MTConcrete a, isCompleteModule m]
+
+-- | all concrete modules for any abstract
+allConcreteModules :: Eq i => MGrammar i f a -> [i]
+allConcreteModules gr = 
+  [i | (i, ModMod m) <- modules gr, MTConcrete _ <- [mtype m], isCompleteModule m]

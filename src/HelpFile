@@ -22,6 +22,7 @@ i,  import: i File
         .gfe   example-based grammar files (only with the -ex option)
         .ebnf  Extended BNF format
         .cf    Context-free (BNF) format
+        .trc   TransferCore format
   options:
       -old          old: parse in GF<2.0 format (not necessary)
       -v            verbose: give lots of messages 
@@ -189,6 +190,15 @@ p,  parse: p String
   examples:
       p -cat=S -mcfg "jag är gammal"   -- parse an S with the MCFG
       rf examples.txt | p -lines      -- parse each non-empty line of the file
+
+at, apply_transfer: at (Module.Fun | Fun)
+      Transfer a term using Fun from Module, or the topmost transfer
+      module. Transfer modules are given in the .trc format. They are
+      shown by the 'po' command.
+  flags:
+     -lang     typecheck the result in this lang instead of default lang
+  examples:
+     p -lang=Cncdecimal "123" | at num2bin | l   -- convert dec to bin
 
 tt, test_tokenizer: tt String
       Show the token list sent to the parser when String is parsed.
@@ -559,6 +569,7 @@ q, quit: q
     -printer=unpar          a gfc grammar with parameters eliminated
     -printer=functiongraph  abstract syntax functions in 'dot' format
     -printer=typegraph      abstract syntax categories in 'dot' format
+    -printer=transfer       Transfer language datatype (.tr file format)
     -printer=gfcm        M  gfcm file (default for pm)
     -printer=header      M  gfcm file with header (for GF embedded in Java)
     -printer=graph       M  module dependency graph in 'dot' (graphviz) format

@@ -51,6 +51,7 @@ txtHelpFile =
   "\n        .gfe   example-based grammar files (only with the -ex option)" ++
   "\n        .ebnf  Extended BNF format" ++
   "\n        .cf    Context-free (BNF) format" ++
+  "\n        .trc   TransferCore format" ++
   "\n  options:" ++
   "\n      -old          old: parse in GF<2.0 format (not necessary)" ++
   "\n      -v            verbose: give lots of messages " ++
@@ -218,6 +219,15 @@ txtHelpFile =
   "\n  examples:" ++
   "\n      p -cat=S -mcfg \"jag är gammal\"   -- parse an S with the MCFG" ++
   "\n      rf examples.txt | p -lines      -- parse each non-empty line of the file" ++
+  "\n" ++
+  "\nat, apply_transfer: at (Module.Fun | Fun)" ++
+  "\n      Transfer a term using Fun from Module, or the topmost transfer" ++
+  "\n      module. Transfer modules are given in the .trc format. They are" ++
+  "\n      shown by the 'po' command." ++
+  "\n  flags:" ++
+  "\n     -lang     typecheck the result in this lang instead of default lang" ++
+  "\n  examples:" ++
+  "\n     p -lang=Cncdecimal \"123\" | at num2bin | l   -- convert dec to bin" ++
   "\n" ++
   "\ntt, test_tokenizer: tt String" ++
   "\n      Show the token list sent to the parser when String is parsed." ++
@@ -588,6 +598,7 @@ txtHelpFile =
   "\n    -printer=unpar          a gfc grammar with parameters eliminated" ++
   "\n    -printer=functiongraph  abstract syntax functions in 'dot' format" ++
   "\n    -printer=typegraph      abstract syntax categories in 'dot' format" ++
+  "\n    -printer=transfer       Transfer language datatype (.tr file format)" ++
   "\n    -printer=gfcm        M  gfcm file (default for pm)" ++
   "\n    -printer=header      M  gfcm file with header (for GF embedded in Java)" ++
   "\n    -printer=graph       M  module dependency graph in 'dot' (graphviz) format" ++
