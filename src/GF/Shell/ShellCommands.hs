@@ -124,6 +124,7 @@ testValidFlag :: ShellState -> Command -> OptFunId -> String -> Err ()
 testValidFlag st co f x = case f of
   "cat"     -> testIn (map prQIdent_ (allCategories st))
   "lang"    -> testIn (map prt (allLanguages st))
+  "transfer" -> testIn (map prt (allTransfers st))
   "res"     -> testIn (map prt (allResources (srcModules st)))
   "number"  -> testN
   "printer" -> case co of
@@ -181,6 +182,7 @@ optionsOfCommand co = case co of
   CGenerateTrees -> both "metas" "atoms depth alts cat lang number"
   CPutTerm -> flags "transform number"
   CWrapTerm _ -> opts "c"
+  CApplyTransfer _ -> flags "lang transfer"
   CMorphoAnalyse -> both "short" "lang"
   CTestTokenizer -> flags "lexer"
   CComputeConcrete _ -> flags "res"
