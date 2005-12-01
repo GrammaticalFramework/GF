@@ -88,14 +88,17 @@ instance Print (Tree c) where
     DeriveDecl i0 i1 -> prPrec _i 0 (concatD [doc (showString "derive") , prt 0 i0 , prt 0 i1])
     ConsDecl i exp -> prPrec _i 0 (concatD [prt 0 i , doc (showString ":") , prt 0 exp])
     POr pattern0 pattern1 -> prPrec _i 0 (concatD [prt 1 pattern0 , doc (showString "||") , prt 0 pattern1])
-    PConsTop i pattern patterns -> prPrec _i 1 (concatD [prt 0 i , prt 2 pattern , prt 0 patterns])
-    PCons i patterns -> prPrec _i 2 (concatD [doc (showString "(") , prt 0 i , prt 0 patterns , doc (showString ")")])
-    PRec fieldpatterns -> prPrec _i 2 (concatD [doc (showString "rec") , doc (showString "{") , prt 0 fieldpatterns , doc (showString "}")])
-    PType  -> prPrec _i 2 (concatD [doc (showString "Type")])
-    PStr str -> prPrec _i 2 (concatD [prt 0 str])
-    PInt n -> prPrec _i 2 (concatD [prt 0 n])
-    PVar i -> prPrec _i 2 (concatD [prt 0 i])
-    PWild  -> prPrec _i 2 (concatD [doc (showString "_")])
+    PListCons pattern0 pattern1 -> prPrec _i 1 (concatD [prt 2 pattern0 , doc (showString "::") , prt 1 pattern1])
+    PConsTop i pattern patterns -> prPrec _i 2 (concatD [prt 0 i , prt 3 pattern , prt 0 patterns])
+    PCons i patterns -> prPrec _i 3 (concatD [doc (showString "(") , prt 0 i , prt 0 patterns , doc (showString ")")])
+    PRec fieldpatterns -> prPrec _i 3 (concatD [doc (showString "rec") , doc (showString "{") , prt 0 fieldpatterns , doc (showString "}")])
+    PList plistelems -> prPrec _i 3 (concatD [doc (showString "[") , prt 0 plistelems , doc (showString "]")])
+    PType  -> prPrec _i 3 (concatD [doc (showString "Type")])
+    PStr str -> prPrec _i 3 (concatD [prt 0 str])
+    PInt n -> prPrec _i 3 (concatD [prt 0 n])
+    PVar i -> prPrec _i 3 (concatD [prt 0 i])
+    PWild  -> prPrec _i 3 (concatD [doc (showString "_")])
+    PListElem pattern -> prPrec _i 0 (concatD [prt 0 pattern])
     FieldPattern i pattern -> prPrec _i 0 (concatD [prt 0 i , doc (showString "=") , prt 0 pattern])
     ELet letdefs exp -> prPrec _i 0 (concatD [doc (showString "let") , doc (showString "{") , prt 0 letdefs , doc (showString "}") , doc (showString "in") , prt 0 exp])
     ECase exp cases -> prPrec _i 0 (concatD [doc (showString "case") , prt 0 exp , doc (showString "of") , doc (showString "{") , prt 0 cases , doc (showString "}")])
@@ -157,10 +160,15 @@ instance Print [ConsDecl] where
    [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
+instance Print [PListElem] where
+  prt _ es = case es of
+   [] -> (concatD [])
+   [x] -> (concatD [prt 0 x])
+   x:xs -> (concatD [prt 0 x , doc (showString ",") , prt 0 xs])
 instance Print [Pattern] where
   prt _ es = case es of
    [] -> (concatD [])
-   x:xs -> (concatD [prt 2 x , prt 0 xs])
+   x:xs -> (concatD [prt 3 x , prt 0 xs])
 instance Print [FieldPattern] where
   prt _ es = case es of
    [] -> (concatD [])

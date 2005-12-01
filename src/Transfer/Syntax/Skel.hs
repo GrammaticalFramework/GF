@@ -19,14 +19,17 @@ transTree t = case t of
   DeriveDecl i0 i1 -> failure t
   ConsDecl i exp -> failure t
   POr pattern0 pattern1 -> failure t
+  PListCons pattern0 pattern1 -> failure t
   PConsTop i pattern patterns -> failure t
   PCons i patterns -> failure t
   PRec fieldpatterns -> failure t
+  PList plistelems -> failure t
   PType  -> failure t
   PStr str -> failure t
   PInt n -> failure t
   PVar i -> failure t
   PWild  -> failure t
+  PListElem pattern -> failure t
   FieldPattern i pattern -> failure t
   ELet letdefs exp -> failure t
   ECase exp cases -> failure t
@@ -95,14 +98,20 @@ transConsDecl t = case t of
 transPattern :: Pattern -> Result
 transPattern t = case t of
   POr pattern0 pattern1 -> failure t
+  PListCons pattern0 pattern1 -> failure t
   PConsTop i pattern patterns -> failure t
   PCons i patterns -> failure t
   PRec fieldpatterns -> failure t
+  PList plistelems -> failure t
   PType  -> failure t
   PStr str -> failure t
   PInt n -> failure t
   PVar i -> failure t
   PWild  -> failure t
+
+transPListElem :: PListElem -> Result
+transPListElem t = case t of
+  PListElem pattern -> failure t
 
 transFieldPattern :: FieldPattern -> Result
 transFieldPattern t = case t of

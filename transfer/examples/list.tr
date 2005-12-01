@@ -1,0 +1,6 @@
+import prelude
+
+l1 = append ? [1,2,3,5,6] [3]
+l2 = 2 :: l1
+
+main = rec { x = length ? l2; y = l2}

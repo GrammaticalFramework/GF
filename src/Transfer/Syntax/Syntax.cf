@@ -24,30 +24,39 @@ separator ConsDecl ";" ;
 -- Disjunctive patterns.
 POr.      Pattern ::= Pattern1 "||" Pattern ;
 
+-- List constructor patterns
+PListCons. Pattern1 ::= Pattern2 "::" Pattern1 ;
+
 -- Hack: constructor applied to at least one pattern
 -- this is to separate it from variable patterns
-PConsTop. Pattern1 ::= Ident Pattern2 [Pattern] ;
+PConsTop. Pattern2 ::= Ident Pattern3 [Pattern] ;
 
 -- Real constructor pattern
-internal PCons.    Pattern2 ::= "(" Ident [Pattern] ")" ;
+internal PCons.    Pattern3 ::= "(" Ident [Pattern] ")" ;
 
 -- Record patterns
-PRec.     Pattern2 ::= "rec" "{" [FieldPattern] "}";
--- The pattern matching the Type constant
-PType.    Pattern2 ::= "Type" ;
--- String literal patterns
-PStr.     Pattern2 ::= String ;
--- Integer literal patterns
-PInt.     Pattern2 ::= Integer ;
--- Variable patterns
-PVar.     Pattern2 ::= Ident ;
--- Wild card patterns
-PWild.    Pattern2 ::= "_" ;
+PRec.     Pattern3 ::= "rec" "{" [FieldPattern] "}";
 
-coercions Pattern 2 ;
+-- List patterns
+PList.    Pattern3 ::= "[" [PListElem] "]" ;
+PListElem. PListElem ::= Pattern ;
+separator PListElem "," ;
+
+-- The pattern matching the Type constant
+PType.    Pattern3 ::= "Type" ;
+-- String literal patterns
+PStr.     Pattern3 ::= String ;
+-- Integer literal patterns
+PInt.     Pattern3 ::= Integer ;
+-- Variable patterns
+PVar.     Pattern3 ::= Ident ;
+-- Wild card patterns
+PWild.    Pattern3 ::= "_" ;
+
+coercions Pattern 3 ;
 
 [].  [Pattern] ::= ;
-(:). [Pattern] ::= Pattern2 [Pattern] ;
+(:). [Pattern] ::= Pattern3 [Pattern] ;
 
 FieldPattern. FieldPattern ::= Ident "=" Pattern ;
 separator FieldPattern ";" ;

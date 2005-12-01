@@ -13,6 +13,11 @@ const _ _ x _ = x
 id : (A:Type) -> A -> A
 id _ x = x
 
+flip : (A:Type) -> (B:Type) -> (C:Type) -> (A -> B -> C) -> B -> A -> C
+flip _ _ _ f x y = f y x
+
+compose : (A:Type) -> (B:Type) -> (C:Type) -> (B -> C) -> (A -> B) -> A -> C
+compose _ _ _ f g x = f (g x)
 
 --
 -- The Integer type
@@ -117,13 +122,16 @@ data List : (_:Type) -> Type where
 	Nil : (A:Type) -> List A
         Cons : (A:Type) -> A -> List A -> List A
 
-size : (A:Type) -> List A -> Nat
-size _ (Nil _) = Zero
-size A (Cons _ x xs) = Succ (size A xs)
+foldr : (A : Type) -> (B : Type) -> (A -> B -> B) -> B -> List A -> B
+foldr _ _ _ x [] = x
+foldr A B f x (y::ys) = f y (foldr A B f x ys)
+
+length : (A:Type) -> List A -> Integer
+length A = foldr A Integer (\_ -> \y -> y+1) 0
 
 map : (A:Type) -> (B:Type) -> (A -> B) -> List A -> List B
-map _ B _ (Nil _) = Nil B
-map A B f (Cons _ x xs) = Cons B (f x) (map A B f xs)
+map _ _ _ [] = []
+map A B f (x::xs) = f x :: map A B f xs
 
 append : (A:Type) -> List A -> List A -> List A
 append A xs ys = foldr A (List A) (Cons A) ys xs
@@ -131,9 +139,7 @@ append A xs ys = foldr A (List A) (Cons A) ys xs
 concat : (A : Type) -> List (List A) -> List A
 concat A = foldr (List A) (List A) (append A) (Nil A)
 
-foldr : (A : Type) -> (B : Type) -> (A -> B -> B) -> B -> List A -> B
-foldr _ _ _ x (Nil _) = x
-foldr A B f x (Cons _ y ys) = f y (foldr A B f x ys)
+
 
 -- Instances:
 
