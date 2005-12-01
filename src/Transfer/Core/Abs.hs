@@ -59,7 +59,8 @@ data Tree :: * -> * where
     EVar :: CIdent -> Tree Exp_
     EType :: Tree Exp_
     EStr :: String -> Tree Exp_
-    EInt :: Integer -> Tree Exp_
+    EInteger :: Integer -> Tree Exp_
+    EDouble :: Double -> Tree Exp_
     EMeta :: TMeta -> Tree Exp_
     LetDef :: CIdent -> Exp -> Exp -> Tree LetDef_
     FieldType :: CIdent -> Exp -> Tree FieldType_
@@ -163,7 +164,8 @@ instance Show (Tree c) where
     EVar cident -> opar n . showString "EVar" . showChar ' ' . showsPrec 1 cident . cpar n
     EType -> showString "EType"
     EStr str -> opar n . showString "EStr" . showChar ' ' . showsPrec 1 str . cpar n
-    EInt n -> opar n . showString "EInt" . showChar ' ' . showsPrec 1 n . cpar n
+    EInteger n -> opar n . showString "EInteger" . showChar ' ' . showsPrec 1 n . cpar n
+    EDouble d -> opar n . showString "EDouble" . showChar ' ' . showsPrec 1 d . cpar n
     EMeta tmeta -> opar n . showString "EMeta" . showChar ' ' . showsPrec 1 tmeta . cpar n
     LetDef cident exp0 exp1 -> opar n . showString "LetDef" . showChar ' ' . showsPrec 1 cident . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     FieldType cident exp -> opar n . showString "FieldType" . showChar ' ' . showsPrec 1 cident . showChar ' ' . showsPrec 1 exp . cpar n
@@ -202,7 +204,8 @@ johnMajorEq (ERec fieldvalues) (ERec fieldvalues_) = fieldvalues == fieldvalues_
 johnMajorEq (EVar cident) (EVar cident_) = cident == cident_
 johnMajorEq EType EType = True
 johnMajorEq (EStr str) (EStr str_) = str == str_
-johnMajorEq (EInt n) (EInt n_) = n == n_
+johnMajorEq (EInteger n) (EInteger n_) = n == n_
+johnMajorEq (EDouble d) (EDouble d_) = d == d_
 johnMajorEq (EMeta tmeta) (EMeta tmeta_) = tmeta == tmeta_
 johnMajorEq (LetDef cident exp0 exp1) (LetDef cident_ exp0_ exp1_) = cident == cident_ && exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (FieldType cident exp) (FieldType cident_ exp_) = cident == cident_ && exp == exp_
@@ -240,14 +243,15 @@ instance Ord (Tree c) where
     index (EVar _) = 22
     index (EType ) = 23
     index (EStr _) = 24
-    index (EInt _) = 25
-    index (EMeta _) = 26
-    index (LetDef _ _ _) = 27
-    index (FieldType _ _) = 28
-    index (FieldValue _ _) = 29
-    index (Case _ _) = 30
-    index (TMeta _) = 31
-    index (CIdent _) = 32
+    index (EInteger _) = 25
+    index (EDouble _) = 26
+    index (EMeta _) = 27
+    index (LetDef _ _ _) = 28
+    index (FieldType _ _) = 29
+    index (FieldValue _ _) = 30
+    index (Case _ _) = 31
+    index (TMeta _) = 32
+    index (CIdent _) = 33
     compareSame (Module decls) (Module decls_) = compare decls decls_
     compareSame (DataDecl cident exp consdecls) (DataDecl cident_ exp_ consdecls_) = mappend (compare cident cident_) (mappend (compare exp exp_) (compare consdecls consdecls_))
     compareSame (TypeDecl cident exp) (TypeDecl cident_ exp_) = mappend (compare cident cident_) (compare exp exp_)
@@ -273,7 +277,8 @@ instance Ord (Tree c) where
     compareSame (EVar cident) (EVar cident_) = compare cident cident_
     compareSame EType EType = EQ
     compareSame (EStr str) (EStr str_) = compare str str_
-    compareSame (EInt n) (EInt n_) = compare n n_
+    compareSame (EInteger n) (EInteger n_) = compare n n_
+    compareSame (EDouble d) (EDouble d_) = compare d d_
     compareSame (EMeta tmeta) (EMeta tmeta_) = compare tmeta tmeta_
     compareSame (LetDef cident exp0 exp1) (LetDef cident_ exp0_ exp1_) = mappend (compare cident cident_) (mappend (compare exp0 exp0_) (compare exp1 exp1_))
     compareSame (FieldType cident exp) (FieldType cident_ exp_) = mappend (compare cident cident_) (compare exp exp_)

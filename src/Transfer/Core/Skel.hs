@@ -36,7 +36,8 @@ transTree t = case t of
   EVar cident -> failure t
   EType  -> failure t
   EStr str -> failure t
-  EInt n -> failure t
+  EInteger n -> failure t
+  EDouble d -> failure t
   EMeta tmeta -> failure t
   LetDef cident exp0 exp1 -> failure t
   FieldType cident exp -> failure t
@@ -90,7 +91,8 @@ transExp t = case t of
   EVar cident -> failure t
   EType  -> failure t
   EStr str -> failure t
-  EInt n -> failure t
+  EInteger n -> failure t
+  EDouble d -> failure t
   EMeta tmeta -> failure t
 
 transLetDef :: LetDef -> Result

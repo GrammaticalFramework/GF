@@ -85,7 +85,8 @@ data Tree :: * -> * where
     EVar :: Ident -> Tree Exp_
     EType :: Tree Exp_
     EStr :: String -> Tree Exp_
-    EInt :: Integer -> Tree Exp_
+    EInteger :: Integer -> Tree Exp_
+    EDouble :: Double -> Tree Exp_
     EMeta :: Tree Exp_
     LetDef :: Ident -> Exp -> Exp -> Tree LetDef_
     Case :: Pattern -> Exp -> Tree Case_
@@ -268,7 +269,8 @@ instance Show (Tree c) where
     EVar i -> opar n . showString "EVar" . showChar ' ' . showsPrec 1 i . cpar n
     EType -> showString "EType"
     EStr str -> opar n . showString "EStr" . showChar ' ' . showsPrec 1 str . cpar n
-    EInt n -> opar n . showString "EInt" . showChar ' ' . showsPrec 1 n . cpar n
+    EInteger n -> opar n . showString "EInteger" . showChar ' ' . showsPrec 1 n . cpar n
+    EDouble d -> opar n . showString "EDouble" . showChar ' ' . showsPrec 1 d . cpar n
     EMeta -> showString "EMeta"
     LetDef i exp0 exp1 -> opar n . showString "LetDef" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
     Case pattern exp -> opar n . showString "Case" . showChar ' ' . showsPrec 1 pattern . showChar ' ' . showsPrec 1 exp . cpar n
@@ -334,7 +336,8 @@ johnMajorEq (EList exps) (EList exps_) = exps == exps_
 johnMajorEq (EVar i) (EVar i_) = i == i_
 johnMajorEq EType EType = True
 johnMajorEq (EStr str) (EStr str_) = str == str_
-johnMajorEq (EInt n) (EInt n_) = n == n_
+johnMajorEq (EInteger n) (EInteger n_) = n == n_
+johnMajorEq (EDouble d) (EDouble d_) = d == d_
 johnMajorEq EMeta EMeta = True
 johnMajorEq (LetDef i exp0 exp1) (LetDef i_ exp0_ exp1_) = i == i_ && exp0 == exp0_ && exp1 == exp1_
 johnMajorEq (Case pattern exp) (Case pattern_ exp_) = pattern == pattern_ && exp == exp_
@@ -399,17 +402,18 @@ instance Ord (Tree c) where
     index (EVar _) = 46
     index (EType ) = 47
     index (EStr _) = 48
-    index (EInt _) = 49
-    index (EMeta ) = 50
-    index (LetDef _ _ _) = 51
-    index (Case _ _) = 52
-    index (BindVar _ _) = 53
-    index (BindNoVar _) = 54
-    index (VVar _) = 55
-    index (VWild ) = 56
-    index (FieldType _ _) = 57
-    index (FieldValue _ _) = 58
-    index (Ident _) = 59
+    index (EInteger _) = 49
+    index (EDouble _) = 50
+    index (EMeta ) = 51
+    index (LetDef _ _ _) = 52
+    index (Case _ _) = 53
+    index (BindVar _ _) = 54
+    index (BindNoVar _) = 55
+    index (VVar _) = 56
+    index (VWild ) = 57
+    index (FieldType _ _) = 58
+    index (FieldValue _ _) = 59
+    index (Ident _) = 60
     compareSame (Module imports decls) (Module imports_ decls_) = mappend (compare imports imports_) (compare decls decls_)
     compareSame (Import i) (Import i_) = compare i i_
     compareSame (DataDecl i exp consdecls) (DataDecl i_ exp_ consdecls_) = mappend (compare i i_) (mappend (compare exp exp_) (compare consdecls consdecls_))
@@ -459,7 +463,8 @@ instance Ord (Tree c) where
     compareSame (EVar i) (EVar i_) = compare i i_
     compareSame EType EType = EQ
     compareSame (EStr str) (EStr str_) = compare str str_
-    compareSame (EInt n) (EInt n_) = compare n n_
+    compareSame (EInteger n) (EInteger n_) = compare n n_
+    compareSame (EDouble d) (EDouble d_) = compare d d_
     compareSame EMeta EMeta = EQ
     compareSame (LetDef i exp0 exp1) (LetDef i_ exp0_ exp1_) = mappend (compare i i_) (mappend (compare exp0 exp0_) (compare exp1 exp1_))
     compareSame (Case pattern exp) (Case pattern_ exp_) = mappend (compare pattern pattern_) (compare exp exp_)
