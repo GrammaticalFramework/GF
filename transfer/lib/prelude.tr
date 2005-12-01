@@ -38,7 +38,7 @@ map : (A:Type) -> (B:Type) -> (A -> B) -> List A -> List B
 map _ B _ (Nil _) = Nil B
 map A B f (Cons _ x xs) = Cons B (f x) (map A B f xs)
 
-append : (A:Type) -> (xs:List A) -> List A -> List A
+append : (A:Type) -> List A -> List A -> List A
 append A xs ys = foldr A (List A) (Cons A) ys xs
 
 concat : (A : Type) -> List (List A) -> List A
@@ -111,8 +111,8 @@ plus : (A : Type) -> Add A -> A -> A -> A
 plus _ d = d.plus
 
 sum : (A:Type) -> Add A -> List A -> A
-sum _ d (Nil _) = d.zero
-sum A d (Cons _ x xs) = d.plus x (sum A d xs)
+sum A d = foldr A A d.plus d.zero
+
 
 -- Operators:
 
@@ -127,6 +127,10 @@ sum A d (Cons _ x xs) = d.plus x (sum A d xs)
 add_String : Add String
 add_String = rec zero = ""
 		 plus = prim_add_Str
+
+add_List : (A : Type) -> Add (List A)
+add_List A = rec zero = Nil A
+		 plus = append A
 
 --
 -- The Sub class
@@ -158,8 +162,7 @@ times : (A : Type) -> Mul A -> A -> A -> A
 times _ d = d.times
 
 product : (A:Type) -> Mul A -> List A -> A
-product _ d (Nil _) = d.one
-product A d (Cons _ x xs) = d.times x (product A d xs)
+product A d = foldr A A d.times d.one
 
 -- Operators:
 
