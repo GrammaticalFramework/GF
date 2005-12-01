@@ -2,8 +2,6 @@
 
 - Tuple syntax in expressions, types and patterns? Implemented with records.
 
-- List syntax in types and patterns? Implemented with List.
-
 - implicit arguments?
 
 - show generation
