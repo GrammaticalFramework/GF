@@ -43,6 +43,7 @@ data Tree :: * -> * where
     ValueDecl :: Ident -> [Pattern] -> Exp -> Tree Decl_
     DeriveDecl :: Ident -> Ident -> Tree Decl_
     ConsDecl :: Ident -> Exp -> Tree ConsDecl_
+    POr :: Pattern -> Pattern -> Tree Pattern_
     PConsTop :: Ident -> Pattern -> [Pattern] -> Tree Pattern_
     PCons :: Ident -> [Pattern] -> Tree Pattern_
     PRec :: [FieldPattern] -> Tree Pattern_
@@ -117,6 +118,7 @@ composOpM f t = case t of
     ValueDecl i patterns exp -> return ValueDecl `ap` f i `ap` mapM f patterns `ap` f exp
     DeriveDecl i0 i1 -> return DeriveDecl `ap` f i0 `ap` f i1
     ConsDecl i exp -> return ConsDecl `ap` f i `ap` f exp
+    POr pattern0 pattern1 -> return POr `ap` f pattern0 `ap` f pattern1
     PConsTop i pattern patterns -> return PConsTop `ap` f i `ap` f pattern `ap` mapM f patterns
     PCons i patterns -> return PCons `ap` f i `ap` mapM f patterns
     PRec fieldpatterns -> return PRec `ap` mapM f fieldpatterns
@@ -170,6 +172,7 @@ composOpFold zero combine f t = case t of
     ValueDecl i patterns exp -> f i `combine` foldr combine zero (map f patterns) `combine` f exp
     DeriveDecl i0 i1 -> f i0 `combine` f i1
     ConsDecl i exp -> f i `combine` f exp
+    POr pattern0 pattern1 -> f pattern0 `combine` f pattern1
     PConsTop i pattern patterns -> f i `combine` f pattern `combine` foldr combine zero (map f patterns)
     PCons i patterns -> f i `combine` foldr combine zero (map f patterns)
     PRec fieldpatterns -> foldr combine zero (map f fieldpatterns)
@@ -223,6 +226,7 @@ instance Show (Tree c) where
     ValueDecl i patterns exp -> opar n . showString "ValueDecl" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 patterns . showChar ' ' . showsPrec 1 exp . cpar n
     DeriveDecl i0 i1 -> opar n . showString "DeriveDecl" . showChar ' ' . showsPrec 1 i0 . showChar ' ' . showsPrec 1 i1 . cpar n
     ConsDecl i exp -> opar n . showString "ConsDecl" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 exp . cpar n
+    POr pattern0 pattern1 -> opar n . showString "POr" . showChar ' ' . showsPrec 1 pattern0 . showChar ' ' . showsPrec 1 pattern1 . cpar n
     PConsTop i pattern patterns -> opar n . showString "PConsTop" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 pattern . showChar ' ' . showsPrec 1 patterns . cpar n
     PCons i patterns -> opar n . showString "PCons" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 patterns . cpar n
     PRec fieldpatterns -> opar n . showString "PRec" . showChar ' ' . showsPrec 1 fieldpatterns . cpar n
@@ -288,6 +292,7 @@ johnMajorEq (TypeDecl i exp) (TypeDecl i_ exp_) = i == i_ && exp == exp_
 johnMajorEq (ValueDecl i patterns exp) (ValueDecl i_ patterns_ exp_) = i == i_ && patterns == patterns_ && exp == exp_
 johnMajorEq (DeriveDecl i0 i1) (DeriveDecl i0_ i1_) = i0 == i0_ && i1 == i1_
 johnMajorEq (ConsDecl i exp) (ConsDecl i_ exp_) = i == i_ && exp == exp_
+johnMajorEq (POr pattern0 pattern1) (POr pattern0_ pattern1_) = pattern0 == pattern0_ && pattern1 == pattern1_
 johnMajorEq (PConsTop i pattern patterns) (PConsTop i_ pattern_ patterns_) = i == i_ && pattern == pattern_ && patterns == patterns_
 johnMajorEq (PCons i patterns) (PCons i_ patterns_) = i == i_ && patterns == patterns_
 johnMajorEq (PRec fieldpatterns) (PRec fieldpatterns_) = fieldpatterns == fieldpatterns_
@@ -352,58 +357,59 @@ instance Ord (Tree c) where
     index (ValueDecl _ _ _) = 4
     index (DeriveDecl _ _) = 5
     index (ConsDecl _ _) = 6
-    index (PConsTop _ _ _) = 7
-    index (PCons _ _) = 8
-    index (PRec _) = 9
-    index (PType ) = 10
-    index (PStr _) = 11
-    index (PInt _) = 12
-    index (PVar _) = 13
-    index (PWild ) = 14
-    index (FieldPattern _ _) = 15
-    index (ELet _ _) = 16
-    index (ECase _ _) = 17
-    index (EIf _ _ _) = 18
-    index (EDo _ _) = 19
-    index (EAbs _ _) = 20
-    index (EPi _ _ _) = 21
-    index (EPiNoVar _ _) = 22
-    index (EBind _ _) = 23
-    index (EBindC _ _) = 24
-    index (EOr _ _) = 25
-    index (EAnd _ _) = 26
-    index (EEq _ _) = 27
-    index (ENe _ _) = 28
-    index (ELt _ _) = 29
-    index (ELe _ _) = 30
-    index (EGt _ _) = 31
-    index (EGe _ _) = 32
-    index (EListCons _ _) = 33
-    index (EAdd _ _) = 34
-    index (ESub _ _) = 35
-    index (EMul _ _) = 36
-    index (EDiv _ _) = 37
-    index (EMod _ _) = 38
-    index (ENeg _) = 39
-    index (EApp _ _) = 40
-    index (EProj _ _) = 41
-    index (ERecType _) = 42
-    index (ERec _) = 43
-    index (EList _) = 44
-    index (EVar _) = 45
-    index (EType ) = 46
-    index (EStr _) = 47
-    index (EInt _) = 48
-    index (EMeta ) = 49
-    index (LetDef _ _ _) = 50
-    index (Case _ _) = 51
-    index (BindVar _ _) = 52
-    index (BindNoVar _) = 53
-    index (VVar _) = 54
-    index (VWild ) = 55
-    index (FieldType _ _) = 56
-    index (FieldValue _ _) = 57
-    index (Ident _) = 58
+    index (POr _ _) = 7
+    index (PConsTop _ _ _) = 8
+    index (PCons _ _) = 9
+    index (PRec _) = 10
+    index (PType ) = 11
+    index (PStr _) = 12
+    index (PInt _) = 13
+    index (PVar _) = 14
+    index (PWild ) = 15
+    index (FieldPattern _ _) = 16
+    index (ELet _ _) = 17
+    index (ECase _ _) = 18
+    index (EIf _ _ _) = 19
+    index (EDo _ _) = 20
+    index (EAbs _ _) = 21
+    index (EPi _ _ _) = 22
+    index (EPiNoVar _ _) = 23
+    index (EBind _ _) = 24
+    index (EBindC _ _) = 25
+    index (EOr _ _) = 26
+    index (EAnd _ _) = 27
+    index (EEq _ _) = 28
+    index (ENe _ _) = 29
+    index (ELt _ _) = 30
+    index (ELe _ _) = 31
+    index (EGt _ _) = 32
+    index (EGe _ _) = 33
+    index (EListCons _ _) = 34
+    index (EAdd _ _) = 35
+    index (ESub _ _) = 36
+    index (EMul _ _) = 37
+    index (EDiv _ _) = 38
+    index (EMod _ _) = 39
+    index (ENeg _) = 40
+    index (EApp _ _) = 41
+    index (EProj _ _) = 42
+    index (ERecType _) = 43
+    index (ERec _) = 44
+    index (EList _) = 45
+    index (EVar _) = 46
+    index (EType ) = 47
+    index (EStr _) = 48
+    index (EInt _) = 49
+    index (EMeta ) = 50
+    index (LetDef _ _ _) = 51
+    index (Case _ _) = 52
+    index (BindVar _ _) = 53
+    index (BindNoVar _) = 54
+    index (VVar _) = 55
+    index (VWild ) = 56
+    index (FieldType _ _) = 57
+    index (FieldValue _ _) = 58
+    index (Ident _) = 59
     compareSame (Module imports decls) (Module imports_ decls_) = mappend (compare imports imports_) (compare decls decls_)
     compareSame (Import i) (Import i_) = compare i i_
     compareSame (DataDecl i exp consdecls) (DataDecl i_ exp_ consdecls_) = mappend (compare i i_) (mappend (compare exp exp_) (compare consdecls consdecls_))
@@ -411,6 +417,7 @@ instance Ord (Tree c) where
     compareSame (ValueDecl i patterns exp) (ValueDecl i_ patterns_ exp_) = mappend (compare i i_) (mappend (compare patterns patterns_) (compare exp exp_))
     compareSame (DeriveDecl i0 i1) (DeriveDecl i0_ i1_) = mappend (compare i0 i0_) (compare i1 i1_)
     compareSame (ConsDecl i exp) (ConsDecl i_ exp_) = mappend (compare i i_) (compare exp exp_)
+    compareSame (POr pattern0 pattern1) (POr pattern0_ pattern1_) = mappend (compare pattern0 pattern0_) (compare pattern1 pattern1_)
     compareSame (PConsTop i pattern patterns) (PConsTop i_ pattern_ patterns_) = mappend (compare i i_) (mappend (compare pattern pattern_) (compare patterns patterns_))
     compareSame (PCons i patterns) (PCons i_ patterns_) = mappend (compare i i_) (compare patterns patterns_)
     compareSame (PRec fieldpatterns) (PRec fieldpatterns_) = compare fieldpatterns fieldpatterns_

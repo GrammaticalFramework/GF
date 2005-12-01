@@ -1,0 +1,23 @@
+Some features of the Transfer language:
+
+* Purely functional
+* Dependent types
+* Eager evaluation
+* Generalized algebraic datatypes
+* Metavariables
+* Records with subtyping
+* Overloading by explicit dictionary passing
+* Pattern matching by case expressions
+
+Additional features in the front-end language:
+
+* Disjunctive patterns
+* do-notation
+* Hidden arguments (not implemented yet)
+* Automatic derivation of some operations on user-defined GADTs:
+  - Compositional maps and folds
+  - Equality
+  - Ordering
+  - Showing
+* Pattern equations
+* Operator syntax for common functions, most are overloaded

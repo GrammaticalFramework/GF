@@ -33,6 +33,7 @@ declsToCore_ =     desugar
                >>> deriveDecls
                >>> replaceCons 
                >>> compilePattDecls 
+               >>> expandOrPatts
                >>> optimize
 
 optimize :: [Decl] -> C [Decl]
@@ -344,6 +345,34 @@ fieldPatternVars :: Ident -> [FieldPattern] -> [Ident]
 fieldPatternVars f fps = [p | FieldPattern f' (PVar p) <- fps, f == f']
 
 --
+-- * Expand disjunctive patterns.
+--
+
+expandOrPatts :: [Decl] -> C [Decl]
+expandOrPatts = return . map f
+ where
+ f :: Tree a -> Tree a
+ f x = case x of
+              ECase e cs -> ECase (f e) (concatMap (expandCase . f) cs)
+              _          -> composOp f x
+
+expandCase :: Case -> [Case]
+expandCase (Case p e) = [ Case p' e | p' <- expandPatt p ]
+
+expandPatt :: Pattern -> [Pattern]
+expandPatt p = case p of
+                    POr p1 p2  -> expandPatt p1 ++ expandPatt p2
+                    PCons i ps -> map (PCons i) $ expandPatts ps
+                    PRec fps   -> let (fs,ps) = unzip $ fromPRec fps
+                                      fpss = map (zip fs) (expandPatts ps)
+                                   in map (PRec . toPRec) fpss
+                    _ -> [p]
+
+expandPatts :: [Pattern] -> [[Pattern]]
+expandPatts [] = [[]]
+expandPatts (p:ps) = [ p':ps' | p' <- expandPatt p, ps' <- expandPatts ps]
+
+--
 -- * Remove simple syntactic sugar.
 --
 
@@ -548,6 +577,12 @@ binds = f
 isValueDecl :: Ident -> Decl -> Bool
 isValueDecl x (ValueDecl y _ _) = x == y
 isValueDecl _ _ = False
+
+fromPRec :: [FieldPattern] -> [(Ident,Pattern)]
+fromPRec fps = [ (l,p) | FieldPattern l p <- fps ]
+
+toPRec :: [(Ident,Pattern)] -> [FieldPattern]
+toPRec = map (uncurry FieldPattern)
 
 --
 -- * Data types

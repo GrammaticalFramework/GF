@@ -19,6 +19,7 @@ import Transfer.ErrM
  '{' { PT _ (TS "{") }
  '}' { PT _ (TS "}") }
  '=' { PT _ (TS "=") }
+ '||' { PT _ (TS "||") }
  '(' { PT _ (TS "(") }
  ')' { PT _ (TS ")") }
  '_' { PT _ (TS "_") }
@@ -27,7 +28,6 @@ import Transfer.ErrM
  '\\' { PT _ (TS "\\") }
  '>>=' { PT _ (TS ">>=") }
  '>>' { PT _ (TS ">>") }
- '||' { PT _ (TS "||") }
  '&&' { PT _ (TS "&&") }
  '==' { PT _ (TS "==") }
  '/=' { PT _ (TS "/=") }
@@ -112,23 +112,28 @@ ListConsDecl : {- empty -} { [] }
 
 
 Pattern :: { Pattern }
-Pattern : Ident Pattern1 ListPattern { PConsTop $1 $2 (reverse $3) } 
+Pattern : Pattern1 '||' Pattern { POr $1 $3 } 
   | Pattern1 { $1 }
 
 
 Pattern1 :: { Pattern }
-Pattern1 : '(' Ident ListPattern ')' { PCons $2 (reverse $3) } 
-  | 'rec' '{' ListFieldPattern '}' { PRec $3 }
+Pattern1 : Ident Pattern2 ListPattern { PConsTop $1 $2 (reverse $3) } 
+  | Pattern2 { $1 }
+
+
+Pattern2 :: { Pattern }
+Pattern2 : 'rec' '{' ListFieldPattern '}' { PRec $3 } 
   | 'Type' { PType }
   | String { PStr $1 }
   | Integer { PInt $1 }
   | Ident { PVar $1 }
   | '_' { PWild }
+  | '(' Pattern ')' { $2 }
 
 
 ListPattern :: { [Pattern] }
 ListPattern : {- empty -} { [] } 
-  | ListPattern Pattern1 { flip (:) $1 $2 }
+  | ListPattern Pattern2 { flip (:) $1 $2 }
 
 
 FieldPattern :: { FieldPattern }
