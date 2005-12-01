@@ -49,16 +49,16 @@ is that you can concentrate on one linguistic aspect at a time, or
 also distribute the work among several authors.
 
 
-<h3>Phrase modules</h3>
+<h3>Phrase category modules</h3>
 
-The direct parents of the top could be called <b>phrase</b>,
+The direct parents of the top could be called <b>phrase category modules</b>,
 since each of them concentrates on a particular phrase category (nouns, verbs,
-adjectives, sentences,...). A phrase module tells 
+adjectives, sentences,...). A phrase category module tells 
 <i>how to construct phrases in that category</i>. You will find out that
 all functions in any of these modules have the same value type (or maybe
 one of a small number of different types). Thus we have
 <ul>
-<li> <tt>Noun</tt>: constuction of nouns and noun phrases
+<li> <tt>Noun</tt>: construction of nouns and noun phrases
 <li> <tt>Adjective</tt>: construction of adjectival phrases
 <li> <tt>Verb</tt>: construction of verb phrases
 <li> <tt>Adverb</tt>: construction of adverbial phrases
@@ -74,9 +74,9 @@ one of a small number of different types). Thus we have
 <h3>Infrastructure modules</h3>
 
 Expressions of each phrase category are constructed in the corresponding
-phrase module. But their <i>use</i> takes mostly place in other modules.
+phrase category module. But their <i>use</i> takes mostly place in other modules.
 For instance, noun phrases, which are constructed in <tt>Noun</tt>, are
-used as arguments of functions of almost all other phrase modules. 
+used as arguments of functions of almost all other phrase category modules. 
 How can we build all these modules independently of each other?
 
 <p>
@@ -85,7 +85,7 @@ As usual in typeful programming, the <i>only</i> thing you need to know
 about an object you use is its type. When writing a linearization rule
 for a GF abstract syntax function, the only thing you need to know is
 the linearization types of its value and argument categories. To achieve
-the division of the resource grammar to several parallel phrase modules,
+the division of the resource grammar to several parallel phrase category modules,
 what we need is an underlying definition of the linearization types. This
 definition is given as the implementation of
 <ul>
@@ -141,7 +141,7 @@ most morphological patterns of the language.
 
 The module <tt>Lex</tt> is used in <tt>Test</tt> instead of the two
 larger modules. Its purpose is to provide a quick way to test the
-syntactic structures of the phrase modules without having to implement
+syntactic structures of the phrase category modules without having to implement
 the larger lexica.
 
 <p>
@@ -154,7 +154,7 @@ different languages.
 
 
 
-<h2>How to start</h2>
+<h2>Phases of the work</h2>
 
 <h3>Putting up a directory</h3>
 
@@ -195,7 +195,8 @@ are building a grammar for the Dutch language. Here are the first steps.
      But you will have to make lots of manual changes in all files anyway!
 
 <li> Comment out the contents of these files, except their headers and module
-     brackets.
+     brackets. This will give you a set of templates out of which the grammar
+     will grow as you uncomment and modify the files rule by rule.
 
 </ol>
 
@@ -207,7 +208,7 @@ were introduced above is a natural order to proceed, even though not the
 only one. So you will find yourseld iterating the following steps:
 
 <ol>
-<li> Select a phrase module, e.g. <tt>NounDut</tt>, and uncomment one
+<li> Select a phrase category module, e.g. <tt>NounDut</tt>, and uncomment one
      linearization rule (for instance, <tt>DefSg</tt>, which is
      not too complicated).
 
@@ -239,6 +240,7 @@ only one. So you will find yourseld iterating the following steps:
      </pre>
 
 <li> Spare some tree-linearization pairs for later regression testing.
+     You can do this way (!!to be completed)
 
 </ol>
 You are likely to run this cycle a few times for each linearization rule
@@ -247,10 +249,271 @@ you implement, and some hundreds of times altogether. There are 159
 
 <p>
 
-Of course, you don't need to complete one phrase module before starting
+Of course, you don't need to complete one phrase category module before starting
 with the next one. Actually, a suitable subset of <tt>Noun</tt>,
 <tt>Verb</tt>, and <tt>Adjective</tt> will lead to a reasonable coverage
 very soon, keep you motivated, and reveal errors.
+
+
+<h3>Resource modules used</h3>
+
+These modules will be written by you.
+<ul>
+<li> <tt>ResDut</tt>: parameter types and auxiliary operations
+<li> <tt>MorphoDut</tt>: complete inflection engine; not needed for <tt>Test</tt>.
+</ul>
+These modules are language-independent and provided by the existing resource
+package.
+<ul>
+<li> <tt>ParamX</tt>: parameter types used in many languages
+<li> <tt>TenseX</tt>: implementation of the logical tense, anteriority, 
+     and polarity parameters
+<li> <tt>Coordination</tt>: operations to deal with lists and coordination
+<li> <tt>Prelude</tt>: general-purpose operations on strings, records,
+      truth values, etc.
+<li> <tt>Predefined</tt>: general-purpose operations with hard-coded definitions
+</ul>
+
+
+
+<h3>Morphology and lexicon</h3>
+
+When the implementation of <tt>Test</tt> is complete, it is time to
+work out the lexicon files. The underlying machinery is provided in
+<tt>MorphoDut</tt>, which is, in effect, your linguistic theory of
+Dutch morphology. It can contain very sophisticated and complicated
+definitions, which are not necessarily suitable for actually building a
+lexicon. For this purpose, you should write the module
+<ul>
+<li> <tt>ParadigmsDut</tt>: morphological paradigms for the lexicographer.
+</ul>
+This module provides high-level ways to define the linearization of
+lexical items, of categories <tt>N, A, V</tt> and their complement-taking
+variants.
+
+<p>
+
+For ease of use, the <tt>Paradigms</tt> modules follow a certain
+naming convention. Thus they for each lexical category, such as <tt>N</tt>,
+the functions
+<ul>
+<li> <tt>mkN</tt>, for worst-case construction of <tt>N</tt>. Its type signature
+     has the form
+     <pre>
+       mkN : Str -> ... -> Str -> P -> ... -> Q -> N
+     </pre>
+     with as many string and parameter arguments as can ever be needed to
+     construct an <tt>N</tt>.
+<li> <tt>regN</tt>, for the most common cases, with just one string argument:
+     <pre>
+       regN : Str -> N
+     </pre>
+<li> A language-dependent (small) set of functions to handle mild irregularities
+     and common exceptions.
+</ul>
+For the complement-taking variants, such as <tt>V2</tt>, we provide
+<ul>
+<li> <tt>mkV2</tt>, which takes a <tt>V</tt> and all necessary arguments, such
+     as case and preposition:
+     <pre>
+       mkV2 : V -> Case -> Str -> V2 ;
+     </pre>
+<li> A language-dependent (small) set of functions to handle common special cases,
+     such as direct transitive verbs:
+     <pre>
+       dirV2 : V -> V2 ;
+       -- dirV2 v = mkV2 v accusative [] 
+     </pre>
+</ul>
+The golden rule for the design of paradigms is that
+<ul>
+<li> The user will only need function applications with constants and strings,
+     never any records or tables.
+</ul>
+The discipline of data abstraction moreover requires that the user of the resource
+is not given access to parameter constructors, but only to constants that denote 
+them. This gives the resource grammarian the freedom to change the underlying
+data representation if needed. It means that the <tt>ParadigmsDut</tt> module has
+to define constants for those parameter types and constructors that 
+the application grammarian may need to use, e.g.
+<pre>
+  oper 
+    Case : Type ;
+    nominative, accusative, genitive : Case ;
+</pre>
+These constants are defined in terms of parameter types and constructors
+in <tt>ResDut</tt> and <tt>MorphoDut</tt>, which modules are are not
+accessible to the application grammarian.
+
+
+<h3>Lock fields</h3>
+
+An important difference between <tt>MorphoDut</tt> and
+<tt>ParadigmsDut</tt> is that the former uses "raw" record types
+as lincats, whereas the latter used category symbols defined in
+<tt>CatDut</tt>. When these category symbols are used to denote
+record types in a resource modules, such as <tt>ParadigmsDut</tt>,
+a <b>lock field</b> is added to the record, so that categories
+with the same implementation are not confused with each other.
+(This is inspired by the <tt>newtype</tt> discipline in Haskell.)
+For instance, the lincats of adverbs and conjunctions may be the same
+in <tt>CatDut</tt>:
+<pre>
+  lincat Adv  = {s : Str} ;
+  lincat Conj = {s : Str} ;
+</pre>
+But when these category symbols are used to denote their linearization 
+types in resource module, these definitions are translated to
+<pre>
+  oper Adv  : Type = {s : Str  ; lock_Adv  : {}} ;
+  oper Conj : Type = {s : Str} ; lock_Conj : {}} ;
+</pre>
+In this way, the user of a resource grammar cannot confuse adverbs with
+conjunctions. In other words, the lock fields force the type checker
+to function as grammaticality checker.
+
+<p>
+
+When the resource grammar is <tt>open</tt>ed in an application grammar, the
+lock fields are never seen (except possibly in type error messages),
+and the application grammarian should never write them herself. If she
+has to do this, it is a sign that the resource grammar is incomplete, and
+the proper way to proceed is to fix the resource grammar.
+
+<p>
+
+The resource grammarian has to provide the dummy lock field values
+in her hidden definitions of constants in <tt>Paradigms</tt>. For instance,
+<pre>
+  mkAdv : Str -> Adv ;
+  -- mkAdv s = {s = s ; lock_Adv = <>} ;
+</pre>
+
+
+<h3>Lexicon construction</h3>
+
+The lexicon belonging to <tt>LangDut</tt> consists of two modules:
+<ul>
+<li> <tt>StructuralDut</tt>, structural words, built by directly using
+     <tt>MorphoDut</tt>.
+<li> <tt>BasicDut</tt>, content words, built by using <tt>ParadigmsDut</tt>.
+</ul>
+The reason why <tt>MorphoDut</tt> has to be used in <tt>StructuralDut</tt>
+is that <tt>ParadigmsDut</tt> does not contain constructors for closed
+word classes such as pronouns and determiners. The reason why we
+recommend <tt>ParadigmsDut</tt> for building <tt>BasicDut</tt> is that
+the coverage of the paradigms gets thereby tested and that the
+use of the paradigms in <tt>BasicDut</tt> gives a good set of examples for
+those who want to build new lexica.
+
+
+
+
+<h2>Inside phrase category modules</h2>
+
+<h3>Noun</h3>
+
+<h3>Verb</h3>
+
+<h3>Adjective</h3>
+
+
+<h2>Lexicon extension</h2>
+
+<h3>The irregularity lexicon</h3>
+
+It may be handy to provide a separate module of irregular
+verbs and other words which are difficult for a lexicographer
+to handle. There are usually a limited number of such words - a
+few hundred perhaps. Building such a lexicon separately also
+makes it less important to cover <i>everything</i> by the
+worst-case paradigms (<tt>mkV</tt> etc).
+
+
+
+<h3>Lexicon extraction from a word list</h3>
+
+You can often find resources such as lists of 
+irregular verbs on the internet. For instance, the
+<a href="http://www.dutchtrav.com/gram/irrverbs.html">
+Dutch for Travelers</a> page gives a list of verbs in the
+traditional tabular format, which begins as follows:
+<pre>
+  begrijpen begrijp begreep begrepen 	to understand
+  bijten    bijt    beet    gebeten     to bite
+  binden    bind    bond    gebonden 	to tie
+  breken    breek   brak    gebroken 	to break
+</pre>
+All you have to do is to write a suitable verb paradigm
+<pre>
+  irregV : Str -> Str -> Str -> Str -> V ;
+</pre>
+and a Perl or Python or Haskell script that transforms
+the table to
+<pre>
+  begrijpen_V = irregV "begrijpen" "begrijp" "begreep" "begrepen" ;
+  bijten_V    = irregV "bijten"    "bijt"    "beet"    "gebeten" ;
+  binden_V    = irregV "binden"    "bind"    "bond"    "gebonden" ;
+</pre>
+(You may want to use the English translation for some purpose, as well.)
+
+<p>
+
+When using ready-made word lists, you should think about
+coyright issues. Ideally, all resource grammar material should
+be provided under GNU General Public License.
+
+
+
+<h3>Lexicon extraction from raw text data</h3>
+
+This is a cheap technique to build a lexicon of thousands
+of words, if text data is available in digital format.
+See the <a href="http://www.cs.chalmers.se/~markus/FM/">
+Functional Morphology</a> homepage for details.
+
+
+
+<h3>Extending the resource grammar API</h3>
+
+Sooner or later it will happen that the resource grammar API
+does not suffice for all applications. A common reason is
+that it does not include idiomatic expressions in a given language.
+The solution then is in the first place to build language-specific
+extension modules. This chapter will deal with this issue.
+
+
+<h2>Writing an instance of parametrized resource grammar implementation</h2>
+
+Above we have looked at how a resource implementation is built by
+the copy and paste method (from English to Dutch), that is, formally
+speaking, from scratch. A more elegant solution available for 
+families of languages such as Romance and Scandinavian is to
+use parametrized modules. The advantages are
+<ul>
+<li> theoretical: linguistic generalizations and insights
+<li> practical: maintainability improves with fewer components
+</ul>
+In this chapter, we will look at an example: adding Portuguese to
+the Romance family.
+
+
+
+<h2>Parametrizing a resource grammar implementation</h2>
+
+This is the most demanding form of resource grammar writing.
+We do <i>not</i> recommend the method of parametrizing from the
+beginning: it is easier to have one language first implemented 
+in the conventional way and then add another language of the
+same family by aprametrization. This means that the copy and
+paste method is still used, but at this time the differences
+are put into an <tt>interface</tt> module. 
+
+<p>
+
+This chapter will work out an example of how an Estonian grammar
+is constructed from the Finnish grammar through parametrization.
+
 
 
 </body>
