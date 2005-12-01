@@ -20,8 +20,12 @@ import Transfer.ErrM
  '}' { PT _ (TS "}") }
  '=' { PT _ (TS "=") }
  '||' { PT _ (TS "||") }
+ '::' { PT _ (TS "::") }
  '(' { PT _ (TS "(") }
  ')' { PT _ (TS ")") }
+ '[' { PT _ (TS "[") }
+ ']' { PT _ (TS "]") }
+ ',' { PT _ (TS ",") }
  '_' { PT _ (TS "_") }
  '->' { PT _ (TS "->") }
  '<-' { PT _ (TS "<-") }
@@ -35,17 +39,13 @@ import Transfer.ErrM
  '<=' { PT _ (TS "<=") }
  '>' { PT _ (TS ">") }
  '>=' { PT _ (TS ">=") }
- '::' { PT _ (TS "::") }
  '+' { PT _ (TS "+") }
  '-' { PT _ (TS "-") }
  '*' { PT _ (TS "*") }
  '/' { PT _ (TS "/") }
  '%' { PT _ (TS "%") }
  '.' { PT _ (TS ".") }
- '[' { PT _ (TS "[") }
- ']' { PT _ (TS "]") }
  '?' { PT _ (TS "?") }
- ',' { PT _ (TS ",") }
  'Type' { PT _ (TS "Type") }
  'case' { PT _ (TS "case") }
  'data' { PT _ (TS "data") }
@@ -119,12 +119,18 @@ Pattern : Pattern1 '||' Pattern { POr $1 $3 }
 
 
 Pattern1 :: { Pattern }
-Pattern1 : Ident Pattern2 ListPattern { PConsTop $1 $2 (reverse $3) } 
+Pattern1 : Pattern2 '::' Pattern1 { PListCons $1 $3 } 
   | Pattern2 { $1 }
 
 
 Pattern2 :: { Pattern }
-Pattern2 : 'rec' '{' ListFieldPattern '}' { PRec $3 } 
+Pattern2 : Ident Pattern3 ListPattern { PConsTop $1 $2 (reverse $3) } 
+  | Pattern3 { $1 }
+
+
+Pattern3 :: { Pattern }
+Pattern3 : 'rec' '{' ListFieldPattern '}' { PRec $3 } 
+  | '[' ListPListElem ']' { PList $2 }
   | 'Type' { PType }
   | String { PStr $1 }
   | Integer { PInt $1 }
@@ -133,9 +139,19 @@ Pattern2 : 'rec' '{' ListFieldPattern '}' { PRec $3 }
   | '(' Pattern ')' { $2 }
 
 
+PListElem :: { PListElem }
+PListElem : Pattern { PListElem $1 } 
+
+
+ListPListElem :: { [PListElem] }
+ListPListElem : {- empty -} { [] } 
+  | PListElem { (:[]) $1 }
+  | PListElem ',' ListPListElem { (:) $1 $3 }
+
+
 ListPattern :: { [Pattern] }
 ListPattern : {- empty -} { [] } 
-  | ListPattern Pattern2 { flip (:) $1 $2 }
+  | ListPattern Pattern3 { flip (:) $1 $2 }
 
 
 FieldPattern :: { FieldPattern }

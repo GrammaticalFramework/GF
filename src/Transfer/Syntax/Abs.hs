@@ -16,6 +16,8 @@ data ConsDecl_
 type ConsDecl = Tree ConsDecl_
 data Pattern_
 type Pattern = Tree Pattern_
+data PListElem_
+type PListElem = Tree PListElem_
 data FieldPattern_
 type FieldPattern = Tree FieldPattern_
 data Exp_
@@ -44,14 +46,17 @@ data Tree :: * -> * where
     DeriveDecl :: Ident -> Ident -> Tree Decl_
     ConsDecl :: Ident -> Exp -> Tree ConsDecl_
     POr :: Pattern -> Pattern -> Tree Pattern_
+    PListCons :: Pattern -> Pattern -> Tree Pattern_
     PConsTop :: Ident -> Pattern -> [Pattern] -> Tree Pattern_
     PCons :: Ident -> [Pattern] -> Tree Pattern_
     PRec :: [FieldPattern] -> Tree Pattern_
+    PList :: [PListElem] -> Tree Pattern_
     PType :: Tree Pattern_
     PStr :: String -> Tree Pattern_
     PInt :: Integer -> Tree Pattern_
     PVar :: Ident -> Tree Pattern_
     PWild :: Tree Pattern_
+    PListElem :: Pattern -> Tree PListElem_
     FieldPattern :: Ident -> Pattern -> Tree FieldPattern_
     ELet :: [LetDef] -> Exp -> Tree Exp_
     ECase :: Exp -> [Case] -> Tree Exp_
@@ -120,10 +125,13 @@ composOpM f t = case t of
     DeriveDecl i0 i1 -> return DeriveDecl `ap` f i0 `ap` f i1
     ConsDecl i exp -> return ConsDecl `ap` f i `ap` f exp
     POr pattern0 pattern1 -> return POr `ap` f pattern0 `ap` f pattern1
+    PListCons pattern0 pattern1 -> return PListCons `ap` f pattern0 `ap` f pattern1
     PConsTop i pattern patterns -> return PConsTop `ap` f i `ap` f pattern `ap` mapM f patterns
     PCons i patterns -> return PCons `ap` f i `ap` mapM f patterns
     PRec fieldpatterns -> return PRec `ap` mapM f fieldpatterns
+    PList plistelems -> return PList `ap` mapM f plistelems
     PVar i -> return PVar `ap` f i
+    PListElem pattern -> return PListElem `ap` f pattern
     FieldPattern i pattern -> return FieldPattern `ap` f i `ap` f pattern
     ELet letdefs exp -> return ELet `ap` mapM f letdefs `ap` f exp
     ECase exp cases -> return ECase `ap` f exp `ap` mapM f cases
@@ -174,10 +182,13 @@ composOpFold zero combine f t = case t of
     DeriveDecl i0 i1 -> f i0 `combine` f i1
     ConsDecl i exp -> f i `combine` f exp
     POr pattern0 pattern1 -> f pattern0 `combine` f pattern1
+    PListCons pattern0 pattern1 -> f pattern0 `combine` f pattern1
     PConsTop i pattern patterns -> f i `combine` f pattern `combine` foldr combine zero (map f patterns)
     PCons i patterns -> f i `combine` foldr combine zero (map f patterns)
     PRec fieldpatterns -> foldr combine zero (map f fieldpatterns)
+    PList plistelems -> foldr combine zero (map f plistelems)
     PVar i -> f i
+    PListElem pattern -> f pattern
     FieldPattern i pattern -> f i `combine` f pattern
     ELet letdefs exp -> foldr combine zero (map f letdefs) `combine` f exp
     ECase exp cases -> f exp `combine` foldr combine zero (map f cases)
@@ -228,14 +239,17 @@ instance Show (Tree c) where
     DeriveDecl i0 i1 -> opar n . showString "DeriveDecl" . showChar ' ' . showsPrec 1 i0 . showChar ' ' . showsPrec 1 i1 . cpar n
     ConsDecl i exp -> opar n . showString "ConsDecl" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 exp . cpar n
     POr pattern0 pattern1 -> opar n . showString "POr" . showChar ' ' . showsPrec 1 pattern0 . showChar ' ' . showsPrec 1 pattern1 . cpar n
+    PListCons pattern0 pattern1 -> opar n . showString "PListCons" . showChar ' ' . showsPrec 1 pattern0 . showChar ' ' . showsPrec 1 pattern1 . cpar n
     PConsTop i pattern patterns -> opar n . showString "PConsTop" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 pattern . showChar ' ' . showsPrec 1 patterns . cpar n
     PCons i patterns -> opar n . showString "PCons" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 patterns . cpar n
     PRec fieldpatterns -> opar n . showString "PRec" . showChar ' ' . showsPrec 1 fieldpatterns . cpar n
+    PList plistelems -> opar n . showString "PList" . showChar ' ' . showsPrec 1 plistelems . cpar n
     PType -> showString "PType"
     PStr str -> opar n . showString "PStr" . showChar ' ' . showsPrec 1 str . cpar n
     PInt n -> opar n . showString "PInt" . showChar ' ' . showsPrec 1 n . cpar n
     PVar i -> opar n . showString "PVar" . showChar ' ' . showsPrec 1 i . cpar n
     PWild -> showString "PWild"
+    PListElem pattern -> opar n . showString "PListElem" . showChar ' ' . showsPrec 1 pattern . cpar n
     FieldPattern i pattern -> opar n . showString "FieldPattern" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 pattern . cpar n
     ELet letdefs exp -> opar n . showString "ELet" . showChar ' ' . showsPrec 1 letdefs . showChar ' ' . showsPrec 1 exp . cpar n
     ECase exp cases -> opar n . showString "ECase" . showChar ' ' . showsPrec 1 exp . showChar ' ' . showsPrec 1 cases . cpar n
@@ -295,14 +309,17 @@ johnMajorEq (ValueDecl i patterns exp) (ValueDecl i_ patterns_ exp_) = i == i_ &
 johnMajorEq (DeriveDecl i0 i1) (DeriveDecl i0_ i1_) = i0 == i0_ && i1 == i1_
 johnMajorEq (ConsDecl i exp) (ConsDecl i_ exp_) = i == i_ && exp == exp_
 johnMajorEq (POr pattern0 pattern1) (POr pattern0_ pattern1_) = pattern0 == pattern0_ && pattern1 == pattern1_
+johnMajorEq (PListCons pattern0 pattern1) (PListCons pattern0_ pattern1_) = pattern0 == pattern0_ && pattern1 == pattern1_
 johnMajorEq (PConsTop i pattern patterns) (PConsTop i_ pattern_ patterns_) = i == i_ && pattern == pattern_ && patterns == patterns_
 johnMajorEq (PCons i patterns) (PCons i_ patterns_) = i == i_ && patterns == patterns_
 johnMajorEq (PRec fieldpatterns) (PRec fieldpatterns_) = fieldpatterns == fieldpatterns_
+johnMajorEq (PList plistelems) (PList plistelems_) = plistelems == plistelems_
 johnMajorEq PType PType = True
 johnMajorEq (PStr str) (PStr str_) = str == str_
 johnMajorEq (PInt n) (PInt n_) = n == n_
 johnMajorEq (PVar i) (PVar i_) = i == i_
 johnMajorEq PWild PWild = True
+johnMajorEq (PListElem pattern) (PListElem pattern_) = pattern == pattern_
 johnMajorEq (FieldPattern i pattern) (FieldPattern i_ pattern_) = i == i_ && pattern == pattern_
 johnMajorEq (ELet letdefs exp) (ELet letdefs_ exp_) = letdefs == letdefs_ && exp == exp_
 johnMajorEq (ECase exp cases) (ECase exp_ cases_) = exp == exp_ && cases == cases_
@@ -361,59 +378,62 @@ instance Ord (Tree c) where
     index (DeriveDecl _ _) = 5
     index (ConsDecl _ _) = 6
     index (POr _ _) = 7
-    index (PConsTop _ _ _) = 8
-    index (PCons _ _) = 9
-    index (PRec _) = 10
-    index (PType ) = 11
-    index (PStr _) = 12
-    index (PInt _) = 13
-    index (PVar _) = 14
-    index (PWild ) = 15
-    index (FieldPattern _ _) = 16
-    index (ELet _ _) = 17
-    index (ECase _ _) = 18
-    index (EIf _ _ _) = 19
-    index (EDo _ _) = 20
-    index (EAbs _ _) = 21
-    index (EPi _ _ _) = 22
-    index (EPiNoVar _ _) = 23
-    index (EBind _ _) = 24
-    index (EBindC _ _) = 25
-    index (EOr _ _) = 26
-    index (EAnd _ _) = 27
-    index (EEq _ _) = 28
-    index (ENe _ _) = 29
-    index (ELt _ _) = 30
-    index (ELe _ _) = 31
-    index (EGt _ _) = 32
-    index (EGe _ _) = 33
-    index (EListCons _ _) = 34
-    index (EAdd _ _) = 35
-    index (ESub _ _) = 36
-    index (EMul _ _) = 37
-    index (EDiv _ _) = 38
-    index (EMod _ _) = 39
-    index (ENeg _) = 40
-    index (EApp _ _) = 41
-    index (EProj _ _) = 42
-    index (ERecType _) = 43
-    index (ERec _) = 44
-    index (EList _) = 45
-    index (EVar _) = 46
-    index (EType ) = 47
-    index (EStr _) = 48
-    index (EInteger _) = 49
-    index (EDouble _) = 50
-    index (EMeta ) = 51
-    index (LetDef _ _ _) = 52
-    index (Case _ _) = 53
-    index (BindVar _ _) = 54
-    index (BindNoVar _) = 55
-    index (VVar _) = 56
-    index (VWild ) = 57
-    index (FieldType _ _) = 58
-    index (FieldValue _ _) = 59
-    index (Ident _) = 60
+    index (PListCons _ _) = 8
+    index (PConsTop _ _ _) = 9
+    index (PCons _ _) = 10
+    index (PRec _) = 11
+    index (PList _) = 12
+    index (PType ) = 13
+    index (PStr _) = 14
+    index (PInt _) = 15
+    index (PVar _) = 16
+    index (PWild ) = 17
+    index (PListElem _) = 18
+    index (FieldPattern _ _) = 19
+    index (ELet _ _) = 20
+    index (ECase _ _) = 21
+    index (EIf _ _ _) = 22
+    index (EDo _ _) = 23
+    index (EAbs _ _) = 24
+    index (EPi _ _ _) = 25
+    index (EPiNoVar _ _) = 26
+    index (EBind _ _) = 27
+    index (EBindC _ _) = 28
+    index (EOr _ _) = 29
+    index (EAnd _ _) = 30
+    index (EEq _ _) = 31
+    index (ENe _ _) = 32
+    index (ELt _ _) = 33
+    index (ELe _ _) = 34
+    index (EGt _ _) = 35
+    index (EGe _ _) = 36
+    index (EListCons _ _) = 37
+    index (EAdd _ _) = 38
+    index (ESub _ _) = 39
+    index (EMul _ _) = 40
+    index (EDiv _ _) = 41
+    index (EMod _ _) = 42
+    index (ENeg _) = 43
+    index (EApp _ _) = 44
+    index (EProj _ _) = 45
+    index (ERecType _) = 46
+    index (ERec _) = 47
+    index (EList _) = 48
+    index (EVar _) = 49
+    index (EType ) = 50
+    index (EStr _) = 51
+    index (EInteger _) = 52
+    index (EDouble _) = 53
+    index (EMeta ) = 54
+    index (LetDef _ _ _) = 55
+    index (Case _ _) = 56
+    index (BindVar _ _) = 57
+    index (BindNoVar _) = 58
+    index (VVar _) = 59
+    index (VWild ) = 60
+    index (FieldType _ _) = 61
+    index (FieldValue _ _) = 62
+    index (Ident _) = 63
     compareSame (Module imports decls) (Module imports_ decls_) = mappend (compare imports imports_) (compare decls decls_)
     compareSame (Import i) (Import i_) = compare i i_
     compareSame (DataDecl i exp consdecls) (DataDecl i_ exp_ consdecls_) = mappend (compare i i_) (mappend (compare exp exp_) (compare consdecls consdecls_))
@@ -422,14 +442,17 @@ instance Ord (Tree c) where
     compareSame (DeriveDecl i0 i1) (DeriveDecl i0_ i1_) = mappend (compare i0 i0_) (compare i1 i1_)
     compareSame (ConsDecl i exp) (ConsDecl i_ exp_) = mappend (compare i i_) (compare exp exp_)
     compareSame (POr pattern0 pattern1) (POr pattern0_ pattern1_) = mappend (compare pattern0 pattern0_) (compare pattern1 pattern1_)
+    compareSame (PListCons pattern0 pattern1) (PListCons pattern0_ pattern1_) = mappend (compare pattern0 pattern0_) (compare pattern1 pattern1_)
     compareSame (PConsTop i pattern patterns) (PConsTop i_ pattern_ patterns_) = mappend (compare i i_) (mappend (compare pattern pattern_) (compare patterns patterns_))
     compareSame (PCons i patterns) (PCons i_ patterns_) = mappend (compare i i_) (compare patterns patterns_)
     compareSame (PRec fieldpatterns) (PRec fieldpatterns_) = compare fieldpatterns fieldpatterns_
+    compareSame (PList plistelems) (PList plistelems_) = compare plistelems plistelems_
     compareSame PType PType = EQ
     compareSame (PStr str) (PStr str_) = compare str str_
     compareSame (PInt n) (PInt n_) = compare n n_
     compareSame (PVar i) (PVar i_) = compare i i_
     compareSame PWild PWild = EQ
+    compareSame (PListElem pattern) (PListElem pattern_) = compare pattern pattern_
     compareSame (FieldPattern i pattern) (FieldPattern i_ pattern_) = mappend (compare i i_) (compare pattern pattern_)
     compareSame (ELet letdefs exp) (ELet letdefs_ exp_) = mappend (compare letdefs letdefs_) (compare exp exp_)
     compareSame (ECase exp cases) (ECase exp_ cases_) = mappend (compare exp exp_) (compare cases cases_)

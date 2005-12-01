@@ -63,15 +63,15 @@ The symbols used in Syntax are the following: \\
 \begin{tabular}{lll}
 {\symb{;}} &{\symb{:}} &{\symb{\{}} \\
 {\symb{\}}} &{\symb{{$=$}}} &{\symb{{$|$}{$|$}}} \\
-{\symb{(}} &{\symb{)}} &{\symb{\_}} \\
-{\symb{{$-$}{$>$}}} &{\symb{{$<$}{$-$}}} &{\symb{$\backslash$}} \\
-{\symb{{$>$}{$>$}{$=$}}} &{\symb{{$>$}{$>$}}} &{\symb{\&\&}} \\
-{\symb{{$=$}{$=$}}} &{\symb{/{$=$}}} &{\symb{{$<$}}} \\
-{\symb{{$<$}{$=$}}} &{\symb{{$>$}}} &{\symb{{$>$}{$=$}}} \\
-{\symb{::}} &{\symb{{$+$}}} &{\symb{{$-$}}} \\
+{\symb{::}} &{\symb{(}} &{\symb{)}} \\
+{\symb{[}} &{\symb{]}} &{\symb{,}} \\
+{\symb{\_}} &{\symb{{$-$}{$>$}}} &{\symb{{$<$}{$-$}}} \\
+{\symb{$\backslash$}} &{\symb{{$>$}{$>$}{$=$}}} &{\symb{{$>$}{$>$}}} \\
+{\symb{\&\&}} &{\symb{{$=$}{$=$}}} &{\symb{/{$=$}}} \\
+{\symb{{$<$}}} &{\symb{{$<$}{$=$}}} &{\symb{{$>$}}} \\
+{\symb{{$>$}{$=$}}} &{\symb{{$+$}}} &{\symb{{$-$}}} \\
 {\symb{*}} &{\symb{/}} &{\symb{\%}} \\
-{\symb{.}} &{\symb{[}} &{\symb{]}} \\
-{\symb{?}} &{\symb{,}} & \\
+{\symb{.}} &{\symb{?}} & \\
 \end{tabular}\\
 
 \subsection*{Comments}
@@ -126,12 +126,18 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Pattern1}} & {\arrow}  &{\nonterminal{Ident}} {\nonterminal{Pattern2}} {\nonterminal{ListPattern}}  \\
+{\nonterminal{Pattern1}} & {\arrow}  &{\nonterminal{Pattern2}} {\terminal{::}} {\nonterminal{Pattern1}}  \\
  & {\delimit}  &{\nonterminal{Pattern2}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Pattern2}} & {\arrow}  &{\terminal{rec}} {\terminal{\{}} {\nonterminal{ListFieldPattern}} {\terminal{\}}}  \\
+{\nonterminal{Pattern2}} & {\arrow}  &{\nonterminal{Ident}} {\nonterminal{Pattern3}} {\nonterminal{ListPattern}}  \\
+ & {\delimit}  &{\nonterminal{Pattern3}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
+{\nonterminal{Pattern3}} & {\arrow}  &{\terminal{rec}} {\terminal{\{}} {\nonterminal{ListFieldPattern}} {\terminal{\}}}  \\
+ & {\delimit}  &{\terminal{[}} {\nonterminal{ListPListElem}} {\terminal{]}}  \\
  & {\delimit}  &{\terminal{Type}}  \\
  & {\delimit}  &{\nonterminal{String}}  \\
  & {\delimit}  &{\nonterminal{Integer}}  \\
@@ -141,8 +147,18 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
+{\nonterminal{PListElem}} & {\arrow}  &{\nonterminal{Pattern}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
+{\nonterminal{ListPListElem}} & {\arrow}  &{\emptyP} \\
+ & {\delimit}  &{\nonterminal{PListElem}}  \\
+ & {\delimit}  &{\nonterminal{PListElem}} {\terminal{,}} {\nonterminal{ListPListElem}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
 {\nonterminal{ListPattern}} & {\arrow}  &{\emptyP} \\
- & {\delimit}  &{\nonterminal{Pattern2}} {\nonterminal{ListPattern}}  \\
+ & {\delimit}  &{\nonterminal{Pattern3}} {\nonterminal{ListPattern}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}

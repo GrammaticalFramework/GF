@@ -381,6 +381,8 @@ desugar = return . map f
  where
  f :: Tree a -> Tree a
  f x = case x of
+              PListCons p1 p2    -> pListCons        <| p1   <| p2
+              PList xs           -> pList (map f [p | PListElem p <- xs])
               EIf exp0 exp1 exp2 -> ifBool           <| exp0 <| exp1 <| exp2
               EDo bs e           -> mkDo (map f bs) (f e)
               BindNoVar exp0     -> BindVar VWild    <| exp0
@@ -405,6 +407,16 @@ desugar = return . map f
               EList exps         -> mkList (map f exps)
               _                  -> composOp f x
     where g <| x = g (f x)
+
+--
+-- * List patterns
+--
+
+pListCons :: Pattern -> Pattern -> Pattern
+pListCons p1 p2 = PCons (Ident "Cons") [PWild,p1,p2]
+
+pList :: [Pattern] -> Pattern
+pList = foldr pListCons (PCons (Ident "Nil") [PWild])
 
 --
 -- * Use an overloaded function.
