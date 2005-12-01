@@ -15,16 +15,81 @@ id _ x = x
 
 
 --
--- The List type
+-- The Integer type
+--
+
+-- Instances:
+
+num_Integer : Num Integer
+num_Integer = rec zero = 0
+		  plus = prim_add_Int
+		  minus = prim_sub_Int
+		  one = 1
+              	  times = prim_mul_Int
+		  div = prim_div_Int
+              	  mod = prim_mod_Int
+		  negate = prim_neg_Int
+		  eq = prim_eq_Int
+		  compare = prim_cmp_Int
+
+show_Integer : Show Integer
+show_Integer = rec show = prim_show_Int
+
+
+
+-- 
+-- The String type
+--
+
+-- Instances:
+
+add_String : Add String
+add_String = rec zero = ""
+		 plus = prim_add_Str
+
+
+ord_String : Ord String
+ord_String = rec eq = prim_eq_Str
+		 compare = prim_cmp_Str
+
+show_String : Show String
+show_String = rec show = prim_show_Str
+
+
+--
+-- The Bool type
 --
 
 data Bool : Type where 
 	True : Bool
 	False : Bool
 
+-- derive Show Bool
+-- derive Eq Bool
+-- derive Ord Bool
+
 not : Bool -> Bool
 not b = if b then False else True
 
+-- Instances:
+
+neg_Bool : Neg Bool
+neg_Bool = rec negate = not
+
+add_Bool : Add Bool
+add_Bool = rec zero = False
+               plus = \x -> \y -> x || y
+
+mul_Bool : Add Bool
+mul_Bool = rec one = True
+               times = \x -> \y -> x && y
+
+
+
+
+--
+-- The List type
+--
 
 data List : (_:Type) -> Type where 
 	Nil : (A:Type) -> List A
@@ -48,6 +113,20 @@ foldr : (A : Type) -> (B : Type) -> (A -> B -> B) -> B -> List A -> B
 foldr _ _ _ x (Nil _) = x
 foldr A B f x (Cons _ y ys) = f y (foldr A B f x ys)
 
+-- Instances:
+
+add_List : (A : Type) -> Add (List A)
+add_List A = rec zero = Nil A
+		 plus = append A
+
+
+monad_List : Monad List
+monad_list = rec return = \A -> \x -> Cons A x (Nil A)
+		 bind = \A -> \B -> \m -> \k -> concat B (map A B k m)
+
+
+
+
 
 --
 -- The Maybe type
@@ -57,6 +136,11 @@ data Maybe : Type -> Type where
 	Nothing : (A : Type) -> Maybe A
 	Just : (A : Type) -> A -> Maybe A
 
+-- derive Show Maybe
+-- derive Eq Maybe
+-- derive Ord Maybe
+
+
 fromMaybe : (A : Type) -> A -> Maybe A -> A
 fromMaybe _ x Nothing = x
 fromMaybe _ _ (Just x) = x
@@ -64,6 +148,19 @@ fromMaybe _ _ (Just x) = x
 maybe : (A : Type) -> (B : Type) -> B -> (A -> B) -> Maybe A -> A
 maybe _ _ x _ Nothing = x
 maybe _ _ _ f (Just x) = f x
+
+
+-- Instances:
+
+monad_Maybe : Monad Maybe
+monad_Maybe = 
+  rec return = Just
+      bind = \A -> \B -> \m -> \k -> 
+         case m of
+		Nothing _ -> Nothing B
+		Just _ x  -> k x
+
+
 
 
 --
@@ -82,19 +179,8 @@ Num = sig zero : A
 	  eq : A -> A -> Bool
 	  compare : A -> A -> Ordering
 
--- Instances:
 
-num_Integer : Num Integer
-num_Integer = rec zero = 0
-		  plus = prim_add_Int
-		  minus = prim_sub_Int
-		  one = 1
-              	  times = prim_mul_Int
-		  div = prim_div_Int
-              	  mod = prim_mod_Int
-		  negate = prim_neg_Int
-		  eq = prim_eq_Int
-		  compare = prim_cmp_Int
+
 
 --
 -- The Add class
@@ -120,17 +206,9 @@ sum A d = foldr A A d.plus d.zero
   (x + y) => (plus ? ? x y)
 -}
 
--- Instances:
 
--- num_Integer
 
-add_String : Add String
-add_String = rec zero = ""
-		 plus = prim_add_Str
 
-add_List : (A : Type) -> Add (List A)
-add_List A = rec zero = Nil A
-		 plus = append A
 
 --
 -- The Sub class
@@ -142,9 +220,8 @@ Sub = sig minus : A -> A -> A
 minus : (A : Type) -> Sub A -> A
 minus _ d = d.minus
 
--- Instances:
 
--- num_Integer
+
 
 
 --
@@ -170,9 +247,7 @@ product A d = foldr A A d.times d.one
   (x * y) => (times ? ? x y)
 -}
 
--- Instances:
 
--- num_Integer
 
 
 --
@@ -196,9 +271,7 @@ mod _ d = d.mod
   (x % y) => (mod ? ? x y)
 -}
 
--- Instances:
 
--- num_Integer
 
 
 
@@ -218,12 +291,6 @@ negate _ d = d.neg
   (-x) => negate ? ? x
 -}
 
--- Instances:
-
--- num_Integer
-
-neg_Bool : Neg Bool
-neg_Bool = rec negate = not
 
 
 
@@ -248,12 +315,7 @@ neq A d x y = not (eq A d x y)
   (x /= y) => (neq ? ? x y)
 -}
 
--- Instances:
 
--- num_Integer
-
-eq_String : Eq String
-eq_String = rec eq = prim_eq_Str
 
 
 
@@ -297,13 +359,8 @@ gt = ordOp (\o -> case o of { GT -> True; _ -> False })
   (x > y) => (gt ? ? x y)
 -}
 
--- Instances:
 
--- num_Integer
 
-ord_String : Ord String
-ord_String = rec eq = prim_eq_Str
-		 compare = prim_cmp_Str
 
 
 
@@ -318,13 +375,7 @@ show : (A : Type) -> Show A -> A -> String
 show _ d = d.show
 
 
--- Instances:
 
-show_Integer : Show Integer
-show_Integer = rec show = prim_show_Int
-
-show_String : Show String
-show_String = rec show = prim_show_Str
 
 
 
@@ -335,6 +386,7 @@ show_String = rec show = prim_show_Str
 Monoid : Type -> Type
 Monoid = sig mzero : A
 	     mplus : A -> A -> A
+
 
 
 
@@ -354,6 +406,9 @@ composOp _ _ d = d.composOp
 composFold : (C : Type) -> (T : C -> Type) -> (d : Compos C T) -> (B : Type) -> Monoid B 
           -> (c : C) -> ((a : C) -> T a -> b) -> T c -> b
 composFold _ _ d = d.composFold
+
+
+
 
 
 --
@@ -378,16 +433,3 @@ bind _ d = d.bind
   (x >>  y) => bind ? ? ? ? x (\_ -> y)
 -}
 
--- Instances:
-
-monad_List : Monad List
-monad_list = rec return = \A -> \x -> Cons A x (Nil A)
-		 bind = \A -> \B -> \m -> \k -> concat B (map A B k m)
-
-monad_Maybe : Monad Maybe
-monad_Maybe = 
-  rec return = Just
-      bind = \A -> \B -> \m -> \k -> 
-         case m of
-		Nothing _ -> Nothing B
-		Just _ x  -> k x
