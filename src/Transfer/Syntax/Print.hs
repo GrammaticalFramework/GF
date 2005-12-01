@@ -87,14 +87,15 @@ instance Print (Tree c) where
     ValueDecl i patterns exp -> prPrec _i 0 (concatD [prt 0 i , prt 0 patterns , doc (showString "=") , prt 0 exp])
     DeriveDecl i0 i1 -> prPrec _i 0 (concatD [doc (showString "derive") , prt 0 i0 , prt 0 i1])
     ConsDecl i exp -> prPrec _i 0 (concatD [prt 0 i , doc (showString ":") , prt 0 exp])
-    PConsTop i pattern patterns -> prPrec _i 0 (concatD [prt 0 i , prt 1 pattern , prt 0 patterns])
-    PCons i patterns -> prPrec _i 1 (concatD [doc (showString "(") , prt 0 i , prt 0 patterns , doc (showString ")")])
-    PRec fieldpatterns -> prPrec _i 1 (concatD [doc (showString "rec") , doc (showString "{") , prt 0 fieldpatterns , doc (showString "}")])
-    PType  -> prPrec _i 1 (concatD [doc (showString "Type")])
-    PStr str -> prPrec _i 1 (concatD [prt 0 str])
-    PInt n -> prPrec _i 1 (concatD [prt 0 n])
-    PVar i -> prPrec _i 1 (concatD [prt 0 i])
-    PWild  -> prPrec _i 1 (concatD [doc (showString "_")])
+    POr pattern0 pattern1 -> prPrec _i 0 (concatD [prt 1 pattern0 , doc (showString "||") , prt 0 pattern1])
+    PConsTop i pattern patterns -> prPrec _i 1 (concatD [prt 0 i , prt 2 pattern , prt 0 patterns])
+    PCons i patterns -> prPrec _i 2 (concatD [doc (showString "(") , prt 0 i , prt 0 patterns , doc (showString ")")])
+    PRec fieldpatterns -> prPrec _i 2 (concatD [doc (showString "rec") , doc (showString "{") , prt 0 fieldpatterns , doc (showString "}")])
+    PType  -> prPrec _i 2 (concatD [doc (showString "Type")])
+    PStr str -> prPrec _i 2 (concatD [prt 0 str])
+    PInt n -> prPrec _i 2 (concatD [prt 0 n])
+    PVar i -> prPrec _i 2 (concatD [prt 0 i])
+    PWild  -> prPrec _i 2 (concatD [doc (showString "_")])
     FieldPattern i pattern -> prPrec _i 0 (concatD [prt 0 i , doc (showString "=") , prt 0 pattern])
     ELet letdefs exp -> prPrec _i 0 (concatD [doc (showString "let") , doc (showString "{") , prt 0 letdefs , doc (showString "}") , doc (showString "in") , prt 0 exp])
     ECase exp cases -> prPrec _i 0 (concatD [doc (showString "case") , prt 0 exp , doc (showString "of") , doc (showString "{") , prt 0 cases , doc (showString "}")])
@@ -158,7 +159,7 @@ instance Print [ConsDecl] where
 instance Print [Pattern] where
   prt _ es = case es of
    [] -> (concatD [])
-   x:xs -> (concatD [prt 1 x , prt 0 xs])
+   x:xs -> (concatD [prt 2 x , prt 0 xs])
 instance Print [FieldPattern] where
   prt _ es = case es of
    [] -> (concatD [])

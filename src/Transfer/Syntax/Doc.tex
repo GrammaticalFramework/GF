@@ -56,10 +56,10 @@ The symbols used in Syntax are the following: \\
 
 \begin{tabular}{lll}
 {\symb{;}} &{\symb{:}} &{\symb{\{}} \\
-{\symb{\}}} &{\symb{{$=$}}} &{\symb{(}} \\
-{\symb{)}} &{\symb{\_}} &{\symb{{$-$}{$>$}}} \\
-{\symb{{$<$}{$-$}}} &{\symb{$\backslash$}} &{\symb{{$>$}{$>$}{$=$}}} \\
-{\symb{{$>$}{$>$}}} &{\symb{{$|$}{$|$}}} &{\symb{\&\&}} \\
+{\symb{\}}} &{\symb{{$=$}}} &{\symb{{$|$}{$|$}}} \\
+{\symb{(}} &{\symb{)}} &{\symb{\_}} \\
+{\symb{{$-$}{$>$}}} &{\symb{{$<$}{$-$}}} &{\symb{$\backslash$}} \\
+{\symb{{$>$}{$>$}{$=$}}} &{\symb{{$>$}{$>$}}} &{\symb{\&\&}} \\
 {\symb{{$=$}{$=$}}} &{\symb{/{$=$}}} &{\symb{{$<$}}} \\
 {\symb{{$<$}{$=$}}} &{\symb{{$>$}}} &{\symb{{$>$}{$=$}}} \\
 {\symb{::}} &{\symb{{$+$}}} &{\symb{{$-$}}} \\
@@ -115,23 +115,28 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Pattern}} & {\arrow}  &{\nonterminal{Ident}} {\nonterminal{Pattern1}} {\nonterminal{ListPattern}}  \\
+{\nonterminal{Pattern}} & {\arrow}  &{\nonterminal{Pattern1}} {\terminal{{$|$}{$|$}}} {\nonterminal{Pattern}}  \\
  & {\delimit}  &{\nonterminal{Pattern1}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Pattern1}} & {\arrow}  &{\terminal{(}} {\nonterminal{Ident}} {\nonterminal{ListPattern}} {\terminal{)}}  \\
- & {\delimit}  &{\terminal{rec}} {\terminal{\{}} {\nonterminal{ListFieldPattern}} {\terminal{\}}}  \\
+{\nonterminal{Pattern1}} & {\arrow}  &{\nonterminal{Ident}} {\nonterminal{Pattern2}} {\nonterminal{ListPattern}}  \\
+ & {\delimit}  &{\nonterminal{Pattern2}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
+{\nonterminal{Pattern2}} & {\arrow}  &{\terminal{rec}} {\terminal{\{}} {\nonterminal{ListFieldPattern}} {\terminal{\}}}  \\
  & {\delimit}  &{\terminal{Type}}  \\
  & {\delimit}  &{\nonterminal{String}}  \\
  & {\delimit}  &{\nonterminal{Integer}}  \\
  & {\delimit}  &{\nonterminal{Ident}}  \\
  & {\delimit}  &{\terminal{\_}}  \\
+ & {\delimit}  &{\terminal{(}} {\nonterminal{Pattern}} {\terminal{)}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
 {\nonterminal{ListPattern}} & {\arrow}  &{\emptyP} \\
- & {\delimit}  &{\nonterminal{Pattern1}} {\nonterminal{ListPattern}}  \\
+ & {\delimit}  &{\nonterminal{Pattern2}} {\nonterminal{ListPattern}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}

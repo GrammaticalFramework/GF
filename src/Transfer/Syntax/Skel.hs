@@ -18,6 +18,7 @@ transTree t = case t of
   ValueDecl i patterns exp -> failure t
   DeriveDecl i0 i1 -> failure t
   ConsDecl i exp -> failure t
+  POr pattern0 pattern1 -> failure t
   PConsTop i pattern patterns -> failure t
   PCons i patterns -> failure t
   PRec fieldpatterns -> failure t
@@ -92,6 +93,7 @@ transConsDecl t = case t of
 
 transPattern :: Pattern -> Result
 transPattern t = case t of
+  POr pattern0 pattern1 -> failure t
   PConsTop i pattern patterns -> failure t
   PCons i patterns -> failure t
   PRec fieldpatterns -> failure t
