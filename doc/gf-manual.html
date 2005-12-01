@@ -10,10 +10,11 @@
 
 <a href="http://www.cs.chalmers.se/~aarne">
 Aarne Ranta</a>, 
-May 17, 2005, for GF Version 2.2
+December 1, 2005, for (forthcoming) GF Version 2.4
 
 <p>
 
+Forth version: May 17, 2005, for GF Version 2.2.<br>
 Third version: June 25, 2003, for GF Version 1.2.<br>
 Second version: June 17, 2002, for GF Version 1.0.<br>
 First version: April 19, 2002.
@@ -147,9 +148,16 @@ All flags to the command <tt>i</tt> are recognized.
 
 
 
-<h2>Library path</h2>
+<h2>Library and grammar paths</h2>
 
-(Not available in Version 2.2 for the moment - sorry.)
+Environment variables and path wild cards.
+<ul>
+<li> <tt>GF_LIB_PATH</tt> gives the location of <tt>GF/lib</tt>
+<li> <tt>GF_GRAMMAR_PATH</tt> gives a list of directories appended
+     to the explicitly given path
+<li> <tt>DIR/*</tt> is expanded to the union of all subdirectories
+     of <tt>DIR</tt>
+</ul>
 
 
 <h3>Command line syntax</h3>
@@ -213,8 +221,13 @@ If Readline is not available,
 a command line consisting of an integer <tt>n</tt> 
 repeats a command <tt>n</tt> lines back in the history.
 For instance, 0 repeats the last command, 1 the second-last, etc.
+This functionality usually doesn't work in Windows.
 
+<p>
 
+From GF version 2.4: to <b>interrupt</b> the execution of a command,
+you can type [Control]-c, and it no longer terminates the GF session.
+This functionality doesn't work in Windows.
 
 
 <h3>Options and flags</h3>
@@ -255,15 +268,26 @@ one must know their dependence on and their effects to an
 <ul>
 <li> main abstract syntax (if any) - pointer to a compiled module
 <li> main concrete syntax (if any) - pointer to a compiled module
-<li> a list of pointers to other concrete syntaxes, for the same abstract
+<li> a list of other concrete syntaxes, for the same abstract
+<li> a list of other abstract syntaxes
+<li> a list of all concrete syntaxes for all abstract syntaxes
 <li> a list of compiled modules
 <li> a list of source modules
-<li> values of flags. 
+<li> global options
+<li> a list of transfer modules
 </ul>
 Normally, the main concrete syntax is the last-imported one.
 The name of this is the
 value of the flag <tt>-lang</tt>, which can be reset by the
 <tt>sf</tt> command.
+<pre>
+  i StoneageEng.gf     -- main concrete is StoneageEng
+  i StoneageSwe.gf     -- main concrete is StoneageSwe
+  sf -lang=StoneageEng -- main concrete is StoneageEng
+  po                   -- show the current environment
+  cm LangSwe           -- change main concrete and abstract
+  e                    -- empty the environment
+</pre>
 
 
 
@@ -305,6 +329,17 @@ input for a command, so the pipe breaks there.
 
 The following is a copy of the current <tt>HelpFile</tt>.
 <pre>
+-- GF help file updated for GF 2.4, 1/12/2005.
+-- *: Commands and options marked with * are not yet implemented.
+--
+-- Each command has a long and a short name, options, and zero or more
+-- arguments. Commands are sorted by functionality. The short name is
+-- given first.
+
+-- Type "h -all" for full help file, "h <CommandName>" for full help on a command.  
+
+-- commands that change the state
+
 i,  import: i File
       Reads a grammar from File and compiles it into a GF runtime grammar.
       Files "include"d in File are read recursively, nubbing repetitions.
@@ -315,8 +350,10 @@ i,  import: i File
         .gfc   canonical GF
         .gfr   precompiled GF resource  
         .gfcm  multilingual canonical GF
+        .gfe   example-based grammar files (only with the -ex option)
         .ebnf  Extended BNF format
         .cf    Context-free (BNF) format
+        .trc   TransferCore format
   options:
       -old          old: parse in GF<2.0 format (not necessary)
       -v            verbose: give lots of messages 
@@ -328,6 +365,8 @@ i,  import: i File
       -cflexer      build an optimized parser with separate lexer trie
       -noemit       do not emit code (default with old grammar format)
       -o            do emit code (default with new grammar format)
+      -ex           preprocess .gfe files if needed
+      -prob         read probabilities from top grammar file  (format --# prob Fun Double)
   flags:
       -abs          set the name used for abstract syntax (with -old option)
       -cnc          set the name used for concrete syntax (with -old option)
@@ -335,6 +374,8 @@ i,  import: i File
       -path         use the (colon-separated) search path to find modules
       -optimize     select an optimization to override file-defined flags
       -conversion   select parsing method (values strict|nondet)
+      -probs        read probabilities from file (format (--# prob) Fun Double)
+      -noparse      read nonparsable functions from file (format --# noparse Funs) 
   examples:
       i English.gf                      -- ordinary import of Concrete
       i -retain german/ParadigmsGer.gf  -- import of Resource to test
@@ -354,6 +395,26 @@ sf, set_flags: sf Flag*
 
 s,  strip: s
       Prune the state by removing source and resource modules.
+
+dc, define_command Name Anything
+      Add a new defined command. The Name must star with '%'. Later,
+      if 'Name X' is used, it is replaced by Anything where #1 is replaced
+      by X. 
+      Restrictions: Currently at most one argument is possible, and a defined
+      command cannot appear in a pipe.     
+      To see what definitions are in scope, use help -defs.
+  examples:
+      dc %tnp p -cat=NP -lang=Eng #1 | l -lang=Swe    -- translate NPs
+      %tnp "this man"                                 -- translate and parse
+
+dt, define_term Name Tree
+      Add a constant for a tree. The constant can later be called by
+      prefixing it with '$'. 
+      Restriction: These terms are not yet usable as a subterm. 
+      To see what definitions are in scope, use help -defs.
+  examples:
+      p -cat=NP "this man" | dt tm    -- define tm as parse result
+      l -all $tm                      -- linearize tm in all forms
 
 -- commands that give information about the state
 
@@ -380,7 +441,6 @@ pm, print_multigrammar: pm
   options:
       -utf8  apply UTF8 encoding to the tokens in the grammar
       -utf8id apply UTF8 encoding to the identifiers in the grammar
-      -graph print module dependency graph in 'dot' format
   examples:
       pm | wf Letter.gfcm  -- print the grammar into the file Letter.gfcm
       pm -printer=graph | wf D.dot  -- then do 'dot -Tps D.dot > D.ps'
@@ -437,23 +497,39 @@ p,  parse: p String
       Shows all Trees returned for String by the actual
       grammar (overridden by the -lang flag), in the category S (overridden
       by the -cat flag).
-  options:
+  options for batch input:
+      -lines   parse each line of input separately, ignoring empty lines
+      -all     as -lines, but also parse empty lines
+      -prob    rank results by probability
+      -cut     stop after first lexing result leading to parser success
+  options for selecting parsing method:
+      (default)parse using an overgenerating CFG
+      -cfg     parse using a much less overgenerating CFG
+      -mcfg    parse using an even less overgenerating MCFG
+      Note:    the first time parsing with -cfg or -mcfg might take a long time
+  options that only work for the default parsing method:
       -n       non-strict: tolerates morphological errors
       -ign     ignore unknown words when parsing
       -raw     return context-free terms in raw form
       -v       verbose: give more information if parsing fails
-      -new     use an experimental method (GF 2.0; sometimes very good)
-      -lines   parse each line of input separately, ignoring empty lines
-      -all     as -lines, but also parse empty lines
   flags:
       -cat     parse in this category
       -lang    parse in this grammar
       -lexer   filter input through this lexer
-      -parser  use this context-free parsing method
+      -parser  use this parsing strategy
       -number  return this many results at most
   examples:
-      p -cat=S -new "jag är gammal"   -- parse an S with the new method
+      p -cat=S -mcfg "jag är gammal"   -- parse an S with the MCFG
       rf examples.txt | p -lines      -- parse each non-empty line of the file
+
+at, apply_transfer: at (Module.Fun | Fun)
+      Transfer a term using Fun from Module, or the topmost transfer
+      module. Transfer modules are given in the .trc format. They are
+      shown by the 'po' command.
+  flags:
+     -lang     typecheck the result in this lang instead of default lang
+  examples:
+     p -lang=Cncdecimal "123" | at num2bin | l   -- convert dec to bin
 
 tt, test_tokenizer: tt String
       Show the token list sent to the parser when String is parsed.
@@ -462,6 +538,14 @@ tt, test_tokenizer: tt String
      -lexer    use this lexer
   examples:
      tt -lexer=codelit "2*(x + 3)"  -- a favourite lexer for program code
+
+g, grep: g String1 String2
+      Grep the String1 in the String2. String2 is read line by line,
+      and only those lines that contain String1 are returned.
+  flags:
+     -v  return those lines that do not contain String1.
+  examples:
+     pg -printer=cf | grep "mother"  -- show cf rules with word mother
 
 cc, compute_concrete: cc Term
       Compute a term by concrete syntax definitions. Uses the topmost
@@ -503,6 +587,9 @@ gr, generate_random: gr Tree?
       Generates a random Tree of a given category. If a Tree
       argument is given, the command completes the Tree with values to
       the metavariables in the tree. 
+  options:
+      -prob    use probabilities (works for nondep types only)
+      -cf      use a very fast method (works for nondep types only)
   flags:
       -cat     generate in this category
       -lang    use the abstract syntax of this grammar
@@ -522,6 +609,7 @@ gt, generate_trees: gt Tree?
       -metas   also return trees that include metavariables
   flags:
       -depth   generate to this depth (default 3)
+      -atoms   take this number of atomic rules of each category (default unlimited)
       -alts    take this number of alternatives at each branch (default unlimited)
       -cat     generate in this category
       -lang    use the abstract syntax of this grammar
@@ -574,6 +662,19 @@ wt, wrap_tree: wt Fun
       Wraps the tree as the sole argument of Fun.
   flags:
       -c           compute the resulting new tree to normal form
+
+vt, visualize_tree: vt Tree
+      Shows the abstract syntax tree via dot and gv (via temporary files
+      grphtmp.dot, grphtmp.ps).
+  flags:
+      -c           show categories only (no functions)
+      -f           show functions only (no categories)
+      -g           show as graph (sharing uses of the same function)
+      -o           just generate the .dot file
+  examples:
+    p "hello world" | vt -o | wf my.dot ;; ! open -a GraphViz my.dot
+    -- This writes the parse tree into my.dot and opens the .dot file
+    -- with another application without generating .ps.
 
 -- subshells
 
@@ -685,7 +786,8 @@ h, help: h Command?
       Displays the paragraph concerning the command from this help file.
       Without the argument, shows the first lines of all paragraphs.
   options
-       -all  show the whole help file
+       -all   show the whole help file
+       -defs  show user-defined commands and terms
   examples:
        h print_grammar  -- show all information on the pg command
 
@@ -697,6 +799,12 @@ q, quit: q
       Issues a system command. No value is returned to GF.
    example:
       ! ls
+
+?, system_command: ? String
+      Issues a system command that receives its arguments from GF pipe
+      and returns a value to GF.
+   example:
+      h | ? 'wc -l' | p -cat=Num
 
 
 -- Flags. The availability of flags is defined separately for each command.
@@ -736,22 +844,34 @@ q, quit: q
     -lexer=codelit       like code, but treat unknown words as string literals
     -lexer=textlit       like text, but treat unknown words as string literals
     -lexer=codeC         use a C-like lexer
+    -lexer=ignore        like literals, but ignore unknown words
+    -lexer=subseqs       like ignore, but then try all subsequences from longest
 
 -number, the maximum number of generated items in a list. 
        The default is unlimited.
 
 -optimize, optimization on generated code.
        The default is share for concrete, none for resource modules.
+       Each of the flags can have the suffix _subs, which performs
+       common subexpression elimination after the main optimization.
+       Thus, -optimize=all_subs is the most aggressive one.
+
     -optimize=share        share common branches in tables
     -optimize=parametrize  first try parametrize then do share with the rest
     -optimize=values       represent tables as courses-of-values
     -optimize=all          first try parametrize then do values with the rest
     -optimize=none         no optimization
 
--parser, Context-free    parsing algorithm. Under construction.
-       The default is a chart parser via context-free approximation.
+-parser, parsing strategy. The default is chart. If -cfg or -mcfg are
+       selected, only bottomup and topdown are recognized.
+    -parser=chart          bottom-up chart parsing
+    -parser=bottomup       a more up to date bottom-up strategy
+    -parser=topdown        top-down strategy
+    -parser=old            an old bottom-up chart parser
 
--printer, format in which the grammar is printed. The default is gfc.
+-printer, format in which the grammar is printed. The default is
+       gfc. Those marked with M are (only) available for pm, the rest
+       for pg.
     -printer=gfc            GFC grammar
     -printer=gf             GF grammar
     -printer=old            old GF grammar
@@ -767,6 +887,27 @@ q, quit: q
     -printer=fullform       full-form lexicon, short format
    *-printer=xml            XML: DTD for the pg command, object for st
     -printer=old            old GF: file readable by GF 1.2
+    -printer=stat           show some statistics of generated GFC
+    -printer=probs          show probabilities of all functions
+    -printer=gsl            Nuance GSL speech recognition grammar
+    -printer=jsgf           Java Speech Grammar Format
+    -printer=srgs_xml       SRGS XML format
+    -printer=srgs_xml_prob  SRGS XML format, with weights
+    -printer=slf            a finite automaton in the HTK SLF format
+    -printer=slf_graphviz   the same automaton as in SLF, but in Graphviz format
+    -printer=fa_graphviz    a finite automaton with labelled edges
+    -printer=regular        a regular grammar in a simple BNF
+    -printer=unpar          a gfc grammar with parameters eliminated
+    -printer=functiongraph  abstract syntax functions in 'dot' format
+    -printer=typegraph      abstract syntax categories in 'dot' format
+    -printer=transfer       Transfer language datatype (.tr file format)
+    -printer=gfcm        M  gfcm file (default for pm)
+    -printer=header      M  gfcm file with header (for GF embedded in Java)
+    -printer=graph       M  module dependency graph in 'dot' (graphviz) format
+    -printer=missing     M  the missing linearizations of each concrete
+    -printer=gfc-prolog  M  gfc in prolog format (also pg)
+    -printer=mcfg-prolog M  mcfg in prolog format (also pg)
+    -printer=cfg-prolog  M  cfg in prolog format (also pg)
 
 -startcat, like -cat, but used in grammars (to avoid clash with keyword cat)
 
@@ -788,7 +929,7 @@ q, quit: q
     -unlexer=concat      remove all spaces
     -unlexer=bind        like identity, but bind at "&+"
 
--- *: Commands and options marked with * are not yet implemented.
+-- *: Commands and options marked with * are currently not implemented.
 </pre>
 
 
