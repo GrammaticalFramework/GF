@@ -115,7 +115,8 @@ EList.     Exp13 ::= "[" [Exp] "]" ;
 EVar.      Exp13 ::= Ident ;
 EType.     Exp13 ::= "Type" ;
 EStr.      Exp13 ::= String ;
-EInt.      Exp13 ::= Integer ;
+EInteger.  Exp13 ::= Integer ;
+EDouble.   Exp13 ::= Double ;
 EMeta.     Exp13 ::= "?" ;
 
 coercions Exp 13 ;

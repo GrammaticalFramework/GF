@@ -22,18 +22,40 @@ id _ x = x
 
 num_Integer : Num Integer
 num_Integer = rec zero = 0
-		  plus = prim_add_Int
-		  minus = prim_sub_Int
+		  plus = prim_add_Integer
+		  minus = prim_sub_Integer
 		  one = 1
-              	  times = prim_mul_Int
-		  div = prim_div_Int
-              	  mod = prim_mod_Int
-		  negate = prim_neg_Int
-		  eq = prim_eq_Int
-		  compare = prim_cmp_Int
+              	  times = prim_mul_Integer
+		  div = prim_div_Integer
+              	  mod = prim_mod_Integer
+		  negate = prim_neg_Integer
+		  eq = prim_eq_Integer
+		  compare = prim_cmp_Integer
 
 show_Integer : Show Integer
-show_Integer = rec show = prim_show_Int
+show_Integer = rec show = prim_show_Integer
+
+
+--
+-- The Double type
+--
+
+-- Instances:
+
+num_Double : Num Double
+num_Double = rec zero = 0.0
+		 plus = prim_add_Double
+		 minus = prim_sub_Double
+		 one = 1.0
+              	 times = prim_mul_Double
+		 div = prim_div_Double
+              	 mod = prim_mod_Double
+		 negate = prim_neg_Double
+		 eq = prim_eq_Double
+		 compare = prim_cmp_Double
+
+show_Double : Show Double
+show_Double = rec show = prim_show_Double
 
 
 
@@ -45,15 +67,15 @@ show_Integer = rec show = prim_show_Int
 
 add_String : Add String
 add_String = rec zero = ""
-		 plus = prim_add_Str
+		 plus = prim_add_String
 
 
 ord_String : Ord String
 ord_String = rec eq = prim_eq_Str
-		 compare = prim_cmp_Str
+		 compare = prim_cmp_String
 
 show_String : Show String
-show_String = rec show = prim_show_Str
+show_String = rec show = prim_show_String
 
 
 --
@@ -283,7 +305,7 @@ Neg : Type -> Type
 Neg = sig negate : A -> A
 
 negate : (A : Type) -> Neg A -> A -> A
-negate _ d = d.neg
+negate _ d = d.negate
 
 -- Operators:
 

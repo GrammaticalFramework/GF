@@ -77,7 +77,9 @@ EType.     Exp5 ::= "Type" ;
 -- String literal expressions.
 EStr.      Exp5 ::= String ;
 -- Integer literal expressions.
-EInt.      Exp5 ::= Integer ;
+EInteger.  Exp5 ::= Integer ;
+-- Double literal expressions.
+EDouble.   Exp5 ::= Double ;
 -- Meta variables
 EMeta.     Exp5 ::= TMeta ;
 

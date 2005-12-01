@@ -37,6 +37,7 @@ import Transfer.ErrM
 
 L_quoted { PT _ (TL $$) }
 L_integ  { PT _ (TI $$) }
+L_doubl  { PT _ (TD $$) }
 L_TMeta { PT _ (T_TMeta $$) }
 L_CIdent { PT _ (T_CIdent $$) }
 L_err    { _ }
@@ -46,6 +47,7 @@ L_err    { _ }
 
 String  :: { String }  : L_quoted { $1 }
 Integer :: { Integer } : L_integ  { (read $1) :: Integer }
+Double  :: { Double }  : L_doubl  { (read $1) :: Double }
 TMeta    :: { TMeta} : L_TMeta { TMeta ($1)}
 CIdent    :: { CIdent} : L_CIdent { CIdent ($1)}
 
@@ -142,7 +144,8 @@ Exp5 : 'sig' '{' ListFieldType '}' { ERecType $3 }
   | CIdent { EVar $1 }
   | 'Type' { EType }
   | String { EStr $1 }
-  | Integer { EInt $1 }
+  | Integer { EInteger $1 }
+  | Double { EDouble $1 }
   | TMeta { EMeta $1 }
   | '(' Exp ')' { $2 }
 

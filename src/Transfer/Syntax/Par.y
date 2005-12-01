@@ -65,6 +65,7 @@ import Transfer.ErrM
 L_ident  { PT _ (TV $$) }
 L_quoted { PT _ (TL $$) }
 L_integ  { PT _ (TI $$) }
+L_doubl  { PT _ (TD $$) }
 L_err    { _ }
 
 
@@ -73,6 +74,7 @@ L_err    { _ }
 Ident   :: { Ident }   : L_ident  { Ident $1 }
 String  :: { String }  : L_quoted { $1 }
 Integer :: { Integer } : L_integ  { (read $1) :: Integer }
+Double  :: { Double }  : L_doubl  { (read $1) :: Double }
 
 Module :: { Module }
 Module : ListImport ListDecl { Module $1 $2 } 
@@ -262,7 +264,8 @@ Exp13 : 'sig' '{' ListFieldType '}' { ERecType $3 }
   | Ident { EVar $1 }
   | 'Type' { EType }
   | String { EStr $1 }
-  | Integer { EInt $1 }
+  | Integer { EInteger $1 }
+  | Double { EDouble $1 }
   | '?' { EMeta }
   | '(' Exp ')' { $2 }
 

@@ -32,6 +32,12 @@ except \terminal{"}\ unless preceded by \verb6\6.
 Integer literals \nonterminal{Int}\ are nonempty sequences of digits.
 
 
+Double-precision float literals \nonterminal{Double}\ have the structure
+indicated by the regular expression $\nonterminal{digit}+ \mbox{{\it `.'}} \nonterminal{digit}+ (\mbox{{\it `e'}} \mbox{{\it `-'}}? \nonterminal{digit}+)?$ i.e.\
+two sequences of digits separated by a decimal point, optionally
+followed by an unsigned or negative exponent.
+
+
 
 
 
@@ -165,6 +171,7 @@ All other symbols are terminals.\\
  & {\delimit}  &{\terminal{Type}}  \\
  & {\delimit}  &{\nonterminal{String}}  \\
  & {\delimit}  &{\nonterminal{Integer}}  \\
+ & {\delimit}  &{\nonterminal{Double}}  \\
  & {\delimit}  &{\nonterminal{TMeta}}  \\
  & {\delimit}  &{\terminal{(}} {\nonterminal{Exp}} {\terminal{)}}  \\
 \end{tabular}\\

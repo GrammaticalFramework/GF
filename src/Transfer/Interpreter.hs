@@ -11,6 +11,7 @@ import Debug.Trace
 
 data Value = VStr String
            | VInt Integer
+           | VDbl Double
            | VType
            | VRec [(CIdent,Value)]
            | VClos Env Exp
@@ -51,7 +52,8 @@ seqEnv (Env e) = Env $! deepSeqList [ fst p `seq` p | p <- e ]
 -- | The built-in types and functions.
 builtin :: Env
 builtin = 
-    mkEnv [(CIdent "Int",VType),
+    mkEnv [(CIdent "Integer",VType),
+           (CIdent "Double",VType),
            (CIdent "String",VType),
            mkIntUn  "neg"  negate  toInt,
            mkIntBin "add"  (+)     toInt,
@@ -62,6 +64,15 @@ builtin =
            mkIntBin "eq"   (==)    toBool,
            mkIntBin "cmp"  compare toOrd,
            mkIntUn  "show" show    toStr,
+           mkDblUn  "neg"  negate  toDbl,
+           mkDblBin "add"  (+)     toDbl,
+           mkDblBin "sub"  (-)     toDbl,
+           mkDblBin "mul"  (*)     toDbl,
+           mkDblBin "div"  (/)     toDbl,
+           mkDblBin "mod"  (\_ _ -> 0.0) toDbl,
+           mkDblBin "eq"   (==)    toBool,
+           mkDblBin "cmp"  compare toOrd,
+           mkDblUn  "show" show    toStr,
            mkStrBin "add"  (++)    toStr,
            mkStrBin "eq"   (==)    toBool,
            mkStrBin "cmp"  compare toOrd,
@@ -69,28 +80,38 @@ builtin =
           ]
   where 
   toInt i  = VInt i
+  toDbl i  = VDbl i
   toBool b = VCons (CIdent (show b)) []
   toOrd o  = VCons (CIdent (show o)) []
   toStr s  = VStr s
-  mkIntUn x f g = let c = CIdent ("prim_"++x++"_Int")
-                   in (c, VPrim (\n -> appInt1 f g n))
-  mkIntBin x f g = let c = CIdent ("prim_"++x++"_Int")
-                    in (c, VPrim (\n -> VPrim (\m -> appInt2 f g n m )))
-  appInt1 f g x = case x of
+  mkUn t a x f g = let c = CIdent ("prim_" ++ x ++ "_" ++ t)
+                   in (c, VPrim (\n -> a f g n))
+  mkBin t a x f g = let c = CIdent ("prim_" ++ x ++ "_" ++ t)
+                    in (c, VPrim (\n -> VPrim (\m -> a f g n m )))
+  mkIntUn = mkUn "Integer" $ \ f g x -> 
+                     case x of
                          VInt n -> g (f n)
                          _ -> error $ printValue x ++ " is not an integer"
-  appInt2 f g x y = case (x,y) of
+  mkIntBin = mkBin "Integer" $ \ f g x y -> 
+                     case (x,y) of
                          (VInt n,VInt m) -> g (f n m)
                          _ -> error $ printValue x ++ " and " ++ printValue y 
                                       ++ " are not both integers"
-  mkStrUn x f g = let c = CIdent ("prim_"++x++"_Str")
-                   in (c, VPrim (\n -> appStr1 f g n))
-  mkStrBin x f g = let c = CIdent ("prim_"++x++"_Str")
-                    in (c, VPrim (\n -> VPrim (\m -> appStr2 f g n m )))
-  appStr1 f g x = case x of
+  mkDblUn = mkUn "Double" $ \ f g x -> 
+                     case x of
+                         VDbl n -> g (f n)
+                         _ -> error $ printValue x ++ " is not a double"
+  mkDblBin = mkBin "Double" $ \ f g x y -> 
+                     case (x,y) of
+                         (VDbl n,VDbl m) -> g (f n m)
+                         _ -> error $ printValue x ++ " and " ++ printValue y 
+                                      ++ " are not both doubles"
+  mkStrUn = mkUn "String" $ \ f g x -> 
+                     case x of
                          VStr n -> g (f n)
-                         _ -> error $ printValue x ++ " is not an integer"
-  appStr2 f g x y = case (x,y) of
+                         _ -> error $ printValue x ++ " is not a string"
+  mkStrBin = mkBin "String" $ \ f g x y -> 
+                     case (x,y) of
                          (VStr n,VStr m) -> g (f n m)
                          _ -> error $ printValue x ++ " and " ++ printValue y 
                                       ++ " are not both strings"
@@ -144,7 +165,8 @@ eval env x = case x of
   EVar id  -> lookupEnv env id
   EType  -> VType
   EStr str  -> VStr str
-  EInt n  -> VInt n
+  EInteger n  -> VInt n
+  EDouble n  -> VDbl n
   EMeta (TMeta t) -> VMeta (read $ drop 1 t)
 
 firstMatch :: Value -> [Case] -> Maybe (Exp,[(CIdent,Value)])
@@ -196,7 +218,8 @@ valueToExp :: Value -> Exp
 valueToExp v = 
     case v of
            VStr s     -> EStr s
-           VInt i     -> EInt i
+           VInt i     -> EInteger i
+           VDbl i     -> EDouble i
            VType      -> EType
            VRec fs    -> ERec [ FieldValue f (valueToExp v) | (f,v) <- fs]
            VClos env e  -> e
