@@ -1,0 +1,38 @@
+-- file GF/lib/resource-1.0/README
+-- created Thu Dec  1 22:21:21 CET 2005
+-- by A. Ranta, aarne@cs.chalmers.se
+
+This is a working directory for the next version of GF resource
+grammar library, incomplete in many ways but aimed to become the
+first "mature" release. The old releases (resource-0.6 and resource)
+will be kept available, but 'resource' will be renamed 'resource-0.9',
+and 'resource' will probably be made into a symbolic link to the
+current version.
+
+The main changes from 0.9 to 1.0 are
+
+1. Refactoring of module structure: there are many more modules now.
+   However, the full API is still available as LangX.
+
+2. Increased coverage. We have used the second CLE book ("Spoken
+   Language Translation", by M. Rayner, D. Carter, P. Bouillon
+   V. Digalakis, and M. Wirén, Cambridge UP, 2000) as guideline and 
+   goal.
+
+3. Some constructions have been dropped out or modified. This concerns
+   in particular the determiner structure in the module Noun.
+
+4. Judging from the English implementation, there is a promise to get
+   a lighter and more efficient resource library, just because of
+   lessons learned from earlier implementations.
+
+Version 0.9 is hereby "frozen" to its current state, which means that
+extensions and bug fixes are not carried over to it. However, if
+requested, we might provide a reimplementation of the old API using
+the new.
+
+When will it be ready? Hopefully around February 2005.
+
+
+
+ 
