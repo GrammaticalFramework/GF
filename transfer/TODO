@@ -1,18 +1,10 @@
 * Improve front-end language
 
-- Tuple syntax in expressions, types and patterns. Implemented with records.
+- Tuple syntax in expressions, types and patterns? Implemented with records.
 
-- List syntax in expressions, types and patterns. Implemented with List.
-
-- operators for primitive string operations: 
-
-- list operators: ++, :
-
-- overloaded operators?
+- List syntax in types and patterns? Implemented with List.
 
 - implicit arguments?
-
-- composOp generation
 
 - show generation
 
@@ -29,6 +21,8 @@
 * Improve interpreter
 
 - More efficient handling of constructor application
+
+- Implement tail recursion.
 
 * Improve the core language
 
