@@ -1,4 +1,4 @@
---# -path=.:prelude
+--# -path=.:../abstract:../common:prelude
 
 concrete LangEng of Lang = 
   NounEng, 

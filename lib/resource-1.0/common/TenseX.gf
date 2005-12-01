@@ -15,8 +15,4 @@ concrete TenseX of Tense = open (R = ParamX) in {
     ASimul = {s = []} ** {a = R.Simul} ;
     AAnter = {s = []} ** {a = R.Anter} ;
 
-
-
-
-
 }
