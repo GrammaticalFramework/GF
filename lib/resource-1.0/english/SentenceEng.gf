@@ -17,6 +17,20 @@ concrete SentenceEng of Sentence = CatEng ** open ResEng in {
           }
     } ;
 
+    PredSCVP sc vp = {
+      s = \\t,a,b,o => 
+        let 
+          agr   = (agrP3 Sg).a ;
+          verb  = vp.s ! t ! a ! b ! o ! agr ;
+          subj  = sc.s ;
+          compl = vp.s2 ! agr 
+        in
+        case o of {
+          ODir   => subj ++ verb.fin ++ verb.inf ++ compl ;
+          OQuest => verb.fin ++ subj ++ verb.inf ++ compl
+          }
+    } ;
+
     ImpVP vp = {
       s = \\pol,n => 
         let 

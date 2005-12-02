@@ -8,18 +8,18 @@ flags
 
 lin
   airplane_N = regN "airplane" ;
---  answer_V2S = mkV2S (regV "answer") "to" ;
+  answer_V2S = mkV2S (regV "answer") "to" ;
   apartment_N = regN "apartment" ;
   apple_N = regN "apple" ;
   art_N = regN "art" ;
---  ask_V2Q = mkV2Q (regV "ask") [] ;
+  ask_V2Q = mkV2Q (regV "ask") [] ;
   baby_N = regN "baby" ;
   bad_A = regADeg "bad" ;
   bank_N = regN "bank" ;
   beautiful_A = regADeg "beautiful" ;
---  become_VA = mkVA (irregV "become" "became" "become") ;
+  become_VA = mkVA (irregV "become" "became" "become") ;
   beer_N = regN "beer" ;
---  beg_V2V = mkV2V (regDuplV "beg") [] "to" ;
+  beg_V2V = mkV2V (regDuplV "beg") [] "to" ;
   big_A = regADeg "big" ;
   bike_N = regN "bike" ;
   bird_N = regN "bird" ;
@@ -65,7 +65,7 @@ lin
   dog_N = regN "dog" ;
   door_N = regN "door" ;
   drink_V2 = dirV2 (irregV "drink" "drank" "drunk") ;
---  easy_A2V = mkA2V (regA "easy") "for" ;
+  easy_A2V = mkA2V (regA "easy") "for" ;
   eat_V2 = dirV2 (irregV "eat" "ate" "eaten") ;
   empty_A = regADeg "empty" ;
   enemy_N = regN "enemy" ;
@@ -79,7 +79,7 @@ lin
   fridge_N = regN "fridge" ;
   friend_N = regN "friend" ;
   fruit_N = regN "fruit" ;
---  fun_AV = mkAV (regA "fun") ;
+  fun_AV = mkAV (regA "fun") ;
   garden_N = regN "garden" ;
   girl_N = regN "girl" ;
   glove_N = regN "glove" ;
@@ -128,7 +128,7 @@ lin
   oil_N = regN "oil" ;
   old_A = regADeg "old" ;
   open_V2 = dirV2 (regV "open") ;
---  paint_V2A = mkV2A (regV "paint") [] ;
+  paint_V2A = mkV2A (regV "paint") [] ;
   paper_N = regN "paper" ;
   peace_N = regN "peace" ;
   pen_N = regN "pen" ;
@@ -137,10 +137,10 @@ lin
   play_V2 = dirV2 (regV "play") ;
   policeman_N = regN "policeman" ;
   priest_N = regN "priest" ;
---  probable_AS = mkAS (regA "probable") ;
+  probable_AS = mkAS (regA "probable") ;
   queen_N = regN "queen" ;
   radio_N = regN "radio" ;
---  rain_V0 = mkV0 (regV "rain") ;
+  rain_V0 = mkV0 (regV "rain") ;
   read_V2 = dirV2 (irregV "read" "read" "read") ;
   red_A = regADeg "red" ;
   religion_N = regN "religion" ;

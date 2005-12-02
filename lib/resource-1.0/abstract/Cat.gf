@@ -22,12 +22,18 @@ abstract Cat = {
     V ;
     V2 ;
     V3 ;
+
     VV ;
     VS ;
     VQ ;
 
+    VA ;
+    V2A ;
+
     AP ; 
+
     Comp ;
+    SC ;
 
     A ;
     A2 ;

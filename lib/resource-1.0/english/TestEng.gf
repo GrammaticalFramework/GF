@@ -1,4 +1,4 @@
---# -path=.:prelude
+--# -path=.:../abstract:../common:prelude
 
 concrete TestEng of Test = 
   NounEng, 
