@@ -164,6 +164,7 @@ data Exp =
  | ESort Sort
  | EString String
  | EInt Integer
+ | EFloat Double
  | EMeta
  | EEmpty
  | EData
@@ -213,6 +214,7 @@ data Patt =
  | PCon Ident
  | PQ Ident Ident
  | PInt Integer
+ | PFloat Double
  | PStr String
  | PR [PattAss]
  | PTup [PattTupleComp]

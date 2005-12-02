@@ -85,6 +85,7 @@ tr2str (Tr (N (_,at,val,_,_),ts)) = case (at,val) of
   (AtM _,     v)         -> SMeta (catOf v)
   (AtL s,     _)         -> SString s
   (AtI i,     _)         -> SInt i
+  (AtF i,     _)         -> SFloat i
   _ -> SMeta "FAILED_TO_GENERATE" ---- err monad!
  where
    catOf v = case v of
@@ -148,7 +149,8 @@ data STree =
     SApp (SFun,[STree]) 
   | SMeta SCat
   | SString String
-  | SInt Int
+  | SInt Integer
+  | SFloat Double
    deriving (Show,Eq)
 
 depth :: STree -> Int
@@ -164,6 +166,7 @@ prSTree t = case t of
   SMeta c -> '?':c
   SString s -> prQuotedString s
   SInt i -> show i 
+  SFloat i -> show i 
  where
   pr1 t@(SApp (_,ts)) = ' ' : (if null ts then id else prParenth) (prSTree t)
   pr1 t = prSTree t

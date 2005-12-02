@@ -219,6 +219,7 @@ instance Print Atom where
   prt (AtV i) = prt i
   prt (AtL s) = s
   prt (AtI i) = show i
+  prt (AtF i) = show i
   prt_ (AtC (_,f)) = prt f 
   prt_ a = prt a
 

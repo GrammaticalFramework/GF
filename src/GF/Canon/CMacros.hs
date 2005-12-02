@@ -130,6 +130,7 @@ term2patt trm = case trm of
     return (PR (map (uncurry PAss) (zip ll aa')))
   LI x -> return $ PV x
   EInt i -> return $ PI i
+  EFloat i -> return $ PF i
   FV (t:_) -> term2patt t ----
   _ -> prtBad "no pattern corresponds to term" trm
 
@@ -140,6 +141,7 @@ patt2term p = case p of
   PW      -> anyTerm ----
   PR pas  -> R [ Ass lbl (patt2term q) | PAss lbl q <- pas ]
   PI i    -> EInt i
+  PF i    -> EFloat i
 
 anyTerm :: Term
 anyTerm  = LI (A.identC "_") --- should not happen

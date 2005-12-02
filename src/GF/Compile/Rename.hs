@@ -94,6 +94,7 @@ renameIdentTerm env@(act,imps) t =
    -- this facility is mainly for BWC with GF1: you need not import PredefAbs
    predefAbs c s = case c of
      IC "Int" -> return $ const $ Q cPredefAbs cInt
+     IC "Float" -> return $ const $ Q cPredefAbs cFloat
      IC "String" -> return $ const $ Q cPredefAbs cString
      _ -> Bad s
 

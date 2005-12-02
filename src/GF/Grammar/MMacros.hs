@@ -335,6 +335,7 @@ exp2tree e = do
     Meta m -> return $ AtM m
     K s    -> return $ AtL s
     EInt n -> return $ AtI n
+    EFloat n -> return $ AtF n
     _ -> prtBad "cannot convert to atom" f
   ts <- mapM exp2tree xs
   return $ Tr (N (cont,at,uVal,([],[]),True),ts)

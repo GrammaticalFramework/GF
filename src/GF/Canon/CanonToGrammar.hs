@@ -156,7 +156,8 @@ redCTerm x = case x of
   C term0 term  -> liftM2 G.C (redCTerm term0) (redCTerm term)
   FV terms  -> liftM G.FV $ mapM redCTerm terms
   K (KS str) -> return $ G.K str
-  EInt i     -> return $ G.EInt $ fromInteger i
+  EInt i     -> return $ G.EInt i
+  EFloat i   -> return $ G.EFloat i
   E  -> return $ G.Empty
   K (KP d vs)  -> return $ 
                     G.Alts (tList d,[(tList s, G.Strs $ map G.K v) | Var s v <- vs])
@@ -187,6 +188,7 @@ redPatt p = case p of
         ls' = map redLabel ls
     ts <- mapM redPatt ts
     return $ G.PR $ zip ls' ts
-  PI i -> return $ G.PInt (fromInteger i)
+  PI i -> return $ G.PInt i
+  PF i -> return $ G.PFloat i
   _ -> Bad $ "cannot recompile pattern" +++ show p
 

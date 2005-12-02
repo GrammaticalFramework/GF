@@ -231,6 +231,7 @@ instance Print APatt where
    APV id -> prPrec i 0 (concatD [prt 0 id])
    APS str -> prPrec i 0 (concatD [prt 0 str])
    API n -> prPrec i 0 (concatD [prt 0 n])
+   APF n -> prPrec i 0 (concatD [prt 0 n])
    APW  -> prPrec i 0 (concatD [doc (showString "_")])
 
   prtList es = case es of
@@ -292,6 +293,7 @@ instance Print Term where
    C term0 term -> prPrec i 0 (concatD [prt 0 term0 , doc (showString "++") , prt 1 term])
    FV terms -> prPrec i 1 (concatD [docs (showString "variants") , doc (showString "{") , prt 2 terms , doc (showString "}")])
    EInt n -> prPrec i 2 (concatD [prt 0 n])
+   EFloat n -> prPrec i 2 (concatD [prt 0 n])
    K tokn -> prPrec i 2 (concatD [prt 0 tokn])
    E  -> prPrec i 2 (concatD [doc (showString "[") , doc (showString "]")])
 
@@ -356,6 +358,7 @@ instance Print Patt where
    PW  -> prPrec i 0 (concatD [docs (showString "_")])
    PR pattassigns -> prPrec i 0 (concatD [doc (showString "{") , prt 0 pattassigns , doc (showString "}")])
    PI n -> prPrec i 0 (concatD [prt 0 n])
+   PF n -> prPrec i 0 (concatD [prt 0 n])
 
   prtList es = case es of
    [] -> (concatD [])

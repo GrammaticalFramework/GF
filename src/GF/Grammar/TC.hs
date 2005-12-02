@@ -32,7 +32,8 @@ data AExp =
      AVr   Ident Val 
    | ACn   QIdent Val
    | AType 
-   | AInt  Int 
+   | AInt  Integer 
+   | AFloat Double
    | AStr  String
    | AMeta MetaSymb Val
    | AApp  AExp AExp Val 
@@ -145,11 +146,12 @@ inferExp :: Theory -> TCEnv -> Exp -> Err (AExp, Val, [(Val,Val)])
 inferExp th tenv@(k,rho,gamma) e = case e of
    Vr x -> mkAnnot (AVr x) $ noConstr $ lookupVar gamma x
    Q m c 
-    | m == cPredefAbs && (elem c (map identC ["Int","String"])) ->
+    | m == cPredefAbs && (elem c (map identC ["Int","String","Float"])) ->
                                        return (ACn (m,c) vType, vType, [])
     | otherwise -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c)
    QC m c -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c) ----
    EInt i -> return (AInt i, valAbsInt, [])
+   EFloat i -> return (AFloat i, valAbsFloat, [])
    K i -> return (AStr i, valAbsString, [])
    Sort _ -> return (AType, vType, [])
    App f t -> do
@@ -165,6 +167,7 @@ inferExp th tenv@(k,rho,gamma) e = case e of
  where
    predefAbs c s = case c of
      IC "Int" -> return $ const $ Q cPredefAbs cInt
+     IC "Float" -> return $ const $ Q cPredefAbs cFloat
      IC "String" -> return $ const $ Q cPredefAbs cString
      _ -> Bad s
 
@@ -189,7 +192,8 @@ checkEqs th tenv@(k,rho,gamma) (fun@(m,f),def) val = case def of
      PV IW   -> (meta (MetaSymb i) : ps, i+1,        g) 
      PV x    -> (meta (MetaSymb i) : ps, i+1,upd x i g)
      PString s -> (            K s : ps, i,          g)
-     PInt i -> (EInt i : ps, i, g)
+     PInt n -> (EInt n : ps, i, g)
+     PFloat n -> (EFloat n : ps, i, g)
      PP m c xs -> (mkApp (qq (m,c)) xss : ps, i', g') 
                     where (xss,i',g') = foldr p2t ([],i,g) xs
      _ -> error $ "undefined p2t case" +++ prt p +++ "in checkBranch"
@@ -238,7 +242,8 @@ checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $
      PV IW   -> (meta (MetaSymb i) : ps, i+1,g,k) 
      PV x    -> (vr x   : ps, i, upd x k g,k+1)
      PString s -> (K s : ps, i, g, k)
-     PInt i -> (EInt i : ps, i, g, k)
+     PInt n -> (EInt n : ps, i, g, k)
+     PFloat n -> (EFloat n : ps, i, g, k)
      PP m c xs -> (mkApp (qq (m,c)) xss : ps, j, g',k') 
                     where (xss,j,g',k') = foldr p2t ([],i,g,k) xs
      _ -> error $ "undefined p2t case" +++ prt p +++ "in checkBranch"
@@ -262,6 +267,7 @@ checkPatt th tenv exp val = do
      Meta m -> return $ (AMeta m val, val, [])
      Vr x   -> return $ (AVr   x val, val, [])
      EInt i -> return (AInt i, valAbsInt, [])
+     EFloat i -> return (AFloat i, valAbsFloat, [])
      K s    -> return (AStr s, valAbsString, [])
 
      Q m c  -> do

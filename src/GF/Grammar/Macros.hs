@@ -287,11 +287,12 @@ typeStr   = srt "Str"
 typeTok   = srt "Tok"
 typeStrs  = srt "Strs"
 
-typeString, typeInt :: Term
-typeInts :: Int -> Term
+typeString, typeFloat, typeInt :: Term
+typeInts :: Integer -> Term
 
 typeString = constPredefRes "String"
 typeInt = constPredefRes "Int"
+typeFloat = constPredefRes "Float"
 typeInts i = App (constPredefRes "Ints") (EInt i)
 
 isTypeInts :: Term -> Bool
@@ -501,6 +502,7 @@ term2patt trm = case termForm trm of
     aa' <- mapM term2patt aa
     return (PR (zip ll aa'))
   Ok ([],EInt i,[]) -> return $ PInt i
+  Ok ([],EFloat i,[]) -> return $ PFloat i
   Ok ([],K s,   []) -> return $ PString s
   _ -> prtBad "no pattern corresponds to term" trm
 
@@ -513,6 +515,7 @@ patt2term pt = case pt of
   PR r      -> R [assign l (patt2term p) | (l,p) <- r] 
   PT _ p    ->  patt2term p
   PInt i    -> EInt i
+  PFloat i  -> EFloat i
   PString s -> K s 
 
 redirectTerm :: Ident -> Term -> Term

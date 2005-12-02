@@ -14,17 +14,18 @@
 
 module GF.CF.CFIdent (-- * Tokens and categories
 		CFTok(..), CFCat(..),
-		tS, tC, tL, tI, tV, tM, tInt,
+		tS, tC, tL, tI, tF, tV, tM, tInt,
 		prCFTok,
 		-- * Function names and profiles
 		CFFun(..), Profile,
 		wordsCFTok,
 		-- * CF Functions
-		mkCFFun, varCFFun, consCFFun, string2CFFun, stringCFFun, intCFFun, dummyCFFun,
+		mkCFFun, varCFFun, consCFFun, string2CFFun, stringCFFun, 
+                intCFFun, floatCFFun, dummyCFFun,
 		cfFun2String, cfFun2Ident, cfFun2Profile, metaCFFun,
 		-- * CF Categories
 		mkCIdent, ident2CFCat, labels2CFCat, string2CFCat, 
-                catVarCF, cat2CFCat, cfCatString, cfCatInt,
+                catVarCF, cat2CFCat, cfCatString, cfCatInt,cfCatFloat,
 		moduleOfCFCat, cfCat2Cat, cfCat2Ident, lexCFCat,
 		-- * CF Tokens
 		string2CFTok, str2cftoks,
@@ -48,7 +49,8 @@ data CFTok =
    TS String     -- ^ normal strings
  | TC String     -- ^ strings that are ambiguous between upper or lower case
  | TL String     -- ^ string literals
- | TI Int        -- ^ integer literals
+ | TI Integer    -- ^ integer literals
+ | TF Double     -- ^ float literals
  | TV Ident      -- ^ variables
  | TM Int String -- ^ metavariables; the integer identifies it
   deriving (Eq, Ord, Show)
@@ -60,6 +62,7 @@ tS :: String -> CFTok
 tC :: String -> CFTok
 tL :: String -> CFTok
 tI :: String -> CFTok
+tF :: String -> CFTok
 tV :: String -> CFTok
 tM :: String -> CFTok
 
@@ -67,10 +70,11 @@ tS  = TS
 tC  = TC
 tL  = TL
 tI  = TI . read 
+tF  = TF . read 
 tV  = TV . identC
 tM  = TM 0
 
-tInt :: Int -> CFTok
+tInt :: Integer -> CFTok
 tInt = TI
 
 prCFTok :: CFTok -> String
@@ -79,6 +83,7 @@ prCFTok t = case t of
   TC s -> s
   TL s -> s
   TI i -> show i
+  TF i -> show i
   TV x -> prt x
   TM i m -> m --- "?" --- m
 
@@ -113,8 +118,11 @@ string2CFFun m c = consCFFun $ mkCIdent m c
 stringCFFun :: String -> CFFun 
 stringCFFun = mkCFFun . AS
 
-intCFFun :: Int -> CFFun 
-intCFFun = mkCFFun . AI . toInteger
+intCFFun :: Integer -> CFFun 
+intCFFun = mkCFFun . AI
+
+floatCFFun :: Double -> CFFun 
+floatCFFun = mkCFFun . AF
 
 -- | used in lexer-by-need rules
 dummyCFFun :: CFFun
@@ -166,8 +174,9 @@ cat2CFCat = uncurry idents2CFCat
 cfCatString :: CFCat
 cfCatString = string2CFCat (prt cPredefAbs) "String"
 
-cfCatInt :: CFCat
+cfCatInt, cfCatFloat :: CFCat
 cfCatInt = string2CFCat (prt cPredefAbs) "Int"
+cfCatFloat = string2CFCat (prt cPredefAbs) "Float"
 
 
 

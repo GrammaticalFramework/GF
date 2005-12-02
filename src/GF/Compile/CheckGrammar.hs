@@ -279,6 +279,7 @@ computeLType gr t = do
 
     App (Q (IC "Predef") (IC "Ints")) _ -> return ty ---- shouldn't be needed
     Q (IC "Predef") (IC "Int")          -> return ty ---- shouldn't be needed
+    Q (IC "Predef") (IC "Float")        -> return ty ---- shouldn't be needed
 
     Q m c | elem c [cPredef,cPredefAbs] -> return ty
 
@@ -416,6 +417,8 @@ inferLType gr trm = case trm of
 
    EInt i -> return (trm, typeInt)
 
+   EFloat i -> return (trm, typeFloat)
+
    Empty -> return (trm, typeTok)
 
    C s1 s2 -> 
@@ -508,6 +511,7 @@ inferLType gr trm = case trm of
      PT _ p -> isConstPatt p
      PString _ -> True
      PInt _ -> True
+     PFloat _ -> True
      _ -> False
 
    inferPatt p = case p of

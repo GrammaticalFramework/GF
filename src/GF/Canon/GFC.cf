@@ -80,6 +80,7 @@ APC. APatt ::= "(" CIdent [APatt] ")" ;
 APV. APatt ::= Ident ;
 APS. APatt ::= String ;
 API. APatt ::= Integer ;
+APF. APatt ::= Double ;
 APW. APatt ::= "_" ;
 
 separator Decl ";" ;
@@ -120,7 +121,8 @@ S.    Term1 ::= Term1 "!" Term2 ;
 C.    Term  ::= Term "++" Term1 ;
 FV.   Term1 ::= "variants" "{" [Term2] "}" ;  --- no separator!
 
-EInt. Term2 ::= Integer ;
+EInt.   Term2 ::= Integer ;
+EFloat. Term2 ::= Double ;
 K.    Term2 ::= Tokn ;
 E.    Term2 ::= "[" "]" ;
 
@@ -144,6 +146,7 @@ PV.   Patt ::= Ident ;
 PW.   Patt ::= "_" ;
 PR.   Patt ::= "{" [PattAssign] "}" ;
 PI.   Patt ::= Integer ;
+PF.   Patt ::= Double ;
 
 PAss. PattAssign ::= Label "=" Patt ;
 

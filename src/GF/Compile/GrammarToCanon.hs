@@ -231,7 +231,8 @@ redCTerm t = case t of
     return $ G.V ty' ts'
   S u v -> liftM2 G.S (redCTerm u) (redCTerm v)
   K s   -> return $ G.K (G.KS s)
-  EInt i -> return $ G.EInt $ toInteger i
+  EInt i -> return $ G.EInt i
+  EFloat i -> return $ G.EFloat i
   C u v -> liftM2 G.C (redCTerm u) (redCTerm v)
   FV ts -> liftM G.FV $ mapM redCTerm ts
 ---  Ready ss -> return $ G.Ready [redStr ss] --- obsolete
@@ -259,7 +260,8 @@ redPatt p = case p of
     ts <- mapM redPatt tts
     return $ G.PR $  map (uncurry G.PAss) $ zip ls' ts
   PT _ q -> redPatt q
-  PInt i -> return $ G.PI (toInteger i)
+  PInt i -> return $ G.PI i
+  PFloat i -> return $ G.PF i
   PV x -> liftM G.PV $ redIdent x --- for parametrize optimization
   _ -> prtBad "cannot reduce pattern" p
 
