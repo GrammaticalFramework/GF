@@ -57,9 +57,4 @@ concrete CatEng of Cat = open ResEng, Prelude, (R = ParamX) in {
     Conj = {s : Str ; n : Number} ;
     DConj = {s1,s2 : Str ; n : Number} ;
 
-    SeqS = {s1,s2 : Str} ;
-    SeqAdv = {s1,s2 : Str} ;
-    SeqNP = {s1,s2 : Case => Str ; a : Agr} ;
-    SeqAP = {s1,s2 : Agr => Str ; isPre : Bool} ;
-
 }

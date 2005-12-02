@@ -20,10 +20,12 @@ will give some hints how to extend the API.
 
 <p>
 
-<b>Notice</b>. This document concerns the API V. 1.0 which has not
+<b>Notice</b>. This document concerns the API v. 1.0 which has not
 yet been released. You can find the beginnings of it
-in <tt>GF/lib/resource-1.0/gf</tt>, but the locations of
-files are not yet final.
+in <a href=".."><tt>GF/lib/resource-1.0/</tt></a>. See the
+<a href="../README"><tt>resource-1.0/README</tt></a> for
+details on how this differs from previous versions.
+
 
 
 <h2>The resource grammar API</h2>
@@ -178,7 +180,7 @@ are building a grammar for the Dutch language. Here are the first steps.
      and rename them:
      <pre>
        cp ../english/*Eng.gf .
-       rename -n 's/Eng/Dut/' *Eng.gf
+       rename 's/Eng/Dut/' *Eng.gf
      </pre>
 
 <li> Change the <tt>Eng</tt> module references to <tt>Dut</tt> references
@@ -194,18 +196,34 @@ are building a grammar for the Dutch language. Here are the first steps.
      </pre>
      But you will have to make lots of manual changes in all files anyway!
 
-<li> Comment out the contents of these files, except their headers and module
-     brackets. This will give you a set of templates out of which the grammar
+<li> Comment out the contents of these files:
+     <pre>
+       sed -i 's/^/--/' *Dut.gf
+     </pre>
+     This will give you a set of templates out of which the grammar
      will grow as you uncomment and modify the files rule by rule.
+
+<li> In the file <tt>TestDut.gf</tt>, uncomment all lines except the list
+     of inherited modules. Now you can open the grammar in GF:
+     <pre>
+       gf TestDut.gf
+     </pre>
+
+<li> Now you will at all following steps have a valid, but incomplete
+     GF grammar. The GF command
+     <pre>
+       pg -printer=missing
+     </pre>
+     tells you what exactly is missing.
 
 </ol>
 
 
 <h3>The develop-test cycle</h3>
 
-Now starts the real work. The order in which the <tt>Phrase</tt> modules
+The real work starts now. The order in which the <tt>Phrase</tt> modules
 were introduced above is a natural order to proceed, even though not the
-only one. So you will find yourseld iterating the following steps:
+only one. So you will find yourself iterating the following steps:
 
 <ol>
 <li> Select a phrase category module, e.g. <tt>NounDut</tt>, and uncomment one
