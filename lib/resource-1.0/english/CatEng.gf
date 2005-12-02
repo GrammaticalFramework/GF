@@ -20,12 +20,14 @@ concrete CatEng of Cat = open ResEng, Prelude, (R = ParamX) in {
       s2 : Agr => Str
       } ;
 
-    V, VS, VQ = Verb ; -- = {s : VForm => Str} ;
-    V2, VV = Verb ** {c2 : Str} ;
+    V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
+    V2, VV, V2A = Verb ** {c2 : Str} ;
     V3 = Verb ** {c2, c3 : Str} ;
 
     AP = {s : Agr => Str ; isPre : Bool} ; 
     Comp = {s : Agr => Str} ; 
+
+    SC = {s : Str} ;
 
     A  = {s : AForm => Str} ;
     A2 = {s : AForm => Str ; c2 : Str} ;

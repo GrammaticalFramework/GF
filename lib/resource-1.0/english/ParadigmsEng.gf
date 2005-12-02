@@ -258,8 +258,6 @@ oper
 -- Verbs and adjectives can take complements such as sentences,
 -- questions, verb phrases, and adjectives.
 
-  V0, V2S, V2V, VA, V2A, V2Q : Type ; ----
-
   mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
   mkV2S : V -> Str -> V2S ;
@@ -270,12 +268,18 @@ oper
   mkVQ  : V -> VQ ;
   mkV2Q : V -> Str -> V2Q ;
 
-  AS, A2S, AV, A2V : Type ; ----
-
   mkAS  : A -> AS ;
   mkA2S : A -> Str -> A2S ;
   mkAV  : A -> AV ;
   mkA2V : A -> Str -> A2V ;
+
+-- Notice: categories $V2S, V2V, V2A, V2Q$ are in v 1.0 treated
+-- just as synonyms of $V2$, and the second argument is given
+-- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
+-- $V0$ is just $V$.
+
+  V0, V2S, V2V, V2A, V2Q : Type ;
+  AS, A2S, AV, A2V : Type ;
 
 
 --2 Definitions of paradigms
@@ -431,18 +435,21 @@ oper
   mkVV  v = v ** {c2 = "to" ; lock_VV = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
 
-{-
-  mkV0  v = v ** {lock_V0 = <>} ;
-  mkV2S v p = mkV2 v p ** {lock_V2S = <>} ;
-  mkV2V v p t = mkV2 v p ** {s4 = t ; lock_V2V = <>} ;
+  V0 : Type = V ;
+  V2S, V2V, V2Q, V2A : Type = V2 ;
+  AS, A2S, AV : Type = A ;
+  A2V : Type = A2 ;
+
+  mkV0  v = v ** {lock_V = <>} ;
+  mkV2S v p = mkV2 v p ** {lock_V2 = <>} ;
+  mkV2V v p t = mkV2 v p ** {s4 = t ; lock_V2 = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
-  mkV2Q v p = mkV2 v p ** {lock_V2Q = <>} ;
+  mkV2Q v p = mkV2 v p ** {lock_V2 = <>} ;
 
-  mkAS  v = v ** {lock_AS = <>} ;
-  mkA2S v p = mkA2 v p ** {lock_A2S = <>} ;
-  mkAV  v = v ** {lock_AV = <>} ;
-  mkA2V v p = mkA2 v p ** {lock_A2V = <>} ;
--}
+  mkAS  v = v ** {lock_A = <>} ;
+  mkA2S v p = mkA2 v p ** {lock_A = <>} ;
+  mkAV  v = v ** {lock_A = <>} ;
+  mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
 
 } ;

@@ -1,18 +1,18 @@
 abstract Basic = Cat ** {
   fun
   airplane_N : N ;
---  answer_V2S : V2S ;
+  answer_V2S : V2 ;
   apartment_N : N ;
   apple_N : N ;
   art_N : N ;
---  ask_V2Q : V2Q ;
+  ask_V2Q : V2 ;
   baby_N : N ;
   bad_A : A ;
   bank_N : N ;
   beautiful_A : A ;
---  become_VA : VA ;
+  become_VA : VA ;
   beer_N : N ;
---  beg_V2V : V2V ;
+  beg_V2V : V2 ;
   big_A : A ;
   bike_N : N ;
   bird_N : N ;
@@ -58,7 +58,7 @@ abstract Basic = Cat ** {
   dog_N : N ;
   door_N : N ;
   drink_V2 : V2 ;
---  easy_A2V : A2V ;
+  easy_A2V : A2 ;
   eat_V2 : V2 ;
   enemy_N : N ;
   empty_A : A ;
@@ -72,7 +72,7 @@ abstract Basic = Cat ** {
   fridge_N : N ;
   friend_N : N ;
   fruit_N : N ;
---  fun_AV : AV ;
+  fun_AV : A ;
   garden_N : N ;
   girl_N : N ;
   glove_N : N ;
@@ -121,7 +121,7 @@ abstract Basic = Cat ** {
   oil_N : N ;
   old_A : A ;
   open_V2 : V2 ;
---  paint_V2A : V2A ;
+  paint_V2A : V2A ;
   paper_N : N ;
   peace_N : N ;
   pen_N : N ;
@@ -130,10 +130,10 @@ abstract Basic = Cat ** {
   play_V2 : V2 ;
   policeman_N : N ;
   priest_N : N ;
---  probable_AS : AS ;
+  probable_AS : A ;
   queen_N : N ;
   radio_N : N ;
---  rain_V0 : V0 ;
+  rain_V0 : V ;
   read_V2 : V2 ;
   red_A : A ;
   religion_N : N ;

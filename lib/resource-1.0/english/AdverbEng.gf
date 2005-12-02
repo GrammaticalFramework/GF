@@ -14,6 +14,7 @@ concrete AdverbEng of Adverb = CatEng ** open ResEng, Prelude in {
     AdAdv = cc2 ;
 
     SubjS = cc2 ;
+    AdvSC s = s ;
 
     AdnCAdv cadv = {s = cadv.s ++ "than"} ;
 
