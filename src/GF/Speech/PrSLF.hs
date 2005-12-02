@@ -74,8 +74,8 @@ prSLF (SLF { slfNodes = ns, slfEdges = es})
 
 showWord :: SLFWord -> String
 showWord Nothing = "!NULL"
-showWord (Just w) = w -- FIXME: convert words to upper case
-		      -- FIXME: could this be the empty string? if so, print as !NULL
+showWord (Just w) | null w = "!NULL"
+                  | otherwise = map toUpper w
 
 prFields :: [(String,String)] -> ShowS
 prFields fs = unwordsS [ showString l . showChar '=' . showString v | (l,v) <- fs ]
