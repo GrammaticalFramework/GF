@@ -42,7 +42,7 @@ exp2core f = T.EApp (T.EVar (var f)) . exp2c where
   Q  _ c  -> T.EVar (var c)
   QC _ c  -> T.EVar (var c)
   K s     -> T.EStr s
-  EInt i  -> T.EInt $ toInteger i
+  EInt i  -> T.EInteger $ toInteger i
   Meta m  -> T.EMeta (T.TMeta (prt m))   ---- which meta symbol?
   Vr x    -> T.EVar (var x)              ---- should be syntactic var
 
@@ -54,7 +54,7 @@ core2exp e = case e of
   T.EAbs (T.PVVar x) b -> Abs (var x) (core2exp b) ---- only from syntactic abstr
   T.EVar c   -> Vr (var c)               -- GF annotates to Q or QC
   T.EStr s   -> K s
-  T.EInt i   -> EInt $ fromInteger i
+  T.EInteger i -> EInt $ fromInteger i
   T.EMeta _  -> uExp  -- meta symbol 0, refreshed by GF
  where
    var (T.CIdent x) = zIdent x
