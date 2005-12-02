@@ -102,4 +102,17 @@ oper
 
   comma = "," ;
 
+-- you can also do this to right-associative lists:
+
+  consrStr : Str -> Str -> ListX -> ListX = \comma,x,xs -> 
+    {s1 = x ++ comma ++ xs.s1 ; s2 = xs.s2 } ; 
+
+  consrSS : Str -> SS -> ListX -> ListX = \comma,x,xs -> 
+    consrStr comma x.s xs ;
+
+  consrTable : (P : Type) -> Str -> {s : P => Str} -> ListTable P -> ListTable P = 
+    \P,c,x,xs ->
+    {s1 = table P {o => x.s ! o ++ c ++ xs.s1 ! o} ; s2 = xs.s2} ; 
+
+
 } ;

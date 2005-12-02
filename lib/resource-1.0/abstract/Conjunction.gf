@@ -2,26 +2,22 @@ abstract Conjunction = Cat ** {
 
   fun
 
-    ConjS    : Conj -> SeqS -> S ;        -- "John walks and Mary runs"
-    ConjAP   : Conj -> SeqAP -> AP ;      -- "even and prime"
-    ConjNP   : Conj -> SeqNP -> NP ;      -- "John or Mary"
-    ConjAdv  : Conj -> SeqAdv -> Adv ;    -- "quickly or slowly"
+    ConjS    : Conj -> [S] -> S ;         -- "John walks and Mary runs"
+    ConjAP   : Conj -> [AP] -> AP ;       -- "even and prime"
+    ConjNP   : Conj -> [NP] -> NP ;       -- "John or Mary"
+    ConjAdv  : Conj -> [Adv] -> Adv ;     -- "quickly or slowly"
 
-    DConjS   : DConj -> SeqS -> S ;       -- "either John walks or Mary runs"
-    DConjAP  : DConj -> SeqAP -> AP ;     -- "both even and prime"
-    DConjNP  : DConj -> SeqNP -> NP ;     -- "either John or Mary"
-    DConjAdv : DConj -> SeqAdv -> Adv ;   -- "both badly and slowly"
+    DConjS   : DConj -> [S] -> S ;        -- "either John walks or Mary runs"
+    DConjAP  : DConj -> [AP] -> AP ;      -- "both even and prime"
+    DConjNP  : DConj -> [NP] -> NP ;      -- "either John or Mary"
+    DConjAdv : DConj -> [Adv] -> Adv ;    -- "both badly and slowly"
 
+-- These categories are internal to this module.
 
--- these are rather uninteresting
-
-    TwoS : S -> S -> SeqS ;
-    AddS : SeqS -> S -> SeqS ;
-    TwoAdv : Adv -> Adv -> SeqAdv ;
-    AddAdv : SeqAdv -> Adv -> SeqAdv ;
-    TwoNP : NP -> NP -> SeqNP ;
-    AddNP : SeqNP -> NP -> SeqNP ;
-    TwoAP : AP -> AP -> SeqAP ;
-    AddAP : SeqAP -> AP -> SeqAP ;
+  cat
+    [S]{2} ; 
+    [Adv]{2} ; 
+    [NP]{2} ; 
+    [AP]{2} ;
 
 }

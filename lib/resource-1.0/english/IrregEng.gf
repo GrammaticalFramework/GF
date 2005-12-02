@@ -2,6 +2,8 @@
 
 concrete IrregEng of IrregEngAbs = CatEng ** open ParadigmsEng in {
 
+flags optimize=values ;
+
   lin
   awake_V = irregV "awake" "awoke" "awoken" ;
   bear_V = irregV "bear" "bore" "born" ;

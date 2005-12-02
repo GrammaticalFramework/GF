@@ -74,13 +74,6 @@ abstract Cat = {
     CAdv ;    -- comparative adverb     e.g. "more", "less"
     Subj ;    -- subjunction,           e.g. "if", "when"
 
-    SeqS ;    -- sequence of sentences
-    SeqVP ;   -- sequence of verb phrases
-    SeqAP ;   -- sequence of adjectival phrases
-    SeqNP ;   -- sequence of noun phrases
-    SeqAdv ;  -- sequence of adverbs
-
     Voc ;     -- vocative or "please"
-
 
 }
