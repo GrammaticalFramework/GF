@@ -62,6 +62,7 @@ linearizeToRecord gr mk m = lin [] where
       A.AtC f -> lookf c t f >>= comp xs'
       A.AtL s -> return $ recS $ tK $ prt at
       A.AtI i -> return $ recS $ tK $ prt at
+      A.AtF i -> return $ recS $ tK $ prt at
       A.AtV x -> lookCat c >>= comp [tK (prt_ at)]
       A.AtM m -> lookCat c >>= comp [tK (prt_ at)] 
 

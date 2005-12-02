@@ -30,6 +30,7 @@ isInPredefined = err (const True) (const False) . typPredefined
 typPredefined :: Ident -> Err Type
 typPredefined c@(IC f) = case f of
   "Int"    -> return typePType
+  "Float"  -> return typePType
   "Ints"   -> return $ mkFunType [cnPredef "Int"] typePType
   "PBool"  -> return typePType
   "PFalse" -> return $ cnPredef "PBool"
@@ -65,17 +66,17 @@ appPredefined t = case t of
    case f of
     -- one-place functions
     Q (IC "Predef") (IC f) -> case (f, x) of
-      ("length", K s) -> retb $ EInt $ length s
+      ("length", K s) -> retb $ EInt $ toInteger $ length s
       _ -> retb t ---- prtBad "cannot compute predefined" t
 
     -- two-place functions
     App (Q (IC "Predef") (IC f)) z0 -> do
      (z,_) <- appPredefined z0
      case (f, norm z, norm x) of
-      ("drop", EInt i, K s) -> retb $ K (drop i s)
-      ("take", EInt i, K s) -> retb $ K (take i s)
-      ("tk",   EInt i, K s) -> retb $ K (take (max 0 (length s - i)) s)
-      ("dp",   EInt i, K s) -> retb $ K (drop (max 0 (length s - i)) s)
+      ("drop", EInt i, K s) -> retb $ K (drop (fi i) s)
+      ("take", EInt i, K s) -> retb $ K (take (fi i) s)
+      ("tk",   EInt i, K s) -> retb $ K (take (max 0 (length s - fi i)) s)
+      ("dp",   EInt i, K s) -> retb $ K (drop (max 0 (length s - fi i)) s)
       ("eqStr",K s,    K t) -> retb $ if s == t then predefTrue else predefFalse
       ("occur",K s,    K t) -> retb $ if substring s t then predefTrue else predefFalse
       ("occurs",K s,   K t) -> retb $ if any (flip elem t) s then predefTrue else predefFalse
@@ -105,6 +106,7 @@ appPredefined t = case t of
    norm t = case t of
      Empty -> K []
      _ -> t
+   fi = fromInteger
 
 -- read makes variables into constants
 

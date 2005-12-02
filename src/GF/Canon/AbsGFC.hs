@@ -90,6 +90,7 @@ data APatt =
  | APV Ident
  | APS String
  | API Integer
+ | APF Double
  | APW
   deriving (Eq,Ord,Show)
 
@@ -100,6 +101,7 @@ data Atom =
  | AM Integer
  | AS String
  | AI Integer
+ | AF Double
  | AT Sort
   deriving (Eq,Ord,Show)
 
@@ -132,6 +134,7 @@ data Term =
  | C Term Term
  | FV [Term]
  | EInt Integer
+ | EFloat Double
  | K Tokn
  | E
   deriving (Eq,Ord,Show)
@@ -170,6 +173,7 @@ data Patt =
  | PW
  | PR [PattAssign]
  | PI Integer
+ | PF Double
   deriving (Eq,Ord,Show)
 
 data PattAssign =

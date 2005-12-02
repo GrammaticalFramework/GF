@@ -218,6 +218,8 @@ aexp2tree (aexp,cs) = do
        return ([],AtC c,v',[])
      AInt i -> do
        return ([],AtI i,valAbsInt,[])
+     AFloat i -> do
+       return ([],AtF i,valAbsFloat,[])
      AStr s -> do
        return ([],AtL s,valAbsString,[])
      AMeta m v -> do

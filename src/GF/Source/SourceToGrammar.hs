@@ -396,7 +396,8 @@ transExp x = case x of
   EQCons m c    -> liftM2 G.Q  (transIdent m) (transIdent c)
   EString str   -> return $ G.K str 
   ESort sort    -> liftM G.Sort $ transSort sort
-  EInt n        -> return $ G.EInt $ fromInteger n
+  EInt n        -> return $ G.EInt n
+  EFloat n      -> return $ G.EFloat n
   EMeta         -> return $ M.meta $ M.int2meta 0
   EEmpty        -> return G.Empty
   -- [ C x_1 ... x_n ] becomes (ListC x_1 ... x_n)
@@ -522,7 +523,8 @@ transPatt x = case x of
   PV id  -> liftM G.PV $ transIdent id
   PC id patts  -> liftM2 G.PC (transIdent id) (mapM transPatt patts)
   PCon id  -> liftM2 G.PC (transIdent id) (return [])
-  PInt n  -> return $ G.PInt (fromInteger n)
+  PInt n  -> return $ G.PInt n
+  PFloat n  -> return $ G.PFloat n
   PStr str  -> return $ G.PString str
   PR pattasss -> do
     let (lss,ps) = unzip [(ls,p) | PA ls p <- pattasss]

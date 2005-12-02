@@ -190,7 +190,8 @@ mkCFPredef opts binds rules = (ruls, \s -> preds0 s ++ look s) where
     [(cat,         metaCFFun)     | TM _ _ <- [s], cat <- cats] ++
     [(cat,         varCFFun x)    | TV x   <- [s], cat <- catVarCF : bindcats] ++
     [(cfCatString, stringCFFun t) | TL t   <- [s]]              ++
-    [(cfCatInt,    intCFFun t)    | TI t   <- [s]]
+    [(cfCatInt,    intCFFun t)    | TI t   <- [s]] ++
+    [(cfCatFloat,  floatCFFun t)  | TF t   <- [s]]
   cats = nub [c | (_,rs) <- rules, (_,(_,its)) <- rs, CFNonterm c <- its]
   bindcats = [c | c <- cats, elem (cfCat2Ident c) binds]
   look = concatMap snd . map (trieLookup preds) . wordsCFTok --- for TC tokens

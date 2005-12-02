@@ -52,10 +52,17 @@ tokLits = map mkCFTok . mergeStr . words where
 tokVars :: String -> [CFTok]
 tokVars = map mkCFTokVar . words
 
+isFloat s = case s of
+  c:cs | isDigit c -> isFloat cs
+  '.':cs@(_:_)     -> all isDigit cs
+  _ -> False
+
+
 mkCFTok :: String -> CFTok
 mkCFTok s = case s of
   '"' :cs@(_:_) | last cs == '"'  -> tL $ init cs
   '\'':cs@(_:_) | last cs == '\'' -> tL $ init cs --- 's Gravenhage
+  _:_ | isFloat s -> tF s
   _:_ | all isDigit s -> tI s
   _ -> tS s
 
@@ -73,10 +80,16 @@ mkTokVars tok = map tv . tok where
   tv t = t
 
 mkLit :: String -> CFTok
-mkLit s = if (all isDigit s) then (tI s) else (tL s)
+mkLit s 
+  | isFloat s = tF s
+  | all isDigit s = tI s
+  | otherwise = tL s
 
 mkTL :: String -> CFTok
-mkTL s = if (all isDigit s) then (tI s) else (tL ("'" ++ s ++ "'"))
+mkTL s 
+  | isFloat s = tF s
+  | all isDigit s = tI s
+  | otherwise = tL ("'" ++ s ++ "'")
 
 
 -- | Haskell lexer, usable for much code
@@ -120,7 +133,7 @@ lexC2M' isHigherOrder s = case s of
  where
   lexC = lexC2M' isHigherOrder
   getId s  = mkT i : lexC cs where (i,cs) = span isIdChar s
-  getLit s = tI i  : lexC cs where (i,cs) = span isDigit s
+  getLit s = tI i  : lexC cs where (i,cs) = span isDigit s ---- Float!
   isIdChar c = isAlpha c || isDigit c || elem c "'_"
   isSymb = reservedAnsiCSymbol 
   dropComment s = case s of
@@ -160,6 +173,7 @@ unknown2string :: (String -> Bool) -> [CFTok] -> [CFTok]
 unknown2string isKnown = map mkOne where
   mkOne t@(TS s) 
     | isKnown s = t
+    | isFloat s = tF s
     | all isDigit s = tI s 
     | otherwise = tL s
   mkOne t@(TC s) = if isKnown s then t else mkTL s
@@ -170,6 +184,7 @@ unknown2var isKnown = map mkOne where
   mkOne t@(TS "??") = if isKnown "??" then t else tM "??"
   mkOne t@(TS s) 
     | isKnown s = t
+    | isFloat s = tF s
     | all isDigit s = tI s 
     | otherwise = tV s
   mkOne t@(TC s) = if isKnown s then t else tV s

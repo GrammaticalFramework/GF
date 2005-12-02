@@ -125,6 +125,7 @@ str2tr t = case t of
   SMeta _     -> mkMeta 0
   SString s   -> K s
   SInt i      -> EInt i
+  SFloat i    -> EFloat i
  where
    trId = cn . zIdent
 
@@ -142,7 +143,8 @@ data STree =
 --  | SAppN (SIdent,[STree])  -- no probability given 
   | SMeta SCat
   | SString String
-  | SInt Int
+  | SInt Integer
+  | SFloat Double
    deriving (Show,Eq)
 
 probTree :: STree -> Double
@@ -165,6 +167,7 @@ genTree :: [Double] -> SGrammar -> SCat -> (STree,Int)
 genTree rs gr = gett rs where
   gett ds "String" = (SString "foo",1)
   gett ds "Int" = (SInt 1978,1)
+  gett ds "Float" = (SFloat 3.1415926, 1)
   gett ds cat = case look cat of
     [] -> (SMeta cat,1) -- if no productions, return ? 
     fs -> let 
@@ -212,6 +215,7 @@ prSTree t = case t of
   SMeta c -> '?':c
   SString s -> prQuotedString s
   SInt i -> show i 
+  SFloat i -> show i 
  where
   pr1 t@(SApp (_,ts)) = ' ' : (if null ts then id else prParenth) (prSTree t)
   pr1 t = prSTree t

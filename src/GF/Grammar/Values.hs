@@ -17,9 +17,9 @@ module GF.Grammar.Values (-- * values used in TC type checking
 	       -- * annotated tree used in editing
 	       Tree, TrNode(..), Atom(..), Binds, Constraints, MetaSubst,
 	       -- * for TC
-	       valAbsInt, valAbsString, vType,
+	       valAbsInt, valAbsFloat, valAbsString, vType,
 	       isPredefCat,
-	       cType, cPredefAbs, cInt, cString,
+	       cType, cPredefAbs, cInt, cFloat, cString,
 	       eType, tree2exp, loc2treeFocus
 	      ) where
 
@@ -45,7 +45,8 @@ type Tree = Tr TrNode
 newtype TrNode = N (Binds,Atom,Val,(Constraints,MetaSubst),Bool) 
   deriving (Eq,Show)
 
-data Atom = AtC Fun | AtM MetaSymb | AtV Ident | AtL String | AtI Int
+data Atom = 
+  AtC Fun | AtM MetaSymb | AtV Ident | AtL String | AtI Integer | AtF Double
   deriving (Eq,Show)
 
 type Binds = [(Ident,Val)]
@@ -56,6 +57,9 @@ type MetaSubst = [(MetaSymb,Val)]
 
 valAbsInt :: Val
 valAbsInt = VCn (cPredefAbs, cInt)
+
+valAbsFloat :: Val
+valAbsFloat = VCn (cPredefAbs, cFloat)
 
 valAbsString :: Val
 valAbsString = VCn (cPredefAbs, cString)
@@ -71,6 +75,9 @@ cPredefAbs = identC "PredefAbs"
 
 cInt :: Ident
 cInt = identC "Int"
+
+cFloat :: Ident
+cFloat = identC "Float"
 
 cString :: Ident
 cString = identC "String"
@@ -89,6 +96,7 @@ tree2exp (Tr (N (bi,at,_,_,_),ts)) = foldr Abs (foldl App at' ts') bi' where
     AtM m -> Meta m
     AtL s -> K s
     AtI s -> EInt s
+    AtF s -> EFloat s
   bi' = map fst bi
   ts' = map tree2exp ts
 

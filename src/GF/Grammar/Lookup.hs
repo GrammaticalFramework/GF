@@ -158,7 +158,7 @@ lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
 
 
 lookupLincat :: SourceGrammar -> Ident -> Ident -> Err Type
-lookupLincat gr m c | elem c [zIdent "String", zIdent "Int"] = 
+lookupLincat gr m c | elem c [zIdent "String", zIdent "Int", zIdent "Float"] = 
   return defLinType --- ad hoc; not needed?
 
 lookupLincat gr m c = do

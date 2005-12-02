@@ -335,6 +335,7 @@ instance Print Exp where
    ESort sort -> prPrec i 4 (concatD [prt 0 sort])
    EString str -> prPrec i 4 (concatD [prt 0 str])
    EInt n -> prPrec i 4 (concatD [prt 0 n])
+   EFloat n -> prPrec i 4 (concatD [prt 0 n])
    EMeta  -> prPrec i 4 (concatD [doc (showString "?")])
    EEmpty  -> prPrec i 4 (concatD [doc (showString "[") , doc (showString "]")])
    EData  -> prPrec i 4 (concatD [doc (showString "data")])
@@ -390,6 +391,7 @@ instance Print Patt where
    PCon id -> prPrec i 1 (concatD [doc (showString "{0") , prt 0 id , doc (showString "}0")]) -- H
    PQ id0 id -> prPrec i 1 (concatD [prt 0 id0 , doc (showString ".") , prt 0 id])
    PInt n -> prPrec i 1 (concatD [prt 0 n])
+   PFloat n -> prPrec i 1 (concatD [prt 0 n])
    PStr str -> prPrec i 1 (concatD [prt 0 str])
    PR pattasss -> prPrec i 1 (concatD [doc (showString "{") , prt 0 pattasss , doc (showString "}")])
    PTup patttuplecomps -> prPrec i 1 (concatD [doc (showString "<") , prt 0 patttuplecomps , doc (showString ">")])

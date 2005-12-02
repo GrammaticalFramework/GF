@@ -107,6 +107,7 @@ lookupRef gr binds at = case at of
   Q m f  -> lookupFunType gr m f >>= return . vClos
   Vr i   -> maybeErr ("unknown variable" +++ prt at) $ lookup i binds
   EInt _ -> return valAbsInt
+  EFloat _ -> return valAbsFloat
   K _    -> return valAbsString
   _      -> prtBad "cannot refine with complex term" at ---
 
@@ -116,6 +117,7 @@ refsForType compat gr binds val =
     [(vr i, (t,False)) | (i,t) <- binds, Ok ty <- [val2exp t], compat val ty] ++
     -- integer and string literals
     [(EInt i, (val,False)) | val == valAbsInt, i <- [0,1,2,5,11,1978]] ++
+    [(EFloat i, (val,False)) | val == valAbsFloat, i <- [3.1415926]] ++
     [(K s, (val,False)) | val == valAbsString, s <- ["foo", "NN", "x"]] ++
     -- functions defined in the current abstract syntax
     [(qq f, (vClos t,isRecursiveType t)) | (f,t) <- funsForType compat gr val]

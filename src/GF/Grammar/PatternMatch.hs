@@ -61,6 +61,7 @@ tryMatch (p,t) = do
       (PString s, ([],K i,[])) | s==i -> return []
       (PString "",([],Empty,[]))      -> return [] -- because "" = [""] = []
       (PInt s, ([],EInt i,[])) | s==i -> return []
+      (PFloat s,([],EFloat i,[])) | s==i -> return [] --- rounding?
       (PC p pp, ([], Con f, tt)) | 
             p `eqStrIdent` f && length pp == length tt ->
          do matches <- mapM tryMatch (zip pp tt)

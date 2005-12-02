@@ -172,7 +172,8 @@ trt trm = case trm of
     K a -> P.EString a
     C a b -> P.EConcat (trt a) (trt b)
 
-    EInt i -> P.EInt $ toInteger i
+    EInt i -> P.EInt i
+    EFloat i -> P.EFloat i
 
     Glue a b -> P.EGlue (trt a) (trt b)
     Alts (t, tt) -> P.EPre (trt t) [P.Alt (trt v) (trt c) | (v,c) <- tt]
@@ -192,7 +193,8 @@ trp p = case p of
     PP p c a -> P.PQC (tri p) (tri c) (map trp a)
     PR r -> P.PR [P.PA [trLabelIdent l] (trp p) | (l,p) <- r]
     PString s -> P.PStr s
-    PInt i -> P.PInt $ toInteger i
+    PInt i -> P.PInt i
+    PFloat i -> P.PFloat i
     PT t p -> trp p ---- prParenth (prt p +++ ":" +++ prt t)
 
 
