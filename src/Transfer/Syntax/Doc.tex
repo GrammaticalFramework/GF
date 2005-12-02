@@ -62,16 +62,16 @@ The symbols used in Syntax are the following: \\
 
 \begin{tabular}{lll}
 {\symb{;}} &{\symb{:}} &{\symb{\{}} \\
-{\symb{\}}} &{\symb{{$=$}}} &{\symb{{$|$}{$|$}}} \\
-{\symb{::}} &{\symb{(}} &{\symb{)}} \\
-{\symb{[}} &{\symb{]}} &{\symb{,}} \\
-{\symb{\_}} &{\symb{{$-$}{$>$}}} &{\symb{{$<$}{$-$}}} \\
-{\symb{$\backslash$}} &{\symb{{$>$}{$>$}{$=$}}} &{\symb{{$>$}{$>$}}} \\
-{\symb{\&\&}} &{\symb{{$=$}{$=$}}} &{\symb{/{$=$}}} \\
-{\symb{{$<$}}} &{\symb{{$<$}{$=$}}} &{\symb{{$>$}}} \\
-{\symb{{$>$}{$=$}}} &{\symb{{$+$}}} &{\symb{{$-$}}} \\
-{\symb{*}} &{\symb{/}} &{\symb{\%}} \\
-{\symb{.}} &{\symb{?}} & \\
+{\symb{\}}} &{\symb{{$=$}}} &{\symb{{$|$}}} \\
+{\symb{{$|$}{$|$}}} &{\symb{::}} &{\symb{(}} \\
+{\symb{)}} &{\symb{[}} &{\symb{]}} \\
+{\symb{,}} &{\symb{\_}} &{\symb{{$-$}{$>$}}} \\
+{\symb{$\backslash$}} &{\symb{{$<$}{$-$}}} &{\symb{{$>$}{$>$}{$=$}}} \\
+{\symb{{$>$}{$>$}}} &{\symb{\&\&}} &{\symb{{$=$}{$=$}}} \\
+{\symb{/{$=$}}} &{\symb{{$<$}}} &{\symb{{$<$}{$=$}}} \\
+{\symb{{$>$}}} &{\symb{{$>$}{$=$}}} &{\symb{{$+$}}} \\
+{\symb{{$-$}}} &{\symb{*}} &{\symb{/}} \\
+{\symb{\%}} &{\symb{.}} &{\symb{?}} \\
 \end{tabular}\\
 
 \subsection*{Comments}
@@ -100,7 +100,7 @@ All other symbols are terminals.\\
 \begin{tabular}{lll}
 {\nonterminal{Decl}} & {\arrow}  &{\terminal{data}} {\nonterminal{Ident}} {\terminal{:}} {\nonterminal{Exp}} {\terminal{where}} {\terminal{\{}} {\nonterminal{ListConsDecl}} {\terminal{\}}}  \\
  & {\delimit}  &{\nonterminal{Ident}} {\terminal{:}} {\nonterminal{Exp}}  \\
- & {\delimit}  &{\nonterminal{Ident}} {\nonterminal{ListPattern}} {\terminal{{$=$}}} {\nonterminal{Exp}}  \\
+ & {\delimit}  &{\nonterminal{Ident}} {\nonterminal{ListPattern}} {\nonterminal{Guard}} {\terminal{{$=$}}} {\nonterminal{Exp}}  \\
  & {\delimit}  &{\terminal{derive}} {\nonterminal{Ident}} {\nonterminal{Ident}}  \\
 \end{tabular}\\
 
@@ -118,6 +118,11 @@ All other symbols are terminals.\\
 {\nonterminal{ListConsDecl}} & {\arrow}  &{\emptyP} \\
  & {\delimit}  &{\nonterminal{ConsDecl}}  \\
  & {\delimit}  &{\nonterminal{ConsDecl}} {\terminal{;}} {\nonterminal{ListConsDecl}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
+{\nonterminal{Guard}} & {\arrow}  &{\terminal{{$|$}}} {\nonterminal{Exp1}}  \\
+ & {\delimit}  &{\emptyP} \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
@@ -172,11 +177,23 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp}} & {\arrow}  &{\terminal{let}} {\terminal{\{}} {\nonterminal{ListLetDef}} {\terminal{\}}} {\terminal{in}} {\nonterminal{Exp}}  \\
- & {\delimit}  &{\terminal{case}} {\nonterminal{Exp}} {\terminal{of}} {\terminal{\{}} {\nonterminal{ListCase}} {\terminal{\}}}  \\
- & {\delimit}  &{\terminal{if}} {\nonterminal{Exp}} {\terminal{then}} {\nonterminal{Exp}} {\terminal{else}} {\nonterminal{Exp}}  \\
- & {\delimit}  &{\terminal{do}} {\terminal{\{}} {\nonterminal{ListBind}} {\nonterminal{Exp}} {\terminal{\}}}  \\
+{\nonterminal{Exp}} & {\arrow}  &{\terminal{(}} {\nonterminal{VarOrWild}} {\terminal{:}} {\nonterminal{Exp}} {\terminal{)}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
+ & {\delimit}  &{\nonterminal{Exp1}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
  & {\delimit}  &{\nonterminal{Exp1}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
+{\nonterminal{VarOrWild}} & {\arrow}  &{\nonterminal{Ident}}  \\
+ & {\delimit}  &{\terminal{\_}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
+{\nonterminal{Exp1}} & {\arrow}  &{\terminal{$\backslash$}} {\nonterminal{VarOrWild}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp1}}  \\
+ & {\delimit}  &{\terminal{let}} {\terminal{\{}} {\nonterminal{ListLetDef}} {\terminal{\}}} {\terminal{in}} {\nonterminal{Exp1}}  \\
+ & {\delimit}  &{\terminal{case}} {\nonterminal{Exp}} {\terminal{of}} {\terminal{\{}} {\nonterminal{ListCase}} {\terminal{\}}}  \\
+ & {\delimit}  &{\terminal{if}} {\nonterminal{Exp}} {\terminal{then}} {\nonterminal{Exp}} {\terminal{else}} {\nonterminal{Exp1}}  \\
+ & {\delimit}  &{\terminal{do}} {\terminal{\{}} {\nonterminal{ListBind}} {\nonterminal{Exp}} {\terminal{\}}}  \\
+ & {\delimit}  &{\nonterminal{Exp2}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
@@ -190,7 +207,7 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Case}} & {\arrow}  &{\nonterminal{Pattern}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
+{\nonterminal{Case}} & {\arrow}  &{\nonterminal{Pattern}} {\nonterminal{Guard}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
@@ -207,18 +224,6 @@ All other symbols are terminals.\\
 \begin{tabular}{lll}
 {\nonterminal{ListBind}} & {\arrow}  &{\emptyP} \\
  & {\delimit}  &{\nonterminal{Bind}} {\terminal{;}} {\nonterminal{ListBind}}  \\
-\end{tabular}\\
-
-\begin{tabular}{lll}
-{\nonterminal{Exp2}} & {\arrow}  &{\terminal{$\backslash$}} {\nonterminal{VarOrWild}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
- & {\delimit}  &{\terminal{(}} {\nonterminal{VarOrWild}} {\terminal{:}} {\nonterminal{Exp}} {\terminal{)}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
- & {\delimit}  &{\nonterminal{Exp3}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
- & {\delimit}  &{\nonterminal{Exp3}}  \\
-\end{tabular}\\
-
-\begin{tabular}{lll}
-{\nonterminal{VarOrWild}} & {\arrow}  &{\nonterminal{Ident}}  \\
- & {\delimit}  &{\terminal{\_}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
@@ -314,7 +319,7 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp1}} & {\arrow}  &{\nonterminal{Exp2}}  \\
+{\nonterminal{Exp2}} & {\arrow}  &{\nonterminal{Exp3}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}

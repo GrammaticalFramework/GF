@@ -22,8 +22,9 @@ import Transfer.ErrM
  '(' { PT _ (TS "(") }
  ')' { PT _ (TS ")") }
  '_' { PT _ (TS "_") }
- '\\' { PT _ (TS "\\") }
+ '|' { PT _ (TS "|") }
  '->' { PT _ (TS "->") }
+ '\\' { PT _ (TS "\\") }
  '.' { PT _ (TS ".") }
  'Type' { PT _ (TS "Type") }
  'case' { PT _ (TS "case") }
@@ -122,6 +123,16 @@ ListLetDef : {- empty -} { [] }
   | LetDef ';' ListLetDef { (:) $1 $3 }
 
 
+Case :: { Case }
+Case : Pattern '|' Exp '->' Exp { Case $1 $3 $5 } 
+
+
+ListCase :: { [Case] }
+ListCase : {- empty -} { [] } 
+  | Case { (:[]) $1 }
+  | Case ';' ListCase { (:) $1 $3 }
+
+
 Exp2 :: { Exp }
 Exp2 : '\\' PatternVariable '->' Exp { EAbs $2 $4 } 
   | '(' PatternVariable ':' Exp ')' '->' Exp { EPi $2 $4 $7 }
@@ -172,16 +183,6 @@ ListFieldValue : {- empty -} { [] }
 
 Exp1 :: { Exp }
 Exp1 : Exp2 { $1 } 
-
-
-Case :: { Case }
-Case : Pattern '->' Exp { Case $1 $3 } 
-
-
-ListCase :: { [Case] }
-ListCase : {- empty -} { [] } 
-  | Case { (:[]) $1 }
-  | Case ';' ListCase { (:) $1 $3 }
 
 
 

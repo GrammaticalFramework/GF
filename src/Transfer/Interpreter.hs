@@ -137,9 +137,9 @@ eval env x = case x of
        in eval (seqEnv env') exp2
   ECase exp cases -> 
       let v = eval env exp
-          r = case firstMatch v cases of
+          r = case firstMatch env v cases of
                   Nothing -> error $ "No pattern matched " ++ printValue v
-                  Just (e,bs) -> eval (bs `addToEnv` env) e
+                  Just (e,env') -> eval env' e
        in v `seq` r
   EAbs _ _ -> VClos env x
   EPi _ _ _  -> VClos env x
@@ -169,11 +169,17 @@ eval env x = case x of
   EDouble n  -> VDbl n
   EMeta (TMeta t) -> VMeta (read $ drop 1 t)
 
-firstMatch :: Value -> [Case] -> Maybe (Exp,[(CIdent,Value)])
-firstMatch _ [] = Nothing
-firstMatch v (Case p e:cs) = case match p v of
-                                            Nothing -> firstMatch v cs
-                                            Just env -> Just (e,env)
+firstMatch :: Env -> Value -> [Case] -> Maybe (Exp,Env)
+firstMatch _ _ [] = Nothing
+firstMatch env v (Case p g e:cs) = 
+    case match p v of
+        Nothing -> firstMatch env v cs
+        Just bs -> let env' = bs `addToEnv` env
+                    in case eval env' g of
+                           VCons (CIdent "True")  [] -> Just (e,env')
+                           VCons (CIdent "False") [] -> firstMatch env v cs
+                           x -> error $ "Error in guard: " ++ printValue x 
+                                        ++ " is not a Bool"
 
 bind :: PatternVariable -> Value -> [(CIdent,Value)]
 bind (PVVar x) v = [(x,v)]

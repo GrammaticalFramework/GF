@@ -15,9 +15,11 @@ transTree t = case t of
   Import i -> failure t
   DataDecl i exp consdecls -> failure t
   TypeDecl i exp -> failure t
-  ValueDecl i patterns exp -> failure t
+  ValueDecl i patterns guard exp -> failure t
   DeriveDecl i0 i1 -> failure t
   ConsDecl i exp -> failure t
+  GuardExp exp -> failure t
+  GuardNo  -> failure t
   POr pattern0 pattern1 -> failure t
   PListCons pattern0 pattern1 -> failure t
   PConsTop i pattern patterns -> failure t
@@ -31,13 +33,13 @@ transTree t = case t of
   PWild  -> failure t
   PListElem pattern -> failure t
   FieldPattern i pattern -> failure t
+  EPi varorwild exp0 exp1 -> failure t
+  EPiNoVar exp0 exp1 -> failure t
+  EAbs varorwild exp -> failure t
   ELet letdefs exp -> failure t
   ECase exp cases -> failure t
   EIf exp0 exp1 exp2 -> failure t
   EDo binds exp -> failure t
-  EAbs varorwild exp -> failure t
-  EPi varorwild exp0 exp1 -> failure t
-  EPiNoVar exp0 exp1 -> failure t
   EBind exp0 exp1 -> failure t
   EBindC exp0 exp1 -> failure t
   EOr exp0 exp1 -> failure t
@@ -66,12 +68,12 @@ transTree t = case t of
   EInteger n -> failure t
   EDouble d -> failure t
   EMeta  -> failure t
-  LetDef i exp0 exp1 -> failure t
-  Case pattern exp -> failure t
-  BindVar varorwild exp -> failure t
-  BindNoVar exp -> failure t
   VVar i -> failure t
   VWild  -> failure t
+  LetDef i exp0 exp1 -> failure t
+  Case pattern guard exp -> failure t
+  BindVar varorwild exp -> failure t
+  BindNoVar exp -> failure t
   FieldType i exp -> failure t
   FieldValue i exp -> failure t
   Ident str -> failure t
@@ -88,12 +90,17 @@ transDecl :: Decl -> Result
 transDecl t = case t of
   DataDecl i exp consdecls -> failure t
   TypeDecl i exp -> failure t
-  ValueDecl i patterns exp -> failure t
+  ValueDecl i patterns guard exp -> failure t
   DeriveDecl i0 i1 -> failure t
 
 transConsDecl :: ConsDecl -> Result
 transConsDecl t = case t of
   ConsDecl i exp -> failure t
+
+transGuard :: Guard -> Result
+transGuard t = case t of
+  GuardExp exp -> failure t
+  GuardNo  -> failure t
 
 transPattern :: Pattern -> Result
 transPattern t = case t of
@@ -119,13 +126,13 @@ transFieldPattern t = case t of
 
 transExp :: Exp -> Result
 transExp t = case t of
+  EPi varorwild exp0 exp1 -> failure t
+  EPiNoVar exp0 exp1 -> failure t
+  EAbs varorwild exp -> failure t
   ELet letdefs exp -> failure t
   ECase exp cases -> failure t
   EIf exp0 exp1 exp2 -> failure t
   EDo binds exp -> failure t
-  EAbs varorwild exp -> failure t
-  EPi varorwild exp0 exp1 -> failure t
-  EPiNoVar exp0 exp1 -> failure t
   EBind exp0 exp1 -> failure t
   EBindC exp0 exp1 -> failure t
   EOr exp0 exp1 -> failure t
@@ -155,23 +162,23 @@ transExp t = case t of
   EDouble d -> failure t
   EMeta  -> failure t
 
+transVarOrWild :: VarOrWild -> Result
+transVarOrWild t = case t of
+  VVar i -> failure t
+  VWild  -> failure t
+
 transLetDef :: LetDef -> Result
 transLetDef t = case t of
   LetDef i exp0 exp1 -> failure t
 
 transCase :: Case -> Result
 transCase t = case t of
-  Case pattern exp -> failure t
+  Case pattern guard exp -> failure t
 
 transBind :: Bind -> Result
 transBind t = case t of
   BindVar varorwild exp -> failure t
   BindNoVar exp -> failure t
-
-transVarOrWild :: VarOrWild -> Result
-transVarOrWild t = case t of
-  VVar i -> failure t
-  VWild  -> failure t
 
 transFieldType :: FieldType -> Result
 transFieldType t = case t of

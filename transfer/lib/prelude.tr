@@ -19,6 +19,10 @@ flip _ _ _ f x y = f y x
 compose : (A:Type) -> (B:Type) -> (C:Type) -> (B -> C) -> (A -> B) -> A -> C
 compose _ _ _ f g x = f (g x)
 
+otherwise : Bool
+otherwise = True
+
+
 --
 -- The Integer type
 --
@@ -133,6 +137,11 @@ map : (A:Type) -> (B:Type) -> (A -> B) -> List A -> List B
 map _ _ _ [] = []
 map A B f (x::xs) = f x :: map A B f xs
 
+filter : (A:Type) -> (A -> Bool) -> List A -> List A
+filter _ _ []            = []
+filter A f (x::xs) | f x = x :: filter A f xs
+filter A f (x::xs)       = filter A f xs
+
 append : (A:Type) -> List A -> List A -> List A
 append A xs ys = foldr A (List A) (Cons A) ys xs
 
@@ -165,7 +174,7 @@ data Maybe : Type -> Type where
 	Just : (A : Type) -> A -> Maybe A
 
 -- derive Show Maybe
--- derive Eq Maybe
+derive Eq Maybe
 -- derive Ord Maybe
 
 

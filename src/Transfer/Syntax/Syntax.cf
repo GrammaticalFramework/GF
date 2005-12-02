@@ -12,14 +12,17 @@ Module. Module ::= [Import] [Decl] ;
 Import. Import ::= "import" Ident ;
 separator Import ";" ;
 
-DataDecl.  Decl ::= "data" Ident ":" Exp "where" "{" [ConsDecl] "}" ;
-TypeDecl.  Decl ::= Ident ":" Exp ;
-ValueDecl. Decl ::= Ident [Pattern] "=" Exp ;
-DeriveDecl. Decl ::= "derive" Ident Ident ;
+DataDecl.     Decl ::= "data" Ident ":" Exp "where" "{" [ConsDecl] "}" ;
+TypeDecl.     Decl ::= Ident ":" Exp ;
+ValueDecl.    Decl ::= Ident [Pattern] Guard "=" Exp ;
+DeriveDecl.   Decl ::= "derive" Ident Ident ;
 separator Decl ";" ;
 
 ConsDecl. ConsDecl ::= Ident ":" Exp ;
 separator ConsDecl ";" ;
+
+GuardExp.  Guard ::= "|" Exp1 ;
+GuardNo.   Guard ::= ;
 
 -- Disjunctive patterns.
 POr.      Pattern ::= Pattern1 "||" Pattern ;
@@ -61,26 +64,25 @@ coercions Pattern 3 ;
 FieldPattern. FieldPattern ::= Ident "=" Pattern ;
 separator FieldPattern ";" ;
 
-ELet.      Exp  ::= "let" "{" [LetDef] "}" "in" Exp ;
+-- Function types have precedence < 1 to keep the
+-- "->" from conflicting with the "->" after guards
+EPi.       Exp ::= "(" VarOrWild ":" Exp ")" "->" Exp ;
+EPiNoVar.  Exp ::= Exp1 "->" Exp ;
+VVar.      VarOrWild ::= Ident ;
+VWild.     VarOrWild ::= "_" ;
+
+EAbs.      Exp1 ::= "\\" VarOrWild "->" Exp1 ;
+ELet.      Exp1 ::= "let" "{" [LetDef] "}" "in" Exp1 ;
 LetDef.    LetDef ::= Ident ":" Exp "=" Exp ;
 separator LetDef ";" ;
-
-ECase.     Exp  ::= "case" Exp "of" "{" [Case] "}" ;
-Case. Case ::= Pattern "->" Exp ;
+ECase.     Exp1 ::= "case" Exp "of" "{" [Case] "}" ;
+Case.     Case ::= Pattern Guard "->" Exp ;
 separator Case ";" ;
-
-EIf.       Exp  ::= "if" Exp "then" Exp "else" Exp ;
-
-EDo.       Exp  ::= "do" "{" [Bind] Exp "}" ;
+EIf.       Exp1 ::= "if" Exp "then" Exp "else" Exp1 ;
+EDo.       Exp1 ::= "do" "{" [Bind] Exp "}" ;
 BindVar.   Bind ::= VarOrWild "<-" Exp ;
 BindNoVar. Bind ::= Exp ;
 terminator Bind ";" ;
-
-EAbs.      Exp2 ::= "\\" VarOrWild "->" Exp ;
-EPi.       Exp2 ::= "(" VarOrWild ":" Exp ")" "->" Exp ;
-EPiNoVar.  Exp2 ::= Exp3 "->" Exp ;
-VVar.      VarOrWild ::= Ident ;
-VWild.     VarOrWild ::= "_" ;
 
 EBind.     Exp3 ::= Exp3 ">>=" Exp4 ;
 EBindC.    Exp3 ::= Exp3 ">>"  Exp4 ;

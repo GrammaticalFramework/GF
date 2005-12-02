@@ -64,8 +64,8 @@ The symbols used in Core are the following: \\
 \begin{tabular}{lll}
 {\symb{;}} &{\symb{:}} &{\symb{\{}} \\
 {\symb{\}}} &{\symb{{$=$}}} &{\symb{(}} \\
-{\symb{)}} &{\symb{\_}} &{\symb{$\backslash$}} \\
-{\symb{{$-$}{$>$}}} &{\symb{.}} & \\
+{\symb{)}} &{\symb{\_}} &{\symb{{$|$}}} \\
+{\symb{{$-$}{$>$}}} &{\symb{$\backslash$}} &{\symb{.}} \\
 \end{tabular}\\
 
 \subsection*{Comments}
@@ -149,6 +149,16 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
+{\nonterminal{Case}} & {\arrow}  &{\nonterminal{Pattern}} {\terminal{{$|$}}} {\nonterminal{Exp}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
+{\nonterminal{ListCase}} & {\arrow}  &{\emptyP} \\
+ & {\delimit}  &{\nonterminal{Case}}  \\
+ & {\delimit}  &{\nonterminal{Case}} {\terminal{;}} {\nonterminal{ListCase}}  \\
+\end{tabular}\\
+
+\begin{tabular}{lll}
 {\nonterminal{Exp2}} & {\arrow}  &{\terminal{$\backslash$}} {\nonterminal{PatternVariable}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
  & {\delimit}  &{\terminal{(}} {\nonterminal{PatternVariable}} {\terminal{:}} {\nonterminal{Exp}} {\terminal{)}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
  & {\delimit}  &{\nonterminal{Exp3}}  \\
@@ -198,16 +208,6 @@ All other symbols are terminals.\\
 
 \begin{tabular}{lll}
 {\nonterminal{Exp1}} & {\arrow}  &{\nonterminal{Exp2}}  \\
-\end{tabular}\\
-
-\begin{tabular}{lll}
-{\nonterminal{Case}} & {\arrow}  &{\nonterminal{Pattern}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
-\end{tabular}\\
-
-\begin{tabular}{lll}
-{\nonterminal{ListCase}} & {\arrow}  &{\emptyP} \\
- & {\delimit}  &{\nonterminal{Case}}  \\
- & {\delimit}  &{\nonterminal{Case}} {\terminal{;}} {\nonterminal{ListCase}}  \\
 \end{tabular}\\
 
 
