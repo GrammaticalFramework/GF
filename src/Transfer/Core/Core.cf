@@ -47,6 +47,9 @@ separator LetDef ";" ;
 
 -- Case expressions.
 ECase.     Exp  ::= "case" Exp "of" "{" [Case] "}" ;
+Case.      Case ::= Pattern "|" Exp "->" Exp ;
+separator  Case ";" ;
+
 
 -- Lambda abstractions.
 EAbs.      Exp2 ::= "\\" PatternVariable "->" Exp ;
@@ -86,10 +89,6 @@ EMeta.     Exp5 ::= TMeta ;
 token TMeta ('?' digit+) ;
 
 coercions Exp 5 ;
-
-
-Case. Case ::= Pattern "->" Exp ;
-separator Case ";" ;
 
 
 -- Identifiers in core can start with underscore to allow

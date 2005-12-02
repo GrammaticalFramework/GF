@@ -19,6 +19,7 @@ import Transfer.ErrM
  '{' { PT _ (TS "{") }
  '}' { PT _ (TS "}") }
  '=' { PT _ (TS "=") }
+ '|' { PT _ (TS "|") }
  '||' { PT _ (TS "||") }
  '::' { PT _ (TS "::") }
  '(' { PT _ (TS "(") }
@@ -28,8 +29,8 @@ import Transfer.ErrM
  ',' { PT _ (TS ",") }
  '_' { PT _ (TS "_") }
  '->' { PT _ (TS "->") }
- '<-' { PT _ (TS "<-") }
  '\\' { PT _ (TS "\\") }
+ '<-' { PT _ (TS "<-") }
  '>>=' { PT _ (TS ">>=") }
  '>>' { PT _ (TS ">>") }
  '&&' { PT _ (TS "&&") }
@@ -93,7 +94,7 @@ ListImport : {- empty -} { [] }
 Decl :: { Decl }
 Decl : 'data' Ident ':' Exp 'where' '{' ListConsDecl '}' { DataDecl $2 $4 $7 } 
   | Ident ':' Exp { TypeDecl $1 $3 }
-  | Ident ListPattern '=' Exp { ValueDecl $1 (reverse $2) $4 }
+  | Ident ListPattern Guard '=' Exp { ValueDecl $1 (reverse $2) $3 $5 }
   | 'derive' Ident Ident { DeriveDecl $2 $3 }
 
 
@@ -111,6 +112,11 @@ ListConsDecl :: { [ConsDecl] }
 ListConsDecl : {- empty -} { [] } 
   | ConsDecl { (:[]) $1 }
   | ConsDecl ';' ListConsDecl { (:) $1 $3 }
+
+
+Guard :: { Guard }
+Guard : '|' Exp1 { GuardExp $2 } 
+  | {- empty -} { GuardNo }
 
 
 Pattern :: { Pattern }
@@ -165,11 +171,23 @@ ListFieldPattern : {- empty -} { [] }
 
 
 Exp :: { Exp }
-Exp : 'let' '{' ListLetDef '}' 'in' Exp { ELet $3 $6 } 
-  | 'case' Exp 'of' '{' ListCase '}' { ECase $2 $5 }
-  | 'if' Exp 'then' Exp 'else' Exp { EIf $2 $4 $6 }
-  | 'do' '{' ListBind Exp '}' { EDo (reverse $3) $4 }
+Exp : '(' VarOrWild ':' Exp ')' '->' Exp { EPi $2 $4 $7 } 
+  | Exp1 '->' Exp { EPiNoVar $1 $3 }
   | Exp1 { $1 }
+
+
+VarOrWild :: { VarOrWild }
+VarOrWild : Ident { VVar $1 } 
+  | '_' { VWild }
+
+
+Exp1 :: { Exp }
+Exp1 : '\\' VarOrWild '->' Exp1 { EAbs $2 $4 } 
+  | 'let' '{' ListLetDef '}' 'in' Exp1 { ELet $3 $6 }
+  | 'case' Exp 'of' '{' ListCase '}' { ECase $2 $5 }
+  | 'if' Exp 'then' Exp 'else' Exp1 { EIf $2 $4 $6 }
+  | 'do' '{' ListBind Exp '}' { EDo (reverse $3) $4 }
+  | Exp2 { $1 }
 
 
 LetDef :: { LetDef }
@@ -183,7 +201,7 @@ ListLetDef : {- empty -} { [] }
 
 
 Case :: { Case }
-Case : Pattern '->' Exp { Case $1 $3 } 
+Case : Pattern Guard '->' Exp { Case $1 $2 $4 } 
 
 
 ListCase :: { [Case] }
@@ -200,18 +218,6 @@ Bind : VarOrWild '<-' Exp { BindVar $1 $3 }
 ListBind :: { [Bind] }
 ListBind : {- empty -} { [] } 
   | ListBind Bind ';' { flip (:) $1 $2 }
-
-
-Exp2 :: { Exp }
-Exp2 : '\\' VarOrWild '->' Exp { EAbs $2 $4 } 
-  | '(' VarOrWild ':' Exp ')' '->' Exp { EPi $2 $4 $7 }
-  | Exp3 '->' Exp { EPiNoVar $1 $3 }
-  | Exp3 { $1 }
-
-
-VarOrWild :: { VarOrWild }
-VarOrWild : Ident { VVar $1 } 
-  | '_' { VWild }
 
 
 Exp3 :: { Exp }
@@ -306,8 +312,8 @@ ListFieldValue : {- empty -} { [] }
   | FieldValue ';' ListFieldValue { (:) $1 $3 }
 
 
-Exp1 :: { Exp }
-Exp1 : Exp2 { $1 } 
+Exp2 :: { Exp }
+Exp2 : Exp3 { $1 } 
 
 
 ListExp :: { [Exp] }
