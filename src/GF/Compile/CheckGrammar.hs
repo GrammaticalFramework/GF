@@ -569,7 +569,8 @@ checkLType env trm typ0 = do
          trm' <- comp trm
          case trm' of
            RecType _ -> termWith trm $ return typeType
-           ExtR (Vr _) (RecType _) -> termWith trm $ return typeType -- ext t = t ** ...
+           ExtR (Vr _) (RecType _) -> termWith trm $ return typeType 
+                                      -- ext t = t ** ...
            _ -> prtFail "invalid record type extension" trm
        RecType rr -> do
          (r',ty,s') <- checks [
@@ -585,7 +586,14 @@ checkLType env trm typ0 = do
                 r2 <- justCheck r' rr0
                 s2 <- justCheck s' rr2
                 return $ (ExtR r2 s2, typ) 
-           _ -> raise ("record type expected in extension of" +++ prt r +++ "but found" +++ prt ty)
+           _ -> raise ("record type expected in extension of" +++ prt r +++ 
+                       "but found" +++ prt ty)
+
+       ExtR ty ex -> do
+         r' <- justCheck r ty
+         s' <- justCheck s ex
+         return $ (ExtR r' s', typ) --- is this all?
+
        _ -> prtFail "record extension not meaningful for" typ
 
     FV vs -> do

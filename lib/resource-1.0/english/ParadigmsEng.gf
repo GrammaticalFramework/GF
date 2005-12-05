@@ -332,7 +332,7 @@ oper
     mkN man men (man + "'s") mens ;
 
   mkN = \man,men,man's,men's -> 
-    mkNoun man men man's men's ** {g = Neutr ; lock_N = <>} ;
+    mkNoun man man's men men's ** {g = Neutr ; lock_N = <>} ;
 
   genderN g man = {s = man.s ; g = g ; lock_N = <>} ;
 
