@@ -7,8 +7,8 @@ GHCFLAGS=-i$(SRCDIR)
 .PHONY: all bnfc bnfctest doc docclean clean bnfcclean distclean
 
 all:
-	$(GHC) $(GHCFLAGS) --make -o run_core run_core.hs
-	$(GHC) $(GHCFLAGS) --make -o compile_to_core compile_to_core.hs
+	$(GHC) $(GHCFLAGS) --make -o trci trci.hs
+	$(GHC) $(GHCFLAGS) --make -o transferc transferc.hs
 
 bnfc: bnfcclean
 	cd $(SRCDIR) && bnfc -gadt -d -p Transfer Transfer/Core/Core.cf
@@ -38,8 +38,8 @@ docclean:
 clean:
 	-rm -f *.o *.hi
 	find $(SRCDIR)/Transfer -name '*.o' -o -name '*.hi' | xargs rm -f
-	-rm -f run_core	
-	-rm -f compile_to_core
+	-rm -f trci
+	-rm -f transferc
 	-rm -f test_core test_syntax test_layout
 
 bnfcclean: 
@@ -47,4 +47,3 @@ bnfcclean:
 	-rm -f $(SRCDIR)/Transfer/Syntax/{Doc,Lex,Par,Layout,Skel,Print,Test,Abs}.*
 
 distclean: clean bnfcclean
-
