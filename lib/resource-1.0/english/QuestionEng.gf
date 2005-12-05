@@ -13,16 +13,9 @@ concrete QuestionEng of Question = CatEng ** open ResEng in {
               } ---- "whether" in ExtEng
       } ;
 
-    QuestVP qp vp = {
-      s = \\t,a,b,q => 
-        let 
-          agr   = {n = qp.n ; p = P3} ;
-          verb  = vp.s ! t ! a ! b ! ODir ! agr ;
-          subj  = qp.s ! Nom ;
-          compl = vp.s2 ! agr
-        in
-        subj ++ verb.fin ++ verb.inf ++ compl
-    } ;
+    QuestVP qp vp = 
+      let cl = mkS (qp.s ! Nom) {n = qp.n ; p = P3} vp.s vp.s2
+      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
 
     QuestSlash ip slash = {
       s = \\t,a,p => 

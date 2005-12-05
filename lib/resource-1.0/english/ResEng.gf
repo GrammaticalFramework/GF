@@ -13,35 +13,40 @@ resource ResEng = ParamEng ** open Prelude in {
 
 -- For $Lex$.
 
-    regN : Str -> {s : Number => Case => Str} = \car -> {
+-- For each lexical category, here are the worst-case constructors.
+
+    mkNoun : (_,_,_,_ : Str) -> {s : Number => Case => Str} = 
+      \man,mans,men,mens -> {
       s = table {
         Sg => table {
-          Gen => car + "'s" ;
-          _ => car
+          Gen => mans ;
+          _ => man
           } ;
         Pl => table {
-          Gen => car + "s'" ;
-          _ => car + "s"
+          Gen => mens ;
+          _ => men
           }
         }
       } ;
 
-    regA : Str -> {s : AForm => Str} = \warm -> {
+    mkAdjective : (_,_,_,_ : Str) -> {s : AForm => Str} = 
+      \good,better,best,well -> {
       s = table {
-        AAdj Posit  => warm ;
-        AAdj Compar => warm + "er" ;
-        AAdj Superl => warm + "est" ;
-        AAdv        => warm + "ly"
+        AAdj Posit  => good ;
+        AAdj Compar => better ;
+        AAdj Superl => best ;
+        AAdv        => well
         }
       } ;
 
-
-    regV : Str -> {s : VForm => Str} = \walk -> {
+    mkVerb : (_,_,_,_,_ : Str) -> {s : VForm => Str} = 
+      \go,goes,went,gone,going -> {
       s = table {
-        VInf  => walk ;
-        VPres => walk + "s" ;
-        VPast | VPPart => walk + "ed" ;
-        VPresPart => walk + "ing"
+        VInf   => go ;
+        VPres  => goes ;
+        VPast  => went ;
+        VPPart => gone ;
+        VPresPart => going
         }
       } ;
 
@@ -60,6 +65,18 @@ resource ResEng = ParamEng ** open Prelude in {
        p = p
        }
      } ;
+
+-- These functions cover many cases; full coverage inflectional patterns are
+-- in $MorphoEng$.
+
+    regN : Str -> {s : Number => Case => Str} = \car ->
+      mkNoun car (car + "'s") (car + "s") (car + "s'") ;
+
+    regA : Str -> {s : AForm => Str} = \warm ->
+      mkAdjective warm (warm + "er") (warm + "est") (warm + "ly") ;
+
+    regV : Str -> {s : VForm => Str} = \walk ->
+      mkVerb walk (walk + "s") (walk + "ed") (walk + "ed") (walk + "ing") ;
 
     regNP : Str -> Number -> {s : Case => Str ; a : Agr} = \that,n ->
       mkNP that that (that + "'s") n P3 ;
@@ -81,8 +98,11 @@ resource ResEng = ParamEng ** open Prelude in {
     s : VForm => Str
     } ;
 
+  VerbForms : Type =
+    Tense => Anteriority => Polarity => Ord => Agr => {fin, inf : Str} ; 
+
   VP : Type = {
-    s  : Tense => Anteriority => Polarity => Ord => Agr => {fin, inf : Str} ; 
+    s  : VerbForms ;
     s2 : Agr => Str
     } ;
 
@@ -205,6 +225,26 @@ resource ResEng = ParamEng ** open Prelude in {
     {n = Pl ; p = P2} => "yourselves" ;
     {n = Pl ; p = P3} => "themselves"
     } ;
+
+-- For $Sentence$.
+
+  Clause : Type = {
+    s : Tense => Anteriority => Polarity => Ord => Str
+    } ;
+
+  mkS : Str -> Agr -> VerbForms -> (Agr => Str) -> Clause =
+    \subj,agr,verb,compl0 -> {
+      s = \\t,a,b,o => 
+        let 
+          verb  = verb ! t ! a ! b ! o ! agr ;
+          compl = compl0 ! agr
+        in
+        case o of {
+          ODir   => subj ++ verb.fin ++ verb.inf ++ compl ;
+          OQuest => verb.fin ++ subj ++ verb.inf ++ compl
+          }
+    } ;
+
 
 -- For $Numeral$.
 

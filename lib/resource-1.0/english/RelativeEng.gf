@@ -15,11 +15,9 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
             RNoAg => ag ;
             RAg a => a
             } ;
-          verb  = vp.s ! t ! ant ! b ! ODir ! agr ;
-          subj  = rp.s ! Nom ;
-          compl = vp.s2 ! agr
+          cl = mkS (rp.s ! Nom) agr vp.s vp.s2
         in
-        subj ++ verb.fin ++ verb.inf ++ compl
+        cl.s ! t ! ant ! b ! ODir
       } ;
 
     RelSlash rp slash = {
