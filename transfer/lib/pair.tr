@@ -9,3 +9,13 @@ fst _ _ p = case p of Pair _ _ x _ -> x
 
 snd : (A:Type) -> (B:Type) -> Pair A B -> B
 snd _ _ p = case p of Pair _ _ x _ -> x
+
+{-
+
+ syntax:
+
+ (x1,...,xn) => { p1 = e1; ... ; pn = en }
+
+ where n >= 2 and x1,...,xn are expressions or patterns
+
+-}
