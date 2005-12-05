@@ -110,7 +110,7 @@ deriveDecls ds = liftM concat (mapM der ds)
            Just d -> d t k cs
            _ -> fail $ "Don't know how to derive " ++ f
       where (k,cs) = getDataType ts t
-  der d                = return [d]
+  der d = return [d]
 
 type Derivator = Ident -> Exp -> [(Ident,Exp)] -> C [Decl]
 
@@ -446,7 +446,9 @@ desugar = return . map f
  f :: Tree a -> Tree a
  f x = case x of
               PListCons p1 p2    -> pListCons        <| p1   <| p2
-              PList xs           -> pList (map f [p | PListElem p <- xs])
+              PEmptyList         -> pList []
+              PList xs           -> pList [f p | CommaPattern p <- xs]
+              PTuple x xs          -> mkPTuple [f p | CommaPattern p <- (x:xs)]
               GuardNo            -> gtrue
               EIf exp0 exp1 exp2 -> ifBool           <| exp0 <| exp1 <| exp2
               EDo bs e           -> mkDo (map f bs) (f e)
@@ -469,7 +471,9 @@ desugar = return . map f
               EDiv exp0 exp1     -> overlBin "div"   <| exp0 <| exp1
               EMod exp0 exp1     -> overlBin "mod"   <| exp0 <| exp1
               ENeg exp0          -> overlUn  "neg"   <| exp0
+              EEmptyList         -> mkList []
               EList exps         -> mkList (map f exps)
+              ETuple exp1 exps   -> mkETuple (map f (exp1:exps))
               _                  -> composOp f x
     where g <| x = g (f x)
 
@@ -687,8 +691,10 @@ dataTypes ds = Map.fromList [ (i,(t,[(c,ct) | ConsDecl c ct <- cs])) | DataDecl 
 
 getDataType :: DataTypes -> Ident -> (Exp,[(Ident,Exp)])
 getDataType ts i = 
-    fromMaybe (error $ "Data type " ++ printTree i ++ " not found")
-              (Map.lookup i ts) 
+    case Map.lookup i ts of
+        Just t -> t
+        Nothing -> error $ "Data type " ++ printTree i ++ " not found."
+                           ++ " Known types: " ++ show (Map.keysSet ts)
 
 --
 -- * Utilities

@@ -136,7 +136,9 @@ Pattern2 : Ident Pattern3 ListPattern { PConsTop $1 $2 (reverse $3) }
 
 Pattern3 :: { Pattern }
 Pattern3 : 'rec' '{' ListFieldPattern '}' { PRec $3 } 
-  | '[' ListPListElem ']' { PList $2 }
+  | '[' ']' { PEmptyList }
+  | '[' ListCommaPattern ']' { PList $2 }
+  | '(' CommaPattern ',' ListCommaPattern ')' { PTuple $2 $4 }
   | 'Type' { PType }
   | String { PStr $1 }
   | Integer { PInt $1 }
@@ -145,14 +147,13 @@ Pattern3 : 'rec' '{' ListFieldPattern '}' { PRec $3 }
   | '(' Pattern ')' { $2 }
 
 
-PListElem :: { PListElem }
-PListElem : Pattern { PListElem $1 } 
+CommaPattern :: { CommaPattern }
+CommaPattern : Pattern { CommaPattern $1 } 
 
 
-ListPListElem :: { [PListElem] }
-ListPListElem : {- empty -} { [] } 
-  | PListElem { (:[]) $1 }
-  | PListElem ',' ListPListElem { (:) $1 $3 }
+ListCommaPattern :: { [CommaPattern] }
+ListCommaPattern : CommaPattern { (:[]) $1 } 
+  | CommaPattern ',' ListCommaPattern { (:) $1 $3 }
 
 
 ListPattern :: { [Pattern] }
@@ -282,7 +283,9 @@ Exp12 : Exp12 '.' Ident { EProj $1 $3 }
 Exp13 :: { Exp }
 Exp13 : 'sig' '{' ListFieldType '}' { ERecType $3 } 
   | 'rec' '{' ListFieldValue '}' { ERec $3 }
+  | '[' ']' { EEmptyList }
   | '[' ListExp ']' { EList $2 }
+  | '(' Exp ',' ListExp ')' { ETuple $2 $4 }
   | Ident { EVar $1 }
   | 'Type' { EType }
   | String { EStr $1 }
@@ -317,8 +320,7 @@ Exp2 : Exp3 { $1 }
 
 
 ListExp :: { [Exp] }
-ListExp : {- empty -} { [] } 
-  | Exp { (:[]) $1 }
+ListExp : Exp { (:[]) $1 } 
   | Exp ',' ListExp { (:) $1 $3 }
 
 

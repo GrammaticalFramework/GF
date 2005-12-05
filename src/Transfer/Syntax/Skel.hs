@@ -25,13 +25,15 @@ transTree t = case t of
   PConsTop i pattern patterns -> failure t
   PCons i patterns -> failure t
   PRec fieldpatterns -> failure t
-  PList plistelems -> failure t
+  PEmptyList  -> failure t
+  PList commapatterns -> failure t
+  PTuple commapattern commapatterns -> failure t
   PType  -> failure t
   PStr str -> failure t
   PInt n -> failure t
   PVar i -> failure t
   PWild  -> failure t
-  PListElem pattern -> failure t
+  CommaPattern pattern -> failure t
   FieldPattern i pattern -> failure t
   EPi varorwild exp0 exp1 -> failure t
   EPiNoVar exp0 exp1 -> failure t
@@ -61,7 +63,9 @@ transTree t = case t of
   EProj exp i -> failure t
   ERecType fieldtypes -> failure t
   ERec fieldvalues -> failure t
+  EEmptyList  -> failure t
   EList exps -> failure t
+  ETuple exp exps -> failure t
   EVar i -> failure t
   EType  -> failure t
   EStr str -> failure t
@@ -109,16 +113,18 @@ transPattern t = case t of
   PConsTop i pattern patterns -> failure t
   PCons i patterns -> failure t
   PRec fieldpatterns -> failure t
-  PList plistelems -> failure t
+  PEmptyList  -> failure t
+  PList commapatterns -> failure t
+  PTuple commapattern commapatterns -> failure t
   PType  -> failure t
   PStr str -> failure t
   PInt n -> failure t
   PVar i -> failure t
   PWild  -> failure t
 
-transPListElem :: PListElem -> Result
-transPListElem t = case t of
-  PListElem pattern -> failure t
+transCommaPattern :: CommaPattern -> Result
+transCommaPattern t = case t of
+  CommaPattern pattern -> failure t
 
 transFieldPattern :: FieldPattern -> Result
 transFieldPattern t = case t of
@@ -154,7 +160,9 @@ transExp t = case t of
   EProj exp i -> failure t
   ERecType fieldtypes -> failure t
   ERec fieldvalues -> failure t
+  EEmptyList  -> failure t
   EList exps -> failure t
+  ETuple exp exps -> failure t
   EVar i -> failure t
   EType  -> failure t
   EStr str -> failure t
