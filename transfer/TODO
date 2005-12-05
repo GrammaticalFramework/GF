@@ -1,7 +1,5 @@
 * Improve front-end language
 
-- Tuple syntax in expressions, types and patterns? Implemented with records.
-
 - implicit arguments?
 
 - show generation

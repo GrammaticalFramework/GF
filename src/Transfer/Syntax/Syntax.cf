@@ -41,9 +41,16 @@ internal PCons.    Pattern3 ::= "(" Ident [Pattern] ")" ;
 PRec.     Pattern3 ::= "rec" "{" [FieldPattern] "}";
 
 -- List patterns
-PList.    Pattern3 ::= "[" [PListElem] "]" ;
-PListElem. PListElem ::= Pattern ;
-separator PListElem "," ;
+PEmptyList. Pattern3 ::= "[" "]" ;
+PList.      Pattern3 ::= "[" [CommaPattern] "]" ;
+
+-- Tuple patterns
+PTuple.   Pattern3 ::= "(" CommaPattern "," [CommaPattern] ")" ;
+
+-- hack to allow a different [Pattern] from the one defined
+-- for constructor patterns
+CommaPattern. CommaPattern ::= Pattern ;
+separator nonempty CommaPattern "," ;
 
 -- The pattern matching the Type constant
 PType.    Pattern3 ::= "Type" ;
@@ -121,7 +128,11 @@ ERec.      Exp13 ::= "rec" "{" [FieldValue] "}" ;
 FieldValue.FieldValue ::= Ident "=" Exp ;
 separator FieldValue ";" ;
 
+EEmptyList.Exp13 ::= "[" "]" ;
 EList.     Exp13 ::= "[" [Exp] "]" ;
+
+-- n-tuple, where n>=2
+ETuple.    Exp13 ::= "(" Exp "," [Exp] ")" ;
 
 EVar.      Exp13 ::= Ident ;
 EType.     Exp13 ::= "Type" ;
@@ -132,4 +143,4 @@ EMeta.     Exp13 ::= "?" ;
 
 coercions Exp 13 ;
 
-separator Exp "," ;
+separator nonempty Exp "," ;

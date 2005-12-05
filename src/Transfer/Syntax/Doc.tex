@@ -142,7 +142,9 @@ All other symbols are terminals.\\
 
 \begin{tabular}{lll}
 {\nonterminal{Pattern3}} & {\arrow}  &{\terminal{rec}} {\terminal{\{}} {\nonterminal{ListFieldPattern}} {\terminal{\}}}  \\
- & {\delimit}  &{\terminal{[}} {\nonterminal{ListPListElem}} {\terminal{]}}  \\
+ & {\delimit}  &{\terminal{[}} {\terminal{]}}  \\
+ & {\delimit}  &{\terminal{[}} {\nonterminal{ListCommaPattern}} {\terminal{]}}  \\
+ & {\delimit}  &{\terminal{(}} {\nonterminal{CommaPattern}} {\terminal{,}} {\nonterminal{ListCommaPattern}} {\terminal{)}}  \\
  & {\delimit}  &{\terminal{Type}}  \\
  & {\delimit}  &{\nonterminal{String}}  \\
  & {\delimit}  &{\nonterminal{Integer}}  \\
@@ -152,13 +154,12 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{PListElem}} & {\arrow}  &{\nonterminal{Pattern}}  \\
+{\nonterminal{CommaPattern}} & {\arrow}  &{\nonterminal{Pattern}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{ListPListElem}} & {\arrow}  &{\emptyP} \\
- & {\delimit}  &{\nonterminal{PListElem}}  \\
- & {\delimit}  &{\nonterminal{PListElem}} {\terminal{,}} {\nonterminal{ListPListElem}}  \\
+{\nonterminal{ListCommaPattern}} & {\arrow}  &{\nonterminal{CommaPattern}}  \\
+ & {\delimit}  &{\nonterminal{CommaPattern}} {\terminal{,}} {\nonterminal{ListCommaPattern}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
@@ -288,7 +289,9 @@ All other symbols are terminals.\\
 \begin{tabular}{lll}
 {\nonterminal{Exp13}} & {\arrow}  &{\terminal{sig}} {\terminal{\{}} {\nonterminal{ListFieldType}} {\terminal{\}}}  \\
  & {\delimit}  &{\terminal{rec}} {\terminal{\{}} {\nonterminal{ListFieldValue}} {\terminal{\}}}  \\
+ & {\delimit}  &{\terminal{[}} {\terminal{]}}  \\
  & {\delimit}  &{\terminal{[}} {\nonterminal{ListExp}} {\terminal{]}}  \\
+ & {\delimit}  &{\terminal{(}} {\nonterminal{Exp}} {\terminal{,}} {\nonterminal{ListExp}} {\terminal{)}}  \\
  & {\delimit}  &{\nonterminal{Ident}}  \\
  & {\delimit}  &{\terminal{Type}}  \\
  & {\delimit}  &{\nonterminal{String}}  \\
@@ -323,8 +326,7 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{ListExp}} & {\arrow}  &{\emptyP} \\
- & {\delimit}  &{\nonterminal{Exp}}  \\
+{\nonterminal{ListExp}} & {\arrow}  &{\nonterminal{Exp}}  \\
  & {\delimit}  &{\nonterminal{Exp}} {\terminal{,}} {\nonterminal{ListExp}}  \\
 \end{tabular}\\
 

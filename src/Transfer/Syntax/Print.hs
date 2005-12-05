@@ -94,13 +94,15 @@ instance Print (Tree c) where
     PConsTop i pattern patterns -> prPrec _i 2 (concatD [prt 0 i , prt 3 pattern , prt 0 patterns])
     PCons i patterns -> prPrec _i 3 (concatD [doc (showString "(") , prt 0 i , prt 0 patterns , doc (showString ")")])
     PRec fieldpatterns -> prPrec _i 3 (concatD [doc (showString "rec") , doc (showString "{") , prt 0 fieldpatterns , doc (showString "}")])
-    PList plistelems -> prPrec _i 3 (concatD [doc (showString "[") , prt 0 plistelems , doc (showString "]")])
+    PEmptyList  -> prPrec _i 3 (concatD [doc (showString "[") , doc (showString "]")])
+    PList commapatterns -> prPrec _i 3 (concatD [doc (showString "[") , prt 0 commapatterns , doc (showString "]")])
+    PTuple commapattern commapatterns -> prPrec _i 3 (concatD [doc (showString "(") , prt 0 commapattern , doc (showString ",") , prt 0 commapatterns , doc (showString ")")])
     PType  -> prPrec _i 3 (concatD [doc (showString "Type")])
     PStr str -> prPrec _i 3 (concatD [prt 0 str])
     PInt n -> prPrec _i 3 (concatD [prt 0 n])
     PVar i -> prPrec _i 3 (concatD [prt 0 i])
     PWild  -> prPrec _i 3 (concatD [doc (showString "_")])
-    PListElem pattern -> prPrec _i 0 (concatD [prt 0 pattern])
+    CommaPattern pattern -> prPrec _i 0 (concatD [prt 0 pattern])
     FieldPattern i pattern -> prPrec _i 0 (concatD [prt 0 i , doc (showString "=") , prt 0 pattern])
     EPi varorwild exp0 exp1 -> prPrec _i 0 (concatD [doc (showString "(") , prt 0 varorwild , doc (showString ":") , prt 0 exp0 , doc (showString ")") , doc (showString "->") , prt 0 exp1])
     EPiNoVar exp0 exp1 -> prPrec _i 0 (concatD [prt 1 exp0 , doc (showString "->") , prt 0 exp1])
@@ -130,7 +132,9 @@ instance Print (Tree c) where
     EProj exp i -> prPrec _i 12 (concatD [prt 12 exp , doc (showString ".") , prt 0 i])
     ERecType fieldtypes -> prPrec _i 13 (concatD [doc (showString "sig") , doc (showString "{") , prt 0 fieldtypes , doc (showString "}")])
     ERec fieldvalues -> prPrec _i 13 (concatD [doc (showString "rec") , doc (showString "{") , prt 0 fieldvalues , doc (showString "}")])
+    EEmptyList  -> prPrec _i 13 (concatD [doc (showString "[") , doc (showString "]")])
     EList exps -> prPrec _i 13 (concatD [doc (showString "[") , prt 0 exps , doc (showString "]")])
+    ETuple exp exps -> prPrec _i 13 (concatD [doc (showString "(") , prt 0 exp , doc (showString ",") , prt 0 exps , doc (showString ")")])
     EVar i -> prPrec _i 13 (concatD [prt 0 i])
     EType  -> prPrec _i 13 (concatD [doc (showString "Type")])
     EStr str -> prPrec _i 13 (concatD [prt 0 str])
@@ -162,9 +166,8 @@ instance Print [ConsDecl] where
    [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
-instance Print [PListElem] where
+instance Print [CommaPattern] where
   prt _ es = case es of
-   [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ",") , prt 0 xs])
 instance Print [Pattern] where
@@ -202,6 +205,5 @@ instance Print [FieldValue] where
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
 instance Print [Exp] where
   prt _ es = case es of
-   [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ",") , prt 0 xs])
