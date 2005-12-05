@@ -1,12 +1,326 @@
-- Problem
+Transfer language reference
 
-- Abstract syntax
 
-- Concrete syntax
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags transfer.txt
 
-- Generate tree module
+%!target:html
+%!options(html): --toc
 
-- Write transfer code
- - Derive Compos and Eq
 
+
+
+
+
+This document describes the features of the Transfer language.
+See the Transfer tutorial for how to compile and use Transfer programs.
+
+Transfer is a dependently typed functional programming language 
+with eager evaluation.
+
+== Layout syntax==
+
+Transfer uses layout syntax, where the indentation of a piece of code
+determines which syntactic block it belongs to.
+
+To give the block structure of a piece of code without using layout
+syntax, you can enclose the block in curly braces (``{ }``) and 
+separate the parts of the blocks with semicolons (``;``).
+
+
+== Top-level stuff == 
+
+=== Imports ===
+
+A Transfer module start with some imports. Most modules will have to
+import the prelude, which contains definitons used by most programs:
+
+```
+import prelude
+```
+
+
+=== Declaring functions ===
+
+Functions need to be given a type and a definition. The type is given
+by a typing judgement on the form:
+
+```
+f : T
+```
+
+where ``f`` is the function's name, and ``T`` its type.
+
+The definition of the function is the given as a sequence of pattern
+equations. The first equation whose patterns match the function arguments
+is used when the function is called. Pattern equations are on the form:
+
+```
+f p1 ... p1n = exp
+...
+f qn1 ... qnm = exp
+```
+
+
+=== Declaring new data types ===
+
+Transfer supports Generalized Algebraic Datatypes.
+They are declared thusly:
+
+```
+data D : T where 
+     c1 : Tc1
+     ...
+     cn : Tcn
+```
+
+Here ``D`` is the name of the data type, ``T`` is the type of the type
+constructor, ``c1`` to ``cn`` are the data constructor names, and
+``Tc1`` to ``Tcn`` are their types. 
+
+
+== Local definitions ==
+
+To give local definition to some names, use:
+
+```
+let x1 : T1 = exp1
+    ...
+    xn : Tn = expn
+ in exp
+```
+
+
+
+== Types ==
+
+=== Basic types ===
+
+==== Integers ====
+
+The type of integers is called ``Integer``. 
+standard decmial integer literals are used to represent values of this type.
+
+==== Floating-point numbers ====
+
+The only currently supported floating-point type is ``Double``, which supports
+IEEE-754 double-precision floating-point numbers. Double literals are written
+in decimal notation, e.g. "123.456".
+
+==== Strings ====
+
+There is a primitive ``String`` type. This might be replaced by a list of 
+characters representation in the future. String literals are written with double
+quotes, e.g. ``"this is a string"``.
+
+
+==== Booleans ====
+
+Booleans are not a built-in type, though some features of the Transfer language
+depend on them.
+
+```
+data Bool : Type where
+        True : Bool
+        False : Bool
+```
+
+In addition to normal pattern matching on booleans, you can use the built-in
+if-expression:
+
+```
+if exp1 then exp2 else exp3
+```
+
+where ``exp1`` must be an expression of type ``Bool``.
+
+
+
+=== Records ===
+
+Record types are created by using a ``sig`` expression:
+
+```
+sig { p1 : T1; ... ; pn : Tn }
+```
+
+Here, ``p1`` to ``pn`` are the field labels and ``T1`` to ``Tn`` are their types.
+
+Record values are constructed using ``rec`` expressions:
+
+```
+rec { p1 = exp1; ... ; pn = expn }
+```
+
+The curly braces and semicolons are simply explicit layout syntax, so 
+the record type and record expression above can also be written as:
+
+```
+sig p1 : T1
+    pn : Tn
+```
+
+```
+rec p1 = exp1
+    pn = expn
+```
+
+==== Record subtyping ====
+
+
+
+
+=== Tuples ===
+
+Tuples on the form:
+
+```
+(exp1, ..., expn)
+```
+
+are syntactic sugar for records with fields ``p1`` to ``pn``. The expression
+above is equivalent to:
+
+```
+rec { p1 = exp1; ... ; pn = expn }
+```
+
+
+=== Lists ===
+
+The ``List`` type is not built-in, though there is some special syntax for it.
+The list type is declared as:
+
+```
+data List : Type -> Type where 
+	Nil : (A:Type) -> List A
+        Cons : (A:Type) -> A -> List A -> List A
+```
+
+The empty lists can be written as ``[]``. There is a operator ``::`` which can 
+be used instead of ``Cons``. These are just syntactic sugar for expressions
+using ``Nil`` and ``Cons``, with the type arguments hidden.
+
+
+== Pattern matching ==
+
+Pattern matching is done in pattern equations and by using the 
+``case`` construct:
+
+```
+case exp of
+     p1 | guard1 -> rhs1
+     ...
+     pn | guardn -> rhsn
+```
+
+``guard1`` to ``guardn`` are boolean expressions. Case arms can also be written 
+without guards, such as:
+
+```
+     pk -> rhsk
+```
+
+This is the same as writing:
+
+```
+     pk | True -> rhsk
+```
+
+The syntax of patterns are decribed below.
+
+=== Constructor patterns ===
+
+Constructor patterns are written as:
+
+```
+C p1 ... pn
+```
+
+where ``C`` is a data constructor which takes ``n`` arguments.
+If the value to be matched is the constructor ``C`` applied to 
+arguments ``v1`` to ``vn``, then ``v1`` to ``vn`` will be matched
+against ``p1`` to ``pn``.
+
+
+=== Variable patterns ===
+
+A variable pattern is a single identifier:
+
+```
+x
+```
+
+A variable pattern matches any value, and binds the variable name to the
+value. A variable may not occur more than once in a pattern.
+
+
+=== Wildcard patterns ===
+
+Wildcard patterns are written as with a single underscore:
+
+```
+_
+```
+
+Wildcard patterns match all values and bind no variables.
+
+
+=== Record patterns ===
+
+Record patterns match record values:
+
+```
+rec { l1 = p1; ... ; ln = pn }
+```
+
+A record value matches a record pattern, if the record value has all the 
+fields ``l1`` to ``ln``, and their values match ``p1`` to ``pn``.
+
+Note that a record value may have more fields than the record pattern and 
+they will still match.
+
+
+=== Disjunctive patterns ===
+
+It is possible to write a pattern on the form:
+
+```
+p1 || ... || pn
+```
+
+A value will match this pattern if it matches any of the patterns ``p1`` to ``pn``.
+FIXME: talk about how this is expanded
+
+
+=== List patterns ===
+
+=== Tuple patterns ===
+
+Tuples patterns on the form:
+
+```
+(p1, ... , pn)
+```
+
+are syntactic sugar for record patterns, in the same way as tuple expressions.
+
+=== String literal patterns ===
+
+String literals can be used as patterns.
+
+
+=== Integer literal patterns ===
+
+Integer literals can be used as patterns.
+
+
+== Meta variables ==
+
+== Type classes ==
+
+== Operators ==
+
+== Compositional functions ==
 
