@@ -33,6 +33,6 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
 
     EmbedS  s  = {s = conjThat ++ s.s} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = infVP vp (agrP3 Sg).a} ; --- agr
+    EmbedVP vp = {s = infVP vp (agrP3 Sg)} ; --- agr
 
 }

@@ -472,19 +472,6 @@ stateFirstCat sgr =
  where 
    a = P.prt (absId sgr)
 
-{-
--- command-line option -cat=foo overrides the possible start cat of a grammar
-stateTransferFun :: StateGrammar -> Maybe Fun
-stateTransferFun sgr = getOptVal (stateOptions sgr) transferFun >>= return . zIdent
-
-stateConcrete = concreteOf . stateGrammarST
-stateAbstract = abstractOf . stateGrammarST
-
-maybeStateAbstract (ShSt (ma,_,_)) = ma
-hasStateAbstract = maybe False (const True) . maybeStateAbstract
-abstractOfState = maybe emptyAbstractST id . maybeStateAbstract
--}
-
 stateIsWord :: StateGrammar -> String -> Bool
 stateIsWord sg = isKnownWord (stateMorpho sg)
 
@@ -496,47 +483,9 @@ addProbs ip@(lang,probs) sh = do
   return $ sh{probss = pbs'}
 
 addTransfer :: (Ident,T.Env) -> ShellState -> ShellState
-addTransfer it sh = sh {transfers = it : transfers sh}
+addTransfer it@(i,_) sh = 
+  sh {transfers = it : filter ((/= i) . fst) (transfers sh)}
 
-{-
-
--- getting info on a language
-existLang :: ShellState -> Language -> Bool
-existLang st lang = elem lang (allLanguages st)
-
-stateConcreteOfLang :: ShellState -> Language -> StateConcrete
-stateConcreteOfLang (ShSt (_,gs,_)) lang = 
-  maybe emptyStateConcrete snd $ lookup lang gs
-
-fileOfLang :: ShellState -> Language -> FilePath
-fileOfLang (ShSt (_,gs,_)) lang = 
-  maybe nonExistingLangFile (fst .fst) $ lookup lang gs
-
-nonExistingLangFile = "NON-EXISTING LANGUAGE" ---
-
-
-allLangOptions st lang = unionOptions (optionsOfLang st lang) (globalOptions st)
-
--- construct state
-
-stateGrammar st cf mo opts = StGr ((st,cf,mo),opts)
-
-initShellState ab fs gs opts = 
-  ShSt (Just ab, [(getLangName f, ((f,True),g)) | (f,g) <- zip fs gs], opts)
-emptyInitShellState opts     = ShSt (Nothing, [], opts)
-
--- the second-last part of a file name is the default language name
-getLangName :: String -> Language
-getLangName file = language (if notElem '.' file then file else langname) where
- elif     = reverse file
- xiferp   = tail (dropWhile (/='.') elif)
- langname = reverse (takeWhile (flip notElem "./") xiferp)
-
--- option -language=foo overrides the default language name
-getLangNameOpt :: Options -> String -> Language
-getLangNameOpt opts file = 
-  maybe (getLangName file) language $ getOptVal opts useLanguage
--}
 -- modify state
 
 type ShellStateOper = ShellState -> ShellState
@@ -553,20 +502,6 @@ languageOnOff :: Bool -> Language -> ShellStateOper
 ---                                         __________ this is OBSOLETE
 languageOnOff b lang sh = sh {concretes = cs'} where
   cs' = [if lang==l then (lc,b) else i | i@(lc@(l,c),_) <- concretes sh]
-
-{-
-updateLanguage :: FilePath -> (Language, StateConcrete) -> ShellStateOper
-updateLanguage file (lang,gr) (ShSt (ab,gs,os)) = 
-  ShSt (ab, updateAssoc (lang,((file,True),gr)) gs, os') where
-    os' = changeOptVal os useLanguage (prLanguage lang) -- actualizes the new lang
-
-initWithAbstract :: AbstractST -> ShellStateOper
-initWithAbstract ab st@(ShSt (ma,cs,os)) = 
-  maybe (ShSt (Just ab,cs,os)) (const st) ma
-
-removeLanguage :: Language -> ShellStateOper
-removeLanguage lang (ShSt (ab,gs,os)) = ShSt (ab,removeAssoc lang gs, os)
--}
 
 changeOptions :: (Options -> Options) -> ShellStateOper
 ---                                      __________ this is OBSOLETE

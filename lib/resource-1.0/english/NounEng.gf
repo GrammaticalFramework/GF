@@ -3,8 +3,11 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
   flags optimize=all_subs ;
 
   lin
-    DetCN det cn = {s = \\c => det.s ++ cn.s ! det.n ! c} ** agrP3 det.n ;
-    UsePN pn = pn ** agrP3 Sg ;
+    DetCN det cn = {
+      s = \\c => det.s ++ cn.s ! det.n ! c ; 
+      a = agrP3 det.n
+      } ;
+    UsePN pn = pn ** {a = agrP3 Sg} ;
     UsePron p = p ;
 
     MkDet pred quant num ord = {
@@ -35,7 +38,7 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
     ComplN3 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; c2 = f.c3} ;
 
     AdjCN ap cn = {
-      s = \\n,c => preOrPost ap.isPre (ap.s ! (agrP3 n).a) (cn.s ! n ! c)
+      s = \\n,c => preOrPost ap.isPre (ap.s ! agrP3 n) (cn.s ! n ! c)
       } ;
     RelCN cn rs = {s = \\n,c => cn.s ! n ! c ++ rs.s ! {n = n ; p = P3}} ;
 

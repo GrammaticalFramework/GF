@@ -37,12 +37,6 @@ oper
 oper
   CommonNoun : Type = {s : Number => Case => Str} ;
 
-  mkNoun  : (_,_,_,_ : Str) -> CommonNoun = 
-    \man,men, mans, mens -> {s = table {
-       Sg => table {Gen => mans ; _ => man} ;
-       Pl => table {Gen => mens ; _ => men}
-      }} ;
-
   nounGen : Str -> CommonNoun = \dog -> case last dog of {
     "y" => nounY "dog" ;
     "s" => nounS (init "dog") ;
@@ -107,15 +101,6 @@ oper
 
   Adjective = {s : AForm => Str} ;
 
-  mkAdjective : (_,_,_,_ : Str) -> Adjective = \free,freer,freest,freely -> {
-    s = table {
-      AAdj Posit  => free ;
-      AAdj Compar => freer ;
-      AAdj Superl => freest ;
-      AAdv        => freely
-      }
-    } ;
-  
 -- However, most adjectives can be inflected using the final character.
 -- N.B. this is not correct for "shy", but $mkAdjective$ has to be used.
 
@@ -149,23 +134,13 @@ oper
 --
 -- The worst case needs five forms. (The verb "be" is treated separately.)
 
-  mkVerbWorst : (_,_,_,_,_: Str) -> Verb = \go,goes,went,gone,going -> 
-    {s = table {
-       VInf  => go ; 
-       VPres => goes ; 
-       VPast => went ;
-       VPPart => gone ;
-       VPresPart => going
-       }
-    } ;
-
   mkVerb4 : (_,_,_,_: Str) -> Verb = \go,goes,went,gone -> 
     let going = case last go of {
       "e" => init go + "ing" ;
       _ => go + "ing"
       }
     in
-    mkVerbWorst go goes went gone going ;
+    mkVerb go goes went gone going ;
 
 -- This is what we use to derive the irregular forms in almost all cases
 
@@ -193,9 +168,6 @@ oper
     in 
     mkVerb4 soak soaks soaked soaked ;
 
-  mkVerb : (_,_,_ : Str) -> Verb = \ring,rang,rung ->
-    mkVerb4 ring (ring + "s") rang rung ;
-
   verbGen : Str -> Verb = \kill -> case last kill of {
     "y" => verbP3y (init kill) ;
     "e" => verbP3e (init kill) ;
@@ -206,7 +178,7 @@ oper
 -- These are just auxiliary to $verbGen$.
 
   regVerbP3 : Str -> Verb = \walk -> 
-    mkVerb walk (walk + "ed") (walk + "ed") ;
+    mkVerbIrreg walk (walk + "ed") (walk + "ed") ;
   verbP3s   : Str -> Verb = \kiss -> 
     mkVerb4 kiss (kiss + "es") (kiss + "ed") (kiss + "ed") ;
   verbP3e   : Str -> Verb = \love -> 

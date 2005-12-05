@@ -48,8 +48,8 @@ resource ParamEng = ParamX ** {
 --2 Transformations between parameter types
 
   oper
-    agrP3 : Number -> {a : Agr} = \n -> 
-      {a = {n = n ; p = P3}} ;
+    agrP3 : Number -> Agr = \n -> 
+      {n = n ; p = P3} ;
 
     conjAgr : Agr -> Agr -> Agr = \a,b -> {
       n = conjNumber a.n b.n ;

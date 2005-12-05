@@ -1,4 +1,4 @@
-concrete ConjunctionEng of Conjunction = 
+concrete SeqConjunctionEng of Conjunction = 
   CatEng ** open ResEng, Coordination, Prelude in {
 
   lin
@@ -23,21 +23,19 @@ concrete ConjunctionEng of Conjunction =
       isPre = ss.isPre
       } ;
 
--- These fun's are generated from the list cat's.
-
-    BaseS = twoSS ;
-    ConsS = consrSS comma ;
-    BaseAdv = twoSS ;
-    ConsAdv = consrSS comma ;
-    BaseNP x y = twoTable Case x y ** {a = conjAgr x.a y.a} ;
-    ConsNP xs x = consrTable Case comma xs x ** {a = conjAgr xs.a x.a} ;
-    BaseAP x y = twoTable Agr x y ** {isPre = andB x.isPre y.isPre} ;
-    ConsAP xs x = consrTable Agr comma xs x ** {isPre = andB xs.isPre x.isPre} ;
+    TwoS = twoSS ;
+    AddS = consSS comma ;
+    TwoAdv = twoSS ;
+    AddAdv = consSS comma ;
+    TwoNP x y = twoTable Case x y ** {a = conjAgr x.a y.a} ;
+    AddNP xs x = consTable Case comma xs x ** {a = conjAgr xs.a x.a} ;
+    TwoAP x y = twoTable Agr x y ** {isPre = andB x.isPre y.isPre} ;
+    AddAP xs x = consTable Agr comma xs x ** {isPre = andB xs.isPre x.isPre} ;
 
   lincat
-    [S] = {s1,s2 : Str} ;
-    [Adv] = {s1,s2 : Str} ;
-    [NP] = {s1,s2 : Case => Str ; a : Agr} ;
-    [AP] = {s1,s2 : Agr => Str ; isPre : Bool} ;
+    SeqS = {s1,s2 : Str} ;
+    SeqAdv = {s1,s2 : Str} ;
+    SeqNP = {s1,s2 : Case => Str ; a : Agr} ;
+    SeqAP = {s1,s2 : Agr => Str ; isPre : Bool} ;
 
 }

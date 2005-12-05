@@ -3,33 +3,9 @@ concrete SentenceEng of Sentence = CatEng ** open ResEng in {
   flags optimize=all_subs ;
 
   lin
-    PredVP np vp = {
-      s = \\t,a,b,o => 
-        let 
-          agr   = np.a ;
-          verb  = vp.s ! t ! a ! b ! o ! agr ;
-          subj  = np.s ! Nom ;
-          compl = vp.s2 ! agr 
-        in
-        case o of {
-          ODir   => subj ++ verb.fin ++ verb.inf ++ compl ;
-          OQuest => verb.fin ++ subj ++ verb.inf ++ compl
-          }
-    } ;
+    PredVP np vp = mkS (np.s ! Nom) np.a vp.s vp.s2 ;
 
-    PredSCVP sc vp = {
-      s = \\t,a,b,o => 
-        let 
-          agr   = (agrP3 Sg).a ;
-          verb  = vp.s ! t ! a ! b ! o ! agr ;
-          subj  = sc.s ;
-          compl = vp.s2 ! agr 
-        in
-        case o of {
-          ODir   => subj ++ verb.fin ++ verb.inf ++ compl ;
-          OQuest => verb.fin ++ subj ++ verb.inf ++ compl
-          }
-    } ;
+    PredSCVP sc vp = mkS sc.s (agrP3 Sg) vp.s vp.s2 ;
 
     ImpVP vp = {
       s = \\pol,n => 
@@ -44,36 +20,12 @@ concrete SentenceEng of Sentence = CatEng ** open ResEng in {
         dont ++ verb
     } ;
 
-    SlashV2 np v2 = {
-      s = \\t,a,b,o => 
-        let 
-          agr   = np.a ;
-          verb  = (predV v2).s ! t ! a ! b ! o ! agr ;
-          subj  = np.s ! Nom
-        in
-        case o of {
-          ODir   => subj ++ verb.fin ++ verb.inf ;
-          OQuest => verb.fin ++ subj ++ verb.inf
-          } ;
-      c2 = v2.c2 
-    } ;
-    --- not possible:
-    --- PredVP (np ** {lock_NP =<>}) (UseV (v2 ** {lock_V = <>})) ** {c2 = v2.c2} ;
+    SlashV2 np v2 = mkS (np.s ! Nom) np.a (predV v2).s (\\_ => []) **
+      {c2 = v2.c2} ;
 
-    SlashVVV2 np vv v2 = {
-      s = \\t,a,b,o => 
-        let 
-          agr   = np.a ;
-          verb  = (predV vv).s ! t ! a ! b ! o ! agr ;
-          inf   = "to" ++ v2.s ! VInf ;
-          subj  = np.s ! Nom
-        in
-        case o of {
-          ODir   => subj ++ verb.fin ++ verb.inf ++ inf ;
-          OQuest => verb.fin ++ subj ++ verb.inf ++ inf
-          } ;
-      c2 = v2.c2 
-    } ;
+    SlashVVV2 np vv v2 = 
+      mkS (np.s ! Nom) np.a (predV vv).s (\\_ => "to" ++ v2.s ! VInf) **
+      {c2 = v2.c2} ;
 
     AdvSlash slash adv = {
       s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;

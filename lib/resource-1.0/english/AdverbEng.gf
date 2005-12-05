@@ -14,7 +14,7 @@ concrete AdverbEng of Adverb = CatEng ** open ResEng, Prelude in {
     AdAdv = cc2 ;
 
     SubjS = cc2 ;
-    AdvSC s = s ;
+    AdvSC s = s ; --- this rule give stack overflow in ordinary parsing
 
     AdnCAdv cadv = {s = cadv.s ++ "than"} ;
 

@@ -344,7 +344,7 @@ oper
 
   regPN n g = nameReg n g ** {lock_PN = <>} ;
   nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
-  mkNP x y n g = {s = table {Gen => x ; _ => y} ; a = (agrP3 n).a ;
+  mkNP x y n g = {s = table {Gen => x ; _ => y} ; a = agrP3 n ;
   lock_NP = <>} ;
 
   mkA a b = mkAdjective a a a b ** {lock_A = <>} ;
@@ -388,7 +388,7 @@ oper
   mkPreposition p = p ;
   mkPrep p = ss p ** {lock_Prep = <>} ;
 
-  mkV a b c d e = mkVerbWorst a b c d e ** {s1 = [] ; lock_V = <>} ;
+  mkV a b c d e = mkVerb a b c d e ** {s1 = [] ; lock_V = <>} ;
 
   regV cry = 
     let
