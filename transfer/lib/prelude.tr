@@ -122,7 +122,7 @@ mul_Bool = rec one = True
 -- The List type
 --
 
-data List : (_:Type) -> Type where 
+data List : Type -> Type where 
 	Nil : (A:Type) -> List A
         Cons : (A:Type) -> A -> List A -> List A
 
