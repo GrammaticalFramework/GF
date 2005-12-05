@@ -92,13 +92,10 @@ mergeDecls ds@(ValueDecl x p _ _:_)
          when (not (all ((== n) . length) pss))
               $ fail $ "Pattern count mismatch for " ++ printTree x
          vs <- freshIdents n
-         let cases = map (\ (ps,g,rhs) -> Case (mkPRec ps) g rhs) cs
-             c = ECase (mkERec (map EVar vs)) cases
+         let cases = map (\ (ps,g,rhs) -> Case (mkPTuple ps) g rhs) cs
+             c = ECase (mkETuple (map EVar vs)) cases
              f = foldr (EAbs . VVar) c vs
          return $ ValueDecl x [] GuardNo f
-  where mkRec r f = r . zipWith (\i e -> f (Ident ("p"++show i)) e) [0..]
-        mkPRec = mkRec PRec FieldPattern
-        mkERec = mkRec ERec FieldValue
 
 --
 -- * Derived function definitions
@@ -136,7 +133,7 @@ deriveCompos t@(Ident ts) k cs =
     cf <- deriveComposFold t k cs
     let [c] = argumentTypes k -- FIXME: what if there is not exactly one argument to t?
         d = Ident ("compos_"++ts)
-        dt = apply (EVar (Ident "Compos")) [c, EVar t]
+        dt = apply (var "Compos") [c, EVar t]
         r = ERec [FieldValue (Ident "composOp") co,
                   FieldValue (Ident "composFold") cf]
     return [TypeDecl d dt, ValueDecl d [] GuardNo r]
@@ -214,34 +211,39 @@ deriveShow t k cs = fail $ "derive Show not implemented"
 deriveEq :: Derivator
 deriveEq t@(Ident tn) k cs = 
     do
-    let ats = argumentTypes k
-        d = Ident ("eq_"++tn)
-    dt <- abstractType ats (EApp (EVar (Ident "Eq")) . apply (EVar t))
-    eq <- mkEq
-    r <- abstract (arity k) (\_ -> ERec [FieldValue (Ident "eq") eq])
+    dt <- abstractType ats (EApp (var "Eq") . apply (EVar t))
+    f <- mkEq
+    r <- abstract (arity k) (\_ -> ERec [FieldValue (Ident "eq") f])
     return [TypeDecl d dt, ValueDecl d [] GuardNo r]
   where
+  ats = argumentTypes k
+  d = Ident ("eq_"++tn)
   mkEq = do
          x <- freshIdent
+         y <- freshIdent
          cases <- mapM (uncurry mkEqCase) cs
-         return $ EAbs (VVar x) (ECase (EVar x) cases)
+         let fc = Case PWild gtrue false
+         abstract 2 (\es -> ECase (mkETuple es) (cases++[fc]))
   mkEqCase c ct = 
       do
       let n = arity ct
+          ts = argumentTypes ct
       vs1 <- freshIdents n
       vs2 <- freshIdents n
-      y <- freshIdent
-      let p1 = PCons c (map PVar vs1)
-          p2 = PCons c (map PVar vs2)
-          es1 = map EVar vs1
-          es2 = map EVar vs2
-          tc | n == 0 = true
-               -- FIXME: using EEq doesn't work right now
-             | otherwise = foldr1 EAnd (zipWith EEq es1 es2)
-          c1 = Case p2 gtrue tc
-          c2 = Case PWild gtrue false
-      return $ Case p1 gtrue (EAbs (VVar y) (ECase (EVar y) [c1,c2]))
-               
+      let pr = mkPTuple [PCons c (map PVar vs1), PCons c (map PVar vs2)]
+          eqs = concat $ zipWith3 child_eq ts vs1 vs2
+          rhs [] = true
+          rhs xs = foldr1 EAnd xs
+      return $ Case pr gtrue (rhs eqs)
+  -- FIXME: hack: this returns a list to skip testing type arguments.
+  child_eq EType _ _ = []
+  child_eq t x y = [apply (var "eq") [t,eq_dict t, EVar x, EVar y]]
+  -- FIXME: this is a hack to at least support Tree types
+  eq_dict (EApp (EVar t') _) 
+      | t' == t = apply (EVar d) (replicate (arity k) EMeta)
+  eq_dict (EVar (Ident x)) 
+      | x `elem` ["String","Integer","Double"] = var ("eq_"++x)
+  eq_dict _ = EMeta
 
 --
 -- * Deriving instances of Ord
@@ -568,6 +570,13 @@ false = var "False"
 
 gtrue :: Guard
 gtrue = GuardExp true
+
+
+mkETuple :: [Exp] -> Exp
+mkETuple = ERec . zipWith (\i -> FieldValue (Ident ("p"++show i))) [0..]
+
+mkPTuple :: [Pattern] -> Pattern
+mkPTuple = PRec . zipWith (\i -> FieldPattern (Ident ("p"++show i))) [0..]
 
 -- | Apply an expression to a list of arguments.
 apply :: Exp -> [Exp] -> Exp

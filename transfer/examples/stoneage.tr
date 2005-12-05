@@ -1,3 +1,5 @@
+import prelude
+
 data Cat : Type where {
   CN : Cat ;
   NP : Cat ;
@@ -205,3 +207,4 @@ data Tree : (_ : Cat)-> Type where {
 
 derive Compos Tree
 
+derive Eq Tree
