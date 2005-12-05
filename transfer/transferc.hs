@@ -22,4 +22,4 @@ main = do
                 cf <- compileFile path f
                 putStrLn $ "Wrote " ++ cf
                 return ()
-         _   -> die "Usage: compile_to_core [-i<path> [-i<path> ... ]] <file>"
+         _   -> die "Usage: transferc [-i<path> [-i<path> ... ]] <file>"

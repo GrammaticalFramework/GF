@@ -28,7 +28,7 @@ main = do args <- getArgs
           let (flags,files) = partition ("-" `isPrefixOf`) args
           env <- case files of
             [f] -> loadFile f
-            _   -> fail "Usage: run_core [-i] <file>"
+            _   -> fail "Usage: trci [-i] <file>"
           when ("-v" `elem` flags) $ do
                                      putStrLn "Top-level environment:"
                                      putStrLn (prEnv env)
