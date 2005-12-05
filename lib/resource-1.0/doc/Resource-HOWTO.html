@@ -73,6 +73,7 @@ one of a small number of different types). Thus we have
 </ul>
 
 
+
 <h3>Infrastructure modules</h3>
 
 Expressions of each phrase category are constructed in the corresponding
@@ -227,11 +228,11 @@ only one. So you will find yourself iterating the following steps:
 
 <ol>
 <li> Select a phrase category module, e.g. <tt>NounDut</tt>, and uncomment one
-     linearization rule (for instance, <tt>DefSg</tt>, which is
+     linearization rule (for instance, <tt>IndefSg</tt>, which is
      not too complicated).
 
 <li> Write down some Dutch examples of this rule, in this case translations
-     of "the dog", "the house", "the big house", etc.
+     of "a dog", "a house", "a big house", etc.
 
 <li> Think about the categories involved (<tt>CN, NP, N</tt>) and the
      variations they have. Encode this in the lincats of <tt>CatDut</tt>.
@@ -240,13 +241,14 @@ only one. So you will find yourself iterating the following steps:
 <li> To be able to test the construction, 
      define some words you need to instantiate it
      in <tt>LexDut</tt>. Again, it can be helpful to define some simple-minded
-     morphological paradigms in <tt>ResDut</tt>, e.g. corresponding to
-     <tt>ResEng.regN</tt>.
+     morphological paradigms in <tt>ResDut</tt>, in particular worst-case
+     constructors corresponding to e.g.
+     <tt>ResEng.mkNoun</tt>.
 
 <li> Doing this, you may want to test the resource independently. Do this by
      <pre>
        i -retain ResDut
-       cc regN "huis"
+       cc mkNoun "ei" "eieren" Neutr
      </pre>
 
 <li> Uncomment <tt>NounDut</tt> and <tt>LexDut</tt> in <tt>TestDut</tt>,
