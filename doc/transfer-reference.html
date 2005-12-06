@@ -1,0 +1,484 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE>Transfer language reference</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>Transfer language reference</H1>
+<FONT SIZE="4">
+<I>Author: Björn Bringert &lt;bringert@cs.chalmers.se&gt;</I><BR>
+Last update: Tue Dec  6 14:26:07 2005
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+    <UL>
+    <LI><A HREF="#toc1">Layout syntax</A>
+    <LI><A HREF="#toc2">Imports</A>
+    <LI><A HREF="#toc3">Function declarations</A>
+    <LI><A HREF="#toc4">Data type declarations</A>
+    <LI><A HREF="#toc5">Lambda expressions</A>
+    <LI><A HREF="#toc6">Local definitions</A>
+    <LI><A HREF="#toc7">Types</A>
+      <UL>
+      <LI><A HREF="#function_types">Function types</A>
+      <LI><A HREF="#toc9">Basic types</A>
+      <LI><A HREF="#toc10">Records</A>
+      <LI><A HREF="#toc11">Tuples</A>
+      <LI><A HREF="#toc12">Lists</A>
+      </UL>
+    <LI><A HREF="#toc13">Pattern matching</A>
+      <UL>
+      <LI><A HREF="#toc14">Constructor patterns</A>
+      <LI><A HREF="#toc15">Variable patterns</A>
+      <LI><A HREF="#toc16">Wildcard patterns</A>
+      <LI><A HREF="#toc17">Record patterns</A>
+      <LI><A HREF="#toc18">Disjunctive patterns</A>
+      <LI><A HREF="#toc19">List patterns</A>
+      <LI><A HREF="#toc20">Tuple patterns</A>
+      <LI><A HREF="#toc21">String literal patterns</A>
+      <LI><A HREF="#toc22">Integer literal patterns</A>
+      </UL>
+    <LI><A HREF="#toc23">Meta variables</A>
+    <LI><A HREF="#toc24">Type classes</A>
+    <LI><A HREF="#toc25">Operators</A>
+    <LI><A HREF="#toc26">Compositional functions</A>
+    <LI><A HREF="#toc27">do notation</A>
+    </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+This document describes the features of the Transfer language.
+See the <A HREF="transfer-tutorial.html">Transfer tutorial</A>
+for an example of a Transfer program, and how to compile and use 
+Transfer programs.
+</P>
+<P>
+Transfer is a dependently typed functional programming language 
+with eager evaluation.
+</P>
+<A NAME="toc1"></A>
+<H2>Layout syntax</H2>
+<P>
+Transfer uses layout syntax, where the indentation of a piece of code
+determines which syntactic block it belongs to.
+</P>
+<P>
+To give the block structure of a piece of code without using layout
+syntax, you can enclose the block in curly braces (<CODE>{ }</CODE>) and 
+separate the parts of the blocks with semicolons (<CODE>;</CODE>).
+</P>
+<P>
+For example, this case expression:
+</P>
+<PRE>
+  case x of
+         p1 -&gt; e1
+         p2 -&gt; e2
+</PRE>
+<P></P>
+<P>
+is equivalent to this one:
+</P>
+<PRE>
+  case x of {
+         p1 -&gt; e1 ;
+         p2 -&gt; e2 
+  }
+</PRE>
+<P></P>
+<P>
+Here the layout is insignificant, as the structure is given with
+braces and semicolons. Thus the above is equivalent to:
+</P>
+<PRE>
+  case x of { p1 -&gt; e1 ; p2 -&gt; e2 }
+</PRE>
+<P></P>
+<A NAME="toc2"></A>
+<H2>Imports</H2>
+<P>
+A Transfer module start with some imports. Most modules will have to
+import the prelude, which contains definitons used by most programs:
+</P>
+<PRE>
+  import prelude
+</PRE>
+<P></P>
+<A NAME="toc3"></A>
+<H2>Function declarations</H2>
+<P>
+Functions need to be given a type and a definition. The type is given
+by a typing judgement on the form:
+</P>
+<PRE>
+  f : T
+</PRE>
+<P></P>
+<P>
+where <CODE>f</CODE> is the function's name, and <CODE>T</CODE> its type. See 
+<A HREF="#function_types">Function types</A> for a how the types of functions
+are written.
+</P>
+<P>
+The definition of the function is the given as a sequence of pattern
+equations. The first equation whose patterns match the function arguments
+is used when the function is called. Pattern equations are on the form:
+</P>
+<PRE>
+  f p1 ... p1n = exp
+  ...
+  f qn1 ... qnm = exp
+</PRE>
+<P></P>
+<A NAME="toc4"></A>
+<H2>Data type declarations</H2>
+<P>
+Transfer supports Generalized Algebraic Datatypes.
+They are declared thusly:
+</P>
+<PRE>
+  data D : T where 
+       c1 : Tc1
+       ...
+       cn : Tcn
+</PRE>
+<P></P>
+<P>
+Here <CODE>D</CODE> is the name of the data type, <CODE>T</CODE> is the type of the type
+constructor, <CODE>c1</CODE> to <CODE>cn</CODE> are the data constructor names, and
+<CODE>Tc1</CODE> to <CODE>Tcn</CODE> are their types. 
+</P>
+<A NAME="toc5"></A>
+<H2>Lambda expressions</H2>
+<P>
+<I>Lambda expressions</I> are terms which express functions, without
+giving names to them. For example:
+</P>
+<PRE>
+  \x -&gt; x + 1
+</PRE>
+<P></P>
+<P>
+is the function which takes an argument, and returns the value of the 
+argument + 1.
+</P>
+<A NAME="toc6"></A>
+<H2>Local definitions</H2>
+<P>
+To give local definition to some names, use:
+</P>
+<PRE>
+  let x1 : T1 = exp1
+      ...
+      xn : Tn = expn
+   in exp
+</PRE>
+<P></P>
+<A NAME="toc7"></A>
+<H2>Types</H2>
+<A NAME="function_types"></A>
+<H3>Function types</H3>
+<P>
+Functions types are of the form:
+</P>
+<PRE>
+  A -&gt; B
+</PRE>
+<P></P>
+<P>
+This is the type of functions which take an argument of type 
+<CODE>A</CODE> and returns a result of type <CODE>B</CODE>.
+</P>
+<P>
+To write functions which take more than one argument, we use <I>currying</I>.
+A function which takes n arguments is a function which takes 1 
+argument and returns a function which takes n-1 arguments. Thus,
+</P>
+<PRE>
+  A -&gt; (B -&gt; C)
+</PRE>
+<P></P>
+<P>
+or, equivalently, since <CODE>-&gt;</CODE> associates to the right:
+</P>
+<PRE>
+  A -&gt; B -&gt; C
+</PRE>
+<P></P>
+<P>
+is the type of functions which take 2 arguments, the first of type 
+<CODE>A</CODE> and the second of type <CODE>B</CODE>. This arrangement lets us do
+<I>partial application</I> of function to fewer arguments than the function 
+is declared to take, returning a new function which takes the rest 
+of the arguments.
+</P>
+<H4>Dependent function types</H4>
+<P>
+In a function type, the value of an argument can be used later 
+in the type. Such dependent function types are written:
+</P>
+<PRE>
+  (x1 : T1) -&gt; ... -&gt; (xn : Tn) -&gt; T
+</PRE>
+<P></P>
+<P>
+Here, <CODE>x1</CODE> can be used in <CODE>T2</CODE> to <CODE>Tn</CODE>, <CODE>x1</CODE> can be used 
+in <CODE>T2</CODE> to <CODE>Tn</CODE>
+</P>
+<A NAME="toc9"></A>
+<H3>Basic types</H3>
+<H4>Integers</H4>
+<P>
+The type of integers is called <CODE>Integer</CODE>. 
+standard decmial integer literals are used to represent values of this type.
+</P>
+<H4>Floating-point numbers</H4>
+<P>
+The only currently supported floating-point type is <CODE>Double</CODE>, which supports
+IEEE-754 double-precision floating-point numbers. Double literals are written
+in decimal notation, e.g. <CODE>123.456</CODE>.
+</P>
+<H4>Strings</H4>
+<P>
+There is a primitive <CODE>String</CODE> type. This might be replaced by a list of 
+characters representation in the future. String literals are written 
+with double quotes, e.g. <CODE>"this is a string"</CODE>.
+</P>
+<H4>Booleans</H4>
+<P>
+Booleans are not a built-in type, though some features of the Transfer language
+depend on them.
+</P>
+<PRE>
+  data Bool : Type where
+          True : Bool
+          False : Bool
+</PRE>
+<P></P>
+<P>
+In addition to normal pattern matching on booleans, you can use the built-in
+if-expression:
+</P>
+<PRE>
+  if exp1 then exp2 else exp3
+</PRE>
+<P></P>
+<P>
+where <CODE>exp1</CODE> must be an expression of type <CODE>Bool</CODE>.
+</P>
+<A NAME="toc10"></A>
+<H3>Records</H3>
+<P>
+Record types are created by using a <CODE>sig</CODE> expression:
+</P>
+<PRE>
+  sig { p1 : T1; ... ; pn : Tn }
+</PRE>
+<P></P>
+<P>
+Here, <CODE>p1</CODE> to <CODE>pn</CODE> are the field labels and <CODE>T1</CODE> to <CODE>Tn</CODE> are their types.
+</P>
+<P>
+Record values are constructed using <CODE>rec</CODE> expressions:
+</P>
+<PRE>
+  rec { p1 = exp1; ... ; pn = expn }
+</PRE>
+<P></P>
+<P>
+The curly braces and semicolons are simply explicit layout syntax, so 
+the record type and record expression above can also be written as:
+</P>
+<PRE>
+  sig p1 : T1
+      pn : Tn
+</PRE>
+<P></P>
+<PRE>
+  rec p1 = exp1
+      pn = expn
+</PRE>
+<P></P>
+<H4>Record subtyping</H4>
+<P>
+A record of some type R1 can be used as a record of any type R2
+such that for every field <CODE>p1 : T1</CODE> in R2, <CODE>p1 : T1</CODE> is also a 
+field of T1.
+</P>
+<A NAME="toc11"></A>
+<H3>Tuples</H3>
+<P>
+Tuples on the form:
+</P>
+<PRE>
+  (exp1, ..., expn)
+</PRE>
+<P></P>
+<P>
+are syntactic sugar for records with fields <CODE>p1</CODE> to <CODE>pn</CODE>. The expression
+above is equivalent to:
+</P>
+<PRE>
+  rec { p1 = exp1; ... ; pn = expn }
+</PRE>
+<P></P>
+<A NAME="toc12"></A>
+<H3>Lists</H3>
+<P>
+The <CODE>List</CODE> type is not built-in, though there is some special syntax for it.
+The list type is declared as:
+</P>
+<PRE>
+  data List : Type -&gt; Type where 
+  	Nil : (A:Type) -&gt; List A
+          Cons : (A:Type) -&gt; A -&gt; List A -&gt; List A
+</PRE>
+<P></P>
+<P>
+The empty lists can be written as <CODE>[]</CODE>. There is a operator <CODE>::</CODE> which can 
+be used instead of <CODE>Cons</CODE>. These are just syntactic sugar for expressions
+using <CODE>Nil</CODE> and <CODE>Cons</CODE>, with the type arguments hidden.
+</P>
+<A NAME="toc13"></A>
+<H2>Pattern matching</H2>
+<P>
+Pattern matching is done in pattern equations and by using the 
+<CODE>case</CODE> construct:
+</P>
+<PRE>
+  case exp of
+       p1 | guard1 -&gt; rhs1
+       ...
+       pn | guardn -&gt; rhsn
+</PRE>
+<P></P>
+<P>
+<CODE>guard1</CODE> to <CODE>guardn</CODE> are boolean expressions. Case arms can also be written 
+without guards, such as:
+</P>
+<PRE>
+       pk -&gt; rhsk
+</PRE>
+<P></P>
+<P>
+This is the same as writing:
+</P>
+<PRE>
+       pk | True -&gt; rhsk
+</PRE>
+<P></P>
+<P>
+The syntax of patterns are decribed below.
+</P>
+<A NAME="toc14"></A>
+<H3>Constructor patterns</H3>
+<P>
+Constructor patterns are written as:
+</P>
+<PRE>
+  C p1 ... pn
+</PRE>
+<P></P>
+<P>
+where <CODE>C</CODE> is a data constructor which takes <CODE>n</CODE> arguments.
+If the value to be matched is the constructor <CODE>C</CODE> applied to 
+arguments <CODE>v1</CODE> to <CODE>vn</CODE>, then <CODE>v1</CODE> to <CODE>vn</CODE> will be matched
+against <CODE>p1</CODE> to <CODE>pn</CODE>.
+</P>
+<A NAME="toc15"></A>
+<H3>Variable patterns</H3>
+<P>
+A variable pattern is a single identifier:
+</P>
+<PRE>
+  x
+</PRE>
+<P></P>
+<P>
+A variable pattern matches any value, and binds the variable name to the
+value. A variable may not occur more than once in a pattern.
+</P>
+<A NAME="toc16"></A>
+<H3>Wildcard patterns</H3>
+<P>
+Wildcard patterns are written as with a single underscore:
+</P>
+<PRE>
+  _
+</PRE>
+<P></P>
+<P>
+Wildcard patterns match all values and bind no variables.
+</P>
+<A NAME="toc17"></A>
+<H3>Record patterns</H3>
+<P>
+Record patterns match record values:
+</P>
+<PRE>
+  rec { l1 = p1; ... ; ln = pn }
+</PRE>
+<P></P>
+<P>
+A record value matches a record pattern, if the record value has all the 
+fields <CODE>l1</CODE> to <CODE>ln</CODE>, and their values match <CODE>p1</CODE> to <CODE>pn</CODE>.
+</P>
+<P>
+Note that a record value may have more fields than the record pattern and 
+they will still match.
+</P>
+<A NAME="toc18"></A>
+<H3>Disjunctive patterns</H3>
+<P>
+It is possible to write a pattern on the form:
+</P>
+<PRE>
+  p1 || ... || pn
+</PRE>
+<P></P>
+<P>
+A value will match this pattern if it matches any of the patterns <CODE>p1</CODE> to <CODE>pn</CODE>.
+FIXME: talk about how this is expanded
+</P>
+<A NAME="toc19"></A>
+<H3>List patterns</H3>
+<A NAME="toc20"></A>
+<H3>Tuple patterns</H3>
+<P>
+Tuples patterns on the form:
+</P>
+<PRE>
+  (p1, ... , pn)
+</PRE>
+<P></P>
+<P>
+are syntactic sugar for record patterns, in the same way as tuple expressions.
+</P>
+<A NAME="toc21"></A>
+<H3>String literal patterns</H3>
+<P>
+String literals can be used as patterns.
+</P>
+<A NAME="toc22"></A>
+<H3>Integer literal patterns</H3>
+<P>
+Integer literals can be used as patterns.
+</P>
+<A NAME="toc23"></A>
+<H2>Meta variables</H2>
+<A NAME="toc24"></A>
+<H2>Type classes</H2>
+<A NAME="toc25"></A>
+<H2>Operators</H2>
+<A NAME="toc26"></A>
+<H2>Compositional functions</H2>
+<A NAME="toc27"></A>
+<H2>do notation</H2>
+
+<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags darcs.txt transfer-reference.txt transfer-tutorial.txt transfer.txt -->
+</BODY></HTML>

@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE>Transfer tutorial</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>Transfer tutorial</H1>
+<FONT SIZE="4">
+<I>Author: Björn Bringert &lt;bringert@cs.chalmers.se&gt;</I><BR>
+Last update: Tue Dec  6 14:26:07 2005
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+  <UL>
+  <LI><A HREF="#toc1">Objective</A>
+  <LI><A HREF="#toc2">Abstract syntax</A>
+  <LI><A HREF="#toc3">Concrete syntax</A>
+  <LI><A HREF="#toc4">Generate tree module</A>
+  <LI><A HREF="#toc5">Write transfer code</A>
+  <LI><A HREF="#toc6">Compiling Transfer programs</A>
+  <LI><A HREF="#toc7">Using Transfer programs in GF</A>
+    <UL>
+    <LI><A HREF="#toc8">Loading the grammars</A>
+    <LI><A HREF="#toc9">Loading the Transfer program</A>
+    <LI><A HREF="#toc10">Calling Transfer functions</A>
+      <UL>
+      <LI><A HREF="#toc11">Transfer between different abstract syntaxes</A>
+      </UL>
+    </UL>
+  </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<A NAME="toc1"></A>
+<H1>Objective</H1>
+<P>
+We want to write a Transfer program which we can use to do aggregation
+in sentences which use conjugations on the sentence, noun phrase and
+verb phrase levels. For example, we want to be able to transform
+the sentence "John walks and Mary walks" to the sentence 
+"John and Mary walk". We would also like to transform 
+"John walks and John swims" to "John walks and swims". 
+</P>
+<P>
+Thus that what we want to do is:
+</P>
+<UL>
+<LI>Transform sentence conjugation where the verb phrases in the sentences
+  are identical to noun phrase conjugation.
+<LI>Transform sentence conjugation where the noun phrases in the sentences
+  are identical to verb phrase conjugation.
+</UL>
+
+<P>
+This needs to be done recursively and thoughout the sentence, to be 
+able to handle cases like "John walks and Mary walks and Bill walks", and
+"John runs and Mary walks and Bill walks".
+</P>
+<P>
+FIXME: what about John walks and Mary runs and Bill walks"?
+</P>
+<A NAME="toc2"></A>
+<H1>Abstract syntax</H1>
+<P>
+We will use the abstract syntax defined in 
+<A HREF="../transfer/examples/aggregation/Abstract.gf">Abstract.gf</A>.
+</P>
+<A NAME="toc3"></A>
+<H1>Concrete syntax</H1>
+<P>
+There is an English concrete syntax for this grammar in
+<A HREF="../transfer/examples/aggregation/English.gf">English.gf</A>.
+</P>
+<A NAME="toc4"></A>
+<H1>Generate tree module</H1>
+<P>
+To be able to write Transfer programs which sue the types defined in
+an abstract syntax, we first need to generate a Transfer file with
+a data type defintition corresponding to the abstract syntax.
+This is done with the <CODE>transfer</CODE> grammar printer:
+</P>
+<PRE>
+  $ gf
+  &gt; i English.gf
+  &gt; pg -printer=transfer | wf tree.tr
+</PRE>
+<P></P>
+<P>
+Note that you need to load a concrete syntax which uses the abstract
+syntax that you want to create a Transfer data type for. Loading just the
+abstract syntax module is not enough. FIXME: why?
+</P>
+<P>
+The command sequence above writes a Transfer data type definition to the
+file <CODE>tree.tr</CODE>.
+</P>
+<A NAME="toc5"></A>
+<H1>Write transfer code</H1>
+<P>
+We write the Transfer program 
+<A HREF="../transfer/examples/aggregation/aggregate.tr">aggregate.tr</A>.
+</P>
+<P>
+FIXME: explain the code
+</P>
+<A NAME="toc6"></A>
+<H1>Compiling Transfer programs</H1>
+<P>
+Transfer programs are written in the human-friendly Transfer language,
+but GF only understands the simpler Transfer Core language. Therefore,
+before using a Transfer program, you must first compile it to
+Transfer Core. This is done using the <CODE>transferc</CODE> command:
+</P>
+<PRE>
+  $ transferc -i&lt;lib&gt; &lt;transfer program&gt;
+</PRE>
+<P></P>
+<P>
+Here, <CODE>&lt;lib&gt;</CODE> is the path to search for any modules which you import
+in your Transfer program. You can give several <CODE>-i</CODE> flags.
+</P>
+<P>
+So, to compile <CODE>aggregate.tr</CODE> which we created above, we use:
+</P>
+<PRE>
+  $ transferc aggregate.tr
+</PRE>
+<P></P>
+<P>
+The creates the Transfer Core file <CODE>aggregate.trc</CODE>.
+</P>
+<A NAME="toc7"></A>
+<H1>Using Transfer programs in GF</H1>
+<A NAME="toc8"></A>
+<H2>Loading the grammars</H2>
+<P>
+To use a Transfer Core program to transform abstract syntax terms
+in GF, you must first load the grammars which you want to use the
+program with. For the example above, we need the grammar <CODE>English.gf</CODE>
+and its dependencies. We load this grammar with:
+</P>
+<PRE>
+  &gt; i English.gf
+</PRE>
+<P></P>
+<A NAME="toc9"></A>
+<H2>Loading the Transfer program</H2>
+<P>
+There are two steps to using a Transfer Core program in GF. First you load 
+the program into GF. This is done with the <CODE>i</CODE> command, which is also
+used when loading grammar modules. To load the <CODE>aggregate.trc</CODE> which
+we created above, we use:
+</P>
+<PRE>
+  &gt; i aggregate.trc
+</PRE>
+<P></P>
+<A NAME="toc10"></A>
+<H2>Calling Transfer functions</H2>
+<P>
+To call a Transfer function on a term, we use the <CODE>at</CODE> command.
+The <CODE>at</CODE> command takes the name of a Transfer function and an abstract
+syntax term, and applies the function to the term:
+</P>
+<PRE>
+  &gt; at aggregS ConjS And (Pred John Walk) (Pred Mary Walk)
+  
+  Pred (ConjNP And John Mary) Walk
+</PRE>
+<P></P>
+<P>
+Of course, the input and output terms of the <CODE>at</CODE> command can
+be read from and written to pipes:
+</P>
+<PRE>
+  &gt; p "John walks and Mary walks" | at aggregS | l
+  
+  John and Mary walk
+</PRE>
+<P></P>
+<P>
+To see what is going on between the steps, we can use <CODE>-tr</CODE> flags
+to the commands:
+</P>
+<PRE>
+  &gt; p -tr "John walks and Mary walks" | at -tr aggregS | l
+  
+  ConjS And (Pred John Walk) (Pred Mary Walk)
+  
+  Pred (ConjNP And John Mary) Walk
+  
+  John and Mary walk
+</PRE>
+<P></P>
+<A NAME="toc11"></A>
+<H3>Transfer between different abstract syntaxes</H3>
+<P>
+If the transfer function which you wan to call takes as input a term in one
+abstract syntax, and returns a term in a different abstract syntax, you
+can use the <CODE>-lang</CODE> flag with the <CODE>at</CODE> command. This is needed since the 
+<CODE>at</CODE> command type checks the result it produces, and it needs to
+know which abstract sytnax to type check it in.
+</P>
+
+<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags darcs.txt transfer-reference.txt transfer-tutorial.txt transfer.txt -->
+</BODY></HTML>

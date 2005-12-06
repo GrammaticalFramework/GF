@@ -1,20 +1,23 @@
+import prelude ;
 data Cat : Type where {
   Conj : Cat ;
   NP : Cat ;
   S : Cat ;
   VP : Cat 
 } ;
-data Tree : (_ : Cat)-> Type where {
+data Tree : Cat -> Type where {
   And : Tree Conj ;
   Bill : Tree NP ;
-  ConjNP : (_ : Tree Conj)-> (_ : Tree NP)-> (_ : Tree NP)-> Tree NP ;
-  ConjS : (_ : Tree Conj)-> (_ : Tree S)-> (_ : Tree S)-> Tree S ;
-  ConjVP : (_ : Tree Conj)-> (_ : Tree VP)-> (_ : Tree VP)-> Tree VP ;
+  ConjNP : Tree Conj -> Tree NP -> Tree NP -> Tree NP ;
+  ConjS : Tree Conj -> Tree S -> Tree S -> Tree S ;
+  ConjVP : Tree Conj -> Tree VP -> Tree VP -> Tree VP ;
   John : Tree NP ;
   Mary : Tree NP ;
   Or : Tree Conj ;
-  Pred : (_ : Tree NP)-> (_ : Tree VP)-> Tree S ;
+  Pred : Tree NP -> Tree VP -> Tree S ;
   Run : Tree VP ;
   Swim : Tree VP ;
   Walk : Tree VP 
-}
+} ;
+derive Eq Tree ;
+derive Compos Tree ;

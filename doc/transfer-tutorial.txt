@@ -1,0 +1,164 @@
+Transfer tutorial
+Author: Björn Bringert <bringert@cs.chalmers.se>
+Last update: %%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags -t html --toc darcs.txt
+
+%!target:html
+%!options(html): --toc
+
+
+
+= Objective =
+
+We want to write a Transfer program which we can use to do aggregation
+in sentences which use conjugations on the sentence, noun phrase and
+verb phrase levels. For example, we want to be able to transform
+the sentence "John walks and Mary walks" to the sentence 
+"John and Mary walk". We would also like to transform 
+"John walks and John swims" to "John walks and swims". 
+
+Thus that what we want to do is:
+
+- Transform sentence conjugation where the verb phrases in the sentences
+  are identical to noun phrase conjugation.
+- Transform sentence conjugation where the noun phrases in the sentences
+  are identical to verb phrase conjugation.
+
+
+This needs to be done recursively and thoughout the sentence, to be 
+able to handle cases like "John walks and Mary walks and Bill walks", and
+"John runs and Mary walks and Bill walks".
+
+
+FIXME: what about John walks and Mary runs and Bill walks"?
+
+
+= Abstract syntax =
+
+We will use the abstract syntax defined in 
+[Abstract.gf ../transfer/examples/aggregation/Abstract.gf].
+
+= Concrete syntax =
+
+There is an English concrete syntax for this grammar in
+[English.gf ../transfer/examples/aggregation/English.gf].
+
+= Generate tree module =
+
+To be able to write Transfer programs which use the types defined in
+an abstract syntax, we first need to generate a Transfer file with
+a data type defintition corresponding to the abstract syntax.
+This is done with the ``transfer`` grammar printer:
+
+```
+$ gf
+> i English.gf
+> pg -printer=transfer | wf tree.tr
+```
+
+Note that you need to load a concrete syntax which uses the abstract
+syntax that you want to create a Transfer data type for. Loading just the
+abstract syntax module is not enough. FIXME: why?
+
+The command sequence above writes a Transfer data type definition to the
+file ``tree.tr``.
+
+
+= Write transfer code =
+
+We write the Transfer program 
+[aggregate.tr ../transfer/examples/aggregation/aggregate.tr].
+
+FIXME: explain the code
+
+= Compiling Transfer programs =
+
+Transfer programs are written in the human-friendly Transfer language,
+but GF only understands the simpler Transfer Core language. Therefore,
+before using a Transfer program, you must first compile it to
+Transfer Core. This is done using the ``transferc`` command:
+
+```
+$ transferc -i<lib> <transfer program>
+```
+
+Here, ``<lib>`` is the path to search for any modules which you import
+in your Transfer program. You can give several ``-i`` flags.
+
+So, to compile ``aggregate.tr`` which we created above, we use:
+
+```
+$ transferc aggregate.tr
+```
+
+The creates the Transfer Core file ``aggregate.trc``.
+
+
+= Using Transfer programs in GF =
+
+== Loading the grammars ==
+
+To use a Transfer Core program to transform abstract syntax terms
+in GF, you must first load the grammars which you want to use the
+program with. For the example above, we need the grammar ``English.gf``
+and its dependencies. We load this grammar with:
+
+```
+> i English.gf
+```
+
+== Loading the Transfer program ==
+
+There are two steps to using a Transfer Core program in GF. First you load 
+the program into GF. This is done with the ``i`` command, which is also
+used when loading grammar modules. To load the ``aggregate.trc`` which
+we created above, we use:
+
+```
+> i aggregate.trc
+```
+
+== Calling Transfer functions ==
+
+To call a Transfer function on a term, we use the ``at`` command.
+The ``at`` command takes the name of a Transfer function and an abstract
+syntax term, and applies the function to the term:
+
+```
+> at aggregS ConjS And (Pred John Walk) (Pred Mary Walk)
+
+Pred (ConjNP And John Mary) Walk
+```
+
+Of course, the input and output terms of the ``at`` command can
+be read from and written to pipes:
+
+```
+> p "John walks and Mary walks" | at aggregS | l
+
+John and Mary walk
+```
+
+To see what is going on between the steps, we can use ``-tr`` flags
+to the commands:
+
+```
+> p -tr "John walks and Mary walks" | at -tr aggregS | l
+
+ConjS And (Pred John Walk) (Pred Mary Walk)
+
+Pred (ConjNP And John Mary) Walk
+
+John and Mary walk
+```
+
+=== Transfer between different abstract syntaxes ===
+
+If the transfer function which you wan to call takes as input a term in one
+abstract syntax, and returns a term in a different abstract syntax, you
+can use the ``-lang`` flag with the ``at`` command. This is needed since the 
+``at`` command type checks the result it produces, and it needs to
+know which abstract sytnax to type check it in.

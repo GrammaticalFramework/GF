@@ -44,23 +44,14 @@ aggreg _ t =
   case t of
       ConjS c s1 s2 -> 
 	case (aggreg ? s1, aggreg ? s2) of
-		(Pred np1 vp1, Pred np2 vp2) | eq_NP np1 np2 -> 
+	     (Pred np1 vp1, Pred np2 vp2) | eq NP (eq_Tree NP) np1 np2 -> 
 			Pred np1 (ConjVP c vp1 vp2)
-                (Pred np1 vp1, Pred np2 vp2) | eq_VP vp1 vp2 -> 
+             (Pred np1 vp1, Pred np2 vp2) | eq VP (eq_Tree VP) vp1 vp2 -> 
 	        	Pred (ConjNP c np1 np2) vp1
-		(s1',s2') -> ConjS c s1' s2'
+	     (s1',s2') -> ConjS c s1' s2'
       _ -> composOp ? ? compos_Tree ? aggreg t
 
 
 -- aggreg specialized for Tree S
 aggregS : Tree S -> Tree S
 aggregS = aggreg S
-
--- equality specialized for Tree NP
-eq_NP : Tree NP -> Tree NP -> Bool
-eq_NP = eq NP (eq_Tree NP)
-
--- equality specialized for Tree VP
-eq_VP : Tree VP -> Tree VP -> Bool
-eq_VP = eq VP (eq_Tree VP)
-
