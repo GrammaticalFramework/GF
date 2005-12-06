@@ -14,7 +14,7 @@ Last update: %%date(%c)
 = Objective =
 
 We want to write a Transfer program which we can use to do aggregation
-in sentences which use conjugations on the sentence, noun phrase and
+in sentences which use conjunctions on the sentence, noun phrase and
 verb phrase levels. For example, we want to be able to transform
 the sentence "John walks and Mary walks" to the sentence 
 "John and Mary walk". We would also like to transform 
@@ -22,10 +22,10 @@ the sentence "John walks and Mary walks" to the sentence
 
 Thus that what we want to do is:
 
-- Transform sentence conjugation where the verb phrases in the sentences
-  are identical to noun phrase conjugation.
-- Transform sentence conjugation where the noun phrases in the sentences
-  are identical to verb phrase conjugation.
+- Transform sentence conjunction where the verb phrases in the sentences
+  are identical to noun phrase conjunction.
+- Transform sentence conjunction where the noun phrases in the sentences
+  are identical to verb phrase conjunction.
 
 
 This needs to be done recursively and thoughout the sentence, to be 
