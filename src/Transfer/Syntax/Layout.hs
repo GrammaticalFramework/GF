@@ -109,8 +109,11 @@ resolveLayout tp = res Nothing [if tl then Implicit 1 else Explicit]
   res (Just t) (Explicit:bs) [] | null bs = []
                                 | otherwise = res (Just t) bs []
 
-  -- If we are using top-level layout, insert a semicolon after the last token
-  res (Just t) [Implicit n] [] = addToken (nextPos t) layoutSep []
+  -- If we are using top-level layout, insert a semicolon after
+  -- the last token, if there isn't one already
+  res (Just t) [Implicit n] []
+      | isTokenIn [layoutSep] t = []
+      | otherwise = addToken (nextPos t) layoutSep []
 
   -- At EOF in an implicit, non-top-level block: close the block
   res (Just t) (Implicit n:bs) [] =
