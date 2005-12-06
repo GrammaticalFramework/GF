@@ -64,7 +64,7 @@ syntax that you want to create a Transfer data type for. Loading just the
 abstract syntax module is not enough. FIXME: why?
 
 The command sequence above writes a Transfer data type definition to the
-file ``tree.tr``.
+file [tree.tr ../transfer/examples/aggregation/tree.tr].
 
 
 = Write transfer code =
