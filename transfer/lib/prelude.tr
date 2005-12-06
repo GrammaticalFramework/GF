@@ -176,7 +176,7 @@ concat A = foldr (List A) (List A) (append A) (Nil A)
 partition : (A : Type) -> (A -> Bool) -> List A -> Pair (List A) (List A)
 partition _ _ [] = ([],[])
 partition A p (x::xs) = 
-  let r = partition A p xs
+  let r : Pair (List A) (List A) = partition A p xs
    in if p x then (x :: fst r, snd r) else (fst r, x :: snd r)
 
 
