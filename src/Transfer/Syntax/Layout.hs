@@ -105,10 +105,17 @@ resolveLayout tp = res Nothing [if tl then Implicit 1 else Explicit]
   -- Nothing to see here, move along.
   res _ st (t:ts)  = moveAlong st [t] ts
 
-  -- We are at EOF, close all open implicit non-top-level layout blocks.
-  res (Just t) st [] = 
-        addTokens (position t) [layoutClose | Implicit n <- st, 
-                                              not (tl && n == 1)] []
+  -- At EOF: skip explicit blocks.
+  res (Just t) (Explicit:bs) [] | null bs = []
+                                | otherwise = res (Just t) bs []
+
+  -- If we are using top-level layout, insert a semicolon after the last token
+  res (Just t) [Implicit n] [] = addToken (nextPos t) layoutSep []
+
+  -- At EOF in an implicit, non-top-level block: close the block
+  res (Just t) (Implicit n:bs) [] =
+     let c = addToken (nextPos t) layoutClose []
+      in moveAlong bs c []
 
   -- This should only happen if the input is empty.
   res Nothing st [] = []

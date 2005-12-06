@@ -10,13 +10,16 @@ comment "{-" "-}" ;
 Module. Module ::= [Import] [Decl] ;
 
 Import. Import ::= "import" Ident ;
-separator Import ";" ;
+-- FIXME: this is terminator to ensure that the pretty printer
+-- produces a semicolon after the last import. This could cause
+-- problems in a program which only does imports and uses layout syntax.
+terminator Import ";" ;
 
 DataDecl.     Decl ::= "data" Ident ":" Exp "where" "{" [ConsDecl] "}" ;
 TypeDecl.     Decl ::= Ident ":" Exp ;
 ValueDecl.    Decl ::= Ident [Pattern] Guard "=" Exp ;
 DeriveDecl.   Decl ::= "derive" Ident Ident ;
-separator Decl ";" ;
+terminator Decl ";" ;
 
 ConsDecl. ConsDecl ::= Ident ":" Exp ;
 separator ConsDecl ";" ;
