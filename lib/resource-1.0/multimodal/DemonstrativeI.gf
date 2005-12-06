@@ -7,6 +7,8 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
     MQS    = Dem {s : Polarity => Str} ;
     MImp   = Dem {s : Polarity => Str} ;
     MVP    = Dem VP ;
+    MComp  = Dem Comp ;
+    MAP    = Dem AP ;
     DNP    = Dem NP ;
     DAdv   = Dem Adv ;
     Point  = DemRes.Point ;
@@ -26,8 +28,11 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
     DemV2 verb obj = mkDem VP (ComplV2 verb obj) obj ;
     DemVV vv vp    = mkDem VP (ComplVV vv vp) vp ;
 
-    DemComp comp = mkDem Comp (UseComp comp) ;
-    DCompAP 
+    DemComp comp = mkDem VP (UseComp comp) comp ;
+---    DemComp = keepDem VP UseComp ;
+
+    DCompAP ap   = mkDem Comp (CompAP ap) ap ;
+    DCompAdv adv = mkDem Comp (CompAdv adv) adv ;
      
 
     AdvMVP vp adv =
@@ -38,7 +43,7 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
 
     thisDet_DNP cn = 
       mkDem NP (DetCN (MkDet NoPredet this_Quant NoNum NoOrd) cn) ;
-    thatDet_DNP p cn = mkDem (DetNP that_Det cn) ;
+    thatDet_DNP cn = 
       mkDem NP (DetCN (MkDet NoPredet that_Quant NoNum NoOrd) cn) ;
 
     here_DAdv      = mkDem Adv here_Adv ;
