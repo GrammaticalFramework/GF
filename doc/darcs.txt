@@ -1,12 +1,15 @@
 GF Darcs repository
-
-GF has now been moved to a Darcs repository. No changes should be committed to the CVS repository from now on.
-
+Author: Björn Bringert <bringert@cs.chalmers.se>
+Last update: %%date(%c)
 
 % NOTE: this is a txt2tags file.
 % Create an html file from this file using:
 % txt2tags -t html --toc darcs.txt
 
+%!target:html
+%!options(html): --toc
+
+**GF has now been moved to a Darcs repository. No changes should be committed to the CVS repository from now on.**
 
 = What is darcs? =
 
@@ -58,11 +61,14 @@ need to run ``autoconf`` before ``configure``.
 
 == Updating your copy ==
 
-Get all new patches from the main repo:
+To get all new patches from the main repo:
 
 ```
 $ darcs pull -a
 ```
+
+This can be done anywhere in your local repository, i.e. in the ``GF``
+directory, or any of its subdirectories.
 
 Without ``-a``, you can choose which patches you want to get.
 
