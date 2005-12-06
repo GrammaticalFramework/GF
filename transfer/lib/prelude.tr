@@ -116,6 +116,31 @@ mul_Bool = rec one = True
                times = \x -> \y -> x && y
 
 
+--
+-- Tuples
+--
+
+Pair : Type -> Type -> Type
+Pair A B = sig { p1 : A; p2 : B }
+
+pair : (A:Type) -> (B:Type) -> A -> B -> Pair A B
+pair _ _ x y = rec { p1 = x; p2 = y }
+
+fst : (A:Type) -> (B:Type) -> Pair A B -> A
+fst _ _ p = case p of Pair _ _ x _ -> x
+
+snd : (A:Type) -> (B:Type) -> Pair A B -> B
+snd _ _ p = case p of Pair _ _ x _ -> x
+
+{-
+
+ syntax:
+
+ (x1,...,xn) => { p1 = e1; ... ; pn = en }
+
+ where n >= 2 and x1,...,xn are expressions or patterns
+
+-}
 
 
 --
@@ -148,6 +173,11 @@ append A xs ys = foldr A (List A) (Cons A) ys xs
 concat : (A : Type) -> List (List A) -> List A
 concat A = foldr (List A) (List A) (append A) (Nil A)
 
+partition : (A : Type) -> (A -> Bool) -> List A -> Pair (List A) (List A)
+partition _ _ [] = ([],[])
+partition A p (x::xs) = 
+  let r = partition A p xs
+   in if p x then (x :: fst r, snd r) else (fst r, x :: snd r)
 
 
 -- Instances:
