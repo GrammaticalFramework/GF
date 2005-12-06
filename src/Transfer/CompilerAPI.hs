@@ -44,7 +44,7 @@ loadModule = loadModule_ []
                      Ok  m    -> return m 
     let load = [ i | Import (Ident i) <- is ] \\ ms
     let path' = directoryOf f : path
-    files <- mapM (findFile path' . (++".tr")) load
+    files <- mapM (findFile path' . (++".tra")) load
     dss <- mapM (loadModule_ (load++ms) path) files
     return $ concat (dss++[ds])
 

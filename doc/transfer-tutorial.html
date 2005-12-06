@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Transfer tutorial</H1>
 <FONT SIZE="4">
 <I>Author: Björn Bringert &lt;bringert@cs.chalmers.se&gt;</I><BR>
-Last update: Tue Dec  6 17:25:21 2005
+Last update: Tue Dec  6 17:32:55 2005
 </FONT></CENTER>
 
 <P></P>
@@ -85,7 +85,7 @@ This is done with the <CODE>transfer</CODE> grammar printer:
 <PRE>
   $ gf
   &gt; i English.gf
-  &gt; pg -printer=transfer | wf tree.tr
+  &gt; pg -printer=transfer | wf tree.tra
 </PRE>
 <P></P>
 <P>
@@ -95,13 +95,13 @@ abstract syntax module is not enough. FIXME: why?
 </P>
 <P>
 The command sequence above writes a Transfer data type definition to the
-file <A HREF="../transfer/examples/aggregation/tree.tr">tree.tr</A>.
+file <A HREF="../transfer/examples/aggregation/tree.tra">tree.tra</A>.
 </P>
 <A NAME="toc5"></A>
 <H1>Write transfer code</H1>
 <P>
 We write the Transfer program 
-<A HREF="../transfer/examples/aggregation/aggregate.tr">aggregate.tr</A>.
+<A HREF="../transfer/examples/aggregation/aggregate.tra">aggregate.tra</A>.
 </P>
 <P>
 FIXME: explain the code
@@ -123,10 +123,10 @@ Here, <CODE>&lt;lib&gt;</CODE> is the path to search for any modules which you i
 in your Transfer program. You can give several <CODE>-i</CODE> flags.
 </P>
 <P>
-So, to compile <CODE>aggregate.tr</CODE> which we created above, we use:
+So, to compile <CODE>aggregate.tra</CODE> which we created above, we use:
 </P>
 <PRE>
-  $ transferc aggregate.tr
+  $ transferc aggregate.tra
 </PRE>
 <P></P>
 <P>

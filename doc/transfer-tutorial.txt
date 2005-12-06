@@ -56,7 +56,7 @@ This is done with the ``transfer`` grammar printer:
 ```
 $ gf
 > i English.gf
-> pg -printer=transfer | wf tree.tr
+> pg -printer=transfer | wf tree.tra
 ```
 
 Note that you need to load a concrete syntax which uses the abstract
@@ -64,13 +64,13 @@ syntax that you want to create a Transfer data type for. Loading just the
 abstract syntax module is not enough. FIXME: why?
 
 The command sequence above writes a Transfer data type definition to the
-file [tree.tr ../transfer/examples/aggregation/tree.tr].
+file [tree.tra ../transfer/examples/aggregation/tree.tra].
 
 
 = Write transfer code =
 
 We write the Transfer program 
-[aggregate.tr ../transfer/examples/aggregation/aggregate.tr].
+[aggregate.tra ../transfer/examples/aggregation/aggregate.tra].
 
 FIXME: explain the code
 
@@ -88,10 +88,10 @@ $ transferc -i<lib> <transfer program>
 Here, ``<lib>`` is the path to search for any modules which you import
 in your Transfer program. You can give several ``-i`` flags.
 
-So, to compile ``aggregate.tr`` which we created above, we use:
+So, to compile ``aggregate.tra`` which we created above, we use:
 
 ```
-$ transferc aggregate.tr
+$ transferc aggregate.tra
 ```
 
 The creates the Transfer Core file ``aggregate.trc``.
