@@ -154,12 +154,10 @@ instance Print (Tree c) where
 instance Print [Import] where
   prt _ es = case es of
    [] -> (concatD [])
-   [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
 instance Print [Decl] where
   prt _ es = case es of
    [] -> (concatD [])
-   [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
 instance Print [ConsDecl] where
   prt _ es = case es of

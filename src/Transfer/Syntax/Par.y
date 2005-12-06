@@ -78,7 +78,7 @@ Integer :: { Integer } : L_integ  { (read $1) :: Integer }
 Double  :: { Double }  : L_doubl  { (read $1) :: Double }
 
 Module :: { Module }
-Module : ListImport ListDecl { Module $1 $2 } 
+Module : ListImport ListDecl { Module (reverse $1) (reverse $2) } 
 
 
 Import :: { Import }
@@ -87,8 +87,7 @@ Import : 'import' Ident { Import $2 }
 
 ListImport :: { [Import] }
 ListImport : {- empty -} { [] } 
-  | Import { (:[]) $1 }
-  | Import ';' ListImport { (:) $1 $3 }
+  | ListImport Import ';' { flip (:) $1 $2 }
 
 
 Decl :: { Decl }
@@ -100,8 +99,7 @@ Decl : 'data' Ident ':' Exp 'where' '{' ListConsDecl '}' { DataDecl $2 $4 $7 }
 
 ListDecl :: { [Decl] }
 ListDecl : {- empty -} { [] } 
-  | Decl { (:[]) $1 }
-  | Decl ';' ListDecl { (:) $1 $3 }
+  | ListDecl Decl ';' { flip (:) $1 $2 }
 
 
 ConsDecl :: { ConsDecl }
