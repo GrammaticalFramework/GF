@@ -1,16 +1,20 @@
 abstract Demonstrative = Cat, Tense ** {
 
+-- Naming convention: $M$ prepended to 'unimodal' names.
+-- Exceptions: lexical units, those without unimodal counterparts.
+
   cat
 
     MS ;     -- multimodal sentence or question
     MQS ;    -- multimodal wh question
     MImp ;   -- multimodal imperative
     MVP ;    -- multimodal verb phrase
-    MComp ;  -- multimodal complement to copula (MAP, DNP, DAdv)
+    MComp ;  -- multimodal complement to copula (MAP, MNP, MAdv)
     MAP ;    -- multimodal adjectival phrase
 
-    DNP ;    -- demonstrative noun phrase
-    DAdv ;   -- demonstrative adverbial
+    MNP ;    -- demonstrative noun phrase
+    MAdv ;   -- demonstrative adverbial
+
     Point ;  -- pointing gesture
 
   fun
@@ -21,53 +25,58 @@ abstract Demonstrative = Cat, Tense ** {
 
 -- Construction of sentences, questions, and imperatives.
 
-    PredMVP   : DNP -> MVP -> MS ;  -- he flies here
-    QuestMVP  : DNP -> MVP -> MQS ; -- does he fly here
+    MPredVP   : MNP -> MVP -> MS ;    -- he flies here
+    MQPredVP  : MNP -> MVP -> MQS ;   -- does he fly here
 
-    QQuestMVP : IP  -> MVP -> MQS ; -- who flies here
+    MQuestVP  : IP  -> MVP -> MQS ;   -- who flies here
 
-    ImpMVP    : MVP -> MImp ;       -- fly here!
+    MImpVP    : MVP -> MImp ;         -- fly here!
 
 -- Construction of verb phrases from verb + complements.
 
-    DemV   : V  -> MVP ;              -- flies (here)
-    DemV2  : V2 -> DNP -> MVP ;       -- takes this (here)
-    DemVV  : VV -> MVP -> MVP ;       -- wants to fly (here)
+    MUseV    : V  -> MVP ;            -- flies (here)
+    MComplV2 : V2 -> MNP -> MVP ;     -- takes this (here)
+    MComplVV : VV -> MVP -> MVP ;     -- wants to fly (here)
 
-    DemComp : MComp -> MVP ;          -- is here ; is bigger than this
+    MUseComp : MComp -> MVP ;         -- is here ; is bigger than this
 
-    DCompAP  : MAP  -> MComp ;        -- bigger than this
-    DCompNP  : DNP  -> MComp ;        -- the price of this
-    DCompAdv : DAdv -> MComp ;        -- here
+    MCompAP  : MAP  -> MComp ;        -- bigger than this
+    MCompNP  : MNP  -> MComp ;        -- the price of this
+    MCompAdv : MAdv -> MComp ;        -- here
 
+    MPositA  : A -> MAP ;             -- big
+    MComparA : A -> MNP -> MAP ;      -- bigger than this
 
 -- Adverbial modification of a verb phrase.
 
-    AdvMVP : MVP -> DAdv -> MVP ;      
+    MAdvVP : MVP -> MAdv -> MVP ;     -- fly here
 
 -- Demonstrative pronouns as NPs and determiners.
 
-    this_DNP    : Point -> DNP ;        -- this
-    that_DNP    : Point -> DNP ;        -- that
-    thisDet_DNP : CN -> Point -> DNP ;  -- this car
-    thatDet_DNP : CN -> Point -> DNP ;  -- that car
+    this_MNP    : Point -> MNP ;        -- this
+    that_MNP    : Point -> MNP ;        -- that
+    thisDet_MNP : CN -> Point -> MNP ;  -- this car
+    thatDet_MNP : CN -> Point -> MNP ;  -- that car
 
 -- Demonstrative adverbs.
 
-    here_DAdv      : Point -> DAdv ;    -- here
-    here7from_DAdv : Point -> DAdv ;    -- from here
-    here7to_DAdv   : Point -> DAdv ;    -- to here
+    here_MAdv      : Point -> MAdv ;    -- here
+    here7from_MAdv : Point -> MAdv ;    -- from here
+    here7to_MAdv   : Point -> MAdv ;    -- to here
 
 -- Building an adverb as prepositional phrase.
 
-    PrepDNP : Prep -> DNP -> DAdv ;
+    MPrepNP : Prep -> MNP -> MAdv ;     -- in this car
 
 -- Using ordinary categories.
 
--- Interface to $Demonstrative$.
+-- Mounting nondemonstrative expressions.
 
-    DemNP   : NP  -> DNP ;
-    DemAdv  : Adv -> DAdv ;
+    DemNP   : NP  -> MNP ;
+    DemAdv  : Adv -> MAdv ;
+
+-- Top-level phrases.
+
     PhrMS   : Pol -> MS   -> Phr ;
     PhrMS   : Pol -> MS   -> Phr ;
     PhrMQS  : Pol -> MQS  -> Phr ;
