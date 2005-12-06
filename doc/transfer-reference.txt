@@ -1,4 +1,6 @@
 Transfer language reference
+Author: Björn Bringert <bringert@cs.chalmers.se>
+Last update: %%date(%c)
 
 
 % NOTE: this is a txt2tags file.
@@ -14,7 +16,9 @@ Transfer language reference
 
 
 This document describes the features of the Transfer language.
-See the Transfer tutorial for how to compile and use Transfer programs.
+See the [Transfer tutorial transfer-tutorial.html]
+for an example of a Transfer program, and how to compile and use 
+Transfer programs.
 
 Transfer is a dependently typed functional programming language 
 with eager evaluation.
@@ -28,10 +32,31 @@ To give the block structure of a piece of code without using layout
 syntax, you can enclose the block in curly braces (``{ }``) and 
 separate the parts of the blocks with semicolons (``;``).
 
+For example, this case expression:
 
-== Top-level stuff == 
+```
+case x of
+       p1 -> e1
+       p2 -> e2
+```
 
-=== Imports ===
+is equivalent to this one:
+
+```
+case x of {
+       p1 -> e1 ;
+       p2 -> e2 
+}
+```
+
+Here the layout is insignificant, as the structure is given with
+braces and semicolons. Thus the above is equivalent to:
+
+```
+case x of { p1 -> e1 ; p2 -> e2 }
+```
+
+== Imports ==
 
 A Transfer module start with some imports. Most modules will have to
 import the prelude, which contains definitons used by most programs:
@@ -41,7 +66,7 @@ import prelude
 ```
 
 
-=== Declaring functions ===
+== Function declarations ==
 
 Functions need to be given a type and a definition. The type is given
 by a typing judgement on the form:
@@ -50,7 +75,9 @@ by a typing judgement on the form:
 f : T
 ```
 
-where ``f`` is the function's name, and ``T`` its type.
+where ``f`` is the function's name, and ``T`` its type. See 
+[Function types #function_types] for a how the types of functions
+are written.
 
 The definition of the function is the given as a sequence of pattern
 equations. The first equation whose patterns match the function arguments
@@ -63,7 +90,7 @@ f qn1 ... qnm = exp
 ```
 
 
-=== Declaring new data types ===
+== Data type declarations ==
 
 Transfer supports Generalized Algebraic Datatypes.
 They are declared thusly:
@@ -78,6 +105,19 @@ data D : T where
 Here ``D`` is the name of the data type, ``T`` is the type of the type
 constructor, ``c1`` to ``cn`` are the data constructor names, and
 ``Tc1`` to ``Tcn`` are their types. 
+
+
+== Lambda expressions ==
+
+//Lambda expressions// are terms which express functions, without
+giving names to them. For example:
+
+```
+\x -> x + 1
+```
+
+is the function which takes an argument, and returns the value of the 
+argument + 1.
 
 
 == Local definitions ==
@@ -95,6 +135,50 @@ let x1 : T1 = exp1
 
 == Types ==
 
+=== Function types ===[function_types]
+
+Functions types are of the form:
+
+```
+A -> B
+```
+
+This is the type of functions which take an argument of type 
+``A`` and returns a result of type ``B``.
+
+To write functions which take more than one argument, we use //currying//.
+A function which takes n arguments is a function which takes 1 
+argument and returns a function which takes n-1 arguments. Thus,
+
+```
+A -> (B -> C)
+```
+
+or, equivalently, since ``->`` associates to the right:
+
+```
+A -> B -> C
+```
+
+is the type of functions which take 2 arguments, the first of type 
+``A`` and the second of type ``B``. This arrangement lets us do
+//partial application// of function to fewer arguments than the function 
+is declared to take, returning a new function which takes the rest 
+of the arguments.
+
+
+==== Dependent function types ====
+
+In a function type, the value of an argument can be used later 
+in the type. Such dependent function types are written:
+
+```
+(x1 : T1) -> ... -> (xn : Tn) -> T
+```
+
+Here, ``x1`` can be used in ``T2`` to ``Tn``, ``x1`` can be used 
+in ``T2`` to ``Tn``
+
 === Basic types ===
 
 ==== Integers ====
@@ -106,13 +190,13 @@ standard decmial integer literals are used to represent values of this type.
 
 The only currently supported floating-point type is ``Double``, which supports
 IEEE-754 double-precision floating-point numbers. Double literals are written
-in decimal notation, e.g. "123.456".
+in decimal notation, e.g. ``123.456``.
 
 ==== Strings ====
 
 There is a primitive ``String`` type. This might be replaced by a list of 
-characters representation in the future. String literals are written with double
-quotes, e.g. ``"this is a string"``.
+characters representation in the future. String literals are written 
+with double quotes, e.g. ``"this is a string"``.
 
 
 ==== Booleans ====
@@ -168,8 +252,9 @@ rec p1 = exp1
 
 ==== Record subtyping ====
 
-
-
+A record of some type R1 can be used as a record of any type R2
+such that for every field ``p1 : T1`` in R2, ``p1 : T1`` is also a 
+field of T1.
 
 === Tuples ===
 
@@ -323,4 +408,6 @@ Integer literals can be used as patterns.
 == Operators ==
 
 == Compositional functions ==
+
+== do notation ==
 

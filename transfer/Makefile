@@ -1,11 +1,13 @@
 SRCDIR=../src
 
 GHC=ghc
-GHCFLAGS=-i$(SRCDIR)
+GHCFLAGS=-i$(SRCDIR) 
+GHCOPTFLAGS=-O2
 
 
 .PHONY: all bnfc bnfctest doc docclean clean bnfcclean distclean
 
+all: GHCFLAGS += $(GHCOPTFLAGS)
 all:
 	$(GHC) $(GHCFLAGS) --make -o trci trci.hs
 	$(GHC) $(GHCFLAGS) --make -o transferc transferc.hs
