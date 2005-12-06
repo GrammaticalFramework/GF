@@ -42,6 +42,8 @@ abstract Structural = Cat ** {
   from_Prep : Prep ;
   he_Pron : Pron ; -- NP
   here_Adv : Adv ; --
+  here7to_Adv : Adv ;
+  here7from_Adv : Adv ;
   how_IAdv : IAdv ;
   how8many_IDet : IDet ;
   i_Pron : Pron ; -- NP
@@ -74,6 +76,9 @@ abstract Structural = Cat ** {
   somewhere_Adv : Adv ;
   that_Quant : Quant ; -- Det
   that_NP : NP ;
+  there_Adv : Adv ;
+  there7to_Adv : Adv ;
+  there7from_Adv : Adv ;
   therefore_PConj : PConj ; -- AdC
   these_Quant : Quant ; -- NDet
 --  they8fem_NP : NP ;

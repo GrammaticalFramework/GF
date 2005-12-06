@@ -215,9 +215,4 @@ abstract Basic = Cat ** {
   stop_V : V ;
   jump_V : V ;
 
-  here7to_Adv : Adv ;
-  here7from_Adv : Adv ;
-  there_Adv : Adv ;
-  there7to_Adv : Adv ;
-  there7from_Adv : Adv ;
 }

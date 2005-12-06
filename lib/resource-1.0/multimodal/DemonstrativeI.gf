@@ -26,18 +26,24 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
     DemV2 verb obj = mkDem VP (ComplV2 verb obj) obj ;
     DemVV vv vp    = mkDem VP (ComplVV vv vp) vp ;
 
+    DemComp comp = mkDem Comp (UseComp comp) ;
+    DCompAP 
+     
+
     AdvMVP vp adv =
       mkDem VP (AdvVP vp adv) (concatPoint vp adv) ;
 
     this_DNP = mkDem NP this_NP ;
     that_DNP = mkDem NP that_NP ;
 
---    thisDet_DNP p cn = mkDem (DetNP this_Det cn) p ;
---    thatDet_DNP p cn = mkDem (DetNP that_Det cn) p ;
+    thisDet_DNP cn = 
+      mkDem NP (DetCN (MkDet NoPredet this_Quant NoNum NoOrd) cn) ;
+    thatDet_DNP p cn = mkDem (DetNP that_Det cn) ;
+      mkDem NP (DetCN (MkDet NoPredet that_Quant NoNum NoOrd) cn) ;
 
     here_DAdv      = mkDem Adv here_Adv ;
---    here7from_DAdv = mkDem here7from_Adv ;
---    here7to_DAdv   = mkDem here7to_Adv ;
+    here7from_DAdv = mkDem Adv here7from_Adv ;
+    here7to_DAdv   = mkDem Adv here7to_Adv ;
 
     PrepDNP p np   = mkDem Adv (PrepNP p np) np ;
 

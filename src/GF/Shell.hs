@@ -300,8 +300,8 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
 
   CPutTerm -> changeArg (opTT2CommandArg (optTermCommand opts gro)  . s2t) sa
 
-  CWrapTerm f -> changeArg (opTT2CommandArg (return . wrapByFun opts gro f)) sa
-  CApplyTransfer f -> changeArg (opTT2CommandArg (return . applyTransfer opts gro transfs f)) sa
+  CWrapTerm f -> changeArg (opTT2CommandArg (return . wrapByFun opts gro f) . s2t) sa
+  CApplyTransfer f -> changeArg (opTT2CommandArg (return . applyTransfer opts gro transfs f) . s2t) sa
   CMorphoAnalyse -> changeArg (AString . morphoAnalyse opts gro . prCommandArg) sa
   CTestTokenizer -> changeArg (AString . optTokenizer opts gro . prCommandArg) sa
 

@@ -31,6 +31,13 @@ abstract Demonstrative = Cat, Tense ** {
     DemV2  : V2 -> DNP -> MVP ;       -- takes this (here)
     DemVV  : VV -> MVP -> MVP ;       -- wants to fly (here)
 
+    DemComp : DComp -> MVP ;          -- is here ; is bigger than this
+
+    DCompAP  : DAP  -> DComp ;        -- bigger than this
+    DCompNP  : DNP  -> DComp ;        -- the price of this
+    DCompAdv : DAdv -> DComp ;        -- here
+
+
 -- Adverbial modification of a verb phrase.
 
     AdvMVP : MVP -> DAdv -> MVP ;      
@@ -39,8 +46,8 @@ abstract Demonstrative = Cat, Tense ** {
 
     this_DNP    : Point -> DNP ;        -- this
     that_DNP    : Point -> DNP ;        -- that
-    thisDet_DNP : Point -> CN -> DNP ;  -- this car
-    thatDet_DNP : Point -> CN -> DNP ;  -- that car
+    thisDet_DNP : CN -> Point -> DNP ;  -- this car
+    thatDet_DNP : CN -> Point -> DNP ;  -- that car
 
 -- Demonstrative adverbs.
 
