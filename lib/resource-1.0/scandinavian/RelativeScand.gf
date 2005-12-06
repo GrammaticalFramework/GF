@@ -1,0 +1,34 @@
+--concrete RelativeScand of Relative = CatScand ** open ResScand in {
+--
+--  flags optimize=all_subs ;
+--
+--  lin
+--
+--    RelCl cl = {
+--      s = \\t,a,p,_ => "such" ++ "that" ++ cl.s ! t ! a ! p ! ODir
+--      } ;
+--
+--    RelVP rp vp = {
+--      s = \\t,ant,b,ag => 
+--        let 
+--          agr = case rp.a of {
+--            RNoAg => ag ;
+--            RAg a => a
+--            } ;
+--          cl = mkS (rp.s ! Nom) agr vp.s vp.s2
+--        in
+--        cl.s ! t ! ant ! b ! ODir
+--      } ;
+--
+--    RelSlash rp slash = {
+--      s = \\t,a,p,_ => slash.c2 ++ rp.s ! Acc ++ slash.s ! t ! a ! p ! ODir
+--      } ;
+--
+--    FunRP p np rp = {
+--      s = \\c => np.s ! c ++ p.s ++ rp.s ! Acc ;
+--      a = RAg np.a
+--      } ;
+--
+--    IdRP = mkIP "which" "which" "whose" Sg ** {a = RNoAg} ;
+--
+--}
