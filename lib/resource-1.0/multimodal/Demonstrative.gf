@@ -6,6 +6,9 @@ abstract Demonstrative = Cat, Tense ** {
     MQS ;    -- multimodal wh question
     MImp ;   -- multimodal imperative
     MVP ;    -- multimodal verb phrase
+    MComp ;  -- multimodal complement to copula (MAP, DNP, DAdv)
+    MAP ;    -- multimodal adjectival phrase
+
     DNP ;    -- demonstrative noun phrase
     DAdv ;   -- demonstrative adverbial
     Point ;  -- pointing gesture
@@ -31,11 +34,11 @@ abstract Demonstrative = Cat, Tense ** {
     DemV2  : V2 -> DNP -> MVP ;       -- takes this (here)
     DemVV  : VV -> MVP -> MVP ;       -- wants to fly (here)
 
-    DemComp : DComp -> MVP ;          -- is here ; is bigger than this
+    DemComp : MComp -> MVP ;          -- is here ; is bigger than this
 
-    DCompAP  : DAP  -> DComp ;        -- bigger than this
-    DCompNP  : DNP  -> DComp ;        -- the price of this
-    DCompAdv : DAdv -> DComp ;        -- here
+    DCompAP  : MAP  -> MComp ;        -- bigger than this
+    DCompNP  : DNP  -> MComp ;        -- the price of this
+    DCompAdv : DAdv -> MComp ;        -- here
 
 
 -- Adverbial modification of a verb phrase.

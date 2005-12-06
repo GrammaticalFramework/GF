@@ -63,7 +63,7 @@ evalModule oopts ms mo@(name,mod) = case mod of
       MGrammar (mod' : _) <- foldM evalOp gr ids
       return $ mod'
     MTConcrete a -> do
-      js' <- mapMTree (evalCncInfo oopts gr0 name a) js
+      js' <- mapMTree (evalCncInfo oopts gr name a) js ---- <- gr0 6/12/2005
       return $ (name, ModMod (Module mt st fs me ops js'))
 
     _ -> return $ (name,mod)

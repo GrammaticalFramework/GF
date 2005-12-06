@@ -218,7 +218,7 @@ checkCncInfo gr m (a,abs) (c,info) = do
       checkPrintname gr mpr
       return (c,CncCat (Yes typ') mdef' mpr)
 
-    _ -> return (c,info)
+    _ -> checkResInfo gr (c,info)
 
  where
    env = gr
@@ -739,6 +739,12 @@ checkEqLType env t u trm = do
                                  -- . || -- if fails, try subtyping:
                                  all (\ (l,a) -> 
                                      any (\ (k,b) -> alpha g a b && l == k) ts) rs
+
+     (ExtR r s, ExtR r' s') -> alpha g r r' && alpha g s s'
+
+     (ExtR r s, t) -> alpha g r t || alpha g s t
+
+
 
      -- the following say that Ints n is a subset of Int and of Ints m
      (App (Q (IC "Predef") (IC "Ints")) (EInt n), 

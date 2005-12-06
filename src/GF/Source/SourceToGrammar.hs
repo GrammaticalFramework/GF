@@ -339,7 +339,7 @@ transCncDef x = case x of
     let defs2 = [(f, termInPattern t) | (f,(_,Yes t)) <- defs']
     returnl [(f, G.CncFun Nothing (yes t) nope) | (f,t) <- defs2]
 
-  _ -> Bad $ "illegal definition in concrete syntax:" ++++ printTree x
+  _ -> errIn ("illegal definition in concrete syntax:") $ transResDef x
 
 transPrintDef :: PrintDef -> Err [(Ident,G.Term)]
 transPrintDef x = case x of
