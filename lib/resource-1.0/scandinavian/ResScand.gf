@@ -138,9 +138,9 @@ resource ResScand = ParamScand ** open Prelude in {
     } ;
 
   VP = {
-      s : SForm => {
-        fin : Str ;           -- V1 har  ---s1
-        inf : Str             -- V2 sagt ---s4
+      s : VPForm => {
+        fin : Str ;          -- V1 har  ---s1
+        inf : Str            -- V2 sagt ---s4
         } ;
       a1 : Polarity => Str ; -- A1 inte ---s3
       n2 : Agr => Str ;      -- N2 dig  ---s5  
@@ -188,7 +188,7 @@ resource ResScand = ParamScand ** open Prelude in {
 --    agrVerb (verb.s ! VPres) (verb.s ! VInf) ;
 
   infVP : VP -> Agr -> Str = \vp,a -> 
-    (vp.s ! VInfinit Simul).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
+    (vp.s ! VPInfinit Simul).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
 
 --  agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
 --    case agr of {
@@ -236,14 +236,12 @@ resource ResScand = ParamScand ** open Prelude in {
     s : Tense => Anteriority => Polarity => Order => Str
     } ;
 
-  mkS : Str -> Agr -> 
-        (SForm => {fin,inf : Str}) -> (Polarity => Str) -> (Agr => Str) -> Clause =
-    \subj,agr,verb,adv,compl0 -> {
+  mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp -> {
       s = \\t,a,b,o => 
         let 
-          verb  = verb ! VFinite t a ;
-          neg   = adv ! b ;
-          compl = compl0 ! agr
+          verb  = vp.s  ! VPFinite t a ;
+          neg   = vp.a1 ! b ;
+          compl = vp.n2 ! agr ++ vp.a2 ++ vp.ext
         in
         case o of {
           Main => subj ++ verb.fin ++ neg ++ verb.inf ++ compl ;

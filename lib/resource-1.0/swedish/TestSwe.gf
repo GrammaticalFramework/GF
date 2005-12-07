@@ -7,7 +7,7 @@ concrete TestSwe of Test =
   AdverbSwe,
 --  -- NumeralSwe,
   SentenceSwe,
---  QuestionSwe,
+  QuestionSwe,
 --  RelativeSwe,
 --  ConjunctionSwe,
   PhraseSwe,

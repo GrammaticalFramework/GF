@@ -1,54 +1,66 @@
---concrete QuestionScand of Question = CatScand ** open ResScand in {
---
---  flags optimize=all_subs ;
---
---  lin
---
---    QuestCl cl = {
---      s = \\t,a,p => 
---            let cls = cl.s ! t ! a ! p 
---            in table {
---              QDir   => cls ! OQuest ;
---              QIndir => "if" ++ cls ! ODir
---              } ---- "whether" in ExtScand
---      } ;
---
---    QuestVP qp vp = 
---      let cl = mkS (qp.s ! Nom) {n = qp.n ; p = P3} vp.s vp.s2
---      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
---
---    QuestSlash ip slash = {
---      s = \\t,a,p => 
---            let 
---              cls = slash.s ! t ! a ! p ;
---              who = slash.c2 ++ ip.s ! Acc --- stranding in ExtScand 
---            in table {
---              QDir   => who ++ cls ! OQuest ;
---              QIndir => who ++ cls ! ODir
---              }
---      } ;
---
---    QuestIAdv iadv cl = {
---      s = \\t,a,p => 
---            let 
---              cls = cl.s ! t ! a ! p ;
---              why = iadv.s
---            in table {
---              QDir   => why ++ cls ! OQuest ;
---              QIndir => why ++ cls ! ODir
---              }
---      } ;
---
---    PrepIP p ip = {s = p.s ++ ip.s ! Nom} ;
---
---    AdvIP ip adv = {
---      s = \\c => ip.s ! c ++ adv.s ;
---      n = ip.n
---      } ;
--- 
---    IDetCN idet num ord cn = {
---      s = \\c => idet.s ++ num.s ++ ord.s ++ cn.s ! idet.n ! c ; 
---      n = idet.n
---      } ;
---
---}
+incomplete concrete QuestionScand of Question = 
+  CatScand ** open DiffScand, ResScand in {
+
+  flags optimize=all_subs ;
+
+  lin
+
+    QuestCl cl = {
+      s = \\t,a,p => 
+            let cls = cl.s ! t ! a ! p 
+            in table {
+              QDir   => cls ! Inv ;
+              QIndir => subjIf ++ cls ! Sub
+              }
+      } ;
+
+    QuestVP qp vp = {
+      s = \\t,a,b,q => 
+        let 
+          somo = case q of {
+            QIndir => <"som",Sub> ;
+            _      => <[],   Main>
+            } ;
+          cl = mkClause (qp.s ! nominative ++ somo.p1) {gn = qp.gn ; p = P3} vp  
+        in
+        cl.s ! t ! a ! b ! somo.p2
+      } ;   
+
+    QuestSlash ip slash = {
+      s = \\t,a,p => 
+            let 
+              cls = slash.s ! t ! a ! p ;
+              who = slash.c2 ++ ip.s ! accusative --- stranding in ExtScand 
+            in table {
+              QDir   => who ++ cls ! Inv ;
+              QIndir => who ++ cls ! Sub
+              }
+      } ;
+
+    QuestIAdv iadv cl = {
+      s = \\t,a,p => 
+            let 
+              cls = cl.s ! t ! a ! p ;
+              why = iadv.s
+            in table {
+              QDir   => why ++ cls ! Inv ;
+              QIndir => why ++ cls ! Sub
+              }
+      } ;
+
+    PrepIP p ip = {
+      s = p.s ++ ip.s ! accusative
+      } ;
+
+    AdvIP ip adv = {
+      s = \\c => ip.s ! c ++ adv.s ;
+      gn = ip.gn
+      } ;
+ 
+    IDetCN idet num ord cn = let g = cn.g in {
+      s  = \\c => 
+           idet.s ! g ++ num.s ! g ++ ord.s ++ cn.s ! idet.n ! idet.det ! caseNP c ; 
+      gn = gennum g idet.n
+      } ;
+
+}
