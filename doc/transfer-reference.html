@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Transfer language reference</H1>
 <FONT SIZE="4">
 <I>Author: Björn Bringert &lt;bringert@cs.chalmers.se&gt;</I><BR>
-Last update: Wed Dec  7 10:45:42 2005
+Last update: Wed Dec  7 11:02:54 2005
 </FONT></CENTER>
 
 <P></P>
@@ -29,23 +29,24 @@ Last update: Wed Dec  7 10:45:42 2005
       <LI><A HREF="#toc12">Tuples</A>
       <LI><A HREF="#toc13">Lists</A>
       </UL>
-    <LI><A HREF="#toc14">Pattern matching</A>
+    <LI><A HREF="#toc14">Case expressions</A>
+    <LI><A HREF="#patterns">Patterns</A>
       <UL>
-      <LI><A HREF="#toc15">Constructor patterns</A>
-      <LI><A HREF="#toc16">Variable patterns</A>
-      <LI><A HREF="#toc17">Wildcard patterns</A>
-      <LI><A HREF="#toc18">Record patterns</A>
-      <LI><A HREF="#toc19">Disjunctive patterns</A>
-      <LI><A HREF="#toc20">List patterns</A>
-      <LI><A HREF="#toc21">Tuple patterns</A>
-      <LI><A HREF="#toc22">String literal patterns</A>
-      <LI><A HREF="#toc23">Integer literal patterns</A>
+      <LI><A HREF="#toc16">Constructor patterns</A>
+      <LI><A HREF="#toc17">Variable patterns</A>
+      <LI><A HREF="#toc18">Wildcard patterns</A>
+      <LI><A HREF="#toc19">Record patterns</A>
+      <LI><A HREF="#toc20">Disjunctive patterns</A>
+      <LI><A HREF="#toc21">List patterns</A>
+      <LI><A HREF="#toc22">Tuple patterns</A>
+      <LI><A HREF="#toc23">String literal patterns</A>
+      <LI><A HREF="#toc24">Integer literal patterns</A>
       </UL>
-    <LI><A HREF="#toc24">Metavariables</A>
-    <LI><A HREF="#toc25">Overloaded functions / Type classes</A>
-    <LI><A HREF="#toc26">Operators</A>
-    <LI><A HREF="#toc27">Compositional functions</A>
-    <LI><A HREF="#toc28">do notation</A>
+    <LI><A HREF="#toc25">Metavariables</A>
+    <LI><A HREF="#toc26">Overloaded functions / Type classes</A>
+    <LI><A HREF="#toc27">Operators</A>
+    <LI><A HREF="#toc28">Compositional functions</A>
+    <LI><A HREF="#toc29">do notation</A>
     </UL>
 
 <P></P>
@@ -140,11 +141,14 @@ equations. The first equation whose patterns match the function arguments
 is used when the function is called. Pattern equations are on the form:
 </P>
 <PRE>
-  f p1 ... p1n = exp
+  f p11 ... p1m = exp
   ...
-  f qn1 ... qnm = exp
+  f pn1 ... pnm = exp
 </PRE>
 <P></P>
+<P>
+where <CODE>p11</CODE> to <CODE>pnm</CODE> are patterns, see <A HREF="#patterns">Patterns</A>.
+</P>
 <A NAME="toc5"></A>
 <H2>Data type declarations</H2>
 <P>
@@ -238,7 +242,7 @@ in the type. Such dependent function types are written:
 <P></P>
 <P>
 Here, <CODE>x1</CODE> can be used in <CODE>T2</CODE> to <CODE>Tn</CODE>, <CODE>x1</CODE> can be used 
-in <CODE>T2</CODE> to <CODE>Tn</CODE>
+in <CODE>T2</CODE> to <CODE>Tn</CODE>.
 </P>
 <A NAME="toc10"></A>
 <H3>Basic types</H3>
@@ -355,7 +359,7 @@ be used instead of <CODE>Cons</CODE>. These are just syntactic sugar for express
 using <CODE>Nil</CODE> and <CODE>Cons</CODE>, with the type arguments hidden.
 </P>
 <A NAME="toc14"></A>
-<H2>Pattern matching</H2>
+<H2>Case expressions</H2>
 <P>
 Pattern matching is done in pattern equations and by using the 
 <CODE>case</CODE> construct:
@@ -368,6 +372,7 @@ Pattern matching is done in pattern equations and by using the
 </PRE>
 <P></P>
 <P>
+where <CODE>p1</CODE> to <CODE>pn</CODE> are patterns, see <A HREF="#patterns">Patterns</A>.
 <CODE>guard1</CODE> to <CODE>guardn</CODE> are boolean expressions. Case arms can also be written 
 without guards, such as:
 </P>
@@ -382,10 +387,9 @@ This is the same as writing:
        pk | True -&gt; rhsk
 </PRE>
 <P></P>
-<P>
-The syntax of patterns are decribed below.
-</P>
-<A NAME="toc15"></A>
+<A NAME="patterns"></A>
+<H2>Patterns</H2>
+<A NAME="toc16"></A>
 <H3>Constructor patterns</H3>
 <P>
 Constructor patterns are written as:
@@ -400,7 +404,7 @@ If the value to be matched is the constructor <CODE>C</CODE> applied to
 arguments <CODE>v1</CODE> to <CODE>vn</CODE>, then <CODE>v1</CODE> to <CODE>vn</CODE> will be matched
 against <CODE>p1</CODE> to <CODE>pn</CODE>.
 </P>
-<A NAME="toc16"></A>
+<A NAME="toc17"></A>
 <H3>Variable patterns</H3>
 <P>
 A variable pattern is a single identifier:
@@ -413,7 +417,7 @@ A variable pattern is a single identifier:
 A variable pattern matches any value, and binds the variable name to the
 value. A variable may not occur more than once in a pattern.
 </P>
-<A NAME="toc17"></A>
+<A NAME="toc18"></A>
 <H3>Wildcard patterns</H3>
 <P>
 Wildcard patterns are written as with a single underscore:
@@ -425,7 +429,7 @@ Wildcard patterns are written as with a single underscore:
 <P>
 Wildcard patterns match all values and bind no variables.
 </P>
-<A NAME="toc18"></A>
+<A NAME="toc19"></A>
 <H3>Record patterns</H3>
 <P>
 Record patterns match record values:
@@ -442,7 +446,7 @@ fields <CODE>l1</CODE> to <CODE>ln</CODE>, and their values match <CODE>p1</CODE
 Note that a record value may have more fields than the record pattern and 
 they will still match.
 </P>
-<A NAME="toc19"></A>
+<A NAME="toc20"></A>
 <H3>Disjunctive patterns</H3>
 <P>
 It is possible to write a pattern on the form:
@@ -455,9 +459,39 @@ It is possible to write a pattern on the form:
 A value will match this pattern if it matches any of the patterns <CODE>p1</CODE> to <CODE>pn</CODE>.
 FIXME: talk about how this is expanded
 </P>
-<A NAME="toc20"></A>
-<H3>List patterns</H3>
 <A NAME="toc21"></A>
+<H3>List patterns</H3>
+<P>
+When pattern matching in lists, there are two special constructs.
+A whole list can be matched be a list of patterns:
+</P>
+<PRE>
+  [p1, ... , pn]
+</PRE>
+<P></P>
+<P>
+This pattern will match lists of length n, such that each element
+in the list matches the corresponding pattern. The empty list pattern:
+</P>
+<PRE>
+  []
+</PRE>
+<P></P>
+<P>
+is a special case of this. It matches the empty list, oddly enough.
+</P>
+<P>
+Non-empty lists can also be matched with <CODE>::</CODE>-patterns:
+</P>
+<PRE>
+  p1::p2
+</PRE>
+<P></P>
+<P>
+This pattern matches a non-empty lists such that the first element of
+the list matches <CODE>p1</CODE> and the rest of the list matches <CODE>p2</CODE>.
+</P>
+<A NAME="toc22"></A>
 <H3>Tuple patterns</H3>
 <P>
 Tuples patterns on the form:
@@ -469,17 +503,17 @@ Tuples patterns on the form:
 <P>
 are syntactic sugar for record patterns, in the same way as tuple expressions.
 </P>
-<A NAME="toc22"></A>
+<A NAME="toc23"></A>
 <H3>String literal patterns</H3>
 <P>
 String literals can be used as patterns.
 </P>
-<A NAME="toc23"></A>
+<A NAME="toc24"></A>
 <H3>Integer literal patterns</H3>
 <P>
 Integer literals can be used as patterns.
 </P>
-<A NAME="toc24"></A>
+<A NAME="toc25"></A>
 <H2>Metavariables</H2>
 <P>
 Metavariable are written as questions marks:
@@ -494,17 +528,33 @@ A metavariable is a way to the the Transfer type checker that:
 I can't be bothered to tell you". 
 </P>
 <P>
-Metavariables can be used to avoid having to give type variables
-and dictionaries explicitly.
+Metavariables can be used to avoid having to give type
+and dictionary arguments explicitly.
 </P>
-<A NAME="toc25"></A>
-<H2>Overloaded functions / Type classes</H2>
 <A NAME="toc26"></A>
-<H2>Operators</H2>
+<H2>Overloaded functions / Type classes</H2>
 <A NAME="toc27"></A>
-<H2>Compositional functions</H2>
+<H2>Operators</H2>
 <A NAME="toc28"></A>
+<H2>Compositional functions</H2>
+<A NAME="toc29"></A>
 <H2>do notation</H2>
+<P>
+Sequences of operations in the Monad type class can be written 
+using do-notation, like in Haskell:
+</P>
+<PRE>
+  do x &lt;- f
+     y &lt;- g x
+     h y
+</PRE>
+<P></P>
+<P>
+is equivalent to:
+</P>
+<PRE>
+  f &gt;&gt;= \x -&gt; g x &gt;&gt;= \y -&gt; h y
+</PRE>
 
 <!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags transfer-reference.txt -->

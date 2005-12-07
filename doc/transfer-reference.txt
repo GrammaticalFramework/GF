@@ -61,6 +61,7 @@ braces and semicolons. Thus the above is equivalent to:
 case x of { p1 -> e1 ; p2 -> e2 }
 ```
 
+
 == Imports ==
 
 A Transfer module start with some imports. Most modules will have to
@@ -89,10 +90,12 @@ equations. The first equation whose patterns match the function arguments
 is used when the function is called. Pattern equations are on the form:
 
 ```
-f p1 ... p1n = exp
+f p11 ... p1m = exp
 ...
-f qn1 ... qnm = exp
+f pn1 ... pnm = exp
 ```
+
+where ``p11`` to ``pnm`` are patterns, see [Patterns #patterns].
 
 
 == Data type declarations ==
@@ -135,7 +138,6 @@ let x1 : T1 = exp1
     xn : Tn = expn
  in exp
 ```
-
 
 
 == Types ==
@@ -182,7 +184,8 @@ in the type. Such dependent function types are written:
 ```
 
 Here, ``x1`` can be used in ``T2`` to ``Tn``, ``x1`` can be used 
-in ``T2`` to ``Tn``
+in ``T2`` to ``Tn``.
+
 
 === Basic types ===
 
@@ -191,11 +194,13 @@ in ``T2`` to ``Tn``
 The type of integers is called ``Integer``. 
 standard decmial integer literals are used to represent values of this type.
 
+
 ==== Floating-point numbers ====
 
 The only currently supported floating-point type is ``Double``, which supports
 IEEE-754 double-precision floating-point numbers. Double literals are written
 in decimal notation, e.g. ``123.456``.
+
 
 ==== Strings ====
 
@@ -255,11 +260,13 @@ rec p1 = exp1
     pn = expn
 ```
 
+
 ==== Record subtyping ====
 
 A record of some type R1 can be used as a record of any type R2
 such that for every field ``p1 : T1`` in R2, ``p1 : T1`` is also a 
 field of T1.
+
 
 === Tuples ===
 
@@ -293,7 +300,7 @@ be used instead of ``Cons``. These are just syntactic sugar for expressions
 using ``Nil`` and ``Cons``, with the type arguments hidden.
 
 
-== Pattern matching ==
+== Case expressions ==
 
 Pattern matching is done in pattern equations and by using the 
 ``case`` construct:
@@ -305,6 +312,7 @@ case exp of
      pn | guardn -> rhsn
 ```
 
+where ``p1`` to ``pn`` are patterns, see [Patterns #patterns].
 ``guard1`` to ``guardn`` are boolean expressions. Case arms can also be written 
 without guards, such as:
 
@@ -318,7 +326,8 @@ This is the same as writing:
      pk | True -> rhsk
 ```
 
-The syntax of patterns are decribed below.
+
+== Patterns ==[patterns]
 
 === Constructor patterns ===
 
@@ -386,6 +395,32 @@ FIXME: talk about how this is expanded
 
 === List patterns ===
 
+When pattern matching in lists, there are two special constructs.
+A whole list can be matched be a list of patterns:
+
+```
+[p1, ... , pn]
+```
+
+This pattern will match lists of length n, such that each element
+in the list matches the corresponding pattern. The empty list pattern:
+
+```
+[]
+```
+
+is a special case of this. It matches the empty list, oddly enough.
+
+Non-empty lists can also be matched with ``::``-patterns:
+
+```
+p1::p2
+```
+
+This pattern matches a non-empty lists such that the first element of
+the list matches ``p1`` and the rest of the list matches ``p2``.
+
+
 === Tuple patterns ===
 
 Tuples patterns on the form:
@@ -418,14 +453,35 @@ A metavariable is a way to the the Transfer type checker that:
 "you should be able to figure out what this should be,
 I can't be bothered to tell you". 
 
-Metavariables can be used to avoid having to give type variables
-and dictionaries explicitly.
+Metavariables can be used to avoid having to give type
+and dictionary arguments explicitly.
+
 
 == Overloaded functions / Type classes ==
 
+
+
 == Operators ==
+
+
 
 == Compositional functions ==
 
+
+
 == do notation ==
 
+Sequences of operations in the Monad type class can be written 
+using do-notation, like in Haskell:
+
+```
+do x <- f
+   y <- g x
+   h y
+```
+
+is equivalent to:
+
+```
+f >>= \x -> g x >>= \y -> h y
+```
