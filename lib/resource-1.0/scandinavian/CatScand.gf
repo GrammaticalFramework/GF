@@ -47,7 +47,7 @@ incomplete concrete CatScand of Cat =
 
 -- Constructed in $Noun$.
 
-    Det, Quant = {s : Gender => Str ; n : Number ; det : DetSpecies } ;
+    Det, Quant = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
     Predet = {s : GenNum => Str} ;
     Num    = {s : Gender => Str} ;
     Ord    = {s : Str} ;
@@ -60,8 +60,8 @@ incomplete concrete CatScand of Cat =
     N2   = Noun  ** {c2 : Str} ;
     N3   = Noun  ** {c2,c3 : Str} ;
 
-    IP = NP ;
-    IDet = Det ;
+    IP   = {s : NPForm => Str ; gn : GenNum} ;
+    IDet = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
     IAdv = {s : Str} ;    
 
     RP = {s : RCase => Str ; a : RAgr} ;

@@ -25,7 +25,7 @@ concrete LexSwe of Lex = CatSwe ** open ResSwe, Prelude in {
       mkAdjective "varm" "varmt" "varma" "varma" "varmare" "varmast" "varmaste" ;
     close_A2 = 
       mkAdjective "nära" "nära" "nära" "nära" "närmare" "närmast" "närmaste"
-      ** {c2 = "to"} ;
+      ** {c2 = "till"} ;
 
     here_Adv = {s = "här"} ;
     very_AdA = {s = "mycket"} ;
@@ -33,25 +33,39 @@ concrete LexSwe of Lex = CatSwe ** open ResSwe, Prelude in {
 
     only_Predet = {s = \\_ => "bara"} ;
     all_Predet = {s = gennumForms "all" "allt" "alla"} ;
---    this_Quant = {s = "this" ; n = Sg} ;
---    these_Quant = {s = "these" ; n = Pl} ;
---    
+    this_Quant = {s = genderForms "denna" "detta" ; n = Sg ; det = DDef Indef} ;
+    these_Quant = {s = \\_ => "dessa" ; n = Pl ; det = DDef Indef} ;
+    
     i_Pron  = mkNP "jag"  "mig"  "min" "mitt" "mina"  SgUtr P1 ;
     he_Pron = mkNP "han"  "honom"  "hans" "hans" "hans"  SgUtr P3 ;
     we_Pron = mkNP "vi"  "oss"  "vår" "vårt" "våra"  SgUtr P1 ;
---
---    whoSg_IP = mkIP "who" "whom" "whose" Sg ;
---    whoPl_IP = mkIP "who" "whom" "whose" Pl ;
---
+
+    whoSg_IP = {s = vem.s ; gn = SgUtr} ;
+    whoPl_IP = {s = vem.s ; gn = Plg} ;
+
     when_IAdv = {s = "när"} ;
     where_IAdv = {s = "var"} ;
     why_IAdv = {s = "varför"} ;
---
---    whichSg_IDet = {s = "which" ; n = Sg} ;
---    whichPl_IDet = {s = "which" ; n = Pl} ;
---
---    one_Numeral = {s = table {NCard => "one" ; NOrd => "first"} ; n = Sg} ;
---    forty_Numeral = {s = table {NCard => "forty" ; NOrd => "fortieth"} ; n = Pl} ;
+
+    whichSg_IDet = {s = genderForms "vilken" "vilket" ; n = Sg ; det = DDef Indef} ;
+    whichPl_IDet = {s = \\_ => "vilka" ;                n = Pl ; det = DDef Indef} ;
+
+    one_Numeral = {
+      s = table {
+        NCard Utr => "en" ; 
+        NCard Neutr => "ett" ; 
+        NOrd SupStrong => "först" ;
+        NOrd SupWeak => "första"
+        } ; 
+      n = Sg
+      } ;
+    forty_Numeral = {
+      s = table {
+        NCard _ => "fyrtio" ; 
+        NOrd _  => "fyrtionde"
+        } ; 
+      n = Sg
+      } ;
 
     in_Prep = {s = "i"} ;
     of_Prep = {s = "av"} ;
@@ -68,5 +82,10 @@ concrete LexSwe of Lex = CatSwe ** open ResSwe, Prelude in {
 
     more_CAdv = ss "mera" ;
     less_CAdv = ss "mindre" ;
+
+-- Auxiliaries that are used repeatedly.
+
+  oper
+    vem = mkNP "vem" "vem" "vems" "vems" "vems" SgUtr P3 ;
 
 }

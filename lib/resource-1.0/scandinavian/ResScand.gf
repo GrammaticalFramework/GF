@@ -162,13 +162,28 @@ resource ResScand = ParamScand ** open Prelude in {
     eext = vp.eext
     } ;
 
------ This is not functional.
---
---  insertAdV : Str -> VP -> VP = \adv,vp -> {
---    s = vp.s ;
---    s2 = vp.s2
---    } ;
---
+  insertAdv : Str -> VP -> VP = \adv,vp -> {
+    s = vp.s ;
+    a1 = vp.a1 ;
+    n2 = vp.n2 ;
+    a2 = vp.a2 ++ adv ;
+    ext = vp.ext ;
+    en2 = vp.en2 ;
+    ea2 = True ;
+    eext = vp.eext
+    } ;
+
+  insertAdV : Str -> VP -> VP = \adv,vp -> {
+    s = vp.s ;
+    a1 = \\b => vp.a1 ! b ++ adv ;
+    n2 = vp.n2 ;
+    a2 = vp.a2 ;
+    ext = vp.ext ;
+    en2 = vp.en2 ;
+    ea2 = vp.ea2 ;
+    eext = vp.eext
+    } ;
+
 --  presVerb : {s : VForm => Str} -> Agr -> Str = \verb -> 
 --    agrVerb (verb.s ! VPres) (verb.s ! VInf) ;
 

@@ -5,6 +5,8 @@ interface DiffScand = open ResScand, Prelude in {
   param
     Gender ;
 
+    CardOrd = NCard Gender | NOrd AFormSup ; -- sic! (AFormSup)
+
   oper
     neutrum, utrum : Gender ;
 
@@ -28,6 +30,7 @@ interface DiffScand = open ResScand, Prelude in {
     artIndef : Gender => Str ;
 
     verbHave : {s : VForm => Str} ;
+    verbBe   : {s : VForm => Str} ;
 
     auxFut : Str ;
     auxCond : Str ;
@@ -71,5 +74,9 @@ interface DiffScand = open ResScand, Prelude in {
     ext : Str = [] ;
     en2,ea2,eext : Bool = False   -- indicate if the field exists
     } ;
+
+-- For determiners; mostly two-valued even in Norwegian.
+
+  genderForms : (x1,x2 : Str) -> Gender => Str ;
 
 }

@@ -31,6 +31,8 @@ instance DiffSwe of DiffScand = open ResScand, Prelude in {
 
     verbHave = 
       mkVerb "ha" "har" "ha" "hade" "haft" "havd" "havt" "havda" ;
+    verbBe = 
+      mkVerb "vara" "är" "var" "var" "varit" "varen" "varet" "varna" ;
 
     auxFut = "ska" ;      -- "skall" in ExtSwe
     auxCond = "skulle" ;
@@ -39,4 +41,11 @@ instance DiffSwe of DiffScand = open ResScand, Prelude in {
       Pos => [] ;
       Neg => "inte"
       } ;
+
+    genderForms : (x1,x2 : Str) -> Gender => Str = \all,allt -> 
+      table {
+        Utr => all ;
+        Neutr => allt
+        } ;
+
 }
