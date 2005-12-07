@@ -7,44 +7,45 @@
 <P ALIGN="center"><CENTER><H1>Transfer language reference</H1>
 <FONT SIZE="4">
 <I>Author: Björn Bringert &lt;bringert@cs.chalmers.se&gt;</I><BR>
-Last update: Tue Dec  6 14:26:07 2005
+Last update: Wed Dec  7 10:45:42 2005
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
     <UL>
-    <LI><A HREF="#toc1">Layout syntax</A>
-    <LI><A HREF="#toc2">Imports</A>
-    <LI><A HREF="#toc3">Function declarations</A>
-    <LI><A HREF="#toc4">Data type declarations</A>
-    <LI><A HREF="#toc5">Lambda expressions</A>
-    <LI><A HREF="#toc6">Local definitions</A>
-    <LI><A HREF="#toc7">Types</A>
+    <LI><A HREF="#toc1">Current implementation status</A>
+    <LI><A HREF="#toc2">Layout syntax</A>
+    <LI><A HREF="#toc3">Imports</A>
+    <LI><A HREF="#toc4">Function declarations</A>
+    <LI><A HREF="#toc5">Data type declarations</A>
+    <LI><A HREF="#toc6">Lambda expressions</A>
+    <LI><A HREF="#toc7">Local definitions</A>
+    <LI><A HREF="#toc8">Types</A>
       <UL>
       <LI><A HREF="#function_types">Function types</A>
-      <LI><A HREF="#toc9">Basic types</A>
-      <LI><A HREF="#toc10">Records</A>
-      <LI><A HREF="#toc11">Tuples</A>
-      <LI><A HREF="#toc12">Lists</A>
+      <LI><A HREF="#toc10">Basic types</A>
+      <LI><A HREF="#toc11">Records</A>
+      <LI><A HREF="#toc12">Tuples</A>
+      <LI><A HREF="#toc13">Lists</A>
       </UL>
-    <LI><A HREF="#toc13">Pattern matching</A>
+    <LI><A HREF="#toc14">Pattern matching</A>
       <UL>
-      <LI><A HREF="#toc14">Constructor patterns</A>
-      <LI><A HREF="#toc15">Variable patterns</A>
-      <LI><A HREF="#toc16">Wildcard patterns</A>
-      <LI><A HREF="#toc17">Record patterns</A>
-      <LI><A HREF="#toc18">Disjunctive patterns</A>
-      <LI><A HREF="#toc19">List patterns</A>
-      <LI><A HREF="#toc20">Tuple patterns</A>
-      <LI><A HREF="#toc21">String literal patterns</A>
-      <LI><A HREF="#toc22">Integer literal patterns</A>
+      <LI><A HREF="#toc15">Constructor patterns</A>
+      <LI><A HREF="#toc16">Variable patterns</A>
+      <LI><A HREF="#toc17">Wildcard patterns</A>
+      <LI><A HREF="#toc18">Record patterns</A>
+      <LI><A HREF="#toc19">Disjunctive patterns</A>
+      <LI><A HREF="#toc20">List patterns</A>
+      <LI><A HREF="#toc21">Tuple patterns</A>
+      <LI><A HREF="#toc22">String literal patterns</A>
+      <LI><A HREF="#toc23">Integer literal patterns</A>
       </UL>
-    <LI><A HREF="#toc23">Meta variables</A>
-    <LI><A HREF="#toc24">Type classes</A>
-    <LI><A HREF="#toc25">Operators</A>
-    <LI><A HREF="#toc26">Compositional functions</A>
-    <LI><A HREF="#toc27">do notation</A>
+    <LI><A HREF="#toc24">Metavariables</A>
+    <LI><A HREF="#toc25">Overloaded functions / Type classes</A>
+    <LI><A HREF="#toc26">Operators</A>
+    <LI><A HREF="#toc27">Compositional functions</A>
+    <LI><A HREF="#toc28">do notation</A>
     </UL>
 
 <P></P>
@@ -61,6 +62,16 @@ Transfer is a dependently typed functional programming language
 with eager evaluation.
 </P>
 <A NAME="toc1"></A>
+<H2>Current implementation status</H2>
+<P>
+<B>Not all features of the Transfer language have been implemented yet</B>. The most 
+important missing piece is the type checker. This means that there are almost
+no checks done on Transfer programs before they are run. It also means that
+the values of metavariables are not inferred. Thus metavariables cannot
+be used where their values matter. For example, dictionaries for overlaoded 
+functions must be given explicitly, not as metavariables.
+</P>
+<A NAME="toc2"></A>
 <H2>Layout syntax</H2>
 <P>
 Transfer uses layout syntax, where the indentation of a piece of code
@@ -98,7 +109,7 @@ braces and semicolons. Thus the above is equivalent to:
   case x of { p1 -&gt; e1 ; p2 -&gt; e2 }
 </PRE>
 <P></P>
-<A NAME="toc2"></A>
+<A NAME="toc3"></A>
 <H2>Imports</H2>
 <P>
 A Transfer module start with some imports. Most modules will have to
@@ -108,7 +119,7 @@ import the prelude, which contains definitons used by most programs:
   import prelude
 </PRE>
 <P></P>
-<A NAME="toc3"></A>
+<A NAME="toc4"></A>
 <H2>Function declarations</H2>
 <P>
 Functions need to be given a type and a definition. The type is given
@@ -134,7 +145,7 @@ is used when the function is called. Pattern equations are on the form:
   f qn1 ... qnm = exp
 </PRE>
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc5"></A>
 <H2>Data type declarations</H2>
 <P>
 Transfer supports Generalized Algebraic Datatypes.
@@ -152,7 +163,7 @@ Here <CODE>D</CODE> is the name of the data type, <CODE>T</CODE> is the type of 
 constructor, <CODE>c1</CODE> to <CODE>cn</CODE> are the data constructor names, and
 <CODE>Tc1</CODE> to <CODE>Tcn</CODE> are their types. 
 </P>
-<A NAME="toc5"></A>
+<A NAME="toc6"></A>
 <H2>Lambda expressions</H2>
 <P>
 <I>Lambda expressions</I> are terms which express functions, without
@@ -166,7 +177,7 @@ giving names to them. For example:
 is the function which takes an argument, and returns the value of the 
 argument + 1.
 </P>
-<A NAME="toc6"></A>
+<A NAME="toc7"></A>
 <H2>Local definitions</H2>
 <P>
 To give local definition to some names, use:
@@ -178,7 +189,7 @@ To give local definition to some names, use:
    in exp
 </PRE>
 <P></P>
-<A NAME="toc7"></A>
+<A NAME="toc8"></A>
 <H2>Types</H2>
 <A NAME="function_types"></A>
 <H3>Function types</H3>
@@ -229,7 +240,7 @@ in the type. Such dependent function types are written:
 Here, <CODE>x1</CODE> can be used in <CODE>T2</CODE> to <CODE>Tn</CODE>, <CODE>x1</CODE> can be used 
 in <CODE>T2</CODE> to <CODE>Tn</CODE>
 </P>
-<A NAME="toc9"></A>
+<A NAME="toc10"></A>
 <H3>Basic types</H3>
 <H4>Integers</H4>
 <P>
@@ -270,7 +281,7 @@ if-expression:
 <P>
 where <CODE>exp1</CODE> must be an expression of type <CODE>Bool</CODE>.
 </P>
-<A NAME="toc10"></A>
+<A NAME="toc11"></A>
 <H3>Records</H3>
 <P>
 Record types are created by using a <CODE>sig</CODE> expression:
@@ -309,7 +320,7 @@ A record of some type R1 can be used as a record of any type R2
 such that for every field <CODE>p1 : T1</CODE> in R2, <CODE>p1 : T1</CODE> is also a 
 field of T1.
 </P>
-<A NAME="toc11"></A>
+<A NAME="toc12"></A>
 <H3>Tuples</H3>
 <P>
 Tuples on the form:
@@ -326,7 +337,7 @@ above is equivalent to:
   rec { p1 = exp1; ... ; pn = expn }
 </PRE>
 <P></P>
-<A NAME="toc12"></A>
+<A NAME="toc13"></A>
 <H3>Lists</H3>
 <P>
 The <CODE>List</CODE> type is not built-in, though there is some special syntax for it.
@@ -343,7 +354,7 @@ The empty lists can be written as <CODE>[]</CODE>. There is a operator <CODE>::<
 be used instead of <CODE>Cons</CODE>. These are just syntactic sugar for expressions
 using <CODE>Nil</CODE> and <CODE>Cons</CODE>, with the type arguments hidden.
 </P>
-<A NAME="toc13"></A>
+<A NAME="toc14"></A>
 <H2>Pattern matching</H2>
 <P>
 Pattern matching is done in pattern equations and by using the 
@@ -374,7 +385,7 @@ This is the same as writing:
 <P>
 The syntax of patterns are decribed below.
 </P>
-<A NAME="toc14"></A>
+<A NAME="toc15"></A>
 <H3>Constructor patterns</H3>
 <P>
 Constructor patterns are written as:
@@ -389,7 +400,7 @@ If the value to be matched is the constructor <CODE>C</CODE> applied to
 arguments <CODE>v1</CODE> to <CODE>vn</CODE>, then <CODE>v1</CODE> to <CODE>vn</CODE> will be matched
 against <CODE>p1</CODE> to <CODE>pn</CODE>.
 </P>
-<A NAME="toc15"></A>
+<A NAME="toc16"></A>
 <H3>Variable patterns</H3>
 <P>
 A variable pattern is a single identifier:
@@ -402,7 +413,7 @@ A variable pattern is a single identifier:
 A variable pattern matches any value, and binds the variable name to the
 value. A variable may not occur more than once in a pattern.
 </P>
-<A NAME="toc16"></A>
+<A NAME="toc17"></A>
 <H3>Wildcard patterns</H3>
 <P>
 Wildcard patterns are written as with a single underscore:
@@ -414,7 +425,7 @@ Wildcard patterns are written as with a single underscore:
 <P>
 Wildcard patterns match all values and bind no variables.
 </P>
-<A NAME="toc17"></A>
+<A NAME="toc18"></A>
 <H3>Record patterns</H3>
 <P>
 Record patterns match record values:
@@ -431,7 +442,7 @@ fields <CODE>l1</CODE> to <CODE>ln</CODE>, and their values match <CODE>p1</CODE
 Note that a record value may have more fields than the record pattern and 
 they will still match.
 </P>
-<A NAME="toc18"></A>
+<A NAME="toc19"></A>
 <H3>Disjunctive patterns</H3>
 <P>
 It is possible to write a pattern on the form:
@@ -444,9 +455,9 @@ It is possible to write a pattern on the form:
 A value will match this pattern if it matches any of the patterns <CODE>p1</CODE> to <CODE>pn</CODE>.
 FIXME: talk about how this is expanded
 </P>
-<A NAME="toc19"></A>
-<H3>List patterns</H3>
 <A NAME="toc20"></A>
+<H3>List patterns</H3>
+<A NAME="toc21"></A>
 <H3>Tuple patterns</H3>
 <P>
 Tuples patterns on the form:
@@ -458,27 +469,43 @@ Tuples patterns on the form:
 <P>
 are syntactic sugar for record patterns, in the same way as tuple expressions.
 </P>
-<A NAME="toc21"></A>
+<A NAME="toc22"></A>
 <H3>String literal patterns</H3>
 <P>
 String literals can be used as patterns.
 </P>
-<A NAME="toc22"></A>
+<A NAME="toc23"></A>
 <H3>Integer literal patterns</H3>
 <P>
 Integer literals can be used as patterns.
 </P>
-<A NAME="toc23"></A>
-<H2>Meta variables</H2>
 <A NAME="toc24"></A>
-<H2>Type classes</H2>
+<H2>Metavariables</H2>
+<P>
+Metavariable are written as questions marks:
+</P>
+<PRE>
+  ?
+</PRE>
+<P></P>
+<P>
+A metavariable is a way to the the Transfer type checker that:
+"you should be able to figure out what this should be,
+I can't be bothered to tell you". 
+</P>
+<P>
+Metavariables can be used to avoid having to give type variables
+and dictionaries explicitly.
+</P>
 <A NAME="toc25"></A>
-<H2>Operators</H2>
+<H2>Overloaded functions / Type classes</H2>
 <A NAME="toc26"></A>
-<H2>Compositional functions</H2>
+<H2>Operators</H2>
 <A NAME="toc27"></A>
+<H2>Compositional functions</H2>
+<A NAME="toc28"></A>
 <H2>do notation</H2>
 
 <!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
-<!-- cmdline: txt2tags darcs.txt transfer-reference.txt transfer-tutorial.txt transfer.txt -->
+<!-- cmdline: txt2tags transfer-reference.txt -->
 </BODY></HTML>
