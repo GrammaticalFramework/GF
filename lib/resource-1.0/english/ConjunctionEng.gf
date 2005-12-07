@@ -1,13 +1,15 @@
 concrete ConjunctionEng of Conjunction = 
   CatEng ** open ResEng, Coordination, Prelude in {
 
+  flags optimize=all_subs ;
+
   lin
 
-    ConjS conj ss = {s = conjunctX conj ss} ;
-    DConjS conj ss = {s = conjunctDistrX conj ss} ;
+    ConjS = conjunctSS ;
+    DConjS = conjunctDistrSS ;
 
-    ConjAdv conj ss = {s = conjunctX conj ss} ;
-    DConjAdv conj ss = {s = conjunctDistrX conj ss} ;
+    ConjAdv = conjunctSS ;
+    DConjAdv = conjunctDistrSS ;
 
     ConjNP conj ss = conjunctTable Case conj ss ** {
       a = {n = conjNumber conj.n ss.a.n ; p = ss.a.p}
