@@ -96,7 +96,7 @@ data Bool : Type where
 	False : Bool
 
 -- derive Show Bool
--- derive Eq Bool
+derive Eq Bool
 -- derive Ord Bool
 
 not : Bool -> Bool
