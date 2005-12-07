@@ -9,14 +9,14 @@ concrete CatEng of Cat = open ResEng, Prelude, (R = ParamX) in {
     QS = {s : QForm => Str} ;
     RS = {s : Agr => Str} ;
 
-    Cl    = {s : Tense => Anteriority => Polarity => Ord => Str} ;
-    Slash = {s : Tense => Anteriority => Polarity => Ord => Str} ** {c2 : Str} ;
+    Cl    = {s : Tense => Anteriority => Polarity => Order => Str} ;
+    Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** {c2 : Str} ;
 
     QCl   = {s : Tense => Anteriority => Polarity => QForm => Str} ;
     RCl   = {s : Tense => Anteriority => Polarity => Agr => Str} ;
 
     VP = {
-      s  : Tense => Anteriority => Polarity => Ord => Agr => {fin, inf : Str} ; 
+      s  : Tense => Anteriority => Polarity => Order => Agr => {fin, inf : Str} ; 
       s2 : Agr => Str
       } ;
 

@@ -99,7 +99,7 @@ resource ResEng = ParamEng ** open Prelude in {
     } ;
 
   VerbForms : Type =
-    Tense => Anteriority => Polarity => Ord => Agr => {fin, inf : Str} ; 
+    Tense => Anteriority => Polarity => Order => Agr => {fin, inf : Str} ; 
 
   VP : Type = {
     s  : VerbForms ;
@@ -229,7 +229,7 @@ resource ResEng = ParamEng ** open Prelude in {
 -- For $Sentence$.
 
   Clause : Type = {
-    s : Tense => Anteriority => Polarity => Ord => Str
+    s : Tense => Anteriority => Polarity => Order => Str
     } ;
 
   mkClause : Str -> Agr -> VP -> Clause =

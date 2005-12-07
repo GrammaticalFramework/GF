@@ -29,7 +29,7 @@ resource ParamEng = ParamX ** {
 
 -- The order of sentence is needed already in $VP$.
 
-    Ord = ODir | OQuest ;
+    Order = ODir | OQuest ;
 
 
 --2 For $Adjective$
