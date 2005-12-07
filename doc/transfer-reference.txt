@@ -233,35 +233,52 @@ where ``exp1`` must be an expression of type ``Bool``.
 
 === Records ===
 
+==== Record types ====
+
 Record types are created by using a ``sig`` expression:
 
 ```
-sig { p1 : T1; ... ; pn : Tn }
+sig { l1 : T1; ... ; ln : Tn }
 ```
 
-Here, ``p1`` to ``pn`` are the field labels and ``T1`` to ``Tn`` are their types.
+Here, ``l1`` to ``ln`` are the field labels and ``T1`` to ``Tn`` are field types.
+
+==== Record values ====
 
 Record values are constructed using ``rec`` expressions:
 
 ```
-rec { p1 = exp1; ... ; pn = expn }
+rec { l1 = exp1; ... ; ln = expn }
 ```
+
+==== Record projection ====
+
+Fields are selection from records using the ``.`` operator. This expression selects
+the field ``l`` from the record value ``r``:
+
+```
+r.l
+```
+
+==== Records and layout syntax ====
 
 The curly braces and semicolons are simply explicit layout syntax, so 
 the record type and record expression above can also be written as:
 
 ```
-sig p1 : T1
-    pn : Tn
+sig l1 : T1
+    ...
+    ln : Tn
 ```
 
 ```
-rec p1 = exp1
-    pn = expn
+rec l1 = exp1
+    ...
+    ln = expn
 ```
 
 
-==== Record subtyping ====
+==== Record subtyping ====[record_subtyping]
 
 A record of some type R1 can be used as a record of any type R2
 such that for every field ``p1 : T1`` in R2, ``p1 : T1`` is also a 
@@ -441,7 +458,7 @@ String literals can be used as patterns.
 Integer literals can be used as patterns.
 
 
-== Metavariables ==
+== Metavariables ==[metavariables]
 
 Metavariable are written as questions marks:
 
@@ -449,7 +466,7 @@ Metavariable are written as questions marks:
 ?
 ```
 
-A metavariable is a way to the the Transfer type checker that:
+A metavariable is a way to the the type checker that:
 "you should be able to figure out what this should be,
 I can't be bothered to tell you". 
 
@@ -457,11 +474,121 @@ Metavariables can be used to avoid having to give type
 and dictionary arguments explicitly.
 
 
-== Overloaded functions / Type classes ==
+== Overloaded functions ==
+
+In Transfer, functions can be overloaded by having them take a record
+of functions as an argument. For example, the functions for equality
+and inequality in the Transfer prelude module are defined as:
+
+```
+Eq : Type -> Type
+Eq A = sig eq : A -> A -> Bool
+
+eq : (A : Type) -> Eq A -> A -> A -> Bool
+eq _ d = d.eq
+
+neq : (A : Type) -> Eq A -> A -> A -> Bool
+neq A d x y = not (eq A d x y)
+```
+
+We call ``Eq`` a //type class//, though it's actually just a record type
+used to pass function implementations to overloaded functions.  We
+call a value of type ``Eq A`` an Eq //dictionary// for the type A.
+The dictionary is used to look up the version of the function for the
+particular type we want to use the function on. Thus, in order to use
+the ``eq`` function on two integers, we need a dictionary of type 
+``Eq Integer``:
+
+```
+eq_Integer : Eq Integer
+eq_Integer = rec eq = prim_eq_Integer
+```
+
+where ``prim_eq_Integer`` is the built-in equality function for
+integers. To check whether two numbers ``x`` and ``y`` are equal, we
+can then call the overloaded ``eq`` function with the dictionary:
+
+```
+eq Integer eq_Integer x y
+```
+
+Giving the type at which to use the overloaded function, and the appropriate
+dictionary is cumbersome. [Metavariables #metavariables] come to the rescue:
+
+```
+eq ? ? x y
+```
+
+The type checker can in most cases figure out the values of the type and 
+dictionary arguments. **NOTE: this is not implemented yet.**
 
 
+=== Type class extension ===
 
-== Operators ==
+By using record subtyping, see [Record subtyping #record_subtyping], we can
+create type classes which extend other type classes. A dictionary for the
+new type class can also be used as a dictionary for old type class.
+
+For example, we can extend the ``Eq`` type class above to ``Ord``, a type 
+class for orderings:
+
+```
+Ord : Type -> Type
+Ord A = sig eq : A -> A -> Bool
+            compare : A -> A -> Ordering
+```
+
+To extend an existing class, we keep the fields of the class we want to
+extend, and add any new fields that we want. Because of record subtyping, 
+for any type A, a value of type ``Ord A`` is also a value of type ``Eq A``.
+
+
+=== Extending multiple classes ===
+
+A type class can also extend several classes, by simply having all the fields
+from all the classes we want to extend. The ``Num`` class described below is 
+an example of this.
+
+
+== Standard prelude == 
+
+The standard prelude, see [prelude.tra ../transfer/lib/prelude.tra]
+contains definitions of a number of standard types, functions and 
+type classes.
+
+
+== Operators == 
+
+Most built-in operators in the Transfer language are translated
+o calls to overloaded functions. This means that they can be
+use at any type for which there is a dictionry for the type class
+in question.
+
+=== Unary operators ===
+
+|| Operator | Precedence | Translation             |
+| ``-``     |         10 | ``-x => negate ? ? x``  |
+
+
+=== Binary operators ===
+
+|| Operator | Precedence | Associativity | Translation of ``x op y``    |
+|  ``>>=``  |     3      |    left       |  ``bind ? ? x y``            |
+|  ``>>``   |     3      |    left       |  ``bind ? ? x (\_ -> y)``    |
+|  ``||``   |     4      |    right      |  ``if x then True else y``   |
+|  ``&&``   |     5      |    right      |  ``if x then y else False``  |
+|  ``==``   |     6      |    none       |  ``eq ? ? x y``              |
+|  ``/=``   |     6      |    none       |  ``neq ? ? x y``             |
+|  ``<``    |     6      |    none       |  ``lt ? ? x y``              |
+|  ``<=``   |     6      |    none       |  ``le ? ? x y``              |
+|  ``>``    |     6      |    none       |  ``gt ? ? x y``              |
+|  ``>=``   |     6      |    none       |  ``ge ? ? x y``              |
+|  ``::``   |     7      |    right      |  ``Cons ? ? x y``            |
+|  ``+``    |     8      |    left       |  ``plus ? ? x y``            |
+|  ``-``    |     8      |    left       |  ``minus ? ? x y``           |
+|  ``*``    |     9      |    left       |  ``times ? ? x y``           |
+|  ``/``    |     9      |    left       |  ``div ? ? x y``             |
+|  ``%``    |     9      |    left       |  ``mod ? ? x y``             |
 
 
 

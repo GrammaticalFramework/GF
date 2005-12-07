@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Transfer language reference</H1>
 <FONT SIZE="4">
 <I>Author: Björn Bringert &lt;bringert@cs.chalmers.se&gt;</I><BR>
-Last update: Wed Dec  7 11:02:54 2005
+Last update: Wed Dec  7 12:50:46 2005
 </FONT></CENTER>
 
 <P></P>
@@ -42,11 +42,20 @@ Last update: Wed Dec  7 11:02:54 2005
       <LI><A HREF="#toc23">String literal patterns</A>
       <LI><A HREF="#toc24">Integer literal patterns</A>
       </UL>
-    <LI><A HREF="#toc25">Metavariables</A>
-    <LI><A HREF="#toc26">Overloaded functions / Type classes</A>
-    <LI><A HREF="#toc27">Operators</A>
-    <LI><A HREF="#toc28">Compositional functions</A>
-    <LI><A HREF="#toc29">do notation</A>
+    <LI><A HREF="#metavariables">Metavariables</A>
+    <LI><A HREF="#toc26">Overloaded functions</A>
+      <UL>
+      <LI><A HREF="#toc27">Type class extension</A>
+      <LI><A HREF="#toc28">Extending multiple classes</A>
+      </UL>
+    <LI><A HREF="#toc29">Standard prelude</A>
+    <LI><A HREF="#toc30">Operators</A>
+      <UL>
+      <LI><A HREF="#toc31">Unary operators</A>
+      <LI><A HREF="#toc32">Binary operators</A>
+      </UL>
+    <LI><A HREF="#toc33">Compositional functions</A>
+    <LI><A HREF="#toc34">do notation</A>
     </UL>
 
 <P></P>
@@ -287,37 +296,52 @@ where <CODE>exp1</CODE> must be an expression of type <CODE>Bool</CODE>.
 </P>
 <A NAME="toc11"></A>
 <H3>Records</H3>
+<H4>Record types</H4>
 <P>
 Record types are created by using a <CODE>sig</CODE> expression:
 </P>
 <PRE>
-  sig { p1 : T1; ... ; pn : Tn }
+  sig { l1 : T1; ... ; ln : Tn }
 </PRE>
 <P></P>
 <P>
-Here, <CODE>p1</CODE> to <CODE>pn</CODE> are the field labels and <CODE>T1</CODE> to <CODE>Tn</CODE> are their types.
+Here, <CODE>l1</CODE> to <CODE>ln</CODE> are the field labels and <CODE>T1</CODE> to <CODE>Tn</CODE> are field types.
 </P>
+<H4>Record values</H4>
 <P>
 Record values are constructed using <CODE>rec</CODE> expressions:
 </P>
 <PRE>
-  rec { p1 = exp1; ... ; pn = expn }
+  rec { l1 = exp1; ... ; ln = expn }
 </PRE>
 <P></P>
+<H4>Record projection</H4>
+<P>
+Fields are selection from records using the <CODE>.</CODE> operator. This expression selects
+the field <CODE>l</CODE> from the record value <CODE>r</CODE>:
+</P>
+<PRE>
+  r.l
+</PRE>
+<P></P>
+<H4>Records and layout syntax</H4>
 <P>
 The curly braces and semicolons are simply explicit layout syntax, so 
 the record type and record expression above can also be written as:
 </P>
 <PRE>
-  sig p1 : T1
-      pn : Tn
+  sig l1 : T1
+      ...
+      ln : Tn
 </PRE>
 <P></P>
 <PRE>
-  rec p1 = exp1
-      pn = expn
+  rec l1 = exp1
+      ...
+      ln = expn
 </PRE>
 <P></P>
+<A NAME="record_subtyping"></A>
 <H4>Record subtyping</H4>
 <P>
 A record of some type R1 can be used as a record of any type R2
@@ -513,7 +537,7 @@ String literals can be used as patterns.
 <P>
 Integer literals can be used as patterns.
 </P>
-<A NAME="toc25"></A>
+<A NAME="metavariables"></A>
 <H2>Metavariables</H2>
 <P>
 Metavariable are written as questions marks:
@@ -523,7 +547,7 @@ Metavariable are written as questions marks:
 </PRE>
 <P></P>
 <P>
-A metavariable is a way to the the Transfer type checker that:
+A metavariable is a way to the the type checker that:
 "you should be able to figure out what this should be,
 I can't be bothered to tell you". 
 </P>
@@ -532,12 +556,223 @@ Metavariables can be used to avoid having to give type
 and dictionary arguments explicitly.
 </P>
 <A NAME="toc26"></A>
-<H2>Overloaded functions / Type classes</H2>
+<H2>Overloaded functions</H2>
+<P>
+In Transfer, functions can be overloaded by having them take a record
+of functions as an argument. For example, the functions for equality
+and inequality in the Transfer prelude module are defined as:
+</P>
+<PRE>
+  Eq : Type -&gt; Type
+  Eq A = sig eq : A -&gt; A -&gt; Bool
+  
+  eq : (A : Type) -&gt; Eq A -&gt; A -&gt; A -&gt; Bool
+  eq _ d = d.eq
+  
+  neq : (A : Type) -&gt; Eq A -&gt; A -&gt; A -&gt; Bool
+  neq A d x y = not (eq A d x y)
+</PRE>
+<P></P>
+<P>
+We call <CODE>Eq</CODE> a <I>type class</I>, though it's actually just a record type
+used to pass function implementations to overloaded functions.  We
+call a value of type <CODE>Eq A</CODE> an Eq <I>dictionary</I> for the type A.
+The dictionary is used to look up the version of the function for the
+particular type we want to use the function on. Thus, in order to use
+the <CODE>eq</CODE> function on two integers, we need a dictionary of type 
+<CODE>Eq Integer</CODE>:
+</P>
+<PRE>
+  eq_Integer : Eq Integer
+  eq_Integer = rec eq = prim_eq_Integer
+</PRE>
+<P></P>
+<P>
+where <CODE>prim_eq_Integer</CODE> is the built-in equality function for
+integers. To check whether two numbers <CODE>x</CODE> and <CODE>y</CODE> are equal, we
+can then call the overloaded <CODE>eq</CODE> function with the dictionary:
+</P>
+<PRE>
+  eq Integer eq_Integer x y
+</PRE>
+<P></P>
+<P>
+Giving the type at which to use the overloaded function, and the appropriate
+dictionary is cumbersome. <A HREF="#metavariables">Metavariables</A> come to the rescue:
+</P>
+<PRE>
+  eq ? ? x y
+</PRE>
+<P></P>
+<P>
+The type checker can in most cases figure out the values of the type and 
+dictionary arguments. <B>NOTE: this is not implemented yet.</B>
+</P>
 <A NAME="toc27"></A>
-<H2>Operators</H2>
+<H3>Type class extension</H3>
+<P>
+By using record subtyping, see <A HREF="#record_subtyping">Record subtyping</A>, we can
+create type classes which extend other type classes. A dictionary for the
+new type class can also be used as a dictionary for old type class.
+</P>
+<P>
+For example, we can extend the <CODE>Eq</CODE> type class above to <CODE>Ord</CODE>, a type 
+class for orderings:
+</P>
+<PRE>
+  Ord : Type -&gt; Type
+  Ord A = sig eq : A -&gt; A -&gt; Bool
+              compare : A -&gt; A -&gt; Ordering
+</PRE>
+<P></P>
+<P>
+To extend an existing class, we keep the fields of the class we want to
+extend, and add any new fields that we want. Because of record subtyping, 
+for any type A, a value of type <CODE>Ord A</CODE> is also a value of type <CODE>Eq A</CODE>.
+</P>
 <A NAME="toc28"></A>
-<H2>Compositional functions</H2>
+<H3>Extending multiple classes</H3>
+<P>
+A type class can also extend several classes, by simply having all the fields
+from all the classes we want to extend. The <CODE>Num</CODE> class described below is 
+an example of this.
+</P>
 <A NAME="toc29"></A>
+<H2>Standard prelude</H2>
+<P>
+The standard prelude, see <A HREF="../transfer/lib/prelude.tra">prelude.tra</A>
+contains definitions of a number of standard types, functions and 
+type classes.
+</P>
+<A NAME="toc30"></A>
+<H2>Operators</H2>
+<A NAME="toc31"></A>
+<H3>Unary operators</H3>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Operator</TH>
+<TH>Precedence</TH>
+<TH>Translation</TH>
+</TR>
+<TR>
+<TD><CODE>-</CODE></TD>
+<TD ALIGN="right">10</TD>
+<TD><CODE>-x =&gt; negate ? ? x</CODE></TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc32"></A>
+<H3>Binary operators</H3>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Operator</TH>
+<TH>Precedence</TH>
+<TH>Associativity</TH>
+<TH>Translation of <CODE>x op y</CODE></TH>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>&gt;&gt;=</CODE></TD>
+<TD ALIGN="center">3</TD>
+<TD ALIGN="center">left</TD>
+<TD ALIGN="center"><CODE>bind ? ? x y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>&gt;&gt;</CODE></TD>
+<TD ALIGN="center">3</TD>
+<TD ALIGN="center">left</TD>
+<TD ALIGN="center"><CODE>bind ? ? x (\_ -&gt; y)</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>||</CODE></TD>
+<TD ALIGN="center">4</TD>
+<TD ALIGN="center">right</TD>
+<TD ALIGN="center"><CODE>if x then True else y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>&amp;&amp;</CODE></TD>
+<TD ALIGN="center">5</TD>
+<TD ALIGN="center">right</TD>
+<TD ALIGN="center"><CODE>if x then y else False</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>==</CODE></TD>
+<TD ALIGN="center">6</TD>
+<TD ALIGN="center">none</TD>
+<TD ALIGN="center"><CODE>eq ? ? x y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>/=</CODE></TD>
+<TD ALIGN="center">6</TD>
+<TD ALIGN="center">none</TD>
+<TD ALIGN="center"><CODE>neq ? ? x y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>&lt;</CODE></TD>
+<TD ALIGN="center">6</TD>
+<TD ALIGN="center">none</TD>
+<TD ALIGN="center"><CODE>lt ? ? x y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>&lt;=</CODE></TD>
+<TD ALIGN="center">6</TD>
+<TD ALIGN="center">none</TD>
+<TD ALIGN="center"><CODE>le ? ? x y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>&gt;</CODE></TD>
+<TD ALIGN="center">6</TD>
+<TD ALIGN="center">none</TD>
+<TD ALIGN="center"><CODE>gt ? ? x y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>&gt;=</CODE></TD>
+<TD ALIGN="center">6</TD>
+<TD ALIGN="center">none</TD>
+<TD ALIGN="center"><CODE>ge ? ? x y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>::</CODE></TD>
+<TD ALIGN="center">7</TD>
+<TD ALIGN="center">right</TD>
+<TD ALIGN="center"><CODE>Cons ? ? x y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>+</CODE></TD>
+<TD ALIGN="center">8</TD>
+<TD ALIGN="center">left</TD>
+<TD ALIGN="center"><CODE>plus ? ? x y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>-</CODE></TD>
+<TD ALIGN="center">8</TD>
+<TD ALIGN="center">left</TD>
+<TD ALIGN="center"><CODE>minus ? ? x y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>*</CODE></TD>
+<TD ALIGN="center">9</TD>
+<TD ALIGN="center">left</TD>
+<TD ALIGN="center"><CODE>times ? ? x y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>/</CODE></TD>
+<TD ALIGN="center">9</TD>
+<TD ALIGN="center">left</TD>
+<TD ALIGN="center"><CODE>div ? ? x y</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>%</CODE></TD>
+<TD ALIGN="center">9</TD>
+<TD ALIGN="center">left</TD>
+<TD ALIGN="center"><CODE>mod ? ? x y</CODE></TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc33"></A>
+<H2>Compositional functions</H2>
+<A NAME="toc34"></A>
 <H2>do notation</H2>
 <P>
 Sequences of operations in the Monad type class can be written 
