@@ -37,10 +37,10 @@ param
    | VSupin Voice
    | VPtPret AFormPos Case ;
 
-  SForm = 
-     VFinite Tense Anteriority
-   | VImperat
-   | VInfinit Anteriority ;
+  VPForm = 
+     VPFinite Tense Anteriority
+   | VPImperat
+   | VPInfinit Anteriority ;
 
   NPForm = NPNom | NPAcc | NPPoss GenNum ;
 ---  AdjPronForm = APron GenNum Case ;

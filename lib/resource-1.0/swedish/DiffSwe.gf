@@ -24,6 +24,8 @@ instance DiffSwe of DiffScand = open ResScand, Prelude in {
     conjThan = "än" ;
     infMark  = "att" ;
 
+    subjIf = "om" ;
+
     artIndef : Gender => Str = table {
       Utr => "en" ;
       Neutr => "ett"

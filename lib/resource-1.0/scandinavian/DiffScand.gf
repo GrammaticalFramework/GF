@@ -5,17 +5,10 @@ interface DiffScand = open ResScand, Prelude in {
   param
     Gender ;
 
-    CardOrd = NCard Gender | NOrd AFormSup ; -- sic! (AFormSup)
-
   oper
     neutrum, utrum : Gender ;
 
     gennum : Gender -> Number -> GenNum ;
-
-    agrP3 : Gender -> Number -> Agr = \g,n -> {
-      gn = gennum g n ;
-      p = P3
-      } ;
 
 -- This is the form of the noun in "det stora berget"/"det store berg".
 
@@ -27,6 +20,8 @@ interface DiffScand = open ResScand, Prelude in {
     conjThan : Str ;
     infMark  : Str ;
 
+    subjIf : Str ;
+
     artIndef : Gender => Str ;
 
     verbHave : {s : VForm => Str} ;
@@ -37,9 +32,28 @@ interface DiffScand = open ResScand, Prelude in {
 
     negation : Polarity => Str ;
 
+-- For determiners; mostly two-valued even in Norwegian.
+
+    genderForms : (x1,x2 : Str) -> Gender => Str ;
+
+-----------------------------------------------------------------------
+--
+-- The functions and parameters below are here because they depend on
+-- the parametrized constants, but their definitions are fully given
+-- here relative to the above.
+
+  param
+    CardOrd = NCard Gender | NOrd AFormSup ; -- sic! (AFormSup)
+
+  oper  
+    agrP3 : Gender -> Number -> Agr = \g,n -> {
+      gn = gennum g n ;
+      p = P3
+      } ;
+
 -- This function is here because it depends on $verbHave, auxFut, auxCond$.
 
-  predV : Verb -> VP = \verb -> 
+   predV : Verb -> VP = \verb -> 
     let
       vfin : Tense -> Str = \t -> verb.s ! vFin t Act ;
       vsup = verb.s ! VI (VSupin Act) ;  
@@ -54,19 +68,19 @@ interface DiffScand = open ResScand, Prelude in {
 
     in {
     s = table {
-      VFinite t Simul => case t of {
+      VPFinite t Simul => case t of {
         Pres | Past => vf (vfin t) [] ;
         Fut  => vf auxFut vinf ;
         Cond => vf auxCond vinf
         } ;
-      VFinite t Anter => case t of {
+      VPFinite t Anter => case t of {
         Pres | Past => vf (har t) vsup ;
         Fut  => vf auxFut (ha ++ vsup) ;
         Cond => vf auxCond (ha ++ vsup) 
         } ;
-      VImperat => vf (verb.s ! VF (VImper Act)) [] ;
-      VInfinit Simul => vf [] vinf ;
-      VInfinit Anter => vf [] (ha ++ vsup)
+      VPImperat => vf (verb.s ! VF (VImper Act)) [] ;
+      VPInfinit Simul => vf [] vinf ;
+      VPInfinit Anter => vf [] (ha ++ vsup)
       } ;
     a1  : Polarity => Str = negation ;
     n2  : Agr  => Str = \\_ => [] ;
@@ -75,8 +89,5 @@ interface DiffScand = open ResScand, Prelude in {
     en2,ea2,eext : Bool = False   -- indicate if the field exists
     } ;
 
--- For determiners; mostly two-valued even in Norwegian.
-
-  genderForms : (x1,x2 : Str) -> Gender => Str ;
 
 }
