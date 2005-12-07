@@ -11,6 +11,22 @@
 Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 </center>
+
+<p>
+
+6/12 (AR) Accept <tt>param</tt> and <tt>oper</tt> definitions in
+<tt>concrete</tt> modules. The definitions are just inlined in the
+current module and not inherited. The purpose is to support rapid
+prototyping of grammars.
+
+<p>
+
+2/12 (AR) The built-in type <tt>Float</tt> added to abstract syntax (and
+resource). Values are stored as Haskell's <tt>Double</tt> precision
+floats. For the syntax of float literals, see BNFC document.
+NB: some bug still prevents parsing float literals in object
+languages.
+
 <p>
 
 1/12 (BB,AR) The command <tt>at = apply_transfer</tt>, which applies

@@ -11,29 +11,34 @@ incomplete concrete VerbScand of Verb = CatScand ** open DiffScand, ResScand in 
     ComplVV v vp = insertObj (\\a => v.c2 ++ infVP vp a) (predV v) ;
     ComplVS v s  = insertObj (\\_ => conjThat ++ s.s ! Sub) (predV v) ;
     ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
-{-
-    ComplVA  v    ap = insertObj (ap.s) (predV v) ;
+
+    ComplVA  v ap = 
+      insertObj (\\a => ap.s ! agrAdj a.gn DIndef) (predV v) ;
     ComplV2A v np ap = 
-      insertObj (\\_ => v.c2 ++ np.s ! Acc ++ ap.s ! np.a) (predV v) ;
+      insertAdv
+        (ap.s ! agrAdj np.a.gn DIndef)
+        (insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v)) ;
 
-    UseComp comp = insertObj comp.s (predAux auxBe) ;
+    UseComp comp = insertObj (\\a => comp.s ! agrAdj a.gn DIndef) (predV verbBe) ;
 
-    AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
-    AdVVP adv vp = insertAdV adv.s vp ;
+    CompAP ap = ap ;
+    CompNP np = {s = \\_ => np.s ! accusative} ;
+    CompAdv a = {s = \\_ => a.s} ;
 
+--- these give parser overflow
+---    AdvVP vp adv = insertAdv adv.s vp ;
+---    AdVVP adv vp = insertAdV adv.s vp ;
+
+{-
     ReflV2 v = insertObj (\\a => v.c2 ++ reflPron ! a) (predV v) ;
 
     PassV2 v = {s = \\_ => v.s ! VPPart} ;
+-}
 
     UseVV, UseVS, UseVQ = \vv -> {s = vv.s ; c2 = []} ;
 
-    CompAP ap = ap ;
-    CompNP np = {s = \\_ => np.s ! Acc} ;
-    CompAdv a = {s = \\_ => a.s} ;
-
-    EmbedS  s  = {s = conjThat ++ s.s} ;
+    EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = infVP vp (agrP3 Sg)} ; --- agr
--}
+    EmbedVP vp = {s = infVP vp (agrP3 utrum Sg)} ; --- agr
 
 }

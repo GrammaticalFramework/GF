@@ -36,8 +36,8 @@ incomplete concrete NounScand of Noun =
     NoOrd = {s = []} ;
     NumInt n = {s = \\_ => n.s} ;
 
-----    NumNumeral numeral = {s = \\g => numeral.s ! NCard g} ;
-    OrdNumeral numeral = {s = numeral.s ! NOrd} ;
+    NumNumeral numeral = {s = \\g => numeral.s ! NCard g} ;
+    OrdNumeral numeral = {s = numeral.s ! NOrd SupWeak} ;
 
     AdNum adn num = {s = \\g => adn.s ++ num.s ! g} ;
 
@@ -49,8 +49,17 @@ incomplete concrete NounScand of Noun =
     IndefSg = {s = artIndef   ; n = Sg ; det = DIndef} ;
     IndefPl = {s = \\_ => []  ; n = Pl ; det = DIndef} ;
 
-----    ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c} ;
-----    ComplN3 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; c2 = f.c3} ;
+-- The genitive of this $NP$ is not correct: "sonen till mig" (not "migs").
+
+    ComplN2 f x = {
+      s = \\n,d,c => f.s ! n ! specDet d ! Nom ++ f.c2 ++ x.s ! accusative ;
+      g = f.g
+      } ;
+    ComplN3 f x = {
+      s = \\n,d,c => f.s ! n ! d ! Nom ++ f.c2 ++ x.s ! accusative ; 
+      g = f.g ;
+      c2 = f.c3
+      } ;
 
     AdjCN ap cn = let g = cn.g in {
       s = \\n,d,c => preOrPost ap.isPre 
