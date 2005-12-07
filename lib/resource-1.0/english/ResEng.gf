@@ -232,12 +232,12 @@ resource ResEng = ParamEng ** open Prelude in {
     s : Tense => Anteriority => Polarity => Ord => Str
     } ;
 
-  mkS : Str -> Agr -> VerbForms -> (Agr => Str) -> Clause =
-    \subj,agr,verb,compl0 -> {
+  mkClause : Str -> Agr -> VP -> Clause =
+    \subj,agr,vp -> {
       s = \\t,a,b,o => 
         let 
-          verb  = verb ! t ! a ! b ! o ! agr ;
-          compl = compl0 ! agr
+          verb  = vp.s ! t ! a ! b ! o ! agr ;
+          compl = vp.s2 ! agr
         in
         case o of {
           ODir   => subj ++ verb.fin ++ verb.inf ++ compl ;

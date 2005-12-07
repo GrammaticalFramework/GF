@@ -14,7 +14,7 @@ concrete QuestionEng of Question = CatEng ** open ResEng in {
       } ;
 
     QuestVP qp vp = 
-      let cl = mkS (qp.s ! Nom) {n = qp.n ; p = P3} vp.s vp.s2
+      let cl = mkClause (qp.s ! Nom) {n = qp.n ; p = P3} vp
       in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
 
     QuestSlash ip slash = {
