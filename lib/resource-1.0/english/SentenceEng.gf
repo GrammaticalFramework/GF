@@ -3,9 +3,9 @@ concrete SentenceEng of Sentence = CatEng ** open ResEng in {
   flags optimize=all_subs ;
 
   lin
-    PredVP np vp = mkS (np.s ! Nom) np.a vp.s vp.s2 ;
+    PredVP np vp = mkClause (np.s ! Nom) np.a vp ;
 
-    PredSCVP sc vp = mkS sc.s (agrP3 Sg) vp.s vp.s2 ;
+    PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
 
     ImpVP vp = {
       s = \\pol,n => 
@@ -20,11 +20,11 @@ concrete SentenceEng of Sentence = CatEng ** open ResEng in {
         dont ++ verb
     } ;
 
-    SlashV2 np v2 = mkS (np.s ! Nom) np.a (predV v2).s (\\_ => []) **
-      {c2 = v2.c2} ;
+    SlashV2 np v2 = 
+      mkClause (np.s ! Nom) np.a (predV v2) ** {c2 = v2.c2} ;
 
     SlashVVV2 np vv v2 = 
-      mkS (np.s ! Nom) np.a (predV vv).s (\\_ => "to" ++ v2.s ! VInf) **
+      mkClause (np.s ! Nom) np.a (insertObj (\\_ => "to" ++ v2.s ! VInf) (predV vv))  **
       {c2 = v2.c2} ;
 
     AdvSlash slash adv = {

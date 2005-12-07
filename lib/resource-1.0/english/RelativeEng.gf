@@ -15,7 +15,7 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
             RNoAg => ag ;
             RAg a => a
             } ;
-          cl = mkS (rp.s ! Nom) agr vp.s vp.s2
+          cl = mkClause (rp.s ! Nom) agr vp
         in
         cl.s ! t ! ant ! b ! ODir
       } ;
