@@ -80,6 +80,20 @@ oper
     Pres => VF (VPres v) ;
     Past => VF (VPret v) ;
     _ => VI (VInfin v) --- not to be used?
-    } ;    
+    } ;
+    
+-- Used in $ConjunctionScand$.
+
+  conjGenNum : (_,_ : GenNum) -> GenNum = \g,h -> case <g,h> of {
+    <SgUtr,SgUtr> => SgUtr ;
+    <Plg,  _>     => Plg ;
+    <_,  Plg>     => Plg ;
+    _             => SgNeutr 
+    } ;
+
+  conjAgr : (_,_ : Agr) -> Agr = \a,b -> {
+    gn = conjGenNum a.gn b.gn ;
+    p  = conjPerson a.p  b.p
+    } ;
 
 }

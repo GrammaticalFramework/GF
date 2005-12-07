@@ -1,4 +1,4 @@
-resource Coordination = {
+resource Coordination = open Prelude in {
 
 param
   ListSize = TwoElem | ManyElem ;
@@ -26,6 +26,12 @@ oper
 
   conjunctDistrX : ConjunctionDistr -> ListX -> Str = \or,xs ->
     or.s1 ++ xs.s1 ++ or.s2 ++ xs.s2 ;
+
+  conjunctSS : Conjunction -> ListX -> SS = \or,xs ->
+    ss (xs.s1 ++ or.s ++ xs.s2) ;
+
+  conjunctDistrSS : ConjunctionDistr -> ListX -> SS = \or,xs ->
+    ss (or.s1 ++ xs.s1 ++ or.s2 ++ xs.s2) ;
 
   -- all this lifted to tables
 
