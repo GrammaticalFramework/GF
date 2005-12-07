@@ -1,10 +1,11 @@
---concrete SentenceScand of Sentence = CatScand ** open ResScand in {
---
---  flags optimize=all_subs ;
---
---  lin
---    PredVP np vp = mkS (np.s ! Nom) np.a vp.s vp.s2 ;
---
+incomplete concrete SentenceScand of Sentence = 
+  CatScand ** open DiffScand, ResScand in {
+
+  flags optimize=all_subs ;
+
+  lin
+    PredVP np vp = mkS (np.s ! nominative) np.a vp.s vp.a1 vp.n2 ;
+
 --    PredSCVP sc vp = mkS sc.s (agrP3 Sg) vp.s vp.s2 ;
 --
 --    ImpVP vp = {
@@ -34,4 +35,4 @@
 --
 --    SlashPrep cl prep = cl ** {c2 = prep.s} ;
 --
---}
+}

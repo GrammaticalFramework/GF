@@ -1,17 +1,17 @@
 --# -path=.:../scandinavian:../abstract:../common:prelude
 
 concrete TestSwe of Test = 
---  NounSwe, 
---  VerbSwe, 
+  NounSwe, 
+  VerbSwe, 
   AdjectiveSwe,
   AdverbSwe,
 --  -- NumeralSwe,
---  SentenceSwe,
+  SentenceSwe,
 --  QuestionSwe,
 --  RelativeSwe,
 --  ConjunctionSwe,
   PhraseSwe,
---  UntensedSwe,
+  UntensedSwe,
 --  -- TensedSwe,
   LexSwe 
   ** {

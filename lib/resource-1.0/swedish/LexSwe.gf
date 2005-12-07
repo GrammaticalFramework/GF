@@ -30,15 +30,15 @@ concrete LexSwe of Lex = CatSwe ** open ResSwe, Prelude in {
     here_Adv = {s = "här"} ;
     very_AdA = {s = "mycket"} ;
     always_AdV = {s = "alltid"} ;
---
---    only_Predet = {s = "bara"} ;
---    all_Predet = {s = "alla"} ;
+
+    only_Predet = {s = \\_ => "bara"} ;
+    all_Predet = {s = gennumForms "all" "allt" "alla"} ;
 --    this_Quant = {s = "this" ; n = Sg} ;
 --    these_Quant = {s = "these" ; n = Pl} ;
 --    
---    i_Pron  = mkNP "I"  "me"  "my"  Sg P1 ;
---    he_Pron = mkNP "he" "him" "his" Sg P3 ;
---    we_Pron = mkNP "we" "us"  "our" Pl P1 ;
+    i_Pron  = mkNP "jag"  "mig"  "min" "mitt" "mina"  SgUtr P1 ;
+    he_Pron = mkNP "han"  "honom"  "hans" "hans" "hans"  SgUtr P3 ;
+    we_Pron = mkNP "vi"  "oss"  "vår" "vårt" "våra"  SgUtr P1 ;
 --
 --    whoSg_IP = mkIP "who" "whom" "whose" Sg ;
 --    whoPl_IP = mkIP "who" "whom" "whose" Pl ;
