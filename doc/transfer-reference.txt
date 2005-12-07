@@ -2,17 +2,12 @@ Transfer language reference
 Author: Björn Bringert <bringert@cs.chalmers.se>
 Last update: %%date(%c)
 
-
 % NOTE: this is a txt2tags file.
 % Create an html file from this file using:
 % txt2tags transfer.txt
 
 %!target:html
 %!options(html): --toc
-
-
-
-
 
 
 This document describes the features of the Transfer language.
@@ -22,6 +17,16 @@ Transfer programs.
 
 Transfer is a dependently typed functional programming language 
 with eager evaluation.
+
+== Current implementation status ==
+
+**Not all features of the Transfer language have been implemented yet**. The most 
+important missing piece is the type checker. This means that there are almost
+no checks done on Transfer programs before they are run. It also means that
+the values of metavariables are not inferred. Thus metavariables cannot
+be used where their values matter. For example, dictionaries for overlaoded 
+functions must be given explicitly, not as metavariables.
+
 
 == Layout syntax==
 
@@ -401,9 +406,22 @@ String literals can be used as patterns.
 Integer literals can be used as patterns.
 
 
-== Meta variables ==
+== Metavariables ==
 
-== Type classes ==
+Metavariable are written as questions marks:
+
+```
+?
+```
+
+A metavariable is a way to the the Transfer type checker that:
+"you should be able to figure out what this should be,
+I can't be bothered to tell you". 
+
+Metavariables can be used to avoid having to give type variables
+and dictionaries explicitly.
+
+== Overloaded functions / Type classes ==
 
 == Operators ==
 
