@@ -1,26 +1,14 @@
---concrete ExtScand of ExtScandAbs = CatScand ** open ResScand in {
---
---  lincat
---
---    Aux = {s : Polarity => Str} ;
---    
---  lin
--- 
---    PredAux np aux vp = mkS (np.s ! Nom) np.a
---      (\\t,ant,b,ord,agr => 
---       let 
---        fin  = aux.s ! b ;
---        vf : Str -> Str -> {fin, inf : Str} = \x,y -> 
---          {fin = x ; inf = y} ;
---      in
---      case ant of {
---        Simul => vf fin [] ;
---        Anter => vf fin "have"
---        }
---      )
---      (\\agr => infVP vp agr) ;
---
---    can_Aux  = {s = \\p => posneg p "can"} ; ---- cannt
---    must_Aux = {s = \\p => posneg p "must"} ;
---
---}
+incomplete concrete ExtScand of ExtScandAbs = 
+  CatScand ** open DiffScand, ResScand in {
+
+  lin
+    DefSgN predet noun = let g = noun.g in {
+      s = \\c => predet.s ! gennum g Sg ++ noun.s ! Sg ! Def ! caseNP c ;
+      a = agrP3 g Sg
+      } ;
+    DefPlN predet noun = let g = noun.g in {
+      s = \\c => predet.s ! Plg ++ noun.s ! Pl ! Def ! caseNP c ;
+      a = agrP3 g Sg
+      } ;
+
+}
