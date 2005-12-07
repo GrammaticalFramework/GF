@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Transfer language reference</H1>
 <FONT SIZE="4">
 <I>Author: Björn Bringert &lt;bringert@cs.chalmers.se&gt;</I><BR>
-Last update: Wed Dec  7 12:50:46 2005
+Last update: Wed Dec  7 13:24:23 2005
 </FONT></CENTER>
 
 <P></P>
@@ -26,7 +26,7 @@ Last update: Wed Dec  7 12:50:46 2005
       <LI><A HREF="#function_types">Function types</A>
       <LI><A HREF="#toc10">Basic types</A>
       <LI><A HREF="#toc11">Records</A>
-      <LI><A HREF="#toc12">Tuples</A>
+      <LI><A HREF="#tuples">Tuples</A>
       <LI><A HREF="#toc13">Lists</A>
       </UL>
     <LI><A HREF="#toc14">Case expressions</A>
@@ -48,7 +48,7 @@ Last update: Wed Dec  7 12:50:46 2005
       <LI><A HREF="#toc27">Type class extension</A>
       <LI><A HREF="#toc28">Extending multiple classes</A>
       </UL>
-    <LI><A HREF="#toc29">Standard prelude</A>
+    <LI><A HREF="#prelude">Standard prelude</A>
     <LI><A HREF="#toc30">Operators</A>
       <UL>
       <LI><A HREF="#toc31">Unary operators</A>
@@ -69,7 +69,8 @@ Transfer programs.
 </P>
 <P>
 Transfer is a dependently typed functional programming language 
-with eager evaluation.
+with eager evaluation. The language supports generalized algebraic
+datatypes, pattern matching and function overloading.
 </P>
 <A NAME="toc1"></A>
 <H2>Current implementation status</H2>
@@ -78,7 +79,7 @@ with eager evaluation.
 important missing piece is the type checker. This means that there are almost
 no checks done on Transfer programs before they are run. It also means that
 the values of metavariables are not inferred. Thus metavariables cannot
-be used where their values matter. For example, dictionaries for overlaoded 
+be used where their values matter. For example, dictionaries for overloaded 
 functions must be given explicitly, not as metavariables.
 </P>
 <A NAME="toc2"></A>
@@ -88,9 +89,9 @@ Transfer uses layout syntax, where the indentation of a piece of code
 determines which syntactic block it belongs to.
 </P>
 <P>
-To give the block structure of a piece of code without using layout
-syntax, you can enclose the block in curly braces (<CODE>{ }</CODE>) and 
-separate the parts of the blocks with semicolons (<CODE>;</CODE>).
+To give the block structure without using layout
+syntax, you can enclose the block in curly braces and 
+separate the parts of the blocks with semicolons.
 </P>
 <P>
 For example, this case expression:
@@ -113,7 +114,7 @@ is equivalent to this one:
 <P></P>
 <P>
 Here the layout is insignificant, as the structure is given with
-braces and semicolons. Thus the above is equivalent to:
+braces and semicolons. Thus it is equivalent to:
 </P>
 <PRE>
   case x of { p1 -&gt; e1 ; p2 -&gt; e2 }
@@ -122,13 +123,16 @@ braces and semicolons. Thus the above is equivalent to:
 <A NAME="toc3"></A>
 <H2>Imports</H2>
 <P>
-A Transfer module start with some imports. Most modules will have to
+A Transfer module starts with some imports. Most modules will have to
 import the prelude, which contains definitons used by most programs:
 </P>
 <PRE>
   import prelude
 </PRE>
 <P></P>
+<P>
+For more information about the standard prelude, see <A HREF="#prelude">Standard prelude</A>.
+</P>
 <A NAME="toc4"></A>
 <H2>Function declarations</H2>
 <P>
@@ -145,18 +149,37 @@ where <CODE>f</CODE> is the function's name, and <CODE>T</CODE> its type. See
 are written.
 </P>
 <P>
-The definition of the function is the given as a sequence of pattern
+The definition of the function is then given as a sequence of pattern
 equations. The first equation whose patterns match the function arguments
 is used when the function is called. Pattern equations are on the form:
 </P>
 <PRE>
-  f p11 ... p1m = exp
+  f p11 ... p1m = exp1
   ...
-  f pn1 ... pnm = exp
+  f pn1 ... pnm = expn
 </PRE>
 <P></P>
 <P>
 where <CODE>p11</CODE> to <CODE>pnm</CODE> are patterns, see <A HREF="#patterns">Patterns</A>.
+</P>
+<P>
+Pattern equations can also have guards, boolean expressions which determine
+whether to use the equation when the pattern has been matched. Pattern equations 
+with guards are written:
+</P>
+<PRE>
+  f p11 ... p1m | guard1 = exp1
+  ...
+  f pn1 ... pnm | guardn = expn
+</PRE>
+<P></P>
+<P>
+Pattern equations with and without guards can be mixed in the definiton of 
+a function.
+</P>
+<P>
+Any variables bound in the patterns are in scope in the guards and 
+right hand sides of each pattern equation.
 </P>
 <A NAME="toc5"></A>
 <H2>Data type declarations</H2>
@@ -175,6 +198,9 @@ They are declared thusly:
 Here <CODE>D</CODE> is the name of the data type, <CODE>T</CODE> is the type of the type
 constructor, <CODE>c1</CODE> to <CODE>cn</CODE> are the data constructor names, and
 <CODE>Tc1</CODE> to <CODE>Tcn</CODE> are their types. 
+</P>
+<P>
+FIXME: explain the constraints on the types of type and data constructors.
 </P>
 <A NAME="toc6"></A>
 <H2>Lambda expressions</H2>
@@ -202,6 +228,11 @@ To give local definition to some names, use:
    in exp
 </PRE>
 <P></P>
+<P>
+Here, the variables <CODE>x1</CODE> to <CODE>xn</CODE> are in scope in all the expressions
+<CODE>exp1</CODE> to <CODE>expn</CODE>, and in <CODE>exp</CODE>. Thus let-defined functions can be
+mutually recursive.
+</P>
 <A NAME="toc8"></A>
 <H2>Types</H2>
 <A NAME="function_types"></A>
@@ -219,7 +250,7 @@ This is the type of functions which take an argument of type
 </P>
 <P>
 To write functions which take more than one argument, we use <I>currying</I>.
-A function which takes n arguments is a function which takes 1 
+A function which takes n arguments is a function which takes one
 argument and returns a function which takes n-1 arguments. Thus,
 </P>
 <PRE>
@@ -234,7 +265,7 @@ or, equivalently, since <CODE>-&gt;</CODE> associates to the right:
 </PRE>
 <P></P>
 <P>
-is the type of functions which take 2 arguments, the first of type 
+is the type of functions which take teo arguments, the first of type 
 <CODE>A</CODE> and the second of type <CODE>B</CODE>. This arrangement lets us do
 <I>partial application</I> of function to fewer arguments than the function 
 is declared to take, returning a new function which takes the rest 
@@ -246,19 +277,19 @@ In a function type, the value of an argument can be used later
 in the type. Such dependent function types are written:
 </P>
 <PRE>
-  (x1 : T1) -&gt; ... -&gt; (xn : Tn) -&gt; T
+  (x : A) -&gt; B
 </PRE>
 <P></P>
 <P>
-Here, <CODE>x1</CODE> can be used in <CODE>T2</CODE> to <CODE>Tn</CODE>, <CODE>x1</CODE> can be used 
-in <CODE>T2</CODE> to <CODE>Tn</CODE>.
+Here, <CODE>x</CODE> is in scope in <CODE>B</CODE>. 
 </P>
 <A NAME="toc10"></A>
 <H3>Basic types</H3>
 <H4>Integers</H4>
 <P>
 The type of integers is called <CODE>Integer</CODE>. 
-standard decmial integer literals are used to represent values of this type.
+Standard decmial integer literals, such as <CODE>0</CODE> and <CODE>1234</CODE> are used to 
+represent values of this type.
 </P>
 <H4>Floating-point numbers</H4>
 <P>
@@ -268,14 +299,16 @@ in decimal notation, e.g. <CODE>123.456</CODE>.
 </P>
 <H4>Strings</H4>
 <P>
-There is a primitive <CODE>String</CODE> type. This might be replaced by a list of 
-characters representation in the future. String literals are written 
+There is a primitive <CODE>String</CODE> type. String literals are written 
 with double quotes, e.g. <CODE>"this is a string"</CODE>.
+FIXME: This might be replaced by a list of 
+characters representation in the future. 
 </P>
 <H4>Booleans</H4>
 <P>
 Booleans are not a built-in type, though some features of the Transfer language
-depend on them.
+depend on them. The <CODE>Bool</CODE> type is defined in the 
+<A HREF="#prelude">Standard prelude</A>.
 </P>
 <PRE>
   data Bool : Type where
@@ -317,7 +350,7 @@ Record values are constructed using <CODE>rec</CODE> expressions:
 <P></P>
 <H4>Record projection</H4>
 <P>
-Fields are selection from records using the <CODE>.</CODE> operator. This expression selects
+Fields are selected from records using the <CODE>.</CODE> operator. This expression selects
 the field <CODE>l</CODE> from the record value <CODE>r</CODE>:
 </P>
 <PRE>
@@ -348,7 +381,7 @@ A record of some type R1 can be used as a record of any type R2
 such that for every field <CODE>p1 : T1</CODE> in R2, <CODE>p1 : T1</CODE> is also a 
 field of T1.
 </P>
-<A NAME="toc12"></A>
+<A NAME="tuples"></A>
 <H3>Tuples</H3>
 <P>
 Tuples on the form:
@@ -373,19 +406,19 @@ The list type is declared as:
 </P>
 <PRE>
   data List : Type -&gt; Type where 
-  	Nil : (A:Type) -&gt; List A
+          Nil : (A:Type) -&gt; List A
           Cons : (A:Type) -&gt; A -&gt; List A -&gt; List A
 </PRE>
 <P></P>
 <P>
-The empty lists can be written as <CODE>[]</CODE>. There is a operator <CODE>::</CODE> which can 
+The empty list can be written as <CODE>[]</CODE>. There is an operator <CODE>::</CODE> which can 
 be used instead of <CODE>Cons</CODE>. These are just syntactic sugar for expressions
 using <CODE>Nil</CODE> and <CODE>Cons</CODE>, with the type arguments hidden.
 </P>
 <A NAME="toc14"></A>
 <H2>Case expressions</H2>
 <P>
-Pattern matching is done in pattern equations and by using the 
+Pattern matching is done in pattern equations and with the 
 <CODE>case</CODE> construct:
 </P>
 <PRE>
@@ -424,9 +457,8 @@ Constructor patterns are written as:
 <P></P>
 <P>
 where <CODE>C</CODE> is a data constructor which takes <CODE>n</CODE> arguments.
-If the value to be matched is the constructor <CODE>C</CODE> applied to 
-arguments <CODE>v1</CODE> to <CODE>vn</CODE>, then <CODE>v1</CODE> to <CODE>vn</CODE> will be matched
-against <CODE>p1</CODE> to <CODE>pn</CODE>.
+If the value to be matched is <CODE>C v1 ... vn</CODE>, 
+then <CODE>v1</CODE> to <CODE>vn</CODE> will be matched against <CODE>p1</CODE> to <CODE>pn</CODE>.
 </P>
 <A NAME="toc17"></A>
 <H3>Variable patterns</H3>
@@ -440,11 +472,14 @@ A variable pattern is a single identifier:
 <P>
 A variable pattern matches any value, and binds the variable name to the
 value. A variable may not occur more than once in a pattern.
+Note that variable patterns may not use the same identifier as data constructors
+which are in scope, since they will then be interpreted as constructor
+patterns.
 </P>
 <A NAME="toc18"></A>
 <H3>Wildcard patterns</H3>
 <P>
-Wildcard patterns are written as with a single underscore:
+Wildcard patterns are written with a single underscore:
 </P>
 <PRE>
   _
@@ -463,12 +498,12 @@ Record patterns match record values:
 </PRE>
 <P></P>
 <P>
-A record value matches a record pattern, if the record value has all the 
+A record value matches a record pattern if the record value has all the 
 fields <CODE>l1</CODE> to <CODE>ln</CODE>, and their values match <CODE>p1</CODE> to <CODE>pn</CODE>.
 </P>
 <P>
-Note that a record value may have more fields than the record pattern and 
-they will still match.
+Note that a record value may have more fields than the record pattern.
+The values of these fields do not influence the pattern matching.
 </P>
 <A NAME="toc20"></A>
 <H3>Disjunctive patterns</H3>
@@ -486,8 +521,8 @@ FIXME: talk about how this is expanded
 <A NAME="toc21"></A>
 <H3>List patterns</H3>
 <P>
-When pattern matching in lists, there are two special constructs.
-A whole list can be matched be a list of patterns:
+When pattern matching on lists, there are two special constructs.
+A whole list can by matched be a list of patterns:
 </P>
 <PRE>
   [p1, ... , pn]
@@ -512,7 +547,7 @@ Non-empty lists can also be matched with <CODE>::</CODE>-patterns:
 </PRE>
 <P></P>
 <P>
-This pattern matches a non-empty lists such that the first element of
+This pattern matches non-empty lists such that the first element of
 the list matches <CODE>p1</CODE> and the rest of the list matches <CODE>p2</CODE>.
 </P>
 <A NAME="toc22"></A>
@@ -525,7 +560,8 @@ Tuples patterns on the form:
 </PRE>
 <P></P>
 <P>
-are syntactic sugar for record patterns, in the same way as tuple expressions.
+are syntactic sugar for record patterns, in the same way as 
+tuple expressions, see <A HREF="#tuples">Tuples</A>.
 </P>
 <A NAME="toc23"></A>
 <H3>String literal patterns</H3>
@@ -540,14 +576,14 @@ Integer literals can be used as patterns.
 <A NAME="metavariables"></A>
 <H2>Metavariables</H2>
 <P>
-Metavariable are written as questions marks:
+Metavariables are written as questions marks:
 </P>
 <PRE>
   ?
 </PRE>
 <P></P>
 <P>
-A metavariable is a way to the the type checker that:
+A metavariable is a way to tell the type checker that:
 "you should be able to figure out what this should be,
 I can't be bothered to tell you". 
 </P>
@@ -560,7 +596,7 @@ and dictionary arguments explicitly.
 <P>
 In Transfer, functions can be overloaded by having them take a record
 of functions as an argument. For example, the functions for equality
-and inequality in the Transfer prelude module are defined as:
+and inequality in the Transfer <A HREF="#prelude">Prelude</A> are defined as:
 </P>
 <PRE>
   Eq : Type -&gt; Type
@@ -577,7 +613,7 @@ and inequality in the Transfer prelude module are defined as:
 We call <CODE>Eq</CODE> a <I>type class</I>, though it's actually just a record type
 used to pass function implementations to overloaded functions.  We
 call a value of type <CODE>Eq A</CODE> an Eq <I>dictionary</I> for the type A.
-The dictionary is used to look up the version of the function for the
+The dictionary is used to look up the version of some function for the
 particular type we want to use the function on. Thus, in order to use
 the <CODE>eq</CODE> function on two integers, we need a dictionary of type 
 <CODE>Eq Integer</CODE>:
@@ -598,7 +634,7 @@ can then call the overloaded <CODE>eq</CODE> function with the dictionary:
 <P></P>
 <P>
 Giving the type at which to use the overloaded function, and the appropriate
-dictionary is cumbersome. <A HREF="#metavariables">Metavariables</A> come to the rescue:
+dictionary can be cumbersome. <A HREF="#metavariables">Metavariables</A> come to the rescue:
 </P>
 <PRE>
   eq ? ? x y
@@ -628,24 +664,30 @@ class for orderings:
 <P>
 To extend an existing class, we keep the fields of the class we want to
 extend, and add any new fields that we want. Because of record subtyping, 
-for any type A, a value of type <CODE>Ord A</CODE> is also a value of type <CODE>Eq A</CODE>.
+for any type <CODE>A</CODE>, a value of type <CODE>Ord A</CODE> is also a value of type <CODE>Eq A</CODE>.
 </P>
 <A NAME="toc28"></A>
 <H3>Extending multiple classes</H3>
 <P>
 A type class can also extend several classes, by simply having all the fields
-from all the classes we want to extend. The <CODE>Num</CODE> class described below is 
-an example of this.
+from all the classes we want to extend. The <CODE>Num</CODE> class in the 
+<A HREF="#prelude">Standard prelude</A> is an example of this.
 </P>
-<A NAME="toc29"></A>
+<A NAME="prelude"></A>
 <H2>Standard prelude</H2>
 <P>
-The standard prelude, see <A HREF="../transfer/lib/prelude.tra">prelude.tra</A>
+The standard prelude, see <A HREF="../transfer/lib/prelude.tra">prelude.tra</A>,
 contains definitions of a number of standard types, functions and 
 type classes.
 </P>
 <A NAME="toc30"></A>
 <H2>Operators</H2>
+<P>
+Most built-in operators in the Transfer language are translated
+to calls to overloaded functions. This means that they can be
+used at any type for which there is a dictionary for the type class
+in question.
+</P>
 <A NAME="toc31"></A>
 <H3>Unary operators</H3>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -656,8 +698,8 @@ type classes.
 </TR>
 <TR>
 <TD><CODE>-</CODE></TD>
-<TD ALIGN="right">10</TD>
-<TD><CODE>-x =&gt; negate ? ? x</CODE></TD>
+<TD ALIGN="center">10</TD>
+<TD ALIGN="center"><CODE>-x =&gt; negate ? ? x</CODE></TD>
 </TR>
 </TABLE>
 
