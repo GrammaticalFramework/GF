@@ -1317,7 +1317,7 @@ oper
 -- "What do you want to do? - Wash myself."
 
   verbUtterance : VerbPhrase -> Utterance = \vp ->
-    ss (vp.s1 ++ vp.s ! VIInfinit ! ASgP1) ; 
+    ss (vp.s1 ++ vp.s ! VIInfinit ! ASgP1 ++ ".") ; 
 
 
 --2 Sentence adverbs

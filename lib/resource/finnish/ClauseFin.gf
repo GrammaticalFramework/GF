@@ -187,7 +187,7 @@ concrete ClauseFin of Clause = CategoriesFin **
       (insertObjectInf (mkClauseInf verb) verb.c verb.s3 verb.p y)
         verb.c2 verb.s5 verb.p2 z ;
   IPredVS verb sent = 
-    insertComplementInf (mkClauseInf verb) sent.s ;
+    insertComplementInf (mkClauseInf verb) (embedConj ++ sent.s) ;
   IPredVQ verb quest = 
     insertComplementInf (mkClauseInf verb) quest.s ;
 
