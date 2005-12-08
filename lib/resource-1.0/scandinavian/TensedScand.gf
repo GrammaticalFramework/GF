@@ -1,4 +1,5 @@
-incomplete concrete TensedScand of Tensed = CatScand, TenseX ** open ResScand in {
+incomplete concrete TensedScand of Tensed = CatScand, TenseX ** 
+  open ResScand in {
 
   flags optimize=all_subs ;
 
