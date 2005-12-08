@@ -46,7 +46,7 @@ param
 ---  AdjPronForm = APron GenNum Case ;
 ---  AuxVerbForm = AuxInf | AuxPres | AuxPret | AuxSup ;
 
-  RCase = RNom | RAcc | RGen | RPrep ;
+  RCase = RNom | RGen | RPrep ;
 
   RAgr = RNoAg | RAg {gn : GenNum ; p : Person} ;
 
