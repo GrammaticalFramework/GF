@@ -1,2 +1,2 @@
-concrete TensedSwe of Tensed = CatSwe ** TensedScand with
+concrete TensedSwe of Tensed = CatSwe, TenseX ** TensedScand with
   (DiffScand = DiffSwe) ;

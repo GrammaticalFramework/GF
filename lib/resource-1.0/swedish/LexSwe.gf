@@ -38,7 +38,7 @@ concrete LexSwe of Lex = CatSwe ** open ResSwe, Prelude in {
     
     i_Pron  = mkNP "jag"  "mig"  "min" "mitt" "mina"  SgUtr P1 ;
     he_Pron = mkNP "han"  "honom"  "hans" "hans" "hans"  SgUtr P3 ;
-    we_Pron = mkNP "vi"  "oss"  "vår" "vårt" "våra"  SgUtr P1 ;
+    we_Pron = mkNP "vi"  "oss"  "vår" "vårt" "våra"  Plg P1 ;
 
     whoSg_IP = {s = vem.s ; gn = SgUtr} ;
     whoPl_IP = {s = vem.s ; gn = Plg} ;

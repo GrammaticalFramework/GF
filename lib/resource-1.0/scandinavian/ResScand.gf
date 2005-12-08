@@ -129,9 +129,10 @@ resource ResScand = ParamScand ** open Prelude in {
       _ => de
     } ;  
 
---    regNP : Str -> Number -> {s : Case => Str ; a : Agr} = \that,n ->
---      mkNP that that (that + "'s") n P3 ;
---
+  regNP : Str -> Str -> GenNum -> {s : NPForm => Str ; a : Agr} =
+    \det,dess,gn ->
+    mkNP det det dess dess dess gn P3 ;
+
 
 -- For $Verb$.
 

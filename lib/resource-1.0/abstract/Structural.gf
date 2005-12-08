@@ -21,8 +21,8 @@ abstract Structural = Cat ** {
   almost_AdA : AdA ;    -- Adv
   almost_AdN : AdN ;    --
   although_Subj : Subj ;
-  and_Conj : Conj ;
   always_AdV : AdV ; --
+  and_Conj : Conj ;
   because_Subj : Subj ;
   before_Prep : Prep ;
   behind_Prep : Prep ;
@@ -76,15 +76,17 @@ abstract Structural = Cat ** {
   somewhere_Adv : Adv ;
   that_Quant : Quant ; -- Det
   that_NP : NP ;
-  there_Adv : Adv ;
-  there7to_Adv : Adv ;
-  there7from_Adv : Adv ;
+  there_Adv : Adv ; --
+  there7to_Adv : Adv ; --
+  there7from_Adv : Adv ; --
   therefore_PConj : PConj ; -- AdC
+  these_NP : NP ; --
   these_Quant : Quant ; -- NDet
 --  they8fem_NP : NP ;
   they_Pron : Pron ; -- NP
   this_Quant : Quant ; -- NDet
   this_NP : NP ;
+  those_NP : NP ; --
   those_Quant : Quant ; -- NDet
   thou_Pron : Pron ; -- NP
   through_Prep : Prep ;
