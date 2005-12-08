@@ -75,7 +75,7 @@ lin
    factory_N = regN "fábrica" ;	
    father_N2 = deN2 (regN "padre") ;
    fear_VS = mkVS (regV "temer") ;
-   find_V2 = dirV2 (regV "encontrar") ;
+   find_V2 = dirV2 (verboV (encontrar_38 "encontrar")) ;
    fish_N = mascN (regN "pez") ;
    floor_N = regN "suelo" ;		-- piso
    forget_V2 = dirV2 (regV "olvidar") ;

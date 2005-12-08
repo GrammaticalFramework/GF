@@ -882,7 +882,7 @@ oper
   questClause : Clause -> Question = \cl -> 
     {s = \\b,c => table {
        DirQ   => cl.s ! b ! c ;
-       IndirQ => cl.s ! b ! c
+       IndirQ => siSubj.s ++ cl.s ! b ! c
        }
     } ;
 
@@ -1174,7 +1174,7 @@ oper
     useNounPhrase (indefNounPhrase n mec) ;
 
   verbUtterance : VerbPhrase -> Utterance = \vp ->
-    ss (vp.s ! VIInfinit ! Masc !  Sg ! P3) ; 
+    ss (vp.s ! VIInfinit ! Masc !  Sg ! P3 ++ ".") ; 
 
 
 -- one-form variants

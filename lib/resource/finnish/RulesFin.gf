@@ -63,7 +63,7 @@ lin
   PredAS adj sent = sats2clause (
     insertComplement 
       (mkSats impersNounPhrase (vNom verbOlla))
-      (complAdjPhrase Sg (adj2adjPhrase adj) ++ sent.s)
+        ((adj2adjPhrase adj).s ! APred ! AN (NCase Sg Part) ++ embedConj ++ sent.s)
       ) ; 
   PredV0 rain = sats2clause (mkSats impersNounPhrase (vNom rain)) ;
 
