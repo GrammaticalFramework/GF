@@ -39,8 +39,9 @@ incomplete concrete CatScand of Cat =
 
     SC   = {s : Str} ; -- always Sub
 
-    A  = {s : AForm => Str} ;
-    A2 = {s : AForm => Str} ** {c2 : Str} ;
+    A  = Adjective ;
+       -- {s : AForm => Str} ;
+    A2 = Adjective ** {c2 : Str} ;
 
     Adv, AdV, AdA, AdS, AdN = {s : Str} ;
     Prep = {s : Str} ;
@@ -73,6 +74,4 @@ incomplete concrete CatScand of Cat =
     Conj = {s : Str ; n : Number} ;
     DConj = {s1,s2 : Str ; n : Number} ;
 
-  oper
-    Noun = {s : Number => Species => Case => Str ; g : Gender} ;
 }

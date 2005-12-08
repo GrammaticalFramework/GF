@@ -18,7 +18,7 @@ resource ResScand = ParamScand ** open Prelude in {
 -- But $mkNoun$ is fully defined only for each language, since
 -- $Gender$ varies.
 
-    nounForms : (_,_,_,_ : Str) -> (Number => Species => Case => Str) = 
+  nounForms : (x1,_,_,x4 : Str) -> (Number => Species => Case => Str) = 
       \man,mannen,men,mennen -> \\n,d,c => case <n,d> of {
         <Sg,Indef> => mkCase c man ;
         <Sg,Def>   => mkCase c mannen ;
@@ -26,7 +26,9 @@ resource ResScand = ParamScand ** open Prelude in {
         <Pl,Def>   => mkCase c mennen
         } ;
 
-  mkAdjective : (s1,_,_,_,_,_,s7 : Str) -> {s : AForm => Str} = 
+  Adjective : Type = {s : AForm => Str} ;
+
+  mkAdjective : (x1,_,_,_,_,_,x7 : Str) -> {s : AForm => Str} = 
     \liten, litet, lilla, sma, mindre, minst, minsta -> {
     s = table {
       AF (APosit a) c          => mkCase c (mkAdjPos a liten litet lilla sma) ;
@@ -45,7 +47,7 @@ resource ResScand = ParamScand ** open Prelude in {
     VF (VImper v)   => mkVoice v finn ;
     VI (VInfin v)   => mkVoice v finna ;
     VI (VSupin v)   => mkVoice v funnit ;
-    VI (VPtPret a c) => mkCase c (mkAdjPos a funnen funnet funna funna)
+    VI (VPtPret a c)=> mkCase c (mkAdjPos a funnen funnet funna funna)
     }
    } ;
 

@@ -59,6 +59,9 @@ interface DiffScand = open ResScand, Prelude in {
       p = P3
       } ;
 
+    Noun = {s : Number => Species => Case => Str ; g : Gender} ;
+
+
 -- This function is here because it depends on $verbHave, auxFut, auxCond$.
 
    predV : Verb -> VP = \verb -> 
