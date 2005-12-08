@@ -249,9 +249,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Str -> Str -> V3 ;    -- speak, with, about
-  dirV3    : V -> Str -> V3 ;           -- give,_,to
-  dirdirV3 : V -> V3 ;                  -- give,_,_
+  mkV3     : V -> Preposition -> Preposition -> V3 ; -- speak, with, about
+  dirV3    : V -> Preposition -> V3 ;                -- give,_,to
+  dirdirV3 : V -> V3 ;                               -- give,_,_
 
 --3 Other complement patterns
 --
