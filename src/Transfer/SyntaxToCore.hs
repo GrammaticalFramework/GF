@@ -577,10 +577,10 @@ gtrue = GuardExp true
 
 
 mkETuple :: [Exp] -> Exp
-mkETuple = ERec . zipWith (\i -> FieldValue (Ident ("p"++show i))) [0..]
+mkETuple = ERec . zipWith (\i -> FieldValue (Ident ("p"++show i))) [1..]
 
 mkPTuple :: [Pattern] -> Pattern
-mkPTuple = PRec . zipWith (\i -> FieldPattern (Ident ("p"++show i))) [0..]
+mkPTuple = PRec . zipWith (\i -> FieldPattern (Ident ("p"++show i))) [1..]
 
 -- | Apply an expression to a list of arguments.
 apply :: Exp -> [Exp] -> Exp
