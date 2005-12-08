@@ -48,12 +48,16 @@ data SLFEdge = SLFEdge { eId :: Int, eStart :: Int, eEnd :: Int }
 
 slfPrinter :: Ident -- ^ Grammar name
 	   -> Options -> CGrammar -> String
-slfPrinter name opts cfg = prSLF (automatonToSLF $ moveLabelsToNodes $ dfa2nfa $ cfgToFA name opts cfg) ""
+slfPrinter name opts cfg = prSLF (automatonToSLF $ mkSLFFA name opts cfg) ""
 
 slfGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 slfGraphvizPrinter name opts cfg = 
-    prFAGraphviz $ mapStates (fromMaybe "") $ mapTransitions (const "") $ moveLabelsToNodes $ dfa2nfa $ cfgToFA name opts cfg
+    prFAGraphviz $ mapStates (fromMaybe "") $ mapTransitions (const "") $ mkSLFFA name opts cfg
+
+mkSLFFA :: Ident -- ^ Grammar name
+	-> Options -> CGrammar -> FA State (Maybe String) ()
+mkSLFFA name opts cfg = oneFinalState Nothing () $ moveLabelsToNodes $ dfa2nfa $ cfgToFA name opts cfg
 
 automatonToSLF :: FA State (Maybe String) () -> SLF
 automatonToSLF fa = 

@@ -18,6 +18,7 @@ module GF.Speech.FiniteState (FA, State, NFA, DFA,
 			      addFinalState,
 			      newState, newTransition,
 			      mapStates, mapTransitions,
+                              oneFinalState,
 			      moveLabelsToNodes, minimize,
                               dfa2nfa,
 			      prFAGraphviz) where
@@ -78,6 +79,18 @@ minimize = determinize . reverseNFA . dfa2nfa . determinize . reverseNFA
 
 onGraph :: (Graph n a b -> Graph n c d) -> FA n a b -> FA n c d
 onGraph f (FA g s ss) = FA (f g) s ss
+
+-- | Make the finite automaton have a single final state
+--   by adding a new final state and adding an edge
+--   from the old final states to the new state.
+oneFinalState :: a        -- ^ Label to give the new node
+              -> b        -- ^ Label to give the new edges
+              -> FA n a b -- ^ The old network
+              -> FA n a b -- ^ The new network
+oneFinalState nl el fa =
+    let (FA g s fs,nf) = newState nl fa
+        es = [ (f,nf,el) | f <- fs ]
+     in FA (newEdges es g) s [nf]
 
 -- | Transform a standard finite automaton with labelled edges
 --   to one where the labels are on the nodes instead. This can add
