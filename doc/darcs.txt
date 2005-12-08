@@ -8,6 +8,7 @@ Last update: %%date(%c)
 
 %!target:html
 %!options(html): --toc
+%!encoding:utf-8
 
 **GF has now been moved to a Darcs repository. No changes should be committed to the CVS repository from now on.**
 
