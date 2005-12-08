@@ -36,6 +36,14 @@ interface DiffScand = open ResScand, Prelude in {
 
     genderForms : (x1,x2 : Str) -> Gender => Str ;
 
+-- The forms of a relative pronoun ("som", "vars", "i vilken").
+
+    relPron : GenNum => RCase => Str ;
+
+-- Pronoun "sådan" used in $Relative.RelCl$.
+
+    pronSuch : GenNum => Str ;
+
 -----------------------------------------------------------------------
 --
 -- The functions and parameters below are here because they depend on

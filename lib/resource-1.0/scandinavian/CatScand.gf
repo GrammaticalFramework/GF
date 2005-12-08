@@ -64,7 +64,7 @@ incomplete concrete CatScand of Cat =
     IDet = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
     IAdv = {s : Str} ;    
 
-    RP = {s : RCase => Str ; a : RAgr} ;
+    RP = {s : GenNum => RCase => Str ; a : RAgr} ;
 
     Numeral = {s : CardOrd => Str ; n : Number} ;
 

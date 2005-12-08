@@ -50,4 +50,14 @@ instance DiffSwe of DiffScand = open ResScand, Prelude in {
         Neutr => allt
         } ;
 
+    relPron : GenNum => RCase => Str = \\gn,c => case c of {
+      RNom  => "som" ;
+      RGen  => "vars" ;
+      RPrep => gennumForms "vilken" "vilket" "vilka" ! gn
+      } ;
+
+    pronSuch = gennumForms "sådan" "sådant" "sådana" ;
+
+
+
 }

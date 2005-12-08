@@ -68,12 +68,19 @@ incomplete concrete NounScand of Noun =
       g = g
       } ;
 
-{-
-    RelCN cn rs = {s = \\n,c => cn.s ! n ! c ++ rs.s ! {n = n ; p = P3}} ;
+    RelCN cn rs = let g = cn.g in {
+      s = \\n,d,c => cn.s ! n ! d ! c ++ rs.s ! agrP3 g n ;
+      g = g
+      } ;
+    SentCN  cn s = let g = cn.g in {
+      s = \\n,d,c => cn.s ! n ! d ! c ++ conjThat ++ s.s ! Sub ;
+      g = g
+      } ;
+    QuestCN cn qs = let g = cn.g in {
+      s = \\n,d,c => cn.s ! n ! d ! c ++ qs.s ! QIndir ;
+      g = g
+      } ;
 
-    SentCN cn s = {s = \\n,c => cn.s ! n ! c ++ conjThat ++ s.s} ;
-    QuestCN cn qs = {s = \\n,c => cn.s ! n ! c ++ qs.s ! QIndir} ;
--}
     UseN noun = {
       s = \\n,d => noun.s ! n ! specDet d ;
       g = noun.g
