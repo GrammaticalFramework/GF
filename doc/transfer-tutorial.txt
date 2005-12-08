@@ -8,7 +8,7 @@ Last update: %%date(%c)
 
 %!target:html
 %!options(html): --toc
-
+%!encoding:utf-8
 
 
 = Objective =
