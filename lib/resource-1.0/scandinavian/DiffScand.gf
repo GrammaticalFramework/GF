@@ -18,6 +18,7 @@ interface DiffScand = open ResScand, Prelude in {
 
     conjThat : Str ;
     conjThan : Str ;
+    conjAnd  : Str ;
     infMark  : Str ;
 
     subjIf : Str ;

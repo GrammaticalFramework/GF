@@ -1,4 +1,4 @@
-resource ParamX = {
+resource ParamX = open Prelude in {
 
   param
     Number = Sg | Pl ;
@@ -26,10 +26,10 @@ resource ParamX = {
 
 -- To construct a record with a polarity-dependent table.
 
-    polCases : Str -> Str -> {s : Polarity => Str} = \true,false -> {
+    polCases : SS -> SS -> {s : Polarity => Str} = \true,false -> {
       s = table {
-        Pos => true ;
-        Neg => false
+        Pos => true.s ;
+        Neg => false.s
         }
       } ;
 
