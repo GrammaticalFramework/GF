@@ -22,6 +22,7 @@ instance DiffSwe of DiffScand = open ResScand, Prelude in {
 
     conjThat = "att" ;
     conjThan = "än" ;
+    conjAnd = "och" ;
     infMark  = "att" ;
 
     subjIf = "om" ;

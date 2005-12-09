@@ -26,7 +26,7 @@ incomplete concrete VerbScand of Verb = CatScand ** open DiffScand, ResScand in 
     CompAdv a = {s = \\_ => a.s} ;
 
 --- these give parser overflow
----    AdvVP vp adv = insertAdv adv.s vp ;
+    AdvVP vp adv = insertAdv adv.s vp ;
 ---    AdVVP adv vp = insertAdV adv.s vp ;
 
 {-

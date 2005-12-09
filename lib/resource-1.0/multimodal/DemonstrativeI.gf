@@ -23,7 +23,10 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
       in 
       mkDem 
         {s : Polarity => Str} 
-        (polCases (PosCl cl).s (NegCl cl).s) (concatPoint np vp) ;
+        (polCases 
+          (UttS (PosCl cl)) 
+          (UttS (NegCl cl))) 
+        (concatPoint np vp) ;
 
     MQPredVP np vp = 
       let cl = QuestCl (PredVP np vp)
@@ -31,8 +34,8 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
       mkDem 
         {s : Polarity => Str} 
         (polCases 
-           ((PosQCl cl).s ! QDir) 
-           ((NegQCl cl).s ! QDir))
+           (UttQS (PosQCl cl)) 
+           (UttQS (NegQCl cl)))
         (concatPoint np vp) ;
 
     MQuestVP np vp = 
@@ -41,8 +44,8 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
       mkDem 
         {s : Polarity => Str} 
         (polCases 
-           ((PosQCl cl).s ! QDir) 
-           ((NegQCl cl).s ! QDir))
+           (UttQS (PosQCl cl)) 
+           (UttQS (NegQCl cl)))
         vp ;
 
     MImpVP vp =
@@ -51,8 +54,8 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
       mkDem 
         {s : Polarity => Str} 
         (polCases 
-           ((UttImpSg PPos imp).s) 
-           ((UttImpSg PNeg imp).s))
+           ((UttImpSg PPos imp)) 
+           ((UttImpSg PNeg imp)))
         vp ;
       
 
