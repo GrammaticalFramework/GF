@@ -177,6 +177,17 @@ summary of the supported input and output formats (the nodes in ellipses).
 
 <p>
 
+For instance, if you want to write a finite-state automaton
+in the HTK SLF format (to use for speech recognition), all you have to do
+is to write an EBNF grammar in a file <tt>foo.ebnf</tt> and type
+<pre>
+  echo "pg -printer=slf" | gf foo.ebnf
+</pre>
+
+
+
+<h2>License</h2>
+
 GF is open-source software licensed under 
 <a href="LICENSE">GNU General Public License (GPL)</a>.
 
