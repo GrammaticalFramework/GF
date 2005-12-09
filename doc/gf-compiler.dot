@@ -67,10 +67,19 @@ gf11 [label = "file.gfc", style = "solid", shape = "plaintext"];
   cfgm [label = "file.cfgm", style = "solid", shape = "plaintext"];
   gfc -> cfgm [label = " Conversions.GFC", style = "dotted"];
 
-  srg [label = "file.gsl", style = "solid", shape = "plaintext"];
+  srg [label = "Non-LR CFG", style = "solid", shape = "plaintext"];
   cfg -> srg [label = " Speech.SRG", style = "dotted"];
 
+  gsl [label = "file.gsl", style = "solid", shape = "plaintext"];
+  srg -> gsl [label = " Speech.PrGSL", style = "dotted"]; 
+
+  jsgf [label = "file.jsgf", style = "solid", shape = "plaintext"];
+  srg -> jsgf [label = " Speech.PrJSGF", style = "dotted"]; 
+
+  fa [label = "DFA", style = "solid", shape = "plaintext"];
+  cfg -> fa [label = " Speech.CFGToFiniteState", style = "dotted"];
+
   slf [label = "file.slf", style = "solid", shape = "plaintext"];
-  cfg -> slf [label = " Speech.CFGToFiniteState", style = "dotted"];
+  fa -> slf [label = " Speech.PrSLF", style = "dotted"];
 
 }
