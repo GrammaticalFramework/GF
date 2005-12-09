@@ -1,4 +1,4 @@
 import nat
 import fib
 
--- main = natToInt (fibNat (intToNat 10))
+main = (\x -> (\x -> \x -> x) 1 x) 5
