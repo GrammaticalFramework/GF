@@ -1,9 +1,9 @@
 digraph {
 
   gfe [label = "file.gfe", style = "solid", shape = "plaintext"];
-  gfe -> gf1 [label = " MkConcrete", style = "dotted"];
+  gfe -> gf1 [label = " MkConcrete", style = "dashed"];
 
-gf1 [label = "file.gf", style = "solid", shape = "plaintext"];
+gf1 [label = "file.gf", style = "solid", shape = "ellipse"];
 gf1 -> gf2 [label = " LexGF", style = "solid"];
 
 gf2 [label = "token list", style = "solid", shape = "plaintext"];
@@ -13,10 +13,10 @@ gf3 [label = "source tree", style = "solid", shape = "plaintext"];
 gf3 -> gf4 [label = " SourceToGrammar", style = "solid"];
 
   cf [label = "file.cf", style = "solid", shape = "plaintext"];
-  cf -> gf4 [label = " CF.PPrCF", style = "dotted"];
+  cf -> gf4 [label = " CF.PPrCF", style = "dashed"];
 
   ebnf [label = "file.ebnf", style = "solid", shape = "plaintext"];
-  ebnf -> gf4 [label = " CF.EBNF", style = "dotted"];
+  ebnf -> gf4 [label = " CF.EBNF", style = "dashed"];
 
 
 gf4 [label = "GF tree", style = "solid", shape = "plaintext"];
@@ -37,49 +37,49 @@ gf8 -> gf9 [label = " GrammarToCanon", style = "solid"];
 gf9 [label = "GFC tree", style = "solid", shape = "plaintext"];
 gf9 -> gfc [label = " BackOpt", style = "solid"];
 
-gfc [label = "optimized GFC tree", style = "solid", shape = "plaintext"];
+gfc [label = "optimized GFC tree", style = "solid", shape = "box"];
 gfc -> gf11 [label = " PrintGFC", style = "solid"];
 
-gf11 [label = "file.gfc", style = "solid", shape = "plaintext"];
+gf11 [label = "file.gfc", style = "solid", shape = "ellipse"];
 
 
   mcfg [label = "file.gfcm", style = "solid", shape = "plaintext"];
-  gfc -> mcfg [label = " PrintGFC", style = "dotted"];
+  gfc -> mcfg [label = " PrintGFC", style = "dashed"];
 
   bnf [label = "file.cf", style = "solid", shape = "plaintext"];
-  gfc -> bnf [label = " CF.PrLBNF", style = "dotted"];
+  gfc -> bnf [label = " CF.PrLBNF", style = "dashed"];
 
   happy [label = "file.y (Happy)", style = "solid", shape = "plaintext"];
-  bnf -> happy [label = " bnfc", style = "dotted"];
+  bnf -> happy [label = " bnfc", style = "dashed"];
 
   bison [label = "file.y (Bison)", style = "solid", shape = "plaintext"];
-  bnf -> bison [label = " bnfc", style = "dotted"];
+  bnf -> bison [label = " bnfc", style = "dashed"];
 
   cup [label = "parser.java (CUP)", style = "solid", shape = "plaintext"];
-  bnf -> cup [label = " bnfc", style = "dotted"];
+  bnf -> cup [label = " bnfc", style = "dashed"];
 
   xml [label = "file.dtd (XML)", style = "solid", shape = "plaintext"];
-  bnf -> xml [label = " bnfc", style = "dotted"];
+  bnf -> xml [label = " bnfc", style = "dashed"];
 
-  cfg [label = "file.cfg", style = "solid", shape = "plaintext"];
-  gfc -> cfg [label = " Conversions.GFC", style = "dotted"];
+  cfg [label = "CFG tree", style = "solid", shape = "plaintext"];
+  gfc -> cfg [label = " Conversions.GFC", style = "dashed"];
 
   cfgm [label = "file.cfgm", style = "solid", shape = "plaintext"];
-  gfc -> cfgm [label = " Conversions.GFC", style = "dotted"];
+  cfg -> cfgm [label = " Conversions.GFC", style = "dashed"];
 
   srg [label = "Non-LR CFG", style = "solid", shape = "plaintext"];
-  cfg -> srg [label = " Speech.SRG", style = "dotted"];
+  cfg -> srg [label = " Speech.SRG", style = "dashed"];
 
   gsl [label = "file.gsl", style = "solid", shape = "plaintext"];
-  srg -> gsl [label = " Speech.PrGSL", style = "dotted"]; 
+  srg -> gsl [label = " Speech.PrGSL", style = "dashed"]; 
 
   jsgf [label = "file.jsgf", style = "solid", shape = "plaintext"];
-  srg -> jsgf [label = " Speech.PrJSGF", style = "dotted"]; 
+  srg -> jsgf [label = " Speech.PrJSGF", style = "dashed"]; 
 
   fa [label = "DFA", style = "solid", shape = "plaintext"];
-  cfg -> fa [label = " Speech.CFGToFiniteState", style = "dotted"];
+  cfg -> fa [label = " Speech.CFGToFiniteState", style = "dashed"];
 
   slf [label = "file.slf", style = "solid", shape = "plaintext"];
-  fa -> slf [label = " Speech.PrSLF", style = "dotted"];
+  fa -> slf [label = " Speech.PrSLF", style = "dashed"];
 
 }
