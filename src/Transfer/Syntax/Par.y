@@ -190,7 +190,7 @@ Exp1 : '\\' VarOrWild '->' Exp1 { EAbs $2 $4 }
 
 
 LetDef :: { LetDef }
-LetDef : Ident ':' Exp '=' Exp { LetDef $1 $3 $5 } 
+LetDef : Ident '=' Exp { LetDef $1 $3 } 
 
 
 ListLetDef :: { [LetDef] }

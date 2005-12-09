@@ -42,7 +42,7 @@ PVWild. PatternVariable ::= "_" ;
 
 -- Let expressions.
 ELet.      Exp  ::= "let" "{" [LetDef] "}" "in" Exp ;
-LetDef.    LetDef ::= CIdent ":" Exp "=" Exp ;
+LetDef.    LetDef ::= CIdent "=" Exp ;
 separator LetDef ";" ;
 
 -- Case expressions.
@@ -50,11 +50,10 @@ ECase.     Exp  ::= "case" Exp "of" "{" [Case] "}" ;
 Case.      Case ::= Pattern "|" Exp "->" Exp ;
 separator  Case ";" ;
 
-
 -- Lambda abstractions.
-EAbs.      Exp2 ::= "\\" PatternVariable "->" Exp ;
+EAbs.      Exp1 ::= "\\" PatternVariable "->" Exp ;
 -- Function types.
-EPi.       Exp2 ::= "(" PatternVariable ":" Exp ")" "->" Exp ;
+EPi.       Exp1 ::= "(" PatternVariable ":" Exp ")" "->" Exp ;
 
 -- Function application.
 EApp.      Exp3 ::= Exp3 Exp4 ;

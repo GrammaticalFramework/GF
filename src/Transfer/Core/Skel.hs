@@ -39,7 +39,7 @@ transTree t = case t of
   EInteger n -> failure t
   EDouble d -> failure t
   EMeta tmeta -> failure t
-  LetDef cident exp0 exp1 -> failure t
+  LetDef cident exp -> failure t
   Case pattern exp0 exp1 -> failure t
   FieldType cident exp -> failure t
   FieldValue cident exp -> failure t
@@ -97,7 +97,7 @@ transExp t = case t of
 
 transLetDef :: LetDef -> Result
 transLetDef t = case t of
-  LetDef cident exp0 exp1 -> failure t
+  LetDef cident exp -> failure t
 
 transCase :: Case -> Result
 transCase t = case t of

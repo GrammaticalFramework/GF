@@ -83,7 +83,7 @@ VWild.     VarOrWild ::= "_" ;
 
 EAbs.      Exp1 ::= "\\" VarOrWild "->" Exp1 ;
 ELet.      Exp1 ::= "let" "{" [LetDef] "}" "in" Exp1 ;
-LetDef.    LetDef ::= Ident ":" Exp "=" Exp ;
+LetDef.    LetDef ::= Ident "=" Exp ;
 separator LetDef ";" ;
 ECase.     Exp1 ::= "case" Exp "of" "{" [Case] "}" ;
 Case.     Case ::= Pattern Guard "->" Exp ;

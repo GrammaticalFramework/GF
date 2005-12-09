@@ -550,7 +550,7 @@ substs ss = f (Map.fromList ss)
  f ss t | Map.null ss = t
  f ss t = case t of
    ELet ds e3 ->
-     ELet [LetDef id (f ss e1) (f ss' e2) | LetDef id e1 e2 <- ds] (f ss' e3)
+     ELet [LetDef id (f ss' e2) | LetDef id e2 <- ds] (f ss' e3)
       where ss' = ss `mapMinusSet` letDefBinds ds
    Case p g e -> Case p (f ss' g) (f ss' e) where ss' = ss `mapMinusSet` binds p
    EAbs (VVar id) e -> EAbs (VVar id) (f ss' e) where ss' = Map.delete id ss
@@ -618,13 +618,10 @@ freshIdents n = replicateM n freshIdent
 
 -- | Get the variables bound by a set of let definitions.
 letDefBinds :: [LetDef] -> Set Ident
-letDefBinds defs = Set.fromList [ id | LetDef id _ _ <- defs]
-
-letDefTypes :: [LetDef] -> [Exp]
-letDefTypes defs = [ exp1 | LetDef _ exp1 _ <- defs ]
+letDefBinds defs = Set.fromList [ id | LetDef id _ <- defs]
 
 letDefRhss :: [LetDef] -> [Exp]
-letDefRhss defs = [ exp2 | LetDef _ _ exp2 <- defs ]
+letDefRhss defs = [ exp | LetDef _ exp <- defs ]
 
 -- | Get the free variables in an expression.
 freeVars :: Exp -> Set Ident
@@ -632,10 +629,8 @@ freeVars = f
   where
   f :: Tree a -> Set Ident
   f t = case t of
-   ELet defs exp3 -> 
-        Set.unions $
-           (Set.unions (f exp3:map f (letDefRhss defs)) Set.\\ letDefBinds defs)
-           :map f (letDefTypes defs)
+   ELet defs exp -> 
+           Set.unions (f exp:map f (letDefRhss defs)) Set.\\ letDefBinds defs
    ECase exp cases -> f exp `Set.union` 
                       Set.unions [(f g `Set.union` f e) Set.\\ binds p 
                                       | Case p g e <- cases]
@@ -653,8 +648,7 @@ countFreeOccur x = f
   where
   f :: Tree a -> Int
   f t = case t of
-   ELet defs _ | x `Set.member` letDefBinds defs ->
-            sum (map f (letDefTypes defs))
+   ELet defs _ | x `Set.member` letDefBinds defs -> 0
    Case p _ _ | x `Set.member` binds p -> 0
    EAbs (VVar id) _ | id == x -> 0
    EPi (VVar id) exp1 _ | id == x -> f exp1

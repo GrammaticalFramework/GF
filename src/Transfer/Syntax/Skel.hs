@@ -74,7 +74,7 @@ transTree t = case t of
   EMeta  -> failure t
   VVar i -> failure t
   VWild  -> failure t
-  LetDef i exp0 exp1 -> failure t
+  LetDef i exp -> failure t
   Case pattern guard exp -> failure t
   BindVar varorwild exp -> failure t
   BindNoVar exp -> failure t
@@ -177,7 +177,7 @@ transVarOrWild t = case t of
 
 transLetDef :: LetDef -> Result
 transLetDef t = case t of
-  LetDef i exp0 exp1 -> failure t
+  LetDef i exp -> failure t
 
 transCase :: Case -> Result
 transCase t = case t of
