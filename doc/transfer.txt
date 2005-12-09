@@ -9,6 +9,8 @@ Last update: %%date(%c)
 %!target:html
 %!encoding:utf-8
 
+**WARNING: The Transfer language is still experimental. Its syntax, type system and semantics may change without notice. I will try to help you with any problems this might cause, but I will not refrain from changing the language solely for reasons of backwards compatibility.**
+
 The GF Transfer language is a programming language which can be
 used to write functions which work on abstract syntax terms. 
 

@@ -10,6 +10,8 @@ Last update: %%date(%c)
 %!options(html): --toc
 %!encoding:utf-8
 
+**WARNING: The Transfer language is still experimental. Its syntax, type system and semantics may change without notice. I will try to help you with any problems this might cause, but I will not refrain from changing the language solely for reasons of backwards compatibility.**
+
 This document describes the features of the Transfer language.
 See the [Transfer tutorial transfer-tutorial.html]
 for an example of a Transfer program, and how to compile and use 
