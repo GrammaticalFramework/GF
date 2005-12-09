@@ -43,20 +43,29 @@ gfc -> gf11 [label = " PrintGFC", style = "solid"];
 gf11 [label = "file.gfc", style = "solid", shape = "plaintext"];
 
 
-  mcfg [label = "file.mcfg", style = "solid", shape = "plaintext"];
+  mcfg [label = "file.gfcm", style = "solid", shape = "plaintext"];
   gfc -> mcfg [label = " PrintGFC", style = "dotted"];
 
   bnf [label = "file.cf", style = "solid", shape = "plaintext"];
   gfc -> bnf [label = " CF.PrLBNF", style = "dotted"];
 
-  happy [label = "file.y", style = "solid", shape = "plaintext"];
-  gfc -> happy [label = " BNFC", style = "dotted"];
+  happy [label = "file.y (Happy)", style = "solid", shape = "plaintext"];
+  bnf -> happy [label = " bnfc", style = "dotted"];
 
-  bison [label = "file.y", style = "solid", shape = "plaintext"];
-  gfc -> bison [label = " BNFC", style = "dotted"];
+  bison [label = "file.y (Bison)", style = "solid", shape = "plaintext"];
+  bnf -> bison [label = " bnfc", style = "dotted"];
+
+  cup [label = "parser.java (CUP)", style = "solid", shape = "plaintext"];
+  bnf -> cup [label = " bnfc", style = "dotted"];
+
+  xml [label = "file.dtd (XML)", style = "solid", shape = "plaintext"];
+  bnf -> xml [label = " bnfc", style = "dotted"];
 
   cfg [label = "file.cfg", style = "solid", shape = "plaintext"];
   gfc -> cfg [label = " Conversions.GFC", style = "dotted"];
+
+  cfgm [label = "file.cfgm", style = "solid", shape = "plaintext"];
+  gfc -> cfgm [label = " Conversions.GFC", style = "dotted"];
 
   srg [label = "file.gsl", style = "solid", shape = "plaintext"];
   cfg -> srg [label = " Speech.SRG", style = "dotted"];
