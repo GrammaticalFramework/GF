@@ -37,7 +37,8 @@ declsToCore_ =     deriveDecls
                >>> optimize
 
 optimize :: [Decl] -> C [Decl]
-optimize =     removeUselessMatch
+optimize =     uniqueVars
+           >>> removeUselessMatch
            >>> betaReduce
 
 newState :: CState
@@ -45,6 +46,51 @@ newState = CState {
                    nextVar = 0,
                    nextMeta = 0
                   }
+
+
+--
+-- * Make all variable names unique
+--
+
+uniqueVars :: [Decl] -> C [Decl]
+uniqueVars = mapM (f Map.empty)
+  where
+  f :: Map Ident Ident -> Tree a -> C (Tree a)
+  f ss t = case t of
+                ELet ds _ ->
+                    do
+                    let vs = Set.toList (letDefBinds ds)
+                    vs' <- freshIdents (length vs)
+                    let ss' = addToSubstEnv (zip vs vs') ss
+                    composOpM (f ss') t
+                LetDef i e -> 
+                    case Map.lookup i ss of 
+                         Nothing -> fail $ "let var " ++ printTree i ++ " not renamed"
+                         Just i' -> liftM (LetDef i') (f ss e)
+                Case p _ _ -> 
+                    do
+                    let vs = Set.toList (binds p)
+                    vs' <- freshIdents (length vs)
+                    let ss' = addToSubstEnv (zip vs vs') ss
+                    composOpM (f ss') t
+                EAbs (VVar i) e -> 
+                    do
+                    i' <- freshIdent
+                    let ss' = addToSubstEnv [(i,i')] ss
+                    liftM (EAbs (VVar i')) (f ss' e)
+                EPi (VVar i) e1 e2 -> 
+                    do
+                    i' <- freshIdent
+                    let ss' = addToSubstEnv [(i,i')] ss
+                    liftM2 (EPi (VVar i')) (f ss e1) (f ss' e2)
+                EVar i -> return $ case Map.lookup i ss of
+                                                        Nothing -> t -- constructor
+                                                        Just i' -> EVar i'
+                PVar i -> return $ case Map.lookup i ss of
+                                                        Nothing -> t -- constructor
+                                                        Just i' -> PVar i'
+                _ -> composOpM (f ss) t
+       where addToSubstEnv bs m = foldr (\ (k,v) -> Map.insert k v) m bs
 
 --
 -- * Number meta variables
@@ -535,6 +581,7 @@ ifBool :: Exp -> Exp -> Exp -> Exp
 ifBool c t e = ECase c [Case (PCons (Ident "True") []) gtrue t,
                         Case (PCons (Ident "False") []) gtrue e]
 
+
 --
 -- * Substitution
 --
@@ -542,7 +589,22 @@ ifBool c t e = ECase c [Case (PCons (Ident "True") []) gtrue t,
 subst :: Ident -> Exp -> Exp -> Exp
 subst x e = substs [(x,e)]
 
+
+
 -- | Simultaneuous substitution
+substs :: [(Ident, Exp)] -> Exp -> Exp
+substs ss = f (Map.fromList ss)
+ where  
+ f :: Map Ident Exp -> Tree a -> Tree a
+ f ss t | Map.null ss = t
+ f ss t = case t of
+                 EVar i -> Map.findWithDefault t i ss
+                 _      -> composOp (f ss) t
+
+
+{-
+-- not needed now that variable names are unique
+-- FIXE: this function does not properly rename bound variables
 substs :: [(Ident, Exp)] -> Exp -> Exp
 substs ss = f (Map.fromList ss)
  where  
@@ -558,6 +620,7 @@ substs ss = f (Map.fromList ss)
        EPi (VVar id) (f ss e1) (f ss' e2) where ss' = Map.delete id ss
    EVar i -> Map.findWithDefault t i ss
    _      -> composOp (f ss) t
+-}
 
 --
 -- * Abstract syntax utilities
