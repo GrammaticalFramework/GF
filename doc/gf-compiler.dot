@@ -1,0 +1,67 @@
+digraph {
+
+  gfe [label = "file.gfe", style = "solid", shape = "plaintext"];
+  gfe -> gf1 [label = " MkConcrete", style = "dotted"];
+
+gf1 [label = "file.gf", style = "solid", shape = "plaintext"];
+gf1 -> gf2 [label = " LexGF", style = "solid"];
+
+gf2 [label = "token list", style = "solid", shape = "plaintext"];
+gf2 -> gf3 [label = " ParGF", style = "solid"];
+
+gf3 [label = "source tree", style = "solid", shape = "plaintext"];
+gf3 -> gf4 [label = " SourceToGrammar", style = "solid"];
+
+  cf [label = "file.cf", style = "solid", shape = "plaintext"];
+  cf -> gf4 [label = " CF.PPrCF", style = "dotted"];
+
+  ebnf [label = "file.ebnf", style = "solid", shape = "plaintext"];
+  ebnf -> gf4 [label = " CF.EBNF", style = "dotted"];
+
+
+gf4 [label = "GF tree", style = "solid", shape = "plaintext"];
+gf4 -> gf5 [label = " Extend", style = "solid"];
+
+gf5 [label = "inheritance-linked GF tree", style = "solid", shape = "plaintext"];
+gf5 -> gf6 [label = " Rename", style = "solid"];
+
+gf6 [label = "name-resolved GF tree", style = "solid", shape = "plaintext"];
+gf6 -> gf7 [label = " CheckGrammar", style = "solid"];
+
+gf7 [label = "type-annotated GF tree", style = "solid", shape = "plaintext"];
+gf7 -> gf8 [label = " Optimize", style = "solid"];
+
+gf8 [label = "optimized GF tree", style = "solid", shape = "plaintext"];
+gf8 -> gf9 [label = " GrammarToCanon", style = "solid"];
+
+gf9 [label = "GFC tree", style = "solid", shape = "plaintext"];
+gf9 -> gfc [label = " BackOpt", style = "solid"];
+
+gfc [label = "optimized GFC tree", style = "solid", shape = "plaintext"];
+gfc -> gf11 [label = " PrintGFC", style = "solid"];
+
+gf11 [label = "file.gfc", style = "solid", shape = "plaintext"];
+
+
+  mcfg [label = "file.mcfg", style = "solid", shape = "plaintext"];
+  gfc -> mcfg [label = " PrintGFC", style = "dotted"];
+
+  bnf [label = "file.cf", style = "solid", shape = "plaintext"];
+  gfc -> bnf [label = " CF.PrLBNF", style = "dotted"];
+
+  happy [label = "file.y", style = "solid", shape = "plaintext"];
+  gfc -> happy [label = " BNFC", style = "dotted"];
+
+  bison [label = "file.y", style = "solid", shape = "plaintext"];
+  gfc -> bison [label = " BNFC", style = "dotted"];
+
+  cfg [label = "file.cfg", style = "solid", shape = "plaintext"];
+  gfc -> cfg [label = " Conversions.GFC", style = "dotted"];
+
+  srg [label = "file.gsl", style = "solid", shape = "plaintext"];
+  cfg -> srg [label = " Speech.SRG", style = "dotted"];
+
+  slf [label = "file.slf", style = "solid", shape = "plaintext"];
+  cfg -> slf [label = " Speech.CFGToFiniteState", style = "dotted"];
+
+}
