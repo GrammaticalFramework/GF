@@ -114,7 +114,7 @@ Exp : 'let' '{' ListLetDef '}' 'in' Exp { ELet $3 $6 }
 
 
 LetDef :: { LetDef }
-LetDef : CIdent ':' Exp '=' Exp { LetDef $1 $3 $5 } 
+LetDef : CIdent '=' Exp { LetDef $1 $3 } 
 
 
 ListLetDef :: { [LetDef] }
@@ -133,10 +133,10 @@ ListCase : {- empty -} { [] }
   | Case ';' ListCase { (:) $1 $3 }
 
 
-Exp2 :: { Exp }
-Exp2 : '\\' PatternVariable '->' Exp { EAbs $2 $4 } 
+Exp1 :: { Exp }
+Exp1 : '\\' PatternVariable '->' Exp { EAbs $2 $4 } 
   | '(' PatternVariable ':' Exp ')' '->' Exp { EPi $2 $4 $7 }
-  | Exp3 { $1 }
+  | Exp2 { $1 }
 
 
 Exp3 :: { Exp }
@@ -181,8 +181,8 @@ ListFieldValue : {- empty -} { [] }
   | FieldValue ';' ListFieldValue { (:) $1 $3 }
 
 
-Exp1 :: { Exp }
-Exp1 : Exp2 { $1 } 
+Exp2 :: { Exp }
+Exp2 : Exp3 { $1 } 
 
 
 

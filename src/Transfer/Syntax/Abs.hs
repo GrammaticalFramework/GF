@@ -103,7 +103,7 @@ data Tree :: * -> * where
     EMeta :: Tree Exp_
     VVar :: Ident -> Tree VarOrWild_
     VWild :: Tree VarOrWild_
-    LetDef :: Ident -> Exp -> Exp -> Tree LetDef_
+    LetDef :: Ident -> Exp -> Tree LetDef_
     Case :: Pattern -> Guard -> Exp -> Tree Case_
     BindVar :: VarOrWild -> Exp -> Tree Bind_
     BindNoVar :: Exp -> Tree Bind_
@@ -175,7 +175,7 @@ composOpM f t = case t of
     ETuple exp exps -> return ETuple `ap` f exp `ap` mapM f exps
     EVar i -> return EVar `ap` f i
     VVar i -> return VVar `ap` f i
-    LetDef i exp0 exp1 -> return LetDef `ap` f i `ap` f exp0 `ap` f exp1
+    LetDef i exp -> return LetDef `ap` f i `ap` f exp
     Case pattern guard exp -> return Case `ap` f pattern `ap` f guard `ap` f exp
     BindVar varorwild exp -> return BindVar `ap` f varorwild `ap` f exp
     BindNoVar exp -> return BindNoVar `ap` f exp
@@ -235,7 +235,7 @@ composOpFold zero combine f t = case t of
     ETuple exp exps -> f exp `combine` foldr combine zero (map f exps)
     EVar i -> f i
     VVar i -> f i
-    LetDef i exp0 exp1 -> f i `combine` f exp0 `combine` f exp1
+    LetDef i exp -> f i `combine` f exp
     Case pattern guard exp -> f pattern `combine` f guard `combine` f exp
     BindVar varorwild exp -> f varorwild `combine` f exp
     BindNoVar exp -> f exp
@@ -308,7 +308,7 @@ instance Show (Tree c) where
     EMeta -> showString "EMeta"
     VVar i -> opar n . showString "VVar" . showChar ' ' . showsPrec 1 i . cpar n
     VWild -> showString "VWild"
-    LetDef i exp0 exp1 -> opar n . showString "LetDef" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 exp0 . showChar ' ' . showsPrec 1 exp1 . cpar n
+    LetDef i exp -> opar n . showString "LetDef" . showChar ' ' . showsPrec 1 i . showChar ' ' . showsPrec 1 exp . cpar n
     Case pattern guard exp -> opar n . showString "Case" . showChar ' ' . showsPrec 1 pattern . showChar ' ' . showsPrec 1 guard . showChar ' ' . showsPrec 1 exp . cpar n
     BindVar varorwild exp -> opar n . showString "BindVar" . showChar ' ' . showsPrec 1 varorwild . showChar ' ' . showsPrec 1 exp . cpar n
     BindNoVar exp -> opar n . showString "BindNoVar" . showChar ' ' . showsPrec 1 exp . cpar n
@@ -384,7 +384,7 @@ johnMajorEq (EDouble d) (EDouble d_) = d == d_
 johnMajorEq EMeta EMeta = True
 johnMajorEq (VVar i) (VVar i_) = i == i_
 johnMajorEq VWild VWild = True
-johnMajorEq (LetDef i exp0 exp1) (LetDef i_ exp0_ exp1_) = i == i_ && exp0 == exp0_ && exp1 == exp1_
+johnMajorEq (LetDef i exp) (LetDef i_ exp_) = i == i_ && exp == exp_
 johnMajorEq (Case pattern guard exp) (Case pattern_ guard_ exp_) = pattern == pattern_ && guard == guard_ && exp == exp_
 johnMajorEq (BindVar varorwild exp) (BindVar varorwild_ exp_) = varorwild == varorwild_ && exp == exp_
 johnMajorEq (BindNoVar exp) (BindNoVar exp_) = exp == exp_
@@ -459,7 +459,7 @@ instance Ord (Tree c) where
     index (EMeta ) = 60
     index (VVar _) = 61
     index (VWild ) = 62
-    index (LetDef _ _ _) = 63
+    index (LetDef _ _) = 63
     index (Case _ _ _) = 64
     index (BindVar _ _) = 65
     index (BindNoVar _) = 66
@@ -529,7 +529,7 @@ instance Ord (Tree c) where
     compareSame EMeta EMeta = EQ
     compareSame (VVar i) (VVar i_) = compare i i_
     compareSame VWild VWild = EQ
-    compareSame (LetDef i exp0 exp1) (LetDef i_ exp0_ exp1_) = mappend (compare i i_) (mappend (compare exp0 exp0_) (compare exp1 exp1_))
+    compareSame (LetDef i exp) (LetDef i_ exp_) = mappend (compare i i_) (compare exp exp_)
     compareSame (Case pattern guard exp) (Case pattern_ guard_ exp_) = mappend (compare pattern pattern_) (mappend (compare guard guard_) (compare exp exp_))
     compareSame (BindVar varorwild exp) (BindVar varorwild_ exp_) = mappend (compare varorwild varorwild_) (compare exp exp_)
     compareSame (BindNoVar exp) (BindNoVar exp_) = compare exp exp_

@@ -85,8 +85,8 @@ int2bin = int2bin_ End
 
 int2bin_ : Binary_Tree Bin -> Integer -> Binary_Tree Bin
 int2bin_ b 0 = b
-int2bin_ b n = let d : Integer = if n % 2 == 0 then Zero else One
-		   q : Integer = n / 2
+int2bin_ b n = let d = if n % 2 == 0 then Zero else One
+		   q = n / 2
                 in int2bin_ (d b) q
 
 num2bin : Tree Numeral -> Binary_Tree Bin

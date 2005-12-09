@@ -139,7 +139,7 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{LetDef}} & {\arrow}  &{\nonterminal{CIdent}} {\terminal{:}} {\nonterminal{Exp}} {\terminal{{$=$}}} {\nonterminal{Exp}}  \\
+{\nonterminal{LetDef}} & {\arrow}  &{\nonterminal{CIdent}} {\terminal{{$=$}}} {\nonterminal{Exp}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
@@ -159,9 +159,9 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp2}} & {\arrow}  &{\terminal{$\backslash$}} {\nonterminal{PatternVariable}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
+{\nonterminal{Exp1}} & {\arrow}  &{\terminal{$\backslash$}} {\nonterminal{PatternVariable}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
  & {\delimit}  &{\terminal{(}} {\nonterminal{PatternVariable}} {\terminal{:}} {\nonterminal{Exp}} {\terminal{)}} {\terminal{{$-$}{$>$}}} {\nonterminal{Exp}}  \\
- & {\delimit}  &{\nonterminal{Exp3}}  \\
+ & {\delimit}  &{\nonterminal{Exp2}}  \\
 \end{tabular}\\
 
 \begin{tabular}{lll}
@@ -207,7 +207,7 @@ All other symbols are terminals.\\
 \end{tabular}\\
 
 \begin{tabular}{lll}
-{\nonterminal{Exp1}} & {\arrow}  &{\nonterminal{Exp2}}  \\
+{\nonterminal{Exp2}} & {\arrow}  &{\nonterminal{Exp3}}  \\
 \end{tabular}\\
 
 

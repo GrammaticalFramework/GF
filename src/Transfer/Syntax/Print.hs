@@ -143,7 +143,7 @@ instance Print (Tree c) where
     EMeta  -> prPrec _i 13 (concatD [doc (showString "?")])
     VVar i -> prPrec _i 0 (concatD [prt 0 i])
     VWild  -> prPrec _i 0 (concatD [doc (showString "_")])
-    LetDef i exp0 exp1 -> prPrec _i 0 (concatD [prt 0 i , doc (showString ":") , prt 0 exp0 , doc (showString "=") , prt 0 exp1])
+    LetDef i exp -> prPrec _i 0 (concatD [prt 0 i , doc (showString "=") , prt 0 exp])
     Case pattern guard exp -> prPrec _i 0 (concatD [prt 0 pattern , prt 0 guard , doc (showString "->") , prt 0 exp])
     BindVar varorwild exp -> prPrec _i 0 (concatD [prt 0 varorwild , doc (showString "<-") , prt 0 exp])
     BindNoVar exp -> prPrec _i 0 (concatD [prt 0 exp])

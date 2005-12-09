@@ -131,8 +131,8 @@ addModuleEnv env (Module ds) =
 eval :: Env -> Exp -> Value
 eval env x = case x of
   ELet defs exp2 -> 
-      let env' = [ (id, v) | LetDef id _ e <- defs, 
-                                     let v = eval env' e] 
+      let env' = [ (id, v) | LetDef id e <- defs, 
+                             let v = eval env' e] 
                  `addToEnv` env
        in eval (seqEnv env') exp2
   ECase exp cases -> 

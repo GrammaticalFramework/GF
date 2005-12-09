@@ -13,7 +13,7 @@ isSnake _ x = case x of
 
 wideSnake : (A : Cat) -> Tree A -> Tree A
 wideSnake _ x = case x of
-		    Wide y -> let y' : CN = wideSnake ? y
+		    Wide y -> let y' = wideSnake ? y
                                in if isSnake CN y' then Thick y' else Wide y'
 		    _ -> composOp ? ? compos_Tree ? wideSnake x
 		
