@@ -26,8 +26,10 @@ main = do
   xx <- getArgs
   let 
    (typ,format,names) = case xx of
-    "-latex" : xs -> (0,doc2latex,xs)
-    "-htmls" : xs -> (2,doc2html,xs)
+    "-latex"  : xs -> (0,doc2latex,xs)
+    "-htmls"  : xs -> (2,doc2html,xs)
+    "-txt"    : xs -> (3,doc2txt,xs)
+    "-txthtml": xs -> (4,doc2txt,xs)
     xs            -> (1,doc2html,xs)
   if null xx
      then do
@@ -37,11 +39,14 @@ main = do
        ss <- readFile name
        let outfile = fileFormat typ name
        writeFile outfile $ format $ pDoc $ ss)
-  if typ == 2
-     then do
-       mapM (\name -> system $ "htmls " ++ (fileFormat typ name)) names
-       return ()
-     else return ()
+  case typ of
+     2 -> 
+       mapM_ (\name -> system $ "htmls " ++ (fileFormat typ name)) names
+     4 ->
+       mapM_ (\name -> 
+               system $ "txt2tags -thtml --toc " ++ (fileFormat typ name)) names
+     _ -> return ()
+  return ()
 
 welcome = unlines [
   "",
@@ -51,10 +56,11 @@ welcome = unlines [
 
 help = unlines $ [
   "",
-  "Usage: gfdoc (-latex|-htmls) <file>+",
+  "Usage: gfdoc (-latex|-htmls|-txt|-txthtml) <file>+",
   "",
   "The program operates with lines in GF code, treating them into LaTeX",
-  "(flag -latex), to a set of HTML documents (flag -htmls), or to one",
+  "(flag -latex), to a set of HTML documents (flag -htmls), to a txt2tags file",
+  "(flag -txt), to HTML via txt (flag -txthtml), or to one",
   "HTML file (by default). The output is written in a file",
   "whose name is formed from the input file name by replacing its suffix",
   "with html or tex; in case of set of HTML files, the names are prefixed",
@@ -78,11 +84,17 @@ help = unlines $ [
   "",
   " *[Text]*   emphasized (boldface)",
   " \"[Text]\"   example string (italics)",
-  " $[Text]$   example code (courier)"
+  " $[Text]$   example code (courier)",
+  "",
+  "For other formatting and links, we recommend the txt2tags format."
   ]
 
-fileFormat typ x = body ++ if (typ==0) then "tex" else "html" where
+fileFormat typ x = body ++ suff where
   body = reverse $ dropWhile (/='.') $ reverse x
+  suff = case typ of
+    0 -> "tex"
+    _ | typ < 3 -> "html"
+    _ -> "txt"
 
 -- the document datatype
 
@@ -261,6 +273,45 @@ preludeLatex = unlines $ [
   "\\setlength{\\parskip}{2mm}",
   "\\setlength{\\parindent}{0mm}"
  ]
+
+-- render in txt2tags
+
+doc2txt :: Doc -> String
+doc2txt (Doc title paras) = unlines $
+  let tit = concat (map item2txt title) in
+      tit:
+      "Author: ":
+      "Last update: %%date(%c)":
+      "% NOTE: this is a txt2tags file.":
+      "% Create an html file from this file using:":
+      ("% txt2tags " ++ tit):
+      "\n":
+      concat (["Produced by " ++ welcome]) :
+      "\n" :
+      concat (tagTxt "=" [tit]) :
+      empty :
+      map para2txt paras
+
+para2txt :: Paragraph -> String
+para2txt p = case p of
+  Text its      -> concat (map item2txt its)
+  Item its      -> "- " ++ concat (map item2txt its)
+  Code s        -> unlines $ tagTxt "```" $ map (indent 2) $ 
+                                              remEmptyLines $ lines s
+  New           -> "\n"
+  NewPage       -> "\n" ++ "!-- NEW --"
+  Heading i its -> concat $ tagTxt (replicate i '=') [concat (map item2txt its)]
+
+item2txt :: TextItem -> String
+item2txt i = case i of
+  Str s -> s
+  Emp s -> concat $ tagTxt "**" [spec s]
+  Lit s -> concat $ tagTxt "//" [spec s]
+  Inl s -> concat $ tagTxt "``" [spec s]
+
+tagTxt t ss = t : ss ++ [t]
+
+
 
 -- auxiliaries
 
