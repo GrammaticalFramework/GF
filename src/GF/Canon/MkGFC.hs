@@ -112,12 +112,14 @@ trExp t = case t of
     AM i   -> A.Meta $ A.MetaSymb $ fromInteger i
     AT s   -> A.Sort $ prt s
     AS s   -> A.K s
-    AI i   -> A.EInt $ fromInteger i
+    AI i   -> A.EInt $ i
+    AF i   -> A.EFloat $ i
   trPt p = case p of
     APC mc ps -> let (m,c) = trQIdent mc in A.PP m c (map trPt ps)
     APV x -> A.PV x
     APS s -> A.PString s
-    API i -> A.PInt $ fromInteger i
+    API i -> A.PInt $ i
+    APF i -> A.PFloat $ i
     APW   -> A.PW
 
 trQIdent (CIQ m c) = (m,c)

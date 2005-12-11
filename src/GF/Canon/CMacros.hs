@@ -227,6 +227,20 @@ allLinValues trm = do
   lts <- allLinFields trm
   mapM (mapPairsM (return . allCaseValues)) lts
 
+-- | to gather all fields; does not assume s naming of fields; 
+-- used in Morpho only
+allAllLinValues :: Term -> Err [[(Label,[([Patt],Term)])]]
+allAllLinValues trm = do
+  lts <- allFields trm
+  mapM (mapPairsM (return . allCaseValues)) lts
+ where
+  allFields trm = case trm of
+    R rs  -> return [[(l,t) | Ass l t <- rs]]
+    FV ts -> do
+      lts <- mapM allFields ts
+      return $ concat lts
+    _ -> prtBad "fields can only be sought in a record not in" trm
+
 -- | to gather all linearizations, even from nested records; params ignored
 allLinBranches :: Term -> [([Label],Term)]
 allLinBranches trm = case trm of

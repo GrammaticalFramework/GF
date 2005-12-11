@@ -719,9 +719,28 @@ checkEqLType env t u trm = do
      else raise ("type of" +++ prt trm +++ 
                 ": expected" +++ prt t' ++ ", inferred" +++ prt u')
  where
-   alpha g t u = case (t,u) of  --- quick hack version of TC.eqVal
+
+   -- t is a subtype of u 
+   --- quick hack version of TC.eqVal
+   alpha g t u = case (t,u) of  
+
+     -- contravariance
      (Prod x a b, Prod y c d) -> alpha g c a && alpha ((x,y):g) b d 
-                                                      -- contravariance!
+                              
+     -- record subtyping
+     (RecType rs, RecType ts) -> all (\ (l,a) -> 
+                                     any (\ (k,b) -> alpha g a b && l == k) ts) rs
+     (ExtR r s, ExtR r' s') -> alpha g r r' && alpha g s s'
+     (ExtR r s, t) -> alpha g r t || alpha g s t
+
+     -- the following say that Ints n is a subset of Int and of Ints m >= n
+     (App (Q (IC "Predef") (IC "Ints")) (EInt n), 
+        App (Q (IC "Predef") (IC "Ints")) (EInt m)) -> m >= n
+     (App (Q (IC "Predef") (IC "Ints")) (EInt n), 
+        Q (IC "Predef") (IC "Int"))                 -> True ---- should check size
+     
+     (Q (IC "Predef") (IC "Int"),  ---- why this ???? AR 11/12/2005
+        App (Q (IC "Predef") (IC "Ints")) (EInt n)) -> True
 
      ---- this should be made in Rename
      (Q  m a, Q  n b) | a == b -> elem m (allExtendsPlus env n) 
@@ -733,27 +752,6 @@ checkEqLType env t u trm = do
                                || elem n (allExtendsPlus env m)
      (Q  m a, QC n b) | a == b -> elem m (allExtendsPlus env n) 
                                || elem n (allExtendsPlus env m)
-
-     (RecType rs, RecType ts) -> -- and [alpha g a b && l == k --- too strong req
-                                 --       | ((l,a),(k,b)) <- zip rs ts]
-                                 -- . || -- if fails, try subtyping:
-                                 all (\ (l,a) -> 
-                                     any (\ (k,b) -> alpha g a b && l == k) ts) rs
-
-     (ExtR r s, ExtR r' s') -> alpha g r r' && alpha g s s'
-
-     (ExtR r s, t) -> alpha g r t || alpha g s t
-
-
-
-     -- the following say that Ints n is a subset of Int and of Ints m
-     (App (Q (IC "Predef") (IC "Ints")) (EInt n), 
-        App (Q (IC "Predef") (IC "Ints")) (EInt m)) -> m >= n
-     (App (Q (IC "Predef") (IC "Ints")) (EInt n), 
-        Q (IC "Predef") (IC "Int"))                 -> True ---- should check size
-     
-     (Q (IC "Predef") (IC "Int"),
-        App (Q (IC "Predef") (IC "Ints")) (EInt n)) -> True
 
      (Table a b,  Table c d)  -> alpha g a c && alpha g b d
      (Vr x,       Vr y)       -> x == y || elem (x,y) g || elem (y,x) g

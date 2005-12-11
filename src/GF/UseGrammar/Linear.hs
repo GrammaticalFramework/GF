@@ -259,7 +259,7 @@ linearizeToStrss gr mk e = do
 allLinsOfFun :: CanonGrammar -> CIdent -> Err [[(Label,[([Patt],Term)])]]
 allLinsOfFun gr f = do
   t <- lookupLin gr f 
-  allLinValues t
+  allAllLinValues t --- all fields, not only s. 11/12/2005
 
 
 -- | returns printname if one exists; otherwise linearizes with metas
