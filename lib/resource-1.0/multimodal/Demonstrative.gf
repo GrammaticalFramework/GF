@@ -11,9 +11,8 @@ abstract Demonstrative = Cat, Tense ** {
     MVP ;    -- multimodal verb phrase
     MComp ;  -- multimodal complement to copula (MAP, MNP, MAdv)
     MAP ;    -- multimodal adjectival phrase
-
-    MNP ;    -- demonstrative noun phrase
-    MAdv ;   -- demonstrative adverbial
+    MNP ;    -- multimodal (demonstrative) noun phrase
+    MAdv ;   -- multimodal (demonstrative) adverbial
 
     Point ;  -- pointing gesture
 

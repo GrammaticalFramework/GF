@@ -41,4 +41,6 @@ lin
 --  PHere = DemNP this_NP ;
 --  PNamed s = DemNP (UsePN (SymbPN s)) ;
 
+----  FromThisPlace = 
+
 }

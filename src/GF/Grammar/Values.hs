@@ -83,7 +83,7 @@ cString :: Ident
 cString = identC "String"
 
 isPredefCat :: Ident -> Bool
-isPredefCat c = elem c [cInt,cString]
+isPredefCat c = elem c [cInt,cString,cFloat]
 
 eType :: Exp
 eType = Sort "Type"
