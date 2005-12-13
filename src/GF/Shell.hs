@@ -348,6 +348,7 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
   CWriteFile file  -> justOutputArg opts (writeFile file) sa
   CAppendFile file -> justOutputArg opts (appendFile file) sa
   CSpeakAloud      -> justOutputArg opts (speechGenerate opts) sa
+  CSpeechInput     -> returnArgIO (speechInput opts gro >>= return . AString) sa
   CSystemCommand s -> case a of
     AUnit -> justOutput opts (system s >> return ()) sa
     _     -> systemArg  opts a s sa 

@@ -27,9 +27,8 @@ import GF.Speech.FiniteState
 import GF.Speech.Relation
 import GF.Speech.TransformCFG
 
-cfgToFA :: Ident -- ^ Grammar name
-	-> Options -> CGrammar -> DFA String
-cfgToFA name opts = minimize . compileAutomaton start . makeSimpleRegular
+cfgToFA :: Options -> CGrammar -> DFA String
+cfgToFA opts = minimize . compileAutomaton start . makeSimpleRegular
   where start = getStartCat opts
 
 makeSimpleRegular :: CGrammar -> CFRules

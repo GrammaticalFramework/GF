@@ -451,6 +451,14 @@ sa, speak_aloud: sa String
     h | sa              -- listen to the list of commands
     gr -cat=S | l | sa  -- generate a random sentence and speak it aloud
 
+si, speech_input: si
+      Uses an ATK speech recognizer to get speech input. 
+  flags:
+      -lang: The grammar to use with the speech recognizer.
+      -cat: The grammar category to get input in.
+      -language: Use acoustic model and dictionary for this language.
+      -number: The number of utterances to recognize.
+
 h, help: h Command?
       Displays the paragraph concerning the command from this help file.
       Without the argument, shows the first lines of all paragraphs.

@@ -134,6 +134,7 @@ pCommand ws = case ws of
   "af" : f : s  -> aString (CAppendFile (unquote f)) s
   "rf" : f : [] -> aUnit   (CReadFile (unquote f))
   "sa" : s      -> aString CSpeakAloud s
+  "si" : []     -> aUnit   CSpeechInput
   "ps" : s      -> aString CPutString s
   "st" : s      -> aTerm   CShowTerm s
   "!"  : s      -> aUnit   (CSystemCommand (unwords s))

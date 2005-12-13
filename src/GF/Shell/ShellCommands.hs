@@ -65,6 +65,7 @@ data Command =
  | CWriteFile  FilePath
  | CAppendFile FilePath
  | CSpeakAloud
+ | CSpeechInput
  | CPutString
  | CShowTerm
  | CSystemCommand String
@@ -197,6 +198,8 @@ optionsOfCommand co = case co of
   CWriteFile  _ -> none
   CAppendFile _ -> none
   CSpeakAloud -> flags "language"
+  CSpeechInput -> flags "lang cat language number"
+
   CPutString -> both "utf8" "filter length"
   CShowTerm -> flags "printer"
   CShowTreeGraph -> opts "c f g o"

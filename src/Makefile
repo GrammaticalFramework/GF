@@ -48,6 +48,10 @@ ifeq ("$(INTERRUPT)","yes")
   GHCFLAGS += -DUSE_INTERRUPT
 endif
 
+ifeq ("$(ATK)","yes")
+  GHCFLAGS += -DUSE_ATK
+endif
+
 ifeq ("$(ENABLE_JAVA)", "yes")
   BUILD_JAR=jar
 else

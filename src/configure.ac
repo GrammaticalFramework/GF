@@ -116,6 +116,41 @@ esac
 AC_SUBST(INTERRUPT)
 
 dnl ***********************************************
+dnl ATK speech recognition
+dnl ***********************************************
+
+AC_ARG_WITH(atk,
+  AC_HELP_STRING([--with-atk=<use ATK speech recognition>],
+               [Choose whether to compile in support for speech
+	        recognition using ATK. Requires ATK and libatkrec.
+	        Available alternatives are: 'yes', 'no'
+		(default = no)]),
+  [ATK="$withval"],
+  [ATK="no"])
+
+case $ATK in
+    yes)
+        AC_MSG_CHECKING([for atkrec package])
+	ATKREC_VERSION=`ghc-pkg latest atkrec`
+	if test "$ATKREC_VERSION" = ""; then
+	    AC_MSG_RESULT(['not found'])
+            AC_MSG_WARN([Disabling ATK support.])
+	    ATK="no"
+        else
+	    AC_MSG_RESULT([$ATKREC_VERSION])
+        fi
+        ;;
+    no)
+        ;;
+    *)
+        AC_MSG_ERROR([Bad value for --with-atk: $ATK])
+
+        ;;
+esac
+
+AC_SUBST(ATK)
+
+dnl ***********************************************
 dnl java stuff
 dnl ***********************************************
 
