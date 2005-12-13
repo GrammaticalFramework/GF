@@ -59,6 +59,8 @@ import qualified GF.Embed.EmbedAPI as EA
 
 import GF.UseGrammar.Editing
 
+import GF.System.SpeechInput (recognizeSpeech)
+
 ----import GrammarToXML 
 
 ----import GrammarToMGrammar as M
@@ -205,6 +207,14 @@ speechGenerate opts str = do
   system ("flite" +++ "\" " ++ str ++ "\"")
 ---  system ("echo" +++ "\"" ++ str ++ "\" | festival --tts" ++ lan)
   return ()
+
+-- FIXME: look at flags
+speechInput :: Options -> StateGrammar -> IO String
+speechInput opt s = recognizeSpeech name opts cfg
+  where
+  opts = stateOptions s
+  name = cncId s
+  cfg = stateCFG s
 
 optLinearizeTreeVal :: Options -> GFGrammar -> Tree -> String
 optLinearizeTreeVal opts gr = err id id . optLinearizeTree opts gr

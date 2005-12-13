@@ -37,7 +37,7 @@ import Data.Maybe (fromMaybe)
 faGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 faGraphvizPrinter name opts cfg = 
-    prFAGraphviz $ mapStates (const "") $ cfgToFA name opts cfg
+    prFAGraphviz $ mapStates (const "") $ cfgToFA opts cfg
 
 
 -- | Convert the grammar to a regular grammar and print it in BNF
@@ -51,7 +51,7 @@ regularPrinter = prCFRules . makeSimpleRegular
 
 faCPrinter :: Ident -- ^ Grammar name
 	   -> Options -> CGrammar -> String
-faCPrinter name opts cfg = fa2c $ cfgToFA name opts cfg
+faCPrinter name opts cfg = fa2c $ cfgToFA opts cfg
 
 fa2c :: DFA String -> String
 fa2c fa = undefined

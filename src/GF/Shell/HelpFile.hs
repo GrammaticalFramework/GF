@@ -480,6 +480,14 @@ txtHelpFile =
   "\n    h | sa              -- listen to the list of commands" ++
   "\n    gr -cat=S | l | sa  -- generate a random sentence and speak it aloud" ++
   "\n" ++
+  "\nsi, speech_input: si" ++
+  "\n      Uses an ATK speech recognizer to get speech input. " ++
+  "\n  flags:" ++
+  "\n      -lang: The grammar to use with the speech recognizer." ++
+  "\n      -cat: The grammar category to get input in." ++
+  "\n      -language: Use acoustic model and dictionary for this language." ++
+  "\n      -number: The number of utterances to recognize." ++
+  "\n" ++
   "\nh, help: h Command?" ++
   "\n      Displays the paragraph concerning the command from this help file." ++
   "\n      Without the argument, shows the first lines of all paragraphs." ++
