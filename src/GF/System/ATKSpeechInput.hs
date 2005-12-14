@@ -28,9 +28,9 @@ import System.IO.Unsafe
 
 -- FIXME: get these from somewhere else
 
-config = "/home/bjorn/projects/atkrec/atkrec.cfg"
+config = "/home/aarne/atk/atkrec/atkrec.cfg"
 
-res = "/home/bjorn/src/atk/Resources"
+res = "/home/aarne/atk/atk/Resources"
 hmmlist = res ++ "/UK_SI_ZMFCC/hmmlistbg"
 mmf0 = res ++ "/UK_SI_ZMFCC/WI4"
 mmf1 = res ++ "/UK_SI_ZMFCC/BGHMM2"
