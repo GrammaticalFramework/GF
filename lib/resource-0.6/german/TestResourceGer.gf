@@ -3,7 +3,7 @@
 
 concrete TestResourceGer of TestResource = StructuralGer ** open SyntaxGer in {
 
-flags startcat=Phr ; lexer=text ; parser=chart ; unlexer=text ;
+flags startcat=Phr ; lexer=text ; unlexer=text ;
 
 -- a random sample from the lexicon
 

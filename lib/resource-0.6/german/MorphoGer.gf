@@ -492,7 +492,7 @@ oper
 
 -- Modal auxiliary verbs
   verbumAux : (_,_,_,_,_ : Str) -> Verbum = \können,kann,konnte,könnte,gekonnt -> 
-  let k = (verbumStrongLaufen können kann konnte könnte gekonnt)
+  let k =        mkVerbum können kann kann konnte könnte gekonnt ;--- (verbumStrongLaufen können kann konnte könnte gekonnt)
   in 
   table {
     VInd Sg P1 => kann ;

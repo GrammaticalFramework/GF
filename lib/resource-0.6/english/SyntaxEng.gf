@@ -634,10 +634,10 @@ s ; s2 = [] ; isAux = False} ;
                   (try.s ! InfImp ++ try.s1) ;        -- ... try
     in
       {s =  \\b,v => if_then_Str b 
-                        (try.s ! v ++ try.s1 ++ to ++ run.s ! True ! InfImp)
+                        (try.s ! v ++ try.s1) 
                         (dont ! v) ;
        s2 = \\b,v => if_then_Str b
-                        (run.s2 ! True ! v) 
+                        (to ++ run.s ! True ! InfImp ++ run.s2 ! True ! v) 
                         (trnot ++ run.s ! True ! InfImp ++ run.s2 ! True ! v) ; 
        isAuxT = taux ;
        isAuxF = True

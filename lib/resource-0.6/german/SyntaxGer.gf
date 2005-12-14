@@ -605,7 +605,7 @@ oper
 
   complVerbVerb : VerbVerb -> VerbGroup -> VerbGroup = \will, essen ->
     will ** {
-      s3 = \\b,_ => negation b ++ 
+      s3 = \\b,n => essen.s3 ! True ! n ++ negation b ++ 
                     essen.s2 ++ zuInfinitive will.isAux ++ essen.s ! VInf ;
       s4 = essen.s4
       } ;
