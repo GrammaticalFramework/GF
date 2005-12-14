@@ -20,4 +20,4 @@ import GF.Conversion.Types (CGrammar)
 
 recognizeSpeech :: Ident -- ^ Grammar name
 	        -> Options -> CGrammar -> IO String
-recognizeSpeech = fail "No speech input available"
+recognizeSpeech _ _ _ = fail "No speech input available"
