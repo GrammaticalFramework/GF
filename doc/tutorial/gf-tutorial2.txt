@@ -1,0 +1,1320 @@
+Grammatical Framework Tutorial
+Author: Aarne Ranta <aarne (at) cs.chalmers.se>
+Last update: %%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags --toc gf-tutorial2.txt
+
+%!target:html
+
+[../gf-logo.gif]
+
+=Grammatical Framework Tutorial=
+
+
+
+**3rd Edition, for GF version 2.2 or later**
+
+
+
+[Aarne Ranta http://www.cs.chalmers.se/~aarne]
+
+
+``aarne@cs.chalmers.se``
+
+
+
+
+%--!
+==GF = Grammatical Framework==
+
+The term GF is used for different things:
+
+- a **program** used for working with grammars
+- a **programming language** in which grammars can be written
+- a **theory** about grammars and languages
+
+
+
+
+This tutorial is primarily about the GF program and 
+the GF programming language.
+It will guide you
+
+- to use the GF program
+- to write GF grammars
+- to write programs in which GF grammars are used as components
+
+
+
+
+%--!
+===Getting the GF program===
+
+The program is open-source free software, which you can download via the
+GF Homepage:
+[``http://www.cs.chalmers.se/~aarne/GF`` http://www.cs.chalmers.se/~aarne/GF]
+
+
+
+There you can download
+
+- ready-made binaries for Linux, Solaris, Macintosh, and Windows
+- source code and documentation
+- grammar libraries and examples
+
+
+
+If you want to compile GF from source, you need Haskell and Java
+compilers. But normally you don't have to compile, and you definitely
+don't need to know Haskell or Java to use GF.
+
+
+
+To start the GF program, assuming you have installed it, just type
+```
+  gf
+```
+in the shell. You will see GF's welcome message and the prompt ``>``.
+
+
+%--!
+==My first grammar==
+
+Now you are ready to try out your first grammar.
+We start with one that is not written in GF language, but
+in the EBNF notation (Extended Backus Naur Form), which GF can also
+understand. Type (or copy) the following lines in a file named
+``paleolithic.ebnf``:
+```
+  S   ::= NP VP ;
+  VP  ::= V | TV NP | "is" A ;
+  NP  ::= ("this" | "that" | "the" | "a") CN ;
+  CN  ::= A CN ;
+  CN  ::= "boy" | "louse" | "snake" | "worm" ;
+  A   ::= "green" | "rotten" | "thick" | "warm" ;
+  V   ::= "laughs" | "sleeps" | "swims" ;
+  TV  ::= "eats" | "kills" | "washes" ;
+```
+
+
+%--!
+===Importing grammars and parsing strings===
+
+The first GF command when using a grammar is to **import** it.
+The command has a long name, ``import``, and a short name, ``i``.
+```
+  import paleolithic.gf
+```
+The GF program now **compiles** your grammar into an internal
+representation, and shows a new prompt when it is ready.
+ 
+
+
+You can use GF for **parsing**:
+```
+  > parse "the boy eats a snake"
+  Mks_0 (Mks_6 Mks_9) (Mks_2 Mks_20 (Mks_7 Mks_11))
+
+  > parse "the snake eats a boy"
+  Mks_0 (Mks_6 Mks_11) (Mks_2 Mks_20 (Mks_7 Mks_9))
+```
+The ``parse`` (= ``p``) command takes a **string**
+(in double quotes) and returns an **abstract syntax tree** - the thing
+with ``Mks``s and parentheses. We will see soon how to make sense
+of the abstract syntax trees - now you should just notice that the tree
+is different for the two strings. 
+
+
+
+Strings that return a tree when parsed do so in virtue of the grammar
+you imported. Try parsing something else, and you fail
+```
+  > p "hello world"
+  No success in cf parsing
+  no tree found
+```
+
+
+%--!
+===Generating trees and strings===
+
+You can also use GF for **linearizing**
+(``linearize = l``). This is the inverse of
+parsing, taking trees into strings:
+```
+  > linearize Mks_0 (Mks_6 Mks_11) (Mks_2 Mks_20 (Mks_7 Mks_9))
+  the snake eats a boy
+```
+What is the use of this? Typically not that you type in a tree at
+the GF prompt. The utility of linearization comes from the fact that
+you can obtain a tree from somewhere else. One way to do so is
+**random generation** (``generate_random = gr``):
+```
+  > generate_random
+  Mks_0 (Mks_4 Mks_11) (Mks_3 Mks_15)
+```
+Now you can copy the tree and paste it to the ``linearize command``.
+Or, more efficiently, feed random generation into parsing by using
+a **pipe**.
+```
+  > gr | l
+  this worm is warm
+```
+
+
+%--!
+===Some random-generated sentences===
+
+Random generation can be quite amusing. So you may want to
+generate ten strings with one and the same command:
+```
+  > gr -number=10 | l
+  this boy is green
+  a snake laughs
+  the rotten boy is thick
+  a boy washes this worm
+  a boy is warm
+  this green warm boy is rotten
+  the green thick green louse is rotten
+  that boy is green
+  this thick thick boy laughs
+  a boy is green
+```
+
+
+%--!
+===Systematic generation===
+
+To generate <i>all<i> sentence that a grammar
+can generate, use the command ``generate_trees = gt``.
+```
+  > generate_trees | l
+  this louse laughs
+  this louse sleeps
+  this louse swims
+  this louse is green
+  this louse is rotten
+  ...
+  a boy is rotten
+  a boy is thick
+  a boy is warm
+```
+You get quite a few trees but not all of them: only up to a given
+**depth** of trees. To see how you can get more, use the
+``help = h`` command,
+```
+  help gr
+```
+**Quiz**. If the command ``gt`` generated all
+trees in your grammar, it would never terminate. Why?
+
+
+
+%--!
+===More on pipes; tracing===
+
+A pipe of GF commands can have any length, but the "output type"
+(either string or tree) of one command must always match the "input type"
+of the next command. 
+
+
+
+The intermediate results in a pipe can be observed by putting the
+**tracing** flag ``-tr`` to each command whose output you
+want to see:
+```
+  > gr -tr | l -tr | p
+  Mks_0 (Mks_7 Mks_10) (Mks_1 Mks_18)
+  a louse sleeps
+  Mks_0 (Mks_7 Mks_10) (Mks_1 Mks_18)
+```
+This facility is good for test purposes: for instance, you
+may want to see if a grammar is **ambiguous**, i.e.
+contains strings that can be parsed in more than one way.
+
+
+
+%--!
+===Writing and reading files===
+
+To save the outputs of GF commands into a file, you can
+pipe it to the ``write_file = wf`` command,
+```
+  > gr -number=10 | l | write_file exx.tmp
+```
+You can read the file back to GF with the
+``read_file = rf`` command,
+```
+  > read_file exx.tmp | l -tr | p -lines
+```
+Notice the flag ``-lines`` given to the parsing
+command. This flag tells GF to parse each line of
+the file separately. Without the flag, the grammar could
+not recognize the string in the file, because it is not
+a sentence but a sequence of ten sentences.
+
+
+
+%--!
+===Labelled context-free grammars===
+
+The syntax trees returned by GF's parser in the previous examples
+are not so nice to look at. The identifiers of form ``Mks``
+are **labels** of the EBNF rules. To see which label corresponds to
+which rule, you can use the ``print_grammar = pg`` command
+with the ``printer`` flag set to ``cf`` (which means context-free):
+```
+  > print_grammar -printer=cf
+  Mks_10. CN ::= "louse" ;
+  Mks_11. CN ::= "snake" ;
+  Mks_12. CN ::= "worm" ;
+  Mks_8.  CN ::= A CN ;
+  Mks_9.  CN ::= "boy" ;
+  Mks_4.  NP ::= "this" CN ;
+  Mks_15. A  ::= "thick" ;
+  ...
+```
+A syntax tree such as
+```
+  Mks_4 (Mks_8 Mks_15 Mks_12)
+  this thick worm
+```
+encodes the sequence of grammar rules used for building the
+expression. If you look at this tree, you will notice that ``Mks_4``
+is the label of the rule prefixing ``this`` to a common noun,
+``Mks_15`` is the label of the adjective ``thick``,
+and so on.
+
+
+%--!
+<h4>The labelled context-free format<h4>
+
+The **labelled context-free grammar** format permits user-defined
+labels to each rule.
+GF recognizes files of this format by the suffix
+``.cf``. It is intermediate between EBNF and full GF format.
+Let us include the following rules in the file
+``paleolithic.cf``.
+```
+  PredVP.  S   ::= NP VP ;
+  UseV.    VP  ::= V ;
+  ComplTV. VP  ::= TV NP ;
+  UseA.    VP  ::= "is" A ;
+  This.    NP  ::= "this" CN ; 
+  That.    NP  ::= "that" CN ; 
+  Def.     NP  ::= "the" CN ;
+  Indef.   NP  ::= "a" CN ;  
+  ModA.    CN  ::= A CN ;
+  Boy.     CN  ::= "boy" ;
+  Louse.   CN  ::= "louse" ;
+  Snake.   CN  ::= "snake" ;
+  Worm.    CN  ::= "worm" ;
+  Green.   A   ::= "green" ;
+  Rotten.  A   ::= "rotten" ;
+  Thick.   A   ::= "thick" ;
+  Warm.    A   ::= "warm" ;
+  Laugh.   V   ::= "laughs" ;
+  Sleep.   V   ::= "sleeps" ;
+  Swim.    V   ::= "swims" ;
+  Eat.     TV  ::= "eats" ;
+  Kill.    TV  ::= "kills" 
+  Wash.    TV  ::= "washes" ;
+```
+
+%--!
+<h4>Using the labelled context-free format<h4>
+
+The GF commands for the ``.cf`` format are
+exactly the same as for the ``.ebnf`` format.
+Just the syntax trees become nicer to read and
+to remember. Notice that before reading in
+a new grammar in GF you often (but not always,
+as we will see later) have first to give the
+command (``empty = e``), which removes the
+old grammar from the GF shell state.
+```
+  > empty
+
+  > i paleolithic.cf
+
+  > p "the boy eats a snake"
+  PredVP (Def Boy) (ComplTV Eat (Indef Snake))
+
+  > gr -tr | l
+  PredVP (Indef Louse) (UseA Thick)
+  a louse is thick
+```
+
+
+%--!
+==The GF grammar format==
+
+To see what there really is in GF's shell state when a grammar
+has been imported, you can give the plain command
+``print_grammar = pg``.
+```
+  > print_grammar
+```
+The output is quite unreadable at this stage, and you may feel happy that
+you did not need to write the grammar in that notation, but that the
+GF grammar compiler produced it.
+
+
+
+However, we will now start to show how GF's own notation gives you
+much more expressive power than the ``.cf`` and ``.ebnf``
+formats. We will introduce the ``.gf`` format by presenting
+one more way of defining the same grammar as in
+``paleolithic.cf`` and ``paleolithic.ebnf``.
+Then we will show how the full GF grammar format enables you
+to do things that are not possible in the weaker formats.
+
+
+%--!
+===Abstract and concrete syntax===
+
+A GF grammar consists of two main parts:
+
+- **abstract syntax**, defining what syntax trees there are
+- **concrete syntax**, defining how trees are linearized into strings 
+
+
+
+The EBNF and CF formats fuse these two things together, but it is possible
+to take them apart. For instance, the verb phrase predication rule
+```
+  PredVP. S ::= NP VP ;
+```
+is interpreted as the following pair of rules:
+```
+  fun PredVP : NP -> VP -> S ;
+  lin PredVP x y = {s = x.s ++ y.s} ;
+```
+The former rule, with the keyword ``fun``, belongs to the abstract syntax.
+It defines the **function**
+``PredVP`` which constructs syntax trees of form
+(``PredVP`` <i>x<i> <i>y<i>). 
+
+
+
+The latter rule, with the keyword ``lin``, belongs to the concrete syntax.
+It defines the **linearization function** for
+syntax trees of form (``PredVP`` <i>x<i> <i>y<i>). 
+
+
+%--!
+<h4>Judgement forms<h4>
+
+Rules in a GF grammar are called **judgements**, and the keywords
+``fun`` and ``lin`` are used for distinguishing between two
+**judgement forms**. Here is a summary of the most important
+judgement forms:
+
+  - abstract syntax
+  
+     | form               | reading                   | 
+     | ``cat`` C          | C is a category
+     | ``fun`` f ``:`` A  | f is a function of type A 
+
+  - concrete syntax
+  
+     | form                 | reading        | 
+     | ``lincat`` C ``=`` T | category C has linearization type T 
+     | ``lin`` f ``=`` t    | function f has linearization t
+  
+
+
+We return to the precise meanings of these judgement forms later.
+First we will look at how judgements are grouped into modules, and
+show how the grammar ``paleolithic.cf`` is
+expressed by using modules and judgements.
+
+
+%--!
+<h4>Module types<h4>
+
+A GF grammar consists of **modules**, 
+into which judgements are grouped. The most important
+module forms are
+
+  - ``abstract`` A = M``, abstract syntax A with judgements in
+  the module body M.
+  - ``concrete`` C ``of`` A = M``, concrete syntax C of the
+       abstract syntax A, with judgements in the module body M.
+
+
+
+%--!
+<h4>Record types, records, and ``Str``s<h4>
+
+The linearization type of a category is a **record type**, with
+zero of more **fields** of different types. The simplest record
+type used for linearization in GF is
+```
+  {s : Str}
+```
+which has one field, with **label** ``s`` and type ``Str``.
+
+
+
+Examples of records of this type are
+```
+  [s = "foo"}
+  [s = "hello" ++ "world"}
+```
+The type ``Str`` is really the type of **token lists**, but
+most of the time one can conveniently think of it as the type of strings,
+denoted by string literals in double quotes.
+
+
+
+Whenever a record ``r`` of type ``{s : Str}`` is given,
+``r.s`` is an object of type ``Str``. This is of course
+a special case of the **projection** rule, allowing the extraction
+of fields from a record.
+
+
+%--!
+<h4>An abstract syntax example<h4>
+
+Each nonterminal occurring in the grammar ``paleolithic.cf`` is
+introduced by a ``cat`` judgement. Each
+rule label is introduced by a ``fun`` judgement.
+```
+abstract Paleolithic = {
+cat 
+  S ; NP ; VP ; CN ; A ; V ; TV ; 
+fun
+  PredVP  : NP -> VP -> S ;
+  UseV    : V -> VP ;
+  ComplTV : TV -> NP -> VP ;
+  UseA    : A -> VP ;
+  ModA    : A -> CN -> CN ;
+  This, That, Def, Indef : CN -> NP ; 
+  Boy, Louse, Snake, Worm : CN ;
+  Green, Rotten, Thick, Warm : A ;
+  Laugh, Sleep, Swim : V ;
+  Eat, Kill, Wash : TV ;
+}
+```
+Notice the use of shorthands permitting the sharing of
+the keyword in subsequent judgements, and of the type
+in subsequent ``fun`` judgements.
+
+
+%--!
+<h4>A concrete syntax example<h4>
+
+Each category introduced in ``Paleolithic.gf`` is
+given a ``lincat`` rule, and each
+function is given a ``fun`` rule. Similar shorthands
+apply as in ``abstract`` modules.
+```
+concrete PaleolithicEng of Paleolithic = {
+lincat 
+  S, NP, VP, CN, A, V, TV = {s : Str} ; 
+lin
+  PredVP np vp  = {s = np.s ++ vp.s} ;
+  UseV   v      = v ;
+  ComplTV tv np = {s = tv.s ++ np.s} ;
+  UseA   a   = {s = "is" ++ a.s} ;
+  This  cn   = {s = "this" ++ cn.s} ; 
+  That  cn   = {s = "that" ++ cn.s} ; 
+  Def   cn   = {s = "the" ++ cn.s} ;
+  Indef cn   = {s = "a" ++ cn.s} ; 
+  ModA  a cn = {s = a.s ++ cn.s} ;
+  Boy    = {s = "boy"} ;
+  Louse  = {s = "louse"} ;
+  Snake  = {s = "snake"} ;
+  Worm   = {s = "worm"} ;
+  Green  = {s = "green"} ;
+  Rotten = {s = "rotten"} ;
+  Thick  = {s = "thick"} ;
+  Warm   = {s = "warm"} ;
+  Laugh  = {s = "laughs"} ;
+  Sleep  = {s = "sleeps"} ;
+  Swim   = {s = "swims"} ;
+  Eat    = {s = "eats"} ;
+  Kill   = {s = "kills"} ; 
+  Wash   = {s = "washes"} ;
+}
+```
+
+
+%--!
+<h4>Modules and files<h4>
+
+Module name + ``.gf`` = file name
+
+
+
+Each module is compiled into a ``.gfc`` file.
+
+
+
+Import ``PaleolithicEng.gf`` and try what happens
+```
+  > i PaleolithicEng.gf
+```
+The GF program does not only read the file 
+``PaleolithicEng.gf``, but also all other files that it
+depends on - in this case, ``Paleolithic.gf``.
+
+
+
+For each file that is compiled, a ``.gfc`` file
+is generated. The GFC format (="GF Canonical") is the
+"machine code" of GF, which is faster to process than
+GF source files. When reading a module, GF knows whether
+to use an existing ``.gfc`` file or to generate
+a new one, by looking at modification times.
+
+
+
+%--!
+<h4>Multilingual grammar<h4>
+
+The main advantage of separating abstract from concrete syntax is that
+one abstract syntax can be equipped with many concrete syntaxes.
+A system with this property is called a **multilingual grammar**.
+
+
+
+Multilingual grammars can be used for applications such as
+translation. Let us buid an Italian concrete syntax for
+``Paleolithic`` and then test the resulting 
+multilingual grammar.
+
+
+
+
+%--!
+<h4>An Italian concrete syntax<h4>
+
+```
+concrete PaleolithicIta of Paleolithic = {
+lincat 
+  S, NP, VP, CN, A, V, TV = {s : Str} ; 
+lin
+  PredVP np vp  = {s = np.s ++ vp.s} ;
+  UseV   v      = v ;
+  ComplTV tv np = {s = tv.s ++ np.s} ;
+  UseA   a   = {s = "è" ++ a.s} ;
+  This  cn   = {s = "questo" ++ cn.s} ; 
+  That  cn   = {s = "quello" ++ cn.s} ; 
+  Def   cn   = {s = "il" ++ cn.s} ;
+  Indef cn   = {s = "un" ++ cn.s} ; 
+  ModA  a cn = {s = cn.s ++ a.s} ;
+  Boy    = {s = "ragazzo"} ;
+  Louse  = {s = "pidocchio"} ;
+  Snake  = {s = "serpente"} ;
+  Worm   = {s = "verme"} ;
+  Green  = {s = "verde"} ;
+  Rotten = {s = "marcio"} ;
+  Thick  = {s = "grosso"} ;
+  Warm   = {s = "caldo"} ;
+  Laugh  = {s = "ride"} ;
+  Sleep  = {s = "dorme"} ;
+  Swim   = {s = "nuota"} ;
+  Eat    = {s = "mangia"} ;
+  Kill   = {s = "uccide"} ; 
+  Wash   = {s = "lava"} ;
+}
+```
+
+%--!
+<h4>Using a multilingual grammar<h4>
+
+Import without first emptying
+```
+  > i PaleolithicEng.gf
+  > i PaleolithicIta.gf
+```
+Try generation now:
+```
+  > gr | l
+  un pidocchio uccide questo ragazzo
+
+  > gr | l -lang=PaleolithicEng
+  that louse eats a louse
+```
+Translate by using a pipe:
+```
+  > p -lang=PaleolithicEng "the boy eats the snake" | l -lang=PaleolithicIta
+  il ragazzo mangia il serpente
+```
+
+
+
+%--!
+<h4>Translation quiz<h4>
+
+This is a simple language exercise that can be automatically
+generated from a multilingual grammar. The system generates a set of
+random sentence, displays them in one language, and checks the user's
+answer given in another language. The command ``translation_quiz = tq``
+makes this in a subshell of GF.
+```
+  > translation_quiz PaleolithicEng PaleolithicIta
+
+  Welcome to GF Translation Quiz.
+  The quiz is over when you have done at least 10 examples
+  with at least 75 % success.
+  You can interrupt the quiz by entering a line consisting of a dot ('.').
+
+  a green boy washes the louse
+  un ragazzo verde lava il gatto
+
+  No, not un ragazzo verde lava il gatto, but
+  un ragazzo verde lava il pidocchio
+  Score 0/1
+```
+You can also generate a list of translation exercises and save it in a
+file for later use, by the command ``translation_list = tl``
+```
+  > translation_list -number=25 PaleolithicEng PaleolithicIta
+```
+The number flag gives the number of sentences generated.
+
+
+%--!
+<h4>The multilingual shell state<h4>
+
+A GF shell is at any time in a state, which 
+contains a multilingual grammar. One of the concrete
+syntaxes is the "main" one, which means that parsing and linearization
+are performed by using it. By default, the main concrete syntax is the
+last-imported one. As we saw on previous slide, the ``lang`` flag
+can be used to change the linearization and parsing grammar.
+
+
+
+To see what the multilingual grammar is (as well as some other
+things), you can use the command
+``print_options = po``:
+```
+  > print_options
+  main abstract :     Paleolithic
+  main concrete :     PaleolithicIta
+  all concretes :     PaleolithicIta PaleolithicEng
+```
+
+
+%--!
+<h4>Extending a grammar<h4>
+
+The module system of GF makes it possible to **extend** a
+grammar in different ways. The syntax of extension is
+shown by the following example.
+```
+  abstract Neolithic = Paleolithic ** {
+    fun
+      Fire, Wheel : CN ;
+      Think : V ;
+  }
+```
+Parallel to the abstract syntax, extensions can
+be built for concrete syntaxes:
+```
+  concrete NeolithicEng of Neolithic = PaleolithicEng ** {
+    lin
+      Fire  = {s = "fire"} ;
+      Wheel = {s = "wheel"} ;
+      Think = {s = "thinks"} ;
+  }
+```
+The effect of extension is that all of the contents of the extended
+and extending module are put together.
+
+
+
+%--!
+<h4>Multiple inheritance<h4>
+
+Specialized vocabularies can be represented as small grammars that
+only do "one thing" each, e.g.
+```
+  abstract Fish = {
+    cat Fish ;
+    fun Salmon, Perch : Fish ;
+  }
+
+  abstract Mushrooms = {
+    cat Mushroom ;
+    fun Cep, Agaric : Mushroom ;
+  }
+```
+They can afterwards be combined into bigger grammars by using
+**multiple inheritance**, i.e. extension of several grammars at the
+same time:
+```
+  abstract Gatherer = Paleolithic, Fish, Mushrooms ** {
+    fun 
+      UseFish     : Fish     -> CN ;
+      UseMushroom : Mushroom -> CN ;
+    }
+```
+
+
+
+%--!
+<h4>Visualizing module structure<h4>
+
+When you have created all the abstract syntaxes and
+one set of concrete syntaxes needed for ``Gatherer``,
+your grammar consists of eight GF modules. To see how their
+dependences look like, you can use the command 
+``visualize_graph = vg``,
+```
+  > visualize_graph
+```
+and the graph will pop up in a separate window. It can also
+be printed out into a file, e.g. a ``.gif`` file that
+can be included in an HTML document
+```
+  > pm -printer=graph | wf Gatherer.dot
+  > ! dot -Tgif Gatherer.dot > Gatherer.gif
+```
+The latter command is a Unix command, issued from GF by using the
+shell escape symbol ``!``. The resulting graph is shown in the next section.
+
+
+
+The command ``print_multi = pm`` is used for printing the current multilingual
+grammar in various formats, of which the format ``-printer=graph`` just
+shows the module dependencies.
+
+
+%--!
+<h4>The module structure of ``GathererEng``<h4>
+
+The graph uses
+
+- oval boxes for abstract modules
+- square boxes  for concrete modules
+- black-headed arrows for inheritance
+- white-headed arrows for the concrete-of-abstract relation
+
+
+
+
+<img src="Gatherer.gif">
+
+
+%--!
+===Resource modules===
+
+Suppose we want to say, with the vocabulary included in
+``Paleolithic.gf``, things like
+```
+  the boy eats two snakes
+  all boys sleep  
+```
+The new grammatical facility we need are the plural forms
+of nouns and verbs (<i>boys, sleep<i>), as opposed to their
+singular forms.
+
+
+
+The introduction of plural forms requires two things:
+
+- to **inflect** nouns and verbs in singular and plural number
+- to describe the **agreement** of the verb to subject: the
+  rule that the verb must have the same number as the subject
+
+
+
+Different languages have different rules of inflection and agreement.
+For instance, Italian has also agreement in gender (masculine vs. feminine).
+We want to express such special features of languages precisely in
+concrete syntax while ignoring them in abstract syntax.
+
+
+
+To be able to do all this, we need two new judgement forms,
+a new module form, and a generalizarion of linearization types
+from strings to more complex types.
+
+
+%--!
+<h4>Parameters and tables<h4>
+
+We define the **parameter type** of number in Englisn by
+using a new form of judgement:
+```
+  param Number = Sg | Pl ;
+```
+To express that nouns in English have a linearization
+depending on number, we replace the linearization type ``{s : Str}``
+with a type where the ``s`` field is a **table** depending on number:
+```
+  lincat CN = {s : Number => Str} ;
+```
+The **table type** ``Number => Str`` is in many respects similar to
+a function type (``Number -> Str``). The main restriction is that the
+argument type of a table type must always be a parameter type. This means
+that the argument-value pairs can be listed in a finite table. The following
+example shows such a table:
+```
+  lin Boy = {s = table {
+    Sg => "boy" ;
+    Pl => "boys"
+    }
+  } ;
+```
+The application of a table to a parameter is done by the **selection**
+operator ``!``. For instance,
+```
+  Boy.s ! Pl
+```
+is a selection, whose value is ``"boys"``.
+
+
+%--!
+<h4>Inflection tables, paradigms, and ``oper`` definitions<h4>
+
+All English common nouns are inflected in number, most of them in the
+same way: the plural form is formed from the singular form by adding the
+ending <i>s<i>. This rule is an example of 
+a **paradigm** - a formula telling how the inflection
+forms of a word are formed.
+
+
+
+From GF point of view, a paradigm is a function that takes a **lemma** -
+a string also known as a **dictionary form** - and returns an inflection
+table of desired type. Paradigms are not functions in the sense of the
+``fun`` judgements of abstract syntax (which operate on trees and not
+on strings). Thus we call them **operations** for the sake of clarity,
+introduce one one form of judgement, with the keyword ``oper``. As an
+example, the following operation defines the regular noun paradigm of English:
+```
+  oper regNoun : Str -> {s : Number => Str} = \x -> {
+    s = table {
+      Sg => x ;
+      Pl => x + "s"
+      }
+    } ;
+```
+Thus an ``oper`` judgement includes the name of the defined operation,
+its type, and an expression defining it. As for the syntax of the defining
+expression, notice the **lambda abstraction** form ``\x -> t`` of
+the function, and the **glueing** operator ``+`` telling that
+the string held in the variable ``x`` and the ending ``"s"`` 
+are written together to form one **token**.
+
+
+%--!
+<h4>The ``resource`` module type<h4>
+
+Parameter and operator definitions do not belong to the abstract syntax.
+They can be used when defining concrete syntax - but they are not
+tied to a particular set of linearization rules.
+The proper way to see them is as auxiliary concepts, as **resources**
+usable in many concrete syntaxes.
+
+
+
+The ``resource`` module type thus consists of
+``param`` and ``oper`` definitions. Here is an
+example.
+```
+  resource MorphoEng = {
+    param
+      Number = Sg | Pl ;
+    oper
+      Noun  : Type = {s : Number => Str} ;
+      regNoun : Str -> Noun = \x -> {
+        s = table {
+          Sg => x ;
+          Pl => x + "s"
+          }
+        } ;
+  }
+```
+Resource modules can extend other resource modules, in the
+same way as modules of other types can extend modules of the
+same type.
+
+
+
+%--!
+===Opening a ``resource``===
+
+Any number of ``resource`` modules can be
+**opened** in a ``concrete`` syntax, which
+makes the parameter and operation definitions contained
+in the resource usable in the concrete syntax. Here is
+an example, where the resource ``MorphoEng`` is
+open in (the fragment of) a new version of ``PaleolithicEng``.
+```
+concrete PaleolithicEng of Paleolithic = open MorphoEng in {
+  lincat 
+    CN = Noun ;
+  lin
+    Boy   = regNoun "boy" ;
+    Snake = regNoun "snake" ;
+    Worm  = regNoun "worm" ;
+  }
+```
+Notice that, just like in abstract syntax, function application
+is written by juxtaposition of the function and the argument.
+
+
+
+Using operations defined in resource modules is clearly a concise
+way of giving e.g. inflection tables and other repeated patterns
+of expression. In addition, it enables a new kind of modularity
+and division of labour in grammar writing: grammarians familiar with
+the linguistic details of a language can put this knowledge
+available through resource grammars, whose users only need
+to pick the right operations and not to know their implementation
+details.
+
+
+
+%--!
+<h4>Worst-case macros and data abstraction<h4>
+
+Some English nouns, such as ``louse``, are so irregular that
+it makes little sense to see them as instances of a paradigm. Even
+then, it is useful to perform **data abstraction** from the
+definition of the type ``Noun``, and introduce a constructor
+operation, a **worst-case macro** for nouns:
+```
+  oper mkNoun : Str -> Str -> Noun = \x,y -> {
+    s = table {
+      Sg => x ;
+      Pl => y
+      }
+    } ;
+```
+Thus we define
+```
+  lin Louse = mkNoun "louse" "lice" ;
+```
+instead of writing the inflection table explicitly.
+
+
+
+The grammar engineering advantage of worst-case macros is that
+the author of the resource module may change the definitions of
+``Noun`` and ``mkNoun``, and still retain the
+interface (i.e. the system of type signatures) that makes it
+correct to use these functions in concrete modules. In programming
+terms, ``Noun`` is then treated as an **abstract datatype**.
+
+
+
+%--!
+<h4>A system of paradigms using ``Prelude`` operations<h4>
+
+The regular noun paradigm ``regNoun`` can - and should - of course be defined
+by the worst-case macro ``mkNoun``.  In addition, some more noun paradigms
+could be defined, for instance,
+```
+  regNoun : Str -> Noun = \snake -> mkNoun snake (snake + "s") ;
+  sNoun   : Str -> Noun = \kiss  -> mkNoun kiss  (kiss  + "es") ;
+```
+What about nouns like <i>fly<i>, with the plural <i>flies<i>? The already
+available solution is to use the so-called "technical stem" <i>fl<i> as
+argument, and define
+```
+  yNoun   : Str -> Noun = \fl -> mkNoun (fl  + "y") (fl  + "ies") ;
+```
+But this paradigm would be very unintuitive to use, because the "technical stem"
+is not even an existing form of the word. A better solution is to use
+the string operator ``init``, which returns the initial segment (i.e.
+all characters but the last) of a string:
+```
+  yNoun   : Str -> Noun = \fly -> mkNoun fly (init fly  + "ies") ;  
+```
+The operator ``init`` belongs to a set of operations in the
+resource module ``Prelude``, which therefore has to be
+``open``ed so that ``init`` can be used.
+
+
+
+%--!
+<h4>An intelligent noun paradigm using ``case`` expressions<h4>
+
+It may be hard for the user of a resource morphology to pick the right
+inflection paradigm. A way to help this is to define a more intelligent
+paradigms, which chooses the ending by first analysing the lemma.
+The following variant for English regular nouns puts together all the
+previously shown paradigms, and chooses one of them on the basis of
+the final letter of the lemma.
+```
+  regNoun : Str -> Noun = \s -> case last s of {
+    "s" | "z" => mkNoun s (s + "es") ;
+    "y"       => mkNoun s (init s + "ies") ;
+    _         => mkNoun s (s + "s")
+    } ;
+```
+This definition displays many GF expression forms not shown befores;
+these forms are explained in the following section.
+
+
+
+The paradigms ``regNoun`` does not give the correct forms for
+all nouns. For instance, <i>louse - lice<i> and
+<i>fish - fish<i> must be given by using ``mkNoun``.
+Also the word <i>boy<i> would be inflected incorrectly; to prevent
+this, either use ``mkNoun`` or modify 
+``regNoun`` so that the ``"y"`` case does not
+apply if the second-last character is a vowel.
+
+
+
+%--!
+<h4>Pattern matching<h4>
+
+Expressions of the ``table`` form are built from lists of
+argument-value pairs. These pairs are called the **branches**
+of the table. In addition to constants introduced in
+``param`` definitions, the left-hand side of a branch can more
+generally be a **pattern**, and the computation of selection is
+then performed by **pattern matching**:
+
+- a variable pattern (identifier other than constant parameter) matches anything
+- the wild card ``_`` matches anything
+- a string literal pattern, e.g. ``"s"``, matches the same string 
+- a disjunctive pattern ``P | ... | Q`` matches anything that
+     one of the disjuncts matches
+
+
+
+Pattern matching is performed in the order in which the branches
+appear in the table.
+
+
+
+As syntactic sugar, one-branch tables can be written concisely,
+```
+  \\P,...,Q => t  ===  table {P => ... table {Q => t} ...}
+```
+Finally, the ``case`` expressions common in functional
+programming languages are syntactic sugar for table selections:
+```
+  case e of {...} ===  table {...} ! e
+```
+
+
+
+%--!
+<h4>Morphological analysis and morphology quiz<h4>
+
+Even though in GF morphology
+is mostly seen as an auxiliary of syntax, a morphology once defined
+can be used on its own right. The command ``morpho_analyse = ma``
+can be used to read a text and return for each word the analyses that
+it has in the current concrete syntax.
+```
+  > rf bible.txt | morpho_analyse
+```
+Similarly to translation exercises, morphological exercises can
+be generated, by the command ``morpho_quiz = mq``. Usually,
+the category is set to be something else than ``S``. For instance,
+```
+  > i lib/resource/french/VerbsFre.gf
+  > morpho_quiz -cat=V
+
+  Welcome to GF Morphology Quiz.
+  ...
+
+  réapparaître : VFin VCondit  Pl  P2
+  réapparaitriez
+  > No, not réapparaitriez, but
+  réapparaîtriez
+  Score 0/1
+```
+Finally, a list of morphological exercises and save it in a
+file for later use, by the command ``morpho_list = ml``
+```
+  > morpho_list -number=25 -cat=V
+```
+The number flag gives the number of exercises generated.
+
+
+
+%--!
+<h4>Parametric vs. inherent features, agreement<h4>
+
+The rule of subject-verb agreement in English says that the verb
+phrase must be inflected in the number of the subject. This
+means that a noun phrase (functioning as a subject), in some sense
+<i>has<i> a number, which it "sends" to the verb. The verb does not
+have a number, but must be able to receive whatever number the
+subject has. This distinction is nicely represented by the
+different linearization types of noun phrases and verb phrases:
+```
+  lincat NP = {s : Str ; n : Number} ;
+  lincat VP = {s : Number => Str} ;
+```
+We say that the number of ``NP`` is an **inherent feature**,
+whereas the number of  ``NP`` is **parametric**.
+
+
+
+The agreement rule itself is expressed in the linearization rule of
+the predication structure:
+```
+  lin PredVP np vp = {s = np.s ++ vp.s ! np.n} ;
+```
+The following page will present a new version of
+``PaleolithingEng``, assuming an abstract syntax 
+xextended with ``All`` and ``Two``.
+It also assumes that ``MorphoEng`` has a paradigm
+``regVerb`` for regular verbs (which need only be
+regular only in the present tensse).
+The reader is invited to inspect the way in which agreement works in
+the formation of noun phrases and verb phrases.
+
+
+
+%--!
+<h4>English concrete syntax with parameters<h4>
+
+```
+concrete PaleolithicEng of Paleolithic = open MorphoEng in {
+lincat 
+  S, A          = {s : Str} ; 
+  VP, CN, V, TV = {s : Number => Str} ; 
+  NP            = {s : Str ; n : Number} ; 
+lin
+  PredVP np vp  = {s = np.s ++ vp.s ! np.n} ;
+  UseV   v      = v ;
+  ComplTV tv np = {s = \\n => tv.s ! n ++ np.s} ;
+  UseA   a   = {s = \\n => case n of {Sg => "is" ; Pl => "are"} ++ a.s} ;
+  This  cn   = {s = "this" ++ cn.s ! Sg } ; 
+  Indef cn   = {s = "a" ++ cn.s ! Sg} ; 
+  All   cn   = {s = "all" ++ cn.s ! Pl} ; 
+  Two   cn   = {s = "two" ++ cn.s ! Pl} ; 
+  ModA  a cn = {s = \\n => a.s ++ cn.s ! n} ;
+  Louse  = mkNoun "louse" "lice" ;
+  Snake  = regNoun "snake" ;
+  Green  = {s = "green"} ;
+  Warm   = {s = "warm"} ;
+  Laugh  = regVerb "laugh" ;
+  Sleep  = regVerb "sleep" ;
+  Kill   = regVerb "kill" ;
+}
+```
+
+
+
+%--!
+<h4>Hierarchic parameter types<h4>
+
+The reader familiar with a functional programming language such as
+<a href="http://www.haskell.org">Haskell<a> must have noticed the similarity
+between parameter types in GF and algebraic datatypes (``data`` definitions
+in Haskell). The GF parameter types are actually a special case of algebraic
+datatypes: the main restriction is that in GF, these types must be finite.
+(This restriction makes it possible to invert linearization rules into
+parsing methods.)
+
+
+
+However, finite is not the same thing as enumerated. Even in GF, parameter
+constructors can take arguments, provided these arguments are from other
+parameter types (recursion is forbidden). Such parameter types impose a
+hierarchic order among parameters. They are often useful to define
+linguistically accurate parameter systems.
+
+
+
+To give an example, Swedish adjectives
+are inflected in number (singular or plural) and
+gender (uter or neuter). These parameters would suggest 2*2=4 different
+forms. However, the gender distinction is done only in the singular. Therefore,
+it would be inaccurate to define adjective paradigms using the type
+``Gender => Number => Str``. The following hierarchic definition
+yields an accurate system of three adjectival forms.
+```
+  param AdjForm = ASg Gender | APl ;
+  param Gender  = Uter | Neuter ;
+```
+In pattern matching, a constructor can have patterns as arguments. For instance,
+the adjectival paradigm in which the two singular forms are the same, can be defined
+```
+  oper plattAdj : Str -> AdjForm => Str = \x -> table {
+    ASg _ => x ;
+    APl   => x + "a" ;
+    }
+```
+
+
+%--!
+<h4>Discontinuous constituents<h4>
+
+A linearization type may contain more strings than one. 
+An example of where this is useful are English particle
+verbs, such as <i>switch off<i>. The linearization of
+a sentence may place the object between the verb and the particle:
+<i>he switched it off<i>.
+
+
+
+The first of the following judgements defines transitive verbs as a
+**discontinuous constituents**, i.e. as having a linearization
+type with two strings and not just one. The second judgement
+shows how the constituents are separated by the object in complementization.
+```
+  lincat TV = {s : Number => Str ; s2 : Str} ;
+  lin ComplTV tv obj = {s = \\n => tv.s ! n ++ obj.s ++ tv.s2} ;
+```
+
+
+
+GF currently requires that all fields in linearization records that
+have a table with value type ``Str`` have as labels
+either ``s`` or ``s`` with an integer index.
+
+
+
+
+%--!
+==Topics still to be written==
+
+
+Free variation
+
+
+
+Record extension, tuples
+
+
+
+Predefined types and operations
+
+
+
+Lexers and unlexers
+
+
+
+Grammars of formal languages
+
+
+
+Resource grammars and their reuse
+
+
+
+Embedded grammars in Haskell and Java
+
+
+
+Dependent types, variable bindings, semantic definitions
+
+
+
+Transfer rules
+
+
+
+<body>
+<html>
