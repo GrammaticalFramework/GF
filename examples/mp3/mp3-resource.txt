@@ -41,10 +41,11 @@ To try out the grammar, do for example
   > si -tr | p | l -multi                     -- translate speech input
     [say:] I want to play Yesterday
 ```
-The last command only works if you have installed 
-[ATK http://mi.eng.cam.ac.uk/~sjy/software.htm] and compiled 
+The last command only works if you have installed the
+[ATK http://mi.eng.cam.ac.uk/~sjy/software.htm] speech recognition library 
+and compiled 
 [GF version 14/12/2005 http://www.cs.chalmers.se/Cs/Research/Language-technology/darcs/GF/doc/darcs.html] 
-or later.
+or later, with support for ATK enabled.
 
 
 ==Structure==
