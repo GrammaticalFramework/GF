@@ -10,20 +10,6 @@ Last update: %%date(%c)
 
 [../gf-logo.gif]
 
-=Grammatical Framework Tutorial=
-
-
-
-**3rd Edition, for GF version 2.2 or later**
-
-
-
-[Aarne Ranta http://www.cs.chalmers.se/~aarne]
-
-
-``aarne@cs.chalmers.se``
-
-
 
 
 %--!
@@ -84,19 +70,28 @@ in the shell. You will see GF's welcome message and the prompt ``>``.
 
 Now you are ready to try out your first grammar.
 We start with one that is not written in GF language, but
-in the EBNF notation (Extended Backus Naur Form), which GF can also
+in the ubiquitous BNF notation (Backus Naur Form), which GF can also
 understand. Type (or copy) the following lines in a file named
 ``paleolithic.ebnf``:
 ```
   S   ::= NP VP ;
   VP  ::= V | TV NP | "is" A ;
-  NP  ::= ("this" | "that" | "the" | "a") CN ;
+  NP  ::= "this" CN | "that" CN | "the" CN | "a" CN ;
   CN  ::= A CN ;
   CN  ::= "boy" | "louse" | "snake" | "worm" ;
   A   ::= "green" | "rotten" | "thick" | "warm" ;
   V   ::= "laughs" | "sleeps" | "swims" ;
   TV  ::= "eats" | "kills" | "washes" ;
 ```
+
+(The name ``paleolithic`` refers to a larger package 
+[stoneage http://www.cs.chalmers.se/~aarne/GF/examples/stoneage/],
+which implements a fragment of primitive language. This fragment
+was defined by the linguist Morris Swadesh as a tool for studying
+the historical relations of languages. But as pointed out
+in the Wiktionary article on
+[Swadesh list http://en.wiktionary.org/wiki/Wiktionary:Swadesh_list], the
+fragment is also usable for basic communication with foreigners.)
 
 
 %--!
@@ -1314,7 +1309,3 @@ Dependent types, variable bindings, semantic definitions
 
 Transfer rules
 
-
-
-<body>
-<html>
