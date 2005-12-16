@@ -31,25 +31,48 @@ import System.IO.Unsafe
 
 config = "/home/aarne/atk/atkrec/atkrec.cfg"
 
-{-# NOINLINE initialized #-}
-initialized :: IORef Bool
-initialized = unsafePerformIO $ newIORef False
+data ATKLang = ATKLang {
+                        hmmlist :: FilePath,
+                        mmf0 :: FilePath,
+                        mmf1 :: FilePath,
+                        dict :: FilePath
+                       }
 
-initATK :: IO ()
-initATK = do
-          b <- readIORef initialized
-          when (not b) $ do
-                         hPutStrLn stderr "Initializing..."
-                         atk_home <- getEnv "ATK_HOME"
-                         let res = atk_home ++ "/Resources"
-                             hmmlist = res ++ "/UK_SI_ZMFCC/hmmlistbg"
-                             mmf0 = res ++ "/UK_SI_ZMFCC/WI4"
-                             mmf1 = res ++ "/UK_SI_ZMFCC/BGHMM2"
-                             dict = res ++ "/beep.dct"
-                         initialize config
-                         loadHMMSet "hmm_english" hmmlist mmf0 mmf1
-                         loadDict "dict_english" dict
-                         writeIORef initialized True
+getLanguage :: String -> IO ATKLang
+getLanguage l = 
+    case l of 
+           "en_UK" -> do
+                      atk_home <- getEnv "ATK_HOME"
+                      let res = atk_home ++ "/Resources"
+                      return $ ATKLang {
+                                 hmmlist = res ++ "/UK_SI_ZMFCC/hmmlistbg",
+                                 mmf0 = res ++ "/UK_SI_ZMFCC/WI4",
+                                 mmf1 = res ++ "/UK_SI_ZMFCC/BGHMM2",
+                                 dict = res ++ "/beep.dct" }
+           _ -> fail $ "AKTSpeechInput: language " ++ l ++ " not supported"
+
+-- | List of the languages for which we have already loaded the HMM
+--   and dictionary.
+{-# NOINLINE languages #-}
+languages :: IORef [String]
+languages = unsafePerformIO $ newIORef []
+
+initATK :: String -> IO ()
+initATK language = 
+    do
+    ls <- readIORef languages
+    when (null ls) $ do
+                     hPutStrLn stderr $ "Initializing ATK..."
+                     initialize config
+    when (language `notElem` ls) $ 
+         do
+         let hmmName = "hmm_" ++ language
+             dictName = "dict_" ++ language
+         hPutStrLn stderr $ "Initializing ATK (" ++ language ++ ")..."
+         l <- getLanguage language
+         loadHMMSet hmmName (hmmlist l) (mmf0 l) (mmf1 l)
+         loadDict dictName (dict l)
+         writeIORef languages (language:ls)
 
 recognizeSpeech :: Ident -- ^ Grammar name
 	        -> Options -> CGrammar -> IO String
@@ -57,11 +80,14 @@ recognizeSpeech name opts cfg =
     do
     let slf = slfPrinter name opts cfg
         n = prIdent name
+        language = "en_UK"
+        hmmName = "hmm_" ++ language
+        dictName = "dict_" ++ language
         slfName = "gram_" ++ n
-        recName = "rec_english_" ++ n
-    initATK
+        recName = "rec_" ++ language ++ "_" ++ n
+    initATK language
     loadGrammarString slfName slf
-    createRecognizer recName "hmm_english" "dict_english" slfName
+    createRecognizer recName hmmName dictName slfName
     hPutStrLn stderr "Listening..."
     s <- recognize recName
     return s
