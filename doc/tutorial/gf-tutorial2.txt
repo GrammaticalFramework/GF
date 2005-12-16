@@ -72,7 +72,7 @@ Now you are ready to try out your first grammar.
 We start with one that is not written in GF language, but
 in the ubiquitous BNF notation (Backus Naur Form), which GF can also
 understand. Type (or copy) the following lines in a file named
-``paleolithic.ebnf``:
+``paleolithic.cf``:
 ```
   S   ::= NP VP ;
   VP  ::= V | TV NP | "is" A ;
@@ -88,10 +88,10 @@ understand. Type (or copy) the following lines in a file named
 [stoneage http://www.cs.chalmers.se/~aarne/GF/examples/stoneage/],
 which implements a fragment of primitive language. This fragment
 was defined by the linguist Morris Swadesh as a tool for studying
-the historical relations of languages. But as pointed out
+the historical relations of languages. But as suggested
 in the Wiktionary article on
 [Swadesh list http://en.wiktionary.org/wiki/Wiktionary:Swadesh_list], the
-fragment is also usable for basic communication with foreigners.)
+fragment is also usable for basic communication between foreigners.)
 
 
 %--!
@@ -99,37 +99,40 @@ fragment is also usable for basic communication with foreigners.)
 
 The first GF command when using a grammar is to **import** it.
 The command has a long name, ``import``, and a short name, ``i``.
-```
-  import paleolithic.gf
-```
-The GF program now **compiles** your grammar into an internal
+You can type either
+
+``` import paleolithic.cf
+
+or
+
+``` i paleolithic.cf
+
+to get the same effect.
+The effect is that the GF program **compiles** your grammar into an internal
 representation, and shows a new prompt when it is ready.
  
-
-
-You can use GF for **parsing**:
+You can now use GF for **parsing**:
 ```
   > parse "the boy eats a snake"
-  Mks_0 (Mks_6 Mks_9) (Mks_2 Mks_20 (Mks_7 Mks_11))
+  S_NP_VP (NP_the_CN CN_boy) (VP_TV_NP TV_eats (NP_a_CN CN_snake))
 
   > parse "the snake eats a boy"
-  Mks_0 (Mks_6 Mks_11) (Mks_2 Mks_20 (Mks_7 Mks_9))
+  S_NP_VP (NP_the_CN CN_snake) (VP_TV_NP TV_eats (NP_a_CN CN_boy))
 ```
 The ``parse`` (= ``p``) command takes a **string**
 (in double quotes) and returns an **abstract syntax tree** - the thing
-with ``Mks``s and parentheses. We will see soon how to make sense
+beginning with ``S_NP_VP``. We will see soon how to make sense
 of the abstract syntax trees - now you should just notice that the tree
 is different for the two strings. 
-
-
 
 Strings that return a tree when parsed do so in virtue of the grammar
 you imported. Try parsing something else, and you fail
 ```
   > p "hello world"
-  No success in cf parsing
+  No success in cf parsing hello world
   no tree found
 ```
+
 
 
 %--!
@@ -139,8 +142,8 @@ You can also use GF for **linearizing**
 (``linearize = l``). This is the inverse of
 parsing, taking trees into strings:
 ```
-  > linearize Mks_0 (Mks_6 Mks_11) (Mks_2 Mks_20 (Mks_7 Mks_9))
-  the snake eats a boy
+  > linearize S_NP_VP (NP_the_CN CN_boy) (VP_TV_NP TV_eats (NP_a_CN CN_snake))
+  the boy eats a snake
 ```
 What is the use of this? Typically not that you type in a tree at
 the GF prompt. The utility of linearization comes from the fact that
@@ -148,7 +151,7 @@ you can obtain a tree from somewhere else. One way to do so is
 **random generation** (``generate_random = gr``):
 ```
   > generate_random
-  Mks_0 (Mks_4 Mks_11) (Mks_3 Mks_15)
+  S_NP_VP (NP_this_CN (CN_A_CN A_thick CN_worm)) (VP_V V_sleeps)
 ```
 Now you can copy the tree and paste it to the ``linearize command``.
 Or, more efficiently, feed random generation into parsing by using
@@ -157,6 +160,21 @@ a **pipe**.
   > gr | l
   this worm is warm
 ```
+
+%--!
+===Visualizing trees===
+
+The gibberish code with parentheses returned by the parser does not
+look like trees. Why is it called so? Trees are a data structure that
+represent <b>nesting</b>: trees are branching entities, and the branches
+are themselves trees. Parentheses give a linear representation of trees,
+useful for the computer. But the human eye may prefer to see a visualization;
+for this purpose, GF provides the command ``visualizre_tree = vt``, to which
+parsing (and any other tree-producing command) can be piped:
+
+``` parse "the green boy eats a warm snake" | vt
+
+[Tree.png]
 
 
 %--!
@@ -221,10 +239,11 @@ The intermediate results in a pipe can be observed by putting the
 want to see:
 ```
   > gr -tr | l -tr | p
-  Mks_0 (Mks_7 Mks_10) (Mks_1 Mks_18)
-  a louse sleeps
-  Mks_0 (Mks_7 Mks_10) (Mks_1 Mks_18)
-```
+
+  S_NP_VP (NP_the_CN CN_snake) (VP_V V_sleeps)
+  the snake sleeps
+  S_NP_VP (NP_the_CN CN_snake) (VP_V V_sleeps)
+
 This facility is good for test purposes: for instance, you
 may want to see if a grammar is **ambiguous**, i.e.
 contains strings that can be parsed in more than one way.
@@ -242,7 +261,7 @@ pipe it to the ``write_file = wf`` command,
 You can read the file back to GF with the
 ``read_file = rf`` command,
 ```
-  > read_file exx.tmp | l -tr | p -lines
+  > read_file exx.tmp | p -lines
 ```
 Notice the flag ``-lines`` given to the parsing
 command. This flag tells GF to parse each line of
@@ -257,30 +276,37 @@ a sentence but a sequence of ten sentences.
 
 The syntax trees returned by GF's parser in the previous examples
 are not so nice to look at. The identifiers of form ``Mks``
-are **labels** of the EBNF rules. To see which label corresponds to
+are **labels** of the BNF rules. To see which label corresponds to
 which rule, you can use the ``print_grammar = pg`` command
 with the ``printer`` flag set to ``cf`` (which means context-free):
 ```
   > print_grammar -printer=cf
-  Mks_10. CN ::= "louse" ;
-  Mks_11. CN ::= "snake" ;
-  Mks_12. CN ::= "worm" ;
-  Mks_8.  CN ::= A CN ;
-  Mks_9.  CN ::= "boy" ;
-  Mks_4.  NP ::= "this" CN ;
-  Mks_15. A  ::= "thick" ;
+
+  V_laughs. V ::= "laughs" ;
+  V_sleeps. V ::= "sleeps" ;
+  V_swims. V ::= "swims" ;
+  VP_TV_NP. VP ::= TV NP ;
+  VP_V. VP ::= V ;
+  VP_is_A. VP ::= "is" A ;
+  TV_eats. TV ::= "eats" ;
+  TV_kills. TV ::= "kills" ;
+  TV_washes. TV ::= "washes" ;
+  S_NP_VP. S ::= NP VP ;
+  NP_a_CN. NP ::= "a" ;
   ...
 ```
 A syntax tree such as
 ```
-  Mks_4 (Mks_8 Mks_15 Mks_12)
+  NP_this_CN (CN_A_CN A_thick CN_worm)
   this thick worm
 ```
 encodes the sequence of grammar rules used for building the
-expression. If you look at this tree, you will notice that ``Mks_4``
-is the label of the rule prefixing ``this`` to a common noun,
-``Mks_15`` is the label of the adjective ``thick``,
-and so on.
+expression. If you look at this tree, you will notice that ``NP_this_CN``
+is the label of the rule prefixing ``this`` to a common noun (``CN``),
+thereby forming a noun phrase (``NP``).
+``A_thick`` is the label of the adjective ``thick``,
+and so on. These labels are formed automatically when the grammar
+is compiled by GF.
 
 
 %--!
@@ -288,10 +314,10 @@ and so on.
 
 The **labelled context-free grammar** format permits user-defined
 labels to each rule.
-GF recognizes files of this format by the suffix
-``.cf``. It is intermediate between EBNF and full GF format.
-Let us include the following rules in the file
-``paleolithic.cf``.
+In files with the suffix ``.cf``, you can prefix rules with
+labels that you provide yourself - these may be more useful
+than the automatically generated ones. The following is a possible
+labelling of ``paleolithic.cf`` with nicer-looking labels.
 ```
   PredVP.  S   ::= NP VP ;
   UseV.    VP  ::= V ;
@@ -317,23 +343,8 @@ Let us include the following rules in the file
   Kill.    TV  ::= "kills" 
   Wash.    TV  ::= "washes" ;
 ```
-
-%--!
-<h4>Using the labelled context-free format<h4>
-
-The GF commands for the ``.cf`` format are
-exactly the same as for the ``.ebnf`` format.
-Just the syntax trees become nicer to read and
-to remember. Notice that before reading in
-a new grammar in GF you often (but not always,
-as we will see later) have first to give the
-command (``empty = e``), which removes the
-old grammar from the GF shell state.
+With this grammar, the trees look as follows:
 ```
-  > empty
-
-  > i paleolithic.cf
-
   > p "the boy eats a snake"
   PredVP (Def Boy) (ComplTV Eat (Indef Snake))
 
@@ -358,11 +369,12 @@ GF grammar compiler produced it.
 
 
 
-However, we will now start to show how GF's own notation gives you
-much more expressive power than the ``.cf`` and ``.ebnf``
-formats. We will introduce the ``.gf`` format by presenting
+However, we will now start the demonstration 
+how GF's own notation gives you
+much more expressive power than the ``.cf``
+format. We will introduce the ``.gf`` format by presenting
 one more way of defining the same grammar as in
-``paleolithic.cf`` and ``paleolithic.ebnf``.
+``paleolithic.cf``.
 Then we will show how the full GF grammar format enables you
 to do things that are not possible in the weaker formats.
 
@@ -1275,37 +1287,40 @@ either ``s`` or ``s`` with an integer index.
 ==Topics still to be written==
 
 
-Free variation
+===Free variation===
 
 
 
-Record extension, tuples
+===Record extension, tuples===
 
 
 
-Predefined types and operations
+===Predefined types and operations===
 
 
 
-Lexers and unlexers
+===Lexers and unlexers===
 
 
 
-Grammars of formal languages
+===Grammars of formal languages===
 
 
 
-Resource grammars and their reuse
+===Resource grammars and their reuse===
 
 
 
-Embedded grammars in Haskell and Java
+===Embedded grammars in Haskell, Java, and Prolog===
 
 
 
-Dependent types, variable bindings, semantic definitions
+===Dependent types, variable bindings, semantic definitions===
 
 
 
-Transfer rules
+===Transfer modules===
+
+
+===Alternative input and output grammar formats===
 
