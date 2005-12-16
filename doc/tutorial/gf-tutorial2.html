@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Grammatical Framework Tutorial</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Fri Dec 16 15:10:23 2005
+Last update: Fri Dec 16 21:04:37 2005
 </FONT></CENTER>
 
 <P></P>
@@ -22,19 +22,32 @@ Last update: Fri Dec 16 15:10:23 2005
       <UL>
       <LI><A HREF="#toc4">Importing grammars and parsing strings</A>
       <LI><A HREF="#toc5">Generating trees and strings</A>
-      <LI><A HREF="#toc6">Some random-generated sentences</A>
-      <LI><A HREF="#toc7">Systematic generation</A>
-      <LI><A HREF="#toc8">More on pipes; tracing</A>
-      <LI><A HREF="#toc9">Writing and reading files</A>
-      <LI><A HREF="#toc10">Labelled context-free grammars</A>
+      <LI><A HREF="#toc6">Visualizing trees</A>
+      <LI><A HREF="#toc7">Some random-generated sentences</A>
+      <LI><A HREF="#toc8">Systematic generation</A>
+      <LI><A HREF="#toc9">More on pipes; tracing</A>
+      <LI><A HREF="#toc10">Writing and reading files</A>
+      <LI><A HREF="#toc11">Labelled context-free grammars</A>
       </UL>
-    <LI><A HREF="#toc11">The GF grammar format</A>
+    <LI><A HREF="#toc12">The GF grammar format</A>
       <UL>
-      <LI><A HREF="#toc12">Abstract and concrete syntax</A>
-      <LI><A HREF="#toc13">Resource modules</A>
-      <LI><A HREF="#toc14">Opening a ``resource``</A>
+      <LI><A HREF="#toc13">Abstract and concrete syntax</A>
+      <LI><A HREF="#toc14">Resource modules</A>
+      <LI><A HREF="#toc15">Opening a ``resource``</A>
       </UL>
-    <LI><A HREF="#toc15">Topics still to be written</A>
+    <LI><A HREF="#toc16">Topics still to be written</A>
+      <UL>
+      <LI><A HREF="#toc17">Free variation</A>
+      <LI><A HREF="#toc18">Record extension, tuples</A>
+      <LI><A HREF="#toc19">Predefined types and operations</A>
+      <LI><A HREF="#toc20">Lexers and unlexers</A>
+      <LI><A HREF="#toc21">Grammars of formal languages</A>
+      <LI><A HREF="#toc22">Resource grammars and their reuse</A>
+      <LI><A HREF="#toc23">Embedded grammars in Haskell, Java, and Prolog</A>
+      <LI><A HREF="#toc24">Dependent types, variable bindings, semantic definitions</A>
+      <LI><A HREF="#toc25">Transfer modules</A>
+      <LI><A HREF="#toc26">Alternative input and output grammar formats</A>
+      </UL>
     </UL>
 
 <P></P>
@@ -102,7 +115,7 @@ Now you are ready to try out your first grammar.
 We start with one that is not written in GF language, but
 in the ubiquitous BNF notation (Backus Naur Form), which GF can also
 understand. Type (or copy) the following lines in a file named
-<CODE>paleolithic.ebnf</CODE>:
+<CODE>paleolithic.cf</CODE>:
 </P>
 <PRE>
     S   ::= NP VP ;
@@ -120,38 +133,48 @@ understand. Type (or copy) the following lines in a file named
 <A HREF="http://www.cs.chalmers.se/~aarne/GF/examples/stoneage/">stoneage</A>,
 which implements a fragment of primitive language. This fragment
 was defined by the linguist Morris Swadesh as a tool for studying
-the historical relations of languages. But as pointed out
+the historical relations of languages. But as suggested
 in the Wiktionary article on
 <A HREF="http://en.wiktionary.org/wiki/Wiktionary:Swadesh_list">Swadesh list</A>, the
-fragment is also usable for basic communication with foreigners.)
+fragment is also usable for basic communication between foreigners.)
 </P>
 <A NAME="toc4"></A>
 <H3>Importing grammars and parsing strings</H3>
 <P>
 The first GF command when using a grammar is to <B>import</B> it.
 The command has a long name, <CODE>import</CODE>, and a short name, <CODE>i</CODE>.
+You can type either
 </P>
 <PRE>
-    import paleolithic.gf
+  import paleolithic.cf
 </PRE>
+<P></P>
 <P>
-The GF program now <B>compiles</B> your grammar into an internal
+or
+</P>
+<PRE>
+  i paleolithic.cf
+</PRE>
+<P></P>
+<P>
+to get the same effect.
+The effect is that the GF program <B>compiles</B> your grammar into an internal
 representation, and shows a new prompt when it is ready.
 </P>
 <P>
-You can use GF for <B>parsing</B>:
+You can now use GF for <B>parsing</B>:
 </P>
 <PRE>
     &gt; parse "the boy eats a snake"
-    Mks_0 (Mks_6 Mks_9) (Mks_2 Mks_20 (Mks_7 Mks_11))
+    S_NP_VP (NP_the_CN CN_boy) (VP_TV_NP TV_eats (NP_a_CN CN_snake))
   
     &gt; parse "the snake eats a boy"
-    Mks_0 (Mks_6 Mks_11) (Mks_2 Mks_20 (Mks_7 Mks_9))
+    S_NP_VP (NP_the_CN CN_snake) (VP_TV_NP TV_eats (NP_a_CN CN_boy))
 </PRE>
 <P>
 The <CODE>parse</CODE> (= <CODE>p</CODE>) command takes a <B>string</B>
 (in double quotes) and returns an <B>abstract syntax tree</B> - the thing
-with <CODE>Mks</CODE>s and parentheses. We will see soon how to make sense
+beginning with <CODE>S_NP_VP</CODE>. We will see soon how to make sense
 of the abstract syntax trees - now you should just notice that the tree
 is different for the two strings. 
 </P>
@@ -161,7 +184,7 @@ you imported. Try parsing something else, and you fail
 </P>
 <PRE>
     &gt; p "hello world"
-    No success in cf parsing
+    No success in cf parsing hello world
     no tree found
 </PRE>
 <P></P>
@@ -173,8 +196,8 @@ You can also use GF for <B>linearizing</B>
 parsing, taking trees into strings:
 </P>
 <PRE>
-    &gt; linearize Mks_0 (Mks_6 Mks_11) (Mks_2 Mks_20 (Mks_7 Mks_9))
-    the snake eats a boy
+    &gt; linearize S_NP_VP (NP_the_CN CN_boy) (VP_TV_NP TV_eats (NP_a_CN CN_snake))
+    the boy eats a snake
 </PRE>
 <P>
 What is the use of this? Typically not that you type in a tree at
@@ -184,7 +207,7 @@ you can obtain a tree from somewhere else. One way to do so is
 </P>
 <PRE>
     &gt; generate_random
-    Mks_0 (Mks_4 Mks_11) (Mks_3 Mks_15)
+    S_NP_VP (NP_this_CN (CN_A_CN A_thick CN_worm)) (VP_V V_sleeps)
 </PRE>
 <P>
 Now you can copy the tree and paste it to the <CODE>linearize command</CODE>.
@@ -197,6 +220,24 @@ a <B>pipe</B>.
 </PRE>
 <P></P>
 <A NAME="toc6"></A>
+<H3>Visualizing trees</H3>
+<P>
+The gibberish code with parentheses returned by the parser does not
+look like trees. Why is it called so? Trees are a data structure that
+represent &lt;b&gt;nesting&lt;/b&gt;: trees are branching entities, and the branches
+are themselves trees. Parentheses give a linear representation of trees,
+useful for the computer. But the human eye may prefer to see a visualization;
+for this purpose, GF provides the command <CODE>visualizre_tree = vt</CODE>, to which
+parsing (and any other tree-producing command) can be piped:
+</P>
+<PRE>
+  parse "the green boy eats a warm snake" | vt
+</PRE>
+<P></P>
+<P>
+<IMG ALIGN="middle" SRC="Tree.png" BORDER="0" ALT="">
+</P>
+<A NAME="toc7"></A>
 <H3>Some random-generated sentences</H3>
 <P>
 Random generation can be quite amusing. So you may want to
@@ -216,7 +257,7 @@ generate ten strings with one and the same command:
     a boy is green
 </PRE>
 <P></P>
-<A NAME="toc7"></A>
+<A NAME="toc8"></A>
 <H3>Systematic generation</H3>
 <P>
 To generate &lt;i&gt;all&lt;i&gt; sentence that a grammar
@@ -246,7 +287,7 @@ You get quite a few trees but not all of them: only up to a given
 <B>Quiz</B>. If the command <CODE>gt</CODE> generated all
 trees in your grammar, it would never terminate. Why?
 </P>
-<A NAME="toc8"></A>
+<A NAME="toc9"></A>
 <H3>More on pipes; tracing</H3>
 <P>
 A pipe of GF commands can have any length, but the "output type"
@@ -269,7 +310,7 @@ This facility is good for test purposes: for instance, you
 may want to see if a grammar is <B>ambiguous</B>, i.e.
 contains strings that can be parsed in more than one way.
 </P>
-<A NAME="toc9"></A>
+<A NAME="toc10"></A>
 <H3>Writing and reading files</H3>
 <P>
 To save the outputs of GF commands into a file, you can
@@ -292,7 +333,7 @@ the file separately. Without the flag, the grammar could
 not recognize the string in the file, because it is not
 a sentence but a sequence of ten sentences.
 </P>
-<A NAME="toc10"></A>
+<A NAME="toc11"></A>
 <H3>Labelled context-free grammars</H3>
 <P>
 The syntax trees returned by GF's parser in the previous examples
@@ -389,7 +430,7 @@ old grammar from the GF shell state.
     a louse is thick
 </PRE>
 <P></P>
-<A NAME="toc11"></A>
+<A NAME="toc12"></A>
 <H2>The GF grammar format</H2>
 <P>
 To see what there really is in GF's shell state when a grammar
@@ -413,7 +454,7 @@ one more way of defining the same grammar as in
 Then we will show how the full GF grammar format enables you
 to do things that are not possible in the weaker formats.
 </P>
-<A NAME="toc12"></A>
+<A NAME="toc13"></A>
 <H3>Abstract and concrete syntax</H3>
 <P>
 A GF grammar consists of two main parts:
@@ -893,7 +934,7 @@ The graph uses
 <P>
 &lt;img src="Gatherer.gif"&gt;
 </P>
-<A NAME="toc13"></A>
+<A NAME="toc14"></A>
 <H3>Resource modules</H3>
 <P>
 Suppose we want to say, with the vocabulary included in
@@ -1039,7 +1080,7 @@ Resource modules can extend other resource modules, in the
 same way as modules of other types can extend modules of the
 same type.
 </P>
-<A NAME="toc14"></A>
+<A NAME="toc15"></A>
 <H3>Opening a ``resource``</H3>
 <P>
 Any number of <CODE>resource</CODE> modules can be
@@ -1386,36 +1427,29 @@ GF currently requires that all fields in linearization records that
 have a table with value type <CODE>Str</CODE> have as labels
 either <CODE>s</CODE> or <CODE>s</CODE> with an integer index.
 </P>
-<A NAME="toc15"></A>
+<A NAME="toc16"></A>
 <H2>Topics still to be written</H2>
-<P>
-Free variation
-</P>
-<P>
-Record extension, tuples
-</P>
-<P>
-Predefined types and operations
-</P>
-<P>
-Lexers and unlexers
-</P>
-<P>
-Grammars of formal languages
-</P>
-<P>
-Resource grammars and their reuse
-</P>
-<P>
-Embedded grammars in Haskell and Java
-</P>
-<P>
-Dependent types, variable bindings, semantic definitions
-</P>
-<P>
-Transfer rules
-</P>
+<A NAME="toc17"></A>
+<H3>Free variation</H3>
+<A NAME="toc18"></A>
+<H3>Record extension, tuples</H3>
+<A NAME="toc19"></A>
+<H3>Predefined types and operations</H3>
+<A NAME="toc20"></A>
+<H3>Lexers and unlexers</H3>
+<A NAME="toc21"></A>
+<H3>Grammars of formal languages</H3>
+<A NAME="toc22"></A>
+<H3>Resource grammars and their reuse</H3>
+<A NAME="toc23"></A>
+<H3>Embedded grammars in Haskell, Java, and Prolog</H3>
+<A NAME="toc24"></A>
+<H3>Dependent types, variable bindings, semantic definitions</H3>
+<A NAME="toc25"></A>
+<H3>Transfer modules</H3>
+<A NAME="toc26"></A>
+<H3>Alternative input and output grammar formats</H3>
 
-<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -\-toc gf-tutorial2.txt -->
 </BODY></HTML>
