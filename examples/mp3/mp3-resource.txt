@@ -1,0 +1,89 @@
+Using the GF resource grammar library in multilingual grammars: an example
+Author: Aarne Ranta <aarne (at) cs.chalmers.se>
+Last update: %%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags --toc mp3-resource.txt
+
+%!target:html
+
+
+
+This document describes the contents of the directory 
+[``GF/examples/mp3`` http://www.cs.chalmers.se/~aarne/GF/examples/mp3/].
+
+This directory contains a small example of a dialogue system
+grammar built by using the GF resource grammar library. Its sole
+purpose is to demonstrate this usage, i.e.
+
+ - how the resource API is used to define concrete syntax
+
+ - how to divide the grammar into modules
+
+
+Thus it is not intended to be (even a part of) a really useful 
+system. 
+
+
+==Quick try==
+
+To try out the grammar, do for example
+```
+  gf mk3.gfcm                                 -- start GF
+
+  > gr | l -multi                             -- random generate
+
+  > p -tr "which song is played ?" | l -multi -- parse and translate
+
+  > gt -tr | l -lang=MP3Swe                   -- generate Swedish "treebank"
+
+  > si -tr | p | l -multi                     -- translate speech input
+    [say:] I want to play Yesterday
+```
+The last command only works if you have installed 
+[ATK http://mi.eng.cam.ac.uk/~sjy/software.htm] and compiled 
+[GF version 14/12/2005 http://www.cs.chalmers.se/Cs/Research/Language-technology/darcs/GF/doc/darcs.html] 
+or later.
+
+
+==Structure==
+
+The directory consists of the following grammars:
+
+- [``MP3.gf`` MP3.gf] the main abstract syntax
+- [``MP3I.gf`` MP3I.gf] functor implementation of the main abstract
+- [``MP3Eng.gf`` MP3Eng.gf] English instantiation of the functor
+- [``MP3Fin.gf`` MP3Fin.gf] Finnish instantiation of the functor (buggy)
+- [``MP3Fre.gf`` MP3Fre.gf] French instantiation of the functor
+- [``MP3Ger.gf`` MP3Ger.gf] German instantiation of the functor
+- [``MP3Swe.gf`` MP3Swe.gf] Swedish instantiation of the functor
+- [``Lexicon.gf`` Lexicon.gf] the interface on which ``MP3I.gf`` depends
+- [``LexiconEng.gf`` LexiconEng.gf] English instance of the interface 
+- [``LexiconFin.gf`` LexiconFin.gf] Finnish instance of the interface 
+- [``LexiconFre.gf`` LexiconFre.gf] French  instance of the interface 
+- [``LexiconGer.gf`` LexiconGer.gf] German  instance of the interface 
+- [``LexiconSwe.gf`` LexiconSwe.gf] Swedish instance of the interface 
+
+
+The main linguistic content is in the functor ``MP3I`` and the
+instances of the ``Lexicon`` interface.
+
+The way in which the implementation is divided to a functor
+and an interface depending on it should work as a model for
+building resource grammar applications in general.
+
+In order to compile the grammars from source, you must set the
+environment variable ``GF_LIB_PATH`` to point at the root
+of your GF library, e.g. in the bash shell,
+
+``` export GF_LIB_PATH=/usr/local/lib/GF/
+
+
+==Resource library version==
+
+The example builds on resource v. 0.6. The reason for not building
+on a later version is that German is not yet implemented for them.
+The example will probably be migrated to v. 1.0 soon. The new resource 
+version will fix the bugs in the Finnish implementation.
+
