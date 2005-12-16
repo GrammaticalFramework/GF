@@ -66,7 +66,7 @@ in the shell. You will see GF's welcome message and the prompt ``>``.
 
 
 %--!
-==My first grammar==
+==The ``.cf`` grammar format==
 
 Now you are ready to try out your first grammar.
 We start with one that is not written in GF language, but
@@ -200,7 +200,7 @@ generate ten strings with one and the same command:
 %--!
 ===Systematic generation===
 
-To generate <i>all<i> sentence that a grammar
+To generate //all// sentence that a grammar
 can generate, use the command ``generate_trees = gt``.
 ```
   > generate_trees | l
@@ -243,7 +243,7 @@ want to see:
   S_NP_VP (NP_the_CN CN_snake) (VP_V V_sleeps)
   the snake sleeps
   S_NP_VP (NP_the_CN CN_snake) (VP_V V_sleeps)
-
+```
 This facility is good for test purposes: for instance, you
 may want to see if a grammar is **ambiguous**, i.e.
 contains strings that can be parsed in more than one way.
@@ -310,7 +310,7 @@ is compiled by GF.
 
 
 %--!
-<h4>The labelled context-free format<h4>
+===The labelled context-free format===
 
 The **labelled context-free grammar** format permits user-defined
 labels to each rule.
@@ -355,9 +355,9 @@ With this grammar, the trees look as follows:
 
 
 %--!
-==The GF grammar format==
+==The ``.gf`` grammar format==
 
-To see what there really is in GF's shell state when a grammar
+To see what there is in GF's shell state when a grammar
 has been imported, you can give the plain command
 ``print_grammar = pg``.
 ```
@@ -402,17 +402,17 @@ is interpreted as the following pair of rules:
 The former rule, with the keyword ``fun``, belongs to the abstract syntax.
 It defines the **function**
 ``PredVP`` which constructs syntax trees of form
-(``PredVP`` <i>x<i> <i>y<i>). 
+(``PredVP`` //x// //y//). 
 
 
 
 The latter rule, with the keyword ``lin``, belongs to the concrete syntax.
 It defines the **linearization function** for
-syntax trees of form (``PredVP`` <i>x<i> <i>y<i>). 
+syntax trees of form (``PredVP`` //x// //y//). 
 
 
 %--!
-<h4>Judgement forms<h4>
+===Judgement forms===
 
 Rules in a GF grammar are called **judgements**, and the keywords
 ``fun`` and ``lin`` are used for distinguishing between two
@@ -435,26 +435,26 @@ judgement forms:
 
 We return to the precise meanings of these judgement forms later.
 First we will look at how judgements are grouped into modules, and
-show how the grammar ``paleolithic.cf`` is
+show how the paleolithic grammar is
 expressed by using modules and judgements.
 
 
 %--!
-<h4>Module types<h4>
+===Module types===
 
 A GF grammar consists of **modules**, 
 into which judgements are grouped. The most important
 module forms are
 
-  - ``abstract`` A = M``, abstract syntax A with judgements in
+  - ``abstract`` A ``=`` M, abstract syntax A with judgements in
   the module body M.
-  - ``concrete`` C ``of`` A = M``, concrete syntax C of the
+  - ``concrete`` C ``of`` A ``=`` M, concrete syntax C of the
        abstract syntax A, with judgements in the module body M.
 
 
 
 %--!
-<h4>Record types, records, and ``Str``s<h4>
+===Record types, records, and ``Str``s===
 
 The linearization type of a category is a **record type**, with
 zero of more **fields** of different types. The simplest record
@@ -468,8 +468,8 @@ which has one field, with **label** ``s`` and type ``Str``.
 
 Examples of records of this type are
 ```
-  [s = "foo"}
-  [s = "hello" ++ "world"}
+  {s = "foo"}
+  {s = "hello" ++ "world"}
 ```
 The type ``Str`` is really the type of **token lists**, but
 most of the time one can conveniently think of it as the type of strings,
@@ -478,17 +478,24 @@ denoted by string literals in double quotes.
 
 
 Whenever a record ``r`` of type ``{s : Str}`` is given,
-``r.s`` is an object of type ``Str``. This is of course
+``r.s`` is an object of type ``Str``. This is
 a special case of the **projection** rule, allowing the extraction
-of fields from a record.
+of fields from a record:
+
+- if //r// : ``{`` ... //p// : //T// ... ``}`` then //r.p// : //T//
 
 
 %--!
-<h4>An abstract syntax example<h4>
+===An abstract syntax example===
 
-Each nonterminal occurring in the grammar ``paleolithic.cf`` is
-introduced by a ``cat`` judgement. Each
-rule label is introduced by a ``fun`` judgement.
+To express the abstract syntax of ``paleolithic.cf`` in
+a file ``Paleolithic.gf``, we write two kinds of judgements:
+
+- Each category is introduced by a ``cat`` judgement.
+- Each rule label is introduced by a ``fun`` judgement,
+  with the type formed from the nonterminals of the rule.
+
+
 ```
 abstract Paleolithic = {
 cat 
@@ -512,7 +519,7 @@ in subsequent ``fun`` judgements.
 
 
 %--!
-<h4>A concrete syntax example<h4>
+===A concrete syntax example===
 
 Each category introduced in ``Paleolithic.gf`` is
 given a ``lincat`` rule, and each
@@ -551,7 +558,7 @@ lin
 
 
 %--!
-<h4>Modules and files<h4>
+===Modules and files===
 
 Module name + ``.gf`` = file name
 
@@ -581,7 +588,7 @@ a new one, by looking at modification times.
 
 
 %--!
-<h4>Multilingual grammar<h4>
+==Multilingual grammars and translation==
 
 The main advantage of separating abstract from concrete syntax is that
 one abstract syntax can be equipped with many concrete syntaxes.
@@ -598,7 +605,7 @@ multilingual grammar.
 
 
 %--!
-<h4>An Italian concrete syntax<h4>
+===An Italian concrete syntax===
 
 ```
 concrete PaleolithicIta of Paleolithic = {
@@ -632,7 +639,7 @@ lin
 ```
 
 %--!
-<h4>Using a multilingual grammar<h4>
+===Using a multilingual grammar===
 
 Import without first emptying
 ```
@@ -656,7 +663,7 @@ Translate by using a pipe:
 
 
 %--!
-<h4>Translation quiz<h4>
+===Translation quiz===
 
 This is a simple language exercise that can be automatically
 generated from a multilingual grammar. The system generates a set of
@@ -687,7 +694,7 @@ The number flag gives the number of sentences generated.
 
 
 %--!
-<h4>The multilingual shell state<h4>
+===The multilingual shell state===
 
 A GF shell is at any time in a state, which 
 contains a multilingual grammar. One of the concrete
@@ -710,7 +717,9 @@ things), you can use the command
 
 
 %--!
-<h4>Extending a grammar<h4>
+==Grammar architecture==
+
+===Extending a grammar===
 
 The module system of GF makes it possible to **extend** a
 grammar in different ways. The syntax of extension is
@@ -738,7 +747,7 @@ and extending module are put together.
 
 
 %--!
-<h4>Multiple inheritance<h4>
+===Multiple inheritance===
 
 Specialized vocabularies can be represented as small grammars that
 only do "one thing" each, e.g.
@@ -767,7 +776,7 @@ same time:
 
 
 %--!
-<h4>Visualizing module structure<h4>
+===Visualizing module structure===
 
 When you have created all the abstract syntaxes and
 one set of concrete syntaxes needed for ``Gatherer``,
@@ -795,7 +804,7 @@ shows the module dependencies.
 
 
 %--!
-<h4>The module structure of ``GathererEng``<h4>
+===The module structure of ``GathererEng``===
 
 The graph uses
 
@@ -811,7 +820,7 @@ The graph uses
 
 
 %--!
-===Resource modules===
+==Resource modules==
 
 Suppose we want to say, with the vocabulary included in
 ``Paleolithic.gf``, things like
@@ -820,7 +829,7 @@ Suppose we want to say, with the vocabulary included in
   all boys sleep  
 ```
 The new grammatical facility we need are the plural forms
-of nouns and verbs (<i>boys, sleep<i>), as opposed to their
+of nouns and verbs (//boys, sleep//), as opposed to their
 singular forms.
 
 
@@ -846,7 +855,7 @@ from strings to more complex types.
 
 
 %--!
-<h4>Parameters and tables<h4>
+===Parameters and tables===
 
 We define the **parameter type** of number in Englisn by
 using a new form of judgement:
@@ -880,11 +889,11 @@ is a selection, whose value is ``"boys"``.
 
 
 %--!
-<h4>Inflection tables, paradigms, and ``oper`` definitions<h4>
+===Inflection tables, paradigms, and ``oper`` definitions===
 
 All English common nouns are inflected in number, most of them in the
 same way: the plural form is formed from the singular form by adding the
-ending <i>s<i>. This rule is an example of 
+ending //s//. This rule is an example of 
 a **paradigm** - a formula telling how the inflection
 forms of a word are formed.
 
@@ -914,7 +923,7 @@ are written together to form one **token**.
 
 
 %--!
-<h4>The ``resource`` module type<h4>
+===The ``resource`` module type===
 
 Parameter and operator definitions do not belong to the abstract syntax.
 They can be used when defining concrete syntax - but they are not
@@ -983,7 +992,7 @@ details.
 
 
 %--!
-<h4>Worst-case macros and data abstraction<h4>
+===Worst-case macros and data abstraction===
 
 Some English nouns, such as ``louse``, are so irregular that
 it makes little sense to see them as instances of a paradigm. Even
@@ -1016,7 +1025,7 @@ terms, ``Noun`` is then treated as an **abstract datatype**.
 
 
 %--!
-<h4>A system of paradigms using ``Prelude`` operations<h4>
+===A system of paradigms using ``Prelude`` operations===
 
 The regular noun paradigm ``regNoun`` can - and should - of course be defined
 by the worst-case macro ``mkNoun``.  In addition, some more noun paradigms
@@ -1025,8 +1034,8 @@ could be defined, for instance,
   regNoun : Str -> Noun = \snake -> mkNoun snake (snake + "s") ;
   sNoun   : Str -> Noun = \kiss  -> mkNoun kiss  (kiss  + "es") ;
 ```
-What about nouns like <i>fly<i>, with the plural <i>flies<i>? The already
-available solution is to use the so-called "technical stem" <i>fl<i> as
+What about nouns like //fly//, with the plural //flies//? The already
+available solution is to use the so-called "technical stem" //fl// as
 argument, and define
 ```
   yNoun   : Str -> Noun = \fl -> mkNoun (fl  + "y") (fl  + "ies") ;
@@ -1045,7 +1054,7 @@ resource module ``Prelude``, which therefore has to be
 
 
 %--!
-<h4>An intelligent noun paradigm using ``case`` expressions<h4>
+===An intelligent noun paradigm using ``case`` expressions===
 
 It may be hard for the user of a resource morphology to pick the right
 inflection paradigm. A way to help this is to define a more intelligent
@@ -1066,9 +1075,9 @@ these forms are explained in the following section.
 
 
 The paradigms ``regNoun`` does not give the correct forms for
-all nouns. For instance, <i>louse - lice<i> and
-<i>fish - fish<i> must be given by using ``mkNoun``.
-Also the word <i>boy<i> would be inflected incorrectly; to prevent
+all nouns. For instance, //louse - lice// and
+//fish - fish// must be given by using ``mkNoun``.
+Also the word //boy// would be inflected incorrectly; to prevent
 this, either use ``mkNoun`` or modify 
 ``regNoun`` so that the ``"y"`` case does not
 apply if the second-last character is a vowel.
@@ -1076,7 +1085,7 @@ apply if the second-last character is a vowel.
 
 
 %--!
-<h4>Pattern matching<h4>
+===Pattern matching===
 
 Expressions of the ``table`` form are built from lists of
 argument-value pairs. These pairs are called the **branches**
@@ -1111,7 +1120,7 @@ programming languages are syntactic sugar for table selections:
 
 
 %--!
-<h4>Morphological analysis and morphology quiz<h4>
+===Morphological analysis and morphology quiz===
 
 Even though in GF morphology
 is mostly seen as an auxiliary of syntax, a morphology once defined
@@ -1147,12 +1156,12 @@ The number flag gives the number of exercises generated.
 
 
 %--!
-<h4>Parametric vs. inherent features, agreement<h4>
+===Parametric vs. inherent features, agreement===
 
 The rule of subject-verb agreement in English says that the verb
 phrase must be inflected in the number of the subject. This
 means that a noun phrase (functioning as a subject), in some sense
-<i>has<i> a number, which it "sends" to the verb. The verb does not
+//has// a number, which it "sends" to the verb. The verb does not
 have a number, but must be able to receive whatever number the
 subject has. This distinction is nicely represented by the
 different linearization types of noun phrases and verb phrases:
@@ -1182,7 +1191,7 @@ the formation of noun phrases and verb phrases.
 
 
 %--!
-<h4>English concrete syntax with parameters<h4>
+===English concrete syntax with parameters===
 
 ```
 concrete PaleolithicEng of Paleolithic = open MorphoEng in {
@@ -1213,7 +1222,7 @@ lin
 
 
 %--!
-<h4>Hierarchic parameter types<h4>
+===Hierarchic parameter types===
 
 The reader familiar with a functional programming language such as
 <a href="http://www.haskell.org">Haskell<a> must have noticed the similarity
@@ -1255,13 +1264,13 @@ the adjectival paradigm in which the two singular forms are the same, can be def
 
 
 %--!
-<h4>Discontinuous constituents<h4>
+===Discontinuous constituents===
 
 A linearization type may contain more strings than one. 
 An example of where this is useful are English particle
-verbs, such as <i>switch off<i>. The linearization of
+verbs, such as //switch off//. The linearization of
 a sentence may place the object between the verb and the particle:
-<i>he switched it off<i>.
+//he switched it off//.
 
 
 
@@ -1308,6 +1317,10 @@ either ``s`` or ``s`` with an integer index.
 
 
 ===Resource grammars and their reuse===
+
+
+
+===Speech input and output===
 
 
 
