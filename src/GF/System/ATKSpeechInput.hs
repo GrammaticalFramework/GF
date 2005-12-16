@@ -28,6 +28,7 @@ import System.IO
 import System.IO.Unsafe
 
 data ATKLang = ATKLang {
+                        cmndef :: FilePath,
                         hmmlist :: FilePath,
                         mmf0 :: FilePath,
                         mmf1 :: FilePath,
@@ -49,6 +50,7 @@ getLanguage l =
                       atk_home <- getEnv_ "ATK_HOME" atk_home_error
                       let res = atk_home ++ "/Resources"
                       return $ ATKLang {
+                                 cmndef = res ++ "/UK_SI_ZMFCC/cepmean",
                                  hmmlist = res ++ "/UK_SI_ZMFCC/hmmlistbg",
                                  mmf0 = res ++ "/UK_SI_ZMFCC/WI4",
                                  mmf1 = res ++ "/UK_SI_ZMFCC/BGHMM2",
@@ -64,17 +66,18 @@ languages = unsafePerformIO $ newIORef []
 initATK :: String -> IO ()
 initATK language = 
     do
+    l <- getLanguage language
     ls <- readIORef languages
     when (null ls) $ do
                      config <- getEnv_ "GF_ATK_CFG" gf_atk_cfg_error
                      hPutStrLn stderr $ "Initializing ATK..."
-                     initialize config
+                     -- FIXME: CMNDEFAULT should be set in the per-language setup
+                     initialize (Just config) [("HPARM:CMNDEFAULT",cmndef l)] 
     when (language `notElem` ls) $ 
          do
          let hmmName = "hmm_" ++ language
              dictName = "dict_" ++ language
          hPutStrLn stderr $ "Initializing ATK (" ++ language ++ ")..."
-         l <- getLanguage language
          loadHMMSet hmmName (hmmlist l) (mmf0 l) (mmf1 l)
          loadDict dictName (dict l)
          writeIORef languages (language:ls)
