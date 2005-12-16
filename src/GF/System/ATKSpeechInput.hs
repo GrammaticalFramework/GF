@@ -27,10 +27,6 @@ import System.Environment
 import System.IO
 import System.IO.Unsafe
 
--- FIXME: get these from somewhere else
-
-config = "/home/aarne/atk/atkrec/atkrec.cfg"
-
 data ATKLang = ATKLang {
                         hmmlist :: FilePath,
                         mmf0 :: FilePath,
@@ -38,18 +34,26 @@ data ATKLang = ATKLang {
                         dict :: FilePath
                        }
 
+atk_home_error = "The environment variable ATK_HOME is not set. "
+                 ++ "It should contain the path to your copy of ATK."
+
+gf_atk_cfg_error = "The environment variable GF_ATK_CFG is not set. "
+                   ++ "It should contain the path to your GF ATK configuration"
+                   ++ " file. A default version of this file can be found"
+                   ++ " in GF/src/gf_atk.cfg"
+
 getLanguage :: String -> IO ATKLang
 getLanguage l = 
     case l of 
            "en_UK" -> do
-                      atk_home <- getEnv "ATK_HOME"
+                      atk_home <- getEnv_ "ATK_HOME" atk_home_error
                       let res = atk_home ++ "/Resources"
                       return $ ATKLang {
                                  hmmlist = res ++ "/UK_SI_ZMFCC/hmmlistbg",
                                  mmf0 = res ++ "/UK_SI_ZMFCC/WI4",
                                  mmf1 = res ++ "/UK_SI_ZMFCC/BGHMM2",
                                  dict = res ++ "/beep.dct" }
-           _ -> fail $ "AKTSpeechInput: language " ++ l ++ " not supported"
+           _ -> fail $ "ATKSpeechInput: language " ++ l ++ " not supported"
 
 -- | List of the languages for which we have already loaded the HMM
 --   and dictionary.
@@ -62,6 +66,7 @@ initATK language =
     do
     ls <- readIORef languages
     when (null ls) $ do
+                     config <- getEnv_ "GF_ATK_CFG" gf_atk_cfg_error
                      hPutStrLn stderr $ "Initializing ATK..."
                      initialize config
     when (language `notElem` ls) $ 
@@ -91,3 +96,14 @@ recognizeSpeech name opts cfg =
     hPutStrLn stderr "Listening..."
     s <- recognize recName
     return s
+
+
+getEnv_ :: String    -- ^ Name of environment variable
+        -> String    -- ^ Message to fail with if the variable is not set.
+        -> IO String
+getEnv_ e err = 
+    do
+    env <- getEnvironment
+    case lookup e env of
+                      Just v -> return v
+                      Nothing -> fail err
