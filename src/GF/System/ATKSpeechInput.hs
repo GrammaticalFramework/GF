@@ -31,30 +31,25 @@ import System.IO.Unsafe
 
 config = "/home/aarne/atk/atkrec/atkrec.cfg"
 
-res = "/home/bjorn/src/atk/Resources"
-hmmlist = res ++ "/UK_SI_ZMFCC/hmmlistbg"
-mmf0 = res ++ "/UK_SI_ZMFCC/WI4"
-mmf1 = res ++ "/UK_SI_ZMFCC/BGHMM2"
-dict = res ++ "/beep.dct"
-
+{-# NOINLINE initialized #-}
 initialized :: IORef Bool
 initialized = unsafePerformIO $ newIORef False
 
 initATK :: IO ()
 initATK = do
-       b <- readIORef initialized
-       when (not b) $ do
-                      hPutStrLn stderr "Initializing..."
-                      atk_home <- getEnv "ATK_HOME"
-                      let res = atk_home ++ "/Resources"
-                          hmmlist = res ++ "/UK_SI_ZMFCC/hmmlistbg"
-                          mmf0 = res ++ "/UK_SI_ZMFCC/WI4"
-                          mmf1 = res ++ "/UK_SI_ZMFCC/BGHMM2"
-                          dict = res ++ "/beep.dct"
-                      initialize config
-                      loadHMMSet "hmm_english" hmmlist mmf0 mmf1
-                      loadDict "dict_english" dict
-                      writeIORef initialized True
+          b <- readIORef initialized
+          when (not b) $ do
+                         hPutStrLn stderr "Initializing..."
+                         atk_home <- getEnv "ATK_HOME"
+                         let res = atk_home ++ "/Resources"
+                             hmmlist = res ++ "/UK_SI_ZMFCC/hmmlistbg"
+                             mmf0 = res ++ "/UK_SI_ZMFCC/WI4"
+                             mmf1 = res ++ "/UK_SI_ZMFCC/BGHMM2"
+                             dict = res ++ "/beep.dct"
+                         initialize config
+                         loadHMMSet "hmm_english" hmmlist mmf0 mmf1
+                         loadDict "dict_english" dict
+                         writeIORef initialized True
 
 recognizeSpeech :: Ident -- ^ Grammar name
 	        -> Options -> CGrammar -> IO String
