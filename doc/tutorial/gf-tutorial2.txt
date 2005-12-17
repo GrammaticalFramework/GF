@@ -1530,11 +1530,18 @@ they can be used as arguments. For example:
 
 ===Resource grammars and their reuse===
 
+See 
+[resource library documentation  ../../lib/resource/doc/gf-resource.html]
+
 
 ===Interfaces, instances, and functors===
 
+See an
+[example built this way ../../examples/mp3/mp3-resource.html]
+
 
 ===Restricted inheritance and qualified opening===
+
 
 
 ==More concepts of abstract syntax==
@@ -1546,14 +1553,22 @@ they can be used as arguments. For example:
 
 ===Semantic definitions===
 
-===Case study: grammars of formal languages===
-
-
-
 
 
 ==Transfer modules==
 
+Transfer means noncompositional tree-transforming operations.
+The command ``apply_transfer = at`` is typically used in a pipe:
+```
+  > p "John walks and John runs" | apply_transfer aggregate | l
+  John walks and runs
+```
+See the
+[sources ../../transfer/examples/aggregation] of this example.
+
+See the
+[transfer language documentation  ../transfer.html]
+for more information.
 
 
 ==Practical issues==
@@ -1561,18 +1576,120 @@ they can be used as arguments. For example:
 
 ===Lexers and unlexers===
 
+Lexers and unlexers can be chosen from
+a list of predefined ones, using the flags``-lexer`` and `` -unlexer`` either
+in the grammar file or on the GF command line.
+
+Given by ``help -lexer``, ``help -unlexer``:
+```
+    The default is words.
+    -lexer=words         tokens are separated by spaces or newlines
+    -lexer=literals      like words, but GF integer and string literals recognized
+    -lexer=vars          like words, but "x","x_...","$...$" as vars, "?..." as meta
+    -lexer=chars         each character is a token
+    -lexer=code          use Haskell's lex
+    -lexer=codevars      like code, but treat unknown words as variables, ?? as meta
+    -lexer=text          with conventions on punctuation and capital letters
+    -lexer=codelit       like code, but treat unknown words as string literals
+    -lexer=textlit       like text, but treat unknown words as string literals
+    -lexer=codeC         use a C-like lexer
+    -lexer=ignore        like literals, but ignore unknown words
+    -lexer=subseqs       like ignore, but then try all subsequences from longest
+
+    The default is unwords.
+    -unlexer=unwords     space-separated token list (like unwords)
+    -unlexer=text        format as text: punctuation, capitals, paragraph <p>
+    -unlexer=code        format as code (spacing, indentation)
+    -unlexer=textlit     like text, but remove string literal quotes
+    -unlexer=codelit     like code, but remove string literal quotes
+    -unlexer=concat      remove all spaces
+    -unlexer=bind        like identity, but bind at "&+"
+
+```
+
 
 ===Efficiency of grammars===
+
+Issues:
+
+- the choice of datastructures in ``lincat``s
+- the value of the ``optimize`` flag 
+- parsing efficiency: ``-mcfg`` vs. others
 
 
 ===Speech input and output===
 
+The``speak_aloud = sa`` command sends a string to the speech
+synthesizer 
+[Flite http://www.speech.cs.cmu.edu/flite/doc/].
+It is typically used via a pipe:
+```  generate_random | linearize | speak_aloud
+The result is only satisfactory for English.
+
+The ``speech_input = si`` command receives a string from a
+speech recognizer that requires the installation of
+[ATK http://mi.eng.cam.ac.uk/~sjy/software.htm].
+It is typically used to pipe input to a parser:
+```  speech_input -tr | parse
+The method words only for grammars of English.
+
+Both Flite and ATK are freely available through the links
+above, but they are not distributed together with GF.
+
+
+
+
+===Multilingual syntax editor===
+
+The 
+[Editor User Manual http://www.cs.chalmers.se/~aarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm]
+describes the use of the editor, which works for any multilingual GF grammar.
+
+Here is a snapshot of the editor:
+
+[../quick-editor.gif]
+ 
+The grammars of the snapshot are from the
+[Letter grammar package http://www.cs.chalmers.se/~aarne/GF/examples/letter].
+
+
+
+===Interactive Development Environment (IDE)===
+
+Forthcoming.
+
 
 ===Communicating with GF===
+
+Other processes can communicate with the GF command interpreter,
+and also with the GF syntax editor.
 
 
 ===Embedded grammars in Haskell, Java, and Prolog===
 
+GF grammars can be used as parts of programs written in the
+following languages. The links give more documentation.
+
+- [Java http://www.cs.chalmers.se/~bringert/gf/gf-java.html]
+- [Haskell http://www.cs.chalmers.se/~aarne/GF/src/GF/Embed/EmbedAPI.hs]
+- [Prolog http://www.cs.chalmers.se/~peb/software.html]
+
 
 ===Alternative input and output grammar formats===
+
+A summary is given in the following chart of GF grammar compiler phases:
+[../gf-compiler.png]
+
+
+==Case studies==
+
+===Interfacing formal and natural languages===
+
+[Formal and Informal Software Specifications http://www.cs.chalmers.se/~krijo/thesis/thesisA4.pdf],
+PhD Thesis by
+[Kristofer Johannisson http://www.cs.chalmers.se/~krijo], is an extensive example of this.
+The system is based on a multilingual grammar relating the formal language OCL with
+English and German.
+
+A simpler example will be explained here.
 
