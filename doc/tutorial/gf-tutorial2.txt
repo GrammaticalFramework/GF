@@ -464,18 +464,11 @@ type used for linearization in GF is
 ```
 which has one field, with **label** ``s`` and type ``Str``.
 
-
-
 Examples of records of this type are
 ```
   {s = "foo"}
   {s = "hello" ++ "world"}
 ```
-The type ``Str`` is really the type of **token lists**, but
-most of the time one can conveniently think of it as the type of strings,
-denoted by string literals in double quotes.
-
-
 
 Whenever a record ``r`` of type ``{s : Str}`` is given,
 ``r.s`` is an object of type ``Str``. This is
@@ -483,6 +476,23 @@ a special case of the **projection** rule, allowing the extraction
 of fields from a record:
 
 - if //r// : ``{`` ... //p// : //T// ... ``}`` then //r.p// : //T//
+
+
+The type ``Str`` is really the type of **token lists**, but
+most of the time one can conveniently think of it as the type of strings,
+denoted by string literals in double quotes. 
+
+Notice that
+```  "hello world"
+is not recommended as an expression of type ``Str``. It denotes
+a token with a space in it, and will usually 
+not work with the lexical analysis that precedes parsing. A shorthand
+exemplified by
+```  ["hello world and people"]  === "hello" ++ "world" ++ "and" ++ "people"
+can be used for lists of tokens. The expression
+```  []
+denotes the empty token list.
+
 
 
 %--!
@@ -1274,8 +1284,6 @@ different linearization types of noun phrases and verb phrases:
 We say that the number of ``NP`` is an **inherent feature**,
 whereas the number of  ``NP`` is **parametric**.
 
-
-
 The agreement rule itself is expressed in the linearization rule of
 the predication structure:
 ```
@@ -1295,28 +1303,33 @@ the formation of noun phrases and verb phrases.
 ===English concrete syntax with parameters===
 
 ```
-concrete PaleolithicEng of Paleolithic = open MorphoEng in {
+concrete PaleolithicEng of Paleolithic = open Prelude, MorphoEng in {
 lincat 
-  S, A          = {s : Str} ; 
+  S, A          = SS ; 
   VP, CN, V, TV = {s : Number => Str} ; 
   NP            = {s : Str ; n : Number} ; 
 lin
-  PredVP np vp  = {s = np.s ++ vp.s ! np.n} ;
+  PredVP np vp  = ss (np.s ++ vp.s ! np.n) ;
   UseV   v      = v ;
   ComplTV tv np = {s = \\n => tv.s ! n ++ np.s} ;
-  UseA   a   = {s = \\n => case n of {Sg => "is" ; Pl => "are"} ++ a.s} ;
-  This  cn   = {s = "this" ++ cn.s ! Sg } ; 
-  Indef cn   = {s = "a" ++ cn.s ! Sg} ; 
-  All   cn   = {s = "all" ++ cn.s ! Pl} ; 
-  Two   cn   = {s = "two" ++ cn.s ! Pl} ; 
+  UseA a   = {s = \\n => case n of {Sg => "is" ; Pl => "are"} ++ a.s} ;
+  This     = det Sg "this" ;
+  Indef    = det Sg "a" ;
+  All      = det Pl "all" ;
+  Two      = det Pl "two" ;
   ModA  a cn = {s = \\n => a.s ++ cn.s ! n} ;
   Louse  = mkNoun "louse" "lice" ;
   Snake  = regNoun "snake" ;
-  Green  = {s = "green"} ;
-  Warm   = {s = "warm"} ;
+  Green  = ss "green" ;
+  Warm   = ss "warm" ;
   Laugh  = regVerb "laugh" ;
   Sleep  = regVerb "sleep" ;
   Kill   = regVerb "kill" ;
+oper
+  det : Number -> Str -> Noun -> {s : Str ; n : Number} = \n,d,cn -> {
+    s = d ++ n.s ! n ;
+    n = n
+    } ;
 }
 ```
 
@@ -1326,22 +1339,18 @@ lin
 ===Hierarchic parameter types===
 
 The reader familiar with a functional programming language such as
-<a href="http://www.haskell.org">Haskell<a> must have noticed the similarity
-between parameter types in GF and algebraic datatypes (``data`` definitions
+[Haskell http://www.haskell.org] must have noticed the similarity
+between parameter types in GF and **algebraic datatypes** (``data`` definitions
 in Haskell). The GF parameter types are actually a special case of algebraic
 datatypes: the main restriction is that in GF, these types must be finite.
-(This restriction makes it possible to invert linearization rules into
+(It is this restriction that makes it possible to invert linearization rules into
 parsing methods.)
-
-
 
 However, finite is not the same thing as enumerated. Even in GF, parameter
 constructors can take arguments, provided these arguments are from other
-parameter types (recursion is forbidden). Such parameter types impose a
-hierarchic order among parameters. They are often useful to define
-linguistically accurate parameter systems.
-
-
+parameter types - only recursion is forbidden. Such parameter types impose a
+hierarchic order among parameters. They are often needed to define
+the linguistically most accurate parameter systems.
 
 To give an example, Swedish adjectives
 are inflected in number (singular or plural) and
@@ -1396,7 +1405,7 @@ file for later use, by the command ``morpho_list = ml``
 ```
   > morpho_list -number=25 -cat=V
 ```
-The number flag gives the number of exercises generated.
+The ``number`` flag gives the number of exercises generated.
 
 
 
@@ -1409,9 +1418,7 @@ verbs, such as //switch off//. The linearization of
 a sentence may place the object between the verb and the particle:
 //he switched it off//.
 
-
-
-The first of the following judgements defines transitive verbs as a
+The first of the following judgements defines transitive verbs as
 **discontinuous constituents**, i.e. as having a linearization
 type with two strings and not just one. The second judgement
 shows how the constituents are separated by the object in complementization.
@@ -1419,38 +1426,106 @@ shows how the constituents are separated by the object in complementization.
   lincat TV = {s : Number => Str ; s2 : Str} ;
   lin ComplTV tv obj = {s = \\n => tv.s ! n ++ obj.s ++ tv.s2} ;
 ```
-
-
-
-GF currently requires that all fields in linearization records that
-have a table with value type ``Str`` have as labels
-either ``s`` or ``s`` with an integer index.
-
-
+There is no restriction in the number of discontinuous constituents
+(or other fields) a  ``lincat`` may contain. The only condition is that
+the fields must be of finite types, i.e. built from records, tables,
+parameters, and ``Str``, and not functions. A mathematical result
+about parsing in GF says that the worst-case complexity of parsing
+increases with the number of discontinuous constituents. Moreover,
+the parsing and linearization commands only give reliable results
+for categories whose linearization type has a unique ``Str`` valued
+field labelled ``s``.
 
 
 %--!
-==Topics still to be written==
+==More constructs for concrete syntax==
 
 
+%--!
 ===Free variation===
 
+Sometimes there are many alternative ways to define a concrete syntax.
+For instance, the verb negation in English can be expressed both by
+//does not// and //doesn't//. In linguistic terms, these expressions
+are in **free variation**. The ``variants`` construct of GF can
+be used to give a list of strings in free variation. For example,
+```
+  NegVerb verb = {s = variants {["does not"] ; "doesn't} ++ verb.s} ;
+```
+An empty variant list
+```
+  variants {}
+```
+can be used e.g. if a word lacks a certain form.
+
+In general, ``variants`` should be used cautiously. It is not
+recommended for modules aimed to be libraries, because the
+user of the library has no way to choose among the variants.
+Moreover, even though ``variants`` admits lists of any type,
+its semantics for complex types can cause surprises.
 
 
-===Record extension, tuples===
+
+
+===Record extension and subtyping===
+
+Record types and records can be **extended** with new fields. For instance,
+in German it is natural to see transitive verbs as verbs with a case.
+The symbol ``**`` is used for both constructs.
+```
+  lincat TV = Verb ** {c : Case} ;
+
+  lin Follow = regVerb "folgen" ** {c = Dative} ; 
+```
+To extend a record type or a record with a field whose label it
+already has is a type error.
+
+A record type //T// is a **subtype** of another one //R//, if //T// has
+all the fields of //R// and possibly other fields. For instance,
+an extension of a record type is always a subtype of it.
+
+If //T// is a subtype of //R//, an object of //T// can be used whenever
+an object of //R// is required. For instance, a transitive verb can
+be used whenever a verb is required.
+
+**Contravariance** means that a function taking an //R// as argument
+can also be applied to any object of a subtype //T//.
+
+
+
+===Tuples and product types===
+
+Product types and tuples are syntactic sugar for record types and records:
+```
+  T1 * ... * Tn   ===   {p1 : T1 ; ... ; pn : Tn}
+  <t1, ...,  tn>  ===   {p1 = T1 ; ... ; pn = Tn}
+```
+Thus the labels ``p1, p2,...``` are hard-coded.
 
 
 
 ===Predefined types and operations===
 
+GF has the following predefined categories in abstract syntax:
+```
+  cat Int ;     -- integers, e.g. 0, 5, 743145151019
+  cat Float ;   -- floats, e.g.   0.0, 3.1415926
+  cat String ;  -- strings, e.g.  "", "foo", "123"
+```
+The objects of each of these categories are **literals**
+as indicated in the comments above. No ``fun`` definition
+can have a predefined category as its value type, but
+they can be used as arguments. For example:
+```
+  fun StreetAddress : Int -> String -> Address ;
+  lin StreetAddress number street = {s = number.s ++ street.s} ;
+
+  -- e.g. (StreetAddress 10 "Downing Street") : Address
+```
 
 
-===Lexers and unlexers===
-
-
-
-===Grammars of formal languages===
-
+%--!
+==More features of the module system==
 
 
 ===Resource grammars and their reuse===
@@ -1459,19 +1534,44 @@ either ``s`` or ``s`` with an integer index.
 ===Interfaces, instances, and functors===
 
 
+===Restricted inheritance and qualified opening===
+
+
+==More concepts of abstract syntax==
+
+
+===Dependent types===
+
+===Higher-order abstract syntax===
+
+===Semantic definitions===
+
+===Case study: grammars of formal languages===
+
+
+
+
+
+==Transfer modules==
+
+
+
+==Practical issues==
+
+
+===Lexers and unlexers===
+
+
+===Efficiency of grammars===
+
+
 ===Speech input and output===
 
 
+===Communicating with GF===
+
 
 ===Embedded grammars in Haskell, Java, and Prolog===
-
-
-
-===Dependent types, variable bindings, semantic definitions===
-
-
-
-===Transfer modules===
 
 
 ===Alternative input and output grammar formats===

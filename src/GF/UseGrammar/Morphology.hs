@@ -23,6 +23,7 @@ import GF.Canon.AbsGFC
 import GF.Canon.GFC
 import GF.Grammar.PrGrammar
 import GF.Canon.CMacros
+import GF.Canon.Look
 import GF.Grammar.LookAbs
 import GF.Infra.Ident
 import qualified GF.Grammar.Macros as M
@@ -63,13 +64,15 @@ isKnownWord mo = not . null . snd . appMorphoOnly mo
 mkMorpho :: CanonGrammar -> Ident -> Morpho 
 mkMorpho gr a = tcompile $ concatMap mkOne $ allItems where
 
+  comp = ccompute gr [] -- to undo 'values' optimization
+
   mkOne (Left (fun,c))  = map (prOne fun c) $ allLins fun
   mkOne (Right (fun,_)) = map (prSyn fun) $ allSyns fun
   
   -- gather forms of lexical items
   allLins fun@(m,f) = errVal [] $ do
     ts <- allLinsOfFun gr (CIQ a f)  
-    ss <- mapM (mapPairsM (mapPairsM (return . wordsInTerm))) ts
+    ss <- mapM (mapPairsM (mapPairsM (liftM wordsInTerm . comp))) ts
     return [(p,s) | (p,fs) <- concat $ map snd $ concat ss, s <- fs]
   prOne (_,f) c (ps,s) = (s, [prt f +++ tagPrt c +++ unwords (map prt_ ps)])
 
