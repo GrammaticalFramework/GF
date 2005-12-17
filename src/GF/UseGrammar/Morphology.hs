@@ -71,7 +71,7 @@ mkMorpho gr a = tcompile $ concatMap mkOne $ allItems where
   
   -- gather forms of lexical items
   allLins fun@(m,f) = errVal [] $ do
-    ts <- allLinsOfFun gr (CIQ a f)  
+    ts <- lookupLin gr (CIQ a f) >>= comp >>= allAllLinValues  
     ss <- mapM (mapPairsM (mapPairsM (liftM wordsInTerm . comp))) ts
     return [(p,s) | (p,fs) <- concat $ map snd $ concat ss, s <- fs]
   prOne (_,f) c (ps,s) = (s, [prt f +++ tagPrt c +++ unwords (map prt_ ps)])
