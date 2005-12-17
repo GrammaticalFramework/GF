@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Grammatical Framework Tutorial</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Sat Dec 17 13:32:10 2005
+Last update: Sat Dec 17 21:42:39 2005
 </FONT></CENTER>
 
 <P></P>
@@ -80,20 +80,35 @@ Last update: Sat Dec 17 13:32:10 2005
       <LI><A HREF="#toc49">Morphological analysis and morphology quiz</A>
       <LI><A HREF="#toc50">Discontinuous constituents</A>
       </UL>
-    <LI><A HREF="#toc51">Topics still to be written</A>
+    <LI><A HREF="#toc51">More constructs for concrete syntax</A>
       <UL>
       <LI><A HREF="#toc52">Free variation</A>
-      <LI><A HREF="#toc53">Record extension, tuples</A>
-      <LI><A HREF="#toc54">Predefined types and operations</A>
-      <LI><A HREF="#toc55">Lexers and unlexers</A>
-      <LI><A HREF="#toc56">Grammars of formal languages</A>
+      <LI><A HREF="#toc53">Record extension and subtyping</A>
+      <LI><A HREF="#toc54">Tuples and product types</A>
+      <LI><A HREF="#toc55">Predefined types and operations</A>
+      </UL>
+    <LI><A HREF="#toc56">More features of the module system</A>
+      <UL>
       <LI><A HREF="#toc57">Resource grammars and their reuse</A>
       <LI><A HREF="#toc58">Interfaces, instances, and functors</A>
-      <LI><A HREF="#toc59">Speech input and output</A>
-      <LI><A HREF="#toc60">Embedded grammars in Haskell, Java, and Prolog</A>
-      <LI><A HREF="#toc61">Dependent types, variable bindings, semantic definitions</A>
-      <LI><A HREF="#toc62">Transfer modules</A>
-      <LI><A HREF="#toc63">Alternative input and output grammar formats</A>
+      <LI><A HREF="#toc59">Restricted inheritance and qualified opening</A>
+      </UL>
+    <LI><A HREF="#toc60">More concepts of abstract syntax</A>
+      <UL>
+      <LI><A HREF="#toc61">Dependent types</A>
+      <LI><A HREF="#toc62">Higher-order abstract syntax</A>
+      <LI><A HREF="#toc63">Semantic definitions</A>
+      <LI><A HREF="#toc64">Case study: grammars of formal languages</A>
+      </UL>
+    <LI><A HREF="#toc65">Transfer modules</A>
+    <LI><A HREF="#toc66">Practical issues</A>
+      <UL>
+      <LI><A HREF="#toc67">Lexers and unlexers</A>
+      <LI><A HREF="#toc68">Efficiency of grammars</A>
+      <LI><A HREF="#toc69">Speech input and output</A>
+      <LI><A HREF="#toc70">Communicating with GF</A>
+      <LI><A HREF="#toc71">Embedded grammars in Haskell, Java, and Prolog</A>
+      <LI><A HREF="#toc72">Alternative input and output grammar formats</A>
       </UL>
     </UL>
 
@@ -619,11 +634,7 @@ Examples of records of this type are
     {s = "foo"}
     {s = "hello" ++ "world"}
 </PRE>
-<P>
-The type <CODE>Str</CODE> is really the type of <B>token lists</B>, but
-most of the time one can conveniently think of it as the type of strings,
-denoted by string literals in double quotes.
-</P>
+<P></P>
 <P>
 Whenever a record <CODE>r</CODE> of type <CODE>{s : Str}</CODE> is given,
 <CODE>r.s</CODE> is an object of type <CODE>Str</CODE>. This is
@@ -634,6 +645,35 @@ of fields from a record:
 <LI>if <I>r</I> : <CODE>{</CODE> ... <I>p</I> : <I>T</I> ... <CODE>}</CODE> then <I>r.p</I> : <I>T</I>
 </UL>
 
+<P>
+The type <CODE>Str</CODE> is really the type of <B>token lists</B>, but
+most of the time one can conveniently think of it as the type of strings,
+denoted by string literals in double quotes. 
+</P>
+<P>
+Notice that
+</P>
+<PRE>
+   "hello world"
+</PRE>
+<P>
+is not recommended as an expression of type <CODE>Str</CODE>. It denotes
+a token with a space in it, and will usually 
+not work with the lexical analysis that precedes parsing. A shorthand
+exemplified by
+</P>
+<PRE>
+   ["hello world and people"]  === "hello" ++ "world" ++ "and" ++ "people"
+</PRE>
+<P>
+can be used for lists of tokens. The expression
+</P>
+<PRE>
+   []
+</PRE>
+<P>
+denotes the empty token list.
+</P>
 <A NAME="toc18"></A>
 <H3>An abstract syntax example</H3>
 <P>
@@ -1498,28 +1538,33 @@ the formation of noun phrases and verb phrases.
 <A NAME="toc47"></A>
 <H3>English concrete syntax with parameters</H3>
 <PRE>
-  concrete PaleolithicEng of Paleolithic = open MorphoEng in {
+  concrete PaleolithicEng of Paleolithic = open Prelude, MorphoEng in {
   lincat 
-    S, A          = {s : Str} ; 
+    S, A          = SS ; 
     VP, CN, V, TV = {s : Number =&gt; Str} ; 
     NP            = {s : Str ; n : Number} ; 
   lin
-    PredVP np vp  = {s = np.s ++ vp.s ! np.n} ;
+    PredVP np vp  = ss (np.s ++ vp.s ! np.n) ;
     UseV   v      = v ;
     ComplTV tv np = {s = \\n =&gt; tv.s ! n ++ np.s} ;
-    UseA   a   = {s = \\n =&gt; case n of {Sg =&gt; "is" ; Pl =&gt; "are"} ++ a.s} ;
-    This  cn   = {s = "this" ++ cn.s ! Sg } ; 
-    Indef cn   = {s = "a" ++ cn.s ! Sg} ; 
-    All   cn   = {s = "all" ++ cn.s ! Pl} ; 
-    Two   cn   = {s = "two" ++ cn.s ! Pl} ; 
+    UseA a   = {s = \\n =&gt; case n of {Sg =&gt; "is" ; Pl =&gt; "are"} ++ a.s} ;
+    This     = det Sg "this" ;
+    Indef    = det Sg "a" ;
+    All      = det Pl "all" ;
+    Two      = det Pl "two" ;
     ModA  a cn = {s = \\n =&gt; a.s ++ cn.s ! n} ;
     Louse  = mkNoun "louse" "lice" ;
     Snake  = regNoun "snake" ;
-    Green  = {s = "green"} ;
-    Warm   = {s = "warm"} ;
+    Green  = ss "green" ;
+    Warm   = ss "warm" ;
     Laugh  = regVerb "laugh" ;
     Sleep  = regVerb "sleep" ;
     Kill   = regVerb "kill" ;
+  oper
+    det : Number -&gt; Str -&gt; Noun -&gt; {s : Str ; n : Number} = \n,d,cn -&gt; {
+      s = d ++ n.s ! n ;
+      n = n
+      } ;
   }
 </PRE>
 <P></P>
@@ -1527,19 +1572,19 @@ the formation of noun phrases and verb phrases.
 <H3>Hierarchic parameter types</H3>
 <P>
 The reader familiar with a functional programming language such as
-&lt;a href="<A HREF="http://www.haskell.org">http://www.haskell.org</A>"&gt;Haskell&lt;a&gt; must have noticed the similarity
-between parameter types in GF and algebraic datatypes (<CODE>data</CODE> definitions
+<A HREF="http://www.haskell.org">Haskell</A> must have noticed the similarity
+between parameter types in GF and <B>algebraic datatypes</B> (<CODE>data</CODE> definitions
 in Haskell). The GF parameter types are actually a special case of algebraic
 datatypes: the main restriction is that in GF, these types must be finite.
-(This restriction makes it possible to invert linearization rules into
+(It is this restriction that makes it possible to invert linearization rules into
 parsing methods.)
 </P>
 <P>
 However, finite is not the same thing as enumerated. Even in GF, parameter
 constructors can take arguments, provided these arguments are from other
-parameter types (recursion is forbidden). Such parameter types impose a
-hierarchic order among parameters. They are often useful to define
-linguistically accurate parameter systems.
+parameter types - only recursion is forbidden. Such parameter types impose a
+hierarchic order among parameters. They are often needed to define
+the linguistically most accurate parameter systems.
 </P>
 <P>
 To give an example, Swedish adjectives
@@ -1603,7 +1648,7 @@ file for later use, by the command <CODE>morpho_list = ml</CODE>
     &gt; morpho_list -number=25 -cat=V
 </PRE>
 <P>
-The number flag gives the number of exercises generated.
+The <CODE>number</CODE> flag gives the number of exercises generated.
 </P>
 <A NAME="toc50"></A>
 <H3>Discontinuous constituents</H3>
@@ -1615,7 +1660,7 @@ a sentence may place the object between the verb and the particle:
 <I>he switched it off</I>.
 </P>
 <P>
-The first of the following judgements defines transitive verbs as a
+The first of the following judgements defines transitive verbs as
 <B>discontinuous constituents</B>, i.e. as having a linearization
 type with two strings and not just one. The second judgement
 shows how the constituents are separated by the object in complementization.
@@ -1624,37 +1669,145 @@ shows how the constituents are separated by the object in complementization.
     lincat TV = {s : Number =&gt; Str ; s2 : Str} ;
     lin ComplTV tv obj = {s = \\n =&gt; tv.s ! n ++ obj.s ++ tv.s2} ;
 </PRE>
-<P></P>
 <P>
-GF currently requires that all fields in linearization records that
-have a table with value type <CODE>Str</CODE> have as labels
-either <CODE>s</CODE> or <CODE>s</CODE> with an integer index.
+There is no restriction in the number of discontinuous constituents
+(or other fields) a  <CODE>lincat</CODE> may contain. The only condition is that
+the fields must be of finite types, i.e. built from records, tables,
+parameters, and <CODE>Str</CODE>, and not functions. A mathematical result
+about parsing in GF says that the worst-case complexity of parsing
+increases with the number of discontinuous constituents. Moreover,
+the parsing and linearization commands only give reliable results
+for categories whose linearization type has a unique <CODE>Str</CODE> valued
+field labelled <CODE>s</CODE>.
 </P>
 <A NAME="toc51"></A>
-<H2>Topics still to be written</H2>
+<H2>More constructs for concrete syntax</H2>
 <A NAME="toc52"></A>
 <H3>Free variation</H3>
+<P>
+Sometimes there are many alternative ways to define a concrete syntax.
+For instance, the verb negation in English can be expressed both by
+<I>does not</I> and <I>doesn't</I>. In linguistic terms, these expressions
+are in <B>free variation</B>. The <CODE>variants</CODE> construct of GF can
+be used to give a list of strings in free variation. For example,
+</P>
+<PRE>
+    NegVerb verb = {s = variants {["does not"] ; "doesn't} ++ verb.s} ;
+</PRE>
+<P>
+An empty variant list
+</P>
+<PRE>
+    variants {}
+</PRE>
+<P>
+can be used e.g. if a word lacks a certain form.
+</P>
+<P>
+In general, <CODE>variants</CODE> should be used cautiously. It is not
+recommended for modules aimed to be libraries, because the
+user of the library has no way to choose among the variants.
+Moreover, even though <CODE>variants</CODE> admits lists of any type,
+its semantics for complex types can cause surprises.
+</P>
 <A NAME="toc53"></A>
-<H3>Record extension, tuples</H3>
+<H3>Record extension and subtyping</H3>
+<P>
+Record types and records can be <B>extended</B> with new fields. For instance,
+in German it is natural to see transitive verbs as verbs with a case.
+The symbol <CODE>**</CODE> is used for both constructs.
+</P>
+<PRE>
+    lincat TV = Verb ** {c : Case} ;
+  
+    lin Follow = regVerb "folgen" ** {c = Dative} ; 
+</PRE>
+<P>
+To extend a record type or a record with a field whose label it
+already has is a type error.
+</P>
+<P>
+A record type <I>T</I> is a <B>subtype</B> of another one <I>R</I>, if <I>T</I> has
+all the fields of <I>R</I> and possibly other fields. For instance,
+an extension of a record type is always a subtype of it.
+</P>
+<P>
+If <I>T</I> is a subtype of <I>R</I>, an object of <I>T</I> can be used whenever
+an object of <I>R</I> is required. For instance, a transitive verb can
+be used whenever a verb is required.
+</P>
+<P>
+<B>Contravariance</B> means that a function taking an <I>R</I> as argument
+can also be applied to any object of a subtype <I>T</I>.
+</P>
 <A NAME="toc54"></A>
-<H3>Predefined types and operations</H3>
+<H3>Tuples and product types</H3>
+<P>
+Product types and tuples are syntactic sugar for record types and records:
+</P>
+<PRE>
+    T1 * ... * Tn   ===   {p1 : T1 ; ... ; pn : Tn}
+    &lt;t1, ...,  tn&gt;  ===   {p1 = T1 ; ... ; pn = Tn}
+</PRE>
+<P>
+Thus the labels <CODE>p1, p2,...`</CODE> are hard-coded.
+</P>
 <A NAME="toc55"></A>
-<H3>Lexers and unlexers</H3>
+<H3>Predefined types and operations</H3>
+<P>
+GF has the following predefined categories in abstract syntax:
+</P>
+<PRE>
+    cat Int ;     -- integers, e.g. 0, 5, 743145151019
+    cat Float ;   -- floats, e.g.   0.0, 3.1415926
+    cat String ;  -- strings, e.g.  "", "foo", "123"
+</PRE>
+<P>
+The objects of each of these categories are <B>literals</B>
+as indicated in the comments above. No <CODE>fun</CODE> definition
+can have a predefined category as its value type, but
+they can be used as arguments. For example:
+</P>
+<PRE>
+    fun StreetAddress : Int -&gt; String -&gt; Address ;
+    lin StreetAddress number street = {s = number.s ++ street.s} ;
+  
+    -- e.g. (StreetAddress 10 "Downing Street") : Address
+</PRE>
+<P></P>
 <A NAME="toc56"></A>
-<H3>Grammars of formal languages</H3>
+<H2>More features of the module system</H2>
 <A NAME="toc57"></A>
 <H3>Resource grammars and their reuse</H3>
 <A NAME="toc58"></A>
 <H3>Interfaces, instances, and functors</H3>
 <A NAME="toc59"></A>
-<H3>Speech input and output</H3>
+<H3>Restricted inheritance and qualified opening</H3>
 <A NAME="toc60"></A>
-<H3>Embedded grammars in Haskell, Java, and Prolog</H3>
+<H2>More concepts of abstract syntax</H2>
 <A NAME="toc61"></A>
-<H3>Dependent types, variable bindings, semantic definitions</H3>
+<H3>Dependent types</H3>
 <A NAME="toc62"></A>
-<H3>Transfer modules</H3>
+<H3>Higher-order abstract syntax</H3>
 <A NAME="toc63"></A>
+<H3>Semantic definitions</H3>
+<A NAME="toc64"></A>
+<H3>Case study: grammars of formal languages</H3>
+<A NAME="toc65"></A>
+<H2>Transfer modules</H2>
+<A NAME="toc66"></A>
+<H2>Practical issues</H2>
+<A NAME="toc67"></A>
+<H3>Lexers and unlexers</H3>
+<A NAME="toc68"></A>
+<H3>Efficiency of grammars</H3>
+<A NAME="toc69"></A>
+<H3>Speech input and output</H3>
+<A NAME="toc70"></A>
+<H3>Communicating with GF</H3>
+<A NAME="toc71"></A>
+<H3>Embedded grammars in Haskell, Java, and Prolog</H3>
+<A NAME="toc72"></A>
 <H3>Alternative input and output grammar formats</H3>
 
 <!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
