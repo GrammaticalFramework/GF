@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Grammatical Framework Tutorial</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Fri Dec 16 22:10:53 2005
+Last update: Sat Dec 17 13:32:10 2005
 </FONT></CENTER>
 
 <P></P>
@@ -45,43 +45,55 @@ Last update: Fri Dec 16 22:10:53 2005
       <LI><A HREF="#toc22">An Italian concrete syntax</A>
       <LI><A HREF="#toc23">Using a multilingual grammar</A>
       <LI><A HREF="#toc24">Translation quiz</A>
-      <LI><A HREF="#toc25">The multilingual shell state</A>
       </UL>
-    <LI><A HREF="#toc26">Grammar architecture</A>
+    <LI><A HREF="#toc25">Grammar architecture</A>
       <UL>
-      <LI><A HREF="#toc27">Extending a grammar</A>
-      <LI><A HREF="#toc28">Multiple inheritance</A>
-      <LI><A HREF="#toc29">Visualizing module structure</A>
-      <LI><A HREF="#toc30">The module structure of ``GathererEng``</A>
+      <LI><A HREF="#toc26">Extending a grammar</A>
+      <LI><A HREF="#toc27">Multiple inheritance</A>
+      <LI><A HREF="#toc28">Visualizing module structure</A>
       </UL>
-    <LI><A HREF="#toc31">Resource modules</A>
+    <LI><A HREF="#toc29">System commands</A>
+    <LI><A HREF="#toc30">Resource modules</A>
       <UL>
-      <LI><A HREF="#toc32">Parameters and tables</A>
-      <LI><A HREF="#toc33">Inflection tables, paradigms, and ``oper`` definitions</A>
-      <LI><A HREF="#toc34">The ``resource`` module type</A>
-      <LI><A HREF="#toc35">Opening a ``resource``</A>
-      <LI><A HREF="#toc36">Worst-case macros and data abstraction</A>
-      <LI><A HREF="#toc37">A system of paradigms using ``Prelude`` operations</A>
-      <LI><A HREF="#toc38">An intelligent noun paradigm using ``case`` expressions</A>
-      <LI><A HREF="#toc39">Pattern matching</A>
-      <LI><A HREF="#toc40">Morphological analysis and morphology quiz</A>
-      <LI><A HREF="#toc41">Parametric vs. inherent features, agreement</A>
-      <LI><A HREF="#toc42">English concrete syntax with parameters</A>
-      <LI><A HREF="#toc43">Hierarchic parameter types</A>
-      <LI><A HREF="#toc44">Discontinuous constituents</A>
+      <LI><A HREF="#toc31">The golden rule of functional programming</A>
+      <LI><A HREF="#toc32">Operation definitions</A>
+      <LI><A HREF="#toc33">The ``resource`` module type</A>
+      <LI><A HREF="#toc34">Opening a ``resource``</A>
+      <LI><A HREF="#toc35">Division of labour</A>
       </UL>
-    <LI><A HREF="#toc45">Topics still to be written</A>
+    <LI><A HREF="#toc36">Morphology</A>
       <UL>
-      <LI><A HREF="#toc46">Free variation</A>
-      <LI><A HREF="#toc47">Record extension, tuples</A>
-      <LI><A HREF="#toc48">Predefined types and operations</A>
-      <LI><A HREF="#toc49">Lexers and unlexers</A>
-      <LI><A HREF="#toc50">Grammars of formal languages</A>
-      <LI><A HREF="#toc51">Resource grammars and their reuse</A>
-      <LI><A HREF="#toc52">Embedded grammars in Haskell, Java, and Prolog</A>
-      <LI><A HREF="#toc53">Dependent types, variable bindings, semantic definitions</A>
-      <LI><A HREF="#toc54">Transfer modules</A>
-      <LI><A HREF="#toc55">Alternative input and output grammar formats</A>
+      <LI><A HREF="#toc37">Parameters and tables</A>
+      <LI><A HREF="#toc38">Inflection tables, paradigms, and ``oper`` definitions</A>
+      <LI><A HREF="#toc39">Worst-case macros and data abstraction</A>
+      <LI><A HREF="#toc40">A system of paradigms using ``Prelude`` operations</A>
+      <LI><A HREF="#toc41">An intelligent noun paradigm using ``case`` expressions</A>
+      <LI><A HREF="#toc42">Pattern matching</A>
+      <LI><A HREF="#toc43">Morphological ``resource`` modules</A>
+      <LI><A HREF="#toc44">Testing ``resource`` modules</A>
+      </UL>
+    <LI><A HREF="#toc45">Using morphology in concrete syntax</A>
+      <UL>
+      <LI><A HREF="#toc46">Parametric vs. inherent features, agreement</A>
+      <LI><A HREF="#toc47">English concrete syntax with parameters</A>
+      <LI><A HREF="#toc48">Hierarchic parameter types</A>
+      <LI><A HREF="#toc49">Morphological analysis and morphology quiz</A>
+      <LI><A HREF="#toc50">Discontinuous constituents</A>
+      </UL>
+    <LI><A HREF="#toc51">Topics still to be written</A>
+      <UL>
+      <LI><A HREF="#toc52">Free variation</A>
+      <LI><A HREF="#toc53">Record extension, tuples</A>
+      <LI><A HREF="#toc54">Predefined types and operations</A>
+      <LI><A HREF="#toc55">Lexers and unlexers</A>
+      <LI><A HREF="#toc56">Grammars of formal languages</A>
+      <LI><A HREF="#toc57">Resource grammars and their reuse</A>
+      <LI><A HREF="#toc58">Interfaces, instances, and functors</A>
+      <LI><A HREF="#toc59">Speech input and output</A>
+      <LI><A HREF="#toc60">Embedded grammars in Haskell, Java, and Prolog</A>
+      <LI><A HREF="#toc61">Dependent types, variable bindings, semantic definitions</A>
+      <LI><A HREF="#toc62">Transfer modules</A>
+      <LI><A HREF="#toc63">Alternative input and output grammar formats</A>
       </UL>
     </UL>
 
@@ -661,7 +673,7 @@ in subsequent <CODE>fun</CODE> judgements.
 <P>
 Each category introduced in <CODE>Paleolithic.gf</CODE> is
 given a <CODE>lincat</CODE> rule, and each
-function is given a <CODE>fun</CODE> rule. Similar shorthands
+function is given a <CODE>lin</CODE> rule. Similar shorthands
 apply as in <CODE>abstract</CODE> modules.
 </P>
 <PRE>
@@ -718,7 +730,7 @@ depends on - in this case, <CODE>Paleolithic.gf</CODE>.
 For each file that is compiled, a <CODE>.gfc</CODE> file
 is generated. The GFC format (="GF Canonical") is the
 "machine code" of GF, which is faster to process than
-GF source files. When reading a module, GF knows whether
+GF source files. When reading a module, GF decides whether
 to use an existing <CODE>.gfc</CODE> file or to generate
 a new one, by looking at modification times.
 </P>
@@ -771,7 +783,7 @@ multilingual grammar.
 <A NAME="toc23"></A>
 <H3>Using a multilingual grammar</H3>
 <P>
-Import without first emptying
+Import the two grammars in the same GF session.
 </P>
 <PRE>
     &gt; i PaleolithicEng.gf
@@ -794,13 +806,25 @@ Translate by using a pipe:
     &gt; p -lang=PaleolithicEng "the boy eats the snake" | l -lang=PaleolithicIta
     il ragazzo mangia il serpente
 </PRE>
+<P>
+The <CODE>lang</CODE> flag tells GF which concrete syntax to use in parsing and
+linearization. By default, the flag is set to the last-imported grammar.
+To see what grammars are in scope and which is the main one, use the command
+<CODE>print_options = po</CODE>:
+</P>
+<PRE>
+    &gt; print_options
+    main abstract :     Paleolithic
+    main concrete :     PaleolithicIta
+    actual concretes :  PaleolithicIta PaleolithicEng
+</PRE>
 <P></P>
 <A NAME="toc24"></A>
 <H3>Translation quiz</H3>
 <P>
 This is a simple language exercise that can be automatically
 generated from a multilingual grammar. The system generates a set of
-random sentence, displays them in one language, and checks the user's
+random sentences, displays them in one language, and checks the user's
 answer given in another language. The command <CODE>translation_quiz = tq</CODE>
 makes this in a subshell of GF.
 </P>
@@ -827,38 +851,18 @@ file for later use, by the command <CODE>translation_list = tl</CODE>
     &gt; translation_list -number=25 PaleolithicEng PaleolithicIta
 </PRE>
 <P>
-The number flag gives the number of sentences generated.
+The <CODE>number</CODE> flag gives the number of sentences generated.
 </P>
 <A NAME="toc25"></A>
-<H3>The multilingual shell state</H3>
-<P>
-A GF shell is at any time in a state, which 
-contains a multilingual grammar. One of the concrete
-syntaxes is the "main" one, which means that parsing and linearization
-are performed by using it. By default, the main concrete syntax is the
-last-imported one. As we saw on previous slide, the <CODE>lang</CODE> flag
-can be used to change the linearization and parsing grammar.
-</P>
-<P>
-To see what the multilingual grammar is (as well as some other
-things), you can use the command
-<CODE>print_options = po</CODE>:
-</P>
-<PRE>
-    &gt; print_options
-    main abstract :     Paleolithic
-    main concrete :     PaleolithicIta
-    all concretes :     PaleolithicIta PaleolithicEng
-</PRE>
-<P></P>
-<A NAME="toc26"></A>
 <H2>Grammar architecture</H2>
-<A NAME="toc27"></A>
+<A NAME="toc26"></A>
 <H3>Extending a grammar</H3>
 <P>
 The module system of GF makes it possible to <B>extend</B> a
 grammar in different ways. The syntax of extension is
-shown by the following example.
+shown by the following example. This is how language
+was extended when civilization advanced from the 
+paleolithic to the neolithic age:
 </P>
 <PRE>
     abstract Neolithic = Paleolithic ** {
@@ -883,11 +887,12 @@ be built for concrete syntaxes:
 The effect of extension is that all of the contents of the extended
 and extending module are put together.
 </P>
-<A NAME="toc28"></A>
+<A NAME="toc27"></A>
 <H3>Multiple inheritance</H3>
 <P>
 Specialized vocabularies can be represented as small grammars that
-only do "one thing" each, e.g.
+only do "one thing" each. For instance, the following are grammars
+for fish names and mushroom names.
 </P>
 <PRE>
     abstract Fish = {
@@ -908,12 +913,12 @@ same time:
 <PRE>
     abstract Gatherer = Paleolithic, Fish, Mushrooms ** {
       fun 
-        UseFish     : Fish     -&gt; CN ;
-        UseMushroom : Mushroom -&gt; CN ;
+        FishCN     : Fish     -&gt; CN ;
+        MushroomCN : Mushroom -&gt; CN ;
       }
 </PRE>
 <P></P>
-<A NAME="toc29"></A>
+<A NAME="toc28"></A>
 <H3>Visualizing module structure</H3>
 <P>
 When you have created all the abstract syntaxes and
@@ -926,9 +931,28 @@ dependences look like, you can use the command
     &gt; visualize_graph
 </PRE>
 <P>
-and the graph will pop up in a separate window. It can also
-be printed out into a file, e.g. a <CODE>.gif</CODE> file that
-can be included in an HTML document
+and the graph will pop up in a separate window. 
+</P>
+<P>
+The graph uses
+</P>
+<UL>
+<LI>oval boxes for abstract modules
+<LI>square boxes  for concrete modules
+<LI>black-headed arrows for inheritance
+<LI>white-headed arrows for the concrete-of-abstract relation
+<P></P>
+<IMG ALIGN="middle" SRC="Gatherer.gif" BORDER="0" ALT="">
+</UL>
+
+<A NAME="toc29"></A>
+<H2>System commands</H2>
+<P>
+To document your grammar, you may want to print the
+graph into a file, e.g. a <CODE>.gif</CODE> file that
+can be included in an HTML document. You can do this
+by first printing the graph into a file <CODE>.dot</CODE> and then
+processing this file with the <CODE>dot</CODE> program.
 </P>
 <PRE>
     &gt; pm -printer=graph | wf Gatherer.dot
@@ -941,25 +965,147 @@ shell escape symbol <CODE>!</CODE>. The resulting graph is shown in the next sec
 <P>
 The command <CODE>print_multi = pm</CODE> is used for printing the current multilingual
 grammar in various formats, of which the format <CODE>-printer=graph</CODE> just
-shows the module dependencies.
+shows the module dependencies. Use the <CODE>help</CODE> to see what other formats
+are available:
 </P>
+<PRE>
+    &gt; help pm
+    &gt; help -printer
+</PRE>
+<P></P>
 <A NAME="toc30"></A>
-<H3>The module structure of ``GathererEng``</H3>
+<H2>Resource modules</H2>
+<A NAME="toc31"></A>
+<H3>The golden rule of functional programming</H3>
 <P>
-The graph uses
+In comparison to the <CODE>.cf</CODE> format, the <CODE>.gf</CODE> format still looks rather
+verbose, and demands lots more characters to be written. You have probably
+done this by the copy-paste-modify method, which is a standard way to
+avoid repeating work.
+</P>
+<P>
+However, there is a more elegant way to avoid repeating work than the copy-and-paste
+method. The <B>golden rule of functional programming</B> says that
 </P>
 <UL>
-<LI>oval boxes for abstract modules
-<LI>square boxes  for concrete modules
-<LI>black-headed arrows for inheritance
-<LI>white-headed arrows for the concrete-of-abstract relation
+<LI>whenever you find yourself programming by copy-and-paste, write a function instead.
 </UL>
 
 <P>
-&lt;img src="Gatherer.gif"&gt;
+A function separates the shared parts of different computations from the
+changing parts, parameters. In functional programming languages, such as
+<A HREF="http://www.haskell.org">Haskell</A>, it is possible to share muc more than in
+the languages such as C and Java.
 </P>
-<A NAME="toc31"></A>
-<H2>Resource modules</H2>
+<A NAME="toc32"></A>
+<H3>Operation definitions</H3>
+<P>
+GF is a functional programming language, not only in the sense that
+the abstract syntax is a system of functions (<CODE>fun</CODE>), but also because
+functional programming can be used to define concrete syntax. This is
+done by using a new form of judgement, with the keyword <CODE>oper</CODE> (for
+<B>operation</B>), distinct from <CODE>fun</CODE> for the sake of clarity.
+Here is a simple example of an operation:
+</P>
+<PRE>
+    oper ss : Str -&gt; {s : Str} = \x -&gt; {s = x} ;
+</PRE>
+<P>
+The operation can be <B>applied</B> to an argument, and GF will
+<B>compute</B> the application into a value. For instance,
+</P>
+<PRE>
+    ss "boy"  ---&gt;  {s = "boy"}
+</PRE>
+<P>
+(We use the symbol <CODE>---&gt;</CODE> to indicate how an expression is 
+computed into a value; this symbol is not a part of GF)
+</P>
+<P>
+Thus an <CODE>oper</CODE> judgement includes the name of the defined operation,
+its type, and an expression defining it. As for the syntax of the defining
+expression, notice the <B>lambda abstraction</B> form <CODE>\x -&gt; t</CODE> of
+the function.
+</P>
+<A NAME="toc33"></A>
+<H3>The ``resource`` module type</H3>
+<P>
+Operator definitions can be included in a concrete syntax. 
+But they are not really tied to a particular set of linearization rules.
+They should rather be seen as <B>resources</B>
+usable in many concrete syntaxes.
+</P>
+<P>
+The <CODE>resource</CODE> module type can be used to package
+<CODE>oper</CODE> definitions into reusable resources. Here is
+an example, with a handful of operations to manipulate
+strings and records.
+</P>
+<PRE>
+    resource StringOper = {
+      oper
+        SS : Type = {s : Str} ;
+  
+        ss : Str -&gt; SS = \x -&gt; {s = x} ;
+  
+        cc : SS -&gt; SS -&gt; SS = \x,y -&gt; ss (x.s ++ y.s) ;
+  
+        prefix : Str -&gt; SS -&gt; SS = \p,x -&gt; ss (p ++ x.s) ;
+    }
+</PRE>
+<P>
+Resource modules can extend other resource modules, in the
+same way as modules of other types can extend modules of the
+same type. Thus it is possible to build resource hierarchies.
+</P>
+<A NAME="toc34"></A>
+<H3>Opening a ``resource``</H3>
+<P>
+Any number of <CODE>resource</CODE> modules can be
+<B>opened</B> in a <CODE>concrete</CODE> syntax, which
+makes definitions contained
+in the resource usable in the concrete syntax. Here is
+an example, where the resource <CODE>StringOper</CODE> is
+opened in a new version of <CODE>PaleolithicEng</CODE>.
+</P>
+<PRE>
+  concrete PalEng of Paleolithic = open StringOper in {
+    lincat 
+      S, NP, VP, CN, A, V, TV = SS ; 
+    lin
+      PredVP  = cc ;
+      UseV v  = v ;
+      ComplTV = cc ; 
+      UseA  = prefix "is" ;
+      This  = prefix "this" ;
+      That  = prefix "that" ;
+      Def   = prefix "the" ;
+      Indef = prefix "a" ;
+      ModA  = cc ;
+      Boy    = ss "boy" ;
+      Louse  = ss "louse" ;
+      Snake  = ss "snake" ;
+      -- etc
+  }
+</PRE>
+<P>
+The same string operations could be use to write <CODE>PaleolithicIta</CODE>
+more concisely.
+</P>
+<A NAME="toc35"></A>
+<H3>Division of labour</H3>
+<P>
+Using operations defined in resource modules is a
+way to avoid repetitive code.
+In addition, it enables a new kind of modularity
+and division of labour in grammar writing: grammarians familiar with
+the linguistic details of a language can put this knowledge
+available through resource grammar modules, whose users only need
+to pick the right operations and not to know their implementation
+details.
+</P>
+<A NAME="toc36"></A>
+<H2>Morphology</H2>
 <P>
 Suppose we want to say, with the vocabulary included in
 <CODE>Paleolithic.gf</CODE>, things like
@@ -985,15 +1131,16 @@ The introduction of plural forms requires two things:
 <P>
 Different languages have different rules of inflection and agreement.
 For instance, Italian has also agreement in gender (masculine vs. feminine).
-We want to express such special features of languages precisely in
-concrete syntax while ignoring them in abstract syntax.
+We want to express such special features of languages in the
+concrete syntax while ignoring them in the abstract syntax.
 </P>
 <P>
-To be able to do all this, we need two new judgement forms,
-a new module form, and a generalizarion of linearization types
+To be able to do all this, we need one new judgement form,
+many new expression forms, 
+and a generalizarion of linearization types
 from strings to more complex types.
 </P>
-<A NAME="toc32"></A>
+<A NAME="toc37"></A>
 <H3>Parameters and tables</H3>
 <P>
 We define the <B>parameter type</B> of number in Englisn by
@@ -1012,7 +1159,7 @@ with a type where the <CODE>s</CODE> field is a <B>table</B> depending on number
 </PRE>
 <P>
 The <B>table type</B> <CODE>Number =&gt; Str</CODE> is in many respects similar to
-a function type (<CODE>Number -&gt; Str</CODE>). The main restriction is that the
+a function type (<CODE>Number -&gt; Str</CODE>). The main difference is that the
 argument type of a table type must always be a parameter type. This means
 that the argument-value pairs can be listed in a finite table. The following
 example shows such a table:
@@ -1034,7 +1181,7 @@ operator <CODE>!</CODE>. For instance,
 <P>
 is a selection, whose value is <CODE>"boys"</CODE>.
 </P>
-<A NAME="toc33"></A>
+<A NAME="toc38"></A>
 <H3>Inflection tables, paradigms, and ``oper`` definitions</H3>
 <P>
 All English common nouns are inflected in number, most of them in the
@@ -1048,9 +1195,8 @@ From GF point of view, a paradigm is a function that takes a <B>lemma</B> -
 a string also known as a <B>dictionary form</B> - and returns an inflection
 table of desired type. Paradigms are not functions in the sense of the
 <CODE>fun</CODE> judgements of abstract syntax (which operate on trees and not
-on strings). Thus we call them <B>operations</B> for the sake of clarity,
-introduce one one form of judgement, with the keyword <CODE>oper</CODE>. As an
-example, the following operation defines the regular noun paradigm of English:
+on strings), but operations defined in <CODE>oper</CODE> judgements.
+The following operation defines the regular noun paradigm of English:
 </P>
 <PRE>
     oper regNoun : Str -&gt; {s : Number =&gt; Str} = \x -&gt; {
@@ -1061,85 +1207,19 @@ example, the following operation defines the regular noun paradigm of English:
       } ;
 </PRE>
 <P>
-Thus an <CODE>oper</CODE> judgement includes the name of the defined operation,
-its type, and an expression defining it. As for the syntax of the defining
-expression, notice the <B>lambda abstraction</B> form <CODE>\x -&gt; t</CODE> of
-the function, and the <B>glueing</B> operator <CODE>+</CODE> telling that
+The <B>glueing</B> operator <CODE>+</CODE> tells that
 the string held in the variable <CODE>x</CODE> and the ending <CODE>"s"</CODE> 
-are written together to form one <B>token</B>.
-</P>
-<A NAME="toc34"></A>
-<H3>The ``resource`` module type</H3>
-<P>
-Parameter and operator definitions do not belong to the abstract syntax.
-They can be used when defining concrete syntax - but they are not
-tied to a particular set of linearization rules.
-The proper way to see them is as auxiliary concepts, as <B>resources</B>
-usable in many concrete syntaxes.
-</P>
-<P>
-The <CODE>resource</CODE> module type thus consists of
-<CODE>param</CODE> and <CODE>oper</CODE> definitions. Here is an
-example.
+are written together to form one <B>token</B>. Thus, for instance,
 </P>
 <PRE>
-    resource MorphoEng = {
-      param
-        Number = Sg | Pl ;
-      oper
-        Noun  : Type = {s : Number =&gt; Str} ;
-        regNoun : Str -&gt; Noun = \x -&gt; {
-          s = table {
-            Sg =&gt; x ;
-            Pl =&gt; x + "s"
-            }
-          } ;
-    }
+    (regNoun "boy").s ! Pl  ---&gt; "boy" + "s"  ---&gt;  "boys"
 </PRE>
-<P>
-Resource modules can extend other resource modules, in the
-same way as modules of other types can extend modules of the
-same type.
-</P>
-<A NAME="toc35"></A>
-<H3>Opening a ``resource``</H3>
-<P>
-Any number of <CODE>resource</CODE> modules can be
-<B>opened</B> in a <CODE>concrete</CODE> syntax, which
-makes the parameter and operation definitions contained
-in the resource usable in the concrete syntax. Here is
-an example, where the resource <CODE>MorphoEng</CODE> is
-open in (the fragment of) a new version of <CODE>PaleolithicEng</CODE>.
-</P>
-<PRE>
-  concrete PaleolithicEng of Paleolithic = open MorphoEng in {
-    lincat 
-      CN = Noun ;
-    lin
-      Boy   = regNoun "boy" ;
-      Snake = regNoun "snake" ;
-      Worm  = regNoun "worm" ;
-    }
-</PRE>
-<P>
-Notice that, just like in abstract syntax, function application
-is written by juxtaposition of the function and the argument.
-</P>
-<P>
-Using operations defined in resource modules is clearly a concise
-way of giving e.g. inflection tables and other repeated patterns
-of expression. In addition, it enables a new kind of modularity
-and division of labour in grammar writing: grammarians familiar with
-the linguistic details of a language can put this knowledge
-available through resource grammars, whose users only need
-to pick the right operations and not to know their implementation
-details.
-</P>
-<A NAME="toc36"></A>
+<P></P>
+<A NAME="toc39"></A>
 <H3>Worst-case macros and data abstraction</H3>
 <P>
 Some English nouns, such as <CODE>louse</CODE>, are so irregular that
-it makes little sense to see them as instances of a paradigm. Even
+it makes no sense to see them as instances of a paradigm. Even
 then, it is useful to perform <B>data abstraction</B> from the
 definition of the type <CODE>Noun</CODE>, and introduce a constructor
 operation, a <B>worst-case macro</B> for nouns:
@@ -1159,6 +1239,13 @@ Thus we define
     lin Louse = mkNoun "louse" "lice" ;
 </PRE>
 <P>
+and
+</P>
+<PRE>
+    oper regNoun : Str -&gt; Noun = \x -&gt; 
+      mkNoun x (x + "s") ;
+</PRE>
+<P>
 instead of writing the inflection table explicitly.
 </P>
 <P>
@@ -1169,48 +1256,47 @@ interface (i.e. the system of type signatures) that makes it
 correct to use these functions in concrete modules. In programming
 terms, <CODE>Noun</CODE> is then treated as an <B>abstract datatype</B>.
 </P>
-<A NAME="toc37"></A>
+<A NAME="toc40"></A>
 <H3>A system of paradigms using ``Prelude`` operations</H3>
 <P>
-The regular noun paradigm <CODE>regNoun</CODE> can - and should - of course be defined
-by the worst-case macro <CODE>mkNoun</CODE>.  In addition, some more noun paradigms
-could be defined, for instance,
+In addition to the completely regular noun paradigm <CODE>regNoun</CODE>, 
+some other frequent noun paradigms deserve to be
+defined, for instance,
 </P>
 <PRE>
-    regNoun : Str -&gt; Noun = \snake -&gt; mkNoun snake (snake + "s") ;
-    sNoun   : Str -&gt; Noun = \kiss  -&gt; mkNoun kiss  (kiss  + "es") ;
+    sNoun : Str -&gt; Noun = \kiss  -&gt; mkNoun kiss  (kiss  + "es") ;
 </PRE>
 <P>
 What about nouns like <I>fly</I>, with the plural <I>flies</I>? The already
-available solution is to use the so-called "technical stem" <I>fl</I> as
-argument, and define
+available solution is to use the longest common prefix
+<I>fl</I> (also known as the <B>technical stem</B>) as argument, and define
 </P>
 <PRE>
-    yNoun   : Str -&gt; Noun = \fl -&gt; mkNoun (fl  + "y") (fl  + "ies") ;
+    yNoun : Str -&gt; Noun = \fl -&gt; mkNoun (fl  + "y") (fl  + "ies") ;
 </PRE>
 <P>
-But this paradigm would be very unintuitive to use, because the "technical stem"
-is not even an existing form of the word. A better solution is to use
-the string operator <CODE>init</CODE>, which returns the initial segment (i.e.
+But this paradigm would be very unintuitive to use, because the technical stem
+is not an existing form of the word. A better solution is to use
+the lemma and a string operator <CODE>init</CODE>, which returns the initial segment (i.e.
 all characters but the last) of a string:
 </P>
 <PRE>
-    yNoun   : Str -&gt; Noun = \fly -&gt; mkNoun fly (init fly  + "ies") ;  
+    yNoun : Str -&gt; Noun = \fly -&gt; mkNoun fly (init fly  + "ies") ;  
 </PRE>
 <P>
 The operator <CODE>init</CODE> belongs to a set of operations in the
 resource module <CODE>Prelude</CODE>, which therefore has to be
 <CODE>open</CODE>ed so that <CODE>init</CODE> can be used.
 </P>
-<A NAME="toc38"></A>
+<A NAME="toc41"></A>
 <H3>An intelligent noun paradigm using ``case`` expressions</H3>
 <P>
 It may be hard for the user of a resource morphology to pick the right
 inflection paradigm. A way to help this is to define a more intelligent
-paradigms, which chooses the ending by first analysing the lemma.
+paradigm, which chooses the ending by first analysing the lemma.
 The following variant for English regular nouns puts together all the
 previously shown paradigms, and chooses one of them on the basis of
-the final letter of the lemma.
+the final letter of the lemma (found by the prelude operator <CODE>last</CODE>).
 </P>
 <PRE>
     regNoun : Str -&gt; Noun = \s -&gt; case last s of {
@@ -1221,7 +1307,7 @@ the final letter of the lemma.
 </PRE>
 <P>
 This definition displays many GF expression forms not shown befores;
-these forms are explained in the following section.
+these forms are explained in the next section.
 </P>
 <P>
 The paradigms <CODE>regNoun</CODE> does not give the correct forms for
@@ -1232,7 +1318,7 @@ this, either use <CODE>mkNoun</CODE> or modify
 <CODE>regNoun</CODE> so that the <CODE>"y"</CODE> case does not
 apply if the second-last character is a vowel.
 </P>
-<A NAME="toc39"></A>
+<A NAME="toc42"></A>
 <H3>Pattern matching</H3>
 <P>
 Expressions of the <CODE>table</CODE> form are built from lists of
@@ -1252,7 +1338,7 @@ then performed by <B>pattern matching</B>:
 
 <P>
 Pattern matching is performed in the order in which the branches
-appear in the table.
+appear in the table: the branch of the first matching pattern is followed.
 </P>
 <P>
 As syntactic sugar, one-branch tables can be written concisely,
@@ -1268,54 +1354,119 @@ programming languages are syntactic sugar for table selections:
     case e of {...} ===  table {...} ! e
 </PRE>
 <P></P>
-<A NAME="toc40"></A>
-<H3>Morphological analysis and morphology quiz</H3>
+<A NAME="toc43"></A>
+<H3>Morphological ``resource`` modules</H3>
 <P>
-Even though in GF morphology
-is mostly seen as an auxiliary of syntax, a morphology once defined
-can be used on its own right. The command <CODE>morpho_analyse = ma</CODE>
-can be used to read a text and return for each word the analyses that
-it has in the current concrete syntax.
+A common idiom is to
+gather the <CODE>oper</CODE> and <CODE>param</CODE> definitions
+needed for inflecting words in
+a language into a morphology module. Here is a simple
+example, <A HREF="MorphoEng.gf"><CODE>MorphoEng</CODE></A>.
 </P>
 <PRE>
-    &gt; rf bible.txt | morpho_analyse
-</PRE>
-<P>
-Similarly to translation exercises, morphological exercises can
-be generated, by the command <CODE>morpho_quiz = mq</CODE>. Usually,
-the category is set to be something else than <CODE>S</CODE>. For instance,
-</P>
-<PRE>
-    &gt; i lib/resource/french/VerbsFre.gf
-    &gt; morpho_quiz -cat=V
+    --# -path=.:prelude
   
-    Welcome to GF Morphology Quiz.
-    ...
+    resource MorphoEng = open Prelude in {
   
-    réapparaître : VFin VCondit  Pl  P2
-    réapparaitriez
-    &gt; No, not réapparaitriez, but
-    réapparaîtriez
-    Score 0/1
+      param
+        Number = Sg | Pl ;
+  
+      oper
+        Noun, Verb : Type = {s : Number =&gt; Str} ;
+  
+        mkNoun : Str -&gt; Str -&gt; Noun = \x,y -&gt; {
+          s = table {
+            Sg =&gt; x ;
+            Pl =&gt; y
+            }
+          } ;
+  
+        regNoun : Str -&gt; Noun = \s -&gt; case last s of {
+          "s" | "z" =&gt; mkNoun s (s + "es") ;
+          "y"       =&gt; mkNoun s (init s + "ies") ;
+          _         =&gt; mkNoun s (s + "s")
+          } ;
+  
+        mkVerb : Str -&gt; Str -&gt; Verb = \x,y -&gt; mkNoun y x ;
+  
+        regVerb : Str -&gt; Verb = \s -&gt; case last s of {
+          "s" | "z" =&gt; mkVerb s (s + "es") ;
+          "y"       =&gt; mkVerb s (init s + "ies") ;
+          "o"       =&gt; mkVerb s (s + "es") ;
+          _         =&gt; mkVerb s (s + "s")
+          } ;
+    }
 </PRE>
 <P>
-Finally, a list of morphological exercises and save it in a
-file for later use, by the command <CODE>morpho_list = ml</CODE>
+The first line gives as a hint to the compiler the
+<B>search path</B> needed to find all the other modules that the
+module depends on. The directory <CODE>prelude</CODE> is a subdirectory of
+<CODE>GF/lib</CODE>; to be able to refer to it in this simple way, you can
+set the environment variable <CODE>GF_LIB_PATH</CODE> to point to this
+directory.
+</P>
+<A NAME="toc44"></A>
+<H3>Testing ``resource`` modules</H3>
+<P>
+To test a <CODE>resource</CODE> module independently, you can import it
+with a flag that tells GF to retain the <CODE>oper</CODE> definitions
+in the memory; the usual behaviour is that <CODE>oper</CODE> definitions
+are just applied to compile linearization rules 
+(this is called <B>inlining</B>) and then thrown away.
 </P>
 <PRE>
-    &gt; morpho_list -number=25 -cat=V
+   &gt; i -retain MorphoEng.gf
+</PRE>
+<P></P>
+<P>
+The command <CODE>compute_concrete = cc</CODE> computes any expression
+formed by operations and other GF constructs. For example,
+</P>
+<PRE>
+    &gt; cc regVerb "echo"
+    {s : Number =&gt; Str = table Number {
+      Sg =&gt; "echoes" ;
+      Pl =&gt; "echo"
+      }
+    }
+</PRE>
+<P></P>
+<P>
+The command <CODE>show_operations = so`</CODE> shows the type signatures
+of all operations returning a given value type:
+</P>
+<PRE>
+    &gt; so Verb
+    MorphoEng.mkNoun : Str -&gt; Str -&gt; {s : {MorphoEng.Number} =&gt; Str}
+    MorphoEng.mkVerb : Str -&gt; Str -&gt; {s : {MorphoEng.Number} =&gt; Str}
+    MorphoEng.regNoun : Str -&gt; {s : {MorphoEng.Number} =&gt; Str}
+    MorphoEng.regVerb : Str -&gt; { s : {MorphoEng.Number} =&gt; Str}
 </PRE>
 <P>
-The number flag gives the number of exercises generated.
+Why does the command also show the operations that form
+<CODE>Noun</CODE>s? The reason is that the type expression
+<CODE>Verb</CODE> is first computed, and its value happens to be
+the same as the value of <CODE>Noun</CODE>.
 </P>
-<A NAME="toc41"></A>
+<A NAME="toc45"></A>
+<H2>Using morphology in concrete syntax</H2>
+<P>
+We can now enrich the concrete syntax definitions to
+comprise morphology. This will involve a more radical
+variation between languages (e.g. English and Italian)
+then just the use of different words. In general,
+parameters and linearization types are different in
+different languages - but this does not prevent the 
+use of a common abstract syntax.
+</P>
+<A NAME="toc46"></A>
 <H3>Parametric vs. inherent features, agreement</H3>
 <P>
 The rule of subject-verb agreement in English says that the verb
 phrase must be inflected in the number of the subject. This
-means that a noun phrase (functioning as a subject), in some sense
-<I>has</I> a number, which it "sends" to the verb. The verb does not
-have a number, but must be able to receive whatever number the
+means that a noun phrase (functioning as a subject), inherently
+<I>has</I> a number, which it passes to the verb. The verb does not
+<I>have</I> a number, but must be able to receive whatever number the
 subject has. This distinction is nicely represented by the
 different linearization types of noun phrases and verb phrases:
 </P>
@@ -1335,7 +1486,7 @@ the predication structure:
     lin PredVP np vp = {s = np.s ++ vp.s ! np.n} ;
 </PRE>
 <P>
-The following page will present a new version of
+The following section will present a new version of
 <CODE>PaleolithingEng</CODE>, assuming an abstract syntax 
 xextended with <CODE>All</CODE> and <CODE>Two</CODE>.
 It also assumes that <CODE>MorphoEng</CODE> has a paradigm
@@ -1344,7 +1495,7 @@ regular only in the present tensse).
 The reader is invited to inspect the way in which agreement works in
 the formation of noun phrases and verb phrases.
 </P>
-<A NAME="toc42"></A>
+<A NAME="toc47"></A>
 <H3>English concrete syntax with parameters</H3>
 <PRE>
   concrete PaleolithicEng of Paleolithic = open MorphoEng in {
@@ -1372,7 +1523,7 @@ the formation of noun phrases and verb phrases.
   }
 </PRE>
 <P></P>
-<A NAME="toc43"></A>
+<A NAME="toc48"></A>
 <H3>Hierarchic parameter types</H3>
 <P>
 The reader familiar with a functional programming language such as
@@ -1414,7 +1565,47 @@ the adjectival paradigm in which the two singular forms are the same, can be def
       }
 </PRE>
 <P></P>
-<A NAME="toc44"></A>
+<A NAME="toc49"></A>
+<H3>Morphological analysis and morphology quiz</H3>
+<P>
+Even though in GF morphology
+is mostly seen as an auxiliary of syntax, a morphology once defined
+can be used on its own right. The command <CODE>morpho_analyse = ma</CODE>
+can be used to read a text and return for each word the analyses that
+it has in the current concrete syntax.
+</P>
+<PRE>
+    &gt; rf bible.txt | morpho_analyse
+</PRE>
+<P>
+In the same way as translation exercises, morphological exercises can
+be generated, by the command <CODE>morpho_quiz = mq</CODE>. Usually,
+the category is set to be something else than <CODE>S</CODE>. For instance,
+</P>
+<PRE>
+    &gt; i lib/resource/french/VerbsFre.gf
+    &gt; morpho_quiz -cat=V
+  
+    Welcome to GF Morphology Quiz.
+    ...
+  
+    réapparaître : VFin VCondit  Pl  P2
+    réapparaitriez
+    &gt; No, not réapparaitriez, but
+    réapparaîtriez
+    Score 0/1
+</PRE>
+<P>
+Finally, a list of morphological exercises and save it in a
+file for later use, by the command <CODE>morpho_list = ml</CODE>
+</P>
+<PRE>
+    &gt; morpho_list -number=25 -cat=V
+</PRE>
+<P>
+The number flag gives the number of exercises generated.
+</P>
+<A NAME="toc50"></A>
 <H3>Discontinuous constituents</H3>
 <P>
 A linearization type may contain more strings than one. 
@@ -1439,27 +1630,31 @@ GF currently requires that all fields in linearization records that
 have a table with value type <CODE>Str</CODE> have as labels
 either <CODE>s</CODE> or <CODE>s</CODE> with an integer index.
 </P>
-<A NAME="toc45"></A>
-<H2>Topics still to be written</H2>
-<A NAME="toc46"></A>
-<H3>Free variation</H3>
-<A NAME="toc47"></A>
-<H3>Record extension, tuples</H3>
-<A NAME="toc48"></A>
-<H3>Predefined types and operations</H3>
-<A NAME="toc49"></A>
-<H3>Lexers and unlexers</H3>
-<A NAME="toc50"></A>
-<H3>Grammars of formal languages</H3>
 <A NAME="toc51"></A>
-<H3>Resource grammars and their reuse</H3>
+<H2>Topics still to be written</H2>
 <A NAME="toc52"></A>
-<H3>Embedded grammars in Haskell, Java, and Prolog</H3>
+<H3>Free variation</H3>
 <A NAME="toc53"></A>
-<H3>Dependent types, variable bindings, semantic definitions</H3>
+<H3>Record extension, tuples</H3>
 <A NAME="toc54"></A>
-<H3>Transfer modules</H3>
+<H3>Predefined types and operations</H3>
 <A NAME="toc55"></A>
+<H3>Lexers and unlexers</H3>
+<A NAME="toc56"></A>
+<H3>Grammars of formal languages</H3>
+<A NAME="toc57"></A>
+<H3>Resource grammars and their reuse</H3>
+<A NAME="toc58"></A>
+<H3>Interfaces, instances, and functors</H3>
+<A NAME="toc59"></A>
+<H3>Speech input and output</H3>
+<A NAME="toc60"></A>
+<H3>Embedded grammars in Haskell, Java, and Prolog</H3>
+<A NAME="toc61"></A>
+<H3>Dependent types, variable bindings, semantic definitions</H3>
+<A NAME="toc62"></A>
+<H3>Transfer modules</H3>
+<A NAME="toc63"></A>
 <H3>Alternative input and output grammar formats</H3>
 
 <!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->

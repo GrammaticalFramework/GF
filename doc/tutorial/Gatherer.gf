@@ -1,5 +1,5 @@
 abstract Gatherer = Paleolithic, Fish, Mushrooms ** {
     fun 
-      UseFish     : Fish     -> CN ;
-      UseMushroom : Mushroom -> CN ;
+      FishCN     : Fish     -> CN ;
+      MushroomCN : Mushroom -> CN ;
 }
