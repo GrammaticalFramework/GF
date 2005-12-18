@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Grammatical Framework Tutorial</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Sun Dec 18 21:43:08 2005
+Last update: Sun Dec 18 22:27:21 2005
 </FONT></CENTER>
 
 <P></P>
@@ -77,44 +77,6 @@ Last update: Sun Dec 18 21:43:08 2005
       <UL>
       <LI><A HREF="#toc47">Parametric vs. inherent features, agreement</A>
       <LI><A HREF="#toc48">English concrete syntax with parameters</A>
-      <LI><A HREF="#toc49">Hierarchic parameter types</A>
-      <LI><A HREF="#toc50">Morphological analysis and morphology quiz</A>
-      <LI><A HREF="#toc51">Discontinuous constituents</A>
-      </UL>
-    <LI><A HREF="#toc52">More constructs for concrete syntax</A>
-      <UL>
-      <LI><A HREF="#toc53">Free variation</A>
-      <LI><A HREF="#toc54">Record extension and subtyping</A>
-      <LI><A HREF="#toc55">Tuples and product types</A>
-      <LI><A HREF="#toc56">Predefined types and operations</A>
-      </UL>
-    <LI><A HREF="#toc57">More features of the module system</A>
-      <UL>
-      <LI><A HREF="#toc58">Resource grammars and their reuse</A>
-      <LI><A HREF="#toc59">Interfaces, instances, and functors</A>
-      <LI><A HREF="#toc60">Restricted inheritance and qualified opening</A>
-      </UL>
-    <LI><A HREF="#toc61">More concepts of abstract syntax</A>
-      <UL>
-      <LI><A HREF="#toc62">Dependent types</A>
-      <LI><A HREF="#toc63">Higher-order abstract syntax</A>
-      <LI><A HREF="#toc64">Semantic definitions</A>
-      </UL>
-    <LI><A HREF="#toc65">Transfer modules</A>
-    <LI><A HREF="#toc66">Practical issues</A>
-      <UL>
-      <LI><A HREF="#toc67">Lexers and unlexers</A>
-      <LI><A HREF="#toc68">Efficiency of grammars</A>
-      <LI><A HREF="#toc69">Speech input and output</A>
-      <LI><A HREF="#toc70">Multilingual syntax editor</A>
-      <LI><A HREF="#toc71">Interactive Development Environment (IDE)</A>
-      <LI><A HREF="#toc72">Communicating with GF</A>
-      <LI><A HREF="#toc73">Embedded grammars in Haskell, Java, and Prolog</A>
-      <LI><A HREF="#toc74">Alternative input and output grammar formats</A>
-      </UL>
-    <LI><A HREF="#toc75">Case studies</A>
-      <UL>
-      <LI><A HREF="#toc76">Interfacing formal and natural languages</A>
       </UL>
     </UL>
 
@@ -833,7 +795,7 @@ Try generation now:
     &gt; gr | l
     quello formaggio molto noioso è italiano
   
-    &gt; gr | l -lang=PaleolithicEng
+    &gt; gr | l -lang=FoodEng
     this fish is warm
 </PRE>
 <P>
@@ -1139,30 +1101,34 @@ Any number of <CODE>resource</CODE> modules can be
 makes definitions contained
 in the resource usable in the concrete syntax. Here is
 an example, where the resource <CODE>StringOper</CODE> is
-opened in a new version of <CODE>PaleolithicEng</CODE>.
+opened in a new version of <CODE>FoodEng</CODE>.
 </P>
 <PRE>
-  concrete PalEng of Paleolithic = open StringOper in {
-    lincat 
-      S, NP, VP, CN, A, V, TV = SS ; 
+    concrete Food2Eng of Food = open StringOper in {
+  
+    lincat
+      S, Item, Kind, Quality = SS ;
+  
     lin
-      PredVP  = cc ;
-      UseV v  = v ;
-      ComplTV = cc ; 
-      UseA  = prefix "is" ;
-      This  = prefix "this" ;
-      That  = prefix "that" ;
-      Def   = prefix "the" ;
-      Indef = prefix "a" ;
-      ModA  = cc ;
-      Boy    = ss "boy" ;
-      Louse  = ss "louse" ;
-      Snake  = ss "snake" ;
-      -- etc
-  }
+      Is item quality = cc item (prefix "is" quality) ;
+      This = prefix "this" ;
+      That = prefix "that" ;
+      QKind = cc ;
+      Wine = ss "wine" ;
+      Cheese = ss "cheese" ;
+      Fish = ss "fish" ;
+      Very = prefix "very" ;
+      Fresh = ss "fresh" ;
+      Warm = ss "warm" ;
+      Italian = ss "Italian" ;
+      Expensive = ss "expensive" ;
+      Delicious = ss "delicious" ;
+      Boring = ss "boring" ;
+  
+    }
 </PRE>
 <P>
-The same string operations could be use to write <CODE>PaleolithicIta</CODE>
+The same string operations could be use to write <CODE>FoodIta</CODE>
 more concisely.
 </P>
 <A NAME="toc36"></A>
@@ -1181,15 +1147,14 @@ details.
 <H2>Morphology</H2>
 <P>
 Suppose we want to say, with the vocabulary included in
-<CODE>Paleolithic.gf</CODE>, things like
+<CODE>Food.gf</CODE>, things like
 </P>
 <PRE>
-    the boy eats two snakes
-    all boys sleep  
+    all Italian wines are delicious
 </PRE>
 <P>
 The new grammatical facility we need are the plural forms
-of nouns and verbs (<I>boys, sleep</I>), as opposed to their
+of nouns and verbs (<I>wines, are</I>), as opposed to their
 singular forms.
 </P>
 <P>
@@ -1208,9 +1173,9 @@ We want to express such special features of languages in the
 concrete syntax while ignoring them in the abstract syntax.
 </P>
 <P>
-To be able to do all this, we need one new judgement form,
-many new expression forms, 
-and a generalizarion of linearization types
+To be able to do all this, we need one new judgement form
+and many new expression forms.
+We also need to generalize linearization types
 from strings to more complex types.
 </P>
 <A NAME="toc38"></A>
@@ -1223,12 +1188,12 @@ using a new form of judgement:
     param Number = Sg | Pl ;
 </PRE>
 <P>
-To express that nouns in English have a linearization
+To express that <CODE>Kind</CODE> expressions in English have a linearization
 depending on number, we replace the linearization type <CODE>{s : Str}</CODE>
 with a type where the <CODE>s</CODE> field is a <B>table</B> depending on number:
 </P>
 <PRE>
-    lincat CN = {s : Number =&gt; Str} ;
+    lincat Kind = {s : Number =&gt; Str} ;
 </PRE>
 <P>
 The <B>table type</B> <CODE>Number =&gt; Str</CODE> is in many respects similar to
@@ -1238,9 +1203,9 @@ that the argument-value pairs can be listed in a finite table. The following
 example shows such a table:
 </P>
 <PRE>
-    lin Boy = {s = table {
-      Sg =&gt; "boy" ;
-      Pl =&gt; "boys"
+    lin Cheese = {s = table {
+      Sg =&gt; "cheese" ;
+      Pl =&gt; "cheeses"
       }
     } ;
 </PRE>
@@ -1249,10 +1214,10 @@ The application of a table to a parameter is done by the <B>selection</B>
 operator <CODE>!</CODE>. For instance,
 </P>
 <PRE>
-    Boy.s ! Pl
+    Cheese.s ! Pl
 </PRE>
 <P>
-is a selection, whose value is <CODE>"boys"</CODE>.
+is a selection, whose value is <CODE>"cheeses"</CODE>.
 </P>
 <A NAME="toc39"></A>
 <H3>Inflection tables, paradigms, and ``oper`` definitions</H3>
@@ -1280,18 +1245,18 @@ The following operation defines the regular noun paradigm of English:
       } ;
 </PRE>
 <P>
-The <B>glueing</B> operator <CODE>+</CODE> tells that
+The <B>gluing</B> operator <CODE>+</CODE> tells that
 the string held in the variable <CODE>x</CODE> and the ending <CODE>"s"</CODE> 
 are written together to form one <B>token</B>. Thus, for instance,
 </P>
 <PRE>
-    (regNoun "boy").s ! Pl  ---&gt; "boy" + "s"  ---&gt;  "boys"
+    (regNoun "cheese").s ! Pl  ---&gt; "cheese" + "s"  ---&gt;  "cheeses"
 </PRE>
 <P></P>
 <A NAME="toc40"></A>
 <H3>Worst-case macros and data abstraction</H3>
 <P>
-Some English nouns, such as <CODE>louse</CODE>, are so irregular that
+Some English nouns, such as <CODE>mouse</CODE>, are so irregular that
 it makes no sense to see them as instances of a paradigm. Even
 then, it is useful to perform <B>data abstraction</B> from the
 definition of the type <CODE>Noun</CODE>, and introduce a constructor
@@ -1306,10 +1271,10 @@ operation, a <B>worst-case macro</B> for nouns:
       } ;
 </PRE>
 <P>
-Thus we define
+Thus we could define
 </P>
 <PRE>
-    lin Louse = mkNoun "louse" "lice" ;
+    lin Mouse = mkNoun "mouse" "mice" ;
 </PRE>
 <P>
 and
@@ -1384,7 +1349,7 @@ these forms are explained in the next section.
 </P>
 <P>
 The paradigms <CODE>regNoun</CODE> does not give the correct forms for
-all nouns. For instance, <I>louse - lice</I> and
+all nouns. For instance, <I>mouse - mice</I> and
 <I>fish - fish</I> must be given by using <CODE>mkNoun</CODE>.
 Also the word <I>boy</I> would be inflected incorrectly; to prevent
 this, either use <CODE>mkNoun</CODE> or modify 
@@ -1541,7 +1506,7 @@ means that a noun phrase (functioning as a subject), inherently
 <I>has</I> a number, which it passes to the verb. The verb does not
 <I>have</I> a number, but must be able to receive whatever number the
 subject has. This distinction is nicely represented by the
-different linearization types of noun phrases and verb phrases:
+different linearization types of <B>noun phrases</B> and <B>verb phrases</B>:
 </P>
 <PRE>
     lincat NP = {s : Str ; n : Number} ;
@@ -1559,437 +1524,476 @@ the predication structure:
     lin PredVP np vp = {s = np.s ++ vp.s ! np.n} ;
 </PRE>
 <P>
-The following section will present a new version of
-<CODE>PaleolithingEng</CODE>, assuming an abstract syntax 
-xextended with <CODE>All</CODE> and <CODE>Two</CODE>.
-It also assumes that <CODE>MorphoEng</CODE> has a paradigm
-<CODE>regVerb</CODE> for regular verbs (which need only be
-regular only in the present tensse).
+The following section will present
+<CODE>FoodsEng</CODE>, assuming the abstract syntax <CODE>Foods</CODE> 
+that is similar to <CODE>Food</CODE> but also has the
+plural determiners <CODE>All</CODE> and <CODE>Most</CODE>.
 The reader is invited to inspect the way in which agreement works in
-the formation of noun phrases and verb phrases.
+the formation of sentences.
 </P>
 <A NAME="toc48"></A>
 <H3>English concrete syntax with parameters</H3>
 <PRE>
-  concrete PaleolithicEng of Paleolithic = open Prelude, MorphoEng in {
-  lincat 
-    S, A          = SS ; 
-    VP, CN, V, TV = {s : Number =&gt; Str} ; 
-    NP            = {s : Str ; n : Number} ; 
-  lin
-    PredVP np vp  = ss (np.s ++ vp.s ! np.n) ;
-    UseV   v      = v ;
-    ComplTV tv np = {s = \\n =&gt; tv.s ! n ++ np.s} ;
-    UseA a   = {s = \\n =&gt; case n of {Sg =&gt; "is" ; Pl =&gt; "are"} ++ a.s} ;
-    This     = det Sg "this" ;
-    Indef    = det Sg "a" ;
-    All      = det Pl "all" ;
-    Two      = det Pl "two" ;
-    ModA  a cn = {s = \\n =&gt; a.s ++ cn.s ! n} ;
-    Louse  = mkNoun "louse" "lice" ;
-    Snake  = regNoun "snake" ;
-    Green  = ss "green" ;
-    Warm   = ss "warm" ;
-    Laugh  = regVerb "laugh" ;
-    Sleep  = regVerb "sleep" ;
-    Kill   = regVerb "kill" ;
-  oper
-    det : Number -&gt; Str -&gt; Noun -&gt; {s : Str ; n : Number} = \n,d,cn -&gt; {
-      s = d ++ n.s ! n ;
-      n = n
-      } ;
+  --# -path=.:prelude
+  
+  concrete FoodsEng of Foods = open Prelude, MorphoEng in {
+  
+    lincat
+      S, Quality = SS ; 
+      Kind = {s : Number =&gt; Str} ; 
+      Item = {s : Str ; n : Number} ; 
+  
+    lin
+      Is item quality = ss (item.s ++ (mkVerb "are" "is").s ! item.n ++ quality.s) ;
+      This = det Sg "this" ;
+      That = det Sg "that" ;
+      All  = det Pl "all" ;
+      Most = det Pl "most" ;
+      QKind quality kind = {s = \\n =&gt; quality.s ++ kind.s ! n} ;
+      Wine = regNoun "wine" ;
+      Cheese = regNoun "cheese" ;
+      Fish = mkNoun "fish" "fish" ;
+      Very = prefixSS "very" ;
+      Fresh = ss "fresh" ;
+      Warm = ss "warm" ;
+      Italian = ss "Italian" ;
+      Expensive = ss "expensive" ;
+      Delicious = ss "delicious" ;
+      Boring = ss "boring" ;
+  
+    oper
+      det : Number -&gt; Str -&gt; Noun -&gt; {s : Str ; n : Number} = \n,d,cn -&gt; {
+        s = d ++ cn.s ! n ;
+        n = n
+        } ;
+  
   }
-</PRE>
-<P></P>
-<A NAME="toc49"></A>
-<H3>Hierarchic parameter types</H3>
-<P>
-The reader familiar with a functional programming language such as
-<A HREF="http://www.haskell.org">Haskell</A> must have noticed the similarity
-between parameter types in GF and <B>algebraic datatypes</B> (<CODE>data</CODE> definitions
-in Haskell). The GF parameter types are actually a special case of algebraic
-datatypes: the main restriction is that in GF, these types must be finite.
-(It is this restriction that makes it possible to invert linearization rules into
-parsing methods.)
-</P>
-<P>
-However, finite is not the same thing as enumerated. Even in GF, parameter
-constructors can take arguments, provided these arguments are from other
-parameter types - only recursion is forbidden. Such parameter types impose a
-hierarchic order among parameters. They are often needed to define
-the linguistically most accurate parameter systems.
-</P>
-<P>
-To give an example, Swedish adjectives
-are inflected in number (singular or plural) and
-gender (uter or neuter). These parameters would suggest 2*2=4 different
-forms. However, the gender distinction is done only in the singular. Therefore,
-it would be inaccurate to define adjective paradigms using the type
-<CODE>Gender =&gt; Number =&gt; Str</CODE>. The following hierarchic definition
-yields an accurate system of three adjectival forms.
-</P>
-<PRE>
-    param AdjForm = ASg Gender | APl ;
-    param Gender  = Uter | Neuter ;
-</PRE>
-<P>
-In pattern matching, a constructor can have patterns as arguments. For instance,
-the adjectival paradigm in which the two singular forms are the same, can be defined
-</P>
-<PRE>
-    oper plattAdj : Str -&gt; AdjForm =&gt; Str = \x -&gt; table {
-      ASg _ =&gt; x ;
-      APl   =&gt; x + "a" ;
-      }
-</PRE>
-<P></P>
-<A NAME="toc50"></A>
-<H3>Morphological analysis and morphology quiz</H3>
-<P>
-Even though in GF morphology
-is mostly seen as an auxiliary of syntax, a morphology once defined
-can be used on its own right. The command <CODE>morpho_analyse = ma</CODE>
-can be used to read a text and return for each word the analyses that
-it has in the current concrete syntax.
-</P>
-<PRE>
-    &gt; rf bible.txt | morpho_analyse
-</PRE>
-<P>
-In the same way as translation exercises, morphological exercises can
-be generated, by the command <CODE>morpho_quiz = mq</CODE>. Usually,
-the category is set to be something else than <CODE>S</CODE>. For instance,
-</P>
-<PRE>
-    &gt; i lib/resource/french/VerbsFre.gf
-    &gt; morpho_quiz -cat=V
+      ```
   
-    Welcome to GF Morphology Quiz.
-    ...
   
-    réapparaître : VFin VCondit  Pl  P2
-    réapparaitriez
-    &gt; No, not réapparaitriez, but
-    réapparaîtriez
-    Score 0/1
-</PRE>
-<P>
-Finally, a list of morphological exercises and save it in a
-file for later use, by the command <CODE>morpho_list = ml</CODE>
-</P>
-<PRE>
-    &gt; morpho_list -number=25 -cat=V
-</PRE>
-<P>
-The <CODE>number</CODE> flag gives the number of exercises generated.
-</P>
-<A NAME="toc51"></A>
-<H3>Discontinuous constituents</H3>
-<P>
-A linearization type may contain more strings than one. 
-An example of where this is useful are English particle
-verbs, such as <I>switch off</I>. The linearization of
-a sentence may place the object between the verb and the particle:
-<I>he switched it off</I>.
-</P>
-<P>
-The first of the following judgements defines transitive verbs as
-<B>discontinuous constituents</B>, i.e. as having a linearization
-type with two strings and not just one. The second judgement
-shows how the constituents are separated by the object in complementization.
-</P>
-<PRE>
-    lincat TV = {s : Number =&gt; Str ; s2 : Str} ;
-    lin ComplTV tv obj = {s = \\n =&gt; tv.s ! n ++ obj.s ++ tv.s2} ;
-</PRE>
-<P>
-There is no restriction in the number of discontinuous constituents
-(or other fields) a  <CODE>lincat</CODE> may contain. The only condition is that
-the fields must be of finite types, i.e. built from records, tables,
-parameters, and <CODE>Str</CODE>, and not functions. A mathematical result
-about parsing in GF says that the worst-case complexity of parsing
-increases with the number of discontinuous constituents. Moreover,
-the parsing and linearization commands only give reliable results
-for categories whose linearization type has a unique <CODE>Str</CODE> valued
-field labelled <CODE>s</CODE>.
-</P>
-<A NAME="toc52"></A>
-<H2>More constructs for concrete syntax</H2>
-<A NAME="toc53"></A>
-<H3>Free variation</H3>
-<P>
-Sometimes there are many alternative ways to define a concrete syntax.
-For instance, the verb negation in English can be expressed both by
-<I>does not</I> and <I>doesn't</I>. In linguistic terms, these expressions
-are in <B>free variation</B>. The <CODE>variants</CODE> construct of GF can
-be used to give a list of strings in free variation. For example,
-</P>
-<PRE>
-    NegVerb verb = {s = variants {["does not"] ; "doesn't} ++ verb.s} ;
-</PRE>
-<P>
-An empty variant list
-</P>
-<PRE>
-    variants {}
-</PRE>
-<P>
-can be used e.g. if a word lacks a certain form.
-</P>
-<P>
-In general, <CODE>variants</CODE> should be used cautiously. It is not
-recommended for modules aimed to be libraries, because the
-user of the library has no way to choose among the variants.
-Moreover, even though <CODE>variants</CODE> admits lists of any type,
-its semantics for complex types can cause surprises.
-</P>
-<A NAME="toc54"></A>
-<H3>Record extension and subtyping</H3>
-<P>
-Record types and records can be <B>extended</B> with new fields. For instance,
-in German it is natural to see transitive verbs as verbs with a case.
-The symbol <CODE>**</CODE> is used for both constructs.
-</P>
-<PRE>
-    lincat TV = Verb ** {c : Case} ;
   
-    lin Follow = regVerb "folgen" ** {c = Dative} ; 
-</PRE>
-<P>
-To extend a record type or a record with a field whose label it
-already has is a type error.
-</P>
-<P>
-A record type <I>T</I> is a <B>subtype</B> of another one <I>R</I>, if <I>T</I> has
-all the fields of <I>R</I> and possibly other fields. For instance,
-an extension of a record type is always a subtype of it.
-</P>
-<P>
-If <I>T</I> is a subtype of <I>R</I>, an object of <I>T</I> can be used whenever
-an object of <I>R</I> is required. For instance, a transitive verb can
-be used whenever a verb is required.
-</P>
-<P>
-<B>Contravariance</B> means that a function taking an <I>R</I> as argument
-can also be applied to any object of a subtype <I>T</I>.
-</P>
-<A NAME="toc55"></A>
-<H3>Tuples and product types</H3>
-<P>
-Product types and tuples are syntactic sugar for record types and records:
-</P>
-<PRE>
-    T1 * ... * Tn   ===   {p1 : T1 ; ... ; pn : Tn}
-    &lt;t1, ...,  tn&gt;  ===   {p1 = T1 ; ... ; pn = Tn}
-</PRE>
-<P>
-Thus the labels <CODE>p1, p2,...`</CODE> are hard-coded.
-</P>
-<A NAME="toc56"></A>
-<H3>Predefined types and operations</H3>
-<P>
-GF has the following predefined categories in abstract syntax:
-</P>
-<PRE>
-    cat Int ;     -- integers, e.g. 0, 5, 743145151019
-    cat Float ;   -- floats, e.g.   0.0, 3.1415926
-    cat String ;  -- strings, e.g.  "", "foo", "123"
-</PRE>
-<P>
-The objects of each of these categories are <B>literals</B>
-as indicated in the comments above. No <CODE>fun</CODE> definition
-can have a predefined category as its value type, but
-they can be used as arguments. For example:
-</P>
-<PRE>
-    fun StreetAddress : Int -&gt; String -&gt; Address ;
-    lin StreetAddress number street = {s = number.s ++ street.s} ;
+  %--!
+  ===Hierarchic parameter types===
   
-    -- e.g. (StreetAddress 10 "Downing Street") : Address
-</PRE>
-<P></P>
-<A NAME="toc57"></A>
-<H2>More features of the module system</H2>
-<A NAME="toc58"></A>
-<H3>Resource grammars and their reuse</H3>
-<P>
-See 
-<A HREF="../../lib/resource/doc/gf-resource.html">resource library documentation</A>
-</P>
-<A NAME="toc59"></A>
-<H3>Interfaces, instances, and functors</H3>
-<P>
-See an
-<A HREF="../../examples/mp3/mp3-resource.html">example built this way</A>
-</P>
-<A NAME="toc60"></A>
-<H3>Restricted inheritance and qualified opening</H3>
-<A NAME="toc61"></A>
-<H2>More concepts of abstract syntax</H2>
-<A NAME="toc62"></A>
-<H3>Dependent types</H3>
-<A NAME="toc63"></A>
-<H3>Higher-order abstract syntax</H3>
-<A NAME="toc64"></A>
-<H3>Semantic definitions</H3>
-<A NAME="toc65"></A>
-<H2>Transfer modules</H2>
-<P>
-Transfer means noncompositional tree-transforming operations.
-The command <CODE>apply_transfer = at</CODE> is typically used in a pipe:
-</P>
-<PRE>
-    &gt; p "John walks and John runs" | apply_transfer aggregate | l
-    John walks and runs
-</PRE>
-<P>
-See the
-<A HREF="../../transfer/examples/aggregation">sources</A> of this example.
-</P>
-<P>
-See the
-<A HREF="../transfer.html">transfer language documentation</A>
-for more information.
-</P>
-<A NAME="toc66"></A>
-<H2>Practical issues</H2>
-<A NAME="toc67"></A>
-<H3>Lexers and unlexers</H3>
-<P>
-Lexers and unlexers can be chosen from
-a list of predefined ones, using the flags<CODE>-lexer</CODE> and `` -unlexer`` either
-in the grammar file or on the GF command line.
-</P>
-<P>
-Given by <CODE>help -lexer</CODE>, <CODE>help -unlexer</CODE>:
-</P>
-<PRE>
-      The default is words.
-      -lexer=words         tokens are separated by spaces or newlines
-      -lexer=literals      like words, but GF integer and string literals recognized
-      -lexer=vars          like words, but "x","x_...","$...$" as vars, "?..." as meta
-      -lexer=chars         each character is a token
-      -lexer=code          use Haskell's lex
-      -lexer=codevars      like code, but treat unknown words as variables, ?? as meta
-      -lexer=text          with conventions on punctuation and capital letters
-      -lexer=codelit       like code, but treat unknown words as string literals
-      -lexer=textlit       like text, but treat unknown words as string literals
-      -lexer=codeC         use a C-like lexer
-      -lexer=ignore        like literals, but ignore unknown words
-      -lexer=subseqs       like ignore, but then try all subsequences from longest
+  The reader familiar with a functional programming language such as
+  [Haskell http://www.haskell.org] must have noticed the similarity
+  between parameter types in GF and **algebraic datatypes** (``data`` definitions
+  in Haskell). The GF parameter types are actually a special case of algebraic
+  datatypes: the main restriction is that in GF, these types must be finite.
+  (It is this restriction that makes it possible to invert linearization rules into
+  parsing methods.)
   
-      The default is unwords.
-      -unlexer=unwords     space-separated token list (like unwords)
-      -unlexer=text        format as text: punctuation, capitals, paragraph &lt;p&gt;
-      -unlexer=code        format as code (spacing, indentation)
-      -unlexer=textlit     like text, but remove string literal quotes
-      -unlexer=codelit     like code, but remove string literal quotes
-      -unlexer=concat      remove all spaces
-      -unlexer=bind        like identity, but bind at "&amp;+"
+  However, finite is not the same thing as enumerated. Even in GF, parameter
+  constructors can take arguments, provided these arguments are from other
+  parameter types - only recursion is forbidden. Such parameter types impose a
+  hierarchic order among parameters. They are often needed to define
+  the linguistically most accurate parameter systems.
+  
+  To give an example, Swedish adjectives
+  are inflected in number (singular or plural) and
+  gender (uter or neuter). These parameters would suggest 2*2=4 different
+  forms. However, the gender distinction is done only in the singular. Therefore,
+  it would be inaccurate to define adjective paradigms using the type
+  ``Gender =&gt; Number =&gt; Str``. The following hierarchic definition
+  yields an accurate system of three adjectival forms.
+</PRE>
+<P>
+  param AdjForm = ASg Gender | APl ;
+  param Gender  = Uter | Neuter ;
+</P>
+<PRE>
+  In pattern matching, a constructor can have patterns as arguments. For instance,
+  the adjectival paradigm in which the two singular forms are the same, can be defined
+</PRE>
+<P>
+  oper plattAdj : Str -&gt; AdjForm =&gt; Str = \x -&gt; table {
+    ASg _ =&gt; x ;
+    APl   =&gt; x + "a" ;
+    }
+</P>
+<PRE>
+  
+  
+  %--!
+  ===Morphological analysis and morphology quiz===
+  
+  Even though in GF morphology
+  is mostly seen as an auxiliary of syntax, a morphology once defined
+  can be used on its own right. The command ``morpho_analyse = ma``
+  can be used to read a text and return for each word the analyses that
+  it has in the current concrete syntax.
+</PRE>
+<P>
+  &gt; rf bible.txt | morpho_analyse
+</P>
+<PRE>
+  In the same way as translation exercises, morphological exercises can
+  be generated, by the command ``morpho_quiz = mq``. Usually,
+  the category is set to be something else than ``S``. For instance,
+</PRE>
+<P>
+  &gt; i lib/resource/french/VerbsFre.gf
+  &gt; morpho_quiz -cat=V
+</P>
+<P>
+  Welcome to GF Morphology Quiz.
+  ...
+</P>
+<P>
+  réapparaître : VFin VCondit  Pl  P2
+  réapparaitriez
+  &gt; No, not réapparaitriez, but
+  réapparaîtriez
+  Score 0/1
+</P>
+<PRE>
+  Finally, a list of morphological exercises and save it in a
+  file for later use, by the command ``morpho_list = ml``
+</PRE>
+<P>
+  &gt; morpho_list -number=25 -cat=V
+</P>
+<PRE>
+  The ``number`` flag gives the number of exercises generated.
+  
+  
+  
+  %--!
+  ===Discontinuous constituents===
+  
+  A linearization type may contain more strings than one. 
+  An example of where this is useful are English particle
+  verbs, such as //switch off//. The linearization of
+  a sentence may place the object between the verb and the particle:
+  //he switched it off//.
+  
+  The first of the following judgements defines transitive verbs as
+  **discontinuous constituents**, i.e. as having a linearization
+  type with two strings and not just one. The second judgement
+  shows how the constituents are separated by the object in complementization.
+</PRE>
+<P>
+  lincat TV = {s : Number =&gt; Str ; s2 : Str} ;
+  lin ComplTV tv obj = {s = \\n =&gt; tv.s ! n ++ obj.s ++ tv.s2} ;
+</P>
+<PRE>
+  There is no restriction in the number of discontinuous constituents
+  (or other fields) a  ``lincat`` may contain. The only condition is that
+  the fields must be of finite types, i.e. built from records, tables,
+  parameters, and ``Str``, and not functions. A mathematical result
+  about parsing in GF says that the worst-case complexity of parsing
+  increases with the number of discontinuous constituents. Moreover,
+  the parsing and linearization commands only give reliable results
+  for categories whose linearization type has a unique ``Str`` valued
+  field labelled ``s``.
+  
+  
+  %--!
+  ==More constructs for concrete syntax==
+  
+  
+  %--!
+  ===Free variation===
+  
+  Sometimes there are many alternative ways to define a concrete syntax.
+  For instance, the verb negation in English can be expressed both by
+  //does not// and //doesn't//. In linguistic terms, these expressions
+  are in **free variation**. The ``variants`` construct of GF can
+  be used to give a list of strings in free variation. For example,
+</PRE>
+<P>
+  NegVerb verb = {s = variants {["does not"] ; "doesn't} ++ verb.s} ;
+</P>
+<PRE>
+  An empty variant list
+</PRE>
+<P>
+  variants {}
+</P>
+<PRE>
+  can be used e.g. if a word lacks a certain form.
+  
+  In general, ``variants`` should be used cautiously. It is not
+  recommended for modules aimed to be libraries, because the
+  user of the library has no way to choose among the variants.
+  Moreover, even though ``variants`` admits lists of any type,
+  its semantics for complex types can cause surprises.
+  
+  
+  
+  
+  ===Record extension and subtyping===
+  
+  Record types and records can be **extended** with new fields. For instance,
+  in German it is natural to see transitive verbs as verbs with a case.
+  The symbol ``**`` is used for both constructs.
+</PRE>
+<P>
+  lincat TV = Verb ** {c : Case} ;
+</P>
+<P>
+  lin Follow = regVerb "folgen" ** {c = Dative} ; 
+</P>
+<PRE>
+  To extend a record type or a record with a field whose label it
+  already has is a type error.
+  
+  A record type //T// is a **subtype** of another one //R//, if //T// has
+  all the fields of //R// and possibly other fields. For instance,
+  an extension of a record type is always a subtype of it.
+  
+  If //T// is a subtype of //R//, an object of //T// can be used whenever
+  an object of //R// is required. For instance, a transitive verb can
+  be used whenever a verb is required.
+  
+  **Contravariance** means that a function taking an //R// as argument
+  can also be applied to any object of a subtype //T//.
+  
+  
+  
+  ===Tuples and product types===
+  
+  Product types and tuples are syntactic sugar for record types and records:
+</PRE>
+<P>
+  T1 * ... * Tn   ===   {p1 : T1 ; ... ; pn : Tn}
+  &lt;t1, ...,  tn&gt;  ===   {p1 = T1 ; ... ; pn = Tn}
+</P>
+<PRE>
+  Thus the labels ``p1, p2,...``` are hard-coded.
+  
+  
+  %--!
+  ===Prefix-dependent choices===
+  
+  The construct exemplified in
+</PRE>
+<P>
+  oper artIndef : Str = 
+    pre {"a" ; "an" / strs {"a" ; "e" ; "i" ; "o"}} ;
+</P>
+<PRE>
+  Thus
+</PRE>
+<P>
+  artIndef ++ "cheese"  ---&gt;  "a" ++ "cheese"
+  artIndef ++ "apple"   ---&gt;  "an" ++ "cheese"
+</P>
+<PRE>
+  This very example does not work in all situations: the prefix
+  //u// has no general rules, and some problematic words are
+  //euphemism, one-eyed, n-gram//. It is possible to write
+</PRE>
+<P>
+  oper artIndef : Str = 
+    pre {"a" ; 
+         "a"  / strs {"eu" ; "one"} ;
+         "an" / strs {"a" ; "e" ; "i" ; "o" ; "n-"}
+        } ;
+</P>
+<PRE>
+  
+  
+  
+  ===Predefined types and operations===
+  
+  GF has the following predefined categories in abstract syntax:
+</PRE>
+<P>
+  cat Int ;     -- integers, e.g. 0, 5, 743145151019
+  cat Float ;   -- floats, e.g.   0.0, 3.1415926
+  cat String ;  -- strings, e.g.  "", "foo", "123"
+</P>
+<PRE>
+  The objects of each of these categories are **literals**
+  as indicated in the comments above. No ``fun`` definition
+  can have a predefined category as its value type, but
+  they can be used as arguments. For example:
+</PRE>
+<P>
+  fun StreetAddress : Int -&gt; String -&gt; Address ;
+  lin StreetAddress number street = {s = number.s ++ street.s} ;
+</P>
+<P>
+  -- e.g. (StreetAddress 10 "Downing Street") : Address
+</P>
+<PRE>
+  
+  
+  %--!
+  ==More features of the module system==
+  
+  
+  ===Resource grammars and their reuse===
+  
+  See 
+  [resource library documentation  ../../lib/resource/doc/gf-resource.html]
+  
+  
+  ===Interfaces, instances, and functors===
+  
+  See an
+  [example built this way ../../examples/mp3/mp3-resource.html]
+  
+  
+  ===Restricted inheritance and qualified opening===
+  
+  
+  
+  ==More concepts of abstract syntax==
+  
+  
+  ===Dependent types===
+  
+  ===Higher-order abstract syntax===
+  
+  ===Semantic definitions===
+  
+  
+  
+  ==Transfer modules==
+  
+  Transfer means noncompositional tree-transforming operations.
+  The command ``apply_transfer = at`` is typically used in a pipe:
+</PRE>
+<P>
+  &gt; p "John walks and John runs" | apply_transfer aggregate | l
+  John walks and runs
+</P>
+<PRE>
+  See the
+  [sources ../../transfer/examples/aggregation] of this example.
+  
+  See the
+  [transfer language documentation  ../transfer.html]
+  for more information.
+  
+  
+  ==Practical issues==
+  
+  
+  ===Lexers and unlexers===
+  
+  Lexers and unlexers can be chosen from
+  a list of predefined ones, using the flags``-lexer`` and `` -unlexer`` either
+  in the grammar file or on the GF command line.
+  
+  Given by ``help -lexer``, ``help -unlexer``:
+</PRE>
+<P>
+    The default is words.
+    -lexer=words         tokens are separated by spaces or newlines
+    -lexer=literals      like words, but GF integer and string literals recognized
+    -lexer=vars          like words, but "x","x_...","$...$" as vars, "?..." as meta
+    -lexer=chars         each character is a token
+    -lexer=code          use Haskell's lex
+    -lexer=codevars      like code, but treat unknown words as variables, ?? as meta
+    -lexer=text          with conventions on punctuation and capital letters
+    -lexer=codelit       like code, but treat unknown words as string literals
+    -lexer=textlit       like text, but treat unknown words as string literals
+    -lexer=codeC         use a C-like lexer
+    -lexer=ignore        like literals, but ignore unknown words
+    -lexer=subseqs       like ignore, but then try all subsequences from longest
+</P>
+<P>
+    The default is unwords.
+    -unlexer=unwords     space-separated token list (like unwords)
+    -unlexer=text        format as text: punctuation, capitals, paragraph &lt;p&gt;
+    -unlexer=code        format as code (spacing, indentation)
+    -unlexer=textlit     like text, but remove string literal quotes
+    -unlexer=codelit     like code, but remove string literal quotes
+    -unlexer=concat      remove all spaces
+    -unlexer=bind        like identity, but bind at "&amp;+"
+</P>
+<PRE>
+  
+  
+  ===Efficiency of grammars===
+  
+  Issues:
+  
+  - the choice of datastructures in ``lincat``s
+  - the value of the ``optimize`` flag 
+  - parsing efficiency: ``-mcfg`` vs. others
+  
+  
+  ===Speech input and output===
+  
+  The``speak_aloud = sa`` command sends a string to the speech
+  synthesizer 
+  [Flite http://www.speech.cs.cmu.edu/flite/doc/].
+  It is typically used via a pipe:
+  ```  generate_random | linearize | speak_aloud
+  The result is only satisfactory for English.
+  
+  The ``speech_input = si`` command receives a string from a
+  speech recognizer that requires the installation of
+  [ATK http://mi.eng.cam.ac.uk/~sjy/software.htm].
+  It is typically used to pipe input to a parser:
+  ```  speech_input -tr | parse
+  The method words only for grammars of English.
+  
+  Both Flite and ATK are freely available through the links
+  above, but they are not distributed together with GF.
+  
+  
+  
+  
+  ===Multilingual syntax editor===
+  
+  The 
+  [Editor User Manual http://www.cs.chalmers.se/~aarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm]
+  describes the use of the editor, which works for any multilingual GF grammar.
+  
+  Here is a snapshot of the editor:
+  
+  [../quick-editor.gif]
+   
+  The grammars of the snapshot are from the
+  [Letter grammar package http://www.cs.chalmers.se/~aarne/GF/examples/letter].
+  
+  
+  
+  ===Interactive Development Environment (IDE)===
+  
+  Forthcoming.
+  
+  
+  ===Communicating with GF===
+  
+  Other processes can communicate with the GF command interpreter,
+  and also with the GF syntax editor.
+  
+  
+  ===Embedded grammars in Haskell, Java, and Prolog===
+  
+  GF grammars can be used as parts of programs written in the
+  following languages. The links give more documentation.
+  
+  - [Java http://www.cs.chalmers.se/~bringert/gf/gf-java.html]
+  - [Haskell http://www.cs.chalmers.se/~aarne/GF/src/GF/Embed/EmbedAPI.hs]
+  - [Prolog http://www.cs.chalmers.se/~peb/software.html]
+  
+  
+  ===Alternative input and output grammar formats===
+  
+  A summary is given in the following chart of GF grammar compiler phases:
+  [../gf-compiler.png]
+  
+  
+  ==Case studies==
+  
+  ===Interfacing formal and natural languages===
+  
+  [Formal and Informal Software Specifications http://www.cs.chalmers.se/~krijo/thesis/thesisA4.pdf],
+  PhD Thesis by
+  [Kristofer Johannisson http://www.cs.chalmers.se/~krijo], is an extensive example of this.
+  The system is based on a multilingual grammar relating the formal language OCL with
+  English and German.
+  
+  A simpler example will be explained here.
   
 </PRE>
-<P></P>
-<A NAME="toc68"></A>
-<H3>Efficiency of grammars</H3>
-<P>
-Issues:
-</P>
-<UL>
-<LI>the choice of datastructures in <CODE>lincat</CODE>s
-<LI>the value of the <CODE>optimize</CODE> flag 
-<LI>parsing efficiency: <CODE>-mcfg</CODE> vs. others
-</UL>
-
-<A NAME="toc69"></A>
-<H3>Speech input and output</H3>
-<P>
-The<CODE>speak_aloud = sa</CODE> command sends a string to the speech
-synthesizer 
-<A HREF="http://www.speech.cs.cmu.edu/flite/doc/">Flite</A>.
-It is typically used via a pipe:
-</P>
-<PRE>
-   generate_random | linearize | speak_aloud
-</PRE>
-<P>
-The result is only satisfactory for English.
-</P>
-<P>
-The <CODE>speech_input = si</CODE> command receives a string from a
-speech recognizer that requires the installation of
-<A HREF="http://mi.eng.cam.ac.uk/~sjy/software.htm">ATK</A>.
-It is typically used to pipe input to a parser:
-</P>
-<PRE>
-   speech_input -tr | parse
-</PRE>
-<P>
-The method words only for grammars of English.
-</P>
-<P>
-Both Flite and ATK are freely available through the links
-above, but they are not distributed together with GF.
-</P>
-<A NAME="toc70"></A>
-<H3>Multilingual syntax editor</H3>
-<P>
-The 
-<A HREF="http://www.cs.chalmers.se/~aarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm">Editor User Manual</A>
-describes the use of the editor, which works for any multilingual GF grammar.
-</P>
-<P>
-Here is a snapshot of the editor:
-</P>
-<P>
-<IMG ALIGN="middle" SRC="../quick-editor.gif" BORDER="0" ALT="">
-</P>
-<P>
-The grammars of the snapshot are from the
-<A HREF="http://www.cs.chalmers.se/~aarne/GF/examples/letter">Letter grammar package</A>.
-</P>
-<A NAME="toc71"></A>
-<H3>Interactive Development Environment (IDE)</H3>
-<P>
-Forthcoming.
-</P>
-<A NAME="toc72"></A>
-<H3>Communicating with GF</H3>
-<P>
-Other processes can communicate with the GF command interpreter,
-and also with the GF syntax editor.
-</P>
-<A NAME="toc73"></A>
-<H3>Embedded grammars in Haskell, Java, and Prolog</H3>
-<P>
-GF grammars can be used as parts of programs written in the
-following languages. The links give more documentation.
-</P>
-<UL>
-<LI><A HREF="http://www.cs.chalmers.se/~bringert/gf/gf-java.html">Java</A>
-<LI><A HREF="http://www.cs.chalmers.se/~aarne/GF/src/GF/Embed/EmbedAPI.hs">Haskell</A>
-<LI><A HREF="http://www.cs.chalmers.se/~peb/software.html">Prolog</A>
-</UL>
-
-<A NAME="toc74"></A>
-<H3>Alternative input and output grammar formats</H3>
-<P>
-A summary is given in the following chart of GF grammar compiler phases:
-<IMG ALIGN="middle" SRC="../gf-compiler.png" BORDER="0" ALT="">
-</P>
-<A NAME="toc75"></A>
-<H2>Case studies</H2>
-<A NAME="toc76"></A>
-<H3>Interfacing formal and natural languages</H3>
-<P>
-<A HREF="http://www.cs.chalmers.se/~krijo/thesis/thesisA4.pdf">Formal and Informal Software Specifications</A>,
-PhD Thesis by
-<A HREF="http://www.cs.chalmers.se/~krijo">Kristofer Johannisson</A>, is an extensive example of this.
-The system is based on a multilingual grammar relating the formal language OCL with
-English and German.
-</P>
-<P>
-A simpler example will be explained here.
-</P>
 
 <!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -\-toc gf-tutorial2.txt -->
