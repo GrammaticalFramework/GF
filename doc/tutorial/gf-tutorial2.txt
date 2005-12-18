@@ -22,8 +22,6 @@ The term GF is used for different things:
 - a **theory** about grammars and languages
 
 
-
-
 This tutorial is primarily about the GF program and 
 the GF programming language.
 It will guide you
@@ -42,14 +40,11 @@ The program is open-source free software, which you can download via the
 GF Homepage:
 [``http://www.cs.chalmers.se/~aarne/GF`` http://www.cs.chalmers.se/~aarne/GF]
 
-
-
 There you can download
 
-- ready-made binaries for Linux, Solaris, Macintosh, and Windows
+- binaries for Linux, Solaris, Macintosh, and Windows
 - source code and documentation
 - grammar libraries and examples
-
 
 
 If you want to compile GF from source, you need Haskell and Java
@@ -57,12 +52,25 @@ compilers. But normally you don't have to compile, and you definitely
 don't need to know Haskell or Java to use GF.
 
 
-
 To start the GF program, assuming you have installed it, just type
 ```
-  gf
+  % gf
 ```
 in the shell. You will see GF's welcome message and the prompt ``>``.
+The command
+```
+  > help
+```
+will give you a list of available commands.
+
+As a common convention in this Tutorial, we will use
+
+- ``%`` as a prompt that marks system commands
+- ``>`` as a prompt that marks GF commands
+
+
+Thus you should not type these prompts, but only the lines that
+follow them.
 
 
 %--!
@@ -72,26 +80,20 @@ Now you are ready to try out your first grammar.
 We start with one that is not written in GF language, but
 in the ubiquitous BNF notation (Backus Naur Form), which GF can also
 understand. Type (or copy) the following lines in a file named
-``paleolithic.cf``:
+``food.cf``:
 ```
-  S   ::= NP VP ;
-  VP  ::= V | TV NP | "is" A ;
-  NP  ::= "this" CN | "that" CN | "the" CN | "a" CN ;
-  CN  ::= A CN ;
-  CN  ::= "boy" | "louse" | "snake" | "worm" ;
-  A   ::= "green" | "rotten" | "thick" | "warm" ;
-  V   ::= "laughs" | "sleeps" | "swims" ;
-  TV  ::= "eats" | "kills" | "washes" ;
+  S       ::= Item "is" Quality ;
+  Item    ::= "this" Kind | "that" Kind ;
+  Kind    ::= Quality Kind ;
+  Kind    ::= "wine" | "cheese" | "fish" ;
+  Quality ::= "very" Quality ;
+  Quality ::= "fresh" | "warm" | "Italian" | "expensive" | "delicious" | "boring" ;
 ```
-
-(The name ``paleolithic`` refers to a larger package 
-[stoneage http://www.cs.chalmers.se/~aarne/GF/examples/stoneage/],
-which implements a fragment of primitive language. This fragment
-was defined by the linguist Morris Swadesh as a tool for studying
-the historical relations of languages. But as suggested
-in the Wiktionary article on
-[Swadesh list http://en.wiktionary.org/wiki/Wiktionary:Swadesh_list], the
-fragment is also usable for basic communication between foreigners.)
+This grammar defines a set of phrases usable to speak about food.
+It builds **sentences** (``S``) by assigning ``Qualities`` to
+``Item``s. The grammar shows a typical character of GF grammars:
+they are small grammars describing some more or less well-defined
+domain, such as in this case food.
 
 
 %--!
@@ -101,11 +103,11 @@ The first GF command when using a grammar is to **import** it.
 The command has a long name, ``import``, and a short name, ``i``.
 You can type either
 
-``` import paleolithic.cf
+```> import food.cf
 
 or
 
-``` i paleolithic.cf
+```> i food.cf
 
 to get the same effect.
 The effect is that the GF program **compiles** your grammar into an internal
@@ -113,15 +115,16 @@ representation, and shows a new prompt when it is ready.
  
 You can now use GF for **parsing**:
 ```
-  > parse "the boy eats a snake"
-  S_NP_VP (NP_the_CN CN_boy) (VP_TV_NP TV_eats (NP_a_CN CN_snake))
+  > parse "this cheese is delicious"
+  S_Item_is_Quality (Item_this_Kind Kind_cheese) Quality_delicious
 
-  > parse "the snake eats a boy"
-  S_NP_VP (NP_the_CN CN_snake) (VP_TV_NP TV_eats (NP_a_CN CN_boy))
+  > p "that wine is very very Italian"
+  S_Item_is_Quality (Item_that_Kind Kind_wine) 
+    (Quality_very_Quality (Quality_very_Quality Quality_Italian))
 ```
 The ``parse`` (= ``p``) command takes a **string**
 (in double quotes) and returns an **abstract syntax tree** - the thing
-beginning with ``S_NP_VP``. We will see soon how to make sense
+beginning with ``S_Item_Is_Quality``. We will see soon how to make sense
 of the abstract syntax trees - now you should just notice that the tree
 is different for the two strings. 
 
@@ -142,8 +145,8 @@ You can also use GF for **linearizing**
 (``linearize = l``). This is the inverse of
 parsing, taking trees into strings:
 ```
-  > linearize S_NP_VP (NP_the_CN CN_boy) (VP_TV_NP TV_eats (NP_a_CN CN_snake))
-  the boy eats a snake
+  > linearize S_Item_is_Quality (Item_that_Kind Kind_wine) Quality_warm
+  that wine is warm
 ```
 What is the use of this? Typically not that you type in a tree at
 the GF prompt. The utility of linearization comes from the fact that
@@ -151,14 +154,14 @@ you can obtain a tree from somewhere else. One way to do so is
 **random generation** (``generate_random = gr``):
 ```
   > generate_random
-  S_NP_VP (NP_this_CN (CN_A_CN A_thick CN_worm)) (VP_V V_sleeps)
+  S_Item_is_Quality (Item_this_Kind Kind_wine) Quality_delicious
 ```
 Now you can copy the tree and paste it to the ``linearize command``.
-Or, more efficiently, feed random generation into parsing by using
+Or, more efficiently, feed random generation into linearization by using
 a **pipe**.
 ```
   > gr | l
-  this worm is warm
+  this fresh cheese is delicious
 ```
 
 %--!
@@ -166,13 +169,13 @@ a **pipe**.
 
 The gibberish code with parentheses returned by the parser does not
 look like trees. Why is it called so? Trees are a data structure that
-represent <b>nesting</b>: trees are branching entities, and the branches
+represent **nesting**: trees are branching entities, and the branches
 are themselves trees. Parentheses give a linear representation of trees,
 useful for the computer. But the human eye may prefer to see a visualization;
 for this purpose, GF provides the command ``visualizre_tree = vt``, to which
 parsing (and any other tree-producing command) can be piped:
 
-``` parse "the green boy eats a warm snake" | vt
+``` parse "this delicious cheese is very Italian" | vt
 
 [Tree.png]
 
@@ -184,16 +187,16 @@ Random generation can be quite amusing. So you may want to
 generate ten strings with one and the same command:
 ```
   > gr -number=10 | l
-  this boy is green
-  a snake laughs
-  the rotten boy is thick
-  a boy washes this worm
-  a boy is warm
-  this green warm boy is rotten
-  the green thick green louse is rotten
-  that boy is green
-  this thick thick boy laughs
-  a boy is green
+  that wine is boring
+  that fresh cheese is fresh
+  that cheese is very boring
+  this cheese is Italian
+  that expensive cheese is expensive
+  that fish is fresh
+  that wine is very Italian
+  this wine is Italian
+  this cheese is boring
+  this fish is boring
 ```
 
 
@@ -204,21 +207,22 @@ To generate //all// sentence that a grammar
 can generate, use the command ``generate_trees = gt``.
 ```
   > generate_trees | l
-  this louse laughs
-  this louse sleeps
-  this louse swims
-  this louse is green
-  this louse is rotten
+  that cheese is very Italian
+  that cheese is very boring
+  that cheese is very delicious
+  that cheese is very expensive
+  that cheese is very fresh
   ...
-  a boy is rotten
-  a boy is thick
-  a boy is warm
+  this wine is expensive
+  this wine is fresh
+  this wine is warm
+
 ```
 You get quite a few trees but not all of them: only up to a given
 **depth** of trees. To see how you can get more, use the
 ``help = h`` command,
 ```
-  help gr
+  help gt
 ```
 **Quiz**. If the command ``gt`` generated all
 trees in your grammar, it would never terminate. Why?
@@ -240,9 +244,9 @@ want to see:
 ```
   > gr -tr | l -tr | p
 
-  S_NP_VP (NP_the_CN CN_snake) (VP_V V_sleeps)
-  the snake sleeps
-  S_NP_VP (NP_the_CN CN_snake) (VP_V V_sleeps)
+  S_Item_is_Quality (Item_this_Kind Kind_cheese) Quality_boring
+  this cheese is boring
+  S_Item_is_Quality (Item_this_Kind Kind_cheese) Quality_boring
 ```
 This facility is good for test purposes: for instance, you
 may want to see if a grammar is **ambiguous**, i.e.
@@ -282,31 +286,33 @@ with the ``printer`` flag set to ``cf`` (which means context-free):
 ```
   > print_grammar -printer=cf
 
-  V_laughs. V ::= "laughs" ;
-  V_sleeps. V ::= "sleeps" ;
-  V_swims. V ::= "swims" ;
-  VP_TV_NP. VP ::= TV NP ;
-  VP_V. VP ::= V ;
-  VP_is_A. VP ::= "is" A ;
-  TV_eats. TV ::= "eats" ;
-  TV_kills. TV ::= "kills" ;
-  TV_washes. TV ::= "washes" ;
-  S_NP_VP. S ::= NP VP ;
-  NP_a_CN. NP ::= "a" ;
-  ...
+  S_Item_is_Quality. S ::= Item "is" Quality ;
+  Quality_Italian. Quality ::= "Italian" ;
+  Quality_boring. Quality ::= "boring" ;
+  Quality_delicious. Quality ::= "delicious" ;
+  Quality_expensive. Quality ::= "expensive" ;
+  Quality_fresh. Quality ::= "fresh" ;
+  Quality_very_Quality. Quality ::= "very" Quality ;
+  Quality_warm. Quality ::= "warm" ;
+  Kind_Quality_Kind. Kind ::= Quality Kind ;
+  Kind_cheese. Kind ::= "cheese" ;
+  Kind_fish. Kind ::= "fish" ;
+  Kind_wine. Kind ::= "wine" ;
+  Item_that_Kind. Item ::= "that" Kind ;
+  Item_this_Kind. Item ::= "this" Kind ;
 ```
 A syntax tree such as
 ```
-  NP_this_CN (CN_A_CN A_thick CN_worm)
-  this thick worm
+  S_Item_is_Quality (Item_this_Kind Kind_wine) Quality_delicious
 ```
 encodes the sequence of grammar rules used for building the
-expression. If you look at this tree, you will notice that ``NP_this_CN``
-is the label of the rule prefixing ``this`` to a common noun (``CN``),
-thereby forming a noun phrase (``NP``).
-``A_thick`` is the label of the adjective ``thick``,
+tree. If you look at this tree, you will notice that ``Item_this_Kind``
+is the label of the rule prefixing ``this`` to a ``Kind``,
+thereby forming an ``Item``.
+``Kind_wine`` is the label of the kind ``"wine"``,
 and so on. These labels are formed automatically when the grammar
-is compiled by GF.
+is compiled by GF, in a way that guarantees that different rules
+get different labels.
 
 
 %--!
@@ -319,39 +325,28 @@ labels that you provide yourself - these may be more useful
 than the automatically generated ones. The following is a possible
 labelling of ``paleolithic.cf`` with nicer-looking labels.
 ```
-  PredVP.  S   ::= NP VP ;
-  UseV.    VP  ::= V ;
-  ComplTV. VP  ::= TV NP ;
-  UseA.    VP  ::= "is" A ;
-  This.    NP  ::= "this" CN ; 
-  That.    NP  ::= "that" CN ; 
-  Def.     NP  ::= "the" CN ;
-  Indef.   NP  ::= "a" CN ;  
-  ModA.    CN  ::= A CN ;
-  Boy.     CN  ::= "boy" ;
-  Louse.   CN  ::= "louse" ;
-  Snake.   CN  ::= "snake" ;
-  Worm.    CN  ::= "worm" ;
-  Green.   A   ::= "green" ;
-  Rotten.  A   ::= "rotten" ;
-  Thick.   A   ::= "thick" ;
-  Warm.    A   ::= "warm" ;
-  Laugh.   V   ::= "laughs" ;
-  Sleep.   V   ::= "sleeps" ;
-  Swim.    V   ::= "swims" ;
-  Eat.     TV  ::= "eats" ;
-  Kill.    TV  ::= "kills" 
-  Wash.    TV  ::= "washes" ;
+  Is.        S       ::= Item "is" Quality ;
+  That.      Item    ::= "that" Kind ;
+  This.      Item    ::= "this" Kind ;
+  QKind.     Kind    ::= Quality Kind ;
+  Cheese.    Kind    ::= "cheese" ;
+  Fish.      Kind    ::= "fish" ;
+  Wine.      Kind    ::= "wine" ;
+  Italian.   Quality ::= "Italian" ;
+  Boring.    Quality ::= "boring" ;
+  Delicious. Quality ::= "delicious" ;
+  Expensive. Quality ::= "expensive" ;
+  Fresh.     Quality ::= "fresh" ;
+  Very.      Quality ::= "very" Quality ;
+  Warm.      Quality ::= "warm" ;
 ```
 With this grammar, the trees look as follows:
 ```
-  > p "the boy eats a snake"
-  PredVP (Def Boy) (ComplTV Eat (Indef Snake))
-
-  > gr -tr | l
-  PredVP (Indef Louse) (UseA Thick)
-  a louse is thick
+  > parse -tr "this delicious cheese is very Italian" | vt
+  Is (This (QKind Delicious Cheese)) (Very Italian)
 ```
+
+[Tree2.png]
 
 
 %--!
@@ -367,14 +362,12 @@ The output is quite unreadable at this stage, and you may feel happy that
 you did not need to write the grammar in that notation, but that the
 GF grammar compiler produced it.
 
-
-
 However, we will now start the demonstration 
 how GF's own notation gives you
 much more expressive power than the ``.cf``
 format. We will introduce the ``.gf`` format by presenting
 one more way of defining the same grammar as in
-``paleolithic.cf``.
+``food.cf``.
 Then we will show how the full GF grammar format enables you
 to do things that are not possible in the weaker formats.
 
@@ -388,27 +381,24 @@ A GF grammar consists of two main parts:
 - **concrete syntax**, defining how trees are linearized into strings 
 
 
-
 The EBNF and CF formats fuse these two things together, but it is possible
-to take them apart. For instance, the verb phrase predication rule
+to take them apart. For instance, the sentence formation rule
 ```
-  PredVP. S ::= NP VP ;
+  Is. S ::= Item "is" Quality ;
 ```
 is interpreted as the following pair of rules:
 ```
-  fun PredVP : NP -> VP -> S ;
-  lin PredVP x y = {s = x.s ++ y.s} ;
+  fun Is : Item -> Quality -> S ;
+  lin Is item quality = {s = item.s ++ "is" ++ quality.s} ;
 ```
 The former rule, with the keyword ``fun``, belongs to the abstract syntax.
 It defines the **function**
-``PredVP`` which constructs syntax trees of form
-(``PredVP`` //x// //y//). 
-
-
+``Is`` which constructs syntax trees of form
+(``Is`` //item// //quality//). 
 
 The latter rule, with the keyword ``lin``, belongs to the concrete syntax.
 It defines the **linearization function** for
-syntax trees of form (``PredVP`` //x// //y//). 
+syntax trees of form (``Is`` //item// //quality//). 
 
 
 %--!
@@ -498,8 +488,8 @@ denotes the empty token list.
 %--!
 ===An abstract syntax example===
 
-To express the abstract syntax of ``paleolithic.cf`` in
-a file ``Paleolithic.gf``, we write two kinds of judgements:
+To express the abstract syntax of ``food.cf`` in
+a file ``Food.gf``, we write two kinds of judgements:
 
 - Each category is introduced by a ``cat`` judgement.
 - Each rule label is introduced by a ``fun`` judgement,
@@ -507,20 +497,18 @@ a file ``Paleolithic.gf``, we write two kinds of judgements:
 
 
 ```
-abstract Paleolithic = {
-cat 
-  S ; NP ; VP ; CN ; A ; V ; TV ; 
-fun
-  PredVP  : NP -> VP -> S ;
-  UseV    : V -> VP ;
-  ComplTV : TV -> NP -> VP ;
-  UseA    : A -> VP ;
-  ModA    : A -> CN -> CN ;
-  This, That, Def, Indef : CN -> NP ; 
-  Boy, Louse, Snake, Worm : CN ;
-  Green, Rotten, Thick, Warm : A ;
-  Laugh, Sleep, Swim : V ;
-  Eat, Kill, Wash : TV ;
+abstract Food = {
+
+  cat
+    S ; Item ; Kind ; Quality ;
+
+  fun
+    Is : Item -> Quality -> S ;
+    This, That : Kind -> Item ;
+    QKind : Quality -> Kind -> Kind ;
+    Wine, Cheese, Fish : Kind ;
+    Very : Quality -> Quality ;
+    Fresh, Warm, Italian, Expensive, Delicious, Boring : Quality ;
 }
 ```
 Notice the use of shorthands permitting the sharing of
@@ -531,38 +519,31 @@ in subsequent ``fun`` judgements.
 %--!
 ===A concrete syntax example===
 
-Each category introduced in ``Paleolithic.gf`` is
+Each category introduced in ``Food.gf`` is
 given a ``lincat`` rule, and each
 function is given a ``lin`` rule. Similar shorthands
 apply as in ``abstract`` modules.
 ```
-concrete PaleolithicEng of Paleolithic = {
-lincat 
-  S, NP, VP, CN, A, V, TV = {s : Str} ; 
-lin
-  PredVP np vp  = {s = np.s ++ vp.s} ;
-  UseV   v      = v ;
-  ComplTV tv np = {s = tv.s ++ np.s} ;
-  UseA   a   = {s = "is" ++ a.s} ;
-  This  cn   = {s = "this" ++ cn.s} ; 
-  That  cn   = {s = "that" ++ cn.s} ; 
-  Def   cn   = {s = "the" ++ cn.s} ;
-  Indef cn   = {s = "a" ++ cn.s} ; 
-  ModA  a cn = {s = a.s ++ cn.s} ;
-  Boy    = {s = "boy"} ;
-  Louse  = {s = "louse"} ;
-  Snake  = {s = "snake"} ;
-  Worm   = {s = "worm"} ;
-  Green  = {s = "green"} ;
-  Rotten = {s = "rotten"} ;
-  Thick  = {s = "thick"} ;
-  Warm   = {s = "warm"} ;
-  Laugh  = {s = "laughs"} ;
-  Sleep  = {s = "sleeps"} ;
-  Swim   = {s = "swims"} ;
-  Eat    = {s = "eats"} ;
-  Kill   = {s = "kills"} ; 
-  Wash   = {s = "washes"} ;
+concrete FoodEng of Food = {
+
+  lincat
+    S, Item, Kind, Quality = {s : Str} ;
+
+  lin
+    Is item quality = {s = item.s ++ "is" ++ quality.s} ;
+    This kind = {s = "this" ++ kind.s} ;
+    That kind = {s = "that" ++ kind.s} ;
+    QKind quality kind = {s = quality.s ++ kind.s} ;
+    Wine = {s = "wine"} ;
+    Cheese = {s = "cheese"} ;
+    Fish = {s = "fish"} ;
+    Very quality = {s = "very" ++ quality.s} ;
+    Fresh = {s = "fresh"} ;
+    Warm = {s = "warm"} ;
+    Italian = {s = "Italian"} ;
+    Expensive = {s = "expensive"} ;
+    Delicious = {s = "delicious"} ;
+    Boring = {s = "boring"} ;
 }
 ```
 
@@ -572,19 +553,15 @@ lin
 
 Module name + ``.gf`` = file name
 
-
-
 Each module is compiled into a ``.gfc`` file.
 
-
-
-Import ``PaleolithicEng.gf`` and try what happens
+Import ``FoodEng.gf`` and see what happens
 ```
-  > i PaleolithicEng.gf
+  > i FoodEng.gf
 ```
 The GF program does not only read the file 
-``PaleolithicEng.gf``, but also all other files that it
-depends on - in this case, ``Paleolithic.gf``.
+``FoodEng.gf``, but also all other files that it
+depends on - in this case, ``Food.gf``.
 
 For each file that is compiled, a ``.gfc`` file
 is generated. The GFC format (="GF Canonical") is the
@@ -604,7 +581,7 @@ A system with this property is called a **multilingual grammar**.
 
 Multilingual grammars can be used for applications such as
 translation. Let us buid an Italian concrete syntax for
-``Paleolithic`` and then test the resulting 
+``Food`` and then test the resulting 
 multilingual grammar.
 
 
@@ -614,34 +591,29 @@ multilingual grammar.
 ===An Italian concrete syntax===
 
 ```
-concrete PaleolithicIta of Paleolithic = {
-lincat 
-  S, NP, VP, CN, A, V, TV = {s : Str} ; 
-lin
-  PredVP np vp  = {s = np.s ++ vp.s} ;
-  UseV   v      = v ;
-  ComplTV tv np = {s = tv.s ++ np.s} ;
-  UseA   a   = {s = "è" ++ a.s} ;
-  This  cn   = {s = "questo" ++ cn.s} ; 
-  That  cn   = {s = "quello" ++ cn.s} ; 
-  Def   cn   = {s = "il" ++ cn.s} ;
-  Indef cn   = {s = "un" ++ cn.s} ; 
-  ModA  a cn = {s = cn.s ++ a.s} ;
-  Boy    = {s = "ragazzo"} ;
-  Louse  = {s = "pidocchio"} ;
-  Snake  = {s = "serpente"} ;
-  Worm   = {s = "verme"} ;
-  Green  = {s = "verde"} ;
-  Rotten = {s = "marcio"} ;
-  Thick  = {s = "grosso"} ;
-  Warm   = {s = "caldo"} ;
-  Laugh  = {s = "ride"} ;
-  Sleep  = {s = "dorme"} ;
-  Swim   = {s = "nuota"} ;
-  Eat    = {s = "mangia"} ;
-  Kill   = {s = "uccide"} ; 
-  Wash   = {s = "lava"} ;
+concrete FoodIta of Food = {
+
+  lincat
+    S, Item, Kind, Quality = {s : Str} ;
+
+  lin
+    Is item quality = {s = item.s ++ "è" ++ quality.s} ;
+    This kind = {s = "questo" ++ kind.s} ;
+    That kind = {s = "quello" ++ kind.s} ;
+    QKind quality kind = {s = kind.s ++ quality.s} ;
+    Wine = {s = "vino"} ;
+    Cheese = {s = "formaggio"} ;
+    Fish = {s = "pesce"} ;
+    Very quality = {s = "molto" ++ quality.s} ;
+    Fresh = {s = "fresco"} ;
+    Warm = {s = "caldo"} ;
+    Italian = {s = "italiano"} ;
+    Expensive = {s = "caro"} ;
+    Delicious = {s = "delizioso"} ;
+    Boring = {s = "noioso"} ;
+
 }
+
 ```
 
 %--!
@@ -649,21 +621,21 @@ lin
 
 Import the two grammars in the same GF session.
 ```
-  > i PaleolithicEng.gf
-  > i PaleolithicIta.gf
+  > i FoodEng.gf
+  > i FoodIta.gf
 ```
 Try generation now:
 ```
   > gr | l
-  un pidocchio uccide questo ragazzo
+  quello formaggio molto noioso è italiano
 
-  > gr | l -lang=PaleolithicEng
-  that louse eats a louse
+  > gr | l -lang=FoodEng
+  this fish is warm
 ```
 Translate by using a pipe:
 ```
-  > p -lang=PaleolithicEng "the boy eats the snake" | l -lang=PaleolithicIta
-  il ragazzo mangia il serpente
+  > p -lang=FoodEng "this cheese is very delicious" | l -lang=FoodIta
+  questo formaggio è molto delizioso
 ```
 The ``lang`` flag tells GF which concrete syntax to use in parsing and
 linearization. By default, the flag is set to the last-imported grammar.
@@ -671,10 +643,34 @@ To see what grammars are in scope and which is the main one, use the command
 ``print_options = po``:
 ```
   > print_options
-  main abstract :     Paleolithic
-  main concrete :     PaleolithicIta
-  actual concretes :  PaleolithicIta PaleolithicEng
+  main abstract :     Food
+  main concrete :     FoodIta
+  actual concretes :  FoodIta FoodEng
 ```
+
+
+%--!
+===Translation session===
+
+If translation is what you want to do with a set of grammars, a convenient
+way to do it is to open a ``translation_session = ts``. In this session,
+you can translate between all the languages that are in scope.
+A dot ``.`` terminates the translation session.
+```
+  > ts
+
+  trans> that very warm cheese is boring
+  quello formaggio molto caldo è noioso
+  that very warm cheese is boring
+
+  trans> questo vino molto italiano è molto delizioso
+  questo vino molto italiano è molto delizioso
+  this very Italian wine is very delicious
+
+  trans> .
+  >
+```
+
 
 
 %--!
@@ -686,24 +682,30 @@ random sentences, displays them in one language, and checks the user's
 answer given in another language. The command ``translation_quiz = tq``
 makes this in a subshell of GF.
 ```
-  > translation_quiz PaleolithicEng PaleolithicIta
+  > translation_quiz FoodEng FoodIta
 
   Welcome to GF Translation Quiz.
   The quiz is over when you have done at least 10 examples
   with at least 75 % success.
   You can interrupt the quiz by entering a line consisting of a dot ('.').
 
-  a green boy washes the louse
-  un ragazzo verde lava il gatto
+  this fish is warm
+  questo pesce è caldo
+  > Yes.
+  Score 1/1
 
-  No, not un ragazzo verde lava il gatto, but
-  un ragazzo verde lava il pidocchio
-  Score 0/1
+  this cheese is Italian
+  questo formaggio è noioso
+  > No, not questo formaggio è noioso, but
+  questo formaggio è italiano
+
+  Score 1/2
+  this fish is expensive
 ```
 You can also generate a list of translation exercises and save it in a
 file for later use, by the command ``translation_list = tl``
 ```
-  > translation_list -number=25 PaleolithicEng PaleolithicIta
+  > translation_list -number=25 FoodEng FoodIta
 ```
 The ``number`` flag gives the number of sentences generated.
 
@@ -716,24 +718,27 @@ The ``number`` flag gives the number of sentences generated.
 
 The module system of GF makes it possible to **extend** a
 grammar in different ways. The syntax of extension is
-shown by the following example. This is how language
-was extended when civilization advanced from the 
-paleolithic to the neolithic age:
+shown by the following example. We extend ``Food`` by
+adding a category of questions and two new functions.
 ```
-  abstract Neolithic = Paleolithic ** {
+  abstract Morefood = Food ** {
+    cat
+      Question ;
     fun
-      Fire, Wheel : CN ;
-      Think : V ;
+      QIs : Item -> Quality -> Question ;
+      Pizza : Kind ;
+      
   }
 ```
 Parallel to the abstract syntax, extensions can
 be built for concrete syntaxes:
 ```
-  concrete NeolithicEng of Neolithic = PaleolithicEng ** {
+  concrete MorefoodEng of Morefood = FoodEng ** {
+    lincat
+      Question = {s : Str} ;
     lin
-      Fire  = {s = "fire"} ;
-      Wheel = {s = "wheel"} ;
-      Think = {s = "thinks"} ;
+      QIs item quality = {s = "is" ++ item.s ++ quality.s} ;
+      Pizza = {s = "pizza"} ;
   }
 ```
 The effect of extension is that all of the contents of the extended
@@ -746,14 +751,14 @@ and extending module are put together.
 
 Specialized vocabularies can be represented as small grammars that
 only do "one thing" each. For instance, the following are grammars
-for fish names and mushroom names.
+for fruit and mushrooms
 ```
-  abstract Fish = {
-    cat Fish ;
-    fun Salmon, Perch : Fish ;
+  abstract Fruit = {
+    cat Fruit ;
+    fun Apple, Peach : Fruit ;
   }
 
-  abstract Mushrooms = {
+  abstract Mushroom = {
     cat Mushroom ;
     fun Cep, Agaric : Mushroom ;
   }
@@ -762,20 +767,22 @@ They can afterwards be combined into bigger grammars by using
 **multiple inheritance**, i.e. extension of several grammars at the
 same time:
 ```
-  abstract Gatherer = Paleolithic, Fish, Mushrooms ** {
+  abstract Foodmarket = Food, Fruit, Mushroom ** {
     fun 
-      FishCN     : Fish     -> CN ;
-      MushroomCN : Mushroom -> CN ;
+      FruitKind    : Fruit    -> Kind ;
+      MushroomKind : Mushroom -> Kind ;
     }
 ```
-
+At this point, you would perhaps like to go back to
+``Food`` and take apart ``Wine`` to build a special
+``Drink`` module.
 
 
 %--!
 ===Visualizing module structure===
 
 When you have created all the abstract syntaxes and
-one set of concrete syntaxes needed for ``Gatherer``,
+one set of concrete syntaxes needed for ``Foodmarket``,
 your grammar consists of eight GF modules. To see how their
 dependences look like, you can use the command 
 ``visualize_graph = vg``,
@@ -791,7 +798,7 @@ The graph uses
 - black-headed arrows for inheritance
 - white-headed arrows for the concrete-of-abstract relation
 
-[Gatherer.gif]
+[Foodmarket.png]
 
 
 
@@ -799,17 +806,16 @@ The graph uses
 ==System commands==
 
 To document your grammar, you may want to print the
-graph into a file, e.g. a ``.gif`` file that
+graph into a file, e.g. a ``.png`` file that
 can be included in an HTML document. You can do this
 by first printing the graph into a file ``.dot`` and then
 processing this file with the ``dot`` program.
 ```
-  > pm -printer=graph | wf Gatherer.dot
-  > ! dot -Tgif Gatherer.dot > Gatherer.gif
+  > pm -printer=graph | wf Foodmarket.dot
+  > ! dot -Tpng Foodmarket.dot > Foodmarket.png
 ```
 The latter command is a Unix command, issued from GF by using the
-shell escape symbol ``!``. The resulting graph is shown in the next section.
-
+shell escape symbol ``!``. The resulting graph was shown in the previous section.
 
 The command ``print_multi = pm`` is used for printing the current multilingual
 grammar in various formats, of which the format ``-printer=graph`` just
@@ -819,6 +825,7 @@ are available:
   > help pm
   > help -printer
 ```
+
 
 
 %--!
@@ -908,28 +915,32 @@ Any number of ``resource`` modules can be
 makes definitions contained
 in the resource usable in the concrete syntax. Here is
 an example, where the resource ``StringOper`` is
-opened in a new version of ``PaleolithicEng``.
+opened in a new version of ``FoodEng``.
 ```
-concrete PalEng of Paleolithic = open StringOper in {
-  lincat 
-    S, NP, VP, CN, A, V, TV = SS ; 
+  concrete Food2Eng of Food = open StringOper in {
+
+  lincat
+    S, Item, Kind, Quality = SS ;
+
   lin
-    PredVP  = cc ;
-    UseV v  = v ;
-    ComplTV = cc ; 
-    UseA  = prefix "is" ;
-    This  = prefix "this" ;
-    That  = prefix "that" ;
-    Def   = prefix "the" ;
-    Indef = prefix "a" ;
-    ModA  = cc ;
-    Boy    = ss "boy" ;
-    Louse  = ss "louse" ;
-    Snake  = ss "snake" ;
-    -- etc
-}
+    Is item quality = cc item (prefix "is" quality) ;
+    This = prefix "this" ;
+    That = prefix "that" ;
+    QKind = cc ;
+    Wine = ss "wine" ;
+    Cheese = ss "cheese" ;
+    Fish = ss "fish" ;
+    Very = prefix "very" ;
+    Fresh = ss "fresh" ;
+    Warm = ss "warm" ;
+    Italian = ss "Italian" ;
+    Expensive = ss "expensive" ;
+    Delicious = ss "delicious" ;
+    Boring = ss "boring" ;
+
+  }
 ```
-The same string operations could be use to write ``PaleolithicIta``
+The same string operations could be use to write ``FoodIta``
 more concisely.
 
 
@@ -952,13 +963,12 @@ details.
 ==Morphology==
 
 Suppose we want to say, with the vocabulary included in
-``Paleolithic.gf``, things like
+``Food.gf``, things like
 ```
-  the boy eats two snakes
-  all boys sleep  
+  all Italian wines are delicious
 ```
 The new grammatical facility we need are the plural forms
-of nouns and verbs (//boys, sleep//), as opposed to their
+of nouns and verbs (//wines, are//), as opposed to their
 singular forms.
 
 The introduction of plural forms requires two things:
@@ -973,9 +983,9 @@ For instance, Italian has also agreement in gender (masculine vs. feminine).
 We want to express such special features of languages in the
 concrete syntax while ignoring them in the abstract syntax.
 
-To be able to do all this, we need one new judgement form,
-many new expression forms, 
-and a generalizarion of linearization types
+To be able to do all this, we need one new judgement form
+and many new expression forms.
+We also need to generalize linearization types
 from strings to more complex types.
 
 
@@ -987,11 +997,11 @@ using a new form of judgement:
 ```
   param Number = Sg | Pl ;
 ```
-To express that nouns in English have a linearization
+To express that ``Kind`` expressions in English have a linearization
 depending on number, we replace the linearization type ``{s : Str}``
 with a type where the ``s`` field is a **table** depending on number:
 ```
-  lincat CN = {s : Number => Str} ;
+  lincat Kind = {s : Number => Str} ;
 ```
 The **table type** ``Number => Str`` is in many respects similar to
 a function type (``Number -> Str``). The main difference is that the
@@ -999,18 +1009,18 @@ argument type of a table type must always be a parameter type. This means
 that the argument-value pairs can be listed in a finite table. The following
 example shows such a table:
 ```
-  lin Boy = {s = table {
-    Sg => "boy" ;
-    Pl => "boys"
+  lin Cheese = {s = table {
+    Sg => "cheese" ;
+    Pl => "cheeses"
     }
   } ;
 ```
 The application of a table to a parameter is done by the **selection**
 operator ``!``. For instance,
 ```
-  Boy.s ! Pl
+  Cheese.s ! Pl
 ```
-is a selection, whose value is ``"boys"``.
+is a selection, whose value is ``"cheeses"``.
 
 
 %--!
@@ -1036,11 +1046,11 @@ The following operation defines the regular noun paradigm of English:
       }
     } ;
 ```
-The **glueing** operator ``+`` tells that
+The **gluing** operator ``+`` tells that
 the string held in the variable ``x`` and the ending ``"s"`` 
 are written together to form one **token**. Thus, for instance,
 ```
-  (regNoun "boy").s ! Pl  ---> "boy" + "s"  --->  "boys"
+  (regNoun "cheese").s ! Pl  ---> "cheese" + "s"  --->  "cheeses"
 ```
 
 
@@ -1048,7 +1058,7 @@ are written together to form one **token**. Thus, for instance,
 %--!
 ===Worst-case macros and data abstraction===
 
-Some English nouns, such as ``louse``, are so irregular that
+Some English nouns, such as ``mouse``, are so irregular that
 it makes no sense to see them as instances of a paradigm. Even
 then, it is useful to perform **data abstraction** from the
 definition of the type ``Noun``, and introduce a constructor
@@ -1061,9 +1071,9 @@ operation, a **worst-case macro** for nouns:
       }
     } ;
 ```
-Thus we define
+Thus we could define
 ```
-  lin Louse = mkNoun "louse" "lice" ;
+  lin Mouse = mkNoun "mouse" "mice" ;
 ```
 and
 ```
@@ -1129,7 +1139,7 @@ This definition displays many GF expression forms not shown befores;
 these forms are explained in the next section.
 
 The paradigms ``regNoun`` does not give the correct forms for
-all nouns. For instance, //louse - lice// and
+all nouns. For instance, //mouse - mice// and
 //fish - fish// must be given by using ``mkNoun``.
 Also the word //boy// would be inflected incorrectly; to prevent
 this, either use ``mkNoun`` or modify 
@@ -1276,7 +1286,7 @@ means that a noun phrase (functioning as a subject), inherently
 //has// a number, which it passes to the verb. The verb does not
 //have// a number, but must be able to receive whatever number the
 subject has. This distinction is nicely represented by the
-different linearization types of noun phrases and verb phrases:
+different linearization types of **noun phrases** and **verb phrases**:
 ```
   lincat NP = {s : Str ; n : Number} ;
   lincat VP = {s : Number => Str} ;
@@ -1289,49 +1299,53 @@ the predication structure:
 ```
   lin PredVP np vp = {s = np.s ++ vp.s ! np.n} ;
 ```
-The following section will present a new version of
-``PaleolithingEng``, assuming an abstract syntax 
-xextended with ``All`` and ``Two``.
-It also assumes that ``MorphoEng`` has a paradigm
-``regVerb`` for regular verbs (which need only be
-regular only in the present tensse).
+The following section will present
+``FoodsEng``, assuming the abstract syntax ``Foods`` 
+that is similar to ``Food`` but also has the
+plural determiners ``All`` and ``Most``.
 The reader is invited to inspect the way in which agreement works in
-the formation of noun phrases and verb phrases.
+the formation of sentences.
 
 
 %--!
 ===English concrete syntax with parameters===
 
 ```
-concrete PaleolithicEng of Paleolithic = open Prelude, MorphoEng in {
-lincat 
-  S, A          = SS ; 
-  VP, CN, V, TV = {s : Number => Str} ; 
-  NP            = {s : Str ; n : Number} ; 
-lin
-  PredVP np vp  = ss (np.s ++ vp.s ! np.n) ;
-  UseV   v      = v ;
-  ComplTV tv np = {s = \\n => tv.s ! n ++ np.s} ;
-  UseA a   = {s = \\n => case n of {Sg => "is" ; Pl => "are"} ++ a.s} ;
-  This     = det Sg "this" ;
-  Indef    = det Sg "a" ;
-  All      = det Pl "all" ;
-  Two      = det Pl "two" ;
-  ModA  a cn = {s = \\n => a.s ++ cn.s ! n} ;
-  Louse  = mkNoun "louse" "lice" ;
-  Snake  = regNoun "snake" ;
-  Green  = ss "green" ;
-  Warm   = ss "warm" ;
-  Laugh  = regVerb "laugh" ;
-  Sleep  = regVerb "sleep" ;
-  Kill   = regVerb "kill" ;
-oper
-  det : Number -> Str -> Noun -> {s : Str ; n : Number} = \n,d,cn -> {
-    s = d ++ n.s ! n ;
-    n = n
-    } ;
+--# -path=.:prelude
+
+concrete FoodsEng of Foods = open Prelude, MorphoEng in {
+
+  lincat
+    S, Quality = SS ; 
+    Kind = {s : Number => Str} ; 
+    Item = {s : Str ; n : Number} ; 
+
+  lin
+    Is item quality = ss (item.s ++ (mkVerb "are" "is").s ! item.n ++ quality.s) ;
+    This = det Sg "this" ;
+    That = det Sg "that" ;
+    All  = det Pl "all" ;
+    Most = det Pl "most" ;
+    QKind quality kind = {s = \\n => quality.s ++ kind.s ! n} ;
+    Wine = regNoun "wine" ;
+    Cheese = regNoun "cheese" ;
+    Fish = mkNoun "fish" "fish" ;
+    Very = prefixSS "very" ;
+    Fresh = ss "fresh" ;
+    Warm = ss "warm" ;
+    Italian = ss "Italian" ;
+    Expensive = ss "expensive" ;
+    Delicious = ss "delicious" ;
+    Boring = ss "boring" ;
+
+  oper
+    det : Number -> Str -> Noun -> {s : Str ; n : Number} = \n,d,cn -> {
+      s = d ++ cn.s ! n ;
+      n = n
+      } ;
+
 }
-```
+    ```
 
 
 
@@ -1501,6 +1515,31 @@ Product types and tuples are syntactic sugar for record types and records:
   <t1, ...,  tn>  ===   {p1 = T1 ; ... ; pn = Tn}
 ```
 Thus the labels ``p1, p2,...``` are hard-coded.
+
+
+%--!
+===Prefix-dependent choices===
+
+The construct exemplified in
+```
+  oper artIndef : Str = 
+    pre {"a" ; "an" / strs {"a" ; "e" ; "i" ; "o"}} ;
+```
+Thus
+```
+  artIndef ++ "cheese"  --->  "a" ++ "cheese"
+  artIndef ++ "apple"   --->  "an" ++ "cheese"
+```
+This very example does not work in all situations: the prefix
+//u// has no general rules, and some problematic words are
+//euphemism, one-eyed, n-gram//. It is possible to write
+```
+  oper artIndef : Str = 
+    pre {"a" ; 
+         "a"  / strs {"eu" ; "one"} ;
+         "an" / strs {"a" ; "e" ; "i" ; "o" ; "n-"}
+        } ;
+```
 
 
 

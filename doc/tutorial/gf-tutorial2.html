@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Grammatical Framework Tutorial</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Sat Dec 17 23:19:34 2005
+Last update: Sun Dec 18 21:43:08 2005
 </FONT></CENTER>
 
 <P></P>
@@ -44,76 +44,77 @@ Last update: Sat Dec 17 23:19:34 2005
       <UL>
       <LI><A HREF="#toc22">An Italian concrete syntax</A>
       <LI><A HREF="#toc23">Using a multilingual grammar</A>
-      <LI><A HREF="#toc24">Translation quiz</A>
+      <LI><A HREF="#toc24">Translation session</A>
+      <LI><A HREF="#toc25">Translation quiz</A>
       </UL>
-    <LI><A HREF="#toc25">Grammar architecture</A>
+    <LI><A HREF="#toc26">Grammar architecture</A>
       <UL>
-      <LI><A HREF="#toc26">Extending a grammar</A>
-      <LI><A HREF="#toc27">Multiple inheritance</A>
-      <LI><A HREF="#toc28">Visualizing module structure</A>
+      <LI><A HREF="#toc27">Extending a grammar</A>
+      <LI><A HREF="#toc28">Multiple inheritance</A>
+      <LI><A HREF="#toc29">Visualizing module structure</A>
       </UL>
-    <LI><A HREF="#toc29">System commands</A>
-    <LI><A HREF="#toc30">Resource modules</A>
+    <LI><A HREF="#toc30">System commands</A>
+    <LI><A HREF="#toc31">Resource modules</A>
       <UL>
-      <LI><A HREF="#toc31">The golden rule of functional programming</A>
-      <LI><A HREF="#toc32">Operation definitions</A>
-      <LI><A HREF="#toc33">The ``resource`` module type</A>
-      <LI><A HREF="#toc34">Opening a ``resource``</A>
-      <LI><A HREF="#toc35">Division of labour</A>
+      <LI><A HREF="#toc32">The golden rule of functional programming</A>
+      <LI><A HREF="#toc33">Operation definitions</A>
+      <LI><A HREF="#toc34">The ``resource`` module type</A>
+      <LI><A HREF="#toc35">Opening a ``resource``</A>
+      <LI><A HREF="#toc36">Division of labour</A>
       </UL>
-    <LI><A HREF="#toc36">Morphology</A>
+    <LI><A HREF="#toc37">Morphology</A>
       <UL>
-      <LI><A HREF="#toc37">Parameters and tables</A>
-      <LI><A HREF="#toc38">Inflection tables, paradigms, and ``oper`` definitions</A>
-      <LI><A HREF="#toc39">Worst-case macros and data abstraction</A>
-      <LI><A HREF="#toc40">A system of paradigms using ``Prelude`` operations</A>
-      <LI><A HREF="#toc41">An intelligent noun paradigm using ``case`` expressions</A>
-      <LI><A HREF="#toc42">Pattern matching</A>
-      <LI><A HREF="#toc43">Morphological ``resource`` modules</A>
-      <LI><A HREF="#toc44">Testing ``resource`` modules</A>
+      <LI><A HREF="#toc38">Parameters and tables</A>
+      <LI><A HREF="#toc39">Inflection tables, paradigms, and ``oper`` definitions</A>
+      <LI><A HREF="#toc40">Worst-case macros and data abstraction</A>
+      <LI><A HREF="#toc41">A system of paradigms using ``Prelude`` operations</A>
+      <LI><A HREF="#toc42">An intelligent noun paradigm using ``case`` expressions</A>
+      <LI><A HREF="#toc43">Pattern matching</A>
+      <LI><A HREF="#toc44">Morphological ``resource`` modules</A>
+      <LI><A HREF="#toc45">Testing ``resource`` modules</A>
       </UL>
-    <LI><A HREF="#toc45">Using morphology in concrete syntax</A>
+    <LI><A HREF="#toc46">Using morphology in concrete syntax</A>
       <UL>
-      <LI><A HREF="#toc46">Parametric vs. inherent features, agreement</A>
-      <LI><A HREF="#toc47">English concrete syntax with parameters</A>
-      <LI><A HREF="#toc48">Hierarchic parameter types</A>
-      <LI><A HREF="#toc49">Morphological analysis and morphology quiz</A>
-      <LI><A HREF="#toc50">Discontinuous constituents</A>
+      <LI><A HREF="#toc47">Parametric vs. inherent features, agreement</A>
+      <LI><A HREF="#toc48">English concrete syntax with parameters</A>
+      <LI><A HREF="#toc49">Hierarchic parameter types</A>
+      <LI><A HREF="#toc50">Morphological analysis and morphology quiz</A>
+      <LI><A HREF="#toc51">Discontinuous constituents</A>
       </UL>
-    <LI><A HREF="#toc51">More constructs for concrete syntax</A>
+    <LI><A HREF="#toc52">More constructs for concrete syntax</A>
       <UL>
-      <LI><A HREF="#toc52">Free variation</A>
-      <LI><A HREF="#toc53">Record extension and subtyping</A>
-      <LI><A HREF="#toc54">Tuples and product types</A>
-      <LI><A HREF="#toc55">Predefined types and operations</A>
+      <LI><A HREF="#toc53">Free variation</A>
+      <LI><A HREF="#toc54">Record extension and subtyping</A>
+      <LI><A HREF="#toc55">Tuples and product types</A>
+      <LI><A HREF="#toc56">Predefined types and operations</A>
       </UL>
-    <LI><A HREF="#toc56">More features of the module system</A>
+    <LI><A HREF="#toc57">More features of the module system</A>
       <UL>
-      <LI><A HREF="#toc57">Resource grammars and their reuse</A>
-      <LI><A HREF="#toc58">Interfaces, instances, and functors</A>
-      <LI><A HREF="#toc59">Restricted inheritance and qualified opening</A>
+      <LI><A HREF="#toc58">Resource grammars and their reuse</A>
+      <LI><A HREF="#toc59">Interfaces, instances, and functors</A>
+      <LI><A HREF="#toc60">Restricted inheritance and qualified opening</A>
       </UL>
-    <LI><A HREF="#toc60">More concepts of abstract syntax</A>
+    <LI><A HREF="#toc61">More concepts of abstract syntax</A>
       <UL>
-      <LI><A HREF="#toc61">Dependent types</A>
-      <LI><A HREF="#toc62">Higher-order abstract syntax</A>
-      <LI><A HREF="#toc63">Semantic definitions</A>
+      <LI><A HREF="#toc62">Dependent types</A>
+      <LI><A HREF="#toc63">Higher-order abstract syntax</A>
+      <LI><A HREF="#toc64">Semantic definitions</A>
       </UL>
-    <LI><A HREF="#toc64">Transfer modules</A>
-    <LI><A HREF="#toc65">Practical issues</A>
+    <LI><A HREF="#toc65">Transfer modules</A>
+    <LI><A HREF="#toc66">Practical issues</A>
       <UL>
-      <LI><A HREF="#toc66">Lexers and unlexers</A>
-      <LI><A HREF="#toc67">Efficiency of grammars</A>
-      <LI><A HREF="#toc68">Speech input and output</A>
-      <LI><A HREF="#toc69">Multilingual syntax editor</A>
-      <LI><A HREF="#toc70">Interactive Development Environment (IDE)</A>
-      <LI><A HREF="#toc71">Communicating with GF</A>
-      <LI><A HREF="#toc72">Embedded grammars in Haskell, Java, and Prolog</A>
-      <LI><A HREF="#toc73">Alternative input and output grammar formats</A>
+      <LI><A HREF="#toc67">Lexers and unlexers</A>
+      <LI><A HREF="#toc68">Efficiency of grammars</A>
+      <LI><A HREF="#toc69">Speech input and output</A>
+      <LI><A HREF="#toc70">Multilingual syntax editor</A>
+      <LI><A HREF="#toc71">Interactive Development Environment (IDE)</A>
+      <LI><A HREF="#toc72">Communicating with GF</A>
+      <LI><A HREF="#toc73">Embedded grammars in Haskell, Java, and Prolog</A>
+      <LI><A HREF="#toc74">Alternative input and output grammar formats</A>
       </UL>
-    <LI><A HREF="#toc74">Case studies</A>
+    <LI><A HREF="#toc75">Case studies</A>
       <UL>
-      <LI><A HREF="#toc75">Interfacing formal and natural languages</A>
+      <LI><A HREF="#toc76">Interfacing formal and natural languages</A>
       </UL>
     </UL>
 
@@ -156,7 +157,7 @@ GF Homepage:
 There you can download
 </P>
 <UL>
-<LI>ready-made binaries for Linux, Solaris, Macintosh, and Windows
+<LI>binaries for Linux, Solaris, Macintosh, and Windows
 <LI>source code and documentation
 <LI>grammar libraries and examples
 </UL>
@@ -170,10 +171,29 @@ don't need to know Haskell or Java to use GF.
 To start the GF program, assuming you have installed it, just type
 </P>
 <PRE>
-    gf
+    % gf
 </PRE>
 <P>
 in the shell. You will see GF's welcome message and the prompt <CODE>&gt;</CODE>.
+The command
+</P>
+<PRE>
+    &gt; help
+</PRE>
+<P>
+will give you a list of available commands.
+</P>
+<P>
+As a common convention in this Tutorial, we will use
+</P>
+<UL>
+<LI><CODE>%</CODE> as a prompt that marks system commands
+<LI><CODE>&gt;</CODE> as a prompt that marks GF commands
+</UL>
+
+<P>
+Thus you should not type these prompts, but only the lines that
+follow them.
 </P>
 <A NAME="toc3"></A>
 <H2>The ``.cf`` grammar format</H2>
@@ -182,28 +202,22 @@ Now you are ready to try out your first grammar.
 We start with one that is not written in GF language, but
 in the ubiquitous BNF notation (Backus Naur Form), which GF can also
 understand. Type (or copy) the following lines in a file named
-<CODE>paleolithic.cf</CODE>:
+<CODE>food.cf</CODE>:
 </P>
 <PRE>
-    S   ::= NP VP ;
-    VP  ::= V | TV NP | "is" A ;
-    NP  ::= "this" CN | "that" CN | "the" CN | "a" CN ;
-    CN  ::= A CN ;
-    CN  ::= "boy" | "louse" | "snake" | "worm" ;
-    A   ::= "green" | "rotten" | "thick" | "warm" ;
-    V   ::= "laughs" | "sleeps" | "swims" ;
-    TV  ::= "eats" | "kills" | "washes" ;
+    S       ::= Item "is" Quality ;
+    Item    ::= "this" Kind | "that" Kind ;
+    Kind    ::= Quality Kind ;
+    Kind    ::= "wine" | "cheese" | "fish" ;
+    Quality ::= "very" Quality ;
+    Quality ::= "fresh" | "warm" | "Italian" | "expensive" | "delicious" | "boring" ;
 </PRE>
-<P></P>
 <P>
-(The name <CODE>paleolithic</CODE> refers to a larger package 
-<A HREF="http://www.cs.chalmers.se/~aarne/GF/examples/stoneage/">stoneage</A>,
-which implements a fragment of primitive language. This fragment
-was defined by the linguist Morris Swadesh as a tool for studying
-the historical relations of languages. But as suggested
-in the Wiktionary article on
-<A HREF="http://en.wiktionary.org/wiki/Wiktionary:Swadesh_list">Swadesh list</A>, the
-fragment is also usable for basic communication between foreigners.)
+This grammar defines a set of phrases usable to speak about food.
+It builds <B>sentences</B> (<CODE>S</CODE>) by assigning <CODE>Qualities</CODE> to
+<CODE>Item</CODE>s. The grammar shows a typical character of GF grammars:
+they are small grammars describing some more or less well-defined
+domain, such as in this case food.
 </P>
 <A NAME="toc4"></A>
 <H3>Importing grammars and parsing strings</H3>
@@ -212,17 +226,15 @@ The first GF command when using a grammar is to <B>import</B> it.
 The command has a long name, <CODE>import</CODE>, and a short name, <CODE>i</CODE>.
 You can type either
 </P>
-<PRE>
-  import paleolithic.cf
-</PRE>
-<P></P>
+<P>
+```&gt; import food.cf
+</P>
 <P>
 or
 </P>
-<PRE>
-  i paleolithic.cf
-</PRE>
-<P></P>
+<P>
+```&gt; i food.cf
+</P>
 <P>
 to get the same effect.
 The effect is that the GF program <B>compiles</B> your grammar into an internal
@@ -232,16 +244,17 @@ representation, and shows a new prompt when it is ready.
 You can now use GF for <B>parsing</B>:
 </P>
 <PRE>
-    &gt; parse "the boy eats a snake"
-    S_NP_VP (NP_the_CN CN_boy) (VP_TV_NP TV_eats (NP_a_CN CN_snake))
+    &gt; parse "this cheese is delicious"
+    S_Item_is_Quality (Item_this_Kind Kind_cheese) Quality_delicious
   
-    &gt; parse "the snake eats a boy"
-    S_NP_VP (NP_the_CN CN_snake) (VP_TV_NP TV_eats (NP_a_CN CN_boy))
+    &gt; p "that wine is very very Italian"
+    S_Item_is_Quality (Item_that_Kind Kind_wine) 
+      (Quality_very_Quality (Quality_very_Quality Quality_Italian))
 </PRE>
 <P>
 The <CODE>parse</CODE> (= <CODE>p</CODE>) command takes a <B>string</B>
 (in double quotes) and returns an <B>abstract syntax tree</B> - the thing
-beginning with <CODE>S_NP_VP</CODE>. We will see soon how to make sense
+beginning with <CODE>S_Item_Is_Quality</CODE>. We will see soon how to make sense
 of the abstract syntax trees - now you should just notice that the tree
 is different for the two strings. 
 </P>
@@ -263,8 +276,8 @@ You can also use GF for <B>linearizing</B>
 parsing, taking trees into strings:
 </P>
 <PRE>
-    &gt; linearize S_NP_VP (NP_the_CN CN_boy) (VP_TV_NP TV_eats (NP_a_CN CN_snake))
-    the boy eats a snake
+    &gt; linearize S_Item_is_Quality (Item_that_Kind Kind_wine) Quality_warm
+    that wine is warm
 </PRE>
 <P>
 What is the use of this? Typically not that you type in a tree at
@@ -274,16 +287,16 @@ you can obtain a tree from somewhere else. One way to do so is
 </P>
 <PRE>
     &gt; generate_random
-    S_NP_VP (NP_this_CN (CN_A_CN A_thick CN_worm)) (VP_V V_sleeps)
+    S_Item_is_Quality (Item_this_Kind Kind_wine) Quality_delicious
 </PRE>
 <P>
 Now you can copy the tree and paste it to the <CODE>linearize command</CODE>.
-Or, more efficiently, feed random generation into parsing by using
+Or, more efficiently, feed random generation into linearization by using
 a <B>pipe</B>.
 </P>
 <PRE>
     &gt; gr | l
-    this worm is warm
+    this fresh cheese is delicious
 </PRE>
 <P></P>
 <A NAME="toc6"></A>
@@ -291,14 +304,14 @@ a <B>pipe</B>.
 <P>
 The gibberish code with parentheses returned by the parser does not
 look like trees. Why is it called so? Trees are a data structure that
-represent &lt;b&gt;nesting&lt;/b&gt;: trees are branching entities, and the branches
+represent <B>nesting</B>: trees are branching entities, and the branches
 are themselves trees. Parentheses give a linear representation of trees,
 useful for the computer. But the human eye may prefer to see a visualization;
 for this purpose, GF provides the command <CODE>visualizre_tree = vt</CODE>, to which
 parsing (and any other tree-producing command) can be piped:
 </P>
 <PRE>
-  parse "the green boy eats a warm snake" | vt
+  parse "this delicious cheese is very Italian" | vt
 </PRE>
 <P></P>
 <P>
@@ -312,16 +325,16 @@ generate ten strings with one and the same command:
 </P>
 <PRE>
     &gt; gr -number=10 | l
-    this boy is green
-    a snake laughs
-    the rotten boy is thick
-    a boy washes this worm
-    a boy is warm
-    this green warm boy is rotten
-    the green thick green louse is rotten
-    that boy is green
-    this thick thick boy laughs
-    a boy is green
+    that wine is boring
+    that fresh cheese is fresh
+    that cheese is very boring
+    this cheese is Italian
+    that expensive cheese is expensive
+    that fish is fresh
+    that wine is very Italian
+    this wine is Italian
+    this cheese is boring
+    this fish is boring
 </PRE>
 <P></P>
 <A NAME="toc8"></A>
@@ -332,15 +345,16 @@ can generate, use the command <CODE>generate_trees = gt</CODE>.
 </P>
 <PRE>
     &gt; generate_trees | l
-    this louse laughs
-    this louse sleeps
-    this louse swims
-    this louse is green
-    this louse is rotten
+    that cheese is very Italian
+    that cheese is very boring
+    that cheese is very delicious
+    that cheese is very expensive
+    that cheese is very fresh
     ...
-    a boy is rotten
-    a boy is thick
-    a boy is warm
+    this wine is expensive
+    this wine is fresh
+    this wine is warm
+  
 </PRE>
 <P>
 You get quite a few trees but not all of them: only up to a given
@@ -348,7 +362,7 @@ You get quite a few trees but not all of them: only up to a given
 <CODE>help = h</CODE> command,
 </P>
 <PRE>
-    help gr
+    help gt
 </PRE>
 <P>
 <B>Quiz</B>. If the command <CODE>gt</CODE> generated all
@@ -369,9 +383,9 @@ want to see:
 <PRE>
     &gt; gr -tr | l -tr | p
   
-    S_NP_VP (NP_the_CN CN_snake) (VP_V V_sleeps)
-    the snake sleeps
-    S_NP_VP (NP_the_CN CN_snake) (VP_V V_sleeps)
+    S_Item_is_Quality (Item_this_Kind Kind_cheese) Quality_boring
+    this cheese is boring
+    S_Item_is_Quality (Item_this_Kind Kind_cheese) Quality_boring
 </PRE>
 <P>
 This facility is good for test purposes: for instance, you
@@ -413,34 +427,36 @@ with the <CODE>printer</CODE> flag set to <CODE>cf</CODE> (which means context-f
 <PRE>
     &gt; print_grammar -printer=cf
   
-    V_laughs. V ::= "laughs" ;
-    V_sleeps. V ::= "sleeps" ;
-    V_swims. V ::= "swims" ;
-    VP_TV_NP. VP ::= TV NP ;
-    VP_V. VP ::= V ;
-    VP_is_A. VP ::= "is" A ;
-    TV_eats. TV ::= "eats" ;
-    TV_kills. TV ::= "kills" ;
-    TV_washes. TV ::= "washes" ;
-    S_NP_VP. S ::= NP VP ;
-    NP_a_CN. NP ::= "a" ;
-    ...
+    S_Item_is_Quality. S ::= Item "is" Quality ;
+    Quality_Italian. Quality ::= "Italian" ;
+    Quality_boring. Quality ::= "boring" ;
+    Quality_delicious. Quality ::= "delicious" ;
+    Quality_expensive. Quality ::= "expensive" ;
+    Quality_fresh. Quality ::= "fresh" ;
+    Quality_very_Quality. Quality ::= "very" Quality ;
+    Quality_warm. Quality ::= "warm" ;
+    Kind_Quality_Kind. Kind ::= Quality Kind ;
+    Kind_cheese. Kind ::= "cheese" ;
+    Kind_fish. Kind ::= "fish" ;
+    Kind_wine. Kind ::= "wine" ;
+    Item_that_Kind. Item ::= "that" Kind ;
+    Item_this_Kind. Item ::= "this" Kind ;
 </PRE>
 <P>
 A syntax tree such as
 </P>
 <PRE>
-    NP_this_CN (CN_A_CN A_thick CN_worm)
-    this thick worm
+    S_Item_is_Quality (Item_this_Kind Kind_wine) Quality_delicious
 </PRE>
 <P>
 encodes the sequence of grammar rules used for building the
-expression. If you look at this tree, you will notice that <CODE>NP_this_CN</CODE>
-is the label of the rule prefixing <CODE>this</CODE> to a common noun (<CODE>CN</CODE>),
-thereby forming a noun phrase (<CODE>NP</CODE>).
-<CODE>A_thick</CODE> is the label of the adjective <CODE>thick</CODE>,
+tree. If you look at this tree, you will notice that <CODE>Item_this_Kind</CODE>
+is the label of the rule prefixing <CODE>this</CODE> to a <CODE>Kind</CODE>,
+thereby forming an <CODE>Item</CODE>.
+<CODE>Kind_wine</CODE> is the label of the kind <CODE>"wine"</CODE>,
 and so on. These labels are formed automatically when the grammar
-is compiled by GF.
+is compiled by GF, in a way that guarantees that different rules
+get different labels.
 </P>
 <A NAME="toc12"></A>
 <H3>The labelled context-free format</H3>
@@ -453,42 +469,32 @@ than the automatically generated ones. The following is a possible
 labelling of <CODE>paleolithic.cf</CODE> with nicer-looking labels.
 </P>
 <PRE>
-    PredVP.  S   ::= NP VP ;
-    UseV.    VP  ::= V ;
-    ComplTV. VP  ::= TV NP ;
-    UseA.    VP  ::= "is" A ;
-    This.    NP  ::= "this" CN ; 
-    That.    NP  ::= "that" CN ; 
-    Def.     NP  ::= "the" CN ;
-    Indef.   NP  ::= "a" CN ;  
-    ModA.    CN  ::= A CN ;
-    Boy.     CN  ::= "boy" ;
-    Louse.   CN  ::= "louse" ;
-    Snake.   CN  ::= "snake" ;
-    Worm.    CN  ::= "worm" ;
-    Green.   A   ::= "green" ;
-    Rotten.  A   ::= "rotten" ;
-    Thick.   A   ::= "thick" ;
-    Warm.    A   ::= "warm" ;
-    Laugh.   V   ::= "laughs" ;
-    Sleep.   V   ::= "sleeps" ;
-    Swim.    V   ::= "swims" ;
-    Eat.     TV  ::= "eats" ;
-    Kill.    TV  ::= "kills" 
-    Wash.    TV  ::= "washes" ;
+    Is.        S       ::= Item "is" Quality ;
+    That.      Item    ::= "that" Kind ;
+    This.      Item    ::= "this" Kind ;
+    QKind.     Kind    ::= Quality Kind ;
+    Cheese.    Kind    ::= "cheese" ;
+    Fish.      Kind    ::= "fish" ;
+    Wine.      Kind    ::= "wine" ;
+    Italian.   Quality ::= "Italian" ;
+    Boring.    Quality ::= "boring" ;
+    Delicious. Quality ::= "delicious" ;
+    Expensive. Quality ::= "expensive" ;
+    Fresh.     Quality ::= "fresh" ;
+    Very.      Quality ::= "very" Quality ;
+    Warm.      Quality ::= "warm" ;
 </PRE>
 <P>
 With this grammar, the trees look as follows:
 </P>
 <PRE>
-    &gt; p "the boy eats a snake"
-    PredVP (Def Boy) (ComplTV Eat (Indef Snake))
-  
-    &gt; gr -tr | l
-    PredVP (Indef Louse) (UseA Thick)
-    a louse is thick
+    &gt; parse -tr "this delicious cheese is very Italian" | vt
+    Is (This (QKind Delicious Cheese)) (Very Italian)
 </PRE>
 <P></P>
+<P>
+<IMG ALIGN="middle" SRC="Tree2.png" BORDER="0" ALT="">
+</P>
 <A NAME="toc13"></A>
 <H2>The ``.gf`` grammar format</H2>
 <P>
@@ -510,7 +516,7 @@ how GF's own notation gives you
 much more expressive power than the <CODE>.cf</CODE>
 format. We will introduce the <CODE>.gf</CODE> format by presenting
 one more way of defining the same grammar as in
-<CODE>paleolithic.cf</CODE>.
+<CODE>food.cf</CODE>.
 Then we will show how the full GF grammar format enables you
 to do things that are not possible in the weaker formats.
 </P>
@@ -526,28 +532,28 @@ A GF grammar consists of two main parts:
 
 <P>
 The EBNF and CF formats fuse these two things together, but it is possible
-to take them apart. For instance, the verb phrase predication rule
+to take them apart. For instance, the sentence formation rule
 </P>
 <PRE>
-    PredVP. S ::= NP VP ;
+    Is. S ::= Item "is" Quality ;
 </PRE>
 <P>
 is interpreted as the following pair of rules:
 </P>
 <PRE>
-    fun PredVP : NP -&gt; VP -&gt; S ;
-    lin PredVP x y = {s = x.s ++ y.s} ;
+    fun Is : Item -&gt; Quality -&gt; S ;
+    lin Is item quality = {s = item.s ++ "is" ++ quality.s} ;
 </PRE>
 <P>
 The former rule, with the keyword <CODE>fun</CODE>, belongs to the abstract syntax.
 It defines the <B>function</B>
-<CODE>PredVP</CODE> which constructs syntax trees of form
-(<CODE>PredVP</CODE> <I>x</I> <I>y</I>). 
+<CODE>Is</CODE> which constructs syntax trees of form
+(<CODE>Is</CODE> <I>item</I> <I>quality</I>). 
 </P>
 <P>
 The latter rule, with the keyword <CODE>lin</CODE>, belongs to the concrete syntax.
 It defines the <B>linearization function</B> for
-syntax trees of form (<CODE>PredVP</CODE> <I>x</I> <I>y</I>). 
+syntax trees of form (<CODE>Is</CODE> <I>item</I> <I>quality</I>). 
 </P>
 <A NAME="toc15"></A>
 <H3>Judgement forms</H3>
@@ -682,8 +688,8 @@ denotes the empty token list.
 <A NAME="toc18"></A>
 <H3>An abstract syntax example</H3>
 <P>
-To express the abstract syntax of <CODE>paleolithic.cf</CODE> in
-a file <CODE>Paleolithic.gf</CODE>, we write two kinds of judgements:
+To express the abstract syntax of <CODE>food.cf</CODE> in
+a file <CODE>Food.gf</CODE>, we write two kinds of judgements:
 </P>
 <UL>
 <LI>Each category is introduced by a <CODE>cat</CODE> judgement.
@@ -692,20 +698,18 @@ a file <CODE>Paleolithic.gf</CODE>, we write two kinds of judgements:
 </UL>
 
 <PRE>
-  abstract Paleolithic = {
-  cat 
-    S ; NP ; VP ; CN ; A ; V ; TV ; 
-  fun
-    PredVP  : NP -&gt; VP -&gt; S ;
-    UseV    : V -&gt; VP ;
-    ComplTV : TV -&gt; NP -&gt; VP ;
-    UseA    : A -&gt; VP ;
-    ModA    : A -&gt; CN -&gt; CN ;
-    This, That, Def, Indef : CN -&gt; NP ; 
-    Boy, Louse, Snake, Worm : CN ;
-    Green, Rotten, Thick, Warm : A ;
-    Laugh, Sleep, Swim : V ;
-    Eat, Kill, Wash : TV ;
+  abstract Food = {
+  
+    cat
+      S ; Item ; Kind ; Quality ;
+  
+    fun
+      Is : Item -&gt; Quality -&gt; S ;
+      This, That : Kind -&gt; Item ;
+      QKind : Quality -&gt; Kind -&gt; Kind ;
+      Wine, Cheese, Fish : Kind ;
+      Very : Quality -&gt; Quality ;
+      Fresh, Warm, Italian, Expensive, Delicious, Boring : Quality ;
   }
 </PRE>
 <P>
@@ -716,39 +720,32 @@ in subsequent <CODE>fun</CODE> judgements.
 <A NAME="toc19"></A>
 <H3>A concrete syntax example</H3>
 <P>
-Each category introduced in <CODE>Paleolithic.gf</CODE> is
+Each category introduced in <CODE>Food.gf</CODE> is
 given a <CODE>lincat</CODE> rule, and each
 function is given a <CODE>lin</CODE> rule. Similar shorthands
 apply as in <CODE>abstract</CODE> modules.
 </P>
 <PRE>
-  concrete PaleolithicEng of Paleolithic = {
-  lincat 
-    S, NP, VP, CN, A, V, TV = {s : Str} ; 
-  lin
-    PredVP np vp  = {s = np.s ++ vp.s} ;
-    UseV   v      = v ;
-    ComplTV tv np = {s = tv.s ++ np.s} ;
-    UseA   a   = {s = "is" ++ a.s} ;
-    This  cn   = {s = "this" ++ cn.s} ; 
-    That  cn   = {s = "that" ++ cn.s} ; 
-    Def   cn   = {s = "the" ++ cn.s} ;
-    Indef cn   = {s = "a" ++ cn.s} ; 
-    ModA  a cn = {s = a.s ++ cn.s} ;
-    Boy    = {s = "boy"} ;
-    Louse  = {s = "louse"} ;
-    Snake  = {s = "snake"} ;
-    Worm   = {s = "worm"} ;
-    Green  = {s = "green"} ;
-    Rotten = {s = "rotten"} ;
-    Thick  = {s = "thick"} ;
-    Warm   = {s = "warm"} ;
-    Laugh  = {s = "laughs"} ;
-    Sleep  = {s = "sleeps"} ;
-    Swim   = {s = "swims"} ;
-    Eat    = {s = "eats"} ;
-    Kill   = {s = "kills"} ; 
-    Wash   = {s = "washes"} ;
+  concrete FoodEng of Food = {
+  
+    lincat
+      S, Item, Kind, Quality = {s : Str} ;
+  
+    lin
+      Is item quality = {s = item.s ++ "is" ++ quality.s} ;
+      This kind = {s = "this" ++ kind.s} ;
+      That kind = {s = "that" ++ kind.s} ;
+      QKind quality kind = {s = quality.s ++ kind.s} ;
+      Wine = {s = "wine"} ;
+      Cheese = {s = "cheese"} ;
+      Fish = {s = "fish"} ;
+      Very quality = {s = "very" ++ quality.s} ;
+      Fresh = {s = "fresh"} ;
+      Warm = {s = "warm"} ;
+      Italian = {s = "Italian"} ;
+      Expensive = {s = "expensive"} ;
+      Delicious = {s = "delicious"} ;
+      Boring = {s = "boring"} ;
   }
 </PRE>
 <P></P>
@@ -761,15 +758,15 @@ Module name + <CODE>.gf</CODE> = file name
 Each module is compiled into a <CODE>.gfc</CODE> file.
 </P>
 <P>
-Import <CODE>PaleolithicEng.gf</CODE> and try what happens
+Import <CODE>FoodEng.gf</CODE> and see what happens
 </P>
 <PRE>
-    &gt; i PaleolithicEng.gf
+    &gt; i FoodEng.gf
 </PRE>
 <P>
 The GF program does not only read the file 
-<CODE>PaleolithicEng.gf</CODE>, but also all other files that it
-depends on - in this case, <CODE>Paleolithic.gf</CODE>.
+<CODE>FoodEng.gf</CODE>, but also all other files that it
+depends on - in this case, <CODE>Food.gf</CODE>.
 </P>
 <P>
 For each file that is compiled, a <CODE>.gfc</CODE> file
@@ -789,40 +786,35 @@ A system with this property is called a <B>multilingual grammar</B>.
 <P>
 Multilingual grammars can be used for applications such as
 translation. Let us buid an Italian concrete syntax for
-<CODE>Paleolithic</CODE> and then test the resulting 
+<CODE>Food</CODE> and then test the resulting 
 multilingual grammar.
 </P>
 <A NAME="toc22"></A>
 <H3>An Italian concrete syntax</H3>
 <PRE>
-  concrete PaleolithicIta of Paleolithic = {
-  lincat 
-    S, NP, VP, CN, A, V, TV = {s : Str} ; 
-  lin
-    PredVP np vp  = {s = np.s ++ vp.s} ;
-    UseV   v      = v ;
-    ComplTV tv np = {s = tv.s ++ np.s} ;
-    UseA   a   = {s = "è" ++ a.s} ;
-    This  cn   = {s = "questo" ++ cn.s} ; 
-    That  cn   = {s = "quello" ++ cn.s} ; 
-    Def   cn   = {s = "il" ++ cn.s} ;
-    Indef cn   = {s = "un" ++ cn.s} ; 
-    ModA  a cn = {s = cn.s ++ a.s} ;
-    Boy    = {s = "ragazzo"} ;
-    Louse  = {s = "pidocchio"} ;
-    Snake  = {s = "serpente"} ;
-    Worm   = {s = "verme"} ;
-    Green  = {s = "verde"} ;
-    Rotten = {s = "marcio"} ;
-    Thick  = {s = "grosso"} ;
-    Warm   = {s = "caldo"} ;
-    Laugh  = {s = "ride"} ;
-    Sleep  = {s = "dorme"} ;
-    Swim   = {s = "nuota"} ;
-    Eat    = {s = "mangia"} ;
-    Kill   = {s = "uccide"} ; 
-    Wash   = {s = "lava"} ;
+  concrete FoodIta of Food = {
+  
+    lincat
+      S, Item, Kind, Quality = {s : Str} ;
+  
+    lin
+      Is item quality = {s = item.s ++ "è" ++ quality.s} ;
+      This kind = {s = "questo" ++ kind.s} ;
+      That kind = {s = "quello" ++ kind.s} ;
+      QKind quality kind = {s = kind.s ++ quality.s} ;
+      Wine = {s = "vino"} ;
+      Cheese = {s = "formaggio"} ;
+      Fish = {s = "pesce"} ;
+      Very quality = {s = "molto" ++ quality.s} ;
+      Fresh = {s = "fresco"} ;
+      Warm = {s = "caldo"} ;
+      Italian = {s = "italiano"} ;
+      Expensive = {s = "caro"} ;
+      Delicious = {s = "delizioso"} ;
+      Boring = {s = "noioso"} ;
+  
   }
+  
 </PRE>
 <P></P>
 <A NAME="toc23"></A>
@@ -831,25 +823,25 @@ multilingual grammar.
 Import the two grammars in the same GF session.
 </P>
 <PRE>
-    &gt; i PaleolithicEng.gf
-    &gt; i PaleolithicIta.gf
+    &gt; i FoodEng.gf
+    &gt; i FoodIta.gf
 </PRE>
 <P>
 Try generation now:
 </P>
 <PRE>
     &gt; gr | l
-    un pidocchio uccide questo ragazzo
+    quello formaggio molto noioso è italiano
   
     &gt; gr | l -lang=PaleolithicEng
-    that louse eats a louse
+    this fish is warm
 </PRE>
 <P>
 Translate by using a pipe:
 </P>
 <PRE>
-    &gt; p -lang=PaleolithicEng "the boy eats the snake" | l -lang=PaleolithicIta
-    il ragazzo mangia il serpente
+    &gt; p -lang=FoodEng "this cheese is very delicious" | l -lang=FoodIta
+    questo formaggio è molto delizioso
 </PRE>
 <P>
 The <CODE>lang</CODE> flag tells GF which concrete syntax to use in parsing and
@@ -859,12 +851,35 @@ To see what grammars are in scope and which is the main one, use the command
 </P>
 <PRE>
     &gt; print_options
-    main abstract :     Paleolithic
-    main concrete :     PaleolithicIta
-    actual concretes :  PaleolithicIta PaleolithicEng
+    main abstract :     Food
+    main concrete :     FoodIta
+    actual concretes :  FoodIta FoodEng
 </PRE>
 <P></P>
 <A NAME="toc24"></A>
+<H3>Translation session</H3>
+<P>
+If translation is what you want to do with a set of grammars, a convenient
+way to do it is to open a <CODE>translation_session = ts</CODE>. In this session,
+you can translate between all the languages that are in scope.
+A dot <CODE>.</CODE> terminates the translation session.
+</P>
+<PRE>
+    &gt; ts
+  
+    trans&gt; that very warm cheese is boring
+    quello formaggio molto caldo è noioso
+    that very warm cheese is boring
+  
+    trans&gt; questo vino molto italiano è molto delizioso
+    questo vino molto italiano è molto delizioso
+    this very Italian wine is very delicious
+  
+    trans&gt; .
+    &gt;
+</PRE>
+<P></P>
+<A NAME="toc25"></A>
 <H3>Translation quiz</H3>
 <P>
 This is a simple language exercise that can be automatically
@@ -874,46 +889,54 @@ answer given in another language. The command <CODE>translation_quiz = tq</CODE>
 makes this in a subshell of GF.
 </P>
 <PRE>
-    &gt; translation_quiz PaleolithicEng PaleolithicIta
+    &gt; translation_quiz FoodEng FoodIta
   
     Welcome to GF Translation Quiz.
     The quiz is over when you have done at least 10 examples
     with at least 75 % success.
     You can interrupt the quiz by entering a line consisting of a dot ('.').
   
-    a green boy washes the louse
-    un ragazzo verde lava il gatto
+    this fish is warm
+    questo pesce è caldo
+    &gt; Yes.
+    Score 1/1
   
-    No, not un ragazzo verde lava il gatto, but
-    un ragazzo verde lava il pidocchio
-    Score 0/1
+    this cheese is Italian
+    questo formaggio è noioso
+    &gt; No, not questo formaggio è noioso, but
+    questo formaggio è italiano
+  
+    Score 1/2
+    this fish is expensive
 </PRE>
 <P>
 You can also generate a list of translation exercises and save it in a
 file for later use, by the command <CODE>translation_list = tl</CODE>
 </P>
 <PRE>
-    &gt; translation_list -number=25 PaleolithicEng PaleolithicIta
+    &gt; translation_list -number=25 FoodEng FoodIta
 </PRE>
 <P>
 The <CODE>number</CODE> flag gives the number of sentences generated.
 </P>
-<A NAME="toc25"></A>
-<H2>Grammar architecture</H2>
 <A NAME="toc26"></A>
+<H2>Grammar architecture</H2>
+<A NAME="toc27"></A>
 <H3>Extending a grammar</H3>
 <P>
 The module system of GF makes it possible to <B>extend</B> a
 grammar in different ways. The syntax of extension is
-shown by the following example. This is how language
-was extended when civilization advanced from the 
-paleolithic to the neolithic age:
+shown by the following example. We extend <CODE>Food</CODE> by
+adding a category of questions and two new functions.
 </P>
 <PRE>
-    abstract Neolithic = Paleolithic ** {
+    abstract Morefood = Food ** {
+      cat
+        Question ;
       fun
-        Fire, Wheel : CN ;
-        Think : V ;
+        QIs : Item -&gt; Quality -&gt; Question ;
+        Pizza : Kind ;
+        
     }
 </PRE>
 <P>
@@ -921,31 +944,32 @@ Parallel to the abstract syntax, extensions can
 be built for concrete syntaxes:
 </P>
 <PRE>
-    concrete NeolithicEng of Neolithic = PaleolithicEng ** {
+    concrete MorefoodEng of Morefood = FoodEng ** {
+      lincat
+        Question = {s : Str} ;
       lin
-        Fire  = {s = "fire"} ;
-        Wheel = {s = "wheel"} ;
-        Think = {s = "thinks"} ;
+        QIs item quality = {s = "is" ++ item.s ++ quality.s} ;
+        Pizza = {s = "pizza"} ;
     }
 </PRE>
 <P>
 The effect of extension is that all of the contents of the extended
 and extending module are put together.
 </P>
-<A NAME="toc27"></A>
+<A NAME="toc28"></A>
 <H3>Multiple inheritance</H3>
 <P>
 Specialized vocabularies can be represented as small grammars that
 only do "one thing" each. For instance, the following are grammars
-for fish names and mushroom names.
+for fruit and mushrooms
 </P>
 <PRE>
-    abstract Fish = {
-      cat Fish ;
-      fun Salmon, Perch : Fish ;
+    abstract Fruit = {
+      cat Fruit ;
+      fun Apple, Peach : Fruit ;
     }
   
-    abstract Mushrooms = {
+    abstract Mushroom = {
       cat Mushroom ;
       fun Cep, Agaric : Mushroom ;
     }
@@ -956,18 +980,22 @@ They can afterwards be combined into bigger grammars by using
 same time:
 </P>
 <PRE>
-    abstract Gatherer = Paleolithic, Fish, Mushrooms ** {
+    abstract Foodmarket = Food, Fruit, Mushroom ** {
       fun 
-        FishCN     : Fish     -&gt; CN ;
-        MushroomCN : Mushroom -&gt; CN ;
+        FruitKind    : Fruit    -&gt; Kind ;
+        MushroomKind : Mushroom -&gt; Kind ;
       }
 </PRE>
-<P></P>
-<A NAME="toc28"></A>
+<P>
+At this point, you would perhaps like to go back to
+<CODE>Food</CODE> and take apart <CODE>Wine</CODE> to build a special
+<CODE>Drink</CODE> module.
+</P>
+<A NAME="toc29"></A>
 <H3>Visualizing module structure</H3>
 <P>
 When you have created all the abstract syntaxes and
-one set of concrete syntaxes needed for <CODE>Gatherer</CODE>,
+one set of concrete syntaxes needed for <CODE>Foodmarket</CODE>,
 your grammar consists of eight GF modules. To see how their
 dependences look like, you can use the command 
 <CODE>visualize_graph = vg</CODE>,
@@ -987,25 +1015,25 @@ The graph uses
 <LI>black-headed arrows for inheritance
 <LI>white-headed arrows for the concrete-of-abstract relation
 <P></P>
-<IMG ALIGN="middle" SRC="Gatherer.gif" BORDER="0" ALT="">
+<IMG ALIGN="middle" SRC="Foodmarket.png" BORDER="0" ALT="">
 </UL>
 
-<A NAME="toc29"></A>
+<A NAME="toc30"></A>
 <H2>System commands</H2>
 <P>
 To document your grammar, you may want to print the
-graph into a file, e.g. a <CODE>.gif</CODE> file that
+graph into a file, e.g. a <CODE>.png</CODE> file that
 can be included in an HTML document. You can do this
 by first printing the graph into a file <CODE>.dot</CODE> and then
 processing this file with the <CODE>dot</CODE> program.
 </P>
 <PRE>
-    &gt; pm -printer=graph | wf Gatherer.dot
-    &gt; ! dot -Tgif Gatherer.dot &gt; Gatherer.gif
+    &gt; pm -printer=graph | wf Foodmarket.dot
+    &gt; ! dot -Tpng Foodmarket.dot &gt; Foodmarket.png
 </PRE>
 <P>
 The latter command is a Unix command, issued from GF by using the
-shell escape symbol <CODE>!</CODE>. The resulting graph is shown in the next section.
+shell escape symbol <CODE>!</CODE>. The resulting graph was shown in the previous section.
 </P>
 <P>
 The command <CODE>print_multi = pm</CODE> is used for printing the current multilingual
@@ -1018,9 +1046,9 @@ are available:
     &gt; help -printer
 </PRE>
 <P></P>
-<A NAME="toc30"></A>
-<H2>Resource modules</H2>
 <A NAME="toc31"></A>
+<H2>Resource modules</H2>
+<A NAME="toc32"></A>
 <H3>The golden rule of functional programming</H3>
 <P>
 In comparison to the <CODE>.cf</CODE> format, the <CODE>.gf</CODE> format still looks rather
@@ -1042,7 +1070,7 @@ changing parts, parameters. In functional programming languages, such as
 <A HREF="http://www.haskell.org">Haskell</A>, it is possible to share muc more than in
 the languages such as C and Java.
 </P>
-<A NAME="toc32"></A>
+<A NAME="toc33"></A>
 <H3>Operation definitions</H3>
 <P>
 GF is a functional programming language, not only in the sense that
@@ -1072,7 +1100,7 @@ its type, and an expression defining it. As for the syntax of the defining
 expression, notice the <B>lambda abstraction</B> form <CODE>\x -&gt; t</CODE> of
 the function.
 </P>
-<A NAME="toc33"></A>
+<A NAME="toc34"></A>
 <H3>The ``resource`` module type</H3>
 <P>
 Operator definitions can be included in a concrete syntax. 
@@ -1103,7 +1131,7 @@ Resource modules can extend other resource modules, in the
 same way as modules of other types can extend modules of the
 same type. Thus it is possible to build resource hierarchies.
 </P>
-<A NAME="toc34"></A>
+<A NAME="toc35"></A>
 <H3>Opening a ``resource``</H3>
 <P>
 Any number of <CODE>resource</CODE> modules can be
@@ -1137,7 +1165,7 @@ opened in a new version of <CODE>PaleolithicEng</CODE>.
 The same string operations could be use to write <CODE>PaleolithicIta</CODE>
 more concisely.
 </P>
-<A NAME="toc35"></A>
+<A NAME="toc36"></A>
 <H3>Division of labour</H3>
 <P>
 Using operations defined in resource modules is a
@@ -1149,7 +1177,7 @@ available through resource grammar modules, whose users only need
 to pick the right operations and not to know their implementation
 details.
 </P>
-<A NAME="toc36"></A>
+<A NAME="toc37"></A>
 <H2>Morphology</H2>
 <P>
 Suppose we want to say, with the vocabulary included in
@@ -1185,7 +1213,7 @@ many new expression forms,
 and a generalizarion of linearization types
 from strings to more complex types.
 </P>
-<A NAME="toc37"></A>
+<A NAME="toc38"></A>
 <H3>Parameters and tables</H3>
 <P>
 We define the <B>parameter type</B> of number in Englisn by
@@ -1226,7 +1254,7 @@ operator <CODE>!</CODE>. For instance,
 <P>
 is a selection, whose value is <CODE>"boys"</CODE>.
 </P>
-<A NAME="toc38"></A>
+<A NAME="toc39"></A>
 <H3>Inflection tables, paradigms, and ``oper`` definitions</H3>
 <P>
 All English common nouns are inflected in number, most of them in the
@@ -1260,7 +1288,7 @@ are written together to form one <B>token</B>. Thus, for instance,
     (regNoun "boy").s ! Pl  ---&gt; "boy" + "s"  ---&gt;  "boys"
 </PRE>
 <P></P>
-<A NAME="toc39"></A>
+<A NAME="toc40"></A>
 <H3>Worst-case macros and data abstraction</H3>
 <P>
 Some English nouns, such as <CODE>louse</CODE>, are so irregular that
@@ -1301,7 +1329,7 @@ interface (i.e. the system of type signatures) that makes it
 correct to use these functions in concrete modules. In programming
 terms, <CODE>Noun</CODE> is then treated as an <B>abstract datatype</B>.
 </P>
-<A NAME="toc40"></A>
+<A NAME="toc41"></A>
 <H3>A system of paradigms using ``Prelude`` operations</H3>
 <P>
 In addition to the completely regular noun paradigm <CODE>regNoun</CODE>, 
@@ -1333,7 +1361,7 @@ The operator <CODE>init</CODE> belongs to a set of operations in the
 resource module <CODE>Prelude</CODE>, which therefore has to be
 <CODE>open</CODE>ed so that <CODE>init</CODE> can be used.
 </P>
-<A NAME="toc41"></A>
+<A NAME="toc42"></A>
 <H3>An intelligent noun paradigm using ``case`` expressions</H3>
 <P>
 It may be hard for the user of a resource morphology to pick the right
@@ -1363,7 +1391,7 @@ this, either use <CODE>mkNoun</CODE> or modify
 <CODE>regNoun</CODE> so that the <CODE>"y"</CODE> case does not
 apply if the second-last character is a vowel.
 </P>
-<A NAME="toc42"></A>
+<A NAME="toc43"></A>
 <H3>Pattern matching</H3>
 <P>
 Expressions of the <CODE>table</CODE> form are built from lists of
@@ -1399,7 +1427,7 @@ programming languages are syntactic sugar for table selections:
     case e of {...} ===  table {...} ! e
 </PRE>
 <P></P>
-<A NAME="toc43"></A>
+<A NAME="toc44"></A>
 <H3>Morphological ``resource`` modules</H3>
 <P>
 A common idiom is to
@@ -1450,7 +1478,7 @@ module depends on. The directory <CODE>prelude</CODE> is a subdirectory of
 set the environment variable <CODE>GF_LIB_PATH</CODE> to point to this
 directory.
 </P>
-<A NAME="toc44"></A>
+<A NAME="toc45"></A>
 <H3>Testing ``resource`` modules</H3>
 <P>
 To test a <CODE>resource</CODE> module independently, you can import it
@@ -1493,7 +1521,7 @@ Why does the command also show the operations that form
 <CODE>Verb</CODE> is first computed, and its value happens to be
 the same as the value of <CODE>Noun</CODE>.
 </P>
-<A NAME="toc45"></A>
+<A NAME="toc46"></A>
 <H2>Using morphology in concrete syntax</H2>
 <P>
 We can now enrich the concrete syntax definitions to
@@ -1504,7 +1532,7 @@ parameters and linearization types are different in
 different languages - but this does not prevent the 
 use of a common abstract syntax.
 </P>
-<A NAME="toc46"></A>
+<A NAME="toc47"></A>
 <H3>Parametric vs. inherent features, agreement</H3>
 <P>
 The rule of subject-verb agreement in English says that the verb
@@ -1540,7 +1568,7 @@ regular only in the present tensse).
 The reader is invited to inspect the way in which agreement works in
 the formation of noun phrases and verb phrases.
 </P>
-<A NAME="toc47"></A>
+<A NAME="toc48"></A>
 <H3>English concrete syntax with parameters</H3>
 <PRE>
   concrete PaleolithicEng of Paleolithic = open Prelude, MorphoEng in {
@@ -1573,7 +1601,7 @@ the formation of noun phrases and verb phrases.
   }
 </PRE>
 <P></P>
-<A NAME="toc48"></A>
+<A NAME="toc49"></A>
 <H3>Hierarchic parameter types</H3>
 <P>
 The reader familiar with a functional programming language such as
@@ -1615,7 +1643,7 @@ the adjectival paradigm in which the two singular forms are the same, can be def
       }
 </PRE>
 <P></P>
-<A NAME="toc49"></A>
+<A NAME="toc50"></A>
 <H3>Morphological analysis and morphology quiz</H3>
 <P>
 Even though in GF morphology
@@ -1655,7 +1683,7 @@ file for later use, by the command <CODE>morpho_list = ml</CODE>
 <P>
 The <CODE>number</CODE> flag gives the number of exercises generated.
 </P>
-<A NAME="toc50"></A>
+<A NAME="toc51"></A>
 <H3>Discontinuous constituents</H3>
 <P>
 A linearization type may contain more strings than one. 
@@ -1685,9 +1713,9 @@ the parsing and linearization commands only give reliable results
 for categories whose linearization type has a unique <CODE>Str</CODE> valued
 field labelled <CODE>s</CODE>.
 </P>
-<A NAME="toc51"></A>
-<H2>More constructs for concrete syntax</H2>
 <A NAME="toc52"></A>
+<H2>More constructs for concrete syntax</H2>
+<A NAME="toc53"></A>
 <H3>Free variation</H3>
 <P>
 Sometimes there are many alternative ways to define a concrete syntax.
@@ -1715,7 +1743,7 @@ user of the library has no way to choose among the variants.
 Moreover, even though <CODE>variants</CODE> admits lists of any type,
 its semantics for complex types can cause surprises.
 </P>
-<A NAME="toc53"></A>
+<A NAME="toc54"></A>
 <H3>Record extension and subtyping</H3>
 <P>
 Record types and records can be <B>extended</B> with new fields. For instance,
@@ -1745,7 +1773,7 @@ be used whenever a verb is required.
 <B>Contravariance</B> means that a function taking an <I>R</I> as argument
 can also be applied to any object of a subtype <I>T</I>.
 </P>
-<A NAME="toc54"></A>
+<A NAME="toc55"></A>
 <H3>Tuples and product types</H3>
 <P>
 Product types and tuples are syntactic sugar for record types and records:
@@ -1757,7 +1785,7 @@ Product types and tuples are syntactic sugar for record types and records:
 <P>
 Thus the labels <CODE>p1, p2,...`</CODE> are hard-coded.
 </P>
-<A NAME="toc55"></A>
+<A NAME="toc56"></A>
 <H3>Predefined types and operations</H3>
 <P>
 GF has the following predefined categories in abstract syntax:
@@ -1780,31 +1808,31 @@ they can be used as arguments. For example:
     -- e.g. (StreetAddress 10 "Downing Street") : Address
 </PRE>
 <P></P>
-<A NAME="toc56"></A>
-<H2>More features of the module system</H2>
 <A NAME="toc57"></A>
+<H2>More features of the module system</H2>
+<A NAME="toc58"></A>
 <H3>Resource grammars and their reuse</H3>
 <P>
 See 
 <A HREF="../../lib/resource/doc/gf-resource.html">resource library documentation</A>
 </P>
-<A NAME="toc58"></A>
+<A NAME="toc59"></A>
 <H3>Interfaces, instances, and functors</H3>
 <P>
 See an
 <A HREF="../../examples/mp3/mp3-resource.html">example built this way</A>
 </P>
-<A NAME="toc59"></A>
-<H3>Restricted inheritance and qualified opening</H3>
 <A NAME="toc60"></A>
-<H2>More concepts of abstract syntax</H2>
+<H3>Restricted inheritance and qualified opening</H3>
 <A NAME="toc61"></A>
-<H3>Dependent types</H3>
+<H2>More concepts of abstract syntax</H2>
 <A NAME="toc62"></A>
-<H3>Higher-order abstract syntax</H3>
+<H3>Dependent types</H3>
 <A NAME="toc63"></A>
-<H3>Semantic definitions</H3>
+<H3>Higher-order abstract syntax</H3>
 <A NAME="toc64"></A>
+<H3>Semantic definitions</H3>
+<A NAME="toc65"></A>
 <H2>Transfer modules</H2>
 <P>
 Transfer means noncompositional tree-transforming operations.
@@ -1823,9 +1851,9 @@ See the
 <A HREF="../transfer.html">transfer language documentation</A>
 for more information.
 </P>
-<A NAME="toc65"></A>
-<H2>Practical issues</H2>
 <A NAME="toc66"></A>
+<H2>Practical issues</H2>
+<A NAME="toc67"></A>
 <H3>Lexers and unlexers</H3>
 <P>
 Lexers and unlexers can be chosen from
@@ -1861,7 +1889,7 @@ Given by <CODE>help -lexer</CODE>, <CODE>help -unlexer</CODE>:
   
 </PRE>
 <P></P>
-<A NAME="toc67"></A>
+<A NAME="toc68"></A>
 <H3>Efficiency of grammars</H3>
 <P>
 Issues:
@@ -1872,7 +1900,7 @@ Issues:
 <LI>parsing efficiency: <CODE>-mcfg</CODE> vs. others
 </UL>
 
-<A NAME="toc68"></A>
+<A NAME="toc69"></A>
 <H3>Speech input and output</H3>
 <P>
 The<CODE>speak_aloud = sa</CODE> command sends a string to the speech
@@ -1902,7 +1930,7 @@ The method words only for grammars of English.
 Both Flite and ATK are freely available through the links
 above, but they are not distributed together with GF.
 </P>
-<A NAME="toc69"></A>
+<A NAME="toc70"></A>
 <H3>Multilingual syntax editor</H3>
 <P>
 The 
@@ -1919,18 +1947,18 @@ Here is a snapshot of the editor:
 The grammars of the snapshot are from the
 <A HREF="http://www.cs.chalmers.se/~aarne/GF/examples/letter">Letter grammar package</A>.
 </P>
-<A NAME="toc70"></A>
+<A NAME="toc71"></A>
 <H3>Interactive Development Environment (IDE)</H3>
 <P>
 Forthcoming.
 </P>
-<A NAME="toc71"></A>
+<A NAME="toc72"></A>
 <H3>Communicating with GF</H3>
 <P>
 Other processes can communicate with the GF command interpreter,
 and also with the GF syntax editor.
 </P>
-<A NAME="toc72"></A>
+<A NAME="toc73"></A>
 <H3>Embedded grammars in Haskell, Java, and Prolog</H3>
 <P>
 GF grammars can be used as parts of programs written in the
@@ -1942,15 +1970,15 @@ following languages. The links give more documentation.
 <LI><A HREF="http://www.cs.chalmers.se/~peb/software.html">Prolog</A>
 </UL>
 
-<A NAME="toc73"></A>
+<A NAME="toc74"></A>
 <H3>Alternative input and output grammar formats</H3>
 <P>
 A summary is given in the following chart of GF grammar compiler phases:
 <IMG ALIGN="middle" SRC="../gf-compiler.png" BORDER="0" ALT="">
 </P>
-<A NAME="toc74"></A>
-<H2>Case studies</H2>
 <A NAME="toc75"></A>
+<H2>Case studies</H2>
+<A NAME="toc76"></A>
 <H3>Interfacing formal and natural languages</H3>
 <P>
 <A HREF="http://www.cs.chalmers.se/~krijo/thesis/thesisA4.pdf">Formal and Informal Software Specifications</A>,

@@ -1,0 +1,6 @@
+S       ::= Item "is" Quality ;
+Item    ::= "this" Kind | "that" Kind ;
+Kind    ::= Quality Kind ;
+Kind    ::= "wine" | "cheese" | "fish" ;
+Quality ::= "very" Quality ;
+Quality ::= "fresh" | "warm" | "Italian" | "expensive" | "delicious" | "boring" ;
