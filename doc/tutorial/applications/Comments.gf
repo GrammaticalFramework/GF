@@ -1,4 +1,4 @@
-abstract Foods = {
+abstract Comments = {
 
   cat
     S ; Item ; Kind ; Quality ;
@@ -7,8 +7,6 @@ abstract Foods = {
     Is : Item -> Quality -> S ;
     This, That, These, Those : Kind -> Item ;
     QKind : Quality -> Kind -> Kind ;
-    Wine, Cheese, Fish, Pizza : Kind ;
     Very : Quality -> Quality ;
-    Fresh, Warm, Italian, Expensive, Delicious, Boring : Quality ;
 
 }
