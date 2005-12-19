@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Grammatical Framework Tutorial</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Mon Dec 19 17:31:35 2005
+Last update: Mon Dec 19 18:00:23 2005
 </FONT></CENTER>
 
 <P></P>
@@ -96,8 +96,8 @@ Last update: Mon Dec 19 17:31:35 2005
       </UL>
     <LI><A HREF="#toc63">More features of the module system</A>
       <UL>
-      <LI><A HREF="#toc64">Resource grammars and their reuse</A>
-      <LI><A HREF="#toc65">Interfaces, instances, and functors</A>
+      <LI><A HREF="#toc64">Interfaces, instances, and functors</A>
+      <LI><A HREF="#toc65">Resource grammars and their reuse</A>
       <LI><A HREF="#toc66">Restricted inheritance and qualified opening</A>
       </UL>
     <LI><A HREF="#toc67">More concepts of abstract syntax</A>
@@ -2050,16 +2050,59 @@ they can be used as arguments. For example:
 <A NAME="toc63"></A>
 <H2>More features of the module system</H2>
 <A NAME="toc64"></A>
+<H3>Interfaces, instances, and functors</H3>
+<A NAME="toc65"></A>
 <H3>Resource grammars and their reuse</H3>
 <P>
-See 
-<A HREF="../../lib/resource/doc/gf-resource.html">resource library documentation</A>
+A resource grammar is a grammar built on linguistic grounds,
+to describe a language rather than a domain.
+The GF resource grammar library contains resource grammars for
+10 languages, is described more closely in the following
+documents:
 </P>
-<A NAME="toc65"></A>
-<H3>Interfaces, instances, and functors</H3>
+<UL>
+<LI><A HREF="../../lib/resource/doc/gf-resource.html">Resource library API documentation</A>:
+  for application grammarians using the resource.
+<LI><A HREF="../../lib/resource-1.0/doc/Resource-HOWTO.html">Resource writing HOWTO</A>:
+  for resource grammarians developing the resource.
+</UL>
+
 <P>
-See an
-<A HREF="../../examples/mp3/mp3-resource.html">example built this way</A>
+However, to give a flavour of both using and writing resource grammars,
+we have created a miniature resource, which resides in the
+subdirectory <A HREF="resource"><CODE>resource</CODE></A>. Its API consists of the following
+modules:
+</P>
+<UL>
+<LI><A HREF="resource/Syntax.gf">Syntax</A>: syntactic structures, language-independent
+<LI><A HREF="resource/LexEng.gf">LexEng</A>: lexical paradigms, English
+<LI><A HREF="resource/LexIta.gf">LexIta</A>: lexical paradigms, Italian
+</UL>
+
+<P>
+Only these three modules should be <CODE>open</CODE>ed in applications.
+The implementations of the resource are given in the following four modules:
+</P>
+<UL>
+<LI><A HREF="resource/MorphoEng.gf">MorphoEng</A>,
+  <A HREF="resource/MorphoIta.gf">MorphoIta</A>: low-level morphology
+<LI>{SyntaxEng resource/SyntaxEng.gf].
+  <A HREF="resource/SyntaxIta.gf">SyntaxIta</A>: definitions of syntactic structures
+</UL>
+
+<P>
+An example use of the resource resides in the
+subdirectory <A HREF="applications"><CODE>applications</CODE></A>.
+It implements the abstract syntax 
+<A HREF="applications/FoodComments.gf"><CODE>FoodComments</CODE></A> for English and Italian.
+The following diagram shows the module structure, indicating by
+colours which modules are written by the grammarian. The two blue modules
+form the abstract syntax. The three red modules form the concrete syntax.
+The two green modules are trivial instantiations of a functor.
+The rest of the modules (black) come from the resource.
+</P>
+<P>
+<IMG ALIGN="middle" SRC="Multi.png" BORDER="0" ALT="">
 </P>
 <A NAME="toc66"></A>
 <H3>Restricted inheritance and qualified opening</H3>
