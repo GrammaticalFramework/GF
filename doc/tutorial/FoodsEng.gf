@@ -1,4 +1,4 @@
---# -path=.:prelude
+--# -path=.:resource:prelude
 
 concrete FoodsEng of Foods = open Prelude, MorphoEng in {
 
@@ -9,14 +9,15 @@ concrete FoodsEng of Foods = open Prelude, MorphoEng in {
 
   lin
     Is item quality = ss (item.s ++ (mkVerb "are" "is").s ! item.n ++ quality.s) ;
-    This = det Sg "this" ;
-    That = det Sg "that" ;
-    All  = det Pl "all" ;
-    Most = det Pl "most" ;
+    This  = det Sg "this" ;
+    That  = det Sg "that" ;
+    These = det Pl "these" ;
+    Those = det Pl "those" ;
     QKind quality kind = {s = \\n => quality.s ++ kind.s ! n} ;
     Wine = regNoun "wine" ;
     Cheese = regNoun "cheese" ;
     Fish = mkNoun "fish" "fish" ;
+    Pizza = regNoun "pizza" ;
     Very = prefixSS "very" ;
     Fresh = ss "fresh" ;
     Warm = ss "warm" ;

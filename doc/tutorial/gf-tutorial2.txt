@@ -8,12 +8,23 @@ Last update: %%date(%c)
 
 %!target:html
 
+% workaround for some missing things in the format
+% %!postproc(html): C- <center>
+% %!postproc(html): -C </center>
+% %!postproc(html): t- <tt>
+% %!postproc(html): -t </tt>
+
+
+
+
 [../gf-logo.gif]
 
 
 
 %--!
-==GF = Grammatical Framework==
+==Introduction==
+
+===GF = Grammatical Framework===
 
 The term GF is used for different things:
 
@@ -30,6 +41,143 @@ It will guide you
 - to write GF grammars
 - to write programs in which GF grammars are used as components
 
+
+
+%--!
+===What are GF grammars used for===
+
+A grammar is a definition of a language.
+From this definition, different language processing components 
+can be derived:
+
+- parsing: to analyse the language
+- linearization: to generate the language
+- translation: to analyse one language and generate another
+
+
+A GF grammar can be seen as a declarative program from which these
+processing tasks can be automatically derived. In addition, many
+other tasks are readily available for GF grammars:
+
+- morphological analysis: find out the possible inflection forms of words
+- morphological synthesis: generate all inflection forms of words
+- random generation: generate random expressions
+- corpus generation: generate all expressions
+- teaching quizzes: train morphology and translation
+- multilingual authoring: create a document in many languages simultaneously
+- speech input: optimize a speech recognition system for your grammar
+
+
+A typical GF application is based on a **multilingual grammar** involving
+translation on a special domain. Existing applications of this idea include
+
+- [Alfa: http://www.cs.chalmers.se/%7Ehallgren/Alfa/Tutorial/GFplugin.html]:
+  a natural-language interface to a proof editor
+  (languages: English, French, Swedish)
+- [KeY http://www.key-project.org/]: 
+  a multilingual authoring system for creating software specifications
+  (languages: OCL, English, German)
+- [TALK http://www.talk-project.org]:
+  multilingual and multimodal dialogue systems
+- [WebALT http://webalt.math.helsinki.fi/content/index_eng.html]: 
+  a multilingual translator of mathematical exercises
+  (languages: Catalan, English, Finnish, French, Spanish, Swedish)
+- [Numeral translator http://www.cs.chalmers.se/~bringert/gf/translate/]: 
+  number words from 1 to 999,999
+  (88 languages)
+
+
+The specialization of a grammar to a domain makes it possible to
+obtain much better translations than in an unlimited machine translation
+system. This is due to the well-defined semantics of such domains.
+Grammars having this character are called **application grammars**.
+They are different from most grammars written by linguists just
+because they are multilingual and domain-specific.
+
+However, there is another kind of grammars, which we call **resource grammars**.
+These are large, comprehensive grammars that can be used on any domain.
+The GF Resource Grammar Library has resource grammars for 10 languages.
+These grammars can be used as **libraries** to define application grammars.
+In this way, it is possible to write a high-quality grammar without
+knowing about linguistics: in general, to write an application grammar
+by using the resource library just requires practical knowledge of
+the target language.
+
+
+
+
+%--!
+===Who is this tutorial for===
+
+This tutorial is mainly for programmers who want to learn to write
+application grammars. It will go through GF's programming concepts
+without entering too deep into linguistics. Thus it should
+be accessible to anyone who has some previous programming experience.
+
+A separate document is being written on how to write resource grammars.
+This includes the ways in which linguistic problems posed by different
+languages are solved in GF.
+
+
+%--!
+===The coverage of the tutorial===
+
+The tutorial gives a hands-on introduction to grammar writing.
+We start by building a small grammar for the domain of food:
+in this grammar, you can say things like
+``` this Italian cheese is delicious
+in English and Italian.
+
+The first English grammar 
+[``food.cf`` food.cf]
+is written in a context-free
+notation (also known as BNF). The BNF format is often a good
+starting point for GF grammar development, because it is
+simple and widely used. However, the BNF format is not
+good for multilingual grammars. While it is possible to
+translate the words contained in a BNF grammar to another
+language, proper translation usually involves more, e.g.
+changing the word order in
+``` Italian cheese ===> formaggio italiano
+The full GF grammar format is designed to support such
+changes, by separating between the **abstract syntax**
+(the logical structure) and the **concrete syntax** (the
+sequence of words) of expressions. 
+
+There is more than words and word order that makes languages
+different. Words can have different forms, and which forms
+they have vary from language to language. For instance,
+Italian adjectives usually have four forms where English
+has just one:
+```
+  delicious (wine | wines | pizza | pizzas)
+  vino delizioso, vini deliziosi, pizza deliziosa, pizze deliziose
+```
+The **morphology** of a language describes the
+forms of its words. While the complete description of morphology
+belongs to resource grammars, the tutorial will explain the
+main programming concepts involved. This will moreover
+make it possible to grow the fragment covered by the food example.
+The tutorial will in fact build a toy resource grammar in order
+to illustrate the module structure of library-based application
+grammar writing.
+
+Thus it is by elaborating the initial ``food.cf`` example that
+the tutorial makes a guided tour through all concepts of GF.
+While the constructs of the GF language are the main focus,
+also the commands of the GF system are introduced as they
+are needed. 
+
+To learn how to write GF grammars is not the only goal of
+this tutorial. To learn the commands of the GF system means
+that simple applications of grammars, such as translation and
+quiz systems, can be built simply by writing scripts for the
+system. More complicated applications, such as natural-language
+interfaces and dialogue systems, also require programming in
+some general-purpose language. We will briefly explain how
+GF grammars are used as components of Haskell, Java, and
+Prolog grammars. The tutorial concludes with a couple of
+case studies showing how such complete systems can be built.
 
 
 
@@ -74,7 +222,7 @@ follow them.
 
 
 %--!
-==The ``.cf`` grammar format==
+==The .cf grammar format==
 
 Now you are ready to try out your first grammar.
 We start with one that is not written in GF language, but
@@ -1186,7 +1334,7 @@ A common idiom is to
 gather the ``oper`` and ``param`` definitions
 needed for inflecting words in
 a language into a morphology module. Here is a simple
-example, [``MorphoEng`` MorphoEng.gf].
+example, [``MorphoEng`` resource/MorphoEng.gf].
 ```
   --# -path=.:prelude
 
@@ -1302,7 +1450,7 @@ the predication structure:
 The following section will present
 ``FoodsEng``, assuming the abstract syntax ``Foods`` 
 that is similar to ``Food`` but also has the
-plural determiners ``All`` and ``Most``.
+plural determiners ``These`` and ``Those``.
 The reader is invited to inspect the way in which agreement works in
 the formation of sentences.
 
@@ -1310,8 +1458,14 @@ the formation of sentences.
 %--!
 ===English concrete syntax with parameters===
 
+The grammar uses both 
+[``Prelude`` ../../lib/prelude/Prelude.gf] and
+[``MorphoEng`` resource/MorphoEng].
+We will later see how to make the grammar even
+more high-level by using a resource grammar library
+and parametrized modules.
 ```
---# -path=.:prelude
+--# -path=.:resource:prelude
 
 concrete FoodsEng of Foods = open Prelude, MorphoEng in {
 
@@ -1322,10 +1476,10 @@ concrete FoodsEng of Foods = open Prelude, MorphoEng in {
 
   lin
     Is item quality = ss (item.s ++ (mkVerb "are" "is").s ! item.n ++ quality.s) ;
-    This = det Sg "this" ;
-    That = det Sg "that" ;
-    All  = det Pl "all" ;
-    Most = det Pl "most" ;
+    This  = det Sg "this" ;
+    That  = det Sg "that" ;
+    These = det Pl "these" ;
+    Those = det Pl "those" ;
     QKind quality kind = {s = \\n => quality.s ++ kind.s ! n} ;
     Wine = regNoun "wine" ;
     Cheese = regNoun "cheese" ;
@@ -1375,14 +1529,23 @@ it would be inaccurate to define adjective paradigms using the type
 yields an accurate system of three adjectival forms.
 ```
   param AdjForm = ASg Gender | APl ;
-  param Gender  = Uter | Neuter ;
+  param Gender  = Utr | Neutr ;
 ```
-In pattern matching, a constructor can have patterns as arguments. For instance,
-the adjectival paradigm in which the two singular forms are the same, can be defined
+Here is an example of pattern matching, the paradigm of regular adjectives.
 ```
-  oper plattAdj : Str -> AdjForm => Str = \x -> table {
-    ASg _ => x ;
-    APl   => x + "a" ;
+  oper regAdj : Str -> AdjForm => Str = \fin -> table {
+    ASg Utr   => fin ;
+    ASg Neutr => fin + "t" ;
+    APl       => fin + "a" ;
+    }
+```
+A constructor can have patterns as arguments. For instance,
+the adjectival paradigm in which the two singular forms are the same, 
+can be defined
+```
+  oper plattAdj : Str -> AdjForm => Str = \platt -> table {
+    ASg _ => platt ;
+    APl   => platt + "a" ;
     }
 ```
 
@@ -1437,8 +1600,8 @@ The first of the following judgements defines transitive verbs as
 type with two strings and not just one. The second judgement
 shows how the constituents are separated by the object in complementization.
 ```
-  lincat TV = {s : Number => Str ; s2 : Str} ;
-  lin ComplTV tv obj = {s = \\n => tv.s ! n ++ obj.s ++ tv.s2} ;
+  lincat TV         = {s : Number => Str ; part : Str} ;
+  lin PredTV tv obj = {s = \\n => tv.s ! n ++ obj.s ++ tv.part} ;
 ```
 There is no restriction in the number of discontinuous constituents
 (or other fields) a  ``lincat`` may contain. The only condition is that
@@ -1456,6 +1619,30 @@ field labelled ``s``.
 
 
 %--!
+===Local definitions===
+
+Local definitions ("``let`` expressions") are used in functional
+programming for two reasons: to structure the code into smaller
+expressions, and to avoid repeated computation of one and
+the same expression. Here is an example, from 
+[``MorphoIta resource/MorphoIta.gf]:
+```
+  oper regNoun : Str -> Noun = \vino -> 
+        let 
+          vin = init vino ;
+          o   = last vino
+        in
+        case o of {
+          "a"       => mkNoun Fem  vino (vin + "e") ;
+          "o" | "e" => mkNoun Masc vino (vin + "i") ;
+          _         => mkNoun Masc vino vino         
+          } ;
+```
+
+
+
+
+%--!
 ===Free variation===
 
 Sometimes there are many alternative ways to define a concrete syntax.
@@ -1464,7 +1651,7 @@ For instance, the verb negation in English can be expressed both by
 are in **free variation**. The ``variants`` construct of GF can
 be used to give a list of strings in free variation. For example,
 ```
-  NegVerb verb = {s = variants {["does not"] ; "doesn't} ++ verb.s} ;
+  NegVerb verb = {s = variants {["does not"] ; "doesn't} ++ verb.s ! Pl} ;
 ```
 An empty variant list
 ```
@@ -1542,14 +1729,13 @@ This very example does not work in all situations: the prefix
 ```
 
 
-
 ===Predefined types and operations===
 
 GF has the following predefined categories in abstract syntax:
 ```
   cat Int ;     -- integers, e.g. 0, 5, 743145151019
-  cat Float ;   -- floats, e.g.   0.0, 3.1415926
-  cat String ;  -- strings, e.g.  "", "foo", "123"
+  cat Float ;   -- floats,   e.g. 0.0, 3.1415926
+  cat String ;  -- strings,  e.g. "", "foo", "123"
 ```
 The objects of each of these categories are **literals**
 as indicated in the comments above. No ``fun`` definition
