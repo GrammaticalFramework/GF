@@ -1781,7 +1781,7 @@ Only these three modules should be ``open``ed in applications.
 The implementations of the resource are given in the following four modules:
 - [MorphoEng resource/MorphoEng.gf],
   [MorphoIta resource/MorphoIta.gf]: low-level morphology
-- {SyntaxEng resource/SyntaxEng.gf].
+- [SyntaxEng resource/SyntaxEng.gf].
   [SyntaxIta resource/SyntaxIta.gf]: definitions of syntactic structures
 
 
