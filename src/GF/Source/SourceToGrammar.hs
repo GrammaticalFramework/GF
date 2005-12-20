@@ -517,6 +517,24 @@ transSort :: Sort -> Err String
 transSort x = case x of
   _ -> return $ printTree x
 
+transPatts :: Patt -> Err [G.Patt]
+transPatts p = case p of
+  PDisj p1 p2 -> liftM2 (++) (transPatts p1) (transPatts p2)
+  PC id patts -> liftM (map (G.PC id) . combinations) $ mapM transPatts patts
+  PR pattasss -> do
+    let (lss,ps) = unzip [(ls,p) | PA ls p <- pattasss]
+        ls = map LIdent $ concat lss
+    ps0 <- mapM transPatts ps
+    let ps' = combinations ps0
+    lss' <- mapM trLabel ls
+    let rss = map (zip lss') ps'
+    return $ map G.PR rss
+  PTup pcs -> do
+    ps0 <- mapM transPatts [e | PTComp e <- pcs]
+    let ps' = combinations ps0
+    return $ map (G.PR . M.tuple2recordPatt) ps'
+  _ -> liftM singleton $ transPatt p
+
 transPatt :: Patt -> Err G.Patt
 transPatt x = case x of
   PW  -> return G.wildPatt
@@ -535,6 +553,7 @@ transPatt x = case x of
   PQ id0 id  -> liftM3 G.PP (transIdent id0) (transIdent id) (return [])
   PQC id0 id patts  -> 
     liftM3 G.PP (transIdent id0) (transIdent id) (mapM transPatt patts)
+  PDisj _ _ -> Bad $ "not allowed pattern" +++ printTree x
 
 transBind :: Bind -> Err Ident
 transBind x = case x of
@@ -553,8 +572,8 @@ transCases :: [Case] -> Err [G.Case]
 transCases = liftM concat . mapM transCase
 
 transCase :: Case -> Err [G.Case]
-transCase (Case pattalts exp) = do
-  patts <- mapM transPatt [p | AltP p <- pattalts]
+transCase (Case p exp) = do
+  patts <- transPatts p
   exp'  <- transExp exp  
   return [(p,exp') | p <- patts]
 

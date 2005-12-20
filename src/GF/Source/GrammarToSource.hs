@@ -205,8 +205,8 @@ trAssign (lab, (mty, t)) = maybe (P.LDDef x t') (\ty -> P.LDFull x (trt ty) t') 
 
 trLabelling (lab,ty) = P.LDDecl [trLabelIdent lab] (trt ty)
 
-trCase  (patt, trm) = P.Case [P.AltP (trp patt)] (trt trm)
-trCases (patts,trm) = P.Case (map (P.AltP . trp) patts) (trt trm)
+trCase  (patt, trm) = P.Case (trp patt) (trt trm)
+trCases (patts,trm) = P.Case (foldl1 P.PDisj (map trp patts)) (trt trm)
 
 trDecl (x,ty) = P.DDDec [trb x] (trt ty)
 

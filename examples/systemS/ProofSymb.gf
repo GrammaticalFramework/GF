@@ -18,7 +18,7 @@ concrete ProofSymb of Proof = FormulaSymb ** open Prelude, Precedence in {
     RedAbs form = continue ["Reductio ad absurdum"] (task neg abs)
       where { neg = useTop (prefixR 4 "~" form) } ;
 
-    ExFalso form = finish (["Ex falso quodlibet"] ++ form.s) "Ø" ; --- form
+    ExFalso form = finish (["Ex falso quodlibet"] ++ toProve form) "Ø" ; --- form
 
     ConjSplit a b c = 
       continue ["Conjunction split"] 
@@ -81,4 +81,10 @@ concrete ProofSymb of Proof = FormulaSymb ** open Prelude, Precedence in {
 
     abs = "_|_" ;
  
+    toProve : PrecExp -> Str = \c -> 
+      variants {
+        [] ;      -- for generation
+        useTop c  -- for parsing
+        } ;
+
 }
