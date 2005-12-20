@@ -1,0 +1,7 @@
+Suppose A -> B. We will show that ~ B -> ~ A.
+It is enough to assume A -> B, ~ B and show ~ A.
+Thus, by rewriting ~ A we may assume A -> B, ~ B and show A -> _|_.
+It is enough to assume A, A -> B, ~ B and show _|_.
+Then, by Modus ponens, we get A, A -> B, B, ~ B to prove _|_.
+In particular we get B, ~ B to prove _|_.
+Hence we get _|_ as desired.
