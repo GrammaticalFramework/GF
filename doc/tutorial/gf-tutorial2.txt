@@ -1704,6 +1704,36 @@ Product types and tuples are syntactic sugar for record types and records:
 Thus the labels ``p1, p2,...``` are hard-coded.
 
 
+===Record and tuple patterns===
+
+Record types of parameter types are also parameter types.
+A typical example is a record of agreement features, e.g. French
+```
+  oper Agr : PType = {g : Gender ; n : Number ; p : Person} ;
+```
+Notice the term ``PType`` rather than just ``Type`` referring to
+parameter types. Every ``PType`` is also a ``Type``.
+
+Pattern matching is done in the expected way, but it can moreover
+utilize partial records: the branch
+```
+  {g = Fem} => t
+```
+in a table of type ``Agr => T`` means the same as
+```
+  {g = Fem ; n = _ ; p = _} => t
+```
+Tuple patterns are translated to record patterns in the
+same way as tuples to records; partial patterns make it
+possible to write, slightly surprisingly,
+```
+  case <g,n,p> of {
+    <Fem> => t
+    ...
+    }
+```
+
+
 %--!
 ===Prefix-dependent choices===
 

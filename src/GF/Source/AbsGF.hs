@@ -1,5 +1,4 @@
-
-module GF.Source.AbsGF where
+module GF.Source.AbsGF where --H
 
 import GF.Infra.Ident --H
 
@@ -189,16 +188,17 @@ data Exp =
  | ESelect Exp Exp
  | ETupTyp Exp Exp
  | EExtend Exp Exp
+ | EGlue Exp Exp
+ | EConcat Exp Exp
  | EAbstr [Bind] Exp
  | ECTable [Bind] Exp
  | EProd Decl Exp
  | ETType Exp Exp
- | EConcat Exp Exp
- | EGlue Exp Exp
  | ELet [LocDef] Exp
  | ELetb [LocDef] Exp
  | EWhere Exp [LocDef]
  | EEqs [Equation]
+ | EExample Exp String
  | ELString LString
  | ELin Ident
   deriving (Eq,Ord,Show)
@@ -220,6 +220,7 @@ data Patt =
  | PTup [PattTupleComp]
  | PC Ident [Patt]
  | PQC Ident Ident [Patt]
+ | PDisj Patt Patt
   deriving (Eq,Ord,Show)
 
 data PattAss =
@@ -237,10 +238,6 @@ data Sort =
  | Sort_Tok
  | Sort_Str
  | Sort_Strs
-  deriving (Eq,Ord,Show)
-
-data PattAlt =
-   AltP Patt
   deriving (Eq,Ord,Show)
 
 data Bind =
@@ -262,7 +259,7 @@ data PattTupleComp =
   deriving (Eq,Ord,Show)
 
 data Case =
-   Case [PattAlt] Exp
+   Case Patt Exp
   deriving (Eq,Ord,Show)
 
 data Equation =

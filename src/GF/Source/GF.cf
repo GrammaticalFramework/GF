@@ -150,51 +150,55 @@ separator LocDef ";" ;
 
 -- terms and types
 
-EIdent.    Exp4 ::= Ident ;
-EConstr.   Exp4 ::= "{" Ident "}" ;
-ECons.     Exp4 ::= "%" Ident "%" ;
-ESort.     Exp4 ::= Sort ;
-EString.   Exp4 ::= String ;
-EInt.      Exp4 ::= Integer ;
-EFloat.    Exp4 ::= Double ;
-EMeta.     Exp4 ::= "?" ;
-EEmpty.    Exp4 ::= "[" "]" ;
-EData.     Exp4 ::= "data" ;
-EList.     Exp4 ::= "[" Ident Exps "]" ;
-EStrings.  Exp4 ::= "[" String "]" ;
-ERecord.   Exp4 ::= "{" [LocDef] "}" ; -- !
-ETuple.    Exp4 ::= "<" [TupleComp] ">" ;  --- needed for separator ","
-EIndir.    Exp4 ::= "(" "in" Ident ")" ;   -- indirection, used in judgements
-ETyped.    Exp4 ::= "<" Exp ":" Exp ">" ;  -- typing, used for annotations
+EIdent.    Exp6 ::= Ident ;
+EConstr.   Exp6 ::= "{" Ident "}" ;
+ECons.     Exp6 ::= "%" Ident "%" ;
+ESort.     Exp6 ::= Sort ;
+EString.   Exp6 ::= String ;
+EInt.      Exp6 ::= Integer ;
+EFloat.    Exp6 ::= Double ;
+EMeta.     Exp6 ::= "?" ;
+EEmpty.    Exp6 ::= "[" "]" ;
+EData.     Exp6 ::= "data" ;
+EList.     Exp6 ::= "[" Ident Exps "]" ;
+EStrings.  Exp6 ::= "[" String "]" ;
+ERecord.   Exp6 ::= "{" [LocDef] "}" ; -- !
+ETuple.    Exp6 ::= "<" [TupleComp] ">" ;  --- needed for separator ","
+EIndir.    Exp6 ::= "(" "in" Ident ")" ;   -- indirection, used in judgements
+ETyped.    Exp6 ::= "<" Exp ":" Exp ">" ;  -- typing, used for annotations
 
-EProj.     Exp3 ::= Exp3 "." Label ;
-EQConstr.  Exp3 ::= "{" Ident "." Ident "}" ;  -- qualified constructor
-EQCons.    Exp3 ::= "%" Ident "." Ident  ;     -- qualified constant
+EProj.     Exp5 ::= Exp5 "." Label ;
+EQConstr.  Exp5 ::= "{" Ident "." Ident "}" ;  -- qualified constructor
+EQCons.    Exp5 ::= "%" Ident "." Ident  ;     -- qualified constant
 
-EApp.      Exp2 ::= Exp2 Exp3 ;
-ETable.    Exp2 ::= "table" "{" [Case] "}" ;
-ETTable.   Exp2 ::= "table" Exp4 "{" [Case] "}" ;
-EVTable.   Exp2 ::= "table" Exp4 "[" [Exp] "]" ;
-ECase.     Exp2 ::= "case" Exp "of" "{" [Case] "}" ;
-EVariants. Exp2 ::= "variants" "{" [Exp] "}" ;
-EPre.      Exp2 ::= "pre" "{" Exp ";" [Altern] "}" ;
-EStrs.     Exp2 ::= "strs" "{" [Exp] "}" ;
-EConAt.    Exp2 ::= Ident "@" Exp4 ;
+EApp.      Exp4 ::= Exp4 Exp5 ;
+ETable.    Exp4 ::= "table" "{" [Case] "}" ;
+ETTable.   Exp4 ::= "table" Exp6 "{" [Case] "}" ;
+EVTable.   Exp4 ::= "table" Exp6 "[" [Exp] "]" ;
+ECase.     Exp4 ::= "case" Exp "of" "{" [Case] "}" ;
+EVariants. Exp4 ::= "variants" "{" [Exp] "}" ;
+EPre.      Exp4 ::= "pre" "{" Exp ";" [Altern] "}" ;
+EStrs.     Exp4 ::= "strs" "{" [Exp] "}" ;
+EConAt.    Exp4 ::= Ident "@" Exp6 ;
 
-ESelect.   Exp1 ::= Exp1 "!" Exp2 ;
-ETupTyp.   Exp1 ::= Exp1 "*" Exp2 ;
-EExtend.   Exp1 ::= Exp1 "**" Exp2 ;
+ESelect.   Exp3 ::= Exp3 "!" Exp4 ;
+ETupTyp.   Exp3 ::= Exp3 "*" Exp4 ;
+EExtend.   Exp3 ::= Exp3 "**" Exp4 ;
+
+EGlue.     Exp1 ::= Exp2 "+"  Exp1 ;
+
+EConcat.   Exp  ::= Exp1 "++" Exp ;
 
 EAbstr.    Exp  ::= "\\" [Bind] "->" Exp ;
 ECTable.   Exp  ::= "\\""\\" [Bind] "=>" Exp ;
 EProd.     Exp  ::= Decl "->" Exp ;
-ETType.    Exp  ::= Exp1 "=>" Exp ; -- these are thus right associative
-EConcat.   Exp  ::= Exp1 "++" Exp ;
-EGlue.     Exp  ::= Exp1 "+"  Exp ;
+ETType.    Exp  ::= Exp3 "=>" Exp ; -- these are thus right associative
 ELet.      Exp  ::= "let" "{" [LocDef] "}" "in" Exp ;
 ELetb.     Exp  ::= "let" [LocDef] "in" Exp ;
-EWhere.    Exp  ::= Exp1 "where" "{" [LocDef] "}" ;
+EWhere.    Exp  ::= Exp3 "where" "{" [LocDef] "}" ;
 EEqs.      Exp  ::= "fn" "{" [Equation] "}" ;
+
+EExample.  Exp  ::= "in" Exp5 String ;
 
 coercions Exp 4 ;
 
@@ -202,23 +206,24 @@ separator Exp ";" ; -- in variants
 
 -- list of arguments to category
 NilExp. Exps ::= ;
-ConsExp. Exps ::= Exp4 Exps ; -- Exp4 to force parantheses
+ConsExp. Exps ::= Exp6 Exps ; -- Exp6 to force parantheses
 
 -- patterns
 
-PW.    Patt1 ::= "_" ;
-PV.    Patt1 ::= Ident ;
-PCon.  Patt1 ::= "{" Ident "}" ;
-PQ.    Patt1 ::= Ident "." Ident ;
-PInt.  Patt1 ::= Integer ;
-PFloat. Patt1 ::= Double ;
-PStr.  Patt1 ::= String ;
-PR.    Patt1 ::= "{" [PattAss] "}" ;
-PTup.  Patt1 ::= "<" [PattTupleComp] ">" ;
-PC.    Patt  ::= Ident [Patt] ;
-PQC.   Patt  ::= Ident "." Ident [Patt] ;
+PW.     Patt2  ::= "_" ;
+PV.     Patt2  ::= Ident ;
+PCon.   Patt2  ::= "{" Ident "}" ;
+PQ.     Patt2  ::= Ident "." Ident ;
+PInt.   Patt2  ::= Integer ;
+PFloat. Patt2  ::= Double ;
+PStr.   Patt2  ::= String ;
+PR.     Patt2  ::= "{" [PattAss] "}" ;
+PTup.   Patt2  ::= "<" [PattTupleComp] ">" ;
+PC.     Patt1  ::= Ident [Patt] ;
+PQC.    Patt1  ::= Ident "." Ident [Patt] ;
+PDisj.  Patt   ::= Patt "|" Patt1 ;
 
-coercions Patt 1 ;
+coercions Patt 2 ;
 
 PA.  PattAss ::= [Ident] "=" Patt ;
 
@@ -233,13 +238,10 @@ rules Sort ::= "Type" | "PType" | "Tok" | "Str" | "Strs" ;
 
 separator PattAss ";" ;
 
-AltP. PattAlt ::= Patt ;
-
 -- this is explicit to force higher precedence level on rhs
-(:[]). [Patt] ::= Patt1 ;
-(:).   [Patt] ::= Patt1 [Patt] ;
+(:[]). [Patt] ::= Patt2 ;
+(:).   [Patt] ::= Patt2 [Patt] ;
 
-separator nonempty PattAlt "|" ;
 
 -- binds in lambdas and lin rules
 
@@ -252,7 +254,7 @@ separator Bind "," ;
 -- declarations in function types
 
 DDec.  Decl ::= "(" [Bind] ":" Exp ")" ;
-DExp.  Decl ::= Exp2 ; -- can thus be an application
+DExp.  Decl ::= Exp4 ; -- can thus be an application
 
 -- tuple component (term or pattern)
 
@@ -264,7 +266,7 @@ separator PattTupleComp "," ;
 
 -- case branches
 
-Case. Case ::= [PattAlt] "=>" Exp ;
+Case. Case ::= Patt "=>" Exp ;
 
 separator nonempty Case ";" ;
 
@@ -283,7 +285,7 @@ separator Altern ";" ;
 -- in a context, higher precedence is required than in function types
 
 DDDec.  DDecl ::= "(" [Bind] ":" Exp ")" ;
-DDExp.  DDecl ::= Exp4 ;  -- can thus *not* be an application
+DDExp.  DDecl ::= Exp6 ;  -- can thus *not* be an application
 
 separator DDecl "" ;
 
@@ -308,8 +310,8 @@ FMinus.  FileName ::= "-" FileName ;
 FAddId.  FileName ::= Ident FileName ;
 
 token LString '\'' (char - '\'')* '\'' ;
-ELString.  Exp4 ::= LString ;
-ELin.      Exp2 ::= "Lin" Ident ;
+ELString.  Exp6 ::= LString ;
+ELin.      Exp4 ::= "Lin" Ident ;
 
 DefPrintOld.  TopDef ::= "printname" [PrintDef] ;
 DefLintype.   TopDef ::= "lintype"   [Def] ;
