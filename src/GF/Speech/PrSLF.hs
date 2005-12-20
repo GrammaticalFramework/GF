@@ -32,7 +32,7 @@ import GF.Speech.FiniteState
 import GF.Speech.SRG
 import GF.Speech.TransformCFG
 
-import Data.Char (toUpper,toLower)
+import Data.Char (toUpper)
 import Data.List
 import Data.Maybe (fromMaybe)
 
