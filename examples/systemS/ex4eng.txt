@@ -1,0 +1,8 @@
+We will show that (A -> B) v (B -> A).
+To that end, we will assume ~ ((A -> B) v (B -> A)) and show _|_.
+So let us assume that ~ ((A -> B) v (B -> A)).
+Then, by the first de Morgan's law, we get ~ (A -> B) & ~ (B -> A) to prove _|_.
+So by splitting we get ~ (A -> B), ~ (B -> A) to prove _|_.
+By implication negation, we get A, ~ (B -> A) to prove _|_.
+By implication negation, we get A, ~ A to prove _|_.
+Hence we get _|_ as desired.

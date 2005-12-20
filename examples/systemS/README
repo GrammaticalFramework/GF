@@ -1,0 +1,65 @@
+AR 20/12/2005
+
+This is a translator of a part of the proof system
+by Claes Strannegård, as defined in the manuscript
+"Translating Formal Proofs into English".
+
+The functionality is to translate between a formal
+and an informal notation for proofs.
+
+As examples, we provide 3 of the 4 examples in
+Strannegård's paper. His example 3 is left as exercise.
+
+A good way to start is
+
+  % gf <test.gfs
+
+which will translate the proofs back and forth.
+
+If you modify the grammars and want to compile from source, you also need
+
+  % export GF_LIB_PATH=/home/aarne/GF/lib -- set to the path in your system
+
+Files:
+
+  ex1eng.txt      -- the 3 tests
+  ex1.txt    
+  ex2eng.txt
+  ex2.txt
+  ex4eng.txt
+  ex4.txt
+
+  Formula.gf      -- abstract syntax of formulas
+  FormulaSymb.gf  -- concrete syntax of formulas
+  Precedence.gf   -- precedence package
+  ProofEng.gf     -- top concrete syntax, English
+  Proof.gf        -- top abstract syntax
+  ProofSymb.gf    -- top concrete syntax, symboli
+
+  proof.gfcm      -- precompiled translator
+
+  README          -- this file
+  test.gfs        -- the test script
+
+
+Notes:
+
+1. The abstract syntax does not do proof checking.
+
+2. de Morgan labels have been disambiguated with "1" and "2".
+
+3. The symbolic Ex falso quodlibet rule needs to show the
+   conclusion formula in the label to make linearization 
+   possible (in the absence of smart proof checking).
+
+4. The English concrete syntax needs some extra formula
+   arguments for the same reason. These arguments can be
+   omitted, but the resulting parser returns some 
+   metavariables.
+
+An interesting further task would be to implement the
+proof checker and a proof search procedure, in Haskell or,
+even better, in the GF Transfer Language.
+
+Another nice thing would be to linearize the formulas
+into real English.
