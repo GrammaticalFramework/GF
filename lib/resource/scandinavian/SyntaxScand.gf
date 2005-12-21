@@ -1346,7 +1346,7 @@ oper
       in
       table {
         DirQ   => dusov ! Inv ;
-        IndirQ => (strPrep CPom) ++ dusov ! Sub
+        IndirQ => conjOm ++ dusov ! Sub
         }
     } ;
 
