@@ -1,4 +1,5 @@
--- backtracks
+-- part of this is adapted from a word list by Alan Black. Not to be used for military purposes.
+
 V2 ::= "abandons" | "abandon" | "abandoned" | "abandoning" ;
 V ::= "abbreviates" | "abbreviate" | "abbreviated" | "abbreviating" ;
 V2 ::= "abducts" | "abduct" | "abducted" | "abducting" ;
