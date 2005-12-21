@@ -209,7 +209,7 @@ updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do
   let abstrs = nubBy (\ (x,_) (y,_) -> x == y) $ 
                maybe id (\a -> ((a,concrs0):)) abstr0 $ abstracts sh
 
-  let cgr = filterAbstracts (map fst abstrs) cgr0
+  let cgr = cgr0 ---- filterAbstracts (map fst abstrs) cgr0
 
   let concrs = nub $ concrs0 ++ map (snd . fst) (concretes sh)
       concr0 = ifNull Nothing (return . head) concrs
@@ -268,20 +268,6 @@ prShellStateInfo sh = unlines [
   "transfer modules : " +++ unwords (map (P.prt . fst) (transfers sh))
   ]
 
-{- ---- should be called from IOGrammar *before* compiling
-testSameAbstract :: ShellState -> Maybe Ident -> Err (Maybe Ident)
-testSameAbstract sh mcnc = do
-  abstr0 <- case abstract sh of
-    Just a -> do
-      -- test that abstract is compatible --- unsafe exception for old? 
-      --- if True oElem showOld opts then return () else
-      case a' of
-        Nothing -> return ()
-        Just b -> testErr (a==b) ("expected abstract" +++ P.prt a +++ "but found " +++ P.prt b) 
-      return $ Just a
-    _ -> return a'
--}
-
 abstractName :: ShellState -> String
 abstractName sh = maybe "(none)" P.prt (abstract sh)
 
@@ -296,7 +282,6 @@ filterAbstracts absts cgr = M.MGrammar (nubBy (\x y -> fst x == fst y) [m | m <-
   ext es a = case lookup a es of
     Just e -> a : concatMap (ext es) e  ---- FIX multiple exts
     _ -> []
-
 
 purgeShellState :: ShellState -> ShellState
 purgeShellState sh = ShSt {
