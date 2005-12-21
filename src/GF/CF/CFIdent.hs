@@ -30,7 +30,8 @@ module GF.CF.CFIdent (-- * Tokens and categories
 		-- * CF Tokens
 		string2CFTok, str2cftoks,
 		-- * Comparisons
-		compatToks, compatTok, compatCFFun, compatCF
+		compatToks, compatTok, compatCFFun, compatCF,
+                wordsLits
 	       ) where
 
 import GF.Data.Operations
@@ -41,7 +42,7 @@ import GF.Canon.AbsGFC
 import GF.Grammar.Macros (ident2label)
 import GF.Grammar.PrGrammar
 import GF.Data.Str
-import Data.Char (toLower, toUpper)
+import Data.Char (toLower, toUpper, isSpace)
 import Data.List (intersperse)
 
 -- | this type should be abstract
@@ -204,7 +205,7 @@ string2CFTok :: String -> CFTok
 string2CFTok = tS
 
 str2cftoks :: Str -> [CFTok]
-str2cftoks = map tS . words . sstr
+str2cftoks = map tS . wordsLits . sstr
 
 -- decide if two token lists look the same (in parser postprocessing)
 
@@ -217,6 +218,7 @@ compatTok _ (TM _ _) = True
 compatTok t u = any (`elem` (alts t)) (alts u) where
   alts u = case u of
     TC (c:s) -> [toLower c : s, toUpper c : s]
+    TL s -> [s, prQuotedString s]
     _ -> [prCFTok u]
 
 -- | decide if two CFFuns have the same function head (profiles may differ)
@@ -229,3 +231,21 @@ compatCFFun (CFFun (f,_)) (CFFun (g,_)) = f == g
 compatCF :: CFCat -> CFCat -> Bool
 ----compatCF = (==)
 compatCF (CFCat (CIQ _ c, l)) (CFCat (CIQ _ c', l')) = c==c' && l==l'
+
+-- | Like 'words', but does not split on whitespace inside
+--   double quotes.wordsLits :: String -> [String]
+-- Also treats escaped quotes in quotes (AR 21/12/2005) by breaks
+-- instead of break
+wordsLits [] = []
+wordsLits (c:cs) | isSpace c = wordsLits (dropWhile isSpace cs)
+		 | c == '\'' || c == '"' 
+		     = let (l,rs) = breaks (==c) cs
+			   rs' = drop 1 rs
+			   in ([c]++l++[c]):wordsLits rs'
+		 | otherwise = let (w,rs) = break isSpace cs
+				   in (c:w):wordsLits rs
+  where
+    breaks c cs = case break c cs of
+      (l@(_:_),d:rs) | last l == '\\' -> 
+        let (r,ts) = breaks c rs in (l++[d]++r, ts)
+      v -> v

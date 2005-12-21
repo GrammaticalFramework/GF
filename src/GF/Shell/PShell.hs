@@ -23,6 +23,7 @@ import GF.Infra.Option
 import GF.Compile.PGrammar (pzIdent, pTrm) --- (string2formsAndTerm)
 import GF.API
 import GF.System.Arch (fetchCommand)
+import GF.UseGrammar.Tokenize (wordsLits)
 
 import Data.Char (isDigit, isSpace)
 import System.IO.Error
@@ -43,18 +44,6 @@ getCommandLinesBatch st = do
 pCommandLines :: HState -> String -> [CommandLine]
 pCommandLines st = 
   map (pCommandLine st) . concatMap (chunks ";;" . wordsLits) . lines
-
--- | Like 'words', but does not split on whitespace inside
---   double quotes.
-wordsLits :: String -> [String]
-wordsLits [] = []
-wordsLits (c:cs) | isSpace c = wordsLits (dropWhile isSpace cs)
-		 | c == '\'' || c == '"' 
-		     = let (l,rs) = break (==c) cs
-			   rs' = drop 1 rs
-			   in ([c]++l++[c]):wordsLits rs'
-		 | otherwise = let (w,rs) = break isSpace cs
-				   in (c:w):wordsLits rs
 
 -- | Remove single or double quotes around a string
 unquote :: String -> String
@@ -83,7 +72,7 @@ pCommandOpt _ s = (CVoid, noOptions, [AError "no parse"])
 
 pInputString :: String -> [CommandArg]
 pInputString s = case s of
-  ('"':_:_) -> [AString (init (tail s))]
+  ('"':_:_) | last s == '"' -> [AString (read s)]
   _         -> [AError "illegal string"]
 
 -- | command @rl@ can be written @remove_language@ etc.

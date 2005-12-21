@@ -104,7 +104,10 @@ helpMsg = unlines [
   "  -make         batch-compile files",
   "     -noemit      do not emit code when compiling",
   "     -v           be verbose when compiling",
-  "Also all flags for import (i) are interpreted; see 'help i'."
+  "Also all flags for import (i) are interpreted; see 'help import'.",
+  "An example combination of flags is",
+  "  gf -batch -nocpu -s",
+  "which suppresses all messages except the output and fatal errors."
   ]
 
 welcomeMsg = 

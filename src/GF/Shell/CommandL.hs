@@ -25,7 +25,7 @@ import GF.Compile.ShellState
 import GF.Infra.Option
 import GF.UseGrammar.Session
 import GF.Shell.Commands
-import GF.Shell.PShell (wordsLits)
+import GF.UseGrammar.Tokenize (wordsLits)
 
 import Data.Char
 import Data.List (intersperse)
