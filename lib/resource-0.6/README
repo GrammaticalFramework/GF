@@ -1,5 +1,10 @@
 GF Resource grammar library, v. 0.6.
 
+VERSION NOTICE: This library is replaced by v. 0.9 
+(directory ../resource). It will be gradually replaced
+by v. 1.0 (directory ../resource-1.0). However, v. 0.6
+is the only version currently supporting German. 
+
 To precompile a test suite:
 
   gf <mkTest.gfs
