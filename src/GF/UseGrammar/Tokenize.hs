@@ -22,7 +22,8 @@ module GF.UseGrammar.Tokenize ( tokWords,
 		  lexText,
 		  lexC2M, lexC2M',
 		  lexTextLiteral,
-                  lexIgnore
+                  lexIgnore,
+                  wordsLits
 		) where
 
 import GF.Data.Operations
@@ -39,7 +40,7 @@ tokWords :: String -> [CFTok]
 tokWords = map tS . words
 
 tokLits :: String -> [CFTok]
-tokLits = map mkCFTok . mergeStr . words where
+tokLits = map mkCFTok . mergeStr . wordsLits where
   mergeStr ss = case ss of
     w@(c:cs):rest | elem c "\'\"" && c /= last w -> getStr [w] rest
     w      :rest                  -> w : mergeStr rest
@@ -50,7 +51,7 @@ tokLits = map mkCFTok . mergeStr . words where
     [] -> reverse v
 
 tokVars :: String -> [CFTok]
-tokVars = map mkCFTokVar . words
+tokVars = map mkCFTokVar . wordsLits
 
 isFloat s = case s of
   c:cs | isDigit c -> isFloat cs
@@ -208,3 +209,4 @@ lexIgnore isKnown = concatMap mkOne where
     | isKnown s = [t]
     | otherwise = []
   mkOne t       = [t]
+

@@ -217,7 +217,7 @@ instance Print Atom where
   prt (AtC f) = prQIdent f
   prt (AtM i) = prt i
   prt (AtV i) = prt i
-  prt (AtL s) = s
+  prt (AtL s) = prQuotedString s
   prt (AtI i) = show i
   prt (AtF i) = show i
   prt_ (AtC (_,f)) = prt f 
