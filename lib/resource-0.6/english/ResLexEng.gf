@@ -6,6 +6,7 @@ flags startcat=Phr ; lexer=textlit ; parser=chart ; unlexer=text ;
 
 -- a random sample from the lexicon
 
+-- adapted from a word list by Alan Black. Not to be used for military purposes.
 
 lin abandon24 = verb2 "abandon" "" ;
 lin abbreviate25 = vGen "abbreviate" ;
