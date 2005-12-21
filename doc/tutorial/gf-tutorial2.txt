@@ -1835,12 +1835,13 @@ The rest of the modules (black) come from the resource.
 
 ==More concepts of abstract syntax==
 
-
 ===Dependent types===
 
 ===Higher-order abstract syntax===
 
 ===Semantic definitions===
+
+===List categories===
 
 
 
@@ -1951,7 +1952,16 @@ Forthcoming.
 ===Communicating with GF===
 
 Other processes can communicate with the GF command interpreter,
-and also with the GF syntax editor.
+and also with the GF syntax editor. Useful flags when invoking GF are
+- ``-batch`` suppresses the promps and structures the communication with XML tags.
+- ``-s`` suppresses non-output non-error messages and XML tags.
+-- ``-nocpu`` suppresses CPU time indication.
+
+Thus the most silent way to invoke GF is
+```
+  gf -batch -s -nocpu
+```
+
 
 
 ===Embedded grammars in Haskell, Java, and Prolog===
