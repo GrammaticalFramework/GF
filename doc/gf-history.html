@@ -12,14 +12,29 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 </center>
 
+<p>
+
 20/12 (AR) Support for full disjunctive patterns (<tt>P | Q</tt>) i.e.
 not just on top level.
 
 <p>
 
-14/12 (BB,AR) The command <tt>speech_input = si</tt> which creates
+14/12 (BB) The command <tt>si</tt> (<tt>speech_input</tt>) which creates
 a speech recognizer from a grammar for English and admits speech input
-of strings.
+of strings has been added. The command uses an 
+<a href="http://htk.eng.cam.ac.uk/develop/atk.shtml">ATK</a> recognizer and 
+creates a recognition
+network which accepts strings in the currently active grammar.
+In order to use the <tt>si</tt> command, 
+you need to install the 
+<a href="http://www.cs.chalmers.se/~bringert/darcs/atkrec/">atkrec library</a>
+and configure GF with <tt>./configure --with-atk</tt> before compiling. 
+You need to set two environment variables for the <tt>si</tt> command to 
+work. <tt>ATK_HOME</tt> should contain the path to your copy of ATK
+and <tt>GF_ATK_CFG</tt> should contain the path to your GF ATK configuration
+file. A default version of this file can be found in
+ <tt>GF/src/gf_atk.cfg</tt>.
+
 
 <p>
 
