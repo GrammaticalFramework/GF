@@ -18,4 +18,8 @@ import Control.Exception (Exception)
 
 {-# NOINLINE runInterruptibly #-}
 runInterruptibly :: IO a -> IO (Either Exception a)
-runInterruptibly = fmap Right
+--runInterruptibly = fmap Right
+runInterruptibly a = 
+    p `catch` h
+  where p = a >>= \x -> return $! Right $! x
+        h e = return $ Left e
