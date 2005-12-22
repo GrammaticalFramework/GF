@@ -112,8 +112,7 @@ helpMsg = unlines [
 
 welcomeMsg = 
   "Welcome to " ++ authorMsg ++++ 
-  "If the letters ä (a-umlaut) and ö (u-umlaut) look strange" ++
-  "\nin the above message, try 'h -coding'." ++
+  "If ä and ö (umlaut letters) look strange, see 'h -coding'." ++
   "\n\nType 'h' for help, and 'h [Command] for more detailed help."
 
 authorMsg = unlines [
