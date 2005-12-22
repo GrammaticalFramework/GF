@@ -605,4 +605,9 @@ q, quit: q
     -unlexer=concat      remove all spaces
     -unlexer=bind        like identity, but bind at "&+"
 
--- *: Commands and options marked with * are not yet implemented.
+-coding, Some grammars are in UTF-8, some in isolatin-1.
+    If the letters ä (a-umlaut) and ö (u-umlaut) look strange, either
+    change your terminal to isolatin-1, or rewrite the grammar with
+    'pg -utf8'.
+
+-- *: Commands and options marked with * are not currently implemented.

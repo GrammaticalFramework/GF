@@ -111,7 +111,10 @@ helpMsg = unlines [
   ]
 
 welcomeMsg = 
-  "Welcome to " ++ authorMsg ++++ welcomeArch ++ "\n\nType 'h' for help."
+  "Welcome to " ++ authorMsg ++++ 
+  "If the letters ä (a-umlaut) and ö (u-umlaut) look strange" ++
+  "\nin the above message, try 'h -coding'." ++
+  "\n\nType 'h' for help, and 'h [Command] for more detailed help."
 
 authorMsg = unlines [
  "Grammatical Framework, Version " ++ version,

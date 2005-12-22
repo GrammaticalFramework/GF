@@ -561,7 +561,6 @@ txtHelpFile =
   "\n       Each of the flags can have the suffix _subs, which performs" ++
   "\n       common subexpression elimination after the main optimization." ++
   "\n       Thus, -optimize=all_subs is the most aggressive one." ++
-  "\n" ++
   "\n    -optimize=share        share common branches in tables" ++
   "\n    -optimize=parametrize  first try parametrize then do share with the rest" ++
   "\n    -optimize=values       represent tables as courses-of-values" ++
@@ -635,5 +634,10 @@ txtHelpFile =
   "\n    -unlexer=concat      remove all spaces" ++
   "\n    -unlexer=bind        like identity, but bind at \"&+\"" ++
   "\n" ++
-  "\n-- *: Commands and options marked with * are not yet implemented." ++
+  "\n-coding, Some grammars are in UTF-8, some in isolatin-1." ++
+  "\n    If the letters ä (a-umlaut) and ö (u-umlaut) look strange, either" ++
+  "\n    change your terminal to isolatin-1, or rewrite the grammar with" ++
+  "\n    'pg -utf8'." ++
+  "\n" ++
+  "\n-- *: Commands and options marked with * are not currently implemented." ++
   []
