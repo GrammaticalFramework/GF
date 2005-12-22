@@ -210,7 +210,7 @@ optionsOfCommand co = case co of
   CPrintMultiGrammar -> both "utf8 utf8id" "printer"
   CPrintSourceGrammar -> both "utf8" "printer"
 
-  CHelp _ -> opts "all defs filter length lexer unlexer printer transform depth number"
+  CHelp _ -> opts "all alts atoms coding defs filter length lexer unlexer printer probs transform depth number"
 
   CImpure ICEditSession -> both "f" "file"
   CImpure ICTranslateSession -> both "f langs" "cat"
