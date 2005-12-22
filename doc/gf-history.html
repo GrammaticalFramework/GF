@@ -14,7 +14,23 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
-20/12 (AR) Support for full disjunctive patterns (<tt>P | Q</tt>) i.e.
+<hr>
+
+22/12 <b>Release of GF 2.4</b>.
+
+<p>
+
+21/12 (AR) It now works to parse escaped string literals from command
+line, and also string literals with spaces:
+<pre>
+  gf examples/tram0/TramEng.gf
+  > p -lexer=literals "I want to go to \"Gustaf Adolfs torg\" ;"
+  QInput (GoTo (DestNamed "Gustaf Adolfs torg"))
+</pre>
+
+<p>
+
+20/12 (AR) Support for full disjunctive patterns (<tt>P|Q</tt>) i.e.
 not just on top level.
 
 <p>
@@ -258,6 +274,7 @@ statistics of gfc compilation result. To be extended with new information.
 The most important stats now are the top-40 sized definitions.
 
 <p>
+<hr>
 
 1/7 <b>Release of GF 2.3</b>.
 
