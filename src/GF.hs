@@ -113,7 +113,7 @@ helpMsg = unlines [
 welcomeMsg = 
   "Welcome to " ++ authorMsg ++++ 
   "If ä and ö (umlaut letters) look strange, see 'h -coding'." ++
-  "\n\nType 'h' for help, and 'h [Command] for more detailed help."
+  "\n\nType 'h' for help, and 'h [Command] for more detailed help.\n"
 
 authorMsg = unlines [
  "Grammatical Framework, Version " ++ version,
