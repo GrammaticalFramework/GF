@@ -34,10 +34,13 @@ import Data.Char (toUpper,toLower)
 import Data.List
 import Data.Maybe (fromMaybe)
 
+
+
 faGraphvizPrinter :: Ident -- ^ Grammar name
 		   -> Options -> CGrammar -> String
 faGraphvizPrinter name opts cfg = 
-    prFAGraphviz $ mapStates (const "") $ cfgToFA opts cfg
+    prFAGraphviz $ mapStates (const "") fa
+  where fa = cfgToFA opts cfg
 
 
 -- | Convert the grammar to a regular grammar and print it in BNF
