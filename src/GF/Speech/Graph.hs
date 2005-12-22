@@ -13,7 +13,7 @@
 -----------------------------------------------------------------------------
 module GF.Speech.Graph ( Graph(..), Node, Edge, Incoming, Outgoing
                         , newGraph, nodes, edges
-                        , nmap, emap, newNode, newEdge, newEdges
+                        , nmap, emap, newNode, newNodes, newEdge, newEdges
                         , incoming, outgoing, getOutgoing
                         , getFrom, getTo, getLabel
                         , reverseGraph, renameNodes
@@ -51,6 +51,11 @@ emap f (Graph c ns es) = Graph c ns [(x,y,f l) | (x,y,l) <- es]
 
 newNode :: a -> Graph n a b -> (Graph n a b,n)
 newNode l (Graph (c:cs) ns es) = (Graph cs ((c,l):ns) es, c)
+
+newNodes :: [a] -> Graph n a b -> (Graph n a b,[Node n a])
+newNodes ls (Graph cs ns es) = (Graph cs' (ns'++ns) es, ns')
+  where (xs,cs') = splitAt (length ls) cs
+        ns' = zip xs ls
 
 newEdge :: Edge n b -> Graph n a b -> Graph n a b
 newEdge e (Graph c ns es) = Graph c ns (e:es)

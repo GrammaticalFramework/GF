@@ -16,7 +16,8 @@ module GF.Speech.FiniteState (FA, State, NFA, DFA,
 			      states, transitions,
 			      newFA, 
 			      addFinalState,
-			      newState, newTransition,
+			      newState, newStates,
+                              newTransition,
 			      mapStates, mapTransitions,
                               oneFinalState,
 			      moveLabelsToNodes, minimize,
@@ -64,6 +65,10 @@ addFinalState f (FA g s ss) = FA g s (f:ss)
 newState :: a -> FA n a b -> (FA n a b, n)
 newState x (FA g s ss) = (FA g' s ss, n)
     where (g',n) = newNode x g
+
+newStates :: [a] -> FA n a b -> (FA n a b, [(n,a)])
+newStates xs (FA g s ss) = (FA g' s ss, ns)
+    where (g',ns) = newNodes xs g
 
 newTransition :: n -> n -> b -> FA n a b -> FA n a b
 newTransition f t l = onGraph (newEdge (f,t,l))

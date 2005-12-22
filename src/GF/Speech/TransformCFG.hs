@@ -37,6 +37,8 @@ import Control.Monad
 import Data.FiniteMap
 import Data.List
 import Data.Maybe (fromJust, fromMaybe)
+import Data.Set (Set)
+import qualified Data.Set as Set
 
 
 -- | not very nice to replace the structured CFCat type with a simple string
@@ -134,8 +136,8 @@ ruleFun :: CFRule_ -> Fun
 ruleFun (CFRule _ _ n) = name2fun n 
 
 -- | Checks if a symbol is a non-terminal of one of the given categories.
-catElem :: Eq c => Symbol c t -> [c] -> Bool
-catElem s cs = symbol (`elem` cs) (const False) s
+catElem :: Symbol Cat_ t -> Set Cat_ -> Bool
+catElem s cs = symbol (`Set.member` cs) (const False) s
 
 -- | Check if any of the categories used on the right-hand side
 --   are in the given list of categories.
