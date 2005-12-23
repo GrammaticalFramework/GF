@@ -100,10 +100,10 @@ purgeEmpty r = Map.filter (not . Set.null) r
 
 
 -- | Get the equivalence classes from an equivalence relation. 
-equivalenceClasses :: Ord a => Rel a -> [[a]]
+equivalenceClasses :: Ord a => Rel a -> [Set a]
 equivalenceClasses r = equivalenceClasses_ (Map.keys r) r
  where equivalenceClasses_ [] _ = []
-       equivalenceClasses_ (x:xs) r = Set.toList ys:equivalenceClasses_ zs r
+       equivalenceClasses_ (x:xs) r = ys:equivalenceClasses_ zs r
 	   where ys = allRelated r x
                  zs = [x' | x' <- xs, not (x' `Set.member` ys)]
 

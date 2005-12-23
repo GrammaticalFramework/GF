@@ -34,11 +34,6 @@ lookupList a [] = []
 lookupList a (p:ps) | a == fst p = snd p : lookupList a ps
 		    | otherwise  =         lookupList a ps
 
--- | Find the first list in a list of lists
---   which contains the argument.
-findSet :: Eq c => c -> [[c]] -> Maybe [c]
-findSet x = find (x `elem`)
-
 split :: [a] -> ([a], [a])
 split (x : y : as) = (x:xs, y:ys)
     where (xs, ys) = split as
