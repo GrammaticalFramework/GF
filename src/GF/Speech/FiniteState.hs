@@ -25,11 +25,13 @@ module GF.Speech.FiniteState (FA, State, NFA, DFA,
 			      prFAGraphviz) where
 
 import Data.List
-import Data.Maybe (catMaybes,fromJust)
+import Data.Maybe (catMaybes,fromJust,isNothing)
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Set (Set)
 import qualified Data.Set as Set
+
+import qualified Data.Set as StateSet
 
 import GF.Data.Utilities
 import GF.Speech.Graph
@@ -37,7 +39,9 @@ import qualified GF.Visualization.Graphviz as Dot
 
 type State = Int
 
-data FA n a b = FA (Graph n a b) n [n]
+type StateSet = StateSet.Set State
+
+data FA n a b = FA !(Graph n a b) !n ![n]
 
 type NFA a = FA State () (Maybe a)
 
@@ -87,6 +91,7 @@ minimize = determinize . reverseNFA . dfa2nfa . determinize . reverseNFA
 onGraph :: (Graph n a b -> Graph n c d) -> FA n a b -> FA n c d
 onGraph f (FA g s ss) = FA (f g) s ss
 
+
 -- | Make the finite automaton have a single final state
 --   by adding a new final state and adding an edge
 --   from the old final states to the new state.
@@ -133,21 +138,28 @@ alphabet :: Eq b => Graph n a (Maybe b) -> [b]
 alphabet = nub . catMaybes . map getLabel . edges
 
 determinize :: Ord a => NFA a -> DFA a
-determinize (FA g s f) = let (ns,es) = h [start] [] []
-                             final = filter isDFAFinal ns
-                             fa = FA (Graph undefined [(n,()) | n <- ns] es) start final
+determinize (FA g s f) = let (ns,es) = h (Set.singleton start) Set.empty Set.empty
+                             (ns',es') = (Set.toList ns, Set.toList es)
+                             final = filter isDFAFinal ns'
+                             fa = FA (Graph undefined [(n,()) | n <- ns'] es') start final
  		          in numberStates fa
   where out = outgoing g
-	start = closure out $ Set.singleton s
-        isDFAFinal n = not (Set.null (Set.fromList f `Set.intersection` n))
-	h currentStates oldStates oldEdges 
-	    | null currentStates = (oldStates,oldEdges)
-	    | otherwise = h uniqueNewStates allOldStates (newEdges++oldEdges)
+	start = closure out $ StateSet.singleton s
+        isDFAFinal n = not (StateSet.null (StateSet.fromList f `StateSet.intersection` n))
+	h currentStates oldStates es
+	    | Set.null currentStates = (oldStates,es)
+	    | otherwise = h uniqueNewStates allOldStates es'
 	    where 
-	    allOldStates = currentStates ++ oldStates
-            (newStates,newEdges) 
-                = unzip [ (s, (n,s,c)) | n <- currentStates, (c,s) <- reachable out n]
-	    uniqueNewStates = nub newStates \\ allOldStates
+	    allOldStates = oldStates `Set.union` currentStates
+            (newStates,es') = new (Set.toList currentStates) Set.empty es
+	    uniqueNewStates = newStates Set.\\ allOldStates
+        -- Get the sets of states reachable from the given states 
+        -- by consuming one symbol, and the associated edges.
+        new [] rs es = (rs,es)
+        new (n:ns) rs es = new ns rs' es'
+          where cs = reachable out n
+                rs' = rs `Set.union` Set.fromList (map snd cs)
+                es' = es `Set.union` Set.fromList [(n,s,c) | (c,s) <- cs]
 
 numberStates :: (Ord x,Enum y) => FA x a b -> FA y a b
 numberStates (FA g s fs) = FA (renameNodes newName rest g) s' fs'
@@ -158,21 +170,22 @@ numberStates (FA g s fs) = FA (renameNodes newName rest g) s' fs'
           fs' = map newName fs
 
 -- | Get all the nodes reachable from a list of nodes by only empty edges.
-closure :: Ord n => Outgoing n a (Maybe b) -> Set n -> Set n
+closure :: Outgoing State a (Maybe b) -> StateSet -> StateSet
 closure out x = closure_ x x
-  where closure_ acc check | Set.null check = acc
+  where closure_ acc check | StateSet.null check = acc
                            | otherwise = closure_ acc' check'
             where
-            reach = Set.fromList [y | x <- Set.toList check, 
+            reach = StateSet.fromList [y | x <- StateSet.toList check, 
                                       (_,y,Nothing) <- getOutgoing out x]
-            acc' = acc `Set.union` reach
-            check' = reach Set.\\ acc
+            acc' = acc `StateSet.union` reach
+            check' = reach StateSet.\\ acc
 
 -- | Get a map of labels to sets of all nodes reachable 
 --   from a the set of nodes by one edge with the given 
 --   label and then any number of empty edges.
-reachable :: (Ord n, Ord b) => Outgoing n a (Maybe b) -> Set n -> [(b,Set n)]
-reachable out ns = Map.toList $ Map.map (closure out . Set.fromList) $ Map.fromListWith (++) [(c,[y]) | n <- Set.toList ns, (_,y,Just c) <- getOutgoing out n]
+reachable :: Ord b => Outgoing State a (Maybe b) -> StateSet -> [(b,StateSet)]
+reachable out ns = Map.toList $ Map.map (closure out . StateSet.fromList) $ reachable1 out ns
+reachable1 out ns = Map.fromListWith (++) [(c, [y]) | n <- StateSet.toList ns, (_,y,Just c) <- getOutgoing out n]
 
 reverseNFA :: NFA a -> NFA a
 reverseNFA (FA g s fs) = FA g''' s' [s]

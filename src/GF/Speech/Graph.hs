@@ -27,7 +27,7 @@ import Data.List
 import Data.Map (Map)
 import qualified Data.Map as Map
 
-data Graph n a b = Graph [n] [Node n a] [Edge n b]
+data Graph n a b = Graph [n] ![Node n a] ![Edge n b]
 		 deriving (Eq,Show)
 
 type Node n a = (n,a)
@@ -45,7 +45,7 @@ nodes (Graph _ ns _) = ns
 edges :: Graph n a b -> [Edge n b]
 edges (Graph _ _ es) = es
 
--- | Map a function over the node label.s
+-- | Map a function over the node labels.
 nmap :: (a -> c) -> Graph n a b -> Graph n c b
 nmap f (Graph c ns es) = Graph c [(n,f l) | (n,l) <- ns] es
 
@@ -57,15 +57,20 @@ newNode :: a -> Graph n a b -> (Graph n a b,n)
 newNode l (Graph (c:cs) ns es) = (Graph cs ((c,l):ns) es, c)
 
 newNodes :: [a] -> Graph n a b -> (Graph n a b,[Node n a])
-newNodes ls (Graph cs ns es) = (Graph cs' (ns'++ns) es, ns')
-  where (xs,cs') = splitAt (length ls) cs
-        ns' = zip xs ls
+newNodes ls g = (g', zip ns ls)
+  where (g',ns) = mapAccumL (flip newNode) g ls
+-- lazy version:
+--newNodes ls (Graph cs ns es) = (Graph cs' (ns'++ns) es, ns')
+--  where (xs,cs') = splitAt (length ls) cs
+--        ns' = zip xs ls
 
 newEdge :: Edge n b -> Graph n a b -> Graph n a b
 newEdge e (Graph c ns es) = Graph c ns (e:es)
 
 newEdges :: [Edge n b] -> Graph n a b -> Graph n a b
-newEdges es' (Graph c ns es) = Graph c ns (es'++es)
+newEdges es g = foldl' (flip newEdge) g es
+-- lazy version:
+-- newEdges es' (Graph c ns es) = Graph c ns (es'++es)
 
 -- | Get a map of nodes and their incoming edges.
 incoming :: Ord n => Graph n a b -> Incoming n a b
@@ -84,7 +89,7 @@ getOutgoing out x = maybe [] snd (Map.lookup x out)
 
 groupEdgesBy :: (Ord n) => (Edge n b -> n) -> Graph n a b -> Map n (a,[Edge n b])
 groupEdgesBy f (Graph _ ns es) = 
-    foldl (\m e -> Map.adjust (\ (x,el) -> (x,e:el)) (f e) m) nm es
+    foldl' (\m e -> Map.adjust (\ (x,el) -> (x,e:el)) (f e) m) nm es
   where nm = Map.fromList [ (n, (x,[])) | (n,x) <- ns ]
 
 getFrom :: Edge n b -> n
@@ -100,11 +105,16 @@ reverseGraph :: Graph n a b -> Graph n a b
 reverseGraph (Graph c ns es) = Graph c ns [ (t,f,l) | (f,t,l) <- es ]
 
 
--- | Re-name the nodes in the graph.
+-- | Rename the nodes in the graph.
 renameNodes :: (n -> m) -- ^ renaming function
             -> [m] -- ^ infinite supply of fresh node names, to
                    --   use when adding nodes in the future.
             -> Graph n a b -> Graph m a b
 renameNodes newName c (Graph _ ns es) = Graph c ns' es'
-    where ns' = [ (newName n,x) | (n,x) <- ns ]
-	  es' = [ (newName f, newName t, l) | (f,t,l) <- es]
+    where ns' = map' (\ (n,x) -> (newName n,x)) ns
+	  es' = map' (\ (f,t,l) -> (newName f, newName t, l)) es
+
+-- | A strict 'map'
+map' :: (a -> b) -> [a] -> [b]
+map' _ [] = []
+map' f (x:xs) = ((:) $! f x) $! map' f xs
