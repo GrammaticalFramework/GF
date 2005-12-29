@@ -28,6 +28,8 @@ import Data.List
 import Data.Maybe (catMaybes,fromJust)
 import Data.Map (Map)
 import qualified Data.Map as Map
+import Data.Set (Set)
+import qualified Data.Set as Set
 
 import GF.Data.Utilities
 import GF.Speech.Graph
@@ -132,20 +134,20 @@ alphabet = nub . catMaybes . map getLabel . edges
 
 determinize :: Ord a => NFA a -> DFA a
 determinize (FA g s f) = let (ns,es) = h [start] [] []
-                             final = filter (not . null . (f `intersect`)) ns
+                             final = filter isDFAFinal ns
                              fa = FA (Graph undefined [(n,()) | n <- ns] es) start final
  		          in numberStates fa
   where out = outgoing g
-	start = closure out [s]
-	isDFAFinal n = not (null (f `intersect` n))
-	-- Get the new DFA states and edges produced by a set of DFA states.
-	new ns = unzip [ (s, (n,s,c)) | n <- ns, (c,s) <- reachable out n]
+	start = closure out $ Set.singleton s
+        isDFAFinal n = not (Set.null (Set.fromList f `Set.intersection` n))
 	h currentStates oldStates oldEdges 
 	    | null currentStates = (oldStates,oldEdges)
-	    | otherwise = h newStates' allOldStates (newEdges++oldEdges)
-	    where (newStates,newEdges) = new currentStates
-		  allOldStates = currentStates ++ oldStates
-		  newStates' = nub newStates \\ allOldStates
+	    | otherwise = h uniqueNewStates allOldStates (newEdges++oldEdges)
+	    where 
+	    allOldStates = currentStates ++ oldStates
+            (newStates,newEdges) 
+                = unzip [ (s, (n,s,c)) | n <- currentStates, (c,s) <- reachable out n]
+	    uniqueNewStates = nub newStates \\ allOldStates
 
 numberStates :: (Ord x,Enum y) => FA x a b -> FA y a b
 numberStates (FA g s fs) = FA (renameNodes newName rest g) s' fs'
@@ -155,16 +157,17 @@ numberStates (FA g s fs) = FA (renameNodes newName rest g) s' fs'
           s' = newName s
           fs' = map newName fs
 
--- | Get all the nodes reachable from a set of nodes by only empty edges.
-closure :: Ord n => Outgoing n a (Maybe b) -> [n] -> [n]
+-- | Get all the nodes reachable from a list of nodes by only empty edges.
+closure :: Ord n => Outgoing n a (Maybe b) -> Set n -> Set n
 closure out = fix closure_
-    where closure_ r = r `union` [y | x <- r, (_,y,Nothing) <- getOutgoing out x]
+    where closure_ r = inserts [y | x <- Set.toList r, (_,y,Nothing) <- getOutgoing out x] r
+          inserts xs s = foldl (flip Set.insert) s xs
 
--- | Get a map which maps labels to a sort list of all nodes reachable 
---   from a given set of nodes by one edge with the given 
+-- | Get a map of labels to sets of all nodes reachable 
+--   from a the set of nodes by one edge with the given 
 --   label and then any number of empty edges.
-reachable :: (Ord n, Ord b) => Outgoing n a (Maybe b) -> [n] -> [(b,[n])]
-reachable out ns = Map.toList $ Map.map (sort . closure out) $ Map.fromListWith union [(c,[y]) | n <- ns, (_,y,Just c) <- getOutgoing out n]
+reachable :: (Ord n, Ord b) => Outgoing n a (Maybe b) -> Set n -> [(b,Set n)]
+reachable out ns = Map.toList $ Map.map (closure out . Set.fromList) $ Map.fromListWith (++) [(c,[y]) | n <- Set.toList ns, (_,y,Just c) <- getOutgoing out n]
 
 reverseNFA :: NFA a -> NFA a
 reverseNFA (FA g s fs) = FA g''' s' [s]
