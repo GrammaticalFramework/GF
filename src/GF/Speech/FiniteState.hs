@@ -152,16 +152,21 @@ determinize (FA g s f) = let (ns,es) = h [start] [] []
 numberStates :: (Ord x,Enum y) => FA x a b -> FA y a b
 numberStates (FA g s fs) = FA (renameNodes newName rest g) s' fs'
     where (ns,rest) = splitAt (length (nodes g)) $ [toEnum 0 .. ]
-          newNodes = zip (map fst (nodes g)) ns
-	  newName n = lookup' n newNodes
+          newNodes = Map.fromList (zip (map fst (nodes g)) ns)
+	  newName n = Map.findWithDefault (error "FiniteState.newName") n newNodes
           s' = newName s
           fs' = map newName fs
 
 -- | Get all the nodes reachable from a list of nodes by only empty edges.
 closure :: Ord n => Outgoing n a (Maybe b) -> Set n -> Set n
-closure out = fix closure_
-    where closure_ r = inserts [y | x <- Set.toList r, (_,y,Nothing) <- getOutgoing out x] r
-          inserts xs s = foldl (flip Set.insert) s xs
+closure out x = closure_ x x
+  where closure_ acc check | Set.null check = acc
+                           | otherwise = closure_ acc' check'
+            where
+            reach = Set.fromList [y | x <- Set.toList check, 
+                                      (_,y,Nothing) <- getOutgoing out x]
+            acc' = acc `Set.union` reach
+            check' = reach Set.\\ acc
 
 -- | Get a map of labels to sets of all nodes reachable 
 --   from a the set of nodes by one edge with the given 
