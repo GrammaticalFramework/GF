@@ -25,21 +25,17 @@ module GF.Speech.FiniteState (FA, State, NFA, DFA,
 			      prFAGraphviz) where
 
 import Data.List
-import Data.Maybe (catMaybes,fromJust,isNothing)
+import Data.Maybe 
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Set (Set)
 import qualified Data.Set as Set
-
-import qualified Data.Set as StateSet
 
 import GF.Data.Utilities
 import GF.Speech.Graph
 import qualified GF.Visualization.Graphviz as Dot
 
 type State = Int
-
-type StateSet = StateSet.Set State
 
 data FA n a b = FA !(Graph n a b) !n ![n]
 
@@ -144,11 +140,12 @@ determinize (FA g s f) = let (ns,es) = h (Set.singleton start) Set.empty Set.emp
                              fa = FA (Graph undefined [(n,()) | n <- ns'] es') start final
  		          in numberStates fa
   where out = outgoing g
-	start = closure out $ StateSet.singleton s
-        isDFAFinal n = not (StateSet.null (StateSet.fromList f `StateSet.intersection` n))
+--        reach = nodesReachable out
+	start = closure out $ Set.singleton s
+        isDFAFinal n = not (Set.null (Set.fromList f `Set.intersection` n))
 	h currentStates oldStates es
 	    | Set.null currentStates = (oldStates,es)
-	    | otherwise = h uniqueNewStates allOldStates es'
+	    | otherwise = ((h $! uniqueNewStates) $! allOldStates) $! es'
 	    where 
 	    allOldStates = oldStates `Set.union` currentStates
             (newStates,es') = new (Set.toList currentStates) Set.empty es
@@ -157,7 +154,7 @@ determinize (FA g s f) = let (ns,es) = h (Set.singleton start) Set.empty Set.emp
         -- by consuming one symbol, and the associated edges.
         new [] rs es = (rs,es)
         new (n:ns) rs es = new ns rs' es'
-          where cs = reachable out n
+          where cs = reachable out n --reachable reach n
                 rs' = rs `Set.union` Set.fromList (map snd cs)
                 es' = es `Set.union` Set.fromList [(n,s,c) | (c,s) <- cs]
 
@@ -170,22 +167,37 @@ numberStates (FA g s fs) = FA (renameNodes newName rest g) s' fs'
           fs' = map newName fs
 
 -- | Get all the nodes reachable from a list of nodes by only empty edges.
-closure :: Outgoing State a (Maybe b) -> StateSet -> StateSet
+closure :: Ord n => Outgoing n a (Maybe b) -> Set n -> Set n
 closure out x = closure_ x x
-  where closure_ acc check | StateSet.null check = acc
+  where closure_ acc check | Set.null check = acc
                            | otherwise = closure_ acc' check'
             where
-            reach = StateSet.fromList [y | x <- StateSet.toList check, 
+            reach = Set.fromList [y | x <- Set.toList check, 
                                       (_,y,Nothing) <- getOutgoing out x]
-            acc' = acc `StateSet.union` reach
-            check' = reach StateSet.\\ acc
+            acc' = acc `Set.union` reach
+            check' = reach Set.\\ acc
 
--- | Get a map of labels to sets of all nodes reachable 
---   from a the set of nodes by one edge with the given 
+-- | Get a map of labels to sets of all nodes reachable
+--   from a the set of nodes by one edge with the given
 --   label and then any number of empty edges.
-reachable :: Ord b => Outgoing State a (Maybe b) -> StateSet -> [(b,StateSet)]
-reachable out ns = Map.toList $ Map.map (closure out . StateSet.fromList) $ reachable1 out ns
-reachable1 out ns = Map.fromListWith (++) [(c, [y]) | n <- StateSet.toList ns, (_,y,Just c) <- getOutgoing out n]
+reachable :: (Ord n,Ord b) => Outgoing n a (Maybe b) -> Set n -> [(b,Set n)]
+reachable out ns = Map.toList $ Map.map (closure out . Set.fromList) $ reachable1 out ns
+reachable1 out ns = Map.fromListWith (++) [(c, [y]) | n <- Set.toList ns, (_,y,Just c) <- getOutgoing out n]
+
+
+{-
+-- Alternative implementation of reachable, seems to use too much memory.
+
+type Reachable n b = Map n (Map b (Set n))
+
+reachable :: (Ord n, Ord b) => Reachable n b -> Set n -> [(b,Set n)]
+reachable r ns = Map.toList $ Map.unionsWith Set.union $ lookups (Set.toList ns) r
+
+nodesReachable :: (Ord n, Ord b) => Outgoing n a (Maybe b) -> Reachable n b
+nodesReachable out = Map.map (f . snd) out
+  where f = Map.map (closure out . Set.fromList) . edgesByLabel
+        edgesByLabel es = Map.fromListWith (++) [(c,[y]) | (_,y,Just c) <- es]
+-}
 
 reverseNFA :: NFA a -> NFA a
 reverseNFA (FA g s fs) = FA g''' s' [s]
@@ -214,3 +226,9 @@ toGraphviz (FA (Graph _ ns es) s f) = Dot.Graph Dot.Directed [] (map mkNode ns) 
 			   ++ if n `elem` f then [("style","bold")] else []
 	 mkEdge (x,y,l) = Dot.Edge (show x) (show y) [("label",l)]
 
+--
+-- * Utilities
+--
+
+lookups :: Ord k => [k] -> Map k a -> [a]
+lookups xs m = mapMaybe (flip Map.lookup m) xs
