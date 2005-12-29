@@ -103,7 +103,7 @@ oneFinalState nl el fa =
 moveLabelsToNodes :: (Ord n,Eq a) => FA n () (Maybe a) -> FA n (Maybe a) ()
 moveLabelsToNodes = removeTrivialEmptyNodes . onGraph f
   where f gr@(Graph c _ _) = Graph c' ns (concat ess)
-	    where is = incoming gr
+	    where is = incomingToList $ incoming gr
 		  (c',is') = mapAccumL fixIncoming c is
 		  (ns,ess) = unzip (concat is')
 
@@ -112,7 +112,7 @@ moveLabelsToNodes = removeTrivialEmptyNodes . onGraph f
 removeTrivialEmptyNodes :: FA n (Maybe a) () -> FA n (Maybe a) ()
 removeTrivialEmptyNodes = id -- FIXME: implement
 
-fixIncoming :: (Eq n, Eq a) => [n] -> (Node n (),[Edge n (Maybe a)]) -> ([n],[(Node n (Maybe a),[Edge n ()])])
+fixIncoming :: (Ord n, Eq a) => [n] -> (Node n (),[Edge n (Maybe a)]) -> ([n],[(Node n (Maybe a),[Edge n ()])])
 fixIncoming cs c@((n,()),es) = (cs'', ((n,Nothing),es'):newContexts)
   where ls = nub $ map getLabel es
 	(cs',cs'') = splitAt (length ls) cs
@@ -156,7 +156,7 @@ numberStates (FA g s fs) = FA (renameNodes newName rest g) s' fs'
           fs' = map newName fs
 
 -- | Get all the nodes reachable from a set of nodes by only empty edges.
-closure :: Eq n => Outgoing n a (Maybe b) -> [n] -> [n]
+closure :: Ord n => Outgoing n a (Maybe b) -> [n] -> [n]
 closure out = fix closure_
     where closure_ r = r `union` [y | x <- r, (_,y,Nothing) <- getOutgoing out x]
 
