@@ -110,7 +110,7 @@ mutRecSets g = Map.fromList . concatMap mkMutRecSet
 make_fa :: (CFRules,MutRecSets) -> State -> [Symbol Cat_ Token] -> State 
           -> NFA Token -> NFA Token
 make_fa c@(g,ns) q0 alpha q1 fa = 
-     case alpha of
+   case alpha of
         []       -> newTransition q0 q1 Nothing fa
         [Tok t]  -> newTransition q0 q1 (Just t) fa
         [Cat a]  -> case Map.lookup a ns of
@@ -119,16 +119,15 @@ make_fa c@(g,ns) q0 alpha q1 fa =
                               if mrIsRightRec n
                                then
                                 -- the set Ni is right-recursive or cyclic
-                                let fa''  = foldl (\ f (CFRule c xs _) -> make_fa_ (getState c) xs q1 f) fa' nrs
-                                    fa''' = foldl (\ f (CFRule c ss _) -> 
-                                                       let (xs,Cat d) = (init ss,last ss)
-                                                        in make_fa_ (getState c) xs (getState d) f) fa'' rs
-                                 in newTransition q0 (getState a) Nothing fa'''
+                                let new = [(getState c, xs, q1) | CFRule c xs _ <- nrs]
+                                          ++ [(getState c, xs, getState d) | CFRule c ss _ <- rs, 
+                                                                             let (xs,Cat d) = (init ss,last ss)]
+                                 in make_fas new $ newTransition q0 (getState a) Nothing fa'
                                else
                                 -- the set Ni is left-recursive
-                                let fa'' = foldl (\f (CFRule c xs _) -> make_fa_ q0 xs (getState c) f) fa' nrs
-                                    fa''' = foldl (\f (CFRule c (Cat d:xs) _) -> make_fa_ (getState d) xs (getState c) f) fa'' rs
-                                in newTransition (getState a) q1 Nothing fa'''
+                                let new = [(q0, xs, getState c) | CFRule c xs _ <- nrs]
+                                          ++ [(getState d, xs, getState c) | CFRule c (Cat d:xs) _ <- rs]
+                                 in make_fas new $ newTransition (getState a) q1 Nothing fa'
                           where
                           (fa',stateMap) = addStatesForCats ni fa
                           getState x = Map.findWithDefault 
@@ -136,11 +135,13 @@ make_fa c@(g,ns) q0 alpha q1 fa =
                                        x stateMap
                         -- a is not recursive
                         Nothing -> let rs = catRules g a
-                                    in foldl (\fa -> \ (CFRule _ b _) -> make_fa_ q0 b q1 fa) fa rs
+                                    in foldl' (\f (CFRule _ b _) -> make_fa_ q0 b q1 f) fa rs
         (x:beta) -> let (fa',q) = newState () fa
-                     in make_fa_ q beta q1 $! make_fa_ q0 [x] q fa'
+                     in make_fa_ q beta q1 $ make_fa_ q0 [x] q fa'
   where
   make_fa_ = make_fa c
+  make_fas xs fa = foldl' (\f' (s1,xs,s2) -> make_fa_ s1 xs s2 f') fa xs
+
 
 addStatesForCats :: [Cat_] -> NFA Token -> (NFA Token, Map Cat_ State)
 addStatesForCats cs fa = (fa', m)
