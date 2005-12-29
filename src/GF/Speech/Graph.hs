@@ -14,7 +14,8 @@
 module GF.Speech.Graph ( Graph(..), Node, Edge, Incoming, Outgoing
                         , newGraph, nodes, edges
                         , nmap, emap, newNode, newNodes, newEdge, newEdges
-                        , incoming, outgoing, getOutgoing
+                        , incoming, incomingToList
+                        , outgoing, getOutgoing
                         , getFrom, getTo, getLabel
                         , reverseGraph, renameNodes
                        ) where
@@ -23,14 +24,17 @@ import GF.Data.Utilities
 
 import Data.List
 
+import Data.Map (Map)
+import qualified Data.Map as Map
+
 data Graph n a b = Graph [n] [Node n a] [Edge n b]
 		 deriving (Eq,Show)
 
 type Node n a = (n,a)
 type Edge n b = (n,n,b)
 
-type Incoming n a b = [(Node n a,[Edge n b])]
-type Outgoing n a b = [(Node n a,[Edge n b])]
+type Incoming n a b = Map n (a, [Edge n b])
+type Outgoing n a b = Map n (a, [Edge n b])
 
 newGraph :: [n] -> Graph n a b
 newGraph ns = Graph ns [] []
@@ -63,23 +67,25 @@ newEdge e (Graph c ns es) = Graph c ns (e:es)
 newEdges :: [Edge n b] -> Graph n a b -> Graph n a b
 newEdges es' (Graph c ns es) = Graph c ns (es'++es)
 
--- | Get a list of all nodes and their incoming edges.
+-- | Get a map of nodes and their incoming edges.
 incoming :: Ord n => Graph n a b -> Incoming n a b
 incoming = groupEdgesBy getTo
 
--- | Get a list of all nodes and their outgoing edges.
+incomingToList :: Incoming n a b -> [(Node n a, [Edge n b])]
+incomingToList out = [ ((n,x),es) | (n,(x,es)) <- Map.toList out ]
+
+-- | Get a map of nodes and their outgoing edges.
 outgoing :: Ord n => Graph n a b -> Outgoing n a b
 outgoing = groupEdgesBy getFrom
 
--- | From a list of outgoing edges, get all edges
---   starting at a given node.
-getOutgoing :: Eq n => Outgoing n a b -> n -> [Edge n b]
-getOutgoing out x = head [ es | ((y,_),es) <- out, x == y ]
+-- | Get all edges starting at a given node.
+getOutgoing :: Ord n => Outgoing n a b -> n -> [Edge n b]
+getOutgoing out x = maybe [] snd (Map.lookup x out)
 
-groupEdgesBy :: (Ord n) => (Edge n b -> n) -> Graph n a b -> [(Node n a,[Edge n b])]
-groupEdgesBy h (Graph _ ns es) = 
-    snd $ mapAccumL f (sortBy (compareBy h) es) (sortBy (compareBy fst) ns)
-  where f es' v@(n,_) = let (nes,es'') = span ((==n) . h) es' in (es'',(v,nes))
+groupEdgesBy :: (Ord n) => (Edge n b -> n) -> Graph n a b -> Map n (a,[Edge n b])
+groupEdgesBy f (Graph _ ns es) = 
+    foldl (\m e -> Map.adjust (\ (x,el) -> (x,e:el)) (f e) m) nm es
+  where nm = Map.fromList [ (n, (x,[])) | (n,x) <- ns ]
 
 getFrom :: Edge n b -> n
 getFrom (f,_,_) = f
