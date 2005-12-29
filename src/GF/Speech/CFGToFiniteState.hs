@@ -130,8 +130,10 @@ make_fa c@(g,ns) q0 alpha q1 fa =
                                     fa''' = foldl (\f (CFRule c (Cat d:xs) _) -> make_fa_ (getState d) xs (getState c) f) fa'' rs
                                 in newTransition (getState a) q1 Nothing fa'''
                           where
-                          (fa',ss) = addStatesForCats ni fa
-                          getState x = lookup' x ss
+                          (fa',stateMap) = addStatesForCats ni fa
+                          getState x = Map.findWithDefault 
+                                       (error $ "CFGToFiniteState: No state for " ++ x) 
+                                       x stateMap
                         -- a is not recursive
                         Nothing -> let rs = catRules g a
                                     in foldl (\fa -> \ (CFRule _ b _) -> make_fa_ q0 b q1 fa) fa rs
@@ -140,9 +142,10 @@ make_fa c@(g,ns) q0 alpha q1 fa =
   where
   make_fa_ = make_fa c
 
-addStatesForCats :: [Cat_] -> NFA Token -> (NFA Token, [(Cat_,State)])
-addStatesForCats cs fa = (fa', zip cs (map fst ns))
+addStatesForCats :: [Cat_] -> NFA Token -> (NFA Token, Map Cat_ State)
+addStatesForCats cs fa = (fa', m)
   where (fa', ns) = newStates (replicate (length cs) ()) fa
+        m = Map.fromList (zip cs (map fst ns))
 
 ruleIsNonRecursive :: Set Cat_ -> CFRule_ -> Bool
 ruleIsNonRecursive cs = noCatsInSet cs . ruleRhs
