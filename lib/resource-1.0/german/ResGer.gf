@@ -48,23 +48,133 @@ resource ResGer = ParamGer ** open Prelude in {
 -- we need just two or four forms.
 
   mkNoun4 : (x1,_,_,x4 : Str) -> Gender -> Noun = \wein,weines,weine,weinen ->
-      mkNoun wein wein wein weines weine weinen ;
+    mkNoun wein wein wein weines weine weinen ;
 
   mkNoun2 : (x1,x2 : Str) -> Gender -> Noun = \frau,frauen ->
-      mkNoun frau frau frau frau frauen frauen ;
+    mkNoun4 frau frau frauen frauen ;
+
+-- Adjectives need four forms: two for the positive and one for the other degrees.
+
+  Adjective : Type = {s : Degree => AForm => Str} ;
+
+  mkAdjective : (x1,_,_,x4 : Str) -> Adjective = \gut,gute,besser,best -> 
+    {s = table {
+       Posit  => adjForms gut gute ; 
+       Compar => adjForms besser besser ; 
+       Superl => adjForms best best
+       }
+    } ;
+
+  regAdjective : Str -> Adjective = \blau ->
+    mkAdjective blau blau (blau + "er") (blau + "est") ;
+
+-- This auxiliary gives the forms in each degree. 
+
+  adjForms : (x1,x2 : Str) -> AForm => Str = \teuer,teur ->
+   table {
+    APred => teuer ;
+    AMod Strong (GSg Masc) c => 
+      caselist (teur+"er") (teur+"en") (teur+"em") (teur+"es") ! c ;
+    AMod Strong (GSg Fem) c => 
+      caselist (teur+"e") (teur+"e") (teur+"er") (teur+"er") ! c ;
+    AMod Strong (GSg Neut) c => 
+      caselist (teur+"es") (teur+"es") (teur+"em") (teur+"es") ! c ;
+    AMod Strong GPl c => 
+      caselist (teur+"e") (teur+"e") (teur+"en") (teur+"er") ! c ;
+    AMod Weak (GSg g) c => case <g,c> of {
+      <_,Nom>    => teur+"e" ;
+      <Masc,Acc> => teur+"en" ;
+      <_,Acc>    => teur+"e" ;
+      _          => teur+"en" } ;
+    AMod Weak GPl c => teur+"en"
+    } ;
+
+  Verb : Type = {s : VForm => Str} ;
+
+  mkVerb : (x1,_,_,_,_,x6 : Str) -> Verb = \geben,gibt,gib,gab,gaebe,gegeben -> 
+    let
+      ifSibilant : Str -> Str -> Str -> Str = \u,b1,b2 -> 
+        case u of {
+          "s" => b1 ;
+          "x" => b1 ;
+          "z" => b1 ;
+          "ß" => b1 ;
+          _   => b2 
+          } ; 
+      en = Predef.dp 2 geben ;
+      geb = case Predef.tk 1 en of {
+        "e" => Predef.tk 2 geben ;
+         _  => Predef.tk 1 geben
+         } ;
+      gebt = geb + (adde geb) + "t" ;
+      gebte = ifTok Tok (Predef.dp 1 gab) "e" gab (gab + "e") ;
+      gibst = ifSibilant (Predef.dp 1 gib) (gib + "t") (gib + "st") ;
+      gegebener = (regAdjective gegeben).s ;
+    in {s = table {
+       VInf       => geben ;
+       VInd Sg P1 => geb + "e" ;
+       VInd Sg P2 => gibst ;
+       VInd Sg P3 => gibt ;
+       VInd Pl P2 => gebt ;
+       VInd Pl _  => geben ; -- the famous law
+       VImp Sg    => gib + (impe gib) ;
+       VImp Pl    => gebt ;
+       VSubj Sg P1 => geb + "e" ;
+       VSubj Sg P2 => geb + "est" ;
+       VSubj Sg P3 => geb + "e" ;
+       VSubj Pl P2 => geb + "et" ;
+       VSubj Pl _  => geben ;
+       VPresPart a => (regAdjective (geben + "d")).s ! a ;
+
+       VImpfInd Sg P1 => gab ;
+       VImpfInd Sg P2 => gab + (adde gab) + "st" ;
+       VImpfInd Sg P3 => gab ;
+       VImpfInd Pl P2 => gab + (adde gab) + "t" ;
+       VImpfInd Pl _  => gebte + "n" ;
+
+       VImpfSubj Sg P1 => gaebe ;
+       VImpfSubj Sg P2 => gaebe + "st" ;
+       VImpfSubj Sg P3 => gaebe ;
+       VImpfSubj Pl P2 => gaebe + "t" ;
+       VImpfSubj Pl _  => gaebe + "n" ;
+
+       VPart a    => gegebener ! a
+       }
+     } ;
+ 
+-- Weak verbs:
+  regVerb : Str -> Verb = \legen ->
+    let 
+       leg = Predef.tk 2 legen ;
+       legte = leg + "te" ;
+    in
+       mkVerb legen (leg+(adde leg)+"t") leg legte legte ("ge"+leg+"t") ;
 
 
---
---    mkAdjective : (_,_,_,_ : Str) -> {s : AForm => Str} = 
---      \good,better,best,well -> {
---      s = table {
---        AAdj Posit  => good ;
---        AAdj Compar => better ;
---        AAdj Superl => best ;
---        AAdv        => well
---        }
---      } ;
---
+  adde : Str -> Str = \stem ->
+   let
+     eVowelorLiquid : Str -> Str = \u -> 
+      case u of {
+        "l" | "r" | "a" | "o" | "u" | "e" | "i" | "ü" | "ä" | "ö" => "e" ;
+        _   => [] 
+        } ;   
+
+     eConsonantmn : Str -> Str -> Str = \nl,l -> 
+      case l of {
+        "m" | "n" => eVowelorLiquid nl ;
+        _ => []
+        } ;
+ 
+     nl = init (Predef.dp 2 stem) ;
+     l  = last stem ;
+     e  = case l of {
+           "d" | t => "e" ;
+           _ => eConsonantmn nl l
+           } ;
+   in 
+     e ;
+
+
 --    mkVerb : (_,_,_,_,_ : Str) -> {s : VForm => Str} = 
 --      \go,goes,went,gone,going -> {
 --      s = table {
