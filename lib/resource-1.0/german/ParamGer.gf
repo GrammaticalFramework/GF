@@ -18,6 +18,15 @@ resource ParamGer = ParamX ** {
 
     Adjf = Strong | Weak ;
 
+-- Gender distinctions are only made in the singular. 
+
+    GenNum = GSg Gender | GPl ;
+
+-- The predicative form of adjectives is not inflected further.
+
+    AForm  = APred | AMod Adjf GenNum Case ;  
+
+
 ---- Agreement of $NP$ is a record. We'll add $Gender$ later.
 --
 --  oper
@@ -26,8 +35,19 @@ resource ParamGer = ParamX ** {
 --  param 
 --    Gender = Neutr | Masc | Fem ;
 --
-----2 For $Verb$
---
+--2 For $Verb$
+
+  VForm = 
+     VInf 
+   | VPresInd  Number Person
+   | VPresSubj Number Person
+   | VImper    Number
+   | VImpfInd  Number Person 
+   | VImpfSubj Number Person 
+   | VPresPart AForm 
+   | VPastPart AForm ;
+
+
 ---- Only these five forms are needed for open-lexicon verbs.
 --
 --  param
