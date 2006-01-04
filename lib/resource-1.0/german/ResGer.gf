@@ -35,7 +35,7 @@ resource ResGer = ParamGer ** open Prelude in {
 
   Noun : Type = {s : Number => Case => Str ; g : Gender} ;
 
-  mkNoun  : (x1,_,_,_,_,x6 : Str) -> Gender -> Noun = 
+  mkN  : (x1,_,_,_,_,x6 : Str) -> Gender -> Noun = 
     \mann, mannen, manne, mannes, maenner, maennern, g -> {
      s = table {
        Sg => caselist mann mannen manne mannes ;
@@ -47,17 +47,17 @@ resource ResGer = ParamGer ** open Prelude in {
 -- But we never need all the six forms at the same time. Often
 -- we need just two or four forms.
 
-  mkNoun4 : (x1,_,_,x4 : Str) -> Gender -> Noun = \wein,weines,weine,weinen ->
-    mkNoun wein wein wein weines weine weinen ;
+  mkN4 : (x1,_,_,x4 : Str) -> Gender -> Noun = \wein,weines,weine,weinen ->
+    mkN wein wein wein weines weine weinen ;
 
-  mkNoun2 : (x1,x2 : Str) -> Gender -> Noun = \frau,frauen ->
-    mkNoun4 frau frau frauen frauen ;
+  mkN2 : (x1,x2 : Str) -> Gender -> Noun = \frau,frauen ->
+    mkN4 frau frau frauen frauen ;
 
 -- Adjectives need four forms: two for the positive and one for the other degrees.
 
   Adjective : Type = {s : Degree => AForm => Str} ;
 
-  mkAdjective : (x1,_,_,x4 : Str) -> Adjective = \gut,gute,besser,best -> 
+  mkA : (x1,_,_,x4 : Str) -> Adjective = \gut,gute,besser,best -> 
     {s = table {
        Posit  => adjForms gut gute ; 
        Compar => adjForms besser besser ; 
@@ -65,8 +65,8 @@ resource ResGer = ParamGer ** open Prelude in {
        }
     } ;
 
-  regAdjective : Str -> Adjective = \blau ->
-    mkAdjective blau blau (blau + "er") (blau + "est") ;
+  regA : Str -> Adjective = \blau ->
+    mkA blau blau (blau + "er") (blau + "est") ;
 
 -- This auxiliary gives the forms in each degree. 
 
@@ -89,9 +89,21 @@ resource ResGer = ParamGer ** open Prelude in {
     AMod Weak GPl c => teur+"en"
     } ;
 
+-- This is used e.g. when forming determiners.
+
+  appAdj : Adjective -> Number => Gender => Case => Str = \adj ->
+    let
+      ad : GenNum -> Case -> Str = \gn,c -> 
+        adj.s ! Posit ! AMod Strong gn c
+    in
+    \\n,g,c => case n of {
+       Sg => ad (GSg g) c ;
+       _  => ad GPl c
+     } ;
+
   Verb : Type = {s : VForm => Str} ;
 
-  mkVerb : (x1,_,_,_,_,x6 : Str) -> Verb = \geben,gibt,gib,gab,gaebe,gegeben -> 
+  mkV : (x1,_,_,_,_,x6 : Str) -> Verb = \geben,gibt,gib,gab,gaebe,gegeben -> 
     let
       ifSibilant : Str -> Str -> Str -> Str = \u,b1,b2 -> 
         case u of {
@@ -109,7 +121,7 @@ resource ResGer = ParamGer ** open Prelude in {
       gebt = addE geb + "t" ;
       gebte = ifTok Tok (Predef.dp 1 gab) "e" gab (gab + "e") ;
       gibst = ifSibilant (Predef.dp 1 gib) (gib + "t") (gib + "st") ;
-      gegebener = (regAdjective gegeben).s ! Posit ;
+      gegebener = (regA gegeben).s ! Posit ;
       gabe = addE gab ;
       gibe = ifTok Str (Predef.dp 2 gib) "ig" "e" [] ++ addE gib
     in {s = table {
@@ -126,7 +138,7 @@ resource ResGer = ParamGer ** open Prelude in {
        VPresSubj Sg P3 => geb + "e" ;
        VPresSubj Pl P2 => geb + "et" ;
        VPresSubj Pl _  => geben ;
-       VPresPart a => (regAdjective (geben + "d")).s ! Posit ! a ;
+       VPresPart a => (regA (geben + "d")).s ! Posit ! a ;
 
        VImpfInd Sg P1 => gab ;
        VImpfInd Sg P2 => gabe + "st" ;
@@ -146,7 +158,7 @@ resource ResGer = ParamGer ** open Prelude in {
  
 -- Weak verbs, including "lächeln", "kümmern".
 
-  regVerb : Str -> Verb = \legen ->
+  regV : Str -> Verb = \legen ->
     let 
        leg = case Predef.dp 2 legen of {
          "en" => Predef.tk 2 legen ;
@@ -155,7 +167,16 @@ resource ResGer = ParamGer ** open Prelude in {
        lege = addE leg ;
        legte = lege + "te"
     in
-       mkVerb legen (lege+"t") leg legte legte ("ge"+lege+"t") ;
+       mkV legen (lege+"t") leg legte legte ("ge"+lege+"t") ;
+
+-- To eliminate the morpheme "ge".
+
+  no_geV : Verb -> Verb = \verb -> {
+    s = table {
+      VPastPart a => Predef.drop 2 (verb.s ! VPastPart a) ;
+      v => verb.s ! v
+      }
+    } ;
 
 -- This function decides whether to add an "e" to the stem before "t".
 -- Examples: "töten - tötet", "kehren - kehrt", "lernen - lernt", "atmen - atmet".
@@ -174,6 +195,10 @@ resource ResGer = ParamGer ** open Prelude in {
         }
     in 
       stem + e ;
+
+-- Prepositions for complements indicate the complement case.
+
+  Preposition : Type = {s : Str ; c : Case} ;
 
 --
 --    mkIP : (i,me,my : Str) -> Number -> {s : Case => Str ; n : Number} =

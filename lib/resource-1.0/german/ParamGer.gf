@@ -22,22 +22,21 @@ resource ParamGer = ParamX ** {
 
     GenNum = GSg Gender | GPl ;
 
--- The predicative form of adjectives is not inflected further.
-
-    AForm  = APred | AMod Adjf GenNum Case ;  
-
-
 ---- Agreement of $NP$ is a record. We'll add $Gender$ later.
 --
---  oper
---    Agr = {n : Number ; p : Person} ;
---
---  param 
---    Gender = Neutr | Masc | Fem ;
---
+  oper Agr = {n : Number ; p : Person} ;
+
+----2 For $Adjective$
+
+-- The predicative form of adjectives is not inflected further.
+
+  param 
+    AForm = APred | AMod Adjf GenNum Case ;  
+
+
 --2 For $Verb$
 
-  VForm = 
+  param VForm = 
      VInf 
    | VPresInd  Number Person
    | VPresSubj Number Person
@@ -47,20 +46,11 @@ resource ParamGer = ParamX ** {
    | VPresPart AForm 
    | VPastPart AForm ;
 
+-- The order of sentence is depends on whether it is used as a main
+-- clause, inverted, or subordinate.
 
----- Only these five forms are needed for open-lexicon verbs.
+    Order = ODir | OQuest ;
 --
---  param
---    VForm = VInf | VPres | VPast | VPPart | VPresPart ;
---
----- The order of sentence is needed already in $VP$.
---
---    Order = ODir | OQuest ;
---
---
-----2 For $Adjective$
---
---    AForm = AAdj Degree | AAdv ;
 --
 ----2 For $Relative$
 -- 
