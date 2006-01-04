@@ -20,31 +20,32 @@ concrete CatGer of Cat = open ResGer, Prelude, (R = ParamX) in {
 --      s2 : Agr => Str
 --      } ;
 --
---    V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
---    V2, VV, V2A = Verb ** {c2 : Str} ;
---    V3 = Verb ** {c2, c3 : Str} ;
---
---    AP = {s : Agr => Str ; isPre : Bool} ; 
---    Comp = {s : Agr => Str} ; 
+    V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
+    V2, VV, V2A = Verb ** {c2 : Preposition} ;
+    V3 = Verb ** {c2, c3 : Preposition} ;
+
+    AP = {s : AForm => Str ; isPre : Bool} ; 
+    Comp = {s : Str} ; 
 --
 --    SC = {s : Str} ;
 --
---    A  = {s : AForm => Str} ;
---    A2 = {s : AForm => Str ; c2 : Str} ;
---
---    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
---    Prep = {s : Str} ;
---
---    Det, Quant = {s : Str ; n : Number} ;
---    Predet, Num, Ord = {s : Str} ;
---
+    A  = {s : Degree => AForm => Str} ;
+    A2 = {s : Degree => AForm => Str ; c2 : Preposition} ;
+
+    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
+    Prep = {s : Str ; c : Case} ;
+
+    Det, Quant = {s : Gender => Case => Str ; n : Number ; a : Adjf} ;
+    Predet = {s : Number => Gender => Case => Str} ;
+    Num, Ord = {s : Gender => Case => Str} ;
+
     CN = {s : Adjf => Number => Case => Str ; g : Gender} ;
     N  = {s : Number => Case => Str ; g : Gender} ;
---    PN = {s : Case => Str} ;
---    Pron, NP = {s : Case => Str ; a : Agr} ;
---    N2 = {s : Number => Case => Str} ** {c2 : Str} ;
---    N3 = {s : Number => Case => Str} ** {c2,c3 : Str} ;
---
+    PN = {s : Case => Str} ;
+    Pron, NP = {s : Case => Str ; a : Agr} ;
+    N2 = {s : Number => Case => Str ; g : Gender} ** {c2 : Preposition} ;
+    N3 = {s : Number => Case => Str ; g : Gender} ** {c2,c3 : Preposition} ;
+
 --    IP = {s : Case => Str ; n : Number} ;
 --    IDet = {s : Str ; n : Number} ;
 --    IAdv = {s : Str} ;    

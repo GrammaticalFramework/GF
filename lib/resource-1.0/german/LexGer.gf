@@ -1,25 +1,27 @@
 concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
---
---  lin
---    walk_V  = regV "walk" ;
---    help_V2 = regV "help" ** {c2 = []} ;
---    show_V3 = regV "show" ** {c2 = [] ; c3 = "to"} ;
+
+  lin
+    walk_V  = mkV "gehen" "geht" "geh" "ging" "ginge" "gegangen" ;
+    help_V2 = mkV "helfen" "hilft" "hilf" "half" "hälfe" "geholfen" ** 
+              {c2 = {s = [] ; c = Dat}} ;
+    show_V3 = regV "zeigen" ** 
+              {c2 = {s = [] ; c = Acc} ; c3 = {s = [] ; c = Dat}} ;
 --    want_VV = regV "want" ** {c2 = "to"} ;
---    claim_VS = regV "claim" ;
---    ask_VQ = regV "ask" ;
---
---    dog_N  = regN "dog" ;
+    claim_VS = no_geV (regV "behaupten") ;
+    ask_VQ = regV "fragen" ;
+
+    dog_N  = mkN4 "Hund" "Hundes" "Hünde" "Hünden" Masc ;
 --    son_N2 = regN "son" ** {c2 = "of"} ;
 --    way_N3 = regN "way" ** {c2 = "from" ; c3 = "to"} ;
 --
---    warm_A = regA "warm" ;
+    warm_A = mkA "warm" "warm" "wärmer" "wärmst" ;
 --    close_A2 = regA "close" ** {c2 = "to"} ;
 --
---    here_Adv = {s = "here"} ;
---    very_AdA = {s = "very"} ;
---    always_AdV = {s = "always"} ;
---
---    only_Predet = {s = "only"} ;
+    here_Adv = {s = "hier"} ;
+    very_AdA = {s = "sehr"} ;
+    always_AdV = {s = "immer"} ;
+
+    only_Predet = {s = \\_,_,_ => "nur"} ;
 --    all_Predet = {s = "only"} ;
 --    this_Quant = {s = "this" ; n = Sg} ;
 --    these_Quant = {s = "these" ; n = Pl} ;
