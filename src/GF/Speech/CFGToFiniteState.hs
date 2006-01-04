@@ -12,9 +12,11 @@
 -- Approximates CFGs with finite state networks.
 -----------------------------------------------------------------------------
 
-module GF.Speech.CFGToFiniteState (cfgToFA, makeSimpleRegular) where
+module GF.Speech.CFGToFiniteState (cfgToFA, makeSimpleRegular,
+                                   MFALabel(..), MFA(..), cfgToMFA) where
 
 import Data.List
+import Data.Maybe
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Set (Set)
@@ -31,11 +33,13 @@ import GF.Speech.FiniteState
 import GF.Speech.Relation
 import GF.Speech.TransformCFG
 
+data Recursivity = RightR | LeftR | NotR
+
 data MutRecSet = MutRecSet {
-                            mrCats :: [Cat_],
+                            mrCats :: Set Cat_,
                             mrNonRecRules :: [CFRule_],
                             mrRecRules :: [CFRule_],
-                            mrIsRightRec :: Bool
+                            mrRec :: Recursivity
                            }
 
 
@@ -47,6 +51,10 @@ cfgToFA opts = minimize . compileAutomaton start . makeSimpleRegular
 
 makeSimpleRegular :: CGrammar -> CFRules
 makeSimpleRegular = makeRegular . removeIdenticalRules . removeEmptyCats . cfgToCFRules
+
+--
+-- * Approximate context-free grammars with regular grammars.
+--
 
 -- Use the transformation algorithm from \"Regular Approximation of Context-free
 -- Grammars through Approximation\", Mohri and Nederhof, 2000
@@ -63,12 +71,14 @@ makeRegular g = groupProds $ concatMap trSet (mutRecCats True g)
                       where c' = newCat c
                   makeRightLinearRules b' (CFRule c ss n) = 
                       case ys of
-                              [] -> [CFRule b' (xs ++ [Cat (newCat c)]) n] -- no non-terminals left
-                              (Cat b:zs) -> CFRule b' (xs ++ [Cat b]) n 
-                                        : makeRightLinearRules (newCat b) (CFRule c zs n)
+                              [] -> newRule b' (xs ++ [Cat (newCat c)]) n -- no non-terminals left
+                              (Cat b:zs) -> newRule b' (xs ++ [Cat b]) n 
+                                        ++ makeRightLinearRules (newCat b) (CFRule c zs n)
                       where (xs,ys) = break (`catElem` cs) ss
+                            -- don't add rules on the form A -> A
+                            newRule c rhs n | rhs == [Cat c] = []
+                                            | otherwise = [CFRule c rhs n]
         newCat c = c ++ "$"
-
 
 -- | Get the sets of mutually recursive non-terminals for a grammar.
 mutRecCats :: Bool    -- ^ If true, all categories will be in some set.
@@ -79,31 +89,18 @@ mutRecCats incAll g = equivalenceClasses $ refl $ symmetricSubrelation $ transit
         allCats = map fst g
         refl = if incAll then reflexiveClosure_ allCats else reflexiveSubrelation
 
+--
+-- * Compile strongly regular grammars to NFAs
+--
+
 -- Convert a strongly regular grammar to a finite automaton.
 compileAutomaton :: Cat_ -- ^ Start category
                  -> CFRules
                  -> NFA Token
-compileAutomaton start g = make_fa (g,ns) s [Cat start] f fa''
+compileAutomaton start g = make_fa (g,ns) s [Cat start] f fa
   where 
-  fa = newFA ()
-  s = startState fa
-  (fa',f) = newState () fa
-  fa'' = addFinalState f fa'
+  (fa,s,f) = newFA_
   ns = mutRecSets g $ mutRecCats False g
-
-mutRecSets :: CFRules -> [Set Cat_] -> MutRecSets
-mutRecSets g = Map.fromList . concatMap mkMutRecSet
-  where 
-  mkMutRecSet cs = [ (c,ms) | c <- csl ]
-   where csl = Set.toList cs
-         rs = catSetRules g csl
-         (nrs,rrs) = partition (ruleIsNonRecursive cs) rs
-         ms = MutRecSet {
-                         mrCats = csl,
-                         mrNonRecRules = nrs,
-                         mrRecRules = rrs,
-                         mrIsRightRec = all (isRightLinear cs) rrs
-                        }
 
 -- | The make_fa algorithm from \"Regular approximation of CFLs: a grammatical view\",
 --   Mark-Jan Nederhof. International Workshop on Parsing Technologies, 1997.
@@ -116,14 +113,14 @@ make_fa c@(g,ns) q0 alpha q1 fa =
         [Cat a]  -> case Map.lookup a ns of
                         -- a is recursive
                         Just n@(MutRecSet { mrCats = ni, mrNonRecRules = nrs, mrRecRules = rs} ) -> 
-                              if mrIsRightRec n
-                               then
+                              case mrRec n of
+                               RightR ->
                                 -- the set Ni is right-recursive or cyclic
                                 let new = [(getState c, xs, q1) | CFRule c xs _ <- nrs]
                                           ++ [(getState c, xs, getState d) | CFRule c ss _ <- rs, 
                                                                              let (xs,Cat d) = (init ss,last ss)]
                                  in make_fas new $ newTransition q0 (getState a) Nothing fa'
-                               else
+                               LeftR ->
                                 -- the set Ni is left-recursive
                                 let new = [(q0, xs, getState c) | CFRule c xs _ <- nrs]
                                           ++ [(getState d, xs, getState c) | CFRule c (Cat d:xs) _ <- rs]
@@ -143,15 +140,122 @@ make_fa c@(g,ns) q0 alpha q1 fa =
   make_fas xs fa = foldl' (\f' (s1,xs,s2) -> make_fa_ s1 xs s2 f') fa xs
 
 
-addStatesForCats :: [Cat_] -> NFA Token -> (NFA Token, Map Cat_ State)
+--
+-- * Multiple DFA type
+--
+
+data MFALabel a = MFASym a | MFASub String
+                deriving Eq
+
+data MFA a = MFA (DFA (MFALabel a)) [(String,DFA (MFALabel a))]
+
+--
+-- * Compile strongly regular grammars to multiple DFAs
+--
+
+cfgToMFA :: Options -> CGrammar -> MFA String
+cfgToMFA opts g = MFA startFA [(c, toMFA (minimize fa)) | (c,fa) <- fas]
+  where start = getStartCat opts
+        startFA = let (fa,s,f) = newFA_
+                   in newTransition s f (MFASub start) fa
+        fas = compileAutomata $ makeSimpleRegular g
+        mkMFALabel (Cat c) = MFASub c
+        mkMFALabel (Tok t) = MFASym t
+        toMFA = mapTransitions mkMFALabel
+
+-- | Convert a strongly regular grammar to a number of finite automata,
+--   one for each non-terminal.
+--   The edges in the automata accept tokens, or name another automaton to use.
+compileAutomata :: CFRules
+                 -> [(Cat_,NFA (Symbol Cat_ Token))]
+                    -- ^ A map of non-terminals and their automata.
+compileAutomata g = [(c, makeOneFA c) | c <- allCats g]
+  where
+  mrs = mutRecSets g $ mutRecCats True g
+  makeOneFA c = make_fa1 mr s [Cat c] f fa 
+    where (fa,s,f) = newFA_
+          mr = fromJust (Map.lookup c mrs)
+
+
+-- | The make_fa algorithm from \"Regular approximation of CFLs: a grammatical view\",
+--   Mark-Jan Nederhof. International Workshop on Parsing Technologies, 1997,
+--   adapted to build a finite automaton for a single (mutually recursive) set only.
+--   Categories not in the set (fromJustMap.lookup c mrs)will result in category-labelled edges.
+make_fa1 :: MutRecSet -- ^ The set of (mutually recursive) categories for which
+                      --   we are building the automaton.
+         -> State     -- ^ State to come from
+         -> [Symbol Cat_ Token] -- ^ Symbols to accept
+         -> State     -- ^ State to end up in
+         -> NFA (Symbol Cat_ Token) -- ^ FA to add to.
+         -> NFA (Symbol Cat_ Token)
+make_fa1 mr q0 alpha q1 fa = 
+   case alpha of
+        []        -> newTransition q0 q1 Nothing fa
+        [t@(Tok _)] -> newTransition q0 q1 (Just t) fa
+        [c@(Cat a)] | not (a `Set.member` mrCats mr) -> newTransition q0 q1 (Just c) fa
+        [Cat a] ->
+            case mrRec mr of
+                NotR -> -- the set is a non-recursive (always singleton) set of categories
+                        -- so the set of category rules is the set of rules for the whole set
+                    make_fas [(q0, b, q1) | CFRule _ b _ <- mrNonRecRules mr] fa
+                RightR -> -- the set is right-recursive or cyclic
+                    let new = [(getState c, xs, q1) | CFRule c xs _ <- mrNonRecRules mr]
+                              ++ [(getState c, xs, getState d) | CFRule c ss _ <- mrRecRules mr, 
+                                                                 let (xs,Cat d) = (init ss,last ss)]
+                     in make_fas new $ newTransition q0 (getState a) Nothing fa'
+                LeftR -> -- the set is left-recursive
+                    let new = [(q0, xs, getState c) | CFRule c xs _ <- mrNonRecRules mr]
+                              ++ [(getState d, xs, getState c) | CFRule c (Cat d:xs) _ <- mrRecRules mr]
+                     in make_fas new $ newTransition (getState a) q1 Nothing fa'
+             where
+             (fa',stateMap) = addStatesForCats (mrCats mr) fa
+             getState x = Map.findWithDefault 
+                          (error $ "CFGToFiniteState: No state for " ++ x) 
+                          x stateMap
+        (x:beta) -> let (fa',q) = newState () fa
+                     in make_fas [(q0,[x],q),(q,beta,q1)] fa'
+  where
+  make_fas xs fa = foldl' (\f' (s1,xs,s2) -> make_fa1 mr s1 xs s2 f') fa xs
+
+mutRecSets :: CFRules -> [Set Cat_] -> MutRecSets
+mutRecSets g = Map.fromList . concatMap mkMutRecSet
+  where 
+  mkMutRecSet cs = [ (c,ms) | c <- csl ]
+   where csl = Set.toList cs
+         rs = catSetRules g csl
+         (nrs,rrs) = partition (ruleIsNonRecursive cs) rs
+         ms = MutRecSet {
+                         mrCats = cs,
+                         mrNonRecRules = nrs,
+                         mrRecRules = rrs,
+                         mrRec = rec
+                        }
+         rec | null rrs = NotR
+             | all (isRightLinear cs) rrs = RightR
+             | otherwise = LeftR
+
+--
+-- * Utilities
+--
+
+-- | Create a new finite automaton with an initial and a final state.
+newFA_ :: Enum n => (FA n () b, n, n)
+newFA_ = (fa'', s, f)
+    where fa = newFA ()
+          s = startState fa
+          (fa',f) = newState () fa
+          fa'' = addFinalState f fa'
+
+-- | Add a state for the given NFA for each of the categories
+--   in the given set. Returns a map of categories to their
+--   corresponding states.
+addStatesForCats :: Set Cat_ -> NFA t -> (NFA t, Map Cat_ State)
 addStatesForCats cs fa = (fa', m)
-  where (fa', ns) = newStates (replicate (length cs) ()) fa
-        m = Map.fromList (zip cs (map fst ns))
+  where (fa', ns) = newStates (replicate (Set.size cs) ()) fa
+        m = Map.fromList (zip (Set.toList cs) (map fst ns))
 
 ruleIsNonRecursive :: Set Cat_ -> CFRule_ -> Bool
 ruleIsNonRecursive cs = noCatsInSet cs . ruleRhs
-
-
 
 noCatsInSet :: Set Cat_ -> [Symbol Cat_ t] -> Bool
 noCatsInSet cs = not . any (`catElem` cs)

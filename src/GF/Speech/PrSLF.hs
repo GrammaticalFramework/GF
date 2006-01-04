@@ -31,40 +31,70 @@ import GF.Speech.CFGToFiniteState
 import GF.Speech.FiniteState
 import GF.Speech.SRG
 import GF.Speech.TransformCFG
+import qualified GF.Visualization.Graphviz as Dot
 
+import Control.Monad
+import qualified Control.Monad.State as STM
 import Data.Char (toUpper)
 import Data.List
-import Data.Maybe (fromMaybe)
+import Data.Maybe (maybe)
+
+data SLFs = SLFs [(String,SLF)] SLF
 
 data SLF = SLF { slfNodes :: [SLFNode], slfEdges :: [SLFEdge] }
 
 data SLFNode = SLFNode { nId :: Int, nWord :: SLFWord, nTag :: Maybe String }
+             | SLFSubLat { nId :: Int, nLat :: String }
 
 -- | An SLF word is a word, or the empty string.
 type SLFWord = Maybe String
 
 data SLFEdge = SLFEdge { eId :: Int, eStart :: Int, eEnd :: Int }
 
+type SLF_FA = FA State (Maybe (MFALabel String)) ()
 
+-- | Make a network with subnetworks in SLF
 slfPrinter :: Ident -- ^ Grammar name
 	   -> Options -> CGrammar -> String
-slfPrinter name opts cfg = prSLF (automatonToSLF $ mkSLFFA opts cfg) ""
+slfPrinter name opts cfg = prSLFs (mfaToSLFs $ cfgToMFA opts cfg) ""
 
 slfGraphvizPrinter :: Ident -- ^ Grammar name
-	   -> Options -> CGrammar -> String
-slfGraphvizPrinter name opts cfg = 
-    prFAGraphviz $ mapStates (fromMaybe "") $ mapTransitions (const "") $ mkSLFFA opts cfg
+	           -> Options -> CGrammar -> String
+slfGraphvizPrinter name opts cfg = Dot.prGraphviz g
+  where MFA main subs = cfgToMFA opts cfg
+        g = Dot.addSubGraphs (map (uncurry gvSLFFA) subs) $ gvSLFFA "" main
 
-mkSLFFA :: Options -> CGrammar -> FA State (Maybe String) ()
-mkSLFFA opts cfg = oneFinalState Nothing () $ moveLabelsToNodes $ dfa2nfa $ cfgToFA opts cfg
+gvSLFFA :: String -> DFA (MFALabel String) -> Dot.Graph
+gvSLFFA n = faToGraphviz n . mapStates (maybe "" mfaLabelToGv) 
+            . mapTransitions (const "") . slfStyleFA
+  where mfaLabelToGv (MFASym s) = s
+        mfaLabelToGv (MFASub s) = "<" ++ s ++ ">"
 
-automatonToSLF :: FA State (Maybe String) () -> SLF
-automatonToSLF fa = SLF { slfNodes = map mkSLFNode (states fa),
-	                  slfEdges = zipWith mkSLFEdge [0..] (transitions fa) }
+mapMFA :: (DFA (MFALabel a) -> b) -> MFA a -> (b,[(String,b)])
+mapMFA f (MFA main subs) = (f main, [(c, f fa) | (c,fa) <- subs])
 
-mkSLFNode :: (Int, Maybe String) -> SLFNode
-mkSLFNode (i, Nothing) = SLFNode { nId = i, nWord = Nothing, nTag = Nothing }
-mkSLFNode (i, Just w)
+slfStyleFA :: DFA (MFALabel String) -> SLF_FA
+slfStyleFA = oneFinalState Nothing () . moveLabelsToNodes . dfa2nfa
+
+mfaToSLFs :: MFA String -> SLFs
+mfaToSLFs (MFA main subs) 
+    = SLFs [(c, dfaToSLF fa) | (c,fa) <- subs] (dfaToSLF main)
+  where dfaToSLF = automatonToSLF . slfStyleFA
+
+automatonToSLF :: SLF_FA -> SLF
+automatonToSLF fa = SLF { slfNodes = ns, slfEdges = es }
+  where ns = map (uncurry mfaNodeToSLFNode) (states fa)
+        es = zipWith (\i (f,t,()) -> mkSLFEdge i (f,t)) [0..] (transitions fa)
+
+mfaNodeToSLFNode :: Int -> Maybe (MFALabel String) -> SLFNode
+mfaNodeToSLFNode i l = case l of
+                                Nothing -> mkSLFNode i Nothing
+                                Just (MFASym x) -> mkSLFNode i (Just x)
+                                Just (MFASub s) -> mkSLFSubLat i s
+
+mkSLFNode :: Int -> Maybe String -> SLFNode
+mkSLFNode i Nothing = SLFNode { nId = i, nWord = Nothing, nTag = Nothing }
+mkSLFNode i (Just w)
     | isNonWord w = SLFNode { nId = i, 
                               nWord = Nothing, 
                               nTag = Just w }
@@ -72,17 +102,30 @@ mkSLFNode (i, Just w)
                             nWord = Just (map toUpper w), 
                             nTag = Just w }
 
-mkSLFEdge :: Int -> (Int,Int,()) -> SLFEdge
-mkSLFEdge i (f,t,()) = SLFEdge { eId = i, eStart = f, eEnd = t }
+mkSLFSubLat :: Int -> String -> SLFNode
+mkSLFSubLat i sub = SLFSubLat { nId = i, nLat = sub }
+
+mkSLFEdge :: Int -> (Int,Int) -> SLFEdge
+mkSLFEdge i (f,t) = SLFEdge { eId = i, eStart = f, eEnd = t }
+
+prSLFs :: SLFs -> ShowS
+prSLFs (SLFs subs main) = unlinesS (map prSub subs) . prOneSLF main
+  where prSub (n,s) = showString "SUBLAT=" . shows n 
+                      . nl . prOneSLF s . showString "." . nl
 
 prSLF :: SLF -> ShowS
-prSLF (SLF { slfNodes = ns, slfEdges = es}) 
+prSLF slf = {- showString "VERSION=1.0" . nl . -} prOneSLF slf
+
+prOneSLF :: SLF -> ShowS
+prOneSLF (SLF { slfNodes = ns, slfEdges = es}) 
     = header . unlinesS (map prNode ns) . nl . unlinesS (map prEdge es) . nl
     where
-    header = showString "VERSION=1.0" . nl 
-	     . prFields [("N",show (length ns)),("L", show (length es))] . nl
-    prNode n = prFields $ [("I",show (nId n)),("W",showWord (nWord n))]
-                          ++ maybe [] (\t -> [("s",t)]) (nTag n)
+    header = prFields [("N",show (length ns)),("L", show (length es))] . nl
+    prNode (SLFNode { nId = i, nWord = w, nTag = t })
+            = prFields $ [("I",show i),("W",showWord w)] 
+                         ++ maybe [] (\t -> [("s",t)]) t
+    prNode (SLFSubLat { nId = i, nLat = l }) 
+            = prFields [("I",show i),("L",show l)]
     prEdge e = prFields [("J",show (eId e)),("S",show (eStart e)),("E",show (eEnd e))]
 
 -- | Check if a word should not correspond to a word in the SLF file.

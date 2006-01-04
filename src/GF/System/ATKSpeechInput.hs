@@ -22,13 +22,14 @@ import GF.Speech.PrSLF
 import Speech.ATKRec
 
 import Control.Monad
+import Data.Maybe
 import Data.IORef
 import System.Environment
 import System.IO
 import System.IO.Unsafe
 
 data ATKLang = ATKLang {
-                        cmndef :: FilePath,
+                        cmndef :: Maybe FilePath,
                         hmmlist :: FilePath,
                         mmf0 :: FilePath,
                         mmf1 :: FilePath,
@@ -50,11 +51,19 @@ getLanguage l =
                       atk_home <- getEnv_ "ATK_HOME" atk_home_error
                       let res = atk_home ++ "/Resources"
                       return $ ATKLang {
-                                 cmndef = res ++ "/UK_SI_ZMFCC/cepmean",
+                                 cmndef = Just $ res ++ "/UK_SI_ZMFCC/cepmean",
                                  hmmlist = res ++ "/UK_SI_ZMFCC/hmmlistbg",
                                  mmf0 = res ++ "/UK_SI_ZMFCC/WI4",
                                  mmf1 = res ++ "/UK_SI_ZMFCC/BGHMM2",
                                  dict = res ++ "/beep.dct" }
+           "sv_SE" -> do
+                      let res = "/home/bjorn/projects/atkswe/stoneage-swe"
+                      return $ ATKLang {
+                                 cmndef = Nothing,
+                                 hmmlist = res ++ "/triphones1",
+                                 mmf0 = res ++ "/hmm12/macros",
+                                 mmf1 = res ++ "/hmm12/hmmdefs",
+                                 dict = res ++ "/dict" }
            _ -> fail $ "ATKSpeechInput: language " ++ l ++ " not supported"
 
 -- | List of the languages for which we have already loaded the HMM
@@ -71,8 +80,8 @@ initATK language =
     when (null ls) $ do
                      config <- getEnv_ "GF_ATK_CFG" gf_atk_cfg_error
                      hPutStrLn stderr $ "Initializing ATK..."
-                     -- FIXME: CMNDEFAULT should be set in the per-language setup
-                     initialize (Just config) [("HPARM:CMNDEFAULT",cmndef l)] 
+                     let ps = map ((,) "HPARM:CMNDEFAULT") (maybeToList (cmndef l))
+                     initialize (Just config) ps
     when (language `notElem` ls) $ 
          do
          let hmmName = "hmm_" ++ language
@@ -88,7 +97,7 @@ recognizeSpeech name opts cfg =
     do
     let slf = slfPrinter name opts cfg
         n = prIdent name
-        language = "en_UK"
+        language = "sv_SE"
         hmmName = "hmm_" ++ language
         dictName = "dict_" ++ language
         slfName = "gram_" ++ n
