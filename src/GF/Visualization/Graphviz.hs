@@ -16,6 +16,7 @@ module GF.Visualization.Graphviz (
 				  Graph(..), GraphType(..), 
 				  Node(..), Edge(..),
 				  Attr,
+                                  addSubGraphs,
 				  prGraphviz
 			) where
 
@@ -23,7 +24,8 @@ import Data.Char
 
 import GF.Data.Utilities
 
-data Graph = Graph GraphType [Attr] [Node] [Edge]
+-- | Graph type, graph ID, graph attirbutes, graph nodes, graph edges, subgraphs
+data Graph = Graph GraphType String [Attr] [Node] [Edge] [Graph]
   deriving (Show)
 
 data GraphType = Directed | Undirected
@@ -37,13 +39,31 @@ data Edge = Edge String String [Attr]
 
 type Attr = (String,String)
 
+--
+-- * Graph construction
+--
+
+addSubGraphs :: [Graph] -> Graph -> Graph
+addSubGraphs nss (Graph t i at ns es ss) = Graph t i at ns es (nss++ss)
+
+--
+-- * Pretty-printing
+--
+
 prGraphviz :: Graph -> String
-prGraphviz (Graph t at ns es) = 
-    unlines $ [graphtype t ++ " {"] 
-		++ map (++";") (map prAttr at
-				++ map prNode ns 
-				++ map (prEdge t) es) 
-		++ ["}\n"]
+prGraphviz g@(Graph t i _ _ _ _) =
+    graphtype t ++ " " ++ esc i ++ " {\n" ++ prGraph g ++ "}\n"
+
+prSubGraph :: Graph -> String
+prSubGraph g@(Graph _ i _ _ _ _) = 
+    "subgraph" ++ " " ++ esc i ++ " {\n" ++ prGraph g ++ "}"
+
+prGraph :: Graph -> String
+prGraph (Graph t id at ns es ss) = 
+    unlines $ map (++";") (map prAttr at
+		           ++ map prNode ns 
+		           ++ map (prEdge t) es
+                           ++ map prSubGraph ss)
 
 graphtype :: GraphType -> String
 graphtype Directed = "digraph"

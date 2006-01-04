@@ -120,6 +120,9 @@ isDirectLeftRecursive _ = False
 -- * CFG rule utilities
 --
 
+allCats :: CFRules -> [Cat_]
+allCats = map fst
+
 catRules :: CFRules -> Cat_ -> [CFRule_]
 catRules rs c = fromMaybe [] (lookup c rs)
 
