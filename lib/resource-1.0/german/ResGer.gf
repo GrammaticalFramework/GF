@@ -98,7 +98,7 @@ resource ResGer = ParamGer ** open Prelude in {
           "s" => b1 ;
           "x" => b1 ;
           "z" => b1 ;
-          "ß" => b1 ;
+          "Ã" => b1 ;
           _   => b2 
           } ; 
       en = Predef.dp 2 geben ;
@@ -106,30 +106,32 @@ resource ResGer = ParamGer ** open Prelude in {
         "e" => Predef.tk 2 geben ;
          _  => Predef.tk 1 geben
          } ;
-      gebt = geb + (adde geb) + "t" ;
+      gebt = addE geb + "t" ;
       gebte = ifTok Tok (Predef.dp 1 gab) "e" gab (gab + "e") ;
       gibst = ifSibilant (Predef.dp 1 gib) (gib + "t") (gib + "st") ;
-      gegebener = (regAdjective gegeben).s ;
+      gegebener = (regAdjective gegeben).s ! Posit ;
+      gabe = addE gab ;
+      gibe = ifTok Str (Predef.dp 2 gib) "ig" "e" [] ++ addE gib
     in {s = table {
        VInf       => geben ;
-       VInd Sg P1 => geb + "e" ;
-       VInd Sg P2 => gibst ;
-       VInd Sg P3 => gibt ;
-       VInd Pl P2 => gebt ;
-       VInd Pl _  => geben ; -- the famous law
-       VImp Sg    => gib + (impe gib) ;
-       VImp Pl    => gebt ;
-       VSubj Sg P1 => geb + "e" ;
-       VSubj Sg P2 => geb + "est" ;
-       VSubj Sg P3 => geb + "e" ;
-       VSubj Pl P2 => geb + "et" ;
-       VSubj Pl _  => geben ;
-       VPresPart a => (regAdjective (geben + "d")).s ! a ;
+       VPresInd Sg P1 => geb + "e" ;
+       VPresInd Sg P2 => gibst ;
+       VPresInd Sg P3 => gibt ;
+       VPresInd Pl P2 => gebt ;
+       VPresInd Pl _  => geben ; -- the famous law
+       VImper Sg    => gibe ;
+       VImper Pl    => gebt ;
+       VPresSubj Sg P1 => geb + "e" ;
+       VPresSubj Sg P2 => geb + "est" ;
+       VPresSubj Sg P3 => geb + "e" ;
+       VPresSubj Pl P2 => geb + "et" ;
+       VPresSubj Pl _  => geben ;
+       VPresPart a => (regAdjective (geben + "d")).s ! Posit ! a ;
 
        VImpfInd Sg P1 => gab ;
-       VImpfInd Sg P2 => gab + (adde gab) + "st" ;
+       VImpfInd Sg P2 => gabe + "st" ;
        VImpfInd Sg P3 => gab ;
-       VImpfInd Pl P2 => gab + (adde gab) + "t" ;
+       VImpfInd Pl P2 => gabe + "t" ;
        VImpfInd Pl _  => gebte + "n" ;
 
        VImpfSubj Sg P1 => gaebe ;
@@ -138,53 +140,41 @@ resource ResGer = ParamGer ** open Prelude in {
        VImpfSubj Pl P2 => gaebe + "t" ;
        VImpfSubj Pl _  => gaebe + "n" ;
 
-       VPart a    => gegebener ! a
+       VPastPart a    => gegebener ! a
        }
      } ;
  
--- Weak verbs:
+-- Weak verbs, including "lächeln", "kümmern".
+
   regVerb : Str -> Verb = \legen ->
     let 
-       leg = Predef.tk 2 legen ;
-       legte = leg + "te" ;
+       leg = case Predef.dp 2 legen of {
+         "en" => Predef.tk 2 legen ;
+         _  => Predef.tk 1 legen
+         } ;
+       lege = addE leg ;
+       legte = lege + "te"
     in
-       mkVerb legen (leg+(adde leg)+"t") leg legte legte ("ge"+leg+"t") ;
+       mkVerb legen (lege+"t") leg legte legte ("ge"+lege+"t") ;
 
+-- This function decides whether to add an "e" to the stem before "t".
+-- Examples: "töten - tötet", "kehren - kehrt", "lernen - lernt", "atmen - atmet".
 
-  adde : Str -> Str = \stem ->
-   let
-     eVowelorLiquid : Str -> Str = \u -> 
-      case u of {
-        "l" | "r" | "a" | "o" | "u" | "e" | "i" | "ü" | "ä" | "ö" => "e" ;
-        _   => [] 
-        } ;   
+  addE : Str -> Str = \stem ->
+    let
+      r = init (Predef.dp 2 stem) ;
+      n = last stem ;
+      e = case n of {
+        "t" | "d" => "e" ;
+        "e" => [] ;
+        _ => case r of {
+          "l" | "r" | "a" | "o" | "u" | "e" | "i" | "Ã¼" | "Ã¤" | "Ã¶" | "h" => [] ;
+          _   => "e" 
+          }
+        }
+    in 
+      stem + e ;
 
-     eConsonantmn : Str -> Str -> Str = \nl,l -> 
-      case l of {
-        "m" | "n" => eVowelorLiquid nl ;
-        _ => []
-        } ;
- 
-     nl = init (Predef.dp 2 stem) ;
-     l  = last stem ;
-     e  = case l of {
-           "d" | t => "e" ;
-           _ => eConsonantmn nl l
-           } ;
-   in 
-     e ;
-
-
---    mkVerb : (_,_,_,_,_ : Str) -> {s : VForm => Str} = 
---      \go,goes,went,gone,going -> {
---      s = table {
---        VInf   => go ;
---        VPres  => goes ;
---        VPast  => went ;
---        VPPart => gone ;
---        VPresPart => going
---        }
---      } ;
 --
 --    mkIP : (i,me,my : Str) -> Number -> {s : Case => Str ; n : Number} =
 --     \i,me,my,n -> let who = mkNP i me my n P3 in {s = who.s ; n = n} ;
