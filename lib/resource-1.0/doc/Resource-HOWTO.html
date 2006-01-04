@@ -51,7 +51,7 @@
 <P>
 Resource grammar HOWTO
 Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;
-Last update: Thu Dec  8 14:52:30 2005
+Last update: Wed Jan  4 11:29:41 2006
 </P>
 <A NAME="toc1"></A>
 <H1>HOW TO WRITE A RESOURCE GRAMMAR</H1>
@@ -59,7 +59,7 @@ Last update: Thu Dec  8 14:52:30 2005
   <A HREF="http://www.cs.chalmers.se/~aarne/">Aarne Ranta</A>
 </P>
 <P>
-  20051208
+  20060104
 </P>
 <P>
 The purpose of this document is to tell how to implement the GF
@@ -89,7 +89,7 @@ leaves out certain complicated but not always necessary things:
 tenses and most part of the lexicon.
 </P>
 <P>
-<IMG ALIGN="left" SRC="Test.png" BORDER="0" ALT="">
+<IMG ALIGN="middle" SRC="Test.png" BORDER="0" ALT="">
 </P>
 <P>
 The module structure is rather flat: almost every module is a direct
@@ -213,48 +213,64 @@ different languages.
 Unless you are writing an instance of a parametrized implementation
 (Romance or Scandinavian), which will be covered later, the most
 simple way is to follow roughly the following procedure. Assume you
-are building a grammar for the Dutch language. Here are the first steps.
+are building a grammar for the German language. Here are the first steps,
+which we actually followed ourselves when building the German implementation
+of resource v. 1.0.
 </P>
 <OL>
 <LI>Create a sister directory for <CODE>GF/lib/resource/english</CODE>, named
-     <CODE>dutch</CODE>.
-     ```
-       cd GF/lib/resource/
-       mkdir dutch
-       cd dutch
-     ```
+     <CODE>german</CODE>.
+<PRE>
+         cd GF/lib/resource/
+         mkdir german
+         cd german
+</PRE>
 <P></P>
-<LI>Check out the <A HREF="http://www.w3.org/WAI/ER/IG/ert/iso639.htm">ISO 639 3-letter language code</A> 
-   for Dutch: it is <CODE>Dut</CODE>.
+<LI>Check out the [ISO 639 3-letter language code 
+   <A HREF="http://www.w3.org/WAI/ER/IG/ert/iso639.htm">http://www.w3.org/WAI/ER/IG/ert/iso639.htm</A>] 
+   for German: both <CODE>Ger</CODE> and <CODE>Deu</CODE> are given, and we pick <CODE>Ger</CODE>.
 <P></P>
-<LI>Copy the <CODE>*Eng.gf</CODE> files from <CODE>english</CODE> <CODE>dutch</CODE>,
+<LI>Copy the <CODE>*Eng.gf</CODE> files from <CODE>english</CODE> <CODE>german</CODE>,
      and rename them:
-     ```
-       cp ../english/*Eng.gf .
-       rename 's/Eng/Dut/' *Eng.gf
-     ```
+<PRE>
+         cp ../english/*Eng.gf .
+         rename 's/Eng/Ger/' *Eng.gf
+</PRE>
 <P></P>
-<LI>Change the <CODE>Eng</CODE> module references to <CODE>Dut</CODE> references
+<LI>Change the <CODE>Eng</CODE> module references to <CODE>Ger</CODE> references
      in all files:
-     ``` sed -i 's/Eng/Dut/g' *Dut.gf
+<PRE>
+         sed -i 's/English/German/g' *Ger.gf
+         sed -i 's/Eng/Ger/g' *Ger.gf
+</PRE>
+  The first line prevents changing the word <CODE>English</CODE>, which appears
+  here and there in comments, to <CODE>Gerlish</CODE>.
 <P></P>
 <LI>This may of course change unwanted occurrences of the 
      string <CODE>Eng</CODE> - verify this by
-     ``` grep Dut *.gf
+<PRE>
+         grep Ger *.gf
+</PRE>
      But you will have to make lots of manual changes in all files anyway!
 <P></P>
 <LI>Comment out the contents of these files:
-     ``` sed -i 's/^/--/' *Dut.gf
+<PRE>
+         sed -i 's/^/--/' *Ger.gf
+</PRE>
      This will give you a set of templates out of which the grammar
      will grow as you uncomment and modify the files rule by rule.
 <P></P>
-<LI>In the file <CODE>TestDut.gf</CODE>, uncomment all lines except the list
+<LI>In the file <CODE>TestGer.gf</CODE>, uncomment all lines except the list
      of inherited modules. Now you can open the grammar in GF:
-     ``` gf TestDut.gf
+<PRE>
+         gf TestGer.gf
+</PRE>
 <P></P>
 <LI>Now you will at all following steps have a valid, but incomplete
      GF grammar. The GF command
-     ``` pg -printer=missing
+<PRE>
+         pg -printer=missing
+</PRE>
      tells you what exactly is missing.
 </OL>
 
@@ -266,37 +282,38 @@ were introduced above is a natural order to proceed, even though not the
 only one. So you will find yourself iterating the following steps:
 </P>
 <OL>
-<LI>Select a phrase category module, e.g. <CODE>NounDut</CODE>, and uncomment one
-     linearization rule (for instance, <CODE>IndefSg</CODE>, which is
+<LI>Select a phrase category module, e.g. <CODE>NounGer</CODE>, and uncomment one
+     linearization rule (for instance, <CODE>DefSg</CODE>, which is
      not too complicated).
 <P></P>
-<LI>Write down some Dutch examples of this rule, in this case translations
-     of "a dog", "a house", "a big house", etc.
+<LI>Write down some German examples of this rule, for instance translations
+     of "the dog", "the house", "the big house", etc. Write these in all their
+     different forms (two numbers and four cases).
 <P></P>
 <LI>Think about the categories involved (<CODE>CN, NP, N</CODE>) and the
-     variations they have. Encode this in the lincats of <CODE>CatDut</CODE>.
-     You may have to define some new parameter types in <CODE>ResDut</CODE>.
+     variations they have. Encode this in the lincats of <CODE>CatGer</CODE>.
+     You may have to define some new parameter types in <CODE>ResGer</CODE>.
 <P></P>
 <LI>To be able to test the construction, 
      define some words you need to instantiate it
-     in <CODE>LexDut</CODE>. Again, it can be helpful to define some simple-minded
-     morphological paradigms in <CODE>ResDut</CODE>, in particular worst-case
+     in <CODE>LexGer</CODE>. Again, it can be helpful to define some simple-minded
+     morphological paradigms in <CODE>ResGer</CODE>, in particular worst-case
      constructors corresponding to e.g.
      <CODE>ResEng.mkNoun</CODE>.
 <P></P>
 <LI>Doing this, you may want to test the resource independently. Do this by
-     ```
-       i -retain ResDut
-       cc mkNoun "ei" "eieren" Neutr
-     ```
+<PRE>
+         i -retain ResGer
+         cc mkNoun "Brief" "Briefe" Masc
+</PRE>
 <P></P>
-<LI>Uncomment <CODE>NounDut</CODE> and <CODE>LexDut</CODE> in <CODE>TestDut</CODE>,
-     and compile <CODE>TestDut</CODE> in GF. Then test by parsing, linearization,
+<LI>Uncomment <CODE>NounGer</CODE> and <CODE>LexGer</CODE> in <CODE>TestGer</CODE>,
+     and compile <CODE>TestGer</CODE> in GF. Then test by parsing, linearization,
      and random generation. In particular, linearization to a table should
      be used so that you see all forms produced:
-     ```
-       gr -cat=NP -number=20 -tr | l -table
-     ```
+<PRE>
+         gr -cat=NP -number=20 -tr | l -table
+</PRE>
 <P></P>
 <LI>Spare some tree-linearization pairs for later regression testing.
      You can do this way (!!to be completed)
@@ -319,8 +336,8 @@ very soon, keep you motivated, and reveal errors.
 These modules will be written by you.
 </P>
 <UL>
-<LI><CODE>ResDut</CODE>: parameter types and auxiliary operations
-<LI><CODE>MorphoDut</CODE>: complete inflection engine; not needed for <CODE>Test</CODE>.
+<LI><CODE>ResGer</CODE>: parameter types and auxiliary operations
+<LI><CODE>MorphoGer</CODE>: complete inflection engine; not needed for <CODE>Test</CODE>.
 </UL>
 
 <P>
@@ -342,13 +359,13 @@ package.
 <P>
 When the implementation of <CODE>Test</CODE> is complete, it is time to
 work out the lexicon files. The underlying machinery is provided in
-<CODE>MorphoDut</CODE>, which is, in effect, your linguistic theory of
-Dutch morphology. It can contain very sophisticated and complicated
+<CODE>MorphoGer</CODE>, which is, in effect, your linguistic theory of
+German morphology. It can contain very sophisticated and complicated
 definitions, which are not necessarily suitable for actually building a
 lexicon. For this purpose, you should write the module
 </P>
 <UL>
-<LI><CODE>ParadigmsDut</CODE>: morphological paradigms for the lexicographer.
+<LI><CODE>ParadigmsGer</CODE>: morphological paradigms for the lexicographer.
 </UL>
 
 <P>
@@ -364,15 +381,15 @@ the functions
 <UL>
 <LI><CODE>mkN</CODE>, for worst-case construction of <CODE>N</CODE>. Its type signature
      has the form
-     ```
-       mkN : Str -&gt; ... -&gt; Str -&gt; P -&gt; ... -&gt; Q -&gt; N
-     ```
+<PRE>
+         mkN : Str -&gt; ... -&gt; Str -&gt; P -&gt; ... -&gt; Q -&gt; N
+</PRE>
      with as many string and parameter arguments as can ever be needed to
      construct an <CODE>N</CODE>.
 <LI><CODE>regN</CODE>, for the most common cases, with just one string argument:
-     ```
-       regN : Str -&gt; N
-     ```
+<PRE>
+         regN : Str -&gt; N
+</PRE>
 <LI>A language-dependent (small) set of functions to handle mild irregularities
      and common exceptions.
 <P></P>
@@ -380,15 +397,15 @@ For the complement-taking variants, such as <CODE>V2</CODE>, we provide
 <P></P>
 <LI><CODE>mkV2</CODE>, which takes a <CODE>V</CODE> and all necessary arguments, such
      as case and preposition:
-     ```
-       mkV2 : V -&gt; Case -&gt; Str -&gt; V2 ;
-     ```
+<PRE>
+         mkV2 : V -&gt; Case -&gt; Str -&gt; V2 ;
+</PRE>
 <LI>A language-dependent (small) set of functions to handle common special cases,
      such as direct transitive verbs:
-     ```
-       dirV2 : V -&gt; V2 ;
-       -- dirV2 v = mkV2 v accusative [] 
-     ```
+<PRE>
+         dirV2 : V -&gt; V2 ;
+         -- dirV2 v = mkV2 v accusative [] 
+</PRE>
 </UL>
 
 <P>
@@ -403,33 +420,33 @@ The golden rule for the design of paradigms is that
 The discipline of data abstraction moreover requires that the user of the resource
 is not given access to parameter constructors, but only to constants that denote 
 them. This gives the resource grammarian the freedom to change the underlying
-data representation if needed. It means that the <CODE>ParadigmsDut</CODE> module has
+data representation if needed. It means that the <CODE>ParadigmsGer</CODE> module has
 to define constants for those parameter types and constructors that 
 the application grammarian may need to use, e.g.
 </P>
 <PRE>
     oper 
       Case : Type ;
-      nominative, accusative, genitive : Case ;
+      nominative, accusative, genitive, dative : Case ;
 </PRE>
 <P>
 These constants are defined in terms of parameter types and constructors
-in <CODE>ResDut</CODE> and <CODE>MorphoDut</CODE>, which modules are are not
+in <CODE>ResGer</CODE> and <CODE>MorphoGer</CODE>, which modules are are not
 accessible to the application grammarian.
 </P>
 <A NAME="toc11"></A>
 <H3>Lock fields</H3>
 <P>
-An important difference between <CODE>MorphoDut</CODE> and
-<CODE>ParadigmsDut</CODE> is that the former uses "raw" record types
+An important difference between <CODE>MorphoGer</CODE> and
+<CODE>ParadigmsGer</CODE> is that the former uses "raw" record types
 as lincats, whereas the latter used category symbols defined in
-<CODE>CatDut</CODE>. When these category symbols are used to denote
-record types in a resource modules, such as <CODE>ParadigmsDut</CODE>,
+<CODE>CatGer</CODE>. When these category symbols are used to denote
+record types in a resource modules, such as <CODE>ParadigmsGer</CODE>,
 a <B>lock field</B> is added to the record, so that categories
 with the same implementation are not confused with each other.
 (This is inspired by the <CODE>newtype</CODE> discipline in Haskell.)
 For instance, the lincats of adverbs and conjunctions may be the same
-in <CODE>CatDut</CODE>:
+in <CODE>CatGer</CODE>:
 </P>
 <PRE>
     lincat Adv  = {s : Str} ;
@@ -467,21 +484,21 @@ in her hidden definitions of constants in <CODE>Paradigms</CODE>. For instance,
 <A NAME="toc12"></A>
 <H3>Lexicon construction</H3>
 <P>
-The lexicon belonging to <CODE>LangDut</CODE> consists of two modules:
+The lexicon belonging to <CODE>LangGer</CODE> consists of two modules:
 </P>
 <UL>
-<LI><CODE>StructuralDut</CODE>, structural words, built by directly using
-     <CODE>MorphoDut</CODE>.
-<LI><CODE>BasicDut</CODE>, content words, built by using <CODE>ParadigmsDut</CODE>.
+<LI><CODE>StructuralGer</CODE>, structural words, built by directly using
+     <CODE>MorphoGer</CODE>.
+<LI><CODE>BasicGer</CODE>, content words, built by using <CODE>ParadigmsGer</CODE>.
 </UL>
 
 <P>
-The reason why <CODE>MorphoDut</CODE> has to be used in <CODE>StructuralDut</CODE>
-is that <CODE>ParadigmsDut</CODE> does not contain constructors for closed
+The reason why <CODE>MorphoGer</CODE> has to be used in <CODE>StructuralGer</CODE>
+is that <CODE>ParadigmsGer</CODE> does not contain constructors for closed
 word classes such as pronouns and determiners. The reason why we
-recommend <CODE>ParadigmsDut</CODE> for building <CODE>BasicDut</CODE> is that
+recommend <CODE>ParadigmsGer</CODE> for building <CODE>BasicGer</CODE> is that
 the coverage of the paradigms gets thereby tested and that the
-use of the paradigms in <CODE>BasicDut</CODE> gives a good set of examples for
+use of the paradigms in <CODE>BasicGer</CODE> gives a good set of examples for
 those who want to build new lexica.
 </P>
 <A NAME="toc13"></A>
@@ -509,34 +526,31 @@ worst-case paradigms (<CODE>mkV</CODE> etc).
 <P>
 You can often find resources such as lists of 
 irregular verbs on the internet. For instance, the
-<A HREF="http://www.dutchtrav.com/gram/irrverbs.html">Dutch for Travelers</A> 
+<A HREF="http://www.iee.et.tu-dresden.de/~wernerr/grammar/verben_dt.html">Irregular German Verbs</A> 
 page gives a list of verbs in the
 traditional tabular format, which begins as follows:
 </P>
 <PRE>
-    begrijpen begrijp begreep begrepen 	to understand
-    bijten    bijt    beet    gebeten     to bite
-    binden    bind    bond    gebonden 	to tie
-    breken    breek   brak    gebroken 	to break
+    backen (du bäckst, er bäckt)	                 backte [buk]	           gebacken
+    befehlen (du befiehlst, er befiehlt; befiehl!) befahl (beföhle; befähle) befohlen
+    beginnen	                                 begann (begönne; begänne) begonnen
+    beißen	                                 biß	                   gebissen
 </PRE>
 <P>
 All you have to do is to write a suitable verb paradigm
 </P>
 <PRE>
-    irregV : Str -&gt; Str -&gt; Str -&gt; Str -&gt; V ;
+    irregV : (x1,_,_,_,_,x6 : Str) -&gt; V ;
 </PRE>
 <P>
 and a Perl or Python or Haskell script that transforms
 the table to
 </P>
 <PRE>
-    begrijpen_V = irregV "begrijpen" "begrijp" "begreep" "begrepen" ;
-    bijten_V    = irregV "bijten"    "bijt"    "beet"    "gebeten" ;
-    binden_V    = irregV "binden"    "bind"    "bond"    "gebonden" ;
+    backen_V   = irregV "backen" "bäckt" "back" "backte" "backte" "gebacken" ;
+    befehlen_V = irregV "befehlen" "befiehlt" "befiehl" "befahl" "beföhle" "befohlen" ;
 </PRE>
-<P>
-(You may want to use the English translation for some purpose, as well.)
-</P>
+<P></P>
 <P>
 When using ready-made word lists, you should think about
 coyright issues. Ideally, all resource grammar material should
@@ -563,7 +577,7 @@ extension modules. This chapter will deal with this issue.
 <H2>Writing an instance of parametrized resource grammar implementation</H2>
 <P>
 Above we have looked at how a resource implementation is built by
-the copy and paste method (from English to Dutch), that is, formally
+the copy and paste method (from English to German), that is, formally
 speaking, from scratch. A more elegant solution available for 
 families of languages such as Romance and Scandinavian is to
 use parametrized modules. The advantages are
