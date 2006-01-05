@@ -4,16 +4,10 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
 
   lin
     DetCN det cn = {
-      s = \\c => det.s ! cn.g ! c ++ cn.s ! adjfCase c ! det.n ! c ;
+      s = \\c => det.s ! cn.g ! c ++ cn.s ! adjfCase det.a c ! det.n ! c ;
       a = agrP3 det.n ;
       isPron = False
-      } 
-     where {
-       adjfCase : Case -> Adjf = \c -> case <det.a,c> of {
-         <Strong, Nom|Acc> => Strong ;
-         _ => Weak
-         }
-       } ;      
+      } ;
 
     UsePN pn = pn ** {a = agrP3 Sg} ;
     UsePron pron = {
@@ -27,7 +21,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         a = quant.a
       in {
         s = \\g,c => pred.s ! n ! g ! c ++ quant.s ! g ! c ++ 
-                     num.s ! g ! c ++ ord.s ! a ! g ! c ;
+                     num.s ! g ! c ++ ord.s ! agrAdj g (adjfCase a c) n c ;
         n = n ;
         a = a
         } ;
@@ -46,17 +40,16 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
 
     NoPredet = {s = \\_,_,_ => []} ; 
     NoNum = {s = \\_,_ => []} ; 
-    NoOrd = {s = \\_,_,_ => []} ;
+    NoOrd = {s = \\_ => []} ;
 
     NumInt n = {s = \\_,_ => n.s} ;
 
---
---    NumNumeral numeral = {s = numeral.s ! NCard} ;
---    OrdNumeral numeral = {s = numeral.s ! NOrd} ;
---
---    AdNum adn num = {s = adn.s ++ num.s} ;
---
---    OrdSuperl a = {s = a.s ! AAdj Superl} ;
+    NumNumeral numeral = {s = \\_,_ => numeral.s ! NCard} ;
+    OrdNumeral numeral = {s = \\af => numeral.s ! NOrd af} ;
+
+    AdNum adn num = {s = \\g,c => adn.s ++ num.s ! g ! c} ;
+
+    OrdSuperl a = {s = a.s ! Superl} ;
 
     DefSg = {
       s = \\g,c => artDef ! GSg g ! c ; 
