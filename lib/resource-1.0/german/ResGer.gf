@@ -90,9 +90,10 @@ resource ResGer = ParamGer ** open Prelude in {
        _  => ad GPl c
      } ;
 
-  Verb : Type = {s : VForm => Str} ;
+  Verb : Type = {s : VForm => Str ; aux : VAux} ;
 
-  mkV : (x1,_,_,_,_,x6 : Str) -> Verb = \geben,gibt,gib,gab,gaebe,gegeben -> 
+  mkV : (x1,_,_,_,_,x6 : Str) -> VAux -> Verb = 
+    \geben,gibt,gib,gab,gaebe,gegeben,aux -> 
     let
       ifSibilant : Str -> Str -> Str -> Str = \u,b1,b2 -> 
         case u of {
@@ -114,35 +115,38 @@ resource ResGer = ParamGer ** open Prelude in {
       gabe = addE gab ;
       gibe = ifTok Str (Predef.dp 2 gib) "ig" "e" [] ++ addE gib
     in {s = table {
+
        VInf       => geben ;
+
        VPresInd Sg P1 => geb + "e" ;
        VPresInd Sg P2 => gibst ;
        VPresInd Sg P3 => gibt ;
        VPresInd Pl P2 => gebt ;
        VPresInd Pl _  => geben ; -- the famous law
+
        VImper Sg    => gibe ;
        VImper Pl    => gebt ;
-       VPresSubj Sg P1 => geb + "e" ;
+
        VPresSubj Sg P2 => geb + "est" ;
-       VPresSubj Sg P3 => geb + "e" ;
+       VPresSubj Sg _  => geb + "e" ;
        VPresSubj Pl P2 => geb + "et" ;
        VPresSubj Pl _  => geben ;
+
        VPresPart a => (regA (geben + "d")).s ! Posit ! a ;
 
-       VImpfInd Sg P1 => gab ;
        VImpfInd Sg P2 => gabe + "st" ;
-       VImpfInd Sg P3 => gab ;
+       VImpfInd Sg _  => gab ;
        VImpfInd Pl P2 => gabe + "t" ;
        VImpfInd Pl _  => gebte + "n" ;
 
-       VImpfSubj Sg P1 => gaebe ;
        VImpfSubj Sg P2 => gaebe + "st" ;
-       VImpfSubj Sg P3 => gaebe ;
+       VImpfSubj Sg _  => gaebe ;
        VImpfSubj Pl P2 => gaebe + "t" ;
        VImpfSubj Pl _  => gaebe + "n" ;
 
        VPastPart a    => gegebener ! a
-       }
+       } ;
+     aux = aux
      } ;
  
 -- This function decides whether to add an "e" to the stem before "t".
@@ -172,16 +176,14 @@ resource ResGer = ParamGer ** open Prelude in {
 -- All personal pronouns, except "ihr", conform to the simple
 -- pattern $mkPronPers$.
 
-  ProPN = {s : NPForm => Str ; n : Number ; p : Person} ;
-
-  mkPronPers : (_,_,_,_,_ : Str) -> Number -> Person -> ProPN = 
+  mkPronPers : (x1,_,_,_,x5 : Str) -> Number -> Person -> 
+               {s : NPForm => Str ; a : Agr} = 
     \ich,mich,mir,meiner,mein,n,p -> {
       s = table {
         NPCase c    => caselist ich mich mir meiner ! c ;
         NPPoss gn c => mein + pronEnding ! gn ! c
         } ;
-      n = n ;
-      p = p
+      a = {n = n ; p = p}
       } ;
 
   pronEnding : GenNum => Case => Str = table {
@@ -237,7 +239,7 @@ resource ResGer = ParamGer ** open Prelude in {
        lege = addE leg ;
        legte = lege + "te"
     in
-       mkV legen (lege+"t") leg legte legte ("ge"+lege+"t") ;
+       mkV legen (lege+"t") leg legte legte ("ge"+lege+"t") VHaben ;
 
 -- To eliminate the morpheme "ge".
 
@@ -245,29 +247,150 @@ resource ResGer = ParamGer ** open Prelude in {
     s = table {
       VPastPart a => Predef.drop 2 (verb.s ! VPastPart a) ;
       v => verb.s ! v
-      }
+      } ;
+    aux = verb.aux
+    } ;
+
+-- To change the default auxiliary "haben" to "sein".
+
+  seinV : Verb -> Verb = \verb -> {
+    s = verb.s ;
+    aux = VSein
+    } ;
+
+
+-- For $Verb$.
+
+  VP : Type = {
+      s : Agr => VPForm => {
+        fin : Str ;          -- V1 hat  ---s1
+        inf : Str            -- V2 gesagt ---s4
+        } ;
+      a1 : Polarity => Str ; -- A1 nicht ---s3
+      n2 : Agr => Str ;      -- N2 dich  ---s5
+      a2 : Str ;             -- A2 heute ---s6
+      ext : Str              -- S-Ext dass sie kommt ---s7
+      } ;
+
+  predV : Verb -> VP = \verb ->
+    let
+      vfin : Tense -> Agr -> Str = \t,a -> 
+        verb.s ! vFin t a ;
+      vpart = verb.s ! VPastPart APred ;
+      vinf = verb.s ! VInf ;
+
+      vHaben = auxPerfect verb ;
+      hat : Tense -> Agr -> Str = \t,a -> 
+        vHaben ! vFin t a ;
+      haben : Str = vHaben ! VInf ;
+
+      wird : Agr -> Str = \a -> werden_V.s ! VPresInd a.n a.p ;  
+      wuerde : Agr -> Str = \a -> werden_V.s ! VImpfSubj a.n a.p ;
+
+      vf : Str -> Str -> {fin,inf : Str} = \fin,inf -> {
+        fin = fin ; inf = inf
+        } ;
+
+    in {
+    s = \\a => table {
+      VPFinite t Simul => case t of {
+        Pres | Past => vf (vfin t a) [] ;
+        Fut  => vf (wird a) vinf ;
+        Cond => vf (wuerde a) vinf
+        } ;
+      VPFinite t Anter => case t of {
+        Pres | Past => vf (hat t a) vpart ;
+        Fut  => vf (wird a) (vpart ++ haben) ;
+        Cond => vf (wuerde a) (vpart ++ haben)
+        } ;
+      VPImperat => vf (verb.s ! VImper a.n) [] ;
+      VPInfinit Simul => vf [] vinf ;
+      VPInfinit Anter => vf [] (vpart ++ haben)
+      } ;
+    a1  : Polarity => Str = negation ;
+    n2  : Agr  => Str = \\_ => [] ;
+    a2  : Str = [] ;
+    ext : Str = []
+    } ;
+
+  auxPerfect : Verb -> VForm => Str = \verb ->
+    case verb.aux of {
+      VHaben => haben_V.s ;
+      VSein => sein_V.s
+      } ;
+
+  haben_V : Verb = 
+    let
+      haben = mkV "haben" "hat" "hab" "hatte" "hätte" "gehabt" VHaben
+    in 
+    {s = table {
+      VPresInd Sg P2 => "hast" ;
+      v => haben.s ! v
+      } ;
+     aux = VHaben 
+    } ;
+
+  werden_V : Verb = 
+    let
+      werden = mkV "werden" "wird" "werd" "wurde" "würde" "geworden" VSein
+    in 
+    {s = table {
+      VPresInd Sg P2 => "wirst" ;
+      v => werden.s ! v
+      } ;
+     aux = VSein
+    } ;
+
+  sein_V : Verb = 
+    let
+      sein = mkV "sein" "ist" "sei" "war" "wäre" "gewesen" VSein
+    in
+    {s = table {
+      VPresInd Sg P1 => "bin" ;
+      VPresInd Sg P2 => "bist" ;
+      VPresInd Pl P2 => "seid" ;
+      VPresInd Pl _  => "sind" ;
+      VImper Sg    => "sei" ;
+      VImper Pl    => "seid" ;
+      VPresSubj Sg P1 => "sei" ;
+      VPresSubj Sg P2 => (variants {"seiest" ; "seist"}) ;
+      VPresSubj Sg P3 => "sei" ;
+      VPresSubj Pl P2 => "seien" ;
+      VPresSubj Pl _  => "seiet" ;
+      VPresPart a => (regA "seiend").s ! Posit ! a ;
+      v => sein.s ! v 
+      } ;
+     aux = VSein
+    } ;
+
+  negation : Polarity => Str = table {
+      Pos => [] ;
+      Neg => "nicht"
+      } ;
+
+
+-- For $Sentence$.
+
+  Clause : Type = {
+    s : Tense => Anteriority => Polarity => Order => Str
+    } ;
+
+  mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp -> {
+      s = \\t,a,b,o =>
+        let
+          verb  = vp.s  ! agr ! VPFinite t a ;
+          neg   = vp.a1 ! b ;
+          compl = vp.n2 ! agr ++ vp.a2 ++ vp.ext
+        in
+        case o of {
+          Main => subj ++ verb.fin ++ neg ++ verb.inf ++ compl ;
+          Inv  => verb.fin ++ subj ++ neg ++ verb.inf ++ compl ;
+          Sub  => subj ++ neg ++ compl ++ verb.inf ++ verb.fin
+          }
     } ;
 
 
 
-
--- We have just a heuristic definition of the indefinite article.
--- There are lots of exceptions: consonantic "e" ("euphemism"), consonantic
--- "o" ("one-sided"), vocalic "u" ("umbrella").
---
---    artIndef = pre {
---      "a" ; 
---      "an" / strs {"a" ; "e" ; "i" ; "o" ; "A" ; "E" ; "I" ; "O" }
---      } ;
---
---    artDef = "the" ;
---
--- For $Verb$.
---
---  Verb : Type = {
---    s : VForm => Str
---    } ;
---
 --  VerbForms : Type =
 --    Tense => Anteriority => Polarity => Order => Agr => {fin, inf : Str} ; 
 --

@@ -50,11 +50,18 @@ resource ParamGer = ParamX ** {
    | VPresPart AForm 
    | VPastPart AForm ;
 
+  param VPForm =
+     VPFinite Tense Anteriority
+   | VPImperat
+   | VPInfinit Anteriority ;
+
+  param VAux = VHaben | VSein ;
+
 -- The order of sentence is depends on whether it is used as a main
 -- clause, inverted, or subordinate.
 
-    Order = ODir | OQuest ;
---
+  param  Order = Main | Inv | Sub ;
+
 --
 ----2 For $Relative$
 -- 
@@ -80,6 +87,12 @@ resource ParamGer = ParamX ** {
     agrAdj : Gender -> Adjf -> Number -> Case -> AForm = \g,a,n,c ->
       AMod a (gennum g n) c ;
 
+    vFin : Tense -> Agr -> VForm = \t,a ->
+      case t of {
+        Pres => VPresInd  a.n a.p ;
+        Past => VImpfInd  a.n a.p ;
+        _ => VInf --- never used
+        } ;
 
 --    conjAgr : Agr -> Agr -> Agr = \a,b -> {
 --      n = conjNumber a.n b.n ;

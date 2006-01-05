@@ -1,9 +1,10 @@
 concrete VerbGer of Verb = CatGer ** open ResGer in {
---
---  flags optimize=all_subs ;
---
---  lin
---    UseV = predV ;
+
+  flags optimize=all_subs ;
+
+  lin
+    UseV = predV ;
+
 --    ComplV2 v np = insertObj (\\_ => v.c2 ++ np.s ! Acc) (predV v) ;
 --    ComplV3 v np np2 = 
 --      insertObj (\\_ => v.c2 ++ np.s ! Acc ++ v.c3 ++ np2.s ! Acc) (predV v) ;
