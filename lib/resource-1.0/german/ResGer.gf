@@ -2,6 +2,8 @@
 
 --1 German auxiliary operations.
 --
+-- (c) 2002-2006 Aarne Ranta and Harald Hammarström
+--
 -- This module contains operations that are needed to make the
 -- resource syntax work. To define everything that is needed to
 -- implement $Test$, it moreover contains regular lexical
