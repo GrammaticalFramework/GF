@@ -19,7 +19,8 @@ concrete CatGer of Cat = open ResGer, Prelude in {
 
     VP = ResGer.VP ;
     V, VS, VQ, VA = ResGer.Verb ; -- = {s : VForm => Str} ;
-    V2, VV, V2A = Verb ** {c2 : Preposition} ;
+    VV = Verb ** {part : Str} ;
+    V2, V2A = Verb ** {c2 : Preposition} ;
     V3 = Verb ** {c2, c3 : Preposition} ;
 
     AP = {s : AForm => Str ; isPre : Bool} ; 

@@ -8,7 +8,7 @@ concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
               {c2 = {s = [] ; c = Dat}} ;
     show_V3 = regV "zeigen" ** 
               {c2 = {s = [] ; c = Acc} ; c3 = {s = [] ; c = Dat}} ;
---    want_VV = regV "want" ** {c2 = "to"} ;
+    want_VV = auxVV wollen_V ;
     claim_VS = no_geV (regV "behaupten") ;
     ask_VQ = regV "fragen" ;
 
