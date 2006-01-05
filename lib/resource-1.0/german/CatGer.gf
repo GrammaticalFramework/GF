@@ -37,12 +37,14 @@ concrete CatGer of Cat = open ResGer, Prelude, (R = ParamX) in {
 
     Det, Quant = {s : Gender => Case => Str ; n : Number ; a : Adjf} ;
     Predet = {s : Number => Gender => Case => Str} ;
-    Num, Ord = {s : Gender => Case => Str} ;
+    Num = {s : Gender => Case => Str} ;
+    Ord = {s : Adjf => Gender => Case => Str} ;
 
     CN = {s : Adjf => Number => Case => Str ; g : Gender} ;
     N  = {s : Number => Case => Str ; g : Gender} ;
     PN = {s : Case => Str} ;
-    Pron, NP = {s : Case => Str ; a : Agr} ;
+    Pron = {s : NPForm => Str ; a : Agr} ;
+    NP = {s : Case => Str ; a : Agr} ;
     N2 = {s : Number => Case => Str ; g : Gender} ** {c2 : Preposition} ;
     N3 = {s : Number => Case => Str ; g : Gender} ** {c2,c3 : Preposition} ;
 

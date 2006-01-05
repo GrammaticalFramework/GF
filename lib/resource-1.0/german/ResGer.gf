@@ -31,7 +31,8 @@ resource ResGer = ParamGer ** open Prelude in {
 -- More paradigms are given in $ParadigmsGer$.
 
 -- The worst-case constructor for common nouns needs six forms: all plural forms
--- are always the same except for the dative.
+-- are always the same except for the dative. Actually the six forms are never
+-- needed at the same time, but just subsets of them.
 
   Noun : Type = {s : Number => Case => Str ; g : Gender} ;
 
@@ -44,15 +45,6 @@ resource ResGer = ParamGer ** open Prelude in {
      g = g
     } ;
 
--- But we never need all the six forms at the same time. Often
--- we need just two or four forms.
-
-  mkN4 : (x1,_,_,x4 : Str) -> Gender -> Noun = \wein,weines,weine,weinen ->
-    mkN wein wein wein weines weine weinen ;
-
-  mkN2 : (x1,x2 : Str) -> Gender -> Noun = \frau,frauen ->
-    mkN4 frau frau frauen frauen ;
-
 -- Adjectives need four forms: two for the positive and one for the other degrees.
 
   Adjective : Type = {s : Degree => AForm => Str} ;
@@ -64,9 +56,6 @@ resource ResGer = ParamGer ** open Prelude in {
        Superl => adjForms best best
        }
     } ;
-
-  regA : Str -> Adjective = \blau ->
-    mkA blau blau (blau + "er") (blau + "est") ;
 
 -- This auxiliary gives the forms in each degree. 
 
@@ -156,7 +145,88 @@ resource ResGer = ParamGer ** open Prelude in {
        }
      } ;
  
--- Weak verbs, including "lächeln", "kümmern".
+-- This function decides whether to add an "e" to the stem before "t".
+-- Examples: "töten - tötet", "kehren - kehrt", "lernen - lernt", "atmen - atmet".
+
+  addE : Str -> Str = \stem ->
+    let
+      r = init (Predef.dp 2 stem) ;
+      n = last stem ;
+      e = case n of {
+        "t" | "d" => "e" ;
+        "e" | "h" => [] ;
+        _ => case r of {
+          "l" | "r" | "a" | "o" | "u" | "e" | "i" | "Ã¼" | "Ã¤" | "Ã¶"|"h" => [] ;
+          _ => "e" 
+          }
+        }
+    in 
+      stem + e ;
+
+-- Prepositions for complements indicate the complement case.
+
+  Preposition : Type = {s : Str ; c : Case} ;
+
+-- Pronouns and articles
+-- Here we define personal and relative pronouns.
+-- All personal pronouns, except "ihr", conform to the simple
+-- pattern $mkPronPers$.
+
+  ProPN = {s : NPForm => Str ; n : Number ; p : Person} ;
+
+  mkPronPers : (_,_,_,_,_ : Str) -> Number -> Person -> ProPN = 
+    \ich,mich,mir,meiner,mein,n,p -> {
+      s = table {
+        NPCase c    => caselist ich mich mir meiner ! c ;
+        NPPoss gn c => mein + pronEnding ! gn ! c
+        } ;
+      n = n ;
+      p = p
+      } ;
+
+  pronEnding : GenNum => Case => Str = table {
+    GSg Masc => caselist ""  "en" "em" "es" ;
+    GSg Fem  => caselist "e" "e"  "er" "er" ;
+    GSg Neut => caselist ""  ""   "em" "es" ;
+    GPl      => caselist "e"  "e" "en" "er"
+    } ;
+
+  artDef : GenNum => Case => Str = table {
+    GSg Masc => caselist "der" "den" "dem" "des" ;
+    GSg Fem  => caselist "die" "die" "der" "der" ;
+    GSg Neut => caselist "das" "das" "dem" "des" ;
+    GPl      => caselist "die" "die" "den" "der"
+    } ;
+
+
+--
+--    mkIP : (i,me,my : Str) -> Number -> {s : Case => Str ; n : Number} =
+--     \i,me,my,n -> let who = mkNP i me my n P3 in {s = who.s ; n = n} ;
+--
+--    mkNP : (i,me,my : Str) -> Number -> Person -> {s : Case => Str ; a : Agr} =
+--     \i,me,my,n,p -> {
+--     s = table {
+--       Nom => i ;
+--       Acc => me ;
+--       Gen => my
+--       } ;
+--     a = {
+--       n = n ;
+--       p = p
+--       }
+--     } ;
+--
+-- These functions cover many cases; full coverage inflectional patterns are
+-- in $MorphoGer$.
+
+  mkN4 : (x1,_,_,x4 : Str) -> Gender -> Noun = \wein,weines,weine,weinen ->
+    mkN wein wein wein weines weine weinen ;
+
+  mkN2 : (x1,x2 : Str) -> Gender -> Noun = \frau,frauen ->
+    mkN4 frau frau frauen frauen ;
+
+  regA : Str -> Adjective = \blau ->
+    mkA blau blau (blau + "er") (blau + "est") ;
 
   regV : Str -> Verb = \legen ->
     let 
@@ -178,60 +248,9 @@ resource ResGer = ParamGer ** open Prelude in {
       }
     } ;
 
--- This function decides whether to add an "e" to the stem before "t".
--- Examples: "töten - tötet", "kehren - kehrt", "lernen - lernt", "atmen - atmet".
 
-  addE : Str -> Str = \stem ->
-    let
-      r = init (Predef.dp 2 stem) ;
-      n = last stem ;
-      e = case n of {
-        "t" | "d" => "e" ;
-        "e" => [] ;
-        _ => case r of {
-          "l" | "r" | "a" | "o" | "u" | "e" | "i" | "Ã¼" | "Ã¤" | "Ã¶" | "h" => [] ;
-          _   => "e" 
-          }
-        }
-    in 
-      stem + e ;
 
--- Prepositions for complements indicate the complement case.
 
-  Preposition : Type = {s : Str ; c : Case} ;
-
---
---    mkIP : (i,me,my : Str) -> Number -> {s : Case => Str ; n : Number} =
---     \i,me,my,n -> let who = mkNP i me my n P3 in {s = who.s ; n = n} ;
---
---    mkNP : (i,me,my : Str) -> Number -> Person -> {s : Case => Str ; a : Agr} =
---     \i,me,my,n,p -> {
---     s = table {
---       Nom => i ;
---       Acc => me ;
---       Gen => my
---       } ;
---     a = {
---       n = n ;
---       p = p
---       }
---     } ;
---
--- These functions cover many cases; full coverage inflectional patterns are
--- in $MorphoGer$.
---
---    regN : Str -> {s : Number => Case => Str} = \car ->
---      mkNoun car (car + "'s") (car + "s") (car + "s'") ;
---
---    regA : Str -> {s : AForm => Str} = \warm ->
---      mkAdjective warm (warm + "er") (warm + "est") (warm + "ly") ;
---
---    regV : Str -> {s : VForm => Str} = \walk ->
---      mkVerb walk (walk + "s") (walk + "ed") (walk + "ed") (walk + "ing") ;
---
---    regNP : Str -> Number -> {s : Case => Str ; a : Agr} = \that,n ->
---      mkNP that that (that + "'s") n P3 ;
---
 -- We have just a heuristic definition of the indefinite article.
 -- There are lots of exceptions: consonantic "e" ("euphemism"), consonantic
 -- "o" ("one-sided"), vocalic "u" ("umbrella").
