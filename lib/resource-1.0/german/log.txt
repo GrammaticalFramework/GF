@@ -117,5 +117,23 @@ NounGer: RelCN
 > p -cat=RCl -mcfg "der geht" | l -table
 > p -cat=NP -mcfg "der Hund dem wir helfen wollen" | l -table
 
+NounGer: Num and Ord related rules
+CatGer: Ord has parametric AForm; Num has no params
+ParamGer: CardOrd
+LexGer: Numeral
+> p -cat=NP "meine vierzig warmen Hünde"
+> p -cat=NP "mein vierzigter Hund"
 
+CatGer: Conj, DConj
+ConjunctionGer: all (mostly from Scand)
+LexGer: Conj, DConj
+> p -cat=NP "ich und der Hund" | l -table
+> p -cat=S -mcfg "ich und der Hund sind entweder warm oder warm"
 
+> pm -printer=missing
+TestGer
+  AdVVP  AdvSC  ComplV2A  ComplVA  EmbedQS  EmbedS  EmbedVP  PassV2  ReflA2  ReflV2  UttVP
+  one_Numeral
+
+wc german/*.gfc
+   1231    4116   98878 total

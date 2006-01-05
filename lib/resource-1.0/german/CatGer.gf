@@ -38,7 +38,7 @@ concrete CatGer of Cat = open ResGer, Prelude in {
     Det, Quant = {s : Gender => Case => Str ; n : Number ; a : Adjf} ;
     Predet = {s : Number => Gender => Case => Str} ;
     Num = {s : Gender => Case => Str} ;
-    Ord = {s : Adjf => Gender => Case => Str} ;
+    Ord = {s : AForm => Str} ;
 
     CN = {s : Adjf => Number => Case => Str ; g : Gender} ;
     N  = {s : Number => Case => Str ; g : Gender} ;
@@ -54,11 +54,11 @@ concrete CatGer of Cat = open ResGer, Prelude in {
 
     RP = {s : GenNum => Case => Str ; a : RAgr} ;
 
---    Numeral = {s : CardOrd => Str ; n : Number} ;
+    Numeral = {s : CardOrd => Str ; n : Number} ;
 
     CAdv = {s : Str} ;    
 
---    Conj = {s : Str ; n : Number} ;
---    DConj = {s1,s2 : Str ; n : Number} ;
---
+    Conj = {s : Str ; n : Number} ;
+    DConj = {s1,s2 : Str ; n : Number} ;
+
 }

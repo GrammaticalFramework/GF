@@ -45,13 +45,19 @@ concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
     whichPl_IDet = {s = appAdj (regA "welch") ! Sg ; n = Pl} ;
 
 --    one_Numeral = {s = table {NCard => "one" ; NOrd => "first"} ; n = Sg} ;
---    forty_Numeral = {s = table {NCard => "forty" ; NOrd => "fortieth"} ; n = Pl} ;
+    forty_Numeral = {
+      s = table {
+        NCard => "vierzig" ; 
+        NOrd af => (regA "vierzigt").s ! Posit ! af
+        } ;
+      n = Pl
+      } ;
 
     in_Prep = {s = "in" ; c = Dat} ;
     of_Prep = {s = "von" ; c = Dat} ;
 
---    and_Conj = {s = "and" ; n = Pl} ;
---    either7or_DConj = {s1 = "either" ; s2 = "or" ; n = Sg} ;
+    and_Conj = {s = "und" ; n = Pl} ;
+    either7or_DConj = {s1 = "entweder" ; s2 = "oder" ; n = Sg} ;
 
     if_Subj = ss "wenn" ;
     because_Subj = ss "weil" ;

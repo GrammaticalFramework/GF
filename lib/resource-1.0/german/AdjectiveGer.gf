@@ -9,7 +9,7 @@ concrete AdjectiveGer of Adjective = CatGer ** open ResGer, Prelude in {
       isPre = True
       } ;
     ComparA a np = {
-      s = \\af => a.s ! Compar ! af ++ "als" ++ np.s ! Nom ;
+      s = \\af => a.s ! Compar ! af ++ conjThan ++ np.s ! Nom ;
       isPre = True
       } ;
 

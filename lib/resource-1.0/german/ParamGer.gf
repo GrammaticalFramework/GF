@@ -68,10 +68,10 @@ resource ParamGer = ParamX ** {
  
     RAgr = RNoAg | RAg {n : Number ; p : Person} ;
 
-----2 For $Numeral$
---
---    CardOrd = NCard | NOrd ;
---    DForm = unit | teen | ten  ;
+--2 For $Numeral$
+
+    CardOrd = NCard | NOrd AForm ;
+    DForm = unit | teen | ten  ;
 
 --2 Transformations between parameter types
 
@@ -96,6 +96,13 @@ resource ParamGer = ParamX ** {
     agrAdj : Gender -> Adjf -> Number -> Case -> AForm = \g,a,n,c ->
       AMod a (gennum g n) c ;
 
+-- This is used twice in NounGer.
+
+    adjfCase : Adjf -> Case -> Adjf = \a,c -> case <a,c> of {
+         <Strong, Nom|Acc> => Strong ;
+         _ => Weak
+         } ;      
+
     vFin : Tense -> Agr -> VForm = \t,a ->
       case t of {
         Pres => VPresInd  a.n a.p ;
@@ -103,9 +110,9 @@ resource ParamGer = ParamX ** {
         _ => VInf --- never used
         } ;
 
---    conjAgr : Agr -> Agr -> Agr = \a,b -> {
---      n = conjNumber a.n b.n ;
---      p = conjPerson a.p b.p
---      } ;
---
+    conjAgr : Agr -> Agr -> Agr = \a,b -> {
+      n = conjNumber a.n b.n ;
+      p = conjPerson a.p b.p
+      } ;
+
 }
