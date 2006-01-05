@@ -1,10 +1,11 @@
 concrete SentenceGer of Sentence = CatGer ** open ResGer in {
---
---  flags optimize=all_subs ;
---
---  lin
---    PredVP np vp = mkClause (np.s ! Nom) np.a vp ;
---
+
+  flags optimize=all_subs ;
+
+  lin
+
+    PredVP np vp = mkClause (np.s ! Nom) np.a vp ;
+
 --    PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
 --
 --    ImpVP vp = {

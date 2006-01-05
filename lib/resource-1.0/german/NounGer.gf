@@ -41,7 +41,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
     PossPronPl p = {
       s = \\g,c => p.s ! NPPoss (gennum g Pl) c ;
       n = Pl ;
-      a = Strong
+      a = Weak
       } ;
 
     NoPredet = {s = \\_,_,_ => []} ; 

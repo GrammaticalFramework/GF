@@ -1,8 +1,8 @@
 concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
 
   lin
-    walk_V  = mkV "gehen" "geht" "geh" "ging" "ginge" "gegangen" ;
-    help_V2 = mkV "helfen" "hilft" "hilf" "half" "hälfe" "geholfen" ** 
+    walk_V  = mkV "gehen" "geht" "geh" "ging" "ginge" "gegangen" VSein ;
+    help_V2 = mkV "helfen" "hilft" "hilf" "half" "hälfe" "geholfen" VHaben ** 
               {c2 = {s = [] ; c = Dat}} ;
     show_V3 = regV "zeigen" ** 
               {c2 = {s = [] ; c = Acc} ; c3 = {s = [] ; c = Dat}} ;
@@ -22,14 +22,14 @@ concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
     always_AdV = {s = "immer"} ;
 
     only_Predet = {s = \\_,_,_ => "nur"} ;
---    all_Predet = {s = "only"} ;
---    this_Quant = {s = "this" ; n = Sg} ;
---    these_Quant = {s = "these" ; n = Pl} ;
---    
---    i_Pron  = mkNP "I"  "me"  "my"  Sg P1 ;
---    he_Pron = mkNP "he" "him" "his" Sg P3 ;
---    we_Pron = mkNP "we" "us"  "our" Pl P1 ;
---
+    all_Predet = {s = appAdj (regA "all")} ;
+    this_Quant = {s = appAdj (regA "dies") ! Sg ; n = Sg ; a = Weak} ;
+    these_Quant = {s = appAdj (regA "dies") ! Pl ; n = Pl ; a = Weak} ;
+    
+    i_Pron  = mkPronPers "ich" "mich" "mir"   "meiner" "mein"  Sg P1 ;
+    he_Pron = mkPronPers "er"  "ihn"  "ihm"   "seiner" "sein"  Sg P3 ;
+    we_Pron = mkPronPers "wir" "uns"  "uns"   "unser"  "unser" Pl P1 ;
+
 --    whoSg_IP = mkIP "who" "whom" "whose" Sg ;
 --    whoPl_IP = mkIP "who" "whom" "whose" Pl ;
 --

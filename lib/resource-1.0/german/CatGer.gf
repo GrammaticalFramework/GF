@@ -8,18 +8,14 @@ concrete CatGer of Cat = open ResGer, Prelude, (R = ParamX) in {
 --    S  = {s : Str} ;
 --    QS = {s : QForm => Str} ;
 --    RS = {s : Agr => Str} ;
---
---    Cl    = {s : Tense => Anteriority => Polarity => Order => Str} ;
+
+    Cl = {s : Tense => Anteriority => Polarity => Order => Str} ;
 --    Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** {c2 : Str} ;
 --
 --    QCl   = {s : Tense => Anteriority => Polarity => QForm => Str} ;
 --    RCl   = {s : Tense => Anteriority => Polarity => Agr => Str} ;
---
---    VP = {
---      s  : Tense => Anteriority => Polarity => Order => Agr => {fin, inf : Str} ; 
---      s2 : Agr => Str
---      } ;
---
+
+    VP = ResGer.VP ;
     V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
     V2, VV, V2A = Verb ** {c2 : Preposition} ;
     V3 = Verb ** {c2, c3 : Preposition} ;
