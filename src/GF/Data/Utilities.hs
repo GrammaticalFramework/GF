@@ -88,6 +88,12 @@ lookup' x = fromJust . lookup x
 find' :: (a -> Bool) -> [a] -> a
 find' p = fromJust . find p
 
+-- | Set a value in a lookup table.
+tableSet :: Eq a => a -> b -> [(a,b)] -> [(a,b)]
+tableSet x y [] = [(x,y)]
+tableSet x y (p@(x',_):xs) | x' == x = (x,y):xs
+                           | otherwise = p:tableSet x y xs
+
 -- * equality functions
 
 -- | Use an ordering function as an equality predicate.

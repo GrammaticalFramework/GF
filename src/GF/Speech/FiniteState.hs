@@ -22,6 +22,7 @@ module GF.Speech.FiniteState (FA, State, NFA, DFA,
                               oneFinalState,
 			      moveLabelsToNodes, minimize,
                               dfa2nfa,
+                              unusedNames, renameStates,
 			      prFAGraphviz, faToGraphviz) where
 
 import Data.List
@@ -84,6 +85,20 @@ mapTransitions f = onGraph (emap f)
 minimize :: Ord a => NFA a -> DFA a
 minimize = determinize . reverseNFA . dfa2nfa . determinize . reverseNFA
 
+unusedNames :: FA n a b -> [n]
+unusedNames (FA (Graph names _ _) _ _) = names
+
+-- | Give new names to all nodes.
+renameStates :: Ord x => [y] -- ^ Infinite supply of new names
+             -> FA x a b
+             -> FA y a b
+renameStates supply (FA g s fs) = FA (renameNodes newName rest g) s' fs'
+    where (ns,rest) = splitAt (length (nodes g)) supply
+          newNodes = Map.fromList (zip (map fst (nodes g)) ns)
+	  newName n = Map.findWithDefault (error "FiniteState.newName") n newNodes
+          s' = newName s
+          fs' = map newName fs
+
 onGraph :: (Graph n a b -> Graph n c d) -> FA n a b -> FA n c d
 onGraph f (FA g s ss) = FA (f g) s ss
 
@@ -138,7 +153,7 @@ determinize (FA g s f) = let (ns,es) = h (Set.singleton start) Set.empty Set.emp
                              (ns',es') = (Set.toList ns, Set.toList es)
                              final = filter isDFAFinal ns'
                              fa = FA (Graph undefined [(n,()) | n <- ns'] es') start final
- 		          in numberStates fa
+ 		          in renameStates [0..] fa
   where out = outgoing g
 --        reach = nodesReachable out
 	start = closure out $ Set.singleton s
@@ -158,13 +173,6 @@ determinize (FA g s f) = let (ns,es) = h (Set.singleton start) Set.empty Set.emp
                 rs' = rs `Set.union` Set.fromList (map snd cs)
                 es' = es `Set.union` Set.fromList [(n,s,c) | (c,s) <- cs]
 
-numberStates :: (Ord x,Enum y) => FA x a b -> FA y a b
-numberStates (FA g s fs) = FA (renameNodes newName rest g) s' fs'
-    where (ns,rest) = splitAt (length (nodes g)) $ [toEnum 0 .. ]
-          newNodes = Map.fromList (zip (map fst (nodes g)) ns)
-	  newName n = Map.findWithDefault (error "FiniteState.newName") n newNodes
-          s' = newName s
-          fs' = map newName fs
 
 -- | Get all the nodes reachable from a list of nodes by only empty edges.
 closure :: Ord n => Outgoing n a (Maybe b) -> Set n -> Set n
@@ -213,14 +221,14 @@ dfa2nfa = mapTransitions Just
 --
 
 prFAGraphviz :: (Eq n,Show n) => FA n String String -> String
-prFAGraphviz  = Dot.prGraphviz . faToGraphviz ""
+prFAGraphviz  = Dot.prGraphviz . faToGraphviz
 
 prFAGraphviz_ :: (Eq n,Show n,Show a, Show b) => FA n a b -> String
-prFAGraphviz_  = Dot.prGraphviz . faToGraphviz "" . mapStates show . mapTransitions show
+prFAGraphviz_  = Dot.prGraphviz . faToGraphviz . mapStates show . mapTransitions show
 
-faToGraphviz :: (Eq n,Show n) => String -- ^ Graph ID
-             -> FA n String String -> Dot.Graph
-faToGraphviz i (FA (Graph _ ns es) s f) = Dot.Graph Dot.Directed i [] (map mkNode ns) (map mkEdge es) []
+faToGraphviz :: (Eq n,Show n) => FA n String String -> Dot.Graph
+faToGraphviz (FA (Graph _ ns es) s f) 
+    = Dot.Graph Dot.Directed Nothing [] (map mkNode ns) (map mkEdge es) []
    where mkNode (n,l) = Dot.Node (show n) attrs
 	     where attrs = [("label",l)]
 			   ++ if n == s then [("shape","box")] else []
