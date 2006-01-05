@@ -1,54 +1,69 @@
 concrete QuestionGer of Question = CatGer ** open ResGer in {
---
---  flags optimize=all_subs ;
---
---  lin
---
---    QuestCl cl = {
---      s = \\t,a,p => 
---            let cls = cl.s ! t ! a ! p 
---            in table {
---              QDir   => cls ! OQuest ;
---              QIndir => "if" ++ cls ! ODir
---              } ---- "whether" in ExtGer
---      } ;
---
---    QuestVP qp vp = 
---      let cl = mkClause (qp.s ! Nom) {n = qp.n ; p = P3} vp
---      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
---
---    QuestSlash ip slash = {
---      s = \\t,a,p => 
---            let 
---              cls = slash.s ! t ! a ! p ;
---              who = slash.c2 ++ ip.s ! Acc --- stranding in ExtGer 
---            in table {
---              QDir   => who ++ cls ! OQuest ;
---              QIndir => who ++ cls ! ODir
---              }
---      } ;
---
---    QuestIAdv iadv cl = {
---      s = \\t,a,p => 
---            let 
---              cls = cl.s ! t ! a ! p ;
---              why = iadv.s
---            in table {
---              QDir   => why ++ cls ! OQuest ;
---              QIndir => why ++ cls ! ODir
---              }
---      } ;
---
---    PrepIP p ip = {s = p.s ++ ip.s ! Nom} ;
---
---    AdvIP ip adv = {
---      s = \\c => ip.s ! c ++ adv.s ;
---      n = ip.n
---      } ;
--- 
---    IDetCN idet num ord cn = {
---      s = \\c => idet.s ++ num.s ++ ord.s ++ cn.s ! idet.n ! c ; 
---      n = idet.n
---      } ;
---
+
+  flags optimize=all_subs ;
+
+  lin
+
+    QuestCl cl = {
+      s = \\t,a,p => 
+            let cls = cl.s ! t ! a ! p 
+            in table {
+              QDir   => cls ! Inv ;
+              QIndir => "ob" ++ cls ! Sub
+              }
+      } ;
+
+    QuestVP qp vp = {
+      s = \\t,a,b,q => 
+        let 
+          cl = (mkClause (qp.s ! Nom) (agrP3 qp.n) vp).s ! t ! a ! b
+        in
+        case q of {
+            QIndir => cl ! Sub ;
+            _      => cl ! Main
+            }
+      } ;
+
+    QuestSlash ip slash = {
+      s = \\t,a,p => 
+            let 
+              cls = slash.s ! t ! a ! p ;
+              who = appPrep slash.c2 ip.s
+            in table {
+              QDir   => who ++ cls ! Inv ;
+              QIndir => who ++ cls ! Sub
+              }
+      } ;
+
+    QuestIAdv iadv cl = {
+      s = \\t,a,p => 
+            let 
+              cls = cl.s ! t ! a ! p ;
+              why = iadv.s
+            in table {
+              QDir   => why ++ cls ! Inv ;
+              QIndir => why ++ cls ! Sub
+              }
+      } ;
+
+    PrepIP p ip = {
+      s = appPrep p ip.s
+      } ;
+
+    AdvIP ip adv = {
+      s = \\c => ip.s ! c ++ adv.s ;
+      n = ip.n
+      } ;
+ 
+    IDetCN idet num ord cn = 
+      let 
+        g = cn.g ;
+        n = idet.n
+      in {
+      s = \\c => 
+           idet.s ! g ! c ++ num.s ! g ! c ++ ord.s ! Weak ! g ! c ++ cn.s ! Weak ! n ! c ; 
+      n = n
+      } ;
+
 }
+

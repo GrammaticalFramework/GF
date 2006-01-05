@@ -12,8 +12,8 @@ concrete CatGer of Cat = open ResGer, Prelude in {
 --    RS = {s : Agr => Str} ;
 
     Cl = {s : Tense => Anteriority => Polarity => Order => Str} ;
---    Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** {c2 : Str} ;
---
+    Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** {c2 : Preposition} ;
+
     QCl   = {s : Tense => Anteriority => Polarity => QForm => Str} ;
     RCl   = {s : Tense => Anteriority => Polarity => Agr => Str} ;
 

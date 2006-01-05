@@ -32,33 +32,33 @@ concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
     he_Pron = mkPronPers "er"  "ihn"  "ihm"   "seiner" "sein"  Sg P3 ;
     we_Pron = mkPronPers "wir" "uns"  "uns"   "unser"  "unser" Pl P1 ;
 
---    whoSg_IP = mkIP "who" "whom" "whose" Sg ;
---    whoPl_IP = mkIP "who" "whom" "whose" Pl ;
---
---    when_IAdv = {s = "when"} ;
---    where_IAdv = {s = "where"} ;
---    why_IAdv = {s = "why"} ;
---
---    whichSg_IDet = {s = "which" ; n = Sg} ;
---    whichPl_IDet = {s = "which" ; n = Pl} ;
---
+    whoSg_IP = {s = caselist "wer" "wen" "wem" "wessen" ; n = Sg} ;
+    whoPl_IP = {s = caselist "wer" "wen" "wem" "wessen" ; n = Pl} ;
+
+    when_IAdv = {s = "wann"} ;
+    where_IAdv = {s = "wo"} ;
+    why_IAdv = {s = "warum"} ;
+
+    whichSg_IDet = {s = appAdj (regA "welch") ! Sg ; n = Sg} ;
+    whichPl_IDet = {s = appAdj (regA "welch") ! Sg ; n = Pl} ;
+
 --    one_Numeral = {s = table {NCard => "one" ; NOrd => "first"} ; n = Sg} ;
 --    forty_Numeral = {s = table {NCard => "forty" ; NOrd => "fortieth"} ; n = Pl} ;
---
---    in_Prep = {s = "in"} ;
---    of_Prep = {s = "of"} ;
---
+
+    in_Prep = {s = "in" ; c = Dat} ;
+    of_Prep = {s = "von" ; c = Dat} ;
+
 --    and_Conj = {s = "and" ; n = Pl} ;
 --    either7or_DConj = {s1 = "either" ; s2 = "or" ; n = Sg} ;
---
---    if_Subj = ss "if" ;
---    because_Subj = ss "because" ;
---
---    but_PConj = {s = "but"} ;
---   
---    please_Voc = {s = "," ++ "please"} ;
---
---    more_CAdv = ss "more" ;
---    less_CAdv = ss "less" ;
---
+
+    if_Subj = ss "wenn" ;
+    because_Subj = ss "weil" ;
+
+    but_PConj = {s = "aber"} ;
+   
+    please_Voc = {s = "," ++ "bitte"} ;
+
+    more_CAdv = ss "mehr" ;
+    less_CAdv = ss "weniger" ;
+
 }
