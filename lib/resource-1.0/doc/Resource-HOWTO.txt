@@ -1,5 +1,4 @@
-
-Resource grammar HOWTO
+Resource grammar writing HOWTO
 Author: Aarne Ranta <aarne (at) cs.chalmers.se>
 Last update: %%date(%c)
 
@@ -10,21 +9,10 @@ Last update: %%date(%c)
 %!target:html
 
 
-  =HOW TO WRITE A RESOURCE GRAMMAR=
-
-
-
-  [Aarne Ranta http://www.cs.chalmers.se/~aarne/]
-
-  %%Date
-
-
-
 The purpose of this document is to tell how to implement the GF
 resource grammar API for a new language. We will //not// cover how
 to use the resource grammar, nor how to change the API. But we
 will give some hints how to extend the API.
-
 
 
 **Notice**. This document concerns the API v. 1.0 which has not
@@ -240,7 +228,11 @@ of resource v. 1.0.
 ```
      tells you what exactly is missing.
 
+Here is the module structure of ``TestGer``. It has been simplified by leaving out
+the majority of the phrase category modules. Each of them has the same dependencies
+as e.g. ``VerbGer``.
 
+[German.png]
 
 
 ===The develop-test cycle===
@@ -296,6 +288,13 @@ Of course, you don't need to complete one phrase category module before starting
 with the next one. Actually, a suitable subset of ``Noun``,
 ``Verb``, and ``Adjective`` will lead to a reasonable coverage
 very soon, keep you motivated, and reveal errors.
+
+
+Here is a [live log ../german/log.txt] of the actual process of
+building the German implementation of resource API v. 1.0.
+It is the basis of the more detailed explanations, which will
+follow soon. (You will found out that these explanations involve
+a rational reconstruction of the live process!)
 
 
 ===Resource modules used===
