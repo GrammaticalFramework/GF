@@ -145,16 +145,17 @@ moveLabelsToNodes = onGraph f
 
 -- | Remove empty nodes which are not start or final, and have
 --   exactly one outgoing edge or exactly one incoming edge.
-removeTrivialEmptyNodes :: Ord n => FA n (Maybe a) () -> FA n (Maybe a) ()
+removeTrivialEmptyNodes :: (Eq a, Ord n) => FA n (Maybe a) () -> FA n (Maybe a) ()
 removeTrivialEmptyNodes = pruneUnusable . skipSimpleEmptyNodes
 
 -- | Move edges to empty nodes with exactly one outgoing edge 
 --   or exactly one incoming edge to point to the next node(s).
-skipSimpleEmptyNodes :: Ord n => FA n (Maybe a) () -> FA n (Maybe a) ()
+skipSimpleEmptyNodes :: (Eq a, Ord n) => FA n (Maybe a) () -> FA n (Maybe a) ()
 skipSimpleEmptyNodes = onGraph og
   where 
-  og g@(Graph c ns es) = Graph c ns (concatMap changeEdge es)
+  og g@(Graph c ns es) = if es' == es then g else og (Graph c ns es')
     where
+    es' = concatMap changeEdge es
     info = nodeInfo g
     changeEdge e@(f,t,()) 
       | isNothing (getNodeLabel info t)
@@ -171,11 +172,12 @@ isInternal (FA _ start final) n = n /= start && n `notElem` final
 pruneUnusable :: Ord n => FA n (Maybe a) () -> FA n (Maybe a) ()
 pruneUnusable fa = onGraph f fa
  where
- f g = removeNodes (Set.fromList [ n | (n,_) <- nodes g, 
-                                   isInternal fa n,
-                                   inDegree info n == 0 
-                                    || outDegree info n == 0]) g
+ f g = if Set.null rns then g else f (removeNodes rns g)
   where info = nodeInfo g
+        rns = Set.fromList [ n | (n,_) <- nodes g, 
+                             isInternal fa n,
+                             inDegree info n == 0 
+                             || outDegree info n == 0]
 
 fixIncoming :: (Ord n, Eq a) => [n] 
             -> (Node n (),[Edge n (Maybe a)]) -- ^ A node and its incoming edges
