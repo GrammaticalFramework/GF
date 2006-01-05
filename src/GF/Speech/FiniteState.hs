@@ -128,34 +128,37 @@ moveLabelsToNodes = onGraph f
 
 
 -- | Remove empty nodes which are not start or final, and have
---   exactly one outgoing edge.
+--   exactly one outgoing edge or exactly one incoming edge.
 removeTrivialEmptyNodes :: Ord n => FA n (Maybe a) () -> FA n (Maybe a) ()
-removeTrivialEmptyNodes = pruneUnreachable . skipEmptyNodes
+removeTrivialEmptyNodes = pruneUnusable . skipSimpleEmptyNodes
 
--- | Move edges to empty nodes with one outgoing edge to the next edge.
-skipEmptyNodes :: Ord n => FA n (Maybe a) () -> FA n (Maybe a) ()
-skipEmptyNodes = onGraph og
+-- | Move edges to empty nodes with exactly one outgoing edge 
+--   or exactly one incoming edge to point to the next node(s).
+skipSimpleEmptyNodes :: Ord n => FA n (Maybe a) () -> FA n (Maybe a) ()
+skipSimpleEmptyNodes = onGraph og
   where 
-  og g@(Graph c ns es) = Graph c ns (map changeEdge es)
+  og g@(Graph c ns es) = Graph c ns (concatMap changeEdge es)
     where
     info = nodeInfo g
     changeEdge e@(f,t,()) 
-      | isNothing (getNodeLabel info t) 
-          = case getOutgoing info t of
-                [(_,t',())] -> (f,t',())
-                _ -> e
-      | otherwise = e
+      | isNothing (getNodeLabel info t)
+        && (inDegree info t == 1 || outDegree info t == 1)
+          = [ (f,t',()) | (_,t',()) <- getOutgoing info t]
+      | otherwise = [e]
+
 
 isInternal :: Eq n => FA n a b -> n -> Bool
 isInternal (FA _ start final) n = n /= start && n `notElem` final
 
--- | Remove all internal nodes with no incoming edges.
-pruneUnreachable :: Ord n => FA n (Maybe a) () -> FA n (Maybe a) ()
-pruneUnreachable fa = onGraph f fa
+-- | Remove all internal nodes with no incoming edges
+--   or no outgoing edges.
+pruneUnusable :: Ord n => FA n (Maybe a) () -> FA n (Maybe a) ()
+pruneUnusable fa = onGraph f fa
  where
  f g = removeNodes (Set.fromList [ n | (n,_) <- nodes g, 
                                    isInternal fa n,
-                                   null (getIncoming info n)]) g
+                                   inDegree info n == 0 
+                                    || outDegree info n == 0]) g
   where info = nodeInfo g
 
 fixIncoming :: (Ord n, Eq a) => [n] 

@@ -17,6 +17,7 @@ module GF.Speech.Graph ( Graph(..), Node, Edge, NodeInfo
                         , removeNodes
                         , nodeInfo
                         , getIncoming, getOutgoing, getNodeLabel
+                        , inDegree, outDegree
                         , edgeFrom, edgeTo, edgeLabel
                         , reverseGraph, renameNodes
                        ) where
@@ -108,6 +109,12 @@ getIncoming i n = let (_,inc,_) = lookupNode i n in inc
 
 getOutgoing :: Ord n => NodeInfo n a b -> n -> [Edge n b]
 getOutgoing i n = let (_,_,out) = lookupNode i n in out
+
+inDegree :: Ord n => NodeInfo n a b -> n -> Int
+inDegree i n = length $ getIncoming i n
+
+outDegree :: Ord n => NodeInfo n a b -> n -> Int
+outDegree i n = length $ getOutgoing i n
 
 getNodeLabel :: Ord n => NodeInfo n a b -> n -> a
 getNodeLabel i n = let (l,_,_) = lookupNode i n in l
