@@ -13,7 +13,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Speech.CFGToFiniteState (cfgToFA, makeSimpleRegular,
-                                   MFALabel(..), MFA(..), cfgToMFA) where
+                                   MFALabel(..), MFA(..), cfgToMFA,cfgToFA') where
 
 import Data.List
 import Data.Maybe
@@ -30,6 +30,7 @@ import GF.Infra.Ident (Ident)
 import GF.Infra.Option (Options)
 
 import GF.Speech.FiniteState
+import GF.Speech.Graph
 import GF.Speech.Relation
 import GF.Speech.TransformCFG
 
@@ -44,6 +45,17 @@ data MutRecSet = MutRecSet {
 
 
 type MutRecSets = Map Cat_ MutRecSet
+
+--
+-- * Multiple DFA type
+--
+
+data MFALabel a = MFASym a | MFASub String
+                deriving Eq
+
+data MFA a = MFA (DFA (MFALabel a)) [(String,DFA (MFALabel a))]
+
+
 
 cfgToFA :: Options -> CGrammar -> DFA String
 cfgToFA opts = minimize . compileAutomaton start . makeSimpleRegular
@@ -139,30 +151,41 @@ make_fa c@(g,ns) q0 alpha q1 fa =
   make_fa_ = make_fa c
   make_fas xs fa = foldl' (\f' (s1,xs,s2) -> make_fa_ s1 xs s2 f') fa xs
 
-
---
--- * Multiple DFA type
---
-
-data MFALabel a = MFASym a | MFASub String
-                deriving Eq
-
-data MFA a = MFA (DFA (MFALabel a)) [(String,DFA (MFALabel a))]
-
 --
 -- * Compile a strongly regular grammar to a DFA with sub-automata
 --
 
 cfgToMFA :: Options -> CGrammar -> MFA String
-cfgToMFA opts g = sortSubLats $ removeUnusedSubLats mfa
+cfgToMFA opts g = buildMFA start g
   where start = getStartCat opts
-        startFA = let (fa,s,f) = newFA_
+
+-- | Build a DFA by building and expanding an MFA
+cfgToFA' :: Options -> CGrammar -> DFA String
+cfgToFA' opts g = mfaToDFA $ cfgToMFA opts g
+
+buildMFA :: Cat_ -- ^ Start category
+         -> CGrammar -> MFA String
+buildMFA start g = sortSubLats $ removeUnusedSubLats mfa
+  where startFA = let (fa,s,f) = newFA_
                    in newTransition s f (MFASub start) fa
         fas = compileAutomata $ makeSimpleRegular g
         mkMFALabel (Cat c) = MFASub c
         mkMFALabel (Tok t) = MFASym t
         toMFA = mapTransitions mkMFALabel
         mfa = MFA startFA [(c, toMFA (minimize fa)) | (c,fa) <- fas]
+
+mfaToDFA :: Ord a => MFA a -> DFA a
+mfaToDFA (MFA main subs) = minimize $ expand $ dfa2nfa main
+  where
+  subs' = Map.fromList [(c, dfa2nfa n) | (c,n) <- subs]
+  getSub l = fromJust $ Map.lookup l subs'
+  expand (FA (Graph c ns es) s f) 
+      = foldl' expandEdge (FA (Graph c ns []) s f) es
+  expandEdge fa (f,t,x) = 
+      case x of
+             Nothing         -> newTransition f t Nothing  fa
+             Just (MFASym s) -> newTransition f t (Just s) fa
+             Just (MFASub l) -> insertNFA fa (f,t) (expand $ getSub l)
 
 removeUnusedSubLats :: MFA a -> MFA a
 removeUnusedSubLats mfa@(MFA main subs) = MFA main [(c,s) | (c,s) <- subs, isUsed c]

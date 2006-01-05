@@ -11,15 +11,17 @@
 --
 -- A simple finite state network module.
 -----------------------------------------------------------------------------
-module GF.Speech.FiniteState (FA, State, NFA, DFA,
+module GF.Speech.FiniteState (FA(..), State, NFA, DFA,
 			      startState, finalStates,
 			      states, transitions,
 			      newFA, 
 			      addFinalState,
 			      newState, newStates,
-                              newTransition,
+                              newTransition, newTransitions,
 			      mapStates, mapTransitions,
                               oneFinalState,
+                              insertNFA,
+                              onGraph,
 			      moveLabelsToNodes, removeTrivialEmptyNodes,
                               minimize,
                               dfa2nfa,
@@ -77,6 +79,9 @@ newStates xs (FA g s ss) = (FA g' s ss, ns)
 newTransition :: n -> n -> b -> FA n a b -> FA n a b
 newTransition f t l = onGraph (newEdge (f,t,l))
 
+newTransitions :: [(n, n, b)] -> FA n a b -> FA n a b
+newTransitions es = onGraph (newEdges es)
+
 mapStates :: (a -> c) -> FA n a b -> FA n c b
 mapStates f = onGraph (nmap f)
 
@@ -99,6 +104,17 @@ renameStates supply (FA g s fs) = FA (renameNodes newName rest g) s' fs'
 	  newName n = Map.findWithDefault (error "FiniteState.newName") n newNodes
           s' = newName s
           fs' = map newName fs
+
+-- | Insert an NFA into another
+insertNFA :: NFA a -- ^ NFA to insert into
+          -> (State, State) -- ^ States to insert between
+          -> NFA a -- ^ NFA to insert.
+          -> NFA a
+insertNFA (FA g1 s1 fs1) (f,t) (FA g2 s2 fs2) 
+    = FA (newEdges es g') s1 fs1
+    where 
+    es = (f,ren s2,Nothing):[(ren f2,t,Nothing) | f2 <- fs2]
+    (g',ren) = mergeGraphs g1 g2
 
 onGraph :: (Graph n a b -> Graph n c d) -> FA n a b -> FA n c d
 onGraph f (FA g s ss) = FA (f g) s ss

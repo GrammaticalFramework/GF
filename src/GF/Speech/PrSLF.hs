@@ -78,7 +78,7 @@ renameSubs (MFA main subs) = MFA (renameLabels main) subs'
 
 slfGraphvizPrinter :: Ident -> Options -> CGrammar -> String
 slfGraphvizPrinter name opts cfg 
-    = prFAGraphviz $ gvFA $ slfStyleFA $ cfgToFA opts cfg
+    = prFAGraphviz $ gvFA $ slfStyleFA $ cfgToFA' opts cfg
   where 
   gvFA = mapStates (fromMaybe "") . mapTransitions (const "")
 
@@ -116,7 +116,7 @@ gvSLFFA n fa =
 
 slfPrinter :: Ident -> Options -> CGrammar -> String
 slfPrinter name opts cfg 
-    = prSLF (automatonToSLF mkSLFNode $ slfStyleFA $ cfgToFA opts cfg) ""
+    = prSLF (automatonToSLF mkSLFNode $ slfStyleFA $ cfgToFA' opts cfg) ""
 
 --
 -- * SLF printing (with sub-networks)
