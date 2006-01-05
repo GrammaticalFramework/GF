@@ -62,13 +62,25 @@ slfGraphvizPrinter :: Ident -- ^ Grammar name
 	           -> Options -> CGrammar -> String
 slfGraphvizPrinter name opts cfg = Dot.prGraphviz g
   where MFA main subs = cfgToMFA opts cfg
-        g = Dot.addSubGraphs (map (uncurry gvSLFFA) subs) $ gvSLFFA "" main
+        g = STM.evalState (liftM2 Dot.addSubGraphs ss m) [0..] 
+        ss = mapM (\ (c,f) -> gvSLFFA (Just c) f) subs
+        m = gvSLFFA Nothing main
 
-gvSLFFA :: String -> DFA (MFALabel String) -> Dot.Graph
-gvSLFFA n = faToGraphviz n . mapStates (maybe "" mfaLabelToGv) 
-            . mapTransitions (const "") . slfStyleFA
+gvSLFFA :: Maybe String -> DFA (MFALabel String) -> STM.State [State] Dot.Graph
+gvSLFFA n fa = 
+    liftM (mkCluster n . faToGraphviz . mapStates (maybe "" mfaLabelToGv) 
+            . mapTransitions (const "")) (rename $ slfStyleFA fa)
   where mfaLabelToGv (MFASym s) = s
-        mfaLabelToGv (MFASub s) = "<" ++ s ++ ">"
+        mfaLabelToGv (MFASub s) = "#" ++ s
+        mkCluster Nothing = id
+        mkCluster (Just x) 
+            = Dot.setName ("cluster_"++x) . Dot.setAttr "label" x
+        rename fa = do
+                    names <- STM.get
+                    let fa' = renameStates names fa
+                        names' = unusedNames fa'
+                    STM.put names'
+                    return fa'
 
 mapMFA :: (DFA (MFALabel a) -> b) -> MFA a -> (b,[(String,b)])
 mapMFA f (MFA main subs) = (f main, [(c, f fa) | (c,fa) <- subs])

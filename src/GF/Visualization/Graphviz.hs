@@ -17,6 +17,8 @@ module GF.Visualization.Graphviz (
 				  Node(..), Edge(..),
 				  Attr,
                                   addSubGraphs,
+                                  setName,
+                                  setAttr,
 				  prGraphviz
 			) where
 
@@ -25,7 +27,14 @@ import Data.Char
 import GF.Data.Utilities
 
 -- | Graph type, graph ID, graph attirbutes, graph nodes, graph edges, subgraphs
-data Graph = Graph GraphType String [Attr] [Node] [Edge] [Graph]
+data Graph = Graph {
+                    gType :: GraphType,
+                    gId :: Maybe String,
+                    gAttrs :: [Attr],
+                    gNodes :: [Node],
+                    gEdges :: [Edge],
+                    gSubgraphs :: [Graph]
+                   }
   deriving (Show)
 
 data GraphType = Directed | Undirected
@@ -44,7 +53,13 @@ type Attr = (String,String)
 --
 
 addSubGraphs :: [Graph] -> Graph -> Graph
-addSubGraphs nss (Graph t i at ns es ss) = Graph t i at ns es (nss++ss)
+addSubGraphs gs g = g { gSubgraphs = gs ++ gSubgraphs g }
+
+setName :: String -> Graph -> Graph
+setName n g = g { gId = Just n }
+
+setAttr :: String -> String -> Graph -> Graph
+setAttr n v g = g { gAttrs = tableSet n v (gAttrs g) }
 
 --
 -- * Pretty-printing
@@ -52,11 +67,11 @@ addSubGraphs nss (Graph t i at ns es ss) = Graph t i at ns es (nss++ss)
 
 prGraphviz :: Graph -> String
 prGraphviz g@(Graph t i _ _ _ _) =
-    graphtype t ++ " " ++ esc i ++ " {\n" ++ prGraph g ++ "}\n"
+    graphtype t ++ " " ++ maybe "" esc i ++ " {\n" ++ prGraph g ++ "}\n"
 
 prSubGraph :: Graph -> String
 prSubGraph g@(Graph _ i _ _ _ _) = 
-    "subgraph" ++ " " ++ esc i ++ " {\n" ++ prGraph g ++ "}"
+    "subgraph" ++ " " ++ maybe "" esc i ++ " {\n" ++ prGraph g ++ "}"
 
 prGraph :: Graph -> String
 prGraph (Graph t id at ns es ss) = 
