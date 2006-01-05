@@ -58,7 +58,7 @@ import GF.CF.CFtoSRG
 import GF.Speech.PrGSL (gslPrinter)
 import GF.Speech.PrJSGF (jsgfPrinter)
 import GF.Speech.PrSRGS (srgsXmlPrinter)
-import GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter)
+import GF.Speech.PrSLF
 import GF.Speech.PrFA (faGraphvizPrinter,regularPrinter,faCPrinter)
 
 import GF.Data.Zipper
@@ -259,6 +259,12 @@ customGrammarPrinter =
   ,(strCI "slf_graphviz", \s -> let opts = stateOptions s
                                     name = cncId s
                                  in slfGraphvizPrinter name opts $ stateCFG s)
+  ,(strCI "slf_sub", \s -> let opts = stateOptions s
+                               name = cncId s
+                            in slfSubPrinter name opts $ stateCFG s)
+  ,(strCI "slf_sub_graphviz", \s -> let opts = stateOptions s
+                                        name = cncId s
+                                     in slfSubGraphvizPrinter name opts $ stateCFG s)
   ,(strCI "fa_graphviz", \s -> let opts = stateOptions s
                                    name = cncId s
                                  in faGraphvizPrinter name opts $ stateCFG s)

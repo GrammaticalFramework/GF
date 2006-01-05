@@ -570,7 +570,9 @@ q, quit: q
     -printer=srgs_xml       SRGS XML format
     -printer=srgs_xml_prob  SRGS XML format, with weights
     -printer=slf            a finite automaton in the HTK SLF format
-    -printer=slf_graphviz   the same automaton as in SLF, but in Graphviz format
+    -printer=slf_graphviz   the same automaton as slf, but in Graphviz format
+    -printer=slf_sub        a finite automaton with sub-automata in the HTK SLF format
+    -printer=slf_sub_graphviz the same automaton as slf_sub, but in Graphviz format
     -printer=fa_graphviz    a finite automaton with labelled edges
     -printer=regular        a regular grammar in a simple BNF
     -printer=unpar          a gfc grammar with parameters eliminated
