@@ -150,11 +150,11 @@ data MFALabel a = MFASym a | MFASub String
 data MFA a = MFA (DFA (MFALabel a)) [(String,DFA (MFALabel a))]
 
 --
--- * Compile strongly regular grammars to multiple DFAs
+-- * Compile a strongly regular grammar to a DFA with sub-automata
 --
 
 cfgToMFA :: Options -> CGrammar -> MFA String
-cfgToMFA opts g = MFA startFA [(c, toMFA (minimize fa)) | (c,fa) <- fas]
+cfgToMFA opts g = removeUnusedSubLats mfa
   where start = getStartCat opts
         startFA = let (fa,s,f) = newFA_
                    in newTransition s f (MFASub start) fa
@@ -162,6 +162,16 @@ cfgToMFA opts g = MFA startFA [(c, toMFA (minimize fa)) | (c,fa) <- fas]
         mkMFALabel (Cat c) = MFASub c
         mkMFALabel (Tok t) = MFASym t
         toMFA = mapTransitions mkMFALabel
+        mfa = MFA startFA [(c, toMFA (minimize fa)) | (c,fa) <- fas]
+
+removeUnusedSubLats :: MFA a -> MFA a
+removeUnusedSubLats (MFA main subs) = MFA main [(c,s) | (c,s) <- subs, isUsed c]
+  where
+  usedMap = Map.fromList [(c,usedSubLats n) | (c,n) <- subs]
+  used = growUsedSet (usedSubLats main)
+  isUsed c = c `Set.member` used
+  growUsedSet = fix (\s -> foldl Set.union s $ mapMaybe (flip Map.lookup usedMap) $ Set.toList s)
+  usedSubLats fa = Set.fromList [s | (_,_,MFASub s) <- transitions fa]
 
 -- | Convert a strongly regular grammar to a number of finite automata,
 --   one for each non-terminal.

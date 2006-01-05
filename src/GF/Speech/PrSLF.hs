@@ -53,10 +53,13 @@ data SLFEdge = SLFEdge { eId :: Int, eStart :: Int, eEnd :: Int }
 
 type SLF_FA = FA State (Maybe (MFALabel String)) ()
 
--- | Make a network with subnetworks in SLF
-slfPrinter :: Ident -- ^ Grammar name
-	   -> Options -> CGrammar -> String
-slfPrinter name opts cfg = prSLFs (mfaToSLFs $ cfgToMFA opts cfg) ""
+slfStyleFA :: DFA (MFALabel String) -> SLF_FA
+slfStyleFA = renameStates [0..] . removeTrivialEmptyNodes . oneFinalState Nothing () 
+             . moveLabelsToNodes . dfa2nfa
+
+--
+-- * SLF graphviz printing
+--
 
 slfGraphvizPrinter :: Ident -- ^ Grammar name
 	           -> Options -> CGrammar -> String
@@ -82,11 +85,23 @@ gvSLFFA n fa =
                     STM.put names'
                     return fa'
 
-mapMFA :: (DFA (MFALabel a) -> b) -> MFA a -> (b,[(String,b)])
-mapMFA f (MFA main subs) = (f main, [(c, f fa) | (c,fa) <- subs])
+--
+-- * SLF printing
+--
 
-slfStyleFA :: DFA (MFALabel String) -> SLF_FA
-slfStyleFA = removeTrivialEmptyNodes . oneFinalState Nothing () . moveLabelsToNodes . dfa2nfa
+-- | Make a network with subnetworks in SLF
+slfPrinter :: Ident -- ^ Grammar name
+	   -> Options -> CGrammar -> String
+slfPrinter name opts cfg = prSLFs (mfaToSLFs $ renameSubs $ cfgToMFA opts cfg) ""
+
+renameSubs :: MFA String -> MFA String
+renameSubs (MFA main subs) = MFA (renameLabels main) subs'
+  where newNames = zip (map fst subs) ["sub"++show n | n <- [0..]]
+        newName s = lookup' s newNames
+        subs' = [(newName s,renameLabels n) | (s,n) <- subs]
+        renameLabels = mapTransitions renameLabel
+        renameLabel (MFASub x) = MFASub (newName x)
+        renameLabel l = l
 
 mfaToSLFs :: MFA String -> SLFs
 mfaToSLFs (MFA main subs) 
@@ -121,7 +136,7 @@ mkSLFEdge :: Int -> (Int,Int) -> SLFEdge
 mkSLFEdge i (f,t) = SLFEdge { eId = i, eStart = f, eEnd = t }
 
 prSLFs :: SLFs -> ShowS
-prSLFs (SLFs subs main) = unlinesS (map prSub subs) . prOneSLF main
+prSLFs (SLFs subs main) = unlinesS (map prSub subs ++ [prOneSLF main])
   where prSub (n,s) = showString "SUBLAT=" . shows n 
                       . nl . prOneSLF s . showString "." . nl
 
