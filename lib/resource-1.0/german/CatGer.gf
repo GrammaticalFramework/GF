@@ -3,19 +3,19 @@ concrete CatGer of Cat = open ResGer, Prelude in {
   flags optimize=all_subs ;
 
   lincat
---    Text, Phr, Utt = {s : Str} ;
---
---    Imp = {s : Polarity => Number => Str} ;
+    Text, Phr, Utt = {s : Str} ;
+
+    Imp = {s : Polarity => Number => Str} ;
 
     S  = {s : Order => Str} ;
---    QS = {s : QForm => Str} ;
+    QS = {s : QForm => Str} ;
 --    RS = {s : Agr => Str} ;
 
     Cl = {s : Tense => Anteriority => Polarity => Order => Str} ;
 --    Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** {c2 : Str} ;
 --
---    QCl   = {s : Tense => Anteriority => Polarity => QForm => Str} ;
---    RCl   = {s : Tense => Anteriority => Polarity => Agr => Str} ;
+    QCl   = {s : Tense => Anteriority => Polarity => QForm => Str} ;
+    RCl   = {s : Tense => Anteriority => Polarity => Agr => Str} ;
 
     VP = ResGer.VP ;
     V, VS, VQ, VA = ResGer.Verb ; -- = {s : VForm => Str} ;
@@ -25,9 +25,9 @@ concrete CatGer of Cat = open ResGer, Prelude in {
 
     AP = {s : AForm => Str ; isPre : Bool} ; 
     Comp = {s : Agr => Str} ; 
---
---    SC = {s : Str} ;
---
+
+    SC = {s : Str} ;
+
     A  = {s : Degree => AForm => Str} ;
     A2 = {s : Degree => AForm => Str ; c2 : Preposition} ;
 
@@ -47,16 +47,16 @@ concrete CatGer of Cat = open ResGer, Prelude in {
     N2 = {s : Number => Case => Str ; g : Gender} ** {c2 : Preposition} ;
     N3 = {s : Number => Case => Str ; g : Gender} ** {c2,c3 : Preposition} ;
 
---    IP = {s : Case => Str ; n : Number} ;
---    IDet = {s : Str ; n : Number} ;
---    IAdv = {s : Str} ;    
---
+    IP = {s : Case => Str ; n : Number} ;
+    IDet = {s : Gender => Case => Str ; n : Number} ;
+    IAdv = {s : Str} ;    
+
 --    RP = {s : Case => Str ; a : RAgr} ;
 --
 --    Numeral = {s : CardOrd => Str ; n : Number} ;
---
---    CAdv = {s : Str} ;    
---
+
+    CAdv = {s : Str} ;    
+
 --    Conj = {s : Str ; n : Number} ;
 --    DConj = {s1,s2 : Str ; n : Number} ;
 --

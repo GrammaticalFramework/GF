@@ -27,14 +27,14 @@ concrete VerbGer of Verb = CatGer ** open ResGer in {
     CompNP np = {s = \\_ => np.s ! Nom} ;
     CompAdv a = {s = \\_ => a.s} ;
 
---    AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
-------    AdVVP adv vp = insertAdV adv.s vp ;
+    AdvVP vp adv = insertAdv adv.s vp ;
+--    AdVVP adv vp = insertAdV adv.s vp ;
 --
 --    ReflV2 v = insertObj (\\a => v.c2 ++ reflPron ! a) (predV v) ;
 --
 --    PassV2 v = {s = \\_ => v.s ! VPPart} ;
---
---    UseVV, UseVS, UseVQ = \vv -> {s = vv.s ; c2 = []} ; -- no "to"
+
+    UseVV, UseVS, UseVQ = \v -> v ** {c2 = noPreposition Acc} ;
 
 --    EmbedS  s  = {s = conjThat ++ s.s} ;
 --    EmbedQS qs = {s = qs.s ! QIndir} ;

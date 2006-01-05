@@ -6,21 +6,17 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer in {
 
     PredVP np vp = mkClause (np.s ! Nom) np.a vp ;
 
---    PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
---
---    ImpVP vp = {
---      s = \\pol,n => 
---        let 
---          agr   = {n = n ; p = P2} ;
---          verb  = infVP vp agr ;
---          dont  = case pol of {
---            Neg => "don't" ;
---            _ => []
---            }
---        in
---        dont ++ verb
---    } ;
---
+    PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
+
+    ImpVP vp = {
+      s = \\pol,n => 
+        let 
+          agr   = {n = n ; p = P2} ;
+          verb  = vp.s ! agr ! VPImperat ;
+        in
+        verb.fin ++ vp.a1 ! pol ++ verb.inf ++ vp.n2 ! agr ++ vp.a2 ++ vp.ext
+    } ;
+
 --    SlashV2 np v2 = 
 --      mkClause (np.s ! Nom) np.a (predV v2) ** {c2 = v2.c2} ;
 --

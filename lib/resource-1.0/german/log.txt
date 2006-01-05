@@ -27,7 +27,7 @@ LexGer: Pron, Det
 
 AdjectiveGer: PositA, ComparA, AdAP
 > p -cat=NP "ein warmer Hund" | l -table
-> p -cat=NP -lexer=literals "alle meine 3 sehr warmen Hünde"
+> p -cat=NP -lexer=literals "alle meine 3 sehr warmen HÃ¼nde"
 
 ResGer: predV, mkClause, aux verbs
 VerbGer: UseV
@@ -65,7 +65,7 @@ VerbGer: UseComp, Comp*
 
 ResGer: wollen_V, auxVV, insertExtrapos
 VerbGer: ComplVS
-> p -cat=Cl -mcfg "ich behaupte daß wir gehen" | l -table
+> p -cat=Cl -mcfg "ich behaupte daÃ wir gehen" | l -table
 (gets OK with proper extrapos)
 VerbGer: ComplVV
   = insertObj (\\a => v.part ++ (vp.s ! a ! VPInfinit Simul).inf) (predV v) ;
@@ -74,3 +74,12 @@ VerbGer: ComplVV
   Pres  Anter  Pos  Inv  : habe ich gehen gewollen
   Pres  Anter  Pos  Sub  : ich gehen gewollen habe
 (Thus "double infinitives" don't get right.)
+
+
+Added routine stuff to AdverbGer and AdjectiveGer. Noticed failure with
+comparison ("schneller als ein Zug" pro "mehr schnell als ein Zug")
+
+SentenceGer: ImpVP
+PhraseGer: almost all (actually copied from PhraseScand)
+> p -cat=Imp -mcfg "geh hier"
+ImpVP (AdvVP (UseV walk_V) here_Adv)
