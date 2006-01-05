@@ -173,6 +173,11 @@ resource ResGer = ParamGer ** open Prelude in {
   appPrep : Preposition -> (Case => Str) -> Str = \prep,arg ->
     prep.s ++ arg ! prep.c ;
 
+-- To build a preposition from just a case.
+
+  noPreposition : Case -> Preposition = \c -> 
+    {s = [] ; c = c} ;
+
 -- Pronouns and articles
 -- Here we define personal and relative pronouns.
 -- All personal pronouns, except "ihr", conform to the simple
@@ -410,23 +415,6 @@ resource ResGer = ParamGer ** open Prelude in {
     ext = vp.ext ++ ext
     } ;
 
-    s = \\a => table {
-      VPFinite t Anter => case t of {
-        Pres | Past => vf (hat t a) vpart ;
-        Fut  => vf (wird a) (vpart ++ haben) ;
-        Cond => vf (wuerde a) (vpart ++ haben)
-        } ;
-      VPImperat => vf (verb.s ! VImper a.n) [] ;
-      VPInfinit Simul => vf [] vinf ;
-      VPInfinit Anter => vf [] (vpart ++ haben)
-      } ;
-    a1  : Polarity => Str = negation ;
-    n2  : Agr  => Str = \\_ => [] ;
-    a2  : Str = [] ;
-    ext : Str = []
-    } ;
-
-
 
 -- For $Sentence$.
 
@@ -451,6 +439,8 @@ resource ResGer = ParamGer ** open Prelude in {
     } ;
 
   conjThat : Str = "daß" ;
+
+  conjThan : Str = "als" ;
 
   reflPron : Agr => Str = table {
     {n = Sg ; p = P1} => "mich" ;
