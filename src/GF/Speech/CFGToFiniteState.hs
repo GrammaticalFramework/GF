@@ -154,7 +154,7 @@ data MFA a = MFA (DFA (MFALabel a)) [(String,DFA (MFALabel a))]
 --
 
 cfgToMFA :: Options -> CGrammar -> MFA String
-cfgToMFA opts g = removeUnusedSubLats mfa
+cfgToMFA opts g = sortSubLats $ removeUnusedSubLats mfa
   where start = getStartCat opts
         startFA = let (fa,s,f) = newFA_
                    in newTransition s f (MFASub start) fa
@@ -165,13 +165,32 @@ cfgToMFA opts g = removeUnusedSubLats mfa
         mfa = MFA startFA [(c, toMFA (minimize fa)) | (c,fa) <- fas]
 
 removeUnusedSubLats :: MFA a -> MFA a
-removeUnusedSubLats (MFA main subs) = MFA main [(c,s) | (c,s) <- subs, isUsed c]
+removeUnusedSubLats mfa@(MFA main subs) = MFA main [(c,s) | (c,s) <- subs, isUsed c]
   where
-  usedMap = Map.fromList [(c,usedSubLats n) | (c,n) <- subs]
+  usedMap = subLatUseMap mfa
   used = growUsedSet (usedSubLats main)
   isUsed c = c `Set.member` used
   growUsedSet = fix (\s -> foldl Set.union s $ mapMaybe (flip Map.lookup usedMap) $ Set.toList s)
-  usedSubLats fa = Set.fromList [s | (_,_,MFASub s) <- transitions fa]
+
+subLatUseMap :: MFA a -> Map String (Set String)
+subLatUseMap (MFA _ subs) = Map.fromList [(c,usedSubLats n) | (c,n) <- subs]
+
+usedSubLats :: DFA (MFALabel a) -> Set String
+usedSubLats fa = Set.fromList [s | (_,_,MFASub s) <- transitions fa]
+
+revMultiMap :: (Ord a, Ord b) => Map a (Set b) -> Map b (Set a)
+revMultiMap m = Map.fromListWith Set.union [ (y,Set.singleton x) | (x,s) <- Map.toList m, y <- Set.toList s]
+
+-- | Sort sub-networks topologically.
+sortSubLats :: MFA a -> MFA a
+sortSubLats mfa@(MFA main subs) = MFA main (reverse $ sortLats usedByMap subs)
+  where
+  usedByMap = revMultiMap (subLatUseMap mfa)
+  sortLats _ [] = []
+  sortLats ub ls = xs ++ sortLats ub' ys
+      where (xs,ys) = partition ((==0) . indeg) ls
+            ub' = Map.map (Set.\\ Set.fromList (map fst xs)) ub
+            indeg (c,_) = maybe 0 Set.size $ Map.lookup c ub
 
 -- | Convert a strongly regular grammar to a number of finite automata,
 --   one for each non-terminal.
