@@ -15,7 +15,7 @@
 module GF.System.ATKSpeechInput (recognizeSpeech) where
 
 import GF.Infra.Ident (Ident, prIdent)
-import GF.Infra.Option (Options)
+import GF.Infra.Option
 import GF.Conversion.Types (CGrammar)
 import GF.Speech.PrSLF
 
@@ -29,11 +29,11 @@ import System.IO
 import System.IO.Unsafe
 
 data ATKLang = ATKLang {
-                        cmndef :: Maybe FilePath,
                         hmmlist :: FilePath,
                         mmf0 :: FilePath,
                         mmf1 :: FilePath,
-                        dict :: FilePath
+                        dict :: FilePath,
+                        opts :: [(String,String)]
                        }
 
 atk_home_error = "The environment variable ATK_HOME is not set. "
@@ -51,19 +51,22 @@ getLanguage l =
                       atk_home <- getEnv_ "ATK_HOME" atk_home_error
                       let res = atk_home ++ "/Resources"
                       return $ ATKLang {
-                                 cmndef = Just $ res ++ "/UK_SI_ZMFCC/cepmean",
                                  hmmlist = res ++ "/UK_SI_ZMFCC/hmmlistbg",
                                  mmf0 = res ++ "/UK_SI_ZMFCC/WI4",
                                  mmf1 = res ++ "/UK_SI_ZMFCC/BGHMM2",
-                                 dict = res ++ "/beep.dct" }
+                                 dict = res ++ "/beep.dct",
+                                 opts = [("TARGETKIND", "MFCC_0_D_A_Z"),
+                                         ("HPARM:CMNDEFAULT", res ++ "/UK_SI_ZMFCC/cepmean")]
+                                       }
            "sv_SE" -> do
                       let res = "/home/bjorn/projects/atkswe/stoneage-swe"
                       return $ ATKLang {
-                                 cmndef = Nothing,
                                  hmmlist = res ++ "/triphones1",
                                  mmf0 = res ++ "/hmm12/macros",
                                  mmf1 = res ++ "/hmm12/hmmdefs",
-                                 dict = res ++ "/dict" }
+                                 dict = res ++ "/dict",
+                                 opts = [("TARGETKIND", "MFCC_0_D_A")]
+                                        }
            _ -> fail $ "ATKSpeechInput: language " ++ l ++ " not supported"
 
 -- | List of the languages for which we have already loaded the HMM
@@ -80,8 +83,8 @@ initATK language =
     when (null ls) $ do
                      config <- getEnv_ "GF_ATK_CFG" gf_atk_cfg_error
                      hPutStrLn stderr $ "Initializing ATK..."
-                     let ps = map ((,) "HPARM:CMNDEFAULT") (maybeToList (cmndef l))
-                     initialize (Just config) ps
+                     -- FIXME: different recognizers need different global options
+                     initialize (Just config) (opts l)
     when (language `notElem` ls) $ 
          do
          let hmmName = "hmm_" ++ language
@@ -95,14 +98,21 @@ recognizeSpeech :: Ident -- ^ Grammar name
 	        -> Options -> CGrammar -> IO String
 recognizeSpeech name opts cfg = 
     do
+    -- Options
+    let language = fromMaybe "en_UK" (getOptVal opts speechLanguage)
+        cat = fromMaybe "S" (getOptVal opts gStartCat) ++ "{}.s"
+        number = optIntOrN opts flagNumber 1
+    -- FIXME: use values of cat and number flags
     let slf = slfPrinter name opts cfg
         n = prIdent name
-        language = "sv_SE"
         hmmName = "hmm_" ++ language
         dictName = "dict_" ++ language
         slfName = "gram_" ++ n
         recName = "rec_" ++ language ++ "_" ++ n
+    print opts
+    writeFile "debug.net" slf
     initATK language
+    hPutStrLn stderr "Loading grammar..."
     loadGrammarString slfName slf
     createRecognizer recName hmmName dictName slfName
     hPutStrLn stderr "Listening..."
