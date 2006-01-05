@@ -53,9 +53,23 @@ data SLFEdge = SLFEdge { eId :: Int, eStart :: Int, eEnd :: Int }
 
 type SLF_FA = FA State (Maybe (MFALabel String)) ()
 
+mkFAs :: Options -> CGrammar -> (SLF_FA, [(String,SLF_FA)])
+mkFAs opts cfg = (slfStyleFA main, [(c,slfStyleFA n) | (c,n) <- subs])
+  where MFA main subs = {- renameSubs $ -} cfgToMFA opts cfg
+
 slfStyleFA :: DFA (MFALabel String) -> SLF_FA
 slfStyleFA = renameStates [0..] . removeTrivialEmptyNodes . oneFinalState Nothing () 
              . moveLabelsToNodes . dfa2nfa
+
+-- | Give sequential names to subnetworks.
+renameSubs :: MFA String -> MFA String
+renameSubs (MFA main subs) = MFA (renameLabels main) subs'
+  where newNames = zip (map fst subs) ["sub"++show n | n <- [0..]]
+        newName s = lookup' s newNames
+        subs' = [(newName s,renameLabels n) | (s,n) <- subs]
+        renameLabels = mapTransitions renameLabel
+        renameLabel (MFASub x) = MFASub (newName x)
+        renameLabel l = l
 
 --
 -- * SLF graphviz printing
@@ -64,15 +78,15 @@ slfStyleFA = renameStates [0..] . removeTrivialEmptyNodes . oneFinalState Nothin
 slfGraphvizPrinter :: Ident -- ^ Grammar name
 	           -> Options -> CGrammar -> String
 slfGraphvizPrinter name opts cfg = Dot.prGraphviz g
-  where MFA main subs = cfgToMFA opts cfg
+  where (main, subs) = mkFAs opts cfg
         g = STM.evalState (liftM2 Dot.addSubGraphs ss m) [0..] 
         ss = mapM (\ (c,f) -> gvSLFFA (Just c) f) subs
         m = gvSLFFA Nothing main
 
-gvSLFFA :: Maybe String -> DFA (MFALabel String) -> STM.State [State] Dot.Graph
+gvSLFFA :: Maybe String -> SLF_FA -> STM.State [State] Dot.Graph
 gvSLFFA n fa = 
     liftM (mkCluster n . faToGraphviz . mapStates (maybe "" mfaLabelToGv) 
-            . mapTransitions (const "")) (rename $ slfStyleFA fa)
+            . mapTransitions (const "")) (rename fa)
   where mfaLabelToGv (MFASym s) = s
         mfaLabelToGv (MFASub s) = "#" ++ s
         mkCluster Nothing = id
@@ -92,21 +106,10 @@ gvSLFFA n fa =
 -- | Make a network with subnetworks in SLF
 slfPrinter :: Ident -- ^ Grammar name
 	   -> Options -> CGrammar -> String
-slfPrinter name opts cfg = prSLFs (mfaToSLFs $ renameSubs $ cfgToMFA opts cfg) ""
-
-renameSubs :: MFA String -> MFA String
-renameSubs (MFA main subs) = MFA (renameLabels main) subs'
-  where newNames = zip (map fst subs) ["sub"++show n | n <- [0..]]
-        newName s = lookup' s newNames
-        subs' = [(newName s,renameLabels n) | (s,n) <- subs]
-        renameLabels = mapTransitions renameLabel
-        renameLabel (MFASub x) = MFASub (newName x)
-        renameLabel l = l
-
-mfaToSLFs :: MFA String -> SLFs
-mfaToSLFs (MFA main subs) 
-    = SLFs [(c, dfaToSLF fa) | (c,fa) <- subs] (dfaToSLF main)
-  where dfaToSLF = automatonToSLF . slfStyleFA
+slfPrinter name opts cfg = prSLFs slfs ""
+  where 
+  (main,subs) = mkFAs opts cfg
+  slfs = SLFs [(c, automatonToSLF fa) | (c,fa) <- subs] (automatonToSLF main)
 
 automatonToSLF :: SLF_FA -> SLF
 automatonToSLF fa = SLF { slfNodes = ns, slfEdges = es }
@@ -115,9 +118,9 @@ automatonToSLF fa = SLF { slfNodes = ns, slfEdges = es }
 
 mfaNodeToSLFNode :: Int -> Maybe (MFALabel String) -> SLFNode
 mfaNodeToSLFNode i l = case l of
-                                Nothing -> mkSLFNode i Nothing
-                                Just (MFASym x) -> mkSLFNode i (Just x)
-                                Just (MFASub s) -> mkSLFSubLat i s
+                              Nothing -> mkSLFNode i Nothing
+                              Just (MFASym x) -> mkSLFNode i (Just x)
+                              Just (MFASub s) -> mkSLFSubLat i s
 
 mkSLFNode :: Int -> Maybe String -> SLFNode
 mkSLFNode i Nothing = SLFNode { nId = i, nWord = Nothing, nTag = Nothing }
