@@ -20,7 +20,7 @@ module GF.Speech.Graph ( Graph(..), Node, Edge, NodeInfo
                         , inDegree, outDegree
                         , nodeLabel
                         , edgeFrom, edgeTo, edgeLabel
-                        , reverseGraph, renameNodes
+                        , reverseGraph, mergeGraphs, renameNodes
                        ) where
 
 import GF.Data.Utilities
@@ -120,36 +120,6 @@ outDegree i n = length $ getOutgoing i n
 getNodeLabel :: Ord n => NodeInfo n a b -> n -> a
 getNodeLabel i n = let (l,_,_) = lookupNode i n in l
 
-{-
--- | Get a map of nodes and their incoming edges.
-incoming :: Ord n => Graph n a b -> Incoming n a b
-incoming = groupEdgesBy getTo
-
--- | Get all edges ending at a given node.
-getIncoming :: Ord n => Incoming n a b -> n -> [Edge n b]
-getIncoming out x = maybe [] snd (Map.lookup x out)
-
-incomingToList :: Incoming n a b -> [(Node n a, [Edge n b])]
-incomingToList out = [ ((n,x),es) | (n,(x,es)) <- Map.toList out ]
-
--- | Get a map of nodes and their outgoing edges.
-outgoing :: Ord n => Graph n a b -> Outgoing n a b
-outgoing = groupEdgesBy getFrom
-
--- | Get all edges starting at a given node.
-getOutgoing :: Ord n => Outgoing n a b -> n -> [Edge n b]
-getOutgoing out x = maybe [] snd (Map.lookup x out)
-
--- | Get the label of a node given its outgoing list.
-getLabelOut :: Ord n => Outgoing n a b -> n -> a
-getLabelOut out x = fst $ fromJust (Map.lookup x out)
-
-groupEdgesBy :: (Ord n) => (Edge n b -> n) -> Graph n a b -> Map n (a,[Edge n b])
-groupEdgesBy f (Graph _ ns es) = 
-    foldl' (\m e -> Map.adjust (\ (x,el) -> (x,e:el)) (f e) m) nm es
-  where nm = Map.fromList [ (n, (x,[])) | (n,x) <- ns ]
--}
-
 nodeLabel :: Node n a -> a
 nodeLabel = snd
 
@@ -165,6 +135,21 @@ edgeLabel (_,_,l) = l
 reverseGraph :: Graph n a b -> Graph n a b
 reverseGraph (Graph c ns es) = Graph c ns [ (t,f,l) | (f,t,l) <- es ]
 
+-- | Add the nodes from the second graph to the first graph.
+--   The nodes in the second graph will be renamed using the name 
+--   supply in the first graph.
+--   This function is more efficient when the second graph
+--   is smaller than the first.
+mergeGraphs :: Ord m => Graph n a b -> Graph m a b 
+            -> (Graph n a b, m -> n) -- ^ The new graph and a function translating
+                                      --  the old names of nodes in the second graph
+                                      --  to names in the new graph.
+mergeGraphs (Graph c ns1 es1) g2 = (Graph c' (ns2++ns1) (es2++es1), newName)
+  where 
+  (xs,c') = splitAt (length (nodes g2)) c
+  newNames = Map.fromList (zip (map fst (nodes g2)) xs)
+  newName n = fromJust $ Map.lookup n newNames
+  Graph _ ns2 es2 = renameNodes newName undefined g2
 
 -- | Rename the nodes in the graph.
 renameNodes :: (n -> m) -- ^ renaming function
