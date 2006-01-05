@@ -57,10 +57,20 @@ add flags optimize=all_subs  to this module:
 VerbGer: UseComp, Comp*
 > p -cat=Cl -mcfg "ich bin ein Hund" | l -table
 
-
-vg
+> vg
 (see complex figure)
-i english/TestEng.gf
-vg
+> i english/TestEng.gf
+> vg
 (see complex symmetric figure)
 
+ResGer: wollen_V, auxVV, insertExtrapos
+VerbGer: ComplVS
+> p -cat=Cl -mcfg "ich behaupte daß wir gehen" | l -table
+(gets OK with proper extrapos)
+VerbGer: ComplVV
+  = insertObj (\\a => v.part ++ (vp.s ! a ! VPInfinit Simul).inf) (predV v) ;
+> p -cat=Cl "ich will gehen" | l -table
+  Pres  Anter  Pos  Main  : ich habe gehen gewollen
+  Pres  Anter  Pos  Inv  : habe ich gehen gewollen
+  Pres  Anter  Pos  Sub  : ich gehen gewollen habe
+(Thus "double infinitives" don't get right.)

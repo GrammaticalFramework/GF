@@ -9,8 +9,11 @@ concrete VerbGer of Verb = CatGer ** open ResGer in {
     ComplV3 v np np2 =
       insertObj (\\_ => appPrep v.c2 np.s ++ appPrep v.c3 np2.s) (predV v) ;
 
---    ComplVV v vp = insertObj (\\a => v.c2 ++ infVP vp a) (predV v) ;
---    ComplVS v s  = insertObj (\\_ => conjThat ++ s.s) (predV v) ;
+    ComplVV v vp = 
+      insertObj (\\a => v.part ++ (vp.s ! a ! VPInfinit Simul).inf) (predV v) ;
+    ComplVS v s = 
+      insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ;
+
 --    ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
 --
 --    ComplVA  v    ap = insertObj (ap.s) (predV v) ;
