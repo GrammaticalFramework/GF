@@ -18,6 +18,7 @@ module GF.Speech.Graph ( Graph(..), Node, Edge, NodeInfo
                         , nodeInfo
                         , getIncoming, getOutgoing, getNodeLabel
                         , inDegree, outDegree
+                        , nodeLabel
                         , edgeFrom, edgeTo, edgeLabel
                         , reverseGraph, renameNodes
                        ) where
@@ -148,6 +149,9 @@ groupEdgesBy f (Graph _ ns es) =
     foldl' (\m e -> Map.adjust (\ (x,el) -> (x,e:el)) (f e) m) nm es
   where nm = Map.fromList [ (n, (x,[])) | (n,x) <- ns ]
 -}
+
+nodeLabel :: Node n a -> a
+nodeLabel = snd
 
 edgeFrom :: Edge n b -> n
 edgeFrom (f,_,_) = f
