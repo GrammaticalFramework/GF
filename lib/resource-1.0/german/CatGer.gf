@@ -1,11 +1,13 @@
-concrete CatGer of Cat = open ResGer, Prelude, (R = ParamX) in {
+concrete CatGer of Cat = open ResGer, Prelude in {
+
+  flags optimize=all_subs ;
 
   lincat
 --    Text, Phr, Utt = {s : Str} ;
 --
 --    Imp = {s : Polarity => Number => Str} ;
---
---    S  = {s : Str} ;
+
+    S  = {s : Order => Str} ;
 --    QS = {s : QForm => Str} ;
 --    RS = {s : Agr => Str} ;
 
@@ -16,12 +18,12 @@ concrete CatGer of Cat = open ResGer, Prelude, (R = ParamX) in {
 --    RCl   = {s : Tense => Anteriority => Polarity => Agr => Str} ;
 
     VP = ResGer.VP ;
-    V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
+    V, VS, VQ, VA = ResGer.Verb ; -- = {s : VForm => Str} ;
     V2, VV, V2A = Verb ** {c2 : Preposition} ;
     V3 = Verb ** {c2, c3 : Preposition} ;
 
     AP = {s : AForm => Str ; isPre : Bool} ; 
-    Comp = {s : Str} ; 
+    Comp = {s : Agr => Str} ; 
 --
 --    SC = {s : Str} ;
 --

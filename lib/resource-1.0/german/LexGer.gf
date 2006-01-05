@@ -1,5 +1,7 @@
 concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
 
+  flags optimize = values ;
+
   lin
     walk_V  = mkV "gehen" "geht" "geh" "ging" "ginge" "gegangen" VSein ;
     help_V2 = mkV "helfen" "hilft" "hilf" "half" "hälfe" "geholfen" VHaben ** 
