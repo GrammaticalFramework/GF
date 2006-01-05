@@ -86,7 +86,7 @@ mapMFA :: (DFA (MFALabel a) -> b) -> MFA a -> (b,[(String,b)])
 mapMFA f (MFA main subs) = (f main, [(c, f fa) | (c,fa) <- subs])
 
 slfStyleFA :: DFA (MFALabel String) -> SLF_FA
-slfStyleFA = oneFinalState Nothing () . moveLabelsToNodes . dfa2nfa
+slfStyleFA = removeTrivialEmptyNodes . oneFinalState Nothing () . moveLabelsToNodes . dfa2nfa
 
 mfaToSLFs :: MFA String -> SLFs
 mfaToSLFs (MFA main subs) 

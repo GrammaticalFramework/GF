@@ -20,7 +20,8 @@ module GF.Speech.FiniteState (FA, State, NFA, DFA,
                               newTransition,
 			      mapStates, mapTransitions,
                               oneFinalState,
-			      moveLabelsToNodes, minimize,
+			      moveLabelsToNodes, removeTrivialEmptyNodes,
+                              minimize,
                               dfa2nfa,
                               unusedNames, renameStates,
 			      prFAGraphviz, faToGraphviz) where
@@ -119,26 +120,56 @@ oneFinalState nl el fa =
 --   to one where the labels are on the nodes instead. This can add
 --   up to one extra node per edge.
 moveLabelsToNodes :: (Ord n,Eq a) => FA n () (Maybe a) -> FA n (Maybe a) ()
-moveLabelsToNodes = removeTrivialEmptyNodes . onGraph f
-  where f gr@(Graph c _ _) = Graph c' ns (concat ess)
-	    where is = incomingToList $ incoming gr
+moveLabelsToNodes = onGraph f
+  where f g@(Graph c _ _) = Graph c' ns (concat ess)
+	    where is = [ ((n,l),inc) | (n, (l,inc,_)) <- Map.toList (nodeInfo g)]
 		  (c',is') = mapAccumL fixIncoming c is
 		  (ns,ess) = unzip (concat is')
 
--- | Remove nodes which are not start or final, and have
---   exactly one incoming or exactly one outgoing edge.
-removeTrivialEmptyNodes :: FA n (Maybe a) () -> FA n (Maybe a) ()
-removeTrivialEmptyNodes = id -- FIXME: implement
 
-fixIncoming :: (Ord n, Eq a) => [n] -> (Node n (),[Edge n (Maybe a)]) -> ([n],[(Node n (Maybe a),[Edge n ()])])
+-- | Remove empty nodes which are not start or final, and have
+--   exactly one outgoing edge.
+removeTrivialEmptyNodes :: Ord n => FA n (Maybe a) () -> FA n (Maybe a) ()
+removeTrivialEmptyNodes = pruneUnreachable . skipEmptyNodes
+
+-- | Move edges to empty nodes with one outgoing edge to the next edge.
+skipEmptyNodes :: Ord n => FA n (Maybe a) () -> FA n (Maybe a) ()
+skipEmptyNodes = onGraph og
+  where 
+  og g@(Graph c ns es) = Graph c ns (map changeEdge es)
+    where
+    info = nodeInfo g
+    changeEdge e@(f,t,()) 
+      | isNothing (getNodeLabel info t) 
+          = case getOutgoing info t of
+                [(_,t',())] -> (f,t',())
+                _ -> e
+      | otherwise = e
+
+isInternal :: Eq n => FA n a b -> n -> Bool
+isInternal (FA _ start final) n = n /= start && n `notElem` final
+
+-- | Remove all internal nodes with no incoming edges.
+pruneUnreachable :: Ord n => FA n (Maybe a) () -> FA n (Maybe a) ()
+pruneUnreachable fa = onGraph f fa
+ where
+ f g = removeNodes (Set.fromList [ n | (n,_) <- nodes g, 
+                                   isInternal fa n,
+                                   null (getIncoming info n)]) g
+  where info = nodeInfo g
+
+fixIncoming :: (Ord n, Eq a) => [n] 
+            -> (Node n (),[Edge n (Maybe a)]) -- ^ A node and its incoming edges
+            -> ([n],[(Node n (Maybe a),[Edge n ()])]) -- ^ Replacement nodes with their
+                                                      -- incoming edges.
 fixIncoming cs c@((n,()),es) = (cs'', ((n,Nothing),es'):newContexts)
-  where ls = nub $ map getLabel es
+  where ls = nub $ map edgeLabel es
 	(cs',cs'') = splitAt (length ls) cs
 	newNodes = zip cs' ls
 	es' = [ (x,n,()) | x <- map fst newNodes ]
 	-- separate cyclic and non-cyclic edges
 	(cyc,ncyc) = partition (\ (f,_,_) -> f == n) es
-	       -- keep all incoming non-cyclic edges with the right label
+	          -- keep all incoming non-cyclic edges with the right label
 	to (x,l) = [ (f,x,()) | (f,_,l') <- ncyc, l == l']
 	          -- for each cyclic edge with the right label, 
 	          -- add an edge from each of the new nodes (including this one)
@@ -146,7 +177,7 @@ fixIncoming cs c@((n,()),es) = (cs'', ((n,Nothing),es'):newContexts)
 	newContexts = [ (v, to v) | v <- newNodes ]
 
 alphabet :: Eq b => Graph n a (Maybe b) -> [b]
-alphabet = nub . catMaybes . map getLabel . edges
+alphabet = nub . catMaybes . map edgeLabel . edges
 
 determinize :: Ord a => NFA a -> DFA a
 determinize (FA g s f) = let (ns,es) = h (Set.singleton start) Set.empty Set.empty
@@ -154,9 +185,9 @@ determinize (FA g s f) = let (ns,es) = h (Set.singleton start) Set.empty Set.emp
                              final = filter isDFAFinal ns'
                              fa = FA (Graph undefined [(n,()) | n <- ns'] es') start final
  		          in renameStates [0..] fa
-  where out = outgoing g
+  where info = nodeInfo g
 --        reach = nodesReachable out
-	start = closure out $ Set.singleton s
+	start = closure info $ Set.singleton s
         isDFAFinal n = not (Set.null (Set.fromList f `Set.intersection` n))
 	h currentStates oldStates es
 	    | Set.null currentStates = (oldStates,es)
@@ -169,43 +200,28 @@ determinize (FA g s f) = let (ns,es) = h (Set.singleton start) Set.empty Set.emp
         -- by consuming one symbol, and the associated edges.
         new [] rs es = (rs,es)
         new (n:ns) rs es = new ns rs' es'
-          where cs = reachable out n --reachable reach n
+          where cs = reachable info n --reachable reach n
                 rs' = rs `Set.union` Set.fromList (map snd cs)
                 es' = es `Set.union` Set.fromList [(n,s,c) | (c,s) <- cs]
 
 
 -- | Get all the nodes reachable from a list of nodes by only empty edges.
-closure :: Ord n => Outgoing n a (Maybe b) -> Set n -> Set n
-closure out x = closure_ x x
+closure :: Ord n => NodeInfo n a (Maybe b) -> Set n -> Set n
+closure info x = closure_ x x
   where closure_ acc check | Set.null check = acc
                            | otherwise = closure_ acc' check'
             where
             reach = Set.fromList [y | x <- Set.toList check, 
-                                      (_,y,Nothing) <- getOutgoing out x]
+                                      (_,y,Nothing) <- getOutgoing info x]
             acc' = acc `Set.union` reach
             check' = reach Set.\\ acc
 
 -- | Get a map of labels to sets of all nodes reachable
 --   from a the set of nodes by one edge with the given
 --   label and then any number of empty edges.
-reachable :: (Ord n,Ord b) => Outgoing n a (Maybe b) -> Set n -> [(b,Set n)]
-reachable out ns = Map.toList $ Map.map (closure out . Set.fromList) $ reachable1 out ns
-reachable1 out ns = Map.fromListWith (++) [(c, [y]) | n <- Set.toList ns, (_,y,Just c) <- getOutgoing out n]
-
-
-{-
--- Alternative implementation of reachable, seems to use too much memory.
-
-type Reachable n b = Map n (Map b (Set n))
-
-reachable :: (Ord n, Ord b) => Reachable n b -> Set n -> [(b,Set n)]
-reachable r ns = Map.toList $ Map.unionsWith Set.union $ lookups (Set.toList ns) r
-
-nodesReachable :: (Ord n, Ord b) => Outgoing n a (Maybe b) -> Reachable n b
-nodesReachable out = Map.map (f . snd) out
-  where f = Map.map (closure out . Set.fromList) . edgesByLabel
-        edgesByLabel es = Map.fromListWith (++) [(c,[y]) | (_,y,Just c) <- es]
--}
+reachable :: (Ord n,Ord b) => NodeInfo n a (Maybe b) -> Set n -> [(b,Set n)]
+reachable info ns = Map.toList $ Map.map (closure info . Set.fromList) $ reachable1 info ns
+reachable1 info ns = Map.fromListWith (++) [(c, [y]) | n <- Set.toList ns, (_,y,Just c) <- getOutgoing info n]
 
 reverseNFA :: NFA a -> NFA a
 reverseNFA (FA g s fs) = FA g''' s' [s]

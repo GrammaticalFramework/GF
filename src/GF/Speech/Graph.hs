@@ -11,21 +11,24 @@
 --
 -- A simple graph module.
 -----------------------------------------------------------------------------
-module GF.Speech.Graph ( Graph(..), Node, Edge, Incoming, Outgoing
+module GF.Speech.Graph ( Graph(..), Node, Edge, NodeInfo
                         , newGraph, nodes, edges
                         , nmap, emap, newNode, newNodes, newEdge, newEdges
-                        , incoming, incomingToList
-                        , outgoing, getOutgoing
-                        , getFrom, getTo, getLabel
+                        , removeNodes
+                        , nodeInfo
+                        , getIncoming, getOutgoing, getNodeLabel
+                        , edgeFrom, edgeTo, edgeLabel
                         , reverseGraph, renameNodes
                        ) where
 
 import GF.Data.Utilities
 
 import Data.List
-
+import Data.Maybe
 import Data.Map (Map)
 import qualified Data.Map as Map
+import Data.Set (Set)
+import qualified Data.Set as Set
 
 data Graph n a b = Graph [n] ![Node n a] ![Edge n b]
 		 deriving (Eq,Show)
@@ -33,15 +36,17 @@ data Graph n a b = Graph [n] ![Node n a] ![Edge n b]
 type Node n a = (n,a)
 type Edge n b = (n,n,b)
 
-type Incoming n a b = Map n (a, [Edge n b])
-type Outgoing n a b = Map n (a, [Edge n b])
+type NodeInfo n a b = Map n (a, [Edge n b], [Edge n b])
 
+-- | Create a new empty graph.
 newGraph :: [n] -> Graph n a b
 newGraph ns = Graph ns [] []
 
+-- | Get all the nodes in the graph.
 nodes :: Graph n a b -> [Node n a]
 nodes (Graph _ ns _) = ns
 
+-- | Get all the edges in the graph.
 edges :: Graph n a b -> [Edge n b]
 edges (Graph _ _ es) = es
 
@@ -53,7 +58,10 @@ nmap f (Graph c ns es) = Graph c [(n,f l) | (n,l) <- ns] es
 emap :: (b -> c) -> Graph n a b -> Graph n a c
 emap f (Graph c ns es) = Graph c ns [(x,y,f l) | (x,y,l) <- es]
 
-newNode :: a -> Graph n a b -> (Graph n a b,n)
+-- | Add a node to the graph.
+newNode :: a               -- ^ Node label
+        -> Graph n a b 
+        -> (Graph n a b,n) -- ^ Node graph and name of new node
 newNode l (Graph (c:cs) ns es) = (Graph cs ((c,l):ns) es, c)
 
 newNodes :: [a] -> Graph n a b -> (Graph n a b,[Node n a])
@@ -72,9 +80,46 @@ newEdges es g = foldl' (flip newEdge) g es
 -- lazy version:
 -- newEdges es' (Graph c ns es) = Graph c ns (es'++es)
 
+-- | Remove a set of nodes and all edges to and from those nodes.
+removeNodes :: Ord n => Set n -> Graph n a b -> Graph n a b
+removeNodes xs (Graph c ns es) = Graph c ns' es'
+  where 
+  keepNode n = not (Set.member n xs)
+  ns' = [ x | x@(n,_) <- ns, keepNode n ]
+  es' = [ e | e@(f,t,_) <- es, keepNode f && keepNode t ]
+
+-- | Get a map of node names to info about each node.
+nodeInfo :: Ord n => Graph n a b -> NodeInfo n a b
+nodeInfo g = Map.fromList [ (n, (x, fn inc n, fn out n)) | (n,x) <- nodes g ]
+  where 
+  inc = groupEdgesBy edgeTo g
+  out = groupEdgesBy edgeFrom g
+  fn m n = fromMaybe [] (Map.lookup n m)
+
+groupEdgesBy :: (Ord n) => (Edge n b -> n) -- ^ Gets the node to group by
+             -> Graph n a b -> Map n [Edge n b]
+groupEdgesBy f g = Map.fromListWith (++) [(f e, [e]) | e <- edges g]
+
+lookupNode :: Ord n => NodeInfo n a b -> n -> (a, [Edge n b], [Edge n b])
+lookupNode i n = fromJust $ Map.lookup n i
+
+getIncoming :: Ord n => NodeInfo n a b -> n -> [Edge n b]
+getIncoming i n = let (_,inc,_) = lookupNode i n in inc
+
+getOutgoing :: Ord n => NodeInfo n a b -> n -> [Edge n b]
+getOutgoing i n = let (_,_,out) = lookupNode i n in out
+
+getNodeLabel :: Ord n => NodeInfo n a b -> n -> a
+getNodeLabel i n = let (l,_,_) = lookupNode i n in l
+
+{-
 -- | Get a map of nodes and their incoming edges.
 incoming :: Ord n => Graph n a b -> Incoming n a b
 incoming = groupEdgesBy getTo
+
+-- | Get all edges ending at a given node.
+getIncoming :: Ord n => Incoming n a b -> n -> [Edge n b]
+getIncoming out x = maybe [] snd (Map.lookup x out)
 
 incomingToList :: Incoming n a b -> [(Node n a, [Edge n b])]
 incomingToList out = [ ((n,x),es) | (n,(x,es)) <- Map.toList out ]
@@ -87,19 +132,24 @@ outgoing = groupEdgesBy getFrom
 getOutgoing :: Ord n => Outgoing n a b -> n -> [Edge n b]
 getOutgoing out x = maybe [] snd (Map.lookup x out)
 
+-- | Get the label of a node given its outgoing list.
+getLabelOut :: Ord n => Outgoing n a b -> n -> a
+getLabelOut out x = fst $ fromJust (Map.lookup x out)
+
 groupEdgesBy :: (Ord n) => (Edge n b -> n) -> Graph n a b -> Map n (a,[Edge n b])
 groupEdgesBy f (Graph _ ns es) = 
     foldl' (\m e -> Map.adjust (\ (x,el) -> (x,e:el)) (f e) m) nm es
   where nm = Map.fromList [ (n, (x,[])) | (n,x) <- ns ]
+-}
 
-getFrom :: Edge n b -> n
-getFrom (f,_,_) = f
+edgeFrom :: Edge n b -> n
+edgeFrom (f,_,_) = f
 
-getTo :: Edge n b -> n
-getTo (_,t,_) = t
+edgeTo :: Edge n b -> n
+edgeTo (_,t,_) = t
 
-getLabel :: Edge n b -> b
-getLabel (_,_,l) = l
+edgeLabel :: Edge n b -> b
+edgeLabel (_,_,l) = l
 
 reverseGraph :: Graph n a b -> Graph n a b
 reverseGraph (Graph c ns es) = Graph c ns [ (t,f,l) | (f,t,l) <- es ]
