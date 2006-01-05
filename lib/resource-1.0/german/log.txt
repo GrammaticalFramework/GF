@@ -98,3 +98,24 @@ QuestionGer: IDetCN (using NounGer.MkDet)
 > p -cat=QS -mcfg "welcher Hund geht"
 > p -cat=QS -mcfg "in welchem Hund geht er"
 
+wc german/*.gfc
+69407 total
+
+NounGer: ComplN2, ComplN3, SentCN, QuestCN
+LexGer: N2, N3
+> p -cat=NP "der Sohn von dem Hund"
+> p -cat=CN -mcfg "Hund ob er geht"
+
+SentenceGer: Slash rules
+> p -cat=QS -mcfg "wem hilft er"
+
+CatGer: RP, RS, RCl
+ParamGer: RAgr
+RelativeGer: all (copied from Scand; tweaking betw GenNum, Agr also in CatGer)
+UntensedGer: PosRCl, NegRCl
+NounGer: RelCN
+> p -cat=RCl -mcfg "der geht" | l -table
+> p -cat=NP -mcfg "der Hund dem wir helfen wollen" | l -table
+
+
+

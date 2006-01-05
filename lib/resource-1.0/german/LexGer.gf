@@ -13,12 +13,14 @@ concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
     ask_VQ = regV "fragen" ;
 
     dog_N  = mkN4 "Hund" "Hundes" "Hünde" "Hünden" Masc ;
---    son_N2 = regN "son" ** {c2 = "of"} ;
---    way_N3 = regN "way" ** {c2 = "from" ; c3 = "to"} ;
---
+    son_N2 = mkN4 "Sohn" "Sohnes" "Söhne" "Söhnen" Masc ** 
+             {c2 = {s = "von" ; c = Dat}} ;
+    way_N3 = mkN4 "Weg" "Weges" "Wege" "Wegen" Masc ** 
+             {c2 = {s = "von" ; c = Dat} ; c3 = {s = "nach" ; c = Dat}} ;
+
     warm_A = mkA "warm" "warm" "wärmer" "wärmst" ;
---    close_A2 = regA "close" ** {c2 = "to"} ;
---
+    close_A2 = regA "eng" ** {c2 = {s = "zu" ; c = Dat}} ;
+
     here_Adv = {s = "hier"} ;
     very_AdA = {s = "sehr"} ;
     always_AdV = {s = "immer"} ;

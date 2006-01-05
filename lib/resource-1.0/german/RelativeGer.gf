@@ -1,34 +1,45 @@
 concrete RelativeGer of Relative = CatGer ** open ResGer in {
---
---  flags optimize=all_subs ;
---
---  lin
---
---    RelCl cl = {
---      s = \\t,a,p,_ => "such" ++ "that" ++ cl.s ! t ! a ! p ! ODir
---      } ;
---
---    RelVP rp vp = {
---      s = \\t,ant,b,ag => 
---        let 
---          agr = case rp.a of {
---            RNoAg => ag ;
---            RAg a => a
---            } ;
---          cl = mkClause (rp.s ! Nom) agr vp
---        in
---        cl.s ! t ! ant ! b ! ODir
---      } ;
---
---    RelSlash rp slash = {
---      s = \\t,a,p,_ => slash.c2 ++ rp.s ! Acc ++ slash.s ! t ! a ! p ! ODir
---      } ;
---
---    FunRP p np rp = {
---      s = \\c => np.s ! c ++ p.s ++ rp.s ! Acc ;
---      a = RAg np.a
---      } ;
---
---    IdRP = mkIP "which" "which" "whose" Sg ** {a = RNoAg} ;
---
+
+  flags optimize=all_subs ;
+
+  lin
+
+    RelCl cl = {
+      s = \\t,a,b,_ => "derart" ++ conjThat ++ cl.s ! t ! a ! b ! Sub
+      } ;
+
+    RelVP rp vp = {
+      s = \\t,ant,b,gn => 
+        let 
+          agr = case rp.a of {
+            RNoAg => agrP3 (numGenNum gn) ;
+            RAg a => a
+            } ;
+          cl = mkClause (rp.s ! gn ! Nom) agr vp
+        in
+        cl.s ! t ! ant ! b ! Sub
+      } ;
+
+    RelSlash rp slash = {
+      s = \\t,a,p,gn => 
+          appPrep slash.c2 (rp.s ! gn) ++ slash.s ! t ! a ! p ! Sub
+      } ;
+
+    FunRP p np rp = {
+      s = \\gn,c => np.s ! c ++ appPrep p (rp.s ! gn) ;
+      a = RAg np.a
+      } ;
+
+    IdRP = {s = relPron ; a = RNoAg} ;
+
+  oper
+      relPron :  GenNum => Case => Str = \\gn,c =>
+    case <gn,c> of {
+      <GSg Fem,Gen> => "deren" ;
+      <GSg g,Gen>   => "dessen" ;
+      <GPl,Dat>     => "denen" ;
+      <GPl,Gen>     => "deren" ;
+      _ => artDef ! gn ! c
+      } ;
+
 }

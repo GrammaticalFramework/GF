@@ -17,18 +17,19 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer in {
         verb.fin ++ vp.a1 ! pol ++ verb.inf ++ vp.n2 ! agr ++ vp.a2 ++ vp.ext
     } ;
 
---    SlashV2 np v2 = 
---      mkClause (np.s ! Nom) np.a (predV v2) ** {c2 = v2.c2} ;
---
---    SlashVVV2 np vv v2 = 
---      mkClause (np.s ! Nom) np.a (insertObj (\\_ => "to" ++ v2.s ! VInf) (predV vv))  **
---      {c2 = v2.c2} ;
---
---    AdvSlash slash adv = {
---      s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
---      c2 = slash.c2
---    } ;
---
---    SlashPrep cl prep = cl ** {c2 = prep.s} ;
---
+    SlashV2 np v2 = 
+      mkClause (np.s ! Nom) np.a (predV v2) ** {c2 = v2.c2} ;
+
+    SlashVVV2 np vv v2 = 
+        mkClause (np.s ! Nom) np.a 
+          (insertObj (\\a => vv.part ++ v2.s ! VInf) (predV vv)) **
+        {c2 = v2.c2} ;
+
+    AdvSlash slash adv = {
+      s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
+      c2 = slash.c2
+    } ;
+
+    SlashPrep cl prep = cl ** {c2 = prep} ;
+
 }
