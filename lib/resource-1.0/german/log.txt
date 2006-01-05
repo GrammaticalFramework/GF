@@ -83,3 +83,18 @@ SentenceGer: ImpVP
 PhraseGer: almost all (actually copied from PhraseScand)
 > p -cat=Imp -mcfg "geh hier"
 ImpVP (AdvVP (UseV walk_V) here_Adv)
+
+QuestionGer: almost all (copied from Scand)
+UntensedGer: PosQCl, NegQCl
+> p -cat=QS -mcfg "gehen wir nicht" | l -table
+  QDir  : gehen wir nicht
+  QIndir  : ob wir nicht gehen
+
+VerbGer: ComplVQ
+> p -cat=S -mcfg "ich frage ob wir warm sind"
+
+LexGer: *IDet, *IP, *Prep
+QuestionGer: IDetCN (using NounGer.MkDet)
+> p -cat=QS -mcfg "welcher Hund geht"
+> p -cat=QS -mcfg "in welchem Hund geht er"
+
