@@ -137,3 +137,6 @@ TestGer
 
 wc german/*.gfc
    1231    4116   98878 total
+
+Now we have finished most of TestGer in two days, 4 + 8 hours. But we had the
+old morphology and other files, and the Scandinavian v 1.0 as help.
