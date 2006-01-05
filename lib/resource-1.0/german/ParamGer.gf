@@ -60,13 +60,14 @@ resource ParamGer = ParamX ** {
 -- The order of sentence is depends on whether it is used as a main
 -- clause, inverted, or subordinate.
 
-  param  Order = Main | Inv | Sub ;
+  param  
+    Order = Main | Inv | Sub ;
 
---
-----2 For $Relative$
--- 
---    RAgr = RNoAg | RAg {n : Number ; p : Person} ;
---
+
+--2 For $Relative$
+ 
+    RAgr = RNoAg | RAg {n : Number ; p : Person} ;
+
 ----2 For $Numeral$
 --
 --    CardOrd = NCard | NOrd ;
@@ -82,6 +83,14 @@ resource ParamGer = ParamX ** {
       case n of {
         Sg => GSg g ;
         Pl => GPl
+        } ;
+
+-- Needed in $RelativeGer$.
+
+    numGenNum : GenNum -> Number = \gn -> 
+      case gn of {
+        GSg _ => Sg ;
+        GPl   => Pl
         } ;
 
     agrAdj : Gender -> Adjf -> Number -> Case -> AForm = \g,a,n,c ->

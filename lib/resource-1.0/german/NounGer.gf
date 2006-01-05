@@ -79,9 +79,16 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       n = Pl ;
       a = Strong
       } ;
---
---    ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c} ;
---    ComplN3 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; c2 = f.c3} ;
+
+    ComplN2 f x = {
+      s = \\_,n,c => f.s ! n ! c ++ appPrep f.c2 x.s ;
+      g = f.g
+      } ;
+    ComplN3 f x = {
+      s = \\n,c => f.s ! n ! c ++ appPrep f.c2 x.s ;
+      g = f.g ; 
+      c2 = f.c3
+      } ;
 
     AdjCN ap cn = 
       let 
@@ -94,10 +101,19 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         g = g
         } ;
 
---    RelCN cn rs = {s = \\n,c => cn.s ! n ! c ++ rs.s ! {n = n ; p = P3}} ;
---
---    SentCN cn s = {s = \\n,c => cn.s ! n ! c ++ conjThat ++ s.s} ;
---    QuestCN cn qs = {s = \\n,c => cn.s ! n ! c ++ qs.s ! QIndir} ;
+    RelCN cn rs = {
+      s = \\a,n,c => cn.s ! a ! n ! c ++ rs.s ! gennum cn.g n ;
+      g = cn.g
+      } ;
+
+    SentCN cn s = {
+      s = \\a,n,c => cn.s ! a ! n ! c ++ conjThat ++ s.s ! Sub ;
+      g = cn.g
+      } ;
+    QuestCN cn qs = {
+      s = \\a,n,c => cn.s ! a ! n ! c ++ qs.s ! QIndir ;
+      g = cn.g
+      } ;
 
     UseN n = {
       s = \\_ => n.s ;

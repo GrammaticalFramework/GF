@@ -3,19 +3,20 @@ concrete CatGer of Cat = open ResGer, Prelude in {
   flags optimize=all_subs ;
 
   lincat
+
     Text, Phr, Utt = {s : Str} ;
 
     Imp = {s : Polarity => Number => Str} ;
 
     S  = {s : Order => Str} ;
     QS = {s : QForm => Str} ;
---    RS = {s : Agr => Str} ;
+    RS = {s : GenNum => Str} ;
 
     Cl = {s : Tense => Anteriority => Polarity => Order => Str} ;
     Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** {c2 : Preposition} ;
 
     QCl   = {s : Tense => Anteriority => Polarity => QForm => Str} ;
-    RCl   = {s : Tense => Anteriority => Polarity => Agr => Str} ;
+    RCl   = {s : Tense => Anteriority => Polarity => GenNum => Str} ;
 
     VP = ResGer.VP ;
     V, VS, VQ, VA = ResGer.Verb ; -- = {s : VForm => Str} ;
@@ -51,8 +52,8 @@ concrete CatGer of Cat = open ResGer, Prelude in {
     IDet = {s : Gender => Case => Str ; n : Number} ;
     IAdv = {s : Str} ;    
 
---    RP = {s : Case => Str ; a : RAgr} ;
---
+    RP = {s : GenNum => Case => Str ; a : RAgr} ;
+
 --    Numeral = {s : CardOrd => Str ; n : Number} ;
 
     CAdv = {s : Str} ;    

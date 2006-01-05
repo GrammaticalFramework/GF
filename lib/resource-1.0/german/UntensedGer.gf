@@ -9,7 +9,7 @@ concrete UntensedGer of Untensed = CatGer ** open ResGer in {
     PosQCl cl = {s = cl.s ! Pres ! Simul ! Pos} ;
     NegQCl cl = {s = cl.s ! Pres ! Simul ! Neg} ;
 
---    PosRCl cl = {s = cl.s ! Pres ! Simul ! Pos} ;
---    NegRCl cl = {s = cl.s ! Pres ! Simul ! Neg} ;
---
+    PosRCl cl = {s = cl.s ! Pres ! Simul ! Pos} ;
+    NegRCl cl = {s = cl.s ! Pres ! Simul ! Neg} ;
+
 }
