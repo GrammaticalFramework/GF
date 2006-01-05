@@ -1,0 +1,66 @@
+Steps of building the German implementation.
+
+4/1/2006
+
+ParamGer: Case, Gender, Adjf
+CatGer: N, CN
+ResGer: mkNoun, mkN2, mkN4
+> cc mkN2 "Stube" "Stuben" Fem
+
+ResGer: mkA, mkV, regA, regV
+> cc regV "machen"
+
+CatGer: V*, A*
+LexGer: N*, A*, V*
+> l -table walk_V
+
+NounGer: determiner rules, UseN
+ParamGer: gennum, adjAgr
+ResGer: pronForms
+> p -cat=NP "der Hund" | l -table
+
+
+5/1
+
+LexGer: Pron, Det
+> p "mein Hund"
+
+AdjectiveGer: PositA, ComparA, AdAP
+> p -cat=NP "ein warmer Hund" | l -table
+> p -cat=NP -lexer=literals "alle meine 3 sehr warmen Hünde"
+
+ResGer: predV, mkClause, aux verbs
+VerbGer: UseV
+SentenceGer: PredVP
+> l -table PredVP (UsePron i_Pron) (UseV walk_V)
+("ich nicht gegangen hatte" etc)
+
+ParamGer: VAux
+ResGer: added aux : VAux to Verb and mkV
+LexGer: mkV updates
+> l -table PredVP (UsePron i_Pron) (UseV walk_V)
+("ich nicht gegangen war" etc, now correct)
+
+
+ResGer: appPrep, insertObj, insertAdv
+VerbGer: ComplV2, ComplV3
+SentenceGer: PosCl, NegCl
+> p -cat=S -mcfg "ich zeige ihn meinem warmen Hund"
+
+wc *.gfc
+122385 total
+ 70667 CatGer.gfc (largest)
+add flags optimize=all_subs  to this module:
+  5781 CatGer.gfc
+ 57499 total
+
+VerbGer: UseComp, Comp*
+> p -cat=Cl -mcfg "ich bin ein Hund" | l -table
+
+
+vg
+(see complex figure)
+i english/TestEng.gf
+vg
+(see complex symmetric figure)
+

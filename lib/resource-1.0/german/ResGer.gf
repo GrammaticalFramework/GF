@@ -97,10 +97,7 @@ resource ResGer = ParamGer ** open Prelude in {
     let
       ifSibilant : Str -> Str -> Str -> Str = \u,b1,b2 -> 
         case u of {
-          "s" => b1 ;
-          "x" => b1 ;
-          "z" => b1 ;
-          "Ã" => b1 ;
+          "s" | "x" | "z" | "ß" => b1 ;
           _   => b2 
           } ; 
       en = Predef.dp 2 geben ;
@@ -170,6 +167,11 @@ resource ResGer = ParamGer ** open Prelude in {
 -- Prepositions for complements indicate the complement case.
 
   Preposition : Type = {s : Str ; c : Case} ;
+
+-- To apply a preposition to a complement.
+
+  appPrep : Preposition -> (Case => Str) -> Str = \prep,arg ->
+    prep.s ++ arg ! prep.c ;
 
 -- Pronouns and articles
 -- Here we define personal and relative pronouns.
@@ -368,6 +370,23 @@ resource ResGer = ParamGer ** open Prelude in {
       Neg => "nicht"
       } ;
 
+-- Extending a verb phrase with new constituents.
+
+  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
+    s = vp.s ;
+    a1 = vp.a1 ;
+    n2 = \\a => vp.n2 ! a ++ obj ! a ;
+    a2 = vp.a2 ;
+    ext = vp.ext
+    } ;
+
+  insertAdv : Str -> VP -> VP = \adv,vp -> {
+    s = vp.s ;
+    a1 = vp.a1 ;
+    n2 = vp.n2 ;
+    a2 = vp.a2 ++ adv ;
+    ext = vp.ext
+    } ;
 
 -- For $Sentence$.
 
@@ -380,12 +399,13 @@ resource ResGer = ParamGer ** open Prelude in {
         let
           verb  = vp.s  ! agr ! VPFinite t a ;
           neg   = vp.a1 ! b ;
-          compl = vp.n2 ! agr ++ vp.a2 ++ vp.ext
+          obj   = vp.n2 ! agr ++ vp.a2 ++ vp.ext ;
+          compl = neg ++ obj ++ verb.inf ;
         in
         case o of {
-          Main => subj ++ verb.fin ++ neg ++ verb.inf ++ compl ;
-          Inv  => verb.fin ++ subj ++ neg ++ verb.inf ++ compl ;
-          Sub  => subj ++ neg ++ compl ++ verb.inf ++ verb.fin
+          Main => subj ++ verb.fin ++ compl ;
+          Inv  => verb.fin ++ subj ++ compl ;
+          Sub  => subj ++ compl ++ verb.fin
           }
     } ;
 
