@@ -22,16 +22,20 @@ resource ParamGer = ParamX ** {
 
     GenNum = GSg Gender | GPl ;
 
----- Agreement of $NP$ is a record. We'll add $Gender$ later.
---
+-- Agreement of $NP$ is a record.
+
   oper Agr = {n : Number ; p : Person} ;
 
-----2 For $Adjective$
+-- Pronouns are the worst-case noun phrases, which have both case
+-- and possessive forms.
+
+  param NPForm = NPCase Case | NPPoss GenNum Case ;
+
+--2 For $Adjective$
 
 -- The predicative form of adjectives is not inflected further.
 
-  param 
-    AForm = APred | AMod Adjf GenNum Case ;  
+  param AForm = APred | AMod Adjf GenNum Case ;  
 
 
 --2 For $Verb$
@@ -60,13 +64,23 @@ resource ParamGer = ParamX ** {
 --
 --    CardOrd = NCard | NOrd ;
 --    DForm = unit | teen | ten  ;
---
-----2 Transformations between parameter types
---
---  oper
---    agrP3 : Number -> Agr = \n -> 
---      {n = n ; p = P3} ;
---
+
+--2 Transformations between parameter types
+
+  oper
+    agrP3 : Number -> Agr = \n -> 
+      {n = n ; p = P3} ;
+
+    gennum : Gender -> Number -> GenNum = \g,n ->
+      case n of {
+        Sg => GSg g ;
+        Pl => GPl
+        } ;
+
+    agrAdj : Gender -> Adjf -> Number -> Case -> AForm = \g,a,n,c ->
+      AMod a (gennum g n) c ;
+
+
 --    conjAgr : Agr -> Agr -> Agr = \a,b -> {
 --      n = conjNumber a.n b.n ;
 --      p = conjPerson a.p b.p

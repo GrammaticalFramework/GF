@@ -20,7 +20,7 @@ concrete LexEng of Lex = CatEng ** open ResEng, Prelude in {
     always_AdV = {s = "always"} ;
 
     only_Predet = {s = "only"} ;
-    all_Predet = {s = "only"} ;
+    all_Predet = {s = "all"} ;
     this_Quant = {s = "this" ; n = Sg} ;
     these_Quant = {s = "these" ; n = Pl} ;
     
