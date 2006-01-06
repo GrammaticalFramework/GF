@@ -664,7 +664,7 @@ checkLType env trm typ0 = do
 pattContext :: LTEnv -> Type -> Patt -> Check Context
 pattContext env typ p = case p of
   PV x -> return [(x,typ)]
-  PP q c ps | q /= cPredef -> do
+  PP q c ps | q /= cPredef || prt c == "CC" -> do ---- why this /=? AR 6/1/2006
     t <- checkErr $ lookupResType cnc q c
     (cont,v) <- checkErr $ typeFormCnc t
     checkCond ("wrong number of arguments for constructor in" +++ prt p) 

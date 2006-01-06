@@ -195,25 +195,23 @@ resource ResGer = ParamGer ** open Prelude in {
 
   VP : Type = {
       s : Agr => VPForm => {
-        fin : Str ;          -- V1 hat  ---s1
-        inf : Str            -- V2 gesagt ---s4
+        fin : Str ;          -- V1 hat
+        inf : Str            -- V2 gesagt
         } ;
-      a1 : Polarity => Str ; -- A1 nicht ---s3
-      n2 : Agr => Str ;      -- N2 dich  ---s5
-      a2 : Str ;             -- A2 heute ---s6
-      ext : Str              -- S-Ext dass sie kommt ---s7
+      a1 : Polarity => Str ; -- A1 nicht
+      n2 : Agr => Str ;      -- N2 dich
+      a2 : Str ;             -- A2 heute
+      ext : Str              -- S-Ext dass sie kommt
       } ;
 
   predV : Verb -> VP = \verb ->
     let
-      vfin : Tense -> Agr -> Str = \t,a -> 
-        verb.s ! vFin t a ;
+      vfin : Tense -> Agr -> Str = \t,a -> verb.s ! vFin t a ;
       vpart = verb.s ! VPastPart APred ;
       vinf = verb.s ! VInf ;
 
       vHaben = auxPerfect verb ;
-      hat : Tense -> Agr -> Str = \t,a -> 
-        vHaben ! vFin t a ;
+      hat : Tense -> Agr -> Str = \t,a -> vHaben ! vFin t a ;
       haben : Str = vHaben ! VInf ;
 
       wird : Agr -> Str = \a -> werden_V.s ! VPresInd a.n a.p ;  
@@ -340,10 +338,6 @@ resource ResGer = ParamGer ** open Prelude in {
           }
     } ;
 
-  conjThat : Str = "daß" ;
-
-  conjThan : Str = "als" ;
-
   reflPron : Agr => Str = table {
     {n = Sg ; p = P1} => "mich" ;
     {n = Sg ; p = P2} => "dich" ;
@@ -352,6 +346,11 @@ resource ResGer = ParamGer ** open Prelude in {
     {n = Pl ; p = P2} => "euch" ;
     {n = Pl ; p = P3} => "sich"
     } ;
+
+  conjThat : Str = "daß" ;
+
+  conjThan : Str = "als" ;
+
 
 -- For $Numeral$.
 --

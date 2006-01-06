@@ -521,6 +521,8 @@ transPatts :: Patt -> Err [G.Patt]
 transPatts p = case p of
   PDisj p1 p2 -> liftM2 (++) (transPatts p1) (transPatts p2)
   PC id patts -> liftM (map (G.PC id) . combinations) $ mapM transPatts patts
+  PQC q id patts -> liftM (map (G.PP q id) . combinations) (mapM transPatts patts)
+
   PR pattasss -> do
     let (lss,ps) = unzip [(ls,p) | PA ls p <- pattasss]
         ls = map LIdent $ concat lss
