@@ -17,6 +17,108 @@
 ---- To regulate the use of endings for both nouns, adjectives, and verbs:
 --
 --oper
+
+  mkV : (x1,_,_,_,_,x6 : Str) -> VAux -> Verb = 
+    \geben,gibt,gib,gab,gaebe,gegeben,aux -> 
+    let
+      ifSibilant : Str -> Str -> Str -> Str = \u,b1,b2 -> 
+        case u of {
+          "s" | "x" | "z" | "Ã" => b1 ;
+          _   => b2 
+          } ; 
+      en = Predef.dp 2 geben ;
+      geb = case Predef.tk 1 en of {
+        "e" => Predef.tk 2 geben ;
+         _  => Predef.tk 1 geben
+         } ;
+      gebt = addE geb + "t" ;
+      gebte = ifTok Tok (Predef.dp 1 gab) "e" gab (gab + "e") ;
+      gibst = ifSibilant (Predef.dp 1 gib) (gib + "t") (gib + "st") ;
+      gegebener = (regA gegeben).s ! Posit ;
+      gabe = addE gab ;
+      gibe = ifTok Str (Predef.dp 2 gib) "ig" "e" [] ++ addE gib
+    in {s = table {
+
+       VInf       => geben ;
+
+       VPresInd Sg P1 => geb + "e" ;
+       VPresInd Sg P2 => gibst ;
+       VPresInd Sg P3 => gibt ;
+       VPresInd Pl P2 => gebt ;
+       VPresInd Pl _  => geben ; -- the famous law
+
+       VImper Sg    => gibe ;
+       VImper Pl    => gebt ;
+
+       VPresSubj Sg P2 => geb + "est" ;
+       VPresSubj Sg _  => geb + "e" ;
+       VPresSubj Pl P2 => geb + "et" ;
+       VPresSubj Pl _  => geben ;
+
+       VPresPart a => (regA (geben + "d")).s ! Posit ! a ;
+
+       VImpfInd Sg P2 => gabe + "st" ;
+       VImpfInd Sg _  => gab ;
+       VImpfInd Pl P2 => gabe + "t" ;
+       VImpfInd Pl _  => gebte + "n" ;
+
+       VImpfSubj Sg P2 => gaebe + "st" ;
+       VImpfSubj Sg _  => gaebe ;
+       VImpfSubj Pl P2 => gaebe + "t" ;
+       VImpfSubj Pl _  => gaebe + "n" ;
+
+       VPastPart a    => gegebener ! a
+       } ;
+     aux = aux
+     } ;
+ 
+-- This function decides whether to add an "e" to the stem before "t".
+-- Examples: "tÃ¶ten - tÃ¶tet", "kehren - kehrt", "lernen - lernt", "atmen - atmet".
+
+  addE : Str -> Str = \stem ->
+    let
+      r = init (Predef.dp 2 stem) ;
+      n = last stem ;
+      e = case n of {
+        "t" | "d" => "e" ;
+        "e" | "h" => [] ;
+        _ => case r of {
+          "l" | "r" | "a" | "o" | "u" | "e" | "i" | "ÃÂ¼" | "ÃÂ¤" | "ÃÂ¶"|"h" => [] ;
+          _ => "e" 
+          }
+        }
+    in 
+      stem + e ;
+
+  weakV : Str -> Verb = \legen ->
+    let 
+       leg = case Predef.dp 2 legen of {
+         "en" => Predef.tk 2 legen ;
+         _  => Predef.tk 1 legen
+         } ;
+       lege = addE leg ;
+       legte = lege + "te"
+    in
+       mkV legen (lege+"t") leg legte legte ("ge"+lege+"t") VHaben ;
+
+-- To eliminate the past participle prefix "ge".
+
+  no_geV : Verb -> Verb = \verb -> {
+    s = table {
+      VPastPart a => Predef.drop 2 (verb.s ! VPastPart a) ;
+      v => verb.s ! v
+      } ;
+    aux = verb.aux
+    } ;
+
+-- To change the default auxiliary "haben" to "sein".
+
+  seinV : Verb -> Verb = \verb -> {
+    s = verb.s ;
+    aux = VSein
+    } ;
+
+
 --  y2ie : Str -> Str -> Str = \fly,s -> 
 --    let y = last (init fly) in
 --    case y of {

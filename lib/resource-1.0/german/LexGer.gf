@@ -3,14 +3,33 @@ concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
   flags optimize = values ;
 
   lin
-    walk_V  = mkV "gehen" "geht" "geh" "ging" "ginge" "gegangen" VSein ;
-    help_V2 = mkV "helfen" "hilft" "hilf" "half" "hälfe" "geholfen" VHaben ** 
-              {c2 = {s = [] ; c = Dat}} ;
-    show_V3 = regV "zeigen" ** 
-              {c2 = {s = [] ; c = Acc} ; c3 = {s = [] ; c = Dat}} ;
-    want_VV = auxVV wollen_V ;
-    claim_VS = no_geV (regV "behaupten") ;
-    ask_VQ = regV "fragen" ;
+    walk_V = 
+      mkV 
+        "gehen" "gehe" "gehst" "geht" "geht" "geh" 
+        "ging" "gingst" "gingt" "gingen"
+        "ginge" "gegangen" VSein ;
+    help_V2 = 
+      mkV 
+        "helfen" "helfe" "hilfst" "hilft" "helft" "hilf" 
+        "half" "halfst" "halft" "halfen" 
+        "hälfe" "geholfen" VHaben ** 
+      {c2 = {s = [] ; c = Dat}} ;
+    show_V3 = 
+      regV "zeigen" ** 
+      {c2 = {s = [] ; c = Acc} ; c3 = {s = [] ; c = Dat}} ;
+    want_VV = auxVV 
+      (mkV 
+        "wollen" "will" "willst" "will" "wollt" "woll" 
+        "wollte" "wolltest" "wollten" "wolltet"
+        "wollte" "gewollen" 
+        VHaben) ;
+    claim_VS = 
+      mkV
+        "behaupten" "behaupte" "bahauptest" "behauptet" "behauptet" "behaupte"
+        "behauptete" "behauptetest" "behauptetet" "behaupteten"
+        "behauptete" "behauptet" VHaben ;
+    ask_VQ = 
+      regV "fragen" ;
 
     dog_N  = mkN4 "Hund" "Hundes" "Hünde" "Hünden" Masc ;
     son_N2 = mkN4 "Sohn" "Sohnes" "Söhne" "Söhnen" Masc ** 
@@ -19,7 +38,7 @@ concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
              {c2 = {s = "von" ; c = Dat} ; c3 = {s = "nach" ; c = Dat}} ;
 
     warm_A = mkA "warm" "warm" "wärmer" "wärmst" ;
-    close_A2 = regA "eng" ** {c2 = {s = "zu" ; c = Dat}} ;
+    close_A2 = regA "eng" ** {c2 = {s = "bei" ; c = Dat}} ;
 
     here_Adv = {s = "hier"} ;
     very_AdA = {s = "sehr"} ;
