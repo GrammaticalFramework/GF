@@ -19,6 +19,24 @@ for creating SLF networks with sub-automata.
 
 <hr>
 
+6/1/2006 (AR) Concatenative string patterns to help morphology definitions.
+The pattern <tt>Predef.CC p1 p2</tt> matches a string literal <tt>s</tt> 
+with the first (i.e. shortest-prefix) division <tt>s1 + s2 = s</tt> such that
+<tt>p1</tt> matches <tt>s1</tt> and <tt>p2</tt> matches <tt>s2</tt>. For example,
+the following expression produces the English plural forms
+<i>boy-boys, play-plays, fly-flies, dog-dogs</i>:
+<pre>
+  plur : Str -> Str = \s -> case s of {
+    CC x (CC ("a" | "o") "y") => s + "s" ;
+    CC x "y"                  => x + "ies" ;
+    _                         => s + "s"
+    } ;
+</pre>
+This can be seen as a step towards regular expression string patterns. 
+The natural notation <tt>p1 + p2</tt> will be considered later.
+
+<hr>
+
 22/12 <b>Release of GF 2.4</b>.
 
 <p>
