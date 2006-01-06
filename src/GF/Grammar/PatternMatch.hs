@@ -66,6 +66,12 @@ tryMatch (p,t) = do
             p `eqStrIdent` f && length pp == length tt ->
          do matches <- mapM tryMatch (zip pp tt)
             return (concat matches)
+
+      (PP (IC "Predef") (IC "CC") [p1,p2], ([],K s, [])) -> do
+         let cuts = [splitAt n s | n <- [0 .. length s]] 
+         matches <- checks [mapM tryMatch [(p1,K s1),(p2,K s2)] | (s1,s2) <- cuts]
+         return (concat matches)
+
       (PP q p pp, ([], QC r f, tt)) | 
             -- q `eqStrIdent` r &&  --- not for inherited AR 10/10/2005
             p `eqStrIdent` f && length pp == length tt ->
@@ -97,6 +103,7 @@ isInConstantForm trm = case trm of
     App c a  -> isInConstantForm c && isInConstantForm a
     R r      -> all (isInConstantForm . snd . snd) r
     K _      -> True
+    Empty    -> True
     Alias _ _ t -> isInConstantForm t
     EInt _   -> True
     _       -> False ---- isInArgVarForm trm
