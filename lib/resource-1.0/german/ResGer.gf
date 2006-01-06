@@ -6,9 +6,8 @@
 --
 -- This module contains operations that are needed to make the
 -- resource syntax work. To define everything that is needed to
--- implement $Test$, it moreover contains regular lexical
+-- implement $Test$, it moreover contains some lexical
 -- patterns needed for $Lex$.
---
 
 resource ResGer = ParamGer ** open Prelude in {
 
@@ -59,112 +58,62 @@ resource ResGer = ParamGer ** open Prelude in {
        }
     } ;
 
--- This auxiliary gives the forms in each degree. 
-
-  adjForms : (x1,x2 : Str) -> AForm => Str = \teuer,teur ->
-   table {
-    APred => teuer ;
-    AMod Strong (GSg Masc) c => 
-      caselist (teur+"er") (teur+"en") (teur+"em") (teur+"es") ! c ;
-    AMod Strong (GSg Fem) c => 
-      caselist (teur+"e") (teur+"e") (teur+"er") (teur+"er") ! c ;
-    AMod Strong (GSg Neut) c => 
-      caselist (teur+"es") (teur+"es") (teur+"em") (teur+"es") ! c ;
-    AMod Strong GPl c => 
-      caselist (teur+"e") (teur+"e") (teur+"en") (teur+"er") ! c ;
-    AMod Weak (GSg g) c => case <g,c> of {
-      <_,Nom>    => teur+"e" ;
-      <Masc,Acc> => teur+"en" ;
-      <_,Acc>    => teur+"e" ;
-      _          => teur+"en" } ;
-    AMod Weak GPl c => teur+"en"
-    } ;
-
--- This is used e.g. when forming determiners.
-
-  appAdj : Adjective -> Number => Gender => Case => Str = \adj ->
-    let
-      ad : GenNum -> Case -> Str = \gn,c -> 
-        adj.s ! Posit ! AMod Strong gn c
-    in
-    \\n,g,c => case n of {
-       Sg => ad (GSg g) c ;
-       _  => ad GPl c
-     } ;
+-- Verbs need as many as 12 forms, to cover the variations with
+-- suffixes "t" and "st". Auxiliaries like "sein" will have to
+-- make extra cases even for this.
 
   Verb : Type = {s : VForm => Str ; aux : VAux} ;
 
-  mkV : (x1,_,_,_,_,x6 : Str) -> VAux -> Verb = 
-    \geben,gibt,gib,gab,gaebe,gegeben,aux -> 
-    let
-      ifSibilant : Str -> Str -> Str -> Str = \u,b1,b2 -> 
-        case u of {
-          "s" | "x" | "z" | "ß" => b1 ;
-          _   => b2 
-          } ; 
-      en = Predef.dp 2 geben ;
-      geb = case Predef.tk 1 en of {
-        "e" => Predef.tk 2 geben ;
-         _  => Predef.tk 1 geben
-         } ;
-      gebt = addE geb + "t" ;
-      gebte = ifTok Tok (Predef.dp 1 gab) "e" gab (gab + "e") ;
-      gibst = ifSibilant (Predef.dp 1 gib) (gib + "t") (gib + "st") ;
-      gegebener = (regA gegeben).s ! Posit ;
-      gabe = addE gab ;
-      gibe = ifTok Str (Predef.dp 2 gib) "ig" "e" [] ++ addE gib
-    in {s = table {
-
-       VInf       => geben ;
-
-       VPresInd Sg P1 => geb + "e" ;
-       VPresInd Sg P2 => gibst ;
-       VPresInd Sg P3 => gibt ;
-       VPresInd Pl P2 => gebt ;
-       VPresInd Pl _  => geben ; -- the famous law
-
-       VImper Sg    => gibe ;
-       VImper Pl    => gebt ;
-
-       VPresSubj Sg P2 => geb + "est" ;
-       VPresSubj Sg _  => geb + "e" ;
-       VPresSubj Pl P2 => geb + "et" ;
+  mkV : (x1,_,_,_,_,_,_,_,_,_,_,x12 : Str) -> VAux -> Verb = 
+    \geben,gebe,gibst,gibt,gebt,gib,gab,gabst,gaben,gabt,gaebe,gegeben,aux -> 
+    {s = table {
+       VInf            => geben ;
+       VPresInd Sg P1  => gebe ;
+       VPresInd Sg P2  => gibst ;
+       VPresInd Sg P3  => gibt ;
+       VPresInd Pl P2  => gebt ;
+       VPresInd Pl _   => geben ;
+       VImper Sg       => gib ;
+       VImper Pl       => gebt ;
+       VPresSubj Sg P2 => init geben + "st" ;
+       VPresSubj Sg _  => init geben ;
+       VPresSubj Pl P2 => init geben + "t" ;
        VPresSubj Pl _  => geben ;
-
-       VPresPart a => (regA (geben + "d")).s ! Posit ! a ;
-
-       VImpfInd Sg P2 => gabe + "st" ;
-       VImpfInd Sg _  => gab ;
-       VImpfInd Pl P2 => gabe + "t" ;
-       VImpfInd Pl _  => gebte + "n" ;
-
+       VPresPart a     => (regA (geben + "d")).s ! Posit ! a ;
+       VImpfInd Sg P2  => gabst ;
+       VImpfInd Sg _   => gab ;
+       VImpfInd Pl P2  => gabt ;
+       VImpfInd Pl _   => gaben ;
        VImpfSubj Sg P2 => gaebe + "st" ;
        VImpfSubj Sg _  => gaebe ;
        VImpfSubj Pl P2 => gaebe + "t" ;
        VImpfSubj Pl _  => gaebe + "n" ;
-
-       VPastPart a    => gegebener ! a
+       VPastPart a     => (regA gegeben).s ! Posit ! a
        } ;
      aux = aux
      } ;
- 
--- This function decides whether to add an "e" to the stem before "t".
--- Examples: "töten - tötet", "kehren - kehrt", "lernen - lernt", "atmen - atmet".
 
-  addE : Str -> Str = \stem ->
-    let
-      r = init (Predef.dp 2 stem) ;
-      n = last stem ;
-      e = case n of {
-        "t" | "d" => "e" ;
-        "e" | "h" => [] ;
-        _ => case r of {
-          "l" | "r" | "a" | "o" | "u" | "e" | "i" | "Ã¼" | "Ã¤" | "Ã¶"|"h" => [] ;
-          _ => "e" 
-          }
-        }
-    in 
-      stem + e ;
+-- These functions cover many regular cases; full coverage inflectional patterns are
+-- defined in $MorphoGer$.
+
+  mkN4 : (x1,_,_,x4 : Str) -> Gender -> Noun = \wein,weines,weine,weinen ->
+    mkN wein wein wein weines weine weinen ;
+
+  regA : Str -> Adjective = \blau ->
+    mkA blau blau (blau + "er") (blau + "est") ;
+
+  regV : Str -> Verb = \legen ->
+    let 
+      lege  = init legen ;
+      leg   = init lege ;
+      legt  = leg + "t" ;
+      legte = legt + "e"
+    in
+    mkV 
+      legen lege (leg+"st") legt legt leg 
+      legte (legte + "st") (legte + "n") (legte + "t")
+      legte ("ge" + legt) 
+      VHaben ;
 
 -- Prepositions for complements indicate the complement case.
 
@@ -209,64 +158,38 @@ resource ResGer = ParamGer ** open Prelude in {
     GPl      => caselist "die" "die" "den" "der"
     } ;
 
+-- This is used when forming determiners that are like adjectives.
 
---
---    mkIP : (i,me,my : Str) -> Number -> {s : Case => Str ; n : Number} =
---     \i,me,my,n -> let who = mkNP i me my n P3 in {s = who.s ; n = n} ;
---
---    mkNP : (i,me,my : Str) -> Number -> Person -> {s : Case => Str ; a : Agr} =
---     \i,me,my,n,p -> {
---     s = table {
---       Nom => i ;
---       Acc => me ;
---       Gen => my
---       } ;
---     a = {
---       n = n ;
---       p = p
---       }
---     } ;
---
--- These functions cover many cases; full coverage inflectional patterns are
--- in $MorphoGer$.
-
-  mkN4 : (x1,_,_,x4 : Str) -> Gender -> Noun = \wein,weines,weine,weinen ->
-    mkN wein wein wein weines weine weinen ;
-
-  mkN2 : (x1,x2 : Str) -> Gender -> Noun = \frau,frauen ->
-    mkN4 frau frau frauen frauen ;
-
-  regA : Str -> Adjective = \blau ->
-    mkA blau blau (blau + "er") (blau + "est") ;
-
-  regV : Str -> Verb = \legen ->
-    let 
-       leg = case Predef.dp 2 legen of {
-         "en" => Predef.tk 2 legen ;
-         _  => Predef.tk 1 legen
-         } ;
-       lege = addE leg ;
-       legte = lege + "te"
+  appAdj : Adjective -> Number => Gender => Case => Str = \adj ->
+    let
+      ad : GenNum -> Case -> Str = \gn,c -> 
+        adj.s ! Posit ! AMod Strong gn c
     in
-       mkV legen (lege+"t") leg legte legte ("ge"+lege+"t") VHaben ;
+    \\n,g,c => case n of {
+       Sg => ad (GSg g) c ;
+       _  => ad GPl c
+     } ;
 
--- To eliminate the morpheme "ge".
+-- This auxiliary gives the forms in each degree of adjectives. 
 
-  no_geV : Verb -> Verb = \verb -> {
-    s = table {
-      VPastPart a => Predef.drop 2 (verb.s ! VPastPart a) ;
-      v => verb.s ! v
-      } ;
-    aux = verb.aux
+  adjForms : (x1,x2 : Str) -> AForm => Str = \teuer,teur ->
+   table {
+    APred => teuer ;
+    AMod Strong (GSg Masc) c => 
+      caselist (teur+"er") (teur+"en") (teur+"em") (teur+"es") ! c ;
+    AMod Strong (GSg Fem) c => 
+      caselist (teur+"e") (teur+"e") (teur+"er") (teur+"er") ! c ;
+    AMod Strong (GSg Neut) c => 
+      caselist (teur+"es") (teur+"es") (teur+"em") (teur+"es") ! c ;
+    AMod Strong GPl c => 
+      caselist (teur+"e") (teur+"e") (teur+"en") (teur+"er") ! c ;
+    AMod Weak (GSg g) c => case <g,c> of {
+      <_,Nom>    => teur+"e" ;
+      <Masc,Acc> => teur+"en" ;
+      <_,Acc>    => teur+"e" ;
+      _          => teur+"en" } ;
+    AMod Weak GPl c => teur+"en"
     } ;
-
--- To change the default auxiliary "haben" to "sein".
-
-  seinV : Verb -> Verb = \verb -> {
-    s = verb.s ;
-    aux = VSein
-    } ;
-
 
 -- For $Verb$.
 
@@ -329,41 +252,31 @@ resource ResGer = ParamGer ** open Prelude in {
       } ;
 
   haben_V : Verb = 
-    let
-      haben = mkV "haben" "hat" "hab" "hatte" "hätte" "gehabt" VHaben
-    in 
-    {s = table {
-      VPresInd Sg P2 => "hast" ;
-      v => haben.s ! v
-      } ;
-     aux = VHaben 
-    } ;
+    mkV 
+      "haben" "habe" "hast" "hat" "habt" "hab" 
+      "hatte" "hattest" "hatten" "hattet" 
+      "hätte" "gehabt" 
+      VHaben ;
 
   werden_V : Verb = 
-    let
-      werden = mkV "werden" "wird" "werd" "wurde" "würde" "geworden" VSein
-    in 
-    {s = table {
-      VPresInd Sg P2 => "wirst" ;
-      v => werden.s ! v
-      } ;
-     aux = VSein
-    } ;
+    mkV 
+      "werden" "werde" "wirst" "wird" "werdet" "werd" 
+      "wurde" "wurdest" "wurden" "wurdet" 
+      "würde" "geworden" 
+      VSein ;
 
   sein_V : Verb = 
     let
-      sein = mkV "sein" "ist" "sei" "war" "wäre" "gewesen" VSein
+      sein = mkV 
+      "sein" "bin" "bist" "ist" "seid" "sei" 
+      "war"  "warst" "waren" "wart" 
+      "wäre" "gewesen" 
+      VSein
     in
     {s = table {
-      VPresInd Sg P1 => "bin" ;
-      VPresInd Sg P2 => "bist" ;
-      VPresInd Pl P2 => "seid" ;
-      VPresInd Pl _  => "sind" ;
-      VImper Sg    => "sei" ;
-      VImper Pl    => "seid" ;
-      VPresSubj Sg P1 => "sei" ;
+      VPresInd Pl (P1 | P3) => "sind" ;
       VPresSubj Sg P2 => (variants {"seiest" ; "seist"}) ;
-      VPresSubj Sg P3 => "sei" ;
+      VPresSubj Sg _  => "sei" ;
       VPresSubj Pl P2 => "seien" ;
       VPresSubj Pl _  => "seiet" ;
       VPresPart a => (regA "seiend").s ! Posit ! a ;
@@ -372,24 +285,12 @@ resource ResGer = ParamGer ** open Prelude in {
      aux = VSein
     } ;
 
-  wollen_V : Verb = 
-    let
-      wollen = mkV "wollen" "will" "woll" "wollte" "wollte" "gewollen" VHaben
-    in 
-    {s = table {
-      VPresInd Sg P1 => "will" ;
-      VPresInd Sg P2 => "willst" ;
-      v => wollen.s ! v
-      } ;
-     aux = VHaben 
-    } ;
+  auxVV : Verb -> Verb ** {part : Str} = \v -> v ** {part = []} ;
 
   negation : Polarity => Str = table {
       Pos => [] ;
       Neg => "nicht"
       } ;
-
-  auxVV : Verb -> Verb ** {part : Str} = \v -> v ** {part = []} ;
 
 -- Extending a verb phrase with new constituents.
 
@@ -416,7 +317,6 @@ resource ResGer = ParamGer ** open Prelude in {
     a2 = vp.a2 ;
     ext = vp.ext ++ ext
     } ;
-
 
 -- For $Sentence$.
 
@@ -452,7 +352,6 @@ resource ResGer = ParamGer ** open Prelude in {
     {n = Pl ; p = P2} => "euch" ;
     {n = Pl ; p = P3} => "sich"
     } ;
-
 
 -- For $Numeral$.
 --
