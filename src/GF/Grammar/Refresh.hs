@@ -77,6 +77,7 @@ refreshPatt p = case p of
   PSeq p' q' -> liftM2 PSeq    (refreshPatt p') (refreshPatt q')
   PAlt p' q' -> liftM2 PAlt    (refreshPatt p') (refreshPatt q')
   PRep p'    -> liftM  PRep    (refreshPatt p')
+  PNeg p'    -> liftM  PNeg    (refreshPatt p')
 
   _ -> return p
 

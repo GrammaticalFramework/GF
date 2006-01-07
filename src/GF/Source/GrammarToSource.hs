@@ -202,6 +202,7 @@ trp p = case p of
     PAlt p q -> P.PDisj (trp p) (trp q)
     PSeq p q -> P.PSeq (trp p) (trp q)
     PRep p   -> P.PRep (trp p)
+    PNeg p   -> P.PNeg (trp p)
 
 
 trAssign (lab, (mty, t)) = maybe (P.LDDef x t') (\ty -> P.LDFull x (trt ty) t') mty

@@ -255,6 +255,10 @@ renamePattern env patt = case patt of
     (p',vs) <- renp p
     return (PRep p', vs)
 
+  PNeg p -> do
+    (p',vs) <- renp p
+    return (PNeg p', vs)
+
   PAs x p -> do
     (p',vs) <- renp p
     return (PAs x p', x:vs)

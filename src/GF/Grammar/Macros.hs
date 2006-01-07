@@ -509,6 +509,9 @@ term2patt trm = case termForm trm of
   Ok ([], Cn (IC "@"), [Vr a,b]) -> do
     b' <- term2patt b
     return (PAs a b')
+  Ok ([], Cn (IC "-"), [a]) -> do
+    a' <- term2patt a
+    return (PNeg a')
   Ok ([], Cn (IC "*"), [a]) -> do
     a' <- term2patt a
     return (PRep a')
@@ -540,6 +543,7 @@ patt2term pt = case pt of
   PSeq a b  -> appc "+" [(patt2term a), (patt2term b)] --- an encoding
   PAlt a b  -> appc "|" [(patt2term a), (patt2term b)] --- an encoding
   PRep a    -> appc "*" [(patt2term a)]                --- an encoding
+  PNeg a    -> appc "-" [(patt2term a)]                --- an encoding
 
 
 redirectTerm :: Ident -> Term -> Term

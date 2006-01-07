@@ -224,6 +224,7 @@ data Patt =
  | PSeq Patt Patt
  | PRep Patt
  | PAs Ident Patt
+ | PNeg Patt
   deriving (Eq,Ord,Show)
 
 data PattAss =

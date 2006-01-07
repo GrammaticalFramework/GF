@@ -10,7 +10,6 @@ resource Predef = {
   oper Int  : Type = variants {} ;                     -- the type of integers
   oper Ints : Int -> Type = variants {} ;              -- the type of integers from 0 to n
 
-  oper CC     : Tok -> Tok -> Tok      = variants {} ; -- concatenation; used in patterns
   oper length : Tok ->        Int      = variants {} ; -- length of string
   oper drop   : Int -> Tok -> Tok      = variants {} ; -- drop prefix of length
   oper take   : Int -> Tok -> Tok      = variants {} ; -- take prefix of length

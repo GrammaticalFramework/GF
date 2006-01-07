@@ -1355,7 +1355,9 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     in
     {s = table {
       Imper Sg => "älä" ;
-      Impf n p | Cond n p => ei.s ! Pres n p ;
+--      Impf n p | Cond n p => ei.s ! Pres n p ;
+      Impf n p => ei.s ! Pres n p ;
+      Cond n p => ei.s ! Pres n p ;
       v => ei.s ! v
       }
     } ;

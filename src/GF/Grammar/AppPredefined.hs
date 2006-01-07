@@ -35,7 +35,6 @@ typPredefined c@(IC f) = case f of
   "PBool"  -> return typePType
   "PFalse" -> return $ cnPredef "PBool"
   "PTrue"  -> return $ cnPredef "PBool"
-  "CC"     -> return $ mkFunType [typeTok,typeTok] typeTok
   "dp"     -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
   "drop"   -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
   "eqInt"  -> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "PBool")
@@ -74,7 +73,6 @@ appPredefined t = case t of
     App (Q (IC "Predef") (IC f)) z0 -> do
      (z,_) <- appPredefined z0
      case (f, norm z, norm x) of
-      ("CC",   K r,    K s) -> retb $ K (r ++ s)
       ("drop", EInt i, K s) -> retb $ K (drop (fi i) s)
       ("take", EInt i, K s) -> retb $ K (take (fi i) s)
       ("tk",   EInt i, K s) -> retb $ K (take (max 0 (length s - fi i)) s)

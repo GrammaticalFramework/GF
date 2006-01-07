@@ -515,11 +515,17 @@ inferLType gr trm = case trm of
      PSeq p q -> isConstPatt p && isConstPatt q
      PAlt p q -> isConstPatt p && isConstPatt q
      PRep p -> isConstPatt p
+     PNeg p -> isConstPatt p
      PAs _ p -> isConstPatt p
      _ -> False
 
    inferPatt p = case p of
      PP q c ps | q /= cPredef -> checkErr $ lookupResType gr q c >>= valTypeCnc
+     PAs _ p  -> inferPatt p
+     PNeg p   -> inferPatt p
+     PAlt p q -> checks [inferPatt p, inferPatt q]
+     PSeq _ _ -> return $ typeTok
+     PRep _   -> return $ typeTok
      _ -> infer (patt2term p) >>= return . snd
 
 checkLType :: SourceGrammar -> Term -> Type -> Check (Term, Type)
@@ -700,6 +706,7 @@ pattContext env typ p = case p of
     g2 <- pattContext env typ q
     return $ g1 ++ g2
   PRep p -> pattContext env typeStr p
+  PNeg p -> pattContext env typeStr p
 
   _ -> return [] ---- check types!
  where 
