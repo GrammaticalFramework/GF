@@ -601,9 +601,7 @@ oper
 -- This auxiliary resolves vowel harmony from a given letter.
 
 getHarmony : Str -> Str = \u -> case u of {
-  "a" => "a" ;
-  "o" => "a" ;
-  "u" => "a" ;
+  "a"|"o"|"u" => "a" ;
   _   => "ä"
   } ;
 
@@ -616,81 +614,58 @@ vowelHarmony : Str -> Str = \liitin ->
 -- In general, *whether there is* grade alternation must be given in the lexicon
 -- (cf. "auto - auton" not "audon"; "vihje - vihjeen" not "vihkeen").
 
-  weakGrade : Str -> Str = \kukko -> 
-    let {
-      kukk = init kukko ;
-      ku = Predef.tk 3 kukko ;
-      kul = Predef.tk 2 kukko ;
-      kk = init (Predef.dp 3 kukko) ;
-      k  = last kk ;
-      o  = last kukko ;
-      kuk = case kk of {
-        "kk" => ku + "k" ;
-        "pp" => ku + "p" ;
-        "tt" => ku + "t" ;
-        "nk" => ku + "ng" ;
-        "nt" => ku + "nn" ;
-        "mp" => ku + "mm" ;
-        "rt" => ku + "rr" ;
-        "lt" => ku + "ll" ;
-        "lk" => kul + case o of {
-           "i" | "e" => "j" ;
-           _   => ""
-           } ;
-        "rk" => kul + case o of {
-           "i" | "e" => "j" ;
-           _   => ""
-           } ;
-        "hk" | "tk" => kukk ;  -- *tahko-tahon, *pitkä-pitkän
-        "sk" => kukk ;  -- *lasku-lasvun
-        "sp" => kukk ;  -- *raspi-rasvin
-        "st" => kukk ;  -- *lastu-lasdun
-        _ => case k of {
-          "k" => case o of {
-            "u" => kul + "v" ;
-            _ => kul 
-            };
-          "p" => kul + "v" ;
-          "t" => kul + "d" ;
-          _ => kukk
-          }
-        }
-    } 
-    in kuk + o ;
+  weakGrade : Str -> Str = \kukko ->
+    let
+      ku  = Predef.tk 3 kukko ;
+      kko = Predef.dp 3 kukko ;
+      o   = last kukko
+    in
+      case kko of {
+        "kk" + _ => ku + "k"  + o  ;
+        "pp" + _ => ku + "p"  + o  ;
+        "tt" + _ => ku + "t"  + o  ;
+        "nk" + _ => ku + "ng" + o  ;
+        "nt" + _ => ku + "nn" + o  ;
+        "mp" + _ => ku + "mm" + o  ;
+        "rt" + _ => ku + "rr" + o  ;
+        "lt" + _ => ku + "ll" + o  ;
+        "lk" + ("i" | "e") => ku + "lj" + o ;
+        "rk" + ("i" | "e") => ku + "rj" + o ;
+        "lk" + _ => ku + "l" + o  ;
+        "rk" + _ => ku + "r" + o  ;
+        ("hk" | "tk") + _ => kukko ;           -- *tahko-tahon, *pitkä-pitkän
+        "s" + ("k" | "p" | "t") + _ => kukko ; -- *lasku-lasvun, *raspi-rasvin, *lastu-lasdun
+        x + "ku" => ku + x + "vu" ;
+        x + "k" + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") => ku + x      + o ; 
+        x + "p" + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") => ku + x + "v" + o ; 
+        x + "t" + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") => ku + x + "d" + o ; 
+        _ => kukko
+        } ;
 
 --- This is only used to analyse nouns "rae", "hake", etc.
 
-  strongGrade : Str -> Str = \hake -> 
+  strongGrade : Str -> Str = \hake ->
     let
-      hak = init hake ;
-      ha = init hak ;
-      k  = last hak ;
+      ha = Predef.tk 2 hake ;
       e  = last hake ;
-      ly = Predef.tk 2 hak ;
-      hd = Predef.dp 2 hak ;
-      ifE : Str -> Str = \hant -> ifTok Str e "e" hant hak ;
-      hakk =
+      hak = init hake ;
+      hd = Predef.dp 2 hak
+    in
       case hd of {
         "ng" => ha + "k" ;
         "nn" => ha + "t" ;
         "mm" => ha + "p" ;
-        "rr" => ha + "t" ;
-        "ll" => ha + "t" ;
-        "lj" => ifE (ha + "k") ; -- paljas-paljaan
-        "hk" | "sk" | "sp" | "st" => hak ;
-        _ =>     -- vihje/pohje: impossible to infer
-      case k of {
-        "k" => hak + "k" ;
-        "p" => hak + "p" ;
-        "t" => hak + "t" ;
-        "d" => ha + "t" ;
-        "v" => ha + "p" ;  -- rove/hyve impossible
-        "a" | "ä" => hak + "k" ;
-        _ => hak
-        }
-     }
-     in hakk + e ;  
-
+        "rr" | "ll" => ha + "t" ;
+        "hj" | "lj" => ha + "k" ;  -- pohje/lahje impossible
+        "hk" | "sk" | "sp" | "st" => hak ; 
+        _ + "k"  => ha + "kk" ;
+        _ + "p"  => ha + "pp" ;
+        _ + "t"  => ha + "tt" ;
+        _ + "d"  => ha + "t" ;
+        _ + ("a" | "ä") => hak + "k" ;  -- säe, tae
+        _ + "v"  => ha + "p" ;  -- rove/hyve impossible
+        _    => hak
+        } + e ;
 
 --3 Proper names
 --
@@ -1077,24 +1052,22 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
   regVerbH : Str -> VerbH = \soutaa -> 
   let
     taa = Predef.dp 3 soutaa ;
-    ta  = init taa ;
-    aa  = Predef.dp 2 taa ;
     juo = Predef.tk 2 soutaa ;
     souda = weakGrade (init soutaa) ;
     soudan = juo + "en" ;
     o  = Predef.dp 1 juo ;
-    a = last aa ;
+    a = last soutaa ;
     u = ifTok Str a "a" "u" "y" ;
     joi = Predef.tk 2 juo + (o + "i")
-  in case ta of {
-    "it" => vHarkita soutaa ;
-    "st" | "nn" | "rr" | "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
-      _ => case aa of {
-    "aa" | "ää" => vOttaa soutaa (souda + "n") ;
-    "da" | "dä" => vJuoda soutaa joi ;
-    "ta" | "tä" => vOsata soutaa ;
+  in 
+  case taa of {
+    "it" + _ => vHarkita soutaa ;
+    ("st" | "nn" | "rr" | "ll") + _ => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
+    _ + ("aa" | "ää")     => vOttaa soutaa (souda + "n") ;
+    ("o" | "u" | "y" | "ö") + ("da" | "dä") => vJuoda soutaa joi ;
+    ("ata" | "ätä") => vOsata soutaa ;
     _ => vHukkua soutaa souda
-    }} ;
+    } ;
 
   reg2VerbH : (soutaa,souti : Str) -> VerbH = \soutaa,souti ->
   let
@@ -1105,39 +1078,32 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     juo = Predef.tk 2 soutaa ;
     o  = Predef.dp 1 juo ;
     u = ifTok Str (last soutaa) "a" "u" "y" ;
-    aa  = Predef.dp 2 soutaa ;
     taa = Predef.dp 3 soutaa ;
-    ta  = Predef.tk 1 taa ;
   in 
-  case aa of {
-    "aa" | "ää" => vHuoltaa soutaa soudan souti soudin ;
-     _ => case ta of {
-    "at" | "ät" => vPalkata soutaa souti ;
-    "st"        => vJuosta soutaa souden (juo +   o+u+"t") (juo + "t"+u) ;
+  case taa of {
+    "taa" | "tää" => vHuoltaa soutaa soudan souti soudin ;
+    "ata" | "ätä" => vPalkata soutaa souti ;
+    "sta" | "stä" => vJuosta soutaa souden (juo +   o+u+"t") (juo + "t"+u) ;
     _ => soudat
-    }} ** {sc = Nom ; lock_V = <>} ;
+    } ;
 
   reg3VerbH : (_,_,_ : Str) -> VerbH = \soutaa,soudan,souti -> 
   let
     taa   = Predef.dp 3 soutaa ;
-    ta    = init taa ;
-    aa    = Predef.dp 2 taa ;
     souda = init soudan ;
     juo = Predef.tk 2 soutaa ;
     o  = last juo ;
-    a = last aa ;
+    a = last taa ;
     u = ifTok Str a "a" "u" "y" ;
     soudin = weakGrade souti + "n" ;
     soudat = reg2VerbH soutaa souti ;
-  in case ta of {
-    "ll" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
-    "ot" | "öt" => vPudota soutaa souti ;
-      _ => case aa of {
-    "aa" | "ää" => vHuoltaa soutaa soudan souti soudin ;
-    "da" | "dä" => vJuoda soutaa souti ;
+  in case taa of {
+    "lla" | "llä" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
+    "ota" | "ötä" => vPudota soutaa souti ;
+    "taa" | "tää" => vHuoltaa soutaa soudan souti soudin ;
+    _ + ("da" | "dä") => vJuoda soutaa souti ;
     _ => soudat
-    }} ** {sc = Nom ; lock_V = <>} ;
-
+    } ;
 
 -- For "harppoa", "hukkua", "löytyä", with grade alternation.
 
