@@ -175,9 +175,10 @@ data Patt =
  | PAs Ident Patt         -- ^ as-pattern: x@p
 
  -- regular expression patterns
+ | PNeg Patt              -- ^ negated pattern: -p
  | PAlt Patt Patt         -- ^ disjunctive pattern: p1 | p2
- | PSeq Patt Patt         -- ^ sequence of token parts
- | PRep Patt              -- ^ repetition of token part
+ | PSeq Patt Patt         -- ^ sequence of token parts: p + q
+ | PRep Patt              -- ^ repetition of token part: p*
 
   deriving (Read, Show, Eq, Ord)
 

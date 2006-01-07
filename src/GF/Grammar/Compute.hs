@@ -310,6 +310,7 @@ computeTermOpt rec gr = comp where
        PSeq p q -> concatMap contP [p,q]
        PAlt p q -> concatMap contP [p,q]
        PRep p   -> contP p
+       PNeg p   -> contP p
 
        _ -> []
 

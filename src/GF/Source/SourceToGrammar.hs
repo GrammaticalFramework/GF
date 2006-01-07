@@ -559,7 +559,8 @@ transPatt x = case x of
   PDisj p1 p2 -> liftM2 G.PAlt (transPatt p1) (transPatt p2)
   PSeq p1 p2  -> liftM2 G.PSeq (transPatt p1) (transPatt p2)
   PRep p      -> liftM  G.PRep (transPatt p)
-  PAs x p     -> liftM2 G.PAs (transIdent x) (transPatt p)
+  PNeg p      -> liftM  G.PNeg (transPatt p)
+  PAs x p     -> liftM2 G.PAs  (transIdent x) (transPatt p)
 
 
 

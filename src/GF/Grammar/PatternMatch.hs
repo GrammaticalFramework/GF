@@ -95,6 +95,10 @@ tryMatch (p,t) = do
 
       (PAlt p1 p2,_) -> checks [trym p1 t', trym p2 t']
 
+      (PNeg p',_) -> case tryMatch (p',t) of
+        Bad _ -> return []
+        _ -> prtBad "no match with negative pattern" p
+
       (PSeq p1 p2, ([],K s, [])) -> do
          let cuts = [splitAt n s | n <- [0 .. length s]] 
          matches <- checks [mapM tryMatch [(p1,K s1),(p2,K s2)] | (s1,s2) <- cuts]

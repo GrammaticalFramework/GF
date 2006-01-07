@@ -225,6 +225,7 @@ PDisj.  Patt   ::= Patt "|" Patt1 ;
 PSeq.   Patt   ::= Patt "+" Patt1 ;
 PRep.   Patt1  ::= Patt2 "*" ;
 PAs.    Patt1  ::= Ident "@" Patt2 ;
+PNeg.   Patt1  ::= "-" Patt2 ;
 
 coercions Patt 2 ;
 

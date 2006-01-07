@@ -456,6 +456,7 @@ Patt1 : Ident ListPatt { PC $1 $2 }
   | Ident '.' Ident ListPatt { PQC $1 $3 $4 }
   | Patt2 '*' { PRep $1 }
   | Ident '@' Patt2 { PAs $1 $3 }
+  | '-' Patt2 { PNeg $2 }
   | Patt2 { $1 }
 
 

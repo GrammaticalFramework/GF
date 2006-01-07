@@ -402,6 +402,7 @@ instance Print Patt where
    PSeq patt0 patt -> prPrec i 0 (concatD [prt 0 patt0 , doc (showString "+") , prt 1 patt])
    PRep patt -> prPrec i 1 (concatD [prt 2 patt , doc (showString "*")])
    PAs id patt -> prPrec i 1 (concatD [prt 0 id , doc (showString "@") , prt 2 patt])
+   PNeg patt -> prPrec i 1 (concatD [doc (showString "-") , prt 2 patt])
 
   prtList es = case es of
    [x] -> (concatD [prt 2 x])
