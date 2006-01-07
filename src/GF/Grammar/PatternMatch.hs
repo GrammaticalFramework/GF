@@ -105,7 +105,7 @@ tryMatch (p,t) = do
          return (concat matches)
 
       (PRep p1, ([],K s, [])) -> checks [
-        trym (foldr (const (PSeq p1)) (PString "") [0..n]) t' | n <- [1 .. length s]
+        trym (foldr (const (PSeq p1)) (PString "") [1..n]) t' | n <- [0 .. length s]
         ]
 
       _ -> prtBad "no match in case expr for" t
