@@ -1,22 +1,39 @@
 incomplete concrete CatScand of Cat = 
   open ResScand, Prelude, DiffScand, (R = ParamX) in {
 
-  lincat
-    Text, Phr, Utt = {s : Str} ;
+  flags optimize=all_subs ;
 
+  lincat
+
+-- Phrase
+
+    Text, Phr, Utt, Voc = {s : Str} ;
+
+-- Tensed/Untensed
+
+    S  = {s : Order => Str} ;
+    QS = {s : QForm => Str} ;
+    RS = {s : Agr => Str} ;
+
+-- Sentence
+
+    Cl = {s : Tense => Anteriority => Polarity => Order => Str} ;
+    Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** {c2 : Str} ;
     Imp = {s : Polarity => Number => Str} ;
 
-    S   = {s : Order => Str} ;
-    QS  = {s : QForm => Str} ;
-    RS  = {s : Agr => Str} ;
+-- Question
 
-    Cl    = {s : Tense => Anteriority => Polarity => Order => Str} ;
-    Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** {c2 : Str} ;
+    QCl = {s : Tense => Anteriority => Polarity => QForm => Str} ;
+    IP = {s : NPForm => Str ; gn : GenNum} ;
+    IAdv = {s : Str} ;    
+    IDet = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
 
-    QCl   = {s : Tense => Anteriority => Polarity => QForm => Str} ;
-    RCl   = {s : Tense => Anteriority => Polarity => Agr   => Str} ;
+-- Relative
 
--- Constructed in $Verb$.
+    RCl = {s : Tense => Anteriority => Polarity => Agr => Str} ;
+    RP = {s : GenNum => RCase => Str ; a : RAgr} ;
+
+-- Verb
 
     VP = {
       s : VPForm => {
@@ -29,49 +46,54 @@ incomplete concrete CatScand of Cat =
       ext : Str ;            -- S-Ext att hon går   ---s7
       en2,ea2,eext : Bool    -- indicate if the field exists
       } ;
+    Comp = {s : AFormPos => Str} ; 
+    SC = {s : Str} ; -- always Sub
+
+
+-- Adjective
+
+    AP = {s : AFormPos => Str ; isPre : Bool} ; 
+
+-- Noun
+
+    CN = {s : Number => DetSpecies => Case => Str ; g : Gender} ;
+    NP,Pron = {s : NPForm => Str ; a : Agr} ;
+    Det, Quant = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
+    Predet = {s : GenNum => Str} ;
+    Num = {s : Gender => Str} ;
+    Ord = {s : Str} ;
+
+-- Adverb
+
+    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
+
+-- Numeral
+
+    Numeral = {s : CardOrd => Str ; n : Number} ;
+
+-- Structural
+
+    Conj = {s : Str ; n : Number} ;
+    DConj = {s1,s2 : Str ; n : Number} ;
+    PConj = {s : Str} ;    
+    CAdv = {s : Str} ;    
+    Subj = {s : Str} ;
+    Prep = {s : Str} ;
+
+-- Open lexical classes, e.g. Basic
 
     V, VS, VQ, VA = Verb ;
     V2, VV, V2A = Verb ** {c2 : Str} ;
     V3 = Verb ** {c2,c3 : Str} ;
 
-    AP   = {s : AFormPos => Str ; isPre : Bool} ; 
-    Comp = {s : AFormPos => Str} ; 
-
-    SC   = {s : Str} ; -- always Sub
-
     A  = Adjective ;
        -- {s : AForm => Str} ;
     A2 = Adjective ** {c2 : Str} ;
 
-    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
-    Prep = {s : Str} ;
-
--- Constructed in $Noun$.
-
-    Det, Quant = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
-    Predet = {s : GenNum => Str} ;
-    Num    = {s : Gender => Str} ;
-    Ord    = {s : Str} ;
-
     N  = Noun ; 
       -- {s : Number => Species => Case => Str ; g : Gender} ;
-    CN = {s : Number => DetSpecies => Case => Str ; g : Gender} ;
-    PN = {s : Case => Str ; g : Gender} ;
-    Pron, NP = {s : NPForm => Str ; a : Agr} ;
     N2   = Noun  ** {c2 : Str} ;
     N3   = Noun  ** {c2,c3 : Str} ;
-
-    IP   = {s : NPForm => Str ; gn : GenNum} ;
-    IDet = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
-    IAdv = {s : Str} ;    
-
-    RP = {s : GenNum => RCase => Str ; a : RAgr} ;
-
-    Numeral = {s : CardOrd => Str ; n : Number} ;
-
-    CAdv = {s : Str} ;    
-
-    Conj = {s : Str ; n : Number} ;
-    DConj = {s1,s2 : Str ; n : Number} ;
+    PN = {s : Case => Str ; g : Gender} ;
 
 }

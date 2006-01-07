@@ -7,11 +7,11 @@ abstract Phrase = Cat, Tense ** {
     UttQS   : QS -> Utt ;
     UttImpSg, UttImpPl  : Pol -> Imp -> Utt ;
 
-    UttIP   : IP -> Utt ;
+    UttIP   : IP   -> Utt ;
     UttIAdv : IAdv -> Utt ;
-    UttNP   : NP -> Utt ;
-    UttAdv  : Adv -> Utt ;
-    UttVP   : VP -> Utt ;
+    UttNP   : NP   -> Utt ;
+    UttAdv  : Adv  -> Utt ;
+    UttVP   : VP   -> Utt ;
 
     NoPConj : PConj ;
     PConjConj : Conj -> PConj ;
