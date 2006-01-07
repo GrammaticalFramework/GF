@@ -197,6 +197,12 @@ trp p = case p of
     PFloat i -> P.PFloat i
     PT t p -> trp p ---- prParenth (prt p +++ ":" +++ prt t)
 
+    PAs  x p -> P.PAs (tri x) (trp p)
+
+    PAlt p q -> P.PDisj (trp p) (trp q)
+    PSeq p q -> P.PSeq (trp p) (trp q)
+    PRep p   -> P.PRep (trp p)
+
 
 trAssign (lab, (mty, t)) = maybe (P.LDDef x t') (\ty -> P.LDFull x (trt ty) t') mty
   where 

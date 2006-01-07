@@ -241,6 +241,24 @@ renamePattern env patt = case patt of
     let (ps',vs') = unzip psvss
     return (PR (zip ls ps'), concat vs') 
 
+  PAlt p q -> do
+    (p',vs) <- renp p
+    (q',ws) <- renp q
+    return (PAlt p' q', vs ++ ws)
+
+  PSeq p q -> do
+    (p',vs) <- renp p
+    (q',ws) <- renp q
+    return (PSeq p' q', vs ++ ws)
+
+  PRep p -> do
+    (p',vs) <- renp p
+    return (PRep p', vs)
+
+  PAs x p -> do
+    (p',vs) <- renp p
+    return (PAs x p', x:vs)
+
   _ -> return (patt,[])
 
  where 

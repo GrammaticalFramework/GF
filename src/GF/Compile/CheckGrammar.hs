@@ -512,6 +512,10 @@ inferLType gr trm = case trm of
      PString _ -> True
      PInt _ -> True
      PFloat _ -> True
+     PSeq p q -> isConstPatt p && isConstPatt q
+     PAlt p q -> isConstPatt p && isConstPatt q
+     PRep p -> isConstPatt p
+     PAs _ p -> isConstPatt p
      _ -> False
 
    inferPatt p = case p of
@@ -664,7 +668,7 @@ checkLType env trm typ0 = do
 pattContext :: LTEnv -> Type -> Patt -> Check Context
 pattContext env typ p = case p of
   PV x -> return [(x,typ)]
-  PP q c ps | q /= cPredef || prt c == "CC" -> do ---- why this /=? AR 6/1/2006
+  PP q c ps | q /= cPredef -> do ---- why this /=? AR 6/1/2006
     t <- checkErr $ lookupResType cnc q c
     (cont,v) <- checkErr $ typeFormCnc t
     checkCond ("wrong number of arguments for constructor in" +++ prt p) 
@@ -683,7 +687,21 @@ pattContext env typ p = case p of
     checkEqLType env typ t (patt2term p')
     pattContext env typ p'
 
-  _ -> return [] ----
+  PAs x p -> do
+    g <- pattContext env typ p
+    return $ (x,typ):g
+
+  PAlt p q -> do
+    g1 <- pattContext env typ p
+    g2 <- pattContext env typ q
+    return $ filter (flip elem g1) g2 -- must be in both
+  PSeq p q -> do
+    g1 <- pattContext env typ p
+    g2 <- pattContext env typ q
+    return $ g1 ++ g2
+  PRep p -> pattContext env typeStr p
+
+  _ -> return [] ---- check types!
  where 
    cnc = env
 

@@ -200,7 +200,7 @@ EEqs.      Exp  ::= "fn" "{" [Equation] "}" ;
 
 EExample.  Exp  ::= "in" Exp5 String ;
 
-coercions Exp 4 ;
+coercions Exp 6 ;
 
 separator Exp ";" ; -- in variants
 
@@ -222,6 +222,9 @@ PTup.   Patt2  ::= "<" [PattTupleComp] ">" ;
 PC.     Patt1  ::= Ident [Patt] ;
 PQC.    Patt1  ::= Ident "." Ident [Patt] ;
 PDisj.  Patt   ::= Patt "|" Patt1 ;
+PSeq.   Patt   ::= Patt "+" Patt1 ;
+PRep.   Patt1  ::= Patt2 "*" ;
+PAs.    Patt1  ::= Ident "@" Patt2 ;
 
 coercions Patt 2 ;
 

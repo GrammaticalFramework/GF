@@ -504,6 +504,24 @@ term2patt trm = case termForm trm of
   Ok ([],EInt i,[]) -> return $ PInt i
   Ok ([],EFloat i,[]) -> return $ PFloat i
   Ok ([],K s,   []) -> return $ PString s
+
+--- encodings due to excessive use of term-patt convs. AR 7/1/2005
+  Ok ([], Cn (IC "@"), [Vr a,b]) -> do
+    b' <- term2patt b
+    return (PAs a b')
+  Ok ([], Cn (IC "*"), [a]) -> do
+    a' <- term2patt a
+    return (PRep a')
+  Ok ([], Cn (IC "+"), [a,b]) -> do
+    a' <- term2patt a
+    b' <- term2patt b
+    return (PSeq a' b')
+  Ok ([], Cn (IC "|"), [a,b]) -> do
+    a' <- term2patt a
+    b' <- term2patt b
+    return (PAlt a' b')
+
+
   _ -> prtBad "no pattern corresponds to term" trm
 
 patt2term :: Patt -> Term
@@ -513,10 +531,16 @@ patt2term pt = case pt of
   PC c pp   -> mkApp (Con c) (map patt2term pp)
   PP p c pp -> mkApp (QC p c) (map patt2term pp)
   PR r      -> R [assign l (patt2term p) | (l,p) <- r] 
-  PT _ p    ->  patt2term p
+  PT _ p    -> patt2term p
   PInt i    -> EInt i
   PFloat i  -> EFloat i
   PString s -> K s 
+
+  PAs x p   -> appc "@" [Vr x, patt2term p]            --- an encoding
+  PSeq a b  -> appc "+" [(patt2term a), (patt2term b)] --- an encoding
+  PAlt a b  -> appc "|" [(patt2term a), (patt2term b)] --- an encoding
+  PRep a    -> appc "*" [(patt2term a)]                --- an encoding
+
 
 redirectTerm :: Ident -> Term -> Term
 redirectTerm n t = case t of

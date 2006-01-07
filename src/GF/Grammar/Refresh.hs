@@ -71,6 +71,13 @@ refreshPatt p = case p of
   PP q c ps -> liftM (PP q c) (mapM refreshPatt ps)
   PR r    -> liftM PR     (mapPairsM refreshPatt r)
   PT t p' -> liftM2 PT    (refresh t) (refreshPatt p')
+
+  PAs x p'   -> liftM2 PAs     (refVar x) (refreshPatt p')
+
+  PSeq p' q' -> liftM2 PSeq    (refreshPatt p') (refreshPatt q')
+  PAlt p' q' -> liftM2 PAlt    (refreshPatt p') (refreshPatt q')
+  PRep p'    -> liftM  PRep    (refreshPatt p')
+
   _ -> return p
 
 refreshRecord r = case r of
