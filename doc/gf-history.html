@@ -14,26 +14,54 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
-5/1 (BB) New grammar printers <tt>slf_sub</tt> and <tt>slf_sub_graphviz</tt>
-for creating SLF networks with sub-automata.
-
-<hr>
-
-6/1/2006 (AR) Concatenative string patterns to help morphology definitions.
-The pattern <tt>Predef.CC p1 p2</tt> matches a string literal <tt>s</tt> 
-with the first (i.e. shortest-prefix) division <tt>s1 + s2 = s</tt> such that
-<tt>p1</tt> matches <tt>s1</tt> and <tt>p2</tt> matches <tt>s2</tt>. For example,
-the following expression produces the English plural forms
-<i>boy-boys, play-plays, fly-flies, dog-dogs</i>:
+7/1 (AR) Full set of regular expression patterns, with
+as-patterns to enable variable bindings to matched expressions:
+<ul>
+ <li> <i>p</i> <tt>+</tt> <i>q</i> : token consisting of <i>p</i> followed by <i>q</i>
+ <li> <i>p</i> <tt>*</tt>          : token <i>p</i> repeated 0 or more times
+                                     (max the length of the strin to be matched)
+ <li> <tt>-</tt> <i>p</i>          : matches anything that <i>p</i> does not match
+ <li> <i>x</i> <tt>@</tt> <i>p</i> : bind to <i>x</i> what <i>p</i> matches
+ <li> <i>p</i> <tt>|</tt> <i>q</i> : matches what either <i>p</i> or <i>q</i> matches
+</ul>
+The last three apply to all types of patterns, the first two only to token strings.
+Example: plural formation in Swedish 2nd declension
+(<i>pojke-pojkar, nyckel-nycklar, seger-segrar, bil-bilar</i>):
 <pre>
-  plur : Str -> Str = \s -> case s of {
-    CC x (CC ("a" | "o") "y") => s + "s" ;
-    CC x "y"                  => x + "ies" ;
-    _                         => s + "s"
+  plural2 : Str -> Str = \w -> case w of {
+    pojk + "e"                       => pojk + "ar" ;
+    nyck + "e" + l@("l" | "r" | "n") => nyck + l + "ar" ;
+    bil                              => bil + "ar"
     } ;
 </pre>
+Semantics: variables are always bound to the <b>first match</b>, in the sequence defined
+as the list <tt>Match p v</tt> as follows:
+<pre>
+  Match (p1|p2) v = Match p1 v ++ Match p2 v
+  Match (p1+p2) s = [Match p1 s1 ++ Match p2 s2 | i <- [0..length s], (s1,s2) = splitAt i s]
+  Match p*      s = Match "" s ++ Match p s ++ Match (p + p) s ++ ...
+  Match c       v = [[]] if c == v  -- for constant patterns c
+  Match x       v = [[(x,v)]]       -- for variable patterns x
+  Match x@p     v = [[(x,v)]] + M   if M = Match p v /= []
+  Match p       v = [] otherwise    -- failure
+</pre>
+Examples:
+<ul>
+<li> <tt>x + "e" + y</tt> matches <tt>"peter"</tt> with <tt>x = "p", y = "ter"</tt>
+<li> <tt>x@("foo"*)</tt> matches any token with <tt>x = ""</tt>
+<li> <tt>x + y@("er"*)</tt> matches <tt>"burgerer"</tt> with <tt>x = "burg", y = "erer"</tt>
+</ul>
+<p>
+
+6/1 (AR) Concatenative string patterns to help morphology definitions...
 This can be seen as a step towards regular expression string patterns. 
 The natural notation <tt>p1 + p2</tt> will be considered later.
+<b>Note</b>. This was done on 7/1.
+
+<p>
+
+5/1/2006 (BB) New grammar printers <tt>slf_sub</tt> and <tt>slf_sub_graphviz</tt>
+for creating SLF networks with sub-automata.
 
 <hr>
 
