@@ -399,6 +399,9 @@ instance Print Patt where
    PC id patts -> prPrec i 1 (concatD [prt 0 id , prt 0 patts])
    PQC id0 id patts -> prPrec i 1 (concatD [prt 0 id0 , doc (showString ".") , prt 0 id , prt 0 patts])
    PDisj patt0 patt -> prPrec i 0 (concatD [prt 0 patt0 , doc (showString "|") , prt 1 patt])
+   PSeq patt0 patt -> prPrec i 0 (concatD [prt 0 patt0 , doc (showString "+") , prt 1 patt])
+   PRep patt -> prPrec i 1 (concatD [prt 2 patt , doc (showString "*")])
+   PAs id patt -> prPrec i 1 (concatD [prt 0 id , doc (showString "@") , prt 2 patt])
 
   prtList es = case es of
    [x] -> (concatD [prt 2 x])

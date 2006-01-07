@@ -221,6 +221,9 @@ data Patt =
  | PC Ident [Patt]
  | PQC Ident Ident [Patt]
  | PDisj Patt Patt
+ | PSeq Patt Patt
+ | PRep Patt
+ | PAs Ident Patt
   deriving (Eq,Ord,Show)
 
 data PattAss =

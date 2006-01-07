@@ -517,6 +517,7 @@ transSort :: Sort -> Err String
 transSort x = case x of
   _ -> return $ printTree x
 
+--- no more used 7/1/2006 AR
 transPatts :: Patt -> Err [G.Patt]
 transPatts p = case p of
   PDisj p1 p2 -> liftM2 (++) (transPatts p1) (transPatts p2)
@@ -555,7 +556,12 @@ transPatt x = case x of
   PQ id0 id  -> liftM3 G.PP (transIdent id0) (transIdent id) (return [])
   PQC id0 id patts  -> 
     liftM3 G.PP (transIdent id0) (transIdent id) (mapM transPatt patts)
-  PDisj _ _ -> Bad $ "not allowed pattern" +++ printTree x
+  PDisj p1 p2 -> liftM2 G.PAlt (transPatt p1) (transPatt p2)
+  PSeq p1 p2  -> liftM2 G.PSeq (transPatt p1) (transPatt p2)
+  PRep p      -> liftM  G.PRep (transPatt p)
+  PAs x p     -> liftM2 G.PAs (transIdent x) (transPatt p)
+
+
 
 transBind :: Bind -> Err Ident
 transBind x = case x of
@@ -571,13 +577,13 @@ transDecl x = case x of
   DExp exp  -> liftM (return . M.mkDecl) $ transExp exp
 
 transCases :: [Case] -> Err [G.Case]
-transCases = liftM concat . mapM transCase
+transCases = mapM transCase
 
-transCase :: Case -> Err [G.Case]
+transCase :: Case -> Err G.Case
 transCase (Case p exp) = do
-  patts <- transPatts p
+  patt <- transPatt p
   exp'  <- transExp exp  
-  return [(p,exp') | p <- patts]
+  return (patt,exp')
 
 transEquation :: Equation -> Err G.Equation
 transEquation x = case x of

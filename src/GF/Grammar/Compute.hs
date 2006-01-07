@@ -304,6 +304,13 @@ computeTermOpt rec gr = comp where
        PP _ _ ps -> concatMap contP ps
        PT _ p -> contP p
        PR rs -> concatMap (contP . snd) rs
+
+       PAs x p -> (x,Vr x) : contP p
+
+       PSeq p q -> concatMap contP [p,q]
+       PAlt p q -> concatMap contP [p,q]
+       PRep p   -> contP p
+
        _ -> []
 
      prawitz g i f cs e = do

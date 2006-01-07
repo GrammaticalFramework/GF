@@ -171,6 +171,14 @@ data Patt =
  | PInt    Integer        -- ^ integer literal pattern: @12@    -- only abstract
  | PFloat Double          -- ^ float literal pattern: @1.2@    -- only abstract
  | PT Type Patt           -- ^ type-annotated pattern
+
+ | PAs Ident Patt         -- ^ as-pattern: x@p
+
+ -- regular expression patterns
+ | PAlt Patt Patt         -- ^ disjunctive pattern: p1 | p2
+ | PSeq Patt Patt         -- ^ sequence of token parts
+ | PRep Patt              -- ^ repetition of token part
+
   deriving (Read, Show, Eq, Ord)
 
 -- | to guide computation and type checking of tables

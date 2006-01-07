@@ -67,11 +67,6 @@ tryMatch (p,t) = do
          do matches <- mapM tryMatch (zip pp tt)
             return (concat matches)
 
-      (PP (IC "Predef") (IC "CC") [p1,p2], ([],K s, [])) -> do
-         let cuts = [splitAt n s | n <- [0 .. length s]] 
-         matches <- checks [mapM tryMatch [(p1,K s1),(p2,K s2)] | (s1,s2) <- cuts]
-         return (concat matches)
-
       (PP q p pp, ([], QC r f, tt)) | 
             -- q `eqStrIdent` r &&  --- not for inherited AR 10/10/2005
             p `eqStrIdent` f && length pp == length tt ->
@@ -91,6 +86,24 @@ tryMatch (p,t) = do
             return (concat matches)
       (PT _ p',_) -> trym p' t'
       (_, ([],Alias _ _ d,[])) -> tryMatch (p,d)
+
+--      (PP (IC "Predef") (IC "CC") [p1,p2], ([],K s, [])) -> do
+
+      (PAs x p',_) -> do
+         subst <- trym p' t'
+         return $ (x,t) : subst
+
+      (PAlt p1 p2,_) -> checks [trym p1 t', trym p2 t']
+
+      (PSeq p1 p2, ([],K s, [])) -> do
+         let cuts = [splitAt n s | n <- [0 .. length s]] 
+         matches <- checks [mapM tryMatch [(p1,K s1),(p2,K s2)] | (s1,s2) <- cuts]
+         return (concat matches)
+
+      (PRep p1, ([],K s, [])) -> checks [
+        trym (foldr (const (PSeq p1)) (PString "") [0..n]) t' | n <- [1 .. length s]
+        ]
+
       _ -> prtBad "no match in case expr for" t
   
 isInConstantForm :: Term -> Bool
