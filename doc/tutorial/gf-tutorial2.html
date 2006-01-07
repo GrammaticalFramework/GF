@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Grammatical Framework Tutorial</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Wed Dec 21 10:29:13 2005
+Last update: Sat Jan  7 21:51:56 2006
 </FONT></CENTER>
 
 <P></P>
@@ -92,37 +92,38 @@ Last update: Wed Dec 21 10:29:13 2005
       <LI><A HREF="#toc59">Record extension and subtyping</A>
       <LI><A HREF="#toc60">Tuples and product types</A>
       <LI><A HREF="#toc61">Record and tuple patterns</A>
-      <LI><A HREF="#toc62">Prefix-dependent choices</A>
-      <LI><A HREF="#toc63">Predefined types and operations</A>
+      <LI><A HREF="#toc62">Regular expression patterns</A>
+      <LI><A HREF="#toc63">Prefix-dependent choices</A>
+      <LI><A HREF="#toc64">Predefined types and operations</A>
       </UL>
-    <LI><A HREF="#toc64">More features of the module system</A>
+    <LI><A HREF="#toc65">More features of the module system</A>
       <UL>
-      <LI><A HREF="#toc65">Interfaces, instances, and functors</A>
-      <LI><A HREF="#toc66">Resource grammars and their reuse</A>
-      <LI><A HREF="#toc67">Restricted inheritance and qualified opening</A>
+      <LI><A HREF="#toc66">Interfaces, instances, and functors</A>
+      <LI><A HREF="#toc67">Resource grammars and their reuse</A>
+      <LI><A HREF="#toc68">Restricted inheritance and qualified opening</A>
       </UL>
-    <LI><A HREF="#toc68">More concepts of abstract syntax</A>
+    <LI><A HREF="#toc69">More concepts of abstract syntax</A>
       <UL>
-      <LI><A HREF="#toc69">Dependent types</A>
-      <LI><A HREF="#toc70">Higher-order abstract syntax</A>
-      <LI><A HREF="#toc71">Semantic definitions</A>
-      <LI><A HREF="#toc72">List categories</A>
+      <LI><A HREF="#toc70">Dependent types</A>
+      <LI><A HREF="#toc71">Higher-order abstract syntax</A>
+      <LI><A HREF="#toc72">Semantic definitions</A>
+      <LI><A HREF="#toc73">List categories</A>
       </UL>
-    <LI><A HREF="#toc73">Transfer modules</A>
-    <LI><A HREF="#toc74">Practical issues</A>
+    <LI><A HREF="#toc74">Transfer modules</A>
+    <LI><A HREF="#toc75">Practical issues</A>
       <UL>
-      <LI><A HREF="#toc75">Lexers and unlexers</A>
-      <LI><A HREF="#toc76">Efficiency of grammars</A>
-      <LI><A HREF="#toc77">Speech input and output</A>
-      <LI><A HREF="#toc78">Multilingual syntax editor</A>
-      <LI><A HREF="#toc79">Interactive Development Environment (IDE)</A>
-      <LI><A HREF="#toc80">Communicating with GF</A>
-      <LI><A HREF="#toc81">Embedded grammars in Haskell, Java, and Prolog</A>
-      <LI><A HREF="#toc82">Alternative input and output grammar formats</A>
+      <LI><A HREF="#toc76">Lexers and unlexers</A>
+      <LI><A HREF="#toc77">Efficiency of grammars</A>
+      <LI><A HREF="#toc78">Speech input and output</A>
+      <LI><A HREF="#toc79">Multilingual syntax editor</A>
+      <LI><A HREF="#toc80">Interactive Development Environment (IDE)</A>
+      <LI><A HREF="#toc81">Communicating with GF</A>
+      <LI><A HREF="#toc82">Embedded grammars in Haskell, Java, and Prolog</A>
+      <LI><A HREF="#toc83">Alternative input and output grammar formats</A>
       </UL>
-    <LI><A HREF="#toc83">Case studies</A>
+    <LI><A HREF="#toc84">Case studies</A>
       <UL>
-      <LI><A HREF="#toc84">Interfacing formal and natural languages</A>
+      <LI><A HREF="#toc85">Interfacing formal and natural languages</A>
       </UL>
     </UL>
 
@@ -2036,6 +2037,71 @@ possible to write, slightly surprisingly,
 </PRE>
 <P></P>
 <A NAME="toc62"></A>
+<H3>Regular expression patterns</H3>
+<P>
+(New since 7 January 2006.)
+</P>
+<P>
+To define string operations computed at compile time, such
+as in morphology, it is handy to use regular expression patterns:
+</P>
+ <UL>
+ <LI><I>p</I> <CODE>+</CODE> <I>q</I> : token consisting of <I>p</I> followed by <I>q</I>
+ <LI><I>p</I> <CODE>*</CODE>       : token <I>p</I> repeated 0 or more times
+                                     (max the length of the string to be matched)
+ <LI><CODE>-</CODE> <I>p</I>       : matches anything that <I>p</I> does not match
+ <LI><I>x</I> <CODE>@</CODE> <I>p</I> : bind to <I>x</I> what <I>p</I> matches
+ <LI><I>p</I> <CODE>|</CODE> <I>q</I> : matches what either <I>p</I> or <I>q</I> matches
+ </UL>
+
+<P>
+The last three apply to all types of patterns, the first two only to token strings.
+Example: plural formation in Swedish 2nd declension
+(<I>pojke-pojkar, nyckel-nycklar, seger-segrar, bil-bilar</I>):
+</P>
+<PRE>
+    plural2 : Str -&gt; Str = \w -&gt; case w of {
+      pojk + "e"                       =&gt; pojk + "ar" ;
+      nyck + "e" + l@("l" | "r" | "n") =&gt; nyck + l + "ar" ;
+      bil                              =&gt; bil + "ar"
+      } ;
+</PRE>
+<P>
+Another example: English noun plural formation.
+</P>
+<PRE>
+    plural : Str -&gt; Str = \w -&gt; case w of {
+      _ + ("s" | "z" | "x" | "sh")      =&gt; w + "es" ;
+      _ + ("a" | "o" | "u" | "e") + "y" =&gt; w + "s" ;
+      x + "y"                           =&gt; x + "ies" ;
+      _                                 =&gt; w + "s"
+      } ;
+  
+</PRE>
+<P>
+Semantics: variables are always bound to the <B>first match</B>, which is the first
+in the sequence of binding lists <CODE>Match p v</CODE> defined as follows. In the definition,
+<CODE>p</CODE> is a pattern and <CODE>v</CODE> is a value.
+</P>
+<PRE>
+    Match (p1|p2) v = Match p1 v ++ Match p2 v
+    Match (p1+p2) s = [Match p1 s1 ++ Match p2 s2 | i &lt;- [0..length s], (s1,s2) = splitAt i s]
+    Match p*      s = Match "" s ++ Match p s ++ Match (p + p) s ++ ...
+    Match c       v = [[]] if c == v  -- for constant and literal patterns c
+    Match x       v = [[(x,v)]]       -- for variable patterns x
+    Match x@p     v = [[(x,v)]] + M   if M = Match p v /= []
+    Match p       v = [] otherwise    -- failure
+</PRE>
+<P>
+Examples:
+</P>
+<UL>
+<LI><CODE>x + "e" + y</CODE> matches <CODE>"peter"</CODE> with <CODE>x = "p", y = "ter"</CODE>
+<LI><CODE>x@("foo"*)</CODE> matches any token with <CODE>x = ""</CODE>
+<LI><CODE>x + y@("er"*)</CODE> matches <CODE>"burgerer"</CODE> with <CODE>x = "burg", y = "erer"</CODE>
+</UL>
+
+<A NAME="toc63"></A>
 <H3>Prefix-dependent choices</H3>
 <P>
 The construct exemplified in
@@ -2064,7 +2130,7 @@ This very example does not work in all situations: the prefix
           } ;
 </PRE>
 <P></P>
-<A NAME="toc63"></A>
+<A NAME="toc64"></A>
 <H3>Predefined types and operations</H3>
 <P>
 GF has the following predefined categories in abstract syntax:
@@ -2087,11 +2153,11 @@ they can be used as arguments. For example:
     -- e.g. (StreetAddress 10 "Downing Street") : Address
 </PRE>
 <P></P>
-<A NAME="toc64"></A>
-<H2>More features of the module system</H2>
 <A NAME="toc65"></A>
-<H3>Interfaces, instances, and functors</H3>
+<H2>More features of the module system</H2>
 <A NAME="toc66"></A>
+<H3>Interfaces, instances, and functors</H3>
+<A NAME="toc67"></A>
 <H3>Resource grammars and their reuse</H3>
 <P>
 A resource grammar is a grammar built on linguistic grounds,
@@ -2144,19 +2210,19 @@ The rest of the modules (black) come from the resource.
 <P>
 <IMG ALIGN="middle" SRC="Multi.png" BORDER="0" ALT="">
 </P>
-<A NAME="toc67"></A>
-<H3>Restricted inheritance and qualified opening</H3>
 <A NAME="toc68"></A>
-<H2>More concepts of abstract syntax</H2>
+<H3>Restricted inheritance and qualified opening</H3>
 <A NAME="toc69"></A>
-<H3>Dependent types</H3>
+<H2>More concepts of abstract syntax</H2>
 <A NAME="toc70"></A>
-<H3>Higher-order abstract syntax</H3>
+<H3>Dependent types</H3>
 <A NAME="toc71"></A>
-<H3>Semantic definitions</H3>
+<H3>Higher-order abstract syntax</H3>
 <A NAME="toc72"></A>
-<H3>List categories</H3>
+<H3>Semantic definitions</H3>
 <A NAME="toc73"></A>
+<H3>List categories</H3>
+<A NAME="toc74"></A>
 <H2>Transfer modules</H2>
 <P>
 Transfer means noncompositional tree-transforming operations.
@@ -2175,9 +2241,9 @@ See the
 <A HREF="../transfer.html">transfer language documentation</A>
 for more information.
 </P>
-<A NAME="toc74"></A>
-<H2>Practical issues</H2>
 <A NAME="toc75"></A>
+<H2>Practical issues</H2>
+<A NAME="toc76"></A>
 <H3>Lexers and unlexers</H3>
 <P>
 Lexers and unlexers can be chosen from
@@ -2213,7 +2279,7 @@ Given by <CODE>help -lexer</CODE>, <CODE>help -unlexer</CODE>:
   
 </PRE>
 <P></P>
-<A NAME="toc76"></A>
+<A NAME="toc77"></A>
 <H3>Efficiency of grammars</H3>
 <P>
 Issues:
@@ -2224,7 +2290,7 @@ Issues:
 <LI>parsing efficiency: <CODE>-mcfg</CODE> vs. others
 </UL>
 
-<A NAME="toc77"></A>
+<A NAME="toc78"></A>
 <H3>Speech input and output</H3>
 <P>
 The<CODE>speak_aloud = sa</CODE> command sends a string to the speech
@@ -2254,7 +2320,7 @@ The method words only for grammars of English.
 Both Flite and ATK are freely available through the links
 above, but they are not distributed together with GF.
 </P>
-<A NAME="toc78"></A>
+<A NAME="toc79"></A>
 <H3>Multilingual syntax editor</H3>
 <P>
 The 
@@ -2271,12 +2337,12 @@ Here is a snapshot of the editor:
 The grammars of the snapshot are from the
 <A HREF="http://www.cs.chalmers.se/~aarne/GF/examples/letter">Letter grammar package</A>.
 </P>
-<A NAME="toc79"></A>
+<A NAME="toc80"></A>
 <H3>Interactive Development Environment (IDE)</H3>
 <P>
 Forthcoming.
 </P>
-<A NAME="toc80"></A>
+<A NAME="toc81"></A>
 <H3>Communicating with GF</H3>
 <P>
 Other processes can communicate with the GF command interpreter,
@@ -2293,7 +2359,7 @@ Thus the most silent way to invoke GF is
 </PRE>
 </UL>
 
-<A NAME="toc81"></A>
+<A NAME="toc82"></A>
 <H3>Embedded grammars in Haskell, Java, and Prolog</H3>
 <P>
 GF grammars can be used as parts of programs written in the
@@ -2305,15 +2371,15 @@ following languages. The links give more documentation.
 <LI><A HREF="http://www.cs.chalmers.se/~peb/software.html">Prolog</A>
 </UL>
 
-<A NAME="toc82"></A>
+<A NAME="toc83"></A>
 <H3>Alternative input and output grammar formats</H3>
 <P>
 A summary is given in the following chart of GF grammar compiler phases:
 <IMG ALIGN="middle" SRC="../gf-compiler.png" BORDER="0" ALT="">
 </P>
-<A NAME="toc83"></A>
-<H2>Case studies</H2>
 <A NAME="toc84"></A>
+<H2>Case studies</H2>
+<A NAME="toc85"></A>
 <H3>Interfacing formal and natural languages</H3>
 <P>
 <A HREF="http://www.cs.chalmers.se/~krijo/thesis/thesisA4.pdf">Formal and Informal Software Specifications</A>,
