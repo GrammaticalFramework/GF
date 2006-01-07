@@ -1733,6 +1733,64 @@ possible to write, slightly surprisingly,
     }
 ```
 
+%--!
+===Regular expression patterns===
+
+(New since 7 January 2006.)
+
+To define string operations computed at compile time, such
+as in morphology, it is handy to use regular expression patterns:
+
+
+ - //p// ``+`` //q// : token consisting of //p// followed by //q//
+ - //p// ``*``       : token //p// repeated 0 or more times
+                                     (max the length of the string to be matched)
+ - ``-`` //p//       : matches anything that //p// does not match
+ - //x// ``@`` //p// : bind to //x// what //p// matches
+ - //p// ``|`` //q// : matches what either //p// or //q// matches
+
+
+The last three apply to all types of patterns, the first two only to token strings.
+Example: plural formation in Swedish 2nd declension
+(//pojke-pojkar, nyckel-nycklar, seger-segrar, bil-bilar//):
+```
+  plural2 : Str -> Str = \w -> case w of {
+    pojk + "e"                       => pojk + "ar" ;
+    nyck + "e" + l@("l" | "r" | "n") => nyck + l + "ar" ;
+    bil                              => bil + "ar"
+    } ;
+```
+Another example: English noun plural formation.
+```
+  plural : Str -> Str = \w -> case w of {
+    _ + ("s" | "z" | "x" | "sh")      => w + "es" ;
+    _ + ("a" | "o" | "u" | "e") + "y" => w + "s" ;
+    x + "y"                           => x + "ies" ;
+    _                                 => w + "s"
+    } ;
+
+```
+Semantics: variables are always bound to the **first match**, which is the first
+in the sequence of binding lists ``Match p v`` defined as follows. In the definition,
+``p`` is a pattern and ``v`` is a value.
+```
+  Match (p1|p2) v = Match p1 v ++ Match p2 v
+  Match (p1+p2) s = [Match p1 s1 ++ Match p2 s2 | i <- [0..length s], (s1,s2) = splitAt i s]
+  Match p*      s = Match "" s ++ Match p s ++ Match (p + p) s ++ ...
+  Match c       v = [[]] if c == v  -- for constant and literal patterns c
+  Match x       v = [[(x,v)]]       -- for variable patterns x
+  Match x@p     v = [[(x,v)]] + M   if M = Match p v /= []
+  Match p       v = [] otherwise    -- failure
+```
+Examples:
+
+- ``x + "e" + y`` matches ``"peter"`` with ``x = "p", y = "ter"``
+- ``x@("foo"*)`` matches any token with ``x = ""``
+- ``x + y@("er"*)`` matches ``"burgerer"`` with ``x = "burg", y = "erer"``
+
+
+
+
 
 %--!
 ===Prefix-dependent choices===
