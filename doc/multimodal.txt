@@ -1,4 +1,4 @@
-Multimodal Resource Grammars
+Demonstrative Expressions and Multimodal Grammars
 Author: Aarne Ranta <aarne (at) cs.chalmers.se>
 Last update: %%date(%c)
 
@@ -12,11 +12,19 @@ Last update: %%date(%c)
 %!target:html
 
 
-==Plan==
+==Abstract==
 
-After an introduction to **demonstratives**
-and **integrated multimodality**,
-we will show how multimodal grammars can be written in GF
+This document shows a method to write grammars
+in which spoken utterances are accompanied by
+pointing gestures. A computer application of such
+grammars are **multimodal dialogue systems**, in
+which the pointing gestures are performed by 
+mouse clicks and movements.
+
+After an introduction to the notions of
+**demonstratives** and **integrated multimodality**,
+we will show by a concrete example
+how multimodal grammars can be written in GF
 and how they can be used in dialogue systems.
 The explanation is given in three stages:
 
@@ -25,7 +33,7 @@ The explanation is given in three stages:
 + How to use a multimodal resource grammar.
 
 
-==Multimodal expressions==
+==Multimodal grammars==
 
 **Demonstrative expressions** are an old idea. Such
 expressions get their meaning from the context.
@@ -37,8 +45,8 @@ expressions get their meaning from the context.
 In particular, as in these examples, the meaning
 can be obtained from accompanying pointing gestures.
 
-Thus the meaning-bearing unit if neither the words and the 
-gesture alone, but their combination. Demonstratives
+Thus the meaning-bearing unit is neither the words nor the 
+gestures alone, but their combination. Demonstratives
 thus provide an example of **integrated multimodality**,
 as opposed to parallel multimodality. In parallel
 multimodality, speech and other modes of communication 
@@ -83,7 +91,7 @@ of **linearization types**. A linearization type is the type of
 the **concrete syntax objects** assigned to semantic values.
 What a GF grammar defines is a relation 
 ```
-  abstract syntax trees  ---  concrete syntax objects
+      abstract syntax trees  <--->  concrete syntax objects
 ```
 When modelling context-free grammar in GF,
 the concrete syntax objects are just strings. 
@@ -111,7 +119,7 @@ A simple example of a multimodal GF grammar is the one called
 the Tram Demo grammar. It was written by Björn Bringert within
 the TALK project as a part of a dialogue system that
 deals with queries about tram timetables. The system interprets
-a speech input in combination with clicks on a digital map.
+a speech input in combination with mouse clicks on a digital map.
 
 The abstract syntax of (a minimal fragment of) the Tram Demo
 grammar is
@@ -120,8 +128,8 @@ cat
   Input, Dep, Dest, Click ;
 fun
   GoFromTo    : Dep  -> Dest -> Input ; -- "I want to go from x to y"
-  DepClick    : Click -> Dep ;          -- "from here" with click
-  DestClick   : Click -> Dest ;         -- "to here" with click
+  DepHere     : Click -> Dep ;          -- "from here" with click
+  DestHere    : Click -> Dest ;         -- "to here" with click
 
   CCoord      : Int -> Int -> Click ;   -- click coordinates
 ```
@@ -133,8 +141,8 @@ lincat
 
 lin
   GoFromTo x y  = {s = ["I want to go"] ++ x.s ++ y.s ; p = x.p ++ y.p} ;
-  DepClick c    = {s = ["from here"]                  ; p = c.p} ;
-  DestClick c   = {s = ["to here"]                    ; p = c.p} ;
+  DepHere c     = {s = ["from here"]                  ; p = c.p} ;
+  DestHere c    = {s = ["to here"]                    ; p = c.p} ;
 
   CCoord x y    = {p = "(" ++ x.s ++ "," ++ y.s ++ ")"} ;
 ```
@@ -185,7 +193,7 @@ we split verb phrases (``VP``) into a finite and infinitive part.
   lin Quest np vp = {s = vp.fin ++ np.s ++ vp.inf} ;
 ```
 
-==From grammars to dialogue systems==
+===From grammars to dialogue systems===
 
 The general recipe for using GF when building dialogue systems
 is to write a grammar with the following components:
@@ -218,57 +226,65 @@ manager by Prolog representations of abstract syntax.
 
 ==Adding multimodality to a unimodal grammar==
 
-This section gives a recipe for converting a unimodal grammar to
-multimodal, by adding pointing gestures to expressions. The recipe
+This section gives a recipe for making any unimodal grammar
+multimodal, by adding pointing gestures to chosen expressions. The recipe
 guarantees that the resulting grammar remains semantically well-formed,
 i.e. type correct.
 
 
 ===The multimodal conversion===
 
-The **multimodal conversion** of a grammar consists of three
-steps involving a decision, and four derivative steps:
+The **multimodal conversion** of a grammar consists of seven
+steps, of which the first is always the same, the second
+involves a decision, and the rest are derivative:
 
-+ (Decision) Decide which categories are demonstrative. This means that their
-  expressions can (but need not) contain pointing gestures.
-+ (Decision) Define constructors that are truly demonstrative, i.e. take
-  a pointing gesture as an argument. These constructors have the form
++ Add the category ```Point``` with a standard linearization type.
+```
+  cat Point ;
+  lincat Point = {point : Str} ;
+```
++ (Decision) Decide which constructors are demonstrative, i.e. take
+  a pointing gesture as an argument. Add a ``Point``` as their last argument.
+  The new type signatures for such constructors //d// have the form
 ```
    fun d : ... -> Point -> D 
 ```
-  In the simplest case, such a //d// is an already existing
-  constructor, to which a ``Point`` argument it added. But it is also
-  possible to add new constructors.
-+ (Derivative) Add an extra ``point`` field to the linearization type //L// of any
-  demonstrative category //D//:
++ (Derivative) Add a ``point`` field to the linearization type //L// of any
+  demonstrative category //D//, i.e. a category that has at least one demonstrative
+  constructor:
 ```
     lincat D = L ** {point : Str} ;
 ```
-+ (Derivative) Add an extra ``point`` field to the linearization //t// of any
-  constructor //d// that has been made demonstrative:
-```
-    lin d x1 ... xn p = t x1 ... xn ** p ;
-```
-+ (Decision) Define the linearization rules of those demonstrative constructors
-  that are new.
-+ (Derivative) If some other category //C// has a constructor //f// that takes
++ (Derivative) If some other category //C// has a constructor //d// that takes
   demonstratives as arguments, make it demonstrative by adding a //point// field
   to its linearization type.
++ (Derivative) Store the ``point`` field in the linearization //t// of any
+  constructor //d// that has been made demonstrative:
+```
+    lin d x1 ... xn p = t x1 ... xn ** {point = p.point} ;
+```
 + (Derivative) For each constructor //f// that takes demonstratives //D_1,...,D_n// 
   as arguments, collect the //point// fields of the arguments in the //point//
   field of the value:
 ```
-  lin f x_1 ... x_m = t x_1 ... x_m ** {point = x_d1.point ++ ... ++ x_dn.point} ;
+  lin f x_1 ... x_m = 
+    t x_1 ... x_m ** {point = x_d1.point ++ ... ++ x_dn.point} ;
 ```
   Make sure that the pointings ``x_d1.point ... x_dn.point`` are concatenated
   in the same order as the arguments appear in the //linearization// //t//,
   which is not necessarily the same as the abstract argument order.
++ (Derivative) To preserve type correctness, add an empty 
+  ``point`` field to the linearization //t// of any
+  constructor //c// of a demonstrative category:
+```
+    lin c x1 ... xn = t x1 ... xn ** {point = []} ;
+```
 
 
 ===An example of the conversion===
 
 Start with a Tram Demo grammar with no demonstratives, but just 
-tram stop names and the indexical //here// (referring to the user's 
+tram stop names and the indexical //here// (interpreted as e.g. the user's 
 standing place). 
 ```
 cat
@@ -296,45 +312,48 @@ lin
 
   Almedal       = {s = "Almedal"} ;
 ```
-We now decide that the categories ``Dep`` and ``Dest`` are demonstrative.
-This means, derivatively, that ``Input`` is also demonstrative.
-But ``Name`` remains unimodal.
+Let us follow the steps of the recipe.
 
-We also decide that ``DepHere`` and ``DestHere`` involve a pointing gesture.
-This has consequences for ``GoFromTo`` but not for the other constructors.
-However, even here we have to add an empty pointing sequence if required by the
-linearization type. 
++ We add the category ``Point`` and its linearization type.
++ We decide that ``DepHere`` and ``DestHere`` involve a pointing gesture.
++ We add ``point`` to the linearization types of ``Dep`` and ``Dest``.
++ Therefore, also add ``point`` to ``Input``. (But ``Name`` remains unimodal.)
++ Add ``p.point`` to the linearizations of ``DepHere`` and ``DestHere``.
++ Concatenate the points of the arguments of ``GoFromTo``.
++ Add an empty ``point`` to ``DepName`` and ``DestName``.
+
 
 In the resulting grammar, one category is added and 
-two functions are changed in the abstract syntax:
+two functions are changed in the abstract syntax (annotated by the step numbers):
 ```
 cat
-  Point ;
+  Point ;                                               -- 1
 fun
-  DepHere     : Point -> Dep ;
-  DestHere    : Point -> Dest ;
+  DepHere     : Point -> Dep ;                          -- 2
+  DestHere    : Point -> Dest ;                         -- 2
 
 ```
-The concrete syntax in its entirety looks as follows:
+The concrete syntax in its entirety looks as follows 
 ```
 lincat
-  Input, Dep, Dest = {s : Str ; point : Str} ;
+  Dep, Dest = {s : Str ; point : Str} ;                 -- 3    
+  Input = {s : Str ; point : Str} ;                     -- 4
   Name = {s : Str} ;
-  Point = {point : Str} ;
+  Point = {point : Str} ;                               -- 1
 lin
-  GoFromTo x y  = {s = ["I want to go"] ++ x.s ++ y.s ; 
+  GoFromTo x y  = {s = ["I want to go"] ++ x.s ++ y.s ; -- 6
                    point = x.point ++ y.point
                   } ;
-  DepHere p     = {s = ["from here"] ;
+  DepHere p     = {s = ["from here"] ;                  -- 5
                    point = p.point
                   } ;
-  DestHere p    = {s = ["to here"] :
+  DestHere p    = {s = ["to here"] :                    -- 5
                    point = p.point
                   } ;
-  DepName n     = {s = ["from"] ++ n.s ;
+  DepName n     = {s = ["from"] ++ n.s ;                -- 7
                    point = []
                   } ;
-  DestName n    = {s = ["to"] ++ n.s ;
+  DestName n    = {s = ["to"] ++ n.s ;                  -- 7
                    point = []
                   } ;
   Almedal       = {s = "Almedal"} ;
@@ -345,6 +364,9 @@ What we need in addition, to use the grammar in applications, are
 + Top-level categories, like ``Query`` and ``Speech`` in the original.
 
 
+But their proper place is probably in another grammar module, so that
+the core Tram Demo grammar can be used in different systems e.g.
+encoding clicks in different ways.
 
 
 ===Multimodal conversion combinators===
@@ -386,7 +408,8 @@ lincat
   Name = SS ;
 
 lin
-  GoFromTo x y  = {s = ["I want to go"] ++ x.s ++ y.s} ** concatPoint x y ;
+  GoFromTo x y  = {s = ["I want to go"] ++ x.s ++ y.s} ** 
+                  concatPoint x y ;
   DepHere       = mkDem  SS {s = ["from here"]} ;
   DestHere      = mkDem  SS {s = ["to here"]} ;
   DepName n     = nonDem SS {s = ["from"] ++ n.s} ;
@@ -406,19 +429,19 @@ concise. Notice the use of partial application in ``DepHere`` and
 
 The main advantage of using GF when building dialogue systems is
 that various components of the system
-can be automatically generated GF grammars.
-Writing grammars, however, can still be a considerable
+can be automatically generated from GF grammars.
+Writing these grammars, however, can still be a considerable
 task. A case in point are multilingual systems:
 how to localize e.g. a system built in a car to
 the languages of all those customers to whom the
 car is sold? This problem has been the main focus of
-GF for some years, and the solution on which work has been
+GF for some years, and the solution on which most work has been
 done is the development of **resource grammar libraries**.
 These libraries work in the same way as program libraries
 in software engineering, enabling a division of labour
-between, in the present case, linguists and domain experts.
+between linguists and domain experts.
 
-One of the challenges in the resource grammars of different
+One of the goals in the resource grammars of different
 languages has been to provide a **language-independent API**,
 which makes the same resource grammar functions available for
 different languages. For instance, the categories
@@ -441,15 +464,16 @@ multimodality is heavily dependent on similar things. What can we
 do to make multimodal grammars easier to write (for different languages)?
 There are two orthogonal answers:
 
-+ Use resource grammars and before and then apply the multimodal
++ Use resource grammars to write a unimodal dialogue grammar and 
+  then apply the multimodal
   conversion to manually chosen parts.
 + Use **multimodal resource grammars** to derive multimodal
-  dialogue system grammars automatically.
+  dialogue system grammars directly.
 
 
 The multimodal resource grammar library has been obtained from
-the unimodal one by applying, manually, an idea similar to the
-multimodal conversion. In addition, the API has been simplified
+the unimodal one by applying the multimodal conversion  manually.
+In addition, the API has been simplified
 by leaving out structures needed in written technical documents 
 (the original application area of GF) but not in spoken dialogue.
 
@@ -646,7 +670,7 @@ the ``Multimodal`` API has been implemented:
 
 
 
-==A problem: switched order==
+===The order problem===
 
 It was pointed out in the section on the multimodal conversion that
 the concrete word order may be different from the abstract one,
@@ -667,7 +691,7 @@ ignore the word order problem, if it is correctly dealt with in
 the resource.
 
 
-==A recipe for using a resource library==
+===A recipe for using a resource library===
 
 In the beginning, we believed resource grammars are all that
 an application grammarian needs to write a concrete syntax.
@@ -676,8 +700,8 @@ the grammar development in this way: selecting functions from
 a resource API requires more abstract thinking than just
 writing things (maybe even in a context-free grammar notation,
 also supported by GF). This experience has led to the following
-steps for grammar development, which at the same time give
-the work a quick start and in the end used increased abstraction
+steps for grammar development, which, while permitting
+a quick start of the work, towards the end increase abstraction
 to localize the grammar in different languages.
 
 + Encode domain ontology in and abstract syntax, ``Domain``.
