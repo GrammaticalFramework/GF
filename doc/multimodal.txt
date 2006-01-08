@@ -1,0 +1,691 @@
+Multimodal Resource Grammars
+Author: Aarne Ranta <aarne (at) cs.chalmers.se>
+Last update: %%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags --toc multimodal.txt
+
+% Create a latex file from this file using:
+% txt2tags -ttex multimodal.txt
+
+%!target:html
+
+
+==Plan==
+
+After an introduction to **demonstratives**
+and **integrated multimodality**,
+we will show how multimodal grammars can be written in GF
+and how they can be used in dialogue systems.
+The explanation is given in three stages:
+
++ How to write a multimodal grammar by hand.
++ How to add multimodality to a unimodal grammar.
++ How to use a multimodal resource grammar.
+
+
+==Multimodal expressions==
+
+**Demonstrative expressions** are an old idea. Such
+expressions get their meaning from the context.
+
+	    //This train// is faster than //that airplane//.
+
+	    I want to go from //this place// to //this place//.
+
+In particular, as in these examples, the meaning
+can be obtained from accompanying pointing gestures.
+
+Thus the meaning-bearing unit if neither the words and the 
+gesture alone, but their combination. Demonstratives
+thus provide an example of **integrated multimodality**,
+as opposed to parallel multimodality. In parallel
+multimodality, speech and other modes of communication 
+are just alternative ways to convey the same information.
+
+
+===Representing demonstratives in semantics and grammar===
+
+When formalizing the semantics of demonstratives, we can combine syntax with coordinates:
+
+	    I want to go from this place to this place
+
+is interpreted as something like
+```
+  want(I, go, this(place,(123,45)), this(place,(98,10))) 
+```
+Now, the same semantic value can be given in many ways, by performing
+the clicks at different points of time in relation to the speech: 
+
+	    I want to go from this place CLICK(123,45) to this place CLICK(98,10) 
+
+	    I want to go from this place to this place CLICK(123,45) CLICK(98,10) 
+
+	    CLICK(123,45) CLICK(98,10) I want to go from this place to this place 
+
+How do we build the value compositionally in parsing?
+Traditional parsing is sequential: its input is a string of tokens.
+It works for demonstratives only if the pointing is adjacent to 
+the spoken expression. In the actual input, the demonstrative word
+can be separated from the accompanying click by other words. The two
+can also be simultaneous. 
+
+
+===Asynchronous syntax in GF===
+
+What we need is a notion of **asynchronous parsing**, as opposed to
+sequential parsing (where demonstrative words and clicks must be
+adjacent). 
+
+We can implement asynchronous parsin in GF by exploiting the generality
+of **linearization types**. A linearization type is the type of
+the **concrete syntax objects** assigned to semantic values.
+What a GF grammar defines is a relation 
+```
+  abstract syntax trees  ---  concrete syntax objects
+```
+When modelling context-free grammar in GF,
+the concrete syntax objects are just strings. 
+But they can be more structured objects as well - in general, they are
+**records** of different kinds of objects. For example,
+a demonstrative expression can be linearized into a record of two strings.
+```
+                                     {s = "this place" ;
+  this place (coord 123 45)  <--->    p = "(123,45)"
+                                     }
+```
+The record
+```
+  {s = "I want to go from this place to this place" ;
+   p = "(123,45) (98,10"
+  }
+```
+represents any combination of the sentence and the clicks, as long
+as the clicks appear in this order.
+
+
+===Example multimodal grammar: abstract syntax===
+
+A simple example of a multimodal GF grammar is the one called
+the Tram Demo grammar. It was written by Björn Bringert within
+the TALK project as a part of a dialogue system that
+deals with queries about tram timetables. The system interprets
+a speech input in combination with clicks on a digital map.
+
+The abstract syntax of (a minimal fragment of) the Tram Demo
+grammar is
+```
+cat
+  Input, Dep, Dest, Click ;
+fun
+  GoFromTo    : Dep  -> Dest -> Input ; -- "I want to go from x to y"
+  DepClick    : Click -> Dep ;          -- "from here" with click
+  DestClick   : Click -> Dest ;         -- "to here" with click
+
+  CCoord      : Int -> Int -> Click ;   -- click coordinates
+```
+An English concrete syntax of the grammar is
+```
+lincat
+  Input, Dep, Dest = {s : Str ; p : Str} ;
+  Click            = {p : Str} ;
+
+lin
+  GoFromTo x y  = {s = ["I want to go"] ++ x.s ++ y.s ; p = x.p ++ y.p} ;
+  DepClick c    = {s = ["from here"]                  ; p = c.p} ;
+  DestClick c   = {s = ["to here"]                    ; p = c.p} ;
+
+  CCoord x y    = {p = "(" ++ x.s ++ "," ++ y.s ++ ")"} ;
+```
+When the grammar is used in the actual system, standard parsing methods
+are used for interpreting the integrated speech and click input.
+Parsing appears on two levels: the speech input parsing
+performed by the Nuance speech recognition program (without the clicks),
+and the semantics-yielding parser sending input to the dialogue manager.
+The latter parser just attaches the clicks to the speech input. The order
+of the clicks is preserved, and the parser can hence associate each of
+the clicks with proper demonstratives. Here is the grammar used in the
+two parsing phases.
+```
+cat
+  Query,    -- whole content
+  Speech ;  -- speech only
+fun
+  QueryInput  : Input -> Query ;   -- the whole content shown
+  SpeechInput : Input -> Speech ;  -- only the speech shown
+
+lincat
+  Query, Speech = {s : Str} ;
+lin
+  QueryInput i  = {s = i.s ++ ";" ++ i.p} ;
+  SpeechInput i = {s = i.s} ;
+```
+
+
+===Digression: discontinuous constituents===
+
+The GF representation of integrated multimodality is 
+similar to the representation of **discontinous constituents**.
+For instance, assume //has arrived// is a verb phrase in English,
+which can be used both in declarative sentences and questions,
+
+	she //has arrived//
+
+	//has// she //arrived//
+
+In the question, the two words are separated from each other. If
+//has arrived// is a constituent of the question, it is thus discontinuous.
+To represent such constituents in GF, records can be used:
+we split verb phrases (``VP``) into a finite and infinitive part.
+```
+  lincat VP = {fin, inf : Str} ;
+
+  lin Indic np vp = {s = np.s ++ vp.fin ++ vp.inf} ;
+  lin Quest np vp = {s = vp.fin ++ np.s ++ vp.inf} ;
+```
+
+==From grammars to dialogue systems==
+
+The general recipe for using GF when building dialogue systems
+is to write a grammar with the following components:
+
+- The abstract syntax defines the semantics (the "ontology")
+  of the domain of the system.
+- The concrete syntaxes define alternative modes of input and output.
+
+
+The engineering advantages of this approach have to do partly with
+the declarativity of the description, partly with the tools provided
+by GF to derive different components of the system:
+
+- The type checker guarantees that all the input and output
+  modes match with the ontology.
+- The grammar compiler generates parsers for each input grammar
+  and generators for each output grammar.
+- Translators between GF's abstract syntax and other ontology
+  description languages enable communication with different 
+  kinds of dialogue managers and cover e.g. Prolog terms and XML objects.
+- Translators from GF's concrete syntax to speech recognition formats
+  make it possible to generate e.g. Nuance grammars and ATK language
+  models. 
+
+
+An example of this process is Björn Bringert's TramDemo.
+More recently, grammars have been integrated to the GoDiS dialogue
+manager by Prolog representations of abstract syntax.
+
+
+==Adding multimodality to a unimodal grammar==
+
+This section gives a recipe for converting a unimodal grammar to
+multimodal, by adding pointing gestures to expressions. The recipe
+guarantees that the resulting grammar remains semantically well-formed,
+i.e. type correct.
+
+
+===The multimodal conversion===
+
+The **multimodal conversion** of a grammar consists of three
+steps involving a decision, and four derivative steps:
+
++ (Decision) Decide which categories are demonstrative. This means that their
+  expressions can (but need not) contain pointing gestures.
++ (Decision) Define constructors that are truly demonstrative, i.e. take
+  a pointing gesture as an argument. These constructors have the form
+```
+   fun d : ... -> Point -> D 
+```
+  In the simplest case, such a //d// is an already existing
+  constructor, to which a ``Point`` argument it added. But it is also
+  possible to add new constructors.
++ (Derivative) Add an extra ``point`` field to the linearization type //L// of any
+  demonstrative category //D//:
+```
+    lincat D = L ** {point : Str} ;
+```
++ (Derivative) Add an extra ``point`` field to the linearization //t// of any
+  constructor //d// that has been made demonstrative:
+```
+    lin d x1 ... xn p = t x1 ... xn ** p ;
+```
++ (Decision) Define the linearization rules of those demonstrative constructors
+  that are new.
++ (Derivative) If some other category //C// has a constructor //f// that takes
+  demonstratives as arguments, make it demonstrative by adding a //point// field
+  to its linearization type.
++ (Derivative) For each constructor //f// that takes demonstratives //D_1,...,D_n// 
+  as arguments, collect the //point// fields of the arguments in the //point//
+  field of the value:
+```
+  lin f x_1 ... x_m = t x_1 ... x_m ** {point = x_d1.point ++ ... ++ x_dn.point} ;
+```
+  Make sure that the pointings ``x_d1.point ... x_dn.point`` are concatenated
+  in the same order as the arguments appear in the //linearization// //t//,
+  which is not necessarily the same as the abstract argument order.
+
+
+===An example of the conversion===
+
+Start with a Tram Demo grammar with no demonstratives, but just 
+tram stop names and the indexical //here// (referring to the user's 
+standing place). 
+```
+cat
+  Input, Dep, Dest, Name ;
+fun
+  GoFromTo    : Dep  -> Dest -> Input ;
+  DepHere     : Dep ;                  
+  DestHere    : Dest ;                 
+  DepName     : Name -> Dep ;          
+  DestName    : Name -> Dest ;         
+
+  Almedal     : Name ;                 
+```
+A unimodal English concrete syntax of the grammar is
+```
+lincat
+  Input, Dep, Dest, Name = {s : Str} ;
+
+lin
+  GoFromTo x y  = {s = ["I want to go"] ++ x.s ++ y.s} ;
+  DepHere       = {s = ["from here"]} ;
+  DestHere      = {s = ["to here"]} ;
+  DepName n     = {s = ["from"] ++ n.s} ;
+  DestName n    = {s = ["to"] ++ n.s} ;
+
+  Almedal       = {s = "Almedal"} ;
+```
+We now decide that the categories ``Dep`` and ``Dest`` are demonstrative.
+This means, derivatively, that ``Input`` is also demonstrative.
+But ``Name`` remains unimodal.
+
+We also decide that ``DepHere`` and ``DestHere`` involve a pointing gesture.
+This has consequences for ``GoFromTo`` but not for the other constructors.
+However, even here we have to add an empty pointing sequence if required by the
+linearization type. 
+
+In the resulting grammar, one category is added and 
+two functions are changed in the abstract syntax:
+```
+cat
+  Point ;
+fun
+  DepHere     : Point -> Dep ;
+  DestHere    : Point -> Dest ;
+
+```
+The concrete syntax in its entirety looks as follows:
+```
+lincat
+  Input, Dep, Dest = {s : Str ; point : Str} ;
+  Name = {s : Str} ;
+  Point = {point : Str} ;
+lin
+  GoFromTo x y  = {s = ["I want to go"] ++ x.s ++ y.s ; 
+                   point = x.point ++ y.point
+                  } ;
+  DepHere p     = {s = ["from here"] ;
+                   point = p.point
+                  } ;
+  DestHere p    = {s = ["to here"] :
+                   point = p.point
+                  } ;
+  DepName n     = {s = ["from"] ++ n.s ;
+                   point = []
+                  } ;
+  DestName n    = {s = ["to"] ++ n.s ;
+                   point = []
+                  } ;
+  Almedal       = {s = "Almedal"} ;
+```
+What we need in addition, to use the grammar in applications, are
+
++ Constructors for ``Point``, e.g. coordinate pairs.
++ Top-level categories, like ``Query`` and ``Speech`` in the original.
+
+
+
+
+===Multimodal conversion combinators===
+
+GF is a functional programming language, and we exploit this
+by providing a set of combinators that makes the multimodal conversion easier
+and clearer. We start with the type of sequences of pointing gestures.
+```
+    Point : Type = {point : Str} ;
+```
+To make a record type multimodal is to extend it with ``Point``.
+The record extension operator ``**`` is needed here.
+```
+    Dem   : Type -> Type = \t -> t ** Point ;
+```
+To construct, use, and concatenate pointings:
+```
+    mkPoint : Str -> Point = \s -> {point = s} ;
+
+    noPoint : Point = mkPoint [] ;
+
+    point   : Point -> Str = \p -> p.point ;
+
+    concatPoint : (x,y : Point) -> Point = \x,y -> 
+      mkPoint (point x ++ point y) ;
+```
+Finally, to add pointing to a record, with the limiting case of no demonstrative needed.
+```
+    mkDem : (t : Type) -> t -> Point -> Dem t = \_,x,s -> x ** s ;
+
+    nonDem : (t : Type) -> t -> Dem t = \t,x -> mkDem t x noPoint ;
+```
+Let us rewrite the Tram Demo grammar by using these combinators:
+```
+oper
+  SS : Type = {s : Str} ;
+lincat
+  Input, Dep, Dest = Dem SS ; 
+  Name = SS ;
+
+lin
+  GoFromTo x y  = {s = ["I want to go"] ++ x.s ++ y.s} ** concatPoint x y ;
+  DepHere       = mkDem  SS {s = ["from here"]} ;
+  DestHere      = mkDem  SS {s = ["to here"]} ;
+  DepName n     = nonDem SS {s = ["from"] ++ n.s} ;
+  DestName n    = nonDem SS {s = ["to"] ++ n.s} ;
+
+  Almedal       = {s = "Almedal"} ;
+```
+The type synonym ``SS`` is introduced to make the combinator applications
+concise. Notice the use of partial application in ``DepHere`` and
+``DestHere``; an equivalent way to write is
+```
+  DepHere p     = mkDem  SS {s = ["from here"]} p ;
+```
+
+
+==Multimodal resource grammars==
+
+The main advantage of using GF when building dialogue systems is
+that various components of the system
+can be automatically generated GF grammars.
+Writing grammars, however, can still be a considerable
+task. A case in point are multilingual systems:
+how to localize e.g. a system built in a car to
+the languages of all those customers to whom the
+car is sold? This problem has been the main focus of
+GF for some years, and the solution on which work has been
+done is the development of **resource grammar libraries**.
+These libraries work in the same way as program libraries
+in software engineering, enabling a division of labour
+between, in the present case, linguists and domain experts.
+
+One of the challenges in the resource grammars of different
+languages has been to provide a **language-independent API**,
+which makes the same resource grammar functions available for
+different languages. For instance, the categories
+``S``, ``NP``, and ``VP`` are available in all of the
+10 languages currently supported, and so is the function
+```
+  PredVP : NP -> VP -> S
+```
+which corresponds to the rule ``S -> NP VP`` in phrase
+structure grammar. However, there are several levels of abstraction
+between the function ``PredVP`` and the phrase structure rule,
+because the rule is implemented in so different ways in different
+languages. In particular, discontinuous constituents are needed in
+various degrees to make the rule work in different languages.
+
+Now, dealing with discontinuous constituents is one of the demanding
+aspects of multilingual grammar writing that the resource grammar 
+API is designed to hide. But the proposed treatment of integrated
+multimodality is heavily dependent on similar things. What can we
+do to make multimodal grammars easier to write (for different languages)?
+There are two orthogonal answers:
+
++ Use resource grammars and before and then apply the multimodal
+  conversion to manually chosen parts.
++ Use **multimodal resource grammars** to derive multimodal
+  dialogue system grammars automatically.
+
+
+The multimodal resource grammar library has been obtained from
+the unimodal one by applying, manually, an idea similar to the
+multimodal conversion. In addition, the API has been simplified
+by leaving out structures needed in written technical documents 
+(the original application area of GF) but not in spoken dialogue.
+
+In the following subsections, we will show a part of the
+multimodal resource grammar API, limited to a fragment that
+is needed to get the main ideas and to reimplement the
+Tram Demo grammar. The reimplementation shows one more advantage
+of the resource grammar approach: dialogue systems can be 
+automatically instantiated to different languages.
+
+
+
+
+===Resource grammar API===
+
+The resource grammar API has three main kinds of entries:
+
++ Language-independent linguistic structures (``linguistic ontology''), e.g.
+```
+  PredVP : NP -> VP -> S ;     -- "Mary helps him"
+```
++ Language-specific syntax extensions, e.g. Swedish and German fronting
+topicalization
+```
+  TopicObj : NP -> VP -> S ;   -- "honom hjälper Mary"
+```
++ Language-specific lexical constructors, e.g. Germanic //Ablaut// patterns
+```
+  irregV : (sing,sang,sung : Str) -> V ;
+```
+
+
+The first two kinds of entries are ``cat`` and ``fun`` definitions
+in an abstract syntax. The multimodal, restricted API has
+e.g. the following categories. Their names are obtained from
+the corresponding unimodal categories by prefixing ``M``.
+```
+  MS ;     -- multimodal sentence or question
+  MQS ;    -- multimodal wh question
+  MImp ;   -- multimodal imperative
+  MVP ;    -- multimodal verb phrase
+  MNP ;    -- multimodal (demonstrative) noun phrase
+  MAdv ;   -- multimodal (demonstrative) adverbial
+
+  Point ;  -- pointing gesture
+```
+
+
+
+===Multimodal API: functions for building demonstratives===
+
+Demonstrative pronouns can be used both as noun phrases and
+as determiners.
+```
+    this_MNP    : Point -> MNP ;        -- this
+    thisDet_MNP : CN -> Point -> MNP ;  -- this car
+```
+There are also demonstrative adverbs, and prepositions give
+a productive way to build more adverbs.
+```
+    here_MAdv      : Point -> MAdv ;    -- here
+    here7from_MAdv : Point -> MAdv ;    -- from here
+
+    MPrepNP : Prep -> MNP -> MAdv ;     -- in this car
+```
+
+
+===Multimodal API: functions for building sentences and phrases===
+
+A handful of predication rules construct sentences, questions, and imperatives.
+```
+    MPredVP   : MNP -> MVP -> MS ;    -- this plane flies here
+    MQPredVP  : MNP -> MVP -> MQS ;   -- does this plane fly here
+    MQuestVP  : IP  -> MVP -> MQS ;   -- who flies here
+    MImpVP    : MVP -> MImp ;         -- fly here!
+```
+Verb phrases are constructed from verbs (inherited as such from
+the unimodal API) by providing their complements.
+```
+    MUseV     : V   -> MVP ;          -- flies
+    MComplV2  : V2  -> MNP -> MVP ;   -- takes this
+    MComplVV  : VV  -> MVP -> MVP ;   -- wants to take this
+```
+A multimodal adverb can be attached to a verb phrase.
+```
+    MAdvVP    : MVP -> MAdv -> MVP ;  -- flies here
+```
+
+
+
+
+===Language-independent implementation: examples===
+
+The implementation makes heavy use of the multimodal conversion
+combinators. It adds a ``point`` field to whatever the implementation of the unimodal
+category is in any language. Thus, for example
+```
+  lincat
+    MVP   = Dem VP ;
+    MNP   = Dem NP ;
+    MAdv  = Dem Adv ;
+
+  lin 
+    this_MNP = mkDem NP this_NP ;
+    -- i.e. this_MNP p = this_NP ** {point = p.point} ;
+
+    MComplV2 verb obj = mkDem VP (ComplV2 verb obj) obj ;
+
+    MAdvVP vp adv = mkDem VP (AdvVP vp adv) (concatPoint vp adv) ;
+```
+
+
+
+===Multimodal API: interface to unimodal expressions===
+
+Using nondemonstrative expressions as demonstratives:
+```
+    DemNP   : NP  -> MNP ;
+    DemAdv  : Adv -> MAdv ;
+```
+Building top-level phrases:
+```
+    PhrMS   : Pol -> MS   -> Phr ;
+    PhrMS   : Pol -> MS   -> Phr ;
+    PhrMQS  : Pol -> MQS  -> Phr ;
+    PhrMImp : Pol -> MImp -> Phr ;
+```
+
+
+===Instantiating multimodality to different languages===
+
+The implementation above has only used the resource grammar API,
+not the concrete implementations. The library ``Demonstrative``
+is a **parametrized module**, also called a **functor**, which
+has the following structure
+```
+  incomplete concrete DemonstrativeI of Demonstrative = 
+    Cat, TenseX ** open Test, Structural in {
+    
+    -- lincat and lin rules
+
+    }
+```
+It can be **instantiated** to different languages as follows.
+```
+  concrete DemonstrativeEng of Demonstrative = 
+    CatEng, TenseX ** DemonstrativeI with
+      (Test = TestEng),
+      (Structural = StructuralEng) ;
+
+  concrete DemonstrativeSwe of Demonstrative = 
+    CatSwe, TenseX ** DemonstrativeI with
+      (Test = TestSwe),
+      (Structural = StructuralSwe) ;
+```
+
+
+
+===Language-independent reimplementation of TramDemo===
+
+Again using the functor idea, we reimplement ``TramDemo``
+as follows:
+```
+incomplete concrete TramI of Tram = open Multimodal in {
+
+lincat
+  Query = Phr ; Input = MS ; 
+  Dep, Dest = MAdv ; Click = Point ;
+lin
+  QInput = PhrMS PPos ;
+
+  GoFromTo x y = 
+    MPredVP (DemNP (UsePron i_Pron)) 
+      (MAdvVP (MAdvVP (MComplVV want_VV (MUseV go_V)) x) y) ;
+
+  DepHere    = here7from_MAdv ;
+  DestHere   = here7to_MAdv ;
+  DepName s  = MPrepNP from_Prep (DemNP (UsePN (SymbPN (MkSymb s)))) ;
+  DestName s = MPrepNP to_Prep (DemNP (UsePN (SymbPN (MkSymb s)))) ;
+
+```
+Then we can instantiate this to all languages for which
+the ``Multimodal`` API has been implemented:
+```
+  concrete TramEng of Tram = TramI with 
+    (Multimodal = MultimodalEng) ;
+
+  concrete TramSwe of Tram = TramI with 
+    (Multimodal = MultimodalSwe) ;
+
+  concrete TramFre of Tram = TramI with 
+    (Multimodal = MultimodalFre) ;
+```
+
+
+
+==A problem: switched order==
+
+It was pointed out in the section on the multimodal conversion that
+the concrete word order may be different from the abstract one,
+and vary between different languages. For instance, Swedish
+topicalization
+
+	 Det här tåget vill den här kunden inte ta.
+
+(``this train, this customer doesn't want to take'') may well have
+an abstract syntax of a form in which the customer appears 
+before the train.
+
+This is a problem for the implementor of the resource grammar.
+It means that some parts of the resource must be written manually
+and not as a functor.
+However, the //user// of the resource can safely
+ignore the word order problem, if it is correctly dealt with in
+the resource.
+
+
+==A recipe for using a resource library==
+
+In the beginning, we believed resource grammars are all that
+an application grammarian needs to write a concrete syntax.
+However, experience has shown that it can be heavy to start
+the grammar development in this way: selecting functions from
+a resource API requires more abstract thinking than just
+writing things (maybe even in a context-free grammar notation,
+also supported by GF). This experience has led to the following
+steps for grammar development, which at the same time give
+the work a quick start and in the end used increased abstraction
+to localize the grammar in different languages.
+
++ Encode domain ontology in and abstract syntax, ``Domain``.
++ Write a rough concrete syntax in English, ``DomainRough``.
+  This can be oversimplified and overgenerating.
++ Reimplement by resource, and build a functor ``DomainI``.
++ Instantiate this functor to different languages, and test.
++ If a rule doesn't satisfy in a language, use its resource in
+  a different way (**compile-time transfer**).
+
+
