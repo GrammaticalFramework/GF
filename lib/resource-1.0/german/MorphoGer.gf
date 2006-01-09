@@ -1,39 +1,37 @@
-----# -path=.:../../prelude
+--# -path=.:../common:../../prelude
 --
 ----1 A Simple German Resource Morphology
 ----
----- Aarne Ranta 2002 -- 2005
+---- Aarne Ranta & Harald Hammarstr�m 2002 -- 2006
 ----
 ---- This resource morphology contains definitions needed in the resource
 ---- syntax. To build a lexicon, it is better to use $ParadigmsGer$, which
 ---- gives a higher-level access to this module.
 --
---resource MorphoGer = ResGer ** open Prelude, (Predef=Predef) in {
---
---  flags optimize=all ;
---
-----2 Phonology
-----
----- To regulate the use of endings for both nouns, adjectives, and verbs:
---
---oper
+resource MorphoGer = ResGer ** open Prelude, (Predef=Predef) in {
 
-  mkV : (x1,_,_,_,_,x6 : Str) -> VAux -> Verb = 
+  flags optimize=all ;
+
+--2 Phonology
+--
+-- To regulate the use of endings for both nouns, adjectives, and verbs:
+
+oper
+
+  mk6V : (x1,_,_,_,_,x6 : Str) -> VAux -> Verb = 
     \geben,gibt,gib,gab,gaebe,gegeben,aux -> 
     let
-      ifSibilant : Str -> Str -> Str -> Str = \u,b1,b2 -> 
-        case u of {
-          "s" | "x" | "z" | "Ã" => b1 ;
-          _   => b2 
-          } ; 
       en = Predef.dp 2 geben ;
       geb = case Predef.tk 1 en of {
         "e" => Predef.tk 2 geben ;
          _  => Predef.tk 1 geben
          } ;
+      gibst = case last geb of {
+        "s" | "x" | "z" | "�" => gibt ;
+        _   => gib + "st"
+        } ; 
       gebt = addE geb + "t" ;
       gebte = ifTok Tok (Predef.dp 1 gab) "e" gab (gab + "e") ;
-      gibst = ifSibilant (Predef.dp 1 gib) (gib + "t") (gib + "st") ;
       gegebener = (regA gegeben).s ! Posit ;
       gabe = addE gab ;
       gibe = ifTok Str (Predef.dp 2 gib) "ig" "e" [] ++ addE gib
@@ -73,22 +71,21 @@
      } ;
  
 -- This function decides whether to add an "e" to the stem before "t".
--- Examples: "tÃ¶ten - tÃ¶tet", "kehren - kehrt", "lernen - lernt", "atmen - atmet".
+-- Examples: "t�ten - t�tet", "kehren - kehrt", "lernen - lernt", "atmen - atmet".
 
   addE : Str -> Str = \stem ->
     let
       r = init (Predef.dp 2 stem) ;
       n = last stem ;
-      e = case n of {
-        "t" | "d" => "e" ;
-        "e" | "h" => [] ;
-        _ => case r of {
-          "l" | "r" | "a" | "o" | "u" | "e" | "i" | "ÃÂ¼" | "ÃÂ¤" | "ÃÂ¶"|"h" => [] ;
-          _ => "e" 
-          }
+    in
+    case n of {
+      "t" | "d" => stem + "e" ;
+      "e" | "h" => stem ;
+      _ => case r of {
+        "l" | "r" | "a" | "e" | "i" | "o" | "u" | "�" | "�" | "�" | "h" => stem ;
+        _ => stem + "e" 
         }
-    in 
-      stem + e ;
+      } ;
 
   weakV : Str -> Verb = \legen ->
     let 
@@ -99,7 +96,7 @@
        lege = addE leg ;
        legte = lege + "te"
     in
-       mkV legen (lege+"t") leg legte legte ("ge"+lege+"t") VHaben ;
+       mk6V legen (lege + "t") leg legte legte ("ge" + lege + "t") VHaben ;
 
 -- To eliminate the past participle prefix "ge".
 
@@ -296,5 +293,5 @@
 --  verbNoPart : Verb -> Verb = \v -> verbPart v [] ;
 --
 --
---} ;
---
+} ;
+
