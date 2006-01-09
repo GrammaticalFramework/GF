@@ -691,25 +691,38 @@ ignore the word order problem, if it is correctly dealt with in
 the resource.
 
 
-===A recipe for using a resource library===
+===A recipe for using the resource library===
 
-In the beginning, we believed resource grammars are all that
+When starting to develop resource grammars, we believed they
+would be all that
 an application grammarian needs to write a concrete syntax.
-However, experience has shown that it can be heavy to start
-the grammar development in this way: selecting functions from
+However, experience has shown that it can be tough to start
+grammar development in this way: selecting functions from
 a resource API requires more abstract thinking than just
-writing things (maybe even in a context-free grammar notation,
-also supported by GF). This experience has led to the following
-steps for grammar development, which, while permitting
-a quick start of the work, towards the end increase abstraction
-to localize the grammar in different languages.
+writing strings, and its take longer to reach testable
+results. The most light-weight format is
+maybe to start with context-free grammars (which notation is
+also supported by GF). Context-free grammars that
+give acceptable even though over-generating
+results for languages like English are quick to produce.
+
+The experience has led to the following
+steps for grammar development. While giving the work
+a quick start, this recipe
+increases abstraction at a later level, when it is time to
+to localize the grammar to different languages.
+If context-free notation is used, steps 1 and 2 can 
+be merged.
 
 + Encode domain ontology in and abstract syntax, ``Domain``.
 + Write a rough concrete syntax in English, ``DomainRough``.
-  This can be oversimplified and overgenerating.
-+ Reimplement by resource, and build a functor ``DomainI``.
-+ Instantiate this functor to different languages, and test.
-+ If a rule doesn't satisfy in a language, use its resource in
-  a different way (**compile-time transfer**).
+  This can be oversimplified and overgenerating. 
++ Reimplement by using the resource library, and build a functor ``DomainI``.
+  This can helped by **example-based grammar writing**, where
+  the examples are generated from ``DomainRough``.
++ Instantiate the functor ``DomainI`` to different languages, 
+  and test the results by generating linearizations.
++ If some rule doesn't satisfy in some language, use the resource in
+  a different way for that case (**compile-time transfer**).
 
 
