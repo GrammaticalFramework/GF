@@ -56,10 +56,10 @@ tryMatch (p,t) = do
  where
   trym p t' =
     case (p,t') of
+      (_,(x,Empty,y)) -> trym p (x,K [],y)   -- because "" = [""] = []
       (PV IW, _) | isInConstantForm t -> return [] -- optimization with wildcard
       (PV x,  _) | isInConstantForm t -> return [(x,t)]
       (PString s, ([],K i,[])) | s==i -> return []
-      (PString "",([],Empty,[]))      -> return [] -- because "" = [""] = []
       (PInt s, ([],EInt i,[])) | s==i -> return []
       (PFloat s,([],EFloat i,[])) | s==i -> return [] --- rounding?
       (PC p pp, ([], Con f, tt)) | 
