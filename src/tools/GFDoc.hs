@@ -280,7 +280,6 @@ doc2txt :: Doc -> String
 doc2txt (Doc title paras) = unlines $
   let tit = concat (map item2txt title) in
       tit:
-      "Author: ":
       "Last update: %%date(%c)":
       "% NOTE: this is a txt2tags file.":
       "% Create an html file from this file using:":
@@ -288,7 +287,6 @@ doc2txt (Doc title paras) = unlines $
       "\n":
       concat (["Produced by " ++ welcome]) :
       "\n" :
-      concat (tagTxt "=" [tit]) :
       empty :
       map para2txt paras
 

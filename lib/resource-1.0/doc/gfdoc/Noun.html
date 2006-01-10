@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE> The construction of nouns, noun phrases, and determiners</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1> The construction of nouns, noun phrases, and determiners</H1>
+<FONT SIZE="4">
+<I>Author: </I><BR>
+Last update: Tue Jan 10 16:38:51 2006
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+  <UL>
+  <LI><A HREF="#toc1">The construction of nouns, noun phrases, and determiners</A>
+    <UL>
+    <LI><A HREF="#toc2">Noun phrases</A>
+    <LI><A HREF="#toc3">Determiners</A>
+    <LI><A HREF="#toc4">Common nouns</A>
+    </UL>
+  </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
+</P>
+<A NAME="toc1"></A>
+<H1>The construction of nouns, noun phrases, and determiners</H1>
+<PRE>
+    abstract Noun = Cat ** {
+    
+      fun
+</PRE>
+<P></P>
+<A NAME="toc2"></A>
+<H2>Noun phrases</H2>
+<P>
+The three main types of noun phrases are
+</P>
+<UL>
+<LI>common nouns with determiners
+<LI>proper names
+<LI>pronouns
+</UL>
+
+<PRE>
+        DetCN   : Det -&gt; CN -&gt; NP ;   -- the man
+        UsePN   : PN -&gt; NP ;          -- John
+        UsePron : Pron -&gt; NP ;        -- he
+</PRE>
+<P></P>
+<P>
+Pronouns are given in the module <A HREF="Structural.html">Structural</A>.
+</P>
+<A NAME="toc3"></A>
+<H2>Determiners</H2>
+<P>
+The determiner has a fine-grained structure, in which four
+different optional parts can be discerned. The noun phrase
+<I>all my first forty books</I> shows each of these parts.
+The cardinal numeral is only available for plural determiners.
+(This is modified from CLE by further dividing their <CODE>Num</CODE> into 
+cardinal and ordinal.)
+</P>
+<PRE>
+        DetSg : Predet -&gt; QuantSg -&gt;        Ord -&gt; Det ;
+        DetPl : Predet -&gt; QuantPl -&gt; Num -&gt; Ord -&gt; Det ;
+</PRE>
+<P></P>
+<P>
+Pronouns have possessive forms. Genitives of other kinds
+of noun phrases are not given here, since they are not possible
+in e.g. Romance languages.
+</P>
+<PRE>
+        PossSg : Pron -&gt; QuantSg ;    -- my (house)
+        PossPl : Pron -&gt; QuantPl ;    -- my (houses)
+</PRE>
+<P></P>
+<P>
+All parts of the determiner can be empty, except <CODE>Quant</CODE>, which is
+the <I>kernel</I> of a determiner.
+</P>
+<PRE>
+        NoPredet : Predet ;
+        NoNum    : Num ;
+        NoOrd    : Ord ;
+</PRE>
+<P></P>
+<P>
+<CODE>Num</CODE> consists of either digits or numeral words.
+</P>
+<PRE>
+        NumInt     : Int -&gt; Num ;     -- 51
+        NumNumeral : Numeral -&gt; Num ; -- fifty-one
+</PRE>
+<P></P>
+<P>
+The construction of numerals is defined in <A HREF="Numeral.html">Numeral</A>.
+<CODE>Num</CODE> can  be modified by certain adverbs.
+</P>
+<PRE>
+        AdNum : AdN -&gt; Num -&gt; Num ;   -- almost 51
+</PRE>
+<P></P>
+<P>
+<CODE>Ord</CODE> consists of either digits or numeral words.
+</P>
+<PRE>
+        OrdInt     : Int -&gt; Ord ;     -- 51st
+        OrdNumeral : Numeral -&gt; Ord ; -- fifty-first
+</PRE>
+<P></P>
+<P>
+Superlative forms of adjectives behave syntactically in the same way as
+ordinals.
+</P>
+<PRE>
+        OrdSuperl : A -&gt; Ord ;        -- largest
+</PRE>
+<P></P>
+<P>
+Definite and indefinite constructions are sometimes realized as
+neatly distinct words (Spanish <I>un, unos ; el, los</I>) but also without
+any particular word (Finnish; Swedish definites).
+</P>
+<PRE>
+        DefSg   : QuantSg ;           -- the (house)
+        DefPl   : QuantPl ;           -- the (houses)
+        IndefSg : QuantSg ;           -- a (house)
+        IndefPl : QuantPl ;           -- (houses)
+</PRE>
+<P></P>
+<P>
+Nouns can be used without an article as mass nouns. The resource does
+not distinguish mass nouns from other common nouns, which can result
+in semantically odd expressions.
+</P>
+<PRE>
+        MassDet : QuantSg ;           -- (beer)
+</PRE>
+<P></P>
+<P>
+Other determiners are defined in <A HREF="Structural.html">Structural</A>.
+</P>
+<A NAME="toc4"></A>
+<H2>Common nouns</H2>
+<P>
+Simple nouns can be used as nouns outright.
+</P>
+<PRE>
+        UseN : N -&gt; CN ;              -- house
+</PRE>
+<P></P>
+<P>
+Relational nouns take one or two arguments.
+</P>
+<PRE>
+        ComplN2 : N2 -&gt; NP -&gt; CN ;    -- son of the king
+        ComplN3 : N3 -&gt; NP -&gt; N2 ;    -- flight from Moscow (to Paris)
+</PRE>
+<P></P>
+<P>
+Relational nouns can also be used without their arguments.
+The semantics is typically derivative of the relational meaning.
+</P>
+<PRE>
+        UseN2 : N2 -&gt; CN ;            -- son
+        UseN3 : N3 -&gt; CN ;            -- flight
+</PRE>
+<P></P>
+<P>
+Nouns can be modified by adjectives and relative clauses.
+</P>
+<PRE>
+        AdjCN   : AP -&gt; CN -&gt; CN ;    -- big house
+        RelCN   : CN -&gt; RS -&gt; CN ;    -- house that John owns
+</PRE>
+<P></P>
+<P>
+Nouns can also be modified by embedded sentences and questions.
+For some nouns this makes little sense, but we leave this for applications
+to decide.
+</P>
+<PRE>
+        SentCN  : CN -&gt; S  -&gt; CN ;    -- fact that John smokes
+        QuestCN : CN -&gt; QS -&gt; CN ;    -- question whether John smokes
+    
+    } ;
+</PRE>
+<P></P>
+
+<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -thtml -\-toc abstract/Noun.txt -->
+</BODY></HTML>

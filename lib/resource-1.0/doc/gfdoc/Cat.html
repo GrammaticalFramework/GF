@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE> The category system</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1> The category system</H1>
+<FONT SIZE="4">
+<I>Author: </I><BR>
+Last update: Tue Jan 10 16:38:50 2006
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+  <UL>
+  <LI><A HREF="#toc1">The category system</A>
+    <UL>
+    <LI><A HREF="#toc2">Top-level units</A>
+    <LI><A HREF="#toc3">Tensed sentences</A>
+    <LI><A HREF="#toc4">Clauses</A>
+    <LI><A HREF="#toc5">Questions and interrogatives</A>
+    <LI><A HREF="#toc6">Relative clauses and pronouns</A>
+    <LI><A HREF="#toc7">Verb phrases</A>
+    <LI><A HREF="#toc8">Adjectival phrases</A>
+    <LI><A HREF="#toc9">Nouns and noun phrases</A>
+    <LI><A HREF="#toc10">Adverbs</A>
+    <LI><A HREF="#toc11">Numerals</A>
+    <LI><A HREF="#toc12">Structural words</A>
+    <LI><A HREF="#toc13">Words of open classes</A>
+    </UL>
+  </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
+</P>
+<A NAME="toc1"></A>
+<H1>The category system</H1>
+<PRE>
+    abstract Cat = {
+    
+      cat
+</PRE>
+<P></P>
+<A NAME="toc2"></A>
+<H2>Top-level units</H2>
+<P>
+Constructed in <A HREF="Phrase.html">Phrase</A>.
+</P>
+<PRE>
+        Text ;  -- text consisting of several phrases
+        Phr ;   -- phrase in a text                    e.g. "But be quiet my darling."
+        Utt ;   -- sentence, question, word...         e.g. "be quiet"
+        Voc ;   -- vocative or "please"                e.g. "my darling"
+</PRE>
+<P></P>
+<A NAME="toc3"></A>
+<H2>Tensed sentences</H2>
+<P>
+Constructed in <A HREF="Tensed.html">Tensed</A>.
+A simplified variant, with just present forms, is <A HREF="Untensed.html">Untensed</A>.
+</P>
+<PRE>
+        S ;     -- declarative sentence                e.g. "she lived here"
+        QS ;    -- question                            e.g. "where did she live"
+        RS ;    -- relative                            e.g. "in which she lived"
+</PRE>
+<P></P>
+<A NAME="toc4"></A>
+<H2>Clauses</H2>
+<P>
+Constructed in <A HREF="Sentence.html">Sentence</A>.
+</P>
+<PRE>
+        Cl ;    -- declarative clause, with all tenses e.g. "she looks at this"
+        Slash ; -- clause missing NP (S/NP in GPSG)    e.g. "she looks at"
+        Imp ;   -- imperative                          e.g. "look at this"
+</PRE>
+<P></P>
+<A NAME="toc5"></A>
+<H2>Questions and interrogatives</H2>
+<P>
+Constructed in <A HREF="Question.html">Question</A>.
+</P>
+<PRE>
+        QCl ;   -- question clause, with all tenses    e.g. "why does she walk"
+        IP ;    -- interrogative pronoun               e.g. "who"
+        IAdv ;  -- interrogative adverb                e.g. "why"
+        IDet ;  -- interrogative determiner            e.g. "which"
+</PRE>
+<P></P>
+<A NAME="toc6"></A>
+<H2>Relative clauses and pronouns</H2>
+<P>
+Constructed in <A HREF="Relative.html">Relative</A>.
+</P>
+<PRE>
+        RCl ;   -- relative clause, with all tenses    e.g. "in which she lives"
+        RP ;    -- relative pronoun                    e.g. "in which"
+</PRE>
+<P></P>
+<A NAME="toc7"></A>
+<H2>Verb phrases</H2>
+<P>
+Constructed in <A HREF="Verb.html">Verb</A>.
+</P>
+<PRE>
+        VP ;    -- verb phrase                         e.g. "is very warm"
+        Comp ;  -- complement of copula, such as AP    e.g. "very warm"
+        SC ;    -- embedded sentence or question       e.g. "that it rains"
+</PRE>
+<P></P>
+<A NAME="toc8"></A>
+<H2>Adjectival phrases</H2>
+<P>
+Constructed in <A HREF="Adjective.html">Adjective</A>.
+</P>
+<PRE>
+        AP ;    -- adjectival phrase                   e.g. "very warm"
+</PRE>
+<P></P>
+<A NAME="toc9"></A>
+<H2>Nouns and noun phrases</H2>
+<P>
+Constructed in <A HREF="Noun.html">Noun</A>. 
+Many atomic noun phrases e.g. <I>everybody</I>
+are constructed in <A HREF="Structural.html">Structural</A>.
+The determiner structure is
+</P>
+<PRE>
+  Predet (QuantSg | QuantPl Num) Ord
+</PRE>
+<P>
+as defined in <A HREF="Noun.html">Noun</A>.
+</P>
+<PRE>
+        CN ;    -- common noun (without determiner)    e.g. "red house"
+        NP ;    -- noun phrase (subject or object)     e.g. "the red house"
+        Pron ;  -- personal pronoun                    e.g. "she"
+        Det ;   -- determiner phrase                   e.g. "all the seven"
+        Predet; -- predeterminer (prefixed Quant)      e.g. "all"
+        QuantSg;-- quantifier ('nucleus' of sing. Det) e.g. "this"
+        QuantPl;-- quantifier ('nucleus' of plur. Det) e.g. "these"
+        Num ;   -- cardinal number (used with QuantPl) e.g. "seven"
+        Ord ;   -- ordinal number (used in Det)        e.g. "seventh"
+</PRE>
+<P></P>
+<A NAME="toc10"></A>
+<H2>Adverbs</H2>
+<P>
+Constructed in <A HREF="Adverb.html">Adverb</A>.  
+Many adverbs are constructed in <A HREF="Structural.html">Structural</A>.
+</P>
+<PRE>
+        Adv ;   -- verb-phrase-modifying adverb,       e.g. "in the house"
+        AdV ;   -- adverb directly attached to verb    e.g. "always"
+        AdA ;   -- adjective-modifying adverb,         e.g. "very"
+        AdN ;   -- numeral-modifying adverb,           e.g. "more than"
+</PRE>
+<P></P>
+<A NAME="toc11"></A>
+<H2>Numerals</H2>
+<P>
+Constructed in <A HREF="Numeral.html">Numeral</A>.
+</P>
+<PRE>
+        Numeral;-- cardinal or ordinal,                e.g. "five/fifth"
+</PRE>
+<P></P>
+<A NAME="toc12"></A>
+<H2>Structural words</H2>
+<P>
+Constructed in <A HREF="Structural.html">Structural</A>.
+</P>
+<PRE>
+        Conj ;  -- conjunction,                        e.g. "and"
+        DConj ; -- distributed conj.                   e.g. "both - and"
+        PConj ; -- phrase-beginning conj.              e.g. "therefore"
+        CAdv ;  -- comparative adverb                  e.g. "more"
+        Subj ;  -- subjunction,                        e.g. "if"
+        Prep ;  -- preposition, or just case           e.g. "in"
+</PRE>
+<P></P>
+<A NAME="toc13"></A>
+<H2>Words of open classes</H2>
+<P>
+These are constructed in <A HREF="Basic.html">Basic</A> and in additional lexicon modules.
+</P>
+<PRE>
+        V ;     -- one-place verb                      e.g. "sleep" 
+        V2 ;    -- two-place verb                      e.g. "love"
+        V3 ;    -- three-place verb                    e.g. "show"
+        VV ;    -- verb-phrase-complement verb         e.g. "want"
+        VS ;    -- sentence-complement verb            e.g. "claim"
+        VQ ;    -- question-complement verb            e.g. "ask"
+        VA ;    -- adjective-complement verb           e.g. "look"
+        V2A ;   -- verb with NP and AP complement      e.g. "paint"
+    
+        A ;     -- one-place adjective                 e.g. "warm"
+        A2 ;    -- two-place adjective                 e.g. "divisible"
+    
+        N ;     -- common noun                         e.g. "house"
+        N2 ;    -- relational noun                     e.g. "son"
+        N3 ;    -- three-place relational noun         e.g. "connection"
+        PN ;    -- proper name                         e.g. "Paris"
+    
+    }
+</PRE>
+<P></P>
+
+<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -thtml -\-toc abstract/Cat.txt -->
+</BODY></HTML>

@@ -10,16 +10,23 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
     UsePN pn = pn ** {a = agrP3 Sg} ;
     UsePron p = p ;
 
-    MkDet pred quant num ord = {
-      s = pred.s ++ quant.s ++ num.s ++ ord.s ; 
-      n = quant.n
+    DetSg pred quant ord = {
+      s = pred.s ++ quant.s ++ ord.s ; 
+      n = Sg
       } ;
 
-    PossPronSg p = {s = p.s ! Gen ; n = Sg} ;
-    PossPronPl p = {s = p.s ! Gen ; n = Pl} ;
+    DetPl pred quant num ord = {
+      s = pred.s ++ quant.s ++ num.s ++ ord.s ; 
+      n = Pl
+      } ;
+
+    PossSg p = {s = p.s ! Gen} ;
+    PossPl p = {s = p.s ! Gen} ;
 
     NoPredet, NoNum, NoOrd = {s = []} ;
+
     NumInt n = n ;
+    OrdInt n = {s = n.s ++ "th"} ; ---
 
     NumNumeral numeral = {s = numeral.s ! NCard} ;
     OrdNumeral numeral = {s = numeral.s ! NOrd} ;
@@ -32,7 +39,13 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
     DefPl = {s = artDef ; n = Pl} ;
 
     IndefSg = {s = artIndef ; n = Sg} ;
-    IndefPl = {s = []  ; n = Pl} ;
+    IndefPl = {s = [] ; n = Pl} ;
+
+    MassDet = {s = [] ; n = Sg} ;
+
+    UseN n = n ;
+    UseN2 n = n ;
+    UseN3 n = n ;
 
     ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c} ;
     ComplN3 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; c2 = f.c3} ;
@@ -44,7 +57,5 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
 
     SentCN cn s = {s = \\n,c => cn.s ! n ! c ++ conjThat ++ s.s} ;
     QuestCN cn qs = {s = \\n,c => cn.s ! n ! c ++ qs.s ! QIndir} ;
-
-    UseN n = n ;
 
 }

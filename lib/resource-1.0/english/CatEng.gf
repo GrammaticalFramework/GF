@@ -49,8 +49,8 @@ concrete CatEng of Cat = open ResEng, Prelude in {
 
     CN = {s : Number => Case => Str} ;
     NP, Pron = {s : Case => Str ; a : Agr} ;
-    Det, Quant = {s : Str ; n : Number} ;
-    Predet, Num, Ord = {s : Str} ;
+    Det = {s : Str ; n : Number} ;
+    Predet, QuantSg, QuantPl, Num, Ord = {s : Str} ;
 
 -- Adverb
 

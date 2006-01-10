@@ -74,20 +74,20 @@ abstract Structural = Cat ** {
   somebody_NP : NP ;
   something_NP : NP ;
   somewhere_Adv : Adv ;
-  that_Quant : Quant ; -- Det
+  that_Quant : QuantSg ; -- Det
   that_NP : NP ;
   there_Adv : Adv ; --
   there7to_Adv : Adv ; --
   there7from_Adv : Adv ; --
   therefore_PConj : PConj ; -- AdC
   these_NP : NP ; --
-  these_Quant : Quant ; -- NDet
+  these_Quant : QuantPl ; -- NDet
 --  they8fem_NP : NP ;
   they_Pron : Pron ; -- NP
-  this_Quant : Quant ; -- NDet
+  this_Quant : QuantSg ; -- NDet
   this_NP : NP ;
   those_NP : NP ; --
-  those_Quant : Quant ; -- NDet
+  those_Quant : QuantPl ; -- NDet
   thou_Pron : Pron ; -- NP
   through_Prep : Prep ;
   to_Prep : Prep ;

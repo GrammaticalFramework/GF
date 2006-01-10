@@ -58,7 +58,9 @@ incomplete concrete CatScand of Cat =
 
     CN = {s : Number => DetSpecies => Case => Str ; g : Gender} ;
     NP,Pron = {s : NPForm => Str ; a : Agr} ;
-    Det, Quant = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
+    Det = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
+    QuantSg = {s : Gender => Str ; det : DetSpecies} ;
+    QuantPl = {s : Gender => Str ; det : DetSpecies} ;
     Predet = {s : GenNum => Str} ;
     Num = {s : Gender => Str} ;
     Ord = {s : Str} ;
