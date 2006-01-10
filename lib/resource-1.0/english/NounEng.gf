@@ -55,7 +55,6 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
       } ;
     RelCN cn rs = {s = \\n,c => cn.s ! n ! c ++ rs.s ! {n = n ; p = P3}} ;
 
-    SentCN cn s = {s = \\n,c => cn.s ! n ! c ++ conjThat ++ s.s} ;
-    QuestCN cn qs = {s = \\n,c => cn.s ! n ! c ++ qs.s ! QIndir} ;
+    SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s} ;
 
 }

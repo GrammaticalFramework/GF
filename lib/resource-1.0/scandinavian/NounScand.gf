@@ -86,12 +86,8 @@ incomplete concrete NounScand of Noun =
       s = \\n,d,c => cn.s ! n ! d ! c ++ rs.s ! agrP3 g n ;
       g = g
       } ;
-    SentCN  cn s = let g = cn.g in {
-      s = \\n,d,c => cn.s ! n ! d ! c ++ conjThat ++ s.s ! Sub ;
-      g = g
-      } ;
-    QuestCN cn qs = let g = cn.g in {
-      s = \\n,d,c => cn.s ! n ! d ! c ++ qs.s ! QIndir ;
+    SentCN  cn sc = let g = cn.g in {
+      s = \\n,d,c => cn.s ! n ! d ! c ++ sc.s ;
       g = g
       } ;
 

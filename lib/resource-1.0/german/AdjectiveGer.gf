@@ -25,12 +25,8 @@ concrete AdjectiveGer of Adjective = CatGer ** open ResGer, Prelude in {
 --      isPre = False
 --      } ;
 
-    SentAP ap s = {
-      s = \\a => ap.s ! a ++ conjThat ++ s.s ! Sub ; 
-      isPre = False
-      } ;
-    QuestAP ap qs = {
-      s = \\a => ap.s ! a ++ qs.s ! QIndir ; 
+    SentAP ap sc = {
+      s = \\a => ap.s ! a ++ sc.s ; 
       isPre = False
       } ;
 

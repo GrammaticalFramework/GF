@@ -122,13 +122,8 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       } ;
 
     SentCN cn s = {
-      s = \\a,n,c => cn.s ! a ! n ! c ++ conjThat ++ s.s ! Sub ;
+      s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ;
       g = cn.g
       } ;
-    QuestCN cn qs = {
-      s = \\a,n,c => cn.s ! a ! n ! c ++ qs.s ! QIndir ;
-      g = cn.g
-      } ;
-
 
 }
