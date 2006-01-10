@@ -17,7 +17,8 @@ concrete CatGer of Cat = open ResGer, Prelude in {
 -- Sentence
 
     Cl = {s : Tense => Anteriority => Polarity => Order => Str} ;
-    Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** {c2 : Preposition} ;
+    Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** 
+            {c2 : Preposition} ;
     Imp = {s : Polarity => Number => Str} ;
 
 -- Question
@@ -47,7 +48,8 @@ concrete CatGer of Cat = open ResGer, Prelude in {
     CN = {s : Adjf => Number => Case => Str ; g : Gender} ;
     NP = {s : Case => Str ; a : Agr} ;
     Pron = {s : NPForm => Str ; a : Agr} ;
-    Det, Quant = {s : Gender => Case => Str ; n : Number ; a : Adjf} ;
+    Det = {s : Gender => Case => Str ; n : Number ; a : Adjf} ;
+    QuantSg, QuantPl = {s : Gender => Case => Str ; a : Adjf} ;
     Predet = {s : Number => Gender => Case => Str} ;
     Num = {s : Gender => Case => Str} ;
     Ord = {s : AForm => Str} ;

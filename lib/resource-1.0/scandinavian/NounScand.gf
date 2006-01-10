@@ -15,18 +15,23 @@ incomplete concrete NounScand of Noun =
 
     UsePron p = p ;
 
-    MkDet pred quant num ord = let n = quant.n in {
-      s = \\g => pred.s ! gennum g n ++ quant.s ! g ++ num.s ! g ++ ord.s ; 
-      n = n ;
+    DetSg pred quant ord = {
+      s = \\g => pred.s ! gennum g Sg ++ quant.s ! g ++ ord.s ; 
+      n = Sg ;
+      det = quant.det
+      } ;
+    DetPl pred quant num ord = {
+      s = \\g => pred.s ! gennum g Pl ++ quant.s ! g ++ num.s ! g ++ ord.s ; 
+      n = Pl ;
       det = quant.det
       } ;
 
-    PossPronSg p = {
+    PossSg p = {
       s = \\g => p.s ! NPPoss (gennum g Sg) ; 
       n = Sg ;
       det = DDef Indef
       } ;
-    PossPronPl p = {
+    PossPl p = {
       s = \\_ => p.s ! NPPoss Plg ; 
       n = Pl ;
       det = DDef Indef
@@ -34,7 +39,9 @@ incomplete concrete NounScand of Noun =
 
     NoPredet, NoNum = {s = \\_ => []} ; -- these get different types!
     NoOrd = {s = []} ;
+
     NumInt n = {s = \\_ => n.s} ;
+    OrdInt n = {s = n.s ++ ":e"} ; ---
 
     NumNumeral numeral = {s = \\g => numeral.s ! NCard g} ;
     OrdNumeral numeral = {s = numeral.s ! NOrd SupWeak} ;
@@ -46,8 +53,15 @@ incomplete concrete NounScand of Noun =
     DefSg = {s = \\g => artDef (gennum g Sg) ; n = Sg ; det = DDef detDef} ;
     DefPl = {s = \\_ => artDef Plg           ; n = Pl ; det = DDef detDef} ;
 
-    IndefSg = {s = artIndef   ; n = Sg ; det = DIndef} ;
-    IndefPl = {s = \\_ => []  ; n = Pl ; det = DIndef} ;
+    IndefSg = {s = artIndef  ; n = Sg ; det = DIndef} ;
+    IndefPl = {s = \\_ => [] ; n = Pl ; det = DIndef} ;
+
+    MassDet = {s = \\_ => [] ; n = Sg ; det = DIndef} ;
+
+    UseN, UseN2, UseN3 = \noun -> {
+      s = \\n,d => noun.s ! n ! specDet d ;
+      g = noun.g
+      } ;
 
 -- The genitive of this $NP$ is not correct: "sonen till mig" (not "migs").
 
@@ -79,11 +93,6 @@ incomplete concrete NounScand of Noun =
     QuestCN cn qs = let g = cn.g in {
       s = \\n,d,c => cn.s ! n ! d ! c ++ qs.s ! QIndir ;
       g = g
-      } ;
-
-    UseN noun = {
-      s = \\n,d => noun.s ! n ! specDet d ;
-      g = noun.g
       } ;
 
 }

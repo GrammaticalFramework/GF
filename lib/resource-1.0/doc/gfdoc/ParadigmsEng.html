@@ -1,0 +1,459 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<FONT SIZE="4">
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+  <UL>
+  <LI><A HREF="#toc1">English Lexical Paradigms</A>
+    <UL>
+    <LI><A HREF="#toc2">Parameters</A>
+    <LI><A HREF="#toc3">Nouns</A>
+      <UL>
+      <LI><A HREF="#toc4">Compound nouns</A>
+      <LI><A HREF="#toc5">Relational nouns</A>
+      <LI><A HREF="#toc6">Relational common noun phrases</A>
+      <LI><A HREF="#toc7">Proper names and noun phrases</A>
+      </UL>
+    <LI><A HREF="#toc8">Adjectives</A>
+      <UL>
+      <LI><A HREF="#toc9">Two-place adjectives</A>
+      </UL>
+    <LI><A HREF="#toc10">Adverbs</A>
+    <LI><A HREF="#toc11">Prepositions</A>
+    <LI><A HREF="#toc12">Verbs</A>
+      <UL>
+      <LI><A HREF="#toc13">Verbs with a particle.</A>
+      <LI><A HREF="#toc14">Two-place verbs</A>
+      <LI><A HREF="#toc15">Three-place verbs</A>
+      <LI><A HREF="#toc16">Other complement patterns</A>
+      </UL>
+    <LI><A HREF="#toc17">Definitions of paradigms</A>
+    </UL>
+  </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+Author: 
+Last update: Tue Jan 10 16:38:53 2006
+</P>
+<P>
+Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
+</P>
+<P>
+==
+</P>
+<P>
+# -path=.:../abstract:../../prelude
+</P>
+<A NAME="toc1"></A>
+<H1>English Lexical Paradigms</H1>
+<P>
+Aarne Ranta 2003--2005
+</P>
+<P>
+This is an API to the user of the resource grammar 
+for adding lexical items. It gives functions for forming
+expressions of open categories: nouns, adjectives, verbs.
+</P>
+<P>
+Closed categories (determiners, pronouns, conjunctions) are
+accessed through the resource syntax API, <CODE>Structural.gf</CODE>. 
+</P>
+<P>
+The main difference with <CODE>MorphoEng.gf</CODE> is that the types
+referred to are compiled resource grammar types. We have moreover
+had the design principle of always having existing forms, rather
+than stems, as string arguments of the paradigms.
+</P>
+<P>
+The structure of functions for each word class <CODE>C</CODE> is the following:
+first we give a handful of patterns that aim to cover all
+regular cases. Then we give a worst-case function <CODE>mkC</CODE>, which serves as an
+escape to construct the most irregular words of type <CODE>C</CODE>.
+However, this function should only seldom be needed: we have a
+separate module <CODE>IrregularEng</CODE>, which covers all irregularly inflected
+words.
+</P>
+<P>
+The following modules are presupposed:
+</P>
+<PRE>
+    resource ParadigmsEng = open 
+      (Predef=Predef), 
+      Prelude, 
+      MorphoEng,
+      CatEng
+      in {
+</PRE>
+<P></P>
+<A NAME="toc2"></A>
+<H2>Parameters</H2>
+<P>
+To abstract over gender names, we define the following identifiers.
+</P>
+<PRE>
+    oper
+      Gender : Type ; 
+    
+      human     : Gender ;
+      nonhuman  : Gender ;
+      masculine : Gender ;
+      feminite  : Gender ;
+</PRE>
+<P></P>
+<P>
+To abstract over number names, we define the following.
+</P>
+<PRE>
+      Number : Type ; 
+    
+      singular : Number ;
+      plural   : Number ;
+</PRE>
+<P></P>
+<P>
+To abstract over case names, we define the following.
+</P>
+<PRE>
+      Case : Type ;
+    
+      nominative : Case ;
+      genitive   : Case ;
+</PRE>
+<P></P>
+<P>
+Prepositions are used in many-argument functions for rection.
+</P>
+<PRE>
+      Preposition : Type ;
+</PRE>
+<P></P>
+<A NAME="toc3"></A>
+<H2>Nouns</H2>
+<P>
+Worst case: give all four forms and the semantic gender.
+</P>
+<PRE>
+      mkN  : (man,men,man's,men's : Str) -&gt; N ;
+</PRE>
+<P></P>
+<P>
+The regular function captures the variants for nouns ending with
+<I>s</I>,<I>sh</I>,<I>x</I>,<I>z</I> or <I>y</I>: <I>kiss - kisses</I>, <I>flash - flashes</I>; 
+<I>fly - flies</I> (but <I>toy - toys</I>),
+</P>
+<PRE>
+      regN : Str -&gt; N ;
+</PRE>
+<P></P>
+<P>
+In practice the worst case is just: give singular and plural nominative.
+</P>
+<PRE>
+      mk2N : (man,men : Str) -&gt; N ;
+</PRE>
+<P></P>
+<P>
+All nouns created by the previous functions are marked as
+<CODE>nonhuman</CODE>. If you want a <CODE>human</CODE> noun, wrap it with the following
+function:
+</P>
+<PRE>
+      genderN : Gender -&gt; N -&gt; N ;
+</PRE>
+<P></P>
+<A NAME="toc4"></A>
+<H3>Compound nouns</H3>
+<P>
+All the functions above work quite as well to form compound nouns,
+such as <I>baby boom</I>. 
+</P>
+<A NAME="toc5"></A>
+<H3>Relational nouns</H3>
+<P>
+Relational nouns (<I>daughter of x</I>) need a preposition. 
+</P>
+<PRE>
+      mkN2 : N -&gt; Preposition -&gt; N2 ;
+</PRE>
+<P></P>
+<P>
+The most common preposition is <I>of</I>, and the following is a
+shortcut for regular, <CODE>nonhuman</CODE> relational nouns with <I>of</I>.
+</P>
+<PRE>
+      regN2 : Str -&gt; N2 ;
+</PRE>
+<P></P>
+<P>
+Use the function <CODE>mkPreposition</CODE> or see the section on prepositions below to  
+form other prepositions.
+</P>
+<P>
+Three-place relational nouns (<I>the connection from x to y</I>) need two prepositions.
+</P>
+<PRE>
+      mkN3 : N -&gt; Preposition -&gt; Preposition -&gt; N3 ;
+</PRE>
+<P></P>
+<A NAME="toc6"></A>
+<H3>Relational common noun phrases</H3>
+<P>
+In some cases, you may want to make a complex <CODE>CN</CODE> into a
+relational noun (e.g. <I>the old town hall of</I>).
+</P>
+<PRE>
+      cnN2 : CN -&gt; Preposition -&gt; N2 ;
+      cnN3 : CN -&gt; Preposition -&gt; Preposition -&gt; N3 ;
+</PRE>
+<P></P>
+<A NAME="toc7"></A>
+<H3>Proper names and noun phrases</H3>
+<P>
+Proper names, with a regular genitive, are formed as follows
+</P>
+<PRE>
+      regPN : Str -&gt; Gender -&gt; PN ;          -- John, John's
+</PRE>
+<P></P>
+<P>
+Sometimes you can reuse a common noun as a proper name, e.g. <I>Bank</I>.
+</P>
+<PRE>
+      nounPN : N -&gt; PN ;
+</PRE>
+<P></P>
+<P>
+To form a noun phrase that can also be plural and have an irregular
+genitive, you can use the worst-case function.
+</P>
+<PRE>
+      mkNP : Str -&gt; Str -&gt; Number -&gt; Gender -&gt; NP ; 
+</PRE>
+<P></P>
+<A NAME="toc8"></A>
+<H2>Adjectives</H2>
+<P>
+Non-comparison one-place adjectives need two forms: one for
+the adjectival and one for the adverbial form (<I>free - freely</I>)
+</P>
+<PRE>
+      mkA : (free,freely : Str) -&gt; A ;
+</PRE>
+<P></P>
+<P>
+For regular adjectives, the adverbial form is derived. This holds
+even for cases with the variation <I>happy - happily</I>.
+</P>
+<PRE>
+      regA : Str -&gt; A ;
+</PRE>
+<P></P>
+<A NAME="toc9"></A>
+<H3>Two-place adjectives</H3>
+<P>
+Two-place adjectives need a preposition for their second argument.
+</P>
+<PRE>
+      mkA2 : A -&gt; Preposition -&gt; A2 ;
+</PRE>
+<P></P>
+<P>
+Comparison adjectives may two more forms. 
+</P>
+<PRE>
+      ADeg : Type ;
+    
+      mkADeg : (good,better,best,well : Str) -&gt; ADeg ;
+</PRE>
+<P></P>
+<P>
+The regular pattern recognizes two common variations: 
+<I>-e</I> (<I>rude</I> - <I>ruder</I> - <I>rudest</I>) and
+<I>-y</I> (<I>happy - happier - happiest - happily</I>)
+</P>
+<PRE>
+      regADeg : Str -&gt; ADeg ;      -- long, longer, longest
+</PRE>
+<P></P>
+<P>
+However, the duplication of the final consonant is nor predicted,
+but a separate pattern is used:
+</P>
+<PRE>
+      duplADeg : Str -&gt; ADeg ;      -- fat, fatter, fattest
+</PRE>
+<P></P>
+<P>
+If comparison is formed by <I>more, //most</I>, as in general for//
+long adjective, the following pattern is used:
+</P>
+<PRE>
+      compoundADeg : A -&gt; ADeg ; -- -/more/most ridiculous
+</PRE>
+<P></P>
+<P>
+From a given <CODE>ADeg</CODE>, it is possible to get back to <CODE>A</CODE>.
+</P>
+<PRE>
+      adegA : ADeg -&gt; A ;
+</PRE>
+<P></P>
+<A NAME="toc10"></A>
+<H2>Adverbs</H2>
+<P>
+Adverbs are not inflected. Most lexical ones have position
+after the verb. Some can be preverbal (e.g. <I>always</I>).
+</P>
+<PRE>
+      mkAdv : Str -&gt; Adv ;
+      mkAdV : Str -&gt; AdV ;
+</PRE>
+<P></P>
+<P>
+Adverbs modifying adjectives and sentences can also be formed.
+</P>
+<PRE>
+      mkAdA : Str -&gt; AdA ;
+</PRE>
+<P></P>
+<A NAME="toc11"></A>
+<H2>Prepositions</H2>
+<P>
+A preposition as used for rection in the lexicon, as well as to
+build <CODE>PP</CODE>s in the resource API, just requires a string.
+</P>
+<PRE>
+      mkPreposition : Str -&gt; Preposition ;
+      mkPrep        : Str -&gt; Prep ;
+</PRE>
+<P></P>
+<P>
+(These two functions are synonyms.)
+</P>
+<A NAME="toc12"></A>
+<H2>Verbs</H2>
+<P>
+Except for <I>be</I>, the worst case needs five forms: the infinitive and
+the third person singular present, the past indicative, and the
+past and present participles.
+</P>
+<PRE>
+      mkV : (go, goes, went, gone, going : Str) -&gt; V ;
+</PRE>
+<P></P>
+<P>
+The regular verb function recognizes the special cases where the last
+character is <I>y</I> (<I>cry - cries</I> but <I>buy - buys</I>) or <I>s</I>, <I>sh</I>, <I>x</I>, <I>z</I>
+(<I>fix - fixes</I>, etc).
+</P>
+<PRE>
+      regV : Str -&gt; V ;
+</PRE>
+<P></P>
+<P>
+The following variant duplicates the last letter in the forms like
+<I>rip - ripped - ripping</I>.
+</P>
+<PRE>
+      regDuplV : Str -&gt; V ;
+</PRE>
+<P></P>
+<P>
+There is an extensive list of irregular verbs in the module <CODE>IrregularEng</CODE>.
+In practice, it is enough to give three forms, 
+e.g. <I>drink - drank - drunk</I>, with a variant indicating consonant
+duplication in the present participle.
+</P>
+<PRE>
+      irregV     : (drink, drank, drunk  : Str) -&gt; V ;
+      irregDuplV : (get,   got,   gotten : Str) -&gt; V ;
+</PRE>
+<P></P>
+<A NAME="toc13"></A>
+<H3>Verbs with a particle.</H3>
+<P>
+The particle, such as in <I>switch on</I>, is given as a string.
+</P>
+<PRE>
+      partV  : V -&gt; Str -&gt; V ;
+</PRE>
+<P></P>
+<A NAME="toc14"></A>
+<H3>Two-place verbs</H3>
+<P>
+Two-place verbs need a preposition, except the special case with direct object.
+(transitive verbs). Notice that a particle comes from the <CODE>V</CODE>.
+</P>
+<PRE>
+      mkV2  : V -&gt; Preposition -&gt; V2 ;
+    
+      dirV2 : V -&gt; V2 ;
+</PRE>
+<P></P>
+<A NAME="toc15"></A>
+<H3>Three-place verbs</H3>
+<P>
+Three-place (ditransitive) verbs need two prepositions, of which
+the first one or both can be absent.
+</P>
+<PRE>
+      mkV3     : V -&gt; Preposition -&gt; Preposition -&gt; V3 ; -- speak, with, about
+      dirV3    : V -&gt; Preposition -&gt; V3 ;                -- give,_,to
+      dirdirV3 : V -&gt; V3 ;                               -- give,_,_
+</PRE>
+<P></P>
+<A NAME="toc16"></A>
+<H3>Other complement patterns</H3>
+<P>
+Verbs and adjectives can take complements such as sentences,
+questions, verb phrases, and adjectives.
+</P>
+<PRE>
+      mkV0  : V -&gt; V0 ;
+      mkVS  : V -&gt; VS ;
+      mkV2S : V -&gt; Str -&gt; V2S ;
+      mkVV  : V -&gt; VV ;
+      mkV2V : V -&gt; Str -&gt; Str -&gt; V2V ;
+      mkVA  : V -&gt; VA ;
+      mkV2A : V -&gt; Str -&gt; V2A ;
+      mkVQ  : V -&gt; VQ ;
+      mkV2Q : V -&gt; Str -&gt; V2Q ;
+    
+      mkAS  : A -&gt; AS ;
+      mkA2S : A -&gt; Str -&gt; A2S ;
+      mkAV  : A -&gt; AV ;
+      mkA2V : A -&gt; Str -&gt; A2V ;
+</PRE>
+<P></P>
+<P>
+Notice: categories <CODE>V2S, V2V, V2A, V2Q</CODE> are in v 1.0 treated
+just as synonyms of <CODE>V2</CODE>, and the second argument is given
+as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
+<CODE>V0</CODE> is just <CODE>V</CODE>.
+</P>
+<PRE>
+      V0, V2S, V2V, V2A, V2Q : Type ;
+      AS, A2S, AV, A2V : Type ;
+</PRE>
+<P></P>
+<A NAME="toc17"></A>
+<H2>Definitions of paradigms</H2>
+<P>
+The definitions should not bother the user of the API. So they are
+hidden from the document.
+</P>
+
+<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -thtml -\-toc english/ParadigmsEng.txt -->
+</BODY></HTML>

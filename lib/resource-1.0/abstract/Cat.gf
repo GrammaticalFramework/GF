@@ -1,96 +1,130 @@
+--1 The category system
+
 abstract Cat = {
 
   cat
 
--- Top-level units constructed in $Phrase$.
+--2 Top-level units
+
+-- Constructed in [Phrase Phrase.html].
 
     Text ;  -- text consisting of several phrases
-    Phr ;   -- phrase in a text                            e.g. "But be quiet my darling."
-    Utt ;   -- sentence, question, "one-word utterance"... e.g. "be quiet"
-    Voc ;   -- vocative or "please"                        e.g. "my darling"
+    Phr ;   -- phrase in a text                    e.g. "But be quiet my darling."
+    Utt ;   -- sentence, question, word...         e.g. "be quiet"
+    Voc ;   -- vocative or "please"                e.g. "my darling"
 
--- Tensed sentences constructed in $Tensed$ and, with just present forms, in $Untensed$.
+--2 Tensed sentences
 
-    S ;     -- declarative sentence                        e.g. "she lived here"
-    QS ;    -- question                                    e.g. "where did she live"
-    RS ;    -- relative                                    e.g. "in which she lived"
+-- Constructed in [Tensed Tensed.html].
+-- A simplified variant, with just present forms, is [Untensed Untensed.html].
 
--- Clauses constructed in $Sentence$.
+    S ;     -- declarative sentence                e.g. "she lived here"
+    QS ;    -- question                            e.g. "where did she live"
+    RS ;    -- relative                            e.g. "in which she lived"
 
-    Cl ;    -- declarative clause, with all tense forms    e.g. "she looks at this"
-    Slash ; -- clause lacking object (S/NP in GPSG)        e.g. "she looks at"
-    Imp ;   -- imperative                                  e.g. "look at this"
+--2 Clauses
 
--- Questions and interrogatives, constructed in $Question$.
+-- Constructed in [Sentence Sentence.html].
 
-    QCl ;   -- question clause, with all tense forms       e.g. "why does she walk"
-    IP ;    -- interrogative pronoun                       e.g. "who"
-    IAdv ;  -- interrogative adverb                        e.g. "why"
-    IDet ;  -- interrogative determiner                    e.g. "which"
+    Cl ;    -- declarative clause, with all tenses e.g. "she looks at this"
+    Slash ; -- clause missing NP (S/NP in GPSG)    e.g. "she looks at"
+    Imp ;   -- imperative                          e.g. "look at this"
 
--- Relatives, constructed in $Relative$.
+--2 Questions and interrogatives
 
-    RCl ;   -- relative clause, with all tense forms       e.g. "in which she lives"
-    RP ;    -- relative pronoun                            e.g. "in which"
+-- Constructed in [Question Question.html].
 
--- Verb phrases, constructed in $Verb$.
+    QCl ;   -- question clause, with all tenses    e.g. "why does she walk"
+    IP ;    -- interrogative pronoun               e.g. "who"
+    IAdv ;  -- interrogative adverb                e.g. "why"
+    IDet ;  -- interrogative determiner            e.g. "which"
 
-    VP ;    -- verb phrase                                 e.g. "is very warm"
-    Comp ;  -- complement of copula, e.g. AP, NP           e.g. "very warm"
-    SC ;    -- sentential noun phrase: e.g. 'that' clause  e.g. "that it rains"
+--2 Relative clauses and pronouns
 
--- Adjectival phrases, constructed in $Adjective$.
+-- Constructed in [Relative Relative.html].
 
-    AP ;    -- adjectival phrase                           e.g. "very warm"
+    RCl ;   -- relative clause, with all tenses    e.g. "in which she lives"
+    RP ;    -- relative pronoun                    e.g. "in which"
 
--- Nouns and noun phrases, constructed in $Noun$ (many also in $Structural$).
+--2 Verb phrases
 
-    CN ;    -- common noun (needs determiner to make NP)   e.g. "red house"
-    NP ;    -- noun phrase (usable as subject or object)   e.g. "the red house"
-    Pron ;  -- personal pronoun                            e.g. "she"
-    Det ;   -- determiner phrase                           e.g. "all the seven"
-    Predet; -- predeterminer (prefixed to a quantifier)    e.g. "all"
-    Quant ; -- quantifier (the 'kernel' of a determiner)   e.g. "the"
-    Num ;   -- cardinal number (used in a determiner)      e.g. "seven"
-    Ord ;   -- ordinal number (used in a determiner)       e.g. "first"
+-- Constructed in [Verb Verb.html].
 
--- Adverbs, constructed in $Adverb$  (many also in $Structural$).
+    VP ;    -- verb phrase                         e.g. "is very warm"
+    Comp ;  -- complement of copula, such as AP    e.g. "very warm"
+    SC ;    -- embedded sentence or question       e.g. "that it rains"
 
-    Adv ;   -- verb-phrase-modifying adverb,               e.g. "in the house"
-    AdV ;   -- sentential adverb, typically close to verb  e.g. "always"
-    AdA ;   -- adjective-modifying adverb,                 e.g. "very"
-    AdN ;   -- numeral-modifying adverb,                   e.g. "more than"
+--2 Adjectival phrases
 
--- Numeral with cardinal and ordinal forms, constructed in $Numeral$.
+-- Constructed in [Adjective Adjective.html].
 
-    Numeral;-- cardinal or ordinal,                        e.g. "five/fifth"
+    AP ;    -- adjectival phrase                   e.g. "very warm"
 
--- Structural words, constructed in $Structural$.
+--2 Nouns and noun phrases
 
-    Conj ;  -- conjunction,                                e.g. "and"
-    DConj ; -- distributed conj.                           e.g. "both - and"
-    PConj ; -- phrase-beginning conj.                      e.g. "therefore"
-    CAdv ;  -- comparative adverb                          e.g. "more"
-    Subj ;  -- subjunction,                                e.g. "if"
-    Prep ;  -- preposition, or just a case in some langs   e.g. "in"
+-- Constructed in [Noun Noun.html]. 
+-- Many atomic noun phrases e.g. "everybody"
+-- are constructed in [Structural Structural.html].
+-- The determiner structure is
+-- ``` Predet (QuantSg | QuantPl Num) Ord
+-- as defined in [Noun Noun.html].
 
--- Words of open classes, constructed in $Basic$ and in additional lexicon modules.
+    CN ;    -- common noun (without determiner)    e.g. "red house"
+    NP ;    -- noun phrase (subject or object)     e.g. "the red house"
+    Pron ;  -- personal pronoun                    e.g. "she"
+    Det ;   -- determiner phrase                   e.g. "all the seven"
+    Predet; -- predeterminer (prefixed Quant)      e.g. "all"
+    QuantSg;-- quantifier ('nucleus' of sing. Det) e.g. "this"
+    QuantPl;-- quantifier ('nucleus' of plur. Det) e.g. "these"
+    Num ;   -- cardinal number (used with QuantPl) e.g. "seven"
+    Ord ;   -- ordinal number (used in Det)        e.g. "seventh"
 
-    V ;     -- one-place verb                              e.g. "sleep" 
-    V2 ;    -- two-place verb                              e.g. "love"
-    V3 ;    -- three-place verb                            e.g. "show"
-    VV ;    -- verb-phrase-complement verb                 e.g. "want"
-    VS ;    -- sentence-complement verb                    e.g. "claim"
-    VQ ;    -- question-complement verb                    e.g. "ask"
-    VA ;    -- adjective-complement verb                   e.g. "look"
-    V2A ;   -- verb with NP and AP complement              e.g. "paint"
+--2 Adverbs
 
-    A ;     -- one-place adjective                         e.g. "warm"
-    A2 ;    -- two-place adjective                         e.g. "divisible"
+-- Constructed in [Adverb Adverb.html].  
+-- Many adverbs are constructed in [Structural Structural.html].
 
-    N ;     -- common noun                                 e.g. "house"
-    N2 ;    -- relational noun                             e.g. "son"
-    N3 ;    -- three-place relational noun                 e.g. "connection"
-    PN ;    -- proper name                                 e.g. "Paris"
+    Adv ;   -- verb-phrase-modifying adverb,       e.g. "in the house"
+    AdV ;   -- adverb directly attached to verb    e.g. "always"
+    AdA ;   -- adjective-modifying adverb,         e.g. "very"
+    AdN ;   -- numeral-modifying adverb,           e.g. "more than"
+
+--2 Numerals
+
+-- Constructed in [Numeral Numeral.html].
+
+    Numeral;-- cardinal or ordinal,                e.g. "five/fifth"
+
+--2 Structural words
+
+-- Constructed in [Structural Structural.html].
+
+    Conj ;  -- conjunction,                        e.g. "and"
+    DConj ; -- distributed conj.                   e.g. "both - and"
+    PConj ; -- phrase-beginning conj.              e.g. "therefore"
+    CAdv ;  -- comparative adverb                  e.g. "more"
+    Subj ;  -- subjunction,                        e.g. "if"
+    Prep ;  -- preposition, or just case           e.g. "in"
+
+--2 Words of open classes
+
+-- These are constructed in [Basic Basic.html] and in additional lexicon modules.
+
+    V ;     -- one-place verb                      e.g. "sleep" 
+    V2 ;    -- two-place verb                      e.g. "love"
+    V3 ;    -- three-place verb                    e.g. "show"
+    VV ;    -- verb-phrase-complement verb         e.g. "want"
+    VS ;    -- sentence-complement verb            e.g. "claim"
+    VQ ;    -- question-complement verb            e.g. "ask"
+    VA ;    -- adjective-complement verb           e.g. "look"
+    V2A ;   -- verb with NP and AP complement      e.g. "paint"
+
+    A ;     -- one-place adjective                 e.g. "warm"
+    A2 ;    -- two-place adjective                 e.g. "divisible"
+
+    N ;     -- common noun                         e.g. "house"
+    N2 ;    -- relational noun                     e.g. "son"
+    N3 ;    -- three-place relational noun         e.g. "connection"
+    PN ;    -- proper name                         e.g. "Paris"
 
 }

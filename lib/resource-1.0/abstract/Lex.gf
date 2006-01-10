@@ -20,8 +20,8 @@ abstract Lex = Cat ** {
 
     only_Predet, all_Predet : Predet ;
 
-    this_Quant, these_Quant  : Quant ;
-
+    this_Quant : QuantSg ;
+    these_Quant : QuantPl ;
     
     i_Pron, he_Pron, we_Pron : Pron ;
 

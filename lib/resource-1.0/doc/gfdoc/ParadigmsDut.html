@@ -1,0 +1,595 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<FONT SIZE="4">
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+Author: 
+Last update: Tue Jan 10 16:38:53 2006
+</P>
+<P>
+Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
+</P>
+<P>
+==
+</P>
+<P>
+--# -path=.:../abstract:../../prelude
+</P>
+<P>
+--1 Dutlish Lexical Paradigms
+--
+-- Aarne Ranta 2003--2005
+--
+-- This is an API to the user of the resource grammar 
+-- for adding lexical items. It gives functions for forming
+-- expressions of open categories: nouns, adjectives, verbs.
+-- 
+-- Closed categories (determiners, pronouns, conjunctions) are
+-- accessed through the resource syntax API, <CODE>Structural.gf</CODE>. 
+--
+-- The main difference with <CODE>MorphoDut.gf</CODE> is that the types
+-- referred to are compiled resource grammar types. We have moreover
+-- had the design principle of always having existing forms, rather
+-- than stems, as string arguments of the paradigms.
+--
+-- The structure of functions for each word class <CODE>C</CODE> is the following:
+-- first we give a handful of patterns that aim to cover all
+-- regular cases. Then we give a worst-case function <CODE>mkC</CODE>, which serves as an
+-- escape to construct the most irregular words of type <CODE>C</CODE>.
+-- However, this function should only seldom be needed: we have a
+-- separate module <CODE>IrregularDut</CODE>, which covers all irregularly inflected
+-- words.
+-- 
+-- The following modules are presupposed:
+</P>
+<P>
+resource ParadigmsDut = open 
+(Predef=Predef), 
+Prelude, 
+MorphoDut,
+CatDut
+in {
+--2 Parameters 
+--
+-- To abstract over gender names, we define the following identifiers.
+</P>
+<P>
+oper
+Gender : Type ; 
+</P>
+<P>
+human     : Gender ;
+nonhuman  : Gender ;
+masculine : Gender ;
+feminite  : Gender ;
+</P>
+<P>
+-- To abstract over number names, we define the following.
+</P>
+<P>
+Number : Type ; 
+</P>
+<P>
+singular : Number ;
+plural   : Number ;
+</P>
+<P>
+-- To abstract over case names, we define the following.
+</P>
+<P>
+Case : Type ;
+</P>
+<P>
+nominative : Case ;
+genitive   : Case ;
+</P>
+<P>
+-- Prepositions are used in many-argument functions for rection.
+</P>
+<P>
+Preposition : Type ;
+</P>
+<P>
+--2 Nouns
+</P>
+<P>
+-- Worst case: give all four forms and the semantic gender.
+</P>
+<P>
+mkN  : (man,men,man's,men's : Str) -&gt; N ;
+</P>
+<P>
+-- The regular function captures the variants for nouns ending with
+-- <I>s</I>,<I>sh</I>,<I>x</I>,<I>z</I> or <I>y</I>: <I>kiss - kisses</I>, <I>flash - flashes</I>; 
+-- <I>fly - flies</I> (but <I>toy - toys</I>),
+</P>
+<P>
+regN : Str -&gt; N ;
+</P>
+<P>
+-- In practice the worst case is just: give singular and plural nominative.
+</P>
+<P>
+mk2N : (man,men : Str) -&gt; N ;
+</P>
+<P>
+-- All nouns created by the previous functions are marked as
+-- <CODE>nonhuman</CODE>. If you want a <CODE>human</CODE> noun, wrap it with the following
+-- function:
+</P>
+<P>
+genderN : Gender -&gt; N -&gt; N ;
+</P>
+<P>
+--3 Compound nouns 
+--
+-- All the functions above work quite as well to form compound nouns,
+-- such as <I>baby boom</I>. 
+</P>
+<P>
+--3 Relational nouns 
+-- 
+-- Relational nouns (<I>daughter of x</I>) need a preposition. 
+</P>
+<P>
+mkN2 : N -&gt; Preposition -&gt; N2 ;
+</P>
+<P>
+-- The most common preposition is <I>of</I>, and the following is a
+-- shortcut for regular, <CODE>nonhuman</CODE> relational nouns with <I>of</I>.
+</P>
+<P>
+regN2 : Str -&gt; N2 ;
+</P>
+<P>
+-- Use the function <CODE>mkPreposition</CODE> or see the section on prepositions below to  
+-- form other prepositions.
+--
+-- Three-place relational nouns (<I>the connection from x to y</I>) need two prepositions.
+</P>
+<P>
+mkN3 : N -&gt; Preposition -&gt; Preposition -&gt; N3 ;
+</P>
+<P>
+--3 Relational common noun phrases
+--
+-- In some cases, you may want to make a complex <CODE>CN</CODE> into a
+-- relational noun (e.g. <I>the old town hall of</I>).
+</P>
+<P>
+cnN2 : CN -&gt; Preposition -&gt; N2 ;
+cnN3 : CN -&gt; Preposition -&gt; Preposition -&gt; N3 ;
+</P>
+<P>
+-- 
+--3 Proper names and noun phrases
+--
+-- Proper names, with a regular genitive, are formed as follows
+</P>
+<P>
+regPN : Str -&gt; Gender -&gt; PN ;          -- John, John's
+</P>
+<P>
+-- Sometimes you can reuse a common noun as a proper name, e.g. <I>Bank</I>.
+</P>
+<P>
+nounPN : N -&gt; PN ;
+</P>
+<P>
+-- To form a noun phrase that can also be plural and have an irregular
+-- genitive, you can use the worst-case function.
+</P>
+<P>
+mkNP : Str -&gt; Str -&gt; Number -&gt; Gender -&gt; NP ; 
+</P>
+<P>
+--2 Adjectives
+</P>
+<P>
+-- Non-comparison one-place adjectives need two forms: one for
+-- the adjectival and one for the adverbial form (<I>free - freely</I>)
+</P>
+<P>
+mkA : (free,freely : Str) -&gt; A ;
+</P>
+<P>
+-- For regular adjectives, the adverbial form is derived. This holds
+-- even for cases with the variation <I>happy - happily</I>.
+</P>
+<P>
+regA : Str -&gt; A ;
+</P>
+<P>
+--3 Two-place adjectives
+--
+-- Two-place adjectives need a preposition for their second argument.
+</P>
+<P>
+mkA2 : A -&gt; Preposition -&gt; A2 ;
+</P>
+<P>
+-- Comparison adjectives may two more forms. 
+</P>
+<P>
+ADeg : Type ;
+</P>
+<P>
+mkADeg : (good,better,best,well : Str) -&gt; ADeg ;
+</P>
+<P>
+-- The regular pattern recognizes two common variations: 
+-- <I>-e</I> (<I>rude</I> - <I>ruder</I> - <I>rudest</I>) and
+-- <I>-y</I> (<I>happy - happier - happiest - happily</I>)
+</P>
+<P>
+regADeg : Str -&gt; ADeg ;      -- long, longer, longest
+</P>
+<P>
+-- However, the duplication of the final consonant is nor predicted,
+-- but a separate pattern is used:
+</P>
+<P>
+duplADeg : Str -&gt; ADeg ;      -- fat, fatter, fattest
+</P>
+<P>
+-- If comparison is formed by <I>more, //most</I>, as in general for//
+-- long adjective, the following pattern is used:
+</P>
+<P>
+compoundADeg : A -&gt; ADeg ; -- -/more/most ridiculous
+</P>
+<P>
+-- From a given <CODE>ADeg</CODE>, it is possible to get back to <CODE>A</CODE>.
+</P>
+<P>
+adegA : ADeg -&gt; A ;
+</P>
+<P>
+--2 Adverbs
+</P>
+<P>
+-- Adverbs are not inflected. Most lexical ones have position
+-- after the verb. Some can be preverbal (e.g. <I>always</I>).
+</P>
+<P>
+mkAdv : Str -&gt; Adv ;
+mkAdV : Str -&gt; AdV ;
+</P>
+<P>
+-- Adverbs modifying adjectives and sentences can also be formed.
+</P>
+<P>
+mkAdA : Str -&gt; AdA ;
+</P>
+<P>
+--2 Prepositions
+--
+-- A preposition as used for rection in the lexicon, as well as to
+-- build <CODE>PP</CODE>s in the resource API, just requires a string.
+</P>
+<P>
+mkPreposition : Str -&gt; Preposition ;
+mkPrep        : Str -&gt; Prep ;
+</P>
+<P>
+-- (These two functions are synonyms.)
+</P>
+<P>
+--2 Verbs
+--
+-- Except for <I>be</I>, the worst case needs five forms: the infinitive and
+-- the third person singular present, the past indicative, and the
+-- past and present participles.
+</P>
+<P>
+mkV : (go, goes, went, gone, going : Str) -&gt; V ;
+</P>
+<P>
+-- The regular verb function recognizes the special cases where the last
+-- character is <I>y</I> (<I>cry - cries</I> but <I>buy - buys</I>) or <I>s</I>, <I>sh</I>, <I>x</I>, <I>z</I>
+-- (<I>fix - fixes</I>, etc).
+</P>
+<P>
+regV : Str -&gt; V ;
+</P>
+<P>
+-- The following variant duplicates the last letter in the forms like
+-- <I>rip - ripped - ripping</I>.
+</P>
+<P>
+regDuplV : Str -&gt; V ;
+</P>
+<P>
+-- There is an extensive list of irregular verbs in the module <CODE>IrregularDut</CODE>.
+-- In practice, it is enough to give three forms, 
+-- e.g. <I>drink - drank - drunk</I>, with a variant indicating consonant
+-- duplication in the present participle.
+</P>
+<P>
+irregV     : (drink, drank, drunk  : Str) -&gt; V ;
+irregDuplV : (get,   got,   gotten : Str) -&gt; V ;
+</P>
+<P>
+--3 Verbs with a particle.
+--
+-- The particle, such as in <I>switch on</I>, is given as a string.
+</P>
+<P>
+partV  : V -&gt; Str -&gt; V ;
+</P>
+<P>
+--3 Two-place verbs
+--
+-- Two-place verbs need a preposition, except the special case with direct object.
+-- (transitive verbs). Notice that a particle comes from the <CODE>V</CODE>.
+</P>
+<P>
+mkV2  : V -&gt; Preposition -&gt; V2 ;
+</P>
+<P>
+dirV2 : V -&gt; V2 ;
+</P>
+<P>
+--3 Three-place verbs
+--
+-- Three-place (ditransitive) verbs need two prepositions, of which
+-- the first one or both can be absent.
+</P>
+<P>
+mkV3     : V -&gt; Str -&gt; Str -&gt; V3 ;    -- speak, with, about
+dirV3    : V -&gt; Str -&gt; V3 ;           -- give,_,to
+dirdirV3 : V -&gt; V3 ;                  -- give,_,_
+</P>
+<P>
+--3 Other complement patterns
+--
+-- Verbs and adjectives can take complements such as sentences,
+-- questions, verb phrases, and adjectives.
+</P>
+<P>
+mkV0  : V -&gt; V0 ;
+mkVS  : V -&gt; VS ;
+mkV2S : V -&gt; Str -&gt; V2S ;
+mkVV  : V -&gt; VV ;
+mkV2V : V -&gt; Str -&gt; Str -&gt; V2V ;
+mkVA  : V -&gt; VA ;
+mkV2A : V -&gt; Str -&gt; V2A ;
+mkVQ  : V -&gt; VQ ;
+mkV2Q : V -&gt; Str -&gt; V2Q ;
+</P>
+<P>
+mkAS  : A -&gt; AS ;
+mkA2S : A -&gt; Str -&gt; A2S ;
+mkAV  : A -&gt; AV ;
+mkA2V : A -&gt; Str -&gt; A2V ;
+</P>
+<P>
+-- Notice: categories <CODE>V2S, V2V, V2A, V2Q</CODE> are in v 1.0 treated
+-- just as synonyms of <CODE>V2</CODE>, and the second argument is given
+-- as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
+-- <CODE>V0</CODE> is just <CODE>V</CODE>.
+</P>
+<P>
+V0, V2S, V2V, V2A, V2Q : Type ;
+AS, A2S, AV, A2V : Type ;
+</P>
+<P>
+--2 Definitions of paradigms
+--
+-- The definitions should not bother the user of the API. So they are
+-- hidden from the document.
+--.
+</P>
+<P>
+Gender = MorphoDut.Gender ; 
+Number = MorphoDut.Number ;
+Case = MorphoDut.Case ;
+human = Masc ; 
+nonhuman = Neutr ;
+masculine = Masc ;
+feminine = Fem ;
+singular = Sg ;
+plural = Pl ;
+nominative = Nom ;
+genitive = Gen ;
+</P>
+<P>
+Preposition = Str ;
+</P>
+<P>
+regN = \ray -&gt; 
+let
+ra  = Predef.tk 1 ray ; 
+y   = Predef.dp 1 ray ; 
+r   = Predef.tk 2 ray ; 
+ay  = Predef.dp 2 ray ;
+rays =
+case y of {
+<I>y</I> =&gt; y2ie ray <I>s</I> ; 
+<I>s</I> =&gt; ray + <I>es</I> ;
+<I>z</I> =&gt; ray + <I>es</I> ;
+<I>x</I> =&gt; ray + <I>es</I> ;
+_ =&gt; case ay of {
+<I>sh</I> =&gt; ray + <I>es</I> ;
+<I>ch</I> =&gt; ray + <I>es</I> ;
+_    =&gt; ray + <I>s</I>
+}
+}
+in
+mk2N ray rays ;
+</P>
+<P>
+mk2N = \man,men -&gt; 
+let mens = case last men of {
+<I>s</I> =&gt; men + <I>'</I> ;
+_   =&gt; men + <I>'s</I>
+}
+in
+mkN man men (man + <I>'s</I>) mens ;
+</P>
+<P>
+mkN = \man,men,man's,men's -&gt; 
+mkNoun man men man's men's **** {g = Neutr ; lock_N = &lt;&gt;} ;
+</P>
+<P>
+genderN g man = {s = man.s ; g = g ; lock_N = &lt;&gt;} ;
+</P>
+<P>
+mkN2 = \n,p -&gt; n **** {lock_N2 = &lt;&gt; ; c2 = p} ;
+regN2 n = mkN2 (regN n) (mkPreposition <I>of</I>) ;
+mkN3 = \n,p,q -&gt; n **** {lock_N3 = &lt;&gt; ; c2 = p ; c3 = q} ;
+cnN2 = \n,p -&gt; n **** {lock_N2 = &lt;&gt; ; c2 = p} ;
+cnN3 = \n,p,q -&gt; n **** {lock_N3 = &lt;&gt; ; c2 = p ; c3 = q} ;
+</P>
+<P>
+regPN n g = nameReg n g **** {lock_PN = &lt;&gt;} ;
+nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = &lt;&gt;} ;
+mkNP x y n g = {s = table {Gen =&gt; x ; _ =&gt; y} ; a = (agrP3 n).a ;
+lock_NP = &lt;&gt;} ;
+</P>
+<P>
+mkA a b = mkAdjective a a a b **** {lock_A = &lt;&gt;} ;
+regA a = regAdjective a **** {lock_A = &lt;&gt;} ;
+</P>
+<P>
+mkA2 a p = a **** {c2 = p ; lock_A2 = &lt;&gt;} ;
+</P>
+<P>
+ADeg = A ; ----
+</P>
+<P>
+mkADeg a b c d = mkAdjective a b c d **** {lock_A = &lt;&gt;} ;
+</P>
+<P>
+regADeg happy = 
+let
+happ = init happy ;
+y    = last happy ;
+happie = case y of {
+<I>y</I> =&gt; happ + <I>ie</I> ;
+<I>e</I> =&gt; happy ;
+_   =&gt; happy + <I>e</I>
+} ;
+happily = case y of {
+<I>y</I> =&gt; happ + <I>ily</I> ;
+_   =&gt; happy + <I>ly</I>
+} ;
+in mkADeg happy (happie + <I>r</I>) (happie + <I>st</I>) happily ;
+</P>
+<P>
+duplADeg fat = 
+mkADeg fat 
+(fat + last fat + <I>er</I>) (fat + last fat + <I>est</I>) (fat + <I>ly</I>) ;
+</P>
+<P>
+compoundADeg a =
+let ad = (a.s ! AAdj Posit) 
+in mkADeg ad (<I>more</I> ++ ad) (<I>most</I> ++ ad) (a.s ! AAdv) ;
+</P>
+<P>
+adegA a = a ;
+</P>
+<P>
+mkAdv x = ss x **** {lock_Adv = &lt;&gt;} ;
+mkAdV x = ss x **** {lock_AdV = &lt;&gt;} ;
+mkAdA x = ss x **** {lock_AdA = &lt;&gt;} ;
+</P>
+<P>
+mkPreposition p = p ;
+mkPrep p = ss p **** {lock_Prep = &lt;&gt;} ;
+</P>
+<P>
+mkV a b c d e = mkVerbWorst a b c d e **** {s1 = [] ; lock_V = &lt;&gt;} ;
+</P>
+<P>
+regV cry = 
+let
+cr = init cry ;
+y  = last cry ;
+cries = (regN cry).s ! Pl ! Nom ; -- !
+crie  = init cries ;
+cried = case last crie of {
+<I>e</I> =&gt; crie + <I>d</I> ;
+_   =&gt; crie + <I>ed</I>
+} ;
+crying = case y of {
+<I>e</I> =&gt; case last cr of {
+<I>e</I> =&gt; cry + <I>ing</I> ; 
+_ =&gt; cr + <I>ing</I> 
+} ;
+_   =&gt; cry + <I>ing</I>
+}
+in mkV cry cries cried cried crying ;
+</P>
+<P>
+regDuplV fit = 
+let fitt = fit + last fit in
+mkV fit (fit + <I>s</I>) (fitt + <I>ed</I>) (fitt + <I>ed</I>) (fitt + <I>ing</I>) ;
+</P>
+<P>
+irregV x y z = let reg = (regV x).s in
+mkV x (reg ! VPres) y z (reg ! VPresPart) **** {s1 = [] ; lock_V = &lt;&gt;} ;
+</P>
+<P>
+irregDuplV fit y z = 
+let 
+fitting = (regDuplV fit).s ! VPresPart
+in
+mkV fit (fit + <I>s</I>) y z fitting ;
+</P>
+<P>
+partV v p = verbPart v p **** {lock_V = &lt;&gt;} ;
+</P>
+<P>
+mkV2 v p = v **** {s = v.s ; s1 = v.s1 ; c2 = p ; lock_V2 = &lt;&gt;} ;
+dirV2 v = mkV2 v [] ;
+</P>
+<P>
+mkV3 v p q = v **** {s = v.s ; s1 = v.s1 ; c2 = p ; c3 = q ; lock_V3 = &lt;&gt;} ;
+dirV3 v p = mkV3 v [] p ;
+dirdirV3 v = dirV3 v [] ;
+</P>
+<P>
+mkVS  v = v **** {lock_VS = &lt;&gt;} ;
+mkVV  v = v **** {c2 = <I>to</I> ; lock_VV = &lt;&gt;} ;
+mkVQ  v = v **** {lock_VQ = &lt;&gt;} ;
+</P>
+<P>
+V0 : Type = V ;
+V2S, V2V, V2Q, V2A : Type = V2 ;
+AS, A2S, AV : Type = A ;
+A2V : Type = A2 ;
+</P>
+<P>
+mkV0  v = v **** {lock_V = &lt;&gt;} ;
+mkV2S v p = mkV2 v p **** {lock_V2 = &lt;&gt;} ;
+mkV2V v p t = mkV2 v p **** {s4 = t ; lock_V2 = &lt;&gt;} ;
+mkVA  v = v **** {lock_VA = &lt;&gt;} ;
+mkV2A v p = mkV2 v p **** {lock_V2A = &lt;&gt;} ;
+mkV2Q v p = mkV2 v p **** {lock_V2 = &lt;&gt;} ;
+</P>
+<P>
+mkAS  v = v **** {lock_A = &lt;&gt;} ;
+mkA2S v p = mkA2 v p **** {lock_A = &lt;&gt;} ;
+mkAV  v = v **** {lock_A = &lt;&gt;} ;
+mkA2V v p = mkA2 v p **** {lock_A2 = &lt;&gt;} ;
+</P>
+<P>
+} ;
+</P>
+
+<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -thtml -\-toc dutch/ParadigmsDut.txt -->
+</BODY></HTML>
