@@ -109,9 +109,8 @@ abstract Noun = Cat ** {
 
 -- Nouns can also be modified by embedded sentences and questions.
 -- For some nouns this makes little sense, but we leave this for applications
--- to decide.
+-- to decide. Sentential complements are defined in [Verb Verb.html].
 
-    SentCN  : CN -> S  -> CN ;    -- fact that John smokes
-    QuestCN : CN -> QS -> CN ;    -- question whether John smokes
+    SentCN  : CN -> SC  -> CN ;   -- fact that John smokes, question if he does
 
 } ;

@@ -1,3 +1,11 @@
+test:
+	gf -src english/LangEng.gf swedish/LangSwe.gf german/TestGer.gf
+
+stat:
+	wc english/*.gfc 
+	wc swedish/*.gfc 
+	wc german/*.gfc
+
 gfdoc:
 	gfdoc -txthtml abstract/*.gf
 	gfdoc -txthtml */Paradigms*.gf

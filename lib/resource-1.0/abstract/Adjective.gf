@@ -1,25 +1,30 @@
+--1 Adjectives and adjectival phrases
+
 abstract Adjective = Cat ** {
 
   fun
 
-    PositA  : A -> AP ;
-    ComparA : A -> NP -> AP ;
+-- The principal ways of forming an adjectival phrase are
+-- positive, comparative, relational, reflexive-relational, and
+-- elliptic-relational.
+-- (The superlative use is covered in [Noun Noun.html].$SuperlA$.)
 
--- $SuperlA$ belongs to determiner syntax in $Noun$.
+    PositA  : A -> AP ;         -- warm
+    ComparA : A -> NP -> AP ;   -- warmer than Spain
+    ComplA2 : A2 -> NP -> AP ;  -- divisible by 2
+    ReflA2  : A2 -> AP ;        -- divisible by itself
+    UseA2   : A2 -> A ;         -- divisible
 
-    ComplA2 : A2 -> NP -> AP ;
+-- Sentence and question complements defined for all adjectival
+-- phrases, although the semantics is only clear for some adjective.
+ 
+    SentAP  : AP -> SC -> AP ;  -- great that she won, uncertain if she did
 
-    ReflA2  : A2 -> AP ;
+-- An adjectival phrase can be modified by an *adadjective*, such as "very".
 
-    SentAP  : AP -> S  -> AP ;
-    QuestAP : AP -> QS -> AP ;
+    AdAP    : AdA -> AP -> AP ; -- very uncertain
 
-    AdAP : AdA -> AP -> AP ;
-
--- $AdvA$ that forms adverbs belongs to $Adverb$.
-
--- Elliptic constructions as usual.
-
-    UseA2 : A2 -> A ;
+-- The formation of adverbs from adjective (e.g. "quickly") is covered
+-- by [Adverb Adverb.html].
 
 }

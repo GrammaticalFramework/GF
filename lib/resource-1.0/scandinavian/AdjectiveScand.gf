@@ -24,12 +24,8 @@ incomplete concrete AdjectiveScand of Adjective =
 --      isPre = False
 --      } ;
 --
-    SentAP ap s = {
-      s = \\a => ap.s ! a ++ conjThat ++ s.s ! Inv ; 
-      isPre = False
-      } ;
-    QuestAP ap qs = {
-      s = \\a => ap.s ! a ++ qs.s ! QIndir ; 
+    SentAP ap sc = {
+      s = \\a => ap.s ! a ++ sc.s ; 
       isPre = False
       } ;
 
