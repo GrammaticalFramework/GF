@@ -56,14 +56,19 @@ incomplete concrete CatScand of Cat =
 
 -- Noun
 
-    CN = {s : Number => DetSpecies => Case => Str ; g : Gender} ;
+-- The fields $isMod$ and $isDet$, and the boolean parameter of
+-- determiners, are a hack (the simples possible we found) that
+-- permits treating definite articles "huset - de fem husen - det gamla huset"
+-- as $Quant$.
+
+    CN = {s : Number => DetSpecies => Case => Str ; g : Gender ; isMod : Bool} ;
     NP,Pron = {s : NPForm => Str ; a : Agr} ;
-    Det = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
-    QuantSg = {s : Gender => Str ; det : DetSpecies} ;
-    QuantPl = {s : Gender => Str ; det : DetSpecies} ;
+    Det = {s : Bool => Gender => Str ; n : Number ; det : DetSpecies} ;
+    QuantSg = {s : Bool => Gender => Str ; det : DetSpecies} ;
+    QuantPl = {s : Bool => Gender => Str ; det : DetSpecies} ;
     Predet = {s : GenNum => Str} ;
-    Num = {s : Gender => Str} ;
-    Ord = {s : Str} ;
+    Num = {s : Gender => Str ; isDet : Bool} ;
+    Ord = {s : Str ; isDet : Bool} ;
 
 -- Adverb
 
