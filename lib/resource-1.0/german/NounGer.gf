@@ -58,6 +58,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
     NoOrd = {s = \\_ => []} ;
 
     NumInt n = {s = \\_,_ => n.s} ;
+    OrdInt n = {s = \\_   => n.s ++ "."} ;
 
     NumNumeral numeral = {s = \\_,_ => numeral.s ! NCard} ;
     OrdNumeral numeral = {s = \\af => numeral.s ! NOrd af} ;

@@ -22,7 +22,8 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer in {
 
     SlashVVV2 np vv v2 = 
         mkClause (np.s ! Nom) np.a 
-          (insertObj (\\a => vv.part ++ v2.s ! VInf) (predV vv)) **
+          (insertObj (\\a => v2.prefix ++ infPart vv.isAux  ++ v2.s ! VInf) 
+             (predVGen vv.isAux vv)) **
         {c2 = v2.c2} ;
 
     AdvSlash slash adv = {
