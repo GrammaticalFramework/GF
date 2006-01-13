@@ -29,6 +29,7 @@ abstract Cat = {
     Cl ;    -- declarative clause, with all tenses e.g. "she looks at this"
     Slash ; -- clause missing NP (S/NP in GPSG)    e.g. "she looks at"
     Imp ;   -- imperative                          e.g. "look at this"
+    SC ;    -- embedded sentence or question       e.g. "that it rains"
 
 --2 Questions and interrogatives
 
@@ -52,7 +53,6 @@ abstract Cat = {
 
     VP ;    -- verb phrase                         e.g. "is very warm"
     Comp ;  -- complement of copula, such as AP    e.g. "very warm"
-    SC ;    -- embedded sentence or question       e.g. "that it rains"
 
 --2 Adjectival phrases
 
