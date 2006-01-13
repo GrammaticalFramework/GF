@@ -38,7 +38,6 @@ concrete LexEng of Lex = CatEng ** open ResEng, Prelude in {
     whichSg_IDet = {s = "which" ; n = Sg} ;
     whichPl_IDet = {s = "which" ; n = Pl} ;
 
-    one_Numeral = {s = table {NCard => "one" ; NOrd => "first"} ; n = Sg} ;
     forty_Numeral = {s = table {NCard => "forty" ; NOrd => "fortieth"} ; n = Pl} ;
 
     in_Prep = {s = "in"} ;
