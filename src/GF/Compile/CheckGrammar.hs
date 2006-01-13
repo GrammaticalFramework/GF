@@ -697,16 +697,26 @@ pattContext env typ p = case p of
     g <- pattContext env typ p
     return $ (x,typ):g
 
-  PAlt p q -> do
-    g1 <- pattContext env typ p
+  PAlt p' q -> do
+    g1 <- pattContext env typ p'
     g2 <- pattContext env typ q
-    return $ filter (flip elem g1) g2 -- must be in both
+    let pts = [pt | pt <- g1, notElem pt g2] ++ [pt | pt <- g2, notElem pt g1]
+    checkCond 
+      ("incompatible bindings of" +++ 
+       unwords (nub (map (prt . fst) pts))+++ 
+       "in pattern alterantives" +++ prt p) (null pts) 
+    return g1 -- must be g1 == g2
   PSeq p q -> do
     g1 <- pattContext env typ p
     g2 <- pattContext env typ q
     return $ g1 ++ g2
-  PRep p -> pattContext env typeStr p
-  PNeg p -> pattContext env typeStr p
+  PRep p' -> do
+    co <- pattContext env typeStr p'
+    if not (null co)
+      then checkWarn ("no variable bound inside * pattern" +++ prt p) 
+           >> return []
+      else return []
+  PNeg p' -> pattContext env typ p'
 
   _ -> return [] ---- check types!
  where 
