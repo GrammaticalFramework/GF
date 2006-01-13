@@ -1,3 +1,8 @@
+LICENSE: This library is free software licensed under GNU General
+Public License (GPL), see LICENSE.
+
+Author (c) Aarne Ranta 2005-2006.
+
 -- file GF/lib/resource-1.0/README
 -- created Thu Dec  1 22:21:21 CET 2005
 -- by A. Ranta, aarne@cs.chalmers.se
@@ -20,7 +25,9 @@ The main changes from 0.9 to 1.0 are
    goal.
 
 3. Some constructions have been dropped out or modified. This concerns
-   in particular the determiner structure in the module Noun.
+   in particular the determiner structure in the module Noun. Also the
+   number of verb subcategorization patterns is lower: predication can
+   be done by adding adverbs instead.
 
 4. Judging from the English implementation, there is a promise to get
    a lighter and more efficient resource library, just because of
@@ -33,8 +40,8 @@ the new.
 
 When will it be ready? Hopefully around February 2005.
 
+---------- later history and status:
 
-LICENSE: This library is free software licensed under GNU General
-Public License (GPL), see LICENSE.
-
-Author (c) Aarne Ranta 2005.
+13/1/2006 All of English, most of Scandinavian/Swedish, and TestGer
+have now been implemented. Most abstract/ modules have been documented
+using gfdoc. 

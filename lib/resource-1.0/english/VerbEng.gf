@@ -19,6 +19,8 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
     UseComp comp = insertObj comp.s (predAux auxBe) ;
 
     AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
+
+--- This rule destroys parsing...
 ----    AdVVP adv vp = insertAdV adv.s vp ;
 
     ReflV2 v = insertObj (\\a => v.c2 ++ reflPron ! a) (predV v) ;

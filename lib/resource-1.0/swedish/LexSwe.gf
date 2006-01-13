@@ -33,8 +33,8 @@ concrete LexSwe of Lex = CatSwe ** open ResSwe, Prelude in {
 
     only_Predet = {s = \\_ => "bara"} ;
     all_Predet = {s = gennumForms "all" "allt" "alla"} ;
-    this_Quant = {s = genderForms "denna" "detta" ; n = Sg ; det = DDef Indef} ;
-    these_Quant = {s = \\_ => "dessa" ; n = Pl ; det = DDef Indef} ;
+    this_Quant = {s = \\_ => genderForms "denna" "detta" ; n = Sg ; det = DDef Indef} ;
+    these_Quant = {s = \\_,_ => "dessa" ; n = Pl ; det = DDef Indef} ;
     
     i_Pron  = mkNP "jag"  "mig"  "min" "mitt" "mina"  SgUtr P1 ;
     he_Pron = mkNP "han"  "honom"  "hans" "hans" "hans"  SgUtr P3 ;
@@ -50,15 +50,6 @@ concrete LexSwe of Lex = CatSwe ** open ResSwe, Prelude in {
     whichSg_IDet = {s = genderForms "vilken" "vilket" ; n = Sg ; det = DDef Indef} ;
     whichPl_IDet = {s = \\_ => "vilka" ;                n = Pl ; det = DDef Indef} ;
 
-    one_Numeral = {
-      s = table {
-        NCard Utr => "en" ; 
-        NCard Neutr => "ett" ; 
-        NOrd SupStrong => "först" ;
-        NOrd SupWeak => "första"
-        } ; 
-      n = Sg
-      } ;
     forty_Numeral = {
       s = table {
         NCard _ => "fyrtio" ; 

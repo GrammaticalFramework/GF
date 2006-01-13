@@ -37,7 +37,7 @@ abstract Lex = Cat ** {
 
     always_AdV : AdV ;
 
-    one_Numeral, forty_Numeral : Numeral ;
+    forty_Numeral : Numeral ;
 
     in_Prep, of_Prep : Prep ;
 
