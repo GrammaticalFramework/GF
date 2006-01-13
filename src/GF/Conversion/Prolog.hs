@@ -101,10 +101,10 @@ prtSPath (Path path) = prtPList (map (either prtQ prtSTerm) path)
 
 prtSCat (Decl var cat args)     = prVar ++ prtFunctor (prtQ cat) (map prtSTTerm args)
     where prVar | var == anyVar = ""
-                | otherwise     = "_" ++ prt var ++ ":"
+                | otherwise     = "_" ++ prtVar var ++ ":"
 
 prtSTTerm (con :@ args) = prtFunctor (prtQ con) (map prtSTTerm args)
-prtSTTerm (TVar var)    = "_" ++ prt var
+prtSTTerm (TVar var)    = "_" ++ prtVar var
 
 ----------------------------------------------------------------------
 -- | MCFG to Prolog
@@ -187,6 +187,11 @@ prtQStr atom =  "'" ++ concatMap esc (prt atom) ++ "'"
           esc '\n' = "\\n"
           esc '\t' = "\\t"
           esc c = [c]
+
+prtVar var = reprime (prt var)
+    where reprime "" = ""
+          reprime ('\'' : cs) = "_0" ++ reprime cs
+          reprime (c:cs) = c : reprime cs
 
 prtLine = replicate 70 '%'
 

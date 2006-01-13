@@ -46,19 +46,29 @@ convertGFC opts = \g -> let s = g2s g
                         in trace2 "Options" (show opts) (s, (e, (e2m e, e2c e)))
     where e2c = M2C.convertGrammar
 	  e2m = case getOptVal opts firstCat of
-		  Just cat -> flip RemEra.convertGrammar [identC cat]
-		  Nothing  -> flip RemEra.convertGrammar []
+		  Just cat -> flip erasing [identC cat]
+		  Nothing  -> flip erasing []
 	  s2e = case getOptVal opts gfcConversion of
-		  Just "strict"            -> S2M.convertGrammarStrict
-		  Just "finite-strict"     -> S2M.convertGrammarStrict
-		  Just "epsilon"           -> RemEps.convertGrammar . S2M.convertGrammarNondet
-		  _                        -> S2M.convertGrammarNondet
+		  Just "strict"            -> strict
+		  Just "finite-strict"     -> strict
+		  Just "epsilon"           -> epsilon . nondet
+		  _                        -> nondet
 	  g2s = case getOptVal opts gfcConversion of
-		  Just "finite"            ->                          S2Fin.convertGrammar . G2S.convertGrammar
-		  Just "singletons"        -> RemSing.convertGrammar .                        G2S.convertGrammar
-		  Just "finite-singletons" -> RemSing.convertGrammar . S2Fin.convertGrammar . G2S.convertGrammar
-		  Just "finite-strict"     ->                          S2Fin.convertGrammar . G2S.convertGrammar
-		  _                        ->                                                 G2S.convertGrammar
+		  Just "finite"            -> finite . simple
+		  Just "finite2"           -> finite . finite . simple
+		  Just "finite3"           -> finite . finite . finite . simple
+		  Just "singletons"        -> single . simple
+		  Just "finite-singletons" -> single . finite . simple
+		  Just "finite-strict"     -> finite . simple
+		  _                        -> simple
+
+          simple  = G2S.convertGrammar
+          strict  = S2M.convertGrammarStrict
+          nondet  = S2M.convertGrammarNondet
+          epsilon = RemEps.convertGrammar
+          finite  = S2Fin.convertGrammar
+          single  = RemSing.convertGrammar
+          erasing = RemEra.convertGrammar
 
 gfc2simple :: Options -> (CanonGrammar, Ident) -> SGrammar
 gfc2simple opts = fst . convertGFC opts 

@@ -107,14 +107,17 @@ calcSplitable rules = (listAssoc splitableCat2Funs, listAssoc splitableFun2Cat)
 			  (nondepCats <**> depCats) <\\> resultCats
 
           -- all result cats for some pure function
-	  resultCats = nubsort [ cat | Rule (Abs (Decl _ cat _) decls _) _ <- rules,
+	  resultCats = tracePrt "SimpleToFinite - result cats" prt $
+                       nubsort [ cat | Rule (Abs (Decl _ cat _) decls _) _ <- rules,
 				 not (null decls) ]
 
           -- all cats in constants without dependencies
-          nondepCats = nubsort [ cat | Rule (Abs (Decl _ cat []) [] _) _ <- rules ]
+          nondepCats = tracePrt "SimpleToFinite - nondep cats" prt $
+                       nubsort [ cat | Rule (Abs (Decl _ cat []) [] _) _ <- rules ]
 
           -- all cats occurring as some dependency of another cat
-	  depCats = nubsort [ cat | Rule (Abs decl decls _) _ <- rules,
+	  depCats = tracePrt "SimpleToFinite - dep cats" prt $
+                    nubsort [ cat | Rule (Abs decl decls _) _ <- rules,
 			      cat <- varCats [] (decls ++ [decl]) ]
 
 	  varCats _ [] = []
