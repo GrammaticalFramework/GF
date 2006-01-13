@@ -23,16 +23,13 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
 
     ReflV2 v = insertObj (\\a => v.c2 ++ reflPron ! a) (predV v) ;
 
-    PassV2 v = {s = \\_ => v.s ! VPPart} ;
+    PassV2 v = insertObj (\\_ => v.s ! VPPart) (predAux auxBe) ;
 
-    UseVV, UseVS, UseVQ = \vv -> {s = vv.s ; c2 = []} ; -- no "to"
+    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = []} ; -- no "to"
 
     CompAP ap = ap ;
     CompNP np = {s = \\_ => np.s ! Acc} ;
     CompAdv a = {s = \\_ => a.s} ;
 
-    EmbedS  s  = {s = conjThat ++ s.s} ;
-    EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = infVP vp (agrP3 Sg)} ; --- agr
 
 }

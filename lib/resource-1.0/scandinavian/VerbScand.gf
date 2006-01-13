@@ -35,10 +35,6 @@ incomplete concrete VerbScand of Verb = CatScand ** open DiffScand, ResScand in 
     PassV2 v = {s = \\_ => v.s ! VPPart} ;
 -}
 
-    UseVV, UseVS, UseVQ = \vv -> {s = vv.s ; c2 = []} ;
-
-    EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
-    EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = infVP vp (agrP3 utrum Sg)} ; --- agr
+    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = []} ;
 
 }

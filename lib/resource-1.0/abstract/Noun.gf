@@ -2,8 +2,6 @@
 
 abstract Noun = Cat ** {
 
-  fun
-
 --2 Noun phrases
 
 -- The three main types of noun phrases are
@@ -12,6 +10,7 @@ abstract Noun = Cat ** {
 -- - pronouns
 --
 --
+  fun
     DetCN   : Det -> CN -> NP ;   -- the man
     UsePN   : PN -> NP ;          -- John
     UsePron : Pron -> NP ;        -- he

@@ -12,4 +12,8 @@ abstract Sentence = Cat ** {
     AdvSlash  : Slash -> Adv -> Slash ;
     SlashPrep : Cl -> Prep -> Slash ;
 
+    EmbedS  : S  -> SC ;
+    EmbedQS : QS -> SC ;
+    EmbedVP : VP -> SC ;
+
 }

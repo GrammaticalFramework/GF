@@ -36,4 +36,8 @@ incomplete concrete SentenceScand of Sentence =
 
     SlashPrep cl prep = cl ** {c2 = prep.s} ;
 
+    EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
+    EmbedQS qs = {s = qs.s ! QIndir} ;
+    EmbedVP vp = {s = infVP vp (agrP3 utrum Sg)} ; --- agr
+
 }

@@ -34,10 +34,6 @@ concrete VerbGer of Verb = CatGer ** open ResGer in {
 --
 --    PassV2 v = {s = \\_ => v.s ! VPPart} ;
 
-    UseVV, UseVS, UseVQ = \v -> v ** {c2 = noPreposition Acc} ;
+    UseVS, UseVQ = \v -> v ** {c2 = noPreposition Acc} ;
 
---    EmbedS  s  = {s = conjThat ++ s.s} ;
---    EmbedQS qs = {s = qs.s ! QIndir} ;
---    EmbedVP vp = {s = infVP vp (agrP3 Sg)} ; --- agr
---
 }
