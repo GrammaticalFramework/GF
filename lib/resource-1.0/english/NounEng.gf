@@ -10,20 +10,25 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
     UsePN pn = pn ** {a = agrP3 Sg} ;
     UsePron p = p ;
 
-    DetSg pred quant ord = {
-      s = pred.s ++ quant.s ++ ord.s ; 
+    PredetNP pred np = {
+      s = \\c => pred.s ++ np.s ! c ;
+      a = np.a
+      } ;
+
+    DetSg quant ord = {
+      s = quant.s ++ ord.s ; 
       n = Sg
       } ;
 
-    DetPl pred quant num ord = {
-      s = pred.s ++ quant.s ++ num.s ++ ord.s ; 
+    DetPl quant num ord = {
+      s = quant.s ++ num.s ++ ord.s ; 
       n = Pl
       } ;
 
     PossSg p = {s = p.s ! Gen} ;
     PossPl p = {s = p.s ! Gen} ;
 
-    NoPredet, NoNum, NoOrd = {s = []} ;
+    NoNum, NoOrd = {s = []} ;
 
     NumInt n = n ;
     OrdInt n = {s = n.s ++ "th"} ; ---

@@ -10,27 +10,33 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       } ;
 
     UsePN pn = pn ** {a = agrP3 Sg} ;
+
     UsePron pron = {
       s = \\c => pron.s ! NPCase c ;
       a = pron.a
       } ;
 
-    DetSg pred quant ord = 
+    PredetNP pred np = {
+      s = \\c => pred.s ! np.a.n ! Masc ! c ++ np.s ! c ; ---- g
+      a = np.a
+      } ;
+
+    DetSg quant ord = 
       let 
         n = Sg ;
         a = quant.a
       in {
-        s = \\g,c => pred.s ! n ! g ! c ++ quant.s ! g ! c ++ 
+        s = \\g,c => quant.s ! g ! c ++ 
                      ord.s ! agrAdj g (adjfCase a c) n c ;
         n = n ;
         a = a
         } ;
-    DetPl pred quant num ord = 
+    DetPl quant num ord = 
       let 
         n = Pl ;
         a = quant.a
       in {
-        s = \\g,c => pred.s ! n ! g ! c ++ quant.s ! g ! c ++ 
+        s = \\g,c => quant.s ! g ! c ++ 
                      num.s ! g ! c ++ ord.s ! agrAdj g (adjfCase a c) n c ;
         n = n ;
         a = a
@@ -48,7 +54,6 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       a = Weak
       } ;
 
-    NoPredet = {s = \\_,_,_ => []} ; 
     NoNum = {s = \\_,_ => []} ; 
     NoOrd = {s = \\_ => []} ;
 

@@ -25,7 +25,7 @@ concrete StructuralSwe of Structural = CatSwe **
   during_Prep = ss "under" ;
   either7or_DConj = sd2 "antingen" "eller" ** {n = Sg} ;
   everybody_NP = regNP "alla" "allas" Plg ;
-  every_Det = {s = \\_ => "varje" ; n = Sg ; det = DDef Indef} ;
+  every_Det = {s = \\_,_ => "varje" ; n = Sg ; det = DDef Indef} ;
   everything_NP = regNP "allting" "alltings" SgNeutr ;
   everywhere_Adv = ss "överallt" ;
   from_Prep = ss "från" ;
@@ -41,10 +41,10 @@ concrete StructuralSwe of Structural = CatSwe **
   in_Prep = ss "i" ;
   it_Pron = regNP "det" "dess" SgNeutr ;
   less_CAdv = ss "mindre" ;
-  many_Det = {s = \\_ => "många" ; n = Pl ; det = DDef Indef} ;
+  many_Det = {s = \\_,_ => "många" ; n = Pl ; det = DDef Indef} ;
   more_CAdv = ss "mer" ;
   most_Predet = {s = gennumForms ["den mesta"] ["det mesta"] ["de flesta"]} ;
-  much_Det = {s = \\_ => "mycket" ; n = Pl ; det = DDef Indef} ;
+  much_Det = {s = \\_,_ => "mycket" ; n = Pl ; det = DDef Indef} ;
   must_VV = 
     mkVerb6 "få" "måste" "få" "fick" "måst" "måst" ** {c2 = [] ; lock_VV = <>} ;
   no_Phr = ss ["Nej"] ;
@@ -58,24 +58,26 @@ concrete StructuralSwe of Structural = CatSwe **
   quite_Adv = ss "ganska" ;
   she_Pron = mkNP "hon" "henne" "hennes" "hennes" "hennes"  SgUtr P3 ;
   so_AdA = ss "så" ;
-  someSg_Det = {s = genderForms "någon" "något" ; n = Sg ; det = DDef Indef} ;
-  somePl_Det = {s = \\_ => "några" ; n = Pl ; det = DDef Indef} ;
+  someSg_Det = {s = \\_ => genderForms "någon" "något" ; n = Sg ; det = DDef Indef} ;
+  somePl_Det = {s = \\_,_ => "några" ; n = Pl ; det = DDef Indef} ;
   somebody_NP = regNP "någon" "någons" SgUtr ;
   something_NP = regNP "något" "någots" SgNeutr ;
   somewhere_Adv = ss "någonstans" ;
-  that_Quant = {s = genderForms ["den där"] ["det där"] ; n = Sg ; det = DDef Def} ;
+  that_Quant = 
+    {s = \\_ => genderForms ["den där"] ["det där"] ; n = Sg ; det = DDef Def} ;
   that_NP = regNP ["det där"] ["det därs"] SgNeutr ;
   there_Adv = ss "där" ;
   there7to_Adv = ss "dit" ;
   there7from_Adv = ss "därifrån" ;
   therefore_PConj = ss "därför" ;
   these_NP = regNP ["de här"] ["det härs"] Plg ;
-  these_Quant = {s = \\_ => ["de här"] ; n = Pl ; det = DDef Def} ;
+  these_Quant = {s = \\_,_ => ["de här"] ; n = Pl ; det = DDef Def} ;
   they_Pron = mkNP "de" "dem" "deras" "deras" "deras" Plg P1 ;
-  this_Quant = {s = genderForms ["den här"] ["det här"] ; n = Sg ; det = DDef Def} ;
+  this_Quant = 
+    {s = \\_ => genderForms ["den här"] ["det här"] ; n = Sg ; det = DDef Def} ;
   this_NP = regNP ["det här"] ["det härs"] SgNeutr ;
   those_NP = regNP ["de där"] ["det därs"] Plg ;
-  those_Quant = {s = \\_ => ["de där"] ; n = Pl ; det = DDef Def} ;
+  those_Quant = {s = \\_,_ => ["de där"] ; n = Pl ; det = DDef Def} ;
   thou_Pron = mkNP "du" "dig" "din" "ditt" "dina" SgUtr P2 ;
   through_Prep = ss "genom" ;
   too_AdA = ss "för" ;

@@ -16,20 +16,22 @@ abstract Noun = Cat ** {
     UsePN   : PN -> NP ;          -- John
     UsePron : Pron -> NP ;        -- he
 
--- Pronouns are given in the module [Structural Structural.html].
+-- Pronouns are defined in the module [Structural Structural.html].
 
+-- A noun phrase already formed can be modified by a Predeterminer.
+
+   PredetNP : Predet -> NP -> NP; -- only the man 
 
 --2 Determiners
 
--- The determiner has a fine-grained structure, in which four
--- different optional parts can be discerned. The noun phrase
--- "all my first forty books" shows each of these parts.
+-- The determiner has a fine-grained structure, in which a 'nucleus'
+-- quantifier and two optional parts can be discerned. 
 -- The cardinal numeral is only available for plural determiners.
 -- (This is modified from CLE by further dividing their $Num$ into 
 -- cardinal and ordinal.)
 
-    DetSg : Predet -> QuantSg ->        Ord -> Det ;
-    DetPl : Predet -> QuantPl -> Num -> Ord -> Det ;
+    DetSg : QuantSg ->        Ord -> Det ;  -- this best man
+    DetPl : QuantPl -> Num -> Ord -> Det ;  -- these five best men
 
 -- Pronouns have possessive forms. Genitives of other kinds
 -- of noun phrases are not given here, since they are not possible
@@ -41,9 +43,8 @@ abstract Noun = Cat ** {
 -- All parts of the determiner can be empty, except $Quant$, which is
 -- the "kernel" of a determiner.
 
-    NoPredet : Predet ;
-    NoNum    : Num ;
-    NoOrd    : Ord ;
+    NoNum  : Num ;
+    NoOrd  : Ord ;
 
 -- $Num$ consists of either digits or numeral words.
 
