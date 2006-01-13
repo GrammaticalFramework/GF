@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../common:../../prelude
+
 --1 English auxiliary operations.
 
 -- This module contains operations that are needed to make the
@@ -205,7 +207,10 @@ resource ResEng = ParamEng ** open Prelude in {
       <Neg,{n = Sg ; p = P1}> => ["am not"] ; --- am not I
       _ => agrVerb (posneg b "is")  (posneg b "are") a
       } ;
-    past = \\b,a => agrVerb (posneg b "was") (posneg b "were") a ;
+    past = \\b,a => case a of {
+      {n = Sg ; p = P1|P3} => (posneg b "was") ;
+      _                    => (posneg b "were")
+      } ;
     inf  = "be" ;
     ppart = "been"
     } ;

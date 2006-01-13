@@ -10,7 +10,6 @@ abstract Adverb = Cat ** {
     PositAdvAdj : A -> Adv ;                 -- quickly
     PrepNP      : Prep -> NP -> Adv ;        -- in the house
 
-
 -- Comparative adverbs have a noun phrase or a sentence as object of
 -- comparison.
 
@@ -24,7 +23,7 @@ abstract Adverb = Cat ** {
 -- Subordinate clauses can function as adverbs.
 
     SubjS : Subj -> S -> Adv ;               -- when he arrives
-    AdvSC : SC -> Adv ;                      ---- REMOVE THIS?
+    AdvSC : SC -> Adv ;                      -- that he arrives ---- REMOVE?
 
 -- Comparison adverbs also work as numeral adverbs.
 
