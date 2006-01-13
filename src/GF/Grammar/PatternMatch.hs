@@ -105,9 +105,10 @@ tryMatch (p,t) = do
          return (concat matches)
 
       (PRep p1, ([],K s, [])) -> checks [
-        trym (foldr (const (PSeq p1)) (PString "") [1..n]) t' | n <- [0 .. length s]
-        ]
-
+         trym (foldr (const (PSeq p1)) (PString "") 
+           [1..n]) t' | n <- [0 .. length s]
+        ] >>
+        return []
       _ -> prtBad "no match in case expr for" t
   
 isInConstantForm :: Term -> Bool
