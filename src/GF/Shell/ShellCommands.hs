@@ -146,7 +146,7 @@ testValidFlag st co f x = case f of
   "filter"  -> testInc customStringCommand
   "length"  -> testN
   "optimize"-> testIn $ words "parametrize values all share none"
-  "conversion" -> testIn $ words "strict nondet finite singletons finite-strict finite-singletons"
+  "conversion" -> testIn $ words "strict nondet finite finite2 finite3 singletons finite-strict finite-singletons"
   _ -> return ()
  where
    testInc ci = 

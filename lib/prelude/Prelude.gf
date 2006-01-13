@@ -10,6 +10,7 @@ oper
   ss3 : (_,_ ,_: Str) -> SS = \x,y,z -> ss (x ++ y ++ z) ;
 
   cc2 : (_,_ : SS) -> SS = \x,y -> ss (x.s ++ y.s) ;
+  cc3 : (_,_,_ : SS) -> SS = \x,y,z -> ss (x.s ++ y.s ++ z.s) ;
 
   SS1 : Type -> Type = \P -> {s : P => Str} ;
   ss1 : (A : Type) -> Str -> SS1 A = \A,s -> {s = table {_ => s}} ;

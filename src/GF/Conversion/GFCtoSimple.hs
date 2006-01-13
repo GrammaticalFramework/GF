@@ -53,7 +53,8 @@ convertGrammar (g,i) = trace2 "GFCtoSimple - concrete language" (prt (snd gram))
           gram = (unSubelimCanon g,i)
 
 convertAbsFun :: Env -> I.Ident -> A.Exp -> SRule
-convertAbsFun gram fun typing = Rule abs cnc
+convertAbsFun gram fun typing = -- trace2 "GFCtoSimple - converting function" (prt fun) $
+                                Rule abs cnc
     where abs = convertAbstract [] fun typing
 	  cnc = convertConcrete gram abs
 
@@ -74,6 +75,14 @@ convertType x args (A.EAtom at) = Decl x (convertCat at) args
 convertType x args (A.EProd _ _ b) = convertType x args b ---- AR 7/10 workaround
 convertType x args exp          = error $ "GFCtoSimple.convertType: " ++ prt exp
 
+{- Exp from GF/Canon/GFC.cf:
+EApp.   Exp1 ::= Exp1 Exp2 ;
+EProd.  Exp  ::= "(" Ident ":" Exp ")" "->" Exp ;
+EAbs.   Exp  ::= "\\" Ident "->" Exp ;
+EAtom.  Exp2 ::= Atom ;
+EData.  Exp2 ::= "data" ;
+-}
+
 convertExp :: [TTerm] -> A.Exp -> TTerm
 convertExp args (A.EAtom at) = convertAtom args at
 convertExp args (A.EApp a b) = convertExp (convertExp [] b : args) a
@@ -81,8 +90,10 @@ convertExp args exp          = error $ "GFCtoSimple.convertExp: " ++ prt exp
 
 convertAtom :: [TTerm] -> A.Atom -> TTerm
 convertAtom args (A.AC con) = con :@ reverse args
+-- A.AD: is this correct???
+convertAtom args (A.AD con) = con :@ args
 convertAtom []   (A.AV var) = TVar var
-convertAtom args atom       = error $ "GFCtoSimple.convertAtom: " ++ prt args ++ " " ++ prt atom
+convertAtom args atom       = error $ "GFCtoSimple.convertAtom: " ++ prt args ++ " " ++ show atom
 
 convertCat :: A.Atom -> SCat
 convertCat (A.AC (A.CIQ _ cat)) = cat
