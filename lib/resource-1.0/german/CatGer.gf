@@ -74,7 +74,7 @@ concrete CatGer of Cat = open ResGer, Prelude in {
 -- Open lexical classes, e.g. Basic
 
     V, VS, VQ, VA = ResGer.Verb ; -- = {s : VForm => Str} ;
-    VV = Verb ** {part : Str} ;
+    VV = Verb ** {isAux : Bool} ;
     V2, V2A = Verb ** {c2 : Preposition} ;
     V3 = Verb ** {c2, c3 : Preposition} ;
 

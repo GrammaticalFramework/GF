@@ -7,12 +7,12 @@ concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
       mkV 
         "gehen" "gehe" "gehst" "geht" "geht" "geh" 
         "ging" "gingst" "gingt" "gingen"
-        "ginge" "gegangen" VSein ;
+        "ginge" "gegangen" "aus" VSein ;
     help_V2 = 
       mkV 
         "helfen" "helfe" "hilfst" "hilft" "helft" "hilf" 
         "half" "halfst" "halft" "halfen" 
-        "hälfe" "geholfen" VHaben ** 
+        "hälfe" "geholfen" [] VHaben ** 
       {c2 = {s = [] ; c = Dat}} ;
     show_V3 = 
       regV "zeigen" ** 
@@ -21,13 +21,13 @@ concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
       (mkV 
         "wollen" "will" "willst" "will" "wollt" "woll" 
         "wollte" "wolltest" "wollten" "wolltet"
-        "wollte" "gewollen" 
+        "wollte" "gewollen" [] 
         VHaben) ;
     claim_VS = 
       mkV
         "behaupten" "behaupte" "bahauptest" "behauptet" "behauptet" "behaupte"
         "behauptete" "behauptetest" "behauptetet" "behaupteten"
-        "behauptete" "behauptet" VHaben ;
+        "behauptete" "behauptet" [] VHaben ;
     ask_VQ = 
       regV "fragen" ;
 

@@ -1,4 +1,4 @@
-concrete PhraseGer of Phrase = CatGer, TenseX ** open ResGer in {
+concrete PhraseGer of Phrase = CatGer, TenseX ** open Prelude, ResGer in {
 
   flags optimize=all_subs ;
 
@@ -13,7 +13,11 @@ concrete PhraseGer of Phrase = CatGer, TenseX ** open ResGer in {
     UttIP ip = {s = ip.s ! Nom} ; --- Acc also
     UttIAdv iadv = iadv ;
     UttNP np = {s = np.s ! Acc} ;
-----    UttVP vp = {s = infMark ++ infVP vp (agrP3 Sg)} ;
+    UttVP vp = 
+      let 
+        vpi = vp.s ! agrP3 Sg ! VPInfinit Simul --- agr 
+      in
+      ss (vp.n2 ! agrP3 Sg ++ vp.a2 ++ vpi.fin ++ infPart False ++ vpi.inf) ;
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;

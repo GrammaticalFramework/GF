@@ -20,10 +20,10 @@ concrete AdjectiveGer of Adjective = CatGer ** open ResGer, Prelude in {
       isPre = True
       } ;
 
---    ReflA2 a = {
---      s = \\ag => a.s ! AAdj Posit ++ a.c2 ++ reflPron ! ag ; 
---      isPre = False
---      } ;
+    ReflA2 a = {
+      s = \\af => a.s ! Posit ! APred ++ appPrep a.c2 (reflPron ! agrP3 Sg) ; --- agr 
+      isPre = True
+      } ;
 
     SentAP ap sc = {
       s = \\a => ap.s ! a ++ sc.s ; 

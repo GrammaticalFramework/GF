@@ -15,7 +15,7 @@ concrete AdverbGer of Adverb = CatGer ** open ResGer, Prelude in {
     AdAdv = cc2 ;
 
     SubjS subj s = {s = subj.s ++ s.s ! Sub} ;
---    AdvSC s = s ; --- this rule give stack overflow in ordinary parsing
+    AdvSC s = s ;
 
     AdnCAdv cadv = {s = cadv.s ++ conjThan} ;
 

@@ -62,10 +62,10 @@ resource ResGer = ParamGer ** open Prelude in {
 -- suffixes "t" and "st". Auxiliaries like "sein" will have to
 -- make extra cases even for this.
 
-  Verb : Type = {s : VForm => Str ; aux : VAux} ;
+  Verb : Type = {s : VForm => Str ; prefix : Str ; aux : VAux} ;
 
-  mkV : (x1,_,_,_,_,_,_,_,_,_,_,x12 : Str) -> VAux -> Verb = 
-    \geben,gebe,gibst,gibt,gebt,gib,gab,gabst,gaben,gabt,gaebe,gegeben,aux -> 
+  mkV : (x1,_,_,_,_,_,_,_,_,_,_,x12 : Str) -> Str -> VAux -> Verb = 
+    \geben,gebe,gibst,gibt,gebt,gib,gab,gabst,gaben,gabt,gaebe,gegeben,ein,aux -> 
     {s = table {
        VInf            => geben ;
        VPresInd Sg P1  => gebe ;
@@ -90,6 +90,7 @@ resource ResGer = ParamGer ** open Prelude in {
        VImpfSubj Pl _  => gaebe + "n" ;
        VPastPart a     => (regA gegeben).s ! Posit ! a
        } ;
+     prefix = ein ;
      aux = aux
      } ;
 
@@ -113,7 +114,7 @@ resource ResGer = ParamGer ** open Prelude in {
       legen lege (leg+"st") legt legt leg 
       legte (legte + "st") (legte + "n") (legte + "t")
       legte ("ge" + legt) 
-      VHaben ;
+      [] VHaben ;
 
 -- Prepositions for complements indicate the complement case.
 
@@ -204,11 +205,13 @@ resource ResGer = ParamGer ** open Prelude in {
       ext : Str              -- S-Ext dass sie kommt
       } ;
 
-  predV : Verb -> VP = \verb ->
+  predV : Verb -> VP = predVGen False ;
+
+  predVGen : Bool -> Verb -> VP = \isAux, verb ->
     let
       vfin : Tense -> Agr -> Str = \t,a -> verb.s ! vFin t a ;
-      vpart = verb.s ! VPastPart APred ;
       vinf = verb.s ! VInf ;
+      vpart = if_then_Str isAux vinf (verb.s ! VPastPart APred) ;
 
       vHaben = auxPerfect verb ;
       hat : Tense -> Agr -> Str = \t,a -> vHaben ! vFin t a ;
@@ -217,8 +220,10 @@ resource ResGer = ParamGer ** open Prelude in {
       wird : Agr -> Str = \a -> werden_V.s ! VPresInd a.n a.p ;  
       wuerde : Agr -> Str = \a -> werden_V.s ! VImpfSubj a.n a.p ;
 
+      auf = verb.prefix ;
+
       vf : Str -> Str -> {fin,inf : Str} = \fin,inf -> {
-        fin = fin ; inf = inf
+        fin = fin ; inf = auf ++ inf
         } ;
 
     in {
@@ -254,14 +259,21 @@ resource ResGer = ParamGer ** open Prelude in {
       "haben" "habe" "hast" "hat" "habt" "hab" 
       "hatte" "hattest" "hatten" "hattet" 
       "hätte" "gehabt" 
-      VHaben ;
+      [] VHaben ;
 
   werden_V : Verb = 
     mkV 
       "werden" "werde" "wirst" "wird" "werdet" "werd" 
       "wurde" "wurdest" "wurden" "wurdet" 
       "würde" "geworden" 
-      VSein ;
+      [] VSein ;
+
+  werdenPass : Verb = 
+    mkV 
+      "werden" "werde" "wirst" "wird" "werdet" "werd" 
+      "wurde" "wurdest" "wurden" "wurdet" 
+      "würde" "worden" 
+      [] VSein ;
 
   sein_V : Verb = 
     let
@@ -269,7 +281,7 @@ resource ResGer = ParamGer ** open Prelude in {
       "sein" "bin" "bist" "ist" "seid" "sei" 
       "war"  "warst" "waren" "wart" 
       "wäre" "gewesen" 
-      VSein
+      [] VSein
     in
     {s = table {
       VPresInd Pl (P1 | P3) => "sind" ;
@@ -280,10 +292,11 @@ resource ResGer = ParamGer ** open Prelude in {
       VPresPart a => (regA "seiend").s ! Posit ! a ;
       v => sein.s ! v 
       } ;
+     prefix = [] ;
      aux = VSein
     } ;
 
-  auxVV : Verb -> Verb ** {part : Str} = \v -> v ** {part = []} ;
+  auxVV : Verb -> Verb ** {isAux : Bool} = \v -> v ** {isAux = True} ;
 
   negation : Polarity => Str = table {
       Pos => [] ;
@@ -296,6 +309,14 @@ resource ResGer = ParamGer ** open Prelude in {
     s = vp.s ;
     a1 = vp.a1 ;
     n2 = \\a => vp.n2 ! a ++ obj ! a ;
+    a2 = vp.a2 ;
+    ext = vp.ext
+    } ;
+
+  insertAdV : Str -> VP -> VP = \adv,vp -> {
+    s = vp.s ;
+    a1 = \\a => vp.a1 ! a ++ adv ;
+    n2 = vp.n2 ;
     a2 = vp.a2 ;
     ext = vp.ext
     } ;
@@ -338,19 +359,27 @@ resource ResGer = ParamGer ** open Prelude in {
           }
     } ;
 
-  reflPron : Agr => Str = table {
-    {n = Sg ; p = P1} => "mich" ;
-    {n = Sg ; p = P2} => "dich" ;
-    {n = Sg ; p = P3} => "sich" ; --
-    {n = Pl ; p = P1} => "uns" ;
-    {n = Pl ; p = P2} => "euch" ;
-    {n = Pl ; p = P3} => "sich"
+-- The nominative case is not used as reflexive, but defined here
+-- so that we can reuse this in personal pronouns. 
+-- The missing Sg "ihrer" shows that a dependence on gender would
+-- be needed.
+
+  reflPron : Agr => Case => Str = table {
+    {n = Sg ; p = P1} => caselist "ich" "mich" "mir"  "meiner" ;
+    {n = Sg ; p = P2} => caselist "du"  "dich" "dir"  "deiner" ;
+    {n = Sg ; p = P3} => caselist "er" "sich" "sich" "seiner" ; --- ihrer
+    {n = Pl ; p = P1} => caselist "wir" "uns"  "uns"  "unser" ;
+    {n = Pl ; p = P2} => caselist "ihr" "euch" "euch" "euer" ;
+    {n = Pl ; p = P3} => caselist "sie" "sich" "sich" "ihrer"
     } ;
 
   conjThat : Str = "daß" ;
 
   conjThan : Str = "als" ;
 
+-- The infinitive particle "zu" is used if and only if $vv.isAux = False$.
+ 
+  infPart : Bool -> Str = \b -> if_then_Str b [] "zu" ;
 
 -- For $Numeral$.
 --

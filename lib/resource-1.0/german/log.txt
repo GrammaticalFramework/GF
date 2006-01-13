@@ -140,3 +140,51 @@ wc german/*.gfc
 
 Now we have finished most of TestGer in two days, 4 + 8 hours. But we had the
 old morphology and other files, and the Scandinavian v 1.0 as help.
+
+--------------------
+
+13/1
+
+CatGer: add prefix to V*, isAux to VV - the latter mostly to deal with double infinitives
+ResGer: generalize predV to predVGen
+LexGer: experiment with gehen --> ausgehen
+> l -table PredVP (UsePron he_Pron) (ComplVV want_VV (UseV walk_V))
+--- the auxiliary is still in wrong place in subordinate double infinitives
+
+ResGer: reflPron
+VerbGer: ReflV2
+AdjectiveGer: ReflA2 --- with missing person agreement 
+> p -cat=Cl -mcfg "ich helfe mir"
+  PredVP (UsePron i_Pron) (ComplV2 help_V2 (UsePron i_Pron))
+  PredVP (UsePron i_Pron) (ReflV2 help_V2)
+> p -cat=Cl -mcfg "er hilft sich"
+  PredVP (UsePron he_Pron) (ReflV2 help_V2)
+
+> pm -printer=missing
+  AdVVP AdvSC OrdInt UttVP
+A round of filling these completes the implementation of TestGer.
+ResGer: insertAdV
+> p -cat=Cl -mcfg "er hilft immer seinem Hund"
+  PredVP (UsePron he_Pron) (AdVVP always_AdV (ComplV2 help_V2 
+    (DetCN (DetSg (PossSg he_Pron) NoOrd) (UseN dog_N))))
+wc german/*.gfc
+     63     203    4768 german/AdjectiveGer.gfc
+     63     198    1649 german/AdverbGer.gfc
+     55     184    7490 german/CatGer.gfc
+     76     260    4489 german/ConjunctionGer.gfc
+     94     315   13968 german/LexGer.gfc
+    121     445    2736 german/MorphoGer.gfc
+     86     306    6637 german/NounGer.gfc
+     41     160    1419 german/ParamGer.gfc
+     81     245    2256 german/PhraseGer.gfc
+     63     219    3333 german/QuestionGer.gfc
+     63     219    3800 german/RelativeGer.gfc
+     87     343    2081 german/ResGer.gfc
+    112     393   20890 german/SentenceGer.gfc
+    230     696    4752 german/TestGer.gfc
+     61     185    1483 german/UntensedGer.gfc
+    110     366   41629 german/VerbGer.gfc
+   1406    4737  123380 total
+
+Ca. 4h more work was needed, so we have spent 16h now.
+
