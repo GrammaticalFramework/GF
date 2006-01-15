@@ -1,100 +1,118 @@
---concrete StructuralGer of Structural = CatGer ** 
---  open MorphoGer, Prelude in {
---
---  flags optimize=all ;
---
---  lin
---  above_Prep = ss "above" ;
---  after_Prep = ss "after" ;
---  all_Predet = ss "all" ;
---  almost_AdA, almost_AdN = ss "almost" ;
---  although_Subj = ss "although" ;
---  always_AdV = ss "always" ;
---  and_Conj = ss "and" ** {n = Pl} ;
---  because_Subj = ss "because" ;
---  before_Prep = ss "before" ;
---  behind_Prep = ss "behind" ;
---  between_Prep = ss "between" ;
---  both7and_DConj = sd2 "both" "and" ** {n = Pl} ;
---  but_PConj = ss "but" ;
---  by8agent_Prep = ss "by" ;
---  by8means_Prep = ss "by" ;
---  can8know_VV = verbPart (mkVerbIrreg "know" "knew" "known") "how"** {c2 = "to"} ;---
---  can_VV = verbGen "manage" ** {c2 = "to"} ; ---
---  during_Prep = ss "during" ;
---  either7or_DConj = sd2 "either" "or" ** {n = Sg} ;
---  everybody_NP = regNP "everybody" Sg ;
---  every_Det = mkDeterminer Sg "every" ;
---  everything_NP = regNP "everything" Sg ;
---  everywhere_Adv = ss "everywhere" ;
---  from_Prep = ss "from" ;
---  he_Pron = mkNP "he" "him" "his" Sg P3 ;
---  here_Adv = ss "here" ;
---  here7to_Adv = ss ["to here"] ;
---  here7from_Adv = ss ["from here"] ;
---  how_IAdv = ss "how" ;
---  how8many_IDet = mkDeterminer Pl ["how many"] ;
---  if_Subj = ss "if" ;
---  in8front_Prep = ss ["in front of"] ;
---  i_Pron  = mkNP "I" "me" "my"  Sg P1 ;
---  in_Prep = ss "in" ;
---  it_Pron  = mkNP "it" "it" "its" Sg P3 ;
---  less_CAdv = ss "less" ;
---  many_Det = mkDeterminer Pl "many" ;
---  more_CAdv = ss "more" ;
---  most_Predet = ss "most" ;
---  much_Det = mkDeterminer Sg "much" ;
---  must_VV = mkVerb4 "have" "has" "had" "had" ** {c2 = "to"} ; ---
---  no_Phr = ss "no" ;
---  on_Prep = ss "on" ;
---  only_Predet = ss "only" ;
---  or_Conj = ss "or" ** {n = Sg} ;
---  otherwise_PConj = ss "otherwise" ;
---  part_Prep = ss "of" ;
---  please_Voc = ss "please" ;
---  possess_Prep = ss "of" ;
---  quite_Adv = ss "quite" ;
---  she_Pron = mkNP "she" "her" "her" Sg P3 ;
---  so_AdA = ss "so" ;
---  somebody_NP = regNP "somebody" Sg ;
---  someSg_Det = mkDeterminer Sg "some" ;
---  somePl_Det = mkDeterminer Pl "some" ;
---  something_NP = regNP "something" Sg ;
---  somewhere_Adv = ss "somewhere" ;
---  that_Quant = mkDeterminer Sg "that" ;
---  that_NP = regNP "that" Sg ;
---  there_Adv = ss "there" ;
---  there7to_Adv = ss "there" ;
---  there7from_Adv = ss ["from there"] ;
---  therefore_PConj = ss "therefore" ;
---  these_Quant = mkDeterminer Pl "these" ;
---  they_Pron = mkNP "they" "them" "their" Pl P3 ; 
---  this_Quant = mkDeterminer Sg "this" ;
---  this_NP = regNP "this" Sg ;
---  those_Quant = mkDeterminer Pl "those" ;
---  thou_Pron = mkNP "you" "you" "your" Sg P2 ;
---  through_Prep = ss "through" ;
---  too_AdA = ss "too" ;
---  to_Prep = ss "to" ;
---  under_Prep = ss "under" ;
---  very_AdA = ss "very" ;
---  want_VV = verbGen "want" ** {c2 = "to"} ;
---  we_Pron = mkNP "we" "us"  "our" Pl P1 ;
---  whatPl_IP = mkIP "what" "what" "what's" Sg ;
---  whatSg_IP = mkIP "what" "what" "what's" Sg ;
---  when_IAdv = ss "when" ;
---  when_Subj = ss "when" ;
---  where_IAdv = ss "where" ;
---  whichPl_IDet = mkDeterminer Pl ["which"] ;
---  whichSg_IDet = mkDeterminer Sg ["which"] ;
---  whoSg_IP = mkIP "who" "whom" "whose" Sg ;
---  whoPl_IP = mkIP "who" "whom" "whose" Pl ;
---  why_IAdv = ss "why" ;
---  without_Prep = ss "without" ;
---  with_Prep = ss "with" ;
---  ye_Pron = mkNP "you" "you" "your" Pl P2 ;
---  you_Pron = mkNP "you" "you" "your" Sg P2 ;
---  yes_Phr = ss "yes" ;
---
---}
---
+concrete StructuralGer of Structural = CatGer ** 
+
+  open MorphoGer, Prelude in {
+
+  flags optimize=all ;
+
+  lin
+
+  above_Prep = mkPrep "über" Dat ;
+  after_Prep = mkPrep "nach" Dat ;
+  all_Predet = {s = appAdj (regA "all")} ;
+  almost_AdA, almost_AdN = ss "fast" ;
+  although_Subj = ss "obwohl" ;
+  always_AdV = ss "immer" ;
+  and_Conj = ss "und" ** {n = Pl} ;
+  because_Subj = ss "weil" ;
+  before_Prep = mkPrep "vor" Dat ;
+  behind_Prep = mkPrep "hinter" Dat ;
+  between_Prep = mkPrep "zwischen" Dat ;
+  both7and_DConj = sd2 "sowohl" ["als auch"] ** {n = Pl} ;
+  but_PConj = ss "aber" ;
+  by8agent_Prep = mkPrep "durch" Acc ;
+  by8means_Prep = mkPrep "mit" Dat ;
+  can8know_VV, can_VV = auxVV 
+      (mkV 
+        "können" "kann" "kannst" "kann" "könnt" "könn" 
+        "konnte" "konntest" "konnten" "könntet"
+        "könnte" "gekonnen" [] 
+        VHaben) ;
+  during_Prep = mkPrep "während" Gen ;
+  either7or_DConj = sd2 "entweder" "oder" ** {n = Sg} ;
+  everybody_NP = nameNounPhrase {s = caselist "jeder" "jeden" "jedem" "jedes"} ;
+  every_Det = detLikeAdj Sg "jed" ;
+  everything_NP = nameNounPhrase {s = caselist "alles" "alles" "allem" "alles"} ;
+  everywhere_Adv = ss "überall" ;
+  from_Prep = mkPrep "aus" Dat ;
+  he_Pron = mkPronPers "er" "ihn" "ihm" "seiner" "sein"  Sg P3 ;
+  here7to_Adv = ss ["hierher"] ;
+  here7from_Adv = ss ["hieraus"] ;
+  here_Adv = ss ["to hier"] ;
+  how_IAdv = ss "wie" ;
+  how8many_IDet = detLikeAdj Pl "wieviel" ;
+  if_Subj = ss "wenn" ;
+  in8front_Prep = mkPrep "vor" Dat ;
+  i_Pron = mkPronPers "ich" "mich" "mir" "meiner" "mein"  Sg P1 ;
+  in_Prep = mkPrep "in" Dat ;
+  it_Pron = mkPronPers "es" "es" "ihm" "seiner" "sein"  Sg P3 ;
+  less_CAdv = ss "weniger" ;
+  many_Det = detLikeAdj Pl "viel" ;
+  more_CAdv = ss "mehr" ;
+  most_Predet = {s = appAdj (regA "meist")} ;
+  much_Det = detLikeAdj Sg "viel" ;
+  must_VV = auxVV 
+      (mkV 
+        "müssen" "muß" "mußt" "muß" "müßt" "müß" 
+        "mußte" "mußtest" "mußten" "mußtet"
+        "mußte" "gemüßt" [] 
+        VHaben) ;
+  only_Predet = {s = \\_,_,_ => "nur"} ;
+  no_Phr = ss ["Nein ."] ;
+  on_Prep = mkPrep "auf" Dat ;
+  or_Conj = ss "oder" ** {n = Sg} ;
+  otherwise_PConj = ss "sonst" ;
+  part_Prep = mkPrep "von" Dat ;
+  please_Voc = ss "bitte" ;
+  possess_Prep = mkPrep "von" Dat ;
+  quite_Adv = ss "ziemlich" ;
+  she_Pron = mkPronPers "sie" "sie" "ihr" "ihrer" "ihr" Sg P3 ;
+  so_AdA = ss "so" ;
+  somebody_NP = nameNounPhrase {s = caselist "jemand" "jemanden" "jemandem" "jemands"} ;
+  somePl_Det = detLikeAdj Pl "einig" ;
+  --  someSg_Det = 
+  something_NP = nameNounPhrase {s = \\_ => "etwas"} ;
+  somewhere_Adv = ss "irgendwo" ;
+  that_Quant = detLikeAdj Sg "jen" ;
+  that_NP = nameNounPhrase {s = caselist "das" "das" "denem" "dessen"} ; ----
+  there_Adv = ss "da" ;
+  there7to_Adv = ss "dahin" ;
+  there7from_Adv = ss ["daher"] ;
+  therefore_PConj = ss "deshalb" ;
+  these_Quant = detLikeAdj Pl "dies" ;
+  they_Pron = mkPronPers "sie" "sie" "ihnen" "ihrer" "ihr" Pl P3 ;
+  this_Quant = detLikeAdj Sg "dies" ;
+  this_NP = nameNounPhrase {s = caselist "dies" "dies" "diesem" "dieses"} ; ----
+  --  those_NP
+  those_Quant = detLikeAdj Pl "jen" ;
+  thou_Pron = mkPronPers "du" "dich" "dir" "deiner" "dein" Sg P2 ;
+  through_Prep = mkPrep "durch" Acc ;
+  too_AdA = ss "zu" ;
+  to_Prep = mkPrep "nach" Dat ;
+  under_Prep = mkPrep "unter" Dat ;
+  very_AdA = ss "sehr" ;
+  want_VV = auxVV 
+      (mkV 
+        "wollen" "will" "willst" "will" "wollt" "woll" 
+        "wollte" "wolltest" "wollten" "wolltet"
+        "wollte" "gewollen" [] 
+        VHaben) ;
+  we_Pron = mkPronPers "wir" "uns"  "uns"   "unser"  "unser" Pl P1 ;
+
+  whatSg_IP = {s = caselist "was" "was" "was" "wessen" ; n = Sg} ; ----
+  whatPl_IP = {s = caselist "was" "was" "was" "wessen" ; n = Pl} ; ----
+
+  when_IAdv = ss "wann" ;
+  when_Subj = ss "wenn" ;
+  where_IAdv = ss "war" ;
+
+  whichPl_IDet = detLikeAdj Pl "welch" ;
+  whichSg_IDet = detLikeAdj Sg "welch" ;
+  whoSg_IP = {s = caselist "wer" "wen" "wem" "wessen" ; n = Sg} ;
+  whoPl_IP = {s = caselist "wer" "wen" "wem" "wessen" ; n = Pl} ;
+  why_IAdv = ss "warum" ;
+  without_Prep = mkPrep "ohne" Acc ;
+  with_Prep = mkPrep "mit" Dat ;
+  ye_Pron = mkPronPers "ihr" "euch" "euch" "eurer" "euer" Pl P2 ; ---- poss
+  yes_Phr = ss ["Ja ."] ;
+  you_Pron = mkPronPers "Sie" "Sie" "Ihnen" "Ihrer" "Ihr" Pl P3 ;
+}
