@@ -188,3 +188,12 @@ wc german/*.gfc
 
 Ca. 4h more work was needed, so we have spent 16h now.
 
+--------------------
+
+14/1
+
+TensedGer: just uncomment, except S
+StructuralGer: almost complete with some determiner forms to revisit
+ParadigmsGer: almost complete with verb form variations to revisit
+MorphoGer: very few functions in this module
+
