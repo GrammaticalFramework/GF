@@ -98,7 +98,7 @@ oper
   mkN2 : N -> Preposition -> N2 ;
 
 -- The most common preposition is "of", and the following is a
--- shortcut for regular, $nonhuman$ relational nouns with "of".
+-- shortcut for regular relational nouns with "of".
 
   regN2 : Str -> N2 ;
 

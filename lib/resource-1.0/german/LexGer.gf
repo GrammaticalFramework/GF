@@ -31,7 +31,7 @@ concrete LexGer of Lex = CatGer ** open ResGer, Prelude in {
     ask_VQ = 
       regV "fragen" ;
 
-    dog_N  = mkN4 "Hund" "Hundes" "Hünde" "Hünden" Masc ;
+    dog_N  = mkN4 "Hund" "Hundes" "Hunde" "Hunden" Masc ;
     son_N2 = mkN4 "Sohn" "Sohnes" "Söhne" "Söhnen" Masc ** 
              {c2 = {s = "von" ; c = Dat}} ;
     way_N3 = mkN4 "Weg" "Weges" "Wege" "Wegen" Masc ** 
