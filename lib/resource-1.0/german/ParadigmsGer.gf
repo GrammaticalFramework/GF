@@ -1,455 +1,488 @@
-----# -path=.:../abstract:../../prelude
+--# -path=.:../common:../abstract:../../prelude
 --
-----1 German Lexical Paradigms
-----
----- Aarne Ranta 2003--2005
-----
----- This is an API to the user of the resource grammar 
----- for adding lexical items. It gives functions for forming
----- expressions of open categories: nouns, adjectives, verbs.
----- 
----- Closed categories (determiners, pronouns, conjunctions) are
----- accessed through the resource syntax API, $Structural.gf$. 
-----
----- The main difference with $MorphoGer.gf$ is that the types
----- referred to are compiled resource grammar types. We have moreover
----- had the design principle of always having existing forms, rather
----- than stems, as string arguments of the paradigms.
-----
----- The structure of functions for each word class $C$ is the following:
----- first we give a handful of patterns that aim to cover all
----- regular cases. Then we give a worst-case function $mkC$, which serves as an
----- escape to construct the most irregular words of type $C$.
----- However, this function should only seldom be needed: we have a
----- separate module $IrregularGer$, which covers all irregularly inflected
----- words.
----- 
----- The following modules are presupposed:
+--1 German Lexical Paradigms
 --
---resource ParadigmsGer = open 
---  (Predef=Predef), 
---  Prelude, 
---  MorphoGer,
---  CatGer
---  in {
-----2 Parameters 
-----
----- To abstract over gender names, we define the following identifiers.
+-- Aarne Ranta 2003--2005
 --
---oper
---  Gender : Type ; 
---
---  human     : Gender ;
---  nonhuman  : Gender ;
---  masculine : Gender ;
---  feminite  : Gender ;
---
----- To abstract over number names, we define the following.
---
---  Number : Type ; 
---
---  singular : Number ;
---  plural   : Number ;
---
----- To abstract over case names, we define the following.
---
---  Case : Type ;
---
---  nominative : Case ;
---  genitive   : Case ;
---
----- Prepositions are used in many-argument functions for rection.
---
---  Preposition : Type ;
---
---
-----2 Nouns
---
----- Worst case: give all four forms and the semantic gender.
---
---  mkN  : (man,men,man's,men's : Str) -> N ;
---
----- The regular function captures the variants for nouns ending with
----- "s","sh","x","z" or "y": "kiss - kisses", "flash - flashes"; 
----- "fly - flies" (but "toy - toys"),
---
---  regN : Str -> N ;
---
----- In practice the worst case is just: give singular and plural nominative.
---
---  mk2N : (man,men : Str) -> N ;
---
----- All nouns created by the previous functions are marked as
----- $nonhuman$. If you want a $human$ noun, wrap it with the following
----- function:
---
---  genderN : Gender -> N -> N ;
---
-----3 Compound nouns 
-----
----- All the functions above work quite as well to form compound nouns,
----- such as "baby boom". 
---
---
-----3 Relational nouns 
----- 
----- Relational nouns ("daughter of x") need a preposition. 
---
---  mkN2 : N -> Preposition -> N2 ;
---
----- The most common preposition is "of", and the following is a
----- shortcut for regular, $nonhuman$ relational nouns with "of".
---
---  regN2 : Str -> N2 ;
---
----- Use the function $mkPreposition$ or see the section on prepositions below to  
----- form other prepositions.
-----
----- Three-place relational nouns ("the connection from x to y") need two prepositions.
---
---  mkN3 : N -> Preposition -> Preposition -> N3 ;
---
---
-----3 Relational common noun phrases
-----
----- In some cases, you may want to make a complex $CN$ into a
----- relational noun (e.g. "the old town hall of").
---
---  cnN2 : CN -> Preposition -> N2 ;
---  cnN3 : CN -> Preposition -> Preposition -> N3 ;
---
----- 
-----3 Proper names and noun phrases
-----
----- Proper names, with a regular genitive, are formed as follows
---
---  regPN : Str -> Gender -> PN ;          -- John, John's
---
----- Sometimes you can reuse a common noun as a proper name, e.g. "Bank".
---
---  nounPN : N -> PN ;
---
----- To form a noun phrase that can also be plural and have an irregular
----- genitive, you can use the worst-case function.
---
---  mkNP : Str -> Str -> Number -> Gender -> NP ; 
---
-----2 Adjectives
---
----- Non-comparison one-place adjectives need two forms: one for
----- the adjectival and one for the adverbial form ("free - freely")
---
---  mkA : (free,freely : Str) -> A ;
---
----- For regular adjectives, the adverbial form is derived. This holds
----- even for cases with the variation "happy - happily".
---
---  regA : Str -> A ;
+-- This is an API to the user of the resource grammar 
+-- for adding lexical items. It gives functions for forming
+-- expressions of open categories: nouns, adjectives, verbs.
 -- 
-----3 Two-place adjectives
-----
----- Two-place adjectives need a preposition for their second argument.
---
---  mkA2 : A -> Preposition -> A2 ;
---
----- Comparison adjectives may two more forms. 
---
---  ADeg : Type ;
---
---  mkADeg : (good,better,best,well : Str) -> ADeg ;
---
----- The regular pattern recognizes two common variations: 
----- "-e" ("rude" - "ruder" - "rudest") and
----- "-y" ("happy - happier - happiest - happily")
---
---  regADeg : Str -> ADeg ;      -- long, longer, longest
---
----- However, the duplication of the final consonant is nor predicted,
----- but a separate pattern is used:
---
---  duplADeg : Str -> ADeg ;      -- fat, fatter, fattest
---
----- If comparison is formed by "more, "most", as in general for
----- long adjective, the following pattern is used:
---
---  compoundADeg : A -> ADeg ; -- -/more/most ridiculous
---
----- From a given $ADeg$, it is possible to get back to $A$.
---
---  adegA : ADeg -> A ;
---
---
-----2 Adverbs
---
----- Adverbs are not inflected. Most lexical ones have position
----- after the verb. Some can be preverbal (e.g. "always").
---
---  mkAdv : Str -> Adv ;
---  mkAdV : Str -> AdV ;
---
----- Adverbs modifying adjectives and sentences can also be formed.
---
---  mkAdA : Str -> AdA ;
---
-----2 Prepositions
-----
----- A preposition as used for rection in the lexicon, as well as to
----- build $PP$s in the resource API, just requires a string.
---
---  mkPreposition : Str -> Preposition ;
---  mkPrep        : Str -> Prep ;
---
----- (These two functions are synonyms.)
---
-----2 Verbs
-----
----- Except for "be", the worst case needs five forms: the infinitive and
----- the third person singular present, the past indicative, and the
----- past and present participles.
---
---  mkV : (go, goes, went, gone, going : Str) -> V ;
---
----- The regular verb function recognizes the special cases where the last
----- character is "y" ("cry - cries" but "buy - buys") or "s", "sh", "x", "z"
----- ("fix - fixes", etc).
---
---  regV : Str -> V ;
---
----- The following variant duplicates the last letter in the forms like
----- "rip - ripped - ripping".
---
---  regDuplV : Str -> V ;
---
----- There is an extensive list of irregular verbs in the module $IrregularGer$.
----- In practice, it is enough to give three forms, 
----- e.g. "drink - drank - drunk", with a variant indicating consonant
----- duplication in the present participle.
---
---  irregV     : (drink, drank, drunk  : Str) -> V ;
---  irregDuplV : (get,   got,   gotten : Str) -> V ;
---
---
-----3 Verbs with a particle.
-----
----- The particle, such as in "switch on", is given as a string.
---
---  partV  : V -> Str -> V ;
---
-----3 Two-place verbs
-----
----- Two-place verbs need a preposition, except the special case with direct object.
----- (transitive verbs). Notice that a particle comes from the $V$.
---
---  mkV2  : V -> Preposition -> V2 ;
---
---  dirV2 : V -> V2 ;
---
-----3 Three-place verbs
-----
----- Three-place (ditransitive) verbs need two prepositions, of which
----- the first one or both can be absent.
---
---  mkV3     : V -> Preposition -> Preposition -> V3 ; -- speak, with, about
---  dirV3    : V -> Preposition -> V3 ;                -- give,_,to
---  dirdirV3 : V -> V3 ;                               -- give,_,_
---
-----3 Other complement patterns
-----
----- Verbs and adjectives can take complements such as sentences,
----- questions, verb phrases, and adjectives.
---
---  mkV0  : V -> V0 ;
---  mkVS  : V -> VS ;
---  mkV2S : V -> Str -> V2S ;
---  mkVV  : V -> VV ;
---  mkV2V : V -> Str -> Str -> V2V ;
---  mkVA  : V -> VA ;
---  mkV2A : V -> Str -> V2A ;
---  mkVQ  : V -> VQ ;
---  mkV2Q : V -> Str -> V2Q ;
---
---  mkAS  : A -> AS ;
---  mkA2S : A -> Str -> A2S ;
---  mkAV  : A -> AV ;
---  mkA2V : A -> Str -> A2V ;
---
----- Notice: categories $V2S, V2V, V2A, V2Q$ are in v 1.0 treated
----- just as synonyms of $V2$, and the second argument is given
----- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
----- $V0$ is just $V$.
---
---  V0, V2S, V2V, V2A, V2Q : Type ;
---  AS, A2S, AV, A2V : Type ;
---
---
-----2 Definitions of paradigms
-----
----- The definitions should not bother the user of the API. So they are
----- hidden from the document.
-----.
---
---  Gender = MorphoGer.Gender ; 
---  Number = MorphoGer.Number ;
---  Case = MorphoGer.Case ;
---  human = Masc ; 
---  nonhuman = Neutr ;
---  masculine = Masc ;
---  feminine = Fem ;
---  singular = Sg ;
---  plural = Pl ;
---  nominative = Nom ;
---  genitive = Gen ;
---
---  Preposition = Str ;
---
---  regN = \ray -> 
---    let
---      ra  = Predef.tk 1 ray ; 
---      y   = Predef.dp 1 ray ; 
---      r   = Predef.tk 2 ray ; 
---      ay  = Predef.dp 2 ray ;
---      rays =
---        case y of {
---          "y" => y2ie ray "s" ; 
---          "s" => ray + "es" ;
---          "z" => ray + "es" ;
---          "x" => ray + "es" ;
---          _ => case ay of {
---            "sh" => ray + "es" ;
---            "ch" => ray + "es" ;
---            _    => ray + "s"
---            }
---         }
---     in
---       mk2N ray rays ;
---
---  mk2N = \man,men -> 
---    let mens = case last men of {
---      "s" => men + "'" ;
---      _   => men + "'s"
---      }
---    in
---    mkN man men (man + "'s") mens ;
---
---  mkN = \man,men,man's,men's -> 
---    mkNoun man man's men men's ** {g = Neutr ; lock_N = <>} ;
---
---  genderN g man = {s = man.s ; g = g ; lock_N = <>} ;
---
---  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
---  regN2 n = mkN2 (regN n) (mkPreposition "of") ;
---  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
---  cnN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
---  cnN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
---
---  regPN n g = nameReg n g ** {lock_PN = <>} ;
---  nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
---  mkNP x y n g = {s = table {Gen => x ; _ => y} ; a = agrP3 n ;
---  lock_NP = <>} ;
---
---  mkA a b = mkAdjective a a a b ** {lock_A = <>} ;
---  regA a = regAdjective a ** {lock_A = <>} ;
---
---  mkA2 a p = a ** {c2 = p ; lock_A2 = <>} ;
---
---  ADeg = A ; ----
---
---  mkADeg a b c d = mkAdjective a b c d ** {lock_A = <>} ;
---
---  regADeg happy = 
---    let
---      happ = init happy ;
---      y    = last happy ;
---      happie = case y of {
---        "y" => happ + "ie" ;
---        "e" => happy ;
---        _   => happy + "e"
---        } ;
---      happily = case y of {
---        "y" => happ + "ily" ;
---        _   => happy + "ly"
---        } ;
---    in mkADeg happy (happie + "r") (happie + "st") happily ;
---
---  duplADeg fat = 
---    mkADeg fat 
---    (fat + last fat + "er") (fat + last fat + "est") (fat + "ly") ;
---
---  compoundADeg a =
---    let ad = (a.s ! AAdj Posit) 
---    in mkADeg ad ("more" ++ ad) ("most" ++ ad) (a.s ! AAdv) ;
---
---  adegA a = a ;
---
---  mkAdv x = ss x ** {lock_Adv = <>} ;
---  mkAdV x = ss x ** {lock_AdV = <>} ;
---  mkAdA x = ss x ** {lock_AdA = <>} ;
---
---  mkPreposition p = p ;
---  mkPrep p = ss p ** {lock_Prep = <>} ;
---
---  mkV a b c d e = mkVerb a b c d e ** {s1 = [] ; lock_V = <>} ;
---
---  regV cry = 
---    let
---      cr = init cry ;
---      y  = last cry ;
---      cries = (regN cry).s ! Pl ! Nom ; -- !
---      crie  = init cries ;
---      cried = case last crie of {
---        "e" => crie + "d" ;
---        _   => crie + "ed"
---        } ;
---      crying = case y of {
---        "e" => case last cr of {
---           "e" => cry + "ing" ; 
---           _ => cr + "ing" 
---           } ;
---        _   => cry + "ing"
---        }
---    in mkV cry cries cried cried crying ;
---
---  regDuplV fit = 
---    let fitt = fit + last fit in
---    mkV fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing") ;
---
---  irregV x y z = let reg = (regV x).s in
---    mkV x (reg ! VPres) y z (reg ! VPresPart) ** {s1 = [] ; lock_V = <>} ;
---
---  irregDuplV fit y z = 
---    let 
---      fitting = (regDuplV fit).s ! VPresPart
---    in
---    mkV fit (fit + "s") y z fitting ;
---
---  partV v p = verbPart v p ** {lock_V = <>} ;
---
---  mkV2 v p = v ** {s = v.s ; s1 = v.s1 ; c2 = p ; lock_V2 = <>} ;
---  dirV2 v = mkV2 v [] ;
---
---  mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p ; c3 = q ; lock_V3 = <>} ;
---  dirV3 v p = mkV3 v [] p ;
---  dirdirV3 v = dirV3 v [] ;
---
---  mkVS  v = v ** {lock_VS = <>} ;
---  mkVV  v = v ** {c2 = "to" ; lock_VV = <>} ;
---  mkVQ  v = v ** {lock_VQ = <>} ;
---
---  V0 : Type = V ;
---  V2S, V2V, V2Q, V2A : Type = V2 ;
---  AS, A2S, AV : Type = A ;
---  A2V : Type = A2 ;
---
---  mkV0  v = v ** {lock_V = <>} ;
---  mkV2S v p = mkV2 v p ** {lock_V2 = <>} ;
---  mkV2V v p t = mkV2 v p ** {s4 = t ; lock_V2 = <>} ;
---  mkVA  v = v ** {lock_VA = <>} ;
---  mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
---  mkV2Q v p = mkV2 v p ** {lock_V2 = <>} ;
---
---  mkAS  v = v ** {lock_A = <>} ;
---  mkA2S v p = mkA2 v p ** {lock_A = <>} ;
---  mkAV  v = v ** {lock_A = <>} ;
---  mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
---
---} ;
+-- Closed categories (determiners, pronouns, conjunctions) are
+-- accessed through the resource syntax API, $Structural.gf$. 
+--
+-- The main difference with $MorphoGer.gf$ is that the types
+-- referred to are compiled resource grammar types. We have moreover
+-- had the design principle of always having existing forms, rather
+-- than stems, as string arguments of the paradigms.
+--
+-- The structure of functions for each word class $C$ is the following:
+-- first we give a handful of patterns that aim to cover all
+-- regular cases. Then we give a worst-case function $mkC$, which serves as an
+-- escape to construct the most irregular words of type $C$.
+-- However, this function should only seldom be needed: we have a
+-- separate module $IrregularGer$, which covers all irregularly inflected
+-- words.
+
+resource ParadigmsGer = open 
+  (Predef=Predef), 
+  Prelude, 
+  MorphoGer,
+  CatGer
+  in {
+
+--2 Parameters 
+
+-- To abstract over gender names, we define the following identifiers.
+
+oper
+  Gender    : Type ; 
+
+  masculine : Gender ;
+  feminine  : Gender ;
+  neuter    : Gender ;
+
+-- To abstract over case names, we define the following.
+
+  Case       : Type ; 
+
+  nominative : Case ;
+  accusative : Case ;
+  dative     : Case ;
+  genitive   : Case ;
+
+-- To abstract over number names, we define the following.
+
+  Number    : Type ; 
+
+  singular  : Number ;
+  plural    : Number ;
+
+
+--2 Nouns
+
+-- Worst case: give all four singular forms, two plural forms (others + dative),
+-- and the gender.
+
+  mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N ; 
+                                 -- mann, mann, manne, mannes, männer, männern
+
+-- The regular heuristics recognizes some suffixes, from which it
+-- guesses the gender and the declension: "e, ung, ion" give the
+-- feminine with plural ending "-n, -en", and the rest are masculines
+-- with the plural "-e" (without Umlaut).
+
+  regN : Str -> N ;
+
+-- The 'almost regular' case is much like the information given in an ordinary
+-- dictionary. It takes the singular and plural nominative and the
+-- gender, and infers the other forms from these.
+
+  reg2N : (x1,x2 : Str) -> Gender -> N ;
+
+
+{-
+-- Often it is enough with singular and plural nominatives, and singular
+-- genitive. The plural dative
+-- is computed by the heuristic that it is the same as the nominative this
+-- ends with "n" or "s", otherwise "n" is added.
+
+  nGen : Str -> Str -> Str ->  Gender -> N ; -- punkt,punktes,punkt
+  
+-- Here are some common patterns. Singular nominative or two nominatives are needed.
+-- Two forms are needed in case of Umlaut, which would be complicated to define.
+-- For the same reason, we have separate patterns for multisyllable stems.
+-- 
+-- The weak masculine pattern $nSoldat$ avoids duplicating the final "e".
+
+  nRaum   : (_,_ : Str) -> N ;    -- Raum, (Raumes,) Räume (masc)
+  nTisch  : Str -> N ;            -- Tisch, (Tisches, Tische) (masc)
+  nVater  : (_,_ : Str) -> N ;    -- Vater, (Vaters,) Väter (masc)
+  nFehler : Str -> N ;            -- Fehler, (fehlers, Fehler) (masc)
+  nSoldat : Str -> N ;            -- Soldat (, Soldaten) ; Kunde (, Kunden) (masc)
+
+-- Neuter patterns. 
+
+  nBuch   : (_,_ : Str) -> N ;    -- Buch, (Buches, Bücher) (neut)
+  nMesser : Str -> N ;            -- Messer, (Messers, Messer) (neut)
+  nBein   : Str -> N ;            -- Bein, (Beins, Beine) (neut)
+  nAuto   : Str -> N ;            -- Auto, (Autos, Autos) (neut)
+
+-- Feminine patterns. Duplicated "e" is avoided in $nFrau$.
+
+  nStudentin : Str -> N ;         -- Studentin (Studentinne) 
+  nHand   : (_,_ : Str) -> N ;    -- Hand, Hände; Mutter, Mütter (fem)
+  nFrau   : Str -> N ;            -- Frau (, Frauen) ; Wiese (, Wiesen) (fem)
+
+
+-- Nouns used as functions need a preposition. The most common is "von".
+
+  mkFun  : N -> Preposition -> Case -> Fun ;
+  funVon : N -> Fun ;
+
+-- Proper names, with their possibly
+-- irregular genitive. The regular genitive is  "s", omitted after "s".
+
+  mkPN  : (karolus, karoli : Str) -> PN ; -- karolus, karoli
+  pnReg : (Johann : Str) -> PN ;          -- Johann, Johanns ; Johannes, Johannes
+
+-- On the top level, it is maybe $CN$ that is used rather than $N$, and
+-- $NP$ rather than $PN$.
+
+  mkCN  : N -> CN ;
+  mkNP  : (karolus,karoli : Str) -> NP ;
+
+  npReg : Str -> NP ;   -- Johann, Johanns
+
+-- In some cases, you may want to make a complex $CN$ into a function.
+
+  mkFunCN  : CN -> Preposition -> Case -> Fun ;
+  funVonCN : CN -> Fun ;
+
+
+--2 Adjectives
+
+-- Non-comparison one-place adjectives need two forms in the worst case:
+-- the one in predication and the one before the ending "e".
+
+  mkAdj1 : (teuer,teur : Str) -> Adj1 ;
+
+-- Invariable adjective are a special case.
+
+  adjInvar : Str -> Adj1 ;          -- prima
+
+-- The following heuristic recognizes the the end of the word, and builds
+-- the second form depending on if it is "e", "er", or something else.
+-- N.B. a contraction is made with "er", which works for "teuer" but not
+-- for "bitter".
+
+  adjGen : Str -> Adj1 ;            -- gut; teuer; böse
+
+-- Two-place adjectives need a preposition and a case as extra arguments.
+
+  mkAdj2 : Adj1 -> Str -> Case -> Adj2 ;  -- teilbar, durch, acc
+
+-- Comparison adjectives may need three adjective, corresponding to the
+-- three comparison forms. 
+
+  mkAdjDeg : (gut,besser,best : Adj1) -> AdjDeg ;
+
+-- In many cases, each of these adjectives is itself regular. Then we only
+-- need three strings. Notice that contraction with "er" is not performed
+-- ("bessere", not "bessre").
+
+  aDeg3 : (gut,besser,best : Str) -> AdjDeg ;
+
+-- In the completely regular case, the comparison forms are constructed by
+-- the endings "er" and "st".
+
+  aReg : Str -> AdjDeg ;    -- billig, billiger, billigst
+
+-- The past participle of a verb can be used as an adjective.
+
+  aPastPart : V -> Adj1 ;   -- gefangen
+
+-- On top level, there are adjectival phrases. The most common case is
+-- just to use a one-place adjective. The variation in $adjGen$ is taken
+-- into account.
+
+  apReg : Str -> AP ;
+
+--OLD:
+--2 Verbs
+--
+-- The fragment only has present tense so far, but in all persons.
+-- It also has the infinitive and the past participles.
+-- The worst case macro needs four forms: : the infinitive and 
+-- the third person singular (where Umlaut may occur), the singular imperative,
+-- and the past participle.
+-- 
+-- The function recognizes if the stem ends with "s" or "t" and performs the
+-- appropriate contractions.
+
+--NEW (By Harald Hammarström):
+--2 Verbs
+-- The worst-case macro needs six forms:
+-- x Infinitive, 
+-- x 3p sg pres. indicative, 
+-- x 2p sg imperative, 
+-- x 1/3p sg imperfect indicative, 
+-- x 1/3p sg imperfect subjunctive (because this uncommon form can have umlaut)
+-- x the perfect participle 
+
+-- But you'll only want to use one of the five macros:
+-- x weakVerb              -- For a regular verb like legen
+-- x verbGratulieren       -- For a regular verb without ge- in the perfect
+--                            particple. Like gratulieren, beweisen etc 
+-- x verbStrongSingen      -- A strong verb without umlauting present tense.
+--                            You'll need to supply the strong imperfect forms
+--                            as well as the participle. 
+-- x verbStrongSehen       -- A strong verb that umlauts in the 2/3p sg pres
+--                            indicative as well as the imperative. You'll
+--                            need to give (only) the 3rd p sg pres ind. in
+--                            addition to the strong imperfect forms and the
+--                            part participle.
+-- x verbStrongLaufen      -- A strong verb that umlauts in the 2/3p sg pres
+--                            indicative but NOT the imperative. You'll
+--                            need to give (only) the 3rd p sg pres ind. in
+--                            addition to the strong imperfect forms and the
+--                            part participle.
+--
+-- Things that are handled automatically
+-- x Imperative e (although optional forms are not given)
+-- x Extra e in verbs like arbeitete, regnet, findet, atmet.
+--   NOTE: If pres. umlauting strong verbs are defined through the verbumStrong
+--   macro (which they should) it is automatically handled so they avoid 
+--   falling into this rule e.g er tritt (rather than *er tritet)
+-- x s is dropped in the 2p sg if appropriate du setzt
+-- x verbs that end in -rn, -ln rather than -en
+
+-- Things that are not handled:
+-- x -ß-/-ss-
+-- x Optional dropping of -e- in e.g wand(e)re etc
+-- x Optional indicative forms instead of pres. subj. 2p sg. and 2p pl.  
+-- x (Weak) verbs without the ge- on the participle (in wait for a systematic
+--   treatment of the insep. prefixes and stress). You have to manually use
+--   the verbGratulieren for this. E.g do verbGratulieren "beweisen" - 
+--   verbWeak "beweisen" would yield *gebeweist.
+
+  mkV : (_,_,_,_,_,_ : Str) -> V ;   -- geben, gibt, gib, gab, gäbe, gegeben
+
+-- Weak verbs are sometimes called regular verbs.
+  
+  vWeak  : Str -> V ;             -- führen
+
+  vGratulieren : Str -> V ;             -- gratulieren
+  vSehen : (_,_,_,_,_ : Str) -> V ; -- sehen, sieht, sah, sähe, gesehen
+  vLaufen : (_,_,_,_,_ : Str) -> V ; -- laufen, lauft, liefe, liefe, gelaufen
+
+-- The verbs 'be' and 'have' are special.
+
+  vSein  : V ;
+  vHaben : V ;
+
+-- Some irregular verbs.
+
+  vFahren : V ;
+
+-- Verbs with a detachable particle, with regular ones as a special case.
+
+  vPartWeak  : (_,_ : Str) -> V ;             -- führen, aus
+
+--  vPartGratulieren (_,_ : Str) -> V ;          
+  vPartSehen : (_,_,_,_,_,_ : Str) -> V ; -- sehen, sieht, sah, sähe, gesehen
+  vPartLaufen : (_,_,_,_,_,_ : Str) -> V ; -- laufen, lauft, liefe, liefe, gelaufen
+  mkVPart  :  V -> Str -> V ;              -- vFahren, aus
+
+-- Obsolete; use vPartWeak etc instead
+  --vPart    :  (_,_,_,_,_ : Str) -> V ;   -- sehen, sieht, sieh, gesehen, aus
+  --vPartReg :  (_,_     : Str) -> V ;     -- bringen, um
+
+-- Two-place verbs, and the special case with direct object. Notice that
+-- a particle can be included in a $V$.
+
+  mkTV     : V   -> Str -> Case -> TV ;    -- hören, zu, dative
+
+  tvWeak    : Str -> Str -> Case -> TV ;    -- hören, zu, dative
+  tvDir    : V -> TV ;                     -- umbringen
+  tvDirReg : Str -> TV ;                   -- lieben
+
+-- Three-place verbs require two prepositions and cases.
+
+  mkV3 : V -> Str -> Case -> Str -> Case -> V3 ;  -- geben,[],dative,[],accusative
+
+-- Sentence-complement verbs are just verbs.
+
+  mkVS : V -> VS ;
+
+-- Verb-complement verbs either need the "zu" particle or don't.
+-- The ones that don't are usually auxiliary verbs.
+
+  vsAux : V -> VV ;
+  vsZu  : V -> VV ;
+
+--2 Adverbials
+--
+-- Adverbials for modifying verbs, adjectives, and sentences can be formed 
+-- from strings.
+
+  mkAdV : Str -> AdV ;
+  mkAdA : Str -> AdA ;
+  mkAdS : Str -> AdS ;
+
+-- Prepositional phrases are another productive form of adverbials.
+
+  mkPP : Case -> Str -> NP -> AdV ;
+
+-- One can also use the function $ResourceGer.PrepNP$ with one of the given
+-- prepositions or a preposition formed by giving a string and a case:
+
+  mkPrep : Str -> Case -> Prep ;
+
+-- The definitions should not bother the user of the API. So they are
+-- hidden from the document.
+--.
+-}
+
+  Gender = MorphoGer.Gender ;
+  Case = MorphoGer.Case ;
+  Number = MorphoGer.Number ;
+  masculine = Masc ;
+  feminine  = Fem ;
+  neuter = Neutr ;
+  nominative = Nom ;
+  accusative = Acc ;
+  dative = Dat ;
+  genitive = Gen ;
+  singular = Sg ;
+  plural = Pl ;
+
+  mkN a b c d e f g = MorphoGer.mkN a b c d e f g ** {lock_N = <>} ;
+
+  regN : Str -> N = \hund -> case hund of {
+    _ + "e" => mkN hund hund hund hund (hund + "n") (hund + "n") Fem ;
+    _ + ("ion" | "ung") => mkN hund hund hund hund (hund + "en") (hund + "en") Fem ;
+    _                   => mkN hund hund hund (genitS hund) (hund + "e") (hund + "en") Masc
+    } ;
+
+  reg2N : (x1,x2 : Str) -> Gender -> N = \hund,hunde,g -> 
+    let
+      hunds = genitS hund ;
+      hundE = dativE hund ;
+      hunden = pluralN hunde
+    in
+    case <hund,hunde,g> of {                                        -- Duden p. 223
+      <_,_ + ("e" | "er"), Masc | Neutr> =>                         -- I,IV 
+        mkN hund hund hundE hunds hunde hunden g ;
+      <_ + ("el"|"er"|"en"),_ + ("el"|"er"|"en"), Masc | Neutr> =>  -- II
+        mkN hund hund hund hunds hunde hunden g ;
+      <_,_ + "s", Masc | Neutr> =>                                  -- V 
+        mkN hund hund hund (hund + "s") hunde hunde g ;
+      <_,_ + "en", Masc> =>                                         -- VI 
+        mkN hund hunde hunde hunde hunde hunde g ;
+      <_,_ + ("e" | "er"), Fem> =>                                  -- VII,VIII 
+        mkN hund hund hund hund hunde hunden g ;
+      <_,_ + ("n" | "s"), Fem> =>                                   -- IX,X 
+        mkN hund hund hund hund hunde hunde g ;
+      _ => regN hund
+    } ;
+   
+-- auxiliaries
+
+  genitS : Str -> Str = \hund -> case hund of {
+    _ + ("el" | "en" | "er") => hund + "s" ;
+    _ => hund + variants {"s" ; "es"}
+    } ;
+  pluralN : Str -> Str = \hund -> case hund of {
+    _ + ("el" | "en" | "er" | "e") => hund + "n" ;
+    _ => hund + "en"
+    } ;
+  dativE : Str -> Str = \hund -> case hund of {
+    _ + ("el" | "en" | "er" | "e") => hund ;
+    _ => variants {hund ; hund + "e"}
+    } ;
+
+{-
+  nGen = \punkt, punktes, punkte, g -> let {
+      e   = Predef.dp 1 punkte ; 
+      eqy = ifTok N e ;
+      noN = mkNoun4 punkt punktes punkte punkte g ** {lock_N = <>}
+    } in
+    eqy "n" noN (
+    eqy "s" noN (
+            mkNoun4 punkt punktes punkte (punkte+"n") g ** {lock_N = <>})) ;
+
+  nRaum = \raum, räume -> nGen raum (raum + "es") räume masculine ;
+  nTisch = \tisch -> 
+    mkNoun4 tisch (tisch + "es") (tisch + "e") (tisch +"en") masculine ** 
+    {lock_N = <>};
+  nVater = \vater, väter -> nGen vater (vater + "s") väter masculine ;
+  nFehler = \fehler -> nVater fehler fehler ;
+
+  nSoldat = \soldat -> let {
+     e = Predef.dp 1 soldat ; 
+     soldaten = ifTok Tok e "e" (soldat + "n") (soldat + "en")
+    } in
+    mkN soldat soldaten soldaten soldaten soldaten soldaten masculine ;
+
+  nBein = \bein -> declN2n bein ** {lock_N = <>};
+  nBuch = \buch, bücher -> nGen buch (buch + "es") bücher neuter ;
+  nMesser = \messer -> nGen messer (messer + "s") messer neuter ;
+  nAuto = \auto -> let {autos = auto + "s"} in 
+          mkNoun4 auto autos autos autos neuter ** {lock_N = <>} ;
+
+  nStudentin = \studentin -> declN1in studentin ** {lock_N = <>}; 
+  nHand = \hand, hände -> nGen hand hand hände feminine ;
+
+  nFrau = \frau -> let {
+     e = Predef.dp 1 frau ; 
+     frauen = ifTok Tok e "e" (frau + "n") (frau + "en")
+    } in
+    mkN frau frau frau frau frauen frauen feminine ;
+
+  mkFun n = mkFunCN (UseN n) ;
+  funVon n = funVonCN (UseN n) ;
+
+  mkPN = \karolus, karoli -> 
+    {s = table {Gen => karoli ; _ => karolus} ; lock_PN = <>} ;
+  pnReg = \horst -> 
+    mkPN horst (ifTok Tok (Predef.dp 1 horst) "s" horst (horst + "s")) ;
+
+  mkCN = UseN ;
+  mkNP = \x,y -> UsePN (mkPN x y) ;
+  npReg = \s -> UsePN (pnReg s) ;
+
+  mkFunCN n p c = mkFunC n p c ** {lock_Fun = <>} ;
+  funVonCN n = funVonC n ** {lock_Fun = <>} ;
+
+  mkAdj1 x y = mkAdjective x y ** {lock_Adj1 = <>} ;
+  adjInvar a = Morpho.adjInvar a ** {lock_Adj1 = <>} ;
+  adjGen a = Morpho.adjGen a ** {lock_Adj1 = <>} ;
+  mkAdj2 = \a,p,c -> a ** {s2 = p ; c = c ; lock_Adj2 = <>} ;
+
+  mkAdjDeg a b c = mkAdjComp a b c ** {lock_AdjDeg = <>} ;
+  aDeg3 a b c = adjCompReg3 a b c ** {lock_AdjDeg = <>} ;
+  aReg a = adjCompReg a ** {lock_AdjDeg = <>} ;
+  aPastPart = \v -> {s = table AForm {a => v.s ! VPart a} ; lock_Adj1 = <>} ; 
+  apReg = \s -> AdjP1 (adjGen s) ;
+
+  mkV a b c d e f = mkVerbSimple (mkVerbum a b c d e f) ** {lock_V = <>} ;
+  vWeak a = mkVerbSimple (verbumWeak a) ** {lock_V = <>} ;
+  vGratulieren a = mkVerbSimple (verbumGratulieren a) ** {lock_V = <>} ; 
+  vSehen a b c d e = mkVerbSimple (verbumStrongSehen a b c d e) ** {lock_V = <>} ;
+  vLaufen a b c d e = mkVerbSimple (verbumStrongLaufen a b c d e) ** {lock_V = <>} ;
+
+  -- vReg = \s -> mkVerbSimple (regVerb s) ** {lock_V = <>} ;
+  vSein = verbSein ** {lock_V = <>} ;
+  vHaben = verbHaben ** {lock_V = <>} ;
+  vFahren = mkVerbSimple (verbumStrongLaufen "fahren" "fährt" "fuhr" "führe" "gefahren") ** {lock_V = <>} ;
+
+  vPartWeak = \führen, aus -> (mkVerb (verbumWeak führen) aus) ** {lock_V = <>} ;
+  --vGratulieren = verbumGratulieren ** {lock_V = <>} ; 
+  vPartSehen a b c d e aus = (mkVerb (verbumStrongSehen a b c d e) aus) ** {lock_V = <>} ;
+  vPartLaufen a b c d e aus = (mkVerb (verbumStrongLaufen a b c d e) aus) ** {lock_V = <>} ;
+
+  --vPart = \sehen, sieht, sieh, gesehen, aus -> 
+  --  mkVerb (mkVerbum sehen sieht sieh gesehen) aus ** {lock_V = <>} ;
+  --vPartReg = \sehen, aus -> mkVerb (regVerb sehen) aus ** {lock_V = <>} ;
+  mkVPart v p = mkVerb v.s p  ** {lock_V = <>} ;
+
+  mkTV v p c = mkTransVerb v p c  ** {lock_TV = <>} ;
+  tvWeak = \hören, zu, dat -> mkTV (vWeak hören) zu dat ;
+  tvDir = \v -> mkTV v [] accusative ;
+  tvDirReg = \v -> tvWeak v [] accusative ; 
+  mkV3 v s c t d = mkDitransVerb v s c t d ** {lock_V3 = <>} ;
+
+  mkVS v = v ** {lock_VS = <>} ;
+  vsAux v = v ** {isAux = True ; lock_VV = <>} ; 
+  vsZu v = v ** {isAux = True ; lock_VV = <>} ; 
+
+  mkAdV a = ss a ** {lock_AdV = <>} ;
+  mkPP x y = PrepNP {s = y ; c = x ; lock_Prep = <>} ;
+  mkAdA a = ss a ** {lock_AdA = <>} ;
+  mkAdS a = ss a ** {lock_AdS = <>} ;
+  mkPrep s c = {s = s ; c = c ; lock_Prep = <>} ;
+
+-}
+
+} ;
