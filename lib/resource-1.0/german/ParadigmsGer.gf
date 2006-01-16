@@ -107,7 +107,7 @@ oper
 
 -- Adjectives need four forms: two for the positive and one for the other degrees.
 
-  mkA : (x1,_,_,x4 : Str) -> A ; -- gut,gute,besser,best 
+  mkA : (x1,_,_,x4 : Str) -> A ; -- gut,gut,besser,best 
 
 -- The regular adjective formation works for most cases, and includes
 -- variations such as "teuer - teurer", "böse - böser".
@@ -127,7 +127,17 @@ oper
 -- A preposition is formed from a string and a case.
 
   mkPrep : Str -> Case -> Prep ;
+  
+-- Often just a case with the empty string is enough.
 
+  accPrep : Prep ;
+  datPrep : Prep ;
+  genPrep : Prep ;
+
+-- A couple of common prepositions (always with the dative).
+
+  von_Prep : Prep ;
+  zu_Prep  : Prep ;
 
 --2 Verbs
 
@@ -167,12 +177,13 @@ oper
 
 --3 Two-place verbs
 --
--- Two-place verbs need a preposition, except the special case with direct object.
--- (transitive verbs). Notice that a particle comes from the $V$.
+-- Two-place verbs need a preposition, except the special case with direct object
+-- (accusative, transitive verbs). There is also a case for dative objects.
 
   mkV2  : V -> Prep -> V2 ;
 
   dirV2 : V -> V2 ;
+  datV2 : V -> V2 ;
 
 --3 Three-place verbs
 --
@@ -286,6 +297,11 @@ oper
   mkA2 = \a,p -> a ** {c2 = p ; lock_A2 = <>} ;
 
   mkPrep s c = {s = s ; c = c ; lock_Prep = <>} ;
+  accPrep = mkPrep [] accusative ;
+  datPrep = mkPrep [] dative ;
+  genPrep = mkPrep [] genitive ;
+  von_Prep = mkPrep "von" dative ;
+  zu_Prep = mkPrep "zu" dative ;
 
   mkV geben gibt gib gab gaebe gegeben = 
     let
@@ -315,6 +331,30 @@ oper
       sing = stemVerb singen ;
     in
     mkV singen singt sing sang saenge gesungen ;
+
+  prefixV p v = {s = v.s ; prefix = p ; lock_V = v.lock_V ; aux = v.aux} ;
+  habenV v = {s = v.s ; prefix = v.prefix ; lock_V = v.lock_V ; aux = VHaben} ;
+  seinV v = {s = v.s ; prefix = v.prefix ; lock_V = v.lock_V ; aux = VSein} ;
+
+  no_geV v = let vs = v.s in {
+    s = table {
+      p@(VPastPart _) => Predef.drop 2 (vs ! p) ;
+      p => vs ! p
+      } ;
+    prefix = v.prefix ; lock_V = v.lock_V ; aux = v.aux
+    } ;
+
+  mkV2 v c   = v ** {c2 = c ; lock_V2 = <>} ;
+  dirV2 v = mkV2 v (mkPrep [] accusative) ;
+  datV2 v = mkV2 v (mkPrep [] dative) ;
+
+  mkV3 v c d = v ** {c2 = c ; c3 = d ; lock_V3 = <>} ;
+  dirV3 v p = mkV3 v (mkPrep [] accusative) p ;
+  accdatV3 v = dirV3 v (mkPrep [] dative) ; 
+
+  mkVS v = v ** {lock_VS = <>} ;
+  mkVQ v = v ** {lock_VQ = <>} ;
+  mkVV v = v ** {isAux = False ; lock_VV = <>} ;
 
   V0 : Type = V ;
   V2S, V2V, V2Q, V2A : Type = V2 ;
