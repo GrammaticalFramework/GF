@@ -203,3 +203,5 @@ ParamGer: removed Strong/Weak from AForm to save lexicon storage. Done in agrAdj
   Only affects NounGer and QuestionGer. Notice that making case analysis on <a,gn,c> is
   much less storage-efficient.
 
+ParadigmsGer: completed
+
