@@ -205,3 +205,8 @@ ParamGer: removed Strong/Weak from AForm to save lexicon storage. Done in agrAdj
 
 ParadigmsGer: completed
 
+ParamGer: VType
+ResGer, ParadigmsGer: the consequences of this
+
+BasicGer; started
+
