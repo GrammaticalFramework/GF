@@ -25,8 +25,8 @@ interface DiffScand = open ResScand, Prelude in {
 
     artIndef : Gender => Str ;
 
-    verbHave : {s : VForm => Str} ;
-    verbBe   : {s : VForm => Str} ;
+    verbHave : {s : VForm => Str ; vtype : VType} ;
+    verbBe   : {s : VForm => Str ; vtype : VType} ;
 
     auxFut : Str ;
     auxCond : Str ;
@@ -67,9 +67,13 @@ interface DiffScand = open ResScand, Prelude in {
 
    predV : Verb -> VP = \verb -> 
     let
-      vfin : Tense -> Str = \t -> verb.s ! vFin t Act ;
-      vsup = verb.s ! VI (VSupin Act) ;  
-      vinf = verb.s ! VI (VInfin Act) ;
+      diath = case verb.vtype of {
+        VPass => Pass ;
+        _ => Act
+        } ;
+      vfin : Tense -> Str = \t -> verb.s ! vFin t diath ;
+      vsup = verb.s ! VI (VSupin diath) ;  
+      vinf = verb.s ! VI (VInfin diath) ;
 
       har : Tense -> Str = \t -> verbHave.s ! vFin t Act ;
       ha  : Str = verbHave.s ! VI (VInfin Act) ;
@@ -90,16 +94,20 @@ interface DiffScand = open ResScand, Prelude in {
         Fut  => vf auxFut (ha ++ vsup) ;
         Cond => vf auxCond (ha ++ vsup) 
         } ;
-      VPImperat => vf (verb.s ! VF (VImper Act)) [] ;
+      VPImperat => vf (verb.s ! VF (VImper diath)) [] ;
       VPInfinit Simul => vf [] vinf ;
       VPInfinit Anter => vf [] (ha ++ vsup)
       } ;
     a1  : Polarity => Str = negation ;
-    n2  : Agr  => Str = \\_ => [] ;
+    n2  : Agr  => Str = \\a => case verb.vtype of {
+      VRefl => reflPron a ;
+      _ => []
+      } ;
     a2  : Str = [] ;
     ext : Str = [] ;
     en2,ea2,eext : Bool = False   -- indicate if the field exists
     } ;
 
+reflPron : Agr -> Str ;
 
 }

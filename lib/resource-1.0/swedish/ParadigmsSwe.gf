@@ -229,9 +229,11 @@ oper
 
 --3 Deponent verbs.
 --
--- Some words are used in passive forms only, e.g. "hoppas".
+-- Some words are used in passive forms only, e.g. "hoppas", some as
+-- reflexive e.g. "ångra sig".
 
   depV  : V -> V ;
+  reflV : V -> V ;
 
 --3 Two-place verbs
 --
@@ -338,8 +340,9 @@ oper
   irregV x y z = irregVerb x y z
      ** {s1 = [] ; lock_V = <>} ;
 
-  partV v p = {s = \\f => v.s ! f ++ p ; lock_V = <>} ;
-----  depV v = deponentVerb v ** {lock_V = <>} ;
+  partV v p = {s = \\f => v.s ! f ++ p ; vtype = v.vtype ; lock_V = <>} ;
+  depV v = {s = v.s ; vtype = VPass ; lock_V = <>} ;
+  reflV v = {s = v.s ; vtype = VRefl ; lock_V = <>} ;
 
   mkV2 v p = v ** {s = v.s ; c2 = p ; lock_V2 = <>} ;
   dirV2 v = mkV2 v [] ;

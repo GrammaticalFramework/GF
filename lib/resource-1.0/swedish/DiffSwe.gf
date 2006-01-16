@@ -51,6 +51,14 @@ instance DiffSwe of DiffScand = open ResScand, Prelude in {
         Neutr => allt
         } ;
 
+    reflPron : Agr -> Str = \a -> case a of {
+      {gn = Plg ; p = P1} => "oss" ;
+      {gn = Plg ; p = P2} => "er" ;
+      {p = P1} => "mig" ;
+      {p = P2} => "dig" ;
+      {p = P3} => "sig"
+      } ;
+
     relPron : GenNum => RCase => Str = \\gn,c => case c of {
       RNom  => "som" ;
       RGen  => "vars" ;

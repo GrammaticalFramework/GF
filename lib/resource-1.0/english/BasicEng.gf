@@ -3,8 +3,7 @@
 concrete BasicEng of Basic = CatEng ** open ParadigmsEng in {
 
 flags 
-  startcat=Phr ; lexer=textlit ; unlexer=text ;
-  optimize=all ;
+  optimize=values ;
 
 lin
   airplane_N = regN "airplane" ;

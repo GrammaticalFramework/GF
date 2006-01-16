@@ -42,6 +42,8 @@ param
    | VPImperat
    | VPInfinit Anteriority ;
 
+  VType = VAct | VPass | VRefl ;
+
   NPForm = NPNom | NPAcc | NPPoss GenNum ;
 ---  AdjPronForm = APron GenNum Case ;
 ---  AuxVerbForm = AuxInf | AuxPres | AuxPret | AuxSup ;

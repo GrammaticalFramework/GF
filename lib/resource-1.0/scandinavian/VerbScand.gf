@@ -35,6 +35,6 @@ incomplete concrete VerbScand of Verb = CatScand ** open DiffScand, ResScand in 
     PassV2 v = {s = \\_ => v.s ! VPPart} ;
 -}
 
-    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = []} ;
+    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; vtype = vv.vtype} ;
 
 }

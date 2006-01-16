@@ -41,7 +41,7 @@ resource ResEng = ParamEng ** open Prelude in {
         }
       } ;
 
-    mkVerb : (_,_,_,_,_ : Str) -> {s : VForm => Str} = 
+    mkVerb : (_,_,_,_,_ : Str) -> Verb = 
       \go,goes,went,gone,going -> {
       s = table {
         VInf   => go ;
@@ -49,7 +49,8 @@ resource ResEng = ParamEng ** open Prelude in {
         VPast  => went ;
         VPPart => gone ;
         VPresPart => going
-        }
+        } ;
+      isRefl = False
       } ;
 
     mkIP : (i,me,my : Str) -> Number -> {s : Case => Str ; n : Number} =
@@ -77,7 +78,7 @@ resource ResEng = ParamEng ** open Prelude in {
     regA : Str -> {s : AForm => Str} = \warm ->
       mkAdjective warm (warm + "er") (warm + "est") (warm + "ly") ;
 
-    regV : Str -> {s : VForm => Str} = \walk ->
+    regV : Str -> Verb = \walk ->
       mkVerb walk (walk + "s") (walk + "ed") (walk + "ed") (walk + "ing") ;
 
     regNP : Str -> Number -> {s : Case => Str ; a : Agr} = \that,n ->
@@ -97,7 +98,8 @@ resource ResEng = ParamEng ** open Prelude in {
 -- For $Verb$.
 
   Verb : Type = {
-    s : VForm => Str
+    s : VForm => Str ;
+    isRefl : Bool
     } ;
 
   VerbForms : Type =
@@ -138,7 +140,7 @@ resource ResEng = ParamEng ** open Prelude in {
         <Cond,Anter,Pos,_>      => vf "would"      ("have" ++ part) ;
         <Cond,Anter,Neg,_>      => vf "wouldn't"   ("have" ++ part)
         } ;
-    s2 = \\_ => []
+    s2 = \\a => if_then_Str verb.isRefl (reflPron ! a) []
     } ;
 
   predAux : Aux -> VP = \verb -> {
