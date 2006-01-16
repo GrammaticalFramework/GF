@@ -21,7 +21,7 @@ lin
   beg_V2V = mkV2V (mkV "be" "ber""be" "blad" "bett" "bedd") [] "att" ;
   big_ADeg = irregADeg "stor" "större" "störst";
   bike_N = mk2N "cykel" "cyklar" ;
-  bird_N = mk2N "fågel" "fåglar" ;
+  bird_N = mkN "fågel" "fågeln" "fåglar" "fåglarna";
   black_ADeg = mk2ADeg "svart" "svart" ;
   blue_ADeg = mk2ADeg "blå" "blått";
   boat_N = regN "båt" utrum ;
