@@ -13,7 +13,7 @@ concrete LangGer of Lang =
   PhraseGer,
   TensedGer,
   StructuralGer,
---  BasicGer
+  BasicGer
   ** {
 
 flags startcat = Phr ;
