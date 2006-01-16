@@ -178,6 +178,9 @@ checkResInfo gr (c,info) = do
          (_, Yes de) -> do
            (de',ty') <- infer de
            return (Yes ty', Yes de')
+         (_,Nope) -> do
+           checkWarn "No definition given to oper"
+           return (pty,pde)
          _ -> return (pty, pde) --- other cases are uninteresting
       return (c, ResOper pty' pde')
 
@@ -673,7 +676,7 @@ checkLType env trm typ0 = do
 
 pattContext :: LTEnv -> Type -> Patt -> Check Context
 pattContext env typ p = case p of
-  PV x -> return [(x,typ)]
+  PV x | not (isWildIdent x) -> return [(x,typ)]
   PP q c ps | q /= cPredef -> do ---- why this /=? AR 6/1/2006
     t <- checkErr $ lookupResType cnc q c
     (cont,v) <- checkErr $ typeFormCnc t
@@ -710,17 +713,18 @@ pattContext env typ p = case p of
     g1 <- pattContext env typ p
     g2 <- pattContext env typ q
     return $ g1 ++ g2
-  PRep p' -> do
-    co <- pattContext env typeStr p'
-    if not (null co)
-      then checkWarn ("no variable bound inside * pattern" +++ prt p) 
-           >> return []
-      else return []
-  PNeg p' -> pattContext env typ p'
+  PRep p' -> noBind p'
+  PNeg p' -> noBind p'
 
   _ -> return [] ---- check types!
  where 
    cnc = env
+   noBind p' = do
+    co <- pattContext env typeStr p'
+    if not (null co)
+      then checkWarn ("no variable bound inside pattern" +++ prt p) 
+           >> return []
+      else return []
 
 -- auxiliaries
 
