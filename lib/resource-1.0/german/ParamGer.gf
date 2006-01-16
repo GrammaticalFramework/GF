@@ -57,6 +57,8 @@ resource ParamGer = ParamX ** {
 
   param VAux = VHaben | VSein ;
 
+  param VType = VAct | VRefl Case ;
+
 -- The order of sentence is depends on whether it is used as a main
 -- clause, inverted, or subordinate.
 

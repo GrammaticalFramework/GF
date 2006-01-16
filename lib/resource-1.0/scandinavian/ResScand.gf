@@ -38,7 +38,7 @@ resource ResScand = ParamScand ** open Prelude in {
       } 
     } ;
 
-  mkVerb : (x1,_,_,_,_,_,_,x8 : Str) -> {s : VForm => Str} = 
+  mkVerb : (x1,_,_,_,_,_,_,x8 : Str) -> {s : VForm => Str ; vtype : VType} = 
    \finna,finner,finn,fann,funnit,funnen,funnet,funna -> {
    s = table {
     VF (VPres Act)  => finner ;
@@ -48,7 +48,8 @@ resource ResScand = ParamScand ** open Prelude in {
     VI (VInfin v)   => mkVoice v finna ;
     VI (VSupin v)   => mkVoice v funnit ;
     VI (VPtPret a c)=> mkCase c (mkAdjPos a funnen funnet funna funna)
-    }
+    } ;
+   vtype = VAct
    } ;
 
 -- These are useful auxiliaries.
@@ -81,29 +82,6 @@ resource ResScand = ParamScand ** open Prelude in {
       }
     } ;
 
---    mkAdjective : (_,_,_,_ : Str) -> {s : AForm => Str} = 
---      \good,better,best,well -> {
---      s = table {
---        AAdj Posit  => good ;
---        AAdj Compar => better ;
---        AAdj Superl => best ;
---        AAdv        => well
---        }
---      } ;
---
---    mkVerb : (_,_,_,_,_ : Str) -> {s : VForm => Str} = 
---      \go,goes,went,gone,going -> {
---      s = table {
---        VInf   => go ;
---        VPres  => goes ;
---        VPast  => went ;
---        VPPart => gone ;
---        VPresPart => going
---        }
---      } ;
---
---    mkIP : (i,me,my : Str) -> Number -> {s : Case => Str ; n : Number} =
---     \i,me,my,n -> let who = mkNP i me my n P3 in {s = who.s ; n = n} ;
 
 -- For $Noun$.
 
@@ -137,7 +115,8 @@ resource ResScand = ParamScand ** open Prelude in {
 -- For $Verb$.
 
   Verb : Type = {
-    s : VForm => Str
+    s : VForm => Str ;
+    vtype : VType
     } ;
 
   VP = {
@@ -187,51 +166,9 @@ resource ResScand = ParamScand ** open Prelude in {
     eext = vp.eext
     } ;
 
---  presVerb : {s : VForm => Str} -> Agr -> Str = \verb -> 
---    agrVerb (verb.s ! VPres) (verb.s ! VInf) ;
-
   infVP : VP -> Agr -> Str = \vp,a -> 
     (vp.s ! VPInfinit Simul).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
 
---  agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
---    case agr of {
---      {n = Sg ; p = P3} => has ;
---      _                 => have
---      } ;
---
---  have   = agrVerb "has"     "have" ;
---  havent = agrVerb "hasn't"  "haven't" ;
---  does   = agrVerb "does"    "do" ;
---  doesnt = agrVerb "doesn't" "don't" ;
---
---  Aux = {pres,past : Polarity => Agr => Str ; inf,ppart : Str} ;
---
---  auxBe : Aux = {
---    pres = \\b,a => case <b,a> of {
---      <Pos,{n = Sg ; p = P1}> => "am" ; 
---      <Neg,{n = Sg ; p = P1}> => ["am not"] ; --- am not I
---      _ => agrVerb (posneg b "is")  (posneg b "are") a
---      } ;
---    past = \\b,a => agrVerb (posneg b "was") (posneg b "were") a ;
---    inf  = "be" ;
---    ppart = "been"
---    } ;
---
---  posneg : Polarity -> Str -> Str = \p,s -> case p of {
---    Pos => s ;
---    Neg => s + "n't"
---    } ;
---
---  conjThat : Str = "that" ;
---
---  reflPron : Agr => Str = table {
---    {n = Sg ; p = P1} => "myself" ;
---    {n = Sg ; p = P2} => "yourself" ;
---    {n = Sg ; p = P3} => "itself" ; ----
---    {n = Pl ; p = P1} => "ourselves" ;
---    {n = Pl ; p = P2} => "yourselves" ;
---    {n = Pl ; p = P3} => "themselves"
---    } ;
 
 -- For $Sentence$.
 
@@ -253,7 +190,6 @@ resource ResScand = ParamScand ** open Prelude in {
           }
     } ;
 
---
 ---- For $Numeral$.
 --
 --  mkNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} = 

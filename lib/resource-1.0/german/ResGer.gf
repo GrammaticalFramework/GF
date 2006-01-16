@@ -62,7 +62,12 @@ resource ResGer = ParamGer ** open Prelude in {
 -- suffixes "t" and "st". Auxiliaries like "sein" will have to
 -- make extra cases even for this.
 
-  Verb : Type = {s : VForm => Str ; prefix : Str ; aux : VAux} ;
+  Verb : Type = {
+    s : VForm => Str ; 
+    prefix : Str ; 
+    aux : VAux ; 
+    vtype : VType
+    } ;
 
   mkV : (x1,_,_,_,_,_,_,_,_,_,_,x12 : Str) -> Str -> VAux -> Verb = 
     \geben,gebe,gibst,gibt,gebt,gib,gab,gabst,gaben,gabt,gaebe,gegeben,ein,aux -> 
@@ -91,7 +96,8 @@ resource ResGer = ParamGer ** open Prelude in {
        VPastPart a     => (regA gegeben).s ! Posit ! a
        } ;
      prefix = ein ;
-     aux = aux
+     aux = aux ;
+     vtype = VAct
      } ;
 
 -- These functions cover many regular cases; full coverage inflectional patterns are
@@ -237,7 +243,10 @@ resource ResGer = ParamGer ** open Prelude in {
       VPInfinit Anter => vf [] (vpart ++ haben)
       } ;
     a1  : Polarity => Str = negation ;
-    n2  : Agr  => Str = \\_ => [] ;
+    n2  : Agr => Str = case verb.vtype of {
+      VAct => \\_ => [] ;
+      VRefl c => \\a => reflPron ! a ! c
+      } ;
     a2  : Str = [] ;
     ext : Str = []
     } ;
@@ -287,7 +296,8 @@ resource ResGer = ParamGer ** open Prelude in {
       v => sein.s ! v 
       } ;
      prefix = [] ;
-     aux = VSein
+     aux = VSein ;
+     vtype = VAct
     } ;
 
   auxVV : Verb -> Verb ** {isAux : Bool} = \v -> v ** {isAux = True} ;

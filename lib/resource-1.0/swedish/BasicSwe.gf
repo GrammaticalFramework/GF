@@ -3,8 +3,7 @@
 concrete BasicSwe of Basic = CatSwe ** open ParadigmsSwe in {
 
 flags 
-  startcat=Phr ; lexer=textlit ; unlexer=text ;
-  optimize=all ;
+  optimize=values ;
 
 lin
   airplane_N = regN "flygplan" neutrum ;
@@ -93,8 +92,8 @@ lin
   have_V2 = dirV2 (mkV "ha" "har" "ha" "hade" "haft" "haft") ; ---- pp
   hear_V2 = dirV2 (mkV "höra" "hör" "hör" "hörde" "hört" "hörd") ;
   hill_N = regN "kulle" utrum ;
-  hope_VS = mkVS ((regV "önska")) ;
-----  hope_VS = mkVS (depV (regV "hoppas")) ;
+--  hope_VS = mkVS ((regV "önska")) ;
+  hope_VS = mkVS (depV (regV "hoppa")) ;
   horse_N = regN "häst" utrum ;
   hot_A = regADeg "het" ;
   house_N = regN "hus" neutrum ;
@@ -105,7 +104,7 @@ lin
   know_V2 = dirV2 (mkV "veta" "vet" "vet" "visste" "vetat" "visst") ;
   lake_N = mkN "sjö" "sjön" "sjöar" "sjöarna" ;
   lamp_N = regN "lampa" utrum;
-  learn_V2 = dirV2 (mkV "lära" "lär" "lär" "lärde" "lärt" "lärd") ; ---- refl!
+  learn_V2 = dirV2 (reflV (mkV "lära" "lär" "lär" "lärde" "lärt" "lärd")) ;
   leather_N = mkN "läder" "lädret" "läder" "lädren" ;
   leave_V2 = dirV2 (regV "lämna") ;
   like_V2 = mkV2 (mk2V "tycka" "tyckte") "om" ;

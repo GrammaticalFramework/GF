@@ -145,7 +145,8 @@ adj2Reg : Str -> Str -> Adjective = \vid,vitt ->
       funnet = funn ! Strong SgNeutr ! Nom ;
       funna  = funn ! Strong Plg ! Nom 
     in
-    mkVerb finna finner finn fann funnit funnen funnet funna ;
+    mkVerb finna finner finn fann funnit funnen funnet funna **
+   {vtype=VAct} ;
 
   ptPretForms : Str -> AFormPos => Case => Str = \funnen -> \\a,c =>  
   let 

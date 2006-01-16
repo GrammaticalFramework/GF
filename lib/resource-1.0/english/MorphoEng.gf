@@ -189,7 +189,7 @@ oper
 --- The particle always appears right after the verb.
 
   verbPart : Verb -> Str -> Verb = \v,p ->
-    {s = \\f => v.s ! f ++ p} ;
+    {s = \\f => v.s ! f ++ p ; isRefl = v.isRefl} ;
 
   verbNoPart : Verb -> Verb = \v -> verbPart v [] ;
 

@@ -175,6 +175,10 @@ oper
   seinV  : V -> V ;
   habenV : V -> V ;
 
+-- Reflexive verbs can take reflexive pronouns of different cases.
+
+  reflV  : V -> Case -> V ;
+
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object
@@ -332,16 +336,21 @@ oper
     in
     mkV singen singt sing sang saenge gesungen ;
 
-  prefixV p v = {s = v.s ; prefix = p ; lock_V = v.lock_V ; aux = v.aux} ;
-  habenV v = {s = v.s ; prefix = v.prefix ; lock_V = v.lock_V ; aux = VHaben} ;
-  seinV v = {s = v.s ; prefix = v.prefix ; lock_V = v.lock_V ; aux = VSein} ;
+  prefixV p v = 
+    {s = v.s ; prefix = p ; lock_V = v.lock_V ; aux = v.aux ; vtype = v.vtype} ;
+  habenV v = 
+    {s = v.s ; prefix = v.prefix ; lock_V = v.lock_V ; aux = VHaben ; vtype = v.vtype} ;
+  seinV v = 
+    {s = v.s ; prefix = v.prefix ; lock_V = v.lock_V ; aux = VSein ; vtype = v.vtype} ;
+  reflV v c = 
+    {s = v.s ; prefix = v.prefix ; lock_V = v.lock_V ; aux = VHaben ; vtype = VRefl c} ;
 
   no_geV v = let vs = v.s in {
     s = table {
       p@(VPastPart _) => Predef.drop 2 (vs ! p) ;
       p => vs ! p
       } ;
-    prefix = v.prefix ; lock_V = v.lock_V ; aux = v.aux
+    prefix = v.prefix ; lock_V = v.lock_V ; aux = v.aux ; vtype = v.vtype
     } ;
 
   mkV2 v c   = v ** {c2 = c ; lock_V2 = <>} ;

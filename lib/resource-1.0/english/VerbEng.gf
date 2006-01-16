@@ -27,7 +27,7 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
 
     PassV2 v = insertObj (\\_ => v.s ! VPPart) (predAux auxBe) ;
 
-    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = []} ; -- no "to"
+    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; isRefl = vv.isRefl} ; -- no "to"
 
     CompAP ap = ap ;
     CompNP np = {s = \\_ => np.s ! Acc} ;

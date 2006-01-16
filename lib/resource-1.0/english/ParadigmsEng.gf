@@ -235,6 +235,12 @@ oper
 
   partV  : V -> Str -> V ;
 
+--3 Reflexive verbs
+--
+-- By default, verbs are not reflexive; this function makes them that.
+
+  reflV  : V -> V ;
+
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object.
@@ -423,6 +429,7 @@ oper
     mkV fit (fit + "s") y z fitting ;
 
   partV v p = verbPart v p ** {lock_V = <>} ;
+  reflV v = {s = v.s ; part = v.part ; lock_V = v.lock_V ; isRefl = True} ;
 
   mkV2 v p = v ** {s = v.s ; s1 = v.s1 ; c2 = p ; lock_V2 = <>} ;
   dirV2 v = mkV2 v [] ;
