@@ -190,10 +190,16 @@ Ca. 4h more work was needed, so we have spent 16h now.
 
 --------------------
 
-14/1
+15/1 (3h)
 
 TensedGer: just uncomment, except S
 StructuralGer: almost complete with some determiner forms to revisit
 ParadigmsGer: almost complete with verb form variations to revisit
 MorphoGer: very few functions in this module
+
+16/1
+
+ParamGer: removed Strong/Weak from AForm to save lexicon storage. Done in agrAdj instead. 
+  Only affects NounGer and QuestionGer. Notice that making case analysis on <a,gn,c> is
+  much less storage-efficient.
 

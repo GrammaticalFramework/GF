@@ -289,12 +289,13 @@ oper
 
   mkV geben gibt gib gab gaebe gegeben = 
     let
-      gebe = init geben ; ----
-      gibst = init gibt + "st" ; ----
-      gebt = init gebe ; ----
-      gabst = gab + "st" ; ----
+      geb   = stemVerb geben ;
+      gebe  = geb + "e" ;
+      gibst = verbST (init gibt) ;
+      gebt  = verbT geb ;
+      gabst = verbST gab ;
       gaben = pluralN gab ;
-      gabt = gab + "t" ----
+      gabt  = verbT gab
     in 
     MorphoGer.mkV 
       geben gebe gibst gibt gebt gib gab gabst gaben gabt gaebe gegeben
@@ -302,16 +303,16 @@ oper
 
   regV fragen = 
     let
-      frag = Predef.tk 2 fragen ; ----
-      fragt = frag + "t" ; ----
-      fragte = fragt + "e" ;
+      frag    = stemVerb fragen ;
+      fragt   = verbT frag ;
+      fragte  = fragt + "e" ;
       gefragt = "ge" + fragt ;
     in
-    mkV fragen fragt frag fragte fragte gefragt ;
+    mkV fragen fragt (frag + "e") fragte fragte gefragt ;
 
   irregV singen singt sang saenge gesungen = 
     let
-      sing = Predef.tk 2 singen ; ----
+      sing = stemVerb singen ;
     in
     mkV singen singt sing sang saenge gesungen ;
 
