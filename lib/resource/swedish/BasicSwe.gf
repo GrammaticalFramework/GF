@@ -163,7 +163,7 @@ lin
   shirt_N = regN "skjorta" utrum ;
   shoe_N = regN "sko" utrum ;
   shop_N = mk2N "affär" "affären" ;
-  short_ADeg = regADeg "kort" ;
+  short_ADeg = mk2ADeg "kort" "kort" ;
   silver_N = mkN "silver" "silvret" "silver" "silvren" ;
   sister_N = mk2N "syster" "systrar" ;
   sleep_V = (irregV "sova" "sov" "sovit") ;
