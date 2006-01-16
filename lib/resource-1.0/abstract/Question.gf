@@ -1,16 +1,25 @@
+--1 Questions and interrogative pronouns
+
 abstract Question = Cat ** {
 
+-- A question can be formed from a clause ('yes-no question') or
+-- with an interrogative.
+
   fun
+    QuestCl    : Cl -> QCl ;                   -- does John walk
+    QuestVP    : IP -> VP -> QCl ;             -- who walks
+    QuestSlash : IP -> Slash -> QCl ;          -- who does John love
+    QuestIAdv  : IAdv -> Cl -> QCl ;           -- why does John walk
 
-    QuestCl    : Cl -> QCl ;
-    QuestVP    : IP -> VP -> QCl ;
-    QuestSlash : IP -> Slash -> QCl ;
-    QuestIAdv  : IAdv -> Cl -> QCl ;
+-- Interrogative pronouns can be formed with interrogative
+-- determiners. 
 
-    PrepIP : Prep -> IP -> IAdv ;
-    AdvIP  : IP -> Adv -> IP ;
- 
-    IDetCN : IDet -> Num -> Ord -> CN -> IP ;
+    IDetCN  : IDet -> Num -> Ord -> CN -> IP;  -- which five best songs
+    AdvIP   : IP -> Adv -> IP ;                -- who in Europe
+
+    PrepIP  : Prep -> IP -> IAdv ;             -- with whom
+
+-- More $IP$, $IDet$, and $IAdv$ are defined in
+-- [Structural Structural.html].
 
 }
-   
