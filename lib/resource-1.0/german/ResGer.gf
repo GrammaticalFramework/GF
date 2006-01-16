@@ -164,7 +164,7 @@ resource ResGer = ParamGer ** open Prelude in {
   appAdj : Adjective -> Number => Gender => Case => Str = \adj ->
     let
       ad : GenNum -> Case -> Str = \gn,c -> 
-        adj.s ! Posit ! AMod Strong gn c
+        adj.s ! Posit ! AMod gn c
     in
     \\n,g,c => case n of {
        Sg => ad (GSg g) c ;
@@ -176,20 +176,14 @@ resource ResGer = ParamGer ** open Prelude in {
   adjForms : (x1,x2 : Str) -> AForm => Str = \teuer,teur ->
    table {
     APred => teuer ;
-    AMod Strong (GSg Masc) c => 
+    AMod (GSg Masc) c => 
       caselist (teur+"er") (teur+"en") (teur+"em") (teur+"es") ! c ;
-    AMod Strong (GSg Fem) c => 
+    AMod (GSg Fem) c => 
       caselist (teur+"e") (teur+"e") (teur+"er") (teur+"er") ! c ;
-    AMod Strong (GSg Neut) c => 
+    AMod (GSg Neut) c => 
       caselist (teur+"es") (teur+"es") (teur+"em") (teur+"es") ! c ;
-    AMod Strong GPl c => 
-      caselist (teur+"e") (teur+"e") (teur+"en") (teur+"er") ! c ;
-    AMod Weak (GSg g) c => case <g,c> of {
-      <_,Nom>    => teur+"e" ;
-      <Masc,Acc> => teur+"en" ;
-      <_,Acc>    => teur+"e" ;
-      _          => teur+"en" } ;
-    AMod Weak GPl c => teur+"en"
+    AMod GPl c => 
+      caselist (teur+"e") (teur+"e") (teur+"en") (teur+"er") ! c
     } ;
 
 -- For $Verb$.

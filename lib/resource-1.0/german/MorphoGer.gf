@@ -42,6 +42,24 @@ oper
     _ => variants {hund ; hund + "e"}
     } ;
 
+-- Duden, p. 119
+
+  verbT : Str -> Str = \v -> case v of {
+    _ + ("t" | "d") => v + "et" ; -- gründen, reden, betten
+    _ + ("ch" | "k" | "p" | "t" | "g" | "b" | "d" | "f" | "s") + 
+        ("m" | "n") => v + "et" ; -- atmen, widmen, öffnen, rechnen
+    _ => v + "t"                  -- lernen, lärmen, qualmen etc
+    } ;
+
+  verbST : Str -> Str = \v -> case v of {
+    _ + ("s" | "ss" | "ß" | "sch" | "x" | "z") => v + "t" ;
+    _ => v + "st"
+    } ;
+
+  stemVerb : Str -> Str = \v -> case v of {
+    _ + ("rn" | "ln") => init v ;
+    _ => Predef.tk 2 v
+    } ;
 
 } ;
 

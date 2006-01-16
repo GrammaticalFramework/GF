@@ -35,7 +35,7 @@ resource ParamGer = ParamX ** {
 
 -- The predicative form of adjectives is not inflected further.
 
-  param AForm = APred | AMod Adjf GenNum Case ;  
+  param AForm = APred | AMod GenNum Case ;  
 
 
 --2 For $Verb$
@@ -93,8 +93,23 @@ resource ParamGer = ParamX ** {
         GPl   => Pl
         } ;
 
+-- Used in $NounGer$.
+
     agrAdj : Gender -> Adjf -> Number -> Case -> AForm = \g,a,n,c ->
-      AMod a (gennum g n) c ;
+      let
+        gn = gennum g n ;
+        e  = AMod (GSg Fem) Nom ;
+        en = AMod (GSg Masc) Acc ;
+      in
+      case a of {
+        Strong => AMod gn c ;
+        _ => case <gn,c> of {
+          <GSg _,   Nom> => e ;
+          <GSg Masc,Acc> => en ;
+          <GSg _,   Acc> => e ;
+          _              => en 
+        }
+      } ;
 
 -- This is used twice in NounGer.
 
