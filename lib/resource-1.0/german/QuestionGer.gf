@@ -61,7 +61,7 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
         n = idet.n
       in {
       s = \\c => 
-           idet.s ! g ! c ++ num.s ! g ! c ++ ord.s ! agrAdj g Weak n c ++ 
+           idet.s ! g ! c ++ num.s ++ ord.s ! agrAdj g Weak n c ++ 
            cn.s ! Weak ! n ! c ; 
       n = n
       } ;
