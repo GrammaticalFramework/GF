@@ -57,6 +57,11 @@ concrete StructuralGer of Structural = CatGer **
         "mußte" "mußtest" "mußten" "mußtet"
         "mußte" "gemüßt" [] 
         VHaben) ;
+  one_Quant = {
+      s = \\g,c => "ein" + pronEnding ! GSg g ! c ;  
+      n = Sg ;
+      a = Strong
+      } ;
   only_Predet = {s = \\_,_,_ => "nur"} ;
   no_Phr = ss ["Nein ."] ;
   on_Prep = mkPrep "auf" Dat ;
@@ -70,7 +75,11 @@ concrete StructuralGer of Structural = CatGer **
   so_AdA = ss "so" ;
   somebody_NP = nameNounPhrase {s = caselist "jemand" "jemanden" "jemandem" "jemands"} ;
   somePl_Det = detLikeAdj Pl "einig" ;
-  --  someSg_Det = 
+  someSg_Det = {
+      s = \\g,c => "ein" + pronEnding ! GSg g ! c ;  
+      n = Sg ;
+      a = Strong
+      } ;
   something_NP = nameNounPhrase {s = \\_ => "etwas"} ;
   somewhere_Adv = ss "irgendwo" ;
   that_Quant = detLikeAdj Sg "jen" ;
@@ -79,11 +88,13 @@ concrete StructuralGer of Structural = CatGer **
   there7to_Adv = ss "dahin" ;
   there7from_Adv = ss ["daher"] ;
   therefore_PConj = ss "deshalb" ;
+  these_NP = {s = caselist "diese" "diese" "diesen" "dieser" ; a = agrP3 Pl} ;
   these_Quant = detLikeAdj Pl "dies" ;
   they_Pron = mkPronPers "sie" "sie" "ihnen" "ihrer" "ihr" Pl P3 ;
   this_Quant = detLikeAdj Sg "dies" ;
   this_NP = nameNounPhrase {s = caselist "dies" "dies" "diesem" "dieses"} ; ----
   --  those_NP
+  those_NP = {s = caselist "jene" "jene" "jenen" "jener" ; a = agrP3 Pl} ;
   those_Quant = detLikeAdj Pl "jen" ;
   thou_Pron = mkPronPers "du" "dich" "dir" "deiner" "dein" Sg P2 ;
   through_Prep = mkPrep "durch" Acc ;
