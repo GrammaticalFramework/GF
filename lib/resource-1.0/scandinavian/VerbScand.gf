@@ -33,9 +33,10 @@ incomplete concrete VerbScand of Verb = CatScand ** open DiffScand, ResScand in 
 
     ReflV2 v = insertObj (\\a => v.c2 ++ reflPron a) (predV v) ;
 
---  PassV2 v = {s = \\_ => v.s ! VPPart} ;
--- UseComp comp = insertObj (\\a => comp.s ! agrAdj a.gn DIndef) (predV verbBe) ;
-
+    PassV2 v = 
+      insertObj 
+        (\\a => v.s ! VI (VPtPret (agrAdj a.gn DIndef) Nom)) 
+        (predV verbBecome) ;
 
     UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; vtype = vv.vtype} ;
 

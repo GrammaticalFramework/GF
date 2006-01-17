@@ -36,6 +36,8 @@ instance DiffSwe of DiffScand = open ResScand, Prelude in {
       mkVerb "ha" "har" "ha" "hade" "haft" "havd" "havt" "havda" ;
     verbBe = 
       mkVerb "vara" "är" "var" "var" "varit" "varen" "varet" "varna" ;
+    verbBecome = 
+      mkVerb "bli" "blir" "bli" "blev" "blivit" "bliven" "blivet" "blivna" ;
 
     auxFut = "ska" ;      -- "skall" in ExtSwe
     auxCond = "skulle" ;

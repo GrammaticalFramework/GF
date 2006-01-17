@@ -1,47 +1,47 @@
 concrete NumeralSwe of Numeral = CatSwe ** open ResScand, MorphoSwe in {
 
-{-
 lincat 
   Digit = {s : DForm => CardOrd => Str} ;
   Sub10 = {s : DForm => CardOrd => Str ; n : Number} ;
-  Sub100     = {s : CardOrd => Str ; n : Number} ;
-  Sub1000    = {s : CardOrd => Str ; n : Number} ;
-  Sub1000000 = {s : CardOrd => Str ; n : Number} ;
+  Sub100, Sub1000, Sub1000000 = 
+          {s :          CardOrd => Str ; n : Number} ;
 
-lin num x = x ;
-lin n2 = let two = mkNum "two"   "twelve"   "twenty" "second" in
-         {s = \\f,c => case <f,c> of {
-             <teen,NOrd> => "twelfth" ;
-             _ => two.s ! f ! c
-             }
-         } ;
+lin 
+  num x = x ;
 
-lin n3 = mkNum "three" "thirteen" "thirty" "third" ;
-lin n4 = mkNum "four"  "fourteen" "forty" "fourth" ;
-lin n5 = mkNum "five"  "fifteen"  "fifty" "fifth" ;
-lin n6 = regNum "six" ;
-lin n7 = regNum "seven" ;
-lin n8 = mkNum "eight" "eighteen" "eighty" "eighth" ;
-lin n9 = regNum "nine" ;
+  n2 = mkTal  "två"  "tolv"    "tjugo"   "andra"   "tolfte" ;
+  n3 = mkTal  "tre"  "tretton" "trettio" "tredje"  "trettonde" ;
+  n4 = mkTal  "fyra" "fjorton" "fyrtio"  "fjärde"  "fjortonde" ;
+  n5 = mkTal  "fem"  "femton"  "femtio"  "femte"   "femtonde" ;
+  n6 = mkTal  "sex"  "sexton"  "sextion" "sjätte"  "sextonde" ;
+  n7 = mkTal  "sju"  "sjutton" "sjuttio" "sjunde"  "sjuttonde" ;
+  n8 = mkTal  "åtta" "arton"   "åttio"   "åttonde" "artonde" ;
+  n9 = mkTal  "nio"  "nitton"  "nittio"  "nionde"  "nittonde" ;
 
-lin pot01 = mkNum "one" "eleven" "ten" "first" ** {n = Sg} ;
-lin pot0 d = d ** {n = Pl} ;
-lin pot110 = regCardOrd "ten" ** {n = Pl} ;
-lin pot111 = regCardOrd "eleven" ** {n = Pl} ;
-lin pot1to19 d = {s = d.s ! teen} ** {n = Pl} ;
-lin pot0as1 n = {s = n.s ! unit}  ** {n = n.n} ;
-lin pot1 d = {s = d.s ! ten} ** {n = Pl} ;
-lin pot1plus d e = {
-   s = \\c => d.s ! ten ! NCard ++ "-" ++ e.s ! unit ! c ; n = Pl} ;
-lin pot1as2 n = n ;
-lin pot2 d = {s = \\c => d.s ! unit ! NCard ++ mkCard c "hundred"}  ** {n = Pl} ;
-lin pot2plus d e = {
-  s = \\c => d.s ! unit ! NCard ++ "hundred" ++ "and" ++ e.s ! c ; n = Pl} ;
-lin pot2as3 n = n ;
-lin pot3 n = {
-  s = \\c => n.s ! NCard ++ mkCard c "thousand" ; n = Pl} ;
-lin pot3plus n m = {
-  s = \\c => n.s ! NCard ++ "thousand" ++ m.s ! c ; n = Pl} ;
--}
+  pot01 = {
+    s = \\f => table {
+          NCard g => case g of {Neutr => "ett" ; _ => "en"} ;
+          _ => "första"
+          } ; 
+    n = Sg
+    } ;
+  pot0 d = {s = \\f,g => d.s ! f ! g ; n = Pl} ;
+  pot110 = numPl (cardReg "tio") ;
+  pot111 = numPl (cardOrd "elva" "elfte") ;
+  pot1to19 d = numPl (d.s ! ton) ;
+  pot0as1 n = {s = n.s ! ental ; n = n.n} ;
+  pot1 d = numPl (d.s ! tiotal) ;
+  pot1plus d e = {s = \\g => d.s ! tiotal ! invNum ++ e.s ! ental ! g ; n = Pl} ;
+  pot1as2 n = n ;
+  pot2 d = 
+    numPl (\\g => d.s ! ental ! invNum ++ cardOrd "hundra" "hundrade" ! g) ;
+  pot2plus d e = 
+    {s = \\g => d.s ! ental ! invNum ++ "hundra" ++ e.s ! g ; n = Pl} ;
+  pot2as3 n = n ;
+  pot3 n = 
+    numPl (\\g => n.s ! invNum ++ "tusen" ++ cardOrd "tusen" "tusende" ! g) ;
+  pot3plus n m = 
+    {s = \\g => n.s ! invNum ++ "tusen" ++ m.s ! g ; n = Pl} ;
 
 }
+

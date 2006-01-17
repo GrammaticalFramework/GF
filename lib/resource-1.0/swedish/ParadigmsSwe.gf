@@ -167,15 +167,6 @@ oper
   mk3ADeg : (galen,galet,galna : Str) -> ADeg ;
   mk2ADeg : (bred,brett        : Str) -> ADeg ;
 
--- If comparison is formed by "more, "most", as in general for
--- long adjective, the following pattern is used:
-
-  compoundADeg : A -> ADeg ; -- -/more/most ridiculous
-
--- From a given $ADeg$, it is possible to get back to $A$.
-
-  adegA : ADeg -> A ;
-
 
 --2 Adverbs
 

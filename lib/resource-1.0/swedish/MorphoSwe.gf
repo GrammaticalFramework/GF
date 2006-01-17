@@ -256,21 +256,36 @@ conj3 : Str -> Verb = \bo ->
 
 -- for $Structural$
 
--- for Numerals
+-- For $Numeral$.
 
 param DForm = ental  | ton  | tiotal  ;
 
 oper 
-  LinDigit = {s : DForm => Str} ;
+  LinDigit = {s : DForm => CardOrd => Str} ;
 
-  mkTal : Str -> Str -> Str -> LinDigit = \två, tolv, tjugo -> 
-    {s = table {ental => två ; ton => tolv ; tiotal => tjugo}} ;
+  cardOrd : Str -> Str -> CardOrd => Str = \tre,tredje ->
+    table {
+      NCard _ => tre ;
+      NOrd a  => tredje ---- a
+      } ;
 
-  regTal : Str -> LinDigit = \fem -> 
-    mkTal fem (fem + "ton") (fem + "tio") ;
+  cardReg : Str -> CardOrd => Str = \tio ->
+    cardOrd tio (tio + "nde") ;
 
-  numPl : Str -> {s : Gender => Str ; n : Number} = \n ->
-    {s = \\_ => n ; n = Pl} ;
+  mkTal : (x1,_,_,_,x5 : Str) -> LinDigit = 
+    \två, tolv, tjugo, andra, tolfte -> 
+    {s = table {
+           ental  => cardOrd två andra ; 
+           ton    => cardOrd tolv tolfte ;
+           tiotal => cardReg tjugo
+           }
+     } ;
+
+  numPl : (CardOrd => Str) -> {s : CardOrd => Str ; n : Number} = \n ->
+    {s = n ; n = Pl} ;
+
+  invNum : CardOrd = NCard Neutr ;
+
 
 } ;
 

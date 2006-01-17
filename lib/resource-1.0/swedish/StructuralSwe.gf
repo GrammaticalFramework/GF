@@ -90,15 +90,13 @@ concrete StructuralSwe of Structural = CatSwe **
     mkVerb6 "vilja" "vill" "vilj" "ville" "velat" "velad" ** 
     {c2 = [] ; lock_VV = <>} ;
   we_Pron = mkNP "vi"  "oss"  "vår" "vårt" "våra"  Plg P1 ;
-----  whatPl_IP = intPronWhat plural ;
-----  whatSg_IP = intPronWhat singular ;
+  whatSg_IP = {s = \\_ => "vad" ; gn = SgUtr} ; ---- infl
+  whatPl_IP = {s = \\_ => "vad" ; gn = Plg} ; ---- infl
   when_IAdv = ss "när" ;
   when_Subj = ss "när" ;
   where_IAdv = ss "var" ;
   whichPl_IDet = {s = \\_ => "vilka" ; n = Pl ; det = DIndef} ;
   whichSg_IDet = {s = genderForms "vilken" "vilket" ; n = Sg ; det = DIndef} ;
-----  whichPl_IDet = vilkenDet ;
-----  whichSg_IDet = mkDeterminerPl "vilka" IndefP ;
   whoSg_IP = {s = vem.s ; gn = SgUtr} ;
   whoPl_IP = {s = vem.s ; gn = Plg} ;
   why_IAdv = ss "varför" ;

@@ -28,6 +28,8 @@ interface DiffScand = open ResScand, Prelude in {
     verbHave : {s : VForm => Str ; vtype : VType} ;
     verbBe   : {s : VForm => Str ; vtype : VType} ;
 
+    verbBecome : {s : VForm => Str ; vtype : VType} ;
+
     auxFut : Str ;
     auxCond : Str ;
 

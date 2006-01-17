@@ -190,30 +190,4 @@ resource ResScand = ParamScand ** open Prelude in {
           }
     } ;
 
----- For $Numeral$.
---
---  mkNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} = 
---    \two, twelve, twenty, second ->
---    {s = table {
---       unit => table {NCard => two ; NOrd => second} ; 
---       teen => \\c => mkCard c twelve ; 
---       ten  => \\c => mkCard c twenty
---       }
---    } ;
---
---  regNum : Str -> {s : DForm => CardOrd => Str} = 
---    \six -> mkNum six (six + "teen") (six + "ty") (regOrd six) ;
---
---  regCardOrd : Str -> {s : CardOrd => Str} = \ten ->
---    {s = table {NCard => ten ; NOrd => regOrd ten}} ;
---
---  mkCard : CardOrd -> Str -> Str = \c,ten -> 
---    (regCardOrd ten).s ! c ; 
---
---  regOrd : Str -> Str = \ten -> 
---    case last ten of {
---      "y" => init ten + "ieth" ;
---      _   => ten + "th"
---      } ;
---
 }
