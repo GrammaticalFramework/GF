@@ -23,7 +23,6 @@ import GF.Conversion.Types
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..),symbol)
 import GF.Infra.Ident
-import GF.Infra.Option
 import GF.Infra.Print
 import GF.Speech.CFGToFiniteState
 import GF.Speech.FiniteState
@@ -37,10 +36,10 @@ import Data.Maybe (fromMaybe)
 
 
 faGraphvizPrinter :: Ident -- ^ Grammar name
-		   -> Options -> CGrammar -> String
-faGraphvizPrinter name opts cfg = 
+		   -> String -> CGrammar -> String
+faGraphvizPrinter name start cfg = 
     prFAGraphviz $ mapStates (const "") fa
-  where fa = cfgToFA opts cfg
+  where fa = cfgToFA start cfg
 
 
 -- | Convert the grammar to a regular grammar and print it in BNF
@@ -53,8 +52,8 @@ regularPrinter = prCFRules . makeSimpleRegular
   showRhs = unwords . map (symbol id show)
 
 faCPrinter :: Ident -- ^ Grammar name
-	   -> Options -> CGrammar -> String
-faCPrinter name opts cfg = fa2c $ cfgToFA opts cfg
+	   -> String -> CGrammar -> String
+faCPrinter name start cfg = fa2c $ cfgToFA start cfg
 
 fa2c :: DFA String -> String
 fa2c fa = undefined

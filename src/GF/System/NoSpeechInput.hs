@@ -18,6 +18,11 @@ import GF.Infra.Ident (Ident)
 import GF.Infra.Option (Options)
 import GF.Conversion.Types (CGrammar)
 
+
 recognizeSpeech :: Ident -- ^ Grammar name
-	        -> Options -> CGrammar -> IO String
-recognizeSpeech _ _ _ = fail "No speech input available"
+	        -> String -- ^ Language, e.g. en_UK
+                -> CGrammar -- ^ Context-free grammar for input
+                -> String -- ^ Start category name
+                -> Int -- ^ Number of utterances
+                -> IO [String]
+recognizeSpeech _ _ _ _ _ = fail "No speech input available"

@@ -59,64 +59,71 @@ getLanguage l =
                                          ("HPARM:CMNDEFAULT", res ++ "/UK_SI_ZMFCC/cepmean")]
                                        }
            "sv_SE" -> do
-                      let res = "/home/bjorn/projects/atkswe/stoneage-swe"
+                      let res = "/home/bjorn/projects/atkswe/numerals-swe/final"
                       return $ ATKLang {
-                                 hmmlist = res ++ "/triphones1",
-                                 mmf0 = res ++ "/hmm12/macros",
-                                 mmf1 = res ++ "/hmm12/hmmdefs",
-                                 dict = res ++ "/dict",
+                                 hmmlist = res ++ "/hmm_tri/hmmlist",
+                                 mmf0 = res ++ "/hmm_tri/macros",
+                                 mmf1 = res ++ "/hmm_tri/hmmdefs",
+                                 dict = res ++ "/NumeralsSwe.dct",
                                  opts = [("TARGETKIND", "MFCC_0_D_A")]
                                         }
            _ -> fail $ "ATKSpeechInput: language " ++ l ++ " not supported"
 
--- | List of the languages for which we have already loaded the HMM
+-- | Current language for which we have loaded the HMM
 --   and dictionary.
-{-# NOINLINE languages #-}
-languages :: IORef [String]
-languages = unsafePerformIO $ newIORef []
+{-# NOINLINE currentLang #-}
+currentLang :: IORef (Maybe String)
+currentLang = unsafePerformIO $ newIORef Nothing
+
+-- | Initializes the ATK, loading the given language.
+--   ATK must not be initialized when calling this function.
+loadLang :: String -> IO ()
+loadLang lang = 
+    do
+    l <- getLanguage lang
+    config <- getEnv_ "GF_ATK_CFG" gf_atk_cfg_error
+    hPutStrLn stderr $ "Initializing ATK..."
+    initialize (Just config) (opts l)
+    let hmmName = "hmm_" ++ lang
+        dictName = "dict_" ++ lang
+    hPutStrLn stderr $ "Initializing ATK (" ++ lang ++ ")..."
+    loadHMMSet hmmName (hmmlist l) (mmf0 l) (mmf1 l)
+    loadDict dictName (dict l)
+    writeIORef currentLang (Just lang)
 
 initATK :: String -> IO ()
-initATK language = 
+initATK lang = 
     do
-    l <- getLanguage language
-    ls <- readIORef languages
-    when (null ls) $ do
-                     config <- getEnv_ "GF_ATK_CFG" gf_atk_cfg_error
-                     hPutStrLn stderr $ "Initializing ATK..."
-                     -- FIXME: different recognizers need different global options
-                     initialize (Just config) (opts l)
-    when (language `notElem` ls) $ 
-         do
-         let hmmName = "hmm_" ++ language
-             dictName = "dict_" ++ language
-         hPutStrLn stderr $ "Initializing ATK (" ++ language ++ ")..."
-         loadHMMSet hmmName (hmmlist l) (mmf0 l) (mmf1 l)
-         loadDict dictName (dict l)
-         writeIORef languages (language:ls)
+    ml <- readIORef currentLang
+    case ml of
+            Nothing -> loadLang lang
+            Just l | l == lang -> return ()
+                   | otherwise -> do
+                                  deinitialize
+                                  loadLang lang
 
 recognizeSpeech :: Ident -- ^ Grammar name
-	        -> Options -> CGrammar -> IO String
-recognizeSpeech name opts cfg = 
+	        -> String -- ^ Language, e.g. en_UK
+                -> CGrammar -- ^ Context-free grammar for input
+                -> String -- ^ Start category name
+                -> Int -- ^ Number of utterances
+                -> IO [String]
+recognizeSpeech name language cfg start number = 
     do
-    -- Options
-    let language = fromMaybe "en_UK" (getOptVal opts speechLanguage)
-        cat = fromMaybe "S" (getOptVal opts gStartCat) ++ "{}.s"
-        number = optIntOrN opts flagNumber 1
-    -- FIXME: use values of cat and number flags
-    let slf = slfPrinter name opts cfg
+    -- FIXME: use cat
+    let slf = slfPrinter name start cfg
         n = prIdent name
         hmmName = "hmm_" ++ language
         dictName = "dict_" ++ language
         slfName = "gram_" ++ n
         recName = "rec_" ++ language ++ "_" ++ n
-    print opts
     writeFile "debug.net" slf
     initATK language
     hPutStrLn stderr "Loading grammar..."
     loadGrammarString slfName slf
     createRecognizer recName hmmName dictName slfName
     hPutStrLn stderr "Listening..."
-    s <- recognize recName
+    s <- replicateM number (recognize recName)
     return s
 
 
