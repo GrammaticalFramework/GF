@@ -105,9 +105,9 @@ oper
 
 --2 Adjectives
 
--- Adjectives need four forms: two for the positive and one for the other degrees.
+-- Adjectives need three forms, one for each degree.
 
-  mkA : (x1,_,_,x4 : Str) -> A ; -- gut,gut,besser,best 
+  mkA : (x1,_,x3 : Str) -> A ; -- gut,besser,beste 
 
 -- The regular adjective formation works for most cases, and includes
 -- variations such as "teuer - teurer", "böse - böser".
@@ -215,7 +215,7 @@ oper
   mkVS  : V -> VS ;
   mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
-  mkV2V : V -> Prep -> Prep -> V2V ;
+  mkV2V : V -> Prep -> V2V ;
   mkVA  : V -> VA ;
   mkV2A : V -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
@@ -260,7 +260,8 @@ oper
   regN : Str -> N = \hund -> case hund of {
     _ + "e" => mkN hund hund hund hund (hund + "n") (hund + "n") Fem ;
     _ + ("ion" | "ung") => mkN hund hund hund hund (hund + "en") (hund + "en") Fem ;
-    _                   => mkN hund hund hund (genitS hund) (hund + "e") (hund + "en") Masc
+    _ + ("er" | "en" | "el") => mkN hund hund hund (genitS hund) hund (hund + "n") Masc ; 
+    _  => mkN hund hund hund (genitS hund) (hund + "e") (hund + "en") Masc
     } ;
 
   reg2N : (x1,x2 : Str) -> Gender -> N = \hund,hunde,g -> 
@@ -295,13 +296,18 @@ oper
   regPN = \horst -> 
     mkPN horst (ifTok Tok (Predef.dp 1 horst) "s" horst (horst + "s")) ;
 
-  mkA : (x1,_,_,x4 : Str) -> A = \a,b,c,d -> 
-    MorphoGer.mkA a b c d ** {lock_A = <>} ;
+  mkA : (x1,_,x3 : Str) -> A = \a,b,c ->
+    let aa : Str = case a of {
+      teu + "er" => teu + "r" ;
+      mud + "e" => mud ;
+      _ => a
+    } in 
+    MorphoGer.mkA a aa b (init c) ** {lock_A = <>} ;
 
   regA : Str -> A = \a -> case a of {
-    teu + "er" => mkA a (teu + "re") (teu + "rer") (teu + "rest") ;
-    _ + "e"    => mkA a a (a + "r") (a + "st") ;
-    _          => mkA a a (a + "er") (a + "est")
+    teu + "er" => mkA a (teu + "rer") (teu + "rest") ;
+    _ + "e"    => mkA a (a + "r") (a + "st") ;
+    _          => mkA a (a + "er") (a + "est")
     } ;
 
   invarA = \s -> {s = \\_,_ => s ; lock_A = <>} ; ---- comparison
@@ -363,6 +369,10 @@ oper
     prefix = v.prefix ; lock_V = v.lock_V ; aux = v.aux ; vtype = v.vtype
     } ;
 
+  haben_V = MorphoGer.haben_V ** {lock_V = <>} ;
+  sein_V = MorphoGer.sein_V ** {lock_V = <>} ;
+  werden_V = MorphoGer.werden_V ** {lock_V = <>} ;
+
   mkV2 v c   = v ** {c2 = c ; lock_V2 = <>} ;
   dirV2 v = mkV2 v (mkPrep [] accusative) ;
   datV2 v = mkV2 v (mkPrep [] dative) ;
@@ -382,7 +392,7 @@ oper
 
   mkV0  v = v ** {lock_V = <>} ;
   mkV2S v p = mkV2 v p ** {lock_V2 = <>} ;
-  mkV2V v p t = mkV2 v p ** {s4 = t ; lock_V2 = <>} ;
+  mkV2V v p = mkV2 v p ** {lock_V2 = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
   mkV2Q v p = mkV2 v p ** {lock_V2 = <>} ;

@@ -1,5 +1,7 @@
 concrete NumeralGer of Numeral = CatGer ** open MorphoGer in {
 
+flags optimize = all_subs ;
+
 lincat 
   Digit = {s : DForm => CardOrd => Str} ;
   Sub10 = {s : DForm => CardOrd => Str} ;

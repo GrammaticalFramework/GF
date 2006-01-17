@@ -197,7 +197,7 @@ StructuralGer: almost complete with some determiner forms to revisit
 ParadigmsGer: almost complete with verb form variations to revisit
 MorphoGer: very few functions in this module
 
-16/1
+16/1 (4h)
 
 ParamGer: removed Strong/Weak from AForm to save lexicon storage. Done in agrAdj instead. 
   Only affects NounGer and QuestionGer. Notice that making case analysis on <a,gn,c> is
@@ -208,5 +208,22 @@ ParadigmsGer: completed
 ParamGer: VType
 ResGer, ParadigmsGer: the consequences of this
 
-BasicGer; started
+BasicGer; started. Strategy: fill all you know without consulting dictionary;
+mark ---- before what you dont know, and after what you are uncertain about.
 
+Insight: to write a *resource* grammar you need not be a fluent speaker, but
+just to understand what grammar books say. It is when writing application
+grammars that you need to make stylistic judgements to do the right choices
+from the resource.
+
+17/1
+
+MorphoGer: for numerals
+NumeralGer: all
+> make stat
+  66123 german/NumeralGer.gfc
+added flags optimize=all_subs ;
+  17046 german/NumeralGer.gfc
+
+BasicGer: completed. Idea: work in pairs, one consulting the dictionary (or
+giving native speaker advice)
