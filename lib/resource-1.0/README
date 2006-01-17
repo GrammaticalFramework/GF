@@ -42,6 +42,9 @@ When will it be ready? Hopefully around February 2005.
 
 ---------- later history and status:
 
+17/1 All of English, Swedish, and German implemented. Some known bugs
+remain, also some ToDo API functions.
+
 13/1/2006 All of English, most of Scandinavian/Swedish, and TestGer
 have now been implemented. Most abstract/ modules have been documented
 using gfdoc. 
