@@ -28,6 +28,7 @@ concrete StructuralSwe of Structural = CatSwe **
   every_Det = {s = \\_,_ => "varje" ; n = Sg ; det = DDef Indef} ;
   everything_NP = regNP "allting" "alltings" SgNeutr ;
   everywhere_Adv = ss "överallt" ;
+  first_Ord = {s = "första" ; isDet = True} ;
   from_Prep = ss "från" ;
   he_Pron = mkNP "han"  "honom"  "hans" "hans" "hans"  SgUtr P3 ;
   here_Adv = ss "här" ;
@@ -49,6 +50,7 @@ concrete StructuralSwe of Structural = CatSwe **
     mkVerb6 "få" "måste" "få" "fick" "måst" "måst" ** {c2 = [] ; lock_VV = <>} ;
   no_Phr = ss ["Nej"] ;
   on_Prep = ss "på" ;
+  one_Quant = {s = \\_ => genderForms ["en"] ["ett"] ; n = Sg ; det = DIndef} ;
   only_Predet = {s = \\_ => "bara"} ;
   or_Conj = ss "eller" ** {n = Sg} ;
   otherwise_PConj = ss "annars" ;
@@ -58,8 +60,8 @@ concrete StructuralSwe of Structural = CatSwe **
   quite_Adv = ss "ganska" ;
   she_Pron = mkNP "hon" "henne" "hennes" "hennes" "hennes"  SgUtr P3 ;
   so_AdA = ss "så" ;
-  someSg_Det = {s = \\_ => genderForms "någon" "något" ; n = Sg ; det = DDef Indef} ;
-  somePl_Det = {s = \\_,_ => "några" ; n = Pl ; det = DDef Indef} ;
+  someSg_Det = {s = \\_ => genderForms "någon" "något" ; n = Sg ; det = DIndef} ;
+  somePl_Det = {s = \\_,_ => "några" ; n = Pl ; det = DIndef} ;
   somebody_NP = regNP "någon" "någons" SgUtr ;
   something_NP = regNP "något" "någots" SgNeutr ;
   somewhere_Adv = ss "någonstans" ;
@@ -93,6 +95,8 @@ concrete StructuralSwe of Structural = CatSwe **
   when_IAdv = ss "när" ;
   when_Subj = ss "när" ;
   where_IAdv = ss "var" ;
+  whichPl_IDet = {s = \\_ => "vilka" ; n = Pl ; det = DIndef} ;
+  whichSg_IDet = {s = genderForms "vilken" "vilket" ; n = Sg ; det = DIndef} ;
 ----  whichPl_IDet = vilkenDet ;
 ----  whichSg_IDet = mkDeterminerPl "vilka" IndefP ;
   whoSg_IP = {s = vem.s ; gn = SgUtr} ;
