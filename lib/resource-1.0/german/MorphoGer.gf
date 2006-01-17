@@ -61,5 +61,32 @@ oper
     _ => Predef.tk 2 v
     } ;
 
+-- For $Numeral$.
+
+  LinDigit = {s : DForm => CardOrd => Str} ;
+
+  cardOrd : Str -> Str -> CardOrd => Str = \drei,dritte ->
+    table {
+      NCard  => drei ;
+      NOrd a => (regA (init dritte)).s ! Posit ! a
+      } ;
+
+  cardReg : Str -> CardOrd => Str = \zehn ->
+    cardOrd zehn (zehn + "te") ;
+
+  mkDigit : (x1,_,_,x4 : Str) -> LinDigit = 
+    \drei,dreizehn,dreissig,dritte ->
+    {s = table {
+           DUnit => cardOrd drei dritte ;
+           DTeen => cardReg dreizehn ;
+           DTen  => cardOrd dreissig (dreissig + "ste")
+           }
+     } ;
+
+  regDigit : Str -> LinDigit = \vier -> 
+    mkDigit vier (vier + "zehn") (vier + "zig") (vier + "te") ;
+
+  invNum : CardOrd = NCard ;
+
 } ;
 

@@ -5,7 +5,7 @@ concrete LangGer of Lang =
   VerbGer, 
   AdjectiveGer,
   AdverbGer,
---  NumeralGer,
+  NumeralGer,
   SentenceGer,
   QuestionGer,
   RelativeGer,

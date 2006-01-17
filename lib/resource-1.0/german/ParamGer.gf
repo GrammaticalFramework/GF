@@ -73,7 +73,7 @@ resource ParamGer = ParamX ** {
 --2 For $Numeral$
 
     CardOrd = NCard | NOrd AForm ;
-    DForm = unit | teen | ten  ;
+    DForm = DUnit  | DTeen  | DTen ;
 
 --2 Transformations between parameter types
 

@@ -122,6 +122,13 @@ oper
 
   mkA2 : A -> Prep -> A2 ;
 
+--2 Adverbs
+
+-- Adverbs are just strings.
+
+  mkAdv : Str -> Adv ;
+
+
 --2 Prepositions
 
 -- A preposition is formed from a string and a case.
@@ -300,6 +307,8 @@ oper
   invarA = \s -> {s = \\_,_ => s ; lock_A = <>} ; ---- comparison
 
   mkA2 = \a,p -> a ** {c2 = p ; lock_A2 = <>} ;
+
+  mkAdv s = {s = s ; lock_Adv = <>} ;
 
   mkPrep s c = {s = s ; c = c ; lock_Prep = <>} ;
   accPrep = mkPrep [] accusative ;
