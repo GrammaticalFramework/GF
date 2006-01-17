@@ -1,5 +1,5 @@
 test:
-	gf -src english/LangEng.gf swedish/LangSwe.gf german/TestGer.gf
+	gf -src english/LangEng.gf swedish/LangSwe.gf german/LangGer.gf
 
 stat:
 	wc english/*.gfc 
