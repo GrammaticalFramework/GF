@@ -2,7 +2,7 @@
 --
 --1 German Lexical Paradigms
 --
--- Aarne Ranta 2003--2005
+-- Aarne Ranta & Harald Hammarström 2003--2006
 --
 -- This is an API to the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
@@ -148,8 +148,8 @@ oper
 -- - 1/3p sg imperfect indicative, 
 -- - 1/3p sg imperfect subjunctive (because this uncommon form can have umlaut)
 -- - the perfect participle 
-
-
+--
+--
   mkV : (x1,_,_,_,_,x6 : Str) -> V ;   -- geben, gibt, gib, gab, gäbe, gegeben
 
 -- Weak verbs are sometimes called regular verbs.
@@ -178,6 +178,7 @@ oper
 -- Reflexive verbs can take reflexive pronouns of different cases.
 
   reflV  : V -> Case -> V ;
+
 
 --3 Two-place verbs
 --
