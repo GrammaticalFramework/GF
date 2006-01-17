@@ -26,7 +26,6 @@ import GF.Conversion.Types
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..),symbol)
 import GF.Infra.Ident
-import GF.Infra.Option
 import GF.Infra.Print
 import GF.Speech.CFGToFiniteState
 import GF.Speech.FiniteState
@@ -54,9 +53,9 @@ data SLFEdge = SLFEdge { eId :: Int, eStart :: Int, eEnd :: Int }
 
 type SLF_FA = FA State (Maybe (MFALabel String)) ()
 
-mkFAs :: Options -> CGrammar -> (SLF_FA, [(String,SLF_FA)])
-mkFAs opts cfg = (slfStyleFA main, [(c,slfStyleFA n) | (c,n) <- subs])
-  where MFA main subs = {- renameSubs $ -} cfgToMFA opts cfg
+mkFAs :: String -> CGrammar -> (SLF_FA, [(String,SLF_FA)])
+mkFAs start cfg = (slfStyleFA main, [(c,slfStyleFA n) | (c,n) <- subs])
+  where MFA main subs = {- renameSubs $ -} cfgToMFA start cfg
 
 slfStyleFA :: Eq a => DFA a -> FA State (Maybe a) ()
 slfStyleFA = renameStates [0..] . removeTrivialEmptyNodes . oneFinalState Nothing () 
@@ -76,9 +75,9 @@ renameSubs (MFA main subs) = MFA (renameLabels main) subs'
 -- * SLF graphviz printing (without sub-networks)
 --
 
-slfGraphvizPrinter :: Ident -> Options -> CGrammar -> String
-slfGraphvizPrinter name opts cfg 
-    = prFAGraphviz $ gvFA $ slfStyleFA $ cfgToFA' opts cfg
+slfGraphvizPrinter :: Ident -> String -> CGrammar -> String
+slfGraphvizPrinter name start cfg 
+    = prFAGraphviz $ gvFA $ slfStyleFA $ cfgToFA' start cfg
   where 
   gvFA = mapStates (fromMaybe "") . mapTransitions (const "")
 
@@ -87,9 +86,9 @@ slfGraphvizPrinter name opts cfg
 --
 
 slfSubGraphvizPrinter :: Ident -- ^ Grammar name
-	           -> Options -> CGrammar -> String
-slfSubGraphvizPrinter name opts cfg = Dot.prGraphviz g
-  where (main, subs) = mkFAs opts cfg
+	           -> String -> CGrammar -> String
+slfSubGraphvizPrinter name start cfg = Dot.prGraphviz g
+  where (main, subs) = mkFAs start cfg
         g = STM.evalState (liftM2 Dot.addSubGraphs ss m) [0..] 
         ss = mapM (\ (c,f) -> gvSLFFA (Just c) f) subs
         m = gvSLFFA Nothing main
@@ -114,9 +113,9 @@ gvSLFFA n fa =
 -- * SLF printing (without sub-networks)
 --
 
-slfPrinter :: Ident -> Options -> CGrammar -> String
-slfPrinter name opts cfg 
-    = prSLF (automatonToSLF mkSLFNode $ slfStyleFA $ cfgToFA' opts cfg) ""
+slfPrinter :: Ident -> String -> CGrammar -> String
+slfPrinter name start cfg 
+    = prSLF (automatonToSLF mkSLFNode $ slfStyleFA $ cfgToFA' start cfg) ""
 
 --
 -- * SLF printing (with sub-networks)
@@ -124,10 +123,10 @@ slfPrinter name opts cfg
 
 -- | Make a network with subnetworks in SLF
 slfSubPrinter :: Ident -- ^ Grammar name
-	   -> Options -> CGrammar -> String
-slfSubPrinter name opts cfg = prSLFs slfs ""
+	   -> String -> CGrammar -> String
+slfSubPrinter name start cfg = prSLFs slfs ""
   where 
-  (main,subs) = mkFAs opts cfg
+  (main,subs) = mkFAs start cfg
   slfs = SLFs [(c, faToSLF fa) | (c,fa) <- subs] (faToSLF main)
   faToSLF = automatonToSLF mfaNodeToSLFNode
 

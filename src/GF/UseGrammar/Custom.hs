@@ -101,6 +101,7 @@ import GF.Infra.UseIO
 
 import Control.Monad
 import Data.Char
+import Data.Maybe (fromMaybe)
 
 -- character codings
 import GF.Text.Unicode
@@ -254,23 +255,29 @@ customGrammarPrinter =
                                      probs = stateProbs s
                              in srgsXmlPrinter name opts (Just probs) $ stateCFG s)
   ,(strCI "slf",     \s -> let opts = stateOptions s
+                               start = getStartCat opts
                                name = cncId s
-                            in slfPrinter name opts $ stateCFG s)
+                            in slfPrinter name start $ stateCFG s)
   ,(strCI "slf_graphviz", \s -> let opts = stateOptions s
+                                    start = getStartCat opts
                                     name = cncId s
-                                 in slfGraphvizPrinter name opts $ stateCFG s)
+                                 in slfGraphvizPrinter name start $ stateCFG s)
   ,(strCI "slf_sub", \s -> let opts = stateOptions s
+                               start = getStartCat opts
                                name = cncId s
-                            in slfSubPrinter name opts $ stateCFG s)
+                            in slfSubPrinter name start $ stateCFG s)
   ,(strCI "slf_sub_graphviz", \s -> let opts = stateOptions s
+                                        start = getStartCat opts
                                         name = cncId s
-                                     in slfSubGraphvizPrinter name opts $ stateCFG s)
+                                     in slfSubGraphvizPrinter name start $ stateCFG s)
   ,(strCI "fa_graphviz", \s -> let opts = stateOptions s
+                                   start = getStartCat opts
                                    name = cncId s
-                                 in faGraphvizPrinter name opts $ stateCFG s)
+                                 in faGraphvizPrinter name start $ stateCFG s)
   ,(strCI "fa_c", \s -> let opts = stateOptions s
+                            start = getStartCat opts
                             name = cncId s
-                        in faCPrinter name opts $ stateCFG s)
+                        in faCPrinter name start $ stateCFG s)
   ,(strCI "regular", regularPrinter . stateCFG)
   ,(strCI "plbnf",   prLBNF True)
   ,(strCI "lbnf",    prLBNF False)
@@ -321,7 +328,8 @@ customGrammarPrinter =
 --  ,(strCI "cfg-old",  PrtOld.prt . CnvOld.cfg . statePInfoOld)
   ] 
   where stateGrammarLangOpts s = (stateOptions s, stateGrammarLang s)
-
+        getStartCat :: Options -> String
+        getStartCat opts = fromMaybe "S" (getOptVal opts gStartCat) ++ "{}.s"
 
 customMultiGrammarPrinter = 
   customData "Printers for multiple grammars, selected by option -printer=x" $

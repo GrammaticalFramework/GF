@@ -75,6 +75,7 @@ import GF.Infra.UseIO
 import GF.Data.Zipper
 
 import Data.List (nub)
+import Data.Maybe (fromMaybe)
 import Control.Monad (liftM)
 import System (system)
 
@@ -208,13 +209,15 @@ speechGenerate opts str = do
 ---  system ("echo" +++ "\"" ++ str ++ "\" | festival --tts" ++ lan)
   return ()
 
--- FIXME: look at flags
-speechInput :: Options -> StateGrammar -> IO String
-speechInput opt s = recognizeSpeech name opts cfg
+speechInput :: Options -> StateGrammar -> IO [String]
+speechInput opt s = recognizeSpeech name language cfg cat number
   where
-  opts = stateOptions s
+  opts = addOptions opt (stateOptions s)
   name = cncId s
-  cfg = stateCFG s
+  cfg = stateCFG s -- FIXME: use lang flag to select grammar
+  language = fromMaybe "en_UK" (getOptVal opts speechLanguage)
+  cat = fromMaybe "S" (getOptVal opts gStartCat)
+  number = optIntOrN opts flagNumber 1
 
 optLinearizeTreeVal :: Options -> GFGrammar -> Tree -> String
 optLinearizeTreeVal opts gr = err id id . optLinearizeTree opts gr
