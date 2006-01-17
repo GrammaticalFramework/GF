@@ -168,6 +168,7 @@ oper
   mk2ADeg : (bred,brett        : Str) -> ADeg ;
 
 
+
 --2 Adverbs
 
 -- Adverbs are not inflected. Most lexical ones have position
@@ -290,8 +291,57 @@ oper
   genitive = Gen ;
 
   mkN x y z u = mkNoun x y z u ** {lock_N = <>} ;
-  regN x g = regNoun x g ** {lock_N = <>} ;
-  mk2N x g = reg2Noun x g ** {lock_N = <>} ;
+  regN bil g = case g of {
+    Utr => case last bil of {
+      "a" => decl1Noun bil ;
+      _   => decl2Noun bil
+      } ;
+    Neutr => case last bil of {
+      "e" => decl4Noun bil ;
+      _   => decl5Noun bil
+      }
+    } ** {lock_N = <>} ;
+
+  mk2N bil bilar = 
+   let 
+     l  = last bil ;
+     b  = Predef.tk 2 bil ; 
+     ar = Predef.dp 2 bilar ;
+     bile = Predef.tk 2 bilar
+   in 
+   case ar of {
+      "or" => case l of {
+         "a" => decl1Noun bil ;
+         "r" => decl5Noun bil ;
+         "o" => mkNoun bil (bil + "n")  bilar (bilar + "na") ;
+         _   => mkNoun bil (bil + "en") bilar (bilar + "na")
+         } ;
+      "ar" => ifTok Noun bil bilar 
+                (decl5Noun bil) 
+                (ifTok Noun bile bil 
+                 (decl2Noun bil)
+                 (case l of {
+                    "e" => decl2Noun bil ; -- pojke-pojkar
+                    _   => mkNoun bil (bile + "en") bilar (bilar + "na") -- mun-munnar
+                    }
+                 )
+                ) ;
+      "er" => case l of {
+        "e" => mkNoun bil (bil + "n") (bil +"r") (bil + "rna") ;
+        "y" | "å" | "é" => decl3Noun bil ;
+        _   => mkNoun bil (bil + "en") bilar (bilar + "na")
+      } ;
+      "en" => ifTok Noun bil bilar (decl5Noun bil) (decl4Noun bil) ; -- ben-ben
+      _ => ifTok Noun bil bilar (
+             case Predef.dp 3 bil of {
+                "are" => let kikar = init bil in
+                         mkNoun bil (kikar + "en") bil (kikar + "na") ; 
+                _ => decl5Noun bil
+                }
+             )
+             (decl5Noun bil) --- rest case with lots of garbage
+      }  ** {lock_N = <>} ;
+         
 
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
   regN2 n g = mkN2 (regN n g) (mkPreposition "av") ;
