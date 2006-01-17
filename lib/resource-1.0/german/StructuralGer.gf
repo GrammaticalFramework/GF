@@ -93,7 +93,6 @@ concrete StructuralGer of Structural = CatGer **
   they_Pron = mkPronPers "sie" "sie" "ihnen" "ihrer" "ihr" Pl P3 ;
   this_Quant = detLikeAdj Sg "dies" ;
   this_NP = nameNounPhrase {s = caselist "dies" "dies" "diesem" "dieses"} ; ----
-  --  those_NP
   those_NP = {s = caselist "jene" "jene" "jenen" "jener" ; a = agrP3 Pl} ;
   those_Quant = detLikeAdj Pl "jen" ;
   thou_Pron = mkPronPers "du" "dich" "dir" "deiner" "dein" Sg P2 ;
