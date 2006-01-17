@@ -1,4 +1,18 @@
--- numerals from 1 to 999999 in decimal notation
+--1 Numerals
+
+-- This grammar defines numerals from 1 to 999999. 
+-- The implementations are adapted from the
+-- [numerals library http://www.cs.chalmers.se/~aarne/GF/examples/numerals/] 
+-- which defines numerals for 88 languages.
+-- The resource grammar implementations add to this inflection (if needed)
+-- and ordinal numbers.
+
+-- *Note*. Number 1 as defined 
+-- in the category $Numeral$ here should not be used in the formation of
+-- noun phrases, and should therefore be removed. Instead, one should use
+-- [Structural Structural.html]$.one_Quant$. This makes the grammar simpler
+-- because we can assume that numbers form plural noun phrases.
+
 
 abstract Numeral = Cat ** {
 
@@ -28,4 +42,5 @@ fun
   pot2as3 : Sub1000 -> Sub1000000 ;             -- coercion of 1..999
   pot3 : Sub1000 -> Sub1000000 ;                -- m * 1000
   pot3plus : Sub1000 -> Sub1000 -> Sub1000000 ; -- m * 1000 + n
+
 }
