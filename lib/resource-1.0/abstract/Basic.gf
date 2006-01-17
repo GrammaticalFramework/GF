@@ -1,6 +1,8 @@
 abstract Basic = Cat ** {
   fun
+  add_V3 : V3 ;
   airplane_N : N ;
+  already_Adv : Adv ;
   answer_V2S : V2 ;
   apartment_N : N ;
   apple_N : N ;
@@ -54,6 +56,7 @@ abstract Basic = Cat ** {
   die_V : V ;
   dirty_A : A ;
   distance_N3 : N3 ;
+  do_V2 : V2 ;
   doctor_N : N ;
   dog_N : N ;
   door_N : N ;
@@ -93,6 +96,7 @@ abstract Basic = Cat ** {
   important_A : A ;
   industry_N : N ;
   iron_N : N ;
+  jump_V : V ;
   king_N : N ;
   know_V2 : V2 ;
   lake_N : N ;
@@ -118,6 +122,8 @@ abstract Basic = Cat ** {
   narrow_A : A ;
   new_A : A ;
   newspaper_N : N ;
+  now_Adv : Adv ;
+  number_N : N ;
   oil_N : N ;
   old_A : A ;
   open_V2 : V2 ;
@@ -131,6 +137,7 @@ abstract Basic = Cat ** {
   policeman_N : N ;
   priest_N : N ;
   probable_AS : A ;
+  put_V2 : V2 ;
   queen_N : N ;
   radio_N : N ;
   rain_V0 : V ;
@@ -163,10 +170,12 @@ abstract Basic = Cat ** {
   small_A : A ;
   snake_N : N ;
   sock_N : N ;
+  song_N : N ;
   speak_V2 : V2 ;
   star_N : N ;
   steel_N : N ;
   stone_N : N ;
+  stop_V : V ;
   stove_N : N ;
   student_N : N ;
   stupid_A : A ;
@@ -183,7 +192,7 @@ abstract Basic = Cat ** {
   train_N : N ;
   travel_V : V ;
   tree_N : N ;
-----  trousers_N : N ;
+  ----  trousers_N : N ;
   ugly_A : A ;
   understand_V2 : V2 ;
   university_N : N ;
@@ -204,15 +213,5 @@ abstract Basic = Cat ** {
   write_V2 : V2 ;
   yellow_A : A ;
   young_A : A ;
-
-  do_V2 : V2 ;
-  now_Adv : Adv ;
-  already_Adv : Adv ;
-  song_N : N ;
-  add_V3 : V3 ;
-  number_N : N ;
-  put_V2 : V2 ;
-  stop_V : V ;
-  jump_V : V ;
 
 }
