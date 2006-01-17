@@ -1,12 +1,13 @@
 --# -path=.:../common:../abstract:../../prelude
 
-concrete BasicGer of Basic = CatGer ** open ParadigmsGer in {
+concrete BasicGer of Basic = CatGer ** open Prelude, ParadigmsGer in {
 
 flags 
   optimize=values ;
 
 lin
   airplane_N = regN "Flugzeug"  ;
+  already_Adv = ss "schon" ;
   answer_V2S = mkV2S (regV "antworten") datPrep ;
   apartment_N = regN "Wohnung" ;
   apple_N = reg2N "Apfel" "Äpfel" masculine  ;
@@ -127,8 +128,8 @@ lin
   new_A = regA "neu" ;
   newspaper_N = regN "Zeitung" ;
 {-
-  oil_N = regN "olja" ;
-  old_A = mkA "gammal" "gammalt" "gamla" "gamla" "äldre" "äldst" "äldsta" ;
+  oil_N = regN "Öl" ; ----
+  old_A = mkA "alt" "gammalt" "gamla" "gamla" "äldre" "äldst" "äldsta" ;
   open_V2 = dirV2 (regV "öppna") ;
   paint_V2A = mkV2A (regV "måla") [] ;
   paper_N = mkN "papper" "pappret" "papper" "pappren" ;
