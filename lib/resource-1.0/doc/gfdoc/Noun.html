@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1> The construction of nouns, noun phrases, and determiners</H1>
 <FONT SIZE="4">
 <I>Author: </I><BR>
-Last update: Tue Jan 17 15:29:09 2006
+Last update: Wed Jan 18 19:08:00 2006
 </FONT></CENTER>
 
 <P></P>
@@ -173,16 +173,19 @@ Relational nouns can also be used without their arguments.
 The semantics is typically derivative of the relational meaning.
 </P>
 <PRE>
-        UseN2 : N2 -&gt; CN ;            -- son
-        UseN3 : N3 -&gt; CN ;            -- flight
+        UseN2   : N2 -&gt; CN ;          -- son
+        UseN3   : N3 -&gt; CN ;          -- flight
 </PRE>
 <P></P>
 <P>
-Nouns can be modified by adjectives and relative clauses.
+Nouns can be modified by adjectives, relative clauses, and adverbs
+(the last rule will give rise to many 'PP attachement' ambiguities
+when used in connection with verb phrases).
 </P>
 <PRE>
-        AdjCN   : AP -&gt; CN -&gt; CN ;    -- big house
-        RelCN   : CN -&gt; RS -&gt; CN ;    -- house that John owns
+        AdjCN   : AP -&gt; CN  -&gt; CN ;   -- big house
+        RelCN   : CN -&gt; RS  -&gt; CN ;   -- house that John owns
+        AdvCN   : CN -&gt; Adv -&gt; CN ;   -- house on the hill
 </PRE>
 <P></P>
 <P>

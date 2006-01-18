@@ -1,3 +1,15 @@
+--1 A Basic Lexicon
+
+-- This files gives a list of words whose purpose is to test the GF
+-- resource grammar. It covers all lexical categories of [Cat Cat.html].
+-- By containing some of the most common words,
+-- it is aimed to cover, with high probability, all morphological 
+-- patterns in the different languages.
+
+-- Using this lexicon for translation is not recommended. The linearizations
+-- of the words in different languages are not guaranteed to be translation
+-- equivalents.
+
 abstract Basic = Cat ** {
   fun
   add_V3 : V3 ;
@@ -129,6 +141,7 @@ abstract Basic = Cat ** {
   open_V2 : V2 ;
   paint_V2A : V2A ;
   paper_N : N ;
+  paris_PN : PN ;
   peace_N : N ;
   pen_N : N ;
   planet_N : N ;

@@ -18,14 +18,15 @@
       <LI><A HREF="#toc4">Proper names and noun phrases</A>
       </UL>
     <LI><A HREF="#toc5">Adjectives</A>
-    <LI><A HREF="#toc6">Prepositions</A>
-    <LI><A HREF="#toc7">Verbs</A>
+    <LI><A HREF="#toc6">Adverbs</A>
+    <LI><A HREF="#toc7">Prepositions</A>
+    <LI><A HREF="#toc8">Verbs</A>
       <UL>
-      <LI><A HREF="#toc8">Two-place verbs</A>
-      <LI><A HREF="#toc9">Three-place verbs</A>
-      <LI><A HREF="#toc10">Other complement patterns</A>
+      <LI><A HREF="#toc9">Two-place verbs</A>
+      <LI><A HREF="#toc10">Three-place verbs</A>
+      <LI><A HREF="#toc11">Other complement patterns</A>
       </UL>
-    <LI><A HREF="#toc11">Definitions of paradigms</A>
+    <LI><A HREF="#toc12">Definitions of paradigms</A>
     </UL>
   </UL>
 
@@ -34,7 +35,7 @@
 <P></P>
 <P>
 Author: 
-Last update: Tue Jan 17 15:29:11 2006
+Last update: Wed Jan 18 19:08:02 2006
 </P>
 <P>
 Produced by 
@@ -185,10 +186,10 @@ The regular genitive is  <I>s</I>, omitted after <I>s</I>.
 <A NAME="toc5"></A>
 <H2>Adjectives</H2>
 <P>
-Adjectives need four forms: two for the positive and one for the other degrees.
+Adjectives need three forms, one for each degree.
 </P>
 <PRE>
-      mkA : (x1,_,_,x4 : Str) -&gt; A ; -- gut,gut,besser,best 
+      mkA : (x1,_,x3 : Str) -&gt; A ; -- gut,besser,beste 
 </PRE>
 <P></P>
 <P>
@@ -214,6 +215,15 @@ Two-place adjectives are formed by adding a preposition to an adjective.
 </PRE>
 <P></P>
 <A NAME="toc6"></A>
+<H2>Adverbs</H2>
+<P>
+Adverbs are just strings.
+</P>
+<PRE>
+      mkAdv : Str -&gt; Adv ;
+</PRE>
+<P></P>
+<A NAME="toc7"></A>
 <H2>Prepositions</H2>
 <P>
 A preposition is formed from a string and a case.
@@ -239,7 +249,7 @@ A couple of common prepositions (always with the dative).
       zu_Prep  : Prep ;
 </PRE>
 <P></P>
-<A NAME="toc7"></A>
+<A NAME="toc8"></A>
 <H2>Verbs</H2>
 <P>
 The worst-case constructor needs six forms:
@@ -302,7 +312,7 @@ Reflexive verbs can take reflexive pronouns of different cases.
       reflV  : V -&gt; Case -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc8"></A>
+<A NAME="toc9"></A>
 <H3>Two-place verbs</H3>
 <P>
 Two-place verbs need a preposition, except the special case with direct object
@@ -315,7 +325,7 @@ Two-place verbs need a preposition, except the special case with direct object
       datV2 : V -&gt; V2 ;
 </PRE>
 <P></P>
-<A NAME="toc9"></A>
+<A NAME="toc10"></A>
 <H3>Three-place verbs</H3>
 <P>
 Three-place (ditransitive) verbs need two prepositions, of which
@@ -327,7 +337,7 @@ the first one or both can be absent.
       accdatV3 : V -&gt; V3 ;                               -- give,_,_
 </PRE>
 <P></P>
-<A NAME="toc10"></A>
+<A NAME="toc11"></A>
 <H3>Other complement patterns</H3>
 <P>
 Verbs and adjectives can take complements such as sentences,
@@ -338,7 +348,7 @@ questions, verb phrases, and adjectives.
       mkVS  : V -&gt; VS ;
       mkV2S : V -&gt; Prep -&gt; V2S ;
       mkVV  : V -&gt; VV ;
-      mkV2V : V -&gt; Prep -&gt; Prep -&gt; V2V ;
+      mkV2V : V -&gt; Prep -&gt; V2V ;
       mkVA  : V -&gt; VA ;
       mkV2A : V -&gt; Prep -&gt; V2A ;
       mkVQ  : V -&gt; VQ ;
@@ -361,7 +371,7 @@ as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
       AS, A2S, AV, A2V : Type ;
 </PRE>
 <P></P>
-<A NAME="toc11"></A>
+<A NAME="toc12"></A>
 <H2>Definitions of paradigms</H2>
 <P>
 The definitions should not bother the user of the API. So they are

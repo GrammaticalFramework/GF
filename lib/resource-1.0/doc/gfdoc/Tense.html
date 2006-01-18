@@ -2,27 +2,38 @@
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE> Tense, Polarity, and Anteriority</TITLE>
 </HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1> Tense, Polarity, and Anteriority</H1>
 <FONT SIZE="4">
+<I>Author: </I><BR>
+Last update: Wed Jan 18 19:08:01 2006
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
+  <UL>
+  <LI><A HREF="#toc1">Tense, Polarity, and Anteriority</A>
+  </UL>
+
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
-<P>
-Author: 
-Last update: Tue Jan 17 15:29:10 2006
-</P>
 <P>
 Produced by 
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
+<A NAME="toc1"></A>
+<H1>Tense, Polarity, and Anteriority</H1>
 <P>
-==
+This module defines the abstract parameters of tense, polarity, and
+anteriority, which are used in <A HREF="Tensed.html">Tensed</A> to generate different
+forms of sentences. Together they give 2 x 4 x 4 = 16 sentence forms.
+These tenses are defined for all languages in the library. More tenses
+can be defined in the language extensions, e.g. the <I>passé simple</I> of
+Romance languages.
 </P>
 <PRE>
     abstract Tense = {
@@ -33,9 +44,9 @@ gfdoc - a rudimentary GF document generator.
         Ant ;
     
       fun
-        PPos, PNeg : Pol ;
-        TPres, TPast, TFut, TCond : Tense ;
-        ASimul, AAnter : Ant ;
+        PPos, PNeg : Pol ;                  -- I sleep/don't sleep
+        TPres, TPast, TFut, TCond : Tense ; -- I sleep/slept/will sleep/would sleep
+        ASimul, AAnter : Ant ;              -- I sleep/have slept
     
     }
 </PRE>

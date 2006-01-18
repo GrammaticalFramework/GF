@@ -136,6 +136,7 @@ lin
   open_V2 = dirV2 (regV "öffnen") ;
   paint_V2A = mkV2A (regV "malen") accPrep ;
   paper_N = reg2N "Papier" "Papiere" neuter ;
+  paris_PN = mkPN "Paris" "Paris" ;
   peace_N = mkN "Friede" "Frieden" "Frieden" "Friedens" "Frieden" "Frieden" masculine ;
   pen_N = regN "Bleistift" ; ----
   planet_N = reg2N "Planet" "Planeten" masculine ;

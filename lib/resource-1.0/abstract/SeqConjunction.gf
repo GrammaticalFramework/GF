@@ -1,7 +1,9 @@
+--1 Conjunctions of left-recursive lists
+
 abstract SeqConjunction = Cat ** {
 
 -- This module is for backward compatibility with API 0.9.
--- To be used instead of Conjunction.
+-- To be used instead of [Conjunction Conjunction.html].
 
   fun
 

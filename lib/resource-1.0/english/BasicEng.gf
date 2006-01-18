@@ -129,6 +129,7 @@ lin
   open_V2 = dirV2 (regV "open") ;
   paint_V2A = mkV2A (regV "paint") [] ;
   paper_N = regN "paper" ;
+  paris_PN = regPN "Paris" nonhuman ;
   peace_N = regN "peace" ;
   pen_N = regN "pen" ;
   planet_N = regN "planet" ;

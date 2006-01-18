@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1> Coordination</H1>
 <FONT SIZE="4">
 <I>Author: </I><BR>
-Last update: Tue Jan 17 15:29:08 2006
+Last update: Wed Jan 18 19:07:59 2006
 </FONT></CENTER>
 
 <P></P>
@@ -42,6 +42,11 @@ and define two general patterns:
 <LI>distributed conjunction: both X,...,X and X
 </UL>
 
+<P>
+<B>Note</B>. This module uses right-recursive lists. If backward
+compatibility with API 0.9 is needed, use
+<A HREF="SeqConjunction.html">SeqConjunction</A>.
+</P>
 <PRE>
     abstract Conjunction = Cat ** {
 </PRE>

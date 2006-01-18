@@ -2,50 +2,56 @@
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE> Symbolic expressions</TITLE>
 </HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1> Symbolic expressions</H1>
 <FONT SIZE="4">
+<I>Author: </I><BR>
+Last update: Wed Jan 18 19:08:00 2006
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
-      <UL>
-      <LI><A HREF="#toc1">Noun phrases with symbols</A>
-      <LI><A HREF="#toc2">Symbol lists</A>
-      </UL>
+  <UL>
+  <LI><A HREF="#toc1">Symbolic expressions</A>
+    <UL>
+    <LI><A HREF="#toc2">Noun phrases with symbols</A>
+    <LI><A HREF="#toc3">Symbol lists</A>
+    </UL>
+  </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
 <P>
-Author: 
-Last update: Tue Jan 17 15:29:08 2006
-</P>
-<P>
 Produced by 
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
+<A NAME="toc1"></A>
+<H1>Symbolic expressions</H1>
 <P>
-==
+<B>Note</B>. This module is not automatically included in the main
+grammar <A HREF="Lang.html">Lang</A>.
 </P>
 <PRE>
     abstract Math = Cat ** {
 </PRE>
 <P></P>
-<A NAME="toc1"></A>
-<H3>Noun phrases with symbols</H3>
+<A NAME="toc2"></A>
+<H2>Noun phrases with symbols</H2>
 <PRE>
     fun
     
-      SymbPN      : Symb -&gt; PN ;                -- "x"
-      IntPN       : Int -&gt; PN ;                 -- "27"
-      CNIntNP     : CN -&gt; Int -&gt; NP ;           -- "level 53"
-      CNSymbNP    : Det -&gt; CN -&gt; [Symb] -&gt; NP ; -- "(the) (2) numbers x and y"
+      SymbPN      : Symb -&gt; PN ;                -- x
+      IntPN       : Int -&gt; PN ;                 -- 27
+      CNIntNP     : CN -&gt; Int -&gt; NP ;           -- level 53
+      CNSymbNP    : Det -&gt; CN -&gt; [Symb] -&gt; NP ; -- (the) (2) numbers x and y
 </PRE>
 <P></P>
-<A NAME="toc2"></A>
-<H3>Symbol lists</H3>
+<A NAME="toc3"></A>
+<H2>Symbol lists</H2>
 <P>
 A symbol list has at least two elements. The last two are separated
 by a conjunction (<I>and</I> in English), the others by commas.
