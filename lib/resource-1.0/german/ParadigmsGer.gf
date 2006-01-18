@@ -260,8 +260,8 @@ oper
   regN : Str -> N = \hund -> case hund of {
     _ + "e" => mkN hund hund hund hund (hund + "n") (hund + "n") Fem ;
     _ + ("ion" | "ung") => mkN hund hund hund hund (hund + "en") (hund + "en") Fem ;
-    _ + ("er" | "en" | "el") => mkN hund hund hund (genitS hund) hund (hund + "n") Masc ; 
-    _  => mkN hund hund hund (genitS hund) (hund + "e") (hund + "en") Masc
+    _ + ("er" | "en" | "el") => mkN hund hund hund (genitS hund) hund (pluralN hund) Masc ; 
+    _  => mkN hund hund hund (genitS hund) (hund + "e") (pluralN hund) Masc
     } ;
 
   reg2N : (x1,x2 : Str) -> Gender -> N = \hund,hunde,g -> 
