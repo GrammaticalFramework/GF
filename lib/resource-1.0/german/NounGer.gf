@@ -132,4 +132,9 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       g = cn.g
       } ;
 
+    AdvCN cn s = {
+      s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ;
+      g = cn.g
+      } ;
+
 }

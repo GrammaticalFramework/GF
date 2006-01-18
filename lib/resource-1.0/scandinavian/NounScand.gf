@@ -33,7 +33,8 @@ incomplete concrete NounScand of Noun =
       det = quant.det
       } ;
     DetPl quant num ord = {
-      s = \\b,g => quant.s ! (orB b (orB num.isDet ord.isDet)) ! g ++ ord.s ;
+      s = \\b,g => quant.s ! (orB b (orB num.isDet ord.isDet)) ! g ++ 
+                   num.s ! g ++ ord.s ;
       n = Pl ;
       det = quant.det
       } ;
@@ -112,6 +113,11 @@ incomplete concrete NounScand of Noun =
       isMod = cn.isMod
       } ;
     SentCN  cn sc = let g = cn.g in {
+      s = \\n,d,c => cn.s ! n ! d ! c ++ sc.s ;
+      g = g ;
+      isMod = cn.isMod
+      } ;
+    AdvCN  cn sc = let g = cn.g in {
       s = \\n,d,c => cn.s ! n ! d ! c ++ sc.s ;
       g = g ;
       isMod = cn.isMod

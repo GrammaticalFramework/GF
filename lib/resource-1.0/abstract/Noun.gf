@@ -99,13 +99,16 @@ abstract Noun = Cat ** {
 -- Relational nouns can also be used without their arguments.
 -- The semantics is typically derivative of the relational meaning.
 
-    UseN2 : N2 -> CN ;            -- son
-    UseN3 : N3 -> CN ;            -- flight
+    UseN2   : N2 -> CN ;          -- son
+    UseN3   : N3 -> CN ;          -- flight
 
--- Nouns can be modified by adjectives and relative clauses.
+-- Nouns can be modified by adjectives, relative clauses, and adverbs
+-- (the last rule will give rise to many 'PP attachement' ambiguities
+-- when used in connection with verb phrases).
 
-    AdjCN   : AP -> CN -> CN ;    -- big house
-    RelCN   : CN -> RS -> CN ;    -- house that John owns
+    AdjCN   : AP -> CN  -> CN ;   -- big house
+    RelCN   : CN -> RS  -> CN ;   -- house that John owns
+    AdvCN   : CN -> Adv -> CN ;   -- house on the hill
 
 -- Nouns can also be modified by embedded sentences and questions.
 -- For some nouns this makes little sense, but we leave this for applications

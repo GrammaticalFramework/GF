@@ -34,7 +34,8 @@ oper
     _ => hund + variants {"s" ; "es"}
     } ;
   pluralN : Str -> Str = \hund -> case hund of {
-    _ + ("el" | "en" | "er" | "e") => hund + "n" ;
+    _ + ("el" | "er" | "e") => hund + "n" ;
+    _ + "en" => hund ;
     _ => hund + "en"
     } ;
   dativE : Str -> Str = \hund -> case hund of {

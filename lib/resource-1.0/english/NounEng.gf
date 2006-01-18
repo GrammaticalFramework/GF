@@ -59,6 +59,7 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
       s = \\n,c => preOrPost ap.isPre (ap.s ! agrP3 n) (cn.s ! n ! c)
       } ;
     RelCN cn rs = {s = \\n,c => cn.s ! n ! c ++ rs.s ! {n = n ; p = P3}} ;
+    AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s} ;
 
     SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s} ;
 
