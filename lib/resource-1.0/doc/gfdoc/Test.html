@@ -2,27 +2,37 @@
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE> The Reduced Top Module of the Resource Grammar</TITLE>
 </HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1> The Reduced Top Module of the Resource Grammar</H1>
 <FONT SIZE="4">
+<I>Author: </I><BR>
+Last update: Wed Jan 18 19:08:02 2006
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
+  <UL>
+  <LI><A HREF="#toc1">The Reduced Top Module of the Resource Grammar</A>
+  </UL>
+
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
-<P>
-Author: 
-Last update: Tue Jan 17 15:29:10 2006
-</P>
 <P>
 Produced by 
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
+<A NAME="toc1"></A>
+<H1>The Reduced Top Module of the Resource Grammar</H1>
 <P>
-==
+This grammar is just a collection of the different modules,
+and one that can be imported when one wants to test a reduced version
+of the grammar. The complete top module is <A HREF="Lang.html">Lang</A>.
+The main constructs missing are tenses of sentences, numerals, and 
+comprehensive lexicon.
 </P>
 <PRE>
     abstract Test = 
@@ -30,7 +40,6 @@ gfdoc - a rudimentary GF document generator.
       Verb, 
       Adjective,
       Adverb,
-      -- Numeral,
       Sentence, 
       Question,
       Relative,
@@ -38,6 +47,9 @@ gfdoc - a rudimentary GF document generator.
       Phrase,
       Untensed, 
       -- Tensed,
+      -- Structural,
+      -- Basic,
+      -- Numeral,
       Lex 
       ** {} ;
 </PRE>

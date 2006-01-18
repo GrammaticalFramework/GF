@@ -1,4 +1,12 @@
+--1 Test lexicon
+
+-- This lexicon is used when developing a grammar, and called by
+-- [Test Test.html]. The full lexicon is divided between
+-- [Structural Structural.html], [Basic Basic.html], and [Numeral Numeral.html].
+
 abstract Lex = Cat ** {
+
+-- Words of open classes
 
   fun
     walk_V  : V ;
@@ -15,7 +23,7 @@ abstract Lex = Cat ** {
     warm_A : A ;
     close_A2 : A2 ;
 
--- structural
+-- Structural words
 
 
     only_Predet, all_Predet : Predet ;

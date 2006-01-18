@@ -131,6 +131,7 @@ lin
   open_V2 = dirV2 (regV "öppna") ;
   paint_V2A = mkV2A (regV "måla") [] ;
   paper_N = mkN "papper" "pappret" "papper" "pappren" ;
+  paris_PN = regPN "Paris" neutrum ;
   peace_N = regN "fred" utrum ; ---- ar?
   pen_N = regN "penna" utrum ;
   planet_N = mk2N "planet" "planeter" ;

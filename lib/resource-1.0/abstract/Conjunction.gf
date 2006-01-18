@@ -7,6 +7,9 @@
 -- - distributed conjunction: both X,...,X and X
 --
 --
+-- *Note*. This module uses right-recursive lists. If backward
+-- compatibility with API 0.9 is needed, use
+-- [SeqConjunction SeqConjunction.html].
 
 abstract Conjunction = Cat ** {
 

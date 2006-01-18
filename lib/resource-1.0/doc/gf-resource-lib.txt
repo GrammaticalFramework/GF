@@ -1,0 +1,50 @@
+GF Resource Grammar Library v. 1.0
+Author: Aarne Ranta <aarne (at) cs.chalmers.se>
+Last update: %%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags --toc -thtml gf-resource-lib.txt
+
+%!target:html
+
+
+**Notice**. This document concerns the API v. 1.0 which has not
+yet been "officially" released. You can find the beginnings of it
+in [``GF/lib/resource-1.0/`` ..]. See the
+[``resource-1.0/README`` ../README] for
+details on how it differs from previous versions
+and how much has been implemented
+
+
+
+==The language independent API==
+
+The API is divided into a bunch of ``abstract`` modules.
+The following figure gives the dependencies of these modules.
+
+[Lang.png] 
+
+The documentation of the individual modules:
+
+- [Cat gfdoc/Cat.html]: the category system
+- [Noun gfdoc/Noun.html]: construction of nouns and noun phrases
+- [Adjective gfdoc/Adjective.html]: construction of adjectival phrases
+- [Verb gfdoc/Verb.html]: construction of verb phrases
+- [Adverb gfdoc/Adverb.html]: construction of adverbial phrases
+- [Numeral gfdoc/Numeral.html]: construction of cardinal and ordinal numerals
+- [Sentence gfdoc/Sentence.html]: construction of sentences and imperatives
+- [Question gfdoc/Question.html]: construction of questions
+- [Relative gfdoc/Relative.html]: construction of relative clauses
+- [Conjunction gfdoc/Conjunction.html]: coordination of phrases
+- [Phrase gfdoc/Phrase.html]: construction of the major units of text and speech
+- [Structural gfdoc/Structural.html]: a lexicon of structural words
+- [Basic gfdoc/Basic.html]: a lexicon of other common words, for test purposes
+- [Lang gfdoc/Lang.html]: the main module comprising all the others
+
+
+==The language-dependent APIs==
+
+- [ParadigmsEng english/ParadigmsEng.html]: English lexical paradigms
+- [ParadigmsGer german/ParadigmsGer.html]: German lexical paradigms
+- [ParadigmsSwe swedish/ParadigmsSwe.html]: Swedish lexical paradigms
