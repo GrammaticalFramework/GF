@@ -45,6 +45,6 @@ The documentation of the individual modules:
 
 ==The language-dependent APIs==
 
-- [ParadigmsEng english/ParadigmsEng.html]: English lexical paradigms
-- [ParadigmsGer german/ParadigmsGer.html]: German lexical paradigms
-- [ParadigmsSwe swedish/ParadigmsSwe.html]: Swedish lexical paradigms
+- [ParadigmsEng gfdoc/ParadigmsEng.html]: English lexical paradigms
+- [ParadigmsGer gfdoc/ParadigmsGer.html]: German lexical paradigms
+- [ParadigmsSwe gfdoc/ParadigmsSwe.html]: Swedish lexical paradigms
