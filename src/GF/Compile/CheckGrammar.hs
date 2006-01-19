@@ -185,6 +185,7 @@ checkResInfo gr (c,info) = do
       return (c, ResOper pty' pde')
 
     ResParam (Yes pcs) -> chIn "parameter type" $ do
+----      mapM ((mapM (computeLType gr . snd)) . snd) pcs
       mapM_ ((mapM_ (checkIfParType gr . snd)) . snd) pcs
       return (c,info)
 

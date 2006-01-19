@@ -33,7 +33,7 @@ incomplete concrete NounRomance of Noun =
       n = Sg
       } ;
     DetPl quant num ord = {
-      s = \\g,c => quant.s ! g ! c ++ num.s ! g ++ ord.s ! aagr g Sg ;
+      s = \\g,c => quant.s ! g ! c ++ num.s ! g ++ ord.s ! aagr g Pl ;
       n = Pl
       } ;
 
@@ -64,7 +64,7 @@ incomplete concrete NounRomance of Noun =
       n = Sg
       } ;
     DefPl = {
-      s = \\g,c => artDef g Sg c ;  
+      s = \\g,c => artDef g Pl c ;  
       n = Pl
       } ;
 
