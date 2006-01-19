@@ -10,7 +10,7 @@ param
 
   Case = Nom | Acc | CPrep Prep ; 
 
-  NPForm = Ton Case | Aton Case | Poss AAgr ;
+  NPForm = Ton Case | Aton Case | Poss {g : Gender ; n : Number} ; --- AAgr
 
   RelForm = RSimple Case | RComplex Gender Number Case ;
 
