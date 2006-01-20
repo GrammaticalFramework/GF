@@ -47,34 +47,54 @@ oper
 
   predV : Verb -> VP = \verb -> 
     let
-      vfin  : Agr -> TMood -> Str = \a,tm -> verb.s ! VFin tm a.n a.p ;
-      vpart : Agr -> Str = \a -> verb.s ! VPart a.g a.n ; ----  
+      vfin  : TMood -> Agr -> Str = \tm,a -> verb.s ! VFin tm a.n a.p ;
+      vpart : AAgr -> Str = \a -> verb.s ! VPart a.g a.n ;
       vinf  = verb.s ! VInfin ;
 
       aux   = auxVerb verb.vtyp ;
 
-      habet  : Agr -> TMood -> Str = \a,tm -> aux ! VFin tm a.n a.p ;
+      habet  : TMood -> Agr -> Str = \tm,a -> aux ! VFin tm a.n a.p ;
       habere : Str = aux ! VInfin ;
 
-      vf : Str -> Str -> {fin,inf : Str} = \fin,inf -> {
-        fin = fin ; inf = inf
+      vf : (Agr -> Str) -> (AAgr -> Str) -> {
+          fin : Agr => Str ; 
+          inf : AAgr => Str
+        } = 
+        \fin,inf -> {
+          fin = \\a => fin a ; 
+          inf = \\a => inf a
         } ;
 
     in {
-    s = \\a => table {
-      VPFinite t Simul => vf (vfin a t) [] ;
-      VPFinite t Anter => vf (habet a t) (vpart a) ; 
-      VPImperat        => vf (verb.s ! VImper SgP2) [] ; ----
-      VPInfinit Simul  => vf [] vinf ;
-      VPInfinit Anter  => vf [] (habere ++ vpart a)
+    s = table {
+      VPFinite t Simul => vf (vfin t) (\_ -> []) ;
+      VPFinite t Anter => vf (habet t) vpart ; 
+      VPImperat        => vf (\_ -> verb.s ! VImper SgP2) (\_ -> []) ; ----
+      VPInfinit Simul  => vf (\_ -> []) (\_ -> vinf) ;
+      VPInfinit Anter  => vf (\_ -> []) (\a -> habere ++ vpart a)
       } ;
-    a1  = negation ;
-    c1,c2 = [] ; ----
-    n2  = \\a => [] ;
-    a2  : Str = [] ;
-    ext : Str = [] ;
+    agr   = partAgr verb.vtyp ;
+    neg   = negation ;
+    clit1 = \\a => [] ; ----
+    clit2 = [] ;
+    comp  = \\a => [] ;
+    adv   = [] ;
+    ext   = [] ;
     } ;
-
+{-
+  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
+    s = vp.s ;
+    agr =
+    
+    a1 = vp.a1 ;
+    n2 = \\a => vp.n2 ! a ++ obj ! a ;
+    a2 = vp.a2 ;
+    ext = vp.ext ;
+    en2 = True ;
+    ea2 = vp.ea2 ;
+    eext = vp.eext
+    } ;
+-}
   mkClause : Str -> Agr -> VP -> 
     {s : Tense => Anteriority => Polarity => Mood => Str} =
     \subj,agr,vp -> {
@@ -86,13 +106,16 @@ oper
             Fut  => VFut ;
             Cond => VCondit
             } ;
-          verb  = vp.s  ! agr ! VPFinite tm a ;
-          neg   = vp.a1 ! b ;
-          clit  = vp.c1 ++ vp.c2 ;
-          compl = vp.n2 ! agr ++ vp.a2 ++ vp.ext
+          vps   = vp.s ! VPFinite tm a ;
+          verb  = vps.fin ! agr ;
+          inf   = vps.inf ! (appVPAgr vp.agr (aagr agr.g agr.n)) ; --- subtype bug
+          neg   = vp.neg ! b ;
+          clit  = vp.clit1 ! agr ++ vp.clit2 ;
+          compl = vp.comp ! agr ++ vp.adv ++ vp.ext
         in
-        subj ++ neg.p1 ++ clit ++ verb.fin ++ neg.p2 ++ verb.inf ++ compl
+        subj ++ neg.p1 ++ clit ++ verb ++ neg.p2 ++ inf ++ compl
     } ;
+
 
 }
 

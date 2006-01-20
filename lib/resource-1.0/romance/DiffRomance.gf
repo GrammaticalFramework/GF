@@ -28,6 +28,8 @@ oper
   negation  : Polarity => (Str * Str) ;
   copula    : Verb ;
 
+  partAgr   : VType -> VPAgr ;
+
 -- These needed above.
 
 param
