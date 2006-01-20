@@ -151,7 +151,7 @@ matchPatt cs0 (FV ts) = liftM FV $ mapM (matchPatt cs0) ts
 matchPatt cs0 trm = term2patt trm >>= match cs0 where
   match cs t = 
     case cs of
-      Cas ps b  :_ | elem t ps -> return b 
+      Cas ps b  :_ | elem t ps -> return b
       _:cs'                    -> match cs' t
       []                       -> Bad $ "pattern not found for" +++ prt t 
               +++ "among" ++++ unlines (map prt cs0)  ---- debug 

@@ -30,6 +30,8 @@ oper
 
   partAgr   : VType -> VPAgr ;
 
+  conjThan  : Str ;
+
 -- These needed above.
 
 param

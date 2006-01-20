@@ -1,8 +1,116 @@
 concrete StructuralFre of Structural = CatFre ** 
-  open MorphoFre, Prelude in {
+  open PhonoFre, MorphoFre, ParadigmsFre, Prelude in {
 
   flags optimize=all ;
 
+lin
+
+  above_Prep = {s = ["au dessus"] ; c = genitive ; isDir = False} ;
+  after_Prep = mkPreposition "après" ;
+--  all_Predet = toutDet ;
+  almost_AdA, almost_AdN = ss "presque" ;
+  although_Subj = ss ("bien" ++ elisQue) ** {m = Conjunct} ;
+  and_Conj = ss "et" ** {n = Pl} ;
+  because_Subj = ss ("parce" ++ elisQue) ** {m = Indic} ;
+  before_Prep = mkPreposition "avant" ;
+  behind_Prep = mkPreposition "derrière" ;
+  between_Prep = mkPreposition "entre" ;
+  both7and_DConj = {s1,s2 = "et" ; n = Pl} ;
+  by8agent_Prep = mkPreposition "par" ;
+  by8means_Prep = mkPreposition "par" ;
+--  can8know_VV = mkVerbVerbDir (verbPres (conj3savoir "savoir") AHabere) ;
+--  can_VV = mkVerbVerbDir (verbPres (conj3pouvoir "pouvoir") AHabere) ;
+  during_Prep = mkPreposition "pendant" ;
+  either7or_DConj = {s1,s2 = "ou" ; n = Pl} ;
+--  everybody_NP = mkNameNounPhrase ["tout le monde"] Masc ;
+  every_Det = {s = \\_,_ => "chaque" ; n = Sg} ;
+--  everything_NP = mkNameNounPhrase ["tout"] Masc ;
+  everywhere_Adv = ss "partout" ;
+  from_Prep = complGen ; ---
+  he_Pron = 
+    mkPronoun
+      "il" (elision "l") "lui" "lui" "son" (elisPoss "s") "ses"
+      Masc Sg P3 Clit2 ;
+  how_IAdv = ss "comment" ;
+  how8many_IDet = {s = \\_ => "combien" ++ elisDe ; n = Pl} ;
+  if_Subj = ss elisSi ** {m = Indic} ;
+  in8front_Prep = mkPreposition "devant" ;
+  i_Pron = 
+    mkPronoun
+      (elision "j") (elision "m") (elision "m") "moi" "mon" (elisPoss "m") "mes"
+      Fem Sg P1 Clit1 ;
+  in_Prep = mkPreposition "dans" ;
+  it_Pron = 
+    mkPronoun
+      "il" (elision "l") "lui" "lui" "son" (elisPoss "s") "ses"
+      Masc Sg P3 Clit2 ;
+--  many_Det = mkDeterminer1 plural "plusieurs" ;
+--  most8many_Det = plupartDet ;
+--  most_Det = mkDeterminer1 singular (["la plupart"] ++ elisDe) ; --- de
+--  much_Det = mkDeterminer1 singular ("beaucoup" ++ elisDe) ; --- de
+--  must_VV = mkVerbVerbDir (verbPres (conj3devoir "devoir") AHabere) ;
+  no_Phr = ss "non" ; --- and also Si!
+  on_Prep = mkPreposition "sur" ;
+  or_Conj = {s = "ou" ; n = Sg} ;
+  otherwise_PConj = ss "autrement" ;
+  part_Prep = complGen ;
+  possess_Prep = complGen ;
+  quite_Adv = ss "assez" ;
+  she_Pron = 
+    mkPronoun
+      "elle" elisLa "lui" "elle" "son" (elisPoss "s") "ses"
+      Fem Sg P3 Clit2 ;
+
+  so_AdA = ss "si" ;
+--  somebody_NP = mkNameNounPhrase ["quelqu'un"] Masc ;
+--  some_Det = mkDeterminer1 singular "quelque" ;
+--  some_NDet = mkDeterminerNum "quelques" "quelques" ;
+--  something_NP = mkNameNounPhrase ["quelque chose"] Masc ;
+  somewhere_Adv = ss ["quelque part"] ; --- ne - pas
+--  that_Det = mkDeterminer singular (pre {"ce" ; "cet" / voyelle}) "cette" ; --- là
+--  that_NP = mkNameNounPhrase ["ça"] Masc ;
+  therefore_PConj = ss "donc" ;
+--  these_NDet = mkDeterminerNum "ces" "ces" ; --- ci
+--  they_Pron = pronNounPhrase pronIls ;
+--  they8fem_Pron = pronNounPhrase pronElles ;
+--  this_Det = mkDeterminer singular (pre {"ce" ; "cet" / voyelle}) "cette" ; --- ci
+--  this_NP = mkNameNounPhrase ["ceci"] Masc ;
+--  those_NDet = mkDeterminerNum "ces" "ces" ; --- là
+  thou_Pron = mkPronoun 
+    "tu" (elision "t") (elision "t") "toi" "ton" (elisPoss "t") "tes"
+    Fem Sg P2 Clit1 ;
+  through_Prep = mkPreposition "par" ;
+  too_AdA = ss "trop" ;
+  to_Prep = complDat ;
+  under_Prep = mkPreposition "sous" ;
+  very_AdA = ss "très" ;
+--  want_VV = mkVerbVerbDir (verbPres (conj3vouloir "vouloir") AHabere) ;
+  we_Pron = 
+    mkPronoun "nous" "nous" "nous" "nous" "notre" "notre" "nos"
+    Fem Pl P1 Clit3 ;
+  whatSg_IP = {s = \\_ => "quoi" ; a = aagr Fem Sg} ;
+--  what8many_IP = intPronWhat plural ;
+  when_IAdv = ss "quand" ;
+  when_Subj = ss "quand" ** {m = Indic} ;
+  where_IAdv = ss "où" ;
+--  which8many_IDet = mkDeterminerNum "quels" "quelles" ** {n = Pl} ;
+--  which8one_IDet = quelDet ;
+  whoSg_IP = {s = \\_ => "qui" ; a = aagr Fem Sg} ;
+--  who8many_IP = intPronWho plural ;
+  why_IAdv = ss "pourquoi" ;
+  without_Prep = mkPreposition "sans" ;
+  with_Prep = mkPreposition "avec" ;
+  ye_Pron = 
+    mkPronoun
+      "vous" "vous" "vous" "vous" "votre" "votre" "vos"
+       Fem Pl P2 Clit3 ;
+  yes_Phr = ss "oui" ; --- si
+--  you_Pron = pronNounPhrase pronVous ;
+
+}
+
+
+{-
   lin
   above_Prep = ss "ovanför" ;
   after_Prep = ss "efter" ;
@@ -113,3 +221,4 @@ concrete StructuralFre of Structural = CatFre **
 
 }
 
+-}

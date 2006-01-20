@@ -4,7 +4,7 @@ incomplete concrete SentenceRomance of Sentence =
   flags optimize=all_subs ;
 
   lin
-    PredVP np vp = mkClause (np.s ! Ton Nom) np.a vp ;
+    PredVP np vp = mkClause (np.s ! Aton Nom) np.a vp ;
 {-
     PredSCVP sc vp = mkClause sc.s (agrP3 neutrum Sg) vp ;
 
