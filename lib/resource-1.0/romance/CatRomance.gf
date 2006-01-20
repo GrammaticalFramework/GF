@@ -46,7 +46,7 @@ incomplete concrete CatRomance of Cat =
 -- Noun
 
     CN      = {s : Number => Str ; g : Gender} ;
-    NP,Pron = {s : NPForm => Str ; a : Agr ; c : ClitType} ;
+    NP,Pron = Pronoun ;
     Det     = {s : Gender => Case => Str ; n : Number} ;
     QuantSg = {s : Gender => Case => Str} ;
     QuantPl = {s : Gender => Case => Str} ;

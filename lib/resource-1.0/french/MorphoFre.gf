@@ -162,8 +162,6 @@ oper
 -- All the eight personal pronouns can be built by the following macro.
 -- The use of "en" as atonic genitive is debatable.
 
-  Pronoun = {s : NPForm => Str ; a : Agr ; c : ClitType} ;
-
   mkPronoun : (_,_,_,_,_,_,_ : Str) -> 
               Gender -> Number -> Person -> ClitType -> Pronoun =
     \il,le,lui,Lui,son,sa,ses,g,n,p,c ->

@@ -12,7 +12,7 @@ concrete LangFre of Lang =
 --  ConjunctionFre,
 --  PhraseFre,
 --  TensedFre,
---  StructuralFre,
+  StructuralFre,
   BasicFre
   ** {
 
