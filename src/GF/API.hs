@@ -216,7 +216,7 @@ speechInput opt s = recognizeSpeech name language cfg cat number
   name = cncId s
   cfg = stateCFG s -- FIXME: use lang flag to select grammar
   language = fromMaybe "en_UK" (getOptVal opts speechLanguage)
-  cat = fromMaybe "S" (getOptVal opts gStartCat)
+  cat = fromMaybe "S" (getOptVal opts gStartCat) ++ "{}.s"
   number = optIntOrN opts flagNumber 1
 
 optLinearizeTreeVal :: Options -> GFGrammar -> Tree -> String

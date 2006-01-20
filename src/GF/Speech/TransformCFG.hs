@@ -36,7 +36,7 @@ import GF.Speech.FiniteState
 import Control.Monad
 import Data.FiniteMap
 import Data.List
-import Data.Maybe (fromJust, fromMaybe)
+import Data.Maybe (fromMaybe)
 import Data.Set (Set)
 import qualified Data.Set as Set
 

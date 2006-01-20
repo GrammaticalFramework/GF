@@ -81,8 +81,8 @@ unionAll = nub . concat
 
 -- | Like 'lookup', but fails if the argument is not found,
 --   instead of returning Nothing.
-lookup' :: Eq a => a -> [(a,b)] -> b
-lookup' x = fromJust . lookup x
+lookup' :: (Show a, Eq a) => a -> [(a,b)] -> b
+lookup' x = fromMaybe (error $ "Not found: " ++ show x) . lookup x
 
 -- | Like 'find', but fails if nothing is found.
 find' :: (a -> Bool) -> [a] -> a
