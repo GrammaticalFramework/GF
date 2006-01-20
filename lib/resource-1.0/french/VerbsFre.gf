@@ -390,6 +390,6 @@ lin
   vêtir_V2 = v_besch26 "vêtir" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ;
   vivre_V2 = v_besch76 "vivre" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ;
   voir_V2 = v_besch39 "voir" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ;
-  vouloir_V2 = v_besch48 "vouloir" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complGen} ;
+  vouloir_V2 = v_besch48 "vouloir" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ;
 
 }

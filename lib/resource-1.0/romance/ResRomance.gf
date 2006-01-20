@@ -145,6 +145,14 @@ oper
         subj ++ neg.p1 ++ clit ++ verb ++ neg.p2 ++ inf ++ compl
     } ;
 
+  infVP : VP -> Agr -> Str = \vp,agr ->
+      let
+        inf = (vp.s ! VPInfinit Simul).inf ! (aagr agr.g agr.n) ;
+        neg = vp.neg ! Pos ; --- Neg not in API
+        cli = vp.clit1 ! agr ++ vp.clit2 ;
+        obj = vp.comp ! agr
+      in
+      clitInf cli inf ++ obj ;
 
 }
 
