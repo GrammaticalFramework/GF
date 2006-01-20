@@ -20,17 +20,32 @@ resource CommonRomance = ParamRomance ** open Prelude in {
     Noun = {s : Number => Str ; g : Gender} ;
 
     VP : Type = {
-      s : Agr => VPForm => {
-        fin : Str ;           -- ai  
-        inf : Str             -- dit 
+      s : VPForm => {
+        fin : Agr  => Str ;             -- ai  
+        inf : AAgr => Str               -- dit 
         } ;
-      a1  : Polarity => (Str * Str) ; -- ne-pas
-      c1  : Str ;             -- le
-      c2  : Str ;             -- lui
-      n2  : Agr => Str ;      -- content(e) ; à ma mère
-      a2  : Str ;             -- hier
-      ext : Str ;             -- que je dors
+      agr   : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
+      neg   : Polarity => (Str * Str) ; -- ne-pas
+      clit1 : Agr => Str ;              -- se
+      clit2 : Str ;                     -- lui
+      comp  : Agr => Str ;              -- content(e) ; à ma mère
+      adv   : Str ;                     -- hier
+      ext   : Str ;                     -- que je dors
       } ;
+
+    appVPAgr : VPAgr -> AAgr -> AAgr = \vp,agr -> 
+      case vp of {
+        VPAgrNone   => aagr Masc Sg ;
+        VPAgrSubj   => agr ;
+        VPAgrClit a => a
+        } ;
+
+  param
+    VPAgr = 
+       VPAgrNone                    -- elle a dormi 
+     | VPAgrSubj                    -- elle est partie, elle s'est vue
+     | VPAgrClit                    -- elle les a vues
+        {g : Gender ; n : Number} ;
 
 }
 
