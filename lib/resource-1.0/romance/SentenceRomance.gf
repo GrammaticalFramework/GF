@@ -1,11 +1,11 @@
 incomplete concrete SentenceRomance of Sentence = 
-  CatRomance ** open DiffRomance, ResRomance in {
+  CatRomance ** open CommonRomance, ResRomance in {
 
   flags optimize=all_subs ;
 
   lin
-    PredVP np vp = mkClause (np.s ! nominative) np.a vp ;
-
+    PredVP np vp = mkClause (np.s ! Ton Nom) np.a vp ;
+{-
     PredSCVP sc vp = mkClause sc.s (agrP3 neutrum Sg) vp ;
 
     ImpVP vp = {
@@ -39,5 +39,5 @@ incomplete concrete SentenceRomance of Sentence =
     EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = infVP vp (agrP3 utrum Sg)} ; --- agr
-
+-}
 }

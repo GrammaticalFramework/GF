@@ -1,5 +1,5 @@
 incomplete concrete NounRomance of Noun =
-   CatRomance ** open DiffRomance, ResRomance, Prelude in {
+   CatRomance ** open CommonRomance, ResRomance, Prelude in {
 
   flags optimize=all_subs ;
 

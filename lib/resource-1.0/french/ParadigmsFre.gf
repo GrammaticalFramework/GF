@@ -28,8 +28,8 @@ resource ParadigmsFre =
   open 
     (Predef=Predef), 
     Prelude, 
-    ResRomance, 
-    DiffFre, 
+    CommonRomance, 
+    ResFre, 
     MorphoFre, 
     CatFre in {
 
@@ -319,9 +319,9 @@ oper
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
-  regV x = let v = vvf (mkVerbReg x) in {s = v ; aux = VHabere ; lock_V = <> ; isRefl = False} ;
-  reg3V x y z = let v = vvf (mkVerb3Reg x y z) in {s = v ; aux = VHabere ; lock_V = <> ; isRefl = False} ;
-  etreV v = {s = v.s ; aux = VEsse ; lock_V = <> ; isRefl = False} ;
+  regV x = let v = vvf (mkVerbReg x) in {s = v ; vtyp = VHabere ; lock_V = <>} ;
+  reg3V x y z = let v = vvf (mkVerb3Reg x y z) in {s = v ; vtyp = VHabere ; lock_V = <>} ;
+  etreV v = {s = v.s ; vtyp = VEsse ; lock_V = <>} ;
 
   mkV2 v p = v ** {c2 = p ; lock_V2 = <>} ;
   dirV2 v = mkV2 v accusative ;

@@ -91,6 +91,11 @@ param
 
   NumPersI  = SgP2 | PlP1 | PlP2 ;
 
+  VPForm =
+     VPFinite TMood Anteriority
+   | VPImperat
+   | VPInfinit Anteriority ;
+
 -- Agreement of adjectives, verb phrases, and relative pronouns.
 
 oper

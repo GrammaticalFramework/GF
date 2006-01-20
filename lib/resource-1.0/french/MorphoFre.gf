@@ -8,7 +8,7 @@
 -- syntax. To build a lexicon, it is better to use $ParadigmsFre$, which
 -- gives a higher-level access to this module.
 
-resource MorphoFre = ResRomance, DiffFre ** 
+resource MorphoFre = CommonRomance, ResFre ** 
   open PhonoFre, Prelude, Predef in {
 
 flags optimize=all ;
@@ -171,8 +171,8 @@ oper
        Ton x => prepCase x ++ Lui ;
        Aton Nom => il ;
        Aton Acc => le ; 
-       Aton Gen => "en" ; --- hmm
-       Aton Dat => lui ; 
+       Aton (CPrep P_de) => "en" ; --- hmm
+       Aton (CPrep P_a) => lui ; 
        Poss {n = Sg ; g = Masc} => son ;
        Poss {n = Sg ; g = Fem}  => sa ;
        Poss {n = Pl}    => ses
