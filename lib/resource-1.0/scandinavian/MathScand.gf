@@ -9,7 +9,7 @@ lin
     a = agrP3 cn.g Sg
     } ;
   CNSymbNP det cn xs = let g = cn.g in {
-    s = \\c => det.s ! g ++ cn.s ! det.n ! det.det ! caseNP c ++ xs.s ; 
+    s = \\c => det.s ! cn.isMod ! g ++ cn.s ! det.n ! det.det ! caseNP c ++ xs.s ; 
     a = agrP3 g det.n
     } ;
 

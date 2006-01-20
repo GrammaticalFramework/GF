@@ -1,5 +1,5 @@
 incomplete concrete QuestionRomance of Question = 
-  CatRomance ** open DiffRomance, ResRomance in {
+  CatRomance ** open CommonRomance, ResRomance in {
 
   flags optimize=all_subs ;
 
@@ -9,23 +9,19 @@ incomplete concrete QuestionRomance of Question =
       s = \\t,a,p => 
             let cls = cl.s ! t ! a ! p 
             in table {
-              QDir   => cls ! Inv ;
-              QIndir => subjIf ++ cls ! Sub
+              QDir   => cls ! Indic ;
+              QIndir => "si" ++ cls ! Indic ---- subjIf
               }
       } ;
 
     QuestVP qp vp = {
-      s = \\t,a,b,q => 
-        let 
-          somo = case q of {
-            QIndir => <"som",Sub> ;
-            _      => <[],   Main>
-            } ;
-          cl = mkClause (qp.s ! nominative ++ somo.p1) {gn = qp.gn ; p = P3} vp  
+      s = \\t,a,b,_ => 
+        let
+          cl = mkClause (qp.s ! Nom) (agrP3 qp.a.g qp.a.n) vp  
         in
-        cl.s ! t ! a ! b ! somo.p2
+        cl.s ! t ! a ! b ! Indic
       } ;   
-
+{-
     QuestSlash ip slash = {
       s = \\t,a,p => 
             let 
@@ -62,5 +58,5 @@ incomplete concrete QuestionRomance of Question =
            idet.s ! g ++ num.s ! g ++ ord.s ++ cn.s ! idet.n ! idet.det ! caseNP c ; 
       gn = gennum g idet.n
       } ;
-
+-}
 }

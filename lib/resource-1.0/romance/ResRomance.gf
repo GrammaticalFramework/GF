@@ -26,6 +26,12 @@ oper
   complGen : Compl = {s = [] ; c = genitive ; isDir = False} ;
   complDat : Compl = {s = [] ; c = dative ; isDir = True} ;
 
+  pn2np : {s : Str ; g : Gender} -> Pronoun = \pn -> {
+      s = \\c => prepCase (npform2case c) ++ pn.s ; 
+      a = agrP3 pn.g Sg ;
+      c = Clit0
+      } ;
+
   npform2case : NPForm -> Case = \p -> case p of {
     Ton  x => x ;
     Aton x => x ;

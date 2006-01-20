@@ -1,5 +1,5 @@
 incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
-  open Prelude, Test, Structural, ParamX, DemRes in {
+  open Prelude, Lang, ParamX, DemRes in {
 
   lincat
 
@@ -24,8 +24,8 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
       mkDem 
         {s : Polarity => Str} 
         (polCases 
-          (UttS (PosCl cl)) 
-          (UttS (NegCl cl))) 
+          (UttS (UseCl TPres ASimul PPos cl)) 
+          (UttS (UseCl TPres ASimul PNeg cl))) 
         (concatPoint np vp) ;
 
     MQPredVP np vp = 
@@ -34,8 +34,8 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
       mkDem 
         {s : Polarity => Str} 
         (polCases 
-           (UttQS (PosQCl cl)) 
-           (UttQS (NegQCl cl)))
+           (UttQS (UseQCl TPres ASimul PPos cl)) 
+           (UttQS (UseQCl TPres ASimul PNeg cl)))
         (concatPoint np vp) ;
 
     MQuestVP np vp = 
@@ -44,8 +44,8 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
       mkDem 
         {s : Polarity => Str} 
         (polCases 
-           (UttQS (PosQCl cl)) 
-           (UttQS (NegQCl cl)))
+           (UttQS (UseQCl TPres ASimul PPos cl)) 
+           (UttQS (UseQCl TPres ASimul PNeg cl)))
         vp ;
 
     MImpVP vp =
@@ -80,9 +80,9 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
     that_MNP = mkDem NP that_NP ;
 
     thisDet_MNP cn = 
-      mkDem NP (DetCN (MkDet NoPredet this_Quant NoNum NoOrd) cn) ;
+      mkDem NP (DetCN (DetSg this_Quant NoOrd) cn) ;
     thatDet_MNP cn = 
-      mkDem NP (DetCN (MkDet NoPredet that_Quant NoNum NoOrd) cn) ;
+      mkDem NP (DetCN (DetSg that_Quant NoOrd) cn) ;
 
     here_MAdv      = mkDem Adv here_Adv ;
     here7from_MAdv = mkDem Adv here7from_Adv ;

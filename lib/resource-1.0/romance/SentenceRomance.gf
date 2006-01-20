@@ -5,18 +5,18 @@ incomplete concrete SentenceRomance of Sentence =
 
   lin
     PredVP np vp = mkClause (np.s ! Aton Nom) np.a vp ;
-{-
-    PredSCVP sc vp = mkClause sc.s (agrP3 neutrum Sg) vp ;
+
+--    PredSCVP sc vp = mkClause sc.s (agrP3 neutrum Sg) vp ;
 
     ImpVP vp = {
-      s = \\pol,n => 
+      s = \\pol,aag => 
         let 
-          agr   = {gn = gennum utrum n ; p = P2} ;
-          verb  = vp.s ! VPImperat ;
+          agr   = aag ** {p = P2} ;
+          verb  = (vp.s ! VPImperat).fin ! agr
         in
-        verb.fin ++ vp.a1 ! pol ++ verb.inf ++ vp.n2 ! agr ++ vp.a2 ++ vp.ext
+        verb ++ vp.comp ! agr ++ vp.ext --- neg,clit
     } ;
-
+{-
     SlashV2 np v2 = 
       mkClause 
         (np.s ! nominative) np.a 
