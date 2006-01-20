@@ -17,6 +17,12 @@ resource CommonRomance = ParamRomance ** open Prelude in {
         Fem => bonne
         } ; 
 
+    aagrForms : (x1,_,_,x4 : Str) -> (AAgr => Str) = \tout,toute,tous,toutes ->
+      table {
+        {g = g ; n = Sg} => genForms tout toute ! g ;
+        {g = g ; n = Pl} => genForms tous toutes ! g
+        } ;
+
     Noun = {s : Number => Str ; g : Gender} ;
 
     VP : Type = {
@@ -44,7 +50,7 @@ resource CommonRomance = ParamRomance ** open Prelude in {
        VPAgrNone                    -- elle a dormi 
      | VPAgrSubj                    -- elle est partie, elle s'est vue
      | VPAgrClit                    -- elle les a vues
-        {g : Gender ; n : Number} ;
+         {g : Gender ; n : Number} ;
 
 }
 

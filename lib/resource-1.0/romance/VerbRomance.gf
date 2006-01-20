@@ -10,8 +10,9 @@ incomplete concrete VerbRomance of Verb =
 
     ComplV3 v np np2 = insertObject v.c3 np2 (insertObject v.c2 np (predV v)) ;
 
+    ComplVV v vp = insertComplement (\\a => prepCase v.c2.c ++ infVP vp a) (predV v) ;
+
 {-
-    ComplVV v vp = insertObj (\\a => v.c2 ++ infVP vp a) (predV v) ;
     ComplVS v s  = insertObj (\\_ => conjThat ++ s.s ! Sub) (predV v) ;
     ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
 

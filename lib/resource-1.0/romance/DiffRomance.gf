@@ -32,6 +32,8 @@ oper
 
   conjThan  : Str ;
 
+  clitInf   : Str -> Str -> Str ;
+
 -- These needed above.
 
 param
