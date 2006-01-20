@@ -372,17 +372,18 @@ wrapByFun opts gr f t =
    g = grammar gr
 
 applyTransfer :: Options -> GFGrammar -> [(Ident,T.Env)] ->
-                 (Maybe Ident,Ident) -> Tree -> Tree
-applyTransfer opts gr trs (mm,f) t = 
-  err (const t) id $ annotate g t'
+                 (Maybe Ident,Ident) -> Tree -> Err [Tree]
+applyTransfer opts gr trs (mm,f) t = mapM (annotate g) ts'
  where
-   t' = qualifTerm (absId gr) $ trans tr f $ tree2exp t
+   ts' = map (qualifTerm (absId gr)) $ trans tr f $ tree2exp t
    g = grammar gr
    tr = case mm of
      Just m -> maybe empty id $ lookup m trs
      _ -> ifNull empty (snd . head) trs
-
-   trans tr f = core2exp . T.evaluateExp tr . exp2core f
+   -- FIXME: if the returned value is a list,
+   -- return a list of trees
+   trans :: T.Env -> Ident -> Exp -> [Exp]
+   trans tr f = (:[]) . core2exp . T.evaluateExp tr . exp2core f
    empty = T.builtin
 
 {-

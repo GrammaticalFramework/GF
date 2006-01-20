@@ -298,10 +298,10 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
         g3 = return () ---- system "rm -f grphtmp.*"
     justOutput opts (g0 >> g1 >> g2 >> g3 >> return ()) sa
 
-  CPutTerm -> changeArg (opTT2CommandArg (optTermCommand opts gro)  . s2t) sa
+  CPutTerm -> changeArg (opTT2CommandArg (return . optTermCommand opts gro) . s2t) sa
 
-  CWrapTerm f -> changeArg (opTT2CommandArg (return . wrapByFun opts gro f) . s2t) sa
-  CApplyTransfer f -> changeArg (opTT2CommandArg (return . applyTransfer opts gro transfs f) . s2t) sa
+  CWrapTerm f -> changeArg (opTT2CommandArg (return . return . wrapByFun opts gro f) . s2t) sa
+  CApplyTransfer f -> changeArg (opTT2CommandArg (applyTransfer opts gro transfs f) . s2t) sa
   CMorphoAnalyse -> changeArg (AString . morphoAnalyse opts gro . prCommandArg) sa
   CTestTokenizer -> changeArg (AString . optTokenizer opts gro . prCommandArg) sa
 
@@ -498,7 +498,7 @@ opTS2CommandArg f (ATrms ts) = AString $ unlines $ map f ts
 opTS2CommandArg _ (AError s) = AError ("expected term, but got error:" ++++ s)
 opTS2CommandArg _ a = AError ("expected term, but got:" ++++ prCommandArg a)
 
-opTT2CommandArg :: (Tree -> [Tree]) -> CommandArg -> CommandArg
-opTT2CommandArg f (ATrms ts) = ATrms $ concat $ map f ts
+opTT2CommandArg :: (Tree -> Err [Tree]) -> CommandArg -> CommandArg
+opTT2CommandArg f (ATrms ts) = err AError (ATrms . concat) $ mapM f ts
 opTT2CommandArg _ (AError s) = AError ("expected term, but got error:" ++++ s)
 opTT2CommandArg _ a = AError ("expected term, but got:" ++++ prCommandArg a)
