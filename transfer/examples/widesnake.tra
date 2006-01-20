@@ -17,3 +17,5 @@ wideSnake _ x = case x of
                                in if isSnake CN y' then Thick y' else Wide y'
 		    _ -> composOp ? ? compos_Tree ? wideSnake x
 		
+wideSnakeNP : Tree NP -> Tree NP
+wideSnakeNP = wideSnake NP
