@@ -42,6 +42,9 @@ When will it be ready? Hopefully around February 2005.
 
 ---------- later history and status:
 
+20/1 Main difficulties of French and Romance implemented. Also 
+ParadigmsFre and fragments of LangFre.
+
 17/1 All of English, Swedish, and German implemented. Some known bugs
 remain, also some ToDo API functions.
 
