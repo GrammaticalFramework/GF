@@ -2,11 +2,11 @@
 
 concrete LangFre of Lang = 
   NounFre, 
---  VerbFre, 
+  VerbFre, 
 --  AdjectiveFre,
 --  AdverbFre,
 --  NumeralFre,
---  SentenceFre,
+  SentenceFre,
 --  QuestionFre,
 --  RelativeFre,
 --  ConjunctionFre,

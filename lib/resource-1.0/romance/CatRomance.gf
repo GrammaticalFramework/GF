@@ -1,5 +1,5 @@
 incomplete concrete CatRomance of Cat = 
-  open ResRomance, Prelude, DiffRomance, (R = ParamX) in {
+  open Prelude, CommonRomance, ResRomance, (R = ParamX) in {
 
   flags optimize=all_subs ;
 
@@ -35,21 +35,9 @@ incomplete concrete CatRomance of Cat =
 
 -- Verb
 
-    VP = {
-      s : Anteriority => VF => {
-        fin : Str ;           -- ai  
-        inf : Str             -- dit 
-        } ;
-      a1  : Polarity => Str ; -- ne-pas
-      c1  : Str ;             -- le
-      c2  : Str ;             -- lui
-      n2  : Agr => Str ;      -- content(e) ; à ma mère
-      a2  : Str ;             -- hier
-      ext : Str ;             -- que je dors
-      } ;
+    VP = CommonRomance.VP ;
     Comp = {s : Agr => Str} ; 
     SC = {s : Str} ;
-
 
 -- Adjective
 
@@ -96,9 +84,5 @@ incomplete concrete CatRomance of Cat =
     N2 = Noun  ** {c2 : Compl} ;
     N3 = Noun  ** {c2,c3 : Compl} ;
     PN = {s : Str ; g : Gender} ;
-
-  oper
-    Noun = {s : Number => Str ; g : Gender} ;
-    Verb = {s : VF => Str ; aux : VAux ; isRefl : Bool} ;
 
 }

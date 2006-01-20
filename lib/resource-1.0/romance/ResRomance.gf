@@ -1,205 +1,98 @@
-----1 Romance auxiliary operations.
+--1 Romance auxiliary operations.
 --
----- This module contains operations that are needed to make the
----- resource syntax work. To define everything that is needed to
----- implement $Test$, it moreover contains regular lexical
----- patterns needed for $Lex$.
---
-resource ResRomance = ParamRomance ** open Prelude in {
 
-  flags optimize=all ;
-
-  oper
-    genForms : Str -> Str -> Gender => Str = \bon,bonne ->
-      table {
-        Masc => bon ; 
-        Fem => bonne
-        } ; 
+interface ResRomance = DiffRomance ** open CommonRomance, Prelude in {
 
 
-}
+--2 Constants uniformly defined in terms of language-dependent constants
 
-{-
-  oper
+param
 
--- For $Lex$.
+  NPForm = Ton Case | Aton Case | Poss {g : Gender ; n : Number} ; --- AAgr
 
--- For each lexical category, here are the worst-case constructors.
---
--- But $mkNoun$ is fully defined only for each language, since
--- $Gender$ varies.
+  RelForm = RSimple Case | RComplex Gender Number Case ;
 
-  nounForms : (x1,_,_,x4 : Str) -> (Number => Species => Case => Str) = 
-      \man,mannen,men,mennen -> \\n,d,c => case <n,d> of {
-        <Sg,Indef> => mkCase c man ;
-        <Sg,Def>   => mkCase c mannen ;
-        <Pl,Indef> => mkCase c men ;
-        <Pl,Def>   => mkCase c mennen
+
+oper
+
+  nominative : Case = Nom ;
+  accusative : Case = Acc ;
+
+  Compl : Type = {s : Str ; c : Case} ;
+
+  complAcc : Compl = {s = [] ; c = accusative} ;
+  complGen : Compl = {s = [] ; c = genitive} ;
+  complDat : Compl = {s = [] ; c = dative} ;
+
+  npform2case : NPForm -> Case = \p -> case p of {
+    Ton  x => x ;
+    Aton x => x ;
+    Poss _ => genitive
+    } ;
+
+  case2npform : Case -> NPForm = \c -> case c of {
+    Nom => Aton Nom ;
+    Acc => Aton Acc ;
+    _   => Ton c
+    } ;
+
+  npRelForm : NPForm -> RelForm = \np -> case np of {
+    Ton  c => RSimple c ;
+    Aton c => RSimple c ;
+    Poss _ => RSimple genitive
+    } ;
+
+  appCompl : Compl -> (NPForm => Str) -> Str = \comp,np ->
+    comp.s ++ np ! Ton comp.c ;
+
+  predV : Verb -> VP = \verb -> 
+    let
+      vfin  : Agr -> TMood -> Str = \a,tm -> verb.s ! VFin tm a.n a.p ;
+      vpart : Agr -> Str = \a -> verb.s ! VPart a.g a.n ; ----  
+      vinf  = verb.s ! VInfin ;
+
+      aux   = auxVerb verb.vtyp ;
+
+      habet  : Agr -> TMood -> Str = \a,tm -> aux ! VFin tm a.n a.p ;
+      habere : Str = aux ! VInfin ;
+
+      vf : Str -> Str -> {fin,inf : Str} = \fin,inf -> {
+        fin = fin ; inf = inf
         } ;
 
-  Adjective : Type = {s : AForm => Str} ;
-
-  mkAdjective : (x1,_,_,_,_,_,x7 : Str) -> {s : AForm => Str} = 
-    \liten, litet, lilla, sma, mindre, minst, minsta -> {
-    s = table {
-      AF (APosit a) c          => mkCase c (mkAdjPos a liten litet lilla sma) ;
-      AF ACompar c             => mkCase c mindre ;
-      AF (ASuperl SupStrong) c => mkCase c minst ;
-      AF (ASuperl SupWeak) c   => mkCase c minsta
-      } 
-    } ;
-
-  mkVerb : (x1,_,_,_,_,_,_,x8 : Str) -> {s : VForm => Str ; vtype : VType} = 
-   \finna,finner,finn,fann,funnit,funnen,funnet,funna -> {
-   s = table {
-    VF (VPres Act)  => finner ;
-    VF (VPres Pass) => mkVoice Pass finn ;
-    VF (VPret v)    => mkVoice v fann ;
-    VF (VImper v)   => mkVoice v finn ;
-    VI (VInfin v)   => mkVoice v finna ;
-    VI (VSupin v)   => mkVoice v funnit ;
-    VI (VPtPret a c)=> mkCase c (mkAdjPos a funnen funnet funna funna)
-    } ;
-   vtype = VAct
-   } ;
-
--- These are useful auxiliaries.
-
-  mkCase : Case -> Str -> Str = \c,f -> case c of {
-      Nom => f ;
-      Gen => f + case last f of {
-        "s" | "x" => [] ;
-        _ => "s"
-        }
+    in {
+    s = \\a => table {
+      VPFinite t Simul => vf (vfin a t) [] ;
+      VPFinite t Anter => vf (habet a t) (vpart a) ; 
+      VPImperat        => vf (verb.s ! VImper SgP2) [] ; ----
+      VPInfinit Simul  => vf [] vinf ;
+      VPInfinit Anter  => vf [] (habere ++ vpart a)
       } ;
-
-  mkAdjPos : AFormPos -> (s1,_,_,s4 : Str) -> Str =
-    \a, liten, litet, lilla, sma ->
-    case a of {
-      Strong gn => case gn of {
-        SgUtr => liten ;
-        SgNeutr => litet ;
-        Plg => sma
-      } ;
-     Weak Sg => lilla ;
-     Weak Pl => sma
-   } ;
-
-  mkVoice : Voice -> Str -> Str = \v,s -> case v of {
-    Act => s ;
-    Pass => s + case last s of {
-      "s" => "es" ;
-      _   => "s"
-      }
+    a1  = negation ;
+    c1,c2 = [] ; ----
+    n2  = \\a => [] ;
+    a2  : Str = [] ;
+    ext : Str = [] ;
     } ;
 
-
--- For $Noun$.
-
-  artDef : GenNum -> Str = \gn -> gennumForms "den" "det" "de" ! gn ;
-
-  mkNP : (x1,_,_,_,x5 : Str) -> GenNum -> Person -> 
-         {s : NPForm => Str ; a : Agr} = \du,dig,din,ditt,dina,gn,p -> {
-    s = table {
-      NPNom => du ;
-      NPAcc => dig ;
-      NPPoss g => gennumForms din ditt dina ! g
-      } ;
-    a = {
-      gn = gn ;
-      p  = p
-      }
-    } ;
-
-  gennumForms : (x1,x2,x3 : Str) -> GenNum => Str = \den,det,de -> 
-    table {
-      SgUtr => den ;
-      SgNeutr => det ;
-      _ => de
-    } ;  
-
-  regNP : Str -> Str -> GenNum -> {s : NPForm => Str ; a : Agr} =
-    \det,dess,gn ->
-    mkNP det det dess dess dess gn P3 ;
-
-
--- For $Verb$.
-
-  Verb : Type = {
-    s : VForm => Str ;
-    vtype : VType
-    } ;
-
-  VP = {
-      s : VPForm => {
-        fin : Str ;          -- V1 har  ---s1
-        inf : Str            -- V2 sagt ---s4
-        } ;
-      a1 : Polarity => Str ; -- A1 inte ---s3
-      n2 : Agr => Str ;      -- N2 dig  ---s5  
-      a2 : Str ;             -- A2 idag ---s6
-      ext : Str ;            -- S-Ext att hon går   ---s7
-      --- ea1,ev2,           --- these depend on params of v and a1
-      en2,ea2,eext : Bool    -- indicate if the field exists
-      } ;
-
-
-  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
-    s = vp.s ;
-    a1 = vp.a1 ;
-    n2 = \\a => vp.n2 ! a ++ obj ! a ;
-    a2 = vp.a2 ;
-    ext = vp.ext ;
-    en2 = True ;
-    ea2 = vp.ea2 ;
-    eext = vp.eext
-    } ;
-
-  insertAdv : Str -> VP -> VP = \adv,vp -> {
-    s = vp.s ;
-    a1 = vp.a1 ;
-    n2 = vp.n2 ;
-    a2 = vp.a2 ++ adv ;
-    ext = vp.ext ;
-    en2 = vp.en2 ;
-    ea2 = True ;
-    eext = vp.eext
-    } ;
-
-  insertAdV : Str -> VP -> VP = \adv,vp -> {
-    s = vp.s ;
-    a1 = \\b => vp.a1 ! b ++ adv ;
-    n2 = vp.n2 ;
-    a2 = vp.a2 ;
-    ext = vp.ext ;
-    en2 = vp.en2 ;
-    ea2 = vp.ea2 ;
-    eext = vp.eext
-    } ;
-
-  infVP : VP -> Agr -> Str = \vp,a -> 
-    (vp.s ! VPInfinit Simul).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
-
-
--- For $Sentence$.
-
-  Clause : Type = {
-    s : Tense => Anteriority => Polarity => Order => Str
-    } ;
-
-  mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp -> {
-      s = \\t,a,b,o => 
+  mkClause : Str -> Agr -> VP -> 
+    {s : Tense => Anteriority => Polarity => Mood => Str} =
+    \subj,agr,vp -> {
+      s = \\t,a,b,m => 
         let 
-          verb  = vp.s  ! VPFinite t a ;
+          tm = case t of {
+            Pres => VPres m ;
+            Past => VImperf m ;
+            Fut  => VFut ;
+            Cond => VCondit
+            } ;
+          verb  = vp.s  ! agr ! VPFinite tm a ;
           neg   = vp.a1 ! b ;
+          clit  = vp.c1 ++ vp.c2 ;
           compl = vp.n2 ! agr ++ vp.a2 ++ vp.ext
         in
-        case o of {
-          Main => subj ++ verb.fin ++ neg ++ verb.inf ++ compl ;
-          Inv  => verb.fin ++ subj ++ neg ++ verb.inf ++ compl ;
-          Sub  => subj ++ neg ++ verb.fin ++ verb.inf ++ compl
-          }
+        subj ++ neg.p1 ++ clit ++ verb.fin ++ neg.p2 ++ verb.inf ++ compl
     } ;
 
 }
--}
+

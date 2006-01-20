@@ -1,18 +1,14 @@
 --# -path=.:../romance:../abstract:../common:prelude
 
-instance DiffFre of DiffRomance = open ResRomance, PhonoFre, Prelude in {
+instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 
   param 
     Prep = P_de | P_a ;
-    VAux = VHabere | VEsse ;
+    VType = VHabere | VEsse | VRefl ;
 
   oper
-    dative : Case = CPrep P_a ;
+    dative   : Case = CPrep P_a ;
     genitive : Case = CPrep P_de ;
-
-    complAcc : Compl = {s = [] ; c = Acc} ;
-    complGen : Compl = {s = [] ; c = genitive} ;
-    complDat : Compl = {s = [] ; c = dative} ;
 
     prepCase : Case -> Str = \c -> case c of {
       Nom => [] ;
@@ -44,5 +40,19 @@ instance DiffFre of DiffRomance = open ResRomance, PhonoFre, Prelude in {
       CPrep P_de => elisDe ;
       _ => prepCase c ++ artDef g Sg (CPrep P_de)
       } ;
+
+    auxVerb : VType -> (VF => Str) = \vtyp -> case vtyp of {
+      VHabere => avoir_V.s ;
+      _ => copula.s
+      } ;
+
+    negation : Polarity => (Str * Str) = table {
+      Pos => <[],[]> ;
+      Neg => <elisNe,"pas">
+      } ;
+
+    copula : Verb = {s = table VF ["être";"suis";"es";"est";"sommes";"êtes";"sont";"sois";"sois";"soit";"soyons";"soyez";"soient";"étais";"étais";"était";"étions";"étiez";"étaient";"fusse";"fusses";"fût";"fussions";"fussiez";"fussent";"fus";"fus";"fut";"fûmes";"fûtes";"furent";"serai";"seras";"sera";"serons";"serez";"seront";"serais";"serais";"serait";"serions";"seriez";"seraient";"sois";"soyons";"soyez";"été";"étés";"étée";"étées";"étant"]; vtyp=VHabere} ;
+
+    avoir_V : Verb = {s=table VF ["avoir";"ai";"as";"a";"avons";"avez";"ont";"aie";"aies";"ait";"ayons";"ayez";"aient";"avais";"avais";"avait";"avions";"aviez";"avaient";"eusse";"eusses";"eût";"eussions";"eussiez";"eussent";"eus";"eus";"eut";"eûmes";"eûtes";"eurent";"aurai";"auras";"aura";"aurons";"aurez";"auront";"aurais";"aurais";"aurait";"aurions";"auriez";"auraient";"aie";"ayons";"ayez";"eu";"eus";"eue";"eues";"ayant"];vtyp=VHabere};
 
 }

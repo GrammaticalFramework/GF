@@ -411,6 +411,9 @@ inferLType gr trm = case trm of
        else do 
          (arg,val) <- checks $ map (inferCase Nothing) pts'
          check trm (Table arg val)
+   V arg pts -> do
+     (_,val) <- checks $ map infer pts
+     return (trm, Table arg val)
 
    K s  -> do
      if elem ' ' s

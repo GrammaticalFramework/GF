@@ -4,6 +4,7 @@ incomplete concrete VerbRomance of Verb = CatRomance ** open DiffRomance, ResRom
 
   lin
     UseV = predV ;
+{-
     ComplV2 v np = insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v) ;
     ComplV3 v np np2 = 
       insertObj 
@@ -39,5 +40,6 @@ incomplete concrete VerbRomance of Verb = CatRomance ** open DiffRomance, ResRom
         (predV verbBecome) ;
 
     UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; vtype = vv.vtype} ;
+-}
 
 }
