@@ -18,11 +18,13 @@ oper
   nominative : Case = Nom ;
   accusative : Case = Acc ;
 
-  Compl : Type = {s : Str ; c : Case} ;
+  Pronoun = {s : NPForm => Str ; a : Agr ; c : ClitType} ;
 
-  complAcc : Compl = {s = [] ; c = accusative} ;
-  complGen : Compl = {s = [] ; c = genitive} ;
-  complDat : Compl = {s = [] ; c = dative} ;
+  Compl : Type = {s : Str ; c : Case ; isDir : Bool} ;
+
+  complAcc : Compl = {s = [] ; c = accusative ; isDir = True} ;
+  complGen : Compl = {s = [] ; c = genitive ; isDir = False} ;
+  complDat : Compl = {s = [] ; c = dative ; isDir = True} ;
 
   npform2case : NPForm -> Case = \p -> case p of {
     Ton  x => x ;
@@ -81,20 +83,24 @@ oper
     adv   = [] ;
     ext   = [] ;
     } ;
-{-
-  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
-    s = vp.s ;
-    agr =
-    
-    a1 = vp.a1 ;
-    n2 = \\a => vp.n2 ! a ++ obj ! a ;
-    a2 = vp.a2 ;
-    ext = vp.ext ;
-    en2 = True ;
-    ea2 = vp.ea2 ;
-    eext = vp.eext
+
+  insertObject : Compl -> Pronoun -> VP -> VP = \c,np,vp -> 
+    let
+      cc : Str * Str * VPAgr = case <c.isDir, np.c> of {
+        <False,_> | <_,Clit0> => <[], c.s ++ np.s ! Ton c.c, vp.agr> ; 
+        _                     => <np.s ! Aton c.c, [], VPAgrClit np.a> 
+        }
+    in {
+      s     = vp.s ;
+      agr   = cc.p3 ;
+      clit1 = vp.clit1 ; ---- works for one clit now
+      clit2 = cc.p1 ;  
+      neg   = vp.neg ;
+      comp  = \\a => vp.comp ! a ++ cc.p2 ;
+      adv   = vp.adv ;
+      ext   = vp.ext ;
     } ;
--}
+
   mkClause : Str -> Agr -> VP -> 
     {s : Tense => Anteriority => Polarity => Mood => Str} =
     \subj,agr,vp -> {

@@ -288,7 +288,7 @@ oper
   accusative = complAcc ;
   genitive = complGen ;
   dative = complDat ;
-  mkPreposition p = {s = p ; c = Acc} ;
+  mkPreposition p = {s = p ; c = Acc ; isDir = False} ;
 
   mkN x y g = mkCNomIrreg x y g ** {lock_N = <>} ;
   regN x g = mkNomReg x g ** {lock_N = <>} ;
