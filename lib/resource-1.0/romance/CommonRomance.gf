@@ -28,8 +28,7 @@ resource CommonRomance = ParamRomance ** open Prelude in {
       neg   : Polarity => (Str * Str) ; -- ne-pas
       clit1 : Agr => Str ;              -- se
       clit2 : Str ;                     -- lui
-      comp  : Agr => Str ;              -- content(e) ; à ma mère
-      adv   : Str ;                     -- hier
+      comp  : Agr => Str ;              -- content(e) ; à ma mère ; hier
       ext   : Str ;                     -- que je dors
       } ;
 

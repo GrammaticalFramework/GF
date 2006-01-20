@@ -1,17 +1,18 @@
 incomplete concrete AdjectiveRomance of Adjective = 
-  CatRomance ** open DiffRomance, ResRomance, Prelude in {
+  CatRomance ** open CommonRomance, ResRomance, Prelude in {
 
   lin
 
     PositA  a = {
-      s = \\ap => a.s ! AF (APosit ap) Nom ;
-      isPre = True
+      s = a.s ! Posit ;
+      isPre = a.isPre
       } ;
     ComparA a np = {
-      s = \\_ => a.s ! AF ACompar Nom ++ conjThan ++ np.s ! nominative ; 
+      s = \\af => a.s ! Compar ! af ++ conjThan ++ np.s ! Ton Nom ; 
       isPre = False
       } ;
 
+{-
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
     ComplA2 a np = {
@@ -29,12 +30,12 @@ incomplete concrete AdjectiveRomance of Adjective =
       s = \\a => ap.s ! a ++ sc.s ; 
       isPre = False
       } ;
-
+-}
     AdAP ada ap = {
       s = \\a => ada.s ++ ap.s ! a ;
       isPre = ap.isPre
       } ;
 
-    UseA2 a = a ;
+    UseA2 a = a ** {isPre = False} ;
 
 }

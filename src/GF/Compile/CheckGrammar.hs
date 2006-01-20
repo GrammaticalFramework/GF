@@ -717,14 +717,14 @@ pattContext env typ p = case p of
     g1 <- pattContext env typ p
     g2 <- pattContext env typ q
     return $ g1 ++ g2
-  PRep p' -> noBind p'
-  PNeg p' -> noBind p'
+  PRep p' -> noBind typeStr p'
+  PNeg p' -> noBind typ p'
 
   _ -> return [] ---- check types!
  where 
    cnc = env
-   noBind p' = do
-    co <- pattContext env typeStr p'
+   noBind typ p' = do
+    co <- pattContext env typ p'
     if not (null co)
       then checkWarn ("no variable bound inside pattern" +++ prt p) 
            >> return []

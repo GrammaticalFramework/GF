@@ -80,25 +80,48 @@ oper
     clit1 = \\a => [] ; ----
     clit2 = [] ;
     comp  = \\a => [] ;
-    adv   = [] ;
     ext   = [] ;
     } ;
 
   insertObject : Compl -> Pronoun -> VP -> VP = \c,np,vp -> 
     let
-      cc : Str * Str * VPAgr = case <c.isDir, np.c> of {
-        <False,_> | <_,Clit0> => <[], c.s ++ np.s ! Ton c.c, vp.agr> ; 
-        _                     => <np.s ! Aton c.c, [], VPAgrClit np.a> 
-        }
+      cc : Str * Str * VPAgr = case <c.isDir, c.c, np.c> of {
+        <False,_,_> | 
+        <_,_,Clit0> => <[], c.s ++ np.s ! Ton c.c, vp.agr> ; 
+        <_,Acc,_>   => <np.s ! Aton c.c, [], VPAgrClit (aagr np.a.g np.a.n)> ; --- subty
+        _           => <np.s ! Aton c.c, [], vp.agr>
+        } ;
+      high = case np.c of {      -- whether the new clitic comes closer to verb
+        Clit0 | Clit1 => False ; ---- approximation; should look at the old clit too
+        _ => True
+        } ;
     in {
       s     = vp.s ;
       agr   = cc.p3 ;
-      clit1 = vp.clit1 ; ---- works for one clit now
-      clit2 = cc.p1 ;  
+      clit1 = vp.clit1 ; ---- just a reflexive
+      clit2 = preOrPost high vp.clit2 cc.p1 ;
       neg   = vp.neg ;
       comp  = \\a => vp.comp ! a ++ cc.p2 ;
-      adv   = vp.adv ;
       ext   = vp.ext ;
+    } ;
+
+  insertComplement : (Agr => Str) -> VP -> VP = \co,vp -> { 
+    s     = vp.s ;
+    agr   = vp.agr ;
+    clit1 = vp.clit1 ; 
+    clit2 = vp.clit2 ; 
+    neg   = vp.neg ;
+    comp  = \\a => vp.comp ! a ++ co ! a ;
+    ext   = vp.ext ;
+    } ;
+  insertAdv : Str -> VP -> VP = \co,vp -> { 
+    s     = vp.s ;
+    agr   = vp.agr ;
+    clit1 = vp.clit1 ; 
+    clit2 = vp.clit2 ; 
+    neg   = vp.neg ;
+    comp  = \\a => vp.comp ! a ++ co ;
+    ext   = vp.ext ;
     } ;
 
   mkClause : Str -> Agr -> VP -> 
@@ -117,7 +140,7 @@ oper
           inf   = vps.inf ! (appVPAgr vp.agr (aagr agr.g agr.n)) ; --- subtype bug
           neg   = vp.neg ! b ;
           clit  = vp.clit1 ! agr ++ vp.clit2 ;
-          compl = vp.comp ! agr ++ vp.adv ++ vp.ext
+          compl = vp.comp ! agr ++ vp.ext
         in
         subj ++ neg.p1 ++ clit ++ verb ++ neg.p2 ++ inf ++ compl
     } ;
@@ -125,3 +148,13 @@ oper
 
 }
 
+-- insertObject:
+-- p -cat=Cl -tr "la femme te l' envoie"
+-- PredVP (DetCN (DetSg DefSg NoOrd) (UseN woman_N)) 
+--  (ComplV3 send_V3 (UsePron he_Pron) (UsePron thou_Pron))
+-- la femme te l' a envoyé
+--
+-- p -cat=Cl -tr "la femme te lui envoie"
+-- PredVP (DetCN (DetSg DefSg NoOrd) (UseN woman_N)) 
+--   (ComplV3 send_V3 (UsePron thou_Pron) (UsePron he_Pron))
+-- la femme te lui a envoyée

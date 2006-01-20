@@ -25,7 +25,7 @@ param
 
   Mood   = Indic | Conjunct ;
 
--- There are different types of clicic pronouns (as for position).
+-- There are different types of clitic pronouns (as for position).
 -- Examples of each: "Giovanni" ; "io" ; "lui" ; "noi".
 
   ClitType = Clit0 | Clit1 | Clit2 | Clit3 ;
