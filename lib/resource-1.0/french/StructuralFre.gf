@@ -76,17 +76,17 @@ lin
 --  some_NDet = mkDeterminerNum "quelques" "quelques" ;
 --  something_NP = mkNameNounPhrase ["quelque chose"] Masc ;
   somewhere_Adv = ss ["quelque part"] ; --- ne - pas
---  that_Det = mkDeterminer singular (pre {"ce" ; "cet" / voyelle}) "cette" ; --- là
---  that_NP = mkNameNounPhrase ["ça"] Masc ;
-  there7from_Adv = ss "de là" ;
+  that_Quant = {s = \\g,c => prepCase c ++ genForms "ce" "cette" ! g} ; ---- cet
+  that_NP = pn2np (mkPN ["ceci"] Masc) ;
+  there7from_Adv = ss ["de là"] ;
   there7to_Adv = ss "là" ; --- y
   there_Adv = ss "là" ;
   therefore_PConj = ss "donc" ;
 --  these_NDet = mkDeterminerNum "ces" "ces" ; --- ci
 --  they_Pron = pronNounPhrase pronIls ;
 --  they8fem_Pron = pronNounPhrase pronElles ;
---  this_Det = mkDeterminer singular (pre {"ce" ; "cet" / voyelle}) "cette" ; --- ci
---  this_NP = mkNameNounPhrase ["ceci"] Masc ;
+  this_Quant = {s = \\g,c => prepCase c ++ genForms "ce" "cette" ! g} ; ---- cet
+  this_NP = pn2np (mkPN ["ceci"] Masc) ;
 --  those_NDet = mkDeterminerNum "ces" "ces" ; --- là
   thou_Pron = mkPronoun 
     "tu" (elision "t") (elision "t") "toi" "ton" (elisPoss "t") "tes"

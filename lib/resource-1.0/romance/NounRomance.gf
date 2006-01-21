@@ -14,11 +14,7 @@ incomplete concrete NounRomance of Noun =
         c = Clit0
         } ;
 
-    UsePN pn = {
-      s = \\c => prepCase (npform2case c) ++ pn.s ; 
-      a = agrP3 pn.g Sg ;
-      c = Clit0
-      } ;
+    UsePN = pn2np ;
 
     UsePron p = p ;
 

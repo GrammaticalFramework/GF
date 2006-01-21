@@ -1,9 +1,11 @@
 incomplete concrete MathRomance of Math = 
-  CatRomance ** open Prelude, ResRomance, DiffRomance in {
+  CatRomance ** open Prelude, CommonRomance, ResRomance in {
 
 lin
-  SymbPN i = {s = \\c => i.s ; g = Neutr} ; --- c
-  IntPN i  = {s = \\c => i.s ; g = Neutr} ; --- c
+  SymbPN i = {s = i.s ; g = Masc} ;
+  IntPN i  = {s = i.s ; g = Masc} ;
+
+{-
   CNIntNP cn i = {
     s = \\c => (cn.s ! Sg ! DIndef ! Nom ++ i.s) ;
     a = agrP3 cn.g Sg
@@ -12,6 +14,7 @@ lin
     s = \\c => det.s ! g ++ cn.s ! det.n ! det.det ! caseNP c ++ xs.s ; 
     a = agrP3 g det.n
     } ;
+-}
 
 lincat 
 
@@ -21,7 +24,7 @@ lin
 
   MkSymb s = s ;
 
-  BaseSymb = infixSS conjAnd ;
+  BaseSymb = infixSS "et" ; ----
   ConsSymb = infixSS "," ;
 
 }

@@ -7,11 +7,11 @@ concrete LangFre of Lang =
   AdverbFre,
 --  NumeralFre,
   SentenceFre,
---  QuestionFre,
+  QuestionFre,
 --  RelativeFre,
 --  ConjunctionFre,
---  PhraseFre,
---  TensedFre,
+  PhraseFre,
+  TensedFre,
   StructuralFre,
   BasicFre
   ** {
