@@ -258,3 +258,10 @@ Known bugs: double infinitives in subordinate clauses.
 Known uncertainties: marked with ----, mostly in Structural and Basic.
 
 Work: ca 27h for whole German (but with support in 0.6 esp. morphology, Swedish).
+
+
+22/1
+
+Fixed double infinitives with a new field (isAux : Bool) in VP. Used in
+mkClause.
+

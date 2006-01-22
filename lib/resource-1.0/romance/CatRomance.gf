@@ -69,7 +69,7 @@ incomplete concrete CatRomance of Cat =
     PConj = {s : Str} ;    
     CAdv  = {s : Str} ;    
     Subj  = {s : Str ; m : Mood} ;
-    Prep  = {s : Str} ;
+    Prep  = {s : Str ; c : Case} ;
 
 -- Open lexical classes, e.g. Basic
 

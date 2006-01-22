@@ -30,7 +30,7 @@ fun
 --  PClick   : Click -> Place ;          -- click associated with a "here"
 --  PHere    : Place ;                   -- indexical "here", without a click
 
-  FromThisPlace : Dep ;               -- "from this place"
-  ToThisPlace   : Dest ;              -- "to this place"
+--  FromThisPlace : Dep ;               -- "from this place"
+--  ToThisPlace   : Dest ;              -- "to this place"
 
 }
