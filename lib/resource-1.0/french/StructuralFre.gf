@@ -5,7 +5,7 @@ concrete StructuralFre of Structural = CatFre **
 
 lin
 
-  above_Prep = {s = ["au dessus"] ; c = genitive ; isDir = False} ;
+  above_Prep = {s = ["au dessus"] ; c = MorphoFre.genitive ; isDir = False} ;
   after_Prep = mkPreposition "après" ;
   all_Predet = {s = aagrForms "tout" "toute" "tous" "toutes"} ;
   almost_AdA, almost_AdN = ss "presque" ;

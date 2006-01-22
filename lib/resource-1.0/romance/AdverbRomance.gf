@@ -12,7 +12,7 @@ incomplete concrete AdverbRomance of Adverb =
       s = cadv.s ++ a.s ! Posit ! AA ++ conjThan ++ s.s ! Conjunct --- ne
       } ;
 
-    PrepNP prep np = {s = prep.s ++ np.s ! Ton Acc} ;
+    PrepNP prep np = {s = prep.s ++ np.s ! case2npform prep.c} ;
 
     AdAdv = cc2 ;
 
