@@ -196,13 +196,15 @@ resource ResGer = ParamGer ** open Prelude in {
 
   VP : Type = {
       s : Agr => VPForm => {
-        fin : Str ;          -- V1 hat
-        inf : Str            -- V2 gesagt
+        fin : Str ;          -- hat
+        inf : Str            -- wollen
         } ;
-      a1 : Polarity => Str ; -- A1 nicht
-      n2 : Agr => Str ;      -- N2 dich
-      a2 : Str ;             -- A2 heute
-      ext : Str              -- S-Ext dass sie kommt
+      a1 : Polarity => Str ; -- nicht
+      n2 : Agr => Str ;      -- dich
+      a2 : Str ;             -- heute
+      isAux : Bool ;      -- is a double infinitive
+      inf : Str ;            -- sagen
+      ext : Str              -- dass sie kommt
       } ;
 
   predV : Verb -> VP = predVGen False ;
@@ -248,7 +250,8 @@ resource ResGer = ParamGer ** open Prelude in {
       VRefl c => \\a => reflPron ! a ! c
       } ;
     a2  : Str = [] ;
-    ext : Str = []
+    isAux = isAux ; ----
+    inf,ext : Str = []
     } ;
 
   auxPerfect : Verb -> VForm => Str = \verb ->
@@ -314,6 +317,8 @@ resource ResGer = ParamGer ** open Prelude in {
     a1 = vp.a1 ;
     n2 = \\a => vp.n2 ! a ++ obj ! a ;
     a2 = vp.a2 ;
+    isAux = vp.isAux ;
+    inf = vp.inf ;
     ext = vp.ext
     } ;
 
@@ -322,6 +327,8 @@ resource ResGer = ParamGer ** open Prelude in {
     a1 = \\a => vp.a1 ! a ++ adv ;
     n2 = vp.n2 ;
     a2 = vp.a2 ;
+    isAux = vp.isAux ;
+    inf = vp.inf ;
     ext = vp.ext
     } ;
 
@@ -330,6 +337,8 @@ resource ResGer = ParamGer ** open Prelude in {
     a1 = vp.a1 ;
     n2 = vp.n2 ;
     a2 = vp.a2 ++ adv ;
+    isAux = vp.isAux ;
+    inf = vp.inf ;
     ext = vp.ext
     } ;
 
@@ -338,7 +347,19 @@ resource ResGer = ParamGer ** open Prelude in {
     a1 = vp.a1 ;
     n2 = vp.n2 ;
     a2 = vp.a2 ;
+    isAux = vp.isAux ;
+    inf = vp.inf ;
     ext = vp.ext ++ ext
+    } ;
+
+  insertInf : Str -> VP -> VP = \inf,vp -> {
+    s = vp.s ;
+    a1 = vp.a1 ;
+    n2 = vp.n2 ;
+    a2 = vp.a2 ;
+    isAux = vp.isAux ; ----
+    inf = vp.inf ++ inf ;
+    ext = vp.ext
     } ;
 
 -- For $Sentence$.
@@ -353,13 +374,18 @@ resource ResGer = ParamGer ** open Prelude in {
           verb  = vp.s  ! agr ! VPFinite t a ;
           neg   = vp.a1 ! b ;
           obj   = vp.n2 ! agr ++ vp.a2 ;
-          compl = neg ++ obj ++ verb.inf ;
+          compl = neg ++ obj ;
+          inf   = vp.inf ++ verb.inf ;
           extra = vp.ext ;
+          inffin = case <a,vp.isAux> of {
+            <Anter,True> => verb.fin ++ inf ; -- double infinitive
+            _ => inf ++ verb.fin              --- or just auxiliary vp
+            }
         in
         case o of {
-          Main => subj ++ verb.fin ++ compl ++ extra ;
-          Inv  => verb.fin ++ subj ++ compl ++ extra ;
-          Sub  => subj ++ compl ++ verb.fin ++ extra
+          Main => subj ++ verb.fin ++ compl ++ inf ++ extra ;
+          Inv  => verb.fin ++ subj ++ compl ++ inf ++ extra ;
+          Sub  => subj ++ compl ++ inffin ++ extra
           }
     } ;
 
