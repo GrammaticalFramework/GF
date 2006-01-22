@@ -11,13 +11,15 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer in {
 
     ComplVV v vp = 
       let 
-        compl : Agr => Str = \\a => 
+        compl : Agr -> (Str * Str) = \a -> 
           let 
              vpi = vp.s ! a ! VPInfinit Simul 
           in
-          vp.n2 ! a ++  vp.a2 ++ vpi.fin ++ infPart v.isAux ++ vpi.inf 
+          <vp.n2 ! a ++  vp.a2, infPart v.isAux ++ vpi.inf> ;
+        obj : Agr => Str = \\a => (compl a).p1 ;
+        inf : Str = (compl (agrP3 Sg)).p2 ; --- agr makes no diff here
       in
-      insertObj compl (predVGen v.isAux v) ;
+      insertInf inf (insertObj obj (predVGen v.isAux v)) ;
 
     ComplVS v s = 
       insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ;
