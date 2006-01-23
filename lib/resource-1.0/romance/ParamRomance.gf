@@ -120,7 +120,7 @@ oper
   Agr  : Type = AAgr ** {p : Person} ;
 
 param
-  RAgr = RAg AAgr | RNoAg ;
+  RAgr = RAg {g : Gender ; n : Number} | RNoAg ; --- AAgr
 
 oper
   aagr : Gender -> Number -> AAgr = \g,n ->

@@ -298,15 +298,6 @@ oper
         } 
       } ;
 -}
--- Reflexive pronouns are defined in $SyntaxFre$.
-
--- The composable pronoun "lequel" is inflected by varying the definite
--- article and the determiner "quel" in the expected way.
-
-  lequelPron : Gender -> Number -> Case -> Str = \g,n,c -> 
-    artDef g n c + quelPron g n ;
-
-
 --2 Determiners
 --
 -- Determiners, traditionally called indefinite pronouns, are inflected
@@ -316,15 +307,6 @@ oper
   pronForms : Str -> Str -> Gender -> Number -> Str = \tel,telle,g,n -> case g of {
     Masc => nomReg tel ! n ;
     Fem  => nomReg telle ! n
-    } ;
-
-  quelPron : Gender -> Number -> Str = pronForms "quel" "quelle" ;
-
-  telPron : Gender -> Number -> Str = pronForms "tel" "telle" ;
-
-  toutPron : Gender -> Number -> Str = \g,n -> case g of {
-    Masc => numForms "tout" "tous" ! n ;
-    Fem  => nomReg "toutee" ! n
     } ;
 
 -- The following macro generates the phrases "est-ce que", "est-ce qu'",

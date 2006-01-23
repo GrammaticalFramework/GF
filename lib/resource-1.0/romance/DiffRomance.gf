@@ -31,8 +31,12 @@ oper
   partAgr   : VType -> VPAgr ;
 
   conjThan  : Str ;
+  conjThat  : Str ;
 
   clitInf   : Str -> Str -> Str ;
+
+  relPron   : Bool => AAgr => Case => Str ;
+  pronSuch  : AAgr => Str ;
 
 -- These needed above.
 

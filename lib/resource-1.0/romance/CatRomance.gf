@@ -31,7 +31,7 @@ incomplete concrete CatRomance of Cat =
 -- Relative
 
     RCl  = {s : Tense => Anteriority => Polarity => Mood => Agr => Str} ;
-    RP   = {s : AAgr  => RelForm => Str} ; ----  ; a : RAgr} ;
+    RP   = {s : Bool => AAgr => Case => Str ; a : RAgr} ;
 
 -- Verb
 

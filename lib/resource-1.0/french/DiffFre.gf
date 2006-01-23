@@ -57,8 +57,27 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
       } ;
 
     conjThan = elisQue ;
+    conjThat = elisQue ;
 
     clitInf cli inf = cli ++ inf ;
+
+    relPron : Bool => AAgr => Case => Str = \\b,a,c => 
+      let
+        lequel = artDef a.g a.n c + quelPron ! a
+      in
+      case b of {
+      False => case c of {
+        Nom => "qui" ;
+        Acc => elisQue ;
+        CPrep P_de => "dont" ;
+        _ => lequel
+        } ;
+      _   => lequel
+      } ;
+
+    pronSuch : AAgr => Str = aagrForms "tel" "telle" "tels" "telles" ;
+
+    quelPron : AAgr => Str = aagrForms "quel" "quelle" "quels" "quelles" ;
 
     copula : Verb = {s = table VF ["être";"suis";"es";"est";"sommes";"êtes";"sont";"sois";"sois";"soit";"soyons";"soyez";"soient";"étais";"étais";"était";"étions";"étiez";"étaient";"fusse";"fusses";"fût";"fussions";"fussiez";"fussent";"fus";"fus";"fut";"fûmes";"fûtes";"furent";"serai";"seras";"sera";"serons";"serez";"seront";"serais";"serais";"serait";"serions";"seriez";"seraient";"sois";"soyons";"soyez";"été";"étés";"étée";"étées";"étant"]; vtyp=VHabere} ;
 

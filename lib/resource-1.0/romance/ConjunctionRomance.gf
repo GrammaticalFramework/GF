@@ -10,14 +10,16 @@ incomplete concrete ConjunctionRomance of Conjunction =
 
     ConjAdv conj ss = conjunctSS conj ss ;
     DConjAdv conj ss = conjunctDistrSS conj ss ;
-{-
+
     ConjNP conj ss = conjunctTable NPForm conj ss ** {
-      a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p}
+      a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p} ; 
+      c = Clit0
       } ;
     DConjNP conj ss = conjunctDistrTable NPForm conj ss ** {
-      a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p}
+      a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p} ;
+      c = Clit0
       } ;
--}
+
     ConjAP conj ss = conjunctTable AForm conj ss ** {
       isPre = ss.isPre
       } ;
