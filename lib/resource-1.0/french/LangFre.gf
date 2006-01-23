@@ -9,7 +9,7 @@ concrete LangFre of Lang =
   SentenceFre,
   QuestionFre,
 --  RelativeFre,
---  ConjunctionFre,
+  ConjunctionFre,
   PhraseFre,
   TensedFre,
   StructuralFre,
