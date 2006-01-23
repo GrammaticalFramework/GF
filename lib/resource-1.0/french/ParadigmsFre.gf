@@ -337,7 +337,7 @@ oper
   A2S, A2V : Type = A2 ;
 
   mkV0  v = v ** {lock_V0 = <>} ;
-  mkVS  v = v ** {mn,mp = Indic ; lock_VS = <>} ;  ---- more moods
+  mkVS  v = v ** {m = \\_ => Indic ; lock_VS = <>} ;  ---- more moods
   mkV2S v p = mkV2 v p ** {mn,mp = Indic ; lock_V2S = <>} ;
   mkVV  v = v ** {c2 = complAcc ; lock_VV = <>} ;
   deVV  v = v ** {c2 = complGen ; lock_VV = <>} ;

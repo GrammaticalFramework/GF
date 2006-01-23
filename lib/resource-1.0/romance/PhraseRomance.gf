@@ -12,7 +12,7 @@ incomplete concrete PhraseRomance of Phrase =
     UttIP ip = {s = ip.s ! Nom} ; --- Acc also
     UttIAdv iadv = iadv ;
     UttNP np = {s = np.s ! Ton Nom} ;
-----    UttVP vp = {s = infVP vp (agrP3 Utr Sg)} ;
+    UttVP vp = {s = infVP vp (agrP3 Fem Sg)} ; --- Agr
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;

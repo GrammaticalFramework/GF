@@ -38,6 +38,8 @@ oper
   relPron   : Bool => AAgr => Case => Str ;
   pronSuch  : AAgr => Str ;
 
+  partQIndir : Str ; -- ce, ciò
+
 -- These needed above.
 
 param

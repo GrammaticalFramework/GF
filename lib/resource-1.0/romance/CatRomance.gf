@@ -73,9 +73,10 @@ incomplete concrete CatRomance of Cat =
 
 -- Open lexical classes, e.g. Basic
 
-    V, VS, VQ, VA = Verb ;
+    V, VQ, VA = Verb ;
     V2, VV, V2A = Verb ** {c2 : Compl} ;
     V3 = Verb ** {c2,c3 : Compl} ;
+    VS = Verb ** {m : Polarity => Mood} ;
 
     A  = {s : Degree => AForm => Str ; isPre : Bool} ;
     A2 = {s : Degree => AForm => Str ; c2 : Compl} ;
