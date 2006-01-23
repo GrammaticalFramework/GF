@@ -10,9 +10,6 @@ param
 
   NPForm = Ton Case | Aton Case | Poss {g : Gender ; n : Number} ; --- AAgr
 
-  RelForm = RSimple Case | RComplex Gender Number Case ;
-
-
 oper
 
   nominative : Case = Nom ;
@@ -44,11 +41,6 @@ oper
     _   => Ton c
     } ;
 
-  npRelForm : NPForm -> RelForm = \np -> case np of {
-    Ton  c => RSimple c ;
-    Aton c => RSimple c ;
-    Poss _ => RSimple genitive
-    } ;
 
   appCompl : Compl -> (NPForm => Str) -> Str = \comp,np ->
     comp.s ++ np ! Ton comp.c ;
