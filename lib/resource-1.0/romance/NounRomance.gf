@@ -19,7 +19,7 @@ incomplete concrete NounRomance of Noun =
     UsePron p = p ;
 
     PredetNP pred np = {
-      s = \\c => prepCase (npform2case c) ++ pred.s ! np.a ++ np.s ! Ton Acc ;
+      s = \\c => pred.s ! np.a ! npform2case c ++ np.s ! case2npform pred.c ;
       a = np.a ;
       c = Clit0
       } ;
@@ -100,21 +100,17 @@ incomplete concrete NounRomance of Noun =
         g = g ;
         } ;
 
-{-
     RelCN cn rs = let g = cn.g in {
-      s = \\n,d,c => cn.s ! n ! d ! c ++ rs.s ! agrP3 g n ;
-      g = g ;
-      isMod = cn.isMod
+      s = \\n => cn.s ! n ++ rs.s ! Indic ! agrP3 g n ; --- mood
+      g = g
       } ;
     SentCN  cn sc = let g = cn.g in {
-      s = \\n,d,c => cn.s ! n ! d ! c ++ sc.s ;
-      g = g ;
-      isMod = cn.isMod
+      s = \\n => cn.s ! n ++ sc.s ;
+      g = g
       } ;
     AdvCN  cn sc = let g = cn.g in {
-      s = \\n,d,c => cn.s ! n ! d ! c ++ sc.s ;
-      g = g ;
-      isMod = cn.isMod
+      s = \\n => cn.s ! n ++ sc.s ;
+      g = g
       } ;
--}
+
 }

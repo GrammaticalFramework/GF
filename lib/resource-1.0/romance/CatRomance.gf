@@ -26,12 +26,12 @@ incomplete concrete CatRomance of Cat =
     QCl  = {s : Tense => Anteriority => Polarity => QForm => Str} ;
     IP   = {s : Case => Str ; a : AAgr} ;
     IAdv = {s : Str} ;    
-    IDet = {s : Gender => Str ; n : Number} ;
+    IDet = {s : Gender => Case => Str ; n : Number} ;
 
 -- Relative
 
     RCl  = {s : Tense => Anteriority => Polarity => Mood => Agr => Str} ;
-----    RP   = {s : AAgr  => RelForm => Str ; a : RAgr} ;
+    RP   = {s : AAgr  => RelForm => Str} ; ----  ; a : RAgr} ;
 
 -- Verb
 
@@ -50,7 +50,7 @@ incomplete concrete CatRomance of Cat =
     Det     = {s : Gender => Case => Str ; n : Number} ;
     QuantSg = {s : Gender => Case => Str} ;
     QuantPl = {s : Gender => Case => Str} ;
-    Predet  = {s : AAgr   => Str} ;
+    Predet  = {s : AAgr   => Case => Str ; c : Case} ; -- la plupart de...
     Num     = {s : Gender => Str} ;
     Ord     = {s : AAgr   => Str} ;
 
