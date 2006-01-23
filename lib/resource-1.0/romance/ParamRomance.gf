@@ -42,6 +42,10 @@ param
 
   PronGen = PGen Gender | PNoGen ;
 
+-- Cardinal numerals have gender, ordinal numerals have full number as well.
+
+  CardOrd = NCard Gender | NOrd Gender Number ;
+
 -- The following coercions are useful:
 
 oper
@@ -59,6 +63,19 @@ oper
     AF _ n => n ;
     _      => Sg -- "le plus lentement"
     } ;
+  
+  conjGender : Gender -> Gender -> Gender = \m,n -> 
+    case <m,n> of {
+      <Fem,Fem> => Fem ;
+      _ => Fem 
+      } ;
+
+  conjAgr : Agr -> Agr -> Agr = \a,b -> {
+    g = conjGender a.g b.g ;
+    n = conjNumber a.n b.n ;
+    p = conjPerson a.p b.p
+    } ;
+
 
 --3 Verbs 
 --

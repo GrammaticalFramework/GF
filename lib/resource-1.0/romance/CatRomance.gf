@@ -60,7 +60,7 @@ incomplete concrete CatRomance of Cat =
 
 -- Numeral
 
-----    Numeral = {s : CardOrd => Str ; n : Number} ;
+    Numeral = {s : CardOrd => Str} ;
 
 -- Structural
 

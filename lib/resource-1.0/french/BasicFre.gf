@@ -131,6 +131,7 @@ lin
   open_V2 = ouvrir_V2 ;
   paint_V2A = mkV2A (v2V peindre_V2) accusative ;
   paper_N = regN "papier" masculine ;
+  paris_PN = mkPN "Paris" masculine ;
   peace_N = regN "paix" feminine ;
   pen_N = regN "stylo" masculine ;
   planet_N = regN "planète" feminine ;

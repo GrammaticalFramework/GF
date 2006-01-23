@@ -19,7 +19,8 @@ incomplete concrete NounRomance of Noun =
     UsePron p = p ;
 
     PredetNP pred np = {
-      s = \\c => pred.s ! np.a ! npform2case c ++ np.s ! case2npform pred.c ;
+      s = \\c => pred.s ! aagr (np.a.g) (np.a.n) ! npform2case c ++  --- subtype
+                 np.s ! case2npform pred.c ;
       a = np.a ;
       c = Clit0
       } ;
@@ -48,12 +49,12 @@ incomplete concrete NounRomance of Noun =
     NumInt n = {s = \\_ => n.s} ;
     OrdInt n = {s = \\_ => n.s ++ "ème"} ; ---
 
-----    NumNumeral numeral = {s = \\g => numeral.s ! NCard g ; isDet = True} ;
-----    OrdNumeral numeral = {s = numeral.s ! NOrd SupWeak ; isDet = True} ;
+    NumNumeral numeral = {s = \\g => numeral.s ! NCard g} ;
+    OrdNumeral numeral = {s = \\a => numeral.s ! NOrd a.g a.n} ;
 
     AdNum adn num = {s = \\a => adn.s ++ num.s ! a} ;
 
-----    OrdSuperl a = {s = a.s ! AF (ASuperl SupWeak) Nom ; isDet = True} ;
+    OrdSuperl adj = {s = \\a => adj.s ! Superl ! AF a.g a.n} ;
 
     DefSg = {
       s = \\g,c => artDef g Sg c ; 
