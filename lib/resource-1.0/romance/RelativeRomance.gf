@@ -20,12 +20,11 @@ incomplete concrete RelativeRomance of Relative =
         in
         cl.s ! t ! ant ! b ! m
       } ;
-{-
+
     RelSlash rp slash = {
-      s = \\t,a,p,ag => 
-          rp.s ! ag.gn ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2
+      s = \\t,a,p,m,ag => 
+          slash.c2.s ++ rp.s ! False ! ag ! slash.c2.c ++ slash.s ! t ! a ! p ! m
       } ;
--}
 
     FunRP p np rp = {
       s = \\_,a,c => np.s ! Ton Nom ++ p.s ++ rp.s ! True ! a ! p.c ;
@@ -35,8 +34,5 @@ incomplete concrete RelativeRomance of Relative =
       s = relPron ; 
       a = RNoAg
       } ;
-
---    RCl  = {s : Tense => Anteriority => Polarity => Mood => Agr => Str} ;
---    RP   = {s : AAgr  => RelForm => Str ; a : RAgr} ;
 
 }

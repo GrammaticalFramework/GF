@@ -78,7 +78,7 @@ oper
     clit1 = \\a => [] ; ----
     clit2 = [] ;
     comp  = \\a => [] ;
-    ext   = [] ;
+    ext   = \\p => []
     } ;
 
   insertObject : Compl -> Pronoun -> VP -> VP = \c,np,vp -> 
@@ -121,6 +121,15 @@ oper
     comp  = \\a => vp.comp ! a ++ co ;
     ext   = vp.ext ;
     } ;
+  insertExtrapos : (Polarity => Str) -> VP -> VP = \co,vp -> { 
+    s     = vp.s ;
+    agr   = vp.agr ;
+    clit1 = vp.clit1 ; 
+    clit2 = vp.clit2 ; 
+    neg   = vp.neg ;
+    comp  = vp.comp ;
+    ext   = \\p => vp.ext ! p ++ co ! p ;
+    } ;
 
   mkClause : Str -> Agr -> VP -> 
     {s : Tense => Anteriority => Polarity => Mood => Str} =
@@ -138,7 +147,7 @@ oper
           inf   = vps.inf ! (appVPAgr vp.agr (aagr agr.g agr.n)) ; --- subtype bug
           neg   = vp.neg ! b ;
           clit  = vp.clit1 ! agr ++ vp.clit2 ;
-          compl = vp.comp ! agr ++ vp.ext
+          compl = vp.comp ! agr ++ vp.ext ! b
         in
         subj ++ neg.p1 ++ clit ++ verb ++ neg.p2 ++ inf ++ compl
     } ;

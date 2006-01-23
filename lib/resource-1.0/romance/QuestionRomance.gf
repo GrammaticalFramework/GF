@@ -21,27 +21,24 @@ incomplete concrete QuestionRomance of Question =
         in
         cl.s ! t ! a ! b ! Indic
       } ;   
-{-
+
     QuestSlash ip slash = {
       s = \\t,a,p => 
             let 
-              cls = slash.s ! t ! a ! p ;
-              who = slash.c2 ++ ip.s ! accusative --- stranding in ExtRomance 
+              cls = slash.s ! t ! a ! p ! Indic ;
+              who = slash.c2.s ++ ip.s ! slash.c2.c
             in table {
-              QDir   => who ++ cls ! Inv ;
-              QIndir => who ++ cls ! Sub
+              QDir   => who ++ cls ;
+              QIndir => partQIndir ++ who ++ cls
               }
       } ;
 
     QuestIAdv iadv cl = {
-      s = \\t,a,p => 
+      s = \\t,a,p,_ => 
             let 
-              cls = cl.s ! t ! a ! p ;
+              cls = cl.s ! t ! a ! p ! Indic ;
               why = iadv.s
-            in table {
-              QDir   => why ++ cls ! Inv ;
-              QIndir => why ++ cls ! Sub
-              }
+            in why ++ cls
       } ;
 
     PrepIP p ip = {
@@ -50,13 +47,17 @@ incomplete concrete QuestionRomance of Question =
 
     AdvIP ip adv = {
       s = \\c => ip.s ! c ++ adv.s ;
-      gn = ip.gn
+      a = ip.a
       } ;
  
-    IDetCN idet num ord cn = let g = cn.g in {
-      s  = \\c => 
-           idet.s ! g ++ num.s ! g ++ ord.s ++ cn.s ! idet.n ! idet.det ! caseNP c ; 
-      gn = gennum g idet.n
+    IDetCN idet num ord cn = 
+      let 
+        g = cn.g ;
+        n = idet.n ;
+        a = aagr g n
+      in {
+      s = \\c => idet.s ! g ! c ++ num.s ! g ++ ord.s ! a ++ cn.s ! n ; 
+      a = a
       } ;
--}
+
 }

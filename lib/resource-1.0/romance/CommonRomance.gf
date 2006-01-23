@@ -35,7 +35,7 @@ resource CommonRomance = ParamRomance ** open Prelude in {
       clit1 : Agr => Str ;              -- se
       clit2 : Str ;                     -- lui
       comp  : Agr => Str ;              -- content(e) ; à ma mère ; hier
-      ext   : Str ;                     -- que je dors
+      ext   : Polarity => Str ;         -- que je dors / que je dorme
       } ;
 
     appVPAgr : VPAgr -> AAgr -> AAgr = \vp,agr -> 

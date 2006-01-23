@@ -12,17 +12,15 @@ incomplete concrete VerbRomance of Verb =
 
     ComplVV v vp = insertComplement (\\a => prepCase v.c2.c ++ infVP vp a) (predV v) ;
 
-{-
-    ComplVS v s  = insertObj (\\_ => conjThat ++ s.s ! Sub) (predV v) ;
-    ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
+    ComplVS v s  = insertExtrapos (\\b => conjThat ++ s.s ! (v.m ! b)) (predV v) ;
+    ComplVQ v q  = insertExtrapos (\\_ => q.s ! QIndir) (predV v) ;
 
-    ComplVA  v ap = 
-      insertObj (\\a => ap.s ! agrAdj a.gn DIndef) (predV v) ;
+    ComplVA v ap = 
+      insertComplement (\\a => ap.s ! AF a.g a.n) (predV v) ;
     ComplV2A v np ap = 
-      insertAdv
-        (ap.s ! agrAdj np.a.gn DIndef)
-        (insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v)) ;
--}
+      insertComplement 
+        (\\a => ap.s ! AF np.a.g np.a.n)
+        (insertObject v.c2 np (predV v)) ;
 
     UseComp comp = insertComplement comp.s (predV copula) ;
 
@@ -40,8 +38,8 @@ incomplete concrete VerbRomance of Verb =
       insertObj 
         (\\a => v.s ! VI (VPtPret (agrAdj a.gn DIndef) Nom)) 
         (predV verbBecome) ;
-
-    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; vtype = vv.vtype} ;
 -}
+
+    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = complAcc ; vtyp = vv.vtyp} ;
 
 }
