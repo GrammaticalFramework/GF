@@ -38,6 +38,6 @@ incomplete concrete SentenceRomance of Sentence =
 
     EmbedS  s  = {s = conjThat ++ s.s ! Indic} ; --- mood
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = infVP vp (agrP3 Masc Sg)} ; --- agr
+    EmbedVP vp = {s = infVP vp (agrP3 Masc Sg)} ; --- agr ---- compl
 
 }

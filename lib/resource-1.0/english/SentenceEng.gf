@@ -36,6 +36,6 @@ concrete SentenceEng of Sentence = CatEng ** open ResEng in {
 
     EmbedS  s  = {s = conjThat ++ s.s} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = infVP vp (agrP3 Sg)} ; --- agr
+    EmbedVP vp = {s = "to" ++ infVP vp (agrP3 Sg)} ; --- agr
 
 }

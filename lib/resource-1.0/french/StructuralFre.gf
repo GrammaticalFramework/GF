@@ -86,7 +86,7 @@ lin
   there7to_Adv = ss "là" ; --- y
   there_Adv = ss "là" ;
   therefore_PConj = ss "donc" ;
-  these_NP = pn2np (mkPN ["celles-ci"] Fem) ;
+  these_NP = pn2np (mkPN ["celles-ci"] Fem) ; ---- Pl
   these_Quant = {s = \\_,c => prepCase c ++ "ces"} ; ---- ci
   they_Pron = mkPronoun
     "elles" "les" "leur" "eux" "leur" "leur" "leurs"

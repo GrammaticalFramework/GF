@@ -38,6 +38,6 @@ incomplete concrete SentenceScand of Sentence =
 
     EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = infVP vp (agrP3 utrum Sg)} ; --- agr
+    EmbedVP vp = {s = infMark ++ infVP vp (agrP3 utrum Sg)} ; --- agr
 
 }
