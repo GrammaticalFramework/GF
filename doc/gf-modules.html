@@ -593,7 +593,7 @@ a <b>lock field</b>,
   cat C ;                    ===>  oper C : Type = T ** {lock_C : {}} ;
   lincat C = T ;
 
-  fun f : C_1 ... C_n -> C ; ===>  oper f : A = \x_1,...,x_n -> 
+  fun f : C_1 ... C_n -> C ; ===>  oper f : C_1 ... C_n -> C = \x_1,...,x_n -> 
   lin f = t ;                        t x_1 ... x_n ** {lock_C = &lt;>};
 </pre>
 (Notice that the latter translation is type-correct because of

@@ -1332,15 +1332,9 @@ oper
       t                  => s + tavoir ! t
       } ;
 
--- for NumeralsFre
+--- for Numerals
 
 param DForm = unit  | teen  | jten  | ten  | tenplus  ;
 param Place = indep  | attr  ;
-
-oper
-  digitPl : 
-  {inh : DForm ; inh1 : Number ; s : DForm => Str} ->
-  {inh : DForm ; inh1 : Number ; s : Gender => DForm => Str ; n : Number} = \d -> 
-  {inh = d.inh ; inh1 = d.inh1 ; s = \\_ => d.s ; n = Pl} ;
 
 }
