@@ -1,5 +1,5 @@
 incomplete concrete VerbRomance of Verb = 
-  CatRomance ** open CommonRomance, ResRomance in {
+  CatRomance ** open Prelude, CommonRomance, ResRomance in {
 
   flags optimize=all_subs ;
 
@@ -31,14 +31,13 @@ incomplete concrete VerbRomance of Verb =
     AdvVP vp adv = insertAdv adv.s vp ;
     AdVVP adv vp = insertAdv adv.s vp ;
 
-{-
-    ReflV2 v = insertObj (\\a => v.c2 ++ reflPron a) (predV v) ;
+    ReflV2 v = case v.c2.isDir of {
+      True  => predV {s = v.s ; vtyp = vRefl} ;
+      False => insertComplement 
+                 (\\a => v.c2.s ++ reflPron ! a.n ! a.p ! v.c2.c) (predV v)
+      } ;
 
-    PassV2 v = 
-      insertObj 
-        (\\a => v.s ! VI (VPtPret (agrAdj a.gn DIndef) Nom)) 
-        (predV verbBecome) ;
--}
+    PassV2 v = insertComplement (\\a => v.s ! VPart a.g a.n) (predV auxPassive) ;
 
     UseVS, UseVQ = \vv -> {s = vv.s ; c2 = complAcc ; vtyp = vv.vtyp} ;
 

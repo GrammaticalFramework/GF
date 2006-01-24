@@ -18,13 +18,13 @@ incomplete concrete AdjectiveRomance of Adjective =
       s = \\af => adj.s ! Posit ! af ++ appCompl adj.c2 np.s ; 
       isPre = False
       } ;
-{-
-    ReflA2 a = {
-      s = \\ap => a.s ! AF (APosit ap) Nom ++ a.c2 ++ 
-                  reflPron (agrP3 Utr Sg) ; ---- 
+
+    ReflA2 adj = {
+      s = \\af => 
+             adj.s ! Posit ! af ++ adj.c2.s ++ reflPron ! Sg ! P3 ! adj.c2.c ; --- agr
       isPre = False
       } ;
--}
+
     SentAP ap sc = {
       s = \\a => ap.s ! a ++ sc.s ; --- mood 
       isPre = False

@@ -81,6 +81,29 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 
     partQIndir = elision "c" ;
 
+    reflPron : Number => Person => Case => Str = 
+      let 
+        cases : (x,y : Str) -> (Case => Str) = \me,moi -> table {
+          Acc | CPrep P_a => me ;
+          _ => moi
+          } ;
+      in 
+      \\n,p => case <n,p> of { 
+        <Sg,P1> => cases (elision "m") "moi" ;
+        <Sg,P2> => cases (elision "t") "toi" ;
+        <Pl,P1> => \\_ => "nous" ;
+        <Pl,P2> => \\_ => "vous" ;
+        _ => cases (elision "s") "soi"
+        } ;
+
+    vRefl   : VType = VRefl ;
+    isVRefl : VType -> Bool = \ty -> case ty of {
+      VRefl => True ;
+      _ => False
+      } ;
+
+    auxPassive : Verb = copula ;
+
     copula : Verb = {s = table VF ["être";"suis";"es";"est";"sommes";"êtes";"sont";"sois";"sois";"soit";"soyons";"soyez";"soient";"étais";"étais";"était";"étions";"étiez";"étaient";"fusse";"fusses";"fût";"fussions";"fussiez";"fussent";"fus";"fus";"fut";"fûmes";"fûtes";"furent";"serai";"seras";"sera";"serons";"serez";"seront";"serais";"serais";"serait";"serions";"seriez";"seraient";"sois";"soyons";"soyez";"été";"étés";"étée";"étées";"étant"]; vtyp=VHabere} ;
 
     avoir_V : Verb = {s=table VF ["avoir";"ai";"as";"a";"avons";"avez";"ont";"aie";"aies";"ait";"ayons";"ayez";"aient";"avais";"avais";"avait";"avions";"aviez";"avaient";"eusse";"eusses";"eût";"eussions";"eussiez";"eussent";"eus";"eus";"eut";"eûmes";"eûtes";"eurent";"aurai";"auras";"aura";"aurons";"aurez";"auront";"aurais";"aurais";"aurait";"aurions";"auriez";"auraient";"aie";"ayons";"ayez";"eu";"eus";"eue";"eues";"ayant"];vtyp=VHabere};

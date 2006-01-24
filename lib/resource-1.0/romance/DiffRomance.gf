@@ -1,6 +1,5 @@
 interface DiffRomance = open CommonRomance, Prelude in {
 
-
 --2 Constants whose definitions depend on language.
 
 -- Prepositions that fuse with the article vary.
@@ -18,8 +17,6 @@ oper
   prepCase  : Case -> Str ;
 
   partitive : Gender -> Case -> Str ;
-
-  reflPron  : Number -> Person -> Str ;
 
   artDef    : Gender -> Number -> Case -> Str ;
   artIndef  : Gender -> Number -> Case -> Str ;
@@ -40,7 +37,15 @@ oper
 
   partQIndir : Str ; -- ce, ciò
 
--- These needed above.
+  reflPron : Number => Person => Case => Str ;
+
+  vRefl   : VType ;
+  isVRefl : VType -> Bool ;
+
+  auxPassive : Verb ;
+
+
+-- These are needed above.
 
 param
   Case = Nom | Acc | CPrep Prep ; 
