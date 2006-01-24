@@ -35,6 +35,6 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer in {
 
     EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = (vp.s ! agrP3 Sg ! VPInfinit Simul).inf} ; --- agr
+    EmbedVP vp = {s = "zu" ++ (vp.s ! agrP3 Sg ! VPInfinit Simul).inf} ; --- agr ---- compl
 
 }
