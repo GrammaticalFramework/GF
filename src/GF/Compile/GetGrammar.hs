@@ -12,7 +12,9 @@
 -- this module builds the internal GF grammar that is sent to the type checker
 -----------------------------------------------------------------------------
 
-module GF.Compile.GetGrammar (getSourceModule, getOldGrammar, getCFGrammar, getEBNFGrammar,
+module GF.Compile.GetGrammar (
+  getSourceModule, getSourceGrammar,
+  getOldGrammar, getCFGrammar, getEBNFGrammar,
 		   err2err
 		  ) where
 
@@ -49,6 +51,13 @@ getSourceModule file = do
   let tokens = myLexer string
   mo1  <- ioeErr $ {- err2err $ -} pModDef tokens
   ioeErr $ transModDef mo1
+
+getSourceGrammar :: FilePath -> IOE SourceGrammar
+getSourceGrammar file = do
+  string    <- readFileIOE file
+  let tokens = myLexer string
+  gr1  <- ioeErr $ {- err2err $ -} pGrammar tokens
+  ioeErr $ transGrammar gr1
 
 
 -- for old GF format with includes

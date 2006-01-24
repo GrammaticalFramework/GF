@@ -77,15 +77,15 @@ compileModule :: Options -> ShellState -> FilePath -> IOE TimedCompileEnv
 
 compileModule opts st0 file | 
      oElem showOld opts || 
-     elem suff ["cf","ebnf"] = do
+     elem suff ["cf","ebnf","gfm"] = do
   let putp  = putPointE opts
   let putpp = putPointEsil opts
   let path = [] ----
-  grammar1 <- if suff == "cf"
-              then putp ("- parsing" +++ suff +++ file) $ getCFGrammar opts file
-              else if suff == "ebnf"
-              then putp ("- parsing" +++ suff +++ file) $ getEBNFGrammar opts file
-              else putp ("- parsing old gf" +++ file) $ getOldGrammar opts file
+  grammar1 <- case suff of
+    "cf"   -> putp ("- parsing" +++ suff +++ file) $ getCFGrammar opts file
+    "ebnf" -> putp ("- parsing" +++ suff +++ file) $ getEBNFGrammar opts file
+    "gfm"  -> putp ("- parsing" +++ suff +++ file) $ getSourceGrammar file
+    _      -> putp ("- parsing old gf" +++ file)   $ getOldGrammar opts file
   let mods = modules grammar1
   let env = compileEnvShSt st0 []
   foldM (comp putpp path) env mods

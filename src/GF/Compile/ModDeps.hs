@@ -57,7 +57,7 @@ checkUniqueErr ms = do
 checkUniqueImportNames :: [Ident] -> SourceModInfo -> Err ()
 checkUniqueImportNames ns mo = case mo of
   ModMod m -> test [n | OQualif _ n v <- opens m, n /= v]
-
+  _ -> return () --- Bad $ "bug: ModDeps does not treat" +++ show mo
  where
 
   test ms = testErr (all (`notElem` ns) ms)
