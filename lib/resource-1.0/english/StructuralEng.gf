@@ -76,14 +76,13 @@ concrete StructuralEng of Structural = CatEng **
   this_NP = regNP "this" Sg ;
   those_NP = regNP "those" Pl ;
   those_Quant = mkDeterminer Pl "those" ;
-  thou_Pron = mkNP "you" "you" "your" Sg P2 ;
   through_Prep = ss "through" ;
   too_AdA = ss "too" ;
   to_Prep = ss "to" ;
   under_Prep = ss "under" ;
   very_AdA = ss "very" ;
   want_VV = verbGen "want" ** {c2 = "to"} ;
-  we_Pron = mkNP "we" "us"  "our" Pl P1 ;
+  we_Pron = mkNP "we" "us" "our" Pl P1 ;
   whatPl_IP = mkIP "what" "what" "what's" Sg ;
   whatSg_IP = mkIP "what" "what" "what's" Sg ;
   when_IAdv = ss "when" ;
@@ -96,9 +95,10 @@ concrete StructuralEng of Structural = CatEng **
   why_IAdv = ss "why" ;
   without_Prep = ss "without" ;
   with_Prep = ss "with" ;
-  ye_Pron = mkNP "you" "you" "your" Pl P2 ;
-  you_Pron = mkNP "you" "you" "your" Sg P2 ;
   yes_Phr = ss "yes" ;
+  youSg_Pron = mkNP "you" "you" "your" Sg P2 ;
+  youPl_Pron = mkNP "you" "you" "your" Pl P2 ;
+  youPol_Pron = mkNP "you" "you" "your" Sg P2 ;
 
 }
 

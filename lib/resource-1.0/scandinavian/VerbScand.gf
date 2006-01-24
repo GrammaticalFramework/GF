@@ -1,4 +1,4 @@
-incomplete concrete VerbScand of Verb = CatScand ** open DiffScand, ResScand in {
+incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand in {
 
   flags optimize=all_subs ;
 

@@ -95,7 +95,6 @@ concrete StructuralGer of Structural = CatGer **
   this_NP = nameNounPhrase {s = caselist "dies" "dies" "diesem" "dieses"} ; ----
   those_NP = {s = caselist "jene" "jene" "jenen" "jener" ; a = agrP3 Pl} ;
   those_Quant = detLikeAdj Pl "jen" ;
-  thou_Pron = mkPronPers "du" "dich" "dir" "deiner" "dein" Sg P2 ;
   through_Prep = mkPrep "durch" Acc ;
   too_AdA = ss "zu" ;
   to_Prep = mkPrep "nach" Dat ;
@@ -123,7 +122,9 @@ concrete StructuralGer of Structural = CatGer **
   why_IAdv = ss "warum" ;
   without_Prep = mkPrep "ohne" Acc ;
   with_Prep = mkPrep "mit" Dat ;
-  ye_Pron = mkPronPers "ihr" "euch" "euch" "eurer" "euer" Pl P2 ; ---- poss
+  youSg_Pron = mkPronPers "du" "dich" "dir" "deiner" "dein" Sg P2 ;
+  youPl_Pron = mkPronPers "ihr" "euch" "euch" "eurer" "euer" Pl P2 ; ---- poss
+  youPol_Pron = mkPronPers "Sie" "Sie" "Ihnen" "Ihrer" "Ihr" Pl P3 ;
   yes_Phr = ss ["Ja ."] ;
-  you_Pron = mkPronPers "Sie" "Sie" "Ihnen" "Ihrer" "Ihr" Pl P3 ;
+
 }

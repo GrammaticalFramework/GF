@@ -1,5 +1,5 @@
 incomplete concrete SentenceScand of Sentence = 
-  CatScand ** open DiffScand, ResScand in {
+  CatScand ** open CommonScand, ResScand in {
 
   flags optimize=all_subs ;
 

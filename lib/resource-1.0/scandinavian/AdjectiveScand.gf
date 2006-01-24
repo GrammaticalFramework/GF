@@ -1,5 +1,5 @@
 incomplete concrete AdjectiveScand of Adjective = 
-  CatScand ** open DiffScand, ResScand, Prelude in {
+  CatScand ** open CommonScand, ResScand, Prelude in {
 
   lin
 

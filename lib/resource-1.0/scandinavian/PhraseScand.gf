@@ -1,5 +1,5 @@
 incomplete concrete PhraseScand of Phrase = 
-  CatScand, TenseX ** open DiffScand, ResScand, Prelude in {
+  CatScand, TenseX ** open CommonScand, ResScand, Prelude in {
 
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;

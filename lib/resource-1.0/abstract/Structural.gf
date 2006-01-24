@@ -86,7 +86,6 @@ abstract Structural = Cat ** {
   this_NP : NP ;
   those_NP : NP ;
   those_Quant : QuantPl ;
-  thou_Pron : Pron ;
   through_Prep : Prep ;
   to_Prep : Prep ;
   too_AdA : AdA ;
@@ -106,8 +105,9 @@ abstract Structural = Cat ** {
   why_IAdv : IAdv ;
   with_Prep : Prep ;
   without_Prep : Prep ;
-  ye_Pron : Pron ;
   yes_Phr : Phr ;
-  you_Pron : Pron ;
+  youSg_Pron : Pron ;
+  youPl_Pron : Pron ;
+  youPol_Pron : Pron ;
 
 }

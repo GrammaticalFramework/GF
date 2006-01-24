@@ -1,5 +1,5 @@
 incomplete concrete NounScand of Noun =
-   CatScand ** open DiffScand, ResScand, Prelude in {
+   CatScand ** open CommonScand, ResScand, Prelude in {
 
   flags optimize=all_subs ;
 

@@ -1,4 +1,4 @@
-incomplete concrete AdverbScand of Adverb = CatScand ** open DiffScand, ResScand, Prelude in {
+incomplete concrete AdverbScand of Adverb = CatScand ** open CommonScand, ResScand, Prelude in {
 
   lin
     PositAdvAdj a = {

@@ -1,5 +1,5 @@
 incomplete concrete ConjunctionScand of Conjunction = 
-  CatScand ** open ResScand, Coordination, Prelude in {
+  CatScand ** open CommonScand, ResScand, Coordination, Prelude in {
 
   flags optimize=all_subs ;
 

@@ -1,5 +1,5 @@
 incomplete concrete ExtScand of ExtScandAbs = 
-  CatScand ** open DiffScand, ResScand in {
+  CatScand ** open CommonScand, ResScand in {
 
   lin
     DefSgN predet noun = let g = noun.g in {
