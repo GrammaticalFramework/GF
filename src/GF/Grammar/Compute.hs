@@ -122,6 +122,15 @@ computeTermOpt rec gr = comp where
 
          _   -> returnC $ P t' l
 
+     S t@(T _ cc) v -> do
+       v'     <- comp g v
+       case matchPattern cc v' of
+         Ok (c,g') -> comp (g' ++ g) c
+         _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
+         _ -> do
+           t' <- comp g t
+           return $ S t' v' -- if v' is not canonical
+
      S t v -> do
        t'     <- comp g t
        v'     <- comp g v
