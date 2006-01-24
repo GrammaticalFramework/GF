@@ -59,7 +59,7 @@ lin
   most_Predet = {s = \\_,c => prepCase c ++ ["la plupart"] ; c = CPrep P_de} ;
   much_Det = {s = \\_,c => prepCase c ++ "beaucoup" ++ elisDe ; n = Pl} ;
   must_VV = mkVV (devoir_V2 ** {lock_V = <>}) ;
-  no_Phr = ss "non" ; --- and also Si!
+  no_Phr = ss "non" ;
   on_Prep = mkPreposition "sur" ;
   one_Quant = {s = \\g,c => prepCase c ++ genForms "un" "une" ! g} ;
   only_Predet = {s = \\_,c => prepCase c ++ "seulement" ; c = Nom} ; --- seul(e)(s)
@@ -95,9 +95,6 @@ lin
   this_NP = pn2np (mkPN ["ceci"] Masc) ;
   those_NP = pn2np (mkPN ["celles-là"] Fem) ;
   those_Quant = {s = \\_,c => prepCase c ++ "ces"} ; ---- là
-  thou_Pron = mkPronoun 
-    "tu" (elision "t") (elision "t") "toi" "ton" (elisPoss "t") "tes"
-    Fem Sg P2 Clit1 ;
   through_Prep = mkPreposition "par" ;
   too_AdA = ss "trop" ;
   to_Prep = complDat ;
@@ -119,11 +116,14 @@ lin
   why_IAdv = ss "pourquoi" ;
   without_Prep = mkPreposition "sans" ;
   with_Prep = mkPreposition "avec" ;
-  ye_Pron, you_Pron = 
+  yes_Phr = ss "oui" ; --- si
+  youSg_Pron = mkPronoun 
+    "tu" (elision "t") (elision "t") "toi" "ton" (elisPoss "t") "tes"
+    Fem Sg P2 Clit1 ;
+  youPl_Pron, youPol_Pron = 
     mkPronoun
       "vous" "vous" "vous" "vous" "votre" "votre" "vos"
        Fem Pl P2 Clit3 ;
-  yes_Phr = ss "oui" ; --- si
 
 }
 

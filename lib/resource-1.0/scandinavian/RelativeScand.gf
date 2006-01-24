@@ -1,5 +1,5 @@
 incomplete concrete RelativeScand of Relative = 
-  CatScand ** open DiffScand, ResScand in {
+  CatScand ** open CommonScand, ResScand in {
 
   flags optimize=all_subs ;
 

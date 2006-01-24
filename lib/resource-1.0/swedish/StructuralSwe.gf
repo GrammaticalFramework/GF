@@ -80,7 +80,6 @@ concrete StructuralSwe of Structural = CatSwe **
   this_NP = regNP ["det här"] ["det härs"] SgNeutr ;
   those_NP = regNP ["de där"] ["det därs"] Plg ;
   those_Quant = {s = \\_,_ => ["de där"] ; n = Pl ; det = DDef Def} ;
-  thou_Pron = mkNP "du" "dig" "din" "ditt" "dina" SgUtr P2 ;
   through_Prep = ss "genom" ;
   too_AdA = ss "för" ;
   to_Prep = ss "till" ;
@@ -102,9 +101,10 @@ concrete StructuralSwe of Structural = CatSwe **
   why_IAdv = ss "varför" ;
   without_Prep = ss "utan" ;
   with_Prep = ss "med" ;
-  ye_Pron = mkNP "ni" "er" "er" "ert" "era"  Plg P2 ;
   yes_Phr = ss ["ja"] ;
-  you_Pron = mkNP "ni" "er" "er" "ert" "era"  SgUtr P2 ; --- wrong in refl
+  youSg_Pron = mkNP "du" "dig" "din" "ditt" "dina" SgUtr P2 ;
+  youPl_Pron = mkNP "ni" "er" "er" "ert" "era"  Plg P2 ;
+  youPol_Pron = mkNP "ni" "er" "er" "ert" "era"  SgUtr P2 ; --- wrong in refl
 
 -- Auxiliaries that are used repeatedly.
 

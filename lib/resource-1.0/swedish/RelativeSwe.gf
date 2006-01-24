@@ -1,2 +1,2 @@
 concrete RelativeSwe of Relative = CatSwe ** RelativeScand with
-  (DiffScand = DiffSwe) ;
+  (ResScand = ResSwe) ;

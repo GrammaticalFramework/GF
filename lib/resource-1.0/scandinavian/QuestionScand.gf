@@ -1,5 +1,5 @@
 incomplete concrete QuestionScand of Question = 
-  CatScand ** open DiffScand, ResScand in {
+  CatScand ** open CommonScand, ResScand in {
 
   flags optimize=all_subs ;
 

@@ -1,5 +1,5 @@
 incomplete concrete CatScand of Cat = 
-  open ResScand, Prelude, DiffScand, (R = ParamX) in {
+  open ResScand, Prelude, CommonScand, (R = ParamX) in {
 
   flags optimize=all_subs ;
 

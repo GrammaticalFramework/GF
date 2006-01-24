@@ -28,8 +28,8 @@ resource ParadigmsSwe =
   open 
     (Predef=Predef), 
     Prelude, 
-    ResScand, 
-    DiffSwe, 
+    CommonScand, 
+    ResSwe, 
     MorphoSwe, 
     CatSwe in {
 
@@ -280,9 +280,9 @@ oper
 -- hidden from the document.
 --.
 
-  Gender = DiffSwe.Gender ; 
-  Number = ResScand.Number ;
-  Case = ResScand.Case ;
+  Gender = ResSwe.Gender ; 
+  Number = CommonScand.Number ;
+  Case = CommonScand.Case ;
   utrum = Utr ; 
   neutrum = Neutr ;
   singular = Sg ;
