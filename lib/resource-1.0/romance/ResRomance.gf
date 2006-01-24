@@ -51,7 +51,8 @@ oper
       vpart : AAgr -> Str = \a -> verb.s ! VPart a.g a.n ;
       vinf  = verb.s ! VInfin ;
 
-      aux   = auxVerb verb.vtyp ;
+      typ = verb.vtyp ;
+      aux = auxVerb typ ;
 
       habet  : TMood -> Agr -> Str = \tm,a -> aux ! VFin tm a.n a.p ;
       habere : Str = aux ! VInfin ;
@@ -73,9 +74,12 @@ oper
       VPInfinit Simul  => vf (\_ -> []) (\_ -> vinf) ;
       VPInfinit Anter  => vf (\_ -> []) (\a -> habere ++ vpart a)
       } ;
-    agr   = partAgr verb.vtyp ;
+    agr   = partAgr typ ;
     neg   = negation ;
-    clit1 = \\a => [] ; ----
+    clit1 = \\a => case isVRefl typ of {
+              True => reflPron ! a.n ! a.p  ! Acc ;
+              _ => []
+              } ;
     clit2 = [] ;
     comp  = \\a => [] ;
     ext   = \\p => []
