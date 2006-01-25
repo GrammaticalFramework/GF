@@ -1,0 +1,110 @@
+digraph {
+
+size = "12,12" ;
+
+LangGer [style = "dashed", shape = "box", URL = "LangGer.gf"];
+LangGer -> NounGer [style = "solid"];
+LangGer -> VerbGer [style = "solid"];
+LangGer -> ConjunctionGer [style = "solid"];
+LangGer -> StructuralGer [style = "solid"];
+LangGer -> LexiconGer [style = "solid"];
+LangGer -> Lang [arrowhead = "empty", style = "dashed"];
+
+Lang [style = "solid", shape = "ellipse", URL = "Lang.gf"];
+Lang -> Noun [style = "solid"];
+Lang -> Verb [style = "solid"];
+Lang -> Conjunction [style = "solid"];
+Lang -> Structural [style = "solid"];
+Lang -> Lexicon [style = "solid"];
+
+NounGer [style = "dashed", shape = "box", URL = "NounGer.gf"];
+NounGer -> CatGer [style = "solid"];
+NounGer -> ResGer [style = "dotted"];
+NounGer -> Prelude [style = "dotted"];
+NounGer -> Noun [arrowhead = "empty", style = "dashed"];
+
+Noun [style = "solid", shape = "ellipse", URL = "Noun.gf"];
+Noun -> Cat [style = "solid"];
+
+VerbGer [style = "dashed", shape = "box", URL = "VerbGer.gf"];
+VerbGer -> CatGer [style = "solid"];
+VerbGer -> Prelude [style = "dotted"];
+VerbGer -> ResGer [style = "dotted"];
+VerbGer -> Verb [arrowhead = "empty", style = "dashed"];
+
+Verb [style = "solid", shape = "ellipse", URL = "Verb.gf"];
+Verb -> Cat [style = "solid"];
+
+ConjunctionGer [style = "dashed", shape = "box", URL = "ConjunctionGer.gf"];
+ConjunctionGer -> CatGer [style = "solid"];
+ConjunctionGer -> ResGer [style = "dotted"];
+ConjunctionGer -> Coordination [style = "dotted"];
+ConjunctionGer -> Prelude [style = "dotted"];
+ConjunctionGer -> Conjunction [arrowhead = "empty", style = "dashed"];
+
+Conjunction [style = "solid", shape = "ellipse", URL = "Conjunction.gf"];
+Conjunction -> Cat [style = "solid"];
+
+Coordination [style = "dashed", shape = "ellipse", URL = "Coordination.gf"];
+Coordination -> Prelude [style = "dotted"];
+
+StructuralGer [style = "dashed", shape = "box", URL = "StructuralGer.gf"];
+StructuralGer -> CatGer [style = "solid"];
+StructuralGer -> MorphoGer [style = "dotted"];
+StructuralGer -> Prelude [style = "dotted"];
+StructuralGer -> Structural [arrowhead = "empty", style = "dashed"];
+
+Structural [style = "solid", shape = "ellipse", URL = "Structural.gf"];
+Structural -> Cat [style = "solid"];
+
+LexiconGer [style = "dashed", shape = "box", URL = "LexiconGer.gf"];
+LexiconGer -> CatGer [style = "solid"];
+LexiconGer -> Prelude [style = "dotted"];
+LexiconGer -> ParadigmsGer [style = "dotted"];
+LexiconGer -> Lexicon [arrowhead = "empty", style = "dashed"];
+
+Lexicon [style = "solid", shape = "ellipse", URL = "Lexicon.gf"];
+Lexicon -> Cat [style = "solid"];
+
+ParadigmsGer [style = "dashed", shape = "ellipse", URL = "ParadigmsGer.gf"];
+ParadigmsGer -> Predef [style = "dotted"];
+ParadigmsGer -> Prelude [style = "dotted"];
+ParadigmsGer -> MorphoGer [style = "dotted"];
+ParadigmsGer -> CatGer [style = "dotted"];
+
+CatGer [style = "dashed", shape = "box", URL = "CatGer.gf"];
+CatGer -> TenseX [style = "solid"];
+CatGer -> ResGer [style = "dotted"];
+CatGer -> Prelude [style = "dotted"];
+CatGer -> Cat [arrowhead = "empty", style = "dashed"];
+
+Cat [style = "solid", shape = "ellipse", URL = "Cat.gf"];
+Cat -> Tense [style = "solid"];
+
+TenseX [style = "dashed", shape = "box", URL = "TenseX.gf"];
+TenseX -> ParamX [style = "dotted"];
+TenseX -> Tense [arrowhead = "empty", style = "dashed"];
+
+Tense [style = "solid", shape = "ellipse", URL = "Tense.gf"];
+
+MorphoGer [style = "dashed", shape = "ellipse", URL = "MorphoGer.gf"];
+MorphoGer -> ResGer [style = "solid"];
+MorphoGer -> Prelude [style = "dotted"];
+MorphoGer -> Predef [style = "dotted"];
+
+ResGer [style = "dashed", shape = "ellipse", URL = "ResGer.gf"];
+ResGer -> ParamGer [style = "solid"];
+ResGer -> Prelude [style = "dotted"];
+
+ParamGer [style = "dashed", shape = "ellipse", URL = "ParamGer.gf"];
+ParamGer -> ParamX [style = "solid"];
+
+ParamX [style = "dashed", shape = "ellipse", URL = "ParamX.gf"];
+ParamX -> Prelude [style = "dotted"];
+
+Prelude [style = "dashed", shape = "ellipse", URL = "Prelude.gf"];
+Prelude -> Predef [style = "dotted"];
+
+Predef [style = "dashed", shape = "ellipse", URL = "Predef.gf"];
+
+}
