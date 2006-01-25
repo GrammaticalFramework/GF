@@ -4,7 +4,7 @@ Last update: %%date(%c)
 
 % NOTE: this is a txt2tags file.
 % Create an html file from this file using:
-% txt2tags --toc -thtml gf-resource-lib.txt
+% txt2tags --toc -thtml index.txt
 
 %!target:html
 
