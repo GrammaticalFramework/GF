@@ -1166,7 +1166,7 @@ example shows such a table:
 The application of a table to a parameter is done by the **selection**
 operator ``!``. For instance,
 ```
-  Cheese.s ! Pl
+   table {Sg => "cheese" ; Pl => "cheeses"} ! Pl
 ```
 is a selection, whose value is ``"cheeses"``.
 
