@@ -1,4 +1,4 @@
-concrete PhraseGer of Phrase = CatGer, TenseX ** open Prelude, ResGer in {
+concrete PhraseGer of Phrase = CatGer ** open Prelude, ResGer in {
 
   flags optimize=all_subs ;
 

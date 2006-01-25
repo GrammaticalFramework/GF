@@ -1,6 +1,6 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
 
-concrete BasicFre of Basic = CatFre ** open ParadigmsFre, VerbsFre in {
+concrete LexiconFre of Lexicon = CatFre ** open ParadigmsFre, IrregFre in {
 
 flags 
   optimize=values ;

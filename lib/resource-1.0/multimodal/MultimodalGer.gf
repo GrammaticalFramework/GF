@@ -14,5 +14,5 @@ concrete MultimodalGer of Multimodal =
 --  Tensed,
   StructuralGer,
   DemonstrativeGer,
-  BasicGer
+  LexiconGer
   ** {} ;

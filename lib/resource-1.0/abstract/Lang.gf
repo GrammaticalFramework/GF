@@ -15,7 +15,6 @@ abstract Lang =
   Relative,
   Conjunction,
   Phrase,
-  Tensed,
   Structural,
-  Basic
+  Lexicon
   ** {} ;

@@ -1,4 +1,4 @@
-concrete TensedEng of Tensed = CatEng, TenseX ** open ResEng in {
+concrete TensedEng of Tensed = CatEng ** open ResEng in {
 
   flags optimize=all_subs ;
 

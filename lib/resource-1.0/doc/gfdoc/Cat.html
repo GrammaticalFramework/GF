@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1> The category system</H1>
 <FONT SIZE="4">
 <I>Author: </I><BR>
-Last update: Wed Jan 25 10:50:12 2006
+Last update: Wed Jan 25 13:41:13 2006
 </FONT></CENTER>
 
 <P></P>
@@ -17,17 +17,16 @@ Last update: Wed Jan 25 10:50:12 2006
   <LI><A HREF="#toc1">The category system</A>
     <UL>
     <LI><A HREF="#toc2">Top-level units</A>
-    <LI><A HREF="#toc3">Tensed sentences</A>
-    <LI><A HREF="#toc4">Clauses</A>
-    <LI><A HREF="#toc5">Questions and interrogatives</A>
-    <LI><A HREF="#toc6">Relative clauses and pronouns</A>
-    <LI><A HREF="#toc7">Verb phrases</A>
-    <LI><A HREF="#toc8">Adjectival phrases</A>
-    <LI><A HREF="#toc9">Nouns and noun phrases</A>
-    <LI><A HREF="#toc10">Adverbs</A>
-    <LI><A HREF="#toc11">Numerals</A>
-    <LI><A HREF="#toc12">Structural words</A>
-    <LI><A HREF="#toc13">Words of open classes</A>
+    <LI><A HREF="#toc3">Sentences and clauses</A>
+    <LI><A HREF="#toc4">Questions and interrogatives</A>
+    <LI><A HREF="#toc5">Relative clauses and pronouns</A>
+    <LI><A HREF="#toc6">Verb phrases</A>
+    <LI><A HREF="#toc7">Adjectival phrases</A>
+    <LI><A HREF="#toc8">Nouns and noun phrases</A>
+    <LI><A HREF="#toc9">Adverbs</A>
+    <LI><A HREF="#toc10">Numerals</A>
+    <LI><A HREF="#toc11">Structural words</A>
+    <LI><A HREF="#toc12">Words of open classes</A>
     </UL>
   </UL>
 
@@ -42,7 +41,7 @@ gfdoc - a rudimentary GF document generator.
 <A NAME="toc1"></A>
 <H1>The category system</H1>
 <PRE>
-    abstract Cat = {
+    abstract Cat = Tense ** {
     
       cat
 </PRE>
@@ -60,30 +59,21 @@ Constructed in <A HREF="Phrase.html">Phrase</A>.
 </PRE>
 <P></P>
 <A NAME="toc3"></A>
-<H2>Tensed sentences</H2>
+<H2>Sentences and clauses</H2>
 <P>
-Constructed in <A HREF="Tensed.html">Tensed</A>.
-A simplified variant, with just present forms, is <A HREF="Untensed.html">Untensed</A>.
+Constructed in <A HREF="Sentence.html">Sentence</A>.
 </P>
 <PRE>
         S ;     -- declarative sentence                e.g. "she lived here"
         QS ;    -- question                            e.g. "where did she live"
         RS ;    -- relative                            e.g. "in which she lived"
-</PRE>
-<P></P>
-<A NAME="toc4"></A>
-<H2>Clauses</H2>
-<P>
-Constructed in <A HREF="Sentence.html">Sentence</A>.
-</P>
-<PRE>
         Cl ;    -- declarative clause, with all tenses e.g. "she looks at this"
         Slash ; -- clause missing NP (S/NP in GPSG)    e.g. "she looks at"
         Imp ;   -- imperative                          e.g. "look at this"
         SC ;    -- embedded sentence or question       e.g. "that it rains"
 </PRE>
 <P></P>
-<A NAME="toc5"></A>
+<A NAME="toc4"></A>
 <H2>Questions and interrogatives</H2>
 <P>
 Constructed in <A HREF="Question.html">Question</A>.
@@ -95,7 +85,7 @@ Constructed in <A HREF="Question.html">Question</A>.
         IDet ;  -- interrogative determiner            e.g. "which"
 </PRE>
 <P></P>
-<A NAME="toc6"></A>
+<A NAME="toc5"></A>
 <H2>Relative clauses and pronouns</H2>
 <P>
 Constructed in <A HREF="Relative.html">Relative</A>.
@@ -105,7 +95,7 @@ Constructed in <A HREF="Relative.html">Relative</A>.
         RP ;    -- relative pronoun                    e.g. "in which"
 </PRE>
 <P></P>
-<A NAME="toc7"></A>
+<A NAME="toc6"></A>
 <H2>Verb phrases</H2>
 <P>
 Constructed in <A HREF="Verb.html">Verb</A>.
@@ -115,7 +105,7 @@ Constructed in <A HREF="Verb.html">Verb</A>.
         Comp ;  -- complement of copula, such as AP    e.g. "very warm"
 </PRE>
 <P></P>
-<A NAME="toc8"></A>
+<A NAME="toc7"></A>
 <H2>Adjectival phrases</H2>
 <P>
 Constructed in <A HREF="Adjective.html">Adjective</A>.
@@ -124,7 +114,7 @@ Constructed in <A HREF="Adjective.html">Adjective</A>.
         AP ;    -- adjectival phrase                   e.g. "very warm"
 </PRE>
 <P></P>
-<A NAME="toc9"></A>
+<A NAME="toc8"></A>
 <H2>Nouns and noun phrases</H2>
 <P>
 Constructed in <A HREF="Noun.html">Noun</A>. 
@@ -150,7 +140,7 @@ as defined in <A HREF="Noun.html">Noun</A>.
         Ord ;   -- ordinal number (used in Det)        e.g. "seventh"
 </PRE>
 <P></P>
-<A NAME="toc10"></A>
+<A NAME="toc9"></A>
 <H2>Adverbs</H2>
 <P>
 Constructed in <A HREF="Adverb.html">Adverb</A>.  
@@ -163,7 +153,7 @@ Many adverbs are constructed in <A HREF="Structural.html">Structural</A>.
         AdN ;   -- numeral-modifying adverb,           e.g. "more than"
 </PRE>
 <P></P>
-<A NAME="toc11"></A>
+<A NAME="toc10"></A>
 <H2>Numerals</H2>
 <P>
 Constructed in <A HREF="Numeral.html">Numeral</A>.
@@ -172,7 +162,7 @@ Constructed in <A HREF="Numeral.html">Numeral</A>.
         Numeral;-- cardinal or ordinal,                e.g. "five/fifth"
 </PRE>
 <P></P>
-<A NAME="toc12"></A>
+<A NAME="toc11"></A>
 <H2>Structural words</H2>
 <P>
 Constructed in <A HREF="Structural.html">Structural</A>.
@@ -186,10 +176,10 @@ Constructed in <A HREF="Structural.html">Structural</A>.
         Prep ;  -- preposition, or just case           e.g. "in"
 </PRE>
 <P></P>
-<A NAME="toc13"></A>
+<A NAME="toc12"></A>
 <H2>Words of open classes</H2>
 <P>
-These are constructed in <A HREF="Basic.html">Basic</A> and in additional lexicon modules.
+These are constructed in <A HREF="Lexicon.html">Lexicon</A> and in additional lexicon modules.
 </P>
 <PRE>
         V ;     -- one-place verb                      e.g. "sleep" 

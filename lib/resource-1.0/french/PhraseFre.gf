@@ -1,2 +1,2 @@
-concrete PhraseFre of Phrase = CatFre, TenseX ** PhraseRomance with
+concrete PhraseFre of Phrase = CatFre ** PhraseRomance with
   (ResRomance = ResFre) ;

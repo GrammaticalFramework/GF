@@ -4,7 +4,7 @@
 -- Translated to GF by Aarne Ranta
 -- added extracted subcat information 29/11
 
-abstract VerbsFreAbs = Cat ** {
+abstract IrregFreAbs = Cat ** {
 
 -- all verbs in classes with "er" and "ir" like "finir" are omitted
 

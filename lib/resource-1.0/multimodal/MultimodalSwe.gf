@@ -14,6 +14,6 @@ concrete MultimodalSwe of Multimodal =
 --  Tensed,
   StructuralSwe,
   DemonstrativeSwe,
-  BasicSwe
+  LexiconSwe
   ** {} ;
 

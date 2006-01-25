@@ -2,7 +2,7 @@
 
 -- This lexicon is used when developing a grammar, and called by
 -- [Test Test.html]. The full lexicon is divided between
--- [Structural Structural.html], [Basic Basic.html], and [Numeral Numeral.html].
+-- [Structural Structural.html], [Lexicon Lexicon.html], and [Numeral Numeral.html].
 
 abstract Lex = Cat ** {
 

@@ -14,6 +14,6 @@ concrete MultimodalEng of Multimodal =
 --  Tensed,
   StructuralEng,
   DemonstrativeEng,
-  BasicEng
+  LexiconEng
   ** {} ;
 

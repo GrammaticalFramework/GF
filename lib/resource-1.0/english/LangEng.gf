@@ -11,9 +11,8 @@ concrete LangEng of Lang =
   RelativeEng,
   ConjunctionEng,
   PhraseEng,
-  TensedEng,
   StructuralEng,
-  BasicEng
+  LexiconEng
   ** {
 
 flags startcat = Phr ;

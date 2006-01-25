@@ -1,4 +1,4 @@
-concrete CatGer of Cat = open ResGer, Prelude in {
+concrete CatGer of Cat = TenseX ** open ResGer, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -71,7 +71,7 @@ concrete CatGer of Cat = open ResGer, Prelude in {
     Subj = {s : Str} ;
     Prep = {s : Str ; c : Case} ;
 
--- Open lexical classes, e.g. Basic
+-- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = ResGer.Verb ; -- = {s : VForm => Str} ;
     VV = Verb ** {isAux : Bool} ;

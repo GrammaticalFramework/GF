@@ -30,18 +30,8 @@ The following figure gives the dependencies of these modules.
 
 [Lang.png] 
 
-
-It is advisable to start with a simpler subset of the API, which
-leaves out certain complicated but not always necessary things:
-tenses and most part of the lexicon.
-
-
-[Test.png]
-
-
-
 The module structure is rather flat: almost every module is a direct
-parent of the top module (``Lang`` or ``Test``). The idea
+parent of the top module ``Lang``. The idea
 is that you can concentrate on one linguistic aspect at a time, or
 also distribute the work among several authors.
 
@@ -78,8 +68,6 @@ For instance, noun phrases, which are constructed in ``Noun``, are
 used as arguments of functions of almost all other phrase category modules. 
 How can we build all these modules independently of each other?
 
-
-
 As usual in typeful programming, the //only// thing you need to know
 about an object you use is its type. When writing a linearization rule
 for a GF abstract syntax function, the only thing you need to know is
@@ -99,19 +87,6 @@ English, for instance, most categories do have this linearization type!
 
 
 
-As a slight asymmetry in the module diagrams, you find the following
-modules:
-
-- ``Tense``: defines the parameters of polarity, anteriority, and tense
-- ``Tensed``: defines how sentences use those parameters
-- ``Untensed``: makes sentences use the polarity parameter only
-
-
-The full resource API (``Lang``) uses ``Tensed``, whereas the
-restricted ``Test`` API uses ``Untensed``. 
-
-
-
 ===Lexical modules===
 
 What is lexical and what is syntactic is not as clearcut in GF as in
@@ -121,34 +96,22 @@ that the ``lin`` consists of only one token (or of a table whose values
 are single tokens). Even in the restricted lexicon included in the resource
 API, the latter rule is sometimes violated in some languages.
 
-
-
 Another characterization of lexical is that lexical units can be added
 almost //ad libitum//, and they cannot be defined in terms of already
 given rules. The lexical modules of the resource API are thus more like
-samples than complete lists. There are three such modules:
+samples than complete lists. There are two such modules:
 
 - ``Structural``: structural words (determiners, conjunctions,...)
-- ``Basic``: basic everyday content words (nouns, verbs,...)
-- ``Lex``: a very small sample of both structural and content words
+- ``Lexicon``: basic everyday content words (nouns, verbs,...)
 
 
 The module ``Structural`` aims for completeness, and is likely to
-be extended in future releases of the resource. The module ``Basic``
+be extended in future releases of the resource. The module ``Lexicon``
 gives a "random" list of words, which enable interesting testing of syntax,
 and also a check list for morphology, since those words are likely to include
 most morphological patterns of the language.
 
-
-
-The module ``Lex`` is used in ``Test`` instead of the two
-larger modules. Its purpose is to provide a quick way to test the
-syntactic structures of the phrase category modules without having to implement
-the larger lexica.
-
-
-
-In the case of ``Basic`` it may come out clearer than anywhere else
+In the case of ``Lexicon`` it may come out clearer than anywhere else
 in the API that it is impossible to give exact translation equivalents in
 different languages on the level of a resource grammar. In other words,
 application grammars are likely to use the resource in different ways for
@@ -215,9 +178,9 @@ of resource v. 1.0.
   lines in the previous step) - but you uncommenting the first
   and the last lines will actually do the job for many of the files.
 
-+ Now you can open the grammar ``TestGer`` in GF:
++ Now you can open the grammar ``LangGer`` in GF:
 ``` 
-       gf TestGer.gf
+       gf LangGer.gf
 ```
   You will get lots of warnings on missing rules, but the grammar will compile.
 
@@ -228,7 +191,7 @@ of resource v. 1.0.
 ```
      tells you what exactly is missing.
 
-Here is the module structure of ``TestGer``. It has been simplified by leaving out
+Here is the module structure of ``LangGer``. It has been simplified by leaving out
 the majority of the phrase category modules. Each of them has the same dependencies
 as e.g. ``VerbGer``.
 
@@ -255,7 +218,7 @@ only one. So you will find yourself iterating the following steps:
 
 + To be able to test the construction, 
      define some words you need to instantiate it
-     in ``LexGer``. Again, it can be helpful to define some simple-minded
+     in ``LexiconGer``. Again, it can be helpful to define some simple-minded
      morphological paradigms in ``ResGer``, in particular worst-case
      constructors corresponding to e.g.
      ``ResEng.mkNoun``.
@@ -266,8 +229,8 @@ only one. So you will find yourself iterating the following steps:
        cc mkNoun "Brief" "Briefe" Masc
 ```
 
-+ Uncomment ``NounGer`` and ``LexGer`` in ``TestGer``,
-     and compile ``TestGer`` in GF. Then test by parsing, linearization,
++ Uncomment ``NounGer`` and ``LexiconGer`` in ``LangGer``,
+     and compile ``LangGer`` in GF. Then test by parsing, linearization,
      and random generation. In particular, linearization to a table should
      be used so that you see all forms produced:
 ```
@@ -279,30 +242,30 @@ only one. So you will find yourself iterating the following steps:
 
 
 You are likely to run this cycle a few times for each linearization rule
-you implement, and some hundreds of times altogether. There are 159
-``funs`` in ``Test`` (at the moment).
-
-
+you implement, and some hundreds of times altogether. There are 66 ``cat``s and
+458 ``funs`` in ``Lang`` at the moment; 149 of the ``funs`` are outside the two
+lexicon modules).
 
 Of course, you don't need to complete one phrase category module before starting
 with the next one. Actually, a suitable subset of ``Noun``,
 ``Verb``, and ``Adjective`` will lead to a reasonable coverage
 very soon, keep you motivated, and reveal errors.
 
-
 Here is a [live log ../german/log.txt] of the actual process of
 building the German implementation of resource API v. 1.0.
 It is the basis of the more detailed explanations, which will
 follow soon. (You will found out that these explanations involve
-a rational reconstruction of the live process!)
+a rational reconstruction of the live process! Among other things, the
+API was changed during the actual process to make it more intuitive.)
 
 
 ===Resource modules used===
 
 These modules will be written by you.
 
-- ``ResGer``: parameter types and auxiliary operations
-- ``MorphoGer``: complete inflection engine; not needed for ``Test``.
+- ``ParamGer``: parameter types
+- ``ResGer``: auxiliary operations (a resource for the resource grammar!)
+- ``MorphoGer``: complete inflection engine
 
 
 These modules are language-independent and provided by the existing resource
@@ -389,7 +352,7 @@ the application grammarian may need to use, e.g.
 ```
 These constants are defined in terms of parameter types and constructors
 in ``ResGer`` and ``MorphoGer``, which modules are are not
-accessible to the application grammarian.
+visible to the application grammarian.
 
 
 ===Lock fields===
@@ -418,15 +381,11 @@ In this way, the user of a resource grammar cannot confuse adverbs with
 conjunctions. In other words, the lock fields force the type checker
 to function as grammaticality checker.
 
-
-
 When the resource grammar is ``open``ed in an application grammar, the
 lock fields are never seen (except possibly in type error messages),
 and the application grammarian should never write them herself. If she
 has to do this, it is a sign that the resource grammar is incomplete, and
 the proper way to proceed is to fix the resource grammar.
-
-
 
 The resource grammarian has to provide the dummy lock field values
 in her hidden definitions of constants in ``Paradigms``. For instance,
@@ -456,13 +415,46 @@ those who want to build new lexica.
 
 
 
-==Inside phrase category modules==
+==Inside grammar modules==
 
-===Noun===
+So far we just give links to the implementations of each API.
+More explanation iś to follow - but many detail implementation tricks
+are only found in the cooments of the modules.
 
-===Verb===
 
-===Adjective===
+===The category system===
+
+- [Cat gfdoc/Cat.html], [CatGer gfdoc/CatGer.html]
+
+
+===Phrase category modules===
+
+- [Tense gfdoc/Tense.html], [TenseGer ../german/TenseGer.gf]
+- [Noun gfdoc/Noun.html], [NounGer ../german/NounGer.gf]
+- [Adjective gfdoc/Adjective.html], [AdjectiveGer ../german/AdjectiveGer.gf]
+- [Verb gfdoc/Verb.html], [VerbGer ../german/VerbGer.gf]
+- [Adverb gfdoc/Adverb.html], [AdverbGer ../german/AdverbGer.gf]
+- [Numeral gfdoc/Numeral.html], [NumeralGer ../german/NumeralGer.gf]
+- [Sentence gfdoc/Sentence.html], [SentenceGer ../german/SentenceGer.gf]
+- [Question gfdoc/Question.html], [QuestionGer ../german/QuestionGer.gf]
+- [Relative gfdoc/Relative.html], [RelativeGer ../german/RelativeGer.gf]
+- [Conjunction gfdoc/Conjunction.html], [ConjunctionGer ../german/ConjunctionGer.gf]
+- [Phrase gfdoc/Phrase.html], [PhraseGer ../german/PhraseGer.gf]
+- [Lang gfdoc/Lang.html], [LangGer ../german/LangGer.gf]
+
+
+===Resource modules===
+
+- [ParamGer ../german/ParamGer.gf]
+- [ResGer ../german/ResGer.gf]
+- [MorphoGer ../german/MorphoGer.gf]
+- [ParadigmsGer gfdoc/ParadigmsGer.html], [ParadigmsGer.gf ../german/ParadigmsGer.gf]
+
+
+===Lexicon===
+
+- [Structural gfdoc/Structural.html], [StructuralGer ../german/StructuralGer.gf]
+- [Lexicon gfdoc/Lexicon.html], [LexiconGer ../german/LexiconGer.gf]
 
 
 ==Lexicon extension==
@@ -486,10 +478,10 @@ irregular verbs on the internet. For instance, the
 page gives a list of verbs in the
 traditional tabular format, which begins as follows:
 ```
-  backen (du bäckst, er bäckt)	                 backte [buk]	           gebacken
+  backen (du bäckst, er bäckt)	                 backte [buk]              gebacken
   befehlen (du befiehlst, er befiehlt; befiehl!) befahl (beföhle; befähle) befohlen
-  beginnen	                                 begann (begönne; begänne) begonnen
-  beißen	                                 biß	                   gebissen
+  beginnen                                       begann (begönne; begänne) begonnen
+  beißen                                         biß                       gebissen
 ```
 All you have to do is to write a suitable verb paradigm
 ```
@@ -538,7 +530,7 @@ use parametrized modules. The advantages are
 - practical: maintainability improves with fewer components
 
 
-In this chapter, we will look at an example: adding Portuguese to
+In this chapter, we will look at an example: adding Italian to
 the Romance family.
 
 

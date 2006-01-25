@@ -11,9 +11,8 @@ concrete LangSwe of Lang =
   RelativeSwe,
   ConjunctionSwe,
   PhraseSwe,
-  TensedSwe,
   StructuralSwe,
-  BasicSwe
+  LexiconSwe
   ** {
 
 flags startcat = Phr ;

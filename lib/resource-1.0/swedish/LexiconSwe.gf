@@ -1,6 +1,6 @@
 --# -path=.:../scandinavian:../common:../abstract:../../prelude
 
-concrete BasicSwe of Basic = CatSwe ** open ParadigmsSwe in {
+concrete LexiconSwe of Lexicon = CatSwe ** open ParadigmsSwe in {
 
 flags 
   optimize=values ;
