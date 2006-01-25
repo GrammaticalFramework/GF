@@ -179,24 +179,25 @@ oper
 
   mkV : (supa,super,sup,söp,supit,supen : Str) -> V ;
 
--- The 'regular verb' function is the first conjugation if the
--- infinitive ends with "a" ("tala" - "talar" - "talade" - "talat"),
+-- The 'regular verb' function is inspired by Lexin. It uses the
+-- present tense indicative form. The value is the first conjugation if the
+-- argument ends with "ar" ("tala" - "talar" - "talade" - "talat"),
+-- the second with "er" ("leka" - "leker" - "lekte" - "lekt", with the
+-- variations like "gräva", "vända", "tyda", "hyra"), and 
 -- the third in other cases ("bo" - "bor" - "bodde" - "bott").
 
-  regV : (tala : Str) -> V ;
+  regV : (talar : Str) -> V ;
 
 -- The almost regular verb function needs the infinitive and the preteritum.
--- It can deal with almost all cases in the first, second, and third
--- conjugation: "tala" - "talade", "leka" - "lekte", 
--- "gräva" - "grävde", "byta" - "bytte", "vända" - "vände",
--- "tyda" - "tydde", "bo" - "bodde".
+-- It is not really more powerful than the new implementation of
+-- $regV$ based on the indicative form.
 
   mk2V : (leka,lekte : Str) -> V ;
 
 -- There is an extensive list of irregular verbs in the module $IrregularSwe$.
 -- In practice, it is enough to give three forms, as in school books.
 
-  irregV : (dricka, drack, druckit  : Str) -> V ;
+  irregV : (dricka, drack, druckit : Str) -> V ;
 
 
 --3 Verbs with a particle.
