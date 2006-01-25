@@ -11,9 +11,8 @@ concrete LangFre of Lang =
   RelativeFre,
   ConjunctionFre,
   PhraseFre,
-  TensedFre,
   StructuralFre,
-  BasicFre
+  LexiconFre
   ** {
 
 flags startcat = Phr ;

@@ -1,6 +1,6 @@
 --1 Phrases and utterances
 
-abstract Phrase = Cat, Tense ** {
+abstract Phrase = Cat ** {
 
 -- When a phrase is built from an utterance it can be prefixed
 -- with a phrasal conjunction (such as "but", "therefore")

@@ -1,6 +1,6 @@
 --# -path=.:../common:../abstract:../../prelude
 
-concrete BasicGer of Basic = CatGer ** open Prelude, ParadigmsGer in {
+concrete LexiconGer of Lexicon = CatGer ** open Prelude, ParadigmsGer in {
 
 flags 
   optimize=all_subs ;

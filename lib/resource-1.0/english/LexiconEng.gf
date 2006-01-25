@@ -1,6 +1,6 @@
 --# -path=.:prelude
 
-concrete BasicEng of Basic = CatEng ** open ParadigmsEng in {
+concrete LexiconEng of Lexicon = CatEng ** open ParadigmsEng in {
 
 flags 
   optimize=values ;

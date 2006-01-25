@@ -11,9 +11,8 @@ concrete LangGer of Lang =
   RelativeGer,
   ConjunctionGer,
   PhraseGer,
-  TensedGer,
   StructuralGer,
-  BasicGer
+  LexiconGer
   ** {
 
 flags startcat = Phr ;

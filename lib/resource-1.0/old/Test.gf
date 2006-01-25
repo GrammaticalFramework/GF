@@ -20,7 +20,7 @@ abstract Test =
   Untensed, 
   -- Tensed,
   -- Structural,
-  -- Basic,
+  -- Lexicon,
   -- Numeral,
   Lex 
   ** {} ;

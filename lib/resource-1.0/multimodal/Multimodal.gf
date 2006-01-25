@@ -12,5 +12,5 @@ abstract Multimodal =
 --  Tensed,
   Structural,
   Demonstrative,
-  Basic
+  Lexicon
   ** {} ;

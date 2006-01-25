@@ -1,4 +1,4 @@
-concrete CatEng of Cat = open ResEng, Prelude in {
+concrete CatEng of Cat = TenseX ** open ResEng, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -69,7 +69,7 @@ concrete CatEng of Cat = open ResEng, Prelude in {
     Subj = {s : Str} ;
     Prep = {s : Str} ;
 
--- Open lexical classes, e.g. Basic
+-- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
     V2, VV, V2A = Verb ** {c2 : Str} ;

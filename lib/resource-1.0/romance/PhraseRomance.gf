@@ -1,5 +1,5 @@
 incomplete concrete PhraseRomance of Phrase = 
-  CatRomance, TenseX ** open CommonRomance, ResRomance, Prelude in {
+  CatRomance ** open CommonRomance, ResRomance, Prelude in {
 
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;

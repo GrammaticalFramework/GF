@@ -1,5 +1,5 @@
 incomplete concrete CatRomance of Cat = 
-  open Prelude, CommonRomance, ResRomance, (R = ParamX) in {
+  TenseX ** open Prelude, CommonRomance, ResRomance, (R = ParamX) in {
 
   flags optimize=all_subs ;
 
@@ -71,7 +71,7 @@ incomplete concrete CatRomance of Cat =
     Subj  = {s : Str ; m : Mood} ;
     Prep  = {s : Str ; c : Case} ;
 
--- Open lexical classes, e.g. Basic
+-- Open lexical classes, e.g. Lexicon
 
     V, VQ, VA = Verb ;
     V2, VV, V2A = Verb ** {c2 : Compl} ;

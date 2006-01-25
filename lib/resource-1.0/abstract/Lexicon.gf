@@ -1,4 +1,4 @@
---1 A Basic Lexicon
+--1 A Lexicon Lexicon
 
 -- This files gives a list of words whose purpose is to test the GF
 -- resource grammar. It covers all lexical categories of [Cat Cat.html].
@@ -10,7 +10,7 @@
 -- of the words in different languages are not guaranteed to be translation
 -- equivalents.
 
-abstract Basic = Cat ** {
+abstract Lexicon = Cat ** {
   fun
   add_V3 : V3 ;
   airplane_N : N ;

@@ -1,4 +1,4 @@
-incomplete concrete TensedRomance of Tensed = CatRomance, TenseX ** 
+incomplete concrete TensedRomance of Tensed = CatRomance ** 
   open ResRomance in {
 
   flags optimize=all_subs ;

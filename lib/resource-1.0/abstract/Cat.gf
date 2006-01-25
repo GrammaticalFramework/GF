@@ -1,6 +1,6 @@
 --1 The category system
 
-abstract Cat = {
+abstract Cat = Tense ** {
 
   cat
 
@@ -13,19 +13,13 @@ abstract Cat = {
     Utt ;   -- sentence, question, word...         e.g. "be quiet"
     Voc ;   -- vocative or "please"                e.g. "my darling"
 
---2 Tensed sentences
+--2 Sentences and clauses
 
--- Constructed in [Tensed Tensed.html].
--- A simplified variant, with just present forms, is [Untensed Untensed.html].
+-- Constructed in [Sentence Sentence.html].
 
     S ;     -- declarative sentence                e.g. "she lived here"
     QS ;    -- question                            e.g. "where did she live"
     RS ;    -- relative                            e.g. "in which she lived"
-
---2 Clauses
-
--- Constructed in [Sentence Sentence.html].
-
     Cl ;    -- declarative clause, with all tenses e.g. "she looks at this"
     Slash ; -- clause missing NP (S/NP in GPSG)    e.g. "she looks at"
     Imp ;   -- imperative                          e.g. "look at this"
@@ -108,7 +102,7 @@ abstract Cat = {
 
 --2 Words of open classes
 
--- These are constructed in [Basic Basic.html] and in additional lexicon modules.
+-- These are constructed in [Lexicon Lexicon.html] and in additional lexicon modules.
 
     V ;     -- one-place verb                      e.g. "sleep" 
     V2 ;    -- two-place verb                      e.g. "love"

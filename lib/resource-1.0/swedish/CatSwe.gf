@@ -1,2 +1,2 @@
-concrete CatSwe of Cat = CatScand with
+concrete CatSwe of Cat = TenseX ** CatScand with
   (ResScand = ResSwe) ;

@@ -14,6 +14,6 @@ concrete MultimodalFre of Multimodal =
 --  Tensed,
   StructuralFre,
   DemonstrativeFre,
-  BasicFre
+  LexiconFre
   ** {} ;
 

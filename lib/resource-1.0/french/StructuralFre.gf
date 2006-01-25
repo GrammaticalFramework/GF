@@ -1,5 +1,5 @@
 concrete StructuralFre of Structural = CatFre ** 
-  open PhonoFre, MorphoFre, ParadigmsFre, VerbsFre, Prelude in {
+  open PhonoFre, MorphoFre, ParadigmsFre, IrregFre, Prelude in {
 
   flags optimize=all ;
 

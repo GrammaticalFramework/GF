@@ -1,4 +1,4 @@
-concrete PhraseEng of Phrase = CatEng, TenseX ** open ResEng in {
+concrete PhraseEng of Phrase = CatEng ** open ResEng in {
 
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;

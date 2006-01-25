@@ -28,6 +28,7 @@ The following figure gives the dependencies of these modules.
 The documentation of the individual modules:
 
 - [Cat gfdoc/Cat.html]: the category system
+- [Tense gfdoc/Tense.html]: tense, anteriority, and polarity values
 - [Noun gfdoc/Noun.html]: construction of nouns and noun phrases
 - [Adjective gfdoc/Adjective.html]: construction of adjectival phrases
 - [Verb gfdoc/Verb.html]: construction of verb phrases
@@ -39,7 +40,7 @@ The documentation of the individual modules:
 - [Conjunction gfdoc/Conjunction.html]: coordination of phrases
 - [Phrase gfdoc/Phrase.html]: construction of the major units of text and speech
 - [Structural gfdoc/Structural.html]: a lexicon of structural words
-- [Basic gfdoc/Basic.html]: a lexicon of other common words, for test purposes
+- [Lexicon gfdoc/Lexicon.html]: a lexicon of other common words, for test purposes
 - [Lang gfdoc/Lang.html]: the main module comprising all the others
 
 

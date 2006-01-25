@@ -1,2 +1,2 @@
-concrete PhraseSwe of Phrase = CatSwe, TenseX ** PhraseScand with
+concrete PhraseSwe of Phrase = CatSwe ** PhraseScand with
   (ResScand = ResSwe) ;

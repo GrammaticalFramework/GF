@@ -4,7 +4,7 @@
 -- Translated to GF by Aarne Ranta
 -- added extracted subcat information 29/11
 
-concrete VerbsFre of VerbsFreAbs = CatFre ** 
+concrete IrregFre of IrregFreAbs = CatFre ** 
   open DiffFre, MorphoFre, BeschFre, Prelude in {
 
   flags optimize=values ;

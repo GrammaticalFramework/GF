@@ -6,7 +6,7 @@
 -- A variant with just the polarity variation is given in
 -- [Untensed Untensed.html].
 
-abstract Tensed = Cat, Tense ** {
+abstract Tensed = Cat ** {
 
   fun
     UseCl  : Tense -> Ant -> Pol -> Cl  -> S ;

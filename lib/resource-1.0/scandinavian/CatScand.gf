@@ -1,5 +1,5 @@
 incomplete concrete CatScand of Cat = 
-  open ResScand, Prelude, CommonScand, (R = ParamX) in {
+  TenseX ** open ResScand, Prelude, CommonScand, (R = ParamX) in {
 
   flags optimize=all_subs ;
 
@@ -87,7 +87,7 @@ incomplete concrete CatScand of Cat =
     Subj = {s : Str} ;
     Prep = {s : Str} ;
 
--- Open lexical classes, e.g. Basic
+-- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ;
     V2, VV, V2A = Verb ** {c2 : Str} ;
