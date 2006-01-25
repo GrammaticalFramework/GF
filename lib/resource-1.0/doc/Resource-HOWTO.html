@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Resource grammar writing HOWTO</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Wed Jan 25 14:52:10 2006
+Last update: Wed Jan 25 14:58:45 2006
 </FONT></CENTER>
 
 <P></P>
@@ -19,32 +19,33 @@ Last update: Wed Jan 25 14:52:10 2006
       <LI><A HREF="#toc2">Phrase category modules</A>
       <LI><A HREF="#toc3">Infrastructure modules</A>
       <LI><A HREF="#toc4">Lexical modules</A>
+      <LI><A HREF="#toc5">A reduced API</A>
       </UL>
-    <LI><A HREF="#toc5">Phases of the work</A>
+    <LI><A HREF="#toc6">Phases of the work</A>
       <UL>
-      <LI><A HREF="#toc6">Putting up a directory</A>
-      <LI><A HREF="#toc7">The develop-test cycle</A>
-      <LI><A HREF="#toc8">Resource modules used</A>
-      <LI><A HREF="#toc9">Morphology and lexicon</A>
-      <LI><A HREF="#toc10">Lock fields</A>
-      <LI><A HREF="#toc11">Lexicon construction</A>
+      <LI><A HREF="#toc7">Putting up a directory</A>
+      <LI><A HREF="#toc8">The develop-test cycle</A>
+      <LI><A HREF="#toc9">Resource modules used</A>
+      <LI><A HREF="#toc10">Morphology and lexicon</A>
+      <LI><A HREF="#toc11">Lock fields</A>
+      <LI><A HREF="#toc12">Lexicon construction</A>
       </UL>
-    <LI><A HREF="#toc12">Inside grammar modules</A>
+    <LI><A HREF="#toc13">Inside grammar modules</A>
       <UL>
-      <LI><A HREF="#toc13">The category system</A>
-      <LI><A HREF="#toc14">Phrase category modules</A>
-      <LI><A HREF="#toc15">Resource modules</A>
-      <LI><A HREF="#toc16">Lexicon</A>
+      <LI><A HREF="#toc14">The category system</A>
+      <LI><A HREF="#toc15">Phrase category modules</A>
+      <LI><A HREF="#toc16">Resource modules</A>
+      <LI><A HREF="#toc17">Lexicon</A>
       </UL>
-    <LI><A HREF="#toc17">Lexicon extension</A>
+    <LI><A HREF="#toc18">Lexicon extension</A>
       <UL>
-      <LI><A HREF="#toc18">The irregularity lexicon</A>
-      <LI><A HREF="#toc19">Lexicon extraction from a word list</A>
-      <LI><A HREF="#toc20">Lexicon extraction from raw text data</A>
-      <LI><A HREF="#toc21">Extending the resource grammar API</A>
+      <LI><A HREF="#toc19">The irregularity lexicon</A>
+      <LI><A HREF="#toc20">Lexicon extraction from a word list</A>
+      <LI><A HREF="#toc21">Lexicon extraction from raw text data</A>
+      <LI><A HREF="#toc22">Extending the resource grammar API</A>
       </UL>
-    <LI><A HREF="#toc22">Writing an instance of parametrized resource grammar implementation</A>
-    <LI><A HREF="#toc23">Parametrizing a resource grammar implementation</A>
+    <LI><A HREF="#toc23">Writing an instance of parametrized resource grammar implementation</A>
+    <LI><A HREF="#toc24">Parametrizing a resource grammar implementation</A>
     </UL>
 
 <P></P>
@@ -166,8 +167,17 @@ application grammars are likely to use the resource in different ways for
 different languages.
 </P>
 <A NAME="toc5"></A>
-<H2>Phases of the work</H2>
+<H3>A reduced API</H3>
+<P>
+If you want to experiment with a small subset of the resource API first, 
+try out the module 
+<A HREF="http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/resource/Syntax.gf">Syntax</A>
+explained in the
+<A HREF="http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html">GF Tutorial</A>.
+</P>
 <A NAME="toc6"></A>
+<H2>Phases of the work</H2>
+<A NAME="toc7"></A>
 <H3>Putting up a directory</H3>
 <P>
 Unless you are writing an instance of a parametrized implementation
@@ -246,7 +256,7 @@ as e.g. <CODE>VerbGer</CODE>.
 <IMG ALIGN="middle" SRC="German.png" BORDER="0" ALT="">
 </OL>
 
-<A NAME="toc7"></A>
+<A NAME="toc8"></A>
 <H3>The develop-test cycle</H3>
 <P>
 The real work starts now. The order in which the <CODE>Phrase</CODE> modules
@@ -311,7 +321,7 @@ follow soon. (You will found out that these explanations involve
 a rational reconstruction of the live process! Among other things, the
 API was changed during the actual process to make it more intuitive.)
 </P>
-<A NAME="toc8"></A>
+<A NAME="toc9"></A>
 <H3>Resource modules used</H3>
 <P>
 These modules will be written by you.
@@ -336,7 +346,7 @@ package.
 <LI><CODE>Predefined</CODE>: general-purpose operations with hard-coded definitions
 </UL>
 
-<A NAME="toc9"></A>
+<A NAME="toc10"></A>
 <H3>Morphology and lexicon</H3>
 <P>
 When the implementation of <CODE>Test</CODE> is complete, it is time to
@@ -416,7 +426,7 @@ These constants are defined in terms of parameter types and constructors
 in <CODE>ResGer</CODE> and <CODE>MorphoGer</CODE>, which modules are are not
 visible to the application grammarian.
 </P>
-<A NAME="toc10"></A>
+<A NAME="toc11"></A>
 <H3>Lock fields</H3>
 <P>
 An important difference between <CODE>MorphoGer</CODE> and
@@ -463,7 +473,7 @@ in her hidden definitions of constants in <CODE>Paradigms</CODE>. For instance,
     -- mkAdv s = {s = s ; lock_Adv = &lt;&gt;} ;
 </PRE>
 <P></P>
-<A NAME="toc11"></A>
+<A NAME="toc12"></A>
 <H3>Lexicon construction</H3>
 <P>
 The lexicon belonging to <CODE>LangGer</CODE> consists of two modules:
@@ -483,20 +493,20 @@ the coverage of the paradigms gets thereby tested and that the
 use of the paradigms in <CODE>BasicGer</CODE> gives a good set of examples for
 those who want to build new lexica.
 </P>
-<A NAME="toc12"></A>
+<A NAME="toc13"></A>
 <H2>Inside grammar modules</H2>
 <P>
 So far we just give links to the implementations of each API.
 More explanation iś to follow - but many detail implementation tricks
 are only found in the cooments of the modules.
 </P>
-<A NAME="toc13"></A>
+<A NAME="toc14"></A>
 <H3>The category system</H3>
 <UL>
 <LI><A HREF="gfdoc/Cat.html">Cat</A>, <A HREF="gfdoc/CatGer.html">CatGer</A>
 </UL>
 
-<A NAME="toc14"></A>
+<A NAME="toc15"></A>
 <H3>Phrase category modules</H3>
 <UL>
 <LI><A HREF="gfdoc/Tense.html">Tense</A>, <A HREF="../german/TenseGer.gf">TenseGer</A>
@@ -513,7 +523,7 @@ are only found in the cooments of the modules.
 <LI><A HREF="gfdoc/Lang.html">Lang</A>, <A HREF="../german/LangGer.gf">LangGer</A>
 </UL>
 
-<A NAME="toc15"></A>
+<A NAME="toc16"></A>
 <H3>Resource modules</H3>
 <UL>
 <LI><A HREF="../german/ParamGer.gf">ParamGer</A>
@@ -522,16 +532,16 @@ are only found in the cooments of the modules.
 <LI><A HREF="gfdoc/ParadigmsGer.html">ParadigmsGer</A>, <A HREF="../german/ParadigmsGer.gf">ParadigmsGer.gf</A>
 </UL>
 
-<A NAME="toc16"></A>
+<A NAME="toc17"></A>
 <H3>Lexicon</H3>
 <UL>
 <LI><A HREF="gfdoc/Structural.html">Structural</A>, <A HREF="../german/StructuralGer.gf">StructuralGer</A>
 <LI><A HREF="gfdoc/Lexicon.html">Lexicon</A>, <A HREF="../german/LexiconGer.gf">LexiconGer</A>
 </UL>
 
-<A NAME="toc17"></A>
-<H2>Lexicon extension</H2>
 <A NAME="toc18"></A>
+<H2>Lexicon extension</H2>
+<A NAME="toc19"></A>
 <H3>The irregularity lexicon</H3>
 <P>
 It may be handy to provide a separate module of irregular
@@ -541,7 +551,7 @@ few hundred perhaps. Building such a lexicon separately also
 makes it less important to cover <I>everything</I> by the
 worst-case paradigms (<CODE>mkV</CODE> etc).
 </P>
-<A NAME="toc19"></A>
+<A NAME="toc20"></A>
 <H3>Lexicon extraction from a word list</H3>
 <P>
 You can often find resources such as lists of 
@@ -576,7 +586,7 @@ When using ready-made word lists, you should think about
 coyright issues. Ideally, all resource grammar material should
 be provided under GNU General Public License.
 </P>
-<A NAME="toc20"></A>
+<A NAME="toc21"></A>
 <H3>Lexicon extraction from raw text data</H3>
 <P>
 This is a cheap technique to build a lexicon of thousands
@@ -584,7 +594,7 @@ of words, if text data is available in digital format.
 See the <A HREF="http://www.cs.chalmers.se/~markus/FM/">Functional Morphology</A> 
 homepage for details.
 </P>
-<A NAME="toc21"></A>
+<A NAME="toc22"></A>
 <H3>Extending the resource grammar API</H3>
 <P>
 Sooner or later it will happen that the resource grammar API
@@ -593,7 +603,7 @@ that it does not include idiomatic expressions in a given language.
 The solution then is in the first place to build language-specific
 extension modules. This chapter will deal with this issue.
 </P>
-<A NAME="toc22"></A>
+<A NAME="toc23"></A>
 <H2>Writing an instance of parametrized resource grammar implementation</H2>
 <P>
 Above we have looked at how a resource implementation is built by
@@ -611,7 +621,7 @@ use parametrized modules. The advantages are
 In this chapter, we will look at an example: adding Italian to
 the Romance family.
 </P>
-<A NAME="toc23"></A>
+<A NAME="toc24"></A>
 <H2>Parametrizing a resource grammar implementation</H2>
 <P>
 This is the most demanding form of resource grammar writing.

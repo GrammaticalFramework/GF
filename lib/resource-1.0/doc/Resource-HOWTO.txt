@@ -119,6 +119,17 @@ different languages.
 
 
 
+===A reduced API===
+
+If you want to experiment with a small subset of the resource API first, 
+try out the module 
+[Syntax http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/resource/Syntax.gf]
+explained in the
+[GF Tutorial http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html].
+
+
+
+
 ==Phases of the work==
 
 ===Putting up a directory===
