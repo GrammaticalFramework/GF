@@ -435,7 +435,7 @@ are only found in the cooments of the modules.
 
 ===The category system===
 
-- [Cat gfdoc/Cat.html], [CatGer gfdoc/CatGer.html]
+- [Cat gfdoc/Cat.html], [CatGer gfdoc/CatGer.gf]
 
 
 ===Phrase category modules===
