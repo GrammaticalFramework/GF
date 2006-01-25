@@ -148,7 +148,7 @@ lin
   religion_N = mk2N "religion" "religioner" ;
   restaurant_N = mk2N "restaurang" "restauranger" ;
   river_N = mkN "å" "ån" "åar" "åarna" ;
-  rock_N = regN "sten" utrum ;
+  rock_N = mkN "sten" "stenen" "stenar" "stenarna" ;
   roof_N = regN "tak" neutrum ;
   rubber_N = mkN "gummi" "gummit" "gummin" "gummina" ;
   run_V = (irregV "springa" "sprang" "sprungit") ;
@@ -163,7 +163,7 @@ lin
   sheep_N = mk2N "får" "får" ;
   ship_N = regN "skepp" neutrum ;
   shirt_N = regN "skjorta" utrum ;
-  shoe_N = regN "sko" utrum ;
+  shoe_N = mk2N "sko" "skor" ;
   shop_N = mk2N "affär" "affären" ;
   short_A = regA "kort" ;
   silver_N = mkN "silver" "silvret" "silver" "silvren" ;
@@ -175,7 +175,7 @@ lin
   speak_V2 = dirV2 (regV "tala") ;
   star_N = regN "stjärna" utrum ;
   steel_N = regN "stål" utrum ;
-  stone_N = regN "sten" utrum ;
+  stone_N = mkN "sten" "stenen" "stenar" "stenarna" ;
   stove_N = regN "spis" utrum ;
   student_N = mk2N "student" "studenter" ;
   stupid_A = mk3A "dum" "dumt" "dumma" ;

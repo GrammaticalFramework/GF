@@ -318,9 +318,10 @@ oper
   decl2Noun : Str -> N = \bil ->
     let 
       bb : Str * Str = case bil of {
-        pojk + "e"                       => <pojk + "ar",    bil + "n"> ;
-        nyck + "e" + l@("l" | "r" | "n") => <nyck + l + "ar",bil + "n"> ;
-        _                                => <bil + "ar",     bil + "en">
+        pojk + "e"                 => <pojk + "ar",    bil  + "n"> ;
+        nyck + "e" + l@("l" | "r") => <nyck + l + "ar",bil  + "n"> ;
+        sock + "e" + "n"           => <sock + "nar",   sock + "nen"> ;
+        _                          => <bil + "ar",     bil  + "en">
         } ;
     in mkN bil bb.p2 bb.p1 (bb.p1 + "na") ;
 
