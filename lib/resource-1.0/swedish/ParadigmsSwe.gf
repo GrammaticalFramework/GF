@@ -129,44 +129,30 @@ oper
 
 --2 Adjectives
 
--- Non-comparison one-place adjectives need for forms: 
+-- Adjectives may need as many as seven forms. 
 
-  mkA : (galen,galet,galna : Str) -> A ;
+  mkA : (liten, litet, lilla, sma, mindre, minst, minsta : Str) -> A ;
 
--- For regular adjectives, the other forms are derived. 
+-- The regular pattern works for many adjectives, e.g. those ending
+-- with "ig".
 
   regA : Str -> A ;
 
--- In practice, two forms are enough.
+-- Just the comparison forms can be irregular.
 
-  mk2A : (bred,brett : Str) -> A ;
- 
+  irregA : (tung,tyngre,tyngst : Str) -> A ;
+
+-- Sometimes just the positive forms are irregular.
+
+  mk3A : (galen,galet,galna : Str) -> A ;
+  mk2A : (bred,brett        : Str) -> A ;
+
+
 --3 Two-place adjectives
 --
 -- Two-place adjectives need a preposition for their second argument.
 
   mkA2 : A -> Preposition -> A2 ;
-
--- Comparison adjectives may need as many as seven forms. 
-
-  ADeg : Type ;
-
-  mkADeg : (liten, litet, lilla, sma, mindre, minst, minsta : Str) -> ADeg ;
-
--- The regular pattern works for many adjectives, e.g. those ending
--- with "ig".
-
-  regADeg : Str -> ADeg ;
-
--- Just the comparison forms can be irregular.
-
-  irregADeg : (tung,tyngre,tyngst : Str) -> ADeg ;
-
--- Sometimes just the positive forms are irregular.
-
-  mk3ADeg : (galen,galet,galna : Str) -> ADeg ;
-  mk2ADeg : (bred,brett        : Str) -> ADeg ;
-
 
 
 --2 Adverbs
@@ -290,7 +276,14 @@ oper
   nominative = Nom ;
   genitive = Gen ;
 
-  mkN x y z u = mkNoun x y z u ** {lock_N = <>} ;
+  mkN = \apa,apan,apor,aporna ->  {
+    s = nounForms apa apan apor aporna ;
+    g = case last apan of {
+      "n" => Utr ;
+      _ => Neutr
+      }
+    } ** {lock_N = <>} ;
+
   regN bil g = case g of {
     Utr => case last bil of {
       "a" => decl1Noun bil ;
@@ -303,45 +296,50 @@ oper
     } ** {lock_N = <>} ;
 
   mk2N bil bilar = 
-   let 
-     l  = last bil ;
-     b  = Predef.tk 2 bil ; 
-     ar = Predef.dp 2 bilar ;
-     bile = Predef.tk 2 bilar
-   in 
-   case ar of {
-      "or" => case l of {
-         "a" => decl1Noun bil ;
-         "r" => decl5Noun bil ;
-         "o" => mkNoun bil (bil + "n")  bilar (bilar + "na") ;
-         _   => mkNoun bil (bil + "en") bilar (bilar + "na")
-         } ;
-      "ar" => ifTok Noun bil bilar 
-                (decl5Noun bil) 
-                (ifTok Noun bile bil 
-                 (decl2Noun bil)
-                 (case l of {
-                    "e" => decl2Noun bil ; -- pojke-pojkar
-                    _   => mkNoun bil (bile + "en") bilar (bilar + "na") -- mun-munnar
-                    }
-                 )
-                ) ;
-      "er" => case l of {
-        "e" => mkNoun bil (bil + "n") (bil +"r") (bil + "rna") ;
-        "y" | "å" | "é" => decl3Noun bil ;
-        _   => mkNoun bil (bil + "en") bilar (bilar + "na")
+   ifTok N bil bilar (decl5Noun bil) (
+     case Predef.dp 2 bilar of {
+       "or" => case bil of {
+          _ + "a"  => decl1Noun bil ; -- apa, apor
+          _ + "o"  => mkN bil (bil + "n")  bilar (bilar + "na") ; -- ko,kor
+          _        => mkN bil (bil + "en") bilar (bilar + "na")   -- ros,rosor
+          } ;
+       "ar" => decl2Noun bil ;
+       "er" => decl3Noun bil ;                             -- 
+       "en" => decl4Noun bil ;                             -- rike, riken
+       _    => mkN bil (bil + "et") bilar (bilar + "n") -- centrum, centra 
+      }) ;
+
+-- School declensions.
+
+  decl1Noun : Str -> N = \apa -> 
+    let ap = init apa in
+    mkN apa (apa + "n") (ap + "or") (ap + "orna") ;
+
+  decl2Noun : Str -> N = \bil ->
+    let 
+      bb : Str * Str = case bil of {
+        pojk + "e"                       => <pojk + "ar",    bil + "n"> ;
+        nyck + "e" + l@("l" | "r" | "n") => <nyck + l + "ar",bil + "n"> ;
+        _                                => <bil + "ar",     bil + "en">
+        } ;
+    in mkN bil bb.p2 bb.p1 (bb.p1 + "na") ;
+
+  decl3Noun : Str -> N = \sak ->
+    case last sak of {
+      "e" => mkN sak (sak + "n") (sak +"r") (sak + "rna") ;
+      "y" | "å" | "é" | "y" => mkN sak (sak + "n") (sak +"er") (sak + "erna") ;
+      _ => mkN sak (sak + "en") (sak + "er") (sak + "erna")
       } ;
-      "en" => ifTok Noun bil bilar (decl5Noun bil) (decl4Noun bil) ; -- ben-ben
-      _ => ifTok Noun bil bilar (
-             case Predef.dp 3 bil of {
-                "are" => let kikar = init bil in
-                         mkNoun bil (kikar + "en") bil (kikar + "na") ; 
-                _ => decl5Noun bil
-                }
-             )
-             (decl5Noun bil) --- rest case with lots of garbage
-      }  ** {lock_N = <>} ;
-         
+
+  decl4Noun : Str -> N = \rike ->
+    mkN rike (rike + "t") (rike + "n") (rike + "na") ;
+
+  decl5Noun : Str -> N = \lik ->
+    case Predef.dp 3 lik of {
+      "are" => mkN lik (lik + "n") lik (init lik + "na") ; -- kikare 
+      _ => mkN lik (lik + "et") lik (lik + "en")
+      } ;
+
 
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
   regN2 n g = mkN2 (regN n g) (mkPreposition "av") ;
@@ -353,19 +351,19 @@ oper
     {s = table {NPPoss _ => y ; _ => x} ; a = agrP3 g n ; p = P3 ;
      lock_NP = <>} ;
 
-  mkA a b c = (adjAlmostReg a b c) ** {lock_A = <>} ;
-  mk2A a b = (adj2Reg a b) ** {lock_A = <>} ;
-  regA a = (adjReg a) ** {lock_A = <>} ;
+  mkA a b c d e f g = mkAdjective a b c d e f g ** {lock_A = <>} ;
+  regA fin          = mk3A fin (fin + "t") (fin + "a") ** {lock_A = <>} ;
+  irregA ung yngre yngst = 
+    mkA ung (ung + "t") (ung + "a") (ung + "a") yngre yngst (yngst+"a") ;
+
+  mk3A ljummen ljummet ljumma =
+    mkAdjective 
+      ljummen ljummet ljumma ljumma 
+      (ljumma + "re") (ljumma + "st") (ljumma + "ste") ** {lock_A = <>} ;
+  mk2A vid vitt = mk3A vid vitt (vid + "a") ;
+
 
   mkA2 a p = a ** {c2 = p ; lock_A2 = <>} ;
-
-  ADeg = A ;
-
-  mkADeg a b c d e f g = mkAdjective a b c d e f g ** {lock_A = <>} ;
-  regADeg a = adjReg a ** {lock_A = <>} ;
-  irregADeg a b c = adjIrreg3 a b c ** {lock_A = <>} ;
-  mk3ADeg a b c = adjAlmostReg a b c ** {lock_A = <>} ;
-  mk2ADeg a b = adj2Reg a b ** {lock_A = <>} ;
 
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;
@@ -373,12 +371,69 @@ oper
 
   mkPreposition p = p ;
 
-  mkV a b c d e f = mkVerb6 a b c d e f ** {lock_V = <>} ;
+  mkV = \finna,finner,finn,fann,funnit,funnen ->
+    let 
+      funn = ptPretForms funnen ;
+      funnet = funn ! Strong SgNeutr ! Nom ;
+      funna  = funn ! Strong Plg ! Nom 
+    in
+    mkVerb finna finner finn fann funnit funnen funnet funna **
+    {vtype=VAct ; lock_V = <>} ;
 
-  regV a = mk2V a (a + de) where {de = case last a of {"a" => "de" ; _ => "dde"}} ;
-  mk2V a b = regVerb a b ** {lock_V = <>} ;
+  regV leker = case leker of {
+    lek + "a"  => conj1 leker ; --- bw compat
+    lek + "ar" => conj1 (lek + "a") ;
+    lek + "er" => conj2 (lek + "a") ;
+    bo  + "r"  => conj3 bo
+    } ;
 
-  irregV x y z = irregVerb x y z
+  mk2V leka lekte = case <leka,lekte> of {
+    <_, _ + "ade"> => conj1 leka ;  
+    <_ + "a", _>   => conj2 leka ;
+    _ => conj3 leka
+    } ;
+
+-- school conjugations
+
+  conj1 : Str -> V = \tala ->
+    mkV tala (tala + "r") tala (tala +"de") (tala +"t") (tala +"d") ;
+
+  conj2 : Str -> V = \leka ->
+    let lek = init leka in
+    case last lek of {
+      "l" | "m" | "n" | "v" | "g" => 
+        mkV leka (lek + "er") lek (lek +"de") (lek +"t") (lek +"d") ;
+      "r" =>
+        mkV leka lek lek (lek +"de") (lek +"t") (lek +"d") ;
+      _ => case leka of {
+        _ + "nd" => 
+          mkV leka (lek + "er") lek (lek +"e") (init lek +"t") lek ;
+        _ => 
+          mkV leka (lek + "er") lek (lek +"te") (lek +"t") (lek +"t")
+        } 
+      } ;
+
+  conj3 : Str -> V = \bo ->
+    mkV bo (bo + "r") bo (bo +"dde") (bo +"tt") (bo +"dd") ;
+
+  irregV = \sälja, sålde, sålt -> 
+    let
+      a = last sälja ; 
+      sälj = case a of {
+        "a" => init sälja ;
+        _ => sälja
+        } ;
+      er = case a of {
+        "a" => "er" ;
+        _ => "r"
+        } ;
+      såld = case Predef.dp 2 sålt of {
+        "it" => Predef.tk 2 sålt + "en" ;
+        "tt" => Predef.tk 2 sålt + "dd" ;
+        _ => init sålt + "d"
+        }
+    in 
+    mkV sälja (sälj + er) sälj sålde sålt såld
      ** {s1 = [] ; lock_V = <>} ;
 
   partV v p = {s = \\f => v.s ! f ++ p ; vtype = v.vtype ; lock_V = <>} ;

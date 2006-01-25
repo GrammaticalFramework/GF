@@ -1,5 +1,5 @@
 concrete StructuralSwe of Structural = CatSwe ** 
-  open MorphoSwe, Prelude in {
+  open MorphoSwe, ParadigmsSwe, Prelude in {
 
   flags optimize=all ;
 
@@ -20,7 +20,7 @@ concrete StructuralSwe of Structural = CatSwe **
   but_PConj = ss "men" ;
   by8means_Prep = ss "med" ;
   can8know_VV, can_VV = 
-    mkVerb6 "kunna" "kan" "kunn" "kunde" "kunnat" "kunnen" **
+    mkV "kunna" "kan" "kunn" "kunde" "kunnat" "kunnen" **
     {c2 = [] ; lock_VV = <>} ;
   during_Prep = ss "under" ;
   either7or_DConj = sd2 "antingen" "eller" ** {n = Sg} ;
@@ -30,7 +30,7 @@ concrete StructuralSwe of Structural = CatSwe **
   everywhere_Adv = ss "överallt" ;
   first_Ord = {s = "första" ; isDet = True} ;
   from_Prep = ss "från" ;
-  he_Pron = mkNP "han"  "honom"  "hans" "hans" "hans"  SgUtr P3 ;
+  he_Pron = MorphoSwe.mkNP "han"  "honom"  "hans" "hans" "hans"  SgUtr P3 ;
   here_Adv = ss "här" ;
   here7to_Adv = ss "hit" ;
   here7from_Adv = ss "härifrån" ;
@@ -38,16 +38,16 @@ concrete StructuralSwe of Structural = CatSwe **
   how8many_IDet = {s = \\_ => ["hur många"] ; n = Pl ; det = DDef Indef} ;
   if_Subj = ss "om" ;
   in8front_Prep = ss "framför" ;
-  i_Pron = mkNP "jag"  "mig"  "min" "mitt" "mina"  SgUtr P1 ;
+  i_Pron = MorphoSwe.mkNP "jag"  "mig"  "min" "mitt" "mina"  SgUtr P1 ;
   in_Prep = ss "i" ;
-  it_Pron = regNP "det" "dess" SgNeutr ;
+  it_Pron = MorphoSwe.regNP "det" "dess" SgNeutr ;
   less_CAdv = ss "mindre" ;
   many_Det = {s = \\_,_ => "många" ; n = Pl ; det = DDef Indef} ;
   more_CAdv = ss "mer" ;
   most_Predet = {s = gennumForms ["den mesta"] ["det mesta"] ["de flesta"]} ;
   much_Det = {s = \\_,_ => "mycket" ; n = Pl ; det = DDef Indef} ;
   must_VV = 
-    mkVerb6 "få" "måste" "få" "fick" "måst" "måst" ** {c2 = [] ; lock_VV = <>} ;
+    mkV "få" "måste" "få" "fick" "måst" "måst" ** {c2 = [] ; lock_VV = <>} ;
   no_Phr = ss ["Nej"] ;
   on_Prep = ss "på" ;
   one_Quant = {s = \\_ => genderForms ["en"] ["ett"] ; n = Sg ; det = DIndef} ;
@@ -58,7 +58,7 @@ concrete StructuralSwe of Structural = CatSwe **
   please_Voc = ss "tack" ; ---
   possess_Prep = ss "av" ;
   quite_Adv = ss "ganska" ;
-  she_Pron = mkNP "hon" "henne" "hennes" "hennes" "hennes"  SgUtr P3 ;
+  she_Pron = MorphoSwe.mkNP "hon" "henne" "hennes" "hennes" "hennes"  SgUtr P3 ;
   so_AdA = ss "så" ;
   someSg_Det = {s = \\_ => genderForms "någon" "något" ; n = Sg ; det = DIndef} ;
   somePl_Det = {s = \\_,_ => "några" ; n = Pl ; det = DIndef} ;
@@ -74,7 +74,7 @@ concrete StructuralSwe of Structural = CatSwe **
   therefore_PConj = ss "därför" ;
   these_NP = regNP ["de här"] ["det härs"] Plg ;
   these_Quant = {s = \\_,_ => ["de här"] ; n = Pl ; det = DDef Def} ;
-  they_Pron = mkNP "de" "dem" "deras" "deras" "deras" Plg P1 ;
+  they_Pron = MorphoSwe.mkNP "de" "dem" "deras" "deras" "deras" Plg P1 ;
   this_Quant = 
     {s = \\_ => genderForms ["den här"] ["det här"] ; n = Sg ; det = DDef Def} ;
   this_NP = regNP ["det här"] ["det härs"] SgNeutr ;
@@ -86,9 +86,9 @@ concrete StructuralSwe of Structural = CatSwe **
   under_Prep = ss "under" ;
   very_AdA = ss "mycket" ;
   want_VV = 
-    mkVerb6 "vilja" "vill" "vilj" "ville" "velat" "velad" ** 
+    mkV "vilja" "vill" "vilj" "ville" "velat" "velad" ** 
     {c2 = [] ; lock_VV = <>} ;
-  we_Pron = mkNP "vi"  "oss"  "vår" "vårt" "våra"  Plg P1 ;
+  we_Pron = MorphoSwe.mkNP "vi"  "oss"  "vår" "vårt" "våra"  Plg P1 ;
   whatSg_IP = {s = \\_ => "vad" ; gn = SgUtr} ; ---- infl
   whatPl_IP = {s = \\_ => "vad" ; gn = Plg} ; ---- infl
   when_IAdv = ss "när" ;
@@ -102,14 +102,14 @@ concrete StructuralSwe of Structural = CatSwe **
   without_Prep = ss "utan" ;
   with_Prep = ss "med" ;
   yes_Phr = ss ["ja"] ;
-  youSg_Pron = mkNP "du" "dig" "din" "ditt" "dina" SgUtr P2 ;
-  youPl_Pron = mkNP "ni" "er" "er" "ert" "era"  Plg P2 ;
-  youPol_Pron = mkNP "ni" "er" "er" "ert" "era"  SgUtr P2 ; --- wrong in refl
+  youSg_Pron = MorphoSwe.mkNP "du" "dig" "din" "ditt" "dina" SgUtr P2 ;
+  youPl_Pron = MorphoSwe.mkNP "ni" "er" "er" "ert" "era"  Plg P2 ;
+  youPol_Pron = MorphoSwe.mkNP "ni" "er" "er" "ert" "era"  SgUtr P2 ; --- wrong in refl
 
 -- Auxiliaries that are used repeatedly.
 
   oper
-    vem = mkNP "vem" "vem" "vems" "vems" "vems" SgUtr P3 ;
+    vem = MorphoSwe.mkNP "vem" "vem" "vems" "vems" "vems" SgUtr P3 ;
 
 }
 
