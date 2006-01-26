@@ -300,6 +300,7 @@ oper
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
   mkPN x g = {s = x ; g = g} ** {lock_PN = <>} ;
+  mkNP x g n = {s = (pn2np (mkPN x g)).s ; a = agrP3 g n ; c = Clit0} ** {lock_NP = <>} ;
 
   mkA a b c d = compADeg {s = \\_ => (mkAdj a c b d).s ; isPre = False ; lock_A = <>} ;
   regA a = compADeg {s = \\_ => (mkAdjReg a).s ; isPre = False ; lock_A = <>} ;

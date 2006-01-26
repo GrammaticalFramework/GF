@@ -33,8 +33,16 @@ incomplete concrete ConjunctionRomance of Conjunction =
     ConsS = consrTable Mood comma ;
     BaseAdv = twoSS ;
     ConsAdv = consrSS comma ;
-    BaseNP x y = twoTable NPForm x y ** {a = conjAgr x.a y.a} ;
-    ConsNP xs x = consrTable NPForm comma xs x ** {a = conjAgr xs.a x.a} ;
+    BaseNP x y = {
+      s1 = \\c => x.s ! c ; 
+      s2 = \\c => y.s ! (conjunctCase c) ; 
+      a = conjAgr x.a y.a
+      } ;
+    ConsNP x xs = {
+      s1 = \\c => x.s ! c ++ comma ++ xs.s1 ! (conjunctCase c) ; 
+      s2 = \\c => xs.s2 ! (conjunctCase c) ; 
+      a = conjAgr x.a xs.a
+      } ;
     BaseAP x y = twoTable AForm x y ** {isPre = andB x.isPre y.isPre} ;
     ConsAP xs x = consrTable AForm comma xs x ** {isPre = andB xs.isPre x.isPre} ;
 

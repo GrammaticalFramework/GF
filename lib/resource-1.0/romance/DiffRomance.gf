@@ -21,6 +21,11 @@ oper
   artDef    : Gender -> Number -> Case -> Str ;
   artIndef  : Gender -> Number -> Case -> Str ;
 
+-- This regulates whether a preposition is repeated in conjunction
+-- (Fre "la somme de 3 et de 4", Ita "la somma di 3 e 4").
+
+  conjunctCase : NPForm -> NPForm ;
+
   auxVerb   : VType -> (VF => Str) ;
   negation  : Polarity => (Str * Str) ;
   copula    : Verb ;
@@ -49,6 +54,7 @@ oper
 
 param
   Case = Nom | Acc | CPrep Prep ; 
+  NPForm = Ton Case | Aton Case | Poss {g : Gender ; n : Number} ; --- AAgr
 
 oper
   Verb = {s : VF => Str ; vtyp : VType} ;

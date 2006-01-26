@@ -6,10 +6,6 @@ interface ResRomance = DiffRomance ** open CommonRomance, Prelude in {
 
 --2 Constants uniformly defined in terms of language-dependent constants
 
-param
-
-  NPForm = Ton Case | Aton Case | Poss {g : Gender ; n : Number} ; --- AAgr
-
 oper
 
   nominative : Case = Nom ;
