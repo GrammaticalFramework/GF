@@ -1,12 +1,12 @@
-To make and install GF2 (Version 2.1, 8/11/2004).
+To make and install GF (Updated for version 2.4).
 
-1. Unpack GF2 and go to the source directory (the place where this 
+1. Unpack GF and go to the source directory (the place where this 
    INSTALL file is - so you have probably done this already!)
 
-     tar xvfz GF-2.1.tgz
-     cd GF-2.1/src
+     tar xvfz GF-2.4.tgz
+     cd GF-2.4/src
 
-2. Make sure you have GHC (Glasgow Haskell Compiler), version 5.02 or later.
+2. Make sure you have GHC (Glasgow Haskell Compiler), version 6.4 or later.
    In Windows, you also need Cygwin.
 
      ghc --version
@@ -70,5 +70,5 @@ To make and install GF2 (Version 2.1, 8/11/2004).
 
    When the window opens, push the Random button. 
 
-Author: Aarne Ranta, Björn Bringert 8/11/2004 -- 18/10/2005
+Author: Aarne Ranta, Björn Bringert 8/11/2004 -- 26/01/2006
 
