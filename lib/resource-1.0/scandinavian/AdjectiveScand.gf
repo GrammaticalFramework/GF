@@ -21,7 +21,7 @@ incomplete concrete AdjectiveScand of Adjective =
 
     ReflA2 a = {
       s = \\ap => a.s ! AF (APosit ap) Nom ++ a.c2 ++ 
-                  reflPron (agrP3 Utr Sg) ; ---- 
+                  reflPron (agrP3 utrum Sg) ; ---- 
       isPre = False
       } ;
 

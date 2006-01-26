@@ -13,7 +13,7 @@ lin
   n3 = mkTal  "tre"  "tretton" "trettio" "tredje"  "trettonde" ;
   n4 = mkTal  "fyra" "fjorton" "fyrtio"  "fjärde"  "fjortonde" ;
   n5 = mkTal  "fem"  "femton"  "femtio"  "femte"   "femtonde" ;
-  n6 = mkTal  "sex"  "sexton"  "sextion" "sjätte"  "sextonde" ;
+  n6 = mkTal  "sex"  "sexton"  "sextio"  "sjätte"  "sextonde" ;
   n7 = mkTal  "sju"  "sjutton" "sjuttio" "sjunde"  "sjuttonde" ;
   n8 = mkTal  "åtta" "arton"   "åttio"   "åttonde" "artonde" ;
   n9 = mkTal  "nio"  "nitton"  "nittio"  "nionde"  "nittonde" ;
@@ -39,7 +39,7 @@ lin
     {s = \\g => d.s ! ental ! invNum ++ "hundra" ++ e.s ! g ; n = Pl} ;
   pot2as3 n = n ;
   pot3 n = 
-    numPl (\\g => n.s ! invNum ++ "tusen" ++ cardOrd "tusen" "tusende" ! g) ;
+    numPl (\\g => n.s ! invNum ++ cardOrd "tusen" "tusende" ! g) ;
   pot3plus n m = 
     {s = \\g => n.s ! invNum ++ "tusen" ++ m.s ! g ; n = Pl} ;
 

@@ -124,12 +124,16 @@ computeTermOpt rec gr = comp where
 
      S t@(T _ cc) v -> do
        v'     <- comp g v
-       case matchPattern cc v' of
-         Ok (c,g') -> comp (g' ++ g) c
-         _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
-         _ -> do
-           t' <- comp g t
-           return $ S t' v' -- if v' is not canonical
+       case v' of
+         FV vs -> do
+           ts' <- mapM (comp g . S t) vs
+           return $ variants ts' 
+         _ -> case matchPattern cc v' of
+           Ok (c,g') -> comp (g' ++ g) c
+           _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
+           _ -> do
+             t' <- comp g t
+             return $ S t' v' -- if v' is not canonical
 
      S t v -> do
        t'     <- comp g t

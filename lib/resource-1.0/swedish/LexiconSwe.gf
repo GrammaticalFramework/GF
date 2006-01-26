@@ -46,7 +46,7 @@ lin
   cheese_N = regN "ost" utrum ;
   child_N = regN "barn" neutrum ;
   church_N = regN "kyrka" utrum ;
-  city_N = mk2N "stad" "städer" ;
+  city_N = mkN "stad" "staden" "städer" "städerna" ;
   clean_A = regA "ren" ;
   clever_A = regA "klok" ;
   close_V2 = dirV2 (mk2V "stänga" "stängde") ;
@@ -55,7 +55,7 @@ lin
   come_V = (mkV "komma" "kommer" "kom" "kom" "kommit" "kommen") ;
   computer_N = mk2N "dator" "datorer" ;
   country_N = mkN "land" "landet" "länder" "länderna" ;
-  cousin_N = mk2N "kusin" "kusinerna" ;
+  cousin_N = mk2N "kusin" "kusiner" ;
   cow_N = mk2N "ko" "kor" ;
   die_V = (mkV "dö" "dör" "dö" "dog" "dött" "dödd") ; ----
   distance_N3 = mkN3 (mk2N "avstånd" "avstånd") "från" "till" ;
@@ -125,7 +125,6 @@ lin
   narrow_A = regA "smal" ;
   new_A = mkA "ny" "nytt" "nya" "nya" "nyare" "nyast" "nyaste" ;
   newspaper_N = regN "tidning" utrum ;
-
   oil_N = regN "olja" utrum ;
   old_A = mkA "gammal" "gammalt" "gamla" "gamla" "äldre" "äldst" "äldsta" ;
   open_V2 = dirV2 (regV "öppna") ;
@@ -141,7 +140,7 @@ lin
   priest_N = mk2N "präst" "präster" ;
   probable_AS = mkAS (regA "sannolik") ;
   queen_N = regN "drottning" utrum ;
-  radio_N = regN "radio" utrum ; ----
+  radio_N = mkN "radio" "radion" "radioapparater" "radioapparaterna" ; -- SAOL
   rain_V0 = mkV0 (regV "regna") ;
   read_V2 = dirV2 (mk2V "läsa" "läste") ;
   red_A = mk2A "röd" "rött" ;
