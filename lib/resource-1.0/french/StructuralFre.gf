@@ -78,22 +78,22 @@ lin
   somebody_NP = pn2np (mkPN ["quelqu'un"] Masc) ;
   somePl_Det = {s = \\_,c => prepCase c ++ "quelques" ; n = Pl} ;
   someSg_Det = {s = \\_,c => prepCase c ++ elision "quelqu" ; n = Sg} ;
-  something_NP = pn2np (mkPN ["quelque chose"] Fem) ;
+  something_NP = pn2np (mkPN ["quelque chose"] Masc) ;
   somewhere_Adv = ss ["quelque part"] ; --- ne - pas
   that_Quant = {s = \\g,c => prepCase c ++ genForms "ce" "cette" ! g} ; ---- cet
-  that_NP = pn2np (mkPN ["ceci"] Masc) ;
+  that_NP = mkNP ["ceci"] Masc Sg ;
   there7from_Adv = ss ["de là"] ;
   there7to_Adv = ss "là" ; --- y
   there_Adv = ss "là" ;
   therefore_PConj = ss "donc" ;
-  these_NP = pn2np (mkPN ["celles-ci"] Fem) ; ---- Pl
+  these_NP = mkNP ["celles-ci"] Fem Pl ;
   these_Quant = {s = \\_,c => prepCase c ++ "ces"} ; ---- ci
   they_Pron = mkPronoun
     "elles" "les" "leur" "eux" "leur" "leur" "leurs"
     Fem Pl P3 Clit1 ;
   this_Quant = {s = \\g,c => prepCase c ++ genForms "ce" "cette" ! g} ; ---- cet
   this_NP = pn2np (mkPN ["ceci"] Masc) ;
-  those_NP = pn2np (mkPN ["celles-là"] Fem) ;
+  those_NP = mkNP ["celles-là"] Fem Pl ;
   those_Quant = {s = \\_,c => prepCase c ++ "ces"} ; ---- là
   through_Prep = mkPreposition "par" ;
   too_AdA = ss "trop" ;
