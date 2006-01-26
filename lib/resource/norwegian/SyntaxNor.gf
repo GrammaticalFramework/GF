@@ -23,7 +23,7 @@ instance SyntaxNor of SyntaxScand = TypesNor **
   verbFinnas : Verb = 
     mkVerb "finnes" "finner" "finnes" "fantes" "funnets" "fins" ** {s1 = []} ;
   verbVara = mkVerb "være" "er" nonExist "var" "vært" "vær" ** {s1 = []} ;
-  verbHava = mkVerb "ha" "ha" "has" "hadde" "hatt" "ha" ** {s1 = []} ;
+  verbHava = mkVerb "ha" "har" "has" "hadde" "hatt" "ha" ** {s1 = []} ;
 
   relPronForms : RelCase => GenNum => Str = table {
     RNom  => \\_ => "som" ;

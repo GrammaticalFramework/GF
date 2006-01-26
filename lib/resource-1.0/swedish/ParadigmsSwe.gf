@@ -78,6 +78,11 @@ oper
 
   mk2N : (nyckel,nycklar : Str) -> N ;
 
+-- This heuristic takes just the plural definite form and infers the others.
+-- It does not work if there are changes in the stem.
+
+  mk1N : (bilarna : Str) -> N ;
+  
 
 --3 Compound nouns 
 --
@@ -296,6 +301,14 @@ oper
       }
     } ** {lock_N = <>} ;
 
+  mk1N bilarna = case bilarna of {
+    ap  + "orna" => decl1Noun (ap + "a") ;
+    bil + "arna" => decl2Noun bil ;
+    rad + "erna" => decl3Noun rad ;
+    rik +  "ena" => decl4Noun (rik + "e") ;
+    husen        => decl5Noun (Predef.tk 2 husen)
+    } ;
+
   mk2N bil bilar = 
    ifTok N bil bilar (decl5Noun bil) (
      case Predef.dp 2 bilar of {
@@ -442,13 +455,12 @@ oper
   depV v = {s = v.s ; vtype = VPass ; lock_V = <>} ;
   reflV v = {s = v.s ; vtype = VRefl ; lock_V = <>} ;
 
-  mkV2 v p = v ** {s = v.s ; c2 = p ; lock_V2 = <>} ;
+  mkV2 v p = v ** {c2 = p ; lock_V2 = <>} ;
   dirV2 v = mkV2 v [] ;
 
-  mkV3 v p q = v ** {s = v.s ; c2 = p ; c3 = q ; lock_V3 = <>} ;
+  mkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
   dirV3 v p = mkV3 v [] p ;
   dirdirV3 v = dirV3 v [] ;
-
 
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {lock_VS = <>} ;
