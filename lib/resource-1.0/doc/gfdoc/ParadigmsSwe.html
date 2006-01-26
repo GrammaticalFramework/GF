@@ -43,7 +43,7 @@
 <P></P>
 <P>
 Author: 
-Last update: Wed Jan 25 13:41:15 2006
+Last update: Thu Jan 26 15:05:58 2006
 </P>
 <P>
 Produced by 
@@ -162,6 +162,14 @@ In practice the worst case is often just: give singular and plural indefinite.
       mk2N : (nyckel,nycklar : Str) -&gt; N ;
 </PRE>
 <P></P>
+<P>
+This heuristic takes just the plural definite form and infers the others.
+It does not work if there are changes in the stem.
+</P>
+<PRE>
+      mk1N : (bilarna : Str) -&gt; N ;
+</PRE>
+<P></P>
 <A NAME="toc4"></A>
 <H3>Compound nouns</H3>
 <P>
@@ -231,24 +239,33 @@ genitive, you can use the worst-case function.
 <A NAME="toc8"></A>
 <H2>Adjectives</H2>
 <P>
-Non-comparison one-place adjectives need for forms: 
+Adjectives may need as many as seven forms. 
 </P>
 <PRE>
-      mkA : (galen,galet,galna : Str) -&gt; A ;
+      mkA : (liten, litet, lilla, sma, mindre, minst, minsta : Str) -&gt; A ;
 </PRE>
 <P></P>
 <P>
-For regular adjectives, the other forms are derived. 
+The regular pattern works for many adjectives, e.g. those ending
+with <I>ig</I>.
 </P>
 <PRE>
       regA : Str -&gt; A ;
 </PRE>
 <P></P>
 <P>
-In practice, two forms are enough.
+Just the comparison forms can be irregular.
 </P>
 <PRE>
-      mk2A : (bred,brett : Str) -&gt; A ;
+      irregA : (tung,tyngre,tyngst : Str) -&gt; A ;
+</PRE>
+<P></P>
+<P>
+Sometimes just the positive forms are irregular.
+</P>
+<PRE>
+      mk3A : (galen,galet,galna : Str) -&gt; A ;
+      mk2A : (bred,brett        : Str) -&gt; A ;
 </PRE>
 <P></P>
 <A NAME="toc9"></A>
@@ -258,38 +275,6 @@ Two-place adjectives need a preposition for their second argument.
 </P>
 <PRE>
       mkA2 : A -&gt; Preposition -&gt; A2 ;
-</PRE>
-<P></P>
-<P>
-Comparison adjectives may need as many as seven forms. 
-</P>
-<PRE>
-      ADeg : Type ;
-    
-      mkADeg : (liten, litet, lilla, sma, mindre, minst, minsta : Str) -&gt; ADeg ;
-</PRE>
-<P></P>
-<P>
-The regular pattern works for many adjectives, e.g. those ending
-with <I>ig</I>.
-</P>
-<PRE>
-      regADeg : Str -&gt; ADeg ;
-</PRE>
-<P></P>
-<P>
-Just the comparison forms can be irregular.
-</P>
-<PRE>
-      irregADeg : (tung,tyngre,tyngst : Str) -&gt; ADeg ;
-</PRE>
-<P></P>
-<P>
-Sometimes just the positive forms are irregular.
-</P>
-<PRE>
-      mk3ADeg : (galen,galet,galna : Str) -&gt; ADeg ;
-      mk2ADeg : (bred,brett        : Str) -&gt; ADeg ;
 </PRE>
 <P></P>
 <A NAME="toc10"></A>
@@ -329,20 +314,21 @@ The worst case needs five forms.
 </PRE>
 <P></P>
 <P>
-The 'regular verb' function is the first conjugation if the
-infinitive ends with <I>a</I> (<I>tala</I> - <I>talar</I> - <I>talade</I> - <I>talat</I>),
+The 'regular verb' function is inspired by Lexin. It uses the
+present tense indicative form. The value is the first conjugation if the
+argument ends with <I>ar</I> (<I>tala</I> - <I>talar</I> - <I>talade</I> - <I>talat</I>),
+the second with <I>er</I> (<I>leka</I> - <I>leker</I> - <I>lekte</I> - <I>lekt</I>, with the
+variations like <I>gräva</I>, <I>vända</I>, <I>tyda</I>, <I>hyra</I>), and 
 the third in other cases (<I>bo</I> - <I>bor</I> - <I>bodde</I> - <I>bott</I>).
 </P>
 <PRE>
-      regV : (tala : Str) -&gt; V ;
+      regV : (talar : Str) -&gt; V ;
 </PRE>
 <P></P>
 <P>
 The almost regular verb function needs the infinitive and the preteritum.
-It can deal with almost all cases in the first, second, and third
-conjugation: <I>tala</I> - <I>talade</I>, <I>leka</I> - <I>lekte</I>, 
-<I>gräva</I> - <I>grävde</I>, <I>byta</I> - <I>bytte</I>, <I>vända</I> - <I>vände</I>,
-<I>tyda</I> - <I>tydde</I>, <I>bo</I> - <I>bodde</I>.
+It is not really more powerful than the new implementation of
+<CODE>regV</CODE> based on the indicative form.
 </P>
 <PRE>
       mk2V : (leka,lekte : Str) -&gt; V ;
@@ -353,7 +339,7 @@ There is an extensive list of irregular verbs in the module <CODE>IrregularSwe</
 In practice, it is enough to give three forms, as in school books.
 </P>
 <PRE>
-      irregV : (dricka, drack, druckit  : Str) -&gt; V ;
+      irregV : (dricka, drack, druckit : Str) -&gt; V ;
 </PRE>
 <P></P>
 <A NAME="toc13"></A>
