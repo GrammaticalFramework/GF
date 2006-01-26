@@ -51,3 +51,11 @@ The documentation of the individual modules:
 - [ParadigmsGer gfdoc/ParadigmsGer.html]: German lexical paradigms
 - [ParadigmsNor gfdoc/ParadigmsNor.html]: Norwegian lexical paradigms
 - [ParadigmsSwe gfdoc/ParadigmsSwe.html]: Swedish lexical paradigms
+
+
+
+- [IrregEng gfdoc/IrregEng.gf]: English irregular verbs
+- [IrregFre gfdoc/IrregFre.gf]: French irregular verbs
+% - [IrregGer gfdoc/IrregGer.gf]: German irregular verbs
+- [IrregNor gfdoc/IrregNor.gf]: Norwegian irregular verbs
+- [IrregSwe gfdoc/IrregSwe.gf]: Swedish irregular verbs

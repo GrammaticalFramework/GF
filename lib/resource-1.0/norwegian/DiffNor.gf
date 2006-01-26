@@ -17,7 +17,7 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
         _  => Plg
         } ;
 
-    detDef : Species = Indef ;
+    detDef : Species = Def ;
 
 -- Strings.
 
