@@ -1,0 +1,312 @@
+Grammars as Software Libraries
+Author: Aarne Ranta <aarne (at) cs.chalmers.se>
+Last update: %%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags --toc gslt-sem-2006.txt
+
+%!target:html
+
+%!postproc(html): #NEW <!-- NEW -->
+
+#NEW
+
+==Software Libraries==
+
+The main device of **division of labour** in programming.
+
+Instead of writing a sorting algorithm over and over again,
+the programmers take it from a library. You write (in Haskell),
+```
+  Data.List.sort xs
+```
+instead of a lot of code actually implementing sorting.
+
+Practical advantages:
+- division of labour
+- faster development of new software
+
+
+#NEW
+
+==Abstraction==
+
+Libraries promote **abstraction**: you abstract away from details.
+
+The use of libraries is therefore a good programming style.
+
+It is also **scientifically interesting** to create libraries:
+you have to think about abstractions on your domain of expertise.
+
+Notice: libraries can bring abstraction to almost any language,
+if it just has a support for functions or macros.
+
+
+#NEW
+
+==Grammars as libraries?==
+
+Example: we want to create a GUI (Graphical User Interface) button
+that says //yes//, and **localize** it to different languages:
+```
+  Yes   Ja   Kyllä   Oui   Ja   Sì
+```
+Possible ways to do this:
++ Go around dictionaries to find the word in different languages
+```
+  yesButton english = button "Yes"
+  yesButton swedish = button "Ja"
+  yesButton finnish = button "Kyllä"
+```
++ Hire more programmers to perform localization in different languages
++ Use a library ``GUIText`` such that you can write
+```
+  yesButton lang = button (render lang GUIText.Yes) 
+```
+
+
+
+#NEW
+
+==A slightly more advanced example==
+
+This is what you often see as a feedback from a program:
+```
+  You have 1 messages.
+```
+Or perhaps with a little more thought:
+```
+  You have 1 message(s).
+```
+The code that should be written is of course
+```
+  mess n = "You have" +++ show n +++ messages ++ "." 
+    where
+      messages = if n==1 then "message" else "messages"
+```
+(E.g. VoiceXML gives good support for this.)
+
+
+#NEW
+
+==Problems with the more advanced example==
+
+The same as with "Yes": you have to know the words "you",
+"have", "message".
+
+//Moreover//, you have to know the inflection of the equivalent
+of "message":
+```
+  if n==1 then "meddelande" else "meddelanden"
+```
+//Moreover//, you have to know the congruence with different numbers
+(e.g. Russian, Arabic):
+```
+  if n==1 then "m" else
+  if n==2 then "mein" else "moun"
+```
+You also have to know the case required by the verb "have" 
+(e.g. Finnish: nominative in singular, partitive in plural).
+
+//Moreover//, you have to know what is the proper way to politely
+address the user:
+```
+  Du har 3 meddelanden / Ni har 3 meddelanden
+  Vous avez 3 messages / Tu as 3 messages
+```
+(This can also depend on country and the kind of program.)
+
+
+#NEW
+
+==A library-based solution==
+
+In analogy with the "Yes" case, you write
+```
+  mess lang n = render lang (MailText.YouHaveMessages n)
+```
+Hmm, is this so smart? What about if you want to say
+```
+  You have 4 documents.
+  You have 5 jewels.
+  I have 7 surprises.
+```
+It is time to move from **canned text** to a **grammar**.
+
+
+
+#NEW
+
+==An improved library-based solution==
+
+You may want to write
+```
+  mess  lang n = render lang (Have PolYou (Num n Message))
+  sword lang n = render lang (Have FamYou (Num n Sword))
+  surpr lang n = render lang (Have I      (Num n Surprise))
+```
+For this purpose, you need a library with the following API
+(Application Programmer's Interface):
+```
+  Have : NounPhrase -> NounPhrase -> Sentence
+
+  PolYou, FamYou, I : NounPhrase
+  
+  Num : Int -> Noun -> NounPhrase
+
+  Message, Sword, Surprise : Noun  
+```
+You also need a top-level rendering function
+```
+  render : Language -> Sentence -> String
+```
+
+
+#NEW
+
+==An optimal solution?==
+
+The library API for language will certainly grow big and become
+difficult to use. Why could't I just write
+```
+  mess lang n = render lang (parse english "you have n messages")
+```
+To this end, the API should provide the top-level function
+```
+  parse : Language -> String -> Sentence
+```
+The library that we will present actually has this as well!
+
+The only complication is that ``parse`` does not always return
+just one sentence. Those may be zero:
+```
+  you have n mesaggse  
+```
+or many:
+```
+  Have PolYou (Num n Message)
+  Have FamYou (Num n Message)
+  Have PlurYou (Num n Message)
+```
+
+
+#NEW
+
+==The components of a grammar library==
+
+The library has **construction functions** like
+```
+  Have   : NounPhrase -> NounPhrase -> Sentence
+  PolYou : NounPhrase
+```
+These functions build **grammatical structures**, which
+can have different realizations in different languages.
+
+Therefore we also need **realization functions**, 
+```
+  render : Language -> Sentence -> String
+  parse  : Language -> String -> [Sentence]
+```
+Both of them require major linguistic expertise to write - but,
+one this is done, they can be used with very little linguistic
+knowledge by application programmers!
+
+
+#NEW
+
+==Implementing a grammar library in GF==
+
+GF = Grammatical Framework
+
+Those who know GF have already seen the introduction as a
+seduction argument for GF.
+
+In GF,
+- construction functions = **abstract syntax**
+- realization functions = **concrete syntax**
+
+
+Example:
+```
+  abstract GUIText = {
+    cat Text ;
+    fun Yes : Text ;
+    } 
+  concrete GUITextEng of GUIText = {
+    lin Yes = ss "yes" ;
+    } 
+  concrete GUITextFin of GUIText = {
+    lin Yes = ss "kyllä" ;
+    } 
+```
+
+
+#NEW
+
+==Linearization and parsing==
+
+The realizatin function is, for each language, implemented by
+**linearization rules** (``lin``).
+
+The linearization rules directly give the ``render`` method:
+```
+  render english x = GUITextEng.lin x
+```
+The GF formalism moreover has the property of **reversibility**:
+a set of linearization rules automatically generates a parser as
+well.
+
+While reversibility has a minor importance for the applications
+shown above, it is crucial for other applications of GF grammars.
+
+
+#NEW
+
+==Applying GF==
+
+**multilingual grammar** = abstract syntax + concrete syntaxes
+
+Early instances of the idea (from 1998) - **application grammars**:
+- multilingual authoring
+- domain-specific translation
+- dialogue systems
+
+
+Later development (from 2001) - **resource grammars**:
+- grammar libraries with language-independent APIs
+
+
+Of course, one important use of resource grammars is
+to help writing application grammars in GF.
+
+In addition to GF itself, GF grammars can be accessed in 
+Haskell, Prolog, and Java programs.
+
+
+#NEW
+
+==Domain, ontology, idiom==
+
+An abstract syntax can represent
+- a **semantic model**
+- an **ontology**
+
+
+The concrete syntax defines how the **concepts** of the ontology
+are represented in natural language (or in a formal language).
+
+The following requirements are made:
+- linguistic correctness (inflection, agreement, word order,...)
+- semantic correctness (express the intended concepts)
+- conformance to the domain idiom (use natural phrasing)
+
+
+Benefit: translation via semantic model of domain can reach high quality.
+
+Problem: the expertise of both a linguist and a domain expert are required. 
+
+
+
+
+%http://www.boost.org/
