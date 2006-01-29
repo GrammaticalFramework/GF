@@ -14,13 +14,19 @@ Last update: %%date(%c)
 
 ==Setting==
 
-Funding
-- VR: Library-Based Grammar Engineering (2006-2008)
+Current funding
+- VR: Library-Based Grammar Engineering (2006-2008) 
+  - Lars Borin (Swedish)
+  - Robin Cooper (Computational Linguistics)
+  - Sibylle Schupp and Aarne Ranta (Computer Science)
+
+
+Previous funding
 - VR: Record Types and Dialogue Semantics (2003-2005)
 - VINNOVA: Interactive Language Technology (2001-2004)
 
 
-Applications
+Main applications
 - TALK: multilingual and multimodal dialogue systems
 - WebALT: multilingual generation of mathematical teaching material
 - KeY: multilingual authoring of software specifications
@@ -30,21 +36,21 @@ Applications
 
 ==People==
 
-Staff:
+Staff contributions to grammar libraries:
 - Björn Bringert
 - Markus Forsberg
 - Harald Hammarström
 - Janna Khegai
-- Peter Ljunglöf
 - Aarne Ranta
 
 
-Student projects:
+Student projects on libraries:
 - Inger Andersson & Therese Söderberg: Spanish morphology
 - Ludmilla Bogavac: Russian morphology
 - Ali El Dada: Arabic morphology and syntax
 - Muhammad Humayoun: Urdu morphology
 - Michael Pellauer: Estonian morphology
+
 
 
 #NEW
@@ -97,8 +103,13 @@ Possible ways to do this:
   yesButton swedish = button "Ja"
   yesButton finnish = button "Kyllä"
 ```
+
 + Hire more programmers to perform localization in different languages
-+ Use a library ``GUIText`` such that you can write
+
+
+#NEW
+
+3. Use a library ``GUIText`` such that you can write
 ```
   yesButton lang = button (render lang GUIText.Yes) 
 ```
@@ -194,17 +205,18 @@ You may want to write
 For this purpose, you need a library with the following API
 (Application Programmer's Interface):
 ```
-  Have : NounPhrase -> NounPhrase -> Sentence
+  Have    : NounPhrase -> NounPhrase -> Sentence
 
-  PolYou, FamYou, I : NounPhrase
-  
-  Num : Int -> Noun -> NounPhrase
+  PolYou  : NounPhrase
+  FamYou  : NounPhrase
 
-  Message, Jewel, Surprise : Noun  
+  Num     : Int -> Noun -> NounPhrase
+
+  Message : Noun  
 ```
 You also need a top-level rendering function
 ```
-  render : Language -> Sentence -> String
+  render  : Language -> Sentence -> String
 ```
 
 
@@ -223,6 +235,9 @@ To this end, the API should provide the top-level function
 ```
 The library that we will present actually has this as well!
 
+
+#NEW
+
 The only complication is that ``parse`` does not always return
 just one sentence. Those may be zero:
 ```
@@ -230,8 +245,8 @@ just one sentence. Those may be zero:
 ```
 or many:
 ```
-  Have PolYou (Num n Message)
-  Have FamYou (Num n Message)
+  Have PolYou  (Num n Message)
+  Have FamYou  (Num n Message)
   Have PlurYou (Num n Message)
 ```
 
@@ -251,7 +266,7 @@ can have different realizations in different languages.
 Therefore we also need **realization functions**, 
 ```
   render : Language -> Sentence -> String
-  parse  : Language -> String -> [Sentence]
+  parse  : Language -> String   -> [Sentence]
 ```
 Both of them require major linguistic expertise to write - but,
 one this is done, they can be used with very little linguistic
@@ -272,15 +287,19 @@ In GF,
 - realization functions = **concrete syntax**
 
 
-Example:
+#NEW
+
+Simplest possible example:
 ```
   abstract GUIText = {
     cat Text ;
     fun Yes : Text ;
     } 
+
   concrete GUITextEng of GUIText = {
     lin Yes = ss "yes" ;
     } 
+
   concrete GUITextFin of GUIText = {
     lin Yes = ss "kyllä" ;
     } 
@@ -302,8 +321,8 @@ The GF formalism moreover has the property of **reversibility**:
 a set of linearization rules automatically generates a parser as
 well.
 
-While reversibility has a minor importance for the applications
-shown above, it is crucial for other applications of GF grammars.
+%While reversibility has a minor importance for the applications
+%shown above, it is crucial for other applications of GF grammars.
 
 
 #NEW
@@ -312,34 +331,24 @@ shown above, it is crucial for other applications of GF grammars.
 
 **multilingual grammar** = abstract syntax + concrete syntaxes
 
-Early instances of the idea (from 1998) - **application grammars**:
+Examples of the idea: 
 - multilingual authoring
 - domain-specific translation
 - dialogue systems
 
-
-Later development (from 2001) - **resource grammars**:
-- grammar libraries with language-independent APIs
-
-
-Of course, one important use of resource grammars is
-to help writing application grammars in GF.
-
-In addition to GF itself, GF grammars can be accessed in 
-Haskell, Prolog, and Java programs.
 
 
 #NEW
 
 ==Domain, ontology, idiom==
 
-An abstract syntax can represent
+An abstract syntax represents
 - a **semantic model**
 - an **ontology**
 
 
-The concrete syntax defines how the **concepts** of the ontology
-are represented in natural language (or in a formal language).
+The concrete syntax defines how the concepts of the ontology
+are represented in a language.
 
 The following requirements are made:
 - linguistic correctness (inflection, agreement, word order,...)
@@ -406,17 +415,17 @@ All these sentences are grammatically incorrect.
 
 ==Solving the difficulties==
 
-GF has tools for expressing the linguistic rules that are needed to
-produce correct translations in different languages. (Expressive power
-between TAG and HPSG.)
+GF can express the linguistic rules that are needed to
+produce correct translations. (Expressive power
+between TAG and HPSG, but the language is more high-level.)
 
-Instead of just strings, we need parameters**, **tables**,
+Instead of just strings, we need **parameters**, **tables**,
 and **record types**. For instance, French:
 ```
   param Mod = Ind | Subj ;
   param Gen = Masc | Fem ;
 
-  lincat Nat = {s : Str ; g : Gen} ;
+  lincat Nat  = {s : Str ; g : Gen} ;
   lincat Prop = {s : Mod => Str} ;
 
   lin Even x = {s =
@@ -424,10 +433,27 @@ and **record types**. For instance, French:
         m => x.s ++
              case m   of {Ind  => "est" ;  Subj => "soit"} ++
              case x.g of {Masc => "pair" ; Fem  => "paire"}
-      }
-    } ;
+        }
+      } ;
 ```
 Linguistic knowledge dominates in the size of this grammar.
+
+
+#NEW
+
+==Application grammars vs. resource grammars==
+
+Application grammar ("semantic grammar")
+- abstract syntax: domain semantics
+- concrete syntax: "controlled language"
+- author: domain expert
+
+
+Resource grammar ("syntactic grammar")
+- abstract syntax: linguistic structures
+- concrete syntax: (approximation of) entire language
+- author: linguist
+
 
 
 #NEW
@@ -457,7 +483,7 @@ Notice: choice of adjective is domain expert knowledge.
 
 
 #NEW
-==Questions in grammar library design==
+==Design questions for grammar the library==
 
 What should there be in the library?
 - morphology, lexicon, syntax, semantics,...
@@ -468,7 +494,7 @@ How do we organize and present the library?
 - "school grammar" vs. sophisticated linguistic concepts
 
 
-Where do we get the data from?
+Where to get the data from?
 - automatic extraction or hand-writing?
 - reuse of existing resources?
 
@@ -478,14 +504,14 @@ hence cannot use existing proprietary resources.
 
 
 #NEW
-==Answers to questions in grammar library design==
+==Design decisions==
 
 The current GF resource grammar library has, for each language,
 - complete morphology
 - lexicon of the most important structural words
 - test lexicon of ca. 300 content words
-- representative fragment of syntax
-- very little semantics,
+- representative fragment of syntax (cf. CLE (Core Language Engine))
+- rather flat semantics (cf. Quasi-Logical Form of CLE)
 
 
 Organization and presentation:
@@ -497,7 +523,7 @@ Organization and presentation:
 
 
 #NEW
-==Answers to questions in grammar library design. cont'd==
+==Design decisions, cont'd==
 
 Where do we get the data from?
 - morphology and syntax are hand-written
@@ -506,25 +532,11 @@ Where do we get the data from?
 - tool for automatic lexicon extraction
 - we have not reused existing resources
 
+
 The resource grammar library is entirely
 open-source free software (under GNU GPL license).
 
 
-
-
-
-#NEW
-==The scope of a resource grammar library for a language==
-
-All morphological paradigms
-
-Basic lexicon of structural, common, and irregular words
-
-Basic syntactic structures (approx. those of CLE, Core Language Engine)
-
-Currently,
-- //no// semantics,  
-- //no// language-specific structures if not necessary for expressivity.
 
 
 
@@ -533,7 +545,7 @@ Currently,
 #NEW
 ==Success criteria==
 
-Grammatical correctness
+Grammatical correctness of everything generated.
 
 Semantic coverage: you can express whatever you want.
 
@@ -548,24 +560,18 @@ families, using the module system of GF.
 ==These are not our success criteria==
 
 Language coverage: to be able to parse all expressions.
+- Example: French //passé simple//, although covered by the
+morphology, is not available through the language-independent API.
 
-Example:
-the French //passé simple// tense, although covered by the
-morphology, is not used in the language-independent API, but
-only the //passé composé// is. However, an application
-accessing the French-specific (or Romance-specific)
-modules can use the passé simple.
 
 Semantic correctness: only to produce meaningful expressions.
-
-Example: the following sentences can be generated
+- Example: the following sentences can be generated
 ```
   colourless green ideas sleep furiously
 
   the time is seventy past forty-two
 ```
-However, an applicatio grammar can use a domain-specific
-semantics to guarantee semantic well-formedness.
+
 
 (Warning for linguists:) theoretical innovation in
 syntax is not among the goals
@@ -575,6 +581,9 @@ syntax is not among the goals
 
 #NEW
 ==So where is semantics?==
+
+Application grammars typically use domain-specific
+semantics to guarantee semantic well-formedness.
 
 GF incorporates a **Logical Framework** and is therefore
 capable of expressing logical semantics //à la// Montague
@@ -587,6 +596,29 @@ Instead, we expect semantics to be given in
 **application grammars** built on semantic models
 of different domains.
 
+
+#NEW
+==Levels of representation==
+
+No fixed set of levels; here some examples:
+```
+  2 is even
+  2 är jämnt
+```
+In ``Arithm``
+```
+  Even 2
+```
+In ``Predication`` (high level resource API)
+```
+  predA (IntNP 2) (regA "even")
+  predA (IntNP 2) (regA "jämn")
+```
+In ``Lang`` (ground level resource API)
+```
+  UseCl TPres ASimul PPos (PredVP (UsePN (IntPN 2)) (UseComp (CompAP (PositA (regA "even")))))
+  UseCl TPres ASimul PPos (PredVP (UsePN (IntPN 2)) (UseComp (CompAP (PositA (regA "jämn")))))
+```
 
 
 
@@ -729,17 +761,16 @@ Example heuristic, from [ParadigsSwe gfdoc/ParadigmsSwe.html]:
 ==Some formats that can be generated from GF grammars==
 
 ```
-    -printer=lbnf           BNF Converter, thereby C/Bison, Java/JavaCup
-    -printer=fullform       full-form lexicon, short format
-    -printer=xml            XML: DTD for the pg command, object for st
-    -printer=gsl            Nuance GSL speech recognition grammar
-    -printer=jsgf           Java Speech Grammar Format
-    -printer=srgs_xml       SRGS XML format
-    -printer=srgs_xml_prob  SRGS XML format, with weights
-    -printer=slf            a finite automaton in the HTK SLF format
-    -printer=regular        a regular grammar in a simple BNF
-    -printer=gfc-prolog     gfc in prolog format (also pg)
-
+-printer=lbnf           BNF Converter, thereby C/Bison, Java/JavaCup
+-printer=fullform       full-form lexicon, short format
+-printer=xml            XML: DTD for the pg command, object for st
+-printer=gsl            Nuance GSL speech recognition grammar
+-printer=jsgf           Java Speech Grammar Format
+-printer=srgs_xml       SRGS XML format
+-printer=srgs_xml_prob  SRGS XML format, with weights
+-printer=slf            a finite automaton in the HTK SLF format
+-printer=regular        a regular grammar in a simple BNF
+-printer=gfc-prolog     gfc in prolog format (also pg)
 ```
 
 
@@ -749,20 +780,31 @@ Example heuristic, from [ParadigsSwe gfdoc/ParadigmsSwe.html]:
 The most general format is **multilingual treebank** generation:
 ```
   > gr -tr | l -multi
-  Freeze (All Fruit)
+  UseCl TCond AAnter PPos (PredVP (DetCN (DetSg DefSg NoOrd) 
+    (AdjCN (PositA young_A) (UseN man_N))) (ComplV2 love_V2 (UsePron she_Pron)))
 
-  all fruits freeze
-  kaikki hedelmät jäätyvät
-  alla frukter fryser
-  alle frukter fryser
-  todas las frutas congelan
-  tutte le frutte gelano
-  tous les fruits gèlent
+  den unga mannen skulle ha älskat henne
+
+  der junge Mann würde sie geliebt haben
+
+  le jeune homme l' aurait aimée
+
+  the young man would have loved her
 ```
 A special case is corpus generation, either exhaustive or random with 
 or without probability weights attached to constructors.
 
 Cf. Rebecca Jonson this afternoon.
+
+
+#NEW
+==Use as program components==
+
+Haskell, Java, Prolog
+
+Parsing, generation, translation
+
+Push-button creation of spoken language translators (using Nuance)
 
 
 #NEW
@@ -772,7 +814,8 @@ CLE = Core Language Engine
 - the closest point of comparison as for coverage and purpose
 - resource API similar to "Quasi-Logical Form" 
 - parametrized modules instead of grammar porting via macro packages
-- grammar specialization via partial evaluatio instead of explanation-based learning
+- grammar specialization via partial evaluation instead of explanation-based learning
+  - therefore, transfer at compile time as often as possible
 
 
 Lingo Matrix project (HPSG)
