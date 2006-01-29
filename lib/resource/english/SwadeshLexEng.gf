@@ -101,7 +101,7 @@ concrete SwadeshLexEng of SwadeshLex = CategoriesEng
     -- Nouns
 
     animal_N = regN "animal" ;
-    ashes_N = regN "ashes" ; -- FIXME: plural only?
+    ashes_N = regN "ash" ; -- FIXME: plural only?
     back_N = regN "back" ;
     bark_N = regN "bark" ;
     belly_N = regN "belly" ;
