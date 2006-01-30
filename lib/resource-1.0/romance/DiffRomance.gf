@@ -1,4 +1,12 @@
+--1 Differences between Romance languages
+
 interface DiffRomance = open CommonRomance, Prelude in {
+
+-- The first six constants show the essential differences
+-- between French, Italian, and Romance syntaxes (as regards the
+-- resource API). The other constants are either derivatively
+-- dependent, or have as values strings, which are language-dependent
+-- anyway.
 
 --2 Constants whose definitions fundamentally depend on language
 
@@ -27,6 +35,11 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
   oper conjunctCase : NPForm -> NPForm ;
 
+-- How infinitives and clitics are placed relative to each other
+-- (Fre "la voir", Ita "vederla").
+
+  oper clitInf : Str -> Str -> Str ;
+
 
 --2 Constants that must derivatively depend on language
 
@@ -52,8 +65,6 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
   conjThan  : Str ;
   conjThat  : Str ;
-
-  clitInf   : Str -> Str -> Str ;
 
   relPron   : Bool => AAgr => Case => Str ;
   pronSuch  : AAgr => Str ;
