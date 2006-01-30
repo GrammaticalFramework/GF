@@ -32,8 +32,8 @@ oper
     } ;
 
   case2npform : Case -> NPForm = \c -> case c of {
-    Nom => Aton Nom ;
-    Acc => Aton Acc ;
+    Nom => Ton Nom ;
+    Acc => Ton Acc ;
     _   => Ton c
     } ;
 
