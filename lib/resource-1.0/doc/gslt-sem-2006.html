@@ -1,0 +1,1153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE>Grammars as Software Libraries</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>Grammars as Software Libraries</H1>
+<FONT SIZE="4">
+<I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
+Last update: Mon Jan 30 10:53:18 2006
+</FONT></CENTER>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>Setting</H2>
+<P>
+Current funding
+</P>
+<UL>
+<LI>VR: Library-Based Grammar Engineering (2006-2008) 
+  <UL>
+  <LI>Lars Borin (Swedish)
+  <LI>Robin Cooper (Computational Linguistics)
+  <LI>Sibylle Schupp and Aarne Ranta (Computer Science)
+  </UL>
+</UL>
+
+<P>
+Previous funding
+</P>
+<UL>
+<LI>VR: Record Types and Dialogue Semantics (2003-2005)
+<LI>VINNOVA: Interactive Language Technology (2001-2004)
+</UL>
+
+<P>
+Main applications
+</P>
+<UL>
+<LI>TALK: multilingual and multimodal dialogue systems
+<LI>WebALT: multilingual generation of mathematical teaching material
+<LI>KeY: multilingual authoring of software specifications
+</UL>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>People</H2>
+<P>
+Staff contributions to grammar libraries:
+</P>
+<UL>
+<LI>Björn Bringert
+<LI>Markus Forsberg
+<LI>Harald Hammarström
+<LI>Janna Khegai
+<LI>Aarne Ranta
+</UL>
+
+<P>
+Student projects on grammar libraries:
+</P>
+<UL>
+<LI>Inger Andersson &amp; Therese Söderberg: Spanish morphology
+<LI>Ludmilla Bogavac: Russian morphology
+<LI>Ali El Dada: Arabic morphology and syntax
+<LI>Muhammad Humayoun: Urdu morphology
+<LI>Michael Pellauer: Estonian morphology
+</UL>
+
+<P>
+Technology, also:
+</P>
+<UL>
+<LI>Håkan Burden
+<LI>Hans-Joachim Daniels
+<LI>Kristofer Johannisson
+<LI>Peter Ljunglöf
+</UL>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>Software Libraries</H2>
+<P>
+The main device of <B>division of labour</B> in programming.
+</P>
+<P>
+Instead of writing a sorting algorithm over and over again,
+the programmers take it from a library. You write (in Haskell),
+</P>
+<PRE>
+    Data.List.sort xs
+</PRE>
+<P>
+instead of a lot of code actually implementing sorting.
+</P>
+<P>
+Practical advantages:
+</P>
+<UL>
+<LI>faster development of new software
+<LI>quality guarantee and automatic improvements
+</UL>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>Abstraction</H2>
+<P>
+Libraries promote <B>abstraction</B>: you abstract away from details.
+</P>
+<P>
+The use of libraries is therefore a good programming style.
+</P>
+<P>
+It is also <B>scientifically interesting</B> to create libraries:
+you have to think about abstractions on your domain of expertise.
+</P>
+<P>
+Notice: libraries can bring abstraction to almost any language,
+if it just has a support for functions or macros.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Grammars as libraries?</H2>
+<P>
+Example: we want to create a GUI (Graphical User Interface) button
+that says <I>yes</I>, and <B>localize</B> it to different languages:
+</P>
+<PRE>
+    Yes   Ja   Kyllä   Oui   Ja   Sì
+</PRE>
+<P>
+Possible ways to do this:
+</P>
+<OL>
+<LI>Go around dictionaries to find the word in different languages
+<PRE>
+    yesButton english = button "Yes"
+    yesButton swedish = button "Ja"
+    yesButton finnish = button "Kyllä"
+</PRE>
+<P></P>
+<LI>Hire more programmers to perform localization in different languages
+</OL>
+
+<P>
+<!-- NEW -->
+</P>
+<P>
+3. Use a library <CODE>Text</CODE> such that you can write
+</P>
+<PRE>
+    yesButton lang = button (Text.render lang Text.Yes) 
+</PRE>
+<P>
+The library has an API (Application Programmer's Interface) with:
+</P>
+<OL>
+<LI>A repository of text elements such as
+<PRE>
+    Yes    : Text
+    No     : Text
+</PRE>
+<LI>A function rendering text elements in different languages:
+<PRE>
+    render : Language -&gt; Text -&gt; String
+</PRE>
+</OL>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>A slightly more advanced example</H2>
+<P>
+This is what you often see as a feedback from a program:
+</P>
+<PRE>
+    You have 1 messages.
+</PRE>
+<P>
+Or perhaps with a little more thought:
+</P>
+<PRE>
+    You have 1 message(s).
+</PRE>
+<P>
+The code that should be written is of course
+</P>
+<PRE>
+    mess n = "You have" +++ show n +++ messages ++ "." 
+      where
+        messages = if n==1 then "message" else "messages"
+</PRE>
+<P>
+(E.g. VoiceXML supports this.)
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Problems with the more advanced example</H2>
+<P>
+The same as with "Yes": you have to know the words "you",
+"have", "message".
+</P>
+<P>
+<I>Moreover</I>, you have to know the inflection of the equivalent
+of "message":
+</P>
+<PRE>
+    if n == 1 then "meddelande" else "meddelanden"
+</PRE>
+<P>
+<I>Moreover</I>, you have to know the congruence with different numbers
+(e.g. Arabic):
+</P>
+<PRE>
+    if n == 1 then "risAlaö" else
+    if n == 2 then "risAlatAn" else 
+    if n &lt; 11 then "rasA'il" else
+                   "risAlaö"
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H2>More problems with the advanced example</H2>
+<P>
+You also have to know the case required by the verb "have" 
+e.g. Finnish: 
+</P>
+<PRE>
+    1 viesti   -- nominative 
+    4 viestiä  -- partitive
+</PRE>
+<P>
+<I>Moreover</I>, you have to know what is the proper way to politely
+address the user:
+</P>
+<PRE>
+    Du har 3 meddelanden / Ni har 3 meddelanden
+    Vous avez 3 messages / Tu as 3 messages
+</PRE>
+<P>
+(This can also depend on country and the kind of program.)
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>A library-based solution</H2>
+<P>
+In analogy with the "Yes" case, you write
+</P>
+<PRE>
+    mess lang n = render lang (Text.YouHaveMessages n)
+</PRE>
+<P>
+Hmm, is this so smart? What about if you want to say
+</P>
+<PRE>
+    You have 4 documents.
+    You have 5 jewels.
+    I have 7 surprises.
+</PRE>
+<P>
+It is time to move from <B>canned text</B> to a <B>grammar</B>.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>An improved library-based solution</H2>
+<P>
+You may want to write
+</P>
+<PRE>
+    mess  lang n = render lang (Have PolYou (Num n Message))
+    sword lang n = render lang (Have FamYou (Num n Jewel))
+    surpr lang n = render lang (Have I      (Num n Surprise))
+</PRE>
+<P>
+For this purpose, you need a library with the API
+</P>
+<PRE>
+    Have    : NounPhrase -&gt; NounPhrase -&gt; Sentence
+  
+    PolYou  : NounPhrase
+    FamYou  : NounPhrase
+  
+    Num     : Int -&gt; Noun -&gt; NounPhrase
+  
+    Message : Noun  
+    Jewel   : Noun
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H2>The ultimate solution?</H2>
+<P>
+The library API for language will certainly grow big and become
+difficult to use. Why couldn't I just write
+</P>
+<PRE>
+    mess lang n = render lang (parse english "you have n messages")
+</PRE>
+<P>
+To this end, the API should provide the top-level function
+</P>
+<PRE>
+    parse : Language -&gt; String -&gt; Sentence
+</PRE>
+<P>
+The library that we will present actually has this as well!
+</P>
+<P>
+<!-- NEW -->
+</P>
+<P>
+The only complication is that <CODE>parse</CODE> does not always return
+just one sentence. Those may be zero:
+</P>
+<PRE>
+    "you have n mesaggse"
+  
+</PRE>
+<P>
+or many:
+</P>
+<PRE>
+    "you have n messages"
+  
+    Have PolYou  (Num n Message)
+    Have FamYou  (Num n Message)
+    Have PlurYou (Num n Message)
+</PRE>
+<P>
+Thus some amount of interaction is needed.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>The components of a grammar library</H2>
+<P>
+The library has <B>construction functions</B> like
+</P>
+<PRE>
+    Have   : NounPhrase -&gt; NounPhrase -&gt; Sentence
+    PolYou : NounPhrase
+</PRE>
+<P>
+These functions build <B>grammatical structures</B>, which
+can have different realizations in different languages.
+</P>
+<P>
+Therefore we also need <B>realization functions</B>, 
+</P>
+<PRE>
+    render : Language -&gt; Sentence -&gt; String
+    parse  : Language -&gt; String   -&gt; [Sentence]
+</PRE>
+<P>
+Both of them require linguistic expertise to write - but,
+one this is done, they can be used with very little linguistic
+knowledge by application programmers!
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Implementing a grammar library in GF</H2>
+<P>
+GF = Grammatical Framework
+</P>
+<P>
+Those who know GF have already seen the introduction as a
+seduction argument leading to GF.
+</P>
+<P>
+In GF,
+</P>
+<UL>
+<LI>construction functions = <B>abstract syntax</B>
+<LI>realization functions = <B>concrete syntax</B>
+</UL>
+
+<P>
+<!-- NEW -->
+</P>
+<P>
+Simplest possible example:
+</P>
+<PRE>
+    abstract Text = {
+      cat Text ;
+      fun Yes : Text ;
+      fun No  : Text ;
+      } 
+  
+    concrete TextEng of Text = {
+      lin Yes = ss "yes" ;
+      lin No  = ss "no" ;
+      } 
+  
+    concrete TextFin of Text = {
+      lin Yes = ss "kyllä" ;
+      lin No  = ss "ei" ;
+      } 
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Linearization and parsing</H2>
+<P>
+The realizatin function is, for each language, implemented by
+<B>linearization rules</B> (<CODE>lin</CODE>).
+</P>
+<P>
+The linearization rules directly give the <CODE>render</CODE> method:
+</P>
+<PRE>
+    render english x = TextEng.lin x
+</PRE>
+<P>
+The GF formalism moreover has the property of <B>reversibility</B>:
+</P>
+<UL>
+<LI>a set of linearization rules automatically generates a parser.
+</UL>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>Applying GF</H2>
+<P>
+<B>multilingual grammar</B> = abstract syntax + concrete syntaxes
+</P>
+<P>
+Examples of the idea: 
+</P>
+<UL>
+<LI>domain-specific translation
+<LI>multilingual authoring
+<LI>dialogue systems
+</UL>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>Domain, ontology, idiom</H2>
+<P>
+An abstract syntax has other names:
+</P>
+<UL>
+<LI>a <B>semantic model</B>
+<LI>an <B>ontology</B>
+</UL>
+
+<P>
+The concrete syntax defines how the ontology
+is represented in a language.
+</P>
+<P>
+The following requirements are made:
+</P>
+<UL>
+<LI>linguistic correctness (inflection, agreement, word order,...)
+<LI>semantic correctness (express the concepts properly)
+<LI>conformance to the domain idiom (use proper terms and phrasing)
+</UL>
+
+<P>
+Benefit: translation via semantic model of domain can reach high quality.
+</P>
+<P>
+Problem: the expertise of both a linguist and a domain expert are required. 
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Example domain</H2>
+<P>
+Arithmetic of natural numbers: abstract syntax
+</P>
+<PRE>
+    cat Prop ; Nat ;
+    fun Even : Nat -&gt; Prop ;
+</PRE>
+<P>
+<B>Concrete syntax</B>: mapping from abstract syntax trees to strings in a language
+(English, French, German, Swedish,...)
+</P>
+<PRE>
+    lin Even x = {s = x.s ++ "is"  ++ "even"} ; 
+    lin Even x = {s = x.s ++ "est" ++ "pair"} ;
+    lin Even x = {s = x.s ++ "ist" ++ "gerade"} ;
+    lin Even x = {s = x.s ++ "är"  ++ "jämnt"} ;
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Translation system</H2>
+<P>
+We can translate using the abstract syntax as interlingua:
+</P>
+<PRE>
+    4 is even                  4 ist gerade
+               \              /
+                 Even (NInt 4)
+               /              \
+    4 est pair                  4 är jämnt
+</PRE>
+<P>
+This idea is used e.g. in the WebALT project to generate mathematical
+teaching material in 7 languages.
+</P>
+<P>
+But is it really so simple?
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Difficulties with concrete syntax</H2>
+<P>
+The previous multilingual grammar breaks these rules in many situations:
+</P>
+<PRE>
+    2 and 3 is even
+    la somme de 3 et de 5 est pair
+    wenn 2 ist gerade, dann 2+2 ist gerade
+    om x är jämnt, summan av x och 2 är jämnt
+</PRE>
+<P>
+All these sentences are grammatically incorrect.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Solving the difficulties</H2>
+<P>
+GF <I>can</I> express the linguistic rules that are needed to
+produce correct translations:
+</P>
+<P>
+In addition to strings, we use <B>parameters</B>, <B>tables</B>,
+and <B>record types</B>. For instance, French:
+</P>
+<PRE>
+    param Mod = Ind | Subj ;
+    param Gen = Masc | Fem ;
+  
+    lincat Nat  = {s : Str ; g : Gen} ;
+    lincat Prop = {s : Mod =&gt; Str} ;
+  
+    lin Even x = {s =
+        table {
+          m =&gt; x.s ++
+               case m   of {Ind  =&gt; "est" ;  Subj =&gt; "soit"} ++
+               case x.g of {Masc =&gt; "pair" ; Fem  =&gt; "paire"}
+          }
+        } ;
+</PRE>
+<P>
+Linguistic knowledge dominates in the size of this grammar.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Application grammars vs. resource grammars</H2>
+<P>
+Application grammar ("semantic grammar")
+</P>
+<UL>
+<LI>abstract syntax: domain semantics
+<LI>concrete syntax: "controlled language"
+<LI>author: domain expert
+</UL>
+
+<P>
+Resource grammar ("syntactic grammar")
+</P>
+<UL>
+<LI>abstract syntax: linguistic structures
+<LI>concrete syntax: (approximation of) entire language
+<LI>author: linguist
+</UL>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>GF as programming language</H2>
+<P>
+The expressive power is between TAG and HPSG.
+</P>
+<P>
+The language is more high-level: a modern, <B>typed functional programming language</B>.
+</P>
+<P>
+It enables linguistic generalizations and abstractions.
+</P>
+<P>
+But we don't want to bother application grammarians with these details.
+</P>
+<P>
+We have built a <B>module system</B> that can hide details.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Concrete syntax using library</H2>
+<P>
+Assume the following API
+</P>
+<PRE>
+    cat S ; NP ; A ;
+  
+    fun predA : A -&gt; NP -&gt; S ;
+  
+    oper regA : Str -&gt; A ;
+</PRE>
+<P>
+Now implement <CODE>Even</CODE> for four languages
+</P>
+<PRE>
+    lincat
+      Prop = S ;
+      Nat  = NP ;
+    lin
+      Even = predA (regA "even") ;   -- English
+      Even = predA (regA "jämn") ;   -- Swedish
+      Even = predA (regA "pair") ;   -- French
+      Even = predA (regA "gerade") ; -- German
+</PRE>
+<P>
+Notice: the choice of adjective is domain expert knowledge.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Design questions for the grammar library</H2>
+<P>
+What should there be in the library?
+</P>
+<UL>
+<LI>morphology, lexicon, syntax, semantics,...
+</UL>
+
+<P>
+How do we organize and present the library?
+</P>
+<UL>
+<LI>division into modules, level of granularity
+<LI>"school grammar" vs. sophisticated linguistic concepts
+</UL>
+
+<P>
+Where to get the data from?
+</P>
+<UL>
+<LI>automatic extraction or hand-writing?
+<LI>reuse of existing resources?
+</UL>
+
+<P>
+Extra constraint: we want open-source free software and
+hence cannot use existing proprietary resources.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Design decisions</H2>
+<P>
+Coverage, for each language:
+</P>
+<UL>
+<LI>complete morphology
+<LI>lexicon of the most important structural words
+<LI>test lexicon of ca. 300 content words
+<LI>representative fragment of syntax (cf. CLE (Core Language Engine))
+<LI>rather flat semantics (cf. Quasi-Logical Form of CLE)
+</UL>
+
+<P>
+Organization:
+</P>
+<UL>
+<LI>top-level (API) modules
+<LI>Ground API + special-purpose APIs ("macro packages")
+<LI>"school grammar" concepts rather than advanced linguistic theory
+</UL>
+
+<P>
+Presentation:
+</P>
+<UL>
+<LI>tool <CODE>gfdoc</CODE> for generating HTML from grammars
+<LI>example collections
+</UL>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>Design decisions, cont'd</H2>
+<P>
+Where do we get the data from?
+</P>
+<UL>
+<LI>morphology and syntax are hand-written
+<LI>the test lexicon is hand-written
+<LI>APIs for manual lexicon extension
+<LI>tool for automatic lexicon extraction
+<LI>we have not reused existing resources
+</UL>
+
+<P>
+The resource grammar library is entirely open-source free software (under GNU GPL license).
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Success criteria and evaluation</H2>
+<P>
+Grammatical correctness of everything generated.
+</P>
+<P>
+Semantic coverage: you can express whatever you want.
+</P>
+<P>
+Usability as library for non-linguists.
+</P>
+<P>
+Evaluation: tested in third-party projects.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>These are not our success criteria</H2>
+<P>
+Language coverage: 
+</P>
+<UL>
+<LI>to be able to parse all expressions.
+<LI>Example: French <I>passé simple</I>, although covered by the
+morphology, is not available through the language-independent API.
+<LI>But: reconsidered to improve example-based grammar writing
+</UL>
+
+<P>
+Semantic correctness: 
+</P>
+<UL>
+<LI>only to produce meaningful expressions.
+<LI>Example: the following sentences can be generated
+<PRE>
+    colourless green ideas sleep furiously
+    the time is seventy past forty-two
+</PRE>
+</UL>
+
+<P>
+Linguistic innovation in syntax:
+</P>
+<UL>
+<LI>rather a presentation of "known facts"
+<LI>innovation would be hidden from users anyway...
+</UL>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>Where is semantics?</H2>
+<P>
+Application grammars use domain-specific
+semantics to guarantee semantic well-formedness.
+</P>
+<P>
+GF incorporates a <B>Logical Framework</B> and can express
+</P>
+<UL>
+<LI>logical semantics <I>à la</I> Montague
+<LI>anaphora and discourse using dependent types
+</UL>
+
+<P>
+Language-independent API is a rough semantic model.
+</P>
+<P>
+But we do <I>not</I> try to give semantics once and
+for all for the whole language.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Representations in different APIs</H2>
+<P>
+<B>Grammar composition</B>: any grammar can serve as resource to another one.
+</P>
+<P>
+No fixed set of representation levels; here some examples for
+</P>
+<PRE>
+    2 is even
+    2 är jämnt
+</PRE>
+<P>
+In <CODE>Arithm</CODE>
+</P>
+<PRE>
+    Even 2
+</PRE>
+<P>
+In <CODE>Predication</CODE> (high level resource API)
+</P>
+<PRE>
+    predA (IntNP 2) (regA "even")
+    predA (IntNP 2) (regA "jämn")
+</PRE>
+<P>
+In <CODE>Lang</CODE> (ground level resource API)
+</P>
+<PRE>
+    UseCl TPres ASimul PPos (PredVP (UsePN (IntPN 2)) 
+      (UseComp (CompAP (PositA (regA "even")))))
+    UseCl TPres ASimul PPos (PredVP (UsePN (IntPN 2)) 
+      (UseComp (CompAP (PositA (regA "jämn")))))
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Languages</H2>
+<P>
+The current GF Resource Project covers ten languages:
+</P>
+<UL>
+<LI><CODE>Dan</CODE>ish
+<LI><CODE>Eng</CODE>lish
+<LI><CODE>Fin</CODE>nish
+<LI><CODE>Fre</CODE>nch
+<LI><CODE>Ger</CODE>man
+<LI><CODE>Ita</CODE>lian
+<LI><CODE>Nor</CODE>wegian (bokmål)
+<LI><CODE>Rus</CODE>sian
+<LI><CODE>Spa</CODE>nish
+<LI><CODE>Swe</CODE>dish
+</UL>
+
+<P>
+Implementation of API v 1.0 projected for the end of February.
+</P>
+<P>
+In addition, we have parts (morphology) of Arabic, Estonian, Latin, and Urdu
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Library structure 1: language-independent API</H2>
+<P>
+<IMG ALIGN="middle" SRC="Lang.png" BORDER="0" ALT="">
+</P>
+<P>
+<A HREF="index.html">Resource index page</A>
+</P>
+<P>
+<A HREF="gfdoc/Cat.html">Examples of each category</A>
+</P>
+<P>
+Cf. "matrix" in BLARK, LinGo
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Library structure 2: language-dependent APIs</H2>
+<UL>
+<LI>morphological paradigms, e.g. <CODE>ParadigmsSwe</CODE>
+<PRE>
+    mkN  : (man,mannen,män,männen : Str) -&gt; N ;   -- worst-case nouns
+    regV : (leker : Str) -&gt; V ;                   -- regular verbs
+</PRE>
+<LI>irregular words esp. verbs, e.g. <CODE>IrregSwe</CODE>
+<PRE>
+    angripa_V = irregV "angripa" "angrep" "angripit" ;
+</PRE>
+<LI>exended syntax with language-specific rules, e.g. <CODE>ExtNor</CODE>
+<PRE>
+    PostPoss : CN -&gt; Pron -&gt; NP ;     -- bilen min
+</PRE>
+</UL>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>Difficulties encountered</H2>
+<P>
+English: negation and auxiliary vs. non-auxiliary verbs
+</P>
+<P>
+Finnish: object case
+</P>
+<P>
+German: double infinitives
+</P>
+<P>
+Romance: clitic pronouns
+</P>
+<P>
+Scandinavian: determiners
+</P>
+<P>
+<I>In particular</I>: how to make the grammars efficient
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>How much can be language-independent?</H2>
+<P>
+For the ten languages we have considered, it <I>is</I> possible
+to implement the current API.
+</P>
+<P>
+Reservations:
+</P>
+<UL>
+<LI>does not necessarily extend to all other languages
+<LI>does not necessarily cover the most idiomatic expressions of each language
+<LI>may not be the easiest API to implement 
+  <UL>
+  <LI>e.g. negation and inversion with  <I>do</I> in English suggest that some other
+  structure would be more natural
+  </UL>
+</UL>
+
+<UL>
+<LI>the structures may not have the same semantics in all different languages
+</UL>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>Using the library</H2>
+<P>
+Simplest case: use the API in the same way for all languages.
+</P>
+<UL>
+<LI><B>+</B> grammar localization for free
+<LI><B>-</B> not the best idioms for each language
+</UL>
+
+<P>
+In practice: use the API in different ways for different languages
+</P>
+<PRE>
+    -- Eng: x's name is y
+    Name x y = predNP (GenCN x (regN "name")) (StringNP y) 
+    -- Swe: x heter y
+    Name x y = predV2 x heta_V2 (StringNP y)               
+</PRE>
+<P>
+This amounts to <B>compile-time transfer</B>.
+</P>
+<P>
+Surprisingly, writing an application grammar requires more native-speaker knowledge
+than writing a resource grammar!
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Parametrized modules</H2>
+<P>
+We can go even farther than share an abstract API: we can share implementations
+among related languages.
+</P>
+<P>
+Exploited in two families:
+</P>
+<UL>
+<LI>Romance: French, Italian, Spanish
+<LI>Scanndinavian: Danish, Norwegian, Swedish
+</UL>
+
+<P>
+<A HREF="../scandinavian/DiffScand.gf">The declarations of Scandinavian syntax differences</A>
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Lexicon extension</H2>
+<P>
+We cannot anticipate all vocabulary needed in application grammars.
+</P>
+<P>
+Therefore we provide high-level paradigms to add new words.
+</P>
+<P>
+Example heuristic, from <A HREF="gfdoc/ParadigmsSwe.html">ParadigsSwe</A>:
+</P>
+<PRE>
+    regV : (leker : Str) -&gt; V ;
+  
+    regV leker = case leker of {
+      lek + ("a" | "ar")  =&gt; conj1 (lek + "a") ;
+      lek + "er"          =&gt; conj2 (lek + "a") ;
+      bo  + "r"           =&gt; conj3 bo
+      }
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Example low-level morphological definition</H2>
+<PRE>
+    decl2Noun : Str -&gt; N = \bil -&gt;
+      let 
+        bb : Str * Str = case bil of {
+          pojk + "e"                 =&gt; &lt;pojk + "ar",    bil  + "n"&gt; ;
+          nyck + "e" + l@("l" | "r") =&gt; &lt;nyck + l + "ar",bil  + "n"&gt; ;
+          sock + "e" + "n"           =&gt; &lt;sock + "nar",   sock + "nen"&gt; ;
+          _                          =&gt; &lt;bil + "ar",     bil  + "en"&gt;
+          } ;
+      in mkN bil bb.p2 bb.p1 (bb.p1 + "na") ;
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Some formats that can be generated from GF grammars</H2>
+<PRE>
+  -printer=lbnf           BNF Converter, thereby C/Bison, Java/JavaCup
+  -printer=fullform       full-form lexicon, short format
+  -printer=xml            XML: DTD for the pg command, object for st
+  -printer=gsl            Nuance GSL speech recognition grammar
+  -printer=jsgf           Java Speech Grammar Format
+  -printer=srgs_xml       SRGS XML format
+  -printer=srgs_xml_prob  SRGS XML format, with weights
+  -printer=slf            a finite automaton in the HTK SLF format
+  -printer=regular        a regular grammar in a simple BNF
+  -printer=gfc-prolog     gfc in prolog format (also pg)
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Use as program components</H2>
+<P>
+Haskell, Java, Prolog
+</P>
+<P>
+Parsing, generation, translation
+</P>
+<P>
+Push-button creation of spoken language translators (using Nuance)
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Grammar library as linguistic resource</H2>
+<P>
+Can we use the libraries outside domain-specific fragments?
+</P>
+<P>
+We seem to be approaching full coverage from below.
+</P>
+<P>
+The resource API is not good for heavy-duty parsing (too abstract and 
+therefore too inefficient).
+</P>
+<P>
+Two ideas:
+</P>
+<UL>
+<LI>write shallow parsers as application grammars
+<LI>generate corpora and use statistic parsing methods
+</UL>
+
+<P>
+<!-- NEW -->
+</P>
+<H2>Corpus generation</H2>
+<P>
+The most general format is <B>multilingual treebank</B> generation:
+</P>
+<PRE>
+    &gt; gr -tr | l -multi
+    UseCl TCond AAnter PNeg (PredVP (DetCN (DetSg DefSg NoOrd) 
+      (AdjCN (PositA young_A) (UseN woman_N))) (ComplV2 love_V2 (UsePron he_Pron)))
+  
+    The young woman wouldn't have loved him
+    Den unga kvinnan skulle inte ha älskat honom
+    Den unge kvinna ville ikke ha elska ham
+    La joven mujer no lo habría amado
+    La giovane donna non lo avrebbe amato
+    La jeune femme ne l' aurait pas aimé
+    Nuori nainen ei olisi rakastanut häntä
+</PRE>
+<P>
+This is either exhaustive or random, possibly
+with probability weights attached to constructors.
+</P>
+<P>
+A special case is <B>corpus generation</B>: just leave one language.
+</P>
+<P>
+Can this be useful? Cf. Rebecca Jonson this afternoon.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Related work</H2>
+<P>
+CLE = Core Language Engine
+</P>
+<UL>
+<LI>the closest point of comparison as for coverage and purpose
+<LI>resource API similar to "Quasi-Logical Form" 
+<LI>parametrized modules instead of grammar porting via macro packages
+<LI>grammar specialization via partial evaluation instead of explanation-based learning
+  <UL>
+  <LI>therefore, transfer at compile time as often as possible
+  </UL>
+</UL>
+
+<P>
+LinGo Matrix project (HPSG)
+</P>
+<UL>
+<LI>methodology rather than formal discipline for multilingual grammars
+<LI>not aimed as library, no grammar specialization?
+<LI>wider coverage - parsing real texts
+</UL>
+
+<P>
+Parsing detached from grammar (Nivre) - grammar detached from parsing
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H2>Demo</H2>
+<P>
+Stoneage grammar, based on the Swadesh word list.
+</P>
+<P>
+Implemented as application on top of the resource grammar.
+</P>
+<P>
+Illustrate generation and spoken-language parsing.
+</P>
+
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags gslt-sem-2006.txt -->
+</BODY></HTML>
