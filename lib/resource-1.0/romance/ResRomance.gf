@@ -86,7 +86,7 @@ oper
       cc : Str * Str * VPAgr = case <c.isDir, c.c, np.c> of {
         <False,_,_> | 
         <_,_,Clit0> => <[], c.s ++ np.s ! Ton c.c, vp.agr> ; 
-        <_,Acc,_>   => <np.s ! Aton c.c, [], VPAgrClit (aagr np.a.g np.a.n)> ; --- subty
+        <_,Acc,_>   => <np.s ! Aton c.c, [], vpAgrClit np.a> ;
         _           => <np.s ! Aton c.c, [], vp.agr>
         } ;
       high = case np.c of {      -- whether the new clitic comes closer to verb

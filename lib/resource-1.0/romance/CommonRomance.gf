@@ -40,16 +40,16 @@ resource CommonRomance = ParamRomance ** open Prelude in {
 
     appVPAgr : VPAgr -> AAgr -> AAgr = \vp,agr -> 
       case vp of {
-        VPAgrNone   => aagr Masc Sg ;
         VPAgrSubj   => agr ;
         VPAgrClit a => a
         } ;
 
+    vpAgrNone : VPAgr = VPAgrClit (aagr Masc Sg) ;
+
   param
     VPAgr = 
-       VPAgrNone                    -- elle a dormi 
-     | VPAgrSubj                    -- elle est partie, elle s'est vue
-     | VPAgrClit                    -- elle les a vues
+       VPAgrSubj                    -- elle est partie, elle s'est vue
+     | VPAgrClit                    -- elle a dormi; elle les a vues
          {g : Gender ; n : Number} ;
 
 }
