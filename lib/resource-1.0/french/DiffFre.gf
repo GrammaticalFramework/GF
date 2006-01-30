@@ -49,9 +49,12 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
       } ;
 
     partAgr : VType -> VPAgr = \vtyp -> case vtyp of {
-      VHabere => VPAgrNone ;
+      VHabere => vpAgrNone ;
       _ => VPAgrSubj
       } ;
+
+    vpAgrClit : Agr -> VPAgr = \a ->
+      VPAgrClit (aagr a.g a.n) ; --- subty
 
     negation : Polarity => (Str * Str) = table {
       Pos => <[],[]> ;
