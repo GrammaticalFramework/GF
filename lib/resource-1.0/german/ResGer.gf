@@ -373,8 +373,8 @@ resource ResGer = ParamGer ** open Prelude in {
         let
           verb  = vp.s  ! agr ! VPFinite t a ;
           neg   = vp.a1 ! b ;
-          obj   = vp.n2 ! agr ++ vp.a2 ;
-          compl = obj ++ neg ;
+          obj   = vp.n2 ! agr ;
+          compl = obj ++ neg ++ vp.a2 ;
           inf   = vp.inf ++ verb.inf ;
           extra = vp.ext ;
           inffin = case <a,vp.isAux> of {

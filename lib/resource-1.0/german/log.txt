@@ -265,3 +265,8 @@ Work: ca 27h for whole German (but with support in 0.6 esp. morphology, Swedish)
 Fixed double infinitives with a new field (isAux : Bool) in VP. Used in
 mkClause.
 
+31/1
+
+Fine-tuned the place of negation by changing in ResGerman.mkClause and 
+VerbGerman.UseCompl. Want to say "ich bin nicht alt" and "ich liebe sie nicht".
+
