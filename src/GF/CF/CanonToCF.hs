@@ -128,6 +128,8 @@ term2CFItems m t = errIn "forming cf items" $ case t of
      its <- mapM t2c ts
      tryMkCFTerm (concat its)
 
+   P (S c _) _ -> t2c c --- w-around for bug in Compute? AR 31/1/2006
+
    P arg s -> extrR arg s
 
    K (KS s) -> return [[PTerm (RegAlts [s]) | not (null s)]]

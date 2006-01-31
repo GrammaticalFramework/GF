@@ -59,3 +59,7 @@ The documentation of the individual modules:
 % - [IrregGer gfdoc/IrregGer.gf]: German irregular verbs
 - [IrregNor gfdoc/IrregNor.gf]: Norwegian irregular verbs
 - [IrregSwe gfdoc/IrregSwe.gf]: Swedish irregular verbs
+
+
+==Special-purpose APIs==
+
