@@ -1,4 +1,4 @@
-concrete MathEng of Math = CatEng ** open Prelude, ResEng in {
+concrete SymbolEng of Symbol = CatEng ** open Prelude, ResEng in {
 
 lin
   SymbPN i = {s = \\c => i.s ; a = agrP3 Sg} ; --- c

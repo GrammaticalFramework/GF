@@ -1,4 +1,4 @@
-incomplete concrete MathRomance of Math = 
+incomplete concrete SymbolRomance of Symbol = 
   CatRomance ** open Prelude, CommonRomance, ResRomance in {
 
 lin

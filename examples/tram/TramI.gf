@@ -1,4 +1,4 @@
-incomplete concrete TramI of Tram = open Multimodal, Math in {
+incomplete concrete TramI of Tram = open Multimodal, Symbol in {
 
 flags startcat=Query ; lexer=textlit ;
 

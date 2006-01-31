@@ -1,5 +1,5 @@
-incomplete concrete MathScand of Math = 
-  CatScand ** open Prelude, ResScand, DiffScand in {
+incomplete concrete SymbolScand of Symbol = 
+  CatScand ** open Prelude, ResScand, CommonScand in {
 
 lin
   SymbPN i = {s = \\c => i.s ; g = Neutr} ; --- c

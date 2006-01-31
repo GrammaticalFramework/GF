@@ -1,4 +1,4 @@
-incomplete concrete DemonstrativeI of Demonstrative = Cat, TenseX **
+incomplete concrete DemonstrativeI of Demonstrative = Cat **
   open Prelude, Lang, ParamX, DemRes in {
 
   lincat
