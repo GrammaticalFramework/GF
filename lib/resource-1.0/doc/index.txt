@@ -63,3 +63,15 @@ The documentation of the individual modules:
 
 ==Special-purpose APIs==
 
+===Multimodal===
+
+- [Multimodal gfdoc/Multimodal.html]: main module for multimodal dialogue systems
+- [Demonstrative gfdoc/Demonstrative.html]: demonstrative noun phrases and adverbs
+
+
+===Mathematical===
+
+- [Mathematical gfdoc/Mathematical.html]: main module for mathematical language
+- [Predication gfdoc/Predication.html]: predication with verbs, adjectives, etc
+- [Symbol gfdoc/Symbol.html]: symbols and numbers in text
+
