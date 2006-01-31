@@ -3,16 +3,17 @@
 -- *Note*. This module is not automatically included in the main
 -- grammar [Lang Lang.html].
 
-abstract Math = Cat ** {
+abstract Symbol = Cat ** {
 
---2 Noun phrases with symbols
+--2 Noun phrases with symbols and numbers
 
 fun
 
-  SymbPN      : Symb -> PN ;                -- x
-  IntPN       : Int -> PN ;                 -- 27
-  CNIntNP     : CN -> Int -> NP ;           -- level 53
-  CNSymbNP    : Det -> CN -> [Symb] -> NP ; -- (the) (2) numbers x and y
+  SymbPN   : Symb -> PN ;                -- x
+  IntPN    : Int -> PN ;                 -- 27
+  FloatPN  : Float -> PN ;               -- 3.14159
+  CNIntNP  : CN -> Int -> NP ;           -- level 53
+  CNSymbNP : Det -> CN -> [Symb] -> NP ; -- (the) (2) numbers x and y
 
 --2 Symbol lists
 

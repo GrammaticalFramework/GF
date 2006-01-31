@@ -1,4 +1,4 @@
-concrete DemonstrativeSwe of Demonstrative = CatSwe, TenseX ** DemonstrativeI with
+concrete DemonstrativeSwe of Demonstrative = CatSwe ** DemonstrativeI with
   (Lang = LangSwe) ;
 
 

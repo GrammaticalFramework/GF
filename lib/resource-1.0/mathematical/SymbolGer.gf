@@ -1,4 +1,4 @@
-concrete MathGer of Math = CatGer ** open Prelude, ResGer in {
+concrete SymbolGer of Symbol = CatGer ** open Prelude, ResGer in {
 
 lin
   SymbPN i = {s = \\c => i.s ; g = Neutr} ; --- c

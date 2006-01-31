@@ -1,2 +1,2 @@
-concrete DemonstrativeFre of Demonstrative = CatFre, TenseX ** DemonstrativeI with
+concrete DemonstrativeFre of Demonstrative = CatFre ** DemonstrativeI with
   (Lang = LangFre) ;
