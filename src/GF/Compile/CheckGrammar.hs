@@ -37,6 +37,7 @@ import GF.Grammar.Macros
 import GF.Grammar.ReservedWords ----
 import GF.Grammar.PatternMatch
 import GF.Grammar.AppPredefined
+import GF.Grammar.Lockfield (isLockLabel)
 
 import GF.Data.Operations
 import GF.Infra.CheckM
@@ -757,9 +758,15 @@ checkEqLType :: LTEnv -> Type -> Type -> Term -> Check Type
 checkEqLType env t u trm = do
   t' <- comp t 
   u' <- comp u
-  if alpha [] t' u' 
-     then return t'
-     else raise ("type of" +++ prt trm +++ 
+  case alpha [] t' u' of
+    True -> return t'
+    -- forgive missing lock fields by only generating a warning.
+    --- better: use a flag to forgive (AR 31/1/2006)
+    _ -> case missingLock [] t' u' of
+      Just lo -> do
+        checkWarn $ "missing lock field" +++ unwords (map prt lo)
+        return t'
+      _ -> raise ("type of" +++ prt trm +++ 
                 ": expected" +++ prt t' ++ ", inferred" +++ prt u')
  where
 
@@ -772,7 +779,7 @@ checkEqLType env t u trm = do
                               
      -- record subtyping
      (RecType rs, RecType ts) -> all (\ (l,a) -> 
-                                     any (\ (k,b) -> alpha g a b && l == k) ts) rs
+                                   any (\ (k,b) -> alpha g a b && l == k) ts) rs
      (ExtR r s, ExtR r' s') -> alpha g r r' && alpha g s s'
      (ExtR r s, t) -> alpha g r t || alpha g s t
 
@@ -780,7 +787,7 @@ checkEqLType env t u trm = do
      (App (Q (IC "Predef") (IC "Ints")) (EInt n), 
         App (Q (IC "Predef") (IC "Ints")) (EInt m)) -> m >= n
      (App (Q (IC "Predef") (IC "Ints")) (EInt n), 
-        Q (IC "Predef") (IC "Int"))                 -> True ---- should check size
+        Q (IC "Predef") (IC "Int"))                 -> True ---- check size!
      
      (Q (IC "Predef") (IC "Int"),  ---- why this ???? AR 11/12/2005
         App (Q (IC "Predef") (IC "Ints")) (EInt n)) -> True
@@ -803,6 +810,17 @@ checkEqLType env t u trm = do
                                   || elem t sTypes && elem u sTypes
                                   || (t == typeType && u == typePType) 
                                   || (u == typeType && t == typePType) 
+
+   missingLock g t u = case (t,u) of  
+     (RecType rs, RecType ts) -> 
+       let 
+         ls = [l | (l,a) <- rs, 
+                   not (any (\ (k,b) -> alpha g a b && l == k) ts)]
+         (locks,others) = partition isLockLabel ls
+       in case others of
+         _:_ -> Nothing
+         _ -> return locks
+     _ -> Nothing
 
    sTypes = [typeStr, typeTok, typeString]
    comp = computeLType env
@@ -827,20 +845,3 @@ linTypeOfType cnc m typ = do
      ,return defLinType
      ]
 
-{-
--- check if a type is complex in variants
--- Not so useful as one might think, since variants of a complex type
--- can be created indirectly: f (variants {True,False})
-
-checkIfComplexVariantType :: Term -> Type -> Check ()
-checkIfComplexVariantType e t = case t of
-  Prod _ _ _ -> cs
-  Table _ _  -> cs
-  RecType (_:_:_) -> cs
-  _ -> return ()
- where
-   cs = case e of
-      FV (_:_) -> checkWarn $ "Warning:" +++ prt e +++ "has complex type" +++ prt t
-      _ -> return ()
-
--}
