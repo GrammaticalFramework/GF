@@ -1,6 +1,8 @@
 incomplete concrete DemonstrativeI of Demonstrative = Cat **
   open Prelude, Lang, ParamX, DemRes in {
 
+  flags optimize = all_subs ;
+
   lincat
 
     MS     = Dem {s : Polarity => Str} ;

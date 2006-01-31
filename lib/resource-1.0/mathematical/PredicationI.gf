@@ -1,5 +1,7 @@
 incomplete concrete PredicationI of Predication = Cat ** open ParamX, Lang in {
 
+flags optimize = all_subs ;
+
 lincat
   AS = {s : Polarity => S} ;
 
