@@ -127,6 +127,13 @@ try out the module
 explained in the
 [GF Tutorial http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html].
 
+Another reduced API is the
+[toy Latin grammar  latin.gf]
+which will be used as a reference when discussing the details.
+It is not so usable in practice as the Tutorial API, but it goes
+deeper in explaining what parameters and dependencies the principal categories
+and rules have.
+
 
 
 
@@ -426,11 +433,34 @@ those who want to build new lexica.
 
 
 
+==The core of the syntax==
+
+Among all categories and functions, there is is a handful of the 
+most important and distinct ones, of which the others are can be 
+seen as variations. The categories are
+```
+  Cl ; VP ; V2 ; NP ; CN ; Det ; AP ;
+```
+The functions are
+```
+  PredVP  : NP  -> VP -> Cl ;  -- predication
+  ComplV2 : V2  -> NP -> VP ;  -- complementization
+  DetCN   : Det -> CN -> NP ;  -- determination
+  ModCN   : AP  -> CN -> CN ;  -- modification
+```
+This [toy Latin grammar  latin.gf] shows in a nutshell how these
+rules relate the categories to each other. It is intended to be a
+first approximation when designing the parameter system of a new
+language. We will refer to the implementations contained in it
+when discussing the modules in more detail.
+
+
+
 ==Inside grammar modules==
 
 So far we just give links to the implementations of each API.
-More explanation iś to follow - but many detail implementation tricks
-are only found in the cooments of the modules.
+More explanations follow - but many detail implementation tricks
+are only found in the comments of the modules.
 
 
 ===The category system===

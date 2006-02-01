@@ -14,7 +14,7 @@ concrete MathematicalIta of Mathematical =
   StructuralIta,
 
   SymbolIta,
-  PredicationIta,
+  PredicationIta, --  - [predV3,predV2], --- gf bug
 
   LexiconIta
   ** {
