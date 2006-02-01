@@ -105,6 +105,9 @@ showsAttrs = concatS . map (showChar ' ' .) . map showsAttr
 showsAttr :: Attr -> ShowS
 showsAttr (n,v) = showString n . showString "=\"" . showString (escape v) . showString "\""
 
--- FIXME: escape double quotes
+-- FIXME: escape strange charachters with &#xxx;
 escape :: String -> String
-escape = id
+escape = concatMap escChar
+  where
+  escChar c | c `elem` ['"','\\'] = '\\':[c]
+            | otherwise = [c]
