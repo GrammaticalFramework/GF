@@ -20,6 +20,7 @@ module GF.Speech.PrSRGS (srgsXmlPrinter) where
 import GF.Data.Utilities
 import GF.Speech.SRG
 import GF.Infra.Ident
+import GF.Today
 
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..), NameProfile(..), Profile(..), forestName)
@@ -54,7 +55,8 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
     xmlGr = grammar root l ([meta "description" 
                              ("SRGS XML speech recognition grammar for " ++ name
                               ++ ". " ++ "Original start category: " ++ origStart),
-                             meta "generator" "GF"]
+                             meta "generator" ("Grammatical Framework " ++ version 
+                                               ++ " (compiled " ++ today ++ ")")]
 			  ++ map ruleToXML rs)
     ruleToXML (SRGRule cat origCat alts) = 
 	rule (prCat cat) (comments ["Category " ++ origCat] ++ prRhs isList alts)
