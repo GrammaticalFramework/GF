@@ -29,6 +29,7 @@ import GF.Infra.Option
 import GF.Probabilistic.Probabilistic (Probs)
 
 import Data.Char (toUpper,toLower)
+import Data.List
 
 data XML = Data String | Tag String [Attr] [XML] | Comment String
  deriving (Eq,Show)
@@ -56,17 +57,35 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
                              meta "generator" "GF"]
 			  ++ map ruleToXML rs)
     ruleToXML (SRGRule cat origCat alts) = 
-	rule (prCat cat) (comments ["Category " ++ origCat] ++ [prRhs alts])
-    prRhs rhss = oneOf (map prAlt rhss)
-    prAlt (SRGAlt p n@(Name _ pr) rhs) 
-          | sisr = prodItem (Just n) p (map (uncurry (symItem pr)) (numberCats 0 rhs))
-          | otherwise = prodItem Nothing p (map (\s -> symItem [] s 0) rhs)
-    numberCats _ [] = []
-    numberCats n (s@(Cat _):ss) = (s,n):numberCats (n+1) ss
-    numberCats n (s:ss) = (s,n):numberCats n ss
+	rule (prCat cat) (comments ["Category " ++ origCat] ++ prRhs isList alts)
+      where isList = "List" `isPrefixOf` origCat && length cs == 2
+                      && isBase (cs!!0) && isCons (cs!!1)
+            cs = sortNub [f | SRGAlt _ (Name f _) _ <- alts]
+    prRhs isList rhss = [oneOf (map (mkProd sisr isList) rhss)] 
 
 rule :: String -> [XML] -> XML
 rule i = Tag "rule" [("id",i)]
+
+isBase :: Fun -> Bool
+isBase f = "Base" `isPrefixOf` prIdent f
+
+isCons :: Fun -> Bool
+isCons f = "Cons" `isPrefixOf` prIdent f
+
+mkProd :: Bool -> Bool -> SRGAlt -> XML
+mkProd sisr isList (SRGAlt p n@(Name f pr) rhs) 
+    | sisr = prodItem (Just n) p (r ++ if isList then [buildList] else [])
+    | otherwise = prodItem Nothing p (map (\s -> symItem [] s 0) rhs)
+  where 
+  r = map (uncurry (symItem pr)) (numberCats 0 rhs)
+  buildList | isBase f = 
+                tag ["$ = new Array(" ++ join "," args ++ ")"]
+            | isCons f = tag ["$.arg1.unshift($.arg0); $ = $.arg1;"]
+    where args = ["$.arg"++show n | n <- [0..length pr-1]]
+  numberCats _ [] = []
+  numberCats n (s@(Cat _):ss) = (s,n):numberCats (n+1) ss
+  numberCats n (s:ss) = (s,n):numberCats n ss
+  
 
 prodItem :: Maybe Name -> Maybe Double -> [XML] -> XML
 prodItem n mp xs = Tag "item" w (t++cs)
@@ -78,7 +97,7 @@ prodItem n mp xs = Tag "item" w (t++cs)
 	       _ -> xs
 
 prodTag :: Name -> [XML]
-prodTag (Name f prs) = [Tag "tag" [] [Data (join "; " ts)]]
+prodTag (Name f prs) = [tag ts]
   where 
   ts = ["$.name=" ++ showFun f] ++
        ["$.arg" ++ show n ++ "=" ++ argInit (prs!!n) 
@@ -91,10 +110,13 @@ prodTag (Name f prs) = [Tag "tag" [] [Data (join "; " ts)]]
 symItem :: [Profile a] -> Symbol String Token -> Int -> XML
 symItem prs (Cat c) x = Tag "item" [] ([Tag "ruleref" [("uri","#" ++ prCat c)] []]++t)
   where 
-  t = if null ts then [] else [Tag "tag" [] [Data (join "; " ts)]]
+  t = if null ts then [] else [tag ts]
   ts = ["$.arg" ++ show n ++ "=$$" 
             | n <- [0..length prs-1], inProfile x (prs!!n)]
 symItem _ (Tok t) _ = Tag "item" [] [Data (showToken t)]
+
+tag :: [String] -> XML
+tag ts = Tag "tag" [] [Data (join "; " ts)]
 
 inProfile :: Int -> Profile a -> Bool
 inProfile x (Unify xs) = x `elem` xs
