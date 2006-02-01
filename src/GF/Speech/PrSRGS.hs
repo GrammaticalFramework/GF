@@ -57,13 +57,21 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
                               ++ ". " ++ "Original start category: " ++ origStart),
                              meta "generator" ("Grammatical Framework " ++ version 
                                                ++ " (compiled " ++ today ++ ")")]
-			  ++ map ruleToXML rs)
+                            ++ topCatRules
+			    ++ map ruleToXML rs)
     ruleToXML (SRGRule cat origCat alts) = 
 	rule (prCat cat) (comments ["Category " ++ origCat] ++ prRhs isList alts)
       where isList = "List" `isPrefixOf` origCat && length cs == 2
                       && isBase (cs!!0) && isCons (cs!!1)
             cs = sortNub [f | SRGAlt _ (Name f _) _ <- alts]
     prRhs isList rhss = [oneOf (map (mkProd sisr isList) rhss)] 
+    -- externally visible rules for each of the GF categories
+    topCatRules = [topRule tc [oneOf (map it cs)] | (tc,cs) <- topCats]
+        where topCats = buildMultiMap [(gfCat origCat, cat) | SRGRule cat origCat _ <- rs]
+              gfCat = takeWhile (/='{')
+              it c = symItem [] (Cat c) 0
+              topRule i is = Tag "rule" [("id",i),("scope","public")] 
+                             (is ++ [tag ["$ = $$"]])
 
 rule :: String -> [XML] -> XML
 rule i = Tag "rule" [("id",i)]
