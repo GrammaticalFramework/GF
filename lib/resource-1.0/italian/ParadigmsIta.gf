@@ -1,6 +1,6 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
 
---1 French Lexical Paradigms
+--1 Italian Lexical Paradigms
 --
 -- Aarne Ranta 2003
 --
@@ -11,7 +11,7 @@
 -- Closed categories (determiners, pronouns, conjunctions) are
 -- accessed through the resource syntax API, $Structural.gf$. 
 --
--- The main difference with $MorphoFre.gf$ is that the types
+-- The main difference with $MorphoIta.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
 -- had the design principle of always having existing forms, rather
 -- than stems, as string arguments of the paradigms.
@@ -24,14 +24,15 @@
 -- separate module $IrregularEng$, which covers all irregularly inflected
 -- words.
 
-resource ParadigmsFre = 
+resource ParadigmsIta = 
   open 
     (Predef=Predef), 
     Prelude, 
     CommonRomance, 
-    ResFre, 
-    MorphoFre, 
-    CatFre in {
+    ResIta, 
+    MorphoIta, 
+    BeschIta,
+    CatIta in {
 
   flags optimize=all ;
 
@@ -65,21 +66,23 @@ oper
 
   mkPreposition : Str -> Preposition ;
 
-
 --2 Nouns
 
 -- Worst case: give both two forms and the gender. 
 
-  mkN  : (oeil,yeux : Str) -> Gender -> N ;
+  mkN  : (uomi,uomini : Str) -> Gender -> N ;
 
 -- The regular function takes the singular form and the gender,
--- and computes the plural by a heuristic. The heuristic currently
--- covers the cases "pas-pas", "prix-prix", "nez-nez", 
--- "bijou-bijoux", "cheveu-cheveux", "plateau-plateaux", "cheval-chevaux".
--- If in doubt, use the $cc$ command to test!
+-- and computes the plural and the gender by a heuristic. 
+-- The heuristic says that the gender is feminine for nouns
+-- ending with "a", and masculine for all other words.
 
-  regN : Str -> Gender -> N ;
+  regN : Str -> N ;
 
+-- To force a different gender, use one of the following functions.
+
+  mascN : N -> N ;
+  femN  : N -> N ;
 
 --3 Compound nouns 
 --
@@ -93,17 +96,17 @@ oper
 
 --3 Relational nouns 
 -- 
--- Relational nouns ("fille de x") need a case and a preposition. 
+-- Relational nouns ("figlio di x") need a case and a preposition. 
 
   mkN2 : N -> Preposition -> N2 ;
 
--- The most common cases are the genitive "de" and the dative "à", 
+-- The most common cases are the genitive "di" and the dative "a", 
 -- with the empty preposition.
 
-  deN2 : N -> N2 ;
+  diN2 : N -> N2 ;
   aN2  : N -> N2 ;
 
--- Three-place relational nouns ("la connection de x à y") need two prepositions.
+-- Three-place relational nouns ("la connessione di x a y") need two prepositions.
 
   mkN3 : N -> Preposition -> Preposition -> N3 ;
 
@@ -129,16 +132,13 @@ oper
 
 --2 Adjectives
 
--- Non-comparison one-place adjectives need four forms in the worst
+-- Non-comparison one-place adjectives need five forms in the worst
 -- case (masc and fem singular, masc plural, adverbial).
 
-  mkA : (banal,banale,banaux,banalement : Str) -> A ;
+  mkA : (solo,sola,soli,sole, solamente : Str) -> A ;
 
 -- For regular adjectives, all other forms are derived from the
--- masculine singular. The heuristic takes into account certain
--- deviant endings: "banal- -banaux", "chinois- -chinois", 
--- "heureux-heureuse-heureux", "italien-italienne", "jeune-jeune",
--- "amer-amère", "carré- - -carrément", "joli- - -joliment".
+-- masculine singular. 
 
   regA : Str -> A ;
 
@@ -158,23 +158,20 @@ oper
 --3 Comparison adjectives 
 
 -- Comparison adjectives are in the worst case put up from two
--- adjectives: the positive ("bon"), and the comparative ("meilleure"). 
+-- adjectives: the positive ("buono"), and the comparative ("migliore"). 
 
   mkADeg : A -> A -> A ;
 
--- If comparison is formed by "plus", as usual in French,
+-- If comparison is formed by "più", as usual in Italian,
 -- the following pattern is used:
 
   compADeg : A -> A ;
 
--- From a given $A$, it is possible to get back to $A$.
+-- The regular pattern is the same as $regA$ for plain adjectives, 
+-- with comparison by "plus".
 
-  adegA : A -> A ;
+  regADeg : Str -> A ;
 
--- For prefixed adjectives, the following function is
--- provided.
-
-  prefA : A -> A ;
 
 --2 Adverbs
 
@@ -183,7 +180,7 @@ oper
 
   mkAdv : Str -> Adv ;
 
--- Some appear next to the verb (e.g. "toujours").
+-- Some appear next to the verb (e.g. "sempre").
 
   mkAdV : Str -> AdV ;
 
@@ -194,10 +191,6 @@ oper
 
 --2 Verbs
 --
--- Irregular verbs are given in the module $VerbsFre$. 
--- If a verb should be missing in that list, the module
--- $BeschFre$ gives all the patterns of the "Bescherelle" book.
--- 
 -- Regular verbs are ones with the infinitive "er" or "ir", the
 -- latter with plural present indicative forms as "finissons".
 -- The regular verb function is the first conjugation recognizes
@@ -206,18 +199,18 @@ oper
 
   regV : Str -> V ;
 
--- Sometimes, however, it is not predictable which variant of the "er"
--- conjugation is to be selected. Then it is better to use the function
--- that gives the third person singular present indicative and future 
--- (("il") "jette", "jettera") as second argument.
+-- The module $BeschIta$ gives all the patterns of the "Bescherelle"
+-- book. To use them in the category $V$, wrap them with the function
 
-  reg3V : (jeter,jette,jettera : Str) -> V ;
+  verboV : Verbo -> V ;
 
--- The function $regV$ gives all verbs the compound auxiliary "avoir".
--- To change it to "être", use the following function. Reflexive implies "être".
+-- The function $regV$ gives all verbs the compound auxiliary "avere".
+-- To change it to "essere", use the following function.
+-- Reflexive implies "essere".
 
-  etreV : V -> V ;
+  essereV : V -> V ;
   reflV : V -> V ;
+
 
 --3 Two-place verbs
 --
@@ -240,6 +233,7 @@ oper
   mkV3     : V -> Preposition -> Preposition -> V3 ; -- parler, à, de
   dirV3    : V -> Preposition -> V3 ;                -- donner,_,à
   dirdirV3 : V -> V3 ;                               -- donner,_,_
+
 
 --3 Other complement patterns
 --
@@ -272,14 +266,15 @@ oper
   V0, V2S, V2V, V2A, V2Q : Type ;
   AS, A2S, AV, A2V : Type ;
 
---2 Definitions of the paradigms
+
+--2 The definitions of the paradigms
 --
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
 
-  Gender = MorphoFre.Gender ; 
-  Number = MorphoFre.Number ;
+  Gender = MorphoIta.Gender ; 
+  Number = MorphoIta.Number ;
   masculine = Masc ;
   feminine = Fem ;
   singular = Sg ;
@@ -291,49 +286,73 @@ oper
   dative = complDat ;
   mkPreposition p = {s = p ; c = Acc ; isDir = False} ;
 
-  mkN x y g = mkCNomIrreg x y g ** {lock_N = <>} ;
-  regN x g = mkNomReg x g ** {lock_N = <>} ;
+  mkN x y g = mkNounIrreg x y g ** {lock_N = <>} ;
+  regN x = mkNomReg x ** {lock_N = <>} ;
   compN x y = {s = \\n => x.s ! n ++ y ; g = x.g ; lock_N = <>} ;
+  femN x = {s = x.s ; g = feminine ; lock_N = <>} ;
+  mascN x = {s = x.s ; g = masculine ; lock_N = <>} ;
+
 
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
-  deN2 n = mkN2 n genitive ;
+  diN2 n = mkN2 n genitive ;
   aN2 n = mkN2 n dative ;
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
   mkPN x g = {s = x ; g = g} ** {lock_PN = <>} ;
   mkNP x g n = {s = (pn2np (mkPN x g)).s; a = agrP3 g n ; c = Clit0} ** {lock_NP = <>} ;
 
-  mkA a b c d = compADeg {s = \\_ => (mkAdj a c b d).s ; isPre = False ; lock_A = <>} ;
+  mkA a b c d e = 
+   compADeg {s = \\_ => (mkAdj a b c d e).s ; isPre = False ; lock_A = <>} ;
   regA a = compADeg {s = \\_ => (mkAdjReg a).s ; isPre = False ; lock_A = <>} ;
   prefA a = {s = a.s ; isPre = True ; lock_A = <>} ;
 
   mkA2 a p = a ** {c2 = p ; lock_A2 = <>} ;
 
   mkADeg a b = 
-    {s = table {Posit => a.s ! Posit ; _ => b.s ! Posit} ; isPre = a.isPre ; lock_A = <>} ;
+   {s = table {Posit => a.s ! Posit ; _ => b.s ! Posit} ; 
+    isPre = a.isPre ; lock_A = <>} ;
   compADeg a = 
-    {s = table {Posit => a.s ! Posit ; _ => \\f => "plus" ++ a.s ! Posit ! f} ; 
+    {s = table {Posit => a.s ! Posit ; _ => \\f => "più" ++ a.s ! Posit ! f} ; 
      isPre = a.isPre ;
      lock_A = <>} ;
-  prefA a = {s = a.s ; isPre = True ; lock_A = <>} ;
-
+  regADeg a = compADeg (regA a) ;
 
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
-  regV x = let v = vvf (mkVerbReg x) in {s = v ; vtyp = VHabere ; lock_V = <>} ;
-  reg3V x y z = let v = vvf (mkVerb3Reg x y z) in {s = v ; vtyp = VHabere ; lock_V = <>} ;
-  etreV v = {s = v.s ; vtyp = VEsse ; lock_V = <>} ;
+  regV x = 
+    let 
+      are = Predef.dp 3 x ;
+      ci  = Predef.dp 2 (Predef.tk 3 x) ;
+      i   = last ci ;
+      verb = case are of {
+        "ire" =>  finire_100 x ;
+        _ => case i of {
+          "c" => cercare_7 x ;
+          "g" => legare_8 x ;
+          _ => case ci of {
+            "ci" => cominciare_9 x ;
+            "gi" => mangiare_10 x ;
+           _    => amare_6 x
+            }
+          }
+        }
+    in verbBesch verb ** {vtyp = VHabere ; lock_V = <>} ;
+
+  verboV ve = verbBesch ve ** {vtyp = VHabere ; lock_V = <>} ;
+
+  essereV v = {s = v.s ; vtyp = VEsse ; lock_V = <>} ;
   reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;
 
-  mkV2 v p = v ** {c2 = p ; lock_V2 = <>} ;
+  mkV2 v p = {s = v.s ; vtyp = v.vtyp ; c2 = p ; lock_V2 = <>} ;
   dirV2 v = mkV2 v accusative ;
   v2V v = v ** {lock_V = <>} ;
 
-  mkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
-  dirV3 v p = mkV3 v complAcc p ;
-  dirdirV3 v = dirV3 v complDat ;
+  mkV3 v p q = {s = v.s ; vtyp = v.vtyp ; 
+    c2 = p ; c3 = q ; lock_V3 = <>} ;
+  dirV3 v p = mkV3 v accusative p ;
+  dirdirV3 v = dirV3 v dative ;
 
   V0 : Type = V ;
   V2S, V2V, V2Q, V2A : Type = V2 ;

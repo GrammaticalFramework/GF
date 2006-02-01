@@ -25,6 +25,8 @@ resource CommonRomance = ParamRomance ** open Prelude in {
 
     Noun = {s : Number => Str ; g : Gender} ;
 
+    Adj = {s : AForm => Str} ;
+
     VP : Type = {
       s : VPForm => {
         fin : Agr  => Str ;             -- ai  

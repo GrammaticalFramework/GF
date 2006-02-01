@@ -78,8 +78,6 @@ oper
 -- Adjectives are conveniently seen as gender-dependent nouns.
 -- Here are some patterns. First one that describes the worst case.
 
-  Adj = {s : AForm => Str} ;
-
   mkAdj : (_,_,_,_ : Str) -> Adj = \vieux,vieuxs,vieille,vieillement ->
     {s = table {
        AF Masc n => numForms vieux vieuxs ! n ;
