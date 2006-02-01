@@ -569,10 +569,14 @@ q, quit: q
     -printer=jsgf           Java Speech Grammar Format
     -printer=srgs_xml       SRGS XML format
     -printer=srgs_xml_prob  SRGS XML format, with weights
+    -printer=srgs_xml_ms_sem SRGS XML format, with semantic tags for the
+                             Microsoft Speech API.
     -printer=slf            a finite automaton in the HTK SLF format
     -printer=slf_graphviz   the same automaton as slf, but in Graphviz format
-    -printer=slf_sub        a finite automaton with sub-automata in the HTK SLF format
-    -printer=slf_sub_graphviz the same automaton as slf_sub, but in Graphviz format
+    -printer=slf_sub        a finite automaton with sub-automata in the 
+                            HTK SLF format
+    -printer=slf_sub_graphviz the same automaton as slf_sub, but in  
+                              Graphviz format
     -printer=fa_graphviz    a finite automaton with labelled edges
     -printer=regular        a regular grammar in a simple BNF
     -printer=unpar          a gfc grammar with parameters eliminated

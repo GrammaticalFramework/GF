@@ -32,7 +32,7 @@ import GF.Speech.SRG
 jsgfPrinter :: Ident -- ^ Grammar name
 	   -> Options -> Maybe Probs -> CGrammar -> String
 jsgfPrinter name opts probs cfg = prJSGF srg ""
-    where srg = makeSRG name opts probs cfg
+    where srg = makeSimpleSRG name opts probs cfg
 
 prJSGF :: SRG -> ShowS
 prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
@@ -49,7 +49,7 @@ prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
 	comments [origCat] . nl
         . prCat cat . showString " = " . joinS " | " (map prAlt rhs) . nl
     -- FIXME: use the probability
-    prAlt (SRGAlt mp rhs)
+    prAlt (SRGAlt mp _ rhs)
 	| null rhs' = showString "<NULL>"
 	| otherwise = wrap "(" (unwordsS (map prSymbol rhs')) ")"
 	    where rhs' = rmPunct rhs

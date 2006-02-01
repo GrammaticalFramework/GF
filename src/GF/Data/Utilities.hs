@@ -73,7 +73,12 @@ sortNub = map head . group . sort
 
 -- | Like 'nubBy', but more efficient as it uses sorting internally.
 sortNubBy :: (a -> a -> Ordering) -> [a] -> [a]
-sortNubBy f = map head . groupBy (compareEq f) . sortBy f
+sortNubBy f = map head . sortGroupBy f
+
+-- | Sorts and then groups elements given and ordering of the 
+--   elements.
+sortGroupBy :: (a -> a -> Ordering) -> [a] -> [[a]]
+sortGroupBy f = groupBy (compareEq f) . sortBy f
 
 -- | Take the union of a list of lists.
 unionAll :: Eq a => [[a]] -> [a]

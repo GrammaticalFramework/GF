@@ -249,11 +249,14 @@ customGrammarPrinter =
                             in jsgfPrinter name opts Nothing $ stateCFG s)
   ,(strCI "srgs_xml", \s -> let opts = stateOptions s
                                 name = cncId s
-                             in srgsXmlPrinter name opts Nothing $ stateCFG s)
+                             in srgsXmlPrinter name opts False Nothing $ stateCFG s)
   ,(strCI "srgs_xml_prob", \s -> let opts = stateOptions s
                                      name = cncId s
                                      probs = stateProbs s
-                             in srgsXmlPrinter name opts (Just probs) $ stateCFG s)
+                             in srgsXmlPrinter name opts False (Just probs) $ stateCFG s)
+  ,(strCI "srgs_xml_ms_sem", \s -> let opts = stateOptions s
+                                       name = cncId s
+                                   in srgsXmlPrinter name opts True Nothing $ stateCFG s)
   ,(strCI "slf",     \s -> let opts = stateOptions s
                                start = getStartCat opts
                                name = cncId s

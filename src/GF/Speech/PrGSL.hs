@@ -33,7 +33,7 @@ import Data.Char (toUpper,toLower)
 gslPrinter :: Ident -- ^ Grammar name
 	   -> Options -> Maybe Probs -> CGrammar -> String
 gslPrinter name opts probs cfg = prGSL srg ""
-    where srg = makeSRG name opts probs cfg
+    where srg = makeSimpleSRG name opts probs cfg
 
 prGSL :: SRG -> ShowS
 prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
@@ -48,7 +48,7 @@ prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
 	showString "; " . prtS origCat . nl
         . prCat cat . sp . wrap "[" (unwordsS (map prAlt rhs)) "]" . nl
     -- FIXME: use the probability
-    prAlt (SRGAlt mp rhs) = wrap "(" (unwordsS (map prSymbol rhs')) ")"
+    prAlt (SRGAlt mp _ rhs) = wrap "(" (unwordsS (map prSymbol rhs')) ")"
 	where rhs' = rmPunct rhs
     prSymbol (Cat c) = prCat c
     prSymbol (Tok t) = wrap "\"" (showString (showToken t)) "\""
