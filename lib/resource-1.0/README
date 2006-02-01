@@ -27,9 +27,16 @@ The main changes from 0.9 to 1.0 are
 3. Some constructions have been dropped out or modified. This concerns
    in particular the determiner structure in the module Noun. Also the
    number of verb subcategorization patterns is lower: predication can
-   be done by adding adverbs instead.
+   be done by adding adverbs instead. Also the division between A and ADeg
+   is eliminated.
 
-4. Judging from the English implementation, there is a promise to get
+4. The implementation is more direct; there is no "SyntaxX" variant of
+   each rule as in 0.9. The ease to find definitions and change them
+   weighs many times more than the abstraction attained by indirection,
+   in this case. Also compilation time and amount of generated code (gfr)
+   decreases quite a bit.
+
+5. Judging from the English implementation, there is a promise to get
    a lighter and more efficient resource library, just because of
    lessons learned from earlier implementations.
 
@@ -41,6 +48,8 @@ the new.
 When will it be ready? Hopefully around February 2005.
 
 ---------- later history and status:
+
+ 1/2 Italian added.
 
 26/1 Norwegian added.
 

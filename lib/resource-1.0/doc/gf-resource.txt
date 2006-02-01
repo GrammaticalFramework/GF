@@ -972,7 +972,7 @@ The structure looks like this.
  | Finnish   | X    | +    | -    | X         | X       | 0
  | French    | X    | X    | X    | X         | X       | X
  | German    | X    | -    | X    | X         | -       | -
- | Italian   | X    | X    | -    | X         | X       | X
+ | Italian   | X    | X    | X    | X         | X       | X
  | Norwegian | -    | X    | X    | X         | X       | X
  | Russian   | X    | X    | -    | *         | -       | -
  | Spanish   | -    | X    | -    | X         | X       | X

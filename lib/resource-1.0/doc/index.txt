@@ -48,6 +48,7 @@ The documentation of the individual modules:
 
 - [ParadigmsEng gfdoc/ParadigmsEng.html]: English lexical paradigms
 - [ParadigmsFre gfdoc/ParadigmsFre.html]: French lexical paradigms
+- [ParadigmsIta gfdoc/ParadigmsIta.html]: Italian lexical paradigms
 - [ParadigmsGer gfdoc/ParadigmsGer.html]: German lexical paradigms
 - [ParadigmsNor gfdoc/ParadigmsNor.html]: Norwegian lexical paradigms
 - [ParadigmsSwe gfdoc/ParadigmsSwe.html]: Swedish lexical paradigms
