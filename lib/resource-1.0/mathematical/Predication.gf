@@ -9,30 +9,28 @@ abstract Predication = Cat ** {
 
 --2 The category of atomic sentences
 
--- These sentences have both a positive and a negative form
-
-cat
-  AS ;
+-- We want to use sentences in positive and negative forms but do not care about
+-- tenses.
 
 fun
-  PosAS : AS -> S ;
-  NegAS : AS -> S ;
+  PosCl     : Cl -> S ;                -- positive sentence:   "x intersects y"
+  NegCl     : Cl -> S ;                -- negative sentence:   "x doesn't intersect y"
 
 --2 Predication patterns.
 
-  predV     : V  -> NP -> AS ;         -- one-place verb:      "x converges"
-  predV2    : V2 -> NP -> NP -> AS ;   -- two-place verb:      "x intersects y"
-  predV3    : V3 -> NP->NP-> NP -> AS; -- three-place verb:    "x intersects y at z"
-  predVColl : V  -> NP -> NP -> AS ;   -- collective verb:     "x and y intersect"
-  predA     : A  -> NP -> AS ;         -- one-place adjective: "x is even"
-  predA2    : A2 -> NP -> NP -> AS ;   -- two-place adj:       "x is divisible by y"
-  predAComp : A  -> NP -> NP -> AS;    -- comparative adj:     "x is greater than y"
-  predAColl : A  -> NP -> NP -> AS ;   -- collective adj:      "x and y are parallel"
-  predN     : N  -> NP -> AS ;         -- one-place noun:      "x is a point"
-  predN2    : N2 -> NP -> NP -> AS ;   -- two-place noun:      "x is a divisor of y"
-  predNColl : N  -> NP -> NP -> AS ;   -- collective noun:     "x and y are duals"
-  predAdv   : Adv -> NP -> AS ;        -- adverb:              "x is inside"
-  predPrep  : Prep -> NP -> NP -> AS ; -- preposition:         "x is outside y"
+  predV     : V  -> NP -> Cl ;         -- one-place verb:      "x converges"
+  predV2    : V2 -> NP -> NP -> Cl ;   -- two-place verb:      "x intersects y"
+  predV3    : V3 -> NP->NP-> NP -> Cl; -- three-place verb:    "x intersects y at z"
+  predVColl : V  -> NP -> NP -> Cl ;   -- collective verb:     "x and y intersect"
+  predA     : A  -> NP -> Cl ;         -- one-place adjective: "x is even"
+  predA2    : A2 -> NP -> NP -> Cl ;   -- two-place adj:       "x is divisible by y"
+  predAComp : A  -> NP -> NP -> Cl;    -- comparative adj:     "x is greater than y"
+  predAColl : A  -> NP -> NP -> Cl ;   -- collective adj:      "x and y are parallel"
+  predN     : N  -> NP -> Cl ;         -- one-place noun:      "x is a point"
+  predN2    : N2 -> NP -> NP -> Cl ;   -- two-place noun:      "x is a divisor of y"
+  predNColl : N  -> NP -> NP -> Cl ;   -- collective noun:     "x and y are duals"
+  predAdv   : Adv -> NP -> Cl ;        -- adverb:              "x is inside"
+  predPrep  : Prep -> NP -> NP -> Cl ; -- preposition:         "x is outside y"
 
 --2 Individual-valued function applications
 
