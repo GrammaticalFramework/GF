@@ -99,6 +99,11 @@ tableSet x y [] = [(x,y)]
 tableSet x y (p@(x',_):xs) | x' == x = (x,y):xs
                            | otherwise = p:tableSet x y xs
 
+-- | Group tuples by their first elements.
+buildMultiMap :: Ord a => [(a,b)] -> [(a,[b])]
+buildMultiMap = map (\g -> (fst (head g), map snd g) )
+                 . sortGroupBy (compareBy fst)
+
 -- * equality functions
 
 -- | Use an ordering function as an equality predicate.
