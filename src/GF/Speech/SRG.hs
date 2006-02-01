@@ -18,13 +18,16 @@
 -- FIXME: figure out name prefix from grammar name
 -----------------------------------------------------------------------------
 
-module GF.Speech.SRG where
+module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..),
+                      makeSimpleSRG, makeSRG
+                     , lookupFM_, prtS) where
 
 import GF.Data.Operations
 import GF.Data.Utilities
 import GF.Infra.Ident
 import GF.Formalism.CFG
-import GF.Formalism.Utilities (Symbol(..))
+import GF.Formalism.Utilities (Symbol(..), NameProfile(..)
+                              , Profile, SyntaxForest)
 import GF.Conversion.Types
 import GF.Infra.Print
 import GF.Speech.TransformCFG
@@ -48,8 +51,8 @@ data SRGRule = SRGRule String String [SRGAlt] -- ^ SRG category name, original c
 	                                      --   and productions
 	     deriving (Eq,Show)
 
--- | maybe a probability, and a list of symbols
-data SRGAlt = SRGAlt (Maybe Double) [Symbol String Token]
+-- | maybe a probability, a rule name and a list of symbols
+data SRGAlt = SRGAlt (Maybe Double) Name [Symbol String Token]
 	      deriving (Eq,Show)
 
 -- | SRG category name and original name
@@ -57,12 +60,34 @@ type CatName = (String,String)
 
 type CatNames = FiniteMap String String
 
+-- | Create a non-left-recursive SRG. 
+--   FIXME: the probabilities, names and profiles in the returned 
+--   grammar may be meaningless.
+makeSimpleSRG :: Ident     -- ^ Grammar name
+	      -> Options   -- ^ Grammar options
+	      -> Maybe Probs -- ^ Probabilities
+	      -> CGrammar -- ^ A context-free grammar
+	      -> SRG
+makeSimpleSRG 
+    = makeSRG_ (removeLeftRecursion . removeIdenticalRules . removeEmptyCats)
+
+-- | Create a SRG preserving the names, profiles and probabilities of the 
+--   input grammar. The returned grammar may be left-recursive.
 makeSRG :: Ident     -- ^ Grammar name
 	-> Options   -- ^ Grammar options
 	-> Maybe Probs -- ^ Probabilities
 	-> CGrammar -- ^ A context-free grammar
 	-> SRG
-makeSRG i opts probs gr 
+makeSRG = makeSRG_ removeEmptyCats
+
+makeSRG_ :: (CFRules -> CFRules) -- ^ Transformations to apply to the
+                                 --   CFG before converting to SRG
+         -> Ident     -- ^ Grammar name
+	 -> Options   -- ^ Grammar options
+	 -> Maybe Probs -- ^ Probabilities
+	 -> CGrammar -- ^ A context-free grammar
+	 -> SRG
+makeSRG_ f i opts probs gr 
     = SRG { grammarName = name,
 	    startCat = lookupFM_ names origStart,
 	    origStartCat = origStart,
@@ -72,21 +97,19 @@ makeSRG i opts probs gr
     name = prIdent i
     origStart = getStartCat opts
     l = fromMaybe "en_UK" (getOptVal opts speechLanguage)
-    gr' = removeLeftRecursion $ removeIdenticalRules $ removeEmptyCats $ cfgToCFRules gr
+    gr' = f (cfgToCFRules gr)
     (cats,cfgRules) = unzip gr'
     names = mkCatNames name cats
     rs = map (cfgRulesToSRGRule names probs) cfgRules
 
-
--- FIXME: probabilities get larger than 1.0 when new rules are
--- introduced
--- FIXME: merge alternatives with same rhs but different probabilities
+-- FIXME: merge alternatives with same rhs and profile but different probabilities
 cfgRulesToSRGRule :: FiniteMap String String -> Maybe Probs -> [CFRule_] -> SRGRule
 cfgRulesToSRGRule names probs rs@(r:_) = SRGRule cat origCat rhs
     where origCat = lhsCat r
 	  cat = lookupFM_ names origCat
 	  rhs = nub $ map ruleToAlt rs
-	  ruleToAlt r = SRGAlt (ruleProb probs r) (map renameCat (ruleRhs r))
+	  ruleToAlt r@(CFRule c ss n) 
+              = SRGAlt (ruleProb probs r) n (map renameCat ss)
 	  renameCat (Cat c) = Cat (lookupFM_ names c)
 	  renameCat t = t
 

@@ -37,6 +37,7 @@ import Control.Monad
 import Data.FiniteMap
 import Data.List
 import Data.Maybe (fromMaybe)
+import Data.Monoid (mconcat)
 import Data.Set (Set)
 import qualified Data.Set as Set
 
@@ -77,14 +78,13 @@ removeEmptyCats = fix removeEmptyCats'
 	emptyCats = filter (nothingOrNull . flip lookup rs) allCats
 	k' = map (\ (c,xs) -> (c, filter (not . anyUsedBy emptyCats) xs)) keep
 
--- | Remove rules which are identical, not caring about the rule names.
---   FIXME: this messes up probabilities
+-- | Remove rules which have the same rhs. 
+--   FIXME: this messes up probabilities, names and profiles
 removeIdenticalRules :: CFRules -> CFRules
-removeIdenticalRules g = [(c,sortNubBy compareCatAndRhs rs) | (c,rs) <- g]
-    where compareCatAndRhs (CFRule c1 ss1 _) (CFRule c2 ss2 _) = 
-              case c1 `compare` c2 of
-                                   EQ -> ss1 `compare` ss2
-                                   o  -> o
+removeIdenticalRules g = [(c,sortNubBy cmpRules rs) | (c,rs) <- g]
+    where 
+    cmpRules (CFRule c1 ss1 _) (CFRule c2 ss2 _) = 
+              mconcat [c1 `compare` c2, ss1 `compare` ss2]
 
 removeLeftRecursion :: CFRules -> CFRules
 removeLeftRecursion rs = concatMap removeDirectLeftRecursion $ map handleProds rs

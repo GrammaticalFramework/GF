@@ -598,10 +598,14 @@ txtHelpFile =
   "\n    -printer=jsgf           Java Speech Grammar Format" ++
   "\n    -printer=srgs_xml       SRGS XML format" ++
   "\n    -printer=srgs_xml_prob  SRGS XML format, with weights" ++
+  "\n    -printer=srgs_xml_ms_sem SRGS XML format, with semantic tags for the" ++
+  "\n                             Microsoft Speech API." ++
   "\n    -printer=slf            a finite automaton in the HTK SLF format" ++
   "\n    -printer=slf_graphviz   the same automaton as slf, but in Graphviz format" ++
-  "\n    -printer=slf_sub        a finite automaton with sub-automata in the HTK SLF format" ++
-  "\n    -printer=slf_sub_graphviz the same automaton as slf_sub, but in Graphviz format" ++
+  "\n    -printer=slf_sub        a finite automaton with sub-automata in the " ++
+  "\n                            HTK SLF format" ++
+  "\n    -printer=slf_sub_graphviz the same automaton as slf_sub, but in  " ++
+  "\n                              Graphviz format" ++
   "\n    -printer=fa_graphviz    a finite automaton with labelled edges" ++
   "\n    -printer=regular        a regular grammar in a simple BNF" ++
   "\n    -printer=unpar          a gfc grammar with parameters eliminated" ++
