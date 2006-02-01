@@ -38,6 +38,8 @@ import Data.FiniteMap
 data SRG = SRG { grammarName :: String    -- ^ grammar name
 		 , startCat :: String     -- ^ start category name
 		 , origStartCat :: String -- ^ original start category name
+                 , grammarLanguage :: String -- ^ The language for which the grammar 
+                                             --   is intended, e.g. en_UK
 	         , rules :: [SRGRule] 
 	       }
 	 deriving (Eq,Show)
@@ -64,10 +66,12 @@ makeSRG i opts probs gr
     = SRG { grammarName = name,
 	    startCat = lookupFM_ names origStart,
 	    origStartCat = origStart,
+            grammarLanguage = l,
 	    rules = rs }
     where 
     name = prIdent i
     origStart = getStartCat opts
+    l = fromMaybe "en_UK" (getOptVal opts speechLanguage)
     gr' = removeLeftRecursion $ removeIdenticalRules $ removeEmptyCats $ cfgToCFRules gr
     (cats,cfgRules) = unzip gr'
     names = mkCatNames name cats
