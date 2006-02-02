@@ -106,7 +106,7 @@ fun
   defPl_Det : Det ;
 
   amare_V2 : V2 ;
-  licere_V2 : V2 ;
+  placere_V2 : V2 ;
   puella_CN : CN ;
   servus_CN : CN ;
   habilis_AP : AP ;
@@ -138,10 +138,10 @@ lin
     c = Acc
     } ;
 
-  licere_V2 = {
+  placere_V2 = {
     s = \\t,n,p => table (Tense * Number * Person) [
-      "liceo"   ; "lices"   ; "licet"   ; "licemus"   ; "licetis"   ; "licent" ;
-      "licebam" ; "licebas" ; "licebat" ; "licebamus" ; "licebatis" ; "licebant"
+      "placeo"   ; "places"   ; "placet"   ; "placemus"   ; "placetis"   ; "placent" ;
+      "placebam" ; "placebas" ; "placebat" ; "placebamus" ; "placebatis" ; "placebant"
       ] ! <t,n,p> ;
     c = Dat
     } ;
