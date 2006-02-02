@@ -14,7 +14,7 @@ concrete MathematicalFre of Mathematical =
   StructuralFre,
 
   SymbolFre,
-  PredicationFre,
+  PredicationFre - [predV3], ---- gf bug
 
   LexiconFre
   ** {
