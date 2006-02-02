@@ -32,12 +32,16 @@ abstract Noun = Cat ** {
     DetSg : QuantSg ->        Ord -> Det ;  -- this best man
     DetPl : QuantPl -> Num -> Ord -> Det ;  -- these five best men
 
+-- Quantifiers that have both forms can be used in both ways.
+
+    SgQuant : Quant -> QuantSg ;            -- this
+    PlQuant : Quant -> QuantPl ;            -- these
+
 -- Pronouns have possessive forms. Genitives of other kinds
 -- of noun phrases are not given here, since they are not possible
 -- in e.g. Romance languages.
 
-    PossSg : Pron -> QuantSg ;    -- my (house)
-    PossPl : Pron -> QuantPl ;    -- my (houses)
+    PossPron : Pron -> Quant ;    -- my (house)
 
 -- All parts of the determiner can be empty, except $Quant$, which is
 -- the "kernel" of a determiner.
@@ -70,16 +74,14 @@ abstract Noun = Cat ** {
 -- neatly distinct words (Spanish "un, unos ; el, los") but also without
 -- any particular word (Finnish; Swedish definites).
 
-    DefSg   : QuantSg ;           -- the (house)
-    DefPl   : QuantPl ;           -- the (houses)
-    IndefSg : QuantSg ;           -- a (house)
-    IndefPl : QuantPl ;           -- (houses)
+    DefArt   : Quant ;            -- the (house), the (houses)
+    IndefArt : Quant ;            -- a (house), (houses)
 
 -- Nouns can be used without an article as mass nouns. The resource does
 -- not distinguish mass nouns from other common nouns, which can result
 -- in semantically odd expressions.
 
-    MassDet : QuantSg ;           -- (beer)
+    MassDet  : QuantSg ;          -- (beer)
 
 -- Other determiners are defined in [Structural Structural.html].
 

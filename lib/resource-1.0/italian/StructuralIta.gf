@@ -79,21 +79,29 @@ lin
   someSg_Det = {s = \\_,c => prepCase c ++ "qualche" ; n = Sg} ;
   something_NP = pn2np (mkPN ["qualche cosa"] Masc) ;
   somewhere_Adv = ss ["qualche parte"] ;
-  that_Quant = {s = \\g,c => prepCase c ++ genForms "quello" "quella" ! g} ;
+  that_Quant = {
+    s = table {
+      Sg => \\g,c => prepCase c ++ genForms "quello" "quella" ! g ;
+      Pl => \\g,c => prepCase c ++ genForms "quelli" "quelle" ! g ---- quegli
+      }
+    } ;
   that_NP = mkNP ["questo"] Masc Sg ;
   there7from_Adv = ss ["di là"] ;
   there7to_Adv = ss "là" ; --- ci
   there_Adv = ss "là" ;
   therefore_PConj = ss "quindi" ;
   these_NP = mkNP ["queste"] Fem Pl ;
-  these_Quant = {s = \\g,c => prepCase c ++ genForms "questo" "questa" ! g} ;
   they_Pron = mkPronoun
     "loro" "loro" "li" "loro" "loro" "loro" "loro" "loro" 
     Fem Pl P3 Clit1 ;
-  this_Quant = {s = \\g,c => prepCase c ++ genForms "questo" "questa" ! g} ;
+  this_Quant = {
+    s = table {
+      Sg => \\g,c => prepCase c ++ genForms "questo" "questa" ! g ;
+      Pl => \\g,c => prepCase c ++ genForms "questi" "queste" ! g
+      }
+    } ;
   this_NP = pn2np (mkPN ["questo"] Masc) ;
   those_NP = mkNP ["quelle"] Fem Pl ;
-  those_Quant = {s = \\g,c => prepCase c ++ genForms "quelli" "quelle" ! g} ; --- quegli
   through_Prep = mkPreposition "per" ;
   too_AdA = ss "troppo" ;
   to_Prep = complDat ;

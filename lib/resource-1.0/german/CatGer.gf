@@ -50,6 +50,7 @@ concrete CatGer of Cat = TenseX ** open ResGer, Prelude in {
     Pron = {s : NPForm => Str ; a : Agr} ;
     Det = {s : Gender => Case => Str ; n : Number ; a : Adjf} ;
     QuantSg, QuantPl = {s : Gender => Case => Str ; a : Adjf} ;
+    Quant = {s : Number => Gender => Case => Str ; a : Adjf} ;
     Predet = {s : Number => Gender => Case => Str} ;
     Num = {s : Str} ;
     Ord = {s : AForm => Str} ;

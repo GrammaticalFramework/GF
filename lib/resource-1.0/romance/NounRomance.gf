@@ -34,13 +34,11 @@ incomplete concrete NounRomance of Noun =
       n = Pl
       } ;
 
-    PossSg p = {
-      s = \\g,c => prepCase c ++ p.s ! Poss (aagr g Sg) ; 
-      n = Sg
-      } ;
-    PossPl p = {
-      s = \\g,c => prepCase c ++ p.s ! Poss (aagr g Pl) ; 
-      n = Pl
+    SgQuant q = {s = q.s ! Sg} ;
+    PlQuant q = {s = q.s ! Pl} ;
+
+    PossPron p = {
+      s = \\n,g,c => prepCase c ++ p.s ! Poss (aagr g n) ---- il mio!
       } ;
 
     NoNum = {s = \\_ => []} ;
@@ -56,22 +54,12 @@ incomplete concrete NounRomance of Noun =
 
     OrdSuperl adj = {s = \\a => adj.s ! Superl ! AF a.g a.n} ;
 
-    DefSg = {
-      s = \\g,c => artDef g Sg c ; 
-      n = Sg
-      } ;
-    DefPl = {
-      s = \\g,c => artDef g Pl c ;  
-      n = Pl
+    DefArt = {
+      s = \\n,g,c => artDef g n c
       } ;
 
-    IndefSg = {
-      s = \\g,c => artIndef g Sg c ; 
-      n = Sg
-      } ;
-    IndefPl = {
-      s = \\g,c => artIndef g Pl c ; 
-      n = Pl
+    IndefArt = {
+      s = \\n,g,c => artIndef g n c
       } ;
 
     MassDet = {

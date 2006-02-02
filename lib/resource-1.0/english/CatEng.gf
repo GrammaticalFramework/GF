@@ -51,6 +51,7 @@ concrete CatEng of Cat = TenseX ** open ResEng, Prelude in {
     NP, Pron = {s : Case => Str ; a : Agr} ;
     Det = {s : Str ; n : Number} ;
     Predet, QuantSg, QuantPl, Num, Ord = {s : Str} ;
+    Quant = {s : Number => Str} ;
 
 -- Adverb
 

@@ -68,8 +68,9 @@ abstract Cat = Tense ** {
     Pron ;  -- personal pronoun                    e.g. "she"
     Det ;   -- determiner phrase                   e.g. "all the seven"
     Predet; -- predeterminer (prefixed Quant)      e.g. "all"
-    QuantSg;-- quantifier ('nucleus' of sing. Det) e.g. "this"
-    QuantPl;-- quantifier ('nucleus' of plur. Det) e.g. "these"
+    QuantSg;-- quantifier ('nucleus' of sing. Det) e.g. "every"
+    QuantPl;-- quantifier ('nucleus' of plur. Det) e.g. "many"
+    Quant ; -- quantifier with both sg and pl      e.g. "this/these"
     Num ;   -- cardinal number (used with QuantPl) e.g. "seven"
     Ord ;   -- ordinal number (used in Det)        e.g. "seventh"
 

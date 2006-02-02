@@ -67,20 +67,28 @@ concrete StructuralNor of Structural = CatNor **
   something_NP = regNP "noe" "noes" SgNeutr ;
   somewhere_Adv = ss ["et eller annet sted"] ; ---- ?
   that_Quant = 
-    {s = \\_ => genderForms ["den der"] ["det der"] ; n = Sg ; det = DDef Def} ;
+    {s = table {
+       Sg => \\_ => genderForms ["den der"] ["det der"] ; 
+       Pl => \\_,_ => ["de der"]
+       } ;
+     det = DDef Def
+    } ;
   that_NP = regNP ["det der"] ["det ders"] SgNeutr ;
   there_Adv = ss "der" ;
   there7to_Adv = ss "dit" ;
   there7from_Adv = ss "derfra" ;
   therefore_PConj = ss "derfor" ;
   these_NP = regNP ["de her"] ["det hers"] Plg ;
-  these_Quant = {s = \\_,_ => ["de her"] ; n = Pl ; det = DDef Def} ;
   they_Pron = MorphoNor.mkNP "de" "dem" "deres" "deres" "deres" Plg P1 ;
   this_Quant = 
-    {s = \\_ => genderForms ["den her"] ["det her"] ; n = Sg ; det = DDef Def} ;
+    {s = table {
+       Sg => \\_ => genderForms ["den her"] ["det her"] ; 
+       Pl => \\_,_ => ["de her"]
+       } ;
+     det = DDef Def
+    } ;
   this_NP = regNP ["det her"] ["det hers"] SgNeutr ;
   those_NP = regNP ["de der"] ["de ders"] Plg ;
-  those_Quant = {s = \\_,_ => ["de der"] ; n = Pl ; det = DDef Def} ;
   through_Prep = ss "gjennom" ;
   too_AdA = ss "for" ;
   to_Prep = ss "til" ;

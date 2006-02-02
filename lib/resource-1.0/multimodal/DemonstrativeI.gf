@@ -82,9 +82,9 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat **
     that_MNP = mkDem NP that_NP ;
 
     thisDet_MNP cn = 
-      mkDem NP (DetCN (DetSg this_Quant NoOrd) cn) ;
+      mkDem NP (DetCN (DetSg (SgQuant this_Quant) NoOrd) cn) ;
     thatDet_MNP cn = 
-      mkDem NP (DetCN (DetSg that_Quant NoOrd) cn) ;
+      mkDem NP (DetCN (DetSg (SgQuant that_Quant) NoOrd) cn) ;
 
     here_MAdv      = mkDem Adv here_Adv ;
     here7from_MAdv = mkDem Adv here7from_Adv ;

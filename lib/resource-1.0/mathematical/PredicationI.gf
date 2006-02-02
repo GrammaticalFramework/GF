@@ -17,19 +17,21 @@ lin
   predAComp a x y = PredVP x (UseComp (CompAP (ComparA a y))) ;
   predAColl a x y = 
     PredVP (ConjNP and_Conj (BaseNP x y)) (UseComp (CompAP (PositA a))) ;
-  predN n x = PredVP x (UseComp (CompNP (DetCN (DetSg IndefSg NoOrd) (UseN n)))) ;
+  predN n x = 
+    PredVP x (UseComp (CompNP (DetCN (DetSg (SgQuant IndefArt) NoOrd) (UseN n)))) ;
   predN2 n x y = 
-    PredVP x (UseComp (CompNP (DetCN (DetSg IndefSg NoOrd) (ComplN2 n y)))) ;
+    PredVP x (UseComp (CompNP (DetCN (DetSg (SgQuant IndefArt) NoOrd) (ComplN2 n y)))) ;
   predNColl n x y = PredVP (ConjNP and_Conj (BaseNP x y)) 
-    (UseComp (CompNP (DetCN (DetPl IndefPl NoNum NoOrd) (UseN n)))) ;
+    (UseComp (CompNP (DetCN (DetPl (PlQuant IndefArt) NoNum NoOrd) (UseN n)))) ;
   predAdv a x = PredVP x (UseComp (CompAdv a)) ;
   predPrep p x y = PredVP x (UseComp (CompAdv (PrepNP p y))) ;
 
 --2 Individual-valued function applications
 
-  appN2 n x = DetCN (DetSg DefSg NoOrd) (ComplN2 n x) ;
-  appN3 n x y = DetCN (DetSg DefSg NoOrd) (ComplN2 (ComplN3 n x) y) ;
-  appColl n x y = DetCN (DetSg DefSg NoOrd) (ComplN2 n (ConjNP and_Conj (BaseNP x y))) ;
+  appN2 n x = DetCN (DetSg (SgQuant DefArt) NoOrd) (ComplN2 n x) ;
+  appN3 n x y = DetCN (DetSg (SgQuant DefArt) NoOrd) (ComplN2 (ComplN3 n x) y) ;
+  appColl n x y = 
+    DetCN (DetSg (SgQuant DefArt) NoOrd) (ComplN2 n (ConjNP and_Conj (BaseNP x y))) ;
 
 --2 Families of types
 
@@ -43,6 +45,6 @@ lin
 
 -- This is similar to a family except that the argument is a type.
 
-  typN2 f n = ComplN2 f (DetCN (DetPl IndefPl NoNum NoOrd) n) ;
+  typN2 f n = ComplN2 f (DetCN (DetPl (PlQuant IndefArt) NoNum NoOrd) n) ;
 
 }

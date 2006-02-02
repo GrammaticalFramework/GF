@@ -82,19 +82,17 @@ concrete StructuralGer of Structural = CatGer **
       } ;
   something_NP = nameNounPhrase {s = \\_ => "etwas"} ;
   somewhere_Adv = ss "irgendwo" ;
-  that_Quant = detLikeAdj Sg "jen" ;
+  that_Quant = {s = \\n => (detLikeAdj n "jen").s ; a = Weak} ;
   that_NP = nameNounPhrase {s = caselist "das" "das" "denem" "dessen"} ; ----
   there_Adv = ss "da" ;
   there7to_Adv = ss "dahin" ;
   there7from_Adv = ss ["daher"] ;
   therefore_PConj = ss "deshalb" ;
   these_NP = {s = caselist "diese" "diese" "diesen" "dieser" ; a = agrP3 Pl} ;
-  these_Quant = detLikeAdj Pl "dies" ;
   they_Pron = mkPronPers "sie" "sie" "ihnen" "ihrer" "ihr" Pl P3 ;
-  this_Quant = detLikeAdj Sg "dies" ;
+  this_Quant = {s = \\n => (detLikeAdj n "dies").s ; a = Weak} ;
   this_NP = nameNounPhrase {s = caselist "dies" "dies" "diesem" "dieses"} ; ----
   those_NP = {s = caselist "jene" "jene" "jenen" "jener" ; a = agrP3 Pl} ;
-  those_Quant = detLikeAdj Pl "jen" ;
   through_Prep = mkPrep "durch" Acc ;
   too_AdA = ss "zu" ;
   to_Prep = mkPrep "nach" Dat ;

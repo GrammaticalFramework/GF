@@ -39,14 +39,19 @@ incomplete concrete NounScand of Noun =
       det = quant.det
       } ;
 
-    PossSg p = {
-      s = \\_,g => p.s ! NPPoss (gennum g Sg) ; 
+    SgQuant quant = {
+      s = quant.s ! Sg ;
       n = Sg ;
-      det = DDef Indef
+      det = quant.det
       } ;
-    PossPl p = {
-      s = \\_,_ => p.s ! NPPoss Plg ; 
+    PlQuant quant = {
+      s = quant.s ! Pl ;
       n = Pl ;
+      det = quant.det
+      } ;
+
+    PossPron p = {
+      s = \\n,_,g => p.s ! NPPoss (gennum g n) ; 
       det = DDef Indef
       } ;
 
@@ -63,19 +68,18 @@ incomplete concrete NounScand of Noun =
 
     OrdSuperl a = {s = a.s ! AF (ASuperl SupWeak) Nom ; isDet = True} ;
 
-    DefSg = {
-      s = \\b,g => if_then_Str b (artDef (gennum g Sg)) [] ; 
-      n = Sg ; 
-      det = DDef detDef
-      } ;
-    DefPl = {
-      s = \\b,_ => if_then_Str b (artDef Plg) [] ; 
-      n = Pl ; 
+    DefArt = {
+      s = \\n,b,g => if_then_Str b (artDef (gennum g n)) [] ; 
       det = DDef detDef
       } ;
 
-    IndefSg = {s = \\_ => artIndef  ; n = Sg ; det = DIndef} ;
-    IndefPl = {s = \\_,_ => [] ; n = Pl ; det = DIndef} ;
+    IndefArt = {
+      s = table {
+        Sg => \\_ => artIndef ; 
+        Pl => \\_,_ => []
+        } ; 
+      det = DIndef
+      } ;
 
     MassDet = {s = \\_,_ => [] ; n = Sg ; det = DIndef} ;
 
