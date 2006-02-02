@@ -41,7 +41,7 @@
 <P></P>
 <P>
 Author: 
-Last update: Tue Jan 31 18:15:46 2006
+Last update: Thu Feb  2 16:24:09 2006
 </P>
 <P>
 Produced by 
@@ -344,10 +344,11 @@ that gives the third person singular present indicative and future
 <P></P>
 <P>
 The function <CODE>regV</CODE> gives all verbs the compound auxiliary <I>avoir</I>.
-To change it to <I>être</I>, use the following function.
+To change it to <I>être</I>, use the following function. Reflexive implies <I>être</I>.
 </P>
 <PRE>
       etreV : V -&gt; V ;
+      reflV : V -&gt; V ;
 </PRE>
 <P></P>
 <A NAME="toc13"></A>
