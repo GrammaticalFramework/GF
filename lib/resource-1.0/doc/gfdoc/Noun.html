@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1> The construction of nouns, noun phrases, and determiners</H1>
 <FONT SIZE="4">
 <I>Author: </I><BR>
-Last update: Tue Jan 31 18:15:45 2006
+Last update: Thu Feb  2 16:24:07 2006
 </FONT></CENTER>
 
 <P></P>
@@ -77,13 +77,20 @@ cardinal and ordinal.)
 </PRE>
 <P></P>
 <P>
+Quantifiers that have both forms can be used in both ways.
+</P>
+<PRE>
+        SgQuant : Quant -&gt; QuantSg ;            -- this
+        PlQuant : Quant -&gt; QuantPl ;            -- these
+</PRE>
+<P></P>
+<P>
 Pronouns have possessive forms. Genitives of other kinds
 of noun phrases are not given here, since they are not possible
 in e.g. Romance languages.
 </P>
 <PRE>
-        PossSg : Pron -&gt; QuantSg ;    -- my (house)
-        PossPl : Pron -&gt; QuantPl ;    -- my (houses)
+        PossPron : Pron -&gt; Quant ;    -- my (house)
 </PRE>
 <P></P>
 <P>
@@ -133,10 +140,8 @@ neatly distinct words (Spanish <I>un, unos ; el, los</I>) but also without
 any particular word (Finnish; Swedish definites).
 </P>
 <PRE>
-        DefSg   : QuantSg ;           -- the (house)
-        DefPl   : QuantPl ;           -- the (houses)
-        IndefSg : QuantSg ;           -- a (house)
-        IndefPl : QuantPl ;           -- (houses)
+        DefArt   : Quant ;            -- the (house), the (houses)
+        IndefArt : Quant ;            -- a (house), (houses)
 </PRE>
 <P></P>
 <P>
@@ -145,7 +150,7 @@ not distinguish mass nouns from other common nouns, which can result
 in semantically odd expressions.
 </P>
 <PRE>
-        MassDet : QuantSg ;           -- (beer)
+        MassDet  : QuantSg ;          -- (beer)
 </PRE>
 <P></P>
 <P>

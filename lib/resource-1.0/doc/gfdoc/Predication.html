@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1> A Small Predication Library</H1>
 <FONT SIZE="4">
 <I>Author: </I><BR>
-Last update: Tue Jan 31 18:15:47 2006
+Last update: Thu Feb  2 16:24:10 2006
 </FONT></CENTER>
 
 <P></P>
@@ -48,33 +48,31 @@ API of resource grammars.
 <A NAME="toc2"></A>
 <H2>The category of atomic sentences</H2>
 <P>
-These sentences have both a positive and a negative form
+We want to use sentences in positive and negative forms but do not care about
+tenses.
 </P>
 <PRE>
-    cat
-      AS ;
-    
     fun
-      PosAS : AS -&gt; S ;
-      NegAS : AS -&gt; S ;
+      PosCl     : Cl -&gt; S ;                -- positive sentence:   "x intersects y"
+      NegCl     : Cl -&gt; S ;                -- negative sentence:   "x doesn't intersect y"
 </PRE>
 <P></P>
 <A NAME="toc3"></A>
 <H2>Predication patterns.</H2>
 <PRE>
-      predV     : V  -&gt; NP -&gt; AS ;         -- one-place verb:      "x converges"
-      predV2    : V2 -&gt; NP -&gt; NP -&gt; AS ;   -- two-place verb:      "x intersects y"
-      predV3    : V3 -&gt; NP-&gt;NP-&gt; NP -&gt; AS; -- three-place verb:    "x intersects y at z"
-      predVColl : V  -&gt; NP -&gt; NP -&gt; AS ;   -- collective verb:     "x and y intersect"
-      predA     : A  -&gt; NP -&gt; AS ;         -- one-place adjective: "x is even"
-      predA2    : A2 -&gt; NP -&gt; NP -&gt; AS ;   -- two-place adj:       "x is divisible by y"
-      predAComp : A  -&gt; NP -&gt; NP -&gt; AS;    -- comparative adj:     "x is greater than y"
-      predAColl : A  -&gt; NP -&gt; NP -&gt; AS ;   -- collective adj:      "x and y are parallel"
-      predN     : N  -&gt; NP -&gt; AS ;         -- one-place noun:      "x is a point"
-      predN2    : N2 -&gt; NP -&gt; NP -&gt; AS ;   -- two-place noun:      "x is a divisor of y"
-      predNColl : N  -&gt; NP -&gt; NP -&gt; AS ;   -- collective noun:     "x and y are duals"
-      predAdv   : Adv -&gt; NP -&gt; AS ;        -- adverb:              "x is inside"
-      predPrep  : Prep -&gt; NP -&gt; NP -&gt; AS ; -- preposition:         "x is outside y"
+      predV     : V  -&gt; NP -&gt; Cl ;         -- one-place verb:      "x converges"
+      predV2    : V2 -&gt; NP -&gt; NP -&gt; Cl ;   -- two-place verb:      "x intersects y"
+      predV3    : V3 -&gt; NP-&gt;NP-&gt; NP -&gt; Cl; -- three-place verb:    "x intersects y at z"
+      predVColl : V  -&gt; NP -&gt; NP -&gt; Cl ;   -- collective verb:     "x and y intersect"
+      predA     : A  -&gt; NP -&gt; Cl ;         -- one-place adjective: "x is even"
+      predA2    : A2 -&gt; NP -&gt; NP -&gt; Cl ;   -- two-place adj:       "x is divisible by y"
+      predAComp : A  -&gt; NP -&gt; NP -&gt; Cl;    -- comparative adj:     "x is greater than y"
+      predAColl : A  -&gt; NP -&gt; NP -&gt; Cl ;   -- collective adj:      "x and y are parallel"
+      predN     : N  -&gt; NP -&gt; Cl ;         -- one-place noun:      "x is a point"
+      predN2    : N2 -&gt; NP -&gt; NP -&gt; Cl ;   -- two-place noun:      "x is a divisor of y"
+      predNColl : N  -&gt; NP -&gt; NP -&gt; Cl ;   -- collective noun:     "x and y are duals"
+      predAdv   : Adv -&gt; NP -&gt; Cl ;        -- adverb:              "x is inside"
+      predPrep  : Prep -&gt; NP -&gt; NP -&gt; Cl ; -- preposition:         "x is outside y"
 </PRE>
 <P></P>
 <A NAME="toc4"></A>
