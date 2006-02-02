@@ -1,0 +1,240 @@
+A Birds-Eye View of GF as a Grammar Formalism
+Author: Aarne Ranta
+Last update: %%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags -thtml --toc gf-formalism.txt
+
+%!target:html
+
+%!postproc(html): #NEW <!-- NEW -->
+
+[gf-logo.gif]
+
+//Abstract. This document gives a general description of the//
+//Grammatical Framework (GF), with comparisons to other grammar//
+//formalisms such as CG, ACG, HPSG, and LFG.//
+
+
+#NEW
+
+==GF in a few words==
+
+Grammatical Framework (GF) is a grammar formalism 
+based on **constructive type theory**.
+
+GF makes a distinction between **abstract syntax** and **concrete syntax**.
+
+The abstract syntax part of GF is a **logical framework**, with
+dependent types and higher-order functions.
+
+The concrete syntax is a system of **records** containing strings and features.
+
+A GF grammar defines a **reversible homomorphism** from an abstract syntax to a
+concrete syntax.
+
+A **multilingual GF grammar** is a set of concrete syntaxes associated with
+one abstract syntax.
+
+GF grammars are written in a high-level **functional programming language**,
+which is compiled into a **core language** (GFC).
+
+GF grammars can be used as **resources**, i.e. as libraries for writing
+new grammars; these are compiled and optimized by the method of
+**grammar composition**.
+
+GF has a **module system** that supports grammar engineering and separate 
+compilation.
+
+
+#NEW
+
+==History of GF==
+
+1988. Intuitionistic Categorial Grammar; type theory as abstract syntax,
+playing the role of Montague's analysis trees. Grammars implemented in Prolog.
+
+1994. Type-Theoretical Grammar. Abstract syntax organized as a system of
+combinators. Grammars implemented in ALF.
+
+1996. Multilingual Type-Theoretical Grammar. Rules for generating six
+languages from the same abstract syntax. Grammars implemented in ALF, ML, and
+Haskell.
+
+1998. The first implementation of GF as a language of its own.
+
+2000. New version of GF: high-level functional source language, records used
+for concrete syntax.
+
+2003. The module system.
+
+2004. Ljunglöf's thesis //Expressivity and Complexity of GF//.
+
+
+
+#NEW
+
+==Some key ingredients of GF in other grammar formalisms==
+
+- [GF ]: Grammatical Framework
+- [CG ]: categorial grammar
+- [ACG ]: abstract categorial grammar
+- [HPSG ]: head-driven phrase structure grammar
+- [LFG ]: lexical functional grammar
+
+
+|            /                | GF | ACG | LFG | HPSG | CG |
+| abstract vs concrete syntax | X  | X   | ?   | -    | -  |
+| type theory                 | X  | X   | -   | -    | X  |
+| records and features        | X  | -   | X   | X    | -  |
+
+
+#NEW
+
+==Examples of descriptions in each formalism==
+
+To be written...
+
+
+#NEW
+
+==Lambda terms and records==
+
+In CS, abstract syntax is trees and concrete syntax is strings.
+This works more or less for programming languages.
+
+In CG, all syntax is lambda terms. 
+
+In Montague grammar, abstract syntax is lambda terms and
+concrete syntax is trees. Abstract syntax as lambda terms
+can be considered well-established.
+
+In PATR and HPSG, concrete syntax it records. This can be considered
+well-established for natural languages.
+
+In ACG, both are lambda terms. This is more general than GF,
+but reversibility requires linearity restriction, which can be
+unnatural for grammar writing.
+
+In GF, linearization from lambda terms to records is reversible,
+and grammar writing is not restricted to linear terms.
+
+Grammar composition in ACG is just function composition. In GF,
+it is more restricted...
+
+
+#NEW
+
+==The structure of GF formalisms==
+
+The following diagram (to be drawn properly!) describes the
+levels.
+```
+       |   programming language design
+       V
+  GF source language
+       |
+       |   type-directed partial evaluation
+       V
+  GFC assembly language
+       |
+       |   Ljunglöf's translation
+       V
+  MCFG parser
+```
+The last two phases are nontrivial mathematica properties.
+
+In most grammar formalisms, grammarians have to work on the GFC
+(or MCFG) level.
+
+Maybe they use macros - they are therefore like macro assemblers. But there
+are no separately compiled library modules, no type checking, etc.
+
+
+#NEW
+
+==The expressivity of GF==
+
+Parsing complexity is the same as MCFG: polynomial, with
+unrestricted exponent depending on grammar.
+This is between TAG and HPSG.
+
+If semantic well-formedness (type theory) is taken into account,
+then arbitrary logic can be expressed. The well-formedness of
+abstract syntax is decidable, but the well-formedness of a
+concrete-syntax string can require an arbitrary proof construction
+and is therefore undecidable.
+
+Separability between AS and CS: like TAG (Tree Adjoining Grammar), GF
+has the goal of assigning intended trees for strings. This is
+generalized to shared trees for different languages.
+
+The high-level language strives after the properties of
+writability and readability (programming language notions).
+
+
+#NEW
+
+==Grammars and parsing==
+
+In many projects, a grammar is just seen as a **declarative parsing program**.
+
+For GF, a grammar is primarily the **definition of a language**.
+
+Detaching grammars from parsers is a good idea, giving
+- more efficient and robust parsing (statistical etc)
+- cleaner grammars
+
+
+Separating abstract from concrete syntax is a prerequisite for this:
+we want parsers to return abstract syntax objects, and these must exist
+independently of parse trees.
+
+A possible radical approach to parsing: 
+use a grammar to generate a treebank and machine-learn
+a statistical parser from this.
+
+Comparison: Steedman in CCG has done something like this.
+
+
+#NEW
+
+==Grammars as software libraries==
+
+Reuse for different purposes.
+
+Grammar composition.
+
+
+#NEW
+
+==Multilinguality==
+
+In **application grammars**, the AS is a semantic
+model, and a CS covers domain terminology and idioms.
+
+This can give publication-quality translation on
+limited domains (e.g. the WebALT project).
+
+Resource grammars with grammar composition lead to
+**compile-time transfer**.
+
+When is **run-time transfer** necessary?
+
+Cf. CLE (Core Language Engine).
+
+
+#NEW
+
+==Parametrized modules==
+
+This notion comes from the ML language in the 1980's.
+
+It can be used for sharing even more code between languages
+than their AS.
+
+Especially, for related languages (Scandinavian, Romance).
+
+Cf. grammar porting in CLE: what they do with untyped 
+macro packages GF does with typable interfaces.
