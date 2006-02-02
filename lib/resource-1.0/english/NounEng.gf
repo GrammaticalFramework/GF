@@ -25,8 +25,10 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
       n = Pl
       } ;
 
-    PossSg p = {s = p.s ! Gen} ;
-    PossPl p = {s = p.s ! Gen} ;
+    SgQuant quant = {s = quant.s ! Sg} ;
+    PlQuant quant = {s = quant.s ! Pl} ;
+
+    PossPron p = {s = \\_ => p.s ! Gen} ;
 
     NoNum, NoOrd = {s = []} ;
 
@@ -40,11 +42,14 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
 
     OrdSuperl a = {s = a.s ! AAdj Superl} ;
 
-    DefSg = {s = artDef ; n = Sg} ;
-    DefPl = {s = artDef ; n = Pl} ;
+    DefArt = {s = \\_ => artDef} ;
 
-    IndefSg = {s = artIndef ; n = Sg} ;
-    IndefPl = {s = [] ; n = Pl} ;
+    IndefArt = {
+      s = table {
+        Sg => artIndef ; 
+        Pl => []
+        }
+      } ;
 
     MassDet = {s = [] ; n = Sg} ;
 

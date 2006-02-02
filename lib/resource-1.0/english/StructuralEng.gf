@@ -63,19 +63,16 @@ concrete StructuralEng of Structural = CatEng **
   somePl_Det = mkDeterminer Pl "some" ;
   something_NP = regNP "something" Sg ;
   somewhere_Adv = ss "somewhere" ;
-  that_Quant = mkDeterminer Sg "that" ;
+  that_Quant = mkQuant "that" "those" ;
   that_NP = regNP "that" Sg ;
   there_Adv = ss "there" ;
   there7to_Adv = ss "there" ;
   there7from_Adv = ss ["from there"] ;
   therefore_PConj = ss "therefore" ;
-  these_NP = regNP "these" Pl ;
-  these_Quant = mkDeterminer Pl "these" ;
   they_Pron = mkNP "they" "them" "their" Pl P3 ; 
-  this_Quant = mkDeterminer Sg "this" ;
+  this_Quant = mkQuant "this" "these" ;
   this_NP = regNP "this" Sg ;
   those_NP = regNP "those" Pl ;
-  those_Quant = mkDeterminer Pl "those" ;
   through_Prep = ss "through" ;
   too_AdA = ss "too" ;
   to_Prep = ss "to" ;
@@ -99,6 +96,11 @@ concrete StructuralEng of Structural = CatEng **
   youSg_Pron = mkNP "you" "you" "your" Sg P2 ;
   youPl_Pron = mkNP "you" "you" "your" Pl P2 ;
   youPol_Pron = mkNP "you" "you" "your" Sg P2 ;
+
+oper
+  mkQuant : Str -> Str -> {s : Number => Str} = \x,y -> {
+    s = table Number [x ; y]
+    } ;
 
 }
 

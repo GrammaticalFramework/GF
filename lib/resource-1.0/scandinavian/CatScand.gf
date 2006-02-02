@@ -66,6 +66,7 @@ incomplete concrete CatScand of Cat =
     Det = {s : Bool => Gender => Str ; n : Number ; det : DetSpecies} ;
     QuantSg = {s : Bool => Gender => Str ; det : DetSpecies} ;
     QuantPl = {s : Bool => Gender => Str ; det : DetSpecies} ;
+    Quant   = {s : Number => Bool => Gender => Str ; det : DetSpecies} ;
     Predet = {s : GenNum => Str} ;
     Num = {s : Gender => Str ; isDet : Bool} ;
     Ord = {s : Str ; isDet : Bool} ;

@@ -66,20 +66,28 @@ concrete StructuralSwe of Structural = CatSwe **
   something_NP = regNP "något" "någots" SgNeutr ;
   somewhere_Adv = ss "någonstans" ;
   that_Quant = 
-    {s = \\_ => genderForms ["den där"] ["det där"] ; n = Sg ; det = DDef Def} ;
+    {s = table {
+       Sg => \\_ => genderForms ["den där"] ["det där"] ; 
+       Pl => \\_,_ => ["de där"]
+       } ;
+     det = DDef Def
+    } ;
   that_NP = regNP ["det där"] ["det därs"] SgNeutr ;
   there_Adv = ss "där" ;
   there7to_Adv = ss "dit" ;
   there7from_Adv = ss "därifrån" ;
   therefore_PConj = ss "därför" ;
   these_NP = regNP ["de här"] ["det härs"] Plg ;
-  these_Quant = {s = \\_,_ => ["de här"] ; n = Pl ; det = DDef Def} ;
   they_Pron = MorphoSwe.mkNP "de" "dem" "deras" "deras" "deras" Plg P1 ;
   this_Quant = 
-    {s = \\_ => genderForms ["den här"] ["det här"] ; n = Sg ; det = DDef Def} ;
+    {s = table {
+       Sg => \\_ => genderForms ["den här"] ["det här"] ; 
+       Pl => \\_,_ => ["de här"]
+       } ;
+     det = DDef Def
+    } ;
   this_NP = regNP ["det här"] ["det härs"] SgNeutr ;
   those_NP = regNP ["de där"] ["det därs"] Plg ;
-  those_Quant = {s = \\_,_ => ["de där"] ; n = Pl ; det = DDef Def} ;
   through_Prep = ss "genom" ;
   too_AdA = ss "för" ;
   to_Prep = ss "till" ;

@@ -42,16 +42,18 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         a = a
         } ;
 
-    PossSg p = {
-      s = \\g,c => p.s ! NPPoss (gennum g Sg) c ;
-      n = Sg ;
-      a = Strong
+    SgQuant q = {
+      s = q.s ! Sg ;
+      a = q.a
+      } ;
+    PlQuant q = {
+      s = q.s ! Pl ;
+      a = q.a
       } ;
 
-    PossPl p = {
-      s = \\g,c => p.s ! NPPoss (gennum g Pl) c ;
-      n = Pl ;
-      a = Weak
+    PossPron p = {
+      s = \\n,g,c => p.s ! NPPoss (gennum g n) c ;
+      a = Strong --- need separately weak for Pl ?
       } ;
 
     NoNum = {s = []} ; 
@@ -67,25 +69,16 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
 
     OrdSuperl a = {s = a.s ! Superl} ;
 
-    DefSg = {
-      s = \\g,c => artDef ! GSg g ! c ; 
-      n = Sg ;
-      a = Weak
-      } ;
-    DefPl = {
-      s = \\_,c => artDef ! GPl ! c ; 
-      n = Pl ;
+    DefArt = {
+      s = \\n,g,c => artDef ! gennum g n ! c ; 
       a = Weak
       } ;
 
-    IndefSg = {
-      s = \\g,c => "ein" + pronEnding ! GSg g ! c ;  
-      n = Sg ;
-      a = Strong
-      } ;
-    IndefPl = {
-      s = \\_,_ => [] ; 
-      n = Pl ;
+    IndefArt = {
+      s = table {
+        Sg => \\g,c => "ein" + pronEnding ! GSg g ! c ;  
+        Pl =>  \\_,_ => []
+        } ; 
       a = Strong
       } ;
 
@@ -94,7 +87,6 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       n = Sg ;
       a = Strong
       } ;
-
 
     UseN, UseN2, UseN3 = \n -> {
       s = \\_ => n.s ;

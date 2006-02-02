@@ -80,21 +80,29 @@ lin
   someSg_Det = {s = \\_,c => prepCase c ++ elision "quelqu" ; n = Sg} ;
   something_NP = pn2np (mkPN ["quelque chose"] Masc) ;
   somewhere_Adv = ss ["quelque part"] ; --- ne - pas
-  that_Quant = {s = \\g,c => prepCase c ++ genForms "ce" "cette" ! g} ; ---- cet
+  that_Quant = {s = 
+    table {
+      Sg => \\g,c => prepCase c ++ genForms "ce" "cette" ! g ;  ---- cet ; là
+      Pl => \\_,_ => "ces"
+      }
+    } ;
   that_NP = mkNP ["ceci"] Masc Sg ;
   there7from_Adv = ss ["de là"] ;
   there7to_Adv = ss "là" ; --- y
   there_Adv = ss "là" ;
   therefore_PConj = ss "donc" ;
   these_NP = mkNP ["celles-ci"] Fem Pl ;
-  these_Quant = {s = \\_,c => prepCase c ++ "ces"} ; ---- ci
   they_Pron = mkPronoun
     "elles" "les" "leur" "eux" "leur" "leur" "leurs"
     Fem Pl P3 Clit1 ;
-  this_Quant = {s = \\g,c => prepCase c ++ genForms "ce" "cette" ! g} ; ---- cet
+  this_Quant = {s = 
+    table {
+      Sg => \\g,c => prepCase c ++ genForms "ce" "cette" ! g ;  ---- cet ; ci
+      Pl => \\_,_ => "ces"
+      }
+    } ;
   this_NP = pn2np (mkPN ["ceci"] Masc) ;
   those_NP = mkNP ["celles-là"] Fem Pl ;
-  those_Quant = {s = \\_,c => prepCase c ++ "ces"} ; ---- là
   through_Prep = mkPreposition "par" ;
   too_AdA = ss "trop" ;
   to_Prep = complDat ;
