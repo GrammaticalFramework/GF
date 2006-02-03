@@ -11,7 +11,7 @@ concrete LangSpa of Lang =
   RelativeSpa,
   ConjunctionSpa,
   PhraseSpa,
---  StructuralSpa,
+  StructuralSpa,
   LexiconSpa
   ** {
 

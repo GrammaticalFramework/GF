@@ -129,6 +129,7 @@ lin
    open_V2 = dirV2 (special_ppV (regV "abrir") "abierto") ;
    paint_V2A = mkV2A (regV "pintar") accusative ;
    paper_N = regN "papel" ;
+   paris_PN = mkPN "Paris" masculine ;
    peace_N = femN (regN "paz") ;
    pen_N = regN "lapicera" ;
    planet_N = mascN (regN "planeta") ;

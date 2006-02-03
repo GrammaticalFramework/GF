@@ -27,7 +27,7 @@ lin
   can_VV = mkVV (verboV (potere_69 "potere")) ;
   during_Prep = mkPreposition "durante" ;
   either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
-  everybody_NP = pn2np (mkPN ["tutto il mondo"] Masc) ;
+  everybody_NP = mkNP ["tutti"] Masc Pl ;
   every_Det = {s = \\_,_ => "ogni" ; n = Sg} ;
   everything_NP = pn2np (mkPN ["tutto"] Masc) ;
   everywhere_Adv = ss "dappertutto" ;
@@ -74,7 +74,7 @@ lin
       "lei" "la" "le" "lei" "suo" "sua" "suoi" "sue"
       Fem Sg P3 Clit2 ;
   so_AdA = ss "così" ;
-  somebody_NP = pn2np (mkPN ["quelcuno"] Masc) ;
+  somebody_NP = pn2np (mkPN ["qualcuno"] Masc) ;
   somePl_Det = {s = \\_,c => prepCase c ++ "qualche" ; n = Pl} ;
   someSg_Det = {s = \\_,c => prepCase c ++ "qualche" ; n = Sg} ;
   something_NP = pn2np (mkPN ["qualche cosa"] Masc) ;
@@ -131,6 +131,10 @@ lin
     mkPronoun
        "voi" "vi" "vi" "voi" "vostro" "vostra" "vostri" "vostre"
        Fem Pl P2 Clit3 ;
+  youPol_Pron =
+    mkPronoun
+      "Lei" "La" "Le" "Lei" "Suo" "Sua" "Suoi" "Sue"
+      Fem Sg P3 Clit2 ;
 
 }
 
