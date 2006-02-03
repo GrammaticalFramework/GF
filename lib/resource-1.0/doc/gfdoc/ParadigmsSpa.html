@@ -10,7 +10,7 @@
 <HR NOSHADE SIZE=1>
 <P></P>
   <UL>
-  <LI><A HREF="#toc1">Italian Lexical Paradigms</A>
+  <LI><A HREF="#toc1">Spanish Lexical Paradigms</A>
     <UL>
     <LI><A HREF="#toc2">Parameters</A>
     <LI><A HREF="#toc3">Nouns</A>
@@ -55,7 +55,7 @@ gfdoc - a rudimentary GF document generator.
 # -path=.:../romance:../common:../abstract:../../prelude
 </P>
 <A NAME="toc1"></A>
-<H1>Italian Lexical Paradigms</H1>
+<H1>Spanish Lexical Paradigms</H1>
 <P>
 Aarne Ranta 2003
 </P>
@@ -69,7 +69,7 @@ Closed categories (determiners, pronouns, conjunctions) are
 accessed through the resource syntax API, <CODE>Structural.gf</CODE>. 
 </P>
 <P>
-The main difference with <CODE>MorphoIta.gf</CODE> is that the types
+The main difference with <CODE>MorphoSpa.gf</CODE> is that the types
 referred to are compiled resource grammar types. We have moreover
 had the design principle of always having existing forms, rather
 than stems, as string arguments of the paradigms.
@@ -79,20 +79,17 @@ The structure of functions for each word class <CODE>C</CODE> is the following:
 first we give a handful of patterns that aim to cover all
 regular cases. Then we give a worst-case function <CODE>mkC</CODE>, which serves as an
 escape to construct the most irregular words of type <CODE>C</CODE>.
-However, this function should only seldom be needed: we have a
-separate module <CODE>IrregularEng</CODE>, which covers all irregularly inflected
-words.
 </P>
 <PRE>
-    resource ParadigmsIta = 
+    resource ParadigmsSpa = 
       open 
         (Predef=Predef), 
         Prelude, 
         CommonRomance, 
-        ResIta, 
-        MorphoIta, 
-        BeschIta,
-        CatIta in {
+        ResSpa, 
+        MorphoSpa, 
+        BeschSpa,
+        CatSpa in {
     
       flags optimize=all ;
 </PRE>
@@ -139,17 +136,21 @@ amalgamate with the following word (the 'genitive' <I>de</I> and the
 <A NAME="toc3"></A>
 <H2>Nouns</H2>
 <P>
-Worst case: give both two forms and the gender. 
+Worst case: two forms (singular + plural),
+and the gender.
 </P>
 <PRE>
-      mkN  : (uomi,uomini : Str) -&gt; Gender -&gt; N ;
+      mkN  : (_,_ : Str) -&gt; Gender -&gt; N ;   -- uomo, uomini, masculine
 </PRE>
 <P></P>
 <P>
 The regular function takes the singular form and the gender,
 and computes the plural and the gender by a heuristic. 
 The heuristic says that the gender is feminine for nouns
-ending with <I>a</I>, and masculine for all other words.
+ending with <I>a</I> or <I>z</I>, and masculine for all other words.
+Nouns ending with <I>a</I>, <I>o</I>, <I>e</I> have the plural with <I>s</I>,
+those ending with <I>z</I> have <I>ces</I> in plural; all other nouns
+have <I>es</I> as plural ending. The accent is not dealt with.
 </P>
 <PRE>
       regN : Str -&gt; N ;
@@ -178,18 +179,18 @@ they are frequent in lexica.
 <A NAME="toc5"></A>
 <H3>Relational nouns</H3>
 <P>
-Relational nouns (<I>figlio di x</I>) need a case and a preposition. 
+Relational nouns (<I>fille de x</I>) need a case and a preposition. 
 </P>
 <PRE>
       mkN2 : N -&gt; Preposition -&gt; N2 ;
 </PRE>
 <P></P>
 <P>
-The most common cases are the genitive <I>di</I> and the dative <I>a</I>, 
+The most common cases are the genitive <I>de</I> and the dative <I>a</I>, 
 with the empty preposition.
 </P>
 <PRE>
-      diN2 : N -&gt; N2 ;
+      deN2 : N -&gt; N2 ;
       aN2  : N -&gt; N2 ;
 </PRE>
 <P></P>
@@ -237,7 +238,8 @@ case (masc and fem singular, masc plural, adverbial).
 <P></P>
 <P>
 For regular adjectives, all other forms are derived from the
-masculine singular. 
+masculine singular. The types of adjectives that are recognized are
+<I>alto</I>, <I>fuerte</I>, <I>util</I>.
 </P>
 <PRE>
       regA : Str -&gt; A ;
@@ -266,14 +268,14 @@ Two-place adjectives need a preposition for their second argument.
 <H3>Comparison adjectives</H3>
 <P>
 Comparison adjectives are in the worst case put up from two
-adjectives: the positive (<I>buono</I>), and the comparative (<I>migliore</I>). 
+adjectives: the positive (<I>bueno</I>), and the comparative (<I>mejor</I>). 
 </P>
 <PRE>
       mkADeg : A -&gt; A -&gt; A ;
 </PRE>
 <P></P>
 <P>
-If comparison is formed by <I>più</I>, as usual in Italian,
+If comparison is formed by <I>mas</I>, as usual in Spanish,
 the following pattern is used:
 </P>
 <PRE>
@@ -282,7 +284,7 @@ the following pattern is used:
 <P></P>
 <P>
 The regular pattern is the same as <CODE>regA</CODE> for plain adjectives, 
-with comparison by <I>plus</I>.
+with comparison by <I>mas</I>.
 </P>
 <PRE>
       regADeg : Str -&gt; A ;
@@ -299,7 +301,7 @@ after the verb.
 </PRE>
 <P></P>
 <P>
-Some appear next to the verb (e.g. <I>sempre</I>).
+Some appear next to the verb (e.g. <I>siempre</I>).
 </P>
 <PRE>
       mkAdV : Str -&gt; AdV ;
@@ -315,32 +317,37 @@ Adverbs modifying adjectives and sentences can also be formed.
 <A NAME="toc12"></A>
 <H2>Verbs</H2>
 <P>
-Regular verbs are ones with the infinitive <I>er</I> or <I>ir</I>, the
-latter with plural present indicative forms as <I>finissons</I>.
-The regular verb function is the first conjugation recognizes
-these endings, as well as the variations among
-<I>aimer, céder, placer, peser, jeter, placer, manger, assiéger, payer</I>.
+Regular verbs are ones inflected like <I>cortar</I>, <I>deber</I>, or <I>vivir</I>.
+The regular verb function is the first conjugation (<I>ar</I>) recognizes
+the variations corresponding to the patterns
+<I>actuar, cazar, guiar, pagar, sacar</I>. The module <CODE>BeschSpa</CODE> gives
+the complete set of <I>Bescherelle</I> conjugations.
 </P>
 <PRE>
       regV : Str -&gt; V ;
 </PRE>
 <P></P>
 <P>
-The module <CODE>BeschIta</CODE> gives all the patterns of the <I>Bescherelle</I>
+The module <CODE>BeschSpa</CODE> gives all the patterns of the <I>Bescherelle</I>
 book. To use them in the category <CODE>V</CODE>, wrap them with the function
 </P>
 <PRE>
-      verboV : Verbo -&gt; V ;
+      verboV : Verbum -&gt; V ;
 </PRE>
 <P></P>
 <P>
-The function <CODE>regV</CODE> gives all verbs the compound auxiliary <I>avere</I>.
-To change it to <I>essere</I>, use the following function.
-Reflexive implies <I>essere</I>.
+To form reflexive verbs:
 </P>
 <PRE>
-      essereV : V -&gt; V ;
       reflV : V -&gt; V ;
+</PRE>
+<P></P>
+<P>
+Verbs with a deviant passive participle: just give the participle
+in masculine singular form as second argument.
+</P>
+<PRE>
+      special_ppV : V -&gt; Str -&gt; V ; 
 </PRE>
 <P></P>
 <A NAME="toc13"></A>
@@ -419,5 +426,5 @@ hidden from the document.
 </P>
 
 <!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
-<!-- cmdline: txt2tags -thtml -\-toc italian/ParadigmsIta.txt -->
+<!-- cmdline: txt2tags -thtml -\-toc spanish/ParadigmsSpa.txt -->
 </BODY></HTML>
