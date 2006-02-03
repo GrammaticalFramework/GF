@@ -1,5 +1,9 @@
+all: langs test
+
 test:
-	gf -src */Lang*.gf
+	echo "gr -cat=S -tr -number=11 | l -multi gf" | gf langs.gfcm
+langs:
+	echo "s ;; pm | wf langs.gfcm" | gf -src */Lang??*.gf english/LangEng.gf
 
 stat:
 	wc */*.gfc
