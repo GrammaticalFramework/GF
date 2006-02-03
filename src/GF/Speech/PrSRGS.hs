@@ -18,6 +18,7 @@
 module GF.Speech.PrSRGS (srgsXmlPrinter) where
 
 import GF.Data.Utilities
+import GF.Data.XML
 import GF.Speech.SRG
 import GF.Infra.Ident
 import GF.Today
@@ -32,11 +33,6 @@ import GF.Probabilistic.Probabilistic (Probs)
 import Data.Char (toUpper,toLower)
 import Data.List
 
-data XML = Data String | Tag String [Attr] [XML] | Comment String
- deriving (Eq,Show)
-
-type Attr = (String,String)
-
 srgsXmlPrinter :: Ident -- ^ Grammar name
 	       -> Options 
                -> Bool  -- ^ Whether to include semantic interpretation 
@@ -48,9 +44,8 @@ srgsXmlPrinter name opts sisr probs cfg = prSrgsXml sisr srg ""
 prSrgsXml :: Bool -> SRG -> ShowS
 prSrgsXml sisr (SRG{grammarName=name,startCat=start,
                origStartCat=origStart,grammarLanguage=l,rules=rs})
-    = header . showsXML xmlGr
+    = showsXMLDoc xmlGr
     where
-    header = showString "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
     root = prCat start
     xmlGr = grammar root l ([meta "description" 
                              ("SRGS XML speech recognition grammar for " ++ name
@@ -67,14 +62,16 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
     prRhs isList rhss = [oneOf (map (mkProd sisr isList) rhss)] 
     -- externally visible rules for each of the GF categories
     topCatRules = [topRule tc [oneOf (map it cs)] | (tc,cs) <- topCats]
-        where topCats = buildMultiMap [(gfCat origCat, cat) | SRGRule cat origCat _ <- rs]
-              gfCat = takeWhile (/='{')
+        where topCats = buildMultiMap [(cfgCatToGFCat origCat, cat) | SRGRule cat origCat _ <- rs]
               it c = symItem [] (Cat c) 0
               topRule i is = Tag "rule" [("id",i),("scope","public")] 
-                             (is ++ [tag ["$ = $$"]])
+                             (is ++ [tag ["$."++i++ " = $$"]])
 
 rule :: String -> [XML] -> XML
 rule i = Tag "rule" [("id",i)]
+
+cfgCatToGFCat :: String -> String
+cfgCatToGFCat = takeWhile (/='{')
 
 isBase :: Fun -> Bool
 isBase f = "Base" `isPrefixOf` prIdent f
@@ -153,27 +150,3 @@ grammar root l = Tag "grammar" [("xml:lang", l),
 
 meta :: String -> String -> XML
 meta n c = Tag "meta" [("name",n),("content",c)] []
-
-comments :: [String] -> [XML]
-comments = map Comment
-
-showsXML :: XML -> ShowS
-showsXML (Data s) = showString s
-showsXML (Tag t as []) = showChar '<' . showString t . showsAttrs as . showString "/>"
-showsXML (Tag t as cs) = 
-    showChar '<' . showString t . showsAttrs as . showChar '>' 
-		 . concatS (map showsXML cs) . showString "</" . showString t . showChar '>'
-showsXML (Comment c) = showString "<!-- " . showString c . showString " -->"
-
-showsAttrs :: [Attr] -> ShowS
-showsAttrs = concatS . map (showChar ' ' .) . map showsAttr
-
-showsAttr :: Attr -> ShowS
-showsAttr (n,v) = showString n . showString "=\"" . showString (escape v) . showString "\""
-
--- FIXME: escape strange charachters with &#xxx;
-escape :: String -> String
-escape = concatMap escChar
-  where
-  escChar c | c `elem` ['"','\\'] = '\\':[c]
-            | otherwise = [c]

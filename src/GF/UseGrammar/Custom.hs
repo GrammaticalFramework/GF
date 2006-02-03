@@ -60,6 +60,7 @@ import GF.Speech.PrJSGF (jsgfPrinter)
 import GF.Speech.PrSRGS (srgsXmlPrinter)
 import GF.Speech.PrSLF
 import GF.Speech.PrFA (faGraphvizPrinter,regularPrinter,faCPrinter)
+import GF.Speech.GrammarToVoiceXML (grammar2vxml)
 
 import GF.Data.Zipper
 
@@ -257,6 +258,7 @@ customGrammarPrinter =
   ,(strCI "srgs_xml_ms_sem", \s -> let opts = stateOptions s
                                        name = cncId s
                                    in srgsXmlPrinter name opts True Nothing $ stateCFG s)
+  ,(strCI "vxml",    grammar2vxml . stateGrammarST)
   ,(strCI "slf",     \s -> let opts = stateOptions s
                                start = getStartCat opts
                                name = cncId s

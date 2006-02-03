@@ -600,6 +600,7 @@ txtHelpFile =
   "\n    -printer=srgs_xml_prob  SRGS XML format, with weights" ++
   "\n    -printer=srgs_xml_ms_sem SRGS XML format, with semantic tags for the" ++
   "\n                             Microsoft Speech API." ++
+  "\n    -printer=vxml           Generate a dialogue system in VoiceXML." ++
   "\n    -printer=slf            a finite automaton in the HTK SLF format" ++
   "\n    -printer=slf_graphviz   the same automaton as slf, but in Graphviz format" ++
   "\n    -printer=slf_sub        a finite automaton with sub-automata in the " ++
