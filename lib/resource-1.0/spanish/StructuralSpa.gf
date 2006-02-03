@@ -5,132 +5,154 @@ concrete StructuralSpa of Structural = CatSpa **
 
 lin
 
-  above_Prep = {s = ["sopra"] ; c = MorphoSpa.genitive ; isDir = False} ;
-  after_Prep = mkPreposition "dopo" ;
+  above_Prep = mkPreposition "sobre" ;
+  after_Prep = {s = ["despues"] ; c = MorphoSpa.genitive ; isDir = False} ;
   all_Predet = {
-    s = \\a,c => prepCase c ++ aagrForms "tutto" "tutta" "tutti" "tutte" ! a ;
+    s = \\a,c => prepCase c ++ aagrForms "todo" "toda" "todos" "todas" ! a ;
     c = Nom
     } ;
-  almost_AdA, almost_AdN = ss "quasi" ;
-  always_AdV = ss "sempre" ;
+  almost_AdA, almost_AdN = ss "casi" ;
+  always_AdV = ss "siempre" ;
   although_Subj = ss "benché" ** {m = Conjunct} ;
-  and_Conj = ss "e" ** {n = Pl} ;
-  because_Subj = ss "perché" ** {m = Indic} ;
-  before_Prep = mkPreposition "prima" ;
-  behind_Prep = mkPreposition "dietro" ;
-  between_Prep = mkPreposition "fra" ;
-  both7and_DConj = {s1,s2 = "e" ; n = Pl} ;
-  but_PConj = ss "ma" ;
-  by8agent_Prep = {s = [] ; c = CPrep P_da} ;
-  by8means_Prep = mkPreposition "per" ;
-  can8know_VV = mkVV (verboV (sapere_78 "sapere")) ;
-  can_VV = mkVV (verboV (potere_69 "potere")) ;
-  during_Prep = mkPreposition "durante" ;
+  and_Conj = etConj ;
+  because_Subj = ss "porque" ** {m = Indic} ;
+  before_Prep = {s = "antes" ; c = MorphoSpa.genitive ; isDir = False} ;
+  behind_Prep = {s = "detrás" ; c = MorphoSpa.genitive ; isDir = False} ;
+  between_Prep = mkPreposition "entre" ;
+  both7and_DConj = {s1,s2 = etConj.s ; n = Pl} ;
+  but_PConj = ss "mas" ;
+  by8agent_Prep = mkPreposition "por" ;
+  by8means_Prep = mkPreposition "por" ;
+  can8know_VV = mkVV (verboV (saber_71 "saber")) ;
+  can_VV = mkVV (verboV (poder_58 "poder")) ;
+  during_Prep = mkPreposition "durante" ; ----
   either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
-  everybody_NP = pn2np (mkPN ["tutto il mondo"] Masc) ;
-  every_Det = {s = \\_,_ => "ogni" ; n = Sg} ;
-  everything_NP = pn2np (mkPN ["tutto"] Masc) ;
-  everywhere_Adv = ss "dappertutto" ;
-  first_Ord = {s = \\ag => (regA "primo").s ! Posit ! AF ag.g ag.n} ;
+  everybody_NP = mkNP ["todos"] Masc Pl ;
+  every_Det = {s = \\_,_ => "cada" ; n = Sg} ;
+  everything_NP = pn2np (mkPN ["todo"] Masc) ;
+  everywhere_Adv = ss ["en todas partes"] ;
+  first_Ord = {s = \\ag => (regA "primero").s ! Posit ! AF ag.g ag.n} ;
   from_Prep = complGen ; ---
   he_Pron = 
-    mkPronoun
-      "lui" "lo" "gli" "lui" "suo" "sua" "suoi" "sue"
+    mkPronoun 
+     "el" "lo" "le" "él"
+     "su" "su" "sus" "sus"
       Masc Sg P3 Clit2 ;
-  here7from_Adv = ss ["da quì"] ;
-  here7to_Adv = ss "quì" ;
-  here_Adv = ss "quì" ;
-  how_IAdv = ss "come" ;
-  how8many_IDet = {s = \\g,c => prepCase c ++ genForms "quanti" "quante" ! g ; n = Pl} ;
-  if_Subj = ss "se" ** {m = Indic} ;
-  in8front_Prep = mkPreposition "davanti" ;
+  here_Adv = mkAdv "aquí" ;		-- acá
+  here7to_Adv = mkAdv ["para acá"] ;
+  here7from_Adv = mkAdv ["de acá"] ;
+  how_IAdv = ss "como" ;
+  how8many_IDet = 
+    {s = \\g,c => prepCase c ++ genForms "cuantos" "cuantas" ! g ; n = Pl} ;
+  if_Subj = ss "si" ** {m = Indic} ;
+  in8front_Prep = {s = "delante" ; c = MorphoSpa.genitive ; isDir = False} ;
   i_Pron = 
     mkPronoun
-      "io" "mi" "mi" "me" "mio" "mia" "miei" "mie"
+      "yo" "me" "me" "mí"
+      "mi" "mi" "mis" "mis"
       Fem Sg P1 Clit1 ;
-  in_Prep = {s = [] ; c = CPrep P_in} ;
+  in_Prep = mkPreposition "en" ;
   it_Pron = 
     mkPronoun
-      "lui" "lo" "gli" "lui" "suo" "sua" "suoi" "sue"
+      "el" "lo" "le" "él"
+      "su" "su" "sus" "sus"
       Masc Sg P3 Clit2 ;
-  less_CAdv = ss "meno" ;
-  many_Det = {s = \\g,c => prepCase c ++ genForms "molti" "molte" ! g ; n = Pl} ;
-  more_CAdv = ss "più" ;
-  most_Predet = {s = \\_,c => prepCase c ++ ["la maggior parte"] ; c = CPrep P_di} ;
-  much_Det = {s = \\g,c => prepCase c ++ genForms "molto" "molta" ! g ; n = Sg} ;
-  must_VV = mkVV (verboV (dovere_47 "dovere")) ;
+  less_CAdv = ss "meno" ; ----
+  many_Det = {s = \\g,c => prepCase c ++ genForms "muchos" "muchas" ! g ; n = Pl} ;
+  more_CAdv = ss "mas" ;
+  most_Predet = {s = \\_,c => prepCase c ++ ["la mayor parte"] ; c = CPrep P_de} ;
+  much_Det = {s = \\g,c => prepCase c ++ genForms "mucho" "mucha" ! g ; n = Sg} ;
+  must_VV = mkVV (verboV (deber_6 "deber")) ;
   no_Phr = ss "no" ;
-  on_Prep = {s = [] ; c = CPrep P_su} ;
+  on_Prep = mkPreposition "sobre" ;
   one_Quant = {s = \\g,c => prepCase c ++ genForms "uno" "una" ! g} ;
-  only_Predet = {s = \\_,c => prepCase c ++ "soltanto" ; c = Nom} ; --- solo|a|i|e
+  only_Predet = {s = \\_,c => prepCase c ++ "solamente" ; c = Nom} ;
   or_Conj = {s = "o" ; n = Sg} ;
-  otherwise_PConj = ss "altramente" ;
+  otherwise_PConj = ss "otramente" ;
   part_Prep = complGen ;
-  please_Voc = ss ["per favore"] ;
+  please_Voc = ss ["por favor"] ;
   possess_Prep = complGen ;
-  quite_Adv = ss "assai" ;
+  quite_Adv = ss "bastante" ;
   she_Pron = 
     mkPronoun
-      "lei" "la" "le" "lei" "suo" "sua" "suoi" "sue"
+      "ella" "la" "le" "ella"
+      "su" "su" "sus" "sus"
       Fem Sg P3 Clit2 ;
-  so_AdA = ss "così" ;
-  somebody_NP = pn2np (mkPN ["quelcuno"] Masc) ;
-  somePl_Det = {s = \\_,c => prepCase c ++ "qualche" ; n = Pl} ;
-  someSg_Det = {s = \\_,c => prepCase c ++ "qualche" ; n = Sg} ;
-  something_NP = pn2np (mkPN ["qualche cosa"] Masc) ;
-  somewhere_Adv = ss ["qualche parte"] ;
+  so_AdA = ss "tanto" ;
+  somebody_NP = pn2np (mkPN ["algún"] Masc) ;
+  somePl_Det = {s = \\g,c => prepCase c ++ genForms "algunos" "algunas" ! g ; n = Pl} ;
+  someSg_Det = {s = \\g,c => prepCase c ++ "algun" ; n = Sg} ;
+  something_NP = pn2np (mkPN ["algo"] Masc) ;
+  somewhere_Adv = ss ["en ninguna parte"] ;
   that_Quant = {
     s = table {
-      Sg => \\g,c => prepCase c ++ genForms "quello" "quella" ! g ;
-      Pl => \\g,c => prepCase c ++ genForms "quelli" "quelle" ! g ---- quegli
+      Sg => \\g,c => prepCase c ++ genForms "ese" "esa" ! g ;
+      Pl => \\g,c => prepCase c ++ genForms "esos" "esas" ! g
       }
     } ;
-  that_NP = mkNP ["questo"] Masc Sg ;
-  there7from_Adv = ss ["di là"] ;
-  there7to_Adv = ss "là" ; --- ci
-  there_Adv = ss "là" ;
-  therefore_PConj = ss "quindi" ;
-  these_NP = mkNP ["queste"] Fem Pl ;
+  that_NP = mkNP ["eso"] Masc Sg ;
+  there_Adv = mkAdv "allí" ;		-- allá
+  there7to_Adv = mkAdv ["para allá"] ;
+  there7from_Adv = mkAdv ["de allá"] ;	
+  therefore_PConj = ss ["por eso"] ;
+  these_NP = mkNP ["estas"] Fem Pl ;
   they_Pron = mkPronoun
-    "loro" "loro" "li" "loro" "loro" "loro" "loro" "loro" 
+    "ellas" "las" "les" "ellas"
+    "su" "su" "sus" "sus"
     Fem Pl P3 Clit1 ;
   this_Quant = {
     s = table {
-      Sg => \\g,c => prepCase c ++ genForms "questo" "questa" ! g ;
-      Pl => \\g,c => prepCase c ++ genForms "questi" "queste" ! g
+      Sg => \\g,c => prepCase c ++ genForms "este" "esta" ! g ;
+      Pl => \\g,c => prepCase c ++ genForms "estos" "estas" ! g
       }
     } ;
-  this_NP = pn2np (mkPN ["questo"] Masc) ;
-  those_NP = mkNP ["quelle"] Fem Pl ;
-  through_Prep = mkPreposition "per" ;
-  too_AdA = ss "troppo" ;
+  this_NP = pn2np (mkPN ["esto"] Masc) ;
+  those_NP = mkNP ["esas"] Fem Pl ;
+  through_Prep = mkPreposition "por" ;
+  too_AdA = ss "demasiado" ;
   to_Prep = complDat ;
-  under_Prep = mkPreposition "sotto" ;
-  very_AdA = ss "molto" ;
-  want_VV = mkVV (verboV (volere_96 "volere")) ;
+  under_Prep = mkPreposition "bajo" ;
+  very_AdA = ss "muy" ;
+  want_VV = mkVV (verboV (querer_64 "querer")) ;
   we_Pron = 
-    mkPronoun "noi" "ci" "ci" "noi" "nostro" "nostra" "nostri" "nostre"
-    Fem Pl P1 Clit3 ;
-  whatSg_IP = {s = \\c => prepCase c ++ ["che cosa"] ; a = aagr Fem Sg} ;
-  whatPl_IP = {s = \\c => prepCase c ++ ["che cose"] ; a = aagr Fem Pl} ; ---
-  when_IAdv = ss "quando" ;
-  when_Subj = ss "quando" ** {m = Indic} ;
-  where_IAdv = ss "dove" ;
-  whichPl_IDet = {s = \\g,c => prepCase c ++ genForms "quale" "quale" ! g ; n = Sg} ;
-  whichSg_IDet = {s = \\g,c => prepCase c ++ genForms "quali" "quali" ! g; n = Pl} ;
-  whoPl_IP = {s = \\c => prepCase c ++ "chi" ; a = aagr Fem Pl} ;
-  whoSg_IP = {s = \\c => prepCase c ++ "chi" ; a = aagr Fem Sg} ;
-  why_IAdv = ss "perché" ;
-  without_Prep = mkPreposition "senza" ;
-  with_Prep = {s = [] ; c = CPrep P_con} ;
-  yes_Phr = ss "sì" ;
+    mkPronoun 
+      "nosotras" "nos" "nos" "nosotras"
+      "nuestro" "nuestra" "nuestros" "nuestras"
+      Fem Pl P1 Clit3 ;
+  whatSg_IP = {s = \\c => prepCase c ++ ["qué"] ; a = aagr Masc Sg} ;
+  whatPl_IP = {s = \\c => prepCase c ++ ["qué"] ; a = aagr Masc Pl} ; ---
+  when_IAdv = ss "cuando" ;
+  when_Subj = ss "cuando" ** {m = Indic} ;
+  where_IAdv = ss "donde" ;
+  whichPl_IDet = {s = \\g,c => prepCase c ++ "cuale" ; n = Sg} ;
+  whichSg_IDet = {s = \\g,c => prepCase c ++ "cuali" ; n = Pl} ;
+  whoPl_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Fem Pl} ;
+  whoSg_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Fem Sg} ;
+  why_IAdv = ss "porqué" ;
+  without_Prep = mkPreposition "sin" ;
+  with_Prep = mkPreposition "con" ;
+  yes_Phr = ss "sí" ;
   youSg_Pron = mkPronoun 
-    "tu" "ti" "ti" "te" "tuo" "tua" "tuoi" "tue"
+    "tu" "te" "te" "tí"
+    "tu" "tu" "tus" "tus"
     Fem Sg P2 Clit1 ;
   youPl_Pron =
     mkPronoun
-       "voi" "vi" "vi" "voi" "vostro" "vostra" "vostri" "vostre"
-       Fem Pl P2 Clit3 ;
+      "vosotras" "vos" "vos" "vosotras"
+      "vuestro" "vuestra" "vuestros" "vuestras"
+      Fem Pl P2 Clit3 ;
+  youPol_Pron =
+    mkPronoun
+      "usted" "la" "le" "usted"
+      "su" "su" "sus" "sus"
+      Fem Pl P2 Clit3 ;
+
+oper
+  etConj : {s : Str ; n : Number} = {s = pre {
+    "y" ; 
+    "y" / strs {"ya" ; "ye" ; "yo" ; "yu"} ;
+    "e" / strs {"i" ; "hi" ; "y"}
+    }} ** {n = Pl} ;
 
 }
 

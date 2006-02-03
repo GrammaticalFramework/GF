@@ -14,7 +14,6 @@ resource MorphoSpa = CommonRomance, ResSpa **
   flags optimize=all ;
 
 
-
 --2 Nouns
 --
 -- The following macro is useful for creating the forms of number-dependent
@@ -26,14 +25,11 @@ oper
 
 -- For example:
 
-  nomVino : Str -> Number => Str = \vino -> let {vin = Predef.tk 1 vino} in
-    numForms vino (vin + "i") ;
+  nomVino : Str -> Number => Str = \vino -> 
+    numForms vino (vino + "s") ;
 
-  nomRana : Str -> Number => Str = \rana -> let {ran = Predef.tk 1 rana} in
-    numForms rana (ran + "e") ;
-
-  nomSale : Str -> Number => Str = \sale -> let {sal = Predef.tk 1 sale} in
-    numForms sale (sal + "i") ;
+  nomPilar : Str -> Number => Str = \pilar -> 
+    numForms pilar (pilar + "es") ;
 
   nomTram : Str -> Number => Str = \tram ->
     numForms tram tram ;
@@ -46,31 +42,13 @@ oper
   mkNounIrreg : Str -> Str -> Gender -> Noun = \mec,mecs -> 
     mkNoun (numForms mec mecs) ;
 
-  mkNomReg : Str -> Noun = \vino -> 
-   let
-     o = last vino ;
-     vin = init vino ;
-     n = last vin
-   in
-   case o of {
-     "o" => {s = case n of {
-       "c" | "g" => numForms vino (vin + "hi") ;
-       "i"       => numForms vino vin ;
-       _         => numForms vino (vin + "i")
-       } ; g = Masc} ;
-     "a" => {s = case n of {
-       "c" | "g" => numForms vino (vin + "he") ;
-       _         => numForms vino (vin + "e")
-       } ; g = Fem} ;
-     "e" => {s = numForms vino (vin + "i")
-       ; g = Masc} ;
-     "à" | "ù" => {s = numForms vino vino
-       ; g = Fem} ;
-     _ => {s = numForms vino vino
-       ; g = Masc}
-     } ;
-
-
+  mkNomReg : Str -> Noun = \mec ->
+    case last mec of {
+      "o" | "e" => mkNoun (nomVino mec) Masc ; 
+      "a" => mkNoun (nomVino mec) Fem ;
+      "z" => mkNounIrreg mec (init mec + "ces") Fem ;
+      _   => mkNoun (nomPilar mec) Masc
+      } ;
 
 --2 Adjectives
 --
@@ -91,40 +69,21 @@ oper
     let 
       sol = Predef.tk 1 solo
     in
-    mkAdj solo (sol + "a") (sol + "i") (sol + "e") (sol + "amente") ;
+    mkAdj solo (sol + "a") (sol + "os") (sol + "as") (sol + "amente") ;
 
-  adjTale : Str -> Adj = \tale -> 
-    let 
-      tal  = Predef.tk 1 tale ;
-      tali = tal + "i" ;
-      tala = if_then_Str (pbool2bool (Predef.occur (Predef.dp 1 tal) "lr")) tal tale
-    in
-    mkAdj tale tale tali tali (tala + "mente") ;
+  adjUtil : Str -> Str -> Adj = \util,utiles -> 
+    mkAdj util util utiles utiles (util + "mente") ;
 
   adjBlu : Str -> Adj = \blu -> 
     mkAdj blu blu blu blu blu ; --- 
 
-
-  mkAdjReg : Str -> Adj = \solo ->
-   let
-     o = last solo ;
-     sol = init solo ;
-     l = last sol ;
-     solamente = (sol + "amente")
-   in
-   case o of {
-     "o" => case l of {
-       "c" | "g" => mkAdj solo (sol + "a") (sol + "hi") (sol + "he") solamente ;
-       "i"       => mkAdj solo (sol + "a") sol (sol + "e") solamente ;
-       _         => mkAdj solo (sol + "a") (sol + "i") (sol + "e") solamente
-       } ;
-     "e" => mkAdj solo solo (sol + "i") (sol + "i") (case l of {
-       "l" => sol + "mente" ;
-       _   => solo + "mente"
-       }) ;
-     _ => mkAdj solo solo solo solo (sol + "mente")
-     } ;
-
+  mkAdjReg : Str -> Adj = \solo -> 
+    case last solo of {
+      "o" => adjSolo solo ;
+      "e" => adjUtil solo (solo + "s") ;
+      _   => adjUtil solo (solo + "es")
+----      _   => adjBlu solo
+      } ;
 
 --2 Personal pronouns
 --
@@ -140,7 +99,6 @@ oper
        Ton x => prepCase x ++ Lui ;
        Aton Nom => il ; ---- [] ;
        Aton Acc => le ;
-       Aton (CPrep P_di) => "ne" ; --- hmm
        Aton (CPrep P_a) => lui ;
        Aton q       => prepCase q ++ Lui ; ---- GF bug with c or p! 
        Poss {n = Sg ; g = Masc} => son ;
@@ -151,6 +109,34 @@ oper
      a = {g = g ; n = n ; p = p} ;
      c = c
     } ;
+{-
+  -- used in constructions like "(no) hay ..."
+
+  pronEmpty : Number -> Pronoun = \n -> mkPronoun
+    []
+    []
+    []
+    []
+    [] [] [] []
+    (PGen Masc)
+    n
+    P3
+    Clit2 ;
+
+--2 Reflexive pronouns
+--
+-- It is simply a function depending on number and person.
+
+  pronRefl : Number -> Person -> Str = \n,p -> case <n,p> of {
+    <Sg,P1> => "me" ;
+    <Sg,P2> => "te" ;
+    <_, P3> => "se" ;
+    <Pl,P1> => "nos" ;
+    <Pl,P2> => "vos"
+    } ;
+
+-}
+
 
 --2 Determiners
 --
