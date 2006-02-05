@@ -1071,7 +1071,8 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
   in 
   case taa of {
     "it" + _ => vHarkita soutaa ;
-    ("st" | "nn" | "rr" | "ll") + _ => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
+    ("st" | "nn" | "rr" | "ll") + _ => 
+      vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
     _ + ("aa" | "ää")     => vOttaa soutaa (souda + "n") ;
     ("o" | "u" | "y" | "ö") + ("da" | "dä") => vJuoda soutaa joi ;
     ("ata" | "ätä") => vOsata soutaa ;
@@ -1080,7 +1081,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
   reg2VerbH : (soutaa,souti : Str) -> VerbH = \soutaa,souti ->
   let
-    soudat = regVerbH soutaa ;
+----    soudat = regVerbH soutaa ;
     soudan = weakGrade (init soutaa) + "n" ;
     soudin = weakGrade souti + "n" ;
     souden = init souti + "en" ;
@@ -1092,8 +1093,10 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
   case taa of {
     "taa" | "tää" => vHuoltaa soutaa soudan souti soudin ;
     "ata" | "ätä" => vPalkata soutaa souti ;
+    "ota" | "ötä" => vPudota soutaa souti ;
     "sta" | "stä" => vJuosta soutaa souden (juo +   o+u+"t") (juo + "t"+u) ;
-    _ => soudat
+    _ + ("da" | "dä") => vJuoda soutaa souti
+----    _ => soudat
     } ;
 
   reg3VerbH : (_,_,_ : Str) -> VerbH = \soutaa,soudan,souti -> 
@@ -1104,14 +1107,12 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     o  = last juo ;
     a = last taa ;
     u = ifTok Str a "a" "u" "y" ;
-    soudin = weakGrade souti + "n" ;
-    soudat = reg2VerbH soutaa souti ;
+    soudin = souti + "n" ; ----weakGrade souti + "n" ;
+    ----soudat = reg2VerbH soutaa souti ;
   in case taa of {
     "lla" | "llä" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
-    "ota" | "ötä" => vPudota soutaa souti ;
-    "taa" | "tää" => vHuoltaa soutaa soudan souti soudin ;
-    _ + ("da" | "dä") => vJuoda soutaa souti ;
-    _ => soudat
+    "taa" | "tää" => vHuoltaa soutaa soudan souti soudin
+----    _ => soudat
     } ;
 
 -- For "harppoa", "hukkua", "löytyä", with grade alternation.

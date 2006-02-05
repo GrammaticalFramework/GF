@@ -70,16 +70,18 @@ concrete CatFin of Cat = TenseX ** open ResFin, Prelude in {
     PConj = {s : Str} ;    
     CAdv = {s : Str} ;    
     Subj = {s : Str} ;
-    Prep = {s : Str} ;
+    Prep = Compl ;
 
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb1 ; -- = {s : VForm => Str ; sc : Case} ;
-    V2, VV, V2A = Verb1 ** {c2 : Compl ; } ;
+    V2 = Verb1 ** {c2 : Compl} ;
+    V2A = Verb1 ** {c2, c3 : Compl} ;
+    VV = Verb1 ; ---- infinitive form
     V3 = Verb1 ** {c2, c3 : Compl} ;
 
     A = {s : Degree => AForm => Str} ;
-    A2 = {s : Degree => AForm => Str ; c2 : Str} ;
+    A2 = {s : Degree => AForm => Str ; c2 : Compl} ;
 
     N  = {s : NForm => Str} ;
     N2 = {s : NForm => Str} ** {c2 : Compl} ;

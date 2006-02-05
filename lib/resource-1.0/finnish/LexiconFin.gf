@@ -8,18 +8,18 @@ flags
 
 lin
   airplane_N = regN "lentokone" ;
-----  answer_V2S = mkV2S (caseV2 (regV "vastata") allative) ;
+  answer_V2S = mkV2S (regV "vastata") (casePrep allative) ;
   apartment_N = regN "asunto" ;
   apple_N = nLukko "omena" ; --- omenia, not omenoita
   art_N = regN "taide" ;
-----  ask_V2Q = mkV2Q (caseV2 (regV "kysyä") ablative) ;
+  ask_V2Q = mkV2Q (regV "kysyä") (casePrep ablative) ;
   baby_N = nLukko "vauva" ;
   bad_A = mkADeg (nLukko "paha") "pahempi" "pahin" ;
   bank_N = regN "pankki" ;
   beautiful_A = mkADeg (regN "kaunis") "kauniimpi" "kaunein" ;
-----  become_VA = mkVA (regV "tulla") translative ;
+  become_VA = mkVA (regV "tulla") (casePrep translative) ;
   beer_N = regN "olut" ;
-----  beg_V2V = mkV2V (caseV2 (reg2V "pyytää" "pyysi") partitive) ;
+  beg_V2V = mkV2V (reg2V "pyytää" "pyysi") (casePrep partitive) ;
   big_A = mkADeg (sgpartN (nArpi "suuri") "suurta") "suurempi" "suurin" ;
   bike_N = nLukko "polkupyörä" ; --- for correct vowel harmony
   bird_N = nLukko "lintu" ;
@@ -63,12 +63,12 @@ lin
   cow_N = nLukko "lehmä" ;
   die_V = regV "kuolla" ;
   dirty_A = mkADeg (regN "likainen") "likaisempi" "likaisin" ;
-  distance_N3 = mkN3 (regN "etäisyys") elative illative ;
+  distance_N3 = mkN3 (regN "etäisyys") (casePrep elative) (casePrep illative) ;
   doctor_N = reg2N "tohtori" "tohtoreita" ;
   dog_N = nLukko "koira" ;
   door_N = nArpi "ovi" ;
   drink_V2 = dirV2 (regV "juoda") ;
-----  easy_A2V = mkA2V (mkA2 (mkA (nLukko "helppo")) (caseP allative)) ;
+  easy_A2V = mkA2V (mkA (nLukko "helppo")) (casePrep allative) ;
   eat_V2 = dirV2 (regV "syödä") ;
   empty_A = mkADeg (nLukko "tyhjä") "tyhjempi" "tyhjin" ;
   enemy_N = regN "vihollinen" ;
@@ -82,7 +82,7 @@ lin
   fridge_N = regN "jääkaappi" ;
   friend_N = nLukko "ystävä" ;
   fruit_N = nLukko "hedelmä" ;
-----  fun_AV = mkAV (mkA (nLukko "hauska")) ;
+  fun_AV = mkAV (mkA (nLukko "hauska")) ;
   garden_N = nKukko "puutarha" "puutarhan" "puutarhoja" ;
   girl_N = nLukko "tyttö" ;
   glove_N = regN "käsine" ;
@@ -121,7 +121,7 @@ lin
   love_V2 = caseV2 (regV "rakastaa") partitive ;
   man_N = mkN "mies" "miehen" "miehenä" "miestä" "mieheen" 
             "miehinä" "miehissä" "miesten" "miehiä" "miehiin" ;
-  married_A2 = mkA2 (mkA (nRae "avioitunut" "avioituneena")) (postpP genitive "kanssa") ;
+  married_A2 = mkA2 (mkA (nRae "avioitunut" "avioituneena")) (postPrep genitive "kanssa") ;
   meat_N = nLukko "liha" ;
   milk_N = nLukko "maito" ;
   moon_N = regN "kuu" ;
@@ -134,7 +134,7 @@ lin
   oil_N = nLukko "öljy" ;
   old_A = mkADeg (nLukko "vanha") "vanhempi" "vanhin" ;
   open_V2 = dirV2 (regV "avata") ;
-----  paint_V2A = mkV2A (dirV2 (regV "maalata")) translative ;
+  paint_V2A = mkV2A (regV "maalata") accPrep (casePrep translative) ;
   paper_N = reg2N "paperi" "papereita" ;
   peace_N = nLukko "rauha" ;
   pen_N = nLukko "kynä" ;
@@ -143,10 +143,10 @@ lin
   play_V2 = dirV2 (regV "pelata") ; --- leikkiä, soittaa
   policeman_N = regN "poliisi" ;
   priest_N = regN "pappi" ;
-----  probable_AS = mkAS (mkA (nNainen "todennäköistä")) ; --- for vowel harmony
+  probable_AS = mkAS (mkA (nNainen "todennäköistä")) ; --- for vowel harmony
   queen_N = regN "kuningatar" ;
   radio_N = reg2N "radio" "radioita" ;
-----  rain_V = mkV0 (reg2V "sataa" "satoi") ;
+  rain_V0 = mkV0 (reg2V "sataa" "satoi") ;
   read_V2 = dirV2 (regV "lukea") ;
   red_A = regADeg "punainen" ;
   religion_N = nLukko "uskonto" ;
@@ -189,7 +189,7 @@ lin
   switch8off_V2 = dirV2 (regV "sammuttaa") ; ---
   switch8on_V2 = dirV2 (regV "sytyttää") ; ---
   table_N = nLukko "pöytä" ;
-  talk_V3 = mkV3 (regV "puhua") (caseP allative) (caseP elative) ;
+  talk_V3 = mkV3 (regV "puhua") (casePrep allative) (casePrep elative) ;
   teacher_N = nLukko "opettaja" ;
   teach_V2 = dirV2 (regV "opettaa") ;
   television_N = reg2N "televisio" "televisioita" ;

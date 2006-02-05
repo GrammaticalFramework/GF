@@ -1,5 +1,5 @@
 incomplete concrete ConjunctionRomance of Conjunction = 
-  CatRomance ** open ParamRomance, ResRomance, Coordination, Prelude in {
+  CatRomance ** open CommonRomance, ResRomance, Coordination, Prelude in {
 
   flags optimize=all_subs ;
 

@@ -1,4 +1,4 @@
---# -path=.:../abstract:../../prelude
+--# -path=.:../abstract:../common:../../prelude
 
 --1 Finnish Lexical Paradigms
 --
@@ -33,7 +33,7 @@ resource ParadigmsFin = open
   CatFin
   in {
 
---  flags optimize=values ;
+--  flags optimize=all ;
   flags optimize=noexpand ;
 
 --2 Parameters 
@@ -65,12 +65,10 @@ oper
 -- of many-place verbs and adjective. A complement can be defined by
 -- just a case, or a pre/postposition and a case.
 
-  PPosition  : Type ;
-
-  prepP      : Case -> Str -> PPosition ;
-  postpP     : Case -> Str -> PPosition ;
-  caseP      : Case ->        PPosition ;
-  accusative : PPosition ;
+  prePrep     : Case -> Str -> Prep ;
+  postPrep    : Case -> Str -> Prep ;
+  casePrep    : Case ->        Prep ;
+  accusative  : Prep ;
 
 --2 Nouns
 
@@ -197,15 +195,15 @@ oper
 -- Separately-written compound nouns, like "sambal oelek", "Urho Kekkonen",
 -- have only their last part inflected.
 
-  nComp : Str -> N -> N ;
+  compN : Str -> N -> N ;
 
 -- Nouns used as functions need a case, of which by far the commonest is
 -- the genitive.
 
-  mkN2 : N -> Case -> N2 ;
-  genN2  : N -> N2 ;
+  mkN2  : N -> Prep -> N2 ;
+  genN2 : N -> N2 ;
 
-  mkN3 : N -> Case -> Case -> N3 ;
+  mkN3  : N -> Prep -> Prep -> N3 ;
 
 -- Proper names can be formed by using declensions for nouns.
 -- The plural forms are filtered away by the compiler.
@@ -221,7 +219,7 @@ oper
 
 -- Two-place adjectives need a case for the second argument.
 
-  mkA2 : A -> PPosition -> A2 ;
+  mkA2 : A -> Prep -> A2 ;
 
 -- Comparison adjectives have three forms. The comparative and the superlative
 -- are always inflected in the same way, so the nominative of them is actually
@@ -286,7 +284,7 @@ oper
 
 -- Two-place verbs need a case, and can have a pre- or postposition.
 
-  mkV2 : V -> PPosition -> V2 ;
+  mkV2 : V -> Prep -> V2 ;
 
 -- If the complement needs just a case, the following special function can be used.
 
@@ -304,9 +302,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> PPosition -> PPosition -> V3 ;    -- speak, with, about
-  dirV3    : V -> Case      -> V3 ;                 -- give,_,to
-  dirdirV3 : V              -> V3 ;                 -- acc, allat
+  mkV3     : V -> Prep -> Prep -> V3 ;    -- speak, with, about
+  dirV3    : V -> Case -> V3 ;            -- give,_,to
+  dirdirV3 : V         -> V3 ;            -- acc, allat
 
 
 --3 Other complement patterns
@@ -316,25 +314,25 @@ oper
 
   mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
-  mkV2S : V -> Str -> V2S ;
+  mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
-  mkV2V : V -> Str -> Str -> V2V ;
-  mkVA  : V -> VA ;
-  mkV2A : V -> Str -> V2A ;
+  mkV2V : V -> Prep -> V2V ;
+  mkVA  : V -> Prep -> VA ;
+  mkV2A : V -> Prep -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
-  mkV2Q : V -> Str -> V2Q ;
+  mkV2Q : V -> Prep -> V2Q ;
 
   mkAS  : A -> AS ;
-  mkA2S : A -> Str -> A2S ;
+  mkA2S : A -> Prep -> A2S ;
   mkAV  : A -> AV ;
-  mkA2V : A -> Str -> A2V ;
+  mkA2V : A -> Prep -> A2V ;
 
--- Notice: categories $V2S, V2V, V2A, V2Q$ are in v 1.0 treated
+-- Notice: categories $V2S, V2V, V2Q$ are in v 1.0 treated
 -- just as synonyms of $V2$, and the second argument is given
 -- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
 -- $V0$ is just $V$.
 
-  V0, V2S, V2V, V2A, V2Q : Type ;
+  V0, V2S, V2V, V2Q : Type ;
   AS, A2S, AV, A2V : Type ;
 
 -- The definitions should not bother the user of the API. So they are
@@ -358,25 +356,20 @@ oper
   ablative = Ablat ;
   allative = Allat ;
 
-  PPosition : Type = {c : NPForm ; s3 : Str ; p : Bool} ;
-  prepP  : Case -> Str -> PPosition = 
-    \c,p -> {c = NPCase c ; s3 = p ; p = True} ;
-  postpP : Case -> Str -> PPosition =
-    \c,p -> {c = NPCase c ; s3 = p ; p = False} ;
-  caseP : Case -> PPosition =
-    \c -> {c = NPCase c ; s3 = [] ; p = True} ;
-  accusative =  {c = NPAccNom ; s3 = [] ; p = True} ;
+  prePrep  : Case -> Str -> Prep = 
+    \c,p -> {c = NPCase c ; s = p ; isPre = True ; lock_Prep = <>} ;
+  postPrep : Case -> Str -> Prep =
+    \c,p -> {c = NPCase c ; s = p ; isPre = False ; lock_Prep = <>} ;
+  casePrep : Case -> Prep =
+    \c -> {c = NPCase c ; s = [] ; isPre = True ; lock_Prep = <>} ;
+  accPrep =  {c = NPAccNom ; s = [] ; isPre = True ; lock_Prep = <>} ;
 
   mkN = \a,b,c,d,e,f,g,h,i,j -> 
     mkNoun a b c d e f g h i j ** {lock_N = <>} ;
 
   regN = \vesi -> 
-  ----  nhn (regNounH vesi) **  {lock_N = <>} ;
   let
     esi = Predef.dp 3 vesi ;   -- analysis: suffixes      
-    si  = Predef.dp 2 esi ;
-    i   = last si ;
-    s   = init si ;
     a   = if_then_Str (pbool2bool (Predef.occurs "aou" vesi)) "a" "ä" ;
     ves = init vesi ;          -- synthesis: prefixes
     vet = strongGrade ves ;
@@ -384,35 +377,29 @@ oper
   in nhn (
        case esi of {
     "uus" | "yys" => sRakkaus vesi ;
-    "nen" =>       sNainen (Predef.tk 3 vesi + ("st" + a)) ;
-
-  _ => case si of {
-    "aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" => sPuu vesi ;
-    "ie" | "uo" | "yö" => sSuo vesi ;
-    "ea" | "eä" => 
-      mkSubst
-        a
-        vesi (vesi) (vesi) (vesi + a)  (vesi + a+"n")
-        (ves + "i") (ves + "i") (ves + "iden")  (ves + "it"+a)
-        (ves + "isiin") ;
-    "is"        => sNauris (vesi + ("t" + a)) ;
-    "ut" | "yt" => sRae vesi (ves + ("en" + a)) ;
-    "as" | "äs" => sRae vesi (vet + (a + "n" + a)) ;
-    "ar" | "är" => sRae vesi (vet + ("ren" + a)) ;
-  _ => case i of {
-    "n"         => sLiitin vesi (vet + "men") ;
-    "s"         => sTilaus vesi (ves + ("ksen" + a)) ;
-    "i" =>         sBaari (vesi + a) ;
-    "e" =>         sRae vesi (strongGrade vesi + "en" + a) ;
-    "a" | "o" | "u" | "y" | "ä" | "ö" => sLukko vesi ;
-    _ =>           sLinux (vesi + "i" + a)
-  }
-  }
+    _ + "nen"           => sNainen (Predef.tk 3 vesi + ("st" + a)) ;
+    _ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö") => sPuu vesi ;
+    _ + ("ie" | "uo" | "yö") => sSuo vesi ;
+    _ + ("ea" | "eä") => 
+        mkSubst
+          a
+          vesi (vesi) (vesi) (vesi + a)  (vesi + a+"n")
+          (ves + "i") (ves + "i") (ves + "iden")  (ves + "it"+a)
+          (ves + "isiin") ;
+    _ + "is"          => sNauris (vesi + ("t" + a)) ;
+    _ + ("ut" | "yt") => sRae vesi (ves + ("en" + a)) ;
+    _ + ("as" | "äs") => sRae vesi (vet + (a + "n" + a)) ;
+    _ + ("ar" | "är") => sRae vesi (vet + ("ren" + a)) ;
+    _ + "n"           => sLiitin vesi (vet + "men") ;
+    _ + "s"           => sTilaus vesi (ves + ("ksen" + a)) ;
+    _ + "i"           => sBaari (vesi + a) ;
+    _ + "e"           => sRae vesi (strongGrade vesi + "en" + a) ;
+    _ + ("a" | "o" | "u" | "y" | "ä" | "ö") => sLukko vesi ;
+    _                 => sLinux (vesi + "i" + a)
   }
   ) **  {lock_N = <>} ;
 
   reg2N : (savi,savia : Str) -> N = \savi,savia -> 
-  ----  nhn (reg2NounH savi savia) 
   let
     savit = regN savi ;
     ia = Predef.dp 2 savia ;
@@ -424,37 +411,33 @@ oper
   case <o,ia> of {
     <"i","ia">              => nhn (sArpi  savi) ;
     <"i","iä">              => nhn (sSylki savi) ;
-    <"i","ta"> | <"i","tä"> => nhn (sTohtori (savi + a)) ;
     <"o","ta"> | <"ö","tä"> => nhn (sRadio savi) ;  
     <"a","ta"> | <"ä","tä"> => nhn (sPeruna savi) ;  
-    <"a","ia"> | <"a","ja"> => nhn (sKukko savi savin savia) ;
+    <"i","ta"> | <"i","tä"> => nhn (sTohtori (savi + a)) ; -- from 10 to 90 ms
+--    <"a","ia"> | <"a","ja"> => nhn (sKukko savi savin savia) ; ---needless?
     _ => savit
     } 
     **  {lock_N = <>} ;
 
 reg3N = \vesi,veden,vesiä -> 
   let
-    vesit = reg2N vesi vesiä ;
     si = Predef.dp 2 vesi ;
-    i  = last si ;
-    a  = last vesiä ;
-    s  = last (Predef.tk 2 vesiä)
+    a  = last vesiä
   in 
   case si of {
     "us" | "ys" =>
-       ifTok CommonNoun (Predef.dp 3 veden) "den" 
-         (nhn (sRakkaus vesi))
-         (nhn (sTilaus vesi (veden + a))) ;
+       nhn (case Predef.dp 3 veden of {
+         "den" => sRakkaus vesi ;
+         _     => sTilaus vesi (veden + a)
+         }) ;
     "as" | "äs" => nhn (sRae vesi (veden + a)) ;
-    "li" | "ni" | "ri" => nhn (sSusi vesi veden (Predef.tk 1 vesi + ("en" + a))) ; 
-    "si" => nhn (sSusi vesi veden (Predef.tk 2 vesi + ("ten" + a))) ; 
+    "li" | "ni" | "ri" => nhn (sSusi vesi veden (init vesi + ("en" + a))) ; 
+    "si"               => nhn (sSusi vesi veden (Predef.tk 2 vesi + ("ten" + a))) ; 
     "in" | "en" | "än" => nhn (sLiitin vesi veden) ;
-    _ => case i of {
-      "a" | "o" | "u" | "y" | "ä" | "ö" => nhn (sKukko vesi veden vesiä) ;
-      "i" => nhn (sKorpi vesi veden (init veden + "n" + a)) ;
-      _ => vesit
-      }
-    } ** {lock_N = <>} ;
+    _ + ("a" | "o" | "u" | "y" | "ä" | "ö") => nhn (sKukko vesi veden vesiä) ;
+    _  {- + "i" -} => nhn (sKorpi vesi veden (init veden + "n" + a))
+    }
+  ** {lock_N = <>} ;
 
   nKukko = \a,b,c -> nhn (sKukko a b c) ** {lock_N = <>} ;
 
@@ -485,14 +468,15 @@ reg3N = \vesi,veden,vesiä ->
     let a = vowelHarmony meri in
     sgpartN (reg2N meri (meri + a)) (init meri + "ta") ;
 
-  nComp = \s,n -> {s = \\c => s ++ n.s ! c ; g = n.g ; lock_N = <>} ;
---  mkN2 = \n,c -> n2n n ** {c = NPCase c ; lock_N2 = <>} ;
---  mkN3 = \n,c,e -> n2n n ** {c = NPCase c ; c2 = NPCase e ; lock_N3 = <>} ;
---  genN2 = \n -> mkN2 n genitive ;
+  compN = \s,n -> {s = \\c => s ++ n.s ! c ; g = n.g ; lock_N = <>} ;
+
+  mkN2 = \n,c -> n ** {c2 = c ; lock_N2 = <>} ;
+  mkN3 = \n,c,e -> n ** {c2 = c ; c3 = e ; lock_N3 = <>} ;
+  genN2 = \n -> mkN2 n (casePrep genitive) ;
   mkPN n = mkProperName n ** {lock_PN = <>} ;
 
-----  mkA = \x -> noun2adj x ** {lock_A = <>} ;
-----  mkA2 = \x,c -> x ** {s3 = c.s3 ; p = c.p ; c = c.c ; lock_A2 = <>} ;
+  mkA = \x -> {s = \\_ => (noun2adj x).s ; lock_A = <>} ;
+  mkA2 = \x,c -> x ** {c2 = c ; lock_A2 = <>} ;
   mkADeg x kivempi kivin = 
     let
       a = last (x.s ! ((NCase Sg Part))) ; ---- gives "kivinta"
@@ -533,41 +517,37 @@ reg3N = \vesi,veden,vesiä ->
     v2v (MorphoFin.vHuoltaa ottaa otan otti otin)  ** {sc = NPCase Nom ; lock_V = <>} ;
 
 
-----  mkV2 = \v,c -> v ** {s3 = c.s3 ; p = c.p ; c = c.c ; lock_V2 = <>} ;
-----  caseV2 = \v,c -> mkV2 v (caseP c) ; 
-----  dirV2 v = mkTransVerbDir v ** {lock_V2 = <>} ;
+  mkV2 = \v,c -> v ** {c2 = c ; lock_V2 = <>} ;
+  caseV2 = \v,c -> mkV2 v (casePrep c) ; 
+  dirV2 v = mkV2 v accPrep ;
 
   mkAdv : Str -> Adv = \s -> {s = s ; lock_Adv = <>} ;
 
-{-
-  mkV3 v p q = v ** 
-    {s3 = p.s3 ; p = p.p ; c = p.c ; s5 = q.s3 ; p2 = q.p ; c2 = q.c ;
-    lock_V3 = <>} ; 
-  dirV3 v p = mkV3 v accusative (caseP p) ;
+
+  mkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ; 
+  dirV3 v p = mkV3 v accPrep (casePrep p) ;
   dirdirV3 v = dirV3 v allative ;
 
-
   mkVS  v = v ** {lock_VS = <>} ;
-  mkVV  v = v ** {c2 = "to" ; lock_VV = <>} ;
+  mkVV  v = v ** {lock_VV = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
 
   V0 : Type = V ;
-  V2S, V2V, V2Q, V2A : Type = V2 ;
+  V2S, V2V, V2Q : Type = V2 ;
   AS, A2S, AV : Type = A ;
   A2V : Type = A2 ;
 
   mkV0  v = v ** {lock_V = <>} ;
   mkV2S v p = mkV2 v p ** {lock_V2 = <>} ;
-  mkV2V v p t = mkV2 v p ** {s4 = t ; lock_V2 = <>} ;
-  mkVA  v = v ** {lock_VA = <>} ;
-  mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
+  mkV2V v p = mkV2 v p ** {lock_V2 = <>} ;
+  mkVA  v p = v ** {c2 = p ; lock_VA = <>} ;
+  mkV2A v p q = v ** {c2 = p ; c3 = q ; lock_V2A = <>} ;
   mkV2Q v p = mkV2 v p ** {lock_V2 = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;
   mkA2S v p = mkA2 v p ** {lock_A = <>} ;
   mkAV  v = v ** {lock_A = <>} ;
   mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
--}
 
 
 } ;
