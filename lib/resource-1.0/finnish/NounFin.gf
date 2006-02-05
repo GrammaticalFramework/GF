@@ -3,13 +3,19 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
   flags optimize=all_subs ;
 
   lin
+{-
     DetCN det cn = {
       s = \\c => det.s ++ cn.s ! det.n ! c ; 
       a = agrP3 det.n
       } ;
-    UsePN pn = pn ** {a = agrP3 Sg} ;
-    UsePron p = p ;
-
+-}
+    UsePN pn = {
+      s = \\c => pn.s ! npform2case c ; 
+      a = agrP3 Sg ;
+      isPron = False
+      } ;
+    UsePron p = p ** {isPron = True} ;
+{-
     PredetNP pred np = {
       s = \\c => pred.s ++ np.s ! c ;
       a = np.a
@@ -67,5 +73,5 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
     AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s} ;
 
     SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s} ;
-
+-}
 }

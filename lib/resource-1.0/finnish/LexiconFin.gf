@@ -136,6 +136,7 @@ lin
   open_V2 = dirV2 (regV "avata") ;
   paint_V2A = mkV2A (regV "maalata") accPrep (casePrep translative) ;
   paper_N = reg2N "paperi" "papereita" ;
+  paris_PN = mkPN (regN "Pariisi") ;
   peace_N = nLukko "rauha" ;
   pen_N = nLukko "kynä" ;
   planet_N = nLukko "planeetta" ;

@@ -19,81 +19,6 @@ resource MorphoFin = ResFin ** open Prelude in {
 
 oper
 
-  NounH : Type = {
-    a,vesi,vede,vete,vetta,veteen,vetii,vesii,vesien,vesia,vesiin : Str
-    } ;
-
-  CommonNoun = {s : NForm => Str} ;
-
--- worst-case macro
-
-  mkSubst : Str -> (_,_,_,_,_,_,_,_,_,_ : Str) -> NounH = 
-    \a,vesi,vede,vete,vetta,veteen,vetii,vesii,vesien,vesia,vesiin -> 
-    {a = a ;
-     vesi = vesi ;
-     vede = vede ;
-     vete = vete ;
-     vetta = vetta ;
-     veteen = veteen ;
-     vetii = vetii ;
-     vesii = vesii ;
-     vesien = vesien ;
-     vesia = vesia ;
-     vesiin = vesiin
-    } ;
-
-  nhn : NounH -> CommonNoun = \nh ->
-    let
-     a = nh.a ;
-     vesi = nh.vesi ;
-     vede = nh.vede ;
-     vete = nh.vete ;
-     vetta = nh.vetta ;
-     veteen = nh.veteen ;
-     vetii = nh.vetii ;
-     vesii = nh.vesii ;
-     vesien = nh.vesien ;
-     vesia = nh.vesia ;
-     vesiin = nh.vesiin
-    in
-    {s = table {
-      NCase Sg Nom    => vesi ;
-      NCase Sg Gen    => vede + "n" ;
-      NCase Sg Part   => vetta ;
-      NCase Sg Transl => vede + "ksi" ;
-      NCase Sg Ess    => vete + ("n" + a) ;
-      NCase Sg Iness  => vede + ("ss" + a) ;
-      NCase Sg Elat   => vede + ("st" + a) ;
-      NCase Sg Illat  => veteen ;
-      NCase Sg Adess  => vede + ("ll" + a) ;
-      NCase Sg Ablat  => vede + ("lt" + a) ;
-      NCase Sg Allat  => vede + "lle" ;
-      NCase Sg Abess  => vede + ("tt" + a) ;
-
-      NCase Pl Nom    => vede + "t" ;
-      NCase Pl Gen    => vesien ;
-      NCase Pl Part   => vesia ;
-      NCase Pl Transl => vesii + "ksi" ;
-      NCase Pl Ess    => vetii + ("n" + a) ;
-      NCase Pl Iness  => vesii + ("ss" + a) ;
-      NCase Pl Elat   => vesii + ("st" + a) ;
-      NCase Pl Illat  => vesiin ;
-      NCase Pl Adess  => vesii + ("ll" + a) ;
-      NCase Pl Ablat  => vesii + ("lt" + a) ;
-      NCase Pl Allat  => vesii + "lle" ;
-      NCase Pl Abess  => vesii + ("tt" + a) ;
-
-      NComit    => vetii + "ne" ;
-      NInstruct => vesii + "n" ;
-
-      NPossNom       => vete ;
-      NPossGenPl     => Predef.tk 1 vesien ;
-      NPossTransl Sg => vede + "kse" ;
-      NPossTransl Pl => vesii + "kse" ;
-      NPossIllat Sg  => Predef.tk 1 veteen ;
-      NPossIllat Pl  => Predef.tk 1 vesiin
-      }
-    } ;
 
 -- A user-friendly variant takes existing forms and infers the vowel harmony.
 
@@ -167,33 +92,6 @@ oper
 
 -- Here some useful special cases; more will be given in $paradigms.Fin.gf$.
 --         
--- Nouns with partitive "a"/"ä" ; 
--- to account for grade and vowel alternation, three forms are usually enough
--- Examples: "talo", "kukko", "huippu", "koira", "kukka", "syylä",...
-
-  sKukko : (_,_,_ : Str) -> NounH = \kukko,kukon,kukkoja ->
-    let {
-      o      = Predef.dp 1 kukko ;
-      a      = Predef.dp 1 kukkoja ;
-      kukkoj = Predef.tk 1 kukkoja ;
-      i      = Predef.dp 1 kukkoj ;
-      ifi    = ifTok Str i "i" ;
-      kukkoi = ifi kukkoj (Predef.tk 1 kukkoj) ;
-      e      = Predef.dp 1 kukkoi ;
-      kukoi  = Predef.tk 2 kukon + Predef.dp 1 kukkoi
-    } 
-    in
-    mkSubst a 
-            kukko 
-            (Predef.tk 1 kukon) 
-            kukko
-            (kukko + a) 
-            (kukko + o + "n")
-            (kukkoi + ifi "" "i") 
-            (kukoi + ifi "" "i") 
-            (ifTok Str e "e" (Predef.tk 1 kukkoi + "ien") (kukkoi + ifi "en" "jen"))
-            kukkoja
-            (kukkoi + ifi "in" "ihin") ;
 
   sLukko : Str -> NounH = \lukko -> 
    let
@@ -336,28 +234,6 @@ oper
             (radioi + "t" + a)
             (radioi + "hin") ;
 
--- Surpraisingly, making the test for the partitive, this not only covers
--- "rae", "perhe", "savuke", but also "rengas", "lyhyt" (except $Sg Illat$), etc.
-
-  sRae : (_,_ : Str) -> NounH = \rae,rakeena ->
-    let {
-      a      = Predef.dp 1 rakeena ;
-      rakee  = Predef.tk 2 rakeena ;
-      rakei  = Predef.tk 1 rakee + "i" ;
-      raet   = rae + (ifTok Str (Predef.dp 1 rae) "e" "t" [])
-    } 
-    in
-    mkSubst a 
-            rae
-            rakee 
-            rakee
-            (raet + ("t" + a)) 
-            (rakee + "seen")
-            rakei
-            rakei
-            (rakei + "den") 
-            (rakei + ("t" + a))
-            (rakei + "siin") ;
 
   sSusi : (_,_,_ : Str) -> NounH = \susi,suden,sutena ->
     let
@@ -730,23 +606,11 @@ vowelHarmony : Str -> Str = \liitin ->
       NPCase Ablat  => minu + ("lt" + a) ;
       NPCase Allat  => minu + "lle" ;
       NPCase Abess  => minu + ("tt" + a) ;
-      NPAccNom | NPAccGen => Predef.tk 1 minun + "t"
+      NPAcc         => Predef.tk 1 minun + "t"
       } ;
      a = {n = n ; p = p}
     } ; 
 
-  pronMina = mkPronoun "minä" "minun" "minua" "minuna" "minuun" Sg P1 ;
-  pronSina = mkPronoun "sinä" "sinun" "sinua" "sinuna" "sinuun"  Sg P2 ;
-  pronHan  = mkPronoun "hän" "hänen" "häntä"  "hänenä" "häneen" Sg P3 ;
-  pronMe   = mkPronoun "me" "meidän" "meitä" "meinä" "meihin" Pl P1 ;
-  pronTe   = mkPronoun "te" "teidän" "teitä" "teinä" "teihin"  Pl P2 ;
-  pronHe   = mkPronoun "he" "heidän" "heitä" "heinä" "heihin"  Pl P3 ;
-  pronNe   = mkPronoun "ne" "niiden" "niitä" "niinä" "niihin"  Pl P3 ;
-
-  pronTama = mkPronoun "tämä" "tämän" "tätä" "tänä" "tähän"  Sg P3 ;
-  pronNama = mkPronoun "nämä" "näiden" "näitä" "näinä" "näihin"  Pl P3 ;
-  pronTuo  = mkPronoun "tuo" "tuon" "tuota" "tuona" "tuohon"  Sg P3 ;
-  pronNuo  = mkPronoun "nuo" "noiden" "noita" "noina" "noihin"  Pl P3 ;
 
 -- The non-human pronoun "se" ('it') is even more irregular,
 -- Its accusative cases do not
@@ -919,22 +783,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
 --2 Adjectives
 --
--- To form an adjective, it is usually enough to give a noun declension: the
--- adverbial form is regular.
 
-  Adj : Type = {s : AForm => Str} ;
-
-  noun2adj : CommonNoun -> Adj = noun2adjComp True ;
-
-  noun2adjComp : Bool -> CommonNoun -> Adj = \isPos,tuore ->
-    let 
-      tuoreesti  = Predef.tk 1 (tuore.s ! NCase Sg Gen) + "sti" ; 
-      tuoreemmin = Predef.tk 2 (tuore.s ! NCase Sg Gen) + "in"
-    in {s = table {
-         AN f => tuore.s ! f ;
-         AAdv => if_then_Str isPos tuoreesti tuoreemmin
-         }
-       } ;
 
 -- For the comparison of adjectives, three noun declensions 
 -- are needed in the worst case.
@@ -957,106 +806,6 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (noun2adjComp False (nhn (sSuurin kivinta))) ;
 
 
---3 Verbs
---
--- The present, past, conditional. and infinitive stems, acc. to Koskenniemi.
--- Unfortunately not enough (without complicated processes).
--- We moreover give grade alternation forms as arguments, since it does not
--- happen automatically.
---- A problem remains with the verb "seistä", where the infinitive
---- stem has vowel harmony "ä" but the others "a", thus "seisoivat" but "seiskää".
-
-
-  mkVerb : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Verb = 
-    \tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun -> 
-    v2v (mkVerbH 
-     tulla tulee tulen tulevat tulkaa tullaan tuli tulin tulisi tullut tultu tullun
-      ) ;
-
-  v2v : VerbH -> Verb = \vh -> 
-    let
-      tulla = vh.tulla ; 
-      tulee = vh.tulee ; 
-      tulen = vh.tulen ; 
-      tulevat = vh.tulevat ;
-      tulkaa = vh.tulkaa ; 
-      tullaan = vh.tullaan ; 
-      tuli = vh.tuli ; 
-      tulin = vh.tulin ;
-      tulisi = vh.tulisi ;
-      tullut = vh.tullut ;
-      tultu = vh.tultu ;
-      tultu = vh.tultu ;
-      tullun = vh.tullun ;
-      tuje = init tulen ;
-      tuji = init tulin ;
-      a = Predef.dp 1 tulkaa ;
-      tulko = Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "ö") ;
-      o = last tulko ;
-      tulleena = Predef.tk 2 tullut + ("een" + a) ;
-      tulleen = (noun2adj (nhn (sRae tullut tulleena))).s ;
-      tullun = (noun2adj (nhn (sKukko tultu tullun (tultu + ("j"+a))))).s  ;
-      tulema = tuje + "m" + a ;
-      vat = "v" + a + "t"
-    in
-    {s = table {
-      Inf => tulla ;
-      Presn Sg P1 => tuje + "n" ;
-      Presn Sg P2 => tuje + "t" ;
-      Presn Sg P3 => tulee ;
-      Presn Pl P1 => tuje + "mme" ;
-      Presn Pl P2 => tuje + "tte" ;
-      Presn Pl P3 => tulevat ;
-      Impf Sg P1 => tuji + "n" ;
-      Impf Sg P2 => tuji + "t" ;
-      Impf Sg P3 => tuli ;
-      Impf Pl P1 => tuji + "mme" ;
-      Impf Pl P2 => tuji + "tte" ;
-      Impf Pl P3 => tuli + vat ;
-      Condit Sg P1 => tulisi + "n" ;
-      Condit Sg P2 => tulisi + "t" ;
-      Condit Sg P3 => tulisi ;
-      Condit Pl P1 => tulisi + "mme" ;
-      Condit Pl P2 => tulisi + "tte" ;
-      Condit Pl P3 => tulisi + vat ;
-      Imper Sg   => tuje ;
-      Imper Pl   => tulkaa ;
-      ImperP3 Sg => tulko + o + "n" ;
-      ImperP3 Pl => tulko + o + "t" ;
-      ImperP1Pl  => tulkaa + "mme" ;
-      ImpNegPl   => tulko ;
-      Pass True  => tullaan ;
-      Pass False => Predef.tk 2 tullaan ;
-      PastPartAct n => tulleen ! n ;
-      PastPartPass n => tullun ! n ;
-      Inf3Iness => tulema + "ss" + a ;
-      Inf3Elat  => tulema + "st" + a ;
-      Inf3Illat => tulema +  a   + "n" ;
-      Inf3Adess => tulema + "ll" + a ;
-      Inf3Abess => tulema + "tt" + a 
-      }
-    } ;
-
-  VerbH : Type = {
-    tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun
-      : Str
-    } ;
-
-  mkVerbH : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> VerbH = 
-    \tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun -> 
-    {tulla = tulla ; 
-     tulee = tulee ; 
-     tulen = tulen ; 
-     tulevat = tulevat ;
-     tulkaa = tulkaa ; 
-     tullaan = tullaan ; 
-     tuli = tuli ; 
-     tulin = tulin ;
-     tulisi = tulisi ;
-     tullut = tullut ;
-     tultu = tultu ;
-     tullun = tullun
-     } ; 
 
   regVerbH : Str -> VerbH = \soutaa -> 
   let
@@ -1315,50 +1064,6 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (juo + "t" + u)
       (juo + "d" + u + "n") ;
 
-  verbOlla : Verb = 
-    mkVerb 
-      "olla" "on" "olen" "ovat" "olkaa" "ollaan" 
-      "oli" "olin" "olisi" "ollut" "oltu" "ollun" ;
-
--- The negating operator "ei" is actually a verb, which has present 
--- active indicative and imperative forms, but no infinitive.
-
-  verbEi : Verb = 
-    let ei = 
-      mkVerb 
-        "ei" "ei" "en" "eivät" "älkää" 
-        "ei" "e" "en" "e" "ei" "ei" "ei"
-    in
-    {s = table {
-      Imper Sg => "älä" ;
---      Impf n p | Condit n p => ei.s ! Presn n p ;
-      Impf n p => ei.s ! Presn n p ;
-      Condit n p => ei.s ! Presn n p ;
-      v => ei.s ! v
-      }
-    } ;
-
---2 Some structural words
-
-  kuinConj = "kuin" ;
-
-  conjEtta = "että" ;
-  advSiten = "siten" ;
-
-
-  kaikkiPron : Number -> Case => Str = \n -> 
-    let {kaiket = caseTable n (nhn (sKorpi "kaikki" "kaiken" "kaikkena"))} in
-    table {
-      Nom => "kaikki" ;
-      c => kaiket ! c
-      } ;
-
-  stopPunct  = "." ;
-  commaPunct = "," ;
-  questPunct = "?" ;
-  exclPunct  = "!" ;
-
-  koPart = suff "ko" ;
 
 -- For $NumeralsFin$.
 

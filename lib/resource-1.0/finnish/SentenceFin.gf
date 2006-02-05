@@ -4,8 +4,8 @@ concrete SentenceFin of Sentence = CatFin ** open ResFin in {
 
   lin
 
-    PredVP np vp = mkClause (np.s ! Nom) np.a vp ;
-
+    PredVP np vp = mkClause (np.s ! vp.sc) np.a vp ;
+{-
     PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
 
     ImpVP vp = {
@@ -42,5 +42,5 @@ concrete SentenceFin of Sentence = CatFin ** open ResFin in {
     UseCl  t a p cl = {s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! ODir} ;
     UseQCl t a p cl = {s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! q} ;
     UseRCl t a p cl = {s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! r} ;
-
+-}
 }

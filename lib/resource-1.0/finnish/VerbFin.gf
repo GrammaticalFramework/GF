@@ -1,10 +1,12 @@
-concrete VerbFin of Verb = CatFin ** open ResFin in {
+concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
 
   flags optimize=all_subs ;
 
   lin
     UseV = predV ;
-    ComplV2 v np = insertObj (\\_ => v.c2 ++ np.s ! Acc) (predV v) ;
+
+    ComplV2 v np = insertObj (\\b,_ => appCompl True b v.c2 np) (predV v) ; ----
+{-
     ComplV3 v np np2 = 
       insertObj (\\_ => v.c2 ++ np.s ! Acc ++ v.c3 ++ np2.s ! Acc) (predV v) ;
 
@@ -32,6 +34,6 @@ concrete VerbFin of Verb = CatFin ** open ResFin in {
     CompAP ap = ap ;
     CompNP np = {s = \\_ => np.s ! Acc} ;
     CompAdv a = {s = \\_ => a.s} ;
-
+-}
 
 }

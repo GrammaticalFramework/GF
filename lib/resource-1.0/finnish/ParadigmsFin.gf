@@ -65,9 +65,10 @@ oper
 -- of many-place verbs and adjective. A complement can be defined by
 -- just a case, or a pre/postposition and a case.
 
-  prePrep     : Case -> Str -> Prep ;
-  postPrep    : Case -> Str -> Prep ;
-  casePrep    : Case ->        Prep ;
+  prePrep     : Case -> Str -> Prep ;  -- ilman, partitive
+  postPrep    : Case -> Str -> Prep ;  -- takana, genitive
+  postGenPrep :         Str -> Prep ;  -- takana
+  casePrep    : Case ->        Prep ;  -- adessive
   accusative  : Prep ;
 
 --2 Nouns
@@ -277,10 +278,9 @@ oper
 
   caseV : Case -> V -> V ;
 
--- The verbs "be" and the negative auxiliary are special.
+-- The verbs "be" is special.
 
   vOlla : V ;
-  vEi   : V ;
 
 -- Two-place verbs need a case, and can have a pre- or postposition.
 
@@ -360,9 +360,10 @@ oper
     \c,p -> {c = NPCase c ; s = p ; isPre = True ; lock_Prep = <>} ;
   postPrep : Case -> Str -> Prep =
     \c,p -> {c = NPCase c ; s = p ; isPre = False ; lock_Prep = <>} ;
+  postGenPrep p = {c = NPCase genitive ; s = p ; isPre = False ; lock_Prep = <>} ;
   casePrep : Case -> Prep =
     \c -> {c = NPCase c ; s = [] ; isPre = True ; lock_Prep = <>} ;
-  accPrep =  {c = NPAccNom ; s = [] ; isPre = True ; lock_Prep = <>} ;
+  accPrep =  {c = NPAcc ; s = [] ; isPre = True ; lock_Prep = <>} ;
 
   mkN = \a,b,c,d,e,f,g,h,i,j -> 
     mkNoun a b c d e f g h i j ** {lock_N = <>} ;
@@ -511,7 +512,6 @@ reg3N = \vesi,veden,vesiä ->
   caseV c v = {s = v.s ; sc = NPCase c ; lock_V = <>} ;
 
   vOlla = verbOlla ** {sc = NPCase Nom ; lock_V = <>} ;
-  vEi = verbEi ** {sc = NPCase Nom ; lock_V = <>} ;
 
   vHuoltaa : (_,_,_,_ : Str) -> Verb = \ottaa,otan,otti,otin -> 
     v2v (MorphoFin.vHuoltaa ottaa otan otti otin)  ** {sc = NPCase Nom ; lock_V = <>} ;
