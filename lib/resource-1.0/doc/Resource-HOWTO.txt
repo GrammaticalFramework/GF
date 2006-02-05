@@ -281,8 +281,7 @@ API was changed during the actual process to make it more intuitive.)
 
 These modules will be written by you.
 
-- ``ParamGer``: parameter types
-- ``ResGer``: auxiliary operations (a resource for the resource grammar!)
+- ``ResGer``: parameter types and auxiliary operations (a resource for the resource grammar!)
 - ``MorphoGer``: complete inflection engine
 
 
@@ -486,7 +485,6 @@ are only found in the comments of the modules.
 
 ===Resource modules===
 
-- [ParamGer ../german/ParamGer.gf]
 - [ResGer ../german/ResGer.gf]
 - [MorphoGer ../german/MorphoGer.gf]
 - [ParadigmsGer gfdoc/ParadigmsGer.html], [ParadigmsGer.gf ../german/ParadigmsGer.gf]

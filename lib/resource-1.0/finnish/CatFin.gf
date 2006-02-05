@@ -34,10 +34,7 @@ concrete CatFin of Cat = TenseX ** open ResFin, Prelude in {
 
 -- Verb
 
-    VP = {
-      s  : Tense => Anteriority => Polarity => Agr => {fin, inf : Str} ; 
-      s2 : Agr => Str
-      } ;
+    VP   = ResFin.VP ;
     Comp = {s : Agr => Str} ; 
     SC   = {s : Str} ;
 
@@ -49,7 +46,7 @@ concrete CatFin of Cat = TenseX ** open ResFin, Prelude in {
 
     CN   = {s : Bool => Number => Case => Str} ;
     Pron = {s : NPForm => Str ; a : Agr} ;
-    NP   = {s : NPForm => Str ; a : Agr} ;
+    NP   = {s : NPForm => Str ; a : Agr ; isPron : Bool} ;
     Det  = {s : Case => Str ; n : Number ; isNum : Bool} ;
     QuantSg, QuantPl = {s : Case => Str} ;
     Predet, Quant, Ord = {s : Number => Case => Str} ;
