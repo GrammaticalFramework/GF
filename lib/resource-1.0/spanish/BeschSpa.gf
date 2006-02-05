@@ -2,6 +2,8 @@
 
 resource BeschSpa = open Prelude, CommonRomance in {
 
+flags optimize=noexpand ; -- faster than values
+
 oper Verbum = {s : VFB => Str} ;
 
 -- machine-generated GF file from FM source by Inger Andersson and Therese Söderberg

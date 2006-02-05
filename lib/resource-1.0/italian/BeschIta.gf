@@ -2,6 +2,8 @@
 
 resource BeschIta = open Prelude, CommonRomance in {
 
+flags optimize=values ; -- smaller than noexpand
+
 oper Verbo = {s : VForm => Str} ;
 
 -- machine-generated GF file
