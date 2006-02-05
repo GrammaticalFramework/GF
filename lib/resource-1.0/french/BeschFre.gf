@@ -1,5 +1,7 @@
 resource BeschFre = open Prelude, MorphoFre in {
 
+flags optimize=noexpand ; -- faster and smaller than =all
+
 oper VerbeN = {s : VF => Str} ;
 oper mkNV : Verbe -> VerbeN = \ve -> {s = vvf ve} ;
 
