@@ -13,8 +13,15 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
           True => Sg ;
           _ => det.n
           } ;
-        ncase : Case -> NForm = \c -> case <c,det.isNum,det.isPoss> of {
-          <Nom,True,_> => NCase Sg Part ;
+        ncase : Case -> NForm = \c -> case <n,c,det.isNum,det.isPoss> of {
+          <_, Nom,True,_> => NCase Sg Part ;
+          <_, _,  True,False> => NCase Sg c ;
+          <_, Nom,_,True> => NPossNom ; 
+          <Sg,Gen,_,True> => NPossNom ;
+          <Pl,Gen,_,True> => NPossGenPl ;
+          <_,Transl,_,True> => NPossTransl n ;
+          <_,Illat,_,True>  => NPossIllat n ;
+ 
           _ => NCase n c  ----
           }
       in {
@@ -77,41 +84,51 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
     NoNum = {s = \\_,_ => [] ; isNum = False} ;
     NoOrd = {s = \\_,_ => []} ;
 
-    NumInt n = {s = \\_,_ => n.s ++ "." ; isNum = True} ;
+    NumInt n = {s = \\_,_ => n.s ; isNum = True} ;
     OrdInt n = {s = \\_,_ => n.s ++ "."} ;
 
-{-
-    NumNumeral numeral = {s = numeral.s ! NCard} ;
-    OrdNumeral numeral = {s = numeral.s ! NOrd} ;
+----    NumNumeral numeral = {s = numeral.s ! NCard} ;
+----    OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 
-    AdNum adn num = {s = adn.s ++ num.s} ;
+    AdNum adn num = {s = \\n,c => adn.s ++ num.s ! n ! c ; isNum = num.isNum} ;
 
-    OrdSuperl a = {s = a.s ! AAdj Superl} ;
+----    OrdSuperl a = {s = a.s ! AAdj Superl} ;
 
-    DefArt = {s = \\_ => artDef} ;
-
-    IndefArt = {
-      s = table {
-        Sg => artIndef ; 
-        Pl => []
-        }
+    DefArt = {
+      s1 = \\_,_ => [] ; 
+      s2 = [] ; 
+      isNum,isPoss = False
       } ;
 
-    MassDet = {s = [] ; n = Sg} ;
--}
+    IndefArt = {
+      s1 = \\_,_ => [] ; --- Nom is Part in Pl ?
+      s2 = [] ; 
+      isNum,isPoss = False
+      } ;
+
+    MassDet = {
+      s1 = \\_ => [] ; --- Nom is Part ?
+      s2 = [] ; 
+      isNum,isPoss = False
+      } ;
 
     UseN n = n ;
 
-{-
     UseN2 n = n ;
     UseN3 n = n ;
 
-    ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c} ;
-    ComplN3 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; c2 = f.c3} ;
+    ComplN2 f x = {
+      s = \\nf => appCompl True Pos f.c2 x ++ f.s ! nf
+      } ;
+    ComplN3 f x = {
+      s = \\nf => appCompl True Pos f.c2 x ++ f.s ! nf ;
+      c2 = f.c3
+      } ;
 
     AdjCN ap cn = {
-      s = \\n,c => preOrPost ap.isPre (ap.s ! agrP3 n) (cn.s ! n ! c)
+      s = \\nf => ap.s ! True ! AN nf ++ cn.s ! nf
       } ;
+{-
     RelCN cn rs = {s = \\n,c => cn.s ! n ! c ++ rs.s ! {n = n ; p = P3}} ;
     AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s} ;
 

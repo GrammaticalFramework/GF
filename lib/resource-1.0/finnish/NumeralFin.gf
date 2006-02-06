@@ -1,44 +1,142 @@
-concrete NumeralFin of Numeral = CatFin ** open ResFin in {
+concrete NumeralFin of Numeral = CatFin **  open Prelude, ParadigmsFin, MorphoFin in {
+
+-- Notice: possessive forms are not used. They get wrong, since every
+-- part is made to agree in them.
+
+flags optimize = all_subs ;
 
 lincat 
-  Digit = {s : DForm => CardOrd => Str} ;
-  Sub10 = {s : DForm => CardOrd => Str ; n : Number} ;
-  Sub100     = {s : CardOrd => Str ; n : Number} ;
-  Sub1000    = {s : CardOrd => Str ; n : Number} ;
   Sub1000000 = {s : CardOrd => Str ; n : Number} ;
+  Digit = {s : CardOrd => Str} ;
+  Sub10, Sub100, Sub1000 = {s : NumPlace => CardOrd => Str ; n : Number} ;
 
-lin num x = x ;
-lin n2 = let two = mkNum "two"   "twelve"   "twenty" "second" in
-         {s = \\f,c => case <f,c> of {
-             <teen,NOrd> => "twelfth" ;
-             _ => two.s ! f ! c
-             }
-         } ;
+lin 
+  num x = x ;
+  n2 = co
+    (nhn (mkSubst "a" "kaksi" "kahde" "kahte" "kahta" "kahteen" "kaksi" "kaksi"
+    "kaksien" "kaksia" "kaksiin")) 
+    (ordN "a" "kahdes") ; --- toinen
+  n3 = co 
+    (nhn (mkSubst "a" "kolme" "kolme" "kolme" "kolmea" "kolmeen" "kolmi" "kolmi"
+    "kolmien" "kolmia" "kolmiin"))
+    (ordN "a" "kolmas") ;
+  n4 = co (regN "neljä") (ordN "ä" "neljäs") ;
+  n5 = co (reg3N "viisi" "viiden" "viisiä") (ordN "ä" "viides") ;
+  n6 = co (reg3N "kuusi" "kuuden" "kuusia") (ordN "a" "kuudes") ; 
+  n7 = co 
+    (nhn (mkSubst "ä" "seitsemän" "seitsemä" "seitsemä" "seitsemää" 
+    "seitsemään" "seitsemi" "seitsemi" "seitsemien" "seitsemiä"
+    "seitsemiin"))
+    (ordN "ä" "seitsemäs") ;
+  n8 = co 
+    (nhn (mkSubst "a" "kahdeksan" "kahdeksa" "kahdeksa" "kahdeksaa" 
+    "kahdeksaan" "kahdeksi" "kahdeksi" "kahdeksien" "kahdeksia"
+    "kahdeksiin"))
+    (ordN "a" "kahdeksas") ;
+  n9 = co
+     (nhn (mkSubst "ä" "yhdeksän" "yhdeksä" "yhdeksä" "yhdeksää" 
+    "yhdeksään" "yhdeksi" "yhdeksi" "yhdeksien" "yhdeksiä" "yhdeksiin"))
+     (ordN "ä" "yhdeksäs") ;
 
-lin n3 = mkNum "three" "thirteen" "thirty" "third" ;
-lin n4 = mkNum "four"  "fourteen" "forty" "fourth" ;
-lin n5 = mkNum "five"  "fifteen"  "fifty" "fifth" ;
-lin n6 = regNum "six" ;
-lin n7 = regNum "seven" ;
-lin n8 = mkNum "eight" "eighteen" "eighty" "eighth" ;
-lin n9 = regNum "nine" ;
+  pot01 = 
+   {s = table {
+      NumAttr => \\_ => [] ; 
+      NumIndep => yksiN.s
+      } ;
+    n = Sg
+    } ;
+  pot0 d = {n = Pl ; s = \\_ => d.s} ;
+  pot110 =
+   {s = \\_ => kymmenenN.s ;
+    n = Pl
+    } ;
 
-lin pot01 = mkNum "one" "eleven" "ten" "first" ** {n = Sg} ;
-lin pot0 d = d ** {n = Pl} ;
-lin pot110 = regCardOrd "ten" ** {n = Pl} ;
-lin pot111 = regCardOrd "eleven" ** {n = Pl} ;
-lin pot1to19 d = {s = d.s ! teen} ** {n = Pl} ;
-lin pot0as1 n = {s = n.s ! unit}  ** {n = n.n} ;
-lin pot1 d = {s = d.s ! ten} ** {n = Pl} ;
-lin pot1plus d e = {
-   s = \\c => d.s ! ten ! NCard ++ "-" ++ e.s ! unit ! c ; n = Pl} ;
-lin pot1as2 n = n ;
-lin pot2 d = {s = \\c => d.s ! unit ! NCard ++ mkCard c "hundred"}  ** {n = Pl} ;
-lin pot2plus d e = {
-  s = \\c => d.s ! unit ! NCard ++ "hundred" ++ "and" ++ e.s ! c ; n = Pl} ;
-lin pot2as3 n = n ;
-lin pot3 n = {
-  s = \\c => n.s ! NCard ++ mkCard c "thousand" ; n = Pl} ;
-lin pot3plus n m = {
-  s = \\c => n.s ! NCard ++ "thousand" ++ m.s ! c ; n = Pl} ;
+  pot111 = {n = Pl ; s = \\_,c => yksiN.s ! c ++"toista"} ; ---- yhdes
+  pot1to19 d = {n = Pl ; s = \\_,c => d.s ! c ++"toista"} ;
+  pot0as1 n = n ;
+
+  pot1 d = {n = Pl ; s = \\_,c => d.s ! c ++ kymmentaN.s ! c} ;
+  pot1plus d e = {
+    n = Pl ; 
+    s = \\_,c => d.s ! c ++ kymmentaN.s ! c ++ e.s ! NumIndep ! c
+    } ;
+  pot1as2 n = n ;
+  pot2 d = {n = Pl ; s = \\_,c => d.s ! NumAttr ! c ++ sataaN.s ! d.n ! c} ; ----
+  pot2plus d e = {
+    n = Pl ; 
+    s = \\_,c => d.s ! NumAttr ! c ++ sataaN.s ! d.n ! c ++ e.s ! NumIndep ! c
+    } ;
+  pot2as3 n = {n = n.n  ; s = n.s ! NumIndep} ;
+  pot3 d = {n = Pl ; s = \\c => d.s ! NumAttr ! c ++ tuhattaN.s ! d.n ! c} ; ----
+  pot3plus d e = {
+    n = Pl ;
+    s = \\c => d.s ! NumAttr ! c ++ tuhattaN.s ! d.n ! c ++ e.s ! NumIndep ! c
+    } ;
+
+oper
+  co : (c,o : {s : NForm => Str}) -> {s : CardOrd => Str} = \c,o -> {
+    s = table {
+      NCard nf => c.s ! nf ;
+      NOrd  nf => o.s ! nf
+      }
+    } ;
+
+-- Too much trouble to infer vowel, cf. "kuudes" vs. "viides".
+
+  ordN : Str -> Str -> {s : NForm => Str} = \a,sadas -> 
+    let
+      sada = init sadas
+    in
+    mkN 
+      sadas (sada + "nnen") (sada + "nten" + a) (sada + "tt" + a) (sada + "nteen")
+      (sada + "nsin" + a) (sada + "nsiss" + a) (sada + "nsien")
+      (sada + "nsi" + a) (sada + "nsiin") ;
+
+param 
+  NumPlace = NumIndep | NumAttr  ;
+
+oper
+  yksiN = co 
+    (nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
+     "yksien" "yksiä" "yksiin")) 
+    (ordN "ä" "yhdes") ; ---- ensimmäinen
+  kymmenenN = co 
+    (nhn (mkSubst "ä" "kymmenen" "kymmene" "kymmene" "kymmentä" 
+    "kymmeneen" "kymmeni" "kymmeni" "kymmenien" "kymmeniä" "kymmeniin")) 
+    (ordN "ä" "kymmenes") ;
+  sataN = co 
+    (nhn (sLukko "sata")) 
+    (ordN "a" "sadas") ;
+
+  tuhatN = co
+    (nhn (mkSubst "a" "tuhat" "tuhanne" "tuhante" "tuhatta" "tuhanteen"
+    "tuhansi" "tuhansi" "tuhansien" "tuhansia" "tuhansiin"))
+    (ordN "a" "tuhannes")  ;
+
+  kymmentaN =
+   {s = table {
+      NCard (NCase Sg Nom) => "kymmentä" ;
+      k => kymmenenN.s ! k
+      }
+    } ;
+
+  sataaN : {s : Number => CardOrd => Str} = {s = table {
+    Sg => sataN.s ;
+    Pl => table {
+      NCard (NCase Sg Nom) => "sataa" ;
+      k => sataN.s ! k
+      }
+    } 
+  } ;
+
+  tuhattaN = {s = table {
+    Sg => tuhatN.s ;
+    Pl => table {
+      NCard (NCase Sg Nom) => "tuhatta" ;
+      k => tuhatN.s ! k
+      }
+    }
+  } ;
+
 }
+

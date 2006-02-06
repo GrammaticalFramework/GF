@@ -60,6 +60,7 @@ oper
     NPAcc    => Gen -- appCompl does the job
     } ;
 
+
 --2 For $Verb$
 
 -- A special form is needed for the negated plural imperative.
@@ -96,8 +97,7 @@ param
 
 --2 For $Numeral$
 
-    CardOrd = NCard | NOrd ;
-    DForm = unit | teen | ten  ;
+    CardOrd = NCard NForm | NOrd NForm ;
 
 --2 Transformations between parameter types
 
@@ -286,35 +286,6 @@ oper
 
   questPart : Str -> Str = \on -> on ++ BIND ++ "ko" ; ----
 
-
-
-{-
--- For $Numeral$.
-
-  mkNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} = 
-    \two, twelve, twenty, second ->
-    {s = table {
-       unit => table {NCard => two ; NOrd => second} ; 
-       teen => \\c => mkCard c twelve ; 
-       ten  => \\c => mkCard c twenty
-       }
-    } ;
-
-  regNum : Str -> {s : DForm => CardOrd => Str} = 
-    \six -> mkNum six (six + "teen") (six + "ty") (regOrd six) ;
-
-  regCardOrd : Str -> {s : CardOrd => Str} = \ten ->
-    {s = table {NCard => ten ; NOrd => regOrd ten}} ;
-
-  mkCard : CardOrd -> Str -> Str = \c,ten -> 
-    (regCardOrd ten).s ! c ; 
-
-  regOrd : Str -> Str = \ten -> 
-    case last ten of {
-      "y" => init ten + "ieth" ;
-      _   => ten + "th"
-      } ;
--}
 
 -- The definitions below were moved here from $MorphoFin$ so that we the
 -- auxiliary of predication can be defined.

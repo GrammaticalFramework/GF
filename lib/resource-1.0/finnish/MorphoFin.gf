@@ -1064,44 +1064,6 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (juo + "t" + u)
       (juo + "d" + u + "n") ;
 
-
--- For $NumeralsFin$.
-
-  param NumPlace = NumIndep | NumAttr  ;
-
-oper
-  yksiN = nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
-                "yksien" "yksiä" "yksiin") ;
-  kymmenenN = nhn (mkSubst "ä" "kymmenen" "kymmene" "kymmene" "kymmentä" 
-     "kymmeneen" "kymmeni" "kymmeni" "kymmenien" "kymmeniä"
-     "kymmeniin") ;
-  sataN = nhn (sLukko "sata") ;
-
-  tuhatN = nhn (mkSubst "a" "tuhat" "tuhanne" "tuhante" "tuhatta" "tuhanteen"
-    "tuhansi" "tuhansi" "tuhansien" "tuhansia" "tuhansiin") ;
-
-  kymmentaN = {s = table {
-    NCase Sg Nom => "kymmentä" ;
-    c => kymmenenN.s ! c
-    }
-  } ;
-
-  sataaN = {s = table {
-    Sg => sataN.s ;
-    Pl => table {
-      NCase Sg Nom => "sataa" ;
-      c => sataN.s ! c
-      }
-    }
-  } ;
-  tuhattaN = {s = table {
-    Sg => tuhatN.s ;
-    Pl => table {
-      NCase Sg Nom => "tuhatta" ;
-      c => tuhatN.s ! c
-      }
-    }
-  } ;
 } ;
 
 

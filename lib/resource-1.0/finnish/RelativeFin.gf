@@ -5,7 +5,8 @@ concrete RelativeFin of Relative = CatFin ** open ResFin in {
   lin
 
     RelCl cl = {
-      s = \\t,a,p,_ => "such" ++ "that" ++ cl.s ! t ! a ! p ! ODir
+      s = \\t,a,p,_ => "siten" ++ "että" ++ cl.s ! t ! a ! p ! SDecl
+      ---- sellainen
       } ;
 
     RelVP rp vp = {
@@ -15,11 +16,11 @@ concrete RelativeFin of Relative = CatFin ** open ResFin in {
             RNoAg => ag ;
             RAg a => a
             } ;
-          cl = mkClause (rp.s ! Nom) agr vp
+          cl = mkClause (rp.s ! agr.n ! vp.sc) agr vp
         in
-        cl.s ! t ! ant ! b ! ODir
+        cl.s ! t ! ant ! b ! SDecl
       } ;
-
+{-
     RelSlash rp slash = {
       s = \\t,a,p,_ => slash.c2 ++ rp.s ! Acc ++ slash.s ! t ! a ! p ! ODir
       } ;
@@ -30,5 +31,5 @@ concrete RelativeFin of Relative = CatFin ** open ResFin in {
       } ;
 
     IdRP = mkIP "which" "which" "whose" Sg ** {a = RNoAg} ;
-
+-}
 }
