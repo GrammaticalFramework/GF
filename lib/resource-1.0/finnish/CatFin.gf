@@ -44,12 +44,21 @@ concrete CatFin of Cat = TenseX ** open ResFin, Prelude in {
 
 -- Noun
 
-    CN   = {s : Bool => Number => Case => Str} ;
+-- The $Bool$ tells if a possessive suffix is attached, which affects the case.
+
+    CN   = {s : NForm => Str} ;
     Pron = {s : NPForm => Str ; a : Agr} ;
     NP   = {s : NPForm => Str ; a : Agr ; isPron : Bool} ;
-    Det  = {s : Case => Str ; n : Number ; isNum : Bool} ;
-    QuantSg, QuantPl = {s : Case => Str} ;
-    Predet, Quant, Ord = {s : Number => Case => Str} ;
+    Det  = {
+      s1 : Case => Str ;       -- minun kolme
+      s2 : Str ;               -- -ni
+      n : Number ;             -- Pl   (agreement feature for verb)
+      isNum : Bool ;           -- True (a numeral is present)
+      isPoss : Bool            -- True (a possessive suffix is present)
+      } ;
+    QuantSg, QuantPl = {s1 : Case => Str ; s2 : Str ; isPoss : Bool} ;
+    Predet, Ord = {s : Number => Case => Str} ;
+    Quant = {s1 : Number => Case => Str ; s2 : Str ; isPoss : Bool} ;
     Num = {s : Number => Case => Str ; isNum : Bool} ;
 
 -- Adverb
