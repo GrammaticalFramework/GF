@@ -3,44 +3,84 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
   flags optimize=all_subs ;
 
   lin
-{-
-    DetCN det cn = {
-      s = \\c => det.s ++ cn.s ! det.n ! c ; 
-      a = agrP3 det.n
+
+-- The $Number$ is subtle: "nuo autot", "nuo kolme autoa" are both plural
+-- for verb agreement, but the noun form is singular in the latter.
+
+    DetCN det cn = 
+      let
+        n : Number = case det.isNum of {
+          True => Sg ;
+          _ => det.n
+          } ;
+        ncase : Case -> NForm = \c -> case <c,det.isNum,det.isPoss> of {
+          <Nom,True,_> => NCase Sg Part ;
+          _ => NCase n c  ----
+          }
+      in {
+      s = \\c => let k = npform2case c in
+                 det.s1 ! k ++ cn.s ! ncase k ++ det.s2 ; 
+      a = agrP3 det.n ;
+      isPron = False
       } ;
--}
+
     UsePN pn = {
       s = \\c => pn.s ! npform2case c ; 
       a = agrP3 Sg ;
       isPron = False
       } ;
     UsePron p = p ** {isPron = True} ;
-{-
+
     PredetNP pred np = {
-      s = \\c => pred.s ++ np.s ! c ;
-      a = np.a
+      s = \\c => pred.s ! np.a.n ! npform2case c ++ np.s ! c ;
+      a = np.a ;
+      isPron = np.isPron  -- kaikki minun - ni
       } ;
 
     DetSg quant ord = {
-      s = quant.s ++ ord.s ; 
-      n = Sg
+      s1 = \\c => quant.s1 ! c ++ ord.s ! Sg ! c ;
+      s2 = quant.s2 ; 
+      n  = Sg ; 
+      isNum = False ; 
+      isPoss = quant.isPoss
       } ;
 
     DetPl quant num ord = {
-      s = quant.s ++ num.s ++ ord.s ; 
-      n = Pl
+      s1 = \\c => quant.s1 ! c ++ num.s ! Sg ! c ++ ord.s ! Sg ! c ; 
+      s2 = quant.s2 ;       
+      n = Pl ;
+      isNum = num.isNum ;
+      isPoss = quant.isPoss
       } ;
 
-    SgQuant quant = {s = quant.s ! Sg} ;
-    PlQuant quant = {s = quant.s ! Pl} ;
+    SgQuant quant = {
+      s1 = quant.s1 ! Sg ; 
+      s2 = quant.s2 ; 
+      isNum = quant.isNum ; 
+      isPoss = quant.isPoss
+      } ;
+    PlQuant quant = {
+      s1 = quant.s1 ! Pl ; 
+      s2 = quant.s2 ; 
+      isNum = quant.isNum ; 
+      isPoss = quant.isPoss
+      } ;
 
-    PossPron p = {s = \\_ => p.s ! Gen} ;
 
-    NoNum, NoOrd = {s = []} ;
+    PossPron p = {
+      s1 = \\_,_ => p.s ! NPCase Gen ;
+      s2 = BIND ++ table Agr ["ni" ; "si" ; "nsa" ; "mme" ; "nne" ; "nsa"] ! p.a ;
+      isNum = False ;
+      isPoss = True
+      } ;
 
-    NumInt n = n ;
-    OrdInt n = {s = n.s ++ "th"} ; ---
+    NoNum = {s = \\_,_ => [] ; isNum = False} ;
+    NoOrd = {s = \\_,_ => []} ;
 
+    NumInt n = {s = \\_,_ => n.s ++ "." ; isNum = True} ;
+    OrdInt n = {s = \\_,_ => n.s ++ "."} ;
+
+{-
     NumNumeral numeral = {s = numeral.s ! NCard} ;
     OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 
@@ -58,8 +98,11 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       } ;
 
     MassDet = {s = [] ; n = Sg} ;
+-}
 
     UseN n = n ;
+
+{-
     UseN2 n = n ;
     UseN3 n = n ;
 
