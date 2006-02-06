@@ -73,6 +73,7 @@ catForms gr cat fs =
 cat2form :: String -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr cat fs = 
     form cat [var "value" (Just "'?'"),
+              block [if_ "value != '?'" [assign cat "value"]],
               field cat [] [promptString ("quest_"++cat), 
                             grammar (gr++"#"++cat),
                             nomatch [Data "I didn't understand you.", reprompt],
@@ -80,7 +81,7 @@ cat2form gr cat fs =
                             filled [] [if_else (cat ++ " == '?'") [reprompt] feedback]],
               subdialog "sub" [("srcexpr","'#'+"++cat++".name")] 
                              [param "value" cat, filled [] subDone]]
-  where subDone = [return_ ["sub.value"]]
+  where subDone = [assign cat "sub.value", return_ [cat]]
         feedback = [Data "Constructor: ", value (cat++".name")]
 
 fun2form :: String -> VIdent -> [VIdent] -> XML
@@ -93,7 +94,7 @@ fun2form gr fun args =
   ss = map (uncurry mkSub) argNames
   mkSub a t = subdialog a [("src","#"++t)] 
                 [param "value" ("value."++a),
-                 filled [] [assign ("value."++a) a]]
+                 filled [] [assign ("value."++a) (a++"."++t)]]
   ret = block [return_ ["value"]]
 
 --
