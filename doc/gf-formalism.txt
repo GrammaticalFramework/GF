@@ -19,6 +19,40 @@ Last update: %%date(%c)
 
 #NEW
 
+==Logical Frameworks and Grammar Formalisms==
+
+Logic - formalization of mathematics (mathematical language?)
+
+Linguistics - formalization of natural language
+
+Since math lang is a subset, we can expect similarities.
+
+But in natural language we have
+- masses of empirical data
+- no right of reform
+
+
+
+#NEW
+
+==High-level programming==
+
+We have to write a lot of program code when formalizing language.
+
+We need a language with proper abstractions.
+
+Cf. Paul Graham on Prolog: very high-level, but wrong abstractions.
+
+Typed functional languages work well in maths.
+
+We have developed one for linguistics
+- some extra constructs, e.g. inflection tables
+- constraint of reversibility (nontrivial math problem)
+
+
+
+#NEW
+
 ==GF in a few words==
 
 Grammatical Framework (GF) is a grammar formalism 
