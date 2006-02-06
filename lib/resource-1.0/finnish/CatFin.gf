@@ -30,7 +30,7 @@ concrete CatFin of Cat = TenseX ** open ResFin, Prelude in {
 -- Relative
 
     RCl   = {s : Tense => Anteriority => Polarity => Agr => Str} ;
-    RP    = {s : Number => Case => Str ; a : RAgr} ;
+    RP    = {s : Number => NPForm => Str ; a : RAgr} ;
 
 -- Verb
 
@@ -39,6 +39,9 @@ concrete CatFin of Cat = TenseX ** open ResFin, Prelude in {
     SC   = {s : Str} ;
 
 -- Adjective
+
+-- The $Bool$ tells whether usage is modifying (as opposed to
+-- predicative), e.g. "x on suurempi kuin y" vs. "y:tä suurempi luku".
 
     AP   = {s : Bool => AForm => Str} ; 
 

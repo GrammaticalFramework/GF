@@ -1,22 +1,20 @@
-concrete QuestionFin of Question = CatFin ** open ResFin in {
+concrete QuestionFin of Question = CatFin ** open ResFin, Prelude in {
 
   flags optimize=all_subs ;
 
   lin
 
     QuestCl cl = {
-      s = \\t,a,p => 
-            let cls = cl.s ! t ! a ! p 
-            in table {
-              QDir   => cls ! OQuest ;
-              QIndir => "if" ++ cls ! ODir
-              } ---- "whether" in ExtFin
+      s = \\t,a,p => cl.s ! t ! a ! p ! SQuest
       } ;
 
-    QuestVP qp vp = 
-      let cl = mkClause (qp.s ! Nom) {n = qp.n ; p = P3} vp
-      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
-
+    QuestVP ip vp = 
+      let 
+        cl = mkClause (ip.s ! vp.sc) (agrP3 ip.n) vp
+      in {
+        s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
+        } ;
+{-
     QuestSlash ip slash = {
       s = \\t,a,p => 
             let 
@@ -27,28 +25,23 @@ concrete QuestionFin of Question = CatFin ** open ResFin in {
               QIndir => who ++ cls ! ODir
               }
       } ;
-
+-}
     QuestIAdv iadv cl = {
-      s = \\t,a,p => 
-            let 
-              cls = cl.s ! t ! a ! p ;
-              why = iadv.s
-            in table {
-              QDir   => why ++ cls ! OQuest ;
-              QIndir => why ++ cls ! ODir
-              }
+      s = \\t,a,p => iadv.s ++ cl.s ! t ! a ! p ! SDecl
       } ;
 
-    PrepIP p ip = {s = p.s ++ ip.s ! Nom} ;
+    PrepIP p ip = {s = 
+      appCompl True Pos p (ip ** {a = agrP3 ip.n ; isPron = False})} ;
 
     AdvIP ip adv = {
       s = \\c => ip.s ! c ++ adv.s ;
       n = ip.n
       } ;
- 
+{- 
     IDetCN idet num ord cn = {
       s = \\c => idet.s ++ num.s ++ ord.s ++ cn.s ! idet.n ! c ; 
       n = idet.n
       } ;
+-}
 
 }

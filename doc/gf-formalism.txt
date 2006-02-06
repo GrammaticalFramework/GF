@@ -50,6 +50,11 @@ We have developed one for linguistics
 - constraint of reversibility (nontrivial math problem)
 
 
+Writing a grammar of e.g. French clitics should not be a topic
+on which one can write a paper - it should be easy to render in code
+the known facts about languages!
+
+
 
 #NEW
 

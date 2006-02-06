@@ -1,23 +1,26 @@
 concrete AdjectiveFin of Adjective = CatFin ** open ResFin, Prelude in {
 
+  flags optimize=all_subs ; -- gfc size from 2864336 to 6786
+
   lin
 
     PositA  a = {
-      s = \\_ => a.s ! AAdj Posit ;
-      isPre = True
+      s = \\_ => a.s ! Posit
       } ;
     ComparA a np = {
-      s = \\_ => a.s ! AAdj Compar ++ "than" ++ np.s ! Nom ; 
-      isPre = False
+      s = \\isMod,af => case isMod of {
+        True => np.s ! NPCase Part ++ a.s ! Compar ! af ;        -- minua isompi
+        _    => a.s ! Compar ! af ++ "kuin" ++ np.s ! NPCase Nom -- isompi kuin minä
+        } 
       } ;
 
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
-    ComplA2 a np = {
-      s = \\_ => a.s ! AAdj Posit ++ a.c2 ++ np.s ! Acc ; 
-      isPre = False
+    ComplA2 adj np = {
+      s = \\isMod,af => 
+          preOrPost isMod (appCompl True Pos adj.c2 np) (adj.s ! Posit ! af)
       } ;
-
+{-
     ReflA2 a = {
       s = \\ag => a.s ! AAdj Posit ++ a.c2 ++ reflPron ! ag ; 
       isPre = False
@@ -27,10 +30,9 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, Prelude in {
       s = \\a => ap.s ! a ++ sc.s ; 
       isPre = False
       } ;
-
+-}
     AdAP ada ap = {
-      s = \\a => ada.s ++ ap.s ! a ;
-      isPre = ap.isPre
+      s = \\b,af => ada.s ++ ap.s ! b ! af
       } ;
 
     UseA2 a = a ;

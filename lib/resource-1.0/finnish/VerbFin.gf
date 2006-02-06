@@ -17,23 +17,33 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
     ComplVA  v    ap = insertObj (ap.s) (predV v) ;
     ComplV2A v np ap = 
       insertObj (\\_ => v.c2 ++ np.s ! Acc ++ ap.s ! np.a) (predV v) ;
+-}
 
-    UseComp comp = insertObj comp.s (predAux auxBe) ;
+    UseComp comp = 
+      insertObj (\\_ => comp.s) (predV (verbOlla ** {sc = NPCase Nom})) ;
 
-    AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
+    AdvVP vp adv = insertObj (\\_,_ => adv.s) vp ;
 
---- This rule destroys parsing...
 ----    AdVVP adv vp = insertAdV adv.s vp ;
 
-    ReflV2 v = insertObj (\\a => v.c2 ++ reflPron ! a) (predV v) ;
+--    ReflV2 v = insertObj (\\a => v.c2 ++ reflPron ! a) (predV v) ;
 
-    PassV2 v = insertObj (\\_ => v.s ! VPPart) (predAux auxBe) ;
+--    PassV2 v = insertObj (\\_ => v.s ! VPPart) (predAux auxBe) ;
 
-    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; isRefl = vv.isRefl} ; -- no "to"
+--    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; isRefl = vv.isRefl} ; -- no "to"
 
-    CompAP ap = ap ;
-    CompNP np = {s = \\_ => np.s ! Acc} ;
+    CompAP ap = {
+      s = \\agr => 
+          let
+            n = agr.n ; 
+            c = case agr.n of {
+              Sg => Nom ;  -- minä olen iso
+              Pl => Part   -- me olemme isoja
+              }            --- definiteness of NP ?
+          in ap.s ! False ! AN (NCase agr.n c)
+      } ;
+    CompNP np = {s = \\_ => np.s ! NPCase Nom} ;
     CompAdv a = {s = \\_ => a.s} ;
--}
+
 
 }
