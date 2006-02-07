@@ -297,6 +297,31 @@ package.
 - ``Predefined``: general-purpose operations with hard-coded definitions
 
 
+An important decision is what rules to implement in terms of operations in
+``ResGer``. A golden rule of functional programming says that, whenever
+you find yourself programming by copy and paste, you should write a function
+instead. This indicates that an operation should be created if it is to be
+used at least twice. At the same time, a sound principle of vicinity says that
+it should not require too much browsing to understand what a rule does.
+From these two principles, we have derived the following practice:
+- If an operation is needed //in two different modules//, 
+it should be created in ``ResGer``. An example is ``mkClause``, 
+used in ``Sentence``, ``Question``, and ``Relative``-
+- If an operation is needed //twice in the same module//, but never
+outside, it should be created in the same module. Many examples are
+found in ``Numerals``.
+- If an operation is not needed once, it should not be created (but rather
+inlined). Most functions in phrase category modules are implemented in this
+way.
+
+
+This discipline is very different from the one followed in earlier
+versions of the library (up to 0.9). We then valued the principle of
+abstraction more than vicinity, creating layers of abstraction for
+almost everything. This led in practice to the duplication of almost
+all code on the ``lin`` and ``oper`` levels, and made the code
+hard to understand and maintain.
+
 
 
 ===Morphology and lexicon===
