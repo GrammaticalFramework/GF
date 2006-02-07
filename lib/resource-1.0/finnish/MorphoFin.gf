@@ -28,69 +28,8 @@ oper
       talo (Predef.tk 1 talon) (Predef.tk 2 talona) taloa taloon
       (Predef.tk 2 taloina) (Predef.tk 3 taloissa) talojen taloja taloihin) ;
 
--- Regular heuristics.
 
-{-
-  regNounH : Str -> NounH = \vesi -> 
-  let
-    esi = Predef.dp 3 vesi ;   -- analysis: suffixes      
-    si  = Predef.dp 2 esi ;
-    i   = last si ;
-    s   = init si ;
-    a   = if_then_Str (pbool2bool (Predef.occurs "aou" vesi)) "a" "‰" ;
-    ves = init vesi ;          -- synthesis: prefixes
-    vet = strongGrade ves ;
-    ve  = init ves ;
-  in 
-       case esi of {
-    "uus" | "yys" => sRakkaus vesi ;
-    "nen" =>       sNainen (Predef.tk 3 vesi + ("st" + a)) ;
-
-  _ => case si of {
-    "aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "‰‰" | "ˆˆ" => sPuu vesi ;
-    "ie" | "uo" | "yˆ" => sSuo vesi ;
-    "ea" | "e‰" => 
-      mkSubst
-        a
-        vesi (vesi) (vesi) (vesi + a)  (vesi + a+"n")
-        (ves + "i") (ves + "i") (ves + "iden")  (ves + "it"+a)
-        (ves + "isiin") ;
-    "is"        => sNauris (vesi + ("t" + a)) ;
-    "ut" | "yt" => sRae vesi (ves + ("en" + a)) ;
-    "as" | "‰s" => sRae vesi (vet + (a + "n" + a)) ;
-    "ar" | "‰r" => sRae vesi (vet + ("ren" + a)) ;
-  _ => case i of {
-    "n"         => sLiitin vesi (vet + "men") ;
-    "s"         => sTilaus vesi (ves + ("ksen" + a)) ;
-    "i" =>         sBaari (vesi + a) ;
-    "e" =>         sRae vesi (strongGrade vesi + "en" + a) ;
-    "a" | "o" | "u" | "y" | "‰" | "ˆ" => sLukko vesi ;
-    _ =>           sLinux (vesi + "i" + a)
-  }
-  }
-  } ;
-
-  reg2NounH : (savi,savia : Str) -> NounH = \savi,savia -> 
-  let
-    savit = regNounH savi ;
-    ia = Predef.dp 2 savia ;
-    i  = init ia ;
-    a  = last ia ;
-    o  = last savi ;
-    savin = weakGrade savi + "n" ;
-  in
-  case <o,ia> of {
-    <"i","ia">              => sArpi  savi ;
-    <"i","i‰">              => sSylki savi ;
-    <"i","ta"> | <"i","t‰"> => sTohtori (savi + a) ;
-    <"o","ta"> | <"ˆ","t‰"> => sRadio savi ;  
-    <"a","ta"> | <"‰","t‰"> => sPeruna savi ;  
-    <"a","ia"> | <"a","ja"> => sKukko savi savin savia ;
-    _ => savit
-    } ;
--}
-
--- Here some useful special cases; more will be given in $paradigms.Fin.gf$.
+-- Here some useful special cases; more are given in $ParadigmsFin.gf$.
 --         
 
   sLukko : Str -> NounH = \lukko -> 
@@ -612,51 +551,42 @@ vowelHarmony : Str -> Str = \liitin ->
     } ; 
 
 
--- The non-human pronoun "se" ('it') is even more irregular,
--- Its accusative cases do not
--- have a special form with "t", but have the normal genitive/nominative variation.
--- We use the type $ProperName$ for "se", because of the accusative but also
--- because the person and number are as for proper names.
 
-  pronSe : ProperName  = {
-    s = table {
-      Nom    => "se" ;
-      Gen    => "sen" ;
-      Part   => "sit‰" ;
-      Transl => "siksi" ;
-      Ess    => "sin‰" ;
-      Iness  => "siin‰" ;
-      Elat   => "siit‰" ;
-      Illat  => "siihen" ;
-      Adess  => "sill‰" ;
-      Ablat  => "silt‰" ;
-      Allat  => "sille" ;
-      Abess  => "sitt‰"
-      } ;
+-- Determiners
+
+  mkDet : Number -> CommonNoun -> {
+      s1 : Case => Str ;       -- minun kolme
+      s2 : Str ;               -- -ni
+      n : Number ;             -- Pl   (agreement feature for verb)
+      isNum : Bool ;           -- True (a numeral is present)
+      isPoss : Bool ;          -- True (a possessive suffix is present)
+      isDef : Bool             -- True (verb agrees in Pl, Nom is not Part)
+      } = \n, noun -> {
+    s1 = \\c => noun.s ! NCase n c ;
+    s2 = [] ;
+    n = n ;
+    isNum, isPoss = False ;
+    isDef = True  --- does this hold for all new dets?
     } ;
 
--- The possessive suffixes will be needed in syntax. It will show up
--- as a separate word ("auto &+ ni"), which needs unlexing. Unlexing also
--- has to fix the vowel harmony in cases like "‰iti &+ ns‰".
-
-  suff : Str -> Str = \ni -> ni ;
-
-  possSuffix : Number => Person => Str = \\n,p => 
-    suff (case <n,p> of {
-      <Sg,P1> => "ni" ;
-      <Sg,P2> => "si" ;
-      <Sg,P3> => "nsa" ;
-      <Pl,P1> => "mme" ;
-      <Pl,P2> => "nne" ;
-      <Pl,P3> => "nsa"
-    } ) ;
+  mkQuant : CommonNoun -> {
+    s1 : Number => Case => Str ; 
+    s2 : Str ; 
+    isPoss, isDef : Bool
+    } = \noun -> {
+      s1 = \\n,c => noun.s ! NCase n c ;
+      s2 = [] ;
+      isPoss = False ;
+      isDef = True  --- does this hold for all new dets?
+    } ;
 
 -- The relative pronoun, "joka", is inflected in case and number, 
 -- like common nouns, but it does not take possessive suffixes.
 -- The inflextion shows a surprising similarity with "suo".
 
-  relPron : {s : Number => Case => Str} =
-    let {jo = nhn (sSuo "jo")} in {s = 
+oper
+  relPron : Number => Case => Str =
+    let {jo = nhn (sSuo "jo")} in
     table {
       Sg => table {
         Nom => "joka" ;
@@ -667,116 +597,8 @@ vowelHarmony : Str -> Str = \liitin ->
         Nom => "jotka" ;
         c   => "j" + (jo.s ! NCase Pl c)
         }
-      } 
-    } ;
+      } ;
   
-  mikaInt : Number => Case => Str = 
-    let {
-      mi  = nhn (sSuo "mi")
-    } in
-    table {
-      Sg => table {
-        Nom => "mik‰" ;
-        Gen => "mink‰" ;
-        c   => mi.s ! NCase Sg c
-       } ; 
-      Pl => table {
-        Nom => "mitk‰" ;
-        Gen => "mittenk‰" ;
-        c   => mi.s ! NCase Sg c
-        }
-      } ;
-
-  kukaInt : Number => Case => Str = 
-    let {
-      ku = nhn (sRae "kuka" "kenen‰") ;
-      ket = nhn (sRae "kuka" "kein‰")} in
-    table {
-      Sg => table {
-        Nom => "kuka" ;
-        Part => "ket‰" ;
-        Illat => "keneen" ;
-        c   => ku.s ! NCase Sg c
-       } ; 
-      Pl => table {
-        Nom => "ketk‰" ;
-        Illat => "keihin" ;
-        c   => ket.s ! NCase Pl c
-        }
-      } ;
-
-  mikaanPron : Number => Case => Str = \\n,c =>
-    case <n,c> of {
-        <Sg,Nom> => "mik‰‰n" ;
-        <_,Part> => "mit‰‰n" ;
-        <Sg,Gen> => "mink‰‰n" ;
-        <Pl,Nom> => "mitk‰‰n" ;
-        <Pl,Gen> => "mittenk‰‰n" ;
-        <_,Ess>  => "min‰‰n" ;
-        <_,Iness> => "miss‰‰n" ;
-        <_,Elat> => "mist‰‰n" ;
-        <_,Adess> => "mill‰‰n" ;
-        <_,Ablat> => "milt‰‰n" ;
-        _   => mikaInt ! n ! c + "k‰‰n"
-       } ; 
-
-  kukaanPron : Number => Case => Str =
-    table {
-      Sg => table {
-        Nom => "kukaan" ;
-        Part => "ket‰‰n" ;
-        Ess => "ken‰‰n" ;
-        Iness => "kess‰‰n" ;
-        Elat  => "kest‰‰n" ;
-        Illat => "kehenk‰‰n" ;
-        Adess => "kell‰‰n" ;
-        Ablat => "kelt‰‰n" ;
-        c   => kukaInt ! Sg ! c + "k‰‰n"
-       } ; 
-      Pl => table {
-        Nom => "ketk‰‰n" ;
-        Part => "keit‰‰n" ;
-        Ess => "kein‰‰n" ;
-        Iness => "keiss‰‰n" ;
-        Elat => "keist‰‰n" ;
-        Adess => "keill‰‰n" ;
-        Ablat => "keilt‰‰n" ;
-        c   => kukaInt ! Pl ! c + "k‰‰n"
-        }
-      } ;
-
-  jokuPron : Number => Case => Str =
-    let 
-      ku = nhn (sPuu "ku") ;
-      kui = nhn (sPuu "kuu") 
-    in
-    table {
-      Sg => table {
-        Nom => "joku" ;
-        Gen => "jonkun" ;
-        c => relPron.s ! Sg ! c + ku.s ! NCase Sg c
-       } ; 
-      Pl => table {
-        Nom => "jotkut" ;
-        c => relPron.s ! Pl ! c + kui.s ! NCase Pl c
-        }
-      } ;
-
-  jokinPron : Number => Case => Str =
-    table {
-      Sg => table {
-        Nom => "jokin" ;
-        Gen => "jonkin" ;
-        c => relPron.s ! Sg ! c + "kin"
-       } ; 
-      Pl => table {
-        Nom => "jotkin" ;
-        c => relPron.s ! Pl ! c + "kin"
-        }
-      } ;
-
-moniPron : Case => Str = caseTable Sg (nhn (sSusi "moni" "monen" "monena")) ;
-
 caseTable : Number -> CommonNoun -> Case => Str = \n,cn -> 
   \\c => cn.s ! NCase n c ;
 

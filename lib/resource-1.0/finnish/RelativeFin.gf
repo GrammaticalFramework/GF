@@ -1,4 +1,4 @@
-concrete RelativeFin of Relative = CatFin ** open ResFin in {
+concrete RelativeFin of Relative = CatFin ** open Prelude, ResFin, MorphoFin in {
 
   flags optimize=all_subs ;
 
@@ -20,16 +20,31 @@ concrete RelativeFin of Relative = CatFin ** open ResFin in {
         in
         cl.s ! t ! ant ! b ! SDecl
       } ;
-{-
+
     RelSlash rp slash = {
-      s = \\t,a,p,_ => slash.c2 ++ rp.s ! Acc ++ slash.s ! t ! a ! p ! ODir
+      s = \\t,a,p,ag => 
+            let 
+              cls = slash.s ! t ! a ! p ;
+              who = appCompl True p slash.c2 (rp2np ag.n rp)
+            in
+            who ++ cls
       } ;
 
     FunRP p np rp = {
-      s = \\c => np.s ! c ++ p.s ++ rp.s ! Acc ;
+      s = \\n,c => appCompl True Pos p (rp2np n rp) ++ np.s ! c ; --- is c OK?
       a = RAg np.a
       } ;
 
-    IdRP = mkIP "which" "which" "whose" Sg ** {a = RNoAg} ;
--}
+    IdRP = {
+      s = \\n,c => relPron ! n ! npform2case c ;
+      a = RNoAg
+      } ;
+
+oper
+  rp2np : Number -> {s : Number => NPForm => Str ; a : RAgr} -> NP = \n,rp -> {
+    s = rp.s ! n ;
+    a = agrP3 Sg ;  -- does not matter (--- at least in Slash)
+    isPron = False  -- has no special accusative
+    } ;
+
 }

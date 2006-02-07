@@ -38,4 +38,7 @@ API: swadesh/: build a swadesh-related API and migrate lexica
 
 API: mathematical/: symbolic formulas as Cl
 
+API: text construction
+
+All: punctuation
 

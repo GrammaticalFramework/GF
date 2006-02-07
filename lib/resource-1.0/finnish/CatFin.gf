@@ -57,11 +57,12 @@ concrete CatFin of Cat = TenseX ** open ResFin, Prelude in {
       s2 : Str ;               -- -ni
       n : Number ;             -- Pl   (agreement feature for verb)
       isNum : Bool ;           -- True (a numeral is present)
-      isPoss : Bool            -- True (a possessive suffix is present)
+      isPoss : Bool ;          -- True (a possessive suffix is present)
+      isDef : Bool             -- True (verb agrees in Pl, Nom is not Part)
       } ;
-    QuantSg, QuantPl = {s1 : Case => Str ; s2 : Str ; isPoss : Bool} ;
+    QuantSg, QuantPl = {s1 : Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
     Predet, Ord = {s : Number => Case => Str} ;
-    Quant = {s1 : Number => Case => Str ; s2 : Str ; isPoss : Bool} ;
+    Quant = {s1 : Number => Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
     Num = {s : Number => Case => Str ; isNum : Bool} ;
 
 -- Adverb
@@ -83,13 +84,13 @@ concrete CatFin of Cat = TenseX ** open ResFin, Prelude in {
 
 -- Open lexical classes, e.g. Lexicon
 
-    V, VS, VQ, VA = Verb1 ; -- = {s : VForm => Str ; sc : Case} ;
-    V2 = Verb1 ** {c2 : Compl} ;
+    V, VS, VQ = Verb1 ; -- = {s : VForm => Str ; sc : Case} ;
+    V2, VA = Verb1 ** {c2 : Compl} ;
     V2A = Verb1 ** {c2, c3 : Compl} ;
     VV = Verb1 ; ---- infinitive form
     V3 = Verb1 ** {c2, c3 : Compl} ;
 
-    A = {s : Degree => AForm => Str} ;
+    A  = {s : Degree => AForm => Str} ;
     A2 = {s : Degree => AForm => Str ; c2 : Compl} ;
 
     N  = {s : NForm => Str} ;

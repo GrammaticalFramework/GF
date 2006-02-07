@@ -117,10 +117,10 @@ param
   appCompl : Bool -> Polarity -> Compl -> NP -> Str = \isFin,b,co,np ->
     let
       c = case <isFin, b, co.c, np.isPron,np.a.n> of {
-        <_,    Neg, NPAcc,_,_>    => NPCase Part ; -- en näe taloa/sinua
-        <_,    Pos, NPAcc,True,_> => NPAcc ;       -- näen/täytyy sinut
+        <_,    Neg, NPAcc,_,_>      => NPCase Part ; -- en näe taloa/sinua
+        <_,    Pos, NPAcc,True,_>   => NPAcc ;       -- näen/täytyy sinut
         <True, Pos, NPAcc,False,Sg> => NPCase Gen ;  -- näen talon
-        <False,Pos, NPAcc,_,Pl>   => NPCase Nom ;  -- täytyy talo/sinut; näen talot
+        <False,Pos, NPAcc,_,_>      => NPCase Nom ;  -- täytyy talo/sinut; näen talot
         <_,_,coc,_,_>               => coc
         } ;
       nps = np.s ! c
@@ -135,15 +135,16 @@ param
 
 param
   VIForm =
-     VIFin Tense  
-   | VIInf InfForm 
+     VIFin  Tense  
+   | VIInf  InfForm
+   | VIPass 
    | VIImper 
    ;  
 
 oper
   VP = {
     s   : VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ; 
-    s2  : Polarity => Agr => Str ; -- itseni/itseäni
+    s2  : Bool => Polarity => Agr => Str ; -- talo/talon/taloa
     ext : Str ;
     sc  : NPForm
     } ;
@@ -153,7 +154,10 @@ oper
       let
 
         verbs = verb.s ;
-        part : Str = verbs ! PastPartAct (AN (NCase agr.n Nom)) ; 
+        part  : Str = case vi of {
+          VIPass => verbs ! PastPartPass (AN (NCase agr.n Nom)) ; 
+          _      => verbs ! PastPartAct (AN (NCase agr.n Nom))
+          } ; 
 
         eiv : Str = case agr of {
           {n = Sg ; p = P1} => "en" ;
@@ -171,6 +175,7 @@ oper
           <VIFin Past,        Pl> => <eiv, part,                 "olleet"> ;
           <VIImper,           Sg> => <"älä", verbs ! Imper Sg,   "ole"> ;
           <VIImper,           Pl> => <"älkää", verbs ! ImpNegPl, "olko"> ;
+          <VIPass,            _>  => <"ei", verbs ! Pass False,  "ole"> ;
           <VIInf i,           _>  => <"ei", verbs ! Inf i, "olla"> ----
           } ;
 
@@ -185,86 +190,39 @@ oper
         mkvf : VForm -> {fin, inf : Str} = \p -> case <ant,b> of {
           <Simul,Pos> => vf (verbs ! p) [] ;
           <Simul,Neg> => vf ei          neg ;
-          <Anter,Pos> => vf (olla ! p)  part ;
+          <Anter,Pos> => vf (olla ! p)  part ;  
           <Anter,Neg> => vf ei          (ole ++ part)
           }
       in
       case vi of {
         VIFin Past => mkvf (Impf agr.n agr.p) ; 
         VIFin Cond => mkvf (Condit agr.n agr.p) ;
-        _    => mkvf (Presn agr.n agr.p)  
+        VIFin (Pres | Fut) => mkvf (Presn agr.n agr.p) ;
+        VIImper    => mkvf (Imper agr.n) ;
+        VIPass     => mkvf (Pass True) ;
+        VIInf i    => mkvf (Inf i)
         } ;
 
-    s2 = \\_,_ => [] ;
+    s2 = \\_,_,_ => [] ;
     ext = [] ;
     sc = verb.sc 
     } ;
 
 
-  insertObj : (Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
+  insertObj : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
-    s2 = \\b,a => vp.s2 ! b ! a ++ obj ! b ! a ;
+    s2 = \\fin,b,a => vp.s2 ! fin ! b ! a ++ obj ! fin ! b ! a ;
     ext = vp.ext ;
     sc = vp.sc
     } ;
 
-{-
---- This is not functional.
-
-  insertAdV : Str -> VP -> VP = \adv,vp -> {
+  insertExtrapos : Str -> VP -> VP = \obj,vp -> {
     s = vp.s ;
-    s2 = vp.s2
+    s2 = vp.s2 ;
+    ext = vp.ext ++ obj ;
+    sc = vp.sc
     } ;
 
-  presVerb : {s : VForm => Str} -> Agr -> Str = \verb -> 
-    agrVerb (verb.s ! VPres) (verb.s ! VInf) ;
-
-  infVP : VP -> Agr -> Str = \vp,a -> 
-    (vp.s ! Fut ! Simul ! Neg ! ODir ! a).inf ++ vp.s2 ! a ;
-
-  agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
-    case agr of {
-      {n = Sg ; p = P3} => has ;
-      _                 => have
-      } ;
-
-  have   = agrVerb "has"     "have" ;
-  havent = agrVerb "hasn't"  "haven't" ;
-  does   = agrVerb "does"    "do" ;
-  doesnt = agrVerb "doesn't" "don't" ;
-
-  Aux = {pres,past : Polarity => Agr => Str ; inf,ppart : Str} ;
-
-  auxBe : Aux = {
-    pres = \\b,a => case <b,a> of {
-      <Pos,{n = Sg ; p = P1}> => "am" ; 
-      <Neg,{n = Sg ; p = P1}> => ["am not"] ; --- am not I
-      _ => agrVerb (posneg b "is")  (posneg b "are") a
-      } ;
-    past = \\b,a => case a of {
-      {n = Sg ; p = P1|P3} => (posneg b "was") ;
-      _                    => (posneg b "were")
-      } ;
-    inf  = "be" ;
-    ppart = "been"
-    } ;
-
-  posneg : Polarity -> Str -> Str = \p,s -> case p of {
-    Pos => s ;
-    Neg => s + "n't"
-    } ;
-
-  conjThat : Str = "that" ;
-
-  reflPron : Agr => Str = table {
-    {n = Sg ; p = P1} => "myself" ;
-    {n = Sg ; p = P2} => "yourself" ;
-    {n = Sg ; p = P3} => "itself" ; ----
-    {n = Pl ; p = P1} => "ourselves" ;
-    {n = Pl ; p = P2} => "yourselves" ;
-    {n = Pl ; p = P3} => "themselves"
-    } ;
--}
 -- For $Sentence$.
 
   Clause : Type = {
@@ -275,8 +233,12 @@ oper
     \subj,agr,vp -> {
       s = \\t,a,b,o => 
         let 
-          verb  = vp.s ! VIFin t ! a ! b ! agr ;
-          compl = vp.s2 ! b ! agr ++ vp.ext
+          agrfin = case vp.sc of {
+                    NPCase Nom => <agr,True> ;
+                    _ => <agrP3 Sg,False>      -- minun täytyy, minulla on
+                    } ;
+          verb  = vp.s ! VIFin t ! a ! b ! agrfin.p1 ;
+          compl = vp.s2 ! agrfin.p2 ! b ! agr ++ vp.ext
         in
         case o of {
           SDecl  => subj ++ verb.fin ++ verb.inf ++ compl ;
@@ -286,6 +248,17 @@ oper
 
   questPart : Str -> Str = \on -> on ++ BIND ++ "ko" ; ----
 
+  infVP : NPForm -> Polarity -> Agr -> VP -> Str =
+    \sc,pol,agr,vp ->
+        let 
+          fin = case sc of {     -- subject case
+            NPCase Nom => True ; -- minä tahdon nähdä auton
+            _ => False           -- minun täytyy nähdä auto
+            } ;
+          verb  = vp.s ! VIInf Inf1 ! Simul ! Pos ! agr ; -- no "ei"
+          compl = vp.s2 ! fin ! pol ! agr ++ vp.ext     -- but compl. case propagated
+        in
+        verb.fin ++ verb.inf ++ compl ;
 
 -- The definitions below were moved here from $MorphoFin$ so that we the
 -- auxiliary of predication can be defined.
@@ -537,5 +510,27 @@ oper
             (ifTok Str e "e" (Predef.tk 1 kukkoi + "ien") (kukkoi + ifi "en" "jen"))
             kukkoja
             (kukkoi + ifi "in" "ihin") ;
+
+-- Reflexive pronoun. 
+--- Possessive could be shared with the more general $NounFin.DetCN$.
+
+oper
+  reflPron : Agr -> NP = \agr -> 
+    let 
+      itse = (nhn (sKukko "itse" "itsen" "itsejä")).s ;
+      nsa  = possSuffix agr
+    in {
+      s = table {
+        NPCase (Nom | Gen) | NPAcc => itse ! NPossNom + nsa ;
+        NPCase Transl      => itse ! NPossTransl Sg + nsa ;
+        NPCase Illat       => itse ! NPossIllat Sg + nsa ;
+        NPCase c           => itse ! NCase Sg c + nsa
+        } ;
+      a = agr ;
+      isPron = False -- no special acc form
+      } ;
+
+  possSuffix : Agr -> Str = \agr -> 
+    table Agr ["ni" ; "si" ; "nsa" ; "mme" ; "nne" ; "nsa"] ! agr ;
 
 }
