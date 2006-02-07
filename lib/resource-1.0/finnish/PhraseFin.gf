@@ -11,7 +11,7 @@ concrete PhraseFin of Phrase = CatFin ** open ResFin in {
     UttIP ip = {s = ip.s ! NPCase Nom} ;
     UttIAdv iadv = iadv ;
     UttNP np = {s = np.s ! NPCase Nom} ;
---    UttVP vp = {s = "to" ++ infVP vp (agrP3 Sg)} ;
+    UttVP vp = {s = infVP (NPCase Nom) Pos (agrP3 Sg) vp} ;
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;

@@ -210,7 +210,7 @@ oper
 -- The plural forms are filtered away by the compiler.
 
   mkPN  : N -> PN ;
-
+  mkNP  : N -> Number -> NP ; 
 
 --2 Adjectives
 
@@ -248,6 +248,10 @@ oper
   regV  : (soutaa : Str) -> V ;
   reg2V : (soutaa,souti : Str) -> V ;
   reg3V : (soutaa,soudan,souti : Str) -> V ;
+
+-- The subject case of verbs is by default nominative. This dunction can change it.
+
+  subjcaseV : V -> Case -> V ;
 
 -- The rest of the paradigms are special cases mostly covered by the heuristics.
 -- A simple special case is the one with just one stem and without grade alternation.
@@ -475,6 +479,12 @@ reg3N = \vesi,veden,vesiä ->
   mkN3 = \n,c,e -> n ** {c2 = c ; c3 = e ; lock_N3 = <>} ;
   genN2 = \n -> mkN2 n (casePrep genitive) ;
   mkPN n = mkProperName n ** {lock_PN = <>} ;
+  mkNP noun num = {
+    s = \\c => noun.s ! NCase num (npform2case c) ; 
+    a = agrP3 num ;
+    isPron = False ;
+    lock_NP = <>
+    } ;
 
   mkA = \x -> {s = \\_ => (noun2adj x).s ; lock_A = <>} ;
   mkA2 = \x,c -> x ** {c2 = c ; lock_A2 = <>} ;
@@ -503,6 +513,8 @@ reg3N = \vesi,veden,vesiä ->
 
   reg3V soutaa soudan souti = 
     v2v (reg3VerbH soutaa soudan souti) ** {sc = NPCase Nom ; lock_V = <>} ;
+
+  subjcaseV v c = {s = v.s ; sc = NPCase c ; lock_V = v.lock_V} ;
 
   vValua v = v2v (vSanoa v) ** {sc = NPCase Nom ; lock_V = <>} ;
   vKattaa v u = v2v (vOttaa v u) ** {sc = NPCase Nom ; lock_V = <>} ;

@@ -1,6 +1,6 @@
 concrete AdjectiveFin of Adjective = CatFin ** open ResFin, Prelude in {
 
-  flags optimize=all_subs ; -- gfc size from 2864336 to 6786
+  flags optimize=all_subs ; -- gfc size from 2864336 to 6786 - i.e. factor 422
 
   lin
 
@@ -20,17 +20,17 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, Prelude in {
       s = \\isMod,af => 
           preOrPost isMod (appCompl True Pos adj.c2 np) (adj.s ! Posit ! af)
       } ;
-{-
-    ReflA2 a = {
-      s = \\ag => a.s ! AAdj Posit ++ a.c2 ++ reflPron ! ag ; 
-      isPre = False
+
+    ReflA2 adj = {
+      s = \\isMod,af => 
+          preOrPost isMod 
+            (appCompl True Pos adj.c2 (reflPron (agrP3 Sg))) (adj.s ! Posit ! af)
       } ;
 
     SentAP ap sc = {
-      s = \\a => ap.s ! a ++ sc.s ; 
-      isPre = False
+      s = \\b,a => ap.s ! b ! a ++ sc.s
       } ;
--}
+
     AdAP ada ap = {
       s = \\b,af => ada.s ++ ap.s ! b ! af
       } ;

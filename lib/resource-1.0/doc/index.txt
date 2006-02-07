@@ -47,6 +47,7 @@ The documentation of the individual modules:
 ==The language-dependent APIs==
 
 - [ParadigmsEng gfdoc/ParadigmsEng.html]: English lexical paradigms
+- [ParadigmsFin gfdoc/ParadigmsFin.html]: Finnish lexical paradigms
 - [ParadigmsFre gfdoc/ParadigmsFre.html]: French lexical paradigms
 - [ParadigmsIta gfdoc/ParadigmsIta.html]: Italian lexical paradigms
 - [ParadigmsGer gfdoc/ParadigmsGer.html]: German lexical paradigms

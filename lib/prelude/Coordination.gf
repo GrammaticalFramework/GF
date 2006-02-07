@@ -120,5 +120,12 @@ oper
     \P,c,x,xs ->
     {s1 = table P {o => x.s ! o ++ c ++ xs.s1 ! o} ; s2 = xs.s2} ; 
 
+  consrTable2 : (P,Q : Type) -> Str -> {s : P => Q => Str} -> 
+    ListTable2 P Q -> ListTable2 P Q = 
+    \P,Q,c,x,xs ->
+    {s1 = table P {p => table Q {q => x.s ! p ! q ++ c ++ xs.s1 ! p ! q}} ; 
+     s2 = xs.s2
+    } ; 
+
 
 } ;
