@@ -229,6 +229,13 @@ txtHelpFile =
   "\n  examples:" ++
   "\n     p -lang=Cncdecimal \"123\" | at num2bin | l   -- convert dec to bin" ++
   "\n" ++
+  "\ntb, tree_bank: tb" ++
+  "\n      Generate a multilingual treebank from a list of trees." ++
+  "\n  flags:" ++
+  "\n     -xml      wrap the treebank with XML tags" ++
+  "\n  examples:" ++
+  "\n     gr -cat=S -number=100 | tb" ++
+  "\n" ++
   "\ntt, test_tokenizer: tt String" ++
   "\n      Show the token list sent to the parser when String is parsed." ++
   "\n      HINT: can be useful when debugging the parser." ++

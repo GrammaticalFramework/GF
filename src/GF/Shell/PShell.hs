@@ -113,6 +113,7 @@ pCommand ws = case ws of
   "tt" : s      -> aString CTestTokenizer s
   "cc" : s      -> aUnit   $ CComputeConcrete $ unwords s
   "so" : s      -> aUnit   $ CShowOpers $ unwords s
+  "tb" : []     -> aUnit   CTreeBank
 
   "tq" : i:o:[] -> aUnit   (CTranslationQuiz (language i) (language o))
   "tl":i:o:[]   -> aUnit   (CTranslationList (language i) (language o))
