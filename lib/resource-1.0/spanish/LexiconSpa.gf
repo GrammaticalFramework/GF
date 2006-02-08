@@ -16,7 +16,7 @@ lin
    bad_A = prefA (mkADeg (regA "malo") (regA "peor")) ;
    bank_N = regN "banco" ;
    beautiful_A = prefA (regADeg "bello") ;	-- bella
-   become_VA = regV "conventir" ;  --- convertirse en, volverse, ponerse
+   become_VA = reflV (regV "convertir") ;  --- convertirse en, volverse, ponerse
    beer_N = regN "cerveza" ;
    beg_V2V = mkV2V (regV "rogar") accusative dative ;   -- pedir
    big_A = prefA (regADeg "grande") ;
@@ -206,7 +206,7 @@ lin
    wine_N = regN "vino" ;
    win_V2 = dirV2 (regV "ganar") ;
    woman_N = femN (regN "mujer") ;
-   wonder_VQ = mkVQ (regV "preguntar") ; ---- preguntarse 
+   wonder_VQ = mkVQ (reflV (regV "preguntar")) ;
    wood_N = regN "madera" ;
    write_V2 = dirV2 (special_ppV (regV "escribir") "escrito") ;
    yellow_A = regADeg "amarillo" ;
