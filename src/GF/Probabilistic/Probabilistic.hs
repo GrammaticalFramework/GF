@@ -46,6 +46,9 @@ import Data.List
 import Control.Monad
 import System.Random
 
+-- | this parameter tells how many constructors at most are generated in a tree
+timeout :: Int
+timeout = 99
 
 -- | generate an infinite list of trees, with their probabilities
 generateRandomTreesProb :: Options -> StdGen -> GFCGrammar -> Probs -> Cat -> [Exp]
@@ -159,12 +162,15 @@ randomTrees :: StdGen -> SGrammar -> SCat -> [STree]
 randomTrees gen = genTrees (randomRs (0.0, 1.0) gen)
 
 genTrees :: [Double] -> SGrammar -> SCat -> [STree]
-genTrees ds gr cat = 
-  let (t,k) = genTree ds gr cat 
-  in t : genTrees (drop k ds) gr cat
+genTrees ds0 gr cat = 
+  let (ds,ds2) = splitAt (timeout+1) ds0  -- for time out, else ds
+      (t,k) = genTree ds gr cat      
+  in (if k>timeout then id else (t:))     -- don't accept with metas
+           (genTrees ds2 gr cat)          -- else (drop k ds)
 
 genTree :: [Double] -> SGrammar -> SCat -> (STree,Int)
 genTree rs gr = gett rs where
+  gett [] cat = (SMeta cat,1) -- time-out case
   gett ds "String" = (SString "foo",1)
   gett ds "Int" = (SInt 1978,1)
   gett ds "Float" = (SFloat 3.1415926, 1)

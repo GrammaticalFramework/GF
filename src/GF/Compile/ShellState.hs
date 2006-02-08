@@ -339,7 +339,10 @@ qualifTop :: StateGrammar -> G.QIdent -> G.QIdent
 qualifTop gr (_,c) = (absId gr,c)
 
 stateGrammarOfLang :: ShellState -> Language -> StateGrammar
-stateGrammarOfLang st0 l = StGr {
+stateGrammarOfLang = stateGrammarOfLangOpt True
+
+stateGrammarOfLangOpt :: Bool -> ShellState -> Language -> StateGrammar
+stateGrammarOfLangOpt purg st0 l = StGr {
   absId    = err (const (identC "Abs")) id  $ M.abstractOfConcrete allCan l, ---
   cncId    = l,
   grammar  = allCan,
@@ -352,7 +355,7 @@ stateGrammarOfLang st0 l = StGr {
   loptions = errVal noOptions $ lookupOptionsCan allCan
   }
  where
-   st = purgeShellState $ errVal st0 $ changeMain (Just l) st0
+   st = (if purg then purgeShellState else id) $ errVal st0 $ changeMain (Just l) st0
    allCan = canModules st
 
 grammarOfLang :: ShellState -> Language -> CanonGrammar

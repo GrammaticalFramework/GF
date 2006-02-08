@@ -1,7 +1,7 @@
 all: langs test
 
 test:
-	echo "gr -cat=S -tr -number=11 | l -multi gf" | gf langs.gfcm
+	echo "gr -cat=S -number=11 -cf | tb" | gf langs.gfcm
 langs:
 	echo "s ;; pm | wf langs.gfcm" | gf -src */Lang??*.gf english/LangEng.gf
 
