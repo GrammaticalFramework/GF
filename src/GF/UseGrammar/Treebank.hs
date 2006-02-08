@@ -33,17 +33,18 @@ import qualified GF.Grammar.Abstract as A
 
 -- | the main function 
 mkTreebank :: Options -> ShellState -> String -> [A.Tree] -> IO ()
-mkTreebank opts sh com trees = putInXML opts "treebank" comm(mapM_ mkItem trees)
+mkTreebank opts sh com trees = putInXML opts "treebank" comm(mapM_ mkItem tris)
  where
-   mkItem t   = putInXML opts "item" cat      (mkTree t >>mapM_ (mkLin t) langs)
+   mkItem(t,i)= putInXML opts "item" (cat i)  (mkTree t >>mapM_ (mkLin t) langs)
    mkTree t   = putInXML opts "tree" []       (putStrLn $ showTree t)
    mkLin t lg = putInXML opts "lin" (lang lg) (putStrLn $ linearize sh lg t)
 
    langs   = [prt_ l | l <- allLanguages sh]
    comm    = "" --- " command=" ++ show com +++ "abstract=" ++ show abstr
    abstr   = "" --- "Abs" ----
-   cat     = "" --- " cat=" ++ show "S" ----
+   cat i   = " number=" ++ show (show i) --- " cat=" ++ show "S" ----
    lang lg = " lang=" ++ show (prt_ (zIdent lg))
+   tris    = zip trees [1..]
 
 
 putInXML :: Options -> String -> String -> IO () -> IO ()
