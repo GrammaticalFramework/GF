@@ -208,7 +208,7 @@ lin
   wine_N = regN "vin" masculine ;
   win_V2 = dirV2 (regV "gagner") ; ---- vaincre
   woman_N = regN "femme" feminine ;
-  wonder_VQ = mkVQ (regV "étonner") ; ----- s'étonner
+  wonder_VQ = mkVQ (reflV (regV "étonner")) ;
   wood_N = regN "bois" masculine ;
   write_V2 = écrire_V2 ;
   yellow_A = regA "jaune" ;
@@ -221,14 +221,7 @@ lin
   add_V3 = dirV3 (regV "ajouter") dative ;
   number_N = regN "nombre" masculine ; ---- numéro
   put_V2 = mettre_V2 ;
-  stop_V = regV "arrêter" ; ---- s'arrêter
+  stop_V = reflV (regV "arrêter") ;
   jump_V = regV "sauter" ;
-{-
-  here_Adv = mkAdv "ici" ;
-  here7to_Adv = mkAdv "ici" ;
-  here7from_Adv = mkAdv ["d'ici"] ;
-  there_Adv = mkAdv "là" ; ---- y, là-bas
-  there7to_Adv = mkAdv "là" ; --- y
-  there7from_Adv = mkAdv ["de là"] ; ---- en
--}
+
 } ;

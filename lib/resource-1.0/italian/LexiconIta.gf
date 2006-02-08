@@ -207,7 +207,7 @@ lin
   wine_N = regN "vino" ;
   win_V2 = dirV2 (verboV (vincere_94 "vincere")) ;
   woman_N = regN "donna" ;
-  wonder_VQ = mkVQ (regV "domandare") ; ---- domandarsi
+  wonder_VQ = mkVQ (reflV (regV "domandare")) ;
   wood_N = regN "legno" ;
   write_V2 = dirV2 (verboV (scrivere_82 "scrivere")) ;
   yellow_A = regADeg "giallo" ;
@@ -220,7 +220,7 @@ lin
   add_V3 = dirV3 (verboV (giungere_55 "aggiungere")) dative ;
   number_N = regN "numero" ;
   put_V2 = dirV2 (verboV (mettere_57 "mettere")) ;
-  stop_V = regV "fermare" ; ---- fermarsi
+  stop_V = reflV (regV "fermare") ;
   jump_V = regV "saltare" ;
 {-
   here_Adv = mkAdv "quì" ;

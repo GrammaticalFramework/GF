@@ -515,6 +515,13 @@ resource ResGer = ParamX ** open Prelude in {
           }
     } ;
 
+  infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp ->
+    <
+     \\agr => vp.n2 ! agr ++  vp.a2,
+     infPart isAux ++ (vp.s ! agrP3 Sg ! VPInfinit Simul).inf,
+     vp.inf ++ vp.ext
+    > ;
+
 -- The nominative case is not used as reflexive, but defined here
 -- so that we can reuse this in personal pronouns. 
 -- The missing Sg "ihrer" shows that a dependence on gender would
