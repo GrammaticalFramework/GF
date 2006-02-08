@@ -27,6 +27,7 @@ import qualified GF.Canon.CMacros as CMacros
 import qualified GF.Compile.GrammarToCanon as GrammarToCanon
 import GF.Grammar.Values
 import GF.UseGrammar.GetTree
+import GF.UseGrammar.Treebank
 
 import GF.Shell.ShellCommands
 
@@ -288,6 +289,11 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
         ATrms (tr:_) -> Just tr
         _ -> Nothing
     returnArg (ATrms $ generateTrees opts gro mt) sa
+
+  CTreeBank -> do
+    let ts = strees $ s2t $ snd sa
+        comm = "command" ----
+    justOutput opts (mkTreebank opts st comm ts) sa
 
   CShowTreeGraph | oElem emitCode opts -> do -- -o
     returnArg (AString $ visualizeTrees opts $ strees $ s2t a) sa

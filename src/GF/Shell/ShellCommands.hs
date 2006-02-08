@@ -48,6 +48,7 @@ data Command =
  | CTranslate Language Language
  | CGenerateRandom
  | CGenerateTrees
+ | CTreeBank
  | CPutTerm
  | CWrapTerm I.Ident
  | CApplyTransfer (Maybe I.Ident, I.Ident)
@@ -182,6 +183,7 @@ optionsOfCommand co = case co of
   CGenerateRandom -> both "cf prob" "cat lang number depth"
   CGenerateTrees -> both "metas" "atoms depth alts cat lang number"
   CPutTerm -> flags "transform number"
+  CTreeBank -> opts "xml"
   CWrapTerm _ -> opts "c"
   CApplyTransfer _ -> flags "lang transfer"
   CMorphoAnalyse -> both "short" "lang"

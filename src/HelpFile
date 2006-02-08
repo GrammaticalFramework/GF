@@ -200,6 +200,13 @@ at, apply_transfer: at (Module.Fun | Fun)
   examples:
      p -lang=Cncdecimal "123" | at num2bin | l   -- convert dec to bin
 
+tb, tree_bank: tb
+      Generate a multilingual treebank from a list of trees.
+  flags:
+     -xml      wrap the treebank with XML tags
+  examples:
+     gr -cat=S -number=100 | tb
+
 tt, test_tokenizer: tt String
       Show the token list sent to the parser when String is parsed.
       HINT: can be useful when debugging the parser.

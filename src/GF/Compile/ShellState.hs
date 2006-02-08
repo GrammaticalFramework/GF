@@ -405,7 +405,7 @@ allActiveGrammars               :: ShellState -> [StateGrammar]
 
 globalOptions = gloptions
 --allLanguages  = map (fst . fst) . concretes
-allLanguages  = M.allConcreteModules . canModules
+allLanguages  = map (snd . fst) . actualConcretes
 allTransfers  = map fst . transfers
 allCategories = map fst . allCatsOf . canModules
 
