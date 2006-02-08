@@ -522,6 +522,10 @@ resource ResGer = ParamX ** open Prelude in {
      vp.inf ++ vp.ext
     > ;
 
+  useInfVP : VP -> Str = \vp ->
+    let vpi = infVP False vp in
+    vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ;
+
 -- The nominative case is not used as reflexive, but defined here
 -- so that we can reuse this in personal pronouns. 
 -- The missing Sg "ihrer" shows that a dependence on gender would

@@ -14,7 +14,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer in {
           agr   = {n = n ; p = P2} ;
           verb  = vp.s ! agr ! VPImperat ;
         in
-        verb.fin ++ vp.a1 ! pol ++ verb.inf ++ vp.n2 ! agr ++ vp.a2 ++ vp.ext
+        verb.fin ++ vp.a1 ! pol ++ verb.inf ++ vp.n2 ! agr ++ vp.a2 ++ vp.inf ++ vp.ext
     } ;
 
     SlashV2 np v2 = 
@@ -35,7 +35,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer in {
 
     EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = "zu" ++ (vp.s ! agrP3 Sg ! VPInfinit Simul).inf} ; --- agr ---- compl
+    EmbedVP vp = {s = useInfVP vp} ;
 
     UseCl  t a p cl = {s = \\o => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! o} ;
     UseQCl t a p cl = {s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! q} ;
