@@ -14,6 +14,15 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
+8/2 (AR) The command <tt>tb = tree_bank</tt> for creating and testing against
+multilingual treebanks. Example uses:
+<pre>
+  gr -cat=S -number=100 | tb -xml | wf tb.xml -- random treebank into file
+  rf tb.txt | tb -c                           -- read comparison treebank from file
+</pre>
+
+<p>
+
 10/1 (AR) Forbade variable binding inside negation and Kleene star
 patterns. 
 

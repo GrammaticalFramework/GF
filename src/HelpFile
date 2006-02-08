@@ -201,11 +201,14 @@ at, apply_transfer: at (Module.Fun | Fun)
      p -lang=Cncdecimal "123" | at num2bin | l   -- convert dec to bin
 
 tb, tree_bank: tb
-      Generate a multilingual treebank from a list of trees.
-  flags:
-     -xml      wrap the treebank with XML tags
+      Generate a multilingual treebank from a list of trees (default) or compare
+      to an existing treebank.
+  options:
+     -c        compare to existing xml-formatted treebank
+     -xml      wrap the treebank (or comparison results) with XML tags
   examples:
-     gr -cat=S -number=100 | tb
+     gr -cat=S -number=100 | tb -xml | wf tb.xml -- random treebank into file
+     rf tb.txt | tb -c                           -- read comparison treebank from file
 
 tt, test_tokenizer: tt String
       Show the token list sent to the parser when String is parsed.

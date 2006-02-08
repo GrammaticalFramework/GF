@@ -230,11 +230,14 @@ txtHelpFile =
   "\n     p -lang=Cncdecimal \"123\" | at num2bin | l   -- convert dec to bin" ++
   "\n" ++
   "\ntb, tree_bank: tb" ++
-  "\n      Generate a multilingual treebank from a list of trees." ++
-  "\n  flags:" ++
-  "\n     -xml      wrap the treebank with XML tags" ++
+  "\n      Generate a multilingual treebank from a list of trees (default) or compare" ++
+  "\n      to an existing treebank." ++
+  "\n  options:" ++
+  "\n     -c        compare to existing xml-formatted treebank" ++
+  "\n     -xml      wrap the treebank (or comparison results) with XML tags" ++
   "\n  examples:" ++
-  "\n     gr -cat=S -number=100 | tb" ++
+  "\n     gr -cat=S -number=100 | tb -xml | wf tb.xml -- random treebank into file" ++
+  "\n     rf tb.txt | tb -c                           -- read comparison treebank from file" ++
   "\n" ++
   "\ntt, test_tokenizer: tt String" ++
   "\n      Show the token list sent to the parser when String is parsed." ++
