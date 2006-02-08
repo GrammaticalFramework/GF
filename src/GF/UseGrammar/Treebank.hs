@@ -12,12 +12,13 @@
 -- Purpose: to generate treebanks.
 -----------------------------------------------------------------------------
 
-module GF.UseGrammar.Treebank (mkTreebank) where
+module GF.UseGrammar.Treebank (mkTreebank,testTreebank) where
 
-
-import GF.Compile.ShellState (ShellState,grammar2shellState,canModules,stateGrammarOfLang,abstract,grammar,firstStateGrammar,allLanguages,allCategories)
+import GF.Compile.ShellState 
 import GF.UseGrammar.Linear (linTree2string)
 import GF.UseGrammar.Custom
+import GF.UseGrammar.GetTree (string2tree)
+import GF.Grammar.TypeCheck (annotate)
 import GF.Canon.CMacros (noMark)
 import GF.Grammar.Grammar (Trm)
 import GF.Grammar.MMacros (exp2tree)
@@ -31,13 +32,14 @@ import qualified GF.Grammar.Abstract as A
 -- Generate a treebank with a multilingual grammar. AR 8/2/2006
 -- (c) Aarne Ranta 2006 under GNU GPL
 
--- | the main function 
-mkTreebank :: Options -> ShellState -> String -> [A.Tree] -> IO ()
-mkTreebank opts sh com trees = putInXML opts "treebank" comm(mapM_ mkItem tris)
+-- | the main functions 
+mkTreebank :: Options -> ShellState -> String -> [A.Tree] -> Res
+mkTreebank opts sh com trees = putInXML opts "treebank" comm (concatMap mkItem tris)
  where
-   mkItem(t,i)= putInXML opts "item" (cat i)  (mkTree t >>mapM_ (mkLin t) langs)
-   mkTree t   = putInXML opts "tree" []       (putStrLn $ showTree t)
-   mkLin t lg = putInXML opts "lin" (lang lg) (putStrLn $ linearize sh lg t)
+   mkItem(t,i)= putInXML opts "item" (cat i)  (mkTree t ++ concatMap (mkLin t) langs)
+--   mkItem(t,i)= putInXML opts "item" (cat i)  (mkTree t >>mapM_ (mkLin t) langs)
+   mkTree t   = putInXML opts "tree" []       (puts $ showTree t)
+   mkLin t lg = putInXML opts "lin" (lang lg) (puts $ linearize sh lg t)
 
    langs   = [prt_ l | l <- allLanguages sh]
    comm    = "" --- " command=" ++ show com +++ "abstract=" ++ show abstr
@@ -46,14 +48,56 @@ mkTreebank opts sh com trees = putInXML opts "treebank" comm(mapM_ mkItem tris)
    lang lg = " lang=" ++ show (prt_ (zIdent lg))
    tris    = zip trees [1..]
 
-
-putInXML :: Options -> String -> String -> IO () -> IO ()
-putInXML opts tag attrs io = do
-  ifXML $ putStrLn $ tagXML $ tag ++ attrs
-  io
-  ifXML $ putStrLn $ tagXML $ '/':tag
+testTreebank :: Options -> ShellState -> String -> Res
+testTreebank opts sh = putInXML opts "diff" [] . concatMap testOne . getTreebank . lines
  where
-  ifXML c = if oElem showXML opts then c else return ()
+  testOne (e,lang,str) = do
+    let tr = annot gr e
+    let str0 = linearize sh lang tr
+    if str == str0 then ret else putInXML opts "diff" [] $ do
+      putInXML opts "tree" [] (puts $ showTree tr)
+      putInXML opts "old"  (" lang=" ++ show (prt_ (zIdent lang))) $ puts str0
+      putInXML opts "new"  (" lang=" ++ show (prt_ (zIdent lang))) $ puts str
+  gr = firstStateGrammar sh
+
+-- string vs. IO
+type Res = [String] -- IO ()
+puts :: String -> Res
+puts = return  -- putStrLn
+ret = [] -- return ()
+--
+
+getTreebank :: [String] -> [(String,String,String)]
+getTreebank ll = case ll of
+  [] -> []
+  l:ls -> 
+    let (l1,l2)   = getItem ls
+        (tr,lins) = getTree l1
+        lglins    = getLins lins
+    in [(tr,lang,str) | (lang,str) <- lglins] ++ getTreebank l2
+ where
+   getItem = span ((/="</item") . take 6)
+
+   getTree (_:ss) = let (t1,t2) = span ((/="</tree") . take 6) ss in (last t1, drop 1 t2)
+
+   getLins (beg:str:end:ss) = (getLang beg, str):getLins ss
+   getLins _ = []
+
+   getLang = takeWhile (/='"') . tail . dropWhile (/='"')
+
+annot :: StateGrammar -> String -> A.Tree
+annot gr s = errVal (error "illegal tree") $ do
+  let t = tree2exp $ string2tree gr s
+  annotate (grammar gr) t
+
+putInXML :: Options -> String -> String -> Res -> Res
+putInXML opts tag attrs io = 
+  (ifXML $ puts $ tagXML $ tag ++ attrs) ++
+  io ++
+  (ifXML $ puts $ tagXML $ '/':tag)
+ where
+  ifXML c = if oElem showXML opts then c else []
+
 
 tagXML :: String -> String
 tagXML s = "<" ++ s ++ ">"

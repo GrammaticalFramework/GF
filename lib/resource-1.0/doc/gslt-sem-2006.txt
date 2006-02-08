@@ -47,6 +47,7 @@ Staff contributions to grammar libraries:
 Student projects on grammar libraries:
 - Inger Andersson & Therese Söderberg: Spanish morphology
 - Ludmilla Bogavac: Russian morphology
+- Karin Cavallin: comparison with Svenska Akademins Grammatik
 - Ali El Dada: Arabic morphology and syntax
 - Muhammad Humayoun: Urdu morphology
 - Michael Pellauer: Estonian morphology
@@ -57,6 +58,15 @@ Technology, also:
 - Hans-Joachim Daniels
 - Kristofer Johannisson
 - Peter Ljunglöf
+
+
+Various grammar library contributions from the multilingual Chalmers comminity:
+- Koen Claessen, Carlos Gonzalía, Patrik Jansson, Wojciech Mostowski, Karol Ostrovsky,
+David Wahlstedt
+
+
+Resource library patches and suggestions from the WebALT staff:
+- Lauri Carlson, Glòria Casanellas, Anni Laine, Wanjiku Ng'ang'a, Jordi Saludes
 
 
 #NEW

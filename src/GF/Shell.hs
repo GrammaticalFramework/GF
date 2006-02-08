@@ -290,10 +290,13 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
         _ -> Nothing
     returnArg (ATrms $ generateTrees opts gro mt) sa
 
+  CTreeBank | oElem doCompute opts -> do -- -c
+    let bank = prCommandArg a
+    returnArg (AString $ unlines $ testTreebank opts st bank) sa
   CTreeBank -> do
     let ts = strees $ s2t $ snd sa
         comm = "command" ----
-    justOutput opts (mkTreebank opts st comm ts) sa
+    returnArg (AString $ unlines $ mkTreebank opts st comm ts) sa
 
   CShowTreeGraph | oElem emitCode opts -> do -- -o
     returnArg (AString $ visualizeTrees opts $ strees $ s2t a) sa
