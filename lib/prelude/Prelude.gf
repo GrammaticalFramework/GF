@@ -20,7 +20,8 @@ oper
 
   nonExist : Str = variants {} ;
 
-  optStr : Str -> Str = \s -> variants {s ; []} ;
+  optStr : Str -> Str = \s -> variants {[] ; s} ;
+  strOpt : Str -> Str = \s -> variants {s ; []} ;
 
   constTable : (A,B : Type) -> B -> A => B = \_,_,b -> \\_ => b ;
   constStr   : (A : Type) -> Str -> A => Str = \A -> constTable A Str ;
