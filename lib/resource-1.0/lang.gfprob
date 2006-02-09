@@ -1,0 +1,6 @@
+--# prob ConjNP   0.05
+--# prob ConjAP   0.1
+--# prob ConjAdv  0.1
+--# prob ConjS    0.1
+--# prob PredSCVP 0.05
+--# prob PredetNP 0.05
