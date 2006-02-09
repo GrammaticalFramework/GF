@@ -60,9 +60,9 @@ Technology, also:
 - Peter Ljunglöf
 
 
-Various grammar library contributions from the multilingual Chalmers comminity:
-- Koen Claessen, Carlos Gonzalía, Patrik Jansson, Wojciech Mostowski, Karol Ostrovsky,
-David Wahlstedt
+Various grammar library contributions from the multilingual Chalmers community:
+- Ana Bove, Koen Claessen, Carlos Gonzalía, Patrik Jansson, 
+Wojciech Mostowski, Karol Ostrovský, David Wahlstedt
 
 
 Resource library patches and suggestions from the WebALT staff:
@@ -578,7 +578,8 @@ Where do we get the data from?
 - we have not reused existing resources
 
 
-The resource grammar library is entirely open-source free software (under GNU GPL license).
+The resource grammar library is entirely open-source free software 
+(under GNU GPL license).
 
 
 
@@ -594,6 +595,8 @@ Semantic coverage: you can express whatever you want.
 Usability as library for non-linguists.
 
 Evaluation: tested in third-party projects.
+
+Tools for regression testing (treebank generation and comparison)
 
 
 
