@@ -7,12 +7,67 @@
 <P ALIGN="center"><CENTER><H1>Grammars as Software Libraries</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Wed Feb  8 19:06:27 2006
+Last update: Thu Feb  9 11:57:20 2006
 </FONT></CENTER>
 
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+    <UL>
+    <LI><A HREF="#toc1">Setting</A>
+    <LI><A HREF="#toc2">People</A>
+    <LI><A HREF="#toc3">Software Libraries</A>
+    <LI><A HREF="#toc4">Abstraction</A>
+    <LI><A HREF="#toc5">Grammars as libraries?</A>
+    <LI><A HREF="#toc6">A slightly more advanced example</A>
+    <LI><A HREF="#toc7">Problems with the more advanced example</A>
+    <LI><A HREF="#toc8">More problems with the advanced example</A>
+    <LI><A HREF="#toc9">A library-based solution</A>
+    <LI><A HREF="#toc10">An improved library-based solution</A>
+    <LI><A HREF="#toc11">The ultimate solution?</A>
+    <LI><A HREF="#toc12">The components of a grammar library</A>
+    <LI><A HREF="#toc13">Implementing a grammar library in GF</A>
+    <LI><A HREF="#toc14">Linearization and parsing</A>
+    <LI><A HREF="#toc15">Applying GF</A>
+    <LI><A HREF="#toc16">Domain, ontology, idiom</A>
+    <LI><A HREF="#toc17">Example domain</A>
+    <LI><A HREF="#toc18">Translation system</A>
+    <LI><A HREF="#toc19">Difficulties with concrete syntax</A>
+    <LI><A HREF="#toc20">Solving the difficulties</A>
+    <LI><A HREF="#toc21">Application grammars vs. resource grammars</A>
+    <LI><A HREF="#toc22">GF as programming language</A>
+    <LI><A HREF="#toc23">Concrete syntax using library</A>
+    <LI><A HREF="#toc24">Design questions for the grammar library</A>
+    <LI><A HREF="#toc25">Design decisions</A>
+    <LI><A HREF="#toc26">Design decisions, cont'd</A>
+    <LI><A HREF="#toc27">Success criteria and evaluation</A>
+    <LI><A HREF="#toc28">These are not our success criteria</A>
+    <LI><A HREF="#toc29">Where is semantics?</A>
+    <LI><A HREF="#toc30">Representations in different APIs</A>
+    <LI><A HREF="#toc31">Languages</A>
+    <LI><A HREF="#toc32">Library structure 1: language-independent API</A>
+    <LI><A HREF="#toc33">Library structure 2: language-dependent APIs</A>
+    <LI><A HREF="#toc34">Difficulties encountered</A>
+    <LI><A HREF="#toc35">How much can be language-independent?</A>
+    <LI><A HREF="#toc36">Using the library</A>
+    <LI><A HREF="#toc37">Parametrized modules</A>
+    <LI><A HREF="#toc38">Lexicon extension</A>
+    <LI><A HREF="#toc39">Example low-level morphological definition</A>
+    <LI><A HREF="#toc40">Some formats that can be generated from GF grammars</A>
+    <LI><A HREF="#toc41">Use as program components</A>
+    <LI><A HREF="#toc42">Grammar library as linguistic resource</A>
+    <LI><A HREF="#toc43">Corpus generation</A>
+    <LI><A HREF="#toc44">Related work</A>
+    <LI><A HREF="#toc45">Demo</A>
+    </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc1"></A>
 <H2>Setting</H2>
 <P>
 Current funding
@@ -46,6 +101,7 @@ Main applications
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc2"></A>
 <H2>People</H2>
 <P>
 Staff contributions to grammar libraries:
@@ -81,11 +137,11 @@ Technology, also:
 </UL>
 
 <P>
-Various grammar library contributions from the multilingual Chalmers comminity:
+Various grammar library contributions from the multilingual Chalmers community:
 </P>
 <UL>
-<LI>Koen Claessen, Carlos Gonzalía, Patrik Jansson, Wojciech Mostowski, Karol Ostrovsky,
-David Wahlstedt
+<LI>Ana Bove, Koen Claessen, Carlos Gonzalía, Patrik Jansson, 
+Wojciech Mostowski, Karol Ostrovský, David Wahlstedt
 </UL>
 
 <P>
@@ -98,6 +154,7 @@ Resource library patches and suggestions from the WebALT staff:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc3"></A>
 <H2>Software Libraries</H2>
 <P>
 The main device of <B>division of labour</B> in programming.
@@ -123,6 +180,7 @@ Practical advantages:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc4"></A>
 <H2>Abstraction</H2>
 <P>
 Libraries promote <B>abstraction</B>: you abstract away from details.
@@ -141,6 +199,7 @@ if it just has a support for functions or macros.
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc5"></A>
 <H2>Grammars as libraries?</H2>
 <P>
 Example: we want to create a GUI (Graphical User Interface) button
@@ -190,6 +249,7 @@ The library has an API (Application Programmer's Interface) with:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc6"></A>
 <H2>A slightly more advanced example</H2>
 <P>
 This is what you often see as a feedback from a program:
@@ -217,6 +277,7 @@ The code that should be written is of course
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc7"></A>
 <H2>Problems with the more advanced example</H2>
 <P>
 The same as with "Yes": you have to know the words "you",
@@ -243,6 +304,7 @@ of "message":
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc8"></A>
 <H2>More problems with the advanced example</H2>
 <P>
 You also have to know the case required by the verb "have" 
@@ -266,6 +328,7 @@ address the user:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc9"></A>
 <H2>A library-based solution</H2>
 <P>
 In analogy with the "Yes" case, you write
@@ -287,6 +350,7 @@ It is time to move from <B>canned text</B> to a <B>grammar</B>.
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc10"></A>
 <H2>An improved library-based solution</H2>
 <P>
 You may want to write
@@ -314,6 +378,7 @@ For this purpose, you need a library with the API
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc11"></A>
 <H2>The ultimate solution?</H2>
 <P>
 The library API for language will certainly grow big and become
@@ -358,6 +423,7 @@ Thus some amount of interaction is needed.
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc12"></A>
 <H2>The components of a grammar library</H2>
 <P>
 The library has <B>construction functions</B> like
@@ -385,6 +451,7 @@ knowledge by application programmers!
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc13"></A>
 <H2>Implementing a grammar library in GF</H2>
 <P>
 GF = Grammatical Framework
@@ -428,6 +495,7 @@ Simplest possible example:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc14"></A>
 <H2>Linearization and parsing</H2>
 <P>
 The realizatin function is, for each language, implemented by
@@ -449,6 +517,7 @@ The GF formalism moreover has the property of <B>reversibility</B>:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc15"></A>
 <H2>Applying GF</H2>
 <P>
 <B>multilingual grammar</B> = abstract syntax + concrete syntaxes
@@ -465,6 +534,7 @@ Examples of the idea:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc16"></A>
 <H2>Domain, ontology, idiom</H2>
 <P>
 An abstract syntax has other names:
@@ -496,6 +566,7 @@ Problem: the expertise of both a linguist and a domain expert are required.
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc17"></A>
 <H2>Example domain</H2>
 <P>
 Arithmetic of natural numbers: abstract syntax
@@ -518,6 +589,7 @@ Arithmetic of natural numbers: abstract syntax
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc18"></A>
 <H2>Translation system</H2>
 <P>
 We can translate using the abstract syntax as interlingua:
@@ -539,6 +611,7 @@ But is it really so simple?
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc19"></A>
 <H2>Difficulties with concrete syntax</H2>
 <P>
 The previous multilingual grammar breaks these rules in many situations:
@@ -555,6 +628,7 @@ All these sentences are grammatically incorrect.
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc20"></A>
 <H2>Solving the difficulties</H2>
 <P>
 GF <I>can</I> express the linguistic rules that are needed to
@@ -585,6 +659,7 @@ Linguistic knowledge dominates in the size of this grammar.
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc21"></A>
 <H2>Application grammars vs. resource grammars</H2>
 <P>
 Application grammar ("semantic grammar")
@@ -607,6 +682,7 @@ Resource grammar ("syntactic grammar")
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc22"></A>
 <H2>GF as programming language</H2>
 <P>
 The expressive power is between TAG and HPSG.
@@ -626,6 +702,7 @@ We have built a <B>module system</B> that can hide details.
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc23"></A>
 <H2>Concrete syntax using library</H2>
 <P>
 Assume the following API
@@ -656,6 +733,7 @@ Notice: the choice of adjective is domain expert knowledge.
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc24"></A>
 <H2>Design questions for the grammar library</H2>
 <P>
 What should there be in the library?
@@ -687,6 +765,7 @@ hence cannot use existing proprietary resources.
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc25"></A>
 <H2>Design decisions</H2>
 <P>
 Coverage, for each language:
@@ -719,6 +798,7 @@ Presentation:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc26"></A>
 <H2>Design decisions, cont'd</H2>
 <P>
 Where do we get the data from?
@@ -732,11 +812,13 @@ Where do we get the data from?
 </UL>
 
 <P>
-The resource grammar library is entirely open-source free software (under GNU GPL license).
+The resource grammar library is entirely open-source free software 
+(under GNU GPL license).
 </P>
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc27"></A>
 <H2>Success criteria and evaluation</H2>
 <P>
 Grammatical correctness of everything generated.
@@ -751,8 +833,12 @@ Usability as library for non-linguists.
 Evaluation: tested in third-party projects.
 </P>
 <P>
+Tools for regression testing (treebank generation and comparison)
+</P>
+<P>
 <!-- NEW -->
 </P>
+<A NAME="toc28"></A>
 <H2>These are not our success criteria</H2>
 <P>
 Language coverage: 
@@ -787,6 +873,7 @@ Linguistic innovation in syntax:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc29"></A>
 <H2>Where is semantics?</H2>
 <P>
 Application grammars use domain-specific
@@ -810,6 +897,7 @@ for all for the whole language.
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc30"></A>
 <H2>Representations in different APIs</H2>
 <P>
 <B>Grammar composition</B>: any grammar can serve as resource to another one.
@@ -847,6 +935,7 @@ In <CODE>Lang</CODE> (ground level resource API)
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc31"></A>
 <H2>Languages</H2>
 <P>
 The current GF Resource Project covers ten languages:
@@ -873,6 +962,7 @@ In addition, we have parts (morphology) of Arabic, Estonian, Latin, and Urdu
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc32"></A>
 <H2>Library structure 1: language-independent API</H2>
 <P>
 <IMG ALIGN="middle" SRC="Lang.png" BORDER="0" ALT="">
@@ -889,6 +979,7 @@ Cf. "matrix" in BLARK, LinGo
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc33"></A>
 <H2>Library structure 2: language-dependent APIs</H2>
 <UL>
 <LI>morphological paradigms, e.g. <CODE>ParadigmsSwe</CODE>
@@ -909,6 +1000,7 @@ Cf. "matrix" in BLARK, LinGo
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc34"></A>
 <H2>Difficulties encountered</H2>
 <P>
 English: negation and auxiliary vs. non-auxiliary verbs
@@ -931,6 +1023,7 @@ Scandinavian: determiners
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc35"></A>
 <H2>How much can be language-independent?</H2>
 <P>
 For the ten languages we have considered, it <I>is</I> possible
@@ -956,6 +1049,7 @@ Reservations:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc36"></A>
 <H2>Using the library</H2>
 <P>
 Simplest case: use the API in the same way for all languages.
@@ -984,6 +1078,7 @@ than writing a resource grammar!
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc37"></A>
 <H2>Parametrized modules</H2>
 <P>
 We can go even farther than share an abstract API: we can share implementations
@@ -1003,6 +1098,7 @@ Exploited in two families:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc38"></A>
 <H2>Lexicon extension</H2>
 <P>
 We cannot anticipate all vocabulary needed in application grammars.
@@ -1026,6 +1122,7 @@ Example heuristic, from <A HREF="gfdoc/ParadigmsSwe.html">ParadigsSwe</A>:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc39"></A>
 <H2>Example low-level morphological definition</H2>
 <PRE>
     decl2Noun : Str -&gt; N = \bil -&gt;
@@ -1042,6 +1139,7 @@ Example heuristic, from <A HREF="gfdoc/ParadigmsSwe.html">ParadigsSwe</A>:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc40"></A>
 <H2>Some formats that can be generated from GF grammars</H2>
 <PRE>
   -printer=lbnf           BNF Converter, thereby C/Bison, Java/JavaCup
@@ -1059,6 +1157,7 @@ Example heuristic, from <A HREF="gfdoc/ParadigmsSwe.html">ParadigsSwe</A>:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc41"></A>
 <H2>Use as program components</H2>
 <P>
 Haskell, Java, Prolog
@@ -1072,6 +1171,7 @@ Push-button creation of spoken language translators (using Nuance)
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc42"></A>
 <H2>Grammar library as linguistic resource</H2>
 <P>
 Can we use the libraries outside domain-specific fragments?
@@ -1094,6 +1194,7 @@ Two ideas:
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc43"></A>
 <H2>Corpus generation</H2>
 <P>
 The most general format is <B>multilingual treebank</B> generation:
@@ -1124,6 +1225,7 @@ Can this be useful? Cf. Rebecca Jonson this afternoon.
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc44"></A>
 <H2>Related work</H2>
 <P>
 CLE = Core Language Engine
@@ -1153,6 +1255,7 @@ Parsing detached from grammar (Nivre) - grammar detached from parsing
 <P>
 <!-- NEW -->
 </P>
+<A NAME="toc45"></A>
 <H2>Demo</H2>
 <P>
 Stoneage grammar, based on the Swadesh word list.
@@ -1164,6 +1267,6 @@ Implemented as application on top of the resource grammar.
 Illustrate generation and spoken-language parsing.
 </P>
 
-<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
-<!-- cmdline: txt2tags gslt-sem-2006.txt -->
+<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -\-toc -thtml gslt-sem-2006.txt -->
 </BODY></HTML>
