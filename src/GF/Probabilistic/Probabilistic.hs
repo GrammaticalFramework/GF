@@ -200,7 +200,8 @@ hitRegion d vs = case vs of
 checkSGrammar :: SGrammar -> Err SGrammar
 checkSGrammar = mapMTree chCat where
   chCat (c,rs) = case sum [p | ((p,f),_) <- rs] of
-    s | s /= 1.0 -> Bad $ "illegal probability sum " ++ show s ++ " in " ++ c
+    s | abs (s - 1.0) > 0.01 -> 
+      Bad $ "illegal probability sum " ++ show s ++ " in " ++ c
     _ -> return (c,rs)
 
 -- for cases where explicit probability is not given (encoded as
