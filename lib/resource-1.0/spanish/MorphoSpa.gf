@@ -97,7 +97,7 @@ oper
     {s = table {
        Ton Nom => il ;
        Ton x => prepCase x ++ Lui ;
-       Aton Nom => il ; ---- [] ;
+       Aton Nom => strOpt il ; ---- [] ;
        Aton Acc => le ;
        Aton (CPrep P_a) => lui ;
        Aton q       => prepCase q ++ Lui ; ---- GF bug with c or p! 

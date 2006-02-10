@@ -138,7 +138,7 @@ oper
     {s = table {
        Ton Nom => il ;
        Ton x => prepCase x ++ Lui ;
-       Aton Nom => il ; ---- [] ;
+       Aton Nom => strOpt il ; -- [] or il
        Aton Acc => le ;
        Aton (CPrep P_di) => "ne" ; --- hmm
        Aton (CPrep P_a) => lui ;

@@ -11,7 +11,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
 --2 Constants whose definitions fundamentally depend on language
 
 -- Prepositions that fuse with the article
--- (Fre, Spa "de", "a"; Ita also "in", "con").
+-- (Fre, Spa "de", "a"; Ita also "con", "da", "in", "su).
 
   param Prep ;
 
