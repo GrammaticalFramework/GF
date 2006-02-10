@@ -1,4 +1,4 @@
---# -path=.:../romance:../abstract:../common:prelude
+--# -path=.:../romance:../common:../abstract:../common:prelude
 
 concrete CatFre of Cat = TenseX ** CatRomance with
   (ResRomance = ResFre) ;

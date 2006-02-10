@@ -24,7 +24,7 @@ lin
   admettre_V2 = v_besch56 "admettre" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ;
   advenir_V = v_besch23 "advenir" ** {vtyp = VEsse ; lock_V = <>} ;
   aller_V = v_besch22 "aller" ** {vtyp = VEsse ; lock_V = <>} ;
-  apercevoir_V2 = v_besch38 "apercevoir" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complGen} ;
+  apercevoir_V2 = v_besch38 "apercevoir" ** {vtyp = VRefl ; lock_V2 = <> ; c2 = complGen} ;
   apparaître_V = v_besch64 "apparaître" ** {vtyp = VHabere ; lock_V = <>} ;
   appartenir_V2 = v_besch23 "appartenir" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complDat} ;
   appendre_V2 = v_besch53 "appendre" ** {vtyp = VHabere ; lock_V2 = <> ; c2 = complAcc} ;

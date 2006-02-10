@@ -46,10 +46,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
 
     auxVerb : VType -> (VF => Str) = \_ -> haber_V.s ;
 
-    partAgr : VType -> VPAgr = \vtyp -> case vtyp of {
-      VHabere => vpAgrNone ;
-      _ => VPAgrSubj
-      } ;
+    partAgr : VType -> VPAgr = \vtyp -> vpAgrNone ;
 
     vpAgrClit : Agr -> VPAgr = \a ->
       vpAgrNone ;
@@ -100,9 +97,9 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
 
     auxPassive : Verb = copula ;
 
-    copula = verbBeschH (ser_1 []) ;
+    copula = verbBeschH (ser_1 "ser") ;
 
-    haber_V : Verb = verbBeschH (haber_3 []) ;
+    haber_V : Verb = verbBeschH (haber_3 "haber") ;
 
     verbBeschH : Verbum -> Verb = \v -> verbBesch v ** {vtyp = VHabere} ;
 
