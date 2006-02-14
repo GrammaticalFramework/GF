@@ -114,11 +114,6 @@ oper
 
   nKukko : (kukko,kukon,kukkoja : Str) -> N ;
 
--- For convenience, we define 1-argument paradigms as producing the
--- nonhuman gender; the following function changes this:
-
-  humanN : N -> N ;
-
 -- A special case are nouns with no alternations: 
 -- the vowel harmony is inferred from the last letter,
 -- which must be one of "o", "u", "ö", "y".
