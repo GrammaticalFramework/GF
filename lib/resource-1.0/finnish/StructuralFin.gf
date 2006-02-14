@@ -34,7 +34,8 @@ concrete StructuralFin of Structural = CatFin **
   either7or_DConj = sd2 "joko" "tai" ** {n = Sg} ;
   everybody_NP = mkNP (regN "jokainen") Sg ;
   every_Det = mkDet Sg (regN "jokainen") ;
-  everything_NP = mkNP (nhn (sKorpi "kaikki" "kaiken" "kaikkena")) Sg ;
+  everything_NP = mkNP ((nhn (sKorpi "kaikki" "kaiken" "kaikkena")) **
+    {lock_N = <>}) Sg ;
   everywhere_Adv = ss "kaikkialla" ;
   first_Ord = {s = \\n,c => (regN "ensimmäinen").s ! NCase n c} ;
   from_Prep = casePrep elative ;

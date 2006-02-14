@@ -215,7 +215,9 @@ updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do
       concr0 = ifNull Nothing (return . head) concrs
       notInrts f = notElem f $ map fst rts
       subcgr = unSubelimCanon cgr
-  cfs <- mapM (canon2cf opts ign subcgr) concrs --- why need to update all...
+  cf's <- if oElem noCF opts
+            then return $ map snd $ cfs sh
+            else mapM (canon2cf opts ign subcgr) concrs --- why need to update all...
 
   let morphos = map (mkMorpho subcgr) concrs
   let probss = [] -----
@@ -241,7 +243,7 @@ updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do
     concretes  = zip (zip concrs concrs) (repeat True),
     canModules = cgr,
     srcModules = src,
-    cfs        = zip concrs cfs,
+    cfs        = zip concrs cf's,
     abstracts  = abstrs,
     mcfgs      = zip concrs mcfgs,
     cfgs       = zip concrs cfgs,
@@ -424,14 +426,6 @@ allActiveStateGrammarsWithNames st =
 
 allActiveGrammars = map snd . allActiveStateGrammarsWithNames
 
-{-
-allGrammarSTs = map stateGrammarST . allStateGrammars
-allCFs        = map stateCF        . allStateGrammars
-
-firstGrammarST  = stateGrammarST . firstStateGrammar
-firstAbstractST = abstractOf . firstGrammarST
-firstConcreteST = concreteOf . firstGrammarST
--}
 -- command-line option -lang=foo overrides the actual grammar in state
 grammarOfOptState :: Options -> ShellState -> StateGrammar
 grammarOfOptState opts st = 

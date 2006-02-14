@@ -252,8 +252,7 @@ oper
   mkVQ  : V -> VQ ;
   mkV2Q : V -> Preposition -> V2Q ;
 
-  mkAS   : A -> AS ;
-  subjAS : A -> AS ;
+  mkAS  : A -> AS ;
   mkA2S : A -> Preposition -> A2S ;
   mkAV  : A -> Preposition -> AV ;
   mkA2V : A -> Preposition -> Preposition -> A2V ;
