@@ -13,11 +13,11 @@ incomplete concrete ConjunctionRomance of Conjunction =
 
     ConjNP conj ss = conjunctTable NPForm conj ss ** {
       a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p} ; 
-      c = Clit0
+      hasClit = False
       } ;
     DConjNP conj ss = conjunctDistrTable NPForm conj ss ** {
       a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p} ;
-      c = Clit0
+      hasClit = False
       } ;
 
     ConjAP conj ss = conjunctTable AForm conj ss ** {

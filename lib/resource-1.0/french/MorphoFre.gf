@@ -161,8 +161,8 @@ oper
 -- The use of "en" as atonic genitive is debatable.
 
   mkPronoun : (_,_,_,_,_,_,_ : Str) -> 
-              Gender -> Number -> Person -> ClitType -> Pronoun =
-    \il,le,lui,Lui,son,sa,ses,g,n,p,c ->
+              Gender -> Number -> Person -> Pronoun =
+    \il,le,lui,Lui,son,sa,ses,g,n,p ->
     {s = table {
        Ton x => prepCase x ++ Lui ;
        Aton Nom => il ;
@@ -174,128 +174,13 @@ oper
        Poss {n = Pl}    => ses
        } ;
      a = {g = g ; n = n ; p = p} ;
-     c = c
+     hasClit = True
     } ;
 
   elisPoss : Str -> Str = \s ->
    pre {s + "a" ; s + "on" / voyelle} ;
-{-
-  pronJe = mkPronoun
-    (elision "j")
-    (elision "m")
-    (elision "m")
-    "moi"
-    "mon" (elisPoss "m") "mes"
-    PNoGen     -- gender cannot be known from pronoun alone
-    Sg
-    P1
-    Clit1 ;
 
-  pronTu = mkPronoun
-    "tu"
-    (elision "t")
-    (elision "t")
-    "toi"
-    "ton" (elisPoss "t") "tes"
-    PNoGen
-    Sg
-    P2
-    Clit1 ;
 
-  pronIl = mkPronoun
-    "il"
-    (elision "l")
-    "lui"
-    "lui"
-    "son" (elisPoss "s") "ses"
-    (PGen Masc)
-    Sg
-    P3
-    Clit2 ;
-
----- A hack to get the dative form "y".
-  pronY = mkPronoun
-    "il"
-    (elision "l")
-    "y"
-    "lui"
-    "en" "en" "en"
-    (PGen Masc)
-    Sg
-    P3
-    Clit2 ;
-
-  pronElle = mkPronoun
-    "elle"
-    elisLa
-    "lui"
-    "elle"
-    "son" (elisPoss "s") "ses"
-    (PGen Fem)
-    Sg
-    P3
-    Clit2 ;
-
-  pronNous = mkPronoun
-    "nous"
-    "nous"
-    "nous"
-    "nous"
-    "notre" "notre" "nos"
-    PNoGen
-    Pl
-    P1
-    Clit3 ;
-
-  pronVous = mkPronoun
-    "vous"
-    "vous"
-    "vous"
-    "vous"
-    "votre" "votre" "vos"
-    PNoGen
-    Pl   --- depends!
-    P2
-    Clit3 ;
-
-  pronIls = mkPronoun
-    "ils"
-    "les"
-    "leur"
-    "eux"
-    "leur" "leur" "leurs"
-    (PGen Masc)
-    Pl
-    P3
-    Clit1 ;
-
-  pronElles = mkPronoun
-    "elles"
-    "les"
-    "leur"
-    "elles"
-    "leur" "leur" "leurs"
-    (PGen Fem)
-    Pl
-    P3
-    Clit1 ;
-
-  personPron : Gender -> Number -> Person -> Pronoun = \g,n,p -> 
-    case <n,p> of {
-      <Sg,P1> => pronJe ;
-      <Sg,P2> => pronTu ;
-      <Sg,P3> => case g of {
-        Masc => pronIl ;
-        Fem  => pronElle 
-        } ;
-      <Pl,P1> => pronNous ;
-      <Pl,P2> => pronVous ;
-      <Pl,P3> => case g of {
-        Masc => pronIls ;
-        Fem  => pronElles 
-        } 
-      } ;
--}
 --2 Determiners
 --
 -- Determiners, traditionally called indefinite pronouns, are inflected

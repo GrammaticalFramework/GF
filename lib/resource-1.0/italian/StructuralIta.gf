@@ -35,8 +35,8 @@ lin
   from_Prep = complGen ; ---
   he_Pron = 
     mkPronoun
-      "lui" "lo" "gli" "lui" "suo" "sua" "suoi" "sue"
-      Masc Sg P3 Clit2 ;
+      "lui" "lo" "gli" "glie" "lui" "suo" "sua" "suoi" "sue"
+      Masc Sg P3 ;
   here7from_Adv = ss ["da quì"] ;
   here7to_Adv = ss "quì" ;
   here_Adv = ss "quì" ;
@@ -46,13 +46,13 @@ lin
   in8front_Prep = mkPreposition "davanti" ;
   i_Pron = 
     mkPronoun
-      "io" "mi" "mi" "me" "mio" "mia" "miei" "mie"
-      Fem Sg P1 Clit1 ;
+      "io" "mi" "mi" "me" "me" "mio" "mia" "miei" "mie"
+      Fem Sg P1 ;
   in_Prep = {s = [] ; c = CPrep P_in} ;
   it_Pron = 
     mkPronoun
-      "lui" "lo" "gli" "lui" "suo" "sua" "suoi" "sue"
-      Masc Sg P3 Clit2 ;
+      "lui" "lo" "gli" "glie" "lui" "suo" "sua" "suoi" "sue"
+      Masc Sg P3 ;
   less_CAdv = ss "meno" ;
   many_Det = {s = \\g,c => prepCase c ++ genForms "molti" "molte" ! g ; n = Pl} ;
   more_CAdv = ss "più" ;
@@ -71,8 +71,8 @@ lin
   quite_Adv = ss "assai" ;
   she_Pron = 
     mkPronoun
-      "lei" "la" "le" "lei" "suo" "sua" "suoi" "sue"
-      Fem Sg P3 Clit2 ;
+      "lei" "la" "le" "glie" "lei" "suo" "sua" "suoi" "sue"
+      Fem Sg P3 ;
   so_AdA = ss "così" ;
   somebody_NP = pn2np (mkPN ["qualcuno"] Masc) ;
   somePl_Det = {s = \\_,c => prepCase c ++ "qualche" ; n = Pl} ;
@@ -92,8 +92,8 @@ lin
   therefore_PConj = ss "quindi" ;
   these_NP = mkNP ["queste"] Fem Pl ;
   they_Pron = mkPronoun
-    "loro" "loro" "li" "loro" "loro" "loro" "loro" "loro" 
-    Fem Pl P3 Clit1 ;
+    "loro" "loro" "li" "glie" "loro" "loro" "loro" "loro" "loro" 
+    Fem Pl P3 ;
   this_Quant = {
     s = table {
       Sg => \\g,c => prepCase c ++ genForms "questo" "questa" ! g ;
@@ -109,8 +109,8 @@ lin
   very_AdA = ss "molto" ;
   want_VV = mkVV (verboV (volere_96 "volere")) ;
   we_Pron = 
-    mkPronoun "noi" "ci" "ci" "noi" "nostro" "nostra" "nostri" "nostre"
-    Fem Pl P1 Clit3 ;
+    mkPronoun "noi" "ci" "ci" "ce" "noi" "nostro" "nostra" "nostri" "nostre"
+    Fem Pl P1 ;
   whatSg_IP = {s = \\c => prepCase c ++ ["che cosa"] ; a = aagr Fem Sg} ;
   whatPl_IP = {s = \\c => prepCase c ++ ["che cose"] ; a = aagr Fem Pl} ; ---
   when_IAdv = ss "quando" ;
@@ -125,16 +125,16 @@ lin
   with_Prep = {s = [] ; c = CPrep P_con} ;
   yes_Phr = ss "sì" ;
   youSg_Pron = mkPronoun 
-    "tu" "ti" "ti" "te" "tuo" "tua" "tuoi" "tue"
-    Fem Sg P2 Clit1 ;
+    "tu" "ti" "ti" "te" "te" "tuo" "tua" "tuoi" "tue"
+    Fem Sg P2 ;
   youPl_Pron =
     mkPronoun
-       "voi" "vi" "vi" "voi" "vostro" "vostra" "vostri" "vostre"
-       Fem Pl P2 Clit3 ;
+       "voi" "vi" "vi" "ve" "voi" "vostro" "vostra" "vostri" "vostre"
+       Fem Pl P2 ;
   youPol_Pron =
     mkPronoun
-      "Lei" "La" "Le" "Lei" "Suo" "Sua" "Suoi" "Sue"
-      Fem Sg P3 Clit2 ;
+      "Lei" "La" "Le" "Glie" "Lei" "Suo" "Sua" "Suoi" "Sue"
+      Fem Sg P3 ;
 
 }
 

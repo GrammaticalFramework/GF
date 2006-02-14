@@ -37,7 +37,7 @@ lin
     mkPronoun 
      "el" "lo" "le" "él"
      "su" "su" "sus" "sus"
-      Masc Sg P3 Clit2 ;
+      Masc Sg P3 ;
   here_Adv = mkAdv "aquí" ;		-- acá
   here7to_Adv = mkAdv ["para acá"] ;
   here7from_Adv = mkAdv ["de acá"] ;
@@ -50,13 +50,13 @@ lin
     mkPronoun
       "yo" "me" "me" "mí"
       "mi" "mi" "mis" "mis"
-      Fem Sg P1 Clit1 ;
+      Fem Sg P1 ;
   in_Prep = mkPreposition "en" ;
   it_Pron = 
     mkPronoun
       "el" "lo" "le" "él"
       "su" "su" "sus" "sus"
-      Masc Sg P3 Clit2 ;
+      Masc Sg P3 ;
   less_CAdv = ss "meno" ; ----
   many_Det = {s = \\g,c => prepCase c ++ genForms "muchos" "muchas" ! g ; n = Pl} ;
   more_CAdv = ss "mas" ;
@@ -77,7 +77,7 @@ lin
     mkPronoun
       "ella" "la" "le" "ella"
       "su" "su" "sus" "sus"
-      Fem Sg P3 Clit2 ;
+      Fem Sg P3 ;
   so_AdA = ss "tanto" ;
   somebody_NP = pn2np (mkPN ["algún"] Masc) ;
   somePl_Det = {s = \\g,c => prepCase c ++ genForms "algunos" "algunas" ! g ; n = Pl} ;
@@ -99,7 +99,7 @@ lin
   they_Pron = mkPronoun
     "ellas" "las" "les" "ellas"
     "su" "su" "sus" "sus"
-    Fem Pl P3 Clit1 ;
+    Fem Pl P3 ;
   this_Quant = {
     s = table {
       Sg => \\g,c => prepCase c ++ genForms "este" "esta" ! g ;
@@ -118,7 +118,7 @@ lin
     mkPronoun 
       "nosotras" "nos" "nos" "nosotras"
       "nuestro" "nuestra" "nuestros" "nuestras"
-      Fem Pl P1 Clit3 ;
+      Fem Pl P1 ;
   whatSg_IP = {s = \\c => prepCase c ++ ["qué"] ; a = aagr Masc Sg} ;
   whatPl_IP = {s = \\c => prepCase c ++ ["qué"] ; a = aagr Masc Pl} ; ---
   when_IAdv = ss "cuando" ;
@@ -135,17 +135,17 @@ lin
   youSg_Pron = mkPronoun 
     "tu" "te" "te" "tí"
     "tu" "tu" "tus" "tus"
-    Fem Sg P2 Clit1 ;
+    Fem Sg P2 ;
   youPl_Pron =
     mkPronoun
       "vosotras" "vos" "vos" "vosotras"
       "vuestro" "vuestra" "vuestros" "vuestras"
-      Fem Pl P2 Clit3 ;
+      Fem Pl P2 ;
   youPol_Pron =
     mkPronoun
       "usted" "la" "le" "usted"
       "su" "su" "sus" "sus"
-      Fem Pl P2 Clit3 ;
+      Fem Pl P2 ;
 
 oper
   etConj : {s : Str ; n : Number} = {s = pre {

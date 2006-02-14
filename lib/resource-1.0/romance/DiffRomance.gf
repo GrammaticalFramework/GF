@@ -15,6 +15,11 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
   param Prep ;
 
+-- Forms of noun phrases. Spanish and Italian have special forms for
+-- fronted clitics.
+
+  param NPForm ;
+
 -- Which types of verbs exist, in terms of auxiliaries.
 -- (Fre, Ita "avoir", "être", and refl; Spa only "haber" and refl).
 
@@ -40,11 +45,24 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
   oper clitInf : Str -> Str -> Str ;
 
+-- If a new clitic is placed before an existing one.
+-- (Fre "le lui", Ita "glie lo").
+
+  placeNewClitic : 
+    (Case * Number * Person) ->                       -- info on old clit
+    Case ->                                           -- case of new clit
+    {s : NPForm => Str ; a : Agr ; hasClit : Bool} -> -- new clit
+    Bool ->                                           -- whether to clit'ze
+    Str ->                                            -- old clit
+    Str ;                                             -- old + new (or rev.)
+
 
 --2 Constants that must derivatively depend on language
 
-  dative    : Case ;
-  genitive  : Case ;
+----  nominative : Case ;
+----  accusative : Case ;
+  dative     : Case ;
+  genitive   : Case ;
 
   vRefl   : VType ;
   isVRefl : VType -> Bool ;
@@ -80,7 +98,6 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
 param
   Case = Nom | Acc | CPrep Prep ; 
-  NPForm = Ton Case | Aton Case | Poss {g : Gender ; n : Number} ; --- AAgr
 
 oper
   Verb = {s : VF => Str ; vtyp : VType} ;

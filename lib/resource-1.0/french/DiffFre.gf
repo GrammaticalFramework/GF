@@ -4,6 +4,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 
   param 
     Prep = P_de | P_a ;
+    NPForm = Ton Case | Aton Case | Poss {g : Gender ; n : Number} ; --- AAgr
     VType = VHabere | VEsse | VRefl ;
 
   oper
@@ -55,6 +56,14 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 
     vpAgrClit : Agr -> VPAgr = \a ->
       VPAgrClit (aagr a.g a.n) ; --- subty
+
+    placeNewClitic = \ci,c,pro,isc,old ->
+      let new = if_then_Str isc (pro.s ! Aton c) [] 
+      in
+      case pro.a.p of {
+        P1 | P2 => new ++ old ;
+        _ => old ++ new
+        } ;
 
     negation : Polarity => (Str * Str) = table {
       Pos => <[],[]> ;

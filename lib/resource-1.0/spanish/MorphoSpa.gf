@@ -92,8 +92,8 @@ oper
 -- We follow the rule that the atonic nominative is empty.
 
   mkPronoun : (_,_,_,_,_,_,_,_ : Str) -> 
-              Gender -> Number -> Person -> ClitType -> Pronoun =
-    \il,le,lui,Lui,son,sa,ses,see,g,n,p,c ->
+              Gender -> Number -> Person -> Pronoun =
+    \il,le,lui,Lui,son,sa,ses,see,g,n,p ->
     {s = table {
        Ton Nom => il ;
        Ton x => prepCase x ++ Lui ;
@@ -107,35 +107,8 @@ oper
        Poss {n = Pl ; g = Fem}  => see
        } ;
      a = {g = g ; n = n ; p = p} ;
-     c = c
+     hasClit = True
     } ;
-{-
-  -- used in constructions like "(no) hay ..."
-
-  pronEmpty : Number -> Pronoun = \n -> mkPronoun
-    []
-    []
-    []
-    []
-    [] [] [] []
-    (PGen Masc)
-    n
-    P3
-    Clit2 ;
-
---2 Reflexive pronouns
---
--- It is simply a function depending on number and person.
-
-  pronRefl : Number -> Person -> Str = \n,p -> case <n,p> of {
-    <Sg,P1> => "me" ;
-    <Sg,P2> => "te" ;
-    <_, P3> => "se" ;
-    <Pl,P1> => "nos" ;
-    <Pl,P2> => "vos"
-    } ;
-
--}
 
 
 --2 Determiners
