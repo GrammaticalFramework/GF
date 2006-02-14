@@ -11,7 +11,7 @@ incomplete concrete NounRomance of Noun =
       in {
         s = \\c => det.s ! g ! npform2case c ++ cn.s ! n ;
         a = agrP3 g n ;
-        c = Clit0
+        hasClit = False
         } ;
 
     UsePN = pn2np ;
@@ -22,7 +22,7 @@ incomplete concrete NounRomance of Noun =
       s = \\c => pred.s ! aagr (np.a.g) (np.a.n) ! npform2case c ++  --- subtype
                  np.s ! case2npform pred.c ;
       a = np.a ;
-      c = Clit0
+      hasClit = False
       } ;
 
     DetSg quant ord = {

@@ -49,15 +49,16 @@ mkTreebank opts sh com trees = putInXML opts "treebank" comm (concatMap mkItem t
    tris    = zip trees [1..]
 
 testTreebank :: Options -> ShellState -> String -> Res
-testTreebank opts sh = putInXML opts "diff" [] . concatMap testOne . getTreebank . lines
+testTreebank opts sh = putInXML opts "testtreebank" [] . concatMap testOne . getTreebank . lines
  where
-  testOne (e,lang,str) = do
+  testOne (e,lang,str0) = do
     let tr = annot gr e
-    let str0 = linearize sh lang tr
-    if str == str0 then ret else putInXML opts "diff" [] $ do
-      putInXML opts "tree" [] (puts $ showTree tr)
-      putInXML opts "old"  (" lang=" ++ show (prt_ (zIdent lang))) $ puts str0
+    let str = linearize sh lang tr
+    if str == str0 then ret else putInXML opts "diff" [] $ concat [
+      putInXML opts "tree" [] (puts $ showTree tr),
+      putInXML opts "old"  (" lang=" ++ show (prt_ (zIdent lang))) $ puts str0,
       putInXML opts "new"  (" lang=" ++ show (prt_ (zIdent lang))) $ puts str
+      ]
   gr = firstStateGrammar sh
 
 -- string vs. IO

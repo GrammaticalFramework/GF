@@ -21,11 +21,6 @@ param
 
   Mood   = Indic | Conjunct ;
 
--- There are different types of clitic pronouns (as for position).
--- Examples of each: "Giovanni" ; "io" ; "lui" ; "noi".
-
-  ClitType = Clit0 | Clit1 | Clit2 | Clit3 ;
-
 -- Adjectives are inflected in gender and number, and there is also an 
 -- adverbial form (e.g. "infiniment"), which has different paradigms and 
 -- can even be irregular ("bien").
@@ -159,19 +154,6 @@ oper
     Noun = {s : Number => Str ; g : Gender} ;
 
     Adj = {s : AForm => Str} ;
-
-    VP : Type = {
-      s : VPForm => {
-        fin : Agr  => Str ;             -- ai  
-        inf : AAgr => Str               -- dit 
-        } ;
-      agr   : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
-      neg   : Polarity => (Str * Str) ; -- ne-pas
-      clit1 : Agr => Str ;              -- se
-      clit2 : Str ;                     -- lui
-      comp  : Agr => Str ;              -- content(e) ; à ma mère ; hier
-      ext   : Polarity => Str ;         -- que je dors / que je dorme
-      } ;
 
     appVPAgr : VPAgr -> AAgr -> AAgr = \vp,agr -> 
       case vp of {

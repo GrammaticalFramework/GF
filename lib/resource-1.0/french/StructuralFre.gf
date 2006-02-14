@@ -36,7 +36,7 @@ lin
   he_Pron = 
     mkPronoun
       "il" (elision "l") "lui" "lui" "son" (elisPoss "s") "ses"
-      Masc Sg P3 Clit2 ;
+      Masc Sg P3 ;
   here7from_Adv = ss "d'ici" ;
   here7to_Adv = ss "ici" ;
   here_Adv = ss "ici" ;
@@ -47,12 +47,12 @@ lin
   i_Pron = 
     mkPronoun
       (elision "j") (elision "m") (elision "m") "moi" "mon" (elisPoss "m") "mes"
-      Fem Sg P1 Clit1 ;
+      Fem Sg P1 ;
   in_Prep = mkPreposition "dans" ;
   it_Pron = 
     mkPronoun
       "il" (elision "l") "lui" "lui" "son" (elisPoss "s") "ses"
-      Masc Sg P3 Clit2 ;
+      Masc Sg P3 ;
   less_CAdv = ss "moins" ;
   many_Det = {s = \\_,c => prepCase c ++ "plusieurs" ; n = Pl} ;
   more_CAdv = ss "plus" ;
@@ -72,7 +72,7 @@ lin
   she_Pron = 
     mkPronoun
       "elle" elisLa "lui" "elle" "son" (elisPoss "s") "ses"
-      Fem Sg P3 Clit2 ;
+      Fem Sg P3 ;
 
   so_AdA = ss "si" ;
   somebody_NP = pn2np (mkPN ["quelqu'un"] Masc) ;
@@ -94,7 +94,7 @@ lin
   these_NP = mkNP ["celles-ci"] Fem Pl ;
   they_Pron = mkPronoun
     "elles" "les" "leur" "eux" "leur" "leur" "leurs"
-    Fem Pl P3 Clit1 ;
+    Fem Pl P3 ;
   this_Quant = {s = 
     table {
       Sg => \\g,c => prepCase c ++ genForms "ce" "cette" ! g ;  ---- cet ; ci
@@ -111,7 +111,7 @@ lin
   want_VV = mkVV (vouloir_V2 ** {lock_V = <>}) ;
   we_Pron = 
     mkPronoun "nous" "nous" "nous" "nous" "notre" "notre" "nos"
-    Fem Pl P1 Clit3 ;
+    Fem Pl P1 ;
   whatSg_IP = {s = \\c => prepCase c ++ "quoi" ; a = aagr Fem Sg} ;
   whatPl_IP = {s = \\c => prepCase c ++ "quoi" ; a = aagr Fem Pl} ;
   when_IAdv = ss "quand" ;
@@ -127,11 +127,11 @@ lin
   yes_Phr = ss "oui" ; --- si
   youSg_Pron = mkPronoun 
     "tu" (elision "t") (elision "t") "toi" "ton" (elisPoss "t") "tes"
-    Fem Sg P2 Clit1 ;
+    Fem Sg P2 ;
   youPl_Pron, youPol_Pron = 
     mkPronoun
       "vous" "vous" "vous" "vous" "votre" "votre" "vos"
-       Fem Pl P2 Clit3 ;
+       Fem Pl P2 ;
 
 }
 

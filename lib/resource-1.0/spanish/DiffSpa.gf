@@ -4,6 +4,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
 
   param 
     Prep = P_de | P_a ;
+    NPForm = Ton Case | Aton Case | Poss {g : Gender ; n : Number} ; --- AAgr
     VType = VHabere | VRefl ;
 
   oper
@@ -50,6 +51,26 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
 
     vpAgrClit : Agr -> VPAgr = \a ->
       vpAgrNone ;
+
+--- This assumes that Acc clitics are in place before Dat.
+
+    placeNewClitic = \ci,c,pro,isc,old ->
+      if_then_Str isc (
+        case <ci.p3, pro.a.p> of {
+          <P2,P1> => old ++ pro.s ! Aton c ;    -- te me, ---se me
+          <P3,P3> => "se" ++ old ;              -- se lo
+          _       => pro.s ! Aton c ++ old      -- indirect first
+          }) [] ;                               -- no clitics
+
+{-
+    placeNewClitic = \ci,c,pro,isc,old ->
+      case <ci.p1, ci.p2, ci.p3, pro.a.p, isc> of {
+        <Acc, Sg, P2,      P1, True> => old ++ pro.s ! Aton c ;    -- te me, ---se me
+        <Acc, _,  P3,      P3, True> => "se" ++ old ;              -- se lo
+        {p5 = True}                  => pro.s ! Aton c ++ old ;    -- indirect first
+        _                            => []                         -- no clitics
+        } ;
+-}
 
     negation : Polarity => (Str * Str) = table {
       Pos => <[],[]> ;

@@ -11,7 +11,7 @@ oper
   nominative : Case = Nom ;
   accusative : Case = Acc ;
 
-  Pronoun = {s : NPForm => Str ; a : Agr ; c : ClitType} ;
+  Pronoun = {s : NPForm => Str ; a : Agr ; hasClit : Bool} ;
 
   Compl : Type = {s : Str ; c : Case ; isDir : Bool} ;
 
@@ -22,13 +22,14 @@ oper
   pn2np : {s : Str ; g : Gender} -> Pronoun = \pn -> {
       s = \\c => prepCase (npform2case c) ++ pn.s ; 
       a = agrP3 pn.g Sg ;
-      c = Clit0
+      hasClit = False
       } ;
 
   npform2case : NPForm -> Case = \p -> case p of {
     Ton  x => x ;
+    Poss _ => genitive ;
     Aton x => x ;
-    Poss _ => genitive
+    _      => dative ---- Ita PreClit
     } ;
 
   case2npform : Case -> NPForm = \c -> case c of {
@@ -37,6 +38,20 @@ oper
     _   => Ton c
     } ;
 
+
+  VP : Type = {
+      s : VPForm => {
+        fin : Agr  => Str ;              -- ai  
+        inf : AAgr => Str                -- dit 
+        } ;
+      agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
+      neg    : Polarity => (Str * Str) ; -- ne-pas
+      clit1  : Agr => Str ;              -- se lui
+      clInfo : Case * Number * Person ;  -- whether and what fills clit1 (Nom = none)
+      clit2  : Str ;                     -- y en
+      comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
+      ext    : Polarity => Str ;         -- que je dors / que je dorme
+      } ;
 
   appCompl : Compl -> (NPForm => Str) -> Str = \comp,np ->
     comp.s ++ np ! Ton comp.c ;
@@ -62,6 +77,11 @@ oper
           inf = \\a => inf a
         } ;
 
+      cli : (Agr => Str) * (Case * Number * Person) = case isVRefl typ of {
+          True => <\\a => reflPron ! a.n ! a.p ! Acc,<Acc,Sg,P3>> ; --- n,p
+          _    => <\\_ => [],                        <Nom,Sg,P1>> -- not care
+          } ;
+
     in {
     s = table {
       VPFinite t Simul => vf (vfin t) (\_ -> []) ;
@@ -70,34 +90,32 @@ oper
       VPInfinit Simul  => vf (\_ -> []) (\_ -> vinf) ;
       VPInfinit Anter  => vf (\_ -> []) (\a -> habere ++ vpart a)
       } ;
-    agr   = partAgr typ ;
-    neg   = negation ;
-    clit1 = \\a => case isVRefl typ of {
-              True => reflPron ! a.n ! a.p  ! Acc ;
-              _ => []
-              } ;
-    clit2 = [] ;
-    comp  = \\a => [] ;
-    ext   = \\p => []
+    agr    = partAgr typ ;
+    neg    = negation ;
+    clit1  = cli.p1 ;
+    clInfo = cli.p2 ;
+    clit2  = [] ;
+    comp   = \\a => [] ;
+    ext    = \\p => []
     } ;
 
   insertObject : Compl -> Pronoun -> VP -> VP = \c,np,vp -> 
     let
-      cc : Str * Str * VPAgr = case <c.isDir, c.c, np.c> of {
+      cc : Bool * Str * VPAgr = case <c.isDir, c.c, np.hasClit> of {
         <False,_,_> | 
-        <_,_,Clit0> => <[], c.s ++ np.s ! Ton c.c, vp.agr> ; 
-        <_,Acc,_>   => <np.s ! Aton c.c, [], vpAgrClit np.a> ;
-        _           => <np.s ! Aton c.c, [], vp.agr>
-        } ;
-      high = case np.c of {      -- whether the new clitic comes closer to verb
-        Clit0 | Clit1 => False ; ---- approximation; should look at the old clit too
-        _ => True
+        <_,_,False>  => <False, c.s ++ np.s ! Ton c.c, vp.agr> ; 
+        <_,Acc,_>    => <True,  [], vpAgrClit np.a> ;
+        _            => <True,  [], vp.agr>
         } ;
     in {
       s     = vp.s ;
       agr   = cc.p3 ;
-      clit1 = vp.clit1 ; ---- just a reflexive
-      clit2 = preOrPost high vp.clit2 cc.p1 ;
+      clit1 = \\a => placeNewClitic vp.clInfo c.c np cc.p1 (vp.clit1 ! a) ;
+      clInfo = case cc.p1 of {
+        False => vp.clInfo ; -- no new clitic
+        _ => <c.c, np.a.n, np.a.p>
+        } ; 
+      clit2 = vp.clit2 ;
       neg   = vp.neg ;
       comp  = \\a => vp.comp ! a ++ cc.p2 ;
       ext   = vp.ext ;
@@ -107,6 +125,7 @@ oper
     s     = vp.s ;
     agr   = vp.agr ;
     clit1 = vp.clit1 ; 
+    clInfo = vp.clInfo ; 
     clit2 = vp.clit2 ; 
     neg   = vp.neg ;
     comp  = \\a => vp.comp ! a ++ co ! a ;
@@ -116,6 +135,7 @@ oper
     s     = vp.s ;
     agr   = vp.agr ;
     clit1 = vp.clit1 ; 
+    clInfo = vp.clInfo ; 
     clit2 = vp.clit2 ; 
     neg   = vp.neg ;
     comp  = \\a => vp.comp ! a ++ co ;
@@ -125,6 +145,7 @@ oper
     s     = vp.s ;
     agr   = vp.agr ;
     clit1 = vp.clit1 ; 
+    clInfo = vp.clInfo ; 
     clit2 = vp.clit2 ; 
     neg   = vp.neg ;
     comp  = vp.comp ;

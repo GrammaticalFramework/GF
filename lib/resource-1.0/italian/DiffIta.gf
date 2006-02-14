@@ -4,6 +4,7 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
 
   param 
     Prep = P_di | P_a | P_da | P_in | P_su | P_con ;
+    NPForm = Ton Case | Aton Case | PreClit | Poss {g : Gender ; n : Number} ; --- AAgr
     VType = VHabere | VEsse | VRefl ;
 
   oper
@@ -75,6 +76,15 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
 
     vpAgrClit : Agr -> VPAgr = \a ->
       vpAgrNone ;
+
+--- This assumes that Acc clitics are in place before Dat.
+
+    placeNewClitic = \ci,c,pro,isc,old ->
+      case <ci.p1,c,isc> of {
+        <Acc,CPrep P_a, True> => pro.s ! PreClit ++ old ; -- there is an old clitic 
+        {p3 = True}           => pro.s ! Aton c ;         -- no old but a new
+        _                     => []                       -- no clitics
+        } ;
 
     negation : Polarity => (Str * Str) = table {
       Pos => <[],[]> ;

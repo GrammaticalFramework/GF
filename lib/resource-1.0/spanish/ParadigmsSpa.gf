@@ -302,7 +302,7 @@ oper
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
   mkPN x g = {s = x ; g = g} ** {lock_PN = <>} ;
-  mkNP x g n = {s = (pn2np (mkPN x g)).s; a = agrP3 g n ; c = Clit0} ** {lock_NP = <>} ;
+  mkNP x g n = {s = (pn2np (mkPN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
 
   mkA a b c d e = 
    compADeg {s = \\_ => (mkAdj a b c d e).s ; isPre = False ; lock_A = <>} ;
