@@ -8,7 +8,8 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
     ComplV3 v np np2 = 
       insertObj (\\_ => v.c2 ++ np.s ! Acc ++ v.c3 ++ np2.s ! Acc) (predV v) ;
 
-    ComplVV v vp = insertObj (\\a => v.c2 ++ infVP vp a) (predV v) ;
+    ComplVV v vp = insertObj (\\a => infVP v.isAux vp a) (predVV v) ;
+
     ComplVS v s  = insertObj (\\_ => conjThat ++ s.s) (predV v) ;
     ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
 
@@ -20,8 +21,7 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
 
     AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
 
---- This rule destroys parsing...
-----    AdVVP adv vp = insertAdV adv.s vp ;
+    AdVVP adv vp = insertAdV adv.s vp ;
 
     ReflV2 v = insertObj (\\a => v.c2 ++ reflPron ! a) (predV v) ;
 

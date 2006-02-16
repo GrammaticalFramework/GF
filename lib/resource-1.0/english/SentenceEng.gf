@@ -1,4 +1,4 @@
-concrete SentenceEng of Sentence = CatEng ** open ResEng in {
+concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
 
   flags optimize=all_subs ;
 
@@ -12,7 +12,7 @@ concrete SentenceEng of Sentence = CatEng ** open ResEng in {
       s = \\pol,n => 
         let 
           agr   = {n = n ; p = P2} ;
-          verb  = infVP vp agr ;
+          verb  = infVP True vp agr ;
           dont  = case pol of {
             Neg => "don't" ;
             _ => []
@@ -25,8 +25,9 @@ concrete SentenceEng of Sentence = CatEng ** open ResEng in {
       mkClause (np.s ! Nom) np.a (predV v2) ** {c2 = v2.c2} ;
 
     SlashVVV2 np vv v2 = 
-      mkClause (np.s ! Nom) np.a (insertObj (\\_ => "to" ++ v2.s ! VInf) (predV vv))  **
-      {c2 = v2.c2} ;
+      mkClause (np.s ! Nom) np.a 
+        (insertObj (\\a => infVP vv.isAux (predV v2) a) (predVV vv))  **
+        {c2 = v2.c2} ;
 
     AdvSlash slash adv = {
       s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
@@ -37,7 +38,7 @@ concrete SentenceEng of Sentence = CatEng ** open ResEng in {
 
     EmbedS  s  = {s = conjThat ++ s.s} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = "to" ++ infVP vp (agrP3 Sg)} ; --- agr
+    EmbedVP vp = {s = infVP False vp (agrP3 Sg)} ; --- agr
 
     UseCl  t a p cl = {s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! ODir} ;
     UseQCl t a p cl = {s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! q} ;

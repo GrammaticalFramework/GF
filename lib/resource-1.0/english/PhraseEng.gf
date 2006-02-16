@@ -1,4 +1,4 @@
-concrete PhraseEng of Phrase = CatEng ** open ResEng in {
+concrete PhraseEng of Phrase = CatEng ** open Prelude, ResEng in {
 
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;
@@ -11,7 +11,7 @@ concrete PhraseEng of Phrase = CatEng ** open ResEng in {
     UttIP ip = {s = ip.s ! Nom} ; --- Acc also
     UttIAdv iadv = iadv ;
     UttNP np = {s = np.s ! Acc} ;
-    UttVP vp = {s = "to" ++ infVP vp (agrP3 Sg)} ;
+    UttVP vp = {s = infVP False vp (agrP3 Sg)} ;
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;
