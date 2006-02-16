@@ -36,6 +36,10 @@ resource ResEng = ParamX ** open Prelude in {
   param
     VForm = VInf | VPres | VPast | VPPart | VPresPart ;
 
+-- Auxiliary verbs have special negative forms.
+
+    VVForm = VVF VForm | VVPresNeg | VVPastNeg ;
+
 -- The order of sentence is needed already in $VP$.
 
     Order = ODir | OQuest ;
@@ -159,8 +163,12 @@ resource ResEng = ParamX ** open Prelude in {
 
   VP : Type = {
     s  : VerbForms ;
+    ad : Str ;
     s2 : Agr => Str
     } ;
+
+--- The order gets wrong with AdV, but works around a parser
+--- generation bug.
 
   predV : Verb -> VP = \verb -> {
     s = \\t,ant,b,ord,agr => 
@@ -173,12 +181,12 @@ resource ResEng = ParamX ** open Prelude in {
           {fin = x ; inf = y} ;
       in
       case <t,ant,b,ord> of {
-        <Pres,Simul,Pos,ODir>   => vf fin          [] ;
+        <Pres,Simul,Pos,ODir>   => vf            fin [] ; --- should be opp
         <Pres,Simul,Pos,OQuest> => vf (does agr)   inf ;
         <Pres,Simul,Neg,_>      => vf (doesnt agr) inf ;
         <Pres,Anter,Pos,_>      => vf (have agr)   part ;
         <Pres,Anter,Neg,_>      => vf (havent agr) part ;
-        <Past,Simul,Pos,ODir>   => vf past         [] ;
+        <Past,Simul,Pos,ODir>   => vf            past [] ; --- should be opp
         <Past,Simul,Pos,OQuest> => vf "did"        inf ;
         <Past,Simul,Neg,_>      => vf "didn't"     inf ;
         <Past,Anter,Pos,_>      => vf "had"        part ;
@@ -192,6 +200,7 @@ resource ResEng = ParamX ** open Prelude in {
         <Cond,Anter,Pos,_>      => vf "would"      ("have" ++ part) ;
         <Cond,Anter,Neg,_>      => vf "wouldn't"   ("have" ++ part)
         } ;
+    ad = [] ;
     s2 = \\a => if_then_Str verb.isRefl (reflPron ! a) []
     } ;
 
@@ -221,25 +230,50 @@ resource ResEng = ParamX ** open Prelude in {
         <Cond,Anter,Pos,_>      => vf "would"      ("have" ++ part) ;
         <Cond,Anter,Neg,_>      => vf "wouldn't"   ("have" ++ part)
         } ;
+    ad = [] ;
     s2 = \\_ => []
     } ;
 
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
+    ad = vp.ad ;
     s2 = \\a => vp.s2 ! a ++ obj ! a
     } ;
 
---- This is not functional.
+--- The adverb should be before the finite verb.
 
   insertAdV : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
-    s2 = vp.s2
+    ad = vp.ad ++ adv ;
+    s2 = \\a => vp.s2 ! a
     } ;
+
+-- 
+
+  predVV : {s : VVForm => Str ; isAux : Bool} -> VP = \verb ->
+    let verbs = verb.s
+    in
+    case verb.isAux of {
+      True => predAux {
+        pres = table {
+          Pos => \\_ => verbs ! VVF VPres ;
+          Neg => \\_ => verbs ! VVPresNeg
+          } ;
+        past = table {
+          Pos => \\_ => verbs ! VVF VPast ;
+          Neg => \\_ => verbs ! VVPastNeg
+          } ;
+        inf = verbs ! VVF VInf ;
+        ppart = verbs ! VVF VPPart
+        } ;
+      _    => predV {s = \\vf => verbs ! VVF vf ; isRefl = False}
+      } ;
 
   presVerb : {s : VForm => Str} -> Agr -> Str = \verb -> 
     agrVerb (verb.s ! VPres) (verb.s ! VInf) ;
 
-  infVP : VP -> Agr -> Str = \vp,a -> 
+  infVP : Bool -> VP -> Agr -> Str = \isAux,vp,a ->
+    if_then_Str isAux [] "to" ++ 
     (vp.s ! Fut ! Simul ! Neg ! ODir ! a).inf ++ vp.s2 ! a ;
 
   agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
@@ -299,8 +333,8 @@ resource ResEng = ParamX ** open Prelude in {
           compl = vp.s2 ! agr
         in
         case o of {
-          ODir   => subj ++ verb.fin ++ verb.inf ++ compl ;
-          OQuest => verb.fin ++ subj ++ verb.inf ++ compl
+          ODir   => subj ++ verb.fin ++ vp.ad ++ verb.inf ++ compl ;
+          OQuest => verb.fin ++ subj ++ vp.ad ++ verb.inf ++ compl
           }
     } ;
 

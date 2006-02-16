@@ -42,7 +42,6 @@ oper
   human     : Gender ;
   nonhuman  : Gender ;
   masculine : Gender ;
-  feminite  : Gender ;
 
 -- To abstract over number names, we define the following.
 
@@ -439,7 +438,10 @@ oper
   dirdirV3 v = dirV3 v [] ;
 
   mkVS  v = v ** {lock_VS = <>} ;
-  mkVV  v = v ** {c2 = "to" ; lock_VV = <>} ;
+  mkVV  v = {
+    s = table {VVF vf => v.s ! vf ; _ => variants {}} ; 
+    isAux = False ; lock_VV = <>
+    } ;
   mkVQ  v = v ** {lock_VQ = <>} ;
 
   V0 : Type = V ;

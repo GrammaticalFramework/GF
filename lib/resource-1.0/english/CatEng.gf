@@ -36,6 +36,7 @@ concrete CatEng of Cat = TenseX ** open ResEng, Prelude in {
 
     VP = {
       s  : Tense => Anteriority => Polarity => Order => Agr => {fin, inf : Str} ; 
+      ad : Str ;
       s2 : Agr => Str
       } ;
     Comp = {s : Agr => Str} ; 
@@ -73,8 +74,9 @@ concrete CatEng of Cat = TenseX ** open ResEng, Prelude in {
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
-    V2, VV, V2A = Verb ** {c2 : Str} ;
+    V2, V2A = Verb ** {c2 : Str} ;
     V3 = Verb ** {c2, c3 : Str} ;
+    VV = {s : VVForm => Str ; isAux : Bool} ;
 
     A = {s : AForm => Str} ;
     A2 = {s : AForm => Str ; c2 : Str} ;

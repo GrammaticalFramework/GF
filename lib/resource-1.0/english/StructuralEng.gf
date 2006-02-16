@@ -1,5 +1,5 @@
 concrete StructuralEng of Structural = CatEng ** 
-  open MorphoEng, Prelude in {
+  open MorphoEng, (P = ParadigmsEng), Prelude in {
 
   flags optimize=all ;
 
@@ -19,8 +19,11 @@ concrete StructuralEng of Structural = CatEng **
   but_PConj = ss "but" ;
   by8agent_Prep = ss "by" ;
   by8means_Prep = ss "by" ;
-  can8know_VV = verbPart (mkVerbIrreg "know" "knew" "known") "how"** {c2 = "to"} ;---
-  can_VV = verbGen "manage" ** {c2 = "to"} ; ---
+  can8know_VV, can_VV = {
+    s = table VVForm [["be able to"] ; "can" ; "could" ; 
+         ["been able to"] ; ["being able to"] ; "can't" ; "couldn't"] ; 
+    isAux = True
+    } ;
   during_Prep = ss "during" ;
   either7or_DConj = sd2 "either" "or" ** {n = Sg} ;
   everybody_NP = regNP "everybody" Sg ;
@@ -45,7 +48,11 @@ concrete StructuralEng of Structural = CatEng **
   more_CAdv = ss "more" ;
   most_Predet = ss "most" ;
   much_Det = mkDeterminer Sg "much" ;
-  must_VV = mkVerb4 "have" "has" "had" "had" ** {c2 = "to"} ; ---
+  must_VV = {
+    s = table VVForm [["be have to"] ; "must" ; ["had to"] ; 
+         ["had to"] ; ["having to"] ; "mustn't" ; ["hadn't to"]] ; ---- 
+    isAux = True
+    } ;
   no_Phr = ss "no" ;
   on_Prep = ss "on" ;
   one_Quant = mkDeterminer Sg "one" ;
@@ -69,6 +76,7 @@ concrete StructuralEng of Structural = CatEng **
   there7to_Adv = ss "there" ;
   there7from_Adv = ss ["from there"] ;
   therefore_PConj = ss "therefore" ;
+  these_NP = regNP "these" Pl ;
   they_Pron = mkNP "they" "them" "their" Pl P3 ; 
   this_Quant = mkQuant "this" "these" ;
   this_NP = regNP "this" Sg ;
@@ -78,7 +86,7 @@ concrete StructuralEng of Structural = CatEng **
   to_Prep = ss "to" ;
   under_Prep = ss "under" ;
   very_AdA = ss "very" ;
-  want_VV = verbGen "want" ** {c2 = "to"} ;
+  want_VV = P.mkVV (P.regV "want") ;
   we_Pron = mkNP "we" "us" "our" Pl P1 ;
   whatPl_IP = mkIP "what" "what" "what's" Sg ;
   whatSg_IP = mkIP "what" "what" "what's" Sg ;
