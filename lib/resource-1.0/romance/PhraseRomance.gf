@@ -1,6 +1,8 @@
 incomplete concrete PhraseRomance of Phrase = 
   CatRomance ** open CommonRomance, ResRomance, Prelude in {
 
+  flags optimize = all_subs ;
+
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;
 

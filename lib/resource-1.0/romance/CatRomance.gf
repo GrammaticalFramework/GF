@@ -35,7 +35,7 @@ incomplete concrete CatRomance of Cat =
 
 -- Verb
 
-    VP = ResRomance.VP ;
+    VP = CommonRomance.VP ;
     Comp = {s : Agr => Str} ; 
     SC = {s : Str} ;
 

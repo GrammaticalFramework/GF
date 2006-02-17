@@ -2,6 +2,8 @@
 
 instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 
+  flags optimize=all ;
+
   param 
     Prep = P_de | P_a ;
     NPForm = Ton Case | Aton Case | Poss {g : Gender ; n : Number} ; --- AAgr
@@ -57,13 +59,25 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
     vpAgrClit : Agr -> VPAgr = \a ->
       VPAgrClit (aagr a.g a.n) ; --- subty
 
-    placeNewClitic = \ci,c,pro,isc,old ->
-      let new = if_then_Str isc (pro.s ! Aton c) [] 
-      in
-      case pro.a.p of {
-        P1 | P2 => new ++ old ;
-        _ => old ++ new
-        } ;
+    pronArg = \n,p,acc,dat ->
+      let 
+        pacc = case acc of {
+          CRefl => case p of {
+            P3 => elision "s" ;  --- use of reflPron incred. expensive
+            _  => argPron Fem n p Acc
+            } ;
+          CPron a => argPron a.g a.n a.p Acc ;
+          _ => []
+          } ;
+        pdat = case dat of {
+          CPron a => argPron a.g a.n a.p dative ;
+          _ => []
+          } ;
+       in
+       case dat of {
+          CPron {p = P3} => <pacc ++ pdat,[]> ;
+          _ => <pdat ++ pacc, []>
+          } ;
 
     negation : Polarity => (Str * Str) = table {
       Pos => <[],[]> ;
@@ -95,19 +109,35 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 
     partQIndir = elision "c" ;
 
-    reflPron : Number => Person => Case => Str = 
+    reflPron : Number -> Person -> Case -> Str = \n,p,c ->
+      let pron = argPron Fem n p c in
+      case <p,c> of {
+        <P3,  Acc | CPrep P_a> => elision "s" ;
+        <P3, _> => prepCase c ++ "soi" ;
+        _ => pron
+        } ;
+
+    argPron : Gender -> Number -> Person -> Case -> Str = 
       let 
-        cases : (x,y : Str) -> (Case => Str) = \me,moi -> table {
+        cases : (x,y : Str) -> Case -> Str = \me,moi,c -> case c of {
           Acc | CPrep P_a => me ;
           _ => moi
           } ;
+        cases3 : (x,y,z : Str) -> Case -> Str = \les,leur,eux,c -> case c of {
+          Acc => les ;
+          CPrep P_a => leur ;
+          _ => eux
+          } ;
       in 
-      \\n,p => case <n,p> of { 
-        <Sg,P1> => cases (elision "m") "moi" ;
-        <Sg,P2> => cases (elision "t") "toi" ;
-        <Pl,P1> => \\_ => "nous" ;
-        <Pl,P2> => \\_ => "vous" ;
-        _ => cases (elision "s") "soi"
+      \g,n,p -> case <g,n,p> of { 
+        <_,Sg,P1> => cases (elision "m") "moi" ;
+        <_,Sg,P2> => cases (elision "t") "toi" ;
+        <_,Pl,P1> => \_ -> "nous" ;
+        <_,Pl,P2> => \_ -> "vous" ;
+        <Fem,Sg,P3> => cases3 elisLa "lui" "elle" ;
+        <_,Sg,P3> => cases3 (elision "l") "lui" "lui" ;
+        <Fem,Pl,P3> => cases3 "les" "leur" "elles" ;
+        <_,Pl,P3> => cases3 "les" "leur" "eux"
         } ;
 
     vRefl   : VType = VRefl ;

@@ -3,6 +3,7 @@
 
 interface ResRomance = DiffRomance ** open CommonRomance, Prelude in {
 
+flags optimize=all ;
 
 --2 Constants uniformly defined in terms of language-dependent constants
 
@@ -38,21 +39,6 @@ oper
     _   => Ton c
     } ;
 
-
-  VP : Type = {
-      s : VPForm => {
-        fin : Agr  => Str ;              -- ai  
-        inf : AAgr => Str                -- dit 
-        } ;
-      agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
-      neg    : Polarity => (Str * Str) ; -- ne-pas
-      clit1  : Agr => Str ;              -- se lui
-      clInfo : Case * Number * Person ;  -- whether and what fills clit1 (Nom = none)
-      clit2  : Str ;                     -- y en
-      comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
-      ext    : Polarity => Str ;         -- que je dors / que je dorme
-      } ;
-
   appCompl : Compl -> (NPForm => Str) -> Str = \comp,np ->
     comp.s ++ np ! Ton comp.c ;
 
@@ -77,11 +63,6 @@ oper
           inf = \\a => inf a
         } ;
 
-      cli : (Agr => Str) * (Case * Number * Person) = case isVRefl typ of {
-          True => <\\a => reflPron ! a.n ! a.p ! Acc,<Acc,Sg,P3>> ; --- n,p
-          _    => <\\_ => [],                        <Nom,Sg,P1>> -- not care
-          } ;
-
     in {
     s = table {
       VPFinite t Simul => vf (vfin t) (\_ -> []) ;
@@ -92,8 +73,11 @@ oper
       } ;
     agr    = partAgr typ ;
     neg    = negation ;
-    clit1  = cli.p1 ;
-    clInfo = cli.p2 ;
+    clAcc  = case isVRefl typ of {
+          True => CRefl ;
+          _    => CNone
+          } ;
+    clDat  = CNone ; --- no dative refls
     clit2  = [] ;
     comp   = \\a => [] ;
     ext    = \\p => []
@@ -101,51 +85,58 @@ oper
 
   insertObject : Compl -> Pronoun -> VP -> VP = \c,np,vp -> 
     let
-      cc : Bool * Str * VPAgr = case <c.isDir, c.c, np.hasClit> of {
-        <False,_,_> | 
-        <_,_,False>  => <False, c.s ++ np.s ! Ton c.c, vp.agr> ; 
-        <_,Acc,_>    => <True,  [], vpAgrClit np.a> ;
-        _            => <True,  [], vp.agr>
+      vpacc = vp.clAcc ; 
+      vpdat = vp.clDat ;
+      vpagr = vp.agr ;
+      npa   = np.a ;
+      noNewClit = <vpacc, vpdat, appCompl c np.s, vpagr> ;
+
+      cc : CAgr * CAgr * Str * VPAgr = case <np.hasClit,c.isDir> of {
+        <True,True> => case c.c of {
+          Acc => <CPron npa,  vpdat,   [], vpAgrClit npa> ;
+          _   => <vpacc,    CPron npa, [], vpagr> -- must be dat
+          } ;
+        _   => noNewClit
         } ;
+
     in {
       s     = vp.s ;
-      agr   = cc.p3 ;
-      clit1 = \\a => placeNewClitic vp.clInfo c.c np cc.p1 (vp.clit1 ! a) ;
-      clInfo = case cc.p1 of {
-        False => vp.clInfo ; -- no new clitic
-        _ => <c.c, np.a.n, np.a.p>
-        } ; 
+      agr   = cc.p4 ;
+      clAcc = cc.p1 ;
+      clDat = cc.p2 ;
       clit2 = vp.clit2 ;
       neg   = vp.neg ;
-      comp  = \\a => vp.comp ! a ++ cc.p2 ;
+      comp  = \\a => vp.comp ! a ++ cc.p3 ;
       ext   = vp.ext ;
     } ;
 
   insertComplement : (Agr => Str) -> VP -> VP = \co,vp -> { 
     s     = vp.s ;
     agr   = vp.agr ;
-    clit1 = vp.clit1 ; 
-    clInfo = vp.clInfo ; 
+    clAcc = vp.clAcc ; 
+    clDat = vp.clDat ; 
     clit2 = vp.clit2 ; 
     neg   = vp.neg ;
     comp  = \\a => vp.comp ! a ++ co ! a ;
     ext   = vp.ext ;
     } ;
+
   insertAdv : Str -> VP -> VP = \co,vp -> { 
     s     = vp.s ;
     agr   = vp.agr ;
-    clit1 = vp.clit1 ; 
-    clInfo = vp.clInfo ; 
+    clAcc = vp.clAcc ; 
+    clDat = vp.clDat ; 
     clit2 = vp.clit2 ; 
     neg   = vp.neg ;
     comp  = \\a => vp.comp ! a ++ co ;
     ext   = vp.ext ;
     } ;
+
   insertExtrapos : (Polarity => Str) -> VP -> VP = \co,vp -> { 
     s     = vp.s ;
     agr   = vp.agr ;
-    clit1 = vp.clit1 ; 
-    clInfo = vp.clInfo ; 
+    clAcc = vp.clAcc ; 
+    clDat = vp.clDat ; 
     clit2 = vp.clit2 ; 
     neg   = vp.neg ;
     comp  = vp.comp ;
@@ -167,20 +158,20 @@ oper
           verb  = vps.fin ! agr ;
           inf   = vps.inf ! (appVPAgr vp.agr (aagr agr.g agr.n)) ; --- subtype bug
           neg   = vp.neg ! b ;
-          clit  = vp.clit1 ! agr ++ vp.clit2 ;
-          compl = vp.comp ! agr ++ vp.ext ! b
+          clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
+          compl = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! b
         in
-        subj ++ neg.p1 ++ clit ++ verb ++ neg.p2 ++ inf ++ compl
+        subj ++ neg.p1 ++ clpr.p1 ++ verb ++ neg.p2 ++ inf ++ compl
     } ;
 
   infVP : VP -> Agr -> Str = \vp,agr ->
       let
-        inf = (vp.s ! VPInfinit Simul).inf ! (aagr agr.g agr.n) ;
-        neg = vp.neg ! Pos ; --- Neg not in API
-        cli = vp.clit1 ! agr ++ vp.clit2 ;
-        obj = vp.comp ! agr
+        inf  = (vp.s ! VPInfinit Simul).inf ! (aagr agr.g agr.n) ;
+        neg  = vp.neg ! Pos ; --- Neg not in API
+        clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
+        obj  = clpr.p2 ++ vp.comp ! agr
       in
-      clitInf cli inf ++ obj ;
+      clitInf clpr.p1 inf ++ obj ;
 
 }
 
