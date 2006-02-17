@@ -8,4 +8,6 @@
 
 instance ResIta of ResRomance = DiffIta ** open CommonRomance, Prelude in {
 
+  flags optimize=all ;
+
 } ;

@@ -1,9 +1,9 @@
 all: langs test
 
 test:
-	echo "gr -cat=S -number=11 -prob | tb" | gf -probs=lang.gfprob langs.gfcm
+	echo "gr -cat=S -number=11 -prob | tb" | gf -nocf -probs=lang.gfprob langs.gfcm
 langs:
-	echo "s ;; pm | wf langs.gfcm" | gf -src */Lang??*.gf english/LangEng.gf +RTS -M400M
+	echo "s ;; pm | wf langs.gfcm" | gf -src -nocf */Lang??*.gf english/LangEng.gf +RTS -M500M
 
 stat:
 	wc */*.gfc

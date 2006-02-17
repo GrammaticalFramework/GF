@@ -82,7 +82,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
   partQIndir : Str ; -- ce, ciò
 
   reflPron : Number -> Person -> Case -> Str ;
-  argPron  : Gender -> Number -> Person -> Case -> Str ;
+--  argPron  : Gender -> Number -> Person -> Case -> Str ;
 
   auxPassive : Verb ;
 
