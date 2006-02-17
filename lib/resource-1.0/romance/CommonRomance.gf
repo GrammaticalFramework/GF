@@ -113,6 +113,10 @@ oper
 param
   RAgr = RAg {g : Gender ; n : Number} | RNoAg ; --- AAgr
 
+-- Clitic slots.
+
+  CAgr = CPron {g : Gender ; n : Number ; p : Person} | CRefl | CNone ; --- Agr
+
 oper
   aagr : Gender -> Number -> AAgr = \g,n ->
     {g = g ; n = n} ;
@@ -168,6 +172,21 @@ oper
        VPAgrSubj                    -- elle est partie, elle s'est vue
      | VPAgrClit                    -- elle a dormi; elle les a vues
          {g : Gender ; n : Number} ;
+
+  oper
+  VP : Type = {
+      s : VPForm => {
+        fin : Agr  => Str ;              -- ai  
+        inf : AAgr => Str                -- dit 
+        } ;
+      agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
+      neg    : Polarity => (Str * Str) ; -- ne-pas
+      clAcc  : CAgr ;                    -- le/se
+      clDat  : CAgr ;                    -- lui
+      clit2  : Str ;                     -- y en
+      comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
+      ext    : Polarity => Str ;         -- que je dors / que je dorme
+      } ;
 
 }
 

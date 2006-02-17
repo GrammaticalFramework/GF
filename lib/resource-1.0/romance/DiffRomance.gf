@@ -45,17 +45,9 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
   oper clitInf : Str -> Str -> Str ;
 
--- If a new clitic is placed before an existing one.
--- (Fre "le lui", Ita "glie lo").
+-- To render pronominal arguments as clitics and/or ordinary complements. 
 
-  placeNewClitic : 
-    (Case * Number * Person) ->                       -- info on old clit
-    Case ->                                           -- case of new clit
-    {s : NPForm => Str ; a : Agr ; hasClit : Bool} -> -- new clit
-    Bool ->                                           -- whether to clit'ze
-    Str ->                                            -- old clit
-    Str ;                                             -- old + new (or rev.)
-
+  pronArg : Number -> Person -> CAgr -> CAgr -> Str * Str ;
 
 --2 Constants that must derivatively depend on language
 
@@ -89,7 +81,8 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
   partQIndir : Str ; -- ce, ciò
 
-  reflPron : Number => Person => Case => Str ;
+  reflPron : Number -> Person -> Case -> Str ;
+  argPron  : Gender -> Number -> Person -> Case -> Str ;
 
   auxPassive : Verb ;
 
