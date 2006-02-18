@@ -2,6 +2,8 @@
 
 instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelude in {
 
+  flags optimize=all ;
+
   param 
     Prep = P_di | P_a | P_da | P_in | P_su | P_con ;
     NPForm = Ton Case | Aton Case | PreClit | Poss {g : Gender ; n : Number} ; --- AAgr
@@ -77,14 +79,27 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
     vpAgrClit : Agr -> VPAgr = \a ->
       vpAgrNone ;
 
---- This assumes that Acc clitics are in place before Dat.
+    pronArg = \n,p,acc,dat ->
+      let 
+        pacc = case acc of {  --- only accusative refl handled
+          CRefl => case p of {
+            P3 => "si" ;
+            _  => argPron Fem n p Acc False --- no clitic after acc
+            } ;
+          CPron a => argPron a.g a.n a.p Acc False ;
+          _ => []
+          } ;
+        hasAcc = case acc of {
+          CNone => False ;
+          _ => True
+          } ;
+        pdat = case dat of {
+          CPron a => argPron a.g a.n a.p dative hasAcc ;
+          _ => []
+          } ;
+       in
+       <pdat ++ pacc, []> ;
 
-    placeNewClitic = \ci,c,pro,isc,old ->
-      case <ci.p1,c,isc> of {
-        <Acc,CPrep P_a, True> => pro.s ! PreClit ++ old ; -- there is an old clitic 
-        {p3 = True}           => pro.s ! Aton c ;         -- no old but a new
-        _                     => []                       -- no clitics
-        } ;
 
     negation : Polarity => (Str * Str) = table {
       Pos => <[],[]> ;
@@ -109,19 +124,43 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
 
     partQIndir = "ciò" ;
 
-    reflPron : Number => Person => Case => Str = 
+    reflPron : Number -> Person -> Case -> Str = 
       let 
-        cases : (x,y : Str) -> (Case => Str) = \me,moi -> table {
+        cases : (x,y : Str) -> (Case -> Str) = \me,moi,c -> case c of {
           Acc | CPrep P_a => me ;
           _ => moi
           } ;
       in 
-      \\n,p => case <n,p> of { 
+      \n,p -> case <n,p> of { 
         <Sg,P1> => cases "mi" "me" ;
         <Sg,P2> => cases "ti" "te" ;
         <Pl,P1> => cases "ci" "noi" ; -- unlike French with just one alt!
         <Pl,P2> => cases "vi" "voi" ;
         _ => cases "si" "se"
+        } ;
+
+    argPron : Gender -> Number -> Person -> Case -> Bool -> Str = 
+      let 
+        cases : (x,y,z : Str) -> Case -> Bool -> Str = 
+          \ci,ce,noi,c,isPre -> case c of {
+          Acc | CPrep P_a => if_then_Str isPre ce ci ;
+          _ => noi
+          } ;
+        cases4 : (x,y,z,u : Str) -> Case -> Bool -> Str =
+          \lo,gli,glie,lui,c,isPre -> case c of {
+          Acc => lo ; 
+          CPrep P_a => if_then_Str isPre glie gli ;
+          _ => lui
+          } ;
+      in 
+      \g,n,p -> case <g,n,p> of { 
+        <_,Sg,P1> => cases "mi" "me" "me" ;
+        <_,Sg,P2> => cases "ti" "te" "te" ;
+        <_,Pl,P1> => cases "ci" "ce" "noi" ; -- unlike French with just one alt!
+        <_,Pl,P2> => cases "vi" "ve" "voi" ;
+        <Masc,Sg,P3> => cases4 "lo" "gli" "glie" "lui" ;
+        <Fem, Sg,P3> => cases4 "la" "le"  "glie" "lei" ;
+        <_,   Pl,P3> => cases4 "li" "li" "glie"  "loro"
         } ;
 
     vRefl   : VType = VRefl ;
