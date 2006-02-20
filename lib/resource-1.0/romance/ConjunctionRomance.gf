@@ -34,12 +34,12 @@ incomplete concrete ConjunctionRomance of Conjunction =
     BaseAdv = twoSS ;
     ConsAdv = consrSS comma ;
     BaseNP x y = {
-      s1 = \\c => x.s ! c ; 
+      s1 = \\c => x.s ! stressedCase c ; 
       s2 = \\c => y.s ! (conjunctCase c) ; 
       a = conjAgr x.a y.a
       } ;
     ConsNP x xs = {
-      s1 = \\c => x.s ! c ++ comma ++ xs.s1 ! (conjunctCase c) ; 
+      s1 = \\c => x.s ! stressedCase c ++ comma ++ xs.s1 ! (conjunctCase c) ; 
       s2 = \\c => xs.s2 ! (conjunctCase c) ; 
       a = conjAgr x.a xs.a
       } ;

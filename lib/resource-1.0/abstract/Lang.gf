@@ -15,6 +15,8 @@ abstract Lang =
   Relative,
   Conjunction,
   Phrase,
+  Text,
   Structural,
+  Idiom,
   Lexicon
   ** {} ;
