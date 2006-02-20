@@ -6,11 +6,11 @@ Eng: non-contracted negations
 
 %Eng: auxiliaries in standard API
 
-API: idiomatic expressions: ExistNP, ProgressiveVP, ImpersonalVP
+%API: idiomatic expressions: ExistNP, ProgressiveVP, ImpersonalVP
 
-Spa: clitic order and changes
+%Spa: clitic order and changes
 
-Ita: clitic order and changes
+%Ita: clitic order and changes
 
 Ita: infinitive contractions
 
@@ -40,8 +40,8 @@ API: swadesh/: build a swadesh-related API and migrate lexica
 
 API: mathematical/: symbolic formulas as Cl
 
-API: text construction
+%API: text construction
 
-All: punctuation
+%All: punctuation
 
 API: apposition, e.g. Det -> CN -> [PN] -> NP
