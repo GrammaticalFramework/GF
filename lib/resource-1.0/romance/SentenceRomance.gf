@@ -8,14 +8,7 @@ incomplete concrete SentenceRomance of Sentence =
 
     PredSCVP sc vp = mkClause sc.s (agrP3 Masc Sg) vp ;
 
-    ImpVP vp = {
-      s = \\pol,aag => 
-        let 
-          agr   = aag ** {p = P2} ;
-          verb  = (vp.s ! VPImperat).fin ! agr
-        in
-        verb ++ vp.comp ! agr ++ vp.ext ! pol ---- neg,clit
-      } ;
+    ImpVP = mkImperative ;
 
     SlashV2 np v2 = 
       mkClause 

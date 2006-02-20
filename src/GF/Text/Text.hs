@@ -71,6 +71,7 @@ formatAsTextGen tag para = unwords . format . cap . words where
     w : c : ww | major c -> format $ (w ++ c) :(cap ww)
     w : c : ww | minor c -> format $ (w ++ c) :    ww
     p : c : ww | openp p -> format $ (p ++ c) :ww
+    p : c : ww | spanish p -> format $ (p ++ concat (cap [c])) :ww
     c     : ww | para  c -> "\n\n"        : format ww
     w     : ww           -> w             : format ww
     [] -> []
@@ -81,6 +82,7 @@ formatAsTextGen tag para = unwords . format . cap . words where
   major = flip elem (map singleton ".!?") 
   minor = flip elem (map singleton ",:;)")
   openp = all (flip elem "(")
+  spanish = all (flip elem "¡¿")
 
 formatAsCode :: String -> String
 formatAsCode = rend 0 . words where

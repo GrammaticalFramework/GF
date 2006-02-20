@@ -11,10 +11,12 @@ concrete LangSpa of Lang =
   RelativeSpa,
   ConjunctionSpa,
   PhraseSpa,
+  TextSpa,      -- special punctuation
+  IdiomSpa,
   StructuralSpa,
   LexiconSpa
   ** {
 
-flags startcat = Phr ;
+flags startcat = Phr ; unlexer = text ; lexer = text ;
 
 } ;

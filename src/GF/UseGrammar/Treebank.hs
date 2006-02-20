@@ -110,6 +110,6 @@ linearize mgr lang =
   linTree2string noMark (canModules mgr) (zIdent lang) 
  where
    sgr   = stateGrammarOfLangOpt False mgr (zIdent lang)
-   untok = customOrDefault noOptions useUntokenizer customUntokenizer sgr
+   untok = customOrDefault (stateOptions sgr) useUntokenizer customUntokenizer sgr
 
 showTree t = prt_ $ tree2exp t

@@ -11,10 +11,12 @@ concrete LangFin of Lang =
   RelativeFin,
   ConjunctionFin,
   PhraseFin,
+  TextX,
+  IdiomFin,
   StructuralFin,
   LexiconFin
   ** {
 
-flags startcat = Phr ;
+flags startcat = Phr ; unlexer = text ; lexer = finnish ;
 
 } ;

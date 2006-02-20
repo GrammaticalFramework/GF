@@ -1,5 +1,5 @@
 incomplete concrete CatRomance of Cat = 
-  TenseX ** open Prelude, CommonRomance, ResRomance, (R = ParamX) in {
+  CommonX ** open Prelude, CommonRomance, ResRomance, (R = ParamX) in {
 
   flags optimize=all_subs ;
 
@@ -7,7 +7,7 @@ incomplete concrete CatRomance of Cat =
 
 -- Phrase
 
-    Text, Phr, Utt, Voc = {s : Str} ;
+    Utt, Voc = {s : Str} ;
 
 -- Tensed/Untensed
 

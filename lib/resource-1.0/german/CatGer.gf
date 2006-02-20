@@ -1,4 +1,4 @@
-concrete CatGer of Cat = TenseX ** open ResGer, Prelude in {
+concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -6,7 +6,7 @@ concrete CatGer of Cat = TenseX ** open ResGer, Prelude in {
 
 -- Phrase
 
-    Text, Phr, Utt, Voc = {s : Str} ;
+    Utt, Voc = {s : Str} ;
 
 -- Tensed/Untensed
 

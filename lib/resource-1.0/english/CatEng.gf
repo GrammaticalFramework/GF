@@ -1,4 +1,4 @@
-concrete CatEng of Cat = TenseX ** open ResEng, Prelude in {
+concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -6,7 +6,7 @@ concrete CatEng of Cat = TenseX ** open ResEng, Prelude in {
 
 -- Phrase
 
-    Text, Phr, Utt, Voc = {s : Str} ;
+    Utt, Voc = {s : Str} ;
 
 -- Tensed/Untensed
 
@@ -35,9 +35,10 @@ concrete CatEng of Cat = TenseX ** open ResEng, Prelude in {
 -- Verb
 
     VP = {
-      s  : Tense => Anteriority => Polarity => Order => Agr => {fin, inf : Str} ; 
-      ad : Str ;
-      s2 : Agr => Str
+      s   : Tense => Anteriority => Polarity => Order => Agr => {fin, inf : Str} ;
+      prp : Str ; -- present participle
+      ad  : Str ;
+      s2  : Agr => Str
       } ;
     Comp = {s : Agr => Str} ; 
     SC = {s : Str} ;

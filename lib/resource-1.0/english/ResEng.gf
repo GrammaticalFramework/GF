@@ -162,9 +162,10 @@ resource ResEng = ParamX ** open Prelude in {
     Tense => Anteriority => Polarity => Order => Agr => {fin, inf : Str} ; 
 
   VP : Type = {
-    s  : VerbForms ;
-    ad : Str ;
-    s2 : Agr => Str
+    s   : VerbForms ;
+    prp : Str ; -- present participle 
+    ad  : Str ;
+    s2  : Agr => Str
     } ;
 
 --- The order gets wrong with AdV, but works around a parser
@@ -200,6 +201,7 @@ resource ResEng = ParamX ** open Prelude in {
         <Cond,Anter,Pos,_>      => vf "would"      ("have" ++ part) ;
         <Cond,Anter,Neg,_>      => vf "wouldn't"   ("have" ++ part)
         } ;
+    prp  = verb.s ! VPresPart ;
     ad = [] ;
     s2 = \\a => if_then_Str verb.isRefl (reflPron ! a) []
     } ;
@@ -230,12 +232,14 @@ resource ResEng = ParamX ** open Prelude in {
         <Cond,Anter,Pos,_>      => vf "would"      ("have" ++ part) ;
         <Cond,Anter,Neg,_>      => vf "wouldn't"   ("have" ++ part)
         } ;
+    prp = verb.prpart ;
     ad = [] ;
     s2 = \\_ => []
     } ;
 
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
+    prp = vp.prp ;
     ad = vp.ad ;
     s2 = \\a => vp.s2 ! a ++ obj ! a
     } ;
@@ -244,6 +248,7 @@ resource ResEng = ParamX ** open Prelude in {
 
   insertAdV : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
+    prp = vp.prp ;
     ad = vp.ad ++ adv ;
     s2 = \\a => vp.s2 ! a
     } ;
@@ -264,7 +269,8 @@ resource ResEng = ParamX ** open Prelude in {
           Neg => \\_ => verbs ! VVPastNeg
           } ;
         inf = verbs ! VVF VInf ;
-        ppart = verbs ! VVF VPPart
+        ppart = verbs ! VVF VPPart ;
+        prpart = verbs ! VVF VPresPart ;
         } ;
       _    => predV {s = \\vf => verbs ! VVF vf ; isRefl = False}
       } ;
@@ -287,7 +293,7 @@ resource ResEng = ParamX ** open Prelude in {
   does   = agrVerb "does"    "do" ;
   doesnt = agrVerb "doesn't" "don't" ;
 
-  Aux = {pres,past : Polarity => Agr => Str ; inf,ppart : Str} ;
+  Aux = {pres,past : Polarity => Agr => Str ; inf,ppart,prpart : Str} ;
 
   auxBe : Aux = {
     pres = \\b,a => case <b,a> of {
@@ -300,7 +306,8 @@ resource ResEng = ParamX ** open Prelude in {
       _                    => (posneg b "were")
       } ;
     inf  = "be" ;
-    ppart = "been"
+    ppart = "been" ;
+    prpart = "being"
     } ;
 
   posneg : Polarity -> Str -> Str = \p,s -> case p of {

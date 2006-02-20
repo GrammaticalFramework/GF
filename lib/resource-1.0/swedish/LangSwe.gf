@@ -17,6 +17,6 @@ concrete LangSwe of Lang =
   LexiconSwe
   ** {
 
-flags startcat = Phr ;
+flags startcat = Phr ;  unlexer = text ; lexer = text ;
 
 } ;

@@ -1,4 +1,4 @@
-concrete CatFin of Cat = TenseX ** open ResFin, Prelude in {
+concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -6,7 +6,7 @@ concrete CatFin of Cat = TenseX ** open ResFin, Prelude in {
 
 -- Phrase
 
-    Text, Phr, Utt, Voc = {s : Str} ;
+    Utt, Voc = {s : Str} ;
 
 -- Tensed/Untensed
 

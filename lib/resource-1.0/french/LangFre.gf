@@ -11,10 +11,12 @@ concrete LangFre of Lang =
   RelativeFre,
   ConjunctionFre,
   PhraseFre,
+  TextX,
+  IdiomFre,
   StructuralFre,
   LexiconFre
   ** {
 
-flags startcat = Phr ;
+flags startcat = Phr ; unlexer = text ; lexer = text ;
 
 } ;
