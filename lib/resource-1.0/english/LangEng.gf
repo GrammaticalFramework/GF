@@ -17,6 +17,6 @@ concrete LangEng of Lang =
   LexiconEng
   ** {
 
-flags startcat = Phr ;
+flags startcat = Phr ; unlexer = text ; lexer = text ;
 
 } ;

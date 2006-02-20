@@ -11,10 +11,12 @@ concrete LangGer of Lang =
   RelativeGer,
   ConjunctionGer,
   PhraseGer,
+  TextX,
+  IdiomGer,
   StructuralGer,
   LexiconGer
   ** {
 
-flags startcat = Phr ;
+flags startcat = Phr ; unlexer = text ; lexer = text ;
 
 } ;

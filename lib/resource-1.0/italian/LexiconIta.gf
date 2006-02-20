@@ -23,7 +23,7 @@ lin
   bike_N = regN "bicicletta" ;
   bird_N = regN "uccello" ;
   black_A = regADeg "nero" ;
-  blue_A = regADeg "blù" ;
+  blue_A = mkA "blù" "blù" "blù" "blù" "blumente" ;
   boat_N = regN "batello" ;
   book_N = regN "libro" ;
   boot_N = regN "stivale" ;

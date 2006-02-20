@@ -1,5 +1,5 @@
 incomplete concrete CatScand of Cat = 
-  TenseX ** open ResScand, Prelude, CommonScand, (R = ParamX) in {
+  CommonX ** open ResScand, Prelude, CommonScand, (R = ParamX) in {
 
   flags optimize=all_subs ;
 
@@ -7,7 +7,7 @@ incomplete concrete CatScand of Cat =
 
 -- Phrase
 
-    Text, Phr, Utt, Voc = {s : Str} ;
+    Utt, Voc = {s : Str} ;
 
 -- Tensed/Untensed
 

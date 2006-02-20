@@ -11,10 +11,12 @@ concrete LangIta of Lang =
   RelativeIta,
   ConjunctionIta,
   PhraseIta,
+  TextX,
+  IdiomIta,
   StructuralIta,
   LexiconIta
   ** {
 
-flags startcat = Phr ;
+flags startcat = Phr ; unlexer = text ; lexer = text ;
 
 } ;

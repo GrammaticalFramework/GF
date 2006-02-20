@@ -63,7 +63,7 @@ concrete StructuralGer of Structural = CatGer **
       a = Strong
       } ;
   only_Predet = {s = \\_,_,_ => "nur"} ;
-  no_Phr = ss ["Nein ."] ;
+  no_Phr = ss "nein" ;
   on_Prep = mkPrep "auf" Dat ;
   or_Conj = ss "oder" ** {n = Sg} ;
   otherwise_PConj = ss "sonst" ;
@@ -123,6 +123,6 @@ concrete StructuralGer of Structural = CatGer **
   youSg_Pron = mkPronPers "du" "dich" "dir" "deiner" "dein" Sg P2 ;
   youPl_Pron = mkPronPers "ihr" "euch" "euch" "eurer" "euer" Pl P2 ; ---- poss
   youPol_Pron = mkPronPers "Sie" "Sie" "Ihnen" "Ihrer" "Ihr" Pl P3 ;
-  yes_Phr = ss ["Ja ."] ;
+  yes_Phr = ss "ja" ;
 
 }

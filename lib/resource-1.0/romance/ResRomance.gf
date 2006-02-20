@@ -61,6 +61,11 @@ oper
       habet  : TMood -> Agr -> Str = \tm,a -> aux ! VFin tm a.n a.p ;
       habere : Str = aux ! VInfin ;
 
+      vimp : Agr -> Str = \a -> verb.s ! VImper (case a.n of {
+        Sg => SgP2 ;
+        Pl => PlP2
+        }) ;
+
       vf : (Agr -> Str) -> (AAgr -> Str) -> {
           fin : Agr => Str ; 
           inf : AAgr => Str
@@ -72,9 +77,9 @@ oper
 
     in {
     s = table {
-      VPFinite t Simul => vf (vfin t) (\_ -> []) ;
-      VPFinite t Anter => vf (habet t) vpart ; 
-      VPImperat        => vf (\_ -> verb.s ! VImper SgP2) (\_ -> []) ; ----
+      VPFinite t Simul => vf (vfin t)   (\_ -> []) ;
+      VPFinite t Anter => vf (habet t)  vpart ; 
+      VPImperat        => vf vimp       (\_ -> []) ;
       VPInfinit Simul  => vf (\_ -> []) (\_ -> vinf) ;
       VPInfinit Anter  => vf (\_ -> []) (\a -> habere ++ vpart a)
       } ;
@@ -139,6 +144,17 @@ oper
     ext   = vp.ext ;
     } ;
 
+  insertClit2 : Str -> VP -> VP = \co,vp -> { 
+    s     = vp.s ;
+    agr   = vp.agr ;
+    clAcc = vp.clAcc ; 
+    clDat = vp.clDat ; 
+    clit2 = vp.clit2 ++ co ; ---- y en 
+    neg   = vp.neg ;
+    comp  = vp.comp ;
+    ext   = vp.ext ;
+    } ;
+
   insertExtrapos : (Polarity => Str) -> VP -> VP = \co,vp -> { 
     s     = vp.s ;
     agr   = vp.agr ;
@@ -168,7 +184,7 @@ oper
           clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
           compl = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! b
         in
-        subj ++ neg.p1 ++ clpr.p1 ++ verb ++ neg.p2 ++ inf ++ compl
+        subj ++ neg.p1 ++ clpr.p1 ++ vp.clit2 ++ verb ++ neg.p2 ++ inf ++ compl
     } ;
 
   infVP : VP -> Agr -> Str = \vp,agr ->
@@ -178,7 +194,7 @@ oper
         clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
         obj  = clpr.p2 ++ vp.comp ! agr
       in
-      clitInf clpr.p1 inf ++ obj ;
+      clitInf (clpr.p1 ++ vp.clit2) inf ++ obj ;
 
 }
 

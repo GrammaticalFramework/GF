@@ -1,18 +1,15 @@
 --1 The category system
 
-abstract Cat = Tense ** {
+abstract Cat = Common ** {
 
   cat
 
 --2 Top-level units
 
--- Constructed in [Text Text.html].
+-- Constructed in [Text Text.html]: $Text$.
 
-    Text ;  -- text consisting of several phrases
+-- Constructed in [Phrase Phrase.html]: $Phr$ and
 
--- Constructed in [Phrase Phrase.html].
-
-    Phr ;   -- phrase in a text                    e.g. "But be quiet my darling."
     Utt ;   -- sentence, question, word...         e.g. "be quiet"
     Voc ;   -- vocative or "please"                e.g. "my darling"
 

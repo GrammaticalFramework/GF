@@ -11,10 +11,12 @@ concrete LangNor of Lang =
   RelativeNor,
   ConjunctionNor,
   PhraseNor,
+  TextX,
+  IdiomNor,
   StructuralNor,
   LexiconNor
   ** {
 
-flags startcat = Phr ;
+flags startcat = Phr ; unlexer = text ; lexer = text ;
 
 } ;

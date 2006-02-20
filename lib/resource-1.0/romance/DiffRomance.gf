@@ -47,12 +47,14 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
 -- To render pronominal arguments as clitics and/or ordinary complements. 
 
-  pronArg : Number -> Person -> CAgr -> CAgr -> Str * Str ;
+  oper pronArg : Number -> Person -> CAgr -> CAgr -> Str * Str ;
+
+-- To render imperatives (with their clitics etc).
+
+  oper mkImperative : CommonRomance.VP -> {s : Polarity => AAgr => Str} ;
 
 --2 Constants that must derivatively depend on language
 
-----  nominative : Case ;
-----  accusative : Case ;
   dative     : Case ;
   genitive   : Case ;
 

@@ -4,9 +4,11 @@ concrete IdiomEng of Idiom = CatEng ** open Prelude, ResEng in {
 
   lin
     ExistNP np = 
-      mkClause "there" (agrP3 Sg) (insertObj (\\_ => np.s ! Acc) (predAux auxBe)) ;
-    ImpersVP vp = mkClause "it" (agrP3 Sg) vp ;
---    ProgrVP  : VP -> VP ;  -- sleeping
+      mkClause "there" (agrP3 np.a.n) (insertObj (\\_ => np.s ! Acc) (predAux auxBe)) ;
+    ImpersCl vp = mkClause "it" (agrP3 Sg) vp ;
+    GenericCl vp = mkClause "one" (agrP3 Sg) vp ;
+
+    ProgrVP vp = insertObj (\\a => vp.ad ++ vp.prp ++ vp.s2 ! a) (predAux auxBe) ;
 
 }
 
