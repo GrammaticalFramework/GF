@@ -39,6 +39,13 @@ oper
     _   => Ton c
     } ;
 
+-- Pronouns in $NP$ lists are always in stressed forms.
+
+  stressedCase : NPForm -> NPForm = \c -> case c of {
+    Aton k => Ton k ;
+    _ => c
+    } ;
+
   appCompl : Compl -> (NPForm => Str) -> Str = \comp,np ->
     comp.s ++ np ! Ton comp.c ;
 

@@ -11,6 +11,8 @@ concrete LangSwe of Lang =
   RelativeSwe,
   ConjunctionSwe,
   PhraseSwe,
+  TextX,
+  IdiomSwe,
   StructuralSwe,
   LexiconSwe
   ** {

@@ -11,7 +11,9 @@ concrete LangEng of Lang =
   RelativeEng,
   ConjunctionEng,
   PhraseEng,
+  TextX,
   StructuralEng,
+  IdiomEng,
   LexiconEng
   ** {
 

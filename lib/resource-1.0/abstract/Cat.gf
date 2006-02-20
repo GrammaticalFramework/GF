@@ -6,16 +6,20 @@ abstract Cat = Tense ** {
 
 --2 Top-level units
 
--- Constructed in [Phrase Phrase.html].
+-- Constructed in [Text Text.html].
 
     Text ;  -- text consisting of several phrases
+
+-- Constructed in [Phrase Phrase.html].
+
     Phr ;   -- phrase in a text                    e.g. "But be quiet my darling."
     Utt ;   -- sentence, question, word...         e.g. "be quiet"
     Voc ;   -- vocative or "please"                e.g. "my darling"
 
 --2 Sentences and clauses
 
--- Constructed in [Sentence Sentence.html].
+-- Constructed in [Sentence Sentence.html], and also in
+-- [Idiom Idiom.html].
 
     S ;     -- declarative sentence                e.g. "she lived here"
     QS ;    -- question                            e.g. "where did she live"
