@@ -41,7 +41,7 @@
 <P></P>
 <P>
 Author: 
-Last update: Tue Feb  7 19:04:52 2006
+Last update: Tue Feb 21 16:23:55 2006
 </P>
 <P>
 Produced by 
@@ -396,26 +396,25 @@ questions, verb phrases, and adjectives.
       aVV   : V -&gt; VV ;  -- "j'arrive à parler"
       mkV2V : V -&gt; Preposition -&gt; Preposition -&gt; V2V ;
       mkVA  : V -&gt; VA ;
-      mkV2A : V -&gt; Preposition -&gt; V2A ;
+      mkV2A : V -&gt; Preposition -&gt; Preposition -&gt; V2A ;
       mkVQ  : V -&gt; VQ ;
       mkV2Q : V -&gt; Preposition -&gt; V2Q ;
     
-      mkAS   : A -&gt; AS ;
-      subjAS : A -&gt; AS ;
+      mkAS  : A -&gt; AS ;
       mkA2S : A -&gt; Preposition -&gt; A2S ;
       mkAV  : A -&gt; Preposition -&gt; AV ;
       mkA2V : A -&gt; Preposition -&gt; Preposition -&gt; A2V ;
 </PRE>
 <P></P>
 <P>
-Notice: categories <CODE>V2S, V2V, V2A, V2Q</CODE> are in v 1.0 treated
+Notice: categories <CODE>V2S, V2V, V2Q</CODE> are in v 1.0 treated
 just as synonyms of <CODE>V2</CODE>, and the second argument is given
 as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
 <CODE>V0</CODE> is just <CODE>V</CODE>.
 </P>
 <PRE>
-      V0, V2S, V2V, V2A, V2Q : Type ;
-      AS, A2S, AV, A2V : Type ;
+      V0, V2S, V2V, V2Q : Type ;
+      AS, A2S, AV, A2V  : Type ;
 </PRE>
 <P></P>
 <A NAME="toc16"></A>

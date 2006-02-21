@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1> The category system</H1>
 <FONT SIZE="4">
 <I>Author: </I><BR>
-Last update: Tue Feb  7 19:04:49 2006
+Last update: Tue Feb 21 16:23:52 2006
 </FONT></CENTER>
 
 <P></P>
@@ -40,8 +40,11 @@ gfdoc - a rudimentary GF document generator.
 </P>
 <A NAME="toc1"></A>
 <H1>The category system</H1>
+<P>
+Some categories are inherited from <A HREF="Common.html">Common</A>.
+</P>
 <PRE>
-    abstract Cat = Tense ** {
+    abstract Cat = Common ** {
     
       cat
 </PRE>
@@ -49,11 +52,10 @@ gfdoc - a rudimentary GF document generator.
 <A NAME="toc2"></A>
 <H2>Top-level units</H2>
 <P>
-Constructed in <A HREF="Phrase.html">Phrase</A>.
+Constructed in <A HREF="Text.html">Text</A>: <CODE>Text</CODE>.
+Constructed in <A HREF="Phrase.html">Phrase</A>: <CODE>Phr</CODE> and
 </P>
 <PRE>
-        Text ;  -- text consisting of several phrases
-        Phr ;   -- phrase in a text                    e.g. "But be quiet my darling."
         Utt ;   -- sentence, question, word...         e.g. "be quiet"
         Voc ;   -- vocative or "please"                e.g. "my darling"
 </PRE>
@@ -61,7 +63,8 @@ Constructed in <A HREF="Phrase.html">Phrase</A>.
 <A NAME="toc3"></A>
 <H2>Sentences and clauses</H2>
 <P>
-Constructed in <A HREF="Sentence.html">Sentence</A>.
+Constructed in <A HREF="Sentence.html">Sentence</A>, and also in
+<A HREF="Idiom.html">Idiom</A>.
 </P>
 <PRE>
         S ;     -- declarative sentence                e.g. "she lived here"

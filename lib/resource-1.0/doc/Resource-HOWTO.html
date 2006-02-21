@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Resource grammar writing HOWTO</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Tue Feb  7 09:22:12 2006
+Last update: Tue Feb 21 16:34:52 2006
 </FONT></CENTER>
 
 <P></P>
@@ -101,6 +101,8 @@ one of a small number of different types). Thus we have
 <LI><CODE>Relative</CODE>: construction of relative clauses
 <LI><CODE>Conjunction</CODE>: coordination of phrases
 <LI><CODE>Phrase</CODE>: construction of the major units of text and speech
+<LI><CODE>Text</CODE>: construction of texts as sequences of phrases
+<LI><CODE>Idiom</CODE>: idiomatic phrases such as existentials
 </UL>
 
 <A NAME="toc3"></A>
@@ -346,8 +348,8 @@ package.
 </P>
 <UL>
 <LI><CODE>ParamX</CODE>: parameter types used in many languages
-<LI><CODE>TenseX</CODE>: implementation of the logical tense, anteriority, 
-     and polarity parameters
+<LI><CODE>CommonX</CODE>: implementation of the categories $Text$ and $Phr$, as well as of
+     the logical tense, anteriority, and polarity parameters
 <LI><CODE>Coordination</CODE>: operations to deal with lists and coordination
 <LI><CODE>Prelude</CODE>: general-purpose operations on strings, records,
       truth values, etc.
@@ -566,13 +568,13 @@ are only found in the comments of the modules.
 <A NAME="toc15"></A>
 <H3>The category system</H3>
 <UL>
+<LI><A HREF="gfdoc/Common.html">Common</A>, <A HREF="../common/CommonX.gf">CommonX</A>
 <LI><A HREF="gfdoc/Cat.html">Cat</A>, <A HREF="gfdoc/CatGer.gf">CatGer</A>
 </UL>
 
 <A NAME="toc16"></A>
 <H3>Phrase category modules</H3>
 <UL>
-<LI><A HREF="gfdoc/Tense.html">Tense</A>, <A HREF="../german/TenseGer.gf">TenseGer</A>
 <LI><A HREF="gfdoc/Noun.html">Noun</A>, <A HREF="../german/NounGer.gf">NounGer</A>
 <LI><A HREF="gfdoc/Adjective.html">Adjective</A>, <A HREF="../german/AdjectiveGer.gf">AdjectiveGer</A>
 <LI><A HREF="gfdoc/Verb.html">Verb</A>, <A HREF="../german/VerbGer.gf">VerbGer</A>
@@ -583,6 +585,8 @@ are only found in the comments of the modules.
 <LI><A HREF="gfdoc/Relative.html">Relative</A>, <A HREF="../german/RelativeGer.gf">RelativeGer</A>
 <LI><A HREF="gfdoc/Conjunction.html">Conjunction</A>, <A HREF="../german/ConjunctionGer.gf">ConjunctionGer</A>
 <LI><A HREF="gfdoc/Phrase.html">Phrase</A>, <A HREF="../german/PhraseGer.gf">PhraseGer</A>
+<LI><A HREF="gfdoc/Text.html">Text</A>, <A HREF="../common/TextX.gf">TextX</A>
+<LI><A HREF="gfdoc/Idiom.html">Idiom</A>, <A HREF="../german/IdiomGer.gf">IdiomGer</A>
 <LI><A HREF="gfdoc/Lang.html">Lang</A>, <A HREF="../german/LangGer.gf">LangGer</A>
 </UL>
 

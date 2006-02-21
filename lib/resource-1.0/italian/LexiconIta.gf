@@ -128,7 +128,8 @@ lin
   oil_N = regN "olio" ;
   old_A =  prefA (regADeg "vecchio") ;
   open_V2 = dirV2 (verboV (aprire_102 "aprire")) ;
-  paint_V2A = mkV2A (verboV (cingere_31 "pingere")) accusative ;
+  paint_V2A = 
+    mkV2A (verboV (cingere_31 "pingere")) accusative (mkPreposition "in") ;
   paper_N = regN "carta" ;
   paris_PN = mkPN "Parigi" masculine ;
   peace_N = femN (regN "pace") ;

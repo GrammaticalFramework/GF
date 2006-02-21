@@ -56,6 +56,8 @@ one of a small number of different types). Thus we have
 - ``Relative``: construction of relative clauses
 - ``Conjunction``: coordination of phrases
 - ``Phrase``: construction of the major units of text and speech
+- ``Text``: construction of texts as sequences of phrases
+- ``Idiom``: idiomatic phrases such as existentials
 
 
 
@@ -289,8 +291,8 @@ These modules are language-independent and provided by the existing resource
 package.
 
 - ``ParamX``: parameter types used in many languages
-- ``TenseX``: implementation of the logical tense, anteriority, 
-     and polarity parameters
+- ``CommonX``: implementation of the categories $Text$ and $Phr$, as well as of
+     the logical tense, anteriority, and polarity parameters
 - ``Coordination``: operations to deal with lists and coordination
 - ``Prelude``: general-purpose operations on strings, records,
       truth values, etc.
@@ -489,12 +491,12 @@ are only found in the comments of the modules.
 
 ===The category system===
 
+- [Common gfdoc/Common.html], [CommonX ../common/CommonX.gf]
 - [Cat gfdoc/Cat.html], [CatGer gfdoc/CatGer.gf]
 
 
 ===Phrase category modules===
 
-- [Tense gfdoc/Tense.html], [TenseGer ../german/TenseGer.gf]
 - [Noun gfdoc/Noun.html], [NounGer ../german/NounGer.gf]
 - [Adjective gfdoc/Adjective.html], [AdjectiveGer ../german/AdjectiveGer.gf]
 - [Verb gfdoc/Verb.html], [VerbGer ../german/VerbGer.gf]
@@ -505,6 +507,8 @@ are only found in the comments of the modules.
 - [Relative gfdoc/Relative.html], [RelativeGer ../german/RelativeGer.gf]
 - [Conjunction gfdoc/Conjunction.html], [ConjunctionGer ../german/ConjunctionGer.gf]
 - [Phrase gfdoc/Phrase.html], [PhraseGer ../german/PhraseGer.gf]
+- [Text gfdoc/Text.html], [TextX ../common/TextX.gf]
+- [Idiom gfdoc/Idiom.html], [IdiomGer ../german/IdiomGer.gf]
 - [Lang gfdoc/Lang.html], [LangGer ../german/LangGer.gf]
 
 

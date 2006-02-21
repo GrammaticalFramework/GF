@@ -73,19 +73,19 @@ ParadigmsGer -> MorphoGer [style = "dotted"];
 ParadigmsGer -> CatGer [style = "dotted"];
 
 CatGer [style = "dashed", shape = "box", URL = "CatGer.gf"];
-CatGer -> TenseX [style = "solid"];
+CatGer -> CommonX [style = "solid"];
 CatGer -> ResGer [style = "dotted"];
 CatGer -> Prelude [style = "dotted"];
 CatGer -> Cat [arrowhead = "empty", style = "dashed"];
 
 Cat [style = "solid", shape = "ellipse", URL = "Cat.gf"];
-Cat -> Tense [style = "solid"];
+Cat -> Common [style = "solid"];
 
-TenseX [style = "dashed", shape = "box", URL = "TenseX.gf"];
-TenseX -> ParamX [style = "dotted"];
-TenseX -> Tense [arrowhead = "empty", style = "dashed"];
+CommonX [style = "dashed", shape = "box", URL = "CommonX.gf"];
+CommonX -> ParamX [style = "dotted"];
+CommonX -> Common [arrowhead = "empty", style = "dashed"];
 
-Tense [style = "solid", shape = "ellipse", URL = "Tense.gf"];
+Common [style = "solid", shape = "ellipse", URL = "Common.gf"];
 
 MorphoGer [style = "dashed", shape = "ellipse", URL = "MorphoGer.gf"];
 MorphoGer -> ResGer [style = "solid"];
@@ -93,11 +93,8 @@ MorphoGer -> Prelude [style = "dotted"];
 MorphoGer -> Predef [style = "dotted"];
 
 ResGer [style = "dashed", shape = "ellipse", URL = "ResGer.gf"];
-ResGer -> ParamGer [style = "solid"];
+ResGer -> ParamX [style = "solid"];
 ResGer -> Prelude [style = "dotted"];
-
-ParamGer [style = "dashed", shape = "ellipse", URL = "ParamGer.gf"];
-ParamGer -> ParamX [style = "solid"];
 
 ParamX [style = "dashed", shape = "ellipse", URL = "ParamX.gf"];
 ParamX -> Prelude [style = "dotted"];

@@ -127,7 +127,7 @@ lin
    oil_N = regN "aceite" ;
    old_A =  prefA (regADeg "viejo") ;
    open_V2 = dirV2 (special_ppV (regV "abrir") "abierto") ;
-   paint_V2A = mkV2A (regV "pintar") accusative ;
+   paint_V2A = mkV2A (regV "pintar") accusative (mkPreposition "en") ;
    paper_N = regN "papel" ;
    paris_PN = mkPN "Paris" masculine ;
    peace_N = femN (regN "paz") ;

@@ -10,7 +10,8 @@ incomplete concrete VerbRomance of Verb =
 
     ComplV3 v np1 np2 = insertObject v.c3 np2 (insertObject v.c2 np1 (predV v)) ;
 
-    ComplVV v vp = insertComplement (\\a => prepCase v.c2.c ++ infVP vp a) (predV v) ;
+    ComplVV v vp = 
+      insertComplement (\\a => prepCase v.c2.c ++ infVP vp a) (predV v) ;
 
     ComplVS v s  = insertExtrapos (\\b => conjThat ++ s.s ! (v.m ! b)) (predV v) ;
     ComplVQ v q  = insertExtrapos (\\_ => q.s ! QIndir) (predV v) ;
@@ -18,9 +19,14 @@ incomplete concrete VerbRomance of Verb =
     ComplVA v ap = 
       insertComplement (\\a => ap.s ! AF a.g a.n) (predV v) ;
     ComplV2A v np ap = 
+      let af = case v.c3.isDir of {
+        True => AF np.a.g np.a.n ;  -- ... bleues
+        _ => AF Masc Sg             -- il les peint en bleu
+        }
+      in
       insertComplement 
-        (\\a => ap.s ! AF np.a.g np.a.n)
-        (insertObject v.c2 np (predV v)) ;
+        (\\a => v.c3.s ++ prepCase v.c3.c ++ ap.s ! af)
+          (insertObject v.c2 np (predV v)) ;
 
     UseComp comp = insertComplement comp.s (predV copula) ;
 

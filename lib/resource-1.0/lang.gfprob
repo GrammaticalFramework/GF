@@ -14,4 +14,4 @@
 --# prob UsePN    0.01
 --# prob yes_Phr  0.02
 --# prob no_Phr   0.02
---# prob TEmpty   0.1
+--# prob TEmpty   0.05
