@@ -1,5 +1,7 @@
 --1 The category system
 
+-- Some categories are inherited from [Common Common.html].
+
 abstract Cat = Common ** {
 
   cat
@@ -105,7 +107,6 @@ abstract Cat = Common ** {
 --2 Words of open classes
 
 -- These are constructed in [Lexicon Lexicon.html] and in additional lexicon modules.
-
     V ;     -- one-place verb                      e.g. "sleep" 
     V2 ;    -- two-place verb                      e.g. "love"
     V3 ;    -- three-place verb                    e.g. "show"
