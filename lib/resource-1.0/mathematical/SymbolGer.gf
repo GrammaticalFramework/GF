@@ -3,19 +3,22 @@ concrete SymbolGer of Symbol = CatGer ** open Prelude, ResGer in {
 lin
   SymbPN i = {s = \\c => i.s ; g = Neutr} ; --- c
   IntPN i  = {s = \\c => i.s ; g = Neutr} ; --- c
-{-
+  FloatPN i  = {s = \\c => i.s ; g = Neutr} ; --- c
+
   CNIntNP cn i = {
-    s = \\c => (cn.s ! Sg ! DIndef ! Nom ++ i.s) ;
-    a = agrP3 cn.g Sg
+    s = \\c => cn.s ! Weak ! Sg ! Nom ++ i.s ;
+    a = agrP3 Sg ;
+    isPron = False
     } ;
   CNSymbNP det cn xs = let g = cn.g in {
-    s = \\c => det.s ! cn.isMod ! g ++ cn.s ! det.n ! det.det ! caseNP c ++ xs.s ; 
-    a = agrP3 g det.n
+    s = \\c => det.s ! g ! c ++ cn.s !  adjfCase det.a c ! det.n ! c ++ xs.s ; 
+    a = agrP3 det.n ;
+    isPron = False
     } ;
--}
+
 lincat 
 
-  Symb, SymbList = SS ;
+  Symb, [Symb] = SS ;
 
 lin
 

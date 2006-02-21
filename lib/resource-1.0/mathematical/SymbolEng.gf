@@ -3,6 +3,7 @@ concrete SymbolEng of Symbol = CatEng ** open Prelude, ResEng in {
 lin
   SymbPN i = {s = \\c => i.s ; a = agrP3 Sg} ; --- c
   IntPN i  = {s = \\c => i.s ; a = agrP3 Sg} ; --- c
+  FloatPN i = {s = \\c => i.s ; a = agrP3 Sg} ; --- c
   CNIntNP cn i = {
     s = \\c => (cn.s ! Sg ! Nom ++ i.s) ;
     a = agrP3 Sg
@@ -14,7 +15,7 @@ lin
 
 lincat 
 
-  Symb, SymbList = SS ;
+  Symb, [Symb] = SS ;
 
 lin
 

@@ -11,8 +11,10 @@ concrete MathematicalFre of Mathematical =
   RelativeFre,
   ConjunctionFre,
   PhraseFre,
+  TextX,
+  IdiomFre,
   StructuralFre,
-
+  
   SymbolFre,
   PredicationFre - [predV3], ---- gf bug
 

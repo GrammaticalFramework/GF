@@ -12,6 +12,8 @@ concrete MathematicalEng of Mathematical =
   ConjunctionEng,
   PhraseEng,
   StructuralEng,
+  TextX,
+  IdiomEng,
 
   SymbolEng,
   PredicationEng,

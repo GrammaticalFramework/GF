@@ -20,6 +20,8 @@ abstract Mathematical =
   Relative,
   Conjunction,
   Phrase,
+  Text,
+  Idiom,
   Structural,
 
   Symbol,

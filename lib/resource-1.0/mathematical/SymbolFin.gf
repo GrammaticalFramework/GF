@@ -1,21 +1,24 @@
-concrete SymbolFin of Symbol = CatFin ** open Prelude, ResFin in {
+concrete SymbolFin of Symbol = CatFin ** open Prelude, NounFin, ResFin in {
 
 lin
   SymbPN i = {s = \\c => i.s} ; --- c
   IntPN i  = {s = \\c => i.s} ; --- c
-{-
+  FloatPN i  = {s = \\c => i.s} ; --- c
+
   CNIntNP cn i = {
-    s = \\c => (cn.s ! Sg ! DIndef ! Nom ++ i.s) ;
-    a = agrP3 cn.g Sg
+    s = \\c => cn.s ! NCase Sg (npform2case c) ++ i.s ;
+    a = agrP3 Sg ;
+    isPron = False
     } ;
-  CNSymbNP det cn xs = let g = cn.g in {
-    s = \\c => det.s ! cn.isMod ! g ++ cn.s ! det.n ! det.det ! caseNP c ++ xs.s ; 
-    a = agrP3 g det.n
+  CNSymbNP det cn xs = let detcn = NounFin.DetCN det cn in {
+    s = \\c => detcn.s ! c ++ xs.s ;
+    a = detcn.a ;
+    isPron = False
     } ;
--}
+
 lincat 
 
-  Symb, SymbList = SS ;
+  Symb, [Symb] = SS ;
 
 lin
 
