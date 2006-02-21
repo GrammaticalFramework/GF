@@ -13,6 +13,8 @@ Lang -> Question [style = "solid"];
 Lang -> Relative [style = "solid"];
 Lang -> Conjunction [style = "solid"];
 Lang -> Phrase [style = "solid"];
+Lang -> Text [style = "solid"];
+Lang -> Idiom [style = "solid"];
 Lang -> Structural [style = "solid"];
 Lang -> Lexicon [style = "solid"];
 
@@ -46,6 +48,12 @@ Conjunction -> Cat [style = "solid"];
 Phrase [style = "solid", shape = "ellipse", URL = "Phrase.gf"];
 Phrase -> Cat [style = "solid"];
 
+Text [style = "solid", shape = "ellipse", URL = "Phrase.gf"];
+Text -> Cat [style = "solid"];
+
+Idiom [style = "solid", shape = "ellipse", URL = "Phrase.gf"];
+Idiom -> Cat [style = "solid"];
+
 Structural [style = "solid", shape = "ellipse", URL = "Structural.gf"];
 Structural -> Cat [style = "solid"];
 
@@ -53,8 +61,8 @@ Lexicon [style = "solid", shape = "ellipse", URL = "Lexicon.gf"];
 Lexicon -> Cat [style = "solid"];
 
 Cat [style = "solid", shape = "ellipse", URL = "Cat.gf"];
-Cat -> Tense [style = "solid"];
+Cat -> Common [style = "solid"];
 
-Tense [style = "solid", shape = "ellipse", URL = "Tense.gf"];
+Common [style = "solid", shape = "ellipse", URL = "Tense.gf"];
 
 }

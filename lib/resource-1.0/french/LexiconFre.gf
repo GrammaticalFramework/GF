@@ -129,7 +129,7 @@ lin
   old_A = 
     prefA (compADeg (mkA "vieux" "vieille" "vieux" "vieillement")) ; ---- vieil
   open_V2 = ouvrir_V2 ;
-  paint_V2A = mkV2A (v2V peindre_V2) accusative ;
+  paint_V2A = mkV2A (v2V peindre_V2) accusative (mkPreposition "en") ;
   paper_N = regN "papier" masculine ;
   paris_PN = mkPN "Paris" masculine ;
   peace_N = regN "paix" feminine ;
