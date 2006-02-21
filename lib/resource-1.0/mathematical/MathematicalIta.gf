@@ -11,6 +11,8 @@ concrete MathematicalIta of Mathematical =
   RelativeIta,
   ConjunctionIta,
   PhraseIta,
+  TextX,
+  IdiomIta,
   StructuralIta,
 
   SymbolIta,

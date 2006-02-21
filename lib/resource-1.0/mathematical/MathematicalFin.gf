@@ -11,6 +11,8 @@ concrete MathematicalFin of Mathematical =
   RelativeFin,
   ConjunctionFin,
   PhraseFin,
+  TextX,
+  IdiomFin,
   StructuralFin,
 
   SymbolFin,

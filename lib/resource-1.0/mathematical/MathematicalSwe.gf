@@ -11,6 +11,9 @@ concrete MathematicalSwe of Mathematical =
   RelativeSwe,
   ConjunctionSwe,
   PhraseSwe,
+  TextX,
+  IdiomSwe,
+
   StructuralSwe,
 
   SymbolSwe,
