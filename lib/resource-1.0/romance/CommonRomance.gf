@@ -102,6 +102,7 @@ param
   VPForm =
      VPFinite TMood Anteriority
    | VPImperat
+   | VPGerund
    | VPInfinit Anteriority ;
 
 -- Agreement of adjectives, verb phrases, and relative pronouns.

@@ -19,7 +19,7 @@ abstract Noun = Cat ** {
 
 -- A noun phrase already formed can be modified by a Predeterminer.
 
-   PredetNP : Predet -> NP -> NP; -- only the man 
+    PredetNP : Predet -> NP -> NP; -- only the man 
 
 --2 Determiners
 

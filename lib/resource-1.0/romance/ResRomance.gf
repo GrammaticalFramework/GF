@@ -54,6 +54,7 @@ oper
       vfin  : TMood -> Agr -> Str = \tm,a -> verb.s ! VFin tm a.n a.p ;
       vpart : AAgr -> Str = \a -> verb.s ! VPart a.g a.n ;
       vinf  = verb.s ! VInfin ;
+      vger  = verb.s ! VGer ;
 
       typ = verb.vtyp ;
       aux = auxVerb typ ;
@@ -80,6 +81,7 @@ oper
       VPFinite t Simul => vf (vfin t)   (\_ -> []) ;
       VPFinite t Anter => vf (habet t)  vpart ; 
       VPImperat        => vf vimp       (\_ -> []) ;
+      VPGerund         => vf (\_ -> []) (\_ -> vger) ;
       VPInfinit Simul  => vf (\_ -> []) (\_ -> vinf) ;
       VPInfinit Anter  => vf (\_ -> []) (\a -> habere ++ vpart a)
       } ;
@@ -192,7 +194,7 @@ oper
         inf  = (vp.s ! VPInfinit Simul).inf ! (aagr agr.g agr.n) ;
         neg  = vp.neg ! Pos ; --- Neg not in API
         clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
-        obj  = clpr.p2 ++ vp.comp ! agr
+        obj  = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
       in
       clitInf (clpr.p1 ++ vp.clit2) inf ++ obj ;
 

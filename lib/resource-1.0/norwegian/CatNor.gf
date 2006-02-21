@@ -1,2 +1,2 @@
-concrete CatNor of Cat = TenseX ** CatScand with
+concrete CatNor of Cat = CommonX ** CatScand with
   (ResScand = ResNor) ;
