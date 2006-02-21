@@ -58,6 +58,8 @@ When will it be ready? Hopefully around February 2006.
 
 ---------- later history and status:
 
+21/2 Added modules Text and Idiom. Many bugs fixed, see TODO.
+
  7/2 Finnish added.
 
  3/2 Spanish added, except ordinal numerals. Much remains to do in Spa & Ita clitics.
