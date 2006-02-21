@@ -16,7 +16,7 @@ incomplete concrete RelativeRomance of Relative =
             RNoAg => ag ;
             RAg a => a ** {p = P3}
             } ;
-          cl = mkClause (rp.s ! False ! ag ! Nom) agr vp
+          cl = mkClause (rp.s ! False ! {g = ag.g ; n = ag.n} ! Nom) agr vp
         in
         cl.s ! t ! ant ! b ! m
       } ;

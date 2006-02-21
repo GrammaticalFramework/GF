@@ -1,5 +1,5 @@
 concrete IdiomIta of Idiom = CatIta ** 
-  open PhonoIta, MorphoIta, ParadigmsIta, Prelude in {
+  open PhonoIta, MorphoIta, BeschIta, ParadigmsIta, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -10,7 +10,7 @@ concrete IdiomIta of Idiom = CatIta **
           (insertComplement (\\_ => np.s ! Ton Nom) 
             (predV copula))) ;
     ImpersCl vp = mkClause [] (agrP3 Masc Sg) vp ;
-    GenericCl vp = mkClause "si" (agrP3 Masc Sg) vp ; ---- se ci fanno cose
+    GenericCl vp = mkClause "si" (agrP3 Masc Sg) vp ; ---- non se ci fanno cose
 
     ProgrVP vp = 
       insertComplement 
@@ -21,7 +21,7 @@ concrete IdiomIta of Idiom = CatIta **
            in
            (vp.s ! VPGerund).inf ! (aagr agr.g agr.n) ++ clpr.p1 ++ obj
         )
-        (predV (essereV (regV "stare"))) ;
+        (predV (essereV (verboV (stare_16 "stare")))) ;
 
 }
 
