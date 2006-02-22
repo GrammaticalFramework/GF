@@ -31,8 +31,8 @@ lin
   DestClick   = here7to_MAdv ;
   DepHere     = DemAdv here7from_Adv ;
   DestHere    = DemAdv here7to_Adv ;
-  DepNamed s  = MPrepNP from_Prep (DemNP (UsePN (SymbPN (MkSymb s)))) ;
-  DestNamed s = MPrepNP to_Prep (DemNP (UsePN (SymbPN (MkSymb s)))) ;
+---  DepNamed s  = MPrepNP from_Prep (DemNP (UsePN (SymbPN (MkSymb s)))) ;
+---  DestNamed s = MPrepNP to_Prep (DemNP (UsePN (SymbPN (MkSymb s)))) ;
 
   CCoord x y = {point = "(" ++ x.s ++ "," ++ y.s ++ ")" ; lock_Point = <>} ;
 

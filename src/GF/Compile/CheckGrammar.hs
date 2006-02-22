@@ -758,16 +758,16 @@ checkEqLType :: LTEnv -> Type -> Type -> Term -> Check Type
 checkEqLType env t u trm = do
   t' <- comp t 
   u' <- comp u
-  case alpha [] t' u' of
+  case t' == u' || alpha [] t' u' of
     True -> return t'
     -- forgive missing lock fields by only generating a warning.
     --- better: use a flag to forgive (AR 31/1/2006)
     _ -> case missingLock [] t' u' of
-      Just lo -> do
+      Ok lo -> do
         checkWarn $ "missing lock field" +++ unwords (map prt lo)
         return t'
-      _ -> raise ("type of" +++ prt trm +++ 
-                ": expected" +++ prt t' ++ ", inferred" +++ prt u')
+      Bad s -> raise (s ++ "type of" +++ prt trm +++ 
+                ": expected" ++++ prt t' ++++ "inferred" ++++ prt u')
  where
 
    -- t is a subtype of u 
@@ -818,9 +818,9 @@ checkEqLType env t u trm = do
                    not (any (\ (k,b) -> alpha g a b && l == k) ts)]
          (locks,others) = partition isLockLabel ls
        in case others of
-         _:_ -> Nothing
+         _:_ -> Bad $ "missing record fieds" +++ unwords (map prt others)
          _ -> return locks
-     _ -> Nothing
+     _ -> Bad ""
 
    sTypes = [typeStr, typeTok, typeString]
    comp = computeLType env
