@@ -287,6 +287,7 @@ computeLType gr t = do
     Q (IC "Predef") (IC "Float")        -> return ty ---- shouldn't be needed
 
     Q m c | elem c [cPredef,cPredefAbs] -> return ty
+    Q m c | elem c [zIdent "Int",zIdent "Float",zIdent "String"] -> return defLinType ----
 
     Q m ident -> checkIn ("module" +++ prt m) $ do
       ty' <- checkErr (lookupResDef gr m ident) 

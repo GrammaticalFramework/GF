@@ -1,4 +1,4 @@
-abstract Tram = {
+abstract Tram = PredefAbs ** {
 
 cat
   Dep ;    -- from here, from Angered

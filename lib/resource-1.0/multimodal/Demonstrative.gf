@@ -1,4 +1,4 @@
-abstract Demonstrative = Cat ** {
+abstract Demonstrative = Cat, PredefAbs ** {
 
 -- Naming convention: $M$ prepended to 'unimodal' names.
 -- Exceptions: lexical units, those without unimodal counterparts.

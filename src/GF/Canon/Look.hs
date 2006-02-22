@@ -30,6 +30,7 @@ import GF.Grammar.PrGrammar
 import GF.Canon.CMacros
 ----import Values
 import GF.Grammar.MMacros
+import GF.Grammar.Macros (zIdent)
 import qualified GF.Infra.Modules as M
 import qualified GF.Canon.CanonToGrammar as CG
 
@@ -50,7 +51,7 @@ lookupCncInfo gr f@(CIQ m c) = do
     _ -> prtBad "not concrete module" m
 
 lookupLin :: CanonGrammar -> CIdent -> Err Term
-lookupLin gr f = do
+lookupLin gr f = errIn "looking up linearization rule" $ do
   info <- lookupCncInfo gr f
   case info of
     CncFun _ _ t _ -> return t
@@ -58,7 +59,9 @@ lookupLin gr f = do
     AnyInd _ n -> lookupLin gr $ redirectIdent n f
 
 lookupLincat :: CanonGrammar -> CIdent -> Err CType
-lookupLincat gr f = do
+lookupLincat gr (CIQ _ c) | elem c [zIdent "String", zIdent "Int", zIdent "Float"] =
+  return defLinType --- ad hoc; not needed? cf. Grammar.Lookup.lookupLincat
+lookupLincat gr f = errIn "looking up linearization type" $ do
   info <- lookupCncInfo gr f
   case info of
     CncCat t _ _ -> return t
@@ -66,7 +69,7 @@ lookupLincat gr f = do
     _ -> prtBad "no lincat found for" f
 
 lookupPrintname :: CanonGrammar -> CIdent -> Err Term
-lookupPrintname gr f = do
+lookupPrintname gr f = errIn "looking up printname" $ do
   info <- lookupCncInfo gr f
   case info of
     CncFun _ _ _ t -> return t

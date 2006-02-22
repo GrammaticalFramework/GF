@@ -3,7 +3,7 @@
 -- *Note*. This module is not automatically included in the main
 -- grammar [Lang Lang.html].
 
-abstract Symbol = Cat ** {
+abstract Symbol = Cat, PredefAbs ** {
 
 --2 Noun phrases with symbols and numbers
 
