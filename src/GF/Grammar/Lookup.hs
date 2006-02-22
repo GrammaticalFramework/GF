@@ -34,7 +34,7 @@ import Data.List (nub)
 import Control.Monad
 
 lookupResDef :: SourceGrammar -> Ident -> Ident -> Err Term
-lookupResDef gr = look True where 
+lookupResDef gr m c = look True m c where 
   look isTop m c = do
     mi   <- lookupModule gr m
     case mi of

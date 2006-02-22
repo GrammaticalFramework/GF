@@ -5,6 +5,9 @@ test:
 langs:
 	echo "s ;; pm | wf langs.gfcm" | gf -src -nocf */Lang??*.gf english/LangEng.gf +RTS -M500M
 
+install:
+	cp -p */*.gfc */*.gfr ../compiled
+
 stat:
 	wc */*.gfc
 gfdoc:
