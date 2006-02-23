@@ -1,11 +1,9 @@
---# -path=.:../abstract:../../prelude:../romance
+--# -path=.:../italian:../common:../abstract:../../prelude:../romance
 
-concrete SwadeshIta of Swadesh = CatIta 
-  ** open StructuralIta, RulesIta, SyntaxIta, ParadigmsIta,
-          BasicIta, BeschIta, Prelude in {
+concrete SwadeshIta of Swadesh = CatIta
+  ** open PhonoIta, MorphoIta, LangIta, ParadigmsIta, BeschIta, Prelude in {
 
   lin
-
     -- Pronouns
 
     i_NP = i_Pron ;
@@ -21,14 +19,19 @@ concrete SwadeshIta of Swadesh = CatIta
 
     -- Determiners
 
-    this_Det = this_Det ;
-    that_Det = that_Det ;
-    all_Det = all_NDet ;
+    this_Det = DetSg (SgQuant this_Quant) NoOrd ;
+    that_Det = DetSg (SgQuant that_Quant) NoOrd ;
+    all_Det  = {
+      s = \\g,c => prepCase c ++ genForms ["tutti i"] ["tutte le"] ! g ;
+      n = Pl
+      } ;
     many_Det = many_Det ;
     some_Det = someSg_Det ;
-    few_Det = mkDeterminer Pl "pochi" "poche" ;
-    other_Det = mkDeterminer Pl "altri" "altre" ;
-
+    few_Det  = {s = \\g,c => prepCase c ++ genForms "pochi" "poche" ! g ; n = Pl} ;
+    other_Det = {
+      s = \\g,c => prepCase c ++ genForms "altri" "altre" ! g ;
+      n = Pl
+      } ;
 
     -- Adverbs
 
@@ -37,6 +40,7 @@ concrete SwadeshIta of Swadesh = CatIta
     where_IAdv = where_IAdv;
     when_IAdv = when_IAdv;
     how_IAdv = how_IAdv;
+    far_Adv = mkAdv "lontano" ;
 
     -- not : Adv ; -- ?
 
@@ -46,9 +50,9 @@ concrete SwadeshIta of Swadesh = CatIta
 
     -- Prepositions
 
-    at_Prep = justCase dative.p1 ;
-    in_Prep = StructuralIta.in_Prep ;
-    with_Prep = StructuralIta.with_Prep ;
+    at_Prep = dative ;
+    in_Prep = in_Prep ;
+    with_Prep = with_Prep ;
 
     -- Numerals
 
@@ -68,7 +72,6 @@ concrete SwadeshIta of Swadesh = CatIta
     dirty_A = dirty_A ;
     dry_A = regA "secco" ;
     dull_A = regA "noioso" ;
-    far_A = regA "lontano" ;
     full_A = regA "pieno" ;
     good_A = good_A ;
     green_A = green_A ;
@@ -186,61 +189,61 @@ concrete SwadeshIta of Swadesh = CatIta
 
     -- Verbs
 
-    bite_V = verboV (esplodere_51 "mordere") ;
+    bite_V = dirV2 (verboV (esplodere_51 "mordere")) ;
     blow_V = regV "soffiare" ;
-    breathe_V = regV "respirare" ;
+    breathe_V = dirV2 (regV "respirare") ;
     burn_V = regV "bruciare" ;
-    come_V = BasicIta.come_V ;
-    count_V = regV "contare" ;
-    cut_V = regV "tagliare" ;
-    die_V = BasicIta.die_V ;
+    come_V = come_V ;
+    count_V = dirV2 (regV "contare") ;
+    cut_V = dirV2 (regV "tagliare") ;
+    die_V = die_V ;
     dig_V = regV "scavare" ;
-    drink_V = drink_V2 ;
-    eat_V = regV "mangiare" ;
+    drink_V = dirV2 (drink_V2) ;
+    eat_V = dirV2 (regV "mangiare") ;
     fall_V = essereV (verboV (cadere_28 "cadere")) ;
-    fear_V = fear_VS ;
-    fight_V = regV "lottare" ;
+    fear_V = dirV2 (fear_VS) ;
+    fight_V = dirV2 (regV "lottare") ;
     float_V = regV "galleggiare" ;
     flow_V = verboV (finire_100 "fluire") ;
     fly_V = regV "volare" ;
     freeze_V = regV "gelare" ;
-    give_V = verboV (dare_15 "dare") ;
-    hear_V = hear_V2 ;
-    hit_V = regV "colpire" ;
-    hold_V = verboV (venire_110 "tenire") ;
-    hunt_V = regV "cacciare" ;
-    kill_V = verboV (ridere_74 "uccidere") ;
-    know_V = know_V2 ;
+    give_V = dirdirV3 (verboV (dare_15 "dare")) ;
+    hear_V = dirV2 (hear_V2) ;
+    hit_V = dirV2 (regV "colpire") ;
+    hold_V = dirV2 (verboV (venire_110 "tenire")) ;
+    hunt_V = dirV2 (regV "cacciare") ;
+    kill_V = dirV2 (verboV (ridere_74 "uccidere")) ;
+    know_V = dirV2 (know_V2) ;
     laugh_V = verboV (ridere_74 "ridere") ;
     lie_V = verboV (piacere_64 "giacere") ;
     live_V = live_V ;
     play_V = regV "giocare" ;
-    pull_V = regV "tirare" ;
-    push_V = verboV (cingere_31 "spingere") ;
-    rub_V = regV "strofinare" ;
+    pull_V = dirV2 (regV "tirare") ;
+    push_V = dirV2 (verboV (cingere_31 "spingere")) ;
+    rub_V = dirV2 (regV "strofinare") ;
     say_V = say_VS ;
-    scratch_V = regV "graffiare" ;
-    see_V = see_V2 ;
+    scratch_V = dirV2 (regV "graffiare") ;
+    see_V = dirV2 (see_V2) ;
     sew_V = verboV (cucire_103 "cucire") ;
     sing_V = regV "cantare" ;
     sit_V = verboV (sedere_84 "sedere") ;  --- refl?
     sleep_V = sleep_V ;
-    smell_V = verboV (sentire_99 "sentire") ;
+    smell_V = dirV2 (verboV (sentire_99 "sentire")) ;
     spit_V = regV "sputare" ;
-    split_V = verboV (ridere_74 "dividere") ;
-    squeeze_V = verboV (temere_20 "spremere") ;
-    stab_V = regV "pugnalare" ;
+    split_V = dirV2 (verboV (ridere_74 "dividere")) ;
+    squeeze_V = dirV2 (verboV (temere_20 "spremere")) ;
+    stab_V = dirV2 (regV "pugnalare") ;
     stand_V = verboV (stare_16 "stare") ;   ---- in piedi
-    suck_V = regV "succhiare" ;
+    suck_V = dirV2 (regV "succhiare") ;
     swell_V = regV "gonfiare" ;
     swim_V = regV "nuotare" ;
     think_V = regV "pensare" ;
-    throw_V = regV "gettare" ;
-    tie_V = regV "legare" ;
+    throw_V = dirV2 (regV "gettare") ;
+    tie_V = dirV2 (regV "legare") ;
     turn_V = regV "tornare" ;
     vomit_V = regV "vomitare" ;
     walk_V = regV "camminare" ;
-    wash_V = regV "lavare" ;
-    wipe_V = regV "asciugare" ;
+    wash_V = dirV2 (regV "lavare") ;
+    wipe_V = dirV2 (regV "asciugare") ;
 
 }

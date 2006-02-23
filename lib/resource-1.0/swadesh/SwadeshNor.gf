@@ -1,8 +1,7 @@
---# -path=.:../abstract:../scandinavian:../../prelude
+--# -path=.:../norwegian:../common:../abstract:../scandinavian:../../prelude
 
-concrete SwadeshNor of Swadesh = CatNor 
-  ** open ResourceNor, SyntaxNor, ParadigmsNor, VerbsNor, 
-          BasicNor, Prelude in {
+concrete SwadeshNor of Swadesh = CatNor
+  ** open MorphoNor, LangNor, ParadigmsNor, IrregNor, Prelude in {
 
   lin
 
@@ -21,14 +20,13 @@ concrete SwadeshNor of Swadesh = CatNor
 
     -- Determiners
 
-    this_Det = this_Det ;
-    that_Det = that_Det ;
-    all_Det = all_NDet ;
+    this_Det = DetSg (SgQuant this_Quant) NoOrd ;
+    that_Det = DetSg (SgQuant that_Quant) NoOrd ;
+    all_Det  = {s = \\_,_ => "alle" ; n = Pl ; det = DDef Indef} ;
     many_Det = many_Det ;
     some_Det = someSg_Det ;
-    few_Det = mkDeterminerPl "få" IndefP ;
-    other_Det = mkDeterminerPl "andre" IndefP ;
-
+    few_Det  = {s = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
+    other_Det = {s = \\_,_ => "andre" ; n = Pl ; det = DDef Indef} ;
 
     -- Adverbs
 
@@ -68,20 +66,19 @@ concrete SwadeshNor of Swadesh = CatNor
     dirty_A = dirty_A ;
     dry_A = mk2A "tørr" "tørt" ;
     dull_A = regA "sløv" ;
-    far_A = regA "fjern" ;
     full_A = regA "full" ;
     good_A = good_A ;
     green_A = green_A ;
-    heavy_A = irregA "tung" "tyngre" "tyngst" ;
+    heavy_A = irregADeg "tung" "tyngre" "tyngst" ;
     left_A = mkA "venstre" "venstre" "venstre" ;
     long_A = long_A ;
     narrow_A = narrow_A ;
-    near_A = mkA "nære" "nære" "nære" "nærmere" "nærmest" ;
+    near_A = mkADeg "nære" "nære" "nære" "nærmere" "nærmest" ;
     new_A = new_A ;
     old_A = old_A ;
     red_A = red_A ;
     right_A = mkA "høyre" "høyre" "høyre" ;
-    rotten_A = mk3A "råtten" "råttent" "råtne" ;
+    rotten_A = mk3ADeg "råtten" "råttent" "råtne" ;
     round_A = regA "rund" ;
     sharp_A = mk2A "kvass" "kvast" ;
     short_A = short_A ;
@@ -100,7 +97,7 @@ concrete SwadeshNor of Swadesh = CatNor
     -- Nouns
 
     animal_N = mk2N "dyr" "dyret" ;
-    ashes_N = mk2N "aske" "aska" ; 
+    ashes_N = mk2N "aske" "aska" ;
     back_N = mk2N "rygg" "ryggen" ;
     bark_N = mk2N "bark" "barken" ;
     belly_N = mk2N "mage" "magen" ;
@@ -124,13 +121,13 @@ concrete SwadeshNor of Swadesh = CatNor
     fingernail_N = mk2N "negl" "neglen" ;
     fire_N = mk2N "ild" "ilden" ;
     fish_N = fish_N ;
-    flower_N = mk2N "blomst" "blomsten" ; 
-    fog_N = mk2N "tåke" "tåka" ; 
+    flower_N = mk2N "blomst" "blomsten" ;
+    fog_N = mk2N "tåke" "tåka" ;
     foot_N = mk2N "fot" "føtter" ;
     forest_N = mk2N "skog" "skogen" ;
     fruit_N = fruit_N ;
     grass_N = mk2N "gras" "graset" ;
-    guts_N = mk2N "tarm" "tarmen" ; ---- involler 
+    guts_N = mk2N "tarm" "tarmen" ; ---- involler
     hair_N = mk2N "hår" "håret" ;
     hand_N = mk2N "hånd" "hånden" ;
 
@@ -155,7 +152,7 @@ concrete SwadeshNor of Swadesh = CatNor
     name_N = mk2N "navn" "navnet" ;
     neck_N = mk2N "nakke" "nakken" ;
     night_N = mkN "natt" "natta" "netter" "nettene" ;
-    nose_N = mk2N "nese" "nesen" ; 
+    nose_N = mk2N "nese" "nesen" ;
     person_N = mk2N "person" "personen" ;
     rain_N = mk2N "regn" "regnet" ;
     river_N = river_N ;
@@ -167,7 +164,7 @@ concrete SwadeshNor of Swadesh = CatNor
     sea_N = sea_N ;
     seed_N = mk2N "frø" "frøet" ;
     skin_N = mk2N "skinn" "skinnet" ;
-    sky_N = mkN "himmel" "himmelen" "himler" "himlene" ; 
+    sky_N = mkN "himmel" "himmelen" "himler" "himlene" ;
     smoke_N = mk2N "røyk" "røyken" ;
     snake_N = snake_N ;
     snow_N = mk2N "snø" "snøen" ;
@@ -176,7 +173,7 @@ concrete SwadeshNor of Swadesh = CatNor
     stone_N = stone_N ;
     sun_N = sun_N ;
     tail_N = mk2N "hale" "halen" ;
-    tongue_N = mk2N "tunge" "tunga" ; 
+    tongue_N = mk2N "tunge" "tunga" ;
     tooth_N = mkN "tann" "tanna" "tenner" "tennene" ;
     tree_N = tree_N ;
     water_N = water_N ;
@@ -189,61 +186,61 @@ concrete SwadeshNor of Swadesh = CatNor
 
     -- Verbs
 
-    bite_V = VerbsNor.bite_V ;
+    bite_V = dirV2 (IrregNor.bite_V) ;
     blow_V = mk2V "blåse" "blåste" ;
-    breathe_V = regV "puste" ;
+    breathe_V = dirV2 (regV "puste") ;
     burn_V = brenne_V ;
     come_V = komme_V ;
-    count_V = regV "regne" ;
-    cut_V = skjære_V ;
+    count_V = dirV2 (regV "regne") ;
+    cut_V = dirV2 (skjære_V) ;
     die_V = dø_V ;
     dig_V = mk2V "grave" "gravde" ;
-    drink_V = drikke_V ;
-    eat_V = mk2V "spise" "spiste" ; ---- ete
+    drink_V = dirV2 (drikke_V) ;
+    eat_V = dirV2 (mk2V "spise" "spiste") ;
     fall_V = falle_V ;
-    fear_V = regV "frykte" ;
-    fight_V = slåss_V ;
+    fear_V = dirV2 (regV "frykte") ;
+    fight_V = dirV2 (slåss_V) ;
     float_V = flyte_V ;
     flow_V = renne_V ;
     fly_V = fly_V ;
     freeze_V = fryse_V ;
-    give_V = gi_V ;
-    hear_V = mk2V "høre" "hørde" ;
-    hit_V = slå_V;
-    hold_V = holde_V ;
-    hunt_V = regV "jakte" ;
-    kill_V = mk2V "drepe" "drepte" ;
-    know_V = vite_V ;
+    give_V = dirdirV3 gi_V ;
+    hear_V = dirV2 (mk2V "høre" "hørde") ;
+    hit_V = dirV2 (slå_V) ;
+    hold_V = dirV2 (holde_V) ;
+    hunt_V = dirV2 (regV "jakte") ;
+    kill_V = dirV2 (mk2V "drepe" "drepte") ;
+    know_V = dirV2 (vite_V) ;
     laugh_V = mkV "le" "ler" "les" "lo" "ledd" "le" ;
     lie_V = ligge_V ;
     live_V = mk2V "leve" "levde" ;
     play_V = mk2V "leke" "lekte" ;
-    pull_V = dra_V ;
-    push_V = irregV "skyve" "skjøv" "skjøvet" ;
-    rub_V = gni_V ;
+    pull_V = dirV2 (dra_V) ;
+    push_V = dirV2 (irregV "skyve" "skjøv" "skjøvet") ;
+    rub_V = dirV2 (gni_V) ;
     say_V = si_V ;
-    scratch_V = regV "klø" ;
-    see_V = se_V ;
+    scratch_V = dirV2 (regV "klø") ;
+    see_V = dirV2 (se_V) ;
     sew_V = mk2V "sy" "sydde" ;
     sing_V = synge_V ;
     sit_V = sitte_V ;
     sleep_V = sove_V ;
-    smell_V = regV "lukte" ;
+    smell_V = dirV2 (regV "lukte") ;
     spit_V = regV "spytte" ;
-    split_V = mk2V "kløyve" "kløyvde" ;
-    squeeze_V = mk2V "klemme" "klemte" ;
-    stab_V = stikke_V ;
+    split_V = dirV2 (mk2V "kløyve" "kløyvde") ;
+    squeeze_V = dirV2 (mk2V "klemme" "klemte") ;
+    stab_V = dirV2 (stikke_V) ;
     stand_V = stå_V ;
-    suck_V = suge_V ;
+    suck_V = dirV2 (suge_V) ;
     swell_V = partV (regV "hovne") "opp" ;
     swim_V = regV "simme" ;
     think_V = mk2V "tenke" "tenkte" ;
-    throw_V = regV "kaste" ;
-    tie_V = regV "knytte" ;
+    throw_V = dirV2 (regV "kaste") ;
+    tie_V = dirV2 (regV "knytte") ;
     turn_V = mk2V "vende" "vendte" ;
     vomit_V = partV (regV "kaste") "opp" ;
     walk_V = gå_V ;
-    wash_V = regV "vaske" ;
-    wipe_V = regV "tørke" ;
+    wash_V = dirV2 (regV "vaske") ;
+    wipe_V = dirV2 (regV "tørke") ;
 
 }

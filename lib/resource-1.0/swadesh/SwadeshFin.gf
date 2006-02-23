@@ -1,8 +1,7 @@
---# -path=.:../abstract:../../prelude
+--# -path=.:../finnish:../common:../abstract:../../prelude
 
-concrete SwadeshFin of Swadesh = CatFin 
-  ** open ResourceFin, SyntaxFin, ParadigmsFin, 
-          BasicFin, Prelude in {
+concrete SwadeshFin of Swadesh = CatFin
+  ** open MorphoFin, LangFin, ParadigmsFin, Prelude in {
 
   flags optimize=values ;
 
@@ -23,14 +22,21 @@ concrete SwadeshFin of Swadesh = CatFin
 
     -- Determiners
 
-    this_Det = this_Det ;
-    that_Det = that_Det ;
-    all_Det = ResourceFin.all_NDet ;
+    this_Det = DetSg (SgQuant this_Quant) NoOrd ;
+    that_Det = DetSg (SgQuant that_Quant) NoOrd ;
+    all_Det = mkDet Pl {s = \\nf => 
+      let
+        kaiket = (nhn (sKorpi "kaikki" "kaiken" "kaikkena")).s
+      in
+      case nf of {
+        NCase Pl Nom => "kaikki" ;
+        _ => kaiket ! nf
+        }
+      } ;
     many_Det = many_Det ;
     some_Det = someSg_Det ;
-    few_Det = mkDeterminer Pl (\\c => (nhn (sTalo "muutama")).s ! NCase Pl c) ;
-    other_Det = mkDeterminer Pl  (\\c => (nhn (sPuu "muu")).s ! NCase Pl c) ;
-
+    few_Det  = mkDet Sg (regN "harva") ;
+    other_Det = mkDet Sg (regN "muu") ;
 
     -- Adverbs
 
@@ -39,6 +45,7 @@ concrete SwadeshFin of Swadesh = CatFin
     where_IAdv = where_IAdv;
     when_IAdv = when_IAdv;
     how_IAdv = how_IAdv;
+    far_Adv = mkAdv "kaukana" ;
 
     -- not : Adv ; -- ?
 
@@ -48,9 +55,9 @@ concrete SwadeshFin of Swadesh = CatFin
 
     -- Prepositions
 
-    at_Prep = prepCase Adess ;
-    in_Prep = prepCase Iness ;
-    with_Prep = prepPostpGen "kanssa" ;
+    at_Prep = casePrep adessive ;
+    in_Prep = casePrep inessive ;
+    with_Prep = postGenPrep "kanssa" ;
 
     -- Numerals
 
@@ -68,10 +75,9 @@ concrete SwadeshFin of Swadesh = CatFin
     cold_A = cold_A ;
     correct_A = regA "oikea" ;
     dirty_A = dirty_A ;
-    dry_A = mkA (regN "kuiva") "kuivempi" "kuivin" ;
-    dull_A = mkA (regN "tyls‰") "tylsempi" "tylsin" ;
-    far_A = regA "kaukainen" ;
-    full_A = mkA (reg3N "t‰ysi" "t‰yden" "t‰ysi‰") "t‰ydempi" "t‰ysin" ;
+    dry_A = mkADeg (regN "kuiva") "kuivempi" "kuivin" ;
+    dull_A = mkADeg (regN "tyls‰") "tylsempi" "tylsin" ;
+    full_A = mkADeg (reg3N "t‰ysi" "t‰yden" "t‰ysi‰") "t‰ydempi" "t‰ysin" ;
     good_A = good_A ;
     green_A = green_A ;
     heavy_A = regA "raskas" ;
@@ -87,11 +93,11 @@ concrete SwadeshFin of Swadesh = CatFin
     short_A = short_A ;
     small_A = small_A ;
     smooth_A = regA "sile‰" ;
-    straight_A = mkA (regN "suora") "suorempi" "suorin" ;
+    straight_A = mkADeg (regN "suora") "suorempi" "suorin" ;
     thick_A = thick_A ;
     thin_A = thin_A ;
     warm_A = warm_A ;
-    wet_A = mkA (regN "m‰rk‰") "m‰rempi" "m‰rin" ;
+    wet_A = mkADeg (regN "m‰rk‰") "m‰rempi" "m‰rin" ;
     white_A = white_A ;
     wide_A = regA "leve‰" ;
     yellow_A = yellow_A ;
@@ -188,63 +194,67 @@ concrete SwadeshFin of Swadesh = CatFin
 
     -- Verbs
 
-    bite_V = regV "purra" ;
+    bite_V = dirV2 (regV "purra") ;
     blow_V = regV "puhaltaa" ;
-    breathe_V = regV "hengitt‰‰" ;
+    breathe_V = dirV2 (regV "hengitt‰‰") ;
     burn_V = regV "palaa" ;
-    come_V = BasicFin.come_V ;
-    count_V = regV "laskea" ;
-    cut_V = reg3V "leikata" "leikkaan" "leikkasi" ;
+    come_V = come_V ;
+    count_V = dirV2 (regV "laskea") ;
+    cut_V = dirV2 (reg2V "leikata" "leikkasi") ;
     die_V = regV "kuolla";
     dig_V = regV "kaivaa" ;
-    drink_V = UseV2 drink_V2 ;
-    eat_V = UseV2 eat_V2 ;
+    drink_V = dirV2 ( drink_V2) ;
+    eat_V = dirV2 ( eat_V2) ;
     fall_V = reg3V "pudota" "putoan" "putosi" ;
-    fear_V = reg3V "pel‰t‰" "pelk‰‰n" "pelk‰si" ;
-    fight_V = regV "taistella" ;
+    fear_V = dirV2 (reg3V "pel‰t‰" "pelk‰‰n" "pelk‰si") ;
+    fight_V = dirV2 (regV "taistella") ;
     float_V = regV "kellua" ;
     flow_V = reg3V "virrata" "virtaan" "virtasi" ;
     fly_V = regV "lent‰‰" ;
     freeze_V = regV "j‰‰ty‰" ;
-    give_V = regV "antaa" ;
-    hear_V = UseV2 hear_V2 ;
-    hit_V = regV "lyˆd‰" ;
-    hold_V = regV "pit‰‰" ;
-    hunt_V = regV "mets‰st‰‰" ;
-    kill_V = regV "tappaa" ;
-    know_V =reg2V "tiet‰‰" "tiesin" ;
+    give_V = dirdirV3 (regV "antaa") ;
+    hear_V = dirV2 ( hear_V2) ;
+    hit_V = dirV2 (regV "lyˆd‰") ;
+    hold_V = dirV2 (regV "pit‰‰") ;
+    hunt_V = dirV2 (regV "mets‰st‰‰") ;
+    kill_V = dirV2 (regV "tappaa") ;
+    know_V = dirV2 (reg2V "tuntea" "tunsin") ;
     laugh_V = reg3V "nauraa" "nauran" "nauroi" ;
     lie_V = reg3V "maata" "makaan" "makasi" ;
     live_V = live_V ;
-    play_V = UseV2 play_V2 ;
-    pull_V = regV "vet‰‰" ;
-    push_V = regV "tyˆnt‰‰" ;
-    rub_V = regV "hieroa" ;
+    play_V =  play_V2 ;
+    pull_V = dirV2 (regV "vet‰‰") ;
+    push_V = dirV2 (regV "tyˆnt‰‰") ;
+    rub_V = dirV2 (regV "hieroa") ;
     say_V = regV "sanoa" ;
-    scratch_V = regV "raapia" ;
-    see_V = UseV2 see_V2 ;
+    scratch_V = dirV2 (regV "raapia") ;
+    see_V = ( see_V2) ;
     sew_V = regV "kylv‰‰" ;
     sing_V = regV "laulaa" ;
     sit_V = regV "istua" ;
     sleep_V = sleep_V ;
-    smell_V = reg2V "haistaa" "haistoi" ;
+    smell_V = dirV2 (reg2V "haistaa" "haistoi") ;
     spit_V = regV "sylke‰" ;
-    split_V = reg2V "halkaista" "halkaisi" ;
-    squeeze_V = regV "puristaa" ;
-    stab_V = regV "pist‰‰" ;
+    split_V = dirV2 (reg2V "halkaista" "halkaisi") ;
+    squeeze_V = dirV2 (regV "puristaa") ;
+    stab_V = dirV2 (regV "pist‰‰") ;
     stand_V = mkV "seist‰" "seisoo" "seison" "seisovat" "seisk‰‰" "seist‰‰n"
       "seisoi" "seisoin" "seisoisi" "seissyt" "seisty" "seistyn" ; --- *seisoiv‰t
-    suck_V = regV "ime‰" ;
+    suck_V = dirV2 (regV "ime‰") ;
     swell_V = mkV "turvota" "turpoaa" "turpoan" "turpoavat" "turvotkaa" "turvotaan"
       "turposi" "turposin" "turpoaisi" "turvonnut" "turvottu" "turvotun" ;
     swim_V = reg3V "uida" "uin" "ui" ;
     think_V = reg3V "ajatella" "ajattelen" "ajatteli" ;
-    throw_V = regV "heitt‰‰" ;
-    tie_V = regV "sitoa" ;
+    throw_V = dirV2 (regV "heitt‰‰") ;
+    tie_V = dirV2 (regV "sitoa") ;
     turn_V = regV "k‰‰nty‰" ;
     vomit_V = regV "oksentaa" ;
     walk_V = walk_V ;
-    wash_V = regV "pest‰" ;
-    wipe_V = regV "pyyhki‰" ;
+    wash_V = dirV2 (regV "pest‰") ;
+    wipe_V = dirV2 (regV "pyyhki‰") ;
+
+oper 
+  regA = regADeg ; ----
+
 
 }
