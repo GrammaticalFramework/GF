@@ -4,7 +4,13 @@ mkV2 file = do
   ls <- readFile file >>= return . lines
   mapM_ (putStrLn . mkOne) ls
 
-mkOne li = case words li of
+--mkOne = mkOneV2
+
+mkOne = mkOneQuote
+
+mkOneQuote li = if elem '"' li then "-- " ++ li else li
+
+mkOneV2 li = case words li of
   v : e : ws | elem v v2s -> 
     "    " ++ unwords (v : e : "dirV2" : ["(" ++ unwords (init ws) ++ ") ;"])
   _ -> li
