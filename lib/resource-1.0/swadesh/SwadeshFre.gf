@@ -1,8 +1,7 @@
---# -path=.:../abstract:../../prelude:../romance
+--# -path=.:../french:../common:../abstract:../../prelude:../romance
 
-concrete SwadeshFre of Swadesh = CatFre 
-  ** open StructuralFre, RulesFre, SyntaxFre, ParadigmsFre, VerbsFre, 
-          BasicFre, Prelude in {
+concrete SwadeshFre of Swadesh = CatFre
+  ** open PhonoFre, MorphoFre, LangFre, ParadigmsFre, IrregFre, Prelude in {
 
   lin
 
@@ -21,14 +20,19 @@ concrete SwadeshFre of Swadesh = CatFre
 
     -- Determiners
 
-    this_Det = this_Det ;
-    that_Det = that_Det ;
-    all_Det = all_NDet ;
+    this_Det = DetSg (SgQuant this_Quant) NoOrd ;
+    that_Det = DetSg (SgQuant that_Quant) NoOrd ;
+    all_Det  = {
+      s = \\g,c => prepCase c ++ genForms "tous" "toutes" ! g ++ "les" ;
+      n = Pl
+      } ;
     many_Det = many_Det ;
     some_Det = someSg_Det ;
-    few_Det = mkDeterminer1 Pl ("peu" ++ elisDe) ;
-    other_Det = mkDeterminer1 Pl ["d'autres"] ;
-
+    few_Det  = {s = \\g,c => prepCase c ++ "peu" ++ elisDe ; n = Pl} ;
+    other_Det = {
+      s = \\g,c => prepCase c ++ "d'autres" ;   -- de d'autres
+      n = Pl
+      } ;
 
     -- Adverbs
 
@@ -37,6 +41,7 @@ concrete SwadeshFre of Swadesh = CatFre
     where_IAdv = where_IAdv;
     when_IAdv = when_IAdv;
     how_IAdv = how_IAdv;
+    far_Adv = mkAdv "loin" ;
 
     -- not : Adv ; -- ?
 
@@ -46,9 +51,9 @@ concrete SwadeshFre of Swadesh = CatFre
 
     -- Prepositions
 
-    at_Prep = justCase dative.p1 ;
-    in_Prep = StructuralFre.in_Prep ;
-    with_Prep = StructuralFre.with_Prep ;
+    at_Prep = dative ;
+    in_Prep = in_Prep ;
+    with_Prep = with_Prep ;
 
     -- Numerals
 
@@ -66,9 +71,8 @@ concrete SwadeshFre of Swadesh = CatFre
     cold_A = cold_A ;
     correct_A = regA "correct" ;
     dirty_A = dirty_A ;
-    dry_A = compA (mkA "sec" "sèche" "secs" "sèches") ;
+    dry_A = (mkA "sec" "sèche" "secs" "sèches") ;
     dull_A = regA "émoussé" ;
-    far_A = regA "lointain" ;
     full_A = regA "plein" ;
     good_A = good_A ;
     green_A = green_A ;
@@ -186,61 +190,61 @@ concrete SwadeshFre of Swadesh = CatFre
 
     -- Verbs
 
-    bite_V = UseV2 mordre_V2 ;
+    bite_V = ( mordre_V2) ;
     blow_V = regV "souffler" ;
-    breathe_V = regV "respirer" ;
+    breathe_V = dirV2 (regV "respirer") ;
     burn_V = regV "brûler" ;
     come_V = venir_V ;
-    count_V = regV "conter" ;
-    cut_V = regV "tailler" ;
+    count_V = dirV2 (regV "conter") ;
+    cut_V = dirV2 (regV "tailler") ;
     die_V = mourir_V ;
     dig_V = regV "creuser" ;
-    drink_V = UseV2 boire_V2 ;
-    eat_V = regV "manger" ;
+    drink_V = ( boire_V2) ;
+    eat_V = dirV2 (regV "manger") ;
     fall_V = regV "tomber" ;
-    fear_V = UseV2 craindre_V2 ;
-    fight_V = regV "lutter" ;
+    fear_V = ( craindre_V2) ;
+    fight_V = dirV2 (regV "lutter") ;
     float_V = regV "flotter" ;
     flow_V = regV "couler" ;
     fly_V = regV "voler" ;
     freeze_V = reg3V "geler" "gèle" "gèlera" ;
-    give_V = regV "donner" ;
-    hear_V = UseV2 entendre_V2 ;
-    hit_V = regV "frapper" ;
-    hold_V = UseV2 tenir_V2 ;
-    hunt_V = regV "chasser" ;
-    kill_V = regV "tuer" ;
-    know_V = UseV2 savoir_V2 ; --- connaître
-    laugh_V = UseV2 rire_V2 ;
-    lie_V = UseV2 étendre_V2 ; ---- reflexive
-    live_V = UseV2 vivre_V2 ;
+    give_V = dirdirV3 (regV "donner") ;
+    hear_V = ( entendre_V2) ;
+    hit_V = dirV2 (regV "frapper") ;
+    hold_V = ( tenir_V2) ;
+    hunt_V = dirV2 (regV "chasser") ;
+    kill_V = dirV2 (regV "tuer") ;
+    know_V = ( connaître_V2) ;
+    laugh_V =  rire_V2 ;
+    lie_V = reflV étendre_V2 ;
+    live_V = vivre_V2 ;
     play_V = regV "jouer" ;
-    pull_V = regV "tirer" ;
-    push_V = regV "pousser" ;
-    rub_V = regV "frotter" ;
-    say_V = UseV2 dire_V2 ;
-    scratch_V = regV "gratter" ;
-    see_V = UseV2 voir_V2 ;
-    sew_V = UseV2 coudre_V2 ;
+    pull_V = dirV2 (regV "tirer") ;
+    push_V = dirV2 (regV "pousser") ;
+    rub_V = dirV2 (regV "frotter") ;
+    say_V = dire_V2 ;
+    scratch_V = dirV2 (regV "gratter") ;
+    see_V = ( voir_V2) ;
+    sew_V = coudre_V2 ;
     sing_V = regV "chanter" ;
-    sit_V = UseV2 asseoir_V2 ; --- refl
-    sleep_V = UseV2 dormir_V2 ;
-    smell_V = UseV2 sentir_V2 ;
+    sit_V = reflV asseoir_V2 ;
+    sleep_V = dormir_V2 ;
+    smell_V = ( sentir_V2) ;
     spit_V = regV "cracher" ;
-    split_V = UseV2 fendre_V2 ;
-    squeeze_V = regV "serrer" ;
-    stab_V = regV "poignarder" ;
-    stand_V = reg3V "lever" "lève" "lèvera" ; ---- refl ----
-    suck_V = regV "sucer" ;
+    split_V = ( fendre_V2) ;
+    squeeze_V = dirV2 (regV "serrer") ;
+    stab_V = dirV2 (regV "poignarder") ;
+    stand_V = reflV (reg3V "lever" "lève" "lèvera") ;
+    suck_V = dirV2 (regV "sucer") ;
     swell_V = regV "gonfler" ;
     swim_V = regV "nager" ;
     think_V = regV "penser" ;
-    throw_V = regV "jeter" ;
-    tie_V = regV "lier" ;
+    throw_V = dirV2 (regV "jeter") ;
+    tie_V = dirV2 (regV "lier") ;
     turn_V = regV "tourner" ;
     vomit_V = regV "vomir" ;
     walk_V = regV "marcher" ;
-    wash_V = regV "laver" ;
-    wipe_V = regV "essuyer" ;
+    wash_V = dirV2 (regV "laver") ;
+    wipe_V = dirV2 (regV "essuyer") ;
 
 }

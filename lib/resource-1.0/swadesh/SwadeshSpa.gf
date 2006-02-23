@@ -1,8 +1,7 @@
---# -path=.:../abstract:../../prelude:../romance
+--# -path=.:../spanish:../common:../abstract:../../prelude:../romance
 
-concrete SwadeshSpa of Swadesh = CatSpa 
-  ** open StructuralSpa, RulesSpa, SyntaxSpa, ParadigmsSpa,
-          BasicSpa, BeschSpa, Prelude in {
+concrete SwadeshSpa of Swadesh = CatSpa
+  ** open PhonoSpa, MorphoSpa, LangSpa, ParadigmsSpa, BeschSpa, Prelude in {
 
 -- words contributed by Ana Bove, May 2005
 
@@ -23,14 +22,19 @@ concrete SwadeshSpa of Swadesh = CatSpa
 
     -- Determiners
 
-    this_Det = this_Det ;
-    that_Det = that_Det ;
-    all_Det = all_NDet ;
+    this_Det = DetSg (SgQuant this_Quant) NoOrd ;
+    that_Det = DetSg (SgQuant that_Quant) NoOrd ;
+    all_Det  = {
+      s = \\g,c => prepCase c ++ genForms ["todos los"] ["todas las"] ! g ;
+      n = Pl
+      } ;
     many_Det = many_Det ;
     some_Det = someSg_Det ;
-    few_Det = mkDeterminer Pl "pocos" "pocas" ;
-    other_Det = mkDeterminer Pl "otros" "otras" ;
-
+    few_Det  = {s = \\g,c => prepCase c ++ genForms "pocos" "pocas" ! g ; n = Pl} ;
+    other_Det = {
+      s = \\g,c => prepCase c ++ genForms "otros" "otras" ! g ;
+      n = Pl
+      } ;
 
     -- Adverbs
 
@@ -39,6 +43,7 @@ concrete SwadeshSpa of Swadesh = CatSpa
     where_IAdv = where_IAdv;
     when_IAdv = when_IAdv;
     how_IAdv = how_IAdv;
+    far_Adv = mkAdv "lejos" ; ----?
 
     -- not : Adv ; -- ?
 
@@ -48,9 +53,9 @@ concrete SwadeshSpa of Swadesh = CatSpa
 
     -- Prepositions
 
-    at_Prep = justCase dative.p1 ;
-    in_Prep = StructuralSpa.in_Prep ;
-    with_Prep = StructuralSpa.with_Prep ;
+    at_Prep = dative ;
+    in_Prep = in_Prep ;
+    with_Prep = with_Prep ;
 
     -- Numerals
 
@@ -71,7 +76,6 @@ concrete SwadeshSpa of Swadesh = CatSpa
      dirty_A = dirty_A ;
      dry_A = regA "seco" ;
      dull_A = regA "desafilado" ;
-     far_A = regA "lejos" ; ----?
      full_A = regA "lleno" ;
      good_A = good_A ;
      green_A = green_A ;
@@ -189,60 +193,61 @@ concrete SwadeshSpa of Swadesh = CatSpa
 
      -- Verbs
 
-     bite_V = verboV (morder_50b "morder") ;
+    bite_V = dirV2 (verboV (morder_50b "morder")) ;
      blow_V = regV "soplar" ;
-     breathe_V = regV "respirar" ;
+    breathe_V = dirV2 (regV "respirar") ;
      burn_V = regV "quemar" ;
-     come_V = BasicSpa.come_V ;
-     count_V = verboV (contar_38b "contar") ;
-     cut_V = regV "cortar" ;
-     die_V = BasicSpa.die_V ;
+     come_V = come_V ;
+    count_V = dirV2 (verboV (contar_38b "contar")) ;
+    cut_V = dirV2 (regV "cortar") ;
+     die_V = die_V ;
      dig_V = regV "escarbar" ;
-     drink_V = regV "tomar" ;
-     eat_V = regV "comer" ;
+    drink_V = dirV2 (regV "tomar") ;
+    eat_V = dirV2 (regV "comer") ;
      fall_V = verboV (caer_20 "caer") ;
-     fear_V = fear_VS ;
-     fight_V = regV "pelear" ;
+    fear_V = dirV2 (fear_VS) ;
+    fight_V = dirV2 (regV "pelear") ;
      float_V = regV "flotar" ;
-     flow_V = verboV (influir_45 "fluir") ;		-- circular
+     flow_V = verboV (influir_45 "fluir") ;             -- circular
      fly_V = regV "volar" ;
      freeze_V = regV "congelar" ;
-     give_V = verboV (dar_27 "dar") ;
-     hear_V = hear_V2 ;
-     hit_V = regV "golpear" ;		-- pegar
-     hold_V = verboV (tener_4 "tener") ;	-- agarrar
-     hunt_V = regV "cazar" ;
-     kill_V = regV "matar" ;
-     know_V = know_V2 ;
-     laugh_V = regV "reir" ; ----V reír_67 
-     lie_V = regV "mentir" ; --  "acostarse"
+     give_V = dirdirV3 (verboV (dar_27 "dar")) ;
+    hear_V = dirV2 (hear_V2) ;
+    hit_V = dirV2 (regV "golpear") ;
+    hold_V = dirV2 (verboV (tener_4 "tener")) ; 
+    hunt_V = dirV2 (regV "cazar") ;
+    kill_V = dirV2 (regV "matar") ;
+    know_V = dirV2 (know_V2) ;
+     laugh_V = regV "reir" ; ----V reír_67
+     lie_V = reflV (regV "acostar") ; --  "acostarse"
      live_V = live_V ;
      play_V = regV "jugar" ;
-     pull_V = regV "tirar" ;
-     push_V = regV "empujar" ;
-     rub_V = regV "resfregar" ;				-- frotar
+    pull_V = dirV2 (regV "tirar") ;
+    push_V = dirV2 (regV "empujar") ;
+    rub_V = dirV2 (regV "resfregar") ;
      say_V = say_VS ;
-     scratch_V = regV "rascar" ;
-     see_V = see_V2 ;
+    scratch_V = dirV2 (regV "rascar") ;
+    see_V = dirV2 (see_V2) ;
      sew_V = regV "coser" ;
      sing_V = regV "cantar" ;
-     sit_V = regV "sentar" ; ----V verboV (sedere_84 "sentarse") ;
+     sit_V = reflV (regV "sentar") ;
      sleep_V = sleep_V ;
-     smell_V = verboV (oler_52 "oler") ;
+    smell_V = dirV2 (verboV (oler_52 "oler")) ;
      spit_V = regV "escupir" ;
-     split_V = regV "separar" ;	-- dividir, partir
-     squeeze_V = regV "exprimir" ;
-     stab_V = regV "apuñalar" ;	
-     stand_V = verboV (estar_2 "estar") ; ---- "estar de pie" ;  
-     suck_V = regV "chupar" ;
+    split_V = dirV2 (regV "separar") ; -- dividir,) ;
+    squeeze_V = dirV2 (regV "exprimir") ;
+    stab_V = dirV2 (regV "apuñalar") ;
+     stand_V = verboV (estar_2 "estar") ; ---- "estar de pie" ;
+    suck_V = dirV2 (regV "chupar") ;
      swell_V = regV "tragar" ;
      swim_V = regV "nadar" ;
      think_V = regV "pensar" ;
-     throw_V = regV "tirar" ;
-     tie_V = regV "atar" ;
+    throw_V = dirV2 (regV "tirar") ;
+    tie_V = dirV2 (regV "atar") ;
      turn_V = regV "doblar" ;
      vomit_V = regV "vomitar" ;
      walk_V = regV "caminar" ;
-     wash_V = regV "lavar" ;
-     wipe_V = regV "secar" ;
+    wash_V = dirV2 (regV "lavar") ;
+    wipe_V = dirV2 (regV "secar") ;
+
 }

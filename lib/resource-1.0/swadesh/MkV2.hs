@@ -4,9 +4,9 @@ mkV2 file = do
   ls <- readFile file >>= return . lines
   mapM_ (putStrLn . mkOne) ls
 
---mkOne = mkOneV2
+mkOne = mkOneV2
 
-mkOne = mkOneQuote
+--mkOne = mkOneQuote
 
 mkOneQuote li = if elem '"' li then "-- " ++ li else li
 
