@@ -1,0 +1,25 @@
+Björn Bringert's tram grammars (user side, without place names)
+implemented as an example of lib/resource/abstract/Multimodal.
+
+For documentation of the original system, see 
+
+  http://www.cs.chalmers.se/~bringert/gf/tramdemo.html
+
+To try, do in gf
+
+  i TramEng.gf
+  gr | l -tr | p
+
+Clicks appear as coordinates on the right of the semicolon.
+This works in eight languages.
+
+Notice that the compilation of the grammars uses precompiled 
+resources, located in 
+
+  GF/lib/compiled
+
+To produce them, use 'make' and 'make install' in GF/lib/resource-1.0.
+
+AR 7/11/2005 -- 23/2/2006
+
+
