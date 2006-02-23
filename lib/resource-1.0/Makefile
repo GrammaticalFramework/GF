@@ -7,10 +7,10 @@ langs:
 	echo "s ;; pm | wf langs.gfcm" | gf -nocf */Lang??*.gf english/LangEng.gf +RTS -M500M -K100M
 
 mathematical:
-	gf -nocf mathematical/Mathematical???.gf  +RTS -M800M -K100M
+	gf -nocf -gfc mathematical/Mathematical???.gf  +RTS -M800M -K100M
 
 multimodal:
-	gf -nocf multimodal/Multimodal???.gf  +RTS -M500M -K100M
+	gf -nocf -gfc multimodal/Multimodal???.gf  +RTS -M500M -K100M
 
 install:
 	cp -p */*.gfc */*.gfr ../compiled
