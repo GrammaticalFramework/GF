@@ -1,6 +1,6 @@
 incomplete concrete TramI of Tram = open Multimodal, Symbol in {
 
-flags startcat=Query ; lexer=textlit ;
+flags startcat=Query ; lexer=literals ;
 
 lincat
   Query = Phr ;      -- top level, plain string
