@@ -56,7 +56,8 @@ txtHelpFile =
   "\n      -old          old: parse in GF<2.0 format (not necessary)" ++
   "\n      -v            verbose: give lots of messages " ++
   "\n      -s            silent: don't give error messages" ++
-  "\n      -src          source: ignore precompiled gfc and gfr files" ++
+  "\n      -src          from source: ignore precompiled gfc and gfr files" ++
+  "\n      -gfc          from gfc: use compiled modules whenever they exist" ++
   "\n      -retain       retain operations: read resource modules (needed in comm cc) " ++
   "\n      -nocf         don't build context-free grammar (thus no parser)" ++
   "\n      -nocheckcirc  don't eliminate circular rules from CF " ++

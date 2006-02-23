@@ -169,7 +169,7 @@ optionsOfCommand co = case co of
   CSetFlag -> both "utf8 table struct record all multi"
 	           "cat lang lexer parser number depth rawtrees unlexer optimize path conversion printer"
 
-  CImport _ -> both "old v s src retain nocf nocheckcirc cflexer noemit o ex prob"
+  CImport _ -> both "old v s src gfc retain nocf nocheckcirc cflexer noemit o ex prob"
                     "abs cnc res path optimize conversion cat probs noparse"
   CRemoveLanguage _ -> none
   CEmptyState -> none

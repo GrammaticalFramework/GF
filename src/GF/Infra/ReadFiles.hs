@@ -62,7 +62,7 @@ getAllFiles opts ps env file = do
     else do
 
 
-    ds2 <- ioeIO $ mapM (selectFormat env) pds1
+    ds2 <- ioeIO $ mapM (selectFormat opts env) pds1
 
     let ds4 = needCompile opts (map fst ds0) ds2
     return ds4
@@ -80,22 +80,25 @@ data CompStatus =
 
 -- for gfc, we also return ModTime to cope with earlier compilation of libs
 
-selectFormat :: ModEnv -> (InitPath,ModName) -> 
+selectFormat :: Options -> ModEnv -> (InitPath,ModName) -> 
                 IO (ModName,(InitPath,(CompStatus,Maybe ModTime)))
-selectFormat env (p,f) = do
+
+selectFormat opts env (p,f) = do
   let pf = prefixPathName p f
   let mtenv = lookup f env   -- Nothing if f is not in env
   let rtenv = lookup (resModName f) env
+  let fromComp = oElem isCompiled opts -- i -gfc
   mtgfc <- getModTime $ gfcFile pf
   mtgf  <- getModTime $ gfFile pf
   let stat = case (rtenv,mtenv,mtgfc,mtgf) of
+        (_,Just tenv,_,_)        | fromComp -> (CSEnv, Just tenv)
+        (_,_,Just tgfc,_)        | fromComp -> (CSRead,Just tgfc)
         (Just tenv,_,_,Just tgf) | laterModTime tenv tgf -> (CSEnvR,Just tenv)
         (_,Just tenv,_,Just tgf) | laterModTime tenv tgf -> (CSEnv, Just tenv)
         (_,_,Just tgfc,Just tgf) | laterModTime tgfc tgf -> (CSRead,Just tgfc)
         (_,_,_,        Nothing) -> (CSRead,Nothing) -- source does not exist
         _ -> (CSComp,Nothing)
   return $ (f, (p,stat))
-
 
 needCompile :: Options -> 
                [ModuleHeader] -> 
