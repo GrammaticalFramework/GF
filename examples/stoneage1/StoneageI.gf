@@ -1,4 +1,4 @@
-incomplete concrete StoneageI of Stoneage = open Lang, Swadesh in { 
+incomplete concrete StoneageI of Stoneage = open Mathematical, Swadesh in { 
 
 flags
   startcat=S ;
@@ -230,6 +230,14 @@ lin
 oper
 
   PresV : V -> NP -> Phr = \v,s -> 
+    PhrUtt NoPConj (UttS (PosCl (predV v s))) NoVoc ;
+  PresV2 : V2 -> NP -> NP -> Phr = \v,s,o -> 
+    PhrUtt NoPConj (UttS (PosCl (predV2 v s o))) NoVoc ;
+  PresV3 : V3 -> NP -> NP -> NP -> Phr = \v,s,o,r -> 
+    PhrUtt NoPConj (UttS (PosCl (predV3 v s o r))) NoVoc ;
+
+{-
+  PresV : V -> NP -> Phr = \v,s -> 
     PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos 
       (PredVP s (UseV v)))) NoVoc ;
   PresV2 : V2 -> NP -> NP -> Phr = \v,s,o -> 
@@ -238,6 +246,7 @@ oper
   PresV3 : V3 -> NP -> NP -> NP -> Phr = \v,s,o,r -> 
     PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos 
       (PredVP s (ComplV3 v o r)))) NoVoc ;
+-}
 
   ModA : A -> CN -> CN = \a ->
     AdjCN (PositA a) ;

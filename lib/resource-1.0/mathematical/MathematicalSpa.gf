@@ -3,8 +3,8 @@
 concrete MathematicalSpa of Mathematical = 
   NounSpa - [ComplN2], --- to avoid ambiguity 
 --  VerbSpa, 
---  AdjectiveSpa,
---  AdverbSpa,
+  AdjectiveSpa,
+  AdverbSpa,
   NumeralSpa,
 --  SentenceSpa,
   QuestionSpa,

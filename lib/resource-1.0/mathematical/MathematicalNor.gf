@@ -3,8 +3,8 @@
 concrete MathematicalNor of Mathematical = 
   NounNor - [ComplN2], --- to avoid ambiguity 
 --  VerbNor, 
---  AdjectiveNor,
---  AdverbNor,
+  AdjectiveNor,
+  AdverbNor,
   NumeralNor,
 --  SentenceNor,
   QuestionNor,

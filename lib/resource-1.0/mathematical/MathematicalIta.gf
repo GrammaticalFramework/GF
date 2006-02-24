@@ -3,8 +3,8 @@
 concrete MathematicalIta of Mathematical = 
   NounIta - [ComplN2], --- to avoid ambiguity 
 --  VerbIta, 
---  AdjectiveIta,
---  AdverbIta,
+  AdjectiveIta,
+  AdverbIta,
   NumeralIta,
 --  SentenceIta,
   QuestionIta,

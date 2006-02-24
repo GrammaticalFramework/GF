@@ -3,8 +3,8 @@
 concrete MathematicalGer of Mathematical = 
   NounGer - [ComplN2], --- to avoid ambiguity 
 --  VerbGer, 
---  AdjectiveGer,
---  AdverbGer,
+  AdjectiveGer,
+  AdverbGer,
   NumeralGer,
 --  SentenceGer,
   QuestionGer,
