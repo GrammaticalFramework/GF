@@ -368,15 +368,16 @@ isCompleteModule :: (Eq i) =>  Module i f a -> Bool
 isCompleteModule m = mstatus m == MSComplete && mtype m /= MTInterface
 
 
--- | all abstract modules
+-- | all abstract modules sorted from least to most dependent
 allAbstracts :: Eq i => MGrammar i f a -> [i]
-allAbstracts gr = [i | (i,ModMod m) <- modules gr, mtype m == MTAbstract]
+allAbstracts gr = topoSort 
+  [(i,extends m) | (i,ModMod m) <- modules gr, mtype m == MTAbstract]
 
 -- | the last abstract in dependency order (head of list)
 greatestAbstract :: Eq i => MGrammar i f a -> Maybe i
 greatestAbstract gr = case allAbstracts gr of
-  []  -> Nothing
-  a:_ -> return a
+  [] -> Nothing
+  as -> return $ last as
 
 -- | all resource modules
 allResources :: MGrammar i f a -> [i]
