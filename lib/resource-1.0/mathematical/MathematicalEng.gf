@@ -3,8 +3,8 @@
 concrete MathematicalEng of Mathematical = 
   NounEng - [ComplN2], --- to avoid ambiguity 
 --  VerbEng, 
---  AdjectiveEng,
---  AdverbEng,
+  AdjectiveEng,
+  AdverbEng,
   NumeralEng,
 --  SentenceEng,
   QuestionEng,

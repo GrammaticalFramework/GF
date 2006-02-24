@@ -12,8 +12,8 @@
 abstract Mathematical = 
   Noun - [ComplN2], --- to avoid ambiguity
 --  Verb, 
---  Adjective,
---  Adverb,
+  Adjective,
+  Adverb,
   Numeral,
 --  Sentence, 
   Question,

@@ -3,8 +3,8 @@
 concrete MathematicalSwe of Mathematical = 
   NounSwe - [ComplN2], --- to avoid ambiguity 
 --  VerbSwe, 
---  AdjectiveSwe,
---  AdverbSwe,
+  AdjectiveSwe,
+  AdverbSwe,
   NumeralSwe,
 --  SentenceSwe,
   QuestionSwe,

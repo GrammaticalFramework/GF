@@ -3,8 +3,8 @@
 concrete MathematicalFre of Mathematical = 
   NounFre - [ComplN2], --- to avoid ambiguity 
 --  VerbFre, 
---  AdjectiveFre,
---  AdverbFre,
+  AdjectiveFre,
+  AdverbFre,
   NumeralFre,
 --  SentenceFre,
   QuestionFre,
