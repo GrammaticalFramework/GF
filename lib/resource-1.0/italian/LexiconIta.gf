@@ -114,7 +114,7 @@ lin
   lose_V2 = dirV2 (verboV (perdere_62 "perdere")) ;
   love_N = regN "amore" ;
   love_V2 = dirV2 (regV "amare") ;
-  man_N = regN "uomo" ;
+  man_N = mkN "uomo" "uomini" masculine ;
   married_A2 = mkA2 (regA "sposato") dative ;
   meat_N = femN (regN "carne") ;
   milk_N = regN "latte" ;
