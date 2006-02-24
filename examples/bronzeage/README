@@ -1,0 +1,44 @@
+(AR 24/2/2006)
+
+(c) Björn Bringert and Aarne Ranta 2005-2006
+
+Based on grammars and lexicon in GF/examples/stoneage by Björn Bringert.
+These grammars use a more varying syntax, with negation, questions,
+imperatives, adverbs, and adjectival predication added.
+
+
+To build the run-time grammar:
+
+  echo "s ;; pm | wf bronzeage.gfcm" | gf -nocf Bronzeage???.gf
+
+Before this, you have to have compiled the libraries:
+
+  cd <whatever you need>GF/lib/resource-1.0
+  make langs
+  make install
+
+To work with the grammar
+
+  gf bronzeage.gfcm
+
+Once in GF, you can do translation,
+
+  p -mcfg -lang=BronzeageEng "Don't eat that thick snake!" | tb
+
+random generation,
+
+  gr | tb
+
+translation quiz lists
+
+  tl -number=5 -cat=CN BronzeageEng BronzeageFre
+
+morphological quiz lists
+
+  ml -number=5 -cat=V -lang=BronzeageSpa
+
+sentence transformation quiz lists
+
+  ml -number=5 -cat=Sent -lang=BronzeageEng
+
+
