@@ -52,7 +52,7 @@ flags  coding=utf8 ;
 
     -- Numerals
 
-    one_Num = NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01)))) ;
+    one_Det = DetSg one_Quant NoOrd ;
     two_Num = NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))) ;
     three_Num = NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n3))))) ;
     four_Num = NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n4))))) ;

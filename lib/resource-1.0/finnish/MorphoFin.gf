@@ -652,7 +652,6 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
   reg2VerbH : (soutaa,souti : Str) -> VerbH = \soutaa,souti ->
   let
-----    soudat = regVerbH soutaa ;
     soudan = weakGrade (init soutaa) + "n" ;
     soudin = weakGrade souti + "n" ;
     souden = init souti + "en" ;
@@ -666,8 +665,8 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     "ata" | "ätä" => vPalkata soutaa souti ;
     "ota" | "ötä" => vPudota soutaa souti ;
     "sta" | "stä" => vJuosta soutaa souden (juo +   o+u+"t") (juo + "t"+u) ;
-    _ + ("da" | "dä") => vJuoda soutaa souti
-----    _ => soudat
+    _ + ("da" | "dä") => vJuoda soutaa souti ;
+    _ => regVerbH soutaa
     } ;
 
   reg3VerbH : (_,_,_ : Str) -> VerbH = \soutaa,soudan,souti -> 
@@ -679,11 +678,10 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     a = last taa ;
     u = ifTok Str a "a" "u" "y" ;
     soudin = souti + "n" ; ----weakGrade souti + "n" ;
-    ----soudat = reg2VerbH soutaa souti ;
   in case taa of {
     "lla" | "llä" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
-    "taa" | "tää" => vHuoltaa soutaa soudan souti soudin
-----    _ => soudat
+    "taa" | "tää" => vHuoltaa soutaa soudan souti soudin ;
+    _ => reg2VerbH soutaa souti
     } ;
 
 -- For "harppoa", "hukkua", "löytyä", with grade alternation.

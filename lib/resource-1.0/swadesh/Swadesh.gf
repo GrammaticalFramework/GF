@@ -50,7 +50,7 @@ abstract Swadesh = Cat ** {
 
     -- Numerals
 
-    one_Num : Num ;
+    one_Det : Det ;
     two_Num : Num ;
     three_Num : Num ;
     four_Num : Num ;

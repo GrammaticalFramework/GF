@@ -85,7 +85,7 @@ lin
   Few = DetCN few_Det ;
   Other = DetCN other_Det ;
 
-  One = DetCN (DetSg one_Quant NoOrd) ;
+  One = DetCN one_Det ;
   Two = DetCN (DetPl (PlQuant IndefArt) two_Num NoOrd) ;
   Three = DetCN (DetPl (PlQuant IndefArt) three_Num NoOrd) ;
   Four = DetCN (DetPl (PlQuant IndefArt) four_Num NoOrd) ;
