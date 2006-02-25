@@ -313,6 +313,7 @@ pathList       = aOpt "path"
 uniCoding      = aOpt "coding"
 probFile       = aOpt "probs"
 noparseFile    = aOpt "noparse"
+usePreprocessor = aOpt "preproc"
 
 -- peb 16/3-05:
 gfcConversion :: String -> Option

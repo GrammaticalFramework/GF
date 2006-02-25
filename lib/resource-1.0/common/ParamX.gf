@@ -5,8 +5,19 @@ resource ParamX = open Prelude in {
     Person = P1 | P2 | P3 ;
     Degree = Posit | Compar | Superl ;
 
-    Anteriority = Simul | Anter ;
-    Tense       = Pres | Past | Fut | Cond ;
+    Anteriority = 
+       Simul 
+     | Anter  --# notpresent
+     ;
+    Tense = 
+       Pres 
+     | Past   --# notpresent
+     | Fut    --# notpresent
+     | Cond   --# notpresent
+     ;
+
+  param
+
     Polarity    = Pos | Neg ;
 
     QForm = QDir | QIndir ;

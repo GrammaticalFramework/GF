@@ -1,4 +1,4 @@
---# -path=.:../swedish:../scandinavian:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MathematicalSwe of Mathematical = 
   NounSwe - [ComplN2], --- to avoid ambiguity 

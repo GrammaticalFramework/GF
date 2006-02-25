@@ -38,13 +38,15 @@ param
 
   VFin =
      VPres Voice
-   | VPret Voice
-   | VImper Voice ;
+   | VPret Voice   --# notpresent
+   | VImper Voice
+   ;
 
   VInf = 
      VInfin Voice
-   | VSupin Voice
-   | VPtPret AFormPos Case ;
+   | VSupin Voice  --# notpresent
+   | VPtPret AFormPos Case
+   ;
 
   VPForm = 
      VPFinite Tense Anteriority
@@ -89,7 +91,7 @@ oper
 
   vFin : Tense -> Voice -> VForm = \t,v -> case t of {
     Pres => VF (VPres v) ;
-    Past => VF (VPret v) ;
+    Past => VF (VPret v) ;  --# notpresent
     _ => VI (VInfin v) --- not to be used?
     } ;
     
@@ -141,10 +143,10 @@ oper
    s = table {
     VF (VPres Act)  => finner ;
     VF (VPres Pass) => mkVoice Pass finn ;
-    VF (VPret v)    => mkVoice v fann ;
+    VF (VPret v)    => mkVoice v fann ;  --# notpresent
     VF (VImper v)   => mkVoice v finn ;
     VI (VInfin v)   => mkVoice v finna ;
-    VI (VSupin v)   => mkVoice v funnit ;
+    VI (VSupin v)   => mkVoice v funnit ;  --# notpresent
     VI (VPtPret a c)=> mkCase c (mkAdjPos a funnen funnet funna funna)
     } ;
    vtype = VAct

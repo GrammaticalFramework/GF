@@ -1,4 +1,4 @@
---# -path=.:../finnish/:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MultimodalFin of Multimodal =
   NounFin,

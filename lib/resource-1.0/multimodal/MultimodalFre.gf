@@ -1,4 +1,4 @@
---# -path=.:../french/:../romance:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MultimodalFre of Multimodal =
   NounFre,

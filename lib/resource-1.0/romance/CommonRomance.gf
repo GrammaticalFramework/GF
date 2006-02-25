@@ -90,11 +90,11 @@ param
    ;
 
   TMood = 
-     VPres   Mood
-   | VImperf Mood
-   | VPasse
-   | VFut
-   | VCondit
+     VPres  Mood
+   | VImperf Mood   --# notpresent
+   | VPasse  --# notpresent
+   | VFut  --# notpresent
+   | VCondit  --# notpresent
    ;
 
   NumPersI  = SgP2 | PlP1 | PlP2 ;

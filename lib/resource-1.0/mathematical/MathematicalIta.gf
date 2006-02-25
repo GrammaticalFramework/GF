@@ -1,4 +1,4 @@
---# -path=.:../italian:../romance:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MathematicalIta of Mathematical = 
   NounIta - [ComplN2], --- to avoid ambiguity 

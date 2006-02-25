@@ -1,19 +1,23 @@
 all: langs mathematical multimodal
 
-test:
+test: langs
 	echo "gr -cat=Text -number=11 -prob | tb" | gf -nocf -probs=lang.gfprob langs.gfcm
 
 langs:
 	echo "s ;; pm | wf langs.gfcm" | gf -nocf */Lang??*.gf english/LangEng.gf +RTS -M500M -K100M
 
-mathematical:
-	gf -nocf -gfc mathematical/Mathematical???.gf  +RTS -M800M -K100M
+present:
+	gf -batch -nocf -preproc=./mkPresent */Lang??*.gf
+	cp -p */*.gfc */*.gfr present
 
-multimodal:
-	gf -nocf -gfc multimodal/Multimodal???.gf  +RTS -M500M -K100M
+mathematical: present
+	gf -batch -nocf -preproc=./mkPresent mathematical/Mathematical???.gf
+
+multimodal: present
+	gf -batch -nocf -preproc=./mkPresent multimodal/Multimodal???.gf
 
 install:
-	cp -p */*.gfc */*.gfr ../compiled
+	cp -p */*.gfc */*.gfr langs
 
 stat:
 	wc */*.gfc

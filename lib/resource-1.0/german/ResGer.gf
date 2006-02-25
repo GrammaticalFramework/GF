@@ -52,8 +52,8 @@ resource ResGer = ParamX ** open Prelude in {
    | VPresInd  Number Person
    | VPresSubj Number Person
    | VImper    Number
-   | VImpfInd  Number Person 
-   | VImpfSubj Number Person 
+   | VImpfInd  Number Person  --# notpresent
+   | VImpfSubj Number Person  --# notpresent
    | VPresPart AForm 
    | VPastPart AForm ;
 
@@ -130,7 +130,7 @@ resource ResGer = ParamX ** open Prelude in {
     vFin : Tense -> Agr -> VForm = \t,a ->
       case t of {
         Pres => VPresInd  a.n a.p ;
-        Past => VImpfInd  a.n a.p ;
+        Past => VImpfInd  a.n a.p ;  --# notpresent
         _ => VInf --- never used
         } ;
 
@@ -207,18 +207,18 @@ resource ResGer = ParamX ** open Prelude in {
        VImper Sg       => gib ;
        VImper Pl       => gebt ;
        VPresSubj Sg P2 => init geben + "st" ;
-       VPresSubj Sg _  => init geben ;
-       VPresSubj Pl P2 => init geben + "t" ;
-       VPresSubj Pl _  => geben ;
+       VPresSubj Sg _  => init geben ;       
+       VPresSubj Pl P2 => init geben + "t" ; 
+       VPresSubj Pl _  => geben ;            
        VPresPart a     => (regA (geben + "d")).s ! Posit ! a ;
-       VImpfInd Sg P2  => gabst ;
-       VImpfInd Sg _   => gab ;
-       VImpfInd Pl P2  => gabt ;
-       VImpfInd Pl _   => gaben ;
-       VImpfSubj Sg P2 => gaebe + "st" ;
-       VImpfSubj Sg _  => gaebe ;
-       VImpfSubj Pl P2 => gaebe + "t" ;
-       VImpfSubj Pl _  => gaebe + "n" ;
+       VImpfInd Sg P2  => gabst ;        --# notpresent
+       VImpfInd Sg _   => gab ;          --# notpresent
+       VImpfInd Pl P2  => gabt ;         --# notpresent
+       VImpfInd Pl _   => gaben ;        --# notpresent
+       VImpfSubj Sg P2 => gaebe + "st" ; --# notpresent
+       VImpfSubj Sg _  => gaebe ;        --# notpresent
+       VImpfSubj Pl P2 => gaebe + "t" ;  --# notpresent
+       VImpfSubj Pl _  => gaebe + "n" ;  --# notpresent
        VPastPart a     => (regA gegeben).s ! Posit ! a
        } ;
      prefix = ein ;
@@ -346,7 +346,7 @@ resource ResGer = ParamX ** open Prelude in {
       haben : Str = vHaben ! VInf ;
 
       wird : Agr -> Str = \a -> werden_V.s ! VPresInd a.n a.p ;  
-      wuerde : Agr -> Str = \a -> werden_V.s ! VImpfSubj a.n a.p ;
+      wuerde : Agr -> Str = \a -> werden_V.s ! VImpfSubj a.n a.p ;  --# notpresent
 
       auf = verb.prefix ;
 
@@ -357,18 +357,20 @@ resource ResGer = ParamX ** open Prelude in {
     in {
     s = \\a => table {
       VPFinite t Simul => case t of {
-        Pres | Past => vf (vfin t a) [] ;
-        Fut  => vf (wird a) vinf ;
-        Cond => vf (wuerde a) vinf
+--        Pres | Past => vf (vfin t a) [] ; -- the general rule
+        Past => vf (vfin t a) [] ;   --# notpresent
+        Fut  => vf (wird a) vinf ;   --# notpresent
+        Cond => vf (wuerde a) vinf ; --# notpresent
+        Pres => vf (vfin t a) []    
         } ;
-      VPFinite t Anter => case t of {
-        Pres | Past => vf (hat t a) vpart ;
-        Fut  => vf (wird a) (vpart ++ haben) ;
-        Cond => vf (wuerde a) (vpart ++ haben)
-        } ;
+      VPFinite t Anter => case t of {            --# notpresent
+        Pres | Past => vf (hat t a) vpart ;      --# notpresent
+        Fut  => vf (wird a) (vpart ++ haben) ;   --# notpresent
+        Cond => vf (wuerde a) (vpart ++ haben)   --# notpresent
+        } ;                                      --# notpresent
       VPImperat => vf (verb.s ! VImper a.n) [] ;
-      VPInfinit Simul => vf [] vinf ;
-      VPInfinit Anter => vf [] (vpart ++ haben)
+      VPInfinit Anter => vf [] (vpart ++ haben) ; --# notpresent
+      VPInfinit Simul => vf [] vinf
       } ;
     a1  : Polarity => Str = negation ;
     n2  : Agr => Str = case verb.vtype of {
@@ -503,10 +505,12 @@ resource ResGer = ParamX ** open Prelude in {
           compl = obj ++ neg ++ vp.a2 ;
           inf   = vp.inf ++ verb.inf ;
           extra = vp.ext ;
-          inffin = case <a,vp.isAux> of {
-            <Anter,True> => verb.fin ++ inf ; -- double infinitive
-            _ => inf ++ verb.fin              --- or just auxiliary vp
-            }
+          inffin = 
+            case <a,vp.isAux> of {                       --# notpresent
+              <Anter,True> => verb.fin ++ inf ; -- double infinitive   --# notpresent
+              _ =>                                      --# notpresent
+              inf ++ verb.fin              --- or just auxiliary vp
+            }                                            --# notpresent
         in
         case o of {
           Main => subj ++ verb.fin ++ compl ++ inf ++ extra ;

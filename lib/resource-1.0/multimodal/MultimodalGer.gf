@@ -1,4 +1,4 @@
---# -path=.:../german/:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MultimodalGer of Multimodal =
   NounGer,

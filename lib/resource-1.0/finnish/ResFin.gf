@@ -69,8 +69,8 @@ param
   VForm = 
      Inf InfForm
    | Presn Number Person
-   | Impf Number Person
-   | Condit Number Person
+   | Impf Number Person  --# notpresent
+   | Condit Number Person  --# notpresent
    | Imper Number
    | ImperP3 Number
    | ImperP1Pl
@@ -169,10 +169,11 @@ oper
           } ;
 
         einegole : Str * Str * Str = case <vi,agr.n> of {
-          <VIFin (Pres | Fut),_>  => <eiv, verbs ! Imper Sg,     "ole"> ;
-          <VIFin Cond,        _>  => <eiv, verbs ! Condit Sg P3, "olisi"> ;
-          <VIFin Past,        Sg> => <eiv, part,                 "ollut"> ;
-          <VIFin Past,        Pl> => <eiv, part,                 "olleet"> ;
+          <VIFin Pres,_>  => <eiv, verbs ! Imper Sg,     "ole"> ;
+          <VIFin Fut,_>  => <eiv, verbs ! Imper Sg,     "ole"> ;   --# notpresent
+          <VIFin Cond,        _>  => <eiv, verbs ! Condit Sg P3, "olisi"> ;  --# notpresent
+          <VIFin Past,        Sg> => <eiv, part,                 "ollut"> ;  --# notpresent
+          <VIFin Past,        Pl> => <eiv, part,                 "olleet"> ;  --# notpresent
           <VIImper,           Sg> => <"älä", verbs ! Imper Sg,   "ole"> ;
           <VIImper,           Pl> => <"älkää", verbs ! ImpNegPl, "olko"> ;
           <VIPass,            _>  => <"ei", verbs ! Pass False,  "ole"> ;
@@ -189,15 +190,16 @@ oper
           {fin = x ; inf = y} ;
         mkvf : VForm -> {fin, inf : Str} = \p -> case <ant,b> of {
           <Simul,Pos> => vf (verbs ! p) [] ;
-          <Simul,Neg> => vf ei          neg ;
-          <Anter,Pos> => vf (olla ! p)  part ;  
-          <Anter,Neg> => vf ei          (ole ++ part)
+          <Anter,Pos> => vf (olla ! p)  part ;    --# notpresent
+          <Anter,Neg> => vf ei          (ole ++ part) ;   --# notpresent
+          <Simul,Neg> => vf ei          neg
           }
       in
       case vi of {
-        VIFin Past => mkvf (Impf agr.n agr.p) ; 
-        VIFin Cond => mkvf (Condit agr.n agr.p) ;
-        VIFin (Pres | Fut) => mkvf (Presn agr.n agr.p) ;
+        VIFin Past => mkvf (Impf agr.n agr.p) ;     --# notpresent
+        VIFin Cond => mkvf (Condit agr.n agr.p) ;  --# notpresent
+        VIFin Fut  => mkvf (Presn agr.n agr.p) ;  --# notpresent
+        VIFin Pres => mkvf (Presn agr.n agr.p) ;
         VIImper    => mkvf (Imper agr.n) ;
         VIPass     => mkvf (Pass True) ;
         VIInf i    => mkvf (Inf i)
@@ -318,18 +320,18 @@ oper
       Presn Pl P1 => tuje + "mme" ;
       Presn Pl P2 => tuje + "tte" ;
       Presn Pl P3 => tulevat ;
-      Impf Sg P1 => tuji + "n" ;
-      Impf Sg P2 => tuji + "t" ;
-      Impf Sg P3 => tuli ;
-      Impf Pl P1 => tuji + "mme" ;
-      Impf Pl P2 => tuji + "tte" ;
-      Impf Pl P3 => tuli + vat ;
-      Condit Sg P1 => tulisi + "n" ;
-      Condit Sg P2 => tulisi + "t" ;
-      Condit Sg P3 => tulisi ;
-      Condit Pl P1 => tulisi + "mme" ;
-      Condit Pl P2 => tulisi + "tte" ;
-      Condit Pl P3 => tulisi + vat ;
+      Impf Sg P1 => tuji + "n" ;   --# notpresent
+      Impf Sg P2 => tuji + "t" ;  --# notpresent
+      Impf Sg P3 => tuli ;  --# notpresent
+      Impf Pl P1 => tuji + "mme" ;  --# notpresent
+      Impf Pl P2 => tuji + "tte" ;  --# notpresent
+      Impf Pl P3 => tuli + vat ;  --# notpresent
+      Condit Sg P1 => tulisi + "n" ;  --# notpresent
+      Condit Sg P2 => tulisi + "t" ;  --# notpresent
+      Condit Sg P3 => tulisi ;  --# notpresent
+      Condit Pl P1 => tulisi + "mme" ;  --# notpresent
+      Condit Pl P2 => tulisi + "tte" ;  --# notpresent
+      Condit Pl P3 => tulisi + vat ;  --# notpresent
       Imper Sg   => tuje ;
       Imper Pl   => tulkaa ;
       ImperP3 Sg => tulko + o + "n" ;

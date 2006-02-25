@@ -227,11 +227,11 @@ oper
     VInfin       => aller ! Inf ;
     VFin (VPres   Indic) n p => aller ! Indi Presn n p ; 
     VFin (VPres   Subjunct) n p => aller ! Subjo SPres n p ;
-    VFin (VImperf Indic) n p => aller ! Indi Imparf n p ; 
-    VFin (VImperf Subjunct) n p => aller ! Subjo SImparf n p ;
-    VFin VPasse n p  => aller ! Indi Passe n p ;
-    VFin VFut n p    => aller ! Indi Futur n p ;
-    VFin VCondit n p => aller ! Condi n p ;
+    VFin (VImperf Indic) n p => aller ! Indi Imparf n p ;     --# notpresent
+    VFin (VImperf Subjunct) n p => aller ! Subjo SImparf n p ;  --# notpresent
+    VFin VPasse n p  => aller ! Indi Passe n p ;  --# notpresent
+    VFin VFut n p    => aller ! Indi Futur n p ;  --# notpresent
+    VFin VCondit n p => aller ! Condi n p ;  --# notpresent
     VImper np    => aller ! Imper np ;
     VPart g n    => aller ! Part (PPasse g n) ;
     VGer         => aller ! Part PPres -- *en* allant

@@ -74,6 +74,7 @@ txtHelpFile =
   "\n      -optimize     select an optimization to override file-defined flags" ++
   "\n      -conversion   select parsing method (values strict|nondet)" ++
   "\n      -probs        read probabilities from file (format (--# prob) Fun Double)" ++
+  "\n      -preproc      use a preprocessor on each source file" ++
   "\n      -noparse      read nonparsable functions from file (format --# noparse Funs) " ++
   "\n  examples:" ++
   "\n      i English.gf                      -- ordinary import of Concrete" ++
