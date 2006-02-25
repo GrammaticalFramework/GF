@@ -1,11 +1,15 @@
--- predefined functions for concrete syntax, defined in AppPredefined.hs
+--1 Predefined functions for concrete syntax
+
+-- The definitions of these constants are hard-coded in GF, and defined
+-- in [AppPredefined.hs ../src/GF/Grammar/AppPredefined.hs]. Applying
+-- them to run-time variables leads to compiler errors that are often
+-- only detected at the code generation time.
 
 resource Predef = {
 
-  -- this type is for internal use only
-  param PBool = PTrue | PFalse ;
+-- This type of booleans is for internal use only.
 
-  -- these operations have their proper definitions in AppPredefined.hs
+  param PBool = PTrue | PFalse ;
 
   oper Int  : Type = variants {} ;                     -- the type of integers
   oper Ints : Int -> Type = variants {} ;              -- the type of integers from 0 to n
@@ -25,7 +29,7 @@ resource Predef = {
   oper read   : (P : Type) -> Tok -> P = variants {} ; -- convert string to param
   oper toStr  : (L : Type) -> L -> Str = variants {} ; -- find the "first" string
   oper mapStr : (L : Type) -> (Str -> Str) -> L -> L = variants {} ; 
-               -- map all strings in a data structure
+               -- map all strings in a data structure; experimental ---
 
-  } ;
+} ;
 

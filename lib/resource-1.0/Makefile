@@ -1,25 +1,23 @@
 all: present mathematical multimodal langs
 
-test: langs
+test:
 	echo "gr -cat=Text -number=11 -prob | tb" | gf -nocf -probs=lang.gfprob langs.gfcm
 
 langs:
-	echo "s ;; pm | wf langs.gfcm" | gf -nocf */Lang??*.gf english/LangEng.gf +RTS -M500M -K100M
+	echo "s ;; pm | wf langs.gfcm" | gf -nocf -src */Lang??*.gf english/LangEng.gf +RTS -M500M -K100M
+	cp -p */*.gfc */*.gfr ../alltenses
 
 present:
-	gf -nocf -preproc=./mkPresent */Lang??*.gf
+	gf -make -src -preproc=./mkPresent */Lang??*.gf
 	mv */*.gfc */*.gfr ../present
 
-mathematical: present
-	gf -batch -nocf -preproc=./mkPresent mathematical/Mathematical???.gf
-	mv mathematical/*.gf ../mathematical
+mathematical:
+	gf -make -nocf -preproc=./mkPresent mathematical/Mathematical???.gf
+	mv mathematical/*.gfc ../mathematical
 
-multimodal: present
-	gf -batch -nocf -preproc=./mkPresent multimodal/Multimodal???.gf
-	mv multimodal/*.gf ../multimodal
-
-install:
-	cp -p */*.gfc */*.gfr ../alltenses
+multimodal:
+	gf -make -nocf -preproc=./mkPresent multimodal/Multimodal???.gf
+	mv multimodal/*.gfc ../multimodal
 
 stat:
 	wc */*.gfc

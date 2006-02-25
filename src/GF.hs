@@ -59,9 +59,8 @@ main = do
       return ()
 
     _ | opt doMake -> do
-      case fs of
-        [f] -> batchCompile os f
-        _ -> putStrLnFlush "expecting exactly one gf file to compile"
+      mapM_ (batchCompile os) fs
+      return ()
 
     _ | opt makeConcrete -> do
         mkConcretes fs

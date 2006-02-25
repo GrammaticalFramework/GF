@@ -11,15 +11,46 @@ Last update: %%date(%c)
 
 **Notice**. This document concerns the API v. 1.0 which has not
 yet been "officially" released. You can find the beginnings of it
-in [``GF/lib/resource-1.0/`` ..]. See the
+in [``GF/lib/resource-1.0/`` ..]. See
 [``resource-1.0/README`` ../README] for
 details on how it differs from previous versions
 and how much has been implemented
 
 
 
+==Using the library==
+
+There is no need to link application grammars to the source directories of the
+library. Use one (or several) of the following packages instead:
+
+- ``lib/alltenses`` the complete ground-API library with all forms
+- ``lib/present`` a pruned ground-API library with present tense only
+- ``lib/mathematical`` special-purpose API for mathematical applications
+- ``lib/multimodal`` special-purpose API for multimodal dialogue applications
+
+
+Notice, however, that both special-purpose APIs share modules with
+``present``. It is therefore not a good idea to use them in combination with
+``alltenses``.
+
+
+It is advisable to use the bare package names in paths pointing to the
+libraries. Here is an example, from ``examples/tram``:
+```
+  --# -path=.:present:multimodal:mathematical:prelude
+```
+To reach these directories from anywhere, set the environment variable
+``GF_LIB_PATH`` to point to the directory ``GF/lib/``. For instance,
+I have the following line in my ``.bashrc`` file:
+```
+  export GF_LIB_PATH=/home/aarne/GF/lib
+```
+
+
+
 ==The language independent API==
 
+This API is accessible by both ``present`` and ``alltenses``.
 The API is divided into a bunch of ``abstract`` modules.
 The following figure gives the dependencies of these modules.
 

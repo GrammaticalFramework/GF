@@ -15,7 +15,6 @@ Before this, you have to have compiled the libraries:
 
   cd <whatever you need>GF/lib/resource-1.0
   make present
-  make install
 
 To work with the grammar
 
