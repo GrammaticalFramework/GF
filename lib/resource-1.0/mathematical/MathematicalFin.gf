@@ -1,4 +1,4 @@
---# -path=.:../finnish:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MathematicalFin of Mathematical = 
   NounFin - [ComplN2], --- to avoid ambiguity 

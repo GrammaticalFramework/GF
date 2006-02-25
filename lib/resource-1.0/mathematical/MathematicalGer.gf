@@ -1,4 +1,4 @@
---# -path=.:../german:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MathematicalGer of Mathematical = 
   NounGer - [ComplN2], --- to avoid ambiguity 

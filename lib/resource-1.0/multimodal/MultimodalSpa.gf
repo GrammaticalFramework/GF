@@ -1,4 +1,4 @@
---# -path=.:../spanish/:../romance:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MultimodalSpa of Multimodal =
   NounSpa,

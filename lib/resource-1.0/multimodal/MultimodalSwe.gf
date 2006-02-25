@@ -1,4 +1,4 @@
---# -path=.:../swedish/:../scandinavian:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MultimodalSwe of Multimodal =
   NounSwe,

@@ -44,16 +44,25 @@ import GF.Infra.ReadFiles ----
 import Data.Char (toUpper)
 import Data.List (nub)
 import Control.Monad (foldM)
+import System (system)
 
-getSourceModule :: FilePath -> IOE SourceModule
-getSourceModule file = do
+getSourceModule :: Options -> FilePath -> IOE SourceModule
+getSourceModule opts file0 = do
+  file <- case getOptVal opts usePreprocessor of
+    Just p -> do
+      let tmp = "_gf_preproc.tmp"
+          cmd = p +++ file0 ++ ">" ++ tmp
+      ioeIO $ system cmd
+      -- ioeIO $ putStrLn $ "preproc" +++ cmd
+      return tmp
+    _ -> return file0
   string    <- readFileIOE file
   let tokens = myLexer string
   mo1  <- ioeErr $ {- err2err $ -} pModDef tokens
   ioeErr $ transModDef mo1
 
-getSourceGrammar :: FilePath -> IOE SourceGrammar
-getSourceGrammar file = do
+getSourceGrammar :: Options -> FilePath -> IOE SourceGrammar
+getSourceGrammar opts file = do
   string    <- readFileIOE file
   let tokens = myLexer string
   gr1  <- ioeErr $ {- err2err $ -} pGrammar tokens

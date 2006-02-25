@@ -1,4 +1,4 @@
---# -path=.:../english/:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MultimodalEng of Multimodal =
   NounEng,

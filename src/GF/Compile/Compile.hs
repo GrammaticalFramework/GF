@@ -84,7 +84,7 @@ compileModule opts st0 file |
   grammar1 <- case suff of
     "cf"   -> putp ("- parsing" +++ suff +++ file) $ getCFGrammar opts file
     "ebnf" -> putp ("- parsing" +++ suff +++ file) $ getEBNFGrammar opts file
-    "gfm"  -> putp ("- parsing" +++ suff +++ file) $ getSourceGrammar file
+    "gfm"  -> putp ("- parsing" +++ suff +++ file) $ getSourceGrammar opts file
     _      -> putp ("- parsing old gf" +++ file)   $ getOldGrammar opts file
   let mods = modules grammar1
   let env = compileEnvShSt st0 []
@@ -195,7 +195,7 @@ compileOne opts env@((_,srcgr,_),_) file = do
 
     -- for compiled resource, parse and organize, then update environment
     "gfr" -> do
-       sm0 <- putp ("| reading" +++ file) $ getSourceModule file
+       sm0 <- putp ("| reading" +++ file) $ getSourceModule opts file
        sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm0
 ---- experiment with not optimizing gfr 
 ----      sm:_  <- putp "  optimizing " $ ioeErr $ evalModule mos sm1
@@ -206,7 +206,8 @@ compileOne opts env@((_,srcgr,_),_) file = do
 
     -- for gf source, do full compilation
     _ -> do
-       sm0 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ getSourceModule file
+       sm0 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
+                                           getSourceModule opts file
        (k',sm)  <- makeSourceModule opts (fst env) sm0
        cm  <- putpp "  generating code... " $ generateModuleCode opts path sm
        ft <- getReadTimes file

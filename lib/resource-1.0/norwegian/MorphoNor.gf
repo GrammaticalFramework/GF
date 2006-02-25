@@ -87,8 +87,8 @@ oper
        VI (VInfin v)       => mkVoice v spise ;
        VF (VPres Act)    => spiser ;
        VF (VPres Pass)   => spises ;
-       VF (VPret v)      => mkVoice v spiste ;
-       VI (VSupin v)     => mkVoice v spist ;
+       VF (VPret v)      => mkVoice v spiste ;   --# notpresent
+       VI (VSupin v)     => mkVoice v spist ;    --# notpresent
        VI (VPtPret (Strong (SgUtr | SgNeutr)) c) => mkCase c spist ;
        VI (VPtPret _ c)  => case last spist of {
          "a" => mkCase c spist ;

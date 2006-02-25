@@ -34,11 +34,21 @@ resource ResEng = ParamX ** open Prelude in {
 -- Only these five forms are needed for open-lexicon verbs.
 
   param
-    VForm = VInf | VPres | VPast | VPPart | VPresPart ;
+    VForm = 
+       VInf
+     | VPres
+     | VPPart
+     | VPresPart
+     | VPast      --# notpresent
+     ;
 
 -- Auxiliary verbs have special negative forms.
 
-    VVForm = VVF VForm | VVPresNeg | VVPastNeg ;
+    VVForm = 
+       VVF VForm
+     | VVPresNeg
+     | VVPastNeg  --# notpresent
+     ;
 
 -- The order of sentence is needed already in $VP$.
 
@@ -102,7 +112,7 @@ resource ResEng = ParamX ** open Prelude in {
       s = table {
         VInf   => go ;
         VPres  => goes ;
-        VPast  => went ;
+        VPast  => went ; --# notpresent
         VPPart => gone ;
         VPresPart => going
         } ;
@@ -164,6 +174,7 @@ resource ResEng = ParamX ** open Prelude in {
   VP : Type = {
     s   : VerbForms ;
     prp : Str ; -- present participle 
+    inf : Str ; -- infinitive
     ad  : Str ;
     s2  : Agr => Str
     } ;
@@ -176,7 +187,6 @@ resource ResEng = ParamX ** open Prelude in {
       let
         inf  = verb.s ! VInf ;
         fin  = presVerb verb agr ;
-        past = verb.s ! VPast ;
         part = verb.s ! VPPart ;
         vf : Str -> Str -> {fin, inf : Str} = \x,y -> 
           {fin = x ; inf = y} ;
@@ -184,24 +194,25 @@ resource ResEng = ParamX ** open Prelude in {
       case <t,ant,b,ord> of {
         <Pres,Simul,Pos,ODir>   => vf            fin [] ; --- should be opp
         <Pres,Simul,Pos,OQuest> => vf (does agr)   inf ;
-        <Pres,Simul,Neg,_>      => vf (doesnt agr) inf ;
-        <Pres,Anter,Pos,_>      => vf (have agr)   part ;
-        <Pres,Anter,Neg,_>      => vf (havent agr) part ;
-        <Past,Simul,Pos,ODir>   => vf            past [] ; --- should be opp
-        <Past,Simul,Pos,OQuest> => vf "did"        inf ;
-        <Past,Simul,Neg,_>      => vf "didn't"     inf ;
-        <Past,Anter,Pos,_>      => vf "had"        part ;
-        <Past,Anter,Neg,_>      => vf "hadn't"     part ;
-        <Fut, Simul,Pos,_>      => vf "will"       inf ;
-        <Fut, Simul,Neg,_>      => vf "won't"      inf ;
-        <Fut, Anter,Pos,_>      => vf "will"       ("have" ++ part) ;
-        <Fut, Anter,Neg,_>      => vf "won't"      ("have" ++ part) ;
-        <Cond,Simul,Pos,_>      => vf "would"      inf ;
-        <Cond,Simul,Neg,_>      => vf "wouldn't"   inf ;
-        <Cond,Anter,Pos,_>      => vf "would"      ("have" ++ part) ;
-        <Cond,Anter,Neg,_>      => vf "wouldn't"   ("have" ++ part)
+        <Pres,Anter,Pos,_>      => vf (have agr)   part ; --# notpresent
+        <Pres,Anter,Neg,_>      => vf (havent agr) part ; --# notpresent
+        <Past,Simul,Pos,ODir>   => vf (verb.s ! VPast) [] ; --# notpresent --- should be opp
+        <Past,Simul,Pos,OQuest> => vf "did"        inf ; --# notpresent
+        <Past,Simul,Neg,_>      => vf "didn't"     inf ; --# notpresent
+        <Past,Anter,Pos,_>      => vf "had"        part ; --# notpresent
+        <Past,Anter,Neg,_>      => vf "hadn't"     part ; --# notpresent
+        <Fut, Simul,Pos,_>      => vf "will"       inf ; --# notpresent
+        <Fut, Simul,Neg,_>      => vf "won't"      inf ; --# notpresent
+        <Fut, Anter,Pos,_>      => vf "will"       ("have" ++ part) ; --# notpresent
+        <Fut, Anter,Neg,_>      => vf "won't"      ("have" ++ part) ; --# notpresent
+        <Cond,Simul,Pos,_>      => vf "would"      inf ; --# notpresent
+        <Cond,Simul,Neg,_>      => vf "wouldn't"   inf ; --# notpresent
+        <Cond,Anter,Pos,_>      => vf "would"      ("have" ++ part) ; --# notpresent
+        <Cond,Anter,Neg,_>      => vf "wouldn't"   ("have" ++ part) ; --# notpresent
+        <Pres,Simul,Neg,_>      => vf (doesnt agr) inf
         } ;
     prp  = verb.s ! VPresPart ;
+    inf  = verb.s ! VInf ;
     ad = [] ;
     s2 = \\a => if_then_Str verb.isRefl (reflPron ! a) []
     } ;
@@ -211,28 +222,28 @@ resource ResEng = ParamX ** open Prelude in {
       let 
         inf  = verb.inf ;
         fin  = verb.pres ! b ! agr ;
-        past = verb.past ! b ! agr ;
         part = verb.ppart ;
         vf : Str -> Str -> {fin, inf : Str} = \x,y -> 
           {fin = x ; inf = y} ;
       in
       case <t,ant,b,ord> of {
-        <Pres,Simul,_,  _>      => vf fin          [] ;
-        <Pres,Anter,Pos,_>      => vf (have agr)   part ;
-        <Pres,Anter,Neg,_>      => vf (havent agr) part ;
-        <Past,Simul,_,  _>      => vf past         [] ;
-        <Past,Anter,Pos,_>      => vf "had"        part ;
-        <Past,Anter,Neg,_>      => vf "hadn't"     part ;
-        <Fut, Simul,Pos,_>      => vf "will"       inf ;
-        <Fut, Simul,Neg,_>      => vf "won't"      inf ;
-        <Fut, Anter,Pos,_>      => vf "will"       ("have" ++ part) ;
-        <Fut, Anter,Neg,_>      => vf "won't"      ("have" ++ part) ;
-        <Cond,Simul,Pos,_>      => vf "would"      inf ;
-        <Cond,Simul,Neg,_>      => vf "wouldn't"   inf ;
-        <Cond,Anter,Pos,_>      => vf "would"      ("have" ++ part) ;
-        <Cond,Anter,Neg,_>      => vf "wouldn't"   ("have" ++ part)
+        <Pres,Anter,Pos,_>      => vf (have agr)   part ;  --# notpresent
+        <Pres,Anter,Neg,_>      => vf (havent agr) part ; --# notpresent
+        <Past,Simul,_,  _>      => vf (verb.past ! b ! agr) [] ; --# notpresent
+        <Past,Anter,Pos,_>      => vf "had"        part ; --# notpresent
+        <Past,Anter,Neg,_>      => vf "hadn't"     part ; --# notpresent
+        <Fut, Simul,Pos,_>      => vf "will"       inf ; --# notpresent
+        <Fut, Simul,Neg,_>      => vf "won't"      inf ; --# notpresent
+        <Fut, Anter,Pos,_>      => vf "will"       ("have" ++ part) ; --# notpresent
+        <Fut, Anter,Neg,_>      => vf "won't"      ("have" ++ part) ; --# notpresent
+        <Cond,Simul,Pos,_>      => vf "would"      inf ; --# notpresent
+        <Cond,Simul,Neg,_>      => vf "wouldn't"   inf ; --# notpresent
+        <Cond,Anter,Pos,_>      => vf "would"      ("have" ++ part) ; --# notpresent
+        <Cond,Anter,Neg,_>      => vf "wouldn't"   ("have" ++ part) ; --# notpresent
+        <Pres,Simul,_,  _>      => vf fin          [] 
         } ;
     prp = verb.prpart ;
+    inf = verb.inf ;
     ad = [] ;
     s2 = \\_ => []
     } ;
@@ -240,6 +251,7 @@ resource ResEng = ParamX ** open Prelude in {
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
     prp = vp.prp ;
+    inf = vp.inf ;
     ad = vp.ad ;
     s2 = \\a => vp.s2 ! a ++ obj ! a
     } ;
@@ -249,6 +261,7 @@ resource ResEng = ParamX ** open Prelude in {
   insertAdV : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
     prp = vp.prp ;
+    inf = vp.inf ;
     ad = vp.ad ++ adv ;
     s2 = \\a => vp.s2 ! a
     } ;
@@ -264,10 +277,10 @@ resource ResEng = ParamX ** open Prelude in {
           Pos => \\_ => verbs ! VVF VPres ;
           Neg => \\_ => verbs ! VVPresNeg
           } ;
-        past = table {
-          Pos => \\_ => verbs ! VVF VPast ;
-          Neg => \\_ => verbs ! VVPastNeg
-          } ;
+        past = table {                       --# notpresent
+          Pos => \\_ => verbs ! VVF VPast ;  --# notpresent
+          Neg => \\_ => verbs ! VVPastNeg    --# notpresent
+          } ;    --# notpresent
         inf = verbs ! VVF VInf ;
         ppart = verbs ! VVF VPPart ;
         prpart = verbs ! VVF VPresPart ;
@@ -280,7 +293,7 @@ resource ResEng = ParamX ** open Prelude in {
 
   infVP : Bool -> VP -> Agr -> Str = \isAux,vp,a ->
     if_then_Str isAux [] "to" ++ 
-    (vp.s ! Fut ! Simul ! Neg ! ODir ! a).inf ++ vp.s2 ! a ;
+    vp.inf ++ vp.s2 ! a ;
 
   agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
     case agr of {
@@ -293,7 +306,11 @@ resource ResEng = ParamX ** open Prelude in {
   does   = agrVerb "does"    "do" ;
   doesnt = agrVerb "doesn't" "don't" ;
 
-  Aux = {pres,past : Polarity => Agr => Str ; inf,ppart,prpart : Str} ;
+  Aux = {
+    pres : Polarity => Agr => Str ; 
+    past : Polarity => Agr => Str ;  --# notpresent
+    inf,ppart,prpart : Str
+    } ;
 
   auxBe : Aux = {
     pres = \\b,a => case <b,a> of {
@@ -301,10 +318,10 @@ resource ResEng = ParamX ** open Prelude in {
       <Neg,{n = Sg ; p = P1}> => ["am not"] ; --- am not I
       _ => agrVerb (posneg b "is")  (posneg b "are") a
       } ;
-    past = \\b,a => case a of {
-      {n = Sg ; p = P1|P3} => (posneg b "was") ;
-      _                    => (posneg b "were")
-      } ;
+    past = \\b,a => case a of {                  --# notpresent
+      {n = Sg ; p = P1|P3} => (posneg b "was") ; --# notpresent
+      _                    => (posneg b "were") --# notpresent
+      } ; --# notpresent
     inf  = "be" ;
     ppart = "been" ;
     prpart = "being"

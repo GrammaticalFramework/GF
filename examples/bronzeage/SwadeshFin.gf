@@ -1,4 +1,4 @@
---# -path=.:../finnish:../common:../abstract:../../prelude
+--# -path=.:../present:../finnish:../common:../abstract:../../prelude
 
 concrete SwadeshFin of Swadesh = CatFin
   ** open MorphoFin, LangFin, ParadigmsFin, Prelude in {

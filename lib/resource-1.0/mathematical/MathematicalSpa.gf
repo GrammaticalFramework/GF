@@ -1,4 +1,4 @@
---# -path=.:../spanish:../romance:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MathematicalSpa of Mathematical = 
   NounSpa - [ComplN2], --- to avoid ambiguity 

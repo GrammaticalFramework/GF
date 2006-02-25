@@ -5,22 +5,25 @@
 -- forms of sentences. Together they give 2 x 4 x 4 = 16 sentence forms.
 
 -- These tenses are defined for all languages in the library. More tenses
--- can be defined in the language extensions, e.g. the "passÃ© simple" of
+-- can be defined in the language extensions, e.g. the "passé simple" of
 -- Romance languages.
 
 abstract Common = {
 
   cat
     Text ;   -- text consisting of several phrases
-    Phr ;    -- phrase in a text                    e.g. "But be quiet my darling."
+    Phr ;    -- phrase in a text                    e.g. "But come here my darling."
 
     Pol ;
     Tense ;
     Ant ;
 
   fun
-    PPos, PNeg : Pol ;                  -- I sleep/don't sleep
-    TPres, TPast, TFut, TCond : Tense ; -- I sleep/slept/will sleep/would sleep
-    ASimul, AAnter : Ant ;              -- I sleep/have slept
+    PPos, PNeg : Pol ;             -- I sleep/don't sleep
+
+    TPres  : Tense ;                
+    ASimul : Ant ;
+    TPast, TFut, TCond : Tense ;   -- I slept/will sleep/would sleep --# notpresent
+    AAnter : Ant ;                 -- I have slept                   --# notpresent
 
 }

@@ -1,4 +1,4 @@
---# -path=.:../french:../romance:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MathematicalFre of Mathematical = 
   NounFre - [ComplN2], --- to avoid ambiguity 

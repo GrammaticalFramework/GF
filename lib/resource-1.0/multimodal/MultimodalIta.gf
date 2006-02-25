@@ -1,4 +1,4 @@
---# -path=.:../italian/:../romance:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MultimodalIta of Multimodal =
   NounIta,

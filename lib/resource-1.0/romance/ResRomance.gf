@@ -79,11 +79,11 @@ oper
     in {
     s = table {
       VPFinite t Simul => vf (vfin t)   (\_ -> []) ;
-      VPFinite t Anter => vf (habet t)  vpart ; 
+      VPFinite t Anter => vf (habet t)  vpart ;   --# notpresent
+      VPInfinit Anter  => vf (\_ -> []) (\a -> habere ++ vpart a) ;  --# notpresent
       VPImperat        => vf vimp       (\_ -> []) ;
       VPGerund         => vf (\_ -> []) (\_ -> vger) ;
-      VPInfinit Simul  => vf (\_ -> []) (\_ -> vinf) ;
-      VPInfinit Anter  => vf (\_ -> []) (\a -> habere ++ vpart a)
+      VPInfinit Simul  => vf (\_ -> []) (\_ -> vinf)
       } ;
     agr    = partAgr typ ;
     neg    = negation ;
@@ -174,10 +174,10 @@ oper
       s = \\t,a,b,m => 
         let 
           tm = case t of {
-            Pres => VPres m ;
-            Past => VImperf m ;
-            Fut  => VFut ;
-            Cond => VCondit
+            Past => VImperf m ;   --# notpresent
+            Fut  => VFut ;  --# notpresent
+            Cond => VCondit ;  --# notpresent
+            Pres => VPres m
             } ;
           vps   = vp.s ! VPFinite tm a ;
           verb  = vps.fin ! agr ;

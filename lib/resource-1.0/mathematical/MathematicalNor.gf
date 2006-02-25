@@ -1,4 +1,4 @@
---# -path=.:../norwegian:../scandinavian:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MathematicalNor of Mathematical = 
   NounNor - [ComplN2], --- to avoid ambiguity 

@@ -1,4 +1,4 @@
---# -path=.:../norwegian/:../scandinavian:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MultimodalNor of Multimodal =
   NounNor,

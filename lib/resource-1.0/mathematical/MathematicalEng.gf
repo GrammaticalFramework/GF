@@ -1,4 +1,4 @@
---# -path=.:../english:../abstract:../common:prelude
+--# -path=.:../present:prelude
 
 concrete MathematicalEng of Mathematical = 
   NounEng - [ComplN2], --- to avoid ambiguity 
