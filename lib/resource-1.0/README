@@ -23,6 +23,13 @@ For translation from Eng to all others, try e.g.
   gf langs.gfcm
   > p -cat=Phr -mcfg "I haven't seen her" | l -multi
 
+To link to the library, use the precompiled packages
+
+- ``lib/alltenses`` the complete ground-API library with all forms
+- ``lib/present`` a pruned ground-API library with present tense only
+- ``lib/mathematical`` special-purpose API for mathematical applications
+- ``lib/multimodal`` special-purpose API for multimodal dialogue applications
+
 The main changes from 0.9 to 1.0 are
 
 1. Refactoring of module structure: there are many more modules now.
@@ -45,18 +52,28 @@ The main changes from 0.9 to 1.0 are
    in this case. Also compilation time and amount of generated code (gfr)
    decreases quite a bit.
 
-5. Judging from the English implementation, there is a promise to get
-   a lighter and more efficient resource library, just because of
-   lessons learned from earlier implementations.
+5. The result is a lighter and more efficient resource library, just 
+   because of lessons learned from earlier implementations.
+   Compared to 0.9, compilation times and gfc sizes have dropped by
+   50% up to 70%.
 
 Version 0.9 is hereby "frozen" to its current state, which means that
 extensions and bug fixes are not carried over to it. However, if
 requested, we might provide a reimplementation of the old API using
 the new.
 
-When will it be ready? Hopefully around February 2006.
+When will it be ready? Today (25 February 2006) the implementation
+is complete for 8 languages (which excludes Danish and Russian).
+A number of bugs wait to be fixes, and a SourceForge release will
+be made some time in March.
+
+BUT WE ALREADY RECOMMEND USING 1.0 INSTEAD OF THE OLDER VERSIONS.
+Notice that GF v. 
 
 ---------- later history and status:
+
+25/2 Added directories for precompiled libraries directly under lib.
+     See doc/index.html for more information.
 
 21/2 Added modules Text and Idiom. Many bugs fixed, see TODO.
 
