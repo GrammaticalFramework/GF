@@ -1,4 +1,4 @@
---# -path=.:compiled:prelude
+--# -path=.:present:multimodal:mathematical:prelude
 
 concrete TramNor of Tram = TramI with 
   (Multimodal = MultimodalNor), 

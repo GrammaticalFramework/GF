@@ -14,7 +14,7 @@ To build the run-time grammar:
 Before this, you have to have compiled the libraries:
 
   cd <whatever you need>GF/lib/resource-1.0
-  make langs
+  make present
   make install
 
 To work with the grammar
@@ -24,6 +24,10 @@ To work with the grammar
 Once in GF, you can do translation,
 
   p -mcfg -lang=BronzeageEng "Don't eat that thick snake!" | tb
+
+spoken-language translation (requires ATK),
+
+  si -lang=BronzeageEng -tr | p -mcfg -lang=BronzeageEng | tb
 
 random generation,
 

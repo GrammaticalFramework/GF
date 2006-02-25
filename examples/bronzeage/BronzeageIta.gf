@@ -1,4 +1,4 @@
---# -path=.:resource-1.0/present:prelude:compiled
+--# -path=.:present:prelude
 
 concrete BronzeageIta of Bronzeage = CatIta, SwadeshIta **  BronzeageI with
   (Lang = LangIta),
