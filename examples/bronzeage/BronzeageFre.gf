@@ -1,4 +1,4 @@
---# -path=.:resource-1.0/present:prelude:compiled
+--# -path=.:present:prelude
 
 concrete BronzeageFre of Bronzeage = CatFre, SwadeshFre **  BronzeageI with
   (Lang = LangFre),

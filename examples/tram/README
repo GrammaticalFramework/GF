@@ -16,10 +16,12 @@ This works in eight languages.
 Notice that the compilation of the grammars uses precompiled 
 resources, located in 
 
-  GF/lib/compiled
+  GF/lib/
 
 To produce them, use 'make' and 'make install' in GF/lib/resource-1.0.
+You moreover have to set your GF_LIB_PATH to point to your GF/lib/.
 
-AR 7/11/2005 -- 23/2/2006
+
+AR 7/11/2005 -- 25/2/2006
 
 

@@ -1,4 +1,4 @@
---# -path=.:resource-1.0/present:prelude:compiled
+--# -path=.:present:prelude
 
 concrete BronzeageNor of Bronzeage = CatNor, SwadeshNor **  BronzeageI with
   (Lang = LangNor),
