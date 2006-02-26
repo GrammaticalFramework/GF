@@ -4,7 +4,7 @@ test:
 	echo "gr -cat=Text -number=11 -prob | tb" | gf -nocf -probs=lang.gfprob langs.gfcm
 
 langs:
-	echo "s ;; pm | wf langs.gfcm" | gf -nocf -src */Lang??*.gf english/LangEng.gf +RTS -M500M -K100M
+	echo "s ;; pm | wf langs.gfcm" | gf -nocf -src */Lang??*.gf english/LangEng.gf +RTS -M800M -K100M
 	cp -p */*.gfc */*.gfr ../alltenses
 
 present:

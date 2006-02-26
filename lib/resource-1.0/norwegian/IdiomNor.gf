@@ -11,7 +11,7 @@ concrete IdiomNor of Idiom = CatNor **
     GenericCl vp = mkClause "man" (agrP3 neutrum Sg) vp ;
 
     ProgrVP vp = 
-      insertObj (\\a => ["ved Ã¥"] ++ infVP vp a) (predV verbBe) ;
+      insertObj (\\a => ["ved å"] ++ infVP vp a) (predV verbBe) ;
 
 }
 

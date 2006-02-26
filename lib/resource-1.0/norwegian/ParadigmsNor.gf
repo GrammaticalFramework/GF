@@ -220,7 +220,7 @@ oper
 --3 Deponent verbs.
 --
 -- Some words are used in passive forms only, e.g. "hoppas", some as
--- reflexive e.g. "Ã¥ngra sig".
+-- reflexive e.g. "ångra sig".
 
   depV  : V -> V ;
   reflV : V -> V ;
@@ -369,7 +369,7 @@ oper
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {lock_VS = <>} ;
   mkV2S v p = mkV2 v p ** {lock_V2S = <>} ;
-  mkVV  v = v ** {c2 = "Ã¥" ; lock_VV = <>} ;
+  mkVV  v = v ** {c2 = "å" ; lock_VV = <>} ;
   mkV2V v p t = mkV2 v p ** {s3 = t ; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;

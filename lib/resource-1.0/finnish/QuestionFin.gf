@@ -45,9 +45,9 @@ concrete QuestionFin of Question = CatFin ** open ResFin, Prelude in {
         let 
           k = npform2case c ;
           ncase = case <k,num.isNum> of {
-            <Nom,  True> => NCase Sg Part ; -- mitk√§ kolme kytkint√§
+            <Nom,  True> => NCase Sg Part ; -- mitk‰ kolme kytkint‰
             <_,    True> => NCase Sg k ;    -- miksi kolmeksi kytkimeksi
-            _            => NCase n  k      -- mitk√§ kytkimet
+            _            => NCase n  k      -- mitk‰ kytkimet
             }
         in
         idet.s ! k ++ num.s ! Sg ! k ++ ord.s ! n ! k ++ cn.s ! ncase ; 

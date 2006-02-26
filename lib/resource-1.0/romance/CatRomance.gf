@@ -49,10 +49,10 @@ incomplete concrete CatRomance of Cat =
     NP,Pron = Pronoun ;
     Det     = {s : Gender => Case => Str ; n : Number} ;
     QuantSg = {s : Gender => Case => Str} ;
-    QuantPl = {s : Gender => Case => Str} ;
-    Quant   = {s : Number => Gender => Case => Str} ;
+    QuantPl = {s : Bool => Gender => Case => Str} ;
+    Quant   = {s : Bool => Number => Gender => Case => Str} ;
     Predet  = {s : AAgr   => Case => Str ; c : Case} ; -- la plupart de...
-    Num     = {s : Gender => Str} ;
+    Num     = {s : Gender => Str ; isNum : Bool} ;
     Ord     = {s : AAgr   => Str} ;
 
 -- Adverb

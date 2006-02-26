@@ -43,7 +43,7 @@ interface DiffScand = open CommonScand, Prelude in {
 
     relPron : GenNum => RCase => Str ;
 
--- Pronoun "sÃ¥dan" used in $Relative.RelCl$.
+-- Pronoun "sådan" used in $Relative.RelCl$.
 
     pronSuch : GenNum => Str ;
 

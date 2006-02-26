@@ -2,9 +2,9 @@ resource PhonoFre = open Prelude in {
 
 oper 
   voyelle : Strs = strs {
-    "a" ; "Ã¢" ; "Ã " ; "e" ; "Ãª" ; "Ã©" ; "Ã¨" ; 
+    "a" ; "à" ; "â " ; "e" ; "é" ; "è" ; "ê¨" ; 
     "h" ; 
-    "i" ; "Ã®" ; "o" ; "Ã´" ; "u" ; "Ã»" ; "y"
+    "i" ; "î" ; "o" ; "ô" ; "u" ; "û" ; "y"
     } ;
 
   elision : Str -> Str = \d -> d + pre {"e" ; "'" / voyelle} ;

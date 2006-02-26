@@ -28,8 +28,8 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
     SlashVVV2 np vv v2 =
       let
         sc = case v2.sc of {
-          NPCase Nom => vv.sc ;   -- joka minun t√§ytyy pest√§
-          c => c                  -- joka minulla t√§ytyy olla
+          NPCase Nom => vv.sc ;   -- joka minun t‰ytyy pest‰
+          c => c                  -- joka minulla t‰ytyy olla
           } 
       in
       {s = \\t,ag,p => 
@@ -53,7 +53,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
       c2 = prep
       } ;
 
-    EmbedS  s  = {s = "ett√§" ++ s.s} ;
+    EmbedS  s  = {s = "ett‰" ++ s.s} ;
     EmbedQS qs = {s = qs.s} ;
     EmbedVP vp = {s = infVP (NPCase Nom) Pos (agrP3 Sg) vp} ; --- case,pol,agr
 

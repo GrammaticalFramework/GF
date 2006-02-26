@@ -14,7 +14,7 @@ Eng: non-contracted negations
 
 Ita: infinitive contractions
 
-Ita: articles in possessives
+%Ita: articles in possessives
 
 %Ger: constituents of infinitive VP
 
@@ -36,7 +36,7 @@ API: mathematical/: math-specific lexicon
 
 API: multimodal/: dialogue-specific lexicon
 
-API: swadesh/: build a swadesh-related API and migrate lexica
+%API: swadesh/: build a swadesh-related API and migrate lexica
 
 API: mathematical/: symbolic formulas as Cl
 

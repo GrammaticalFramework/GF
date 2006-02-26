@@ -131,6 +131,9 @@ oper
 -- All the eight personal pronouns can be built by the following macro.
 -- The use of "ne" as atonic genitive is debatable.
 -- We follow the rule that the atonic nominative is empty.
+-- (The form $glie$ is no longer used, and also the other clitics are
+-- given in $DiffIta.argPron$ and therefore wouldn't be needed in the
+-- pronoun itself.)
 
   mkPronoun : (_,_,_,_,_,_,_,_,_ : Str) -> 
               Gender -> Number -> Person -> Pronoun =
@@ -143,7 +146,6 @@ oper
        Aton (CPrep P_di) => "ne" ; --- hmm
        Aton (CPrep P_a) => lui ;
        Aton q       => prepCase q ++ Lui ; ---- GF bug with c or p!
-       PreClit => glie ; 
        Poss {n = Sg ; g = Masc} => son ;
        Poss {n = Sg ; g = Fem}  => sa ;
        Poss {n = Pl ; g = Masc} => ses ;
