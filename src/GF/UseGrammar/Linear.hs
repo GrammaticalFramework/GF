@@ -121,7 +121,10 @@ expandLinTables gr t = case t of
 -- Do this for an entire grammar:
 
 unoptimizeCanon :: CanonGrammar -> CanonGrammar
-unoptimizeCanon g@(M.MGrammar ms) = M.MGrammar $ map convMod ms where
+unoptimizeCanon g@(M.MGrammar ms) = M.MGrammar $ map (unoptimizeCanonMod g) ms 
+
+unoptimizeCanonMod :: CanonGrammar -> CanonModule -> CanonModule
+unoptimizeCanonMod g = convMod where
   convMod (m, M.ModMod (M.Module (M.MTConcrete a) x flags me os defs)) = 
     (m, M.ModMod (M.Module (M.MTConcrete a) x flags me os (mapTree convDef defs)))
   convMod mm = mm

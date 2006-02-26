@@ -36,6 +36,10 @@ lin n8  =
 lin n9  =
   {inh = conj ; s = table {{p1 = unit ; p2 = mod} => "nueve" ; {p1 = unit ; p2 = unmod} => "nueve" ; {p1 = unit ; p2 = conj} => "y" ++ "nueve" ; {p1 = teen ; p2 = mod} => "diecinueve" ; {p1 = teen ; p2 = unmod} => "diecinueve" ; {p1 = teen ; p2 = conj} => "diecinueve" ; {p1 = ten ; p2 = mod} => "noventa" ; {p1 = ten ; p2 = unmod} => "noventa" ; {p1 = ten ; p2 = conj} => "noventa" ; {p1 = hundred ; p2 = mod} => "novecientos" ; {p1 = hundred ; p2 = unmod} => "novecientos" ; {p1 = hundred ; p2 = conj} => "novecientos"}} ;
 lin pot01  =
+  let
+    uno  : Gender => Str = table {Masc => "uno" ; Fem => "una"} ;
+    yuno : Gender => Str = \\g => "y" ++ uno ! g ;
+  in
   {s = table {{p1 = unit ; p2 = mod} => uno ; {p1 = unit ; p2 = unmod}
   => uno ; {p1 = unit ; p2 = conj} => yuno ; {p1 = teen ; p2 = mod} =>
   uno ; {p1 = teen ; p2 = unmod} => uno ; {p1 = teen ; p2 = conj} =>
@@ -74,7 +78,5 @@ param Modif = mod  | unmod  | conj  ;
 oper spl : Str -> {s : Gender => Str ; n : Number} = \s -> {s = \\_ =>
   s ; n = Pl} ;
 
-  uno  : Gender => Str = table {Masc => "uno" ; Fem => "una"} ;
-  yuno : Gender => Str = \\g => "y" ++ uno ! g ;
 
 }
