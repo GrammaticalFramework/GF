@@ -6,7 +6,6 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 
   param 
     Prep = P_de | P_a ;
-    NPForm = Ton Case | Aton Case | Poss {g : Gender ; n : Number} ; --- AAgr
     VType = VHabere | VEsse | VRefl ;
 
   oper
@@ -39,6 +38,8 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
       _        => prepCase c ++ "des"
       } ;
 
+    possCase = \_,_,c -> prepCase c ;
+
     partitive = \g,c -> case c of {
       CPrep P_de => elisDe ;
       _ => prepCase c ++ artDef g Sg (CPrep P_de)
@@ -62,18 +63,27 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
     vpAgrClit : Agr -> VPAgr = \a ->
       VPAgrClit (aagr a.g a.n) ; --- subty
 
-    pronArg = \n,p,acc,dat ->
+    pronArg = pronArgGen Neg ;
+
+-- Positive polarity is used in the imperative: stressed for 1st and
+-- 2nd persons.
+
+    pronArgGen : Polarity -> Number -> Person -> CAgr -> CAgr -> Str * Str = \b,n,p,acc,dat ->
       let 
+        cas : Person -> Case -> Case = \pr,c -> case <pr,b> of {
+          <P1 | P2, Pos> => CPrep P_de ; --- encoding in argPron
+          _ => c
+          } ;
         pacc = case acc of {
           CRefl => case p of {
             P3 => elision "s" ;  --- use of reflPron incred. expensive
-            _  => argPron Fem n p Acc
+            _  => argPron Fem n p (cas p Acc)
             } ;
-          CPron a => argPron a.g a.n a.p Acc ;
+          CPron a => argPron a.g a.n a.p (cas a.p Acc) ;
           _ => []
           } ;
         pdat = case dat of {
-          CPron a => argPron a.g a.n a.p dative ;
+          CPron a => argPron a.g a.n a.p (cas a.p dative) ;
           _ => []
           } ;
        in
@@ -88,11 +98,11 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
           agr   = aag ** {p = P2} ;
           verb  = (vp.s ! VPImperat).fin ! agr ;
           neg   = vp.neg ! pol ;
-          clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
+          clpr  = pronArgGen pol agr.n agr.p vp.clAcc vp.clDat ;
           compl = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
         in
         case pol of {
-          Pos => verb ++ clpr.p1 ++ compl ; ---- clitics can be different
+          Pos => verb ++ clpr.p1 ++ compl ;
           Neg => neg.p1 ++ clpr.p1 ++ verb ++ neg.p2 ++ compl
           } 
       } ;

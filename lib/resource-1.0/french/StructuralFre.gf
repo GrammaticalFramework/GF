@@ -80,7 +80,7 @@ lin
   someSg_Det = {s = \\_,c => prepCase c ++ elision "quelqu" ; n = Sg} ;
   something_NP = pn2np (mkPN ["quelque chose"] Masc) ;
   somewhere_Adv = ss ["quelque part"] ; --- ne - pas
-  that_Quant = {s = 
+  that_Quant = {s = \\_ => 
     table {
       Sg => \\g,c => prepCase c ++ genForms "ce" "cette" ! g ;  ---- cet ; là
       Pl => \\_,_ => "ces"
@@ -95,7 +95,7 @@ lin
   they_Pron = mkPronoun
     "elles" "les" "leur" "eux" "leur" "leur" "leurs"
     Fem Pl P3 ;
-  this_Quant = {s = 
+  this_Quant = {s = \\_ => 
     table {
       Sg => \\g,c => prepCase c ++ genForms "ce" "cette" ! g ;  ---- cet ; ci
       Pl => \\_,_ => "ces"

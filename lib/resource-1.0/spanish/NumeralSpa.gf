@@ -16,7 +16,7 @@ lincat Sub1000000 = {s : Gender => Str ; n : Number} ;
 lin num x = {
   s = table {
     NCard g  => x.s ! g ;
-    NOrd _ _ => "nÃºmero" ++ x.s ! Masc ---- TODO
+    NOrd _ _ => "número" ++ x.s ! Masc ---- TODO
     }
   } ;
 lin n2  =

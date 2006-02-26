@@ -80,7 +80,7 @@ lin
   something_NP = pn2np (mkPN ["qualche cosa"] Masc) ;
   somewhere_Adv = ss ["qualche parte"] ;
   that_Quant = {
-    s = table {
+    s = \\_ => table {
       Sg => \\g,c => prepCase c ++ genForms "quello" "quella" ! g ;
       Pl => \\g,c => prepCase c ++ genForms "quelli" "quelle" ! g ---- quegli
       }
@@ -95,7 +95,7 @@ lin
     "loro" "loro" "li" "glie" "loro" "loro" "loro" "loro" "loro" 
     Fem Pl P3 ;
   this_Quant = {
-    s = table {
+    s = \\_ => table {
       Sg => \\g,c => prepCase c ++ genForms "questo" "questa" ! g ;
       Pl => \\g,c => prepCase c ++ genForms "questi" "queste" ! g
       }

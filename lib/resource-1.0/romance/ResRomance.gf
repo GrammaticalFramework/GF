@@ -29,8 +29,7 @@ oper
   npform2case : NPForm -> Case = \p -> case p of {
     Ton  x => x ;
     Poss _ => genitive ;
-    Aton x => x ;
-    _      => dative ---- Ita PreClit
+    Aton x => x
     } ;
 
   case2npform : Case -> NPForm = \c -> case c of {

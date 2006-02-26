@@ -392,21 +392,21 @@ resource ResGer = ParamX ** open Prelude in {
     mkV 
       "haben" "habe" "hast" "hat" "habt" "hab" 
       "hatte" "hattest" "hatten" "hattet" 
-      "h√§tte" "gehabt" 
+      "h‰tte" "gehabt" 
       [] VHaben ;
 
   werden_V : Verb = 
     mkV 
       "werden" "werde" "wirst" "wird" "werdet" "werd" 
       "wurde" "wurdest" "wurden" "wurdet" 
-      "w√ºrde" "geworden" 
+      "w¸rde" "geworden" 
       [] VSein ;
 
   werdenPass : Verb = 
     mkV 
       "werden" "werde" "wirst" "wird" "werdet" "werd" 
       "wurde" "wurdest" "wurden" "wurdet" 
-      "w√ºrde" "worden" 
+      "w¸rde" "worden" 
       [] VSein ;
 
   sein_V : Verb = 
@@ -414,7 +414,7 @@ resource ResGer = ParamX ** open Prelude in {
       sein = mkV 
       "sein" "bin" "bist" "ist" "seid" "sei" 
       "war"  "warst" "waren" "wart" 
-      "w√§re" "gewesen" 
+      "w‰re" "gewesen" 
       [] VSein
     in
     {s = table {
@@ -544,7 +544,7 @@ resource ResGer = ParamX ** open Prelude in {
     {n = Pl ; p = P3} => caselist "sie" "sich" "sich" "ihrer"
     } ;
 
-  conjThat : Str = "da√ü" ;
+  conjThat : Str = "daﬂ" ;
 
   conjThan : Str = "als" ;
 

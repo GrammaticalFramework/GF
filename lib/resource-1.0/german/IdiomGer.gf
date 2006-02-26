@@ -5,7 +5,7 @@ concrete IdiomGer of Idiom = CatGer **
 
   lin
     ExistNP np = 
-      let geben = dirV2 (mkV "geben" "gibt" "gib" "gab" "gÃ¤be" "gegeben")
+      let geben = dirV2 (mkV "geben" "gibt" "gib" "gab" "gäbe" "gegeben")
       in
       mkClause "es" (agrP3 Sg) 
         (insertObj (\\_ => appPrep geben.c2 np.s) 

@@ -15,9 +15,9 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
           } ;
         ncase : Case -> NForm = \c -> 
           case <n,c,det.isNum,det.isPoss, det.isDef> of {
-            <_, Nom,  True,_,_>  => NCase Sg Part ; -- kolme kytkint√§(ni)
+            <_, Nom,  True,_,_>  => NCase Sg Part ; -- kolme kytkint‰(ni)
             <_, _, True,False,_> => NCase Sg c ;    -- kolmeksi kytkimeksi
-            <Pl,Nom,  _,_,False> => NCase Pl Part ; -- kytkimi√§
+            <Pl,Nom,  _,_,False> => NCase Pl Part ; -- kytkimi‰
             <_, Nom,_,True,_>    => NPossNom ;      -- kytkime+ni on/ovat...
             <Sg,Gen,_,True,_>    => NPossNom ;      -- kytkime+ni vika
             <Pl,Gen,_,True,_>    => NPossGenPl ;    -- kytkimie+ni viat
@@ -59,7 +59,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       } ;
 
     DetPl quant num ord = {
-      s1 = \\c => quant.s1 ! c ++ num.s ! Pl ! c ++ ord.s ! Pl ! c ; 
+      s1 = \\c => quant.s1 ! c ++ num.s ! Sg ! c ++ ord.s ! Pl ! c ; 
       s2 = quant.s2 ;
       n = Pl ;
       isNum = num.isNum ;

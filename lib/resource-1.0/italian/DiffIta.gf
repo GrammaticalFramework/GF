@@ -6,7 +6,6 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
 
   param 
     Prep = P_di | P_a | P_da | P_in | P_su | P_con ;
-    NPForm = Ton Case | Aton Case | PreClit | Poss {g : Gender ; n : Number} ; --- AAgr
     VType = VHabere | VEsse | VRefl ;
 
   oper
@@ -55,6 +54,8 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
                   genForms (elision "un" "un" "uno") (elision "una" "un'" "una") ! g ;
       _        => prepCase c 
       } ;
+
+    possCase = artDef ;
 
     partitive = \g,c -> case c of {
       CPrep P_di => "di" ;

@@ -30,36 +30,36 @@ incomplete concrete NounRomance of Noun =
       n = Sg
       } ;
     DetPl quant num ord = {
-      s = \\g,c => quant.s ! g ! c ++ num.s ! g ++ ord.s ! aagr g Pl ;
+      s = \\g,c => quant.s ! num.isNum ! g ! c ++ num.s ! g ++ ord.s ! aagr g Pl ;
       n = Pl
       } ;
 
-    SgQuant q = {s = q.s ! Sg} ;
-    PlQuant q = {s = q.s ! Pl} ;
+    SgQuant q = {s = q.s ! False ! Sg} ;
+    PlQuant q = {s = \\b => q.s ! b ! Pl} ;
 
     PossPron p = {
-      s = \\n,g,c => prepCase c ++ p.s ! Poss (aagr g n) ---- il mio!
+      s = \\_,n,g,c => possCase g n c ++ p.s ! Poss (aagr g n) ---- il mio!
       } ;
 
-    NoNum = {s = \\_ => []} ;
+    NoNum = {s = \\_ => [] ; isNum = False} ;
     NoOrd = {s = \\_ => []} ;
 
-    NumInt n = {s = \\_ => n.s} ;
-    OrdInt n = {s = \\_ => n.s ++ "ème"} ; ---
+    NumInt n = {s = \\_ => n.s ; isNum = True} ;
+    OrdInt n = {s = \\_ => n.s ++ "."} ; ---
 
-    NumNumeral numeral = {s = \\g => numeral.s ! NCard g} ;
+    NumNumeral numeral = {s = \\g => numeral.s ! NCard g ; isNum = True} ;
     OrdNumeral numeral = {s = \\a => numeral.s ! NOrd a.g a.n} ;
 
-    AdNum adn num = {s = \\a => adn.s ++ num.s ! a} ;
+    AdNum adn num = {s = \\a => adn.s ++ num.s ! a ; isNum = num.isNum} ;
 
     OrdSuperl adj = {s = \\a => adj.s ! Superl ! AF a.g a.n} ;
 
     DefArt = {
-      s = \\n,g,c => artDef g n c
+      s = \\_,n,g,c => artDef g n c
       } ;
 
     IndefArt = {
-      s = \\n,g,c => artIndef g n c
+      s = \\b,n,g,c => if_then_Str b [] (artIndef g n c) ;
       } ;
 
     MassDet = {

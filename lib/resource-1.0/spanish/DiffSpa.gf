@@ -6,7 +6,6 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
 
   param 
     Prep = P_de | P_a ;
-    NPForm = Ton Case | Aton Case | Poss {g : Gender ; n : Number} ; --- AAgr
     VType = VHabere | VRefl ;
 
   oper
@@ -36,6 +35,8 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
       Sg  => prepCase c ++ genForms "un"   "una" ! g ;
       _   => prepCase c ++ genForms "unos" "unas" ! g
       } ;
+
+    possCase = \_,_,c -> prepCase c ;
 
     partitive = \g,c -> case c of {
       CPrep P_de => "de" ;
