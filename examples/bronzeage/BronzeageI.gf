@@ -28,10 +28,10 @@ incomplete concrete BronzeageI of Bronzeage = Cat, Swadesh ** open Lang in {
     ImpV2 v x = ImpVP (ComplV2 v x) ;
 
     DetCN d n = DetCN d n ;
-    NumCN n cn = DetCN (DetPl (PlQuant IndefArt) n NoOrd) cn ;
+    NumCN k cn = DetCN (DetPl (PlQuant IndefArt) k NoOrd) cn ;
 
     UseN n = UseN n ;
-    ModCN a n = AdjCN (PositA a) n ;
+    ModCN a cn = AdjCN (PositA a) cn ;
 
   param
     SForm = SPos | SNeg | SQuest ;
