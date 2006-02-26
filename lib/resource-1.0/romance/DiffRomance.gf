@@ -2,11 +2,12 @@
 
 interface DiffRomance = open CommonRomance, Prelude in {
 
--- The first six constants show the essential differences
+-- The first eight constants show the essential differences
 -- between French, Italian, and Romance syntaxes (as regards the
 -- resource API). The other constants are either derivatively
 -- dependent, or have as values strings, which are language-dependent
 -- anyway.
+
 
 --2 Constants whose definitions fundamentally depend on language
 
@@ -47,6 +48,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
 -- To render imperatives (with their clitics etc).
 
   oper mkImperative : CommonRomance.VP -> {s : Polarity => AAgr => Str} ;
+
 
 --2 Constants that must derivatively depend on language
 
