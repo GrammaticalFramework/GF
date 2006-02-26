@@ -1,7 +1,7 @@
 incomplete concrete NounScand of Noun =
    CatScand ** open CommonScand, ResScand, Prelude in {
 
-  flags optimize=none_subs ; ---- all_subs
+  flags optimize=all_subs ;
 
 -- The rule defines $Det Quant Num Ord CN$ where $Det$ is empty if
 -- it is the definite article ($DefSg$ or $DefPl$) and both $Num$ and

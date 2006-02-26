@@ -39,6 +39,7 @@ import GF.Compile.Optimize
 import GF.Compile.GrammarToCanon
 import GF.Canon.Share
 import GF.Canon.Subexpressions (elimSubtermsMod,unSubelimModule)
+import GF.UseGrammar.Linear (unoptimizeCanonMod) ----
 
 import qualified GF.Canon.CanonToGrammar as CG
 
@@ -165,7 +166,7 @@ extendCompileEnvCanon ((k,s,c),fts) cgr ft =
 type TimedCompileEnv = (CompileEnv,[(FilePath,ModTime)])
 
 compileOne :: Options -> TimedCompileEnv -> FullPath -> IOE TimedCompileEnv
-compileOne opts env@((_,srcgr,_),_) file = do
+compileOne opts env@((_,srcgr,cancgr0),_) file = do
 
   let putp = putPointE opts
   let putpp = putPointEsil opts
@@ -189,7 +190,8 @@ compileOne opts env@((_,srcgr,_),_) file = do
     -- for canonical gf, read the file and update environment, also source env
     "gfc" -> do
        cm <- putp ("+ reading" +++ file) $ getCanonModule file
-       sm <- ioeErr $ CG.canon2sourceModule $ unSubelimModule cm
+       let cancgr = updateMGrammar (MGrammar [cm]) cancgr0 
+       sm <- ioeErr $ CG.canon2sourceModule $ unoptimizeCanonMod cancgr $ unSubelimModule cm
        ft <- getReadTimes file
        extendCompileEnv env (sm, cm) ft
 
