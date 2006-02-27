@@ -342,7 +342,9 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
     warnDiscont opts
     let n = optIntOrN opts flagNumber 10 
     qs <- transTrainList opts (sgr il) (sgr ol) (toInteger n)
-    returnArg (AString $ foldr (+++++) [] [unlines (s:ss) | (s,ss) <- qs]) sa
+    let hdr = unlines ["# From: " ++ prIdent il,
+                       "# To: " ++ prIdent ol]
+    returnArg (AString $ hdr ++++ foldr (+++++) [] [unlines (s:ss) | (s,ss) <- qs]) sa
 
   CMorphoQuiz -> do
     warnDiscont opts 
