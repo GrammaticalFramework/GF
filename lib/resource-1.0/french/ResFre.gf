@@ -8,6 +8,6 @@
 
 instance ResFre of ResRomance = DiffFre ** open CommonRomance, Prelude in {
 
-flags optimize=all ;
+flags optimize=noexpand ;
 
 } ;

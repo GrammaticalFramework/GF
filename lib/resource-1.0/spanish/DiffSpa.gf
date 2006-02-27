@@ -84,7 +84,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
             } ;
           neg   = vp.neg ! pol ;
           clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
-          compl = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
+          compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
         in
         neg.p1 ++ verb ++ clpr.p1 ++ compl ;
       } ;
