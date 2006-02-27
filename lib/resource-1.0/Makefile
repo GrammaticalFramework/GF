@@ -8,6 +8,7 @@ langs:
 	cp -p */*.gfc */*.gfr ../alltenses
 
 present:
+	chmod u+x mkPresent
 	gf -make -src -preproc=./mkPresent */Lang??*.gf
 	mv */*.gfc */*.gfr ../present
 
