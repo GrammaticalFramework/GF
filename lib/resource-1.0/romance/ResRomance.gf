@@ -145,6 +145,17 @@ oper
     ext   = vp.ext ;
     } ;
 
+  insertAdV : Str -> VP -> VP = \co,vp -> { 
+    s     = vp.s ;
+    agr   = vp.agr ;
+    clAcc = vp.clAcc ; 
+    clDat = vp.clDat ; 
+    clit2 = vp.clit2 ; 
+    neg   = \\b => let vpn = vp.neg ! b in {p1 = vpn.p1 ; p2 = vpn.p2 ++ co} ;
+    comp  = vp.comp ;
+    ext   = vp.ext ;
+    } ;
+
   insertClit2 : Str -> VP -> VP = \co,vp -> { 
     s     = vp.s ;
     agr   = vp.agr ;
@@ -193,7 +204,7 @@ oper
         inf  = (vp.s ! VPInfinit Simul).inf ! (aagr agr.g agr.n) ;
         neg  = vp.neg ! Pos ; --- Neg not in API
         clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
-        obj  = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
+        obj  = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
       in
       clitInf (clpr.p1 ++ vp.clit2) inf ++ obj ;
 

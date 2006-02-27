@@ -85,7 +85,7 @@ lin
       Pl => \\g,c => prepCase c ++ genForms "quelli" "quelle" ! g ---- quegli
       }
     } ;
-  that_NP = mkNP ["questo"] Masc Sg ;
+  that_NP = mkNP ["quello"] Masc Sg ;
   there7from_Adv = ss ["di là"] ;
   there7to_Adv = ss "là" ; --- ci
   there_Adv = ss "là" ;

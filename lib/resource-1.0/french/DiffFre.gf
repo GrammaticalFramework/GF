@@ -63,7 +63,28 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
     vpAgrClit : Agr -> VPAgr = \a ->
       VPAgrClit (aagr a.g a.n) ; --- subty
 
-    pronArg = pronArgGen Neg ;
+----    pronArg = pronArgGen Neg ; --- takes more space and time
+
+    pronArg : Number -> Person -> CAgr -> CAgr -> Str * Str = \n,p,acc,dat ->
+      let 
+        pacc = case acc of {
+          CRefl => case p of {
+            P3 => elision "s" ;  --- use of reflPron incred. expensive
+            _  => argPron Fem n p Acc
+            } ;
+          CPron a => argPron a.g a.n a.p Acc ;
+          _ => []
+          } ;
+        pdat = case dat of {
+          CPron a => argPron a.g a.n a.p dative ;
+          _ => []
+          } ;
+       in
+       case dat of {
+          CPron {p = P3} => <pacc ++ pdat,[]> ;
+          _ => <pdat ++ pacc, []>
+          } ;
+
 
 -- Positive polarity is used in the imperative: stressed for 1st and
 -- 2nd persons.
@@ -99,11 +120,11 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
           verb  = (vp.s ! VPImperat).fin ! agr ;
           neg   = vp.neg ! pol ;
           clpr  = pronArgGen pol agr.n agr.p vp.clAcc vp.clDat ;
-          compl = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
+          compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
         in
         case pol of {
           Pos => verb ++ clpr.p1 ++ compl ;
-          Neg => neg.p1 ++ clpr.p1 ++ verb ++ neg.p2 ++ compl
+          Neg => neg.p1 ++ clpr.p1 ++ verb ++ compl
           } 
       } ;
 

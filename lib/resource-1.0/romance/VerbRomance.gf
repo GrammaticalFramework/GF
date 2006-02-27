@@ -35,7 +35,7 @@ incomplete concrete VerbRomance of Verb =
     CompAdv a = {s = \\_  => a.s} ;
 
     AdvVP vp adv = insertAdv adv.s vp ;
-    AdVVP adv vp = insertAdv adv.s vp ;
+    AdVVP adv vp = insertAdV adv.s vp ;
 
     ReflV2 v = case v.c2.isDir of {
       True  => predV {s = v.s ; vtyp = vRefl} ;
