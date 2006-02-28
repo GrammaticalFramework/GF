@@ -3,6 +3,9 @@
 concrete SwadeshEng of Swadesh = CatEng 
   ** open MorphoEng, LangEng, ParadigmsEng, IrregEng, Prelude in {
 
+  lincat
+    MassN = N ;
+
   lin
 
     -- Pronouns
@@ -28,6 +31,8 @@ concrete SwadeshEng of Swadesh = CatEng
     few_Det = mkDeterminer Pl "few" ;
     other_Det = mkDeterminer Pl "other" ;
 
+    left_Ord = ss "left" ;
+    right_Ord = ss "right" ;
 
     -- Adverbs
 
@@ -92,9 +97,6 @@ concrete SwadeshEng of Swadesh = CatEng
     white_A = white_A ;
     wide_A = regA "wide" ;
     yellow_A = yellow_A ;
-
-    left_A = regA "left" ;
-    right_A = regA "right" ;
 
     -- Nouns
 

@@ -3,6 +3,9 @@
 concrete SwadeshNor of Swadesh = CatNor
   ** open MorphoNor, LangNor, ParadigmsNor, IrregNor, Prelude in {
 
+  lincat
+    MassN = N ;
+
   lin
 
     -- Pronouns
@@ -27,6 +30,9 @@ concrete SwadeshNor of Swadesh = CatNor
     some_Det = someSg_Det ;
     few_Det  = {s = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
     other_Det = {s = \\_,_ => "andre" ; n = Pl ; det = DDef Indef} ;
+
+    left_Ord = {s = "venstre" ; isDet = True} ;
+    right_Ord = {s = "høyre" ; isDet = True} ;
 
     -- Adverbs
 
@@ -70,14 +76,12 @@ concrete SwadeshNor of Swadesh = CatNor
     good_A = good_A ;
     green_A = green_A ;
     heavy_A = irregADeg "tung" "tyngre" "tyngst" ;
-    left_A = mkA "venstre" "venstre" "venstre" ;
     long_A = long_A ;
     narrow_A = narrow_A ;
     near_A = mkADeg "nære" "nære" "nære" "nærmere" "nærmest" ;
     new_A = new_A ;
     old_A = old_A ;
     red_A = red_A ;
-    right_A = mkA "høyre" "høyre" "høyre" ;
     rotten_A = mk3ADeg "råtten" "råttent" "råtne" ;
     round_A = regA "rund" ;
     sharp_A = mk2A "kvass" "kvast" ;

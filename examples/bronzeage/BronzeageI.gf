@@ -1,11 +1,11 @@
-incomplete concrete BronzeageI of Bronzeage = Cat, Swadesh ** open Lang in {
+incomplete concrete BronzeageI of Bronzeage = open Lang in {
 
   flags 
     startcat = Phr ; optimize = all_subs ;
     unlexer = text ; lexer = text ;
 
   lincat
-    Sent = {s : SForm => Str} ; 
+    Sent = {s : SForm => Str} ; MassCN = CN ;
 
   lin
     PhrPos sent = {s = sent.s ! SPos ++ "."} ;
@@ -17,6 +17,7 @@ incomplete concrete BronzeageI of Bronzeage = Cat, Swadesh ** open Lang in {
     SentV  v np = mkSent np (UseV v) ;
 
     SentV2 v x y = mkSent x (ComplV2 v y) ;
+    SentV2Mass v x y = mkSent x (ComplV2 v (massNP y)) ;
     SentV3 v x y z = mkSent x (ComplV3 v y z) ;
     SentA  a x = mkSent x (UseComp (CompAP (PositA a))) ;
     SentNP a x = mkSent x (UseComp (CompNP a)) ;
@@ -27,11 +28,15 @@ incomplete concrete BronzeageI of Bronzeage = Cat, Swadesh ** open Lang in {
     ImpV v = ImpVP (UseV v) ;
     ImpV2 v x = ImpVP (ComplV2 v x) ;
 
+    UsePron p = UsePron p ;
     DetCN d n = DetCN d n ;
     NumCN k cn = DetCN (DetPl (PlQuant IndefArt) k NoOrd) cn ;
 
     UseN n = UseN n ;
     ModCN a cn = AdjCN (PositA a) cn ;
+
+    UseMassN mn = UseN mn ;
+    ModMass a cn = AdjCN (PositA a) cn ;
 
   param
     SForm = SPos | SNeg | SQuest ;
@@ -48,4 +53,7 @@ incomplete concrete BronzeageI of Bronzeage = Cat, Swadesh ** open Lang in {
           } ;
         lock_Sent = <>
       } ;
+
+    massNP : CN -> NP = \mcn -> DetCN (DetSg MassDet NoOrd) mcn ;
+
 }
