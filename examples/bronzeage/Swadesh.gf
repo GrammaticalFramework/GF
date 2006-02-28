@@ -224,7 +224,7 @@ abstract Swadesh = Cat ** {
     sing_V : V ;
     sit_V : V ;
     sleep_V : V ;
-    smell_V : V2 ;
+    smell_V : V ;
     spit_V : V ;
     split_V : V2 ;
     squeeze_V : V2 ;
