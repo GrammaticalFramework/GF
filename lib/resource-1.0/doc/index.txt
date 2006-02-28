@@ -24,7 +24,7 @@ The simplest way to get the library is to install the precompiled version
 [``lib/compiled.tgz`` ../../compiled.tgz]. Just do
 ```
   cd GF/lib
-  tar tvfz compiled.tgz
+  tar xvfz compiled.tgz
 ```
 There is no need to link application grammars to the source directories of the
 library. Use one (or several) of the following packages instead:
