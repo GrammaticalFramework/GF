@@ -41,7 +41,7 @@ concrete SwadeshSwe of Swadesh = CatSwe
     where_IAdv = where_IAdv ;
     when_IAdv = when_IAdv ;
     how_IAdv = how_IAdv ;
-    far_Adv = mkAdv ["långt borta"] ;
+    far_Adv = mkAdv "långt" ;
 
     -- not : Adv ; -- ?
 
