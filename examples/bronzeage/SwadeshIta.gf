@@ -36,8 +36,14 @@ concrete SwadeshIta of Swadesh = CatIta
       n = Pl
       } ;
 
---    left_Ord = regA "sinistro" ;
---    right_Ord = regA "destro" ;
+    left_Ord = mkOrd (regA "sinistro") ;
+    right_Ord = mkOrd (regA "destro") ;
+
+  oper
+    mkOrd : A -> Ord ;
+    mkOrd x = {s = \\ag => x.s ! Posit ! AF ag.g ag.n; lock_Ord = <> } ;
+
+  lin
 
     -- Adverbs
 

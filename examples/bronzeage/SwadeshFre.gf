@@ -37,8 +37,14 @@ concrete SwadeshFre of Swadesh = CatFre
       n = Pl
       } ;
 
---    left_Ord = regA "gauche" ;
---    right_Ord = regA "droite" ;
+    left_Ord = mkOrd (regA "gauche") ;
+    right_Ord = mkOrd (regA "droite") ;
+
+  oper
+    mkOrd : A -> Ord ;
+    mkOrd x = {s = \\ag => x.s ! Posit ! AF ag.g ag.n; lock_Ord = <> } ;
+
+  lin
 
     -- Adverbs
 
