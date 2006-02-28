@@ -52,7 +52,7 @@ lin
   close_V2 = dirV2 (mk2V "stänga" "stängde") ;
   coat_N = regN "rock" utrum ;
   cold_A = regA "kall" ;
-  come_V = (mkV "komma" "kommer" "kom" "kom" "kommit" "kommen") ;
+  come_V = komma_V ;
   computer_N = mk2N "dator" "datorer" ;
   country_N = mkN "land" "landet" "länder" "länderna" ;
   cousin_N = mk2N "kusin" "kusiner" ;

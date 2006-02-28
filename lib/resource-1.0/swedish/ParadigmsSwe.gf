@@ -318,7 +318,7 @@ oper
           _        => mkN bil (bil + "en") bilar (bilar + "na")   -- ros,rosor
           } ;
        "ar" => decl2Noun bil ;
-       "er" => decl3Noun bil ;                             -- 
+       "er" => decl3gNoun bil bilar ;                   -- fot, fötter
        "en" => decl4Noun bil ;                             -- rike, riken
        _    => mkN bil (bil + "et") bilar (bilar + "n") -- centrum, centra 
       }) ;
@@ -332,10 +332,12 @@ oper
   decl2Noun : Str -> N = \bil ->
     let 
       bb : Str * Str = case bil of {
-        pojk + "e"                 => <pojk + "ar",    bil  + "n"> ;
-        nyck + "e" + l@("l" | "r") => <nyck + l + "ar",bil  + "n"> ;
-        sock + "e" + "n"           => <sock + "nar",   sock + "nen"> ;
-        _                          => <bil + "ar",     bil  + "en">
+        br   + ("o" | "u" | "ö" | "å") => <bil + "ar",    bil  + "n"> ;
+        pojk + "e"                     => <pojk + "ar",    bil  + "n"> ;
+        hi + "mme" + l@("l" | "r")     => <hi + "m" + l + "ar",hi + "m" + l + "en"> ;
+        nyck + "e" + l@("l" | "r")     => <nyck + l + "ar",bil  + "n"> ;
+        sock + "e" + "n"               => <sock + "nar",   sock + "nen"> ;
+        _                              => <bil + "ar",     bil  + "en">
         } ;
     in mkN bil bb.p2 bb.p1 (bb.p1 + "na") ;
 
@@ -344,6 +346,12 @@ oper
       "e" => mkN sak (sak + "n") (sak +"r") (sak + "rna") ;
       "y" | "å" | "é" | "y" => mkN sak (sak + "n") (sak +"er") (sak + "erna") ;
       _ => mkN sak (sak + "en") (sak + "er") (sak + "erna")
+      } ;
+  decl3gNoun : Str -> Str -> N = \sak,saker ->
+    case last sak of {
+      "e" => mkN sak (sak + "n") saker (saker + "na") ;
+      "y" | "å" | "é" | "y" => mkN sak (sak + "n") saker (saker + "na") ;
+      _ => mkN sak (sak + "en") saker (saker + "na")
       } ;
 
   decl4Noun : Str -> N = \rike ->
@@ -367,7 +375,16 @@ oper
      lock_NP = <>} ;
 
   mkA a b c d e f g = mkAdjective a b c d e f g ** {lock_A = <>} ;
-  regA fin          = mk3A fin (fin + "t") (fin + "a") ** {lock_A = <>} ;
+  regA fin = 
+    let fint : Str = case fin of {
+      ru  + "nd" => ru  + "nt" ; 
+      se  + "dd" => se  + "tt" ; 
+      pla + "tt" => pla + "tt" ; 
+      gla + "d"  => gla + "tt" ;
+      _          => fin + "t" 
+    } 
+    in
+    mk3A fin fint (fin + "a") ** {lock_A = <>} ;
   irregA ung yngre yngst = 
     mkA ung (ung + "t") (ung + "a") (ung + "a") yngre yngst (yngst+"a") ;
 
@@ -442,17 +459,14 @@ oper
         "a" => init sälja ;
         _ => sälja
         } ;
-      er = case a of {
-        "a" => "er" ;
-        _ => "r"
-        } ;
+      säljer = conj2 sälja ;
       såld = case Predef.dp 2 sålt of {
         "it" => Predef.tk 2 sålt + "en" ;
         "tt" => Predef.tk 2 sålt + "dd" ;
         _ => init sålt + "d"
         }
     in 
-    mkV sälja (sälj + er) sälj sålde sålt såld
+    mkV sälja (säljer.s ! VF (VPres Act)) (säljer.s ! (VF (VImper Act))) sålde sålt såld
      ** {s1 = [] ; lock_V = <>} ;
 
   partV v p = {s = \\f => v.s ! f ++ p ; vtype = v.vtype ; lock_V = <>} ;
