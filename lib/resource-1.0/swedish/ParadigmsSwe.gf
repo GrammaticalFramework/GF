@@ -454,12 +454,10 @@ oper
 
   irregV = \sälja, sålde, sålt -> 
     let
-      a = last sälja ; 
-      sälj = case a of {
-        "a" => init sälja ;
-        _ => sälja
+      säljer = case last sälja of {
+        "a" => conj2 sälja ;
+        _   => conj3 sälja
         } ;
-      säljer = conj2 sälja ;
       såld = case Predef.dp 2 sålt of {
         "it" => Predef.tk 2 sålt + "en" ;
         "tt" => Predef.tk 2 sålt + "dd" ;
