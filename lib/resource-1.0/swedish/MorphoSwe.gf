@@ -18,6 +18,7 @@ resource MorphoSwe = CommonScand, ResSwe ** open Prelude, (Predef=Predef) in {
 oper
   ptPretAll : Str -> Str * Str = \funnen -> 
     case funnen of {
+      ko  +"mmen" => <ko  +"mmet", ko  + "mna"> ; 
       vun  +"nen" => <vun  +"net", vun  + "na"> ; 
       bjud + "en" => <bjud + "et", bjud + "na"> ; 
       se   + "dd" => <se   + "tt", se   +"dda"> ;
