@@ -205,7 +205,7 @@ concrete SwadeshSwe of Swadesh = CatSwe
     fall_V = falla_V ;
     fear_V = dirV2 (regV "frukta") ;
       -- FIXME: passive forms are very strange
-    fight_V = dirV2 (mkV "slåss" "slåss" "slåss" "slogs" "slagits" "slagen") ;
+    fight_V = mkV2 (mkV "slåss" "slåss" "slåss" "slogs" "slagits" "slagen") "med" ;
     float_V = flyta_V ;
     flow_V = rinna_V ;
     fly_V = flyga_V ;
