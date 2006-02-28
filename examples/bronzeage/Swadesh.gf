@@ -116,7 +116,7 @@ abstract Swadesh = Cat ** {
     earth_N : MassN ;
     egg_N : N ;
     eye_N : N ;
-    fat_N : N ;
+    fat_N : MassN ;
     father_N : N ;
     feather_N : N ;
     fingernail_N : N ;
@@ -128,7 +128,7 @@ abstract Swadesh = Cat ** {
     forest_N : N ;
     fruit_N : N ;
     grass_N : N ;
-    guts_N : MassN ;
+    guts_N : N ;
     hair_N : N ;
     hand_N : N ;
     head_N : N ;
