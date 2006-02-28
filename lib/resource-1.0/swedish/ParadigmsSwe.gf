@@ -417,7 +417,11 @@ oper
     let lek = init leka in
     case last lek of {
       "l" | "m" | "n" | "v" | "g" => 
-        mkV leka (lek + "er") lek (lek +"de") (lek +"t") (lek +"d") ;
+        let gom = case <lek : Tok> of {
+          _ + "mm" => init lek ;
+          _ => lek
+          }
+        in mkV leka (lek + "er") gom (gom +"de") (gom +"t") (gom +"d") ;
       "r" =>
         mkV leka lek lek (lek +"de") (lek +"t") (lek +"d") ;
       _ => case leka of {
