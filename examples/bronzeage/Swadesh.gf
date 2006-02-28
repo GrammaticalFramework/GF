@@ -123,7 +123,7 @@ abstract Swadesh = Cat ** {
     fire_N : N ;
     fish_N : N ;
     flower_N : N ;
-    fog_N : N ;
+    fog_N : MassN ;
     foot_N : N ;
     forest_N : N ;
     fruit_N : N ;
