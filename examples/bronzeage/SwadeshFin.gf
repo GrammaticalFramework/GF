@@ -41,8 +41,14 @@ concrete SwadeshFin of Swadesh = CatFin
     few_Det  = mkDet Sg (regN "harva") ;
     other_Det = mkDet Sg (regN "muu") ;
 
---    left_Ord = mkA (regN "vasen") ;
---    right_Ord = mkA (regN "oikea") ;
+    left_Ord = mkOrd (regN "vasen") ;
+    right_Ord = mkOrd (regN "oikea") ;
+
+  oper
+    mkOrd : N -> Ord ;
+    mkOrd x = {s = \\n,c => x.s ! NCase n c; lock_Ord = <> } ;
+
+  lin
 
     -- Adverbs
 
