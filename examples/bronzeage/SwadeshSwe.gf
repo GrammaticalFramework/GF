@@ -1,7 +1,10 @@
---# -path=.:../swedish:../common:../abstract:../scandinavian:../../prelude
+--# -path=.:present:prelude
 
 concrete SwadeshSwe of Swadesh = CatSwe
   ** open MorphoSwe, LangSwe, ParadigmsSwe, IrregSwe, Prelude in {
+
+  lincat
+    MassN = N ;
 
   lin
 
@@ -28,6 +31,8 @@ concrete SwadeshSwe of Swadesh = CatSwe
     few_Det  = {s = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
     other_Det = {s = \\_,_ => "andra" ; n = Pl ; det = DDef Indef} ;
 
+    left_Ord = {s = "vänstra" ; isDet = True} ;
+    right_Ord = {s = "högra" ; isDet = True} ;
 
     -- Adverbs
 
@@ -72,7 +77,6 @@ concrete SwadeshSwe of Swadesh = CatSwe
     good_A = good_A ;
     green_A = green_A ;
     heavy_A = irregA "tung" "tyngre" "tyngst" ;
-    left_A = regA "vänster" ; ----
     long_A = long_A ;
     narrow_A = narrow_A ;
     near_A = mkA "nära" "nära" "nära" "nära"
@@ -80,7 +84,6 @@ concrete SwadeshSwe of Swadesh = CatSwe
     new_A = new_A ;
     old_A = old_A ;
     red_A = red_A ;
-    right_A = regA "höger" ; ----
     rotten_A = mk3A "rutten" "ruttet" "ruttna" ;
     round_A = regA "rund" ;
     sharp_A = regA "vass" ;

@@ -1,5 +1,7 @@
 -- Swadesh 207
 abstract Swadesh = Cat ** {
+  cat MassN;
+
   fun
 
     -- Pronouns
@@ -24,6 +26,9 @@ abstract Swadesh = Cat ** {
     some_Det : Det ;
     few_Det : Det ;
     other_Det : Det ;
+
+    left_Ord : Ord ;
+    right_Ord : Ord ;
 
     -- Adverbs
 
@@ -91,27 +96,24 @@ abstract Swadesh = Cat ** {
     wide_A : A ;
     yellow_A : A ;
 
-    left_A : A ;
-    right_A : A ;
-
     -- Nouns
 
     animal_N : N ;
-    ashes_N : N ;
+    ashes_N : MassN ;
     back_N : N ;
-    bark_N : N ;
+    bark_N : MassN ;
     belly_N : N ;
     bird_N : N ;
-    blood_N : N ;
+    blood_N : MassN ;
     bone_N : N ;
     breast_N : N ;
     child_N : N ;
     cloud_N : N ;
     day_N : N ;
     dog_N : N ;
-    dust_N : N ;
+    dust_N : MassN ;
     ear_N : N ;
-    earth_N : N ;
+    earth_N : MassN ;
     egg_N : N ;
     eye_N : N ;
     fat_N : N ;
@@ -126,14 +128,14 @@ abstract Swadesh = Cat ** {
     forest_N : N ;
     fruit_N : N ;
     grass_N : N ;
-    guts_N : N ;
+    guts_N : MassN ;
     hair_N : N ;
     hand_N : N ;
     head_N : N ;
     heart_N : N ;
     horn_N : N ;
     husband_N : N ;
-    ice_N : N ;
+    ice_N : MassN ;
     knee_N : N ;
     lake_N : N ;
     leaf_N : N ;
@@ -141,7 +143,7 @@ abstract Swadesh = Cat ** {
     liver_N : N ;
     louse_N : N ;
     man_N : N ;
-    meat_N : N ;
+    meat_N : MassN ;
     moon_N : N ;
     mother_N : N ;
     mountain_N : N ;
@@ -151,20 +153,20 @@ abstract Swadesh = Cat ** {
     night_N : N ;
     nose_N : N ;
     person_N : N ;
-    rain_N : N ;
+    rain_N : MassN ;
     river_N : N ;
     road_N : N ;
     root_N : N ;
     rope_N : N ;
-    salt_N : N ;
-    sand_N : N ;
+    salt_N : MassN ;
+    sand_N : MassN ;
     sea_N : N ;
     seed_N : N ;
     skin_N : N ;
     sky_N : N ;
-    smoke_N : N ;
+    smoke_N : MassN ;
     snake_N : N ;
-    snow_N : N ;
+    snow_N : MassN ;
     star_N : N ;
     stick_N : N ;
     stone_N : N ;
@@ -173,7 +175,7 @@ abstract Swadesh = Cat ** {
     tongue_N : N ;
     tooth_N : N ;
     tree_N : N ;
-    water_N : N ;
+    water_N : MassN ;
     wife_N : N ;
     wind_N : N ;
     wing_N : N ;

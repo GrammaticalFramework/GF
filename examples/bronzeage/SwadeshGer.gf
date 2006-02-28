@@ -3,6 +3,9 @@
 concrete SwadeshGer of Swadesh = CatGer
   ** open MorphoGer, LangGer, ParadigmsGer, Prelude in {
 
+  lincat
+    MassN = N ;
+
   lin
 
     -- Pronouns
@@ -28,6 +31,9 @@ concrete SwadeshGer of Swadesh = CatGer
 --     few_Det = mkDeterminer Pl "few" ;
 --     other_Det = mkDeterminer Pl "other" ;
 
+
+--     left_Ord = regA "left" ;
+--     right_Ord = regA "right" ;
 
     -- Adverbs
 
@@ -92,9 +98,6 @@ concrete SwadeshGer of Swadesh = CatGer
     white_A = white_A ;
 --     wide_A = regA "wide" ;
     yellow_A = yellow_A ;
-
---     left_A = regA "left" ;
---     right_A = regA "right" ;
 
     -- Nouns
 

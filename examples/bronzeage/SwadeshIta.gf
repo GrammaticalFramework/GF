@@ -3,6 +3,9 @@
 concrete SwadeshIta of Swadesh = CatIta
   ** open PhonoIta, MorphoIta, LangIta, ParadigmsIta, BeschIta, Prelude in {
 
+  lincat
+    MassN = N ;
+
   lin
     -- Pronouns
 
@@ -32,6 +35,9 @@ concrete SwadeshIta of Swadesh = CatIta
       s = \\g,c => prepCase c ++ genForms "altri" "altre" ! g ;
       n = Pl
       } ;
+
+--    left_Ord = regA "sinistro" ;
+--    right_Ord = regA "destro" ;
 
     -- Adverbs
 
@@ -96,9 +102,6 @@ concrete SwadeshIta of Swadesh = CatIta
     white_A = white_A ;
     wide_A = regA "largo" ;
     yellow_A = yellow_A ;
-
-    left_A = regA "sinistro" ;
-    right_A = regA "destro" ;
 
     -- Nouns
 

@@ -4,6 +4,10 @@ concrete SwadeshRus of Swadesh = CatRus
   ** open ResourceRus, SyntaxRus, ParadigmsRus, 
           BasicRus, Prelude in {
 flags  coding=utf8 ;
+
+  lincat
+    MassN = N ;
+
   lin
 
     -- Pronouns
@@ -29,6 +33,8 @@ flags  coding=utf8 ;
     few_Det = adjInvar "мало" ** {n = Sg; g = PNoGen; c= Nom} ;
     other_Det = drugojDet ** {n = Sg; g = PNoGen; c= Nom} ;
 
+--    left_Ord = AStaruyj "лев";
+--    right_Ord = AStaruyj "прав";
 
     -- Adverbs
 
@@ -73,14 +79,12 @@ flags  coding=utf8 ;
     good_A = good_A ;
     green_A = green_A ;
     heavy_A = mkA (AStaruyj "тяжел") "тяжелее";
-    left_A = AStaruyj "лев";
     long_A = long_A ;
     narrow_A = narrow_A ;
     near_A = mkA (AMalenkij "близк") "ближе";
     new_A = new_A ;
     old_A = old_A ;
     red_A = red_A ;
-    right_A = AStaruyj "прав";
     rotten_A = mkA (AMolodoj "гнил") "гнилее";
     round_A = mkA (AStaruyj "кругл") "круглее";
     sharp_A = mkA (AStaruyj "остр") "острее";

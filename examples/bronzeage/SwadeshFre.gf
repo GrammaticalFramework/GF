@@ -3,6 +3,9 @@
 concrete SwadeshFre of Swadesh = CatFre
   ** open PhonoFre, MorphoFre, LangFre, ParadigmsFre, IrregFre, Prelude in {
 
+  lincat
+    MassN = N ;
+
   lin
 
     -- Pronouns
@@ -33,6 +36,9 @@ concrete SwadeshFre of Swadesh = CatFre
       s = \\g,c => prepCase c ++ "d'autres" ;   -- de d'autres
       n = Pl
       } ;
+
+--    left_Ord = regA "gauche" ;
+--    right_Ord = regA "droite" ;
 
     -- Adverbs
 
@@ -97,9 +103,6 @@ concrete SwadeshFre of Swadesh = CatFre
     white_A = white_A ;
     wide_A = regA "large" ;
     yellow_A = yellow_A ;
-
-    left_A = regA "gauche" ;
-    right_A = regA "droite" ;
 
     -- Nouns
 

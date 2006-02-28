@@ -5,6 +5,9 @@ concrete SwadeshSpa of Swadesh = CatSpa
 
 -- words contributed by Ana Bove, May 2005
 
+  lincat
+    MassN = N ;
+
   lin
 
     -- Pronouns
@@ -35,6 +38,15 @@ concrete SwadeshSpa of Swadesh = CatSpa
       s = \\g,c => prepCase c ++ genForms "otros" "otras" ! g ;
       n = Pl
       } ;
+
+    left_Ord = mkOrd (regA "izquierda") ;
+    right_Ord = mkOrd (regA "derecha") ;
+
+  oper
+    mkOrd : A -> Ord ;
+    mkOrd x = {s = \\ag => x.s ! Posit ! AF ag.g ag.n; lock_Ord = <> } ;
+
+  lin
 
     -- Adverbs
 
@@ -100,9 +112,6 @@ concrete SwadeshSpa of Swadesh = CatSpa
      white_A = white_A ;
      wide_A = regA "ancho" ;	-- extenso
      yellow_A = yellow_A ;
-
-     left_A = regA "izquierda" ;
-     right_A = regA "derecha" ;
 
      -- Nouns
 

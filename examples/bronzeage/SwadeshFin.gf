@@ -5,6 +5,9 @@ concrete SwadeshFin of Swadesh = CatFin
 
   flags optimize=values ;
 
+  lincat
+    MassN = N ;
+
   lin
 
     -- Pronouns
@@ -37,6 +40,9 @@ concrete SwadeshFin of Swadesh = CatFin
     some_Det = someSg_Det ;
     few_Det  = mkDet Sg (regN "harva") ;
     other_Det = mkDet Sg (regN "muu") ;
+
+--    left_Ord = mkA (regN "vasen") ;
+--    right_Ord = mkA (regN "oikea") ;
 
     -- Adverbs
 
@@ -101,9 +107,6 @@ concrete SwadeshFin of Swadesh = CatFin
     white_A = white_A ;
     wide_A = regA "leveä" ;
     yellow_A = yellow_A ;
-
-    left_A = mkA (regN "vasen") ; ----
-    right_A = mkA (regN "oikea") ;
 
     -- Nouns
 
