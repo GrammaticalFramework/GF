@@ -1,4 +1,4 @@
-all: present mathematical multimodal langs
+all: present mathematical multimodal langs compiled
 
 test:
 	echo "gr -cat=Text -number=11 -prob | tb" | gf -nocf -probs=lang.gfprob langs.gfcm
@@ -18,7 +18,10 @@ mathematical:
 
 multimodal:
 	gf -make -nocf -preproc=./mkPresent multimodal/Multimodal???.gf
-	mv multimodal/*.gfc ../multimodal
+	mv multimodal/*.gfc multimodal/*.gfr ../multimodal
+
+compiled:
+	cd .. ; tar cvfz compiled.tgz alltenses/ mathematical/ multimodal/ present/ 
 
 stat:
 	wc */*.gfc
