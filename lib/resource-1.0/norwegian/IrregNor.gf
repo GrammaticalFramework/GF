@@ -6,7 +6,7 @@ concrete IrregNor of IrregNorAbs = CatNor ** open ParadigmsNor in {
 
   flags optimize=values ;
 
-  lin be_V = irregV "be" "bad" "bedt" ;
+  lin be_V = mkV "be" "ber" "bes" "bad" "bedt" "be" ;
   lin bite_V = irregV "bite" (variants {"bet" ; "beit"}) "bitt" ;
   lin bli_V = irregV "bli" (variants {"ble" ; "blei"}) "blitt" ;
   lin brenne_V = irregV "brenne" (variants {"brant" ; "brente"}) "brent" ;
@@ -46,7 +46,7 @@ concrete IrregNor of IrregNorAbs = CatNor ** open ParadigmsNor in {
   lin løpe_V = irregV "løpe" "løp" (variants {"løpt" ; "løpet"}) ;
   lin måtte_V = irregV "måtte" "måtte" "måttet" ;
   lin renne_V = irregV "renne" "rant" "rent" ;
-  lin se_V = irregV "se" "så" "sett" ;
+  lin se_V = mkV "se" "ser" "ses" "så" "sett" "se" ;
   lin selge_V = irregV "selge" "solgte" "solgt" ;
   lin sette_V = irregV "sette" "satte" "satt" ;
   lin si_V = irregV "si" "sa" "sagt" ;
