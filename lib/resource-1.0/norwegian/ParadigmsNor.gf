@@ -352,8 +352,20 @@ oper
 
   mk2V a b = regVerb a b ** {s1 = [] ; vtype = VAct ; lock_V = <>} ;
 
-  irregV x y z =  irregVerb x y z
-     ** {s1 = [] ; vtype = VAct ; lock_V = <>} ;
+  irregV =
+    \drikke,drakk,drukket ->
+    let
+      drikk = case last drikke of {
+        "e" => init drikke ;
+        _ => drikke
+        } ;
+      drikker = case last (init drikke) of {
+        "r" => init drikke ;
+        _   => drikke + "r"
+        }
+    in 
+    mkV drikke drikker (drikke + "s") drakk drukket drikk ; 
+
 
   partV v p = {s = \\f => v.s ! f ++ p ; vtype = v.vtype ; lock_V = <>} ;
   depV v = {s = v.s ; vtype = VPass ; lock_V = <>} ;

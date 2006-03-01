@@ -131,17 +131,6 @@ oper
       _  => vHusk spis 
       } ;
 
-  irregVerb : (drikke,drakk,drukket : Str) -> Verbum = 
-    \drikke,drakk,drukket ->
-    let
-      drikk = init drikke ;
-      drikker = case last (init drikke) of {
-        "r" => drikk ;
-        _   => drikke + "r"
-        }
-    in 
-    mkVerb6 drikke drikker  (drikke + "s") drakk drukket drikk ; 
-
 
 -- For $Numeral$.
 

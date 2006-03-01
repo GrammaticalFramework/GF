@@ -1,6 +1,7 @@
--- Swadesh 207
 abstract Swadesh = Cat ** {
-  cat MassN;
+
+  cat
+    MassN ;
 
   fun
 
