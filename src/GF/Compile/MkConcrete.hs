@@ -18,10 +18,11 @@ import GF.Grammar.Values (Tree,tree2exp)
 import GF.Grammar.PrGrammar (prt_)
 import GF.Grammar.Grammar (Term(Q,QC)) ---
 import GF.Grammar.Macros (composSafeOp, record2subst)
-import GF.Compile.ShellState (firstStateGrammar)
+import GF.Compile.ShellState --(firstStateGrammar,stateGrammarWords)
 import GF.Compile.PGrammar (pTerm)
 import GF.Compile.Compile
 import GF.API
+import GF.API.IOGrammar
 import qualified GF.Embed.EmbedAPI as EA
 
 import GF.Data.Operations
@@ -43,9 +44,6 @@ import Data.List
 -- Format of resource path (on first line):
 --    --# -resource=PATH
 -- Other lines are copied verbatim.
--- The resource has to be built with 
---    i -src -optimize=share SOURCE
--- because mcfg parsing is used.
 -- A sequence of files can be processed with the same resource without
 -- rebuilding the grammar and parser.
 
@@ -62,12 +60,12 @@ mkConcretes files = do
 mkCncGroups (res,files) = do
   putStrLnFlush $ "Going to preprocess examples in " ++ unwords files
   putStrLn $ "Compiling resource " ++ res
-  egr <- appIOE $ 
-    optFile2grammar (options [beSilent]) res
-  --    [useOptimizer "share",fromSource,beSilent,notEmitCode]) res --- for -mcfg
-  gr  <- err (\s -> putStrLn s >> error "resource file rejected") return egr
-  let parser cat = errVal ([],"No parse") . 
-                   optParseArgErrMsg (options [newMParser, firstCat cat, beVerbose]) gr
+  egr <- appIOE $ shellStateFromFiles (options [beSilent]) emptyShellState res
+  gr  <- err (\s -> putStrLn s >> error "resource grammar rejected") 
+           (return . firstStateGrammar) egr
+  let parser cat = 
+        errVal ([],"No parse") . 
+        optParseArgErrMsg (options [newMParser, firstCat cat, beVerbose]) gr
   let morpho = isKnownWord gr
   putStrLn "Building parser"
   mapM_ (mkConcrete parser morpho) files
