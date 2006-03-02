@@ -238,14 +238,16 @@ compatCF (CFCat (CIQ _ c, l)) (CFCat (CIQ _ c', l')) = c==c' && l==l'
 -- instead of break
 wordsLits [] = []
 wordsLits (c:cs) | isSpace c = wordsLits (dropWhile isSpace cs)
-		 | c == '\'' || c == '"' 
+		 | isQuote c
 		     = let (l,rs) = breaks (==c) cs
 			   rs' = drop 1 rs
 			   in ([c]++l++[c]):wordsLits rs'
-		 | otherwise = let (w,rs) = break isSpace cs
+		 | otherwise = let (w,rs) = break isSpaceQ cs
 				   in (c:w):wordsLits rs
   where
     breaks c cs = case break c cs of
       (l@(_:_),d:rs) | last l == '\\' -> 
         let (r,ts) = breaks c rs in (l++[d]++r, ts)
       v -> v
+    isQuote c = elem c "\"'" 
+    isSpaceQ c = isSpace c ---- || isQuote c

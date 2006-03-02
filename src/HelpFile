@@ -37,6 +37,7 @@ i,  import: i File
       -o            do emit code (default with new grammar format)
       -ex           preprocess .gfe files if needed
       -prob         read probabilities from top grammar file  (format --# prob Fun Double)
+      -treebank     read a treebank file to memory (xml format)
   flags:
       -abs          set the name used for abstract syntax (with -old option)
       -cnc          set the name used for concrete syntax (with -old option)
@@ -209,10 +210,17 @@ tb, tree_bank: tb
      -c        compare to existing xml-formatted treebank
      -trees    return the trees of the treebank
      -xml      wrap the treebank (or comparison results) with XML tags
+     -mem      write the treebank in memory instead of a file TODO
   examples:
      gr -cat=S -number=100 | tb -xml | wf tb.xml -- random treebank into file
      rf tb.xml | tb -c                           -- compare-test treebank from file
      rf old.xml | tb -trees | tb -xml            -- create new treebank from old
+
+lt, lookup_treebank: lt String
+      Lookup a string in a treebank and return the resulting trees.
+      Use 'tb' to create a treebank and 'i -treebank' to read it in memory.
+   flag:
+     -treebank use this treebank (instead of the latest introduced one) TODO
 
 tt, test_tokenizer: tt String
       Show the token list sent to the parser when String is parsed.
