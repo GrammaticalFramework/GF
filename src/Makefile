@@ -110,6 +110,7 @@ clean:
 	-rm -f JavaGUI/*.class
 	-rm -f $(GFEDITOR)/de/uka/ilkd/key/ocl/gf/*.class
 	-rm -f gf.wixobj
+	-rm -f ../bin/$(GF_EXE)
 
 distclean: clean
 	-rm -f JavaGUI/gf-java.jar jgf
@@ -254,6 +255,6 @@ install-editor:
 install-java: javac
 	-rm -f ../bin/JavaGUI
 	ln -s ../src/JavaGUI ../bin
-	@echo "PLEASE edit GFHOME in bin/jgf"
+	@echo "PLEASE set GFHOME and GF_LIB_PATH in your environment"
 	-rm -f ../bin/$(GFEDITOR)
 	ln -s ../src/$(GFEDITOR) ../bin

@@ -6,16 +6,16 @@ To make and install GF (Updated for version 2.4).
      tar xvfz GF-2.4.tgz
      cd GF-2.4/src
 
-2. Make sure you have GHC (Glasgow Haskell Compiler), version 6.4 or later.
+3. Make sure you have GHC (Glasgow Haskell Compiler), version 6.4 or later.
    In Windows, you also need Cygwin.
 
      ghc --version
 
-3. If you are building the darcs version, run autoconf (in src/):
+4. If you are building the darcs version, run autoconf (in src/):
 
      autoconf
 
-4. Run configure
+5. Run configure
 
      ./configure
 
@@ -35,17 +35,32 @@ To make and install GF (Updated for version 2.4).
    You may need to run "make clean" after ./configure when you change the 
    readline setting.
 
-5. Compile with make:
+6. Compile with GNU make:
 
      make
 
-   The binary is sent to the file GF/bin/gf
+   or
 
-6. Move files to their right places:
+     gmake
+
+   (if your system has a proprietary make)
+
+   The binary is sent to the file GF/bin/gf .
+
+7. Move files to their right places:
 
      make install
 
-7. For a quick test: 
+8. To run GF, the following environment variables must be set:
+
+     GFHOME         the GF directory,         e.g., "$HOME/project/GF-2.4"
+     GF_LIB_PATH    the GF library directory, e.g,, "$HOME/project/GF-2.4/lib"
+
+   (Usually, you do this in ~/.login, if your shell is any *csh,
+    or in ~/.profile, if your shell is either of sh, ksh, zsh or bash.
+    Afterwards, you have to start a login shell to have the settings available.)
+
+9. For a quick test: 
    Start gf, load a grammar and parse a string:
 
      cd GF/grammars/basic
@@ -56,13 +71,12 @@ To make and install GF (Updated for version 2.4).
      -- this is the response from GF:
      PredA1 (Every Number) (DisjA1 Even Odd)
 
-8. If you want to run the Java GUI, go back to GF2/src and also do
+10. If you want to run the Java GUI, go back to $GFHOME/src directory
+    and also do
 
      make install-java
 
-   Then edit the file GF2/bin/jgf by changing
-   the value of GFHOME to the location of your GF2/bin directory. Test the
-   GUI with some grammars:
+   Test the GUI with some grammars:
 
      cd ../examples/letter
      gf <mkLetter.gfs
