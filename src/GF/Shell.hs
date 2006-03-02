@@ -193,8 +193,8 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
   CChangeMain ma -> changeStateErr (changeMain ma) sa
   CStripState    -> changeState purgeShellState sa
 
+  CRemoveLanguage lan -> changeState (removeLang lan) sa
 {-
-  CRemoveLanguage lan -> changeState (removeLanguage lan) sa
   CTransformGrammar file -> do
     s <- transformGrammarFile opts file
     returnArg (AString s) sa
@@ -293,6 +293,11 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
   CTreeBank | oElem doCompute opts -> do -- -c
     let bank = prCommandArg a
     returnArg (AString $ unlines $ testTreebank opts st bank) sa
+  CTreeBank | oElem getTrees opts -> do -- -trees
+    let bank  = prCommandArg a
+        tes   = map (string2treeErr gro) $ treesTreebank opts bank
+        terms = [t | Ok t <- tes] 
+    returnArg (ATrms terms) sa
   CTreeBank -> do
     let ts = strees $ s2t $ snd sa
         comm = "command" ----

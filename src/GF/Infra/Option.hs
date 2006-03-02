@@ -256,7 +256,8 @@ showMulti    = iOpt "multi"
 fromSource   = iOpt "src"
 makeConcrete = iOpt "examples"
 fromExamples = iOpt "ex"
-openEditor = iOpt "edit"
+openEditor   = iOpt "edit"
+getTrees     = iOpt "trees"
 
 -- ** mainly for stand-alone
 

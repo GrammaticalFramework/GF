@@ -88,8 +88,11 @@ isSep :: Char -> Bool
 isSep c = c == '/' || c == '\\'
 
 getFilePath :: [FilePath] -> String -> IO (Maybe FilePath)
-getFilePath paths file = get paths where
-  get []     = putStrLnFlush ("file" +++ file +++ "not found") >> return Nothing
+getFilePath ps file = getFilePathMsg ("file" +++ file +++ "not found\n") ps file
+
+getFilePathMsg :: String -> [FilePath] -> String -> IO (Maybe FilePath)
+getFilePathMsg msg paths file = get paths where
+  get []     = putStrFlush msg >> return Nothing
   get (p:ps) = let pfile = prefixPathName p file in
                catch (readFile pfile >> return (Just pfile)) (\_ -> get ps)
 
@@ -104,7 +107,7 @@ readFileIfPath paths file = do
 
 doesFileExistPath :: [FilePath] -> String -> IOE Bool
 doesFileExistPath paths file = do
-  mpfile <- ioeIO $ getFilePath paths file
+  mpfile <- ioeIO $ getFilePathMsg "" paths file
   return $ maybe False (const True) mpfile
 
 -- | first var is lib prefix, second is like class path

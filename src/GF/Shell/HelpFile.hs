@@ -80,7 +80,7 @@ txtHelpFile =
   "\n      i English.gf                      -- ordinary import of Concrete" ++
   "\n      i -retain german/ParadigmsGer.gf  -- import of Resource to test" ++
   "\n      " ++
-  "\n* rl, remove_language: rl Language" ++
+  "\nrl, remove_language: rl Language" ++
   "\n      Takes away the language from the state." ++
   "\n" ++
   "\ne,  empty: e" ++
@@ -236,10 +236,12 @@ txtHelpFile =
   "\n      to an existing treebank." ++
   "\n  options:" ++
   "\n     -c        compare to existing xml-formatted treebank" ++
+  "\n     -trees    return the trees of the treebank" ++
   "\n     -xml      wrap the treebank (or comparison results) with XML tags" ++
   "\n  examples:" ++
   "\n     gr -cat=S -number=100 | tb -xml | wf tb.xml -- random treebank into file" ++
-  "\n     rf tb.txt | tb -c                           -- read comparison treebank from file" ++
+  "\n     rf tb.xml | tb -c                           -- compare-test treebank from file" ++
+  "\n     rf old.xml | tb -trees | tb -xml            -- create new treebank from old" ++
   "\n" ++
   "\ntt, test_tokenizer: tt String" ++
   "\n      Show the token list sent to the parser when String is parsed." ++
