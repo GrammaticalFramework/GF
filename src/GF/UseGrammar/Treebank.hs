@@ -12,7 +12,7 @@
 -- Purpose: to generate treebanks.
 -----------------------------------------------------------------------------
 
-module GF.UseGrammar.Treebank (mkTreebank,testTreebank) where
+module GF.UseGrammar.Treebank (mkTreebank,testTreebank,treesTreebank) where
 
 import GF.Compile.ShellState 
 import GF.UseGrammar.Linear (linTree2string)
@@ -49,7 +49,9 @@ mkTreebank opts sh com trees = putInXML opts "treebank" comm (concatMap mkItem t
    tris    = zip trees [1..]
 
 testTreebank :: Options -> ShellState -> String -> Res
-testTreebank opts sh = putInXML opts "testtreebank" [] . concatMap testOne . getTreebank . lines
+testTreebank opts sh = putInXML opts "testtreebank" [] . 
+                       concatMap testOne . 
+                       getTreebanks . lines
  where
   testOne (e,lang,str0) = do
     let tr = annot gr e
@@ -61,6 +63,10 @@ testTreebank opts sh = putInXML opts "testtreebank" [] . concatMap testOne . get
       ]
   gr = firstStateGrammar sh
 
+treesTreebank :: Options -> String -> [String]
+treesTreebank _ = terms . getTreebank . lines where
+  terms ts = [t | (t,_) <- ts]
+
 -- string vs. IO
 type Res = [String] -- IO ()
 puts :: String -> Res
@@ -68,18 +74,23 @@ puts = return  -- putStrLn
 ret = [] -- return ()
 --
 
-getTreebank :: [String] -> [(String,String,String)]
+getTreebanks :: [String] -> [(String,String,String)]
+getTreebanks = concatMap grps . getTreebank where
+  grps (t,lls) = [(t,x,y) | (x,y) <- lls]
+
+getTreebank :: [String] -> [(String,[(String,String)])]
 getTreebank ll = case ll of
-  [] -> []
-  l:ls -> 
+  l:ls@(_:_:_) -> 
     let (l1,l2)   = getItem ls
         (tr,lins) = getTree l1
         lglins    = getLins lins
-    in [(tr,lang,str) | (lang,str) <- lglins] ++ getTreebank l2
+    in (tr,lglins) : getTreebank l2
+  _ -> []
  where
    getItem = span ((/="</item") . take 6)
 
-   getTree (_:ss) = let (t1,t2) = span ((/="</tree") . take 6) ss in (last t1, drop 1 t2)
+   getTree (_:ss) = 
+     let (t1,t2) = span ((/="</tree") . take 6) ss in (last t1, drop 1 t2)
 
    getLins (beg:str:end:ss) = (getLang beg, str):getLins ss
    getLins _ = []

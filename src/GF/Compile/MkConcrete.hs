@@ -55,12 +55,13 @@ mkConcretes files = do
   ress <- mapM getResPath files
   let grps = groupBy (\a b -> fst a == fst b) $ 
                sortBy (\a b -> compare (fst a) (fst b)) $ zip ress files
-  mapM_ mkCncGroups [(r,map snd gs) | gs@((r,_):_) <- grps]
+  mapM_ mkCncGroups [(rp,map snd gs) | gs@((rp,_):_) <- grps]
 
-mkCncGroups (res,files) = do
+mkCncGroups ((res,path),files) = do
   putStrLnFlush $ "Going to preprocess examples in " ++ unwords files
   putStrLn $ "Compiling resource " ++ res
-  egr <- appIOE $ shellStateFromFiles (options [beSilent]) emptyShellState res
+  let opts = options [beSilent,pathList path]
+  egr <- appIOE $ shellStateFromFiles opts emptyShellState res
   gr  <- err (\s -> putStrLn s >> error "resource grammar rejected") 
            (return . firstStateGrammar) egr
   let parser cat = 
@@ -81,12 +82,18 @@ mkConcrete parser morpho file = do
   appendFile out "\n"
   mapM_ (mkCnc out parser morpho) cont
 
-getResPath :: FilePath -> IO String
+getResPath :: FilePath -> IO (String,String)
 getResPath file = do
   s <- liftM lines $ readFileIf file
-  return $ case head (dropWhile (all isSpace) s) of
-    '-':'-':'#':path -> reverse (takeWhile (not . (=='=')) (reverse path))
-    _ -> error "first line must be --# -resource=<PATH>" 
+  case filter (not . all isSpace) s of
+    res:path:_ | is "resource" res && is "path" path -> return (val res, val path)
+    res:_ | is "resource" res -> return (val res, "")
+    _ -> error "expected --# -resource=FILE and optional --# -path=PATH"
+ where
+   val = dropWhile (isSpace) . tail . dropWhile (not . (=='='))
+   is tag s = case words s of
+     "--#":w:_ -> isPrefixOf ('-':tag) w
+     _ -> False 
 
 getExLines :: String -> [Either String String]
 getExLines = getl . lines where

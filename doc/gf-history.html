@@ -14,6 +14,24 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
+1/3 (AR) Added option <tt>-trees</tt> to the command <tt>tree_bank = tb</tt>.
+By this option, the command just returns the trees in the treebank. It can be
+used for producing new treebanks with the same trees:
+<pre>
+  rf old.xml | tb -trees | tb -xml | wf new.xml
+</pre>
+Recall that only treebanks in the XML format can be read with the <tt>-trees</tt>
+and <tt>-c</tt> flags.
+
+<p>
+
+1/3 (AR) A <tt>.gfe</tt> file can have a <tt>--# -path=PATH</tt> on its
+second line. The file given on the first line (<tt>--# -resource=FILE</tt>) 
+is then read w.r.t. this path. This is useful if the resource file has
+no path itself, which happens when it is gfc-only.
+
+<p>
+
 25/2 (AR) The flag <tt>preproc</tt> of the <tt>i</tt> command (and thereby
 to <tt>gf</tt> itself) causes GF to apply a preprocessor to each sourcefile
 it reads.

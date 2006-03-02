@@ -372,6 +372,10 @@ morphoOfLang st  = stateMorpho    . stateGrammarOfLang st
 probsOfLang st   = stateProbs     . stateGrammarOfLang st
 optionsOfLang st = stateOptions   . stateGrammarOfLang st
 
+removeLang :: Language -> ShellState -> ShellState
+removeLang lang st = purgeShellState $ st{concretes = concs1} where
+  concs1 = filter ((/=lang) . snd . fst) $ concretes st
+
 -- | the last introduced grammar, stored in options, is the default for operations
 firstStateGrammar :: ShellState -> StateGrammar
 firstStateGrammar st = errVal (stateAbstractGrammar st) $ do
