@@ -273,7 +273,8 @@ prShellStateInfo sh = unlines [
   "canonical modules :" +++ unwords (map (P.prt .fst) (M.modules (canModules sh))),
   "source modules :   " +++ unwords (map (P.prt .fst) (M.modules (srcModules sh))),
   "global options :   " +++ prOpts (gloptions sh),
-  "transfer modules : " +++ unwords (map (P.prt . fst) (transfers sh))
+  "transfer modules : " +++ unwords (map (P.prt . fst) (transfers sh)),
+  "treebanks :        " +++ unwords (map (P.prt . fst) (treebanks sh))
   ]
 
 abstractName :: ShellState -> String
