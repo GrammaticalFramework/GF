@@ -7,78 +7,117 @@
 <P ALIGN="center"><CENTER><H1>GF Resource Grammar Library v. 1.0</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Tue Feb 28 15:54:42 2006
+Last update: Thu Mar  2 12:03:59 2006
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
     <UL>
-    <LI><A HREF="#toc1">Using the library</A>
-    <LI><A HREF="#toc2">The language independent API</A>
-    <LI><A HREF="#toc3">The language-dependent APIs</A>
-    <LI><A HREF="#toc4">Special-purpose APIs</A>
+    <LI><A HREF="#toc1">Authors</A>
+    <LI><A HREF="#toc2">License</A>
+    <LI><A HREF="#toc3">Scope</A>
       <UL>
-      <LI><A HREF="#toc5">Multimodal</A>
-      <LI><A HREF="#toc6">Mathematical</A>
+      <LI><A HREF="#toc4">The language independent ground API</A>
+      <LI><A HREF="#toc5">The language-dependent APIs</A>
+      <LI><A HREF="#toc6">Special-purpose APIs</A>
       </UL>
+    <LI><A HREF="#toc7">Using the library</A>
+      <UL>
+      <LI><A HREF="#toc8">The compiled version</A>
+      <LI><A HREF="#toc9">Linking applications to libraries</A>
+      <LI><A HREF="#toc10">Using the libraries as top-level grammars</A>
+      </UL>
+    <LI><A HREF="#toc11">Example applications</A>
+      <UL>
+      <LI><A HREF="#toc12">Brozeage</A>
+      <LI><A HREF="#toc13">Tram</A>
+      <LI><A HREF="#toc14">Animals</A>
+      </UL>
+    <LI><A HREF="#toc15">More reading</A>
     </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
 <P>
+The GF Resource Grammar Library defines the basic grammar of
+ten languages: 
+Danish, English, Finnish, French, German,
+Italian, Norwegian, Russian, Spanish, Swedish.
+</P>
+<P>
 <B>Notice</B>. This document concerns the API v. 1.0 which has not
-yet been "officially" released. You can find the beginnings of it
-in <A HREF=".."><CODE>GF/lib/resource-1.0/</CODE></A>. See
-<A HREF="../README"><CODE>resource-1.0/README</CODE></A> for
-details on how it differs from previous versions
-and how much has been implemented
+yet been "officially" released. The release will be made in combination
+with a new version of GF itself, since the grammars use new features
+not available in GF 2.4.
+</P>
+<P>
+V. 1.0 is not yet available for Russian and Danish: for them,
+we refer to <A HREF="../../resource/">v. 0.9</A>.
 </P>
 <A NAME="toc1"></A>
-<H2>Using the library</H2>
+<H2>Authors</H2>
 <P>
-The simplest way to get the library is to install the precompiled version
-<A HREF="../../compiled.tgz"><CODE>lib/compiled.tgz</CODE></A>. Just do
+Janna Khegai (Russian modules, forthcoming),
+Bjorn Bringert (many Swadesh lexica),
+Carlos Gonzalia (Spanish cardinals), 
+Partik Jansson (Swedish cardinals),
+Aarne Ranta.
 </P>
-<PRE>
-    cd GF/lib
-    tar xvfz compiled.tgz
-</PRE>
 <P>
-There is no need to link application grammars to the source directories of the
-library. Use one (or several) of the following packages instead:
+We are grateful for contributions and 
+comments to several other people who have used this and 
+the previous versions of the resource library, including
+David Burke,
+Lauri Carlson,
+Gloria Casanellas,
+Karin Cavallin,
+Hans-Joachim Daniels,
+Kristofer Johannisson,
+Anni Laine,
+Wanjiku Ng'ang'a,
+Jordi Saludes.
+</P>
+<A NAME="toc2"></A>
+<H2>License</H2>
+<P>
+The GF Resource Grammar Library is open-source software licensed under
+GNU General Public License. See the file <A HREF="../LICENSE">LICENSE</A> for more
+details.
+</P>
+<A NAME="toc3"></A>
+<H2>Scope</H2>
+<P>
+Coverage, for each language:
 </P>
 <UL>
-<LI><CODE>lib/alltenses</CODE> the complete ground-API library with all forms
-<LI><CODE>lib/present</CODE> a pruned ground-API library with present tense only
-<LI><CODE>lib/mathematical</CODE> special-purpose API for mathematical applications
-<LI><CODE>lib/multimodal</CODE> special-purpose API for multimodal dialogue applications
+<LI>complete morphology
+<LI>lexicon of the ca. 100 most important structural words
+<LI>test lexicon of ca. 300 content words
+<LI>representative fragment of syntax (cf. CLE (Core Language Engine))
+<LI>rather flat semantics (cf. Quasi-Logical Form of CLE)
 </UL>
 
 <P>
-Notice, however, that both special-purpose APIs share modules with
-<CODE>present</CODE>. It is therefore not a good idea to use them in combination with
-<CODE>alltenses</CODE>.
+Organization:
 </P>
+<UL>
+<LI>top-level (API) modules
+<LI>Ground API + special-purpose APIs
+<LI>"school grammar" concepts rather than advanced linguistic theory
+</UL>
+
 <P>
-It is advisable to use the bare package names in paths pointing to the
-libraries. Here is an example, from <CODE>examples/tram</CODE>:
+Presentation:
 </P>
-<PRE>
-    --# -path=.:present:multimodal:mathematical:prelude
-</PRE>
-<P>
-To reach these directories from anywhere, set the environment variable
-<CODE>GF_LIB_PATH</CODE> to point to the directory <CODE>GF/lib/</CODE>. For instance,
-I have the following line in my <CODE>.bashrc</CODE> file:
-</P>
-<PRE>
-    export GF_LIB_PATH=/home/aarne/GF/lib
-</PRE>
-<P></P>
-<A NAME="toc2"></A>
-<H2>The language independent API</H2>
+<UL>
+<LI>tool <CODE>gfdoc</CODE> for generating HTML from grammars
+<LI>example collections
+</UL>
+
+<A NAME="toc4"></A>
+<H3>The language independent ground API</H3>
 <P>
 This API is accessible by both <CODE>present</CODE> and <CODE>alltenses</CODE>.
 The API is divided into a bunch of <CODE>abstract</CODE> modules.
@@ -110,8 +149,8 @@ The documentation of the individual modules:
 <LI><A HREF="gfdoc/Lang.html">Lang</A>: the main module comprising all the others
 </UL>
 
-<A NAME="toc3"></A>
-<H2>The language-dependent APIs</H2>
+<A NAME="toc5"></A>
+<H3>The language-dependent APIs</H3>
 <UL>
 <LI><A HREF="gfdoc/ParadigmsEng.html">ParadigmsEng</A>: English lexical paradigms
 <LI><A HREF="gfdoc/ParadigmsFin.html">ParadigmsFin</A>: Finnish lexical paradigms
@@ -130,24 +169,163 @@ The documentation of the individual modules:
 <LI><A HREF="gfdoc/IrregSwe.gf">IrregSwe</A>: Swedish irregular verbs
 </UL>
 
-<A NAME="toc4"></A>
-<H2>Special-purpose APIs</H2>
-<A NAME="toc5"></A>
-<H3>Multimodal</H3>
+<A NAME="toc6"></A>
+<H3>Special-purpose APIs</H3>
+<H4>Present</H4>
+<P>
+The API is the same as for the full ground API, but the compiler
+has ignored all verb and sentence tenses except the present.
+Lines ignored in the source files are marked by <CODE>--# notpresent</CODE>.
+The result is a smaller and more efficient grammar, which is still
+sufficient for many applications.
+</P>
+<H4>Multimodal</H4>
 <UL>
 <LI><A HREF="gfdoc/Multimodal.html">Multimodal</A>: main module for multimodal dialogue systems
 <LI><A HREF="gfdoc/Demonstrative.html">Demonstrative</A>: demonstrative noun phrases and adverbs
 </UL>
 
-<A NAME="toc6"></A>
-<H3>Mathematical</H3>
+<H4>Mathematical</H4>
 <UL>
 <LI><A HREF="gfdoc/Mathematical.html">Mathematical</A>: main module for mathematical language
 <LI><A HREF="gfdoc/Predication.html">Predication</A>: predication with verbs, adjectives, etc
 <LI><A HREF="gfdoc/Symbol.html">Symbol</A>: symbols and numbers in text
-<P></P>
 </UL>
 
+<A NAME="toc7"></A>
+<H2>Using the library</H2>
+<A NAME="toc8"></A>
+<H3>The compiled version</H3>
+<P>
+The simplest way to get the library is to install the precompiled version
+<A HREF="../../compiled.tgz"><CODE>lib/compiled.tgz</CODE></A>. Just do
+</P>
+<PRE>
+    cd GF/lib
+    tar xvfz compiled.tgz
+</PRE>
+<P>
+There is no need to link application grammars to the source directories of the
+library. Use one (or several) of the following packages instead:
+</P>
+<UL>
+<LI><CODE>lib/alltenses</CODE> the complete ground-API library with all forms
+<LI><CODE>lib/present</CODE> a pruned ground-API library with present tense only
+<LI><CODE>lib/mathematical</CODE> special-purpose API for mathematical applications
+<LI><CODE>lib/multimodal</CODE> special-purpose API for multimodal dialogue applications
+</UL>
+
+<A NAME="toc9"></A>
+<H3>Linking applications to libraries</H3>
+<P>
+Notice, however, that both special-purpose APIs share modules with
+<CODE>present</CODE>. It is therefore not a good idea to use them in combination with
+<CODE>alltenses</CODE>.
+</P>
+<P>
+It is advisable to use the bare package names in paths pointing to the
+libraries. Here is an example, from <CODE>examples/tram</CODE>:
+</P>
+<PRE>
+    --# -path=.:present:multimodal:mathematical:prelude
+</PRE>
+<P>
+To reach these directories from anywhere, set the environment variable
+<CODE>GF_LIB_PATH</CODE> to point to the directory <CODE>GF/lib/</CODE>. For instance,
+I have the following line in my <CODE>.bashrc</CODE> file:
+</P>
+<PRE>
+    export GF_LIB_PATH=/home/aarne/GF/lib
+</PRE>
+<P></P>
+<A NAME="toc10"></A>
+<H3>Using the libraries as top-level grammars</H3>
+<P>
+If you have done <CODE>make</CODE> in <CODE>lib/resource-1.0</CODE>, you will have 
+a file <CODE>langs.gfcm</CODE>. This file can be used with fast startup for
+tasks such as treebank generation:
+</P>
+<PRE>
+    &gt; i -nocf langs.gfcm
+    &gt; gr -cat=S -cf -number=10 | tb
+</PRE>
+<P>
+The <CODE>-nocf</CODE> flag saves startup time and memory by preventing the
+creation of context-free parse grammars. 
+The resource grammar libraries do <I>not</I> support
+parsing very well. While it is theoretically possible to parse with any
+GF grammar, the resource grammars are so abstract and complex that
+building the actual parser in memory may just need too much resources
+to succeed.
+</P>
+<P>
+An exception is <CODE>LangEng</CODE>. It is actually feasible to parse with
+both <CODE>alltenses/LangEng</CODE> and <CODE>present/LangEng</CODE> - the latter being
+much faster than the former. The <CODE>-mcfg</CODE> flag (multiple context-free grammar)
+must be used:
+</P>
+<PRE>
+    p -lang=LangEng -mcfg "this man is old"
+</PRE>
+<P>
+Parsing with the <CODE>-mcfg</CODE> flag takes a few extra seconds the first time during
+each session, but gets faster at later runs.
+</P>
+<A NAME="toc11"></A>
+<H2>Example applications</H2>
+<P>
+These applications are meand to serve as starting points for
+new applications, showing how the libraries can be used in
+typical situations.
+</P>
+<A NAME="toc12"></A>
+<H3>Brozeage</H3>
+<P>
+The <A HREF="../../../examples/bronzeage">examples/bronzeage</A> 
+grammar set implements a language fragment
+based on the Swadesh list of 200 words. It is useful for
+things like language training.
+</P>
+<A NAME="toc13"></A>
+<H3>Tram</H3>
+<P>
+The <A HREF="../../../examples/tram">examples/tram</A> 
+grammar set implements the user grammar of a 
+multimodal dialogue system concerning public transport.
+Its purpose is to serve as a prototype for applications in the
+TALK project.
+</P>
+<A NAME="toc14"></A>
+<H3>Animals</H3>
+<P>
+The <A HREF="../../../examples/animal">examples/animal</A> 
+grammar set implements some queries about animals.
+Its purpose is to serve as a prototype for example-based 
+grammar writing.
+</P>
+<A NAME="toc15"></A>
+<H2>More reading</H2>
+<P>
+<A HREF="gslt-sem-2006.html">Grammars as Software Libraries</A>. Slides
+with background and motivation for the resource grammar library.
+</P>
+<P>
+<A HREF="Resource-HOWTO.html">How to write resource grammars</A>. Helps you
+start if you want to add another language to the library.
+</P>
+<P>
+<A HREF="http://www.cs.chalmers.se/~aarne/geocal2006.pdf">Parametrized modules for Romance languages</A>. 
+Slides explaining some ideas in the implementation of
+French, Italian, and Spanish.
+</P>
+<P>
+<A HREF="http://www.cs.chalmers.se/~aarne/slides/webalt-2005.pdf">Grammar writing by examples</A>.
+Slides showing how the method is used.
+</P>
+<P>
+<A HREF="http://www.cs.chalmers.se/~aarne/slides/talk-edin2005.pdf">Multimodal Resource Grammars</A>.
+Slides showing how to use the multimodal resource library.
+</P>
 
 <!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -\-toc -thtml index.txt -->
