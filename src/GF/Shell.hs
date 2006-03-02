@@ -181,6 +181,10 @@ execLine put (c@(co, os), arg, cs) (outps,st) = do
 execC :: CommandOpt -> ShellIO
 execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case comm of
 
+  CImport file | oElem (iOpt "treebank") opts -> do
+    ss <- readFileIf file >>= return . lines
+    let tb = pre2treebank $ getTreebank ss
+    changeState (addTreebank (I.identC (takeWhile (/='.') file), tb)) sa
   CImport file | oElem fromExamples opts -> do
     es <- liftM nub $ getGFEFiles opts file
     system $ "gf -examples" +++ unlines es
@@ -302,6 +306,15 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
     let ts = strees $ s2t $ snd sa
         comm = "command" ----
     returnArg (AString $ unlines $ mkTreebank opts st comm ts) sa
+
+  CLookupTreebank -> do
+    case treebanks st of 
+      [] -> returnArg (AError "no treebank") sa
+      (_,tb):_ -> do
+        let s  = prCommandArg a
+        let tes = map (string2treeErr gro . snd) $ lookupTreebank tb s
+            terms = [t | Ok t <- tes]
+        returnArg (ATrms terms) sa
 
   CShowTreeGraph | oElem emitCode opts -> do -- -o
     returnArg (AString $ visualizeTrees opts $ strees $ s2t a) sa

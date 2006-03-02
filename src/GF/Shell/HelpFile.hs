@@ -66,6 +66,7 @@ txtHelpFile =
   "\n      -o            do emit code (default with new grammar format)" ++
   "\n      -ex           preprocess .gfe files if needed" ++
   "\n      -prob         read probabilities from top grammar file  (format --# prob Fun Double)" ++
+  "\n      -treebank     read a treebank file to memory (xml format)" ++
   "\n  flags:" ++
   "\n      -abs          set the name used for abstract syntax (with -old option)" ++
   "\n      -cnc          set the name used for concrete syntax (with -old option)" ++
@@ -238,10 +239,17 @@ txtHelpFile =
   "\n     -c        compare to existing xml-formatted treebank" ++
   "\n     -trees    return the trees of the treebank" ++
   "\n     -xml      wrap the treebank (or comparison results) with XML tags" ++
+  "\n     -mem      write the treebank in memory instead of a file TODO" ++
   "\n  examples:" ++
   "\n     gr -cat=S -number=100 | tb -xml | wf tb.xml -- random treebank into file" ++
   "\n     rf tb.xml | tb -c                           -- compare-test treebank from file" ++
   "\n     rf old.xml | tb -trees | tb -xml            -- create new treebank from old" ++
+  "\n" ++
+  "\nlt, lookup_treebank: lt String" ++
+  "\n      Lookup a string in a treebank and return the resulting trees." ++
+  "\n      Use 'tb' to create a treebank and 'i -treebank' to read it in memory." ++
+  "\n   flag:" ++
+  "\n     -treebank use this treebank (instead of the latest introduced one) TODO" ++
   "\n" ++
   "\ntt, test_tokenizer: tt String" ++
   "\n      Show the token list sent to the parser when String is parsed." ++

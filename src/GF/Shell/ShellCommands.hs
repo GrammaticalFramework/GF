@@ -57,6 +57,8 @@ data Command =
  | CComputeConcrete String
  | CShowOpers String
 
+ | CLookupTreebank
+
  | CTranslationQuiz Language Language
  | CTranslationList Language Language
  | CMorphoQuiz
@@ -169,8 +171,9 @@ optionsOfCommand co = case co of
   CSetFlag -> both "utf8 table struct record all multi"
 	           "cat lang lexer parser number depth rawtrees unlexer optimize path conversion printer"
 
-  CImport _ -> both "old v s src gfc retain nocf nocheckcirc cflexer noemit o make ex prob"
-                    "abs cnc res path optimize conversion cat preproc probs noparse"
+  CImport _ -> 
+    both "old v s src gfc retain nocf nocheckcirc cflexer noemit o make ex prob treebank"
+         "abs cnc res path optimize conversion cat preproc probs noparse"
   CRemoveLanguage _ -> none
   CEmptyState -> none
   CStripState -> none

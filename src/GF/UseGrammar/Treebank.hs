@@ -12,7 +12,14 @@
 -- Purpose: to generate treebanks.
 -----------------------------------------------------------------------------
 
-module GF.UseGrammar.Treebank (mkTreebank,testTreebank,treesTreebank) where
+module GF.UseGrammar.Treebank (
+  mkTreebank,
+  testTreebank,
+  treesTreebank,
+  getTreebank,
+  lookupTreebank,
+  pre2treebank
+  ) where
 
 import GF.Compile.ShellState 
 import GF.UseGrammar.Linear (linTree2string)
@@ -28,6 +35,7 @@ import GF.Grammar.Values (tree2exp)
 import GF.Data.Operations
 import GF.Infra.Option
 import qualified GF.Grammar.Abstract as A
+import qualified Data.Map as M
 
 -- Generate a treebank with a multilingual grammar. AR 8/2/2006
 -- (c) Aarne Ranta 2006 under GNU GPL
@@ -74,11 +82,13 @@ puts = return  -- putStrLn
 ret = [] -- return ()
 --
 
+type PreTreebank = [(String,[(String,String)])]
+
 getTreebanks :: [String] -> [(String,String,String)]
 getTreebanks = concatMap grps . getTreebank where
   grps (t,lls) = [(t,x,y) | (x,y) <- lls]
 
-getTreebank :: [String] -> [(String,[(String,String)])]
+getTreebank :: [String] -> PreTreebank
 getTreebank ll = case ll of
   l:ls@(_:_:_) -> 
     let (l1,l2)   = getItem ls
@@ -96,6 +106,12 @@ getTreebank ll = case ll of
    getLins _ = []
 
    getLang = takeWhile (/='"') . tail . dropWhile (/='"')
+
+lookupTreebank :: Treebank -> String -> [(String,String)]
+lookupTreebank tb s = maybe [] id $ M.lookup s tb 
+
+pre2treebank :: PreTreebank -> Treebank
+pre2treebank tb = M.fromListWith (++) [(s,[(l,t)]) | (t,ls) <- tb, (l,s) <- ls]
 
 annot :: StateGrammar -> String -> A.Tree
 annot gr s = errVal (error "illegal tree") $ do

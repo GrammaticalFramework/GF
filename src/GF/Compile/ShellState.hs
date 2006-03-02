@@ -44,6 +44,7 @@ import qualified GF.Conversion.GFC as Cnv
 import qualified GF.Parsing.GFC as Prs
 
 import Data.List (nub,nubBy)
+import qualified Data.Map as Map
 
 -- AR 11/11/2001 -- 17/6/2003 (for modules) ---- unfinished
 
@@ -61,6 +62,7 @@ data ShellState = ShSt {
                                          -- (large, with parameters, no-so overgenerating)
   pInfos     :: [(Ident, Prs.PInfo)], -- ^ parsing information (compiled mcfg&cfg grammars)
   morphos    :: [(Ident,Morpho)],    -- ^ morphologies
+  treebanks  :: [(Ident,Treebank)],  -- ^ treebanks
   probss     :: [(Ident,Probs)],     -- ^ probability distributions
   gloptions  :: Options,             -- ^ global options
   readFiles  :: [(FilePath,ModTime)],-- ^ files read
@@ -72,6 +74,8 @@ data ShellState = ShSt {
   statistics :: [Statistics],        -- ^ statistics on grammars
   transfers  :: [(Ident,T.Env)]      -- ^ transfer modules
   }                             
+
+type Treebank = Map.Map String [(String,String)] -- lang, tree
 
 actualConcretes :: ShellState -> [((Ident,Ident),Bool)]
 actualConcretes sh = nub [((c,c),b) | 
@@ -102,6 +106,7 @@ emptyShellState = ShSt {
   cfgs       = [],
   pInfos     = [],
   morphos    = [],
+  treebanks  = [],
   probss     = [],
   gloptions  = noOptions,
   readFiles  = [],
@@ -249,6 +254,7 @@ updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do
     cfgs       = zip concrs cfgs,
     pInfos     = zip concrs pInfos,
     morphos    = zip concrs morphos,
+    treebanks  = treebanks sh,
     probss     = zip concrs probss,
     gloptions  = gloptions sh, --- opts, -- this would be command-line options
     readFiles  = [ft | ft@(f,_) <- readFiles sh, notInrts f] ++ rts,
@@ -298,6 +304,7 @@ purgeShellState sh = ShSt {
   cfgs       = cfgs sh,
   pInfos     = pInfos sh,
   morphos    = morphos sh,
+  treebanks  = treebanks sh,
   probss     = probss sh,
   gloptions  = gloptions sh,
   readFiles  = [],
@@ -314,17 +321,17 @@ purgeShellState sh = ShSt {
    acncs = maybe [] singleton abstr ++ map (snd . fst) (actualConcretes sh)
 
 changeMain :: Maybe Ident -> ShellState -> Err ShellState
-changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s trs) = 
-  return (ShSt Nothing Nothing [] ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s trs)
+changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos tbs pbs os rs acs s trs) = 
+  return (ShSt Nothing Nothing [] ms ss cfs old_pis mcfgs cfgs pinfos mos tbs pbs os rs acs s trs)
 changeMain 
-  (Just c) st@(ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos pbs os rs acs s trs) = 
+  (Just c) st@(ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos tbs pbs os rs acs s trs) = 
    case lookup c (M.modules ms) of 
     Just _ -> do
       a   <- M.abstractOfConcrete ms c
       let cas = M.allConcretes ms a
       let cs' = [((c,c),True) | c <- cas]
       return (ShSt (Just a) (Just c) cs' ms ss cfs old_pis mcfgs cfgs
-        pinfos mos pbs os rs acs s trs) 
+        pinfos mos tbs pbs os rs acs s trs) 
     _ -> P.prtBad "The state has no concrete syntax named" c
 
 -- | form just one state grammar, if unique, from a canonical grammar
@@ -472,6 +479,13 @@ addTransfer :: (Ident,T.Env) -> ShellState -> ShellState
 addTransfer it@(i,_) sh = 
   sh {transfers = it : filter ((/= i) . fst) (transfers sh)}
 
+addTreebank :: (Ident,Treebank) -> ShellState -> ShellState
+addTreebank it@(i,_) sh = 
+  sh {treebanks = it : filter ((/= i) . fst) (treebanks sh)}
+
+findTreebank :: ShellState -> Ident -> Err Treebank
+findTreebank sh i = maybeErr "no treebank found" $ lookup i $ treebanks sh
+
 -- modify state
 
 type ShellStateOper = ShellState -> ShellState
@@ -496,8 +510,8 @@ changeOptions f sh = sh {gloptions = f (gloptions sh)}
 changeModTimes :: [(FilePath,ModTime)] -> ShellStateOper
 ---                                         __________ this is OBSOLETE
 changeModTimes mfs
- (ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms pbs os ff ts ss trs) = 
-  ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms pbs os ff' ts ss trs
+ (ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms tbs pbs os ff ts ss trs) = 
+  ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms tbs pbs os ff' ts ss trs
  where
    ff' = mfs ++ [mf | mf@(f,_) <- ff, notElem f (map fst mfs)]
 
