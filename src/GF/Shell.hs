@@ -308,13 +308,18 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
     returnArg (AString $ unlines $ mkTreebank opts st comm ts) sa
 
   CLookupTreebank -> do
-    case treebanks st of 
-      [] -> returnArg (AError "no treebank") sa
-      (_,tb):_ -> do
-        let s  = prCommandArg a
-        let tes = map (string2treeErr gro . snd) $ lookupTreebank tb s
-            terms = [t | Ok t <- tes]
-        returnArg (ATrms terms) sa
+    let tbs = treebanks st
+    if null tbs 
+      then returnArg (AError "no treebank") sa
+      else do
+        let tbi = maybe (fst $ head tbs) I.identC (getOptVal opts (aOpt "treebank"))
+        case lookup tbi tbs of
+          Nothing -> returnArg (AError ("no treebank" +++ prt tbi)) sa
+          Just tb -> do
+            let s  = prCommandArg a
+            let tes = map (string2treeErr gro . snd) $ lookupTreebank tb s
+                terms = [t | Ok t <- tes]
+            returnArg (ATrms terms) sa
 
   CShowTreeGraph | oElem emitCode opts -> do -- -o
     returnArg (AString $ visualizeTrees opts $ strees $ s2t a) sa
