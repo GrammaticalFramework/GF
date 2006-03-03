@@ -15,7 +15,7 @@ $d = [0-9]                -- digit
 $i = [$l $d _ ']          -- identifier character
 $u = [\0-\255]          -- universal: any character
 
-@rsyms =    -- reserved words consisting of special symbols
+@rsyms =    -- symbols and non-identifier-like reserved words
    \; | \: | \{ | \} | \= | \| | \| \| | \: \: | \( | \) | \[ | \] | \, | \_ | \- \> | \\ | \< \- | \> \> \= | \> \> | \& \& | \= \= | \/ \= | \< | \< \= | \> | \> \= | \+ | \- | \* | \/ | \% | \. | \?
 
 :-
@@ -39,7 +39,7 @@ share :: String -> String
 share = id
 
 data Tok =
-   TS !String     -- reserved words
+   TS !String     -- reserved words and symbols
  | TL !String     -- string literals
  | TI !String     -- integer literals
  | TV !String     -- identifiers

@@ -58,7 +58,6 @@ data Tree :: * -> * where
     PEmptyList :: Tree Pattern_
     PList :: [CommaPattern] -> Tree Pattern_
     PTuple :: CommaPattern -> [CommaPattern] -> Tree Pattern_
-    PType :: Tree Pattern_
     PStr :: String -> Tree Pattern_
     PInt :: Integer -> Tree Pattern_
     PVar :: Ident -> Tree Pattern_
@@ -212,7 +211,6 @@ instance Show (Tree c) where
     PEmptyList -> showString "PEmptyList"
     PList commapatterns -> opar n . showString "PList" . showChar ' ' . showsPrec 1 commapatterns . cpar n
     PTuple commapattern commapatterns -> opar n . showString "PTuple" . showChar ' ' . showsPrec 1 commapattern . showChar ' ' . showsPrec 1 commapatterns . cpar n
-    PType -> showString "PType"
     PStr str -> opar n . showString "PStr" . showChar ' ' . showsPrec 1 str . cpar n
     PInt n -> opar n . showString "PInt" . showChar ' ' . showsPrec 1 n . cpar n
     PVar i -> opar n . showString "PVar" . showChar ' ' . showsPrec 1 i . cpar n
@@ -288,7 +286,6 @@ johnMajorEq (PRec fieldpatterns) (PRec fieldpatterns_) = fieldpatterns == fieldp
 johnMajorEq PEmptyList PEmptyList = True
 johnMajorEq (PList commapatterns) (PList commapatterns_) = commapatterns == commapatterns_
 johnMajorEq (PTuple commapattern commapatterns) (PTuple commapattern_ commapatterns_) = commapattern == commapattern_ && commapatterns == commapatterns_
-johnMajorEq PType PType = True
 johnMajorEq (PStr str) (PStr str_) = str == str_
 johnMajorEq (PInt n) (PInt n_) = n == n_
 johnMajorEq (PVar i) (PVar i_) = i == i_
@@ -363,59 +360,58 @@ instance Ord (Tree c) where
     index (PEmptyList ) = 14
     index (PList _) = 15
     index (PTuple _ _) = 16
-    index (PType ) = 17
-    index (PStr _) = 18
-    index (PInt _) = 19
-    index (PVar _) = 20
-    index (PWild ) = 21
-    index (CommaPattern _) = 22
-    index (FieldPattern _ _) = 23
-    index (EPi _ _ _) = 24
-    index (EPiNoVar _ _) = 25
-    index (EAbs _ _) = 26
-    index (ELet _ _) = 27
-    index (ECase _ _) = 28
-    index (EIf _ _ _) = 29
-    index (EDo _ _) = 30
-    index (EBind _ _) = 31
-    index (EBindC _ _) = 32
-    index (EOr _ _) = 33
-    index (EAnd _ _) = 34
-    index (EEq _ _) = 35
-    index (ENe _ _) = 36
-    index (ELt _ _) = 37
-    index (ELe _ _) = 38
-    index (EGt _ _) = 39
-    index (EGe _ _) = 40
-    index (EListCons _ _) = 41
-    index (EAdd _ _) = 42
-    index (ESub _ _) = 43
-    index (EMul _ _) = 44
-    index (EDiv _ _) = 45
-    index (EMod _ _) = 46
-    index (ENeg _) = 47
-    index (EApp _ _) = 48
-    index (EProj _ _) = 49
-    index (ERecType _) = 50
-    index (ERec _) = 51
-    index (EEmptyList ) = 52
-    index (EList _) = 53
-    index (ETuple _ _) = 54
-    index (EVar _) = 55
-    index (EType ) = 56
-    index (EStr _) = 57
-    index (EInteger _) = 58
-    index (EDouble _) = 59
-    index (EMeta ) = 60
-    index (VVar _) = 61
-    index (VWild ) = 62
-    index (LetDef _ _) = 63
-    index (Case _ _ _) = 64
-    index (BindVar _ _) = 65
-    index (BindNoVar _) = 66
-    index (FieldType _ _) = 67
-    index (FieldValue _ _) = 68
-    index (Ident _) = 69
+    index (PStr _) = 17
+    index (PInt _) = 18
+    index (PVar _) = 19
+    index (PWild ) = 20
+    index (CommaPattern _) = 21
+    index (FieldPattern _ _) = 22
+    index (EPi _ _ _) = 23
+    index (EPiNoVar _ _) = 24
+    index (EAbs _ _) = 25
+    index (ELet _ _) = 26
+    index (ECase _ _) = 27
+    index (EIf _ _ _) = 28
+    index (EDo _ _) = 29
+    index (EBind _ _) = 30
+    index (EBindC _ _) = 31
+    index (EOr _ _) = 32
+    index (EAnd _ _) = 33
+    index (EEq _ _) = 34
+    index (ENe _ _) = 35
+    index (ELt _ _) = 36
+    index (ELe _ _) = 37
+    index (EGt _ _) = 38
+    index (EGe _ _) = 39
+    index (EListCons _ _) = 40
+    index (EAdd _ _) = 41
+    index (ESub _ _) = 42
+    index (EMul _ _) = 43
+    index (EDiv _ _) = 44
+    index (EMod _ _) = 45
+    index (ENeg _) = 46
+    index (EApp _ _) = 47
+    index (EProj _ _) = 48
+    index (ERecType _) = 49
+    index (ERec _) = 50
+    index (EEmptyList ) = 51
+    index (EList _) = 52
+    index (ETuple _ _) = 53
+    index (EVar _) = 54
+    index (EType ) = 55
+    index (EStr _) = 56
+    index (EInteger _) = 57
+    index (EDouble _) = 58
+    index (EMeta ) = 59
+    index (VVar _) = 60
+    index (VWild ) = 61
+    index (LetDef _ _) = 62
+    index (Case _ _ _) = 63
+    index (BindVar _ _) = 64
+    index (BindNoVar _) = 65
+    index (FieldType _ _) = 66
+    index (FieldValue _ _) = 67
+    index (Ident _) = 68
     compareSame (Module imports decls) (Module imports_ decls_) = mappend (compare imports imports_) (compare decls decls_)
     compareSame (Import i) (Import i_) = compare i i_
     compareSame (DataDecl i exp consdecls) (DataDecl i_ exp_ consdecls_) = mappend (compare i i_) (mappend (compare exp exp_) (compare consdecls consdecls_))
@@ -433,7 +429,6 @@ instance Ord (Tree c) where
     compareSame PEmptyList PEmptyList = EQ
     compareSame (PList commapatterns) (PList commapatterns_) = compare commapatterns commapatterns_
     compareSame (PTuple commapattern commapatterns) (PTuple commapattern_ commapatterns_) = mappend (compare commapattern commapattern_) (compare commapatterns commapatterns_)
-    compareSame PType PType = EQ
     compareSame (PStr str) (PStr str_) = compare str str_
     compareSame (PInt n) (PInt n_) = compare n n_
     compareSame (PVar i) (PVar i_) = compare i i_

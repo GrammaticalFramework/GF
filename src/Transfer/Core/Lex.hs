@@ -44,7 +44,7 @@ share :: String -> String
 share = id
 
 data Tok =
-   TS !String     -- reserved words
+   TS !String     -- reserved words and symbols
  | TL !String     -- string literals
  | TI !String     -- integer literals
  | TV !String     -- identifiers

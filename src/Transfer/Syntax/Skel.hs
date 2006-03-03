@@ -28,7 +28,6 @@ transTree t = case t of
   PEmptyList  -> failure t
   PList commapatterns -> failure t
   PTuple commapattern commapatterns -> failure t
-  PType  -> failure t
   PStr str -> failure t
   PInt n -> failure t
   PVar i -> failure t
@@ -116,7 +115,6 @@ transPattern t = case t of
   PEmptyList  -> failure t
   PList commapatterns -> failure t
   PTuple commapattern commapatterns -> failure t
-  PType  -> failure t
   PStr str -> failure t
   PInt n -> failure t
   PVar i -> failure t
