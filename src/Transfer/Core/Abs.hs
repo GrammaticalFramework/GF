@@ -43,7 +43,6 @@ data Tree :: * -> * where
     PCons :: CIdent -> [Pattern] -> Tree Pattern_
     PVar :: PatternVariable -> Tree Pattern_
     PRec :: [FieldPattern] -> Tree Pattern_
-    PType :: Tree Pattern_
     PStr :: String -> Tree Pattern_
     PInt :: Integer -> Tree Pattern_
     FieldPattern :: CIdent -> Pattern -> Tree FieldPattern_
@@ -129,7 +128,6 @@ instance Show (Tree c) where
     PCons cident patterns -> opar n . showString "PCons" . showChar ' ' . showsPrec 1 cident . showChar ' ' . showsPrec 1 patterns . cpar n
     PVar patternvariable -> opar n . showString "PVar" . showChar ' ' . showsPrec 1 patternvariable . cpar n
     PRec fieldpatterns -> opar n . showString "PRec" . showChar ' ' . showsPrec 1 fieldpatterns . cpar n
-    PType -> showString "PType"
     PStr str -> opar n . showString "PStr" . showChar ' ' . showsPrec 1 str . cpar n
     PInt n -> opar n . showString "PInt" . showChar ' ' . showsPrec 1 n . cpar n
     FieldPattern cident pattern -> opar n . showString "FieldPattern" . showChar ' ' . showsPrec 1 cident . showChar ' ' . showsPrec 1 pattern . cpar n
@@ -169,7 +167,6 @@ johnMajorEq (ConsDecl cident exp) (ConsDecl cident_ exp_) = cident == cident_ &&
 johnMajorEq (PCons cident patterns) (PCons cident_ patterns_) = cident == cident_ && patterns == patterns_
 johnMajorEq (PVar patternvariable) (PVar patternvariable_) = patternvariable == patternvariable_
 johnMajorEq (PRec fieldpatterns) (PRec fieldpatterns_) = fieldpatterns == fieldpatterns_
-johnMajorEq PType PType = True
 johnMajorEq (PStr str) (PStr str_) = str == str_
 johnMajorEq (PInt n) (PInt n_) = n == n_
 johnMajorEq (FieldPattern cident pattern) (FieldPattern cident_ pattern_) = cident == cident_ && pattern == pattern_
@@ -208,32 +205,31 @@ instance Ord (Tree c) where
     index (PCons _ _) = 5
     index (PVar _) = 6
     index (PRec _) = 7
-    index (PType ) = 8
-    index (PStr _) = 9
-    index (PInt _) = 10
-    index (FieldPattern _ _) = 11
-    index (PVVar _) = 12
-    index (PVWild ) = 13
-    index (ELet _ _) = 14
-    index (ECase _ _) = 15
-    index (EAbs _ _) = 16
-    index (EPi _ _ _) = 17
-    index (EApp _ _) = 18
-    index (EProj _ _) = 19
-    index (ERecType _) = 20
-    index (ERec _) = 21
-    index (EVar _) = 22
-    index (EType ) = 23
-    index (EStr _) = 24
-    index (EInteger _) = 25
-    index (EDouble _) = 26
-    index (EMeta _) = 27
-    index (LetDef _ _) = 28
-    index (Case _ _ _) = 29
-    index (FieldType _ _) = 30
-    index (FieldValue _ _) = 31
-    index (TMeta _) = 32
-    index (CIdent _) = 33
+    index (PStr _) = 8
+    index (PInt _) = 9
+    index (FieldPattern _ _) = 10
+    index (PVVar _) = 11
+    index (PVWild ) = 12
+    index (ELet _ _) = 13
+    index (ECase _ _) = 14
+    index (EAbs _ _) = 15
+    index (EPi _ _ _) = 16
+    index (EApp _ _) = 17
+    index (EProj _ _) = 18
+    index (ERecType _) = 19
+    index (ERec _) = 20
+    index (EVar _) = 21
+    index (EType ) = 22
+    index (EStr _) = 23
+    index (EInteger _) = 24
+    index (EDouble _) = 25
+    index (EMeta _) = 26
+    index (LetDef _ _) = 27
+    index (Case _ _ _) = 28
+    index (FieldType _ _) = 29
+    index (FieldValue _ _) = 30
+    index (TMeta _) = 31
+    index (CIdent _) = 32
     compareSame (Module decls) (Module decls_) = compare decls decls_
     compareSame (DataDecl cident exp consdecls) (DataDecl cident_ exp_ consdecls_) = mappend (compare cident cident_) (mappend (compare exp exp_) (compare consdecls consdecls_))
     compareSame (TypeDecl cident exp) (TypeDecl cident_ exp_) = mappend (compare cident cident_) (compare exp exp_)
@@ -242,7 +238,6 @@ instance Ord (Tree c) where
     compareSame (PCons cident patterns) (PCons cident_ patterns_) = mappend (compare cident cident_) (compare patterns patterns_)
     compareSame (PVar patternvariable) (PVar patternvariable_) = compare patternvariable patternvariable_
     compareSame (PRec fieldpatterns) (PRec fieldpatterns_) = compare fieldpatterns fieldpatterns_
-    compareSame PType PType = EQ
     compareSame (PStr str) (PStr str_) = compare str str_
     compareSame (PInt n) (PInt n_) = compare n n_
     compareSame (FieldPattern cident pattern) (FieldPattern cident_ pattern_) = mappend (compare cident cident_) (compare pattern pattern_)

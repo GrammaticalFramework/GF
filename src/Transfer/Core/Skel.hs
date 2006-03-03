@@ -19,7 +19,6 @@ transTree t = case t of
   PCons cident patterns -> failure t
   PVar patternvariable -> failure t
   PRec fieldpatterns -> failure t
-  PType  -> failure t
   PStr str -> failure t
   PInt n -> failure t
   FieldPattern cident pattern -> failure t
@@ -65,7 +64,6 @@ transPattern t = case t of
   PCons cident patterns -> failure t
   PVar patternvariable -> failure t
   PRec fieldpatterns -> failure t
-  PType  -> failure t
   PStr str -> failure t
   PInt n -> failure t
 

@@ -193,7 +193,6 @@ match (PCons c' ps) (VCons c vs)
 match (PVar x) v                   = Just (bind x v)
 match (PRec fps) (VRec fs) = concatM [ match p (recLookup f fs) | FieldPattern f p <- fps ]
 match (PInt i) (VInt i') | i == i' = Just []
-match PType VType                  = Just []
 match (PStr s) (VStr s') | s == s' = Just []
 match (PInt i) (VInt i') | i == i' = Just []
 match _ _ = Nothing

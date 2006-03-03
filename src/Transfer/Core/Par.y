@@ -87,7 +87,6 @@ Pattern :: { Pattern }
 Pattern : '(' CIdent ListPattern ')' { PCons $2 (reverse $3) } 
   | PatternVariable { PVar $1 }
   | 'rec' '{' ListFieldPattern '}' { PRec $3 }
-  | 'Type' { PType }
   | String { PStr $1 }
   | Integer { PInt $1 }
 

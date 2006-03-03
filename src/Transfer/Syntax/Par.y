@@ -137,7 +137,6 @@ Pattern3 : 'rec' '{' ListFieldPattern '}' { PRec $3 }
   | '[' ']' { PEmptyList }
   | '[' ListCommaPattern ']' { PList $2 }
   | '(' CommaPattern ',' ListCommaPattern ')' { PTuple $2 $4 }
-  | 'Type' { PType }
   | String { PStr $1 }
   | Integer { PInt $1 }
   | Ident { PVar $1 }

@@ -88,7 +88,6 @@ instance Print (Tree c) where
     PCons cident patterns -> prPrec _i 0 (concatD [doc (showString "(") , prt 0 cident , prt 0 patterns , doc (showString ")")])
     PVar patternvariable -> prPrec _i 0 (concatD [prt 0 patternvariable])
     PRec fieldpatterns -> prPrec _i 0 (concatD [doc (showString "rec") , doc (showString "{") , prt 0 fieldpatterns , doc (showString "}")])
-    PType  -> prPrec _i 0 (concatD [doc (showString "Type")])
     PStr str -> prPrec _i 0 (concatD [prt 0 str])
     PInt n -> prPrec _i 0 (concatD [prt 0 n])
     FieldPattern cident pattern -> prPrec _i 0 (concatD [prt 0 cident , doc (showString "=") , prt 0 pattern])

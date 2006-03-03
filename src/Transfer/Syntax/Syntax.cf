@@ -55,8 +55,6 @@ PTuple.   Pattern3 ::= "(" CommaPattern "," [CommaPattern] ")" ;
 CommaPattern. CommaPattern ::= Pattern ;
 separator nonempty CommaPattern "," ;
 
--- The pattern matching the Type constant
-PType.    Pattern3 ::= "Type" ;
 -- String literal patterns
 PStr.     Pattern3 ::= String ;
 -- Integer literal patterns

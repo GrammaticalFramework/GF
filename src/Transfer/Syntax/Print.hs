@@ -97,7 +97,6 @@ instance Print (Tree c) where
     PEmptyList  -> prPrec _i 3 (concatD [doc (showString "[") , doc (showString "]")])
     PList commapatterns -> prPrec _i 3 (concatD [doc (showString "[") , prt 0 commapatterns , doc (showString "]")])
     PTuple commapattern commapatterns -> prPrec _i 3 (concatD [doc (showString "(") , prt 0 commapattern , doc (showString ",") , prt 0 commapatterns , doc (showString ")")])
-    PType  -> prPrec _i 3 (concatD [doc (showString "Type")])
     PStr str -> prPrec _i 3 (concatD [prt 0 str])
     PInt n -> prPrec _i 3 (concatD [prt 0 n])
     PVar i -> prPrec _i 3 (concatD [prt 0 i])
