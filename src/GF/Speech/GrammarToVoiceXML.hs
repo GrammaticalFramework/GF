@@ -56,13 +56,48 @@ updateSkeleton cat skel rule =
 
 skel2vxml :: String -> VIdent -> VSkeleton -> XML
 skel2vxml name start skel = 
-    vxml ([startForm] ++ concatMap (uncurry (catForms gr)) skel)
+    vxml (prelude ++ [startForm] ++ concatMap (uncurry (catForms gr)) skel)
   where 
   gr = grammarURI name
-  startForm = Tag "form" [] [subdialog "sub" [("src","#"++start)] []]
+  prelude = scriptLib
+  startForm = Tag "form" [] [subdialog "sub" [("srcexpr","'#'+"++string start)] []]
 
 grammarURI :: String -> String
 grammarURI name = name ++ ".grxml"
+
+scriptLib :: [XML]
+scriptLib = [script (unlines s)]
+ where 
+ s = ["function dump(r, p) {",
+      "  if (isUndefined(p)) { p = 0 }",
+      "  if (isUndefined(r)) {",
+      "    return 'undefined';",
+      "  } else if (isArray(r)) {",
+      "    var s = '[';",
+      "    for (var i = 0; i < r.length; r++) {",
+      "       s += dump(r[0], 0);",
+      "       if (i < r.length-1) { s += ',' }",
+      "    }",
+      "    s += ']';",
+      "    return s;",
+      "  } else if (r == '?') {",
+      "    return '?';",
+      "  } else {",
+      "    var s = r.name;",
+      "    var i;",
+      "    for (i = 0; ; i++) {",
+      "      var c = r['arg'+i];",
+      "      if (c == undefined) { break; }",
+      "      s += ' ' + dump(c, 1);",
+      "    }",
+      "    if (i > 0 && p > 0) { s = '(' + s + ')'; }",
+      "    return s;",
+      "  }",
+      "}",
+      "function isArray(a) { return a && typeof a == 'object' && a.constructor == Array; }",
+      "function isUndefined(a) { return typeof a == 'undefined'; }"
+     ]
+
 
 catForms :: String -> VIdent -> [(VIdent, [VIdent])] -> [XML]
 catForms gr cat fs = 
@@ -72,30 +107,33 @@ catForms gr cat fs =
 
 cat2form :: String -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr cat fs = 
-    form cat [var "value" (Just "'?'"),
+    form cat [var "value" (Just "'?'"), formDebug cat,
               block [if_ "value != '?'" [assign cat "value"]],
               field cat [] [promptString ("quest_"++cat), 
                             grammar (gr++"#"++cat),
                             nomatch [Data "I didn't understand you.", reprompt],
                             help [Data ("help_"++cat)],
                             filled [] [if_else (cat ++ " == '?'") [reprompt] feedback]],
+              block [prompt [Data (cat ++ " = "), value ("dump("++cat++")")]],
               subdialog "sub" [("srcexpr","'#'+"++cat++".name")] 
                              [param "value" cat, filled [] subDone]]
   where subDone = [assign cat "sub.value", return_ [cat]]
-        feedback = [Data "Constructor: ", value (cat++".name")]
+        feedback = []
 
 fun2form :: String -> VIdent -> [VIdent] -> XML
 fun2form gr fun args = 
-    form fun ([var "value" Nothing]
+    form fun ([var "value" Nothing] ++ [formDebug fun]
               ++ ss
               ++ [ret])
   where 
   argNames = zip ["arg"++show n | n <- [0..]] args
   ss = map (uncurry mkSub) argNames
-  mkSub a t = subdialog a [("src","#"++t)] 
+  mkSub a t = subdialog a [("srcexpr","'#'+"++string t)] 
                 [param "value" ("value."++a),
                  filled [] [assign ("value."++a) (a++"."++t)]]
   ret = block [return_ ["value"]]
+
+formDebug id = block [prompt [Data ("Entering form " ++ id ++ ". value = "), value "dump(value)"]]
 
 --
 -- * VoiceXML stuff
@@ -105,7 +143,7 @@ vxml :: [XML] -> XML
 vxml = Tag "vxml" [("version","2.0"),("xmlns","http://www.w3.org/2001/vxml")]
 
 form :: String -> [XML] -> XML
-form id = Tag "form" [("id", id)]
+form id xs = Tag "form" [("id", id)] xs
 
 field :: String -> [(String,String)] -> [XML] -> XML
 field name attrs = Tag "field" ([("name",name)]++attrs)
@@ -170,6 +208,20 @@ var :: String -> Maybe String -> XML
 var name expr = Tag "var" ([("name",name)]++e) []
   where e = maybe [] ((:[]) . (,) "expr") expr
 
+script :: String -> XML
+script s = Tag "script" [] [CData s]
+
+scriptURI :: String -> XML
+scriptURI uri = Tag "script" [("uri", uri)] []
+
+--
+-- * ECMAScript stuff
+--
+
+string :: String -> String
+string s = "'" ++ concatMap esc s ++ "'"
+  where esc '\'' = "\\'"
+        esc c    = [c]
 
 --
 -- * List stuff
