@@ -182,9 +182,8 @@ execC :: CommandOpt -> ShellIO
 execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case comm of
 
   CImport file | oElem (iOpt "treebank") opts -> do
-    ss <- readFileIf file >>= return . lines
-    let tb = pre2treebank $ getTreebank ss
-    changeState (addTreebank (I.identC (takeWhile (/='.') file), tb)) sa
+    tbs <- readUniTreebanks file
+    changeState (addTreebanks tbs) sa
   CImport file | oElem fromExamples opts -> do
     es <- liftM nub $ getGFEFiles opts file
     system $ "gf -examples" +++ unlines es
@@ -296,7 +295,7 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
 
   CTreeBank | oElem doCompute opts -> do -- -c
     let bank = prCommandArg a
-    returnArg (AString $ unlines $ testTreebank opts st bank) sa
+    returnArg (AString $ unlines $ testMultiTreebank opts st bank) sa
   CTreeBank | oElem getTrees opts -> do -- -trees
     let bank  = prCommandArg a
         tes   = map (string2treeErr gro) $ treesTreebank opts bank
@@ -305,21 +304,28 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
   CTreeBank -> do
     let ts = strees $ s2t $ snd sa
         comm = "command" ----
-    returnArg (AString $ unlines $ mkTreebank opts st comm ts) sa
+    returnArg (AString $ unlines $ mkMultiTreebank opts st comm ts) sa
 
   CLookupTreebank -> do
     let tbs = treebanks st
+    let s   = prCommandArg a
     if null tbs 
       then returnArg (AError "no treebank") sa
       else do
         let tbi = maybe (fst $ head tbs) I.identC (getOptVal opts (aOpt "treebank"))
         case lookup tbi tbs of
           Nothing -> returnArg (AError ("no treebank" +++ prt tbi)) sa
-          Just tb -> do
-            let s  = prCommandArg a
-            let tes = map (string2treeErr gro . snd) $ lookupTreebank tb s
-                terms = [t | Ok t <- tes]
-            returnArg (ATrms terms) sa
+          Just tb -> case () of
+            _ | oElem (iOpt "strings") opts -> do
+              returnArg (AString $ unlines $ map fst $ assocsTreebank tb) sa
+            _ | oElem (iOpt "raw") opts -> do
+              returnArg (AString $ unlines $ lookupTreebank tb s) sa
+            _ | oElem (iOpt "assocs") opts -> do
+              returnArg (AString $ unlines $ map printAssoc $ assocsTreebank tb) sa
+            _ -> do            
+              let tes = map (string2treeErr gro) $ lookupTreebank tb s
+                  terms = [t | Ok t <- tes]
+              returnArg (ATrms terms) sa
 
   CShowTreeGraph | oElem emitCode opts -> do -- -o
     returnArg (AString $ visualizeTrees opts $ strees $ s2t a) sa

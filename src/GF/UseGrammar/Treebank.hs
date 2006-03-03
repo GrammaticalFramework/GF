@@ -13,12 +13,19 @@
 -----------------------------------------------------------------------------
 
 module GF.UseGrammar.Treebank (
-  mkTreebank,
-  testTreebank,
+  mkMultiTreebank,
+  mkUniTreebank,
+  multi2uniTreebank,
+  uni2multiTreebank,
+  testMultiTreebank,
   treesTreebank,
   getTreebank,
+  getUniTreebank,
+  readUniTreebanks,
+  readMultiTreebank,
   lookupTreebank,
-  pre2treebank
+  assocsTreebank,
+  printAssoc
   ) where
 
 import GF.Compile.ShellState 
@@ -34,15 +41,54 @@ import GF.Grammar.PrGrammar (prt_)
 import GF.Grammar.Values (tree2exp)
 import GF.Data.Operations
 import GF.Infra.Option
+import GF.Infra.Ident (Ident)
+import GF.Infra.UseIO
 import qualified GF.Grammar.Abstract as A
 import qualified Data.Map as M
 
 -- Generate a treebank with a multilingual grammar. AR 8/2/2006
 -- (c) Aarne Ranta 2006 under GNU GPL
 
+-- keys  are trees; format: XML file
+type MultiTreebank = [(String,[(String,String)])]       -- tree,lang,lin
+
+-- keys are strings; format: string TAB tree TAB ... TAB tree
+type UniTreebank   = Treebank -- M.Map String [String]  -- string,tree
+
+-- both formats can be read from both kinds of files
+readUniTreebanks :: FilePath -> IO [(Ident,UniTreebank)]
+readUniTreebanks file = do
+  s <- readFileIf file
+  return $ if isMultiTreebank s 
+    then multi2uniTreebank $ getTreebank $ lines s
+    else
+      let tb = getUniTreebank $ lines s
+      in [(zIdent (unsuffixFile file),tb)]
+
+readMultiTreebank :: FilePath -> IO MultiTreebank
+readMultiTreebank file = do
+  s <- readFileIf file
+  return $ if isMultiTreebank s 
+    then getTreebank $ lines s
+    else uni2multiTreebank (zIdent (unsuffixFile file)) $ getUniTreebank $ lines s
+
+isMultiTreebank :: String -> Bool
+isMultiTreebank s = take 10 s == "<treebank>" 
+
+multi2uniTreebank :: MultiTreebank -> [(Ident,UniTreebank)]
+multi2uniTreebank mt@((_,lls):_) = [(zIdent la, mkTb la) | (la,_) <- lls] where
+  mkTb la = M.fromListWith (++) [(s,[t]) | (t,lls) <- mt, (l,s) <- lls, l==la]
+multi2uniTreebank [] = []
+
+uni2multiTreebank ::  Ident -> UniTreebank -> MultiTreebank
+uni2multiTreebank la tb = 
+  [(t,[(prt_ la, s)]) | (s,ts) <- assocsTreebank tb, t <- ts]
+
 -- | the main functions 
-mkTreebank :: Options -> ShellState -> String -> [A.Tree] -> Res
-mkTreebank opts sh com trees = putInXML opts "treebank" comm (concatMap mkItem tris)
+
+-- builds a treebank where trees are the keys, and writes a file (opt. XML)
+mkMultiTreebank :: Options -> ShellState -> String -> [A.Tree] -> Res
+mkMultiTreebank opts sh com trees = putInXML opts "treebank" comm (concatMap mkItem tris)
  where
    mkItem(t,i)= putInXML opts "item" (cat i)  (mkTree t ++ concatMap (mkLin t) langs)
 --   mkItem(t,i)= putInXML opts "item" (cat i)  (mkTree t >>mapM_ (mkLin t) langs)
@@ -56,10 +102,19 @@ mkTreebank opts sh com trees = putInXML opts "treebank" comm (concatMap mkItem t
    lang lg = " lang=" ++ show (prt_ (zIdent lg))
    tris    = zip trees [1..]
 
-testTreebank :: Options -> ShellState -> String -> Res
-testTreebank opts sh = putInXML opts "testtreebank" [] . 
-                       concatMap testOne . 
-                       getTreebanks . lines
+-- builds a unilingual treebank where strings are the keys into an internal treebank
+
+mkUniTreebank :: Options -> ShellState -> Language -> [A.Tree] -> Treebank
+mkUniTreebank opts sh lg trees = M.fromListWith (++) [(lin t, [prt_ t]) | t <- trees]
+ where
+   lang  = prt_ lg 
+   lin t = linearize sh lang t
+
+-- reads a treebank and linearizes its trees again, printing all differences
+testMultiTreebank :: Options -> ShellState -> String -> Res
+testMultiTreebank opts sh = putInXML opts "testtreebank" [] . 
+                            concatMap testOne . 
+                            getTreebanks . lines
  where
   testOne (e,lang,str0) = do
     let tr = annot gr e
@@ -71,6 +126,7 @@ testTreebank opts sh = putInXML opts "testtreebank" [] .
       ]
   gr = firstStateGrammar sh
 
+-- writes all the trees of the treebank
 treesTreebank :: Options -> String -> [String]
 treesTreebank _ = terms . getTreebank . lines where
   terms ts = [t | (t,_) <- ts]
@@ -82,13 +138,17 @@ puts = return  -- putStrLn
 ret = [] -- return ()
 --
 
-type PreTreebank = [(String,[(String,String)])]
+-- here strings are keys
+assocsTreebank :: UniTreebank -> [(String,[String])]
+assocsTreebank = M.assocs
+
+printAssoc (s, ts) = s ++ concat ["\t" ++ t | t <- ts]
 
 getTreebanks :: [String] -> [(String,String,String)]
 getTreebanks = concatMap grps . getTreebank where
   grps (t,lls) = [(t,x,y) | (x,y) <- lls]
 
-getTreebank :: [String] -> PreTreebank
+getTreebank :: [String] -> MultiTreebank
 getTreebank ll = case ll of
   l:ls@(_:_:_) -> 
     let (l1,l2)   = getItem ls
@@ -107,11 +167,12 @@ getTreebank ll = case ll of
 
    getLang = takeWhile (/='"') . tail . dropWhile (/='"')
 
-lookupTreebank :: Treebank -> String -> [(String,String)]
-lookupTreebank tb s = maybe [] id $ M.lookup s tb 
+getUniTreebank :: [String] -> UniTreebank
+getUniTreebank ls = M.fromListWith (++) [(s, ts) | s:ts <- map chop ls] where
+  chop = chunks '\t'
 
-pre2treebank :: PreTreebank -> Treebank
-pre2treebank tb = M.fromListWith (++) [(s,[(l,t)]) | (t,ls) <- tb, (l,s) <- ls]
+lookupTreebank :: Treebank -> String -> [String]
+lookupTreebank tb s = maybe [] id $ M.lookup s tb 
 
 annot :: StateGrammar -> String -> A.Tree
 annot gr s = errVal (error "illegal tree") $ do

@@ -585,7 +585,7 @@ removeAssoc :: Eq a => a -> [(a,b)] -> [(a,b)]
 removeAssoc a = filter ((/=a) . fst)
 
 -- | chop into separator-separated parts
-chunks :: String -> [String] -> [[String]]
+chunks :: Eq a => a -> [a] -> [[a]]
 chunks sep ws = case span (/= sep) ws of
   (a,_:b) -> a : bs where bs = chunks sep b
   (a, []) -> if null a then [] else [a]
