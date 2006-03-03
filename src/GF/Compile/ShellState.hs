@@ -75,7 +75,7 @@ data ShellState = ShSt {
   transfers  :: [(Ident,T.Env)]      -- ^ transfer modules
   }                             
 
-type Treebank = Map.Map String [(String,String)] -- lang, tree
+type Treebank = Map.Map String [String] -- string, trees
 
 actualConcretes :: ShellState -> [((Ident,Ident),Bool)]
 actualConcretes sh = nub [((c,c),b) | 
@@ -480,9 +480,8 @@ addTransfer :: (Ident,T.Env) -> ShellState -> ShellState
 addTransfer it@(i,_) sh = 
   sh {transfers = it : filter ((/= i) . fst) (transfers sh)}
 
-addTreebank :: (Ident,Treebank) -> ShellState -> ShellState
-addTreebank it@(i,_) sh = 
-  sh {treebanks = it : filter ((/= i) . fst) (treebanks sh)}
+addTreebanks :: [(Ident,Treebank)] -> ShellState -> ShellState
+addTreebanks its sh = sh {treebanks = its ++ treebanks sh}
 
 findTreebank :: ShellState -> Ident -> Err Treebank
 findTreebank sh i = maybeErr "no treebank found" $ lookup i $ treebanks sh
