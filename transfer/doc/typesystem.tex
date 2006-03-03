@@ -1,5 +1,6 @@
 \documentclass[a4paper,11pt]{article}
 \usepackage{mathpartir}
+\usepackage{amssymb}
 
 \begin{document}
 
@@ -14,6 +15,20 @@ Transfer Core language. It is far from complete,
 and some of the rules make no sense at all at the moment.
 
 \subsection{Notation}
+
+$\overline{a}$ is a list of $a$s. 
+
+$x$ stands for variables.
+
+$A$,$B$,$C$ are terms which we use for types.
+
+$s$,$t$ are any terms.
+
+$l$ refers to record labels.
+
+$p$ refers to patterns.
+
+$c$ refers to constructors.
 
 $\Delta$ is a set of constructor typings.
 
@@ -35,6 +50,31 @@ the pattern $p$ can matched against a value of type
 $A$, and if the match succeeds, it will create
 variable bindings with the typings $\Gamma$.
 
+$A \leq B$ means that $A$ is a subtype of of $B$.
+
+$A \lesssim B$ means that $A$ is convertible
+to a subtype of $B$.
+
+\subsection{Language}
+
+\begin{eqnarray*}
+s,t,u & ::= & \textrm{let} \ x = s \ \textrm{in} \ t  \\
+& & | \ \textrm{case} \ s \ \textrm{of} \{ \overline{p \mid t \rightarrow u} \} \\
+& & | \ \lambda x . t \\
+& & | \ (x : s) \rightarrow t \\
+& & | \ s \ t \\
+& & | \ s.l \\
+& & | \ \textrm{sig} \ \{ \overline{l : t} \} \\
+& & | \ \textrm{rec} \ \{ \overline{l = t} \} \\
+& & | \ x \\
+& & | \ Type \\
+& & | \ string \\
+& & | \ integer \\
+& & | \ double \\
+p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \ | \ string \ | \ integer 
+\end{eqnarray*}
+
+
 
 \subsection{Rules}
 
@@ -47,6 +87,13 @@ variable bindings with the typings $\Gamma$.
 
 \and
 
+\inferrule[Check by inferring]
+{ \Delta;\Gamma \vdash t \uparrow B \\
+  \Delta;\Gamma \vdash B \lesssim A }
+{ \Delta;\Gamma \vdash t \downarrow A }
+
+\and
+
 \inferrule[Variable]
 { x : A \in \Gamma }
 { \Delta;\Gamma \vdash x \uparrow A }
@@ -54,28 +101,28 @@ variable bindings with the typings $\Gamma$.
 \and 
 
 \inferrule[Constructor]
-{ C : A \in \Delta }
-{ \Delta;\Gamma \vdash C \uparrow A }
+{ c : A \in \Delta }
+{ \Delta;\Gamma \vdash c \uparrow A }
 
 \and 
 
 \inferrule[Function type]
-{ \Delta;\Gamma \vdash A \uparrow Type \\
-  \Delta;\Gamma, x : A \vdash B \uparrow Type }
-{ \Delta;\Gamma \vdash (x : A) \rightarrow B \uparrow Type }
+{ \Delta;\Gamma \vdash A \downarrow Type \\
+  \Delta;\Gamma, x : A \vdash B \downarrow Type }
+{ \Delta;\Gamma \vdash (x : A) \rightarrow B \downarrow Type }
 
 \and
 
 \inferrule[Abstraction]
-{ \Delta;\Gamma, x : A \vdash s \uparrow B }
+{ \Delta;\Gamma, x : A \vdash s \downarrow B }
 { \Delta;\Gamma \vdash \lambda x. s \downarrow (x : A) \rightarrow B }
 
 \and 
 
 \inferrule[Application]
 { \Delta;\Gamma \vdash s \uparrow (x : A) \rightarrow B \\ 
-  \Delta;\Gamma \vdash t \downarrow A }
-{ \Delta;\Gamma \vdash s t \uparrow B [x / t] }
+  \Delta;\Gamma \vdash t \downarrow B }
+{ \Delta;\Gamma \vdash s \ t \uparrow B [x / t] }
 
 \and 
 
@@ -87,7 +134,7 @@ variable bindings with the typings $\Gamma$.
 \and 
 
 \inferrule[Case analysis]
-{ \Delta;\Gamma \vdash t \uparrow A \\
+{ \Delta;\Gamma \vdash s \uparrow A \\
   \Delta \vdash_p p_1 \downarrow A; \Gamma' \\
   \Delta;\Gamma,\Gamma' \vdash g_1 \downarrow Bool \\
   \Delta;\Gamma,\Gamma' \vdash t_1 \uparrow B \\
@@ -107,6 +154,36 @@ variable bindings with the typings $\Gamma$.
 \label{fig:basics}
 \end{figure}
 
+\begin{figure}
+\begin{mathpar}
+
+\inferrule[Record type]
+{ FIXME: labels must occur at most once \\
+  \Delta;\Gamma \vdash T_1 \uparrow Type \\ 
+  \ldots \\
+  \Delta;\Gamma, l_1 : T_1, \ldots, l_{n-1} : T_{n-1} \vdash T_n \uparrow Type }
+{ \Delta;\Gamma \vdash \textrm{sig} \{ l_1 : T_1, \ldots, l_n : T_n \} \uparrow Type }
+
+\and
+
+\inferrule[Record]
+{ FIXME: labels must occur at most once \\
+  \Delta;\Gamma \vdash t_1 \uparrow T_1 \\ 
+  \ldots \\
+  \Delta;\Gamma \vdash t_n \uparrow T_n [l_{n-1} / t_{n-1}] \ldots [l_1 / t_1] }
+{ \Delta;\Gamma \vdash \textrm{rec} \{ l_1 = t_1, \ldots, l_n = t_n \} 
+  \uparrow \textrm{sig} \{ l_1 : T_1, \ldots, l_n : T_n \} }
+
+\and 
+
+\inferrule[Record projection]
+{ \Delta;\Gamma \vdash t \downarrow \textrm{sig} \{ l : T \} }
+{ \Delta;\Gamma \vdash t . l \uparrow T }
+
+\end{mathpar}
+\caption{Records.}
+\label{fig:records}
+\end{figure}
 
 
 \begin{figure}
@@ -125,16 +202,16 @@ variable bindings with the typings $\Gamma$.
 \and 
 
 \inferrule[Constructor pattern]
-{ C : (x_1 : T_1) \rightarrow \ldots \rightarrow T \in \Delta \\
+{ c : (x_1 : T_1) \rightarrow \ldots \rightarrow T \in \Delta \\
   \Delta \vdash_p p_1 \downarrow T_1; \Gamma_1 \\
   \ldots \\
   \Delta \vdash_p p_n \downarrow T_n; \Gamma_n \\
   }
-{ \Delta \vdash_p C p_1 \ldots p_n \ \downarrow \ T; \Gamma_1, \ldots, \Gamma_n }
+{ \Delta \vdash_p c p_1 \ldots p_n \ \downarrow \ T; \Gamma_1, \ldots, \Gamma_n }
 
 \and 
 
-\inferrule[Record pattern]
+\inferrule[Record pattern FIXME: allow more fields in type, ignore order]
 { \Delta \vdash_p p_1 \ \downarrow \ T_1; \Gamma_1 \\
   \ldots \\
   \Delta \vdash_p p_n \ \downarrow \ T_n; \Gamma_n \\
@@ -162,34 +239,7 @@ variable bindings with the typings $\Gamma$.
 \end{figure}
 
 
-\begin{figure}
-\begin{mathpar}
 
-\inferrule[Record type]
-{ \Delta;\Gamma \vdash T_1 \uparrow Type \\ 
-  \ldots \\
-  \Delta;\Gamma, l_1 : T_1, \ldots, l_{n-1} : T_{n-1} \vdash T_n \uparrow Type }
-{ \Delta;\Gamma \vdash \textrm{sig} \{ l_1 : T_1, \ldots, l_n : T_n \} \uparrow Type }
-
-\and
-
-\inferrule[Record]
-{ \Delta;\Gamma \vdash t_1 \uparrow T_1 \\ 
-  \ldots \\
-  \Delta;\Gamma \vdash t_n \uparrow T_n [l_{n-1} / t_{n-1}] \ldots [l_1 / t_1] }
-{ \Delta;\Gamma \vdash \textrm{rec} \{ l_1 = t_1, \ldots, l_n = t_n \} 
-  \uparrow \textrm{sig} \{ l_1 : T_1, \ldots, l_n : T_n \} }
-
-\and 
-
-\inferrule[Record projection]
-{ \Delta;\Gamma \vdash t \uparrow \textrm{sig} \{ l : T \} }
-{ \Delta;\Gamma \vdash t . l \uparrow T }
-
-\end{mathpar}
-\caption{Records.}
-\label{fig:records}
-\end{figure}
 
 
 \begin{figure}
@@ -233,6 +283,105 @@ variable bindings with the typings $\Gamma$.
 \caption{Primitive types.}
 \label{fig:primitive-types}
 \end{figure}
+
+\begin{figure}
+\begin{mathpar}
+
+\inferrule[Subtype conversion]
+{ \vdash s \Downarrow_{wh} s' \\
+  \vdash t \Downarrow_{wh} t' \\
+  s' \leq t' }
+{ s \lesssim t }
+
+\and 
+
+\inferrule[Function type conversion]
+{ A_2 \lesssim A_1 \\
+  B_1 [x_1/z] \lesssim B_2 [x_2/z] }
+{ (x_1 : A_1) \rightarrow B_1 
+  \leq (x_2 : A_2) \rightarrow B_2 }
+
+\and 
+
+\inferrule[Constructor conversion]
+{ s_1 \lesssim t_1 \\ 
+  \ldots \\ 
+  s_n \lesssim t_n \\ 
+}
+{ c s_1 \ldots s_n \leq c t_1 \ldots t_n }
+
+\and 
+
+\inferrule[Record type conversion]
+{ FIXME }
+{ \textrm{sig} \ \{ l_1 : A_1 \ldots l_n : A_n \} 
+  \leq 
+  \textrm{sig} \ \{ k_1 : B_1 \ldots k_m : B_m \}  }
+
+\and 
+
+\inferrule[Record conversion]
+{ FIXME }
+{ \textrm{rec} \ \{ l_1 = s_1 \ldots l_n = s_n \} 
+  \leq 
+  \textrm{rec} \ \{ k_1 = t_1 \ldots k_m = t_m \}  }
+
+\and 
+
+\inferrule[Integer conversion]
+{ i_1 \ \textrm{integer} \\
+  i_2 \ \textrm{integer} \\
+  i_1 =_{integer} i_2}
+{ i_1 \leq i_2 }
+
+
+
+
+
+
+
+\end{mathpar}
+\caption{Conversion and subtyping.}
+\label{fig:conversion}
+\end{figure}
+
+\begin{figure}
+\begin{mathpar}
+
+\inferrule[Eval-let]
+{ s \Downarrow_{wh} s' }
+{ \Gamma \vdash \textrm{let} \ x = s \ \textrm{in} \ t 
+                \Downarrow_{wh} t [x/s']
+}
+
+\and
+
+\inferrule[Eval-case]
+{ }
+{ \Gamma \vdash \textrm{case} \ s \ \textrm{of} \{ \overline{p \mid t \rightarrow u} \}
+}
+
+\and
+
+\inferrule[Eval-abstraction]
+{ }
+{ \Gamma \vdash \lambda x . t \Downarrow_{wh} \lambda x . t \}
+}
+
+\and
+
+\inferrule[Eval-function type]
+{ }
+{ \Gamma \vdash (x : s) \rightarrow t \Downarrow_{wh} \}
+}
+
+
+
+\end{mathpar}
+\caption{Weak head normal form evaluation.}
+\label{fig:whnf-evaluation}
+\end{figure}
+
 
 
 \end{document}
