@@ -7,63 +7,96 @@
 \author{Bj\"orn Bringert \\ \texttt{bringert@cs.chalmers.se}}
 \maketitle
 
+\section{Type Checking Algorithm}
+
 This is the beginnings of a type checking algorithm for the 
 Transfer Core language. It is far from complete,
 and some of the rules make no sense at all at the moment.
+
+\subsection{Notation}
+
+$\Delta$ is a set of constructor typings.
+
+$\Gamma$ is a set of variable typings.
+
+$\Delta;\Gamma \vdash t \uparrow A$ means that in the
+variable typing context $\Gamma$ and the constructor
+typing context $\Delta$, the type of $t$ can be inferred 
+to be $A$.
+
+$\Delta;\Gamma \vdash t \downarrow A$ means that in the
+variable typing context $\Gamma$ and the constructor
+typing context $\Delta$, the type of $t$ can be 
+checked to be $A$.
+
+$\Delta \vdash_p p \downarrow A; \Gamma$ means that
+in the constructor typing context $\Delta$,
+the pattern $p$ can matched against a value of type
+$A$, and if the match succeeds, it will create
+variable bindings with the typings $\Gamma$.
+
+
+\subsection{Rules}
 
 \begin{figure}
 \begin{mathpar}
 
 \inferrule[Type annotation]
-{ \Gamma \vdash t \downarrow A }
-{ \Gamma \vdash t : A \uparrow A }
+{ \Delta;\Gamma \vdash t \downarrow A }
+{ \Delta;\Gamma \vdash t : A \uparrow A }
 
 \and
 
 \inferrule[Variable]
 { x : A \in \Gamma }
-{ \Gamma \vdash x \uparrow A }
+{ \Delta;\Gamma \vdash x \uparrow A }
+
+\and 
+
+\inferrule[Constructor]
+{ C : A \in \Delta }
+{ \Delta;\Gamma \vdash C \uparrow A }
 
 \and 
 
 \inferrule[Function type]
-{ \Gamma \vdash A \uparrow Type \\
-  \Gamma, x : A \vdash B \uparrow Type }
-{ \Gamma \vdash (x : A) \rightarrow B \uparrow Type }
+{ \Delta;\Gamma \vdash A \uparrow Type \\
+  \Delta;\Gamma, x : A \vdash B \uparrow Type }
+{ \Delta;\Gamma \vdash (x : A) \rightarrow B \uparrow Type }
 
 \and
 
 \inferrule[Abstraction]
-{ \Gamma, x : A \vdash s \uparrow B }
-{ \Gamma \vdash \lambda x. s \downarrow (x : A) \rightarrow B }
+{ \Delta;\Gamma, x : A \vdash s \uparrow B }
+{ \Delta;\Gamma \vdash \lambda x. s \downarrow (x : A) \rightarrow B }
 
 \and 
 
 \inferrule[Application]
-{ \Gamma \vdash s \uparrow (x : A) \rightarrow B \\ 
-  \Gamma \vdash t \downarrow A }
-{ \Gamma \vdash s t \uparrow B [x / t] }
+{ \Delta;\Gamma \vdash s \uparrow (x : A) \rightarrow B \\ 
+  \Delta;\Gamma \vdash t \downarrow A }
+{ \Delta;\Gamma \vdash s t \uparrow B [x / t] }
 
 \and 
 
 \inferrule[Local definition]
-{ \Gamma \vdash s \uparrow A \\ 
-  \Gamma, s : A \vdash t \uparrow B }
-{ \Gamma \vdash \textrm{let} \ x = s \ \textrm{in} \ t \uparrow B }
+{ \Delta;\Gamma \vdash s \uparrow A \\ 
+  \Delta;\Gamma, s : A \vdash t \uparrow B }
+{ \Delta;\Gamma \vdash \textrm{let} \ x = s \ \textrm{in} \ t \uparrow B }
 
 \and 
 
 \inferrule[Case analysis]
-{ \Gamma \vdash t \uparrow A \\
-  \Gamma \vdash p_1 \downarrow A, \Gamma' \\
-  \Gamma, \Gamma' \vdash g_1 \downarrow Bool \\
-  \Gamma, \Gamma' \vdash t_1 \uparrow B \\
+{ \Delta;\Gamma \vdash t \uparrow A \\
+  \Delta \vdash_p p_1 \downarrow A; \Gamma' \\
+  \Delta;\Gamma,\Gamma' \vdash g_1 \downarrow Bool \\
+  \Delta;\Gamma,\Gamma' \vdash t_1 \uparrow B \\
   \ldots \\
-  p_n \textrm{match} A, \Gamma' \\
-  \Gamma, \Gamma' \vdash g_n \downarrow Bool \\
-  \Gamma, \Gamma' \vdash t_n \uparrow B \\
+  \Delta p_n \vdash_p A; \Gamma' \\
+  \Delta;\Gamma, \Gamma' \vdash g_n \downarrow Bool \\
+  \Delta;\Gamma, \Gamma' \vdash t_n \uparrow B \\
 }
-{ \Gamma \vdash \textrm{case} \ s \ \textrm{of} \ \{ 
+{ \Delta;\Gamma \vdash \textrm{case} \ s \ \textrm{of} \ \{ 
     p_1 \mid g_1 \rightarrow t_1;
     \ldots;
     p_n \mid g_n \rightarrow t_n
@@ -81,45 +114,45 @@ and some of the rules make no sense at all at the moment.
 
 \inferrule[Variable pattern]
 {  }
-{ x \ \textrm{match} \ A, \{ x : A \} }
+{ \Delta \vdash_p x \downarrow \ A; \{ x : A \} }
 
 \and 
 
 \inferrule[Wildcard pattern]
 {  }
-{ \_ \ \textrm{match} \ A, \{ \} }
+{ \Delta \vdash_p \_ \ \downarrow \ A; \{ \} }
 
 \and 
 
 \inferrule[Constructor pattern]
 { C : (x_1 : T_1) \rightarrow \ldots \rightarrow T \in \Delta \\
-  p_1 \textrm{match} T_1, \Gamma_1 \\
+  \Delta \vdash_p p_1 \downarrow T_1; \Gamma_1 \\
   \ldots \\
-  p_n \textrm{match} T_n, \Gamma_n \\
+  \Delta \vdash_p p_n \downarrow T_n; \Gamma_n \\
   }
-{ C p_1 \ldots p_n \ \textrm{match} \ T, \Gamma_1, \ldots, \Gamma_n }
+{ \Delta \vdash_p C p_1 \ldots p_n \ \downarrow \ T; \Gamma_1, \ldots, \Gamma_n }
 
 \and 
 
 \inferrule[Record pattern]
-{ p_1 \ \textrm{match} \ T_1, \Gamma_1 \\
+{ \Delta \vdash_p p_1 \ \downarrow \ T_1; \Gamma_1 \\
   \ldots \\
-  p_n \ \textrm{match} \ T_n, \Gamma_n \\
+  \Delta \vdash_p p_n \ \downarrow \ T_n; \Gamma_n \\
   }
-{ \textrm{rec} \ \{ l_1 = p_1; \ldots; l_n = p_n \} \ \textrm{match} \ 
-  \textrm{sig} \ \{ l_1 : T_1; \ldots; l_n : T_n \}, \Gamma_1, \ldots, \Gamma_n }
+{ \Delta \vdash_p \textrm{rec} \ \{ l_1 = p_1; \ldots; l_n = p_n \} \ \downarrow \ 
+  \textrm{sig} \ \{ l_1 : T_1; \ldots; l_n : T_n \}; \Gamma_1, \ldots, \Gamma_n }
 
 \and 
 
 \inferrule[Integer literal pattern]
 {  }
-{ integer \ \textrm{match} \ Integer, \{ \} }
+{ \Delta \vdash_p integer \ \downarrow \ Integer; \{ \} }
 
 \and 
 
 \inferrule[String literal pattern]
 {  }
-{ string \ \textrm{match} \ String, \{ \} }
+{ \Delta \vdash_p string \ \downarrow \ String; \{ \} }
 
 \and 
 
@@ -133,25 +166,25 @@ and some of the rules make no sense at all at the moment.
 \begin{mathpar}
 
 \inferrule[Record type]
-{ \Gamma \vdash T_1 \uparrow Type \\ 
+{ \Delta;\Gamma \vdash T_1 \uparrow Type \\ 
   \ldots \\
-  \Gamma, l_1 : T_1, \ldots, l_{n-1} : T_{n-1} \vdash T_n \uparrow Type }
-{ \Gamma \vdash \textrm{sig} \{ l_1 : T_1, \ldots, l_n : T_n \} \uparrow Type }
+  \Delta;\Gamma, l_1 : T_1, \ldots, l_{n-1} : T_{n-1} \vdash T_n \uparrow Type }
+{ \Delta;\Gamma \vdash \textrm{sig} \{ l_1 : T_1, \ldots, l_n : T_n \} \uparrow Type }
 
 \and
 
 \inferrule[Record]
-{ \Gamma \vdash t_1 \uparrow T_1 \\ 
+{ \Delta;\Gamma \vdash t_1 \uparrow T_1 \\ 
   \ldots \\
-  \Gamma \vdash t_n \uparrow T_n [l_{n-1} / t_{n-1}] \ldots [l_1 / t_1] }
-{ \Gamma \vdash \textrm{rec} \{ l_1 = t_1, \ldots, l_n = t_n \} 
+  \Delta;\Gamma \vdash t_n \uparrow T_n [l_{n-1} / t_{n-1}] \ldots [l_1 / t_1] }
+{ \Delta;\Gamma \vdash \textrm{rec} \{ l_1 = t_1, \ldots, l_n = t_n \} 
   \uparrow \textrm{sig} \{ l_1 : T_1, \ldots, l_n : T_n \} }
 
 \and 
 
 \inferrule[Record projection]
-{ \Gamma \vdash t \uparrow \textrm{sig} \{ l : T \} }
-{ \Gamma \vdash t . l \uparrow T }
+{ \Delta;\Gamma \vdash t \uparrow \textrm{sig} \{ l : T \} }
+{ \Delta;\Gamma \vdash t . l \uparrow T }
 
 \end{mathpar}
 \caption{Records.}
@@ -164,37 +197,37 @@ and some of the rules make no sense at all at the moment.
 
 \inferrule[Integer type]
 { }
-{ \Gamma \vdash Integer \uparrow Type }
+{ \Delta;\Gamma \vdash Integer \uparrow Type }
 
 \and 
 
 \inferrule[Integer literal]
 { }
-{ \Gamma \vdash integer \uparrow Integer }
+{ \Delta;\Gamma \vdash integer \uparrow Integer }
 
 \and 
 
 \inferrule[Double type]
 { }
-{ \Gamma \vdash Double \uparrow Type }
+{ \Delta;\Gamma \vdash Double \uparrow Type }
 
 \and 
 
 \inferrule[Double literal]
 { }
-{ \Gamma \vdash double \uparrow Double }
+{ \Delta;\Gamma \vdash double \uparrow Double }
 
 \and 
 
 \inferrule[String type]
 { }
-{ \Gamma \vdash String \uparrow Type }
+{ \Delta;\Gamma \vdash String \uparrow Type }
 
 \and 
 
 \inferrule[String literal]
 { }
-{ \Gamma \vdash string \uparrow String }
+{ \Delta;\Gamma \vdash string \uparrow String }
 
 \end{mathpar}
 \caption{Primitive types.}
