@@ -34,6 +34,7 @@ Aarne Ranta.
 We are grateful for contributions and 
 comments to several other people who have used this and 
 the previous versions of the resource library, including
+Ana Bove,
 David Burke,
 Lauri Carlson,
 Gloria Casanellas,
