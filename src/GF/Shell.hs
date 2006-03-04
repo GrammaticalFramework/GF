@@ -181,9 +181,6 @@ execLine put (c@(co, os), arg, cs) (outps,st) = do
 execC :: CommandOpt -> ShellIO
 execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case comm of
 
-  CImport file | oElem (iOpt "treebank") opts -> do
-    tbs <- readUniTreebanks file
-    changeState (addTreebanks tbs) sa
   CImport file | oElem fromExamples opts -> do
     es <- liftM nub $ getGFEFiles opts file
     system $ "gf -examples" +++ unlines es

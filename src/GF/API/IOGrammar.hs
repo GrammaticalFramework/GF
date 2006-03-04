@@ -23,6 +23,7 @@ import GF.Compile.Compile
 import GF.Compile.ShellState
 import GF.Compile.NoParse
 import GF.Probabilistic.Probabilistic
+import GF.UseGrammar.Treebank
 
 import GF.Infra.Modules
 import GF.Infra.ReadFiles (isOldFile)
@@ -68,6 +69,9 @@ shellStateFromFiles opts st file = do
      let osb = addOptions (options []) opts
      grts <- compileModule osb st file
      ioeErr $ updateShellState opts ign Nothing st grts
+  s | oElem (iOpt "treebank") opts -> do
+     tbs <- ioeIO $ readUniTreebanks file
+     return $ addTreebanks tbs st
   _ -> do
      b <- ioeIO $ isOldFile file
      let opts' = if b then (addOption showOld opts) else opts
