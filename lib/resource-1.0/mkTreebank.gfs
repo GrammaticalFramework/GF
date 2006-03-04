@@ -1,0 +1,10 @@
+-- to create a treebank with 3066 trees, for all languages
+
+i minimal/MinimalEng.gf
+gt -depth=4 -cat=S   | tb -xml | grep -v "/treebank>" | wf min.xml
+gt -depth=4 -cat=QS  | tb -xml | grep -v "treebank>"  | af min.xml
+gt -depth=3 (UttImpSg ? ?) | tb -xml | grep -v "treebank>"  | af min.xml
+gt -depth=4 -cat=NP  | tb -xml | grep -v "<treebank"  | af min.xml
+e
+i -nocf langs.gfcm
+rf min.xml | tb -trees | tb -xml | wf langs.xml

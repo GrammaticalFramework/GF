@@ -245,11 +245,19 @@ txtHelpFile =
   "\n     rf tb.xml | tb -c                           -- compare-test treebank from file" ++
   "\n     rf old.xml | tb -trees | tb -xml            -- create new treebank from old" ++
   "\n" ++
-  "\nlt, lookup_treebank: lt String" ++
+  "\nut, use_treebank: ut String" ++
   "\n      Lookup a string in a treebank and return the resulting trees." ++
-  "\n      Use 'tb' to create a treebank and 'i -treebank' to read it in memory." ++
-  "\n   flag:" ++
-  "\n     -treebank use this treebank (instead of the latest introduced one) TODO" ++
+  "\n      Use 'tb' to create a treebank and 'i -treebank' to read one from" ++
+  "\n      a file." ++
+  "\n   options:" ++
+  "\n     -assocs   show all string-trees associations in the treebank" ++
+  "\n     -strings  show all strings in the treebank" ++
+  "\n     -raw      return result as string, without typechecking it" ++
+  "\n   flags:" ++
+  "\n     -treebank use this treebank (instead of the latest introduced one)" ++
+  "\n   examples:" ++
+  "\n     ut \"He adds this to that\" | l -multi        -- use treebank lookup as parser in translation" ++
+  "\n     ut -assocs | grep \"ComplV2\"                 -- show all associations with ComplV2" ++
   "\n" ++
   "\ntt, test_tokenizer: tt String" ++
   "\n      Show the token list sent to the parser when String is parsed." ++

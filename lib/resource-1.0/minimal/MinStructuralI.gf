@@ -13,6 +13,7 @@ incomplete concrete MinStructuralI of MinStructural = open Structural in {
   if_Subj = if_Subj ;
   in_Prep = in_Prep ;
   that_NP = that_NP ;
+  this_NP = this_NP ;
   we_Pron = we_Pron ;
   whichPl_IDet = whichPl_IDet ;
   whichSg_IDet = whichSg_IDet ;

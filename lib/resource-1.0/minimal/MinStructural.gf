@@ -18,6 +18,7 @@ abstract MinStructural = Cat ** {
   if_Subj : Subj ;
   in_Prep : Prep ;
   that_NP : NP ;
+  this_NP : NP ;
   we_Pron : Pron ;
   whichPl_IDet : IDet ;
   whichSg_IDet : IDet ;

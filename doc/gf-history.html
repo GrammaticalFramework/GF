@@ -14,6 +14,29 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
+4/3 (AR) Added command <tt>use_treebank = ut</tt> for lookup in a treebank.
+This command can be used as a fast substitute for parsing, but also as a
+way to browse treebanks.
+<pre>
+  ut "He adds this to that" | l -multi   -- use treebank lookup as parser in translation
+  ut -assocs | grep "ComplV2"            -- show all associations with ComplV2
+</pre>
+
+<p>
+
+3/3 (AR) Added option <tt>-treebank</tt> to the <tt>i</tt> command. This adds treebanks to
+the shell state. The possible file formats are
+<ol>
+<li> XML file with a multilingual treebank, produced by <tt>tb -xml</tt>
+<li> tab-organized text file with a unilingual treebank, produced by <tt>ut -assocs</tt>
+</ol>
+Notice that the treebanks in shell state are unilingual, and have strings as keys.
+Multilingual treebanks have trees as keys. In case 1, one unilingual treebank per
+language is built in the shell state.
+
+
+<p>
+
 1/3 (AR) Added option <tt>-trees</tt> to the command <tt>tree_bank = tb</tt>.
 By this option, the command just returns the trees in the treebank. It can be
 used for producing new treebanks with the same trees:
