@@ -25,6 +25,7 @@ module GF.UseGrammar.Treebank (
   readMultiTreebank,
   lookupTreebank,
   assocsTreebank,
+  isWordInTreebank,
   printAssoc
   ) where
 
@@ -45,6 +46,7 @@ import GF.Infra.Ident (Ident)
 import GF.Infra.UseIO
 import qualified GF.Grammar.Abstract as A
 import qualified Data.Map as M
+import qualified Data.Set as S
 
 -- Generate a treebank with a multilingual grammar. AR 8/2/2006
 -- (c) Aarne Ranta 2006 under GNU GPL
@@ -141,6 +143,9 @@ ret = [] -- return ()
 -- here strings are keys
 assocsTreebank :: UniTreebank -> [(String,[String])]
 assocsTreebank = M.assocs
+
+isWordInTreebank :: UniTreebank -> String -> Bool
+isWordInTreebank tb w = S.member w (S.fromList (concatMap words (M.keys tb)))
 
 printAssoc (s, ts) = s ++ concat ["\t" ++ t | t <- ts]
 

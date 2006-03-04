@@ -437,6 +437,7 @@ transExp x = case x of
   EExtend exp0 exp  -> liftM2 G.ExtR (transExp exp0) (transExp exp)
   EAbstr binds exp  -> liftM2 M.mkAbs (mapM transBind binds) (transExp exp)
   ETyped exp0 exp   -> liftM2 G.Typed (transExp exp0) (transExp exp)
+  EExample exp str  -> liftM2 G.Example (transExp exp) (return str)
 
   EProd decl exp    -> liftM2 M.mkProdSimple (transDecl decl) (transExp exp)
   ETType exp0 exp   -> liftM2 G.Table (transExp exp0) (transExp exp)
