@@ -35,7 +35,9 @@ trGrammar (MGrammar ms) = P.Gr (map trModule ms) -- no includes
 trModule :: (Ident,SourceModInfo) -> P.ModDef
 trModule (i,mo) = case mo of
   ModMod m -> P.MModule compl typ body where
-    compl = P.CMCompl -- always complete module
+    compl = case mstatus m of
+      MSIncomplete -> P.CMIncompl
+      _ -> P.CMCompl
     i' = tri i
     typ = case typeOfModule mo of
       MTResource -> P.MTResource i'
@@ -140,6 +142,7 @@ trt trm = case trm of
     Prod x a b | isWildIdent x -> P.EProd (P.DExp (trt a)) (trt b)
     Prod x a b -> P.EProd (P.DDec [trb x] (trt a)) (trt b)
 
+    Example t s -> P.EExample (trt t) s
     R [] -> P.ETuple [] --- to get correct parsing when read back
     R r -> P.ERecord $ map trAssign r
     RecType r -> P.ERecord $ map trLabelling r

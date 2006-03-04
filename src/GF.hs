@@ -63,7 +63,7 @@ main = do
       return ()
 
     _ | opt makeConcrete -> do
-        mkConcretes fs
+        mkConcretes os fs
 
     _ | opt openEditor -> do
         system $ "jgf" +++ unwords xs
@@ -88,7 +88,7 @@ main = do
   if opt fromExamples 
     then do
         es <- liftM (nub . concat) $ mapM (getGFEFiles os) fs
-        mkConcretes es
+        mkConcretes os es
         doGF (removeOption fromExamples os) fs
     else doGF os fs
 

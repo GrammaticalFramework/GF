@@ -128,6 +128,7 @@ data Term =
  | Typed Term Term      -- ^ type-annotated term
 --
 -- /below this, the constructors are only for concrete syntax/
+ | Example Term String  -- ^ example-based term: @in M.C "foo"
  | RecType [Labelling]  -- ^ record type: @{ p : A ; ...}@
  | R [Assign]           -- ^ record:      @{ p = a ; ...}@
  | P Term Label         -- ^ projection:  @r.p@
