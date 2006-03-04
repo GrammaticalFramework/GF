@@ -1,0 +1,409 @@
+The GF Resource Grammar Library Version 1.0
+Author: Aarne Ranta <aarne (at) cs.chalmers.se>
+Last update: %%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags --toc clt2006.txt
+
+%!target:html
+
+%!postproc(html): #NEW <!-- NEW -->
+
+
+#NEW 
+
+==Plan==
+
+Purpose
+
+Background
+
+Coverage
+
+Structure
+
+How to use
+
+How to implement a new language
+
+How to extend the API
+
+
+
+#NEW
+
+==Purpose==
+
+===Library for applications===
+
+High-level access to grammatical rules
+
+E.g. //You have k new messages// rendered in ten languages //X//
+```
+  render X (Have (You (Number (k (New Message)))))
+```
+
+Usability for different purposes
+- translation systems
+- software localization
+- dialogue systems
+- language teaching
+
+
+#NEW
+
+===Grammar as parser===
+
+Often in NLP, a grammar is just high-level code for a parser.
+
+But writing a grammar can be inadequate for parsing:
+- too much manual work
+- too inefficient
+- not robust
+- too ambiguous
+
+
+Moreover, a grammar fine-tuned for parsing may not be reusable
+- for generation
+- for specialized grammars
+- as library
+
+
+#NEW
+
+===Grammar as language definition===
+
+Linguistic ontology: **abstract syntax**
+
+E.g. adjectival modification
+```
+  AdjCN : AP -> CN -> CN ;
+```
+
+Rendering in different languages: **concrete syntax**
+
+Resource grammars have generation perspective, rather than parsing
+- abstract syntax serves as a key to expressions in different languages
+
+
+
+#NEW
+
+===Usability by non-linguists===
+
+Division of labour: resource grammars hide linguistic details
+
+Presentation: "school grammar" concepts, dictionary-like conventions
+
+API = Application Programmer's Interface
+
+Documentation: ``gfdoc``
+
+IDE = Interactive Development Environment (forthcoming)
+
+Example-based grammar writing
+```
+  render Ita (parse Eng "you have k messages")
+```
+
+
+#NEW
+
+===Scientific interest===
+
+Linguistics
+- definition of linguistic ontology
+- coping with different problems in different languages
+- sharing concrete-syntax code between languages
+- creating a resource for other NLP applications
+
+
+Computer science
+- datastructures for grammar rules
+- type systems for grammars
+- algorithms: parsing, generation, grammar compilation
+- domain-specific programming language (GF)
+- module system
+
+
+
+#NEW
+
+==Background==
+
+===History===
+
+2002: v. 0.2
+- English, French, German, Swedish
+
+
+2003: v. 0.6
+- module system
+- added Finnish, Italian, Russian
+- used in KeY
+
+
+2005: v. 0.9 
+- tenses
+- added Danish, Norwegian, Spanish; no German
+- used in WebALT
+
+
+2006: v. 1.0
+- approximate CLE coverage
+- reorganized module system and implementation
+- not yet (4/3/2006) for Danish and Russian
+
+
+#NEW
+
+===Authors===
+
+Janna Khegai (Russian modules, forthcoming),
+Bjorn Bringert (many Swadesh lexica),
+Carlos Gonzalia (Spanish cardinals), 
+Partik Jansson (Swedish cardinals),
+Aarne Ranta.
+
+We are grateful for contributions and 
+comments to several other people who have used this and 
+the previous versions of the resource library, including
+Ana Bove,
+David Burke,
+Lauri Carlson,
+Gloria Casanellas,
+Karin Cavallin,
+Hans-Joachim Daniels,
+Kristofer Johannisson,
+Anni Laine,
+Wanjiku Ng'ang'a,
+Jordi Saludes.
+
+
+#NEW
+
+===Related work===
+
+CLE (Core Language Engine, 
+[Book 1992 http://mitpress.mit.edu/catalog/item/default.asp?tid=7739&ttype=2])
+- English, Swedish, French, Danish
+- uses Definita Clause Grammars, implementation in Prolog
+- coverage for SACTI corpus, 
+  [Spoken Language Translator (2001) http://www.cambridge.org/uk/catalogue/catalogue.asp?isbn=0521770777]
+- grammar specialization via explanation-based learning
+
+
+[LinGO Grammar Matrix http://www.delph-in.net/matrix/]
+- English, German, Japanese, Spanish, ...
+- uses HPSG, implementation in LKB
+- a check list for parallel grammar implementations
+
+
+[Pargram http://www2.parc.com/istl/groups/nltt/pargram/]
+- Aimed: Arabic, Chinese, English, French, German, Hungarian, Japanese, 
+Malagasy, Norwegian, Turkish, Urdu, Vietnamese, and Welsh
+- uses LFG
+- one set of big grammars, transfer rules
+
+
+Rosetta Machine Translation ([Book 1994 http://citeseer.ist.psu.edu/181924.html])
+- Dutch, English, French
+- uses M-grammars, compositional translation inspired by Montague
+- compositional transfer rules
+
+
+#NEW
+
+==Coverage==
+
+===Languages====
+
+The current GF Resource Project covers ten languages:
+- ``Dan``ish
+- ``Eng``lish
+- ``Fin``nish
+- ``Fre``nch
+- ``Ger``man
+- ``Ita``lian
+- ``Nor``wegian (bokmål)
+- ``Rus``sian
+- ``Spa``nish
+- ``Swe``dish
+
+
+In addition, parts (morphology) of Arabic, Estonian, Latin, and Urdu
+
+API 1.0 not yet implemented for Danish and Russian
+
+
+
+#NEW
+
+===Morphology====
+
+Complete inflection engine
+- all word classes
+- all forms
+- all inflectional paradigms
+
+
+High-level access via ``ParadigmsX``; e.g. Swedish:
+- worst-case functions
+```
+    mkV : (supa,super,sup,söp,supit,supen : Str) -> V ;
+```
+- common patterns
+```
+    regV   : (talar : Str) -> V ;
+    irregV : (dricka, drack, druckit : Str) -> V ;
+```
+- irregular words in ``IrregX``:
+```
+    draga_V : V = 
+      mkV (variants { "dra"; "draga"}) (variants { "drar" ; "drager"}) 
+          (variants { "dra" ; "drag" }) "drog" "dragit" "dragen" ;
+```
+
+
+
+
+
+
+#NEW
+
+===Syntactic structures===
+
+[Lang.png]
+
+
+#NEW
+
+===Quantitative measures===
+
+67 categories
+
+150 abstract syntax combination rules
+
+100 structural words
+
+350 content words in a test lexicon
+
+Lines of source code (4/3/2006):
+```
+  abstract     1131
+  english      2344
+  german       2386
+  finnish      3396
+  norwegian    1257
+  swedish      1465
+  scandinavian 1023
+  french       3246 -- Besch + Irreg + Morpho 2111
+  italian      7797 -- Besch 6512
+  spanish      7120 -- Besch 5877
+  romance      1066
+```
+
+
+#NEW
+
+==Structure==
+
+#NEW
+
+===Language-independent ground API===
+
+#NEW
+
+===Language-dependent paradigm modules===
+
+#NEW
+
+===Language-dependent syntax extensions===
+
+#NEW
+
+===Special-purpose APIs===
+
+
+
+#NEW
+
+===How to use as top-level grammar===
+
+#NEW
+
+===Parsing===
+
+#NEW
+
+===Treebank generation===
+
+#NEW
+
+===Treebank-based parsing===
+
+#NEW
+
+===Morphology===
+
+#NEW
+
+#NEW
+
+===Syntax editing===
+
+#NEW
+
+===Efficient parsing via application grammar===
+
+
+
+#NEW
+
+==How to use as library==
+
+===Specialization through parametrized modules===
+
+#NEW
+
+===Compile-time transfer===
+
+#NEW
+
+===A natural division into modules===
+
+#NEW
+
+===Example-based grammar writing===
+
+
+
+#NEW
+
+==How to implement a new language==
+
+===Ordinary modules===
+
+#NEW
+
+===Parametrized modules===
+
+#NEW
+
+===The kernel of the API===
+
+#NEW
+
+===How to proceed===
+
+
+
+#NEW
+
+==How to extend the API==
+
+#NEW
+
+===Extend old modules or add a new one?===
+
