@@ -187,6 +187,7 @@ optionsOfCommand co = case co of
   CGenerateTrees -> both "metas" "atoms depth alts cat lang number"
   CPutTerm -> flags "transform number"
   CTreeBank -> opts "c xml trees"
+  CLookupTreebank -> both "assocs raw strings" "treebank"
   CWrapTerm _ -> opts "c"
   CApplyTransfer _ -> flags "lang transfer"
   CMorphoAnalyse -> both "short" "lang"
