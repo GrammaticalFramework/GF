@@ -23,6 +23,9 @@ multimodal:
 compiled:
 	cd .. ; tar cvfz compiled.tgz alltenses/ mathematical/ multimodal/ present/ 
 
+treebank:
+	gf <mkTreebank.gfs
+
 stat:
 	wc */*.gfc
 

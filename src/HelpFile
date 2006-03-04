@@ -216,11 +216,19 @@ tb, tree_bank: tb
      rf tb.xml | tb -c                           -- compare-test treebank from file
      rf old.xml | tb -trees | tb -xml            -- create new treebank from old
 
-lt, lookup_treebank: lt String
+ut, use_treebank: ut String
       Lookup a string in a treebank and return the resulting trees.
-      Use 'tb' to create a treebank and 'i -treebank' to read it in memory.
-   flag:
-     -treebank use this treebank (instead of the latest introduced one) TODO
+      Use 'tb' to create a treebank and 'i -treebank' to read one from
+      a file.
+   options:
+     -assocs   show all string-trees associations in the treebank
+     -strings  show all strings in the treebank
+     -raw      return result as string, without typechecking it
+   flags:
+     -treebank use this treebank (instead of the latest introduced one)
+   examples:
+     ut "He adds this to that" | l -multi        -- use treebank lookup as parser in translation
+     ut -assocs | grep "ComplV2"                 -- show all associations with ComplV2
 
 tt, test_tokenizer: tt String
       Show the token list sent to the parser when String is parsed.

@@ -13,13 +13,13 @@ lin
   art_N = regN "art" ;
   ask_V2Q = mkV2Q (regV "ask") [] ;
   baby_N = regN "baby" ;
-  bad_A = regADeg "bad" ;
+  bad_A = mkADeg "bad" "badly" "worse" "worst" ;
   bank_N = regN "bank" ;
   beautiful_A = regADeg "beautiful" ;
   become_VA = mkVA (irregV "become" "became" "become") ;
   beer_N = regN "beer" ;
   beg_V2V = mkV2V (regDuplV "beg") [] "to" ;
-  big_A = regADeg "big" ;
+  big_A = duplADeg "big" ;
   bike_N = regN "bike" ;
   bird_N = regN "bird" ;
   black_A = regADeg "black" ;
@@ -74,7 +74,7 @@ lin
   find_V2 = dirV2 (irregV "find" "found" "found") ;
   fish_N = mk2N "fish" "fish" ;
   floor_N = regN "floor" ;
-  forget_V2 = dirV2 (irregV "forget" "forgot" "forgotten") ;
+  forget_V2 = dirV2 (irregDuplV "forget" "forgot" "forgotten") ;
   fridge_N = regN "fridge" ;
   friend_N = regN "friend" ;
   fruit_N = regN "fruit" ;
@@ -94,7 +94,7 @@ lin
   hill_N = regN "hill" ;
   hope_VS = mkVS (regV "hope") ;
   horse_N = regN "horse" ;
-  hot_A = regADeg "hot" ;
+  hot_A = duplADeg "hot" ;
   house_N = regN "house" ;
   important_A = compoundADeg (regA "important") ;
   industry_N = regN "industry" ;
@@ -142,7 +142,7 @@ lin
   radio_N = regN "radio" ;
   rain_V0 = mkV0 (regV "rain") ;
   read_V2 = dirV2 (irregV "read" "read" "read") ;
-  red_A = regADeg "red" ;
+  red_A = duplADeg "red" ;
   religion_N = regN "religion" ;
   restaurant_N = regN "restaurant" ;
   river_N = regN "river" ;
@@ -186,7 +186,7 @@ lin
   teach_V2 = dirV2 (irregV "teach" "taught" "taught") ;
   television_N = regN "television" ;
   thick_A = regADeg "thick" ;
-  thin_A = regADeg "thin" ;
+  thin_A = duplADeg "thin" ;
   train_N = regN "train" ;
   travel_V = (regDuplV "travel") ;
   tree_N = regN "tree" ;
@@ -204,7 +204,7 @@ lin
   white_A = regADeg "white" ;
   window_N = regN "window" ;
   wine_N = regN "wine" ;
-  win_V2 = dirV2 (irregV "win" "won" "won") ;
+  win_V2 = dirV2 (irregDuplV "win" "won" "won") ;
   woman_N = mk2N "woman" "women" ;
   wonder_VQ = mkVQ (regV "wonder") ;
   wood_N = regN "wood" ;

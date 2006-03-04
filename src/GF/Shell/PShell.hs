@@ -114,7 +114,7 @@ pCommand ws = case ws of
   "cc" : s      -> aUnit   $ CComputeConcrete $ unwords s
   "so" : s      -> aUnit   $ CShowOpers $ unwords s
   "tb" : []     -> aUnit   CTreeBank
-  "lt" : s      -> aString CLookupTreebank s
+  "ut" : s      -> aString CLookupTreebank s
 
   "tq" : i:o:[] -> aUnit   (CTranslationQuiz (language i) (language o))
   "tl":i:o:[]   -> aUnit   (CTranslationList (language i) (language o))
