@@ -4,14 +4,17 @@ incomplete concrete QuestionsI of Questions = open Lang in {
   lin Answer = \woman_N -> \love_V2 -> \man_N -> % Lang.PhrUtt % Lang.NoPConj (% Lang.UttS (% Lang.UseCl % Lang.TPres % Lang.ASimul % Lang.PPos (% Lang.PredVP (% Lang.DetCN (% Lang.DetSg (% Lang.SgQuant % Lang.DefArt)% Lang.NoOrd)(% Lang.UseN % Lang.woman_N)) (% Lang.ComplV2 % Lang.love_V2 (% Lang.DetCN (% Lang.DetPl (% Lang.PlQuant % Lang.IndefArt)% Lang.NoNum % Lang.NoOrd)(% Lang.UseN % Lang.man_N)))))) % Lang.NoVoc ;
   lincat Entity = N ;
   lincat Phrase = Phr ;
-  lin Who = \love_V2 -> \man_N -> in Phr "who lovs men" ;
+  lin Who = \love_V2 -> \man_N -> % Lang.PhrUtt % Lang.NoPConj (% Lang.UttAdv (% Lang.AdvSC (% Lang.EmbedQS (% Lang.UseQCl % Lang.TPres % Lang.ASimul % Lang.PPos (% Lang.QuestVP % Lang.whoSg_IP (% Lang.ComplV2 % Lang.love_V2 (% Lang.DetCN (% Lang.DetPl (% Lang.PlQuant % Lang.IndefArt)% Lang.NoNum % Lang.NoOrd)(% Lang.UseN % Lang.man_N)))))))) % Lang.NoVoc ;
   lin Whom = \man_N -> \love_V2 -> % Lang.PhrUtt % Lang.NoPConj (% Lang.UttQS (% Lang.UseQCl % Lang.TPres % Lang.ASimul % Lang.PPos (% Lang.QuestSlash % Lang.whoPl_IP (% Lang.SlashV2 (% Lang.DetCN (% Lang.DetSg (% Lang.SgQuant % Lang.DefArt)% Lang.NoOrd)(% Lang.UseN % Lang.man_N)) % Lang.love_V2)))) % Lang.NoVoc ;
   }
 {-
-NO PARSE Who
-who lovs men
-unknown words: lovs
-AMBIGUOUS Whom
+AMBIGUOUS in Who
+who loves men
+PhrUtt NoPConj (UttQS (UseQCl TPres ASimul PPos (QuestVP whoSg_IP (ComplV2 love_V2 (DetCN (DetPl (PlQuant IndefArt) NoNum NoOrd) (UseN man_N)))))) NoVoc
+AMBIGUOUS in Whom
 whom does the man love
 PhrUtt NoPConj (UttQS (UseQCl TPres ASimul PPos (QuestSlash whoSg_IP (SlashV2 (DetCN (DetSg (SgQuant DefArt) NoOrd) (UseN man_N)) love_V2)))) NoVoc
+PARSED in Answer
+the woman loves men
+PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetCN (DetSg (SgQuant DefArt) NoOrd) (UseN woman_N)) (ComplV2 love_V2 (DetCN (DetPl (PlQuant IndefArt) NoNum NoOrd) (UseN man_N)))))) NoVoc
 -}
