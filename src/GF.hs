@@ -48,7 +48,7 @@ main = do
 
    doGF os fs = case 0 of
 
-    _ | opt getHelp -> do
+    _ | opt getHelp || any opt (map iOpt ["h", "-help", "-h"])-> do
       putStrLnFlush $ encodeUTF8 helpMsg
 
     _ | opt forJava -> do
@@ -99,10 +99,11 @@ helpMsg = unlines [
   "  -edit         start the editor GUI (same as command 'jgf')",
   "  -ex           first compile .gfe files as needed, then .gf files",
   "  -examples     batch-compile .gfe files by parsing examples",
-  "  -help         show this message",
+  "     -treebank  use a treebank, instead of a grammar, as parser",
   "  -make         batch-compile files",
   "     -noemit      do not emit code when compiling",
   "     -v           be verbose when compiling",
+  "  -help         show this message",
   "Also all flags for import (i) are interpreted; see 'help import'.",
   "An example combination of flags is",
   "  gf -batch -nocpu -s",

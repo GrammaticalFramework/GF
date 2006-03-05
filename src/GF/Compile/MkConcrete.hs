@@ -67,9 +67,9 @@ mkCncGroups opts0 ((res,path),files) = do
   let treebank = oElem (iOpt "treebank") opts
   egr <- appIOE $ shellStateFromFiles opts emptyShellState res
   (parser,morpho) <- if treebank then do
-      tb <- err (\_ -> error "no treebank")
+      tb <- err (\_ -> error $ "no treebank of name" +++ path)
                 return
-                (egr >>= flip findTreebank (zIdent (unsuffixFile res)))
+                (egr >>= flip findTreebank (zIdent path))
       return (\_ -> flip (,) "Not in treebank" . map pTrm . lookupTreebank tb,
               isWordInTreebank tb)
     else do
@@ -91,9 +91,11 @@ getResPath :: FilePath -> IO (String,String)
 getResPath file = do
   s <- liftM lines $ readFileIf file
   case filter (not . all isSpace) s of
-    res:path:_ | is "resource" res && is "path" path -> return (val res, val path)
+    res:path:_ | is "resource" res && is "path"     path -> return (val res, val path)
+    res:path:_ | is "resource" res && is "treebank" path -> return (val res, val path)
     res:_ | is "resource" res -> return (val res, "")
-    _ -> error "expected --# -resource=FILE and optional --# -path=PATH"
+    _ -> error 
+           "expected --# -resource=FILE and optional --# -path=PATH or --# -treebank=IDENT"
  where
    val = dropWhile (isSpace) . tail . dropWhile (not . (=='='))
    is tag s = case words s of
@@ -133,12 +135,14 @@ mkModule parser morpho (name,src) = case src of
        Example (Vr  cat) s -> parse cat s t
        _ -> composOp mkTrm t
      parse cat s t = case parser (prt_ cat) s of
-       (tr:[], _) -> return tr
+       (tr:[], _) -> do
+         updateSTM ((("PARSED in" +++ prt_ name) : s : [prt_ tr]) ++)
+         return tr
        (tr:trs,_) -> do
-         updateSTM ((("AMBIGUOUS" +++ prt_ name) : s : map prt_ trs) ++)
+         updateSTM ((("AMBIGUOUS in" +++ prt_ name) : s : map prt_ trs) ++)
          return tr
        ([],ms) -> do
-         updateSTM ((("NO PARSE" +++ prt_ name) : s : ms : [morph s]) ++)
+         updateSTM ((("NO PARSE in" +++ prt_ name) : s : ms : [morph s]) ++)
          return t
   morph s = case [w | w <- words s, not (morpho w)] of
     [] -> ""
