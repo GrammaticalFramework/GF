@@ -65,7 +65,10 @@ mkCncGroups opts0 ((res,path),files) = do
   putStrLn $ "Compiling resource " ++ res
   let opts = addOptions (options [beSilent,pathList path]) opts0
   let treebank = oElem (iOpt "treebank") opts
-  egr <- appIOE $ shellStateFromFiles opts emptyShellState res
+  resf <- useIOE res $ do
+    (fp,_) <- readFileLibraryIOE gfLibraryPath res
+    return fp
+  egr <- appIOE $ shellStateFromFiles opts emptyShellState resf
   (parser,morpho) <- if treebank then do
       tb <- err (\_ -> error $ "no treebank of name" +++ path)
                 return
