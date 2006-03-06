@@ -12,9 +12,9 @@ fun
 
 fun
   GoFromTo  : Dep  -> Dest -> Input ; -- user input "want to go from a to b"
-  GoToFrom  : Dest -> Dep  -> Input ; -- user input "want to go to a from b"
-  ComeFrom  : Dep  -> Input ;         -- user input "want to come from x (to where I am now)
-  GoTo      : Dest -> Input ;         -- user input "want to go to x (from where I am now)
+  ComeToFrom: Dest -> Dep  -> Input ; -- user input "want to come to a from b"
+  ComeFrom  : Dep  -> Input ;         -- user input "want to come from x (to where I'm now)
+  GoTo      : Dest -> Input ;         -- user input "want to go to x (from where I'm now)
 
   DepClick  : Click -> Dep ;          -- "from here" with click
   DestClick : Click -> Dest ;         -- "to here" with click

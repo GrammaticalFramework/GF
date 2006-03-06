@@ -21,7 +21,10 @@ resources, located in
 To produce them, use 'make' and 'make install' in GF/lib/resource-1.0.
 You moreover have to set your GF_LIB_PATH to point to your GF/lib/.
 
+The grammar in ExTramI.gfe compiles, but does not give the same grammar 
+as TramI.gf.
 
-AR 7/11/2005 -- 25/2/2006
+
+AR 7/11/2005 -- 6/3/2006
 
 

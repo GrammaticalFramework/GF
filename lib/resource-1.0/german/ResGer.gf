@@ -481,12 +481,12 @@ resource ResGer = ParamX ** open Prelude in {
     } ;
 
   insertInf : Str -> VP -> VP = \inf,vp -> {
-    s = vp.s ;
+    s = \\a,vf => {fin = (vp.s ! a ! vf).fin ; inf = inf ++ (vp.s ! a ! vf).inf} ;
     a1 = vp.a1 ;
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ; ----
-    inf = vp.inf ++ inf ;
+    inf = vp.inf ; --- ++ inf ;
     ext = vp.ext
     } ;
 

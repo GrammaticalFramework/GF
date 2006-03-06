@@ -1,0 +1,41 @@
+--# -resource=../../lib/multimodal/MultimodalEng.gfc
+--# -path=multimodal:present:mathematical:prelude
+
+incomplete concrete TramI of Tram = open Multimodal, DemRes, Symbol in {
+
+flags startcat=Query ; lexer=literals ;
+
+lincat
+  Query = Phr ;      -- top level, plain string
+  Input = MS ;       -- two parallel sequences (text and clicks)
+  Dep, Dest = MAdv ;
+  Click = Point ;
+
+lin
+  QInput = PhrMS PPos ;
+
+  GoFromTo x_MAdv y_MAdv = in MultimodalEng.MS "I want to go X Y" ; 
+
+  ComeToFrom x_MAdv y_MAdv = in MultimodalEng.MS "I want to come X Y" ; 
+
+  ComeFrom x_MAdv = in MultimodalEng.MS "I want to come X" ;
+
+  GoTo x_MAdv = in MultimodalEng.MS "I want to go X" ;
+
+  DepClick c  = mkDem Adv (in MAdv "from here") c ;
+  DestClick c = mkDem Adv (in MAdv "to here") c ;
+  DepHere     = DemAdv (in Adv "from here") ;
+  DestHere    = DemAdv (in Adv "to here") ;
+  DepNamed s  = MPrepNP from_Prep (DemNP (UsePN (SymbPN (MkSymb s)))) ;
+  DestNamed s = MPrepNP to_Prep (DemNP (UsePN (SymbPN (MkSymb s)))) ;
+
+  CCoord x y = {point = "(" ++ x.s ++ "," ++ y.s ++ ")" ; lock_Point = <>} ;
+
+--  Place = DNP ;    -- name + click - not possible for "here"
+--  PClick c = this_DNP c ;
+--  PHere = DemNP this_NP ;
+--  PNamed s = DemNP (UsePN (SymbPN s)) ;
+
+----  FromThisPlace = 
+
+}
