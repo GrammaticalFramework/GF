@@ -88,8 +88,7 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \and
 
 \inferrule[Check by inferring]
-{ \Delta;\Gamma \vdash t \uparrow B \\
-  \Delta;\Gamma \vdash B \lesssim A }
+{ \Delta;\Gamma \vdash t \uparrow A }
 { \Delta;\Gamma \vdash t \downarrow A }
 
 \and
@@ -121,7 +120,9 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 
 \inferrule[Application]
 { \Delta;\Gamma \vdash s \uparrow (x : A) \rightarrow B \\ 
-  \Delta;\Gamma \vdash t \downarrow B }
+  \Delta;\Gamma \vdash t \downarrow A  \\
+  \textrm{FIXME: argument can be of a subtype}
+}
 { \Delta;\Gamma \vdash s \ t \uparrow B [x / t] }
 
 \and 
@@ -137,11 +138,12 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 { \Delta;\Gamma \vdash s \uparrow A \\
   \Delta \vdash_p p_1 \downarrow A; \Gamma' \\
   \Delta;\Gamma,\Gamma' \vdash g_1 \downarrow Bool \\
-  \Delta;\Gamma,\Gamma' \vdash t_1 \uparrow B \\
+  \Delta;\Gamma,\Gamma' \vdash t_1 \uparrow B_1 \\
   \ldots \\
   \Delta p_n \vdash_p A; \Gamma' \\
   \Delta;\Gamma, \Gamma' \vdash g_n \downarrow Bool \\
-  \Delta;\Gamma, \Gamma' \vdash t_n \uparrow B \\
+  \Delta;\Gamma, \Gamma' \vdash t_n \uparrow B_n \\
+  B = B_1 \vee \ldots \vee B_n
 }
 { \Delta;\Gamma \vdash \textrm{case} \ s \ \textrm{of} \ \{ 
     p_1 \mid g_1 \rightarrow t_1;
@@ -158,7 +160,7 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \begin{mathpar}
 
 \inferrule[Record type]
-{ FIXME: labels must occur at most once \\
+{ \textrm{FIXME: labels must occur at most once} \\
   \Delta;\Gamma \vdash T_1 \uparrow Type \\ 
   \ldots \\
   \Delta;\Gamma, l_1 : T_1, \ldots, l_{n-1} : T_{n-1} \vdash T_n \uparrow Type }
@@ -167,7 +169,7 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \and
 
 \inferrule[Record]
-{ FIXME: labels must occur at most once \\
+{ \textrm{FIXME: labels must occur at most once} \\
   \Delta;\Gamma \vdash t_1 \uparrow T_1 \\ 
   \ldots \\
   \Delta;\Gamma \vdash t_n \uparrow T_n [l_{n-1} / t_{n-1}] \ldots [l_1 / t_1] }
@@ -202,17 +204,22 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \and 
 
 \inferrule[Constructor pattern]
-{ c : (x_1 : T_1) \rightarrow \ldots \rightarrow T \in \Delta \\
+{ c : (x_1 : T_1) \rightarrow \ldots \rightarrow T' \in \Delta \\
+  T' = T \\
   \Delta \vdash_p p_1 \downarrow T_1; \Gamma_1 \\
   \ldots \\
   \Delta \vdash_p p_n \downarrow T_n; \Gamma_n \\
+  \textrm{FIXME: $x_k$ can occur in $T_{k+1}$}
   }
-{ \Delta \vdash_p c p_1 \ldots p_n \ \downarrow \ T; \Gamma_1, \ldots, \Gamma_n }
+{ \Delta \vdash_p c \ p_1 \ldots p_n \ \downarrow \ T; \Gamma_1, \ldots, \Gamma_n }
 
 \and 
 
-\inferrule[Record pattern FIXME: allow more fields in type, ignore order]
-{ \Delta \vdash_p p_1 \ \downarrow \ T_1; \Gamma_1 \\
+\inferrule[Record pattern]
+{ \textrm{FIXME: labels must occur at most once} \\
+  \textrm{FIXME: allow more fields in type, ignore order} \\
+  \textrm{FIXME: types can depend on field values} \\
+\Delta \vdash_p p_1 \ \downarrow \ T_1; \Gamma_1 \\
   \ldots \\
   \Delta \vdash_p p_n \ \downarrow \ T_n; \Gamma_n \\
   }
@@ -234,8 +241,8 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \and 
 
 \end{mathpar}
-\caption{Patterns.}
-\label{fig:patterns}
+\caption{Type-checking patterns.}
+\label{fig:typing-patterns}
 \end{figure}
 
 
@@ -308,12 +315,14 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
   \ldots \\ 
   s_n \lesssim t_n \\ 
 }
-{ c s_1 \ldots s_n \leq c t_1 \ldots t_n }
+{ c \ s_1 \ldots s_n \leq c \ t_1 \ldots t_n }
 
 \and 
 
 \inferrule[Record type conversion]
-{ FIXME }
+{ A_1 \lesssim B_1 \ldots A_n \lesssim B_n \\ 
+  \textrm{FIXME: types can depend on fields} \\
+  \textrm{FIXME: allow more fields on the left, ignore order} }
 { \textrm{sig} \ \{ l_1 : A_1 \ldots l_n : A_n \} 
   \leq 
   \textrm{sig} \ \{ k_1 : B_1 \ldots k_m : B_m \}  }
@@ -321,7 +330,10 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \and 
 
 \inferrule[Record conversion]
-{ FIXME }
+{ 
+  \textrm{FIXME: allow more fields on the left, ignore order} \\
+  s_1 \lesssim t_1 \ldots s_n \lesssim s_n
+}
 { \textrm{rec} \ \{ l_1 = s_1 \ldots l_n = s_n \} 
   \leq 
   \textrm{rec} \ \{ k_1 = t_1 \ldots k_m = t_m \}  }
@@ -338,6 +350,13 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 
 
 
+\and
+
+\inferrule[WHNF-Proj]
+{ s \Downarrow_{wh} \textrm{rec} \ \{ \ldots, l = t, \ldots \} }
+{ \Gamma \vdash s.l \Downarrow_{wh} t }
+
+
 
 
 \end{mathpar}
@@ -348,7 +367,7 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \begin{figure}
 \begin{mathpar}
 
-\inferrule[Eval-let]
+\inferrule[WHNF-Let]
 { s \Downarrow_{wh} s' }
 { \Gamma \vdash \textrm{let} \ x = s \ \textrm{in} \ t 
                 \Downarrow_{wh} t [x/s']
@@ -356,24 +375,90 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 
 \and
 
-\inferrule[Eval-case]
-{ }
+\inferrule[WHNF-Case]
+{ \textrm{FIXME: find the right case arm} \\
+  \textrm{FIXME: bind / substitute variables in RHS} }
 { \Gamma \vdash \textrm{case} \ s \ \textrm{of} \{ \overline{p \mid t \rightarrow u} \}
+  \Downarrow_{wh}
 }
 
 \and
 
-\inferrule[Eval-abstraction]
-{ }
-{ \Gamma \vdash \lambda x . t \Downarrow_{wh} \lambda x . t \}
+\inferrule[WHNF-Beta]
+{ \Gamma \vdash s \Downarrow_{wh} \lambda x . s' \\
+  \Gamma \vdash t \Downarrow_{wh} t' }
+{ \Gamma \vdash s \ t \Downarrow_{wh} s' [x/t'] \}
 }
 
 \and
 
-\inferrule[Eval-function type]
+\inferrule[WHNF-Proj]
+{ \Gamma \vdash s \Downarrow_{wh} \textrm{rec} \ \{ \ldots, l = t, \ldots \} }
+{ \Gamma \vdash s.l \Downarrow_{wh} t }
+
+\and
+
+\inferrule[WHNF-Var]
+{ x = t \in \Gamma \\
+  \textrm{FIXME: there shouldn't be any free variables (but there can be functions and constructors)} }
+{ \Gamma \vdash x \Downarrow_{wh} t }
+
+
+% unchanged:
+
+\and
+
+\inferrule[WHNF-Lambda]
 { }
-{ \Gamma \vdash (x : s) \rightarrow t \Downarrow_{wh} \}
+{ \Gamma \vdash \lambda x . t \Downarrow_{wh} \lambda x . t }
+
+\and
+
+\inferrule[WHNF-Pi]
+{ }
+{ \Gamma \vdash (x : s) \rightarrow t \Downarrow_{wh} (x : s) \rightarrow t
 }
+
+\and
+
+\inferrule[WHNF-Sig]
+{ }
+{ \Gamma \vdash \textrm{sig} \ \{ l_1 : A_1, \ldots, l_n : A_n \} 
+   \Downarrow_{wh} \textrm{sig} \ \{ l_1 : A_1, \ldots, l_n : A_n \} }
+
+\and
+
+\inferrule[WHNF-Rec]
+{ }
+{ \Gamma \vdash \textrm{rec} \ \{ l_1 = t_1, \ldots, l_n = t_n \} 
+   \Downarrow_{wh} \textrm{rec} \ \{ l_1 = t_1, \ldots, l_n = t_n \} }
+
+\and
+
+\inferrule[WHNF-Type]
+{ }
+{ \Gamma \vdash Type \Downarrow_{wh} Type }
+
+\and
+
+\inferrule[WHNF-String]
+{ }
+{ \Gamma \vdash string \Downarrow_{wh} string }
+
+\and
+
+\inferrule[WHNF-Integer]
+{ }
+{ \Gamma \vdash integer \Downarrow_{wh} integer }
+
+\and
+
+\inferrule[WHNF-Double]
+{ }
+{ \Gamma \vdash double \Downarrow_{wh} double }
+
+% FIXME: applications which are not beta redexes?
+
 
 
 
