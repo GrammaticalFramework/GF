@@ -39,7 +39,7 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer in {
 
     ReflV2 v = insertObj (\\a => appPrep v.c2 (reflPron ! a)) (predV v) ;
 
-    PassV2 v = insertObj (\\_ => v.s ! VPastPart APred) (predV werdenPass) ;
+    PassV2 v = insertInf (v.s ! VPastPart APred) (predV werdenPass) ;
 
     UseVS, UseVQ = \v -> v ** {c2 = noPreposition Acc} ;
 
