@@ -69,7 +69,6 @@ oper
   postPrep    : Case -> Str -> Prep ;  -- takana, genitive
   postGenPrep :         Str -> Prep ;  -- takana
   casePrep    : Case ->        Prep ;  -- adessive
-  accusative  : Prep ;
 
 --2 Nouns
 

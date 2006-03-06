@@ -10,7 +10,7 @@ concrete QuestionFin of Question = CatFin ** open ResFin, Prelude in {
 
     QuestVP ip vp = 
       let 
-        cl = mkClause (ip.s ! vp.sc) (agrP3 ip.n) vp
+        cl = mkClause (subjForm (ip ** {isPron = False ; a = agrP3 ip.n}) vp.sc) (agrP3 ip.n) vp
       in {
         s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
         } ;

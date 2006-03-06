@@ -11,12 +11,12 @@ concrete IdiomFin of Idiom = CatFin **
           Neg => NPCase Part  -- ei ole olemassa lukua
           }
       in
-      mkClause [] (agrP3 Sg) (insertObj 
+      mkClause noSubj (agrP3 Sg) (insertObj 
         (\\_,b,_ => "olemassa" ++ np.s ! cas b) (predV olla)) ;
 
-    ImpersCl vp = mkClause [] (agrP3 Sg) vp ;
+    ImpersCl vp = mkClause noSubj (agrP3 Sg) vp ;
 
-    GenericCl vp = mkClause [] (agrP3 Sg) {
+    GenericCl vp = mkClause noSubj (agrP3 Sg) {
       s = \\_ => vp.s ! VIPass ;
       s2 = vp.s2 ;
       ext = vp.ext ;
@@ -38,5 +38,6 @@ concrete IdiomFin of Idiom = CatFin **
   oper
     olla = verbOlla ** {sc = NPCase Nom} ;
 
+    noSubj : Polarity -> Str = \_ -> [] ;
 }
 
