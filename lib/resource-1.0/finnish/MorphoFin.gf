@@ -550,7 +550,17 @@ vowelHarmony : Str -> Str = \liitin ->
      a = {n = n ; p = p}
     } ; 
 
-
+  mkDemPronoun : (_,_,_,_,_ : Str) ->  Number -> 
+    {s : NPForm => Str ; a : Agr} = 
+    \tuo, tuon, tuota, tuona, tuohon, n ->
+    let pro = mkPronoun tuo tuon tuota tuona tuohon n P3
+    in {
+      s = table {
+        NPAcc => tuo ;
+        c => pro.s ! c
+        } ;
+      a = pro.a
+      } ;
 
 -- Determiners
 

@@ -29,7 +29,7 @@ concrete StructuralFin of Structural = CatFin **
   by8agent_Prep = postGenPrep "toimesta" ;
   by8means_Prep = casePrep adessive ;
   can8know_VV = reg2V "osata" "osasi" ;
-  can_VV = regV "voida" ;
+  can_VV = reg2V "voida" "voi" ;
   during_Prep = postGenPrep "aikana" ;
   either7or_DConj = sd2 "joko" "tai" ** {n = Sg} ;
   everybody_NP = mkNP (regN "jokainen") Sg ;
@@ -108,14 +108,14 @@ concrete StructuralFin of Structural = CatFin **
     s2 = [] ; isNum,isPoss = False ; isDef = True ; 
     } ;
   that_NP = 
-    mkPronoun "tuo" "tuon" "tuota" "tuona" "tuohon"  Sg P3 **
+    mkDemPronoun "tuo" "tuon" "tuota" "tuona" "tuohon"  Sg **
     {isPron = False} ;
   there_Adv = ss "siellä" ; --- tuolla
   there7to_Adv = ss "sinne" ;
   there7from_Adv = ss "sieltä" ;
   therefore_PConj = ss "siksi" ;
   these_NP = 
-    mkPronoun "nämä" "näiden" "näitä" "näinä" "näihin"  Pl P3 **
+    mkDemPronoun "nämä" "näiden" "näitä" "näinä" "näihin"  Pl **
     {isPron = False} ;
   they_Pron = mkPronoun "he" "heidän" "heitä" "heinä" "heihin"  Pl P3 ; --- ne
   this_Quant = {
@@ -130,10 +130,10 @@ concrete StructuralFin of Structural = CatFin **
     s2 = [] ; isNum,isPoss = False ; isDef = True ; 
     } ;
   this_NP = 
-    mkPronoun "tämä" "tämän" "tätä" "tänä" "tähän"  Sg P3 **
+    mkDemPronoun "tämä" "tämän" "tätä" "tänä" "tähän"  Sg **
     {isPron = False} ;
   those_NP = 
-    mkPronoun "nuo" "noiden" "noita" "noina" "noihin"  Pl P3 **
+    mkDemPronoun "nuo" "noiden" "noita" "noina" "noihin"  Pl **
     {isPron = False} ;
   through_Prep = postGenPrep "kautta" ;
   too_AdA = ss "liian" ;
@@ -143,7 +143,7 @@ concrete StructuralFin of Structural = CatFin **
   want_VV = regV "tahtoa" ;
   we_Pron = mkPronoun "me" "meidän" "meitä" "meinä" "meihin" Pl P1 ;
   whatPl_IP = {
-    s = \\c => mikaInt ! Pl ! npform2case c ;
+    s = table {NPAcc => "mitkä" ; c => mikaInt ! Pl ! npform2case c} ;
     n = Pl
     } ;
   whatSg_IP = {
@@ -162,11 +162,11 @@ concrete StructuralFin of Structural = CatFin **
     n = Sg
     } ;
   whoSg_IP = {
-    s = \\c => kukaInt ! Sg ! npform2case c ;
+    s = table {NPAcc => "kenet" ; c => kukaInt ! Sg ! npform2case c} ;
     n = Sg
     } ;
   whoPl_IP = {
-    s = \\c => kukaInt ! Pl ! npform2case c ;
+    s = table {NPAcc => "ketkä" ; c => kukaInt ! Pl ! npform2case c} ;
     n = Pl
     } ;
   why_IAdv = ss "miksi" ;

@@ -231,10 +231,11 @@ oper
     s : Tense => Anteriority => Polarity => SType => Str
     } ;
 
-  mkClause : Str -> Agr -> VP -> Clause =
-    \subj,agr,vp -> {
+  mkClause : (Polarity -> Str) -> Agr -> VP -> Clause =
+    \sub,agr,vp -> {
       s = \\t,a,b,o => 
         let 
+          subj = sub b ;
           agrfin = case vp.sc of {
                     NPCase Nom => <agr,True> ;
                     _ => <agrP3 Sg,False>      -- minun täytyy, minulla on
@@ -247,6 +248,11 @@ oper
           SQuest => questPart verb.fin ++ subj ++ verb.inf ++ compl
           }
     } ;
+
+-- This is used for subjects of passives: therefore isFin in False.
+
+  subjForm : NP -> NPForm -> Polarity -> Str = \np,sc,b -> 
+    appCompl False b {s = [] ; c = sc ; isPre = True} np ;
 
   questPart : Str -> Str = \on -> on ++ BIND ++ "ko" ; ----
 

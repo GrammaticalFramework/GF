@@ -4,9 +4,9 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
 
   lin
 
-    PredVP np vp = mkClause (np.s ! vp.sc) np.a vp ;
+    PredVP np vp = mkClause (subjForm np vp.sc) np.a vp ;
 
-    PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
+    PredSCVP sc vp = mkClause (\_ -> sc.s) (agrP3 Sg) vp ;
 
     ImpVP vp = {
       s = \\pol,n => 
@@ -21,7 +21,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
 -- The object case is formed at the use site of $c2$, in $Relative$ and $Question$.
 
     SlashV2 np v2 = { 
-      s = \\t,a,p => (mkClause (np.s ! v2.sc) np.a (predV v2)).s ! t ! a ! p ! SDecl ;
+      s = \\t,a,p => (mkClause (subjForm np v2.sc) np.a (predV v2)).s ! t ! a ! p ! SDecl ;
       c2 = v2.c2
       } ;
 
@@ -34,7 +34,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
       in
       {s = \\t,ag,p => 
          (mkClause 
-            (np.s ! sc) np.a 
+            (subjForm np sc) np.a 
             (insertObj 
               (\\_,b,a => infVP vv.sc b a (predV v2)) 
               (predV vv)
