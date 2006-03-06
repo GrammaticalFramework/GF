@@ -319,6 +319,8 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
               returnArg (AString $ unlines $ lookupTreebank tb s) sa
             _ | oElem (iOpt "assocs") opts -> do
               returnArg (AString $ unlines $ map printAssoc $ assocsTreebank tb) sa
+            _ | oElem (iOpt "trees") opts -> do
+              returnArg (ATrms $ str2trees $ concatMap snd $ assocsTreebank tb) sa
             _ -> do            
               let tes = map (string2treeErr gro) $ lookupTreebank tb s
                   terms = [t | Ok t <- tes]
@@ -441,6 +443,8 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
      ASTrm s  -> err AError (ATrms . return) $ string2treeErr gro s
      AString s  -> err AError (ATrms . return) $ string2treeErr gro s
      _ -> a
+
+   str2trees ts = [t | Ok t <- map (string2treeErr gro) ts]
 
    strees a = case a of
      ATrms ts -> ts

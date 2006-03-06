@@ -223,7 +223,8 @@ ut, use_treebank: ut String
    options:
      -assocs   show all string-trees associations in the treebank
      -strings  show all strings in the treebank
-     -raw      return result as string, without typechecking it
+     -trees    show all trees in the treebank
+     -raw      return the lookup result as string, without typechecking it
    flags:
      -treebank use this treebank (instead of the latest introduced one)
    examples:

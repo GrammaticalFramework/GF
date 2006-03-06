@@ -14,6 +14,22 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
+6/3 (AR) Generalized the <tt>gfe</tt> file format in two ways:
+<ol>
+<li> Use the real grammar parser, hence <tt>(in M.C "foo")</tt> expressions
+     may occur anywhere. But the <i>ad hoc</i> word substitution syntax is
+     abandoned: ordinary <tt>let</tt> (and <tt>where</tt>) expressions
+     can now be used instead.
+<li> The resource may now be a treebank, not just a grammar. Parsing
+     is thus replaced by treebank lookup, which in most cases is faster.
+</ol>
+A minor novelty is that the <tt>--# -resource=FILE</tt> flag can now be
+relative to <tt>GF_LIB_PATH</tt>, both for grammars and treebanks.
+The flag <tt> --# -treebank=IDENT</tt> gives the language whose treebank
+entries are used, in case of a multilingual treebank.
+
+<p>
+
 4/3 (AR) Added command <tt>use_treebank = ut</tt> for lookup in a treebank.
 This command can be used as a fast substitute for parsing, but also as a
 way to browse treebanks.

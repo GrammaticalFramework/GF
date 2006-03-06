@@ -252,7 +252,8 @@ txtHelpFile =
   "\n   options:" ++
   "\n     -assocs   show all string-trees associations in the treebank" ++
   "\n     -strings  show all strings in the treebank" ++
-  "\n     -raw      return result as string, without typechecking it" ++
+  "\n     -trees    show all trees in the treebank" ++
+  "\n     -raw      return the lookup result as string, without typechecking it" ++
   "\n   flags:" ++
   "\n     -treebank use this treebank (instead of the latest introduced one)" ++
   "\n   examples:" ++

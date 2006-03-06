@@ -1,4 +1,4 @@
---# -resource=../../lib/multimodal/MultimodalEng.gfc
+--# -resource=multimodal/MultimodalEng.gfc
 --# -path=multimodal:present:mathematical:prelude
 
 incomplete concrete TramI of Tram = open Multimodal, DemRes, Symbol in {
