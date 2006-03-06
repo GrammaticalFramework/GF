@@ -85,4 +85,5 @@ abstract Demonstrative = Cat, PredefAbs ** {
 
     point1, point2 : Point ;
 
+    x_MAdv, y_MAdv : MAdv ;
 }

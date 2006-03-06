@@ -102,5 +102,8 @@ incomplete concrete DemonstrativeI of Demonstrative = Cat **
     point1 = mkPoint "p1" ;
     point2 = mkPoint "p2" ;
 
+    x_MAdv = mkDem Adv (ss "X") noPoint ; --- relies on Adv = {s : Str}
+    y_MAdv = mkDem Adv (ss "Y") noPoint ; ---
+
 }
 

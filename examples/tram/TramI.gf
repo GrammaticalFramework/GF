@@ -15,13 +15,13 @@ lin
     MPredVP (DemNP (UsePron i_Pron)) 
       (MAdvVP (MAdvVP (MComplVV want_VV (MUseV go_V)) x) y) ;
 
-  GoToFrom x y = 
+  ComeToFrom x y = 
     MPredVP (DemNP (UsePron i_Pron)) 
-      (MAdvVP (MAdvVP (MComplVV want_VV (MUseV go_V)) x) y) ;
+      (MAdvVP (MAdvVP (MComplVV want_VV (MUseV come_V)) x) y) ;
 
   ComeFrom x = 
     MPredVP (DemNP (UsePron i_Pron)) 
-      (MAdvVP (MComplVV want_VV (MUseV go_V)) x) ;
+      (MAdvVP (MComplVV want_VV (MUseV come_V)) x) ;
 
   GoTo x = 
     MPredVP (DemNP (UsePron i_Pron)) 
