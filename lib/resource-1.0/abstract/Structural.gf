@@ -38,6 +38,7 @@ abstract Structural = Cat ** {
   everything_NP : NP ;
   everywhere_Adv : Adv ;
   first_Ord : Ord ;
+  few_Det : Det ;
   from_Prep : Prep ;
   he_Pron : Pron ;
   here_Adv : Adv ;

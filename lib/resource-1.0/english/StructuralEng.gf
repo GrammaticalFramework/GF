@@ -30,6 +30,7 @@ concrete StructuralEng of Structural = CatEng **
   every_Det = mkDeterminer Sg "every" ;
   everything_NP = regNP "everything" Sg ;
   everywhere_Adv = ss "everywhere" ;
+  few_Det = mkDeterminer Pl "few" ;
   first_Ord = ss "first" ;
   from_Prep = ss "from" ;
   he_Pron = mkNP "he" "him" "his" Sg P3 ;
@@ -104,6 +105,7 @@ concrete StructuralEng of Structural = CatEng **
   youSg_Pron = mkNP "you" "you" "your" Sg P2 ;
   youPl_Pron = mkNP "you" "you" "your" Pl P2 ;
   youPol_Pron = mkNP "you" "you" "your" Sg P2 ;
+
 
 oper
   mkQuant : Str -> Str -> {s : Number => Str} = \x,y -> {

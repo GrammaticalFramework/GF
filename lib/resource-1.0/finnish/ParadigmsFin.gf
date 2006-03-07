@@ -224,7 +224,7 @@ oper
 
 -- The regular adjectives are based on $regN$ in the positive.
 
-  regADeg : (punainen : Str) -> A ;
+  regA : (punainen : Str) -> A ;
 
 
 --2 Verbs
@@ -490,12 +490,14 @@ reg3N = \vesi,veden,vesiä ->
     in
     regAdjective x kivempaa kivinta ** {lock_A = <>} ;
 
-  regADeg suuri =
+  regA suuri =
     let suur = regN suuri in
     mkADeg 
       suur 
       (init (suur.s ! NCase Sg Gen) + "mpi")
       (init (suur.s ! NCase Pl Ess)) ;
+
+  regADeg = regA ; -- for bw compat
 
   mkV a b c d e f g h i j k l = mkVerb a b c d e f g h i j k l ** 
     {sc = NPCase Nom ; lock_V = <>} ;

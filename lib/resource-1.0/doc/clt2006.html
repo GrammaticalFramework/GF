@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>The GF Resource Grammar Library Version 1.0</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Sat Mar  4 14:20:07 2006
+Last update: Tue Mar  7 16:01:46 2006
 </FONT></CENTER>
 
 <P>
@@ -274,9 +274,7 @@ Rosetta Machine Translation (<A HREF="http://citeseer.ist.psu.edu/181924.html">B
 <!-- NEW -->
 </P>
 <H2>Coverage</H2>
-<P>
-===Languages====
-</P>
+<H3>Languages</H3>
 <P>
 The current GF Resource Project covers ten languages:
 </P>
@@ -302,9 +300,7 @@ API 1.0 not yet implemented for Danish and Russian
 <P>
 <!-- NEW -->
 </P>
-<P>
-===Morphology====
-</P>
+<H3>Morphology and lexicon</H3>
 <P>
 Complete inflection engine
 </P>
@@ -315,24 +311,20 @@ Complete inflection engine
 </UL>
 
 <P>
-High-level access via <CODE>ParadigmsX</CODE>; e.g. Swedish:
+Basic lexicon
 </P>
 <UL>
-<LI>worst-case functions
-<PRE>
-      mkV : (supa,super,sup,söp,supit,supen : Str) -&gt; V ;
-</PRE>
-<LI>common patterns
-<PRE>
-      regV   : (talar : Str) -&gt; V ;
-      irregV : (dricka, drack, druckit : Str) -&gt; V ;
-</PRE>
-<LI>irregular words in <CODE>IrregX</CODE>:
-<PRE>
-      draga_V : V = 
-        mkV (variants { "dra"; "draga"}) (variants { "drar" ; "drager"}) 
-            (variants { "dra" ; "drag" }) "drog" "dragit" "dragen" ;
-</PRE>
+<LI>100 structural words
+<LI>350 content words, mainly for testing
+<LI>these include the 207 <A HREF="http://en.wiktionary.org/wiki/Swadesh_List">Swadesh words</A>
+</UL>
+
+<P>
+It is more important to enable lexicon extensions than to 
+provide a huge lexicon.
+</P>
+<UL>
+<LI>technical lexica can have very special words, which tend to be regular
 </UL>
 
 <P>
@@ -340,7 +332,32 @@ High-level access via <CODE>ParadigmsX</CODE>; e.g. Swedish:
 </P>
 <H3>Syntactic structures</H3>
 <P>
-<IMG ALIGN="middle" SRC="Lang.png" BORDER="0" ALT="">
+Texts: 
+sequences of phrases with punctuation
+</P>
+<P>
+Phrases: 
+declaratives, questions, imperatives, vocatives
+</P>
+<P>
+Tense, mood, and polarity: 
+present, past, future, conditional ; similtaneous, anterior ; positive, negative
+</P>
+<P>
+Questions: 
+yes-no, "wh" ; direct, indirect
+</P>
+<P>
+Clauses: 
+main, relative, embedded (subject, object, adverbial)
+</P>
+<P>
+Verb phrases: 
+intransitive, transitive, ditransitive, prepositional
+</P>
+<P>
+Noun phrases: 
+proper names, pronouns, determiners, possessives, cardinals and ordinals
 </P>
 <P>
 <!-- NEW -->
@@ -378,15 +395,125 @@ Lines of source code (4/3/2006):
 <P>
 <!-- NEW -->
 </P>
-<H2>Structure</H2>
+<H2>Structure of the API</H2>
+<H3>Language-independent ground API</H3>
+<P>
+<IMG ALIGN="middle" SRC="Lang.png" BORDER="0" ALT="">
+</P>
 <P>
 <!-- NEW -->
 </P>
-<H3>Language-independent ground API</H3>
+<H3>The structure of a text sentence</H3>
+<PRE>
+  John walks.
+  
+  TFullStop              : Phr -&gt; Text -&gt; Text
+    (PhrUtt              : PConj -&gt; Utt -&gt; Voc -&gt; Phr
+      NoPConj
+      (UttS              : S -&gt; Utt
+        (UseCl           : Tense -&gt; Anter -&gt; Pol -&gt; Cl -&gt; S
+          TPres              
+          ASimul 
+          PPos 
+          (PredVP        : NP -&gt; VP -&gt; Cl
+            (UsePN       : PN -&gt; NP 
+              john_PN) 
+            (UseV        : V  -&gt; VP
+              walk_V)))) 
+      NoVoc) 
+    TEmpty
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H3>Structure in syntax editor</H3>
+<P>
+<IMG ALIGN="middle" SRC="editor.png" BORDER="0" ALT="">
+</P>
 <P>
 <!-- NEW -->
 </P>
 <H3>Language-dependent paradigm modules</H3>
+<H4>Regular paradigms</H4>
+<P>
+Every language implements these regular patterns that take
+"dictionary forms" as arguments.
+</P>
+<PRE>
+    regN : Str -&gt; N
+    regA : Str -&gt; A 
+    regV : Str -&gt; V
+</PRE>
+<P>
+Their usefulness varies. For instance, they
+all are quite good in Finnish and English.
+In Swedish, less so:
+</P>
+<PRE>
+    regN "val" ---&gt; val, valen, valar, valarna
+</PRE>
+<P>
+Initializing a lexicon with <CODE>regX</CODE>s is
+usually a good starting point in grammar development.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<H4>Regular paradigms</H4>
+<P>
+In Swedish, giving the gender of <CODE>N</CODE> improves a lot
+</P>
+<PRE>
+    regGenN "val" neutrum ---&gt; val, valet, val, valen
+</PRE>
+<P></P>
+<P>
+There are also special constructs taking other forms:
+</P>
+<PRE>
+    mk2N : (nyckel,nycklar : Str) -&gt; N
+    mk1N : (bilarna : Str) -&gt; N
+  
+    irregV : (dricka, drack, druckit : Str) -&gt; V
+</PRE>
+<P></P>
+<P>
+Regular verbs are actually implemented the 
+<A HREF="http://lexin.nada.kth.se/sve-sve.shtml">Lexin</A> way
+</P>
+<PRE>
+    regV : (talar : Str) -&gt; N
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H4>Worst-case paradigms</H4>
+<P>
+To cover all situations, worst-case paradigms are given. E.g. Swedish
+</P>
+<PRE>
+    mkN : (apa,apan,apor,aporna : Str) -&gt; N
+    mkA : (liten, litet, lilla, sma, mindre, minst, minsta : Str) -&gt; A
+    mkV : (supa,super,sup,söp,supit,supen : Str) -&gt; V
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H4>Irregular words</H4>
+<P>
+Iregular words in <CODE>IrregX</CODE>, e.g. Swedish:
+</P>
+<PRE>
+      draga_V : V = 
+        mkV (variants { "dra"; "draga"}) (variants { "drar" ; "drager"}) 
+            (variants { "dra" ; "drag" }) "drog" "dragit" "dragen" ;
+</PRE>
+<P>
+Goal: eliminate the user's need of worst-case functions.
+</P>
 <P>
 <!-- NEW -->
 </P>
@@ -396,25 +523,146 @@ Lines of source code (4/3/2006):
 </P>
 <H3>Special-purpose APIs</H3>
 <P>
+Syntactic structures that are not shared by all languages.
+</P>
+<P>
+Not implemented yet.
+</P>
+<P>
+Candidates:
+</P>
+<UL>
+<LI><CODE>Nor</CODE> post-possessives: <CODE>bilen min</CODE>
+<LI><CODE>Fre</CODE> question forms: <CODE>est-ce que tu dors ?</CODE>
+</UL>
+
+<P>
 <!-- NEW -->
 </P>
 <H3>How to use as top-level grammar</H3>
 <P>
 <!-- NEW -->
 </P>
+<H3>Compiling</H3>
+<P>
+It is a good idea to compile the library, so that it can be opened faster
+</P>
+<PRE>
+    GF/lib/resource-1.0% make
+  
+    writes GF/lib/alltenses
+           GF/lib/present
+           GF/lib/resource-1.0/langs.gfcm
+</PRE>
+<P>
+If you don't intend to change the library, you never need to process the source
+files again. Just do some of
+</P>
+<PRE>
+    gf -nocf langs.gfcm                                    -- all 8 languages
+   
+    gf -nocf -path=alltenses:prelude alltenses/LangSwe.gfc -- Swedish only
+  
+    gf -nocf -path=alltenses:prelude present/LangSwe.gfc   -- Swedish only, present tense only
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
 <H3>Parsing</H3>
+<P>
+The default parser does not work!
+</P>
+<P>
+The MCFG parser works in some languages, after waiting appr. 20 seconds
+</P>
+<PRE>
+    p -mcfg -lang=LangEng -cat=S "I would see her"
+  
+    p -mcfg -lang=LangSwe -cat=S "jag skulle se henne"
+  
+    p -mcfg -lang=LangNor -cat=S "jeg ville se henne"
+  
+</PRE>
+<P>
+Parsing in <CODE>present/</CODE> versions is quicker.
+</P>
 <P>
 <!-- NEW -->
 </P>
 <H3>Treebank generation</H3>
 <P>
+Multilingual treebank entry = tree + linearizations
+</P>
+<P>
+Some examples on treebank generation, assuming <CODE>langs.gfcm</CODE>
+</P>
+<PRE>
+    gr -cat=S   -number=10 -cf | tb                  -- 10 random S
+  
+    gt -cat=Phr -depth=4       | tb -xml | wf ex.xml -- all Phr to depth 4, into file ex.xml
+</PRE>
+<P>
+Regression testing
+</P>
+<PRE>
+    rf ex.xml | tb -c      -- read treebank from file and compare to present grammars 
+</PRE>
+<P>
+Updating a treebank
+</P>
+<PRE>
+    rf old.xml | tb -trees | tb -xml | wf new.xml    -- read old from file, write new to file
+</PRE>
+<P></P>
+<P>
 <!-- NEW -->
 </P>
 <H3>Treebank-based parsing</H3>
 <P>
+Brute-force method that helps if real parsing is more expensive.
+</P>
+<PRE>
+    make treebank                     -- make treebank with all languages
+  
+    gf -treebank langs.xml            -- start GF by reading the treebank
+  
+    &gt; ut -strings -treebank=LangIta   -- show all Ita strings
+  
+    &gt; ut -treebank=LangIta -raw "Quello non si romperebbe" -- look up a string
+  
+    &gt; i -nocf langs.gfcm              -- read grammar to be able to linearize
+  
+    &gt; ut -treebank=LangIta "Quello non si romperebbe" | l -multi  -- translate to all
+</PRE>
+<P></P>
+<P>
 <!-- NEW -->
 </P>
 <H3>Morphology</H3>
+<P>
+Use morphological analyser
+</P>
+<PRE>
+    gf -nocf -retain -path=alltenses:prelude alltenses/LangSwe.gf
+    &gt; ma "jag kan inte höra vad du säger"
+</PRE>
+<P></P>
+<P>
+Try out a morphology quiz
+</P>
+<PRE>
+    &gt; mq -cat=V
+</PRE>
+<P></P>
+<P>
+Try out inflection patterns
+</P>
+<PRE>
+    gf -retain -path=alltenses:prelude alltenses/ParadigmsSwe.gfr
+    &gt; cc regV "lyser"
+</PRE>
+<P></P>
 <P>
 <!-- NEW -->
 </P>
@@ -422,6 +670,16 @@ Lines of source code (4/3/2006):
 <!-- NEW -->
 </P>
 <H3>Syntax editing</H3>
+<P>
+We start a demo by
+</P>
+<PRE>
+  gfeditor langs.gfcm
+</PRE>
+<P></P>
+<P>
+<IMG ALIGN="middle" SRC="editor.png" BORDER="0" ALT="">
+</P>
 <P>
 <!-- NEW -->
 </P>
@@ -469,6 +727,6 @@ Lines of source code (4/3/2006):
 </P>
 <H3>Extend old modules or add a new one?</H3>
 
-<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags clt2006.txt -->
 </BODY></HTML>
