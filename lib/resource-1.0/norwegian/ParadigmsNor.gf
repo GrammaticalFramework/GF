@@ -69,11 +69,17 @@ oper
 
   mkN  : (dreng,drengen,drenger,drengene : Str) -> N ;
 
--- The regular function takes the singular indefinite form and the gender,
--- and computes the other forms by a heuristic. 
+-- The regular function takes the singular indefinite form
+-- and computes the other forms and the gender by a heuristic.
+-- The heuristic is that nouns ending "e" are feminine like "kvinne",
+-- all others are masculine like "bil". 
 -- If in doubt, use the $cc$ command to test!
 
-  regN : Str -> Gender -> N ;
+  regN : Str -> N ;
+
+-- Giving gender manually makes the heuristic more reliable.
+
+  regGenN : Str -> Gender -> N ;
 
 -- This function takes the singular indefinite and definite forms; the
 -- gender is computed from the definite form.
@@ -291,7 +297,14 @@ oper
 
   mkN x y z u = mkSubstantive x y z u ** {g = extNGen y ; lock_N = <>} ;
 
-  regN x g = case last x of {
+  regN x = regGenN x g where {
+    g = case <x : Str> of {
+      _ + "e" => Utr Fem ;
+      _ => Utr Masc
+      }
+    } ;
+
+  regGenN x g = case last x of {
     "e" => case g of {
        Utr Masc   => mkN x (x      + "n") (x + "r") (x + "ne") ;
        Utr Fem    => mkN x (init x + "a") (x + "r") (x + "ne") ;
@@ -305,14 +318,14 @@ oper
     } ;
 
   mk2N x y = case last y of {
-    "n" => regN x masculine ;
-    "a" => regN x feminine ;
-    _   => regN x neutrum
+    "n" => regGenN x masculine ;
+    "a" => regGenN x feminine ;
+    _   => regGenN x neutrum
     } ;
 
 
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
-  regN2 n g = mkN2 (regN n g) (mkPreposition "av") ;
+  regN2 n g = mkN2 (regGenN n g) (mkPreposition "av") ;
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
   regPN n g = {s = \\c => mkCase c n ; g = g} ** {lock_PN = <>} ;

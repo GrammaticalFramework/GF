@@ -68,11 +68,17 @@ oper
 
   mkN  : (apa,apan,apor,aporna : Str) -> N ;
 
--- The regular function takes the singular indefinite form and the gender,
--- and computes the other forms by a heuristic. 
+-- The regular function takes the singular indefinite form and computes the other
+-- forms and the gender by a heuristic. The heuristic is currently 
+-- to treat all words ending with "a" like "flicka", with "e" like "rike",
+-- and otherwise like "bil".
 -- If in doubt, use the $cc$ command to test!
 
-  regN : Str -> Gender -> N ;
+  regN : Str -> N ;
+
+-- Adding the gender manually greatly improves the correction of $regN$.
+
+  regGenN : Str -> Gender -> N ;
 
 -- In practice the worst case is often just: give singular and plural indefinite.
 
@@ -290,7 +296,14 @@ oper
       }
     } ** {lock_N = <>} ;
 
-  regN bil g = case g of {
+  regN bil = regGenN bil g where {
+    g = case <bil : Str> of {
+      _ + "e" => Neutr ;
+      _       => Utr
+      }
+    } ;
+
+  regGenN bil g = case g of {
     Utr => case last bil of {
       "a" => decl1Noun bil ;
       _   => decl2Noun bil
@@ -365,7 +378,7 @@ oper
 
 
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
-  regN2 n g = mkN2 (regN n g) (mkPreposition "av") ;
+  regN2 n g = mkN2 (regGenN n g) (mkPreposition "av") ;
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
   regPN n g = {s = \\c => mkCase c n ; g = g} ** {lock_PN = <>} ;

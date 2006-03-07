@@ -72,13 +72,20 @@ oper
 
   mkN  : (oeil,yeux : Str) -> Gender -> N ;
 
--- The regular function takes the singular form and the gender,
--- and computes the plural by a heuristic. The heuristic currently
+-- The regular function takes the singular form,
+-- and computes the plural and the gender by a heuristic. The plural 
+-- heuristic currently
 -- covers the cases "pas-pas", "prix-prix", "nez-nez", 
 -- "bijou-bijoux", "cheveu-cheveux", "plateau-plateaux", "cheval-chevaux".
+-- The gender heuristic is less reliable: it treats as feminine all
+-- nouns ending with "e" and "ion", all others as masculine.
 -- If in doubt, use the $cc$ command to test!
 
-  regN : Str -> Gender -> N ;
+  regN : Str -> N ;
+
+-- Adding gender information widens the scope of the foregoing function.
+
+  regGenN : Str -> Gender -> N ;
 
 
 --3 Compound nouns 
@@ -287,7 +294,13 @@ oper
   mkPreposition p = {s = p ; c = Acc ; isDir = False} ;
 
   mkN x y g = mkCNomIrreg x y g ** {lock_N = <>} ;
-  regN x g = mkNomReg x g ** {lock_N = <>} ;
+  regN x = regGenN x g where {
+    g = case <x : Str> of {
+     _ + ("e" | "ion") => Fem ;
+     _ => Masc
+     } 
+    } ;
+  regGenN x g = mkNomReg x g ** {lock_N = <>} ;
   compN x y = {s = \\n => x.s ! n ++ y ; g = x.g ; lock_N = <>} ;
 
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
