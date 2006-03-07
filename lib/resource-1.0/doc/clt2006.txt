@@ -114,6 +114,7 @@ Example-based grammar writing
 
 Linguistics
 - definition of linguistic ontology
+- describing language on this level of abstraction
 - coping with different problems in different languages
 - sharing concrete-syntax code between languages
 - creating a resource for other NLP applications
@@ -162,6 +163,8 @@ Computer science
 
 Janna Khegai (Russian modules, forthcoming),
 Bjorn Bringert (many Swadesh lexica),
+Inger Andersson and Therese Söderberg (Spanish morphology),
+Ludmilla Bogavac (Russian morphology),
 Carlos Gonzalia (Spanish cardinals), 
 Partik Jansson (Swedish cardinals),
 Aarne Ranta.
@@ -193,6 +196,10 @@ CLE (Core Language Engine,
   [Spoken Language Translator (2001) http://www.cambridge.org/uk/catalogue/catalogue.asp?isbn=0521770777]
 - grammar specialization via explanation-based learning
 
+
+#NEW
+
+===Slightly less related work===
 
 [LinGO Grammar Matrix http://www.delph-in.net/matrix/]
 - English, German, Japanese, Spanish, ...
@@ -250,7 +257,7 @@ Complete inflection engine
 
 Basic lexicon
 - 100 structural words
-- 350 content words, mainly for testing
+- 340 content words, mainly for testing
 - these include the 207 [Swadesh words http://en.wiktionary.org/wiki/Swadesh_List]
 
 
@@ -273,7 +280,7 @@ Phrases:
 declaratives, questions, imperatives, vocatives
 
 Tense, mood, and polarity: 
-present, past, future, conditional ; similtaneous, anterior ; positive, negative
+present, past, future, conditional ; simultaneous, anterior ; positive, negative
 
 Questions: 
 yes-no, "wh" ; direct, indirect
@@ -300,9 +307,9 @@ proper names, pronouns, determiners, possessives, cardinals and ordinals
 
 100 structural words
 
-350 content words in a test lexicon
+340 content words in a test lexicon
 
-Lines of source code (4/3/2006):
+35 kLines of source code (4/3/2006):
 ```
   abstract     1131
   english      2344
@@ -334,20 +341,20 @@ Lines of source code (4/3/2006):
 ```
 John walks.
 
-TFullStop              : Phr -> Text -> Text
-  (PhrUtt              : PConj -> Utt -> Voc -> Phr
-    NoPConj
-    (UttS              : S -> Utt
+TFullStop              : Phr -> Text -> Text              | TQuestMark, TExclMark
+  (PhrUtt              : PConj -> Utt -> Voc -> Phr       | PhrYes, PhrNo, ...
+    NoPConj                                               | but_PConj, ...
+    (UttS              : S -> Utt                         | UttQS, UttImp, UttNP, ...
       (UseCl           : Tense -> Anter -> Pol -> Cl -> S
         TPres              
         ASimul 
         PPos 
-        (PredVP        : NP -> VP -> Cl
+        (PredVP        : NP -> VP -> Cl                   | ImpersNP, ExistNP, ...
           (UsePN       : PN -> NP 
             john_PN) 
-          (UseV        : V  -> VP
+          (UseV        : V  -> VP                         | ComplV2, UseComp, ...
             walk_V)))) 
-    NoVoc) 
+    NoVoc)                                                | VocNP, please_Voc, ...
   TEmpty
 ```
 
@@ -435,10 +442,6 @@ Goal: eliminate the user's need of worst-case functions.
 
 ===Language-dependent syntax extensions===
 
-#NEW
-
-===Special-purpose APIs===
-
 Syntactic structures that are not shared by all languages.
 
 Not implemented yet.
@@ -448,12 +451,24 @@ Candidates:
 - ``Fre`` question forms: ``est-ce que tu dors ?``
 
 
+#NEW
+
+===Special-purpose APIs===
+
+Mathematical
+
+Multimodal
+
+Present
+
+Minimal
+
+Shallow
+
 
 #NEW
 
-===How to use as top-level grammar===
-
-#NEW
+===How to use the resource as top-level grammar===
 
 ===Compiling===
 
@@ -487,9 +502,6 @@ The MCFG parser works in some languages, after waiting appr. 20 seconds
   p -mcfg -lang=LangEng -cat=S "I would see her"
 
   p -mcfg -lang=LangSwe -cat=S "jag skulle se henne"
-
-  p -mcfg -lang=LangNor -cat=S "jeg ville se henne"
-
 ```
 Parsing in ``present/`` versions is quicker.
 
@@ -559,8 +571,6 @@ Try out inflection patterns
 ```
 
 
-#NEW
-
 
 #NEW
 
@@ -576,6 +586,9 @@ We start a demo by
 
 ===Efficient parsing via application grammar===
 
+Get rid of discontinuous constituents 
+
+Examples: ``mathematical/Predication``, ``examples/bronzeage``
 
 
 #NEW
@@ -584,19 +597,38 @@ We start a demo by
 
 ===Specialization through parametrized modules===
 
+The application grammar is implemented with reference to
+the resource API
+
+Individual languages are instantiations
+
+Example: [tram ../../examples/tram/TramI.gfe]
+
+
 #NEW
 
 ===Compile-time transfer===
+
+Instead of parametrized modules:
+
+select resource functions differently for different languages
+
+Example: imperative vs. infinitive in mathematical exercises
+
 
 #NEW
 
 ===A natural division into modules===
 
+Lexicon in language-dependent moduls
+
+Combination rules in a parametrized module
+
 #NEW
 
 ===Example-based grammar writing===
 
-
+Example: [animal ../../examples/animal/QuestionsI.gfe]
 
 #NEW
 

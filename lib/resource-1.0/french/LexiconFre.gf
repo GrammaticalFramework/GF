@@ -348,5 +348,9 @@ lin
   wash_V2 = dirV2 (regV "laver") ;
   wipe_V2 = dirV2 (regV "essuyer") ;
 
+    hold_V2 = dirV2 tenir_V2 ;
+    split_V2 = dirV2 fendre_V2 ;
+    lie_V = reflV étendre_V2 ;
+    sit_V = reflV asseoir_V2 ;
 
 } ;
