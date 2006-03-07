@@ -42,6 +42,8 @@ concrete SwadeshNor of Swadesh = CatNor
     when_IAdv = when_IAdv ;
     how_IAdv = how_IAdv ;
 
+    far_Adv = mkAdv "fjern" ;
+
     -- not : Adv ; -- ?
 
     -- Conjunctions
