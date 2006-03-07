@@ -168,6 +168,10 @@ oper
 
     vpAgrNone : VPAgr = VPAgrClit (aagr Masc Sg) ;
 
+  oper
+    mkOrd : {s : Degree => AForm => Str} -> {s : AAgr => Str} ;
+    mkOrd x = {s = \\ag => x.s ! Posit ! AF ag.g ag.n} ;
+
   param
     VPAgr = 
        VPAgrSubj                    -- elle est partie, elle s'est vue
@@ -188,6 +192,7 @@ oper
       comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
       ext    : Polarity => Str ;         -- que je dors / que je dorme
       } ;
+
 
 }
 

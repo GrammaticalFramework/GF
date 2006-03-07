@@ -1,6 +1,7 @@
 --# -path=.:../scandinavian:../common:../abstract:../../prelude
 
-concrete LexiconNor of Lexicon = CatNor ** open ParadigmsNor, IrregNor in {
+concrete LexiconNor of Lexicon = CatNor ** 
+  open Prelude, ParadigmsNor, IrregNor in {
 
 flags startcat=Phr ; lexer=textlit ; unlexer=text ;
   optimize=values ;
@@ -221,14 +222,133 @@ lin
   put_V2 = mkV2 (irregV "sette" "satte" "satt") [] ;
   stop_V = regV "stanse" ;
   jump_V = regV "hoppe" ;
-{-
-  here_Adv = mkAdv "her" ;
-  here7to_Adv = mkAdv "hit" ;
-  here7from_Adv = mkAdv ["herfra"] ;
-  there_Adv = mkAdv "der" ;
-  there7to_Adv = mkAdv "dit" ;
-  there7from_Adv = mkAdv ["derfra"] ;
--}
+
+  left_Ord = {s = "venstre" ; isDet = True} ;
+  right_Ord = {s = "høyre" ; isDet = True} ;
+  far_Adv = mkAdv "fjern" ;
+  correct_A = regA "riktig" ;
+  dry_A = mk2A "tørr" "tørt" ;
+  dull_A = regA "sløv" ;
+  full_A = regA "full" ;
+  heavy_A = irregADeg "tung" "tyngre" "tyngst" ;
+  near_A = mkADeg "nære" "nære" "nære" "nærmere" "nærmest" ;
+  rotten_A = mk3ADeg "råtten" "råttent" "råtne" ;
+  round_A = regA "rund" ;
+  sharp_A = mk2A "kvass" "kvast" ;
+  smooth_A = mk2A "slett" "slett" ;
+  straight_A = regA "rak" ;
+  wet_A = regA "våt" ;
+  wide_A = regA "bred" ;
+  animal_N = mk2N "dyr" "dyret" ;
+  ashes_N = mk2N "aske" "aska" ;
+  back_N = mk2N "rygg" "ryggen" ;
+  bark_N = mk2N "bark" "barken" ;
+  belly_N = mk2N "mage" "magen" ;
+  blood_N = mk2N "blod" "blodet" ;
+  bone_N = mk2N "bein" "beinet" ;
+  breast_N = mk2N "bryst" "brystet" ;
+  cloud_N = mk2N "sky" "skya" ;
+  day_N = mk2N "dag" "dagen" ;
+  dust_N = mk2N "støv" "støvet" ;
+  ear_N = mk2N "øre" "øret" ;
+  earth_N = mk2N "jord" "jorda" ;
+  egg_N = mk2N "egg" "egget" ;
+  eye_N = mkN "øye" "øyet" "øyne" "øynene" ;
+  fat_N = mk2N "fett" "fettet" ;
+  feather_N = mk2N "fjør" "fjøra" ;
+  fingernail_N = mk2N "negl" "neglen" ;
+  fire_N = mk2N "ild" "ilden" ;
+  flower_N = mk2N "blomst" "blomsten" ;
+  fog_N = mk2N "tåke" "tåka" ;
+  foot_N = mk2N "fot" "føtter" ;
+  forest_N = mk2N "skog" "skogen" ;
+  grass_N = mk2N "gras" "graset" ;
+  guts_N = mk2N "tarm" "tarmen" ; ---- involler
+  hair_N = mk2N "hår" "håret" ;
+  hand_N = mk2N "hånd" "hånden" ;
+  head_N = mk2N "hode" "hodet" ;
+  heart_N = mk2N "hjerte" "hjertet" ;
+  horn_N = mk2N "horn" "hornet" ;
+  husband_N = mkN "ektemann" "ektemannen" "ektemenn" "ektemennen" ;
+  ice_N = mk2N "is" "isen" ;
+  knee_N = mkN "kne" "kneet" "knær" "knæne" ;
+  leaf_N = mk2N "løv" "løvet" ;
+  leg_N = mk2N "bein" "beinet" ;
+  liver_N = mkN "lever" "leveren" "levrer" "levrene" ;
+  louse_N = mk2N "lus" "lusa" ;
+  mouth_N = mk2N "munn" "munnen" ;
+  name_N = mk2N "navn" "navnet" ;
+  neck_N = mk2N "nakke" "nakken" ;
+  night_N = mkN "natt" "natta" "netter" "nettene" ;
+  nose_N = mk2N "nese" "nesen" ;
+  person_N = mk2N "person" "personen" ;
+  rain_N = mk2N "regn" "regnet" ;
+  road_N = mk2N "vei" "veien" ;
+  root_N = mkN "rot" "rota" "røtter" "røttene" ;
+  rope_N = mk2N "tau" "tauet" ;
+  salt_N = mk2N "salt" "saltet" ;
+  sand_N = mk2N "sand" "sanden" ;
+  seed_N = mk2N "frø" "frøet" ;
+  skin_N = mk2N "skinn" "skinnet" ;
+  sky_N = mkN "himmel" "himmelen" "himler" "himlene" ;
+  smoke_N = mk2N "røyk" "røyken" ;
+  snow_N = mk2N "snø" "snøen" ;
+  stick_N = mk2N "pinne" "pinnen" ;
+  tail_N = mk2N "hale" "halen" ;
+  tongue_N = mk2N "tunge" "tunga" ;
+  tooth_N = mkN "tann" "tanna" "tenner" "tennene" ;
+  wife_N = mk2N "kone" "kona" ;
+  wind_N = mk2N "vind" "vinden" ;
+  wing_N = mk2N "vinge" "vingen" ;
+  worm_N = mk2N "mark" "marken" ;
+  year_N = mk2N "år" "året" ;
+  bite_V2 = dirV2 (IrregNor.bite_V) ;
+  blow_V = mk2V "blåse" "blåste" ;
+  burn_V = brenne_V ;
+  count_V2 = dirV2 (regV "regne") ;
+  cut_V2 = dirV2 (skjære_V) ;
+  dig_V = mk2V "grave" "gravde" ;
+  fall_V = falle_V ;
+  fear_V2 = dirV2 (regV "frykte") ;
+  fight_V2 = dirV2 (slåss_V) ;
+  float_V = flyte_V ;
+  flow_V = renne_V ;
+  fly_V = fly_V ;
+  freeze_V = fryse_V ;
+  give_V3 = dirdirV3 gi_V ;
+  hit_V2 = dirV2 (slå_V) ;
+  hold_V2 = dirV2 (holde_V) ;
+  hunt_V2 = dirV2 (regV "jakte") ;
+  kill_V2 = dirV2 (mk2V "drepe" "drepte") ;
+  laugh_V = mkV "le" "ler" "les" "lo" "ledd" "le" ;
+  lie_V = ligge_V ;
+  play_V = mk2V "leke" "lekte" ;
+  pull_V2 = dirV2 (dra_V) ;
+  push_V2 = dirV2 (irregV "skyve" "skjøv" "skjøvet") ;
+  rub_V2 = dirV2 (gni_V) ;
+  scratch_V2 = dirV2 (regV "klø") ;
+  sew_V = mk2V "sy" "sydde" ;
+  sing_V = synge_V ;
+  sit_V = sitte_V ;
+  smell_V = regV "lukte" ;
+  spit_V = regV "spytte" ;
+  split_V2 = dirV2 (mk2V "kløyve" "kløyvde") ;
+  squeeze_V2 = dirV2 (mk2V "klemme" "klemte") ;
+  stab_V2 = dirV2 (stikke_V) ;
+  stand_V = stå_V ;
+  suck_V2 = dirV2 (suge_V) ;
+  swell_V = partV (regV "hovne") "opp" ;
+  swim_V = regV "simme" ;
+  think_V = mk2V "tenke" "tenkte" ;
+  throw_V2 = dirV2 (regV "kaste") ;
+  tie_V2 = dirV2 (regV "knytte") ;
+  turn_V = mk2V "vende" "vendte" ;
+  vomit_V = partV (regV "kaste") "opp" ;
+  wash_V2 = dirV2 (regV "vaske") ;
+  wipe_V2 = dirV2 (regV "tørke") ;
+  breathe_V = regV "puste" ;
+
+
 } ;
 
 -- a" -> e"   86

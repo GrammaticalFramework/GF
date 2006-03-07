@@ -217,7 +217,7 @@ Rosetta Machine Translation ([Book 1994 http://citeseer.ist.psu.edu/181924.html]
 
 ==Coverage==
 
-===Languages====
+===Languages===
 
 The current GF Resource Project covers ten languages:
 - ``Dan``ish
@@ -240,7 +240,7 @@ API 1.0 not yet implemented for Danish and Russian
 
 #NEW
 
-===Morphology====
+===Morphology and lexicon===
 
 Complete inflection engine
 - all word classes
@@ -248,23 +248,15 @@ Complete inflection engine
 - all inflectional paradigms
 
 
-High-level access via ``ParadigmsX``; e.g. Swedish:
-- worst-case functions
-```
-    mkV : (supa,super,sup,söp,supit,supen : Str) -> V ;
-```
-- common patterns
-```
-    regV   : (talar : Str) -> V ;
-    irregV : (dricka, drack, druckit : Str) -> V ;
-```
-- irregular words in ``IrregX``:
-```
-    draga_V : V = 
-      mkV (variants { "dra"; "draga"}) (variants { "drar" ; "drager"}) 
-          (variants { "dra" ; "drag" }) "drog" "dragit" "dragen" ;
-```
+Basic lexicon
+- 100 structural words
+- 350 content words, mainly for testing
+- these include the 207 [Swadesh words http://en.wiktionary.org/wiki/Swadesh_List]
 
+
+It is more important to enable lexicon extensions than to 
+provide a huge lexicon.
+- technical lexica can have very special words, which tend to be regular
 
 
 
@@ -274,7 +266,28 @@ High-level access via ``ParadigmsX``; e.g. Swedish:
 
 ===Syntactic structures===
 
-[Lang.png]
+Texts: 
+sequences of phrases with punctuation
+
+Phrases: 
+declaratives, questions, imperatives, vocatives
+
+Tense, mood, and polarity: 
+present, past, future, conditional ; similtaneous, anterior ; positive, negative
+
+Questions: 
+yes-no, "wh" ; direct, indirect
+
+Clauses: 
+main, relative, embedded (subject, object, adverbial)
+
+Verb phrases: 
+intransitive, transitive, ditransitive, prepositional
+
+Noun phrases: 
+proper names, pronouns, determiners, possessives, cardinals and ordinals
+
+
 
 
 #NEW
@@ -307,15 +320,116 @@ Lines of source code (4/3/2006):
 
 #NEW
 
-==Structure==
+==Structure of the API==
+
+===Language-independent ground API===
+
+[Lang.png]
+
 
 #NEW
 
-===Language-independent ground API===
+===The structure of a text sentence===
+
+```
+John walks.
+
+TFullStop              : Phr -> Text -> Text
+  (PhrUtt              : PConj -> Utt -> Voc -> Phr
+    NoPConj
+    (UttS              : S -> Utt
+      (UseCl           : Tense -> Anter -> Pol -> Cl -> S
+        TPres              
+        ASimul 
+        PPos 
+        (PredVP        : NP -> VP -> Cl
+          (UsePN       : PN -> NP 
+            john_PN) 
+          (UseV        : V  -> VP
+            walk_V)))) 
+    NoVoc) 
+  TEmpty
+```
+
+#NEW
+
+===Structure in syntax editor===
+
+[editor.png]
+
 
 #NEW
 
 ===Language-dependent paradigm modules===
+
+====Regular paradigms====
+
+Every language implements these regular patterns that take
+"dictionary forms" as arguments.
+```
+  regN : Str -> N
+  regA : Str -> A 
+  regV : Str -> V
+```
+Their usefulness varies. For instance, they
+all are quite good in Finnish and English.
+In Swedish, less so:
+```
+  regN "val" ---> val, valen, valar, valarna
+```
+Initializing a lexicon with ``regX``s is
+usually a good starting point in grammar development.
+
+
+#NEW
+
+====Regular paradigms====
+
+In Swedish, giving the gender of ``N`` improves a lot
+```
+  regGenN "val" neutrum ---> val, valet, val, valen
+```
+
+There are also special constructs taking other forms:
+```
+  mk2N : (nyckel,nycklar : Str) -> N
+  mk1N : (bilarna : Str) -> N
+
+  irregV : (dricka, drack, druckit : Str) -> V
+```
+
+Regular verbs are actually implemented the 
+[Lexin http://lexin.nada.kth.se/sve-sve.shtml] way
+```
+  regV : (talar : Str) -> N
+```
+
+
+#NEW
+
+====Worst-case paradigms====
+
+To cover all situations, worst-case paradigms are given. E.g. Swedish
+```
+  mkN : (apa,apan,apor,aporna : Str) -> N
+  mkA : (liten, litet, lilla, sma, mindre, minst, minsta : Str) -> A
+  mkV : (supa,super,sup,söp,supit,supen : Str) -> V
+```
+
+
+#NEW
+
+====Irregular words====
+
+Iregular words in ``IrregX``, e.g. Swedish:
+```
+    draga_V : V = 
+      mkV (variants { "dra"; "draga"}) (variants { "drar" ; "drager"}) 
+          (variants { "dra" ; "drag" }) "drog" "dragit" "dragen" ;
+```
+Goal: eliminate the user's need of worst-case functions.
+
+
 
 #NEW
 
@@ -325,6 +439,14 @@ Lines of source code (4/3/2006):
 
 ===Special-purpose APIs===
 
+Syntactic structures that are not shared by all languages.
+
+Not implemented yet.
+
+Candidates:
+- ``Nor`` post-possessives: ``bilen min``
+- ``Fre`` question forms: ``est-ce que tu dors ?``
+
 
 
 #NEW
@@ -333,25 +455,122 @@ Lines of source code (4/3/2006):
 
 #NEW
 
+===Compiling===
+
+It is a good idea to compile the library, so that it can be opened faster
+```
+  GF/lib/resource-1.0% make
+
+  writes GF/lib/alltenses
+         GF/lib/present
+         GF/lib/resource-1.0/langs.gfcm
+```
+If you don't intend to change the library, you never need to process the source
+files again. Just do some of
+```
+  gf -nocf langs.gfcm                                    -- all 8 languages
+ 
+  gf -nocf -path=alltenses:prelude alltenses/LangSwe.gfc -- Swedish only
+
+  gf -nocf -path=alltenses:prelude present/LangSwe.gfc   -- Swedish only, present tense only
+```
+
+
+#NEW
+
 ===Parsing===
+
+The default parser does not work!
+
+The MCFG parser works in some languages, after waiting appr. 20 seconds
+```
+  p -mcfg -lang=LangEng -cat=S "I would see her"
+
+  p -mcfg -lang=LangSwe -cat=S "jag skulle se henne"
+
+  p -mcfg -lang=LangNor -cat=S "jeg ville se henne"
+
+```
+Parsing in ``present/`` versions is quicker.
+
 
 #NEW
 
 ===Treebank generation===
 
+Multilingual treebank entry = tree + linearizations
+
+Some examples on treebank generation, assuming ``langs.gfcm``
+```
+  gr -cat=S   -number=10 -cf | tb                  -- 10 random S
+
+  gt -cat=Phr -depth=4       | tb -xml | wf ex.xml -- all Phr to depth 4, into file ex.xml
+```
+Regression testing
+```
+  rf ex.xml | tb -c      -- read treebank from file and compare to present grammars 
+```
+Updating a treebank
+```
+  rf old.xml | tb -trees | tb -xml | wf new.xml    -- read old from file, write new to file
+```
+
+
+
 #NEW
 
 ===Treebank-based parsing===
+
+Brute-force method that helps if real parsing is more expensive.
+```
+  make treebank                     -- make treebank with all languages
+
+  gf -treebank langs.xml            -- start GF by reading the treebank
+
+  > ut -strings -treebank=LangIta   -- show all Ita strings
+
+  > ut -treebank=LangIta -raw "Quello non si romperebbe" -- look up a string
+
+  > i -nocf langs.gfcm              -- read grammar to be able to linearize
+
+  > ut -treebank=LangIta "Quello non si romperebbe" | l -multi  -- translate to all
+```
+
 
 #NEW
 
 ===Morphology===
 
+Use morphological analyser
+```
+  gf -nocf -retain -path=alltenses:prelude alltenses/LangSwe.gf
+  > ma "jag kan inte höra vad du säger"
+```
+
+Try out a morphology quiz
+```
+  > mq -cat=V
+```
+
+Try out inflection patterns
+```
+  gf -retain -path=alltenses:prelude alltenses/ParadigmsSwe.gfr
+  > cc regV "lyser"
+```
+
+
 #NEW
+
 
 #NEW
 
 ===Syntax editing===
+
+We start a demo by
+``` gfeditor langs.gfcm
+
+[editor.png]
+
 
 #NEW
 

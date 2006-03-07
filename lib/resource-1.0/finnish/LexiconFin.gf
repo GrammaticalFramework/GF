@@ -1,6 +1,6 @@
 --# -path=.:prelude
 
-concrete LexiconFin of Lexicon = CatFin ** open ParadigmsFin in {
+concrete LexiconFin of Lexicon = CatFin ** open MorphoFin, ParadigmsFin in {
 
 flags 
   optimize=values ;
@@ -51,8 +51,8 @@ lin
             "lapsina" "lapsissa" "lasten" "lapsia" "lapsiin" ;
   church_N = nLukko "kirkko" ;
   city_N = regN "kaupunki" ;
-  clean_A = regADeg "puhdas" ;
-  clever_A = regADeg "viisas" ;
+  clean_A = regA "puhdas" ;
+  clever_A = regA "viisas" ;
   close_V2 = dirV2 (regV "sulkea") ;
   coat_N = regN "takki" ;
   cold_A = mkADeg (nLukko "kylmä") "kylmempi" "kylmin" ;
@@ -121,7 +121,8 @@ lin
   love_V2 = caseV2 (regV "rakastaa") partitive ;
   man_N = mkN "mies" "miehen" "miehenä" "miestä" "mieheen" 
             "miehinä" "miehissä" "miesten" "miehiä" "miehiin" ;
-  married_A2 = mkA2 (mkA (nRae "avioitunut" "avioituneena")) (postPrep genitive "kanssa") ;
+  married_A2 = 
+    mkA2 (mkA (nRae "avioitunut" "avioituneena")) (postPrep genitive "kanssa") ;
   meat_N = nLukko "liha" ;
   milk_N = nLukko "maito" ;
   moon_N = regN "kuu" ;
@@ -149,7 +150,7 @@ lin
   radio_N = reg2N "radio" "radioita" ;
   rain_V0 = mkV0 (reg2V "sataa" "satoi") ;
   read_V2 = dirV2 (regV "lukea") ;
-  red_A = regADeg "punainen" ;
+  red_A = regA "punainen" ;
   religion_N = nLukko "uskonto" ;
   restaurant_N = nLukko "ravintola" ;
   river_N = nArpi "joki" ;
@@ -172,7 +173,7 @@ lin
   shirt_N = nLukko "paita" ;
   shoe_N = nLukko "kenkä" ;
   shop_N = nLukko "kauppa" ;
-  short_A = regADeg "lyhyt" ;
+  short_A = regA "lyhyt" ;
   silver_N = regN "hopea" ;
   sister_N = nLukko "sisko" ;
   sleep_V = regV "nukkua" ;
@@ -185,7 +186,7 @@ lin
   stone_N = nSylki "kivi" ;
   stove_N = reg3N "liesi" "lieden" "liesiä" ;
   student_N = reg2N "opiskelija" "opiskelijoita" ;
-  stupid_A = regADeg "tyhmä" ;
+  stupid_A = regA "tyhmä" ;
   sun_N = nLukko "aurinko" ;
   switch8off_V2 = dirV2 (regV "sammuttaa") ; ---
   switch8on_V2 = dirV2 (regV "sytyttää") ; ---
@@ -194,8 +195,8 @@ lin
   teacher_N = nLukko "opettaja" ;
   teach_V2 = dirV2 (regV "opettaa") ;
   television_N = reg2N "televisio" "televisioita" ;
-  thick_A = regADeg "paksu" ;
-  thin_A = regADeg "ohut" ;
+  thick_A = regA "paksu" ;
+  thin_A = regA "ohut" ;
   train_N = nLukko "juna" ;
   travel_V = regV "matkustaa" ;
   tree_N = regN "puu" ;
@@ -214,7 +215,7 @@ lin
   war_N = nLukko "sota" ;
   watch_V2 = dirV2 (regV "katsella") ;
   water_N = reg3N "vesi" "veden" "vesiä" ;
-  white_A = regADeg "valkoinen" ;
+  white_A = regA "valkoinen" ;
   window_N = reg2N "ikkuna" "ikkunoita" ;
   wine_N = regN "viini" ;
   win_V2 = dirV2 (regV "voittaa") ;
@@ -222,7 +223,7 @@ lin
   wonder_VQ = mkVQ (regV "ihmetellä") ;
   wood_N = regN "puu" ;
   write_V2 = dirV2 (regV "kirjoittaa") ;
-  yellow_A = regADeg "keltainen" ;
+  yellow_A = regA "keltainen" ;
   young_A = mkADeg (nArpi "nuori") "nuorempi" "nuorin" ;
 
   do_V2 = dirV2 (
@@ -237,13 +238,137 @@ lin
   put_V2 = dirV2 (regV "panna") ;
   stop_V = regV "pysähtyä" ;
   jump_V = regV "hypätä" ;
-{-
-  here_Adv = mkAdv "täällä" ;
-  here7to_Adv = mkAdv "tänne" ;
-  here7from_Adv = mkAdv "täältä" ;
-  there_Adv = mkAdv "siellä" ; --- tuolla
-  there7to_Adv = mkAdv "sinne" ;
-  there7from_Adv = mkAdv "sieltä" ;
--}
+  left_Ord = mkOrd (regN "vasen") ;
+  right_Ord = mkOrd (regN "oikea") ;
+  far_Adv = mkAdv "kaukana" ;
+  correct_A = regA "oikea" ;
+  dry_A = mkADeg (regN "kuiva") "kuivempi" "kuivin" ;
+  dull_A = mkADeg (regN "tylsä") "tylsempi" "tylsin" ;
+  full_A = mkADeg (reg3N "täysi" "täyden" "täysiä") "täydempi" "täysin" ;
+  heavy_A = regA "raskas" ;
+  near_A = regA "läheinen" ;
+  rotten_A = regA "mätä" ;
+  round_A = regA "pyöreä" ;
+  sharp_A = regA "terävä" ;
+  smooth_A = regA "sileä" ;
+  straight_A = mkADeg (regN "suora") "suorempi" "suorin" ;
+  wet_A = mkADeg (regN "märkä") "märempi" "märin" ;
+  wide_A = regA "leveä" ;
+  animal_N = reg3N "eläin" "eläimen" "eläimiä" ;
+  ashes_N = regN "tuhka" ;
+  back_N = regN "selkä" ;
+  bark_N = regN "kaarna" ;
+  belly_N = regN "vatsa" ;
+  blood_N = nMeri "veri" ;
+  bone_N = regN "luu" ;
+  breast_N = regN "rinta" ;
+  cloud_N = reg2N "pilvi" "pilviä" ;
+  day_N = regN "päivä" ;
+  dust_N = regN "pöly" ;
+  ear_N = regN "korva" ;
+  earth_N = regN "maa" ;
+  egg_N = regN "muna" ;
+  eye_N = regN "silmä" ;
+  fat_N = regN "rasva" ;
+  feather_N = reg3N "höyhen" "höyhenen" "höyheniä" ;
+  fingernail_N = reg3N "kynsi" "kynnen" "kynsiä" ;
+  fire_N = reg2N "tuli" "tulia" ;
+  flower_N = regN "kukka" ;
+  fog_N = regN "sumu" ;
+  foot_N = regN "jalka" ;
+  forest_N = regN "metsä" ;
+  grass_N = regN "ruoho" ;
+  guts_N = regN "sisälmys" ; --- suoli
+  hair_N = regN "hius" ;
+  hand_N = reg3N "käsi" "käden" "käsiä" ;
+  head_N = regN "pää" ;
+  heart_N = reg3N "sydän" "sydämen" "sydämiä" ;
+  horn_N = reg2N "sarvi" "sarvia" ;
+  husband_N = mkN "mies" "miehen" "miehenä" "miestä" "mieheen" 
+            "miehinä" "miehissä" "miesten" "miehiä" "miehiin" ; 
+  ice_N = regN "jää" ;
+  knee_N = reg2N "polvi" "polvia" ;
+  leaf_N = reg2N "lehti" "lehtiä" ;
+  leg_N = regN "jalka" ; --- sääri
+  liver_N = regN "maksa" ;
+  louse_N = regN "lude" ;
+  mouth_N = regN "suu" ;
+  name_N = reg2N "nimi" "nimiä" ;
+  neck_N = regN "niska" ;
+  night_N = regN "yö" ;
+  nose_N = regN "nenä" ;
+  person_N = regN "henkilö" ;
+  rain_N = regN "sade" ;
+  road_N = regN "tie" ;
+  root_N = reg2N "juuri" "juuria" ;
+  rope_N = reg3N "köysi" "köyden" "köysiä" ;
+  salt_N = regN "suola" ;
+  sand_N = regN "hiekka" ;
+  seed_N = regN "siemen" ;
+  skin_N = regN "nahka" ;
+  sky_N = reg3N "taivas" "taivaan" "taivaita" ;
+  smoke_N = regN "savu" ;
+  snow_N = sgpartN (nMeri "lumi") "lunta" ;
+  stick_N = regN "keppi" ;
+  tail_N = regN "häntä" ;
+  tongue_N = reg2N "kieli" "kieliä" ;
+  tooth_N = regN "hammas" ;
+  wife_N = regN "vaimo" ;
+  wind_N = reg2N "tuuli" "tuulia" ;
+  wing_N = reg2N "siipi" "siipiä" ;
+  worm_N = regN "mato" ;
+  year_N = reg3N "vuosi" "vuoden" "vuosia" ;
+  bite_V2 = dirV2 (regV "purra") ;
+  blow_V = regV "puhaltaa" ;
+  burn_V = regV "palaa" ;
+  count_V2 = dirV2 (regV "laskea") ;
+  cut_V2 = dirV2 (reg2V "leikata" "leikkasi") ;
+  dig_V = regV "kaivaa" ;
+  fall_V = reg3V "pudota" "putoan" "putosi" ;
+  fear_V2 = dirV2 (reg3V "pelätä" "pelkään" "pelkäsi") ;
+  fight_V2 = dirV2 (regV "taistella") ;
+  float_V = regV "kellua" ;
+  flow_V = reg3V "virrata" "virtaan" "virtasi" ;
+  fly_V = regV "lentää" ;
+  freeze_V = regV "jäätyä" ;
+  give_V3 = dirdirV3 (regV "antaa") ;
+  hit_V2 = dirV2 (regV "lyödä") ;
+  hold_V2 = dirV2 (regV "pitää") ;
+  hunt_V2 = dirV2 (regV "metsästää") ;
+  kill_V2 = dirV2 (regV "tappaa") ;
+  laugh_V = reg3V "nauraa" "nauran" "nauroi" ;
+  lie_V = reg3V "maata" "makaan" "makasi" ;
+  play_V = regV "pelata" ;
+  pull_V2 = dirV2 (regV "vetää") ;
+  push_V2 = dirV2 (regV "työntää") ;
+  rub_V2 = dirV2 (regV "hieroa") ;
+  scratch_V2 = dirV2 (regV "raapia") ;
+  sew_V = regV "kylvää" ;
+  sing_V = regV "laulaa" ;
+  sit_V = regV "istua" ;
+  smell_V = reg2V "haistaa" "haistoi" ;
+  spit_V = regV "sylkeä" ;
+  split_V2 = dirV2 (reg2V "halkaista" "halkaisi") ;
+  squeeze_V2 = dirV2 (regV "puristaa") ;
+  stab_V2 = dirV2 (regV "pistää") ;
+  stand_V = mkV "seistä" "seisoo" "seison" "seisovat" "seiskää" "seistään"
+      "seisoi" "seisoin" "seisoisi" "seissyt" "seisty" "seistyn" ; --- *seisoivät
+  suck_V2 = dirV2 (regV "imeä") ;
+  swell_V = mkV "turvota" "turpoaa" "turpoan" "turpoavat" "turvotkaa" "turvotaan"
+      "turposi" "turposin" "turpoaisi" "turvonnut" "turvottu" "turvotun" ;
+  swim_V = reg3V "uida" "uin" "ui" ;
+  think_V = reg3V "ajatella" "ajattelen" "ajatteli" ;
+  throw_V2 = dirV2 (regV "heittää") ;
+  tie_V2 = dirV2 (regV "sitoa") ;
+  turn_V = regV "kääntyä" ;
+  vomit_V = regV "oksentaa" ;
+  wash_V2 = dirV2 (regV "pestä") ;
+  wipe_V2 = dirV2 (regV "pyyhkiä") ;
+
+  breathe_V = regV "hengittää" ;
+
+ oper
+    mkOrd : N -> Ord ;
+    mkOrd x = {s = \\n,c => x.s ! NCase n c; lock_Ord = <> } ;
 
 } ;

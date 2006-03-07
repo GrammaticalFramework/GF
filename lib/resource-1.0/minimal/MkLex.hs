@@ -1,10 +1,24 @@
 module MkLexicon where
 
 import Char
+import qualified Data.Set as S
+
+-- apply function o to each line in file f
 
 allLines o f = do
   s <- readFile f
   mapM_ (putStrLn . o) (filter noComm (lines s))
+
+
+-- take each line in file k as a key, and choose those lines in file f
+-- that match any of the keys (i.e. whose first word matches it)
+chooseKeys k f = do
+  keys <- readFile k >>= return . (S.fromList . lines)
+  let choose line = case words line of
+        w:_ -> S.member w keys
+        _ -> False
+  old  <- readFile f >>= return . lines
+  mapM_ (putStrLn . drop 2) $ filter choose old -- to remove extra indent
 
 
 -- discard comments and empty lines
@@ -141,3 +155,10 @@ getAllThose sought given = do
   gi <- readFile given
   let so = [w | l <- lines s, w:_ <- [words l]] 
   mapM_ putStrLn $ allThose so $ lines gi
+
+
+-- Swadesh 7/3/2006: replace string defs with f = f ;
+
+reuseLex line = case words line of
+  w : "=" : _ | elem '"' line -> "   " ++ w ++ " = " ++ w ++ " ;"
+  _ -> line

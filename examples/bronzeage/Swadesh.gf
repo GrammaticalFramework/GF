@@ -22,11 +22,9 @@ abstract Swadesh = Cat ** {
 
     that_Det : Det ;
     this_Det : Det ;
-    all_Det : Det ;
+----    all_Predet : Predet ;
     many_Det : Det ;
     some_Det : Det ;
-    few_Det : Det ;
-    other_Det : Det ;
 
     left_Ord : Ord ;
     right_Ord : Ord ;
@@ -81,6 +79,7 @@ abstract Swadesh = Cat ** {
     near_A : A ;
     new_A : A ;
     old_A : A ;
+    other_A : A ;
     red_A : A ;
     rotten_A : A ;
     round_A : A ;
@@ -118,7 +117,7 @@ abstract Swadesh = Cat ** {
     egg_N : N ;
     eye_N : N ;
     fat_N : MassN ;
-    father_N : N ;
+----    father_N : N ;
     feather_N : N ;
     fingernail_N : N ;
     fire_N : N ;
@@ -146,7 +145,7 @@ abstract Swadesh = Cat ** {
     man_N : N ;
     meat_N : MassN ;
     moon_N : N ;
-    mother_N : N ;
+----    mother_N : N ;
     mountain_N : N ;
     mouth_N : N ;
     name_N : N ;
@@ -186,61 +185,61 @@ abstract Swadesh = Cat ** {
 
     -- Verbs
 
-    bite_V : V2 ;
+    bite_V2 : V2 ;
     blow_V : V ;
     breathe_V : V ;
     burn_V : V ;
     come_V : V ;
-    count_V : V2 ;
-    cut_V : V2 ;
+    count_V2 : V2 ;
+    cut_V2 : V2 ;
     die_V : V ;
     dig_V : V ;
-    drink_V : V2 ;
-    eat_V : V2 ;
+    drink_V2 : V2 ;
+    eat_V2 : V2 ;
     fall_V : V ;
-    fear_V : V2 ;
-    fight_V : V2 ;
+    fear_V2 : V2 ;
+    fight_V2 : V2 ;
     float_V : V ;
     flow_V : V ;
     fly_V : V ;
     freeze_V : V ;
-    give_V : V3 ;
-    hear_V : V2 ;
-    hit_V : V2 ;
-    hold_V : V2 ;
-    hunt_V : V2 ;
-    kill_V : V2 ;
-    know_V : V2 ;
+    give_V3 : V3 ;
+    hear_V2 : V2 ;
+    hit_V2 : V2 ;
+    hold_V2 : V2 ;
+    hunt_V2 : V2 ;
+    kill_V2 : V2 ;
+    know_V2 : V2 ;
     laugh_V : V ;
     lie_V : V ;
     live_V : V ;
     play_V : V ;
-    pull_V : V2 ;
-    push_V : V2 ;
-    rub_V : V2 ;
+    pull_V2 : V2 ;
+    push_V2 : V2 ;
+    rub_V2 : V2 ;
     say_V : V ;
-    scratch_V : V2 ;
-    see_V : V2 ;
+    scratch_V2 : V2 ;
+    see_V2 : V2 ;
     sew_V : V ;
     sing_V : V ;
     sit_V : V ;
     sleep_V : V ;
     smell_V : V ;
     spit_V : V ;
-    split_V : V2 ;
-    squeeze_V : V2 ;
-    stab_V : V2 ;
+    split_V2 : V2 ;
+    squeeze_V2 : V2 ;
+    stab_V2 : V2 ;
     stand_V : V ;
-    suck_V : V2 ;
+    suck_V2 : V2 ;
     swell_V : V ;
     swim_V : V ;
     think_V : V ;
-    throw_V : V2 ;
-    tie_V : V2 ;
+    throw_V2 : V2 ;
+    tie_V2 : V2 ;
     turn_V : V ;
     vomit_V : V ;
     walk_V : V ;
-    wash_V : V2 ;
-    wipe_V : V2 ;
+    wash_V2 : V2 ;
+    wipe_V2 : V2 ;
 
 }
