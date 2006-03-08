@@ -200,7 +200,7 @@ CLE (Core Language Engine,
 [Book 1992 http://mitpress.mit.edu/catalog/item/default.asp?tid=7739&ttype=2])
 - English, Swedish, French, Danish
 - uses Definita Clause Grammars, implementation in Prolog
-- coverage for SACTI corpus, 
+- coverage for the ATIS corpus, 
   [Spoken Language Translator (2001) http://www.cambridge.org/uk/catalogue/catalogue.asp?isbn=0521770777]
 - grammar specialization via explanation-based learning
 
