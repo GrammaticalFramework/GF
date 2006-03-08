@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>The GF Resource Grammar Library Version 1.0</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Tue Mar  7 21:50:28 2006
+Last update: Wed Mar  8 08:31:08 2006
 </FONT></CENTER>
 
 <P>
@@ -117,18 +117,33 @@ Resource grammars have generation perspective, rather than parsing
 <P>
 Division of labour: resource grammars hide linguistic details
 </P>
+<UL>
+<LI><CODE>AdjCN : AP -&gt; CN -&gt; CN</CODE> hides agreement, word order,...
+</UL>
+
 <P>
 Presentation: "school grammar" concepts, dictionary-like conventions
 </P>
+<PRE>
+    bird_N = reg2N "Vogel" "Vögel" masculine
+</PRE>
 <P>
 API = Application Programmer's Interface
 </P>
 <P>
-Documentation: <CODE>gfdoc</CODE>
+Documentation: <CODE>gfdoc</CODE> 
 </P>
+<UL>
+<LI>produces html from gf
+</UL>
+
 <P>
 IDE = Interactive Development Environment (forthcoming)
 </P>
+<UL>
+<LI>library browser and syntax editor for grammar writing
+</UL>
+
 <P>
 Example-based grammar writing
 </P>
@@ -480,6 +495,7 @@ There are also special constructs taking other forms:
 </P>
 <PRE>
     mk2N : (nyckel,nycklar : Str) -&gt; N
+  
     mk1N : (bilarna : Str) -&gt; N
   
     irregV : (dricka, drack, druckit : Str) -&gt; V
@@ -502,7 +518,9 @@ To cover all situations, worst-case paradigms are given. E.g. Swedish
 </P>
 <PRE>
     mkN : (apa,apan,apor,aporna : Str) -&gt; N
-    mkA : (liten, litet, lilla, sma, mindre, minst, minsta : Str) -&gt; A
+  
+    mkA : (liten, litet, lilla, små, mindre, minst, minsta : Str) -&gt; A
+  
     mkV : (supa,super,sup,söp,supit,supen : Str) -&gt; V
 </PRE>
 <P></P>
@@ -682,9 +700,6 @@ Try out inflection patterns
 <P>
 <!-- NEW -->
 </P>
-<P>
-<!-- NEW -->
-</P>
 <H3>Syntax editing</H3>
 <P>
 We start a demo by
@@ -701,22 +716,56 @@ We start a demo by
 </P>
 <H3>Efficient parsing via application grammar</H3>
 <P>
+Get rid of discontinuous constituents 
+</P>
+<P>
+Examples: <CODE>mathematical/Predication</CODE>, <CODE>examples/bronzeage</CODE>
+</P>
+<P>
 <!-- NEW -->
 </P>
 <H2>How to use as library</H2>
 <H3>Specialization through parametrized modules</H3>
 <P>
+The application grammar is implemented with reference to
+the resource API
+</P>
+<P>
+Individual languages are instantiations
+</P>
+<P>
+Example: <A HREF="../../../examples/tram/TramI.gf">tram</A>
+</P>
+<P>
 <!-- NEW -->
 </P>
 <H3>Compile-time transfer</H3>
+<P>
+Instead of parametrized modules:
+</P>
+<P>
+select resource functions differently for different languages
+</P>
+<P>
+Example: imperative vs. infinitive in mathematical exercises
+</P>
 <P>
 <!-- NEW -->
 </P>
 <H3>A natural division into modules</H3>
 <P>
+Lexicon in language-dependent moduls
+</P>
+<P>
+Combination rules in a parametrized module
+</P>
+<P>
 <!-- NEW -->
 </P>
 <H3>Example-based grammar writing</H3>
+<P>
+Example: <A HREF="../../../examples/animal/QuestionsI.gfe">animal</A>
+</P>
 <P>
 <!-- NEW -->
 </P>

@@ -93,14 +93,22 @@ Resource grammars have generation perspective, rather than parsing
 ===Usability by non-linguists===
 
 Division of labour: resource grammars hide linguistic details
+- ``AdjCN : AP -> CN -> CN`` hides agreement, word order,...
+
 
 Presentation: "school grammar" concepts, dictionary-like conventions
-
+```
+  bird_N = reg2N "Vogel" "Vögel" masculine
+```
 API = Application Programmer's Interface
 
-Documentation: ``gfdoc``
+Documentation: ``gfdoc`` 
+- produces html from gf
+
 
 IDE = Interactive Development Environment (forthcoming)
+- library browser and syntax editor for grammar writing
+
 
 Example-based grammar writing
 ```
@@ -400,6 +408,7 @@ In Swedish, giving the gender of ``N`` improves a lot
 There are also special constructs taking other forms:
 ```
   mk2N : (nyckel,nycklar : Str) -> N
+
   mk1N : (bilarna : Str) -> N
 
   irregV : (dricka, drack, druckit : Str) -> V
@@ -419,7 +428,9 @@ Regular verbs are actually implemented the
 To cover all situations, worst-case paradigms are given. E.g. Swedish
 ```
   mkN : (apa,apan,apor,aporna : Str) -> N
-  mkA : (liten, litet, lilla, sma, mindre, minst, minsta : Str) -> A
+
+  mkA : (liten, litet, lilla, små, mindre, minst, minsta : Str) -> A
+
   mkV : (supa,super,sup,söp,supit,supen : Str) -> V
 ```
 
@@ -602,7 +613,7 @@ the resource API
 
 Individual languages are instantiations
 
-Example: [tram ../../examples/tram/TramI.gfe]
+Example: [tram ../../../examples/tram/TramI.gf]
 
 
 #NEW
@@ -628,7 +639,7 @@ Combination rules in a parametrized module
 
 ===Example-based grammar writing===
 
-Example: [animal ../../examples/animal/QuestionsI.gfe]
+Example: [animal ../../../examples/animal/QuestionsI.gfe]
 
 #NEW
 
