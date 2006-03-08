@@ -645,27 +645,100 @@ Example: [animal ../../../examples/animal/QuestionsI.gfe]
 
 ==How to implement a new language==
 
-===Ordinary modules===
+See [Resource-HOWTO Resource-HOWTO.html]
+
+==Ordinary modules==
+
+Write a concrete syntax module for each abstract module in the API
+
+Write a ``Paradigms`` module
+
+Examples: English, Finnish, German, Russian
 
 #NEW
 
-===Parametrized modules===
+==Parametrized modules==
+
+Examples: Romance (French, Italian, Spanish), Scandinavian (Danish, Norwegian, Swedish)
+
+Write a ``Diff`` interface for a family of languages
+
+Write concrete syntaxes as functors opening the interface
+
+Write separate ``Paradigms`` modules for each language
+
+Advantages:
+- easier maintenance of library
+- insights into language families
+
+
+Problems:
+- more abstract thinking required
+- individual grammars may not come out optimal in elegance and efficiency
+
 
 #NEW
 
-===The kernel of the API===
+===The core of the API===
+
+Everything else is variations of this
+```
+cat
+  Cl ;   -- clause
+  VP ;   -- verb phrase
+  V2 ;   -- two-place verb
+  NP ;   -- noun phrase
+  CN ;   -- common noun
+  Det ;  -- determiner
+  AP ;   -- adjectival phrase
+
+fun
+  PredVP  : NP  -> VP -> Cl ;   -- predication
+  ComplV2 : V2  -> NP -> VP ;   -- complementization
+  DetCN   : Det -> CN -> NP ;   -- determination
+  ModCN   : AP  -> CN -> CN ;   -- modification
+```
+
+#NEW
+
+===The core of the API===
+
+This [toy Latin grammar  latin.gf] shows in a nutshell how the core
+can be implemented.
+
+Use this API as a first approximation when designing the parameter system of a new
+language. 
+
 
 #NEW
 
 ===How to proceed===
 
++ put up a directory with dummy modules by copying from e.g. English and
+commenting out the contents
+
++ so you will have a compilable ``LangX`` all the time
+
++ start with nouns and their inflection
+
++ proceed to verbs and their inflection
+
++ add some noun phrases
+
++ implement predication
 
 
 #NEW
 
 ==How to extend the API==
 
-#NEW
+Extend old modules or add a new one?
 
-===Extend old modules or add a new one?===
+Usually better to start a new one: then you don't have to implement it
+for all languages at once.
+
+Exception: if you are working with a language-specific API extension,
+you can work directly in that module.
+
+
 
