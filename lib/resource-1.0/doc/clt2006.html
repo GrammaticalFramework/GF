@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>The GF Resource Grammar Library Version 1.0</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Wed Mar  8 09:47:07 2006
+Last update: Wed Mar  8 12:04:15 2006
 </FONT></CENTER>
 
 <P>
@@ -63,7 +63,7 @@ Usability for different purposes
 <P>
 <!-- NEW -->
 </P>
-<H3>Grammar as parser</H3>
+<H3>Not primarily code for a parser</H3>
 <P>
 Often in NLP, a grammar is just high-level code for a parser.
 </P>
@@ -94,20 +94,31 @@ Moreover, a grammar fine-tuned for parsing may not be reusable
 Linguistic ontology: <B>abstract syntax</B>
 </P>
 <P>
-E.g. adjectival modification
+E.g. adjectival modification rule
 </P>
 <PRE>
     AdjCN : AP -&gt; CN -&gt; CN ;
 </PRE>
-<P></P>
 <P>
 Rendering in different languages: <B>concrete syntax</B>
+</P>
+<PRE>
+    AdjCN (PositA even_A) (UseN number_N)
+  
+    even number, even sums
+  
+    jämnt tal, jämna summor
+  
+    nombre pair, sommes paires
+</PRE>
+<P>
+Abstract away from inflection, agreement, word order.
 </P>
 <P>
 Resource grammars have generation perspective, rather than parsing
 </P>
 <UL>
-<LI>abstract syntax serves as a key to expressions in different languages
+<LI>abstract syntax serves as a key to renderings in different languages
 </UL>
 
 <P>
@@ -314,7 +325,7 @@ The current GF Resource Project covers ten languages:
 </UL>
 
 <P>
-In addition, parts (morphology) of Arabic, Estonian, Latin, and Urdu
+In addition, parts of Arabic, Estonian, Latin, and Urdu
 </P>
 <P>
 API 1.0 not yet implemented for Danish and Russian
@@ -449,7 +460,7 @@ proper names, pronouns, determiners, possessives, cardinals and ordinals
 <P>
 <!-- NEW -->
 </P>
-<H3>Structure in syntax editor</H3>
+<H3>The structure in the syntax editor</H3>
 <P>
 <IMG ALIGN="middle" SRC="editor.png" BORDER="0" ALT="">
 </P>
@@ -476,7 +487,7 @@ In Swedish, less so:
     regN "val" ---&gt; val, valen, valar, valarna
 </PRE>
 <P>
-Initializing a lexicon with <CODE>regX</CODE>s is
+Initializing a lexicon with <CODE>regX</CODE> for every entry is
 usually a good starting point in grammar development.
 </P>
 <P>
@@ -494,9 +505,9 @@ In Swedish, giving the gender of <CODE>N</CODE> improves a lot
 There are also special constructs taking other forms:
 </P>
 <PRE>
-    mk2N : (nyckel,nycklar : Str) -&gt; N
+    mk2N   : (nyckel,nycklar : Str) -&gt; N
   
-    mk1N : (bilarna : Str) -&gt; N
+    mk1N   : (bilarna : Str) -&gt; N
   
     irregV : (dricka, drack, druckit : Str) -&gt; V
 </PRE>
@@ -533,8 +544,13 @@ Iregular words in <CODE>IrregX</CODE>, e.g. Swedish:
 </P>
 <PRE>
       draga_V : V = 
-        mkV (variants { "dra"; "draga"}) (variants { "drar" ; "drager"}) 
-            (variants { "dra" ; "drag" }) "drog" "dragit" "dragen" ;
+        mkV 
+          (variants { "dra"  ; "draga"}) 
+          (variants { "drar" ; "drager"}) 
+          (variants { "dra"  ; "drag" }) 
+          "drog" 
+          "dragit" 
+          "dragen" ;
 </PRE>
 <P>
 Goal: eliminate the user's need of worst-case functions.
@@ -547,14 +563,18 @@ Goal: eliminate the user's need of worst-case functions.
 Syntactic structures that are not shared by all languages.
 </P>
 <P>
+Alternative (and often more idiomatic) ways to say what is already covered by the API.
+</P>
+<P>
 Not implemented yet.
 </P>
 <P>
 Candidates:
 </P>
 <UL>
-<LI><CODE>Nor</CODE> post-possessives: <CODE>bilen min</CODE>
-<LI><CODE>Fre</CODE> question forms: <CODE>est-ce que tu dors ?</CODE>
+<LI>Norwegian post-possessives: <CODE>bilen min</CODE>
+<LI>French question forms: <CODE>est-ce que tu dors ?</CODE>
+<LI>Romance simple past tenses
 </UL>
 
 <P>
@@ -600,7 +620,7 @@ files again. Just do some of
    
     gf -nocf -path=alltenses:prelude alltenses/LangSwe.gfc -- Swedish only
   
-    gf -nocf -path=alltenses:prelude present/LangSwe.gfc   -- Swedish only, present tense only
+    gf -nocf -path=present:prelude present/LangSwe.gfc     -- Swedish in present tense only
 </PRE>
 <P></P>
 <P>
@@ -608,10 +628,14 @@ files again. Just do some of
 </P>
 <H3>Parsing</H3>
 <P>
-The default parser does not work!
+The default parser does not work! (It is obsolete anyway.)
 </P>
 <P>
-The MCFG parser works in some languages, after waiting appr. 20 seconds
+The MCFG parser (the new standard) works in theory, but can
+in practice be too slow to build.
+</P>
+<P>
+But it does work in some languages, after waiting appr. 20 seconds
 </P>
 <PRE>
     p -mcfg -lang=LangEng -cat=S "I would see her"
@@ -621,6 +645,14 @@ The MCFG parser works in some languages, after waiting appr. 20 seconds
 <P>
 Parsing in <CODE>present/</CODE> versions is quicker.
 </P>
+<P>
+Remedies:
+</P>
+<UL>
+<LI>write application grammars for parsing
+<LI>use treebank lookup instead
+</UL>
+
 <P>
 <!-- NEW -->
 </P>
@@ -818,7 +850,7 @@ Problems:
 <P>
 <!-- NEW -->
 </P>
-<H3>The core of the API</H3>
+<H3>The core API</H3>
 <P>
 Everything else is variations of this
 </P>
@@ -842,15 +874,105 @@ Everything else is variations of this
 <P>
 <!-- NEW -->
 </P>
-<H3>The core of the API</H3>
+<H3>The core API in Latin: parameters</H3>
 <P>
 This <A HREF="latin.gf">toy Latin grammar</A> shows in a nutshell how the core
 can be implemented.
 </P>
+<PRE>
+  param
+    Number   = Sg | Pl ;
+    Person   = P1 | P2 | P3 ;
+    Tense    = Pres | Past ;
+    Polarity = Pos | Neg ;
+    Case     = Nom | Acc | Dat ;
+    Gender   = Masc | Fem | Neutr ;
+  oper
+    Agr = {g : Gender ; n : Number ; p : Person} ; -- agreement features
+</PRE>
+<P></P>
 <P>
-Use this API as a first approximation when designing the parameter system of a new
-language. 
+<!-- NEW -->
 </P>
+<H3>The core API in Latin: linearization types</H3>
+<PRE>
+  lincat
+    Cl = {
+      s : Tense =&gt; Polarity =&gt; Str
+      } ;
+    VP  = {
+      verb  : Tense =&gt; Polarity =&gt; Agr =&gt; Str ;  -- finite verb
+      neg   : Polarity =&gt; Str ;                  -- negation
+      compl : Agr =&gt; Str                         -- complement
+      } ;
+    V2 = {
+      s : Tense =&gt; Number =&gt; Person =&gt; Str ; 
+      c : Case                                   -- complement case
+      } ;
+    NP = {
+      s : Case =&gt; Str ; 
+      a : Agr                                    -- agreement features
+      } ;
+    CN = {
+      s : Number =&gt; Case =&gt; Str ; 
+      g : Gender
+      } ;
+    Det = {
+      s : Gender =&gt; Case =&gt; Str ; 
+      n : Number
+      } ;
+    AP = {
+      s : Gender =&gt; Number =&gt; Case =&gt; Str
+      } ;
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H3>The core API in Latin: predication and complementization</H3>
+<PRE>
+  lin
+    PredVP np vp = {
+      s = \\t,p =&gt; 
+        let
+          agr = np.a ;
+          subject = np.s ! Nom ;
+          object  = vp.compl ! agr ;
+          verb    = vp.neg ! p ++ vp.verb ! t ! p ! agr  
+        in                      
+        subject ++ object ++ verb
+      } ;
+  
+    ComplV2 v np = {
+      verb  = \\t,p,a =&gt; v.s ! t ! a.n ! a.p ;
+      compl = \\_ =&gt; np.s ! v.c ;
+      neg   = table {Pos =&gt; [] ; Neg =&gt; "non"}
+      } ;
+</PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<H3>The core API in Latin: determination and modification</H3>
+<PRE>
+    DetCN det cn = 
+      let 
+        g = cn.g ; 
+        n = det.n
+      in {
+        s = \\c =&gt; det.s ! g ! c ++ cn.s ! n ! c ;
+        a = {g = g ; n = n ; p = P3}
+        } ;
+  
+    ModCN ap cn = 
+      let 
+        g = cn.g 
+      in {
+        s = \\n,c =&gt; cn.s ! n ! c ++ ap.s ! g ! n ! c ;
+        g = g
+        } ;
+</PRE>
+<P></P>
 <P>
 <!-- NEW -->
 </P>
@@ -886,6 +1008,6 @@ Exception: if you are working with a language-specific API extension,
 you can work directly in that module.
 </P>
 
-<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags clt2006.txt -->
 </BODY></HTML>
