@@ -21,7 +21,8 @@ incomplete concrete AdjectiveRomance of Adjective =
 
     ReflA2 adj = {
       s = \\af => 
-             adj.s ! Posit ! af ++ adj.c2.s ++ reflPron Sg P3 adj.c2.c ; --- agr
+             adj.s ! Posit ! af ++ adj.c2.s ++ 
+             adj.c2.s ++ prepCase adj.c2.c ++ reflPron Sg P3 Nom ; --- agr
       isPre = False
       } ;
 
