@@ -1,1 +1,118 @@
 TODO in GF implementation
+(P=Peter, A=Aarne, B=Björn)
+
+----------------------------------------------------------------------
+URGENT
+
+
+*(P) Hjälpkommandot
+
+> h -printer
+(där saknas -printer=cfgm)
+
+> h -cat
+WARNING: invalid option: cat
+
+> h -lang
+WARNING: invalid option: lang
+
+> h -language
+WARNING: invalid option: language
+
+> h -parser
+WARNING: invalid option: parser
+
+> h -aslkdjaslkdjss
+WARNING: invalid option: aslkdjaslkdjss
+Command not found.
+(det borde stå: "option not found")
+
+> h -optimize
+WARNING: invalid option: optimize
+
+> h -startcat
+WARNING: invalid option: startcat
+
+> h h
+h, help: h Command?
+(det borde även stå om h -option)
+
+
+*(P) En moduls -path adderas till dottermodulerna, 
+så slipper huvudmodulen veta var alla barnbarn ligger:
+
+fil A.hs:
+abstract A = B ** {...}
+
+fil B.hs:
+--# -path=./resource
+abstract B = Lang ** {...}
+
+Alltså: filen A.hs ska inte behöva veta att B.hs använder sig av resource.
+
+
+*(P) Möjlighet att sätta GF_LIB_PATH inuti GF, t.ex. med:
+
+> sf libpath=...
+
+
+*(P) Möjlighet att sätta startkategorin för en grammatik med sf:
+
+> sf startcat=X
+
+
+*(P) import-flaggor:
+
+när man gör "pg -printer=cfg", måste man ha gjort "i -conversion=finite",
+"pg" bryr sig inte om vilka flaggor som sätts i grammatikfilen
+
+när man gör "pm -printer=cfgm", måste flaggan "conversion=finite" vara satt i grammatikfilen, 
+"pm" bryr sig inte om ifall man har gjort "i -conversion=finite"
+
+det är väl jag (Peter) som borde fixa detta, men jag vet inte var de olika flaggorna ligger
+
+och det måste bestämmas vilka flaggor som har företräde:
+- i grammatikfilen, med "flags conversion=finite"
+- på kommandoraden, med "sf conversion=finite"
+- till ett kommmande, med "i -conversion=finite fil.gf"
+
+
+----------------------------------------------------------------------
+NOT SO URGENT
+
+
+*(P) _tmpi, _tmpo
+
+P: när man använder "|" till ett systemanrop, t.ex:
+pg | ! sort
+så skapas filerna _tmpi och _tmpo. Men de tas aldrig bort.
+
+P: Ännu bättre: ta bort filerna efteråt.
+
+A: Sant: när GF quittas (om detta inte sker onormalt).
+Eller när kommandot har kört färdigt (om det terminerar).
+
+P: Bäst(?): skapa filerna i /tmp eller liknande.
+
+A: Ibland får man skrivrättighetsproblem - och det är
+inte kul om man måste ange en tmp-path. Och olika
+användare och gf-processer måste ha unika filnamn.
+Och vet inte hur det funkar på windows...
+
+A: Ett till alternativ skulle vara att använda handles
+utan några tmp-filer alls. Men jag har inte hunnit
+ta reda på hur det går till.
+
+B: Lite slumpmässiga tankar:
+- man kan använda System.Directory.getTemporaryDirectory, så slipper man iaf bry sig om olika plattformsproblem.
+- sen kan man använda System.IO.openTempFile för att skapa en temporär fil. Den tas dock inte bort när programmet avslutas, så det får man fixa själv.
+- System.Posix.Temp.mkstemp gör nåt liknande, men dokumentationen är dålig.
+- biblioteket HsShellScript har lite funktioner för sånt här, se
+http://www.volker-wysk.de/hsshellscript/apidoc/HsShellScript.html#16
+
+
+*(P) Hierarkiska moduler
+
+P: Förslag: A.B.C ligger i filen A/B/C.gf
+Största fördelen: man slipper ange --# -path=...
+
