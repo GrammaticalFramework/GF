@@ -84,11 +84,11 @@ Rendering in different languages: **concrete syntax**
 ```
   AdjCN (PositA even_A) (UseN number_N)
 
-  even number, even sums
+  even number, even numbers
 
-  jämnt tal, jämna summor
+  jämnt tal, jämna tal
 
-  nombre pair, sommes paires
+  nombre pair, nombres pairs
 ```
 Abstract away from inflection, agreement, word order.
 
@@ -183,6 +183,7 @@ Bjorn Bringert (many Swadesh lexica),
 Inger Andersson and Therese Söderberg (Spanish morphology),
 Ludmilla Bogavac (Russian morphology),
 Carlos Gonzalia (Spanish cardinals), 
+Harald Hammarström (German morphology),
 Partik Jansson (Swedish cardinals),
 Aarne Ranta.
 
@@ -426,7 +427,7 @@ There are also special constructs taking other forms:
 Regular verbs are actually implemented the 
 [Lexin http://lexin.nada.kth.se/sve-sve.shtml] way
 ```
-  regV : (talar : Str) -> N
+  regV : (talar : Str) -> V
 ```
 
 
@@ -562,6 +563,24 @@ Updating a treebank
   rf old.xml | tb -trees | tb -xml | wf new.xml    -- read old from file, write new to file
 ```
 
+#NEW
+
+===The multilingual treebank format===
+
+Tree + linearizations
+```
+  > gr -cat=Cl | tb
+  PredVP (UsePron they_Pron) (PassV2 seek_V2)
+  They are sought
+  Elles sont cherchées
+  Son buscadas
+  Vengono cercate
+  De blir sökta
+  De blir lette
+  Sie werden gesucht
+  Heidät etsitään
+```
+These can also be wrapped in XML tags (``tb -xml``)
 
 
 #NEW
@@ -611,19 +630,26 @@ Try out inflection patterns
 
 ===Syntax editing===
 
-We start a demo by
-``` gfeditor langs.gfcm
-
-[editor.png]
+The simplest way to start editing with all grammars is
+``` 
+  gfeditor langs.gfcm
+```
+The forthcoming IDE will extend the syntax editor with
+a ``Paradigms`` file browser and a control on what
+parts of an application grammar remain to be implemented.
 
 
 #NEW
 
 ===Efficient parsing via application grammar===
 
-Get rid of discontinuous constituents 
+Get rid of discontinuous constituents (in particular, ``VP``)
 
-Examples: ``mathematical/Predication``, ``examples/bronzeage``
+Example: [``mathematical/Predication`` gfdoc/Predication.html]:
+```
+  predV2 : V2 -> NP -> NP -> Cl
+```
+instead of ``PredVP np (ComplV2 v2 np')``
 
 
 #NEW
@@ -664,6 +690,23 @@ Combination rules in a parametrized module
 ===Example-based grammar writing===
 
 Example: [animal ../../../examples/animal/QuestionsI.gfe]
+```
+--# -resource=present/LangEng.gf
+--# -path=.:present:prelude
+
+-- to compile: gf -examples QuestionsI.gfe
+
+incomplete concrete QuestionsI of Questions = open Lang in {
+  lincat
+    Phrase = Phr ;
+    Entity = N ;
+    Action = V2 ;
+  lin 
+    Who  love_V2 man_N           = in Phr "who loves men" ;
+    Whom man_N love_V2           = in Phr "whom does the man love" ;
+    Answer woman_N love_V2 man_N = in Phr "the woman loves men" ;
+}
+```
 
 #NEW
 
@@ -853,6 +896,3 @@ for all languages at once.
 
 Exception: if you are working with a language-specific API extension,
 you can work directly in that module.
-
-
-

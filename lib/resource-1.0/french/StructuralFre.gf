@@ -86,7 +86,7 @@ lin
       Pl => \\_,_ => "ces"
       }
     } ;
-  that_NP = mkNP ["ceci"] Masc Sg ;
+  that_NP = mkNP ["cela"] Masc Sg ;
   there7from_Adv = ss ["de là"] ;
   there7to_Adv = ss "là" ; --- y
   there_Adv = ss "là" ;

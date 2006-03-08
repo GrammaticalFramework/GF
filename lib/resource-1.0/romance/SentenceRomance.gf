@@ -19,7 +19,7 @@ incomplete concrete SentenceRomance of Sentence =
     SlashVVV2 np vv v2 = 
       mkClause
         (np.s ! Aton Nom) np.a
-        (insertComplement (\\a => prepCase vv.c2.c ++ v2.s ! VInfin) (predV v2)) **
+        (insertComplement (\\a => prepCase vv.c2.c ++ v2.s ! VInfin) (predV vv)) **
       {c2 = v2.c2} ;
 
     AdvSlash slash adv = {
