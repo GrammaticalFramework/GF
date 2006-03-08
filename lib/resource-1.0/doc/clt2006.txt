@@ -53,7 +53,7 @@ Usability for different purposes
 
 #NEW
 
-===Grammar as parser===
+===Not primarily code for a parser===
 
 Often in NLP, a grammar is just high-level code for a parser.
 
@@ -76,15 +76,24 @@ Moreover, a grammar fine-tuned for parsing may not be reusable
 
 Linguistic ontology: **abstract syntax**
 
-E.g. adjectival modification
+E.g. adjectival modification rule
 ```
   AdjCN : AP -> CN -> CN ;
 ```
-
 Rendering in different languages: **concrete syntax**
+```
+  AdjCN (PositA even_A) (UseN number_N)
+
+  even number, even sums
+
+  jämnt tal, jämna summor
+
+  nombre pair, sommes paires
+```
+Abstract away from inflection, agreement, word order.
 
 Resource grammars have generation perspective, rather than parsing
-- abstract syntax serves as a key to expressions in different languages
+- abstract syntax serves as a key to renderings in different languages
 
 
 
@@ -247,7 +256,7 @@ The current GF Resource Project covers ten languages:
 - ``Swe``dish
 
 
-In addition, parts (morphology) of Arabic, Estonian, Latin, and Urdu
+In addition, parts of Arabic, Estonian, Latin, and Urdu
 
 API 1.0 not yet implemented for Danish and Russian
 
@@ -368,7 +377,7 @@ TFullStop              : Phr -> Text -> Text              | TQuestMark, TExclMar
 
 #NEW
 
-===Structure in syntax editor===
+===The structure in the syntax editor===
 
 [editor.png]
 
@@ -392,7 +401,7 @@ In Swedish, less so:
 ```
   regN "val" ---> val, valen, valar, valarna
 ```
-Initializing a lexicon with ``regX``s is
+Initializing a lexicon with ``regX`` for every entry is
 usually a good starting point in grammar development.
 
 
@@ -407,9 +416,9 @@ In Swedish, giving the gender of ``N`` improves a lot
 
 There are also special constructs taking other forms:
 ```
-  mk2N : (nyckel,nycklar : Str) -> N
+  mk2N   : (nyckel,nycklar : Str) -> N
 
-  mk1N : (bilarna : Str) -> N
+  mk1N   : (bilarna : Str) -> N
 
   irregV : (dricka, drack, druckit : Str) -> V
 ```
@@ -442,8 +451,13 @@ To cover all situations, worst-case paradigms are given. E.g. Swedish
 Iregular words in ``IrregX``, e.g. Swedish:
 ```
     draga_V : V = 
-      mkV (variants { "dra"; "draga"}) (variants { "drar" ; "drager"}) 
-          (variants { "dra" ; "drag" }) "drog" "dragit" "dragen" ;
+      mkV 
+        (variants { "dra"  ; "draga"}) 
+        (variants { "drar" ; "drager"}) 
+        (variants { "dra"  ; "drag" }) 
+        "drog" 
+        "dragit" 
+        "dragen" ;
 ```
 Goal: eliminate the user's need of worst-case functions.
 
@@ -455,11 +469,14 @@ Goal: eliminate the user's need of worst-case functions.
 
 Syntactic structures that are not shared by all languages.
 
+Alternative (and often more idiomatic) ways to say what is already covered by the API.
+
 Not implemented yet.
 
 Candidates:
-- ``Nor`` post-possessives: ``bilen min``
-- ``Fre`` question forms: ``est-ce que tu dors ?``
+- Norwegian post-possessives: ``bilen min``
+- French question forms: ``est-ce que tu dors ?``
+- Romance simple past tenses
 
 
 #NEW
@@ -498,7 +515,7 @@ files again. Just do some of
  
   gf -nocf -path=alltenses:prelude alltenses/LangSwe.gfc -- Swedish only
 
-  gf -nocf -path=alltenses:prelude present/LangSwe.gfc   -- Swedish only, present tense only
+  gf -nocf -path=present:prelude present/LangSwe.gfc     -- Swedish in present tense only
 ```
 
 
@@ -506,15 +523,22 @@ files again. Just do some of
 
 ===Parsing===
 
-The default parser does not work!
+The default parser does not work! (It is obsolete anyway.)
 
-The MCFG parser works in some languages, after waiting appr. 20 seconds
+The MCFG parser (the new standard) works in theory, but can
+in practice be too slow to build.
+
+But it does work in some languages, after waiting appr. 20 seconds
 ```
   p -mcfg -lang=LangEng -cat=S "I would see her"
 
   p -mcfg -lang=LangSwe -cat=S "jag skulle se henne"
 ```
 Parsing in ``present/`` versions is quicker.
+
+Remedies:
+- write application grammars for parsing
+- use treebank lookup instead
 
 
 #NEW
@@ -679,7 +703,7 @@ Problems:
 
 #NEW
 
-===The core of the API===
+===The core API===
 
 Everything else is variations of this
 ```
@@ -701,13 +725,103 @@ fun
 
 #NEW
 
-===The core of the API===
+===The core API in Latin: parameters===
 
 This [toy Latin grammar  latin.gf] shows in a nutshell how the core
 can be implemented.
+```
+param
+  Number   = Sg | Pl ;
+  Person   = P1 | P2 | P3 ;
+  Tense    = Pres | Past ;
+  Polarity = Pos | Neg ;
+  Case     = Nom | Acc | Dat ;
+  Gender   = Masc | Fem | Neutr ;
+oper
+  Agr = {g : Gender ; n : Number ; p : Person} ; -- agreement features
+```
 
-Use this API as a first approximation when designing the parameter system of a new
-language. 
+#NEW
+
+===The core API in Latin: linearization types===
+
+```
+lincat
+  Cl = {
+    s : Tense => Polarity => Str
+    } ;
+  VP  = {
+    verb  : Tense => Polarity => Agr => Str ;  -- finite verb
+    neg   : Polarity => Str ;                  -- negation
+    compl : Agr => Str                         -- complement
+    } ;
+  V2 = {
+    s : Tense => Number => Person => Str ; 
+    c : Case                                   -- complement case
+    } ;
+  NP = {
+    s : Case => Str ; 
+    a : Agr                                    -- agreement features
+    } ;
+  CN = {
+    s : Number => Case => Str ; 
+    g : Gender
+    } ;
+  Det = {
+    s : Gender => Case => Str ; 
+    n : Number
+    } ;
+  AP = {
+    s : Gender => Number => Case => Str
+    } ;
+```
+
+#NEW
+
+===The core API in Latin: predication and complementization===
+
+```
+lin
+  PredVP np vp = {
+    s = \\t,p => 
+      let
+        agr = np.a ;
+        subject = np.s ! Nom ;
+        object  = vp.compl ! agr ;
+        verb    = vp.neg ! p ++ vp.verb ! t ! p ! agr  
+      in                      
+      subject ++ object ++ verb
+    } ;
+
+  ComplV2 v np = {
+    verb  = \\t,p,a => v.s ! t ! a.n ! a.p ;
+    compl = \\_ => np.s ! v.c ;
+    neg   = table {Pos => [] ; Neg => "non"}
+    } ;
+```
+
+#NEW
+
+===The core API in Latin: determination and modification===
+
+```
+  DetCN det cn = 
+    let 
+      g = cn.g ; 
+      n = det.n
+    in {
+      s = \\c => det.s ! g ! c ++ cn.s ! n ! c ;
+      a = {g = g ; n = n ; p = P3}
+      } ;
+
+  ModCN ap cn = 
+    let 
+      g = cn.g 
+    in {
+      s = \\n,c => cn.s ! n ! c ++ ap.s ! g ! n ! c ;
+      g = g
+      } ;
+```
 
 
 #NEW
