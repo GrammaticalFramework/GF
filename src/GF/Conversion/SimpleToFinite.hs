@@ -42,27 +42,62 @@ convertRule split (Rule abs cnc)
     = do newAbs <- convertAbstract split abs
 	 return $ Rule newAbs cnc
 
+{-
+-- old code
 convertAbstract :: Splitable -> Abstract SDecl Name
 		-> CnvMonad (Abstract SDecl Name)
 convertAbstract split (Abs decl decls name)
     = case splitableFun split (name2fun name) of
-        Just newCat -> return $ Abs (Decl anyVar newCat []) decls name
+        Just cat' -> return $ Abs (Decl anyVar (mergeFun (name2fun name) cat') []) decls name
 	Nothing -> expandTyping split name [] decl decls []
 
 
 expandTyping :: Splitable -> Name -> [(Var, SCat)] -> SDecl -> [SDecl] -> [SDecl] 
 	     -> CnvMonad (Abstract SDecl Name)
-expandTyping split fun env (Decl x cat args) [] decls 
-    = return $ Abs decl (reverse decls) fun
+expandTyping split name env (Decl x cat args) [] decls 
+    = return $ Abs decl (reverse decls) name
     where decl = substArgs split x env cat args []
-expandTyping split fun env typ (Decl x xcat xargs : declsToDo) declsDone
+expandTyping split name env typ (Decl x xcat xargs : declsToDo) declsDone
     = do (x', xcat', env') <- calcNewEnv
          let decl = substArgs split x' env xcat' xargs []
-	 expandTyping split fun env' typ declsToDo (decl : declsDone)
+	 expandTyping split name env' typ declsToDo (decl : declsDone)
     where calcNewEnv = case splitableCat split xcat of
-		         Just newCats -> do newCat <- member newCats
+		         Just newFuns -> do newFun <- member newFuns
+                                            let newCat  = mergeFun newFun xcat
+		         -- Just newCats -> do newCat <- member newCats
 					    return (anyVar, newCat, (x,newCat) : env)
 			 Nothing -> return (x, xcat, env)
+-}
+
+-- new code
+convertAbstract :: Splitable -> Abstract SDecl Name
+		-> CnvMonad (Abstract SDecl Name)
+convertAbstract split (Abs decl decls name)
+    = case splitableFun split fun of
+        Just cat' -> return $ Abs (Decl anyVar (mergeFun fun cat') []) decls name
+	Nothing -> expandTyping split [] fun profiles [] decl decls []
+    where Name fun profiles = name
+
+expandTyping :: Splitable -> [(Var, SCat)]
+             -> Fun -> [Profile (SyntaxForest Fun)] -> [Profile (SyntaxForest Fun)] 
+             -> SDecl -> [SDecl] -> [SDecl] 
+	     -> CnvMonad (Abstract SDecl Name)
+expandTyping split env fun [] profiles (Decl x cat args) [] decls 
+    = return $ Abs decl (reverse decls) (Name fun (reverse profiles))
+    where decl = substArgs split x env cat args []
+expandTyping split env fun (prof:profiles) profsDone typ (Decl x xcat xargs : declsToDo) declsDone
+    = do (x', xcat', env', prof') <- calcNewEnv
+         let decl = substArgs split x' env xcat' xargs []
+	 expandTyping split env' fun profiles (prof':profsDone) typ declsToDo (decl : declsDone)
+    where calcNewEnv = case splitableCat split xcat of
+		         Just newFuns -> do newFun <- member newFuns
+                                            let newCat  = mergeFun newFun xcat
+                                                newProf = Constant (FNode newFun [[]])
+                                            -- should really be using some kind of
+                                            -- "profile unification"
+					    return (anyVar, newCat, (x,newCat) : env, newProf)
+			 Nothing -> return (x, xcat, env, prof)
+
 
 substArgs :: Splitable -> Var -> [(Var, SCat)] -> SCat -> [TTerm] -> [TTerm] -> SDecl
 substArgs split x env cat [] args = Decl x cat (reverse args)
@@ -72,16 +107,17 @@ substArgs split x env cat (arg:argsToDo) argsDone
 	Nothing     -> substArgs split x env cat argsToDo (arg : argsDone)
 
 argLookup split env (TVar x)   = lookup x env 
-argLookup split env (con :@ _) = splitableFun split (constr2fun con)
+argLookup split env (con :@ _) = fmap (mergeFun fun) (splitableFun split fun)
+    where fun = constr2fun con
       
 
 ----------------------------------------------------------------------
 -- splitable categories (finite, no dependencies)
 -- they should also be used as some dependency
 
-type Splitable = (Assoc SCat [SCat], Assoc Fun SCat)
+type Splitable = (Assoc SCat [Fun], Assoc Fun SCat)
 
-splitableCat :: Splitable -> SCat -> Maybe [SCat]
+splitableCat :: Splitable -> SCat -> Maybe [Fun]
 splitableCat = lookupAssoc . fst 
 
 splitableFun :: Splitable -> Fun -> Maybe SCat
@@ -89,11 +125,10 @@ splitableFun = lookupAssoc . snd
 
 calcSplitable :: [SRule] -> Splitable
 calcSplitable rules = (listAssoc splitableCat2Funs, listAssoc splitableFun2Cat)
-    where splitableCat2Funs = groupPairs $ nubsort 
-			      [ (cat, mergeFun fun cat) | (cat, fun) <- splitableCatFuns ]
+    where splitableCat2Funs = groupPairs $ nubsort splitableCatFuns
 
 	  splitableFun2Cat = nubsort
-			     [ (fun, mergeFun fun cat) | (cat, fun) <- splitableCatFuns ]
+			     [ (fun, cat) | (cat, fun) <- splitableCatFuns ]
 
           -- cat-fun pairs that are splitable
 	  splitableCatFuns = tracePrt "SimpleToFinite - splitable functions" prt $
