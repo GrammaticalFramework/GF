@@ -36,6 +36,8 @@ import GF.Infra.Ident (Ident(..))
 import Data.Maybe (maybeToList, listToMaybe)
 import Data.Char (isLower, isAlphaNum)
 
+import GF.System.Tracing
+
 ----------------------------------------------------------------------
 -- | printing multiple languages at the same time
 
@@ -172,8 +174,8 @@ prtProfile (Unify args) = foldr1 (prtOper "=") (map (show . succ) args)
 prtProfile (Constant forest) = prtForest forest
 
 prtForest (FMeta) = " ? "
-prtForest (FNode fun [fs]) = prtFunctor (prtQ fun) (prtPList (map prtForest fs))
-prtForest (FNode fun fss) = prtPList [ prtFunctor (prtQ fun) (prtPList (map prtForest fs)) |
+prtForest (FNode fun [fs]) = prtFunctor (prtQ fun) (map prtForest fs)
+prtForest (FNode fun fss) = prtPList [ prtFunctor (prtQ fun) (map prtForest fs) |
                                        fs <- fss ]
 
 prtQ atom = prtQStr (prt atom)

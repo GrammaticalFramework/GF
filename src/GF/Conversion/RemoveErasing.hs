@@ -80,10 +80,16 @@ newRules grammar chart (NC newCat@(MCat cat lbls))
 	     newProfile = snd $ mapAccumL accumProf 0 $
 			  map (lookupAssoc argsInLin) [0 .. length args-1]
 	     accumProf nr = maybe (nr, Unify []) $ const (nr+1, Unify [nr])
-	     newName = Name fun (newProfile `composeProfiles` profile)
+	     newName = -- tracePrt "newName" (prtNewName profile newProfile) $
+                       Name fun (profile `composeProfiles` newProfile)
 
          guard $ all (not . null) argLbls
 	 return $ NR (Rule (Abs newCat newArgs newName) (Cnc lbls argLbls newLins))
+
+
+prtNewName :: [Profile (SyntaxForest Fun)] -> [Profile (SyntaxForest Fun)] -> Name -> String
+prtNewName p p' n = prt p ++ " .o. " ++ prt p' ++ " : " ++ prt n
+
 
 initialCatsTD grammar starts =
     [ cat | cat@(NC (MCat (ECat start _) _)) <- initialCatsBU grammar,
