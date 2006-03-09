@@ -94,6 +94,7 @@ instance Monad Backtr where
     return a  = B (\c f -> c a f)
     B m >>= k = B (\c f -> m (\a -> unBacktr (k a) c) f)
         where unBacktr (B m) = m
+    fail _ = failureB
 
 failureB     = B (\c f -> f)
 B m |||| B n = B (\c f -> m c (n c f))
@@ -116,3 +117,4 @@ instance Monad (BacktrackM s) where
     return a   = BM (\s -> return (s, a))
     BM m >>= k = BM (\s -> do (s', a) <- m s ; unBM (k a) s')
 	where unBM (BM m) = m
+    fail _ = failure
