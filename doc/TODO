@@ -5,6 +5,24 @@ TODO in GF implementation
 URGENT
 
 
+*(P) Felmeddelanden
+
+När det rapporteras syntaxfel bör det skrivas ut vilken fil det rör sig om.
+Annars är det omöjligt att veta var felet ligger om man använder flaggan -s:
+
+	> i -s Domain/MP3/Domain_MP_Semantics.gf
+	syntax error at line 33 before ve , Proposition ,
+
+Andra sorters fel är det inget problem med:
+
+	> i -s Domain/MP3/Domain_MP_Semantics.gf
+	checking module Godis_Semantics
+	Happened in linearization of userMove :
+	product expected instead of {
+	  pl : Str 
+	}
+
+
 *(P) Hjälpkommandot
 
 > h -printer
