@@ -74,6 +74,24 @@ Presentation:
 - example collections
 
 
+==Quick start==
+
+Go to the main directory, compile the grammars, and run a test.
+```
+  cd GF/lib/resource-1.0
+  make
+  make test
+```
+This will take quite some time. An alternative is to use the
+[precompiled grammar package ../../compiled.tgz]. Just do
+```
+  cd GF/lib/resource-1.0
+  make pretest
+```
+For more examples, see the 
+[Overview slides clt2006.html]. 
+
+
 
 ===The language independent ground API===
 
@@ -251,6 +269,9 @@ grammar writing.
 
 [Grammars as Software Libraries gslt-sem-2006.html]. Slides
 with background and motivation for the resource grammar library.
+
+[GF Resource Grammar Library Version 1.0 clt2006.html]. Slides
+giving an overview of the library and practical hints on its use.
 
 [How to write resource grammars  Resource-HOWTO.html]. Helps you
 start if you want to add another language to the library.
