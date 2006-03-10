@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>GF Resource Grammar Library v. 1.0</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Thu Mar  2 12:03:59 2006
+Last update: Fri Mar 10 13:27:21 2006
 </FONT></CENTER>
 
 <P></P>
@@ -17,24 +17,25 @@ Last update: Thu Mar  2 12:03:59 2006
     <LI><A HREF="#toc1">Authors</A>
     <LI><A HREF="#toc2">License</A>
     <LI><A HREF="#toc3">Scope</A>
+    <LI><A HREF="#toc4">Quick start</A>
       <UL>
-      <LI><A HREF="#toc4">The language independent ground API</A>
-      <LI><A HREF="#toc5">The language-dependent APIs</A>
-      <LI><A HREF="#toc6">Special-purpose APIs</A>
+      <LI><A HREF="#toc5">The language independent ground API</A>
+      <LI><A HREF="#toc6">The language-dependent APIs</A>
+      <LI><A HREF="#toc7">Special-purpose APIs</A>
       </UL>
-    <LI><A HREF="#toc7">Using the library</A>
+    <LI><A HREF="#toc8">Using the library</A>
       <UL>
-      <LI><A HREF="#toc8">The compiled version</A>
-      <LI><A HREF="#toc9">Linking applications to libraries</A>
-      <LI><A HREF="#toc10">Using the libraries as top-level grammars</A>
+      <LI><A HREF="#toc9">The compiled version</A>
+      <LI><A HREF="#toc10">Linking applications to libraries</A>
+      <LI><A HREF="#toc11">Using the libraries as top-level grammars</A>
       </UL>
-    <LI><A HREF="#toc11">Example applications</A>
+    <LI><A HREF="#toc12">Example applications</A>
       <UL>
-      <LI><A HREF="#toc12">Brozeage</A>
-      <LI><A HREF="#toc13">Tram</A>
-      <LI><A HREF="#toc14">Animals</A>
+      <LI><A HREF="#toc13">Brozeage</A>
+      <LI><A HREF="#toc14">Tram</A>
+      <LI><A HREF="#toc15">Animals</A>
       </UL>
-    <LI><A HREF="#toc15">More reading</A>
+    <LI><A HREF="#toc16">More reading</A>
     </UL>
 
 <P></P>
@@ -69,6 +70,7 @@ Aarne Ranta.
 We are grateful for contributions and 
 comments to several other people who have used this and 
 the previous versions of the resource library, including
+Ana Bove,
 David Burke,
 Lauri Carlson,
 Gloria Casanellas,
@@ -117,6 +119,28 @@ Presentation:
 </UL>
 
 <A NAME="toc4"></A>
+<H2>Quick start</H2>
+<P>
+Go to the main directory, compile the grammars, and run a test.
+</P>
+<PRE>
+    cd GF/lib/resource-1.0
+    make
+    make test
+</PRE>
+<P>
+This will take quite some time. An alternative is to use the
+<A HREF="../../compiled.tgz">precompiled grammar package</A>. Just do
+</P>
+<PRE>
+    cd GF/lib/resource-1.0
+    make pretest
+</PRE>
+<P>
+For more examples, see the 
+<A HREF="clt2006.html">Overview slides</A>. 
+</P>
+<A NAME="toc5"></A>
 <H3>The language independent ground API</H3>
 <P>
 This API is accessible by both <CODE>present</CODE> and <CODE>alltenses</CODE>.
@@ -149,7 +173,7 @@ The documentation of the individual modules:
 <LI><A HREF="gfdoc/Lang.html">Lang</A>: the main module comprising all the others
 </UL>
 
-<A NAME="toc5"></A>
+<A NAME="toc6"></A>
 <H3>The language-dependent APIs</H3>
 <UL>
 <LI><A HREF="gfdoc/ParadigmsEng.html">ParadigmsEng</A>: English lexical paradigms
@@ -169,7 +193,7 @@ The documentation of the individual modules:
 <LI><A HREF="gfdoc/IrregSwe.gf">IrregSwe</A>: Swedish irregular verbs
 </UL>
 
-<A NAME="toc6"></A>
+<A NAME="toc7"></A>
 <H3>Special-purpose APIs</H3>
 <H4>Present</H4>
 <P>
@@ -192,9 +216,9 @@ sufficient for many applications.
 <LI><A HREF="gfdoc/Symbol.html">Symbol</A>: symbols and numbers in text
 </UL>
 
-<A NAME="toc7"></A>
-<H2>Using the library</H2>
 <A NAME="toc8"></A>
+<H2>Using the library</H2>
+<A NAME="toc9"></A>
 <H3>The compiled version</H3>
 <P>
 The simplest way to get the library is to install the precompiled version
@@ -215,7 +239,7 @@ library. Use one (or several) of the following packages instead:
 <LI><CODE>lib/multimodal</CODE> special-purpose API for multimodal dialogue applications
 </UL>
 
-<A NAME="toc9"></A>
+<A NAME="toc10"></A>
 <H3>Linking applications to libraries</H3>
 <P>
 Notice, however, that both special-purpose APIs share modules with
@@ -238,7 +262,7 @@ I have the following line in my <CODE>.bashrc</CODE> file:
     export GF_LIB_PATH=/home/aarne/GF/lib
 </PRE>
 <P></P>
-<A NAME="toc10"></A>
+<A NAME="toc11"></A>
 <H3>Using the libraries as top-level grammars</H3>
 <P>
 If you have done <CODE>make</CODE> in <CODE>lib/resource-1.0</CODE>, you will have 
@@ -271,14 +295,14 @@ must be used:
 Parsing with the <CODE>-mcfg</CODE> flag takes a few extra seconds the first time during
 each session, but gets faster at later runs.
 </P>
-<A NAME="toc11"></A>
+<A NAME="toc12"></A>
 <H2>Example applications</H2>
 <P>
 These applications are meand to serve as starting points for
 new applications, showing how the libraries can be used in
 typical situations.
 </P>
-<A NAME="toc12"></A>
+<A NAME="toc13"></A>
 <H3>Brozeage</H3>
 <P>
 The <A HREF="../../../examples/bronzeage">examples/bronzeage</A> 
@@ -286,7 +310,7 @@ grammar set implements a language fragment
 based on the Swadesh list of 200 words. It is useful for
 things like language training.
 </P>
-<A NAME="toc13"></A>
+<A NAME="toc14"></A>
 <H3>Tram</H3>
 <P>
 The <A HREF="../../../examples/tram">examples/tram</A> 
@@ -295,7 +319,7 @@ multimodal dialogue system concerning public transport.
 Its purpose is to serve as a prototype for applications in the
 TALK project.
 </P>
-<A NAME="toc14"></A>
+<A NAME="toc15"></A>
 <H3>Animals</H3>
 <P>
 The <A HREF="../../../examples/animal">examples/animal</A> 
@@ -303,11 +327,15 @@ grammar set implements some queries about animals.
 Its purpose is to serve as a prototype for example-based 
 grammar writing.
 </P>
-<A NAME="toc15"></A>
+<A NAME="toc16"></A>
 <H2>More reading</H2>
 <P>
 <A HREF="gslt-sem-2006.html">Grammars as Software Libraries</A>. Slides
 with background and motivation for the resource grammar library.
+</P>
+<P>
+<A HREF="clt2006.html">GF Resource Grammar Library Version 1.0</A>. Slides
+giving an overview of the library and practical hints on its use.
 </P>
 <P>
 <A HREF="Resource-HOWTO.html">How to write resource grammars</A>. Helps you
