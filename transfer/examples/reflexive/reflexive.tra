@@ -29,3 +29,12 @@ reflexivize _ t = composOp ? ? compos_Tree ? reflexivize t
 
 reflexivize_S : Tree S -> Tree S
 reflexivize_S = reflexivize S
+
+{-
+With a type checker and hidden arguments we could write:
+
+reflexivize : {C : Cat} -> Tree C -> Tree C
+reflexivize (PredV2 v s o) | s == o = ReflV2 v s
+reflexivize t = composOp reflexivize t
+
+-}
