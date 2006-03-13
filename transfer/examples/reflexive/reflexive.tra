@@ -1,0 +1,31 @@
+{-
+
+$ ../../transferc -i../../lib reflexive.tra
+
+$ gf English.gf reflexive.trc
+
+> p -tr "John sees John" | at -tr reflexivize_S | l
+PredV2 See John John
+ReflV2 See John
+John sees himself
+
+> p -tr "John and Bill see John and Bill" | at -tr reflexivize_S | l
+PredV2 See (ConjNP And John Bill) (ConjNP And John Bill)
+ReflV2 See (ConjNP And John Bill)
+John and Bill see themselves
+
+> p -tr "John sees Mary" | at -tr reflexivize_S | l
+PredV2 See John Mary
+PredV2 See John Mary
+John sees Mary
+
+-}
+
+import tree
+
+reflexivize : (C : Cat) -> Tree C -> Tree C
+reflexivize _ (PredV2 v s o) | eq ? (eq_Tree ?) s o = ReflV2 v s
+reflexivize _ t = composOp ? ? compos_Tree ? reflexivize t
+
+reflexivize_S : Tree S -> Tree S
+reflexivize_S = reflexivize S
