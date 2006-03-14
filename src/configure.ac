@@ -131,7 +131,7 @@ AC_ARG_WITH(atk,
 case $ATK in
     yes)
         AC_MSG_CHECKING([for atkrec package])
-	ATKREC_VERSION=`ghc-pkg latest atkrec`
+	ATKREC_VERSION=`ghc-pkg field atkrec version`
 	if test "$ATKREC_VERSION" = ""; then
 	    AC_MSG_RESULT(['not found'])
             AC_MSG_WARN([Disabling ATK support.])
