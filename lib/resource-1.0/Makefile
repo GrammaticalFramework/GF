@@ -1,3 +1,5 @@
+.PHONY: all test pretest langs present mathematical multimodal compiled treebank stat gfdoc clean
+
 all: present mathematical multimodal langs compiled
 
 test:
