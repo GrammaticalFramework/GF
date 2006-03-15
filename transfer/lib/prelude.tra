@@ -80,7 +80,7 @@ add_String = rec zero = ""
 
 
 ord_String : Ord String
-ord_String = rec eq = prim_eq_Str
+ord_String = rec eq = prim_eq_String
 		 compare = prim_cmp_String
 
 show_String : Show String
