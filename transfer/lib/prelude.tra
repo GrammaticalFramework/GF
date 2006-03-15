@@ -235,16 +235,16 @@ monad_Maybe =
 --
 
 Num : Type -> Type
-Num = sig zero : A
-	  plus : A -> A -> A
-	  minus : A -> A -> A
-	  one : A
-	  times : A -> A -> A
-	  div : A -> A -> A
-	  mod : A -> A -> A
-	  negate : A -> A
-	  eq : A -> A -> Bool
-	  compare : A -> A -> Ordering
+Num A = sig zero : A
+            plus : A -> A -> A
+	    minus : A -> A -> A
+	    one : A
+	    times : A -> A -> A
+	    div : A -> A -> A
+	    mod : A -> A -> A
+	    negate : A -> A
+	    eq : A -> A -> Bool
+	    compare : A -> A -> Ordering
 
 
 
@@ -254,8 +254,8 @@ Num = sig zero : A
 --
 
 Add : Type -> Type
-Add = sig zero : A
-	  plus : A -> A -> A
+Add A = sig zero : A
+	    plus : A -> A -> A
 
 zero : (A : Type) -> Add A -> A
 zero _ d = d.zero
@@ -296,8 +296,8 @@ minus _ d = d.minus
 --
 
 Mul : Type -> Type
-Mul = sig one : A
-	  times : A -> A -> A
+Mul A = sig one : A
+	    times : A -> A -> A
 
 one : (A : Type) -> Mul A -> A
 one _ d = d.one
@@ -322,8 +322,8 @@ product A d = foldr A A d.times d.one
 --
 
 Div : Type -> Type
-Div = sig div : A -> A -> A
-	  mod : A -> A -> A
+Div A = sig div : A -> A -> A
+	    mod : A -> A -> A
 
 div : (A : Type) -> Div A -> A -> A -> A
 div _ d = d.div
@@ -347,7 +347,7 @@ mod _ d = d.mod
 --
 
 Neg : Type -> Type
-Neg = sig negate : A -> A
+Neg A = sig negate : A -> A
 
 negate : (A : Type) -> Neg A -> A -> A
 negate _ d = d.negate
@@ -451,8 +451,8 @@ show _ d = d.show
 --
 
 Monoid : Type -> Type
-Monoid = sig mzero : A
-	     mplus : A -> A -> A
+Monoid A = sig mzero : A
+	       mplus : A -> A -> A
 
 
 
