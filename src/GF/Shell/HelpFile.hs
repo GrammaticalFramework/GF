@@ -655,12 +655,14 @@ txtHelpFile =
   "\n-startcat, like -cat, but used in grammars (to avoid clash with keyword cat)" ++
   "\n" ++
   "\n-transform, transformation performed on a syntax tree. The default is identity." ++
-  "\n    -transform=identity  no change" ++
-  "\n    -transform=compute   compute by using definitions in the grammar" ++
-  "\n    -transform=typecheck return the term only if it is type-correct" ++
-  "\n    -transform=solve     solve metavariables as derived refinements" ++
-  "\n    -transform=context   solve metavariables by unique refinements as variables" ++
-  "\n    -transform=delete    replace the term by metavariable" ++
+  "\n    -transform=identity     no change" ++
+  "\n    -transform=compute      compute by using definitions in the grammar" ++
+  "\n    -transform=nodup        return the term only if it has no constants duplicated" ++
+  "\n    -transform=nodupatom    return the term only if it has no atomic constants duplicated" ++
+  "\n    -transform=typecheck    return the term only if it is type-correct" ++
+  "\n    -transform=solve        solve metavariables as derived refinements" ++
+  "\n    -transform=context      solve metavariables by unique refinements as variables" ++
+  "\n    -transform=delete       replace the term by metavariable" ++
   "\n" ++
   "\n-unlexer, untokenization transforming linearization output into a string." ++
   "\n       The default is unwords." ++
