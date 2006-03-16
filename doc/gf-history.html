@@ -14,6 +14,18 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
+16/3 (AR) Added two flag values to <tt>pt -transform=X</tt>:
+<tt>nodup</tt> which excludes terms where a constant is duplicated,
+and
+<tt>nodupatom</tt> which excludes terms where an atomic constant is duplicated.
+The latter, in particular, is useful as a filter in generation:
+<pre>
+  gt -cat=Cl | pt -transform=nodupatom
+</pre>
+This gives a corpus where words don't (usually) occur twice in the same clause.
+
+<p>
+
 6/3 (AR) Generalized the <tt>gfe</tt> file format in two ways:
 <ol>
 <li> Use the real grammar parser, hence <tt>(in M.C "foo")</tt> expressions
