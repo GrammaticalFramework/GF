@@ -314,7 +314,7 @@ oper
    {s = table {Posit => a.s ! Posit ; _ => b.s ! Posit} ; 
     isPre = a.isPre ; lock_A = <>} ;
   compADeg a = 
-    {s = table {Posit => a.s ! Posit ; _ => \\f => "più" ++ a.s ! Posit ! f} ; 
+    {s = table {Posit => a.s ! Posit ; _ => \\f => "más" ++ a.s ! Posit ! f} ; 
      isPre = a.isPre ;
      lock_A = <>} ;
   regADeg a = compADeg (regA a) ;

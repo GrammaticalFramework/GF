@@ -90,7 +90,7 @@ putVerb st@(sh,_) s = if (oElem beSilent (globalOptions sh))
 batchCompile :: Options -> FilePath -> IO ()
 batchCompile os file = do
   let file' = mkGFC file
-  let st    = initHState emptyShellState
+  let st    = initHState $ addGlobalOptions (options [iOpt "make"]) emptyShellState
   let s     = "i -o" +++ (unwords $ map ('-':) $ words $ prOpts os) +++ file
   let cs    = pCommandLines st s
   execLines True cs st

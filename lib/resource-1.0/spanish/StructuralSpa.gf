@@ -20,7 +20,7 @@ lin
   behind_Prep = {s = "detrás" ; c = MorphoSpa.genitive ; isDir = False} ;
   between_Prep = mkPreposition "entre" ;
   both7and_DConj = {s1,s2 = etConj.s ; n = Pl} ;
-  but_PConj = ss "mas" ;
+  but_PConj = ss "pero" ;
   by8agent_Prep = mkPreposition "por" ;
   by8means_Prep = mkPreposition "por" ;
   can8know_VV = mkVV (verboV (saber_71 "saber")) ;
