@@ -39,6 +39,7 @@ import qualified GF.Grammar.MMacros as MM
 import GF.Grammar.AbsCompute
 import GF.Grammar.TypeCheck
 import GF.UseGrammar.Generate
+import GF.UseGrammar.MatchTerm
 import GF.UseGrammar.Linear (unoptimizeCanon)
 ------import Compile
 import GF.Compile.ShellState
@@ -373,6 +374,8 @@ customTermCommand =
   ,(strCI "compute",    \g t -> let gr = grammar g in
                                   err (const [t]) return 
                                     (exp2termCommand gr (computeAbsTerm gr) t))
+  ,(strCI "nodup",      \_ t -> if (hasDupIdent $ tree2exp t) then [] else [t])
+  ,(strCI "nodupatom",  \_ t -> if (hasDupAtom  $ tree2exp t) then [] else [t])
   ,(strCI "paraphrase", \g t -> let gr = grammar g in
                                   exp2termlistCommand gr (mkParaphrases gr) t)
 

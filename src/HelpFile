@@ -626,12 +626,14 @@ q, quit: q
 -startcat, like -cat, but used in grammars (to avoid clash with keyword cat)
 
 -transform, transformation performed on a syntax tree. The default is identity.
-    -transform=identity  no change
-    -transform=compute   compute by using definitions in the grammar
-    -transform=typecheck return the term only if it is type-correct
-    -transform=solve     solve metavariables as derived refinements
-    -transform=context   solve metavariables by unique refinements as variables
-    -transform=delete    replace the term by metavariable
+    -transform=identity     no change
+    -transform=compute      compute by using definitions in the grammar
+    -transform=nodup        return the term only if it has no constants duplicated
+    -transform=nodupatom    return the term only if it has no atomic constants duplicated
+    -transform=typecheck    return the term only if it is type-correct
+    -transform=solve        solve metavariables as derived refinements
+    -transform=context      solve metavariables by unique refinements as variables
+    -transform=delete       replace the term by metavariable
 
 -unlexer, untokenization transforming linearization output into a string.
        The default is unwords.
