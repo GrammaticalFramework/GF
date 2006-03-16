@@ -7,6 +7,7 @@ test:
 
 pretest:
 	echo "gr -cat=Cl -number=11 -prob | tb" | gf -probs=lang.gfprob -path=present:prelude -nocf ../present/Lang???.gfc
+
 langs:
 	echo "s ;; pm | wf langs.gfcm" | gf -nocf -src */Lang??*.gf english/LangEng.gf +RTS -M800M -K100M
 	cp -p */*.gfc */*.gfr ../alltenses

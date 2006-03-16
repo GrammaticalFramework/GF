@@ -27,7 +27,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
   oper partAgr   : VType -> VPAgr ;
 
 -- Whether participle agrees to foregoing clitic.
--- (Fre "je l'ai vue", Ita "io la ho visto")
+-- (Fre "je l'ai vue", Spa "yo la he visto")
 
   oper vpAgrClit : Agr -> VPAgr ;
 

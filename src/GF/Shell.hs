@@ -65,6 +65,7 @@ import Data.Char (isDigit)
 import Data.Maybe (fromMaybe)
 
 import GF.System.Signal (runInterruptibly)
+import System.Exit (exitFailure)
 
 ---- import qualified GrammarToGramlet as Gr
 ---- import qualified GrammarToCanonXML2 as Canon
@@ -169,10 +170,16 @@ execLine :: Bool -> CommandLine -> ([String],HState) -> IO ([String],HState)
 execLine put (c@(co, os), arg, cs) (outps,st) = do
   (st',val) <- execC c (st, arg)
   let tr = oElem doTrace os || null cs    -- option -tr leaves trace in pipe
+      make = oElem (iOpt "make") os
+      isErr = case arg of 
+                AError _ -> True
+                _ -> False
       utf = if (oElem useUTF8 os) then encodeUTF8 else id 
       outp = if tr then [utf (prCommandArg val)] else []
   if put then mapM_ putStrLnFlush outp else return ()
-  execs cs val (if put then [] else outps ++ outp, st')
+  if make && isErr
+    then exitFailure
+    else execs cs val (if put then [] else outps ++ outp, st')
  where
     execs []     arg st = return st
     execs (c:cs) arg st = execLine put (c, arg, cs) st
