@@ -102,4 +102,9 @@ incomplete concrete NounRomance of Noun =
       g = g
       } ;
 
+    ApposCN  cn np = let g = cn.g in {
+      s = \\n => cn.s ! n ++ np.s ! Ton Nom ;
+      g = g
+      } ;
+
 }

@@ -129,4 +129,10 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       g = cn.g
       } ;
 
+    ApposCN  cn np = let g = cn.g in {
+      s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! c ;
+      g = g ;
+      isMod = cn.isMod
+      } ;
+
 }
