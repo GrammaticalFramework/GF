@@ -16,6 +16,8 @@ lin
     isPron = False
     } ;
 
+  SymbS sy = sy ;
+
 lincat 
 
   Symb, [Symb] = SS ;
