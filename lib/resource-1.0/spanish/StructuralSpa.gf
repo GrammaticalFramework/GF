@@ -31,6 +31,7 @@ lin
   every_Det = {s = \\_,_ => "cada" ; n = Sg} ;
   everything_NP = pn2np (mkPN ["todo"] Masc) ;
   everywhere_Adv = ss ["en todas partes"] ;
+  few_Det  = {s = \\g,c => prepCase c ++ genForms "pocos" "pocas" ! g ; n = Pl} ;
   first_Ord = {s = \\ag => (regA "primero").s ! Posit ! AF ag.g ag.n} ;
   from_Prep = complGen ; ---
   he_Pron = 

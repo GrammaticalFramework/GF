@@ -37,6 +37,7 @@ concrete StructuralFin of Structural = CatFin **
   everything_NP = mkNP ((nhn (sKorpi "kaikki" "kaiken" "kaikkena")) **
     {lock_N = <>}) Sg ;
   everywhere_Adv = ss "kaikkialla" ;
+  few_Det  = mkDet Sg (regN "harva") ;
   first_Ord = {s = \\n,c => (regN "ensimmäinen").s ! NCase n c} ;
   from_Prep = casePrep elative ;
   he_Pron = mkPronoun "hän" "hänen" "häntä"  "hänenä" "häneen" Sg P3 ;
