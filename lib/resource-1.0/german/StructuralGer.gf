@@ -33,6 +33,7 @@ concrete StructuralGer of Structural = CatGer **
   every_Det = detLikeAdj Sg "jed" ;
   everything_NP = nameNounPhrase {s = caselist "alles" "alles" "allem" "alles"} ;
   everywhere_Adv = ss "überall" ;
+  few_Det = detLikeAdj Pl "wenig" ;
   first_Ord = {s = (regA "erst").s ! Posit} ;
   from_Prep = mkPrep "aus" Dat ;
   he_Pron = mkPronPers "er" "ihn" "ihm" "seiner" "sein"  Sg P3 ;

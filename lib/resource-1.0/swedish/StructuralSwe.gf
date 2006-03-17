@@ -28,6 +28,7 @@ concrete StructuralSwe of Structural = CatSwe **
   every_Det = {s = \\_,_ => "varje" ; n = Sg ; det = DDef Indef} ;
   everything_NP = regNP "allting" "alltings" SgNeutr ;
   everywhere_Adv = ss "överallt" ;
+  few_Det  = {s = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
   first_Ord = {s = "första" ; isDet = True} ;
   from_Prep = ss "från" ;
   he_Pron = MorphoSwe.mkNP "han"  "honom"  "hans" "hans" "hans"  SgUtr P3 ;
@@ -48,7 +49,7 @@ concrete StructuralSwe of Structural = CatSwe **
   much_Det = {s = \\_,_ => "mycket" ; n = Pl ; det = DDef Indef} ;
   must_VV = 
     mkV "få" "måste" "få" "fick" "måst" "måst" ** {c2 = [] ; lock_VV = <>} ;
-  no_Phr = ss ["Nej"] ;
+  no_Phr = ss ["nej"] ;
   on_Prep = ss "på" ;
   one_Quant = {s = \\_ => genderForms ["en"] ["ett"] ; n = Sg ; det = DIndef} ;
   only_Predet = {s = \\_ => "bara"} ;

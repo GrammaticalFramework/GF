@@ -31,6 +31,7 @@ lin
   every_Det = {s = \\_,_ => "chaque" ; n = Sg} ;
   everything_NP = pn2np (mkPN ["tout"] Masc) ;
   everywhere_Adv = ss "partout" ;
+  few_Det  = {s = \\g,c => prepCase c ++ "peu" ++ elisDe ; n = Pl} ;
   first_Ord = {s = \\ag => (regA "premier").s ! Posit ! AF ag.g ag.n} ;
   from_Prep = complGen ; ---
   he_Pron = 

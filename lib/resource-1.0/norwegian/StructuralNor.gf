@@ -28,6 +28,7 @@ concrete StructuralNor of Structural = CatNor **
   every_Det = {s = \\_,_ => "hver" ; n = Sg ; det = DDef Indef} ;
   everything_NP = regNP "alt" "alts" SgNeutr ;
   everywhere_Adv = ss "overalt" ;
+  few_Det  = {s = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
   first_Ord = {s = "første" ; isDet = True} ;
   from_Prep = ss "fra" ;
   he_Pron = MorphoNor.mkNP "han"  "ham"  "hans" "hans" "hans"  SgUtr P3 ;
