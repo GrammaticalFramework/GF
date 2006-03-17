@@ -118,4 +118,10 @@ abstract Noun = Cat ** {
 
     SentCN  : CN -> SC  -> CN ;   -- fact that John smokes, question if he does
 
+--2 Apposition
+
+-- This is certainly overgenerating.
+
+    ApposCN : CN -> NP -> CN ;    -- number x, numbers x and y
+
 } ;

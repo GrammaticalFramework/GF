@@ -116,13 +116,18 @@ incomplete concrete NounScand of Noun =
       g = g ;
       isMod = cn.isMod
       } ;
+    AdvCN  cn sc = let g = cn.g in {
+      s = \\n,d,c => cn.s ! n ! d ! c ++ sc.s ;
+      g = g ;
+      isMod = cn.isMod
+      } ;
     SentCN  cn sc = let g = cn.g in {
       s = \\n,d,c => cn.s ! n ! d ! c ++ sc.s ;
       g = g ;
       isMod = cn.isMod
       } ;
-    AdvCN  cn sc = let g = cn.g in {
-      s = \\n,d,c => cn.s ! n ! d ! c ++ sc.s ;
+    ApposCN  cn np = let g = cn.g in {
+      s = \\n,d,c => cn.s ! n ! d ! Nom ++ np.s ! NPNom ; --c
       g = g ;
       isMod = cn.isMod
       } ;

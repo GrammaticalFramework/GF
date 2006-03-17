@@ -146,6 +146,8 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
 
     SentCN cn sc = {s = \\nf=> cn.s ! nf ++ sc.s} ;
 
+    ApposCN cn np = {s = \\nf=> cn.s ! nf ++ np.s ! NPCase Nom} ; --- luvun x
+
   oper
     numN : NForm -> Number = \nf -> case nf of {
       NCase n _ => n ;
