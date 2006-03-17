@@ -13,6 +13,8 @@ lin
     a = agrP3 det.n
     } ;
 
+  SymbS sy = sy ; 
+
 lincat 
 
   Symb, [Symb] = SS ;

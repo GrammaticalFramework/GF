@@ -15,6 +15,7 @@ lin
     a = agrP3 det.n ;
     isPron = False
     } ;
+  SymbS sy = {s = \\_ => sy.s} ;
 
 lincat 
 

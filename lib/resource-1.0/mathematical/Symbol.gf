@@ -15,6 +15,10 @@ fun
   CNIntNP  : CN -> Int -> NP ;           -- level 53
   CNSymbNP : Det -> CN -> [Symb] -> NP ; -- (the) (2) numbers x and y
 
+--2 Sentence consisting of a formula
+
+  SymbS    : Symb -> S ;                 -- A
+
 --2 Symbol lists
 
 -- A symbol list has at least two elements. The last two are separated

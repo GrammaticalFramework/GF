@@ -14,6 +14,8 @@ lin
     a = agrP3 g det.n
     } ;
 
+  SymbS sy = {s = \\_ => sy.s} ;
+
 lincat 
 
   Symb, [Symb] = SS ;
