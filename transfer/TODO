@@ -4,13 +4,13 @@
 
 - show generation
 
-- eq generation
+- ord generation
 
 - better module system
 
 - Negated patterns?
 
-- Patterns with guards
+- Simplify taking many arguments of the same type: f : (A,B : Type) -> ...
 
 * Improve interpreter
 
