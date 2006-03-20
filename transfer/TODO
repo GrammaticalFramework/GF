@@ -12,6 +12,8 @@
 
 - Simplify taking many arguments of the same type: f : (A,B : Type) -> ...
 
+- add record extension operator?
+
 * Improve interpreter
 
 - More efficient handling of constructor application

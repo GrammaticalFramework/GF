@@ -88,8 +88,8 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \and
 
 \inferrule[Check by inferring]
-{ \Delta;\Gamma \vdash t \uparrow A \\
-  \textrm{FIXME: conversion (but not subtyping?) } }
+{ \Delta;\Gamma \vdash t \uparrow A' \\
+  A' \lesssim A}
 { \Delta;\Gamma \vdash t \downarrow A }
 
 \and
@@ -121,8 +121,8 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 
 \inferrule[Application]
 { \Delta;\Gamma \vdash s \uparrow (x : A) \rightarrow B \\ 
-  \Delta;\Gamma \vdash t \downarrow A'  \\
-  A' \lesssim A }
+  \Delta;\Gamma \vdash t \downarrow A
+}
 { \Delta;\Gamma \vdash s \ t \uparrow B [x / t] }
 
 \and 
@@ -136,14 +136,14 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 
 \inferrule[Case analysis]
 { \Delta;\Gamma \vdash s \uparrow A \\
+  B = B_1 \vee \ldots \vee B_n \\
   \Delta \vdash_p p_1 \downarrow A; \Gamma_1 \\
   \Delta;\Gamma,\Gamma_1 \vdash g_1 \downarrow Bool \\
   \Delta;\Gamma,\Gamma_1 \vdash t_1 \uparrow B_1 \\
   \ldots \\
   \Delta p_n \vdash_p A; \Gamma_n \\
   \Delta;\Gamma, \Gamma_n \vdash g_n \downarrow Bool \\
-  \Delta;\Gamma, \Gamma_n \vdash t_n \uparrow B_n \\
-  B = B_1 \vee \ldots \vee B_n
+  \Delta;\Gamma, \Gamma_n \vdash t_n \uparrow B_n
 }
 { \Delta;\Gamma \vdash \textrm{case} \ s \ \textrm{of} \ \{ 
     p_1 \mid g_1 \rightarrow t_1;
@@ -160,19 +160,20 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \begin{mathpar}
 
 \inferrule[Record type]
-{ \textrm{FIXME: labels must occur at most once} \\
-  \Delta;\Gamma \vdash T_1 \uparrow Type \\ 
+{ \Delta;\Gamma \vdash T_1 \uparrow Type \\ 
   \ldots \\
-  \Delta;\Gamma, l_1 : T_1, \ldots, l_{n-1} : T_{n-1} \vdash T_n \uparrow Type }
+  \Delta;\Gamma, l_1 : T_1, \ldots, l_{n-1} : T_{n-1} \vdash T_n \uparrow Type \\
+  l_1 \ldots l_n \ \textrm{different}
+}
 { \Delta;\Gamma \vdash \textrm{sig} \{ l_1 : T_1, \ldots, l_n : T_n \} \uparrow Type }
 
 \and
 
 \inferrule[Record]
-{ \textrm{FIXME: labels must occur at most once} \\
-  \Delta;\Gamma \vdash t_1 \uparrow T_1 \\ 
+{ \Delta;\Gamma \vdash t_1 \uparrow T_1 \\ 
   \ldots \\
-  \Delta;\Gamma \vdash t_n \uparrow T_n [l_{n-1} / t_{n-1}] \ldots [l_1 / t_1] }
+  \Delta;\Gamma \vdash t_n \uparrow T_n [l_{n-1} / t_{n-1}] \ldots [l_1 / t_1] \\
+  l_1 \ldots l_n \ \textrm{different} }
 { \Delta;\Gamma \vdash \textrm{rec} \{ l_1 = t_1, \ldots, l_n = t_n \} 
   \uparrow \textrm{sig} \{ l_1 : T_1, \ldots, l_n : T_n \} }
 
@@ -204,11 +205,12 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \and 
 
 \inferrule[Constructor pattern]
-{ c : (x_1 : T_1) \rightarrow \ldots \rightarrow T' \in \Delta \\
+{ c : (x_1 : T_1) \rightarrow \ldots \rightarrow (x_n : T_n) \rightarrow T' \in \Delta \\
   T' = T \\
   \Delta \vdash_p p_1 \downarrow T_1; \Gamma_1 \\
   \ldots \\
   \Delta \vdash_p p_n \downarrow T_n; \Gamma_n \\
+  \Gamma_1 \ldots \Gamma_n \ \textrm{disjoint} \\
   \textrm{FIXME: $x_k$ can occur in $T_{k+1}$}
   }
 { \Delta \vdash_p c \ p_1 \ldots p_n \ \downarrow \ T; \Gamma_1, \ldots, \Gamma_n }
@@ -216,12 +218,13 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \and 
 
 \inferrule[Record pattern]
-{ \textrm{FIXME: labels must occur at most once} \\
-  \textrm{FIXME: allow more fields in type, ignore order} \\
+{ \textrm{FIXME: allow more fields in type, ignore order} \\
   \textrm{FIXME: types can depend on field values} \\
 \Delta \vdash_p p_1 \ \downarrow \ T_1; \Gamma_1 \\
   \ldots \\
   \Delta \vdash_p p_n \ \downarrow \ T_n; \Gamma_n \\
+  \Gamma_1 \ldots \Gamma_n \ \textrm{disjoint} \\
+  l_1 \ldots l_n \ \textrm{different}
   }
 { \Delta \vdash_p \textrm{rec} \ \{ l_1 = p_1; \ldots; l_n = p_n \} \ \downarrow \ 
   \textrm{sig} \ \{ l_1 : T_1; \ldots; l_n : T_n \}; \Gamma_1, \ldots, \Gamma_n }
@@ -346,18 +349,21 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
   i_1 =_{integer} i_2}
 { i_1 \leq i_2 }
 
+\and 
 
+\inferrule[String conversion]
+{ i_1 \ \textrm{string} \\
+  i_2 \ \textrm{string} \\
+  i_1 =_{string} i_2}
+{ i_1 \leq i_2 }
 
+\and 
 
-
-\and
-
-\inferrule[WHNF-Proj]
-{ s \Downarrow_{wh} \textrm{rec} \ \{ \ldots, l = t, \ldots \} }
-{ \Gamma \vdash s.l \Downarrow_{wh} t }
-
-
-
+\inferrule[Double conversion]
+{ i_1 \ \textrm{double} \\
+  i_2 \ \textrm{double} \\
+  i_1 =_{double} i_2}
+{ i_1 \leq i_2 }
 
 \end{mathpar}
 \caption{Conversion and subtyping.}
@@ -368,7 +374,8 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \begin{mathpar}
 
 \inferrule[WHNF-Let]
-{ s \Downarrow_{wh} s' }
+{ s \Downarrow_{wh} s' \\ 
+  \textrm{This is a weird way to evaluate a let} }
 { \Gamma \vdash \textrm{let} \ x = s \ \textrm{in} \ t 
                 \Downarrow_{wh} t [x/s']
 }

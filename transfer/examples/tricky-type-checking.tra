@@ -8,6 +8,12 @@ data Tree : Type -> Type where
   EInt : Integer -> Tree Integer
   EFoo : (A:Type) -> A -> Tree A
 
+eval : (B : Type) -> Tree B -> Tree B
+eval _ t = case t of
+		EAdd x y -> EInt (x+y)
+		EInt i -> EInt i
+		EFoo T x -> EFoo T x
+
 strip : (B : Type) -> Tree B -> B
 strip _ t = case t of
 		EAdd x y -> x+y
