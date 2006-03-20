@@ -1,0 +1,15 @@
+-- NOTE: this is unfinished and untested
+
+import nat
+
+data Vector : Type -> Nat -> Type where
+   Empty : (A:Type) -> Vector A Zero
+   Cell : (A:Type) -> (n:Nat) -> A -> Vector A n -> Vector A (Succ n)
+
+mapV : (A:Type) -> (B:Type) -> (n:Nat) -> (A -> B) -> Vector A n -> Vector B n
+mapV A B _ f (Empty _) = Empty B
+mapV A B (Succ n) f (Cell _ _ x xs) = Cell B n (f x) (mapV A B n f xs)
+
+appendV : (A:Type) -> (n:Nat) -> (m:Nat) -> Vector A n -> Vector A m -> Vector A (plusNat n m)
+appendV A _ _ (Empty _) ys = ys
+appendV A (Succ n) m (Cell _ _ x xs) ys = appendV A n (Succ m) xs (Cell A m x ys)

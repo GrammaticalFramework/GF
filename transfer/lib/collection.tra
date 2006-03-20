@@ -1,0 +1,77 @@
+-- NOTE: this is unfinished and untested
+
+import prelude
+import bintree
+
+Collection : Type -> Type
+Collection C = 
+  sig 
+	-- types
+	Elem : Type
+	-- Add stuff
+	zero : C
+        plus : C -> C -> C
+	-- Collection-specific stuff
+        size : C -> Integer
+	add : Elem -> C -> C
+	elem : Elem -> C -> Bool
+        map : (Elem -> Elem) -> C -> C
+        filter : (Elem -> Bool) -> C -> C
+        fromList : List Elem -> C
+        toList : C -> List Elem
+
+
+--
+-- Collection String instance
+--
+
+collection_String : Collection String
+collection_String =
+  rec
+	Elem = Char
+	zero = ""
+	plus = prim_add_String
+	size = prim_length_String
+	-- ...
+
+
+--
+-- Collection List instance
+--
+
+collection_List : (A : Type) -> Collection (List A)
+collection_List A = 
+  rec
+	Elem = A
+	zero = Nil A
+	plus = append A
+	size = length A
+	add  = Cons A
+	-- ...
+
+--
+-- Collection Vector instance
+--
+
+collection_Vector : (A : Type) -> (n : Nat) -> Collection (Vector A n)
+collection_Vector A n = 
+  rec
+	Elem = A
+	zero = Empty A
+	plus = appendV A n n -- FIXME: this only works for vectors of the same length!
+	-- ...
+
+
+--
+-- Collection BinTree instance
+--
+
+collection_BinTree : (A : Type) -> Ord A -> Collection (BinTree A)
+collection_BinTree A o = 
+  rec
+	Elem = A
+	zero = Nil A
+	plus = merge A o
+	size = sizeBT A
+	add  = insert A o
+	-- ...

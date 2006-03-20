@@ -1,9 +1,0 @@
-import nat
-
-data Array : Type -> Nat -> Type where
-   Empty : (A:Type) -> Array A Zero
-   Cell : (A:Type) -> (n:Nat) -> A -> Array A n -> Array A (Succ n)
-
-mapA : (A:Type) -> (B:Type) -> (n:Nat) -> (A -> B) -> Array A n -> Array B n
-mapA A B _ f (Empty _) = Empty B
-mapA A B (Succ n) f (Cell _ _ x xs) = Cell B n (f x) (mapA A B n f xs)
