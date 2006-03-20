@@ -36,7 +36,8 @@ import GF.Probabilistic.Probabilistic (Probs)
 
 import Data.List
 import Data.Maybe (fromMaybe)
-import Data.FiniteMap
+import Data.Map (Map)
+import qualified Data.Map as Map
 
 data SRG = SRG { grammarName :: String    -- ^ grammar name
 		 , startCat :: String     -- ^ start category name
@@ -58,7 +59,7 @@ data SRGAlt = SRGAlt (Maybe Double) Name [Symbol String Token]
 -- | SRG category name and original name
 type CatName = (String,String) 
 
-type CatNames = FiniteMap String String
+type CatNames = Map String String
 
 -- | Create a non-left-recursive SRG. 
 --   FIXME: the probabilities, names and profiles in the returned 
@@ -103,7 +104,7 @@ makeSRG_ f i opts probs gr
     rs = map (cfgRulesToSRGRule names probs) cfgRules
 
 -- FIXME: merge alternatives with same rhs and profile but different probabilities
-cfgRulesToSRGRule :: FiniteMap String String -> Maybe Probs -> [CFRule_] -> SRGRule
+cfgRulesToSRGRule :: Map String String -> Maybe Probs -> [CFRule_] -> SRGRule
 cfgRulesToSRGRule names probs rs@(r:_) = SRGRule cat origCat rhs
     where origCat = lhsCat r
 	  cat = lookupFM_ names origCat
@@ -122,16 +123,16 @@ lookupProb probs i = lookupTree prIdent i probs
 
 mkCatNames :: String   -- ^ Category name prefix
 	   -> [String] -- ^ Original category names
-	   -> FiniteMap String String -- ^ Maps original names to SRG names
-mkCatNames prefix origNames = listToFM (zip origNames names)
+	   -> Map String String -- ^ Maps original names to SRG names
+mkCatNames prefix origNames = Map.fromList (zip origNames names)
     where names = [prefix ++ "_" ++ show x | x <- [0..]]
 
 --
 -- * Utilities for building and printing SRGs
 --
 
-lookupFM_ :: (Ord key, Show key) => FiniteMap key elt -> key -> elt
-lookupFM_ fm k = lookupWithDefaultFM fm (error $ "Key not found: " ++ show k) k
+lookupFM_ :: (Ord key, Show key) => Map key elt -> key -> elt
+lookupFM_ fm k = Map.findWithDefault (error $ "Key not found: " ++ show k) k fm
 
 prtS :: Print a => a -> ShowS
 prtS = showString . prt

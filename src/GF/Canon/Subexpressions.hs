@@ -27,7 +27,8 @@ import GF.Data.Operations
 import qualified GF.Infra.Modules as M
 
 import Control.Monad
-import Data.FiniteMap
+import Data.Map (Map)
+import qualified Data.Map as Map
 import Data.List
 
 {-
@@ -60,7 +61,7 @@ cse is possible in the grammar. It is used by the flag pg -printer=subs.
 elimSubtermsMod :: (Ident,CanonModInfo) -> Err (Ident, CanonModInfo)
 elimSubtermsMod (mo,m) = case m of
   M.ModMod (M.Module mt st fs me ops js) -> do
-    (tree,_) <- appSTM (getSubtermsMod mo (tree2list js)) (emptyFM,0)
+    (tree,_) <- appSTM (getSubtermsMod mo (tree2list js)) (Map.empty,0)
     js2 <- liftM buildTree $ addSubexpConsts mo tree $ tree2list js
     return (mo,M.ModMod (M.Module mt st fs me ops js2))
   _ -> return (mo,m)
@@ -69,8 +70,8 @@ prSubtermStat :: CanonGrammar -> String
 prSubtermStat gr = unlines [prt mo ++++ expsIn mo js | (mo,js) <- mos] where
   mos = [(i, tree2list (M.jments m)) | (i, M.ModMod m) <- M.modules gr, M.isModCnc m]
   expsIn mo js = err id id $ do
-    (tree,_) <- appSTM (getSubtermsMod mo js) (emptyFM,0)
-    let list0 = fmToList tree
+    (tree,_) <- appSTM (getSubtermsMod mo js) (Map.empty,0)
+    let list0 = Map.toList tree
     let list1 = sortBy (\ (_,(m,_)) (_,(n,_)) -> compare n m) list0
     return $ unlines [show n ++ "\t" ++ prt trm | (trm,(n,_)) <- list1]
 
@@ -100,10 +101,10 @@ unSubelimModule mo@(i,m) = case m of
 
 -- implementation
 
-type TermList = FiniteMap Term (Int,Int) -- number of occs, id
+type TermList = Map Term (Int,Int) -- number of occs, id
 type TermM a = STM (TermList,Int) a
 
-addSubexpConsts :: Ident -> FiniteMap Term (Int,Int) -> [(Ident,Info)] -> Err [(Ident,Info)]
+addSubexpConsts :: Ident -> Map Term (Int,Int) -> [(Ident,Info)] -> Err [(Ident,Info)]
 addSubexpConsts mo tree lins = do
   let opers = [oper id trm | (trm,(_,id)) <- list]
   mapM mkOne $ opers ++ lins
@@ -117,19 +118,19 @@ addSubexpConsts mo tree lins = do
        trm' <- recomp f trm
        return (f,ResOper ty trm')
      _ -> return (f,def)
-   recomp f t = case lookupFM tree t of
+   recomp f t = case Map.lookup t tree of
      Just (_,id) | ident id /= f -> return $ I $ cident mo id
      _ -> composOp (recomp f) t
 
-   list = fmToList tree
+   list = Map.toList tree
 
    oper id trm = (ident id, ResOper TStr trm) --- type TStr does not matter
 
-getSubtermsMod :: Ident -> [(Ident,Info)] -> TermM (FiniteMap Term (Int,Int))
+getSubtermsMod :: Ident -> [(Ident,Info)] -> TermM (Map Term (Int,Int))
 getSubtermsMod mo js = do
   mapM (getInfo (collectSubterms mo)) js
   (tree0,_) <- readSTM
-  return $ filterFM (\_ (nu,_) -> nu > 1) tree0
+  return $ Map.filter (\ (nu,_) -> nu > 1) tree0
  where
    getInfo get fi@(f,i) = case i of
      CncFun ci xs trm pn -> do
@@ -156,10 +157,10 @@ collectSubterms mo t = case t of
    add t = do
      (ts,i) <- readSTM
      let 
-       ((count,id),next) = case lookupFM ts t of
+       ((count,id),next) = case Map.lookup t ts of
          Just (nu,id) -> ((nu+1,id), i)
          _ ->            ((1,   i ), i+1)
-     writeSTM (addToFM ts t (count,id), next)
+     writeSTM (Map.insert t (count,id) ts, next)
      return t --- only because of composOp
 
 ident :: Int -> Ident

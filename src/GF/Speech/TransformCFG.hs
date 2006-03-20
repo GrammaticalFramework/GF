@@ -34,7 +34,8 @@ import GF.Infra.Print
 import GF.Speech.FiniteState
 
 import Control.Monad
-import Data.FiniteMap
+import Data.Map (Map)
+import qualified Data.Map as Map
 import Data.List
 import Data.Maybe (fromMaybe)
 import Data.Monoid (mconcat)
@@ -60,7 +61,7 @@ getStartCat opts = fromMaybe "S" (getOptVal opts gStartCat) ++ "{}.s"
 
 -- | Group productions by their lhs categories
 groupProds :: [CFRule_] -> CFRules
-groupProds = fmToList . addListToFM_C (++) emptyFM . map (\r -> (lhsCat r,[r]))
+groupProds = Map.toList . Map.fromListWith (++) . map (\r -> (lhsCat r,[r]))
 
 ungroupProds :: CFRules -> [CFRule_]
 ungroupProds = concat . map snd
