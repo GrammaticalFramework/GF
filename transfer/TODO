@@ -20,13 +20,29 @@
 
 * Improve the core language
 
+* Add primitive types operations to core
+
+- add Char type, with primitive operations:
+  - Enum stuff
+
+- add more primitive operations on strings:
+  - make list an isntance of the collection class for strings
+
+* Add more libraries
+
+- Enum class
+
+- Bounded class
+
+- list functions
+
+- a map structure
+
+- collections framework?
+
+- state monad
+
 * Improve compilation
-
-* Add primitive operations to core
-
-- primitive operations on strings:
-
-- add floating-point numbers with primitive oeprations?
 
 * Implement module system in interpreter
 

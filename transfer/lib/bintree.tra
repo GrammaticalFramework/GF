@@ -1,0 +1,22 @@
+-- NOTE: this is unfinished and untested
+
+import prelude
+
+data BinTree : Type -> Type where
+	Leaf : (A:Type) -> BinTree A
+	Node : (A:Type) -> BinTree A -> A -> BinTree A -> BinTree A
+
+contains : (A:Type) -> Ord A -> A -> BinTree A -> Bool
+contains _ _ _ (Leaf _) = False
+contains A o x (Node _ l y r) 
+	| x < y = contains A o x l
+	| x > y = contains A o x r
+	| otherwise = True
+
+insert : (A:Type) -> Ord A -> A -> BinTree A -> BinTree A
+insert A o x (Leaf _) = Node A (Leaf A) x (Leaf A)
+insert A o x (Node _ l y r) 
+	| x < y = Node A (insert A o x l) y r
+	| x > y = Node A l y (insert A o x r)
+	| otherwise = Node A l x r
+
