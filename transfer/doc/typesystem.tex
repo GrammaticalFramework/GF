@@ -88,7 +88,8 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 \and
 
 \inferrule[Check by inferring]
-{ \Delta;\Gamma \vdash t \uparrow A }
+{ \Delta;\Gamma \vdash t \uparrow A \\
+  \textrm{FIXME: conversion (but not subtyping?) } }
 { \Delta;\Gamma \vdash t \downarrow A }
 
 \and
@@ -120,29 +121,28 @@ p & ::= & x \ | \ \_ \ | \ (c \overline{p}) \ | \ rec \ \{ \overline{l = p} \} \
 
 \inferrule[Application]
 { \Delta;\Gamma \vdash s \uparrow (x : A) \rightarrow B \\ 
-  \Delta;\Gamma \vdash t \downarrow A  \\
-  \textrm{FIXME: argument can be of a subtype}
-}
+  \Delta;\Gamma \vdash t \downarrow A'  \\
+  A' \lesssim A }
 { \Delta;\Gamma \vdash s \ t \uparrow B [x / t] }
 
 \and 
 
 \inferrule[Local definition]
 { \Delta;\Gamma \vdash s \uparrow A \\ 
-  \Delta;\Gamma, s : A \vdash t \uparrow B }
+  \Delta;\Gamma, x : A \vdash t \uparrow B }
 { \Delta;\Gamma \vdash \textrm{let} \ x = s \ \textrm{in} \ t \uparrow B }
 
 \and 
 
 \inferrule[Case analysis]
 { \Delta;\Gamma \vdash s \uparrow A \\
-  \Delta \vdash_p p_1 \downarrow A; \Gamma' \\
-  \Delta;\Gamma,\Gamma' \vdash g_1 \downarrow Bool \\
-  \Delta;\Gamma,\Gamma' \vdash t_1 \uparrow B_1 \\
+  \Delta \vdash_p p_1 \downarrow A; \Gamma_1 \\
+  \Delta;\Gamma,\Gamma_1 \vdash g_1 \downarrow Bool \\
+  \Delta;\Gamma,\Gamma_1 \vdash t_1 \uparrow B_1 \\
   \ldots \\
-  \Delta p_n \vdash_p A; \Gamma' \\
-  \Delta;\Gamma, \Gamma' \vdash g_n \downarrow Bool \\
-  \Delta;\Gamma, \Gamma' \vdash t_n \uparrow B_n \\
+  \Delta p_n \vdash_p A; \Gamma_n \\
+  \Delta;\Gamma, \Gamma_n \vdash g_n \downarrow Bool \\
+  \Delta;\Gamma, \Gamma_n \vdash t_n \uparrow B_n \\
   B = B_1 \vee \ldots \vee B_n
 }
 { \Delta;\Gamma \vdash \textrm{case} \ s \ \textrm{of} \ \{ 
