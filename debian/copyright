@@ -1,0 +1,18 @@
+This package was Debianized by Bjorn Bringert <bringert@cs.chalmers.se>
+on 2006-03-21. 
+
+The upstream sources for this version come from the GF darcs repository
+at http://www.cs.chalmers.se/Cs/Research/Language-technology/darcs/GF/
+
+Authors and copyright licenses:
+
+Copyright (C):
+  Bjorn Bringert, Hakan Burden, Hans-Joachim Daniels, Markus Forsberg,
+  Thomas Hallgren, Harald Hammarstrom, Kristofer Johannisson,
+  Janna Khegai, Peter Ljunglof, Petri Maenpaa, and Aarne Ranta,
+  1998-2006.
+
+You are free to distribute this software under the terms of
+the GNU General Public License.
+On Debian systems, the complete text of the GNU General Public
+License can be found in the file /usr/share/common-licenses/GPL.
