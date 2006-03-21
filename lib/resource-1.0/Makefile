@@ -1,6 +1,9 @@
-.PHONY: all test pretest langs present mathematical multimodal compiled treebank stat gfdoc clean
+.PHONY: show-path all test pretest langs present mathematical multimodal compiled treebank stat gfdoc clean
 
-all: present mathematical multimodal langs compiled
+all: show-path present mathematical multimodal langs compiled
+
+show-path:
+	@echo GF_LIB_PATH=$(GF_LIB_PATH)
 
 test:
 	echo "gr -cat=Text -number=11 -prob | tb" | gf -nocf -probs=lang.gfprob langs.gfcm
