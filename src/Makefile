@@ -252,7 +252,7 @@ install-editor:
 	$(INSTALL) gfeditor $(bindir)
 	$(INSTALL) -m 0644 $(GFEDITOR)/gfeditor.jar $(GF_DATA_DIR)
 
-install-java: javac
+install-java:
 	-rm -f ../bin/JavaGUI
 	ln -s ../src/JavaGUI ../bin
 	@echo "PLEASE set GFHOME and GF_LIB_PATH in your environment"
