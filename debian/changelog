@@ -1,0 +1,5 @@
+gf (2.5) unstable; urgency=low
+
+  * Initial packaging.
+ 
+ -- Bjorn Bringert <bringert@cs.chalmers.se>  Tue, 21 Mar 2006 11:12:25 +0100

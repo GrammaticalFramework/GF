@@ -1,0 +1,16 @@
+Source: gf
+Priority: optional
+Section: science
+Maintainer: Bjorn Bringert <bringert@cs.chalmers.se>
+Build-Depends: debhelper, autoconf, ghc6 (>= 6.4.1-1)
+Standards-Version: 3.6.2
+
+Package: gf
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Tools for GF, a grammar formalism based on type theory
+ Grammatical Framework (GF) is a grammar formalism based on type theory. 
+ It consists of a special-purpose programming language,
+ a compiler of the language, and a generic grammar processor.
+ .
+ Homepage: http://www.cs.chalmers.se/~aarne/GF/
