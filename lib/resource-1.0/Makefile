@@ -29,7 +29,7 @@ multimodal:
 	mv multimodal/*.gfc multimodal/*.gfr ../multimodal
 
 compiled:
-	cd .. ; tar cvfz compiled.tgz alltenses/ mathematical/ multimodal/ present/ 
+	cd .. ; tar cvfz compiled.tgz alltenses/ mathematical/ multimodal/ present/ prelude/*.gf?
 
 treebank:
 	gf <mkTreebank.gfs

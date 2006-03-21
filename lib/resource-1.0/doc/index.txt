@@ -25,21 +25,28 @@ we refer to [v. 0.9 ../../resource/].
 
 ==Authors==
 
+Inger Andersson and Therese Soderberg (Spanish morphology),
+Nicolas Barth and Sylvain Pogodalla (French verb list),
 Janna Khegai (Russian modules, forthcoming),
 Bjorn Bringert (many Swadesh lexica),
 Carlos Gonzalia (Spanish cardinals), 
+Harald Hammarstrom (German morphology),
 Partik Jansson (Swedish cardinals),
 Aarne Ranta.
 
 We are grateful for contributions and 
 comments to several other people who have used this and 
 the previous versions of the resource library, including
+Ludmilla Bogavac,
 Ana Bove,
 David Burke,
 Lauri Carlson,
 Gloria Casanellas,
 Karin Cavallin,
+Robin Cooper,
 Hans-Joachim Daniels,
+Elisabet Engdahl,
+Markus Forsberg,
 Kristofer Johannisson,
 Anni Laine,
 Wanjiku Ng'ang'a,
@@ -83,13 +90,22 @@ Go to the main directory, compile the grammars, and run a test.
   make test
 ```
 This will take quite some time. An alternative is to use the
-[precompiled grammar package ../../compiled.tgz]. Just do
+precompiled grammar package from GF download page. This package 
+has the necessary ``gfc`` and ``gfr`` files directly under ``GF/lib``.
 ```
-  cd GF/lib/resource-1.0
-  make pretest
+  GF/lib/alltenses
+  GF/lib/mathematical
+  GF/lib/multimodal
+  GF/lib/present
 ```
-For more examples, see the 
-[Overview slides clt2006.html]. 
+Do for instance
+```
+  cd GF/lib/
+  gf
+    > i -path=present:prelude present/LangEng.gfc
+    > gr -cat=S -number=3 -cf | tb
+```
+For more examples, see the [Overview slides clt2006.html]. 
 
 
 
@@ -263,6 +279,54 @@ The [examples/animal ../../../examples/animal]
 grammar set implements some queries about animals.
 Its purpose is to serve as a prototype for example-based 
 grammar writing.
+
+
+==Known bugs and missing components==
+
+This bugs should be fixed before the final release of v. 1.0.
+
+Danish
+- API 1.0 not implemented
+
+
+English 
+- only contracted negation forms
+
+
+Finnish
+- no possessive suffixes
+- wrong cases in passive constructions
+
+
+French
+- only direct word order in questions
+
+
+German
+- the Swadesh part of lexicon missing
+- no list of irregular verbs
+
+
+Italian
+- no contraction of infinitives before clitics
+- no list of irregular verbs
+
+
+Norwegian
+- word order in compound verbs sometimes wrong
+
+
+Russian
+- API 1.0 not implemented
+
+
+Spanish
+- no ordinal numbers
+
+
+Swedish
+- word order in compound verbs sometimes wrong
+
 
 
 ==More reading==

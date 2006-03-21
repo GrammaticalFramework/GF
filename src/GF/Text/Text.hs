@@ -60,7 +60,7 @@ formatAsCodeLit :: String -> String
 formatAsCodeLit = formatAsCode . unwords . map unStringLit . words 
 
 formatAsText,formatAsHTML,formatAsLatex :: String -> String
-formatAsText  = formatAsTextGen (=="&-") (=="&-") 
+formatAsText  = formatAsTextGen (const False) (=="&-") 
 formatAsHTML  = formatAsTextGen (\s -> take 1 s == "<" || last s == '>') (const False) 
 formatAsLatex = formatAsTextGen ((=="\\") . take 1)  (const False) 
 

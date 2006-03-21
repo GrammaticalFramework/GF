@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>GF Resource Grammar Library v. 1.0</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Fri Mar 10 13:27:21 2006
+Last update: Tue Mar 21 14:49:24 2006
 </FONT></CENTER>
 
 <P></P>
@@ -35,7 +35,8 @@ Last update: Fri Mar 10 13:27:21 2006
       <LI><A HREF="#toc14">Tram</A>
       <LI><A HREF="#toc15">Animals</A>
       </UL>
-    <LI><A HREF="#toc16">More reading</A>
+    <LI><A HREF="#toc16">Known bugs and missing components</A>
+    <LI><A HREF="#toc17">More reading</A>
     </UL>
 
 <P></P>
@@ -60,9 +61,12 @@ we refer to <A HREF="../../resource/">v. 0.9</A>.
 <A NAME="toc1"></A>
 <H2>Authors</H2>
 <P>
+Inger Andersson and Therese Soderberg (Spanish morphology),
+Nicolas Barth and Sylvain Pogodalla (French verb list),
 Janna Khegai (Russian modules, forthcoming),
 Bjorn Bringert (many Swadesh lexica),
 Carlos Gonzalia (Spanish cardinals), 
+Harald Hammarstrom (German morphology),
 Partik Jansson (Swedish cardinals),
 Aarne Ranta.
 </P>
@@ -70,12 +74,16 @@ Aarne Ranta.
 We are grateful for contributions and 
 comments to several other people who have used this and 
 the previous versions of the resource library, including
+Ludmilla Bogavac,
 Ana Bove,
 David Burke,
 Lauri Carlson,
 Gloria Casanellas,
 Karin Cavallin,
+Robin Cooper,
 Hans-Joachim Daniels,
+Elisabet Engdahl,
+Markus Forsberg,
 Kristofer Johannisson,
 Anni Laine,
 Wanjiku Ng'ang'a,
@@ -130,15 +138,26 @@ Go to the main directory, compile the grammars, and run a test.
 </PRE>
 <P>
 This will take quite some time. An alternative is to use the
-<A HREF="../../compiled.tgz">precompiled grammar package</A>. Just do
+precompiled grammar package from GF download page. This package 
+has the necessary <CODE>gfc</CODE> and <CODE>gfr</CODE> files directly under <CODE>GF/lib</CODE>.
 </P>
 <PRE>
-    cd GF/lib/resource-1.0
-    make pretest
+    GF/lib/alltenses
+    GF/lib/mathematical
+    GF/lib/multimodal
+    GF/lib/present
 </PRE>
 <P>
-For more examples, see the 
-<A HREF="clt2006.html">Overview slides</A>. 
+Do for instance
+</P>
+<PRE>
+    cd GF/lib/
+    gf
+      &gt; i -path=present:prelude present/LangEng.gfc
+      &gt; gr -cat=S -number=3 -cf | tb
+</PRE>
+<P>
+For more examples, see the <A HREF="clt2006.html">Overview slides</A>. 
 </P>
 <A NAME="toc5"></A>
 <H3>The language independent ground API</H3>
@@ -328,6 +347,84 @@ Its purpose is to serve as a prototype for example-based
 grammar writing.
 </P>
 <A NAME="toc16"></A>
+<H2>Known bugs and missing components</H2>
+<P>
+This bugs should be fixed before the final release of v. 1.0.
+</P>
+<P>
+Danish
+</P>
+<UL>
+<LI>API 1.0 not implemented
+</UL>
+
+<P>
+English 
+</P>
+<UL>
+<LI>only contracted negation forms
+</UL>
+
+<P>
+Finnish
+</P>
+<UL>
+<LI>no possessive suffixes
+<LI>wrong cases in passive constructions
+</UL>
+
+<P>
+French
+</P>
+<UL>
+<LI>only direct word order in questions
+</UL>
+
+<P>
+German
+</P>
+<UL>
+<LI>the Swadesh part of lexicon missing
+<LI>no list of irregular verbs
+</UL>
+
+<P>
+Italian
+</P>
+<UL>
+<LI>no contraction of infinitives before clitics
+<LI>no list of irregular verbs
+</UL>
+
+<P>
+Norwegian
+</P>
+<UL>
+<LI>word order in compound verbs sometimes wrong
+</UL>
+
+<P>
+Russian
+</P>
+<UL>
+<LI>API 1.0 not implemented
+</UL>
+
+<P>
+Spanish
+</P>
+<UL>
+<LI>no ordinal numbers
+</UL>
+
+<P>
+Swedish
+</P>
+<UL>
+<LI>word order in compound verbs sometimes wrong
+</UL>
+
+<A NAME="toc17"></A>
 <H2>More reading</H2>
 <P>
 <A HREF="gslt-sem-2006.html">Grammars as Software Libraries</A>. Slides
