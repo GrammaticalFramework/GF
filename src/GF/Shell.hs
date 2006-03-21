@@ -24,6 +24,7 @@ import qualified GF.Grammar.Lookup as L
 import qualified GF.Canon.GFC as GFC
 import qualified GF.Canon.Look as Look
 import qualified GF.Canon.CMacros as CMacros
+import qualified GF.Grammar.MMacros as MMacros
 import qualified GF.Compile.GrammarToCanon as GrammarToCanon
 import GF.Grammar.Values
 import GF.UseGrammar.GetTree
@@ -236,7 +237,10 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
         let ss = (if oElem showAll opts then id else filter (not . null)) $ 
                      lines $ prCommandArg a
         mts <- mapM parse ss
-        let a' = ATrms [t | (_,ATrms ts) <- mts, t <- ts]
+        let mark s ts = case ts of
+              [] -> [MMacros.uTree] -- to leave a trace of unparsed line
+              _  -> ts
+        let a' = ATrms [t | (s,(_,ATrms ts)) <- zip ss mts, t <- mark s ts]
         changeArg (const a') sa
     | otherwise -> parse $ prCommandArg a
    where 

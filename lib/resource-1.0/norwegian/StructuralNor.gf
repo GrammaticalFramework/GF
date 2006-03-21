@@ -107,7 +107,7 @@ concrete StructuralNor of Structural = CatNor **
   whichPl_IDet = {s = \\_ => "hvilke" ; n = Pl ; det = DIndef} ;
   whichSg_IDet = {s = genderForms "hvilken" "hvilket" ; n = Sg ; det = DIndef} ;
   whoSg_IP = {s = vem.s ; gn = SgUtr} ;
-  whoPl_IP = {s = vem.s ; gn = Plg} ;
+  whoPl_IP = {s = \\_ => "hvilke" ; gn = Plg} ;
   why_IAdv = ss "hvorfor" ;
   without_Prep = ss "uten" ;
   with_Prep = ss "med" ;

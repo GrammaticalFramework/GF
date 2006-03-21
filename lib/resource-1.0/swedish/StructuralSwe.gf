@@ -106,7 +106,7 @@ concrete StructuralSwe of Structural = CatSwe **
   whichPl_IDet = {s = \\_ => "vilka" ; n = Pl ; det = DIndef} ;
   whichSg_IDet = {s = genderForms "vilken" "vilket" ; n = Sg ; det = DIndef} ;
   whoSg_IP = {s = vem.s ; gn = SgUtr} ;
-  whoPl_IP = {s = vem.s ; gn = Plg} ;
+  whoPl_IP = {s = \\_ => "vilka" ; gn = Plg} ;
   why_IAdv = ss "varför" ;
   without_Prep = ss "utan" ;
   with_Prep = ss "med" ;

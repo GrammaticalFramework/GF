@@ -31,11 +31,11 @@ import GF.Text.UTF8
 
 import GF.Today (today,version)
 import GF.System.Arch
-import System (getArgs,system)
+import System (getArgs,system,getEnv)
 import Control.Monad (foldM,liftM)
 import Data.List (nub)
 
--- AR 19/4/2000 -- 28/4/2005
+-- AR 19/4/2000 -- 21/3/2006
 
 main :: IO ()
 main = do
@@ -52,7 +52,8 @@ main = do
       putStrLnFlush $ encodeUTF8 helpMsg
 
     _ | opt forJava -> do
-      putStrLnFlush $ encodeUTF8 welcomeMsg 
+      welcome <- welcomeMsgLib
+      putStrLnFlush $ encodeUTF8 welcome 
       st <- useIOE st0 $ 
               foldM (shellStateFromFiles os) st0 fs
       sessionLineJ True st
@@ -77,8 +78,8 @@ main = do
       if opt beSilent then return () else putStrLnFlush "</gfbatch>"
       return ()
     _ -> do
-
-      ifNotSil $ putStrLnFlush $ welcomeMsg
+      welcome <- welcomeMsgLib
+      ifNotSil $ putStrLnFlush $ welcome
       st <- useIOE st0 $ 
               foldM (shellStateFromFiles os) st0 fs
       if null fs then return () else (ifNotSil putCPU) 
@@ -110,9 +111,16 @@ helpMsg = unlines [
   "which suppresses all messages except the output and fatal errors."
   ]
 
-welcomeMsg = 
+welcomeMsgLib = do
+  lib <- catch 
+    (getEnv "GF_LIB_PATH" >>= return . ("GF_LIB_PATH is set to" +++)) 
+    (const (return "Warning: GF_LIB_PATH is not defined."))
+  return $ welcomeMsg lib
+
+welcomeMsg lib = 
   "Welcome to " ++ authorMsg ++++ 
   "If ä and ö (umlaut letters) look strange, see 'h -coding'." ++
+  "\n" ++ lib ++
   "\n\nType 'h' for help, and 'h [Command] for more detailed help.\n"
 
 authorMsg = unlines [
