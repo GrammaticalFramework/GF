@@ -1,6 +1,6 @@
 dnl Run autoconf to generate configure from this file
 
-AC_INIT([GF],[2.4],[aarne@cs.chalmers.se],[GF])
+AC_INIT([GF],[2.5],[aarne@cs.chalmers.se],[GF])
 
 AC_PREREQ(2.53)
 
