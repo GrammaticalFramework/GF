@@ -122,6 +122,6 @@ authorMsg = unlines [
  "Björn Bringert, Håkan Burden, Hans-Joachim Daniels, Markus Forsberg",
  "Thomas Hallgren, Harald Hammarström, Kristofer Johannisson,", 
  "Janna Khegai, Peter Ljunglöf, Petri Mäenpää, and", 
- "Aarne Ranta, 1998-2005, under GNU General Public License (GPL)",
+ "Aarne Ranta, 1998-2006, under GNU General Public License (GPL)",
  "Bug reports to aarne@cs.chalmers.se"
  ]
