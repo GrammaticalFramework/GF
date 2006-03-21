@@ -57,9 +57,11 @@ newRules grammar chart (NR (Rule (Abs _ cats _) _))
 newRules grammar chart (NC newCat@(MCat cat lbls))
     = do Rule (Abs _ args (Name fun profile)) (Cnc _ _ lins0) <- grammar ? cat
 
-	 let lins = [ lin | lin@(Lin lbl _) <- lins0, 
-		      lbl `elem` lbls ]
-	     argsInLin = listAssoc $
+         lins <- selectLins lins0 lbls 
+	 -- let lins = [ lin | lin@(Lin lbl _) <- lins0, 
+	 -- 	      lbl `elem` lbls ]
+
+	 let argsInLin = listAssoc $
 			 map (\((n,c),l) -> (n, MCat c l)) $
 			 groupPairs $ nubsort $
 			 [ ((nr, cat), lbl) | 
@@ -85,6 +87,9 @@ newRules grammar chart (NC newCat@(MCat cat lbls))
 
          guard $ all (not . null) argLbls
 	 return $ NR (Rule (Abs newCat newArgs newName) (Cnc lbls argLbls newLins))
+
+selectLins lins0 = mapM selectLbl
+    where selectLbl lbl = [ lin | lin@(Lin lbl' _) <- lins0, lbl == lbl' ] 
 
 
 prtNewName :: [Profile (SyntaxForest Fun)] -> [Profile (SyntaxForest Fun)] -> Name -> String
