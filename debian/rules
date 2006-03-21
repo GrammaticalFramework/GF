@@ -60,7 +60,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/gf.
-	$(MAKE) -C src install prefix=$(CURDIR)/debian/gf
+	$(MAKE) -C src install-gf prefix=$(CURDIR)/debian/gf
 
 
 # Build architecture-independent files here.
