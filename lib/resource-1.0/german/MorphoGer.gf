@@ -26,6 +26,9 @@ oper
     {s : Gender => Case => Str ; n : Number ; a : Adjf} = \n,dies -> 
       {s = appAdj (regA dies) ! n ; n = n ; a = Weak} ;
 
+  mkOrd : {s : Degree => AForm => Str} -> {s : AForm => Str} = \a ->
+    {s = a.s ! Posit} ;
+
 -- For $ParadigmsGer$.
 
   genitS : Str -> Str = \hund -> case hund of {

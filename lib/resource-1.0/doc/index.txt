@@ -32,6 +32,7 @@ Bjorn Bringert (many Swadesh lexica),
 Carlos Gonzalia (Spanish cardinals), 
 Harald Hammarstrom (German morphology),
 Partik Jansson (Swedish cardinals),
+Andreas Priesnitz (German lexicon),
 Aarne Ranta.
 
 We are grateful for contributions and 
@@ -303,7 +304,6 @@ French
 
 
 German
-- the Swadesh part of lexicon missing
 - no list of irregular verbs
 
 
