@@ -36,9 +36,9 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	# Add here commands to compile the package.
-	./configure $(confflags)
+	cd src && ./configure $(confflags)
 
-	$(MAKE) unix
+	$(MAKE) -C src unix
 	#docbook-to-man debian/gf.sgml > gf.1
 
 	touch build-stamp
@@ -49,7 +49,7 @@ clean:
 	rm -f build-stamp configure-stamp
 
 	# Add here commands to clean up after the build process.
-	-$(MAKE) clean
+	-$(MAKE) -C src clean
 
 	dh_clean 
 
@@ -60,7 +60,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/gf.
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/gf
+	$(MAKE) -C src install DESTDIR=$(CURDIR)/debian/gf
 
 
 # Build architecture-independent files here.
