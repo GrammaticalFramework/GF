@@ -99,6 +99,82 @@ och det måste bestämmas vilka flaggor som har företräde:
 NOT SO URGENT
 
 
+*(P) incomplete concrete
+
+- följande funkar i GF:
+
+incomplete concrete TestDI of TestA = open (C=TestCI) in {
+lincat A = TestCI.A ** {p : Str};
+lin f = TestCI.f ** {p = "f"};
+    g = TestCI.g ** {p = "g"};
+}
+
+> i -src TestDE.gf
+- compiling TestBI.gf...   wrote file TestBI.gfr 110 msec
+  wrote file TestBI.gfc 110 msec
+- compiling TestBE.gf...   wrote file TestBE.gfr 120 msec
+  wrote file TestBE.gfc 120 msec
+- compiling TestA.gf...   wrote file TestA.gfc 120 msec
+- compiling TestCI.gf...   wrote file TestCI.gfc 130 msec
+- compiling TestCE.gf...   wrote file TestCE.gfc 140 msec
+- compiling TestDI.gf...   wrote file TestDI.gfc 140 msec
+- compiling TestDE.gf...   wrote file TestDE.gfc 150 msec
+
+
+- MEN, om man byter ut "TestCI" mot "C" blir det fel:
+
+incomplete concrete TestDI of TestA = open (C=TestCI) in {
+lincat A = C.A ** {p : Str};
+lin f = C.f ** {p = "f"};
+    g = C.g ** {p = "g"};
+}
+
+> i -src TestDE.gf
+- compiling TestBI.gf...   wrote file TestBI.gfr 170 msec
+  wrote file TestBI.gfc 170 msec
+- compiling TestBE.gf...   wrote file TestBE.gfr 170 msec
+  wrote file TestBE.gfc 180 msec
+- compiling TestA.gf...   wrote file TestA.gfc 190 msec
+- compiling TestCI.gf...   wrote file TestCI.gfc 200 msec
+- compiling TestCE.gf...   wrote file TestCE.gfc 200 msec
+- compiling TestDI.gf...   wrote file TestDI.gfc 200 msec
+- compiling TestDE.gf... failed to find C
+OCCURRED IN
+atomic term C given TestCE TestCI TestCE TestDE
+OCCURRED IN
+renaming definition of f
+OCCURRED IN
+renaming module TestDE
+
+
+- de övriga modulerna:
+
+abstract TestA = {
+cat A;
+fun f, g : A;
+}
+
+instance TestBE of TestBI = {
+oper hello = "hello";
+     bye  = "bye";
+}
+
+interface TestBI = {
+oper hello : Str;
+     bye : Str;
+}
+
+concrete TestCE of TestA = TestCI with (TestBI = TestBE);
+
+incomplete concrete TestCI of TestA = open TestBI in {
+lincat A = {s : Str};
+lin f = {s = hello};
+    g = {s = bye};
+}
+
+concrete TestDE of TestA = TestDI with (TestCI = TestCE);
+
+
 *(P) _tmpi, _tmpo
 
 P: när man använder "|" till ett systemanrop, t.ex:
