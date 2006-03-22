@@ -1,19 +1,30 @@
-TODO in GF implementation
-(P=Peter, A=Aarne, B=Björn)
+
+* Some notes on the syntax of this file, making it possible to use todoo-mode.el:
+
+- Items start with "* "
+- Sub-items start with "- "
+- It should be noted somewhere in the item, who has reported the item
+   Suggestion: Add "[who]" at the beginning of the item title
+   (then one can use "assign item" in todoo-mode)
+- Each item should have a priority
+   Suggestion: Add "URGENT", "IMPORTANT" or "WISH" at the beginning of
+   the item title
+- Sort the items in priority order
+   (todoo-mode can move an item up or down)
 
 ----------------------------------------------------------------------
-URGENT
 
 
-*(P) Felmeddelanden
+* [peb] URGENT: Error messages for syntax errors
 
-När det rapporteras syntaxfel bör det skrivas ut vilken fil det rör sig om.
-Annars är det omöjligt att veta var felet ligger om man använder flaggan -s:
+   When a syntax error is reported, it should be noted which file it
+   is. Otherwise it is impossible to know where the error is 
+   (if one uses the -s flag):
 
-	> i -s Domain/MP3/Domain_MP_Semantics.gf
-	syntax error at line 33 before ve , Proposition ,
+   	> i -s Domain/MP3/Domain_MP_Semantics.gf
+   	syntax error at line 33 before ve , Proposition ,
 
-Andra sorters fel är det inget problem med:
+   There's no problem with other kinds of errors:
 
 	> i -s Domain/MP3/Domain_MP_Semantics.gf
 	checking module Godis_Semantics
@@ -23,190 +34,196 @@ Andra sorters fel är det inget problem med:
 	}
 
 
-*(P) Hjälpkommandot
+* [peb] IMPORTANT: Add the -path of a module to daughter modules
 
-> h -printer
-(där saknas -printer=cfgm)
+   Then the main module does not have to know where all grandchildren are:
 
-> h -cat
-WARNING: invalid option: cat
+   file A.gf:
+   abstract A = B ** {...}
 
-> h -lang
-WARNING: invalid option: lang
+   file B.gf:
+   --# -path=./resource
+   abstract B = Lang ** {...}
 
-> h -language
-WARNING: invalid option: language
-
-> h -parser
-WARNING: invalid option: parser
-
-> h -aslkdjaslkdjss
-WARNING: invalid option: aslkdjaslkdjss
-Command not found.
-(det borde stå: "option not found")
-
-> h -optimize
-WARNING: invalid option: optimize
-
-> h -startcat
-WARNING: invalid option: startcat
-
-> h h
-h, help: h Command?
-(det borde även stå om h -option)
+   I.e.: the file A.gf should not need to know that B.gf uses the
+   resource library.
 
 
-*(P) En moduls -path adderas till dottermodulerna, 
-så slipper huvudmodulen veta var alla barnbarn ligger:
+* [peb] IMPORTANT: incomplete concrete and interfaces
 
-fil A.hs:
-abstract A = B ** {...}
+- The following works in GF:
 
-fil B.hs:
---# -path=./resource
-abstract B = Lang ** {...}
+   incomplete concrete TestDI of TestA = open (C=TestCI) in {
+     lincat A = TestCI.A ** {p : Str};
+     lin f = TestCI.f ** {p = "f"};
+         g = TestCI.g ** {p = "g"};
+   }
 
-Alltså: filen A.hs ska inte behöva veta att B.hs använder sig av resource.
+   > i -src TestDE.gf
 
+- BUT, if we exchange "TestCI" for "C" we get an error:
 
-*(P) Möjlighet att sätta GF_LIB_PATH inuti GF, t.ex. med:
+   incomplete concrete TestDI of TestA = open (C=TestCI) in {
+     lincat A = C.A ** {p : Str};
+     lin f = C.f ** {p = "f"};
+         g = C.g ** {p = "g"};
+   }
 
-> sf libpath=...
+   > i -src TestDE.gf
+   compiling TestDE.gf... failed to find C
+   OCCURRED IN
+   atomic term C given TestCE TestCI TestCE TestDE
+   OCCURRED IN
+   renaming definition of f
+   OCCURRED IN
+   renaming module TestDE
 
+- the other modules:
 
-*(P) Möjlighet att sätta startkategorin för en grammatik med sf:
+   abstract TestA = {
+     cat A;
+     fun f, g : A;
+   }
 
-> sf startcat=X
+   instance TestBE of TestBI = {
+     oper hello = "hello";
+          bye  = "bye";
+   }
 
+   interface TestBI = {
+   oper hello : Str;
+        bye : Str;
+   }
 
-*(P) import-flaggor:
+   concrete TestCE of TestA = TestCI with (TestBI = TestBE);
 
-när man gör "pg -printer=cfg", måste man ha gjort "i -conversion=finite",
-"pg" bryr sig inte om vilka flaggor som sätts i grammatikfilen
+   incomplete concrete TestCI of TestA = open TestBI in {
+   lincat A = {s : Str};
+   lin f = {s = hello};
+       g = {s = bye};
+   }
 
-när man gör "pm -printer=cfgm", måste flaggan "conversion=finite" vara satt i grammatikfilen, 
-"pm" bryr sig inte om ifall man har gjort "i -conversion=finite"
+   concrete TestDE of TestA = TestDI with (TestCI = TestCE);
 
-det är väl jag (Peter) som borde fixa detta, men jag vet inte var de olika flaggorna ligger
+* [peb] IMPORTANT: Missing things in the help command
 
-och det måste bestämmas vilka flaggor som har företräde:
-- i grammatikfilen, med "flags conversion=finite"
-- på kommandoraden, med "sf conversion=finite"
-- till ett kommmande, med "i -conversion=finite fil.gf"
+   > h -printer
+   (the flag -printer=cfgm is missing)
+   
+   > h -cat
+   WARNING: invalid option: cat
 
+   > h -lang
+   WARNING: invalid option: lang
 
-----------------------------------------------------------------------
-NOT SO URGENT
+   > h -language
+   WARNING: invalid option: language
 
+   > h -parser
+   WARNING: invalid option: parser
 
-*(P) incomplete concrete
+   > h -aslkdjaslkdjss
+   WARNING: invalid option: aslkdjaslkdjss
+   Command not found.
+   (it should note: "option not found")
 
-- följande funkar i GF:
+   > h -optimize
+   WARNING: invalid option: optimize
 
-incomplete concrete TestDI of TestA = open (C=TestCI) in {
-lincat A = TestCI.A ** {p : Str};
-lin f = TestCI.f ** {p = "f"};
-    g = TestCI.g ** {p = "g"};
-}
+   > h -startcat
+   WARNING: invalid option: startcat
 
-> i -src TestDE.gf
-- compiling TestBI.gf...   wrote file TestBI.gfr 110 msec
-  wrote file TestBI.gfc 110 msec
-- compiling TestBE.gf...   wrote file TestBE.gfr 120 msec
-  wrote file TestBE.gfc 120 msec
-- compiling TestA.gf...   wrote file TestA.gfc 120 msec
-- compiling TestCI.gf...   wrote file TestCI.gfc 130 msec
-- compiling TestCE.gf...   wrote file TestCE.gfc 140 msec
-- compiling TestDI.gf...   wrote file TestDI.gfc 140 msec
-- compiling TestDE.gf...   wrote file TestDE.gfc 150 msec
-
-
-- MEN, om man byter ut "TestCI" mot "C" blir det fel:
-
-incomplete concrete TestDI of TestA = open (C=TestCI) in {
-lincat A = C.A ** {p : Str};
-lin f = C.f ** {p = "f"};
-    g = C.g ** {p = "g"};
-}
-
-> i -src TestDE.gf
-- compiling TestBI.gf...   wrote file TestBI.gfr 170 msec
-  wrote file TestBI.gfc 170 msec
-- compiling TestBE.gf...   wrote file TestBE.gfr 170 msec
-  wrote file TestBE.gfc 180 msec
-- compiling TestA.gf...   wrote file TestA.gfc 190 msec
-- compiling TestCI.gf...   wrote file TestCI.gfc 200 msec
-- compiling TestCE.gf...   wrote file TestCE.gfc 200 msec
-- compiling TestDI.gf...   wrote file TestDI.gfc 200 msec
-- compiling TestDE.gf... failed to find C
-OCCURRED IN
-atomic term C given TestCE TestCI TestCE TestDE
-OCCURRED IN
-renaming definition of f
-OCCURRED IN
-renaming module TestDE
+   > h h
+   h, help: h Command?
+   (it should also mention "h -option")
 
 
-- de övriga modulerna:
+* [peb] IMPORTANT: Set GF_LIb-PATH within GF 
 
-abstract TestA = {
-cat A;
-fun f, g : A;
-}
-
-instance TestBE of TestBI = {
-oper hello = "hello";
-     bye  = "bye";
-}
-
-interface TestBI = {
-oper hello : Str;
-     bye : Str;
-}
-
-concrete TestCE of TestA = TestCI with (TestBI = TestBE);
-
-incomplete concrete TestCI of TestA = open TestBI in {
-lincat A = {s : Str};
-lin f = {s = hello};
-    g = {s = bye};
-}
-
-concrete TestDE of TestA = TestDI with (TestCI = TestCE);
+   > sf libpath=~/GF/lib
 
 
-*(P) _tmpi, _tmpo
+* [peb] IMPORTANT: Set the starting category with "sf"
 
-P: när man använder "|" till ett systemanrop, t.ex:
-pg | ! sort
-så skapas filerna _tmpi och _tmpo. Men de tas aldrig bort.
-
-P: Ännu bättre: ta bort filerna efteråt.
-
-A: Sant: när GF quittas (om detta inte sker onormalt).
-Eller när kommandot har kört färdigt (om det terminerar).
-
-P: Bäst(?): skapa filerna i /tmp eller liknande.
-
-A: Ibland får man skrivrättighetsproblem - och det är
-inte kul om man måste ange en tmp-path. Och olika
-användare och gf-processer måste ha unika filnamn.
-Och vet inte hur det funkar på windows...
-
-A: Ett till alternativ skulle vara att använda handles
-utan några tmp-filer alls. Men jag har inte hunnit
-ta reda på hur det går till.
-
-B: Lite slumpmässiga tankar:
-- man kan använda System.Directory.getTemporaryDirectory, så slipper man iaf bry sig om olika plattformsproblem.
-- sen kan man använda System.IO.openTempFile för att skapa en temporär fil. Den tas dock inte bort när programmet avslutas, så det får man fixa själv.
-- System.Posix.Temp.mkstemp gör nåt liknande, men dokumentationen är dålig.
-- biblioteket HsShellScript har lite funktioner för sånt här, se
-http://www.volker-wysk.de/hsshellscript/apidoc/HsShellScript.html#16
+   > sf startcat=X
 
 
-*(P) Hierarkiska moduler
+* [peb] IMPORTANT: import-flags 
 
-P: Förslag: A.B.C ligger i filen A/B/C.gf
-Största fördelen: man slipper ange --# -path=...
+- There are some inconsistencies when importing grammars:
+   
+   1. when doing "pg -printer=cfg", one must have used "i -conversion=finite",
+   since "pg" doesn't care about the flags that are set in the grammar file
+
+   2. when doing "pm -printer=cfgm", one must have set the flag
+   "conversion=finite" within the grammar file, since "pm" doesn't
+   care about the flags to the import command
+
+   (I guess it's me (peb) who should fix this, but I don't know where
+   the different flags reside...)
+
+- Also, it must be decided in what cases flags can override other flags:
+
+   a) in the grammar file, e.g. "flags conversion=finite;"
+   b) on the command line, e.g. "> sf conversion=finite"
+   c) as argument to a command, e.g. "> i -conversion=finite file.gf"
+
+- A related issue is to decide the scope of flags:
+
+   Some flags are (or should be) local to the module 
+   (e.g. -coding and -path) 
+   Other flags override daughter flags for daughter modules
+   (e.g. -startcat and -conversion)
+
+* [peb] WISH: generalizing incomplete concrete 
+
+   I want to be able to open an incomplete concrete module
+   inside another incomplete conrete.
+   Then I can instantiate both incompletes at the same time.
+
+* [peb] WISH: _tmpi, _tmpo
+
+   The files _tmpi and _tmpo are never removed when quitting GF.
+   Further suggestion: put them in /tmp or similar.
+
+   peb: när man använder "|" till ett systemanrop, t.ex:
+   pg | ! sort
+   så skapas filerna _tmpi och _tmpo. Men de tas aldrig bort.
+
+   peb: Ännu bättre: ta bort filerna efteråt.
+
+   aarne: Sant: när GF quittas (om detta inte sker onormalt).
+   Eller när kommandot har kört färdigt (om det terminerar).
+
+   peb: Bäst(?): skapa filerna i /tmp eller liknande.
+
+   aarne: Ibland får man skrivrättighetsproblem - och det är
+   inte kul om man måste ange en tmp-path. Och olika
+   användare och gf-processer måste ha unika filnamn.
+   Och vet inte hur det funkar på windows...
+
+   aarne: Ett till alternativ skulle vara att använda handles
+   utan några tmp-filer alls. Men jag har inte hunnit
+   ta reda på hur det går till.
+
+   björn: Lite slumpmässiga tankar:
+   + man kan använda System.Directory.getTemporaryDirectory, så slipper man iaf bry sig om olika plattformsproblem.
+   + sen kan man använda System.IO.openTempFile för att skapa en temporär fil. Den tas dock inte bort när programmet avslutas, så det får man fixa själv.
+   + System.Posix.Temp.mkstemp gör nåt liknande, men dokumentationen är dålig.
+   + biblioteket HsShellScript har lite funktioner för sånt här, se
+   http://www.volker-wysk.de/hsshellscript/apidoc/HsShellScript.html#16
+
+
+* [peb] WISH: Hierarchic modules
+
+   Suggestion by peb: 
+   The module A.B.C is located in the file A/B/C.gf
+   
+   Main advantage: you no longer need to state "--# -path=..." in
+   modules
+
+- How can this be combined with several modules inside one file?  
+
+
+
 
