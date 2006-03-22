@@ -44,6 +44,13 @@ data TTerm  = Constr :@ [TTerm]
 	    | TVar Var
 	      deriving (Eq, Ord, Show)
 
+{-- andra ordningens funktioner:
+data Decl c = Decl Var [(c,[TTerm])] (c,[TTerm])
+-- (A -> B)                ==>  Decl _ [(A,[])] (B,[])
+-- (A -> B -> C)           ==>  Decl _ [(A,[]), (B,[])] (C,[])
+-- (y : A t x -> B (t x))  ==>  Decl y [(A,[t:@[],TVar x])] (B,[t:@[TVar x]])
+-}
+
 decl2cat :: Decl c -> c
 decl2cat (Decl _ cat _) = cat
 
