@@ -312,7 +312,8 @@ intransitive, transitive, ditransitive, prepositional
 Noun phrases: 
 proper names, pronouns, determiners, possessives, cardinals and ordinals
 
-
+Coordination:
+lists of sentences, noun phrases, adverbs, adjectival phrases
 
 
 #NEW
