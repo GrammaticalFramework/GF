@@ -16,41 +16,48 @@ help command (``h``).
 
 ==A Quick Example==
 
-This is a complete example using 
+This is a complete example, dividing a grammar
+into three files.
+
 ``abstract``, ``concrete``, and ``resource``.
+
+File ``Order.gf``
 ```
--- in file Order.gf
 abstract Order = {
-  cat 
-    Order ; 
-    Item ;
-  fun 
-    One, Two : Item -> Order ;
-    Pizza : Item ;
-  }
-
--- in file OrderEng.gf
-concrete OrderEng of Order = open Res in {
-  flags startcat=Order ;
-  cat 
-    Order = {s : Str} ; 
-    Item  = {s : Num => Str} ;
-  fun 
-    One it = {s = "one" ++ it.s ! Sg} ;
-    Two it = {s = "two" ++ it.s ! Pl} ;
-    Pizza  = regNoun "pizza" ;
-  }
-
--- in file Res.gf
-resource Res = {
-  param Num = Sg | Pl ;
-  oper regNoun : Str -> {s : Num => Str} =
-    \dog -> {s = table {
-      Sg => dog ;
-      Pl => dog + "s"
-      }
-    } ;
-  } ; 
+cat 
+  Order ; 
+  Item ;
+fun 
+  One, Two : Item -> Order ;
+  Pizza : Item ;
+}
+```
+File ``OrderEng.gf`` (the top file):
+```
+--# -path=.:prelude
+concrete OrderEng of Order = 
+ open Res, Prelude in {
+flags startcat=Order ;
+lincat 
+  Order = SS ; 
+  Item  = {s : Num => Str} ;
+lin 
+  One it = ss ("one" ++ it.s ! Sg) ;
+  Two it = ss ("two" ++ it.s ! Pl) ;
+  Pizza  = regNoun "pizza" ;
+}
+```
+File ``Res.gf``:
+```
+resource Res = open Prelude in {
+param Num = Sg | Pl ;
+oper regNoun : Str -> {s : Num => Str} =
+  \dog -> {s = table {
+    Sg => dog ;
+    Pl => dog + "s"
+    }
+  } ;
+}
 ```
 To use this example, do
 ```
@@ -64,29 +71,29 @@ To use this example, do
 
 ==Modules and files==
 
-In standard GF, there is one module per file.
+One module per file.
 File named ``Foo.gf`` contains module named
 ``Foo``.
 
 Each module has the structure
 ```
 moduletypename =   
-  Extends **        -- optional
-  open Opens in     -- optional
+  Inherits **        -- optional
+  open Opens in      -- optional
   { Judgements }   
 ```
-Extends are names of modules of the same type.
-They can be restricted:
+Inherits are names of modules of the same type.
+Inheritance can be restricted:
 ```
-  Mo[f,g],  -- inherit only f,g
-  Lo-[f,g]  -- inheris all but f,g
+  Mo[f,g],  -- inherit only f,g from Mo
+  Lo-[f,g]  -- inheris all but f,g from Lo
 ```
 Opens are possible in ``concrete`` and ``resource``.
 They are names of modules of these two types, possibly
 qualified:
 ```
-  (M = Mo), -- references M.f or Mo.f
-  (Lo = Lo) -- references Lo.f
+  (M = Mo), -- refer to f as M.f or Mo.f
+  (Lo = Lo) -- refer to f as Lo.f
 ```
 Module types and judgements in them:
 ```
@@ -95,23 +102,28 @@ concrete C of A     -- lincat, lin, lindef, printname
 resource R          -- param, oper
 
 interface I         -- like resource, but can have
-                    -- oper f : T without definition
+                       oper f : T without definition
 instance J of I     -- like resource, defines opers
-                    -- that I leaves undefined
+                       that I leaves undefined
 incomplete          -- functor: concrete that opens 
- concrete CI of A = -- one or more interfaces
+ concrete CI of A =    one or more interfaces
   open I in ...
 concrete CJ of A =  -- completion: concrete that
-  CI with           -- instantiates a functor by giving
-    (I = J)         -- instances of its open interfaces
+  CI with              instantiates a functor by
+    (I = J)            instances of open interfaces
 ``` 
 The forms 
 ``param``, ``oper`` 
-may appear in ``concrete`` as well, but are not inherited to
-extensions.
+may appear in ``concrete`` as well, but are then
+not inherited to extensions.
 
-All modules can moreover have ``flag``s.
-
+All modules can moreover have ``flags`` and comments.
+Comments have the forms
+```
+-- till the end of line
+{- any number of lines between -}
+--# reserved for compiler pragmas
+```
 A ``concrete`` can be opened like a ``resource``.
 It is translated as follows:
 ```
@@ -130,13 +142,14 @@ Any ``concrete`` of it then works as an ``instance``.
 
 ```
 cat C               -- declare category C
-cat C (x : A)       -- dependent category C
-cat C A             -- same as C (x : A)
+cat C (x:A)(y:B x)  -- dependent category C
+cat C A B           -- same as C (x : A)(y : B)
 fun f : T           -- declare function f of type T
 def f = t           -- define f as t
 def f p q = t       -- define f by pattern matching
-data C = f          -- set f as constructor of C
-data f : A -> C     -- same as fun f : A; data C=f
+data C = f | g      -- set f,g as constructors of C
+data f : A -> C     -- same as 
+                       fun f : A -> C; data C=f
 
 lincat C = T        -- define lin.type of cat C
 lin f = t           -- define lin. of fun f
@@ -146,15 +159,16 @@ printname fun f = s -- printname shown in menus
 printname cat C = s -- printname shown in menus
 printname f = s     -- same as printname fun f = s
 
-param P = C | D Q R -- define ptype P with constrs
-                    -- C : P, D : Q -> R -> P
+param P = C | D Q R -- define parameter type P 
+                       with constructors
+                       C : P, D : Q -> R -> P
 oper h : T = t      -- define oper h of type T
 oper h = t          -- omit type, if inferrable
 
-flag p=v            -- define value of flag p
+flags p=v           -- set value of flag p
 ```
 Judgements are terminated by semicolons (``;``).
-Subsequent judgments of the same form may share their
+Subsequent judgments of the same form may share the
 keyword:
 ```
 cat C ; D ;         -- same as cat C ; cat D ;
@@ -187,9 +201,9 @@ P => B           -- table type, if P param. type
 {s : Str ; p : P}-- record type
 {s,t : Str}      -- same as {s : Str ; t : Str}
 {a : A} **{b : B}-- record type extension, same as  
-                 --   {a : A ; b : B}
+                    {a : A ; b : B}
 A * B * C        -- tuple type, same as
-                 --   {p1 : A ; p2 : B ; p3 : C}
+                    {p1 : A ; p2 : B ; p3 : C}
 Ints n           -- type of n first integers
 ```
 Resource (in ``oper``): all those of concrete, plus
@@ -197,7 +211,7 @@ Resource (in ``oper``): all those of concrete, plus
 Tok              -- tokens (subset of Str)
 A -> B           -- functions from A to B
 Int              -- integers
-Strs             -- list of prefixes
+Strs             -- list of prefixes (for pre)
 PType            -- parameter type
 Type             -- any type
 ```
@@ -219,14 +233,14 @@ f a b              -- : C if fun f : A -> B -> C
 Higher-Order Abstract syntax (HOAS): functions as arguments:
 ```
 F a (\y -> b)      -- : C if a : A, b : B (x : A), 
-                   --     fun F : A -> (B -> C) -> C
+                      fun F : A -> (B -> C) -> C
 ```
 Tokens and token lists
 ```
 "hello"            -- : Tok, singleton Str
 "hello" ++ "world" -- : Str
 ["hello world"]    -- : Str, same as "hello" ++ "world"
-"hello" + "world"  -- : Str, computes to "helloworld"
+"hello" + "world"  -- : Tok, computes to "helloworld"
 []                 -- : Str, empty list
 ```
 Parameters
@@ -248,24 +262,21 @@ table {              -- by pattern matching
 table {               
   n => regn n "cat" ;-- variable pattern 
   }
-
-\\_ => "fish"        -- same as table {n => "fish"} 
+table Num {...}      -- table given with arg. type
+table ["ox"; "oxen"] -- table as course of values
+\\_ => "fish"        -- same as table {_ => "fish"} 
 \\p,q => t           -- same as \\p => \\q => t
-
-table Num [          -- table given with arg. type
-  "mouse" ; "mice"   -- and course of values
-  ]
 
 t ! p                -- select p from table t
 case e of {...}      -- same as table {...} ! e 
 ```
 Records
 ```
-{s = "Liz" ; g = Fem}-- record in full form
+{s = "Liz"; g = Fem} -- record in full form
 {s,t = "et"}         -- same as {s = "et";t= "et"}
 
 {s = "Liz"} **       -- record extension: same as
-  {g = Fem}          --   {s = "Liz" ; g = Fem}
+  {g = Fem}             {s = "Liz" ; g = Fem}
 
 <a,b,c>        -- tuple, same as {p1=a;p2=b;p3=c}
 ```
@@ -273,13 +284,14 @@ Functions
 ```
 \x -> t            -- lambda abstract
 \x,y -> t          -- same as \x -> \y -> t
+\x,_ -> t          -- binding not in t
 ```
 Local definitions
 ```
 let x : A = d in t -- let definition
 let x = d in t     -- let defin, type inferred
 let x=d ; y=e in t -- same as 
-                   --   let x=d in let y=t in d
+                      let x=d in let y=e in t
 let {...} in t     -- same as let ... in t
 
 t where {...}      -- same as let ... in t
@@ -298,10 +310,11 @@ Typed expression
 ```
 <t:T>                -- same as t, to help type inference
 ```
-Accessing bound variables in HOAS: use fields ``$1, $2, $3,...``. 
+Accessing bound variables in ``lin``: use fields ``$1, $2, $3,...``. 
 Example:
 ```
-lin F a b = {s = ["for all"] ++ a.s ++ b.$1 ++ b.s}
+fun F : (A : Set) -> (El A -> Prop) -> Prop ; 
+lin F A B = {s = ["for all"] ++ A.s ++ B.$1 ++ B.s}
 ```
 
 
@@ -329,15 +342,15 @@ p*                -- repetition of a string pattern
 
 ```
 -- lib/prelude/Predef.gf
-drop   : Int -> Tok -> Tok     -- drop prefix of length
-take   : Int -> Tok -> Tok     -- take prefix of length
-tk     : Int -> Tok -> Tok     -- drop suffix of length
-dp     : Int -> Tok -> Tok     -- take suffix of length
-occur  : Tok -> Tok -> PBool   -- test if substring
-occurs : Tok -> Tok -> PBool   -- test if any char occurs
-show   : (P : Type) -> P ->Tok -- param to string
-read   : (P : Type) -> Tok-> P -- string to param
-toStr  : (L : Type) -> L ->Str -- find "first" string
+drop   : Int -> Tok -> Tok   -- drop prefix of length
+take   : Int -> Tok -> Tok   -- take prefix of length
+tk     : Int -> Tok -> Tok   -- drop suffix of length
+dp     : Int -> Tok -> Tok   -- take suffix of length
+occur  : Tok -> Tok -> PBool -- test if substring
+occurs : Tok -> Tok -> PBool -- test if any char occurs
+show   : (P:Type) -> P ->Tok -- param to string
+read   : (P:Type) -> Tok-> P -- string to param
+toStr  : (L:Type) -> L ->Str -- find "first" string
 
 -- lib/prelude/Prelude.gf
 param Bool = True | False
@@ -347,7 +360,7 @@ oper
   cc2 : (_,_ : SS) -> SS       -- concat SS's
   optStr : Str -> Str          -- string or empty
   strOpt : Str -> Str          -- empty or string
-  bothWays : Str -> Str -> Str -- XY or YX 
+  bothWays : Str -> Str -> Str -- X++Y or Y++X 
   init : Tok -> Tok            -- all but last char
   last : Tok -> Tok            -- last char
   prefixSS : Str -> SS -> SS
@@ -361,8 +374,7 @@ oper
 ==Flags==
 
 Flags can appear, with growing priority,
-- in files, with judgement keyword ``flags``
-  and without dash (``-``)
+- in files, judgement ``flags`` and without dash (``-``)
 - as flags to ``gf`` when invoked, with dash
 - as flags to various GF commands, with dash
 
@@ -383,18 +395,19 @@ unlexer=textlit text, remove string lit quotes
 unlexer=concat  remove all spaces
 unlexer=bind    remove spaces around "&+"
 
-optimize=values    good for lexicon concrete
 optimize=all_subs  best for almost any concrete
+optimize=values    good for lexicon concrete
 optimize=all       usually good for resource
 optimize=noexpand  for resource, if =all too big
 ```
-For the full set of flags, use on-line ``h -flag``.
+For the full set of values for ``flag``, 
+use on-line ``h -flag``.
 
 
 
 ==File paths==
 
-Colon-separated lists of search directories tried in the
+Colon-separated lists of directories tried in the
 given order: 
 ```
 --# -path=.:../abstract:../common:prelude
@@ -417,23 +430,19 @@ division into files uses ``include``s.
 A file ``Foo.gf`` is recognized as the old format
 if it lacks a module header. 
 
-**Context-free** (file ``foo.cf``). The form of rules is
+**Context-free** (file ``foo.cf``). The form of rules is e.g.
 ```
-  Fun. Cat ::= Cat "tok" Cat ;
+Fun. S ::= NP "is" AP ;
 ```
-where ``Fun`` is optional. Rules must be one per line.
-The RHS can be empty.
+If ``Fun`` is omitted, it is generated automatically. 
+Rules must be one per line. The RHS can be empty.
 
-**Extended BNF** (file ``foo.ebnf``). The form of rules is
+**Extended BNF** (file ``foo.ebnf``). The form of rules is e.g.
 ```
-  Cat ::= Reg ;
+S ::= (NP+ ("is" | "was") AP | V NP*) ;
 ```
-where ``Reg`` is a regular expression of categories
-and quoted tokens:
-```
-  T U, T|U, T*, T+, T? 
-``` 
-The RHS can also be empty.
+where the RHS is a regular expression of categories
+and quoted tokens: ``"foo", T U, T|U, T*, T+, T?``, or empty.
 Rule labels are generated automatically.
 
 
@@ -447,11 +456,11 @@ on command line. This file can be the grammar file itself.
 
 **Example-based grammars**  (file ``foo.gfe``). Expressions of the form
 ```
-in Mo.Cat "example string"
+in Cat "example string"
 ```
 are preprocessed by using a parser given by the flag 
 ```
---# resource=File
+--# -resource=File
 ```
 and the result is written to ``foo.gf``.
 

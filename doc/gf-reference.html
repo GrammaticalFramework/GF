@@ -1,0 +1,574 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE>GF Quick Reference</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>GF Quick Reference</H1>
+<FONT SIZE="4">
+<I>Aarne Ranta</I><BR>
+Wed Mar 29 13:21:48 2006
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+    <UL>
+    <LI><A HREF="#toc1">A Quick Example</A>
+    <LI><A HREF="#toc2">Modules and files</A>
+    <LI><A HREF="#toc3">Judgements</A>
+    <LI><A HREF="#toc4">Types</A>
+    <LI><A HREF="#toc5">Expressions</A>
+    <LI><A HREF="#toc6">Pattern matching</A>
+    <LI><A HREF="#toc7">Sample library functions</A>
+    <LI><A HREF="#toc8">Flags</A>
+    <LI><A HREF="#toc9">File paths</A>
+    <LI><A HREF="#toc10">Alternative grammar formats</A>
+    <LI><A HREF="#toc11">References</A>
+    </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+This is a quick reference on GF grammars.
+Help on GF commands is obtained on line by the
+help command (<CODE>h</CODE>). 
+</P>
+<A NAME="toc1"></A>
+<H2>A Quick Example</H2>
+<P>
+This is a complete example, dividing a grammar
+into three files.
+</P>
+<P>
+<CODE>abstract</CODE>, <CODE>concrete</CODE>, and <CODE>resource</CODE>.
+</P>
+<P>
+File <CODE>Order.gf</CODE>
+</P>
+<PRE>
+  abstract Order = {
+  cat 
+    Order ; 
+    Item ;
+  fun 
+    One, Two : Item -&gt; Order ;
+    Pizza : Item ;
+  }
+</PRE>
+<P>
+File <CODE>OrderEng.gf</CODE> (the top file):
+</P>
+<PRE>
+  --# -path=.:prelude
+  concrete OrderEng of Order = 
+   open Res, Prelude in {
+  flags startcat=Order ;
+  lincat 
+    Order = SS ; 
+    Item  = {s : Num =&gt; Str} ;
+  lin 
+    One it = ss ("one" ++ it.s ! Sg) ;
+    Two it = ss ("two" ++ it.s ! Pl) ;
+    Pizza  = regNoun "pizza" ;
+  }
+</PRE>
+<P>
+File <CODE>Res.gf</CODE>:
+</P>
+<PRE>
+  resource Res = open Prelude in {
+  param Num = Sg | Pl ;
+  oper regNoun : Str -&gt; {s : Num =&gt; Str} =
+    \dog -&gt; {s = table {
+      Sg =&gt; dog ;
+      Pl =&gt; dog + "s"
+      }
+    } ;
+  }
+</PRE>
+<P>
+To use this example, do
+</P>
+<PRE>
+    % gf             -- in shell: start GF
+    &gt; i OrderEng.gf  -- in GF: import grammar
+    &gt; p "one pizza"  --        parse string
+    &gt; l Two Pizza    --        linearize tree
+</PRE>
+<P></P>
+<A NAME="toc2"></A>
+<H2>Modules and files</H2>
+<P>
+One module per file.
+File named <CODE>Foo.gf</CODE> contains module named
+<CODE>Foo</CODE>.
+</P>
+<P>
+Each module has the structure
+</P>
+<PRE>
+  moduletypename =   
+    Inherits **        -- optional
+    open Opens in      -- optional
+    { Judgements }   
+</PRE>
+<P>
+Inherits are names of modules of the same type.
+Inheritance can be restricted:
+</P>
+<PRE>
+    Mo[f,g],  -- inherit only f,g from Mo
+    Lo-[f,g]  -- inheris all but f,g from Lo
+</PRE>
+<P>
+Opens are possible in <CODE>concrete</CODE> and <CODE>resource</CODE>.
+They are names of modules of these two types, possibly
+qualified:
+</P>
+<PRE>
+    (M = Mo), -- refer to f as M.f or Mo.f
+    (Lo = Lo) -- refer to f as Lo.f
+</PRE>
+<P>
+Module types and judgements in them:
+</P>
+<PRE>
+  abstract A          -- cat, fun, def, data
+  concrete C of A     -- lincat, lin, lindef, printname
+  resource R          -- param, oper
+  
+  interface I         -- like resource, but can have
+                         oper f : T without definition
+  instance J of I     -- like resource, defines opers
+                         that I leaves undefined
+  incomplete          -- functor: concrete that opens 
+   concrete CI of A =    one or more interfaces
+    open I in ...
+  concrete CJ of A =  -- completion: concrete that
+    CI with              instantiates a functor by
+      (I = J)            instances of open interfaces
+</PRE>
+<P>
+The forms 
+<CODE>param</CODE>, <CODE>oper</CODE> 
+may appear in <CODE>concrete</CODE> as well, but are then
+not inherited to extensions.
+</P>
+<P>
+All modules can moreover have <CODE>flags</CODE> and comments.
+Comments have the forms
+</P>
+<PRE>
+  -- till the end of line
+  {- any number of lines between -}
+  --# reserved for compiler pragmas
+</PRE>
+<P>
+A <CODE>concrete</CODE> can be opened like a <CODE>resource</CODE>.
+It is translated as follows:
+</P>
+<PRE>
+  cat C          ---&gt;  oper C : Type = 
+  lincat C = T           T ** {lock_C : {}}
+  
+  fun f : G -&gt; C ---&gt;  oper f : A* -&gt; C* = \g -&gt; 
+  lin f = t              t g ** {lock_C = &lt;&gt;}          
+</PRE>
+<P>
+An <CODE>abstract</CODE> can be opened like an <CODE>interface</CODE>.
+Any <CODE>concrete</CODE> of it then works as an <CODE>instance</CODE>.
+</P>
+<A NAME="toc3"></A>
+<H2>Judgements</H2>
+<PRE>
+  cat C               -- declare category C
+  cat C (x:A)(y:B x)  -- dependent category C
+  cat C A B           -- same as C (x : A)(y : B)
+  fun f : T           -- declare function f of type T
+  def f = t           -- define f as t
+  def f p q = t       -- define f by pattern matching
+  data C = f | g      -- set f,g as constructors of C
+  data f : A -&gt; C     -- same as 
+                         fun f : A -&gt; C; data C=f
+  
+  lincat C = T        -- define lin.type of cat C
+  lin f = t           -- define lin. of fun f
+  lin f x y = t       -- same as lin f = \x y -&gt; t
+  lindef C = \s -&gt; t  -- default lin. of cat C
+  printname fun f = s -- printname shown in menus
+  printname cat C = s -- printname shown in menus
+  printname f = s     -- same as printname fun f = s
+  
+  param P = C | D Q R -- define parameter type P 
+                         with constructors
+                         C : P, D : Q -&gt; R -&gt; P
+  oper h : T = t      -- define oper h of type T
+  oper h = t          -- omit type, if inferrable
+  
+  flags p=v           -- set value of flag p
+</PRE>
+<P>
+Judgements are terminated by semicolons (<CODE>;</CODE>).
+Subsequent judgments of the same form may share the
+keyword:
+</P>
+<PRE>
+  cat C ; D ;         -- same as cat C ; cat D ;
+</PRE>
+<P>
+Judgements can also share RHS:
+</P>
+<PRE>
+  fun f,g : A         -- same as fun f : A ; g : A
+</PRE>
+<P></P>
+<A NAME="toc4"></A>
+<H2>Types</H2>
+<P>
+Abstract syntax (in <CODE>fun</CODE>):
+</P>
+<PRE>
+  C                -- basic type, if cat C
+  C a b            -- basic type for dep. category
+  (x : A) -&gt; B     -- dep. functions from A to B
+  (_ : A) -&gt; B     -- nondep. functions from A to B
+  (p,q : A) -&gt; B   -- same as (p : A)-&gt; (q : A) -&gt; B
+  A -&gt; B           -- same as (_ : A) -&gt; B
+  Int              -- predefined integer type
+  Float            -- predefined float type
+  String           -- predefined string type
+</PRE>
+<P>
+Concrete syntax (in <CODE>lincat</CODE>):
+</P>
+<PRE>
+  Str              -- token lists
+  P                -- parameter type, if param P
+  P =&gt; B           -- table type, if P param. type
+  {s : Str ; p : P}-- record type
+  {s,t : Str}      -- same as {s : Str ; t : Str}
+  {a : A} **{b : B}-- record type extension, same as  
+                      {a : A ; b : B}
+  A * B * C        -- tuple type, same as
+                      {p1 : A ; p2 : B ; p3 : C}
+  Ints n           -- type of n first integers
+</PRE>
+<P>
+Resource (in <CODE>oper</CODE>): all those of concrete, plus
+</P>
+<PRE>
+  Tok              -- tokens (subset of Str)
+  A -&gt; B           -- functions from A to B
+  Int              -- integers
+  Strs             -- list of prefixes (for pre)
+  PType            -- parameter type
+  Type             -- any type
+</PRE>
+<P>
+As parameter types, one can use any finite type:
+<CODE>param</CODE> constants <CODE>P</CODE>,
+<CODE>Ints n</CODE>, and record types of parameter types.
+</P>
+<A NAME="toc5"></A>
+<H2>Expressions</H2>
+<P>
+Syntax trees = full function applications
+</P>
+<PRE>
+  f a b              -- : C if fun f : A -&gt; B -&gt; C
+  1977               -- : Int
+  3.14               -- : Float
+  "foo"              -- : String
+</PRE>
+<P>
+Higher-Order Abstract syntax (HOAS): functions as arguments:
+</P>
+<PRE>
+  F a (\y -&gt; b)      -- : C if a : A, b : B (x : A), 
+                        fun F : A -&gt; (B -&gt; C) -&gt; C
+</PRE>
+<P>
+Tokens and token lists
+</P>
+<PRE>
+  "hello"            -- : Tok, singleton Str
+  "hello" ++ "world" -- : Str
+  ["hello world"]    -- : Str, same as "hello" ++ "world"
+  "hello" + "world"  -- : Tok, computes to "helloworld"
+  []                 -- : Str, empty list
+</PRE>
+<P>
+Parameters
+</P>
+<PRE>
+  Sg                   -- atomic constructor
+  VPres Sg P2          -- applied constructor
+  {n = Sg ; p = P3}    -- record of parameters
+</PRE>
+<P>
+Tables
+</P>
+<PRE>
+  table {              -- by full branches
+    Sg =&gt; "mouse" ;
+    Pl =&gt; "mice"
+    }
+  table {              -- by pattern matching
+    Pl =&gt; "mice" ;
+    _  =&gt; "mouse"      -- wildcard pattern
+    }
+  table {               
+    n =&gt; regn n "cat" ;-- variable pattern 
+    }
+  table Num {...}      -- table given with arg. type
+  table ["ox"; "oxen"] -- table as course of values
+  \\_ =&gt; "fish"        -- same as table {_ =&gt; "fish"} 
+  \\p,q =&gt; t           -- same as \\p =&gt; \\q =&gt; t
+  
+  t ! p                -- select p from table t
+  case e of {...}      -- same as table {...} ! e 
+</PRE>
+<P>
+Records
+</P>
+<PRE>
+  {s = "Liz"; g = Fem} -- record in full form
+  {s,t = "et"}         -- same as {s = "et";t= "et"}
+  
+  {s = "Liz"} **       -- record extension: same as
+    {g = Fem}             {s = "Liz" ; g = Fem}
+  
+  &lt;a,b,c&gt;        -- tuple, same as {p1=a;p2=b;p3=c}
+</PRE>
+<P>
+Functions
+</P>
+<PRE>
+  \x -&gt; t            -- lambda abstract
+  \x,y -&gt; t          -- same as \x -&gt; \y -&gt; t
+  \x,_ -&gt; t          -- binding not in t
+</PRE>
+<P>
+Local definitions
+</P>
+<PRE>
+  let x : A = d in t -- let definition
+  let x = d in t     -- let defin, type inferred
+  let x=d ; y=e in t -- same as 
+                        let x=d in let y=e in t
+  let {...} in t     -- same as let ... in t
+  
+  t where {...}      -- same as let ... in t
+</PRE>
+<P>
+Free variation
+</P>
+<PRE>
+  variants {x ; y}     -- both x and y possible
+  variants {}          -- nothing possible
+</PRE>
+<P>
+Prefix-dependent choices
+</P>
+<PRE>
+  pre {"a" ; "an" / v} -- "an" before v, "a" otherw.
+  strs {"a" ; "i" ;"o"}-- list of condition prefixes
+</PRE>
+<P>
+Typed expression
+</P>
+<PRE>
+  &lt;t:T&gt;                -- same as t, to help type inference
+</PRE>
+<P>
+Accessing bound variables in <CODE>lin</CODE>: use fields <CODE>$1, $2, $3,...</CODE>. 
+Example:
+</P>
+<PRE>
+  fun F : (A : Set) -&gt; (El A -&gt; Prop) -&gt; Prop ; 
+  lin F A B = {s = ["for all"] ++ A.s ++ B.$1 ++ B.s}
+</PRE>
+<P></P>
+<A NAME="toc6"></A>
+<H2>Pattern matching</H2>
+<P>
+These patterns can be used in branches of <CODE>table</CODE> and
+<CODE>case</CODE> expressions.
+</P>
+<PRE>
+  C                 -- atomic param constructor
+  C p q             -- param constr. appl- to patterns
+  x                 -- variable, matches anything
+  _                 -- wildcard, matches anything
+  "foo"             -- string
+  56                -- integer
+  {s = p ; y = q}   -- record, matches extensions too
+  &lt;p,q&gt;             -- tuple, same as {p1=p ; p2=q}
+  p | q             -- disjunction, binds to first match
+  x@p               -- binds x to what p matches
+  - p               -- negation
+  p + "s"           -- sequence of two string patterns
+  p*                -- repetition of a string pattern
+</PRE>
+<P></P>
+<A NAME="toc7"></A>
+<H2>Sample library functions</H2>
+<PRE>
+  -- lib/prelude/Predef.gf
+  drop   : Int -&gt; Tok -&gt; Tok   -- drop prefix of length
+  take   : Int -&gt; Tok -&gt; Tok   -- take prefix of length
+  tk     : Int -&gt; Tok -&gt; Tok   -- drop suffix of length
+  dp     : Int -&gt; Tok -&gt; Tok   -- take suffix of length
+  occur  : Tok -&gt; Tok -&gt; PBool -- test if substring
+  occurs : Tok -&gt; Tok -&gt; PBool -- test if any char occurs
+  show   : (P:Type) -&gt; P -&gt;Tok -- param to string
+  read   : (P:Type) -&gt; Tok-&gt; P -- string to param
+  toStr  : (L:Type) -&gt; L -&gt;Str -- find "first" string
+  
+  -- lib/prelude/Prelude.gf
+  param Bool = True | False
+  oper
+    SS  : Type                   -- the type {s : Str}
+    ss  : Str -&gt; SS              -- construct SS
+    cc2 : (_,_ : SS) -&gt; SS       -- concat SS's
+    optStr : Str -&gt; Str          -- string or empty
+    strOpt : Str -&gt; Str          -- empty or string
+    bothWays : Str -&gt; Str -&gt; Str -- X++Y or Y++X 
+    init : Tok -&gt; Tok            -- all but last char
+    last : Tok -&gt; Tok            -- last char
+    prefixSS : Str -&gt; SS -&gt; SS
+    postfixSS : Str -&gt; SS -&gt; SS
+    infixSS : Str -&gt; SS -&gt; SS -&gt; SS
+    if_then_else : (A : Type) -&gt; Bool -&gt; A -&gt; A -&gt; A
+    if_then_Str : Bool -&gt; Str -&gt; Str -&gt; Str
+</PRE>
+<P></P>
+<A NAME="toc8"></A>
+<H2>Flags</H2>
+<P>
+Flags can appear, with growing priority,
+</P>
+<UL>
+<LI>in files, judgement <CODE>flags</CODE> and without dash (<CODE>-</CODE>)
+<LI>as flags to <CODE>gf</CODE> when invoked, with dash
+<LI>as flags to various GF commands, with dash
+</UL>
+
+<P>
+Some common flags used in grammars:
+</P>
+<PRE>
+  startcat=cat    use this category as default 
+  
+  lexer=literals  int and string literals recognized
+  lexer=code      like program code
+  lexer=text      like text: spacing, capitals
+  lexer=textlit   text, unknowns as string lits
+  
+  unlexer=code    like program code
+  unlexer=codelit code, remove string lit quotes
+  unlexer=text    like text: punctuation, capitals
+  unlexer=textlit text, remove string lit quotes
+  unlexer=concat  remove all spaces
+  unlexer=bind    remove spaces around "&amp;+"
+  
+  optimize=all_subs  best for almost any concrete
+  optimize=values    good for lexicon concrete
+  optimize=all       usually good for resource
+  optimize=noexpand  for resource, if =all too big
+</PRE>
+<P>
+For the full set of values for <CODE>flag</CODE>, 
+use on-line <CODE>h -flag</CODE>.
+</P>
+<A NAME="toc9"></A>
+<H2>File paths</H2>
+<P>
+Colon-separated lists of directories tried in the
+given order: 
+</P>
+<PRE>
+  --# -path=.:../abstract:../common:prelude
+</PRE>
+<P>
+This can be (in order of growing preference), as
+first line in the top file, as flag to <CODE>gf</CODE>
+when invoked, or as flag to the <CODE>i</CODE> command.
+The prefix <CODE>--#</CODE> is used only in files.
+</P>
+<P>
+If the variabls <CODE>GF_LIB_PATH</CODE> is defined, its
+value is automatically prefixed to each directory to
+extend the original search path.
+</P>
+<A NAME="toc10"></A>
+<H2>Alternative grammar formats</H2>
+<P>
+<B>Old GF</B> (before GF 2.0): 
+all judgements in any kinds of modules,
+division into files uses <CODE>include</CODE>s.
+A file <CODE>Foo.gf</CODE> is recognized as the old format
+if it lacks a module header. 
+</P>
+<P>
+<B>Context-free</B> (file <CODE>foo.cf</CODE>). The form of rules is e.g.
+</P>
+<PRE>
+  Fun. S ::= NP "is" AP ;
+</PRE>
+<P>
+If <CODE>Fun</CODE> is omitted, it is generated automatically. 
+Rules must be one per line. The RHS can be empty.
+</P>
+<P>
+<B>Extended BNF</B> (file <CODE>foo.ebnf</CODE>). The form of rules is e.g.
+</P>
+<PRE>
+  S ::= (NP+ ("is" | "was") AP | V NP*) ;
+</PRE>
+<P>
+where the RHS is a regular expression of categories
+and quoted tokens: <CODE>"foo", T U, T|U, T*, T+, T?</CODE>, or empty.
+Rule labels are generated automatically.
+</P>
+<P>
+<B>Probabilistic grammars</B> (not a separate format).
+You can set the probability of a function <CODE>f</CODE> (in its value category) by
+</P>
+<PRE>
+  --# prob f 0.009
+</PRE>
+<P>
+These are put into a file given to GF using the <CODE>probs=File</CODE> flag
+on command line. This file can be the grammar file itself.
+</P>
+<P>
+<B>Example-based grammars</B>  (file <CODE>foo.gfe</CODE>). Expressions of the form
+</P>
+<PRE>
+  in Cat "example string"
+</PRE>
+<P>
+are preprocessed by using a parser given by the flag 
+</P>
+<PRE>
+  --# -resource=File
+</PRE>
+<P>
+and the result is written to <CODE>foo.gf</CODE>.
+</P>
+<A NAME="toc11"></A>
+<H2>References</H2>
+<P>
+<A HREF="http://www.cs.chalmers.se/~aarne/GF/">GF Homepage</A>
+</P>
+<P>
+A. Ranta, Grammatical Framework: A Type-Theoretical Grammar Formalism.
+<I>The Journal of Functional Programming</I>, vol. 14:2. 2004, pp. 145-189. 
+</P>
+
+<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -thtml -\-toc gf-reference.txt -->
+</BODY></HTML>
