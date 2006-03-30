@@ -2,7 +2,8 @@
 
 instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 
-  flags optimize=all ;
+  flags optimize=noexpand ;
+--  flags optimize=all ;
 
   param 
     Prep = P_de | P_a ;
