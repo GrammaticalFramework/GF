@@ -13,11 +13,11 @@ incomplete concrete RelativeRomance of Relative =
       s = \\ag =>
         (mkClause
           (rp.s ! False ! {g = ag.g ; n = ag.n} ! Nom)
-          (
-        case rp.a of {
-          RNoAg => ag ;
-          RAg a => a ** {p = P3}
-          }) vp).s
+          (case rp.a of {
+             RNoAg => ag ;
+             RAg a => a ** {p = P3}
+             }) 
+          vp).s
       } ;
 
     RelSlash rp slash = {
