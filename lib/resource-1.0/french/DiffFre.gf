@@ -76,14 +76,13 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
           CPron a => argPron a.g a.n a.p Acc ;
           _ => []
           } ;
-        pdat = case dat of {
-          CPron a => argPron a.g a.n a.p dative ;
-          _ => []
-          } ;
        in
        case dat of {
-          CPron {p = P3} => <pacc ++ pdat,[]> ;
-          _ => <pdat ++ pacc, []>
+          CPron a => let pdat = argPron a.g a.n a.p dative in case a.p of {
+            P3 => <pacc ++ pdat,[]> ;
+            _  => <pdat ++ pacc,[]>
+            } ;
+          _ => <pacc, []>
           } ;
 
 
