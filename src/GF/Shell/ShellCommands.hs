@@ -179,12 +179,12 @@ optionsOfCommand co = case co of
   CStripState -> none
   CTransformGrammar _ -> flags "printer"
   CConvertLatex _ -> none
-  CLinearize _ -> both "utf8 table struct record all multi" "lang number unlexer"
+  CLinearize _ -> both "utf8 table struct record all multi" "lang number unlexer mark"
   CParse -> both "cut new newer cfg mcfg n ign raw v lines all prob" 
                  "cat lang lexer parser number rawtrees"
   CTranslate _ _ -> opts "cat lexer parser"
   CGenerateRandom -> both "cf prob" "cat lang number depth"
-  CGenerateTrees -> both "metas" "atoms depth alts cat lang number"
+  CGenerateTrees -> both "metas" "atoms depth alts cat lang number noexpand"
   CPutTerm -> flags "transform number"
   CTreeBank -> opts "c xml trees"
   CLookupTreebank -> both "assocs raw strings trees" "treebank"
@@ -216,7 +216,7 @@ optionsOfCommand co = case co of
   CPrintMultiGrammar -> both "utf8 utf8id" "printer"
   CPrintSourceGrammar -> both "utf8" "printer"
 
-  CHelp _ -> opts "all alts atoms coding defs filter length lexer unlexer printer probs transform depth number"
+  CHelp _ -> opts "all alts atoms coding defs filter length lexer unlexer printer probs transform depth number cat"
 
   CImpure ICEditSession -> both "f" "file"
   CImpure ICTranslateSession -> both "f langs" "cat"

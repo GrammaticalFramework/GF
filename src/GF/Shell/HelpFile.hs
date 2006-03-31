@@ -335,18 +335,20 @@ txtHelpFile =
   "\n      command completes the Tree with values to the metavariables in" ++
   "\n      the tree." ++
   "\n  options:" ++
-  "\n      -metas   also return trees that include metavariables" ++
+  "\n      -metas    also return trees that include metavariables" ++
   "\n  flags:" ++
-  "\n      -depth   generate to this depth (default 3)" ++
-  "\n      -atoms   take this number of atomic rules of each category (default unlimited)" ++
-  "\n      -alts    take this number of alternatives at each branch (default unlimited)" ++
-  "\n      -cat     generate in this category" ++
-  "\n      -lang    use the abstract syntax of this grammar" ++
-  "\n      -number  generate (at most) this number of trees" ++
+  "\n      -depth    generate to this depth (default 3)" ++
+  "\n      -atoms    take this number of atomic rules of each category (default unlimited)" ++
+  "\n      -alts     take this number of alternatives at each branch (default unlimited)" ++
+  "\n      -cat      generate in this category" ++
+  "\n      -lang     use the abstract syntax of this grammar" ++
+  "\n      -number   generate (at most) this number of trees" ++
+  "\n      -noexpand don't expand these categories (comma-separated, e.g. -noexpand=V,CN)" ++
   "\n  examples:" ++
-  "\n      gt -depth=10 -cat=NP     -- generate all NP's to depth 10 " ++
-  "\n      gt (PredVP ? (NegVG ?))  -- generate all trees of this form" ++
-  "\n      gt -cat=S -tr | l        -- gererate and linearize" ++
+  "\n      gt -depth=10 -cat=NP              -- generate all NP's to depth 10 " ++
+  "\n      gt (PredVP ? (NegVG ?))           -- generate all trees of this form" ++
+  "\n      gt -cat=S -tr | l                 -- generate and linearize" ++
+  "\n      gt -noexpand=NP | l -mark=metacat -- the only NP is meta, linearized \"?0 +NP\"" ++
   "\n" ++
   "\nma, morphologically_analyse: ma String" ++
   "\n      Runs morphological analysis on each word in String and displays" ++
@@ -525,6 +527,7 @@ txtHelpFile =
   "\n  options" ++
   "\n       -all   show the whole help file" ++
   "\n       -defs  show user-defined commands and terms" ++
+  "\n       -FLAG  show the values of FLAG (works for grammar-independent flags)" ++
   "\n  examples:" ++
   "\n       h print_grammar  -- show all information on the pg command" ++
   "\n" ++
@@ -673,6 +676,11 @@ txtHelpFile =
   "\n    -unlexer=codelit     like code, but remove string literal quotes" ++
   "\n    -unlexer=concat      remove all spaces" ++
   "\n    -unlexer=bind        like identity, but bind at \"&+\"" ++
+  "\n" ++
+  "\n-mark, marking of parts of tree in linearization. The default is none." ++
+  "\n    -mark=metacat        append \"+CAT\" to every metavariable, showing its category" ++
+  "\n    -mark=struct         show tree structure with brackets" ++
+  "\n    -mark=java           show tree structure with XML tags (used in gfeditor)" ++
   "\n" ++
   "\n-coding, Some grammars are in UTF-8, some in isolatin-1." ++
   "\n    If the letters ä (a-umlaut) and ö (u-umlaut) look strange, either" ++

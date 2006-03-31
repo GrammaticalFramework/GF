@@ -306,18 +306,20 @@ gt, generate_trees: gt Tree?
       command completes the Tree with values to the metavariables in
       the tree.
   options:
-      -metas   also return trees that include metavariables
+      -metas    also return trees that include metavariables
   flags:
-      -depth   generate to this depth (default 3)
-      -atoms   take this number of atomic rules of each category (default unlimited)
-      -alts    take this number of alternatives at each branch (default unlimited)
-      -cat     generate in this category
-      -lang    use the abstract syntax of this grammar
-      -number  generate (at most) this number of trees
+      -depth    generate to this depth (default 3)
+      -atoms    take this number of atomic rules of each category (default unlimited)
+      -alts     take this number of alternatives at each branch (default unlimited)
+      -cat      generate in this category
+      -lang     use the abstract syntax of this grammar
+      -number   generate (at most) this number of trees
+      -noexpand don't expand these categories (comma-separated, e.g. -noexpand=V,CN)
   examples:
-      gt -depth=10 -cat=NP     -- generate all NP's to depth 10 
-      gt (PredVP ? (NegVG ?))  -- generate all trees of this form
-      gt -cat=S -tr | l        -- gererate and linearize
+      gt -depth=10 -cat=NP              -- generate all NP's to depth 10 
+      gt (PredVP ? (NegVG ?))           -- generate all trees of this form
+      gt -cat=S -tr | l                 -- generate and linearize
+      gt -noexpand=NP | l -mark=metacat -- the only NP is meta, linearized "?0 +NP"
 
 ma, morphologically_analyse: ma String
       Runs morphological analysis on each word in String and displays
@@ -496,6 +498,7 @@ h, help: h Command?
   options
        -all   show the whole help file
        -defs  show user-defined commands and terms
+       -FLAG  show the values of FLAG (works for grammar-independent flags)
   examples:
        h print_grammar  -- show all information on the pg command
 
@@ -644,6 +647,11 @@ q, quit: q
     -unlexer=codelit     like code, but remove string literal quotes
     -unlexer=concat      remove all spaces
     -unlexer=bind        like identity, but bind at "&+"
+
+-mark, marking of parts of tree in linearization. The default is none.
+    -mark=metacat        append "+CAT" to every metavariable, showing its category
+    -mark=struct         show tree structure with brackets
+    -mark=java           show tree structure with XML tags (used in gfeditor)
 
 -coding, Some grammars are in UTF-8, some in isolatin-1.
     If the letters ä (a-umlaut) and ö (u-umlaut) look strange, either
