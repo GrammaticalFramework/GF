@@ -50,6 +50,13 @@ noMark :: Marker
 noMark = defTMarker mk where
   mk _ _ _ = ("","")
 
+-- | mark metas with their categories
+metaCatMark :: Marker
+metaCatMark = defTMarker mk where
+  mk nod _ _ = case nod of
+    V.N (_,V.AtM _,val,_,_) -> ("", '+':prt val)
+    _ -> ("","")
+
 -- | for vanilla brackets, focus, and position, use
 markBracket :: Marker
 markBracket = defTMarker mk where

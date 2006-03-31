@@ -234,6 +234,7 @@ optLinearizeTree opts0 gr t = case getOptVal opts transferFun of
      | mk == markOptJava   -> lin markXMLjgf
      | mk == markOptStruct -> lin markBracket
      | mk == markOptFocus  -> lin markFocus
+     | mk == "metacat"     -> lin metaCatMark
      | otherwise           -> lin noMark
     _ -> lin noMark
 

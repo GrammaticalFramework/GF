@@ -43,17 +43,18 @@ import Data.List
 generateTrees :: Options -> GFCGrammar -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
 generateTrees opts gr cat n mn mt = map str2tr $ generate gr' ifm cat' n mn mt'
   where
-    gr'  = gr2sgr ats gr
+    gr'  = gr2sgr noe ats gr
     cat' = prt $ snd cat
     mt'  = maybe Nothing (return . tr2str) mt
     ifm  = oElem withMetas opts
     ats  = getOptInt opts (aOpt "atoms")
+    noe  = maybe [] (chunks ',') $ getOptVal opts (aOpt "noexpand")
 
 ------------------------------------------
 -- translate grammar to simpler form and generated trees back
 
-gr2sgr :: Maybe Int -> GFCGrammar -> SGrammar
-gr2sgr un gr = buildTree [(c,rs) | rs@((_,(_,c)):_) <- prune rules] where
+gr2sgr :: [SIdent] -> Maybe Int -> GFCGrammar -> SGrammar
+gr2sgr noe un gr = buildTree [(c,noexp c rs) | rs@((_,(_,c)):_) <- prune rules] where
   rules =
     groupBy (\x y -> scat x == scat y) $
       sortBy (\x y -> compare (scat x) (scat y)) 
@@ -71,8 +72,11 @@ gr2sgr un gr = buildTree [(c,rs) | rs@((_,(_,c)):_) <- prune rules] where
     in take n rs1 ++ rs2
   atom = null . fst . snd
 
+  noexp c rs = if elem c noe then [('?':c,([],c))] else rs
+
 -- str2tr :: STree -> Exp
 str2tr t = case t of
+  SApp ('?':c,[]) -> mkMeta 0 -- from noexpand=c
   SApp (f,ts) -> mkApp (trId f) (map str2tr ts) 
   SMeta _     -> mkMeta 0
 ----  SString s   -> K s
