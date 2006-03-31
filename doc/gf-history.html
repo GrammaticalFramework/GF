@@ -14,6 +14,27 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
+31/3 (AR) Added flags and options to some commands, to help generation:
+<ul>
+<li> <tt>gt -noexpand=NP,V,TV</tt> does not expand these categories,
+but only generates metavariables for them.
+<li> <tt>gt -doexpand=NP,V,TV</tt> only expands these categories,
+and generates metavariables for others.
+<li> <tt>gr -cf</tt> has the same flags.
+<li> <tt>l -mark=metacat</tt> marks the metavariables with their categories.
+<li> <tt>p -fail</tt> marks with <tt>#FAIL</tt> strings that have no parse.
+<li> <tt>p -ambiguous</tt> marks as <tt>#AMBIGUOUS</tt>
+     strings that have more than one parse.
+</ul>
+
+<p>
+
+<hr>
+
+22/12 <b>Release of GF 2.5</b>.
+
+<p>
+
 16/3 (AR) Added two flag values to <tt>pt -transform=X</tt>:
 <tt>nodup</tt> which excludes terms where a constant is duplicated,
 and

@@ -199,10 +199,12 @@ txtHelpFile =
   "\n      grammar (overridden by the -lang flag), in the category S (overridden" ++
   "\n      by the -cat flag)." ++
   "\n  options for batch input:" ++
-  "\n      -lines   parse each line of input separately, ignoring empty lines" ++
-  "\n      -all     as -lines, but also parse empty lines" ++
-  "\n      -prob    rank results by probability" ++
-  "\n      -cut     stop after first lexing result leading to parser success" ++
+  "\n      -lines     parse each line of input separately, ignoring empty lines" ++
+  "\n      -all       as -lines, but also parse empty lines" ++
+  "\n      -prob      rank results by probability" ++
+  "\n      -cut       stop after first lexing result leading to parser success" ++
+  "\n      -fail      show strings whose parse fails prefixed by #FAIL" ++
+  "\n      -ambiguous show strings that have more than one parse prefixed by #AMBIGUOUS" ++
   "\n  options for selecting parsing method:" ++
   "\n      (default)parse using an overgenerating CFG" ++
   "\n      -cfg     parse using a much less overgenerating CFG" ++
@@ -344,11 +346,13 @@ txtHelpFile =
   "\n      -lang     use the abstract syntax of this grammar" ++
   "\n      -number   generate (at most) this number of trees" ++
   "\n      -noexpand don't expand these categories (comma-separated, e.g. -noexpand=V,CN)" ++
+  "\n      -doexpand only expand these categories (comma-separated, e.g. -doexpand=V,CN)" ++
   "\n  examples:" ++
   "\n      gt -depth=10 -cat=NP              -- generate all NP's to depth 10 " ++
   "\n      gt (PredVP ? (NegVG ?))           -- generate all trees of this form" ++
   "\n      gt -cat=S -tr | l                 -- generate and linearize" ++
   "\n      gt -noexpand=NP | l -mark=metacat -- the only NP is meta, linearized \"?0 +NP\"" ++
+  "\n      gt | l | p -lines -ambiguous | grep \"#AMBIGUOUS\" -- show ambiguous strings" ++
   "\n" ++
   "\nma, morphologically_analyse: ma String" ++
   "\n      Runs morphological analysis on each word in String and displays" ++

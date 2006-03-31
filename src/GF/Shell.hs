@@ -249,6 +249,10 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
        let p = optParseArgErrMsg opts gro x
        case p of
          Ok (ts,msg) 
+           | oElem (iOpt "fail") opts && null ts -> do
+                putStrLnFlush ("#FAIL:" +++ x) >> changeArg (const $ ATrms ts) sa
+           | oElem (iOpt "ambiguous") opts && length ts > 1 -> do
+                putStrLnFlush ("#AMBIGUOUS:" +++ x) >> changeArg (const $ ATrms ts) sa
            | oElem (iOpt "prob") opts -> do
                 let probs = stateProbs gro 
                 let tps = rankByScore [(t,computeProbTree probs t) | t <- ts]
