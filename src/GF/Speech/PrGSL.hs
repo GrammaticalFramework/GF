@@ -69,7 +69,7 @@ showToken :: Token -> String
 showToken t = map toLower (prt t)
 
 isPunct :: Char -> Bool
-isPunct c = c `elem` "-_.;.,?!()[]{}"
+isPunct c = c `elem` "-_.:;.,?!()[]{}"
 
 comments :: [String] -> ShowS
 comments = unlinesS . map (showString . ("; " ++))
