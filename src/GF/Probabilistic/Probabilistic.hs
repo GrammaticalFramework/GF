@@ -34,7 +34,8 @@ import GF.Grammar.LookAbs
 import GF.Grammar.PrGrammar
 import GF.Grammar.Macros
 import GF.Grammar.Values
-import GF.Grammar.Grammar -- (Cat,EInt,K)
+import GF.Grammar.Grammar
+import GF.Grammar.SGrammar
 
 import GF.Infra.Ident
 import GF.Data.Zipper
@@ -54,13 +55,13 @@ timeout = 99
 generateRandomTreesProb :: Options -> StdGen -> GFCGrammar -> Probs -> Cat -> [Exp]
 generateRandomTreesProb opts gen gr probs cat = 
   map str2tr $ randomTrees gen gr' cat' where
-    gr'  = gr2sgr gr probs
+    gr'  = gr2sgr opts probs gr
     cat' = prt $ snd cat
 
 -- | check that probabilities attached to a grammar make sense
 checkGrammarProbs :: GFCGrammar -> Probs -> Err Probs
 checkGrammarProbs gr probs = 
-  err Bad (return . gr2probs) $ checkSGrammar $ gr2sgr gr probs where
+  err Bad (return . gr2probs) $ checkSGrammar $ gr2sgr noOptions probs gr where
     gr2probs sgr = buildTree [(zIdent f,p) | (_,rs) <- tree2list sgr, ((p,f),_) <- rs]
 
 -- | compute the probability of a given tree
@@ -95,60 +96,8 @@ pProb s = case words s of
    readD :: String -> Double
    readD = read
 
-type Probs = BinTree Ident Double
-
-emptyProbs :: Probs
-emptyProbs = emptyBinTree
-
-prProbs :: Probs -> String
-prProbs = unlines . map pr . tree2list where
-  pr (f,p) = prt f ++ "\t" ++ show p
-
 ------------------------------------------
 -- translate grammar to simpler form and generated trees back
-
-gr2sgr :: GFCGrammar -> Probs -> SGrammar
-gr2sgr gr probs = buildTree [(c,fillProb rs) | rs@((_,(_,c)):_) <- rules] where
-  rules =
-    groupBy (\x y -> scat x == scat y) $
-      sortBy (\x y -> compare (scat x) (scat y)) 
-        [(trId f, ty') | (f,ty) <- funRulesOf gr, ty' <- trTy ty]
-  trId (_,f) = let f' = prt f in case lookupTree prt f probs of
-    Ok p -> (p,f')
-    _ -> (2.0, f')
-  trTy ty = case catSkeleton ty of
-    Ok (mcs,mc) -> [(map trCat mcs, trCat mc)]
-    _ -> []
-  trCat (m,c) = prt c ---
-  scat (_,(_,c)) = c
-
-str2tr :: STree -> Exp
-str2tr t = case t of
-  SApp ((_,f),ts) -> mkApp (trId f) (map str2tr ts) 
-  SMeta _     -> mkMeta 0
-  SString s   -> K s
-  SInt i      -> EInt i
-  SFloat i    -> EFloat i
- where
-   trId = cn . zIdent
-
-type SGrammar = BinTree SCat [SRule]
-type SIdent = String
-type SRule = (SFun,SType)
-type SType = ([SCat],SCat)
-type SCat = SIdent
-type SFun = (Double,SIdent)
-
-allRules gr = concat [rs  | (c,rs) <- tree2list gr]
-
-data STree = 
-    SApp (SFun,[STree]) 
---  | SAppN (SIdent,[STree])  -- no probability given 
-  | SMeta SCat
-  | SString String
-  | SInt Integer
-  | SFloat Double
-   deriving (Show,Eq)
 
 probTree :: STree -> Double
 probTree t = case t of
@@ -204,16 +153,8 @@ checkSGrammar = mapMTree chCat where
       Bad $ "illegal probability sum " ++ show s ++ " in " ++ c
     _ -> return (c,rs)
 
--- for cases where explicit probability is not given (encoded as
--- p > 1) divide the remaining mass by the number of such cases
 
-fillProb :: [SRule] -> [SRule]
-fillProb rs = [((defa p,f),ty) | ((p,f),ty) <- rs] where
-  defa p = if p > 1.0 then def else p
-  def = (1 - sum given) / genericLength nope 
-  (nope,given) = partition (> 1.0) [p | ((p,_),_) <- rs]
-
-
+{-
 ------------------------------------------
 -- to test outside GF
 
@@ -246,7 +187,7 @@ pSRule s = case words s of
      where cs' = [cs !! i | i <- [0,2..length cs - 1]]
   _ -> error $ "not a rule" +++ s
 
-exSgr = mkSGrammar $ map pSRule [
+expSgr = mkSGrammar $ map pSRule [
   "0.8 a : A"
  ,"0.2 b : A"
  ,"0.2 n : A -> S -> S"
@@ -257,3 +198,6 @@ ex1 :: IO ()
 ex1 = do
   g <- newStdGen
   mapM_ (putStrLn . prSTree) $ randomTrees g exSgr "S"
+
+-}
+

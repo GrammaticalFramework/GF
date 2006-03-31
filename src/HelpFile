@@ -170,10 +170,12 @@ p,  parse: p String
       grammar (overridden by the -lang flag), in the category S (overridden
       by the -cat flag).
   options for batch input:
-      -lines   parse each line of input separately, ignoring empty lines
-      -all     as -lines, but also parse empty lines
-      -prob    rank results by probability
-      -cut     stop after first lexing result leading to parser success
+      -lines     parse each line of input separately, ignoring empty lines
+      -all       as -lines, but also parse empty lines
+      -prob      rank results by probability
+      -cut       stop after first lexing result leading to parser success
+      -fail      show strings whose parse fails prefixed by #FAIL
+      -ambiguous show strings that have more than one parse prefixed by #AMBIGUOUS
   options for selecting parsing method:
       (default)parse using an overgenerating CFG
       -cfg     parse using a much less overgenerating CFG
@@ -315,11 +317,13 @@ gt, generate_trees: gt Tree?
       -lang     use the abstract syntax of this grammar
       -number   generate (at most) this number of trees
       -noexpand don't expand these categories (comma-separated, e.g. -noexpand=V,CN)
+      -doexpand only expand these categories (comma-separated, e.g. -doexpand=V,CN)
   examples:
       gt -depth=10 -cat=NP              -- generate all NP's to depth 10 
       gt (PredVP ? (NegVG ?))           -- generate all trees of this form
       gt -cat=S -tr | l                 -- generate and linearize
       gt -noexpand=NP | l -mark=metacat -- the only NP is meta, linearized "?0 +NP"
+      gt | l | p -lines -ambiguous | grep "#AMBIGUOUS" -- show ambiguous strings
 
 ma, morphologically_analyse: ma String
       Runs morphological analysis on each word in String and displays

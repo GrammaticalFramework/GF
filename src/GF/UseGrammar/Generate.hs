@@ -25,7 +25,7 @@ import GF.Grammar.PrGrammar
 import GF.Grammar.Macros
 import GF.Grammar.Values
 import GF.Grammar.Grammar (Cat)
-
+import GF.Grammar.SGrammar
 import GF.Data.Operations
 import GF.Data.Zipper
 import GF.Infra.Option
@@ -43,59 +43,11 @@ import Data.List
 generateTrees :: Options -> GFCGrammar -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
 generateTrees opts gr cat n mn mt = map str2tr $ generate gr' ifm cat' n mn mt'
   where
-    gr'  = gr2sgr noe ats gr
+    gr'  = gr2sgr opts emptyProbs gr
     cat' = prt $ snd cat
     mt'  = maybe Nothing (return . tr2str) mt
     ifm  = oElem withMetas opts
-    ats  = getOptInt opts (aOpt "atoms")
-    noe  = maybe [] (chunks ',') $ getOptVal opts (aOpt "noexpand")
 
-------------------------------------------
--- translate grammar to simpler form and generated trees back
-
-gr2sgr :: [SIdent] -> Maybe Int -> GFCGrammar -> SGrammar
-gr2sgr noe un gr = buildTree [(c,noexp c rs) | rs@((_,(_,c)):_) <- prune rules] where
-  rules =
-    groupBy (\x y -> scat x == scat y) $
-      sortBy (\x y -> compare (scat x) (scat y)) 
-        [(trId f, ty') | (f,ty) <- funRulesOf gr, ty' <- trTy ty]
-  trId = prt . snd
-  trTy ty = case catSkeleton ty of
-    Ok (mcs,mc) -> [(map trCat mcs, trCat mc)]
-    _ -> []
-  trCat (m,c) = prt c ---
-  scat (_,(_,c)) = c
-
-  prune rs = maybe rs (\n -> map (onlyAtoms n) rs) $ un
-  onlyAtoms n rs = 
-    let (rs1,rs2) = partition atom rs 
-    in take n rs1 ++ rs2
-  atom = null . fst . snd
-
-  noexp c rs = if elem c noe then [('?':c,([],c))] else rs
-
--- str2tr :: STree -> Exp
-str2tr t = case t of
-  SApp ('?':c,[]) -> mkMeta 0 -- from noexpand=c
-  SApp (f,ts) -> mkApp (trId f) (map str2tr ts) 
-  SMeta _     -> mkMeta 0
-----  SString s   -> K s
- where
-   trId = cn . zIdent
-
--- tr2str :: Tree -> STree
-tr2str (Tr (N (_,at,val,_,_),ts)) = case (at,val) of
-  (AtC (_,f), _)         -> SApp (prt_ f,map tr2str ts)
-  (AtM _,     v)         -> SMeta (catOf v)
-  (AtL s,     _)         -> SString s
-  (AtI i,     _)         -> SInt i
-  (AtF i,     _)         -> SFloat i
-  _ -> SMeta "FAILED_TO_GENERATE" ---- err monad!
- where
-   catOf v = case v of
-     VApp w _  -> catOf w
-     VCn (_,c) -> prt_ c
-     _ -> "FAILED_TO_GENERATE_FROM_META"
 
 ------------------------------------------
 -- do the main thing with a simpler data structure
@@ -139,58 +91,3 @@ generate gr ifm cat i mn mt = case mt of
     SApp (f,ts) -> [SApp (f,ts') | ts' <- combinations (map genM ts)]
     SMeta k     -> gen k 
     _ -> [t]
-
-type SGrammar = BinTree SCat [SRule]
-type SIdent = String
-type SRule = (SFun,SType)
-type SType = ([SCat],SCat)
-type SCat = SIdent
-type SFun = SIdent
-
-allRules gr = concat [rs  | (c,rs) <- tree2list gr]
-
-data STree = 
-    SApp (SFun,[STree]) 
-  | SMeta SCat
-  | SString String
-  | SInt Integer
-  | SFloat Double
-   deriving (Show,Eq)
-
-depth :: STree -> Int
-depth t = case t of
-  SApp (_,ts@(_:_)) -> maximum (map depth ts) + 1
-  _ -> 1
-
-------------------------------------------
--- to test
-
-prSTree t = case t of
-  SApp (f,ts) -> f ++ concat (map pr1 ts)
-  SMeta c -> '?':c
-  SString s -> prQuotedString s
-  SInt i -> show i 
-  SFloat i -> show i 
- where
-  pr1 t@(SApp (_,ts)) = ' ' : (if null ts then id else prParenth) (prSTree t)
-  pr1 t = prSTree t
-
-pSRule :: String -> SRule
-pSRule s = case words s of
-  f : _ : cs -> (f,(init cs', last cs')) 
-    where cs' = [cs !! i | i <- [0,2..length cs - 1]]
-  _ -> error $ "not a rule" +++ s
-
-exSgr = map pSRule [
-   "Pred   : NP -> VP -> S"
-  ,"Compl  : TV -> NP -> VP" 
-  ,"PredVV : VV -> VP -> VP"
-  ,"DefCN  : CN -> NP"
-  ,"ModCN  : AP -> CN -> CN" 
-  ,"john   : NP"
-  ,"walk   : VP"
-  ,"love   : TV"
-  ,"try    : VV"
-  ,"girl   : CN"
-  ,"big    : AP"
-  ]
