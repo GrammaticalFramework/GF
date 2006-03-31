@@ -33,7 +33,7 @@ import Data.Char (toUpper,toLower)
 gslPrinter :: Ident -- ^ Grammar name
 	   -> Options -> Maybe Probs -> CGrammar -> String
 gslPrinter name opts probs cfg = prGSL srg ""
-    where srg = makeSimpleSRG name opts probs cfg
+    where srg = makeSimpleSRG name opts probs $ rmPunctCFG cfg
 
 prGSL :: SRG -> ShowS
 prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
@@ -48,8 +48,7 @@ prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
 	showString "; " . prtS origCat . nl
         . prCat cat . sp . wrap "[" (unwordsS (map prAlt rhs)) "]" . nl
     -- FIXME: use the probability
-    prAlt (SRGAlt mp _ rhs) = wrap "(" (unwordsS (map prSymbol rhs')) ")"
-	where rhs' = rmPunct rhs
+    prAlt (SRGAlt mp _ rhs) = wrap "(" (unwordsS (map prSymbol rhs)) ")"
     prSymbol (Cat c) = prCat c
     prSymbol (Tok t) = wrap "\"" (showString (showToken t)) "\""
     -- GSL requires an upper case letter in category names
@@ -59,10 +58,12 @@ firstToUpper :: String -> String
 firstToUpper [] = []
 firstToUpper (x:xs) = toUpper x : xs
 
-rmPunct :: [Symbol String Token] -> [Symbol String Token] 
-rmPunct [] = []
-rmPunct (Tok t:ss) | all isPunct (prt t) = rmPunct ss
-rmPunct (s:ss) = s : rmPunct ss
+rmPunctCFG :: CGrammar -> CGrammar
+rmPunctCFG g = [CFRule c (filter keepSymbol ss) n | CFRule c ss n <- g]
+
+keepSymbol :: Symbol c Token -> Bool
+keepSymbol (Tok t) = not (all isPunct (prt t))
+keepSymbol _ = True
 
 -- Nuance does not like upper case characters in tokens
 showToken :: Token -> String
