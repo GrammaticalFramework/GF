@@ -101,7 +101,8 @@ These grammars can be used as **libraries** to define application grammars.
 In this way, it is possible to write a high-quality grammar without
 knowing about linguistics: in general, to write an application grammar
 by using the resource library just requires practical knowledge of
-the target language.
+the target language. and all theoretical knowledge about its grammar
+is given by the libraries.
 
 
 
@@ -135,9 +136,10 @@ notation (also known as BNF). The BNF format is often a good
 starting point for GF grammar development, because it is
 simple and widely used. However, the BNF format is not
 good for multilingual grammars. While it is possible to
-translate the words contained in a BNF grammar to another
-language, proper translation usually involves more, e.g.
-changing the word order in
+"translate" by just changing the words contained in a 
+BNF grammar to words of some other
+language, proper translation usually involves more.
+For instance, the order of words may have to be changed:
 ``` Italian cheese ===> formaggio italiano
 The full GF grammar format is designed to support such
 changes, by separating between the **abstract syntax**
@@ -150,13 +152,13 @@ they have vary from language to language. For instance,
 Italian adjectives usually have four forms where English
 has just one:
 ```
-  delicious (wine | wines | pizza | pizzas)
+  delicious (wine, wines, pizza, pizzas)
   vino delizioso, vini deliziosi, pizza deliziosa, pizze deliziose
 ```
 The **morphology** of a language describes the
 forms of its words. While the complete description of morphology
-belongs to resource grammars, the tutorial will explain the
-main programming concepts involved. This will moreover
+belongs to resource grammars, this tutorial will explain the
+programming concepts involved in morphology. This will moreover
 make it possible to grow the fragment covered by the food example.
 The tutorial will in fact build a toy resource grammar in order
 to illustrate the module structure of library-based application
@@ -212,7 +214,6 @@ The command
 will give you a list of available commands.
 
 As a common convention in this Tutorial, we will use
-
 - ``%`` as a prompt that marks system commands
 - ``>`` as a prompt that marks GF commands
 
@@ -427,7 +428,7 @@ a sentence but a sequence of ten sentences.
 ===Labelled context-free grammars===
 
 The syntax trees returned by GF's parser in the previous examples
-are not so nice to look at. The identifiers of form ``Mks``
+are not so nice to look at. The identifiers that form the tree
 are **labels** of the BNF rules. To see which label corresponds to
 which rule, you can use the ``print_grammar = pg`` command
 with the ``printer`` flag set to ``cf`` (which means context-free):
@@ -471,7 +472,7 @@ labels to each rule.
 In files with the suffix ``.cf``, you can prefix rules with
 labels that you provide yourself - these may be more useful
 than the automatically generated ones. The following is a possible
-labelling of ``paleolithic.cf`` with nicer-looking labels.
+labelling of ``food.cf`` with nicer-looking labels.
 ```
   Is.        S       ::= Item "is" Quality ;
   That.      Item    ::= "that" Kind ;
@@ -498,7 +499,7 @@ With this grammar, the trees look as follows:
 
 
 %--!
-==The ``.gf`` grammar format==
+==The .gf grammar format==
 
 To see what there is in GF's shell state when a grammar
 has been imported, you can give the plain command
@@ -529,7 +530,7 @@ A GF grammar consists of two main parts:
 - **concrete syntax**, defining how trees are linearized into strings 
 
 
-The EBNF and CF formats fuse these two things together, but it is possible
+The CF format fuses these two things together, but it is possible
 to take them apart. For instance, the sentence formation rule
 ```
   Is. S ::= Item "is" Quality ;
@@ -573,7 +574,7 @@ judgement forms:
 
 We return to the precise meanings of these judgement forms later.
 First we will look at how judgements are grouped into modules, and
-show how the paleolithic grammar is
+show how the food grammar is
 expressed by using modules and judgements.
 
 
@@ -728,7 +729,7 @@ one abstract syntax can be equipped with many concrete syntaxes.
 A system with this property is called a **multilingual grammar**.
 
 Multilingual grammars can be used for applications such as
-translation. Let us buid an Italian concrete syntax for
+translation. Let us build an Italian concrete syntax for
 ``Food`` and then test the resulting 
 multilingual grammar.
 
@@ -946,6 +947,7 @@ The graph uses
 - black-headed arrows for inheritance
 - white-headed arrows for the concrete-of-abstract relation
 
+
 [Foodmarket.png]
 
 
@@ -967,7 +969,7 @@ shell escape symbol ``!``. The resulting graph was shown in the previous section
 
 The command ``print_multi = pm`` is used for printing the current multilingual
 grammar in various formats, of which the format ``-printer=graph`` just
-shows the module dependencies. Use the ``help`` to see what other formats
+shows the module dependencies. Use ``help`` to see what other formats
 are available:
 ```
   > help pm
@@ -982,9 +984,9 @@ are available:
 
 ===The golden rule of functional programming===
 
-In comparison to the ``.cf`` format, the ``.gf`` format still looks rather
+In comparison to the ``.cf`` format, the ``.gf`` format looks rather
 verbose, and demands lots more characters to be written. You have probably
-done this by the copy-paste-modify method, which is a standard way to
+done this by the copy-paste-modify method, which is a common way to
 avoid repeating work.
 
 However, there is a more elegant way to avoid repeating work than the copy-and-paste
@@ -995,8 +997,8 @@ method. The **golden rule of functional programming** says that
 
 A function separates the shared parts of different computations from the
 changing parts, parameters. In functional programming languages, such as
-[Haskell http://www.haskell.org], it is possible to share muc more than in
-the languages such as C and Java.
+[Haskell http://www.haskell.org], it is possible to share much more than in
+languages such as C and Java.
 
 
 ===Operation definitions===
@@ -1041,11 +1043,8 @@ strings and records.
   resource StringOper = {
     oper
       SS : Type = {s : Str} ;
-
       ss : Str -> SS = \x -> {s = x} ;
-
       cc : SS -> SS -> SS = \x,y -> ss (x.s ++ y.s) ;
-
       prefix : Str -> SS -> SS = \p,x -> ss (p ++ x.s) ;
   }
 ```
@@ -1181,7 +1180,7 @@ a **paradigm** - a formula telling how the inflection
 forms of a word are formed.
 
 From GF point of view, a paradigm is a function that takes a **lemma** -
-a string also known as a **dictionary form** - and returns an inflection
+also known as a **dictionary form** - and returns an inflection
 table of desired type. Paradigms are not functions in the sense of the
 ``fun`` judgements of abstract syntax (which operate on trees and not
 on strings), but operations defined in ``oper`` judgements.
@@ -1204,13 +1203,13 @@ are written together to form one **token**. Thus, for instance,
 
 
 %--!
-===Worst-case macros and data abstraction===
+===Worst-case functions and data abstraction===
 
 Some English nouns, such as ``mouse``, are so irregular that
 it makes no sense to see them as instances of a paradigm. Even
 then, it is useful to perform **data abstraction** from the
 definition of the type ``Noun``, and introduce a constructor
-operation, a **worst-case macro** for nouns:
+operation, a **worst-case function** for nouns:
 ```
   oper mkNoun : Str -> Str -> Noun = \x,y -> {
     s = table {
@@ -1230,7 +1229,7 @@ and
 ```
 instead of writing the inflection table explicitly.
 
-The grammar engineering advantage of worst-case macros is that
+The grammar engineering advantage of worst-case functions is that
 the author of the resource module may change the definitions of
 ``Noun`` and ``mkNoun``, and still retain the
 interface (i.e. the system of type signatures) that makes it
@@ -1240,7 +1239,7 @@ terms, ``Noun`` is then treated as an **abstract datatype**.
 
 
 %--!
-===A system of paradigms using ``Prelude`` operations===
+===A system of paradigms using Prelude operations===
 
 In addition to the completely regular noun paradigm ``regNoun``, 
 some other frequent noun paradigms deserve to be
@@ -1432,7 +1431,7 @@ The rule of subject-verb agreement in English says that the verb
 phrase must be inflected in the number of the subject. This
 means that a noun phrase (functioning as a subject), inherently
 //has// a number, which it passes to the verb. The verb does not
-//have// a number, but must be able to receive whatever number the
+//have// a number, but must be able to //receive// whatever number the
 subject has. This distinction is nicely represented by the
 different linearization types of **noun phrases** and **verb phrases**:
 ```
@@ -1440,7 +1439,8 @@ different linearization types of **noun phrases** and **verb phrases**:
   lincat VP = {s : Number => Str} ;
 ```
 We say that the number of ``NP`` is an **inherent feature**,
-whereas the number of  ``NP`` is **parametric**.
+whereas the number of  ``NP`` is a **variable feature** (or a
+**parametric feature**).
 
 The agreement rule itself is expressed in the linearization rule of
 the predication structure:
