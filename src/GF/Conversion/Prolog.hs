@@ -81,8 +81,8 @@ prtSRule lang (Rule (Abs cat cats (Name fun _prof)) (Cnc _ _ mterm))
     = (if null lang then "" else prtQ lang ++ " : ") ++ 
       prtFunctor "rule" [plfun, plcat, plcats, plcnc] ++ "."
     where plfun  = prtQ fun
-          plcat  = prtSCat cat
-          plcats = prtFunctor "c" (map prtSCat cats) 
+          plcat  = prtSDecl cat
+          plcats = prtFunctor "c" (map prtSDecl cats) 
 	  plcnc  = "\n\t" ++ prtSTerm (maybe Empty id mterm)
 
 prtSTerm (Arg n c p)    = prtFunctor "arg" [prtQ c, prt (n+1), prtSPath p]
@@ -101,9 +101,14 @@ prtSTerm (term :! sel)  = prtOper "/" (prtSTerm term) (prtSTerm sel)
 
 prtSPath (Path path) = prtPList (map (either prtQ prtSTerm) path)
 
-prtSCat (Decl var cat args)     = prVar ++ prtFunctor (prtQ cat) (map prtSTTerm args)
-    where prVar | var == anyVar = ""
-                | otherwise     = "_" ++ prtVar var ++ ":"
+prtSDecl (Decl var typ) | var == anyVar = prtSAbsType typ
+                        | otherwise     = "_" ++ prtVar var ++ ":" ++ prtSAbsType typ
+
+
+prtSAbsType ([]   ::--> typ) = prtSFOType typ
+prtSAbsType (args ::--> typ) = prtOper ":->" (prtPList (map prtSFOType args)) (prtSFOType typ)
+
+prtSFOType (cat ::@ args) = prtFunctor (prtQ cat) (map prtSTTerm args)
 
 prtSTTerm (con :@ args) = prtFunctor (prtQ con) (map prtSTTerm args)
 prtSTTerm (TVar var)    = "_" ++ prtVar var
