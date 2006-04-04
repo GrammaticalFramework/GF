@@ -42,7 +42,7 @@ instance (Print c, Print n, Print l, Print t) => Print (Rule n c l t) where
 instance (Print c, Print n) => Print (Abstract c n) where
     prt (Abs cat args name) = prt name ++ ". " ++ prt cat ++ 
 			      ( if null args then ""
-				else " -> " ++ prtSep " " args )
+				else " --> " ++ prtSep " " args )
 
 instance (Print l, Print t) => Print (Concrete l t) where
     prt (Cnc lcat args term) = prt term 

@@ -53,6 +53,6 @@ prtFunctionGraphRule (Rule abs@(Abs cat cats (Name fun _prof)) _)
       unlines [ prtSCat c ++ " -> " ++ pfun ++ ";" | c <- cats ]
     where pfun = "GF_FUNCTION_" ++ prt fun
 
-prtSCat (Decl var cat args) = prt cat
+prtSCat decl = prt (decl2cat decl)
 
 

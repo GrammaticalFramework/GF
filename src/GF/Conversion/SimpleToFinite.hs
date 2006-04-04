@@ -74,7 +74,7 @@ convertAbstract :: Splitable -> Abstract SDecl Name
 		-> CnvMonad (Abstract SDecl Name)
 convertAbstract split (Abs decl decls name)
     = case splitableFun split fun of
-        Just cat' -> return $ Abs (Decl anyVar (mergeFun fun cat') []) decls name
+        Just cat' -> return $ Abs (Decl anyVar ([] ::--> (mergeFun fun cat' ::@ []))) decls name
 	Nothing -> expandTyping split [] fun profiles [] decl decls []
     where Name fun profiles = name
 
@@ -82,29 +82,30 @@ expandTyping :: Splitable -> [(Var, SCat)]
              -> Fun -> [Profile (SyntaxForest Fun)] -> [Profile (SyntaxForest Fun)] 
              -> SDecl -> [SDecl] -> [SDecl] 
 	     -> CnvMonad (Abstract SDecl Name)
-expandTyping split env fun [] profiles (Decl x cat args) [] decls 
+expandTyping split env fun [] profiles (Decl x (typargs ::--> (cat ::@ args))) [] decls 
     = return $ Abs decl (reverse decls) (Name fun (reverse profiles))
-    where decl = substArgs split x env cat args []
-expandTyping split env fun (prof:profiles) profsDone typ (Decl x xcat xargs : declsToDo) declsDone
+    where decl = substArgs split x env typargs cat args []
+expandTyping split env fun (prof:profiles) profsDone typ 
+                 (Decl x (xtypargs ::--> (xcat ::@ xargs)) : declsToDo) declsDone
     = do (x', xcat', env', prof') <- calcNewEnv
-         let decl = substArgs split x' env xcat' xargs []
-	 expandTyping split env' fun profiles (prof':profsDone) typ declsToDo (decl : declsDone)
+         let decl = substArgs split x' env xtypargs xcat' xargs []
+	 expandTyping split env' fun profiles (prof' : profsDone) typ declsToDo (decl : declsDone)
     where calcNewEnv = case splitableCat split xcat of
+			 Nothing      -> return (x, xcat, env, prof)
 		         Just newFuns -> do newFun <- member newFuns
                                             let newCat  = mergeFun newFun xcat
                                                 newProf = Constant (FNode newFun [[]])
                                             -- should really be using some kind of
                                             -- "profile unification"
 					    return (anyVar, newCat, (x,newCat) : env, newProf)
-			 Nothing -> return (x, xcat, env, prof)
 
-
-substArgs :: Splitable -> Var -> [(Var, SCat)] -> SCat -> [TTerm] -> [TTerm] -> SDecl
-substArgs split x env cat [] args = Decl x cat (reverse args)
-substArgs split x env cat (arg:argsToDo) argsDone
+substArgs :: Splitable -> Var -> [(Var, SCat)] -> [FOType SCat]
+	  -> SCat -> [TTerm] -> [TTerm] -> SDecl
+substArgs split x env typargs cat [] args = Decl x (typargs ::--> (cat ::@ reverse args))
+substArgs split x env typargs cat (arg:argsToDo) argsDone
     = case argLookup split env arg of
-        Just newCat -> substArgs split x env (mergeArg cat newCat) argsToDo argsDone
-	Nothing     -> substArgs split x env cat argsToDo (arg : argsDone)
+        Just newCat -> substArgs split x env typargs (mergeArg cat newCat) argsToDo argsDone
+	Nothing     -> substArgs split x env typargs cat argsToDo (arg : argsDone)
 
 argLookup split env (TVar x)   = lookup x env 
 argLookup split env (con :@ _) = fmap (mergeFun fun) (splitableFun split fun)
@@ -133,7 +134,7 @@ calcSplitable rules = (listAssoc splitableCat2Funs, listAssoc splitableFun2Cat)
           -- cat-fun pairs that are splitable
 	  splitableCatFuns = tracePrt "SimpleToFinite - splitable functions" prt $
                              [ (cat, name2fun name) |
-			       Rule (Abs (Decl _ cat []) [] name) _ <- rules,
+			       Rule (Abs (Decl _ ([] ::--> (cat ::@ []))) [] name) _ <- rules,
 			       splitableCats ?= cat ]
 
           -- all cats that are splitable
@@ -143,12 +144,12 @@ calcSplitable rules = (listAssoc splitableCat2Funs, listAssoc splitableFun2Cat)
 
           -- all result cats for some pure function
 	  resultCats = tracePrt "SimpleToFinite - result cats" prt $
-                       nubsort [ cat | Rule (Abs (Decl _ cat _) decls _) _ <- rules,
+                       nubsort [ cat | Rule (Abs (Decl _ (_ ::--> (cat ::@ _))) decls _) _ <- rules,
 				 not (null decls) ]
 
           -- all cats in constants without dependencies
           nondepCats = tracePrt "SimpleToFinite - nondep cats" prt $
-                       nubsort [ cat | Rule (Abs (Decl _ cat []) [] _) _ <- rules ]
+                       nubsort [ cat | Rule (Abs (Decl _ ([] ::--> (cat ::@ []))) [] _) _ <- rules ]
 
           -- all cats occurring as some dependency of another cat
 	  depCats = tracePrt "SimpleToFinite - dep cats" prt $
@@ -156,9 +157,10 @@ calcSplitable rules = (listAssoc splitableCat2Funs, listAssoc splitableFun2Cat)
 			      cat <- varCats [] (decls ++ [decl]) ]
 
 	  varCats _ [] = []
-	  varCats env (Decl x xcat args : decls)
+	  varCats env (Decl x (xargs ::--> xtyp@(xcat ::@ _)) : decls)
 	      = varCats ((x,xcat) : env) decls ++
-		[ cat | arg <- args, y <- varsInTTerm arg, cat <- lookupList y env ]
+		[ cat | (_::@args) <- (xtyp:xargs), arg <- args, 
+                  y <- varsInTTerm arg, cat <- lookupList y env ]
 
 
 ----------------------------------------------------------------------

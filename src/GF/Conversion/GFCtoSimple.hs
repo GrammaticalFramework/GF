@@ -1,4 +1,4 @@
-----------------------------------------------------------------------
+---------------------------------------------------------------------
 -- |
 -- Maintainer  : PL
 -- Stability   : (stable)
@@ -63,17 +63,21 @@ convertAbsFun gram fun typing = -- trace2 "GFCtoSimple - converting function" (p
 
 convertAbstract :: [SDecl] -> Fun -> A.Exp -> Abstract SDecl Name
 convertAbstract env fun (A.EProd x a b) 
-    = convertAbstract (convertType x' [] a : env) fun b
+    = convertAbstract (convertAbsType x' [] a : env) fun b
     where x' = if x==I.identC "h_" then anyVar else x
 convertAbstract env fun a 
-    = Abs (convertType anyVar [] a) (reverse env) name
+    = Abs (convertAbsType anyVar [] a) (reverse env) name
     where name = Name fun [ Unify [n] | n <- [0 .. length env-1] ]
 
-convertType :: Var -> [TTerm] -> A.Exp -> SDecl
-convertType x args (A.EApp a b) = convertType x (convertExp [] b : args) a
-convertType x args (A.EAtom at) = Decl x (convertCat at) args
-convertType x args (A.EProd _ _ b) = convertType x args b ---- AR 7/10 workaround
-convertType x args exp          = error $ "GFCtoSimple.convertType: " ++ prt exp
+convertAbsType :: Var -> [FOType SCat] -> A.Exp -> SDecl
+convertAbsType x args (A.EProd _ a b) = convertAbsType x (convertType [] a : args) b
+convertAbsType x args a = Decl x (reverse args ::--> convertType [] a)
+
+convertType :: [TTerm] -> A.Exp -> FOType SCat
+convertType args (A.EApp a b) = convertType (convertExp [] b : args) a
+convertType args (A.EAtom at) = convertCat at ::@ reverse args
+convertType args (A.EProd _ _ b) = convertType args b ---- AR 7/10 workaround
+convertType args exp          = error $ "GFCtoSimple.convertType: " ++ prt exp
 
 {- Exp from GF/Canon/GFC.cf:
 EApp.   Exp1 ::= Exp1 Exp2 ;

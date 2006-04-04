@@ -37,22 +37,29 @@ type SimpleRule    c n t = Rule     (Decl c) n (LinType c t) (Maybe (Term c t))
 
 -- ** dependent type declarations
 
--- | 'Decl x c ts' == x is of type (c applied to ts)
-data Decl c = Decl Var c [TTerm]
-	      deriving (Eq, Ord, Show)
+-- 'Decl x c ts' == x is of type (c applied to ts)
+-- data Decl c = Decl Var c [TTerm]
+--  	      deriving (Eq, Ord, Show)
+
+-- | 'Decl x t' == 'x' is of type 't'
+data Decl    c = Decl Var (AbsType c) deriving (Eq, Ord, Show)
+-- | '[t1..tn] ::--> t' == 't1 -> ... -> tn -> t'
+data AbsType c = [FOType c] ::--> FOType c deriving (Eq, Ord, Show)
+-- | 'c ::@ [t1..tn]' == '(c t1 ... tn)'
+data FOType  c = c ::@ [TTerm] deriving (Eq, Ord, Show)
+
+-- including second order functions:
+-- (A -> B)                ==>  Decl _ ([A ::@ []] ::--> (B ::@ []))
+-- (x : A -> B -> C)       ==>  Decl x ([A ::@ [], B ::@ []] ::--> (C ::@ []))
+-- (y : A t x -> B (t x))  ==>  Decl y ([A ::@ [t:@[],TVar x]] ::--> (B ::@ [t:@[TVar x]]))
+
+
 data TTerm  = Constr :@ [TTerm]
 	    | TVar Var
 	      deriving (Eq, Ord, Show)
 
-{-- andra ordningens funktioner:
-data Decl c = Decl Var [(c,[TTerm])] (c,[TTerm])
--- (A -> B)                ==>  Decl _ [(A,[])] (B,[])
--- (A -> B -> C)           ==>  Decl _ [(A,[]), (B,[])] (C,[])
--- (y : A t x -> B (t x))  ==>  Decl y [(A,[t:@[],TVar x])] (B,[t:@[TVar x]])
--}
-
 decl2cat :: Decl c -> c
-decl2cat (Decl _ cat _) = cat
+decl2cat (Decl _ (_ ::--> (cat ::@ _))) = cat
 
 varsInTTerm :: TTerm -> [Var]
 varsInTTerm tterm = vars tterm []
@@ -218,11 +225,15 @@ lintype2paths path (TblT pt vt) = concat [ lintype2paths (path ++! pat) vt |
 -- * pretty-printing
 
 instance Print c => Print (Decl c) where
-    prt (Decl var cat args) 
-	| null args = prVar ++ prt cat
-	| otherwise = "(" ++ prVar ++ prt cat ++ prtBefore " " args ++ ")"
-	where prVar | var == anyVar = ""
-		    | otherwise     = "?" ++ prt var ++ ":"
+    prt (Decl var typ) | var == anyVar = prt typ
+		       | otherwise     = "(?" ++ prt var ++ ":" ++ prt typ ++ ")"
+
+instance Print c => Print (AbsType c) where
+    prt ([]   ::--> typ) = prt typ
+    prt (args ::--> typ) = "(" ++ prtAfter "->" args ++ prt typ ++ ")"
+
+instance Print c => Print (FOType c) where
+    prt (cat ::@ args) = prt cat ++ prtBefore " " args
 
 instance Print TTerm where
     prt (con :@ args)
