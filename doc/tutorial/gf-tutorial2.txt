@@ -1539,7 +1539,7 @@ Here is an example of pattern matching, the paradigm of regular adjectives.
     APl       => fin + "a" ;
     }
 ```
-A constructor can have patterns as arguments. For instance,
+A constructor can be used as a pattern that has patterns as arguments. For instance,
 the adjectival paradigm in which the two singular forms are the same, 
 can be defined
 ```
@@ -1553,9 +1553,9 @@ can be defined
 %--!
 ===Morphological analysis and morphology quiz===
 
-Even though in GF morphology
-is mostly seen as an auxiliary of syntax, a morphology once defined
-can be used on its own right. The command ``morpho_analyse = ma``
+Even though morphology is in GF
+mostly used as an auxiliary for syntax, it
+can also be useful on its own right. The command ``morpho_analyse = ma``
 can be used to read a text and return for each word the analyses that
 it has in the current concrete syntax.
 ```
@@ -1577,10 +1577,11 @@ the category is set to be something else than ``S``. For instance,
   réapparaîtriez
   Score 0/1
 ```
-Finally, a list of morphological exercises and save it in a
+Finally, a list of morphological exercises can be generated
+off-line saved in a
 file for later use, by the command ``morpho_list = ml``
 ```
-  > morpho_list -number=25 -cat=V
+  > morpho_list -number=25 -cat=V | wf exx.txt
 ```
 The ``number`` flag gives the number of exercises generated.
 
@@ -1595,23 +1596,31 @@ verbs, such as //switch off//. The linearization of
 a sentence may place the object between the verb and the particle:
 //he switched it off//.
 
-The first of the following judgements defines transitive verbs as
+The following judgement defines transitive verbs as
 **discontinuous constituents**, i.e. as having a linearization
-type with two strings and not just one. The second judgement
+type with two strings and not just one. 
+```
+  lincat TV = {s : Number => Str ; part : Str} ;
+```
+This linearization rule
 shows how the constituents are separated by the object in complementization.
 ```
-  lincat TV         = {s : Number => Str ; part : Str} ;
   lin PredTV tv obj = {s = \\n => tv.s ! n ++ obj.s ++ tv.part} ;
 ```
 There is no restriction in the number of discontinuous constituents
 (or other fields) a  ``lincat`` may contain. The only condition is that
 the fields must be of finite types, i.e. built from records, tables,
-parameters, and ``Str``, and not functions. A mathematical result
+parameters, and ``Str``, and not functions. 
+
+A mathematical result
 about parsing in GF says that the worst-case complexity of parsing
-increases with the number of discontinuous constituents. Moreover,
-the parsing and linearization commands only give reliable results
-for categories whose linearization type has a unique ``Str`` valued
-field labelled ``s``.
+increases with the number of discontinuous constituents. This is
+potentially a reason to avoid discontinuous constituents.
+Moreover, the parsing and linearization commands only give accurate
+results for categories whose linearization type has a unique ``Str`` 
+valued field labelled ``s``. Therefore, discontinuous constituents
+are not a good idea in top-level categories accessed by the users
+of a grammar application.
 
 
 %--!
@@ -1662,8 +1671,21 @@ can be used e.g. if a word lacks a certain form.
 In general, ``variants`` should be used cautiously. It is not
 recommended for modules aimed to be libraries, because the
 user of the library has no way to choose among the variants.
-Moreover, even though ``variants`` admits lists of any type,
-its semantics for complex types can cause surprises.
+Moreover, ``variants`` is only defined for basic types (``Str``
+and parameter types). The grammar compiler will admit
+``variants`` for any types, but it will push it to the
+level of basic types in a way that may be unwanted.
+For instance, German has two words meaning "car", 
+//Wagen//, which is Masculine, and //Auto//, which is Neuter.
+However, if one writes
+```
+  variants {{s = "Wagen" ; g = Masc} ; {s = "Auto" ; g = Neutr}}
+```
+this will compute to
+```
+  {s = variants {"Wagen" ; "Auto"} ; g = variants {Masc ; Neutr}}
+```
+which will also accept erroneous combinations of strings and genders.
 
 
 
@@ -1736,12 +1758,8 @@ possible to write, slightly surprisingly,
 %--!
 ===Regular expression patterns===
 
-(New since 7 January 2006.)
-
 To define string operations computed at compile time, such
 as in morphology, it is handy to use regular expression patterns:
-
-
  - //p// ``+`` //q// : token consisting of //p// followed by //q//
  - //p// ``*``       : token //p// repeated 0 or more times
                                      (max the length of the string to be matched)
@@ -1768,25 +1786,24 @@ Another example: English noun plural formation.
     x + "y"                           => x + "ies" ;
     _                                 => w + "s"
     } ;
-
 ```
 Semantics: variables are always bound to the **first match**, which is the first
 in the sequence of binding lists ``Match p v`` defined as follows. In the definition,
 ``p`` is a pattern and ``v`` is a value.
 ```
   Match (p1|p2) v = Match p1 v ++ Match p2 v
-  Match (p1+p2) s = [Match p1 s1 ++ Match p2 s2 | i <- [0..length s], (s1,s2) = splitAt i s]
-  Match p*      s = Match "" s ++ Match p s ++ Match (p + p) s ++ ...
+  Match (p1+p2) s = [Match p1 s1 ++ Match p2 s2 | 
+                       i <- [0..length s], (s1,s2) = splitAt i s]
+  Match p*      s = [[]] if Match "" s ++ Match p s ++ Match (p+p) s ++... /= []
+  Match -p      v = [[]] if Match p v = []
   Match c       v = [[]] if c == v  -- for constant and literal patterns c
   Match x       v = [[(x,v)]]       -- for variable patterns x
   Match x@p     v = [[(x,v)]] + M   if M = Match p v /= []
   Match p       v = [] otherwise    -- failure
 ```
 Examples:
-
 - ``x + "e" + y`` matches ``"peter"`` with ``x = "p", y = "ter"``
-- ``x@("foo"*)`` matches any token with ``x = ""``
-- ``x + y@("er"*)`` matches ``"burgerer"`` with ``x = "burg", y = "erer"``
+- ``x + "er"*`` matches ``"burgerer"`` with ``x = "burg"
 
 
 
@@ -1795,7 +1812,12 @@ Examples:
 %--!
 ===Prefix-dependent choices===
 
-The construct exemplified in
+Sometimes a token has different forms depending on the token
+that follows. An example is the English indefinite article,
+which is //an// if a vowel follows, //a// otherwise.
+Which form is chosen can only be decided at run time, i.e.
+when a string is actually build. GF has a special construct for
+such tokens, the ``pre`` construct exemplified in
 ```
   oper artIndef : Str = 
     pre {"a" ; "an" / strs {"a" ; "e" ; "i" ; "o"}} ;
@@ -1835,6 +1857,47 @@ they can be used as arguments. For example:
 
   -- e.g. (StreetAddress 10 "Downing Street") : Address
 ```
+
+
+
+==More concepts of abstract syntax==
+
+===GF as a logical framework===
+
+In this section, we will introduce concepts that make it possible
+to encode advanced semantic concepts in an abstract syntax.
+These concepts are inherited from **type theory**. Type theory
+is the basis of many systems known as **logical frameworks**, which are
+used for representing mathematical theorems and their proofs on a computer.
+In fact, GF has a logical framework as its proper part:
+this part is the abstract syntax.
+
+In a logical framework, the formalization of a mathematical theory
+is a set of type and function declarations. The following is an example
+of such a theory, represented as an ``abstract`` module in GF.
+```
+  abstract Geometry = {
+    cat 
+      Line ; Point ; Circle ;            -- basic types of figures
+      Prop ;                             -- proposition
+    fun
+      Parallel : Line -> Line -> Prop ;  -- x is parallel to y
+      Centre : Circle -> Point ;         -- the centre of c
+    } 
+```
+
+
+
+===Dependent types===
+
+===Higher-order abstract syntax===
+
+===Semantic definitions===
+
+===List categories===
+
+
+
 
 
 %--!
@@ -1888,18 +1951,6 @@ The rest of the modules (black) come from the resource.
 
 
 ===Restricted inheritance and qualified opening===
-
-
-
-==More concepts of abstract syntax==
-
-===Dependent types===
-
-===Higher-order abstract syntax===
-
-===Semantic definitions===
-
-===List categories===
 
 
 

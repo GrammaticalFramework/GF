@@ -158,7 +158,12 @@ lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
 
 
 lookupLincat :: SourceGrammar -> Ident -> Ident -> Err Type
-lookupLincat gr m c | elem c [zIdent "String", zIdent "Int", zIdent "Float"] = 
+lookupLincat gr m c | elem c [zIdent "Int"] =
+      let ints k = App (Q (IC "Predef") (IC "Ints")) (EInt k) in
+      return $
+      RecType [
+        (LIdent "s", typeStr), (LIdent "last",ints 9),(LIdent "size",ints 1)]
+lookupLincat gr m c | elem c [zIdent "String", zIdent "Float"] = 
   return defLinType --- ad hoc; not needed?
 
 lookupLincat gr m c = do

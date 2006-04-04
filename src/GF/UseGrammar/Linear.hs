@@ -60,8 +60,8 @@ linearizeToRecord gr mk m = lin [] where
 
     r <- case at of
       A.AtC f -> lookf c t f >>= comp xs'
+      A.AtI i -> return $ recInt i
       A.AtL s -> return $ recS $ tK $ prt at
-      A.AtI i -> return $ recS $ tK $ prt at
       A.AtF i -> return $ recS $ tK $ prt at
       A.AtV x -> lookCat c >>= comp [tK (prt_ at)]
       A.AtM m -> lookCat c >>= comp [tK (prt_ at)] 
@@ -78,6 +78,10 @@ linearizeToRecord gr mk m = lin [] where
     R fs -> R $ [Ass (LV i) (tK (prt t)) | (i,(t,_)) <- zip [0..] bs] ++ fs
 
   recS t = R [Ass (L (identC "s")) t] ----
+
+  recInt i = R [Ass (L (identC "s"))  (tK $ show i),
+              Ass (L (identC "last")) (EInt (rem i 10)),
+              Ass (L (identC "size")) (EInt (if i > 9 then 1 else 0))]
 
   lookCat = return . errVal defLindef . look 
          ---- should always be given in the module

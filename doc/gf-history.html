@@ -14,6 +14,31 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
+3/4 (AR) The predefined abstract syntax type <tt>Int</tt> now has two
+inherent parameters indicating its last digit and its size. The (hard-coded)
+linearization type is
+<pre>
+  {s : Str ; size : Predef.Ints 1 ; last : Predef.Ints 9}
+</pre>
+The <tt>size</tt> field has value <tt>1</tt> for integers greater than 9, and
+value <tt>0</tt> for other integers (which are never negative). This parameter can
+be used e.g. in calculating number agreement,
+<pre>
+    Risala i = {s = i.s ++ table (Predef.Ints 1 * Predef.Ints 9) {
+      <0,1>  => "risalah" ;
+      <0,2>  => "risalatan" ;
+      <0,_> | <1,0> => "rasail" ; 
+      _ => "risalah"
+      } ! <i.size,i.last>
+    } ;
+</pre>
+Notice that the table has to be typed explicitly for <tt>Ints k</tt>, 
+because type inference would otherwise return <tt>Int</tt> and therefore
+fail to expand the table.
+
+
+<p>
+
 31/3 (AR) Added flags and options to some commands, to help generation:
 <ul>
 <li> <tt>gt -noexpand=NP,V,TV</tt> does not expand these categories,
