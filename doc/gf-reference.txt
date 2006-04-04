@@ -9,19 +9,23 @@ Aarne Ranta
 %!target:html
 
 
-This is a quick reference on GF grammars.
+This is a quick reference on GF grammars. It aims to
+cover all forms of expression available when writing
+grammars. It assumes basic knowledge of GF, which
+can be acquired from the 
+[GF Tutorial http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/].
 Help on GF commands is obtained on line by the
-help command (``h``). 
+help command (``help``), and help on invoking
+GF with (``gf -help``).
 
 
-==A Quick Example==
+===A complete example===
 
-This is a complete example, dividing a grammar
-into three files.
+This is a complete example of a GF grammar divided
+into three modules in files. The grammar recognizes the
+phrases //one pizza// and //two pizzas//.
 
-``abstract``, ``concrete``, and ``resource``.
-
-File ``Order.gf``
+File ``Order.gf``:
 ```
 abstract Order = {
 cat 
@@ -54,7 +58,7 @@ param Num = Sg | Pl ;
 oper regNoun : Str -> {s : Num => Str} =
   \dog -> {s = table {
     Sg => dog ;
-    Pl => dog + "s"
+    _  => dog + "s"
     }
   } ;
 }
@@ -69,7 +73,7 @@ To use this example, do
 
 
 
-==Modules and files==
+===Modules and files===
 
 One module per file.
 File named ``Foo.gf`` contains module named
@@ -122,7 +126,7 @@ Comments have the forms
 ```
 -- till the end of line
 {- any number of lines between -}
---# reserved for compiler pragmas
+--# used for compiler pragmas
 ```
 A ``concrete`` can be opened like a ``resource``.
 It is translated as follows:
@@ -138,7 +142,7 @@ Any ``concrete`` of it then works as an ``instance``.
 
 
 
-==Judgements==
+===Judgements===
 
 ```
 cat C               -- declare category C
@@ -179,7 +183,7 @@ fun f,g : A         -- same as fun f : A ; g : A
 ```
 
 
-==Types==
+===Types===
 
 Abstract syntax (in ``fun``):
 ```
@@ -208,7 +212,7 @@ Ints n           -- type of n first integers
 ```
 Resource (in ``oper``): all those of concrete, plus
 ``` 
-Tok              -- tokens (subset of Str)
+Tok              -- tokens (subtype of Str)
 A -> B           -- functions from A to B
 Int              -- integers
 Strs             -- list of prefixes (for pre)
@@ -216,12 +220,12 @@ PType            -- parameter type
 Type             -- any type
 ```
 As parameter types, one can use any finite type:
-``param`` constants ``P``,
+``P`` defined in ``param P``,
 ``Ints n``, and record types of parameter types.
 
 
 
-==Expressions==
+===Expressions===
 
 Syntax trees = full function applications
 ```
@@ -232,7 +236,7 @@ f a b              -- : C if fun f : A -> B -> C
 ```
 Higher-Order Abstract syntax (HOAS): functions as arguments:
 ```
-F a (\y -> b)      -- : C if a : A, b : B (x : A), 
+F a (\x -> c)      -- : C if a : A, c : C (x : B), 
                       fun F : A -> (B -> C) -> C
 ```
 Tokens and token lists
@@ -260,7 +264,7 @@ table {              -- by pattern matching
   _  => "mouse"      -- wildcard pattern
   }
 table {               
-  n => regn n "cat" ;-- variable pattern 
+  n => regn n "cat"  -- variable pattern 
   }
 table Num {...}      -- table given with arg. type
 table ["ox"; "oxen"] -- table as course of values
@@ -274,7 +278,6 @@ Records
 ```
 {s = "Liz"; g = Fem} -- record in full form
 {s,t = "et"}         -- same as {s = "et";t= "et"}
-
 {s = "Liz"} **       -- record extension: same as
   {g = Fem}             {s = "Liz" ; g = Fem}
 
@@ -318,13 +321,14 @@ lin F A B = {s = ["for all"] ++ A.s ++ B.$1 ++ B.s}
 ```
 
 
-==Pattern matching==
+===Pattern matching===
 
 These patterns can be used in branches of ``table`` and
-``case`` expressions.
+``case`` expressions. Patterns are matched in the order in
+which they appear in the grammar.
 ```
 C                 -- atomic param constructor
-C p q             -- param constr. appl- to patterns
+C p q             -- param constr. applied to patterns
 x                 -- variable, matches anything
 _                 -- wildcard, matches anything
 "foo"             -- string
@@ -338,7 +342,7 @@ p + "s"           -- sequence of two string patterns
 p*                -- repetition of a string pattern
 ```
 
-==Sample library functions==
+===Sample library functions===
 
 ```
 -- lib/prelude/Predef.gf
@@ -371,7 +375,7 @@ oper
 ```
 
 
-==Flags==
+===Flags===
 
 Flags can appear, with growing priority,
 - in files, judgement ``flags`` and without dash (``-``)
@@ -400,14 +404,14 @@ optimize=values    good for lexicon concrete
 optimize=all       usually good for resource
 optimize=noexpand  for resource, if =all too big
 ```
-For the full set of values for ``flag``, 
-use on-line ``h -flag``.
+For the full set of values for ``FLAG``, 
+use on-line ``h -FLAG``.
 
 
 
-==File paths==
+===File paths===
 
-Colon-separated lists of directories tried in the
+Colon-separated lists of directories searched in the
 given order: 
 ```
 --# -path=.:../abstract:../common:prelude
@@ -417,12 +421,12 @@ first line in the top file, as flag to ``gf``
 when invoked, or as flag to the ``i`` command.
 The prefix ``--#`` is used only in files.
 
-If the variabls ``GF_LIB_PATH`` is defined, its
+If the environment variabls ``GF_LIB_PATH`` is defined, its
 value is automatically prefixed to each directory to
 extend the original search path.
 
 
-==Alternative grammar formats==
+===Alternative grammar formats===
 
 **Old GF** (before GF 2.0): 
 all judgements in any kinds of modules,
@@ -442,7 +446,7 @@ Rules must be one per line. The RHS can be empty.
 S ::= (NP+ ("is" | "was") AP | V NP*) ;
 ```
 where the RHS is a regular expression of categories
-and quoted tokens: ``"foo", T U, T|U, T*, T+, T?``, or empty.
+and quoted tokens: ``"foo", CAT, T U, T|U, T*, T+, T?``, or empty.
 Rule labels are generated automatically.
 
 
@@ -465,7 +469,7 @@ are preprocessed by using a parser given by the flag
 and the result is written to ``foo.gf``.
 
 
-==References==
+===References===
 
 [GF Homepage http://www.cs.chalmers.se/~aarne/GF/]
 

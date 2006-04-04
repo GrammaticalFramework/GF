@@ -7,45 +7,48 @@
 <P ALIGN="center"><CENTER><H1>GF Quick Reference</H1>
 <FONT SIZE="4">
 <I>Aarne Ranta</I><BR>
-Wed Mar 29 13:21:48 2006
+Tue Apr  4 09:41:30 2006
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
-    <UL>
-    <LI><A HREF="#toc1">A Quick Example</A>
-    <LI><A HREF="#toc2">Modules and files</A>
-    <LI><A HREF="#toc3">Judgements</A>
-    <LI><A HREF="#toc4">Types</A>
-    <LI><A HREF="#toc5">Expressions</A>
-    <LI><A HREF="#toc6">Pattern matching</A>
-    <LI><A HREF="#toc7">Sample library functions</A>
-    <LI><A HREF="#toc8">Flags</A>
-    <LI><A HREF="#toc9">File paths</A>
-    <LI><A HREF="#toc10">Alternative grammar formats</A>
-    <LI><A HREF="#toc11">References</A>
-    </UL>
+      <UL>
+      <LI><A HREF="#toc1">A complete example</A>
+      <LI><A HREF="#toc2">Modules and files</A>
+      <LI><A HREF="#toc3">Judgements</A>
+      <LI><A HREF="#toc4">Types</A>
+      <LI><A HREF="#toc5">Expressions</A>
+      <LI><A HREF="#toc6">Pattern matching</A>
+      <LI><A HREF="#toc7">Sample library functions</A>
+      <LI><A HREF="#toc8">Flags</A>
+      <LI><A HREF="#toc9">File paths</A>
+      <LI><A HREF="#toc10">Alternative grammar formats</A>
+      <LI><A HREF="#toc11">References</A>
+      </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
 <P>
-This is a quick reference on GF grammars.
+This is a quick reference on GF grammars. It aims to
+cover all forms of expression available when writing
+grammars. It assumes basic knowledge of GF, which
+can be acquired from the 
+<A HREF="http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/">GF Tutorial</A>.
 Help on GF commands is obtained on line by the
-help command (<CODE>h</CODE>). 
+help command (<CODE>help</CODE>), and help on invoking
+GF with (<CODE>gf -help</CODE>).
 </P>
 <A NAME="toc1"></A>
-<H2>A Quick Example</H2>
+<H3>A complete example</H3>
 <P>
-This is a complete example, dividing a grammar
-into three files.
+This is a complete example of a GF grammar divided
+into three modules in files. The grammar recognizes the
+phrases <I>one pizza</I> and <I>two pizzas</I>.
 </P>
 <P>
-<CODE>abstract</CODE>, <CODE>concrete</CODE>, and <CODE>resource</CODE>.
-</P>
-<P>
-File <CODE>Order.gf</CODE>
+File <CODE>Order.gf</CODE>:
 </P>
 <PRE>
   abstract Order = {
@@ -83,7 +86,7 @@ File <CODE>Res.gf</CODE>:
   oper regNoun : Str -&gt; {s : Num =&gt; Str} =
     \dog -&gt; {s = table {
       Sg =&gt; dog ;
-      Pl =&gt; dog + "s"
+      _  =&gt; dog + "s"
       }
     } ;
   }
@@ -99,7 +102,7 @@ To use this example, do
 </PRE>
 <P></P>
 <A NAME="toc2"></A>
-<H2>Modules and files</H2>
+<H3>Modules and files</H3>
 <P>
 One module per file.
 File named <CODE>Foo.gf</CODE> contains module named
@@ -163,7 +166,7 @@ Comments have the forms
 <PRE>
   -- till the end of line
   {- any number of lines between -}
-  --# reserved for compiler pragmas
+  --# used for compiler pragmas
 </PRE>
 <P>
 A <CODE>concrete</CODE> can be opened like a <CODE>resource</CODE>.
@@ -181,7 +184,7 @@ An <CODE>abstract</CODE> can be opened like an <CODE>interface</CODE>.
 Any <CODE>concrete</CODE> of it then works as an <CODE>instance</CODE>.
 </P>
 <A NAME="toc3"></A>
-<H2>Judgements</H2>
+<H3>Judgements</H3>
 <PRE>
   cat C               -- declare category C
   cat C (x:A)(y:B x)  -- dependent category C
@@ -225,7 +228,7 @@ Judgements can also share RHS:
 </PRE>
 <P></P>
 <A NAME="toc4"></A>
-<H2>Types</H2>
+<H3>Types</H3>
 <P>
 Abstract syntax (in <CODE>fun</CODE>):
 </P>
@@ -259,7 +262,7 @@ Concrete syntax (in <CODE>lincat</CODE>):
 Resource (in <CODE>oper</CODE>): all those of concrete, plus
 </P>
 <PRE>
-  Tok              -- tokens (subset of Str)
+  Tok              -- tokens (subtype of Str)
   A -&gt; B           -- functions from A to B
   Int              -- integers
   Strs             -- list of prefixes (for pre)
@@ -268,11 +271,11 @@ Resource (in <CODE>oper</CODE>): all those of concrete, plus
 </PRE>
 <P>
 As parameter types, one can use any finite type:
-<CODE>param</CODE> constants <CODE>P</CODE>,
+<CODE>P</CODE> defined in <CODE>param P</CODE>,
 <CODE>Ints n</CODE>, and record types of parameter types.
 </P>
 <A NAME="toc5"></A>
-<H2>Expressions</H2>
+<H3>Expressions</H3>
 <P>
 Syntax trees = full function applications
 </P>
@@ -286,7 +289,7 @@ Syntax trees = full function applications
 Higher-Order Abstract syntax (HOAS): functions as arguments:
 </P>
 <PRE>
-  F a (\y -&gt; b)      -- : C if a : A, b : B (x : A), 
+  F a (\x -&gt; c)      -- : C if a : A, c : C (x : B), 
                         fun F : A -&gt; (B -&gt; C) -&gt; C
 </PRE>
 <P>
@@ -320,7 +323,7 @@ Tables
     _  =&gt; "mouse"      -- wildcard pattern
     }
   table {               
-    n =&gt; regn n "cat" ;-- variable pattern 
+    n =&gt; regn n "cat"  -- variable pattern 
     }
   table Num {...}      -- table given with arg. type
   table ["ox"; "oxen"] -- table as course of values
@@ -336,7 +339,6 @@ Records
 <PRE>
   {s = "Liz"; g = Fem} -- record in full form
   {s,t = "et"}         -- same as {s = "et";t= "et"}
-  
   {s = "Liz"} **       -- record extension: same as
     {g = Fem}             {s = "Liz" ; g = Fem}
   
@@ -392,14 +394,15 @@ Example:
 </PRE>
 <P></P>
 <A NAME="toc6"></A>
-<H2>Pattern matching</H2>
+<H3>Pattern matching</H3>
 <P>
 These patterns can be used in branches of <CODE>table</CODE> and
-<CODE>case</CODE> expressions.
+<CODE>case</CODE> expressions. Patterns are matched in the order in
+which they appear in the grammar.
 </P>
 <PRE>
   C                 -- atomic param constructor
-  C p q             -- param constr. appl- to patterns
+  C p q             -- param constr. applied to patterns
   x                 -- variable, matches anything
   _                 -- wildcard, matches anything
   "foo"             -- string
@@ -414,7 +417,7 @@ These patterns can be used in branches of <CODE>table</CODE> and
 </PRE>
 <P></P>
 <A NAME="toc7"></A>
-<H2>Sample library functions</H2>
+<H3>Sample library functions</H3>
 <PRE>
   -- lib/prelude/Predef.gf
   drop   : Int -&gt; Tok -&gt; Tok   -- drop prefix of length
@@ -446,7 +449,7 @@ These patterns can be used in branches of <CODE>table</CODE> and
 </PRE>
 <P></P>
 <A NAME="toc8"></A>
-<H2>Flags</H2>
+<H3>Flags</H3>
 <P>
 Flags can appear, with growing priority,
 </P>
@@ -480,13 +483,13 @@ Some common flags used in grammars:
   optimize=noexpand  for resource, if =all too big
 </PRE>
 <P>
-For the full set of values for <CODE>flag</CODE>, 
-use on-line <CODE>h -flag</CODE>.
+For the full set of values for <CODE>FLAG</CODE>, 
+use on-line <CODE>h -FLAG</CODE>.
 </P>
 <A NAME="toc9"></A>
-<H2>File paths</H2>
+<H3>File paths</H3>
 <P>
-Colon-separated lists of directories tried in the
+Colon-separated lists of directories searched in the
 given order: 
 </P>
 <PRE>
@@ -499,12 +502,12 @@ when invoked, or as flag to the <CODE>i</CODE> command.
 The prefix <CODE>--#</CODE> is used only in files.
 </P>
 <P>
-If the variabls <CODE>GF_LIB_PATH</CODE> is defined, its
+If the environment variabls <CODE>GF_LIB_PATH</CODE> is defined, its
 value is automatically prefixed to each directory to
 extend the original search path.
 </P>
 <A NAME="toc10"></A>
-<H2>Alternative grammar formats</H2>
+<H3>Alternative grammar formats</H3>
 <P>
 <B>Old GF</B> (before GF 2.0): 
 all judgements in any kinds of modules,
@@ -530,7 +533,7 @@ Rules must be one per line. The RHS can be empty.
 </PRE>
 <P>
 where the RHS is a regular expression of categories
-and quoted tokens: <CODE>"foo", T U, T|U, T*, T+, T?</CODE>, or empty.
+and quoted tokens: <CODE>"foo", CAT, T U, T|U, T*, T+, T?</CODE>, or empty.
 Rule labels are generated automatically.
 </P>
 <P>
@@ -560,7 +563,7 @@ are preprocessed by using a parser given by the flag
 and the result is written to <CODE>foo.gf</CODE>.
 </P>
 <A NAME="toc11"></A>
-<H2>References</H2>
+<H3>References</H3>
 <P>
 <A HREF="http://www.cs.chalmers.se/~aarne/GF/">GF Homepage</A>
 </P>
