@@ -287,7 +287,12 @@ computeLType gr t = do
     Q (IC "Predef") (IC "Float")        -> return ty ---- shouldn't be needed
 
     Q m c | elem c [cPredef,cPredefAbs] -> return ty
-    Q m c | elem c [zIdent "Int",zIdent "Float",zIdent "String"] -> return defLinType ----
+    Q m c | elem c [zIdent "Int"] -> 
+      let ints k = App (Q (IC "Predef") (IC "Ints")) (EInt k) in
+      return $
+      RecType [
+        (LIdent "s", typeStr), (LIdent "last",ints 9),(LIdent "size",ints 1)]
+    Q m c | elem c [zIdent "Float",zIdent "String"] -> return defLinType ----
 
     Q m ident -> checkIn ("module" +++ prt m) $ do
       ty' <- checkErr (lookupResDef gr m ident) 
@@ -408,9 +413,10 @@ inferLType gr trm = case trm of
      check trm (Table arg val)
    T ti pts -> do  -- tries to guess: good in oper type inference
      let pts' = [pt | pt@(p,_) <- pts, isConstPatt p]
-     if null pts' 
-       then prtFail "cannot infer table type of" trm
-       else do 
+     case pts' of 
+       [] -> prtFail "cannot infer table type of" trm
+----       PInt k : _ -> return $ Ints $ max [i | PInt i <- pts'] 
+       _  -> do 
          (arg,val) <- checks $ map (inferCase Nothing) pts'
          check trm (Table arg val)
    V arg pts -> do
