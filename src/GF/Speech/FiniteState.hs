@@ -150,8 +150,9 @@ removeTrivialEmptyNodes = pruneUnusable . skipSimpleEmptyNodes
 
 -- | Move edges to empty nodes with exactly one outgoing edge 
 --   or exactly one incoming edge to point to the next node(s).
+--   This is not done if the pointed-to node is a final node.
 skipSimpleEmptyNodes :: (Eq a, Ord n) => FA n (Maybe a) () -> FA n (Maybe a) ()
-skipSimpleEmptyNodes = onGraph og
+skipSimpleEmptyNodes fa = onGraph og fa
   where 
   og g@(Graph c ns es) = if es' == es then g else og (Graph c ns es')
     where
@@ -160,12 +161,15 @@ skipSimpleEmptyNodes = onGraph og
     changeEdge e@(f,t,()) 
       | isNothing (getNodeLabel info t)
         && (inDegree info t == 1 || outDegree info t == 1)
+        && not (isFinal fa t)
           = [ (f,t',()) | (_,t',()) <- getOutgoing info t]
       | otherwise = [e]
 
-
 isInternal :: Eq n => FA n a b -> n -> Bool
 isInternal (FA _ start final) n = n /= start && n `notElem` final
+
+isFinal :: Eq n => FA n a b -> n -> Bool
+isFinal (FA _ _ final) n = n `elem` final
 
 -- | Remove all internal nodes with no incoming edges
 --   or no outgoing edges.

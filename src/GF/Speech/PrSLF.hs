@@ -58,7 +58,7 @@ mkFAs start cfg = (slfStyleFA main, [(c,slfStyleFA n) | (c,n) <- subs])
   where MFA main subs = {- renameSubs $ -} cfgToMFA start cfg
 
 slfStyleFA :: Eq a => DFA a -> FA State (Maybe a) ()
-slfStyleFA = renameStates [0..] . removeTrivialEmptyNodes . oneFinalState Nothing () 
+slfStyleFA = renameStates [0..] . removeTrivialEmptyNodes . oneFinalState Nothing ()
              . moveLabelsToNodes . dfa2nfa
 
 -- | Give sequential names to subnetworks.
