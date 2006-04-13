@@ -140,7 +140,11 @@ topDownFilter srg@(SRG { startCat = start, rules = rs }) = srg { rules = rs' }
   rhsCats = [ (c,c') | r@(SRGRule c _ ps) <- rs, 
                        SRGAlt _ _ ss <- ps, 
                        c' <- filterCats ss]
-  keep = allRelated (transitiveClosure $ mkRel rhsCats) start
+  uses = reflexiveClosure_ (allSRGCats srg) $ transitiveClosure $ mkRel rhsCats
+  keep = allRelated uses start
+
+allSRGCats :: SRG -> [String]
+allSRGCats SRG { rules = rs } = [c | SRGRule c _ _ <- rs]
 
 --
 -- * Utilities for building and printing SRGs
