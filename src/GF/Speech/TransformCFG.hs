@@ -31,9 +31,9 @@ import GF.Formalism.Utilities (Symbol(..), mapSymbol, filterCats, symbol,
 import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.Print
-import GF.Speech.FiniteState
 
 import Control.Monad
+import Control.Monad.State (State, get, put, evalState)
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.List
@@ -88,7 +88,7 @@ removeIdenticalRules g = [(c,sortNubBy cmpRules rs) | (c,rs) <- g]
               mconcat [c1 `compare` c2, ss1 `compare` ss2]
 
 removeLeftRecursion :: CFRules -> CFRules
-removeLeftRecursion rs = concatMap removeDirectLeftRecursion $ map handleProds rs
+removeLeftRecursion rs = removeDirectLeftRecursions $ map handleProds rs
     where 
     handleProds (c, r) = (c, concatMap handleProd r)
     handleProd (CFRule ai (Cat aj:alpha) n) | aj < ai  =
@@ -100,17 +100,25 @@ removeLeftRecursion rs = concatMap removeDirectLeftRecursion $ map handleProds r
              [CFRule ai (beta ++ alpha) n | CFRule _ beta _ <- lookup' aj rs]
     handleProd r = [r]
 
-removeDirectLeftRecursion :: (Cat_,[CFRule_]) -- ^ All productions for a category
+removeDirectLeftRecursions :: [(Cat_,[CFRule_])] -- ^ All productions for a category
 			  -> CFRules
-removeDirectLeftRecursion (a,rs) | null dr = [(a,rs)]
-				 | otherwise = [(a, as), (a', a's)]
+removeDirectLeftRecursions = concat . flip evalState 0 . mapM removeDirectLeftRecursion
+
+removeDirectLeftRecursion :: (Cat_,[CFRule_]) -- ^ All productions for a category
+			  -> State Int CFRules
+removeDirectLeftRecursion (a,rs) 
+    | null dr = return [(a,rs)]
+    | otherwise = 
+        do
+        a' <- fresh a
+        let as = maybeEndWithA' nr
+            is = [CFRule a' (tail r) n | CFRule _ r n <- dr]
+            a's = maybeEndWithA' is
+            maybeEndWithA' xs = xs ++ [CFRule c (r++[Cat a']) n | CFRule c r n <- xs]
+        return [(a, as), (a', a's)]
     where 
-    a' = a ++ "'" -- FIXME: this might not be unique
     (dr,nr) = partition isDirectLeftRecursive rs
-    as = maybeEndWithA' nr
-    is = [CFRule a' (tail r) n | CFRule _ r n <- dr]
-    a's = maybeEndWithA' is
-    maybeEndWithA' xs = xs ++ [CFRule c (r++[Cat a']) n | CFRule c r n <- xs]
+    fresh x = do { n <- get; put (n+1); return $ x ++ "'" ++ show n }
 
 isDirectLeftRecursive :: CFRule_ -> Bool
 isDirectLeftRecursive (CFRule c (Cat c':_) _) = c == c'
