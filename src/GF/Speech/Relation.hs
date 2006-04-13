@@ -13,7 +13,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Speech.Relation (Rel, mkRel
-                           , isRelatedTo
+                           , allRelated , isRelatedTo
                            , transitiveClosure
                            , reflexiveClosure, reflexiveClosure_
                            , symmetricClosure

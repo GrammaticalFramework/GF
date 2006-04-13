@@ -33,7 +33,7 @@ import Data.Char (toUpper,toLower)
 gslPrinter :: Ident -- ^ Grammar name
 	   -> Options -> Maybe Probs -> CGrammar -> String
 gslPrinter name opts probs cfg = prGSL srg ""
-    where srg = makeSimpleSRG name opts probs $ rmPunctCFG cfg
+    where srg = topDownFilter $ makeSimpleSRG name opts probs $ rmPunctCFG cfg
 
 prGSL :: SRG -> ShowS
 prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
