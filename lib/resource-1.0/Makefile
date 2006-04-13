@@ -1,3 +1,5 @@
+GF=gf
+
 .PHONY: show-path all test pretest langs present mathematical multimodal compiled treebank stat gfdoc clean
 
 all: show-path present mathematical multimodal langs compiled
@@ -6,26 +8,26 @@ show-path:
 	@echo GF_LIB_PATH=$(GF_LIB_PATH)
 
 test:
-	echo "gr -cat=Text -number=11 -prob | tb" | gf -nocf -probs=lang.gfprob langs.gfcm
+	echo "gr -cat=Text -number=11 -prob | tb" | $(GF) -nocf -probs=lang.gfprob langs.gfcm
 
 pretest:
-	echo "gr -cat=Cl -number=11 -prob | tb" | gf -probs=lang.gfprob -path=present:prelude -nocf ../present/Lang???.gfc
+	echo "gr -cat=Cl -number=11 -prob | tb" | $(GF) -probs=lang.gfprob -path=present:prelude -nocf ../present/Lang???.gfc
 
 langs:
-	echo "s ;; pm | wf langs.gfcm" | gf -nocf -src */Lang??*.gf english/LangEng.gf +RTS -M800M -K100M
+	echo "s ;; pm | wf langs.gfcm" | $(GF) -nocf -src */Lang??*.gf english/LangEng.gf +RTS -p -M800M -K100M
 	cp -p */*.gfc */*.gfr ../alltenses
 
 present:
 	chmod u+x mkPresent
-	gf -make -src -preproc=./mkPresent */Lang??*.gf
+	$(GF) -make -src -preproc=./mkPresent */Lang??*.gf
 	mv */*.gfc */*.gfr ../present
 
 mathematical:
-	gf -make -nocf -preproc=./mkPresent mathematical/Mathematical???.gf
+	$(GF) -make -nocf -preproc=./mkPresent mathematical/Mathematical???.gf
 	mv mathematical/*.gfc ../mathematical
 
 multimodal:
-	gf -make -nocf -preproc=./mkPresent multimodal/Multimodal???.gf
+	$(GF) -make -nocf -preproc=./mkPresent multimodal/Multimodal???.gf
 	mv multimodal/*.gfc multimodal/*.gfr ../multimodal
 
 compiled:
