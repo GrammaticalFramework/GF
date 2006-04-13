@@ -15,20 +15,30 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
             RNoAg => ag ;
             RAg a => a
             } ;
-          cl = mkClause (rp.s ! Nom) agr vp
+          cl = mkClause (rp.s ! RC Nom) agr vp
         in
         cl.s ! t ! ant ! b ! ODir
       } ;
 
+-- Preposition stranding: "that we are looking at". Pied-piping is
+-- deferred to $ExtEng.gf$ ("at which we are looking").
+
     RelSlash rp slash = {
-      s = \\t,a,p,_ => slash.c2 ++ rp.s ! Acc ++ slash.s ! t ! a ! p ! ODir
+      s = \\t,a,p,_ => rp.s ! RC Acc ++ slash.s ! t ! a ! p ! ODir ++ slash.c2
       } ;
 
     FunRP p np rp = {
-      s = \\c => np.s ! c ++ p.s ++ rp.s ! Acc ;
+      s = \\c => np.s ! Acc ++ p.s ++ rp.s ! RPrep ;
       a = RAg np.a
       } ;
 
-    IdRP = mkIP "which" "which" "whose" Sg ** {a = RNoAg} ;
+    IdRP = {
+      s = table {
+        RC Gen => "whose" ; 
+        RC _   => "that" ;
+        RPrep  => "which"
+        } ;
+      a = RNoAg
+      } ;
 
 }

@@ -62,6 +62,7 @@ resource ResEng = ParamX ** open Prelude in {
 --2 For $Relative$
  
     RAgr = RNoAg | RAg {n : Number ; p : Person} ;
+    RCase = RPrep | RC Case ;
 
 --2 For $Numeral$
 

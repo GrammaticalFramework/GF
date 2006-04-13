@@ -1857,7 +1857,7 @@ they can be used as arguments. For example:
 
   -- e.g. (StreetAddress 10 "Downing Street") : Address
 ```
-
+The linearization type is ``{s : Str}`` for all these categories.
 
 
 ==More concepts of abstract syntax==
@@ -1922,16 +1922,30 @@ documents:
 However, to give a flavour of both using and writing resource grammars,
 we have created a miniature resource, which resides in the
 subdirectory [``resource`` resource]. Its API consists of the following
-modules:
-- [Syntax resource/Syntax.gf]: syntactic structures, language-independent
-- [LexEng resource/LexEng.gf]: lexical paradigms, English
-- [LexIta resource/LexIta.gf]: lexical paradigms, Italian
+three modules:
+
+[Syntax resource/Syntax.gf] - syntactic structures, language-independent:
+```
+
+```
+[LexEng resource/LexEng.gf] - lexical paradigms, English:
+```
+
+```
+[LexIta resource/LexIta.gf] - lexical paradigms, Italian:
+```
+
+```
 
 
 Only these three modules should be ``open``ed in applications.
 The implementations of the resource are given in the following four modules:
-- [MorphoEng resource/MorphoEng.gf],
-  [MorphoIta resource/MorphoIta.gf]: low-level morphology
+
+[MorphoEng resource/MorphoEng.gf],
+```
+
+```
+[MorphoIta resource/MorphoIta.gf]: low-level morphology
 - [SyntaxEng resource/SyntaxEng.gf].
   [SyntaxIta resource/SyntaxIta.gf]: definitions of syntactic structures
 
