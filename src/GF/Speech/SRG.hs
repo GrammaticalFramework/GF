@@ -20,17 +20,19 @@
 
 module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..),
                       makeSimpleSRG, makeSRG
-                     , lookupFM_, prtS) where
+                     , lookupFM_, prtS
+                     , topDownFilter) where
 
 import GF.Data.Operations
 import GF.Data.Utilities
 import GF.Infra.Ident
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..), NameProfile(..)
-                              , Profile, SyntaxForest)
+                              , Profile, SyntaxForest, filterCats)
 import GF.Conversion.Types
 import GF.Infra.Print
 import GF.Speech.TransformCFG
+import GF.Speech.Relation
 import GF.Infra.Option
 import GF.Probabilistic.Probabilistic (Probs)
 
@@ -38,6 +40,8 @@ import Data.List
 import Data.Maybe (fromMaybe)
 import Data.Map (Map)
 import qualified Data.Map as Map
+import Data.Set (Set)
+import qualified Data.Set as Set
 
 data SRG = SRG { grammarName :: String    -- ^ grammar name
 		 , startCat :: String     -- ^ start category name
@@ -126,6 +130,17 @@ mkCatNames :: String   -- ^ Category name prefix
 	   -> Map String String -- ^ Maps original names to SRG names
 mkCatNames prefix origNames = Map.fromList (zip origNames names)
     where names = [prefix ++ "_" ++ show x | x <- [0..]]
+
+
+-- | Remove categories which are not reachable from the start category.
+topDownFilter :: SRG -> SRG
+topDownFilter srg@(SRG { startCat = start, rules = rs }) = srg { rules = rs' }
+  where 
+  rs' = [ r | r@(SRGRule c _ _) <- rs, c `Set.member` keep]
+  rhsCats = [ (c,c') | r@(SRGRule c _ ps) <- rs, 
+                       SRGAlt _ _ ss <- ps, 
+                       c' <- filterCats ss]
+  keep = allRelated (transitiveClosure $ mkRel rhsCats) start
 
 --
 -- * Utilities for building and printing SRGs
