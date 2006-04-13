@@ -87,6 +87,8 @@ removeIdenticalRules g = [(c,sortNubBy cmpRules rs) | (c,rs) <- g]
     cmpRules (CFRule c1 ss1 _) (CFRule c2 ss2 _) = 
               mconcat [c1 `compare` c2, ss1 `compare` ss2]
 
+-- Paull's algorithm, see
+-- http://research.microsoft.com/users/bobmoore/naacl2k-proc-rev.pdf
 removeLeftRecursion :: CFRules -> CFRules
 removeLeftRecursion rs = removeDirectLeftRecursions $ map handleProds rs
     where 
@@ -113,7 +115,10 @@ removeDirectLeftRecursion (a,rs)
         let as = maybeEndWithA' nr
             is = [CFRule a' (tail r) n | CFRule _ r n <- dr]
             a's = maybeEndWithA' is
-            maybeEndWithA' xs = xs ++ [CFRule c (r++[Cat a']) n | CFRule c r n <- xs]
+            -- the not null constraint here avoids creating new 
+            -- left recursive (cyclic) rules.
+            maybeEndWithA' xs = xs ++ [CFRule c (r++[Cat a']) n | CFRule c r n <- xs, 
+                                                                  not (null r)] 
         return [(a, as), (a', a's)]
     where 
     (dr,nr) = partition isDirectLeftRecursive rs
