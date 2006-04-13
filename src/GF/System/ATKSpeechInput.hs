@@ -110,7 +110,6 @@ recognizeSpeech :: Ident -- ^ Grammar name
                 -> IO [String]
 recognizeSpeech name language cfg start number = 
     do
-    -- FIXME: use cat
     let slf = slfPrinter name start cfg
         n = prIdent name
         hmmName = "hmm_" ++ language
@@ -119,10 +118,10 @@ recognizeSpeech name language cfg start number =
         recName = "rec_" ++ language ++ "_" ++ n
     writeFile "debug.net" slf
     initATK language
-    hPutStrLn stderr "Loading grammar..."
+    hPutStrLn stderr $ "Loading grammar " ++ n ++ " ..."
     loadGrammarString slfName slf
     createRecognizer recName hmmName dictName slfName
-    hPutStrLn stderr "Listening..."
+    hPutStrLn stderr $ "Listening in category " ++ start ++ "..."
     s <- replicateM number (recognize recName)
     return s
 

@@ -104,6 +104,8 @@ pg, print_grammar: pg
   flags: 
       -printer
       -lang
+      -startcat  -- The start category of the generated grammar.
+                    Only supported by some grammar printers.
   examples:
       pg -printer=cf  -- show the context-free skeleton
 

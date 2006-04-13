@@ -216,7 +216,7 @@ speechInput opt s = recognizeSpeech name language cfg cat number
   name = cncId s
   cfg = stateCFG s -- FIXME: use lang flag to select grammar
   language = fromMaybe "en_UK" (getOptVal opts speechLanguage)
-  cat = fromMaybe "S" (getOptVal opts gStartCat) ++ "{}.s"
+  cat = prCFCat (firstCatOpts opts s) ++ "{}.s"
   number = optIntOrN opts flagNumber 1
 
 optLinearizeTreeVal :: Options -> GFGrammar -> Tree -> String
@@ -327,7 +327,9 @@ prMultiGrammar opts = M.showMGrammar (oElem optimizeCanon opts)
 -- access to customizable commands
 
 optPrintGrammar :: Options -> StateGrammar -> String
-optPrintGrammar opts = customOrDefault opts grammarPrinter customGrammarPrinter
+optPrintGrammar opts = pg opts
+    where
+    pg = customOrDefault opts grammarPrinter customGrammarPrinter
 
 optPrintMultiGrammar :: Options -> CanonGrammar -> String
 optPrintMultiGrammar opts = encodeId . pmg opts . encode
