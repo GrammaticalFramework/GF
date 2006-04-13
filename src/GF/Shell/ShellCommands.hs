@@ -212,7 +212,7 @@ optionsOfCommand co = case co of
   CSystemCommand _ -> none
   CGrep _ -> opts "v"
 
-  CPrintGrammar -> both "utf8" "printer lang"
+  CPrintGrammar -> both "utf8" "printer lang startcat"
   CPrintMultiGrammar -> both "utf8 utf8id" "printer"
   CPrintSourceGrammar -> both "utf8" "printer"
 

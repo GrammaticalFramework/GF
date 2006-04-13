@@ -133,6 +133,8 @@ txtHelpFile =
   "\n  flags: " ++
   "\n      -printer" ++
   "\n      -lang" ++
+  "\n      -startcat  -- The start category of the generated grammar." ++
+  "\n                    Only supported by some grammar printers." ++
   "\n  examples:" ++
   "\n      pg -printer=cf  -- show the context-free skeleton" ++
   "\n" ++

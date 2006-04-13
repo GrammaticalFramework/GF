@@ -141,7 +141,7 @@ import GF.Text.ExtraDiacritics (mkExtraDiacritics)
 customGrammarParser :: CustomData (FilePath -> IOE C.CanonGrammar) 
 
 -- | grammarPrinter, \"-printer=x\"
-customGrammarPrinter :: CustomData (StateGrammar -> String)             
+customGrammarPrinter :: CustomData (Options -> StateGrammar -> String)             
 
 -- | multiGrammarPrinter, \"-printer=x\"
 customMultiGrammarPrinter :: CustomData (Options -> CanonGrammar -> String)    
@@ -238,67 +238,58 @@ customGrammarParser =
 customGrammarPrinter = 
   customData "Grammar printers, selected by option -printer=x" $
   [
-   (strCI "gfc",     prCanon . stateGrammarST) -- DEFAULT
-  ,(strCI "gf",      err id prGrammar . canon2sourceGrammar . stateGrammarST)
-  ,(strCI "cf",      prCF . stateCF)
-  ,(strCI "old",     printGrammarOld . stateGrammarST)
-  ,(strCI "srg",     prSRG . stateCF)
-  ,(strCI "gsl",     \s -> let opts = stateOptions s
-                               name = cncId s
-                            in gslPrinter name opts Nothing $ stateCFG s)
-  ,(strCI "jsgf",    \s -> let opts = stateOptions s
-                               name = cncId s
-                            in jsgfPrinter name opts Nothing $ stateCFG s)
-  ,(strCI "srgs_xml", \s -> let opts = stateOptions s
-                                name = cncId s
-                             in srgsXmlPrinter name opts False Nothing $ stateCFG s)
-  ,(strCI "srgs_xml_prob", \s -> let opts = stateOptions s
-                                     name = cncId s
-                                     probs = stateProbs s
-                             in srgsXmlPrinter name opts False (Just probs) $ stateCFG s)
-  ,(strCI "srgs_xml_ms_sem", \s -> let opts = stateOptions s
-                                       name = cncId s
-                                   in srgsXmlPrinter name opts True Nothing $ stateCFG s)
-  ,(strCI "vxml",    grammar2vxml . stateGrammarST)
-  ,(strCI "slf",     \s -> let opts = stateOptions s
-                               start = getStartCat opts
-                               name = cncId s
-                            in slfPrinter name start $ stateCFG s)
-  ,(strCI "slf_graphviz", \s -> let opts = stateOptions s
-                                    start = getStartCat opts
+   (strCI "gfc",     \_ -> prCanon . stateGrammarST) -- DEFAULT
+  ,(strCI "gf",      \_ -> err id prGrammar . canon2sourceGrammar . stateGrammarST)
+  ,(strCI "cf",      \_ -> prCF . stateCF)
+  ,(strCI "old",     \_ -> printGrammarOld . stateGrammarST)
+  ,(strCI "srg",     \_ -> prSRG . stateCF)
+  ,(strCI "gsl",     \opts s -> let name = cncId s
+                                 in gslPrinter name opts Nothing $ stateCFG s)
+  ,(strCI "jsgf",    \opts s -> let name = cncId s
+                                 in jsgfPrinter name opts Nothing $ stateCFG s)
+  ,(strCI "srgs_xml", \opts s -> let name = cncId s
+                                  in srgsXmlPrinter name opts False Nothing $ stateCFG s)
+  ,(strCI "srgs_xml_prob", 
+              \opts s -> let name = cncId s
+                             probs = stateProbs s
+                          in srgsXmlPrinter name opts False (Just probs) $ stateCFG s)
+  ,(strCI "srgs_xml_ms_sem", 
+              \opts s -> let name = cncId s
+                          in srgsXmlPrinter name opts True Nothing $ stateCFG s)
+  ,(strCI "vxml", \_ -> grammar2vxml . stateGrammarST)
+  ,(strCI "slf",  \opts s -> let start = getStartCat opts
+                                 name = cncId s
+                              in slfPrinter name start $ stateCFG s)
+  ,(strCI "slf_graphviz", \opts s -> let start = getStartCat opts
+                                         name = cncId s
+                                      in slfGraphvizPrinter name start $ stateCFG s)
+  ,(strCI "slf_sub", \opts s -> let start = getStartCat opts
                                     name = cncId s
-                                 in slfGraphvizPrinter name start $ stateCFG s)
-  ,(strCI "slf_sub", \s -> let opts = stateOptions s
-                               start = getStartCat opts
-                               name = cncId s
-                            in slfSubPrinter name start $ stateCFG s)
-  ,(strCI "slf_sub_graphviz", \s -> let opts = stateOptions s
-                                        start = getStartCat opts
+                                 in slfSubPrinter name start $ stateCFG s)
+  ,(strCI "slf_sub_graphviz", \opts s -> let start = getStartCat opts
+                                             name = cncId s
+                                          in slfSubGraphvizPrinter name start $ stateCFG s)
+  ,(strCI "fa_graphviz", \opts s -> let start = getStartCat opts
                                         name = cncId s
-                                     in slfSubGraphvizPrinter name start $ stateCFG s)
-  ,(strCI "fa_graphviz", \s -> let opts = stateOptions s
-                                   start = getStartCat opts
-                                   name = cncId s
-                                 in faGraphvizPrinter name start $ stateCFG s)
-  ,(strCI "fa_c", \s -> let opts = stateOptions s
-                            start = getStartCat opts
-                            name = cncId s
-                        in faCPrinter name start $ stateCFG s)
-  ,(strCI "regular", regularPrinter . stateCFG)
-  ,(strCI "plbnf",   prLBNF True)
-  ,(strCI "lbnf",    prLBNF False)
-  ,(strCI "bnf",     prBNF False)
-  ,(strCI "haskell", grammar2haskell . stateGrammarST)
-  ,(strCI "transfer", grammar2transfer . stateGrammarST)
-  ,(strCI "morpho",  prMorpho . stateMorpho)
-  ,(strCI "fullform",prFullForm . stateMorpho)
-  ,(strCI "opts",    prOpts . stateOptions)
-  ,(strCI "words",   unwords . stateGrammarWords)
-  ,(strCI "printnames", C.prPrintnamesGrammar . stateGrammarST)
-  ,(strCI "stat",    prStatistics . stateGrammarST)
-  ,(strCI "probs",   prProbs . stateProbs)
-  ,(strCI "unpar",   prCanon . unparametrizeCanon . stateGrammarST)
-  ,(strCI "subs",    prSubtermStat . stateGrammarST)
+                                     in faGraphvizPrinter name start $ stateCFG s)
+  ,(strCI "fa_c", \opts s -> let start = getStartCat opts
+                                 name = cncId s
+                              in faCPrinter name start $ stateCFG s)
+  ,(strCI "regular", \_ -> regularPrinter . stateCFG)
+  ,(strCI "plbnf",   \_ -> prLBNF True)
+  ,(strCI "lbnf",    \_ -> prLBNF False)
+  ,(strCI "bnf",     \_ -> prBNF False)
+  ,(strCI "haskell", \_ -> grammar2haskell . stateGrammarST)
+  ,(strCI "transfer", \_ -> grammar2transfer . stateGrammarST)
+  ,(strCI "morpho",  \_ -> prMorpho . stateMorpho)
+  ,(strCI "fullform",\_ -> prFullForm . stateMorpho)
+  ,(strCI "opts",    \_ -> prOpts . stateOptions)
+  ,(strCI "words",   \_ -> unwords . stateGrammarWords)
+  ,(strCI "printnames", \_ -> C.prPrintnamesGrammar . stateGrammarST)
+  ,(strCI "stat",    \_ -> prStatistics . stateGrammarST)
+  ,(strCI "probs",   \_ -> prProbs . stateProbs)
+  ,(strCI "unpar",   \_ -> prCanon . unparametrizeCanon . stateGrammarST)
+  ,(strCI "subs",    \_ -> prSubtermStat . stateGrammarST)
 
 {- ----
    (strCI "gf",      prt  . st2grammar . stateGrammarST)  -- DEFAULT
@@ -310,26 +301,26 @@ customGrammarPrinter =
 -- add your own grammar printers here
 
 -- grammar conversions:
-  ,(strCI "mcfg",     Prt.prt . stateMCFG)
-  ,(strCI "cfg",      Prt.prt . stateCFG)
-  ,(strCI "pinfo",    Prt.prt . statePInfo)
-  ,(strCI "abstract", Prt.prtAfter "\n" . Cnv.gfc2abstract . stateGrammarLang)
+  ,(strCI "mcfg",     \_ -> Prt.prt . stateMCFG)
+  ,(strCI "cfg",      \_ -> Prt.prt . stateCFG)
+  ,(strCI "pinfo",    \_ -> Prt.prt . statePInfo)
+  ,(strCI "abstract", \_ -> Prt.prtAfter "\n" . Cnv.gfc2abstract . stateGrammarLang)
 
-  ,(strCI "functiongraph",CnvTypeGraph.prtFunctionGraph . Cnv.gfc2simple noOptions . stateGrammarLang)
-  ,(strCI "typegraph",    CnvTypeGraph.prtTypeGraph . Cnv.gfc2simple noOptions . stateGrammarLang)
+  ,(strCI "functiongraph",\_ -> CnvTypeGraph.prtFunctionGraph . Cnv.gfc2simple noOptions . stateGrammarLang)
+  ,(strCI "typegraph",    \_ -> CnvTypeGraph.prtTypeGraph . Cnv.gfc2simple noOptions . stateGrammarLang)
 
-  ,(strCI "gfc-haskell",  CnvHaskell.prtSGrammar . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
-  ,(strCI "mcfg-haskell", CnvHaskell.prtMGrammar . stateMCFG)
-  ,(strCI "cfg-haskell",  CnvHaskell.prtCGrammar . stateCFG)
-  ,(strCI "gfc-prolog",   CnvProlog.prtSGrammar . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
-  ,(strCI "mcfg-prolog",  CnvProlog.prtMGrammar . stateMCFG)
-  ,(strCI "cfg-prolog",   CnvProlog.prtCGrammar . stateCFG)
+  ,(strCI "gfc-haskell",  \_ -> CnvHaskell.prtSGrammar . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
+  ,(strCI "mcfg-haskell", \_ -> CnvHaskell.prtMGrammar . stateMCFG)
+  ,(strCI "cfg-haskell",  \_ -> CnvHaskell.prtCGrammar . stateCFG)
+  ,(strCI "gfc-prolog",   \_ -> CnvProlog.prtSGrammar . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
+  ,(strCI "mcfg-prolog",  \_ -> CnvProlog.prtMGrammar . stateMCFG)
+  ,(strCI "cfg-prolog",   \_ -> CnvProlog.prtCGrammar . stateCFG)
 
 -- obsolete, or only for testing:
-  ,(strCI "abs-skvatt", Cnv.abstract2skvatt . Cnv.gfc2abstract . stateGrammarLang)
-  ,(strCI "cfg-skvatt", Cnv.cfg2skvatt . stateCFG)
-  ,(strCI "simple",   Prt.prt . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
-  ,(strCI "mcfg-erasing", Prt.prt . fst . snd . uncurry Cnv.convertGFC . stateGrammarLangOpts)
+  ,(strCI "abs-skvatt", \_ -> Cnv.abstract2skvatt . Cnv.gfc2abstract . stateGrammarLang)
+  ,(strCI "cfg-skvatt", \_ -> Cnv.cfg2skvatt . stateCFG)
+  ,(strCI "simple",   \_ -> Prt.prt . uncurry Cnv.gfc2simple . stateGrammarLangOpts)
+  ,(strCI "mcfg-erasing", \_ -> Prt.prt . fst . snd . uncurry Cnv.convertGFC . stateGrammarLangOpts)
 --  ,(strCI "mcfg-old", PrtOld.prt . CnvOld.mcfg . statePInfoOld)
 --  ,(strCI "cfg-old",  PrtOld.prt . CnvOld.cfg . statePInfoOld)
   ] 
