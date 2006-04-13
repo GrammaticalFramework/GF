@@ -100,8 +100,7 @@ removeLeftRecursion rs = removeDirectLeftRecursions $ map handleProds rs
              [CFRule ai (beta ++ alpha) n | CFRule _ beta _ <- lookup' aj rs]
     handleProd r = [r]
 
-removeDirectLeftRecursions :: [(Cat_,[CFRule_])] -- ^ All productions for a category
-			  -> CFRules
+removeDirectLeftRecursions :: CFRules -> CFRules
 removeDirectLeftRecursions = concat . flip evalState 0 . mapM removeDirectLeftRecursion
 
 removeDirectLeftRecursion :: (Cat_,[CFRule_]) -- ^ All productions for a category
@@ -124,6 +123,9 @@ isDirectLeftRecursive :: CFRule_ -> Bool
 isDirectLeftRecursive (CFRule c (Cat c':_) _) = c == c'
 isDirectLeftRecursive _ = False
 
+removeCycles :: CFRules -> CFRules 
+removeCycles = groupProds . removeCycles_ . ungroupProds
+  where removeCycles_ rs = [r | r@(CFRule c rhs n) <- rs, rhs /= [Cat c]]
 
 --
 -- * CFG rule utilities

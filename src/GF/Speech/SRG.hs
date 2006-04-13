@@ -74,7 +74,7 @@ makeSimpleSRG :: Ident     -- ^ Grammar name
 	      -> CGrammar -- ^ A context-free grammar
 	      -> SRG
 makeSimpleSRG 
-    = makeSRG_ (removeLeftRecursion . removeIdenticalRules . removeEmptyCats)
+    = makeSRG_ (removeLeftRecursion . removeIdenticalRules . removeEmptyCats . removeCycles)
 
 -- | Create a SRG preserving the names, profiles and probabilities of the 
 --   input grammar. The returned grammar may be left-recursive.
