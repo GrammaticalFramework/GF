@@ -30,7 +30,7 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 -- Relative
 
     RCl = {s : Tense => Anteriority => Polarity => Agr => Str} ;
-    RP = {s : Case => Str ; a : RAgr} ;
+    RP = {s : RCase => Str ; a : RAgr} ;
 
 -- Verb
 
