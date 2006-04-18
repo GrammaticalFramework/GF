@@ -21,10 +21,9 @@ import GF.Data.XML
 import Data.List (isPrefixOf, find, intersperse)
 
 -- | the main function
-grammar2vxml :: GFC.CanonGrammar -> String
-grammar2vxml gr = showsXMLDoc (skel2vxml name startcat gr') ""
+grammar2vxml :: String -> GFC.CanonGrammar -> String
+grammar2vxml startcat gr = showsXMLDoc (skel2vxml name startcat gr') ""
     where (name, gr') = vSkeleton gr
-          startcat = "Order" -- FIXME
 
 type VIdent = String
 
@@ -109,7 +108,7 @@ cat2form :: String -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr cat fs = 
     form cat [var "value" (Just "'?'"), formDebug cat,
               block [if_ "value != '?'" [assign cat "value"]],
-              field cat [] [promptString ("quest_"++cat), 
+              field cat [] [promptString (catQuestion cat), 
                             grammar (gr++"#"++cat),
                             nomatch [Data "I didn't understand you.", reprompt],
                             help [Data ("help_"++cat)],
@@ -119,6 +118,10 @@ cat2form gr cat fs =
                              [param "value" cat, filled [] subDone]]
   where subDone = [assign cat "sub.value", return_ [cat]]
         feedback = []
+
+catQuestion :: VIdent -> String
+catQuestion cat = questFun
+  where questFun = "quest_"++cat
 
 fun2form :: String -> VIdent -> [VIdent] -> XML
 fun2form gr fun args = 

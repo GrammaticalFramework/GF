@@ -30,9 +30,10 @@ import GF.Probabilistic.Probabilistic (Probs)
 import GF.Speech.SRG
 
 jsgfPrinter :: Ident -- ^ Grammar name
-	   -> Options -> Maybe Probs -> CGrammar -> String
-jsgfPrinter name opts probs cfg = prJSGF srg ""
-    where srg = makeSimpleSRG name opts probs cfg
+            -> String    -- ^ Start category
+	    -> Options -> Maybe Probs -> CGrammar -> String
+jsgfPrinter name start opts probs cfg = prJSGF srg ""
+    where srg = makeSimpleSRG name start opts probs cfg
 
 prJSGF :: SRG -> ShowS
 prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})

@@ -43,8 +43,11 @@ import qualified GF.OldParsing.ConvertGrammar as CnvOld -- OBSOLETE
 import qualified GF.Conversion.GFC as Cnv
 import qualified GF.Parsing.GFC as Prs
 
+import Control.Monad (mplus)
 import Data.List (nub,nubBy)
 import qualified Data.Map as Map
+import Data.Maybe (fromMaybe)
+
 
 -- AR 11/11/2001 -- 17/6/2003 (for modules) ---- unfinished
 
@@ -458,13 +461,20 @@ firstCatOpts opts sgr =
 firstAbsCat :: Options -> StateGrammar -> G.QIdent
 firstAbsCat opts = cfCat2Cat . firstCatOpts opts
 
+-- | Gets the start category for the grammar from the options.
+--   If the startcat is not set in the options, we look
+--   for a flag in the grammar. If there is no flag in the
+--   grammar, S is returned.
+startCatStateOpts :: Options -> StateGrammar -> CFCat
+startCatStateOpts opts sgr = 
+    string2CFCat a (fromMaybe "S" (optsStartCat `mplus` grStartCat))
+  where optsStartCat = getOptVal opts gStartCat
+        grStartCat = getOptVal (stateOptions sgr) gStartCat
+        a = P.prt (absId sgr)
+
 -- | a grammar can have start category as option startcat=foo ; default is S 
 stateFirstCat :: StateGrammar -> CFCat
-stateFirstCat sgr =
-  maybe (string2CFCat a "S") (string2CFCat a) $ 
-  getOptVal (stateOptions sgr) gStartCat
- where 
-   a = P.prt (absId sgr)
+stateFirstCat = startCatStateOpts noOptions
 
 stateIsWord :: StateGrammar -> String -> Bool
 stateIsWord sg = isKnownWord (stateMorpho sg)
