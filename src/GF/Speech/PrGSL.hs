@@ -31,9 +31,10 @@ import GF.Probabilistic.Probabilistic (Probs)
 import Data.Char (toUpper,toLower)
 
 gslPrinter :: Ident -- ^ Grammar name
+           -> String    -- ^ Start category
 	   -> Options -> Maybe Probs -> CGrammar -> String
-gslPrinter name opts probs cfg = prGSL srg ""
-    where srg = topDownFilter $ makeSimpleSRG name opts probs $ rmPunctCFG cfg
+gslPrinter name start opts probs cfg = prGSL srg ""
+    where srg = topDownFilter $ makeSimpleSRG name start opts probs $ rmPunctCFG cfg
 
 prGSL :: SRG -> ShowS
 prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})

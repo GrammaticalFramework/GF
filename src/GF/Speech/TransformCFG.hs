@@ -19,7 +19,7 @@
 -- FIXME: lots of this stuff is used by CFGToFiniteState, thus
 -- the missing explicit expot list.
 module GF.Speech.TransformCFG {- (CFRule_, CFRules, 
-			       cfgToCFRules, getStartCat,
+			       cfgToCFRules,
 			       removeLeftRecursion,
 			       removeEmptyCats, removeIdenticalRules) -} where
 
@@ -55,9 +55,6 @@ cfgToCFRules cfg = groupProds [CFRule (catToString c) (map symb r) n | CFRule c 
           -- symb (Cat c) = Cat (catToString c)
 	  -- symb (Tok t) = Tok t
 	  catToString = prt
-
-getStartCat :: Options -> String
-getStartCat opts = fromMaybe "S" (getOptVal opts gStartCat) ++ "{}.s"
 
 -- | Group productions by their lhs categories
 groupProds :: [CFRule_] -> CFRules

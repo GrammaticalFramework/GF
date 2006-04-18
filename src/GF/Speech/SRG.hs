@@ -69,6 +69,7 @@ type CatNames = Map String String
 --   FIXME: the probabilities, names and profiles in the returned 
 --   grammar may be meaningless.
 makeSimpleSRG :: Ident     -- ^ Grammar name
+              -> String    -- ^ Start category
 	      -> Options   -- ^ Grammar options
 	      -> Maybe Probs -- ^ Probabilities
 	      -> CGrammar -- ^ A context-free grammar
@@ -79,6 +80,7 @@ makeSimpleSRG
 -- | Create a SRG preserving the names, profiles and probabilities of the 
 --   input grammar. The returned grammar may be left-recursive.
 makeSRG :: Ident     -- ^ Grammar name
+        -> String    -- ^ Start category
 	-> Options   -- ^ Grammar options
 	-> Maybe Probs -- ^ Probabilities
 	-> CGrammar -- ^ A context-free grammar
@@ -88,11 +90,12 @@ makeSRG = makeSRG_ removeEmptyCats
 makeSRG_ :: (CFRules -> CFRules) -- ^ Transformations to apply to the
                                  --   CFG before converting to SRG
          -> Ident     -- ^ Grammar name
+         -> String    -- ^ Start category
 	 -> Options   -- ^ Grammar options
 	 -> Maybe Probs -- ^ Probabilities
 	 -> CGrammar -- ^ A context-free grammar
 	 -> SRG
-makeSRG_ f i opts probs gr 
+makeSRG_ f i origStart opts probs gr 
     = SRG { grammarName = name,
 	    startCat = lookupFM_ names origStart,
 	    origStartCat = origStart,
@@ -100,7 +103,6 @@ makeSRG_ f i opts probs gr
 	    rules = rs }
     where 
     name = prIdent i
-    origStart = getStartCat opts
     l = fromMaybe "en_UK" (getOptVal opts speechLanguage)
     gr' = f (cfgToCFRules gr)
     (cats,cfgRules) = unzip gr'

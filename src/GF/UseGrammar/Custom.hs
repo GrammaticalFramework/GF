@@ -244,35 +244,41 @@ customGrammarPrinter =
   ,(strCI "old",     \_ -> printGrammarOld . stateGrammarST)
   ,(strCI "srg",     \_ -> prSRG . stateCF)
   ,(strCI "gsl",     \opts s -> let name = cncId s
-                                 in gslPrinter name opts Nothing $ stateCFG s)
+                                    start = getStartCatCF opts s
+                                 in gslPrinter name start opts Nothing $ stateCFG s)
   ,(strCI "jsgf",    \opts s -> let name = cncId s
-                                 in jsgfPrinter name opts Nothing $ stateCFG s)
+                                    start = getStartCatCF opts s
+                                 in jsgfPrinter name start opts Nothing $ stateCFG s)
   ,(strCI "srgs_xml", \opts s -> let name = cncId s
-                                  in srgsXmlPrinter name opts False Nothing $ stateCFG s)
+                                     start = getStartCatCF opts s
+                                  in srgsXmlPrinter name start opts False Nothing $ stateCFG s)
   ,(strCI "srgs_xml_prob", 
               \opts s -> let name = cncId s
                              probs = stateProbs s
-                          in srgsXmlPrinter name opts False (Just probs) $ stateCFG s)
+                             start = getStartCatCF opts s
+                          in srgsXmlPrinter name start opts False (Just probs) $ stateCFG s)
   ,(strCI "srgs_xml_ms_sem", 
               \opts s -> let name = cncId s
-                          in srgsXmlPrinter name opts True Nothing $ stateCFG s)
-  ,(strCI "vxml", \_ -> grammar2vxml . stateGrammarST)
-  ,(strCI "slf",  \opts s -> let start = getStartCat opts
+                             start = getStartCatCF opts s
+                          in srgsXmlPrinter name start opts True Nothing $ stateCFG s)
+  ,(strCI "vxml", \opts s -> let start = getStartCat opts s
+                              in grammar2vxml start (stateGrammarST s))
+  ,(strCI "slf",  \opts s -> let start = getStartCatCF opts s
                                  name = cncId s
                               in slfPrinter name start $ stateCFG s)
-  ,(strCI "slf_graphviz", \opts s -> let start = getStartCat opts
+  ,(strCI "slf_graphviz", \opts s -> let start = getStartCatCF opts s
                                          name = cncId s
                                       in slfGraphvizPrinter name start $ stateCFG s)
-  ,(strCI "slf_sub", \opts s -> let start = getStartCat opts
+  ,(strCI "slf_sub", \opts s -> let start = getStartCatCF opts s
                                     name = cncId s
                                  in slfSubPrinter name start $ stateCFG s)
-  ,(strCI "slf_sub_graphviz", \opts s -> let start = getStartCat opts
+  ,(strCI "slf_sub_graphviz", \opts s -> let start = getStartCatCF opts s
                                              name = cncId s
                                           in slfSubGraphvizPrinter name start $ stateCFG s)
-  ,(strCI "fa_graphviz", \opts s -> let start = getStartCat opts
+  ,(strCI "fa_graphviz", \opts s -> let start = getStartCatCF opts s
                                         name = cncId s
                                      in faGraphvizPrinter name start $ stateCFG s)
-  ,(strCI "fa_c", \opts s -> let start = getStartCat opts
+  ,(strCI "fa_c", \opts s -> let start = getStartCatCF opts s
                                  name = cncId s
                               in faCPrinter name start $ stateCFG s)
   ,(strCI "regular", \_ -> regularPrinter . stateCFG)
@@ -325,8 +331,9 @@ customGrammarPrinter =
 --  ,(strCI "cfg-old",  PrtOld.prt . CnvOld.cfg . statePInfoOld)
   ] 
   where stateGrammarLangOpts s = (stateOptions s, stateGrammarLang s)
-        getStartCat :: Options -> String
-        getStartCat opts = fromMaybe "S" (getOptVal opts gStartCat) ++ "{}.s"
+        getStartCat,getStartCatCF :: Options -> StateGrammar -> String
+        getStartCat opts sgr = prCFCat (startCatStateOpts opts sgr)
+        getStartCatCF opts sgr = getStartCat opts sgr ++ "{}.s"
 
 customMultiGrammarPrinter = 
   customData "Printers for multiple grammars, selected by option -printer=x" $

@@ -36,12 +36,13 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 
 srgsXmlPrinter :: Ident -- ^ Grammar name
+               -> String    -- ^ Start category
 	       -> Options 
                -> Bool  -- ^ Whether to include semantic interpretation 
 	       -> Maybe Probs
 	       -> CGrammar -> String
-srgsXmlPrinter name opts sisr probs cfg = prSrgsXml sisr srg ""
-    where srg = makeSRG name opts probs cfg
+srgsXmlPrinter name start opts sisr probs cfg = prSrgsXml sisr srg ""
+    where srg = makeSRG name start opts probs cfg
 
 prSrgsXml :: Bool -> SRG -> ShowS
 prSrgsXml sisr (SRG{grammarName=name,startCat=start,
