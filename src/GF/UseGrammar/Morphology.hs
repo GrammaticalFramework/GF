@@ -96,7 +96,9 @@ prMorpho :: Morpho -> String
 prMorpho = unlines . map prMorphoAnalysis . collapse
 
 prMorphoAnalysis :: (String,[String]) -> String
-prMorphoAnalysis (w,fs) = unlines (w:fs)
+prMorphoAnalysis (w,fs0) = 
+  let fs = filter (not . null) fs0  in
+  if null fs then w ++++ "*" else unlines (w:fs)
 
 prMorphoAnalysisShort :: (String,[String]) -> String
 prMorphoAnalysisShort (w,fs) = prBracket (w' ++ prTList "/" fs) where
