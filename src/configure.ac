@@ -61,9 +61,10 @@ AC_ARG_WITH(readline,
    else
      READLINE="$withval"
    fi],
-  [if test "$GHC_VERSION" = "6.4" && test "$host_os" = "cygwin"; then
-     AC_MSG_WARN([There are problems with readline on 6.4 for Windows, 
-                    disabling readline support. 
+  [if test "$host_os" = "cygwin"; then
+     AC_MSG_WARN([There are problems with readline for Windows,
+                  for example, pipe characters do not work. 
+                    Disabling readline support. 
                     Use --with-readline to override.])
      READLINE="no"
    else
