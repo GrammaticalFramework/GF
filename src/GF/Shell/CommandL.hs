@@ -76,12 +76,12 @@ getCommand = do
   s <- getLine
   return $ pCommand s
 
--- | decodes UTF8 if u==False, i.e. if the grammar does not use UTF8;
+-- | decodes UTF8 if u==True, i.e. if the grammar uses UTF8;
 -- used in the Java GUI, which always uses UTF8
 getCommandUTF :: Bool -> IO [(String,Command)]
 getCommandUTF u = do
   s <- getLine
-  return $ pCommandMsgs $ if u then s else decodeUTF8 s 
+  return $ pCommandMsgs $ if u then decodeUTF8 s else s
 
 pCommandMsgs :: String -> [(String,Command)]
 pCommandMsgs = map (pCommandMsg . unwords) . concatMap (chunks ";;" . words) . lines
