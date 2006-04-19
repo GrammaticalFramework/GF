@@ -262,7 +262,7 @@ customGrammarPrinter =
                              start = getStartCatCF opts s
                           in srgsXmlPrinter name start opts True Nothing $ stateCFG s)
   ,(strCI "vxml", \opts s -> let start = getStartCat opts s
-                              in grammar2vxml start (stateGrammarST s))
+                              in grammar2vxml start s)
   ,(strCI "slf",  \opts s -> let start = getStartCatCF opts s
                                  name = cncId s
                               in slfPrinter name start $ stateCFG s)

@@ -11,7 +11,14 @@
 module GF.Speech.GrammarToVoiceXML (grammar2vxml) where
 
 import qualified GF.Canon.GFC as GFC
+import GF.Canon.CMacros (noMark)
+import GF.Canon.Unlex (formatAsText)
+import GF.Compile.ShellState (StateGrammar,stateGrammarST,cncId)
 import GF.Grammar.Macros hiding (assign)
+import GF.Grammar.Grammar (Fun)
+import GF.Grammar.Values (Tree)
+import GF.UseGrammar.GetTree (string2treeErr)
+import GF.UseGrammar.Linear (linTree2strings)
 
 import GF.Infra.Modules
 import GF.Data.Operations
@@ -19,16 +26,23 @@ import GF.Data.Operations
 import GF.Data.XML
 
 import Data.List (isPrefixOf, find, intersperse)
+import Data.Maybe (fromMaybe)
+
+import Debug.Trace
 
 -- | the main function
-grammar2vxml :: String -> GFC.CanonGrammar -> String
-grammar2vxml startcat gr = showsXMLDoc (skel2vxml name startcat gr') ""
-    where (name, gr') = vSkeleton gr
+grammar2vxml :: String -> StateGrammar -> String
+grammar2vxml startcat gr = showsXMLDoc (skel2vxml name startcat gr' qs) ""
+    where (name, gr') = vSkeleton (stateGrammarST gr)
+          qs = catQuestions gr (map fst gr')
+
+--
+-- * VSkeleton: a simple description of the abstract syntax.
+--
 
 type VIdent = String
 
 type VSkeleton = [(VIdent, [(VIdent, [VIdent])])]
-
 
 vSkeleton :: GFC.CanonGrammar -> (String,VSkeleton)
 vSkeleton gr = (name,collectR rules [(c,[]) | c <- cats]) where
@@ -52,10 +66,43 @@ updateSkeleton cat skel rule =
    (cat0,rules):rr | cat0 == cat -> (cat0, rule:rules) : rr
    (cat0,rules):rr               -> (cat0, rules) : updateSkeleton cat rr rule
 
+--
+-- * Questions to ask 
+--
 
-skel2vxml :: String -> VIdent -> VSkeleton -> XML
-skel2vxml name start skel = 
-    vxml (prelude ++ [startForm] ++ concatMap (uncurry (catForms gr)) skel)
+type CatQuestions = [(VIdent,String)]
+
+catQuestions :: StateGrammar -> [VIdent] -> CatQuestions
+catQuestions gr cats = [(c,catQuestion gr c) | c <- cats]
+
+catQuestion :: StateGrammar -> VIdent -> String
+catQuestion gr cat = err errHandler id (lin gr fun)
+  where fun = "quest_" ++ cat
+        errHandler e = trace ("GrammarToVoiceXML: " ++ e) fun
+        -- FIXME: use some better warning facility
+
+lin :: StateGrammar -> String -> Err String
+lin gr fun = do
+             tree <- string2treeErr gr fun
+             let ls = map unt $ linTree2strings noMark g c tree
+             case ls of
+                 [] -> fail $ "No linearization of " ++ fun
+                 l:_ -> return l
+  where c = cncId gr
+        g = stateGrammarST gr
+        unt = formatAsText 
+
+getCatQuestion :: VIdent -> CatQuestions -> String
+getCatQuestion c qs = 
+    fromMaybe (error "No question for category " ++ c) (lookup c qs)
+
+--
+-- * Generate VoiceXML
+--
+
+skel2vxml :: String -> VIdent -> VSkeleton -> CatQuestions -> XML
+skel2vxml name start skel qs = 
+    vxml (prelude ++ [startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
   gr = grammarURI name
   prelude = scriptLib
@@ -98,17 +145,17 @@ scriptLib = [script (unlines s)]
      ]
 
 
-catForms :: String -> VIdent -> [(VIdent, [VIdent])] -> [XML]
-catForms gr cat fs = 
+catForms :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> [XML]
+catForms gr qs cat fs = 
     comments [cat ++ " category."]
-    ++ [cat2form gr cat fs] 
+    ++ [cat2form gr qs cat fs] 
     ++ map (uncurry (fun2form gr)) fs
 
-cat2form :: String -> VIdent -> [(VIdent, [VIdent])] -> XML
-cat2form gr cat fs = 
+cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
+cat2form gr qs cat fs = 
     form cat [var "value" (Just "'?'"), formDebug cat,
               block [if_ "value != '?'" [assign cat "value"]],
-              field cat [] [promptString (catQuestion cat), 
+              field cat [] [promptString (getCatQuestion cat qs), 
                             grammar (gr++"#"++cat),
                             nomatch [Data "I didn't understand you.", reprompt],
                             help [Data ("help_"++cat)],
@@ -118,10 +165,6 @@ cat2form gr cat fs =
                              [param "value" cat, filled [] subDone]]
   where subDone = [assign cat "sub.value", return_ [cat]]
         feedback = []
-
-catQuestion :: VIdent -> String
-catQuestion cat = questFun
-  where questFun = "quest_"++cat
 
 fun2form :: String -> VIdent -> [VIdent] -> XML
 fun2form gr fun args = 
