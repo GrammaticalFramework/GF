@@ -7,7 +7,7 @@ concrete PeaceLexExt_Swe of PeaceLexExt =
 
     -- Adjectives
     dangerous_A = regA "farlig" ;
-    dead_A = regA "dÃ¶d" ;
+    dead_A = regA "död" ;
     hungry_A = regA "hungrig" ;
     large_A = big_A ;
     sick_A = regA "sjuk" ;
@@ -30,8 +30,8 @@ concrete PeaceLexExt_Swe of PeaceLexExt =
 
     -- Verbs
     cough_V = regV "hostar" ;
-    need_V2 = dirV2 (regV "behÃ¶ver");
-    own_V2 = dirV2 (regV "Ã¤ger") ;
+    need_V2 = dirV2 (regV "behöver");
+    own_V2 = dirV2 (regV "äger") ;
     show_V3 = dirdirV3 (regV "visar") ;
 
 }
