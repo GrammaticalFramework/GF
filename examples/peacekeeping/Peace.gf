@@ -1,1 +1,4 @@
-abstract Peace = PeaceSyntax, PeaceLexCommon, PeaceLexExt ** {}
+abstract Peace = 
+  PeaceSyntax, PeaceLexCommon, 
+  PeaceLexExt, PeacePhrases 
+  ** {}
