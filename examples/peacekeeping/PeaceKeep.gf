@@ -1,21 +1,22 @@
 abstract PeaceKeep = Cat, PeaceLex ** {
 
   cat
-    Sent ; MassCN ;
+    Sent ; Quest; MassCN ;
 
   fun
     PhrPos    : Sent -> Phr ;
     PhrNeg    : Sent -> Phr ;
-    PhrQuest  : Sent -> Phr ;
+    PhrQuest  : Quest -> Phr ;
     PhrImp    : Imp  -> Phr ;    
     PhrImpNeg : Imp  -> Phr ;    
 
-    QuestIP_V : V -> IP -> Phr ;
-    QuestIP_V2 : V2 -> IP -> NP -> Phr ;
-    QuestIP_V2Mass : V2 -> IP -> MassCN -> Phr ;
-    QuestIP_A : A -> IP -> Phr ;
-    QuestIAdv_V : V -> NP -> IAdv -> Phr ;
-    QuestIAdv_V2 : V2 -> NP -> NP -> IAdv -> Phr ;
+    QuestSent : Sent -> Quest ;
+    QuestIP_V : V -> IP -> Quest ;
+    QuestIP_V2 : V2 -> IP -> NP -> Quest ;
+    QuestIP_V2Mass : V2 -> IP -> MassCN -> Quest ;
+    QuestIP_A : A -> IP -> Quest ;
+    QuestIAdv_V : V -> NP -> IAdv -> Quest ;
+    QuestIAdv_V2 : V2 -> NP -> NP -> IAdv -> Quest ;
 
     SentV  : V  -> NP -> Sent ;
     SentV2 : V2 -> NP -> NP -> Sent ;
