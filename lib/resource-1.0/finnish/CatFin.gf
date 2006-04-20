@@ -25,6 +25,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
     QCl   = {s : Tense => Anteriority => Polarity => Str} ;
     IP    = {s : NPForm => Str ; n : Number} ;
     IAdv  = {s : Str} ;    
+    IComp = {s : Agr => Str} ; 
     IDet  = {s : Case => Str ; n : Number} ;
 
 -- Relative

@@ -6,13 +6,17 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Questions and interrogative pronouns</H1>
 <FONT SIZE="4">
-<I>Last update: Sat Feb 25 22:35:56 2006</I><BR>
-% NOTE: this is a txt2tags file.
+<I>Author: </I><BR>
+Last update: Thu Apr 20 17:30:13 2006
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
+  <UL>
+  <LI><A HREF="#toc1">Questions and interrogative pronouns</A>
+  </UL>
+
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
@@ -21,6 +25,8 @@ Produced by
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
+<A NAME="toc1"></A>
+<H1>Questions and interrogative pronouns</H1>
 <PRE>
     abstract Question = Cat ** {
 </PRE>
@@ -31,10 +37,11 @@ with an interrogative.
 </P>
 <PRE>
       fun
-        QuestCl    : Cl -&gt; QCl ;                   -- does John walk
-        QuestVP    : IP -&gt; VP -&gt; QCl ;             -- who walks
-        QuestSlash : IP -&gt; Slash -&gt; QCl ;          -- who does John love
-        QuestIAdv  : IAdv -&gt; Cl -&gt; QCl ;           -- why does John walk
+        QuestCl     : Cl -&gt; QCl ;                  -- does John walk
+        QuestVP     : IP -&gt; VP -&gt; QCl ;            -- who walks
+        QuestSlash  : IP -&gt; Slash -&gt; QCl ;         -- who does John love
+        QuestIAdv   : IAdv -&gt; Cl -&gt; QCl ;          -- why does John walk
+        QuestIComp  : IComp -&gt; NP -&gt; QCl ;         -- where is John
 </PRE>
 <P></P>
 <P>
@@ -46,6 +53,8 @@ determiners.
         AdvIP   : IP -&gt; Adv -&gt; IP ;                -- who in Europe
     
         PrepIP  : Prep -&gt; IP -&gt; IAdv ;             -- with whom
+    
+        CompIAdv : IAdv -&gt; IComp ;                 -- where
 </PRE>
 <P></P>
 <P>

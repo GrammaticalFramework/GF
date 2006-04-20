@@ -23,10 +23,11 @@ incomplete concrete CatRomance of Cat =
 
 -- Question
 
-    QCl  = {s : Tense => Anteriority => Polarity => QForm => Str} ;
-    IP   = {s : Case => Str ; a : AAgr} ;
-    IAdv = {s : Str} ;    
-    IDet = {s : Gender => Case => Str ; n : Number} ;
+    QCl   = {s : Tense => Anteriority => Polarity => QForm => Str} ;
+    IP    = {s : Case => Str ; a : AAgr} ;
+    IAdv  = {s : Str} ;
+    IComp = {s : AAgr => Str} ;     
+    IDet  = {s : Gender => Case => Str ; n : Number} ;
 
 -- Relative
 
