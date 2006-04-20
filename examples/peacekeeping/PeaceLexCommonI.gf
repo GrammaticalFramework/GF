@@ -1,7 +1,4 @@
-concrete PeaceLex_Eng of PeaceLex = CatEng ** open LangEng, ParadigmsEng in {
-
-  lincat
-    MassN = N ;
+incomplete concrete PeaceLexCommonI of PeaceLexCommon = PeaceCatI ** open Lang in {
 
   lin
 
@@ -47,61 +44,38 @@ concrete PeaceLex_Eng of PeaceLex = CatEng ** open LangEng, ParadigmsEng in {
     black_A = black_A ;
     blue_A = blue_A ;
     cold_A = cold_A ;
-    dangerous_A = regA "dangerous" ;
-    dead_A = regA "dead" ;
     green_A = green_A ;
     hot_A = hot_A ;
-    hungry_A = regA "hungry" ;
-    large_A = regA "large" ;
     red_A = red_A ;
-    sick_A = regA "sick" ;
     small_A = small_A ;
     white_A = white_A ;
     yellow_A = yellow_A ;
 
     -- Nouns
-    air_N = regN "air" ;
     airplane_N = airplane_N ;
     animal_N = animal_N ;
-    arm_N = regN "arm" ;
     blood_N = blood_N ;
     boat_N = boat_N ;
     boy_N = boy_N ;
-    building_N = regN "building" ;
-    car_N = regN "car" ;
     child_N = child_N ;
-    corpse_N = regN "corpse" ;
-    doctor_N = regN "doctor";
-    enemy_N = regN "enemy";
     factory_N = factory_N ;
-    food_N = regN "food";
     foot_N = foot_N ;
-    friend_N = regN "friend";
     girl_N = girl_N ;
     hand_N = hand_N ;
     head_N = head_N ;
     house_N = house_N ;
-    landmine_N = regN "landmine" ;
     leg_N = leg_N ;
     man_N = man_N ;
-    medicine_N = regN "medicine" ;
     road_N = road_N ;
-    skin_N = regN "skin" ;
-    soldier_N = regN "soldier" ;
     water_N = water_N ;
-    weapon_N = regN "weapon";
     woman_N = woman_N ;
 
     -- Verbs
-    cough_V = regV "cough" ;
     drink_V2 = drink_V2 ;
     eat_V2 = eat_V2 ;
     give_V3 = give_V3;
     have_V2 = have_V2;
-    need_V2 = dirV2 (regV "need");
-    own_V2 = dirV2 (regV "own") ;
     see_V2 = see_V2 ;
-    show_V3 = dirdirV3 (regV "show") ;
     sleep_V = sleep_V ;
     walk_V = walk_V ;
 

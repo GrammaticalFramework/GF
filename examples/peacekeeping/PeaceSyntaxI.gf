@@ -1,4 +1,4 @@
-incomplete concrete PeaceKeepI of PeaceKeep = open Lang in {
+incomplete concrete PeaceSyntaxI of PeaceSyntax = PeaceCatI ** open Lang in {
 
   flags 
     startcat = Phr ; optimize = all_subs ;
