@@ -10,6 +10,7 @@ Who gives water to the children?
 Who is hungry?
 Where do you sleep?
 Where do you see the landmine?
+Where is the factory?
 
 The doctor sleeps.
 I see a small girl.
@@ -32,7 +33,6 @@ Give water to the boy!
 
 == Should work ==
 
-Where is the factory? (no QuestIAdv_NP)
 Drink this water! (can't modify MassCN)
 Drink! (drink is V2)
 

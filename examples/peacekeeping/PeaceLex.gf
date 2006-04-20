@@ -13,9 +13,9 @@ abstract PeaceLex = Cat ** {
     we_Pron : Pron ;
     youPl_Pron : Pron ;
     they_Pron : Pron ;
-    whoPl_IP : IP ; -- only one who in Swadesh 207
+    whoPl_IP : IP ;
     whoSg_IP : IP ;
-    whatPl_IP : IP ; -- only one what in Swadesh 207
+    whatPl_IP : IP ;
     whatSg_IP : IP ;
 
     -- Determiners

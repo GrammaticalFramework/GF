@@ -27,6 +27,7 @@ incomplete concrete PeaceKeepI of PeaceKeep = open Lang in {
     QuestIP_V3Mass v ip x y = mkQuest (QuestVP ip (ComplV3 v (massNP x) y)) ;
     QuestIP_A : A -> IP -> Phr ;
     QuestIP_A a ip = mkQuest (QuestVP ip (UseComp (CompAP (PositA a))));
+    QuestIAdv_NP x ia = mkQuest (QuestIComp (CompIAdv ia) x);
 
     QuestIAdv_V v x ia = mkQuest (QuestIAdv ia (PredVP x (UseV v)));
     QuestIAdv_V2 v x y ia = mkQuest (QuestIAdv ia (PredVP x (ComplV2 v y)));

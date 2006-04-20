@@ -23,7 +23,7 @@ abstract PeaceKeep = Cat, PeaceLex ** {
     QuestIP_A : A -> IP -> Quest ;
     QuestIAdv_V : V -> NP -> IAdv -> Quest ;
     QuestIAdv_V2 : V2 -> NP -> NP -> IAdv -> Quest ;
---    QuestIAdv_NP : NP -> IAdv -> Quest ;
+    QuestIAdv_NP : NP -> IAdv -> Quest ;
 
     SentV  : V  -> NP -> Sent ;
     SentV2 : V2 -> NP -> NP -> Sent ;
