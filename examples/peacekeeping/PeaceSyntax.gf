@@ -1,7 +1,9 @@
-abstract PeaceKeep = Cat, PeaceLex ** {
+abstract PeaceSyntax = PeaceCat ** {
 
   cat
-    Sent ; Quest; MassCN ;
+    Sent ; 
+    Quest ; 
+    MassCN ; 
 
   fun
     PhrPos    : Sent -> Phr ;
