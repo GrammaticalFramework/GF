@@ -1,15 +1,51 @@
-Working now:
+== Working now ==
 
-Landmines are dangerous.
-Are you cold?
+Yes.
+
 Who coughs?
-Show me the landmine!
-We are your friends.
-Give your weapon to the soldier!
-Do you need medicine?
+Who owns this building?
+Who needs water?
+Who gives weapons to the soldiers?
+Who gives water to the children?
 Who is hungry?
+Where do you sleep?
+Where do you see the landmine?
 
-Should work:
+The doctor sleeps.
+I see a small girl.
+Soldiers don't eat corpses.
+Do you need medicine?
+We don't give weapons to dangerous soldiers.
+We give food to children.
+Are you cold?
+Landmines are dangerous.
+We are your friends.
+These soldiers aren't your enemies.
+
+Walk!
+Don't eat your friend!
+Drink cold water!
+Give your weapon to the soldier!
+Show me the landmine!
+Give water to the boy!
+
+
+== Should work ==
 
 Where is the factory? (no QuestIAdv_NP)
+Drink this water! (can't modify MassCN)
+Drink! (drink is V2)
+
+
+== English ==
+
+=== Variants that should work ===
+
+don't / do not
+doesn't / does not
+isn't / is not
+aren't / are not
+
+corpse / dead body
+give X to Y / give Y X
 
