@@ -18,9 +18,8 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
             <_, Nom,  True,_,_>  => NCase Sg Part ; -- kolme kytkintä(ni)
             <_, _, True,False,_> => NCase Sg c ;    -- kolmeksi kytkimeksi
             <Pl,Nom,  _,_,False> => NCase Pl Part ; -- kytkimiä
-            <_, Nom,_,True,_>    => NPossNom ;      -- kytkime+ni on/ovat...
-            <Sg,Gen,_,True,_>    => NPossNom ;      -- kytkime+ni vika
-            <Pl,Gen,_,True,_>    => NPossGenPl ;    -- kytkimie+ni viat
+            <_, Nom,_,True,_>    => NPossNom n ;    -- kytkime+ni on/ovat...
+            <_, Gen,_,True,_>    => NPossNom n ;    -- kytkime+ni vika
             <_, Transl,_,True,_> => NPossTransl n ; -- kytkim(e|i)kse+ni
             <_, Illat,_,True,_>  => NPossIllat n ;  -- kytkim(ee|ii)+ni
  
@@ -138,7 +137,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       } ;
 
     AdjCN ap cn = {
-      s = \\nf => ap.s ! True ! AN nf ++ cn.s ! nf
+      s = \\nf => ap.s ! True ! AN (n2nform nf) ++ cn.s ! nf
       } ;
 
     RelCN cn rs = {s = \\nf => cn.s ! nf ++ rs.s ! agrP3 (numN nf)} ;
