@@ -70,6 +70,7 @@ concrete PeaceLex_Eng of PeaceLex = CatEng ** open LangEng, ParadigmsEng in {
     building_N = regN "building" ;
     car_N = regN "car" ;
     child_N = child_N ;
+    corpse_N = regN "corpse" ;
     doctor_N = regN "doctor";
     enemy_N = regN "enemy";
     factory_N = factory_N ;
@@ -85,6 +86,7 @@ concrete PeaceLex_Eng of PeaceLex = CatEng ** open LangEng, ParadigmsEng in {
     man_N = man_N ;
     medicine_N = regN "medicine" ;
     road_N = road_N ;
+    skin_N = regN "skin" ;
     soldier_N = regN "soldier" ;
     water_N = water_N ;
     weapon_N = regN "weapon";
@@ -97,8 +99,10 @@ concrete PeaceLex_Eng of PeaceLex = CatEng ** open LangEng, ParadigmsEng in {
     give_V3 = give_V3;
     have_V2 = have_V2;
     need_V2 = dirV2 (regV "need");
+    own_V2 = dirV2 (regV "own") ;
     see_V2 = see_V2 ;
-    show_V3 = dirdirV3 (regV "show");
+    show_V3 = dirdirV3 (regV "show") ;
+    sleep_V = sleep_V ;
     walk_V = walk_V ;
 
 }

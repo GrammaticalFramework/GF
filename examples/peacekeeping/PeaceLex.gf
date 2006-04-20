@@ -71,6 +71,7 @@ abstract PeaceLex = Cat ** {
     boat_N : N ;
     boy_N : N ;
     child_N : N ;
+    corpse_N : N ;
     building_N : N ;
     car_N : N ;
     doctor_N : N ;
@@ -88,6 +89,7 @@ abstract PeaceLex = Cat ** {
     medicine_N : MassN ;
     man_N : N ;
     road_N : N ;
+    skin_N : MassN ;
     soldier_N : N ;
     water_N : MassN ;
     weapon_N : N ;
@@ -100,8 +102,10 @@ abstract PeaceLex = Cat ** {
     give_V3 : V3 ;
     have_V2 : V2;
     need_V2 : V2;
+    own_V2 : V2 ;
     see_V2 : V2 ;
     show_V3 : V3 ;
+    sleep_V : V ;
     walk_V : V ;
 
 }
