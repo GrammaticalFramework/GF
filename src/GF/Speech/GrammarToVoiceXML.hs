@@ -105,7 +105,7 @@ skel2vxml name start skel qs =
     vxml (prelude ++ [startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
   gr = grammarURI name
-  prelude = scriptLib
+  prelude = var "debug" (Just "1") : scriptLib
   startForm = Tag "form" [] [subdialog "sub" [("srcexpr","'#'+"++string start)] []]
 
 grammarURI :: String -> String
@@ -117,7 +117,7 @@ scriptLib = [script (unlines s)]
  s = ["function dump(r, p) {",
       "  if (isUndefined(p)) { p = 0 }",
       "  if (isUndefined(r)) {",
-      "    return 'undefined';",
+      "    return '*undefined*';",
       "  } else if (isArray(r)) {",
       "    var s = '[';",
       "    for (var i = 0; i < r.length; r++) {",
@@ -133,7 +133,7 @@ scriptLib = [script (unlines s)]
       "    var i;",
       "    for (i = 0; ; i++) {",
       "      var c = r['arg'+i];",
-      "      if (c == undefined) { break; }",
+      "      if (isUndefined(c)) { break; }",
       "      s += ' ' + dump(c, 1);",
       "    }",
       "    if (i > 0 && p > 0) { s = '(' + s + ')'; }",
@@ -160,7 +160,7 @@ cat2form gr qs cat fs =
                             nomatch [Data "I didn't understand you.", reprompt],
                             help [Data ("help_"++cat)],
                             filled [] [if_else (cat ++ " == '?'") [reprompt] feedback]],
-              block [prompt [Data (cat ++ " = "), value ("dump("++cat++")")]],
+              block [if_ "debug == 1" [prompt [Data (cat ++ " = "), value ("dump("++cat++")")]]],
               subdialog "sub" [("srcexpr","'#'+"++cat++".name")] 
                              [param "value" cat, filled [] subDone]]
   where subDone = [assign cat "sub.value", return_ [cat]]
@@ -179,7 +179,7 @@ fun2form gr fun args =
                  filled [] [assign ("value."++a) (a++"."++t)]]
   ret = block [return_ ["value"]]
 
-formDebug id = block [prompt [Data ("Entering form " ++ id ++ ". value = "), value "dump(value)"]]
+formDebug id = block [if_ "debug == 1" [prompt [Data ("Entering form " ++ id ++ ". value = "), value "dump(value)"]]]
 
 --
 -- * VoiceXML stuff
