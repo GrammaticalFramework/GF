@@ -23,7 +23,8 @@ resource ResFin = ParamX ** open Prelude in {
 
     NForm = NCase Number Case 
           | NComit | NInstruct  -- no number dist
-          | NPossNom | NPossGenPl | NPossTransl Number | NPossIllat Number ;
+          | NPossNom Number | NPossGen Number --- number needed for syntax of AdjCN
+          | NPossTransl Number | NPossIllat Number ;
 
 -- Agreement of $NP$ is a record. We'll add $Gender$ later.
 
@@ -58,6 +59,14 @@ oper
   npform2case : NPForm -> Case = \f -> case f of {
     NPCase c => c ;
     NPAcc    => Gen -- appCompl does the job
+    } ;
+
+  n2nform : NForm -> NForm = \nf -> case nf of {
+    NPossNom n => NCase n Nom ; ----
+    NPossGen n  => NCase n Gen ;
+    NPossTransl n => NCase n Transl ;
+    NPossIllat n => NCase n Illat ;
+    _ => nf
     } ;
 
 
@@ -461,8 +470,9 @@ oper
       NComit    => vetii + "ne" ;
       NInstruct => vesii + "n" ;
 
-      NPossNom       => vete ;
-      NPossGenPl     => Predef.tk 1 vesien ;
+      NPossNom _     => vete ;
+      NPossGen Sg    => vete ;
+      NPossGen Pl    => Predef.tk 1 vesien ;
       NPossTransl Sg => vede + "kse" ;
       NPossTransl Pl => vesii + "kse" ;
       NPossIllat Sg  => Predef.tk 1 veteen ;
@@ -529,7 +539,7 @@ oper
       nsa  = possSuffix agr
     in {
       s = table {
-        NPCase (Nom | Gen) | NPAcc => itse ! NPossNom + nsa ;
+        NPCase (Nom | Gen) | NPAcc => itse ! NPossNom Sg + nsa ;
         NPCase Transl      => itse ! NPossTransl Sg + nsa ;
         NPCase Illat       => itse ! NPossIllat Sg + nsa ;
         NPCase c           => itse ! NCase Sg c + nsa
