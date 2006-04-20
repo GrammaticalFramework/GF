@@ -5,15 +5,18 @@ incomplete concrete PeaceKeepI of PeaceKeep = open Lang in {
     unlexer = text ; lexer = text ;
 
   lincat
-    Sent = {s : SForm => Str} ; MassCN = CN ;
+    Sent = {s : SForm => Str} ; 
+    Quest = { s : Str } ;
+    MassCN = CN ;
 
   lin
     PhrPos sent = {s = sent.s ! SPos ++ "."} ;
     PhrNeg sent = {s = sent.s ! SNeg ++ "."} ;
-    PhrQuest sent = {s = sent.s ! SQuest ++ "?"} ;
+    PhrQuest q = {s = q.s ++ "?" } ;
     PhrImp imp = {s = (PhrUtt NoPConj (UttImpSg PPos imp) NoVoc).s ++ "!"} ;
     PhrImpNeg imp = {s = (PhrUtt NoPConj (UttImpSg PNeg imp) NoVoc).s ++ "!"} ;
     
+    QuestSent sent = {s = sent.s ! SQuest } ; 
     QuestIP_V v ip = mkQuest (QuestVP ip (UseV v)) ;
     QuestIP_V2 v ip x = mkQuest (QuestVP ip (ComplV2 v x)) ;
     QuestIP_V2Mass v ip x = mkQuest (QuestVP ip (ComplV2 v (massNP x))) ;
@@ -68,8 +71,8 @@ incomplete concrete PeaceKeepI of PeaceKeep = open Lang in {
 
     massNP : CN -> NP = \mcn -> DetCN (DetSg MassDet NoOrd) mcn ;
 
-    mkQuest : QCl -> Phr ;
-    mkQuest q = { s = (Predef.toStr QS (UseQCl TPres ASimul PPos q)) ++ "?";
-		  lock_Phr = <> } ;
+    mkQuest : QCl -> Quest ;
+    mkQuest q = { s = Predef.toStr QS (UseQCl TPres ASimul PPos q);
+		  lock_Quest = <> } ;
 
 }
