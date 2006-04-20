@@ -48,6 +48,18 @@ incomplete concrete QuestionScand of Question =
               }
       } ;
 
+    QuestIComp icomp np = {
+      s = \\t,a,p => 
+            let 
+              cls = 
+                (mkClause (np.s ! nominative) np.a (predV verbBe)).s ! t ! a ! p ;
+              why = icomp.s ! agrAdj np.a.gn DIndef
+            in table {
+              QDir   => why ++ cls ! Inv ;
+              QIndir => why ++ cls ! Sub
+              }
+      } ;
+
     PrepIP p ip = {
       s = p.s ++ ip.s ! accusative
       } ;
@@ -59,8 +71,10 @@ incomplete concrete QuestionScand of Question =
  
     IDetCN idet num ord cn = let g = cn.g in {
       s  = \\c => 
-           idet.s ! g ++ num.s ! g ++ ord.s ++ cn.s ! idet.n ! idet.det ! caseNP c ; 
+           idet.s ! g ++ num.s ! g ++ ord.s ++ cn.s !idet.n ! idet.det ! caseNP c ;
       gn = gennum g idet.n
       } ;
+
+    CompIAdv a = {s = \\_ => a.s} ;
 
 }

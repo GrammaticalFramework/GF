@@ -25,7 +25,8 @@ incomplete concrete CatScand of Cat =
 
     QCl = {s : Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : NPForm => Str ; gn : GenNum} ;
-    IAdv = {s : Str} ;    
+    IAdv = {s : Str} ;
+    IComp = {s : AFormPos => Str} ; 
     IDet = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
 
 -- Relative

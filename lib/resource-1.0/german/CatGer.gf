@@ -25,7 +25,8 @@ concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
 
     QCl = {s : Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : Case => Str ; n : Number} ;
-    IAdv = {s : Str} ;    
+    IAdv = {s : Str} ;
+    IComp = {s : Agr => Str} ; 
     IDet = {s : Gender => Case => Str ; n : Number} ;
 
 -- Relative

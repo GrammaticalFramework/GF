@@ -24,7 +24,7 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 
     QCl = {s : Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : Case => Str ; n : Number} ;
-    IAdv = {s : Str} ;    
+    IAdv, IComp = {s : Str} ;    
     IDet = {s : Str ; n : Number} ;
 
 -- Relative

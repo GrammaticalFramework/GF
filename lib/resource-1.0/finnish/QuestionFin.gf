@@ -28,6 +28,15 @@ concrete QuestionFin of Question = CatFin ** open ResFin, Prelude in {
       s = \\t,a,p => iadv.s ++ cl.s ! t ! a ! p ! SDecl
       } ;
 
+    QuestIComp icomp np = {
+      s = \\t,a,p => 
+        let 
+          vp = predV (verbOlla ** {sc = NPCase Nom}) ;
+          cl = mkClause (subjForm np vp.sc) np.a vp ;
+        in
+        icomp.s ! np.a ++ cl.s ! t ! a ! p ! SDecl
+      } ;
+
     PrepIP p ip = {s = 
       appCompl True Pos p (ip ** {a = agrP3 ip.n ; isPron = False})} ;
 
@@ -53,5 +62,7 @@ concrete QuestionFin of Question = CatFin ** open ResFin, Prelude in {
         idet.s ! k ++ num.s ! Sg ! k ++ ord.s ! n ! k ++ cn.s ! ncase ; 
       n = n
       } ;
+
+    CompIAdv a = {s = \\_ => a.s} ;
 
 }

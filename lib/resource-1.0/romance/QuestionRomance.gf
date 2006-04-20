@@ -41,6 +41,15 @@ incomplete concrete QuestionRomance of Question =
             in why ++ cls
       } ;
 
+    QuestIComp icomp np = {
+      s = \\t,a,p,_ => 
+            let 
+              vp  = predV copula ;
+              cls = (mkClause (np.s ! Aton Nom) np.a vp).s ! t ! a ! p ! Indic ;
+              why = icomp.s ! {g = np.a.g ; n = np.a.n}
+            in why ++ cls
+      } ;
+
     PrepIP p ip = {
       s = p.s ++ ip.s ! accusative
       } ;
@@ -59,5 +68,7 @@ incomplete concrete QuestionRomance of Question =
       s = \\c => idet.s ! g ! c ++ num.s ! g ++ ord.s ! a ++ cn.s ! n ; 
       a = a
       } ;
+
+    CompIAdv a = {s = \\_  => a.s} ;
 
 }

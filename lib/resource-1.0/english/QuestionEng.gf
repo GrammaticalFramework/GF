@@ -1,4 +1,4 @@
-concrete QuestionEng of Question = CatEng ** open ResEng in {
+concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -17,27 +17,15 @@ concrete QuestionEng of Question = CatEng ** open ResEng in {
       let cl = mkClause (qp.s ! Nom) {n = qp.n ; p = P3} vp
       in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
 
-    QuestSlash ip slash = {
-      s = \\t,a,p => 
-            let 
-              cls = slash.s ! t ! a ! p ;
-              who = slash.c2 ++ ip.s ! Acc --- stranding in ExtEng 
-            in table {
-              QDir   => who ++ cls ! OQuest ;
-              QIndir => who ++ cls ! ODir
-              }
-      } ;
+    QuestSlash ip slash = 
+      mkQuestion (ss (slash.c2 ++ ip.s ! Acc)) slash ;
+      --- stranding in ExtEng 
 
-    QuestIAdv iadv cl = {
-      s = \\t,a,p => 
-            let 
-              cls = cl.s ! t ! a ! p ;
-              why = iadv.s
-            in table {
-              QDir   => why ++ cls ! OQuest ;
-              QIndir => why ++ cls ! ODir
-              }
-      } ;
+    QuestIAdv iadv cl = mkQuestion iadv cl ;
+
+    QuestIComp icomp np = 
+      mkQuestion icomp (mkClause (np.s ! Nom) np.a (predAux auxBe)) ;
+
 
     PrepIP p ip = {s = p.s ++ ip.s ! Nom} ;
 
@@ -49,6 +37,23 @@ concrete QuestionEng of Question = CatEng ** open ResEng in {
     IDetCN idet num ord cn = {
       s = \\c => idet.s ++ num.s ++ ord.s ++ cn.s ! idet.n ! c ; 
       n = idet.n
+      } ;
+
+    CompIAdv a = a ;
+
+  oper
+    mkQuestion : 
+      {s : Str} -> Clause -> 
+      {s : Tense => Anteriority => Polarity => QForm => Str} = \wh,cl ->
+      {
+      s = \\t,a,p => 
+            let 
+              cls = cl.s ! t ! a ! p ;
+              why = wh.s
+            in table {
+              QDir   => why ++ cls ! OQuest ;
+              QIndir => why ++ cls ! ODir
+              }
       } ;
 
 }

@@ -35,6 +35,7 @@ abstract Cat = Common ** {
     QCl ;   -- question clause, with all tenses    e.g. "why does she walk"
     IP ;    -- interrogative pronoun               e.g. "who"
     IAdv ;  -- interrogative adverb                e.g. "why"
+    IComp ; -- interrogative complement of copula  e.g. "where"
     IDet ;  -- interrogative determiner            e.g. "which"
 
 --2 Relative clauses and pronouns

@@ -46,6 +46,18 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
               }
       } ;
 
+    QuestIComp icomp np = {
+      s = \\t,a,p => 
+            let 
+              vp  = predV sein_V ;
+              cls = (mkClause (np.s ! Nom) np.a vp).s ! t ! a ! p ;
+              why = icomp.s ! np.a
+            in table {
+              QDir   => why ++ cls ! Inv ;
+              QIndir => why ++ cls ! Sub
+              }
+      } ;
+
     PrepIP p ip = {
       s = appPrep p ip.s
       } ;
@@ -65,6 +77,7 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
            cn.s ! Weak ! n ! c ; 
       n = n
       } ;
+    CompIAdv a = {s = \\_ => a.s} ;
 
 }
 

@@ -112,7 +112,7 @@ concrete StructuralGer of Structural = CatGer **
 
   when_IAdv = ss "wann" ;
   when_Subj = ss "wenn" ;
-  where_IAdv = ss "war" ;
+  where_IAdv = ss "wo" ;
 
   whichPl_IDet = detLikeAdj Pl "welch" ;
   whichSg_IDet = detLikeAdj Sg "welch" ;
