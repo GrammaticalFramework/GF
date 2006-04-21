@@ -42,12 +42,16 @@
 <HR NOSHADE SIZE=1>
 <P></P>
 <P>
-Last update: Sat Feb 25 22:35:58 2006
+Author: 
+Last update: Fri Apr 21 11:44:29 2006
 </P>
 <P>
 Produced by 
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
+</P>
+<P>
+==
 </P>
 <P>
 # -path=.:../abstract:../../prelude:../common
@@ -171,9 +175,13 @@ function:
 <A NAME="toc4"></A>
 <H3>Compound nouns</H3>
 <P>
-All the functions above work quite as well to form compound nouns,
-such as <I>baby boom</I>. 
+A compound noun ia an uninflected string attached to an inflected noun,
+such as <I>baby boom</I>, <I>chief executive officer</I>.
 </P>
+<PRE>
+      compoundN : Str -&gt; N -&gt; N ;
+</PRE>
+<P></P>
 <A NAME="toc5"></A>
 <H3>Relational nouns</H3>
 <P>
