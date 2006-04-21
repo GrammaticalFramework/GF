@@ -1,12 +1,12 @@
 --# -path=.:..:present:prelude
 
 concrete PeacePhrases_Eng of PeacePhrases = 
-  PeaceCat_Eng ** open ResEng in {
+  PeaceCat_Eng ** open ResEng, PeaceRes in {
 
 lin
-    Hello = { s = "hello" ++ "." } ;
-    GoodMorning = { s = ["good morning"] ++ "." } ;
-    GoodEvening = { s = ["good evening"] ++ "." } ;
-    WhatIsNamePron p = { s = ["what is"] ++ p.s!Gen ++ "name" ++ "?"; };
+    Hello = stop "hello" ;
+    GoodMorning = stop ["good morning"];
+    GoodEvening = stop ["good evening"] ;
+    WhatIsNamePron p = quest (["what is"] ++ p.s!Gen ++ "name") ;
 
 }

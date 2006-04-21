@@ -5,6 +5,6 @@ concrete Peace_Eng of Peace =
   PeaceLexExt_Eng, PeacePhrases_Eng
   ** {
 
-  flags startcat = Phr ; 
+  flags startcat = PhraseWritten ; 
 
 }

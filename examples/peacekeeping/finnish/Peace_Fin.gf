@@ -5,6 +5,6 @@ concrete Peace_Fin of Peace =
   PeaceLexExt_Fin, PeacePhrases_Fin
   ** {
 
-  flags startcat = Phr ; 
-
+  flags startcat = PhraseWritten ; 
+	optimize = all_subs ;
 }

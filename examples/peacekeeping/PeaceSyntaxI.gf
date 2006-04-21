@@ -1,4 +1,5 @@
-incomplete concrete PeaceSyntaxI of PeaceSyntax = PeaceCatI ** open Lang in {
+incomplete concrete PeaceSyntaxI of PeaceSyntax = 
+  PeaceCatI ** open Lang,PeaceRes in {
 
   flags 
 --    optimize = all_subs ;
@@ -11,22 +12,21 @@ incomplete concrete PeaceSyntaxI of PeaceSyntax = PeaceCatI ** open Lang in {
     MassCN = CN ;
 
   lin
-    PhrPos sent = {s = sent.s ! SPos ++ "."} ;
-    PhrNeg sent = {s = sent.s ! SNeg ++ "."} ;
-    PhrQuest q = {s = q.s ++ "?" } ;
-    PhrImp imp = {s = (PhrUtt NoPConj (UttImpSg PPos imp) NoVoc).s ++ "!"} ;
-    PhrImpNeg imp = {s = (PhrUtt NoPConj (UttImpSg PNeg imp) NoVoc).s ++ "!"} ;
+    PhrPos sent = stop (sent.s!SPos) ;
+    PhrNeg sent = stop (sent.s!SNeg) ;
+    PhrQuest q = quest q.s ;
+    PhrImp imp = excl (PhrUtt NoPConj (UttImpSg PPos imp) NoVoc).s;
+    PhrImpNeg imp = excl (PhrUtt NoPConj (UttImpSg PNeg imp) NoVoc).s;
     
-    PhrYes = { s = yes_Phr.s ++ "." } ;
-    PhrNo = { s = no_Phr.s ++ "." } ;
+    PhrYes = stop yes_Phr.s ;
+    PhrNo = stop no_Phr.s ;
 
-    QuestSent sent = {s = sent.s ! SQuest } ; 
+    QuestSent sent = { s = sent.s!SQuest } ; 
     QuestIP_V v ip = mkQuest (QuestVP ip (UseV v)) ;
     QuestIP_V2 v ip x = mkQuest (QuestVP ip (ComplV2 v x)) ;
     QuestIP_V2Mass v ip x = mkQuest (QuestVP ip (ComplV2 v (massNP x))) ;
     QuestIP_V3 v ip x y = mkQuest (QuestVP ip (ComplV3 v x y)) ;
     QuestIP_V3Mass v ip x y = mkQuest (QuestVP ip (ComplV3 v (massNP x) y)) ;
-    QuestIP_A : A -> IP -> Phr ;
     QuestIP_A a ip = mkQuest (QuestVP ip (UseComp (CompAP (PositA a))));
     QuestIAdv_NP x ia = mkQuest (QuestIComp (CompIAdv ia) x);
 
