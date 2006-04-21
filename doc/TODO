@@ -175,6 +175,12 @@
    Other flags override daughter flags for daughter modules
    (e.g. -startcat and -conversion)
 
+* [bringert] IMPORTANT: get right startcat flag when printing CFGM
+   GF.CFGM.PrintCFGrammar.prCanonAsCFGM currently only gets the startcat
+   flag from the top-level concrete module. This might be easier
+   to fix if the multi grammar printers had access to more than just
+   the CanonGrammar. 
+
 * [peb] WISH: generalizing incomplete concrete 
 
    I want to be able to open an incomplete concrete module
@@ -223,7 +229,3 @@
    modules
 
 - How can this be combined with several modules inside one file?  
-
-
-
-
