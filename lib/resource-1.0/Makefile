@@ -14,7 +14,7 @@ pretest:
 	echo "gr -cat=Cl -number=11 -prob | tb" | $(GF) -probs=lang.gfprob -path=present:prelude -nocf ../present/Lang???.gfc
 
 langs:
-	echo "s ;; pm | wf langs.gfcm" | $(GF) -nocf -src */Lang??*.gf english/LangEng.gf +RTS -p -M800M -K100M
+	echo "s ;; pm | wf langs.gfcm" | $(GF) -nocf -src */Lang??*.gf english/LangEng.gf +RTS -M800M -K100M
 	cp -p */*.gfc */*.gfr ../alltenses
 
 present:
