@@ -1,7 +1,7 @@
 incomplete concrete PeaceSyntaxI of PeaceSyntax = PeaceCatI ** open Lang in {
 
   flags 
-    startcat = Phr ; optimize = all_subs ;
+    optimize = all_subs ;
     unlexer = text ; lexer = text ;
 
   lincat
