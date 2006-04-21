@@ -15,9 +15,14 @@
 
 module Main (main) where
 
-import List
-import System
-import Char
+
+import Data.Char
+import Data.List
+import System.Cmd
+import System.Directory
+import System.Environment
+import System.Locale
+import System.Time
 
 -- to read files and write a file
 
@@ -37,8 +42,9 @@ main = do
        putStrLn help
      else flip mapM_ names (\name -> do  
        ss <- readFile name
+       time <- modTime name
        let outfile = fileFormat typ name
-       writeFile outfile $ format $ pDoc $ ss)
+       writeFile outfile $ format $ pDoc time ss)
   case typ of
      2 -> 
        mapM_ (\name -> system $ "htmls " ++ (fileFormat typ name)) names
@@ -47,6 +53,14 @@ main = do
                system $ "txt2tags -thtml --toc " ++ (fileFormat typ name)) names
      _ -> return ()
   return ()
+
+modTime :: FilePath -> IO ModTime
+modTime name = 
+    do
+    t <- getModificationTime name
+    ct <- toCalendarTime t
+    let timeFmt = "%Y-%m-%d %H:%M:%S %Z"
+    return $ formatCalendarTime defaultTimeLocale timeFmt ct
 
 welcome = unlines [
   "",
@@ -98,7 +112,9 @@ fileFormat typ x = body ++ suff where
 
 -- the document datatype
 
-data Doc = Doc Title [Paragraph]
+data Doc = Doc Title ModTime [Paragraph]
+
+type ModTime = String
 
 type Title = [TextItem]
 
@@ -120,10 +136,10 @@ data TextItem =
 
 -- parse document
 
-pDoc :: String -> Doc
-pDoc s = case lines s of
-  ('-':'-':'1':title) : paras -> Doc (pItems title) (map pPara (grp paras))
-  paras -> Doc [] (map pPara (grp paras))
+pDoc :: ModTime -> String -> Doc
+pDoc time s = case dropWhile emptyOrPragma (lines s) of
+  ('-':'-':'1':title) : paras -> Doc (pItems title) time (map pPara (grp paras))
+  paras -> Doc [] time (map pPara (grp paras))
  where
    grp ss = case ss of
      s : rest --- | ignore s      -> grp rest
@@ -161,11 +177,12 @@ pDoc s = case lines s of
      '-':'-':'.':_ -> True
      _ -> False
 
+   emptyOrPragma s = all isSpace s || "--#" `isPrefixOf` s
 
 -- render in html
 
 doc2html :: Doc -> String
-doc2html (Doc title paras) = unlines $
+doc2html (Doc title time paras) = unlines $
   tagXML "html" $
     tagXML "body" $
       unwords (tagXML "i" ["Produced by " ++ welcome]) :
@@ -206,7 +223,7 @@ elimLt s = case s of
 -- render in latex
 
 doc2latex :: Doc -> String
-doc2latex (Doc title paras) = unlines $
+doc2latex (Doc title time paras) = unlines $
   preludeLatex :
   funLatex "title"  [concat (map item2latex title)] :
   funLatex "author" [fontLatex "footnotesize" (welcome)] :
@@ -277,10 +294,11 @@ preludeLatex = unlines $ [
 -- render in txt2tags
 
 doc2txt :: Doc -> String
-doc2txt (Doc title paras) = unlines $
+doc2txt (Doc title time paras) = unlines $
   let tit = concat (map item2txt title) in
       tit:
-      "Last update: %%date(%c)":
+      ("Last update: " ++ time):
+      "":
       "% NOTE: this is a txt2tags file.":
       "% Create an html file from this file using:":
       ("% txt2tags " ++ tit):
