@@ -20,16 +20,23 @@ concrete PeaceLexExt_Fin of PeaceLexExt =
     corpse_N = regN "ruumis" ;
     doctor_N = regN "l‰‰k‰ri";
     enemy_N = regN "vihollinen";
+    face_N = regN "naama" ; ---- kasvot
     food_N = regN "ruoka";
     friend_N = regN "yst‰v‰";
+    ground_N = regN "maa" ;
+    knife_N = reg2N "veitsi" "veitsi‰" ; ---- veist‰
     landmine_N = regN "maamiina" ;
+    map_N = regN "kartta" ;
     medicine_N = regN "l‰‰ke" ;
+    police8officer_N = regN "poliisi" ;
     skin_N = regN "iho" ;
     soldier_N = regN "sotilas" ;
     weapon_N = regN "ase";
 
     -- Verbs
     cough_V = regV "yski‰" ;
+    drop_V2 = dirV2 (regV "pudottaa") ;
+    hurt_V = regV "sattua" ;
     need_V2 = dirV2 (regV "tarvita");
     own_V2 = dirV2 (regV "omistaa") ;
     show_V3 = dirdirV3 (regV "n‰ytt‰‰") ;
