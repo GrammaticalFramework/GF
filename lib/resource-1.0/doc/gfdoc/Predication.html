@@ -6,8 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> A Small Predication Library</H1>
 <FONT SIZE="4">
-<I>Last update: Sat Feb 25 22:36:00 2006</I><BR>
-% NOTE: this is a txt2tags file.
+<I>Last update: 2006-03-03 17:06:11 CET</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -16,9 +15,10 @@
     <UL>
     <LI><A HREF="#toc1">The category of atomic sentences</A>
     <LI><A HREF="#toc2">Predication patterns.</A>
-    <LI><A HREF="#toc3">Individual-valued function applications</A>
-    <LI><A HREF="#toc4">Families of types</A>
-    <LI><A HREF="#toc5">Type constructor</A>
+    <LI><A HREF="#toc3">Imperatives and infinitives.</A>
+    <LI><A HREF="#toc4">Individual-valued function applications</A>
+    <LI><A HREF="#toc5">Families of types</A>
+    <LI><A HREF="#toc6">Type constructor</A>
     </UL>
 
 <P></P>
@@ -71,6 +71,13 @@ tenses.
 </PRE>
 <P></P>
 <A NAME="toc3"></A>
+<H2>Imperatives and infinitives.</H2>
+<PRE>
+      impV2     : V2 -&gt; NP -&gt; Phr ;        -- imperative:          "solve the equation E"
+      infV2     : V2 -&gt; NP -&gt; Phr ;        -- infinitive:          "to solve the equation E"
+</PRE>
+<P></P>
+<A NAME="toc4"></A>
 <H2>Individual-valued function applications</H2>
 <PRE>
       appN2     : N2 -&gt; NP -&gt; NP ;         -- one-place function:  "the successor of x"
@@ -78,7 +85,7 @@ tenses.
       appColl   : N2 -&gt; NP -&gt; NP -&gt; NP ;   -- collective function: "the sum of x and y"
 </PRE>
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc5"></A>
 <H2>Families of types</H2>
 <P>
 These are expressed by relational nouns applied to arguments.
@@ -89,7 +96,7 @@ These are expressed by relational nouns applied to arguments.
       famColl   : N2 -&gt; NP -&gt; NP -&gt; CN ;   -- collective family:   "path between x and y"
 </PRE>
 <P></P>
-<A NAME="toc5"></A>
+<A NAME="toc6"></A>
 <H2>Type constructor</H2>
 <P>
 This is similar to a family except that the argument is a type.
