@@ -1,9 +1,9 @@
-abstract PeacePhrases = Cat ** {
+abstract PeacePhrases = PeaceCat ** {
 
   fun
-    Hello : Phr ;
-    GoodMorning : Phr ;
-    GoodEvening : Phr ;
-    WhatIsNamePron : Pron -> Phr ;
+    Hello : Phrase ;
+    GoodMorning : Phrase ;
+    GoodEvening : Phrase ;
+    WhatIsNamePron : Pron -> Phrase ;
 
 }

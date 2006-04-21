@@ -5,6 +5,6 @@ concrete Peace_Swe of Peace =
   PeaceLexExt_Swe, PeacePhrases_Swe
   ** {
 
-  flags startcat = Phr ; 
+  flags startcat = PhraseWritten ; 
 
 }

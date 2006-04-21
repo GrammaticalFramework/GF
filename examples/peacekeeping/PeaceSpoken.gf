@@ -1,0 +1,1 @@
+abstract PeaceSpoken = Peace ** {}

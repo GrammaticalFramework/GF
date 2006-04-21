@@ -1,12 +1,12 @@
 --# -path=.:..:present:prelude
 
 concrete PeacePhrases_Swe of PeacePhrases = 
-  PeaceCat_Swe ** open CommonScand in {
+  PeaceCat_Swe ** open CommonScand, PeaceRes in {
 
 lin
-    Hello = { s = "hej" ++ "." } ;
-    GoodMorning = { s = ["god morgon"] ++ "." } ;
-    GoodEvening = { s = ["god kväll"] ++ "." } ;
-    WhatIsNamePron p = { s = ["vad heter"] ++ p.s!NPNom ++ "?"; };
+    Hello = stop "hej" ;
+    GoodMorning = stop ["god morgon"] ;
+    GoodEvening = stop ["god kväll"] ;
+    WhatIsNamePron p = stop (["vad heter"] ++ p.s!NPNom) ;
 
 }

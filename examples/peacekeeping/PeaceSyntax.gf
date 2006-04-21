@@ -6,14 +6,14 @@ abstract PeaceSyntax = PeaceCat ** {
     MassCN ; 
 
   fun
-    PhrPos    : Sent -> Phr ;
-    PhrNeg    : Sent -> Phr ;
-    PhrQuest  : Quest -> Phr ;
-    PhrImp    : Imp  -> Phr ;    
-    PhrImpNeg : Imp  -> Phr ;    
+    PhrPos    : Sent -> Phrase ;
+    PhrNeg    : Sent -> Phrase ;
+    PhrQuest  : Quest -> Phrase ;
+    PhrImp    : Imp  -> Phrase ;    
+    PhrImpNeg : Imp  -> Phrase ;    
 
-    PhrYes : Phr ;
-    PhrNo : Phr ;
+    PhrYes : Phrase ;
+    PhrNo : Phrase ;
 
     QuestSent : Sent -> Quest ;
 
