@@ -68,6 +68,7 @@ abstract IrregSweAbs = Cat ** {
   förtiga_V : V ;
   frysa_V : V ;
   gå_V : V ;
+  göra_V : V ;
   genomdriva_V : V ;
   gilla_V : V ;
   giva_V : V ;

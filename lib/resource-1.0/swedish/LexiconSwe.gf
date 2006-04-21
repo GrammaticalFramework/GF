@@ -214,7 +214,7 @@ lin
   yellow_A = regA "gul" ;
   young_A = irregA "ung" "yngre" "yngst" ;
 
-  do_V2 = dirV2 (mkV "göra" "gör" "gör" "gjorde" "gjort" "gjord") ;
+  do_V2 = dirV2 göra_V ;
   now_Adv = mkAdv "nu" ;
   already_Adv = mkAdv "redan" ;
   song_N = mk2N "sång" "sånger" ;
