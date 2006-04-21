@@ -86,8 +86,10 @@ oper
 
 --3 Compound nouns 
 --
--- All the functions above work quite as well to form compound nouns,
--- such as "baby boom". 
+-- A compound noun ia an uninflected string attached to an inflected noun,
+-- such as "baby boom", "chief executive officer".
+
+  compoundN : Str -> N -> N ;
 
 
 --3 Relational nouns 
@@ -340,6 +342,8 @@ oper
     mkNoun man man's men men's ** {g = Neutr ; lock_N = <>} ;
 
   genderN g man = {s = man.s ; g = g ; lock_N = <>} ;
+
+  compoundN s n = {s = \\x,y => s ++ n.s ! x ! y ; g=n.g ; lock_N = <>} ;
 
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
   regN2 n = mkN2 (regN n) (mkPreposition "of") ;
