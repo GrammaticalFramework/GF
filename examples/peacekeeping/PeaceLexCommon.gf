@@ -15,6 +15,9 @@ abstract PeaceLexCommon = PeaceCat ** {
     whatPl_IP : IP ;
     whatSg_IP : IP ;
 
+    this_NP : NP ;
+    that_NP : NP ;
+
     -- Determiners
 
     aSg_Det : Det ;
@@ -74,6 +77,7 @@ abstract PeaceLexCommon = PeaceCat ** {
     woman_N : N;
 
     -- Verbs
+    breathe_V : V ;
     eat_V2 : V2 ;
     drink_V2 : V2 ;
     give_V3 : V3 ;
