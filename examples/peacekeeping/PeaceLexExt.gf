@@ -31,9 +31,12 @@ abstract PeaceLexExt = PeaceCat ** {
     police8officer_N : N ;
     skin_N : MassN ;
     soldier_N : N ;
+    toy_N : N ;
+    translation8machine_N : N ;
     weapon_N : N;
 
     -- Verbs
+    cooperate_V2 : V2 ;
     cough_V : V ;
     drop_V2 : V2 ;
     hurt_V : V ;

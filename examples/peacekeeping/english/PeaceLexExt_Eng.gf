@@ -1,7 +1,8 @@
 --# -path=.:present:prelude
 
 concrete PeaceLexExt_Eng of PeaceLexExt = 
-  PeaceCat_Eng ** open ParadigmsEng, IrregEng in {
+  PeaceCat_Eng ** open ParadigmsEng, IrregEng, 
+                       LexiconEng, StructuralEng in {
 
   lin
 
@@ -31,12 +32,15 @@ concrete PeaceLexExt_Eng of PeaceLexExt =
     police8officer_N = compoundN "police" (regN "officer") ;
     skin_N = regN "skin" ;
     soldier_N = regN "soldier" ;
+    toy_N = regN "toy" ;
+    translation8machine_N = compoundN "translation" (regN "machine") ;
     weapon_N = regN "weapon";
 
     -- Verbs
+    cooperate_V2 = mkV2 (regV "cooperate") (mkPreposition "with") ;
     cough_V = regV "cough" ;
     drop_V2 = dirV2 (regDuplV "drop") ;
-    hurt_V = dirV2 hurt_V ;
+    hurt_V = hurt_V ;
     need_V2 = dirV2 (regV "need");
     own_V2 = dirV2 (regV "own") ;
     show_V3 = dirdirV3 (regV "show") ;

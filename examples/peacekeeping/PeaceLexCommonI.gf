@@ -15,6 +15,9 @@ incomplete concrete PeaceLexCommonI of PeaceLexCommon = PeaceCatI ** open Lang i
     whatPl_IP = whatPl_IP ;
     whatSg_IP = whatSg_IP ;
 
+    this_NP = this_NP ;
+    that_NP = that_NP ;
+
     -- Determiners
 
     aSg_Det =  DetSg (SgQuant IndefArt) NoOrd;
@@ -71,6 +74,7 @@ incomplete concrete PeaceLexCommonI of PeaceLexCommon = PeaceCatI ** open Lang i
     woman_N = woman_N ;
 
     -- Verbs
+    breathe_V = breathe_V ;
     drink_V2 = drink_V2 ;
     eat_V2 = eat_V2 ;
     give_V3 = give_V3;

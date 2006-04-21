@@ -1,7 +1,8 @@
 --# -path=.:present:prelude
 
 concrete PeaceLexExt_Swe of PeaceLexExt = 
-  PeaceCat_Swe ** open ParadigmsSwe, IrregSwe, LexiconSwe in {
+  PeaceCat_Swe ** open ParadigmsSwe, IrregSwe, 
+                       LexiconSwe, StructuralSwe in {
 
   lin
 
@@ -31,9 +32,12 @@ concrete PeaceLexExt_Swe of PeaceLexExt =
     police8officer_N = mk2N "polis" "poliser" ;
     skin_N = mk2N "skinn" "skinn" ;
     soldier_N = mk2N "soldat" "soldater" ;
+    toy_N = regN "leksak" ;
+    translation8machine_N = mk2N "översättningsmaskin" "översättningsmaskiner";
     weapon_N = mkN "vapen" "vapnet" "vapen" "vapnen" ;
 
     -- Verbs
+    cooperate_V2 = mkV2 (regV "samarbetar") (mkPreposition "med") ;
     cough_V = regV "hostar" ;
     drop_V2 = dirV2 (regV "släpper") ;
     hurt_V = partV göra_V "ont" ; -- FIXME: "Gör ont ditt ben?"

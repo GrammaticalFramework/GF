@@ -10,7 +10,7 @@ Who gives water to the children?
 Who is hungry?
 Where do you sleep?
 Where do you see the landmine?
-Where is the factory?
+Where are the weapons?
 
 The doctor sleeps.
 I see a small girl.
@@ -22,15 +22,20 @@ We give food to children.
 Are you cold?
 Landmines are dangerous.
 We are your friends.
+I am a police officer.
+This is a translation machine.
+Weapons aren't toys.
 These soldiers aren't your enemies.
 
 Walk!
+Breathe!
 Don't eat your friend!
 Drink cold water!
 Give your weapon to the soldier!
 Show me the landmine!
 Give water to the boy!
 Drop your weapon!
+Cooperate with us!
 
 == Should work ==
 
@@ -43,6 +48,8 @@ Drink! (drink is V2)
 (without overgenerating too much)
 
 Turn around!
+
+plural-/singular-only nouns: clothes, ...
 
 
 == English ==
