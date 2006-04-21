@@ -50,9 +50,11 @@ haskPreamble =
   "class Gf a where gf :: a -> Trm",
   "class Fg a where fg :: Trm -> a",
   "",
-  predefInst "String" "K s",
+  predefInst "GString" "String" "K s",
   "",
-  predefInst "Int" "EInt s",
+  predefInst "GInt" "Integer" "EInt s",
+  "",
+  predefInst "GFloat" "Double" "EFloat s",
   "",
   "----------------------------------------------------",
   "-- below this line machine-generated",
@@ -60,7 +62,7 @@ haskPreamble =
   ""
  ]
 
-predefInst typ patt = let gtyp = gId typ in
+predefInst gtyp typ patt = 
   "newtype" +++ gtyp +++ "=" +++ gtyp +++ typ +++ " deriving Show" +++++
   "instance Gf" +++ gtyp +++ "where" ++++
   "  gf (" ++ gtyp +++ "s) =" +++ patt +++++
