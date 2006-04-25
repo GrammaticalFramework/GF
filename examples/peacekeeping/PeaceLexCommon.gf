@@ -38,7 +38,8 @@ abstract PeaceLexCommon = PeaceCat ** {
 
     -- Numerals
 
-    one_Det : Det ;
+-- Causes too much ambiguity
+--    one_Det : Det ;
     two_Num : Num ;
     three_Num : Num ;
     four_Num : Num ;
