@@ -1,0 +1,46 @@
+--# -path=.:../abstract:../common:../../prelude
+
+concrete RelativeRus of Relative = CatRus ** open ResRus in {
+--
+--  flags optimize=all_subs ;
+--
+--  lin
+--
+--    RelCl cl = {
+--      s = \\t,a,p,_ => "such" ++ "that" ++ cl.s ! t ! a ! p ! ODir
+--      } ;
+--
+--    RelVP rp vp = {
+--      s = \\t,ant,b,ag => 
+--        let 
+--          agr = case rp.a of {
+--            RNoAg => ag ;
+--            RAg a => a
+--            } ;
+--          cl = mkClause (rp.s ! RC Nom) agr vp
+--        in
+--        cl.s ! t ! ant ! b ! ODir
+--      } ;
+--
+---- Preposition stranding: "that we are looking at". Pied-piping is
+---- deferred to $ExtRus.gf$ ("at which we are looking").
+--
+--    RelSlash rp slash = {
+--      s = \\t,a,p,_ => rp.s ! RC Acc ++ slash.s ! t ! a ! p ! ODir ++ slash.c2
+--      } ;
+--
+--    FunRP p np rp = {
+--      s = \\c => np.s ! Acc ++ p.s ++ rp.s ! RPrep ;
+--      a = RAg np.a
+--      } ;
+--
+--    IdRP = {
+--      s = table {
+--        RC Gen => "whose" ; 
+--        RC _   => "that" ;
+--        RPrep  => "which"
+--        } ;
+--      a = RNoAg
+--      } ;
+--
+}
