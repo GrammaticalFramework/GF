@@ -154,13 +154,13 @@ catForms gr qs cat fs =
 cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr qs cat fs = 
     form cat [var "value" (Just "'?'"), formDebug cat,
-              block [if_ "value != '?'" [assign cat "value"]],
+              blockCond "value != '?'" [assign cat "value"],
               field cat [] [promptString (getCatQuestion cat qs), 
                             grammar (gr++"#"++cat),
                             nomatch [Data "I didn't understand you.", reprompt],
                             help [Data ("help_"++cat)],
                             filled [] [if_else (cat ++ " == '?'") [reprompt] feedback]],
-              block [if_ "debug == 1" [prompt [Data (cat ++ " = "), value ("dump("++cat++")")]]],
+              blockCond "debug == 1" [prompt [Data (cat ++ " = "), value ("dump("++cat++")")]],
               subdialog "sub" [("srcexpr","'#'+"++cat++".name")] 
                              [param "value" cat, filled [] subDone]]
   where subDone = [assign cat "sub.value", return_ [cat]]
@@ -179,7 +179,7 @@ fun2form gr fun args =
                  filled [] [assign ("value."++a) (a++"."++t)]]
   ret = block [return_ ["value"]]
 
-formDebug id = block [if_ "debug == 1" [prompt [Data ("Entering form " ++ id ++ ". value = "), value "dump(value)"]]]
+formDebug id = blockCond "debug == 1" [prompt [Data ("Entering form " ++ id ++ ". value = "), value "dump(value)"]]
 
 --
 -- * VoiceXML stuff
@@ -237,6 +237,9 @@ return_ names = Tag "return" [("namelist", unwords names)] []
 
 block :: [XML] -> XML
 block = Tag "block" []
+
+blockCond :: String -> [XML] -> XML
+blockCond cond = Tag "block" [("cond", cond)]
 
 throw :: String -> String -> XML
 throw event msg = Tag "throw" [("event",event),("message",msg)] []
