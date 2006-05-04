@@ -21,7 +21,7 @@ To test:
 For translation from Eng to all others, try e.g.
 
   gf langs.gfcm
-  > p -cat=Phr -mcfg "I haven't seen her" | l -multi
+  > p -cat=Phr -mcfg -parser=topdown "I haven't seen her" | l -multi
 
 To link to the library, use the precompiled packages
 

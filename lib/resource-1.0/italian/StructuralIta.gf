@@ -117,8 +117,8 @@ lin
   when_IAdv = ss "quando" ;
   when_Subj = ss "quando" ** {m = Indic} ;
   where_IAdv = ss "dove" ;
-  whichPl_IDet = {s = \\g,c => prepCase c ++ genForms "quale" "quale" ! g ; n = Sg} ;
-  whichSg_IDet = {s = \\g,c => prepCase c ++ genForms "quali" "quali" ! g; n = Pl} ;
+  whichSg_IDet = {s = \\g,c => prepCase c ++ genForms "quale" "quale" ! g ; n = Sg} ;
+  whichPl_IDet = {s = \\g,c => prepCase c ++ genForms "quali" "quali" ! g; n = Pl} ;
   whoPl_IP = {s = \\c => prepCase c ++ "chi" ; a = aagr Fem Pl} ;
   whoSg_IP = {s = \\c => prepCase c ++ "chi" ; a = aagr Fem Sg} ;
   why_IAdv = ss "perché" ;
