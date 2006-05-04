@@ -118,8 +118,8 @@ lin
   when_IAdv = ss "quand" ;
   when_Subj = ss "quand" ** {m = Indic} ;
   where_IAdv = ss "où" ;
-  whichPl_IDet = {s = \\g,c => prepCase c ++ genForms "quel" "quelle" ! g ; n = Sg} ;
-  whichSg_IDet = {s = \\g,c => prepCase c ++ genForms "quels" "quelles" ! g; n = Pl} ;
+  whichSg_IDet = {s = \\g,c => prepCase c ++ genForms "quel" "quelle" ! g ; n = Sg} ;
+  whichPl_IDet = {s = \\g,c => prepCase c ++ genForms "quels" "quelles" ! g; n = Pl} ;
   whoPl_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Fem Pl} ;
   whoSg_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Fem Sg} ;
   why_IAdv = ss "pourquoi" ;
