@@ -293,7 +293,7 @@ resource ResEng = ParamX ** open Prelude in {
     agrVerb (verb.s ! VPres) (verb.s ! VInf) ;
 
   infVP : Bool -> VP -> Agr -> Str = \isAux,vp,a ->
-    if_then_Str isAux [] "to" ++ 
+    vp.ad ++ if_then_Str isAux [] "to" ++ 
     vp.inf ++ vp.s2 ! a ;
 
   agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
