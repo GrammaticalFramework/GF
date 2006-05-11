@@ -1,0 +1,36 @@
+11/5/2006
+
+LangFre
+
+373m, 55s, RelativeFre.gfc 43k
+
+Just ag in RelVP:
+
+120m, 40s, 38k
+
+agr,bool instead of ragr:
+
+319m, 52s, 42k
+
+move outside table the case of bool:
+
+221m , 45s,  50k
+
+move outside whole record
+
+213m, 46s, 49k   CHOSEN 11/5
+
+let-defined ag -> ag outside record
+
+275m, 52s, 42m
+
+let-defined ag outermost in branch
+
+284m, 51s, 44m
+
+ragr, outside record
+
+487m, 62s, 76m
+
+
+UseRCl TFut ASimul PPos (RelSlash IdRP (AdvSlash (SlashPrep (GenericCl (ComplV2A paint_V2A (UsePN paris_PN) (PositA full_A))) before_Prep) everywhere_Adv))
