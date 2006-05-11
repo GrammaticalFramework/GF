@@ -281,9 +281,19 @@ oper
 -- auxiliary of predication can be defined.
 
   verbOlla : Verb = 
-    mkVerb 
+    let olla = mkVerb 
       "olla" "on" "olen" "ovat" "olkaa" "ollaan" 
       "oli" "olin" "olisi" "ollut" "oltu" "ollun" ;
+    in {s = table {
+      Inf Inf3Iness => "olemassa" ;
+      Inf Inf3Elat  => "olemasta" ;
+      Inf Inf3Illat => "olemaan" ;
+      Inf Inf3Adess => "olemalla" ;
+      Inf Inf3Abess => "olematta" ;
+      v => olla.s ! v
+      }
+    } ;
+ 
 
 --3 Verbs
 --
@@ -324,7 +334,8 @@ oper
       tulleena = Predef.tk 2 tullut + ("een" + a) ;
       tulleen = (noun2adj (nhn (sRae tullut tulleena))).s ;
       tullun = (noun2adj (nhn (sKukko tultu tullun (tultu + ("j"+a))))).s  ;
-      tulema = tuje + "m" + a ;
+      tulema = Predef.tk 3 tulevat + "m" + a ;
+----      tulema = tuje + "m" + a ;
       vat = "v" + a + "t"
     in
     {s = table {

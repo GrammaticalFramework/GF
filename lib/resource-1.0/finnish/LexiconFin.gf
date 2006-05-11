@@ -331,7 +331,7 @@ lin
   flow_V = reg3V "virrata" "virtaan" "virtasi" ;
   fly_V = regV "lentää" ;
   freeze_V = regV "jäätyä" ;
-  give_V3 = dirdirV3 (regV "antaa") ;
+  give_V3 = dirdirV3 (reg3V "antaa" "annan" "antoi") ;
   hit_V2 = dirV2 (regV "lyödä") ;
   hold_V2 = dirV2 (regV "pitää") ;
   hunt_V2 = dirV2 (regV "metsästää") ;

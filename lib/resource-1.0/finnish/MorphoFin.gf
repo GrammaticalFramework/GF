@@ -687,7 +687,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     o  = last juo ;
     a = last taa ;
     u = ifTok Str a "a" "u" "y" ;
-    soudin = souti + "n" ; ----weakGrade souti + "n" ;
+    soudin = weakGrade (init souti) + "in" ;
   in case taa of {
     "lla" | "llä" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
     "taa" | "tää" => vHuoltaa soutaa soudan souti soudin ;
