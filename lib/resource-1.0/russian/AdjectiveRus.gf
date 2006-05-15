@@ -3,40 +3,44 @@
 
 
 concrete AdjectiveRus of Adjective = CatRus ** open ResRus, Prelude in {
---
---  lin
---
---    PositA  a = {
---      s = \\_ => a.s ! AAdj Posit ;
---      isPre = True
---      } ;
---    ComparA a np = {
---      s = \\_ => a.s ! AAdj Compar ++ "than" ++ np.s ! Nom ; 
---      isPre = False
---      } ;
---
----- $SuperlA$ belongs to determiner syntax in $Noun$.
---
---    ComplA2 a np = {
---      s = \\_ => a.s ! AAdj Posit ++ a.c2 ++ np.s ! Acc ; 
---      isPre = False
---      } ;
---
---    ReflA2 a = {
---      s = \\ag => a.s ! AAdj Posit ++ a.c2 ++ reflPron ! ag ; 
---      isPre = False
---      } ;
---
---    SentAP ap sc = {
---      s = \\a => ap.s ! a ++ sc.s ; 
---      isPre = False
---      } ;
---
---    AdAP ada ap = {
---      s = \\a => ada.s ++ ap.s ! a ;
---      isPre = ap.isPre
---      } ;
---
---    UseA2 a = a ;
---
+flags  coding=utf8 ;
+
+  lin
+
+    PositA  a = { s = a.s!Posit; p = False};
+       -- Comparative forms are used with an object of comparison, as
+        -- adjectival phrases ("больше тебя").
+
+    ComparA bolshoj tu =
+          {s = \\af => bolshoj.s ! Compar ! af ++ tu.s ! (mkPronForm Gen Yes NonPoss) ; 
+            p = True
+           } ;
+
+-- $SuperlA$ belongs to determiner syntax in $Noun$.
+
+    ComplA2 vlublen tu =
+    {s = \\af => vlublen.s !Posit! af ++ vlublen.s2 ++ 
+          tu.s ! (mkPronForm vlublen.c No NonPoss) ;
+     p = True
+    } ;
+
+    ReflA2 vlublen = 
+    {s = \\af => vlublen.s !Posit! af ++ vlublen.s2 ++ "себя";
+     p = True
+    } ;
+
+    SentAP vlublen sent= 
+    {s = \\af => vlublen.s ! af ++ sent.s;
+      p = True
+    } ;
+
+
+    AdAP ada ap = {
+      s = \\af => ada.s ++ ap.s ! af ;
+      p = True
+      } ;
+
+    UseA2 a = a ;
+
 }
+
