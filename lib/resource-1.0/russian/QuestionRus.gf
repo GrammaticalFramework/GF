@@ -1,61 +1,55 @@
 --# -path=.:../abstract:../common:../../prelude
 
 concrete QuestionRus of Question = CatRus ** open ResRus, Prelude in {
---
---  flags optimize=all_subs ;
---
---  lin
---
---    QuestCl cl = {
---      s = \\t,a,p => 
---            let cls = cl.s ! t ! a ! p 
---            in table {
---              QDir   => cls ! OQuest ;
---              QIndir => "if" ++ cls ! ODir
---              } ---- "whether" in ExtRus
---      } ;
---
---    QuestVP qp vp = 
---      let cl = mkClause (qp.s ! Nom) {n = qp.n ; p = P3} vp
---      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
---
---    QuestSlash ip slash = 
---      mkQuestion (ss (slash.c2 ++ ip.s ! Acc)) slash ;
---      --- stranding in ExtRus 
---
---    QuestIAdv iadv cl = mkQuestion iadv cl ;
---
---    QuestIComp icomp np = 
---      mkQuestion icomp (mkClause (np.s ! Nom) np.a (predAux auxBe)) ;
---
---
---    PrepIP p ip = {s = p.s ++ ip.s ! Nom} ;
---
---    AdvIP ip adv = {
---      s = \\c => ip.s ! c ++ adv.s ;
---      n = ip.n
---      } ;
--- 
---    IDetCN idet num ord cn = {
---      s = \\c => idet.s ++ num.s ++ ord.s ++ cn.s ! idet.n ! c ; 
---      n = idet.n
---      } ;
---
---    CompIAdv a = a ;
---
---  oper
---    mkQuestion : 
---      {s : Str} -> Clause -> 
---      {s : Tense => Anteriority => Polarity => QForm => Str} = \wh,cl ->
---      {
---      s = \\t,a,p => 
---            let 
---              cls = cl.s ! t ! a ! p ;
---              why = wh.s
---            in table {
---              QDir   => why ++ cls ! OQuest ;
---              QIndir => why ++ cls ! ODir
---              }
---      } ;
---
+
+  flags optimize=all_subs ;
+
+  lin
+
+    QuestCl cl = {s = \\b,cf,_ => cl.s ! b ! cf  } ; 
+
+    QuestVP kto spit =
+    {s = \\b,clf,qf  => (predVerbPhrase kto spit).s!b!clf  } ;
+
+    QuestSlash Kto yaGovoruO =
+    let {  kom = Kto.s ! (mkPronForm yaGovoruO.c No NonPoss) ; o = yaGovoruO.s2 } in 
+    {s =  \\b,clf,_ => o ++ kom ++ yaGovoruO.s ! b ! clf  
+    } ;
+
+    QuestIAdv kak tuPozhivaesh =
+    {s = \\b,clf,q => kak.s ++ tuPozhivaesh.s!b!clf } ; 
+ 
+    QuestIComp kak tuPozhivaesh =
+    {s = \\b,clf,q => let ne = case b of {Neg => ""; Pos => []}
+     in 
+     kak.s ++ ne ++tuPozhivaesh.s! PF Nom No NonPoss } ; 
+
+
+    PrepIP p ip = {s = p.s ++ ip.s ! PF Nom No NonPoss} ;
+
+    AdvIP ip adv = {
+      s = \\c => ip.s ! c ++ adv.s ;
+       n = ip.n; p=ip.p; g=ip.g; anim=ip.anim; pron=ip.pron 
+      } ;
+ 
+    IDetCN kakoj pyat umeluj okhotnik =
+    {s = \\pf => case kakoj.c of {
+       Nom => 
+        kakoj.s ! AF (extCase pf) okhotnik.anim (gNum okhotnik.g kakoj.n) ++ 
+         pyat.s! (extCase pf) ! okhotnik.g ++ 
+         umeluj.s!AF (extCase pf) okhotnik.anim (gNum okhotnik.g kakoj.n)++
+         okhotnik.s ! kakoj.n ! (extCase pf) ; 
+       _ => 
+        kakoj.s ! AF (extCase pf) okhotnik.anim (gNum okhotnik.g kakoj.n) ++ 
+        pyat.s! (extCase pf) ! okhotnik.g ++ 
+        umeluj.s!AF (extCase pf) okhotnik.anim (gNum okhotnik.g kakoj.n)++  
+        okhotnik.s ! kakoj.n ! kakoj.c };
+     n = kakoj.n ; 
+     p = P3 ;
+     pron = False;
+     g = kakoj.g ;
+     anim = okhotnik.anim 
+    } ;
+
+    CompIAdv a = a ;
 }

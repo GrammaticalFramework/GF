@@ -1,93 +1,106 @@
 --# -path=.:../abstract:../common:../../prelude
 
 concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
---
---  flags optimize=all_subs ;
---
---  lincat
---
----- Phrase
---
---    Utt, Voc = {s : Str} ;
---
----- Tensed/Untensed
---
---    S  = {s : Str} ;
---    QS = {s : QForm => Str} ;
---    RS = {s : Agr => Str} ;
---
----- Sentence
---
---    Cl = {s : Tense => Anteriority => Polarity => Order => Str} ;
---    Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** {c2 : Str} ;
---    Imp = {s : Polarity => Number => Str} ;
---
----- Question
---
---    QCl = {s : Tense => Anteriority => Polarity => QForm => Str} ;
---    IP = {s : Case => Str ; n : Number} ;
---    IAdv, IComp = {s : Str} ;    
---    IDet = {s : Str ; n : Number} ;
---
----- Relative
---
---    RCl = {s : Tense => Anteriority => Polarity => Agr => Str} ;
---    RP = {s : RCase => Str ; a : RAgr} ;
---
----- Verb
---
---    VP = {
---      s   : Tense => Anteriority => Polarity => Order => Agr => {fin, inf : Str} ;
---      prp : Str ; -- present participle
---      inf : Str ; -- infinitive
---      ad  : Str ;
---      s2  : Agr => Str
---      } ;
---    Comp = {s : Agr => Str} ; 
---    SC = {s : Str} ;
---
----- Adjective
---
---    AP = {s : Agr => Str ; isPre : Bool} ; 
---
----- Noun
---
---    CN = {s : Number => Case => Str} ;
---    NP, Pron = {s : Case => Str ; a : Agr} ;
---    Det = {s : Str ; n : Number} ;
---    Predet, QuantSg, QuantPl, Num, Ord = {s : Str} ;
---    Quant = {s : Number => Str} ;
---
----- Adverb
---
---    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
---
----- Numeral
---
---    Numeral = {s : CardOrd => Str ; n : Number} ;
---
----- Structural
---
---    Conj = {s : Str ; n : Number} ;
---    DConj = {s1,s2 : Str ; n : Number} ;
---    PConj = {s : Str} ;    
---    CAdv = {s : Str} ;    
---    Subj = {s : Str} ;
---    Prep = {s : Str} ;
---
----- Open lexical classes, e.g. Lexicon
---
---    V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
---    V2, V2A = Verb ** {c2 : Str} ;
---    V3 = Verb ** {c2, c3 : Str} ;
+
+  flags optimize=all_subs ; coding=utf8 ;
+
+  lincat
+
+-- Phrase
+
+    Utt, Voc = {s : Str} ;
+
+-- Tensed/Untensed
+
+   S  = {s : Str} ;
+   SC  = {s : Str} ;
+   QS = {s :                 QForm => Str} ;
+   RS = {s :                   GenNum => Case => Animacy => Str} ;
+
+-- Sentence
+   -- clause (variable tense) e.g. "John walks"/"John walked"
+   Cl ={s : Polarity => ClForm => Str} ;
+   Slash = {s : Polarity => ClForm => Str; s2: Str; c: Case} ;
+   Imp = { s: Polarity => Gender => Number => Str } ;
+
+-- Question
+
+    QCl = {s :Polarity => ClForm => QForm => Str};  
+    IP = { s : PronForm => Str ; n : Number ; p : Person ;
+           g: PronGen ; anim : Animacy ;  pron: Bool} ;     
+    IAdv, IComp = {s : Str} ;    
+    IDet = Adjective ** {n: Number; g: PronGen; c: Case} ; 
+
+-- Relative
+
+    RCl = {s :  Polarity => ClForm => GenNum => Case => Animacy => Str} ;
+    RP = {s :                   GenNum => Case => Animacy => Str} ;
+
+-- Verb
+   -- Polarity =>
+   Comp, VP = {s : ClForm => GenNum => Person => Str ; asp : Aspect ; w: Voice} 
+          ** {s2 : Str ; s3 : Gender => Number => Str ; negBefore: Bool} ;
+
+
+-- Adjective
+    
+    AP = {s : AdjForm => Str; p : IsPostfixAdj} ; 
+
+-- Noun
+
+    CN = {s : Number => Case => Str; g : Gender; anim : Animacy} ;  
+    NP = { s : PronForm => Str ; n : Number ; p : Person ;
+           g: PronGen ; anim : Animacy ;  pron: Bool} ;     
+    Pron = { s : PronForm => Str ; n : Number ; p : Person ;
+           g: PronGen ;  pron: Bool} ;     
+
+-- Determiners (only determinative pronouns 
+-- (or even indefinite numerals: "много" (many)) in Russian) are inflected 
+-- according to the gender of nouns they determine.
+-- extra parameters (Number and Case) are added for the sake of                            	
+-- the determinative pronoun "bolshinstvo" ("most");
+-- Gender parameter is due to multiple determiners (Numerals in Russian)
+-- like "mnogo"
+-- The determined noun has the case parameter specific for the determiner
+    QuantSg, QuantPl , Det = {s : AdjForm => Str; n: Number; g: PronGen; c: Case} ; 
+    Predet, Quant= {s : AdjForm => Str; g: PronGen; c: Case} ; 
+
+-- Adverb
+
+    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
+
+-- Numeral
+
+    Num, Numeral = {s : Case => Gender => Str} ;
+    
+-- Structural
+-- The conjunction has an inherent number, which is used when conjoining
+-- noun phrases: "Иван и Маша поют" vs. "Иван или Маша поет"; in the
+-- case of "или", the result is however plural if any of the disjuncts is.
+
+    Conj = {s : Str ; n : Number} ;  
+    DConj = {s1,s2 : Str ; n : Number} ; 
+    PConj = {s : Str} ;    
+    CAdv = {s : Str} ;    
+    Subj = {s : Str} ;
+    Prep = {s : Str ; c: Case } ;
+
+-- Open lexical classes, e.g. Lexicon
+
+    V, VS, VV, VQ, VA = Verbum ; -- = {s : VerbForm => Str ; asp : Aspect } ;
+    V2, V2A = Verbum ** Complement ; 
+    V3 = Verbum ** Complement** {s4 : Str; c2: Case} ; 
 --    VV = {s : VVForm => Str ; isAux : Bool} ;
---
---    A = {s : AForm => Str} ;
---    A2 = {s : AForm => Str ; c2 : Str} ;
---
---    N = {s : Number => Case => Str} ;
---    N2 = {s : Number => Case => Str} ** {c2 : Str} ;
---    N3 = {s : Number => Case => Str} ** {c2,c3 : Str} ;
---    PN = {s : Case => Str} ;
---
+
+    Ord =  {s : AdjForm => Str} ;
+    A =  {s : Degree => AdjForm => Str} ;
+    A2 = A ** Complement ;
+
+ -- Substantives moreover have an inherent gender. 
+    N = {s : SubstForm => Str ; g : Gender ; anim : Animacy } ;   
+    N2 = {s : Number => Case => Str; g : Gender; anim : Animacy} ** Complement ;
+    N3 = {s : Number => Case => Str; g : Gender; anim : Animacy} ** Complement ** {s3 : Str; c2: Case} ;
+    PN = {s :  Case => Str ; g : Gender ; anim : Animacy} ;
+
 }
+

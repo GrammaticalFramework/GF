@@ -1,46 +1,36 @@
 --# -path=.:../abstract:../common:../../prelude
 
-concrete RelativeRus of Relative = CatRus ** open ResRus in {
---
---  flags optimize=all_subs ;
---
---  lin
---
---    RelCl cl = {
---      s = \\t,a,p,_ => "such" ++ "that" ++ cl.s ! t ! a ! p ! ODir
---      } ;
---
---    RelVP rp vp = {
---      s = \\t,ant,b,ag => 
---        let 
---          agr = case rp.a of {
---            RNoAg => ag ;
---            RAg a => a
---            } ;
---          cl = mkClause (rp.s ! RC Nom) agr vp
---        in
---        cl.s ! t ! ant ! b ! ODir
---      } ;
---
----- Preposition stranding: "that we are looking at". Pied-piping is
----- deferred to $ExtRus.gf$ ("at which we are looking").
---
---    RelSlash rp slash = {
---      s = \\t,a,p,_ => rp.s ! RC Acc ++ slash.s ! t ! a ! p ! ODir ++ slash.c2
---      } ;
---
---    FunRP p np rp = {
---      s = \\c => np.s ! Acc ++ p.s ++ rp.s ! RPrep ;
---      a = RAg np.a
---      } ;
---
---    IdRP = {
---      s = table {
---        RC Gen => "whose" ; 
---        RC _   => "that" ;
---        RPrep  => "which"
---        } ;
---      a = RNoAg
---      } ;
---
+concrete RelativeRus of Relative = CatRus ** open ResRus, MorphoRus in {
+
+  flags optimize=all_subs ; coding=utf8 ;
+
+  lin
+
+    RelCl A =   {s = \\b,clf,gn,c, anim => 
+     takoj.s ! AF c anim gn ++ "что" ++ A.s !b!clf};
+
+    RelVP kotoruj gulyaet =
+    { s = \\b,clf,gn, c, anim =>  let { nu = numGNum gn } in
+      kotoruj.s ! gn ! c ! anim ++ gulyaet.s2 ++ gulyaet.s ! clf ! gn !P3 ++ 
+       gulyaet.s3 ! genGNum gn ! nu
+    } ;
+
+
+-- Preposition stranding: "that we are looking at". Pied-piping is
+-- deferred to $ExtRus.gf$ ("at which we are looking").
+
+    RelSlash kotoruj yaVizhu =
+    {s = \\b,clf,gn, _ , anim => yaVizhu.s2 ++ kotoruj.s ! gn ! yaVizhu.c ! anim 
+         ++ yaVizhu.s!b!clf 
+    } ;
+
+    FunRP p mama kotoruj =
+    {s = \\gn,c, anim => let {nu = numGNum gn} in
+           mama.s ! PF c No NonPoss ++  
+           p.s ++ kotoruj.s !  gn ! p.c ! anim
+    } ;
+
+    IdRP ={ s  = \\gn, c, anim => 
+     kotorujDet.s ! (AF c anim gn )} ;
 }
+
