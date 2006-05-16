@@ -4,11 +4,17 @@ concrete IdiomSpa of Idiom = CatSpa **
   flags optimize=all_subs ;
 
   lin
+    ImpersCl vp = mkClause [] (agrP3 Masc Sg) vp ;
+    GenericCl vp = mkClause "se" (agrP3 Masc Sg) vp ; ---- just Italian ?
+
     ExistNP np = 
       mkClause [] (agrP3 Masc Sg)
         (insertComplement (\\_ => np.s ! Ton Acc) (predV (verboV (hay_3 "haber")))) ;
-    ImpersCl vp = mkClause [] (agrP3 Masc Sg) vp ;
-    GenericCl vp = mkClause "se" (agrP3 Masc Sg) vp ; ---- just Italian ?
+    ExistIP ip = {
+      s = \\t,a,p,_ =>
+        ip.s ! Nom ++ 
+        (mkClause [] (agrP3 Masc Sg) (predV (verboV (hay_3 "haber")))).s ! t ! a ! p ! Indic
+      } ;
 
     ProgrVP vp = 
       insertComplement 

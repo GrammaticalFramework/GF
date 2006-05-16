@@ -4,13 +4,21 @@ concrete IdiomIta of Idiom = CatIta **
   flags optimize=all_subs ;
 
   lin
+    ImpersCl vp = mkClause [] (agrP3 Masc Sg) vp ;
+    GenericCl vp = mkClause "si" (agrP3 Masc Sg) vp ; ---- non se ci fanno cose
+
     ExistNP np = 
       mkClause [] (agrP3 np.a.g np.a.n) 
         (insertClit2 (elision "ci" "c'" "ci") 
           (insertComplement (\\_ => np.s ! Ton Nom) 
             (predV copula))) ;
-    ImpersCl vp = mkClause [] (agrP3 Masc Sg) vp ;
-    GenericCl vp = mkClause "si" (agrP3 Masc Sg) vp ; ---- non se ci fanno cose
+
+    ExistIP ip = {
+      s = \\t,a,p,_ =>
+        ip.s ! Nom ++ 
+        (mkClause [] (agrP3 ip.a.g ip.a.n) 
+           (insertClit2 (elision "ci" "c'" "ci") (predV copula))).s ! t ! a ! p ! Indic
+      } ;
 
     ProgrVP vp = 
       insertComplement 

@@ -14,6 +14,15 @@ concrete IdiomFin of Idiom = CatFin **
       mkClause noSubj (agrP3 Sg) (insertObj 
         (\\_,b,_ => "olemassa" ++ np.s ! cas b) (predV olla)) ;
 
+    ExistIP ip = 
+      let
+        cas : NPForm = NPCase Part ; --- dep on num, pol?
+        vp = insertObj (\\_,b,_ => "olemassa") (predV olla) ; 
+        cl = mkClause (subjForm (ip ** {isPron = False ; a = agrP3 Sg}) cas) (agrP3 Sg) vp
+      in {
+        s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
+        } ;
+
     ImpersCl vp = mkClause noSubj (agrP3 Sg) vp ;
 
     GenericCl vp = mkClause noSubj (agrP3 Sg) {

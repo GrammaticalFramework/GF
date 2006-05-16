@@ -41,19 +41,4 @@ concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
 
     CompIAdv a = a ;
 
-  oper
-    mkQuestion : 
-      {s : Str} -> Clause -> 
-      {s : Tense => Anteriority => Polarity => QForm => Str} = \wh,cl ->
-      {
-      s = \\t,a,p => 
-            let 
-              cls = cl.s ! t ! a ! p ;
-              why = wh.s
-            in table {
-              QDir   => why ++ cls ! OQuest ;
-              QIndir => why ++ cls ! ODir
-              }
-      } ;
-
 }

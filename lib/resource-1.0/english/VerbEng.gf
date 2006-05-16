@@ -33,5 +33,4 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
     CompNP np = {s = \\_ => np.s ! Acc} ;
     CompAdv a = {s = \\_ => a.s} ;
 
-
 }
