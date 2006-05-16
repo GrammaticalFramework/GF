@@ -1,0 +1,23 @@
+Dialogue system grammar examples.
+
+Files (for X = Eng, Fre, Godis, Swe):
+
+  Dialogue.gf   -- base dialogue grammar
+  DialogueX.gf  -- implementation instance
+  DialogueI.gf  -- implementation functor
+
+  ResGodis.gf   -- help constructs for Prolog terms
+
+  Weekday.gf    -- untility grammar with weekdays
+  WeekdayX.gf
+
+  Agenda.gf     -- application grammar for agenda
+  AgendaX.gf
+
+To build a new application for domain Dom, you need
+
+  Dom.gf        -- introduce fun's in Kind, Object, Oper0, Oper1, Oper2
+  DomX.gf       -- concrete syntax of the new fun's for language X
+
+
+  
