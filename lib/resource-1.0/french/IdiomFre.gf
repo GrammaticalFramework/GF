@@ -7,15 +7,14 @@ concrete IdiomFre of Idiom = CatFre **
     ImpersCl vp = mkClause "il" (agrP3 Masc Sg) vp ;
     GenericCl vp = mkClause "on" (agrP3 Masc Sg) vp ;
 
-
     ExistNP np = 
       mkClause "il" (agrP3 Masc Sg) 
         (insertClit2 "y" (insertComplement (\\_ => np.s ! Ton Acc) (predV avoir_V))) ;
 
     ExistIP ip = {
       s = \\t,a,p,_ => 
-        (mkClause (ip.s ! Nom) (agrP3 ip.a.g ip.a.n) 
-          (insertClit2 "y" (predV avoir_V))).s ! t ! a ! p ! Indic
+        ip.s ! Nom ++ 
+        (mkClause "il" (agrP3 Masc Sg) (insertClit2 "y" (predV avoir_V))).s ! t ! a ! p ! Indic
       } ;
 
     ProgrVP vp = 

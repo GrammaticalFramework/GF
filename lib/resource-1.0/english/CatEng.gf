@@ -36,11 +36,12 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 
     VP = {
       s   : Tense => Anteriority => Polarity => Order => Agr => {fin, inf : Str} ;
-      prp : Str ; -- present participle
+      prp : Str ; -- present participle 
       inf : Str ; -- infinitive
       ad  : Str ;
       s2  : Agr => Str
       } ;
+
     Comp = {s : Agr => Str} ; 
     SC = {s : Str} ;
 

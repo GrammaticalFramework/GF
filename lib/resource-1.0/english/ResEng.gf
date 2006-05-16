@@ -180,6 +180,7 @@ resource ResEng = ParamX ** open Prelude in {
     s2  : Agr => Str
     } ;
 
+
 --- The order gets wrong with AdV, but works around a parser
 --- generation bug.
 
@@ -388,6 +389,20 @@ resource ResEng = ParamX ** open Prelude in {
     case last ten of {
       "y" => init ten + "ieth" ;
       _   => ten + "th"
+      } ;
+
+  mkQuestion : 
+      {s : Str} -> Clause -> 
+      {s : Tense => Anteriority => Polarity => QForm => Str} = \wh,cl ->
+      {
+      s = \\t,a,p => 
+            let 
+              cls = cl.s ! t ! a ! p ;
+              why = wh.s
+            in table {
+              QDir   => why ++ cls ! OQuest ;
+              QIndir => why ++ cls ! ODir
+              }
       } ;
 
 }
