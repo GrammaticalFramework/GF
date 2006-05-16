@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> The construction of nouns, noun phrases, and determiners</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-03-20 12:03:25 CET</I><BR>
+<I>Last update: 2006-05-16 23:42:30 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -51,10 +51,19 @@ The three main types of noun phrases are
 <P></P>
 <P>
 Pronouns are defined in the module <A HREF="Structural.html">Structural</A>.
-A noun phrase already formed can be modified by a Predeterminer.
+A noun phrase already formed can be modified by a <CODE>Predet</CODE>erminer.
 </P>
 <PRE>
         PredetNP : Predet -&gt; NP -&gt; NP; -- only the man 
+</PRE>
+<P></P>
+<P>
+A noun phrase can also be postmodified by the past participle of a
+verb or by an adverb.
+</P>
+<PRE>
+        PPartNP : NP -&gt; V2  -&gt; NP ;    -- the number squared
+        AdvNP   : NP -&gt; Adv -&gt; NP ;    -- Paris at midnight
 </PRE>
 <P></P>
 <A NAME="toc2"></A>

@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Idiomatic expressions</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-03-03 17:06:10 CET</I><BR>
+<I>Last update: 2006-05-16 18:46:50 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -30,11 +30,13 @@ often different even in closely related languages.
 </P>
 <PRE>
       fun
-        ExistNP   : NP -&gt; Cl ;    -- there is a house
         ImpersCl  : VP -&gt; Cl ;    -- it rains
         GenericCl : VP -&gt; Cl ;    -- one sleeps
     
-        ProgrVP   : VP -&gt; VP ;    -- sleeping
+        ExistNP   : NP -&gt; Cl ;    -- there is a house
+        ExistIP   : IP -&gt; QCl ;   -- which houses are there
+    
+        ProgrVP   : VP -&gt; VP ;    -- be sleeping
     
     }
 </PRE>
