@@ -267,7 +267,7 @@ oper
     } ;
 
   infVP : VP -> Agr -> Str = \vp,a -> 
-    (vp.s ! VPInfinit Simul).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
+    vp.a1 ! Pos ++ (vp.s ! VPInfinit Simul).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
 
 
 -- For $Sentence$.
