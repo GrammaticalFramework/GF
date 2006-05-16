@@ -2,13 +2,13 @@ Dialogue system grammar examples.
 
 AR 16/5/2006
 
-Files (for X = Eng, Fre, Godis, Swe):
+Files (for X = Eng, Fin, Fre, Prolog, Swe):
 
   Dialogue.gf   -- base dialogue grammar
   DialogueX.gf  -- implementation instance
   DialogueI.gf  -- implementation functor
 
-  ResGodis.gf   -- help constructs for Prolog terms
+  ResProlog.gf  -- help constructs for Prolog terms
 
   Weekday.gf    -- untility grammar with weekdays
   WeekdayX.gf
