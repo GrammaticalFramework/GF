@@ -109,6 +109,7 @@ concrete IrregSwe of IrregSweAbs = CatSwe ** open ParadigmsSwe in {
   ljuda_V = irregV "ljuda" "ljöd" "ljudit" ;
   ljuga_V = irregV "ljuga" "ljög" "ljugit" ;
   ljuta_V = irregV "ljuta" "ljöt" "ljutit" ;
+  lägga_V = irregV "lägga" "lade" "lagt" ;
   mottaga_V = irregV "mottaga" "mottog" "mottagit" ;
   nerstiga_V = irregV "nerstiga" "nersteg" "nerstigit" ;
   niga_V = irregV "niga" "neg" "nigit" ;

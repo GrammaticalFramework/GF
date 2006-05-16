@@ -6,10 +6,12 @@ abstract Idiom = Cat ** {
 -- often different even in closely related languages.
 
   fun
-    ExistNP   : NP -> Cl ;    -- there is a house
     ImpersCl  : VP -> Cl ;    -- it rains
     GenericCl : VP -> Cl ;    -- one sleeps
 
-    ProgrVP   : VP -> VP ;    -- sleeping
+    ExistNP   : NP -> Cl ;    -- there is a house
+    ExistIP   : IP -> QCl ;   -- which houses are there
+
+    ProgrVP   : VP -> VP ;    -- be sleeping
 
 }
