@@ -6,10 +6,10 @@ concrete LightsProlog of Lights =
   lin
     Light       = ss "light" ;
     Room        = ss "room" ;
-    SwitchOnIn  = ss "switch_on" ;
-    SwitchOffIn = ss "switch_off" ;
-    SwitchOn    = ss "switch_on" ;
-    SwitchOff   = ss "switch_off" ;
+    SwitchOnIn  = op2 "switch_on"  "switch_what" "switch_where" ;
+    SwitchOffIn = op2 "switch_off" "switch_what" "switch_where" ;
+    SwitchOn    = op1 "switch_on"  "switch_what" ;
+    SwitchOff   = op1 "switch_off" "switch_what" ;
 
     LivingRoom  = ss "living_room" ;
     Kitchen     = ss "kitchen" ;

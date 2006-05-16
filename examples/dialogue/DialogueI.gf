@@ -48,10 +48,10 @@ incomplete concrete DialogueI of Dialogue = open Lang, Prelude in {
       } ;
 
    aImp : VP -> Str = \vp ->
-     (PhrUtt NoPConj (UttImpPl PPos (ImpVP vp)) NoVoc).s ;
+     (PhrUtt NoPConj (UttImpSg PPos (ImpVP vp)) NoVoc).s ;
 
    aImpPlease : VP -> Str = \vp ->
-     (PhrUtt NoPConj (UttImpPl PPos (ImpVP vp)) please_Voc).s ;
+     (PhrUtt NoPConj (UttImpSg PPos (ImpVP vp)) please_Voc).s ;
 
    aWant : VP -> Str = \vp ->
      (PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePron i_Pron) 

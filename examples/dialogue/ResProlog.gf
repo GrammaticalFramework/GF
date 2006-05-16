@@ -7,6 +7,9 @@ resource ResProlog = open Prelude in {
 
     apps : Str -> SS -> SS = \f,x -> ss (app1 f x.s) ;
 
+    op1 : (s,x : Str) -> {s,x : Str} = \s,x -> {s = s ; x = x} ;
+    op2 : (s,x,y : Str) -> {s,x,y : Str} = \s,x,y -> {s = s ; x = x ; y = y} ;
+
     request : Str -> Str = app1 "request" ;
     answer  : Str -> Str = app1 "answer" ;
 
