@@ -1,5 +1,7 @@
 Dialogue system grammar examples.
 
+AR 16/5/2006
+
 Files (for X = Eng, Fre, Godis, Swe):
 
   Dialogue.gf   -- base dialogue grammar
@@ -20,4 +22,13 @@ To build a new application for domain Dom, you need
   DomX.gf       -- concrete syntax of the new fun's for language X
 
 
-  
+To test:
+
+  - 'make present' in lib/resource-1.0
+  - 'gf AgendaEng.gf' in current dir, followed by 'gr -cat=Move | l -all'
+  - or the same thing with other languages
+  - for Nuance grammar, do 'pg -printer=gsl -startcat=Move'
+  - to generate a corpus, do 'gt -cat=Move -depth=4 | pt -transform=typecheck | l -all'
+
+
+
