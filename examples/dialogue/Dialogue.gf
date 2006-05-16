@@ -1,5 +1,7 @@
 abstract Dialogue = {
 
+  flags startcat=Move ;
+
   cat
     Move ;
     Action ;
