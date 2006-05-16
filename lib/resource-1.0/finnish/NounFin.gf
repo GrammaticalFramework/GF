@@ -48,6 +48,18 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       isPron = np.isPron  -- kaikki minun - ni
       } ;
 
+    PPartNP np v2 = {
+      s = \\c => np.s ! c ++ v2.s ! PastPartPass (AN (NCase np.a.n Ess)) ;
+      a = np.a ;
+      isPron = np.isPron  -- minun täällä - ni
+      } ;
+
+    AdvNP np adv = {
+      s = \\c => np.s ! c ++ adv.s ;
+      a = np.a ;
+      isPron = np.isPron  -- minun täällä - ni
+      } ;
+
     DetSg quant ord = {
       s1 = \\c => quant.s1 ! c ++ ord.s ! Sg ! c ;
       s2 = quant.s2 ; 
