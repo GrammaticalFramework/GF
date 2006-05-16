@@ -103,6 +103,7 @@ abstract IrregSweAbs = Cat ** {
   ljuda_V : V ;
   ljuga_V : V ;
   ljuta_V : V ;
+  lägga_V : V ;
   mottaga_V : V ;
   nerstiga_V : V ;
   niga_V : V ;

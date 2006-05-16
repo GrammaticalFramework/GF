@@ -4,11 +4,19 @@ concrete IdiomFre of Idiom = CatFre **
   flags optimize=all_subs ;
 
   lin
+    ImpersCl vp = mkClause "il" (agrP3 Masc Sg) vp ;
+    GenericCl vp = mkClause "on" (agrP3 Masc Sg) vp ;
+
+
     ExistNP np = 
       mkClause "il" (agrP3 Masc Sg) 
         (insertClit2 "y" (insertComplement (\\_ => np.s ! Ton Acc) (predV avoir_V))) ;
-    ImpersCl vp = mkClause "il" (agrP3 Masc Sg) vp ;
-    GenericCl vp = mkClause "on" (agrP3 Masc Sg) vp ;
+
+    ExistIP ip = {
+      s = \\t,a,p,_ => 
+        (mkClause (ip.s ! Nom) (agrP3 ip.a.g ip.a.n) 
+          (insertClit2 "y" (predV avoir_V))).s ! t ! a ! p ! Indic
+      } ;
 
     ProgrVP vp = 
       insertComplement 
