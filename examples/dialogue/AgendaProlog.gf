@@ -1,7 +1,7 @@
 --# -path=.:prelude
 
-concrete AgendaGodis of Agenda = 
-  DialogueGodis, WeekdayGodis ** open ResGodis, Prelude in {
+concrete AgendaProlog of Agenda = 
+  DialogueProlog, WeekdayProlog ** open ResProlog, Prelude in {
 
   lin
     Day       = ss "day" ;

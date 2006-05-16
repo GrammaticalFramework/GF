@@ -1,4 +1,4 @@
-concrete WeekdayGodis of Weekday = open ResGodis, Prelude in {
+concrete WeekdayProlog of Weekday = open ResProlog, Prelude in {
 
   lincat 
     WDay = SS ;

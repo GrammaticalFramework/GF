@@ -1,4 +1,4 @@
-resource ResGodis = open Prelude in {
+resource ResProlog = open Prelude in {
 
   oper
     bracket : Str -> Str = \s -> "[" ++ s ++ "]" ;

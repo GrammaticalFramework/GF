@@ -1,6 +1,6 @@
 --# -path=.:prelude
 
-concrete DialogueGodis of Dialogue = open ResGodis, Prelude in {
+concrete DialogueProlog of Dialogue = open ResProlog, Prelude in {
 
   flags lexer=codelit ; unlexer=code ;
 
