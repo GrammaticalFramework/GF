@@ -21,6 +21,16 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       a = np.a
       } ;
 
+    PPartNP np v2 = {
+      s = \\c => np.s ! c ++ v2.s ! VPastPart APred ; --- invar part
+      a = np.a
+      } ;
+
+    AdvNP np adv = {
+      s = \\c => np.s ! c ++ adv.s ;
+      a = np.a
+      } ;
+
     DetSg quant ord = 
       let 
         n = Sg ;

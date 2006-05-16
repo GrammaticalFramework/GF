@@ -27,6 +27,16 @@ incomplete concrete NounScand of Noun =
       a = np.a
       } ;
 
+    PPartNP np v2 = {
+      s = \\c => np.s ! c ++ v2.s ! (VI (VPtPret (agrAdj np.a.gn DIndef) Nom)) ;
+      a = np.a
+      } ;
+
+    AdvNP np adv = {
+      s = \\c => np.s ! c ++ adv.s ;
+      a = np.a
+      } ;
+
     DetSg quant ord = {
       s = \\b,g => quant.s ! (orB b ord.isDet) ! g ++ ord.s ;
       n = Sg ;

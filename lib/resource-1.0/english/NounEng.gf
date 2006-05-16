@@ -15,6 +15,16 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
       a = np.a
       } ;
 
+    PPartNP np v2 = {
+      s = \\c => np.s ! c ++ v2.s ! VPPart ;
+      a = np.a
+      } ;
+
+    AdvNP np adv = {
+      s = \\c => np.s ! c ++ adv.s ;
+      a = np.a
+      } ;
+
     DetSg quant ord = {
       s = quant.s ++ ord.s ; 
       n = Sg

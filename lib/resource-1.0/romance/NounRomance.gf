@@ -25,6 +25,18 @@ incomplete concrete NounRomance of Noun =
       hasClit = False
       } ;
 
+    PPartNP np v2 = {
+      s = \\c => np.s ! c ++ v2.s ! VPart np.a.g np.a.n ;
+      a = np.a ;
+      hasClit = False
+      } ;
+
+    AdvNP np adv = {
+      s = \\c => np.s ! c ++ adv.s ;
+      a = np.a ;
+      hasClit = False
+      } ;
+
     DetSg quant ord = {
       s = \\g,c => quant.s ! g ! c ++ ord.s ! aagr g Sg ;
       n = Sg

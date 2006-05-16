@@ -17,9 +17,15 @@ abstract Noun = Cat ** {
 
 -- Pronouns are defined in the module [Structural Structural.html].
 
--- A noun phrase already formed can be modified by a Predeterminer.
+-- A noun phrase already formed can be modified by a $Predet$erminer.
 
     PredetNP : Predet -> NP -> NP; -- only the man 
+
+-- A noun phrase can also be postmodified by the past participle of a
+-- verb or by an adverb.
+
+    PPartNP : NP -> V2  -> NP ;    -- the number squared
+    AdvNP   : NP -> Adv -> NP ;    -- Paris at midnight
 
 --2 Determiners
 
