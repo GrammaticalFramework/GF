@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+﻿--# -path=.:../abstract:../common:../../prelude
 
 concrete StructuralRus of Structural = CatRus ** 
   open ResRus, MorphoRus, (P = ParadigmsRus), Prelude, NounRus, in {
@@ -78,10 +78,10 @@ lin
   somePl_Det = nekotorujDet ** {n = Pl; g = PNoGen; c= Nom} ;  
   something_NP  = UsePron (pronChtoTo** {lock_Pron=<> }) ;
   somewhere_Adv  = ss "где-нибудь" ;
----  these_NP n =  { s =\\_ => [] ; n = Pl; p = P3; g= PGen Fem ;
---- anim = Animate ;  pron = True} ;    -- missing in Russian
----  those_NP n =  { s =\\_ => [] ; n = Pl; p = P3; g=PGen Fem ;
---- anim = Animate ;  pron = True} ;    -- missing in Russian
+  these_NP n =  { s =\\_ => “”; n = Pl; p = P3; g= PGen Fem ;
+      anim = Animate ;  pron = True} ;    -- missing in Russian
+  those_NP n =  { s =\\_ => “” ; n = Pl; p = P3; g=PGen Fem ;
+     anim = Animate ;  pron = True} ;    -- missing in Russian
   that_Quant   = totDet ** {n = Sg; g = PNoGen; c= Nom} ;
   that_NP  = det2NounPhrase totDet ; -- inanimate form only
   there_Adv = ss "там" ;

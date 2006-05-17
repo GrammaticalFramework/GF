@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+# -path=.:../abstract:../common:../../prelude
 
 concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 
@@ -41,7 +41,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       n = quant.n;
       g = quant.g;
       c = quant.c
-      } ;
+      } ;
 
     DetPl quant num ord = {
       s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af)  ++ ord.s!af ; 
@@ -62,13 +62,13 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -- so just leave a decimal representation, without case-suffixes:
     NumInt i =  {s = table { _ => table {_ => i.s } } } ;
 
---    OrdInt n = case n of {
---       0|2|6 => (uy_oj_EndDecl n.s) ; 
---       3 => (ti_j_EndDecl n.s) ; 
---       _ => uy_j_EndDecl n.s }  ;
+    OrdInt n = case n of {
+       0|2|6 => (uy_oj_EndDecl n.s) ; 
+       3 => (ti_j_EndDecl n.s) ; 
+       _ => uy_j_EndDecl n.s }  ;
 
---  OrdNumeral numeral = 
---    {s = \\ af => (uy_j_EndDecl (numeral.s ! caseAF af ! genAF af)).s!af} ;
+  OrdNumeral numeral = 
+    {s = \\ af => (uy_j_EndDecl (numeral.s ! caseAF af ! genAF af)).s!af} ;
 
     NumNumeral n = n ;
 
