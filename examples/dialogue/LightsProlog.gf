@@ -14,7 +14,7 @@ concrete LightsProlog of Lights =
     LivingRoom  = ss "living_room" ;
     Kitchen     = ss "kitchen" ;
 
-    MorningMode = ss "morning_mode" ;
+    MorningMode = ss (bracket (app1 "answer" "morning_mode")) ;
 
 }
 

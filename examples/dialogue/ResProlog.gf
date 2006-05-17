@@ -4,6 +4,7 @@ resource ResProlog = open Prelude in {
     bracket : Str -> Str = \s -> "[" ++ s ++ "]" ;
 
     app1 : Str -> Str -> Str = \f,x -> f ++ paren x ;
+    app2 : Str -> Str -> Str -> Str = \f,x,y -> f ++ paren (x ++ "," ++ y) ;
 
     apps : Str -> SS -> SS = \f,x -> ss (app1 f x.s) ;
 
