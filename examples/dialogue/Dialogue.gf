@@ -5,6 +5,8 @@ abstract Dialogue = {
   cat
     Move ;
     Action ;
+    Proposition ;
+    Question ;
     Kind ;
     Object Kind ;
     Oper0 ;
@@ -13,9 +15,17 @@ abstract Dialogue = {
 
   fun
     MRequest : Action -> Move ;
-    MAnswer  : Action -> Move ;
+    MConfirm : Action -> Move ;
+    MAnswer  : Proposition -> Move ;
+    MIssue   : Question -> Move ;
 
-    MQuery : Kind -> Move ;
+    MYes     : Move ;
+    MNo      : Move ;
+    MObject  : (k : Kind) -> Object k -> Move ;
+
+    PAction  : Action -> Proposition ;
+
+    QKind  : Kind -> Question ;
 
     AOper0 :                 Oper0                             -> Action ;
     AOper1 : (k   : Kind) -> Oper1 k   -> Object k             -> Action ;
