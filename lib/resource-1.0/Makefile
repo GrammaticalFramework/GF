@@ -19,7 +19,7 @@ langs:
 
 present:
 	chmod u+x mkPresent
-	$(GF) -make -src -preproc=./mkPresent */Lang??*.gf
+	$(GF) -make -src -preproc=./mkPresent */Lang??*.gf +RTS -M800M -K100M
 	mv */*.gfc */*.gfr ../present
 
 mathematical:

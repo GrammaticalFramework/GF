@@ -50,6 +50,7 @@ import GF.Infra.Option
 import GF.UseGrammar.Information
 import GF.Shell.HelpFile
 import GF.Compile.PrOld
+import GF.Compile.Wordlist
 import GF.Grammar.PrGrammar
 
 import Control.Monad (foldM,liftM)
@@ -188,6 +189,10 @@ execLine put (c@(co, os), arg, cs) (outps,st) = do
 -- | individual commands possibly piped: value returned; this is not a state monad
 execC :: CommandOpt -> ShellIO
 execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case comm of
+
+  CImport file | fileSuffix file == "gfwl" -> do
+    fs <- mkWordlist file
+    foldM (\x y -> execC (CImport y, opts) x) sa fs
 
   CImport file | oElem fromExamples opts -> do
     es <- liftM nub $ getGFEFiles opts file
