@@ -20,6 +20,7 @@ i,  import: i File
         .gfr   precompiled GF resource  
         .gfcm  multilingual canonical GF
         .gfe   example-based grammar files (only with the -ex option)
+        .gfwl  multilingual word list (preprocessed to abs + cncs)
         .ebnf  Extended BNF format
         .cf    Context-free (BNF) format
         .trc   TransferCore format

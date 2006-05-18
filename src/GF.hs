@@ -22,6 +22,7 @@ import GF.API.IOGrammar
 import GF.Compile.ShellState
 import GF.Compile.Compile
 import GF.Compile.MkConcrete
+import GF.Compile.Wordlist
 import GF.Shell
 import GF.Shell.SubShell
 import GF.Shell.ShellCommands
@@ -91,6 +92,11 @@ main = do
         es <- liftM (nub . concat) $ mapM (getGFEFiles os) fs
         mkConcretes os es
         doGF (removeOption fromExamples os) fs
+  -- preprocessing gfwl
+    else if (length fs == 1 && fileSuffix (head fs) == "gfwl")
+    then do
+      fs' <- mkWordlist (head fs)
+      doGF os fs'
     else doGF os fs
 
 helpMsg = unlines [

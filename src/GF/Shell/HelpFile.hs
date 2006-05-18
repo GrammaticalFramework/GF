@@ -49,6 +49,7 @@ txtHelpFile =
   "\n        .gfr   precompiled GF resource  " ++
   "\n        .gfcm  multilingual canonical GF" ++
   "\n        .gfe   example-based grammar files (only with the -ex option)" ++
+  "\n        .gfwl  multilingual word list (preprocessed to abs + cncs)" ++
   "\n        .ebnf  Extended BNF format" ++
   "\n        .cf    Context-free (BNF) format" ++
   "\n        .trc   TransferCore format" ++
