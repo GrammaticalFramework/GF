@@ -225,7 +225,7 @@ txtHelpFile =
   "\n      -parser  use this parsing strategy" ++
   "\n      -number  return this many results at most" ++
   "\n  examples:" ++
-  "\n      p -cat=S -mcfg \"jag är gammal\"   -- parse an S with the MCFG" ++
+  "\n      p -cat=S -mcfg \"jag \228r gammal\"   -- parse an S with the MCFG" ++
   "\n      rf examples.txt | p -lines      -- parse each non-empty line of the file" ++
   "\n" ++
   "\nat, apply_transfer: at (Module.Fun | Fun)" ++
@@ -690,7 +690,7 @@ txtHelpFile =
   "\n    -mark=java           show tree structure with XML tags (used in gfeditor)" ++
   "\n" ++
   "\n-coding, Some grammars are in UTF-8, some in isolatin-1." ++
-  "\n    If the letters ä (a-umlaut) and ö (u-umlaut) look strange, either" ++
+  "\n    If the letters \228 (a-umlaut) and \246 (o-umlaut) look strange, either" ++
   "\n    change your terminal to isolatin-1, or rewrite the grammar with" ++
   "\n    'pg -utf8'." ++
   "\n" ++

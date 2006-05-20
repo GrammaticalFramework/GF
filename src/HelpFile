@@ -661,7 +661,7 @@ q, quit: q
     -mark=java           show tree structure with XML tags (used in gfeditor)
 
 -coding, Some grammars are in UTF-8, some in isolatin-1.
-    If the letters ä (a-umlaut) and ö (u-umlaut) look strange, either
+    If the letters ä (a-umlaut) and ö (o-umlaut) look strange, either
     change your terminal to isolatin-1, or rewrite the grammar with
     'pg -utf8'.
 

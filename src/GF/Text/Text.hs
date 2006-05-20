@@ -82,7 +82,7 @@ formatAsTextGen tag para = unwords . format . cap . words where
   major = flip elem (map singleton ".!?") 
   minor = flip elem (map singleton ",:;)")
   openp = all (flip elem "(")
-  spanish = all (flip elem "¡¿")
+  spanish = all (flip elem "\161\191")
 
 formatAsCode :: String -> String
 formatAsCode = rend 0 . words where
@@ -125,10 +125,10 @@ performBindsFinnish :: String -> String
 performBindsFinnish = performBindsOpt vowelHarmony where
   vowelHarmony w p = if any (flip elem "aouAOU") w then p else map toFront p
   toFront c = case c of
-    'A' -> 'Ä'
-    'O' -> 'Ö'
-    'a' -> 'ä'
-    'o' -> 'ö'
+    'A' -> '\196'
+    'O' -> '\214'
+    'a' -> '\228'
+    'o' -> '\246'
     _ -> c
 
 unStringLit :: String -> String

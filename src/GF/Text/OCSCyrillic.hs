@@ -21,7 +21,7 @@ mkOCSCyrillicWord str = case str of
   [] -> []
   ' ' : cs -> ' ' : mkOCSCyrillicWord cs
   '<' : cs -> '<' : spoolMarkup cs  
-  'ä' : cs -> toEnum 0x0463 : mkOCSCyrillicWord cs
+  '\228' : cs -> toEnum 0x0463 : mkOCSCyrillicWord cs -- ä
   'j' : 'e' : '~' : cs -> toEnum 0x0469 : mkOCSCyrillicWord cs 
   'j' : 'o' : '~' : cs -> toEnum 0x046d : mkOCSCyrillicWord cs
   'j' : 'e' : cs -> toEnum 0x0465 : mkOCSCyrillicWord cs

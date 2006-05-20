@@ -82,7 +82,7 @@ digraphToUnicode (c1, c2) = case lookup (c1, c2) cc of Just c' -> c' ; _ -> c2
  where 
    cc = zip allDevanagariCodes allDevanagari
 
-digraphedDevanagari = " ~ M ;__ AA: II: UU:RoLoEvE~ EE:AvA~ OAU kkH ggHNG ccH jjH ñ TTH DDH N ttH ddH nn. ppH bbH m y rr. l LL. v ç S s h____ .-Sa: ii: uu:ror:eve~ eaiava~ oau ^____OM | -dddu______ Q X G zD.RH fy.R:L:mrmR#I#d#0#1#2#3#4#5#6#7#8#9#o" 
+digraphedDevanagari = " ~ M ;__ AA: II: UU:RoLoEvE~ EE:AvA~ OAU kkH ggHNG ccH jjH \241 TTH DDH N ttH ddH nn. ppH bbH m y rr. l LL. v \231 S s h____ .-Sa: ii: uu:ror:eve~ eaiava~ oau ^____OM | -dddu______ Q X G zD.RH fy.R:L:mrmR#I#d#0#1#2#3#4#5#6#7#8#9#o" 
 
 allDevanagariCodes :: [(Char, Char)]
 allDevanagariCodes = mkPairs digraphedDevanagari

@@ -39,7 +39,7 @@ empty = emptyTree
 
 -- | lookup operator.
 (!) :: Ord key => Map key el -> key -> Maybe el
-fm ! e = lookupTree e fm
+(!) fm e = lookupTree e fm
 
 -- | lookupMany operator.
 (!+) :: Ord key => Map key el -> [key] -> [Maybe el]
