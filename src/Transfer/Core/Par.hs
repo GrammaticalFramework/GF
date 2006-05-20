@@ -1,4 +1,5 @@
 {-# OPTIONS -fglasgow-exts -cpp #-}
+{-# OPTIONS -fno-warn-incomplete-patterns -fno-warn-overlapping-patterns #-}
 module Transfer.Core.Par where
 import Transfer.Core.Abs
 import Transfer.Core.Lex
@@ -903,7 +904,6 @@ myLexer = tokens
 {-# LINE 1 "GenericTemplate.hs" #-}
 -- $Id$
 
-
 {-# LINE 28 "GenericTemplate.hs" #-}
 
 
@@ -913,20 +913,11 @@ data Happy_IntList = HappyCons Int# Happy_IntList
 
 
 
-
 {-# LINE 49 "GenericTemplate.hs" #-}
-
 
 {-# LINE 59 "GenericTemplate.hs" #-}
 
-
-
-
-
-
-
-
-
+{-# LINE 68 "GenericTemplate.hs" #-}
 
 infixr 9 `HappyStk`
 data HappyStk a = HappyStk a (HappyStk a)
@@ -978,14 +969,7 @@ happyDoAction i tk st
  	 action | check     = indexShortOffAddr happyTable off_i
 		| otherwise = indexShortOffAddr happyDefActions st
 
-
-
-
-
-
-
-
-
+{-# LINE 127 "GenericTemplate.hs" #-}
 
 
 indexShortOffAddr (HappyA# arr) off =

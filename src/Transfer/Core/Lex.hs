@@ -1,8 +1,8 @@
 {-# OPTIONS -fglasgow-exts -cpp #-}
 {-# LINE 3 "Transfer/Core/Lex.x" #-}
+{-# OPTIONS -fno-warn-incomplete-patterns #-}
 module Transfer.Core.Lex where
 
-import Transfer.ErrM
 
 
 #if __GLASGOW_HASKELL__ >= 603
@@ -161,18 +161,9 @@ alex_action_9 = tok (\p s -> PT p (TD $ share s))
 -- -----------------------------------------------------------------------------
 -- INTERNALS and main scanner engine
 
-
 {-# LINE 35 "GenericTemplate.hs" #-}
 
-
-
-
-
-
-
-
-
-
+{-# LINE 45 "GenericTemplate.hs" #-}
 
 
 data AlexAddr = AlexA# Addr#
