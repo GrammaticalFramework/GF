@@ -38,18 +38,18 @@ spoolMarkup s = case s of
   '>' : cs -> ('>', -1) : adHocToDigraphWord cs  
   c1 : cs -> (c1, -1) : spoolMarkup cs
     
-isVowel x = elem x "AäuiïaeoI"
+isVowel x = elem x "A\228ui\239aeoI"
 
 vowelOrder :: Char -> Int
 vowelOrder x = case x of 
   'A' -> 0
-  'ä' -> 0
+  '\228' -> 0 -- ä
   'u' -> 1
   'i' -> 2
   'a' -> 3
   'e' -> 4
   'I' -> 5
-  'ï' -> 5
+  '\239' -> 5 -- ï
   'o' -> 6
   c   -> 5 -- vowelless 
 

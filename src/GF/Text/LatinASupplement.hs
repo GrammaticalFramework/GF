@@ -32,7 +32,7 @@ mkLatinASupplementWord str = case str of
   -- Turkish
   'g' : '%' : cs -> toEnum 0x011f : mkLatinASupplementWord cs
   'I' : cs -> toEnum 0x0131 : mkLatinASupplementWord cs
-  'c' : ',' : cs -> 'ç' : mkLatinASupplementWord cs
+  'c' : ',' : cs -> toEnum 0x00e7 : mkLatinASupplementWord cs
   -- Polish
   'e' : ',' : cs -> toEnum 0x0119 : mkLatinASupplementWord cs
   'a' : ',' : cs -> toEnum 0x0105 : mkLatinASupplementWord cs

@@ -26,5 +26,5 @@ decomposeSimple t s = do
     else return $ concat [intersperse "&+" ws | ws <- ss]
 
 exTrie = tcompile (zip ws ws) where 
-  ws = words "ett två tre tjugo trettio hundra tusen"
+  ws = words "ett tv\229 tre tjugo trettio hundra tusen"
 

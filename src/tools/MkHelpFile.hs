@@ -38,6 +38,7 @@ mkOne s = "  \"" ++ pref s ++ (escs s) ++ "\" ++"
    pref _ = "\\n" ---
    escs [] = []
    escs (c:cs) | elem c "\"\\" = '\\':c:escs cs
+               | fromEnum c > 127 = "\\" ++show (fromEnum c)++escs cs
    escs (c:cs) = c:escs cs
 
 helpHeader = unlines [

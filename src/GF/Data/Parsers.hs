@@ -170,7 +170,7 @@ pIdent = pLetter ... longestOfMany pAlphaPlusChar *** uncurry (:)
 
 pLetter, pDigit :: Parser Char Char
 pLetter = satisfy (`elem` (['A'..'Z'] ++ ['a'..'z'] ++ 
-                           ['À' .. 'Û'] ++ ['à' .. 'û'])) -- no such in Char
+                           ['\192' .. '\255'])) -- no such in Char
 pDigit  = satisfy isDigit
 
 pLetters :: Parser Char String

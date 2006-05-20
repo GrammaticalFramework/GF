@@ -73,5 +73,5 @@ allTamilCodes = mkPairs digraphedTamil
 allTamil :: String
 allTamil = (map toEnum [0x0b85 .. 0x0bfa]) 
 
-digraphedTamil = " AA: II: UU:______ EE:AI__ OO:AU k______ G c__ j__ ñ T______ N t______ V n p______ m y r l L M v__ s S h________a: ii: uu:______ ee:ai__ oo:au .__________________ :______________________________#1#2#3#4#5#6#7#8#9^1^2^3=d=m=y=d=c==ru##"
+digraphedTamil = " AA: II: UU:______ EE:AI__ OO:AU k______ G c__ j__ \241 T______ N t______ V n p______ m y r l L M v__ s S h________a: ii: uu:______ ee:ai__ oo:au .__________________ :______________________________#1#2#3#4#5#6#7#8#9^1^2^3=d=m=y=d=c==ru##"
 
