@@ -138,6 +138,7 @@ trm2str t = case t of
   V _ (s:_)       -> trm2str s
   C _ _         -> return $ t
   K _           -> return $ t
+  S c _         -> trm2str c
   Empty         -> return $ t
   _ -> prtBad "cannot get Str from term" t
 
