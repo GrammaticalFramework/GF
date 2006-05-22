@@ -20,23 +20,15 @@ abstract Common = {
 
 -- Constructed in [Text Text.html]: $Text$.
 
-    Text ;   -- text consisting of several phrases
-    Phr ;    -- phrase in a text                    e.g. "But come here my darling."
+    Text ;  -- text consisting of several phrases  e.g. "He is here. Why?"
+    Phr ;   -- phrase in a text                    e.g. "But get out please."
 
 -- Constructed in [Phrase Phrase.html]: $Phr$ and
 
     Utt ;   -- sentence, question, word...         e.g. "be quiet"
     Voc ;   -- vocative or "please"                e.g. "my darling"
     PConj ; -- phrase-beginning conj.              e.g. "therefore"
-
     SC ;    -- embedded sentence or question       e.g. "that it rains"
-
-    SC ;
-    Adv ; 
-    AdV ; 
-    AdA ; 
-    AdS ; 
-    AdN ;
 
 --2 Adverbs
 
@@ -50,9 +42,11 @@ abstract Common = {
     IAdv ;  -- interrogative adverb                e.g. "why"
     CAdv ;  -- comparative adverb                  e.g. "more"
 
-    Pol ;
-    Tense ;
-    Ant ;
+--2 Tense, polarity, and anteriority
+
+    Tense ; -- tense: present, past, future, conditional
+    Pol ;   -- polarity: positive, negative
+    Ant ;   -- anteriority: simultaneous, anterior
 
   fun
     PPos, PNeg : Pol ;             -- I sleep/don't sleep
