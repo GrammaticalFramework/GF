@@ -6,15 +6,6 @@ abstract Cat = Common ** {
 
   cat
 
---2 Top-level units
-
--- Constructed in [Text Text.html]: $Text$.
-
--- Constructed in [Phrase Phrase.html]: $Phr$ and
-
-    Utt ;   -- sentence, question, word...         e.g. "be quiet"
-    Voc ;   -- vocative or "please"                e.g. "my darling"
-
 --2 Sentences and clauses
 
 -- Constructed in [Sentence Sentence.html], and also in
@@ -26,7 +17,6 @@ abstract Cat = Common ** {
     Cl ;    -- declarative clause, with all tenses e.g. "she looks at this"
     Slash ; -- clause missing NP (S/NP in GPSG)    e.g. "she looks at"
     Imp ;   -- imperative                          e.g. "look at this"
-    SC ;    -- embedded sentence or question       e.g. "that it rains"
 
 --2 Questions and interrogatives
 
@@ -100,8 +90,6 @@ abstract Cat = Common ** {
 
     Conj ;  -- conjunction,                        e.g. "and"
     DConj ; -- distributed conj.                   e.g. "both - and"
-    PConj ; -- phrase-beginning conj.              e.g. "therefore"
-    CAdv ;  -- comparative adverb                  e.g. "more"
     Subj ;  -- subjunction,                        e.g. "if"
     Prep ;  -- preposition, or just case           e.g. "in"
 

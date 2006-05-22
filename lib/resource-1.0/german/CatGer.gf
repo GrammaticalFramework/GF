@@ -4,10 +4,6 @@ concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
 
   lincat
 
--- Phrase
-
-    Utt, Voc = {s : Str} ;
-
 -- Tensed/Untensed
 
     S  = {s : Order => Str} ;
@@ -25,7 +21,6 @@ concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
 
     QCl = {s : Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : Case => Str ; n : Number} ;
-    IAdv = {s : Str} ;
     IComp = {s : Agr => Str} ; 
     IDet = {s : Gender => Case => Str ; n : Number} ;
 
@@ -38,7 +33,6 @@ concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
 
     VP = ResGer.VP ;
     Comp = {s : Agr => Str} ; 
-    SC = {s : Str} ;
 
 -- Adjective
 
@@ -56,10 +50,6 @@ concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
     Num = {s : Str} ;
     Ord = {s : AForm => Str} ;
 
--- Adverb
-
-    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
-
 -- Numeral
 
     Numeral = {s : CardOrd => Str} ;
@@ -68,8 +58,6 @@ concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
 
     Conj = {s : Str ; n : Number} ;
     DConj = {s1,s2 : Str ; n : Number} ;
-    PConj = {s : Str} ;    
-    CAdv = {s : Str} ;    
     Subj = {s : Str} ;
     Prep = {s : Str ; c : Case} ;
 

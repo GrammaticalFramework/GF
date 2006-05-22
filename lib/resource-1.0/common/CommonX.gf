@@ -2,6 +2,17 @@ concrete CommonX of Common = open (R = ParamX) in {
 
   lincat
     Text, Phr = {s : Str} ;
+    Utt = {s : Str} ;
+    Voc = {s : Str} ;
+    SC  = {s : Str} ;
+    Adv = {s : Str} ; 
+    AdV = {s : Str} ; 
+    AdA = {s : Str} ; 
+    AdS = {s : Str} ; 
+    AdN = {s : Str} ;
+    IAdv = {s : Str} ;
+    CAdv = {s : Str} ;
+    PConj = {s : Str} ;
 
     Tense = {s : Str ; t : R.Tense} ;
     Ant   = {s : Str ; a : R.Anteriority} ;
