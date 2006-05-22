@@ -4,10 +4,6 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
   lincat
 
--- Phrase
-
-    Utt, Voc = {s : Str} ;
-
 -- Tensed/Untensed
 
     S  = {s : Str} ;
@@ -24,7 +20,6 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
     QCl   = {s : Tense => Anteriority => Polarity => Str} ;
     IP    = {s : NPForm => Str ; n : Number} ;
-    IAdv  = {s : Str} ;    
     IComp = {s : Agr => Str} ; 
     IDet  = {s : Case => Str ; n : Number} ;
 
@@ -37,7 +32,6 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
     VP   = ResFin.VP ;
     Comp = {s : Agr => Str} ; 
-    SC   = {s : Str} ;
 
 -- Adjective
 
@@ -66,10 +60,6 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
     Quant = {s1 : Number => Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
     Num = {s : Number => Case => Str ; isNum : Bool} ;
 
--- Adverb
-
-    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
-
 -- Numeral
 
     Numeral = {s : CardOrd => Str ; n : Number} ;
@@ -78,8 +68,6 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
     Conj = {s : Str ; n : Number} ;
     DConj = {s1,s2 : Str ; n : Number} ;
-    PConj = {s : Str} ;    
-    CAdv = {s : Str} ;    
     Subj = {s : Str} ;
     Prep = Compl ;
 

@@ -45,9 +45,9 @@ lookupResDef gr m c = look True m c where
           ResOper _ Nope    -> return (Q m c) ---- if isTop then lookExt m c 
                                  ---- else prtBad "cannot find in exts" c 
 
-          CncCat (Yes ty) _ _ -> lockRecType c $ ty
-          CncCat _ _ _        -> lockRecType c $ defLinType
-          CncFun _ (Yes tr) _ -> unlockRecord c tr
+          CncCat (Yes ty) _ _ -> return ty ---- lockRecType c $ ty
+          CncCat _ _ _        -> return defLinType ---- lockRecType c $ defLinType
+          CncFun _ (Yes tr) _ -> return tr ---- unlockRecord c tr
 
           AnyInd _ n        -> look False n c
           ResParam _        -> return $ QC m c
@@ -70,7 +70,7 @@ lookupResType gr m c = do
         -- used in reused concrete
         CncCat _ _ _ -> return typeType
         CncFun (Just (cat,(cont,val))) _ _ -> do
-          val' <- lockRecType cat val 
+          val' <- return val ---- lockRecType cat val 
           return $ mkProd (cont, val', [])
         CncFun _ _ _ -> do
           a  <- abstractOfConcrete gr m

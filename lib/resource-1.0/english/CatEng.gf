@@ -4,10 +4,6 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 
   lincat
 
--- Phrase
-
-    Utt, Voc = {s : Str} ;
-
 -- Tensed/Untensed
 
     S  = {s : Str} ;
@@ -24,7 +20,7 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 
     QCl = {s : Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : Case => Str ; n : Number} ;
-    IAdv, IComp = {s : Str} ;    
+    IComp = {s : Str} ;    
     IDet = {s : Str ; n : Number} ;
 
 -- Relative
@@ -43,7 +39,6 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
       } ;
 
     Comp = {s : Agr => Str} ; 
-    SC = {s : Str} ;
 
 -- Adjective
 
@@ -57,10 +52,6 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
     Predet, QuantSg, QuantPl, Num, Ord = {s : Str} ;
     Quant = {s : Number => Str} ;
 
--- Adverb
-
-    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
-
 -- Numeral
 
     Numeral = {s : CardOrd => Str ; n : Number} ;
@@ -69,8 +60,6 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 
     Conj = {s : Str ; n : Number} ;
     DConj = {s1,s2 : Str ; n : Number} ;
-    PConj = {s : Str} ;    
-    CAdv = {s : Str} ;    
     Subj = {s : Str} ;
     Prep = {s : Str} ;
 

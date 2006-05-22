@@ -5,10 +5,6 @@ incomplete concrete CatRomance of Cat =
 
   lincat
 
--- Phrase
-
-    Utt, Voc = {s : Str} ;
-
 -- Tensed/Untensed
 
     S  = {s : Mood => Str} ;
@@ -25,7 +21,6 @@ incomplete concrete CatRomance of Cat =
 
     QCl   = {s : Tense => Anteriority => Polarity => QForm => Str} ;
     IP    = {s : Case => Str ; a : AAgr} ;
-    IAdv  = {s : Str} ;
     IComp = {s : AAgr => Str} ;     
     IDet  = {s : Gender => Case => Str ; n : Number} ;
 
@@ -38,7 +33,6 @@ incomplete concrete CatRomance of Cat =
 
     VP = CommonRomance.VP ;
     Comp = {s : Agr => Str} ; 
-    SC = {s : Str} ;
 
 -- Adjective
 
@@ -56,10 +50,6 @@ incomplete concrete CatRomance of Cat =
     Num     = {s : Gender => Str ; isNum : Bool} ;
     Ord     = {s : AAgr   => Str} ;
 
--- Adverb
-
-    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
-
 -- Numeral
 
     Numeral = {s : CardOrd => Str} ;
@@ -68,8 +58,6 @@ incomplete concrete CatRomance of Cat =
 
     Conj  = {s : Str ; n : Number} ;
     DConj = {s1,s2 : Str ; n : Number} ;
-    PConj = {s : Str} ;    
-    CAdv  = {s : Str} ;    
     Subj  = {s : Str ; m : Mood} ;
     Prep  = {s : Str ; c : Case} ;
 

@@ -5,10 +5,6 @@ incomplete concrete CatScand of Cat =
 
   lincat
 
--- Phrase
-
-    Utt, Voc = {s : Str} ;
-
 -- Tensed/Untensed
 
     S  = {s : Order => Str} ;
@@ -25,7 +21,6 @@ incomplete concrete CatScand of Cat =
 
     QCl = {s : Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : NPForm => Str ; gn : GenNum} ;
-    IAdv = {s : Str} ;
     IComp = {s : AFormPos => Str} ; 
     IDet = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
 
@@ -48,7 +43,6 @@ incomplete concrete CatScand of Cat =
       en2,ea2,eext : Bool    -- indicate if the field exists
       } ;
     Comp = {s : AFormPos => Str} ; 
-    SC = {s : Str} ; -- always Sub
 
 
 -- Adjective
@@ -72,10 +66,6 @@ incomplete concrete CatScand of Cat =
     Num = {s : Gender => Str ; isDet : Bool} ;
     Ord = {s : Str ; isDet : Bool} ;
 
--- Adverb
-
-    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
-
 -- Numeral
 
     Numeral = {s : CardOrd => Str ; n : Number} ;
@@ -84,8 +74,6 @@ incomplete concrete CatScand of Cat =
 
     Conj = {s : Str ; n : Number} ;
     DConj = {s1,s2 : Str ; n : Number} ;
-    PConj = {s : Str} ;    
-    CAdv = {s : Str} ;    
     Subj = {s : Str} ;
     Prep = {s : Str} ;
 
