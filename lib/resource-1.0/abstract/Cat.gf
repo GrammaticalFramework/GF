@@ -24,7 +24,6 @@ abstract Cat = Common ** {
 
     QCl ;   -- question clause, with all tenses    e.g. "why does she walk"
     IP ;    -- interrogative pronoun               e.g. "who"
-    IAdv ;  -- interrogative adverb                e.g. "why"
     IComp ; -- interrogative complement of copula  e.g. "where"
     IDet ;  -- interrogative determiner            e.g. "which"
 
@@ -67,16 +66,6 @@ abstract Cat = Common ** {
     Quant ; -- quantifier with both sg and pl      e.g. "this/these"
     Num ;   -- cardinal number (used with QuantPl) e.g. "seven"
     Ord ;   -- ordinal number (used in Det)        e.g. "seventh"
-
---2 Adverbs
-
--- Constructed in [Adverb Adverb.html].  
--- Many adverbs are constructed in [Structural Structural.html].
-
-    Adv ;   -- verb-phrase-modifying adverb,       e.g. "in the house"
-    AdV ;   -- adverb directly attached to verb    e.g. "always"
-    AdA ;   -- adjective-modifying adverb,         e.g. "very"
-    AdN ;   -- numeral-modifying adverb,           e.g. "more than"
 
 --2 Numerals
 

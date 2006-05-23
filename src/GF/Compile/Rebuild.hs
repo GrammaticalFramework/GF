@@ -72,8 +72,8 @@ rebuildModule ms mo@(i,mi) = do
                      ++ [oQualif i i | i <- map snd insts] ----
                      ++ [oSimple i   | i <- map snd insts] ----
                ----      ++ [oSimple ext] ---- to encode dependence
-      --- check if me is incomplete; --- why inherit all forced by syntax
-      return $ ModMod $ Module mt0 stat' fs (map inheritAll me) ops1 js 
+      --- check if me is incomplete
+      return $ ModMod $ Module mt0 stat' fs me ops1 js 
                           ---- (mapTree (qualifInstanceInfo insts) js) -- not needed
 
     _ -> return mi

@@ -346,7 +346,7 @@ inferLType gr trm = case trm of
    Q m ident | isPredef m -> termWith trm $ checkErr (typPredefined ident)
 
    Q m ident -> checks [
-     termWith trm $ checkErr (lookupResType gr m ident)
+     termWith trm $ checkErr (lookupResType gr m ident) >>= comp
      ,
      checkErr (lookupResDef gr m ident) >>= infer
      ,
@@ -356,7 +356,7 @@ inferLType gr trm = case trm of
    QC m ident | isPredef m -> termWith trm $ checkErr (typPredefined ident)
 
    QC m ident -> checks [
-     termWith trm $ checkErr (lookupResType gr m ident)
+     termWith trm $ checkErr (lookupResType gr m ident) >>= comp
      ,
      checkErr (lookupResDef gr m ident) >>= infer
      ,
@@ -825,7 +825,7 @@ checkEqLType env t u trm = do
                    not (any (\ (k,b) -> alpha g a b && l == k) ts)]
          (locks,others) = partition isLockLabel ls
        in case others of
-         _:_ -> Bad $ "missing record fieds" +++ unwords (map prt others)
+         _:_ -> Bad $ "missing record fields" +++ unwords (map prt others)
          _ -> return locks
      _ -> Bad ""
 

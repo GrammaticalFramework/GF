@@ -112,7 +112,7 @@ transModDef x = case x of
         opens'   <- mapM transOpen opens 
         return (id', GM.ModWith mtyp' mstat' m' [] opens')
       MWithE extends m opens -> do
-        extends' <- liftM (map fst) $ mapM transIncludedExt extends
+        extends' <- mapM transIncludedExt extends
         m'       <- transIdent m
         opens'   <- mapM transOpen opens 
         return (id', GM.ModWith mtyp' mstat' m' extends' opens')

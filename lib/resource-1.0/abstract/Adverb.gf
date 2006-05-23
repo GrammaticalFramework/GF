@@ -4,7 +4,7 @@ abstract Adverb = Cat ** {
 
   fun
 
--- The two main ways of formins adverbs is from adjectives and by
+-- The two main ways of forming adverbs are from adjectives and by
 -- prepositions from noun phrases.
 
     PositAdvAdj : A -> Adv ;                 -- quickly
