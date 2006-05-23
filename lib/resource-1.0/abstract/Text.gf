@@ -1,6 +1,6 @@
 --1 Texts
 
-abstract Text = Cat ** {
+abstract Text = Common ** {
 
   fun
     TEmpty : Text ;

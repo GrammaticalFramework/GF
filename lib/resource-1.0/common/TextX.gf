@@ -1,4 +1,4 @@
-concrete TextX of Text = {
+concrete TextX of Text = CommonX ** {
 
 -- This will work for almost all languages except Spanish.
 

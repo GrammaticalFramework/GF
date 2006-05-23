@@ -4,7 +4,7 @@
 --
 -- Here we have some words belonging to closed classes and appearing
 -- in all languages we have considered.
--- Sometimes they are not really meaningful, e.g. $we_NP$ in Spanish
+-- Sometimes they are not really meaningful, e.g. $we_Pron$ in Spanish
 -- should be replaced by masculine and feminine variants.
 
 abstract Structural = Cat ** {
