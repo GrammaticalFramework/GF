@@ -1,6 +1,6 @@
-interface AuxDialogue = open Lang in {
+interface AuxDialogue = open Multi in {
   oper
-    defN : N -> NP = \n -> 
+    defN : N -> NP = \n ->
       DetCN (DetSg (SgQuant DefArt) NoOrd) (UseN n) ;
 
     mkMove : Str -> Phr = \s -> {s = variants {

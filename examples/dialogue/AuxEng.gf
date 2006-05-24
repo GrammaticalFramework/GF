@@ -1,2 +1,2 @@
-instance AuxEng of AuxDialogue = open LangEng in {
+instance AuxEng of AuxDialogue = open MultiEng in {
 }
