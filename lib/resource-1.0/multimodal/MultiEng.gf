@@ -1,6 +1,4 @@
---# -path=.:../english:../abstract:../common:prelude
-
--- --# -path=.:present:prelude
+--# -path=.:alltenses:prelude
 
 concrete MultiEng of Multi =
   LangEng - [

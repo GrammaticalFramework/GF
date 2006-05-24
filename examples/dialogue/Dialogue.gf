@@ -14,14 +14,14 @@ abstract Dialogue = {
     Oper2 Kind Kind ;
 
   fun
-    MRequest : Action -> Move ;
-    MConfirm : Action -> Move ;
-    MAnswer  : Proposition -> Move ;
-    MIssue   : Question -> Move ;
+    IRequest : Action -> Input ;
+    IConfirm : Action -> Input ;
+    IAnswer  : Proposition -> Input ;
+    IIssue   : Question -> Input ;
 
-    MYes     : Move ;
-    MNo      : Move ;
-    MObject  : (k : Kind) -> Object k -> Move ;
+    IYes     : Input ;
+    INo      : Input ;
+    IObject  : (k : Kind) -> Object k -> Input ;
 
     PAction  : Action -> Proposition ;
 
@@ -35,5 +35,18 @@ abstract Dialogue = {
     OIndef : (k : Kind) -> Object k ;
     ODef   : (k : Kind) -> Object k ;
 
+-- multimodality
 
+  cat
+    Click ;
+    Input ;  -- multimodal asynchronous input
+    Speech ; -- speech only
+  fun
+    OThis     : (k : Kind) -> Click -> Object k ;
+    OThisKind : (k : Kind) -> Click -> Object k ;
+
+    MInput : Input -> Move ;
+    SInput : Input -> Speech ;
+
+    MkClick : String -> Click ;
 }

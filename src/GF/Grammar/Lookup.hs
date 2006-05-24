@@ -72,19 +72,25 @@ lookupResType gr m c = do
         CncFun (Just (cat,(cont,val))) _ _ -> do
           val' <- return val ---- lockRecType cat val 
           return $ mkProd (cont, val', [])
-        CncFun _ _ _ -> do
-          a  <- abstractOfConcrete gr m
-          mu <- lookupModMod gr a
-          info <- lookupIdentInfo mu c
-          case info of
-            AbsFun (Yes ty) _ -> return $ redirectTerm m ty 
-            AbsCat _ _ -> return typeType
-            _ -> prtBad "cannot find type of reused function" c
+        CncFun _ _ _      -> lookFunType m m c
         AnyInd _ n        -> lookupResType gr n c
         ResParam _        -> return $ typePType
         ResValue (Yes t)  -> return $ qualifAnnotPar m t
         _   -> Bad $ prt c +++ "has no type defined in resource" +++ prt m
     _ -> Bad $ prt m +++ "is not a resource"
+  where
+    lookFunType e m c = do
+          a  <- abstractOfConcrete gr m
+          lookFun e m c a
+    lookFun e m c a = do
+          mu <- lookupModMod gr a
+          info <- lookupIdentInfo mu c
+          case info of
+            AbsFun (Yes ty) _ -> return $ redirectTerm e ty 
+            AbsCat _ _ -> return typeType
+            AnyInd _ n -> lookFun e m c n
+            _ -> prtBad "cannot find type of reused function" c
+
 
 lookupParams :: SourceGrammar -> Ident -> Ident -> Err [Param]
 lookupParams gr = look True where 

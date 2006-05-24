@@ -158,6 +158,9 @@ ccompute cnc = comp []
         R rs -> maybe (Bad ("unknown label" +++ prt l +++ "in" +++ prt u'))
                       return $ 
                         lookup l [ (x,y) | Ass x y <- rs]
+        FV rrs -> do
+          mapM (\r -> compt (P r l)) rrs >>= return . FV
+
         _    -> return $ P u' l
     FV ts    -> liftM FV (mapM compt ts)
     C E b    -> compt b

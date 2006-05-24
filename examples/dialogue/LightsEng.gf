@@ -1,7 +1,7 @@
---# -path=.:present:prelude
+--# -path=.:multimodal:alltenses:prelude
 
 concrete LightsEng of Lights = 
-  DialogueEng ** open LangEng, ParadigmsEng, AuxEng, Prelude in {
+  DialogueEng ** open MultiEng, ParadigmsEng, AuxEng, Prelude in {
 
   lin
     Light       = UseN (regN "light") ;
