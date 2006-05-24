@@ -12,6 +12,8 @@ incomplete concrete MultiI of Multi =
     ] 
   ** open (Lang = Lang) in {
 
+  flags optimize = all_subs ;
+
   lincat 
     NP  = Lang.NP  ** {point : Str} ;
     Adv = Lang.Adv ** {point : Str} ;
@@ -158,15 +160,15 @@ incomplete concrete MultiI of Multi =
 
 --3 Demonstratives
 
-    this8point_NP p = LangEng.this_NP ** p ;
-    that8point_NP p = LangEng.that_NP ** p ;
-    these8point_NP p = LangEng.these_NP ** p ;
-    those8point_NP p = LangEng.those_NP ** p ;
+    this8point_NP p = Lang.this_NP ** p ;
+    that8point_NP p = Lang.that_NP ** p ;
+    these8point_NP p = Lang.these_NP ** p ;
+    those8point_NP p = Lang.those_NP ** p ;
     here8point_Adv p = Lang.here_Adv ** p ;
     here7to8point_Adv p = Lang.here7to_Adv ** p ;
     here7from8point_Adv p = Lang.here7from_Adv ** p ;
-    this8point_Quant p = LangEng.this_Quant ** p ;
-    that8point_Quant p = LangEng.that_Quant ** p ;
+    this8point_Quant p = Lang.this_Quant ** p ;
+    that8point_Quant p = Lang.that_Quant ** p ;
 
 
     MkPoint s = {point = s.s} ;

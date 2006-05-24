@@ -1,7 +1,7 @@
---# -path=.:present:prelude
+--# -path=.:multimodal:alltenses:prelude
 
 concrete AgendaFin of Agenda = 
-  DialogueFin, WeekdayFin ** open LangFin, ParadigmsFin in {
+  DialogueFin, WeekdayFin ** open MultiFin, ParadigmsFin in {
 
   lin
     Day       = UseN (regN "päivä") ;

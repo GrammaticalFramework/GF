@@ -1,4 +1,4 @@
---# -path=.:present:prelude
+--# -path=.:multimodal:alltenses:prelude
 
 concrete DialogueSwe of Dialogue = DialogueI with 
-  (Lang = LangSwe) ;
+  (Multi = MultiSwe) ;

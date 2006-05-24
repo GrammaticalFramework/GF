@@ -1,7 +1,7 @@
---# -path=.:present:prelude
+--# -path=.:multimodal:alltenses:prelude
 
 concrete LightsFre of Lights = 
-  DialogueFre ** open LangFre, ParadigmsFre, IrregFre, AuxFre in {
+  DialogueFre ** open MultiFre, ParadigmsFre, IrregFre, AuxFre in {
 
   lin
     Light       = UseN (regN "lampe") ;

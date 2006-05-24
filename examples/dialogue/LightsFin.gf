@@ -1,7 +1,7 @@
---# -path=.:present:prelude
+--# -path=.:multimodal:alltenses:prelude
 
 concrete LightsFin of Lights = 
-  DialogueFin ** open LangFin, ParadigmsFin, AuxFin in {
+  DialogueFin ** open MultiFin, ParadigmsFin, AuxFin in {
 
   lin
     Light       = UseN (regN "valo") ;

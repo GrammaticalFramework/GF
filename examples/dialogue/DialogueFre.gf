@@ -1,4 +1,4 @@
---# -path=.:present:prelude
+--# -path=.:multimodal:alltenses:prelude
 
 concrete DialogueFre of Dialogue = DialogueI with 
-  (Lang = LangFre) ;
+  (Multi = MultiFre) ;

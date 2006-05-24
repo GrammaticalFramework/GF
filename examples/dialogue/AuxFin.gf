@@ -1,2 +1,2 @@
-instance AuxFin of AuxDialogue = open LangFin in {
+instance AuxFin of AuxDialogue = open MultiFin in {
 }

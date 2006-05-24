@@ -1,5 +1,7 @@
 incomplete concrete DialogueI of Dialogue = open Multi, Prelude in {
 
+  flags optimize = all_subs ;
+
   lincat
     Move   = Phr ;
     Action = {s : ActType => Str ; point : Str} ;

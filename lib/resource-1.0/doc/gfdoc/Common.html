@@ -6,12 +6,22 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Infrastructure with common implementations.</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-02-25 15:24:23 CET</I><BR>
+<I>Author: </I><BR>
+Last update: Wed May 24 18:29:11 2006
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
+  <UL>
+  <LI><A HREF="#toc1">Infrastructure with common implementations.</A>
+    <UL>
+    <LI><A HREF="#toc2">Top-level units</A>
+    <LI><A HREF="#toc3">Adverbs</A>
+    <LI><A HREF="#toc4">Tense, polarity, and anteriority</A>
+    </UL>
+  </UL>
+
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
@@ -20,8 +30,13 @@ Produced by
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
+<A NAME="toc1"></A>
+<H1>Infrastructure with common implementations.</H1>
 <P>
-This module defines the abstract parameters of tense, polarity, and
+This module defines the categories that uniformly have the linearization
+<CODE>{s : Str}</CODE> in all languages. They are given lock fields that guarantee
+grammatical correctness via type checking.
+Moreover, this module defines the abstract parameters of tense, polarity, and
 anteriority, which are used in <A HREF="Phrase.html">Phrase</A> to generate different
 forms of sentences. Together they give 2 x 4 x 4 = 16 sentence forms.
 These tenses are defined for all languages in the library. More tenses
@@ -32,12 +47,49 @@ Romance languages.
     abstract Common = {
     
       cat
-        Text ;   -- text consisting of several phrases
-        Phr ;    -- phrase in a text                    e.g. "But come here my darling."
-    
-        Pol ;
-        Tense ;
-        Ant ;
+</PRE>
+<P></P>
+<A NAME="toc2"></A>
+<H2>Top-level units</H2>
+<P>
+Constructed in <A HREF="Text.html">Text</A>: <CODE>Text</CODE>.
+</P>
+<PRE>
+        Text ;  -- text consisting of several phrases  e.g. "He is here. Why?"
+        Phr ;   -- phrase in a text                    e.g. "But get out please."
+</PRE>
+<P></P>
+<P>
+Constructed in <A HREF="Phrase.html">Phrase</A>: <CODE>Phr</CODE> and
+</P>
+<PRE>
+        Utt ;   -- sentence, question, word...         e.g. "be quiet"
+        Voc ;   -- vocative or "please"                e.g. "my darling"
+        PConj ; -- phrase-beginning conj.              e.g. "therefore"
+        SC ;    -- embedded sentence or question       e.g. "that it rains"
+</PRE>
+<P></P>
+<A NAME="toc3"></A>
+<H2>Adverbs</H2>
+<P>
+Constructed in <A HREF="Adverb.html">Adverb</A>.  
+Many adverbs are constructed in <A HREF="Structural.html">Structural</A>.
+</P>
+<PRE>
+        Adv ;   -- verb-phrase-modifying adverb,       e.g. "in the house"
+        AdV ;   -- adverb directly attached to verb    e.g. "always"
+        AdA ;   -- adjective-modifying adverb,         e.g. "very"
+        AdN ;   -- numeral-modifying adverb,           e.g. "more than"
+        IAdv ;  -- interrogative adverb                e.g. "why"
+        CAdv ;  -- comparative adverb                  e.g. "more"
+</PRE>
+<P></P>
+<A NAME="toc4"></A>
+<H2>Tense, polarity, and anteriority</H2>
+<PRE>
+        Tense ; -- tense: present, past, future, conditional
+        Pol ;   -- polarity: positive, negative
+        Ant ;   -- anteriority: simultaneous, anterior
     
       fun
         PPos, PNeg : Pol ;             -- I sleep/don't sleep
