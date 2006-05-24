@@ -1,7 +1,7 @@
---# -path=.:present:prelude
+--# -path=.:multimodal:alltenses:prelude
 
 concrete AgendaEng of Agenda = 
-  DialogueEng, WeekdayEng ** open LangEng, ParadigmsEng in {
+  DialogueEng, WeekdayEng ** open MultiEng, ParadigmsEng in {
 
   lin
     Day       = UseN (regN "day") ;

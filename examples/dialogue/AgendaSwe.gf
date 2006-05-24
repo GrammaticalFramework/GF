@@ -1,7 +1,7 @@
---# -path=.:present:prelude
+--# -path=.:multimodal:alltenses:prelude
 
 concrete AgendaSwe of Agenda = 
-  DialogueSwe, WeekdaySwe ** open LangSwe, ParadigmsSwe, IrregSwe in {
+  DialogueSwe, WeekdaySwe ** open MultiSwe, ParadigmsSwe, IrregSwe in {
 
   lin
     Day       = UseN (regN "dag") ;

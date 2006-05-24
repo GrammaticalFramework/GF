@@ -1,2 +1,2 @@
-instance AuxFre of AuxDialogue = open LangFre in {
+instance AuxFre of AuxDialogue = open MultiFre in {
 }

@@ -2,50 +2,62 @@
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
-<TITLE> English Lexical Paradigms</TITLE>
 </HEAD><BODY BGCOLOR="white" TEXT="black">
-<P ALIGN="center"><CENTER><H1> English Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-04-21 16:38:25 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
+  <UL>
+  <LI><A HREF="#toc1">English Lexical Paradigms</A>
     <UL>
-    <LI><A HREF="#toc1">Parameters</A>
-    <LI><A HREF="#toc2">Nouns</A>
+    <LI><A HREF="#toc2">Parameters</A>
+    <LI><A HREF="#toc3">Nouns</A>
       <UL>
-      <LI><A HREF="#toc3">Compound nouns</A>
-      <LI><A HREF="#toc4">Relational nouns</A>
-      <LI><A HREF="#toc5">Relational common noun phrases</A>
-      <LI><A HREF="#toc6">Proper names and noun phrases</A>
+      <LI><A HREF="#toc4">Compound nouns</A>
+      <LI><A HREF="#toc5">Relational nouns</A>
+      <LI><A HREF="#toc6">Relational common noun phrases</A>
+      <LI><A HREF="#toc7">Proper names and noun phrases</A>
       </UL>
-    <LI><A HREF="#toc7">Adjectives</A>
+    <LI><A HREF="#toc8">Adjectives</A>
       <UL>
-      <LI><A HREF="#toc8">Two-place adjectives</A>
+      <LI><A HREF="#toc9">Two-place adjectives</A>
       </UL>
-    <LI><A HREF="#toc9">Adverbs</A>
-    <LI><A HREF="#toc10">Prepositions</A>
-    <LI><A HREF="#toc11">Verbs</A>
+    <LI><A HREF="#toc10">Adverbs</A>
+    <LI><A HREF="#toc11">Prepositions</A>
+    <LI><A HREF="#toc12">Verbs</A>
       <UL>
-      <LI><A HREF="#toc12">Verbs with a particle.</A>
-      <LI><A HREF="#toc13">Reflexive verbs</A>
-      <LI><A HREF="#toc14">Two-place verbs</A>
-      <LI><A HREF="#toc15">Three-place verbs</A>
-      <LI><A HREF="#toc16">Other complement patterns</A>
+      <LI><A HREF="#toc13">Verbs with a particle.</A>
+      <LI><A HREF="#toc14">Reflexive verbs</A>
+      <LI><A HREF="#toc15">Two-place verbs</A>
+      <LI><A HREF="#toc16">Three-place verbs</A>
+      <LI><A HREF="#toc17">Other complement patterns</A>
       </UL>
-    <LI><A HREF="#toc17">Definitions of paradigms</A>
+    <LI><A HREF="#toc18">Definitions of paradigms</A>
     </UL>
+  </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
 <P>
+Author: 
+Last update: Wed May 24 18:29:14 2006
+</P>
+<P>
 Produced by 
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
+<P>
+==
+</P>
+<P>
+# -path=.:../abstract:../../prelude:../common
+</P>
+<A NAME="toc1"></A>
+<H1>English Lexical Paradigms</H1>
 <P>
 Aarne Ranta 2003--2005
 </P>
@@ -85,7 +97,7 @@ The following modules are presupposed:
       in {
 </PRE>
 <P></P>
-<A NAME="toc1"></A>
+<A NAME="toc2"></A>
 <H2>Parameters</H2>
 <P>
 To abstract over gender names, we define the following identifiers.
@@ -126,7 +138,7 @@ Prepositions are used in many-argument functions for rection.
       Preposition : Type ;
 </PRE>
 <P></P>
-<A NAME="toc2"></A>
+<A NAME="toc3"></A>
 <H2>Nouns</H2>
 <P>
 Worst case: give all four forms and the semantic gender.
@@ -160,7 +172,7 @@ function:
       genderN : Gender -&gt; N -&gt; N ;
 </PRE>
 <P></P>
-<A NAME="toc3"></A>
+<A NAME="toc4"></A>
 <H3>Compound nouns</H3>
 <P>
 A compound noun ia an uninflected string attached to an inflected noun,
@@ -170,7 +182,7 @@ such as <I>baby boom</I>, <I>chief executive officer</I>.
       compoundN : Str -&gt; N -&gt; N ;
 </PRE>
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc5"></A>
 <H3>Relational nouns</H3>
 <P>
 Relational nouns (<I>daughter of x</I>) need a preposition. 
@@ -198,7 +210,7 @@ Three-place relational nouns (<I>the connection from x to y</I>) need two prepos
       mkN3 : N -&gt; Preposition -&gt; Preposition -&gt; N3 ;
 </PRE>
 <P></P>
-<A NAME="toc5"></A>
+<A NAME="toc6"></A>
 <H3>Relational common noun phrases</H3>
 <P>
 In some cases, you may want to make a complex <CODE>CN</CODE> into a
@@ -209,7 +221,7 @@ relational noun (e.g. <I>the old town hall of</I>).
       cnN3 : CN -&gt; Preposition -&gt; Preposition -&gt; N3 ;
 </PRE>
 <P></P>
-<A NAME="toc6"></A>
+<A NAME="toc7"></A>
 <H3>Proper names and noun phrases</H3>
 <P>
 Proper names, with a regular genitive, are formed as follows
@@ -233,7 +245,7 @@ genitive, you can use the worst-case function.
       mkNP : Str -&gt; Str -&gt; Number -&gt; Gender -&gt; NP ; 
 </PRE>
 <P></P>
-<A NAME="toc7"></A>
+<A NAME="toc8"></A>
 <H2>Adjectives</H2>
 <P>
 Non-comparison one-place adjectives need two forms: one for
@@ -251,7 +263,7 @@ even for cases with the variation <I>happy - happily</I>.
       regA : Str -&gt; A ;
 </PRE>
 <P></P>
-<A NAME="toc8"></A>
+<A NAME="toc9"></A>
 <H3>Two-place adjectives</H3>
 <P>
 Two-place adjectives need a preposition for their second argument.
@@ -301,7 +313,7 @@ From a given <CODE>ADeg</CODE>, it is possible to get back to <CODE>A</CODE>.
       adegA : ADeg -&gt; A ;
 </PRE>
 <P></P>
-<A NAME="toc9"></A>
+<A NAME="toc10"></A>
 <H2>Adverbs</H2>
 <P>
 Adverbs are not inflected. Most lexical ones have position
@@ -319,7 +331,7 @@ Adverbs modifying adjectives and sentences can also be formed.
       mkAdA : Str -&gt; AdA ;
 </PRE>
 <P></P>
-<A NAME="toc10"></A>
+<A NAME="toc11"></A>
 <H2>Prepositions</H2>
 <P>
 A preposition as used for rection in the lexicon, as well as to
@@ -333,7 +345,7 @@ build <CODE>PP</CODE>s in the resource API, just requires a string.
 <P>
 (These two functions are synonyms.)
 </P>
-<A NAME="toc11"></A>
+<A NAME="toc12"></A>
 <H2>Verbs</H2>
 <P>
 Except for <I>be</I>, the worst case needs five forms: the infinitive and
@@ -372,7 +384,7 @@ duplication in the present participle.
       irregDuplV : (get,   got,   gotten : Str) -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc12"></A>
+<A NAME="toc13"></A>
 <H3>Verbs with a particle.</H3>
 <P>
 The particle, such as in <I>switch on</I>, is given as a string.
@@ -381,7 +393,7 @@ The particle, such as in <I>switch on</I>, is given as a string.
       partV  : V -&gt; Str -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc13"></A>
+<A NAME="toc14"></A>
 <H3>Reflexive verbs</H3>
 <P>
 By default, verbs are not reflexive; this function makes them that.
@@ -390,7 +402,7 @@ By default, verbs are not reflexive; this function makes them that.
       reflV  : V -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc14"></A>
+<A NAME="toc15"></A>
 <H3>Two-place verbs</H3>
 <P>
 Two-place verbs need a preposition, except the special case with direct object.
@@ -402,7 +414,7 @@ Two-place verbs need a preposition, except the special case with direct object.
       dirV2 : V -&gt; V2 ;
 </PRE>
 <P></P>
-<A NAME="toc15"></A>
+<A NAME="toc16"></A>
 <H3>Three-place verbs</H3>
 <P>
 Three-place (ditransitive) verbs need two prepositions, of which
@@ -414,7 +426,7 @@ the first one or both can be absent.
       dirdirV3 : V -&gt; V3 ;                               -- give,_,_
 </PRE>
 <P></P>
-<A NAME="toc16"></A>
+<A NAME="toc17"></A>
 <H3>Other complement patterns</H3>
 <P>
 Verbs and adjectives can take complements such as sentences,
@@ -448,7 +460,7 @@ as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
       AS, A2S, AV, A2V : Type ;
 </PRE>
 <P></P>
-<A NAME="toc17"></A>
+<A NAME="toc18"></A>
 <H2>Definitions of paradigms</H2>
 <P>
 The definitions should not bother the user of the API. So they are

@@ -1,7 +1,7 @@
---# -path=.:present:prelude
+--# -path=.:multimodal:alltenses:prelude
 
 concrete AgendaFre of Agenda = 
-  DialogueFre, WeekdayFre ** open LangFre, ParadigmsFre, IrregFre in {
+  DialogueFre, WeekdayFre ** open MultiFre, ParadigmsFre, IrregFre in {
 
   lin
     Day       = UseN (regN "jour") ;

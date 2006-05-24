@@ -172,8 +172,7 @@ sufficient for many applications.
 
 ====Multimodal====
 
-- [Multimodal gfdoc/Multimodal.html]: main module for multimodal dialogue systems
-- [Demonstrative gfdoc/Demonstrative.html]: demonstrative noun phrases and adverbs
+- [Multi gfdoc/Multi.html]: main module for multimodal dialogue systems
 
 
 ====Mathematical====

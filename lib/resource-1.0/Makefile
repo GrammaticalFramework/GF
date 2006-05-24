@@ -2,7 +2,7 @@ GF=../../bin/gf
 
 .PHONY: show-path all test pretest langs present mathematical multimodal compiled treebank stat gfdoc clean
 
-all: show-path present mathematical multimodal langs compiled
+all: show-path langs multimodal present mathematical compiled
 
 show-path:
 	@echo GF_LIB_PATH=$(GF_LIB_PATH)
@@ -27,7 +27,7 @@ mathematical:
 	mv mathematical/*.gfc ../mathematical
 
 multimodal:
-	$(GF) -make -nocf -preproc=./mkPresent multimodal/Multimodal???.gf
+	$(GF) -make -nocf multimodal/Multi???.gf
 	mv multimodal/*.gfc multimodal/*.gfr ../multimodal
 
 compiled:
@@ -45,8 +45,7 @@ gfdoc:
 	gfdoc -txthtml mathematical/Mathematical.gf
 	gfdoc -txthtml mathematical/Symbol.gf
 	gfdoc -txthtml mathematical/Predication.gf
-	gfdoc -txthtml multimodal/Demonstrative.gf
-	gfdoc -txthtml multimodal/Multimodal.gf
+	gfdoc -txthtml multimodal/Multi.gf
 	gfdoc -txthtml ../prelude/*.gf
 	mv abstract/*.html doc/gfdoc
 	mv mathematical/*.html doc/gfdoc

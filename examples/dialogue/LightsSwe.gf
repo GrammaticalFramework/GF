@@ -1,7 +1,8 @@
---# -path=.:present:prelude
+--# -path=.:multimodal:alltenses:prelude
+
 
 concrete LightsSwe of Lights = 
-  DialogueSwe ** open LangSwe, ParadigmsSwe, AuxSwe in {
+  DialogueSwe ** open MultiSwe, ParadigmsSwe, AuxSwe in {
 
   lin
     Light       = UseN (regN "lampa") ;

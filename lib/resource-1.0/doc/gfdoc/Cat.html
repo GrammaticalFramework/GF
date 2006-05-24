@@ -6,25 +6,27 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> The category system</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-04-20 21:45:11 CEST</I><BR>
+<I>Author: </I><BR>
+Last update: Wed May 24 18:29:11 2006
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
+  <UL>
+  <LI><A HREF="#toc1">The category system</A>
     <UL>
-    <LI><A HREF="#toc1">Top-level units</A>
     <LI><A HREF="#toc2">Sentences and clauses</A>
     <LI><A HREF="#toc3">Questions and interrogatives</A>
     <LI><A HREF="#toc4">Relative clauses and pronouns</A>
     <LI><A HREF="#toc5">Verb phrases</A>
     <LI><A HREF="#toc6">Adjectival phrases</A>
     <LI><A HREF="#toc7">Nouns and noun phrases</A>
-    <LI><A HREF="#toc8">Adverbs</A>
-    <LI><A HREF="#toc9">Numerals</A>
-    <LI><A HREF="#toc10">Structural words</A>
-    <LI><A HREF="#toc11">Words of open classes</A>
+    <LI><A HREF="#toc8">Numerals</A>
+    <LI><A HREF="#toc9">Structural words</A>
+    <LI><A HREF="#toc10">Words of open classes</A>
     </UL>
+  </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
@@ -34,6 +36,8 @@ Produced by
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
+<A NAME="toc1"></A>
+<H1>The category system</H1>
 <P>
 Some categories are inherited from <A HREF="Common.html">Common</A>.
 </P>
@@ -41,17 +45,6 @@ Some categories are inherited from <A HREF="Common.html">Common</A>.
     abstract Cat = Common ** {
     
       cat
-</PRE>
-<P></P>
-<A NAME="toc1"></A>
-<H2>Top-level units</H2>
-<P>
-Constructed in <A HREF="Text.html">Text</A>: <CODE>Text</CODE>.
-Constructed in <A HREF="Phrase.html">Phrase</A>: <CODE>Phr</CODE> and
-</P>
-<PRE>
-        Utt ;   -- sentence, question, word...         e.g. "be quiet"
-        Voc ;   -- vocative or "please"                e.g. "my darling"
 </PRE>
 <P></P>
 <A NAME="toc2"></A>
@@ -67,7 +60,6 @@ Constructed in <A HREF="Sentence.html">Sentence</A>, and also in
         Cl ;    -- declarative clause, with all tenses e.g. "she looks at this"
         Slash ; -- clause missing NP (S/NP in GPSG)    e.g. "she looks at"
         Imp ;   -- imperative                          e.g. "look at this"
-        SC ;    -- embedded sentence or question       e.g. "that it rains"
 </PRE>
 <P></P>
 <A NAME="toc3"></A>
@@ -78,7 +70,6 @@ Constructed in <A HREF="Question.html">Question</A>.
 <PRE>
         QCl ;   -- question clause, with all tenses    e.g. "why does she walk"
         IP ;    -- interrogative pronoun               e.g. "who"
-        IAdv ;  -- interrogative adverb                e.g. "why"
         IComp ; -- interrogative complement of copula  e.g. "where"
         IDet ;  -- interrogative determiner            e.g. "which"
 </PRE>
@@ -140,19 +131,6 @@ as defined in <A HREF="Noun.html">Noun</A>.
 </PRE>
 <P></P>
 <A NAME="toc8"></A>
-<H2>Adverbs</H2>
-<P>
-Constructed in <A HREF="Adverb.html">Adverb</A>.  
-Many adverbs are constructed in <A HREF="Structural.html">Structural</A>.
-</P>
-<PRE>
-        Adv ;   -- verb-phrase-modifying adverb,       e.g. "in the house"
-        AdV ;   -- adverb directly attached to verb    e.g. "always"
-        AdA ;   -- adjective-modifying adverb,         e.g. "very"
-        AdN ;   -- numeral-modifying adverb,           e.g. "more than"
-</PRE>
-<P></P>
-<A NAME="toc9"></A>
 <H2>Numerals</H2>
 <P>
 Constructed in <A HREF="Numeral.html">Numeral</A>.
@@ -161,7 +139,7 @@ Constructed in <A HREF="Numeral.html">Numeral</A>.
         Numeral;-- cardinal or ordinal,                e.g. "five/fifth"
 </PRE>
 <P></P>
-<A NAME="toc10"></A>
+<A NAME="toc9"></A>
 <H2>Structural words</H2>
 <P>
 Constructed in <A HREF="Structural.html">Structural</A>.
@@ -169,13 +147,11 @@ Constructed in <A HREF="Structural.html">Structural</A>.
 <PRE>
         Conj ;  -- conjunction,                        e.g. "and"
         DConj ; -- distributed conj.                   e.g. "both - and"
-        PConj ; -- phrase-beginning conj.              e.g. "therefore"
-        CAdv ;  -- comparative adverb                  e.g. "more"
         Subj ;  -- subjunction,                        e.g. "if"
         Prep ;  -- preposition, or just case           e.g. "in"
 </PRE>
 <P></P>
-<A NAME="toc11"></A>
+<A NAME="toc10"></A>
 <H2>Words of open classes</H2>
 <P>
 These are constructed in <A HREF="Lexicon.html">Lexicon</A> and in additional lexicon modules.

@@ -1,2 +1,2 @@
-instance AuxSwe of AuxDialogue = open LangSwe in {
+instance AuxSwe of AuxDialogue = open MultiSwe in {
 }

@@ -2,6 +2,9 @@ Dialogue system grammars using GF resource.
 
 AR 16/5/2006
 
+
+24/5 Added multimodality.
+
 ==Functionality and purpose==
 
 Dialogue system abstract syntax + concrete syntaxes for
