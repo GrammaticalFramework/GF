@@ -1864,9 +1864,9 @@ The linearization type is ``{s : Str}`` for all these categories.
 
 ===GF as a logical framework===
 
-In this section, we will introduce concepts that make it possible
+In this section, we will show how 
 to encode advanced semantic concepts in an abstract syntax.
-These concepts are inherited from **type theory**. Type theory
+We use concepts inherited from **type theory**. Type theory
 is the basis of many systems known as **logical frameworks**, which are
 used for representing mathematical theorems and their proofs on a computer.
 In fact, GF has a logical framework as its proper part:
@@ -1913,7 +1913,7 @@ to describe a language rather than a domain.
 The GF resource grammar library contains resource grammars for
 10 languages, is described more closely in the following
 documents:
-- [Resource library API documentation ../../lib/resource/doc/gf-resource.html]:
+- [Resource library API documentation ../../lib/resource-1.0/doc/]:
   for application grammarians using the resource.
 - [Resource writing HOWTO ../../lib/resource-1.0/doc/Resource-HOWTO.html]:
   for resource grammarians developing the resource.
