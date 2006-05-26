@@ -1,8 +1,7 @@
 --1 Infrastructure with common implementations.
 
 -- This module defines the categories that uniformly have the linearization
--- ${s : Str}$ in all languages. They are given lock fields that guarantee
--- grammatical correctness via type checking.
+-- ${s : Str}$ in all languages. 
 
 -- Moreover, this module defines the abstract parameters of tense, polarity, and
 -- anteriority, which are used in [Phrase Phrase.html] to generate different
@@ -49,11 +48,11 @@ abstract Common = {
     Ant ;   -- anteriority: simultaneous, anterior
 
   fun
-    PPos, PNeg : Pol ;             -- I sleep/don't sleep
+    PPos, PNeg : Pol ;           -- I sleep/don't sleep
 
     TPres  : Tense ;                
     ASimul : Ant ;
-    TPast, TFut, TCond : Tense ;   -- I slept/will sleep/would sleep --# notpresent
-    AAnter : Ant ;                 -- I have slept                   --# notpresent
+    TPast, TFut, TCond : Tense ; -- I slept/will sleep/would sleep --# notpresent
+    AAnter : Ant ;               -- I have slept                   --# notpresent
 
 }
