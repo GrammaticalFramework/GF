@@ -1,7 +1,7 @@
 --# -path=.:../abstract:../common:../../prelude
 
 concrete StructuralRus of Structural = CatRus ** 
-  open ResRus, MorphoRus, (P = ParadigmsRus), Prelude,NounRus in {
+  open ResRus, MorphoRus, (P = ParadigmsRus), Prelude, NounRus, in {
 
   flags optimize=all ; coding=utf8 ;
 
@@ -38,7 +38,6 @@ lin
   everything_NP  = UsePron (pronVseInanimate ** {lock_Pron=<>}) ;
   everywhere_Adv = ss "везде" ;
   few_Det = (ij_EndK_G_KH_Decl "немног") **{lock_Det= <>; n= Sg; g = PNoGen; c = Nom}; -- AMalenkij  
-
   first_Ord = (uy_j_EndDecl  "перв" ) ** {lock_A = <>};  --AStaruyj 
   from_Prep  = { s = "от" ; c = Gen };
   he_Pron  = pronOn ;
@@ -59,9 +58,6 @@ lin
   -- inanimate, Sg: "большинство телефонов безмолству-ет" 
 --  most8many_Det = bolshinstvoPlDet ** {n = Pl; g = (PGen Neut); c= Gen} ;  
   -- animate, Pl: "большинство учащихся хорошо подготовлен-ы"
-
-
-
  much_Det   = mnogoSgDet ** {n = Sg; g = (PGen Neut); c= Gen} ; -- same as previous
  must_VV  = verbDolzhen ;
  no_Phr  = ss ["Нет ."] ;
@@ -75,8 +71,6 @@ lin
   please_Voc = ss "пожалуйста" ;
   possess_Prep  = { s = "" ; c = Gen}; --- ?? AR 19/2/2004
   quite_Adv = ss "довольно" ;
-
-
   she_Pron   = pronOna ;
   so_AdA = ss "так";
   somebody_NP = UsePron (pronKtoTo** {lock_Pron = <>});
@@ -84,22 +78,14 @@ lin
   somePl_Det = nekotorujDet ** {n = Pl; g = PNoGen; c= Nom} ;  
   something_NP  = UsePron (pronChtoTo** {lock_Pron=<> }) ;
   somewhere_Adv  = ss "где-нибудь" ;
-
-
-{-
-  these_NP n =  { s =\\_ => "“”"; n = Pl; p = P3; g= PGen Fem ;
-      anim = Animate ;  pron = True} ;    -- missing in Russian
-  those_NP n =  { s =\\_ => "“”" ; n = Pl; p = P3; g=PGen Fem ;
-     anim = Animate ;  pron = True} ;    -- missing in Russian
--}
+  these_NP =  UsePron (pronEti** {lock_Pron = <>}); -- missing in Russian
+  those_NP =  UsePron (pronTe** {lock_Pron = <>}); -- missing in Russian
   that_Quant   = totDet ** {n = Sg; g = PNoGen; c= Nom} ;
   that_NP  = det2NounPhrase totDet ; -- inanimate form only
   there_Adv = ss "там" ;
   there7to_Adv = ss "туда" ;
   there7from_Adv = ss "оттуда" ;
   therefore_PConj  = ss "следовательно" ;
-
-
 --  these_NDet  = etotDet ** { g = PNoGen; c= Nom} ;  
 --  they8fem_NP = UsePron pronOni Animate;
   they_Pron  = pronOni;
@@ -113,8 +99,6 @@ lin
   under_Prep  = { s = "под"  ; c = Inst };
   very_AdA  = ss "очень" ;
   want_VV  = verbKhotet ;
-
-
   we_Pron  = pronMu ;
   whatPl_IP = pron2NounPhraseNum pronChto Inanimate Pl;
   whatSg_IP = pron2NounPhraseNum pronChto Inanimate Sg;
@@ -146,7 +130,5 @@ lin
 ---  NeitherNor = sd2 "ни" [", ни"]  ** {n = Sg} ;
 ---  NowhereNP = ss "нигде" ;
 ---  AgentPrep = { s = "" ; c = Nom}; -- missing in Russian
-
-
-
 }
+

@@ -14,6 +14,13 @@ concrete IdiomRus of Idiom = CatRus ** open Prelude, ResRus, MorphoRus in {
        }
 } ;
 
+    ExistIP Kto =
+    let {  kto = Kto.s ! (PF Nom No NonPoss) } in 
+       {s =  \\b,clf,_ => case b of 
+        {Pos =>  kto ++ verbByut.s ! (getActVerbForm clf (pgen2gen Kto.g) Sg P3) ;
+        Neg => kto ++ "не" ++ verbByut.s ! (getActVerbForm clf (pgen2gen Kto.g) Sg P3) 
+       }
+    } ;
 
     ImpersCl vp = {s= \\ b, clf =>  let ne= case b of {Pos =>[]; Neg =>""}
       in 

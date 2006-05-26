@@ -9,7 +9,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
  { s=\\clf,gn,p => case clf of 
    {
         (ClIndic Present _) =>  masha.s ! (mkPronForm Nom No NonPoss) ;
-        (ClIndic Past _) => case  gn of 
+        (ClIndic PastRus _) => case  gn of 
     {   (ASg Fem)  =>"была"++masha.s ! (mkPronForm Inst No NonPoss);
       (ASg Masc)  =>"был" ++ masha.s!(mkPronForm Inst No NonPoss);
      (ASg Neut)  =>"было" ++ masha.s!(mkPronForm Inst No NonPoss);
@@ -52,7 +52,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 -- infinitive does not save GenNum, 
 -- but indicative does for the sake of adjectival predication !
         ClIndic Present _ =>  zloj.s ! AF Nom Animate gn ;
-        ClIndic Past _ => case gn of
+        ClIndic PastRus _ => case gn of
        { (ASg Fem)   => "была" ++ zloj.s! AF Nom Animate (ASg Fem);
           (ASg Masc)  => "был" ++ zloj.s! AF Nom Animate (ASg Masc);
           (ASg Neut)   => "был" ++ zloj.s! AF Nom Animate (ASg Neut);
@@ -97,7 +97,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
      };
      ClInfinit => "быть" ++ zloj.s;
         ClIndic Present  _ => zloj.s ;
-        ClIndic Past _ => case gn of 
+        ClIndic PastRus _ => case gn of 
        { (ASg Fem)  => "была" ++ zloj.s;
          (ASg Masc) => "был" ++ zloj.s;
           (ASg Neut) => "было" ++ zloj.s;

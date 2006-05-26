@@ -70,10 +70,10 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = vp.s!ClInfinit!(ASg Masc) !P3} ;
 
-    UseCl  t a p cl = {s = cl.s! p.p ! ClIndic t.t a.a};
+    UseCl  t a p cl = {s = cl.s! p.p ! ClIndic (getTense t.t) a.a};
 
-    UseQCl t a p qcl= {s = qcl.s!p.p! ClIndic t.t a.a };
-    UseRCl t a p rcl ={s = rcl.s! p.p ! ClIndic t.t a.a };
+    UseQCl t a p qcl= {s = qcl.s!p.p! ClIndic (getTense t.t) a.a };
+    UseRCl t a p rcl ={s = rcl.s! p.p ! ClIndic (getTense t.t) a.a };
 
 }
 

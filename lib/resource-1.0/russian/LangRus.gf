@@ -1,14 +1,12 @@
 --# -path=.:../abstract:../common:../../prelude
 
 concrete LangRus of Lang = 
-
   NounRus, 
   VerbRus, 
   AdjectiveRus,
   AdverbRus,
   NumeralRus,
   SentenceRus,
-
   QuestionRus,
   RelativeRus,
   ConjunctionRus,
@@ -16,7 +14,4 @@ concrete LangRus of Lang =
   TextX,
   StructuralRus,
   IdiomRus,
-
-  LexiconRus 
-
-** { flags  startcat = Phr ; unlexer = text ; lexer = text ;} ;
+  LexiconRus ** { flags  startcat = Phr ; unlexer = text ; lexer = text ;} ;
