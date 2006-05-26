@@ -174,10 +174,10 @@ resource ResEng = ParamX ** open Prelude in {
 
   VP : Type = {
     s   : VerbForms ;
-    prp : Str ; -- present participle 
-    inf : Str ; -- infinitive
-    ad  : Str ;
-    s2  : Agr => Str
+    prp : Str ;   -- present participle 
+    inf : Str ;   -- the infinitive form ; VerbForms would be the logical place
+    ad  : Str ;   -- sentential adverb
+    s2  : Agr => Str -- complement
     } ;
 
 

@@ -28,7 +28,7 @@ mathematical:
 
 multimodal:
 	$(GF) -make -nocf multimodal/Multi???.gf
-	mv multimodal/*.gfc multimodal/*.gfr ../multimodal
+	mv multimodal/*.gfc ../multimodal
 
 compiled:
 	cd .. ; tar cvfz compiled.tgz alltenses/ mathematical/ multimodal/ present/ prelude/*.gf?

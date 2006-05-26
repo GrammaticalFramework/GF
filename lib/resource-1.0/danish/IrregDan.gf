@@ -8,31 +8,28 @@ concrete IrregDan of IrregDanAbs = CatDan ** open Prelude, ParadigmsDan in {
 
   lin
 
-  bære_V = irregV "bære" "bar" "båret" ;--
-  bede_V = mkV "bede" "beder" "bedes" "bad" "bedt" "bed" ;--
-  bide_V = irregV "bite" "bed" "bitt" ;--
+  bære_V = irregV "bære" "bar" "båret" ;
+  bede_V = mkV "bede" "beder" "bedes" "bad" "bedt" "bed" ;
+  bide_V = irregV "bite" "bed" "bidt" ;
+  binde_V = irregV "binde" "bandt" "bundet" ;
   blive_V = irregV "blive" "blev" "blevet" ;
-  brænde_V = irregV "brænde" "brant" "brænt" ;--
-  bringe_V = irregV "bringe" "bragte" "bragt" ;--
+  brænde_V = irregV "brænde" "brandt" "brændt" ;--
+  bringe_V = irregV "bringe" "bragte" "bragt" ;
   burde_V = irregV "burde" "burde" "burdet" ;--
   dø_V = irregV "dø" "døde" "død" ;
---  dra_V = mkV "dra" "drar" "dras" "drog" (variants {"dradd" ;-- "dratt"}) "dra" ;--
+  drage_V = irregV "drage" "drog" "draget" ;
   drikke_V = irregV "drikke" "drak" "drukket" ;
---  drive_V = irregV "drive" (variants {"drev" ;-- "dreiv"}) "drevet" ;--
---  eie_V = irregV "eie" (variants {"eide" ;-- "åtte"}) (variants {"eid" ;-- "ått"}) ;--
-  falle_V = irregV "falle" "falt" "falt" ;--
+  drive_V = irregV "drive" "drev" "drevet" ;
+  falde_V = irregV "falde" "faldt" "faldet" ;----er
   få_V = irregV "få" "fik" "fået" ;
-  finde_V = irregV "finde" "fand" "fundet" ;--
-  flyde_V = irregV "flyde" "flød" "flytt" ;--
-  flyve_V = irregV "flyve" "fløg" "flydd" ;--
-  foretrekke_V = irregV "foretrekke" "foretrakk" "foretrukket" ;--
+  finde_V = irregV "finde" "fandt" "fundet" ;
+  flyde_V = irregV "flyde" "flød" "flydt" ;
+  flyve_V = irregV "flyve" "fløj" "fløjet" ;
   forlade_V = irregV "forlade" "forlod" "forladet" ;
-  forstå_V = irregV "forstå" "forstod" "forstått" ;--
-  fortælle_V = irregV "fortælle" "fortalte" "fortalt" ;--
-  fryse_V = irregV "fryse" "frøs" "frosset" ;--
-  gå_V = irregV "gå" "gik" "gået" ;
+  forstå_V = irregV "forstå" "forstod" "forstået" ;
+  fryse_V = irregV "fryse" "frøs" "frosset" ;
+  gå_V = irregV "gå" "gik" "gået" ;----er
   give_V = irregV "give" "gav" "givet" ;
---  gjelde_V = irregV "gjelde" (variants {"gjaldt" ;-- "galdt"}) "gjeldt" ;--
   gnide_V = irregV "gnide" "gned" "gnidd" ;--
   gøre_V = irregV "gøre" "gjorde" "gjort" ;
   have_V =  mkV "have" "har" "havde" "haft" nonExist "hav" ;
@@ -67,6 +64,7 @@ concrete IrregDan of IrregDanAbs = CatDan ** open Prelude, ParadigmsDan in {
   tage_V = irregV "tage" "tog" "taget" ;
 --  treffe_V = irregV "treffe" "traff" "truffet" ;--
 --  trives_V = irregV "trives" "trivdes" (variants {"trives" ;-- "trivs"}) ;--
+  tælle_V = irregV "tælle" "talte" "talt" ;
   vide_V = irregV "vide" "vidste" "vidst" ;
 
 }
