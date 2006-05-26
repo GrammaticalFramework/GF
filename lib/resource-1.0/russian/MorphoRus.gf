@@ -310,6 +310,38 @@ oper pronChtoTo: Pronoun =
     p = P3 ;
     pron = False
   } ;
+oper pronEti: Pronoun = 
+  { s = table {
+    PF Nom _ _  => "эти"  ; 
+    PF Gen _ _ => "этих" ;
+    PF Dat _  _ => "этим" ; 
+    PF Acc _  _ => "этих" ; 
+    PF Inst _ _ => "этими" ;
+    PF Prepos _ _ => "этих" 
+    } ;
+    n = Pl; 
+    p = P3;
+    g= PGen Fem ;
+    anim = Animate ; 
+    pron = False    
+  } ;
+
+oper pronTe: Pronoun = 
+  { s = table {
+    PF Nom _ _  => "те"  ; 
+    PF Gen _ _ => "тех" ;
+    PF Dat _  _ => "тем" ; 
+    PF Acc _  _ => "тех" ; 
+    PF Inst _ _ => "теми" ;
+    PF Prepos _ _ => "тех" 
+    } ;
+     n = Pl;
+     p = P3; 
+     g=PGen Fem ;
+     anim = Animate ;  
+     pron = False
+  } ;
+
 
 --oper pronNikto: Pronoun = 
 --  { s = table {
@@ -1229,32 +1261,32 @@ oper vesDet: Adjective = {s = table {
       } 
   } ;
 oper uy_j_EndDecl : Str -> Adjective = \s ->{s = table {
-      AF Nom _ (ASg Masc) => s+"ый"; 
-      AF Nom _ (ASg Fem) => s+"ая"; 
-      AF Nom _ (ASg Neut) => s+"ое";
-      AF Nom _ APl => s+"ые";
-      AF Acc  Inanimate (ASg Masc) => s+"ый"; 
-      AF Acc  Animate (ASg Masc) => s+"ого"; 
-      AF Acc  _ (ASg Fem) => s+"ую"; 
-      AF Acc  _ (ASg Neut) => s+"ое";
-      AF Acc  Inanimate APl => s+"ые";
-      AF Acc  Animate APl => s+"ых";
-      AF Gen  _ (ASg Masc) => s+"ого"; 
-      AF Gen  _ (ASg Fem) => s+"ой"; 
-      AF Gen  _ (ASg Neut) => s+"ого";
-      AF Gen  _ APl => s+"ых";
-      AF Inst _ (ASg Masc) => s+"ым"; 
-      AF Inst _ (ASg Fem) => s+"ой"; 
-      AF Inst _ (ASg Neut) => s+"ым";
-      AF Inst _ APl => s+"ыми";
-      AF Dat  _ (ASg Masc) => s+"ому"; 
-      AF Dat  _ (ASg Fem) => s+"ой"; 
-      AF Dat  _ (ASg Neut) => s+"ому";
-      AF Dat  _ APl => s+"ым";
-      AF Prepos _ (ASg Masc) => s+"ом"; 
-      AF Prepos _ (ASg Fem) => s+"ой"; 
-      AF Prepos _ (ASg Neut) => s+"ом";
-      AF Prepos _ APl => s+"ых";
+      AF Nom _ (ASg Masc) => Prelude.glue s "ый"; 
+      AF Nom _ (ASg Fem) => Prelude.glue s "ая"; 
+      AF Nom _ (ASg Neut) => Prelude.glue s "ое";
+      AF Nom _ APl => Prelude.glue s "ые";
+      AF Acc  Inanimate (ASg Masc) => Prelude.glue s "ый"; 
+      AF Acc  Animate (ASg Masc) => Prelude.glue s "ого"; 
+      AF Acc  _ (ASg Fem) => Prelude.glue s "ую"; 
+      AF Acc  _ (ASg Neut) => Prelude.glue s "ое";
+      AF Acc  Inanimate APl => Prelude.glue s "ые";
+      AF Acc  Animate APl => Prelude.glue s "ых";
+      AF Gen  _ (ASg Masc) => Prelude.glue s "ого"; 
+      AF Gen  _ (ASg Fem) => Prelude.glue s "ой"; 
+      AF Gen  _ (ASg Neut) => Prelude.glue s "ого";
+      AF Gen  _ APl => Prelude.glue s "ых";
+      AF Inst _ (ASg Masc) => Prelude.glue s "ым"; 
+      AF Inst _ (ASg Fem) => Prelude.glue s "ой"; 
+      AF Inst _ (ASg Neut) => Prelude.glue s "ым";
+      AF Inst _ APl => Prelude.glue s "ыми";
+      AF Dat  _ (ASg Masc) => Prelude.glue s "ому"; 
+      AF Dat  _ (ASg Fem) => Prelude.glue s "ой"; 
+      AF Dat  _ (ASg Neut) => Prelude.glue s "ому";
+      AF Dat  _ APl => Prelude.glue s "ым";
+      AF Prepos _ (ASg Masc) => Prelude.glue s "ом"; 
+      AF Prepos _ (ASg Fem) => Prelude.glue s "ой"; 
+      AF Prepos _ (ASg Neut) => Prelude.glue s "ом";
+      AF Prepos _ APl => Prelude.glue s "ых";
       AdvF => "о"
       } 
   } ;
@@ -1493,6 +1525,7 @@ param Conjugation = First | FirstE | Second | Mixed | Dolzhen;
 --
 --3 First conjugation (in Present) verbs :
 
+oper verbIdti : Verbum = verbDecl Imperfective First "ид" "у" "шел" "иди" "идти";
 --oper verbGulyat : Verbum = verbDecl Imperfective First "гуля" "ю" "гулял" "гуляй" "гулять";
 --oper verbVkluchat : Verbum = verbDecl Imperfective First "включа" "ю" "включал" "включай" "включать";
 --oper verbSuchestvovat : Verbum = verbDecl Imperfective First "существу" "ю" "существовал" "существуй" "существовать";
@@ -1532,6 +1565,8 @@ oper verbDolzhen : Verbum = verbDecl Imperfective Dolzhen "долж" "ен" "д�
 -- aspect and voice.
 
 oper AspectVoice: Type = { s : VerbConj => Str ;  asp: Aspect } ;     
+
+idetDozhd: Verbum -> Verbum = \idet -> {s = \\vf=>idet.s!vf ++ "дождь"; asp = Imperfective};
 
 -- "PresentVerb" takes care of the present  tense conjugation.
 

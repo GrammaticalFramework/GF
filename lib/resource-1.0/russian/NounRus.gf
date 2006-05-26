@@ -36,6 +36,26 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       pron = np.pron
       } ;
 
+    PPartNP np v2 = {
+      s = \\pf => np.s ! pf ++ v2.s ! VFORM Act VINF ; 
+      -- no participles in the Verbum type as they behave as adjectives
+      n = np.n;
+      p = np.p;
+      g = np.g;
+      anim = np.anim;
+      pron = np.pron
+      } ;
+
+    AdvNP np adv = {
+      s = \\pf => np.s ! pf ++ adv.s ;
+      n = np.n;
+      p = np.p;
+      g = np.g;
+      anim = np.anim;
+      pron = np.pron
+      } ;
+
+
     DetSg quant ord = {
       s = \\af => quant.s!af ++ ord.s!af ; 
       n = quant.n;
@@ -62,17 +82,15 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -- so just leave a decimal representation, without case-suffixes:
     NumInt i =  {s = table { _ => table {_ => i.s } } } ;
 
-{-
-    OrdInt n = case n of {
-       0|2|6 => (uy_oj_EndDecl n.s) ; 
-       3 => (ti_j_EndDecl n.s) ; 
-       _ => uy_j_EndDecl n.s }  ;
+ --   OrdInt n = case n of {
+ --      0|2|6 => (uy_oj_EndDecl n.s) ; 
+ --      3 => (ti_j_EndDecl n.s) ; 
+ --      _ => uy_j_EndDecl n.s }  ;
 
   OrdNumeral numeral = 
-    {s = \\ af => (uy_j_EndDecl (numeral.s ! caseAF af ! genAF af)).s!af} ;
--}
-    NumNumeral n = n ;
+   {s = \\ af => (uy_j_EndDecl (numeral.s ! caseAF af ! genAF af)).s!af} ;
 
+    NumNumeral n = n ;
 
     AdNum adn num = {s = \\c,n => adn.s ++ num.s!c!n} ;
 
