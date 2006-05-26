@@ -18,6 +18,15 @@ instance DiffDan of DiffScand = open CommonScand, Prelude in {
 
     detDef : Species = Indef ;
 
+    Verb : Type = {
+      s : VForm => Str ;
+      part : Str ;
+      vtype : VType ;
+      isVaere : Bool
+      } ;
+
+    hasAuxBe v = v.isVaere ;
+
 -- Strings.
 
     conjThat = "at" ;
@@ -33,11 +42,15 @@ instance DiffDan of DiffScand = open CommonScand, Prelude in {
       } ;
 
     verbHave = 
-      mkVerb "have" "har" "hav" "havde" "haft" nonExist nonExist nonExist ;
+      mkVerb "have" "har" "hav" "havde" "haft" nonExist nonExist nonExist **
+      {part = [] ; isVaere = False} ;
     verbBe = 
-      mkVerb "være" "er" "var" "var" "været" "væren" "været" "værne" ;
+      mkVerb "være" "er" "var" "var" "været" "væren" "været" "værne" **
+      {part = [] ; isVaere = False} ;
     verbBecome = 
-      mkVerb "blive" "bliver" "bliv" "blev" "blevet" "bliven" "blivet" "blivne" ;
+      mkVerb "blive" "bliver" "bliv" "blev" "blevet" 
+        "bliven" "blivet" "blivne"  **
+      {part = [] ; isVaere = True} ;
 
     auxFut = "vil" ;      -- "skal" in ExtDan
     auxCond = "ville" ;

@@ -18,6 +18,15 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
 
     detDef : Species = Def ;
 
+    Verb : Type = {
+      s : VForm => Str ;
+      part : Str ;
+      vtype : VType
+      } ;
+
+    hasAuxBe _ = False ;
+
+
 -- Strings.
 
     conjThat = "att" ;
@@ -33,11 +42,16 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
       } ;
 
     verbHave = 
-      mkVerb "ha" "har" "ha" "hade" "haft" "havd" "havt" "havda" ;
+      mkVerb "ha" "har" "ha" "hade" "haft" "havd" "havt" "havda" ** noPart ;
     verbBe = 
-      mkVerb "vara" "är" "var" "var" "varit" "varen" "varet" "varna" ;
+      mkVerb "vara" "är" "var" "var" "varit" "varen" "varet" "varna" 
+      ** noPart ;
     verbBecome = 
-      mkVerb "bli" "blir" "bli" "blev" "blivit" "bliven" "blivet" "blivna" ;
+      mkVerb "bli" "blir" "bli" "blev" "blivit" "bliven" "blivet" "blivna"
+      ** noPart ;
+
+    -- auxiliary
+    noPart = {part = []} ;
 
     auxFut = "ska" ;      -- "skall" in ExtSwe
     auxCond = "skulle" ;

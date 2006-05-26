@@ -356,14 +356,15 @@ oper
 
   mkPreposition p = p ;
 
-  mkV a b c d e f = mkVerb6 a b c d e f ** {s1 = [] ; vtype = VAct ; lock_V = <>} ;
+  mkV a b c d e f = mkVerb6 a b c d e f ** 
+    {part = [] ; vtype = VAct ; lock_V = <>} ;
 
   regV a = case last a of {
     "e" => vHusk (init a) ;
     _ => vBo a
-    } ** {s1 = [] ; vtype = VAct ; lock_V = <>} ;
+    } ** {part = [] ; vtype = VAct ; lock_V = <>} ;
 
-  mk2V a b = regVerb a b ** {s1 = [] ; vtype = VAct ; lock_V = <>} ;
+  mk2V a b = regVerb a b ** {part = [] ; vtype = VAct ; lock_V = <>} ;
 
   irregV =
     \drikke,drakk,drukket ->
@@ -380,9 +381,9 @@ oper
     mkV drikke drikker (drikke + "s") drakk drukket drikk ; 
 
 
-  partV v p = {s = \\f => v.s ! f ++ p ; vtype = v.vtype ; lock_V = <>} ;
-  depV v = {s = v.s ; vtype = VPass ; lock_V = <>} ;
-  reflV v = {s = v.s ; vtype = VRefl ; lock_V = <>} ;
+  partV v p = {s = v.s ; part = p ; vtype = v.vtype ; lock_V = <>} ;
+  depV v = {s = v.s ; part = v.part ; vtype = VPass ; lock_V = <>} ;
+  reflV v = {s = v.s ; part = v.part ; vtype = VRefl ; lock_V = <>} ;
 
   mkV2 v p = v ** {c2 = p ; lock_V2 = <>} ;
   dirV2 v = mkV2 v [] ;

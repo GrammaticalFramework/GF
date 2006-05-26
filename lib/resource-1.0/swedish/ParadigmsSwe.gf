@@ -423,7 +423,7 @@ oper
       funna  = funn ! Strong Plg ! Nom 
     in
     mkVerb finna finner finn fann funnit funnen funnet funna **
-    {vtype=VAct ; lock_V = <>} ;
+    {part = [] ; vtype=VAct ; lock_V = <>} ;
 
   regV leker = case leker of {
     lek + "a"  => conj1 leker ; --- bw compat
@@ -480,9 +480,9 @@ oper
     mkV sälja (säljer.s ! VF (VPres Act)) (säljer.s ! (VF (VImper Act))) sålde sålt såld
      ** {s1 = [] ; lock_V = <>} ;
 
-  partV v p = {s = \\f => v.s ! f ++ p ; vtype = v.vtype ; lock_V = <>} ;
-  depV v = {s = v.s ; vtype = VPass ; lock_V = <>} ;
-  reflV v = {s = v.s ; vtype = VRefl ; lock_V = <>} ;
+  partV v p = {s = v.s ; part = p ; vtype = v.vtype ; lock_V = <>} ;
+  depV v = {s = v.s ; part = v.part ; vtype = VPass ; lock_V = <>} ;
+  reflV v = {s = v.s ; part = v.part ; vtype = VRefl ; lock_V = <>} ;
 
   mkV2 v p = v ** {c2 = p ; lock_V2 = <>} ;
   dirV2 v = mkV2 v [] ;

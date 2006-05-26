@@ -40,9 +40,8 @@ resource ParadigmsDan =
 oper
   Gender : Type ; 
 
-  masculine : Gender ;
-  feminine  : Gender ;
-  neutrum   : Gender ;
+  utrum   : Gender ;
+  neutrum : Gender ;
 
 -- To abstract over number names, we define the following.
 
@@ -71,9 +70,8 @@ oper
 
 -- The regular function takes the singular indefinite form
 -- and computes the other forms and the gender by a heuristic.
--- The heuristic is that nouns ending "e" are feminine like "kvinne",
--- all others are masculine like "bil". 
--- If in doubt, use the $cc$ command to test!
+-- The heuristic is that all nouns are $utrum$ with the
+-- plural ending "er"/"r".
 
   regN : Str -> N ;
 
@@ -222,19 +220,27 @@ oper
   irregV : (drikke, drakk, drukket  : Str) -> V ;
 
 
---3 Verbs with a particle.
+--3 Verbs with "være" as auxiliary
+--
+-- By default, the auxiliary is "have". This function changes it to "være".
+
+  vaereV : V -> V ;
+
+--3 Verbs with a particle
 --
 -- The particle, such as in "switch on", is given as a string.
 
   partV  : V -> Str -> V ;
 
---3 Deponent verbs.
+
+--3 Deponent verbs
 --
 -- Some words are used in passive forms only, e.g. "hoppas", some as
 -- reflexive e.g. "ångra sig".
 
   depV  : V -> V ;
   reflV : V -> V ;
+
 
 --3 Two-place verbs
 --
@@ -357,14 +363,16 @@ oper
 
   mkPreposition p = p ;
 
-  mkV a b c d e f = mkVerb6 a b c d e f ** {s1 = [] ; vtype = VAct ; lock_V = <>} ;
+  mkV a b c d e f = mkVerb6 a b c d e f ** 
+    {part = [] ; vtype = VAct ; lock_V = <> ; isVaere = False} ;
 
   regV a = case last a of {
     "e" => vHusk (init a) ;
     _ => vBo a
-    } ** {s1 = [] ; vtype = VAct ; lock_V = <>} ;
+    } ** {part = [] ; vtype = VAct ; isVaere = False ; lock_V = <>} ;
 
-  mk2V a b = regVerb a b ** {s1 = [] ; vtype = VAct ; lock_V = <>} ;
+  mk2V a b = regVerb a b ** 
+    {part = [] ; vtype = VAct ; isVaere = False ; lock_V = <>} ;
 
   irregV =
     \drikke,drakk,drukket ->
@@ -380,10 +388,28 @@ oper
     in 
     mkV drikke drikker (drikke + "s") drakk drukket drikk ; 
 
+  vaereV v = {
+    s = v.s ;
+    part = [] ;
+    vtype = v.vtype ; 
+    isVaere = True ; 
+    lock_V = <>
+    } ;
 
-  partV v p = {s = \\f => v.s ! f ++ p ; vtype = v.vtype ; lock_V = <>} ;
-  depV v = {s = v.s ; vtype = VPass ; lock_V = <>} ;
-  reflV v = {s = v.s ; vtype = VRefl ; lock_V = <>} ;
+  partV v p = {
+    s = v.s ;
+    part = p ; 
+    vtype = v.vtype ; 
+    isVaere = v.isVaere ; 
+    lock_V = <>
+    } ;
+
+  depV v = {
+    s = v.s ; part = v.part ; vtype = VPass ; isVaere = False ; lock_V = <>
+    } ;
+  reflV v = {
+    s = v.s ; part = v.part ; vtype = VRefl ; isVaere = False ; lock_V = <>
+    } ;
 
   mkV2 v p = v ** {c2 = p ; lock_V2 = <>} ;
   dirV2 v = mkV2 v [] ;

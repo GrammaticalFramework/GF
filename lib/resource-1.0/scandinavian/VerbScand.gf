@@ -38,6 +38,7 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand i
         (\\a => v.s ! VI (VPtPret (agrAdj a.gn DIndef) Nom)) 
         (predV verbBecome) ;
 
-    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; vtype = vv.vtype} ;
+    UseVS, UseVQ = \vv -> 
+      vv ** {c2 = []} ;
 
 }
