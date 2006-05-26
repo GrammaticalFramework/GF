@@ -7,55 +7,9 @@
 <P ALIGN="center"><CENTER><H1>Resource grammar writing HOWTO</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Wed Mar  1 16:52:09 2006
+Last update: Fri May 26 17:36:48 2006
 </FONT></CENTER>
 
-<P></P>
-<HR NOSHADE SIZE=1>
-<P></P>
-    <UL>
-    <LI><A HREF="#toc1">The resource grammar API</A>
-      <UL>
-      <LI><A HREF="#toc2">Phrase category modules</A>
-      <LI><A HREF="#toc3">Infrastructure modules</A>
-      <LI><A HREF="#toc4">Lexical modules</A>
-      </UL>
-    <LI><A HREF="#toc5">The core of the syntax</A>
-      <UL>
-      <LI><A HREF="#toc6">Another reduced API</A>
-      <LI><A HREF="#toc7">The present-tense fragment</A>
-      </UL>
-    <LI><A HREF="#toc8">Phases of the work</A>
-      <UL>
-      <LI><A HREF="#toc9">Putting up a directory</A>
-      <LI><A HREF="#toc10">Direction of work</A>
-      <LI><A HREF="#toc11">The develop-test cycle</A>
-      <LI><A HREF="#toc12">Resource modules used</A>
-      <LI><A HREF="#toc13">Morphology and lexicon</A>
-      <LI><A HREF="#toc14">Lock fields</A>
-      <LI><A HREF="#toc15">Lexicon construction</A>
-      </UL>
-    <LI><A HREF="#toc16">Inside grammar modules</A>
-      <UL>
-      <LI><A HREF="#toc17">The category system</A>
-      <LI><A HREF="#toc18">Phrase category modules</A>
-      <LI><A HREF="#toc19">Resource modules</A>
-      <LI><A HREF="#toc20">Lexicon</A>
-      </UL>
-    <LI><A HREF="#toc21">Lexicon extension</A>
-      <UL>
-      <LI><A HREF="#toc22">The irregularity lexicon</A>
-      <LI><A HREF="#toc23">Lexicon extraction from a word list</A>
-      <LI><A HREF="#toc24">Lexicon extraction from raw text data</A>
-      <LI><A HREF="#toc25">Extending the resource grammar API</A>
-      </UL>
-    <LI><A HREF="#toc26">Writing an instance of parametrized resource grammar implementation</A>
-    <LI><A HREF="#toc27">Parametrizing a resource grammar implementation</A>
-    </UL>
-
-<P></P>
-<HR NOSHADE SIZE=1>
-<P></P>
 <P>
 The purpose of this document is to tell how to implement the GF
 resource grammar API for a new language. We will <I>not</I> cover how
@@ -69,7 +23,6 @@ in <A HREF=".."><CODE>GF/lib/resource-1.0/</CODE></A>. See the
 <A HREF="../README"><CODE>resource-1.0/README</CODE></A> for
 details on how this differs from previous versions.
 </P>
-<A NAME="toc1"></A>
 <H2>The resource grammar API</H2>
 <P>
 The API is divided into a bunch of <CODE>abstract</CODE> modules.
@@ -88,7 +41,6 @@ to which all the other modules conform, so that e.g. <CODE>NP</CODE> means
 the same thing in those modules that use <CODE>NP</CODE>s and those that
 constructs them.
 </P>
-<A NAME="toc2"></A>
 <H3>Phrase category modules</H3>
 <P>
 The direct parents of the top will be called <B>phrase category modules</B>,
@@ -113,7 +65,6 @@ one of a small number of different types). Thus we have
 <LI><CODE>Idiom</CODE>: idiomatic phrases such as existentials
 </UL>
 
-<A NAME="toc3"></A>
 <H3>Infrastructure modules</H3>
 <P>
 Expressions of each phrase category are constructed in the corresponding
@@ -142,7 +93,6 @@ can skip the <CODE>lincat</CODE> definition of a category and use the default
 <CODE>{s : Str}</CODE> until you need to change it to something else. In
 English, for instance, many categories do have this linearization type.
 </P>
-<A NAME="toc4"></A>
 <H3>Lexical modules</H3>
 <P>
 What is lexical and what is syntactic is not as clearcut in GF as in
@@ -179,7 +129,6 @@ different languages on the level of a resource grammar. In other words,
 application grammars are likely to use the resource in different ways for
 different languages.
 </P>
-<A NAME="toc5"></A>
 <H2>The core of the syntax</H2>
 <P>
 Among all categories and functions, a handful are 
@@ -204,7 +153,6 @@ rules relate the categories to each other. It is intended to be a
 first approximation when designing the parameter system of a new
 language. 
 </P>
-<A NAME="toc6"></A>
 <H3>Another reduced API</H3>
 <P>
 If you want to experiment with a small subset of the resource API first, 
@@ -213,7 +161,6 @@ try out the module
 explained in the
 <A HREF="http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html">GF Tutorial</A>.
 </P>
-<A NAME="toc7"></A>
 <H3>The present-tense fragment</H3>
 <P>
 Some lines in the resource library are suffixed with the comment
@@ -229,9 +176,7 @@ implementation. To compile a grammar with present-tense-only, use
     i -preproc=GF/lib/resource-1.0/mkPresent LangGer.gf
 </PRE>
 <P></P>
-<A NAME="toc8"></A>
 <H2>Phases of the work</H2>
-<A NAME="toc9"></A>
 <H3>Putting up a directory</H3>
 <P>
 Unless you are writing an instance of a parametrized implementation
@@ -317,7 +262,6 @@ as e.g. <CODE>VerbGer</CODE>.
 <P>
 <IMG ALIGN="middle" SRC="German.png" BORDER="0" ALT="">
 </P>
-<A NAME="toc10"></A>
 <H3>Direction of work</H3>
 <P>
 The real work starts now. There are many ways to proceed, the main ones being
@@ -416,7 +360,6 @@ and dependences there are in your language, and you can now produce very
 much in the order you please. 
 </OL>
 
-<A NAME="toc11"></A>
 <H3>The develop-test cycle</H3>
 <P>
 The following develop-test cycle will
@@ -473,7 +416,6 @@ follow soon. (You will found out that these explanations involve
 a rational reconstruction of the live process! Among other things, the
 API was changed during the actual process to make it more intuitive.)
 </P>
-<A NAME="toc12"></A>
 <H3>Resource modules used</H3>
 <P>
 These modules will be written by you.
@@ -492,8 +434,9 @@ package.
 </P>
 <UL>
 <LI><CODE>ParamX</CODE>: parameter types used in many languages
-<LI><CODE>CommonX</CODE>: implementation of the categories $Text$ and $Phr$, as well as of
-     the logical tense, anteriority, and polarity parameters
+<LI><CODE>CommonX</CODE>: implementation of language-uniform categories 
+    such as $Text$ and $Phr$, as well as of
+    the logical tense, anteriority, and polarity parameters
 <LI><CODE>Coordination</CODE>: operations to deal with lists and coordination
 <LI><CODE>Prelude</CODE>: general-purpose operations on strings, records,
       truth values, etc.
@@ -529,7 +472,6 @@ almost everything. This led in practice to the duplication of almost
 all code on the <CODE>lin</CODE> and <CODE>oper</CODE> levels, and made the code
 hard to understand and maintain.
 </P>
-<A NAME="toc13"></A>
 <H3>Morphology and lexicon</H3>
 <P>
 The paradigms needed to implement
@@ -600,7 +542,6 @@ These constants are defined in terms of parameter types and constructors
 in <CODE>ResGer</CODE> and <CODE>MorphoGer</CODE>, which modules are not
 visible to the application grammarian.
 </P>
-<A NAME="toc14"></A>
 <H3>Lock fields</H3>
 <P>
 An important difference between <CODE>MorphoGer</CODE> and
@@ -611,8 +552,8 @@ record types in a resource modules, such as <CODE>ParadigmsGer</CODE>,
 a <B>lock field</B> is added to the record, so that categories
 with the same implementation are not confused with each other.
 (This is inspired by the <CODE>newtype</CODE> discipline in Haskell.)
-For instance, the lincats of adverbs and conjunctions may be the same
-in <CODE>CatGer</CODE>:
+For instance, the lincats of adverbs and conjunctions are the same
+in <CODE>CommonX</CODE> (and therefore in <CODE>CatGer</CODE>, which inherits it):
 </P>
 <PRE>
     lincat Adv  = {s : Str} ;
@@ -647,7 +588,6 @@ in her hidden definitions of constants in <CODE>Paradigms</CODE>. For instance,
     -- mkAdv s = {s = s ; lock_Adv = &lt;&gt;} ;
 </PRE>
 <P></P>
-<A NAME="toc15"></A>
 <H3>Lexicon construction</H3>
 <P>
 The lexicon belonging to <CODE>LangGer</CODE> consists of two modules:
@@ -667,20 +607,17 @@ the coverage of the paradigms gets thereby tested and that the
 use of the paradigms in <CODE>LexiconGer</CODE> gives a good set of examples for
 those who want to build new lexica.
 </P>
-<A NAME="toc16"></A>
 <H2>Inside grammar modules</H2>
 <P>
 Detailed implementation tricks
 are found in the comments of each module.
 </P>
-<A NAME="toc17"></A>
 <H3>The category system</H3>
 <UL>
 <LI><A HREF="gfdoc/Common.html">Common</A>, <A HREF="../common/CommonX.gf">CommonX</A>
 <LI><A HREF="gfdoc/Cat.html">Cat</A>, <A HREF="gfdoc/CatGer.gf">CatGer</A>
 </UL>
 
-<A NAME="toc18"></A>
 <H3>Phrase category modules</H3>
 <UL>
 <LI><A HREF="gfdoc/Noun.html">Noun</A>, <A HREF="../german/NounGer.gf">NounGer</A>
@@ -698,7 +635,6 @@ are found in the comments of each module.
 <LI><A HREF="gfdoc/Lang.html">Lang</A>, <A HREF="../german/LangGer.gf">LangGer</A>
 </UL>
 
-<A NAME="toc19"></A>
 <H3>Resource modules</H3>
 <UL>
 <LI><A HREF="../german/ResGer.gf">ResGer</A>
@@ -706,16 +642,13 @@ are found in the comments of each module.
 <LI><A HREF="gfdoc/ParadigmsGer.html">ParadigmsGer</A>, <A HREF="../german/ParadigmsGer.gf">ParadigmsGer.gf</A>
 </UL>
 
-<A NAME="toc20"></A>
 <H3>Lexicon</H3>
 <UL>
 <LI><A HREF="gfdoc/Structural.html">Structural</A>, <A HREF="../german/StructuralGer.gf">StructuralGer</A>
 <LI><A HREF="gfdoc/Lexicon.html">Lexicon</A>, <A HREF="../german/LexiconGer.gf">LexiconGer</A>
 </UL>
 
-<A NAME="toc21"></A>
 <H2>Lexicon extension</H2>
-<A NAME="toc22"></A>
 <H3>The irregularity lexicon</H3>
 <P>
 It may be handy to provide a separate module of irregular
@@ -725,7 +658,6 @@ few hundred perhaps. Building such a lexicon separately also
 makes it less important to cover <I>everything</I> by the
 worst-case paradigms (<CODE>mkV</CODE> etc).
 </P>
-<A NAME="toc23"></A>
 <H3>Lexicon extraction from a word list</H3>
 <P>
 You can often find resources such as lists of 
@@ -760,7 +692,6 @@ When using ready-made word lists, you should think about
 coyright issues. Ideally, all resource grammar material should
 be provided under GNU General Public License.
 </P>
-<A NAME="toc24"></A>
 <H3>Lexicon extraction from raw text data</H3>
 <P>
 This is a cheap technique to build a lexicon of thousands
@@ -768,7 +699,6 @@ of words, if text data is available in digital format.
 See the <A HREF="http://www.cs.chalmers.se/~markus/FM/">Functional Morphology</A> 
 homepage for details.
 </P>
-<A NAME="toc25"></A>
 <H3>Extending the resource grammar API</H3>
 <P>
 Sooner or later it will happen that the resource grammar API
@@ -777,7 +707,6 @@ that it does not include idiomatic expressions in a given language.
 The solution then is in the first place to build language-specific
 extension modules. This chapter will deal with this issue (to be completed).
 </P>
-<A NAME="toc26"></A>
 <H2>Writing an instance of parametrized resource grammar implementation</H2>
 <P>
 Above we have looked at how a resource implementation is built by
@@ -797,7 +726,6 @@ the Romance family (to be completed). Here is a set of
 <A HREF="http://www.cs.chalmers.se/~aarne/geocal2006.pdf">slides</A>
 on the topic.
 </P>
-<A NAME="toc27"></A>
 <H2>Parametrizing a resource grammar implementation</H2>
 <P>
 This is the most demanding form of resource grammar writing.
@@ -813,6 +741,6 @@ This chapter will work out an example of how an Estonian grammar
 is constructed from the Finnish grammar through parametrization.
 </P>
 
-<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
-<!-- cmdline: txt2tags -\-toc -thtml Resource-HOWTO.txt -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags Resource-HOWTO.txt -->
 </BODY></HTML>
