@@ -6,14 +6,9 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
 
   lincat
 
--- Phrase
-
-    Utt, Voc = {s : Str} ;
-
 -- Tensed/Untensed
 
    S  = {s : Str} ;
-   SC  = {s : Str} ;
    QS = {s :                 QForm => Str} ;
    RS = {s :                   GenNum => Case => Animacy => Str} ;
 
@@ -28,7 +23,7 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
     QCl = {s :Polarity => ClForm => QForm => Str};  
     IP = { s : PronForm => Str ; n : Number ; p : Person ;
            g: PronGen ; anim : Animacy ;  pron: Bool} ;     
-    IAdv, IComp = {s : Str} ;    
+    IComp = {s : Str} ;    
     IDet = Adjective ** {n: Number; g: PronGen; c: Case} ; 
 
 -- Relative
@@ -65,10 +60,6 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
     QuantSg, QuantPl , Det = {s : AdjForm => Str; n: Number; g: PronGen; c: Case} ; 
     Predet, Quant= {s : AdjForm => Str; g: PronGen; c: Case} ; 
 
--- Adverb
-
-    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
-
 -- Numeral
 
     Num, Numeral = {s : Case => Gender => Str} ;
@@ -80,8 +71,6 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
 
     Conj = {s : Str ; n : Number} ;  
     DConj = {s1,s2 : Str ; n : Number} ; 
-    PConj = {s : Str} ;    
-    CAdv = {s : Str} ;    
     Subj = {s : Str} ;
     Prep = {s : Str ; c: Case } ;
 
