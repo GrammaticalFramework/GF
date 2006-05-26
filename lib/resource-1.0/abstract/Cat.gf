@@ -1,6 +1,22 @@
 --1 The category system
 
+-- The category system is central to the library in the sense
+-- that the other modules ($Adjective$, $Adverb$, $Noun$, $Verb$ etc)
+-- communicate through it. This means that a e.g. a function using
+-- $NP$s in $Verb$ need not know how $NP$s are constructed in $Noun$:
+-- it is enough that both $Verb$ and $Noun$ use the same type $NP$,
+-- which is given here in $Cat$.
+-- 
 -- Some categories are inherited from [Common Common.html].
+-- The reason they are defined there is that they have the same
+-- implementation in all languages in the resource (typically,
+-- just a string). These categories are
+-- $AdA, AdN, AdV, Adv, Ant, CAdv, IAdv, PConj, Phr$, 
+-- $Pol, SC, Tense, Text, Utt, Voc$.
+--
+-- Moreover, the list categories $ListAdv, ListAP, ListNP, ListS$
+-- are defined on $Conjunction$ and only used locally there.
+
 
 abstract Cat = Common ** {
 
@@ -84,7 +100,9 @@ abstract Cat = Common ** {
 
 --2 Words of open classes
 
--- These are constructed in [Lexicon Lexicon.html] and in additional lexicon modules.
+-- These are constructed in [Lexicon Lexicon.html] and in 
+-- additional lexicon modules.
+
     V ;     -- one-place verb                      e.g. "sleep" 
     V2 ;    -- two-place verb                      e.g. "love"
     V3 ;    -- three-place verb                    e.g. "show"

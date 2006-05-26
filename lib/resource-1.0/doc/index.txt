@@ -19,15 +19,16 @@ yet been "officially" released. The release will be made in combination
 with a new version of GF itself, since the grammars use new features
 not available in GF 2.4.
 
-V. 1.0 is not yet available for Russian and Danish: for them,
-we refer to [v. 0.9 ../../resource/].
+**New**. V. 1.0 is now (26 May) available Russian and Danish.
+But the modules still need some testing, especially the Danish
+lexicon (corrections welcome!).
 
 
 ==Authors==
 
 Inger Andersson and Therese Soderberg (Spanish morphology),
 Nicolas Barth and Sylvain Pogodalla (French verb list),
-Janna Khegai (Russian modules, forthcoming),
+Janna Khegai (Russian modules),
 Bjorn Bringert (many Swadesh lexica),
 Carlos Gonzalia (Spanish cardinals), 
 Harald Hammarstrom (German morphology),
@@ -45,11 +46,13 @@ Lauri Carlson,
 Gloria Casanellas,
 Karin Cavallin,
 Robin Cooper,
+Ali El Dada,
 Hans-Joachim Daniels,
 Elisabet Engdahl,
 Markus Forsberg,
 Kristofer Johannisson,
 Anni Laine,
+Saara Myllyntausta,
 Wanjiku Ng'ang'a,
 Jordi Saludes.
 
@@ -141,21 +144,24 @@ The documentation of the individual modules:
 
 ===The language-dependent APIs===
 
+- [ParadigmsDan gfdoc/ParadigmsDan.html]: Danish lexical paradigms
 - [ParadigmsEng gfdoc/ParadigmsEng.html]: English lexical paradigms
 - [ParadigmsFin gfdoc/ParadigmsFin.html]: Finnish lexical paradigms
 - [ParadigmsFre gfdoc/ParadigmsFre.html]: French lexical paradigms
 - [ParadigmsIta gfdoc/ParadigmsIta.html]: Italian lexical paradigms
 - [ParadigmsGer gfdoc/ParadigmsGer.html]: German lexical paradigms
 - [ParadigmsNor gfdoc/ParadigmsNor.html]: Norwegian lexical paradigms
+- [ParadigmsRus gfdoc/ParadigmsRus.html]: Russian lexical paradigms
 - [ParadigmsSpa gfdoc/ParadigmsSpa.html]: Spanish lexical paradigms
 - [ParadigmsSwe gfdoc/ParadigmsSwe.html]: Swedish lexical paradigms
 
 
 
+- [IrregDan gfdoc/IrregDan.gf]: Danish irregular verbs (very incomplete)
 - [IrregEng gfdoc/IrregEng.gf]: English irregular verbs
 - [IrregFre gfdoc/IrregFre.gf]: French irregular verbs
 % - [IrregGer gfdoc/IrregGer.gf]: German irregular verbs
-- [IrregNor gfdoc/IrregNor.gf]: Norwegian irregular verbs
+- [IrregNor gfdoc/IrregNor.gf]: Norwegian irregular verbs (very incomplete)
 - [IrregSwe gfdoc/IrregSwe.gf]: Swedish irregular verbs
 
 
@@ -199,7 +205,8 @@ library. Use one (or several) of the following packages instead:
 - ``lib/alltenses`` the complete ground-API library with all forms
 - ``lib/present`` a pruned ground-API library with present tense only
 - ``lib/mathematical`` special-purpose API for mathematical applications
-- ``lib/multimodal`` special-purpose API for multimodal dialogue applications
+- ``lib/multimodal`` the complete ground-API with demonstratives for 
+  multimodal dialogue applications
 
 
 ===Linking applications to libraries===
@@ -210,9 +217,9 @@ Notice, however, that both special-purpose APIs share modules with
 
 
 It is advisable to use the bare package names in paths pointing to the
-libraries. Here is an example, from ``examples/tram``:
+libraries. Here is an example, from ``examples/dialogue/LightsEng.gf``:
 ```
-  --# -path=.:present:multimodal:mathematical:prelude
+  --# -path=.:alltenses:multimodal:prelude
 ```
 To reach these directories from anywhere, set the environment variable
 ``GF_LIB_PATH`` to point to the directory ``GF/lib/``. For instance,
@@ -244,7 +251,7 @@ both ``alltenses/LangEng`` and ``present/LangEng`` - the latter being
 much faster than the former. The ``-mcfg`` flag (multiple context-free grammar)
 must be used:
 ```
-  p -lang=LangEng -mcfg "this man is old"
+  p -lang=LangEng -mcfg -parser=topdown "this man is old"
 ```
 Parsing with the ``-mcfg`` flag takes a few extra seconds the first time during
 each session, but gets faster at later runs.
@@ -264,11 +271,11 @@ based on the Swadesh list of 200 words. It is useful for
 things like language training.
 
 
-===Tram===
+===Dialogue===
 
-The [examples/tram ../../../examples/tram] 
-grammar set implements the user grammar of a 
-multimodal dialogue system concerning public transport.
+The [examples/dialogue ../../../examples/dialogue] 
+grammar set implements the user grammars of some 
+multimodal dialogue system.
 Its purpose is to serve as a prototype for applications in the
 TALK project.
 
@@ -286,7 +293,7 @@ grammar writing.
 This bugs should be fixed before the final release of v. 1.0.
 
 Danish
-- API 1.0 not implemented
+- the lexicon and chosen inflections are only partially verified
 
 
 English 
@@ -294,8 +301,7 @@ English
 
 
 Finnish
-- no possessive suffixes
-- wrong cases in passive constructions
+- wrong cases in some passive constructions
 
 
 French
@@ -312,11 +318,12 @@ Italian
 
 
 Norwegian
-- word order in compound verbs sometimes wrong
+- the lexicon and chosen inflections are only partially verified
 
 
 Russian
-- API 1.0 not implemented
+- some functions missing
+- regular paradigms are missing
 
 
 Spanish
@@ -324,7 +331,7 @@ Spanish
 
 
 Swedish
-- word order in compound verbs sometimes wrong
+- 
 
 
 
@@ -348,5 +355,6 @@ French, Italian, and Spanish.
 Slides showing how the method is used.
 
 [Multimodal Resource Grammars http://www.cs.chalmers.se/~aarne/slides/talk-edin2005.pdf].
-Slides showing how to use the multimodal resource library.
+Slides showing how to use the multimodal resource library. N.B. the library
+examples are from ``multimodal/old``, which is a reduced-size API.
 

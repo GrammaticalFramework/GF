@@ -141,11 +141,11 @@ oper
       
 
   mkTal : (x1,_,_,_,x5 : Str) -> LinDigit = 
-    \två, tolv, tjugo, andra, tolfte -> 
+    \två, tolv, tjugo, andra, tyvende -> 
     {s = table {
            ental  => cardOrd två andra ; 
-           ton    => cardOrd tolv tolfte ;
-           tiotal => cardReg tjugo
+           ton    => cardReg tolv  ;
+           tiotal => cardOrd tjugo tyvende
            }
      } ;
 
