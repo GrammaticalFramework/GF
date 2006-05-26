@@ -72,7 +72,7 @@ concrete StructuralNor of Structural = CatNor **
        Sg => \\_ => genderForms ["den der"] ["det der"] ; 
        Pl => \\_,_ => ["de der"]
        } ;
-     det = DDef Def
+     det = DDef Indef
     } ;
   that_NP = regNP ["det der"] ["det ders"] SgNeutr ;
   there_Adv = ss "der" ;
@@ -86,7 +86,7 @@ concrete StructuralNor of Structural = CatNor **
        Sg => \\_ => genderForms ["den her"] ["det her"] ; 
        Pl => \\_,_ => ["de her"]
        } ;
-     det = DDef Def
+     det = DDef Indef
     } ;
   this_NP = regNP ["det her"] ["det hers"] SgNeutr ;
   those_NP = regNP ["de der"] ["de ders"] Plg ;

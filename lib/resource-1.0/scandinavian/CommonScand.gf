@@ -214,11 +214,6 @@ oper
 
 -- For $Verb$.
 
-  Verb : Type = {
-    s : VForm => Str ;
-    vtype : VType
-    } ;
-
   VP = {
       s : VPForm => {
         fin : Str ;          -- V1 har  ---s1

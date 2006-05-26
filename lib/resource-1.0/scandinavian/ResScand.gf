@@ -27,11 +27,16 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
       vsup = verb.s ! VI (VSupin diath) ; --# notpresent  
       vinf = verb.s ! VI (VInfin diath) ;
 
-      har : Tense -> Str = \t -> verbHave.s ! vFin t Act ;
-      ha  : Str = verbHave.s ! VI (VInfin Act) ;
+      auxv = case hasAuxBe verb of {
+        True => verbBe.s ;
+        _ => verbHave.s
+        } ;
+
+      har : Tense -> Str = \t -> auxv ! vFin t Act ;
+      ha  : Str = auxv ! VI (VInfin Act) ;
 
       vf : Str -> Str -> {fin,inf : Str} = \fin,inf -> {
-        fin = fin ; inf = inf
+        fin = fin ; inf = inf ++ verb.part
         } ;
 
     in {

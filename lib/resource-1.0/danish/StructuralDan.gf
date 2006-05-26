@@ -83,8 +83,8 @@ concrete StructuralDan of Structural = CatDan **
   they_Pron = MorphoDan.mkNP "de" "dem" "deres" "deres" "deres" Plg P1 ;
   this_Quant = 
     {s = table {
-       Sg => \\_ => genderForms ["den her"] ["det her"] ; 
-       Pl => \\_,_ => ["de her"]
+       Sg => \\_ => genderForms ["denne"] ["dette"] ; 
+       Pl => \\_,_ => ["disse"]
        } ;
      det = DDef Indef
     } ;

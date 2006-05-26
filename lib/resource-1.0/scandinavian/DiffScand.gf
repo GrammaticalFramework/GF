@@ -14,6 +14,12 @@ interface DiffScand = open CommonScand, Prelude in {
 
     detDef : Species ;
 
+-- Danish verbs have a marking for compound-tense auxiliary ("have" or "være").
+
+    Verb : Type ;
+
+    hasAuxBe : Verb -> Bool ;
+
 -- Strings.
 
     conjThat : Str ;
@@ -25,10 +31,10 @@ interface DiffScand = open CommonScand, Prelude in {
 
     artIndef : Gender => Str ;
 
-    verbHave : {s : VForm => Str ; vtype : VType} ;
-    verbBe   : {s : VForm => Str ; vtype : VType} ;
+    verbHave : Verb ;
+    verbBe   : Verb ;
 
-    verbBecome : {s : VForm => Str ; vtype : VType} ;
+    verbBecome : Verb ;
 
     auxFut : Str ;
     auxCond : Str ;

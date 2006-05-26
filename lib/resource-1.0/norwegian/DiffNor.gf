@@ -17,7 +17,15 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
         _  => Plg
         } ;
 
-    detDef : Species = Def ;
+    detDef : Species = Indef ;
+
+    Verb : Type = {
+      s : VForm => Str ;
+      part : Str ;
+      vtype : VType
+      } ;
+
+    hasAuxBe _ = False ;
 
 -- Strings.
 
@@ -35,11 +43,17 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
       } ;
 
     verbHave = 
-      mkVerb "ha" "har" "ha" "hadde" "hatt" nonExist nonExist nonExist ;
+      mkVerb "ha" "har" "ha" "hadde" "hatt" nonExist nonExist nonExist 
+      ** noPart ;
     verbBe = 
-      mkVerb "være" "er" "var" "var" "vært" "væren" "været" "værne" ;
+      mkVerb "være" "er" "var" "var" "vært" "væren" "været" "værne" 
+      ** noPart ;
     verbBecome = 
-      mkVerb "bli" "blir" "bli" "ble" "blitt" "bliven" "blivet" "blivne" ;
+      mkVerb "bli" "blir" "bli" "ble" "blitt" "bliven" "blivet" "blivne" 
+      ** noPart ;
+
+    -- auxiliary
+    noPart = {part = []} ;
 
     auxFut = "vil" ;      -- "skal" in ExtNor
     auxCond = "ville" ;
