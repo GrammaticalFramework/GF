@@ -422,8 +422,9 @@ These modules are language-independent and provided by the existing resource
 package.
 
 - ``ParamX``: parameter types used in many languages
-- ``CommonX``: implementation of the categories $Text$ and $Phr$, as well as of
-     the logical tense, anteriority, and polarity parameters
+- ``CommonX``: implementation of language-uniform categories 
+    such as $Text$ and $Phr$, as well as of
+    the logical tense, anteriority, and polarity parameters
 - ``Coordination``: operations to deal with lists and coordination
 - ``Prelude``: general-purpose operations on strings, records,
       truth values, etc.
@@ -533,8 +534,8 @@ record types in a resource modules, such as ``ParadigmsGer``,
 a **lock field** is added to the record, so that categories
 with the same implementation are not confused with each other.
 (This is inspired by the ``newtype`` discipline in Haskell.)
-For instance, the lincats of adverbs and conjunctions may be the same
-in ``CatGer``:
+For instance, the lincats of adverbs and conjunctions are the same
+in ``CommonX`` (and therefore in ``CatGer``, which inherits it):
 ```
   lincat Adv  = {s : Str} ;
   lincat Conj = {s : Str} ;
