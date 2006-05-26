@@ -10,7 +10,7 @@
 <HR NOSHADE SIZE=1>
 <P></P>
   <UL>
-  <LI><A HREF="#toc1">Norwegian Lexical Paradigms</A>
+  <LI><A HREF="#toc1">Danish Lexical Paradigms</A>
     <UL>
     <LI><A HREF="#toc2">Parameters</A>
     <LI><A HREF="#toc3">Nouns</A>
@@ -28,13 +28,14 @@
     <LI><A HREF="#toc11">Prepositions</A>
     <LI><A HREF="#toc12">Verbs</A>
       <UL>
-      <LI><A HREF="#toc13">Verbs with a particle.</A>
-      <LI><A HREF="#toc14">Deponent verbs.</A>
-      <LI><A HREF="#toc15">Two-place verbs</A>
-      <LI><A HREF="#toc16">Three-place verbs</A>
-      <LI><A HREF="#toc17">Other complement patterns</A>
+      <LI><A HREF="#toc13">Verbs with //være// as auxiliary</A>
+      <LI><A HREF="#toc14">Verbs with a particle</A>
+      <LI><A HREF="#toc15">Deponent verbs</A>
+      <LI><A HREF="#toc16">Two-place verbs</A>
+      <LI><A HREF="#toc17">Three-place verbs</A>
+      <LI><A HREF="#toc18">Other complement patterns</A>
       </UL>
-    <LI><A HREF="#toc18">Definitions of the paradigms</A>
+    <LI><A HREF="#toc19">Definitions of the paradigms</A>
     </UL>
   </UL>
 
@@ -43,7 +44,7 @@
 <P></P>
 <P>
 Author: 
-Last update: Fri May 26 17:33:31 2006
+Last update: Fri May 26 17:33:30 2006
 </P>
 <P>
 Produced by 
@@ -57,7 +58,7 @@ gfdoc - a rudimentary GF document generator.
 # -path=.:../scandinavian:../common:../abstract:../../prelude
 </P>
 <A NAME="toc1"></A>
-<H1>Norwegian Lexical Paradigms</H1>
+<H1>Danish Lexical Paradigms</H1>
 <P>
 Aarne Ranta 2003
 </P>
@@ -71,7 +72,7 @@ Closed categories (determiners, pronouns, conjunctions) are
 accessed through the resource syntax API, <CODE>Structural.gf</CODE>. 
 </P>
 <P>
-The main difference with <CODE>MorphoNor.gf</CODE> is that the types
+The main difference with <CODE>MorphoDan.gf</CODE> is that the types
 referred to are compiled resource grammar types. We have moreover
 had the design principle of always having existing forms, rather
 than stems, as string arguments of the paradigms.
@@ -86,14 +87,14 @@ separate module <CODE>IrregularEng</CODE>, which covers all irregularly inflecte
 words.
 </P>
 <PRE>
-    resource ParadigmsNor = 
+    resource ParadigmsDan = 
       open 
         (Predef=Predef), 
         Prelude, 
         CommonScand, 
-        ResNor, 
-        MorphoNor, 
-        CatNor in {
+        ResDan, 
+        MorphoDan, 
+        CatDan in {
 </PRE>
 <P></P>
 <A NAME="toc2"></A>
@@ -105,9 +106,8 @@ To abstract over gender names, we define the following identifiers.
     oper
       Gender : Type ; 
     
-      masculine : Gender ;
-      feminine  : Gender ;
-      neutrum   : Gender ;
+      utrum   : Gender ;
+      neutrum : Gender ;
 </PRE>
 <P></P>
 <P>
@@ -150,9 +150,8 @@ last letter of the second form (if <I>n</I>, then <CODE>utrum</CODE>, otherwise 
 <P>
 The regular function takes the singular indefinite form
 and computes the other forms and the gender by a heuristic.
-The heuristic is that nouns ending <I>e</I> are feminine like <I>kvinne</I>,
-all others are masculine like <I>bil</I>. 
-If in doubt, use the <CODE>cc</CODE> command to test!
+The heuristic is that all nouns are <CODE>utrum</CODE> with the
+plural ending <I>er///</I>r//.
 </P>
 <PRE>
       regN : Str -&gt; N ;
@@ -171,6 +170,14 @@ gender is computed from the definite form.
 </P>
 <PRE>
       mk2N : (bil,bilen : Str) -&gt; N ;
+</PRE>
+<P></P>
+<P>
+This function takes the singular indefinite and definite and the plural
+indefinite
+</P>
+<PRE>
+      mk3N : (bil,bilen,biler : Str) -&gt; N ;
 </PRE>
 <P></P>
 <A NAME="toc4"></A>
@@ -360,7 +367,7 @@ The almost regular verb function needs the infinitive and the preteritum.
 </PRE>
 <P></P>
 <P>
-There is an extensive list of irregular verbs in the module <CODE>IrregNor</CODE>.
+There is an extensive list of irregular verbs in the module <CODE>IrregDan</CODE>.
 In practice, it is enough to give three forms, as in school books.
 </P>
 <PRE>
@@ -368,7 +375,16 @@ In practice, it is enough to give three forms, as in school books.
 </PRE>
 <P></P>
 <A NAME="toc13"></A>
-<H3>Verbs with a particle.</H3>
+<H3>Verbs with //være// as auxiliary</H3>
+<P>
+By default, the auxiliary is <I>have</I>. This function changes it to <I>være</I>.
+</P>
+<PRE>
+      vaereV : V -&gt; V ;
+</PRE>
+<P></P>
+<A NAME="toc14"></A>
+<H3>Verbs with a particle</H3>
 <P>
 The particle, such as in <I>switch on</I>, is given as a string.
 </P>
@@ -376,8 +392,8 @@ The particle, such as in <I>switch on</I>, is given as a string.
       partV  : V -&gt; Str -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc14"></A>
-<H3>Deponent verbs.</H3>
+<A NAME="toc15"></A>
+<H3>Deponent verbs</H3>
 <P>
 Some words are used in passive forms only, e.g. <I>hoppas</I>, some as
 reflexive e.g. <I>ångra sig</I>.
@@ -387,7 +403,7 @@ reflexive e.g. <I>ångra sig</I>.
       reflV : V -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc15"></A>
+<A NAME="toc16"></A>
 <H3>Two-place verbs</H3>
 <P>
 Two-place verbs need a preposition, except the special case with direct object.
@@ -399,7 +415,7 @@ Two-place verbs need a preposition, except the special case with direct object.
       dirV2 : V -&gt; V2 ;
 </PRE>
 <P></P>
-<A NAME="toc16"></A>
+<A NAME="toc17"></A>
 <H3>Three-place verbs</H3>
 <P>
 Three-place (ditransitive) verbs need two prepositions, of which
@@ -411,7 +427,7 @@ the first one or both can be absent.
       dirdirV3 : V -&gt; V3 ;                  -- give,_,_
 </PRE>
 <P></P>
-<A NAME="toc17"></A>
+<A NAME="toc18"></A>
 <H3>Other complement patterns</H3>
 <P>
 Verbs and adjectives can take complements such as sentences,
@@ -445,7 +461,7 @@ as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
       AS, A2S, AV, A2V : Type ;
 </PRE>
 <P></P>
-<A NAME="toc18"></A>
+<A NAME="toc19"></A>
 <H2>Definitions of the paradigms</H2>
 <P>
 The definitions should not bother the user of the API. So they are
@@ -453,5 +469,5 @@ hidden from the document.
 </P>
 
 <!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
-<!-- cmdline: txt2tags -thtml -\-toc norwegian/ParadigmsNor.txt -->
+<!-- cmdline: txt2tags -thtml -\-toc danish/ParadigmsDan.txt -->
 </BODY></HTML>

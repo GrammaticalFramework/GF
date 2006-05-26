@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1> The category system</H1>
 <FONT SIZE="4">
 <I>Author: </I><BR>
-Last update: Wed May 24 18:29:11 2006
+Last update: Fri May 26 17:33:27 2006
 </FONT></CENTER>
 
 <P></P>
@@ -39,7 +39,24 @@ gfdoc - a rudimentary GF document generator.
 <A NAME="toc1"></A>
 <H1>The category system</H1>
 <P>
+The category system is central to the library in the sense
+that the other modules (<CODE>Adjective</CODE>, <CODE>Adverb</CODE>, <CODE>Noun</CODE>, <CODE>Verb</CODE> etc)
+communicate through it. This means that a e.g. a function using
+<CODE>NP</CODE>s in <CODE>Verb</CODE> need not know how <CODE>NP</CODE>s are constructed in <CODE>Noun</CODE>:
+it is enough that both <CODE>Verb</CODE> and <CODE>Noun</CODE> use the same type <CODE>NP</CODE>,
+which is given here in <CODE>Cat</CODE>.
+</P>
+<P>
 Some categories are inherited from <A HREF="Common.html">Common</A>.
+The reason they are defined there is that they have the same
+implementation in all languages in the resource (typically,
+just a string). These categories are
+<CODE>AdA, AdN, AdV, Adv, Ant, CAdv, IAdv, PConj, Phr</CODE>, 
+<CODE>Pol, SC, Tense, Text, Utt, Voc</CODE>.
+</P>
+<P>
+Moreover, the list categories <CODE>ListAdv, ListAP, ListNP, ListS</CODE>
+are defined on <CODE>Conjunction</CODE> and only used locally there.
 </P>
 <PRE>
     abstract Cat = Common ** {
@@ -154,7 +171,8 @@ Constructed in <A HREF="Structural.html">Structural</A>.
 <A NAME="toc10"></A>
 <H2>Words of open classes</H2>
 <P>
-These are constructed in <A HREF="Lexicon.html">Lexicon</A> and in additional lexicon modules.
+These are constructed in <A HREF="Lexicon.html">Lexicon</A> and in 
+additional lexicon modules.
 </P>
 <PRE>
         V ;     -- one-place verb                      e.g. "sleep" 
