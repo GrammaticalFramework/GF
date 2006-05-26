@@ -25,11 +25,10 @@ This library covers basic linguistic structures of
 different languages.
 
 [Version 1.0 resource-1.0/doc] (still beta, but already recommended).
-Covers English, Finnish, French, German, Italian, Norwegian, 
-Spanish, and Swedish.
+Covers Danish, English, Finnish, French, German, Italian, Norwegian, 
+Russian, Spanish, and Swedish.
 
-[Version 0.9 resource/] (current "official" version). 
-Also covers Danish and Russian, but not German.
+[Version 0.9 resource/]. 
 
 [Version 0.6 resource-0.6/]. Old version with 7 languages.
 

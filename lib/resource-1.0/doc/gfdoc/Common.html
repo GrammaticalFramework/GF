@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1> Infrastructure with common implementations.</H1>
 <FONT SIZE="4">
 <I>Author: </I><BR>
-Last update: Wed May 24 18:29:11 2006
+Last update: Fri May 26 17:33:27 2006
 </FONT></CENTER>
 
 <P></P>
@@ -34,8 +34,7 @@ gfdoc - a rudimentary GF document generator.
 <H1>Infrastructure with common implementations.</H1>
 <P>
 This module defines the categories that uniformly have the linearization
-<CODE>{s : Str}</CODE> in all languages. They are given lock fields that guarantee
-grammatical correctness via type checking.
+<CODE>{s : Str}</CODE> in all languages. 
 Moreover, this module defines the abstract parameters of tense, polarity, and
 anteriority, which are used in <A HREF="Phrase.html">Phrase</A> to generate different
 forms of sentences. Together they give 2 x 4 x 4 = 16 sentence forms.
@@ -92,12 +91,12 @@ Many adverbs are constructed in <A HREF="Structural.html">Structural</A>.
         Ant ;   -- anteriority: simultaneous, anterior
     
       fun
-        PPos, PNeg : Pol ;             -- I sleep/don't sleep
+        PPos, PNeg : Pol ;           -- I sleep/don't sleep
     
         TPres  : Tense ;                
         ASimul : Ant ;
-        TPast, TFut, TCond : Tense ;   -- I slept/will sleep/would sleep --# notpresent
-        AAnter : Ant ;                 -- I have slept                   --# notpresent
+        TPast, TFut, TCond : Tense ; -- I slept/will sleep/would sleep --# notpresent
+        AAnter : Ant ;               -- I have slept                   --# notpresent
     
     }
 </PRE>

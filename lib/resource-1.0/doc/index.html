@@ -7,41 +7,9 @@
 <P ALIGN="center"><CENTER><H1>GF Resource Grammar Library v. 1.0</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Tue Mar 21 16:36:57 2006
+Last update: Fri May 26 17:32:59 2006
 </FONT></CENTER>
 
-<P></P>
-<HR NOSHADE SIZE=1>
-<P></P>
-    <UL>
-    <LI><A HREF="#toc1">Authors</A>
-    <LI><A HREF="#toc2">License</A>
-    <LI><A HREF="#toc3">Scope</A>
-    <LI><A HREF="#toc4">Quick start</A>
-      <UL>
-      <LI><A HREF="#toc5">The language independent ground API</A>
-      <LI><A HREF="#toc6">The language-dependent APIs</A>
-      <LI><A HREF="#toc7">Special-purpose APIs</A>
-      </UL>
-    <LI><A HREF="#toc8">Using the library</A>
-      <UL>
-      <LI><A HREF="#toc9">The compiled version</A>
-      <LI><A HREF="#toc10">Linking applications to libraries</A>
-      <LI><A HREF="#toc11">Using the libraries as top-level grammars</A>
-      </UL>
-    <LI><A HREF="#toc12">Example applications</A>
-      <UL>
-      <LI><A HREF="#toc13">Brozeage</A>
-      <LI><A HREF="#toc14">Tram</A>
-      <LI><A HREF="#toc15">Animals</A>
-      </UL>
-    <LI><A HREF="#toc16">Known bugs and missing components</A>
-    <LI><A HREF="#toc17">More reading</A>
-    </UL>
-
-<P></P>
-<HR NOSHADE SIZE=1>
-<P></P>
 <P>
 The GF Resource Grammar Library defines the basic grammar of
 ten languages: 
@@ -55,15 +23,15 @@ with a new version of GF itself, since the grammars use new features
 not available in GF 2.4.
 </P>
 <P>
-V. 1.0 is not yet available for Russian and Danish: for them,
-we refer to <A HREF="../../resource/">v. 0.9</A>.
+<B>New</B>. V. 1.0 is now (26 May) available Russian and Danish.
+But the modules still need some testing, especially the Danish
+lexicon (corrections welcome!).
 </P>
-<A NAME="toc1"></A>
 <H2>Authors</H2>
 <P>
 Inger Andersson and Therese Soderberg (Spanish morphology),
 Nicolas Barth and Sylvain Pogodalla (French verb list),
-Janna Khegai (Russian modules, forthcoming),
+Janna Khegai (Russian modules),
 Bjorn Bringert (many Swadesh lexica),
 Carlos Gonzalia (Spanish cardinals), 
 Harald Hammarstrom (German morphology),
@@ -82,22 +50,22 @@ Lauri Carlson,
 Gloria Casanellas,
 Karin Cavallin,
 Robin Cooper,
+Ali El Dada,
 Hans-Joachim Daniels,
 Elisabet Engdahl,
 Markus Forsberg,
 Kristofer Johannisson,
 Anni Laine,
+Saara Myllyntausta,
 Wanjiku Ng'ang'a,
 Jordi Saludes.
 </P>
-<A NAME="toc2"></A>
 <H2>License</H2>
 <P>
 The GF Resource Grammar Library is open-source software licensed under
 GNU General Public License. See the file <A HREF="../LICENSE">LICENSE</A> for more
 details.
 </P>
-<A NAME="toc3"></A>
 <H2>Scope</H2>
 <P>
 Coverage, for each language:
@@ -127,7 +95,6 @@ Presentation:
 <LI>example collections
 </UL>
 
-<A NAME="toc4"></A>
 <H2>Quick start</H2>
 <P>
 Go to the main directory, compile the grammars, and run a test.
@@ -160,7 +127,6 @@ Do for instance
 <P>
 For more examples, see the <A HREF="clt2006.html">Overview slides</A>. 
 </P>
-<A NAME="toc5"></A>
 <H3>The language independent ground API</H3>
 <P>
 This API is accessible by both <CODE>present</CODE> and <CODE>alltenses</CODE>.
@@ -193,27 +159,28 @@ The documentation of the individual modules:
 <LI><A HREF="gfdoc/Lang.html">Lang</A>: the main module comprising all the others
 </UL>
 
-<A NAME="toc6"></A>
 <H3>The language-dependent APIs</H3>
 <UL>
+<LI><A HREF="gfdoc/ParadigmsDan.html">ParadigmsDan</A>: Danish lexical paradigms
 <LI><A HREF="gfdoc/ParadigmsEng.html">ParadigmsEng</A>: English lexical paradigms
 <LI><A HREF="gfdoc/ParadigmsFin.html">ParadigmsFin</A>: Finnish lexical paradigms
 <LI><A HREF="gfdoc/ParadigmsFre.html">ParadigmsFre</A>: French lexical paradigms
 <LI><A HREF="gfdoc/ParadigmsIta.html">ParadigmsIta</A>: Italian lexical paradigms
 <LI><A HREF="gfdoc/ParadigmsGer.html">ParadigmsGer</A>: German lexical paradigms
 <LI><A HREF="gfdoc/ParadigmsNor.html">ParadigmsNor</A>: Norwegian lexical paradigms
+<LI><A HREF="gfdoc/ParadigmsRus.html">ParadigmsRus</A>: Russian lexical paradigms
 <LI><A HREF="gfdoc/ParadigmsSpa.html">ParadigmsSpa</A>: Spanish lexical paradigms
 <LI><A HREF="gfdoc/ParadigmsSwe.html">ParadigmsSwe</A>: Swedish lexical paradigms
 </UL>
 
 <UL>
+<LI><A HREF="gfdoc/IrregDan.gf">IrregDan</A>: Danish irregular verbs (very incomplete)
 <LI><A HREF="gfdoc/IrregEng.gf">IrregEng</A>: English irregular verbs
 <LI><A HREF="gfdoc/IrregFre.gf">IrregFre</A>: French irregular verbs
-<LI><A HREF="gfdoc/IrregNor.gf">IrregNor</A>: Norwegian irregular verbs
+<LI><A HREF="gfdoc/IrregNor.gf">IrregNor</A>: Norwegian irregular verbs (very incomplete)
 <LI><A HREF="gfdoc/IrregSwe.gf">IrregSwe</A>: Swedish irregular verbs
 </UL>
 
-<A NAME="toc7"></A>
 <H3>Special-purpose APIs</H3>
 <H4>Present</H4>
 <P>
@@ -225,8 +192,7 @@ sufficient for many applications.
 </P>
 <H4>Multimodal</H4>
 <UL>
-<LI><A HREF="gfdoc/Multimodal.html">Multimodal</A>: main module for multimodal dialogue systems
-<LI><A HREF="gfdoc/Demonstrative.html">Demonstrative</A>: demonstrative noun phrases and adverbs
+<LI><A HREF="gfdoc/Multi.html">Multi</A>: main module for multimodal dialogue systems
 </UL>
 
 <H4>Mathematical</H4>
@@ -236,9 +202,7 @@ sufficient for many applications.
 <LI><A HREF="gfdoc/Symbol.html">Symbol</A>: symbols and numbers in text
 </UL>
 
-<A NAME="toc8"></A>
 <H2>Using the library</H2>
-<A NAME="toc9"></A>
 <H3>The compiled version</H3>
 <P>
 The simplest way to get the library is to install the precompiled version
@@ -256,10 +220,10 @@ library. Use one (or several) of the following packages instead:
 <LI><CODE>lib/alltenses</CODE> the complete ground-API library with all forms
 <LI><CODE>lib/present</CODE> a pruned ground-API library with present tense only
 <LI><CODE>lib/mathematical</CODE> special-purpose API for mathematical applications
-<LI><CODE>lib/multimodal</CODE> special-purpose API for multimodal dialogue applications
+<LI><CODE>lib/multimodal</CODE> the complete ground-API with demonstratives for 
+  multimodal dialogue applications
 </UL>
 
-<A NAME="toc10"></A>
 <H3>Linking applications to libraries</H3>
 <P>
 Notice, however, that both special-purpose APIs share modules with
@@ -268,10 +232,10 @@ Notice, however, that both special-purpose APIs share modules with
 </P>
 <P>
 It is advisable to use the bare package names in paths pointing to the
-libraries. Here is an example, from <CODE>examples/tram</CODE>:
+libraries. Here is an example, from <CODE>examples/dialogue/LightsEng.gf</CODE>:
 </P>
 <PRE>
-    --# -path=.:present:multimodal:mathematical:prelude
+    --# -path=.:alltenses:multimodal:prelude
 </PRE>
 <P>
 To reach these directories from anywhere, set the environment variable
@@ -282,7 +246,6 @@ I have the following line in my <CODE>.bashrc</CODE> file:
     export GF_LIB_PATH=/home/aarne/GF/lib
 </PRE>
 <P></P>
-<A NAME="toc11"></A>
 <H3>Using the libraries as top-level grammars</H3>
 <P>
 If you have done <CODE>make</CODE> in <CODE>lib/resource-1.0</CODE>, you will have 
@@ -309,20 +272,18 @@ much faster than the former. The <CODE>-mcfg</CODE> flag (multiple context-free 
 must be used:
 </P>
 <PRE>
-    p -lang=LangEng -mcfg "this man is old"
+    p -lang=LangEng -mcfg -parser=topdown "this man is old"
 </PRE>
 <P>
 Parsing with the <CODE>-mcfg</CODE> flag takes a few extra seconds the first time during
 each session, but gets faster at later runs.
 </P>
-<A NAME="toc12"></A>
 <H2>Example applications</H2>
 <P>
 These applications are meand to serve as starting points for
 new applications, showing how the libraries can be used in
 typical situations.
 </P>
-<A NAME="toc13"></A>
 <H3>Brozeage</H3>
 <P>
 The <A HREF="../../../examples/bronzeage">examples/bronzeage</A> 
@@ -330,16 +291,14 @@ grammar set implements a language fragment
 based on the Swadesh list of 200 words. It is useful for
 things like language training.
 </P>
-<A NAME="toc14"></A>
-<H3>Tram</H3>
+<H3>Dialogue</H3>
 <P>
-The <A HREF="../../../examples/tram">examples/tram</A> 
-grammar set implements the user grammar of a 
-multimodal dialogue system concerning public transport.
+The <A HREF="../../../examples/dialogue">examples/dialogue</A> 
+grammar set implements the user grammars of some 
+multimodal dialogue system.
 Its purpose is to serve as a prototype for applications in the
 TALK project.
 </P>
-<A NAME="toc15"></A>
 <H3>Animals</H3>
 <P>
 The <A HREF="../../../examples/animal">examples/animal</A> 
@@ -347,7 +306,6 @@ grammar set implements some queries about animals.
 Its purpose is to serve as a prototype for example-based 
 grammar writing.
 </P>
-<A NAME="toc16"></A>
 <H2>Known bugs and missing components</H2>
 <P>
 This bugs should be fixed before the final release of v. 1.0.
@@ -356,7 +314,7 @@ This bugs should be fixed before the final release of v. 1.0.
 Danish
 </P>
 <UL>
-<LI>API 1.0 not implemented
+<LI>the lexicon and chosen inflections are only partially verified
 </UL>
 
 <P>
@@ -370,8 +328,7 @@ English
 Finnish
 </P>
 <UL>
-<LI>no possessive suffixes
-<LI>wrong cases in passive constructions
+<LI>wrong cases in some passive constructions
 </UL>
 
 <P>
@@ -400,14 +357,15 @@ Italian
 Norwegian
 </P>
 <UL>
-<LI>word order in compound verbs sometimes wrong
+<LI>the lexicon and chosen inflections are only partially verified
 </UL>
 
 <P>
 Russian
 </P>
 <UL>
-<LI>API 1.0 not implemented
+<LI>some functions missing
+<LI>regular paradigms are missing
 </UL>
 
 <P>
@@ -419,12 +377,8 @@ Spanish
 
 <P>
 Swedish
+- 
 </P>
-<UL>
-<LI>word order in compound verbs sometimes wrong
-</UL>
-
-<A NAME="toc17"></A>
 <H2>More reading</H2>
 <P>
 <A HREF="gslt-sem-2006.html">Grammars as Software Libraries</A>. Slides
@@ -449,9 +403,10 @@ Slides showing how the method is used.
 </P>
 <P>
 <A HREF="http://www.cs.chalmers.se/~aarne/slides/talk-edin2005.pdf">Multimodal Resource Grammars</A>.
-Slides showing how to use the multimodal resource library.
+Slides showing how to use the multimodal resource library. N.B. the library
+examples are from <CODE>multimodal/old</CODE>, which is a reduced-size API.
 </P>
 
-<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
-<!-- cmdline: txt2tags -\-toc -thtml index.txt -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags index.txt -->
 </BODY></HTML>
