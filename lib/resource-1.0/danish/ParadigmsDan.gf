@@ -86,6 +86,11 @@ oper
 
   mk2N : (bil,bilen : Str) -> N ;
 
+-- This function takes the singular indefinite and definite and the plural
+-- indefinite
+
+  mk3N : (bil,bilen,biler : Str) -> N ;
+
 
 --3 Compound nouns 
 --
@@ -304,16 +309,18 @@ oper
        Neutr      => mkN x (x      + "t") (x + "r") (init x + "ene")
        } ;
     _ => case g of {
-       Utr        => mkN x (x      + "en") (x + "er") (x + "rene") ;
+       Utr        => mkN x (x      + "en") (x + "er") (x + "erne") ;
        Neutr      => mkN x (x      + "et") (x + "")   (x + "ene")
        }
     } ;
 
 
    mk2N x y = case last y of {
-     "n" => regGenN x utrum ;
-     _   => regGenN x neutrum
+     "n" => mk3N x y (init y + "r") ;
+     _   => mk3N x y x
      } ;
+
+   mk3N x y z = let u = ifTok Str x z "ene" "ne" in mkN x y z (z + u) ;
 
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
   regN2 n g = mkN2 (regGenN n g) (mkPreposition "av") ;
@@ -325,7 +332,7 @@ oper
     {s = table {NPPoss _ => x ; _ => y} ; a = agrP3 g n ;
      lock_NP = <>} ;
 
-  mkA a b c = (mkAdject a b c [] []) ** {lock_A = <>} ;
+  mkA = mk3ADeg ;
   mk2A a b = mkA a b (a + "e") ;
   regA a = (regADeg a) **  {lock_A = <>} ;
 
@@ -341,7 +348,7 @@ oper
     }}  ** {lock_A = <>} ;
 
   irregADeg a b c = mkAdject a (a + "t") (a + "e") b c ** {lock_A = <>} ;
-  mk3ADeg a b c = mkAdject a b c (a + "ere") (a + "est") ** {lock_A = <>} ;
+  mk3ADeg a b c = mkAdject a b c (c + "re") (c + "st") ** {lock_A = <>} ;
   mk2ADeg a b = mkAdject a b (a + "e") (a + "ere") (a + "est") ** {lock_A = <>} ;
 
   mkAdv x = ss x ** {lock_Adv = <>} ;
