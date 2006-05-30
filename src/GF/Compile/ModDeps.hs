@@ -93,6 +93,9 @@ moduleDeps ms = mapM deps ms where
 
   -- check for superficial compatibility, not submodule relation etc: what can be extended
   compatMType mt0 mt = case (mt0,mt) of
+    (MTResource,   MTConcrete _) -> True
+    (MTInstance _, MTConcrete _) -> True
+    (MTInterface,  MTAbstract)   -> True
     (MTConcrete _, MTConcrete _) -> True
     (MTInstance _, MTInstance _) -> True
     (MTReuse _, MTReuse _) -> True

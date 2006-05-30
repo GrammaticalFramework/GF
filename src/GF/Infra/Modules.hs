@@ -343,16 +343,20 @@ isModTrans m = case mtype m of
   _ -> False
 
 sameMType :: Eq i => ModuleType i -> ModuleType i -> Bool
-sameMType m n = case (m,n) of
+sameMType m n = case (n,m) of
   (MTConcrete _, MTConcrete _) -> True
+
   (MTInstance _, MTInstance _) -> True
-  (MTInstance _, MTResource) -> True
-  (MTInstance _, MTInterface) -> True
-  (MTResource, MTInstance _) -> True
-  (MTResource, MTInterface) -> True
-  (MTAbstract, MTInterface) -> True    -- for reuse
-  (MTConcrete _, MTResource) -> True -- for reuse
-  (MTInterface,MTResource) -> True
+  (MTInstance _, MTResource)   -> True
+  (MTInstance _, MTConcrete _) -> True
+
+  (MTInterface,  MTInstance _) -> True
+  (MTInterface,  MTResource)   -> True    -- for reuse
+  (MTInterface,  MTAbstract)   -> True    -- for reuse
+
+  (MTResource,   MTInstance _) -> True
+  (MTResource,   MTConcrete _) -> True    -- for reuse
+
   _ -> m == n
 
 -- | don't generate code for interfaces and for incomplete modules

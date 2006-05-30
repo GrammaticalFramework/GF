@@ -214,6 +214,7 @@ checkCncInfo gr m (a,abs) (c,info) = do
                                                    -- cat for cf, typ for pe
 
     CncCat (Yes typ) mdef mpr -> chIn "linearization type of" $ do
+      checkErr $ lookupCatContextSrc gr a c
       typ'  <- checkIfLinType gr typ
       mdef' <- case mdef of
         Yes def -> do
