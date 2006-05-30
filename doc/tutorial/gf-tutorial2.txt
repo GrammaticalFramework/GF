@@ -1910,7 +1910,7 @@ of such a theory, represented as an ``abstract`` module in GF.
 
 A resource grammar is a grammar built on linguistic grounds,
 to describe a language rather than a domain.
-The GF resource grammar library contains resource grammars for
+The GF resource grammar library, which contains resource grammars for
 10 languages, is described more closely in the following
 documents:
 - [Resource library API documentation ../../lib/resource-1.0/doc/]:

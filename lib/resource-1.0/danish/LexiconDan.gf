@@ -12,7 +12,7 @@ lin
   airplane_N = mk2N "fly" "flyet" ;
   answer_V2S = mkV2S (regV "svare") "til" ;
   apartment_N = mk2N "værelse" "værelsen" ;
-  apple_N = mk2N "æble" "æblet" ;
+  apple_N = mk3N "æble" "æblet" "æbler" ;
   art_N = mk2N "kunst" "kunsten" ;
   ask_V2Q = mkV2Q spørge_V [] ;
   baby_N = mk2N "baby" "babyen" ; ---- babyen
@@ -252,7 +252,7 @@ lin
   cloud_N = mk2N "sky" "skyen" ;
   day_N = mk3N "dag" "dagen" "dage" ;
   dust_N = mk2N "støv" "støvet" ;
-  ear_N = mk2N "øre" "øret" ;
+  ear_N = mk3N "øre" "øret" "ører" ;
   earth_N = mk2N "jord" "jorden" ;
   egg_N = mk2N "æg" "æget" ;
   eye_N = mk3N "øje" "øjet" "øjne" ;
@@ -269,7 +269,7 @@ lin
   hair_N = mk2N "hår" "håret" ;
   hand_N = mk2N "hånd" "hånden" ;
   head_N = mk2N "hoved" "hovedet" ;
-  heart_N = mk2N "hjerte" "hjertet" ;
+  heart_N = mk3N "hjerte" "hjertet" "hjerter" ;
   horn_N = mk2N "horn" "hornet" ;
   husband_N = mk2N "ægtefælle" "ægtefællen" ; ----
   ice_N = mk2N "is" "isen" ;

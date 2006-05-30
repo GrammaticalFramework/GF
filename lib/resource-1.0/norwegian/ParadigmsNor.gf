@@ -217,6 +217,13 @@ oper
   irregV : (drikke, drakk, drukket  : Str) -> V ;
 
 
+--3 Verbs with "være" as auxiliary
+--
+-- By default, the auxiliary is "have". This function changes it to "være".
+
+  vaereV : V -> V ;
+
+
 --3 Verbs with a particle.
 --
 -- The particle, such as in "switch on", is given as a string.
@@ -357,14 +364,14 @@ oper
   mkPreposition p = p ;
 
   mkV a b c d e f = mkVerb6 a b c d e f ** 
-    {part = [] ; vtype = VAct ; lock_V = <>} ;
+    {part = [] ; vtype = VAct ; isVaere = False ; lock_V = <>} ;
 
   regV a = case last a of {
     "e" => vHusk (init a) ;
     _ => vBo a
-    } ** {part = [] ; vtype = VAct ; lock_V = <>} ;
+    } ** {part = [] ; vtype = VAct ; isVaere = False ; lock_V = <>} ;
 
-  mk2V a b = regVerb a b ** {part = [] ; vtype = VAct ; lock_V = <>} ;
+  mk2V a b = regVerb a b ** {part = [] ; vtype = VAct ; isVaere = False ; lock_V = <>} ;
 
   irregV =
     \drikke,drakk,drukket ->
@@ -380,10 +387,17 @@ oper
     in 
     mkV drikke drikker (drikke + "s") drakk drukket drikk ; 
 
+  vaereV v = {
+    s = v.s ;
+    part = [] ;
+    vtype = v.vtype ; 
+    isVaere = True ; 
+    lock_V = <>
+    } ;
 
-  partV v p = {s = v.s ; part = p ; vtype = v.vtype ; lock_V = <>} ;
-  depV v = {s = v.s ; part = v.part ; vtype = VPass ; lock_V = <>} ;
-  reflV v = {s = v.s ; part = v.part ; vtype = VRefl ; lock_V = <>} ;
+  partV v p = {s = v.s ; part = p ; vtype = v.vtype ; isVaere = v.isVaere ; lock_V = <>} ;
+  depV v = {s = v.s ; part = v.part ; vtype = VPass ; isVaere = False ; lock_V = <>} ;
+  reflV v = {s = v.s ; part = v.part ; vtype = VRefl ; isVaere = False ; lock_V = <>} ;
 
   mkV2 v p = v ** {c2 = p ; lock_V2 = <>} ;
   dirV2 v = mkV2 v [] ;

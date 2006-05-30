@@ -17,9 +17,9 @@ lin
   bad_A = regADeg "dårlig" ; ----
   bank_N = mk2N "bank" "banken" ;
   beautiful_A = mk3ADeg "vakker" "vakkert" "vakra" ;
-  become_VA = mkVA bli_V ;
+  become_VA = mkVA (vaereV bli_V) ;
   beer_N = regGenN "øl" neutrum ;
-  beg_V2V = mkV2V be_V [] "att" ;
+  beg_V2V = mkV2V be_V [] "at" ;
   big_A = irregADeg "stor" "større" "størst";
   bike_N = mkN "sykkel" "sykkelen" "sykler" "syklene" ;
   bird_N = mk2N "fugl" "fuglen" ;
@@ -53,19 +53,19 @@ lin
   close_V2 = dirV2 (mk2V "lukke" "lukket") ;
   coat_N = regGenN "frakk" masculine ;
   cold_A = regADeg "kald" ;
-  come_V = komme_V ;
+  come_V = vaereV komme_V ;
   computer_N = mk2N "datamaskin" "datamaskinen" ;
   country_N = mk2N "land" "landet" ;
   cousin_N = mk2N "fetter" "fetteren" ; ----
   cow_N = mkN "ku" "kua" "kyr" "kyrne" ; ----
-  die_V = dø_V ;
+  die_V = vaereV dø_V ;
   dirty_A = mk3ADeg "skitten" "skittent" "skitne" ; ----
   distance_N3 = mkN3 (regGenN "avstand" masculine) "fra" "til" ;
   doctor_N = mk2N "lege" "legen" ;
   dog_N = regGenN "hund" masculine ;
   door_N = regGenN "dør" feminine ;
   drink_V2 = dirV2 drikke_V ;
-  easy_A2V = mkA2V (regA "grei") "før" ;
+  easy_A2V = mkA2V (regA "grei") "for" ;
   eat_V2 = dirV2 (mk2V "spise" "spiste") ;
   empty_A = mkADeg "tom" "tomt" "tomme" "tommere" "tommest" ;
   enemy_N = regGenN "fiende" masculine ;
@@ -85,7 +85,7 @@ lin
   glove_N = regGenN "hanske" masculine ;
   gold_N = regGenN "gull" neutrum ;
   good_A = mkADeg "god" "godt" "gode" "bedre" "best" ;
-  go_V = gå_V ;
+  go_V = vaereV gå_V ;
   green_A = mk2ADeg "grønn" "grønt" ;
   harbour_N = regGenN "havn" feminine;
   hate_V2 = dirV2 (regV "hate") ;
@@ -150,7 +150,7 @@ lin
   rock_N = regGenN "stein" masculine ;
   roof_N = regGenN "tak" neutrum ;
   rubber_N = mk2N "gummi" "gummien" ;
-  run_V = springe_V ;
+  run_V = vaereV springe_V ;
   say_VS = mkVS si_V ;
   school_N = regGenN "skole" feminine;
   science_N = mk2N "vitenskap" "vitenskapen" ;
@@ -189,7 +189,7 @@ lin
   thick_A = mk2ADeg "tykk" "tykt" ;
   thin_A = mk2ADeg "tynn" "tynt" ;
   train_N = regGenN "tog" neutrum ;
-  travel_V = mk2V "reise" "reiste" ;
+  travel_V = vaereV (mk2V "reise" "reiste") ;
   tree_N = mkN "tre" "treet" "trær" "træne" ;
   ----  trousers_N = regGenN "trousers" ; ---- pl t !
   ugly_A = mk2ADeg "stygg" "stygt" ;
@@ -197,7 +197,7 @@ lin
   university_N = regGenN "universitet" neutrum ;
   village_N = mk2N "grend" "grenda" ;
   wait_V2 = mkV2 (regV "vente") "på" ;
-  walk_V = (irregV "gå" "gikk" "gått") ;
+  walk_V = vaereV gå_V ;
   warm_A = regADeg "varm" ;
   war_N = regGenN "krig" masculine ;
   watch_V2 = mkV2 se_V "på" ;
@@ -220,7 +220,7 @@ lin
   add_V3 = mkV3 (partV (irregV "legge" "la" "lagt") "til") [] "til" ;
   number_N = mk2N "nummer" "nummeret" ;
   put_V2 = mkV2 (irregV "sette" "satte" "satt") [] ;
-  stop_V = regV "stanse" ;
+  stop_V = vaereV (regV "stanse") ;
   jump_V = regV "hoppe" ;
 
   left_Ord = {s = "venstre" ; isDet = True} ;
@@ -308,12 +308,12 @@ lin
   count_V2 = dirV2 (regV "regne") ;
   cut_V2 = dirV2 (skjære_V) ;
   dig_V = mk2V "grave" "gravde" ;
-  fall_V = falle_V ;
+  fall_V = vaereV falle_V ;
   fear_V2 = dirV2 (regV "frykte") ;
   fight_V2 = dirV2 (slåss_V) ;
   float_V = flyte_V ;
   flow_V = renne_V ;
-  fly_V = fly_V ;
+  fly_V = vaereV fly_V ;
   freeze_V = fryse_V ;
   give_V3 = dirdirV3 gi_V ;
   hit_V2 = dirV2 (slå_V) ;
@@ -335,7 +335,7 @@ lin
   split_V2 = dirV2 (mk2V "kløyve" "kløyvde") ;
   squeeze_V2 = dirV2 (mk2V "klemme" "klemte") ;
   stab_V2 = dirV2 (stikke_V) ;
-  stand_V = stå_V ;
+  stand_V = vaereV stå_V ;
   suck_V2 = dirV2 (suge_V) ;
   swell_V = partV (regV "hovne") "opp" ;
   swim_V = regV "simme" ;

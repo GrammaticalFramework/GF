@@ -156,11 +156,11 @@ l,  linearize: l PattList? Tree
       HINT: see GF language specification for the syntax of Pattern and Term.
       You can also copy and past parsing results.
   options:  
-      -table   show parameters
       -struct  bracketed form
-      -record  record, i.e. explicit GF concrete syntax term
-      -all     show all forms and variants
-      -multi   linearize to all languages (the other options don't work)
+      -table   show parameters (not compatible with -record, -all)
+      -record  record, i.e. explicit GF concrete syntax term (not compatible with -table, -all)
+      -all     show all forms and variants (not compatible with -record, -table)
+      -multi   linearize to all languages (can be combined with the other options)
   flags:
       -lang    linearize in this grammar
       -number  give this number of forms at most
@@ -214,6 +214,9 @@ tb, tree_bank: tb
   options:
      -c        compare to existing xml-formatted treebank
      -trees    return the trees of the treebank
+     -all      show all linearization alternatives (branches and variants)
+     -table    show tables of linearizations with parameters
+     -record   show linearization records
      -xml      wrap the treebank (or comparison results) with XML tags
      -mem      write the treebank in memory instead of a file TODO
   examples:
