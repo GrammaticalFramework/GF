@@ -79,16 +79,16 @@ concrete StructuralNor of Structural = CatNor **
   there7to_Adv = ss "dit" ;
   there7from_Adv = ss "derfra" ;
   therefore_PConj = ss "derfor" ;
-  these_NP = regNP ["de her"] ["det hers"] Plg ;
+  these_NP = regNP ["disse"] ["disses"] Plg ;
   they_Pron = MorphoNor.mkNP "de" "dem" "deres" "deres" "deres" Plg P1 ;
   this_Quant = 
     {s = table {
-       Sg => \\_ => genderForms ["den her"] ["det her"] ; 
-       Pl => \\_,_ => ["de her"]
+       Sg => \\_ => genderForms ["denne"] ["dette"] ; 
+       Pl => \\_,_ => ["disse"]
        } ;
-     det = DDef Indef
+     det = DDef Def
     } ;
-  this_NP = regNP ["det her"] ["det hers"] SgNeutr ;
+  this_NP = regNP ["dette"] ["dettes"] SgNeutr ;
   those_NP = regNP ["de der"] ["de ders"] Plg ;
   through_Prep = ss "gjennom" ;
   too_AdA = ss "for" ;

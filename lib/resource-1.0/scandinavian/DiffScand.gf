@@ -1,6 +1,8 @@
 interface DiffScand = open CommonScand, Prelude in {
 
--- Parameters.
+--1 Differences between Scandinavian languages
+
+-- Norway has three genders, Danish and Swedish have two.
 
   param
     Gender ;
@@ -14,13 +16,14 @@ interface DiffScand = open CommonScand, Prelude in {
 
     detDef : Species ;
 
--- Danish verbs have a marking for compound-tense auxiliary ("have" or "være").
+-- Danish and Norwegian verbs, but not Swedish verbs, 
+-- have two possible compound-tense auxiliaries ("have" or "være").
 
     Verb : Type ;
 
     hasAuxBe : Verb -> Bool ;
 
--- Strings.
+-- The rest of the parameters are function words used in the syntax modules.
 
     conjThat : Str ;
     conjThan : Str ;

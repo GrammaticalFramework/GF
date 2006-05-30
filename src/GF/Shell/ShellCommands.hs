@@ -186,7 +186,7 @@ optionsOfCommand co = case co of
   CGenerateRandom -> both "cf prob" "cat lang number depth atoms noexpand doexpand"
   CGenerateTrees -> both "metas" "atoms depth alts cat lang number noexpand doexpand"
   CPutTerm -> flags "transform number"
-  CTreeBank -> opts "c xml trees"
+  CTreeBank -> opts "c xml trees all table record"
   CLookupTreebank -> both "assocs raw strings trees" "treebank"
   CWrapTerm _ -> opts "c"
   CApplyTransfer _ -> flags "lang transfer"

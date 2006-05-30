@@ -226,6 +226,8 @@ oper
 
   vaereV : V -> V ;
 
+
+
 --3 Verbs with a particle
 --
 -- The particle, such as in "switch on", is given as a string.

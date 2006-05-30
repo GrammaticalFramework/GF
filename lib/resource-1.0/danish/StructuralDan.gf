@@ -79,7 +79,7 @@ concrete StructuralDan of Structural = CatDan **
   there7to_Adv = ss "dit" ;
   there7from_Adv = ss "derfra" ;
   therefore_PConj = ss "derfor" ;
-  these_NP = regNP ["de her"] ["det hers"] Plg ;
+  these_NP = regNP ["disse"] ["disses"] Plg ;
   they_Pron = MorphoDan.mkNP "de" "dem" "deres" "deres" "deres" Plg P1 ;
   this_Quant = 
     {s = table {
@@ -88,7 +88,7 @@ concrete StructuralDan of Structural = CatDan **
        } ;
      det = DDef Indef
     } ;
-  this_NP = regNP ["det her"] ["det hers"] SgNeutr ;
+  this_NP = regNP ["dette"] ["dettes"] SgNeutr ;
   those_NP = regNP ["de der"] ["de ders"] Plg ;
   through_Prep = ss "gennem" ;
   too_AdA = ss "for" ;

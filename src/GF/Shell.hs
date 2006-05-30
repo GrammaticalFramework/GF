@@ -231,8 +231,11 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
 
   CLinearize [] 
     | oElem showMulti opts -> 
-       changeArg (opTS2CommandArg (unlines. linearizeToAll
-          (allStateGrammars st)) . s2t) sa 
+
+       changeArg (opTS2CommandArg (
+         unlines . 
+         (\t -> [optLinearizeTreeVal opts gr t | gr <- allStateGrammars st])) . s2t) sa
+
     | otherwise -> changeArg (opTS2CommandArg (optLinearizeTreeVal opts gro) . s2t) sa
 ----  CLinearize m -> changeArg (opTS2CommandArg (optLinearizeArgForm opts gro m)) sa
 

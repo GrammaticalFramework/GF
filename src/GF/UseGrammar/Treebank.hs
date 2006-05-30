@@ -30,7 +30,7 @@ module GF.UseGrammar.Treebank (
   ) where
 
 import GF.Compile.ShellState 
-import GF.UseGrammar.Linear (linTree2string)
+import GF.UseGrammar.Linear -- (linTree2string)
 import GF.UseGrammar.Custom
 import GF.UseGrammar.GetTree (string2tree)
 import GF.Grammar.TypeCheck (annotate)
@@ -38,7 +38,7 @@ import GF.Canon.CMacros (noMark)
 import GF.Grammar.Grammar (Trm)
 import GF.Grammar.MMacros (exp2tree)
 import GF.Grammar.Macros (zIdent)
-import GF.Grammar.PrGrammar (prt_)
+import GF.Grammar.PrGrammar (prt_,prt)
 import GF.Grammar.Values (tree2exp)
 import GF.Data.Operations
 import GF.Infra.Option
@@ -47,6 +47,7 @@ import GF.Infra.UseIO
 import qualified GF.Grammar.Abstract as A
 import qualified Data.Map as M
 import qualified Data.Set as S
+import Control.Monad (liftM)
 
 -- Generate a treebank with a multilingual grammar. AR 8/2/2006
 -- (c) Aarne Ranta 2006 under GNU GPL
@@ -95,7 +96,7 @@ mkMultiTreebank opts sh com trees = putInXML opts "treebank" comm (concatMap mkI
    mkItem(t,i)= putInXML opts "item" (cat i)  (mkTree t ++ concatMap (mkLin t) langs)
 --   mkItem(t,i)= putInXML opts "item" (cat i)  (mkTree t >>mapM_ (mkLin t) langs)
    mkTree t   = putInXML opts "tree" []       (puts $ showTree t)
-   mkLin t lg = putInXML opts "lin" (lang lg) (puts $ linearize sh lg t)
+   mkLin t lg = putInXML opts "lin" (lang lg) (puts $ linearize opts sh lg t)
 
    langs   = [prt_ l | l <- allLanguages sh]
    comm    = "" --- " command=" ++ show com +++ "abstract=" ++ show abstr
@@ -110,7 +111,7 @@ mkUniTreebank :: Options -> ShellState -> Language -> [A.Tree] -> Treebank
 mkUniTreebank opts sh lg trees = M.fromListWith (++) [(lin t, [prt_ t]) | t <- trees]
  where
    lang  = prt_ lg 
-   lin t = linearize sh lang t
+   lin t = linearize opts sh lang t
 
 -- reads a treebank and linearizes its trees again, printing all differences
 testMultiTreebank :: Options -> ShellState -> String -> Res
@@ -120,7 +121,7 @@ testMultiTreebank opts sh = putInXML opts "testtreebank" [] .
  where
   testOne (e,lang,str0) = do
     let tr = annot gr e
-    let str = linearize sh lang tr
+    let str = linearize opts sh lang tr
     if str == str0 then ret else putInXML opts "diff" [] $ concat [
       putInXML opts "tree" [] (puts $ showTree tr),
       putInXML opts "old"  (" lang=" ++ show (prt_ (zIdent lang))) $ puts str0,
@@ -198,11 +199,18 @@ tagXML s = "<" ++ s ++ ">"
 
 --- these handy functions are borrowed from EmbedAPI
 
-linearize mgr lang = 
-  untok .
-  linTree2string noMark (canModules mgr) (zIdent lang) 
- where
-   sgr   = stateGrammarOfLangOpt False mgr (zIdent lang)
-   untok = customOrDefault (stateOptions sgr) useUntokenizer customUntokenizer sgr
+linearize opts mgr lang = lin where
+  sgr   = stateGrammarOfLangOpt False mgr zlang
+  cgr   = canModules mgr
+  zlang = zIdent lang
+  untok = customOrDefault (addOptions opts (stateOptions sgr)) useUntokenizer customUntokenizer sgr
+  lin   
+    | oElem showRecord opts = err id id . liftM prt . linearizeNoMark cgr zlang
+    | oElem tableLin opts = 
+        err id id . liftM (unlines . map untok . prLinTable True) .  allLinTables cgr zlang
+    | oElem showAll opts =  
+        err id id . liftM (unlines . map untok . prLinTable False) . allLinTables cgr zlang
+
+    | otherwise = untok . linTree2string noMark cgr zlang 
 
 showTree t = prt_ $ tree2exp t

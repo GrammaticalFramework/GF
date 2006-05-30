@@ -185,11 +185,11 @@ txtHelpFile =
   "\n      HINT: see GF language specification for the syntax of Pattern and Term." ++
   "\n      You can also copy and past parsing results." ++
   "\n  options:  " ++
-  "\n      -table   show parameters" ++
   "\n      -struct  bracketed form" ++
-  "\n      -record  record, i.e. explicit GF concrete syntax term" ++
-  "\n      -all     show all forms and variants" ++
-  "\n      -multi   linearize to all languages (the other options don't work)" ++
+  "\n      -table   show parameters (not compatible with -record, -all)" ++
+  "\n      -record  record, i.e. explicit GF concrete syntax term (not compatible with -table, -all)" ++
+  "\n      -all     show all forms and variants (not compatible with -record, -table)" ++
+  "\n      -multi   linearize to all languages (can be combined with the other options)" ++
   "\n  flags:" ++
   "\n      -lang    linearize in this grammar" ++
   "\n      -number  give this number of forms at most" ++
@@ -243,6 +243,9 @@ txtHelpFile =
   "\n  options:" ++
   "\n     -c        compare to existing xml-formatted treebank" ++
   "\n     -trees    return the trees of the treebank" ++
+  "\n     -all      show all linearization alternatives (branches and variants)" ++
+  "\n     -table    show tables of linearizations with parameters" ++
+  "\n     -record   show linearization records" ++
   "\n     -xml      wrap the treebank (or comparison results) with XML tags" ++
   "\n     -mem      write the treebank in memory instead of a file TODO" ++
   "\n  examples:" ++

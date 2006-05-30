@@ -5,7 +5,7 @@ concrete IdiomDan of Idiom = CatDan **
 
   lin
     ImpersCl vp = mkClause "det" (agrP3 neutrum Sg) vp ;
-    GenericCl vp = mkClause "man" (agrP3 neutrum Sg) vp ;
+    GenericCl vp = mkClause "man" (agrP3 utrum Sg) vp ;
 
     ExistNP np = 
       mkClause "det" (agrP3 neutrum Sg) (insertObj 
