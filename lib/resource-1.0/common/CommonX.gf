@@ -9,7 +9,6 @@ concrete CommonX of Common = open (R = ParamX) in {
     Adv = {s : Str} ; --lock_Adv : {}} ;
     AdV = {s : Str} ; --lock_AdV : {}} ;
     AdA = {s : Str} ; --lock_AdA : {}} ;
-    AdS = {s : Str} ; --lock_AdS : {}} ;
     AdN = {s : Str} ; --lock_AdN : {}} ;
     IAdv = {s : Str} ; --lock_IAdv : {}} ;
     CAdv = {s : Str} ; --lock_CAdv : {}} ;
