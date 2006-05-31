@@ -176,7 +176,7 @@ oper
 -- If comparison is formed by "mer, "mest", as in general for
 -- long adjective, the following pattern is used:
 
-  compoundADeg : A -> A ; -- -/mer/mest norsk
+  compoundA : A -> A ; -- -/mer/mest norsk
 
 
 --2 Adverbs
@@ -341,21 +341,26 @@ oper
     {s = table {NPPoss _ => x ; _ => y} ; a = agrP3 g n ;
      lock_NP = <>} ;
 
-  mkA a b c = (mkAdject a b c [] []) ** {lock_A = <>} ;
+  mkA a b c = (mkAdject a b c [] []) ** {isComp = False ; lock_A = <>} ;
   mk2A a b = mkA a b (a + "e") ;
-  regA a = (regADeg a) **  {lock_A = <>} ;
+  regA a = (regADeg a) **  {isComp = False ; lock_A = <>} ;
 
   mkA2 a p = a ** {c2 = p ; lock_A2 = <>} ;
 
-  mkADeg a b c d e = mkAdject a b c d e ** {lock_A = <>} ;
+  mkADeg a b c d e = mkAdject a b c d e ** {isComp = False ; lock_A = <>} ;
   regADeg a = case Predef.dp 2 a of {
     "ig" => aBillig a ;
     "sk" => aRask a ;
     _ => aRod a
-    }  ** {lock_A = <>} ;
-  irregADeg a b c = mkAdject a (a + "t") (a + "e") b c ** {lock_A = <>} ;
-  mk3ADeg a b c = mkAdject a b c (a + "ere") (a + "est") ** {lock_A = <>} ;
-  mk2ADeg a b = mkAdject a b (a + "e") (a + "ere") (a + "est") ** {lock_A = <>} ;
+    }  ** {isComp = False ; lock_A = <>} ;
+  irregADeg a b c = mkAdject a (a + "t") (a + "e") b c ** 
+    {isComp = False ; lock_A = <>} ;
+  mk3ADeg a b c = mkAdject a b c (a + "ere") (a + "est") ** 
+    {isComp = False ; lock_A = <>} ;
+  mk2ADeg a b = mkAdject a b (a + "e") (a + "ere") (a + "est") ** 
+    {isComp = False ; lock_A = <>} ;
+
+  compoundA adj = {s = adj.s ; isComp = True ; lock_A = <>} ;
 
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;

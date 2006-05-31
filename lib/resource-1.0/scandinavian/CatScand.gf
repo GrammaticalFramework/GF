@@ -83,9 +83,9 @@ incomplete concrete CatScand of Cat =
     V2, VV, V2A = Verb ** {c2 : Str} ;
     V3 = Verb ** {c2,c3 : Str} ;
 
-    A  = Adjective ;
+    A  = Adjective ** {isComp : Bool} ;
        -- {s : AForm => Str} ;
-    A2 = Adjective ** {c2 : Str} ;
+    A2 = Adjective ** {isComp : Bool ; c2 : Str} ;
 
     N  = Noun ; 
       -- {s : Number => Species => Case => Str ; g : Gender} ;

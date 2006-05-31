@@ -33,6 +33,7 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
     conjThan = "än" ;
     conjAnd = "och" ;
     infMark  = "att" ;
+    compMore = "mera" ;
 
     subjIf = "om" ;
 
