@@ -36,7 +36,7 @@ concrete StructuralGer of Structural = CatGer **
   few_Det = detLikeAdj Pl "wenig" ;
   first_Ord = {s = (regA "erst").s ! Posit} ;
   from_Prep = mkPrep "aus" Dat ;
-  he_Pron = mkPronPers "er" "ihn" "ihm" "seiner" "sein"  Sg P3 ;
+  he_Pron = mkPronPers "er" "ihn" "ihm" "seiner" "sein"  Masc Sg P3 ;
   here7to_Adv = ss ["hierher"] ;
   here7from_Adv = ss ["hieraus"] ;
   here_Adv = ss "hier" ;
@@ -44,9 +44,9 @@ concrete StructuralGer of Structural = CatGer **
   how8many_IDet = detLikeAdj Pl "wieviel" ;
   if_Subj = ss "wenn" ;
   in8front_Prep = mkPrep "vor" Dat ;
-  i_Pron = mkPronPers "ich" "mich" "mir" "meiner" "mein"  Sg P1 ;
+  i_Pron = mkPronPers "ich" "mich" "mir" "meiner" "mein" Fem Sg P1 ;
   in_Prep = mkPrep "in" Dat ;
-  it_Pron = mkPronPers "es" "es" "ihm" "seiner" "sein"  Sg P3 ;
+  it_Pron = mkPronPers "es" "es" "ihm" "seiner" "sein"  Neutr Sg P3 ;
   less_CAdv = ss "weniger" ;
   many_Det = detLikeAdj Pl "viel" ;
   more_CAdv = ss "mehr" ;
@@ -72,7 +72,7 @@ concrete StructuralGer of Structural = CatGer **
   please_Voc = ss "bitte" ;
   possess_Prep = mkPrep "von" Dat ;
   quite_Adv = ss "ziemlich" ;
-  she_Pron = mkPronPers "sie" "sie" "ihr" "ihrer" "ihr" Sg P3 ;
+  she_Pron = mkPronPers "sie" "sie" "ihr" "ihrer" "ihr" Fem Sg P3 ;
   so_AdA = ss "so" ;
   somebody_NP = nameNounPhrase {s = caselist "jemand" "jemanden" "jemandem" "jemands"} ;
   somePl_Det = detLikeAdj Pl "einig" ;
@@ -90,7 +90,7 @@ concrete StructuralGer of Structural = CatGer **
   there7from_Adv = ss ["daher"] ;
   therefore_PConj = ss "deshalb" ;
   these_NP = {s = caselist "diese" "diese" "diesen" "dieser" ; a = agrP3 Pl} ;
-  they_Pron = mkPronPers "sie" "sie" "ihnen" "ihrer" "ihr" Pl P3 ;
+  they_Pron = mkPronPers "sie" "sie" "ihnen" "ihrer" "ihr" Fem Pl P3 ;
   this_Quant = {s = \\n => (detLikeAdj n "dies").s ; a = Weak} ;
   this_NP = nameNounPhrase {s = caselist "dies" "dies" "diesem" "dieses"} ; ----
   those_NP = {s = caselist "jene" "jene" "jenen" "jener" ; a = agrP3 Pl} ;
@@ -105,7 +105,7 @@ concrete StructuralGer of Structural = CatGer **
         "wollte" "wolltest" "wollten" "wolltet"
         "wollte" "gewollen" [] 
         VHaben) ;
-  we_Pron = mkPronPers "wir" "uns"  "uns"   "unser"  "unser" Pl P1 ;
+  we_Pron = mkPronPers "wir" "uns"  "uns"   "unser"  "unser" Fem Pl P1 ;
 
   whatSg_IP = {s = caselist "was" "was" "was" "wessen" ; n = Sg} ; ----
   whatPl_IP = {s = caselist "was" "was" "was" "wessen" ; n = Pl} ; ----
@@ -121,9 +121,9 @@ concrete StructuralGer of Structural = CatGer **
   why_IAdv = ss "warum" ;
   without_Prep = mkPrep "ohne" Acc ;
   with_Prep = mkPrep "mit" Dat ;
-  youSg_Pron = mkPronPers "du" "dich" "dir" "deiner" "dein" Sg P2 ;
-  youPl_Pron = mkPronPers "ihr" "euch" "euch" "eurer" "euer" Pl P2 ; ---- poss
-  youPol_Pron = mkPronPers "Sie" "Sie" "Ihnen" "Ihrer" "Ihr" Pl P3 ;
+  youSg_Pron = mkPronPers "du" "dich" "dir" "deiner" "dein" Fem Sg P2 ;
+  youPl_Pron = mkPronPers "ihr" "euch" "euch" "eurer" "euer" Fem Pl P2 ; ---- poss
+  youPol_Pron = mkPronPers "Sie" "Sie" "Ihnen" "Ihrer" "Ihr" Fem Pl P3 ;
   yes_Phr = ss "ja" ;
 
 }

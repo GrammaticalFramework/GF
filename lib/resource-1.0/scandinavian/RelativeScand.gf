@@ -6,7 +6,8 @@ incomplete concrete RelativeScand of Relative =
   lin
 
     RelCl cl = {
-      s = \\t,a,p,ag => pronSuch ! ag.gn ++ conjThat ++ cl.s ! t ! a ! p ! Sub
+      s = \\t,a,p,ag => pronSuch ! ag.gn ++ conjThat ++ cl.s ! t ! a ! p ! Sub ;
+      c = NPAcc
       } ;
 
     RelVP rp vp = {
@@ -18,7 +19,8 @@ incomplete concrete RelativeScand of Relative =
             } ;
           cl = mkClause (rp.s ! ag.gn ! RNom) agr vp
         in
-        cl.s ! t ! ant ! b ! Sub
+        cl.s ! t ! ant ! b ! Sub ;
+      c = NPNom
       } ;
 
 --- We make this easy by using "som" and preposition stranding. It would be
@@ -29,7 +31,8 @@ incomplete concrete RelativeScand of Relative =
 
     RelSlash rp slash = {
       s = \\t,a,p,ag => 
-          rp.s ! ag.gn ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2
+          rp.s ! ag.gn ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2 ;
+      c = NPAcc
       } ;
 
 --- The case here could be genitive.

@@ -8,7 +8,7 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 
     S  = {s : Str} ;
     QS = {s : QForm => Str} ;
-    RS = {s : Agr => Str} ;
+    RS = {s : Agr => Str ; c : Case} ; -- c for it clefts
 
 -- Sentence
 
@@ -25,7 +25,7 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 
 -- Relative
 
-    RCl = {s : Tense => Anteriority => Polarity => Agr => Str} ;
+    RCl = {s : Tense => Anteriority => Polarity => Agr => Str ; c : Case} ;
     RP = {s : RCase => Str ; a : RAgr} ;
 
 -- Verb

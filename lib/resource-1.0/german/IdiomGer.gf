@@ -7,6 +7,15 @@ concrete IdiomGer of Idiom = CatGer **
     ImpersCl vp = mkClause "es" (agrP3 Sg) vp ;
     GenericCl vp = mkClause "man" (agrP3 Sg) vp ;
 
+    CleftNP np rs = mkClause "es" (agrP3 Sg) 
+      (insertObj (\\_ => rs.s ! gennum np.a.g np.a.n) ----
+        (insertObj (\\_ => np.s ! rs.c) (predV sein_V))) ;
+
+    CleftAdv ad s = mkClause "es" (agrP3 Sg) 
+      (insertObj (\\_ => s.s ! Main)
+        (insertObj (\\_ => ad.s) (predV sein_V))) ;
+
+
     ExistNP np = 
       mkClause "es" (agrP3 Sg) 
         (insertObj (\\_ => appPrep geben.c2 np.s) 
@@ -24,6 +33,10 @@ concrete IdiomGer of Idiom = CatGer **
       } ;
 
     ProgrVP = insertAdv "eben" ; ----
+
+    ImpPl1 vp = {s = 
+      (mkClause "wir" {g = Fem ; n = Pl ; p = P1} vp).s ! Pres ! Simul ! Pos ! Inv 
+      } ;
 
   oper
     geben = dirV2 (mkV "geben" "gibt" "gib" "gab" "gäbe" "gegeben") ;

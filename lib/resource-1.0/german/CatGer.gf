@@ -8,7 +8,7 @@ concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
 
     S  = {s : Order => Str} ;
     QS = {s : QForm => Str} ;
-    RS = {s : GenNum => Str} ;
+    RS = {s : GenNum => Str ; c : Case} ;
 
 -- Sentence
 
@@ -26,7 +26,7 @@ concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
 
 -- Relative
 
-    RCl = {s : Tense => Anteriority => Polarity => GenNum => Str} ;
+    RCl = {s : Tense => Anteriority => Polarity => GenNum => Str ; c : Case} ;
     RP = {s : GenNum => Case => Str ; a : RAgr} ;
 
 -- Verb
