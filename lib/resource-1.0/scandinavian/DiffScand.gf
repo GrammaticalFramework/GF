@@ -27,6 +27,7 @@ interface DiffScand = open CommonScand, Prelude in {
 
     conjThat : Str ;
     conjThan : Str ;
+    compMore : Str ;
     conjAnd  : Str ;
     infMark  : Str ;
 

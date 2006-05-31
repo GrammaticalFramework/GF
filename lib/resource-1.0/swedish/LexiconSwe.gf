@@ -16,7 +16,7 @@ lin
   baby_N = regGenN "bebis" utrum ;
   bad_A = irregA "dålig" "sämre" "sämst";
   bank_N = mk2N "bank" "banker" ;
-  beautiful_A = mk3A "vacker" "vackert" "vackrast" ;
+  beautiful_A = mk3A "vacker" "vackert" "vackra" ;
   become_VA = mkVA (mkV "bli" "blir""bli" "blev" "blivit" "bliven") ;
   beer_N = regGenN "öl" neutrum ;
   beg_V2V = mkV2V (mkV "be" "ber""be" "blad" "bett" "bedd") [] "att" ;

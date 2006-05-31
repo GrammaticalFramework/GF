@@ -158,6 +158,10 @@ oper
   mk3A : (galen,galet,galna : Str) -> A ;
   mk2A : (bred,brett        : Str) -> A ;
 
+-- Comparison forms may be compound ("mera svensk" - "mest svensk").
+
+  compoundA : A -> A ;
+
 
 --3 Two-place adjectives
 --
@@ -387,7 +391,7 @@ oper
     {s = table {NPPoss _ => y ; _ => x} ; a = agrP3 g n ; p = P3 ;
      lock_NP = <>} ;
 
-  mkA a b c d e f g = mkAdjective a b c d e f g ** {lock_A = <>} ;
+  mkA a b c d e f g = mkAdjective a b c d e f g ** {isComp = False ; lock_A = <>} ;
   regA fin = 
     let fint : Str = case fin of {
       ru  + "nd" => ru  + "nt" ; 
@@ -397,16 +401,17 @@ oper
       _          => fin + "t" 
     } 
     in
-    mk3A fin fint (fin + "a") ** {lock_A = <>} ;
+    mk3A fin fint (fin + "a") ;
   irregA ung yngre yngst = 
     mkA ung (ung + "t") (ung + "a") (ung + "a") yngre yngst (yngst+"a") ;
 
   mk3A ljummen ljummet ljumma =
-    mkAdjective 
+    mkA
       ljummen ljummet ljumma ljumma 
-      (ljumma + "re") (ljumma + "st") (ljumma + "ste") ** {lock_A = <>} ;
+      (ljumma + "re") (ljumma + "st") (ljumma + "ste") ;
   mk2A vid vitt = mk3A vid vitt (vid + "a") ;
 
+  compoundA adj = {s = adj.s ; isComp = True ; lock_A = <>} ;
 
   mkA2 a p = a ** {c2 = p ; lock_A2 = <>} ;
 

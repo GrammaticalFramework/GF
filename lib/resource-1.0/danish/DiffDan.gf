@@ -33,6 +33,7 @@ instance DiffDan of DiffScand = open CommonScand, Prelude in {
     conjThan = "end" ;
     conjAnd = "og" ;
     infMark  = "at" ;
+    compMore = "mere" ;
 
     subjIf = "hvis" ;
 

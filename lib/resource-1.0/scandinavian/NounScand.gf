@@ -76,7 +76,13 @@ incomplete concrete NounScand of Noun =
 
     AdNum adn num = {s = \\g => adn.s ++ num.s ! g ; isDet = True} ;
 
-    OrdSuperl a = {s = a.s ! AF (ASuperl SupWeak) Nom ; isDet = True} ;
+    OrdSuperl a = {
+      s = case a.isComp of {
+        True => "mest" ++ a.s ! AF (APosit (Weak Sg)) Nom ;
+        _    => a.s ! AF (ASuperl SupWeak) Nom
+        }  ; 
+      isDet = True
+      } ;
 
     DefArt = {
       s = \\n,b,g => if_then_Str b (artDef (gennum g n)) [] ; 

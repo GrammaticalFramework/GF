@@ -8,7 +8,11 @@ incomplete concrete AdjectiveScand of Adjective =
       isPre = True
       } ;
     ComparA a np = {
-      s = \\_ => a.s ! AF ACompar Nom ++ conjThan ++ np.s ! nominative ; 
+      s = \\ap => case a.isComp of {
+        True => compMore ++ a.s ! AF (APosit ap) Nom ;
+        _    => a.s ! AF ACompar Nom
+        }
+        ++ conjThan ++ np.s ! nominative ; 
       isPre = False
       } ;
 

@@ -33,6 +33,7 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
     conjThat = "at" ;
     conjThan = "enn" ;
     conjAnd = "og" ;
+    compMore = "mere" ;
     infMark  = "å" ;
 
     subjIf = "hvis" ;
