@@ -270,3 +270,8 @@ mkClause.
 Fine-tuned the place of negation by changing in ResGerman.mkClause and 
 VerbGerman.UseCompl. Want to say "ich bin nicht alt" and "ich liebe sie nicht".
 
+31/5
+
+Added inherent Case to RS, RCl and Gender to Agr in order to handle it clefts
+properly. (In the meantime, the module IdiomGer had required some incremental
+work.)
