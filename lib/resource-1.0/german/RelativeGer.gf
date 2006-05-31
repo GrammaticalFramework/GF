@@ -5,7 +5,8 @@ concrete RelativeGer of Relative = CatGer ** open ResGer in {
   lin
 
     RelCl cl = {
-      s = \\t,a,b,_ => "derart" ++ conjThat ++ cl.s ! t ! a ! b ! Sub
+      s = \\t,a,b,_ => "derart" ++ conjThat ++ cl.s ! t ! a ! b ! Sub ;
+      c = Nom
       } ;
 
     RelVP rp vp = {
@@ -13,16 +14,18 @@ concrete RelativeGer of Relative = CatGer ** open ResGer in {
         let 
           agr = case rp.a of {
             RNoAg => agrP3 (numGenNum gn) ;
-            RAg a => a
+            RAg a => a ** {g = Neutr}
             } ;
           cl = mkClause (rp.s ! gn ! Nom) agr vp
         in
-        cl.s ! t ! ant ! b ! Sub
+        cl.s ! t ! ant ! b ! Sub ;
+      c = Nom
       } ;
 
     RelSlash rp slash = {
       s = \\t,a,p,gn => 
-          appPrep slash.c2 (rp.s ! gn) ++ slash.s ! t ! a ! p ! Sub
+          appPrep slash.c2 (rp.s ! gn) ++ slash.s ! t ! a ! p ! Sub ;
+      c = slash.c2.c
       } ;
 
     FunRP p np rp = {

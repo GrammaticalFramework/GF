@@ -12,10 +12,10 @@ concrete ConjunctionGer of Conjunction =
     DConjAdv conj ss = conjunctDistrSS conj ss ;
 
     ConjNP conj ss = conjunctTable Case conj ss ** {
-      a = {n = conjNumber conj.n ss.a.n ; p = ss.a.p}
+      a = {g = Fem ; n = conjNumber conj.n ss.a.n ; p = ss.a.p}
       } ;
     DConjNP conj ss = conjunctDistrTable Case conj ss ** {
-      a = {n = conjNumber conj.n ss.a.n ; p = ss.a.p}
+      a = {g = Fem ; n = conjNumber conj.n ss.a.n ; p = ss.a.p}
       } ;
 
     ConjAP conj ss = conjunctTable AForm conj ss ** {

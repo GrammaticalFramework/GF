@@ -9,7 +9,7 @@ incomplete concrete CatScand of Cat =
 
     S  = {s : Order => Str} ;
     QS = {s : QForm => Str} ;
-    RS = {s : Agr => Str} ;
+    RS = {s : Agr => Str ; c : NPForm} ;
 
 -- Sentence
 
@@ -24,10 +24,10 @@ incomplete concrete CatScand of Cat =
     IComp = {s : AFormPos => Str} ; 
     IDet = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
 
--- Relative
+-- Relative; the case $c$ is for "det" clefts.
 
-    RCl = {s : Tense => Anteriority => Polarity => Agr => Str} ;
-    RP = {s : GenNum => RCase => Str ; a : RAgr} ;
+    RCl = {s : Tense => Anteriority => Polarity => Agr => Str ; c : NPForm} ;
+    RP  = {s : GenNum => RCase => Str ; a : RAgr} ;
 
 -- Verb
 

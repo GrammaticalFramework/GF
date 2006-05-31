@@ -5,7 +5,8 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
   lin
 
     RelCl cl = {
-      s = \\t,a,p,_ => "such" ++ "that" ++ cl.s ! t ! a ! p ! ODir
+      s = \\t,a,p,_ => "such" ++ "that" ++ cl.s ! t ! a ! p ! ODir ; 
+      c = Nom
       } ;
 
     RelVP rp vp = {
@@ -17,14 +18,16 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
             } ;
           cl = mkClause (rp.s ! RC Nom) agr vp
         in
-        cl.s ! t ! ant ! b ! ODir
+        cl.s ! t ! ant ! b ! ODir ;
+      c = Nom
       } ;
 
 -- Preposition stranding: "that we are looking at". Pied-piping is
 -- deferred to $ExtEng.gf$ ("at which we are looking").
 
     RelSlash rp slash = {
-      s = \\t,a,p,_ => rp.s ! RC Acc ++ slash.s ! t ! a ! p ! ODir ++ slash.c2
+      s = \\t,a,p,_ => rp.s ! RC Acc ++ slash.s ! t ! a ! p ! ODir ++ slash.c2 ;
+      c = Acc
       } ;
 
     FunRP p np rp = {

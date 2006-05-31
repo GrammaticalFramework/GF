@@ -31,7 +31,7 @@ resource ResGer = ParamX ** open Prelude in {
 
 -- Agreement of $NP$ is a record.
 
-  oper Agr = {n : Number ; p : Person} ;
+  oper Agr = {g : Gender ; n : Number ; p : Person} ;
 
 -- Pronouns are the worst-case noun phrases, which have both case
 -- and possessive forms.
@@ -85,8 +85,10 @@ resource ResGer = ParamX ** open Prelude in {
 --2 Transformations between parameter types
 
   oper
-    agrP3 : Number -> Agr = \n -> 
-      {n = n ; p = P3} ;
+    agrP3 : Number -> Agr = agrgP3 Neutr ;
+
+    agrgP3 : Gender -> Number -> Agr = \g,n -> 
+      {g = g ; n = n ; p = P3} ;
 
     gennum : Gender -> Number -> GenNum = \g,n ->
       case n of {
@@ -135,6 +137,7 @@ resource ResGer = ParamX ** open Prelude in {
         } ;
 
     conjAgr : Agr -> Agr -> Agr = \a,b -> {
+      g = Neutr ; ----
       n = conjNumber a.n b.n ;
       p = conjPerson a.p b.p
       } ;
@@ -267,14 +270,14 @@ resource ResGer = ParamX ** open Prelude in {
 -- All personal pronouns, except "ihr", conform to the simple
 -- pattern $mkPronPers$.
 
-  mkPronPers : (x1,_,_,_,x5 : Str) -> Number -> Person -> 
+  mkPronPers : (x1,_,_,_,x5 : Str) -> Gender -> Number -> Person -> 
                {s : NPForm => Str ; a : Agr} = 
-    \ich,mich,mir,meiner,mein,n,p -> {
+    \ich,mich,mir,meiner,mein,g,n,p -> {
       s = table {
         NPCase c    => caselist ich mich mir meiner ! c ;
         NPPoss gn c => mein + pronEnding ! gn ! c
         } ;
-      a = {n = n ; p = p}
+      a = {g = g ; n = n ; p = p}
       } ;
 
   pronEnding : GenNum => Case => Str = table {
@@ -538,7 +541,9 @@ resource ResGer = ParamX ** open Prelude in {
   reflPron : Agr => Case => Str = table {
     {n = Sg ; p = P1} => caselist "ich" "mich" "mir"  "meiner" ;
     {n = Sg ; p = P2} => caselist "du"  "dich" "dir"  "deiner" ;
-    {n = Sg ; p = P3} => caselist "er" "sich" "sich" "seiner" ; --- ihrer
+    {g = Masc ; n = Sg ; p = P3} => caselist "er" "sich" "sich" "seiner" ;
+    {g = Fem  ; n = Sg ; p = P3} => caselist "sie" "sich" "sich" "ihrer" ;
+    {g = Neutr ; n = Sg ; p = P3} => caselist "es" "sich" "sich" "seiner" ;
     {n = Pl ; p = P1} => caselist "wir" "uns"  "uns"  "unser" ;
     {n = Pl ; p = P2} => caselist "ihr" "euch" "euch" "euer" ;
     {n = Pl ; p = P3} => caselist "sie" "sich" "sich" "ihrer"
