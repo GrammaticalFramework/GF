@@ -59,8 +59,10 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
 			    ++ map ruleToXML rs)
     ruleToXML (SRGRule cat origCat alts) = 
 	rule (prCat cat) (comments ["Category " ++ origCat] ++ prRhs isList alts)
-      where isList = "List" `isPrefixOf` origCat && length cs == 2
-                      && isBase (cs!!0) && isCons (cs!!1)
+      where isList = False 
+                     -- Disabled list build since OptimTalk can't handle it ATM
+                     {- "List" `isPrefixOf` origCat && length cs == 2
+                        && isBase (cs!!0) && isCons (cs!!1) -}
             cs = sortNub [f | SRGAlt _ (Name f _) _ <- alts]
     prRhs isList rhss = [oneOf (map (mkProd sisr isList) rhss)] 
     -- externally visible rules for each of the GF categories
