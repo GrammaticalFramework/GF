@@ -28,13 +28,14 @@
     <LI><A HREF="#toc11">Prepositions</A>
     <LI><A HREF="#toc12">Verbs</A>
       <UL>
-      <LI><A HREF="#toc13">Verbs with a particle.</A>
-      <LI><A HREF="#toc14">Deponent verbs.</A>
-      <LI><A HREF="#toc15">Two-place verbs</A>
-      <LI><A HREF="#toc16">Three-place verbs</A>
-      <LI><A HREF="#toc17">Other complement patterns</A>
+      <LI><A HREF="#toc13">Verbs with //være// as auxiliary</A>
+      <LI><A HREF="#toc14">Verbs with a particle.</A>
+      <LI><A HREF="#toc15">Deponent verbs.</A>
+      <LI><A HREF="#toc16">Two-place verbs</A>
+      <LI><A HREF="#toc17">Three-place verbs</A>
+      <LI><A HREF="#toc18">Other complement patterns</A>
       </UL>
-    <LI><A HREF="#toc18">Definitions of the paradigms</A>
+    <LI><A HREF="#toc19">Definitions of the paradigms</A>
     </UL>
   </UL>
 
@@ -43,7 +44,7 @@
 <P></P>
 <P>
 Author: 
-Last update: Fri May 26 17:33:31 2006
+Last update: Wed May 31 19:01:40 2006
 </P>
 <P>
 Produced by 
@@ -306,7 +307,7 @@ If comparison is formed by <I>mer, //mest</I>, as in general for//
 long adjective, the following pattern is used:
 </P>
 <PRE>
-      compoundADeg : A -&gt; A ; -- -/mer/mest norsk
+      compoundA : A -&gt; A ; -- -/mer/mest norsk
 </PRE>
 <P></P>
 <A NAME="toc10"></A>
@@ -368,6 +369,15 @@ In practice, it is enough to give three forms, as in school books.
 </PRE>
 <P></P>
 <A NAME="toc13"></A>
+<H3>Verbs with //være// as auxiliary</H3>
+<P>
+By default, the auxiliary is <I>have</I>. This function changes it to <I>være</I>.
+</P>
+<PRE>
+      vaereV : V -&gt; V ;
+</PRE>
+<P></P>
+<A NAME="toc14"></A>
 <H3>Verbs with a particle.</H3>
 <P>
 The particle, such as in <I>switch on</I>, is given as a string.
@@ -376,7 +386,7 @@ The particle, such as in <I>switch on</I>, is given as a string.
       partV  : V -&gt; Str -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc14"></A>
+<A NAME="toc15"></A>
 <H3>Deponent verbs.</H3>
 <P>
 Some words are used in passive forms only, e.g. <I>hoppas</I>, some as
@@ -387,7 +397,7 @@ reflexive e.g. <I>ångra sig</I>.
       reflV : V -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc15"></A>
+<A NAME="toc16"></A>
 <H3>Two-place verbs</H3>
 <P>
 Two-place verbs need a preposition, except the special case with direct object.
@@ -399,7 +409,7 @@ Two-place verbs need a preposition, except the special case with direct object.
       dirV2 : V -&gt; V2 ;
 </PRE>
 <P></P>
-<A NAME="toc16"></A>
+<A NAME="toc17"></A>
 <H3>Three-place verbs</H3>
 <P>
 Three-place (ditransitive) verbs need two prepositions, of which
@@ -411,7 +421,7 @@ the first one or both can be absent.
       dirdirV3 : V -&gt; V3 ;                  -- give,_,_
 </PRE>
 <P></P>
-<A NAME="toc17"></A>
+<A NAME="toc18"></A>
 <H3>Other complement patterns</H3>
 <P>
 Verbs and adjectives can take complements such as sentences,
@@ -445,7 +455,7 @@ as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
       AS, A2S, AV, A2V : Type ;
 </PRE>
 <P></P>
-<A NAME="toc18"></A>
+<A NAME="toc19"></A>
 <H2>Definitions of the paradigms</H2>
 <P>
 The definitions should not bother the user of the API. So they are

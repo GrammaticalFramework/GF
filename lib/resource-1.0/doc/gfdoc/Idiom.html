@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1> Idiomatic expressions</H1>
 <FONT SIZE="4">
 <I>Author: </I><BR>
-Last update: Fri May 26 17:33:27 2006
+Last update: Wed May 31 19:01:36 2006
 </FONT></CENTER>
 
 <P></P>
@@ -37,13 +37,18 @@ often different even in closely related languages.
 </P>
 <PRE>
       fun
-        ImpersCl  : VP -&gt; Cl ;    -- it rains
-        GenericCl : VP -&gt; Cl ;    -- one sleeps
+        ImpersCl  : VP -&gt; Cl ;        -- it rains
+        GenericCl : VP -&gt; Cl ;        -- one sleeps
     
-        ExistNP   : NP -&gt; Cl ;    -- there is a house
-        ExistIP   : IP -&gt; QCl ;   -- which houses are there
+        CleftNP   : NP  -&gt; RS -&gt; Cl ; -- it is you who did it
+        CleftAdv  : Adv -&gt; S  -&gt; Cl ; -- it is yesterday she arrived
     
-        ProgrVP   : VP -&gt; VP ;    -- be sleeping
+        ExistNP   : NP -&gt; Cl ;        -- there is a house
+        ExistIP   : IP -&gt; QCl ;       -- which houses are there
+    
+        ProgrVP   : VP -&gt; VP ;        -- be sleeping
+    
+        ImpPl1    : VP -&gt; Utt ;       -- let's go
     
     }
 </PRE>
