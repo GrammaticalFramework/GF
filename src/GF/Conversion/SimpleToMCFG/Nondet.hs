@@ -136,15 +136,13 @@ simplifyCase (pat, term) = liftM2 (,) (simplifyTerm pat) (simplifyTerm term)
 reduceTerm :: SLinType -> SPath -> STerm -> CnvMonad ()
 --reduceTerm ctype path (Variants terms) 
 --    = member terms >>= reduceTerm ctype path
-reduceTerm (StrT)     path term = updateLin (path, term)
-reduceTerm (ConT _ _) path term = do pat <- expandTerm term
-				     updateHead (path, pat)
+reduceTerm (StrT)   path term = updateLin (path, term)
+reduceTerm (ConT _) path term = do pat <- expandTerm term
+				   updateHead (path, pat)
 reduceTerm (RecT rtype) path term
-    = sequence_ [ reduceTerm ctype (path ++. lbl) (term +. lbl) |
-		  (lbl, ctype) <- rtype ]
-reduceTerm (TblT ptype vtype) path table 
-    = sequence_ [ reduceTerm vtype (path ++! pat) (table +! pat) |
-		  pat <- enumeratePatterns ptype ]
+    = sequence_ [ reduceTerm ctype (path ++. lbl) (term  +. lbl) | (lbl, ctype) <- rtype ]
+reduceTerm (TblT pats vtype) path table 
+    = sequence_ [ reduceTerm vtype (path ++! pat) (table +! pat) | pat <- pats ]
 
 
 ------------------------------------------------------------
@@ -174,7 +172,7 @@ unifyPType arg (RecT prec) =
     sequence [ liftM ((,) lbl) $
 	       unifyPType (arg +. lbl) ptype |
 	       (lbl, ptype) <- prec ]
-unifyPType (Arg nr _ path) (ConT con terms) = 
+unifyPType (Arg nr _ path) (ConT terms) = 
     do (_, args, _, _) <- readState
        case lookup path (ecatConstraints (args !! nr)) of
          Just term -> return term
