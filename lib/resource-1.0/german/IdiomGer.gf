@@ -8,11 +8,11 @@ concrete IdiomGer of Idiom = CatGer **
     GenericCl vp = mkClause "man" (agrP3 Sg) vp ;
 
     CleftNP np rs = mkClause "es" (agrP3 Sg) 
-      (insertObj (\\_ => rs.s ! gennum np.a.g np.a.n) ----
+      (insertExtrapos (rs.s ! gennum np.a.g np.a.n) ----
         (insertObj (\\_ => np.s ! rs.c) (predV sein_V))) ;
 
     CleftAdv ad s = mkClause "es" (agrP3 Sg) 
-      (insertObj (\\_ => s.s ! Main)
+      (insertExtrapos (conjThat ++ s.s ! Sub)
         (insertObj (\\_ => ad.s) (predV sein_V))) ;
 
 

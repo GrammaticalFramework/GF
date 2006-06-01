@@ -6,7 +6,8 @@ incomplete concrete RelativeRomance of Relative =
   lin
 
     RelCl cl = {
-      s = \\ag,t,a,p,m => pronSuch ! ag ++ conjThat ++ cl.s ! t ! a ! p ! m
+      s = \\ag,t,a,p,m => pronSuch ! ag ++ conjThat ++ cl.s ! t ! a ! p ! m ;
+      c = Nom
       } ;
 
     --- more efficient to compile than case inside mkClause; see log.txt
@@ -15,18 +16,20 @@ incomplete concrete RelativeRomance of Relative =
           (mkClause
                     (rp.s ! False ! {g = ag.g ; n = ag.n} ! Nom)
                     {g = rp.a.g ; n = rp.a.n ; p = P3}
-                    vp).s} ;
+                    vp).s ; c = Nom} ;
       False => {s = \\ag =>
           (mkClause
                     (rp.s ! False ! {g = ag.g ; n = ag.n} ! Nom)
                     ag
-                    vp).s
+                    vp).s ; c = Nom
          }
       } ;
 
     RelSlash rp slash = {
       s = \\ag,t,a,p,m => 
-          slash.c2.s ++ rp.s ! False ! {g = ag.g ; n = ag.n} ! slash.c2.c ++ slash.s ! t ! a ! p ! m
+          slash.c2.s ++ rp.s ! False ! {g = ag.g ; n = ag.n} ! slash.c2.c ++ 
+          slash.s ! t ! a ! p ! m ;
+      c = Acc
       } ;
 
     FunRP p np rp = {

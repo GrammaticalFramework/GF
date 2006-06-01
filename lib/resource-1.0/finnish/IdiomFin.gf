@@ -23,6 +23,18 @@ concrete IdiomFin of Idiom = CatFin **
         s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
         } ;
 
+-- Notice the nominative in the cleft $NP$: "se on Matti josta Liisa pitää"
+
+    CleftNP np rs = mkClause (\_ -> "se") (agrP3 Sg) 
+      (insertExtrapos (rs.s ! np.a)
+        (insertObj (\\_,_,_ => np.s ! NPCase Nom) (predV olla))) ;
+
+-- This gives the almost forbidden "se on Porissa kun Matti asuu".
+
+    CleftAdv ad s = mkClause (\_ -> "se") (agrP3 Sg) 
+      (insertExtrapos ("kun" ++ s.s)
+        (insertObj (\\_,_,_ => ad.s) (predV olla))) ;
+
     ImpersCl vp = mkClause noSubj (agrP3 Sg) vp ;
 
     GenericCl vp = mkClause noSubj (agrP3 Sg) {
@@ -31,7 +43,6 @@ concrete IdiomFin of Idiom = CatFin **
       ext = vp.ext ;
       sc = vp.sc
       } ;
-
 
     ProgrVP vp = 
       let 
@@ -43,6 +54,15 @@ concrete IdiomFin of Idiom = CatFin **
         ext = vp.ext ;
         sc = vp.sc
         } ;
+
+-- This gives "otetaan oluet" instead of "ottakaamme oluet".
+-- The imperative is not available in a $VP$.
+
+  ImpPl1 vp = 
+    let vps = vp.s ! VIPass ! Simul ! Pos ! {n = Pl ; p = P1}
+    in
+    {s = vps.fin ++ vps.inf ++ vp.s2 ! True ! Pos ! {n = Pl ; p = P1} ++ vp.ext
+    } ;
 
   oper
     olla = verbOlla ** {sc = NPCase Nom} ;

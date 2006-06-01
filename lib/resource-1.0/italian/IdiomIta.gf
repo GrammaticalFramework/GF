@@ -1,11 +1,19 @@
 concrete IdiomIta of Idiom = CatIta ** 
-  open PhonoIta, MorphoIta, BeschIta, ParadigmsIta, Prelude in {
+  open (P = ParamX), PhonoIta, MorphoIta, BeschIta, ParadigmsIta, Prelude in {
 
   flags optimize=all_subs ;
 
   lin
     ImpersCl vp = mkClause [] (agrP3 Masc Sg) vp ;
     GenericCl vp = mkClause "si" (agrP3 Masc Sg) vp ; ---- non se ci fanno cose
+
+    CleftNP np rs = mkClause [] (agrP3 Masc Sg) 
+      (insertComplement (\\_ => rs.s ! Indic ! np.a)
+        (insertComplement (\\_ => np.s ! Ton rs.c) (predV copula))) ;
+
+    CleftAdv ad s = mkClause [] (agrP3 Masc Sg) 
+      (insertComplement (\\_ => conjThat ++ s.s ! Indic)
+        (insertComplement (\\_ => ad.s) (predV copula))) ;
 
     ExistNP np = 
       mkClause [] (agrP3 np.a.g np.a.n) 
@@ -17,7 +25,8 @@ concrete IdiomIta of Idiom = CatIta **
       s = \\t,a,p,_ =>
         ip.s ! Nom ++ 
         (mkClause [] (agrP3 ip.a.g ip.a.n) 
-           (insertClit2 (elision "ci" "c'" "ci") (predV copula))).s ! t ! a ! p ! Indic
+           (insertClit2 (elision "ci" "c'" "ci") 
+              (predV copula))).s ! t ! a ! p ! Indic
       } ;
 
     ProgrVP vp = 
@@ -30,6 +39,10 @@ concrete IdiomIta of Idiom = CatIta **
            (vp.s ! VPGerund).inf ! (aagr agr.g agr.n) ++ clpr.p1 ++ obj
         )
         (predV (essereV (verboV (stare_16 "stare")))) ;
+
+    ImpPl1 vp = {s = 
+      (mkClause [] {g = Fem ; n = Pl ; p = P1} vp).s ! P.Pres ! Simul ! Pos ! Indic 
+      } ;
 
 }
 

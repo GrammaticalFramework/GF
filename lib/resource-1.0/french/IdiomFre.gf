@@ -1,5 +1,5 @@
 concrete IdiomFre of Idiom = CatFre ** 
-  open PhonoFre, MorphoFre, ParadigmsFre, Prelude in {
+  open (P = ParamX), PhonoFre, MorphoFre, ParadigmsFre, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -17,10 +17,26 @@ concrete IdiomFre of Idiom = CatFre **
         (mkClause "il" (agrP3 Masc Sg) (insertClit2 "y" (predV avoir_V))).s ! t ! a ! p ! Indic
       } ;
 
+    CleftNP np rs = mkClause elisCe (agrP3 Masc Sg) 
+      (insertComplement (\\_ => rs.s ! Indic ! np.a)
+        (insertComplement (\\_ => np.s ! Ton rs.c) (predV copula))) ;
+
+    CleftAdv ad s = mkClause elisCe (agrP3 Masc Sg) 
+      (insertComplement (\\_ => conjThat ++ s.s ! Indic)
+        (insertComplement (\\_ => ad.s) (predV copula))) ;
+
+
     ProgrVP vp = 
       insertComplement 
         (\\a => "en" ++ "train" ++ elisDe ++ infVP vp a) 
         (predV copula) ;
+
+    ImpPl1 vp = {s = 
+      (mkClause [] {g = Fem ; n = Pl ; p = P1} vp).s ! P.Pres ! Simul ! Pos ! Indic 
+      } ;
+
+  oper
+    elisCe = elision "c" ;
 
 }
 

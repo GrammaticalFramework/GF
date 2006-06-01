@@ -5,8 +5,9 @@ concrete RelativeFin of Relative = CatFin ** open Prelude, ResFin, MorphoFin in 
   lin
 
     RelCl cl = {
-      s = \\t,a,p,_ => "siten" ++ "että" ++ cl.s ! t ! a ! p ! SDecl
+      s = \\t,a,p,_ => "siten" ++ "että" ++ cl.s ! t ! a ! p ! SDecl ;
       ---- sellainen
+      c = NPCase Nom
       } ;
 
     RelVP rp vp = {
@@ -18,7 +19,8 @@ concrete RelativeFin of Relative = CatFin ** open Prelude, ResFin, MorphoFin in 
             } ;
           cl = mkClause (subjForm {s = rp.s ! agr.n ; a = agr ; isPron = False} vp.sc) agr vp
         in
-        cl.s ! t ! ant ! b ! SDecl
+        cl.s ! t ! ant ! b ! SDecl ;
+      c = NPCase Nom
       } ;
 
     RelSlash rp slash = {
@@ -27,7 +29,8 @@ concrete RelativeFin of Relative = CatFin ** open Prelude, ResFin, MorphoFin in 
               cls = slash.s ! t ! a ! p ;
               who = appCompl True p slash.c2 (rp2np ag.n rp)
             in
-            who ++ cls
+            who ++ cls ;
+      c = slash.c2.c
       } ;
 
     FunRP p np rp = {
