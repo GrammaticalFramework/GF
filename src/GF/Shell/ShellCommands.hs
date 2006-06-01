@@ -97,8 +97,12 @@ data Command =
 
 -- to isolate the commands that are executed on top level
 data ImpureCommand = 
-    ICQuit | ICExecuteHistory FilePath | ICEarlierCommand Int
-  | ICEditSession | ICTranslateSession
+    ICQuit 
+  | ICExecuteHistory FilePath 
+  | ICEarlierCommand Int
+  | ICEditSession 
+  | ICTranslateSession
+  | ICReload
 
 type CommandOpt = (Command, Options)
 
