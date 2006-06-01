@@ -1,14 +1,10 @@
 ----------------------------------------------------------------------
 -- |
--- Maintainer  : PL
+-- Maintainer  : Krasimir Angelov
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/11 10:28:16 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
---
--- MCFG parsing
+-- FCFG parsing
 -----------------------------------------------------------------------------
 
 module GF.Parsing.FCFG

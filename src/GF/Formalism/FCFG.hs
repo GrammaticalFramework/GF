@@ -1,14 +1,10 @@
 ----------------------------------------------------------------------
 -- |
--- Maintainer  : PL
+-- Maintainer  : Krasimir Angelov
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/05/09 09:28:45 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.2 $
---
--- Definitions of multiple context-free grammars
+-- Definitions of fast multiple context-free grammars
 -----------------------------------------------------------------------------
 
 module GF.Formalism.FCFG where
