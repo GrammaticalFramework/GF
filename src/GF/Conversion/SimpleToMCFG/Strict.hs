@@ -109,7 +109,7 @@ termPaths ctype term | isBaseType ctype = [ (emptyPath, (ctype, term)) ]
 parPaths :: SLinType -> STerm -> [[(SPath, STerm)]]
 parPaths ctype term = mapM (uncurry (map . (,))) $ groupPairs $
 		      nubsort [ (path, value) | 
-				(path, (ConT _ _, value)) <- termPaths ctype term ]
+				(path, (ConT _, value)) <- termPaths ctype term ]
 
 strPaths :: SLinType -> STerm -> [(SPath, STerm)]
 strPaths ctype term = [ (path, variants values) | (path, values) <- groupPairs paths ]

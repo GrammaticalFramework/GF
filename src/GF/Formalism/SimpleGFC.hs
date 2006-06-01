@@ -79,15 +79,15 @@ term2tterm term = error $ "term2tterm: illegal term"
 -- ** linearization types and terms
 
 data LinType c t = RecT [(Label, LinType c t)]
-		 | TblT (LinType c t) (LinType c t)
-		 | ConT Constr [Term c t]
+		 | TblT [Term c t] (LinType c t)
+		 | ConT [Term c t]
 		 | StrT
 		   deriving (Eq, Ord, Show)
 
 isBaseType :: LinType c t -> Bool
-isBaseType (ConT _ _) = True
-isBaseType (StrT) = True
-isBaseType _ = False
+isBaseType (ConT _) = True
+isBaseType (StrT)   = True
+isBaseType _        = False
 
 data Term c t
     = Arg Int c (Path c t)       -- ^ argument variable, the 'Path' is a path 
@@ -166,12 +166,12 @@ variants terms0 = case concatMap flatten terms0 of
 enumerateTerms :: (Eq c, Eq t) => Maybe (Term c t) -> LinType c t -> [Term c t]
 enumerateTerms arg (StrT) = maybe err return arg
     where err = error "enumeratePatterns: parameter type should not be string"
-enumerateTerms arg (ConT _ terms) = terms
+enumerateTerms arg (ConT terms) = terms
 enumerateTerms arg (RecT rtype) 
     = liftM Rec $ mapM enumAssign rtype
     where enumAssign (lbl, ctype) = liftM ((,) lbl) $ enumerateTerms arg ctype
-enumerateTerms arg (TblT ptype ctype)
-    = liftM Tbl $ mapM enumCase $ enumeratePatterns ptype
+enumerateTerms arg (TblT terms ctype)
+    = liftM Tbl $ mapM enumCase terms
     where enumCase pat = liftM ((,) pat) $ enumerateTerms (fmap (+! pat) arg) ctype
 
 enumeratePatterns :: (Eq c, Eq t) => LinType c t -> [Term c t]
@@ -214,12 +214,12 @@ termFollowPath (Path path0) = follow (reverse path0)
 	  follow (Left  lbl : path) term = follow path (term +. lbl)
 
 lintype2paths :: (Eq c, Eq t) => Path c t -> LinType c t -> [Path c t]
-lintype2paths path (ConT _ _)   = []
+lintype2paths path (ConT _)     = []
 lintype2paths path (StrT)       = [ path ]
 lintype2paths path (RecT rec)   = concat [ lintype2paths (path ++. lbl) ctype |
 					   (lbl, ctype) <- rec ]
-lintype2paths path (TblT pt vt) = concat [ lintype2paths (path ++! pat) vt |
-					   pat <- enumeratePatterns pt ]
+lintype2paths path (TblT pts vt)= concat [ lintype2paths (path ++! pat) vt |
+					   pat <- pts ]
 
 ----------------------------------------------------------------------
 -- * pretty-printing
@@ -243,8 +243,8 @@ instance Print TTerm where
 
 instance (Print c, Print t) => Print (LinType c t) where
     prt (RecT rec) = "{" ++ prtPairList ":" "; " rec ++ "}"
-    prt (TblT t1 t2) = "(" ++ prt t1 ++ " => " ++ prt t2 ++ ")"
-    prt (ConT t ts) = prt t ++ "[" ++ prtSep "|" ts ++ "]"
+    prt (TblT ts t2) = "([" ++ prtSep "|" ts ++ "] => " ++ prt t2 ++ ")"
+    prt (ConT ts) = "[" ++ prtSep "|" ts ++ "]"
     prt (StrT) = "Str"
 
 instance (Print c, Print t) => Print (Term c t) where

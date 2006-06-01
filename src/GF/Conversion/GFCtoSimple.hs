@@ -119,8 +119,8 @@ expandTerm gram term = -- tracePrt "expanded term" prt $
 
 convertCType :: Env -> A.CType -> SLinType
 convertCType gram (A.RecType rec) = RecT [ (lbl, convertCType gram ctype) | A.Lbg lbl ctype <- rec ]
-convertCType gram (A.Table pt vt) = TblT (convertCType gram pt) (convertCType gram vt)
-convertCType gram ct@(A.Cn con)   = ConT con $ map (convertTerm gram) $ groundTerms gram ct
+convertCType gram (A.Table pt vt) = TblT (enumerateTerms Nothing (convertCType gram pt)) (convertCType gram vt)
+convertCType gram ct@(A.Cn con)   = ConT $ map (convertTerm gram) $ groundTerms gram ct
 convertCType gram (A.TStr)        = StrT
 convertCType gram (A.TInts n)     = error "GFCtoSimple.convertCType: cannot handle 'TInts' constructor"
 
