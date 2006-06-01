@@ -133,8 +133,8 @@ authorMsg = unlines [
  "Grammatical Framework, Version " ++ version,
  "Compiled " ++ today,
  "Copyright (c)", 
- "Bj\246rn Bringert, H\229kan Burden, Hans-Joachim Daniels, Markus Forsberg",
- "Thomas Hallgren, Harald Hammarstr\246m, Kristofer Johannisson,", 
+ "Krasimir Angelov, Bj\246rn Bringert, H\229kan Burden, Hans-Joachim Daniels,",
+ "Markus Forsberg, Thomas Hallgren, Harald Hammarstr\246m, Kristofer Johannisson,",
  "Janna Khegai, Peter Ljungl\246f, Petri M\228enp\228\228, and", 
  "Aarne Ranta, 1998-2006, under GNU General Public License (GPL)",
  "Bug reports to aarne@cs.chalmers.se"
