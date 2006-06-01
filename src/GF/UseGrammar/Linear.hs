@@ -75,7 +75,8 @@ linearizeToRecord gr mk m = lin [] where
   look = lookupLin gr . redirectIdent m . rtQIdent
   comp = ccompute gr
   mkBinds bs bdy = case bdy of
-    R fs -> R $ [Ass (LV i) (tK (prt t)) | (i,(t,_)) <- zip [0..] bs] ++ fs
+    R fs  -> R $ [Ass (LV i) (tK (prt t)) | (i,(t,_)) <- zip [0..] bs] ++ fs
+    FV rs -> FV $ map (mkBinds bs) rs
 
   recS t = R [Ass (L (identC "s")) t] ----
 
