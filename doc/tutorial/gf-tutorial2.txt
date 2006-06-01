@@ -1967,6 +1967,167 @@ The rest of the modules (black) come from the resource.
 ===Restricted inheritance and qualified opening===
 
 
+==Using the standard resource library==
+
+The example files of this chapter can be found in
+the directory [``arithm`` ./arithm].
+
+
+===The simplest way===
+
+The simplest way is to ``open`` a top-level ``Lang`` module
+and a ``Paradigms`` module: 
+```
+  abstract Foo = ...
+
+  concrete FooEng = open LangEng, ParadigmsEng in ...
+  concrete FooSwe = open LangSwe, ParadigmsSwe in ...
+```
+Here is an example.
+```
+abstract Arithm = {
+  cat
+    Prop ;
+    Nat ;
+  fun
+    Zero : Nat ;
+    Succ : Nat -> Nat ;
+    Even : Nat -> Prop ;
+    And  : Prop -> Prop -> Prop ;
+}
+
+--# -path=.:alltenses:prelude
+
+concrete ArithmEng of Arithm = open LangEng, ParadigmsEng in {
+  lincat
+    Prop = S ;
+    Nat  = NP ;
+  lin
+    Zero = 
+      UsePN (regPN "zero" nonhuman) ;
+    Succ n = 
+      DetCN (DetSg (SgQuant DefArt) NoOrd) (ComplN2 (regN2 "successor") n) ;
+    Even n = 
+      UseCl TPres ASimul PPos 
+        (PredVP n (UseComp (CompAP (PositA (regA "even"))))) ;
+    And x y = 
+      ConjS and_Conj (BaseS x y) ;
+
+}
+
+--# -path=.:alltenses:prelude
+
+concrete ArithmSwe of Arithm = open LangSwe, ParadigmsSwe in {
+  lincat
+    Prop = S ;
+    Nat  = NP ;
+  lin
+    Zero = 
+      UsePN (regPN "noll" neutrum) ;
+    Succ n = 
+      DetCN (DetSg (SgQuant DefArt) NoOrd) 
+        (ComplN2 (mkN2 (mk2N "efterföljare" "efterföljare") 
+           (mkPreposition "till")) n) ;
+    Even n = 
+      UseCl TPres ASimul PPos 
+        (PredVP n (UseComp (CompAP (PositA (regA "jämn"))))) ;
+    And x y = 
+      ConjS and_Conj (BaseS x y) ;
+}
+```
+
+
+===How to find resource functions===
+
+The definitions in this example were found by parsing:
+```
+  > i LangEng.gf
+
+  -- for Successor:
+  > p -cat=NP -mcfg -parser=topdown "the mother of Paris"
+
+  -- for Even:
+  > p -cat=S -mcfg -parser=topdown "Paris is old"
+
+  -- for And:
+  > p -cat=S -mcfg -parser=topdown "Paris is old and I am old"
+```
+The use of parsing can be systematized by **example-based grammar writing**,
+to which we will return later. 
+
+
+===A functor implementation===
+
+The interesting thing now is that the
+code in ``ArithmSwe`` is similar to the code in ``ArithmEng``, except for
+some lexical items ("noll" vs. "zero", "efterföljare" vs. "successor",
+"jämn" vs. "even").  How can we exploit the similarities and
+actually share code between the languages?
+
+The solution is to use a functor: an ``incomplete`` module that opens
+an ``abstract`` as an ``interface``, and then instantiate it to different
+languages that implement the interface. The structure is as follows:
+```
+  abstract Foo ...
+
+  incomplete concrete FooI = open Lang, Lex in ...
+
+  concrete FooEng of Foo = FooI with (Lang=LangEng), (Lex=LexEng) ;
+  concrete FooSwe of Foo = FooI with (Lang=LangSwe), (Lex=LexSwe) ;
+```
+where ``Lex`` is an abstract lexicon that includes the vocabulary
+specific to this application:
+```
+  abstract Lex = Cat ** ...
+
+  concrete LexEng of Lex = CatEng ** open ParadigmsEng in ...
+  concrete LexSwe of Lex = CatSwe ** open ParadigmsSwe in ...  
+```
+Here, again, a complete example (``abstract Arithm`` is as above):
+```
+incomplete concrete ArithmI of Arithm = open Lang, Lex in {
+  lincat
+    Prop = S ;
+    Nat  = NP ;
+  lin
+    Zero = 
+      UsePN zero_PN ;
+    Succ n = 
+      DetCN (DetSg (SgQuant DefArt) NoOrd) (ComplN2 successor_N2 n) ;
+    Even n = 
+      UseCl TPres ASimul PPos 
+        (PredVP n (UseComp (CompAP (PositA even_A)))) ;
+    And x y = 
+      ConjS and_Conj (BaseS x y) ;
+}
+
+--# -path=.:alltenses:prelude
+concrete ArithmEng of Arithm = ArithmI with
+  (Lang = LangEng),
+  (Lex = LexEng) ;
+
+--# -path=.:alltenses:prelude
+concrete ArithmSwe of Arithm = ArithmI with
+  (Lang = LangSwe),
+  (Lex = LexSwe) ;
+
+abstract Lex = Cat ** {
+  fun
+    zero_PN : PN ;
+    successor_N2 : N2 ;  
+    even_A : A ;
+}
+
+concrete LexSwe of Lex = CatSwe ** open ParadigmsSwe in {
+  lin 
+    zero_PN = regPN "noll" neutrum ;
+    successor_N2 = 
+      mkN2 (mk2N "efterföljare" "efterföljare") (mkPreposition "till") ;
+    even_A = regA "jämn" ;
+}
+```
+
+
 
 ==Transfer modules==
 
