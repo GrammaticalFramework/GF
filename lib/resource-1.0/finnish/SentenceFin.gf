@@ -59,6 +59,9 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
 
     UseCl  t a p cl = {s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! SDecl} ;
     UseQCl t a p cl = {s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p} ;
-    UseRCl t a p cl = {s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! r} ;
+    UseRCl t a p cl = {
+      s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! r ;
+      c = cl.c
+      } ;
 
 }

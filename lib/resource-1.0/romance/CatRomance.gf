@@ -9,7 +9,7 @@ incomplete concrete CatRomance of Cat =
 
     S  = {s : Mood => Str} ;
     QS = {s : QForm => Str} ;
-    RS = {s : Mood => Agr => Str} ;
+    RS = {s : Mood => Agr => Str ; c : Case} ;
 
 -- Sentence
 
@@ -26,7 +26,10 @@ incomplete concrete CatRomance of Cat =
 
 -- Relative
 
-    RCl  = {s : Agr => Tense => Anteriority => Polarity => Mood => Str} ;
+    RCl  = {
+      s : Agr => Tense => Anteriority => Polarity => Mood => Str ; 
+      c : Case
+      } ;
     RP   = {s : Bool => AAgr => Case => Str ; a : AAgr ; hasAgr : Bool} ;
 
 -- Verb

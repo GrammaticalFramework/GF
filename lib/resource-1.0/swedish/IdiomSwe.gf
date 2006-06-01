@@ -12,7 +12,7 @@ concrete IdiomSwe of Idiom = CatSwe **
         (insertObj (\\_ => np.s ! rs.c) (predV verbBe))) ;
 
     CleftAdv ad s = mkClause "det" (agrP3 neutrum Sg) 
-      (insertObj (\\_ => s.s ! Main)
+      (insertObj (\\_ => "som" ++ s.s ! Sub)
         (insertObj (\\_ => ad.s) (predV verbBe))) ;
 
 

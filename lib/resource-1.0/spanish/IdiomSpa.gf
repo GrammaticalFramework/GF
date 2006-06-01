@@ -1,11 +1,20 @@
 concrete IdiomSpa of Idiom = CatSpa ** 
-  open MorphoSpa, ParadigmsSpa, BeschSpa, Prelude in {
+  open (P = ParamX), MorphoSpa, ParadigmsSpa, BeschSpa, Prelude in {
 
   flags optimize=all_subs ;
 
   lin
     ImpersCl vp = mkClause [] (agrP3 Masc Sg) vp ;
     GenericCl vp = mkClause "se" (agrP3 Masc Sg) vp ; ---- just Italian ?
+
+    CleftNP np rs = mkClause [] (agrP3 Masc Sg) 
+      (insertComplement (\\_ => rs.s ! Indic ! np.a)
+        (insertComplement (\\_ => np.s ! Ton rs.c) (predV copula))) ;
+
+    CleftAdv ad s = mkClause [] (agrP3 Masc Sg) 
+      (insertComplement (\\_ => conjThat ++ s.s ! Indic)
+        (insertComplement (\\_ => ad.s) (predV copula))) ;
+
 
     ExistNP np = 
       mkClause [] (agrP3 Masc Sg)
@@ -26,5 +35,9 @@ concrete IdiomSpa of Idiom = CatSpa **
            (vp.s ! VPGerund).inf ! (aagr agr.g agr.n) ++ clpr.p1 ++ obj
         )
         (predV (verboV (estar_2 "estar"))) ;
+
+    ImpPl1 vp = {s = 
+      (mkClause [] {g = Fem ; n = Pl ; p = P1} vp).s ! P.Pres ! Simul ! Pos ! Indic 
+      } ;
 
 }

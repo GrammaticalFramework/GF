@@ -8,7 +8,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
     S  = {s : Str} ;
     QS = {s : Str} ;
-    RS = {s : Agr => Str} ;
+    RS = {s : Agr => Str ; c : NPForm} ;
 
 -- Sentence
 
@@ -25,7 +25,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
 -- Relative
 
-    RCl   = {s : Tense => Anteriority => Polarity => Agr => Str} ;
+    RCl   = {s : Tense => Anteriority => Polarity => Agr => Str ; c : NPForm} ;
     RP    = {s : Number => NPForm => Str ; a : RAgr} ;
 
 -- Verb
