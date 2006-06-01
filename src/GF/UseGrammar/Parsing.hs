@@ -66,10 +66,11 @@ parseStringC :: Options -> StateGrammar -> CFCat -> String -> Check [Tree]
 
 -- to use peb's newer parser 7/4-05 
 parseStringC opts0 sg cat s
- | oElem newCParser opts0 || oElem newMParser opts0 || oElem newParser opts0 || oElem newerParser opts0 = do  
+ | oElem newCParser opts0 || oElem newMParser opts0 || oElem newFParser opts0 || oElem newParser opts0 || oElem newerParser opts0 = do  
   let opts      = unionOptions opts0 $ stateOptions sg
       algorithm | oElem newCParser opts0 = "c"
 		| oElem newMParser opts0 = "m"
+		| oElem newFParser opts0 = "f"
 		| otherwise              = "c" -- default algorithm
       strategy  = maybe "bottomup" id $ getOptVal opts useParser -- -parser=bottomup/topdown
       tokenizer = customOrDefault opts useTokenizer customTokenizer sg

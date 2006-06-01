@@ -21,12 +21,14 @@ import qualified GF.Grammar.Grammar as Grammar (Term)
 import GF.Formalism.GCFG
 import GF.Formalism.SimpleGFC
 import GF.Formalism.MCFG
+import GF.Formalism.FCFG
 import GF.Formalism.CFG
 import GF.Formalism.Utilities
 import GF.Infra.Print
 import GF.Data.Assoc
 
 import Control.Monad (foldM)
+import Data.Array
 
 ----------------------------------------------------------------------
 -- * basic (leaf) types
@@ -105,6 +107,25 @@ mcat2scat :: MCat -> SCat
 mcat2scat = ecat2scat . mcat2ecat
 
 ----------------------------------------------------------------------
+-- * fast nonerasing MCFG
+
+type FGrammar = FCFGrammar FCat Name Token
+type FRule    = FCFRule    FCat Name Token
+data FCat     = FCat  {-# UNPACK #-} !Int SCat [SPath] [(SPath,STerm)]
+
+initialFCat :: SCat -> FCat
+initialFCat cat = FCat 0 cat [] []
+
+fcat2scat :: FCat -> SCat
+fcat2scat (FCat _ c _ _) = c
+
+instance Eq FCat where
+  (FCat id1 _ _ _) == (FCat id2 _ _ _) = id1 == id2
+
+instance Ord FCat where
+  compare (FCat id1 _ _ _) (FCat id2 _ _ _) = compare id1 id2
+
+----------------------------------------------------------------------
 -- * CFG
 
 type CGrammar = CFGrammar CCat Name Token
@@ -131,4 +152,9 @@ instance Print MCat where
 instance Print CCat where
     prt (CCat cat label) = prt cat ++ prt label
 
+instance Print FCat where
+    prt (FCat _ cat rcs tcs) = prt cat ++ "{" ++ 
+			       prtSep ";" ([prt path                    |  path       <- rcs] ++
+			                   [prt path ++ "=" ++ prt term | (path,term) <- tcs])
+			               ++ "}"
 
