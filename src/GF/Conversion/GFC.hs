@@ -31,6 +31,7 @@ import qualified GF.Conversion.RemoveSingletons as RemSing
 import qualified GF.Conversion.RemoveErasing as RemEra
 import qualified GF.Conversion.RemoveEpsilon as RemEps
 import qualified GF.Conversion.SimpleToMCFG as S2M
+import qualified GF.Conversion.SimpleToFCFG as S2FM
 import qualified GF.Conversion.MCFGtoCFG as M2C
 
 import GF.Infra.Print
@@ -40,10 +41,10 @@ import GF.System.Tracing
 ----------------------------------------------------------------------
 -- * GFC -> MCFG & CFG, using options to decide which conversion is used
 
-convertGFC :: Options -> (CanonGrammar, Ident) -> (SGrammar, (EGrammar, (MGrammar, CGrammar)))
+convertGFC :: Options -> (CanonGrammar, Ident) -> (SGrammar, (EGrammar, (MGrammar, FGrammar, CGrammar)))
 convertGFC opts = \g -> let s = g2s g
                             e = s2e s 
-                        in trace2 "Options" (show opts) (s, (e, (e2m e, e2c e)))
+                        in trace2 "Options" (show opts) (s, (e, (e2m e, s2fm s, e2c e)))
     where e2c = M2C.convertGrammar
 	  e2m = case getOptVal opts firstCat of
 		  Just cat -> flip erasing [identC cat]
@@ -53,6 +54,7 @@ convertGFC opts = \g -> let s = g2s g
 		  Just "finite-strict"     -> strict
 		  Just "epsilon"           -> epsilon . nondet
 		  _                        -> nondet
+	  s2fm= S2FM.convertGrammar
 	  g2s = case getOptVal opts gfcConversion of
 		  Just "finite"            -> finite . simple
 		  Just "finite2"           -> finite . finite . simple
@@ -74,10 +76,19 @@ gfc2simple :: Options -> (CanonGrammar, Ident) -> SGrammar
 gfc2simple opts = fst . convertGFC opts 
 
 gfc2mcfg :: Options -> (CanonGrammar, Ident) -> MGrammar
-gfc2mcfg opts = fst . snd . snd . convertGFC opts
+gfc2mcfg opts g = mcfg
+  where
+    (mcfg, _, _) = snd (snd (convertGFC opts g))
 
 gfc2cfg :: Options -> (CanonGrammar, Ident) -> CGrammar
-gfc2cfg opts = snd . snd . snd . convertGFC opts
+gfc2cfg opts g = cfg
+  where
+    (_, _, cfg) = snd (snd (convertGFC opts g))
+
+gfc2fcfg :: Options -> (CanonGrammar, Ident) -> FGrammar
+gfc2fcfg opts g = fcfg
+  where
+    (_, fcfg, _) = snd (snd (convertGFC opts g))
 
 ----------------------------------------------------------------------
 -- * single step conversions

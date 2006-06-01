@@ -184,7 +184,7 @@ optionsOfCommand co = case co of
   CTransformGrammar _ -> flags "printer"
   CConvertLatex _ -> none
   CLinearize _ -> both "utf8 table struct record all multi" "lang number unlexer mark"
-  CParse -> both "ambiguous fail cut new newer cfg mcfg n ign raw v lines all prob" 
+  CParse -> both "ambiguous fail cut new newer cfg mcfg fcfg n ign raw v lines all prob" 
                  "cat lang lexer parser number rawtrees"
   CTranslate _ _ -> opts "cat lexer parser"
   CGenerateRandom -> both "cf prob" "cat lang number depth atoms noexpand doexpand"

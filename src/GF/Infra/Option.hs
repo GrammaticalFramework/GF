@@ -157,6 +157,7 @@ newParser   = iOpt "new"
 newerParser = iOpt "newer"
 newCParser  = iOpt "cfg"
 newMParser  = iOpt "mcfg"
+newFParser  = iOpt "fcfg"
 
 {-
 useParserMCFG, useParserMCFGviaCFG, useParserCFG, useParserCF :: Option

@@ -37,23 +37,29 @@ import qualified GF.Formalism.SimpleGFC as S
 import qualified GF.Formalism.MCFG as M
 import qualified GF.Formalism.CFG as C
 import qualified GF.Parsing.MCFG as PM
+import qualified GF.Parsing.FCFG as PF
 import qualified GF.Parsing.CFG as PC
 
 ----------------------------------------------------------------------
 -- parsing information
 
-data PInfo = PInfo { mcfPInfo :: MCFPInfo,
-		     cfPInfo  :: CFPInfo }
+data PInfo = PInfo { mcfPInfo :: MCFPInfo
+		   , fcfPInfo :: FCFPInfo
+		   , cfPInfo  :: CFPInfo
+		   }
 
 type MCFPInfo = PM.MCFPInfo MCat Name MLabel Token
+type FCFPInfo = PF.FCFPInfo FCat Name Token
 type CFPInfo  = PC.CFPInfo CCat Name Token
 
-buildPInfo :: MGrammar -> CGrammar -> PInfo
-buildPInfo mcfg cfg = PInfo { mcfPInfo = PM.buildMCFPInfo mcfg,
-			      cfPInfo  = PC.buildCFPInfo cfg }
+buildPInfo :: MGrammar -> FGrammar -> CGrammar -> PInfo
+buildPInfo mcfg fcfg cfg = PInfo { mcfPInfo = PM.buildMCFPInfo mcfg
+                                 , fcfPInfo = PF.buildFCFPInfo fcfg
+			         , cfPInfo  = PC.buildCFPInfo  cfg
+			         }
 
 instance Print PInfo where
-    prt (PInfo m c) = prt m ++ "\n" ++ prt c
+    prt (PInfo m f c) = prt m ++ "\n" ++ prt c
 
 ----------------------------------------------------------------------
 -- main parsing function
@@ -112,6 +118,19 @@ selectParser "m" strategy pinfo startCat inTokens
 	     finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
 			  [ PM.makeFinalEdge cat lbl (inputBounds inTokens) | 
 			    cat@(MCat _ [lbl]) <- startCats ]
+	 return $ chart2forests chart (const False) finalEdges
+
+-- parsing via FCFG
+selectParser "f" strategy pinfo startCat inTokens
+    = do let startCats = filter isStart $ PF.grammarCats fcfpi
+	     isStart cat = fcat2scat cat == cfCat2Ident startCat
+	     fcfpi = fcfPInfo pinfo
+	 fcfParser <- PF.parseFCF strategy
+	 let fcfChart = fcfParser fcfpi startCats inTokens
+	     chart = G.abstract2chart fcfChart
+	     (begin,end) = inputBounds inTokens
+	     finalEdges = [ PF.makeFinalEdge cat begin end | 
+			    cat@(FCat _ _ [lbl] _) <- startCats ]
 	 return $ chart2forests chart (const False) finalEdges
 
 -- error parser: 
