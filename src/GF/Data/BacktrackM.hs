@@ -24,97 +24,69 @@ module GF.Data.BacktrackM ( -- * the backtracking state monad
 		    -- * monad specific utilities
 		    member,
 		    -- * running the monad
-		    runBM,
-		    solutions,
-		    finalStates
+		    foldBM,          runBM,
+		    foldSolutions,   solutions,
+		    foldFinalStates, finalStates
 		  ) where
 
 import Control.Monad
-
-------------------------------------------------------------
--- type declarations
-
--- * controlling the monad
-
-failure :: BacktrackM s a
-(|||)   :: BacktrackM s a -> BacktrackM s a -> BacktrackM s a
-
-instance MonadPlus (BacktrackM s) where
-    mzero = failure
-    mplus = (|||)
-
--- * handling the state & environment
-
-readState  :: BacktrackM s s
-writeState :: s -> BacktrackM s ()
-
--- * specific functions on the backtracking monad
-
-member :: [a] -> BacktrackM s a
-member = msum . map return 
-
--- * running the monad
-
-runBM       :: BacktrackM s a  -> s -> [(s, a)]
-
-solutions   :: BacktrackM s a  -> s -> [a]
-solutions   bm = map snd . runBM bm 
-
-finalStates :: BacktrackM s () -> s -> [s]
-finalStates bm = map fst . runBM bm
-
-
-{-
-----------------------------------------------------------------------
--- implementation as lists of successes
-
-newtype BacktrackM s a = BM (s -> [(s, a)])
-
-runBM       (BM m) = m
-
-readState    = BM (\s -> [(s, s)])
-writeState s = BM (\_ -> [(s, ())])
-
-failure       = BM (\s -> [])
-BM m ||| BM n = BM (\s -> m s ++ n s)
-
-instance Monad (BacktrackM s) where
-    return a   = BM (\s -> [(s, a)])
-    BM m >>= k = BM (\s -> concat [ n s' | (s', a) <- m s, let BM n = k a ])
-    fail _     = failure
--}
 
 ----------------------------------------------------------------------
 -- Combining endomorphisms and continuations
 -- a la Ralf Hinze
 
-newtype Backtr a = B (forall b . (a -> b -> b) -> b -> b)
-
-instance Monad Backtr where
-    return a  = B (\c f -> c a f)
-    B m >>= k = B (\c f -> m (\a -> unBacktr (k a) c) f)
-        where unBacktr (B m) = m
-    fail _ = failureB
-
-failureB     = B (\c f -> f)
-B m |||| B n = B (\c f -> m c (n c f))
-
-runB (B m) = m (:) []
-
 -- BacktrackM = state monad transformer over the backtracking monad
 
-newtype BacktrackM s a = BM (s -> Backtr (s, a))
+newtype BacktrackM s a = BM (forall b . (a -> s -> b -> b) -> s -> b -> b)
 
-runBM (BM m) s = runB (m s)
+-- * running the monad
 
-readState    = BM (\s -> return (s, s))
-writeState s = BM (\_ -> return (s, ()))
+runBM :: BacktrackM s a -> s -> [(s,a)]
+runBM (BM m) s = m (\x s xs -> (s,x) : xs) s []
 
-failure = BM (\s -> failureB)
-BM m ||| BM n = BM (\s -> m s |||| n s)
+foldBM :: (a -> s -> b -> b) -> b -> BacktrackM s a -> s -> b
+foldBM f b (BM m) s = m f s b
+
+foldSolutions   :: (a -> b -> b) -> b -> BacktrackM s a -> s -> b
+foldSolutions f b (BM m) s = m (\x s b -> f x b) s b
+
+solutions   :: BacktrackM s a  -> s -> [a]
+solutions = foldSolutions (:) []
+
+foldFinalStates :: (s -> b -> b) -> b -> BacktrackM s () -> s -> b
+foldFinalStates f b (BM m) s = m (\x s b -> f s b) s b
+
+finalStates :: BacktrackM s () -> s -> [s]
+finalStates bm = map fst . runBM bm
+
+
+-- * handling the state & environment
+
+readState :: BacktrackM s s
+readState    = BM (\c s b -> c s s b)
+
+writeState :: s -> BacktrackM s ()
+writeState s = BM (\c _ b -> c () s b)
 
 instance Monad (BacktrackM s) where
-    return a   = BM (\s -> return (s, a))
-    BM m >>= k = BM (\s -> do (s', a) <- m s ; unBM (k a) s')
+    return a   = BM (\c s b -> c a s b)
+    BM m >>= k = BM (\c s b -> m (\a s b -> unBM (k a) c s b) s b)
 	where unBM (BM m) = m
     fail _ = failure
+
+-- * controlling the monad
+
+failure :: BacktrackM s a
+failure = BM (\c s b -> b)
+
+(|||) :: BacktrackM s a -> BacktrackM s a -> BacktrackM s a
+(BM f) ||| (BM g) = BM (\c s b -> f c s (g c s b))
+
+instance MonadPlus (BacktrackM s) where
+    mzero = failure
+    mplus = (|||)
+
+-- * specific functions on the backtracking monad
+
+member :: [a] -> BacktrackM s a
+member = msum . map return 
