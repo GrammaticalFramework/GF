@@ -1,12 +1,8 @@
 ----------------------------------------------------------------------
 -- |
--- Maintainer  : PL
+-- Maintainer  : Krasimir Angelov
 -- Stability   : (stable)
 -- Portability : (portable)
---
--- > CVS $Date: 2005/08/08 09:01:25 $
--- > CVS $Author: peb $
--- > CVS $Revision: 1.5 $
 --
 -- MCFG parsing, the active algorithm
 -----------------------------------------------------------------------------

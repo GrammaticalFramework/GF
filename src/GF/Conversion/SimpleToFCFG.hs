@@ -1,12 +1,8 @@
 ----------------------------------------------------------------------
 -- |
--- Maintainer  : PL
+-- Maintainer  : Krasimir Angelov
 -- Stability   : (stable)
 -- Portability : (portable)
---
--- > CVS $Date: 2005/08/17 08:27:29 $ 
--- > CVS $Author: peb $
--- > CVS $Revision: 1.7 $
 --
 -- Converting SimpleGFC grammars to fast nonerasing MCFG grammar.
 --
