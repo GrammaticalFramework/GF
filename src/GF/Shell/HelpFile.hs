@@ -81,6 +81,9 @@ txtHelpFile =
   "\n  examples:" ++
   "\n      i English.gf                      -- ordinary import of Concrete" ++
   "\n      i -retain german/ParadigmsGer.gf  -- import of Resource to test" ++
+  "\n" ++
+  "\nr, reload: r" ++
+  "\n      Executes the previous import (i) command." ++
   "\n      " ++
   "\nrl, remove_language: rl Language" ++
   "\n      Takes away the language from the state." ++

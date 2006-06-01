@@ -157,7 +157,7 @@ pCommand ws = case ws of
 
   "es" : []     -> aImpure ICEditSession
   "ts" : []     -> aImpure ICTranslateSession
-
+  "r"  : []     -> aImpure ICReload
   _             -> (CVoid, [])
 
  where

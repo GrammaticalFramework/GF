@@ -52,6 +52,9 @@ i,  import: i File
   examples:
       i English.gf                      -- ordinary import of Concrete
       i -retain german/ParadigmsGer.gf  -- import of Resource to test
+
+r, reload: r
+      Executes the previous import (i) command.
       
 rl, remove_language: rl Language
       Takes away the language from the state.

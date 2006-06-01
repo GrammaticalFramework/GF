@@ -28,7 +28,7 @@ import Data.Char (isSpace)
 -- separated from GF Main 24/6/2003
 
 gfInteract :: HState -> IO HState
-gfInteract st@(env,hist) = do
+gfInteract st@(env,hist@(his,_,_,_)) = do
   -- putStrFlush "> " M.F 25/01-02 prompt moved to Arch.
   (s,cs) <- getCommandLines st
   case ifImpure cs of
@@ -48,6 +48,15 @@ gfInteract st@(env,hist) = do
       st' <- execLinesH line [co] st       -- s would not work in execLinesH
       gfInteract st'
 
+    Just (ICReload,_) -> case dropWhile (not . isImport) his of
+      line:_ -> do
+        let co = pCommandLine st $ words line
+        st' <- execLinesH line [co] st
+        gfInteract st'
+      _ -> do
+        putStrLn "No previous import"
+        gfInteract st
+
     Just (ICEditSession,os) -> case getOptVal os useFile of
       Just file -> do
         s <- readFileIf file
@@ -66,6 +75,10 @@ gfInteract st@(env,hist) = do
      opts = globalOptions env
      ifNotSilent c = 
        if oElem beSilent opts then return () else putStrLnFlush c
+     isImport l = case words l of
+       "i":_ -> True
+       "import":_ -> True
+       _ -> False
 
 gfBatch :: HState -> IO HState
 gfBatch st@(sh,_) = do
