@@ -146,7 +146,7 @@ convertArg (TblPrj term selector) nr cat path lbl_path lin lins =
 convertArg (ConSel terms)   nr cat path lbl_path lin lins = do
   sel <- member terms
   restrictHead   lbl_path sel
-  restrictArg nr lbl_path sel
+  restrictArg nr path sel
   return lins
 convertArg StrSel          nr cat path lbl_path lin lins = do
   projectHead lbl_path
