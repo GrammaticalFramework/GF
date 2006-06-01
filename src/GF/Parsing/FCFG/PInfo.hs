@@ -34,6 +34,7 @@ type FCFParser c n t = FCFPInfo c n t
 type FCFChart  c n   = [Abstract (c, RangeRec) n]
 
 makeFinalEdge :: c -> Int -> Int -> (c, RangeRec)
+makeFinalEdge cat 0 0 = (cat, [EmptyRange])
 makeFinalEdge cat i j = (cat, [makeRange i j])
 
 
