@@ -219,15 +219,19 @@ updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do
 
   let cgr = cgr0 ---- filterAbstracts (map fst abstrs) cgr0
 
-  let concrs = nub $ concrs0 ++ map (snd . fst) (concretes sh)
+  let oldConcrs = map (snd . fst) (concretes sh)
+      newConcrs = maybe [] (M.allConcretes gr) abstr0
+      toRetain (c,v) = notElem c newConcrs
+  let concrs = nub $ newConcrs ++ oldConcrs
       concr0 = ifNull Nothing (return . head) concrs
       notInrts f = notElem f $ map fst rts
       subcgr = unSubelimCanon cgr
-  cf's <- if oElem noCF opts
+  cf's0 <- if oElem noCF opts
             then return $ map snd $ cfs sh
-            else mapM (canon2cf opts ign subcgr) concrs --- why need to update all...
+            else mapM (canon2cf opts ign subcgr) newConcrs 
+  let cf's = zip newConcrs cf's0 ++ filter toRetain (cfs sh)
 
-  let morphos = map (mkMorpho subcgr) concrs
+  let morphs = [(c,mkMorpho subcgr c) | c <- newConcrs] ++ filter toRetain (morphos sh)
   let probss = [] -----
 
 
@@ -251,12 +255,12 @@ updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do
     concretes  = zip (zip concrs concrs) (repeat True),
     canModules = cgr,
     srcModules = src,
-    cfs        = zip concrs cf's,
+    cfs        = cf's,
     abstracts  = abstrs,
     mcfgs      = zip concrs mcfgs,
     cfgs       = zip concrs cfgs,
     pInfos     = zip concrs pInfos,
-    morphos    = zip concrs morphos,
+    morphos    = morphs,
     treebanks  = treebanks sh,
     probss     = zip concrs probss,
     gloptions  = gloptions sh, --- opts, -- this would be command-line options
