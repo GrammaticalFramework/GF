@@ -61,6 +61,7 @@ data ShellState = ShSt {
   cfs        :: [(Ident,CF)] ,       -- ^ context-free grammars (small, no parameters, very over-generating)
   abstracts  :: [(Ident,[Ident])],   -- ^ abstracts and their associated concretes
   mcfgs      :: [(Ident, Cnv.MGrammar)], -- ^ MCFG, converted according to Ljunglöf (2004, ch 3)
+  fcfgs      :: [(Ident, Cnv.FGrammar)], -- ^ FCFG, optimized MCFG by Krasimir Angelov
   cfgs       :: [(Ident, Cnv.CGrammar)], -- ^ CFG, converted from mcfg 
                                          -- (large, with parameters, no-so overgenerating)
   pInfos     :: [(Ident, Prs.PInfo)], -- ^ parsing information (compiled mcfg&cfg grammars)
@@ -106,6 +107,7 @@ emptyShellState = ShSt {
   cfs        = [],
   abstracts  = [],
   mcfgs      = [],
+  fcfgs      = [],
   cfgs       = [],
   pInfos     = [],
   morphos    = [],
@@ -136,6 +138,7 @@ data StateGrammar = StGr {
   grammar  :: CanonGrammar,
   cf       :: CF,
   mcfg     :: Cnv.MGrammar,
+  fcfg     :: Cnv.FGrammar,
   cfg      :: Cnv.CGrammar,
   pInfo    :: Prs.PInfo,
   morpho   :: Morpho,
@@ -150,6 +153,7 @@ emptyStateGrammar = StGr {
   grammar  = M.emptyMGrammar,
   cf       = emptyCF,
   mcfg     = [],
+  fcfg     = [],
   cfg      = [],
   pInfo    = Prs.buildPInfo [] [] [],
   morpho   = emptyMorpho,
@@ -162,6 +166,7 @@ emptyStateGrammar = StGr {
 stateGrammarST    :: StateGrammar -> CanonGrammar
 stateCF           :: StateGrammar -> CF
 stateMCFG         :: StateGrammar -> Cnv.MGrammar
+stateFCFG         :: StateGrammar -> Cnv.FGrammar
 stateCFG          :: StateGrammar -> Cnv.CGrammar
 statePInfo        :: StateGrammar -> Prs.PInfo
 stateMorpho       :: StateGrammar -> Morpho
@@ -173,6 +178,7 @@ stateGrammarLang  :: StateGrammar -> (CanonGrammar, Ident)
 stateGrammarST = grammar
 stateCF        = cf
 stateMCFG      = mcfg
+stateFCFG      = fcfg
 stateCFG       = cfg
 statePInfo     = pInfo
 stateMorpho    = morpho
@@ -258,6 +264,7 @@ updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do
     cfs        = cf's,
     abstracts  = abstrs,
     mcfgs      = zip concrs mcfgs,
+    fcfgs      = zip concrs fcfgs,
     cfgs       = zip concrs cfgs,
     pInfos     = zip concrs pInfos,
     morphos    = morphs,
@@ -309,6 +316,7 @@ purgeShellState sh = ShSt {
   cfs        = cfs sh,
   abstracts  = maybe [] (\a -> [(a,map (snd . fst) concrs)]) abstr,
   mcfgs      = mcfgs sh,
+  fcfgs      = fcfgs sh,
   cfgs       = cfgs sh,
   pInfos     = pInfos sh,
   morphos    = morphos sh,
@@ -329,16 +337,16 @@ purgeShellState sh = ShSt {
    acncs = maybe [] singleton abstr ++ map (snd . fst) (actualConcretes sh)
 
 changeMain :: Maybe Ident -> ShellState -> Err ShellState
-changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos tbs pbs os rs acs s trs) = 
-  return (ShSt Nothing Nothing [] ms ss cfs old_pis mcfgs cfgs pinfos mos tbs pbs os rs acs s trs)
+changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs fcfgs cfgs pinfos mos tbs pbs os rs acs s trs) = 
+  return (ShSt Nothing Nothing [] ms ss cfs old_pis mcfgs fcfgs cfgs pinfos mos tbs pbs os rs acs s trs)
 changeMain 
-  (Just c) st@(ShSt _ _ cs ms ss cfs old_pis mcfgs cfgs pinfos mos tbs pbs os rs acs s trs) = 
+  (Just c) st@(ShSt _ _ cs ms ss cfs old_pis mcfgs fcfgs cfgs pinfos mos tbs pbs os rs acs s trs) = 
    case lookup c (M.modules ms) of 
     Just _ -> do
       a   <- M.abstractOfConcrete ms c
       let cas = M.allConcretes ms a
       let cs' = [((c,c),True) | c <- cas]
-      return (ShSt (Just a) (Just c) cs' ms ss cfs old_pis mcfgs cfgs
+      return (ShSt (Just a) (Just c) cs' ms ss cfs old_pis mcfgs fcfgs cfgs
         pinfos mos tbs pbs os rs acs s trs) 
     _ -> P.prtBad "The state has no concrete syntax named" c
 
@@ -365,6 +373,7 @@ stateGrammarOfLangOpt purg st0 l = StGr {
   grammar  = allCan,
   cf       = maybe emptyCF id (lookup l (cfs st)),
   mcfg     = maybe [] id $ lookup l $ mcfgs st,
+  fcfg     = maybe [] id $ lookup l $ fcfgs st,
   cfg      = maybe [] id $ lookup l $ cfgs st,
   pInfo    = maybe (Prs.buildPInfo [] [] []) id $ lookup l $ pInfos st,
   morpho   = maybe emptyMorpho id (lookup l (morphos st)),
@@ -407,6 +416,7 @@ stateAbstractGrammar st = StGr {
   grammar  = canModules st, ---- only abstarct ones
   cf       = emptyCF,
   mcfg     = [],
+  fcfg     = [],
   cfg      = [],
   pInfo    = Prs.buildPInfo [] [] [],
   morpho   = emptyMorpho,
@@ -524,8 +534,8 @@ changeOptions f sh = sh {gloptions = f (gloptions sh)}
 changeModTimes :: [(FilePath,ModTime)] -> ShellStateOper
 ---                                         __________ this is OBSOLETE
 changeModTimes mfs
- (ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms tbs pbs os ff ts ss trs) = 
-  ShSt a c cs can src cfs old_pinfos mcfgs cfgs pinfos ms tbs pbs os ff' ts ss trs
+ (ShSt a c cs can src cfs old_pinfos mcfgs fcfgs cfgs pinfos ms tbs pbs os ff ts ss trs) = 
+  ShSt a c cs can src cfs old_pinfos mcfgs fcfgs cfgs pinfos ms tbs pbs os ff' ts ss trs
  where
    ff' = mfs ++ [mf | mf@(f,_) <- ff, notElem f (map fst mfs)]
 
