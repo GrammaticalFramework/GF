@@ -1,4 +1,4 @@
 abstract PredefAbs = {
-  cat Int ; String ;
+  cat Int ; String ; Float ; 
 } ;
 
