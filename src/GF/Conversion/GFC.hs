@@ -13,7 +13,7 @@
 
 module GF.Conversion.GFC
     (module GF.Conversion.GFC,
-     SGrammar, EGrammar, MGrammar, CGrammar) where
+     SGrammar, EGrammar, MGrammar, FGrammar, CGrammar) where
 
 import GF.Infra.Option
 import GF.Canon.GFC (CanonGrammar)
