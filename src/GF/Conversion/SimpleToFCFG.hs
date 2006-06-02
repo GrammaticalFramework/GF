@@ -340,7 +340,6 @@ data STermSelector
   | TblPrj   STerm  STermSelector
   | ConSel [STerm]
   | StrSel
-  deriving Show
 
 
 mkSingletonSelector :: SLinType -> BacktrackM () STermSelector
@@ -377,10 +376,14 @@ mkSelector rcs tcss =
         add (cas@(pat',sub_sel):cases)
           | pat == pat'             = (pat',addProjection sub_sel path):cases
           | otherwise               = cas : add cases
-    addProjection x y = error ("addProjection "++show x ++ " " ++ prt (Path y))
 
     addRestriction :: STermSelector -> ([Either Label STerm],STerm) -> STermSelector
-    addRestriction (ConSel terms)  ([]              ,term) = ConSel (term:terms)
+    addRestriction (ConSel terms)  ([]              ,term) = ConSel (add terms)
+      where
+        add []                      = [term]
+        add (term':terms)
+          | term == term'           = term':    terms
+          | otherwise               = term':add terms
     addRestriction (RecSel fields) (Left  lbl : path,term) = RecSel (add fields)
       where
         add []                      = [(lbl,path2selector (ConSel [term]) path)]
