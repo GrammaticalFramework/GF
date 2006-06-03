@@ -20,7 +20,8 @@
 --  - tables are type-annotated
 -----------------------------------------------------------------------------
 
-module GF.Compile.CheckGrammar (showCheckModule, justCheckLTerm) where
+module GF.Compile.CheckGrammar (
+  showCheckModule, justCheckLTerm, allOperDependencies, topoSortOpers) where
 
 import GF.Grammar.Grammar
 import GF.Infra.Ident
@@ -63,6 +64,7 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
       MTResource -> mapMTree (checkResInfo gr) js
 
       MTConcrete a -> do
+        checkErr $ topoSortOpers $ allOperDependencies name js
         ModMod abs <- checkErr $ lookupModule gr a
         js1 <- checkCompleteGrammar abs mo
         mapMTree (checkCncInfo gr name (a,abs)) js1
@@ -853,3 +855,26 @@ linTypeOfType cnc m typ = do
      ,return defLinType
      ]
 
+-- | dependency check, detecting circularities and returning topo-sorted list
+
+allOperDependencies :: Ident -> BinTree Ident Info -> [(Ident,[Ident])]
+allOperDependencies m b = 
+  [(f, nub (concatMap opty (pts i))) | (f,i) <- tree2list b]
+  where
+    opersIn t = case t of
+      Q n c | n == m -> [c]
+      _ -> collectOp opersIn t
+    opty (Yes ty) = opersIn ty
+    opty _ = []
+    pts i = case i of
+      ResOper pty pt -> [pty,pt]
+      CncFun  _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
+      _              -> []    ---- ResParam
+
+topoSortOpers :: [(Ident,[Ident])] -> Err [Ident]
+topoSortOpers st = do
+  let eops = topoTest st
+  either 
+    return 
+    (\ops -> Bad ("circular definitions:" +++ unwords (map prt (head ops))))
+    eops
