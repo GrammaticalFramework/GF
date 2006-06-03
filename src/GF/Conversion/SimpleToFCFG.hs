@@ -24,7 +24,6 @@ import Control.Monad
 import GF.Formalism.Utilities
 import GF.Formalism.GCFG 
 import GF.Formalism.FCFG
-import GF.Formalism.MCFG(Lin(..))
 import GF.Formalism.SimpleGFC 
 import GF.Conversion.Types
 import GF.Canon.AbsGFC(CIdent(..))
@@ -71,24 +70,24 @@ convertRule selector (Rule (Abs decl decls (Name fun profile)) (Cnc ctype ctypes
          frulesEnv
          (convertTerm selector term [Lin emptyPath []])
          (let cat : args = map decl2cat (decl : decls)
-          in (initialFCat cat, map initialFCat args, ctype, ctypes))
+          in (initialFCat cat, map (\scat -> (initialFCat scat,[])) args, ctype, ctypes))
   where
     addRule linRec (newCat', newArgs', _, _) env0 =
       let (env1, newCat)          = genFCatHead env0 newCat'
-          (env2, newArgs,idxArgs) = foldr (\(fcat,ctype,idx) (env,args,all_args) -> 
-                                       let (env1, fcat1) = genFCatArg env fcat ctype
+          (env2, newArgs,idxArgs) = foldr (\((fcat@(FCat _ cat rcs tcs),xpaths),ctype,idx) (env,args,all_args) ->
+                                       let xargs          = fcat:[FCat 0 cat [path] tcs | path <- reverse xpaths]
+                                           (env1, xargs1) = List.mapAccumL (genFCatArg ctype) env xargs
                                        in case fcat of
-                                            FCat _ _ [] _ -> (env ,      args,            all_args)
-                                            _             -> (env1,fcat1:args,(idx,fcat1):all_args)) (env1,[],[]) (zip3 newArgs' ctypes [0..])
+                                            FCat _ _ [] _ -> (env ,        args,             all_args)
+                                            _             -> (env1,xargs1++args,(idx,xargs1):all_args)) (env1,[],[]) (zip3 newArgs' ctypes [0..])
           
-          (catPaths : argsPaths) = [rcs | (FCat _ _ rcs _) <- (newCat : newArgs)]
-          
-          newLinRec = listArray (0,length linRec-1) [translateLin idxArgs path linRec | path <- catPaths]
+          newLinRec = listArray (0,length linRec-1) [translateLin idxArgs path linRec | path <- case newCat of {FCat _ _ rcs _ -> rcs}]
 
           (_,newProfile) = List.mapAccumL accumProf 0 newArgs'
             where
-              accumProf nr (FCat _ _ [] _) = (nr,   Unify []  )
-              accumProf nr _               = (nr+1, Unify [nr])
+              accumProf nr (FCat _ _ [] _,_     ) = (nr,       Unify []          )
+              accumProf nr (_            ,xpaths) = (nr+cnt+1, Unify [nr..nr+cnt])
+                where cnt = length xpaths
 
 	  newName = Name fun (profile `composeProfiles` newProfile)
           rule = FRule (Abs newCat newArgs (Name fun newProfile)) newLinRec
@@ -99,22 +98,26 @@ translateLin idxArgs lbl' []                    = array (0,-1) []
 translateLin idxArgs lbl' (Lin lbl syms : lins)
   | lbl' == lbl = listArray (0,length syms-1) (map instSym syms)
   | otherwise   = translateLin idxArgs lbl' lins
-  where instSym = symbol (\(_, lbl, nr) -> instCat lbl nr 0 idxArgs) FSymTok
-        instCat lbl nr nr' ((idx,arg@(FCat _ _ rcs _)):idxArgs)
-          | nr == idx = FSymCat arg (index lbl rcs 0) nr'
-          | otherwise = instCat lbl nr (nr'+1) idxArgs
+  where
+    instSym = symbol (\(_, lbl, nr, xnr) -> instCat lbl nr xnr 0 idxArgs) FSymTok
+    instCat lbl nr xnr nr' ((idx,xargs):idxArgs)
+      | nr == idx = let arg@(FCat _ _ rcs _) = xargs !! xnr
+                    in FSymCat arg (index lbl rcs 0) (nr'+xnr)
+      | otherwise = instCat lbl nr xnr (nr'+length xargs) idxArgs
 
-        index lbl' (lbl:lbls) idx
-          | lbl' == lbl = idx
-          | otherwise   = index lbl' lbls $! (idx+1)
+    index lbl' (lbl:lbls) idx
+      | lbl' == lbl = idx
+      | otherwise   = index lbl' lbls $! (idx+1)
 
 ----------------------------------------------------------------------
 -- term conversion
 
 type CnvMonad a = BacktrackM Env a
 
-type Env    = (FCat, [FCat], SLinType, [SLinType])
+type Env    = (FCat, [(FCat,[SPath])], SLinType, [SLinType])
 type LinRec = [Lin SCat SPath Token]
+
+data Lin cat lbl tok = Lin lbl [Symbol (cat, lbl, Int, Int) tok]
 
 
 convertTerm :: STermSelector -> STerm -> LinRec -> CnvMonad LinRec
@@ -150,8 +153,8 @@ convertArg (ConSel terms)   nr cat path lbl_path lin lins = do
   return lins
 convertArg StrSel          nr cat path lbl_path lin lins = do
   projectHead lbl_path
-  projectArg  nr path
-  return (Lin lbl_path (Cat (cat, path, nr) : lin) : lins)
+  xnr <- projectArg nr path
+  return (Lin lbl_path (Cat (cat, path, nr, xnr) : lin) : lins)
 
 convertCon (ConSel terms) con args lbl_path lin lins = do
   args <- mapM evalTerm args
@@ -224,7 +227,7 @@ unifyPType arg (RecT prec) =
 	       (lbl, ptype) <- prec ]
 unifyPType (Arg nr _ path) (ConT terms) = 
     do (_, args, _, _) <- readState
-       let (FCat _ _ _ tcs) = args !! nr
+       let (FCat _ _ _ tcs,_) = args !! nr
        case lookup path tcs of
          Just term -> return term
          Nothing   -> do term <- member terms
@@ -258,8 +261,8 @@ genFCatHead env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
         tmap_s = Map.singleton tcs x_fcat
         rmap_s = Map.singleton rcs tmap_s
 
-genFCatArg :: FRulesEnv -> FCat -> SLinType -> (FRulesEnv, FCat)
-genFCatArg env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) ctype =
+genFCatArg :: SLinType -> FRulesEnv -> FCat -> (FRulesEnv, FCat)
+genFCatArg ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
   case Map.lookup cat fcatSet >>= Map.lookup rcs of
     Just tmap -> case Map.lookup tcs tmap of
                    Just (Left  fcat) -> (env,   fcat)
@@ -414,16 +417,27 @@ readArgCType arg = do (_, _, _, ctypes) <- readState
 		      return (ctypes !! arg)
 
 restrictArg :: Int -> SPath -> STerm -> CnvMonad ()
-restrictArg arg path term
-    = do (head, args, ctype, ctypes) <- readState 
-	 args' <- updateNthM (restrictFCat path term) arg args
-	 writeState (head, args', ctype, ctypes)
+restrictArg nr path term = do
+  (head, args, ctype, ctypes) <- readState 
+  args' <- updateNthM (\(fcat,xs) -> do fcat <- restrictFCat path term fcat
+                                        return (fcat,xs)                   ) nr args
+  writeState (head, args', ctype, ctypes)
 
-projectArg :: Int -> SPath -> CnvMonad ()
-projectArg arg path
-    = do (head, args, ctype, ctypes) <- readState 
-	 args' <- updateNthM (projectFCat path) arg args
-	 writeState (head, args', ctype, ctypes)
+projectArg :: Int -> SPath -> CnvMonad Int
+projectArg nr path = do
+  (head, args, ctype, ctypes) <- readState
+  (xnr,args') <- updateArgs nr args
+  writeState (head, args', ctype, ctypes)
+  return xnr
+  where
+    updateArgs :: Int -> [(FCat,[SPath])] -> CnvMonad (Int,[(FCat,[SPath])])
+    updateArgs 0 ((a@(FCat _ _ rcs _),xpaths) : as)
+      | path `elem` rcs = return (length xpaths+1,(a,path:xpaths):as)
+      | otherwise       = do a <- projectFCat path a
+                             return (0,(a,xpaths):as)
+    updateArgs n (a : as) = do
+      (xnr,as) <- updateArgs (n-1) as
+      return (xnr,a:as)
 
 readHeadCType :: CnvMonad SLinType
 readHeadCType = do (_, _, ctype, _) <- readState
