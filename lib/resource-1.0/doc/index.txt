@@ -15,13 +15,8 @@ Danish, English, Finnish, French, German,
 Italian, Norwegian, Russian, Spanish, Swedish.
 
 **Notice**. This document concerns the API v. 1.0 which has not
-yet been "officially" released. The release will be made in combination
-with a new version of GF itself, since the grammars use new features
-not available in GF 2.4.
-
-**New**. V. 1.0 is now (26 May) available Russian and Danish.
-But the modules still need some testing, especially the Danish
-lexicon (corrections welcome!).
+yet been "officially" released. The release is planned in the end
+of June 2006.
 
 
 ==Authors==
@@ -32,7 +27,7 @@ Janna Khegai (Russian modules),
 Bjorn Bringert (many Swadesh lexica),
 Carlos Gonzalia (Spanish cardinals), 
 Harald Hammarstrom (German morphology),
-Partik Jansson (Swedish cardinals),
+Patrik Jansson (Swedish cardinals),
 Andreas Priesnitz (German lexicon),
 Aarne Ranta.
 
@@ -52,6 +47,7 @@ Elisabet Engdahl,
 Markus Forsberg,
 Kristofer Johannisson,
 Anni Laine,
+Peter Ljunglöf,
 Saara Myllyntausta,
 Wanjiku Ng'ang'a,
 Jordi Saludes.
@@ -163,6 +159,17 @@ The documentation of the individual modules:
 % - [IrregGer gfdoc/IrregGer.gf]: German irregular verbs
 - [IrregNor gfdoc/IrregNor.gf]: Norwegian irregular verbs (very incomplete)
 - [IrregSwe gfdoc/IrregSwe.gf]: Swedish irregular verbs
+
+
+- [Extra abstract/Extra.gf]: extra constructs implemented in some languages
+- [ExtraScandAbs scandinavian/ExtraScandAbs.gf]: extran constructs in Scandinavian only
+- [ExtraNorAbs norwegian/ExtraNorAbs.gf]: extra constructs in Norwegian only
+
+
+- [English english/EnglishAbs.gf]: English with all extras
+- [Norwegian norwegian/NorwegianAbs.gf]: Norwegian with all extras
+- [Swedish swedish/SwedishAbs.gf]: Swedish with all extras
+
 
 
 ===Special-purpose APIs===
