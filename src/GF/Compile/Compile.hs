@@ -74,7 +74,7 @@ batchCompileOld f = compileOld defOpts f
 -- As for path: if it is read from file, the file path is prepended to each name.
 -- If from command line, it is used as it is.
 compileModule :: Options -> ShellState -> FilePath -> IOE TimedCompileEnv
-----             IOE (GFC.CanonGrammar, (SourceGrammar,[(FilePath,ModTime)]))
+----             IOE (GFC.CanonGrammar, (SourceGrammar,[(String,(FilePath,ModTime))]))
 
 compileModule opts st0 file | 
      oElem showOld opts || 
@@ -113,7 +113,7 @@ compileModule opts1 st0 file = do
   let ioeIOIf = if oElem beVerbose opts then ioeIO else (const (return ()))
   ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
   let st = st0 --- if useFileOpt then emptyShellState else st0
-  let rfs = readFiles st
+  let rfs = [(m,t) | (m,(_,t)) <- readFiles st]
   let file' = if useFileOpt then justFileName file else file -- to find file itself
   files <- getAllFiles opts ps rfs file'
   ioeIOIf $ putStrLn $ "files to read:" +++ show files ----
@@ -127,7 +127,7 @@ compileModule opts1 st0 file = do
 getReadTimes file = do
   t <- ioeIO getNowTime
   let m = justModuleName file
-  return $ (m,t) : [(resModName m,t) | not (isGFC file)]
+  return $ (m,(file,t)) : [(resModName m,(file,t)) | not (isGFC file)]
 
 compileEnvShSt :: ShellState -> [ModName] -> TimedCompileEnv
 compileEnvShSt st fs = ((0,sgr,cgr),fts) where
@@ -163,7 +163,7 @@ extendCompileEnv e@((k,_,_),_) (sm,cm) = extendCompileEnvInt e (k,sm,cm)
 extendCompileEnvCanon ((k,s,c),fts) cgr ft = 
   return ((k,s, MGrammar (modules cgr ++ modules c)),ft++fts)
 
-type TimedCompileEnv = (CompileEnv,[(FilePath,ModTime)])
+type TimedCompileEnv = (CompileEnv,[(String,(FilePath,ModTime))])
 
 compileOne :: Options -> TimedCompileEnv -> FullPath -> IOE TimedCompileEnv
 compileOne opts env@((_,srcgr,cancgr0),_) file = do
@@ -207,7 +207,16 @@ compileOne opts env@((_,srcgr,cancgr0),_) file = do
        extendCompileEnv env (sm,cm) ft
 
     -- for gf source, do full compilation
+
     _ -> do
+
+      --- hack fix to a bug in ReadFiles with reused concrete
+
+      b <- ioeIO $ doesFileExist file
+      if not b 
+        then compileOne opts env $ gfcFile (init (init file))
+        else do
+
        sm0 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
                                            getSourceModule opts file
        (k',sm)  <- makeSourceModule opts (fst env) sm0

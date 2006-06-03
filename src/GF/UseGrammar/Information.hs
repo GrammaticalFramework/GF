@@ -42,7 +42,11 @@ import GF.Infra.UseIO
 showInformation :: Options -> ShellState -> Ident -> IOE ()
 showInformation opts st c = do
   is <- ioeErr $ getInformation opts st c
-  mapM_ (putStrLnE . prInformation opts c) is
+  if null is 
+     then putStrLnE "Identifier not in scope" 
+     else mapM_ (putStrLnE . prInformationM c) is
+ where
+   prInformationM c (i,m) = prInformation opts c i ++ "file:" +++ m ++ "\n"
 
 -- | the data type of different kinds of information
 data Information = 
@@ -71,7 +75,8 @@ prInformation opts c i = unlines $ prt c : case i of
     ]
   ICatAbs m co _ -> [
     "category in abstract module" +++ prt m,
-    "context" +++ prContext co
+    if null co then "not a dependent type" 
+      else "dependent type with context" +++ prContext co
     ]
   ICatCnc m ty cfs tr -> [
     "category in concrete module" +++ prt m,
@@ -102,36 +107,38 @@ prInformation opts c i = unlines $ prt c : case i of
     ]
 
 -- | also finds out if an identifier is defined in many places
-getInformation :: Options -> ShellState -> Ident -> Err [Information]
+getInformation :: Options -> ShellState -> Ident -> Err [(Information,FilePath)]
 getInformation opts st c = allChecks $ [
   do
     m <- lookupModule src c 
     case m of
-      ModMod mo -> return $ IModule mo
+      ModMod mo -> returnm c $ IModule mo
       _ -> prtBad "not a source module" c
   ] ++ map lookInSrc ss ++ map lookInCan cs
  where
    lookInSrc (i,m) = do
      j <- lookupInfo m c 
      case j of
-       AbsCat (Yes co) _ -> return $ ICatAbs i co [] ---
-       AbsFun (Yes ty) _ -> return $ IFunAbs i ty Nothing ---
+       AbsCat (Yes co) _ -> returnm i $ ICatAbs i co [] ---
+       AbsFun (Yes ty) _ -> returnm i $ IFunAbs i ty Nothing ---
        CncCat (Yes ty) _ _ -> do
          ---- let cat = ident2CFCat i c
          ---- rs <- concat [rs | (c,rs) <- cf, ]
-         return $ ICatCnc i ty [] ty ---       
+         returnm i $ ICatCnc i ty [] ty ---       
        CncFun _ (Yes tr) _ -> do
          rs <- return []
-         return $ IFunCnc i tr rs tr ---       
-       ResOper (Yes ty) (Yes tr) -> return $ IOper i ty tr
+         returnm i $ IFunCnc i tr rs tr ---       
+       ResOper (Yes ty) (Yes tr) -> returnm i $ IOper i ty tr
        ResParam (Yes ps) -> do
          ts <- allParamValues src (QC i c)
-         return $ IParam i ps ts
-       ResValue (Yes ty) -> return $ IValue i ty ---
+         returnm i $ IParam i ps ts
+       ResValue (Yes ty) -> returnm i $ IValue i ty ---
        
        _ -> prtBad "nothing available for" i
    lookInCan (i,m) = do
      Bad "nothing available yet in canonical"
+
+   returnm m i = return (i, pathOfModule st m)
 
    src = srcModules st
    can = canModules st
