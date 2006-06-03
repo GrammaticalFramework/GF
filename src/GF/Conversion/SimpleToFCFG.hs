@@ -298,10 +298,14 @@ genFCatArg env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) ctype =
     gen_tcs (StrT)             path acc = return acc
     gen_tcs (ConT terms)       path acc =
       case List.lookup path tcs of
-        Just term -> return ((path,term) : acc)
+        Just term -> return $! addConstraint path term acc
         Nothing   -> do writeState True
                         term <- member terms
-                        return ((path,term) : acc)
+                        return $! addConstraint path term acc
+      where
+        addConstraint path0 term0 (c@(path,term) : cs)
+	  | path0 >  path = c:addConstraint path0 term0 cs
+        addConstraint path0 term0 cs  = (path0,term0) : cs
 
 takeToDoRules :: SRulesMap -> FRulesEnv -> ([([SRule], STermSelector)], FRulesEnv)
 takeToDoRules srulesMap (FRulesEnv last_id fcatSet rules) = (todo,FRulesEnv last_id fcatSet' rules)
