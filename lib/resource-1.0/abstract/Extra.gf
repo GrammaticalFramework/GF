@@ -8,7 +8,6 @@ abstract Extra = Cat ** {
 
   fun
     GenNP       : NP -> Quant ;       -- this man's
-    EmbedBareS  : S -> SC ;           -- (I know) you go
     ComplBareVS : VS -> S -> VP ;     -- know you go
 
 }

@@ -6,7 +6,6 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand ** open CommonScand,R
       det = DDef Indef
       } ;
 
-    EmbedBareS s = {s = s.s ! Sub} ;
     ComplBareVS v s  = insertObj (\\_ => s.s ! Sub) (predV v) ;
 
 } 
