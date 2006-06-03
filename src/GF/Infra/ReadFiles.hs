@@ -167,7 +167,7 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
                                    Just ms <- [lookup m allDeps], elem f ms])
                     || oElem retainOpers opts)
         -> if elem t [MTyResource,MTyIncResource] 
-              then (f,(path,CSRes)) else
+           then (f,(path,CSRes)) else
               if t == MTyIncomplete
               then (f,(path,CSComp)) else
               x

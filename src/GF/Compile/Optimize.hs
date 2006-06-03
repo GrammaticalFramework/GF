@@ -63,7 +63,6 @@ evalModule oopts ms mo@(name,mod) = case mod of
       MGrammar (mod' : _) <- foldM evalOp gr ids
       return $ mod'
     MTConcrete a -> do
-      topoSortOpers $ allOperDependencies name js
       js' <- mapMTree (evalCncInfo oopts gr name a) js ---- <- gr0 6/12/2005
       return $ (name, ModMod (Module mt st fs me ops js'))
 
@@ -211,27 +210,6 @@ recordExpand typ trm = case unComputed typ of
 
 
 -- | auxiliaries for compiling the resource
-allOperDependencies :: Ident -> BinTree Ident Info -> [(Ident,[Ident])]
-allOperDependencies m b = 
-  [(f, nub (concatMap opty (pts i))) | (f,i) <- tree2list b]
-  where
-    opersIn t = case t of
-      Q n c | n == m -> [c]
-      _ -> collectOp opersIn t
-    opty (Yes ty) = opersIn ty
-    opty _ = []
-    pts i = case i of
-      ResOper pty pt -> [pty,pt]
-      CncFun  _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
-      _              -> []    ---- ResParam
-
-topoSortOpers :: [(Ident,[Ident])] -> Err [Ident]
-topoSortOpers st = do
-  let eops = topoTest st
-  either 
-    return 
-    (\ops -> Bad ("circular definitions:" +++ unwords (map prt (head ops))))
-    eops
 
 mkLinDefault :: SourceGrammar -> Type -> Err Term
 mkLinDefault gr typ = do
