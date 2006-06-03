@@ -161,14 +161,16 @@ The documentation of the individual modules:
 - [IrregSwe gfdoc/IrregSwe.gf]: Swedish irregular verbs
 
 
-- [Extra abstract/Extra.gf]: extra constructs implemented in some languages
-- [ExtraScandAbs scandinavian/ExtraScandAbs.gf]: extran constructs in Scandinavian only
-- [ExtraNorAbs norwegian/ExtraNorAbs.gf]: extra constructs in Norwegian only
+- [Extra ../abstract/Extra.gf]: extra constructs implemented in some languages
+- [ExtraScand ../scandinavian/ExtraScandAbs.gf]: extra constructs in Scandinavian only
+- [ExtraNor ../norwegian/ExtraNorAbs.gf]: extra constructs in Norwegian only
+- [ExtraFin ../finnish/ExtraFinAbs.gf]: extra constructs in Finnish only
 
 
-- [English english/EnglishAbs.gf]: English with all extras
-- [Norwegian norwegian/NorwegianAbs.gf]: Norwegian with all extras
-- [Swedish swedish/SwedishAbs.gf]: Swedish with all extras
+- [English ../english/EnglishAbs.gf]: English with all extras
+- [Finnish ../finnish/FinnishAbs.gf]: Finnish with all extras
+- [Norwegian ../norwegian/NorwegianAbs.gf]: Norwegian with all extras
+- [Swedish ../swedish/SwedishAbs.gf]: Swedish with all extras
 
 
 
