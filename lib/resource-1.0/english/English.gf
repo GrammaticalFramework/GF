@@ -3,5 +3,5 @@
 concrete English of EnglishAbs = 
   LangEng,
 --  IrregEng,
-  ExtEng 
+  ExtraEng 
   ** {} ;

@@ -1,5 +1,5 @@
 abstract EnglishAbs = 
   Lang,
 ---  IrregEngAbs,
-  ExtEngAbs
+  ExtraEngAbs
   ** {} ;
