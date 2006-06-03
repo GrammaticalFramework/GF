@@ -37,7 +37,7 @@ import Data.Array
 ----------------------------------------------------------------------
 -- * parsing
 
-parse :: (Ord c, Print n, Ord n, Ord t) => String -> FCFParser c n t
+parse :: (Ord c, Ord n, Ord t) => String -> FCFParser c n t
 parse strategy pinfo starts toks =
     [ Abs (cat, found) (zip rhs rrecs) fun |
       Final ruleid found rrecs <- listXChartFinal chart,
