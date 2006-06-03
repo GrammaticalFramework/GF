@@ -35,6 +35,7 @@ import GF.Probabilistic.Probabilistic
 import GF.Compile.NoParse
 import GF.Infra.Option
 import GF.Infra.Ident
+import GF.Infra.UseIO (justModuleName)
 import GF.System.Arch (ModTime)
 
 import qualified Transfer.InterpreterAPI as T
@@ -69,7 +70,7 @@ data ShellState = ShSt {
   treebanks  :: [(Ident,Treebank)],  -- ^ treebanks
   probss     :: [(Ident,Probs)],     -- ^ probability distributions
   gloptions  :: Options,             -- ^ global options
-  readFiles  :: [(FilePath,ModTime)],-- ^ files read
+  readFiles  :: [(String,(FilePath,ModTime))],-- ^ files read
   absCats    :: [(G.Cat,(G.Context,
                   [(G.Fun,G.Type)],
                   [((G.Fun,Int),G.Type)]))],   -- ^ cats, (their contexts, 
@@ -197,8 +198,8 @@ grammar2shellState opts (gr,sgr) =
 
 -- | update a shell state from a canonical grammar
 updateShellState :: Options -> NoParse -> Maybe Ident -> ShellState -> 
-                    ((Int,G.SourceGrammar,CanonGrammar),[(FilePath,ModTime)]) ->
-               ---- (CanonGrammar,(G.SourceGrammar,[(FilePath,ModTime)])) -> 
+                    ((Int,G.SourceGrammar,CanonGrammar),[(String,(FilePath,ModTime))]) ->
+               ---- (CanonGrammar,(G.SourceGrammar,[(String,(FilePath,ModTime))])) -> 
                     Err ShellState 
 updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do 
   let cgr0 = M.updateMGrammar (canModules sh) gr
@@ -271,7 +272,7 @@ updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do
     treebanks  = treebanks sh,
     probss     = zip concrs probss,
     gloptions  = gloptions sh, --- opts, -- this would be command-line options
-    readFiles  = [ft | ft@(f,_) <- readFiles sh, notInrts f] ++ rts,
+    readFiles  = [ft | ft@(_,(f,_)) <- readFiles sh, notInrts f] ++ rts,
     absCats    = csi,
     statistics = [StDepTypes deps,StBoundVars binds],
     transfers  = transfers sh
@@ -455,6 +456,9 @@ allActiveStateGrammarsWithNames st =
 
 allActiveGrammars = map snd . allActiveStateGrammarsWithNames
 
+pathOfModule :: ShellState -> Ident -> FilePath
+pathOfModule sh m = maybe "module not found" fst $ lookup (P.prt m) $ readFiles sh
+
 -- command-line option -lang=foo overrides the actual grammar in state
 grammarOfOptState :: Options -> ShellState -> StateGrammar
 grammarOfOptState opts st = 
@@ -530,14 +534,6 @@ languageOnOff b lang sh = sh {concretes = cs'} where
 changeOptions :: (Options -> Options) -> ShellStateOper
 ---                                      __________ this is OBSOLETE
 changeOptions f sh = sh {gloptions = f (gloptions sh)}
-
-changeModTimes :: [(FilePath,ModTime)] -> ShellStateOper
----                                         __________ this is OBSOLETE
-changeModTimes mfs
- (ShSt a c cs can src cfs old_pinfos mcfgs fcfgs cfgs pinfos ms tbs pbs os ff ts ss trs) = 
-  ShSt a c cs can src cfs old_pinfos mcfgs fcfgs cfgs pinfos ms tbs pbs os ff' ts ss trs
- where
-   ff' = mfs ++ [mf | mf@(f,_) <- ff, notElem f (map fst mfs)]
 
 addGlobalOptions :: Options -> ShellStateOper
 addGlobalOptions = changeOptions . addOptions
