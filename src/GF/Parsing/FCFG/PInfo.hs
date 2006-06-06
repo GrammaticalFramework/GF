@@ -29,14 +29,7 @@ import Data.Maybe
 type FCFParser c n t = FCFPInfo c n t 
 		     -> [c]
 		     -> Input t
-		     -> FCFChart c n
-
-type FCFChart  c n   = [Abstract (c, RangeRec) n]
-
-makeFinalEdge :: c -> Int -> Int -> (c, RangeRec)
-makeFinalEdge cat 0 0 = (cat, [EmptyRange])
-makeFinalEdge cat i j = (cat, [makeRange i j])
-
+		     -> [SyntaxForest n]
 
 ------------------------------------------------------------
 -- parser information
@@ -54,6 +47,8 @@ data FCFPInfo c n t
 	       , leftcornerTokens   :: Assoc t (SList RuleId)
 		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
 	       , grammarCats        :: SList c
+	       , grammarToks        :: SList t
+	       , grammarLexer       :: t -> (c,SyntaxTree RuleId)
 	       }
 
 
@@ -73,8 +68,8 @@ getLeftCornerCat lins
   where
     syms = lins ! 0
 
-buildFCFPInfo :: (Ord c, Ord n, Ord t) => FCFGrammar c n t -> FCFPInfo c n t
-buildFCFPInfo grammar = 
+buildFCFPInfo :: (Ord c, Ord n, Ord t) => (t -> (c,SyntaxTree RuleId)) -> FCFGrammar c n t -> FCFPInfo c n t
+buildFCFPInfo lexer grammar = 
     traceCalcFirst grammar $
     tracePrt "MCFG.PInfo - parser info" (prt) $
     FCFPInfo { allRules = allrules
@@ -84,6 +79,8 @@ buildFCFPInfo grammar =
 	     , leftcornerCats = leftcorncats
 	     , leftcornerTokens = leftcorntoks
 	     , grammarCats = grammarcats
+	     , grammarToks = grammartoks
+	     , grammarLexer = lexer
 	     }
 
     where allrules = listArray (0,length grammar-1) grammar
@@ -98,6 +95,7 @@ buildFCFPInfo grammar =
 			  [ (fromJust (getLeftCornerTok lins), ruleid) | 
 			    (ruleid, FRule _ lins) <- assocs allrules, isJust (getLeftCornerTok lins) ]
 	  grammarcats   = aElems topdownrules
+	  grammartoks   = nubsort [t | (FRule _ lins) <- grammar, lin <- elems lins, FSymTok t <- elems lin]
 
 ----------------------------------------------------------------------
 -- pretty-printing of statistics

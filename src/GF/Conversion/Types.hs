@@ -14,9 +14,10 @@
 
 module GF.Conversion.Types where
 
-import qualified GF.Infra.Ident as Ident (Ident, wildIdent, isWildIdent)
-import qualified GF.Canon.AbsGFC as AbsGFC (CIdent(..))
+import qualified GF.Infra.Ident as Ident (Ident(..), wildIdent, isWildIdent)
+import qualified GF.Canon.AbsGFC as AbsGFC (CIdent(..), Label(..))
 import qualified GF.Grammar.Grammar as Grammar (Term)
+import qualified GF.Grammar.Values as Values (cString, cInt, cFloat)
 
 import GF.Formalism.GCFG
 import GF.Formalism.SimpleGFC
@@ -115,6 +116,10 @@ data FCat     = FCat  {-# UNPACK #-} !Int SCat [SPath] [(SPath,STerm)]
 
 initialFCat :: SCat -> FCat
 initialFCat cat = FCat 0 cat [] []
+
+fcatString = FCat (-1) Values.cString [Path [Left (AbsGFC.L (Ident.IC "s"))]] []
+fcatInt    = FCat (-2) Values.cInt    [Path [Left (AbsGFC.L (Ident.IC "s"))]] []
+fcatFloat  = FCat (-3) Values.cFloat  [Path [Left (AbsGFC.L (Ident.IC "s"))]] []
 
 fcat2scat :: FCat -> SCat
 fcat2scat (FCat _ c _ _) = c

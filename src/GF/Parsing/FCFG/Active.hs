@@ -11,6 +11,7 @@ module GF.Parsing.FCFG.Active (parse) where
 
 import GF.Data.GeneralDeduction
 import GF.Data.Assoc
+import GF.Data.SortedList
 import GF.Data.Utilities
 
 import GF.Formalism.GCFG
@@ -34,14 +35,11 @@ import Data.Array
 -- * parsing
 
 parse :: (Ord c, Ord n, Ord t) => String -> FCFParser c n t
-parse strategy pinfo starts toks =
-    [ Abs (cat, found) (zip rhs rrecs) fun |
-      Final ruleid found rrecs <- listXChartFinal chart,
-      let FRule (Abs cat rhs fun) _ = allRules pinfo ! ruleid ]
+parse strategy pinfo starts toks = xchart2forests chart pinfo starts toks
     where chart = process strategy pinfo toks axioms emptyXChart
     
-          axioms | isBU  strategy = initialBU pinfo toks
-		 | isTD  strategy = initialTD pinfo starts toks
+          axioms | isBU  strategy = terminal pinfo toks ++ initialScan pinfo toks
+		 | isTD  strategy = initial pinfo starts toks
 
 isBU  s = s=="b"
 isTD  s = s=="t"
@@ -58,7 +56,7 @@ updateChildren recs i rec = updateNthM update i recs
 makeMaxRange (Range _ j) = Range j j
 makeMaxRange EmptyRange  = EmptyRange
 
-process :: (Ord c, Ord n, Ord t) => String -> FCFPInfo c n t -> Input t -> [Item] -> XChart c -> XChart c
+process :: (Ord c, Ord n, Ord t) => String -> FCFPInfo c n t -> Input t -> [Item c] -> XChart c -> XChart c
 process strategy pinfo toks []           chart = chart
 process strategy pinfo toks (item:items) chart = process strategy pinfo toks items $! univRule item chart
   where
@@ -67,7 +65,10 @@ process strategy pinfo toks (item:items) chart = process strategy pinfo toks ite
            case lin ! ppos of
              FSymCat c r d -> case insertXChart chart item c of
 	                        Nothing    -> chart
-	                        Just chart -> let items = do Final _ found' _ <- lookupXChartFinal chart c
+	                        Just chart -> let items = do item <- lookupXChartFinal chart c
+	                                                     let found' = case item of
+	                                                                    Final   _ found' _ -> found'
+	                                                                    Literal _ found' _ -> found'
 	         			                     rng'  <- concatRange rng (found' !! r)
 	         			                     recs' <- updateChildren recs d found'
 	     			                             return (Active ruleid found rng' lbl (ppos+1) recs')
@@ -105,12 +106,28 @@ process strategy pinfo toks (item:items) chart = process strategy pinfo toks ite
                                      return (Active ruleid [] (found' !! r) 0 1 (updateNth (const found') d (emptyChildren abs)))
                       in process strategy pinfo toks items chart
       where
-        (FRule (Abs cat _ fn) _) = allRules pinfo ! ruleid
+        (FRule (Abs cat _ _) _) = allRules pinfo ! ruleid
+    univRule item@(Literal cat found' t) chart =
+      case insertXChart chart item cat of
+        Nothing    -> chart
+        Just chart -> let items = do (Active ruleid found rng l ppos recs) <- lookupXChartAct chart cat
+                                     let FRule _ lins    = allRules pinfo ! ruleid
+                                         FSymCat cat r d = lins ! l ! ppos
+                                     rng'  <- concatRange rng (found' !! r)
+                                     recs' <- updateChildren recs d found'
+                                     return (Active ruleid found rng' l (ppos+1) recs')
+                                  ++
+    			          do guard (isBU strategy)
+			             ruleid <- leftcornerCats pinfo ? cat
+			             let FRule abs lins = allRules pinfo ! ruleid
+			                 FSymCat cat r d = lins ! 0 ! 0
+                                     return (Active ruleid [] (found' !! r) 0 1 (updateNth (const found') d (emptyChildren abs)))
+                      in process strategy pinfo toks items chart
 
 ----------------------------------------------------------------------
 -- * XChart
 
-data Item
+data Item c
   = Active {-# UNPACK #-} !RuleId
            RangeRec
            Range
@@ -118,9 +135,10 @@ data Item
            {-# UNPACK #-} !FPointPos
            [RangeRec]
   | Final {-# UNPACK #-} !RuleId RangeRec [RangeRec]
+  | Literal c RangeRec (SyntaxTree RuleId)
   deriving (Eq, Ord)
 
-data XChart c = XChart !(ParseChart Item c) !(ParseChart Item c)
+data XChart c = XChart !(ParseChart (Item c) c) !(ParseChart (Item c) c)
 
 emptyXChart :: Ord c => XChart c
 emptyXChart = XChart emptyChart emptyChart
@@ -130,7 +148,12 @@ insertXChart (XChart actives finals) item@(Active _ _ _ _ _ _) c =
     Nothing      -> Nothing
     Just actives -> Just (XChart actives finals)
 
-insertXChart (XChart actives finals) item@(Final _ _ _)       c =
+insertXChart (XChart actives finals) item@(Final _ _ _) c =
+  case chartInsert finals item c of
+    Nothing     -> Nothing
+    Just finals -> Just (XChart actives finals)
+
+insertXChart (XChart actives finals) item@(Literal _ _ _) c =
   case chartInsert finals item c of
     Nothing     -> Nothing
     Just finals -> Just (XChart actives finals)
@@ -138,16 +161,35 @@ insertXChart (XChart actives finals) item@(Final _ _ _)       c =
 lookupXChartAct   (XChart actives finals) c = chartLookup actives c
 lookupXChartFinal (XChart actives finals) c = chartLookup finals  c
 
-listXChartAct   (XChart actives finals) = chartList actives
-listXChartFinal (XChart actives finals) = chartList finals
+xchart2forests :: (Ord c, Ord n, Ord t) => XChart c -> FCFParser c n t
+xchart2forests (XChart actives finals) pinfo starts toks = concatMap (edge2forests . makeFinalEdge) starts
+  where
+    assocs = accumAssoc groupPairs $
+                [ case item of
+                    Final ruleid found rrecs      -> let FRule (Abs cat rhs fun) _ = allRules pinfo ! ruleid
+		                                     in ((cat,found), (FNode fun [], zip rhs rrecs))
+                    Literal cat found (TString s) ->    ((cat,found), (FString s,               []))
+                    Literal cat found (TInt    n) ->    ((cat,found), (FInt    n,               []))
+                    Literal cat found (TFloat  f) ->    ((cat,found), (FFloat  f,               []))
+		| item <- chartList finals
+		]
+    edge2forests edge@(cat,_) = map (item2forest cat) $ assocs ? edge
+    item2forest cat (FNode name _, children) = FNode name $ children >>= mapM edge2forests
+    item2forest cat (t           , children) = t
+
+    makeFinalEdge cat =
+      case inputBounds toks of
+        (0,0) -> (cat, [EmptyRange]   )
+        (i,j) -> (cat, [makeRange i j])
 
 
 ----------------------------------------------------------------------
 -- Earley --
 
--- called with all starting categories
-initialTD :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> [c] -> Input t -> [Item]
-initialTD pinfo starts toks = 
+-- anropas med alla startkategorier
+initial :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> [c] -> Input t -> [Item]
+initial pinfo starts toks = 
+    tracePrt "MCFG.Active (Earley) - initial rules" (prt . length) $
     do cat <- starts
        ruleid <- topdownRules pinfo ? cat
        let FRule abs lins = allRules pinfo ! ruleid
@@ -157,21 +199,22 @@ initialTD pinfo starts toks =
 ----------------------------------------------------------------------
 -- Kilbury --
 
--- terminal :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [Item]
--- terminal pinfo toks = $
---     tracePrt "MCFG.Active (Kilbury) - initial terminal rules" (prt . length) $
---     do ruleid <- emptyRules pinfo
---        let FRule abs lins = allRules pinfo ! ruleid
---        rrec <- mapM (rangeRestSyms toks EmptyRange . elems) (elems lins)
---        return $ Final ruleid rrec []
---     where
---       rangeRestSyms toks rng []                 = return rng
---       rangeRestSyms toks rng (FSymTok tok:syms) = do (i,j) <- inputToken toks ? tok
---                                                      rng' <- concatRange rng (makeRange i j)
---                                                      rangeRestSyms toks rng' syms
+terminal :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [Item]
+terminal pinfo toks = 
+    tracePrt "MCFG.Active (Kilbury) - initial terminal rules" (prt . length) $
+    do ruleid <- emptyRules pinfo
+       let FRule abs lins = allRules pinfo ! ruleid
+       rrec <- mapM (rangeRestSyms toks EmptyRange . elems) (elems lins)
+       return $ Final ruleid rrec []
+    where
+      rangeRestSyms toks rng []                 = return rng
+      rangeRestSyms toks rng (FSymTok tok:syms) = do (i,j) <- inputToken toks ? tok
+                                                     rng' <- concatRange rng (makeRange i j)
+                                                     rangeRestSyms toks rng' syms
 
-initialBU :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [Item]
-initialBU pinfo toks =
+initialScan :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [Item]
+initialScan pinfo toks =
+    tracePrt "MCFG.Active (Kilbury) - initial scanned rules" (prt . length) $
     do tok <- aElems (inputToken toks)
        ruleid <- leftcornerTokens pinfo ? tok ++
                  epsilonRules pinfo
