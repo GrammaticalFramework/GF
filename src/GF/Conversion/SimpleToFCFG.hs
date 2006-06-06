@@ -244,7 +244,14 @@ type SRulesMap = Map.Map SCat [SRule]
 type FCatSet = Map.Map SCat (Map.Map [SPath] (Map.Map [(SPath,STerm)] (Either FCat FCat)))
 
 
-emptyFRulesEnv = FRulesEnv 0 Map.empty []
+emptyFRulesEnv = FRulesEnv 0 (ins fcatString (ins fcatInt (ins fcatFloat Map.empty))) []
+  where
+    ins fcat@(FCat _ cat rcs tcs) fcatSet =
+      Map.insertWith (\_ -> Map.insertWith (\_ -> Map.insert tcs x_fcat) rcs tmap_s) cat rmap_s fcatSet
+      where
+        x_fcat = Right fcat
+        tmap_s = Map.singleton tcs x_fcat
+        rmap_s = Map.singleton rcs tmap_s
 
 genFCatHead :: FRulesEnv -> FCat -> (FRulesEnv, FCat)
 genFCatHead env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =

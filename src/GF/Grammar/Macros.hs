@@ -398,16 +398,17 @@ freshAsTerm s = Vr (varX (readIntArg s))
 
 -- | create a terminal for concrete syntax
 string2term :: String -> Term
-string2term = ccK
+string2term = K
 
-ccK :: String -> Term
-ccC :: Term -> Term -> Term
-ccK = K
-ccC = C
+int2term :: Integer -> Term
+int2term = EInt
+
+float2term :: Double -> Term
+float2term = EFloat
 
 -- | create a terminal from identifier
 ident2terminal :: Ident -> Term
-ident2terminal = ccK . prIdent
+ident2terminal = K . prIdent
 
 -- | create a constant
 string2CnTrm :: String -> Term

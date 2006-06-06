@@ -128,15 +128,21 @@ data SyntaxForest n = FMeta
 		      -- of possible alternatives. Ie. the outer list 
 		      -- is a disjunctive node, and the inner lists 
 		      -- are (conjunctive) concatenative nodes
+		    | FString String
+		    | FInt    Integer
+		    | FFloat  Double
 		      deriving (Eq, Ord, Show)
 
 instance Functor SyntaxForest where
     fmap f (FNode n forests) = FNode (f n) $ map (map (fmap f)) forests
-    fmap f (FMeta) = FMeta 
+    fmap _ (FString s) = FString s
+    fmap _ (FInt    n) = FInt    n
+    fmap _ (FFloat  f) = FFloat  f
+    fmap _ (FMeta)     = FMeta
 
 forestName :: SyntaxForest n -> Maybe n
 forestName (FNode n _) = Just n
-forestName (FMeta)     = Nothing
+forestName _           = Nothing
 
 unifyManyForests :: (Monad m, Eq n) => [SyntaxForest n] -> m (SyntaxForest n)
 unifyManyForests = foldM unifyForests FMeta
@@ -148,10 +154,16 @@ unifyForests FMeta  forest = return forest
 unifyForests forest FMeta  = return forest
 unifyForests (FNode name1 children1) (FNode name2 children2)
     | name1 == name2 && not (null children) = return $ FNode name1 children
-    | otherwise    = fail "forest unification failure"
     where children = [ forests | forests1 <- children1, forests2 <- children2,
 		       sameLength forests1 forests2,
 		       forests <- zipWithM unifyForests forests1 forests2 ]
+unifyForests (FString s1) (FString s2)
+    | s1 == s2  = return $ FString s1
+unifyForests (FInt n1) (FInt n2)
+    | n1 == n2  = return $ FInt n1
+unifyForests (FFloat f1) (FFloat f2)
+    | f1 == f2  = return $ FFloat f1
+unifyForests _ _ = fail "forest unification failure"
 
 {- måste tänka mer på detta:
 compactForests :: Ord n => [SyntaxForest n] -> SList (SyntaxForest n)
@@ -178,12 +190,19 @@ compactForests = map joinForests . groupBy eqNames . sortForests
 
 -- ** syntax trees
 
-data SyntaxTree n = TMeta | TNode n [SyntaxTree n] 
-		    deriving (Eq, Ord, Show)
+data SyntaxTree n = TMeta
+                  | TNode n [SyntaxTree n]
+                  | TString  String
+                  | TInt     Integer
+                  | TFloat   Double
+		  deriving (Eq, Ord, Show)
 
 instance Functor SyntaxTree where
     fmap f (TNode n trees) = TNode (f n) $ map (fmap f) trees
-    fmap f (TMeta) = TMeta 
+    fmap _ (TString s)     = TString s
+    fmap _ (TInt    n)     = TInt    n
+    fmap _ (TFloat  f)     = TFloat  f
+    fmap _ (TMeta)         = TMeta 
 
 treeName :: SyntaxTree n -> Maybe n
 treeName (TNode n _) = Just n
@@ -200,7 +219,13 @@ unifyTrees tree TMeta = return tree
 unifyTrees (TNode name1 children1) (TNode name2 children2)
     | name1 == name2 && sameLength children1 children2 
 	= liftM (TNode name1) $ zipWithM unifyTrees children1 children2 
-    | otherwise = fail "tree unification failure"
+unifyTrees (TString s1) (TString s2)
+    | s1 == s2 = return (TString s1)
+unifyTrees (TInt n1) (TInt n2)
+    | n1 == n2 = return (TInt n1)
+unifyTrees (TFloat f1) (TFloat f2)
+    | f1 == f2 = return (TFloat f1)
+unifyTrees _ _ = fail "tree unification failure"
 
 -- ** conversions between representations
 
@@ -235,8 +260,10 @@ chart2forests chart isMeta = es2fs
 
 forest2trees :: SyntaxForest n -> SList (SyntaxTree n)
 forest2trees (FNode n forests) = map (TNode n) $ forests >>= mapM forest2trees
-forest2trees (FMeta) = [TMeta]
-
+forest2trees (FString s) = [TString s]
+forest2trees (FInt    n) = [TInt    n]
+forest2trees (FFloat  f) = [TFloat  f]
+forest2trees (FMeta)     = [TMeta]
 
 ----------------------------------------------------------------------
 -- * profiles
@@ -326,7 +353,10 @@ instance (Print s) => Print (SyntaxTree s) where
     prt (TNode s trees)
 	| null trees = prt s
 	| otherwise  = "(" ++ prt s ++ prtBefore " " trees ++ ")"
-    prt (TMeta) = "?"
+    prt (TString  s) = show s
+    prt (TInt     n) = show n
+    prt (TFloat   f) = show f
+    prt (TMeta)      = "?"
     prtList = prtAfter "\n"
 
 instance (Print s) => Print (SyntaxForest s) where
@@ -335,7 +365,10 @@ instance (Print s) => Print (SyntaxForest s) where
     prt (FNode s [forests]) = "(" ++ prt s ++ prtBefore " " forests ++ ")"
     prt (FNode s children) = "{" ++ prtSep " | " [ prt s ++ prtBefore " " forests | 
 						   forests <- children ] ++ "}"
-    prt (FMeta) = "?"
+    prt (FString s) = show s
+    prt (FInt    n) = show n
+    prt (FFloat  f) = show f
+    prt (FMeta)     = "?"
     prtList = prtAfter "\n"
 
 instance Print a => Print (Profile a) where

@@ -54,9 +54,17 @@ type CFPInfo  = PC.CFPInfo CCat Name Token
 
 buildPInfo :: MGrammar -> FGrammar -> CGrammar -> PInfo
 buildPInfo mcfg fcfg cfg = PInfo { mcfPInfo = PM.buildMCFPInfo mcfg
-                                 , fcfPInfo = PF.buildFCFPInfo fcfg
+                                 , fcfPInfo = PF.buildFCFPInfo grammarLexer fcfg
 			         , cfPInfo  = PC.buildCFPInfo  cfg
 			         }
+  where
+    grammarLexer s =
+      case reads s of
+        [(n::Integer,"")] -> (fcatInt, TInt n)
+        _                 -> case reads s of
+                               [(f::Double,"")] -> (fcatFloat, TFloat  f)
+                               _                -> (fcatString,TString s)
+
 
 instance Print PInfo where
     prt (PInfo m f c) = prt m ++ "\n" ++ prt c
@@ -126,12 +134,7 @@ selectParser "f" strategy pinfo startCat inTokens
 	     isStart cat = fcat2scat cat == cfCat2Ident startCat
 	     fcfpi = fcfPInfo pinfo
 	 fcfParser <- PF.parseFCF strategy
-	 let fcfChart = fcfParser fcfpi startCats inTokens
-	     chart = G.abstract2chart fcfChart
-	     (begin,end) = inputBounds inTokens
-	     finalEdges = [ PF.makeFinalEdge cat begin end | 
-			    cat@(FCat _ _ [lbl] _) <- startCats ]
-	 return $ chart2forests chart (const False) finalEdges
+	 return $ fcfParser fcfpi startCats inTokens
 
 -- error parser: 
 selectParser prs strategy _ _ _ = Bad $ "Parser '" ++ prs ++ "' not defined with strategy: " ++ strategy 
@@ -142,6 +145,9 @@ selectParser prs strategy _ _ _ = Bad $ "Parser '" ++ prs ++ "' not defined with
 
 tree2term :: Ident.Ident -> SyntaxTree Fun -> Grammar.Term
 tree2term abs (TNode f ts) = Macros.mkApp (Macros.qq (abs,f)) (map (tree2term abs) ts)
+tree2term abs (TString  s) = Macros.string2term s
+tree2term abs (TInt     n) = Macros.int2term    n
+tree2term abs (TFloat   f) = Macros.float2term  f
 tree2term abs (TMeta)      = Macros.mkMeta 0
 
 
@@ -156,6 +162,10 @@ applyProfileToForest (FNode name@(Name fun profile) children)
     where chForests   = concat [ applyProfileM unifyManyForests profile forests |
 				 forests0 <- children,
 				 forests <- mapM applyProfileToForest forests0 ]
+applyProfileToForest (FString s) = [FString s]
+applyProfileToForest (FInt    n) = [FInt    n]
+applyProfileToForest (FFloat  f) = [FFloat  f]
+applyProfileToForest (FMeta)     = [FMeta]
 
 {-
 -- more intelligent(?) implementation
