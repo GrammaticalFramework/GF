@@ -32,6 +32,7 @@ import qualified GF.Conversion.RemoveErasing as RemEra
 import qualified GF.Conversion.RemoveEpsilon as RemEps
 import qualified GF.Conversion.SimpleToMCFG as S2M
 import qualified GF.Conversion.SimpleToFCFG as S2FM
+import qualified GF.Conversion.MCFGtoFCFG as M2FM
 import qualified GF.Conversion.MCFGtoCFG as M2C
 
 import GF.Infra.Print
@@ -41,10 +42,12 @@ import GF.System.Tracing
 ----------------------------------------------------------------------
 -- * GFC -> MCFG & CFG, using options to decide which conversion is used
 
-convertGFC :: Options -> (CanonGrammar, Ident) -> (SGrammar, (EGrammar, (MGrammar, FGrammar, CGrammar)))
+convertGFC :: Options -> (CanonGrammar, Ident) 
+           -> (SGrammar, (EGrammar, (MGrammar, FGrammar, CGrammar)))
 convertGFC opts = \g -> let s = g2s g
                             e = s2e s 
-                        in trace2 "Options" (show opts) (s, (e, (e2m e, s2fm s, e2c e)))
+                            m = e2m e
+                        in trace2 "Options" (show opts) (s, (e, (m, s2fm s, e2c e)))
     where e2c = M2C.convertGrammar
 	  e2m = case getOptVal opts firstCat of
 		  Just cat -> flip erasing [identC cat]
@@ -55,6 +58,7 @@ convertGFC opts = \g -> let s = g2s g
 		  Just "epsilon"           -> epsilon . nondet
 		  _                        -> nondet
 	  s2fm= S2FM.convertGrammar
+          m2fm= M2FM.convertGrammar
 	  g2s = case getOptVal opts gfcConversion of
 		  Just "finite"            -> finite . simple
 		  Just "finite2"           -> finite . finite . simple
@@ -89,6 +93,10 @@ gfc2fcfg :: Options -> (CanonGrammar, Ident) -> FGrammar
 gfc2fcfg opts g = fcfg
   where
     (_, fcfg, _) = snd (snd (convertGFC opts g))
+
+mcfg2fcfg :: MGrammar -> FGrammar
+mcfg2fcfg = M2FM.convertGrammar
+
 
 ----------------------------------------------------------------------
 -- * single step conversions
