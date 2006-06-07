@@ -6,18 +6,6 @@
 -- which may be more suitable to open in applications.
 
 abstract Lang = 
-  Noun,
-  Verb, 
-  Adjective,
-  Adverb,
-  Numeral,
-  Sentence, 
-  Question,
-  Relative,
-  Conjunction,
-  Phrase,
-  Text,
-  Structural,
-  Idiom,
+  Grammar,
   Lexicon
   ** {} ;
