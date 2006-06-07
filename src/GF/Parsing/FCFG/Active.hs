@@ -23,11 +23,7 @@ import GF.Infra.Ident
 import GF.Parsing.FCFG.Range
 import GF.Parsing.FCFG.PInfo
 
-import GF.System.Tracing
-
 import Control.Monad (guard)
-
-import GF.Infra.Print
 
 import qualified Data.List as List
 import qualified Data.Map  as Map
@@ -44,8 +40,8 @@ parse strategy pinfo starts toks =
       let FRule (Abs cat rhs fun) _ = allRules pinfo ! ruleid ]
     where chart = process strategy pinfo toks axioms emptyXChart
     
-          axioms | isBU  strategy = terminal pinfo toks ++ initialScan pinfo toks
-		 | isTD  strategy = initial pinfo starts toks
+          axioms | isBU  strategy = initialBU pinfo toks
+		 | isTD  strategy = initialTD pinfo starts toks
 
 isBU  s = s=="b"
 isTD  s = s=="t"
@@ -149,10 +145,9 @@ listXChartFinal (XChart actives finals) = chartList finals
 ----------------------------------------------------------------------
 -- Earley --
 
--- anropas med alla startkategorier
-initial :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> [c] -> Input t -> [Item]
-initial pinfo starts toks = 
-    tracePrt "MCFG.Active (Earley) - initial rules" (prt . length) $
+-- called with all starting categories
+initialTD :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> [c] -> Input t -> [Item]
+initialTD pinfo starts toks = 
     do cat <- starts
        ruleid <- topdownRules pinfo ? cat
        let FRule abs lins = allRules pinfo ! ruleid
@@ -162,23 +157,24 @@ initial pinfo starts toks =
 ----------------------------------------------------------------------
 -- Kilbury --
 
-terminal :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [Item]
-terminal pinfo toks = 
-    tracePrt "MCFG.Active (Kilbury) - initial terminal rules" (prt . length) $
-    do ruleid <- emptyRules pinfo
-       let FRule abs lins = allRules pinfo ! ruleid
-       rrec <- mapM (rangeRestSyms toks EmptyRange . elems) (elems lins)
-       return $ Final ruleid rrec []
-    where
-      rangeRestSyms toks rng []                 = return rng
-      rangeRestSyms toks rng (FSymTok tok:syms) = do (i,j) <- inputToken toks ? tok
-                                                     rng' <- concatRange rng (makeRange i j)
-                                                     rangeRestSyms toks rng' syms
+-- terminal :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [Item]
+-- terminal pinfo toks = $
+--     tracePrt "MCFG.Active (Kilbury) - initial terminal rules" (prt . length) $
+--     do ruleid <- emptyRules pinfo
+--        let FRule abs lins = allRules pinfo ! ruleid
+--        rrec <- mapM (rangeRestSyms toks EmptyRange . elems) (elems lins)
+--        return $ Final ruleid rrec []
+--     where
+--       rangeRestSyms toks rng []                 = return rng
+--       rangeRestSyms toks rng (FSymTok tok:syms) = do (i,j) <- inputToken toks ? tok
+--                                                      rng' <- concatRange rng (makeRange i j)
+--                                                      rangeRestSyms toks rng' syms
 
-initialScan :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [Item]
-initialScan pinfo toks =
-    tracePrt "MCFG.Active (Kilbury) - initial scanned rules" (prt . length) $
+initialBU :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [Item]
+initialBU pinfo toks =
     do tok <- aElems (inputToken toks)
-       ruleid <- leftcornerTokens pinfo ? tok
+       ruleid <- leftcornerTokens pinfo ? tok ++
+                 epsilonRules pinfo
        let FRule abs lins = allRules pinfo ! ruleid
        return $ Active ruleid [] EmptyRange 0 0 (emptyChildren abs)
+

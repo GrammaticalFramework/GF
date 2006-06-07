@@ -47,7 +47,9 @@ data FCFPInfo c n t
     = FCFPInfo { allRules           :: Array RuleId (FCFRule c n t)
                , topdownRules       :: Assoc c (SList RuleId)
 		 -- ^ used in 'GF.Parsing.MCFG.Active' (Earley):
-	       , emptyRules         :: [RuleId]
+	         -- , emptyRules         :: [RuleId]
+	       , epsilonRules       :: [RuleId]
+		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
 	       , leftcornerCats     :: Assoc c (SList RuleId)
 	       , leftcornerTokens   :: Assoc t (SList RuleId)
 		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
@@ -77,7 +79,8 @@ buildFCFPInfo grammar =
     tracePrt "MCFG.PInfo - parser info" (prt) $
     FCFPInfo { allRules = allrules
              , topdownRules = topdownrules
-	     , emptyRules = emptyrules
+	     -- , emptyRules = emptyrules
+	     , epsilonRules = epsilonrules
 	     , leftcornerCats = leftcorncats
 	     , leftcornerTokens = leftcorntoks
 	     , grammarCats = grammarcats
@@ -85,7 +88,9 @@ buildFCFPInfo grammar =
 
     where allrules = listArray (0,length grammar-1) grammar
 	  topdownrules  = accumAssoc id [(cat,  ruleid) | (ruleid, FRule (Abs cat _ _)  _) <- assocs allrules]
-	  emptyrules    = [ruleid | (ruleid, FRule (Abs _ [] _) _) <- assocs allrules]
+	  -- emptyrules    = [ruleid | (ruleid, FRule (Abs _ [] _) _) <- assocs allrules]
+	  epsilonrules  = [ ruleid | (ruleid, FRule _ lins) <- assocs allrules,
+                            not (inRange (bounds (lins ! 0)) 0) ]
 	  leftcorncats  = accumAssoc id
 			  [ (fromJust (getLeftCornerCat lins), ruleid) | 
 			    (ruleid, FRule _ lins) <- assocs allrules, isJust (getLeftCornerCat lins) ]
@@ -100,7 +105,8 @@ buildFCFPInfo grammar =
 instance (Ord c, Ord n, Ord t) => Print (FCFPInfo c n t) where
     prt pI = "[ allRules=" ++ sl (elems . allRules) ++
 	     "; tdRules=" ++ sla topdownRules ++
-	     "; emptyRules=" ++ sl emptyRules ++ 
+	     -- "; emptyRules=" ++ sl emptyRules ++ 
+	     "; epsilonRules=" ++ sl epsilonRules ++ 
 	     "; lcCats=" ++ sla leftcornerCats ++
 	     "; lcTokens=" ++ sla leftcornerTokens ++
 	     "; categories=" ++ sl grammarCats ++ 
