@@ -57,7 +57,7 @@ process strategy pinfo starts toks
 		 | isBU  strategy = [scan, predictKilbury pinfo toks]
 		 | isTD  strategy = [scan, predictEarley pinfo toks]
 	  axioms | isNil strategy = predict pinfo toks
-		 | isBU  strategy = terminal pinfo toks ++ initialScan pinfo toks
+		 | isBU  strategy = {- terminal pinfo toks ++ -} initialScan pinfo toks
 		 | isTD  strategy = initial pinfo starts toks
 
 --processR :: (Ord n, Ord c, Ord l) => 
@@ -70,7 +70,7 @@ processR strategy pinfo starts
 		 | isBU  strategy = [scan, predictKilburyR pinfo]
 		 | isTD  strategy = [scan, predictEarleyR pinfo]
 	  axioms | isNil strategy = predictR pinfo
-		 | isBU  strategy = terminalR pinfo ++ initialScanR pinfo
+		 | isBU  strategy = {- terminalR pinfo ++ -} initialScanR pinfo
 		 | isTD  strategy = initialR pinfo starts
 
 isNil s = s=="n"
@@ -200,18 +200,20 @@ predictEarleyR2 rng (Rule abs (Cnc _ _ (lin : lins))) =
 ----------------------------------------------------------------------
 -- Kilbury --
 
-terminal :: (Ord c, Ord n, Ord l, Ord t) => MCFPInfo c n l t -> Input t -> [Item c n l]
-terminal pinfo toks = 
-    tracePrt "MCFG.Active (Kilbury) - initial terminal rules" (prt . length) $
-    do Rule abs (Cnc _ _ lins) <- emptyRules pinfo
-       lins' <- rangeRestRec toks lins 
-       return $ Final abs (makeRangeRec lins') []
+-- terminal :: (Ord c, Ord n, Ord l, Ord t) => MCFPInfo c n l t -> Input t -> [Item c n l]
+-- terminal pinfo toks = 
+--     tracePrt "MCFG.Active (Kilbury) - initial terminal rules" (prt . length) $
+--     do Rule abs (Cnc _ _ lins) <- emptyRules pinfo
+--        lins' <- rangeRestRec toks lins 
+--        return $ Final abs (makeRangeRec lins') []
 
 initialScan :: (Ord c, Ord n, Ord l, Ord t) => MCFPInfo c n l t -> Input t -> [Item c n l]
 initialScan pinfo toks =
-    tracePrt "MCFG.Active (Kilbury) - initial scanned rules" (prt . length) $
+    tracePrt "MCFG.Active (Kilbury) - initial scanned rules + epsilon rules" (prt . length) $
     do tok <- aElems (inputToken toks)
-       Rule abs (Cnc _ _ lins) <- leftcornerTokens pinfo ? tok
+       Rule abs (Cnc _ _ lins) <- 
+           leftcornerTokens pinfo ? tok ++ 
+           epsilonRules pinfo
        lin' : lins' <- rangeRestRec toks lins
        return $ Active abs [] EmptyRange lin' lins' (emptyChildren abs)
 
@@ -230,16 +232,18 @@ predictKilbury _ _ _ _ = []
 ----------------------------------------------------------------------
 -- KilburyR --
 
-terminalR :: (Ord c, Ord n, Ord l) => MCFPInfo c n l Range -> [Item c n l]
-terminalR pinfo = 
-    tracePrt "MCFG.Active (Kilbury Range) - initial terminal rules" (prt . length) $
-    do Rule abs (Cnc _ _ lins) <- emptyRules pinfo
-       return $ Final abs (makeRangeRec lins) []
+-- terminalR :: (Ord c, Ord n, Ord l) => MCFPInfo c n l Range -> [Item c n l]
+-- terminalR pinfo = 
+--     tracePrt "MCFG.Active (Kilbury Range) - initial terminal rules" (prt . length) $
+--     do Rule abs (Cnc _ _ lins) <- emptyRules pinfo
+--        return $ Final abs (makeRangeRec lins) []
 
 initialScanR :: (Ord c, Ord n, Ord l) => MCFPInfo c n l Range -> [Item c n l]
 initialScanR pinfo =
     tracePrt "MCFG.Active (Kilbury Range) - initial scanned rules" (prt . length) $
-    do Rule abs (Cnc _ _ (lin : lins)) <- concatMap snd (aAssocs (leftcornerTokens pinfo))
+    do Rule abs (Cnc _ _ (lin : lins)) <- 
+           concatMap snd (aAssocs (leftcornerTokens pinfo)) ++
+           epsilonRules pinfo
        return $ Active abs [] EmptyRange lin lins (emptyChildren abs)
 
 predictKilburyR :: (Ord c, Ord n, Ord l) => MCFPInfo c n l Range
