@@ -46,7 +46,8 @@ data MCFPInfo c n l t
 	       , nameRules     :: Assoc n (SList (MCFRule c n l t))
 	       , topdownRules  :: Assoc c (SList (MCFRule c n l t))
 		 -- ^ used in 'GF.Parsing.MCFG.Active' (Earley):
-	       , emptyRules    :: [MCFRule c n l t]
+	       , epsilonRules    :: [MCFRule c n l t]
+		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
 	       , leftcornerCats :: Assoc c (SList (MCFRule c n l t))
 	       , leftcornerTokens :: Assoc t (SList (MCFRule c n l t))
 		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
@@ -71,7 +72,7 @@ rangeRestrictPInfo (pinfo{-::MCFPInfo c n l t-}) inp =
     MCFPInfo { grammarTokens = nubsort (map edgeRange (inputEdges inp))
 	     , nameRules = rrAssoc (nameRules pinfo)
 	     , topdownRules = rrAssoc (topdownRules pinfo)
-	     , emptyRules = rrRules (emptyRules pinfo)
+	     , epsilonRules = rrRules (epsilonRules pinfo)
 	     , leftcornerCats = rrAssoc (leftcornerCats pinfo)
 	     , leftcornerTokens = lctokens
 	     , grammarCats = grammarCats pinfo
@@ -100,7 +101,7 @@ buildMCFPInfo grammar =
     MCFPInfo { grammarTokens = grammartokens
 	     , nameRules = namerules
 	     , topdownRules = topdownrules
-	     , emptyRules = emptyrules
+	     , epsilonRules = epsilonrules
 	     , leftcornerCats = leftcorncats
 	     , leftcornerTokens = leftcorntoks
 	     , grammarCats = grammarcats
@@ -115,7 +116,7 @@ buildMCFPInfo grammar =
 			  [ (name, rule) | rule@(Rule (Abs _ _ name) _) <- allrules ]
 	  topdownrules  = accumAssoc id
 			  [ (cat, rule) | rule@(Rule (Abs cat _ _) _) <- allrules ]
-	  emptyrules    = [ rule | rule@(Rule (Abs _ [] _) _) <- allrules ]
+	  epsilonrules    = [ rule | rule@(Rule _ (Cnc _ _ (Lin _ [] : _))) <- allrules ]
 	  leftcorncats  = accumAssoc id 
 			  [ (cat, rule) | 
 			    rule@(Rule _ (Cnc _ _ (Lin _ (Cat(cat,_,_):_) : _))) <- allrules ]
@@ -149,7 +150,7 @@ instance (Ord c, Ord n, Ord l, Ord t) => Print (MCFPInfo c n l t) where
 	     "; categories=" ++ sl grammarCats ++ 
 	     "; nameRules=" ++ sla nameRules ++ 
 	     "; tdRules=" ++ sla topdownRules ++
-	     "; emptyRules=" ++ sl emptyRules ++ 
+	     "; epsilonRules=" ++ sl epsilonRules ++ 
 	     "; lcCats=" ++ sla leftcornerCats ++
 	     "; lcTokens=" ++ sla leftcornerTokens ++
 	     "; byToken=" ++ sla rulesByToken ++
