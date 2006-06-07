@@ -1,19 +1,7 @@
 --# -path=.:../scandinavian:../abstract:../common:prelude
 
 concrete LangNor of Lang = 
-  NounNor, 
-  VerbNor, 
-  AdjectiveNor,
-  AdverbNor,
-  NumeralNor,
-  SentenceNor,
-  QuestionNor,
-  RelativeNor,
-  ConjunctionNor,
-  PhraseNor,
-  TextX,
-  IdiomNor,
-  StructuralNor,
+  GrammarNor,
   LexiconNor
   ** {
 

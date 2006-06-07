@@ -32,7 +32,7 @@ import qualified GF.Conversion.RemoveErasing as RemEra
 import qualified GF.Conversion.RemoveEpsilon as RemEps
 import qualified GF.Conversion.SimpleToMCFG as S2M
 import qualified GF.Conversion.SimpleToFCFG as S2FM
-import qualified GF.Conversion.MCFGtoFCFG as M2FM
+--import qualified GF.Conversion.MCFGtoFCFG as M2FM
 import qualified GF.Conversion.MCFGtoCFG as M2C
 
 import GF.Infra.Print
@@ -58,7 +58,7 @@ convertGFC opts = \g -> let s = g2s g
 		  Just "epsilon"           -> epsilon . nondet
 		  _                        -> nondet
 	  s2fm= S2FM.convertGrammar
-          m2fm= M2FM.convertGrammar
+          m2fm= undefined --M2FM.convertGrammar
 	  g2s = case getOptVal opts gfcConversion of
 		  Just "finite"            -> finite . simple
 		  Just "finite2"           -> finite . finite . simple
@@ -95,7 +95,7 @@ gfc2fcfg opts g = fcfg
     (_, fcfg, _) = snd (snd (convertGFC opts g))
 
 mcfg2fcfg :: MGrammar -> FGrammar
-mcfg2fcfg = M2FM.convertGrammar
+mcfg2fcfg = undefined --M2FM.convertGrammar
 
 
 ----------------------------------------------------------------------
