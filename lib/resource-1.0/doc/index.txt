@@ -65,7 +65,8 @@ details.
 Coverage, for each language:
 - complete morphology
 - lexicon of the ca. 100 most important structural words
-- test lexicon of ca. 300 content words
+- test lexicon of ca. 300 content words (rough equivalents in each language)
+- list of irregular verbs (language-dependent)
 - representative fragment of syntax (cf. CLE (Core Language Engine))
 - rather flat semantics (cf. Quasi-Logical Form of CLE)
 
@@ -115,7 +116,7 @@ This API is accessible by both ``present`` and ``alltenses``.
 The API is divided into a bunch of ``abstract`` modules.
 The following figure gives the dependencies of these modules.
 
-[Lang.png] 
+[Grammar.png] 
 
 The documentation of the individual modules:
 
@@ -135,7 +136,8 @@ The documentation of the individual modules:
 - [Idiom gfdoc/Idiom.html]: idiomatic phrases, such as existentials
 - [Structural gfdoc/Structural.html]: a lexicon of structural words
 - [Lexicon gfdoc/Lexicon.html]: a lexicon of other common words, for test purposes
-- [Lang gfdoc/Lang.html]: the main module comprising all the others
+- [Grammar gfdoc/Grammar.html]: the main module comprising all but ``Lexicon``
+- [Lang gfdoc/Lang.html]: the main module comprising both ``Grammar`` and ``Lexicon``
 
 
 ===The language-dependent APIs===
@@ -156,19 +158,27 @@ The documentation of the individual modules:
 - [IrregDan gfdoc/IrregDan.gf]: Danish irregular verbs (very incomplete)
 - [IrregEng gfdoc/IrregEng.gf]: English irregular verbs
 - [IrregFre gfdoc/IrregFre.gf]: French irregular verbs
-% - [IrregGer gfdoc/IrregGer.gf]: German irregular verbs
+- [IrregGer gfdoc/IrregGer.gf]: German irregular verbs
 - [IrregNor gfdoc/IrregNor.gf]: Norwegian irregular verbs (very incomplete)
 - [IrregSwe gfdoc/IrregSwe.gf]: Swedish irregular verbs
 
+
+This is the structure of each language-dependent top module.
+
+[English.png]
 
 - [Extra ../abstract/Extra.gf]: extra constructs implemented in some languages
 - [ExtraScand ../scandinavian/ExtraScandAbs.gf]: extra constructs in Scandinavian only
 - [ExtraNor ../norwegian/ExtraNorAbs.gf]: extra constructs in Norwegian only
 - [ExtraFin ../finnish/ExtraFinAbs.gf]: extra constructs in Finnish only
+- [ExtraFre ../french/ExtraFreAbs.gf]: extra constructs in French only
+- [ExtraEng ../english/ExtraEngAbs.gf]: extra constructs in English only
 
 
 - [English ../english/EnglishAbs.gf]: English with all extras
 - [Finnish ../finnish/FinnishAbs.gf]: Finnish with all extras
+- [French ../french/FrenchAbs.gf]: French with all extras
+- [German ../german/GermanAbs.gf]: German with all extras
 - [Norwegian ../norwegian/NorwegianAbs.gf]: Norwegian with all extras
 - [Swedish ../swedish/SwedishAbs.gf]: Swedish with all extras
 
@@ -186,6 +196,11 @@ sufficient for many applications.
 
 
 ====Multimodal====
+
+The API is the same as for the full ground API, but with modified
+linearization types of ``NP`` and ``Adv``, and all other categories
+depending on them: an extra field is added to a demonstrative pointing
+gesture. Some functions for constructing demonstratives are provided.
 
 - [Multi gfdoc/Multi.html]: main module for multimodal dialogue systems
 
@@ -220,9 +235,14 @@ library. Use one (or several) of the following packages instead:
 
 ===Linking applications to libraries===
 
-Notice, however, that both special-purpose APIs share modules with
-``present``. It is therefore not a good idea to use them in combination with
-``alltenses``.
+Typically, open one of
+- ``GrammarX`` for just syntax
+- ``LangX`` for both syntax and a small lexicon
+- ``X`` (e.g. ``English``) for syntax, lexicon, and language-dependent extensions
+
+
+Usually you also need your own lexicon, and hence have to open
+- ``ParadigmsX`` for lexicon-building functions
 
 
 It is advisable to use the bare package names in paths pointing to the
@@ -236,6 +256,11 @@ I have the following line in my ``.bashrc`` file:
 ```
   export GF_LIB_PATH=/home/aarne/GF/lib
 ```
+
+The ``mathematical`` API shares modules with
+``present``. It is therefore not a good idea to use it in combination with
+``alltenses``.
+
 
 
 ===Using the libraries as top-level grammars===
@@ -257,13 +282,16 @@ to succeed.
 
 An exception is ``LangEng``. It is actually feasible to parse with
 both ``alltenses/LangEng`` and ``present/LangEng`` - the latter being
-much faster than the former. The ``-mcfg`` flag (multiple context-free grammar)
+much faster than the former. The ``-fcfg`` flag (fast multiple context-free grammar)
 must be used:
 ```
-  p -lang=LangEng -mcfg -parser=topdown "this man is old"
+  p -lang=LangEng -fcfg "this man is old"
 ```
-Parsing with the ``-mcfg`` flag takes a few extra seconds the first time during
+Parsing with the ``-fcfg`` flag takes a few extra seconds the first time during
 each session, but gets faster at later runs.
+
+It is also feasible to parse in Scandinavian languages (Danish, Norwegian, Swedish).
+
 
 
 ==Example applications==
@@ -314,11 +342,11 @@ Finnish
 
 
 French
-- only direct word order in questions
+- no inverted word order in questions
 
 
 German
-- no list of irregular verbs
+- -
 
 
 Italian
@@ -336,11 +364,9 @@ Russian
 
 
 Spanish
-- no ordinal numbers
-
-
+- -
 Swedish
-- 
+- -
 
 
 
