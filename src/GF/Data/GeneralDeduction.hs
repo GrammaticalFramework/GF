@@ -21,7 +21,7 @@ module GF.Data.GeneralDeduction
      emptyChart,
      chartMember,
      chartInsert, chartInsertM,
-     chartList, chartKeys,
+     chartList, chartKeys, chartAssocs,
      addToChart, addToChartM
     ) where
 
@@ -36,6 +36,7 @@ import Control.Monad (foldM)
 chartLookup :: (Ord item, Ord key) => ParseChart item key -> key -> [item]
 chartList   :: (Ord item, Ord key) => ParseChart item key -> [item]
 chartKeys   :: (Ord item, Ord key) => ParseChart item key -> [key]
+chartAssocs :: (Ord item, Ord key) => ParseChart item key -> [(key,item)]
 buildChart  :: (Ord item, Ord key) => 
 	       (item -> key)                           -- ^ key lookup function
 	    -> [ParseChart item key -> item -> [item]] -- ^ list of inference rules as functions 
@@ -97,6 +98,7 @@ chartMember (KC tree) item key = rbmElem key item tree
 chartLookup (KC tree)      key = rbmLookup key tree
 chartList   (KC tree)          = concatMap snd (rbmList tree)
 chartKeys   (KC tree)          = map fst (rbmList tree)
+chartAssocs (KC tree)          = [(key,item) | (key,items) <- rbmList tree, item <- items]
 chartInsert (KC tree) item key = fmap KC (rbmInsert key item tree)
 
 chartInsertM (KC tree) item keys = fmap KC (foldM insertItem tree keys)
