@@ -1,5 +1,5 @@
 abstract FrenchAbs = 
   Lang,
----  IrregFreAbs,
+  IrregFreAbs,
   ExtraFreAbs
   ** {} ;

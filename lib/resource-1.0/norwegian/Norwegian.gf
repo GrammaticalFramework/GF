@@ -2,6 +2,6 @@
 
 concrete Norwegian of NorwegianAbs = 
   LangNor,
---  IrregNor,
+  IrregNor - [fly_V],
   ExtraNor 
   ** {} ;

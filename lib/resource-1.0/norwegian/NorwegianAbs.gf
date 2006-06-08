@@ -1,5 +1,5 @@
 abstract NorwegianAbs = 
   Lang,
----  IrregNorAbs,
+  IrregNorAbs - [fly_V],
   ExtraNorAbs
   ** {} ;
