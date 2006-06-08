@@ -21,6 +21,7 @@ import GF.Grammar.Macros (composSafeOp, composOp, record2subst, zIdent)
 import GF.Compile.ShellState --(firstStateGrammar,stateGrammarWords)
 import GF.Compile.PGrammar (pTerm,pTrm)
 import GF.Compile.Compile
+import GF.Compile.PrOld (stripTerm)
 import GF.Compile.GetGrammar
 import GF.API
 import GF.API.IOGrammar
@@ -140,10 +141,10 @@ mkModule parser morpho (name,src) = case src of
      parse cat s t = case parser (prt_ cat) s of
        (tr:[], _) -> do
          updateSTM ((("PARSED in" +++ prt_ name) : s : [prt_ tr]) ++)
-         return tr
+         return $ stripTerm tr
        (tr:trs,_) -> do
          updateSTM ((("AMBIGUOUS in" +++ prt_ name) : s : map prt_ trs) ++)
-         return tr
+         return $ stripTerm tr
        ([],ms) -> do
          updateSTM ((("NO PARSE in" +++ prt_ name) : s : ms : [morph s]) ++)
          return t
