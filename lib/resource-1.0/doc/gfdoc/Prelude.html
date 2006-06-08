@@ -6,25 +6,21 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> The GF Prelude</H1>
 <FONT SIZE="4">
-<I>Author: </I><BR>
-Last update: Wed May 31 19:01:42 2006
+<I>Last update: 2006-02-25 22:31:06 CET</I><BR>
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
-  <UL>
-  <LI><A HREF="#toc1">The GF Prelude</A>
     <UL>
-    <LI><A HREF="#toc2">Strings, records, and tables</A>
-    <LI><A HREF="#toc3">Optional elements</A>
-    <LI><A HREF="#toc4">Infixes. prefixes, and postfixes</A>
-    <LI><A HREF="#toc5">Booleans</A>
-    <LI><A HREF="#toc6">High-level acces to Predef operations</A>
-    <LI><A HREF="#toc7">Lexer-related operations</A>
-    <LI><A HREF="#toc8">Miscellaneous</A>
+    <LI><A HREF="#toc1">Strings, records, and tables</A>
+    <LI><A HREF="#toc2">Optional elements</A>
+    <LI><A HREF="#toc3">Infixes. prefixes, and postfixes</A>
+    <LI><A HREF="#toc4">Booleans</A>
+    <LI><A HREF="#toc5">High-level acces to Predef operations</A>
+    <LI><A HREF="#toc6">Lexer-related operations</A>
+    <LI><A HREF="#toc7">Miscellaneous</A>
     </UL>
-  </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
@@ -34,8 +30,6 @@ Produced by
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
-<A NAME="toc1"></A>
-<H1>The GF Prelude</H1>
 <P>
 This file defines some prelude facilities usable in all grammars.
 </P>
@@ -45,7 +39,7 @@ This file defines some prelude facilities usable in all grammars.
     oper
 </PRE>
 <P></P>
-<A NAME="toc2"></A>
+<A NAME="toc1"></A>
 <H2>Strings, records, and tables</H2>
 <PRE>
       SS  : Type = {s : Str} ;
@@ -74,7 +68,7 @@ Discontinuous constituents.
       sd2 : (_,_ : Str) -&gt; SD2 = \x,y -&gt; {s1 = x ; s2 = y} ;
 </PRE>
 <P></P>
-<A NAME="toc3"></A>
+<A NAME="toc2"></A>
 <H2>Optional elements</H2>
 <P>
 Missing form.
@@ -106,7 +100,7 @@ Parametric order between two strings.
         if_then_Str pr (x ++ y) (y ++ x) ;
 </PRE>
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc3"></A>
 <H2>Infixes. prefixes, and postfixes</H2>
 <P>
 Fixes with precedences are defined in <A HREF="Precedence.html">Precedence</A>.
@@ -118,7 +112,7 @@ Fixes with precedences are defined in <A HREF="Precedence.html">Precedence</A>.
       embedSS   : Str -&gt; Str -&gt; SS -&gt; SS = \f,g,x -&gt; ss (f ++ x.s ++ g) ;
 </PRE>
 <P></P>
-<A NAME="toc5"></A>
+<A NAME="toc4"></A>
 <H2>Booleans</H2>
 <PRE>
      param Bool = True | False ;
@@ -154,7 +148,7 @@ Interface to internal booleans
       last : Tok -&gt; Tok = Predef.dp 1 ;
 </PRE>
 <P></P>
-<A NAME="toc6"></A>
+<A NAME="toc5"></A>
 <H2>High-level acces to Predef operations</H2>
 <PRE>
       isNil : Tok -&gt; Bool = \b -&gt; pbool2bool (Predef.eqStr [] b) ;
@@ -163,7 +157,7 @@ Interface to internal booleans
         case Predef.eqStr t u of {Predef.PTrue =&gt; a ; Predef.PFalse =&gt; b} ;
 </PRE>
 <P></P>
-<A NAME="toc7"></A>
+<A NAME="toc6"></A>
 <H2>Lexer-related operations</H2>
 <P>
 Bind together two tokens in some lexers, either obligatorily or optionally
@@ -191,7 +185,7 @@ These should be hidden, and never changed since they are hardcoded in (un)lexers
         CAPIT : Str = "&amp;|" ;
 </PRE>
 <P></P>
-<A NAME="toc8"></A>
+<A NAME="toc7"></A>
 <H2>Miscellaneous</H2>
 <P>
 Identity function

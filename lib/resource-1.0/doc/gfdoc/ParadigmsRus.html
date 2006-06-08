@@ -2,44 +2,32 @@
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE> Russian Lexical Paradigms</TITLE>
 </HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1> Russian Lexical Paradigms</H1>
 <FONT SIZE="4">
+<I>Last update: 2006-05-20 11:51:24 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
-  <UL>
-  <LI><A HREF="#toc1">Russian Lexical Paradigms</A>
     <UL>
-    <LI><A HREF="#toc2">Parameters</A>
-    <LI><A HREF="#toc3">Nouns</A>
-    <LI><A HREF="#toc4">Adjectives</A>
-    <LI><A HREF="#toc5">Adverbs</A>
-    <LI><A HREF="#toc6">Verbs</A>
+    <LI><A HREF="#toc1">Parameters</A>
+    <LI><A HREF="#toc2">Nouns</A>
+    <LI><A HREF="#toc3">Adjectives</A>
+    <LI><A HREF="#toc4">Adverbs</A>
+    <LI><A HREF="#toc5">Verbs</A>
     </UL>
-  </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
 <P>
-Author: 
-Last update: Wed May 31 19:01:40 2006
-</P>
-<P>
 Produced by 
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
-<P>
-==
-</P>
-<P>
-# -path=.:../abstract:../../prelude:../common
-</P>
-<A NAME="toc1"></A>
-<H1>Russian Lexical Paradigms</H1>
 <P>
 Janna Khegai 2003--2005
 </P>
@@ -82,7 +70,7 @@ The following modules are presupposed:
     flags  coding=utf8 ;
 </PRE>
 <P></P>
-<A NAME="toc2"></A>
+<A NAME="toc1"></A>
 <H2>Parameters</H2>
 <P>
 To abstract over gender names, we define the following identifiers.
@@ -122,7 +110,7 @@ To abstract over number names, we define the following.
       plural   : Number ;
 </PRE>
 <P></P>
-<A NAME="toc3"></A>
+<A NAME="toc2"></A>
 <H2>Nouns</H2>
 <P>
 Best case: indeclinabe nouns: <I>кофе</I>, <I>пальто</I>, <I>ВУЗ</I>.
@@ -225,7 +213,7 @@ On the top level, it is maybe <CODE>CN</CODE> that is used rather than <CODE>N</
       mkNP  : Str -&gt; Gender -&gt; Animacy -&gt; NP ;
 </PRE>
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc3"></A>
 <H2>Adjectives</H2>
 <P>
 Non-comparison (only positive degree) one-place adjectives need 28 (4 by 7)
@@ -281,7 +269,7 @@ On top level, there are adjectival phrases. The most common case is
 just to use a one-place adjective. 
 ap : A  -&gt; IsPostfixAdj -&gt; AP ;
 </P>
-<A NAME="toc5"></A>
+<A NAME="toc4"></A>
 <H2>Adverbs</H2>
 <P>
 Adverbs are not inflected. Most lexical ones have position
@@ -291,7 +279,7 @@ after the verb. Some can be preverbal (e.g. <I>always</I>).
       mkAdv : Str -&gt; Adv ;
 </PRE>
 <P></P>
-<A NAME="toc6"></A>
+<A NAME="toc5"></A>
 <H2>Verbs</H2>
 <P>
 In our lexicon description (<I>Verbum</I>) there are 62 forms: 
