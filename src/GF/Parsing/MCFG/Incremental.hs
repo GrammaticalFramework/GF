@@ -18,6 +18,7 @@ import Control.Monad (guard)
 
 import GF.Data.Utilities (select)
 import GF.Data.GeneralDeduction
+import GF.Data.Assoc
 
 import GF.Formalism.GCFG
 import GF.Formalism.MCFG
@@ -34,14 +35,16 @@ import GF.Infra.Print
 
 parse :: (Ord n, Ord c, Ord l, Ord t) => MCFParser c n l t
 parse pinfo starts toks =
-    [ Abs (cat, found) (zip rhs rrecs) fun |
-      Final (Abs cat rhs fun) found rrecs <- chartLookup chart Fin ]
+    accumAssoc groupSyntaxNodes $
+      [ ((cat, found), SNode fun (zip rhs rrecs)) |
+        Final (Abs cat rhs fun) found rrecs <- chartLookup chart Fin ]
     where chart = process pinfo toks ntoks
 	  ntoks = snd (inputBounds toks)
 
 -- parseR :: (Ord n, Ord c, Ord l, Ord t) => MCFParser c n l t
 parseR pinfo starts ntoks =
-    [ Abs (cat, found) (zip rhs rrecs) fun |
+    accumAssoc groupSyntaxNodes $
+    [ ((cat, found), SNode fun (zip rhs rrecs)) |
       Final (Abs cat rhs fun) found rrecs <- chartLookup chart Fin ]
     where chart = processR pinfo ntoks 
 

@@ -112,7 +112,28 @@ inputMany toks     = MkInput inEdges inBounds inFrom inTo inToken
 -- | The values of the chart, a list of key-daughters pairs,
 -- has unique keys. In essence, it is a map from 'n' to daughters.
 -- The daughters should be a set (not necessarily sorted) of rhs's.
-type SyntaxChart n e = Assoc e [(n, [[e]])]
+type SyntaxChart n e = Assoc e [SyntaxNode n [e]]
+
+data SyntaxNode n e = SMeta
+                    | SNode n [e]
+                    | SString String
+                    | SInt    Integer
+                    | SFloat  Double
+                    deriving (Eq,Ord)
+
+groupSyntaxNodes :: Ord n => [SyntaxNode n e] -> [SyntaxNode n [e]]
+groupSyntaxNodes []                =  []
+groupSyntaxNodes (SNode n0 es0:xs) = (SNode n0 (es0:ess)) : groupSyntaxNodes xs'
+  where 
+    (ess,xs') = span xs
+
+    span []       = ([],[])
+    span xs@(SNode n es:xs')
+      | n0 == n   = let (ess,xs) = span xs' in (es:ess,xs)
+      | otherwise = ([],xs)
+groupSyntaxNodes (SString s:xs) = (SString s) : groupSyntaxNodes xs
+groupSyntaxNodes (SInt    n:xs) = (SInt    n) : groupSyntaxNodes xs
+groupSyntaxNodes (SFloat  f:xs) = (SFloat  f) : groupSyntaxNodes xs
 
 -- better(?) representation of forests:
 -- data Forest n = F (SMap n (SList [Forest n])) Bool
@@ -240,7 +261,12 @@ chart2forests :: (Ord n, Ord e) =>
 chart2forests chart isMeta  = concatMap edge2forests
     where edge2forests edge = if isMeta edge then [FMeta]
 			      else map item2forest $ chart ? edge
-	  item2forest (name, children) = FNode name $ children >>= mapM edge2forests
+	  item2forest (SMeta)               = FMeta
+	  item2forest (SNode name children) = FNode name $ children >>= mapM edge2forests
+	  item2forest (SString s)           = FString s
+	  item2forest (SInt    n)           = FInt    n
+	  item2forest (SFloat  f)           = FFloat  f
+	  
 
 {-
 -- more intelligent(?) implementation,

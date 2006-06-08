@@ -29,10 +29,6 @@ data Abstract cat name = Abs cat [cat] name
 data Concrete lin term = Cnc lin [lin] term 
 			 deriving (Eq, Ord, Show)
 
-abstract2chart :: (Ord n, Ord e) => [Abstract e n] -> SyntaxChart n e
-abstract2chart rules = accumAssoc groupPairs $
-		       [ (e, (n, es)) | Abs e es n <- rules ]
-
 ----------------------------------------------------------------------
 
 instance (Print c, Print n, Print l, Print t) => Print (Rule n c l t) where

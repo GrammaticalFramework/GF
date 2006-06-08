@@ -34,15 +34,17 @@ import GF.Infra.Print
 -- | Builds a chart from the initial agenda, given by prediction, and the inference rules 
 parse :: (Ord t, Ord n, Ord c, Ord l) => MCFParser c n l t
 parse pinfo starts toks
-    = [ Abs (cat, makeRangeRec lins) (zip rhs rrecs) fun |
-	Active (Abs cat _Nil fun, rhs) lins rrecs <- chartLookup chart Final ]
+    = accumAssoc groupSyntaxNodes $
+        [ ((cat, makeRangeRec lins), SNode fun (zip rhs rrecs)) |
+          Active (Abs cat _Nil fun, rhs) lins rrecs <- chartLookup chart Final ]
     where chart = process pinfo toks
 
 -- | Builds a chart from the initial agenda, given by prediction, and the inference rules 
 -- parseR :: (Ord t, Ord n, Ord c, Ord l) => MCFParser c n l t
 parseR pinfo starts
-    = [ Abs (cat, makeRangeRec lins) (zip rhs rrecs) fun |
-	Active (Abs cat _Nil fun, rhs) lins rrecs <- chartLookup chart Final ]
+    = accumAssoc groupSyntaxNodes $
+        [ ((cat, makeRangeRec lins), SNode fun (zip rhs rrecs)) |
+	  Active (Abs cat _Nil fun, rhs) lins rrecs <- chartLookup chart Final ]
     where chart = processR pinfo
 
 process :: (Ord t, Ord n, Ord c, Ord l) => MCFPInfo c n l t -> Input t -> NChart c n l

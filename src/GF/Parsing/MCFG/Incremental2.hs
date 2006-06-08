@@ -36,9 +36,10 @@ import GF.Infra.Print
 
 -- parseR :: (Ord n, Ord c, Ord l, Ord t) => MCFParser c n l t
 parse pinfo starts inp =
-    [ Abs (cat, found) (zip rhs rrecs) fun |
-      k <- uncurry enumFromTo (inputBounds inp),
-      Final (Abs cat rhs fun) found rrecs <- chartLookup chart k Fin ]
+    accumAssoc groupSyntaxNodes $
+      [ ((cat, found), SNode fun (zip rhs rrecs)) |
+        k <- uncurry enumFromTo (inputBounds inp),
+        Final (Abs cat rhs fun) found rrecs <- chartLookup chart k Fin ]
     where chart = process pinfo inp 
 
 --process :: (Ord n, Ord c, Ord l) => MCFPInfo c n l Range -> (Int, Int) -> IChart c n l

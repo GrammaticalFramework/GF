@@ -60,10 +60,10 @@ buildPInfo mcfg fcfg cfg = PInfo { mcfPInfo = PM.buildMCFPInfo mcfg
   where
     grammarLexer s =
       case reads s of
-        [(n::Integer,"")] -> (fcatInt, TInt n)
+        [(n::Integer,"")] -> (fcatInt, SInt n)
         _                 -> case reads s of
-                               [(f::Double,"")] -> (fcatFloat, TFloat  f)
-                               _                -> (fcatString,TString s)
+                               [(f::Double,"")] -> (fcatFloat, SFloat  f)
+                               _                -> (fcatString,SString s)
 
 
 instance Print PInfo where
@@ -119,10 +119,7 @@ selectParser "m" strategy pinfo startCat inTokens
 	     isStart cat = mcat2scat cat == cfCat2Ident startCat
 	     mcfpi = mcfPInfo pinfo
 	 mcfParser <- PM.parseMCF strategy
-	 let mcfChart = tracePrt "Parsing.GFC - MCF chart" (prt . length) $
-			mcfParser mcfpi startCats inTokens
-	     chart = tracePrt "Parsing.GFC - chart" (prt . length . concat . map snd . aAssocs) $
-		     G.abstract2chart mcfChart
+	 let chart = mcfParser mcfpi startCats inTokens
 	     finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
 			  [ PM.makeFinalEdge cat lbl (inputBounds inTokens) | 
 			    cat@(MCat _ [lbl]) <- startCats ]
@@ -134,7 +131,10 @@ selectParser "f" strategy pinfo startCat inTokens
 	     isStart cat = fcat2scat cat == cfCat2Ident startCat
 	     fcfpi = fcfPInfo pinfo
 	 fcfParser <- PF.parseFCF strategy
-	 return $ fcfParser fcfpi startCats inTokens
+	 let chart = fcfParser fcfpi startCats inTokens
+	     (i,j) = inputBounds inTokens
+	     finalEdges = [PF.makeFinalEdge cat i j | cat <- startCats]
+	 return $ chart2forests chart (const False) finalEdges
 
 -- error parser: 
 selectParser prs strategy _ _ _ = Bad $ "Parser '" ++ prs ++ "' not defined with strategy: " ++ strategy 
