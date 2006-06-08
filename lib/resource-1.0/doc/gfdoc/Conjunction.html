@@ -6,21 +6,17 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Coordination</H1>
 <FONT SIZE="4">
-<I>Author: </I><BR>
-Last update: Wed May 31 19:01:36 2006
+<I>Last update: 2006-01-20 22:04:10 CET</I><BR>
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
-  <UL>
-  <LI><A HREF="#toc1">Coordination</A>
     <UL>
-    <LI><A HREF="#toc2">Rules</A>
-    <LI><A HREF="#toc3">Categories</A>
-    <LI><A HREF="#toc4">List constructors</A>
+    <LI><A HREF="#toc1">Rules</A>
+    <LI><A HREF="#toc2">Categories</A>
+    <LI><A HREF="#toc3">List constructors</A>
     </UL>
-  </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
@@ -30,8 +26,6 @@ Produced by
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
-<A NAME="toc1"></A>
-<H1>Coordination</H1>
 <P>
 Coordination is defined for many different categories; here is
 a sample. The rules apply to <B>lists</B> of two or more elements,
@@ -51,7 +45,7 @@ compatibility with API 0.9 is needed, use
     abstract Conjunction = Cat ** {
 </PRE>
 <P></P>
-<A NAME="toc2"></A>
+<A NAME="toc1"></A>
 <H2>Rules</H2>
 <PRE>
       fun
@@ -66,7 +60,7 @@ compatibility with API 0.9 is needed, use
         DConjAdv : DConj -&gt; [Adv] -&gt; Adv; -- "both badly and slowly"
 </PRE>
 <P></P>
-<A NAME="toc3"></A>
+<A NAME="toc2"></A>
 <H2>Categories</H2>
 <P>
 These categories are only used in this module.
@@ -79,7 +73,7 @@ These categories are only used in this module.
         [AP]{2} ;
 </PRE>
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc3"></A>
 <H2>List constructors</H2>
 <P>
 The list constructors are derived from the list notation and therefore
