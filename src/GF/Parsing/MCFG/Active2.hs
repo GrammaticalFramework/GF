@@ -34,10 +34,9 @@ import GF.Infra.Print
 
 --parse :: (Ord n, Ord c, Ord l, Ord t) => String -> MCFParser c n l t
 parse strategy pinfo starts toks =
-    trace2 "MCFG.Active 2 - strategy" (if isBU strategy then "BU"
-				     else if isTD strategy then "TD" else "None") $
-    [ Abs (cat, found) (zip rhs rrecs) fun |
-      Final (Abs cat rhs fun) found rrecs <- chartLookup chart Fin ]
+    accumAssoc groupSyntaxNodes $
+      [ ((cat, found), SNode fun (zip rhs rrecs)) |
+        Final (Abs cat rhs fun) found rrecs <- chartLookup chart Fin ]
     where chart = process strategy pinfo starts toks
 
 process :: (Ord n, Ord c, Ord l, Ord t) => 

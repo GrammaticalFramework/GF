@@ -33,8 +33,8 @@ type CFChart    c n t = CFGrammar (Edge c) n t
 -- building syntax charts from grammars
 
 grammar2chart :: (Ord n, Ord e) => CFGrammar e n t -> SyntaxChart n e
-grammar2chart cfchart = accumAssoc groupPairs $
-			[ (lhs, (name, filterCats rhs)) |
+grammar2chart cfchart = accumAssoc groupSyntaxNodes $
+			[ (lhs, SNode name (filterCats rhs)) |
 				     CFRule lhs rhs name <- cfchart ]
 
 

@@ -30,9 +30,7 @@ import GF.Parsing.MCFG.Range
 type MCFParser c n l t = MCFPInfo c n l t 
 		       -> [c]
 		       -> Input t
-		       -> MCFChart c n l
-
-type MCFChart  c n l   = [Abstract (c, RangeRec l) n]
+		       -> SyntaxChart n (c, RangeRec l)
 
 makeFinalEdge :: c -> l -> (Int, Int) -> (c, RangeRec l)
 makeFinalEdge cat lbl bnds = (cat, [(lbl, makeRange bnds)])

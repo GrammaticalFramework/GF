@@ -29,7 +29,10 @@ import Data.Maybe
 type FCFParser c n t = FCFPInfo c n t 
 		     -> [c]
 		     -> Input t
-		     -> [SyntaxForest n]
+		     -> SyntaxChart n (c,RangeRec)
+
+makeFinalEdge cat 0 0 = (cat, [EmptyRange])
+makeFinalEdge cat i j = (cat, [makeRange i j])
 
 ------------------------------------------------------------
 -- parser information
@@ -48,7 +51,7 @@ data FCFPInfo c n t
 		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
 	       , grammarCats        :: SList c
 	       , grammarToks        :: SList t
-	       , grammarLexer       :: t -> (c,SyntaxTree RuleId)
+	       , grammarLexer       :: t -> (c,SyntaxNode RuleId RangeRec)
 	       }
 
 
@@ -68,7 +71,7 @@ getLeftCornerCat lins
   where
     syms = lins ! 0
 
-buildFCFPInfo :: (Ord c, Ord n, Ord t) => (t -> (c,SyntaxTree RuleId)) -> FCFGrammar c n t -> FCFPInfo c n t
+buildFCFPInfo :: (Ord c, Ord n, Ord t) => (t -> (c,SyntaxNode RuleId RangeRec)) -> FCFGrammar c n t -> FCFPInfo c n t
 buildFCFPInfo lexer grammar = 
     traceCalcFirst grammar $
     tracePrt "MCFG.PInfo - parser info" (prt) $
