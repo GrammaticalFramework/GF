@@ -4,11 +4,11 @@ concrete AnimalsFre of Animals = QuestionsFre **
   open LangFre, ParadigmsFre, IrregFre in {
 
   lin
-    Dog   = regN "chien" masculine ;
-    Cat   = regN "chat" masculine ;
-    Mouse = regN "souris" feminine ;
-    Lion  = regN "lion" masculine ;
-    Zebra = regN "zèbre" masculine ;
+    Dog   = regN "chien" ;
+    Cat   = regN "chat" ;
+    Mouse = regGenN "souris" feminine ;
+    Lion  = regN "lion" ;
+    Zebra = regGenN "zèbre" masculine ;
     Chase = dirV2 (regV "chasser") ;
     Eat   = dirV2 (regV "manger") ;
     See   = voir_V2 ;
