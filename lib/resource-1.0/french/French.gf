@@ -2,6 +2,6 @@
 
 concrete French of FrenchAbs = 
   LangFre,
---  IrregFre,
+  IrregFre,
   ExtraFre 
   ** {} ;

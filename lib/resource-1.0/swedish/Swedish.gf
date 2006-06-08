@@ -2,6 +2,6 @@
 
 concrete Swedish of SwedishAbs = 
   LangSwe,
---  IrregSwe,
+  IrregSwe,
   ExtraSwe 
   ** {} ;

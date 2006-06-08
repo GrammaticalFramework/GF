@@ -1,5 +1,5 @@
 abstract SwedishAbs = 
   Lang,
----  IrregSweAbs,
+  IrregSweAbs,
   ExtraSweAbs
   ** {} ;
