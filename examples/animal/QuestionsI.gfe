@@ -1,4 +1,4 @@
---# -resource=../../lib/resource-1.0/english/LangEng.gf
+--# -resource=../../lib/present/LangEng.gfc
 --# -path=.:present:prelude
 
 -- to compile: gf -examples QuestionsI.gfe
