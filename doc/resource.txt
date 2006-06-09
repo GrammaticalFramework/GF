@@ -1,0 +1,31 @@
+The GF Resource Grammar Library
+
+The outermost linguistic structure is Text. Texts are composed
+from Phrases followed by punctuation marks - either of ".", "?" or
+"!! (with their proper variants in Spanish and Arabic). Here is an 
+example of a text.
+
+  John walks. Why? He doesn't want to sleep!
+
+Phrases are mostly built from Utterances, which in turn are
+declarative sentences, questions, or imperatives - but there
+are also "one-word utterances" consisting of noun phrases
+or other subsentential phrases. Some Phrases are more primitive,
+for instance "yes" and "no". Here are some examples of Phrases.
+
+  yes
+  come on, John
+  but John walks
+  give me the stick please
+  don't you know that he is sleeping
+  a glass of wine
+  a glass of wine please
+
+There is no connection between the punctuation marks and the
+types of utterances. This reflects the fact that the punctuation
+mark in a real text is selected as a function of the speech act
+rather than the grammatical form of an utterance. The following
+text is thus well-formed.
+
+  John walks. John walks? John walks!
+

@@ -20,13 +20,16 @@ abstract Common = {
 -- Constructed in [Text Text.html]: $Text$.
 
     Text ;  -- text consisting of several phrases  e.g. "He is here. Why?"
-    Phr ;   -- phrase in a text                    e.g. "But get out please."
 
--- Constructed in [Phrase Phrase.html]: $Phr$ and
+-- Constructed in [Phrase Phrase.html]:
 
+    Phr ;   -- phrase in a text                    e.g. "but be quiet please"
     Utt ;   -- sentence, question, word...         e.g. "be quiet"
     Voc ;   -- vocative or "please"                e.g. "my darling"
     PConj ; -- phrase-beginning conj.              e.g. "therefore"
+
+-- Constructed in [Sentence Sentence.html]:
+
     SC ;    -- embedded sentence or question       e.g. "that it rains"
 
 --2 Adverbs
