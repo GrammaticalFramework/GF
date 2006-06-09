@@ -22,7 +22,17 @@ concrete IdiomRus of Idiom = CatRus ** open Prelude, ResRus, MorphoRus in {
        }
     } ;
 
-    ImpersCl vp = {s= \\ b, clf =>  let ne= case b of {Pos =>[]; Neg =>""}
+    CleftAdv adv sen = {s= \\ b, clf =>  let ne= case b of {Pos =>[]; Neg =>"не"}
+      in 
+      "это" ++ ne ++ adv.s  ++ sen.s }; 
+
+    CleftNP np rs = {s= \\ b, clf =>  let ne= case b of {Pos =>[]; Neg =>"не"}
+      in 
+      "это" ++ ne ++ np.s ! (PF Nom No NonPoss)  ++ rs.s ! ASg Masc!Nom!Animate  }; 
+
+    ImpPl1 vp = {s= "давайте" ++ vp.s! (ClIndic Future Simul)! APl ! P2  }; 
+
+    ImpersCl vp = {s= \\ b, clf =>  let ne= case b of {Pos =>[]; Neg =>"не"}
       in 
       ne ++ vp.s! clf! (ASg Neut) ! P3  }; 
 

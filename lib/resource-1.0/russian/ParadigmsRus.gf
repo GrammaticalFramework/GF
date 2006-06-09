@@ -90,6 +90,11 @@ oper
      -- мужчина, мужчины, мужчине, мужчину, мужчиной, мужчине
      -- мужчины, мужчин, мужчинам, мужчин, мужчинами, мужчинах
 
+-- The regular function captures the variants for some popular nouns 
+-- endings below:
+
+  regN : Str -> N ;
+
 
 -- Here are some common patterns. The list is far from complete.
 
@@ -168,6 +173,11 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 -- positive degree.
 
 -- mkA : ( : Str) -> A ;
+
+-- The regular function captures the variants for some popular adjective
+-- endings below:
+  
+   regA : Str -> Str -> A ;
 
 -- Invariable adjective is a special case.
 
@@ -260,9 +270,9 @@ perfective: Aspect ;
 -- first person from with second person form:
 -- "я люб-лю", "ты люб-ишь". Stems shoud be the same.
 -- So the definition for verb "любить"  looks like:
--- mkRegVerb Imperfective Second "люб" "лю" "любил" "люби" "любить";
+-- regV Imperfective Second "люб" "лю" "любил" "люби" "любить";
 
-   mkRegVerb :Aspect -> Conjugation -> (_,_,_,_,_ : Str) -> V ; 
+   regV :Aspect -> Conjugation -> (_,_,_,_,_ : Str) -> V ; 
 
 -- For writing an application grammar one usualy doesn't need
 -- the whole inflection table, since each verb is used in 
@@ -278,9 +288,9 @@ perfective: Aspect ;
 -- Two-place verbs, and the special case with direct object. Notice that
 -- a particle can be included in a $V$.
 
-   mkTV     : V   -> Str -> Case -> V2 ;   -- "войти в дом"; "в", accusative
+   mkV2     : V   -> Str -> Case -> V2 ;   -- "войти в дом"; "в", accusative
    mkV3  : V -> Str -> Str -> Case -> Case -> V3 ; -- "сложить письмо в конверт"
-   tvDir    : V -> V2 ;                    -- "видеть", "любить"
+   dirV2    : V -> V2 ;                    -- "видеть", "любить"
    tvDirDir : V -> V3 ; 
                             
 -- The definitions should not bother the user of the API. So they are
@@ -358,6 +368,32 @@ dolzhen = Dolzhen;
      anim = anim
    } ** {lock_N = <>}  ;
 
+
+regN = \ray -> 
+    let
+      ra  = Predef.tk 1 ray ; 
+      y   = Predef.dp 1 ray ; 
+      r   = Predef.tk 2 ray ; 
+      ay  = Predef.dp 2 ray ;
+      rays =
+        case y of {
+          "а" => nMashina ray ; 
+          "ь" => nBol ray ;
+          "я" => case ay of { 
+                   "ия" => nMalyariya ray; 
+                    _  => nTetya ray };
+          "е" => case ay of {
+            "ее" => nObezbolivauchee ray ;
+            "ое" => nZhivotnoe ray  ;
+            _ => nProizvedenie ray  };
+          "о" => nChislo ray;
+           _=>  nStomatolog ray
+         }
+     in
+       rays ;
+
+  
+
   nMashina   = \s -> aEndInAnimateDecl s ** {lock_N = <>};
   nEdinica   = \s -> ej_aEndInAnimateDecl s ** {lock_N = <>};
   nZhenchina = \s -> (aEndAnimateDecl s) ** { g = Fem ; anim = Animate } ** {lock_N = <>}; 
@@ -392,7 +428,7 @@ dolzhen = Dolzhen;
 
 
 -- An individual-valued function is a common noun together with the
--- preposition prefixed to its argument ("кл�Z�+ о�' дома").
+-- preposition prefixed to its argument ("клZ+ о' дома").
 -- The situation is analogous to two-place adjectives and transitive verbs.
 --
 -- We allow the genitive construction to be used as a variant of
@@ -421,6 +457,18 @@ dolzhen = Dolzhen;
   mkNP = \x,y,z -> UsePN (mkPN x y z) ;
 
 -- Adjective definitions
+  regA = \ray, comp -> 
+    let
+      ay  = Predef.dp 2 ray ;
+      rays =
+        case ay of {
+          "ый" => AStaruyj ray comp; 
+          "ой" => AMolodoj ray comp;
+          "ий" =>  AMalenkij ray comp;
+           _=>  AKhoroshij ray comp
+         }
+     in
+       rays ;
 
   adjInvar = \s -> { s = \\_,_ => s } ** {lock_A= <>};
 
@@ -462,7 +510,7 @@ dolzhen = Dolzhen;
        PRF APl P3 => plP3   
      };
 
-    mkRegVerb a b c d e f g = verbDecl a b c d e f g ** {lock_V = <>} ;
+    regV a b c d e f g = verbDecl a b c d e f g ** {lock_V = <>} ;
    -- defined in morpho.RusU.gf
 {-
    mkV a b = extVerb a b ** {lock_V = <>};                         -- defined in types.RusU.gf
@@ -475,8 +523,8 @@ dolzhen = Dolzhen;
        VSubj gn => aller.s ! VFORM vox (VSUB gn)
        }; t = Present ; a = aller.asp ; w = vox ; lock_V = <>} ;
 -}
-   mkTV v p cas = v ** {s2 = p ; c = cas; lock_V2 = <>}; 
-   tvDir v = mkTV v [] Acc;
+   mkV2 v p cas = v ** {s2 = p ; c = cas; lock_V2 = <>}; 
+   dirV2 v = mkV2 v [] Acc;
 
 
    tvDirDir v = mkV3 v "" "" Acc Dat; 
