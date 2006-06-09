@@ -57,7 +57,7 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
     ImpVP inf = {s = \\pol, g,n =>          
         let 
           dont  = case pol of {
-            Neg => "don't" ;
+            Neg => "не" ;
             _ => []
             }
         in
