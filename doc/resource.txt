@@ -1,12 +1,25 @@
 The GF Resource Grammar Library
 
+This document is about the use of the 
+GF Resource Grammar Library. It presuppose knowledge of GF and its
+module system, knowledge that can be acquired e.g. from the GF
+tutorial. Starting with an introduction to the library, we will
+later cover all aspects of it that one needs to know in order
+to use it.
+
+
+==Motivation==
 
 The GF Resource Grammar Library contains grammar rules for
 10 languages (some more are under construction). Its purpose
 is to make these rules available for application programmers,
 who can thereby concentrate on the semantic and stylistic
 aspects of their grammars, without having to think about 
-grammaticality. 
+grammaticality. The level of a typical application grammarian
+is skilled programmer, without knowledge linguistics, but with
+a good knowledge of the target languages. Such a combination of
+skilles is typical of a programmer who wants to localize a piece
+of software to a new language.
 
 To give an example, an application dealing with
 music players may have a semantical category ``Kind``, examples
@@ -19,12 +32,16 @@ write
 
   lin Song = reg2N "Lied" "Lieder" neuter
 
-and the eight forms are correctly generated. The use of the resource
-grammar extends from lexical items to syntax rules. The application
-mught also want to modify songs with properties, such as "American",
+and the eight forms are correctly generated. The resource grammar
+library contains a complete set of inflectional paradigms (such as
+regN2 here), enabling the definition of any lexical items.
+
+The resource grammar library is not only about inflectional paradigms - it
+also has syntax rules. The music player application
+might also want to modify songs with properties, such as "American",
 "old", "good". The German grammar for adjectival modifications is
 particularly complex, because the adjectives have to agree in gender,
-number, and case, also depending on what determiner is used
+number, and case, and also depend on what determiner is used
 ("ein Amerikanisches Lied" vs. "das Amerikanische Lied"). All this
 variation is taken care of by the resource grammar function
 
@@ -42,8 +59,8 @@ given that
 
 The resource library API is devided into language-specific and language-independet
 parts. To put is roughly,
-- syntax is language-independent
 - lexicon is language-specific
+- syntax is language-independent
 
 
 Thus, to render the above example in French instead of German, we need to
@@ -55,38 +72,152 @@ But to linearize PropKind, we can use the very same rule as in German.
 The resource function AdjCN has different implementations in the two
 languages, but the application programmer need not care about the difference.
 
+To summarize the example, and also give a template for a programmer to work on,
+here is the complete implementation of a small system with songs and properties.
+The abstract syntax defines a "domain ontology":
+
+  abstract Music = {
+    cat 
+      Kind, 
+      Property ;
+    fun 
+      PropKind : Kind -> Property -> Kind ; 
+      Song : Kind ;
+      American : Property ;
+    }
+
+The concrete syntax is defined independently of language, by opening
+two interfaces: the resource Grammar and an application lexicon.
+
+  incomplete concrete MusicI of Music = open Grammar, MusicLex in {
+    lincat 
+      Kind = CN ;
+      Property = AP ;
+    lin
+      PropKind k p = AdjCN p k ;
+      Song = UseN song_N ;
+      American = PositA american_A ;
+    }
+
+The application lexicon MusicLex has an abstract syntax, that extends
+the resource category system Cat.
+
+  abstract MusicLex = Cat ** {
+    fun
+      song_N : N ;
+      american_A : A ;
+    }
+
+Each language has its own concrete syntax, which opens the inflectional paradigms
+module for that language:
+
+  concrete MusicLexGer of MusicLex = CatGer ** open ParadigmsGer in {
+    lin
+      song_N = reg2N "Lied" "Lieder" neuter ;
+      american_A = regA "amerikanisch" ;
+    }
+
+  concrete MusicLexFre of MusicLex = CatFre ** open ParadigmsFre in {
+    lin
+      song_N = regGenN "chanson" feminine ;
+      american_A = regA "américain" ;
+    }
+
+The top-level Music grammars are obtained by instantiating the two interfaces
+of MusicI:
+
+  concrete MusicGer of Music = MusicI with
+    (Grammar = GrammarGer),
+    (MusicLex = MusicLexGer) ;
+
+  concrete MusicFre of Music = MusicI with
+    (Grammar = GrammarFre),
+    (MusicLex = MusicLexFre) ;
+
+To localize the system to a new language, all that is needed is two modules,
+one implementing MusicLex and the other instantiating Music. The latter is
+completely trivial, whereas the former one involves the choice of correct
+vocabulary and inflectional paradigms. For instance, Finnish is added as follows:
+
+  concrete MusicLexFin of MusicLex = CatFre ** open ParadigmsFin in {
+    lin
+      song_N = regN "kappale" ;
+      american_A = regA "amerikkalainen" ;
+    }
+
+  concrete MusicFin of Music = MusicI with
+    (Grammar = GrammarFin),
+    (MusicLex = MusicLexFin) ;
+
+More work is of course involved if the language-independent linearizations in
+MusicI are not satisfactory for some language. The resource grammar guarantees
+that the linearizations are possible in all languages, in the sense of grammatical,
+but they might of course be inadequate for stylistic reasons. Assume, 
+for the sake of argument, that adjectival modification does not sound good in
+English, but that a relative clause would be preferrable. One can then start as
+before,
+
+  concrete MusicLexEng of MusicLex = CatFre ** open ParadigmsEng in {
+    lin
+      song_N = regN "song" ;
+      american_A = regA "American" ;
+    }
+
+  concrete MusicEng0 of Music = MusicI with
+    (Grammar = GrammarEng),
+    (MusicLex = MusicLexEng) ;
+
+The module MusicEng0 would not be used on the top level, however, but
+another module would be built on top of it, with a restricted import from
+MusicEng0. MusicEng inherits everything from MusicEng0 except PropKind, and
+gives its own definition of this function:
+
+  concrete MusicEng of Music = MusicEng0 - [PropKind] ** open GrammarEng in {
+    lin
+      PropKind k p = 
+        RelCN k (UseRCl TPres ASimul PPos (RelVP IdRP (UseComp (CompAP p)))) ;
+    }
 
 
-==To use a resouce grammar==
 
-===Parsing===
+===Parsing with resource grammars?===
 
 The intended use of the resource grammar is as a library for writing
-application grammars. It is not designed for e.g. parsing text. There
+application grammars. It is not designed for e.g. parsing newspaper text. There
 are several reasons why this is not so practical:
-- efficiency: the resource grammar uses complex data structures, in
+- Efficiency: the resource grammar uses complex data structures, in
 particular, discontinuous constituents, which make parsing slow and the
-parser size huge
-- completeness: the resource grammar does not necessarily cover all rules
-of the language - only enough many so that it is possible to express everything
-in one way or another
-- lexicon: the resource grammar has a very small lexicon, only meant for test
-purposes
-- semantics: the resource grammar has very little semantic control, and may
-accept strange input or deliver strange interpretations
-- ambiguity: parsing in the resource grammar may return lots of results many
-of which are implausible
+parser size huge.
+- Completeness: the resource grammar does not necessarily cover all rules
+of the language - only enough many to be able to express everything
+in one way or another.
+- Lexicon: the resource grammar has a very small lexicon, only meant for test
+purposes.
+- Semantics: the resource grammar has very little semantic control, and may
+accept strange input or deliver strange interpretations.
+- Ambiguity: parsing in the resource grammar may return lots of results many
+of which are implausible.
 
 
-All of these problems should be settled in application grammars - the very point
-of resource grammars is to isolate the low-level linguistic details such as
-inflection, agreement, and word order, from semantic questions, which is what
-the application grammarians should solve.
+All of these problems should be solved in application grammars. 
+The task of resource grammars is just to take care of low-level linguistic 
+details such as inflection, agreement, and word order.
 
+For the same reasons, resource grammars are not adequate for parsing.
+That the syntax API is implemented for different languages of course makes
+it possible to translate via it - but there is no guarantee of translation
+equivalence. Of course, the use of parametrized implementations such as MusicI
+above only extends to those cases where the syntax API does give translation
+equivalence - but this must be seen as a limiting case, and real applications
+will often use only restricted inheritance of MusicI.
+
+
+
+==To find rules in the resource grammar library==
 
 ===Inflection paradigms===
 
-The inflection paradigms are defined separately for each language L
+Inflection paradigms are defined separately for each language L
 in the module ParadigmsL. To test them, the command cc (= compute_concrete)
 can be used:
 
@@ -110,6 +241,25 @@ can be used:
       } ;
     g : Gender = Fem
   }
+
+For the sake of convenience, every language implements these four paradigms:
+
+  oper
+    regN : Str -> N ;   -- regular nouns
+    regA : Str -> A :   -- regular adjectives
+    regV : Str -> V ;   -- regular verbs
+    dirV : V   -> V2 ;  -- direct transitive verbs
+
+It is often possible to initialize a lexicon by just using these functions,
+and later revise it by using the more involved paradigms. For instance, in
+German we cannot use regN "Lied" for Song, because the result would be a
+Masculine noun with the plural form "Liede". The individual Paradigms modules
+tell what cases are covered by the regular heuristics.
+
+As a limiting case, one could even initialize the lexicon for a new language
+by copying the English (or some other already existing) lexicon. This will
+produce language with correct grammar but content words directly borrowed from
+English.
 
 
 
@@ -139,7 +289,7 @@ instance, to find out how sentences are built using transitive verbs, write
 
 Parsing with the English resource grammar has an acceptable speed, but
 with most languages it takes just too much resources even to build the
-parser. However, examples parsed in one language can always be linearized in
+parser. However, examples parsed in one language can always be linearized into
 other languages:
 
   > i italian/LangIta.gf
@@ -148,6 +298,64 @@ other languages:
 
   lo ama
 
+Therefore, one can use the English parser to write an Italian grammar, and also
+to write a language-independent (incomplete) grammar. One can also parse strings
+that are bizarre in English but the intended way of expression in another language.
+For instance, the phrase for "I am hungry" in Italian is literally "I have hunger".
+This can be built by parsing "I have beer" in LanEng and then writing
+
+  lin IamHungry = 
+    let beer_N = regGenN "fame" feminine 
+    in
+    PredVP (UsePron i_Pron) (ComplV2 have_V2 
+      (DetCN (DetSg MassDet NoOrd) (UseN beer_N))) ;
+
+which uses ParadigmsIta.regGenN. 
+
+
+===Example-based grammar writing===
+
+The technique of parsing with the resource grammar can be used in GF source files,
+endowed with the suffix .gfe ("GF examples"). The suffix tells GF to preprocess
+the file by replacing all expressions of the form
+
+  in Module.Cat "example string"
+
+by the syntax trees obtained by parsing "example string" in Cat in Module.
+For instance,
+
+  lin IamHungry = 
+    let beer_N = regGenN "fame" feminine 
+    in
+    (in LangEng.Cl "I have beer") ;
+
+will result in the rule displayed in the previous section. The normal binding rules
+of functional programming (and GF) guarantee that local bindings of identifiers
+take precedence over constants of the same forms. Thus it is also possible to
+linearize functions taking arguments in this way:
+
+  lin
+    PropKind car_N old_A = in LangEng.CN "old car" ;
+
+However, the technique of example-based grammar writing has some limitations:
+- Ambiguity. If a string has several parses, the first one is returned, and
+it may not be the intended one. The other parses are shown in a comment, from
+where they must/can be picked manually.
+- Lexicality. The arguments of a function must be atomic identifiers, and are thus
+not available for categories that have no lexical items. For instance, the PropKind
+rule above gives the result
+
+  lin
+    PropKind car_N old_A = AdjCN (UseN car_N) (PositA old_A) ;  
+
+However, it is possible to write a special lexicon that gives atomic rules for
+all those categories that can be used as arguments, for instance,
+
+  fun
+    cat_CN : CN
+    old_AP : AP
+
+and then use this lexicon instead of the standard one included in Lang.
 
 
 
