@@ -1,11 +1,12 @@
 The GF Resource Grammar Library
 
-This document is about the use of the 
+This document is about the 
 GF Resource Grammar Library. It presuppose knowledge of GF and its
 module system, knowledge that can be acquired e.g. from the GF
-tutorial. Starting with an introduction to the library, we will
-later cover all aspects of it that one needs to know in order
-to use it.
+tutorial. We start with an introduction to the library, and proceed to
+covering all that one needs to know in order to use the library. 
+How to write one's own resource grammar (i.e. implement the API for
+a new language), is covered by a separate Resource-HOWTO document.
 
 
 ==Motivation==
@@ -71,6 +72,9 @@ pick a different linearization of Song,
 But to linearize PropKind, we can use the very same rule as in German.
 The resource function AdjCN has different implementations in the two
 languages, but the application programmer need not care about the difference.
+
+
+===A complete example===
 
 To summarize the example, and also give a template for a programmer to work on,
 here is the complete implementation of a small system with songs and properties.
@@ -149,7 +153,7 @@ vocabulary and inflectional paradigms. For instance, Finnish is added as follows
     (Grammar = GrammarFin),
     (MusicLex = MusicLexFin) ;
 
-More work is of course involved if the language-independent linearizations in
+More work is of course needed if the language-independent linearizations in
 MusicI are not satisfactory for some language. The resource grammar guarantees
 that the linearizations are possible in all languages, in the sense of grammatical,
 but they might of course be inadequate for stylistic reasons. Assume, 
@@ -352,20 +356,68 @@ However, it is possible to write a special lexicon that gives atomic rules for
 all those categories that can be used as arguments, for instance,
 
   fun
-    cat_CN : CN
-    old_AP : AP
+    cat_CN : CN ;
+    old_AP : AP ;
 
 and then use this lexicon instead of the standard one included in Lang.
 
 
 
+===Special-purpose APIs===
+
+To give an analogy with a well-known type setting program, GF can be compared
+with TeX and the resource grammar library with LaTeX. As TeX frees the author
+from thinking about low-level problems of page layout, so GF frees the grammarian
+from writing parsing and generation algorithms. But quite a lot of knowledge of
+//how// to write grammars is still needed, and the resource grammar library helps
+GF grammarians in a way similar to how the LaTeX macro package helps TeX authors.
+
+But even LaTeX is often too detailed and low-level, and users are encouraged to
+develop their own macro packages. The same applies to GF resource grammars:
+the application grammarian might not need all the choises that the resource
+provides, but would prefer less writing and higher-level programming.
+To this end, application grammarians may want to write their own views on the
+resource grammar. An example of this is already provided, in mathematical/Predication.
+Instead of the NP-VP structure, it permits clause construction directly from
+verbs and adjectives and their arguments:
+
+  predV     : V  -> NP -> Cl ;             -- "x converges"
+  predV2    : V2 -> NP -> NP -> Cl ;       -- "x intersects y"
+  predV3    : V3 -> NP -> NP -> NP -> Cl ; -- "x intersects y at z"
+  predVColl : V  -> NP -> NP -> Cl ;       -- "x and y intersect"
+  predA     : A  -> NP -> Cl ;             -- "x is even"
+  predA2    : A2 -> NP -> NP -> Cl ;       -- "x is divisible by y"
+
+The implementation of this module is the functor PredicationI:
+
+  predV v x = PredVP x (UseV v) ;
+  predV2 v x y = PredVP x (ComplV2 v y) ;
+  predV3 v x y z = PredVP x (ComplV3 v y z) ;
+  predVColl v x y = PredVP (ConjNP and_Conj (BaseNP x y)) (UseV v) ;
+  predA a x = PredVP x (UseComp (CompAP (PositA a))) ;
+  predA2 a x y = PredVP x (UseComp (CompAP (ComplA2 a y))) ;
+
+Of course, Predication can be opened together with Grammar, but using
+the resulting grammar for parsing can be frustrating, since having both
+ways of building clauses simultaneously available will produce spurious
+ambiguities. Using Predication without Verb for parsing is a better idea,
+since parsing is also made more efficient without the VP category.
+
+The use of special-purpose APIs is to some extent to be seen as an alternative
+to grammar writing by parsing, and its importance may decrease as parsing
+with the resource grammars gets more efficient.
 
 
-==Overview of linguistic structures==
+
+
+
+==Overview of syntactic structures==
+
+===Texts. phrases, and utterances===
 
 The outermost linguistic structure is Text. Texts are composed
 from Phrases followed by punctuation marks - either of ".", "?" or
-"!! (with their proper variants in Spanish and Arabic). Here is an 
+"!" (with their proper variants in Spanish and Arabic). Here is an 
 example of a Text.
 
   John walks. Why? He doesn't want to sleep!
@@ -373,7 +425,7 @@ example of a Text.
 Phrases are mostly built from Utterances, which in turn are
 declarative sentences, questions, or imperatives - but there
 are also "one-word utterances" consisting of noun phrases
-or other subsentential phrases. Some Phrases are more primitive,
+or other subsentential phrases. Some Phrases are atomic,
 for instance "yes" and "no". Here are some examples of Phrases.
 
   yes
@@ -396,11 +448,14 @@ What is the difference between Phrase and Utterance? Just technical:
 a Phrase is an Utterance with an optional leading conjunction ("but")
 and an optional tailing vocative ("John", "please").
 
+
+===Sentences and clauses===
+
 The richest of the categories below Utterance is S, Sentence. A Sentence
 is formed from a Clause, by fixing its Tense, Anteriority, and Polarity.
 The difference between Sentence and Clause is thus also rather technical.
 For example, each of the following strings has a distinct syntax tree
-of category Sentence:
+in the category Sentence:
 
   John walks
   John doesn't walk
@@ -455,10 +510,13 @@ many constructors:
 10-11. UsePN john_PN    -> UsePron we_Pron                   We walk.
 12-13. UseV walk_V      -> ComplV2 love_V2 this_NP           John loves this. 
 
-The linguistic phenomena mostly discussed in traditional grammars and modern
+
+===Parts of sentences===
+
+The linguistic phenomena mostly discussed in both traditional grammars and modern
 syntax belong to the level of Clauses, that is, lines 9-13, and occasionally
 to Sentences, lines 5-13. At this level, the major categories are
-NP (Noun Phrase) and VP (Verb Phrase). A Clause typically consists of a
+NP (Noun Phrase) and VP (Verb Phrase). A Clause typically consists of just an
 NP and a VP. The internal structure of both NP and VP can be very complex,
 and these categories are mutually recursive: not only can a VP contain an NP,
 
@@ -487,8 +545,7 @@ The Noun module also defines the construction of common nouns. The most frequent
 - adjectival modification: old man
 - relative clause modification: man who sleeps
 
-Verb: How to construct VPs. The main mechanism is verbs with their arguments:
-
+Verb: How to construct VPs. The main mechanism is verbs with their arguments, for instance,
 - one-place verbs: walks
 - two-place verbs: loves Mary
 - three-place verbs: gives her a kiss
@@ -498,10 +555,17 @@ Verb: How to construct VPs. The main mechanism is verbs with their arguments:
 A special verb is the copula, "be" in English but not even realized 
 by a verb in all languages.
 A copula can take different kinds of complement: 
-
 - an adjectival phrase: (John is) old
 - an adverb: (John is) here
 - a noun phrase: (John is) a man
+
+
+Adjective: How to constuct APs.
+
+Adverb: How to construct Advs.
+
+
+===Modules and their names===
 
 The resource modules are named after the kind of phrases that are constructed in them,
 and they can be roughly classified by the "level" or "size" of expressions that are
@@ -514,7 +578,7 @@ formed in them:
 
 Because of mutual recursion such as embedded sentences, this classification is
 not a complete order. However, no mutual dependence is needed between the 
-modules in a formal sense, but they can all be compiled separately. This is due
+modules in a formal sense - they can all be compiled separately. This is due
 to the module Cat, which defines the type system common to the other modules.
 For instance, the types NP and VP are defined in Cat, and the module Verb only
 needs to know what is given in Cat, not what is given in Noun. To implement
@@ -525,3 +589,6 @@ a rule such as
 it is enough to know the linearization type of NP (given in Cat), not what
 ways there are to build NPs (given in Noun), since all these ways must 
 conform to the linearization type defined in Cat.
+
+
+
