@@ -1,5 +1,158 @@
 The GF Resource Grammar Library
 
+
+The GF Resource Grammar Library contains grammar rules for
+10 languages (some more are under construction). Its purpose
+is to make these rules available for application programmers,
+who can thereby concentrate on the semantic and stylistic
+aspects of their grammars, without having to think about 
+grammaticality. 
+
+To give an example, an application dealing with
+music players may have a semantical category ``Kind``, examples
+of Kinds being Song and Artist. In German, for instance, Song 
+is linearized into the noun "Lied", but knowing this is not
+enough to make the application work, because the noun must be 
+produced in both singular and plural, and in four different
+cases. By using the resource grammar library, it is enough to
+write
+
+  lin Song = reg2N "Lied" "Lieder" neuter
+
+and the eight forms are correctly generated. The use of the resource
+grammar extends from lexical items to syntax rules. The application
+mught also want to modify songs with properties, such as "American",
+"old", "good". The German grammar for adjectival modifications is
+particularly complex, because the adjectives have to agree in gender,
+number, and case, also depending on what determiner is used
+("ein Amerikanisches Lied" vs. "das Amerikanische Lied"). All this
+variation is taken care of by the resource grammar function
+
+  fun AdjCN : AP -> CN -> CN
+
+and the resource grammar implementation of the rule adding properties
+to kinds is
+
+  lin PropKind kind prop = AdjCN prop kind
+
+given that 
+
+  lincat Prop = AP
+  lincat Kind = CN
+
+The resource library API is devided into language-specific and language-independet
+parts. To put is roughly,
+- syntax is language-independent
+- lexicon is language-specific
+
+
+Thus, to render the above example in French instead of German, we need to
+pick a different linearization of Song,
+
+  lin Song = regGenN "chanson" feminine
+
+But to linearize PropKind, we can use the very same rule as in German.
+The resource function AdjCN has different implementations in the two
+languages, but the application programmer need not care about the difference.
+
+
+
+==To use a resouce grammar==
+
+===Parsing===
+
+The intended use of the resource grammar is as a library for writing
+application grammars. It is not designed for e.g. parsing text. There
+are several reasons why this is not so practical:
+- efficiency: the resource grammar uses complex data structures, in
+particular, discontinuous constituents, which make parsing slow and the
+parser size huge
+- completeness: the resource grammar does not necessarily cover all rules
+of the language - only enough many so that it is possible to express everything
+in one way or another
+- lexicon: the resource grammar has a very small lexicon, only meant for test
+purposes
+- semantics: the resource grammar has very little semantic control, and may
+accept strange input or deliver strange interpretations
+- ambiguity: parsing in the resource grammar may return lots of results many
+of which are implausible
+
+
+All of these problems should be settled in application grammars - the very point
+of resource grammars is to isolate the low-level linguistic details such as
+inflection, agreement, and word order, from semantic questions, which is what
+the application grammarians should solve.
+
+
+===Inflection paradigms===
+
+The inflection paradigms are defined separately for each language L
+in the module ParadigmsL. To test them, the command cc (= compute_concrete)
+can be used:
+
+  > i -retain german/ParadigmsGer.gf
+
+  > cc regN "Schlange"
+  {
+    s : Number => Case => Str = table Number {
+      Sg => table Case {
+        Nom => "Schlange" ;
+        Acc => "Schlange" ;
+        Dat => "Schlange" ;
+        Gen => "Schlange"
+        } ;
+      Pl => table Case {
+        Nom => "Schlangen" ;
+        Acc => "Schlangen" ;
+        Dat => "Schlangen" ;
+        Gen => "Schlangen"
+        }
+      } ;
+    g : Gender = Fem
+  }
+
+
+
+===Syntax rules===
+
+Syntax rules should be looked for in the abstract modules defining the
+API. There are around 10 such modules, each defining constructors for
+a group of one or more related categories. For instance, the module
+Noun defines how to construct common nouns, noun phrases, and determiners.
+Thus the proper place to find out how nouns are modified with adjectives
+is Noun, because the result of the construction is again a common noun.
+
+Browsing the libraries is helped by the gfdoc-generated HTML pages. 
+However, this is still not easy, and the most efficient way is 
+probably to use the parser.
+Even though parsing is not an intended end-user application 
+of resource grammars, it is a useful technique for application grammarians
+to browse the library. To find out what resource function does some
+particular job, you can just parse a string that exemplifies this job. For
+instance, to find out how sentences are built using transitive verbs, write
+
+  > i english/LangEng.gf
+ 
+  > p -cat=Cl -fcfg "she loves him"
+
+  PredVP (UsePron she_Pron) (ComplV2 love_V2 (UsePron he_Pron))
+
+Parsing with the English resource grammar has an acceptable speed, but
+with most languages it takes just too much resources even to build the
+parser. However, examples parsed in one language can always be linearized in
+other languages:
+
+  > i italian/LangIta.gf
+
+  > l PredVP (UsePron she_Pron) (ComplV2 love_V2 (UsePron he_Pron))
+
+  lo ama
+
+
+
+
+
+
 ==Overview of linguistic structures==
 
 The outermost linguistic structure is Text. Texts are composed
@@ -57,7 +210,7 @@ the same tree.
 The following syntax tree of the Text "John walks." gives an overview
 of the structural levels.
 
-     Node                     Type of subtree   Alternative constructors
+Node Constructor              Type of subtree   Alternative constructors
 
  1.  TFullStop                : Text            TQuestMark
  2.    (PhrUtt                : Phr             
@@ -134,7 +287,8 @@ Verb: How to construct VPs. The main mechanism is verbs with their arguments:
 - sentence-complement verbs: says that it is cold
 - VP-complement verbs: wants to give her a kiss
 
-A special verb is the copula, "be" in English but not even realized by a verb in all languages.
+A special verb is the copula, "be" in English but not even realized 
+by a verb in all languages.
 A copula can take different kinds of complement: 
 
 - an adjectival phrase: (John is) old
@@ -150,7 +304,7 @@ formed in them:
 - Parts of sentence: Adjective, Adverb, Noun, Verb
 - Cross-cut: Conjunction
 
-Because of mutual recursion such as  embedded sentences, this classification is
+Because of mutual recursion such as embedded sentences, this classification is
 not a complete order. However, no mutual dependence is needed between the 
 modules in a formal sense, but they can all be compiled separately. This is due
 to the module Cat, which defines the type system common to the other modules.
