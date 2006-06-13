@@ -1,0 +1,36 @@
+resource MorphoAra = ResAra ** open Prelude in  {
+
+flags optimize = all ;--noexpand;
+
+  oper
+    mkDet : Str -> Number -> State -> Det 
+      = \word,num,state -> 
+      { s = \\_,_,c => word + vowel ! c ;
+        n = numberToSize num;
+        d = state;
+        isNum = False
+      };
+    
+   mkQuantNum : Str -> Number -> State -> { 
+      s: Species => Gender => Case => Str; n: Number; d : State; isNum : Bool} = 
+      \waHid,num,state -> 
+     let waHida = waHid + "َة" in 
+      { s = \\_,g,c => 
+          let word = 
+          case g of {
+            Masc => waHid;
+            Fem => waHida
+          } in Al ! state + word + dec1sg ! state ! c;
+        n = num;
+        d = state;
+        isNum = True
+      };
+    
+    vowel : Case => Str = 
+      table {
+        Nom => "ُ";
+        Acc => "َ";
+        Gen => "ِ"
+      };
+
+}
