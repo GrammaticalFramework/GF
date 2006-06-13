@@ -6,7 +6,7 @@
 \setlength{\parskip}{8pt}\parindent=0pt  % no paragraph indentation
 
 \newcommand{\commOut}[1]{}
-\newcommand{\subsubsubsection}[1]{\textit{#1}}
+\newcommand{\subsubsubsection}[1]{\textbf{#1}.}
 
 \title{The GF Resource Grammar Library}
 \author{Author: Aarne Ranta}
@@ -25,7 +25,7 @@ module system, knowledge that can be acquired e.g. from the GF
 tutorial. We start with an introduction to the library, and proceed to
 details with the aim of covering all that one needs to know 
 in order to use the library. 
-How to write one's own resource grammar (i.e. implement the API for
+How to write one's own resource grammar (i.e. to implement the API for
 a new language), is covered by a separate Resource-HOWTO document.
 
 \section{Motivation}
@@ -34,15 +34,30 @@ The GF Resource Grammar Library contains grammar rules for
 is to make these rules available for application programmers,
 who can thereby concentrate on the semantic and stylistic
 aspects of their grammars, without having to think about 
-grammaticality. The level of a typical application grammarian
-is skilled programmer, without knowledge linguistics, but with
+grammaticality. The targeted level of application grammarians
+is skilled programmer without knowledge linguistics, but with
 a good knowledge of the target languages. Such a combination of
-skilles is typical of a programmer who wants to localize a piece
-of software to a new language.
+skills is typical of programmers who want to localize
+software to new languages.
 
-To give an example, an application dealing with
-music players may have a semantical category \texttt{Kind}, examples
-of Kinds being Song and Artist. In German, for instance, Song 
+The current resource languages are
+-\texttt{Dan}ish
+-\texttt{Eng}lish
+-\texttt{Fin}nish
+-\texttt{Fre}nch
+-\texttt{Ger}man
+-\texttt{Ita}lian
+-\texttt{Nor}wegian
+-\texttt{Rus}sian
+-\texttt{Spa}nish
+-\texttt{Swe}dish
+
+The first three letters (\texttt{Dan} etc) are used in grammar module names.
+
+To give an example application, consider
+music playing devices. In the application,
+we may have a semantical category \texttt{Kind}, examples
+of \texttt{Kind}s being \texttt{Song} and \texttt{Artist}. In German, for instance, \texttt{Song} 
 is linearized into the noun "Lied", but knowing this is not
 enough to make the application work, because the noun must be 
 produced in both singular and plural, and in four different
@@ -54,13 +69,13 @@ write
 \end{verbatim}
 and the eight forms are correctly generated. The resource grammar
 library contains a complete set of inflectional paradigms (such as
-regN2 here), enabling the definition of any lexical items.
+\texttt{regN2} here), enabling the definition of any lexical items.
 
 The resource grammar library is not only about inflectional paradigms - it
 also has syntax rules. The music player application
 might also want to modify songs with properties, such as "American",
 "old", "good". The German grammar for adjectival modifications is
-particularly complex, because the adjectives have to agree in gender,
+particularly complex, because adjectives have to agree in gender,
 number, and case, and also depend on what determiner is used
 ("ein Amerikanisches Lied" vs. "das Amerikanische Lied"). All this
 variation is taken care of by the resource grammar function
@@ -81,21 +96,21 @@ given that
   lincat Kind = CN
 \end{verbatim}
 The resource library API is devided into language-specific and language-independet
-parts. To put is roughly,
+parts. To put it roughly,
 
 \begin{itemize}
-\item lexicon is language-specific
-\item syntax is language-independent
+\item the lexicon API is language-specific
+\item the syntax API is language-independent
 \end{itemize}
 
 Thus, to render the above example in French instead of German, we need to
-pick a different linearization of Song,
+pick a different linearization of \texttt{Song},
 
 \begin{verbatim}
   lin Song = regGenN "chanson" feminine
 \end{verbatim}
-But to linearize PropKind, we can use the very same rule as in German.
-The resource function AdjCN has different implementations in the two
+But to linearize \texttt{PropKind}, we can use the very same rule as in German.
+The resource function \texttt{AdjCN} has different implementations in the two
 languages, but the application programmer need not care about the difference.
 
 \subsection{A complete example}
@@ -115,7 +130,7 @@ The abstract syntax defines a "domain ontology":
     }
 \end{verbatim}
 The concrete syntax is defined independently of language, by opening
-two interfaces: the resource Grammar and an application lexicon.
+two interfaces: the resource \texttt{Grammar} and an application lexicon.
 
 \begin{verbatim}
   incomplete concrete MusicI of Music = open Grammar, MusicLex in {
@@ -128,8 +143,8 @@ two interfaces: the resource Grammar and an application lexicon.
       American = PositA american_A ;
     }
 \end{verbatim}
-The application lexicon MusicLex has an abstract syntax, that extends
-the resource category system Cat.
+The application lexicon \texttt{MusicLex} has an abstract syntax that extends
+the resource category system \texttt{Cat}.
 
 \begin{verbatim}
   abstract MusicLex = Cat ** {
@@ -151,11 +166,11 @@ module for that language:
   concrete MusicLexFre of MusicLex = CatFre ** open ParadigmsFre in {
     lin
       song_N = regGenN "chanson" feminine ;
-      american_A = regA "amÃ©ricain" ;
+      american_A = regA "américain" ;
     }
 \end{verbatim}
-The top-level Music grammars are obtained by instantiating the two interfaces
-of MusicI:
+The top-level \texttt{Music} grammars are obtained by instantiating the two interfaces
+of \texttt{MusicI}:
 
 \begin{verbatim}
   concrete MusicGer of Music = MusicI with
@@ -166,13 +181,21 @@ of MusicI:
     (Grammar = GrammarFre),
     (MusicLex = MusicLexFre) ;
 \end{verbatim}
-To localize the system to a new language, all that is needed is two modules,
-one implementing MusicLex and the other instantiating Music. The latter is
+Both of these files can use the same \texttt{path}, defined as
+
+\begin{verbatim}
+  --# -path=.:present:prelude
+\end{verbatim}
+The \texttt{present} category contains the compiled resources, restricted to
+present tense; \texttt{alltenses} has the full resources.
+
+To localize the music player system to a new language, all that is needed is two modules,
+one implementing \texttt{MusicLex} and the other instantiating \texttt{Music}. The latter is
 completely trivial, whereas the former one involves the choice of correct
 vocabulary and inflectional paradigms. For instance, Finnish is added as follows:
 
 \begin{verbatim}
-  concrete MusicLexFin of MusicLex = CatFre ** open ParadigmsFin in {
+  concrete MusicLexFin of MusicLex = CatFin ** open ParadigmsFin in {
     lin
       song_N = regN "kappale" ;
       american_A = regA "amerikkalainen" ;
@@ -191,7 +214,7 @@ English, but that a relative clause would be preferrable. One can then start as
 before,
 
 \begin{verbatim}
-  concrete MusicLexEng of MusicLex = CatFre ** open ParadigmsEng in {
+  concrete MusicLexEng of MusicLex = CatEng ** open ParadigmsEng in {
     lin
       song_N = regN "song" ;
       american_A = regA "American" ;
@@ -201,9 +224,10 @@ before,
     (Grammar = GrammarEng),
     (MusicLex = MusicLexEng) ;
 \end{verbatim}
-The module MusicEng0 would not be used on the top level, however, but
+The module \texttt{MusicEng0} would not be used on the top level, however, but
 another module would be built on top of it, with a restricted import from
-MusicEng0. MusicEng inherits everything from MusicEng0 except PropKind, and
+\texttt{MusicEng0}. \texttt{MusicEng} inherits everything from \texttt{MusicEng0} 
+except \texttt{PropKind}, and
 gives its own definition of this function:
 
 \begin{verbatim}
@@ -238,18 +262,18 @@ All of these problems should be solved in application grammars.
 The task of resource grammars is just to take care of low-level linguistic 
 details such as inflection, agreement, and word order.
 
-For the same reasons, resource grammars are not adequate for parsing.
+It is for the same reasons that resource grammars are not adequate for translation.
 That the syntax API is implemented for different languages of course makes
 it possible to translate via it - but there is no guarantee of translation
-equivalence. Of course, the use of parametrized implementations such as MusicI
+equivalence. Of course, the use of parametrized implementations such as \texttt{MusicI}
 above only extends to those cases where the syntax API does give translation
 equivalence - but this must be seen as a limiting case, and real applications
-will often use only restricted inheritance of MusicI.
+will often use only restricted inheritance of \texttt{MusicI}.
 
 \section{To find rules in the resource grammar library}
 \subsection{Inflection paradigms}
-Inflection paradigms are defined separately for each language L
-in the module ParadigmsL. To test them, the command cc (= compute\_concrete)
+Inflection paradigms are defined separately for each language \textit{L}
+in the module \texttt{Paradigms}\textit{L}. To test them, the command \texttt{cc} (= \texttt{compute\_concrete})
 can be used:
 
 \begin{verbatim}
@@ -285,22 +309,22 @@ For the sake of convenience, every language implements these four paradigms:
 \end{verbatim}
 It is often possible to initialize a lexicon by just using these functions,
 and later revise it by using the more involved paradigms. For instance, in
-German we cannot use regN "Lied" for Song, because the result would be a
-Masculine noun with the plural form "Liede". The individual Paradigms modules
+German we cannot use \texttt{regN "Lied"} for \texttt{Song}, because the result would be a
+Masculine noun with the plural form \texttt{"Liede"}. The individual \texttt{Paradigms} modules
 tell what cases are covered by the regular heuristics.
 
 As a limiting case, one could even initialize the lexicon for a new language
 by copying the English (or some other already existing) lexicon. This will
-produce language with correct grammar but content words directly borrowed from
+produce language with correct grammar but with content words directly borrowed from
 English.
 
 \subsection{Syntax rules}
 Syntax rules should be looked for in the abstract modules defining the
 API. There are around 10 such modules, each defining constructors for
 a group of one or more related categories. For instance, the module
-Noun defines how to construct common nouns, noun phrases, and determiners.
+\texttt{Noun} defines how to construct common nouns, noun phrases, and determiners.
 Thus the proper place to find out how nouns are modified with adjectives
-is Noun, because the result of the construction is again a common noun.
+is \texttt{Noun}, because the result of the construction is again a common noun.
 
 Browsing the libraries is helped by the gfdoc-generated HTML pages. 
 However, this is still not easy, and the most efficient way is 
@@ -347,13 +371,13 @@ which uses ParadigmsIta.regGenN.
 
 \subsection{Example-based grammar writing}
 The technique of parsing with the resource grammar can be used in GF source files,
-endowed with the suffix .gfe ("GF examples"). The suffix tells GF to preprocess
+endowed with the suffix \texttt{.gfe} ("GF examples"). The suffix tells GF to preprocess
 the file by replacing all expressions of the form
 
 \begin{verbatim}
   in Module.Cat "example string"
 \end{verbatim}
-by the syntax trees obtained by parsing "example string" in Cat in Module.
+by the syntax trees obtained by parsing "example string" in \texttt{Cat} in \texttt{Module}.
 For instance,
 
 \begin{verbatim}
@@ -378,7 +402,7 @@ However, the technique of example-based grammar writing has some limitations:
 it may not be the intended one. The other parses are shown in a comment, from
 where they must/can be picked manually.
 \item Lexicality. The arguments of a function must be atomic identifiers, and are thus
-not available for categories that have no lexical items. For instance, the PropKind
+not available for categories that have no lexical items. For instance, the \texttt{PropKind}
 rule above gives the result
 \begin{verbatim}
   lin
@@ -391,7 +415,7 @@ all those categories that can be used as arguments, for instance,
     cat_CN : CN ;
     old_AP : AP ;
 \end{verbatim}
-and then use this lexicon instead of the standard one included in Lang.
+and then use this lexicon instead of the standard one included in \texttt{Lang}.
 \end{itemize}
 
 \subsection{Special-purpose APIs}
@@ -407,8 +431,9 @@ develop their own macro packages. The same applies to GF resource grammars:
 the application grammarian might not need all the choises that the resource
 provides, but would prefer less writing and higher-level programming.
 To this end, application grammarians may want to write their own views on the
-resource grammar. An example of this is already provided, in mathematical/Predication.
-Instead of the NP-VP structure, it permits clause construction directly from
+resource grammar. An example of this is already provided, in 
+\texttt{mathematical/Predication}.
+Instead of the \texttt{NP-VP} structure, it permits clause construction directly from
 verbs and adjectives and their arguments:
 
 \begin{verbatim}
@@ -419,7 +444,7 @@ verbs and adjectives and their arguments:
   predA     : A  -> NP -> Cl ;             -- "x is even"
   predA2    : A2 -> NP -> NP -> Cl ;       -- "x is divisible by y"
 \end{verbatim}
-The implementation of this module is the functor PredicationI:
+The implementation of this module is the functor \texttt{PredicationI}:
 
 \begin{verbatim}
   predV v x = PredVP x (UseV v) ;
@@ -429,27 +454,27 @@ The implementation of this module is the functor PredicationI:
   predA a x = PredVP x (UseComp (CompAP (PositA a))) ;
   predA2 a x y = PredVP x (UseComp (CompAP (ComplA2 a y))) ;
 \end{verbatim}
-Of course, Predication can be opened together with Grammar, but using
+Of course, \texttt{Predication} can be opened together with \texttt{Grammar}, but using
 the resulting grammar for parsing can be frustrating, since having both
 ways of building clauses simultaneously available will produce spurious
-ambiguities. Using Predication without Verb for parsing is a better idea,
-since parsing is also made more efficient without the VP category.
+ambiguities. Using \texttt{Predication} without \texttt{Verb} for parsing is a better idea,
+since parsing is also made more efficient without rules for the \texttt{VP} category.
 
-The use of special-purpose APIs is to some extent to be seen as an alternative
+The use of special-purpose APIs is to some extent just an alternative
 to grammar writing by parsing, and its importance may decrease as parsing
-with the resource grammars gets more efficient.
+with resource grammars gets more efficient.
 
 \section{Overview of syntactic structures}
 \subsection{Texts. phrases, and utterances}
-The outermost linguistic structure is Text. Texts are composed
-from Phrases followed by punctuation marks - either of ".", "?" or
+The outermost linguistic structure is \texttt{Text}. \texttt{Text}s are composed
+from Phrases (\texttt{Phr}) followed by punctuation marks - either of ".", "?" or
 "!" (with their proper variants in Spanish and Arabic). Here is an 
-example of a Text.
+example of a \texttt{Text} string.
 
 \begin{verbatim}
   John walks. Why? He doesn't want to sleep!
 \end{verbatim}
-Phrases are mostly built from Utterances, which in turn are
+Phrases are mostly built from Utterances (\texttt{Utt}), which in turn are
 declarative sentences, questions, or imperatives - but there
 are also "one-word utterances" consisting of noun phrases
 or other subsentential phrases. Some Phrases are atomic,
@@ -478,8 +503,8 @@ a Phrase is an Utterance with an optional leading conjunction ("but")
 and an optional tailing vocative ("John", "please").
 
 \subsection{Sentences and clauses}
-The richest of the categories below Utterance is S, Sentence. A Sentence
-is formed from a Clause, by fixing its Tense, Anteriority, and Polarity.
+The richest of the categories below Utterance is \texttt{S}, Sentence. A Sentence
+is formed from a Clause (\texttt{Cl}), by fixing its Tense, Anteriority, and Polarity.
 The difference between Sentence and Clause is thus also rather technical.
 For example, each of the following strings has a distinct syntax tree
 in the category Sentence:
@@ -549,14 +574,14 @@ many constructors:
 The linguistic phenomena mostly discussed in both traditional grammars and modern
 syntax belong to the level of Clauses, that is, lines 9-13, and occasionally
 to Sentences, lines 5-13. At this level, the major categories are
-NP (Noun Phrase) and VP (Verb Phrase). A Clause typically consists of just an
-NP and a VP. The internal structure of both NP and VP can be very complex,
-and these categories are mutually recursive: not only can a VP contain an NP,
+\texttt{NP} (Noun Phrase) and \texttt{VP} (Verb Phrase). A Clause typically consists of just an
+\texttt{NP} and a \texttt{VP}. The internal structure of both \texttt{NP} and \texttt{VP} can be very complex,
+and these categories are mutually recursive: not only can a \texttt{VP} contain an \texttt{NP},
 
 \begin{verbatim}
   [VP loves [NP Mary]]
 \end{verbatim}
-but an NP can also contain a VP
+but also an \texttt{NP} can contain a \texttt{VP}
 
 \begin{verbatim}
   [NP every man [RS who [VP walks]]]
@@ -567,32 +592,34 @@ a GF syntax tree, but still a useful device of exposition).
 Most of the resource modules thus define functions that are used inside
 NPs and VPs. Here is a brief overview:
 
-Noun: How to construct NPs. The main three mechanisms 
+\textbf{Noun}. How to construct NPs. The main three mechanisms 
 for constructing NPs are
 
 \begin{itemize}
-\item from proper names: John
-\item from pronouns: we
-\item from common nouns by determiners: this man
+\item from proper names: "John"
+\item from pronouns: "we"
+\item from common nouns by determiners: "this man"
 \end{itemize}
 
-The Noun module also defines the construction of common nouns. The most frequent ways are
+The \texttt{Noun} module also defines the construction of common nouns. 
+The most frequent ways are
 
 \begin{itemize}
-\item lexical noun items: man
-\item adjectival modification: old man
-\item relative clause modification: man who sleeps
-\item application of relational nouns: successor of the number
+\item lexical noun items: "man"
+\item adjectival modification: "old man"
+\item relative clause modification: "man who sleeps"
+\item application of relational nouns: "successor of the number"
 \end{itemize}
 
-Verb: How to construct VPs. The main mechanism is verbs with their arguments, for instance,
+\textbf{Verb}. 
+How to construct VPs. The main mechanism is verbs with their arguments, for instance,
 
 \begin{itemize}
-\item one-place verbs: walks
-\item two-place verbs: loves Mary
-\item three-place verbs: gives her a kiss
-\item sentence-complement verbs: says that it is cold
-\item VP-complement verbs: wants to give her a kiss
+\item one-place verbs: "walks"
+\item two-place verbs: "loves Mary"
+\item three-place verbs: "gives her a kiss"
+\item sentence-complement verbs: "says that it is cold"
+\item VP-complement verbs: "wants to give her a kiss"
 \end{itemize}
 
 A special verb is the copula, "be" in English but not even realized 
@@ -600,22 +627,24 @@ by a verb in all languages.
 A copula can take different kinds of complement: 
 
 \begin{itemize}
-\item an adjectival phrase: (John is) old
-\item an adverb: (John is) here
-\item a noun phrase: (John is) a man
+\item an adjectival phrase: "(John is) old"
+\item an adverb: "(John is) here"
+\item a noun phrase: "(John is) a man"
 \end{itemize}
 
-Adjective: How to constuct APs. The main ways are
+\textbf{Adjective}. 
+How to constuct \texttt{AP}s. The main ways are
 
 \begin{itemize}
-\item positive forms of adjectives: old
-\item comparative forms with object of comparison: older than John
+\item positive forms of adjectives: "old"
+\item comparative forms with object of comparison: "older than John"
 \end{itemize}
 
-Adverb: How to construct Advs. The main ways are
+\textbf{Adverb}. 
+How to construct \texttt{Adv}s. The main ways are
 
 \begin{itemize}
-\item from adjectives: slowly
+\item from adjectives: "slowly"
 \end{itemize}
 
 \subsection{Modules and their names}
@@ -624,27 +653,28 @@ and they can be roughly classified by the "level" or "size" of expressions that 
 formed in them:
 
 \begin{itemize}
-\item Larger than sentence: Text, Phrase 
-\item Same level as sentence: Sentence, Question, Relative
-\item Parts of sentence: Adjective, Adverb, Noun, Verb
-\item Cross-cut: Conjunction
+\item Larger than sentence: \texttt{Text}, \texttt{Phrase} 
+\item Same level as sentence: \texttt{Sentence}, \texttt{Question}, \texttt{Relative}
+\item Parts of sentence: \texttt{Adjective}, \texttt{Adverb}, \texttt{Noun}, \texttt{Verb}
+\item Cross-cut (coordination): \texttt{Conjunction}
 \end{itemize}
 
 Because of mutual recursion such as in embedded sentences, this classification is
 not a complete order. However, no mutual dependence is needed between the 
 modules in a formal sense - they can all be compiled separately. This is due
-to the module Cat, which defines the type system common to the other modules.
-For instance, the types NP and VP are defined in Cat, and the module Verb only
-needs to know what is given in Cat, not what is given in Noun. To implement
+to the module \texttt{Cat}, which defines the type system common to the other modules.
+For instance, the types \texttt{NP} and \texttt{VP} are defined in \texttt{Cat}, and the module \texttt{Verb} only
+needs to know what is given in \texttt{Cat}, not what is given in \texttt{Noun}. To implement
 a rule such as
 
 \begin{verbatim}
   Verb.ComplV2 : V2 -> NP -> VP
 \end{verbatim}
-it is enough to know the linearization type of NP (as well as those of V2 and VP, all
-given in Cat). It is not necessary to know what
-ways there are to build NPs (given in Noun), since all these ways must 
-conform to the linearization type defined in Cat. Thus the format of
+it is enough to know the linearization type of \texttt{NP} 
+(as well as those of \texttt{V2} and \texttt{VP}, all
+given in \texttt{Cat}). It is not necessary to know what
+ways there are to build \texttt{NP}s (given in \texttt{Noun}), since all these ways must 
+conform to the linearization type defined in \texttt{Cat}. Thus the format of
 category-specific modules is as follows:
 
 \begin{verbatim}
@@ -654,32 +684,33 @@ category-specific modules is as follows:
 \end{verbatim}
 
 \subsection{Top-level grammar and lexicon}
-The module Grammar collects all the category-specific modules into
+The module \texttt{Grammar} collects all the category-specific modules into
 a complete grammar:
 
 \begin{verbatim}
   abstract Grammar = 
     Adjective, Noun, Verb, ..., Structural, Idiom
 \end{verbatim}
-The module Structural is a lexicon of structural words (function words),
+The module \texttt{Structural} is a lexicon of structural words (function words),
 such as determiners.
-The module Idiom is a collection of idiomatic structures whose
+
+The module \texttt{Idiom} is a collection of idiomatic structures whose
 implementation is very language-dependent. An example is existential
 structures ("there is", "es gibt", "il y a", etc).
 
-The module Lang combines Grammar with a Lexicon of ca. 350 content words:
+The module \texttt{Lang} combines \texttt{Grammar} with a \texttt{Lexicon} of ca. 350 content words:
 
 \begin{verbatim}
   abstract Lang = Grammar, Lexicon
 \end{verbatim}
-Using Lang instead of Grammar as a library may give the advantage of prociding
+Using \texttt{Lang} instead of \texttt{Grammar} as a library may give 
 for free some words needed in an application. But its main purpose is to
 help testing the resource library. It does not seem possible to maintain
 a general-purpose multilingual lexicon, and this is the form that the module
-Lexicon has.
+\texttt{Lexicon} has.
 
 \subsection{Language-specific syntactic structures}
-The API collected in Grammar has been designed to be implementable for
+The API collected in \texttt{Grammar} has been designed to be implementable for
 all languages in the resource package. It does contain some rules that
 are strange or superfluous in some languages; for instance, the distinction
 between definite and indefinite articles does not apply to Finnish and Russian.
@@ -693,26 +724,27 @@ rules. The top level of each languages looks as follows (with English as example
 \begin{verbatim}
   abstract English = Grammar, ExtraEngAbs, DictEngAbs
 \end{verbatim}
-where ExtraEngAbs is a collection of syntactic structures specific to English,
-and DictEngAbs is an English dictionary (at the moment, it consists of IrregEngAbs,
+where \texttt{ExtraEngAbs} is a collection of syntactic structures specific to English,
+and \texttt{DictEngAbs} is an English dictionary (at the moment, it consists of \texttt{IrregEngAbs},
 the irregular verbs of English). Each of these language-specific grammars has 
 the potential to grow into a full-scale grammar of the language. These grammar
 can also be used as libraries, but the possibility of using functors is lost.
 
-To give a better overview of language-specific structures, modules like ExtraEngAbs
-are built from a language-independent module ExtraAbs by restricted inheritance:
+To give a better overview of language-specific structures, modules like \texttt{ExtraEngAbs}
+are built from a language-independent module \texttt{ExtraAbs} by restricted inheritance:
 
 \begin{verbatim}
   abstract ExtraEngAbs = Extra [f,g,...]
 \end{verbatim}
-Thus any category and function in Extra may be shared by a subset of all
-languages. One can see this set-up as a matrix, which tells what Extra structures
-are implemented in what languages. For the common API in Grammar, the matrix
+Thus any category and function in \texttt{Extra} may be shared by a subset of all
+languages. One can see this set-up as a matrix, which tells what \texttt{Extra} structures
+are implemented in what languages. For the common API in \texttt{Grammar}, the matrix
 is filled with 1's (everything is implemented in every language).
 
 Language-specific extensions and the use of restricted
 inheritance is a recent addition to the resource grammar library, and
 has only been exploited in a very small scale so far.
+
 
 \section{API Documentation}
 \subsection{Top-level modules}
