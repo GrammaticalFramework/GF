@@ -27,8 +27,11 @@ incomplete concrete RelativeRomance of Relative =
 
     RelSlash rp slash = {
       s = \\ag,t,a,p,m => 
-          slash.c2.s ++ rp.s ! False ! {g = ag.g ; n = ag.n} ! slash.c2.c ++ 
-          slash.s ! t ! a ! p ! m ;
+          let aag = {g = ag.g ; n = ag.n} 
+          in
+          slash.c2.s ++ 
+          rp.s ! False ! aag ! slash.c2.c ++ 
+          slash.s ! aag ! t ! a ! p ! m ;    --- ragr
       c = Acc
       } ;
 
