@@ -6,17 +6,21 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Infrastructure with common implementations.</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-05-28 19:11:48 CEST</I><BR>
+<I>Author: </I><BR>
+Last update: Tue Jun 13 11:42:38 2006
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
+  <UL>
+  <LI><A HREF="#toc1">Infrastructure with common implementations.</A>
     <UL>
-    <LI><A HREF="#toc1">Top-level units</A>
-    <LI><A HREF="#toc2">Adverbs</A>
-    <LI><A HREF="#toc3">Tense, polarity, and anteriority</A>
+    <LI><A HREF="#toc2">Top-level units</A>
+    <LI><A HREF="#toc3">Adverbs</A>
+    <LI><A HREF="#toc4">Tense, polarity, and anteriority</A>
     </UL>
+  </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
@@ -26,6 +30,8 @@ Produced by
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
+<A NAME="toc1"></A>
+<H1>Infrastructure with common implementations.</H1>
 <P>
 This module defines the categories that uniformly have the linearization
 <CODE>{s : Str}</CODE> in all languages. 
@@ -42,27 +48,33 @@ Romance languages.
       cat
 </PRE>
 <P></P>
-<A NAME="toc1"></A>
+<A NAME="toc2"></A>
 <H2>Top-level units</H2>
 <P>
 Constructed in <A HREF="Text.html">Text</A>: <CODE>Text</CODE>.
 </P>
 <PRE>
         Text ;  -- text consisting of several phrases  e.g. "He is here. Why?"
-        Phr ;   -- phrase in a text                    e.g. "But get out please."
 </PRE>
 <P></P>
 <P>
-Constructed in <A HREF="Phrase.html">Phrase</A>: <CODE>Phr</CODE> and
+Constructed in <A HREF="Phrase.html">Phrase</A>:
 </P>
 <PRE>
+        Phr ;   -- phrase in a text                    e.g. "but be quiet please"
         Utt ;   -- sentence, question, word...         e.g. "be quiet"
         Voc ;   -- vocative or "please"                e.g. "my darling"
         PConj ; -- phrase-beginning conj.              e.g. "therefore"
+</PRE>
+<P></P>
+<P>
+Constructed in <A HREF="Sentence.html">Sentence</A>:
+</P>
+<PRE>
         SC ;    -- embedded sentence or question       e.g. "that it rains"
 </PRE>
 <P></P>
-<A NAME="toc2"></A>
+<A NAME="toc3"></A>
 <H2>Adverbs</H2>
 <P>
 Constructed in <A HREF="Adverb.html">Adverb</A>.  
@@ -77,7 +89,7 @@ Many adverbs are constructed in <A HREF="Structural.html">Structural</A>.
         CAdv ;  -- comparative adverb                  e.g. "more"
 </PRE>
 <P></P>
-<A NAME="toc3"></A>
+<A NAME="toc4"></A>
 <H2>Tense, polarity, and anteriority</H2>
 <PRE>
         Tense ; -- tense: present, past, future, conditional
