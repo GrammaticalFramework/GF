@@ -6,18 +6,22 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> The construction of nouns, noun phrases, and determiners</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-05-23 23:27:56 CEST</I><BR>
+<I>Author: </I><BR>
+Last update: Tue Jun 13 11:42:40 2006
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
+  <UL>
+  <LI><A HREF="#toc1">The construction of nouns, noun phrases, and determiners</A>
     <UL>
-    <LI><A HREF="#toc1">Noun phrases</A>
-    <LI><A HREF="#toc2">Determiners</A>
-    <LI><A HREF="#toc3">Common nouns</A>
-    <LI><A HREF="#toc4">Apposition</A>
+    <LI><A HREF="#toc2">Noun phrases</A>
+    <LI><A HREF="#toc3">Determiners</A>
+    <LI><A HREF="#toc4">Common nouns</A>
+    <LI><A HREF="#toc5">Apposition</A>
     </UL>
+  </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
@@ -27,11 +31,13 @@ Produced by
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
+<A NAME="toc1"></A>
+<H1>The construction of nouns, noun phrases, and determiners</H1>
 <PRE>
     abstract Noun = Cat ** {
 </PRE>
 <P></P>
-<A NAME="toc1"></A>
+<A NAME="toc2"></A>
 <H2>Noun phrases</H2>
 <P>
 The three main types of noun phrases are
@@ -66,7 +72,7 @@ verb or by an adverb.
         AdvNP   : NP -&gt; Adv -&gt; NP ;    -- Paris at midnight
 </PRE>
 <P></P>
-<A NAME="toc2"></A>
+<A NAME="toc3"></A>
 <H2>Determiners</H2>
 <P>
 The determiner has a fine-grained structure, in which a 'nucleus'
@@ -160,7 +166,7 @@ in semantically odd expressions.
 <P>
 Other determiners are defined in <A HREF="Structural.html">Structural</A>.
 </P>
-<A NAME="toc3"></A>
+<A NAME="toc4"></A>
 <H2>Common nouns</H2>
 <P>
 Simple nouns can be used as nouns outright.
@@ -206,7 +212,7 @@ to decide. Sentential complements are defined in <A HREF="Verb.html">Verb</A>.
         SentCN  : CN -&gt; SC  -&gt; CN ;   -- fact that John smokes, question if he does
 </PRE>
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc5"></A>
 <H2>Apposition</H2>
 <P>
 This is certainly overgenerating.

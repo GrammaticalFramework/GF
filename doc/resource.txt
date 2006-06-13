@@ -1,4 +1,13 @@
 The GF Resource Grammar Library
+Author: Aarne Ranta
+Last update: %%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an latex file from this file using:
+% txt2tags -ttex --toc gf-formalism.txt
+
+%!target:tex
+
 
 This document is about the 
 GF Resource Grammar Library. It presuppose knowledge of GF and its
@@ -31,9 +40,9 @@ enough to make the application work, because the noun must be
 produced in both singular and plural, and in four different
 cases. By using the resource grammar library, it is enough to
 write
-
+```
   lin Song = reg2N "Lied" "Lieder" neuter
-
+```
 and the eight forms are correctly generated. The resource grammar
 library contains a complete set of inflectional paradigms (such as
 regN2 here), enabling the definition of any lexical items.
@@ -46,19 +55,19 @@ particularly complex, because the adjectives have to agree in gender,
 number, and case, and also depend on what determiner is used
 ("ein Amerikanisches Lied" vs. "das Amerikanische Lied"). All this
 variation is taken care of by the resource grammar function
-
+```
   fun AdjCN : AP -> CN -> CN
-
+```
 and the resource grammar implementation of the rule adding properties
 to kinds is
-
+```
   lin PropKind kind prop = AdjCN prop kind
-
+```
 given that 
-
+```
   lincat Prop = AP
   lincat Kind = CN
-
+```
 The resource library API is devided into language-specific and language-independet
 parts. To put is roughly,
 - lexicon is language-specific
@@ -67,9 +76,9 @@ parts. To put is roughly,
 
 Thus, to render the above example in French instead of German, we need to
 pick a different linearization of Song,
-
+```
   lin Song = regGenN "chanson" feminine
-
+```
 But to linearize PropKind, we can use the very same rule as in German.
 The resource function AdjCN has different implementations in the two
 languages, but the application programmer need not care about the difference.
@@ -80,7 +89,7 @@ languages, but the application programmer need not care about the difference.
 To summarize the example, and also give a template for a programmer to work on,
 here is the complete implementation of a small system with songs and properties.
 The abstract syntax defines a "domain ontology":
-
+```
   abstract Music = {
     cat 
       Kind, 
@@ -90,10 +99,10 @@ The abstract syntax defines a "domain ontology":
       Song : Kind ;
       American : Property ;
     }
-
+```
 The concrete syntax is defined independently of language, by opening
 two interfaces: the resource Grammar and an application lexicon.
-
+```
   incomplete concrete MusicI of Music = open Grammar, MusicLex in {
     lincat 
       Kind = CN ;
@@ -103,19 +112,19 @@ two interfaces: the resource Grammar and an application lexicon.
       Song = UseN song_N ;
       American = PositA american_A ;
     }
-
+```
 The application lexicon MusicLex has an abstract syntax, that extends
 the resource category system Cat.
-
+```
   abstract MusicLex = Cat ** {
     fun
       song_N : N ;
       american_A : A ;
     }
-
+```
 Each language has its own concrete syntax, which opens the inflectional paradigms
 module for that language:
-
+```
   concrete MusicLexGer of MusicLex = CatGer ** open ParadigmsGer in {
     lin
       song_N = reg2N "Lied" "Lieder" neuter ;
@@ -127,10 +136,10 @@ module for that language:
       song_N = regGenN "chanson" feminine ;
       american_A = regA "américain" ;
     }
-
+```
 The top-level Music grammars are obtained by instantiating the two interfaces
 of MusicI:
-
+```
   concrete MusicGer of Music = MusicI with
     (Grammar = GrammarGer),
     (MusicLex = MusicLexGer) ;
@@ -138,12 +147,12 @@ of MusicI:
   concrete MusicFre of Music = MusicI with
     (Grammar = GrammarFre),
     (MusicLex = MusicLexFre) ;
-
+```
 To localize the system to a new language, all that is needed is two modules,
 one implementing MusicLex and the other instantiating Music. The latter is
 completely trivial, whereas the former one involves the choice of correct
 vocabulary and inflectional paradigms. For instance, Finnish is added as follows:
-
+```
   concrete MusicLexFin of MusicLex = CatFre ** open ParadigmsFin in {
     lin
       song_N = regN "kappale" ;
@@ -153,7 +162,7 @@ vocabulary and inflectional paradigms. For instance, Finnish is added as follows
   concrete MusicFin of Music = MusicI with
     (Grammar = GrammarFin),
     (MusicLex = MusicLexFin) ;
-
+```
 More work is of course needed if the language-independent linearizations in
 MusicI are not satisfactory for some language. The resource grammar guarantees
 that the linearizations are possible in all languages, in the sense of grammatical,
@@ -161,7 +170,7 @@ but they might of course be inadequate for stylistic reasons. Assume,
 for the sake of argument, that adjectival modification does not sound good in
 English, but that a relative clause would be preferrable. One can then start as
 before,
-
+```
   concrete MusicLexEng of MusicLex = CatFre ** open ParadigmsEng in {
     lin
       song_N = regN "song" ;
@@ -171,18 +180,18 @@ before,
   concrete MusicEng0 of Music = MusicI with
     (Grammar = GrammarEng),
     (MusicLex = MusicLexEng) ;
-
+```
 The module MusicEng0 would not be used on the top level, however, but
 another module would be built on top of it, with a restricted import from
 MusicEng0. MusicEng inherits everything from MusicEng0 except PropKind, and
 gives its own definition of this function:
-
+```
   concrete MusicEng of Music = MusicEng0 - [PropKind] ** open GrammarEng in {
     lin
       PropKind k p = 
         RelCN k (UseRCl TPres ASimul PPos (RelVP IdRP (UseComp (CompAP p)))) ;
     }
-
+```
 
 
 ===Parsing with resource grammars?===
@@ -225,7 +234,7 @@ will often use only restricted inheritance of MusicI.
 Inflection paradigms are defined separately for each language L
 in the module ParadigmsL. To test them, the command cc (= compute_concrete)
 can be used:
-
+```
   > i -retain german/ParadigmsGer.gf
 
   > cc regN "Schlange"
@@ -246,15 +255,15 @@ can be used:
       } ;
     g : Gender = Fem
   }
-
+```
 For the sake of convenience, every language implements these four paradigms:
-
+```
   oper
     regN : Str -> N ;   -- regular nouns
     regA : Str -> A :   -- regular adjectives
     regV : Str -> V ;   -- regular verbs
     dirV : V   -> V2 ;  -- direct transitive verbs
-
+```
 It is often possible to initialize a lexicon by just using these functions,
 and later revise it by using the more involved paradigms. For instance, in
 German we cannot use regN "Lied" for Song, because the result would be a
@@ -285,36 +294,36 @@ of resource grammars, it is a useful technique for application grammarians
 to browse the library. To find out what resource function does some
 particular job, you can just parse a string that exemplifies this job. For
 instance, to find out how sentences are built using transitive verbs, write
-
+```
   > i english/LangEng.gf
  
   > p -cat=Cl -fcfg "she loves him"
 
   PredVP (UsePron she_Pron) (ComplV2 love_V2 (UsePron he_Pron))
-
+```
 Parsing with the English resource grammar has an acceptable speed, but
 with most languages it takes just too much resources even to build the
 parser. However, examples parsed in one language can always be linearized into
 other languages:
-
+```
   > i italian/LangIta.gf
 
   > l PredVP (UsePron she_Pron) (ComplV2 love_V2 (UsePron he_Pron))
 
   lo ama
-
+```
 Therefore, one can use the English parser to write an Italian grammar, and also
 to write a language-independent (incomplete) grammar. One can also parse strings
 that are bizarre in English but the intended way of expression in another language.
 For instance, the phrase for "I am hungry" in Italian is literally "I have hunger".
 This can be built by parsing "I have beer" in LanEng and then writing
-
+```
   lin IamHungry = 
     let beer_N = regGenN "fame" feminine 
     in
     PredVP (UsePron i_Pron) (ComplV2 have_V2 
       (DetCN (DetSg MassDet NoOrd) (UseN beer_N))) ;
-
+```
 which uses ParadigmsIta.regGenN. 
 
 
@@ -323,25 +332,25 @@ which uses ParadigmsIta.regGenN.
 The technique of parsing with the resource grammar can be used in GF source files,
 endowed with the suffix .gfe ("GF examples"). The suffix tells GF to preprocess
 the file by replacing all expressions of the form
-
+```
   in Module.Cat "example string"
-
+```
 by the syntax trees obtained by parsing "example string" in Cat in Module.
 For instance,
-
+```
   lin IamHungry = 
     let beer_N = regGenN "fame" feminine 
     in
     (in LangEng.Cl "I have beer") ;
-
+```
 will result in the rule displayed in the previous section. The normal binding rules
 of functional programming (and GF) guarantee that local bindings of identifiers
 take precedence over constants of the same forms. Thus it is also possible to
 linearize functions taking arguments in this way:
-
+```
   lin
     PropKind car_N old_A = in LangEng.CN "old car" ;
-
+```
 However, the technique of example-based grammar writing has some limitations:
 - Ambiguity. If a string has several parses, the first one is returned, and
 it may not be the intended one. The other parses are shown in a comment, from
@@ -349,17 +358,17 @@ where they must/can be picked manually.
 - Lexicality. The arguments of a function must be atomic identifiers, and are thus
 not available for categories that have no lexical items. For instance, the PropKind
 rule above gives the result
-
+```
   lin
     PropKind car_N old_A = AdjCN (UseN car_N) (PositA old_A) ;  
-
+```
 However, it is possible to write a special lexicon that gives atomic rules for
 all those categories that can be used as arguments, for instance,
-
+```
   fun
     cat_CN : CN ;
     old_AP : AP ;
-
+```
 and then use this lexicon instead of the standard one included in Lang.
 
 
@@ -381,23 +390,23 @@ To this end, application grammarians may want to write their own views on the
 resource grammar. An example of this is already provided, in mathematical/Predication.
 Instead of the NP-VP structure, it permits clause construction directly from
 verbs and adjectives and their arguments:
-
+```
   predV     : V  -> NP -> Cl ;             -- "x converges"
   predV2    : V2 -> NP -> NP -> Cl ;       -- "x intersects y"
   predV3    : V3 -> NP -> NP -> NP -> Cl ; -- "x intersects y at z"
   predVColl : V  -> NP -> NP -> Cl ;       -- "x and y intersect"
   predA     : A  -> NP -> Cl ;             -- "x is even"
   predA2    : A2 -> NP -> NP -> Cl ;       -- "x is divisible by y"
-
+```
 The implementation of this module is the functor PredicationI:
-
+```
   predV v x = PredVP x (UseV v) ;
   predV2 v x y = PredVP x (ComplV2 v y) ;
   predV3 v x y z = PredVP x (ComplV3 v y z) ;
   predVColl v x y = PredVP (ConjNP and_Conj (BaseNP x y)) (UseV v) ;
   predA a x = PredVP x (UseComp (CompAP (PositA a))) ;
   predA2 a x y = PredVP x (UseComp (CompAP (ComplA2 a y))) ;
-
+```
 Of course, Predication can be opened together with Grammar, but using
 the resulting grammar for parsing can be frustrating, since having both
 ways of building clauses simultaneously available will produce spurious
@@ -420,15 +429,15 @@ The outermost linguistic structure is Text. Texts are composed
 from Phrases followed by punctuation marks - either of ".", "?" or
 "!" (with their proper variants in Spanish and Arabic). Here is an 
 example of a Text.
-
+```
   John walks. Why? He doesn't want to sleep!
-
+```
 Phrases are mostly built from Utterances, which in turn are
 declarative sentences, questions, or imperatives - but there
 are also "one-word utterances" consisting of noun phrases
 or other subsentential phrases. Some Phrases are atomic,
 for instance "yes" and "no". Here are some examples of Phrases.
-
+```
   yes
   come on, John
   but John walks
@@ -436,15 +445,15 @@ for instance "yes" and "no". Here are some examples of Phrases.
   don't you know that he is sleeping
   a glass of wine
   a glass of wine please
-
+```
 There is no connection between the punctuation marks and the
 types of utterances. This reflects the fact that the punctuation
 mark in a real text is selected as a function of the speech act
 rather than the grammatical form of an utterance. The following
 text is thus well-formed.
-
+```
   John walks. John walks? John walks!
-
+```
 What is the difference between Phrase and Utterance? Just technical:
 a Phrase is an Utterance with an optional leading conjunction ("but")
 and an optional tailing vocative ("John", "please").
@@ -457,7 +466,7 @@ is formed from a Clause, by fixing its Tense, Anteriority, and Polarity.
 The difference between Sentence and Clause is thus also rather technical.
 For example, each of the following strings has a distinct syntax tree
 in the category Sentence:
-
+```
   John walks
   John doesn't walk
   John walked
@@ -467,13 +476,13 @@ in the category Sentence:
   John will walk
   John won't walk
   ...
-
+```
 whereas in the category Clause all of them are just different forms of
 the same tree.
 
 The following syntax tree of the Text "John walks." gives an overview
 of the structural levels.
-
+```
 Node Constructor             Value type  Other constructors
 -----------------------------------------------------------
  1.  TFullStop               Text        TQuestMark
@@ -491,9 +500,9 @@ Node Constructor             Value type  Other constructors
 13.               walk_V)))) V           sleep_V
 14.      NoVoc)              Voc         please_Voc
 15.    TEmpty                Text            
-
+```
 Here are some examples of the results of changing constructors.
-
+```
  1. TFullStop -> TQuestMark   John walks?
  3. NoPConj   -> but_PConj    But John walks.
  6. TPres     -> TPast        John walked.
@@ -502,14 +511,18 @@ Here are some examples of the results of changing constructors.
 11. john_PN   -> mary_PN      Mary walks.
 13. walk_V    -> sleep_V      John sleeps.
 14. NoVoc     -> please_Voc   John sleeps please.
-
+```
 All constructors cannot of course be changed so freely, because the
 resulting tree would not remain well-typed. Here are some changes involving
 many constructors:
-
- 4- 5. UttS (UseCl ...) -> UttQS (UseQCl (... QuestCl ...))  Does John walk?
-10-11. UsePN john_PN    -> UsePron we_Pron                   We walk.
-12-13. UseV walk_V      -> ComplV2 love_V2 this_NP           John loves this. 
+```
+ 4- 5. UttS (UseCl ...) -> 
+         UttQS (UseQCl (... QuestCl ...)) Does John walk?
+10-11. UsePN john_PN    -> 
+         UsePron we_Pron                  We walk.
+12-13. UseV walk_V      -> 
+         ComplV2 love_V2 this_NP          John loves this. 
+```
 
 
 ===Parts of sentences===
@@ -520,13 +533,13 @@ to Sentences, lines 5-13. At this level, the major categories are
 NP (Noun Phrase) and VP (Verb Phrase). A Clause typically consists of just an
 NP and a VP. The internal structure of both NP and VP can be very complex,
 and these categories are mutually recursive: not only can a VP contain an NP,
-
+```
   [VP loves [NP Mary]]
-
+```
 but an NP can also contain a VP
-
+```
   [NP every man [RS who [VP walks]]]
-
+```
 (a labelled bracketing like this is of course just a rough approximation of
 a GF syntax tree, but still a useful device of exposition).
 
@@ -591,13 +604,124 @@ to the module Cat, which defines the type system common to the other modules.
 For instance, the types NP and VP are defined in Cat, and the module Verb only
 needs to know what is given in Cat, not what is given in Noun. To implement
 a rule such as
-
+```
   Verb.ComplV2 : V2 -> NP -> VP
-
+```
 it is enough to know the linearization type of NP (as well as those of V2 and VP, all
 given in Cat). It is not necessary to know what
 ways there are to build NPs (given in Noun), since all these ways must 
-conform to the linearization type defined in Cat.
+conform to the linearization type defined in Cat. Thus the format of
+category-specific modules is as follows:
+```
+  abstract Adjective = Cat ** {...}
+  abstract Noun      = Cat ** {...}
+  abstract Verb      = Cat ** {...}
+```
+
+
+===Top-level grammar and lexicon===
+
+The module Grammar collects all the category-specific modules into
+a complete grammar:
+```
+  abstract Grammar = 
+    Adjective, Noun, Verb, ..., Structural, Idiom
+```
+The module Structural is a lexicon of structural words (function words),
+such as determiners.
+The module Idiom is a collection of idiomatic structures whose
+implementation is very language-dependent. An example is existential
+structures ("there is", "es gibt", "il y a", etc).
+
+The module Lang combines Grammar with a Lexicon of ca. 350 content words:
+```
+  abstract Lang = Grammar, Lexicon
+```
+Using Lang instead of Grammar as a library may give the advantage of prociding
+for free some words needed in an application. But its main purpose is to
+help testing the resource library. It does not seem possible to maintain
+a general-purpose multilingual lexicon, and this is the form that the module
+Lexicon has.
 
 
 
+===Language-specific syntactic structures===
+
+The API collected in Grammar has been designed to be implementable for
+all languages in the resource package. It does contain some rules that
+are strange or superfluous in some languages; for instance, the distinction
+between definite and indefinite articles does not apply to Finnish and Russian.
+But such rules are still easy to implement: they only create some superfluous
+ambiguity in the languages in question.
+
+But the library makes no claim that all languages should have exactly the same
+abstract syntax. The common API is therefore extended by language-dependent
+rules. The top level of each languages looks as follows (with English as example):
+```
+  abstract English = Grammar, ExtraEngAbs, DictEngAbs
+```
+where ExtraEngAbs is a collection of syntactic structures specific to English,
+and DictEngAbs is an English dictionary (at the moment, it consists of IrregEngAbs,
+the irregular verbs of English). Each of these language-specific grammars has 
+the potential to grow into a full-scale grammar of the language. These grammar
+can also be used as libraries, but the possibility of using functors is lost.
+
+To give a better overview of language-specific structures, modules like ExtraEngAbs
+are built from a language-independent module ExtraAbs by restricted inheritance:
+```
+  abstract ExtraEngAbs = Extra [f,g,...]
+```
+Thus any category and function in Extra may be shared by a subset of all
+languages. One can see this set-up as a matrix, which tells what Extra structures
+are implemented in what languages. For the common API in Grammar, the matrix
+is filled with 1's (everything is implemented in every language).
+
+Language-specific extensions and the use of restricted
+inheritance is a recent addition to the resource grammar library, and
+has only been exploited in a very small scale so far.
+
+
+==API Documentation==
+
+===Top-level modules===
+
+%!include: ../lib/resource-1.0/abstract/Grammar.txt
+%!include: ../lib/resource-1.0/abstract/Lang.txt
+
+
+===Type system===
+
+%!include: ../lib/resource-1.0/abstract/Cat.txt
+%!include: ../lib/resource-1.0/abstract/Common.txt
+
+
+===Phrase category modules===
+
+%!include: ../lib/resource-1.0/abstract/Adjective.txt
+%!include: ../lib/resource-1.0/abstract/Adverb.txt
+%!include: ../lib/resource-1.0/abstract/Conjunction.txt
+%!include: ../lib/resource-1.0/abstract/Idiom.txt
+%!include: ../lib/resource-1.0/abstract/Noun.txt
+%!include: ../lib/resource-1.0/abstract/Numeral.txt
+%!include: ../lib/resource-1.0/abstract/OldLexicon.txt
+%!include: ../lib/resource-1.0/abstract/Phrase.txt
+%!include: ../lib/resource-1.0/abstract/Question.txt
+%!include: ../lib/resource-1.0/abstract/Relative.txt
+%!include: ../lib/resource-1.0/abstract/Sentence.txt
+%!include: ../lib/resource-1.0/abstract/Structural.txt
+%!include: ../lib/resource-1.0/abstract/Text.txt
+%!include: ../lib/resource-1.0/abstract/Verb.txt
+
+
+===Inflectional paradigms===
+
+%!include: ../lib/resource-1.0/danish/ParadigmsDan.txt
+%!include: ../lib/resource-1.0/english/ParadigmsEng.txt
+%!include: ../lib/resource-1.0/finnish/ParadigmsFin.txt
+%!include: ../lib/resource-1.0/french/ParadigmsFre.txt
+%!include: ../lib/resource-1.0/german/ParadigmsGer.txt
+%!include: ../lib/resource-1.0/italian/ParadigmsIta.txt
+%!include: ../lib/resource-1.0/norwegian/ParadigmsNor.txt
+%!include: ../lib/resource-1.0/russian/ParadigmsRus.txt
+%!include: ../lib/resource-1.0/spanish/ParadigmsSpa.txt
+%!include: ../lib/resource-1.0/swedish/ParadigmsSwe.txt
