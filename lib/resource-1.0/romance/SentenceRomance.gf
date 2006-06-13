@@ -11,23 +11,33 @@ incomplete concrete SentenceRomance of Sentence =
     ImpVP = mkImperative ;
 
     SlashV2 np v2 = 
-      mkClause 
-        (np.s ! Aton Nom) np.a 
-        (predV v2) **
-      {c2 = v2.c2} ;
+      {s = \\ag =>case <v2.c2.c,v2.c2.isDir> of {
+          <Acc,True> => 
+               (mkClause (np.s ! Aton Nom) np.a 
+                                 (insertAgr ag (predV v2))).s ;
+          _ => (mkClause (np.s ! Aton Nom) np.a (predV v2)).s
+          } ;
+       c2 = v2.c2
+      } ;
 
     SlashVVV2 np vv v2 = 
-      mkClause
-        (np.s ! Aton Nom) np.a
-        (insertComplement (\\a => prepCase vv.c2.c ++ v2.s ! VInfin) (predV vv)) **
-      {c2 = v2.c2} ;
+      {s = \\_ =>
+        (mkClause
+         (np.s ! Aton Nom) np.a
+         (insertComplement 
+           (\\a => prepCase vv.c2.c ++ v2.s ! VInfin) (predV vv))).s ;
+       c2 = v2.c2
+      } ;
 
     AdvSlash slash adv = {
-      s  = \\t,a,b,m => slash.s ! t ! a ! b ! m ++ adv.s ;
+      s  = \\ag,t,a,b,m => slash.s ! ag ! t ! a ! b ! m ++ adv.s ;
       c2 = slash.c2
       } ;
 
-    SlashPrep cl prep = cl ** {c2 = {s = prep.s ; c = prep.c ; isDir = False}} ;
+    SlashPrep cl prep = {
+      s  = \\_ => cl.s ; 
+      c2 = {s = prep.s ; c = prep.c ; isDir = False}
+      } ;
 
     EmbedS  s  = {s = conjThat ++ s.s ! Indic} ; --- mood
     EmbedQS qs = {s = qs.s ! QIndir} ;

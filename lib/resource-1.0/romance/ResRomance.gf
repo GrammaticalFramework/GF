@@ -134,6 +134,20 @@ oper
     ext   = vp.ext ;
     } ;
 
+-- Agreement with preceding relative or interrogative: 
+-- "les femmes que j'ai aimées"
+
+  insertAgr : AAgr -> VP -> VP = \ag,vp -> { 
+    s     = vp.s ;
+    agr   = vpAgrClit (agrP3 ag.g ag.n) ;
+    clAcc = vp.clAcc ; 
+    clDat = vp.clDat ; 
+    clit2 = vp.clit2 ; 
+    neg   = vp.neg ;
+    comp  = vp.comp ;
+    ext   = vp.ext ;
+    } ;
+
   insertAdv : Str -> VP -> VP = \co,vp -> { 
     s     = vp.s ;
     agr   = vp.agr ;

@@ -25,7 +25,7 @@ incomplete concrete QuestionRomance of Question =
     QuestSlash ip slash = {
       s = \\t,a,p => 
             let 
-              cls = slash.s ! t ! a ! p ! Indic ;
+              cls = slash.s ! ip.a ! t ! a ! p ! Indic ;
               who = slash.c2.s ++ ip.s ! slash.c2.c
             in table {
               QDir   => who ++ cls ;
