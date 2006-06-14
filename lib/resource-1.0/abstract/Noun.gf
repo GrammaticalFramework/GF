@@ -1,4 +1,4 @@
---1 The construction of nouns, noun phrases, and determiners
+--1 Noun: Nouns, noun phrases, and determiners
 
 abstract Noun = Cat ** {
 

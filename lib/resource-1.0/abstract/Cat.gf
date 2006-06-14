@@ -1,4 +1,4 @@
---1 The category system
+--1 Cat: the Category System
 
 -- The category system is central to the library in the sense
 -- that the other modules ($Adjective$, $Adverb$, $Noun$, $Verb$ etc)

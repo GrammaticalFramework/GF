@@ -1,4 +1,4 @@
---1 Questions and interrogative pronouns
+--1 Question: Questions and Interrogative Pronouns
 
 abstract Question = Cat ** {
 

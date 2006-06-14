@@ -27,26 +27,27 @@ is to make these rules available for application programmers,
 who can thereby concentrate on the semantic and stylistic
 aspects of their grammars, without having to think about 
 grammaticality. The targeted level of application grammarians
-is skilled programmer without knowledge linguistics, but with
-a good knowledge of the target languages. Such a combination of
+is that of a skilled programmer with
+a practical knowledge of the target languages, but without
+theoretical knowledge about their grammars.
+Such a combination of
 skills is typical of programmers who want to localize
 software to new languages.
 
 The current resource languages are
--``Dan``ish
--``Eng``lish
--``Fin``nish
--``Fre``nch
--``Ger``man
--``Ita``lian
--``Nor``wegian
--``Rus``sian
--``Spa``nish
--``Swe``dish
+- ``Dan``ish
+- ``Eng``lish
+- ``Fin``nish
+- ``Fre``nch
+- ``Ger``man
+- ``Ita``lian
+- ``Nor``wegian
+- ``Rus``sian
+- ``Spa``nish
+- ``Swe``dish
 
 
 The first three letters (``Dan`` etc) are used in grammar module names.
-
 
 To give an example application, consider
 music playing devices. In the application,
@@ -75,7 +76,7 @@ variation is taken care of by the resource grammar function
 ```
   fun AdjCN : AP -> CN -> CN
 ```
-and the resource grammar implementation of the rule adding properties
+The resource grammar implementation of the rule adding properties
 to kinds is
 ```
   lin PropKind kind prop = AdjCN prop kind
@@ -85,8 +86,8 @@ given that
   lincat Prop = AP
   lincat Kind = CN
 ```
-The resource library API is devided into language-specific and language-independet
-parts. To put it roughly,
+The resource library API is devided into language-specific 
+and language-independet parts. To put it roughly,
 - the lexicon API is language-specific
 - the syntax API is language-independent
 
@@ -98,7 +99,8 @@ pick a different linearization of ``Song``,
 ```
 But to linearize ``PropKind``, we can use the very same rule as in German.
 The resource function ``AdjCN`` has different implementations in the two
-languages, but the application programmer need not care about the difference.
+languages (e.g. a different word order in French), 
+but the application programmer need not care about the difference.
 
 
 ===A complete example===
@@ -117,7 +119,8 @@ The abstract syntax defines a "domain ontology":
       American : Property ;
     }
 ```
-The concrete syntax is defined independently of language, by opening
+The concrete syntax is defined by a functor (parametrize module),
+independently of language, by opening
 two interfaces: the resource ``Grammar`` and an application lexicon.
 ```
   incomplete concrete MusicI of Music = open Grammar, MusicLex in {
@@ -139,13 +142,13 @@ the resource category system ``Cat``.
       american_A : A ;
     }
 ```
-Each language has its own concrete syntax, which opens the inflectional paradigms
-module for that language:
+Each language has its own concrete syntax, which opens the 
+inflectional paradigms module for that language:
 ```
   concrete MusicLexGer of MusicLex = CatGer ** open ParadigmsGer in {
     lin
       song_N = reg2N "Lied" "Lieder" neuter ;
-      american_A = regA "amerikanisch" ;
+      american_A = regA "Amerikanisch" ;
     }
 
   concrete MusicLexFre of MusicLex = CatFre ** open ParadigmsFre in {
@@ -154,8 +157,8 @@ module for that language:
       american_A = regA "américain" ;
     }
 ```
-The top-level ``Music`` grammars are obtained by instantiating the two interfaces
-of ``MusicI``:
+The top-level ``Music`` grammars are obtained by 
+instantiating the two interfaces of ``MusicI``:
 ```
   concrete MusicGer of Music = MusicI with
     (Grammar = GrammarGer),
@@ -172,8 +175,10 @@ Both of these files can use the same ``path``, defined as
 The ``present`` category contains the compiled resources, restricted to
 present tense; ``alltenses`` has the full resources.
 
-To localize the music player system to a new language, all that is needed is two modules,
-one implementing ``MusicLex`` and the other instantiating ``Music``. The latter is
+To localize the music player system to a new language, 
+all that is needed is two modules,
+one implementing ``MusicLex`` and the other 
+instantiating ``Music``. The latter is
 completely trivial, whereas the former one involves the choice of correct
 vocabulary and inflectional paradigms. For instance, Finnish is added as follows:
 ```
@@ -222,8 +227,8 @@ gives its own definition of this function:
 ===Parsing with resource grammars?===
 
 The intended use of the resource grammar is as a library for writing
-application grammars. It is not designed for e.g. parsing newspaper text. There
-are several reasons why this is not so practical:
+application grammars. It is not designed for parsing e.g. newspaper text. There
+are several reasons why this is not practical:
 - Efficiency: the resource grammar uses complex data structures, in
 particular, discontinuous constituents, which make parsing slow and the
 parser size huge.
@@ -245,9 +250,9 @@ details such as inflection, agreement, and word order.
 It is for the same reasons that resource grammars are not adequate for translation.
 That the syntax API is implemented for different languages of course makes
 it possible to translate via it - but there is no guarantee of translation
-equivalence. Of course, the use of parametrized implementations such as ``MusicI``
+equivalence. Of course, the use of functor implementations such as ``MusicI``
 above only extends to those cases where the syntax API does give translation
-equivalence - but this must be seen as a limiting case, and real applications
+equivalence - but this must be seen as a limiting case, and bigger applications
 will often use only restricted inheritance of ``MusicI``.
 
 
@@ -257,7 +262,8 @@ will often use only restricted inheritance of ``MusicI``.
 ===Inflection paradigms===
 
 Inflection paradigms are defined separately for each language //L//
-in the module ``Paradigms``//L//. To test them, the command ``cc`` (= ``compute_concrete``)
+in the module ``Paradigms``//L//. To test them, the command 
+``cc`` (= ``compute_concrete``)
 can be used:
 ```
   > i -retain german/ParadigmsGer.gf
@@ -292,13 +298,14 @@ For the sake of convenience, every language implements these four paradigms:
 It is often possible to initialize a lexicon by just using these functions,
 and later revise it by using the more involved paradigms. For instance, in
 German we cannot use ``regN "Lied"`` for ``Song``, because the result would be a
-Masculine noun with the plural form ``"Liede"``. The individual ``Paradigms`` modules
+Masculine noun with the plural form ``"Liede"``. 
+The individual ``Paradigms`` modules
 tell what cases are covered by the regular heuristics.
 
 As a limiting case, one could even initialize the lexicon for a new language
-by copying the English (or some other already existing) lexicon. This will
+by copying the English (or some other already existing) lexicon. This would
 produce language with correct grammar but with content words directly borrowed from
-English.
+English - maybe not so strange in certain technical domains.
 
 
 
@@ -311,14 +318,16 @@ a group of one or more related categories. For instance, the module
 Thus the proper place to find out how nouns are modified with adjectives
 is ``Noun``, because the result of the construction is again a common noun.
 
-Browsing the libraries is helped by the gfdoc-generated HTML pages. 
+Browsing the libraries is helped by the gfdoc-generated HTML pages,
+whose LaTeX versions are included in the present document.
 However, this is still not easy, and the most efficient way is 
 probably to use the parser.
 Even though parsing is not an intended end-user application 
 of resource grammars, it is a useful technique for application grammarians
-to browse the library. To find out what resource function does some
-particular job, you can just parse a string that exemplifies this job. For
-instance, to find out how sentences are built using transitive verbs, write
+to browse the library. To find out which resource function implements
+a particular structure, one can just parse a string that exemplifies this 
+structure. For instance, to find out how sentences are built using 
+transitive verbs, write
 ```
   > i english/LangEng.gf
  
@@ -381,8 +390,8 @@ However, the technique of example-based grammar writing has some limitations:
 it may not be the intended one. The other parses are shown in a comment, from
 where they must/can be picked manually.
 - Lexicality. The arguments of a function must be atomic identifiers, and are thus
-not available for categories that have no lexical items. For instance, the ``PropKind``
-rule above gives the result
+not available for categories that have no lexical items. 
+For instance, the ``PropKind`` rule above gives the result
 ```
   lin
     PropKind car_N old_A = AdjCN (UseN car_N) (PositA old_A) ;  
@@ -400,8 +409,9 @@ and then use this lexicon instead of the standard one included in ``Lang``.
 
 ===Special-purpose APIs===
 
-To give an analogy with a well-known type setting program, GF can be compared
-with TeX and the resource grammar library with LaTeX. As TeX frees the author
+To give an analogy with the well-known type setting software, GF can be compared
+with TeX and the resource grammar library with LaTeX. 
+Just like TeX frees the author
 from thinking about low-level problems of page layout, so GF frees the grammarian
 from writing parsing and generation algorithms. But quite a lot of knowledge of
 //how// to write grammars is still needed, and the resource grammar library helps
@@ -436,12 +446,13 @@ The implementation of this module is the functor ``PredicationI``:
 Of course, ``Predication`` can be opened together with ``Grammar``, but using
 the resulting grammar for parsing can be frustrating, since having both
 ways of building clauses simultaneously available will produce spurious
-ambiguities. Using ``Predication`` without ``Verb`` for parsing is a better idea,
-since parsing is also made more efficient without rules for the ``VP`` category.
+ambiguities. But using just ``Predication`` without ``Verb`` 
+for parsing is a good idea,
+since parsing is more efficient without rules producing verb phrases.
 
 The use of special-purpose APIs is to some extent just an alternative
 to grammar writing by parsing, and its importance may decrease as parsing
-with resource grammars gets more efficient.
+with resource grammars becomes more practical.
 
 
 
@@ -556,9 +567,11 @@ many constructors:
 The linguistic phenomena mostly discussed in both traditional grammars and modern
 syntax belong to the level of Clauses, that is, lines 9-13, and occasionally
 to Sentences, lines 5-13. At this level, the major categories are
-``NP`` (Noun Phrase) and ``VP`` (Verb Phrase). A Clause typically consists of just an
-``NP`` and a ``VP``. The internal structure of both ``NP`` and ``VP`` can be very complex,
-and these categories are mutually recursive: not only can a ``VP`` contain an ``NP``,
+``NP`` (Noun Phrase) and ``VP`` (Verb Phrase). A Clause typically 
+consists of just an ``NP`` and a ``VP``. 
+The internal structure of both ``NP`` and ``VP`` can be very complex,
+and these categories are mutually recursive: not only can a ``VP`` 
+contain an ``NP``,
 ```
   [VP loves [NP Mary]]
 ```
@@ -588,7 +601,8 @@ The most frequent ways are
 
 
 **Verb**. 
-How to construct VPs. The main mechanism is verbs with their arguments, for instance,
+How to construct VPs. The main mechanism is verbs with their arguments, 
+for instance,
 - one-place verbs: "walks"
 - two-place verbs: "loves Mary"
 - three-place verbs: "gives her a kiss"
@@ -613,12 +627,13 @@ How to constuct ``AP``s. The main ways are
 **Adverb**. 
 How to construct ``Adv``s. The main ways are
 - from adjectives: "slowly"
-
+- as prepositional phrases: "in the car"
 
 
 ===Modules and their names===
 
-The resource modules are named after the kind of phrases that are constructed in them,
+The resource modules are named after the kind of 
+phrases that are constructed in them,
 and they can be roughly classified by the "level" or "size" of expressions that are
 formed in them:
 - Larger than sentence: ``Text``, ``Phrase`` 
@@ -631,7 +646,8 @@ Because of mutual recursion such as in embedded sentences, this classification i
 not a complete order. However, no mutual dependence is needed between the 
 modules in a formal sense - they can all be compiled separately. This is due
 to the module ``Cat``, which defines the type system common to the other modules.
-For instance, the types ``NP`` and ``VP`` are defined in ``Cat``, and the module ``Verb`` only
+For instance, the types ``NP`` and ``VP`` are defined in ``Cat``, 
+and the module ``Verb`` only
 needs to know what is given in ``Cat``, not what is given in ``Noun``. To implement
 a rule such as
 ```
@@ -665,7 +681,8 @@ The module ``Idiom`` is a collection of idiomatic structures whose
 implementation is very language-dependent. An example is existential
 structures ("there is", "es gibt", "il y a", etc).
 
-The module ``Lang`` combines ``Grammar`` with a ``Lexicon`` of ca. 350 content words:
+The module ``Lang`` combines ``Grammar`` with a ``Lexicon`` of 
+ca. 350 content words:
 ```
   abstract Lang = Grammar, Lexicon
 ```
@@ -693,18 +710,22 @@ rules. The top level of each languages looks as follows (with English as example
   abstract English = Grammar, ExtraEngAbs, DictEngAbs
 ```
 where ``ExtraEngAbs`` is a collection of syntactic structures specific to English,
-and ``DictEngAbs`` is an English dictionary (at the moment, it consists of ``IrregEngAbs``,
+and ``DictEngAbs`` is an English dictionary 
+(at the moment, it consists of ``IrregEngAbs``,
 the irregular verbs of English). Each of these language-specific grammars has 
 the potential to grow into a full-scale grammar of the language. These grammar
 can also be used as libraries, but the possibility of using functors is lost.
 
-To give a better overview of language-specific structures, modules like ``ExtraEngAbs``
-are built from a language-independent module ``ExtraAbs`` by restricted inheritance:
+To give a better overview of language-specific structures, 
+modules like ``ExtraEngAbs``
+are built from a language-independent module ``ExtraAbs`` 
+by restricted inheritance:
 ```
   abstract ExtraEngAbs = Extra [f,g,...]
 ```
 Thus any category and function in ``Extra`` may be shared by a subset of all
-languages. One can see this set-up as a matrix, which tells what ``Extra`` structures
+languages. One can see this set-up as a matrix, which tells 
+what ``Extra`` structures
 are implemented in what languages. For the common API in ``Grammar``, the matrix
 is filled with 1's (everything is implemented in every language).
 
@@ -735,7 +756,6 @@ has only been exploited in a very small scale so far.
 %!include: ../lib/resource-1.0/abstract/Idiom.txt
 %!include: ../lib/resource-1.0/abstract/Noun.txt
 %!include: ../lib/resource-1.0/abstract/Numeral.txt
-%!include: ../lib/resource-1.0/abstract/OldLexicon.txt
 %!include: ../lib/resource-1.0/abstract/Phrase.txt
 %!include: ../lib/resource-1.0/abstract/Question.txt
 %!include: ../lib/resource-1.0/abstract/Relative.txt

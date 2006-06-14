@@ -1,4 +1,4 @@
---1 Infrastructure with common implementations.
+--1 Common: Structures with Common Implementations.
 
 -- This module defines the categories that uniformly have the linearization
 -- ${s : Str}$ in all languages. 

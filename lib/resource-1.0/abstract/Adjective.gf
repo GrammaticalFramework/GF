@@ -1,4 +1,4 @@
---1 Adjectives and adjectival phrases
+--1 Adjective: Adjectives and Adjectival Phrases
 
 abstract Adjective = Cat ** {
 
