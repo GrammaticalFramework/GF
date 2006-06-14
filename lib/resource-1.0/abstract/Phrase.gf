@@ -1,4 +1,4 @@
---1 Phrases and utterances
+--1 Phrase: Phrases and Utterances
 
 abstract Phrase = Cat ** {
 

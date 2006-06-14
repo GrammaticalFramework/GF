@@ -1,4 +1,4 @@
---1 Sentences, clauses, imperatives, and sentential complements
+--1 Sentence: Sentences, Clauses, and Imperatives
 
 abstract Sentence = Cat ** {
 

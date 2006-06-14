@@ -1,4 +1,4 @@
---1 Idiomatic expressions
+--1 Idiom: Idiomatic Expressions
 
 abstract Idiom = Cat ** {
 

@@ -1,4 +1,4 @@
---1 Adverbs and adverbial phrases
+--1 Adverb: Adverbs and Adverbial Phrases
 
 abstract Adverb = Cat ** {
 

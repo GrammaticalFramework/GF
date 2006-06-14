@@ -1,4 +1,4 @@
---1 Coordination
+--1 Conjunction: Coordination
 
 -- Coordination is defined for many different categories; here is
 -- a sample. The rules apply to *lists* of two or more elements,

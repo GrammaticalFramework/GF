@@ -1,7 +1,5 @@
---1 GF Resource Grammar API for Structural Words
+--1 Structural: Structural Words
 -- 
--- AR 21/11/2003 -- 30/11/2005
---
 -- Here we have some words belonging to closed classes and appearing
 -- in all languages we have considered.
 -- Sometimes they are not really meaningful, e.g. $we_Pron$ in Spanish
