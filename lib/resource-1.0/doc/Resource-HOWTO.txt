@@ -14,11 +14,19 @@ resource grammar API for a new language. We will //not// cover how
 to use the resource grammar, nor how to change the API. But we
 will give some hints how to extend the API.
 
+A manual for using the resource grammar is found in
 
-**Notice**. This document concerns the API v. 1.0 which has not
-yet been released. You can find the current code
-in [``GF/lib/resource-1.0/`` ..]. See the
-[``resource-1.0/README`` ../README] for
+[``http://www.cs.chalmers.se/~aarne/GF/doc/resource.pdf`` http://www.cs.chalmers.se/~aarne/GF/doc/resource.pdf].
+
+A tutorial on GF, also introducing the idea of resource grammars, is found in
+
+[``http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html`` ../../../doc/tutorial/gf-tutorial2.html].
+
+This document concerns the API v. 1.0. You can find the current code in 
+
+[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/`` ..]
+
+See the [``README`` ../README] for
 details on how this differs from previous versions.
 
 
@@ -28,10 +36,13 @@ details on how this differs from previous versions.
 The API is divided into a bunch of ``abstract`` modules.
 The following figure gives the dependencies of these modules.
 
-[Lang.png] 
+[Grammar.png] 
 
-The module structure is rather flat: almost every module is a direct
-parent of the top module ``Lang``. The idea
+Thus the API consists of a grammar and a lexicon, which is
+provided for test purposes.
+
+The module structure is rather flat: most modules are direct
+parents of ``Grammar``. The idea
 is that you can concentrate on one linguistic aspect at a time, or
 also distribute the work among several authors. The module ``Cat``
 defines the "glue" that ties the aspects together - a type system
@@ -125,6 +136,38 @@ in the API that it is impossible to give exact translation equivalents in
 different languages on the level of a resource grammar. In other words,
 application grammars are likely to use the resource in different ways for
 different languages.
+
+
+==Language-dependent syntax modules==
+
+In addition to the common API, there is room for language-dependent extensions
+of the resource. The top level of each languages looks as follows (with English as example):
+```
+  abstract English = Grammar, ExtraEngAbs, DictEngAbs
+```
+where ``ExtraEngAbs`` is a collection of syntactic structures specific to English,
+and ``DictEngAbs`` is an English dictionary 
+(at the moment, it consists of ``IrregEngAbs``,
+the irregular verbs of English). Each of these language-specific grammars has 
+the potential to grow into a full-scale grammar of the language. These grammar
+can also be used as libraries, but the possibility of using functors is lost.
+
+To give a better overview of language-specific structures, 
+modules like ``ExtraEngAbs``
+are built from a language-independent module ``ExtraAbs`` 
+by restricted inheritance:
+```
+  abstract ExtraEngAbs = Extra [f,g,...]
+```
+Thus any category and function in ``Extra`` may be shared by a subset of all
+languages. One can see this set-up as a matrix, which tells 
+what ``Extra`` structures
+are implemented in what languages. For the common API in ``Grammar``, the matrix
+is filled with 1's (everything is implemented in every language).
+
+In a minimal resource grammar implementation, the language-dependent
+extensions are just empty modules, but it is good to provide them for
+the sake of uniformity.
 
 
 ==The core of the syntax==
