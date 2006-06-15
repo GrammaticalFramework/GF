@@ -6,21 +6,17 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Symbolic expressions</H1>
 <FONT SIZE="4">
-<I>Author: </I><BR>
-Last update: Tue Jun 13 11:42:44 2006
+<I>Last update: 2006-03-17 14:11:37 CET</I><BR>
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
-  <UL>
-  <LI><A HREF="#toc1">Symbolic expressions</A>
     <UL>
-    <LI><A HREF="#toc2">Noun phrases with symbols and numbers</A>
-    <LI><A HREF="#toc3">Sentence consisting of a formula</A>
-    <LI><A HREF="#toc4">Symbol lists</A>
+    <LI><A HREF="#toc1">Noun phrases with symbols and numbers</A>
+    <LI><A HREF="#toc2">Sentence consisting of a formula</A>
+    <LI><A HREF="#toc3">Symbol lists</A>
     </UL>
-  </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
@@ -30,8 +26,6 @@ Produced by
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
-<A NAME="toc1"></A>
-<H1>Symbolic expressions</H1>
 <P>
 <B>Note</B>. This module is not automatically included in the main
 grammar <A HREF="Lang.html">Lang</A>.
@@ -40,7 +34,7 @@ grammar <A HREF="Lang.html">Lang</A>.
     abstract Symbol = Cat, PredefAbs ** {
 </PRE>
 <P></P>
-<A NAME="toc2"></A>
+<A NAME="toc1"></A>
 <H2>Noun phrases with symbols and numbers</H2>
 <PRE>
     fun
@@ -52,13 +46,13 @@ grammar <A HREF="Lang.html">Lang</A>.
       CNSymbNP : Det -&gt; CN -&gt; [Symb] -&gt; NP ; -- (the) (2) numbers x and y
 </PRE>
 <P></P>
-<A NAME="toc3"></A>
+<A NAME="toc2"></A>
 <H2>Sentence consisting of a formula</H2>
 <PRE>
       SymbS    : Symb -&gt; S ;                 -- A
 </PRE>
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc3"></A>
 <H2>Symbol lists</H2>
 <P>
 A symbol list has at least two elements. The last two are separated

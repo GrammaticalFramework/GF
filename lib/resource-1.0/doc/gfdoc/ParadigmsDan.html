@@ -2,63 +2,49 @@
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE> Danish Lexical Paradigms</TITLE>
 </HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1> Danish Lexical Paradigms</H1>
 <FONT SIZE="4">
+<I>Last update: 2006-06-15 14:44:29 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
-  <UL>
-  <LI><A HREF="#toc1">Danish Lexical Paradigms</A>
     <UL>
-    <LI><A HREF="#toc2">Parameters</A>
-    <LI><A HREF="#toc3">Nouns</A>
+    <LI><A HREF="#toc1">Parameters</A>
+    <LI><A HREF="#toc2">Nouns</A>
       <UL>
-      <LI><A HREF="#toc4">Compound nouns</A>
-      <LI><A HREF="#toc5">Relational nouns</A>
-      <LI><A HREF="#toc6">Relational common noun phrases</A>
-      <LI><A HREF="#toc7">Proper names and noun phrases</A>
+      <LI><A HREF="#toc3">Compound nouns</A>
+      <LI><A HREF="#toc4">Relational nouns</A>
+      <LI><A HREF="#toc5">Relational common noun phrases</A>
+      <LI><A HREF="#toc6">Proper names and noun phrases</A>
       </UL>
-    <LI><A HREF="#toc8">Adjectives</A>
+    <LI><A HREF="#toc7">Adjectives</A>
       <UL>
-      <LI><A HREF="#toc9">Two-place adjectives</A>
+      <LI><A HREF="#toc8">Two-place adjectives</A>
       </UL>
-    <LI><A HREF="#toc10">Adverbs</A>
-    <LI><A HREF="#toc11">Prepositions</A>
-    <LI><A HREF="#toc12">Verbs</A>
+    <LI><A HREF="#toc9">Adverbs</A>
+    <LI><A HREF="#toc10">Verbs</A>
       <UL>
-      <LI><A HREF="#toc13">Verbs with //være// as auxiliary</A>
-      <LI><A HREF="#toc14">Verbs with a particle</A>
-      <LI><A HREF="#toc15">Deponent verbs</A>
-      <LI><A HREF="#toc16">Two-place verbs</A>
-      <LI><A HREF="#toc17">Three-place verbs</A>
-      <LI><A HREF="#toc18">Other complement patterns</A>
+      <LI><A HREF="#toc11">Verbs with //være// as auxiliary</A>
+      <LI><A HREF="#toc12">Verbs with a particle</A>
+      <LI><A HREF="#toc13">Deponent verbs</A>
+      <LI><A HREF="#toc14">Two-place verbs</A>
+      <LI><A HREF="#toc15">Three-place verbs</A>
+      <LI><A HREF="#toc16">Other complement patterns</A>
       </UL>
-    <LI><A HREF="#toc19">Definitions of the paradigms</A>
     </UL>
-  </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
 <P>
-Author: 
-Last update: Tue Jun 13 11:42:42 2006
-</P>
-<P>
 Produced by 
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
-<P>
-==
-</P>
-<P>
-# -path=.:../scandinavian:../common:../abstract:../../prelude
-</P>
-<A NAME="toc1"></A>
-<H1>Danish Lexical Paradigms</H1>
 <P>
 Aarne Ranta 2003
 </P>
@@ -97,7 +83,7 @@ words.
         CatDan in {
 </PRE>
 <P></P>
-<A NAME="toc2"></A>
+<A NAME="toc1"></A>
 <H2>Parameters</H2>
 <P>
 To abstract over gender names, we define the following identifiers.
@@ -134,10 +120,11 @@ To abstract over case names, we define the following.
 Prepositions used in many-argument functions are just strings.
 </P>
 <PRE>
-      Preposition : Type = Str ;
+      mkPrep : Str -&gt; Prep ;
+      noPrep : Prep ;         -- empty string
 </PRE>
 <P></P>
-<A NAME="toc3"></A>
+<A NAME="toc2"></A>
 <H2>Nouns</H2>
 <P>
 Worst case: give all four forms. The gender is computed from the
@@ -180,19 +167,19 @@ indefinite
       mk3N : (bil,bilen,biler : Str) -&gt; N ;
 </PRE>
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc3"></A>
 <H3>Compound nouns</H3>
 <P>
 All the functions above work quite as well to form compound nouns,
 such as <I>fotboll</I>. 
 </P>
-<A NAME="toc5"></A>
+<A NAME="toc4"></A>
 <H3>Relational nouns</H3>
 <P>
 Relational nouns (<I>daughter of x</I>) need a preposition. 
 </P>
 <PRE>
-      mkN2 : N -&gt; Preposition -&gt; N2 ;
+      mkN2 : N -&gt; Prep -&gt; N2 ;
 </PRE>
 <P></P>
 <P>
@@ -204,17 +191,18 @@ shortcut for regular, <CODE>nonhuman</CODE> relational nouns with <I>av</I>.
 </PRE>
 <P></P>
 <P>
-Use the function <CODE>mkPreposition</CODE> or see the section on prepositions below to  
+Use the function <CODE>mkPrep</CODE> or see the section on prepositions below to  
 form other prepositions.
 </P>
 <P>
-Three-place relational nouns (<I>the connection from x to y</I>) need two prepositions.
+Three-place relational nouns (<I>the connection from x to y</I>) 
+need two prepositions.
 </P>
 <PRE>
-      mkN3 : N -&gt; Preposition -&gt; Preposition -&gt; N3 ;
+      mkN3 : N -&gt; Prep -&gt; Prep -&gt; N3 ;
 </PRE>
 <P></P>
-<A NAME="toc6"></A>
+<A NAME="toc5"></A>
 <H3>Relational common noun phrases</H3>
 <P>
 In some cases, you may want to make a complex <CODE>CN</CODE> into a
@@ -222,13 +210,14 @@ relational noun (e.g. <I>the old town hall of</I>). However, <CODE>N2</CODE> and
 <CODE>N3</CODE> are purely lexical categories. But you can use the <CODE>AdvCN</CODE>
 and <CODE>PrepNP</CODE> constructions to build phrases like this.
 </P>
-<A NAME="toc7"></A>
+<A NAME="toc6"></A>
 <H3>Proper names and noun phrases</H3>
 <P>
 Proper names, with a regular genitive, are formed as follows
 </P>
 <PRE>
-      regPN : Str -&gt; Gender -&gt; PN ;          -- John, John's
+      mkPN  : Str -&gt; Gender -&gt; PN ;          -- Paris neutrum
+      regPN : Str -&gt; PN ;                    -- utrum gender
 </PRE>
 <P></P>
 <P>
@@ -246,7 +235,7 @@ genitive, you can use the worst-case function.
       mkNP : Str -&gt; Str -&gt; Number -&gt; Gender -&gt; NP ; 
 </PRE>
 <P></P>
-<A NAME="toc8"></A>
+<A NAME="toc7"></A>
 <H2>Adjectives</H2>
 <P>
 Non-comparison one-place adjectives need three forms: 
@@ -269,13 +258,13 @@ In most cases, two forms are enough.
       mk2A : (stor,stort : Str) -&gt; A ;
 </PRE>
 <P></P>
-<A NAME="toc9"></A>
+<A NAME="toc8"></A>
 <H3>Two-place adjectives</H3>
 <P>
 Two-place adjectives need a preposition for their second argument.
 </P>
 <PRE>
-      mkA2 : A -&gt; Preposition -&gt; A2 ;
+      mkA2 : A -&gt; Prep -&gt; A2 ;
 </PRE>
 <P></P>
 <P>
@@ -316,7 +305,7 @@ long adjective, the following pattern is used:
       compoundA : A -&gt; A ; -- -/mer/mest norsk
 </PRE>
 <P></P>
-<A NAME="toc10"></A>
+<A NAME="toc9"></A>
 <H2>Adverbs</H2>
 <P>
 Adverbs are not inflected. Most lexical ones have position
@@ -334,16 +323,7 @@ Adverbs modifying adjectives and sentences can also be formed.
       mkAdA : Str -&gt; AdA ;
 </PRE>
 <P></P>
-<A NAME="toc11"></A>
-<H2>Prepositions</H2>
-<P>
-A preposition is just a string.
-</P>
-<PRE>
-      mkPreposition : Str -&gt; Preposition ;
-</PRE>
-<P></P>
-<A NAME="toc12"></A>
+<A NAME="toc10"></A>
 <H2>Verbs</H2>
 <P>
 The worst case needs six forms.
@@ -374,7 +354,7 @@ In practice, it is enough to give three forms, as in school books.
       irregV : (drikke, drakk, drukket  : Str) -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc13"></A>
+<A NAME="toc11"></A>
 <H3>Verbs with //være// as auxiliary</H3>
 <P>
 By default, the auxiliary is <I>have</I>. This function changes it to <I>være</I>.
@@ -383,7 +363,7 @@ By default, the auxiliary is <I>have</I>. This function changes it to <I>være</I
       vaereV : V -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc14"></A>
+<A NAME="toc12"></A>
 <H3>Verbs with a particle</H3>
 <P>
 The particle, such as in <I>switch on</I>, is given as a string.
@@ -392,7 +372,7 @@ The particle, such as in <I>switch on</I>, is given as a string.
       partV  : V -&gt; Str -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc15"></A>
+<A NAME="toc13"></A>
 <H3>Deponent verbs</H3>
 <P>
 Some words are used in passive forms only, e.g. <I>hoppas</I>, some as
@@ -403,31 +383,31 @@ reflexive e.g. <I>ångra sig</I>.
       reflV : V -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc16"></A>
+<A NAME="toc14"></A>
 <H3>Two-place verbs</H3>
 <P>
 Two-place verbs need a preposition, except the special case with direct object.
 (transitive verbs). Notice that a particle comes from the <CODE>V</CODE>.
 </P>
 <PRE>
-      mkV2  : V -&gt; Preposition -&gt; V2 ;
+      mkV2  : V -&gt; Prep -&gt; V2 ;
     
       dirV2 : V -&gt; V2 ;
 </PRE>
 <P></P>
-<A NAME="toc17"></A>
+<A NAME="toc15"></A>
 <H3>Three-place verbs</H3>
 <P>
 Three-place (ditransitive) verbs need two prepositions, of which
 the first one or both can be absent.
 </P>
 <PRE>
-      mkV3     : V -&gt; Str -&gt; Str -&gt; V3 ;    -- speak, with, about
-      dirV3    : V -&gt; Str -&gt; V3 ;           -- give,_,to
+      mkV3     : V -&gt; Prep -&gt; Prep -&gt; V3 ;    -- speak, with, about
+      dirV3    : V -&gt; Prep -&gt; V3 ;           -- give,_,to
       dirdirV3 : V -&gt; V3 ;                  -- give,_,_
 </PRE>
 <P></P>
-<A NAME="toc18"></A>
+<A NAME="toc16"></A>
 <H3>Other complement patterns</H3>
 <P>
 Verbs and adjectives can take complements such as sentences,
@@ -436,18 +416,18 @@ questions, verb phrases, and adjectives.
 <PRE>
       mkV0  : V -&gt; V0 ;
       mkVS  : V -&gt; VS ;
-      mkV2S : V -&gt; Str -&gt; V2S ;
+      mkV2S : V -&gt; Prep -&gt; V2S ;
       mkVV  : V -&gt; VV ;
-      mkV2V : V -&gt; Str -&gt; Str -&gt; V2V ;
+      mkV2V : V -&gt; Prep -&gt; Prep -&gt; V2V ;
       mkVA  : V -&gt; VA ;
-      mkV2A : V -&gt; Str -&gt; V2A ;
+      mkV2A : V -&gt; Prep -&gt; V2A ;
       mkVQ  : V -&gt; VQ ;
-      mkV2Q : V -&gt; Str -&gt; V2Q ;
+      mkV2Q : V -&gt; Prep -&gt; V2Q ;
     
       mkAS  : A -&gt; AS ;
-      mkA2S : A -&gt; Str -&gt; A2S ;
+      mkA2S : A -&gt; Prep -&gt; A2S ;
       mkAV  : A -&gt; AV ;
-      mkA2V : A -&gt; Str -&gt; A2V ;
+      mkA2V : A -&gt; Prep -&gt; A2V ;
 </PRE>
 <P></P>
 <P>
@@ -461,12 +441,6 @@ as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
       AS, A2S, AV, A2V : Type ;
 </PRE>
 <P></P>
-<A NAME="toc19"></A>
-<H2>Definitions of the paradigms</H2>
-<P>
-The definitions should not bother the user of the API. So they are
-hidden from the document.
-</P>
 
 <!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc danish/ParadigmsDan.txt -->

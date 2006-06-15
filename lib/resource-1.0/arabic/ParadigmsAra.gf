@@ -2,7 +2,7 @@
 
 --1 Arabic Lexical Paradigms
 --
--- Aarne Ranta 2003--2005
+-- Ali El Dada 2005--2006
 --
 -- This is an API to the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming

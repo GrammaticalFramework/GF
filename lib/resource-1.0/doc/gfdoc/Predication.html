@@ -6,24 +6,20 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> A Small Predication Library</H1>
 <FONT SIZE="4">
-<I>Author: </I><BR>
-Last update: Tue Jun 13 11:42:44 2006
+<I>Last update: 2006-02-28 09:26:58 CET</I><BR>
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
-  <UL>
-  <LI><A HREF="#toc1">A Small Predication Library</A>
     <UL>
-    <LI><A HREF="#toc2">The category of atomic sentences</A>
-    <LI><A HREF="#toc3">Predication patterns.</A>
-    <LI><A HREF="#toc4">Imperatives and infinitives.</A>
-    <LI><A HREF="#toc5">Individual-valued function applications</A>
-    <LI><A HREF="#toc6">Families of types</A>
-    <LI><A HREF="#toc7">Type constructor</A>
+    <LI><A HREF="#toc1">The category of atomic sentences</A>
+    <LI><A HREF="#toc2">Predication patterns.</A>
+    <LI><A HREF="#toc3">Imperatives and infinitives.</A>
+    <LI><A HREF="#toc4">Individual-valued function applications</A>
+    <LI><A HREF="#toc5">Families of types</A>
+    <LI><A HREF="#toc6">Type constructor</A>
     </UL>
-  </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
@@ -33,8 +29,6 @@ Produced by
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
-<A NAME="toc1"></A>
-<H1>A Small Predication Library</H1>
 <P>
 (c) Aarne Ranta 2003-2006 under Gnu GPL.
 </P>
@@ -46,7 +40,7 @@ API of resource grammars.
     abstract Predication = Cat ** {
 </PRE>
 <P></P>
-<A NAME="toc2"></A>
+<A NAME="toc1"></A>
 <H2>The category of atomic sentences</H2>
 <P>
 We want to use sentences in positive and negative forms but do not care about
@@ -58,7 +52,7 @@ tenses.
       NegCl     : Cl -&gt; S ;                -- negative sentence:   "x doesn't intersect y"
 </PRE>
 <P></P>
-<A NAME="toc3"></A>
+<A NAME="toc2"></A>
 <H2>Predication patterns.</H2>
 <PRE>
       predV     : V  -&gt; NP -&gt; Cl ;         -- one-place verb:      "x converges"
@@ -76,14 +70,14 @@ tenses.
       predPrep  : Prep -&gt; NP -&gt; NP -&gt; Cl ; -- preposition:         "x is outside y"
 </PRE>
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc3"></A>
 <H2>Imperatives and infinitives.</H2>
 <PRE>
       impV2     : V2 -&gt; NP -&gt; Phr ;        -- imperative:          "solve the equation E"
       infV2     : V2 -&gt; NP -&gt; Phr ;        -- infinitive:          "to solve the equation E"
 </PRE>
 <P></P>
-<A NAME="toc5"></A>
+<A NAME="toc4"></A>
 <H2>Individual-valued function applications</H2>
 <PRE>
       appN2     : N2 -&gt; NP -&gt; NP ;         -- one-place function:  "the successor of x"
@@ -91,7 +85,7 @@ tenses.
       appColl   : N2 -&gt; NP -&gt; NP -&gt; NP ;   -- collective function: "the sum of x and y"
 </PRE>
 <P></P>
-<A NAME="toc6"></A>
+<A NAME="toc5"></A>
 <H2>Families of types</H2>
 <P>
 These are expressed by relational nouns applied to arguments.
@@ -102,7 +96,7 @@ These are expressed by relational nouns applied to arguments.
       famColl   : N2 -&gt; NP -&gt; NP -&gt; CN ;   -- collective family:   "path between x and y"
 </PRE>
 <P></P>
-<A NAME="toc7"></A>
+<A NAME="toc6"></A>
 <H2>Type constructor</H2>
 <P>
 This is similar to a family except that the argument is a type.

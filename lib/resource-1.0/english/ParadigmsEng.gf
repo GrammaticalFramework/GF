@@ -58,8 +58,8 @@ oper
   genitive   : Case ;
 
 -- Prepositions are used in many-argument functions for rection.
+-- The resource category $Prep$ is used.
 
-  Preposition : Type ;
 
 
 --2 Nouns
@@ -96,19 +96,19 @@ oper
 -- 
 -- Relational nouns ("daughter of x") need a preposition. 
 
-  mkN2 : N -> Preposition -> N2 ;
+  mkN2 : N -> Prep -> N2 ;
 
 -- The most common preposition is "of", and the following is a
 -- shortcut for regular relational nouns with "of".
 
   regN2 : Str -> N2 ;
 
--- Use the function $mkPreposition$ or see the section on prepositions below to  
+-- Use the function $mkPrep$ or see the section on prepositions below to  
 -- form other prepositions.
 --
 -- Three-place relational nouns ("the connection from x to y") need two prepositions.
 
-  mkN3 : N -> Preposition -> Preposition -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ;
 
 
 --3 Relational common noun phrases
@@ -116,15 +116,16 @@ oper
 -- In some cases, you may want to make a complex $CN$ into a
 -- relational noun (e.g. "the old town hall of").
 
-  cnN2 : CN -> Preposition -> N2 ;
-  cnN3 : CN -> Preposition -> Preposition -> N3 ;
+  cnN2 : CN -> Prep -> N2 ;
+  cnN3 : CN -> Prep -> Prep -> N3 ;
 
 -- 
 --3 Proper names and noun phrases
 --
 -- Proper names, with a regular genitive, are formed as follows
 
-  regPN : Str -> Gender -> PN ;          -- John, John's
+  regPN    : Str -> PN ;          
+  regGenPN : Str -> Gender -> PN ;     -- John, John's
 
 -- Sometimes you can reuse a common noun as a proper name, e.g. "Bank".
 
@@ -151,7 +152,7 @@ oper
 --
 -- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Preposition -> A2 ;
+  mkA2 : A -> Prep -> A2 ;
 
 -- Comparison adjectives may two more forms. 
 
@@ -197,8 +198,8 @@ oper
 -- A preposition as used for rection in the lexicon, as well as to
 -- build $PP$s in the resource API, just requires a string.
 
-  mkPreposition : Str -> Preposition ;
-  mkPrep        : Str -> Prep ;
+  mkPrep : Str -> Prep ;
+  noPrep : Prep ;
 
 -- (These two functions are synonyms.)
 
@@ -247,7 +248,7 @@ oper
 -- Two-place verbs need a preposition, except the special case with direct object.
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
-  mkV2  : V -> Preposition -> V2 ;
+  mkV2  : V -> Prep -> V2 ;
 
   dirV2 : V -> V2 ;
 
@@ -256,9 +257,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Preposition -> Preposition -> V3 ; -- speak, with, about
-  dirV3    : V -> Preposition -> V3 ;                -- give,_,to
-  dirdirV3 : V -> V3 ;                               -- give,_,_
+  mkV3     : V -> Prep -> Prep -> V3 ;   -- speak, with, about
+  dirV3    : V -> Prep -> V3 ;           -- give,_,to
+  dirdirV3 : V -> V3 ;                   -- give,_,_
 
 --3 Other complement patterns
 --
@@ -267,18 +268,18 @@ oper
 
   mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
-  mkV2S : V -> Str -> V2S ;
+  mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
-  mkV2V : V -> Str -> Str -> V2V ;
+  mkV2V : V -> Prep -> Prep -> V2V ;
   mkVA  : V -> VA ;
-  mkV2A : V -> Str -> V2A ;
+  mkV2A : V -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
-  mkV2Q : V -> Str -> V2Q ;
+  mkV2Q : V -> Prep -> V2Q ;
 
   mkAS  : A -> AS ;
-  mkA2S : A -> Str -> A2S ;
+  mkA2S : A -> Prep -> A2S ;
   mkAV  : A -> AV ;
-  mkA2V : A -> Str -> A2V ;
+  mkA2V : A -> Prep -> A2V ;
 
 -- Notice: categories $V2S, V2V, V2A, V2Q$ are in v 1.0 treated
 -- just as synonyms of $V2$, and the second argument is given
@@ -288,12 +289,11 @@ oper
   V0, V2S, V2V, V2A, V2Q : Type ;
   AS, A2S, AV, A2V : Type ;
 
-
+--.
 --2 Definitions of paradigms
 --
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
---.
 
   Gender = MorphoEng.Gender ; 
   Number = MorphoEng.Number ;
@@ -307,7 +307,7 @@ oper
   nominative = Nom ;
   genitive = Gen ;
 
-  Preposition = Str ;
+  Preposition : Type = Str ; -- obsolete
 
   regN = \ray -> 
     let
@@ -345,13 +345,14 @@ oper
 
   compoundN s n = {s = \\x,y => s ++ n.s ! x ! y ; g=n.g ; lock_N = <>} ;
 
-  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
-  regN2 n = mkN2 (regN n) (mkPreposition "of") ;
-  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
-  cnN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
-  cnN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
+  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
+  regN2 n = mkN2 (regN n) (mkPrep "of") ;
+  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
+  cnN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
+  cnN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
 
-  regPN n g = nameReg n g ** {lock_PN = <>} ;
+  regPN n = regGenPN n human ;
+  regGenPN n g = nameReg n g ** {lock_PN = <>} ;
   nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
   mkNP x y n g = {s = table {Gen => x ; _ => y} ; a = agrP3 n ;
   lock_NP = <>} ;
@@ -359,7 +360,7 @@ oper
   mkA a b = mkAdjective a a a b ** {lock_A = <>} ;
   regA a = regAdjective a ** {lock_A = <>} ;
 
-  mkA2 a p = a ** {c2 = p ; lock_A2 = <>} ;
+  mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
 
   ADeg = A ; ----
 
@@ -394,8 +395,8 @@ oper
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
-  mkPreposition p = p ;
   mkPrep p = ss p ** {lock_Prep = <>} ;
+  noPrep = mkPrep [] ;
 
   mkV a b c d e = mkVerb a b c d e ** {s1 = [] ; lock_V = <>} ;
 
@@ -434,12 +435,12 @@ oper
   partV v p = verbPart v p ** {lock_V = <>} ;
   reflV v = {s = v.s ; part = v.part ; lock_V = v.lock_V ; isRefl = True} ;
 
-  mkV2 v p = v ** {s = v.s ; s1 = v.s1 ; c2 = p ; lock_V2 = <>} ;
-  dirV2 v = mkV2 v [] ;
+  mkV2 v p = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; lock_V2 = <>} ;
+  dirV2 v = mkV2 v noPrep ;
 
-  mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p ; c3 = q ; lock_V3 = <>} ;
-  dirV3 v p = mkV3 v [] p ;
-  dirdirV3 v = dirV3 v [] ;
+  mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
+  dirV3 v p = mkV3 v noPrep p ;
+  dirdirV3 v = dirV3 v noPrep ;
 
   mkVS  v = v ** {lock_VS = <>} ;
   mkVV  v = {

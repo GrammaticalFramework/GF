@@ -5,7 +5,7 @@ concrete StructuralSpa of Structural = CatSpa **
 
 lin
 
-  above_Prep = mkPreposition "sobre" ;
+  above_Prep = mkPrep "sobre" ;
   after_Prep = {s = ["despues"] ; c = MorphoSpa.genitive ; isDir = False} ;
   all_Predet = {
     s = \\a,c => prepCase c ++ aagrForms "todo" "toda" "todos" "todas" ! a ;
@@ -18,14 +18,14 @@ lin
   because_Subj = ss "porque" ** {m = Indic} ;
   before_Prep = {s = "antes" ; c = MorphoSpa.genitive ; isDir = False} ;
   behind_Prep = {s = "detrás" ; c = MorphoSpa.genitive ; isDir = False} ;
-  between_Prep = mkPreposition "entre" ;
+  between_Prep = mkPrep "entre" ;
   both7and_DConj = {s1,s2 = etConj.s ; n = Pl} ;
   but_PConj = ss "pero" ;
-  by8agent_Prep = mkPreposition "por" ;
-  by8means_Prep = mkPreposition "por" ;
+  by8agent_Prep = mkPrep "por" ;
+  by8means_Prep = mkPrep "por" ;
   can8know_VV = mkVV (verboV (saber_71 "saber")) ;
   can_VV = mkVV (verboV (poder_58 "poder")) ;
-  during_Prep = mkPreposition "durante" ; ----
+  during_Prep = mkPrep "durante" ; ----
   either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
   everybody_NP = mkNP ["todos"] Masc Pl ;
   every_Det = {s = \\_,_ => "cada" ; n = Sg} ;
@@ -52,7 +52,7 @@ lin
       "yo" "me" "me" "mí"
       "mi" "mi" "mis" "mis"
       Fem Sg P1 ;
-  in_Prep = mkPreposition "en" ;
+  in_Prep = mkPrep "en" ;
   it_Pron = 
     mkPronoun
       "el" "lo" "le" "él"
@@ -65,7 +65,7 @@ lin
   much_Det = {s = \\g,c => prepCase c ++ genForms "mucho" "mucha" ! g ; n = Sg} ;
   must_VV = mkVV (verboV (deber_6 "deber")) ;
   no_Phr = ss "no" ;
-  on_Prep = mkPreposition "sobre" ;
+  on_Prep = mkPrep "sobre" ;
   one_Quant = {s = \\g,c => prepCase c ++ genForms "uno" "una" ! g} ;
   only_Predet = {s = \\_,c => prepCase c ++ "solamente" ; c = Nom} ;
   or_Conj = {s = "o" ; n = Sg} ;
@@ -109,10 +109,10 @@ lin
     } ;
   this_NP = pn2np (mkPN ["esto"] Masc) ;
   those_NP = mkNP ["esas"] Fem Pl ;
-  through_Prep = mkPreposition "por" ;
+  through_Prep = mkPrep "por" ;
   too_AdA = ss "demasiado" ;
   to_Prep = complDat ;
-  under_Prep = mkPreposition "bajo" ;
+  under_Prep = mkPrep "bajo" ;
   very_AdA = ss "muy" ;
   want_VV = mkVV (verboV (querer_64 "querer")) ;
   we_Pron = 
@@ -130,8 +130,8 @@ lin
   whoPl_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Fem Pl} ;
   whoSg_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Fem Sg} ;
   why_IAdv = ss "porqué" ;
-  without_Prep = mkPreposition "sin" ;
-  with_Prep = mkPreposition "con" ;
+  without_Prep = mkPrep "sin" ;
+  with_Prep = mkPrep "con" ;
   yes_Phr = ss "sí" ;
   youSg_Pron = mkPronoun 
     "tu" "te" "te" "tí"

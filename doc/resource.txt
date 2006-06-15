@@ -1,11 +1,12 @@
 The GF Resource Grammar Library
-Author: Aarne Ranta
+Author: Aarne Ranta, Ali El Dada, and Janna Khegai
 Last update: %%date(%c)
 
 % NOTE: this is a txt2tags file.
 % Create an latex file from this file using:
 % txt2tags -ttex --toc gf-formalism.txt
-
+%!style(tex) : isolatin1
+%!postproc: "section*{"  "section{"
 %!target:tex
 
 
@@ -16,10 +17,17 @@ tutorial. We start with an introduction to the library, and proceed to
 details with the aim of covering all that one needs to know 
 in order to use the library. 
 How to write one's own resource grammar (i.e. to implement the API for
-a new language), is covered by a separate Resource-HOWTO document.
+a new language), is covered by a separate Resource-HOWTO document (available in
+the www address below).
+
+The main part of the document (the API documentation) is generated
+from the actual GF code by using the ``gfdoc`` tool. This documentation
+is also available on-line in HTML format in
+
+[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/`` http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/].
 
 
-==Motivation==
+=Motivation=
 
 The GF Resource Grammar Library contains grammar rules for
 10 languages (some more are under construction). Its purpose
@@ -35,6 +43,7 @@ skills is typical of programmers who want to localize
 software to new languages.
 
 The current resource languages are
+- ``Ara``bic
 - ``Dan``ish
 - ``Eng``lish
 - ``Fin``nish
@@ -47,7 +56,8 @@ The current resource languages are
 - ``Swe``dish
 
 
-The first three letters (``Dan`` etc) are used in grammar module names.
+The first three letters (``Ara`` etc) are used in grammar module names.
+The Arabic implementation is still incomplete.
 
 To give an example application, consider
 music playing devices. In the application,
@@ -103,7 +113,7 @@ languages (e.g. a different word order in French),
 but the application programmer need not care about the difference.
 
 
-===A complete example===
+==A complete example==
 
 To summarize the example, and also give a template for a programmer to work on,
 here is the complete implementation of a small system with songs and properties.
@@ -145,13 +155,15 @@ the resource category system ``Cat``.
 Each language has its own concrete syntax, which opens the 
 inflectional paradigms module for that language:
 ```
-  concrete MusicLexGer of MusicLex = CatGer ** open ParadigmsGer in {
+  concrete MusicLexGer of MusicLex = 
+      CatGer ** open ParadigmsGer in {
     lin
       song_N = reg2N "Lied" "Lieder" neuter ;
       american_A = regA "Amerikanisch" ;
     }
 
-  concrete MusicLexFre of MusicLex = CatFre ** open ParadigmsFre in {
+  concrete MusicLexFre of MusicLex = 
+      CatFre ** open ParadigmsFre in {
     lin
       song_N = regGenN "chanson" feminine ;
       american_A = regA "américain" ;
@@ -182,7 +194,8 @@ instantiating ``Music``. The latter is
 completely trivial, whereas the former one involves the choice of correct
 vocabulary and inflectional paradigms. For instance, Finnish is added as follows:
 ```
-  concrete MusicLexFin of MusicLex = CatFin ** open ParadigmsFin in {
+  concrete MusicLexFin of MusicLex = 
+      CatFin ** open ParadigmsFin in {
     lin
       song_N = regN "kappale" ;
       american_A = regA "amerikkalainen" ;
@@ -200,7 +213,8 @@ for the sake of argument, that adjectival modification does not sound good in
 English, but that a relative clause would be preferrable. One can then start as
 before,
 ```
-  concrete MusicLexEng of MusicLex = CatEng ** open ParadigmsEng in {
+  concrete MusicLexEng of MusicLex = 
+      CatEng ** open ParadigmsEng in {
     lin
       song_N = regN "song" ;
       american_A = regA "American" ;
@@ -216,15 +230,17 @@ another module would be built on top of it, with a restricted import from
 except ``PropKind``, and
 gives its own definition of this function:
 ```
-  concrete MusicEng of Music = MusicEng0 - [PropKind] ** open GrammarEng in {
+  concrete MusicEng of Music = 
+      MusicEng0 - [PropKind] ** open GrammarEng in {
     lin
       PropKind k p = 
-        RelCN k (UseRCl TPres ASimul PPos (RelVP IdRP (UseComp (CompAP p)))) ;
+        RelCN k (UseRCl TPres ASimul PPos 
+          (RelVP IdRP (UseComp (CompAP p)))) ;
     }
 ```
 
 
-===Parsing with resource grammars?===
+==Parsing with resource grammars?==
 
 The intended use of the resource grammar is as a library for writing
 application grammars. It is not designed for parsing e.g. newspaper text. There
@@ -257,9 +273,9 @@ will often use only restricted inheritance of ``MusicI``.
 
 
 
-==To find rules in the resource grammar library==
+=To find rules in the resource grammar library=
 
-===Inflection paradigms===
+==Inflection paradigms==
 
 Inflection paradigms are defined separately for each language //L//
 in the module ``Paradigms``//L//. To test them, the command 
@@ -287,13 +303,14 @@ can be used:
     g : Gender = Fem
   }
 ```
-For the sake of convenience, every language implements these four paradigms:
+For the sake of convenience, every language implements these five paradigms:
 ```
   oper
-    regN : Str -> N ;   -- regular nouns
-    regA : Str -> A :   -- regular adjectives
-    regV : Str -> V ;   -- regular verbs
-    dirV : V   -> V2 ;  -- direct transitive verbs
+    regN  : Str -> N ;   -- regular nouns
+    regA  : Str -> A :   -- regular adjectives
+    regV  : Str -> V ;   -- regular verbs
+    regPN : Str -> PN ;  -- regular proper names
+    dirV  : V   -> V2 ;  -- direct transitive verbs
 ```
 It is often possible to initialize a lexicon by just using these functions,
 and later revise it by using the more involved paradigms. For instance, in
@@ -309,7 +326,7 @@ English - maybe not so strange in certain technical domains.
 
 
 
-===Syntax rules===
+==Syntax rules==
 
 Syntax rules should be looked for in the abstract modules defining the
 API. There are around 10 such modules, each defining constructors for
@@ -361,7 +378,7 @@ This can be built by parsing "I have beer" in LanEng and then writing
 which uses ParadigmsIta.regGenN. 
 
 
-===Example-based grammar writing===
+==Example-based grammar writing==
 
 The technique of parsing with the resource grammar can be used in GF source files,
 endowed with the suffix ``.gfe`` ("GF examples"). The suffix tells GF to preprocess
@@ -407,7 +424,7 @@ and then use this lexicon instead of the standard one included in ``Lang``.
 
 
 
-===Special-purpose APIs===
+==Special-purpose APIs==
 
 To give an analogy with the well-known type setting software, GF can be compared
 with TeX and the resource grammar library with LaTeX. 
@@ -458,9 +475,9 @@ with resource grammars becomes more practical.
 
 
 
-==Overview of syntactic structures==
+=Overview of syntactic structures=
 
-===Texts. phrases, and utterances===
+==Texts. phrases, and utterances==
 
 The outermost linguistic structure is ``Text``. ``Text``s are composed
 from Phrases (``Phr``) followed by punctuation marks - either of ".", "?" or
@@ -496,7 +513,7 @@ a Phrase is an Utterance with an optional leading conjunction ("but")
 and an optional tailing vocative ("John", "please").
 
 
-===Sentences and clauses===
+==Sentences and clauses==
 
 The richest of the categories below Utterance is ``S``, Sentence. A Sentence
 is formed from a Clause (``Cl``), by fixing its Tense, Anteriority, and Polarity.
@@ -562,7 +579,7 @@ many constructors:
 ```
 
 
-===Parts of sentences===
+==Parts of sentences==
 
 The linguistic phenomena mostly discussed in both traditional grammars and modern
 syntax belong to the level of Clauses, that is, lines 9-13, and occasionally
@@ -630,7 +647,7 @@ How to construct ``Adv``s. The main ways are
 - as prepositional phrases: "in the car"
 
 
-===Modules and their names===
+==Modules and their names==
 
 The resource modules are named after the kind of 
 phrases that are constructed in them,
@@ -666,7 +683,7 @@ category-specific modules is as follows:
 ```
 
 
-===Top-level grammar and lexicon===
+==Top-level grammar and lexicon==
 
 The module ``Grammar`` collects all the category-specific modules into
 a complete grammar:
@@ -694,7 +711,7 @@ a general-purpose multilingual lexicon, and this is the form that the module
 
 
 
-===Language-specific syntactic structures===
+==Language-specific syntactic structures==
 
 The API collected in ``Grammar`` has been designed to be implementable for
 all languages in the resource package. It does contain some rules that
@@ -734,46 +751,127 @@ inheritance is a recent addition to the resource grammar library, and
 has only been exploited in a very small scale so far.
 
 
-==API Documentation==
+=API Documentation=
 
-===Top-level modules===
+==Top-level modules==
+
+===Grammar: the Main Module of the Resource Grammar===
 
 %!include: ../lib/resource-1.0/abstract/Grammar.txt
+
+===Lang: a Test Module for the Resource Grammar===
+
 %!include: ../lib/resource-1.0/abstract/Lang.txt
 
 
-===Type system===
+==Type system==
 
+===Cat: the Category System===
+ 
 %!include: ../lib/resource-1.0/abstract/Cat.txt
+
+===Common: Structures with Common Implementations===
+
 %!include: ../lib/resource-1.0/abstract/Common.txt
 
 
-===Phrase category modules===
+==Syntax rule modules==
+
+===Adjective: Adjectives and Adjectival Phrases===
 
 %!include: ../lib/resource-1.0/abstract/Adjective.txt
+
+===Adverb: Adverbs and Adverbial Phrases===
+
 %!include: ../lib/resource-1.0/abstract/Adverb.txt
+
+===Conjunction: Coordination===
+
 %!include: ../lib/resource-1.0/abstract/Conjunction.txt
+
+===Idiom: Idiomatic Expressions===
+
 %!include: ../lib/resource-1.0/abstract/Idiom.txt
+
+===Noun: Nouns, Noun Phrases, and Determiners===
+
 %!include: ../lib/resource-1.0/abstract/Noun.txt
+
+===Numeral: Cardinal and Ordinal Numerals===
+
 %!include: ../lib/resource-1.0/abstract/Numeral.txt
+
+===Phrase: Phrases and Utterances===
+
 %!include: ../lib/resource-1.0/abstract/Phrase.txt
+
+===Question: Questions and Interrogative Pronouns===
+
 %!include: ../lib/resource-1.0/abstract/Question.txt
+
+===Relative: Relative Clauses and Relative Pronouns===
+
 %!include: ../lib/resource-1.0/abstract/Relative.txt
+
+===Sentence: Sentences, Clauses, and Imperatives===
+
 %!include: ../lib/resource-1.0/abstract/Sentence.txt
+
+===Structural: Structural Words===
+
 %!include: ../lib/resource-1.0/abstract/Structural.txt
+
+===Text: Texts===
+
 %!include: ../lib/resource-1.0/abstract/Text.txt
+
+===Verb: Verb Phrases===
+
 %!include: ../lib/resource-1.0/abstract/Verb.txt
 
 
-===Inflectional paradigms===
+==Inflectional paradigms==
+
+===Arabic===
+
+%!include: ../lib/resource-1.0/arabic/ParadigmsAra.txt
+
+===Danish===
 
 %!include: ../lib/resource-1.0/danish/ParadigmsDan.txt
+
+===English===
+
 %!include: ../lib/resource-1.0/english/ParadigmsEng.txt
+
+===Finnish===
+
 %!include: ../lib/resource-1.0/finnish/ParadigmsFin.txt
+
+===French===
+
 %!include: ../lib/resource-1.0/french/ParadigmsFre.txt
+
+===German===
+
 %!include: ../lib/resource-1.0/german/ParadigmsGer.txt
+
+===Italian===
+
 %!include: ../lib/resource-1.0/italian/ParadigmsIta.txt
+
+===Norwegian===
+
 %!include: ../lib/resource-1.0/norwegian/ParadigmsNor.txt
+
+===Russian===
+
 %!include: ../lib/resource-1.0/russian/ParadigmsRus.txt
+
+===Spanish===
+
 %!include: ../lib/resource-1.0/spanish/ParadigmsSpa.txt
+
+===Swedish===
+
 %!include: ../lib/resource-1.0/swedish/ParadigmsSwe.txt

@@ -34,6 +34,7 @@ main = do
     "-latex"  : xs -> (0,doc2latex,xs)
     "-htmls"  : xs -> (2,doc2html,xs)
     "-txt"    : xs -> (3,doc2txt,xs)
+    "-txt2"   : xs -> (3,doc2txt2,xs)
     "-txthtml": xs -> (4,doc2txt,xs)
     xs            -> (1,doc2html,xs)
   if null xx
@@ -292,6 +293,8 @@ preludeLatex = unlines $ [
  ]
 
 -- render in txt2tags
+-- as main document (welcome, top-level subtitles)
+-- as chapter (no welcome, subtitle level + i)
 
 doc2txt :: Doc -> String
 doc2txt (Doc title time paras) = unlines $
@@ -306,17 +309,28 @@ doc2txt (Doc title time paras) = unlines $
       concat (["Produced by " ++ welcome]) :
       "\n" :
       empty :
-      map para2txt paras
+      map (para2txt 0) paras
 
-para2txt :: Paragraph -> String
-para2txt p = case p of
+doc2txt2 :: Doc -> String
+doc2txt2 (Doc title time paras) = unlines $
+  let tit = concat (map item2txt title) in
+      tit:
+      "":
+      concat (tagTxt (replicate 2 '=') [tit]):
+      "\n":
+      empty :
+      map (para2txt 2) paras
+
+para2txt :: Int -> Paragraph -> String
+para2txt j p = case p of
   Text its      -> concat (map item2txt its)
   Item its      -> "- " ++ concat (map item2txt its)
   Code s        -> unlines $ tagTxt "```" $ map (indent 2) $ 
                                               remEmptyLines $ lines s
   New           -> "\n"
   NewPage       -> "\n" ++ "!-- NEW --"
-  Heading i its -> concat $ tagTxt (replicate i '=') [concat (map item2txt its)]
+  Heading i its -> 
+    concat $ tagTxt (replicate (i + j) '=') [concat (map item2txt its)]
 
 item2txt :: TextItem -> String
 item2txt i = case i of

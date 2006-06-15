@@ -1,5 +1,5 @@
 --# -path=.:../common:../abstract:../../prelude
---
+
 --1 German Lexical Paradigms
 --
 -- Aarne Ranta & Harald Hammarström 2003--2006
@@ -235,12 +235,13 @@ oper
   AS, A2S, AV, A2V : Type ;
 
 
+--.
 --2 Definitions of paradigms
 --
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 
---.
+
 
   Gender = MorphoGer.Gender ;
   Case = MorphoGer.Case ;

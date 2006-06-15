@@ -4,7 +4,7 @@ concrete WeekdaySwe of Weekday = open LangSwe, ParadigmsSwe in {
     WDay = PN ;
 
   lin
-    Mon = regPN "måndag" utrum ;
-    Tue = regPN "tisdag" utrum ;
+    Mon = regGenPN "måndag" utrum ;
+    Tue = regGenPN "tisdag" utrum ;
 
 }

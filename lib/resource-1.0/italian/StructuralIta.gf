@@ -6,7 +6,7 @@ concrete StructuralIta of Structural = CatIta **
 lin
 
   above_Prep = {s = ["sopra"] ; c = MorphoIta.genitive ; isDir = False} ;
-  after_Prep = mkPreposition "dopo" ;
+  after_Prep = mkPrep "dopo" ;
   all_Predet = {
     s = \\a,c => prepCase c ++ aagrForms "tutto" "tutta" "tutti" "tutte" ! a ;
     c = Nom
@@ -16,16 +16,16 @@ lin
   although_Subj = ss "benché" ** {m = Conjunct} ;
   and_Conj = ss "e" ** {n = Pl} ;
   because_Subj = ss "perché" ** {m = Indic} ;
-  before_Prep = mkPreposition "prima" ;
-  behind_Prep = mkPreposition "dietro" ;
-  between_Prep = mkPreposition "fra" ;
+  before_Prep = mkPrep "prima" ;
+  behind_Prep = mkPrep "dietro" ;
+  between_Prep = mkPrep "fra" ;
   both7and_DConj = {s1,s2 = "e" ; n = Pl} ;
   but_PConj = ss "ma" ;
-  by8agent_Prep = {s = [] ; c = CPrep P_da} ;
-  by8means_Prep = mkPreposition "per" ;
+  by8agent_Prep = {s = [] ; c = CPrep P_da ; isDir = False} ;
+  by8means_Prep = mkPrep "per" ;
   can8know_VV = mkVV (verboV (sapere_78 "sapere")) ;
   can_VV = mkVV (verboV (potere_69 "potere")) ;
-  during_Prep = mkPreposition "durante" ;
+  during_Prep = mkPrep "durante" ;
   either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
   everybody_NP = mkNP ["tutti"] Masc Pl ;
   every_Det = {s = \\_,_ => "ogni" ; n = Sg} ;
@@ -44,12 +44,12 @@ lin
   how_IAdv = ss "come" ;
   how8many_IDet = {s = \\g,c => prepCase c ++ genForms "quanti" "quante" ! g ; n = Pl} ;
   if_Subj = ss "se" ** {m = Indic} ;
-  in8front_Prep = mkPreposition "davanti" ;
+  in8front_Prep = mkPrep "davanti" ;
   i_Pron = 
     mkPronoun
       "io" "mi" "mi" "me" "me" "mio" "mia" "miei" "mie"
       Fem Sg P1 ;
-  in_Prep = {s = [] ; c = CPrep P_in} ;
+  in_Prep = {s = [] ; c = CPrep P_in ; isDir = False} ;
   it_Pron = 
     mkPronoun
       "lui" "lo" "gli" "glie" "lui" "suo" "sua" "suoi" "sue"
@@ -61,7 +61,7 @@ lin
   much_Det = {s = \\g,c => prepCase c ++ genForms "molto" "molta" ! g ; n = Sg} ;
   must_VV = mkVV (verboV (dovere_47 "dovere")) ;
   no_Phr = ss "no" ;
-  on_Prep = {s = [] ; c = CPrep P_su} ;
+  on_Prep = {s = [] ; c = CPrep P_su ; isDir = False} ;
   one_Quant = {s = \\g,c => prepCase c ++ genForms "uno" "una" ! g} ;
   only_Predet = {s = \\_,c => prepCase c ++ "soltanto" ; c = Nom} ; --- solo|a|i|e
   or_Conj = {s = "o" ; n = Sg} ;
@@ -103,10 +103,10 @@ lin
     } ;
   this_NP = pn2np (mkPN ["questo"] Masc) ;
   those_NP = mkNP ["quelle"] Fem Pl ;
-  through_Prep = mkPreposition "per" ;
+  through_Prep = mkPrep "per" ;
   too_AdA = ss "troppo" ;
   to_Prep = complDat ;
-  under_Prep = mkPreposition "sotto" ;
+  under_Prep = mkPrep "sotto" ;
   very_AdA = ss "molto" ;
   want_VV = mkVV (verboV (volere_96 "volere")) ;
   we_Pron = 
@@ -122,8 +122,8 @@ lin
   whoPl_IP = {s = \\c => prepCase c ++ "chi" ; a = aagr Fem Pl} ;
   whoSg_IP = {s = \\c => prepCase c ++ "chi" ; a = aagr Fem Sg} ;
   why_IAdv = ss "perché" ;
-  without_Prep = mkPreposition "senza" ;
-  with_Prep = {s = [] ; c = CPrep P_con} ;
+  without_Prep = mkPrep "senza" ;
+  with_Prep = {s = [] ; c = CPrep P_con ; isDir = False} ;
   yes_Phr = ss "sì" ;
   youSg_Pron = mkPronoun 
     "tu" "ti" "ti" "te" "te" "tuo" "tua" "tuoi" "tue"

@@ -65,7 +65,7 @@ incomplete concrete CatRomance of Cat =
     Conj  = {s : Str ; n : Number} ;
     DConj = {s1,s2 : Str ; n : Number} ;
     Subj  = {s : Str ; m : Mood} ;
-    Prep  = {s : Str ; c : Case} ;
+    Prep  = {s : Str ; c : Case ; isDir : Bool} ;
 
 -- Open lexical classes, e.g. Lexicon
 

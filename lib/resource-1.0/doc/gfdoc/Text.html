@@ -2,21 +2,16 @@
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
-<TITLE> Texts</TITLE>
+<TITLE> Text: Texts</TITLE>
 </HEAD><BODY BGCOLOR="white" TEXT="black">
-<P ALIGN="center"><CENTER><H1> Texts</H1>
+<P ALIGN="center"><CENTER><H1> Text: Texts</H1>
 <FONT SIZE="4">
-<I>Author: </I><BR>
-Last update: Tue Jun 13 11:42:41 2006
+<I>Last update: 2006-06-15 09:19:39 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
-  <UL>
-  <LI><A HREF="#toc1">Texts</A>
-  </UL>
-
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
@@ -25,16 +20,19 @@ Produced by
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
-<A NAME="toc1"></A>
-<H1>Texts</H1>
+<P>
+Texts are built from an empty text by adding <CODE>Phr</CODE>ases,
+using as constructors the punctuation marks <I>.</I>, <I>?</I>, and <I>!</I>.
+Any punctuation mark can be attached to any kind of phrase.
+</P>
 <PRE>
     abstract Text = Common ** {
     
       fun
-        TEmpty : Text ;
-        TFullStop : Phr -&gt; Text -&gt; Text ;
-        TQuestMark : Phr -&gt; Text -&gt; Text ;
-        TExclMark : Phr -&gt; Text -&gt; Text ;
+        TEmpty     : Text ;                 --
+        TFullStop  : Phr -&gt; Text -&gt; Text ;  -- John walks. ...
+        TQuestMark : Phr -&gt; Text -&gt; Text ;  -- Are you OK? ...
+        TExclMark  : Phr -&gt; Text -&gt; Text ;  -- John walks! ...
     
     }
 </PRE>
