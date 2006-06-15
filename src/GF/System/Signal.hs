@@ -14,14 +14,14 @@
 -- Import the right singal handling module.
 -----------------------------------------------------------------------------
 
-module GF.System.Signal (runInterruptibly) where
+module GF.System.Signal (runInterruptibly,blockInterrupt) where
 
 #ifdef USE_INTERRUPT
 
-import GF.System.UseSignal (runInterruptibly)
+import GF.System.UseSignal (runInterruptibly,blockInterrupt)
 
 #else
 
-import GF.System.NoSignal (runInterruptibly)
+import GF.System.NoSignal (runInterruptibly,blockInterrupt)
 
 #endif

@@ -28,6 +28,7 @@ import GF.Shell.SubShell
 import GF.Shell.ShellCommands
 import GF.Shell.PShell
 import GF.Shell.JGF
+import GF.System.Signal
 import GF.Text.UTF8
 
 import GF.Today (today,version)
@@ -84,7 +85,7 @@ main = do
       st <- useIOE st0 $ 
               foldM (shellStateFromFiles os) st0 fs
       if null fs then return () else (ifNotSil putCPU) 
-      gfInteract (initHState st) 
+      blockInterrupt (gfInteract (initHState st)) 
       return ()
   -- preprocessing gfe
   if opt fromExamples 

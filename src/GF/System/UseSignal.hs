@@ -48,3 +48,11 @@ runInterruptibly a =
 --   the computation fails or not.
 runInterruptibly_ :: IO () -> IO ()
 runInterruptibly_ = fmap (either (const ()) id) . runInterruptibly
+
+-- | Run an action with SIGINT blocked.
+blockInterrupt :: IO a -> IO a
+blockInterrupt a = 
+    do oldH <- installHandler sigINT Ignore Nothing
+       x <- a
+       installHandler sigINT oldH Nothing
+       return x

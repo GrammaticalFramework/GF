@@ -24,3 +24,6 @@ runInterruptibly a =
     p `catch` h
   where p = a >>= \x -> return $! Right $! x
         h e = return $ Left e
+
+blockInterrupt :: IO a -> IO a
+blockInterrupt = id
