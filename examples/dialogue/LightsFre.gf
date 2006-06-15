@@ -6,8 +6,8 @@ concrete LightsFre of Lights =
   lin
     Light       = UseN (regN "lampe") ;
     Room        = UseN (regN "chambre") ;
-    SwitchOnIn  = dirV3 (regV "allumer")  (mkPreposition "dans") ;
-    SwitchOffIn = dirV3 éteindre_V2 (mkPreposition "dans") ;
+    SwitchOnIn  = dirV3 (regV "allumer")  (mkPrep "dans") ;
+    SwitchOffIn = dirV3 éteindre_V2 (mkPrep "dans") ;
     SwitchOn    = dirV2 (regV "allumer") ;
     SwitchOff   = dirV2 éteindre_V2 ;
 

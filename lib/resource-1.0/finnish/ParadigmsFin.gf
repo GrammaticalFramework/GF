@@ -203,6 +203,7 @@ oper
 -- Proper names can be formed by using declensions for nouns.
 -- The plural forms are filtered away by the compiler.
 
+  regPN : Str -> PN ;
   mkPN  : N -> PN ;
   mkNP  : N -> Number -> NP ; 
 
@@ -333,9 +334,9 @@ oper
   V0, V2S, V2V, V2Q : Type ;
   AS, A2S, AV, A2V : Type ;
 
+--.
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
---.
 
   Case = MorphoFin.Case ;
   Number = MorphoFin.Number ;
@@ -472,6 +473,7 @@ reg3N = \vesi,veden,vesiä ->
   mkN2 = \n,c -> n ** {c2 = c ; lock_N2 = <>} ;
   mkN3 = \n,c,e -> n ** {c2 = c ; c3 = e ; lock_N3 = <>} ;
   genN2 = \n -> mkN2 n (casePrep genitive) ;
+  regPN m = mkPN (regN m) ;
   mkPN n = mkProperName n ** {lock_PN = <>} ;
   mkNP noun num = {
     s = \\c => noun.s ! NCase num (npform2case c) ; 

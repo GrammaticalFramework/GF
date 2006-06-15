@@ -1,8 +1,13 @@
-GF=../../bin/gf
+GF=gf
+RTS=+RTS -M800M -K100M
+GFCC=$(GF) -nocf -make
+GFC=$(GFCC) -src
+GFCP=$(GFC) -preproc=./mkPresent
 
-.PHONY: show-path all test pretest langs present mathematical multimodal compiled treebank stat gfdoc clean
 
-all: show-path langs multimodal present mathematical compiled
+.PHONY: show-path all test alltenses pretest langs present mathematical multimodal compiled treebank stat gfdoc clean
+
+all: show-path present alltenses langs multimodal mathematical compiled
 
 show-path:
 	@echo GF_LIB_PATH=$(GF_LIB_PATH)
@@ -13,13 +18,36 @@ test:
 pretest:
 	echo "gr -cat=Cl -number=11 -prob | tb" | $(GF) -probs=lang.gfprob -path=present:prelude -nocf ../present/Lang???.gfc
 
-langs:
-	echo "s ;; pm | wf langs.gfcm" | $(GF) -nocf -src */Lang??*.gf english/LangEng.gf +RTS -M800M -K100M
+alltenses:
+#	$(GFC) arabic/LangAra.gf
+	$(GFC) danish/Danish.gf
+	$(GFC) english/English.gf
+	$(GFC) finnish/Finnish.gf
+	$(GFC) french/French.gf
+	$(GFC) german/German.gf
+	$(GFC) italian/Italian.gf
+	$(GFC) norwegian/Norwegian.gf
+	$(GFC) russian/LangRus.gf
+	$(GFC) spanish/Spanish.gf
+	$(GFC) swedish/Swedish.gf
 	cp -p */*.gfc */*.gfr ../alltenses
 
+langs:
+	echo "s ;; pm | wf langs.gfcm" | $(GFCC) -path=alltenses:prelude ../alltenses/Lang???.gfc $(RTS)
+
+
 present:
-	chmod u+x mkPresent
-	$(GF) -make -src -preproc=./mkPresent */Lang??*.gf +RTS -M800M -K100M
+#	$(GFCP) arabic/LangAra.gf
+	$(GFCP) danish/Danish.gf
+	$(GFCP) english/English.gf
+	$(GFCP) finnish/Finnish.gf
+	$(GFCP) french/French.gf
+	$(GFCP) german/German.gf
+	$(GFCP) italian/Italian.gf
+	$(GFCP) norwegian/Norwegian.gf
+	$(GFCP) russian/LangRus.gf
+	$(GFCP) spanish/Spanish.gf
+	$(GFCP) swedish/Swedish.gf
 	mv */*.gfc */*.gfr ../present
 
 mathematical:

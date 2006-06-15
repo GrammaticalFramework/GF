@@ -143,6 +143,7 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 -- Proper names.
 
   mkPN  : Str -> Gender -> Animacy -> PN ;          -- "Иван", "Маша"
+  regPN : Str -> PN ;
   nounPN : N -> PN ;
   
 -- On the top level, it is maybe $CN$ that is used rather than $N$, and
@@ -292,10 +293,11 @@ perfective: Aspect ;
    mkV3  : V -> Str -> Str -> Case -> Case -> V3 ; -- "сложить письмо в конверт"
    dirV2    : V -> V2 ;                    -- "видеть", "любить"
    tvDirDir : V -> V3 ; 
-                            
+
+--.                            
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
---.
+
   Gender = MorphoRus.Gender ;
   Case = MorphoRus.Case ;
   Number = MorphoRus.Number ;
@@ -450,6 +452,8 @@ regN = \ray ->
        Masc => mkProperNameMasc ivan anim ; 
        _ => mkProperNameFem ivan anim
     } ** {lock_PN =<>};
+  regPN x = mkPN x masculine animate ;
+
   nounPN n = {s=\\c => n.s! SF Sg c; anim=n.anim; g=n.g; lock_PN=<>};
     
   mkCN = UseN;

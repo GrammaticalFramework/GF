@@ -6,7 +6,7 @@ concrete AgendaSwe of Agenda =
   lin
     Day       = UseN (regN "dag") ;
     Meeting   = UseN (regGenN "möte" neutrum) ;
-    Add       = dirV3 (partV lägga_V "till") (mkPreposition "på") ;
+    Add       = dirV3 (partV lägga_V "till") (mkPrep "på") ;
     Remove    = dirV2 (partV taga_V "bort") ;
     Interrupt = avbryta_V ;
    

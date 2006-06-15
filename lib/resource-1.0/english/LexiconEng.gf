@@ -8,18 +8,18 @@ flags
 
 lin
   airplane_N = regN "airplane" ;
-  answer_V2S = mkV2S (regV "answer") "to" ;
+  answer_V2S = mkV2S (regV "answer") toP ;
   apartment_N = regN "apartment" ;
   apple_N = regN "apple" ;
   art_N = regN "art" ;
-  ask_V2Q = mkV2Q (regV "ask") [] ;
+  ask_V2Q = mkV2Q (regV "ask") noPrep ;
   baby_N = regN "baby" ;
   bad_A = mkADeg "bad" "badly" "worse" "worst" ;
   bank_N = regN "bank" ;
   beautiful_A = regADeg "beautiful" ;
   become_VA = mkVA (irregV "become" "became" "become") ;
   beer_N = regN "beer" ;
-  beg_V2V = mkV2V (regDuplV "beg") [] "to" ;
+  beg_V2V = mkV2V (regDuplV "beg") noPrep toP ;
   big_A = duplADeg "big" ;
   bike_N = regN "bike" ;
   bird_N = regN "bird" ;
@@ -60,12 +60,12 @@ lin
   cow_N = regN "cow" ;
   die_V = (regV "die") ;
   dirty_A = regADeg "dirty" ;
-  distance_N3 = mkN3 (regN "distance") "from" "to" ;
+  distance_N3 = mkN3 (regN "distance") fromP toP ;
   doctor_N = regN "doctor" ;
   dog_N = regN "dog" ;
   door_N = regN "door" ;
   drink_V2 = dirV2 (irregV "drink" "drank" "drunk") ;
-  easy_A2V = mkA2V (regA "easy") "for" ;
+  easy_A2V = mkA2V (regA "easy") forP ;
   eat_V2 = dirV2 (irregV "eat" "ate" "eaten") ;
   empty_A = regADeg "empty" ;
   enemy_N = regN "enemy" ;
@@ -108,14 +108,14 @@ lin
   leather_N = regN "leather" ;
   leave_V2 = dirV2 (irregV "leave" "left" "left") ;
   like_V2 = dirV2 (regV "like") ;
-  listen_V2 = mkV2 (regV "listen") "to" ;
+  listen_V2 = mkV2 (regV "listen") toP ;
   live_V = (regV "live") ;
   long_A = regADeg "long" ;
   lose_V2 = dirV2 (irregV "lose" "lost" "lost") ;
   love_N = regN "love" ;
   love_V2 = dirV2 (regV "love") ;
   man_N = mk2N "man" "men" ;
-  married_A2 = mkA2 (regA "married") "to" ;
+  married_A2 = mkA2 (regA "married") toP ;
   meat_N = regN "meat" ;
   milk_N = regN "milk" ;
   moon_N = regN "moon" ;
@@ -128,9 +128,9 @@ lin
   oil_N = regN "oil" ;
   old_A = regADeg "old" ;
   open_V2 = dirV2 (regV "open") ;
-  paint_V2A = mkV2A (regV "paint") [] ;
+  paint_V2A = mkV2A (regV "paint") noPrep ;
   paper_N = regN "paper" ;
-  paris_PN = regPN "Paris" nonhuman ;
+  paris_PN = regPN "Paris" ;
   peace_N = regN "peace" ;
   pen_N = regN "pen" ;
   planet_N = regN "planet" ;
@@ -157,8 +157,8 @@ lin
   sea_N = regN "sea" ;
   seek_V2 = dirV2 (irregV "seek" "sought" "sought") ;
   see_V2 = dirV2 (irregV "see" "saw" "seen") ;
-  sell_V3 = dirV3 (irregV "sell" "sold" "sold") "to" ;
-  send_V3 = dirV3 (irregV "send" "sent" "sent") "to" ;
+  sell_V3 = dirV3 (irregV "sell" "sold" "sold") toP ;
+  send_V3 = dirV3 (irregV "send" "sent" "sent") toP ;
   sheep_N = mk2N "sheep" "sheep" ;
   ship_N = regN "ship" ;
   shirt_N = regN "shirt" ;
@@ -182,7 +182,7 @@ lin
   switch8off_V2 = dirV2 (partV (regV "switch") "off") ;
   switch8on_V2 = dirV2 (partV (regV "switch") "on") ;
   table_N = regN "table" ;
-  talk_V3 = mkV3 (regV "talk") "to" "about" ;
+  talk_V3 = mkV3 (regV "talk") toP aboutP ;
   teacher_N = regN "teacher" ;
   teach_V2 = dirV2 (irregV "teach" "taught" "taught") ;
   television_N = regN "television" ;
@@ -196,7 +196,7 @@ lin
   understand_V2 = dirV2 (irregV "understand" "understood" "understood") ;
   university_N = regN "university" ;
   village_N = regN "village" ;
-  wait_V2 = mkV2 (regV "wait") "for" ;
+  wait_V2 = mkV2 (regV "wait") forP ;
   walk_V = (regV "walk") ;
   warm_A = regADeg "warm" ;
   war_N = regN "war" ;
@@ -217,9 +217,9 @@ lin
   now_Adv = mkAdv "now" ;
   already_Adv = mkAdv "already" ;
   song_N = regN "song" ;
-  add_V3 = dirV3 (regV "add") "to" ;
+  add_V3 = dirV3 (regV "add") toP ;
   number_N = regN "number" ;
-  put_V2 = mkV2 (irregDuplV "put" "put" "put") [] ;
+  put_V2 = mkV2 (irregDuplV "put" "put" "put") noPrep ;
   stop_V = regDuplV "stop" ;
   jump_V = regV "jump" ;
 
@@ -311,7 +311,7 @@ lin
   flow_V = regV "flow" ;
   fly_V = fly_V ;
   freeze_V = freeze_V ;
-  give_V3 = dirV3 give_V "to" ;
+  give_V3 = dirV3 give_V toP ;
   laugh_V = regV "laugh" ;
   lie_V = lie_V ;
   play_V = regV "play" ;
@@ -350,5 +350,14 @@ lin
   wipe_V2 = dirV2 (regV "wipe") ;
 
 --  other_A = regA "other" ;
+
+oper
+  aboutP = mkPrep "about" ;
+  atP = mkPrep "at" ;
+  forP = mkPrep "for" ;
+  fromP = mkPrep "from" ;
+  inP = mkPrep "in" ;
+  onP = mkPrep "on" ;
+  toP = mkPrep "to" ;
 
 } ;

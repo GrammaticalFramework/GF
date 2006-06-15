@@ -59,7 +59,8 @@ oper
 
 -- Prepositions used in many-argument functions are just strings.
 
-  Preposition : Type = Str ;
+  mkPrep : Str -> Prep ;
+  noPrep : Prep ;         -- empty string
 
 --2 Nouns
 
@@ -100,19 +101,20 @@ oper
 -- 
 -- Relational nouns ("daughter of x") need a preposition. 
 
-  mkN2 : N -> Preposition -> N2 ;
+  mkN2 : N -> Prep -> N2 ;
 
 -- The most common preposition is "av", and the following is a
 -- shortcut for regular, $nonhuman$ relational nouns with "av".
 
   regN2 : Str -> Gender -> N2 ;
 
--- Use the function $mkPreposition$ or see the section on prepositions below to  
+-- Use the function $mkPrep$ or see the section on prepositions below to  
 -- form other prepositions.
 --
--- Three-place relational nouns ("the connection from x to y") need two prepositions.
+-- Three-place relational nouns ("the connection from x to y") 
+-- need two prepositions.
 
-  mkN3 : N -> Preposition -> Preposition -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ;
 
 
 --3 Relational common noun phrases
@@ -127,7 +129,8 @@ oper
 --
 -- Proper names, with a regular genitive, are formed as follows
 
-  regPN : Str -> Gender -> PN ;          -- John, John's
+  mkPN  : Str -> Gender -> PN ;          -- Paris neutrum
+  regPN : Str -> PN ;                    -- utrum gender
 
 -- Sometimes you can reuse a common noun as a proper name, e.g. "Bank".
 
@@ -156,7 +159,7 @@ oper
 --
 -- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Preposition -> A2 ;
+  mkA2 : A -> Prep -> A2 ;
 
 -- Comparison adjectives may need as many as five forms. 
 
@@ -194,11 +197,6 @@ oper
 
   mkAdA : Str -> AdA ;
 
---2 Prepositions
---
--- A preposition is just a string.
-
-  mkPreposition : Str -> Preposition ;
 
 --2 Verbs
 --
@@ -249,7 +247,7 @@ oper
 -- Two-place verbs need a preposition, except the special case with direct object.
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
-  mkV2  : V -> Preposition -> V2 ;
+  mkV2  : V -> Prep -> V2 ;
 
   dirV2 : V -> V2 ;
 
@@ -258,8 +256,8 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Str -> Str -> V3 ;    -- speak, with, about
-  dirV3    : V -> Str -> V3 ;           -- give,_,to
+  mkV3     : V -> Prep -> Prep -> V3 ;    -- speak, with, about
+  dirV3    : V -> Prep -> V3 ;           -- give,_,to
   dirdirV3 : V -> V3 ;                  -- give,_,_
 
 --3 Other complement patterns
@@ -269,18 +267,18 @@ oper
 
   mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
-  mkV2S : V -> Str -> V2S ;
+  mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
-  mkV2V : V -> Str -> Str -> V2V ;
+  mkV2V : V -> Prep -> Prep -> V2V ;
   mkVA  : V -> VA ;
-  mkV2A : V -> Str -> V2A ;
+  mkV2A : V -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
-  mkV2Q : V -> Str -> V2Q ;
+  mkV2Q : V -> Prep -> V2Q ;
 
   mkAS  : A -> AS ;
-  mkA2S : A -> Str -> A2S ;
+  mkA2S : A -> Prep -> A2S ;
   mkAV  : A -> AV ;
-  mkA2V : A -> Str -> A2V ;
+  mkA2V : A -> Prep -> A2V ;
 
 -- Notice: categories $V2S, V2V, V2A, V2Q$ are in v 1.0 treated
 -- just as synonyms of $V2$, and the second argument is given
@@ -290,12 +288,13 @@ oper
   V0, V2S, V2V, V2A, V2Q : Type ;
   AS, A2S, AV, A2V : Type ;
 
+--.
 
 --2 Definitions of the paradigms
 --
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
---.
+
 
   Gender = MorphoDan.Gender ; 
   Number = MorphoDan.Number ;
@@ -306,6 +305,14 @@ oper
   plural = Pl ;
   nominative = Nom ;
   genitive = Gen ;
+
+  Preposition : Type = Str ; -- obsolete
+
+  mkPreposition : Str -> Prep ; -- obsolete
+  mkPreposition = mkPrep ;
+
+  mkPrep p = {s = p ; lock_Prep = <>} ;
+  noPrep = mkPrep [] ;
 
   mkN x y z u = mkSubstantive x y z u ** {g = extNGen y ; lock_N = <>} ;
 
@@ -330,11 +337,12 @@ oper
 
    mk3N x y z = let u = ifTok Str x z "ene" "ne" in mkN x y z (z + u) ;
 
-  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
+  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
   regN2 n g = mkN2 (regGenN n g) (mkPreposition "av") ;
-  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
+  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
 
-  regPN n g = {s = \\c => mkCase c n ; g = g} ** {lock_PN = <>} ;
+  mkPN n g = {s = \\c => mkCase c n ; g = g} ** {lock_PN = <>} ;
+  regPN n = mkPN n utrum ;
   nounPN n = {s = n.s ! singular ! Indef ; g = n.g ; lock_PN = <>} ;
   mkNP x y n g = 
     {s = table {NPPoss _ => x ; _ => y} ; a = agrP3 g n ;
@@ -344,7 +352,7 @@ oper
   mk2A a b = mkA a b (a + "e") ;
   regA a = (regADeg a) **  {lock_A = <>} ;
 
-  mkA2 a p = a ** {c2 = p ; lock_A2 = <>} ;
+  mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
 
   mkADeg a b c d e = mkAdject a b c d e ** {isComp = False ; lock_A = <>} ;
 
@@ -367,8 +375,6 @@ oper
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
-
-  mkPreposition p = p ;
 
   mkV a b c d e f = mkVerb6 a b c d e f ** 
     {part = [] ; vtype = VAct ; lock_V = <> ; isVaere = False} ;
@@ -418,12 +424,12 @@ oper
     s = v.s ; part = v.part ; vtype = VRefl ; isVaere = False ; lock_V = <>
     } ;
 
-  mkV2 v p = v ** {c2 = p ; lock_V2 = <>} ;
-  dirV2 v = mkV2 v [] ;
+  mkV2 v p = v ** {c2 = p.s ; lock_V2 = <>} ;
+  dirV2 v = mkV2 v (mkPrep []) ;
 
-  mkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
-  dirV3 v p = mkV3 v [] p ;
-  dirdirV3 v = dirV3 v [] ;
+  mkV3 v p q = v ** {c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
+  dirV3 v p = mkV3 v noPrep p ;
+  dirdirV3 v = dirV3 v noPrep ;
 
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {lock_VS = <>} ;

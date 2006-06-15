@@ -6,7 +6,7 @@ concrete AgendaEng of Agenda =
   lin
     Day       = UseN (regN "day") ;
     Meeting   = UseN (regN "meeting") ;
-    Add       = dirV3 (regV "add") (mkPreposition "on") ;
+    Add       = dirV3 (regV "add") (mkPrep "on") ;
     Remove    = dirV2 (regV "remove") ;
     Interrupt = regV "interrupt" ;
    

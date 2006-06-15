@@ -8,18 +8,18 @@ flags startcat=Phr ; lexer=textlit ; unlexer=text ;
 
 lin
   airplane_N = mk2N "fly" "flyet" ;
-  answer_V2S = mkV2S (regV "svare") "til" ;
+  answer_V2S = mkV2S (regV "svare") (mkPrep "til") ;
   apartment_N = mk2N "leilighet" "leiligheten" ;
   apple_N = mk2N "eple" "eplet" ;
   art_N = mk2N "kunst" "kunsten" ;
-  ask_V2Q = mkV2Q spørre_V [] ;
+  ask_V2Q = mkV2Q spørre_V noPrep ;
   baby_N = mk2N "baby" "babyen" ;
   bad_A = regADeg "dårlig" ; ----
   bank_N = mk2N "bank" "banken" ;
   beautiful_A = mk3ADeg "vakker" "vakkert" "vakra" ;
   become_VA = mkVA (vaereV bli_V) ;
   beer_N = regGenN "øl" neutrum ;
-  beg_V2V = mkV2V be_V [] "at" ;
+  beg_V2V = mkV2V be_V noPrep (mkPrep "at") ;
   big_A = irregADeg "stor" "større" "størst";
   bike_N = mkN "sykkel" "sykkelen" "sykler" "syklene" ;
   bird_N = mk2N "fugl" "fuglen" ;
@@ -33,7 +33,7 @@ lin
   bread_N = regGenN "brød" neutrum ;
   break_V2 = dirV2 (mk2V "knuse" "knuste") ;
   broad_A = regADeg "bred" ;
-  brother_N2 = mkN2 ( (mkN "bror" "broren" "brødre" "brødrene")) "til" ;
+  brother_N2 = mkN2 ( (mkN "bror" "broren" "brødre" "brødrene")) (mkPrep "til") ;
   brown_A = regADeg "brun" ;
   butter_N = regGenN "smør" neutrum ;
   buy_V2 = dirV2 (mk2V "kjøpe" "kjøpte") ;
@@ -60,17 +60,17 @@ lin
   cow_N = mkN "ku" "kua" "kyr" "kyrne" ; ----
   die_V = vaereV dø_V ;
   dirty_A = mk3ADeg "skitten" "skittent" "skitne" ; ----
-  distance_N3 = mkN3 (regGenN "avstand" masculine) "fra" "til" ;
+  distance_N3 = mkN3 (regGenN "avstand" masculine) (mkPrep "fra") (mkPrep "til") ;
   doctor_N = mk2N "lege" "legen" ;
   dog_N = regGenN "hund" masculine ;
   door_N = regGenN "dør" feminine ;
   drink_V2 = dirV2 drikke_V ;
-  easy_A2V = mkA2V (regA "grei") "for" ;
+  easy_A2V = mkA2V (regA "grei") (mkPrep "for") ;
   eat_V2 = dirV2 (mk2V "spise" "spiste") ;
   empty_A = mkADeg "tom" "tomt" "tomme" "tommere" "tommest" ;
   enemy_N = regGenN "fiende" masculine ;
   factory_N = mk2N "fabrikk" "fabrikken" ;
-  father_N2 = mkN2 ( (mkN "far" "faren" "fedre" "fedrene")) "til" ;
+  father_N2 = mkN2 ( (mkN "far" "faren" "fedre" "fedrene")) (mkPrep "til") ;
   fear_VS = mkVS (regV "frykte") ;
   find_V2 = dirV2 (irregV "finne" "fann" "funnet") ;
   fish_N = mk2N "fisk" "fisken" ;
@@ -115,11 +115,11 @@ lin
   love_N = regGenN "kjærlighet" masculine ;
   love_V2 = dirV2 (regV "elske") ;
   man_N =  (mkN "mann" "mannen" "menn" "mennen") ;
-  married_A2 = mkA2 (mk2A "gift" "gift") "med" ;
+  married_A2 = mkA2 (mk2A "gift" "gift") (mkPrep "med") ;
   meat_N = regGenN "kjøtt" neutrum ;
   milk_N = regGenN "melk" masculine ;
   moon_N = regGenN "måne" masculine ;
-  mother_N2 = mkN2 (mkN "mor" "moren" "mødre" "mødrene") "til" ; ---- fem
+  mother_N2 = mkN2 (mkN "mor" "moren" "mødre" "mødrene") (mkPrep "til") ; ---- fem
   mountain_N = regGenN "berg" neutrum ;
   music_N = mk2N "musikk" "musikken" ;
   narrow_A = regADeg "smal" ;
@@ -128,9 +128,9 @@ lin
   oil_N = regGenN "olje" masculine ;
   old_A = mkADeg "gammel" "gammelt" "gamle" "eldre" "eldst" ;
   open_V2 = dirV2 (regV "åpne") ;
-  paint_V2A = mkV2A (regV "male") [] ;
+  paint_V2A = mkV2A (regV "male") noPrep ;
   paper_N = regGenN "papir" neutrum ; ----
-  paris_PN = regPN "Paris" neutrum ;
+  paris_PN = regGenPN "Paris" neutrum ;
   peace_N = regGenN "fred" masculine ;
   pen_N = regGenN "penn" masculine ;
   planet_N = mk2N "planet" "planeten" ;
@@ -155,10 +155,10 @@ lin
   school_N = regGenN "skole" feminine;
   science_N = mk2N "vitenskap" "vitenskapen" ;
   sea_N = mk2N "sjø" "sjøen" ;
-  seek_V2 = mkV2 (mk2V "lete" "lette") "etter" ;
+  seek_V2 = mkV2 (mk2V "lete" "lette") (mkPrep "etter") ;
   see_V2 = dirV2 se_V ;
-  sell_V3 = dirV3 selge_V "til" ;
-  send_V3 = dirV3 (mk2V "sende" "sendte") "til" ;
+  sell_V3 = dirV3 selge_V (mkPrep "til") ;
+  send_V3 = dirV3 (mk2V "sende" "sendte") (mkPrep "til") ;
   sheep_N = mk2N "får" "fåret" ;
   ship_N = regGenN "skip" neutrum ;
   shirt_N = regGenN "skjorte" feminine ;
@@ -182,7 +182,7 @@ lin
   switch8off_V2 = dirV2 (partV (irregV "slå" "slo" "slått") "av") ;
   switch8on_V2 = dirV2 (partV (irregV "slå" "slo" "slått") "på") ;
   table_N = regGenN "bord" neutrum ;
-  talk_V3 = mkV3 (regV "snakke") "til" "om" ;
+  talk_V3 = mkV3 (regV "snakke") (mkPrep "til") (mkPrep "om") ;
   teacher_N = mkN "lærer" "læreren" "lærere" "lærerne" ;
   teach_V2 = dirV2 (mk2V "undervise" "underviste") ;
   television_N = mk2N "fjernsyn" "fjernsynet" ;
@@ -196,11 +196,11 @@ lin
   understand_V2 = dirV2 (irregV "forstå" "forstod" "forstått") ;
   university_N = regGenN "universitet" neutrum ;
   village_N = mk2N "grend" "grenda" ;
-  wait_V2 = mkV2 (regV "vente") "på" ;
+  wait_V2 = mkV2 (regV "vente") (mkPrep "på") ;
   walk_V = vaereV gå_V ;
   warm_A = regADeg "varm" ;
   war_N = regGenN "krig" masculine ;
-  watch_V2 = mkV2 se_V "på" ;
+  watch_V2 = mkV2 se_V (mkPrep "på") ;
   water_N = mk2N "vatn" "vatnet" ;
   white_A = regADeg "hvit" ;
   window_N = mkN "vindu" "vinduet" "vinduer" "vinduene" ; ---- er?
@@ -217,9 +217,9 @@ lin
   now_Adv = mkAdv "nå" ;
   already_Adv = mkAdv "allerede" ;
   song_N = mk2N "sang" "sangen" ;
-  add_V3 = mkV3 (partV (irregV "legge" "la" "lagt") "til") [] "til" ;
+  add_V3 = mkV3 (partV (irregV "legge" "la" "lagt") "til") noPrep (mkPrep "til") ;
   number_N = mk2N "nummer" "nummeret" ;
-  put_V2 = mkV2 (irregV "sette" "satte" "satt") [] ;
+  put_V2 = mkV2 (irregV "sette" "satte" "satt") noPrep ;
   stop_V = vaereV (regV "stanse") ;
   jump_V = regV "hoppe" ;
 

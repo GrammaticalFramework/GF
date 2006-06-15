@@ -8,18 +8,18 @@ flags
 
 lin
   airplane_N = regGenN "flygplan" neutrum ;
-  answer_V2S = mkV2S (regV "svarar") "till" ;
+  answer_V2S = mkV2S (regV "svarar") (mkPrep "till") ;
   apartment_N = mk2N "lägenhet" "lägenheter" ;
   apple_N = regGenN "äpple" neutrum ;
   art_N = mk2N "konst" "konster" ;
-  ask_V2Q = mkV2Q (regV "frågar") [] ;
+  ask_V2Q = mkV2Q (regV "frågar") noPrep ;
   baby_N = regGenN "bebis" utrum ;
   bad_A = irregA "dålig" "sämre" "sämst";
   bank_N = mk2N "bank" "banker" ;
   beautiful_A = mk3A "vacker" "vackert" "vackra" ;
   become_VA = mkVA (mkV "bli" "blir""bli" "blev" "blivit" "bliven") ;
   beer_N = regGenN "öl" neutrum ;
-  beg_V2V = mkV2V (mkV "be" "ber""be" "blad" "bett" "bedd") [] "att" ;
+  beg_V2V = mkV2V (mkV "be" "ber""be" "blad" "bett" "bedd") noPrep (mkPrep "att") ;
   big_A = irregA "stor" "större" "störst";
   bike_N = mk2N "cykel" "cyklar" ;
   bird_N = mk2N "fågel" "fåglar" ;
@@ -33,7 +33,7 @@ lin
   bread_N = regGenN "bröd" neutrum ;
   break_V2 = dirV2 (partV (mkV "slå" "slår" "slå" "slog" "slagit" "slagen") "sönder") ;
   broad_A = mk2A "bred" "brett" ;
-  brother_N2 = mkN2 ((mkN "bror" "brodern" "bröder" "bröderna")) "till" ;
+  brother_N2 = mkN2 ((mkN "bror" "brodern" "bröder" "bröderna")) (mkPrep "till") ;
   brown_A = regA "brun" ;
   butter_N = regGenN "smör" neutrum ;
   buy_V2 = dirV2 (mk2V "köpa" "köpte") ;
@@ -59,18 +59,18 @@ lin
   cousin_N = mk2N "kusin" "kusiner" ;
   cow_N = mk2N "ko" "kor" ;
   die_V = (mkV "dö" "dör" "dö" "dog" "dött" "dödd") ; ----
-  distance_N3 = mkN3 (mk2N "avstånd" "avstånd") "från" "till" ;
+  distance_N3 = mkN3 (mk2N "avstånd" "avstånd") (mkPrep "från") (mkPrep "till") ;
   dirty_A = regA "smutsig" ;
   doctor_N = mk2N "läkare" "läkare" ;
   dog_N = regGenN "hund" utrum ;
   door_N = regGenN "dörr" utrum ;
   drink_V2 = dirV2 (irregV "dricka" "drack" "druckit") ;
-  easy_A2V = mkA2V (mk2A "lätt" "lätt") "för" ;
+  easy_A2V = mkA2V (mk2A "lätt" "lätt") (mkPrep "för") ;
   eat_V2 = dirV2 (irregV "äta" "åt" "ätit") ;
   empty_A = mkA "tom" "tomt" "tomma" "tomma" "tommare" "tommast" "tommaste" ;
   enemy_N = regGenN "fiende" neutrum ;
   factory_N = mk2N "fabrik" "fabriker" ;
-  father_N2 = mkN2 ((mkN "far" "fadern" "fäder" "fäderna")) "till" ;
+  father_N2 = mkN2 ((mkN "far" "fadern" "fäder" "fäderna")) (mkPrep "till") ;
   fear_VS = mkVS (regV "fruktar") ;
   find_V2 = dirV2 (irregV "finna" "fann" "funnit") ;
   fish_N = mk2N "fisk" "fiskar" ;
@@ -108,19 +108,19 @@ lin
   learn_V2 = dirV2 (reflV (mkV "lära" "lär" "lär" "lärde" "lärt" "lärd")) ;
   leather_N = mkN "läder" "lädret" "läder" "lädren" ;
   leave_V2 = dirV2 (regV "lämnar") ;
-  like_V2 = mkV2 (mk2V "tycka" "tyckte") "om" ;
-  listen_V2 = mkV2 (regV "lyssnar") "på" ;
+  like_V2 = mkV2 (mk2V "tycka" "tyckte") (mkPrep "om") ;
+  listen_V2 = mkV2 (regV "lyssnar") (mkPrep "på") ;
   live_V = (irregV "leva" "levde" "levt") ; ---- ?
   long_A = irregA "lång" "längre" "längst" ;
   lose_V2 = dirV2 (regV "förlora") ;
   love_N = regGenN "kärlek" utrum ;
   love_V2 = dirV2 (regV "älska") ;
   man_N = (mkN "man" "mannen" "män" "männen") ;
-  married_A2 = mkA2 (mk2A "gift" "gift") "med" ;
+  married_A2 = mkA2 (mk2A "gift" "gift") (mkPrep "med") ;
   meat_N = regGenN "kött" neutrum ;
   milk_N = regGenN "mjölk" utrum ; ---- -ar?
   moon_N = regGenN "måne" utrum ;
-  mother_N2 = mkN2 (mkN "mor" "modern" "mödrar" "mödrarna") "till" ;
+  mother_N2 = mkN2 (mkN "mor" "modern" "mödrar" "mödrarna") (mkPrep "till") ;
   mountain_N = regGenN "berg" neutrum ;
   music_N = mk2N "musik" "musiker" ; ---- er ?
   narrow_A = regA "smal" ;
@@ -129,9 +129,9 @@ lin
   oil_N = regGenN "olja" utrum ;
   old_A = mkA "gammal" "gammalt" "gamla" "gamla" "äldre" "äldst" "äldsta" ;
   open_V2 = dirV2 (regV "öppna") ;
-  paint_V2A = mkV2A (regV "måla") [] ;
+  paint_V2A = mkV2A (regV "måla") noPrep ;
   paper_N = mkN "papper" "pappret" "papper" "pappren" ;
-  paris_PN = regPN "Paris" neutrum ;
+  paris_PN = regGenPN "Paris" neutrum ;
   peace_N = regGenN "fred" utrum ; ---- ar?
   pen_N = regGenN "penna" utrum ;
   planet_N = mk2N "planet" "planeter" ;
@@ -158,8 +158,8 @@ lin
   sea_N = mkN "sjö" "sjön" "sjöar" "sjöarna" ;
   seek_V2 = dirV2 (mk2V "söka" "sökte") ;
   see_V2 = dirV2 (mkV "se" "ser" "se" "såg" "sett" "sedd") ;
-  sell_V3 = dirV3 (irregV "sälja" "sålde" "sålt") "till" ;
-  send_V3 = dirV3 (regV "skicka") "till" ;
+  sell_V3 = dirV3 (irregV "sälja" "sålde" "sålt") (mkPrep "till") ;
+  send_V3 = dirV3 (regV "skicka") (mkPrep "till") ;
   sheep_N = mk2N "får" "får" ;
   ship_N = regGenN "skepp" neutrum ;
   shirt_N = regGenN "skjorta" utrum ;
@@ -183,7 +183,7 @@ lin
   switch8off_V2 = dirV2 (partV (irregV "stänga" "stängde" "stängt") "av") ;
   switch8on_V2 = dirV2 (partV (irregV "slå" "slog" "slagit") "på") ;
   table_N = regGenN "bord" neutrum ;
-  talk_V3 = mkV3 (regV "prata") "till" "om" ;
+  talk_V3 = mkV3 (regV "prata") (mkPrep "till") (mkPrep "om") ;
   teacher_N = mk2N "lärare" "lärare" ;
   teach_V2 = dirV2 (regV "undervisa") ;
   television_N = mk2N "television" "televisioner" ;
@@ -197,11 +197,11 @@ lin
   understand_V2 = dirV2 (mkV "förstå" "förstår" "förstå" "förstod" "förstått" "förstådd") ;
   university_N = regGenN "universitet" neutrum ;
   village_N = mkN "by" "byn" "byar" "byarna" ;
-  wait_V2 = mkV2 (regV "vänta") "på" ;
+  wait_V2 = mkV2 (regV "vänta") (mkPrep "på") ;
   walk_V = (mkV "gå" "går" "gå" "gick" "gått" "gången") ;
   warm_A = regA "varm" ;
   war_N = regGenN "krig" neutrum ;
-  watch_V2 = mkV2 (regV "titta") "på" ;
+  watch_V2 = mkV2 (regV "titta") (mkPrep "på") ;
   water_N = mkN "vatten" "vattnet" "vatten" "vattnen" ;
   white_A = regA "vit" ;
   window_N = mkN "fönster" "fönstret" "fönster" "fönstren" ;
@@ -218,9 +218,9 @@ lin
   now_Adv = mkAdv "nu" ;
   already_Adv = mkAdv "redan" ;
   song_N = mk2N "sång" "sånger" ;
-  add_V3 = mkV3 (partV (irregV "lägga" "lade" "lagt") "till") [] "till" ;
+  add_V3 = mkV3 (partV (irregV "lägga" "lade" "lagt") "till") noPrep (mkPrep "till") ;
   number_N = mkN "nummer" "numret" "numren" "numren" ;
-  put_V2 = mkV2 (mkV "sätta" "sätter" "sätt" "satte" "satt" "satt") [] ;
+  put_V2 = mkV2 (mkV "sätta" "sätter" "sätt" "satte" "satt" "satt") noPrep ;
   stop_V = regV "stanna" ;
   jump_V = regV "hoppa" ;
 
@@ -315,7 +315,7 @@ lin
   flow_V = rinna_V ;
   fly_V = flyga_V ;
   freeze_V = frysa_V ;
-  give_V3 = dirV3 giva_V "till";
+  give_V3 = dirV3 giva_V (mkPrep "till");
   hit_V2 = dirV2 (slå_V) ;
   hold_V2 = dirV2 (hålla_V) ;
   hunt_V2 = dirV2 (regV "jaga") ;
@@ -348,6 +348,7 @@ lin
   wipe_V2 = dirV2 (regV "torka") ;
 
   breathe_V = depV (regV "anda") ;
-  fight_V2 = mkV2 (mkV "slåss" "slåss" "slåss" "slogs" "slagits" "slagen") "med" ;
+  fight_V2 = 
+    mkV2 (mkV "slåss" "slåss" "slåss" "slogs" "slagits" "slagen") (mkPrep "med") ;
 
 } ;

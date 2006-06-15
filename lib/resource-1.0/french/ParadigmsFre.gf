@@ -57,13 +57,11 @@ oper
 -- amalgamate with the following word (the 'genitive' "de" and the
 -- 'dative' "à").
 
-  Preposition : Type ;
+  accusative : Prep ;
+  genitive   : Prep ;
+  dative     : Prep ;
 
-  accusative : Preposition ;
-  genitive   : Preposition ;
-  dative     : Preposition ;
-
-  mkPreposition : Str -> Preposition ;
+  mkPrep : Str -> Prep ;
 
 
 --2 Nouns
@@ -102,7 +100,7 @@ oper
 -- 
 -- Relational nouns ("fille de x") need a case and a preposition. 
 
-  mkN2 : N -> Preposition -> N2 ;
+  mkN2 : N -> Prep -> N2 ;
 
 -- The most common cases are the genitive "de" and the dative "à", 
 -- with the empty preposition.
@@ -112,7 +110,7 @@ oper
 
 -- Three-place relational nouns ("la connection de x à y") need two prepositions.
 
-  mkN3 : N -> Preposition -> Preposition -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ;
 
 
 --3 Relational common noun phrases
@@ -127,7 +125,10 @@ oper
 --
 -- Proper names need a string and a gender.
 
-  mkPN : Str -> Gender -> PN ;          -- Jean
+  mkPN  : Str -> Gender -> PN ;    -- Jean
+
+  regPN : Str -> PN ;              -- masculine
+
 
 -- To form a noun phrase that can also be plural,
 -- you can use the worst-case function.
@@ -160,7 +161,7 @@ oper
 --
 -- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Preposition -> A2 ;
+  mkA2 : A -> Prep -> A2 ;
 
 --3 Comparison adjectives 
 
@@ -227,7 +228,7 @@ oper
 -- Two-place verbs need a preposition, except the special case with direct object.
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
-  mkV2  : V -> Preposition -> V2 ;
+  mkV2  : V -> Prep -> V2 ;
 
   dirV2 : V -> V2 ;
 
@@ -240,9 +241,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Preposition -> Preposition -> V3 ; -- parler, à, de
-  dirV3    : V -> Preposition -> V3 ;                -- donner,_,à
-  dirdirV3 : V -> V3 ;                               -- donner,_,_
+  mkV3     : V -> Prep -> Prep -> V3 ;  -- parler, à, de
+  dirV3    : V -> Prep -> V3 ;          -- donner,_,à
+  dirdirV3 : V -> V3 ;                  -- donner,_,_
 
 --3 Other complement patterns
 --
@@ -251,20 +252,20 @@ oper
 
   mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
-  mkV2S : V -> Preposition -> V2S ;
+  mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;  -- plain infinitive: "je veux parler"
   deVV  : V -> VV ;  -- "j'essaie de parler"
   aVV   : V -> VV ;  -- "j'arrive à parler"
-  mkV2V : V -> Preposition -> Preposition -> V2V ;
+  mkV2V : V -> Prep -> Prep -> V2V ;
   mkVA  : V -> VA ;
-  mkV2A : V -> Preposition -> Preposition -> V2A ;
+  mkV2A : V -> Prep -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
-  mkV2Q : V -> Preposition -> V2Q ;
+  mkV2Q : V -> Prep -> V2Q ;
 
   mkAS  : A -> AS ;
-  mkA2S : A -> Preposition -> A2S ;
-  mkAV  : A -> Preposition -> AV ;
-  mkA2V : A -> Preposition -> Preposition -> A2V ;
+  mkA2S : A -> Prep -> A2S ;
+  mkAV  : A -> Prep -> AV ;
+  mkA2V : A -> Prep -> Prep -> A2V ;
 
 -- Notice: categories $V2S, V2V, V2Q$ are in v 1.0 treated
 -- just as synonyms of $V2$, and the second argument is given
@@ -274,11 +275,12 @@ oper
   V0, V2S, V2V, V2Q : Type ;
   AS, A2S, AV, A2V : Type ;
 
+--.
 --2 Definitions of the paradigms
 --
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
---.
+
 
   Gender = MorphoFre.Gender ; 
   Number = MorphoFre.Number ;
@@ -291,7 +293,12 @@ oper
   accusative = complAcc ;
   genitive = complGen ;
   dative = complDat ;
-  mkPreposition p = {s = p ; c = Acc ; isDir = False} ;
+  mkPrep p = {s = p ; c = Acc ; isDir = False} ;
+
+  --- obsolete
+  Preposition : Type ;
+  mkPreposition : Str -> Preposition ;
+  mkPreposition = mkPrep ;
 
   mkN x y g = mkCNomIrreg x y g ** {lock_N = <>} ;
   regN x = regGenN x g where {
@@ -308,6 +315,7 @@ oper
   aN2 n = mkN2 n dative ;
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
+  regPN x = mkPN x masculine ;
   mkPN x g = {s = x ; g = g} ** {lock_PN = <>} ;
   mkNP x g n = {s = (pn2np (mkPN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
 

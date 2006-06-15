@@ -6,8 +6,8 @@ concrete LightsEng of Lights =
   lin
     Light       = UseN (regN "light") ;
     Room        = UseN (regN "room") ;
-    SwitchOnIn  = dirV3 (partV (regV "switch") "on")  (mkPreposition "in") ;
-    SwitchOffIn = dirV3 (partV (regV "switch") "off") (mkPreposition "in") ;
+    SwitchOnIn  = dirV3 (partV (regV "switch") "on")  (mkPrep "in") ;
+    SwitchOffIn = dirV3 (partV (regV "switch") "off") (mkPrep "in") ;
     SwitchOn    = dirV2 (partV (regV "switch") "on") ;
     SwitchOff   = dirV2 (partV (regV "switch") "off") ;
 

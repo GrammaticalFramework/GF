@@ -58,13 +58,13 @@ oper
 -- amalgamate with the following word (the 'genitive' "de" and the
 -- 'dative' "à").
 
-  Preposition : Type ;
+  Prep : Type ;
 
-  accusative : Preposition ;
-  genitive   : Preposition ;
-  dative     : Preposition ;
+  accusative : Prep ;
+  genitive   : Prep ;
+  dative     : Prep ;
 
-  mkPreposition : Str -> Preposition ;
+  mkPrep : Str -> Prep ;
 
 --2 Nouns
 
@@ -98,7 +98,7 @@ oper
 -- 
 -- Relational nouns ("figlio di x") need a case and a preposition. 
 
-  mkN2 : N -> Preposition -> N2 ;
+  mkN2 : N -> Prep -> N2 ;
 
 -- The most common cases are the genitive "di" and the dative "a", 
 -- with the empty preposition.
@@ -108,7 +108,7 @@ oper
 
 -- Three-place relational nouns ("la connessione di x a y") need two prepositions.
 
-  mkN3 : N -> Preposition -> Preposition -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ;
 
 
 --3 Relational common noun phrases
@@ -123,7 +123,8 @@ oper
 --
 -- Proper names need a string and a gender.
 
-  mkPN : Str -> Gender -> PN ;          -- Jean
+  mkPN  : Str -> Gender -> PN ;
+  regPN : Str -> PN ;             -- masculine
 
 -- To form a noun phrase that can also be plural,
 -- you can use the worst-case function.
@@ -153,7 +154,7 @@ oper
 --
 -- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Preposition -> A2 ;
+  mkA2 : A -> Prep -> A2 ;
 
 --3 Comparison adjectives 
 
@@ -217,7 +218,7 @@ oper
 -- Two-place verbs need a preposition, except the special case with direct object.
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
-  mkV2  : V -> Preposition -> V2 ;
+  mkV2  : V -> Prep -> V2 ;
 
   dirV2 : V -> V2 ;
 
@@ -230,9 +231,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Preposition -> Preposition -> V3 ; -- parler, à, de
-  dirV3    : V -> Preposition -> V3 ;                -- donner,_,à
-  dirdirV3 : V -> V3 ;                               -- donner,_,_
+  mkV3     : V -> Prep -> Prep -> V3 ; -- parlare, a, di
+  dirV3    : V -> Prep -> V3 ;         -- dare,_,a
+  dirdirV3 : V -> V3 ;                 -- dare,_,_
 
 
 --3 Other complement patterns
@@ -242,20 +243,20 @@ oper
 
   mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
-  mkV2S : V -> Preposition -> V2S ;
-  mkVV  : V -> VV ;  -- plain infinitive: "je veux parler"
-  deVV  : V -> VV ;  -- "j'essaie de parler"
-  aVV   : V -> VV ;  -- "j'arrive à parler"
-  mkV2V : V -> Preposition -> Preposition -> V2V ;
+  mkV2S : V -> Prep -> V2S ;
+  mkVV  : V -> VV ;  -- plain infinitive: "voglio parlare"
+  deVV  : V -> VV ;  -- "cerco di parlare"
+  aVV   : V -> VV ;  -- "arrivo a parlare"
+  mkV2V : V -> Prep -> Prep -> V2V ;
   mkVA  : V -> VA ;
-  mkV2A : V -> Preposition -> Preposition -> V2A ;
+  mkV2A : V -> Prep -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
-  mkV2Q : V -> Preposition -> V2Q ;
+  mkV2Q : V -> Prep -> V2Q ;
 
   mkAS  : A -> AS ;
-  mkA2S : A -> Preposition -> A2S ;
-  mkAV  : A -> Preposition -> AV ;
-  mkA2V : A -> Preposition -> Preposition -> A2V ;
+  mkA2S : A -> Prep -> A2S ;
+  mkAV  : A -> Prep -> AV ;
+  mkA2V : A -> Prep -> Prep -> A2V ;
 
 -- Notice: categories $V2S, V2V, V2Q$ are in v 1.0 treated
 -- just as synonyms of $V2$, and the second argument is given
@@ -266,11 +267,12 @@ oper
   AS, A2S, AV, A2V : Type ;
 
 
+--.
 --2 The definitions of the paradigms
 --
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
---.
+
 
   Gender = MorphoIta.Gender ; 
   Number = MorphoIta.Number ;
@@ -279,11 +281,11 @@ oper
   singular = Sg ;
   plural = Pl ;
 
-  Preposition = Compl ;
+  Prep = Compl ;
   accusative = complAcc ;
   genitive = complGen ;
   dative = complDat ;
-  mkPreposition p = {s = p ; c = Acc ; isDir = False} ;
+  mkPrep p = {s = p ; c = Acc ; isDir = False} ;
 
   mkN x y g = mkNounIrreg x y g ** {lock_N = <>} ;
   regN x = mkNomReg x ** {lock_N = <>} ;
@@ -298,6 +300,7 @@ oper
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
   mkPN x g = {s = x ; g = g} ** {lock_PN = <>} ;
+  regPN x = mkPN x masculine ;
   mkNP x g n = {s = (pn2np (mkPN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
 
   mkA a b c d e = 
