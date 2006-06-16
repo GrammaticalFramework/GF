@@ -61,7 +61,8 @@ concrete IdiomFin of Idiom = CatFin **
   ImpPl1 vp = 
     let vps = vp.s ! VIPass ! Simul ! Pos ! {n = Pl ; p = P1}
     in
-    {s = vps.fin ++ vps.inf ++ vp.s2 ! True ! Pos ! {n = Pl ; p = P1} ++ vp.ext
+    {s = vps.fin ++ vps.inf ++ 
+         vp.s2 ! True ! Pos ! {n = Pl ; p = P1} ++ vp.ext
     } ;
 
   oper
