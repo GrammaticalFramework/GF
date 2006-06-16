@@ -14,7 +14,8 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
           agr   = {n = n ; p = P2} ;
           verb  = infVP True vp agr ;
           dont  = case pol of {
-            Neg => "don't" ;
+            CNeg True => "don't" ;
+            CNeg False => "do" ++ "not" ;
             _ => []
             }
         in
@@ -40,11 +41,13 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = infVP False vp (agrP3 Sg)} ; --- agr
 
-    UseCl  t a p cl = {s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! ODir} ;
-    UseQCl t a p cl = {s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! q} ;
+    UseCl  t a p cl = {s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! ODir} ;
+    UseQCl t a p cl = {s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! q} ;
     UseRCl t a p cl = {
-      s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! r ;
+      s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! r ;
       c = cl.c
       } ;
 
+  oper
+    ctr = contrNeg True ;  -- contracted negations
 }

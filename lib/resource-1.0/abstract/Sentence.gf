@@ -62,6 +62,7 @@ abstract Sentence = Cat ** {
 
 }
 
+--.
 -- Examples for English $S$/$Cl$:
 {-
   Pres  Simul  Pos  ODir  : he sleeps
