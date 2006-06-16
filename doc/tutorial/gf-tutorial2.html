@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Grammatical Framework Tutorial</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Fri Jun 16 01:02:28 2006
+Last update: Fri Jun 16 10:32:52 2006
 </FONT></CENTER>
 
 <P></P>
@@ -100,37 +100,40 @@ Last update: Fri Jun 16 01:02:28 2006
       <UL>
       <LI><A HREF="#toc66">GF as a logical framework</A>
       <LI><A HREF="#toc67">Dependent types</A>
-      <LI><A HREF="#toc68">Higher-order abstract syntax</A>
-      <LI><A HREF="#toc69">Semantic definitions</A>
-      <LI><A HREF="#toc70">List categories</A>
+      <LI><A HREF="#toc68">Dependent types in syntax editing</A>
+      <LI><A HREF="#toc69">Dependent types in concrete syntax</A>
+      <LI><A HREF="#toc70">Expressing selectional restrictions</A>
+      <LI><A HREF="#toc71">Proof objects</A>
+      <LI><A HREF="#toc72">Variable bindings</A>
+      <LI><A HREF="#toc73">Semantic definitions</A>
       </UL>
-    <LI><A HREF="#toc71">More features of the module system</A>
+    <LI><A HREF="#toc74">More features of the module system</A>
       <UL>
-      <LI><A HREF="#toc72">Interfaces, instances, and functors</A>
-      <LI><A HREF="#toc73">Resource grammars and their reuse</A>
-      <LI><A HREF="#toc74">Restricted inheritance and qualified opening</A>
+      <LI><A HREF="#toc75">Interfaces, instances, and functors</A>
+      <LI><A HREF="#toc76">Resource grammars and their reuse</A>
+      <LI><A HREF="#toc77">Restricted inheritance and qualified opening</A>
       </UL>
-    <LI><A HREF="#toc75">Using the standard resource library</A>
+    <LI><A HREF="#toc78">Using the standard resource library</A>
       <UL>
-      <LI><A HREF="#toc76">The simplest way</A>
-      <LI><A HREF="#toc77">How to find resource functions</A>
-      <LI><A HREF="#toc78">A functor implementation</A>
+      <LI><A HREF="#toc79">The simplest way</A>
+      <LI><A HREF="#toc80">How to find resource functions</A>
+      <LI><A HREF="#toc81">A functor implementation</A>
       </UL>
-    <LI><A HREF="#toc79">Transfer modules</A>
-    <LI><A HREF="#toc80">Practical issues</A>
+    <LI><A HREF="#toc82">Transfer modules</A>
+    <LI><A HREF="#toc83">Practical issues</A>
       <UL>
-      <LI><A HREF="#toc81">Lexers and unlexers</A>
-      <LI><A HREF="#toc82">Efficiency of grammars</A>
-      <LI><A HREF="#toc83">Speech input and output</A>
-      <LI><A HREF="#toc84">Multilingual syntax editor</A>
-      <LI><A HREF="#toc85">Interactive Development Environment (IDE)</A>
-      <LI><A HREF="#toc86">Communicating with GF</A>
-      <LI><A HREF="#toc87">Embedded grammars in Haskell, Java, and Prolog</A>
-      <LI><A HREF="#toc88">Alternative input and output grammar formats</A>
+      <LI><A HREF="#toc84">Lexers and unlexers</A>
+      <LI><A HREF="#toc85">Efficiency of grammars</A>
+      <LI><A HREF="#toc86">Speech input and output</A>
+      <LI><A HREF="#toc87">Multilingual syntax editor</A>
+      <LI><A HREF="#toc88">Interactive Development Environment (IDE)</A>
+      <LI><A HREF="#toc89">Communicating with GF</A>
+      <LI><A HREF="#toc90">Embedded grammars in Haskell, Java, and Prolog</A>
+      <LI><A HREF="#toc91">Alternative input and output grammar formats</A>
       </UL>
-    <LI><A HREF="#toc89">Case studies</A>
+    <LI><A HREF="#toc92">Case studies</A>
       <UL>
-      <LI><A HREF="#toc90">Interfacing formal and natural languages</A>
+      <LI><A HREF="#toc93">Interfacing formal and natural languages</A>
       </UL>
     </UL>
 
@@ -2213,29 +2216,950 @@ is a set of type and function declarations. The following is an example
 of such a theory, represented as an <CODE>abstract</CODE> module in GF.
 </P>
 <PRE>
-    abstract Geometry = {
-      cat 
-        Line ; Point ; Circle ;            -- basic types of figures
-        Prop ;                             -- proposition
-      fun
-        Parallel : Line -&gt; Line -&gt; Prop ;  -- x is parallel to y
-        Centre : Circle -&gt; Point ;         -- the centre of c
+  abstract Arithm = {
+    cat
+      Prop ;    -- proposition
+      Nat ;     -- natural number
+    fun
+      Zero : Nat ;                  -- 0
+      Succ : Nat -&gt; Nat ;           -- successor of x
+      Even : Nat -&gt; Prop ;          -- x is even
+      And  : Prop -&gt; Prop -&gt; Prop ; -- A and B
       } 
 </PRE>
-<P></P>
+<P>
+A concrete syntax is given below, as an example of using the resource grammar
+library.
+</P>
 <A NAME="toc67"></A>
 <H3>Dependent types</H3>
+<P>
+<B>Dependent types</B> are a characteristic feature of GF,
+inherited from the
+<B>constructive type theory</B> of Martin-Löf and
+distinguishing GF from most other grammar formalisms and
+functional programming languages.
+The initial main motivation for developing GF was, indeed,
+to have a grammar formalism with dependent types.
+As can be inferred from the fact that we introduce them only now,
+after having written lots of grammars without them,
+dependent types are no longer the only motivation for GF.
+But they are still important and interesting.
+</P>
+<P>
+Dependent types can be used for stating stronger
+<B>conditions of well-formedness</B> than non-dependent types.
+A simple example is postal addresses. Ignoring the other details,
+let us take a look at addresses consisting of
+a street, a city, and a country. 
+</P>
+<PRE>
+  abstract Address = {
+    cat 
+      Address ; Country ; City ; Street ;
+  
+    fun
+      mkAddress : Country -&gt; City -&gt; Street -&gt; Address ;
+  
+      UK, France : Country ;
+      Paris, London, Grenoble : City ;
+      OxfordSt, ShaftesburyAve, BdRaspail, RueBlondel, AvAlsaceLorraine : Street ;
+    }
+</PRE>
+<P>
+The linearization rules
+are straightforward,
+</P>
+<PRE>
+    lin
+  
+      mkAddress country city street = ss (street ++ "," ++ city ++ "," ++ country) ;
+  
+      UK = ss ("U.K.") ;
+      France = ss ("France") ;
+      Paris = ss ("Paris") ;
+      London = ss ("London") ;
+      Grenoble = ss ("Grenoble") ;
+      OxfordSt = ss ("Oxford" ++ "Street") ;
+      ShaftesburyAve = ss ("Shaftesbury" ++ "Avenue") ;
+      BdRaspail = ss ("boulevard" ++ "Raspail") ;
+      RueBlondel = ss ("rue" ++ "Blondel") ;
+      AvAlsaceLorraine = ss ("avenue" ++ "Alsace-Lorraine") ;
+</PRE>
+<P>
+with the exception of <CODE>mkAddress</CODE>, where we have
+reversed the order of the constituents. The type of <CODE>mkAddress</CODE>
+in the abstract syntax takes its arguments in a "logical" order,
+with increasing precision. (This order is sometimes even used in the concrete
+syntax of addresses, e.g. in Russia).
+</P>
+<P>
+Both existing and non-existing addresses are recognized by this
+grammar. The non-existing ones in the following randomly generated
+list have afterwards been marked by *:
+</P>
+<PRE>
+    &gt; gr -cat=Address -number=7 | l
+  
+    * Oxford Street , Paris , France
+    * Shaftesbury Avenue , Grenoble , U.K.
+    boulevard Raspail , Paris , France
+    * rue Blondel , Grenoble , U.K.
+    * Shaftesbury Avenue , Grenoble , France
+    * Oxford Street , London , France
+    * Shaftesbury Avenue , Grenoble , France
+</PRE>
+<P>
+Dependent types provide a way to guarantee that addresses are
+well-formed. What we do is to include <B>contexts</B> in
+<CODE>cat</CODE> judgements:
+</P>
+<PRE>
+    cat Address ; 
+    cat Country ; 
+    cat City Country ; 
+    cat Street (x : Country)(y : City x) ;
+</PRE>
+<P>
+The first two judgements are as before, but the third one makes
+<CODE>City</CODE> dependent on <CODE>Country</CODE>: there are no longer just cities,
+but cities of the U.K. and cities of France. The fourth judgement
+makes <CODE>Street</CODE> dependent on <CODE>City</CODE>; but since 
+<CODE>City</CODE> is itself dependent on <CODE>Country</CODE>, we must
+include them both in the context, moreover guaranteeing that
+the city is one of the given country. Since the context itself
+is built by using a dependent type, we have to use variables
+to indicate the dependencies. The judgement we used for <CODE>City</CODE>
+is actually shorthand for
+</P>
+<PRE>
+    cat City (x : Country)
+</PRE>
+<P>
+which is only possible if the subsequent context does not depend on <CODE>x</CODE>.
+</P>
+<P>
+The <CODE>fun</CODE> judgements of the grammar are modified accordingly:
+</P>
+<PRE>
+    fun
+    
+    mkAddress : (x : Country) -&gt; (y : City x) -&gt; Street x y -&gt; Address ;
+    
+    UK : Country ;
+    France : Country ;
+    Paris : City France ; 
+    London : City UK ; 
+    Grenoble : City France ;
+    OxfordSt : Street UK London ; 
+    ShaftesburyAve : Street UK London ;
+    BdRaspail : Street France Paris ; 
+    RueBlondel : Street France Paris ; 
+    AvAlsaceLorraine : Street France Grenoble ;
+</PRE>
+<P>
+Since the type of <CODE>mkAddress</CODE> now has dependencies among
+its argument types, we have to use variables just like we used in
+the context of <CODE>Street</CODE> above. What we claimed to be the
+"logical" order of the arguments is now forced by the type system
+of GF: a variable must be declared (=bound) before it can be
+referenced (=used).
+</P>
+<P>
+The effect of dependent types is that the *-marked addresses above are
+no longer well-formed. What the GF parser actually does is that it
+initially accepts them (by using a context-free parsing algorithm)
+and then rejects them (by type checking). The random generator does not produce
+illegal addresses (this could be useful in bulk mailing!).
+The linearization algorithm does not care about type dependencies;
+actually, since the <I>categories</I> (ignoring their arguments)
+are the same in both abstract syntaxes,
+we use the same concrete syntax
+for both of them.
+</P>
+<P>
+<B>Remark</B>. Function types <I>without</I>
+variables are actually a shorthand notation: writing
+</P>
+<PRE>
+    fun PredV1 : NP -&gt; V1 -&gt; S
+</PRE>
+<P>
+is shorthand for 
+</P>
+<PRE>
+    fun PredV1 : (x : NP) -&gt; (y : V1) -&gt; S
+</PRE>
+<P>
+or any other naming of the variables. Actually the use of variables
+sometimes shortens the code, since we can write e.g.
+</P>
+<PRE>
+    fun  ConjNP : Conj -&gt; (x,y : NP) -&gt; NP ;
+    oper triple : (x,y,z : Str) -&gt; Str = \x,y,z -&gt; x ++ y ++ z ;
+</PRE>
+<P></P>
 <A NAME="toc68"></A>
-<H3>Higher-order abstract syntax</H3>
+<H3>Dependent types in syntax editing</H3>
+<P>
+An extra advantage of dependent types is seen in
+syntax editing:
+when menus with possible refinements are created,
+only those functions are shown that are type-correct.
+For instance, if the editor state is
+</P>
+<PRE>
+    mkAddress : Address  
+       UK : Country  
+    *  ?2 : City UK  
+       ?3 : Street UK ?2
+</PRE>
+<P>
+only the cities of the U.K. are shown in the city menu.
+</P>
+<P>
+What is more, editing in the state
+</P>
+<PRE>
+    mkAddress : Address  
+       ?1 : Country  
+       ?2 : City (?1)  
+    *  ?3 : Street (?1) (?2)  
+</PRE>
+<P>
+<I>starts</I> from the <CODE>Street</CODE> argument,
+which enables GF automatically to infer the city and the country.
+Thus, in addition to guaranteeing the meaningfulness of the results,
+dependent types can shorten editing sessions considerably.
+</P>
 <A NAME="toc69"></A>
-<H3>Semantic definitions</H3>
+<H3>Dependent types in concrete syntax</H3>
+<P>
+The <B>functional fragment</B> of GF
+terms and types comprises function types, applications, lambda
+abstracts, constants, and variables. This fragment is similar in
+abstract and concrete syntax. In particular,
+dependent types are also available in concrete syntax.
+We have not made use of them yet,
+but we will now look at one example of how they
+can be used.
+</P>
+<P>
+Those readers who are familiar with functional programming languages
+like ML and Haskell, may already have missed <B>polymorphic</B>
+functions. For instance, Haskell programmers have access to
+the functions
+</P>
+<PRE>
+    const :: a -&gt; b -&gt; a
+    const c x = c
+  
+    flip :: (a -&gt; b -&gt;c) -&gt; b -&gt; a -&gt; c
+    flip f y x = f x y
+</PRE>
+<P>
+which can be used for any given types <CODE>a</CODE>,<CODE>b</CODE>, and <CODE>c</CODE>.
+</P>
+<P>
+The GF counterpart of polymorphic functions are <B>monomorphic</B>
+functions with explicit <B>type variables</B>. Thus the above
+definitions can be written
+</P>
+<PRE>
+    oper const :(a,b : Type) -&gt; a -&gt; b -&gt; a =
+      \_,_,c,x -&gt; c ;
+  
+    oper flip : (a,b,c : Type) -&gt; (a -&gt; b -&gt;c) -&gt; b -&gt; a -&gt; c =
+      \_,_,_,f,x,y -&gt; f y x ;
+</PRE>
+<P>
+When the operations are used, the type checker requires
+them to be equipped with all their arguments; this may be a nuisance
+for the Haskell or ML programmer. 
+</P>
 <A NAME="toc70"></A>
-<H3>List categories</H3>
+<H3>Expressing selectional restrictions</H3>
+<P>
+This section introduces a way of using dependent types to
+formalize a notion known as <B>selectional restrictions</B>
+in linguistics. We first present a mathematical model
+of the notion, and then integrate it in a linguistically
+motivated syntax.
+</P>
+<P>
+In linguistics, a 
+grammar is usually thought of as being about <B>syntactic well-formedness</B>
+in a rather liberal sense: an expression can be well-formed without
+being meaningful, in other words, without being
+<B>semantically well-formed</B>.
+For instance, the sentence
+</P>
+<PRE>
+    the number 2 is equilateral
+</PRE>
+<P>
+is syntactically well-formed but semantically ill-formed.
+It is well-formed because it combines a well-formed
+noun phrase ("the number 2") with a well-formed
+verb phrase ("is equilateral") in accordance with the
+rule that the verb phrase is inflected in the
+number of the noun phrase:
+</P>
+<PRE>
+    fun PredV1 : NP -&gt; V1 -&gt; S ;
+    lin PredV1 np v1 = {s = np.s ++ v1.s ! np.n} ;
+</PRE>
+<P>
+It is ill-formed because the predicate "is equilateral"
+is only defined for triangles, not for numbers.
+</P>
+<P>
+In a straightforward type-theoretical formalization of
+mathematics, domains of mathematical objects
+are defined as types. In GF, we could write
+</P>
+<PRE>
+    cat Nat ;
+    cat Triangle ;
+    cat Prop ;
+</PRE>
+<P>
+for the types of natural numbers, triangles, and propositions,
+respectively.
+Noun phrases are typed as objects of basic types other than
+<CODE>Prop</CODE>, whereas verb phrases are functions from basic types
+to <CODE>Prop</CODE>. For instance,
+</P>
+<PRE>
+    fun two : Nat ;
+    fun Even : Nat -&gt; Prop ;
+    fun Equilateral : Triangle -&gt; Prop ;
+</PRE>
+<P>
+With these judgements, and the linearization rules
+</P>
+<PRE>
+    lin two = ss ["the number 2"] ;
+    lin Even x = ss (x.s ++ ["is even"]) ;
+    lin Equilateral x = ss (x.s ++ ["is equilateral"]) ;
+</PRE>
+<P>
+we can form the proposition <CODE>Even two</CODE>
+</P>
+<PRE>
+    the number 2 is even
+</PRE>
+<P>
+but no proposition linearized to
+</P>
+<PRE>
+    the number 2 is equilateral
+</PRE>
+<P>
+since <CODE>Equilateral two</CODE> is not a well-formed type-theoretical object.
+</P>
+<P>
+When formalizing mathematics, e.g. in the purpose of
+computer-assisted theorem proving, we are certainly interested
+in semantic well-formedness: we want to be sure that a proposition makes
+sense before we make the effort of proving it. The straightforward typing
+of nouns and predicates shown above is the way in which this
+is guaranteed in various proof systems based on type theory.
+(Notice that it is still possible to form <I>false</I> propositions,
+e.g. "the number 3 is even".
+False and meaningless are different things.)
+</P>
+<P>
+As shown by the linearization rules for <CODE>two</CODE>, <CODE>Even</CODE>,
+etc, it <I>is</I> possible to use straightforward mathematical typings
+as the abstract syntax of a grammar. However, this syntax is not very
+expressive linguistically: for instance, there is no distinction between
+adjectives and verbs. It is hard to give rules for structures like
+adjectival modification ("even number") and conjunction of predicates
+("even or odd"). 
+</P>
+<P>
+By using dependent types, it is simple to combine a linguistically
+motivated system of categories with mathematically motivated
+type restrictions. What we need is a category of domains of
+individual objects,
+</P>
+<PRE>
+    cat Dom
+</PRE>
+<P>
+and dependencies of other categories on this:
+</P>
+<PRE>
+    cat 
+      S ;            -- sentence
+      V1 Dom ;       -- one-place verb
+      V2 Dom Dom ;   -- two-place verb
+      A1 Dom ;       -- one-place adjective
+      A2 Dom Dom ;   -- two-place adjective
+      PN Dom ;       -- proper name
+      NP Dom ;       -- noun phrase
+      Conj ;         -- conjunction
+      Det ;          -- determiner
+</PRE>
+<P>
+The number of <CODE>Dom</CODE> arguments depends on the semantic type
+corresponding to the category: one-place verbs and adjectives
+correspond to types of the form
+</P>
+<PRE>
+    A -&gt; Prop
+</PRE>
+<P>
+whereas two-place verbs and adjectives correspond to types of the form
+</P>
+<PRE>
+    A -&gt; B -&gt; Prop
+</PRE>
+<P>
+where the domains <CODE>A</CODE> and <CODE>B</CODE> can be distinct.
+Proper names correspond to types of the form
+</P>
+<PRE>
+    A
+</PRE>
+<P>
+that is, individual objects of the domain <CODE>A</CODE>. Noun phrases
+correspond to
+</P>
+<PRE>
+    (A -&gt; Prop) -&gt; Prop
+</PRE>
+<P>
+that is, <B>quantifiers</B> over the domain <CODE>A</CODE>.
+Sentences, conjunctions, and determiners correspond to
+</P>
+<PRE>
+    Prop
+    Prop -&gt; Prop -&gt; Prop
+    (A : Dom) -&gt; (A -&gt; Prop) -&gt; Prop
+</PRE>
+<P>
+respectively,
+and are thus independent of domain. As for common nouns <CODE>CN</CODE>,
+the simplest semantics is that they correspond to
+</P>
+<PRE>
+    Dom
+</PRE>
+<P>
+In this section, we will, in fact, write <CODE>Dom</CODE> instead of <CODE>CN</CODE>. 
+</P>
+<P>
+Having thus parametrized categories on domains, we have to reformulate
+the rules of predication, etc, accordingly. This is straightforward:
+</P>
+<PRE>
+    fun
+      PredV1  : (A   : Dom) -&gt; NP A -&gt; V1 A -&gt; S ;
+      ComplV2 : (A,B : Dom) -&gt; V2 A B -&gt; NP B -&gt; V1 A ;
+      UsePN   : (A   : Dom) -&gt; PN A -&gt; NP A ;
+      DetCN   :                Det -&gt; (A : Dom) -&gt; NP A ;
+      ModA1   :                (A : Dom) -&gt; A1 A -&gt; Dom ;
+      ConjS   :                Conj -&gt; S -&gt; S -&gt; S ;
+      ConjV1  : (A   : Dom) -&gt; Conj -&gt; V1 A -&gt; V1 A -&gt; V1 A ;
+</PRE>
+<P>
+In linearization rules,
+we typically use wildcards for the domain arguments,
+to get arities right:
+</P>
+<PRE>
+    lin
+      PredV1 _ np vp = ss (np.s ++ vp.s) ;
+      ComplV2 _ _ v2 np = ss (v2.s ++ np.s) ;
+      UsePN _ pn = pn ;
+      DetCN det cn = ss (det.s ++ cn.s) ;
+      ModA1 cn a1 = ss (a1.s ++ cn.s) ;
+      ConjS conj s1 s2 = ss (s1.s ++ conj.s ++ s2.s) ;
+      ConjV1 _ conj v1 v2 = ss (v1.s ++ conj.s ++ v2.s) ;
+</PRE>
+<P>
+The domain arguments thus get suppressed in linearization.
+Parsing initially returns metavariables for them,
+but type checking can usually restore them
+by inference from those arguments that are not suppressed.
+</P>
+<P>
+One traditional linguistic example of domain restrictions
+(= selectional restrictions) is the contrast between the two sentences
+</P>
+<PRE>
+    John plays golf
+    golf plays John
+</PRE>
+<P>
+To explain the contrast, we introduce the functions
+</P>
+<PRE>
+    human : Dom ; 
+    game : Dom ;
+    play : V2 human game ;
+    John : PN human ;
+    Golf : PN game ;
+</PRE>
+<P>
+Both sentences still pass the context-free parser,
+returning trees with lots of metavariables of type <CODE>Dom</CODE>:
+</P>
+<PRE>
+    PredV1 ?0 (UsePN ?1 John) (ComplV2 ?2 ?3 play (UsePN ?4 Golf))
+  
+    PredV1 ?0 (UsePN ?1 Golf) (ComplV2 ?2 ?3 play (UsePN ?4 John))
+</PRE>
+<P>
+But only the former sentence passes the type checker, which moreover
+infers the domain arguments:
+</P>
+<PRE>
+    PredV1 human (UsePN human John) (ComplV2 human game play (UsePN game Golf))
+</PRE>
+<P></P>
+<P>
+A known problem with selectional restrictions is that they can be more
+or less liberal. For instance,
+</P>
+<PRE>
+    John loves Mary
+    John loves golf
+</PRE>
+<P>
+both make sense, even though <CODE>Mary</CODE> and <CODE>golf</CODE>
+are of different types. A natural solution in this case is to
+formalize <CODE>love</CODE> as a <B>polymorphic</B> verb, which takes
+a human as its first argument but an object of any type as its second
+argument:
+</P>
+<PRE>
+    fun love : (A : Dom) -&gt; V2 human A ;
+    lin love _ = ss "loves" ;
+</PRE>
+<P>
+Problems remain, such as <B>subtyping</B> (e.g. what
+is meaningful for a <CODE>human</CODE> is also meaningful for
+a <CODE>man</CODE> and a <CODE>woman</CODE>, but not the other way round)
+and the <B>extended use</B> of expressions (e.g. a metaphoric use that
+makes sense of "golf plays John"). 
+</P>
 <A NAME="toc71"></A>
-<H2>More features of the module system</H2>
+<H3>Proof objects</H3>
+<P>
+Perhaps the most well-known feature of constructive type theory is
+the <B>Curry-Howard isomorphism</B>, also known as the
+<B>propositions as types principle</B>. Its earliest formulations
+were attempts to give semantics to the logical systems of
+propositional and predicate calculus. In this section, we will consider
+a more elementary example, showing how the notion of proof is useful
+outside mathematics, as well.
+</P>
+<P>
+We first define the category of unary (also known as Peano-style)
+natural numbers:
+</P>
+<PRE>
+    cat Nat ; 
+    fun Zero : Nat ;
+    fun Succ : Nat -&gt; Nat ;
+</PRE>
+<P>
+The <B>successor function</B> <CODE>Succ</CODE> generates an infinite
+sequence of natural numbers, beginning from <CODE>Zero</CODE>.
+</P>
+<P>
+We then define what it means for a number <I>x</I> to be less than
+a number <I>y</I>. Our definition is based on two axioms:
+</P>
+<UL>
+<LI><CODE>Zero</CODE> is less than <CODE>Succ y</CODE> for any <CODE>y</CODE>.
+<LI>If <CODE>x</CODE> is less than <CODE>y</CODE>, then<CODE>Succ x</CODE> is less than <CODE>Succ y</CODE>.
+</UL>
+
+<P>
+The most straightforward way of expressing these axioms in type theory
+is as typing judgements that introduce objects of a type <CODE>Less x y</CODE>:
+</P>
+<PRE>
+    cat Less Nat Nat ; 
+    fun lessZ : (y : Nat) -&gt; Less Zero (Succ y) ;
+    fun lessS : (x,y : Nat) -&gt; Less x y -&gt; Less (Succ x) (Succ y) ;
+</PRE>
+<P>
+Objects formed by <CODE>lessZ</CODE> and <CODE>lessS</CODE> are
+called <B>proof objects</B>: they establish the truth of certain
+mathematical propositions.
+For instance, the fact that 2 is less that
+4 has the proof object
+</P>
+<PRE>
+    lessS (Succ Zero) (Succ (Succ (Succ Zero)))
+          (lessS Zero (Succ (Succ Zero)) (lessZ (Succ Zero)))
+</PRE>
+<P>
+whose type is
+</P>
+<PRE>
+    Less (Succ (Succ Zero)) (Succ (Succ (Succ (Succ Zero))))
+</PRE>
+<P>
+which is the same thing as the proposition that 2 is less than 4.
+</P>
+<P>
+GF grammars can be used to provide a <B>semantic control</B> of
+well-formedness of expressions. We have already seen examples of this:
+the grammar of well-formed addresses and the grammar with
+selectional restrictions above. By introducing proof objects
+we have now added a very powerful
+technique of expressing semantic conditions.
+</P>
+<P>
+A simple example of the use of proof objects is the definition of
+well-formed <I>time spans</I>: a time span is expected to be from an earlier to
+a later time:
+</P>
+<PRE>
+    from 3 to 8
+</PRE>
+<P>
+is thus well-formed, whereas
+</P>
+<PRE>
+    from 8 to 3
+</PRE>
+<P>
+is not. The following rules for spans impose this condition
+by using the <CODE>Less</CODE> predicate:
+</P>
+<PRE>
+    cat Span ;
+    fun span : (m,n : Nat) -&gt; Less m n -&gt; Span ;
+</PRE>
+<P></P>
 <A NAME="toc72"></A>
-<H3>Interfaces, instances, and functors</H3>
+<H3>Variable bindings</H3>
+<P>
+Mathematical notation and programming languages have lots of
+expressions that <B>bind</B> variables. For instance,
+a universally quantifier proposition
+</P>
+<PRE>
+    (All x)B(x)
+</PRE>
+<P>
+consists of the <B>binding</B> <CODE>(All x)</CODE> of the variable <CODE>x</CODE>,
+and the <B>body</B> <CODE>B(x)</CODE>, where the variable <CODE>x</CODE> is
+said to occur bound. 
+</P>
+<P>
+Variable bindings appear in informal mathematical language as well, for
+instance,
+</P>
+<PRE>
+    for all x, x is equal to x
+  
+    the function that for any numbers x and y returns the maximum of x+y
+    and x*y
+</PRE>
+<P></P>
+<P>
+In type theory, variable-binding expression forms can be formalized
+as functions that take functions as arguments. The universal
+quantifier is defined
+</P>
+<PRE>
+    fun All : (Ind -&gt; Prop) -&gt; Prop
+</PRE>
+<P>
+where <CODE>Ind</CODE> is the type of individuals and <CODE>Prop</CODE>,
+the type of propositions. If we have, for instance, the equality predicate
+</P>
+<PRE>
+    fun Eq : Ind -&gt; Ind -&gt; Prop
+</PRE>
+<P>
+we may form the tree
+</P>
+<PRE>
+    All (\x -&gt; Eq x x)
+</PRE>
+<P>
+which corresponds to the ordinary notation
+</P>
+<PRE>
+    (All x)(x = x).
+</PRE>
+<P></P>
+<P>
+An abstract syntax where trees have functions as arguments, as in
+the two examples above, has turned out to be precisely the right
+thing for the semantics and computer implementation of
+variable-binding expressions. The advantage lies in the fact that
+only one variable-binding expression form is needed, the lambda abstract
+<CODE>\x -&gt; b</CODE>, and all other bindings can be reduced to it.
+This makes it easier to implement mathematical theories and reason
+about them, since variable binding is tricky to implement and
+to reason about. The idea of using functions as arguments of
+syntactic constructors is known as <B>higher-order abstract syntax</B>.
+</P>
+<P>
+The question now arises: how to define linearization rules
+for variable-binding expressions?
+Let us first consider universal quantification,
+</P>
+<PRE>
+    fun All : (Ind -&gt; Prop) -&gt; Prop.
+</PRE>
+<P>
+We write
+</P>
+<PRE>
+    lin All B = {s = "(" ++ "All" ++ B.$0 ++ ")" ++ B.s}
+</PRE>
+<P>
+to obtain the form shown above. 
+This linearization rule brings in a new GF concept - the <CODE>v</CODE>
+field of <CODE>B</CODE> containing a bound variable symbol.
+The general rule is that, if an argument type of a function is
+itself a function type <CODE>A -&gt; C</CODE>, the linearization type of
+this argument is the linearization type of <CODE>C</CODE>
+together with a new field <CODE>$0 : Str</CODE>. In the linearization rule
+for <CODE>All</CODE>, the argument <CODE>B</CODE> thus has the linearization
+type
+</P>
+<PRE>
+    {$0 : Str ; s : Str},
+</PRE>
+<P>
+since the linearization type of <CODE>Prop</CODE> is
+</P>
+<PRE>
+    {s : Str}
+</PRE>
+<P>
+(we remind that the order of fields in a record does not matter).
+In other words, the linearization of a function
+consists of a linearization of the body together with a
+field for a linearization of the bound variable.
+Those familiar with type theory or lambda calculus
+should notice that GF requires trees to be in
+<B>eta-expanded</B> form in order to be linearizable:
+any function of type
+</P>
+<PRE>
+    A -&gt; C
+</PRE>
+<P>
+always has a syntax tree of the form
+</P>
+<PRE>
+    \x -&gt; c
+</PRE>
+<P>
+where <CODE>c : C</CODE> under the assumption <CODE>x : A</CODE>.
+It is in this form that an expression can be analysed
+as having a bound variable and a body. 
+</P>
+<P>
+Given the linearization rule
+</P>
+<PRE>
+    lin Eq a b = {s = "(" ++ a.s ++ "=" ++ b.s ++ ")"}
+</PRE>
+<P>
+the linearization of
+</P>
+<PRE>
+    \x -&gt; Eq x x
+</PRE>
+<P>
+is the record
+</P>
+<PRE>
+    {$0 = "x", s = ["( x = x )"]}
+</PRE>
+<P>
+Thus we can compute the linearization of the formula,
+</P>
+<PRE>
+    All (\x -&gt; Eq x x)  --&gt; {s = "[( All x ) ( x = x )]"}.
+</PRE>
+<P></P>
+<P>
+How did we get the <I>linearization</I> of the variable <CODE>x</CODE>
+into the string <CODE>"x"</CODE>? GF grammars have no rules for
+this: it is just hard-wired in GF that variable symbols are
+linearized into the same strings that represent them in
+the print-out of the abstract syntax. 
+</P>
+<P>
+To be able to
+<I>parse</I> variable symbols, however, GF needs to know what
+to look for (instead of e.g. trying to parse <I>any</I>
+string as a variable). What strings are parsed as variable symbols 
+is defined in the lexical analysis part of GF parsing (see below).
+</P>
+<P>
+When <I>editing</I> with grammars that have
+bound variables, the names of bound variables are
+selected automatically, but can be changed at any time by
+using an Alpha Conversion command.
+</P>
+<P>
+If several variables are bound in the same argument, the
+labels are <CODE>$0, $1, $2</CODE>, etc. 
+</P>
 <A NAME="toc73"></A>
+<H3>Semantic definitions</H3>
+<P>
+We have seen that,
+just like functional programming languages, GF has declarations
+of functions, telling what the type of a function is.
+But we have not yet shown how to <B>compute</B>
+these functions: all we can do is provide them with arguments
+and linearize the resulting terms.
+Since our main interest is the well-formedness of expressions,
+this has not yet bothered 
+us very much. As we will see, however, computation does play a role
+even in the well-formedness of expressions when dependent types are
+present.
+</P>
+<P>
+GF has a form of judgement for <B>semantic definitions</B>,
+recognized by the key word <CODE>def</CODE>. At its simplest, it is just
+the definition of one constant, e.g.
+</P>
+<PRE>
+    def one = succ zero ;
+</PRE>
+<P>
+We can also define a function with arguments,
+</P>
+<PRE>
+    def Neg A = Impl A Abs ;
+</PRE>
+<P>
+which is still a special case of the most general notion of
+definition, that of a group of <B>pattern equations</B>:
+</P>
+<PRE>
+    def sum x zero = x ;
+    def sum x (succ y) = succ (sum x y) ;
+</PRE>
+<P>
+To compute a term is, as in functional programming languages,
+simply to follow a chain of reductions until no definition
+can be applied. For instance, we compute
+</P>
+<PRE>
+    sum one one --&gt;
+    sum (succ zero) (succ zero) --&gt;
+    succ (sum (succ zero) zero) --&gt;
+    succ (succ zero)
+</PRE>
+<P></P>
+<P>
+The <CODE>def</CODE> definitions of a grammar induce a notion of
+<B>definitional equality</B> among trees: two trees are
+definitionally equal if they compute into the same tree.
+Thus, trivially, all trees in a chain of computation
+(such as the one above)
+are definitionally equal to each other. So are the trees
+</P>
+<PRE>
+    sum zero (succ one)
+    succ one
+    sum (sum zero zero) (sum (succ zero) one)
+</PRE>
+<P>
+and infinitely many other trees.
+</P>
+<P>
+A fact that has to be emphasized about <CODE>def</CODE> definitions is that
+they are <I>not</I> performed as a first step of linearization.
+We say that <B>linearization is intensional</B>, which means that
+the definitional equality of two trees does not imply that
+they have the same linearizations. For instance, the seven terms
+above all have different linearizations in arithmetic notation:
+</P>
+<PRE>
+    1 + 1
+    s(0) + s(0)
+    s(s(0) + 0)
+    s(s(0))
+    0 + s(0)
+    s(1)
+    0 + 0 + s(0) + 1
+</PRE>
+<P>
+This notion of intensionality is
+no more exotic than the intensionality of any <B>pretty-printing</B>
+function of a programming language (function that shows
+the expressions of the language as strings). It is vital for
+pretty-printing to be intensional in this sense - if we want,
+for instance, to trace a chain of computation by pretty-printing each
+intermediate step, what we want to see is a sequence of different
+expression, which are definitionally equal.
+</P>
+<P>
+What is more exotic is that GF has two ways of referring to the
+abstract syntax objects. In the concrete syntax, the reference is intentional.
+In the abstract syntax itself, the reference is always extensional, since
+<B>type checking is extensional</B>. The reason is that,
+in the type theory with dependent types, types may depend on terms.
+Two types depending on terms that are definitionally equal are
+equal types. For instance,
+</P>
+<PRE>
+    Proof (Od one)
+    Proof (Od (succ zero))
+</PRE>
+<P>
+are equal types. Hence, any tree that type checks as a proof that
+1 is odd also type checks as a proof that the successor of 0 is odd.
+(Recall, in this connection, that the
+arguments a category depends on never play any role
+in the linearization of trees of that category,
+nor in the definition of the linearization type.)
+</P>
+<P>
+In addition to computation, definitions impose a
+<B>paraphrase</B> relation on expressions:
+two strings are paraphrases if they
+are linearizations of trees that are
+definitionally equal.
+Paraphrases are sometimes interesting for
+translation: the <B>direct translation</B>
+of a string, which is the linearization of the same tree
+in the targer language, may be inadequate because it is e.g.
+unidiomatic or ambiguous. In such a case, 
+the translation algorithm may be made to consider
+translation by a paraphrase.
+</P>
+<P>
+To stress express the distinction between
+<B>constructors</B> (=<B>canonical</B> functions)
+and other functions, GF has a judgement form
+<CODE>data</CODE> to tell that certain functions are canonical, e.g.
+</P>
+<PRE>
+    data Nat = succ | zero ;
+</PRE>
+<P>
+Unlike in Haskell, but similarly to ALF (where constructor functions
+are marked with a flag <CODE>C</CODE>), 
+new constructors can be added to
+a type with new <CODE>data</CODE> judgements. The type signatures of constructors
+are given separately, in ordinary <CODE>fun</CODE> judgements.
+</P>
+<A NAME="toc74"></A>
+<H2>More features of the module system</H2>
+<A NAME="toc75"></A>
+<H3>Interfaces, instances, and functors</H3>
+<A NAME="toc76"></A>
 <H3>Resource grammars and their reuse</H3>
 <P>
 A resource grammar is a grammar built on linguistic grounds,
@@ -2308,15 +3232,15 @@ The rest of the modules (black) come from the resource.
 <P>
 <IMG ALIGN="middle" SRC="Multi.png" BORDER="0" ALT="">
 </P>
-<A NAME="toc74"></A>
+<A NAME="toc77"></A>
 <H3>Restricted inheritance and qualified opening</H3>
-<A NAME="toc75"></A>
+<A NAME="toc78"></A>
 <H2>Using the standard resource library</H2>
 <P>
 The example files of this chapter can be found in
 the directory <A HREF="./arithm"><CODE>arithm</CODE></A>.
 </P>
-<A NAME="toc76"></A>
+<A NAME="toc79"></A>
 <H3>The simplest way</H3>
 <P>
 The simplest way is to <CODE>open</CODE> a top-level <CODE>Lang</CODE> module
@@ -2383,7 +3307,7 @@ Here is an example.
   }
 </PRE>
 <P></P>
-<A NAME="toc77"></A>
+<A NAME="toc80"></A>
 <H3>How to find resource functions</H3>
 <P>
 The definitions in this example were found by parsing:
@@ -2404,7 +3328,7 @@ The definitions in this example were found by parsing:
 The use of parsing can be systematized by <B>example-based grammar writing</B>,
 to which we will return later. 
 </P>
-<A NAME="toc78"></A>
+<A NAME="toc81"></A>
 <H3>A functor implementation</H3>
 <P>
 The interesting thing now is that the
@@ -2482,7 +3406,7 @@ Here, again, a complete example (<CODE>abstract Arithm</CODE> is as above):
   }
 </PRE>
 <P></P>
-<A NAME="toc79"></A>
+<A NAME="toc82"></A>
 <H2>Transfer modules</H2>
 <P>
 Transfer means noncompositional tree-transforming operations.
@@ -2501,9 +3425,9 @@ See the
 <A HREF="../transfer.html">transfer language documentation</A>
 for more information.
 </P>
-<A NAME="toc80"></A>
+<A NAME="toc83"></A>
 <H2>Practical issues</H2>
-<A NAME="toc81"></A>
+<A NAME="toc84"></A>
 <H3>Lexers and unlexers</H3>
 <P>
 Lexers and unlexers can be chosen from
@@ -2539,7 +3463,7 @@ Given by <CODE>help -lexer</CODE>, <CODE>help -unlexer</CODE>:
   
 </PRE>
 <P></P>
-<A NAME="toc82"></A>
+<A NAME="toc85"></A>
 <H3>Efficiency of grammars</H3>
 <P>
 Issues:
@@ -2550,7 +3474,7 @@ Issues:
 <LI>parsing efficiency: <CODE>-mcfg</CODE> vs. others
 </UL>
 
-<A NAME="toc83"></A>
+<A NAME="toc86"></A>
 <H3>Speech input and output</H3>
 <P>
 The<CODE>speak_aloud = sa</CODE> command sends a string to the speech
@@ -2580,7 +3504,7 @@ The method words only for grammars of English.
 Both Flite and ATK are freely available through the links
 above, but they are not distributed together with GF.
 </P>
-<A NAME="toc84"></A>
+<A NAME="toc87"></A>
 <H3>Multilingual syntax editor</H3>
 <P>
 The 
@@ -2597,12 +3521,12 @@ Here is a snapshot of the editor:
 The grammars of the snapshot are from the
 <A HREF="http://www.cs.chalmers.se/~aarne/GF/examples/letter">Letter grammar package</A>.
 </P>
-<A NAME="toc85"></A>
+<A NAME="toc88"></A>
 <H3>Interactive Development Environment (IDE)</H3>
 <P>
 Forthcoming.
 </P>
-<A NAME="toc86"></A>
+<A NAME="toc89"></A>
 <H3>Communicating with GF</H3>
 <P>
 Other processes can communicate with the GF command interpreter,
@@ -2619,7 +3543,7 @@ Thus the most silent way to invoke GF is
 </PRE>
 </UL>
 
-<A NAME="toc87"></A>
+<A NAME="toc90"></A>
 <H3>Embedded grammars in Haskell, Java, and Prolog</H3>
 <P>
 GF grammars can be used as parts of programs written in the
@@ -2631,15 +3555,15 @@ following languages. The links give more documentation.
 <LI><A HREF="http://www.cs.chalmers.se/~peb/software.html">Prolog</A>
 </UL>
 
-<A NAME="toc88"></A>
+<A NAME="toc91"></A>
 <H3>Alternative input and output grammar formats</H3>
 <P>
 A summary is given in the following chart of GF grammar compiler phases:
 <IMG ALIGN="middle" SRC="../gf-compiler.png" BORDER="0" ALT="">
 </P>
-<A NAME="toc89"></A>
+<A NAME="toc92"></A>
 <H2>Case studies</H2>
-<A NAME="toc90"></A>
+<A NAME="toc93"></A>
 <H3>Interfacing formal and natural languages</H3>
 <P>
 <A HREF="http://www.cs.chalmers.se/~krijo/thesis/thesisA4.pdf">Formal and Informal Software Specifications</A>,
