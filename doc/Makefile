@@ -6,3 +6,5 @@ resource:
 	sed -i 's/ion\*{/ion{/g' resource.tex
 	sed -i 's/\\paragraph{}//g' resource.tex
 	sed -i 's/}\\\\/}/g' resource.tex
+	latex resource.tex
+	latex resource.tex

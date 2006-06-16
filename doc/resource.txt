@@ -7,6 +7,11 @@ Last update: %%date(%c)
 % txt2tags -ttex --toc gf-formalism.txt
 %!style(tex) : isolatin1
 %!postproc: "section*{"  "section{"
+%!postproc(tex): "#SMALL"  "scriptsize"
+%!postproc(tex): "#BFIG" "begin{figure}"
+%!postproc(tex): "#GRAMMAR" "includegraphics[width=4in]{Grammar.epsi}"
+%!postproc(tex): "#EFIG" "end{figure}"
+
 %!target:tex
 
 
@@ -709,7 +714,13 @@ help testing the resource library. It does not seem possible to maintain
 a general-purpose multilingual lexicon, and this is the form that the module
 ``Lexicon`` has.
 
+Here is a diagram showing the structure of the API.
 
+#BFIG
+
+#GRAMMAR
+
+#EFIG
 
 ==Language-specific syntactic structures==
 
@@ -875,3 +886,254 @@ has only been exploited in a very small scale so far.
 ===Swedish===
 
 %!include: ../lib/resource-1.0/swedish/ParadigmsSwe.txt
+
+
+
+#SMALL
+
+=Summary of Categories and Functions=
+
+==Categories==
+
+|| Category | Module | Explanation | Example |
+| A2 | Cat | two place adjective  | "divisible"
+| A | Cat | one place adjective  | "warm"
+| AdA | Common | adjective modifying adverb,  | "very"
+| AdN | Common | numeral modifying adverb,  | "more than"
+| AdV | Common | adverb directly attached to verb  | "always"
+| Adv | Common | verb phrase modifying adverb,  | "in the house"
+| Ant | Common | anteriority | simultaneous
+| AP | Cat | adjectival phrase  | "very warm"
+| CAdv | Common | comparative adverb  | "more"
+| Cl | Cat | declarative clause, with all tenses  | "she looks at this"
+| CN | Cat | common noun (without determiner)  | "red house"
+| Comp | Cat | complement of copula, such as AP  | "very warm"
+| Conj | Cat | conjunction,  | "and"
+| DConj | Cat | distributed conj.  | "both and"
+| Det | Cat | determiner phrase  | "all the seven"
+| Digit | Numeral | digit from 2 to 9 | "4"
+| IAdv | Common | interrogative adverb  | "why"
+| IComp | Cat | interrogative complement of copula  | "where"
+| IDet | Cat | interrogative determiner  | "which"
+| Imp | Cat | imperative  | "look at this"
+| IP | Cat | interrogative pronoun  | "who"
+| N2 | Cat | relational noun  | "son"
+| N3 | Cat | three place relational noun  | "connection"
+| N | Cat | common noun  | "house"
+| NP | Cat | noun phrase (subject or object)  | "the red house"
+| Num | Cat | cardinal number (used with QuantPl)  | "seven"
+| Numeral | Cat | cardinal or ordinal,  | "five/fifth"
+| Ord | Cat | ordinal number (used in Det)  | "seventh"
+| PConj | Common | phrase beginning conj.  | "therefore"
+| Phr | Common | phrase in a text  | "but be quiet please"
+| PN | Cat | proper name  | "Paris"
+| Pol | Common | polarity | positive
+| Predet | Cat | predeterminer (prefixed Quant)  | "all"
+| Prep | Cat | preposition, or just case  | "in"
+| Pron | Cat | personal pronoun  | "she"
+| QCl | Cat | question clause, with all tenses  | "why does she walk"
+| QS | Cat | question  | "where did she live"
+| Quant | Cat | quantifier with both sg and pl  | "this/these"
+| QuantPl | Cat | quantifier ('nucleus' of plur. Det)  | "many"
+| QuantSg | Cat | quantifier ('nucleus' of sing. Det)  | "every"
+| RCl | Cat | relative clause, with all tenses  | "in which she lives"
+| RP | Cat | relative pronoun  | "in which"
+| RS | Cat | relative  | "in which she lived"
+| S | Cat | declarative sentence  | "she lived here"
+| SC | Common | embedded sentence or question  | "that it rains"
+| Slash | Cat | clause missing NP (S/NP in GPSG)  | "she looks at"
+
+
+|| Category | Module | Explanation | Example |
+| Sub10 | Numeral      | numeral under 10 | "9"
+| Sub100 | Numeral     | numeral under 100 | "99"
+| Sub1000 | Numeral    | numeral under 1000 | "999"
+| Sub1000000 | Numeral | numeral under million | 123456
+| Subj | Cat | subjunction,  | "if"
+| Tense | Common | tense | present
+| Text | Common | text consisting of several phrases  | "He is here. Why?"
+| Utt | Common | sentence, question, word...  | "be quiet"
+| V2A | Cat | verb with NP and AP complement  | "paint"
+| V2 | Cat | two place verb  | "love"
+| V3 | Cat | three place verb  | "show"
+| VA | Cat | adjective complement verb  | "look"
+| V | Cat | one place verb  | "sleep"
+| Voc | Common | vocative or  | "please" "my darling"
+| VP | Cat | verb phrase  | "is very warm"
+| VQ | Cat | question complement verb  | "ask"
+| VS | Cat | sentence complement verb  | "claim"
+| VV | Cat | verb phrase complement verb  | "want"
+| [Adv] | Conjunction | adverb list | "here, oddly"
+| [AP] | Conjunction | adjectival phrase list | "even, very odd"
+| [NP] | Conjunction | noun phrase list | "John, all women"
+| [S] | Conjunction | sentence list | "I walk, you run"
+
+
+==Functions==
+
+|| Function | Module | Type | Example |
+| AdAdv | Adverb | AdA -> Adv -> Adv | very quickly
+| AdAP | Adjective | AdA -> AP -> AP | very uncertain
+| AdjCN | Noun | AP -> CN -> CN | big house
+| AdnCAdv | Adverb | CAdv -> AdN | more (than five)
+| AdNum | Noun | AdN -> Num -> Num | almost 51
+| AdvCN | Noun | CN -> Adv -> CN | house on the hill
+| AdvIP | Question | IP -> Adv -> IP | who in Europe
+| AdvNP | Noun | NP -> Adv -> NP | Paris at midnight
+| AdvSC | Adverb | SC -> Adv | that he arrives
+| AdvSlash | Sentence | Slash -> Adv -> Slash | (whom) he sees tomorrow
+| AdVVP | Verb | AdV -> VP -> VP | always sleep
+| AdvVP | Verb | VP -> Adv -> VP | sleep here
+| ApposCN | Noun | CN -> NP -> CN | number x, numbers x and y
+| BaseAdv | Conjunction | Adv -> Adv -> [Adv] | "here, today"
+| BaseAP  | Conjunction | AP -> AP -> [AP] | "even, odd"
+| BaseNP  | Conjunction | NP -> NP -> [NP] | "John, Mary"
+| BaseS  | Conjunction | S -> S -> [S] | "I walk, you run"
+| CleftAdv | Idiom | Adv -> S -> Cl | it is yesterday she arrived
+| CleftNP | Idiom | NP -> RS -> Cl | it is you who did it
+| CompAdv | Verb | Adv -> Comp | (be) here
+| CompAP | Verb | AP -> Comp | (be) small
+| ComparA | Adjective | A -> NP -> AP | warmer than Spain
+| ComparAdvAdj | Adverb | CAdv -> A -> NP -> Adv | more quickly than John
+| ComparAdvAdjS | Adverb | CAdv -> A -> S -> Adv | more quickly than he runs
+
+
+|| Function | Module | Type | Example |
+| CompIAdv | Question | IAdv -> IComp | where
+| ComplA2 | Adjective | A2 -> NP -> AP | divisible by 2
+| ComplN2 | Noun | N2 -> NP -> CN | son of the king
+| ComplN3 | Noun | N3 -> NP -> N2 | flight from Moscow (to Paris)
+| ComplV2A | Verb | V2A -> NP -> AP -> VP | paint the house red
+| ComplV2 | Verb | V2 -> NP -> VP | use it
+| ComplV3 | Verb | V3 -> NP -> NP -> VP | send a message to her
+| ComplVA | Verb | VA -> AP -> VP | look red
+| ComplVQ | Verb | VQ -> QS -> VP | ask if she runs
+| ComplVS | Verb | VS -> S -> VP | know that she runs
+| ComplVV | Verb | VV -> VP -> VP | want to run
+| CompNP | Verb | NP -> Comp | (be) a soldier
+| ConjAdv | Conjunction | Conj -> [Adv] -> Adv | quickly or slowly
+| ConjAP | Conjunction | Conj -> [AP] -> AP | even and prime
+| ConjNP | Conjunction | Conj -> [NP] -> NP | John or Mary
+| ConjS | Conjunction | Conj -> [S] -> S | John walks and Mary runs
+| ConsAdv | Conjunction | Adv -> [Adv] -> [Adv] | "here, today, with us"
+| ConsAP  | Conjunction | AP -> [AP] -> [AP] | "even, odd, prime"
+| ConsNP  | Conjunction | NP -> [NP] -> [NP] | "John, Mary, you"
+| ConsS  | Conjunction | S -> [S] -> [S] | "I walk, you run, he sleeps"
+| DConjAdv | Conjunction | DConj -> [Adv] -> Adv | both badly and slowly
+| DConjAP | Conjunction | DConj -> [AP] -> AP | both even and prime
+| DConjNP | Conjunction | DConj -> [NP] -> NP | either John or Mary
+| DConjS | Conjunction | DConj -> [S] -> S | either John walks or Mary runs
+| DefArt | Noun | Quant | the (house), the (houses)
+| DetCN | Noun | Det -> CN -> NP | the man
+| DetPl | Noun | QuantPl -> Num -> Ord -> Det | these five best men
+| DetSg | Noun | QuantSg -> Ord -> Det | this best man
+| EmbedQS | Sentence | QS -> SC | whether you go
+| EmbedS | Sentence | S -> SC | that you go
+| EmbedVP | Sentence | VP -> SC | to go
+| ExistIP | Idiom | IP -> QCl | which houses are there
+| ExistNP | Idiom | NP -> Cl | there is a house
+| FunRP | Relative | Prep -> NP -> RP -> RP | all the roots of which
+| GenericCl | Idiom | VP -> Cl | one sleeps
+| IDetCN | Question | IDet -> Num -> Ord -> CN -> IP | which five best songs
+| IdRP | Relative | RP | which
+| ImpersCl | Idiom | VP -> Cl | it rains
+| ImpPl1 | Idiom | VP -> Utt | let's go
+| ImpVP | Sentence | VP -> Imp | go
+| IndefArt | Noun | Quant | a (house), (houses)
+| MassDet | Noun | QuantSg | (beer)
+| NoNum | Noun | Num | ""
+| NoOrd | Noun | Ord | ""
+| NoPConj | Phrase | PConj | ""
+| NoVoc | Phrase | Voc | ""
+| NumInt | Noun | Int -> Num | 51
+| NumNumeral | Noun | Numeral -> Num | fifty-one
+| OrdInt | Noun | Int -> Ord | 51st
+| OrdNumeral | Noun | Numeral -> Ord | fifty-first
+| OrdSuperl | Noun | A -> Ord | largest
+| PassV2 | Verb | V2 -> VP | be used
+| PConjConj | Phrase | Conj -> PConj | and
+| PhrUtt | Phrase | PConj -> Utt -> Voc -> Phr | But go home my friend.
+| PlQuant | Noun | Quant -> QuantPl | these
+
+|| Function | Module | Type | Example |
+| PositA | Adjective | A -> AP | warm
+| PositAdvAdj | Adverb | A -> Adv | quickly
+| PossPron | Noun | Pron -> Quant | my (house)
+| PPartNP | Noun | NP -> V2 -> NP | the number squared
+| PredetNP | Noun | Predet -> NP -> NP | only the man
+| PredSCVP | Sentence | SC -> VP -> Cl | that you go makes me happy
+| PredVP | Sentence | NP -> VP -> Cl | John walks
+| PrepIP | Question | Prep -> IP -> IAdv | with whom
+| PrepNP | Adverb | Prep -> NP -> Adv | in the house
+| ProgrVP | Idiom | VP -> VP | be sleeping
+| QuestCl | Question | Cl -> QCl | does John walk
+| QuestIAdv | Question | IAdv -> Cl -> QCl | why does John walk
+| QuestIComp | Question | IComp -> NP -> QCl | where is John
+| QuestSlash | Question | IP -> Slash -> QCl | who does John love
+| QuestVP | Question | IP -> VP -> QCl | who walks
+| ReflA2 | Adjective | A2 -> AP | divisible by itself
+| ReflV2 | Verb | V2 -> VP | use itself
+| RelCl | Relative | Cl -> RCl | such that John loves her
+| RelCN | Noun | CN -> RS -> CN | house that John owns
+| RelSlash | Relative | RP -> Slash -> RCl | whom John loves
+| RelVP | Relative | RP -> VP -> RCl | who loves John
+| SentAP | Adjective | AP -> SC -> AP | great that she won, uncertain if she did
+| SentCN | Noun | CN -> SC -> CN | fact that John smokes, question if he does
+| SgQuant | Noun | Quant -> QuantSg | this
+| SlashPrep | Sentence | Cl -> Prep -> Slash | (with whom) he walks
+| SlashV2 | Sentence | NP -> V2 -> Slash | (whom) he sees
+| SlashVVV2 | Sentence | NP -> VV -> V2 -> Slash | (whom) he wants to see
+| SubjS | Adverb | Subj -> S -> Adv | when he arrives
+| TEmpty | Text | Text | ""
+| TExclMark | Text | Phr -> Text -> Text | John walks! ...
+| TFullStop | Text | Phr -> Text -> Text | John walks. ...
+| TQuestMark | Text | Phr -> Text -> Text | Are you OK? ...
+| UseA2 | Adjective | A2 -> A | divisible
+| UseCl | Sentence | Tense -> Ant -> Pol -> Cl -> S | John hadn't walked
+| UseComp | Verb | Comp -> VP | be warm
+| UseN2 | Noun | N2 -> CN | son
+| UseN3 | Noun | N3 -> CN | flight
+| UseN | Noun | N -> CN | house
+| UsePN | Noun | PN -> NP | John
+| UsePron | Noun | Pron -> NP | he
+| UseQCl | Sentence | Tense -> Ant -> Pol -> QCl -> QS | where hadn't he walked
+| UseRCl | Sentence | Tense -> Ant -> Pol -> RCl -> RS | that he hadn't met
+| UseVQ | Verb | VQ -> V2 | ask (a question)
+| UseVS | Verb | VS -> V2 | know (a secret)
+| UseV | Verb | V -> VP | sleep
+| UttAdv | Phrase | Adv -> Utt | here
+| UttIAdv | Phrase | IAdv -> Utt | why
+| UttImpPl | Phrase | Pol -> Imp -> Utt | (don't) help yourselves
+| UttImpSg | Phrase | Pol -> Imp -> Utt | (don't) help yourself
+| UttIP | Phrase | IP -> Utt | who
+| UttNP | Phrase | NP -> Utt | this man
+| UttQS | Phrase | QS -> Utt | is it good
+| UttS | Phrase | S -> Utt | John walks
+| UttVP | Phrase | VP -> Utt | to sleep
+| VocNP | Phrase | NP -> Voc | my friend
+
+|| Function | Module | Type | Example |
+| num | Numeral | Sub1000000 -> Numeral | 2
+| n2 | Numeral | Digit | 2
+| n3 | Numeral | Digit | 3
+| n4 | Numeral | Digit | 4
+| n5 | Numeral | Digit | 5
+| n6 | Numeral | Digit | 6
+| n7 | Numeral | Digit | 7
+| n8 | Numeral | Digit | 8
+| n9 | Numeral | Digit | 9
+| pot01 | Numeral | Sub10 |                                1
+| pot0 | Numeral | Digit -> Sub10 |                        3
+| pot110 | Numeral | Sub100 |                              10
+| pot111 | Numeral | Sub100 |                              11
+| pot1to19 | Numeral | Digit -> Sub100 |                   18
+| pot0as1 | Numeral | Sub10 -> Sub100 |                    3
+| pot1 | Numeral | Digit -> Sub100 |                       50
+| pot1plus | Numeral | Digit -> Sub10 -> Sub100 |          54
+| pot1as2 | Numeral | Sub100 -> Sub1000 |                  99
+| pot2 | Numeral | Sub10 -> Sub1000 |                      600
+| pot2plus | Numeral | Sub10 -> Sub100 -> Sub1000 |        623
+| pot2as3 | Numeral | Sub1000 -> Sub1000000 |              coercion of 1..999
+| pot3 | Numeral | Sub1000 -> Sub1000000 |                 m * 1000
+| pot3plus | Numeral | Sub1000 -> Sub1000 -> Sub1000000 |  m * 1000 + n
+
