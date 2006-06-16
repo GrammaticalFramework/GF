@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>Grammatical Framework Tutorial</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Fri Jun 16 10:32:52 2006
+Last update: Fri Jun 16 17:28:39 2006
 </FONT></CENTER>
 
 <P></P>
@@ -100,40 +100,39 @@ Last update: Fri Jun 16 10:32:52 2006
       <UL>
       <LI><A HREF="#toc66">GF as a logical framework</A>
       <LI><A HREF="#toc67">Dependent types</A>
-      <LI><A HREF="#toc68">Dependent types in syntax editing</A>
-      <LI><A HREF="#toc69">Dependent types in concrete syntax</A>
-      <LI><A HREF="#toc70">Expressing selectional restrictions</A>
-      <LI><A HREF="#toc71">Proof objects</A>
-      <LI><A HREF="#toc72">Variable bindings</A>
-      <LI><A HREF="#toc73">Semantic definitions</A>
+      <LI><A HREF="#toc68">Dependent types in concrete syntax</A>
+      <LI><A HREF="#toc69">Expressing selectional restrictions</A>
+      <LI><A HREF="#toc70">Proof objects</A>
+      <LI><A HREF="#toc71">Variable bindings</A>
+      <LI><A HREF="#toc72">Semantic definitions</A>
       </UL>
-    <LI><A HREF="#toc74">More features of the module system</A>
+    <LI><A HREF="#toc73">More features of the module system</A>
       <UL>
-      <LI><A HREF="#toc75">Interfaces, instances, and functors</A>
-      <LI><A HREF="#toc76">Resource grammars and their reuse</A>
-      <LI><A HREF="#toc77">Restricted inheritance and qualified opening</A>
+      <LI><A HREF="#toc74">Interfaces, instances, and functors</A>
+      <LI><A HREF="#toc75">Resource grammars and their reuse</A>
+      <LI><A HREF="#toc76">Restricted inheritance and qualified opening</A>
       </UL>
-    <LI><A HREF="#toc78">Using the standard resource library</A>
+    <LI><A HREF="#toc77">Using the standard resource library</A>
       <UL>
-      <LI><A HREF="#toc79">The simplest way</A>
-      <LI><A HREF="#toc80">How to find resource functions</A>
-      <LI><A HREF="#toc81">A functor implementation</A>
+      <LI><A HREF="#toc78">The simplest way</A>
+      <LI><A HREF="#toc79">How to find resource functions</A>
+      <LI><A HREF="#toc80">A functor implementation</A>
       </UL>
-    <LI><A HREF="#toc82">Transfer modules</A>
-    <LI><A HREF="#toc83">Practical issues</A>
+    <LI><A HREF="#toc81">Transfer modules</A>
+    <LI><A HREF="#toc82">Practical issues</A>
       <UL>
-      <LI><A HREF="#toc84">Lexers and unlexers</A>
-      <LI><A HREF="#toc85">Efficiency of grammars</A>
-      <LI><A HREF="#toc86">Speech input and output</A>
-      <LI><A HREF="#toc87">Multilingual syntax editor</A>
-      <LI><A HREF="#toc88">Interactive Development Environment (IDE)</A>
-      <LI><A HREF="#toc89">Communicating with GF</A>
-      <LI><A HREF="#toc90">Embedded grammars in Haskell, Java, and Prolog</A>
-      <LI><A HREF="#toc91">Alternative input and output grammar formats</A>
+      <LI><A HREF="#toc83">Lexers and unlexers</A>
+      <LI><A HREF="#toc84">Efficiency of grammars</A>
+      <LI><A HREF="#toc85">Speech input and output</A>
+      <LI><A HREF="#toc86">Multilingual syntax editor</A>
+      <LI><A HREF="#toc87">Interactive Development Environment (IDE)</A>
+      <LI><A HREF="#toc88">Communicating with GF</A>
+      <LI><A HREF="#toc89">Embedded grammars in Haskell, Java, and Prolog</A>
+      <LI><A HREF="#toc90">Alternative input and output grammar formats</A>
       </UL>
-    <LI><A HREF="#toc92">Case studies</A>
+    <LI><A HREF="#toc91">Case studies</A>
       <UL>
-      <LI><A HREF="#toc93">Interfacing formal and natural languages</A>
+      <LI><A HREF="#toc92">Interfacing formal and natural languages</A>
       </UL>
     </UL>
 
@@ -2273,8 +2272,8 @@ are straightforward,
 <PRE>
     lin
   
-      mkAddress country city street = ss (street ++ "," ++ city ++ "," ++ country) ;
-  
+      mkAddress country city street = 
+        ss (street.s ++ "," ++ city.s ++ "," ++ country.s) ;
       UK = ss ("U.K.") ;
       France = ss ("France") ;
       Paris = ss ("Paris") ;
@@ -2400,39 +2399,6 @@ sometimes shortens the code, since we can write e.g.
 </PRE>
 <P></P>
 <A NAME="toc68"></A>
-<H3>Dependent types in syntax editing</H3>
-<P>
-An extra advantage of dependent types is seen in
-syntax editing:
-when menus with possible refinements are created,
-only those functions are shown that are type-correct.
-For instance, if the editor state is
-</P>
-<PRE>
-    mkAddress : Address  
-       UK : Country  
-    *  ?2 : City UK  
-       ?3 : Street UK ?2
-</PRE>
-<P>
-only the cities of the U.K. are shown in the city menu.
-</P>
-<P>
-What is more, editing in the state
-</P>
-<PRE>
-    mkAddress : Address  
-       ?1 : Country  
-       ?2 : City (?1)  
-    *  ?3 : Street (?1) (?2)  
-</PRE>
-<P>
-<I>starts</I> from the <CODE>Street</CODE> argument,
-which enables GF automatically to infer the city and the country.
-Thus, in addition to guaranteeing the meaningfulness of the results,
-dependent types can shorten editing sessions considerably.
-</P>
-<A NAME="toc69"></A>
 <H3>Dependent types in concrete syntax</H3>
 <P>
 The <B>functional fragment</B> of GF
@@ -2452,9 +2418,9 @@ the functions
 </P>
 <PRE>
     const :: a -&gt; b -&gt; a
-    const c x = c
+    const c _ = c
   
-    flip :: (a -&gt; b -&gt;c) -&gt; b -&gt; a -&gt; c
+    flip :: (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
     flip f y x = f x y
 </PRE>
 <P>
@@ -2467,7 +2433,7 @@ definitions can be written
 </P>
 <PRE>
     oper const :(a,b : Type) -&gt; a -&gt; b -&gt; a =
-      \_,_,c,x -&gt; c ;
+      \_,_,c,_ -&gt; c ;
   
     oper flip : (a,b,c : Type) -&gt; (a -&gt; b -&gt;c) -&gt; b -&gt; a -&gt; c =
       \_,_,_,f,x,y -&gt; f y x ;
@@ -2475,9 +2441,9 @@ definitions can be written
 <P>
 When the operations are used, the type checker requires
 them to be equipped with all their arguments; this may be a nuisance
-for the Haskell or ML programmer. 
+for a Haskell or ML programmer. 
 </P>
-<A NAME="toc70"></A>
+<A NAME="toc69"></A>
 <H3>Expressing selectional restrictions</H3>
 <P>
 This section introduces a way of using dependent types to
@@ -2506,8 +2472,8 @@ rule that the verb phrase is inflected in the
 number of the noun phrase:
 </P>
 <PRE>
-    fun PredV1 : NP -&gt; V1 -&gt; S ;
-    lin PredV1 np v1 = {s = np.s ++ v1.s ! np.n} ;
+    fun PredVP : NP -&gt; VP -&gt; S ;
+    lin PredVP np v = {s = np.s ++ vp.s ! np.n} ;
 </PRE>
 <P>
 It is ill-formed because the predicate "is equilateral"
@@ -2719,7 +2685,17 @@ infers the domain arguments:
 <PRE>
     PredV1 human (UsePN human John) (ComplV2 human game play (UsePN game Golf))
 </PRE>
-<P></P>
+<P>
+To try this out in GF, use <CODE>pt = put_term</CODE> with the <B>tree transformation</B>
+that solves the metavariables by type checking:
+</P>
+<PRE>
+    &gt; p -tr "John plays golf" | pt -transform=solve
+    &gt; p -tr "golf plays John" | pt -transform=solve
+</PRE>
+<P>
+In the latter case, no solutions are found.
+</P>
 <P>
 A known problem with selectional restrictions is that they can be more
 or less liberal. For instance,
@@ -2746,7 +2722,7 @@ a <CODE>man</CODE> and a <CODE>woman</CODE>, but not the other way round)
 and the <B>extended use</B> of expressions (e.g. a metaphoric use that
 makes sense of "golf plays John"). 
 </P>
-<A NAME="toc71"></A>
+<A NAME="toc70"></A>
 <H3>Proof objects</H3>
 <P>
 Perhaps the most well-known feature of constructive type theory is
@@ -2777,69 +2753,55 @@ a number <I>y</I>. Our definition is based on two axioms:
 <UL>
 <LI><CODE>Zero</CODE> is less than <CODE>Succ y</CODE> for any <CODE>y</CODE>.
 <LI>If <CODE>x</CODE> is less than <CODE>y</CODE>, then<CODE>Succ x</CODE> is less than <CODE>Succ y</CODE>.
-</UL>
-
-<P>
+<P></P>
 The most straightforward way of expressing these axioms in type theory
 is as typing judgements that introduce objects of a type <CODE>Less x y</CODE>:
-</P>
 <PRE>
     cat Less Nat Nat ; 
     fun lessZ : (y : Nat) -&gt; Less Zero (Succ y) ;
     fun lessS : (x,y : Nat) -&gt; Less x y -&gt; Less (Succ x) (Succ y) ;
 </PRE>
-<P>
 Objects formed by <CODE>lessZ</CODE> and <CODE>lessS</CODE> are
 called <B>proof objects</B>: they establish the truth of certain
 mathematical propositions.
 For instance, the fact that 2 is less that
 4 has the proof object
-</P>
 <PRE>
     lessS (Succ Zero) (Succ (Succ (Succ Zero)))
           (lessS Zero (Succ (Succ Zero)) (lessZ (Succ Zero)))
 </PRE>
-<P>
 whose type is
-</P>
 <PRE>
     Less (Succ (Succ Zero)) (Succ (Succ (Succ (Succ Zero))))
 </PRE>
-<P>
 which is the same thing as the proposition that 2 is less than 4.
-</P>
-<P>
+<P></P>
 GF grammars can be used to provide a <B>semantic control</B> of
 well-formedness of expressions. We have already seen examples of this:
 the grammar of well-formed addresses and the grammar with
 selectional restrictions above. By introducing proof objects
 we have now added a very powerful
 technique of expressing semantic conditions.
-</P>
-<P>
+<P></P>
 A simple example of the use of proof objects is the definition of
 well-formed <I>time spans</I>: a time span is expected to be from an earlier to
 a later time:
-</P>
 <PRE>
     from 3 to 8
 </PRE>
-<P>
 is thus well-formed, whereas
-</P>
 <PRE>
     from 8 to 3
 </PRE>
-<P>
 is not. The following rules for spans impose this condition
 by using the <CODE>Less</CODE> predicate:
-</P>
 <PRE>
     cat Span ;
     fun span : (m,n : Nat) -&gt; Less m n -&gt; Span ;
 </PRE>
-<P></P>
-<A NAME="toc72"></A>
+</UL>
+
+<A NAME="toc71"></A>
 <H3>Variable bindings</H3>
 <P>
 Mathematical notation and programming languages have lots of
@@ -2864,7 +2826,6 @@ instance,
     the function that for any numbers x and y returns the maximum of x+y
     and x*y
 </PRE>
-<P></P>
 <P>
 In type theory, variable-binding expression forms can be formalized
 as functions that take functions as arguments. The universal
@@ -2911,7 +2872,7 @@ for variable-binding expressions?
 Let us first consider universal quantification,
 </P>
 <PRE>
-    fun All : (Ind -&gt; Prop) -&gt; Prop.
+    fun All : (Ind -&gt; Prop) -&gt; Prop
 </PRE>
 <P>
 We write
@@ -2921,7 +2882,7 @@ We write
 </PRE>
 <P>
 to obtain the form shown above. 
-This linearization rule brings in a new GF concept - the <CODE>v</CODE>
+This linearization rule brings in a new GF concept - the <CODE>$0</CODE>
 field of <CODE>B</CODE> containing a bound variable symbol.
 The general rule is that, if an argument type of a function is
 itself a function type <CODE>A -&gt; C</CODE>, the linearization type of
@@ -3000,19 +2961,18 @@ To be able to
 <I>parse</I> variable symbols, however, GF needs to know what
 to look for (instead of e.g. trying to parse <I>any</I>
 string as a variable). What strings are parsed as variable symbols 
-is defined in the lexical analysis part of GF parsing (see below).
+is defined in the lexical analysis part of GF parsing 
 </P>
+<PRE>
+    &gt; p -cat=Prop -lexer=codevars "(All x)(x = x)"
+    All (\x -&gt; Eq x x)
+</PRE>
 <P>
-When <I>editing</I> with grammars that have
-bound variables, the names of bound variables are
-selected automatically, but can be changed at any time by
-using an Alpha Conversion command.
-</P>
-<P>
+(see more details on lexers below).
 If several variables are bound in the same argument, the
 labels are <CODE>$0, $1, $2</CODE>, etc. 
 </P>
-<A NAME="toc73"></A>
+<A NAME="toc72"></A>
 <H3>Semantic definitions</H3>
 <P>
 We have seen that,
@@ -3060,6 +3020,16 @@ can be applied. For instance, we compute
     succ (sum (succ zero) zero) --&gt;
     succ (succ zero)
 </PRE>
+<P>
+Computation in GF is performed with the <CODE>pt</CODE> command and the
+<CODE>compute</CODE> transformation, e.g.
+</P>
+<PRE>
+    &gt; p -tr "1 + 1" | pt -transform=compute -tr | l
+    sum one one
+    succ (succ zero)
+    s(s(0))
+</PRE>
 <P></P>
 <P>
 The <CODE>def</CODE> definitions of a grammar induce a notion of
@@ -3106,16 +3076,16 @@ expression, which are definitionally equal.
 </P>
 <P>
 What is more exotic is that GF has two ways of referring to the
-abstract syntax objects. In the concrete syntax, the reference is intentional.
-In the abstract syntax itself, the reference is always extensional, since
+abstract syntax objects. In the concrete syntax, the reference is intensional.
+In the abstract syntax, the reference is extensional, since
 <B>type checking is extensional</B>. The reason is that,
 in the type theory with dependent types, types may depend on terms.
 Two types depending on terms that are definitionally equal are
 equal types. For instance,
 </P>
 <PRE>
-    Proof (Od one)
-    Proof (Od (succ zero))
+    Proof (Odd one)
+    Proof (Odd (succ zero))
 </PRE>
 <P>
 are equal types. Hence, any tree that type checks as a proof that
@@ -3154,12 +3124,24 @@ are marked with a flag <CODE>C</CODE>),
 new constructors can be added to
 a type with new <CODE>data</CODE> judgements. The type signatures of constructors
 are given separately, in ordinary <CODE>fun</CODE> judgements.
+One can also write directly
 </P>
-<A NAME="toc74"></A>
+<PRE>
+    data succ : Nat -&gt; Nat ;
+</PRE>
+<P>
+which is equivalent to the two judgements
+</P>
+<PRE>
+    fun succ : Nat -&gt; Nat ;
+    data Nat = succ ;
+</PRE>
+<P></P>
+<A NAME="toc73"></A>
 <H2>More features of the module system</H2>
-<A NAME="toc75"></A>
+<A NAME="toc74"></A>
 <H3>Interfaces, instances, and functors</H3>
-<A NAME="toc76"></A>
+<A NAME="toc75"></A>
 <H3>Resource grammars and their reuse</H3>
 <P>
 A resource grammar is a grammar built on linguistic grounds,
@@ -3232,15 +3214,15 @@ The rest of the modules (black) come from the resource.
 <P>
 <IMG ALIGN="middle" SRC="Multi.png" BORDER="0" ALT="">
 </P>
-<A NAME="toc77"></A>
+<A NAME="toc76"></A>
 <H3>Restricted inheritance and qualified opening</H3>
-<A NAME="toc78"></A>
+<A NAME="toc77"></A>
 <H2>Using the standard resource library</H2>
 <P>
 The example files of this chapter can be found in
 the directory <A HREF="./arithm"><CODE>arithm</CODE></A>.
 </P>
-<A NAME="toc79"></A>
+<A NAME="toc78"></A>
 <H3>The simplest way</H3>
 <P>
 The simplest way is to <CODE>open</CODE> a top-level <CODE>Lang</CODE> module
@@ -3307,7 +3289,7 @@ Here is an example.
   }
 </PRE>
 <P></P>
-<A NAME="toc80"></A>
+<A NAME="toc79"></A>
 <H3>How to find resource functions</H3>
 <P>
 The definitions in this example were found by parsing:
@@ -3328,7 +3310,7 @@ The definitions in this example were found by parsing:
 The use of parsing can be systematized by <B>example-based grammar writing</B>,
 to which we will return later. 
 </P>
-<A NAME="toc81"></A>
+<A NAME="toc80"></A>
 <H3>A functor implementation</H3>
 <P>
 The interesting thing now is that the
@@ -3406,7 +3388,7 @@ Here, again, a complete example (<CODE>abstract Arithm</CODE> is as above):
   }
 </PRE>
 <P></P>
-<A NAME="toc82"></A>
+<A NAME="toc81"></A>
 <H2>Transfer modules</H2>
 <P>
 Transfer means noncompositional tree-transforming operations.
@@ -3425,9 +3407,9 @@ See the
 <A HREF="../transfer.html">transfer language documentation</A>
 for more information.
 </P>
-<A NAME="toc83"></A>
+<A NAME="toc82"></A>
 <H2>Practical issues</H2>
-<A NAME="toc84"></A>
+<A NAME="toc83"></A>
 <H3>Lexers and unlexers</H3>
 <P>
 Lexers and unlexers can be chosen from
@@ -3463,7 +3445,7 @@ Given by <CODE>help -lexer</CODE>, <CODE>help -unlexer</CODE>:
   
 </PRE>
 <P></P>
-<A NAME="toc85"></A>
+<A NAME="toc84"></A>
 <H3>Efficiency of grammars</H3>
 <P>
 Issues:
@@ -3471,10 +3453,10 @@ Issues:
 <UL>
 <LI>the choice of datastructures in <CODE>lincat</CODE>s
 <LI>the value of the <CODE>optimize</CODE> flag 
-<LI>parsing efficiency: <CODE>-mcfg</CODE> vs. others
+<LI>parsing efficiency: <CODE>-fcfg</CODE> vs. others
 </UL>
 
-<A NAME="toc86"></A>
+<A NAME="toc85"></A>
 <H3>Speech input and output</H3>
 <P>
 The<CODE>speak_aloud = sa</CODE> command sends a string to the speech
@@ -3504,7 +3486,7 @@ The method words only for grammars of English.
 Both Flite and ATK are freely available through the links
 above, but they are not distributed together with GF.
 </P>
-<A NAME="toc87"></A>
+<A NAME="toc86"></A>
 <H3>Multilingual syntax editor</H3>
 <P>
 The 
@@ -3521,12 +3503,12 @@ Here is a snapshot of the editor:
 The grammars of the snapshot are from the
 <A HREF="http://www.cs.chalmers.se/~aarne/GF/examples/letter">Letter grammar package</A>.
 </P>
-<A NAME="toc88"></A>
+<A NAME="toc87"></A>
 <H3>Interactive Development Environment (IDE)</H3>
 <P>
 Forthcoming.
 </P>
-<A NAME="toc89"></A>
+<A NAME="toc88"></A>
 <H3>Communicating with GF</H3>
 <P>
 Other processes can communicate with the GF command interpreter,
@@ -3543,7 +3525,7 @@ Thus the most silent way to invoke GF is
 </PRE>
 </UL>
 
-<A NAME="toc90"></A>
+<A NAME="toc89"></A>
 <H3>Embedded grammars in Haskell, Java, and Prolog</H3>
 <P>
 GF grammars can be used as parts of programs written in the
@@ -3555,15 +3537,15 @@ following languages. The links give more documentation.
 <LI><A HREF="http://www.cs.chalmers.se/~peb/software.html">Prolog</A>
 </UL>
 
-<A NAME="toc91"></A>
+<A NAME="toc90"></A>
 <H3>Alternative input and output grammar formats</H3>
 <P>
 A summary is given in the following chart of GF grammar compiler phases:
 <IMG ALIGN="middle" SRC="../gf-compiler.png" BORDER="0" ALT="">
 </P>
-<A NAME="toc92"></A>
+<A NAME="toc91"></A>
 <H2>Case studies</H2>
-<A NAME="toc93"></A>
+<A NAME="toc92"></A>
 <H3>Interfacing formal and natural languages</H3>
 <P>
 <A HREF="http://www.cs.chalmers.se/~krijo/thesis/thesisA4.pdf">Formal and Informal Software Specifications</A>,

@@ -1930,8 +1930,8 @@ are straightforward,
 ```
   lin
 
-    mkAddress country city street = ss (street ++ "," ++ city ++ "," ++ country) ;
-
+    mkAddress country city street = 
+      ss (street.s ++ "," ++ city.s ++ "," ++ country.s) ;
     UK = ss ("U.K.") ;
     France = ss ("France") ;
     Paris = ss ("Paris") ;
@@ -2013,8 +2013,6 @@ the context of ``Street`` above. What we claimed to be the
 of GF: a variable must be declared (=bound) before it can be
 referenced (=used).
 
-
-
 The effect of dependent types is that the *-marked addresses above are
 no longer well-formed. What the GF parser actually does is that it
 initially accepts them (by using a context-free parsing algorithm)
@@ -2043,36 +2041,6 @@ sometimes shortens the code, since we can write e.g.
 ```
 
 
-
-===Dependent types in syntax editing===
-
-An extra advantage of dependent types is seen in
-syntax editing:
-when menus with possible refinements are created,
-only those functions are shown that are type-correct.
-For instance, if the editor state is
-```
-  mkAddress : Address  
-     UK : Country  
-  *  ?2 : City UK  
-     ?3 : Street UK ?2
-```
-only the cities of the U.K. are shown in the city menu.
-
-What is more, editing in the state
-```
-  mkAddress : Address  
-     ?1 : Country  
-     ?2 : City (?1)  
-  *  ?3 : Street (?1) (?2)  
-```
-//starts// from the ``Street`` argument,
-which enables GF automatically to infer the city and the country.
-Thus, in addition to guaranteeing the meaningfulness of the results,
-dependent types can shorten editing sessions considerably.
-
-
-
 ===Dependent types in concrete syntax===
 
 The **functional fragment** of GF
@@ -2090,28 +2058,26 @@ functions. For instance, Haskell programmers have access to
 the functions
 ```
   const :: a -> b -> a
-  const c x = c
+  const c _ = c
 
-  flip :: (a -> b ->c) -> b -> a -> c
+  flip :: (a -> b -> c) -> b -> a -> c
   flip f y x = f x y
 ```
 which can be used for any given types ``a``,``b``, and ``c``.
-
 
 The GF counterpart of polymorphic functions are **monomorphic**
 functions with explicit **type variables**. Thus the above
 definitions can be written
 ```
   oper const :(a,b : Type) -> a -> b -> a =
-    \_,_,c,x -> c ;
+    \_,_,c,_ -> c ;
 
   oper flip : (a,b,c : Type) -> (a -> b ->c) -> b -> a -> c =
     \_,_,_,f,x,y -> f y x ;
 ```
 When the operations are used, the type checker requires
 them to be equipped with all their arguments; this may be a nuisance
-for the Haskell or ML programmer. 
-
+for a Haskell or ML programmer. 
 
 
 
@@ -2139,13 +2105,11 @@ verb phrase ("is equilateral") in accordance with the
 rule that the verb phrase is inflected in the
 number of the noun phrase:
 ```
-  fun PredV1 : NP -> V1 -> S ;
-  lin PredV1 np v1 = {s = np.s ++ v1.s ! np.n} ;
+  fun PredVP : NP -> VP -> S ;
+  lin PredVP np v = {s = np.s ++ vp.s ! np.n} ;
 ```
 It is ill-formed because the predicate "is equilateral"
 is only defined for triangles, not for numbers.
-
-
 
 In a straightforward type-theoretical formalization of
 mathematics, domains of mathematical objects
@@ -2181,7 +2145,6 @@ but no proposition linearized to
 ```
 since ``Equilateral two`` is not a well-formed type-theoretical object.
 
-
 When formalizing mathematics, e.g. in the purpose of
 computer-assisted theorem proving, we are certainly interested
 in semantic well-formedness: we want to be sure that a proposition makes
@@ -2191,8 +2154,6 @@ is guaranteed in various proof systems based on type theory.
 (Notice that it is still possible to form //false// propositions,
 e.g. "the number 3 is even".
 False and meaningless are different things.)
-
-
 
 As shown by the linearization rules for ``two``, ``Even``,
 etc, it //is// possible to use straightforward mathematical typings
@@ -2313,6 +2274,13 @@ infers the domain arguments:
 ```
   PredV1 human (UsePN human John) (ComplV2 human game play (UsePN game Golf))
 ```
+To try this out in GF, use ``pt = put_term`` with the **tree transformation**
+that solves the metavariables by type checking:
+```
+  > p -tr "John plays golf" | pt -transform=solve
+  > p -tr "golf plays John" | pt -transform=solve
+```
+In the latter case, no solutions are found.
 
 A known problem with selectional restrictions is that they can be more
 or less liberal. For instance,
@@ -2359,13 +2327,10 @@ natural numbers:
 The **successor function** ``Succ`` generates an infinite
 sequence of natural numbers, beginning from ``Zero``.
 
-
-
 We then define what it means for a number //x// to be less than
 a number //y//. Our definition is based on two axioms:
 - ``Zero`` is less than ``Succ y`` for any ``y``.
 - If ``x`` is less than ``y``, then``Succ x`` is less than ``Succ y``.
-
 
 The most straightforward way of expressing these axioms in type theory
 is as typing judgements that introduce objects of a type ``Less x y``:
@@ -2389,16 +2354,12 @@ whose type is
 ```
 which is the same thing as the proposition that 2 is less than 4.
 
-
-
 GF grammars can be used to provide a **semantic control** of
 well-formedness of expressions. We have already seen examples of this:
 the grammar of well-formed addresses and the grammar with
 selectional restrictions above. By introducing proof objects
 we have now added a very powerful
 technique of expressing semantic conditions.
-
-
 
 A simple example of the use of proof objects is the definition of
 well-formed //time spans//: a time span is expected to be from an earlier to
@@ -2440,7 +2401,6 @@ instance,
   the function that for any numbers x and y returns the maximum of x+y
   and x*y
 ```
-
 In type theory, variable-binding expression forms can be formalized
 as functions that take functions as arguments. The universal
 quantifier is defined
@@ -2477,14 +2437,14 @@ The question now arises: how to define linearization rules
 for variable-binding expressions?
 Let us first consider universal quantification,
 ```
-  fun All : (Ind -> Prop) -> Prop.
+  fun All : (Ind -> Prop) -> Prop
 ```
 We write
 ```
   lin All B = {s = "(" ++ "All" ++ B.$0 ++ ")" ++ B.s}
 ```
 to obtain the form shown above. 
-This linearization rule brings in a new GF concept - the ``v``
+This linearization rule brings in a new GF concept - the ``$0``
 field of ``B`` containing a bound variable symbol.
 The general rule is that, if an argument type of a function is
 itself a function type ``A -> C``, the linearization type of
@@ -2536,7 +2496,6 @@ Thus we can compute the linearization of the formula,
   All (\x -> Eq x x)  --> {s = "[( All x ) ( x = x )]"}.
 ```
 
-
 How did we get the //linearization// of the variable ``x``
 into the string ``"x"``? GF grammars have no rules for
 this: it is just hard-wired in GF that variable symbols are
@@ -2548,13 +2507,12 @@ To be able to
 //parse// variable symbols, however, GF needs to know what
 to look for (instead of e.g. trying to parse //any//
 string as a variable). What strings are parsed as variable symbols 
-is defined in the lexical analysis part of GF parsing (see below).
-
-When //editing// with grammars that have
-bound variables, the names of bound variables are
-selected automatically, but can be changed at any time by
-using an Alpha Conversion command.
-
+is defined in the lexical analysis part of GF parsing 
+```
+  > p -cat=Prop -lexer=codevars "(All x)(x = x)"
+  All (\x -> Eq x x)
+```
+(see more details on lexers below).
 If several variables are bound in the same argument, the
 labels are ``$0, $1, $2``, etc. 
 
@@ -2600,6 +2558,14 @@ can be applied. For instance, we compute
   succ (sum (succ zero) zero) -->
   succ (succ zero)
 ```
+Computation in GF is performed with the ``pt`` command and the
+``compute`` transformation, e.g.
+```
+  > p -tr "1 + 1" | pt -transform=compute -tr | l
+  sum one one
+  succ (succ zero)
+  s(s(0))
+```
 
 The ``def`` definitions of a grammar induce a notion of
 **definitional equality** among trees: two trees are
@@ -2613,8 +2579,6 @@ are definitionally equal to each other. So are the trees
   sum (sum zero zero) (sum (succ zero) one)
 ```
 and infinitely many other trees.
-
-
 
 A fact that has to be emphasized about ``def`` definitions is that
 they are //not// performed as a first step of linearization.
@@ -2641,15 +2605,15 @@ intermediate step, what we want to see is a sequence of different
 expression, which are definitionally equal.
 
 What is more exotic is that GF has two ways of referring to the
-abstract syntax objects. In the concrete syntax, the reference is intentional.
-In the abstract syntax itself, the reference is always extensional, since
+abstract syntax objects. In the concrete syntax, the reference is intensional.
+In the abstract syntax, the reference is extensional, since
 **type checking is extensional**. The reason is that,
 in the type theory with dependent types, types may depend on terms.
 Two types depending on terms that are definitionally equal are
 equal types. For instance,
 ```
-  Proof (Od one)
-  Proof (Od (succ zero))
+  Proof (Odd one)
+  Proof (Odd (succ zero))
 ```
 are equal types. Hence, any tree that type checks as a proof that
 1 is odd also type checks as a proof that the successor of 0 is odd.
@@ -2684,6 +2648,17 @@ are marked with a flag ``C``),
 new constructors can be added to
 a type with new ``data`` judgements. The type signatures of constructors
 are given separately, in ordinary ``fun`` judgements.
+One can also write directly
+```
+  data succ : Nat -> Nat ;
+```
+which is equivalent to the two judgements
+```
+  fun succ : Nat -> Nat ;
+  data Nat = succ ;
+```
+
+
 
 
 %--!
@@ -2974,7 +2949,7 @@ Issues:
 
 - the choice of datastructures in ``lincat``s
 - the value of the ``optimize`` flag 
-- parsing efficiency: ``-mcfg`` vs. others
+- parsing efficiency: ``-fcfg`` vs. others
 
 
 ===Speech input and output===
