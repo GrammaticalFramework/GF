@@ -18,9 +18,9 @@ Ita: infinitive contractions
 
 %Ger: constituents of infinitive VP
 
-Spa: ordinal numbers
+%Spa: ordinal numbers
 
-Nor: Ext: possessives 
+%Nor: Ext: possessives 
 
 %Spa: zero subjects
 
@@ -38,10 +38,10 @@ API: multimodal/: dialogue-specific lexicon
 
 %API: swadesh/: build a swadesh-related API and migrate lexica
 
-API: mathematical/: symbolic formulas as Cl
+%API: mathematical/: symbolic formulas as Cl
 
 %API: text construction
 
 %All: punctuation
 
-API: apposition, e.g. Det -> CN -> [PN] -> NP
+%API: apposition, e.g. Det -> CN -> [PN] -> NP

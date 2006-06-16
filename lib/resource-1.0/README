@@ -14,14 +14,14 @@ will be kept available, but 'resource' will be renamed 'resource-0.9',
 and 'resource' will probably be made into a symbolic link to the
 current version.
 
-To test:
+To compile:
 
   make
 
 For translation from Eng to all others, try e.g.
 
-  gf langs.gfcm
-  > p -cat=Phr -mcfg -parser=topdown "I haven't seen her" | l -multi
+  gf -nocf langs.gfcm
+  > p -cat=Phr -fcfg "I haven't seen her" | l -multi
 
 To link to the library, use the precompiled packages
 
@@ -71,6 +71,9 @@ BUT WE ALREADY RECOMMEND USING 1.0 INSTEAD OF THE OLDER VERSIONS.
 Notice that GF v. 
 
 ---------- later history and status:
+
+16/6 Close to complete, with 10 languages and a substantial part of
+     Arabic.
 
 25/2 Added directories for precompiled libraries directly under lib.
      See doc/index.html for more information.
