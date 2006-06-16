@@ -1876,15 +1876,19 @@ In a logical framework, the formalization of a mathematical theory
 is a set of type and function declarations. The following is an example
 of such a theory, represented as an ``abstract`` module in GF.
 ```
-  abstract Geometry = {
-    cat 
-      Line ; Point ; Circle ;            -- basic types of figures
-      Prop ;                             -- proposition
-    fun
-      Parallel : Line -> Line -> Prop ;  -- x is parallel to y
-      Centre : Circle -> Point ;         -- the centre of c
+abstract Arithm = {
+  cat
+    Prop ;    -- proposition
+    Nat ;     -- natural number
+  fun
+    Zero : Nat ;                  -- 0
+    Succ : Nat -> Nat ;           -- successor of x
+    Even : Nat -> Prop ;          -- x is even
+    And  : Prop -> Prop -> Prop ; -- A and B
     } 
 ```
+A concrete syntax is given below, as an example of using the resource grammar
+library.
 
 
 
