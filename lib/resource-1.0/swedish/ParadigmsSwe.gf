@@ -271,12 +271,11 @@ oper
   V0, V2S, V2V, V2A, V2Q : Type ;
   AS, A2S, AV, A2V : Type ;
 
-
+--.
 --2 Definitions of the paradigms
 --
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
---.
 
   Gender = ResSwe.Gender ; 
   Number = CommonScand.Number ;
