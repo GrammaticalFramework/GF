@@ -27,8 +27,8 @@ txtHelpCommand c =
     _ -> "Command not found."
 
 txtHelpFile =
-  "\n-- GF help file updated for GF 2.2, 17/5/2005." ++
-  "\n-- *: Commands and options marked with * are not yet implemented." ++
+  "\n-- GF help file updated for GF 2.6, 17/6/2006." ++
+  "\n-- *: Commands and options marked with * are currently not implemented." ++
   "\n--" ++
   "\n-- Each command has a long and a short name, options, and zero or more" ++
   "\n-- arguments. Commands are sorted by functionality. The short name is" ++
@@ -215,7 +215,8 @@ txtHelpFile =
   "\n      (default)parse using an overgenerating CFG" ++
   "\n      -cfg     parse using a much less overgenerating CFG" ++
   "\n      -mcfg    parse using an even less overgenerating MCFG" ++
-  "\n      Note:    the first time parsing with -cfg or -mcfg might take a long time" ++
+  "\n      -fcfg    parse using a faster variant of MCFG" ++
+  "\n      Note:    the first time parsing with -cfg, -mcfg, and -fcfg might take a long time" ++
   "\n  options that only work for the default parsing method:" ++
   "\n      -n       non-strict: tolerates morphological errors" ++
   "\n      -ign     ignore unknown words when parsing" ++

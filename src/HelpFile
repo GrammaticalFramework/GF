@@ -1,5 +1,5 @@
--- GF help file updated for GF 2.2, 17/5/2005.
--- *: Commands and options marked with * are not yet implemented.
+-- GF help file updated for GF 2.6, 17/6/2006.
+-- *: Commands and options marked with * are currently not implemented.
 --
 -- Each command has a long and a short name, options, and zero or more
 -- arguments. Commands are sorted by functionality. The short name is
@@ -186,7 +186,8 @@ p,  parse: p String
       (default)parse using an overgenerating CFG
       -cfg     parse using a much less overgenerating CFG
       -mcfg    parse using an even less overgenerating MCFG
-      Note:    the first time parsing with -cfg or -mcfg might take a long time
+      -fcfg    parse using a faster variant of MCFG
+      Note:    the first time parsing with -cfg, -mcfg, and -fcfg might take a long time
   options that only work for the default parsing method:
       -n       non-strict: tolerates morphological errors
       -ign     ignore unknown words when parsing
