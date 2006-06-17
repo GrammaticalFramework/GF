@@ -10,11 +10,12 @@
 
 <a href="http://www.cs.chalmers.se/~aarne">
 Aarne Ranta</a>, 
-December 1, 2005, for (forthcoming) GF Version 2.4
+June 17, 2006, for (forthcoming) GF Version 2.6
 
 <p>
 
-Forth version: May 17, 2005, for GF Version 2.2.<br>
+Fifth version: December 1, 2005, for GF Version 2.4
+Fourth version: May 17, 2005, for GF Version 2.2.<br>
 Third version: June 25, 2003, for GF Version 1.2.<br>
 Second version: June 17, 2002, for GF Version 1.0.<br>
 First version: April 19, 2002.
@@ -28,7 +29,7 @@ The GF grammar language is described in other documents.
 <p>
 
 There is a separate
-<a href="javaGUImanual/javaGUImanual.htm">GF Java GUI Manual</a>.
+<a href="http://www.cs.chalmers.se/~aarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm">Editor User Manual</a>.
 
 
 
@@ -329,8 +330,8 @@ input for a command, so the pipe breaks there.
 
 The following is a copy of the current <tt>HelpFile</tt>.
 <pre>
--- GF help file updated for GF 2.4, 1/12/2005.
--- *: Commands and options marked with * are not yet implemented.
+-- GF help file updated for GF 2.6, 17/6/2006.
+-- *: Commands and options marked with * are currently not implemented.
 --
 -- Each command has a long and a short name, options, and zero or more
 -- arguments. Commands are sorted by functionality. The short name is
@@ -351,6 +352,7 @@ i,  import: i File
         .gfr   precompiled GF resource  
         .gfcm  multilingual canonical GF
         .gfe   example-based grammar files (only with the -ex option)
+        .gfwl  multilingual word list (preprocessed to abs + cncs)
         .ebnf  Extended BNF format
         .cf    Context-free (BNF) format
         .trc   TransferCore format
@@ -358,7 +360,8 @@ i,  import: i File
       -old          old: parse in GF<2.0 format (not necessary)
       -v            verbose: give lots of messages 
       -s            silent: don't give error messages
-      -src          source: ignore precompiled gfc and gfr files
+      -src          from source: ignore precompiled gfc and gfr files
+      -gfc          from gfc: use compiled modules whenever they exist
       -retain       retain operations: read resource modules (needed in comm cc) 
       -nocf         don't build context-free grammar (thus no parser)
       -nocheckcirc  don't eliminate circular rules from CF 
@@ -367,6 +370,7 @@ i,  import: i File
       -o            do emit code (default with new grammar format)
       -ex           preprocess .gfe files if needed
       -prob         read probabilities from top grammar file  (format --# prob Fun Double)
+      -treebank     read a treebank file to memory (xml format)
   flags:
       -abs          set the name used for abstract syntax (with -old option)
       -cnc          set the name used for concrete syntax (with -old option)
@@ -375,12 +379,16 @@ i,  import: i File
       -optimize     select an optimization to override file-defined flags
       -conversion   select parsing method (values strict|nondet)
       -probs        read probabilities from file (format (--# prob) Fun Double)
+      -preproc      use a preprocessor on each source file
       -noparse      read nonparsable functions from file (format --# noparse Funs) 
   examples:
       i English.gf                      -- ordinary import of Concrete
       i -retain german/ParadigmsGer.gf  -- import of Resource to test
+
+r, reload: r
+      Executes the previous import (i) command.
       
-* rl, remove_language: rl Language
+rl, remove_language: rl Language
       Takes away the language from the state.
 
 e,  empty: e
@@ -432,6 +440,8 @@ pg, print_grammar: pg
   flags: 
       -printer
       -lang
+      -startcat  -- The start category of the generated grammar.
+                    Only supported by some grammar printers.
   examples:
       pg -printer=cf  -- show the context-free skeleton
 
@@ -481,11 +491,11 @@ l,  linearize: l PattList? Tree
       HINT: see GF language specification for the syntax of Pattern and Term.
       You can also copy and past parsing results.
   options:  
-      -table   show parameters
       -struct  bracketed form
-      -record  record, i.e. explicit GF concrete syntax term
-      -all     show all forms and variants
-      -multi   linearize to all languages (the other options don't work)
+      -table   show parameters (not compatible with -record, -all)
+      -record  record, i.e. explicit GF concrete syntax term (not compatible with -table, -all)
+      -all     show all forms and variants (not compatible with -record, -table)
+      -multi   linearize to all languages (can be combined with the other options)
   flags:
       -lang    linearize in this grammar
       -number  give this number of forms at most
@@ -498,15 +508,18 @@ p,  parse: p String
       grammar (overridden by the -lang flag), in the category S (overridden
       by the -cat flag).
   options for batch input:
-      -lines   parse each line of input separately, ignoring empty lines
-      -all     as -lines, but also parse empty lines
-      -prob    rank results by probability
-      -cut     stop after first lexing result leading to parser success
+      -lines     parse each line of input separately, ignoring empty lines
+      -all       as -lines, but also parse empty lines
+      -prob      rank results by probability
+      -cut       stop after first lexing result leading to parser success
+      -fail      show strings whose parse fails prefixed by #FAIL
+      -ambiguous show strings that have more than one parse prefixed by #AMBIGUOUS
   options for selecting parsing method:
       (default)parse using an overgenerating CFG
       -cfg     parse using a much less overgenerating CFG
       -mcfg    parse using an even less overgenerating MCFG
-      Note:    the first time parsing with -cfg or -mcfg might take a long time
+      -fcfg    parse using a faster variant of MCFG
+      Note:    the first time parsing with -cfg, -mcfg, and -fcfg might take a long time
   options that only work for the default parsing method:
       -n       non-strict: tolerates morphological errors
       -ign     ignore unknown words when parsing
@@ -530,6 +543,37 @@ at, apply_transfer: at (Module.Fun | Fun)
      -lang     typecheck the result in this lang instead of default lang
   examples:
      p -lang=Cncdecimal "123" | at num2bin | l   -- convert dec to bin
+
+tb, tree_bank: tb
+      Generate a multilingual treebank from a list of trees (default) or compare
+      to an existing treebank.
+  options:
+     -c        compare to existing xml-formatted treebank
+     -trees    return the trees of the treebank
+     -all      show all linearization alternatives (branches and variants)
+     -table    show tables of linearizations with parameters
+     -record   show linearization records
+     -xml      wrap the treebank (or comparison results) with XML tags
+     -mem      write the treebank in memory instead of a file TODO
+  examples:
+     gr -cat=S -number=100 | tb -xml | wf tb.xml -- random treebank into file
+     rf tb.xml | tb -c                           -- compare-test treebank from file
+     rf old.xml | tb -trees | tb -xml            -- create new treebank from old
+
+ut, use_treebank: ut String
+      Lookup a string in a treebank and return the resulting trees.
+      Use 'tb' to create a treebank and 'i -treebank' to read one from
+      a file.
+   options:
+     -assocs   show all string-trees associations in the treebank
+     -strings  show all strings in the treebank
+     -trees    show all trees in the treebank
+     -raw      return the lookup result as string, without typechecking it
+   flags:
+     -treebank use this treebank (instead of the latest introduced one)
+   examples:
+     ut "He adds this to that" | l -multi        -- use treebank lookup as parser in translation
+     ut -assocs | grep "ComplV2"                 -- show all associations with ComplV2
 
 tt, test_tokenizer: tt String
       Show the token list sent to the parser when String is parsed.
@@ -606,18 +650,22 @@ gt, generate_trees: gt Tree?
       command completes the Tree with values to the metavariables in
       the tree.
   options:
-      -metas   also return trees that include metavariables
+      -metas    also return trees that include metavariables
   flags:
-      -depth   generate to this depth (default 3)
-      -atoms   take this number of atomic rules of each category (default unlimited)
-      -alts    take this number of alternatives at each branch (default unlimited)
-      -cat     generate in this category
-      -lang    use the abstract syntax of this grammar
-      -number  generate (at most) this number of trees
+      -depth    generate to this depth (default 3)
+      -atoms    take this number of atomic rules of each category (default unlimited)
+      -alts     take this number of alternatives at each branch (default unlimited)
+      -cat      generate in this category
+      -lang     use the abstract syntax of this grammar
+      -number   generate (at most) this number of trees
+      -noexpand don't expand these categories (comma-separated, e.g. -noexpand=V,CN)
+      -doexpand only expand these categories (comma-separated, e.g. -doexpand=V,CN)
   examples:
-      gt -depth=10 -cat=NP     -- generate all NP's to depth 10 
-      gt (PredVP ? (NegVG ?))  -- generate all trees of this form
-      gt -cat=S -tr | l        -- gererate and linearize
+      gt -depth=10 -cat=NP              -- generate all NP's to depth 10 
+      gt (PredVP ? (NegVG ?))           -- generate all trees of this form
+      gt -cat=S -tr | l                 -- generate and linearize
+      gt -noexpand=NP | l -mark=metacat -- the only NP is meta, linearized "?0 +NP"
+      gt | l | p -lines -ambiguous | grep "#AMBIGUOUS" -- show ambiguous strings
 
 ma, morphologically_analyse: ma String
       Runs morphological analysis on each word in String and displays
@@ -782,12 +830,21 @@ sa, speak_aloud: sa String
     h | sa              -- listen to the list of commands
     gr -cat=S | l | sa  -- generate a random sentence and speak it aloud
 
+si, speech_input: si
+      Uses an ATK speech recognizer to get speech input. 
+  flags:
+      -lang: The grammar to use with the speech recognizer.
+      -cat: The grammar category to get input in.
+      -language: Use acoustic model and dictionary for this language.
+      -number: The number of utterances to recognize.
+
 h, help: h Command?
       Displays the paragraph concerning the command from this help file.
       Without the argument, shows the first lines of all paragraphs.
   options
        -all   show the whole help file
        -defs  show user-defined commands and terms
+       -FLAG  show the values of FLAG (works for grammar-independent flags)
   examples:
        h print_grammar  -- show all information on the pg command
 
@@ -855,7 +912,6 @@ q, quit: q
        Each of the flags can have the suffix _subs, which performs
        common subexpression elimination after the main optimization.
        Thus, -optimize=all_subs is the most aggressive one.
-
     -optimize=share        share common branches in tables
     -optimize=parametrize  first try parametrize then do share with the rest
     -optimize=values       represent tables as courses-of-values
@@ -893,8 +949,15 @@ q, quit: q
     -printer=jsgf           Java Speech Grammar Format
     -printer=srgs_xml       SRGS XML format
     -printer=srgs_xml_prob  SRGS XML format, with weights
+    -printer=srgs_xml_ms_sem SRGS XML format, with semantic tags for the
+                             Microsoft Speech API.
+    -printer=vxml           Generate a dialogue system in VoiceXML.
     -printer=slf            a finite automaton in the HTK SLF format
-    -printer=slf_graphviz   the same automaton as in SLF, but in Graphviz format
+    -printer=slf_graphviz   the same automaton as slf, but in Graphviz format
+    -printer=slf_sub        a finite automaton with sub-automata in the 
+                            HTK SLF format
+    -printer=slf_sub_graphviz the same automaton as slf_sub, but in  
+                              Graphviz format
     -printer=fa_graphviz    a finite automaton with labelled edges
     -printer=regular        a regular grammar in a simple BNF
     -printer=unpar          a gfc grammar with parameters eliminated
@@ -912,12 +975,14 @@ q, quit: q
 -startcat, like -cat, but used in grammars (to avoid clash with keyword cat)
 
 -transform, transformation performed on a syntax tree. The default is identity.
-    -transform=identity  no change
-    -transform=compute   compute by using definitions in the grammar
-    -transform=typecheck return the term only if it is type-correct
-    -transform=solve     solve metavariables as derived refinements
-    -transform=context   solve metavariables by unique refinements as variables
-    -transform=delete    replace the term by metavariable
+    -transform=identity     no change
+    -transform=compute      compute by using definitions in the grammar
+    -transform=nodup        return the term only if it has no constants duplicated
+    -transform=nodupatom    return the term only if it has no atomic constants duplicated
+    -transform=typecheck    return the term only if it is type-correct
+    -transform=solve        solve metavariables as derived refinements
+    -transform=context      solve metavariables by unique refinements as variables
+    -transform=delete       replace the term by metavariable
 
 -unlexer, untokenization transforming linearization output into a string.
        The default is unwords.
@@ -929,7 +994,17 @@ q, quit: q
     -unlexer=concat      remove all spaces
     -unlexer=bind        like identity, but bind at "&+"
 
--- *: Commands and options marked with * are currently not implemented.
+-mark, marking of parts of tree in linearization. The default is none.
+    -mark=metacat        append "+CAT" to every metavariable, showing its category
+    -mark=struct         show tree structure with brackets
+    -mark=java           show tree structure with XML tags (used in gfeditor)
+
+-coding, Some grammars are in UTF-8, some in isolatin-1.
+    If the letters ä (a-umlaut) and ö (o-umlaut) look strange, either
+    change your terminal to isolatin-1, or rewrite the grammar with
+    'pg -utf8'.
+
+-- *: Commands and options marked with * are not currently implemented.
 </pre>
 
 
@@ -952,7 +1027,7 @@ a Fudget GUI, and a Java GUI. They all use the same abstract command language,
 the difference being that the subshell has a string syntax for each command,
 whereas the GUIs mostly use menus and buttons to issue commands. 
 There is a separate
-<a href="javaGUImanual/javaGUImanual.htm">GF Java GUI Manual</a>.
+<a href="http://www.cs.chalmers.se/~aarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm">Editor User Manual</a>.
 
 <p>
 

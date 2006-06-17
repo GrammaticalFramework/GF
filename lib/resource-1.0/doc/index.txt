@@ -14,6 +14,8 @@ ten languages:
 Danish, English, Finnish, French, German,
 Italian, Norwegian, Russian, Spanish, Swedish.
 
+**New**: [User manual of the resource library ../../../doc/resource.pdf].
+
 **Notice**. This document concerns the API v. 1.0 which has not
 yet been "officially" released. The release is planned in the end
 of June 2006.
@@ -91,7 +93,8 @@ Go to the main directory, compile the grammars, and run a test.
   make test
 ```
 This will take quite some time. An alternative is to use the
-precompiled grammar package from GF download page. This package 
+precompiled grammar package [``compiled.tgz`` ../../compiled.tgz]. 
+This package 
 has the necessary ``gfc`` and ``gfr`` files directly under ``GF/lib``.
 ```
   GF/lib/alltenses
@@ -168,11 +171,11 @@ This is the structure of each language-dependent top module.
 [English.png]
 
 - [Extra ../abstract/Extra.gf]: extra constructs implemented in some languages
-- [ExtraScand ../scandinavian/ExtraScandAbs.gf]: extra constructs in Scandinavian only
-- [ExtraNor ../norwegian/ExtraNorAbs.gf]: extra constructs in Norwegian only
+- [ExtraEng ../english/ExtraEngAbs.gf]: extra constructs in English only
 - [ExtraFin ../finnish/ExtraFinAbs.gf]: extra constructs in Finnish only
 - [ExtraFre ../french/ExtraFreAbs.gf]: extra constructs in French only
-- [ExtraEng ../english/ExtraEngAbs.gf]: extra constructs in English only
+- [ExtraNor ../norwegian/ExtraNorAbs.gf]: extra constructs in Norwegian only
+- [ExtraScand ../scandinavian/ExtraScandAbs.gf]: extra constructs in Scandinavian only
 
 
 - [English ../english/EnglishAbs.gf]: English with all extras
@@ -296,7 +299,7 @@ It is also feasible to parse in Scandinavian languages (Danish, Norwegian, Swedi
 
 ==Example applications==
 
-These applications are meand to serve as starting points for
+These applications are meant to serve as starting points for
 new applications, showing how the libraries can be used in
 typical situations.
 
@@ -327,14 +330,12 @@ grammar writing.
 
 ==Known bugs and missing components==
 
-This bugs should be fixed before the final release of v. 1.0.
-
 Danish
 - the lexicon and chosen inflections are only partially verified
 
 
 English 
-- only contracted negation forms
+- -
 
 
 Finnish
@@ -343,6 +344,7 @@ Finnish
 
 French
 - no inverted word order in questions
+- multiple clitics (with V3) not always right
 
 
 German
@@ -352,6 +354,7 @@ German
 Italian
 - no contraction of infinitives before clitics
 - no list of irregular verbs
+- multiple clitics (with V3) not always right
 
 
 Norwegian
@@ -360,17 +363,23 @@ Norwegian
 
 Russian
 - some functions missing
-- regular paradigms are missing
+- some regular paradigms are missing
 
 
 Spanish
-- -
+- no list of irregular verbs
+- multiple clitics (with V3) not always right
+
+
 Swedish
 - -
 
 
 
 ==More reading==
+
+[GF Resource Grammar Library ../../../doc/resource.pdf] (pdf).
+Printable user manual with API documentation.
 
 [Grammars as Software Libraries gslt-sem-2006.html]. Slides
 with background and motivation for the resource grammar library.
@@ -384,7 +393,6 @@ start if you want to add another language to the library.
 [Parametrized modules for Romance languages http://www.cs.chalmers.se/~aarne/geocal2006.pdf]. 
 Slides explaining some ideas in the implementation of
 French, Italian, and Spanish.
-
 
 [Grammar writing by examples http://www.cs.chalmers.se/~aarne/slides/webalt-2005.pdf].
 Slides showing how the method is used.
