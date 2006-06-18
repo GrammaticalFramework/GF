@@ -1,5 +1,6 @@
 incomplete concrete CatRomance of Cat = 
-  CommonX ** open Prelude, CommonRomance, ResRomance, (R = ParamX) in {
+  CommonX - [Tense,TPres,TPast,TFut,TCond] 
+  ** open Prelude, CommonRomance, ResRomance, (R = ParamX) in {
 
   flags optimize=all_subs ;
 
@@ -13,16 +14,16 @@ incomplete concrete CatRomance of Cat =
 
 -- Sentence
 
-    Cl    = {s : Tense => Anteriority => Polarity => Mood => Str} ;
+    Cl    = {s : RTense => Anteriority => Polarity => Mood => Str} ;
     Slash = {
-      s  : AAgr => Tense => Anteriority => Polarity => Mood => Str ; 
+      s  : AAgr => RTense => Anteriority => Polarity => Mood => Str ; 
       c2 : Compl
       } ;
     Imp   = {s : Polarity => AAgr => Str} ;
 
 -- Question
 
-    QCl   = {s : Tense => Anteriority => Polarity => QForm => Str} ;
+    QCl   = {s : RTense => Anteriority => Polarity => QForm => Str} ;
     IP    = {s : Case => Str ; a : AAgr} ;
     IComp = {s : AAgr => Str} ;     
     IDet  = {s : Gender => Case => Str ; n : Number} ;
@@ -30,7 +31,7 @@ incomplete concrete CatRomance of Cat =
 -- Relative
 
     RCl  = {
-      s : Agr => Tense => Anteriority => Polarity => Mood => Str ; 
+      s : Agr => RTense => Anteriority => Polarity => Mood => Str ; 
       c : Case
       } ;
     RP   = {s : Bool => AAgr => Case => Str ; a : AAgr ; hasAgr : Bool} ;
@@ -81,5 +82,14 @@ incomplete concrete CatRomance of Cat =
     N2 = Noun  ** {c2 : Compl} ;
     N3 = Noun  ** {c2,c3 : Compl} ;
     PN = {s : Str ; g : Gender} ;
+
+-- tense augmented with passé simple
+
+    Tense = {s : Str ; t : RTense} ;
+  lin
+    TPres = {s = []} ** {t = RPres} ;
+    TPast = {s = []} ** {t = RPast} ;   --# notpresent
+    TFut  = {s = []} ** {t = RFut} ;    --# notpresent
+    TCond = {s = []} ** {t = RCond} ;   --# notpresent
 
 }

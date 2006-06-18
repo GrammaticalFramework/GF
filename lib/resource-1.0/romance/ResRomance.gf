@@ -193,15 +193,16 @@ oper
     } ;
 
   mkClause : Str -> Agr -> VP -> 
-    {s : Tense => Anteriority => Polarity => Mood => Str} =
+    {s : RTense => Anteriority => Polarity => Mood => Str} =
     \subj,agr,vp -> {
       s = \\t,a,b,m => 
         let 
           tm = case t of {
-            Past => VImperf m ;   --# notpresent
-            Fut  => VFut ;  --# notpresent
-            Cond => VCondit ;  --# notpresent
-            Pres => VPres m
+            RPast  => VImperf m ;   --# notpresent
+            RFut   => VFut ;        --# notpresent
+            RCond  => VCondit ;     --# notpresent
+            RPasse => VPasse ;      --# notpresent
+            RPres  => VPres m
             } ;
           vps   = vp.s ! VPFinite tm a ;
           verb  = vps.fin ! agr ;

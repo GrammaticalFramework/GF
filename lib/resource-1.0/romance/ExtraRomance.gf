@@ -3,5 +3,6 @@ incomplete concrete ExtraRomance of ExtraRomanceAbs = CatRomance **
     CommonRomance,
     ResRomance in {
 
+    lin TPasseSimple = {s = []} ** {t = RPasse} ;   --# notpresent
 
 } 

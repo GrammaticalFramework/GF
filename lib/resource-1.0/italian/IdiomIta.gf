@@ -41,7 +41,7 @@ concrete IdiomIta of Idiom = CatIta **
         (predV (essereV (verboV (stare_16 "stare")))) ;
 
     ImpPl1 vp = {s = 
-      (mkClause [] {g = Fem ; n = Pl ; p = P1} vp).s ! P.Pres ! Simul ! Pos ! Indic 
+      (mkClause [] {g = Fem ; n = Pl ; p = P1} vp).s ! RPres ! Simul ! Pos ! Indic 
       } ;
 
 }
