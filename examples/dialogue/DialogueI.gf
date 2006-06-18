@@ -14,8 +14,8 @@ incomplete concrete DialogueI of Dialogue = open Multi, Prelude in {
     Oper2  = V3 ;
 
   lin
-    IRequest a = {s = a.s ! ARequest ; point = a.point} ;
-    IConfirm a = {s = a.s ! AConfirm ; point = a.point} ;
+    IRequest a = {s = a.s ! ARequest ; point = a.point ; lock_Utt = <>} ;
+    IConfirm a = {s = a.s ! AConfirm ; point = a.point ; lock_Utt = <>} ;
     IAnswer  a = a ;
     IIssue   a = a ;
 
@@ -23,7 +23,7 @@ incomplete concrete DialogueI of Dialogue = open Multi, Prelude in {
     INo  = no_Phr ** noPoint ;
     IObject _ ob = UttNP ob ;
 
-    PAction a  = {s = a.s ! AConfirm ; point = a.point} ;
+    PAction a  = {s = a.s ! AConfirm ; point = a.point ; lock_Utt = <>} ;
 
     QKind k = 
       UttQS (UseQCl TPres ASimul PPos 
