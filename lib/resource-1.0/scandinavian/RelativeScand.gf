@@ -23,15 +23,13 @@ incomplete concrete RelativeScand of Relative =
       c = NPNom
       } ;
 
---- We make this easy by using "som" and preposition stranding. It would be
---- a proble to determine whether $slash$ takes a direct object, since
---- $slash.c2$ is defined to be just a string. 
---
--- The empty relative is left to $ExtScand$.
+-- This rule uses pied piping ("huset i vilket hon bor")
+-- Preposition stranding ("huset som hon bor i")
+-- and the empty relative ("huset hon bor i") are defined in $ExtraScand$.
 
     RelSlash rp slash = {
       s = \\t,a,p,ag => 
-          rp.s ! ag.gn ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2 ;
+          slash.c2 ++ rp.s ! ag.gn ! RPrep ++ slash.s ! t ! a ! p ! Sub ;
       c = NPAcc
       } ;
 

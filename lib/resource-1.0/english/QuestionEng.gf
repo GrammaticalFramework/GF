@@ -19,7 +19,7 @@ concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
 
     QuestSlash ip slash = 
       mkQuestion (ss (slash.c2 ++ ip.s ! Acc)) slash ;
-      --- stranding in ExtEng 
+      --- stranding in ExratEng 
 
     QuestIAdv iadv cl = mkQuestion iadv cl ;
 

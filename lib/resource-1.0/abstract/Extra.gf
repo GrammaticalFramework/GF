@@ -10,4 +10,8 @@ abstract Extra = Cat ** {
     GenNP       : NP -> Quant ;       -- this man's
     ComplBareVS : VS -> S -> VP ;     -- know you go
 
+    StrandRelSlash   : RP -> Slash -> RCl ;   -- that he lives in
+    EmptyRelSlash    : RP -> Slash -> RCl ;   -- he lives in
+    StrandQuestSlash : IP -> Slash -> QCl ;   -- whom does John live with
+
 }
