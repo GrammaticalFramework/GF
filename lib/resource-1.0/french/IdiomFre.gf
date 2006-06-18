@@ -32,7 +32,7 @@ concrete IdiomFre of Idiom = CatFre **
         (predV copula) ;
 
     ImpPl1 vp = {s = 
-      (mkClause [] {g = Fem ; n = Pl ; p = P1} vp).s ! P.Pres ! Simul ! Pos ! Indic 
+      (mkClause [] {g = Fem ; n = Pl ; p = P1} vp).s ! RPres ! Simul ! Pos ! Indic 
       } ;
 
   oper

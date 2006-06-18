@@ -105,6 +105,14 @@ param
    | VPGerund
    | VPInfinit Anteriority ;
 
+  RTense =
+     RPres 
+   | RPast   --# notpresent
+   | RPasse  --# notpresent
+   | RFut    --# notpresent
+   | RCond   --# notpresent
+   ;
+
 -- Agreement of adjectives, verb phrases, and relative pronouns.
 
 oper
