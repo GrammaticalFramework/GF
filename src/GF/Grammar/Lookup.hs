@@ -33,6 +33,10 @@ import GF.Grammar.Lockfield
 import Data.List (nub)
 import Control.Monad
 
+-- whether lock fields are added in reuse
+lock c = lockRecType c -- return
+unlock c = unlockRecord c -- return
+
 lookupResDef :: SourceGrammar -> Ident -> Ident -> Err Term
 lookupResDef gr m c = look True m c where 
   look isTop m c = do
@@ -45,9 +49,9 @@ lookupResDef gr m c = look True m c where
           ResOper _ Nope    -> return (Q m c) ---- if isTop then lookExt m c 
                                  ---- else prtBad "cannot find in exts" c 
 
-          CncCat (Yes ty) _ _ -> return ty ---- lockRecType c $ ty
-          CncCat _ _ _        -> return defLinType ---- lockRecType c $ defLinType
-          CncFun _ (Yes tr) _ -> return tr ---- unlockRecord c tr
+          CncCat (Yes ty) _ _ -> lock c ty
+          CncCat _ _ _        -> lock c defLinType
+          CncFun _ (Yes tr) _ -> unlock c tr
 
           AnyInd _ n        -> look False n c
           ResParam _        -> return $ QC m c
@@ -70,7 +74,7 @@ lookupResType gr m c = do
         -- used in reused concrete
         CncCat _ _ _ -> return typeType
         CncFun (Just (cat,(cont,val))) _ _ -> do
-          val' <- return val ---- lockRecType cat val 
+          val' <- lock cat val 
           return $ mkProd (cont, val', [])
         CncFun _ _ _      -> lookFunType m m c
         AnyInd _ n        -> lookupResType gr n c

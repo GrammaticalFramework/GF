@@ -771,12 +771,12 @@ checkEqLType env t u trm = do
   case t' == u' || alpha [] t' u' of
     True -> return t'
     -- forgive missing lock fields by only generating a warning.
-    --- better: use a flag to forgive (AR 31/1/2006)
+    --- better: use a flag to forgive? (AR 31/1/2006)
     _ -> case missingLock [] t' u' of
       Ok lo -> do
-        checkWarn $ "missing lock field" +++ unwords (map prt lo)
+        checkWarn $ "WARNING: missing lock field" +++ unwords (map prt lo)
         return t'
-      Bad s -> raise (s ++ "type of" +++ prt trm +++ 
+      Bad s -> raise (s +++ "type of" +++ prt trm +++ 
                 ": expected" ++++ prt t' ++++ "inferred" ++++ prt u')
  where
 
