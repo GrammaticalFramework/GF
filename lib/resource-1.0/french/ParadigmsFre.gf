@@ -293,7 +293,7 @@ oper
   accusative = complAcc ;
   genitive = complGen ;
   dative = complDat ;
-  mkPrep p = {s = p ; c = Acc ; isDir = False} ;
+  mkPrep p = {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
 
   --- obsolete
   Preposition : Type ;

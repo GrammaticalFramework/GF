@@ -48,7 +48,7 @@ lin
   i_Pron = 
     mkPronoun
       "io" "mi" "mi" "me" "me" "mio" "mia" "miei" "mie"
-      Fem Sg P1 ;
+      Masc Sg P1 ;
   in_Prep = {s = [] ; c = CPrep P_in ; isDir = False} ;
   it_Pron = 
     mkPronoun
@@ -91,10 +91,10 @@ lin
   there7to_Adv = ss "là" ; --- ci
   there_Adv = ss "là" ;
   therefore_PConj = ss "quindi" ;
-  these_NP = mkNP ["queste"] Fem Pl ;
+  these_NP = mkNP ["questi"] Masc Pl ;
   they_Pron = mkPronoun
     "loro" "loro" "li" "glie" "loro" "loro" "loro" "loro" "loro" 
-    Fem Pl P3 ;
+    Masc Pl P3 ;
   this_Quant = {
     s = \\_ => table {
       Sg => \\g,c => prepCase c ++ genForms "questo" "questa" ! g ;
@@ -102,7 +102,7 @@ lin
       }
     } ;
   this_NP = pn2np (mkPN ["questo"] Masc) ;
-  those_NP = mkNP ["quelle"] Fem Pl ;
+  those_NP = mkNP ["quelli"] Masc Pl ;
   through_Prep = mkPrep "per" ;
   too_AdA = ss "troppo" ;
   to_Prep = complDat ;
@@ -111,7 +111,7 @@ lin
   want_VV = mkVV (verboV (volere_96 "volere")) ;
   we_Pron = 
     mkPronoun "noi" "ci" "ci" "ce" "noi" "nostro" "nostra" "nostri" "nostre"
-    Fem Pl P1 ;
+    Masc Pl P1 ;
   whatSg_IP = {s = \\c => prepCase c ++ ["che cosa"] ; a = aagr Fem Sg} ;
   whatPl_IP = {s = \\c => prepCase c ++ ["che cose"] ; a = aagr Fem Pl} ; ---
   when_IAdv = ss "quando" ;
@@ -119,23 +119,23 @@ lin
   where_IAdv = ss "dove" ;
   whichSg_IDet = {s = \\g,c => prepCase c ++ genForms "quale" "quale" ! g ; n = Sg} ;
   whichPl_IDet = {s = \\g,c => prepCase c ++ genForms "quali" "quali" ! g; n = Pl} ;
-  whoPl_IP = {s = \\c => prepCase c ++ "chi" ; a = aagr Fem Pl} ;
-  whoSg_IP = {s = \\c => prepCase c ++ "chi" ; a = aagr Fem Sg} ;
+  whoPl_IP = {s = \\c => prepCase c ++ "chi" ; a = aagr Masc Pl} ;
+  whoSg_IP = {s = \\c => prepCase c ++ "chi" ; a = aagr Masc Sg} ;
   why_IAdv = ss "perché" ;
   without_Prep = mkPrep "senza" ;
   with_Prep = {s = [] ; c = CPrep P_con ; isDir = False} ;
   yes_Phr = ss "sì" ;
   youSg_Pron = mkPronoun 
     "tu" "ti" "ti" "te" "te" "tuo" "tua" "tuoi" "tue"
-    Fem Sg P2 ;
+    Masc Sg P2 ;
   youPl_Pron =
     mkPronoun
        "voi" "vi" "vi" "ve" "voi" "vostro" "vostra" "vostri" "vostre"
-       Fem Pl P2 ;
+       Masc Pl P2 ;
   youPol_Pron =
     mkPronoun
       "Lei" "La" "Le" "Glie" "Lei" "Suo" "Sua" "Suoi" "Sue"
-      Fem Sg P3 ;
+      Masc Sg P3 ;
 
 }
 

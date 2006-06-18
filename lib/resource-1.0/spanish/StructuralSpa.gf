@@ -51,7 +51,7 @@ lin
     mkPronoun
       "yo" "me" "me" "mí"
       "mi" "mi" "mis" "mis"
-      Fem Sg P1 ;
+      Masc Sg P1 ;
   in_Prep = mkPrep "en" ;
   it_Pron = 
     mkPronoun
@@ -96,11 +96,11 @@ lin
   there7to_Adv = mkAdv ["para allá"] ;
   there7from_Adv = mkAdv ["de allá"] ;	
   therefore_PConj = ss ["por eso"] ;
-  these_NP = mkNP ["estas"] Fem Pl ;
+  these_NP = mkNP ["estos"] Masc Pl ;
   they_Pron = mkPronoun
-    "ellas" "las" "les" "ellas"
+    "ellos" "los" "les" "ellos"
     "su" "su" "sus" "sus"
-    Fem Pl P3 ;
+    Masc Pl P3 ;
   this_Quant = {
     s = \\_ => table {
       Sg => \\g,c => prepCase c ++ genForms "este" "esta" ! g ;
@@ -108,7 +108,7 @@ lin
       }
     } ;
   this_NP = pn2np (mkPN ["esto"] Masc) ;
-  those_NP = mkNP ["esas"] Fem Pl ;
+  those_NP = mkNP ["esos"] Masc Pl ;
   through_Prep = mkPrep "por" ;
   too_AdA = ss "demasiado" ;
   to_Prep = complDat ;
@@ -117,9 +117,9 @@ lin
   want_VV = mkVV (verboV (querer_64 "querer")) ;
   we_Pron = 
     mkPronoun 
-      "nosotras" "nos" "nos" "nosotras"
+      "nosotros" "nos" "nos" "nosotros"
       "nuestro" "nuestra" "nuestros" "nuestras"
-      Fem Pl P1 ;
+      Masc Pl P1 ;
   whatSg_IP = {s = \\c => prepCase c ++ ["qué"] ; a = aagr Masc Sg} ;
   whatPl_IP = {s = \\c => prepCase c ++ ["qué"] ; a = aagr Masc Pl} ; ---
   when_IAdv = ss "cuando" ;
@@ -127,8 +127,8 @@ lin
   where_IAdv = ss "donde" ;
   whichSg_IDet = {s = \\g,c => prepCase c ++ "cuale" ; n = Sg} ;
   whichPl_IDet = {s = \\g,c => prepCase c ++ "cuales" ; n = Pl} ;
-  whoPl_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Fem Pl} ;
-  whoSg_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Fem Sg} ;
+  whoPl_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Masc Pl} ;
+  whoSg_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Masc Sg} ;
   why_IAdv = ss "porqué" ;
   without_Prep = mkPrep "sin" ;
   with_Prep = mkPrep "con" ;
@@ -136,17 +136,17 @@ lin
   youSg_Pron = mkPronoun 
     "tu" "te" "te" "tí"
     "tu" "tu" "tus" "tus"
-    Fem Sg P2 ;
+    Masc Sg P2 ;
   youPl_Pron =
     mkPronoun
-      "vosotras" "vos" "vos" "vosotras"
+      "vosotros" "vos" "vos" "vosotros"
       "vuestro" "vuestra" "vuestros" "vuestras"
-      Fem Pl P2 ;
+      Masc Pl P2 ;
   youPol_Pron =
     mkPronoun
       "usted" "la" "le" "usted"
       "su" "su" "sus" "sus"
-      Fem Pl P2 ;
+      Masc Pl P2 ;
 
 oper
   etConj : {s : Str ; n : Number} = {s = pre {

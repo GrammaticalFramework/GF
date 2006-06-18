@@ -48,7 +48,7 @@ lin
   i_Pron = 
     mkPronoun
       (elision "j") (elision "m") (elision "m") "moi" "mon" (elisPoss "m") "mes"
-      Fem Sg P1 ;
+      Masc Sg P1 ;
   in_Prep = mkPreposition "dans" ;
   it_Pron = 
     mkPronoun
@@ -92,10 +92,10 @@ lin
   there7to_Adv = ss "là" ; --- y
   there_Adv = ss "là" ;
   therefore_PConj = ss "donc" ;
-  these_NP = mkNP ["celles-ci"] Fem Pl ;
+  these_NP = mkNP ["ceux-ci"] Masc Pl ;
   they_Pron = mkPronoun
-    "elles" "les" "leur" "eux" "leur" "leur" "leurs"
-    Fem Pl P3 ;
+    "ils" "les" "leur" "eux" "leur" "leur" "leurs"
+    Masc Pl P3 ;
   this_Quant = {s = \\_ => 
     table {
       Sg => \\g,c => prepCase c ++ genForms "ce" "cette" ! g ;  ---- cet ; ci
@@ -103,7 +103,7 @@ lin
       }
     } ;
   this_NP = pn2np (mkPN ["ceci"] Masc) ;
-  those_NP = mkNP ["celles-là"] Fem Pl ;
+  those_NP = mkNP ["ceux-là"] Masc Pl ;
   through_Prep = mkPreposition "par" ;
   too_AdA = ss "trop" ;
   to_Prep = complDat ;
@@ -112,27 +112,31 @@ lin
   want_VV = mkVV (vouloir_V2 ** {lock_V = <>}) ;
   we_Pron = 
     mkPronoun "nous" "nous" "nous" "nous" "notre" "notre" "nos"
-    Fem Pl P1 ;
-  whatSg_IP = {s = \\c => prepCase c ++ "quoi" ; a = aagr Fem Sg} ;
-  whatPl_IP = {s = \\c => prepCase c ++ "quoi" ; a = aagr Fem Pl} ;
+    Masc Pl P1 ;
+  whatSg_IP = 
+    {s = \\c => artDef a.g a.n c + quelPron ! a ; a = a}
+    where {a = aagr Masc Sg} ;
+  whatPl_IP = 
+    {s = \\c => artDef a.g a.n c + quelPron ! a ; a = a}
+    where {a = aagr Masc Pl} ;
   when_IAdv = ss "quand" ;
   when_Subj = ss "quand" ** {m = Indic} ;
   where_IAdv = ss "où" ;
   whichSg_IDet = {s = \\g,c => prepCase c ++ genForms "quel" "quelle" ! g ; n = Sg} ;
   whichPl_IDet = {s = \\g,c => prepCase c ++ genForms "quels" "quelles" ! g; n = Pl} ;
-  whoPl_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Fem Pl} ;
-  whoSg_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Fem Sg} ;
+  whoPl_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Masc Pl} ;
+  whoSg_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Masc Sg} ;
   why_IAdv = ss "pourquoi" ;
   without_Prep = mkPreposition "sans" ;
   with_Prep = mkPreposition "avec" ;
   yes_Phr = ss "oui" ; --- si
   youSg_Pron = mkPronoun 
     "tu" (elision "t") (elision "t") "toi" "ton" (elisPoss "t") "tes"
-    Fem Sg P2 ;
+    Masc Sg P2 ;
   youPl_Pron, youPol_Pron = 
     mkPronoun
       "vous" "vous" "vous" "vous" "votre" "votre" "vos"
-       Fem Pl P2 ;
+       Masc Pl P2 ;
 
 }
 
