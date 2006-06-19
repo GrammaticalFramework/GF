@@ -39,8 +39,9 @@ import Data.Array
 
 -- parse :: (Ord c, Ord n, Ord l, Ord t) => String -> MCFParser c n l t
 parse strategy pinfo starts =
-    [ Abs (cat, found) (zip rhs rrecs) fun |
-      Final (Abs cat rhs fun) found rrecs <- listXChartFinal chart ]
+    accumAssoc groupSyntaxNodes $
+      [ ((cat, found), SNode fun (zip rhs rrecs)) |
+        Final (Abs cat rhs fun) found rrecs <- listXChartFinal chart ]
     where chart = process strategy pinfo axioms emptyXChart
     
           -- axioms | isBU  strategy = terminal pinfo toks ++ initialScan pinfo toks
