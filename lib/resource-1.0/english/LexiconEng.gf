@@ -85,7 +85,7 @@ lin
   glove_N = regN "glove" ;
   gold_N = regN "gold" ;
   good_A = mkADeg "good" "well" "better" "best" ;
-  go_V = (mkV "go" "goes" "went" "gone" "going") ;
+  go_V = mkV "go" "goes" "went" "gone" "going" ;
   green_A = regADeg "green" ;
   harbour_N = regN "harbour" ;
   hate_V2 = dirV2 (regV "hate") ;
