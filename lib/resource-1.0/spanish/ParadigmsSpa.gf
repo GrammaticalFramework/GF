@@ -348,6 +348,8 @@ oper
 
   verboV ve = verbBesch ve ** {vtyp = VHabere ; lock_V = <>} ;
 
+  reflVerboV : Verbum -> V = \ve -> reflV (verboV ve) ;
+
   special_ppV ve pa = {
     s = table {
       VPart g n => (adjSolo pa).s ! AF g n ;
