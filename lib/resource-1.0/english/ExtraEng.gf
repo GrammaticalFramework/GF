@@ -1,4 +1,5 @@
-concrete ExtraEng of ExtraEngAbs = CatEng ** open ResEng, Prelude in {
+concrete ExtraEng of ExtraEngAbs = CatEng ** 
+  open ResEng, Coordination, Prelude in {
 
   lin
     GenNP np = {s = \\_ => np.s ! Gen} ;
@@ -17,6 +18,24 @@ concrete ExtraEng of ExtraEngAbs = CatEng ** open ResEng, Prelude in {
       {s = \\t,a,b,q => 
          (mkQuestion (ss (ip.s ! Acc)) slash).s ! t ! a ! b ! q ++ slash.c2
       };
+
+  lincat
+    VPI   = {s : VPIForm => Agr => Str} ;
+    [VPI] = {s1,s2 : VPIForm => Agr => Str} ;
+
+  param
+    VPIForm = VPIInf | VPIPPart ;
+
+  lin
+    BaseVPI = twoTable2 VPIForm Agr ;
+    ConsVPI = consrTable2 VPIForm Agr comma ;
+
+    MkVPI vp = {
+      s = \\v,a => vp.ad ++ vp.inf ++ vp.s2 ! a
+      } ;
+    ConjVPI = conjunctTable2 VPIForm Agr ;
+    ComplVPIVV vv vpi = 
+      insertObj (\\a => (if_then_Str vv.isAux [] "to") ++ vpi.s ! VPIInf ! a) (predVV vv) ;
 
     UncNegCl  t a cl = {s = t.s ++ a.s ++ cl.s ! t.t ! a.a ! neg ! ODir} ;
     UncNegQCl t a cl = {s = \\q => t.s ++ a.s ++ cl.s ! t.t ! a.a ! neg !q} ;

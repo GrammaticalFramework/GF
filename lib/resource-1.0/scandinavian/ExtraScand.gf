@@ -1,5 +1,5 @@
-incomplete concrete ExtraScand of ExtraScandAbs = CatScand ** open CommonScand,ResScand in {
-
+incomplete concrete ExtraScand of ExtraScandAbs = CatScand ** 
+   open CommonScand,Coordination,ResScand in {
   lin
     GenNP np = {
       s = \\n,_,g => np.s ! NPPoss (gennum g n) ; 
@@ -29,5 +29,22 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand ** open CommonScand,R
               QIndir => who ++ cls ! Sub ++ slash.c2
               }
       } ;
+
+  lincat
+    VPI   = {s : VPIForm => Agr => Str} ;
+    [VPI] = {s1,s2 : VPIForm => Agr => Str} ;
+
+  param
+    VPIForm = VPIInf | VPISup ; ---- sup not yet used
+
+  lin
+    BaseVPI = twoTable2 VPIForm Agr ;
+    ConsVPI = consrTable2 VPIForm Agr comma ;
+
+    MkVPI vp = {
+      s = \\v,a => infVP vp a ---- no sup
+      } ;
+    ConjVPI = conjunctTable2 VPIForm Agr ;
+    ComplVPIVV vv vpi = insertObj (\\a => vv.c2 ++ vpi.s ! VPIInf ! a) (predV vv) ;
 
 } 

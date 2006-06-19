@@ -14,4 +14,17 @@ abstract Extra = Cat ** {
     EmptyRelSlash    : RP -> Slash -> RCl ;   -- he lives in
     StrandQuestSlash : IP -> Slash -> QCl ;   -- whom does John live with
 
+-- $VP$ conjunction, which has different fragments implemented in
+-- different languages - never a full $VP$, though.
+
+  cat
+    VPI ;
+    [VPI] {2} ;
+
+  fun
+    MkVPI : VP -> VPI ;
+    ConjVPI : Conj -> [VPI] -> VPI ;
+    ComplVPIVV : VV -> VPI -> VP ;
+
+
 }
