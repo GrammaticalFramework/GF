@@ -37,9 +37,8 @@ import Data.Array
 parse :: (Ord c, Ord n, Ord t) => String -> FCFParser c n t
 parse strategy pinfo starts toks = xchart2syntaxchart chart pinfo
     where chart = process strategy pinfo toks axioms emptyXChart
-    
-          axioms | isBU  strategy = terminal pinfo toks ++ initialScan pinfo toks
-		 | isTD  strategy = initial pinfo starts toks
+          axioms | isBU  strategy = literals pinfo toks ++ initialBU pinfo toks
+		 | isTD  strategy = literals pinfo toks ++ initialTD pinfo starts toks
 
 isBU  s = s=="b"
 isTD  s = s=="t"
@@ -149,13 +148,16 @@ xchart2syntaxchart (XChart actives finals) pinfo =
     | (cat, Final found node) <- chartAssocs finals
     ]
 
+literals :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [(c,Item)]
+literals pinfo toks =
+  [let (c,node) = grammarLexer pinfo t in (c,Final [makeRange i j] node) | Edge i j t <- inputEdges toks, not (t `elem` grammarToks pinfo)]
+
 ----------------------------------------------------------------------
 -- Earley --
 
--- anropas med alla startkategorier
-initial :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> [c] -> Input t -> [Item]
-initial pinfo starts toks = 
-    tracePrt "MCFG.Active (Earley) - initial rules" (prt . length) $
+-- called with all starting categories
+initialTD :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> [c] -> Input t -> [(c,Item)]
+initialTD pinfo starts toks = 
     do cat <- starts
        ruleid <- topdownRules pinfo ? cat
        return (cat,Active [] (Range 0 0) 0 0 (emptyChildren ruleid pinfo))
@@ -164,24 +166,10 @@ initial pinfo starts toks =
 ----------------------------------------------------------------------
 -- Kilbury --
 
-terminal :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [Item]
-terminal pinfo toks = 
-    tracePrt "MCFG.Active (Kilbury) - initial terminal rules" (prt . length) $
-    do ruleid <- emptyRules pinfo
-       let FRule abs lins = allRules pinfo ! ruleid
-       rrec <- mapM (rangeRestSyms toks EmptyRange . elems) (elems lins)
-       return $ Final ruleid rrec []
-    where
-      rangeRestSyms toks rng []                 = return rng
-      rangeRestSyms toks rng (FSymTok tok:syms) = do (i,j) <- inputToken toks ? tok
-                                                     rng' <- concatRange rng (makeRange i j)
-                                                     rangeRestSyms toks rng' syms
-
-initialScan :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [Item]
-initialScan pinfo toks =
-    tracePrt "MCFG.Active (Kilbury) - initial scanned rules" (prt . length) $
+initialBU :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [(c,Item)]
+initialBU pinfo toks =
     do tok <- aElems (inputToken toks)
        ruleid <- leftcornerTokens pinfo ? tok ++
                  epsilonRules pinfo
-       let FRule abs lins = allRules pinfo ! ruleid
-       return $ Active ruleid [] EmptyRange 0 0 (emptyChildren abs)
+       let FRule (Abs cat _ _) _ = allRules pinfo ! ruleid
+       return (cat,Active [] EmptyRange 0 0 (emptyChildren ruleid pinfo))
