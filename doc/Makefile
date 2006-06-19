@@ -8,3 +8,4 @@ resource:
 	sed -i 's/}\\\\/}/g' resource.tex
 	latex resource.tex
 	latex resource.tex
+	dvipdf resource.dvi
