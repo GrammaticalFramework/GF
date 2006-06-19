@@ -82,7 +82,7 @@ write
 ```
 and the eight forms are correctly generated. The resource grammar
 library contains a complete set of inflectional paradigms (such as
-``regN2`` here), enabling the definition of any lexical items.
+``reg2N`` here), enabling the definition of any lexical items.
 
 The resource grammar library is not only about inflectional paradigms - it
 also has syntax rules. The music player application

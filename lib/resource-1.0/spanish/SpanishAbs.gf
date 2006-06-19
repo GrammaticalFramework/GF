@@ -1,5 +1,5 @@
 abstract SpanishAbs = 
   Lang,
---  IrregSpaAbs,
+  IrregSpaAbs,
   ExtraSpaAbs
   ** {} ;

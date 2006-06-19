@@ -2,6 +2,6 @@
 
 concrete Spanish of SpanishAbs = 
   LangSpa,
---  IrregSpa,
+  IrregSpa,
   ExtraSpa 
   ** {} ;
