@@ -11,6 +11,10 @@ Last update: %%date(%c)
 %!postproc(tex): "#BFIG" "begin{figure}"
 %!postproc(tex): "#GRAMMAR" "includegraphics[width=4in]{Grammar.epsi}"
 %!postproc(tex): "#EFIG" "end{figure}"
+%!postproc(tex): "#BCENTER" "begin{center}"
+%!postproc(tex): "#ECENTER" "end{center}"
+%!postproc(tex): "#CAPTION" "caption{"
+%!postproc(tex): "#RBRACE" "end{figure}"
 
 %!target:tex
 
@@ -539,8 +543,11 @@ in the category Sentence:
 whereas in the category Clause all of them are just different forms of
 the same tree.
 
-The following syntax tree of the Text "John walks." gives an overview
-of the structural levels.
+Figure 1 shows a type-annotated syntax tree of the Text "John walks." 
+and gives an overview of the structural levels.
+
+#BFIG
+
 ```
 Node Constructor             Value type  Other constructors
 -----------------------------------------------------------
@@ -560,6 +567,13 @@ Node Constructor             Value type  Other constructors
 14.      NoVoc)              Voc         please_Voc
 15.    TEmpty                Text            
 ```
+
+#BCENTER
+Figure 1. Type-annotated syntax tree of the Text "John walks."
+#ECENTER
+
+#EFIG
+
 Here are some examples of the results of changing constructors.
 ```
  1. TFullStop -> TQuestMark   John walks?
@@ -714,11 +728,15 @@ help testing the resource library. It does not seem possible to maintain
 a general-purpose multilingual lexicon, and this is the form that the module
 ``Lexicon`` has.
 
-Here is a diagram showing the structure of the API.
+The diagram in Figure 2 shows the structure of the API.
 
 #BFIG
 
 #GRAMMAR
+
+#BCENTER
+Figure 2. The resource syntax API. 
+#ECENTER
 
 #EFIG
 
@@ -972,6 +990,8 @@ has only been exploited in a very small scale so far.
 ==Functions==
 
 || Function | Module | Type | Example |
+| AAnter | Common | Ant | ""
+| ASimul | Common | Ant | ""
 | AdAdv | Adverb | AdA -> Adv -> Adv | very quickly
 | AdAP | Adjective | AdA -> AP -> AP | very uncertain
 | AdjCN | Noun | AP -> CN -> CN | big house
@@ -1054,12 +1074,14 @@ has only been exploited in a very small scale so far.
 | PConjConj | Phrase | Conj -> PConj | and
 | PhrUtt | Phrase | PConj -> Utt -> Voc -> Phr | But go home my friend.
 | PlQuant | Noun | Quant -> QuantPl | these
-
-|| Function | Module | Type | Example |
 | PositA | Adjective | A -> AP | warm
 | PositAdvAdj | Adverb | A -> Adv | quickly
+
+|| Function | Module | Type | Example |
 | PossPron | Noun | Pron -> Quant | my (house)
 | PPartNP | Noun | NP -> V2 -> NP | the number squared
+| PNeg | Common | Pol | ""
+| PPos | Common | Pol | ""
 | PredetNP | Noun | Predet -> NP -> NP | only the man
 | PredSCVP | Sentence | SC -> VP -> Cl | that you go makes me happy
 | PredVP | Sentence | NP -> VP -> Cl | John walks
@@ -1084,9 +1106,13 @@ has only been exploited in a very small scale so far.
 | SlashV2 | Sentence | NP -> V2 -> Slash | (whom) he sees
 | SlashVVV2 | Sentence | NP -> VV -> V2 -> Slash | (whom) he wants to see
 | SubjS | Adverb | Subj -> S -> Adv | when he arrives
+| TCond | Common | Tense | ""
 | TEmpty | Text | Text | ""
+| TFut | Common | Tense | ""
 | TExclMark | Text | Phr -> Text -> Text | John walks! ...
 | TFullStop | Text | Phr -> Text -> Text | John walks. ...
+| TPast | Common | Tense | ""
+| TPres | Common | Tense | ""
 | TQuestMark | Text | Phr -> Text -> Text | Are you OK? ...
 | UseA2 | Adjective | A2 -> A | divisible
 | UseCl | Sentence | Tense -> Ant -> Pol -> Cl -> S | John hadn't walked
