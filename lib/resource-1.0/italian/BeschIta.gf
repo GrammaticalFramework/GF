@@ -6402,12 +6402,31 @@ oper morire_105 : Str -> Verbo = \morire ->
     }
   } ;
 
----- morire_105
+oper salire_106 : Str -> Verbo = \salire -> 
+  let x_ = Predef.tk 6 salire in
+    mkVerbo 
+     (x_ + "salire") (x_ + "salgo") (x_ + "sale") (x_ + "saliamo") 
+     (x_ + "salirò") (x_ + "salii") (x_ + "salisti") (x_ + "salì") 
+     (x_ + "salirono") (x_ + "sali") (x_ + "salito") ;
 
----- salire_106
----- seguire_107
----- udire_108
----- uscire_109
+oper seguire_107 : Str -> Verbo = \seguire -> 
+  let x_ = Predef.tk 7 seguire in
+    mkVerbo 
+     (x_ + "seguire") (x_ + "seguo") (x_ + "segue") (x_ + "seguiamo") 
+     (x_ + "seguirò") (x_ + "seguii") (x_ + "seguisti") (x_ + "seguì") 
+     (x_ + "seguirono") (x_ + "segui") (x_ + "seguito") ;
+ 
+oper udire_108 : Str -> Verbo = \udire -> 
+  let x_ = Predef.tk 5 udire in
+    mkVerbo (x_ + "udire") (x_ + "odo") (x_ + "ode") (x_ + "udiamo") 
+     (x_ + "udirò") (x_ + "udii") (x_ + "udisti") (x_ + "udì") 
+     (x_ + "udirono") (x_ + "odi") (x_ + "udito") ;
+
+oper uscire_109 : Str -> Verbo = \uscire -> 
+  let x_ = Predef.tk 6 uscire in
+    mkVerbo (x_ + "uscire") (x_ + "esco") (x_ + "esce") 
+      (x_ + "usciamo") (x_ + "uscirò") (x_ + "uscii") (x_ + "uscisti") 
+      (x_ + "uscì") (x_ + "uscirono") (x_ + "esci") (x_ + "uscito") ;
 
 oper venire_110 : Str -> Verbo = \venire -> 
   let v_ = Predef.tk 5 venire in
@@ -6508,5 +6527,75 @@ param
    | Part  TempoP Gender   Number
    ;
 
+ oper
+  mkVerbo : (x1,_,_,_,_,_,_,_,_,_,x11 : Str) -> Verbo ; 
+  mkVerbo
+    dovere devo deve dobbiamo dovro 
+    dovetti dovesti dovette dovettero dovi dovuto = 
+   let
+     dove  = Predef.tk 2 dovere ;
+     dov   = init dove ;
+     dev   = init devo ;
+     dovr  = init dovro ;
+     dovei = Predef.tk 3 dovesti ;
+     dovut = init dovuto
+   in (
+   {s = table {
+    Inf => dovere ;
+    InfClit => init dovere ;
+    Indi Pres Sg P1 => devo ;
+    Indi Pres Sg P2 => init deve + "i" ;
+    Indi Pres Sg P3 => deve ;
+    Indi Pres Pl P1 => dobbiamo ;
+    Indi Pres Pl P2 => dove + "te" ;
+    Indi Pres Pl P3 => init deve + "ono" ;
+    Indi Imperf Sg P1 => dove + "vo" ; --# notpresent
+    Indi Imperf Sg P2 => dove + "vi" ; --# notpresent
+    Indi Imperf Sg P3 => dove + "va" ; --# notpresent
+    Indi Imperf Pl P1 => dove + "vamo" ; --# notpresent
+    Indi Imperf Pl P2 => dove + "vate" ; --# notpresent
+    Indi Imperf Pl P3 => dove + "vano" ; --# notpresent
+    Pass Sg P1 => dovetti ; --# notpresent
+    Pass Sg P2 => dovesti ; --# notpresent
+    Pass Sg P3 => dovette ; --# notpresent
+    Pass Pl P1 => dovei + "mmo" ; --# notpresent
+    Pass Pl P2 => dovei + "ste" ; --# notpresent
+    Pass Pl P3 => dovettero ; --# notpresent
+    Fut Sg P1 => dovro ; --# notpresent
+    Fut Sg P2 => dovr + "ai" ; --# notpresent
+    Fut Sg P3 => dovr + "à" ; --# notpresent
+    Fut Pl P1 => dovr + "emo" ; --# notpresent
+    Fut Pl P2 => dovr + "ete" ; --# notpresent
+    Fut Pl P3 => dovr + "anno" ; --# notpresent
+    Cong Pres Sg P1 => dev + "a" ;
+    Cong Pres Sg P2 => dev + "a" ;
+    Cong Pres Sg P3 => dev + "a" ;
+    Cong Pres Pl P1 => dobbiamo ;
+    Cong Pres Pl P2 => Predef.tk 2 dobbiamo + "te" ;
+    Cong Pres Pl P3 => dev + "ano" ;
+    Cong Imperf Sg P1 => dovei + "ssi" ; --# notpresent
+    Cong Imperf Sg P2 => dovei + "ssi" ; --# notpresent
+    Cong Imperf Sg P3 => dovei + "sse" ; --# notpresent
+    Cong Imperf Pl P1 => dovei + "ssimo" ; --# notpresent
+    Cong Imperf Pl P2 => dovei + "ste" ; --# notpresent
+    Cong Imperf Pl P3 => dovei + "ssero" ; --# notpresent
+    Cond Sg P1 => dovr + "ei" ; --# notpresent
+    Cond Sg P2 => dovr + "esti" ; --# notpresent
+    Cond Sg P3 => dovr + "ebbe" ; --# notpresent
+    Cond Pl P1 => dovr + "emmo" ; --# notpresent
+    Cond Pl P2 => dovr + "este" ; --# notpresent
+    Cond Pl P3 => dovr + "ebbero" ; --# notpresent
+    Imper SgP2 => dovi ;
+    Imper PlP1 => dobbiamo ;
+    Imper PlP2 => dove + "te" ;
+    Ger => dov + "endo" ;
+    Part PresP _ Sg => dov + "ente" ;
+    Part PresP _ Pl => dov + "enti" ;
+    Part PassP Masc Sg => dovuto ;
+    Part PassP Masc Pl => dovut + "i" ;
+    Part PassP Fem Sg => dovut + "a" ;
+    Part PassP Fem Pl => dovut + "e"
+    }
+  }) ;
 
 }
