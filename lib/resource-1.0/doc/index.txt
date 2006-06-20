@@ -367,7 +367,6 @@ Russian
 
 
 Spanish
-- no list of irregular verbs
 - multiple clitics (with V3) not always right
 
 

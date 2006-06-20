@@ -20,6 +20,7 @@ module GF.UseGrammar.Tokenize ( tokWords,
 		  lexHaskellLiteral,
 		  lexHaskellVar,
 		  lexText,
+		  lexTextVar,
 		  lexC2M, lexC2M',
 		  lexTextLiteral,
                   lexIgnore,
@@ -58,6 +59,10 @@ isFloat s = case s of
   '.':cs@(_:_)     -> all isDigit cs
   _ -> False
 
+isString s = case s of
+  c:cs@(_:_) -> (c == '\'' && d == '\'') || (c == '"' && d == '"') where d = last cs
+  _ -> False
+
 
 mkCFTok :: String -> CFTok
 mkCFTok s = case s of
@@ -86,6 +91,7 @@ mkLit s
   | all isDigit s = tI s
   | otherwise = tL s
 
+-- obsolete
 mkTL :: String -> CFTok
 mkTL s 
   | isFloat s = tF s
@@ -104,6 +110,7 @@ lexText :: String -> [CFTok]
 lexText = uncap . lx where
 
   lx s = case s of
+    '?':'?':cs          -> tS "??" : lx cs
     p : cs | isMPunct p -> tS [p] : uncap (lx cs)
     p : cs | isPunct p  -> tS [p] : lx cs
     s : cs | isSpace s  -> lx cs
@@ -177,7 +184,7 @@ unknown2string isKnown = map mkOne where
     | isFloat s = tF s
     | all isDigit s = tI s 
     | otherwise = tL s
-  mkOne t@(TC s) = if isKnown s then t else mkTL s
+  mkOne t@(TC s) = if isKnown s then t else mkLit s
   mkOne t        = t
 
 unknown2var :: (String -> Bool) -> [CFTok] -> [CFTok]
@@ -186,6 +193,7 @@ unknown2var isKnown = map mkOne where
   mkOne t@(TS s) 
     | isKnown s = t
     | isFloat s = tF s
+    | isString s = tL (init (tail s))
     | all isDigit s = tI s 
     | otherwise = tV s
   mkOne t@(TC s) = if isKnown s then t else tV s
@@ -197,6 +205,8 @@ lexTextLiteral    isKnown = unknown2string (eitherUpper isKnown) . lexText
 lexHaskellLiteral isKnown = unknown2string isKnown . lexHaskell
 
 lexHaskellVar     isKnown = unknown2var isKnown . lexHaskell
+lexTextVar    isKnown = unknown2var (eitherUpper isKnown) . lexText
+
 
 eitherUpper isKnown w@(c:cs) = isKnown (toLower c : cs) || isKnown (toUpper c : cs)
 eitherUpper isKnown w = isKnown w

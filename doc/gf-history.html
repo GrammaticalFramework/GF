@@ -12,6 +12,16 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 </center>
 
+<p>
+
+20/6 (AR) The FCFG parser is know the default, as it even handles literals.
+The old default can be selected by <tt>p -old</tt>. Since
+FCFG does not support variable bindings, <tt>-old</tt> is automatically
+selected if the grammar has bindings - and unless the <tt>-fcfg</tt> flag
+is used.
+
+<p>
+
 17/6 (AR) The FCFG parser is now the recommended method for parsing
 heavy grammars such as the resource grammars. It does not yet support
 literals and variable bindings.

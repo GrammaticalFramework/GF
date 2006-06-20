@@ -188,6 +188,10 @@ stateOptions   = loptions
 stateGrammarWords = allMorphoWords . stateMorpho
 stateGrammarLang st = (grammar st, cncId st)
 
+---- this should be computed at compile time and stored
+stateHasHOAS :: StateGrammar -> Bool
+stateHasHOAS = hasHOAS . stateGrammarST
+
 cncModuleIdST :: StateGrammar -> CanonGrammar
 cncModuleIdST = stateGrammarST
 

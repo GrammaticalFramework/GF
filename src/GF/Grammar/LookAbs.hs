@@ -21,6 +21,7 @@ module GF.Grammar.LookAbs (GFCGrammar,
 		lookupRef,
 		refsForType,
 		funRulesOf,
+		hasHOAS,
 		allCatsOf,
 		allBindCatsOf,
 		funsForType,
@@ -129,6 +130,10 @@ funRulesOf gr =
   [((i,f),typ) | (i, ModMod m) <- modules gr,
                  mtype m == MTAbstract,
                  (f, C.AbsFun typ _) <- tree2list (jments m)]
+
+-- testing for higher-order abstract syntax
+hasHOAS :: GFCGrammar -> Bool
+hasHOAS gr = any isHigherOrderType [t | (_,t) <- funRulesOf gr] where
 
 allCatsOf :: GFCGrammar -> [(Cat,Context)]
 allCatsOf gr = 

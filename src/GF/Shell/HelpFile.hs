@@ -212,12 +212,12 @@ txtHelpFile =
   "\n      -fail      show strings whose parse fails prefixed by #FAIL" ++
   "\n      -ambiguous show strings that have more than one parse prefixed by #AMBIGUOUS" ++
   "\n  options for selecting parsing method:" ++
-  "\n      (default)parse using an overgenerating CFG" ++
+  "\n      -fcfg    parse using a fast variant of MCFG (default is no HOAS in grammar)" ++
+  "\n      -old     parse using an overgenerating CFG (default if HOAS in grammar)" ++
   "\n      -cfg     parse using a much less overgenerating CFG" ++
   "\n      -mcfg    parse using an even less overgenerating MCFG" ++
-  "\n      -fcfg    parse using a faster variant of MCFG" ++
-  "\n      Note:    the first time parsing with -cfg, -mcfg, and -fcfg might take a long time" ++
-  "\n  options that only work for the default parsing method:" ++
+  "\n      Note:    the first time parsing with -cfg, -mcfg, and -fcfg may take a long time" ++
+  "\n  options that only work for the -old default parsing method:" ++
   "\n      -n       non-strict: tolerates morphological errors" ++
   "\n      -ign     ignore unknown words when parsing" ++
   "\n      -raw     return context-free terms in raw form" ++
@@ -594,6 +594,7 @@ txtHelpFile =
   "\n    -lexer=chars         each character is a token" ++
   "\n    -lexer=code          use Haskell's lex" ++
   "\n    -lexer=codevars      like code, but treat unknown words as variables, ?? as meta " ++
+  "\n    -lexer=textvars      like text, but treat unknown words as variables, ?? as meta " ++
   "\n    -lexer=text          with conventions on punctuation and capital letters" ++
   "\n    -lexer=codelit       like code, but treat unknown words as string literals" ++
   "\n    -lexer=textlit       like text, but treat unknown words as string literals" ++
