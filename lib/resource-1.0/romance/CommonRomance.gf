@@ -79,6 +79,9 @@ oper
 -- and Italian, since they are not identical. The differences are mostly due
 -- to Bescherelle structuring the forms in different groups; the
 -- gerund and the present participles show real differences.
+--
+-- For Italian contracted forms, $VInfin$ should have
+-- an alternative form, whose proper place is $Diff$.
 
 param 
   VF =
