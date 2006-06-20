@@ -82,7 +82,7 @@ mkCncGroups opts0 ((res,path),files) = do
       return 
             (\cat s -> 
                 errVal ([],"No parse") $ 
-                optParseArgErrMsg (options [newMParser, firstCat cat, beVerbose]) gr s >>=
+                optParseArgErrMsg (options [newFParser, firstCat cat, beVerbose]) gr s >>=
                 (\ (ts,e) -> return (map tree2exp ts, e)) , 
             isKnownWord gr)
   putStrLn "Building parser"

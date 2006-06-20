@@ -204,7 +204,9 @@ renameTerm env vars = ren vars where
       | elem r vs -> return trm                           -- var proj first
       | otherwise -> case renid (Q r (label2ident l)) of  -- qualif   second
           Ok t -> return t
-          _ -> liftM (flip P l) $ renid t                 -- const proj last
+          _ -> case liftM (flip P l) $ renid t of
+            Ok t -> return t                              -- const proj last
+            _ -> prtBad "unknown qualified constant" trm
 
     _ -> composOp (ren vs) trm
 

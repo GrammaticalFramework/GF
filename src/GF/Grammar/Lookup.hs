@@ -51,6 +51,8 @@ lookupResDef gr m c = look True m c where
 
           CncCat (Yes ty) _ _ -> lock c ty
           CncCat _ _ _        -> lock c defLinType
+          CncFun (Just (cat,_)) (Yes tr) _ -> unlock cat tr
+
           CncFun _ (Yes tr) _ -> unlock c tr
 
           AnyInd _ n        -> look False n c
@@ -73,7 +75,7 @@ lookupResType gr m c = do
 
         -- used in reused concrete
         CncCat _ _ _ -> return typeType
-        CncFun (Just (cat,(cont,val))) _ _ -> do
+        CncFun (Just (cat,(cont@(_:_),val))) _ _ -> do
           val' <- lock cat val 
           return $ mkProd (cont, val', [])
         CncFun _ _ _      -> lookFunType m m c

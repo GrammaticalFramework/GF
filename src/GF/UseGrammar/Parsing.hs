@@ -83,7 +83,8 @@ parseStringC opts0 sg cat s
                t:_ -> t
                _ -> [] ---- no support for undet. tok.
   ts <- checkErr $ New.parse algorithm strategy (pInfo sg) (absId sg) cat toks
-  ts' <- mapM (checkErr . annotate (stateGrammarST sg) . refreshMetas []) ts
+  ts' <- checkErr $ 
+           allChecks $ map (annotate (stateGrammarST sg) . refreshMetas []) ts
   return $ optIntOrAll opts flagNumber ts'
 
 
@@ -115,7 +116,8 @@ trees2trms opts sg cn as ts0 info = do
                      )
       (ts1,ss) <- checkErr $ mapErrN 1 postParse ts01
       if null ts1 then raise ss else return ()
-      ts2 <- mapM (checkErr . annotate gr . refreshMetas [] . trExp) ts1 ---- 
+      ts2 <- checkErr $ 
+               allChecks $ map (annotate gr . refreshMetas [] . trExp) ts1 ---- 
       if forgive then return ts2 else do
         let tsss = [(t, allLinsOfTree gr cn t) | t <- ts2]
             ps = [t | (t,ss) <- tsss, 
@@ -127,7 +129,6 @@ trees2trms opts sg cn as ts0 info = do
                           unlines (nub (map sstr (concatMap snd tsss)))
                      else ""
            else return ps
-
   if verb 
      then checkWarn $ " the token list" +++ show as ++++ unknownWords sg as +++++ info
      else return ()
@@ -139,6 +140,8 @@ trees2trms opts sg cn as ts0 info = do
    raw     = oElem rawParse opts
    verb    = oElem beVerbose opts
    forgive = oElem forgiveParse opts
+
+---- Operatins.allChecks :: ErrorMonad m => [m a] -> m [a]
 
 unknownWords sg ts = case filter noMatch [t | t@(TS _) <- ts] of
      [] -> "where all words are known"
