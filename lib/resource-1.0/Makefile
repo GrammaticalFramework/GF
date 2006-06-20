@@ -1,5 +1,7 @@
 GF=gf
 RTS=+RTS -M800M -K100M
+RTSS=+RTS -M1800M -K100M
+GFCA=$(GF) -nocf
 GFCC=$(GF) -nocf -make
 GFC=$(GFCC) -src
 GFCP=$(GFC) -preproc=./mkPresent
@@ -33,7 +35,7 @@ alltenses:
 	cp -p */*.gfc */*.gfr ../alltenses
 
 langs:
-	echo "s ;; pm | wf langs.gfcm" | $(GFCC) -path=alltenses:prelude ../alltenses/Lang???.gfc $(RTS)
+	echo "s ;; pm | wf langs.gfcm" | $(GFCA) -path=alltenses:prelude ../alltenses/Lang???.gfc $(RTSS)
 
 
 present:

@@ -80,7 +80,9 @@ redInfo (c,info) = errIn ("decompiling abstract" +++ show c) $ do
       xx'   <- mapM redArgVar xx
       body' <- redCTerm body
       ppr'  <- redCTerm ppr
-      return $ G.CncFun Nothing (Yes (F.mkAbs xx' body')) (Yes ppr')
+      cat'  <- redIdent cat
+      return $ G.CncFun (Just (cat', ([],F.typeStr))) -- Nothing 
+        (Yes (F.mkAbs xx' body')) (Yes ppr')
 
     AnyInd b c -> liftM (G.AnyInd b) $ redIdent c
 
