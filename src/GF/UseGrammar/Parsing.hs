@@ -54,34 +54,9 @@ parseStringMsg os sg cat s = do
   return (ts, unlines $ reverse ss)
 
 parseStringC :: Options -> StateGrammar -> CFCat -> String -> Check [Tree]
-
----- to test peb's new parser 6/10/2003
----- (obsoleted by "newer" below)
--- parseStringC opts0 sg cat s
---  | oElem newParser opts0 = do  
---   let pm = maybe "" id $ getOptVal opts0 useParser -- -parser=pm
---       ct = cfCat2Cat cat
---   ts <- checkErr $ NewOld.newParser pm sg ct s
---   mapM (checkErr . annotate (stateGrammarST sg) . refreshMetas []) ts
-
--- to use peb's newer parser 7/4-05 
-parseStringC opts0 sg cat s
- | oElem newCParser opts0 || oElem newMParser opts0 || oElem newFParser opts0 || oElem newParser opts0 || oElem newerParser opts0 = do  
-  let opts      = unionOptions opts0 $ stateOptions sg
-      algorithm | oElem newCParser opts0 = "c"
-		| oElem newMParser opts0 = "m"
-		| oElem newFParser opts0 = "f"
-		| otherwise              = "c" -- default algorithm
-      strategy  = maybe "bottomup" id $ getOptVal opts useParser -- -parser=bottomup/topdown
-      tokenizer = customOrDefault opts useTokenizer customTokenizer sg
-      toks = case tokenizer s of
-               t:_ -> t
-               _ -> [] ---- no support for undet. tok.
-  ts <- checkErr $ New.parse algorithm strategy (pInfo sg) (absId sg) cat toks
-  ts' <- mapM (checkErr . annotate (stateGrammarST sg) . refreshMetas []) ts
-  return $ optIntOrAll opts flagNumber ts'
-
-parseStringC opts0 sg cat s = do
+parseStringC opts0 sg cat s 
+ | oElem (iOpt "old") opts0 ||
+   (not (oElem (iOpt "fcfg") opts0) && stateHasHOAS sg) = do
   let opts = unionOptions opts0 $ stateOptions sg
       cf  = stateCF sg
       gr  = stateGrammarST sg
@@ -91,6 +66,26 @@ parseStringC opts0 sg cat s = do
   if oElem (iOpt "cut") opts 
     then doUntil (not . null) $ map (tokens2trms opts sg cn parser) toks
     else mapM (tokens2trms opts sg cn parser) toks >>= return . concat
+
+---- | or [oElem p opts0 | 
+----        p <- [newCParser,newMParser,newFParser,newParser,newerParser] = do  
+
+ | otherwise = do
+  let opts      = unionOptions opts0 $ stateOptions sg
+      algorithm | oElem newCParser opts0 = "c"
+		| oElem newMParser opts0 = "m"
+		| oElem newFParser opts0 = "f"
+		| otherwise              = "f" -- default algorithm: FCFG
+      strategy  = maybe "bottomup" id $ getOptVal opts useParser 
+                      -- -parser=bottomup/topdown
+      tokenizer = customOrDefault opts useTokenizer customTokenizer sg
+      toks = case tokenizer s of
+               t:_ -> t
+               _ -> [] ---- no support for undet. tok.
+  ts <- checkErr $ New.parse algorithm strategy (pInfo sg) (absId sg) cat toks
+  ts' <- mapM (checkErr . annotate (stateGrammarST sg) . refreshMetas []) ts
+  return $ optIntOrAll opts flagNumber ts'
+
 
 tokens2trms :: Options ->StateGrammar ->Ident -> CFParser -> [CFTok] -> Check [Tree]
 tokens2trms opts sg cn parser toks = trees2trms opts sg cn toks trees info

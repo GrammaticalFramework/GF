@@ -183,12 +183,12 @@ p,  parse: p String
       -fail      show strings whose parse fails prefixed by #FAIL
       -ambiguous show strings that have more than one parse prefixed by #AMBIGUOUS
   options for selecting parsing method:
-      (default)parse using an overgenerating CFG
+      -fcfg    parse using a fast variant of MCFG (default is no HOAS in grammar)
+      -old     parse using an overgenerating CFG (default if HOAS in grammar)
       -cfg     parse using a much less overgenerating CFG
       -mcfg    parse using an even less overgenerating MCFG
-      -fcfg    parse using a faster variant of MCFG
-      Note:    the first time parsing with -cfg, -mcfg, and -fcfg might take a long time
-  options that only work for the default parsing method:
+      Note:    the first time parsing with -cfg, -mcfg, and -fcfg may take a long time
+  options that only work for the -old default parsing method:
       -n       non-strict: tolerates morphological errors
       -ign     ignore unknown words when parsing
       -raw     return context-free terms in raw form
@@ -565,6 +565,7 @@ q, quit: q
     -lexer=chars         each character is a token
     -lexer=code          use Haskell's lex
     -lexer=codevars      like code, but treat unknown words as variables, ?? as meta 
+    -lexer=textvars      like text, but treat unknown words as variables, ?? as meta 
     -lexer=text          with conventions on punctuation and capital letters
     -lexer=codelit       like code, but treat unknown words as string literals
     -lexer=textlit       like text, but treat unknown words as string literals

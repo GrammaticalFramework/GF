@@ -450,6 +450,7 @@ customTokenizer =
   ,(strCI "chars",     const $ sg . map (tS . singleton))
   ,(strCI "code",      const $ sg . lexHaskell)
   ,(strCI "codevars",  \gr -> sg . (lexHaskellVar $ stateIsWord gr))
+  ,(strCI "textvars",  \gr -> sg . (lexTextVar $ stateIsWord gr))
   ,(strCI "text",      const $ sg . lexText)
   ,(strCI "unglue",    \gr -> sg . map tS . decomposeWords (stateMorpho gr))
   ,(strCI "codelit",   \gr -> sg . (lexHaskellLiteral $ stateIsWord gr))

@@ -136,6 +136,10 @@ isRecursiveType t = errVal False $ do
   (cc,c) <- catSkeleton t -- thus recursivity on Cat level
   return $ any (== c) cc
 
+isHigherOrderType :: Type -> Bool
+isHigherOrderType t = errVal True $ do  -- pessimistic choice
+  co <- contextOfType t
+  return $ not $ null [x | (x,Prod _ _ _) <- co]
 
 contextOfType :: Type -> Err Context
 contextOfType typ = case typ of
