@@ -212,6 +212,12 @@ oper
   essereV : V -> V ;
   reflV : V -> V ;
 
+-- If $BeschIta$ does not give the desired result or feels difficult
+-- to consult, here is a worst-case function for "-ere" and "-ere" verbs,
+-- taking 11 arguments.
+
+  mkV : 
+    (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V ; 
 
 --3 Two-place verbs
 --
@@ -343,6 +349,13 @@ oper
     in verbBesch verb ** {vtyp = VHabere ; lock_V = <>} ;
 
   verboV ve = verbBesch ve ** {vtyp = VHabere ; lock_V = <>} ;
+
+  mkV 
+    dovere devo deve dobbiamo dovro 
+    dovetti dovesti dovette dovettero dovi dovuto = verboV (mkVerbo
+      dovere devo deve dobbiamo dovro 
+      dovetti dovesti dovette dovettero dovi dovuto
+      ) ;
 
   essereV v = {s = v.s ; vtyp = VEsse ; lock_V = <>} ;
   reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;

@@ -353,7 +353,6 @@ German
 
 Italian
 - no contraction of infinitives before clitics
-- no list of irregular verbs
 - multiple clitics (with V3) not always right
 
 
