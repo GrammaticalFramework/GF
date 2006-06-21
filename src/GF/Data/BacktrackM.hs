@@ -29,6 +29,7 @@ module GF.Data.BacktrackM ( -- * the backtracking state monad
 		    foldFinalStates, finalStates
 		  ) where
 
+import Data.List
 import Control.Monad
 
 ----------------------------------------------------------------------
@@ -80,7 +81,7 @@ failure :: BacktrackM s a
 failure = BM (\c s b -> b)
 
 (|||) :: BacktrackM s a -> BacktrackM s a -> BacktrackM s a
-(BM f) ||| (BM g) = BM (\c s b -> f c s (g c s b))
+(BM f) ||| (BM g) = BM (\c s b -> g c s $! f c s b)
 
 instance MonadPlus (BacktrackM s) where
     mzero = failure
@@ -89,4 +90,4 @@ instance MonadPlus (BacktrackM s) where
 -- * specific functions on the backtracking monad
 
 member :: [a] -> BacktrackM s a
-member = msum . map return 
+member xs = BM (\c s b -> foldl' (\b x -> c x s b) b xs)
