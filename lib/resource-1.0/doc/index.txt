@@ -16,9 +16,8 @@ Italian, Norwegian, Russian, Spanish, Swedish.
 
 **New**: [User manual of the resource library ../../../doc/resource.pdf].
 
-**Notice**. This document concerns the API v. 1.0 which has not
-yet been "officially" released. The release is planned in the end
-of June 2006.
+**Notice**. This document concerns the API v. 1.0 released
+on June 22, 2006.
 
 
 ==Authors==
@@ -27,8 +26,8 @@ Inger Andersson and Therese Soderberg (Spanish morphology),
 Nicolas Barth and Sylvain Pogodalla (French verb list),
 Janna Khegai (Russian modules),
 Bjorn Bringert (many Swadesh lexica),
-Carlos Gonzalia (Spanish cardinals), 
-Harald Hammarstrom (German morphology),
+Carlos Gonzalía (Spanish cardinals), 
+Harald Hammarström (German morphology),
 Patrik Jansson (Swedish cardinals),
 Andreas Priesnitz (German lexicon),
 Aarne Ranta.
@@ -68,7 +67,7 @@ Coverage, for each language:
 - complete morphology
 - lexicon of the ca. 100 most important structural words
 - test lexicon of ca. 300 content words (rough equivalents in each language)
-- list of irregular verbs (language-dependent)
+- list of irregular verbs (separately for each language)
 - representative fragment of syntax (cf. CLE (Core Language Engine))
 - rather flat semantics (cf. Quasi-Logical Form of CLE)
 
@@ -94,8 +93,7 @@ Go to the main directory, compile the grammars, and run a test.
 ```
 This will take quite some time. An alternative is to use the
 precompiled grammar package [``compiled.tgz`` ../../compiled.tgz]. 
-This package 
-has the necessary ``gfc`` and ``gfr`` files directly under ``GF/lib``.
+This package has the necessary ``gfc`` and ``gfr`` files directly under ``GF/lib``.
 ```
   GF/lib/alltenses
   GF/lib/mathematical
@@ -110,6 +108,15 @@ Do for instance
     > gr -cat=S -number=3 -cf | tb
 ```
 For more examples, see the [Overview slides clt2006.html]. 
+
+
+==Encoding==
+
+Finnish, German, Romance, and Scandinavian languages are in isolatin-1.
+
+Russian is in UTF-8.
+
+English is in pure ASCII.
 
 
 
@@ -158,12 +165,13 @@ The documentation of the individual modules:
 
 
 
-- [IrregDan gfdoc/IrregDan.gf]: Danish irregular verbs (very incomplete)
-- [IrregEng gfdoc/IrregEng.gf]: English irregular verbs
-- [IrregFre gfdoc/IrregFre.gf]: French irregular verbs
-- [IrregGer gfdoc/IrregGer.gf]: German irregular verbs
-- [IrregNor gfdoc/IrregNor.gf]: Norwegian irregular verbs (very incomplete)
-- [IrregSwe gfdoc/IrregSwe.gf]: Swedish irregular verbs
+- [IrregDan ../danish/IrregDan.gf]: Danish irregular verbs (very incomplete)
+- [IrregEng ../english/IrregEng.gf]: English irregular verbs
+- [IrregFre ../french/IrregFre.gf]: French irregular verbs
+- [IrregGer ../german/IrregGer.gf]: German irregular verbs
+- [IrregNor ../norwegian/IrregNor.gf]: Norwegian irregular verbs (very incomplete)
+- [IrregSpa ../spanish/IrregSpa.gf]: Spanish irregular verbs
+- [IrregSwe ../swedish/IrregSwe.gf]: Swedish irregular verbs
 
 
 This is the structure of each language-dependent top module.
@@ -171,18 +179,27 @@ This is the structure of each language-dependent top module.
 [English.png]
 
 - [Extra ../abstract/Extra.gf]: extra constructs implemented in some languages
-- [ExtraEng ../english/ExtraEngAbs.gf]: extra constructs in English only
-- [ExtraFin ../finnish/ExtraFinAbs.gf]: extra constructs in Finnish only
-- [ExtraFre ../french/ExtraFreAbs.gf]: extra constructs in French only
-- [ExtraNor ../norwegian/ExtraNorAbs.gf]: extra constructs in Norwegian only
-- [ExtraScand ../scandinavian/ExtraScandAbs.gf]: extra constructs in Scandinavian only
+- [ExtraDan ../danish/ExtraDanAbs.gf]: extra constructs in Danish
+- [ExtraEng ../english/ExtraEngAbs.gf]: extra constructs in English
+- [ExtraFin ../finnish/ExtraFinAbs.gf]: extra constructs in Finnish
+- [ExtraFre ../french/ExtraFreAbs.gf]: extra constructs in French
+- [ExtraIta ../italian/ExtraItaAbs.gf]: extra constructs in Italian
+- [ExtraNor ../norwegian/ExtraNorAbs.gf]: extra constructs in Norwegian
+- [ExtraRus ../russian/ExtraRusAbs.gf]: extra constructs in Russian
+- [ExtraScand ../scandinavian/ExtraScandAbs.gf]: extra constructs in Scandinavian
+- [ExtraSpa ../french/ExtraSpaAbs.gf]: extra constructs in Spanish
+- [ExtraSwe ../swedish/ExtraSweAbs.gf]: extra constructs in Swedish
 
 
+- [Danish ../danish/DanishAbs.gf]: Danish with all extras
 - [English ../english/EnglishAbs.gf]: English with all extras
 - [Finnish ../finnish/FinnishAbs.gf]: Finnish with all extras
 - [French ../french/FrenchAbs.gf]: French with all extras
 - [German ../german/GermanAbs.gf]: German with all extras
+- [Italian ../italian/ItalianAbs.gf]: Italian with all extras
 - [Norwegian ../norwegian/NorwegianAbs.gf]: Norwegian with all extras
+- [Russian ../russian/RussianAbs.gf]: Russian with all extras
+- [Spanish ../spanish/SpanishAbs.gf]: Spanish with all extras
 - [Swedish ../swedish/SwedishAbs.gf]: Swedish with all extras
 
 
@@ -291,9 +308,13 @@ must be used:
   p -lang=LangEng -fcfg "this man is old"
 ```
 Parsing with the ``-fcfg`` flag takes a few extra seconds the first time during
-each session, but gets faster at later runs.
+each session, but gets faster at later runs. From GF 2.6, ``fcfg`` is the
+default parser of GF and the flag is not needed.
 
-It is also feasible to parse in Scandinavian languages (Danish, Norwegian, Swedish).
+It is also possible to parse in Scandinavian languages 
+(Danish, Norwegian, Swedish) and, with enough memory (``gf +RTS -K512M``),
+German.
+
 
 
 
@@ -303,7 +324,7 @@ These applications are meant to serve as starting points for
 new applications, showing how the libraries can be used in
 typical situations.
 
-===Brozeage===
+===Bronzeage===
 
 The [examples/bronzeage ../../../examples/bronzeage] 
 grammar set implements a language fragment
