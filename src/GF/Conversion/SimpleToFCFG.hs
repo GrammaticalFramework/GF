@@ -354,14 +354,14 @@ data STermSelector
   | StrSel
 
 mkSingletonSelectors :: SLinType -> [STermSelector]
-mkSingletonSelectors ctype =
-  let (rcss,tcss) = loop emptyPath ([],[]) ctype
-  in [mkSelector [rcs] tcss | rcs <- rcss]
+mkSingletonSelectors ctype = sels0
   where
+    (sels0,tcss0) = loop emptyPath ([],[]) ctype
+    
     loop path st          (RecT record)      = List.foldl' (\st (lbl,ctype) -> loop (path ++. lbl ) st ctype) st record
     loop path st          (TblT terms ctype) = List.foldl' (\st term        -> loop (path ++! term) st ctype) st terms
-    loop path (rcss,tcss) (ConT terms)       = (rcss,       map ((,) path) terms : tcss)
-    loop path (rcss,tcss) (StrT)             = (path : rcss,                       tcss)
+    loop path (sels,tcss) (ConT terms)       = (                          sels,map ((,) path) terms : tcss)
+    loop path (sels,tcss) (StrT)             = (mkSelector [path] tcss0 : sels,                       tcss)
 
 
 mkSelector :: [SPath] -> [[(SPath,STerm)]] -> STermSelector
