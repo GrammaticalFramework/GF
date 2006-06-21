@@ -1,6 +1,6 @@
 GF=gf
 RTS=+RTS -M800M -K100M
-RTSS=+RTS -M1800M -K100M
+RTSS=+RTS -M1000M -K100M
 GFCA=$(GF) -nocf
 GFCC=$(GF) -nocf -make
 GFC=$(GFCC) -src
