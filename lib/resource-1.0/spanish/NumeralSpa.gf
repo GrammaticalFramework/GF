@@ -41,7 +41,8 @@ lin pot01 =
   {s =\\f,g => case <f,g> of {
      <ental pred,_> => [] ;
      <ental _, NCard Fem> => "una" ;
-     <hundra,  NCard Fem> => "ciento" ;
+     <hundra False,  NCard _> => "cien" ;
+     <hundra True,  NCard Fem> => "ciento" ;
      _ => uno ! f ! g
      } ; 
    n = Pl
@@ -56,9 +57,9 @@ lin pot1 d = spl (d.s ! tiotal) ;
 lin pot1plus d e = 
   {s = \\g => d.s ! tiotal ! g ++ y_CardOrd g ++ e.s ! ental indip ! g ; n = Pl} ;
 lin pot1as2 n = n ;
-lin pot2 d = spl (d.s ! hundra) ;
+lin pot2 d = spl (d.s ! hundra False) ;
 lin pot2plus d e = 
-  {s = \\g => d.s ! hundra ! g ++ e.s ! g ; n = Pl} ;
+  {s = \\g => d.s ! hundra True ! g ++ e.s ! g ; n = Pl} ;
 lin pot2as3 n = n ;
 lin pot3 n = spl (\\g => n.s ! NCard Masc ++ mil g) ;
 lin pot3plus n m = {s = \\g => n.s ! NCard Masc ++ mil g ++ m.s ! g ; n = Pl} ;
@@ -73,9 +74,9 @@ oper
        <tiotal,  NOrd g n> => regCard ventesimo g n ;
        <ton,     NCard _>  => venti ;
        <ton,     NOrd g n> => regCard ventesimo g n ;
-       <hundra,  NCard Masc> => ducento ;
-       <hundra,  NCard Fem> => Predef.tk 2 ducento + "as" ;
-       <hundra,  NOrd g n> => regCard ducentesimo g n
+       <hundra _,  NCard Masc> => ducento ;
+       <hundra _,  NCard Fem> => Predef.tk 2 ducento + "as" ;
+       <hundra _,  NOrd g n> => regCard ducentesimo g n
        }
     } ;
 
@@ -96,7 +97,7 @@ oper
     } ;
 
 param 
-  DForm = ental Pred | ton | tiotal | hundra  ;
+  DForm = ental Pred | ton | tiotal | hundra Bool ;
   Pred = pred | indip ;
 
 }
