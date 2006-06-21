@@ -105,9 +105,8 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
       s = \\pol,aag => 
         let 
           agr   = aag ** {p = p} ;
-          verb  = case <aag.n, pol,p> of {
-            <_,_,   P1> => (vp.s ! VPFinite (VPres Indic) Simul).fin ! agr ;
-            <Sg,Neg,P2> => (vp.s ! VPInfinit Simul).inf ! aag ;
+          verb  = case <aag.n, pol> of {
+            <Sg,Neg> => (vp.s ! VPInfinit Simul).inf ! aag ;
             _ => (vp.s ! VPImperat).fin ! agr
             } ;
           neg   = vp.neg ! pol ;

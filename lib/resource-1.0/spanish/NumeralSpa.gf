@@ -60,8 +60,8 @@ lin pot2 d = spl (d.s ! hundra) ;
 lin pot2plus d e = 
   {s = \\g => d.s ! hundra ! g ++ e.s ! g ; n = Pl} ;
 lin pot2as3 n = n ;
-lin pot3 n = spl (\\g => n.s ! g ++ mil g) ;
-lin pot3plus n m = {s = \\g => n.s ! g ++ mil g ++ m.s ! g ; n = Pl} ;
+lin pot3 n = spl (\\g => n.s ! NCard Masc ++ mil g) ;
+lin pot3plus n m = {s = \\g => n.s ! NCard Masc ++ mil g ++ m.s ! g ; n = Pl} ;
 
 oper
   mkTal : (x1,_,_,_,_,_,_,x8 : Str) -> {s : DForm => CardOrd => Str} =

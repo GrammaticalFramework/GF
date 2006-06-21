@@ -131,7 +131,7 @@ lin
   old_A = 
     prefA (compADeg (mkA "vieux" "vieille" "vieux" "vieillement")) ; ---- vieil
   open_V2 = ouvrir_V2 ;
-  paint_V2A = mkV2A (v2V peindre_V2) accusative (mkPreposition "en") ;
+  paint_V2A = mkV2A (v2V peindre_V2) accusative (mkPrep "en") ;
   paper_N = regGenN "papier" masculine ;
   paris_PN = mkPN "Paris" masculine ;
   peace_N = regGenN "paix" feminine ;
@@ -323,7 +323,7 @@ lin
   hunt_V2 = dirV2 (regV "chasser") ;
   kill_V2 = dirV2 (regV "tuer") ;
   laugh_V =  rire_V2 ;
-  lie_V = reflV étendre_V2 ;
+  lie_V = reflV (v2V étendre_V2) ;
   play_V = regV "jouer" ;
   pull_V2 = dirV2 (regV "tirer") ;
   push_V2 = dirV2 (regV "pousser") ;
@@ -331,7 +331,7 @@ lin
   scratch_V2 = dirV2 (regV "gratter") ;
   sew_V = coudre_V2 ;
   sing_V = regV "chanter" ;
-  sit_V = reflV asseoir_V2 ;
+  sit_V = reflV (v2V asseoir_V2) ;
   smell_V = v2V ( sentir_V2) ;
   spit_V = regV "cracher" ;
   squeeze_V2 = dirV2 (regV "serrer") ;
@@ -348,9 +348,8 @@ lin
   wash_V2 = dirV2 (regV "laver") ;
   wipe_V2 = dirV2 (regV "essuyer") ;
 
-    hold_V2 = dirV2 tenir_V2 ;
-    split_V2 = dirV2 fendre_V2 ;
-    lie_V = reflV étendre_V2 ;
-    sit_V = reflV asseoir_V2 ;
+    hold_V2 = tenir_V2 ;
+    split_V2 = fendre_V2 ;
+    sit_V = reflV (v2V asseoir_V2) ;
 
 } ;

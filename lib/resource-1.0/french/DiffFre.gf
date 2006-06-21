@@ -117,10 +117,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
       s = \\pol,aag => 
         let 
           agr   = aag ** {p = p} ;
-          verb  = case p of {
-            P1 => (vp.s ! VPFinite (VPres Indic) Simul).fin ! agr ;
-            _  => (vp.s ! VPImperat).fin ! agr --- P2 only
-            } ;
+          verb  = (vp.s ! VPImperat).fin ! agr ;
           neg   = vp.neg ! pol ;
           clpr  = pronArgGen pol agr.n agr.p vp.clAcc vp.clDat ;
           compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
