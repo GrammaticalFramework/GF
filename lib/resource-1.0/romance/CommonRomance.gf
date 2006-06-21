@@ -85,7 +85,7 @@ oper
 
 param 
   VF =
-     VInfin
+     VInfin Bool
    | VFin   TMood Number Person 
    | VImper NumPersI 
    | VPart  Gender Number 
@@ -106,7 +106,7 @@ param
      VPFinite TMood Anteriority
    | VPImperat
    | VPGerund
-   | VPInfinit Anteriority ;
+   | VPInfinit Anteriority Bool ;
 
   RTense =
      RPres 
@@ -149,7 +149,7 @@ oper
     <Sg,P2> => VImper SgP2 ; 
     <Pl,P1> => VImper PlP1 ; 
     <Pl,P2> => VImper PlP2 ;
-    _       => VInfin
+    _       => VInfin False
     } ; 
 
 ---
@@ -182,6 +182,10 @@ oper
   oper
     mkOrd : {s : Degree => AForm => Str} -> {s : AAgr => Str} ;
     mkOrd x = {s = \\ag => x.s ! Posit ! AF ag.g ag.n} ;
+
+-- This is used in Spanish and Italian to bind clitics with preceding verb.
+
+    bindIf : Bool -> Str = \b -> if_then_Str b BIND [] ;
 
   param
     VPAgr = 

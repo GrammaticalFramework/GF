@@ -8,7 +8,7 @@ oper mkNV : Verbe -> VerbeN = \ve -> {s = vvf ve} ;
 oper conj : Str -> Verbe = conj1aimer ;  --- temp. default
 
 oper v_nancy100inf : Str -> VerbeN = \ve -> {s = table {
-  VInfin => ve ;
+  VInfin _ => ve ;
   _ => nonExist
   }
 } ;

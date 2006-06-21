@@ -58,21 +58,18 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
     pronArg = \n,p,acc,dat ->
       let 
         paccp = case acc of {
-          CRefl   => <reflPron n p Acc, p> ;
-          CPron a => <argPron a.g a.n a.p Acc, a.p> ;
-          _ => <[],P2>
+          CRefl   => <reflPron n p Acc, p,True> ;
+          CPron a => <argPron a.g a.n a.p Acc, a.p,True> ;
+          _ => <[],P2,False>
           } ;
         pdatp = case dat of {
-          CPron a => <argPron a.g a.n a.p dative, a.p> ;
-          _ => <[],P2>
+          CPron a => <argPron a.g a.n a.p dative, a.p,True> ;
+          _ => <[],P2,False>
           }
        in case <paccp.p2, pdatp.p2> of {
-         <P3,P3> => <"se" ++ paccp.p1, []> ;
-         _       => <pdatp.p1 ++ paccp.p1, []>
+         <P3,P3> => <"se" ++ paccp.p1, [],True> ;
+         _       => <pdatp.p1 ++ paccp.p1, [],orB paccp.p3 pdatp.p3>
          } ;
---      case <p,acc,dat> of {
---        <Sg,P2,CRefl,CPron {n = Sg ; p = P1}> => <"te" ++ "me", []> ;
---        <_,_,CPron {n = Sg ; p = P2},CPron {n = Sg ; p = P1}> => <"te" ++ "me", []> ;
 
     mkImperative p vp = {
       s = \\pol,aag => 
@@ -86,7 +83,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
           clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
           compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
         in
-        neg.p1 ++ verb ++ clpr.p1 ++ compl ;
+        neg.p1 ++ verb ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;
       } ;
 
     negation : Polarity => (Str * Str) = table {
@@ -97,7 +94,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
     conjThan = "que" ;
     conjThat = "que" ;
 
-    clitInf cli inf = inf ++ cli ; --- contraction of inf
+    clitInf b cli inf = inf ++ bindIf b ++ cli ;
 
     relPron : Bool => AAgr => Case => Str = \\b,a,c => 
       case c of {

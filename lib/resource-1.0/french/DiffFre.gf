@@ -66,23 +66,24 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 
 ----    pronArg = pronArgGen Neg ; --- takes more space and time
 
-    pronArg : Number -> Person -> CAgr -> CAgr -> Str * Str = \n,p,acc,dat ->
+    pronArg : Number -> Person -> CAgr -> CAgr -> Str * Str * Bool = 
+      \n,p,acc,dat ->
       let 
         pacc = case acc of {
-          CRefl => case p of {
+          CRefl => <case p of {
             P3 => elision "s" ;  --- use of reflPron incred. expensive
             _  => argPron Fem n p Acc
-            } ;
-          CPron a => argPron a.g a.n a.p Acc ;
-          _ => []
+            },True> ;
+          CPron a => <argPron a.g a.n a.p Acc,True> ;
+          _ => <[],False>
           } ;
        in
        case dat of {
           CPron a => let pdat = argPron a.g a.n a.p dative in case a.p of {
-            P3 => <pacc ++ pdat,[]> ;
-            _  => <pdat ++ pacc,[]>
+            P3 => <pacc.p1 ++ pdat,[],True> ;
+            _  => <pdat ++ pacc.p1,[],True>
             } ;
-          _ => <pacc, []>
+          _ => <pacc.p1, [],pacc.p2>
           } ;
 
 
@@ -119,11 +120,12 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
           agr   = aag ** {p = p} ;
           verb  = (vp.s ! VPImperat).fin ! agr ;
           neg   = vp.neg ! pol ;
+          hascl = (pronArg agr.n agr.p vp.clAcc vp.clDat).p3 ;
           clpr  = pronArgGen pol agr.n agr.p vp.clAcc vp.clDat ;
           compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
         in
         case pol of {
-          Pos => verb ++ clpr.p1 ++ compl ;
+          Pos => verb ++ if_then_Str hascl "-" [] ++ clpr.p1 ++ compl ;
           Neg => neg.p1 ++ clpr.p1 ++ verb ++ compl
           } 
       } ;
@@ -137,7 +139,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
     conjThan = elisQue ;
     conjThat = elisQue ;
 
-    clitInf cli inf = cli ++ inf ;
+    clitInf _ cli inf = cli ++ inf ;
 
     relPron : Bool => AAgr => Case => Str = \\b,a,c => 
       let
@@ -198,8 +200,8 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 
     auxPassive : Verb = copula ;
 
-    copula : Verb = {s = table VF ["être";"suis";"es";"est";"sommes";"êtes";"sont";"sois";"sois";"soit";"soyons";"soyez";"soient";"étais";"étais";"était";"étions";"étiez";"étaient";"fusse";"fusses";"fût";"fussions";"fussiez";"fussent";"fus";"fus";"fut";"fûmes";"fûtes";"furent";"serai";"seras";"sera";"serons";"serez";"seront";"serais";"serais";"serait";"serions";"seriez";"seraient";"sois";"soyons";"soyez";"été";"étés";"étée";"étées";"étant"]; vtyp=VHabere} ;
+    copula : Verb = {s = table VF ["être";"être";"suis";"es";"est";"sommes";"êtes";"sont";"sois";"sois";"soit";"soyons";"soyez";"soient";"étais";"étais";"était";"étions";"étiez";"étaient";"fusse";"fusses";"fût";"fussions";"fussiez";"fussent";"fus";"fus";"fut";"fûmes";"fûtes";"furent";"serai";"seras";"sera";"serons";"serez";"seront";"serais";"serais";"serait";"serions";"seriez";"seraient";"sois";"soyons";"soyez";"été";"étés";"étée";"étées";"étant"]; vtyp=VHabere} ;
 
-    avoir_V : Verb = {s=table VF ["avoir";"ai";"as";"a";"avons";"avez";"ont";"aie";"aies";"ait";"ayons";"ayez";"aient";"avais";"avais";"avait";"avions";"aviez";"avaient";"eusse";"eusses";"eût";"eussions";"eussiez";"eussent";"eus";"eus";"eut";"eûmes";"eûtes";"eurent";"aurai";"auras";"aura";"aurons";"aurez";"auront";"aurais";"aurais";"aurait";"aurions";"auriez";"auraient";"aie";"ayons";"ayez";"eu";"eus";"eue";"eues";"ayant"];vtyp=VHabere};
+    avoir_V : Verb = {s=table VF ["avoir";"avoir";"ai";"as";"a";"avons";"avez";"ont";"aie";"aies";"ait";"ayons";"ayez";"aient";"avais";"avais";"avait";"avions";"aviez";"avaient";"eusse";"eusses";"eût";"eussions";"eussiez";"eussent";"eus";"eus";"eut";"eûmes";"eûtes";"eurent";"aurai";"auras";"aura";"aurons";"aurez";"auront";"aurais";"aurais";"aurait";"aurions";"auriez";"auraient";"aie";"ayons";"ayez";"eu";"eus";"eue";"eues";"ayant"];vtyp=VHabere};
 
 }

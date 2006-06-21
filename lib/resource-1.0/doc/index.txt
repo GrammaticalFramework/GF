@@ -335,7 +335,6 @@ Danish
 
 
 English 
-- -
 
 
 Finnish
@@ -343,16 +342,14 @@ Finnish
 
 
 French
-- no inverted word order in questions
 - multiple clitics (with V3) not always right
+- no pronominal questions with inverted word order
 
 
 German
-- -
 
 
 Italian
-- no contraction of infinitives before clitics
 - multiple clitics (with V3) not always right
 
 
@@ -367,10 +364,11 @@ Russian
 
 Spanish
 - multiple clitics (with V3) not always right
+- missing contractions with imperatives and clitics
 
 
 Swedish
-- -
+
 
 
 

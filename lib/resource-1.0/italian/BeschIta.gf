@@ -6491,7 +6491,8 @@ oper venire_110 : Str -> Verbo = \venire ->
   } ;
 
   verbBesch : {s : VForm => Str} -> {s : VF => Str} = \amare -> {s = table { 
-    VInfin                 => amare.s ! Inf ;
+    VInfin False           => amare.s ! Inf ;
+    VInfin True            => amare.s ! InfClit ;
     VFin (VPres   Indic) n p    => amare.s ! Indi Pres n p ; 
     VFin (VPres   Conjunct) n p => amare.s ! Cong Pres n p ;
     VFin (VImperf Indic) n p    => amare.s ! Indi Imperf n p ;  --# notpresent
