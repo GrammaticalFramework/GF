@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>GF Resource Grammar Library v. 1.0</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Tue Jun 20 18:40:08 2006
+Last update: Wed Jun 21 18:21:48 2006
 </FONT></CENTER>
 
 <P></P>
@@ -18,25 +18,26 @@ Last update: Tue Jun 20 18:40:08 2006
     <LI><A HREF="#toc2">License</A>
     <LI><A HREF="#toc3">Scope</A>
     <LI><A HREF="#toc4">Quick start</A>
+    <LI><A HREF="#toc5">Encoding</A>
       <UL>
-      <LI><A HREF="#toc5">The language independent ground API</A>
-      <LI><A HREF="#toc6">The language-dependent APIs</A>
-      <LI><A HREF="#toc7">Special-purpose APIs</A>
+      <LI><A HREF="#toc6">The language independent ground API</A>
+      <LI><A HREF="#toc7">The language-dependent APIs</A>
+      <LI><A HREF="#toc8">Special-purpose APIs</A>
       </UL>
-    <LI><A HREF="#toc8">Using the library</A>
+    <LI><A HREF="#toc9">Using the library</A>
       <UL>
-      <LI><A HREF="#toc9">The compiled version</A>
-      <LI><A HREF="#toc10">Linking applications to libraries</A>
-      <LI><A HREF="#toc11">Using the libraries as top-level grammars</A>
+      <LI><A HREF="#toc10">The compiled version</A>
+      <LI><A HREF="#toc11">Linking applications to libraries</A>
+      <LI><A HREF="#toc12">Using the libraries as top-level grammars</A>
       </UL>
-    <LI><A HREF="#toc12">Example applications</A>
+    <LI><A HREF="#toc13">Example applications</A>
       <UL>
-      <LI><A HREF="#toc13">Brozeage</A>
-      <LI><A HREF="#toc14">Dialogue</A>
-      <LI><A HREF="#toc15">Animals</A>
+      <LI><A HREF="#toc14">Bronzeage</A>
+      <LI><A HREF="#toc15">Dialogue</A>
+      <LI><A HREF="#toc16">Animals</A>
       </UL>
-    <LI><A HREF="#toc16">Known bugs and missing components</A>
-    <LI><A HREF="#toc17">More reading</A>
+    <LI><A HREF="#toc17">Known bugs and missing components</A>
+    <LI><A HREF="#toc18">More reading</A>
     </UL>
 
 <P></P>
@@ -52,9 +53,8 @@ Italian, Norwegian, Russian, Spanish, Swedish.
 <B>New</B>: <A HREF="../../../doc/resource.pdf">User manual of the resource library</A>.
 </P>
 <P>
-<B>Notice</B>. This document concerns the API v. 1.0 which has not
-yet been "officially" released. The release is planned in the end
-of June 2006.
+<B>Notice</B>. This document concerns the API v. 1.0 released
+on June 22, 2006.
 </P>
 <A NAME="toc1"></A>
 <H2>Authors</H2>
@@ -63,8 +63,8 @@ Inger Andersson and Therese Soderberg (Spanish morphology),
 Nicolas Barth and Sylvain Pogodalla (French verb list),
 Janna Khegai (Russian modules),
 Bjorn Bringert (many Swadesh lexica),
-Carlos Gonzalia (Spanish cardinals), 
-Harald Hammarstrom (German morphology),
+Carlos Gonzalía (Spanish cardinals), 
+Harald Hammarström (German morphology),
 Patrik Jansson (Swedish cardinals),
 Andreas Priesnitz (German lexicon),
 Aarne Ranta.
@@ -107,7 +107,7 @@ Coverage, for each language:
 <LI>complete morphology
 <LI>lexicon of the ca. 100 most important structural words
 <LI>test lexicon of ca. 300 content words (rough equivalents in each language)
-<LI>list of irregular verbs (language-dependent)
+<LI>list of irregular verbs (separately for each language)
 <LI>representative fragment of syntax (cf. CLE (Core Language Engine))
 <LI>rather flat semantics (cf. Quasi-Logical Form of CLE)
 </UL>
@@ -142,8 +142,7 @@ Go to the main directory, compile the grammars, and run a test.
 <P>
 This will take quite some time. An alternative is to use the
 precompiled grammar package <A HREF="../../compiled.tgz"><CODE>compiled.tgz</CODE></A>. 
-This package 
-has the necessary <CODE>gfc</CODE> and <CODE>gfr</CODE> files directly under <CODE>GF/lib</CODE>.
+This package has the necessary <CODE>gfc</CODE> and <CODE>gfr</CODE> files directly under <CODE>GF/lib</CODE>.
 </P>
 <PRE>
     GF/lib/alltenses
@@ -164,6 +163,17 @@ Do for instance
 For more examples, see the <A HREF="clt2006.html">Overview slides</A>. 
 </P>
 <A NAME="toc5"></A>
+<H2>Encoding</H2>
+<P>
+Finnish, German, Romance, and Scandinavian languages are in isolatin-1.
+</P>
+<P>
+Russian is in UTF-8.
+</P>
+<P>
+English is in pure ASCII.
+</P>
+<A NAME="toc6"></A>
 <H3>The language independent ground API</H3>
 <P>
 This API is accessible by both <CODE>present</CODE> and <CODE>alltenses</CODE>.
@@ -197,7 +207,7 @@ The documentation of the individual modules:
 <LI><A HREF="gfdoc/Lang.html">Lang</A>: the main module comprising both <CODE>Grammar</CODE> and <CODE>Lexicon</CODE>
 </UL>
 
-<A NAME="toc6"></A>
+<A NAME="toc7"></A>
 <H3>The language-dependent APIs</H3>
 <UL>
 <LI><A HREF="gfdoc/ParadigmsDan.html">ParadigmsDan</A>: Danish lexical paradigms
@@ -213,12 +223,13 @@ The documentation of the individual modules:
 </UL>
 
 <UL>
-<LI><A HREF="gfdoc/IrregDan.gf">IrregDan</A>: Danish irregular verbs (very incomplete)
-<LI><A HREF="gfdoc/IrregEng.gf">IrregEng</A>: English irregular verbs
-<LI><A HREF="gfdoc/IrregFre.gf">IrregFre</A>: French irregular verbs
-<LI><A HREF="gfdoc/IrregGer.gf">IrregGer</A>: German irregular verbs
-<LI><A HREF="gfdoc/IrregNor.gf">IrregNor</A>: Norwegian irregular verbs (very incomplete)
-<LI><A HREF="gfdoc/IrregSwe.gf">IrregSwe</A>: Swedish irregular verbs
+<LI><A HREF="../danish/IrregDan.gf">IrregDan</A>: Danish irregular verbs (very incomplete)
+<LI><A HREF="../english/IrregEng.gf">IrregEng</A>: English irregular verbs
+<LI><A HREF="../french/IrregFre.gf">IrregFre</A>: French irregular verbs
+<LI><A HREF="../german/IrregGer.gf">IrregGer</A>: German irregular verbs
+<LI><A HREF="../norwegian/IrregNor.gf">IrregNor</A>: Norwegian irregular verbs (very incomplete)
+<LI><A HREF="../spanish/IrregSpa.gf">IrregSpa</A>: Spanish irregular verbs
+<LI><A HREF="../swedish/IrregSwe.gf">IrregSwe</A>: Swedish irregular verbs
 </UL>
 
 <P>
@@ -229,23 +240,32 @@ This is the structure of each language-dependent top module.
 </P>
 <UL>
 <LI><A HREF="../abstract/Extra.gf">Extra</A>: extra constructs implemented in some languages
-<LI><A HREF="../english/ExtraEngAbs.gf">ExtraEng</A>: extra constructs in English only
-<LI><A HREF="../finnish/ExtraFinAbs.gf">ExtraFin</A>: extra constructs in Finnish only
-<LI><A HREF="../french/ExtraFreAbs.gf">ExtraFre</A>: extra constructs in French only
-<LI><A HREF="../norwegian/ExtraNorAbs.gf">ExtraNor</A>: extra constructs in Norwegian only
-<LI><A HREF="../scandinavian/ExtraScandAbs.gf">ExtraScand</A>: extra constructs in Scandinavian only
+<LI><A HREF="../danish/ExtraDanAbs.gf">ExtraDan</A>: extra constructs in Danish
+<LI><A HREF="../english/ExtraEngAbs.gf">ExtraEng</A>: extra constructs in English
+<LI><A HREF="../finnish/ExtraFinAbs.gf">ExtraFin</A>: extra constructs in Finnish
+<LI><A HREF="../french/ExtraFreAbs.gf">ExtraFre</A>: extra constructs in French
+<LI><A HREF="../italian/ExtraItaAbs.gf">ExtraIta</A>: extra constructs in Italian
+<LI><A HREF="../norwegian/ExtraNorAbs.gf">ExtraNor</A>: extra constructs in Norwegian
+<LI><A HREF="../russian/ExtraRusAbs.gf">ExtraRus</A>: extra constructs in Russian
+<LI><A HREF="../scandinavian/ExtraScandAbs.gf">ExtraScand</A>: extra constructs in Scandinavian
+<LI><A HREF="../french/ExtraSpaAbs.gf">ExtraSpa</A>: extra constructs in Spanish
+<LI><A HREF="../swedish/ExtraSweAbs.gf">ExtraSwe</A>: extra constructs in Swedish
 </UL>
 
 <UL>
+<LI><A HREF="../danish/DanishAbs.gf">Danish</A>: Danish with all extras
 <LI><A HREF="../english/EnglishAbs.gf">English</A>: English with all extras
 <LI><A HREF="../finnish/FinnishAbs.gf">Finnish</A>: Finnish with all extras
 <LI><A HREF="../french/FrenchAbs.gf">French</A>: French with all extras
 <LI><A HREF="../german/GermanAbs.gf">German</A>: German with all extras
+<LI><A HREF="../italian/ItalianAbs.gf">Italian</A>: Italian with all extras
 <LI><A HREF="../norwegian/NorwegianAbs.gf">Norwegian</A>: Norwegian with all extras
+<LI><A HREF="../russian/RussianAbs.gf">Russian</A>: Russian with all extras
+<LI><A HREF="../spanish/SpanishAbs.gf">Spanish</A>: Spanish with all extras
 <LI><A HREF="../swedish/SwedishAbs.gf">Swedish</A>: Swedish with all extras
 </UL>
 
-<A NAME="toc7"></A>
+<A NAME="toc8"></A>
 <H3>Special-purpose APIs</H3>
 <H4>Present</H4>
 <P>
@@ -273,9 +293,9 @@ gesture. Some functions for constructing demonstratives are provided.
 <LI><A HREF="gfdoc/Symbol.html">Symbol</A>: symbols and numbers in text
 </UL>
 
-<A NAME="toc8"></A>
-<H2>Using the library</H2>
 <A NAME="toc9"></A>
+<H2>Using the library</H2>
+<A NAME="toc10"></A>
 <H3>The compiled version</H3>
 <P>
 The simplest way to get the library is to install the precompiled version
@@ -297,7 +317,7 @@ library. Use one (or several) of the following packages instead:
   multimodal dialogue applications
 </UL>
 
-<A NAME="toc10"></A>
+<A NAME="toc11"></A>
 <H3>Linking applications to libraries</H3>
 <P>
 Typically, open one of
@@ -336,7 +356,7 @@ The <CODE>mathematical</CODE> API shares modules with
 <CODE>present</CODE>. It is therefore not a good idea to use it in combination with
 <CODE>alltenses</CODE>.
 </P>
-<A NAME="toc11"></A>
+<A NAME="toc12"></A>
 <H3>Using the libraries as top-level grammars</H3>
 <P>
 If you have done <CODE>make</CODE> in <CODE>lib/resource-1.0</CODE>, you will have 
@@ -367,27 +387,30 @@ must be used:
 </PRE>
 <P>
 Parsing with the <CODE>-fcfg</CODE> flag takes a few extra seconds the first time during
-each session, but gets faster at later runs.
+each session, but gets faster at later runs. From GF 2.6, <CODE>fcfg</CODE> is the
+default parser of GF and the flag is not needed.
 </P>
 <P>
-It is also feasible to parse in Scandinavian languages (Danish, Norwegian, Swedish).
+It is also possible to parse in Scandinavian languages 
+(Danish, Norwegian, Swedish) and, with enough memory (<CODE>gf +RTS -K512M</CODE>),
+German.
 </P>
-<A NAME="toc12"></A>
+<A NAME="toc13"></A>
 <H2>Example applications</H2>
 <P>
 These applications are meant to serve as starting points for
 new applications, showing how the libraries can be used in
 typical situations.
 </P>
-<A NAME="toc13"></A>
-<H3>Brozeage</H3>
+<A NAME="toc14"></A>
+<H3>Bronzeage</H3>
 <P>
 The <A HREF="../../../examples/bronzeage">examples/bronzeage</A> 
 grammar set implements a language fragment
 based on the Swadesh list of 200 words. It is useful for
 things like language training.
 </P>
-<A NAME="toc14"></A>
+<A NAME="toc15"></A>
 <H3>Dialogue</H3>
 <P>
 The <A HREF="../../../examples/dialogue">examples/dialogue</A> 
@@ -396,7 +419,7 @@ multimodal dialogue system.
 Its purpose is to serve as a prototype for applications in the
 TALK project.
 </P>
-<A NAME="toc15"></A>
+<A NAME="toc16"></A>
 <H3>Animals</H3>
 <P>
 The <A HREF="../../../examples/animal">examples/animal</A> 
@@ -404,7 +427,7 @@ grammar set implements some queries about animals.
 Its purpose is to serve as a prototype for example-based 
 grammar writing.
 </P>
-<A NAME="toc16"></A>
+<A NAME="toc17"></A>
 <H2>Known bugs and missing components</H2>
 <P>
 Danish
@@ -416,10 +439,6 @@ Danish
 <P>
 English 
 </P>
-<UL>
-<LI>-
-</UL>
-
 <P>
 Finnish
 </P>
@@ -431,22 +450,17 @@ Finnish
 French
 </P>
 <UL>
-<LI>no inverted word order in questions
 <LI>multiple clitics (with V3) not always right
+<LI>no pronominal questions with inverted word order
 </UL>
 
 <P>
 German
 </P>
-<UL>
-<LI>-
-</UL>
-
 <P>
 Italian
 </P>
 <UL>
-<LI>no contraction of infinitives before clitics
 <LI>multiple clitics (with V3) not always right
 </UL>
 
@@ -470,16 +484,13 @@ Spanish
 </P>
 <UL>
 <LI>multiple clitics (with V3) not always right
+<LI>missing contractions with imperatives and clitics
 </UL>
 
 <P>
 Swedish
 </P>
-<UL>
-<LI>-
-</UL>
-
-<A NAME="toc17"></A>
+<A NAME="toc18"></A>
 <H2>More reading</H2>
 <P>
 <A HREF="../../../doc/resource.pdf">GF Resource Grammar Library</A> (pdf).
