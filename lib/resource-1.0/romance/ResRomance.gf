@@ -52,14 +52,14 @@ oper
     let
       vfin  : TMood -> Agr -> Str = \tm,a -> verb.s ! VFin tm a.n a.p ;
       vpart : AAgr -> Str = \a -> verb.s ! VPart a.g a.n ;
-      vinf  = verb.s ! VInfin ;
+      vinf  : Bool -> Str = \b -> verb.s ! VInfin b ;
       vger  = verb.s ! VGer ;
 
       typ = verb.vtyp ;
       aux = auxVerb typ ;
 
       habet  : TMood -> Agr -> Str = \tm,a -> aux ! VFin tm a.n a.p ;
-      habere : Str = aux ! VInfin ;
+      habere : Str = aux ! VInfin False ;
 
       vimp : Agr -> Str = \a -> verb.s ! VImper (case <a.n,a.p> of {
         <Pl,P1> => PlP1 ;
@@ -80,10 +80,10 @@ oper
     s = table {
       VPFinite t Simul => vf (vfin t)   (\_ -> []) ;
       VPFinite t Anter => vf (habet t)  vpart ;   --# notpresent
-      VPInfinit Anter  => vf (\_ -> []) (\a -> habere ++ vpart a) ;  --# notpresent
+      VPInfinit Anter _=> vf (\_ -> []) (\a -> habere ++ vpart a) ;  --# notpresent
       VPImperat        => vf vimp       (\_ -> []) ;
       VPGerund         => vf (\_ -> []) (\_ -> vger) ;
-      VPInfinit Simul  => vf (\_ -> []) (\_ -> vinf)
+      VPInfinit Simul b=> vf (\_ -> []) (\_ -> vinf b)
       } ;
     agr    = partAgr typ ;
     neg    = negation ;
@@ -217,12 +217,12 @@ oper
 
   infVP : VP -> Agr -> Str = \vp,agr ->
       let
-        inf  = (vp.s ! VPInfinit Simul).inf ! (aagr agr.g agr.n) ;
-        neg  = vp.neg ! Pos ; --- Neg not in API
         clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
+        inf  = (vp.s ! VPInfinit Simul clpr.p3).inf ! (aagr agr.g agr.n) ;
+        neg  = vp.neg ! Pos ; --- Neg not in API
         obj  = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
       in
-      clitInf (clpr.p1 ++ vp.clit2) inf ++ obj ;
+      clitInf clpr.p3 (clpr.p1 ++ vp.clit2) inf ++ obj ;
 
 }
 

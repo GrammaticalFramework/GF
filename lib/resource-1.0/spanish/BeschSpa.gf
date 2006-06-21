@@ -5829,8 +5829,23 @@ oper llover_89 : Str -> Verbum = \llover ->
 
 -- Verbs: conversion from full verbs to present-tense verbs.
 
-  verbBesch : {s : VFB => Str} -> {s : CommonRomance.VF => Str} = \amar -> {s = table { 
-    VInfin                 => amar.s ! VI Infn ;
+  verbBesch : {s : VFB => Str} -> {s : CommonRomance.VF => Str} = \amar -> 
+  {-
+   -- even imperatives should be modified this way, so let's postpone this
+   -- AR 21/6/2006 
+  let 
+      amare = amar.s ! VI Infn ;
+      a'r = case last (init amare) of {
+        "i" => "ír" ;
+        "e" => "ér" ;
+        _   => "ár"
+        } ;
+      ama'r = Predef.tk 2 amare ++ a'r
+    in
+   -}
+  {s = table { 
+--    VInfin True                 => ama'r ;
+    VInfin _ => amar.s ! VI Infn ;
     VFin (VPres   Indic) n p => amar.s ! VP (Pres Ind  n p) ; 
     VFin (VPres   Conjunct) n p => amar.s ! VP (Pres Sub n p) ;
     VFin (VImperf Indic) n p => amar.s ! VP (Impf Ind  n p) ;  --# notpresent --# notpresent

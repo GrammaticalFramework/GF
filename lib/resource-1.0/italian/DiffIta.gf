@@ -94,26 +94,30 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
           CNone => False ;
           _ => True
           } ;
+        hasDat = case dat of {
+          CNone => False ;
+          _ => True
+          } ;
         pdat = case dat of {
           CPron a => argPron a.g a.n a.p dative hasAcc ;
           _ => []
           } ;
        in
-       <pdat ++ pacc, []> ;
+       <pdat ++ pacc, [], orB hasAcc hasDat> ;
 
     mkImperative p vp = {
       s = \\pol,aag => 
         let 
           agr   = aag ** {p = p} ;
+          clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
           verb  = case <aag.n, pol> of {
-            <Sg,Neg> => (vp.s ! VPInfinit Simul).inf ! aag ;
+            <Sg,Neg> => (vp.s ! VPInfinit Simul clpr.p3).inf ! aag ;
             _ => (vp.s ! VPImperat).fin ! agr
             } ;
           neg   = vp.neg ! pol ;
-          clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
           compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
         in
-        neg.p1 ++ verb ++ clpr.p1 ++ compl ;
+        neg.p1 ++ verb ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;
       } ;
 
     negation : Polarity => (Str * Str) = table {
@@ -124,7 +128,7 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
     conjThan = "che" ; --- di
     conjThat = "che" ;
 
-    clitInf cli inf = inf ++ cli ; --- contraction of inf
+    clitInf b cli inf = inf ++ bindIf b ++ cli ;
 
     relPron : Bool => AAgr => Case => Str = \\b,a,c => 
       case c of {

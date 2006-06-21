@@ -37,13 +37,15 @@ interface DiffRomance = open CommonRomance, Prelude in {
   oper conjunctCase : NPForm -> NPForm ;
 
 -- How infinitives and clitics are placed relative to each other
--- (Fre "la voir", Ita "vederla").
+-- (Fre "la voir", Ita "vederla"). The $Bool$ is used for indicating
+-- if there are any clitics.
 
-  oper clitInf : Str -> Str -> Str ;
+  oper clitInf : Bool -> Str -> Str -> Str ;
 
 -- To render pronominal arguments as clitics and/or ordinary complements. 
+-- Returns $True$ if there are any clitics.
 
-  oper pronArg : Number -> Person -> CAgr -> CAgr -> Str * Str ;
+  oper pronArg : Number -> Person -> CAgr -> CAgr -> Str * Str * Bool ;
 
 -- To render imperatives (with their clitics etc).
 

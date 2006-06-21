@@ -220,11 +220,11 @@ param
            | Imper NumPersI
            | Part TPart ;
 
--- This is a conversion to the type in $ParamRomance$.
+-- This is a conversion to the type in $CommonRomance$.
 
 oper
   vvf : (VForm => Str) -> (VF => Str) = \aller -> table { 
-    VInfin       => aller ! Inf ;
+    VInfin _       => aller ! Inf ;
     VFin (VPres   Indic) n p => aller ! Indi Presn n p ; 
     VFin (VPres   Subjunct) n p => aller ! Subjo SPres n p ;
     VFin (VImperf Indic) n p => aller ! Indi Imparf n p ;     --# notpresent

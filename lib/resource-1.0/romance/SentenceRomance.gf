@@ -25,7 +25,7 @@ incomplete concrete SentenceRomance of Sentence =
         (mkClause
          (np.s ! Aton Nom) np.a
          (insertComplement 
-           (\\a => prepCase vv.c2.c ++ v2.s ! VInfin) (predV vv))).s ;
+           (\\a => prepCase vv.c2.c ++ v2.s ! VInfin False) (predV vv))).s ;
        c2 = v2.c2
       } ;
 
