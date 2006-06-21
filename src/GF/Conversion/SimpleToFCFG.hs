@@ -43,22 +43,21 @@ import Data.Array
 convertGrammar :: SGrammar -> FGrammar
 convertGrammar srules = getFRules (loop frulesEnv)
   where
-    (srulesMap,frulesEnv) = foldl helper (Map.empty,emptyFRulesEnv) srules
+    (srulesMap,frulesEnv) = List.foldl' helper (Map.empty,emptyFRulesEnv) srules
       where
         helper (srulesMap,frulesEnv) rule@(Rule (Abs decl _ _) (Cnc ctype _ _)) = 
-           ( Map.insertWith (++) (decl2cat decl) [rule] srulesMap
-           , foldBM (\selector _ env -> convertRule selector rule env) 
-                    frulesEnv
-                    (mkSingletonSelector ctype)
-                    ()
-           )
-           
-    loop frulesEnv = 
+          let srulesMap' = Map.insertWith (++) (decl2cat decl) [rule] srulesMap
+              frulesEnv' = List.foldl' (\env selector -> convertRule selector rule env) 
+                                       frulesEnv
+                                       (mkSingletonSelectors ctype)
+          in srulesMap' `seq` frulesEnv' `seq` (srulesMap',frulesEnv')
+
+    loop frulesEnv =
       let (todo, frulesEnv') = takeToDoRules srulesMap frulesEnv
       in case todo of
            [] -> frulesEnv'
-           _  -> loop $! foldl (\env (srules,selector) -> 
-                         foldl (\env srule             -> convertRule selector srule env) env srules) frulesEnv' todo
+           _  -> loop $! List.foldl' (\env (srules,selector) -> 
+                         List.foldl' (\env srule             -> convertRule selector srule env) env srules) frulesEnv' todo
 
 
 ----------------------------------------------------------------------
@@ -355,23 +354,21 @@ data STermSelector
   | ConSel [STerm]
   | StrSel
 
-
-mkSingletonSelector :: SLinType -> BacktrackM () STermSelector
-mkSingletonSelector ctype = do
+mkSingletonSelectors :: SLinType -> [STermSelector]
+mkSingletonSelectors ctype =
   let (rcss,tcss) = loop emptyPath ([],[]) ctype
-  rcs <- member rcss
-  return (mkSelector [rcs] tcss)
+  in [mkSelector [rcs] tcss | rcs <- rcss]
   where
-    loop path st          (RecT record)      = foldl (\st (lbl,ctype) -> loop (path ++. lbl ) st ctype) st record
-    loop path st          (TblT terms ctype) = foldl (\st term        -> loop (path ++! term) st ctype) st terms
+    loop path st          (RecT record)      = List.foldl' (\st (lbl,ctype) -> loop (path ++. lbl ) st ctype) st record
+    loop path st          (TblT terms ctype) = List.foldl' (\st term        -> loop (path ++! term) st ctype) st terms
     loop path (rcss,tcss) (ConT terms)       = (rcss,       map ((,) path) terms : tcss)
     loop path (rcss,tcss) (StrT)             = (path : rcss,                       tcss)
 
 
 mkSelector :: [SPath] -> [[(SPath,STerm)]] -> STermSelector
 mkSelector rcs tcss =
-  foldl addRestriction (case xs of
-                          (path:xs) -> foldl addProjection (path2selector StrSel path) xs) ys
+  List.foldl' addRestriction (case xs of
+                                (path:xs) -> List.foldl' addProjection (path2selector StrSel path) xs) ys
   where
     xs = [ reverse path       |               Path path       <- rcs]
     ys = [(reverse path,term) | tcs <- tcss, (Path path,term) <- tcs]
