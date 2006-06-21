@@ -88,7 +88,6 @@ convertRule selector (Rule (Abs decl decls (Name fun profile)) (Cnc ctype ctypes
               accumProf nr (_            ,xpaths) = (nr+cnt+1, Unify [nr..nr+cnt])
                 where cnt = length xpaths
 
-	  newName = Name fun (profile `composeProfiles` newProfile)
           rule = FRule (Abs newCat newArgs (Name fun newProfile)) newLinRec
       in addFCatRule env2 rule
 convertRule selector _ frulesEnv = frulesEnv
