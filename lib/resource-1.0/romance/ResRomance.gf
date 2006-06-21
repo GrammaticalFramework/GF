@@ -61,9 +61,10 @@ oper
       habet  : TMood -> Agr -> Str = \tm,a -> aux ! VFin tm a.n a.p ;
       habere : Str = aux ! VInfin ;
 
-      vimp : Agr -> Str = \a -> verb.s ! VImper (case a.n of {
-        Sg => SgP2 ;
-        Pl => PlP2
+      vimp : Agr -> Str = \a -> verb.s ! VImper (case <a.n,a.p> of {
+        <Pl,P1> => PlP1 ;
+        <Sg,_>  => SgP2 ;
+        <Pl,_>  => PlP2
         }) ;
 
       vf : (Agr -> Str) -> (AAgr -> Str) -> {

@@ -290,9 +290,9 @@ oper
   plural = Pl ;
 
   Preposition = Compl ;
-  accusative = complAcc ;
-  genitive = complGen ;
-  dative = complDat ;
+  accusative = complAcc ** {lock_Prep = <>} ;
+  genitive = complGen ** {lock_Prep = <>} ;
+  dative = complDat ** {lock_Prep = <>} ;
   mkPrep p = {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
 
   --- obsolete
@@ -348,8 +348,8 @@ oper
   v2V v = v ** {lock_V = <>} ;
 
   mkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
-  dirV3 v p = mkV3 v complAcc p ;
-  dirdirV3 v = dirV3 v complDat ;
+  dirV3 v p = mkV3 v accusative p ;
+  dirdirV3 v = dirV3 v dative ;
 
   V0 : Type = V ;
   V2S, V2V, V2Q : Type = V2 ;
