@@ -60,7 +60,8 @@ txtHelpFile =
   "\n      -src          from source: ignore precompiled gfc and gfr files" ++
   "\n      -gfc          from gfc: use compiled modules whenever they exist" ++
   "\n      -retain       retain operations: read resource modules (needed in comm cc) " ++
-  "\n      -nocf         don't build context-free grammar (thus no parser)" ++
+  "\n      -nocf         don't build old-style context-free grammar (default without HOAS)" ++
+  "\n      -docf         do build old-style context-free grammar (default with HOAS)" ++
   "\n      -nocheckcirc  don't eliminate circular rules from CF " ++
   "\n      -cflexer      build an optimized parser with separate lexer trie" ++
   "\n      -noemit       do not emit code (default with old grammar format)" ++
