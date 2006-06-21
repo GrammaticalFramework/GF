@@ -237,7 +237,8 @@ updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do
       concr0 = ifNull Nothing (return . head) concrs
       notInrts f = notElem f $ map fst rts
       subcgr = unSubelimCanon cgr
-  cf's0 <- if oElem noCF opts
+  cf's0 <- if (not (oElem (iOpt "docf") opts) &&       -- cf only built with -docf
+               (oElem noCF opts || not (hasHOAS cgr))) -- or HOAS, if not -nocf
             then return $ map snd $ cfs sh
             else mapM (canon2cf opts ign subcgr) newConcrs 
   let cf's = zip newConcrs cf's0 ++ filter toRetain (cfs sh)

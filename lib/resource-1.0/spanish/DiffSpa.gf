@@ -74,12 +74,13 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
 --        <Sg,P2,CRefl,CPron {n = Sg ; p = P1}> => <"te" ++ "me", []> ;
 --        <_,_,CPron {n = Sg ; p = P2},CPron {n = Sg ; p = P1}> => <"te" ++ "me", []> ;
 
-    mkImperative vp = {
+    mkImperative p vp = {
       s = \\pol,aag => 
         let 
-          agr   = aag ** {p = P2} ;
-          verb  = case <aag.n, pol> of {
-            <Sg,Neg> => (vp.s ! VPFinite (VPres Conjunct) Simul).fin ! agr ;
+          agr   = aag ** {p = p} ;
+          verb  = case <aag.n, pol,p> of {
+            <_,_,   P1> => (vp.s ! VPFinite (VPres Conjunct) Simul).fin ! agr ;
+            <Sg,Neg,P2> => (vp.s ! VPFinite (VPres Conjunct) Simul).fin ! agr ;
             _ => (vp.s ! VPImperat).fin ! agr
             } ;
           neg   = vp.neg ! pol ;

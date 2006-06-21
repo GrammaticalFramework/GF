@@ -101,12 +101,13 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
        in
        <pdat ++ pacc, []> ;
 
-    mkImperative vp = {
+    mkImperative p vp = {
       s = \\pol,aag => 
         let 
-          agr   = aag ** {p = P2} ;
-          verb  = case <aag.n, pol> of {
-            <Sg,Neg> => (vp.s ! VPInfinit Simul).inf ! aag ;
+          agr   = aag ** {p = p} ;
+          verb  = case <aag.n, pol,p> of {
+            <_,_,   P1> => (vp.s ! VPFinite (VPres Indic) Simul).fin ! agr ;
+            <Sg,Neg,P2> => (vp.s ! VPInfinit Simul).inf ! aag ;
             _ => (vp.s ! VPImperat).fin ! agr
             } ;
           neg   = vp.neg ! pol ;
