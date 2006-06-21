@@ -399,7 +399,7 @@ oper
         _   => drikke + "r"
         }
     in 
-    mkV drikke drikker (drikke + "s") drakk drukket drikk ; 
+    mkV drikke drikker (drikke + "s") drakk drukket (mkImper drikk) ; 
 
   vaereV v = {
     s = v.s ;

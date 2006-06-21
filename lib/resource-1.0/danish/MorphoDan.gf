@@ -93,7 +93,7 @@ oper
         _   => drikke + "r"
         }
     in 
-    mkVerb6 drikke drikker  (drikke + "s") drakk drukket drikk ; 
+    mkVerb6 drikke drikker  (drikke + "s") drakk drukket (mkImper drikk) ; 
 
   regVerb : Str -> Str -> Verbum = \spise, spiste -> 
     let
@@ -110,14 +110,20 @@ oper
       } ;
 
   vHusk : Str -> Verbum = \husk -> 
-    mkVerb6 (husk + "e") (husk + "er") (husk + "es") (husk + "ede") (husk + "et") husk ;
+    mkVerb6 (husk + "e") (husk + "er") (husk + "es") (husk + "ede") (husk + "et") 
+      (mkImper husk) ;
 
   vSpis : Str -> Verbum = \spis -> 
-    mkVerb6 (spis + "e") (spis + "er") (spis + "es") (spis + "te") (spis + "t") spis ;
+    mkVerb6 (spis + "e") (spis + "er") (spis + "es") (spis + "te") (spis + "t") 
+      (mkImper spis) ;
 
   vBo : Str -> Verbum = \bo -> 
-    mkVerb6 bo (bo + "r") (bo + "es") (bo + "ede") (bo + "et") bo ;
+    mkVerb6 bo (bo + "r") (bo + "es") (bo + "ede") (bo + "et") (mkImper bo) ;
 
+-- Remove consonant duplication: "passe - pas"
+
+  mkImper : Str -> Str = \s -> 
+    if_then_Str (pbool2bool (Predef.eqStr (last s) (last (init s)))) (init s) s ;
 
 -- For $Numeral$.
 
