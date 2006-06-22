@@ -349,6 +349,10 @@ lin
   breathe_V = regV "puste" ;
 
 
+  grammar_N = regN "grammatikk" ;
+  language_N = mk2N "språk" "språket" ;
+  rule_N = mkN "regel" "regelen" "regler" "reglene" ;
+
 } ;
 
 -- a" -> e"   86

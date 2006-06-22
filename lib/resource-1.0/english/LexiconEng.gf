@@ -351,6 +351,10 @@ lin
 
 --  other_A = regA "other" ;
 
+  grammar_N = regN "grammar" ;
+  language_N = regN "language" ;
+  rule_N = regN "rule" ;
+
 oper
   aboutP = mkPrep "about" ;
   atP = mkPrep "at" ;

@@ -348,5 +348,9 @@ lin
   wipe_V2 = dirV2 (regV "secar") ;
     breathe_V = (regV "respirar") ;
 
+  grammar_N = regN "gramática" ;
+  language_N = regN "lengua" ;
+  rule_N = regN "regla" ;
+
 
 } ;
