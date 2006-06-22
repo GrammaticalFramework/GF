@@ -16,7 +16,7 @@ Last update: %%date(%c)
 %!postproc(tex): "#CAPTION" "caption{"
 %!postproc(tex): "#RBRACE" "end{figure}"
 %!postproc(tex): "#CLEARPAGE" "clearpage"
-
+%!postproc(tex): "#PARADIGMSRUS" "input{ParadigmsRus.tex}"
 %!target:tex
 
 #CLEARPAGE
@@ -955,6 +955,8 @@ has only been exploited in a very small scale so far.
 % %!include: ../lib/resource-1.0/russian/ParadigmsRus.txt
 
 % %!include: ""./ParadigmsRus.tex""
+
+#PARADIGMSRUS
 
 ===Spanish===
 
