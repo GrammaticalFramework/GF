@@ -107,6 +107,7 @@ oper
     PNoGen => variants {Masc ; Fem} --- the best we can do for ya, tu
     } ;
 
+
 oper
   extCase: PronForm -> Case = \pf -> case pf of 
    { PF Nom _ _ => Nom ;
@@ -194,7 +195,7 @@ oper
    case t of { Present => VPresent p ; PastRus => VPast; Future => VFuture p } ;
 
    getTense : Tense -> RusTense= \t ->
-   case t of { Pres => Present  ; Past => PastRus; _ => Future} ;
+   case t of { Pres => Present  ; Fut => Future; _ => PastRus} ;
 
   
    getVoice: VerbForm -> Voice = \vf ->
@@ -267,6 +268,15 @@ oper
       ClImper => VFORM Act (VIMP n p) 
    };
 
+   getPassVerbForm : ClForm -> Gender -> Number -> Person -> VerbForm = \clf,g,n, p -> case clf of
+   { ClIndic Future _ => VFORM Pass (VIND (gNum g n) (VFuture p));
+     ClIndic PastRus _ => VFORM Pass (VIND (gNum g n) VPast);
+      ClIndic Present _ => VFORM Pass (VIND (gNum g n) (VPresent p));
+      ClCondit => VFORM Pass (VSUB (gNum g n));
+      ClInfinit => VFORM Pass VINF ;
+      ClImper => VFORM Pass (VIMP n p) 
+   };
+
 
 --2 For $Adjective$
 param
@@ -275,13 +285,25 @@ param
 oper
   Complement =  {s2 : Str ; c : Case} ;
 
+oper Refl ={s: Case => Str};
+oper sam: Refl=
+{s = table{
+     Nom => "сам";
+     Gen => "себя";
+     Dat => "себе";
+     Acc => "себя";
+     Inst => "собой";
+     Prepos => "себе"
+     }
+};
+
   pgNum : PronGen -> Number -> GenNum = \g,n -> 
     case n of 
    {   Sg => case g of 
                  { PGen Fem => ASg Fem ;
                    PGen Masc => ASg Masc ;
                    PGen Neut => ASg Neut ;
-                   _ => ASg Masc } ; 
+                   _ => ASg Masc } ; -- assuming pronoun "I" is a male
         Pl => APl
    } ;
               --    _  => variants {ASg Masc ; ASg Fem}  } ; 
@@ -293,7 +315,7 @@ oper numGNum : GenNum -> Number = \gn ->
    case gn of { APl => Pl ; _ => Sg } ;
 
 oper genGNum : GenNum -> Gender = \gn ->
-   case gn of { ASg Fem => Fem; _ => Masc } ;
+   case gn of { ASg Fem => Fem; ASg Masc => Masc; _ => Neut } ;
 
 oper numAF: AdjForm -> Number = \af ->
    case af of { AdvF => Sg; AF _ _  gn => (numGNum gn) } ;

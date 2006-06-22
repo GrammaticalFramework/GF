@@ -25,12 +25,12 @@ flags  coding=utf8 ;
     } ;
 
     ReflA2 vlublen = 
-    {s = \\af => vlublen.s !Posit! af ++ vlublen.s2 ++ "себя";
+    {s = \\af => vlublen.s !Posit! af ++ vlublen.s2 ++ sam.s ! vlublen.c;
      p = True
     } ;
 
     SentAP vlublen sent= 
-    {s = \\af => vlublen.s ! af ++ sent.s;
+    {s = \\af => vlublen.s ! af ++ [", "] ++ sent.s;
       p = True
     } ;
 

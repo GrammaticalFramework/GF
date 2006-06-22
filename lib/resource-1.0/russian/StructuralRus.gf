@@ -45,13 +45,13 @@ lin
   here7to_Adv = ss "сюда" ;
   here7from_Adv = ss "отсюда" ;
   how_IAdv  = ss "как" ;
-  how8many_IDet   = skolkoSgDet ** {n = Sg; g = (PGen Neut); c= Gen}; 
+  how8many_IDet   = skolkoSgDet ** {n = Pl; g = (PGen Neut); c= Gen}; 
   i_Pron   = pronYa ;
   if_Subj    = ss "если" ;
   in8front_Prep  = { s = "перед" ; c = Inst};
   in_Prep  = { s = "в" ; c = Prepos };
   it_Pron    = pronOno ;
-  less_CAdv = ss "меньше" ;
+  less_CAdv = ss "менее" ;
   many_Det  = mnogoSgDet ** {n = Sg; g = (PGen Neut); c= Gen} ; 
   more_CAdv = ss "более" ;
   most_Predet   = bolshinstvoSgDet ** {n = Sg; g = (PGen Neut); c= Gen} ; 

@@ -20,21 +20,21 @@ lin
   beautiful_A =  AStaruyj "красив" "красивее";
   become_VA = regV perfective second "станов" "лю" "стал" "стань" "стать" ;
   beer_N = nChislo "пив" ;
-  beg_V2V = dirV2 (regV imperfective  second "про" "шу" "просил" "проси" "просить" );
+  beg_V2V = dirV2 (mkVerbum  imperfective  "прошу" "просишь" "просит" "просим" "просите" "просят" "просил" "проси" "просить" );
   big_A = AKakoj_Nibud  "больш" "" "больше" ;
   bike_N = nTelefon "велосипед" ;
   bird_N = nEdinica "птиц" ;
   black_A = AStaruyj  "чёрн" "чернее";
   blue_A =  AMolodoj  "голуб" "голубее";
   boat_N = nMashina "лодк" ;
-  book_N = nMashina "книг" ;
+  book_N = nNoga "книг" ;
   boot_N = nBank "сапог" ;
   boss_N = nStomatolog "начальник" ;
   boy_N = nStomatolog "мальчик" ;
   bread_N = nAdres "хлеб" ;
   break_V2 = dirV2 (regV imperfective first "прерыва" "ю" "прерывал" "прерывай" "прерывать" );
   broad_A = AMalenkij  "широк" "шире";
-  brother_N2 = mkN2  (nBrat ",брат") ;
+  brother_N2 = mkN2  (nBrat "брат") ;
   brown_A = AStaruyj  "коричнев" "коричневее";
   butter_N = nChislo "масл";
   buy_V2 = dirV2 (regV imperfective first "покупа" "ю" "покупал" "покупай" "покупать" );
@@ -59,7 +59,7 @@ child_N = mkN "ребёнок" "ребёнка" "ребёнку" "ребёнка
   country_N = nMashina "стран" ;
 cousin_N = nTelefon "кузен" ;
 cow_N = nMashina "коров" ;
-die_V = regV imperfective first "умира" "ю" "умирал" "умрай" "умирать" ;
+die_V = regV imperfective first "умира" "ю" "умирал" "умирай" "умирать" ;
 dirty_A =  AStaruyj  "грязн" "грязнее" ;
 doctor_N = nAdres "доктор" ;
 dog_N = nNoga "собак" ;
@@ -70,7 +70,7 @@ enemy_N = nStomatolog "враг" ;
 factory_N = nNoga "фабрик" ;
 father_N2 = mkN2 (mkN "отец" "отца" "отцу" "отца" "отцом" "отце" "отцы" "отцов" "отцам" "отцов" "отцами" "отцах" masculine animate);
 fear_VS= regV imperfective second "бо" "ю" "боял" "бой" "боять" ;
-find_V2 = dirV2 (regV imperfective second "нахо" "жу" "находил" "находи" "находить" );
+find_V2 = dirV2 (mkVerbum imperfective   "нахожу" "находишь" "находит" "находим" "находите" "находят" "находил" "находи" "находить" );
 fish_N = nMashina "рыб" ;
 floor_N = nTelefon "пол" ;
 forget_V2= dirV2 (regV imperfective first "забыва" "ю" "забывал" "забывай" "забывать" );
@@ -129,7 +129,7 @@ peace_N = nTelefon "мир" ;
 pen_N = nNoga "ручк" ;
 planet_N = nMashina "планет" ;
 plastic_N = nMashina "пластмасс" ;
-play_V2 = dirV2 (regV imperfective first "игра" "ю" "играл" "играй" "играть" );
+play_V2 = mkV2 (regV imperfective first "игра" "ю" "играл" "играй" "играть" ) "c" instructive;
 policeman_N = nTelefon "милиционер" ;
 priest_N = nStomatolog "священник" ;
 queen_N = nMashina "королев" ;
@@ -145,7 +145,7 @@ rubber_N = nMashina "резин" ;
 run_V = regV imperfective first "бега" "ю" "бегал" "бегай" "бегать" ;
 say_VS = regV imperfective second "говор" "ю" "говорил" "говори" "говорить" ;
 school_N = nMashina "школ" ;
-science_N = nEdinica "наук" ;
+science_N = nNoga "наук" ;
 sea_N = nProizvedenie "мор" ;
 seek_V2 = dirV2 (regV imperfective first "ищ" "у" "искал" "ищи" "искать" );
 see_V2 = dirV2 (regV imperfective second "виж" "у" "видел" "видь" "видеть" );
@@ -213,7 +213,7 @@ young_A = AMolodoj  "молод" "моложе";
   stop_V = regV imperfective first "останавлива" "ю" "останавливал" "останавливай" "останавливать";
   jump_V = regV imperfective first "прыга" "ю" "прыгал" "прыгай" "прыгать" ;
 
-distance_N3 = mkN3 (nProizvedenie "расстоян") from_Prep to_Prep ;
+distance_N3 = mkN3 (nProizvedenie "расстояни") from_Prep to_Prep ;
 
 -- in Russian combinations with verbs are expressed with adverbs:
 -- "легко понять" ("easy to understand"), which is different from 
@@ -221,12 +221,12 @@ distance_N3 = mkN3 (nProizvedenie "расстоян") from_Prep to_Prep ;
 -- So the next to words are adjectives, since there are such adjectives
 -- in Russian, but to use them with verb would be wrong in Russian:
 fun_AV = AStaruyj "весёл" "веселее";
-easy_A2V = mkA2 (AMalenkij "легк" "легче") "для" genitive ;
+easy_A2V = mkA2 (AMalenkij "лёгк" "легче") "для" genitive ;
 
 empty_A =  AMolodoj "пуст" "пустее";
 married_A2 = mkA2 (adjInvar "замужем") "за" instructive ;
 paint_V2A = dirV2 (regV imperfective first "рису" "ю" "рисовал" "рисуй"  "рисовать" ) ;
-  probable_AS = AStaruyj "возможный" "возможнее";
+  probable_AS = AStaruyj "возможн" "возможнее";
  rain_V0  = idetDozhd verbIdti; --  No such verb in Russian!
 talk_V3 = mkV3 (regV imperfective second "говор" "ю" "говорил" "говори" "говорить" ) "с" "о" instructive prepositional;
 wonder_VQ = regV imperfective first "интересу" "ю" "интересовал" "интересуй" "интересовать";  

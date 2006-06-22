@@ -188,7 +188,8 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 -- the verb parameter type.
 
   ComplVV putatsya bezhat =
-  { s =  \\clf,gn,p => putatsya.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p)  ++ bezhat.s!clf!gn!p ; 
+  { s =  \\clf,gn,p => putatsya.s ! (getActVerbForm clf (genGNum gn) 
+       (numGNum gn) p) ++ bezhat.s!ClInfinit !gn!p ; 
       asp = putatsya.asp ;
       w = Act;
       negBefore = True;
@@ -213,7 +214,10 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
     } ;
 
   ComplV2A  obechat tu molodoj =
-         {s  = \\clf,gn,p => obechat.s2++obechat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++  tu.s ! PF obechat.c No NonPoss ++molodoj.s!AF Inst tu.anim (pgNum tu.g tu.n) ; 
+    {s  = \\clf,gn,p => obechat.s2++
+          obechat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++  
+         tu.s ! PF obechat.c No NonPoss ++
+         molodoj.s!AF Inst tu.anim (pgNum tu.g tu.n) ; 
       asp = obechat.asp ;
       w = Act;
       negBefore = True;
@@ -225,11 +229,11 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
      asp = poet.asp; w = poet.w; t = poet.t ; negBefore = poet.negBefore } ;
 
   AdVVP khorosho poet =
-    {s = \\clf,gn,p => poet.s ! clf!gn!p; s2 = poet.s2 ++ khorosho.s; s3 = poet.s3;
+    {s = \\clf,gn,p => poet.s ! clf!gn!p; s2 = khorosho.s ++ poet.s2; s3 = poet.s3;
      asp = poet.asp; w = poet.w; t = poet.t ; negBefore = poet.negBefore } ;
 
 PassV2  se =
-    {s=\\clf,gn,p =>  se.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ; 
+    {s=\\clf,gn,p =>  se.s ! (getPassVerbForm clf (genGNum gn) (numGNum gn) p) ; 
     asp=se.asp; w=Pass;      s2 = se.s2;
       negBefore = True;
       s3 = table{_=> table{_ => ""}}
