@@ -2,9 +2,9 @@
 
 --1 Danish Lexical Paradigms
 --
--- Aarne Ranta 2003
+-- Aarne Ranta 2005 - 2006
 --
--- This is an API to the user of the resource grammar 
+-- This is an API for the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
 -- expressions of open categories: nouns, adjectives, verbs.
 -- 
@@ -21,8 +21,8 @@
 -- regular cases. Then we give a worst-case function $mkC$, which serves as an
 -- escape to construct the most irregular words of type $C$.
 -- However, this function should only seldom be needed: we have a
--- separate module $IrregularEng$, which covers all irregularly inflected
--- words.
+-- separate module [``IrregDan`` ../../danish/IrregDan.gf], 
+-- which haves a list of irregular verbs.
 
 resource ParadigmsDan = 
   open 
@@ -67,12 +67,12 @@ oper
 -- Worst case: give all four forms. The gender is computed from the
 -- last letter of the second form (if "n", then $utrum$, otherwise $neutrum$).
 
-  mkN  : (dreng,drengen,drenger,drengene : Str) -> N ;
+  mkN  : (dreng,drengen,drenge,drengene : Str) -> N ;
 
 -- The regular function takes the singular indefinite form
 -- and computes the other forms and the gender by a heuristic.
 -- The heuristic is that all nouns are $utrum$ with the
--- plural ending "er"/"r".
+-- plural ending "er" or "r".
 
   regN : Str -> N ;
 
@@ -94,24 +94,24 @@ oper
 --3 Compound nouns 
 --
 -- All the functions above work quite as well to form compound nouns,
--- such as "fotboll". 
+-- such as "fodbold". 
 
 
 --3 Relational nouns 
 -- 
--- Relational nouns ("daughter of x") need a preposition. 
+-- Relational nouns ("datter til x") need a preposition. 
 
   mkN2 : N -> Prep -> N2 ;
 
--- The most common preposition is "av", and the following is a
--- shortcut for regular, $nonhuman$ relational nouns with "av".
+-- The most common preposition is "af", and the following is a
+-- shortcut for regular relational nouns with "af".
 
   regN2 : Str -> Gender -> N2 ;
 
 -- Use the function $mkPrep$ or see the section on prepositions below to  
 -- form other prepositions.
 --
--- Three-place relational nouns ("the connection from x to y") 
+-- Three-place relational nouns ("forbindelse fra x til y") 
 -- need two prepositions.
 
   mkN3 : N -> Prep -> Prep -> N3 ;
@@ -120,7 +120,7 @@ oper
 --3 Relational common noun phrases
 --
 -- In some cases, you may want to make a complex $CN$ into a
--- relational noun (e.g. "the old town hall of"). However, $N2$ and
+-- relational noun (e.g. "tidligere kone til"). However, $N2$ and
 -- $N3$ are purely lexical categories. But you can use the $AdvCN$
 -- and $PrepNP$ constructions to build phrases like this.
 
@@ -179,7 +179,7 @@ oper
   mk3ADeg : (galen,galet,galna : Str) -> A ;
   mk2ADeg : (bred,bredt        : Str) -> A ;
 
--- If comparison is formed by "mer, "mest", as in general for
+-- If comparison is formed by "mer", "mest", as in general for
 -- long adjective, the following pattern is used:
 
   compoundA : A -> A ; -- -/mer/mest norsk
@@ -188,7 +188,8 @@ oper
 --2 Adverbs
 
 -- Adverbs are not inflected. Most lexical ones have position
--- after the verb. Some can be preverbal (e.g. "always").
+-- after the verb. Some can be close to the verb like the negation
+-- "ikke" (e.g. "altid").
 
   mkAdv : Str -> Adv ;
   mkAdV : Str -> AdV ;
@@ -215,10 +216,10 @@ oper
 -- There is an extensive list of irregular verbs in the module $IrregDan$.
 -- In practice, it is enough to give three forms, as in school books.
 
-  irregV : (drikke, drakk, drukket  : Str) -> V ;
+  irregV : (drikke, drak, drukket  : Str) -> V ;
 
 
---3 Verbs with "være" as auxiliary
+--3 Verbs with 'være' as auxiliary
 --
 -- By default, the auxiliary is "have". This function changes it to "være".
 
@@ -228,15 +229,15 @@ oper
 
 --3 Verbs with a particle
 --
--- The particle, such as in "switch on", is given as a string.
+-- The particle, such as in "passe på", is given as a string.
 
   partV  : V -> Str -> V ;
 
 
 --3 Deponent verbs
 --
--- Some words are used in passive forms only, e.g. "hoppas", some as
--- reflexive e.g. "ångra sig".
+-- Some words are used in passive forms only, e.g. "undres", some as
+-- reflexive e.g. "forestille sig".
 
   depV  : V -> V ;
   reflV : V -> V ;
@@ -256,8 +257,8 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Prep -> Prep -> V3 ;    -- speak, with, about
-  dirV3    : V -> Prep -> V3 ;           -- give,_,to
+  mkV3     : V -> Prep -> Prep -> V3 ;  -- snakke, med, om
+  dirV3    : V -> Prep -> V3 ;          -- give,_,til
   dirdirV3 : V -> V3 ;                  -- give,_,_
 
 --3 Other complement patterns

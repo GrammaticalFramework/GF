@@ -4,7 +4,7 @@
 --
 -- Aarne Ranta & Harald Hammarström 2003--2006
 --
--- This is an API to the user of the resource grammar 
+-- This is an API for the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
 -- expressions of open categories: nouns, adjectives, verbs.
 -- 
@@ -21,8 +21,8 @@
 -- regular cases. Then we give a worst-case function $mkC$, which serves as an
 -- escape to construct the most irregular words of type $C$.
 -- However, this function should only seldom be needed: we have a
--- separate module $IrregularGer$, which covers all irregularly inflected
--- words.
+-- separate module [``IrregGer`` ../../german/IrregGer.gf] 
+-- which covers irregularly inflected verbs.
 
 resource ParadigmsGer = open 
   (Predef=Predef), 
@@ -65,7 +65,7 @@ oper
 -- and the gender.
 
   mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N ; 
-                                 -- mann, mann, manne, mannes, männer, männern
+                       -- mann, mann, manne, mannes, männer, männern
 
 -- The regular heuristics recognizes some suffixes, from which it
 -- guesses the gender and the declension: "e, ung, ion" give the
@@ -100,7 +100,8 @@ oper
 -- The regular genitive is  "s", omitted after "s".
 
   mkPN  : (karolus, karoli : Str) -> PN ; -- karolus, karoli
-  regPN : (Johann : Str) -> PN ;          -- Johann, Johanns ; Johannes, Johannes
+  regPN : (Johann : Str) -> PN ;  
+    -- Johann, Johanns ; Johannes, Johannes
 
 
 --2 Adjectives
@@ -202,9 +203,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Prep -> Prep -> V3 ;  -- speak, with, about
-  dirV3    : V -> Prep -> V3 ;                -- give,_,to
-  accdatV3 : V -> V3 ;                               -- give,_,_
+  mkV3     : V -> Prep -> Prep -> V3 ;  -- sprechen, mit, über
+  dirV3    : V -> Prep -> V3 ;          -- senden,(accusative),nach
+  accdatV3 : V -> V3 ;                  -- give,accusative,dative
 
 --3 Other complement patterns
 --

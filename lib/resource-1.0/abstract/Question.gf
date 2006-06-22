@@ -24,6 +24,6 @@ abstract Question = Cat ** {
 
 
 -- More $IP$, $IDet$, and $IAdv$ are defined in
--- [Structural Structural.html].
+-- [``Structural`` Structural.html].
 
 }

@@ -4,7 +4,7 @@
 --
 -- Aarne Ranta 2003--2005
 --
--- This is an API to the user of the resource grammar 
+-- This is an API for the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
 -- expressions of open categories: nouns, adjectives, verbs.
 -- 
@@ -21,10 +21,8 @@
 -- regular cases. Then we give a worst-case function $mkC$, which serves as an
 -- escape to construct the most irregular words of type $C$.
 -- However, this function should only seldom be needed: we have a
--- separate module $IrregularEng$, which covers all irregularly inflected
--- words.
--- 
--- The following modules are presupposed:
+-- separate module [``IrregEng`` ../../english/IrregEng.gf], 
+-- which covers irregular verbss.
 
 resource ParadigmsEng = open 
   (Predef=Predef), 
@@ -64,7 +62,7 @@ oper
 
 --2 Nouns
 
--- Worst case: give all four forms and the semantic gender.
+-- Worst case: give all four forms.
 
   mkN  : (man,men,man's,men's : Str) -> N ;
 
@@ -171,7 +169,7 @@ oper
 
   duplADeg : Str -> ADeg ;      -- fat, fatter, fattest
 
--- If comparison is formed by "more, "most", as in general for
+-- If comparison is formed by "more", "most", as in general for
 -- long adjective, the following pattern is used:
 
   compoundADeg : A -> ADeg ; -- -/more/most ridiculous

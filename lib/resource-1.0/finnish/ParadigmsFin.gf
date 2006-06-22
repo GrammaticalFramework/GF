@@ -20,11 +20,7 @@
 -- first we give a handful of patterns that aim to cover all
 -- regular cases. Then we give a worst-case function $mkC$, which serves as an
 -- escape to construct the most irregular words of type $C$.
--- However, this function should only seldom be needed: we have a
--- separate module $IrregularFin$, which covers all irregularly inflected
--- words.
--- 
--- The following modules are presupposed:
+-- However, this function should only seldom be needed.
 
 resource ParadigmsFin = open 
   (Predef=Predef), 
@@ -33,15 +29,14 @@ resource ParadigmsFin = open
   CatFin
   in {
 
---  flags optimize=all ;
   flags optimize=noexpand ;
 
 --2 Parameters 
 --
 -- To abstract over gender, number, and (some) case names, 
 -- we define the following identifiers. The application programmer
--- should always use these constants instead of their definitions
--- in $TypesInf$.
+-- should always use these constants instead of the constructors
+-- defined in $ResFin$.
 
 oper
   Number   : Type ;
@@ -72,8 +67,8 @@ oper
 
 --2 Nouns
 
--- The worst case gives ten forms and the semantic gender.
--- In practice just a couple of forms are needed, to define the different
+-- The worst case gives ten forms.
+-- In practice just a couple of forms are needed to define the different
 -- stems, vowel alternation, and vowel harmony.
 
 oper
@@ -106,7 +101,7 @@ oper
 -- The rest of the noun paradigms are mostly covered by the three
 -- heuristics.
 --
--- Nouns with partitive "a"/"ä" are a large group. 
+-- Nouns with partitive "a","ä" are a large group. 
 -- To determine for grade and vowel alternation, three forms are usually needed:
 -- singular nominative and genitive, and plural partitive.
 -- Examples: "talo", "kukko", "huippu", "koira", "kukka", "syylä", "särki"...
@@ -132,11 +127,12 @@ oper
   nSylki : (sylki : Str) -> N ;
 
 -- Foreign words ending in consonants are actually similar to words like
--- "malli"/"mallin"/"malleja", with the exception that the "i" is not attached
+-- "malli"-"mallin"-"malleja", with the exception that the "i" is not attached
 -- to the singular nominative. Examples: "linux", "savett", "screen".
--- The singular partitive form is used to get the vowel harmony. (N.B. more than 
--- 1-syllabic words ending in "n" would have variant plural genitive and 
--- partitive forms, like "sultanien"/"sultaneiden", which are not covered.)
+-- The singular partitive form is used to get the vowel harmony. 
+-- (N.B. more than 1-syllabic words ending in "n" would have variant 
+-- plural genitive and partitive forms, like
+-- "sultanien", "sultaneiden", which are not covered.)
 
   nLinux : (linuxia : Str) -> N ;
 
@@ -151,7 +147,7 @@ oper
 
   nRae : (rae, rakeena : Str) -> N ;
 
--- The following covers nouns with partitive "ta"/"tä", such as
+-- The following covers nouns with partitive "ta","tä", such as
 -- "susi", "vesi", "pieni". To get all stems and the vowel harmony, it takes
 -- the singular nominative, genitive, and essive.
 
@@ -281,6 +277,8 @@ oper
 
   vOlla : V ;
 
+--3 Two-place verbs
+--
 -- Two-place verbs need a case, and can have a pre- or postposition.
 
   mkV2 : V -> Prep -> V2 ;
@@ -291,7 +289,7 @@ oper
 
 -- Verbs with a direct (accusative) object
 -- are special, since their complement case is finally decided in syntax.
--- But this is taken care of by $ClauseFin$.
+-- But this is taken care of in $VerbFin$.
 
   dirV2 : V -> V2 ;
 
@@ -301,9 +299,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Prep -> Prep -> V3 ;    -- speak, with, about
-  dirV3    : V -> Case -> V3 ;            -- give,_,to
-  dirdirV3 : V         -> V3 ;            -- acc, allat
+  mkV3     : V -> Prep -> Prep -> V3 ;  -- puhua, allative, elative
+  dirV3    : V -> Case -> V3 ;          -- siirtää, (accusative), illative
+  dirdirV3 : V         -> V3 ;          -- antaa, (accusative), (allative)
 
 
 --3 Other complement patterns

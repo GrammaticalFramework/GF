@@ -2,9 +2,9 @@
 
 --1 Swedish Lexical Paradigms
 --
--- Aarne Ranta 2003
+-- Aarne Ranta 2001 - 2006
 --
--- This is an API to the user of the resource grammar 
+-- This is an API for the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
 -- expressions of open categories: nouns, adjectives, verbs.
 -- 
@@ -21,8 +21,9 @@
 -- regular cases. Then we give a worst-case function $mkC$, which serves as an
 -- escape to construct the most irregular words of type $C$.
 -- However, this function should only seldom be needed: we have a
--- separate module $IrregularEng$, which covers all irregularly inflected
--- words.
+-- separate module [``IrregSwe`` ../../swedish/IrregSwe],
+-- which covers many irregular verbs.
+
 
 resource ParadigmsSwe = 
   open 
@@ -99,7 +100,7 @@ oper
 
 --3 Relational nouns 
 -- 
--- Relational nouns ("daughter of x") need a preposition. 
+-- Relational nouns ("dotter till x") need a preposition. 
 
   mkN2 : N -> Prep -> N2 ;
 
@@ -111,7 +112,8 @@ oper
 -- Use the function $mkPreposition$ or see the section on prepositions below to  
 -- form other prepositions.
 --
--- Three-place relational nouns ("the connection from x to y") need two prepositions.
+-- Three-place relational nouns ("förbindelse från x till y") 
+-- need two prepositions.
 
   mkN3 : N -> Prep -> Prep -> N3 ;
 
@@ -119,7 +121,7 @@ oper
 --3 Relational common noun phrases
 --
 -- In some cases, you may want to make a complex $CN$ into a
--- relational noun (e.g. "the old town hall of"). However, $N2$ and
+-- relational noun (e.g. "den före detta maken till"). However, $N2$ and
 -- $N3$ are purely lexical categories. But you can use the $AdvCN$
 -- and $PrepNP$ constructions to build phrases like this.
 
@@ -175,10 +177,11 @@ oper
 --2 Adverbs
 
 -- Adverbs are not inflected. Most lexical ones have position
--- after the verb. Some can be preverbal (e.g. "always").
+-- after the verb. Some can be preverbal in subordinate position
+-- (e.g. "alltid").
 
-  mkAdv : Str -> Adv ;
-  mkAdV : Str -> AdV ;
+  mkAdv : Str -> Adv ;  -- här
+  mkAdV : Str -> AdV ;  -- alltid
 
 -- Adverbs modifying adjectives and sentences can also be formed.
 
@@ -205,7 +208,7 @@ oper
 
   mk2V : (leka,lekte : Str) -> V ;
 
--- There is an extensive list of irregular verbs in the module $IrregularSwe$.
+-- There is an extensive list of irregular verbs in the module $IrregSwe$.
 -- In practice, it is enough to give three forms, as in school books.
 
   irregV : (dricka, drack, druckit : Str) -> V ;
@@ -239,9 +242,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Prep -> Prep -> V3 ; -- tala med om
-  dirV3    : V -> Prep -> V3 ;                -- ge _ till
-  dirdirV3 : V -> V3 ;                               -- ge _ _
+  mkV3     : V -> Prep -> Prep -> V3 ; -- tala, med, om
+  dirV3    : V -> Prep -> V3 ;         -- ge, (acc),till
+  dirdirV3 : V -> V3 ;                 -- ge, (dat), (acc)
 
 --3 Other complement patterns
 --

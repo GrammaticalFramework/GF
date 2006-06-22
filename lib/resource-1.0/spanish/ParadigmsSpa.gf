@@ -2,9 +2,9 @@
 
 --1 Spanish Lexical Paradigms
 --
--- Aarne Ranta 2003
+-- Aarne Ranta 2004 - 2006
 --
--- This is an API to the user of the resource grammar 
+-- This is an API for the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
 -- expressions of open categories: nouns, adjectives, verbs.
 -- 
@@ -19,7 +19,9 @@
 -- The structure of functions for each word class $C$ is the following:
 -- first we give a handful of patterns that aim to cover all
 -- regular cases. Then we give a worst-case function $mkC$, which serves as an
--- escape to construct the most irregular words of type $C$.
+-- escape to construct the most irregular words of type $C$. For
+-- verbs, there is a fairly complete list of irregular verbs in
+-- [``IrregSpa`` ../../spanish/IrregSpa.gf].
 
 resource ParadigmsSpa = 
   open 
@@ -53,7 +55,7 @@ oper
 -- Prepositions used in many-argument functions are either strings
 -- (including the 'accusative' empty string) or strings that
 -- amalgamate with the following word (the 'genitive' "de" and the
--- 'dative' "à").
+-- 'dative' "a").
 
   Prep : Type ;
 
@@ -69,7 +71,7 @@ oper
 -- Worst case: two forms (singular + plural),
 -- and the gender.
 
-  mkN  : (_,_ : Str) -> Gender -> N ;   -- uomo, uomini, masculine
+  mkN  : (_,_ : Str) -> Gender -> N ;   -- bastón, bastones, masculine
 
 -- The regular function takes the singular form and the gender,
 -- and computes the plural and the gender by a heuristic. 
@@ -89,7 +91,7 @@ oper
 --3 Compound nouns 
 --
 -- Some nouns are ones where the first part is inflected as a noun but
--- the second part is not inflected. e.g. "numéro de téléphone". 
+-- the second part is not inflected. e.g. "número de teléfono". 
 -- They could be formed in syntax, but we give a shortcut here since
 -- they are frequent in lexica.
 
@@ -125,8 +127,8 @@ oper
 --
 -- Proper names need a string and a gender.
 
-  mkPN  : Str -> Gender -> PN ;         -- Jean
-  regPN : Str -> PN ;                   -- masculine
+  mkPN  : Str -> Gender -> PN ; -- Juan
+  regPN : Str -> PN ;           -- feminine for "-a", otherwise masculine
 
 
 -- To form a noun phrase that can also be plural,
@@ -139,7 +141,7 @@ oper
 -- Non-comparison one-place adjectives need five forms in the worst
 -- case (masc and fem singular, masc plural, adverbial).
 
-  mkA : (solo,sola,soli,sole, solamente : Str) -> A ;
+  mkA : (solo,sola,solos,solas, solamiento : Str) -> A ;
 
 -- For regular adjectives, all other forms are derived from the
 -- masculine singular. The types of adjectives that are recognized are
@@ -149,7 +151,7 @@ oper
 
 -- These functions create postfix adjectives. To switch
 -- them to prefix ones (i.e. ones placed before the noun in
--- modification, as in "petite maison"), the following function is
+-- modification, as in "bueno vino"), the following function is
 -- provided.
 
   prefA : A -> A ;
@@ -236,9 +238,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Prep -> Prep -> V3 ;   -- parler, à, de
-  dirV3    : V -> Prep -> V3 ;           -- donner,_,à
-  dirdirV3 : V -> V3 ;                   -- donner,_,_
+  mkV3     : V -> Prep -> Prep -> V3 ;   -- hablar, a, di
+  dirV3    : V -> Prep -> V3 ;           -- dar,(accusative),a
+  dirdirV3 : V -> V3 ;                   -- dar,(dative),(accusative)
 
 --3 Other complement patterns
 --
@@ -248,9 +250,9 @@ oper
   mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
   mkV2S : V -> Prep -> V2S ;
-  mkVV  : V -> VV ;  -- plain infinitive: "je veux parler"
-  deVV  : V -> VV ;  -- "j'essaie de parler"
-  aVV   : V -> VV ;  -- "j'arrive à parler"
+  mkVV  : V -> VV ;  -- plain infinitive: "quiero hablar"
+  deVV  : V -> VV ;  -- "terminar de hablar"
+  aVV   : V -> VV ;  -- "aprender a hablar"
   mkV2V : V -> Prep -> Prep -> V2V ;
   mkVA  : V -> VA ;
   mkV2A : V -> Prep -> Prep -> V2A ;
@@ -303,7 +305,13 @@ oper
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
   mkPN x g = {s = x ; g = g} ** {lock_PN = <>} ;
-  regPN x = mkPN x masculine ;
+  regPN x = mkPN x g where {
+    g = case last x of {
+      "a" => feminine ;
+      _ => masculine
+      }
+    } ;
+
   mkNP x g n = {s = (pn2np (mkPN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
 
   mkA a b c d e = 

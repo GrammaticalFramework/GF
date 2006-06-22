@@ -9,8 +9,9 @@ abstract Relative = Cat ** {
 
     RelCl    : Cl -> RCl ;            -- such that John loves her
 
--- The more proper ways are from a verb phrase (formed in [Verb Verb.html]) 
--- or a sentence with a missing noun phrase (formed in [Sentence Sentence.html]).
+-- The more proper ways are from a verb phrase 
+-- (formed in [``Verb`` Verb.html]) or a sentence 
+-- with a missing noun phrase (formed in [``Sentence`` Sentence.html]).
 
     RelVP    : RP -> VP -> RCl ;      -- who loves John
     RelSlash : RP -> Slash -> RCl ;   -- whom John loves

@@ -4,7 +4,7 @@
 --
 -- Aarne Ranta 2003
 --
--- This is an API to the user of the resource grammar 
+-- This is an API for the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
 -- expressions of open categories: nouns, adjectives, verbs.
 -- 
@@ -20,9 +20,9 @@
 -- first we give a handful of patterns that aim to cover all
 -- regular cases. Then we give a worst-case function $mkC$, which serves as an
 -- escape to construct the most irregular words of type $C$.
--- However, this function should only seldom be needed: we have a
--- separate module $IrregularEng$, which covers all irregularly inflected
--- words.
+-- However, this function should only seldom be needed. For verbs, we have a
+-- separate module [``BeschIta`` ../../italian/BeschIta.gf],
+-- which covers the "Bescherelle" verb conjugations.
 
 resource ParadigmsIta = 
   open 
@@ -55,8 +55,8 @@ oper
 
 -- Prepositions used in many-argument functions are either strings
 -- (including the 'accusative' empty string) or strings that
--- amalgamate with the following word (the 'genitive' "de" and the
--- 'dative' "à").
+-- amalgamate with the following word (the 'genitive' "di" and the
+-- 'dative' "a").
 
   Prep : Type ;
 
@@ -70,7 +70,7 @@ oper
 
 -- Worst case: give both two forms and the gender. 
 
-  mkN  : (uomi,uomini : Str) -> Gender -> N ;
+  mkN  : (uomo,uomini : Str) -> Gender -> N ;
 
 -- The regular function takes the singular form and the gender,
 -- and computes the plural and the gender by a heuristic. 
@@ -87,7 +87,7 @@ oper
 --3 Compound nouns 
 --
 -- Some nouns are ones where the first part is inflected as a noun but
--- the second part is not inflected. e.g. "numéro de téléphone". 
+-- the second part is not inflected. e.g. "numero di telefono". 
 -- They could be formed in syntax, but we give a shortcut here since
 -- they are frequent in lexica.
 
@@ -114,7 +114,7 @@ oper
 --3 Relational common noun phrases
 --
 -- In some cases, you may want to make a complex $CN$ into a
--- relational noun (e.g. "the old town hall of"). However, $N2$ and
+-- relational noun (e.g. "la vecchia chiesa di"). However, $N2$ and
 -- $N3$ are purely lexical categories. But you can use the $AdvCN$
 -- and $PrepNP$ constructions to build phrases like this.
 
@@ -124,7 +124,7 @@ oper
 -- Proper names need a string and a gender.
 
   mkPN  : Str -> Gender -> PN ;
-  regPN : Str -> PN ;             -- masculine
+  regPN : Str -> PN ;           -- feminine if "-a", otherwise masculine
 
 -- To form a noun phrase that can also be plural,
 -- you can use the worst-case function.
@@ -145,7 +145,7 @@ oper
 
 -- These functions create postfix adjectives. To switch
 -- them to prefix ones (i.e. ones placed before the noun in
--- modification, as in "petite maison"), the following function is
+-- modification, as in "vecchia chiesa"), the following function is
 -- provided.
 
   prefA : A -> A ;
@@ -169,7 +169,7 @@ oper
   compADeg : A -> A ;
 
 -- The regular pattern is the same as $regA$ for plain adjectives, 
--- with comparison by "plus".
+-- with comparison by "più".
 
   regADeg : Str -> A ;
 
@@ -192,15 +192,15 @@ oper
 
 --2 Verbs
 --
--- Regular verbs are ones with the infinitive "er" or "ir", the
--- latter with plural present indicative forms as "finissons".
+-- Regular verbs are ones with the infinitive "are" or "ire", the
+-- latter with singular present indicative forms as "finisco".
 -- The regular verb function is the first conjugation recognizes
 -- these endings, as well as the variations among
--- "aimer, céder, placer, peser, jeter, placer, manger, assiéger, payer".
+-- "amare, cominciare, mangiare, legare, cercare".
 
   regV : Str -> V ;
-
--- The module $BeschIta$ gives all the patterns of the "Bescherelle"
+ 
+-- The module $BeschIta$ gives (almost) all the patterns of the "Bescherelle"
 -- book. To use them in the category $V$, wrap them with the function
 
   verboV : Verbo -> V ;
@@ -213,7 +213,7 @@ oper
   reflV : V -> V ;
 
 -- If $BeschIta$ does not give the desired result or feels difficult
--- to consult, here is a worst-case function for "-ere" and "-ere" verbs,
+-- to consult, here is a worst-case function for "-ire" and "-ere" verbs,
 -- taking 11 arguments.
 
   mkV : 
@@ -306,7 +306,13 @@ oper
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
   mkPN x g = {s = x ; g = g} ** {lock_PN = <>} ;
-  regPN x = mkPN x masculine ;
+  regPN x = mkPN x g where {
+    g = case last x of {
+      "a" => feminine ;
+      _ => masculine
+      }
+    } ;
+
   mkNP x g n = {s = (pn2np (mkPN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
 
   mkA a b c d e = 

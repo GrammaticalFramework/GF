@@ -2,9 +2,9 @@
 
 --1 French Lexical Paradigms
 --
--- Aarne Ranta 2003
+-- Aarne Ranta 2001 - 2006
 --
--- This is an API to the user of the resource grammar 
+-- This is an API for the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
 -- expressions of open categories: nouns, adjectives, verbs.
 -- 
@@ -21,8 +21,8 @@
 -- regular cases. Then we give a worst-case function $mkC$, which serves as an
 -- escape to construct the most irregular words of type $C$.
 -- However, this function should only seldom be needed: we have a
--- separate module $IrregularEng$, which covers all irregularly inflected
--- words.
+-- separate module [``IrregFre`` ../../french/IrregFre.gf],
+-- which covers all irregularly inflected verbs.
 
 resource ParadigmsFre = 
   open 
@@ -116,7 +116,7 @@ oper
 --3 Relational common noun phrases
 --
 -- In some cases, you may want to make a complex $CN$ into a
--- relational noun (e.g. "the old town hall of"). However, $N2$ and
+-- relational noun (e.g. "la vieille église de"). However, $N2$ and
 -- $N3$ are purely lexical categories. But you can use the $AdvCN$
 -- and $PrepNP$ constructions to build phrases like this.
 
@@ -125,9 +125,9 @@ oper
 --
 -- Proper names need a string and a gender.
 
-  mkPN  : Str -> Gender -> PN ;    -- Jean
+  mkPN  : Str -> Gender -> PN ; -- Jean
 
-  regPN : Str -> PN ;              -- masculine
+  regPN : Str -> PN ;           -- feminine if "-e", masculine otherwise
 
 
 -- To form a noun phrase that can also be plural,
@@ -226,7 +226,7 @@ oper
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object.
--- (transitive verbs). Notice that a particle comes from the $V$.
+-- (transitive verbs). 
 
   mkV2  : V -> Prep -> V2 ;
 
@@ -315,7 +315,12 @@ oper
   aN2 n = mkN2 n dative ;
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
-  regPN x = mkPN x masculine ;
+  regPN x = mkPN x g where {
+    g = case last x of {
+      "e" => feminine ;
+      _ => masculine
+      }
+    } ;
   mkPN x g = {s = x ; g = g} ** {lock_PN = <>} ;
   mkNP x g n = {s = (pn2np (mkPN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
 
