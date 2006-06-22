@@ -367,6 +367,10 @@ lin
 
   breathe_V = regV "hengittää" ;
 
+  grammar_N = regN "kielioppi" ;
+  language_N = reg2N "kieli" "kieliä" ;
+  rule_N = regN "sääntö" ;
+
  oper
     mkOrd : N -> Ord ;
     mkOrd x = {s = \\n,c => x.s ! NCase n c; lock_Ord = <> } ;

@@ -128,6 +128,7 @@ fun
   gold_N : N ;
   good_A : A ;
   go_V : V ;
+  grammar_N : N ;
   grass_N : N ;
   green_A : A ;
   guts_N : N ;
@@ -164,6 +165,7 @@ fun
   know_V2 : V2 ;
   lake_N : N ;
   lamp_N : N ;
+  language_N : N ;
   laugh_V : V ;
   leaf_N : N ;
   learn_V2 : V2 ;
@@ -239,6 +241,7 @@ fun
   round_A : A ;
   rubber_N : N ;
   rub_V2 : V2 ;
+  rule_N : N ;
   run_V : V ;
   salt_N : N ;
   sand_N : N ;

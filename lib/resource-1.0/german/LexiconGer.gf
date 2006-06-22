@@ -348,4 +348,10 @@ lin
   tie_V2 = dirV2 (regV "binden") ;
   wash_V2 = dirV2 (regV "waschen") ;
   wipe_V2 = dirV2 (regV "wischen") ;
+
+  grammar_N = reg2N "Grammatik" "Grammatiken" feminine ;
+  language_N = regN "Sprache" ;
+  rule_N = reg2N "Regel" "Regel" feminine ;
+
+
 } ;

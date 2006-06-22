@@ -351,4 +351,9 @@ lin
   fight_V2 = 
     mkV2 (mkV "slåss" "slåss" "slåss" "slogs" "slagits" "slagen") (mkPrep "med") ;
 
+  grammar_N = mk1N "grammatikerna" ;
+  language_N = mk2N "språk" "språk" ;
+  rule_N = mkN "regel" "regeln" "regler" "reglerna" ;
+
+
 } ;

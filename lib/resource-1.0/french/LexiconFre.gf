@@ -352,4 +352,9 @@ lin
     split_V2 = fendre_V2 ;
     sit_V = reflV (v2V asseoir_V2) ;
 
+  grammar_N = regN "grammaire" ;
+  language_N = regN "langue" ;
+  rule_N = regN "règle" ;
+
+
 } ;

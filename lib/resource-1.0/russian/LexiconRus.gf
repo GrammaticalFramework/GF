@@ -399,5 +399,11 @@ paris_PN = mkPN   "Париж"  Masc  Inanimate ;
 
 
 
-} 
+
+
+   grammar_N = nNoga "грамматик";
+   language_N = nBank "язык" ;
+   rule_N = nChislo "правил" ;
+
+}
 

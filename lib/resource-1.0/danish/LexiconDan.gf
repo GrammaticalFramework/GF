@@ -350,6 +350,10 @@ lin
   wipe_V2 = dirV2 (regV "viske") ;
   breathe_V = regV "ånde" ;
 
+  grammar_N = regN "grammatik" ;
+  language_N = mk2N "sprog" "sproget" ;
+  rule_N = mkN "regel" "regeln" "regler" "reglerne" ;
+
 
 } ;
 
