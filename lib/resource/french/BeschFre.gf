@@ -1,4 +1,6 @@
-resource BeschFre = open Prelude, TypesFre, MorphoFre in {
+resource BeschFre = open Prelude, MorphoFre in {
+
+flags optimize=noexpand ; -- faster and smaller than =all
 
 oper VerbeN = {s : VF => Str} ;
 oper mkNV : Verbe -> VerbeN = \ve -> {s = vvf ve} ;
@@ -6,7 +8,7 @@ oper mkNV : Verbe -> VerbeN = \ve -> {s = vvf ve} ;
 oper conj : Str -> Verbe = conj1aimer ;  --- temp. default
 
 oper v_nancy100inf : Str -> VerbeN = \ve -> {s = table {
-  VInfin => ve ;
+  VInfin _ => ve ;
   _ => nonExist
   }
 } ;

@@ -1,31 +1,11 @@
---# -path=.:../../prelude
+--1 Lang: a Test Module for the Resource Grammar
+
+-- This grammar is for testing the resource as included in the
+-- language-independent API, consisting of a grammar and a lexicon.
+-- The grammar without a lexicon is [``Grammar`` Grammar.html],
+-- which may be more suitable to open in applications.
 
 abstract Lang = 
-  Rules, 
-  Clause, 
-  Structural, 
-  Basic, 
-  Time, 
-  Country,
-  Math
-
-  ** {
-
-  flags startcat=Phr ;
-
-  fun
-
--- Mount $Time$.
-
-  AdvDate : Date -> Adv ;
-  AdvTime : Time -> Adv ;
-  NWeekday : Weekday -> N ;
-  PNWeekday : Weekday -> PN ;
-
--- Mount $Country$.
-
-  PNCountry : Country -> PN ;
-  ANationality : Nationality -> A ;
-  NLanguage : Language -> N ;
-
-}
+  Grammar,
+  Lexicon
+  ** {} ;

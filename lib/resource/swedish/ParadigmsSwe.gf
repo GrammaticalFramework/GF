@@ -1,17 +1,17 @@
---# -path=.:../scandinavian:../abstract:../../prelude
+--# -path=.:../scandinavian:../common:../abstract:../../prelude
 
 --1 Swedish Lexical Paradigms
 --
--- Aarne Ranta 2003
+-- Aarne Ranta 2001 - 2006
 --
--- This is an API to the user of the resource grammar 
+-- This is an API for the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
 -- expressions of open categories: nouns, adjectives, verbs.
 -- 
 -- Closed categories (determiners, pronouns, conjunctions) are
 -- accessed through the resource syntax API, $Structural.gf$. 
 --
--- The main difference with $MorphoEng.gf$ is that the types
+-- The main difference with $MorphoSwe.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
 -- had the design principle of always having existing forms, rather
 -- than stems, as string arguments of the paradigms.
@@ -21,13 +21,18 @@
 -- regular cases. Then we give a worst-case function $mkC$, which serves as an
 -- escape to construct the most irregular words of type $C$.
 -- However, this function should only seldom be needed: we have a
--- separate module $IrregularEng$, which covers all irregularly inflected
--- words.
--- 
--- The following modules are presupposed:
+-- separate module [``IrregSwe`` ../../swedish/IrregSwe],
+-- which covers many irregular verbs.
+
 
 resource ParadigmsSwe = 
-  open (Predef=Predef), Prelude, TypesSwe, MorphoSwe, SyntaxSwe, CategoriesSwe in {
+  open 
+    (Predef=Predef), 
+    Prelude, 
+    CommonScand, 
+    ResSwe, 
+    MorphoSwe, 
+    CatSwe in {
 
 --2 Parameters 
 --
@@ -55,7 +60,8 @@ oper
 
 -- Prepositions used in many-argument functions are just strings.
 
-  Preposition : Type = Str ;
+  mkPrep : Str -> Prep ;
+  noPrep : Prep ;         -- empty string
 
 --2 Nouns
 
@@ -64,21 +70,27 @@ oper
 
   mkN  : (apa,apan,apor,aporna : Str) -> N ;
 
--- The regular function takes the singular indefinite form and the gender,
--- and computes the other forms by a heuristic. 
+-- The regular function takes the singular indefinite form and computes the other
+-- forms and the gender by a heuristic. The heuristic is currently 
+-- to treat all words ending with "a" like "flicka", with "e" like "rike",
+-- and otherwise like "bil".
 -- If in doubt, use the $cc$ command to test!
 
-  regN : Str -> Gender -> N ;
+  regN : Str -> N ;
+
+-- Adding the gender manually greatly improves the correction of $regN$.
+
+  regGenN : Str -> Gender -> N ;
 
 -- In practice the worst case is often just: give singular and plural indefinite.
 
   mk2N : (nyckel,nycklar : Str) -> N ;
 
--- All nouns created by the previous functions are marked as
--- $nonmasculine$. If you want a $masculine$ noun, wrap it with the following
--- function:
+-- This heuristic takes just the plural definite form and infers the others.
+-- It does not work if there are changes in the stem.
 
-  mascN : N -> N ;
+  mk1N : (bilarna : Str) -> N ;
+  
 
 --3 Compound nouns 
 --
@@ -88,9 +100,9 @@ oper
 
 --3 Relational nouns 
 -- 
--- Relational nouns ("daughter of x") need a preposition. 
+-- Relational nouns ("dotter till x") need a preposition. 
 
-  mkN2 : N -> Preposition -> N2 ;
+  mkN2 : N -> Prep -> N2 ;
 
 -- The most common preposition is "av", and the following is a
 -- shortcut for regular, $nonhuman$ relational nouns with "av".
@@ -100,15 +112,16 @@ oper
 -- Use the function $mkPreposition$ or see the section on prepositions below to  
 -- form other prepositions.
 --
--- Three-place relational nouns ("the connection from x to y") need two prepositions.
+-- Three-place relational nouns ("förbindelse från x till y") 
+-- need two prepositions.
 
-  mkN3 : N -> Preposition -> Preposition -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ;
 
 
 --3 Relational common noun phrases
 --
 -- In some cases, you may want to make a complex $CN$ into a
--- relational noun (e.g. "the old town hall of"). However, $N2$ and
+-- relational noun (e.g. "den före detta maken till"). However, $N2$ and
 -- $N3$ are purely lexical categories. But you can use the $AdvCN$
 -- and $PrepNP$ constructions to build phrases like this.
 
@@ -117,7 +130,8 @@ oper
 --
 -- Proper names, with a regular genitive, are formed as follows
 
-  regPN : Str -> Gender -> PN ;          -- John, John's
+  regGenPN : Str -> Gender -> PN ;
+  regPN    : Str -> PN ;            -- utrum
 
 -- Sometimes you can reuse a common noun as a proper name, e.g. "Bank".
 
@@ -130,69 +144,48 @@ oper
 
 --2 Adjectives
 
--- Non-comparison one-place adjectives need for forms: 
+-- Adjectives may need as many as seven forms. 
 
-  mkA : (galen,galet,galna : Str) -> A ;
-
--- For regular adjectives, the other forms are derived. 
-
-  regA : Str -> A ;
-
--- In practice, two forms are enough.
-
-  mk2A : (bred,brett : Str) -> A ;
- 
---3 Two-place adjectives
---
--- Two-place adjectives need a preposition for their second argument.
-
-  mkA2 : A -> Preposition -> A2 ;
-
--- Comparison adjectives may need as many as seven forms. 
-
-  mkADeg : (liten, litet, lilla, sma, mindre, minst, minsta : Str) -> ADeg ;
+  mkA : (liten, litet, lilla, sma, mindre, minst, minsta : Str) -> A ;
 
 -- The regular pattern works for many adjectives, e.g. those ending
 -- with "ig".
 
-  regADeg : Str -> ADeg ;
+  regA : Str -> A ;
 
 -- Just the comparison forms can be irregular.
 
-  irregADeg : (tung,tyngre,tyngst : Str) -> ADeg ;
+  irregA : (tung,tyngre,tyngst : Str) -> A ;
 
 -- Sometimes just the positive forms are irregular.
 
-  mk3ADeg : (galen,galet,galna : Str) -> ADeg ;
-  mk2ADeg : (bred,brett        : Str) -> ADeg ;
+  mk3A : (galen,galet,galna : Str) -> A ;
+  mk2A : (bred,brett        : Str) -> A ;
 
--- If comparison is formed by "more, "most", as in general for
--- long adjective, the following pattern is used:
+-- Comparison forms may be compound ("mera svensk" - "mest svensk").
 
-  compoundADeg : A -> ADeg ; -- -/more/most ridiculous
+  compoundA : A -> A ;
 
--- From a given $ADeg$, it is possible to get back to $A$.
 
-  adegA : ADeg -> A ;
+--3 Two-place adjectives
+--
+-- Two-place adjectives need a preposition for their second argument.
+
+  mkA2 : A -> Prep -> A2 ;
 
 
 --2 Adverbs
 
 -- Adverbs are not inflected. Most lexical ones have position
--- after the verb. Some can be preverbal (e.g. "always").
+-- after the verb. Some can be preverbal in subordinate position
+-- (e.g. "alltid").
 
-  mkAdv : Str -> Adv ;
-  mkAdV : Str -> AdV ;
+  mkAdv : Str -> Adv ;  -- här
+  mkAdV : Str -> AdV ;  -- alltid
 
 -- Adverbs modifying adjectives and sentences can also be formed.
 
   mkAdA : Str -> AdA ;
-
---2 Prepositions
---
--- A preposition is just a string.
-
-  mkPreposition : Str -> Preposition ;
 
 --2 Verbs
 --
@@ -200,44 +193,47 @@ oper
 
   mkV : (supa,super,sup,söp,supit,supen : Str) -> V ;
 
--- The 'regular verb' function is the first conjugation if the
--- infinitive ends with "a" ("tala" - "talar" - "talade" - "talat"),
+-- The 'regular verb' function is inspired by Lexin. It uses the
+-- present tense indicative form. The value is the first conjugation if the
+-- argument ends with "ar" ("tala" - "talar" - "talade" - "talat"),
+-- the second with "er" ("leka" - "leker" - "lekte" - "lekt", with the
+-- variations like "gräva", "vända", "tyda", "hyra"), and 
 -- the third in other cases ("bo" - "bor" - "bodde" - "bott").
 
-  regV : (tala : Str) -> V ;
+  regV : (talar : Str) -> V ;
 
 -- The almost regular verb function needs the infinitive and the preteritum.
--- It can deal with almost all cases in the first, second, and third
--- conjugation: "tala" - "talade", "leka" - "lekte", 
--- "gräva" - "grävde", "byta" - "bytte", "vända" - "vände",
--- "tyda" - "tydde", "bo" - "bodde".
+-- It is not really more powerful than the new implementation of
+-- $regV$ based on the indicative form.
 
   mk2V : (leka,lekte : Str) -> V ;
 
--- There is an extensive list of irregular verbs in the module $IrregularSwe$.
+-- There is an extensive list of irregular verbs in the module $IrregSwe$.
 -- In practice, it is enough to give three forms, as in school books.
 
-  irregV : (dricka, drack, druckit  : Str) -> V ;
+  irregV : (dricka, drack, druckit : Str) -> V ;
 
 
 --3 Verbs with a particle.
 --
--- The particle, such as in "switch on", is given as a string.
+-- The particle, such as in "passa på", is given as a string.
 
   partV  : V -> Str -> V ;
 
 --3 Deponent verbs.
 --
--- Some words are used in passive forms only, e.g. "hoppas".
+-- Some words are used in passive forms only, e.g. "hoppas", some as
+-- reflexive e.g. "ångra sig".
 
   depV  : V -> V ;
+  reflV : V -> V ;
 
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object.
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
-  mkV2  : V -> Preposition -> V2 ;
+  mkV2  : V -> Prep -> V2 ;
 
   dirV2 : V -> V2 ;
 
@@ -246,9 +242,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Str -> Str -> V3 ;    -- speak, with, about
-  dirV3    : V -> Str -> V3 ;           -- give,_,to
-  dirdirV3 : V -> V3 ;                  -- give,_,_
+  mkV3     : V -> Prep -> Prep -> V3 ; -- tala, med, om
+  dirV3    : V -> Prep -> V3 ;         -- ge, (acc),till
+  dirdirV3 : V -> V3 ;                 -- ge, (dat), (acc)
 
 --3 Other complement patterns
 --
@@ -257,100 +253,269 @@ oper
 
   mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
-  mkV2S : V -> Str -> V2S ;
+  mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
-  mkV2V : V -> Str -> Str -> V2V ;
+  mkV2V : V -> Prep -> Prep -> V2V ;
   mkVA  : V -> VA ;
-  mkV2A : V -> Str -> V2A ;
+  mkV2A : V -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
-  mkV2Q : V -> Str -> V2Q ;
+  mkV2Q : V -> Prep -> V2Q ;
 
   mkAS  : A -> AS ;
-  mkA2S : A -> Str -> A2S ;
+  mkA2S : A -> Prep -> A2S ;
   mkAV  : A -> AV ;
-  mkA2V : A -> Str -> A2V ;
+  mkA2V : A -> Prep -> A2V ;
 
+-- Notice: categories $V2S, V2V, V2A, V2Q$ are in v 1.0 treated
+-- just as synonyms of $V2$, and the second argument is given
+-- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
+-- $V0$ is just $V$.
 
+  V0, V2S, V2V, V2A, V2Q : Type ;
+  AS, A2S, AV, A2V : Type ;
+
+--.
 --2 Definitions of the paradigms
 --
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
---.
 
-  Gender = SyntaxSwe.NounGender ; 
-  Number = TypesSwe.Number ;
-  Case = TypesSwe.Case ;
-  utrum = NUtr NoMasc ; 
-  neutrum = NNeutr ;
+  Gender = ResSwe.Gender ; 
+  Number = CommonScand.Number ;
+  Case = CommonScand.Case ;
+  utrum = Utr ; 
+  neutrum = Neutr ;
   singular = Sg ;
   plural = Pl ;
   nominative = Nom ;
   genitive = Gen ;
 
-  mkN x y z u = extCommNoun (mkNoun x y z u) ** {lock_N = <>} ;
-  regN x g = extCommNoun (regNoun x (genNoun g)) ** {lock_N = <>} ;
-  mk2N x g = extCommNoun (reg2Noun x g) ** {lock_N = <>} ;
-  mascN n = {s = n.s ; g = NUtr Masc ; lock_N = <>} ;
+  mkPrep p = {s = p ; lock_Prep = <>} ;
+  noPrep = mkPrep [] ;
 
-  mkN2 = \n,p -> n ** {lock_N2 = <> ; s2 = p} ;
-  regN2 n g = mkN2 (regN n g) (mkPreposition "av") ;
-  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; s2 = p ; s3 = q} ;
+  mkN = \apa,apan,apor,aporna ->  {
+    s = nounForms apa apan apor aporna ;
+    g = case last apan of {
+      "n" => Utr ;
+      _ => Neutr
+      }
+    } ** {lock_N = <>} ;
 
-  regPN n g = {s = \\c => mkCase c n ; g = g} ** {lock_PN = <>} ;
+  regN bil = regGenN bil g where {
+    g = case <bil : Str> of {
+      _ + "e" => Neutr ;
+      _       => Utr
+      }
+    } ;
+
+  regGenN bil g = case g of {
+    Utr => case last bil of {
+      "a" => decl1Noun bil ;
+      _   => decl2Noun bil
+      } ;
+    Neutr => case last bil of {
+      "e" => decl4Noun bil ;
+      _   => decl5Noun bil
+      }
+    } ** {lock_N = <>} ;
+
+  mk1N bilarna = case bilarna of {
+    ap  + "orna" => decl1Noun (ap + "a") ;
+    bil + "arna" => decl2Noun bil ;
+    rad + "erna" => decl3Noun rad ;
+    rik +  "ena" => decl4Noun (rik + "e") ;
+    husen        => decl5Noun (Predef.tk 2 husen)
+    } ;
+
+  mk2N bil bilar = 
+   ifTok N bil bilar (decl5Noun bil) (
+     case Predef.dp 2 bilar of {
+       "or" => case bil of {
+          _ + "a"  => decl1Noun bil ; -- apa, apor
+          _ + "o"  => mkN bil (bil + "n")  bilar (bilar + "na") ; -- ko,kor
+          _        => mkN bil (bil + "en") bilar (bilar + "na")   -- ros,rosor
+          } ;
+       "ar" => decl2Noun bil ;
+       "er" => decl3gNoun bil bilar ;                   -- fot, fötter
+       "en" => decl4Noun bil ;                             -- rike, riken
+       _    => mkN bil (bil + "et") bilar (bilar + "n") -- centrum, centra 
+      }) ;
+
+-- School declensions.
+
+  decl1Noun : Str -> N = \apa -> 
+    let ap = init apa in
+    mkN apa (apa + "n") (ap + "or") (ap + "orna") ;
+
+  decl2Noun : Str -> N = \bil ->
+    let 
+      bb : Str * Str = case bil of {
+        br   + ("o" | "u" | "ö" | "å") => <bil + "ar",    bil  + "n"> ;
+        pojk + "e"                     => <pojk + "ar",    bil  + "n"> ;
+        hi + "mme" + l@("l" | "r")     => <hi + "m" + l + "ar",hi + "m" + l + "en"> ;
+        nyck + "e" + l@("l" | "r")     => <nyck + l + "ar",bil  + "n"> ;
+        sock + "e" + "n"               => <sock + "nar",   sock + "nen"> ;
+        _                              => <bil + "ar",     bil  + "en">
+        } ;
+    in mkN bil bb.p2 bb.p1 (bb.p1 + "na") ;
+
+  decl3Noun : Str -> N = \sak ->
+    case last sak of {
+      "e" => mkN sak (sak + "n") (sak +"r") (sak + "rna") ;
+      "y" | "å" | "é" | "y" => mkN sak (sak + "n") (sak +"er") (sak + "erna") ;
+      _ => mkN sak (sak + "en") (sak + "er") (sak + "erna")
+      } ;
+  decl3gNoun : Str -> Str -> N = \sak,saker ->
+    case last sak of {
+      "e" => mkN sak (sak + "n") saker (saker + "na") ;
+      "y" | "å" | "é" | "y" => mkN sak (sak + "n") saker (saker + "na") ;
+      _ => mkN sak (sak + "en") saker (saker + "na")
+      } ;
+
+  decl4Noun : Str -> N = \rike ->
+    mkN rike (rike + "t") (rike + "n") (rike + "na") ;
+
+  decl5Noun : Str -> N = \lik ->
+    case Predef.dp 3 lik of {
+      "are" => mkN lik (lik + "n") lik (init lik + "na") ; -- kikare 
+      _ => mkN lik (lik + "et") lik (lik + "en")
+      } ;
+
+
+  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
+  regN2 n g = mkN2 (regGenN n g) (mkPrep "av") ;
+  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
+
+  regPN n = regGenPN n utrum ;
+  regGenPN n g = {s = \\c => mkCase c n ; g = g} ** {lock_PN = <>} ;
   nounPN n = {s = n.s ! singular ! Indef ; g = n.g ; lock_PN = <>} ;
   mkNP x y n g = 
-    {s = table {PGen _ => x ; _ => y} ; g = genNoun g ; n = n ; p = P3 ;
+    {s = table {NPPoss _ => y ; _ => x} ; a = agrP3 g n ; p = P3 ;
      lock_NP = <>} ;
 
-  mkA a b c = extractPositive (adjAlmostReg a b c) ** {lock_A = <>} ;
-  mk2A a b = extractPositive (adj2Reg a b) ** {lock_A = <>} ;
-  regA a = extractPositive (adjReg a) ** {lock_A = <>} ;
+  mkA a b c d e f g = mkAdjective a b c d e f g ** {isComp = False ; lock_A = <>} ;
+  regA fin = 
+    let fint : Str = case fin of {
+      ru  + "nd" => ru  + "nt" ; 
+      se  + "dd" => se  + "tt" ; 
+      pla + "tt" => pla + "tt" ; 
+      gla + "d"  => gla + "tt" ;
+      _          => fin + "t" 
+    } 
+    in
+    mk3A fin fint (fin + "a") ;
+  irregA ung yngre yngst = 
+    mkA ung (ung + "t") (ung + "a") (ung + "a") yngre yngst (yngst+"a") ;
 
-  mkA2 a p = a ** {s2 = p ; lock_A2 = <>} ;
+  mk3A ljummen ljummet ljumma =
+    mkA
+      ljummen ljummet ljumma ljumma 
+      (ljumma + "re") (ljumma + "st") (ljumma + "ste") ;
+  mk2A vid vitt = mk3A vid vitt (vid + "a") ;
 
-  mkADeg a b c d e f g = mkAdjective a b c d e f g ** {lock_ADeg = <>} ;
-  regADeg a = adjReg a ** {lock_ADeg = <>} ;
-  irregADeg a b c = adjIrreg3 a b c ** {lock_ADeg = <>} ;
-  mk3ADeg a b c = adjAlmostReg a b c ** {lock_ADeg = <>} ;
-  mk2ADeg a b = adj2Reg a b ** {lock_ADeg = <>} ;
+  compoundA adj = {s = adj.s ; isComp = True ; lock_A = <>} ;
+
+  mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
 
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
-  mkPreposition p = p ;
+  mkV = \finna,finner,finn,fann,funnit,funnen ->
+    let 
+      funn = ptPretForms funnen ;
+      funnet = funn ! Strong SgNeutr ! Nom ;
+      funna  = funn ! Strong Plg ! Nom 
+    in
+    mkVerb finna finner finn fann funnit funnen funnet funna **
+    {part = [] ; vtype=VAct ; lock_V = <>} ;
 
-  mkV a b c d e f = mkVerb a b c d e f ** {s1 = [] ; lock_V = <>} ;
+  regV leker = case leker of {
+    lek + "a"  => conj1 leker ; --- bw compat
+    lek + "ar" => conj1 (lek + "a") ;
+    lek + "er" => conj2 (lek + "a") ;
+    bo  + "r"  => conj3 bo
+    } ;
 
-  regV a = mk2V a (a + de) where {de = case last a of {"a" => "de" ; _ => "dde"}} ;
-  mk2V a b = regVerb a b ** {s1 = [] ; lock_V = <>} ;
+  mk2V leka lekte = case <leka,lekte> of {
+    <_, _ + "ade"> => conj1 leka ;  
+    <_ + "a", _>   => conj2 leka ;
+    _ => conj3 leka
+    } ;
 
-  irregV x y z =  vSälja x y z
+-- school conjugations
+
+  conj1 : Str -> V = \tala ->
+    mkV tala (tala + "r") tala (tala +"de") (tala +"t") (tala +"d") ;
+
+  conj2 : Str -> V = \leka ->
+    let lek = init leka in
+    case last lek of {
+      "l" | "m" | "n" | "v" | "g" => 
+        let gom = case <lek : Tok> of {
+          _ + "mm" => init lek ;
+          _ => lek
+          }
+        in mkV leka (lek + "er") gom (gom +"de") (gom +"t") (gom +"d") ;
+      "r" =>
+        mkV leka lek lek (lek +"de") (lek +"t") (lek +"d") ;
+      _ => case leka of {
+        _ + "nd" => 
+          mkV leka (lek + "er") lek (lek +"e") (init lek +"t") lek ;
+        _ => 
+          mkV leka (lek + "er") lek (lek +"te") (lek +"t") (lek +"t")
+        } 
+      } ;
+
+  conj3 : Str -> V = \bo ->
+    mkV bo (bo + "r") bo (bo +"dde") (bo +"tt") (bo +"dd") ;
+
+  irregV = \sälja, sålde, sålt -> 
+    let
+      säljer = case last sälja of {
+        "a" => conj2 sälja ;
+        _   => conj3 sälja
+        } ;
+      såld = case Predef.dp 2 sålt of {
+        "it" => Predef.tk 2 sålt + "en" ;
+        "tt" => Predef.tk 2 sålt + "dd" ;
+        _ => init sålt + "d"
+        }
+    in 
+    mkV sälja (säljer.s ! VF (VPres Act)) (säljer.s ! (VF (VImper Act))) sålde sålt såld
      ** {s1 = [] ; lock_V = <>} ;
 
-  partV v p = {s = v.s ; s1 = p ; lock_V = <>} ;
-  depV v = deponentVerb v ** {lock_V = <>} ;
+  partV v p = {s = v.s ; part = p ; vtype = v.vtype ; lock_V = <>} ;
+  depV v = {s = v.s ; part = v.part ; vtype = VPass ; lock_V = <>} ;
+  reflV v = {s = v.s ; part = v.part ; vtype = VRefl ; lock_V = <>} ;
 
-  mkV2 v p = v ** {s = v.s ; s1 = v.s1 ; s2 = p ; lock_V2 = <>} ;
-  dirV2 v = mkV2 v [] ;
+  mkV2 v p = v ** {c2 = p.s ; lock_V2 = <>} ;
+  dirV2 v = mkV2 v noPrep ;
 
-  mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; s2 = p ; s3 = q ; lock_V3 = <>} ;
-  dirV3 v p = mkV3 v [] p ;
-  dirdirV3 v = dirV3 v [] ;
+  mkV3 v p q = v ** {c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
+  dirV3 v p = mkV3 v noPrep p ;
+  dirdirV3 v = dirV3 v noPrep ;
 
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {lock_VS = <>} ;
-  mkV2S v p = mkV2 v p ** {lock_V2S = <>} ;
-  mkVV  v = v ** {isAux = False ; lock_VV = <>} ;
-  mkV2V v p t = mkV2 v p ** {s3 = t ; lock_V2V = <>} ;
+  mkVV  v = v ** {c2 = "att" ; lock_VV = <>} ;
+  mkVQ  v = v ** {lock_VQ = <>} ;
+
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
-  mkVQ  v = v ** {lock_VQ = <>} ;
-  mkV2Q v p = mkV2 v p ** {lock_V2Q = <>} ;
 
-  mkAS  v = v ** {lock_AS = <>} ;
-  mkA2S v p = mkA2 v p ** {lock_A2S = <>} ;
-  mkAV  v = v ** {lock_AV = <>} ;
-  mkA2V v p = mkA2 v p ** {lock_A2V = <>} ;
+  V0 : Type = V ;
+  V2S, V2V, V2Q, V2A : Type = V2 ;
+  AS, A2S, AV : Type = A ;
+  A2V : Type = A2 ;
+
+  mkV2S v p = mkV2 v p ** {lock_V2 = <>} ;
+  mkV2V v p t = mkV2 v p ** {s3 = t ; lock_V2 = <>} ;
+  mkV2Q v p = mkV2 v p ** {lock_V2 = <>} ;
+
+  mkAS  v = v ** {lock_A = <>} ;
+  mkA2S v p = mkA2 v p ** {lock_A = <>} ;
+  mkAV  v = v ** {lock_A = <>} ;
+  mkA2V v p = mkA2 v p ** {lock_A = <>} ;
 
 } ;

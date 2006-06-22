@@ -1,4 +1,2 @@
---# -path=.:../scandinavian:../abstract:../../prelude
-
-concrete MathDan of Math = CategoriesDan **
-  MathScand with (SyntaxScand=SyntaxDan) ;
+concrete MathDan of Math = CatDan ** MathScand with
+  (ResScand = ResDan) ;

@@ -1,95 +1,142 @@
---# -path=.:../romance:../abstract:../../prelude
+concrete StructuralFre of Structural = CatFre ** 
+  open PhonoFre, MorphoFre, ParadigmsFre, IrregFre, Prelude in {
 
-concrete StructuralFre of Structural =
-  CategoriesFre, NumeralsFre ** 
-    open SyntaxFre, MorphoFre, Prelude in {
+  flags optimize=all ;
 
 lin
 
-  UseNumeral n = {s = \\g => n.s !g ; n = n.n ; isNo = False} ;
-
-  above_Prep = {s = ["au dessus"] ; c = genitive} ;
-  after_Prep = justPrep "après" ;
-  all8mass_Det = toutDet ;
-  all_NDet = mkDeterminerNum ["tous les"] ["toutes les"] ;
-  almost_Adv = ss "presque" ;
-  although_Subj = ss ("bien" ++ elisQue) ** {m = Con} ;
-  and_Conj = etConj ;
-  because_Subj = ss ("parce" ++ elisQue) ** {m = Ind} ;
-  before_Prep = justPrep "avant" ;
-  behind_Prep = justPrep "derrière" ;
-  between_Prep = justPrep "entre" ;
-  both_AndConjD = etetConj ;
-  by8agent_Prep = justPrep "par" ;
-  by8means_Prep = justPrep "par" ;
-  can8know_VV = mkVerbVerbDir (verbPres (conj3savoir "savoir") AHabere) ;
-  can_VV = mkVerbVerbDir (verbPres (conj3pouvoir "pouvoir") AHabere) ;
-  during_Prep = justPrep "pendant" ;
-  either8or_ConjD = ououConj ;
-  everybody_NP = mkNameNounPhrase ["tout le monde"] Masc ;
-  every_Det = chaqueDet ;
-  everything_NP = mkNameNounPhrase ["tout"] Masc ;
+  above_Prep = {s = ["au dessus"] ; c = MorphoFre.genitive ; isDir = False} ;
+  after_Prep = mkPreposition "après" ;
+  all_Predet = {
+    s = \\a,c => prepCase c ++ aagrForms "tout" "toute" "tous" "toutes" ! a ;
+    c = Nom
+    } ;
+  almost_AdA, almost_AdN = ss "presque" ;
+  always_AdV = ss "toujours" ;
+  although_Subj = ss ("bien" ++ elisQue) ** {m = Conjunct} ;
+  and_Conj = ss "et" ** {n = Pl} ;
+  because_Subj = ss ("parce" ++ elisQue) ** {m = Indic} ;
+  before_Prep = mkPreposition "avant" ;
+  behind_Prep = mkPreposition "derrière" ;
+  between_Prep = mkPreposition "entre" ;
+  both7and_DConj = {s1,s2 = "et" ; n = Pl} ;
+  but_PConj = ss "mais" ;
+  by8agent_Prep = mkPreposition "par" ;
+  by8means_Prep = mkPreposition "par" ;
+  can8know_VV = mkVV (savoir_V2 ** {lock_V = <>}) ;
+  can_VV = mkVV pouvoir_V ;
+  during_Prep = mkPreposition "pendant" ;
+  either7or_DConj = {s1,s2 = "ou" ; n = Pl} ;
+  everybody_NP = pn2np (mkPN ["tout le monde"] Masc) ;
+  every_Det = {s = \\_,_ => "chaque" ; n = Sg} ;
+  everything_NP = pn2np (mkPN ["tout"] Masc) ;
   everywhere_Adv = ss "partout" ;
-  from_Prep = justCase genitive ; ---
-  he_NP = pronNounPhrase pronIl ;
-  how_IAdv = commentAdv ;
-  how8many_IDet = {s = \\_ => "combien" ++ elisDe ; n = Pl} ;
-  if_Subj = siSubj ;
-  in8front_Prep = justPrep "devant" ;
-  i_NP = pronNounPhrase pronJe ;
-  in_Prep = justPrep "dans" ;
-  it_NP = pronNounPhrase pronIl ;
-  many_Det = mkDeterminer1 plural "plusieurs" ;
-  most8many_Det = plupartDet ;
-  most_Det = mkDeterminer1 singular (["la plupart"] ++ elisDe) ; --- de
-  much_Det = mkDeterminer1 singular ("beaucoup" ++ elisDe) ; --- de
-  must_VV = mkVerbVerbDir (verbPres (conj3devoir "devoir") AHabere) ;
-  no_Phr = nonPhr ; --- and also Si!
-  on_Prep = justPrep "sur" ;
-  or_Conj = ouConj ;
-  otherwise_Adv = ss "autrement" ;
-  part_Prep = justCase genitive ; ---
-  possess_Prep = justCase genitive ;
+  few_Det  = {s = \\g,c => prepCase c ++ "peu" ++ elisDe ; n = Pl} ;
+  first_Ord = {s = \\ag => (regA "premier").s ! Posit ! AF ag.g ag.n} ;
+  from_Prep = complGen ; ---
+  he_Pron = 
+    mkPronoun
+      "il" (elision "l") "lui" "lui" "son" (elisPoss "s") "ses"
+      Masc Sg P3 ;
+  here7from_Adv = ss "d'ici" ;
+  here7to_Adv = ss "ici" ;
+  here_Adv = ss "ici" ;
+  how_IAdv = ss "comment" ;
+  how8many_IDet = {s = \\_,c => prepCase c ++ "combien" ++ elisDe ; n = Pl} ;
+  if_Subj = ss elisSi ** {m = Indic} ;
+  in8front_Prep = mkPreposition "devant" ;
+  i_Pron = 
+    mkPronoun
+      (elision "j") (elision "m") (elision "m") "moi" "mon" (elisPoss "m") "mes"
+      Masc Sg P1 ;
+  in_Prep = mkPreposition "dans" ;
+  it_Pron = 
+    mkPronoun
+      "il" (elision "l") "lui" "lui" "son" (elisPoss "s") "ses"
+      Masc Sg P3 ;
+  less_CAdv = ss "moins" ;
+  many_Det = {s = \\_,c => prepCase c ++ "plusieurs" ; n = Pl} ;
+  more_CAdv = ss "plus" ;
+  most_Predet = {s = \\_,c => prepCase c ++ ["la plupart"] ; c = CPrep P_de} ;
+  much_Det = {s = \\_,c => prepCase c ++ "beaucoup" ++ elisDe ; n = Pl} ;
+  must_VV = mkVV (devoir_V2 ** {lock_V = <>}) ;
+  no_Phr = ss "non" ;
+  on_Prep = mkPreposition "sur" ;
+  one_Quant = {s = \\g,c => prepCase c ++ genForms "un" "une" ! g} ;
+  only_Predet = {s = \\_,c => prepCase c ++ "seulement" ; c = Nom} ; --- seul(e)(s)
+  or_Conj = {s = "ou" ; n = Sg} ;
+  otherwise_PConj = ss "autrement" ;
+  part_Prep = complGen ;
+  please_Voc = ss ["s'il vous plaît"] ;
+  possess_Prep = complGen ;
   quite_Adv = ss "assez" ;
-  she_NP = pronNounPhrase pronElle ;
-  so_Adv = ss "si" ;
-  somebody_NP = mkNameNounPhrase ["quelqu'un"] Masc ;
-  some_Det = mkDeterminer1 singular "quelque" ;
-  some_NDet = mkDeterminerNum "quelques" "quelques" ;
-  something_NP = mkNameNounPhrase ["quelque chose"] Masc ;
-  somewhere_Adv = ss ["quelque part"] ; --- ne - pas
-  that_Det = mkDeterminer singular (pre {"ce" ; "cet" / voyelle}) "cette" ; --- là
-  that_NP = mkNameNounPhrase ["ça"] Masc ;
-  therefore_Adv = ss "donc" ;
-  these_NDet = mkDeterminerNum "ces" "ces" ; --- ci
-  they_NP = pronNounPhrase pronIls ;
-  they8fem_NP = pronNounPhrase pronElles ;
-  this_Det = mkDeterminer singular (pre {"ce" ; "cet" / voyelle}) "cette" ; --- ci
-  this_NP = mkNameNounPhrase ["ceci"] Masc ;
-  those_NDet = mkDeterminerNum "ces" "ces" ; --- là
-  thou_NP = pronNounPhrase pronTu ;
-  through_Prep = justPrep "par" ;
-  too_Adv = ss "trop" ;
-  to_Prep = justCase dative ; ---
-  under_Prep = justPrep "sous" ;
-  very_Adv = ss "très" ;
-  want_VV = mkVerbVerbDir (verbPres (conj3vouloir "vouloir") AHabere) ;
-  we_NP = pronNounPhrase pronNous ;
-  what8one_IP = intPronWhat singular ;
-  what8many_IP = intPronWhat plural ;
-  when_IAdv = quandAdv ;
-  when_Subj = quandSubj ;
-  where_IAdv = ouAdv ;
-  which8many_IDet = mkDeterminerNum "quels" "quelles" ** {n = Pl} ;
-  which8one_IDet = quelDet ;
-  who8one_IP = intPronWho singular ;
-  who8many_IP = intPronWho plural ;
-  why_IAdv = pourquoiAdv ;
-  without_Prep = justPrep "sans" ;
-  with_Prep = justPrep "avec" ;
-  ye_NP = pronNounPhrase pronVous ;
-  yes_Phr = ouiPhr ;
-  you_NP = pronNounPhrase pronVous ;
+  she_Pron = 
+    mkPronoun
+      "elle" elisLa "lui" "elle" "son" (elisPoss "s") "ses"
+      Fem Sg P3 ;
 
+  so_AdA = ss "si" ;
+  somebody_NP = pn2np (mkPN ["quelqu'un"] Masc) ;
+  somePl_Det = {s = \\_,c => prepCase c ++ "quelques" ; n = Pl} ;
+  someSg_Det = {s = \\_,c => prepCase c ++ elision "quelqu" ; n = Sg} ;
+  something_NP = pn2np (mkPN ["quelque chose"] Masc) ;
+  somewhere_Adv = ss ["quelque part"] ; --- ne - pas
+  that_Quant = {s = \\_ => 
+    table {
+      Sg => \\g,c => prepCase c ++ genForms "ce" "cette" ! g ;  ---- cet ; là
+      Pl => \\_,_ => "ces"
+      }
+    } ;
+  that_NP = mkNP ["cela"] Masc Sg ;
+  there7from_Adv = ss ["de là"] ;
+  there7to_Adv = ss "là" ; --- y
+  there_Adv = ss "là" ;
+  therefore_PConj = ss "donc" ;
+  these_NP = mkNP ["ceux-ci"] Masc Pl ;
+  they_Pron = mkPronoun
+    "ils" "les" "leur" "eux" "leur" "leur" "leurs"
+    Masc Pl P3 ;
+  this_Quant = {s = \\_ => 
+    table {
+      Sg => \\g,c => prepCase c ++ genForms "ce" "cette" ! g ;  ---- cet ; ci
+      Pl => \\_,_ => "ces"
+      }
+    } ;
+  this_NP = pn2np (mkPN ["ceci"] Masc) ;
+  those_NP = mkNP ["ceux-là"] Masc Pl ;
+  through_Prep = mkPreposition "par" ;
+  too_AdA = ss "trop" ;
+  to_Prep = complDat ;
+  under_Prep = mkPreposition "sous" ;
+  very_AdA = ss "très" ;
+  want_VV = mkVV (vouloir_V2 ** {lock_V = <>}) ;
+  we_Pron = 
+    mkPronoun "nous" "nous" "nous" "nous" "notre" "notre" "nos"
+    Masc Pl P1 ;
+  whatSg_IP = 
+    {s = \\c => artDef a.g a.n c + quelPron ! a ; a = a}
+    where {a = aagr Masc Sg} ;
+  whatPl_IP = 
+    {s = \\c => artDef a.g a.n c + quelPron ! a ; a = a}
+    where {a = aagr Masc Pl} ;
+  when_IAdv = ss "quand" ;
+  when_Subj = ss "quand" ** {m = Indic} ;
+  where_IAdv = ss "où" ;
+  whichSg_IDet = {s = \\g,c => prepCase c ++ genForms "quel" "quelle" ! g ; n = Sg} ;
+  whichPl_IDet = {s = \\g,c => prepCase c ++ genForms "quels" "quelles" ! g; n = Pl} ;
+  whoPl_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Masc Pl} ;
+  whoSg_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Masc Sg} ;
+  why_IAdv = ss "pourquoi" ;
+  without_Prep = mkPreposition "sans" ;
+  with_Prep = mkPreposition "avec" ;
+  yes_Phr = ss "oui" ; --- si
+  youSg_Pron = mkPronoun 
+    "tu" (elision "t") (elision "t") "toi" "ton" (elisPoss "t") "tes"
+    Masc Sg P2 ;
+  youPl_Pron, youPol_Pron = 
+    mkPronoun
+      "vous" "vous" "vous" "vous" "votre" "votre" "vos"
+       Masc Pl P2 ;
 
 }
+

@@ -8,38 +8,30 @@
 --
 -- We use the parameter types and word classes defined for morphology.
 
-resource MorphoNor = open Predef, Prelude, TypesNor in {
-
--- Danish grammar source: http://users.cybercity.dk/~nmb3879/danish.html
+resource MorphoNor = CommonScand, ResNor ** open Prelude, Predef in {
 
 -- genders
 
 oper
   masc  = Utr Masc ;
-  fem   = Utr NoMasc ;
+  fem   = Utr Fem ;
   neutr = Neutr ;
+
+-- type synonyms
+
+  Subst : Type = {s : Number => Species => Case => Str} ;
+  Adj = Adjective ;
 
 -- nouns
 
-oper
-  mkSubstantive : (_,_,_,_ : Str) -> {s : SubstForm => Str} =
-  \dreng, drengen, drenger, drengene -> {s = table {
-     SF Sg Indef c => mkCase dreng ! c ;
-     SF Sg Def   c => mkCase drengen ! c ;
-     SF Pl Indef c => mkCase drenger ! c ;
-     SF Pl Def   c => mkCase drengene ! c
-     }
-   } ;
+  mkSubstantive : (_,_,_,_ : Str) -> Subst = 
+    \dreng, drengen, drenger, drengene -> 
+    {s = nounForms dreng drengen drenger drengene} ;
 
-  mkCase : Str -> Case => Str = \bil -> table {
-    Nom => bil ;
-    Gen => bil + "s"   --- but: hus --> hus
-    } ;
-
-  extNGen : Str -> NounGender = \s -> case last s of {
-    "n" => NUtr Masc ;
-    "a" => NUtr NoMasc ;
-    _   => NNeutr
+  extNGen : Str -> Gender = \s -> case last s of {
+    "n" => Utr Masc ;
+    "a" => Utr Fem ;
+    _   => Neutr
     } ; 
 
   nBil : Str -> Subst = \bil ->
@@ -58,67 +50,61 @@ oper
     mkSubstantive hotell (hotell + "et") (hotell + "er")  (hotell + "ene") **
       {h1 = neutr} ;
 
+
+
+
 -- adjectives
 
-  mkAdjective : (_,_,_,_,_ : Str) -> Adj = 
+  mkAdject : (_,_,_,_,_ : Str) -> Adj = 
     \stor,stort,store,storre,storst -> {s = table {
-       AF (Posit (Strong (ASg (Utr _)))) c => mkCase stor ! c ; 
-       AF (Posit (Strong (ASg Neutr))) c => mkCase stort ! c ;
-       AF (Posit _) c                    => mkCase store ! c ;
-       AF Compar c                       => mkCase storre ! c ;
-       AF (Super SupStrong) c            => mkCase storst ! c ;
-       AF (Super SupWeak) c              => mkCase (storst + "e") ! c
+       AF (APosit (Strong SgUtr )) c    => mkCase c stor ; 
+       AF (APosit (Strong SgNeutr)) c   => mkCase c stort ;
+       AF (APosit _) c                  => mkCase c store ;
+       AF ACompar c                     => mkCase c storre ;
+       AF (ASuperl SupStrong) c         => mkCase c storst ;
+       AF (ASuperl SupWeak) c           => mkCase c (storst + "e")
        }
     } ;
 
   aRod : Str -> Adj = \rod -> 
-    mkAdjective rod (rod + "t") (rod + "e") (rod + "ere") (rod + "est") ;
+    mkAdject rod (rod + "t") (rod + "e") (rod + "ere") (rod + "est") ;
 
   aAbstrakt : Str -> Adj = \abstrakt -> 
-    mkAdjective abstrakt abstrakt (abstrakt + "e") (abstrakt + "ere") (abstrakt + "est") ;
+    mkAdject abstrakt abstrakt (abstrakt + "e") (abstrakt + "ere") (abstrakt + "est") ;
 
   aRask : Str -> Adj = \rask -> 
-    mkAdjective rask rask (rask + "e") (rask + "ere") (rask + "est") ;
+    mkAdject rask rask (rask + "e") (rask + "ere") (rask + "est") ;
 
   aBillig : Str -> Adj = \billig -> 
-    mkAdjective billig billig (billig + "e") (billig + "ere") (billig + "st") ;
-
-extractPositive : Adj -> {s : AdjFormPos => Case => Str} = \adj ->
-  {s = \\a,c => adj.s ! (AF (Posit a) c)} ;
+    mkAdject billig billig (billig + "e") (billig + "ere") (billig + "st") ;
 
 -- verbs
 
-  mkVerb : (_,_,_,_,_,_ : Str) -> Verbum = 
+  Verbum : Type = {s : VForm => Str} ;
+
+  mkVerb6 : (_,_,_,_,_,_ : Str) -> Verbum = 
     \spise,spiser,spises,spiste,spist,spis -> {s = table {
-       VI (Inf v)       => mkVoice v spise ;
-       VF (Pres Act)    => spiser ;
-       VF (Pres Pass)   => spises ;
-       VF (Pret v)      => mkVoice v spiste ;
-       VI (Supin v)     => mkVoice v spist ;
-       VI (PtPret (Strong (ASg _)) c) => mkCase spist ! c ;
-       VI (PtPret _ c)  => case last spist of {
-         "a" => mkCase spist ! c ;
-         _   => mkCase (spist + "e") ! c
+       VI (VInfin v)       => mkVoice v spise ;
+       VF (VPres Act)    => spiser ;
+       VF (VPres Pass)   => spises ;
+       VF (VPret v)      => mkVoice v spiste ;   --# notpresent
+       VI (VSupin v)     => mkVoice v spist ;    --# notpresent
+       VI (VPtPret (Strong (SgUtr | SgNeutr)) c) => mkCase c spist ;
+       VI (VPtPret _ c)  => case last spist of {
+         "a" => mkCase c spist ;
+         _   => mkCase c (spist + "e")
          } ;
-       VF (Imper v)     => mkVoice v spis
+       VF (VImper v)     => mkVoice v spis
        }
      } ;
 
-  mkVoice : Voice -> Str -> Str = \v,s -> case v of {
-    Act => s ;
-    Pass => s + case last s of {
-      "s" => "es" ;
-      _   => "s"
-      }
-    } ;
-  
   vHusk : Str -> Verbum = \husk -> 
     let huska : Str = husk + "a"  ---- variants {husk + "a" ; husk + "et"} 
     in
-    mkVerb (husk + "e") (husk + "er") (husk + "es") huska huska husk ;
+    mkVerb6 (husk + "e") (husk + "er") (husk + "es") huska huska husk ;
 
   vSpis : Str -> Verbum = \spis -> 
-    mkVerb (spis + "e") (spis + "er") (spis + "es") (spis + "te") (spis + "t") spis ;
+    mkVerb6 (spis + "e") (spis + "er") (spis + "es") (spis + "te") (spis + "t") spis ;
 
   vLev : Str -> Verbum = \lev ->
     let lever = case last lev of {
@@ -126,10 +112,10 @@ extractPositive : Adj -> {s : AdjFormPos => Case => Str} = \adj ->
       _   => lev + "er"
       }
     in 
-    mkVerb (lev + "e") lever (lev + "es") (lev + "de") (lev + "d") lev ;
+    mkVerb6 (lev + "e") lever (lev + "es") (lev + "de") (lev + "d") lev ;
 
   vBo : Str -> Verbum = \bo -> 
-    mkVerb bo (bo + "r") (bo + "es") (bo + "dde") (bo + "dd") bo ;
+    mkVerb6 bo (bo + "r") (bo + "es") (bo + "dde") (bo + "dd") bo ;
 
   regVerb : Str -> Str -> Verbum = \spise, spiste -> 
     let
@@ -145,150 +131,41 @@ extractPositive : Adj -> {s : AdjFormPos => Case => Str} = \adj ->
       _  => vHusk spis 
       } ;
 
-  irregVerb : (drikke,drakk,drukket : Str) -> Verbum = 
-    \drikke,drakk,drukket ->
-    let
-      drikk = init drikke ;
-      drikker = case last (init drikke) of {
-        "r" => drikk ;
-        _   => drikke + "r"
-        }
-    in 
-    mkVerb drikke drikker  (drikke + "s") drakk drukket drikk ; 
 
--- pronouns
-
-oper jag_32 : ProPN =
- {s = table {
-    PNom => "jeg" ;
-    PAcc => "meg" ;
-    PGen (ASg (Utr Masc)) => "min" ;
-    PGen (ASg (Utr NoMasc)) => "mi" ;
-    PGen (ASg Neutr) => "mitt" ;
-    PGen APl => "mine"
-    } ;
-  h1 = Utr Masc ; -- Masc doesn't matter
-  h2 = Sg ;
-  h3 = P1
-  } ;
-
-oper du_33 : ProPN =
- {s = table {
-    PNom => "du" ;
-    PAcc => "deg" ;
-    PGen (ASg (Utr Masc)) => "din" ;
-    PGen (ASg (Utr NoMasc)) => "di" ;
-    PGen (ASg Neutr) => "ditt" ;
-    PGen APl => "dine"
-    } ;
-  h1 = Utr Masc ;
-  h2 = Sg ;
-  h3 = P2
-  } ;
-
-oper han_34 : ProPN =
- {s = table {
-    PNom => "han" ;
-    PAcc => "ham" ;
-    PGen (ASg (Utr _)) => "hans" ;
-    PGen (ASg Neutr) => "hans" ;
-    PGen APl => "hans"
-    } ;
-  h1 = masc ;
-  h2 = Sg ;
-  h3 = P3
-  } ;
-oper hon_35 : ProPN =
- {s = table {
-    PNom => "hun" ;
-    PAcc => "henne" ;
-    PGen (ASg (Utr _)) => "hennes" ;
-    PGen (ASg Neutr) => "hennes" ;
-    PGen APl => "hennes"
-    } ;
-  h1 = fem ;
-  h2 = Sg ;
-  h3 = P3
-  } ;
-
-oper vi_36 : ProPN =
- {s = table {
-    PNom => "vi" ;
-    PAcc => "oss" ;
-    PGen (ASg (Utr _)) => "vår" ;
-    PGen (ASg Neutr) => "vårt" ;
-    PGen APl => "våre"
-    } ;
-  h1 = Utr Masc ;
-  h2 = Pl ;
-  h3 = P1
-  } ;
-
-oper ni_37 : ProPN =
- {s = table {
-    PNom => "dere" ;
-    PAcc => "dere" ;
-    PGen _ => "deres"
-    } ;
-  h1 = Utr Masc ;
-  h2 = Pl ;
-  h3 = P2
-  } ;
-
-oper de_38 : ProPN =
- {s = table {
-    PNom => "de" ;
-    PAcc => "dem" ;
-    PGen _ => "deres"
-    } ;
-  h1 = Utr Masc ;
-  h2 = Pl ;
-  h3 = P3
-  } ;
-
-oper De_38 : ProPN =
- {s = table {
-    PNom => "Dere" ;
-    PAcc => "Dere" ;
-    PGen _ => "Deres"
-    } ;
-  h1 = Utr Masc ;
-  h2 = Sg ;
-  h3 = P2
-  } ;
-
-oper den_39 : ProPN =
- {s = table {
-    PNom => "de" ;
-    PAcc => "den" ;
-    PGen _ => "dens"
-    } ;
-  h1 = Utr Masc ;
-  h2 = Sg ;
-  h3 = P3
-  } ;
-
-oper det_40 : ProPN =
- {s = table {
-    PNom => "det" ;
-    PAcc => "det" ;
-    PGen _ => "dets"
-    } ;
-  h1 = Neutr ;
-  h2 = Sg ;
-  h3 = P3
-  } ;
-
-
--- from Numerals
+-- For $Numeral$.
 
 param DForm = ental  | ton  | tiotal  ;
 
-oper mkTal : Str -> Str -> Str -> {s : DForm => Str} = 
-  \två -> \tolv -> \tjugo -> 
-  {s = table {ental => två ; ton => tolv ; tiotal => tjugo}} ;
-oper regTal : Str -> {s : DForm => Str} = \fem -> mkTal fem (fem + "ten") (fem + "ti") ;
+oper 
+  LinDigit = {s : DForm => CardOrd => Str} ;
 
-  numPl : Str -> {s : Gender => Str ; n : Number} = \n -> 
-    {s = \\_ => n ; n = Pl} ;
+  cardOrd : Str -> Str -> CardOrd => Str = \tre,tredje ->
+    table {
+      NCard _ => tre ;
+      NOrd a  => tredje ---- a
+      } ;
+
+  cardReg : Str -> CardOrd => Str = \syv ->
+    cardOrd syv (syv + case last syv of {
+      "n" => "de" ;
+      "e" => "nde" ;
+      _   => "ende"
+      }) ;
+      
+
+  mkTal : (x1,_,_,_,x5 : Str) -> LinDigit = 
+    \två, tolv, tjugo, andra, tolfte -> 
+    {s = table {
+           ental  => cardOrd två andra ; 
+           ton    => cardOrd tolv tolfte ;
+           tiotal => cardReg tjugo
+           }
+     } ;
+
+  numPl : (CardOrd => Str) -> {s : CardOrd => Str ; n : Number} = \n ->
+    {s = n ; n = Pl} ;
+
+  invNum : CardOrd = NCard Neutr ;
+
+
 }

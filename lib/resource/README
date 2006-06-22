@@ -1,27 +1,101 @@
-23/1/2005 -- 21/12/2005
+LICENSE: This library is free software licensed under GNU General
+Public License (GPL), see LICENSE.
 
-GF Resource Grammar Library Version 0.9
+Author (c) Aarne Ranta 2005-2006.
 
-The contents of this directory are open source software 
-under GNU General Public License (See LICENCE).
+-- file GF/lib/resource-1.0/README
+-- created Thu Dec  1 22:21:21 CET 2005
+-- by A. Ranta, aarne@cs.chalmers.se
 
-Authors (c): Janna Khegai (Russian), Aarne Ranta.
+This is a working directory for the next version of GF resource
+grammar library, incomplete in many ways but aimed to become the
+first "mature" release. The old releases (resource-0.6 and resource)
+will be kept available, but 'resource' will be renamed 'resource-0.9',
+and 'resource' will probably be made into a symbolic link to the
+current version.
 
-For more information, see doc/gf-resource.html.
+To compile:
 
-To compile a gfcm package, type 'make'. Then open the resource
-with either of
+  make
 
-  gf langs.gfcm
+For translation from Eng to all others, try e.g.
 
-  gfeditor langs.gfcm
+  gf -nocf langs.gfcm
+  > p -cat=Phr -fcfg "I haven't seen her" | l -multi
 
-VERSION NOTICE: this resource grammar library is at the moment of
-writing the most complete one. It supersedes and includes
-v 0.6 (../resource-0.6) in all other respects except that
-it is not implemented for German.
+To link to the library, use the precompiled packages
 
-HOWEVER, this library is no longer developed, but the
-development has been moved to v 1.0 (../resource-1.0).
-V 1.0 will replace v 0.9 during Winter and Spring 2006.
+- ``lib/alltenses`` the complete ground-API library with all forms
+- ``lib/present`` a pruned ground-API library with present tense only
+- ``lib/mathematical`` special-purpose API for mathematical applications
+- ``lib/multimodal`` special-purpose API for multimodal dialogue applications
 
+The main changes from 0.9 to 1.0 are
+
+1. Refactoring of module structure: there are many more modules now.
+   However, the full API is still available as LangX.
+
+2. Increased coverage. We have used the second CLE book ("Spoken
+   Language Translation", by M. Rayner, D. Carter, P. Bouillon
+   V. Digalakis, and M. Wirén, Cambridge UP, 2000) as guideline and 
+   goal.
+
+3. Some constructions have been dropped out or modified. This concerns
+   in particular the determiner structure in the module Noun. Also the
+   number of verb subcategorization patterns is lower: predication can
+   be done by adding adverbs instead. Also the division between A and ADeg
+   is eliminated.
+
+4. The implementation is more direct; there is no "SyntaxX" variant of
+   each rule as in 0.9. The ease to find definitions and change them
+   weighs many times more than the abstraction attained by indirection,
+   in this case. Also compilation time and amount of generated code (gfr)
+   decreases quite a bit.
+
+5. The result is a lighter and more efficient resource library, just 
+   because of lessons learned from earlier implementations.
+   Compared to 0.9, compilation times and gfc sizes have dropped by
+   50% up to 70%.
+
+Version 0.9 is hereby "frozen" to its current state, which means that
+extensions and bug fixes are not carried over to it. However, if
+requested, we might provide a reimplementation of the old API using
+the new.
+
+When will it be ready? Today (25 February 2006) the implementation
+is complete for 8 languages (which excludes Danish and Russian).
+A number of bugs wait to be fixes, and a SourceForge release will
+be made some time in March.
+
+BUT WE ALREADY RECOMMEND USING 1.0 INSTEAD OF THE OLDER VERSIONS.
+Notice that GF v. 
+
+---------- later history and status:
+
+16/6 Close to complete, with 10 languages and a substantial part of
+     Arabic.
+
+25/2 Added directories for precompiled libraries directly under lib.
+     See doc/index.html for more information.
+
+21/2 Added modules Text and Idiom. Many bugs fixed, see TODO.
+
+ 7/2 Finnish added.
+
+ 3/2 Spanish added, except ordinal numerals. Much remains to do in Spa & Ita clitics.
+ 
+ 1/2 Italian added.
+
+26/1 Norwegian added.
+
+24/1 French complete, as well as the Romance parametrized modules.
+
+20/1 Main difficulties of French and Romance implemented. Also 
+ParadigmsFre and fragments of LangFre.
+
+17/1 All of English, Swedish, and German implemented. Some known bugs
+remain, also some ToDo API functions.
+
+13/1/2006 All of English, most of Scandinavian/Swedish, and TestGer
+have now been implemented. Most abstract/ modules have been documented
+using gfdoc. 

@@ -1,21 +1,19 @@
---# -path=.:../romance:../../prelude
+--# -path=.:../romance:../common:../../prelude
 
 --1 A Simple French Resource Morphology
 --
--- Aarne Ranta 2002--2003
+-- Aarne Ranta 2002 -- 2005
 --
 -- This resource morphology contains definitions needed in the resource
--- syntax. It moreover contains the most usual inflectional patterns.
--- The patterns for verbs contain the complete "Bescherelle" conjugation
--- tables.
---
--- We use the parameter types and word classes defined in $types.Fra.gf$.
+-- syntax. To build a lexicon, it is better to use $ParadigmsFre$, which
+-- gives a higher-level access to this module.
 
-resource MorphoFre = open Predef, Prelude, TypesFre in {
+resource MorphoFre = CommonRomance, ResFre ** 
+  open PhonoFre, Prelude, Predef in {
 
 flags optimize=all ;
 
---3 Front vowels
+--2 Front vowels
 --
 -- In verb conjugation, we will need the concept of frontal vowel.
 
@@ -38,6 +36,8 @@ oper
 
 -- Common nouns are inflected in number and have an inherent gender.
 
+  CNom = {s : Number => Str ; g : Gender} ;
+
   mkCNom : (Number => Str) -> Gender -> CNom = \mecmecs,gen -> 
     {s = mecmecs ; g = gen} ;
 
@@ -58,7 +58,7 @@ oper
     mkCNomIrreg cas cas ;
 
   mkNomReg : Str -> Gender -> CNom = \cas -> 
-    let cass = case dp 2 cas of {
+    let cass = case Predef.dp 2 cas of {
       "al" => init cas + "ux" ;
       "au" => cas + "x" ;
       "eu" => cas + "x" ;
@@ -72,23 +72,6 @@ oper
     }
     in mkCNomIrreg cas cass ;
       
-
--- The definite article has quite some variation: three parameters and
--- elision. This is the simples definition we have been able to find.
-
-  artDef : Gender -> Number -> Case -> Str = \g,n,c -> artDefTable ! g ! n ! c ;
-
-  artDefTable : Gender => Number => Case => Str = \\g,n,c => case <g,n,c> of {
-    <Masc,Sg, Nom> => elisLe ;
-    <Masc,Sg, Gen> => pre {"du" ; ["de l'"] / voyelle} ;
-    <Masc,Sg, Dat> => pre {"au" ; ["à l'"]  / voyelle} ;
-    <Masc,Sg, Acc> => elisLe ;
-    <Fem, Sg, _  > => prepCase c ++ elisLa ;
-    <_,   Pl, Gen> => "des" ;
-    <_,   Pl, Dat> => "aux" ;
-    <_,   Pl, _ >  => "les"
-    } ;
-
 
 --2 Adjectives
 --
@@ -178,150 +161,24 @@ oper
 -- The use of "en" as atonic genitive is debatable.
 
   mkPronoun : (_,_,_,_,_,_,_ : Str) -> 
-              PronGen -> Number -> Person -> ClitType -> Pronoun =
-    \il,le,lui,Lui,son,sa,ses,g,n,p,c ->
+              Gender -> Number -> Person -> Pronoun =
+    \il,le,lui,Lui,son,sa,ses,g,n,p ->
     {s = table {
        Ton x => prepCase x ++ Lui ;
        Aton Nom => il ;
        Aton Acc => le ; 
-       Aton Gen => "en" ; --- hmm
-       Aton Dat => lui ; 
-       Poss Sg Masc => son ;
-       Poss Sg Fem  => sa ;
-       Poss Pl _    => ses
+       Aton (CPrep P_de) => "en" ; --- hmm
+       Aton (CPrep P_a) => lui ; 
+       Poss {n = Sg ; g = Masc} => son ;
+       Poss {n = Sg ; g = Fem}  => sa ;
+       Poss {n = Pl}    => ses
        } ;
-     g = g ;
-     n = n ;
-     p = p ;
-     c = c
+     a = {g = g ; n = n ; p = p} ;
+     hasClit = True
     } ;
 
   elisPoss : Str -> Str = \s ->
    pre {s + "a" ; s + "on" / voyelle} ;
-
-  pronJe = mkPronoun
-    (elision "j")
-    (elision "m")
-    (elision "m")
-    "moi"
-    "mon" (elisPoss "m") "mes"
-    PNoGen     -- gender cannot be known from pronoun alone
-    Sg
-    P1
-    Clit1 ;
-
-  pronTu = mkPronoun
-    "tu"
-    (elision "t")
-    (elision "t")
-    "toi"
-    "ton" (elisPoss "t") "tes"
-    PNoGen
-    Sg
-    P2
-    Clit1 ;
-
-  pronIl = mkPronoun
-    "il"
-    (elision "l")
-    "lui"
-    "lui"
-    "son" (elisPoss "s") "ses"
-    (PGen Masc)
-    Sg
-    P3
-    Clit2 ;
-
----- A hack to get the dative form "y".
-  pronY = mkPronoun
-    "il"
-    (elision "l")
-    "y"
-    "lui"
-    "en" "en" "en"
-    (PGen Masc)
-    Sg
-    P3
-    Clit2 ;
-
-  pronElle = mkPronoun
-    "elle"
-    elisLa
-    "lui"
-    "elle"
-    "son" (elisPoss "s") "ses"
-    (PGen Fem)
-    Sg
-    P3
-    Clit2 ;
-
-  pronNous = mkPronoun
-    "nous"
-    "nous"
-    "nous"
-    "nous"
-    "notre" "notre" "nos"
-    PNoGen
-    Pl
-    P1
-    Clit3 ;
-
-  pronVous = mkPronoun
-    "vous"
-    "vous"
-    "vous"
-    "vous"
-    "votre" "votre" "vos"
-    PNoGen
-    Pl   --- depends!
-    P2
-    Clit3 ;
-
-  pronIls = mkPronoun
-    "ils"
-    "les"
-    "leur"
-    "eux"
-    "leur" "leur" "leurs"
-    (PGen Masc)
-    Pl
-    P3
-    Clit1 ;
-
-  pronElles = mkPronoun
-    "elles"
-    "les"
-    "leur"
-    "elles"
-    "leur" "leur" "leurs"
-    (PGen Fem)
-    Pl
-    P3
-    Clit1 ;
-
-  personPron : Gender -> Number -> Person -> Pronoun = \g,n,p -> 
-    case <n,p> of {
-      <Sg,P1> => pronJe ;
-      <Sg,P2> => pronTu ;
-      <Sg,P3> => case g of {
-        Masc => pronIl ;
-        Fem  => pronElle 
-        } ;
-      <Pl,P1> => pronNous ;
-      <Pl,P2> => pronVous ;
-      <Pl,P3> => case g of {
-        Masc => pronIls ;
-        Fem  => pronElles 
-        } 
-      } ;
-
--- Reflexive pronouns are defined in $SyntaxFre$.
-
--- The composable pronoun "lequel" is inflected by varying the definite
--- article and the determiner "quel" in the expected way.
-
-  lequelPron : Gender -> Number -> Case -> Str = \g,n,c -> 
-    artDef g n c + quelPron g n ;
 
 
 --2 Determiners
@@ -333,15 +190,6 @@ oper
   pronForms : Str -> Str -> Gender -> Number -> Str = \tel,telle,g,n -> case g of {
     Masc => nomReg tel ! n ;
     Fem  => nomReg telle ! n
-    } ;
-
-  quelPron : Gender -> Number -> Str = pronForms "quel" "quelle" ;
-
-  telPron : Gender -> Number -> Str = pronForms "tel" "telle" ;
-
-  toutPron : Gender -> Number -> Str = \g,n -> case g of {
-    Masc => numForms "tout" "tous" ! n ;
-    Fem  => nomReg "toutee" ! n
     } ;
 
 -- The following macro generates the phrases "est-ce que", "est-ce qu'",
@@ -356,20 +204,42 @@ oper
 
 
 --2 Verbs
---
---3 The present tense
---
--- We first define some macros for the special case of present tense.
---
--- The verb "être" is often used in syntax.
 
-  verbEtre  = verbPres (conjÊtre "être") AHabere ;
-  verbAvoir  = verbPres (conjAvoir "avoir") AHabere ;
+--3 Parameters
+
+-- The full conjunction is a table on $VForm$, as in "Bescherelle".
+
+param
+  Temps    = Presn | Imparf | Passe | Futur ;
+  TSubj    = SPres | SImparf ;
+  TPart    = PPres | PPasse Gender Number ;
+  VForm    = Inf
+           | Indi Temps Number Person 
+           | Condi Number Person 
+           | Subjo TSubj Number Person
+           | Imper NumPersI
+           | Part TPart ;
+
+-- This is a conversion to the type in $CommonRomance$.
+
+oper
+  vvf : (VForm => Str) -> (VF => Str) = \aller -> table { 
+    VInfin _       => aller ! Inf ;
+    VFin (VPres   Indic) n p => aller ! Indi Presn n p ; 
+    VFin (VPres   Subjunct) n p => aller ! Subjo SPres n p ;
+    VFin (VImperf Indic) n p => aller ! Indi Imparf n p ;     --# notpresent
+    VFin (VImperf Subjunct) n p => aller ! Subjo SImparf n p ;  --# notpresent
+    VFin VPasse n p  => aller ! Indi Passe n p ;  --# notpresent
+    VFin VFut n p    => aller ! Indi Futur n p ;  --# notpresent
+    VFin VCondit n p => aller ! Condi n p ;  --# notpresent
+    VImper np    => aller ! Imper np ;
+    VPart g n    => aller ! Part (PPasse g n) ;
+    VGer         => aller ! Part PPres -- *en* allant
+    } ;
 
 -- We very often form the verb stem by dropping out the infinitive ending.
 
   troncVerb : Tok -> Tok = Predef.tk 2 ;
-
 
 
 --3 Affixes
@@ -493,13 +363,13 @@ oper
     \affpres, affpasse ->
     table {
       Inf                   => tenir  ;
-      Indic  Pres    Sg p     => tien   + affpres ! p ;
-      Indic  Pres    Pl P3    => tienn  + affixPlOns ! P3 ;
-      Indic  Pres    Pl p     => ten    + affixPlOns ! p ;
-      Indic  Imparf  n  p     => ten    + affixImparf ! n ! p ;
-      Indic  Passe   n  p     => t      + affpasse.ps ! n ! p ;
-      Indic  Futur   n  p     => tiendr + affixFutur ! n ! p ;
-      Cond         n  p     => tiendr + affixImparf ! n ! p ;
+      Indi  Presn    Sg p     => tien   + affpres ! p ;
+      Indi  Presn    Pl P3    => tienn  + affixPlOns ! P3 ;
+      Indi  Presn    Pl p     => ten    + affixPlOns ! p ;
+      Indi  Imparf  n  p     => ten    + affixImparf ! n ! p ;
+      Indi  Passe   n  p     => t      + affpasse.ps ! n ! p ;
+      Indi  Futur   n  p     => tiendr + affixFutur ! n ! p ;
+      Condi         n  p     => tiendr + affixImparf ! n ! p ;
       Subjo SPres   Sg p    => soi    + affixSPres ! Sg ! p ;
       Subjo SPres   Pl P3   => soi    + "ent" ;
       Subjo SPres   Pl p    => soy    + affixSPres ! Pl ! p ;
@@ -591,9 +461,9 @@ oper
 
   mkVerbReg : Str -> Verbe = \parler ->
     let
-      e = last (tk 4 parler) ;
-      c = last (tk 3 parler) ;
-      verb_é = pbool2bool (occur "é" (e + last (tk 5 parler))) ;
+      e = last (Predef.tk 4 parler) ;
+      c = last (Predef.tk 3 parler) ;
+      verb_é = pbool2bool (occur "é" (e + last (Predef.tk 5 parler))) ;
       verb_e = andB (pbool2bool (occur e "e")) (pbool2bool (occur c "cmnprsv"))
     in
     case Predef.dp 4 parler of {
@@ -608,7 +478,7 @@ oper
             "cer" => conj1placer parler ;
             "ger" => conj1manger parler ;
             "yer" => conj1payer parler ;
-            _ => case dp 2 parler of {
+            _ => case Predef.dp 2 parler of {
               "ir" => conj2finir parler ;
               _ => conj1aimer parler
               }
@@ -686,7 +556,7 @@ oper
       vet = auxConj3ir "vêt" "vêt" "u"
     } in
     table {
-      Indic Pres Sg P3 => s + "vêt" ;
+      Indi Presn Sg P3 => s + "vêt" ;
       p              => s + vet ! p
       };
   
@@ -716,11 +586,11 @@ oper
       tfa   = conj3assaillir faillir
       } in
     table {
-      Indic Pres Sg p   => fa + "u" + affixSgX ! p ;
+      Indi Presn Sg p   => fa + "u" + affixSgX ! p ;
       Subjo SPres n p => fa + variants {"illiss" ; "ill"} + affixSPres ! n ! p ;
 
-      Indic Futur n p => variants {tfa ! Indic Futur n p ; faudr + affixFutur ! n ! p} ;
-      Cond      n p => variants {tfa ! Cond n p     ; faudr + affixImparf ! n ! p} ;
+      Indi Futur n p => variants {tfa ! Indi Futur n p ; faudr + affixFutur ! n ! p} ;
+      Condi      n p => variants {tfa ! Condi n p     ; faudr + affixImparf ! n ! p} ;
 
       Imper _         => nonExist ;
       p               => tfa ! p
@@ -732,7 +602,7 @@ oper
       tbou = conj3assaillir bouillir
     } in
     table {
-      Indic Pres Sg p  => bou + affixSgS ! p ;
+      Indi Presn Sg p  => bou + affixSgS ! p ;
       Imper SgP2     => bou + "s" ;
       p              => tbou ! p
     };
@@ -778,9 +648,9 @@ oper
     let {g = Predef.tk 4 gésir} in
     table {
       Inf              => g + "ésir" ;
-      Indic  Pres   Sg p => g + lesAffixes "is" "is" "ît" ! p ; 
-      Indic  Pres   Pl p => g + "is" + affixPlOns ! p ;
-      Indic  Imparf n  p => g + "is" + affixImparf ! n ! p ;
+      Indi  Presn   Sg p => g + lesAffixes "is" "is" "ît" ! p ; 
+      Indi  Presn   Pl p => g + "is" + affixPlOns ! p ;
+      Indi  Imparf n  p => g + "is" + affixImparf ! n ! p ;
       Part PPres       => g + "isant" ;
       _                => nonExist
       } ;
@@ -850,7 +720,7 @@ oper
       tpouvoir = auxConj3usX "eu" "ouv" "euv" "" "ourr" "uiss" "uiss" "ouv"
       } in
     table {
-      Indic Pres Sg P1 => p + variants {"eux" ; "uis"} ;
+      Indi Presn Sg P1 => p + variants {"eux" ; "uis"} ;
       t => p + tpouvoir ! t
       } ;
 
@@ -868,11 +738,11 @@ oper
   auxConj3seul3sg : (_,_,_,_,_ : Str) -> Verbe = 
     \faut, fall, pl, faudr, faill -> table {
       Inf                 => fall + "oir" ;
-      Indic  Pres     Sg P3 => faut ;
-      Indic  Imparf   Sg P3 => fall + "ait" ;
-      Indic  Passe    Sg P3 => pl + "ut" ;
-      Indic  Futur    Sg P3 => faudr + "a" ;
-      Cond          Sg P3 => faudr + "ait" ;
+      Indi  Presn     Sg P3 => faut ;
+      Indi  Imparf   Sg P3 => fall + "ait" ;
+      Indi  Passe    Sg P3 => pl + "ut" ;
+      Indi  Futur    Sg P3 => faudr + "a" ;
+      Condi          Sg P3 => faudr + "ait" ;
       Subjo SPres   Sg P3 => faill + "e" ;
       Subjo SImparf Sg P3 => pl + "ût" ;
       Part PPres          => fall + "ant" ;
@@ -922,7 +792,7 @@ oper
     } in 
     table {
       Inf => ass + "eoir" ;
-      Indic Pres Sg P3 => ass + "ied" ;
+      Indi Presn Sg P3 => ass + "ied" ;
       t => ass + tasseoir ! t
       } ;
 
@@ -942,12 +812,12 @@ oper
       tseoir = conj3asseoir seoir
     } in
     table {
-      Indic Pres   Pl P3 => s + "iéent" ;
-      Indic _      _  P1 => nonExist ;
-      Indic _      _  P2 => nonExist ;
-      Indic Passe  _  _  => nonExist ;
-      Cond       _  P1 => nonExist ;
-      Cond       _  P2 => nonExist ;
+      Indi Presn   Pl P3 => s + "iéent" ;
+      Indi _      _  P1 => nonExist ;
+      Indi _      _  P2 => nonExist ;
+      Indi Passe  _  _  => nonExist ;
+      Condi       _  P1 => nonExist ;
+      Condi       _  P2 => nonExist ;
       Subjo SPres Sg P3 => s + "iée" ;
       Subjo SPres Pl P3 => s + "iéent" ;
       Subjo _     _  _  => nonExist ;
@@ -990,13 +860,13 @@ oper
   conj3échoir : Str -> Verbe = \échoir -> 
     let {techoir = conj3choir échoir} in
     table {
-      Indic _      _  P1 => nonExist ;
-      Indic _      _  P2 => nonExist ;
-      Indic Pres Pl P3   => Predef.tk 3 échoir + variants {"oient" ; "éent"} ;
+      Indi _      _  P1 => nonExist ;
+      Indi _      _  P2 => nonExist ;
+      Indi Presn Pl P3   => Predef.tk 3 échoir + variants {"oient" ; "éent"} ;
       Subjo _    _  P1 => nonExist ;
       Subjo _    _  P2 => nonExist ;
-      Cond       _  P1 => nonExist ;
-      Cond       _  P2 => nonExist ;
+      Condi       _  P1 => nonExist ;
+      Condi       _  P2 => nonExist ;
       Imper _          => nonExist ;
       Part PPres       => Predef.tk 3 échoir + "éant" ;      
       t => techoir ! t 
@@ -1080,8 +950,8 @@ oper
       } in 
     table {
       Inf              => faire ;
-      Indic  Pres  Pl P2 => fai + "tes" ;
-      Indic  Pres  Pl P3 => f + "ont" ;
+      Indi  Presn  Pl P2 => fai + "tes" ;
+      Indi  Presn  Pl P3 => f + "ont" ;
       Subjo SPres Pl p => f + "ass" + affixSPres ! Pl ! p ;
       Imper      PlP2  => fai + "tes" ;
       t => tfaire ! t
@@ -1093,7 +963,7 @@ oper
 
   auxConj3ît : Verbe -> Str -> Verbe = \conj,plaît ->
     table {
-      Indic Pres Sg P3 => plaît ;
+      Indi Presn Sg P3 => plaît ;
       t => conj ! t
       } ;
 
@@ -1133,7 +1003,7 @@ oper
   conj3paître : Str -> Verbe = \paître ->
     let {tpaitre = conj3connaître paître} in
     table {
-      Indic Passe _ _     => nonExist ;
+      Indi Passe _ _     => nonExist ;
       Subjo SImparf _ _ => nonExist ;
       Part (PPasse _ _) => Predef.tk 5 paître + "u" ;
       p => tpaitre ! p
@@ -1169,10 +1039,10 @@ oper
                  nonExist (clo + "r") clos clos
     } in
     table {
-      Indic Pres Sg P3 => Predef.tk 1 clo + "ôt" ;
-      Indic Pres Pl P1 => nonExist ;
-      Indic Pres Pl P2 => nonExist ;
-      Indic Imparf _ _ => nonExist ;
+      Indi Presn Sg P3 => Predef.tk 1 clo + "ôt" ;
+      Indi Presn Pl P1 => nonExist ;
+      Indi Presn Pl P2 => nonExist ;
+      Indi Imparf _ _ => nonExist ;
       Imper PlP1 => nonExist ;
       Imper PlP2 => nonExist ;
       t => tclore ! t
@@ -1193,7 +1063,7 @@ oper
       tabsoudre = conj3résoudre absoudre
     } in
     table {
-      Indic Passe _ _ => nonExist ;
+      Indi Passe _ _ => nonExist ;
       Subjo SImparf _ _ => nonExist ;
       Part (PPasse Masc _) => abso + "us" ;
       Part (PPasse Fem n) => nomReg (abso + "ute") ! n ;
@@ -1260,7 +1130,7 @@ oper
                 affixSgS affixPasseI di dis dis d (di + "r") dit (dit+"s")
     } in 
     table {
-      Indic  Pres  Pl P2  => di + "tes" ;
+      Indi  Presn  Pl P2  => di + "tes" ;
       Imper      PlP2   => di + "tes" ;
       t => tdire ! t
       } ;
@@ -1302,9 +1172,9 @@ oper
                             affixSgS affixPasseA
     } in
     table {
-      Indic  Pres    Sg P1 => s + "vais" ;
-      Indic  Pres    n  p  => s + pres ! n ! p ;
-      Indic  Imparf  n  p  => s + "all" + affixImparf ! n ! p ;
+      Indi  Presn    Sg P1 => s + "vais" ;
+      Indi  Presn    n  p  => s + pres ! n ! p ;
+      Indi  Imparf  n  p  => s + "all" + affixImparf ! n ! p ;
       Imper        SgP2  => s + "va" ;
       t                  => s + taller ! t
       } ;
@@ -1318,9 +1188,9 @@ oper
                 "soi" "soy" "soi" "f" "ser" "été" "être" affixSgS affixPasseU
     } in
     table {
-      Indic  Pres    Sg p  => s + sg ! p ;
-      Indic  Pres    Pl p  => s + pl ! p ;
-      Indic  Imparf  n  p  => s + "ét"   + affixImparf ! n ! p ;
+      Indi  Presn    Sg p  => s + sg ! p ;
+      Indi  Presn    Pl p  => s + pl ! p ;
+      Indi  Imparf  n  p  => s + "ét"   + affixImparf ! n ! p ;
       Subjo SPres  Sg p  => s + "soi"  + affixSgS ! p ;
       Subjo SPres  Pl P3 => s + "soient" ;
       Subjo SPres  Pl p  => s + "soy"  + affixPlOns ! p ;
@@ -1336,8 +1206,8 @@ oper
                  "ai" "ay" "ai" "e" "aur" "eu" "avoir" affixSgS affixPasseU
     } in
     table {
-      Indic  Pres    n  p  => s + pres ! n ! p ;
-      Indic  Imparf  n  p  => s + "av" + affixImparf ! n ! p ;
+      Indi  Presn    n  p  => s + pres ! n ! p ;
+      Indi  Imparf  n  p  => s + "av" + affixImparf ! n ! p ;
       Subjo SPres  Sg P3 => s + "ait" ;
       Subjo SPres  Pl P3 => s + "aient" ;
       Subjo SPres  Pl p  => s + "ay"  + affixPlOns ! p ;
@@ -1345,15 +1215,9 @@ oper
       t                  => s + tavoir ! t
       } ;
 
--- for NumeralsFre
+--- for Numerals
 
 param DForm = unit  | teen  | jten  | ten  | tenplus  ;
 param Place = indep  | attr  ;
-
-oper
-  digitPl : 
-  {inh : DForm ; inh1 : Number ; s : DForm => Str} ->
-  {inh : DForm ; inh1 : Number ; s : Gender => DForm => Str ; n : Number} = \d -> 
-  {inh = d.inh ; inh1 = d.inh1 ; s = \\_ => d.s ; n = Pl} ;
 
 }

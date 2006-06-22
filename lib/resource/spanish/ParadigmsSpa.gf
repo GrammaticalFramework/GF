@@ -1,41 +1,53 @@
---# -path=.:../romance:../abstract:../../prelude
+--# -path=.:../romance:../common:../abstract:../../prelude
 
 --1 Spanish Lexical Paradigms
 --
--- Aarne Ranta 2005
+-- Aarne Ranta 2004 - 2006
 --
--- This is an API to the user of the resource grammar 
--- for adding lexical items. It give shortcuts for forming
--- expressions of basic categories: nouns, adjectives, verbs.
+-- This is an API for the user of the resource grammar 
+-- for adding lexical items. It gives functions for forming
+-- expressions of open categories: nouns, adjectives, verbs.
 -- 
 -- Closed categories (determiners, pronouns, conjunctions) are
--- accessed through the resource syntax API, $resource.Abs.gf$. 
+-- accessed through the resource syntax API, $Structural.gf$. 
 --
--- The main difference with $MorphoIta.gf$ is that the types
+-- The main difference with $MorphoSpa.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
--- had the design principle of always having existing forms, not stems, as string
--- arguments of the paradigms.
+-- had the design principle of always having existing forms, rather
+-- than stems, as string arguments of the paradigms.
 --
--- The following modules are presupposed:
+-- The structure of functions for each word class $C$ is the following:
+-- first we give a handful of patterns that aim to cover all
+-- regular cases. Then we give a worst-case function $mkC$, which serves as an
+-- escape to construct the most irregular words of type $C$. For
+-- verbs, there is a fairly complete list of irregular verbs in
+-- [``IrregSpa`` ../../spanish/IrregSpa.gf].
 
 resource ParadigmsSpa = 
-  open Prelude, (Types = TypesSpa), SyntaxSpa, MorphoSpa, BeschSpa,
-  RulesSpa in {
+  open 
+    (Predef=Predef), 
+    Prelude, 
+    CommonRomance, 
+    ResSpa, 
+    MorphoSpa, 
+    BeschSpa,
+    CatSpa in {
+
+  flags optimize=all ;
 
 --2 Parameters 
 --
 -- To abstract over gender names, we define the following identifiers.
 
 oper
-  Bool      : Type ;
-  Gender    : Type ;
+  Gender : Type ; 
 
   masculine : Gender ;
   feminine  : Gender ;
 
 -- To abstract over number names, we define the following.
 
-  Number    : Type ;
+  Number : Type ; 
 
   singular : Number ;
   plural   : Number ;
@@ -43,22 +55,23 @@ oper
 -- Prepositions used in many-argument functions are either strings
 -- (including the 'accusative' empty string) or strings that
 -- amalgamate with the following word (the 'genitive' "de" and the
--- 'dative' "à").
+-- 'dative' "a").
 
-  Preposition    : Type ;
+  Prep : Type ;
 
-  accusative : Preposition ;
-  dative     : Preposition ;
-  genitive   : Preposition ;
+  accusative : Prep ;
+  genitive   : Prep ;
+  dative     : Prep ;
 
-  mkPreposition : Str -> Preposition ;
+  mkPrep : Str -> Prep ;
+
 
 --2 Nouns
 
 -- Worst case: two forms (singular + plural),
 -- and the gender.
 
-  mkN  : (_,_ : Str) -> Gender -> N ;   -- uomo, uomini, masculine
+  mkN  : (_,_ : Str) -> Gender -> N ;   -- bastón, bastones, masculine
 
 -- The regular function takes the singular form and the gender,
 -- and computes the plural and the gender by a heuristic. 
@@ -78,7 +91,7 @@ oper
 --3 Compound nouns 
 --
 -- Some nouns are ones where the first part is inflected as a noun but
--- the second part is not inflected. e.g. "numéro de téléphone". 
+-- the second part is not inflected. e.g. "número de teléfono". 
 -- They could be formed in syntax, but we give a shortcut here since
 -- they are frequent in lexica.
 
@@ -89,7 +102,7 @@ oper
 -- 
 -- Relational nouns ("fille de x") need a case and a preposition. 
 
-  mkN2 : N -> Preposition -> N2 ;
+  mkN2 : N -> Prep -> N2 ;
 
 -- The most common cases are the genitive "de" and the dative "a", 
 -- with the empty preposition.
@@ -99,7 +112,7 @@ oper
 
 -- Three-place relational nouns ("la connessione di x a y") need two prepositions.
 
-  mkN3 : N -> Preposition -> Preposition -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ;
 
 
 --3 Relational common noun phrases
@@ -114,7 +127,9 @@ oper
 --
 -- Proper names need a string and a gender.
 
-  mkPN : Str -> Gender -> PN ;          -- Jean
+  mkPN  : Str -> Gender -> PN ; -- Juan
+  regPN : Str -> PN ;           -- feminine for "-a", otherwise masculine
+
 
 -- To form a noun phrase that can also be plural,
 -- you can use the worst-case function.
@@ -126,7 +141,7 @@ oper
 -- Non-comparison one-place adjectives need five forms in the worst
 -- case (masc and fem singular, masc plural, adverbial).
 
-  mkA : (solo,sola,soli,sole, solamente : Str) -> A ;
+  mkA : (solo,sola,solos,solas, solamiento : Str) -> A ;
 
 -- For regular adjectives, all other forms are derived from the
 -- masculine singular. The types of adjectives that are recognized are
@@ -136,7 +151,7 @@ oper
 
 -- These functions create postfix adjectives. To switch
 -- them to prefix ones (i.e. ones placed before the noun in
--- modification, as in "petite maison"), the following function is
+-- modification, as in "bueno vino"), the following function is
 -- provided.
 
   prefA : A -> A ;
@@ -145,33 +160,25 @@ oper
 --
 -- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Preposition -> A2 ;
+  mkA2 : A -> Prep -> A2 ;
 
 --3 Comparison adjectives 
 
 -- Comparison adjectives are in the worst case put up from two
 -- adjectives: the positive ("bueno"), and the comparative ("mejor"). 
 
-  mkADeg : A -> A -> ADeg ;
+  mkADeg : A -> A -> A ;
 
 -- If comparison is formed by "mas", as usual in Spanish,
 -- the following pattern is used:
 
-  compADeg : A -> ADeg ;
+  compADeg : A -> A ;
 
 -- The regular pattern is the same as $regA$ for plain adjectives, 
 -- with comparison by "mas".
 
-  regADeg : Str -> ADeg ;
+  regADeg : Str -> A ;
 
--- From a given $ADeg$, it is possible to get back to $A$.
-
-  adegA : ADeg -> A ;
-
--- For prefixed adjectives, the following function is
--- provided.
-
-  prefADeg : ADeg -> ADeg ;
 
 --2 Adverbs
 
@@ -204,6 +211,10 @@ oper
 
   verboV : Verbum -> V ;
 
+-- To form reflexive verbs:
+
+  reflV : V -> V ;
+
 -- Verbs with a deviant passive participle: just give the participle
 -- in masculine singular form as second argument.
 
@@ -214,7 +225,7 @@ oper
 -- Two-place verbs need a preposition, except the special case with direct object.
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
-  mkV2  : V -> Preposition -> V2 ;
+  mkV2  : V -> Prep -> V2 ;
 
   dirV2 : V -> V2 ;
 
@@ -227,9 +238,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Preposition -> Preposition -> V3 ; -- parler, à, de
-  dirV3    : V -> Preposition -> V3 ;                -- donner,_,à
-  dirdirV3 : V -> V3 ;                               -- donner,_,_
+  mkV3     : V -> Prep -> Prep -> V3 ;   -- hablar, a, di
+  dirV3    : V -> Prep -> V3 ;           -- dar,(accusative),a
+  dirdirV3 : V -> V3 ;                   -- dar,(dative),(accusative)
 
 --3 Other complement patterns
 --
@@ -238,73 +249,86 @@ oper
 
   mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
-  mkV2S : V -> Preposition -> V2S ;
-  mkVV  : V -> VV ;  -- plain infinitive: "je veux parler"
-  deVV  : V -> VV ;  -- "j'essaie de parler"
-  aVV   : V -> VV ;  -- "j'arrive à parler"
-  mkV2V : V -> Preposition -> Preposition -> V2V ;
+  mkV2S : V -> Prep -> V2S ;
+  mkVV  : V -> VV ;  -- plain infinitive: "quiero hablar"
+  deVV  : V -> VV ;  -- "terminar de hablar"
+  aVV   : V -> VV ;  -- "aprender a hablar"
+  mkV2V : V -> Prep -> Prep -> V2V ;
   mkVA  : V -> VA ;
-  mkV2A : V -> Preposition -> V2A ;
+  mkV2A : V -> Prep -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
-  mkV2Q : V -> Preposition -> V2Q ;
+  mkV2Q : V -> Prep -> V2Q ;
 
-  mkAS   : A -> AS ;
-  subjAS : A -> AS ;
-  mkA2S : A -> Preposition -> A2S ;
-  mkAV  : A -> Preposition -> AV ;
-  mkA2V : A -> Preposition -> Preposition -> A2V ;
+  mkAS  : A -> AS ;
+  mkA2S : A -> Prep -> A2S ;
+  mkAV  : A -> Prep -> AV ;
+  mkA2V : A -> Prep -> Prep -> A2V ;
+
+-- Notice: categories $V2S, V2V, V2Q$ are in v 1.0 treated
+-- just as synonyms of $V2$, and the second argument is given
+-- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
+-- $V0$ is just $V$.
+
+  V0, V2S, V2V, V2Q : Type ;
+  AS, A2S, AV, A2V  : Type ;
 
 
---2 Definitions of the paradigms
+--.
+--2 The definitions of the paradigms
 --
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
---.
 
-  Bool   = Prelude.Bool ;
-  Gender = SyntaxSpa.Gender ;
-  Preposition = SyntaxSpa.Case * Str ;
-  Number = SyntaxSpa.Number ;
-
+  Gender = MorphoSpa.Gender ; 
+  Number = MorphoSpa.Number ;
   masculine = Masc ;
-  feminine  = Fem ;
+  feminine = Fem ;
+  singular = Sg ;
+  plural = Pl ;
 
-  accusative = <Types.accusative,[]> ;
-  genitive = <Types.genitive,[]> ;
-  dative = <Types.dative,[]> ;
-  mkPreposition p = <Acc,p> ;
+  Prep = Compl ;
+  accusative = complAcc ;
+  genitive = complGen ;
+  dative = complDat ;
+  mkPrep p = {s = p ; c = Acc ; isDir = False} ;
 
-  singular = Types.singular ;
-  plural = Types.plural ;
 
-  mkN x y g = mkCNomIrreg x y g ** {lock_N = <>} ;
+  mkN x y g = mkNounIrreg x y g ** {lock_N = <>} ;
   regN x = mkNomReg x ** {lock_N = <>} ;
   compN x y = {s = \\n => x.s ! n ++ y ; g = x.g ; lock_N = <>} ;
   femN x = {s = x.s ; g = feminine ; lock_N = <>} ;
   mascN x = {s = x.s ; g = masculine ; lock_N = <>} ;
 
-  mkN2 = \n,p -> n ** {lock_N2 = <> ; c = p.p1 ; s2 = p.p2} ;
+  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
   deN2 n = mkN2 n genitive ;
   aN2 n = mkN2 n dative ;
-  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c = p.p1 ; s2 = p.p2 ; c3 = q.p1 ; s3 = q.p2} ;
+  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
   mkPN x g = {s = x ; g = g} ** {lock_PN = <>} ;
-  mkNP x g n = let np = mkNameNounPhrase x g in
-    {s = np.s ; g = np.g ; p = np.p ; c = np.c ; n = n ; lock_NP = <>} ;
+  regPN x = mkPN x g where {
+    g = case last x of {
+      "a" => feminine ;
+      _ => masculine
+      }
+    } ;
 
-  mkA a b c d e = mkAdj a b c d e ** {p = False ; lock_A = <>} ;
-  regA a = mkAdjReg a ** {p = False ; lock_A = <>} ;
-  prefA a = {s = a.s ; p = True ; lock_A = <>} ;
+  mkNP x g n = {s = (pn2np (mkPN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
 
-  mkA2 a p = a ** {c = p.p1 ; s2 = p.p2 ; lock_A2 = <>} ;
+  mkA a b c d e = 
+   compADeg {s = \\_ => (mkAdj a b c d e).s ; isPre = False ; lock_A = <>} ;
+  regA a = compADeg {s = \\_ => (mkAdjReg a).s ; isPre = False ; lock_A = <>} ;
+  prefA a = {s = a.s ; isPre = True ; lock_A = <>} ;
 
-  mkADeg a b = {s = table {Pos => a.s ; _ => b.s} ; p = a.p ; lock_ADeg = <>} ;
-  compADeg a = {s = table {Pos => a.s ; _ => \\f => "mas" ++ a.s ! f} ; p = a.p ;
-               lock_ADeg = <>} ;
+  mkA2 a p = a ** {c2 = p ; lock_A2 = <>} ;
+
+  mkADeg a b = 
+   {s = table {Posit => a.s ! Posit ; _ => b.s ! Posit} ; 
+    isPre = a.isPre ; lock_A = <>} ;
+  compADeg a = 
+    {s = table {Posit => a.s ! Posit ; _ => \\f => "más" ++ a.s ! Posit ! f} ; 
+     isPre = a.isPre ;
+     lock_A = <>} ;
   regADeg a = compADeg (regA a) ;
-  prefADeg a = {s = a.s ; p = True ; lock_ADeg = <>} ;
-
-  adegA a = {s = a.s ! Pos ; p = a.p ; lock_A = <>} ;
 
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;
@@ -326,9 +350,13 @@ oper
            _   => cortar_5 x
             }
           }
-    in verbPres verb AHabere ** {lock_V = <>} ;
+    in verbBesch verb ** {vtyp = VHabere ; lock_V = <>} ;
 
-  verboV ve = verbPres ve AHabere ** {lock_V = <>} ;
+  reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;
+
+  verboV ve = verbBesch ve ** {vtyp = VHabere ; lock_V = <>} ;
+
+  reflVerboV : Verbum -> V = \ve -> reflV (verboV ve) ;
 
   special_ppV ve pa = {
     s = table {
@@ -336,32 +364,37 @@ oper
       p => ve.s ! p
       } ;
     lock_V = <> ;
-    aux = AHabere
+    vtyp = VHabere
     } ;
 
-  mkV2 v p = {s = v.s ; aux = v.aux ;  s2 = p.p2 ; c = p.p1 ; lock_V2 = <>} ;
+  mkV2 v p = {s = v.s ; vtyp = v.vtyp ; c2 = p ; lock_V2 = <>} ;
   dirV2 v = mkV2 v accusative ;
   v2V v = v ** {lock_V = <>} ;
 
-  mkV3 v p q = {s = v.s ; aux = v.aux ; 
-    s2 = p.p2 ; s3 = q.p2 ; c = p.p1 ; c3 = q.p1 ; lock_V3 = <>} ;
+  mkV3 v p q = {s = v.s ; vtyp = v.vtyp ; 
+    c2 = p ; c3 = q ; lock_V3 = <>} ;
   dirV3 v p = mkV3 v accusative p ;
   dirdirV3 v = dirV3 v dative ;
 
+  V0 : Type = V ;
+  V2S, V2V, V2Q : Type = V2 ;
+  AS, AV : Type = A ;
+  A2S, A2V : Type = A2 ;
+
   mkV0  v = v ** {lock_V0 = <>} ;
-  mkVS  v = v ** {mn,mp = Ind ; lock_VS = <>} ;  ---- more moods
-  mkV2S v p = mkV2 v p ** {mn,mp = Ind ; lock_V2S = <>} ;
-  mkVV  v = v ** {c = accusative.p1 ; lock_VV = <>} ;
-  deVV  v = v ** {c = genitive.p1 ; lock_VV = <>} ;
-  aVV  v = v ** {c = dative.p1 ; lock_VV = <>} ;
+  mkVS  v = v ** {m = \\_ => Indic ; lock_VS = <>} ;  ---- more moods
+  mkV2S v p = mkV2 v p ** {mn,mp = Indic ; lock_V2S = <>} ;
+  mkVV  v = v ** {c2 = complAcc ; lock_VV = <>} ;
+  deVV  v = v ** {c2 = complGen ; lock_VV = <>} ;
+  aVV  v = v ** {c2 = complDat ; lock_VV = <>} ;
   mkV2V v p t = mkV2 v p ** {c3 = t.p1  ; s3 = p.p2 ; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
-  mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
+  mkV2A v p q = mkV3 v p q ** {lock_V2A = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
   mkV2Q v p = mkV2 v p ** {lock_V2Q = <>} ;
 
-  mkAS  v = v ** {mn,mp = Ind ; lock_AS = <>} ; ---- more moods
-  mkA2S v p = mkA2 v p ** {mn,mp = Ind ; lock_A2S = <>} ;
+  mkAS  v = v ** {lock_AS = <>} ; ---- more moods
+  mkA2S v p = mkA2 v p ** {lock_A2S = <>} ;
   mkAV  v p = v ** {c = p.p1 ; s2 = p.p2 ; lock_AV = <>} ;
   mkA2V v p q = mkA2 v p ** {s3 = q.p2 ; c3 = q.p1 ; lock_A2V = <>} ;
 

@@ -1,215 +1,124 @@
---# -path=.:../abstract:../scandinavian:../../prelude
+concrete StructuralSwe of Structural = CatSwe ** 
+  open MorphoSwe, ParadigmsSwe, Prelude in {
 
---1 The Top-Level Swedish Resource Grammar: Structural Words
---
--- Aarne Ranta 2002 -- 2004
---
-concrete StructuralSwe of Structural = 
-  CategoriesSwe, NumeralsSwe ** 
-    open Prelude, MorphoSwe, SyntaxSwe in {
+  flags optimize=all ;
 
-  flags optimize=values ;
-
- lin
-
-  UseNumeral i = {s = \\g => table {Nom => i.s ! g ; Gen => i.s ! g ++
-  "s"} ; n = i.n} ; ---
-
+  lin
   above_Prep = ss "ovanför" ;
   after_Prep = ss "efter" ;
   by8agent_Prep = ss "av" ;
-  all8mass_Det = mkDeterminerSgGender2 "all" "allt" IndefP ;
-  all_NDet = mkDeterminerPlNum "alla" IndefP ;
-  almost_Adv = ss "nästan" ;
+  all_Predet = {s = gennumForms "all" "allt" "alla"} ;
+  almost_AdA, almost_AdN = ss "nästan" ;
   although_Subj = ss "fast" ;
+  always_AdV = ss "alltid" ;
   and_Conj = ss "och" ** {n = Pl} ;
   because_Subj = ss "eftersom" ;
   before_Prep = ss "före" ;
   behind_Prep = ss "bakom" ;
   between_Prep = ss "mellan" ;
-  both_AndConjD = sd2 "både" "och" ** {n = Pl} ;
+  both7and_DConj = sd2 "både" "och" ** {n = Pl} ;
+  but_PConj = ss "men" ;
   by8means_Prep = ss "med" ;
-  can8know_VV = mkVerb "kunna" "kan" "kunn" "kunde" "kunnat" "kunnen"
-  ** {isAux = True} ;
-  can_VV = mkVerb "kunna" "kan" "kunn" "kunde" "kunnat" "kunnen"
-  ** {isAux = True} ;
+  can8know_VV, can_VV = 
+    mkV "kunna" "kan" "kunn" "kunde" "kunnat" "kunnen" **
+    {c2 = [] ; lock_VV = <>} ;
   during_Prep = ss "under" ;
-  either8or_ConjD = sd2 "antingen" "eller" ** {n = Sg} ;
-  everybody_NP = let alla = table {Nom => "alla" ; Gen => "allas"} in 
-    {s = \\c => alla ! npCase c ; g = Utr ; n = Pl ; p = P3} ;
-  every_Det = varjeDet ;
-  everything_NP = nameNounPhrase (mkProperName "allting" NNeutr) ;
-  everywhere_Adv = advPost "varstans" ;
+  either7or_DConj = sd2 "antingen" "eller" ** {n = Sg} ;
+  everybody_NP = regNP "alla" "allas" Plg ;
+  every_Det = {s = \\_,_ => "varje" ; n = Sg ; det = DDef Indef} ;
+  everything_NP = regNP "allting" "alltings" SgNeutr ;
+  everywhere_Adv = ss "överallt" ;
+  few_Det  = {s = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
+  first_Ord = {s = "första" ; isDet = True} ;
   from_Prep = ss "från" ;
-  he_NP = pronNounPhrase han_34 ;
+  he_Pron = MorphoSwe.mkNP "han"  "honom"  "hans" "hans" "hans"  SgUtr P3 ;
+  here_Adv = ss "här" ;
+  here7to_Adv = ss "hit" ;
+  here7from_Adv = ss "härifrån" ;
   how_IAdv = ss "hur" ;
-  how8many_IDet = mkDeterminerPl ["hur många"] IndefP ;
+  how8many_IDet = {s = \\_ => ["hur många"] ; n = Pl ; det = DDef Indef} ;
   if_Subj = ss "om" ;
   in8front_Prep = ss "framför" ;
-  i_NP = pronNounPhrase jag_32 ;
+  i_Pron = MorphoSwe.mkNP "jag"  "mig"  "min" "mitt" "mina"  SgUtr P1 ;
   in_Prep = ss "i" ;
-  it_NP = pronNounPhrase det_40 ; ----
-
-  many_Det = mkDeterminerPl "många" IndefP ;
-  most_Det = mkDeterminerSgGender2 ["den mesta"] ["det mesta"] (DefP Def) ;
-  most8many_Det = flestaDet ;
-  much_Det = mkDeterminerSg (detSgInvar "mycket") IndefP ;
-  must_VV = mkVerb "få" "måste" "få" "fick" "måst" "måst"   ** {isAux = True} ;
-  no_Phr = ss ["Nej ."] ;
+  it_Pron = MorphoSwe.regNP "det" "dess" SgNeutr ;
+  less_CAdv = ss "mindre" ;
+  many_Det = {s = \\_,_ => "många" ; n = Pl ; det = DDef Indef} ;
+  more_CAdv = ss "mer" ;
+  most_Predet = {s = gennumForms ["den mesta"] ["det mesta"] ["de flesta"]} ;
+  much_Det = {s = \\_,_ => "mycket" ; n = Pl ; det = DDef Indef} ;
+  must_VV = 
+    mkV "få" "måste" "få" "fick" "måst" "måst" ** {c2 = [] ; lock_VV = <>} ;
+  no_Phr = ss ["nej"] ;
   on_Prep = ss "på" ;
+  one_Quant = {s = \\_ => genderForms ["en"] ["ett"] ; n = Sg ; det = DIndef} ;
+  only_Predet = {s = \\_ => "bara"} ;
   or_Conj = ss "eller" ** {n = Sg} ;
-  otherwise_Adv = ss "annars" ;
+  otherwise_PConj = ss "annars" ;
   part_Prep = ss "av" ;
+  please_Voc = ss "tack" ; ---
   possess_Prep = ss "av" ;
   quite_Adv = ss "ganska" ;
-  she_NP = pronNounPhrase hon_35 ;
-  so_Adv = ss "så" ;
-  somebody_NP = nameNounPhrase (mkProperName "någon" (NUtr Masc)) ;
-  some_Det = mkDeterminerSgGender2 "någon" "något" IndefP ;
-  some_NDet = mkDeterminerPlNum "några" IndefP ;
-  something_NP = nameNounPhrase (mkProperName "någonting" NNeutr) ;
-  somewhere_Adv = advPost "någonstans" ;
-  that_Det = mkDeterminerSgGender2 ["den där"] ["det där"] (DefP Def) ;
-  that_NP = regNameNounPhrase ["det där"] NNeutr ;
-  therefore_Adv = ss "därför" ;
-  these_NDet = mkDeterminerPlNum ["de här"] (DefP Def) ;
-  they8fem_NP = pronNounPhrase de_38 ;
-  they_NP = pronNounPhrase de_38 ;
-  this_Det = mkDeterminerSgGender2 ["den här"] ["det här"] (DefP Def) ;
-  this_NP = regNameNounPhrase ["det här"] NNeutr ;
-  those_NDet = mkDeterminerPlNum ["de där"] (DefP Def) ;
-  thou_NP = pronNounPhrase du_33 ;
+  she_Pron = MorphoSwe.mkNP "hon" "henne" "hennes" "hennes" "hennes"  SgUtr P3 ;
+  so_AdA = ss "så" ;
+  someSg_Det = {s = \\_ => genderForms "någon" "något" ; n = Sg ; det = DIndef} ;
+  somePl_Det = {s = \\_,_ => "några" ; n = Pl ; det = DIndef} ;
+  somebody_NP = regNP "någon" "någons" SgUtr ;
+  something_NP = regNP "något" "någots" SgNeutr ;
+  somewhere_Adv = ss "någonstans" ;
+  that_Quant = 
+    {s = table {
+       Sg => \\_ => genderForms ["den där"] ["det där"] ; 
+       Pl => \\_,_ => ["de där"]
+       } ;
+     det = DDef Def
+    } ;
+  that_NP = regNP ["det där"] ["det därs"] SgNeutr ;
+  there_Adv = ss "där" ;
+  there7to_Adv = ss "dit" ;
+  there7from_Adv = ss "därifrån" ;
+  therefore_PConj = ss "därför" ;
+  these_NP = regNP ["de här"] ["det härs"] Plg ;
+  they_Pron = MorphoSwe.mkNP "de" "dem" "deras" "deras" "deras" Plg P1 ;
+  this_Quant = 
+    {s = table {
+       Sg => \\_ => genderForms ["den här"] ["det här"] ; 
+       Pl => \\_,_ => ["de här"]
+       } ;
+     det = DDef Def
+    } ;
+  this_NP = regNP ["det här"] ["det härs"] SgNeutr ;
+  those_NP = regNP ["de där"] ["det därs"] Plg ;
   through_Prep = ss "genom" ;
-  too_Adv = ss "för" ;
+  too_AdA = ss "för" ;
   to_Prep = ss "till" ;
   under_Prep = ss "under" ;
-  very_Adv = ss "mycket" ;
-  want_VV = mkVerb "vilja" "vill" "vilj" "ville" "velat" "velad"   ** {isAux = True} ;
-  we_NP = pronNounPhrase (vi_36) ;
-  what8many_IP = intPronWhat plural ;
-  what8one_IP = intPronWhat singular ;
+  very_AdA = ss "mycket" ;
+  want_VV = 
+    mkV "vilja" "vill" "vilj" "ville" "velat" "velad" ** 
+    {c2 = [] ; lock_VV = <>} ;
+  we_Pron = MorphoSwe.mkNP "vi"  "oss"  "vår" "vårt" "våra"  Plg P1 ;
+  whatSg_IP = {s = \\_ => "vad" ; gn = SgUtr} ; ---- infl
+  whatPl_IP = {s = \\_ => "vad" ; gn = Plg} ; ---- infl
   when_IAdv = ss "när" ;
   when_Subj = ss "när" ;
   where_IAdv = ss "var" ;
-  which8one_IDet = vilkenDet ;
-  which8many_IDet = mkDeterminerPl "vilka" IndefP ;
-  who8many_IP = intPronWho plural ;
-  who8one_IP = intPronWho singular ;
+  whichPl_IDet = {s = \\_ => "vilka" ; n = Pl ; det = DIndef} ;
+  whichSg_IDet = {s = genderForms "vilken" "vilket" ; n = Sg ; det = DIndef} ;
+  whoSg_IP = {s = vem.s ; gn = SgUtr} ;
+  whoPl_IP = {s = \\_ => "vilka" ; gn = Plg} ;
   why_IAdv = ss "varför" ;
   without_Prep = ss "utan" ;
   with_Prep = ss "med" ;
-  ye_NP = pronNounPhrase (ni_37) ;
-  yes_Phr = ss ["Ja ."] ;
-  you_NP = let {ni = pronNounPhrase ni_37 } in {
-             s = ni.s ; g = ni.g ; n = Sg ; p = P2} ; ---- gives wrong refl
+  yes_Phr = ss ["ja"] ;
+  youSg_Pron = MorphoSwe.mkNP "du" "dig" "din" "ditt" "dina" SgUtr P2 ;
+  youPl_Pron = MorphoSwe.mkNP "ni" "er" "er" "ert" "era"  Plg P2 ;
+  youPol_Pron = MorphoSwe.mkNP "ni" "er" "er" "ert" "era"  SgUtr P2 ; --- wrong in refl
 
+-- Auxiliaries that are used repeatedly.
 
-
-{-
-  INP    = pronNounPhrase jag_32 ;
-  ThouNP = pronNounPhrase du_33 ;
-  HeNP   = pronNounPhrase han_34 ;
-  SheNP  = pronNounPhrase hon_35 ;
-  WeNP n = pronNounPhrase (vi_36 n) ;
-  YeNP n = pronNounPhrase (ni_37 n) ;
-  TheyNP = pronNounPhrase de_38 ;
-  TheyFemNP = pronNounPhrase de_38 ;
-
-  YouNP  = let {ni = pronNounPhrase ni_37 } in {
-             s = ni.s ; g = ni.g ; n = Sg ; p = P2} ; ---- gives wrong refl
-
-  ItNP   = pronNounPhrase det_40 ; ----
-  ThisNP = regNameNounPhrase ["det här"] NNeutr ; 
-  ThatNP = regNameNounPhrase ["det där"] NNeutr ; 
-
-  EveryDet = varjeDet ; 
-  AllMassDet   = mkDeterminerSgGender2 "all" "allt" IndefP ; 
-  AllNumDet  = mkDeterminerPlNum "alla" IndefP ; 
-  AnyDet   = mkDeterminerSgGender2 "någon" "något" IndefP ; 
-  AnyNumDet  = mkDeterminerPlNum "några" IndefP ; 
-  SomeDet  = mkDeterminerSgGender2 "någon" "något" IndefP ; 
-  SomeNumDet = mkDeterminerPlNum "några" IndefP ; 
-  ManyDet  = mkDeterminerPl "många" IndefP ; 
-  HowManyDet  = mkDeterminerPl ["hur många"] IndefP ; 
-  NoDet    = mkDeterminerSgGender2 "ingen" "inget" IndefP ; 
-  NoNumDet   = mkDeterminerPlNum "inga" IndefP ; 
-  WhichNumDet = mkDeterminerPlNum "vilka" IndefP ; 
-
-  UseNumeral i = {s = table {Nom => i.s ; Gen => i.s ++ "s"}} ; ---
-
-  WhichDet = vilkenDet ;
-  MostDet  = mkDeterminerSgGender2 ["den mesta"] ["det mesta"] (DefP Def) ;
-  MostsDet = flestaDet ;
-  MuchDet  = mkDeterminerSg (detSgInvar "mycket") IndefP ;
-
-  ThisDet  = mkDeterminerSgGender2 ["den här"] ["det här"] (DefP Def) ;
-  ThatDet  = mkDeterminerSgGender2 ["den där"] ["det där"] (DefP Def) ;
-  TheseNumDet = mkDeterminerPlNum ["de här"] (DefP Def) ; 
-  ThoseNumDet = mkDeterminerPlNum ["de där"] (DefP Def) ; 
-
-  HowIAdv = ss "hur" ;
-  WhenIAdv = ss "när" ;
-  WhereIAdv = ss "var" ;
-  WhyIAdv = ss "varför" ;
-
-  AndConj  = ss "och" ** {n = Pl}  ;
-  OrConj   = ss "eller" ** {n = Sg} ;
-  BothAnd  = sd2 "både" "och" ** {n = Pl}  ;
-  EitherOr = sd2 "antingen" "eller" ** {n = Sg} ;
-  NeitherNor = sd2 "varken" "eller" ** {n = Sg} ;
-  IfSubj   = ss "om" ;
-  WhenSubj = ss "när" ;
-
-  YesPhr = ss ["Ja ."] ;
-  NoPhr = ss ["Nej ."] ;
-
-  VeryAdv = ss "mycket" ;
-  TooAdv = ss "för" ;
-  SoAdv = ss "så" ;
-  OtherwiseAdv = ss "annars" ;
-  ThereforeAdv = ss "därför" ;
-
-  EverybodyNP  = let alla = table {Nom => "alla" ; Gen => "allas"} in {s = \\c => alla ! npCase c ; g = Utr ; n = Pl ; p = P3} ;
-  SomebodyNP   = nameNounPhrase (mkProperName "någon" (NUtr Masc)) ;
-  NobodyNP     = nameNounPhrase (mkProperName "ingen" (NUtr Masc)) ;
-  EverythingNP = nameNounPhrase (mkProperName "allting" NNeutr) ; 
-  SomethingNP  = nameNounPhrase (mkProperName "någonting" NNeutr) ; 
-  NothingNP    = nameNounPhrase (mkProperName "ingenting" NNeutr) ; 
-
-  CanVV     = mkVerb "kunna" "kan" "kunn"  "kunde" "kunnat" "kunnen" ** {s3 = []} ;
-  CanKnowVV = mkVerb "kunna" "kan" "kunn"  "kunde" "kunnat" "kunnen" ** {s3 = []} ;
-  MustVV    = mkVerb "få"    "måste" "få"  "fick"  "måst"   "måst" ** {s3 = []} ;
-  WantVV    = mkVerb "vilja" "vill" "vilj" "ville" "velat" "velad" ** {s3 = []} ;
-
-  EverywhereNP = advPost "varstans" ;
-  SomewhereNP = advPost "någonstans" ;
-  NowhereNP = advPost "ingenstans" ;
-
-  AlthoughSubj = ss "fast" ;
-
-  AlmostAdv = ss "nästan" ;
-  QuiteAdv = ss "ganska" ;
-
-  InPrep = ss "i" ;
-  OnPrep = ss "på" ;
-  ToPrep = ss "till" ;
-  ThroughPrep = ss "genom" ;
-  AbovePrep = ss "ovanför" ;
-  UnderPrep = ss "under" ;
-  InFrontPrep = ss "framför" ;
-  BehindPrep = ss "bakom" ;
-  BetweenPrep = ss "mellan" ;
-  FromPrep = ss "från" ;
-  BeforePrep = ss "före" ;
-  DuringPrep = ss "under" ;
-  AfterPrep = ss "efter" ;
-  WithPrep = ss "med" ;
-  WithoutPrep = ss "utan" ;
-  ByMeansPrep = ss "med" ;
-  PossessPrep = ss "av" ;
-  PartPrep = ss "av" ;
-  AgentPrep = ss "av" ;
--}
-
+  oper
+    vem = MorphoSwe.mkNP "vem" "vem" "vems" "vems" "vems" SgUtr P3 ;
 
 }
+

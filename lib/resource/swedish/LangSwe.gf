@@ -1,23 +1,10 @@
---# -path=.:../scandinavian:../abstract:../../prelude
+--# -path=.:../scandinavian:../abstract:../common:prelude
 
 concrete LangSwe of Lang = 
-  RulesSwe, 
-  ClauseSwe, 
-  StructuralSwe,  
-  BasicSwe,
-  TimeSwe,
-  CountrySwe,
-  MathSwe
+  GrammarSwe,
+  LexiconSwe
+  ** {
 
-   ** open Prelude, ResourceSwe, ParadigmsSwe in {
+flags startcat = Phr ;  unlexer = text ; lexer = text ;
 
-lin
-  AdvDate d = prefixSS "på" d ;
-  AdvTime t = prefixSS "klockan" t ;
-  NWeekday w = w ;
-  PNWeekday w = nounPN w ;
-
-  PNCountry x = x ;
-  ANationality x = x ;
-  NLanguage x = x ;
-}
+} ;
