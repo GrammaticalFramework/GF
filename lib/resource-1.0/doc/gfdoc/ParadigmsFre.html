@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> French Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-06-15 15:08:18 CEST</I><BR>
+<I>Last update: 2006-06-22 21:02:44 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -44,10 +44,10 @@ gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
 <P>
-Aarne Ranta 2003
+Aarne Ranta 2001 - 2006
 </P>
 <P>
-This is an API to the user of the resource grammar 
+This is an API for the user of the resource grammar 
 for adding lexical items. It gives functions for forming
 expressions of open categories: nouns, adjectives, verbs.
 </P>
@@ -67,8 +67,8 @@ first we give a handful of patterns that aim to cover all
 regular cases. Then we give a worst-case function <CODE>mkC</CODE>, which serves as an
 escape to construct the most irregular words of type <CODE>C</CODE>.
 However, this function should only seldom be needed: we have a
-separate module <CODE>IrregularEng</CODE>, which covers all irregularly inflected
-words.
+separate module <A HREF="../../french/IrregFre.gf"><CODE>IrregFre</CODE></A>,
+which covers all irregularly inflected verbs.
 </P>
 <PRE>
     resource ParadigmsFre = 
@@ -191,7 +191,7 @@ Three-place relational nouns (<I>la connection de x à y</I>) need two prepositio
 <H3>Relational common noun phrases</H3>
 <P>
 In some cases, you may want to make a complex <CODE>CN</CODE> into a
-relational noun (e.g. <I>the old town hall of</I>). However, <CODE>N2</CODE> and
+relational noun (e.g. <I>la vieille église de</I>). However, <CODE>N2</CODE> and
 <CODE>N3</CODE> are purely lexical categories. But you can use the <CODE>AdvCN</CODE>
 and <CODE>PrepNP</CODE> constructions to build phrases like this.
 </P>
@@ -201,9 +201,9 @@ and <CODE>PrepNP</CODE> constructions to build phrases like this.
 Proper names need a string and a gender.
 </P>
 <PRE>
-      mkPN  : Str -&gt; Gender -&gt; PN ;    -- Jean
+      mkPN  : Str -&gt; Gender -&gt; PN ; -- Jean
     
-      regPN : Str -&gt; PN ;              -- masculine
+      regPN : Str -&gt; PN ;           -- feminine if "-e", masculine otherwise
 </PRE>
 <P></P>
 <P>
@@ -345,7 +345,7 @@ To change it to <I>être</I>, use the following function. Reflexive implies <I>êt
 <H3>Two-place verbs</H3>
 <P>
 Two-place verbs need a preposition, except the special case with direct object.
-(transitive verbs). Notice that a particle comes from the <CODE>V</CODE>.
+(transitive verbs). 
 </P>
 <PRE>
       mkV2  : V -&gt; Prep -&gt; V2 ;

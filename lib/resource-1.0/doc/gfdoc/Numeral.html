@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Numerals</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-01-25 12:10:58 CET</I><BR>
+<I>Last update: 2006-06-22 19:22:05 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -27,11 +27,18 @@ The implementations are adapted from the
 which defines numerals for 88 languages.
 The resource grammar implementations add to this inflection (if needed)
 and ordinal numbers.
-<B>Note</B>. Number 1 as defined 
+</P>
+<P>
+<B>Note</B> 1. Number 1 as defined 
 in the category <CODE>Numeral</CODE> here should not be used in the formation of
 noun phrases, and should therefore be removed. Instead, one should use
 <A HREF="Structural.html">Structural</A><CODE>.one_Quant</CODE>. This makes the grammar simpler
 because we can assume that numbers form plural noun phrases.
+</P>
+<P>
+<B>Note</B> 2. The implementations introduce spaces between
+parts of a numeral, which is often incorrect - more work on
+(un)lexing is needed to solve this problem.
 </P>
 <PRE>
     abstract Numeral = Cat ** {

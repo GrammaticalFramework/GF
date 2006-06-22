@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Danish Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-06-15 14:44:29 CEST</I><BR>
+<I>Last update: 2006-06-22 20:53:41 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -28,7 +28,7 @@
     <LI><A HREF="#toc9">Adverbs</A>
     <LI><A HREF="#toc10">Verbs</A>
       <UL>
-      <LI><A HREF="#toc11">Verbs with //være// as auxiliary</A>
+      <LI><A HREF="#toc11">Verbs with 'være' as auxiliary</A>
       <LI><A HREF="#toc12">Verbs with a particle</A>
       <LI><A HREF="#toc13">Deponent verbs</A>
       <LI><A HREF="#toc14">Two-place verbs</A>
@@ -46,10 +46,10 @@ gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
 <P>
-Aarne Ranta 2003
+Aarne Ranta 2005 - 2006
 </P>
 <P>
-This is an API to the user of the resource grammar 
+This is an API for the user of the resource grammar 
 for adding lexical items. It gives functions for forming
 expressions of open categories: nouns, adjectives, verbs.
 </P>
@@ -69,8 +69,8 @@ first we give a handful of patterns that aim to cover all
 regular cases. Then we give a worst-case function <CODE>mkC</CODE>, which serves as an
 escape to construct the most irregular words of type <CODE>C</CODE>.
 However, this function should only seldom be needed: we have a
-separate module <CODE>IrregularEng</CODE>, which covers all irregularly inflected
-words.
+separate module <A HREF="../../danish/IrregDan.gf"><CODE>IrregDan</CODE></A>, 
+which haves a list of irregular verbs.
 </P>
 <PRE>
     resource ParadigmsDan = 
@@ -131,14 +131,14 @@ Worst case: give all four forms. The gender is computed from the
 last letter of the second form (if <I>n</I>, then <CODE>utrum</CODE>, otherwise <CODE>neutrum</CODE>).
 </P>
 <PRE>
-      mkN  : (dreng,drengen,drenger,drengene : Str) -&gt; N ;
+      mkN  : (dreng,drengen,drenge,drengene : Str) -&gt; N ;
 </PRE>
 <P></P>
 <P>
 The regular function takes the singular indefinite form
 and computes the other forms and the gender by a heuristic.
 The heuristic is that all nouns are <CODE>utrum</CODE> with the
-plural ending <I>er///</I>r//.
+plural ending <I>er</I> or <I>r</I>.
 </P>
 <PRE>
       regN : Str -&gt; N ;
@@ -171,20 +171,20 @@ indefinite
 <H3>Compound nouns</H3>
 <P>
 All the functions above work quite as well to form compound nouns,
-such as <I>fotboll</I>. 
+such as <I>fodbold</I>. 
 </P>
 <A NAME="toc4"></A>
 <H3>Relational nouns</H3>
 <P>
-Relational nouns (<I>daughter of x</I>) need a preposition. 
+Relational nouns (<I>datter til x</I>) need a preposition. 
 </P>
 <PRE>
       mkN2 : N -&gt; Prep -&gt; N2 ;
 </PRE>
 <P></P>
 <P>
-The most common preposition is <I>av</I>, and the following is a
-shortcut for regular, <CODE>nonhuman</CODE> relational nouns with <I>av</I>.
+The most common preposition is <I>af</I>, and the following is a
+shortcut for regular relational nouns with <I>af</I>.
 </P>
 <PRE>
       regN2 : Str -&gt; Gender -&gt; N2 ;
@@ -195,7 +195,7 @@ Use the function <CODE>mkPrep</CODE> or see the section on prepositions below to
 form other prepositions.
 </P>
 <P>
-Three-place relational nouns (<I>the connection from x to y</I>) 
+Three-place relational nouns (<I>forbindelse fra x til y</I>) 
 need two prepositions.
 </P>
 <PRE>
@@ -206,7 +206,7 @@ need two prepositions.
 <H3>Relational common noun phrases</H3>
 <P>
 In some cases, you may want to make a complex <CODE>CN</CODE> into a
-relational noun (e.g. <I>the old town hall of</I>). However, <CODE>N2</CODE> and
+relational noun (e.g. <I>tidligere kone til</I>). However, <CODE>N2</CODE> and
 <CODE>N3</CODE> are purely lexical categories. But you can use the <CODE>AdvCN</CODE>
 and <CODE>PrepNP</CODE> constructions to build phrases like this.
 </P>
@@ -298,7 +298,7 @@ Sometimes just the positive forms are irregular.
 </PRE>
 <P></P>
 <P>
-If comparison is formed by <I>mer, //mest</I>, as in general for//
+If comparison is formed by <I>mer</I>, <I>mest</I>, as in general for
 long adjective, the following pattern is used:
 </P>
 <PRE>
@@ -309,7 +309,8 @@ long adjective, the following pattern is used:
 <H2>Adverbs</H2>
 <P>
 Adverbs are not inflected. Most lexical ones have position
-after the verb. Some can be preverbal (e.g. <I>always</I>).
+after the verb. Some can be close to the verb like the negation
+<I>ikke</I> (e.g. <I>altid</I>).
 </P>
 <PRE>
       mkAdv : Str -&gt; Adv ;
@@ -351,11 +352,11 @@ There is an extensive list of irregular verbs in the module <CODE>IrregDan</CODE
 In practice, it is enough to give three forms, as in school books.
 </P>
 <PRE>
-      irregV : (drikke, drakk, drukket  : Str) -&gt; V ;
+      irregV : (drikke, drak, drukket  : Str) -&gt; V ;
 </PRE>
 <P></P>
 <A NAME="toc11"></A>
-<H3>Verbs with //være// as auxiliary</H3>
+<H3>Verbs with 'være' as auxiliary</H3>
 <P>
 By default, the auxiliary is <I>have</I>. This function changes it to <I>være</I>.
 </P>
@@ -366,7 +367,7 @@ By default, the auxiliary is <I>have</I>. This function changes it to <I>være</I
 <A NAME="toc12"></A>
 <H3>Verbs with a particle</H3>
 <P>
-The particle, such as in <I>switch on</I>, is given as a string.
+The particle, such as in <I>passe på</I>, is given as a string.
 </P>
 <PRE>
       partV  : V -&gt; Str -&gt; V ;
@@ -375,8 +376,8 @@ The particle, such as in <I>switch on</I>, is given as a string.
 <A NAME="toc13"></A>
 <H3>Deponent verbs</H3>
 <P>
-Some words are used in passive forms only, e.g. <I>hoppas</I>, some as
-reflexive e.g. <I>ångra sig</I>.
+Some words are used in passive forms only, e.g. <I>undres</I>, some as
+reflexive e.g. <I>forestille sig</I>.
 </P>
 <PRE>
       depV  : V -&gt; V ;
@@ -402,8 +403,8 @@ Three-place (ditransitive) verbs need two prepositions, of which
 the first one or both can be absent.
 </P>
 <PRE>
-      mkV3     : V -&gt; Prep -&gt; Prep -&gt; V3 ;    -- speak, with, about
-      dirV3    : V -&gt; Prep -&gt; V3 ;           -- give,_,to
+      mkV3     : V -&gt; Prep -&gt; Prep -&gt; V3 ;  -- snakke, med, om
+      dirV3    : V -&gt; Prep -&gt; V3 ;          -- give,_,til
       dirdirV3 : V -&gt; V3 ;                  -- give,_,_
 </PRE>
 <P></P>
