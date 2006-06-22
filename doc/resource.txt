@@ -4,8 +4,9 @@ Last update: %%date(%c)
 
 % NOTE: this is a txt2tags file.
 % Create an latex file from this file using:
-% txt2tags -ttex --toc gf-formalism.txt
+% txt2tags -ttex resource.txt
 %!style(tex) : isolatin1
+%!style(tex) : utf8x
 %!postproc: "section*{"  "section{"
 %!postproc(tex): "#SMALL"  "scriptsize"
 %!postproc(tex): "#BFIG" "begin{figure}"
@@ -19,6 +20,11 @@ Last update: %%date(%c)
 
 %!target:tex
 
+#CLEARPAGE
+
+%%toc
+
+#CLEARPAGE
 
 This document is about the 
 GF Resource Grammar Library. It presuppose knowledge of GF and its
@@ -937,7 +943,9 @@ has only been exploited in a very small scale so far.
 
 ===Russian===
 
-%!include: ../lib/resource-1.0/russian/ParadigmsRus.txt
+% %!include: ../lib/resource-1.0/russian/ParadigmsRus.txt
+
+%!include: ""./ParadigmsRus.tex""
 
 ===Spanish===
 
