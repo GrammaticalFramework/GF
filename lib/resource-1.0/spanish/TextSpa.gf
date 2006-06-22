@@ -1,4 +1,4 @@
-concrete TextSpa of Text = {
+concrete TextSpa of Text = CommonX - [Tense,TPres,TPast,TFut,TCond] ** {
 
 -- This works for the special punctuation marks of Spanish.
 
