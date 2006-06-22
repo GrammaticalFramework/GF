@@ -2,16 +2,16 @@
 
 --1 Russian Lexical Paradigms
 --
--- Janna Khegai 2003--2005
+-- Janna Khegai 2003--2006
 --
--- This is an API to the user of the resource grammar 
+-- This is an API for the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
 -- expressions of open categories: nouns, adjectives, verbs.
 -- 
 -- Closed categories (determiners, pronouns, conjunctions) are
 -- accessed through the resource syntax API, $Structural.gf$. 
 --
--- The main difference with $MorphoEng.gf$ is that the types
+-- The main difference with $MorphoRus.gf$ is that the types
 -- referred to are compiled resource grammar types. We have moreover
 -- had the design principle of always having existing forms, rather
 -- than stems, as string arguments of the paradigms.
@@ -20,9 +20,6 @@
 -- first we give a handful of patterns that aim to cover all
 -- regular cases. Then we give a worst-case function $mkC$, which serves as an
 -- escape to construct the most irregular words of type $C$.
--- However, this function should only seldom be needed: we have a
--- separate module $IrregularEng$, which covers all irregularly inflected
--- words.
 -- 
 -- The following modules are presupposed:
 
@@ -74,7 +71,7 @@ oper
   animate: Animacy;
   inanimate: Animacy; 
  
-   mkIndeclinableNoun: Str -> Gender -> Animacy -> N ; 
+  mkIndeclinableNoun: Str -> Gender -> Animacy -> N ; 
 
 -- Worst case - give six singular forms:
 -- Nominative, Genetive, Dative, Accusative, Instructive and Prepositional;
@@ -85,7 +82,8 @@ oper
 -- to the Nominative or the Genetive one) is actually of no help, 
 -- since there are a lot of exceptions and the gain is just one form less.
 
-  mkN  : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Gender -> Animacy -> N ; 
+  mkN  : (nomSg, genSg, datSg, accSg, instSg, preposSg,
+          nomPl, genPl, datPl, accPl, instPl, preposPl: Str) -> Gender -> Animacy -> N ; 
 
      -- мужчина, мужчины, мужчине, мужчину, мужчиной, мужчине
      -- мужчины, мужчин, мужчинам, мужчин, мужчинами, мужчинах
@@ -104,7 +102,7 @@ oper
   nEdinica   : Str -> N ;    -- feminine, inanimate, ending with "-а", Inst -"единиц-ей"
   nZhenchina : Str -> N ;    -- feminine, animate, ending with "-a"
   nNoga      : Str -> N ;    -- feminine, inanimate, ending with "г_к_х-a"
-  nMalyariya  : Str -> N ;    -- feminine, inanimate, ending with "-ия"   
+  nMalyariya : Str -> N ;    -- feminine, inanimate, ending with "-ия"   
   nTetya     : Str -> N ;    -- feminine, animate, ending with "-я"   
   nBol       : Str -> N ;    -- feminine, inanimate, ending with "-ь"(soft sign)     
 
@@ -117,8 +115,8 @@ oper
 
 -- Masculine patterns. 
 
---Ending with consonant: 
-nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-ла"
+-- Ending with consonant: 
+  nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-ла"
 
   nBrat: Str -> N ;   -- animate, брат-ья
   nStul: Str -> N ;    -- same as above, but inanimate
@@ -143,7 +141,6 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 -- Proper names.
 
   mkPN  : Str -> Gender -> Animacy -> PN ;          -- "Иван", "Маша"
-  regPN : Str -> PN ;
   nounPN : N -> PN ;
   
 -- On the top level, it is maybe $CN$ that is used rather than $N$, and
@@ -159,14 +156,10 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 -- forms in the worst case:
 
 
---                        Masculine  | Feminine | Neutral | Plural
---  Nominative
---  Genitive
---  Dative
---  Accusative Inanimate
---  Accusative Animate
---  Instructive
---  Prepositional
+--  (Masculine  | Feminine | Neutral | Plural) *
+
+--  (Nominative | Genitive | Dative | Accusative Inanimate | Accusative Animate |
+--  Instructive | Prepositional)
 
 
 -- Notice that 4 short forms, which exist for some adjectives are not included 
@@ -176,9 +169,11 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 -- mkA : ( : Str) -> A ;
 
 -- The regular function captures the variants for some popular adjective
--- endings below:
+-- endings below. The first string agrument is the masculine singular form, 
+-- the second is comparative:
   
    regA : Str -> Str -> A ;
+
 
 -- Invariable adjective is a special case.
 
@@ -186,12 +181,12 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 
 -- Some regular patterns depending on the ending.
 
-   AStaruyj : Str -> Str -> A ;             -- ending with "-ый"
-   AMalenkij : Str -> Str -> A ;            -- ending with "-ий", Gen - "маленьк-ого"
-   AKhoroshij : Str -> Str -> A ;         --  ending with "-ий", Gen - "хорош-его"
-     AMolodoj : Str -> Str -> A ;             -- ending with "-ой", 
+   AStaruyj : Str -> Str -> A ;            -- ending with "-ый"
+   AMalenkij : Str -> Str -> A ;           -- ending with "-ий", Gen - "маленьк-ого"
+   AKhoroshij : Str -> Str -> A ;          -- ending with "-ий", Gen - "хорош-его"
+   AMolodoj : Str -> Str -> A ;            -- ending with "-ой", 
                                            -- plural - молод-ые"
-   AKakoj_Nibud : Str -> Str -> Str -> A ;  -- ending with "-ой", 
+   AKakoj_Nibud : Str -> Str -> Str -> A ; -- ending with "-ой", 
                                            -- plural - "как-ие"
 
 -- Two-place adjectives need a preposition and a case as extra arguments.
@@ -200,11 +195,11 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 
 -- Comparison adjectives need a positive adjective 
 -- (28 forms without short forms). 
--- Taking only one comparative form (non-syntaxic) and 
--- only one superlative form (syntaxic) we can produce the
+-- Taking only one comparative form (non-syntactic) and 
+-- only one superlative form (syntactic) we can produce the
 -- comparison adjective with only one extra argument -
--- non-syntaxic comparative form.
--- Syntaxic forms are based on the positive forms.
+-- non-syntactic comparative form.
+-- Syntactic forms are based on the positive forms.
 
 
 --   mkADeg : A -> Str -> ADeg ;
@@ -215,8 +210,7 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 
 --2 Adverbs
 
--- Adverbs are not inflected. Most lexical ones have position
--- after the verb. Some can be preverbal (e.g. "always").
+-- Adverbs are not inflected.
 
   mkAdv : Str -> Adv ;
 
@@ -228,30 +222,27 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 -- 4(GenNum)(past) ](indicative)+ 4 (GenNum) (subjunctive) } 
 -- Participles (Present and Past) and Gerund forms are not included, 
 -- since they fuction more like Adjectives and Adverbs correspondingly
--- rather than verbs. Aspect regarded as an inherent parameter of a verb.
--- Notice, that some forms are never used for some verbs. Actually, 
--- the majority of verbs do not have many of the forms.
+-- rather than verbs. Aspect is regarded as an inherent parameter of a verb.
+-- Notice, that some forms are never used for some verbs. 
+
 Voice: Type; 
 Aspect: Type; 
---Tense : Type;  
 Bool: Type;
 Conjugation: Type ;
 
-first: Conjugation; -- "гуля-Ешь, гуля-Ем"
-firstE: Conjugation; -- Verbs with vowel "ё": "даёшь" (give), "пьёшь" (drink)  
-second: Conjugation; -- "вид-Ишь, вид-Им"
-mixed: Conjugation; -- "хоч-Ешь - хот-Им"
+first:   Conjugation; -- "гуля-Ешь, гуля-Ем"
+firstE:  Conjugation; -- Verbs with vowel "ё": "даёшь" (give), "пьёшь" (drink)  
+second:  Conjugation; -- "вид-Ишь, вид-Им"
+mixed:   Conjugation; -- "хоч-Ешь - хот-Им"
 dolzhen: Conjugation; -- irregular
 
-true: Bool;
+true:  Bool;
 false: Bool;
  
 active: Voice ;
 passive: Voice ;
 imperfective: Aspect;
 perfective: Aspect ;  
---present : Tense ;
---past : Tense ;
 
 
 -- The worst case need 6 forms of the present tense in indicative mood
@@ -260,7 +251,9 @@ perfective: Aspect ;
 -- (singular, second person: "беги"), an infinitive ("бежать").
 -- Inherent aspect should also be specified.
 
-   mkVerbum : Aspect -> (_,_,_,_,_,_,_,_,_ : Str) -> V ;
+   mkVerbum : Aspect -> (presentSgP1,presentSgP2,presentSgP3,
+                         presentPlP1,presentPlP2,presentPlP3,
+                         pastSgMasculine,imperative,infinitive: Str) -> V ;
 
 -- Common conjugation patterns are two conjugations: 
 --  first - verbs ending with "-ать/-ять" and second - "-ить/-еть".
@@ -273,7 +266,8 @@ perfective: Aspect ;
 -- So the definition for verb "любить"  looks like:
 -- regV Imperfective Second "люб" "лю" "любил" "люби" "любить";
 
-   regV :Aspect -> Conjugation -> (_,_,_,_,_ : Str) -> V ; 
+   regV :Aspect -> Conjugation -> (stemPresentSgP1,endingPresentSgP1,
+                         pastSgP1,imperative,infinitive : Str) -> V ; 
 
 -- For writing an application grammar one usualy doesn't need
 -- the whole inflection table, since each verb is used in 
@@ -293,11 +287,10 @@ perfective: Aspect ;
    mkV3  : V -> Str -> Str -> Case -> Case -> V3 ; -- "сложить письмо в конверт"
    dirV2    : V -> V2 ;                    -- "видеть", "любить"
    tvDirDir : V -> V3 ; 
-
---.                            
+                            
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
-
+--.
   Gender = MorphoRus.Gender ;
   Case = MorphoRus.Case ;
   Number = MorphoRus.Number ;
@@ -452,8 +445,6 @@ regN = \ray ->
        Masc => mkProperNameMasc ivan anim ; 
        _ => mkProperNameFem ivan anim
     } ** {lock_PN =<>};
-  regPN x = mkPN x masculine animate ;
-
   nounPN n = {s=\\c => n.s! SF Sg c; anim=n.anim; g=n.g; lock_PN=<>};
     
   mkCN = UseN;

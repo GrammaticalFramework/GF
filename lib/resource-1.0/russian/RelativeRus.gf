@@ -20,7 +20,8 @@ concrete RelativeRus of Relative = CatRus ** open ResRus, MorphoRus in {
 -- deferred to $ExtRus.gf$ ("at which we are looking").
 
     RelSlash kotoruj yaVizhu =
-    {s = \\b,clf,gn, _ , anim => yaVizhu.s2 ++ kotoruj.s ! gn ! yaVizhu.c ! anim 
+    {s = \\b,clf,gn, _ , anim => yaVizhu.s2 ++ 
+         kotoruj.s ! gn ! yaVizhu.c ! anim 
          ++ yaVizhu.s!b!clf 
     } ;
 

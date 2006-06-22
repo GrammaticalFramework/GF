@@ -16,7 +16,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       n = kazhduj.n ; 
       p = P3 ;
       pron = False;
-      g = kazhduj.g ;
+      g = case kazhduj.g of { PNoGen => (PGen okhotnik.g); _ => kazhduj.g };
       anim = okhotnik.anim 
     } ;
 
@@ -87,8 +87,8 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
  --      3 => (ti_j_EndDecl n.s) ; 
  --      _ => uy_j_EndDecl n.s }  ;
 
-  OrdNumeral numeral = 
-   {s = \\ af => (uy_j_EndDecl (numeral.s ! caseAF af ! genAF af)).s!af} ;
+ -- OrdNumeral numeral = 
+ --  {s = \\ af => (uy_j_EndDecl (numeral.s ! caseAF af ! genAF af)).s!af} ;
 
     NumNumeral n = n ;
 
@@ -165,12 +165,12 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -- first place as common nouns, so that one can also have "a suggestion that...".
 
   SentCN idea x =
-    {s = \\n,c => idea.s ! n ! c ++ ["о том, что"] ++ x.s ; 
+    {s = \\n,c => idea.s ! n ! c ++ x.s ; 
      g = idea.g; anim = idea.anim
     } ;
 
   RelCN idea x =
-    {s = \\n,c => idea.s ! n ! c ++ ["о том, что"] ++ x.s !(gNum idea.g n)!c!idea.anim ; 
+    {s = \\n,c => idea.s ! n ! c ++ x.s !(gNum idea.g n)!c!idea.anim ; 
      g = idea.g; anim = idea.anim
     } ;
 
