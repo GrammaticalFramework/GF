@@ -27,7 +27,8 @@ decodeUTF8 (c:c':c'':cs) | '\xe0' <= c   && c   <= '\xef' &&
 		          '\x80' <= c'  && c'  <= '\xbf' &&
 		          '\x80' <= c'' && c'' <= '\xbf' =
 	toEnum ((fromEnum c `mod` 0x10 * 0x1000) + (fromEnum c' `mod` 0x40) * 0x40 + fromEnum c'' `mod` 0x40) : decodeUTF8 cs
-decodeUTF8 _ = error "UniChar.decodeUTF8: bad data"
+decodeUTF8 s = s ---- AR workaround 22/6/2006
+----decodeUTF8 _ = error "UniChar.decodeUTF8: bad data"
 
 encodeUTF8 :: String -> String
 encodeUTF8 "" = ""

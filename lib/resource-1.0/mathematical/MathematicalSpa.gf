@@ -11,7 +11,7 @@ concrete MathematicalSpa of Mathematical =
   RelativeSpa,
   ConjunctionSpa,
   PhraseSpa,
-  TextSpa,
+  TextSpa - [Tense,TPres,TPast,TFut,TCond],
   IdiomSpa,
   StructuralSpa,
 

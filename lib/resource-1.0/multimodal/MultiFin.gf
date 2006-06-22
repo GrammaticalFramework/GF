@@ -20,7 +20,7 @@ concrete MultiFin of Multi =
       everywhere_Adv, here_Adv, here7to_Adv, here7from_Adv,
       somewhere_Adv, there_Adv, there7to_Adv, there7from_Adv,
       every_Det, few_Det, many_Det, much_Det, someSg_Det, somePl_Det,
-    ImpersCl, GenericCl, ExistNP, ExistIP, ProgrVP,
+    ImpersCl, GenericCl, ExistNP, ExistIP, ProgrVP, ImpPl1,
     already_Adv, far_Adv, now_Adv
     ]
   ** MultiI with
