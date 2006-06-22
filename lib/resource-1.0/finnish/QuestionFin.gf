@@ -52,7 +52,7 @@ concrete QuestionFin of Question = CatFin ** open ResFin, Prelude in {
     IDetCN idet num ord cn = let n = idet.n in {
       s = \\c => 
         let 
-          k = npform2case c ;
+          k = npform2case n c ;
           ncase = case <k,num.isNum> of {
             <Nom,  True> => NCase Sg Part ; -- mitkä kolme kytkintä
             <_,    True> => NCase Sg k ;    -- miksi kolmeksi kytkimeksi

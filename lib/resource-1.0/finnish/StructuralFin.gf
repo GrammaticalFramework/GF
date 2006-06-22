@@ -11,9 +11,9 @@ concrete StructuralFin of Structural = CatFin **
     let
       kaiket = caseTable n (nhn (sKorpi "kaikki" "kaiken" "kaikkena"))
     in
-    case c of {
+    case npform2case n c of {
       Nom => "kaikki" ;
-      _ => kaiket ! c
+      k => kaiket ! k
       }
     } ;
   almost_AdA, almost_AdN = ss "melkein" ;
@@ -52,14 +52,14 @@ concrete StructuralFin of Structural = CatFin **
   i_Pron  = mkPronoun "minä" "minun" "minua" "minuna" "minuun" Sg P1 ;
   in_Prep = casePrep inessive ;
   it_Pron = {
-    s = \\c => pronSe.s ! npform2case c ; 
+    s = \\c => pronSe.s ! npform2case Sg c ; 
     a = agrP3 Sg ; 
     isPron = False
     } ;
   less_CAdv = ss "vähemmän" ;
   many_Det = mkDet Sg (reg2N "moni" "monia") ;
   more_CAdv = ss "enemmän" ;
-  most_Predet = {s = \\n,c => (nhn (sSuurin "useinta")).s ! NCase n c} ;
+  most_Predet = {s = \\n,c => (nhn (sSuurin "useinta")).s ! NCase n (npform2case n c)} ;
   much_Det = mkDet Sg {s = \\_ => "paljon"} ;
   must_VV = subjcaseV (regV "täytyä") genitive ;
   no_Phr = ss "ei" ;
@@ -77,7 +77,7 @@ concrete StructuralFin of Structural = CatFin **
   she_Pron = mkPronoun "hän" "hänen" "häntä"  "hänenä" "häneen" Sg P3 ;
   so_AdA = ss "niin" ;
   somebody_NP = {
-    s = \\c => jokuPron ! Sg ! npform2case c ;
+    s = \\c => jokuPron ! Sg ! npform2case Sg c ;
     a = agrP3 Sg ; 
     isPron = False
     } ;
@@ -92,7 +92,7 @@ concrete StructuralFin of Structural = CatFin **
     n = Pl
     } ;
   something_NP = {
-    s = \\c => jokinPron ! Sg ! npform2case c ;
+    s = \\c => jokinPron ! Sg ! npform2case Sg c ;
     a = agrP3 Sg ; 
     isPron = False
     } ;
@@ -144,11 +144,11 @@ concrete StructuralFin of Structural = CatFin **
   want_VV = regV "tahtoa" ;
   we_Pron = mkPronoun "me" "meidän" "meitä" "meinä" "meihin" Pl P1 ;
   whatPl_IP = {
-    s = table {NPAcc => "mitkä" ; c => mikaInt ! Pl ! npform2case c} ;
+    s = table {NPAcc => "mitkä" ; c => mikaInt ! Pl ! npform2case Pl c} ;
     n = Pl
     } ;
   whatSg_IP = {
-    s = \\c => mikaInt ! Sg ! npform2case c ;
+    s = \\c => mikaInt ! Sg ! npform2case Sg c ;
     n = Sg
     } ;
   when_IAdv = ss "milloin" ;
@@ -163,11 +163,11 @@ concrete StructuralFin of Structural = CatFin **
     n = Sg
     } ;
   whoSg_IP = {
-    s = table {NPAcc => "kenet" ; c => kukaInt ! Sg ! npform2case c} ;
+    s = table {NPAcc => "kenet" ; c => kukaInt ! Sg ! npform2case Sg c} ;
     n = Sg
     } ;
   whoPl_IP = {
-    s = table {NPAcc => "ketkä" ; c => kukaInt ! Pl ! npform2case c} ;
+    s = table {NPAcc => "ketkä" ; c => kukaInt ! Pl ! npform2case Pl c} ;
     n = Pl
     } ;
   why_IAdv = ss "miksi" ;

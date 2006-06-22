@@ -56,9 +56,10 @@ param
   NPForm = NPCase Case | NPAcc ;
 
 oper
-  npform2case : NPForm -> Case = \f -> case f of {
-    NPCase c => c ;
-    NPAcc    => Gen -- appCompl does the job
+  npform2case : Number -> NPForm -> Case = \n,f -> case <f,n> of {
+    <NPCase c,_> => c ;
+    <NPAcc,Sg>   => Gen ;-- appCompl does the job
+    <NPAcc,Pl>   => Nom
     } ;
 
   n2nform : NForm -> NForm = \nf -> case nf of {

@@ -39,7 +39,7 @@ concrete RelativeFin of Relative = CatFin ** open Prelude, ResFin, MorphoFin in 
       } ;
 
     IdRP = {
-      s = \\n,c => relPron ! n ! npform2case c ;
+      s = \\n,c => relPron ! n ! npform2case n c ;
       a = RNoAg
       } ;
 

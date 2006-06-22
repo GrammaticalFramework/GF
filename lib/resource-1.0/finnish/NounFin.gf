@@ -26,7 +26,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
             _ => NCase n c                          -- kytkin, kytkimen,...
             }
       in {
-      s = \\c => let k = npform2case c in
+      s = \\c => let k = npform2case n c in
                  det.s1 ! k ++ cn.s ! ncase k ++ det.s2 ; 
       a = agrP3 (case det.isDef of {
             False => Sg ;  -- autoja menee; kolme autoa menee
@@ -36,14 +36,14 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       } ;
 
     UsePN pn = {
-      s = \\c => pn.s ! npform2case c ; 
+      s = \\c => pn.s ! npform2case Sg c ; 
       a = agrP3 Sg ;
       isPron = False
       } ;
     UsePron p = p ** {isPron = True} ;
 
     PredetNP pred np = {
-      s = \\c => pred.s ! np.a.n ! npform2case c ++ np.s ! c ;
+      s = \\c => pred.s ! np.a.n ! c ++ np.s ! c ;
       a = np.a ;
       isPron = np.isPron  -- kaikki minun - ni
       } ;
