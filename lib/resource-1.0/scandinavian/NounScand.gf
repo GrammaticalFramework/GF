@@ -9,9 +9,17 @@ incomplete concrete NounScand of Noun =
 -- ($AdjCN$). Thus we get $huset$ but $de fem husen$, $det gamla huset$.
 
   lin
-    DetCN det cn = let g = cn.g in {
-      s = \\c => det.s ! cn.isMod ! g ++
-                 cn.s ! det.n ! det.det ! caseNP c ; 
+    DetCN det cn = 
+      let 
+        g = cn.g ;
+        m = cn.isMod ;
+        dd = case <det.det,detDef,m> of {
+          <DDef Def, Indef, True> => DDef Indef ;
+          <d,_,_> => d
+          }
+      in {
+      s = \\c => det.s ! m ! g ++
+                 cn.s ! det.n ! dd ! caseNP c ; 
       a = agrP3 g det.n
       } ;
 
@@ -86,7 +94,7 @@ incomplete concrete NounScand of Noun =
 
     DefArt = {
       s = \\n,b,g => if_then_Str b (artDef (gennum g n)) [] ; 
-      det = DDef detDef
+      det = DDef Def
       } ;
 
     IndefArt = {
@@ -120,7 +128,8 @@ incomplete concrete NounScand of Noun =
       } ;
 
     AdjCN ap cn = let g = cn.g in {
-      s = \\n,d,c => preOrPost ap.isPre 
+      s = \\n,d,c =>
+            preOrPost ap.isPre 
              (ap.s ! agrAdj (gennum g n) d) 
              (cn.s ! n ! d ! c) ;
       g = g ;
