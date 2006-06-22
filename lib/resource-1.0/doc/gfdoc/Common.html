@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Common: Structures with Common Implementations.</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-06-15 09:19:39 CEST</I><BR>
+<I>Last update: 2006-06-22 19:13:55 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -30,11 +30,11 @@ gfdoc - a rudimentary GF document generator.
 This module defines the categories that uniformly have the linearization
 <CODE>{s : Str}</CODE> in all languages. 
 Moreover, this module defines the abstract parameters of tense, polarity, and
-anteriority, which are used in <A HREF="Phrase.html">Phrase</A> to generate different
-forms of sentences. Together they give 2 x 4 x 4 = 16 sentence forms.
+anteriority, which are used in <A HREF="Phrase.html"><CODE>Phrase</CODE></A> to generate different
+forms of sentences. Together they give 4 x 2 x 2 = 16 sentence forms.
 These tenses are defined for all languages in the library. More tenses
 can be defined in the language extensions, e.g. the <I>passé simple</I> of
-Romance languages.
+Romance languages in <A HREF="../romance/ExtraRomance.gf"><CODE>ExtraRomance</CODE></A>.
 </P>
 <PRE>
     abstract Common = {
@@ -45,14 +45,14 @@ Romance languages.
 <A NAME="toc1"></A>
 <H2>Top-level units</H2>
 <P>
-Constructed in <A HREF="Text.html">Text</A>: <CODE>Text</CODE>.
+Constructed in <A HREF="Text.html"><CODE>Text</CODE></A>: <CODE>Text</CODE>.
 </P>
 <PRE>
         Text ;  -- text consisting of several phrases  e.g. "He is here. Why?"
 </PRE>
 <P></P>
 <P>
-Constructed in <A HREF="Phrase.html">Phrase</A>:
+Constructed in <A HREF="Phrase.html"><CODE>Phrase</CODE></A>:
 </P>
 <PRE>
         Phr ;   -- phrase in a text                    e.g. "but be quiet please"
@@ -62,7 +62,7 @@ Constructed in <A HREF="Phrase.html">Phrase</A>:
 </PRE>
 <P></P>
 <P>
-Constructed in <A HREF="Sentence.html">Sentence</A>:
+Constructed in <A HREF="Sentence.html"><CODE>Sentence</CODE></A>:
 </P>
 <PRE>
         SC ;    -- embedded sentence or question       e.g. "that it rains"
@@ -71,8 +71,8 @@ Constructed in <A HREF="Sentence.html">Sentence</A>:
 <A NAME="toc2"></A>
 <H2>Adverbs</H2>
 <P>
-Constructed in <A HREF="Adverb.html">Adverb</A>.  
-Many adverbs are constructed in <A HREF="Structural.html">Structural</A>.
+Constructed in <A HREF="Adverb.html"><CODE>Adverb</CODE></A>.  
+Many adverbs are constructed in <A HREF="Structural.html"><CODE>Structural</CODE></A>.
 </P>
 <PRE>
         Adv ;   -- verb-phrase-modifying adverb,       e.g. "in the house"

@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> English Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-06-15 16:21:43 CEST</I><BR>
+<I>Last update: 2006-06-22 20:54:15 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -49,7 +49,7 @@ gfdoc - a rudimentary GF document generator.
 Aarne Ranta 2003--2005
 </P>
 <P>
-This is an API to the user of the resource grammar 
+This is an API for the user of the resource grammar 
 for adding lexical items. It gives functions for forming
 expressions of open categories: nouns, adjectives, verbs.
 </P>
@@ -69,11 +69,8 @@ first we give a handful of patterns that aim to cover all
 regular cases. Then we give a worst-case function <CODE>mkC</CODE>, which serves as an
 escape to construct the most irregular words of type <CODE>C</CODE>.
 However, this function should only seldom be needed: we have a
-separate module <CODE>IrregularEng</CODE>, which covers all irregularly inflected
-words.
-</P>
-<P>
-The following modules are presupposed:
+separate module <A HREF="../../english/IrregEng.gf"><CODE>IrregEng</CODE></A>, 
+which covers irregular verbss.
 </P>
 <PRE>
     resource ParadigmsEng = open 
@@ -125,7 +122,7 @@ The resource category <CODE>Prep</CODE> is used.
 <A NAME="toc2"></A>
 <H2>Nouns</H2>
 <P>
-Worst case: give all four forms and the semantic gender.
+Worst case: give all four forms.
 </P>
 <PRE>
       mkN  : (man,men,man's,men's : Str) -&gt; N ;
@@ -284,7 +281,7 @@ but a separate pattern is used:
 </PRE>
 <P></P>
 <P>
-If comparison is formed by <I>more, //most</I>, as in general for//
+If comparison is formed by <I>more</I>, <I>most</I>, as in general for
 long adjective, the following pattern is used:
 </P>
 <PRE>

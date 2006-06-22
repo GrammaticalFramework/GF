@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Italian Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-06-15 16:38:46 CEST</I><BR>
+<I>Last update: 2006-06-22 21:07:00 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -47,7 +47,7 @@ gfdoc - a rudimentary GF document generator.
 Aarne Ranta 2003
 </P>
 <P>
-This is an API to the user of the resource grammar 
+This is an API for the user of the resource grammar 
 for adding lexical items. It gives functions for forming
 expressions of open categories: nouns, adjectives, verbs.
 </P>
@@ -66,9 +66,9 @@ The structure of functions for each word class <CODE>C</CODE> is the following:
 first we give a handful of patterns that aim to cover all
 regular cases. Then we give a worst-case function <CODE>mkC</CODE>, which serves as an
 escape to construct the most irregular words of type <CODE>C</CODE>.
-However, this function should only seldom be needed: we have a
-separate module <CODE>IrregularEng</CODE>, which covers all irregularly inflected
-words.
+However, this function should only seldom be needed. For verbs, we have a
+separate module <A HREF="../../italian/BeschIta.gf"><CODE>BeschIta</CODE></A>,
+which covers the <I>Bescherelle</I> verb conjugations.
 </P>
 <PRE>
     resource ParadigmsIta = 
@@ -110,8 +110,8 @@ To abstract over number names, we define the following.
 <P>
 Prepositions used in many-argument functions are either strings
 (including the 'accusative' empty string) or strings that
-amalgamate with the following word (the 'genitive' <I>de</I> and the
-'dative' <I>à</I>).
+amalgamate with the following word (the 'genitive' <I>di</I> and the
+'dative' <I>a</I>).
 </P>
 <PRE>
       Prep : Type ;
@@ -129,7 +129,7 @@ amalgamate with the following word (the 'genitive' <I>de</I> and the
 Worst case: give both two forms and the gender. 
 </P>
 <PRE>
-      mkN  : (uomi,uomini : Str) -&gt; Gender -&gt; N ;
+      mkN  : (uomo,uomini : Str) -&gt; Gender -&gt; N ;
 </PRE>
 <P></P>
 <P>
@@ -154,7 +154,7 @@ To force a different gender, use one of the following functions.
 <H3>Compound nouns</H3>
 <P>
 Some nouns are ones where the first part is inflected as a noun but
-the second part is not inflected. e.g. <I>numéro de téléphone</I>. 
+the second part is not inflected. e.g. <I>numero di telefono</I>. 
 They could be formed in syntax, but we give a shortcut here since
 they are frequent in lexica.
 </P>
@@ -191,7 +191,7 @@ Three-place relational nouns (<I>la connessione di x a y</I>) need two prepositi
 <H3>Relational common noun phrases</H3>
 <P>
 In some cases, you may want to make a complex <CODE>CN</CODE> into a
-relational noun (e.g. <I>the old town hall of</I>). However, <CODE>N2</CODE> and
+relational noun (e.g. <I>la vecchia chiesa di</I>). However, <CODE>N2</CODE> and
 <CODE>N3</CODE> are purely lexical categories. But you can use the <CODE>AdvCN</CODE>
 and <CODE>PrepNP</CODE> constructions to build phrases like this.
 </P>
@@ -202,7 +202,7 @@ Proper names need a string and a gender.
 </P>
 <PRE>
       mkPN  : Str -&gt; Gender -&gt; PN ;
-      regPN : Str -&gt; PN ;             -- masculine
+      regPN : Str -&gt; PN ;           -- feminine if "-a", otherwise masculine
 </PRE>
 <P></P>
 <P>
@@ -234,7 +234,7 @@ masculine singular.
 <P>
 These functions create postfix adjectives. To switch
 them to prefix ones (i.e. ones placed before the noun in
-modification, as in <I>petite maison</I>), the following function is
+modification, as in <I>vecchia chiesa</I>), the following function is
 provided.
 </P>
 <PRE>
@@ -270,7 +270,7 @@ the following pattern is used:
 <P></P>
 <P>
 The regular pattern is the same as <CODE>regA</CODE> for plain adjectives, 
-with comparison by <I>plus</I>.
+with comparison by <I>più</I>.
 </P>
 <PRE>
       regADeg : Str -&gt; A ;
@@ -303,18 +303,18 @@ Adverbs modifying adjectives and sentences can also be formed.
 <A NAME="toc11"></A>
 <H2>Verbs</H2>
 <P>
-Regular verbs are ones with the infinitive <I>er</I> or <I>ir</I>, the
-latter with plural present indicative forms as <I>finissons</I>.
+Regular verbs are ones with the infinitive <I>are</I> or <I>ire</I>, the
+latter with singular present indicative forms as <I>finisco</I>.
 The regular verb function is the first conjugation recognizes
 these endings, as well as the variations among
-<I>aimer, céder, placer, peser, jeter, placer, manger, assiéger, payer</I>.
+<I>amare, cominciare, mangiare, legare, cercare</I>.
 </P>
 <PRE>
       regV : Str -&gt; V ;
 </PRE>
 <P></P>
 <P>
-The module <CODE>BeschIta</CODE> gives all the patterns of the <I>Bescherelle</I>
+The module <CODE>BeschIta</CODE> gives (almost) all the patterns of the <I>Bescherelle</I>
 book. To use them in the category <CODE>V</CODE>, wrap them with the function
 </P>
 <PRE>
@@ -329,6 +329,16 @@ Reflexive implies <I>essere</I>.
 <PRE>
       essereV : V -&gt; V ;
       reflV : V -&gt; V ;
+</PRE>
+<P></P>
+<P>
+If <CODE>BeschIta</CODE> does not give the desired result or feels difficult
+to consult, here is a worst-case function for <I>-ire</I> and <I>-ere</I> verbs,
+taking 11 arguments.
+</P>
+<PRE>
+      mkV : 
+        (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -&gt; V ; 
 </PRE>
 <P></P>
 <A NAME="toc12"></A>

@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Finnish Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-06-15 15:06:49 CEST</I><BR>
+<I>Last update: 2006-06-22 20:46:07 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -18,8 +18,9 @@
     <LI><A HREF="#toc3">Adjectives</A>
     <LI><A HREF="#toc4">Verbs</A>
       <UL>
-      <LI><A HREF="#toc5">Three-place verbs</A>
-      <LI><A HREF="#toc6">Other complement patterns</A>
+      <LI><A HREF="#toc5">Two-place verbs</A>
+      <LI><A HREF="#toc6">Three-place verbs</A>
+      <LI><A HREF="#toc7">Other complement patterns</A>
       </UL>
     </UL>
 
@@ -54,12 +55,7 @@ The structure of functions for each word class <CODE>C</CODE> is the following:
 first we give a handful of patterns that aim to cover all
 regular cases. Then we give a worst-case function <CODE>mkC</CODE>, which serves as an
 escape to construct the most irregular words of type <CODE>C</CODE>.
-However, this function should only seldom be needed: we have a
-separate module <CODE>IrregularFin</CODE>, which covers all irregularly inflected
-words.
-</P>
-<P>
-The following modules are presupposed:
+However, this function should only seldom be needed.
 </P>
 <PRE>
     resource ParadigmsFin = open 
@@ -68,12 +64,7 @@ The following modules are presupposed:
       MorphoFin,
       CatFin
       in {
-</PRE>
-<P></P>
-<P>
-flags optimize=all ;
-</P>
-<PRE>
+    
       flags optimize=noexpand ;
 </PRE>
 <P></P>
@@ -82,8 +73,8 @@ flags optimize=all ;
 <P>
 To abstract over gender, number, and (some) case names, 
 we define the following identifiers. The application programmer
-should always use these constants instead of their definitions
-in <CODE>TypesInf</CODE>.
+should always use these constants instead of the constructors
+defined in <CODE>ResFin</CODE>.
 </P>
 <PRE>
     oper
@@ -120,8 +111,8 @@ just a case, or a pre/postposition and a case.
 <A NAME="toc2"></A>
 <H2>Nouns</H2>
 <P>
-The worst case gives ten forms and the semantic gender.
-In practice just a couple of forms are needed, to define the different
+The worst case gives ten forms.
+In practice just a couple of forms are needed to define the different
 stems, vowel alternation, and vowel harmony.
 </P>
 <PRE>
@@ -167,7 +158,7 @@ The rest of the noun paradigms are mostly covered by the three
 heuristics.
 </P>
 <P>
-Nouns with partitive <I>a///</I>‰// are a large group. 
+Nouns with partitive <I>a</I>,<I>‰</I> are a large group. 
 To determine for grade and vowel alternation, three forms are usually needed:
 singular nominative and genitive, and plural partitive.
 Examples: <I>talo</I>, <I>kukko</I>, <I>huippu</I>, <I>koira</I>, <I>kukka</I>, <I>syyl‰</I>, <I>s‰rki</I>...
@@ -205,11 +196,12 @@ undergo regular weak-grade alternation:
 <P></P>
 <P>
 Foreign words ending in consonants are actually similar to words like
-<I>malli///</I>mallin<I>/</I>malleja<I>, with the exception that the //i</I> is not attached
+<I>malli</I>-<I>mallin</I>-<I>malleja</I>, with the exception that the <I>i</I> is not attached
 to the singular nominative. Examples: <I>linux</I>, <I>savett</I>, <I>screen</I>.
-The singular partitive form is used to get the vowel harmony. (N.B. more than 
-1-syllabic words ending in <I>n</I> would have variant plural genitive and 
-partitive forms, like <I>sultanien///</I>sultaneiden//, which are not covered.)
+The singular partitive form is used to get the vowel harmony. 
+(N.B. more than 1-syllabic words ending in <I>n</I> would have variant 
+plural genitive and partitive forms, like
+<I>sultanien</I>, <I>sultaneiden</I>, which are not covered.)
 </P>
 <PRE>
       nLinux : (linuxia : Str) -&gt; N ;
@@ -233,7 +225,7 @@ The following paradigm covers both nouns ending in an aspirated <I>e</I>, such a
 </PRE>
 <P></P>
 <P>
-The following covers nouns with partitive <I>ta///</I>t‰//, such as
+The following covers nouns with partitive <I>ta</I>,<I>t‰</I>, such as
 <I>susi</I>, <I>vesi</I>, <I>pieni</I>. To get all stems and the vowel harmony, it takes
 the singular nominative, genitive, and essive.
 </P>
@@ -433,6 +425,8 @@ The verbs <I>be</I> is special.
       vOlla : V ;
 </PRE>
 <P></P>
+<A NAME="toc5"></A>
+<H3>Two-place verbs</H3>
 <P>
 Two-place verbs need a case, and can have a pre- or postposition.
 </P>
@@ -450,25 +444,25 @@ If the complement needs just a case, the following special function can be used.
 <P>
 Verbs with a direct (accusative) object
 are special, since their complement case is finally decided in syntax.
-But this is taken care of by <CODE>ClauseFin</CODE>.
+But this is taken care of in <CODE>VerbFin</CODE>.
 </P>
 <PRE>
       dirV2 : V -&gt; V2 ;
 </PRE>
 <P></P>
-<A NAME="toc5"></A>
+<A NAME="toc6"></A>
 <H3>Three-place verbs</H3>
 <P>
 Three-place (ditransitive) verbs need two prepositions, of which
 the first one or both can be absent.
 </P>
 <PRE>
-      mkV3     : V -&gt; Prep -&gt; Prep -&gt; V3 ;    -- speak, with, about
-      dirV3    : V -&gt; Case -&gt; V3 ;            -- give,_,to
-      dirdirV3 : V         -&gt; V3 ;            -- acc, allat
+      mkV3     : V -&gt; Prep -&gt; Prep -&gt; V3 ;  -- puhua, allative, elative
+      dirV3    : V -&gt; Case -&gt; V3 ;          -- siirt‰‰, (accusative), illative
+      dirdirV3 : V         -&gt; V3 ;          -- antaa, (accusative), (allative)
 </PRE>
 <P></P>
-<A NAME="toc6"></A>
+<A NAME="toc7"></A>
 <H3>Other complement patterns</H3>
 <P>
 Verbs and adjectives can take complements such as sentences,

@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> German Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-06-15 14:53:14 CEST</I><BR>
+<I>Last update: 2006-06-22 20:58:18 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -41,7 +41,7 @@ gfdoc - a rudimentary GF document generator.
 Aarne Ranta &amp; Harald Hammarström 2003--2006
 </P>
 <P>
-This is an API to the user of the resource grammar 
+This is an API for the user of the resource grammar 
 for adding lexical items. It gives functions for forming
 expressions of open categories: nouns, adjectives, verbs.
 </P>
@@ -61,8 +61,8 @@ first we give a handful of patterns that aim to cover all
 regular cases. Then we give a worst-case function <CODE>mkC</CODE>, which serves as an
 escape to construct the most irregular words of type <CODE>C</CODE>.
 However, this function should only seldom be needed: we have a
-separate module <CODE>IrregularGer</CODE>, which covers all irregularly inflected
-words.
+separate module <A HREF="../../german/IrregGer.gf"><CODE>IrregGer</CODE></A> 
+which covers irregularly inflected verbs.
 </P>
 <PRE>
     resource ParadigmsGer = open 
@@ -117,7 +117,7 @@ and the gender.
 </P>
 <PRE>
       mkN : (x1,_,_,_,_,x6 : Str) -&gt; Gender -&gt; N ; 
-                                     -- mann, mann, manne, mannes, männer, männern
+                           -- mann, mann, manne, mannes, männer, männern
 </PRE>
 <P></P>
 <P>
@@ -167,7 +167,8 @@ The regular genitive is  <I>s</I>, omitted after <I>s</I>.
 </P>
 <PRE>
       mkPN  : (karolus, karoli : Str) -&gt; PN ; -- karolus, karoli
-      regPN : (Johann : Str) -&gt; PN ;          -- Johann, Johanns ; Johannes, Johannes
+      regPN : (Johann : Str) -&gt; PN ;  
+        -- Johann, Johanns ; Johannes, Johannes
 </PRE>
 <P></P>
 <A NAME="toc4"></A>
@@ -319,9 +320,9 @@ Three-place (ditransitive) verbs need two prepositions, of which
 the first one or both can be absent.
 </P>
 <PRE>
-      mkV3     : V -&gt; Prep -&gt; Prep -&gt; V3 ;  -- speak, with, about
-      dirV3    : V -&gt; Prep -&gt; V3 ;                -- give,_,to
-      accdatV3 : V -&gt; V3 ;                               -- give,_,_
+      mkV3     : V -&gt; Prep -&gt; Prep -&gt; V3 ;  -- sprechen, mit, über
+      dirV3    : V -&gt; Prep -&gt; V3 ;          -- senden,(accusative),nach
+      accdatV3 : V -&gt; V3 ;                  -- give,accusative,dative
 </PRE>
 <P></P>
 <A NAME="toc10"></A>

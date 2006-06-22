@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Spanish Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-06-15 16:29:51 CEST</I><BR>
+<I>Last update: 2006-06-22 21:33:43 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -44,10 +44,10 @@ gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
 <P>
-Aarne Ranta 2003
+Aarne Ranta 2004 - 2006
 </P>
 <P>
-This is an API to the user of the resource grammar 
+This is an API for the user of the resource grammar 
 for adding lexical items. It gives functions for forming
 expressions of open categories: nouns, adjectives, verbs.
 </P>
@@ -65,7 +65,9 @@ than stems, as string arguments of the paradigms.
 The structure of functions for each word class <CODE>C</CODE> is the following:
 first we give a handful of patterns that aim to cover all
 regular cases. Then we give a worst-case function <CODE>mkC</CODE>, which serves as an
-escape to construct the most irregular words of type <CODE>C</CODE>.
+escape to construct the most irregular words of type <CODE>C</CODE>. For
+verbs, there is a fairly complete list of irregular verbs in
+<A HREF="../../spanish/IrregSpa.gf"><CODE>IrregSpa</CODE></A>.
 </P>
 <PRE>
     resource ParadigmsSpa = 
@@ -108,7 +110,7 @@ To abstract over number names, we define the following.
 Prepositions used in many-argument functions are either strings
 (including the 'accusative' empty string) or strings that
 amalgamate with the following word (the 'genitive' <I>de</I> and the
-'dative' <I>à</I>).
+'dative' <I>a</I>).
 </P>
 <PRE>
       Prep : Type ;
@@ -127,7 +129,7 @@ Worst case: two forms (singular + plural),
 and the gender.
 </P>
 <PRE>
-      mkN  : (_,_ : Str) -&gt; Gender -&gt; N ;   -- uomo, uomini, masculine
+      mkN  : (_,_ : Str) -&gt; Gender -&gt; N ;   -- bastón, bastones, masculine
 </PRE>
 <P></P>
 <P>
@@ -155,7 +157,7 @@ To force a different gender, use one of the following functions.
 <H3>Compound nouns</H3>
 <P>
 Some nouns are ones where the first part is inflected as a noun but
-the second part is not inflected. e.g. <I>numéro de téléphone</I>. 
+the second part is not inflected. e.g. <I>número de teléfono</I>. 
 They could be formed in syntax, but we give a shortcut here since
 they are frequent in lexica.
 </P>
@@ -202,8 +204,8 @@ and <CODE>PrepNP</CODE> constructions to build phrases like this.
 Proper names need a string and a gender.
 </P>
 <PRE>
-      mkPN  : Str -&gt; Gender -&gt; PN ;         -- Jean
-      regPN : Str -&gt; PN ;                   -- masculine
+      mkPN  : Str -&gt; Gender -&gt; PN ; -- Juan
+      regPN : Str -&gt; PN ;           -- feminine for "-a", otherwise masculine
 </PRE>
 <P></P>
 <P>
@@ -221,7 +223,7 @@ Non-comparison one-place adjectives need five forms in the worst
 case (masc and fem singular, masc plural, adverbial).
 </P>
 <PRE>
-      mkA : (solo,sola,soli,sole, solamente : Str) -&gt; A ;
+      mkA : (solo,sola,solos,solas, solamiento : Str) -&gt; A ;
 </PRE>
 <P></P>
 <P>
@@ -236,7 +238,7 @@ masculine singular. The types of adjectives that are recognized are
 <P>
 These functions create postfix adjectives. To switch
 them to prefix ones (i.e. ones placed before the noun in
-modification, as in <I>petite maison</I>), the following function is
+modification, as in <I>bueno vino</I>), the following function is
 provided.
 </P>
 <PRE>
@@ -364,9 +366,9 @@ Three-place (ditransitive) verbs need two prepositions, of which
 the first one or both can be absent.
 </P>
 <PRE>
-      mkV3     : V -&gt; Prep -&gt; Prep -&gt; V3 ;   -- parler, à, de
-      dirV3    : V -&gt; Prep -&gt; V3 ;           -- donner,_,à
-      dirdirV3 : V -&gt; V3 ;                   -- donner,_,_
+      mkV3     : V -&gt; Prep -&gt; Prep -&gt; V3 ;   -- hablar, a, di
+      dirV3    : V -&gt; Prep -&gt; V3 ;           -- dar,(accusative),a
+      dirdirV3 : V -&gt; V3 ;                   -- dar,(dative),(accusative)
 </PRE>
 <P></P>
 <A NAME="toc14"></A>
@@ -379,9 +381,9 @@ questions, verb phrases, and adjectives.
       mkV0  : V -&gt; V0 ;
       mkVS  : V -&gt; VS ;
       mkV2S : V -&gt; Prep -&gt; V2S ;
-      mkVV  : V -&gt; VV ;  -- plain infinitive: "je veux parler"
-      deVV  : V -&gt; VV ;  -- "j'essaie de parler"
-      aVV   : V -&gt; VV ;  -- "j'arrive à parler"
+      mkVV  : V -&gt; VV ;  -- plain infinitive: "quiero hablar"
+      deVV  : V -&gt; VV ;  -- "terminar de hablar"
+      aVV   : V -&gt; VV ;  -- "aprender a hablar"
       mkV2V : V -&gt; Prep -&gt; Prep -&gt; V2V ;
       mkVA  : V -&gt; VA ;
       mkV2A : V -&gt; Prep -&gt; Prep -&gt; V2A ;
