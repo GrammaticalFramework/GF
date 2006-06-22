@@ -2,14 +2,15 @@
 
 --1 A Simple Finnish Resource Morphology
 --
--- Aarne Ranta 2002
+-- Aarne Ranta 2002 -- 2005
 --
 -- This resource morphology contains definitions needed in the resource
--- syntax. It moreover contains the most usual inflectional patterns.
---
--- We use the parameter types and word classes defined in $TypesFin.gf$.
+-- syntax. To build a lexicon, it is better to use $ParadigmsFin$, which
+-- gives a higher-level access to this module.
 
-resource MorphoFin = TypesFin ** open Prelude in {
+resource MorphoFin = ResFin ** open Prelude in {
+
+  flags optimize=all ;
 
 --- flags optimize=noexpand ;
 
@@ -18,79 +19,6 @@ resource MorphoFin = TypesFin ** open Prelude in {
 
 oper
 
-  NounH : Type = {
-    a,vesi,vede,vete,vetta,veteen,vetii,vesii,vesien,vesia,vesiin : Str
-    } ;
-
--- worst-case macro
-
-  mkSubst : Str -> (_,_,_,_,_,_,_,_,_,_ : Str) -> NounH = 
-    \a,vesi,vede,vete,vetta,veteen,vetii,vesii,vesien,vesia,vesiin -> 
-    {a = a ;
-     vesi = vesi ;
-     vede = vede ;
-     vete = vete ;
-     vetta = vetta ;
-     veteen = veteen ;
-     vetii = vetii ;
-     vesii = vesii ;
-     vesien = vesien ;
-     vesia = vesia ;
-     vesiin = vesiin
-    } ;
-
-  nhn : NounH -> CommonNoun = \nh ->
-    let
-     a = nh.a ;
-     vesi = nh.vesi ;
-     vede = nh.vede ;
-     vete = nh.vete ;
-     vetta = nh.vetta ;
-     veteen = nh.veteen ;
-     vetii = nh.vetii ;
-     vesii = nh.vesii ;
-     vesien = nh.vesien ;
-     vesia = nh.vesia ;
-     vesiin = nh.vesiin
-    in
-    {s = table {
-      NCase Sg Nom    => vesi ;
-      NCase Sg Gen    => vede + "n" ;
-      NCase Sg Part   => vetta ;
-      NCase Sg Transl => vede + "ksi" ;
-      NCase Sg Ess    => vete + ("n" + a) ;
-      NCase Sg Iness  => vede + ("ss" + a) ;
-      NCase Sg Elat   => vede + ("st" + a) ;
-      NCase Sg Illat  => veteen ;
-      NCase Sg Adess  => vede + ("ll" + a) ;
-      NCase Sg Ablat  => vede + ("lt" + a) ;
-      NCase Sg Allat  => vede + "lle" ;
-      NCase Sg Abess  => vede + ("tt" + a) ;
-
-      NCase Pl Nom    => vede + "t" ;
-      NCase Pl Gen    => vesien ;
-      NCase Pl Part   => vesia ;
-      NCase Pl Transl => vesii + "ksi" ;
-      NCase Pl Ess    => vetii + ("n" + a) ;
-      NCase Pl Iness  => vesii + ("ss" + a) ;
-      NCase Pl Elat   => vesii + ("st" + a) ;
-      NCase Pl Illat  => vesiin ;
-      NCase Pl Adess  => vesii + ("ll" + a) ;
-      NCase Pl Ablat  => vesii + ("lt" + a) ;
-      NCase Pl Allat  => vesii + "lle" ;
-      NCase Pl Abess  => vesii + ("tt" + a) ;
-
-      NComit    => vetii + "ne" ;
-      NInstruct => vesii + "n" ;
-
-      NPossNom       => vete ;
-      NPossGenPl     => Predef.tk 1 vesien ;
-      NPossTransl Sg => vede + "kse" ;
-      NPossTransl Pl => vesii + "kse" ;
-      NPossIllat Sg  => Predef.tk 1 veteen ;
-      NPossIllat Pl  => Predef.tk 1 vesiin
-      }
-    } ;
 
 -- A user-friendly variant takes existing forms and infers the vowel harmony.
 
@@ -100,97 +28,9 @@ oper
       talo (Predef.tk 1 talon) (Predef.tk 2 talona) taloa taloon
       (Predef.tk 2 taloina) (Predef.tk 3 taloissa) talojen taloja taloihin) ;
 
--- Regular heuristics.
 
-{-
-  regNounH : Str -> NounH = \vesi -> 
-  let
-    esi = Predef.dp 3 vesi ;   -- analysis: suffixes      
-    si  = Predef.dp 2 esi ;
-    i   = last si ;
-    s   = init si ;
-    a   = if_then_Str (pbool2bool (Predef.occurs "aou" vesi)) "a" "‰" ;
-    ves = init vesi ;          -- synthesis: prefixes
-    vet = strongGrade ves ;
-    ve  = init ves ;
-  in 
-       case esi of {
-    "uus" | "yys" => sRakkaus vesi ;
-    "nen" =>       sNainen (Predef.tk 3 vesi + ("st" + a)) ;
-
-  _ => case si of {
-    "aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "‰‰" | "ˆˆ" => sPuu vesi ;
-    "ie" | "uo" | "yˆ" => sSuo vesi ;
-    "ea" | "e‰" => 
-      mkSubst
-        a
-        vesi (vesi) (vesi) (vesi + a)  (vesi + a+"n")
-        (ves + "i") (ves + "i") (ves + "iden")  (ves + "it"+a)
-        (ves + "isiin") ;
-    "is"        => sNauris (vesi + ("t" + a)) ;
-    "ut" | "yt" => sRae vesi (ves + ("en" + a)) ;
-    "as" | "‰s" => sRae vesi (vet + (a + "n" + a)) ;
-    "ar" | "‰r" => sRae vesi (vet + ("ren" + a)) ;
-  _ => case i of {
-    "n"         => sLiitin vesi (vet + "men") ;
-    "s"         => sTilaus vesi (ves + ("ksen" + a)) ;
-    "i" =>         sBaari (vesi + a) ;
-    "e" =>         sRae vesi (strongGrade vesi + "en" + a) ;
-    "a" | "o" | "u" | "y" | "‰" | "ˆ" => sLukko vesi ;
-    _ =>           sLinux (vesi + "i" + a)
-  }
-  }
-  } ;
-
-  reg2NounH : (savi,savia : Str) -> NounH = \savi,savia -> 
-  let
-    savit = regNounH savi ;
-    ia = Predef.dp 2 savia ;
-    i  = init ia ;
-    a  = last ia ;
-    o  = last savi ;
-    savin = weakGrade savi + "n" ;
-  in
-  case <o,ia> of {
-    <"i","ia">              => sArpi  savi ;
-    <"i","i‰">              => sSylki savi ;
-    <"i","ta"> | <"i","t‰"> => sTohtori (savi + a) ;
-    <"o","ta"> | <"ˆ","t‰"> => sRadio savi ;  
-    <"a","ta"> | <"‰","t‰"> => sPeruna savi ;  
-    <"a","ia"> | <"a","ja"> => sKukko savi savin savia ;
-    _ => savit
-    } ;
--}
-
--- Here some useful special cases; more will be given in $paradigms.Fin.gf$.
+-- Here some useful special cases; more are given in $ParadigmsFin.gf$.
 --         
--- Nouns with partitive "a"/"‰" ; 
--- to account for grade and vowel alternation, three forms are usually enough
--- Examples: "talo", "kukko", "huippu", "koira", "kukka", "syyl‰",...
-
-  sKukko : (_,_,_ : Str) -> NounH = \kukko,kukon,kukkoja ->
-    let {
-      o      = Predef.dp 1 kukko ;
-      a      = Predef.dp 1 kukkoja ;
-      kukkoj = Predef.tk 1 kukkoja ;
-      i      = Predef.dp 1 kukkoj ;
-      ifi    = ifTok Str i "i" ;
-      kukkoi = ifi kukkoj (Predef.tk 1 kukkoj) ;
-      e      = Predef.dp 1 kukkoi ;
-      kukoi  = Predef.tk 2 kukon + Predef.dp 1 kukkoi
-    } 
-    in
-    mkSubst a 
-            kukko 
-            (Predef.tk 1 kukon) 
-            kukko
-            (kukko + a) 
-            (kukko + o + "n")
-            (kukkoi + ifi "" "i") 
-            (kukoi + ifi "" "i") 
-            (ifTok Str e "e" (Predef.tk 1 kukkoi + "ien") (kukkoi + ifi "en" "jen"))
-            kukkoja
-            (kukkoi + ifi "in" "ihin") ;
 
   sLukko : Str -> NounH = \lukko -> 
    let
@@ -333,28 +173,6 @@ oper
             (radioi + "t" + a)
             (radioi + "hin") ;
 
--- Surpraisingly, making the test for the partitive, this not only covers
--- "rae", "perhe", "savuke", but also "rengas", "lyhyt" (except $Sg Illat$), etc.
-
-  sRae : (_,_ : Str) -> NounH = \rae,rakeena ->
-    let {
-      a      = Predef.dp 1 rakeena ;
-      rakee  = Predef.tk 2 rakeena ;
-      rakei  = Predef.tk 1 rakee + "i" ;
-      raet   = rae + (ifTok Str (Predef.dp 1 rae) "e" "t" [])
-    } 
-    in
-    mkSubst a 
-            rae
-            rakee 
-            rakee
-            (raet + ("t" + a)) 
-            (rakee + "seen")
-            rakei
-            rakei
-            (rakei + "den") 
-            (rakei + ("t" + a))
-            (rakei + "siin") ;
 
   sSusi : (_,_,_ : Str) -> NounH = \susi,suden,sutena ->
     let
@@ -671,6 +489,8 @@ vowelHarmony : Str -> Str = \liitin ->
 --
 -- Proper names are similar to common nouns in the singular.
 
+  ProperName = {s : Case => Str} ;
+
   mkProperName : CommonNoun -> ProperName = \jussi -> 
     {s = \\c => jussi.s ! NCase Sg c} ;
 
@@ -705,87 +525,78 @@ vowelHarmony : Str -> Str = \liitin ->
 --
 -- Here we define personal and relative pronouns.
 
-  mkPronoun : (_,_,_,_,_ : Str) ->  Number -> Person -> Pronoun = 
+  mkPronoun : (_,_,_,_,_ : Str) ->  Number -> Person -> 
+    {s : NPForm => Str ; a : Agr} = 
     \mina, minun, minua, minuna, minuun, n, p ->
     let {
       minu = Predef.tk 2 minuna ;
       a    = Predef.dp 1 minuna
     } in 
     {s = table {
-      PCase Nom    => mina ;
-      PCase Gen    => minun ;
-      PCase Part   => minua ;
-      PCase Transl => minu + "ksi" ;
-      PCase Ess    => minuna ;
-      PCase Iness  => minu + ("ss" + a) ;
-      PCase Elat   => minu + ("st" + a) ;
-      PCase Illat  => minuun ;
-      PCase Adess  => minu + ("ll" + a) ;
-      PCase Ablat  => minu + ("lt" + a) ;
-      PCase Allat  => minu + "lle" ;
-      PCase Abess  => minu + ("tt" + a) ;
-      PAcc         => Predef.tk 1 minun + "t"
+      NPCase Nom    => mina ;
+      NPCase Gen    => minun ;
+      NPCase Part   => minua ;
+      NPCase Transl => minu + "ksi" ;
+      NPCase Ess    => minuna ;
+      NPCase Iness  => minu + ("ss" + a) ;
+      NPCase Elat   => minu + ("st" + a) ;
+      NPCase Illat  => minuun ;
+      NPCase Adess  => minu + ("ll" + a) ;
+      NPCase Ablat  => minu + ("lt" + a) ;
+      NPCase Allat  => minu + "lle" ;
+      NPCase Abess  => minu + ("tt" + a) ;
+      NPAcc         => Predef.tk 1 minun + "t"
       } ;
-     n = n ; p = p} ; 
+     a = {n = n ; p = p}
+    } ; 
 
-  pronMina = mkPronoun "min‰" "minun" "minua" "minuna" "minuun" Sg P1 ;
-  pronSina = mkPronoun "sin‰" "sinun" "sinua" "sinuna" "sinuun"  Sg P2 ;
-  pronHan  = mkPronoun "h‰n" "h‰nen" "h‰nt‰"  "h‰nen‰" "h‰neen" Sg P3 ;
-  pronMe   = mkPronoun "me" "meid‰n" "meit‰" "mein‰" "meihin" Pl P1 ;
-  pronTe   = mkPronoun "te" "teid‰n" "teit‰" "tein‰" "teihin"  Pl P2 ;
-  pronHe   = mkPronoun "he" "heid‰n" "heit‰" "hein‰" "heihin"  Pl P3 ;
-  pronNe   = mkPronoun "ne" "niiden" "niit‰" "niin‰" "niihin"  Pl P3 ;
-
-  pronTama = mkPronoun "t‰m‰" "t‰m‰n" "t‰t‰" "t‰n‰" "t‰h‰n"  Sg P3 ;
-  pronNama = mkPronoun "n‰m‰" "n‰iden" "n‰it‰" "n‰in‰" "n‰ihin"  Pl P3 ;
-  pronTuo  = mkPronoun "tuo" "tuon" "tuota" "tuona" "tuohon"  Sg P3 ;
-  pronNuo  = mkPronoun "nuo" "noiden" "noita" "noina" "noihin"  Pl P3 ;
-
--- The non-human pronoun "se" ('it') is even more irregular,
--- Its accusative cases do not
--- have a special form with "t", but have the normal genitive/nominative variation.
--- We use the type $ProperName$ for "se", because of the accusative but also
--- because the person and number are as for proper names.
-
-  pronSe : ProperName  = {
-    s = table {
-      Nom    => "se" ;
-      Gen    => "sen" ;
-      Part   => "sit‰" ;
-      Transl => "siksi" ;
-      Ess    => "sin‰" ;
-      Iness  => "siin‰" ;
-      Elat   => "siit‰" ;
-      Illat  => "siihen" ;
-      Adess  => "sill‰" ;
-      Ablat  => "silt‰" ;
-      Allat  => "sille" ;
-      Abess  => "sitt‰"
+  mkDemPronoun : (_,_,_,_,_ : Str) ->  Number -> 
+    {s : NPForm => Str ; a : Agr} = 
+    \tuo, tuon, tuota, tuona, tuohon, n ->
+    let pro = mkPronoun tuo tuon tuota tuona tuohon n P3
+    in {
+      s = table {
+        NPAcc => tuo ;
+        c => pro.s ! c
+        } ;
+      a = pro.a
       } ;
+
+-- Determiners
+
+  mkDet : Number -> CommonNoun -> {
+      s1 : Case => Str ;       -- minun kolme
+      s2 : Str ;               -- -ni
+      n : Number ;             -- Pl   (agreement feature for verb)
+      isNum : Bool ;           -- True (a numeral is present)
+      isPoss : Bool ;          -- True (a possessive suffix is present)
+      isDef : Bool             -- True (verb agrees in Pl, Nom is not Part)
+      } = \n, noun -> {
+    s1 = \\c => noun.s ! NCase n c ;
+    s2 = [] ;
+    n = n ;
+    isNum, isPoss = False ;
+    isDef = True  --- does this hold for all new dets?
     } ;
 
--- The possessive suffixes will be needed in syntax. It will show up
--- as a separate word ("auto &+ ni"), which needs unlexing. Unlexing also
--- has to fix the vowel harmony in cases like "‰iti &+ ns‰".
-
-  suff : Str -> Str = \ni -> ni ;
-
-  possSuffix : Number => Person => Str = \\n,p => 
-    suff (case <n,p> of {
-      <Sg,P1> => "ni" ;
-      <Sg,P2> => "si" ;
-      <Sg,P3> => "nsa" ;
-      <Pl,P1> => "mme" ;
-      <Pl,P2> => "nne" ;
-      <Pl,P3> => "nsa"
-    } ) ;
+  mkQuant : CommonNoun -> {
+    s1 : Number => Case => Str ; 
+    s2 : Str ; 
+    isPoss, isDef : Bool
+    } = \noun -> {
+      s1 = \\n,c => noun.s ! NCase n c ;
+      s2 = [] ;
+      isPoss = False ;
+      isDef = True  --- does this hold for all new dets?
+    } ;
 
 -- The relative pronoun, "joka", is inflected in case and number, 
 -- like common nouns, but it does not take possessive suffixes.
 -- The inflextion shows a surprising similarity with "suo".
 
-  relPron : RelPron = 
-    let {jo = nhn (sSuo "jo")} in {s = 
+oper
+  relPron : Number => Case => Str =
+    let {jo = nhn (sSuo "jo")} in
     table {
       Sg => table {
         Nom => "joka" ;
@@ -796,258 +607,37 @@ vowelHarmony : Str -> Str = \liitin ->
         Nom => "jotka" ;
         c   => "j" + (jo.s ! NCase Pl c)
         }
-      } 
-    } ;
+      } ;
   
-  mikaInt : Number => Case => Str = 
-    let {
-      mi  = nhn (sSuo "mi")
-    } in
-    table {
-      Sg => table {
-        Nom => "mik‰" ;
-        Gen => "mink‰" ;
-        c   => mi.s ! NCase Sg c
-       } ; 
-      Pl => table {
-        Nom => "mitk‰" ;
-        Gen => "mittenk‰" ;
-        c   => mi.s ! NCase Sg c
-        }
-      } ;
-
-  kukaInt : Number => Case => Str = 
-    let {
-      ku = nhn (sRae "kuka" "kenen‰") ;
-      ket = nhn (sRae "kuka" "kein‰")} in
-    table {
-      Sg => table {
-        Nom => "kuka" ;
-        Part => "ket‰" ;
-        Illat => "keneen" ;
-        c   => ku.s ! NCase Sg c
-       } ; 
-      Pl => table {
-        Nom => "ketk‰" ;
-        Illat => "keihin" ;
-        c   => ket.s ! NCase Pl c
-        }
-      } ;
-
-  mikaanPron : Number => Case => Str = \\n,c =>
-    case <n,c> of {
-        <Sg,Nom> => "mik‰‰n" ;
-        <_,Part> => "mit‰‰n" ;
-        <Sg,Gen> => "mink‰‰n" ;
-        <Pl,Nom> => "mitk‰‰n" ;
-        <Pl,Gen> => "mittenk‰‰n" ;
-        <_,Ess>  => "min‰‰n" ;
-        <_,Iness> => "miss‰‰n" ;
-        <_,Elat> => "mist‰‰n" ;
-        <_,Adess> => "mill‰‰n" ;
-        <_,Ablat> => "milt‰‰n" ;
-        _   => mikaInt ! n ! c + "k‰‰n"
-       } ; 
-
-  kukaanPron : Number => Case => Str =
-    table {
-      Sg => table {
-        Nom => "kukaan" ;
-        Part => "ket‰‰n" ;
-        Ess => "ken‰‰n" ;
-        Iness => "kess‰‰n" ;
-        Elat  => "kest‰‰n" ;
-        Illat => "kehenk‰‰n" ;
-        Adess => "kell‰‰n" ;
-        Ablat => "kelt‰‰n" ;
-        c   => kukaInt ! Sg ! c + "k‰‰n"
-       } ; 
-      Pl => table {
-        Nom => "ketk‰‰n" ;
-        Part => "keit‰‰n" ;
-        Ess => "kein‰‰n" ;
-        Iness => "keiss‰‰n" ;
-        Elat => "keist‰‰n" ;
-        Adess => "keill‰‰n" ;
-        Ablat => "keilt‰‰n" ;
-        c   => kukaInt ! Pl ! c + "k‰‰n"
-        }
-      } ;
-
-  jokuPron : Number => Case => Str =
-    let 
-      ku = nhn (sPuu "ku") ;
-      kui = nhn (sPuu "kuu") 
-    in
-    table {
-      Sg => table {
-        Nom => "joku" ;
-        Gen => "jonkun" ;
-        c => relPron.s ! Sg ! c + ku.s ! NCase Sg c
-       } ; 
-      Pl => table {
-        Nom => "jotkut" ;
-        c => relPron.s ! Pl ! c + kui.s ! NCase Pl c
-        }
-      } ;
-
-  jokinPron : Number => Case => Str =
-    table {
-      Sg => table {
-        Nom => "jokin" ;
-        Gen => "jonkin" ;
-        c => relPron.s ! Sg ! c + "kin"
-       } ; 
-      Pl => table {
-        Nom => "jotkin" ;
-        c => relPron.s ! Pl ! c + "kin"
-        }
-      } ;
-
-moniPron : Case => Str = caseTable singular (nhn (sSusi "moni" "monen" "monena")) ;
-
 caseTable : Number -> CommonNoun -> Case => Str = \n,cn -> 
   \\c => cn.s ! NCase n c ;
 
 
 --2 Adjectives
 --
--- To form an adjective, it is usually enough to give a noun declension: the
--- adverbial form is regular.
 
-  noun2adj : CommonNoun -> Adjective = noun2adjComp True ;
-
-  noun2adjComp : Bool -> CommonNoun -> Adjective = \isPos,tuore ->
-    let 
-      tuoreesti  = Predef.tk 1 (tuore.s ! NCase Sg Gen) + "sti" ; 
-      tuoreemmin = Predef.tk 2 (tuore.s ! NCase Sg Gen) + "in"
-    in {s = table {
-         AN f => tuore.s ! f ;
-         AAdv => if_then_Str isPos tuoreesti tuoreemmin
-         }
-       } ;
 
 -- For the comparison of adjectives, three noun declensions 
 -- are needed in the worst case.
 
-  mkAdjDegr : (_,_,_ : Adjective) -> AdjDegr = \hyva,parempi,paras -> 
+  mkAdjective : (_,_,_ : Adj) -> Adjective = \hyva,parempi,paras -> 
     {s = table {
-      Pos  => hyva.s ;
-      Comp => parempi.s ;
-      Sup  => paras.s
+      Posit  => hyva.s ;
+      Compar => parempi.s ;
+      Superl  => paras.s
       }
     } ;
 
 -- However, it is usually enough to give the positive declension and
 -- the characteristic forms of comparative and superlative. 
 
-  regAdjDegr : CommonNoun -> Str -> Str -> AdjDegr = \kiva, kivempaa, kivinta ->
-    mkAdjDegr 
+  regAdjective : CommonNoun -> Str -> Str -> Adjective = \kiva, kivempaa, kivinta ->
+    mkAdjective 
       (noun2adj kiva) 
       (noun2adjComp False (nhn (sSuurempi kivempaa))) 
       (noun2adjComp False (nhn (sSuurin kivinta))) ;
 
 
---3 Verbs
---
--- The present, past, conditional. and infinitive stems, acc. to Koskenniemi.
--- Unfortunately not enough (without complicated processes).
--- We moreover give grade alternation forms as arguments, since it does not
--- happen automatically.
---- A problem remains with the verb "seist‰", where the infinitive
---- stem has vowel harmony "‰" but the others "a", thus "seisoivat" but "seisk‰‰".
-
-
-  mkVerb : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Verb = 
-    \tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun -> 
-    v2v (mkVerbH 
-     tulla tulee tulen tulevat tulkaa tullaan tuli tulin tulisi tullut tultu tullun
-      ) ;
-
-  v2v : VerbH -> Verb = \vh -> 
-    let
-      tulla = vh.tulla ; 
-      tulee = vh.tulee ; 
-      tulen = vh.tulen ; 
-      tulevat = vh.tulevat ;
-      tulkaa = vh.tulkaa ; 
-      tullaan = vh.tullaan ; 
-      tuli = vh.tuli ; 
-      tulin = vh.tulin ;
-      tulisi = vh.tulisi ;
-      tullut = vh.tullut ;
-      tultu = vh.tultu ;
-      tultu = vh.tultu ;
-      tullun = vh.tullun ;
-      tuje = init tulen ;
-      tuji = init tulin ;
-      a = Predef.dp 1 tulkaa ;
-      tulko = Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "ˆ") ;
-      o = last tulko ;
-      tulleena = Predef.tk 2 tullut + ("een" + a) ;
-      tulleen = (noun2adj (nhn (sRae tullut tulleena))).s ;
-      tullun = (noun2adj (nhn (sKukko tultu tullun (tultu + ("j"+a))))).s  ;
-      tulema = tuje + "m" + a ;
-      vat = "v" + a + "t"
-    in
-    {s = table {
-      Inf => tulla ;
-      Pres Sg P1 => tuje + "n" ;
-      Pres Sg P2 => tuje + "t" ;
-      Pres Sg P3 => tulee ;
-      Pres Pl P1 => tuje + "mme" ;
-      Pres Pl P2 => tuje + "tte" ;
-      Pres Pl P3 => tulevat ;
-      Impf Sg P1 => tuji + "n" ;
-      Impf Sg P2 => tuji + "t" ;
-      Impf Sg P3 => tuli ;
-      Impf Pl P1 => tuji + "mme" ;
-      Impf Pl P2 => tuji + "tte" ;
-      Impf Pl P3 => tuli + vat ;
-      Cond Sg P1 => tulisi + "n" ;
-      Cond Sg P2 => tulisi + "t" ;
-      Cond Sg P3 => tulisi ;
-      Cond Pl P1 => tulisi + "mme" ;
-      Cond Pl P2 => tulisi + "tte" ;
-      Cond Pl P3 => tulisi + vat ;
-      Imper Sg   => tuje ;
-      Imper Pl   => tulkaa ;
-      ImperP3 Sg => tulko + o + "n" ;
-      ImperP3 Pl => tulko + o + "t" ;
-      ImperP1Pl  => tulkaa + "mme" ;
-      ImpNegPl   => tulko ;
-      Pass True  => tullaan ;
-      Pass False => Predef.tk 2 tullaan ;
-      PastPartAct n => tulleen ! n ;
-      PastPartPass n => tullun ! n ;
-      Inf3Iness => tulema + "ss" + a ;
-      Inf3Elat  => tulema + "st" + a ;
-      Inf3Illat => tulema +  a   + "n" ;
-      Inf3Adess => tulema + "ll" + a ;
-      Inf3Abess => tulema + "tt" + a 
-      }
-    } ;
-
-  VerbH : Type = {
-    tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun
-      : Str
-    } ;
-
-  mkVerbH : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> VerbH = 
-    \tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun -> 
-    {tulla = tulla ; 
-     tulee = tulee ; 
-     tulen = tulen ; 
-     tulevat = tulevat ;
-     tulkaa = tulkaa ; 
-     tullaan = tullaan ; 
-     tuli = tuli ; 
-     tulin = tulin ;
-     tulisi = tulisi ;
-     tullut = tullut ;
-     tultu = tultu ;
-     tullun = tullun
-     } ; 
 
   regVerbH : Str -> VerbH = \soutaa -> 
   let
@@ -1062,7 +652,8 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
   in 
   case taa of {
     "it" + _ => vHarkita soutaa ;
-    ("st" | "nn" | "rr" | "ll") + _ => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
+    ("st" | "nn" | "rr" | "ll") + _ => 
+      vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
     _ + ("aa" | "‰‰")     => vOttaa soutaa (souda + "n") ;
     ("o" | "u" | "y" | "ˆ") + ("da" | "d‰") => vJuoda soutaa joi ;
     ("ata" | "‰t‰") => vOsata soutaa ;
@@ -1071,7 +662,6 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
   reg2VerbH : (soutaa,souti : Str) -> VerbH = \soutaa,souti ->
   let
-    soudat = regVerbH soutaa ;
     soudan = weakGrade (init soutaa) + "n" ;
     soudin = weakGrade souti + "n" ;
     souden = init souti + "en" ;
@@ -1083,8 +673,10 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
   case taa of {
     "taa" | "t‰‰" => vHuoltaa soutaa soudan souti soudin ;
     "ata" | "‰t‰" => vPalkata soutaa souti ;
+    "ota" | "ˆt‰" => vPudota soutaa souti ;
     "sta" | "st‰" => vJuosta soutaa souden (juo +   o+u+"t") (juo + "t"+u) ;
-    _ => soudat
+    _ + ("da" | "d‰") => vJuoda soutaa souti ;
+    _ => regVerbH soutaa
     } ;
 
   reg3VerbH : (_,_,_ : Str) -> VerbH = \soutaa,soudan,souti -> 
@@ -1095,14 +687,11 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     o  = last juo ;
     a = last taa ;
     u = ifTok Str a "a" "u" "y" ;
-    soudin = weakGrade souti + "n" ;
-    soudat = reg2VerbH soutaa souti ;
+    soudin = weakGrade (init souti) + "in" ;
   in case taa of {
     "lla" | "ll‰" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
-    "ota" | "ˆt‰" => vPudota soutaa souti ;
     "taa" | "t‰‰" => vHuoltaa soutaa soudan souti soudin ;
-    _ + ("da" | "d‰") => vJuoda soutaa souti ;
-    _ => soudat
+    _ => reg2VerbH soutaa souti
     } ;
 
 -- For "harppoa", "hukkua", "lˆyty‰", with grade alternation.
@@ -1305,91 +894,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       (juo + "t" + u)
       (juo + "d" + u + "n") ;
 
-  verbOlla : Verb = 
-    mkVerb 
-      "olla" "on" "olen" "ovat" "olkaa" "ollaan" 
-      "oli" "olin" "olisi" "ollut" "oltu" "ollun" ;
-
--- The negating operator "ei" is actually a verb, which has present 
--- active indicative and imperative forms, but no infinitive.
-
-  verbEi : Verb = 
-    let ei = 
-      mkVerb 
-        "ei" "ei" "en" "eiv‰t" "‰lk‰‰" 
-        "ei" "e" "en" "e" "ei" "ei" "ei"
-    in
-    {s = table {
-      Imper Sg => "‰l‰" ;
---      Impf n p | Cond n p => ei.s ! Pres n p ;
-      Impf n p => ei.s ! Pres n p ;
-      Cond n p => ei.s ! Pres n p ;
-      v => ei.s ! v
-      }
-    } ;
-
---2 Some structural words
-
-  kuinConj = "kuin" ;
-
-  conjEtta = "ett‰" ;
-  advSiten = "siten" ;
-
-  mikakukaInt : Gender => Number => Case => Str = 
-    table {
-      NonHuman => mikaInt ;
-      Human => kukaInt
-    } ;
-
-  kaikkiPron : Number -> Case => Str = \n -> 
-    let {kaiket = caseTable n (nhn (sKorpi "kaikki" "kaiken" "kaikkena"))} in
-    table {
-      Nom => "kaikki" ;
-      c => kaiket ! c
-      } ;
-
-  stopPunct  = "." ;
-  commaPunct = "," ;
-  questPunct = "?" ;
-  exclPunct  = "!" ;
-
-  koPart = suff "ko" ;
-
--- For $NumeralsFin$.
-
-  param NumPlace = NumIndep | NumAttr  ;
-
-oper
-  yksiN = nhn (mkSubst "‰" "yksi" "yhde" "yhte" "yht‰" "yhteen" "yksi" "yksi" 
-                "yksien" "yksi‰" "yksiin") ;
-  kymmenenN = nhn (mkSubst "‰" "kymmenen" "kymmene" "kymmene" "kymment‰" 
-     "kymmeneen" "kymmeni" "kymmeni" "kymmenien" "kymmeni‰"
-     "kymmeniin") ;
-  sataN = nhn (sLukko "sata") ;
-
-  tuhatN = nhn (mkSubst "a" "tuhat" "tuhanne" "tuhante" "tuhatta" "tuhanteen"
-    "tuhansi" "tuhansi" "tuhansien" "tuhansia" "tuhansiin") ;
-
-  kymmentaN = {s = table {
-    NCase Sg Nom => "kymment‰" ;
-    c => kymmenenN.s ! c
-    }
-  } ;
-
-  sataaN = {s = table {
-    Sg => sataN.s ;
-    Pl => table {
-      NCase Sg Nom => "sataa" ;
-      c => sataN.s ! c
-      }
-    }
-  } ;
-  tuhattaN = {s = table {
-    Sg => tuhatN.s ;
-    Pl => table {
-      NCase Sg Nom => "tuhatta" ;
-      c => tuhatN.s ! c
-      }
-    }
-  } ;
 } ;
+
+
+

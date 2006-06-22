@@ -1,4 +1,2 @@
---# -path=.:../scandinavian:../abstract:../../prelude
-
-concrete MathNor of Math = CategoriesNor **
-  MathScand with (SyntaxScand=SyntaxNor) ;
+concrete MathNor of Math = CatNor ** MathScand with
+  (ResScand = ResNor) ;

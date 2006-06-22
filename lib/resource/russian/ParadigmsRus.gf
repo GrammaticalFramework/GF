@@ -1,22 +1,36 @@
---# -path=.:../abstract:../../prelude 
+--# -path=.:../abstract:../../prelude:../common
 
 --1 Russian Lexical Paradigms
 --
--- Aarne Ranta, Janna Khegai 2003
+-- Janna Khegai 2003--2006
 --
--- This is an API to the user of the resource grammar 
--- for adding lexical items. It give shortcuts for forming
--- expressions of basic categories: nouns, adjectives, verbs.
+-- This is an API for the user of the resource grammar 
+-- for adding lexical items. It gives functions for forming
+-- expressions of open categories: nouns, adjectives, verbs.
 -- 
 -- Closed categories (determiners, pronouns, conjunctions) are
--- accessed through the resource syntax API, $resource.Abs.gf$. 
+-- accessed through the resource syntax API, $Structural.gf$. 
 --
+-- The main difference with $MorphoRus.gf$ is that the types
+-- referred to are compiled resource grammar types. We have moreover
+-- had the design principle of always having existing forms, rather
+-- than stems, as string arguments of the paradigms.
 --
--- The following files are presupposed:
+-- The structure of functions for each word class $C$ is the following:
+-- first we give a handful of patterns that aim to cover all
+-- regular cases. Then we give a worst-case function $mkC$, which serves as an
+-- escape to construct the most irregular words of type $C$.
+-- 
+-- The following modules are presupposed:
 
-resource ParadigmsRus = open (Predef=Predef), Prelude, MorphoRus, SyntaxRus, 
-CategoriesRus, RulesRus in {
- 
+resource ParadigmsRus = open 
+  (Predef=Predef), 
+  Prelude, 
+  MorphoRus,
+  CatRus,
+  NounRus
+  in {
+
 flags  coding=utf8 ;
 
 --2 Parameters 
@@ -57,7 +71,7 @@ oper
   animate: Animacy;
   inanimate: Animacy; 
  
-   mkIndeclinableNoun: Str -> Gender -> Animacy -> N ; 
+  mkIndeclinableNoun: Str -> Gender -> Animacy -> N ; 
 
 -- Worst case - give six singular forms:
 -- Nominative, Genetive, Dative, Accusative, Instructive and Prepositional;
@@ -68,10 +82,16 @@ oper
 -- to the Nominative or the Genetive one) is actually of no help, 
 -- since there are a lot of exceptions and the gain is just one form less.
 
-  mkN  : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Gender -> Animacy -> N ; 
+  mkN  : (nomSg, genSg, datSg, accSg, instSg, preposSg,
+          nomPl, genPl, datPl, accPl, instPl, preposPl: Str) -> Gender -> Animacy -> N ; 
 
      -- мужчина, мужчины, мужчине, мужчину, мужчиной, мужчине
      -- мужчины, мужчин, мужчинам, мужчин, мужчинами, мужчинах
+
+-- The regular function captures the variants for some popular nouns 
+-- endings below:
+
+  regN : Str -> N ;
 
 
 -- Here are some common patterns. The list is far from complete.
@@ -82,7 +102,7 @@ oper
   nEdinica   : Str -> N ;    -- feminine, inanimate, ending with "-а", Inst -"единиц-ей"
   nZhenchina : Str -> N ;    -- feminine, animate, ending with "-a"
   nNoga      : Str -> N ;    -- feminine, inanimate, ending with "г_к_х-a"
-  nMalyariya  : Str -> N ;    -- feminine, inanimate, ending with "-ия"   
+  nMalyariya : Str -> N ;    -- feminine, inanimate, ending with "-ия"   
   nTetya     : Str -> N ;    -- feminine, animate, ending with "-я"   
   nBol       : Str -> N ;    -- feminine, inanimate, ending with "-ь"(soft sign)     
 
@@ -95,8 +115,8 @@ oper
 
 -- Masculine patterns. 
 
---Ending with consonant: 
-nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-ла"
+-- Ending with consonant: 
+  nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-ла"
 
   nBrat: Str -> N ;   -- animate, брат-ья
   nStul: Str -> N ;    -- same as above, but inanimate
@@ -114,9 +134,9 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 
 -- Nouns used as functions need a preposition. The most common is with Genitive.
 
-  mkFun  : N -> Preposition -> Case -> N2 ;
+  mkFun  : N -> Prep -> N2 ;
   mkN2 : N -> N2 ;
-  mkN3 : N -> Preposition -> Preposition -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ;
 
 -- Proper names.
 
@@ -136,14 +156,10 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 -- forms in the worst case:
 
 
---                        Masculine  | Feminine | Neutral | Plural
---  Nominative
---  Genitive
---  Dative
---  Accusative Inanimate
---  Accusative Animate
---  Instructive
---  Prepositional
+--  (Masculine  | Feminine | Neutral | Plural) *
+
+--  (Nominative | Genitive | Dative | Accusative Inanimate | Accusative Animate |
+--  Instructive | Prepositional)
 
 
 -- Notice that 4 short forms, which exist for some adjectives are not included 
@@ -152,18 +168,25 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 
 -- mkA : ( : Str) -> A ;
 
+-- The regular function captures the variants for some popular adjective
+-- endings below. The first string agrument is the masculine singular form, 
+-- the second is comparative:
+  
+   regA : Str -> Str -> A ;
+
+
 -- Invariable adjective is a special case.
 
    adjInvar : Str -> A ;          -- khaki, mini, hindi, netto
 
 -- Some regular patterns depending on the ending.
 
-   AStaruyj : Str -> A ;             -- ending with "-ый"
-   AMalenkij : Str -> A ;            -- ending with "-ий", Gen - "маленьк-ого"
-   AKhoroshij : Str -> A ;         --  ending with "-ий", Gen - "хорош-его"
-     AMolodoj : Str -> A ;             -- ending with "-ой", 
+   AStaruyj : Str -> Str -> A ;            -- ending with "-ый"
+   AMalenkij : Str -> Str -> A ;           -- ending with "-ий", Gen - "маленьк-ого"
+   AKhoroshij : Str -> Str -> A ;          -- ending with "-ий", Gen - "хорош-его"
+   AMolodoj : Str -> Str -> A ;            -- ending with "-ой", 
                                            -- plural - молод-ые"
-   AKakoj_Nibud : Str -> Str -> A ;  -- ending with "-ой", 
+   AKakoj_Nibud : Str -> Str -> Str -> A ; -- ending with "-ой", 
                                            -- plural - "как-ие"
 
 -- Two-place adjectives need a preposition and a case as extra arguments.
@@ -172,24 +195,22 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 
 -- Comparison adjectives need a positive adjective 
 -- (28 forms without short forms). 
--- Taking only one comparative form (non-syntaxic) and 
--- only one superlative form (syntaxic) we can produce the
+-- Taking only one comparative form (non-syntactic) and 
+-- only one superlative form (syntactic) we can produce the
 -- comparison adjective with only one extra argument -
--- non-syntaxic comparative form.
--- Syntaxic forms are based on the positive forms.
+-- non-syntactic comparative form.
+-- Syntactic forms are based on the positive forms.
 
 
-   mkADeg : A -> Str -> ADeg ;
+--   mkADeg : A -> Str -> ADeg ;
 
 -- On top level, there are adjectival phrases. The most common case is
 -- just to use a one-place adjective. 
-
-   ap : A  -> IsPostfixAdj -> AP ;
+--   ap : A  -> IsPostfixAdj -> AP ;
 
 --2 Adverbs
 
--- Adverbs are not inflected. Most lexical ones have position
--- after the verb. Some can be preverbal (e.g. "always").
+-- Adverbs are not inflected.
 
   mkAdv : Str -> Adv ;
 
@@ -201,30 +222,27 @@ nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-л�
 -- 4(GenNum)(past) ](indicative)+ 4 (GenNum) (subjunctive) } 
 -- Participles (Present and Past) and Gerund forms are not included, 
 -- since they fuction more like Adjectives and Adverbs correspondingly
--- rather than verbs. Aspect regarded as an inherent parameter of a verb.
--- Notice, that some forms are never used for some verbs. Actually, 
--- the majority of verbs do not have many of the forms.
+-- rather than verbs. Aspect is regarded as an inherent parameter of a verb.
+-- Notice, that some forms are never used for some verbs. 
+
 Voice: Type; 
 Aspect: Type; 
-Tense : Type;  
 Bool: Type;
 Conjugation: Type ;
 
-first: Conjugation; -- "гуля-Ешь, гуля-Ем"
-firstE: Conjugation; -- Verbs with vowel "ё": "даёшь" (give), "пьёшь" (drink)  
-second: Conjugation; -- "вид-Ишь, вид-Им"
-mixed: Conjugation; -- "хоч-Ешь - хот-Им"
+first:   Conjugation; -- "гуля-Ешь, гуля-Ем"
+firstE:  Conjugation; -- Verbs with vowel "ё": "даёшь" (give), "пьёшь" (drink)  
+second:  Conjugation; -- "вид-Ишь, вид-Им"
+mixed:   Conjugation; -- "хоч-Ешь - хот-Им"
 dolzhen: Conjugation; -- irregular
 
-true: Bool;
+true:  Bool;
 false: Bool;
  
 active: Voice ;
 passive: Voice ;
 imperfective: Aspect;
 perfective: Aspect ;  
-present : Tense ;
-past : Tense ;
 
 
 -- The worst case need 6 forms of the present tense in indicative mood
@@ -233,7 +251,9 @@ past : Tense ;
 -- (singular, second person: "беги"), an infinitive ("бежать").
 -- Inherent aspect should also be specified.
 
-   mkVerbum : Aspect -> (_,_,_,_,_,_,_,_,_ : Str) -> V ;
+   mkVerbum : Aspect -> (presentSgP1,presentSgP2,presentSgP3,
+                         presentPlP1,presentPlP2,presentPlP3,
+                         pastSgMasculine,imperative,infinitive: Str) -> V ;
 
 -- Common conjugation patterns are two conjugations: 
 --  first - verbs ending with "-ать/-ять" and second - "-ить/-еть".
@@ -244,9 +264,10 @@ past : Tense ;
 -- first person from with second person form:
 -- "я люб-лю", "ты люб-ишь". Stems shoud be the same.
 -- So the definition for verb "любить"  looks like:
--- mkRegVerb Imperfective Second "люб" "лю" "любил" "люби" "любить";
+-- regV Imperfective Second "люб" "лю" "любил" "люби" "любить";
 
-   mkRegVerb :Aspect -> Conjugation -> (_,_,_,_,_ : Str) -> V ; 
+   regV :Aspect -> Conjugation -> (stemPresentSgP1,endingPresentSgP1,
+                         pastSgP1,imperative,infinitive : Str) -> V ; 
 
 -- For writing an application grammar one usualy doesn't need
 -- the whole inflection table, since each verb is used in 
@@ -262,21 +283,21 @@ past : Tense ;
 -- Two-place verbs, and the special case with direct object. Notice that
 -- a particle can be included in a $V$.
 
-   mkTV     : V   -> Str -> Case -> V2 ;   -- "войти в дом"; "в", accusative
+   mkV2     : V   -> Str -> Case -> V2 ;   -- "войти в дом"; "в", accusative
    mkV3  : V -> Str -> Str -> Case -> Case -> V3 ; -- "сложить письмо в конверт"
-   tvDir    : V -> V2 ;                    -- "видеть", "любить"
+   dirV2    : V -> V2 ;                    -- "видеть", "любить"
    tvDirDir : V -> V3 ; 
                             
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
-  Gender = SyntaxRus.Gender ;
-  Case = SyntaxRus.Case ;
-  Number = SyntaxRus.Number ;
-  Animacy = SyntaxRus.Animacy;
-  Aspect = SyntaxRus.Aspect;
-  Voice = SyntaxRus.Voice ;
-  Tense = SyntaxRus.RusTense ;
+  Gender = MorphoRus.Gender ;
+  Case = MorphoRus.Case ;
+  Number = MorphoRus.Number ;
+  Animacy = MorphoRus.Animacy;
+  Aspect = MorphoRus.Aspect;
+  Voice = MorphoRus.Voice ;
+  --Tense = Tense ;
    Bool = Prelude.Bool ;
   Conjugation = MorphoRus.Conjugation;
 first = First ;
@@ -304,8 +325,8 @@ dolzhen = Dolzhen;
   passive = Pass ; 
   imperfective = Imperfective ;
   perfective = Perfective ;
-  present = Present ;
-  past = Past ;
+ -- present = Present ;
+  --past = Past ;
   --  Degree     = Pos | Comp | Super ;
  -- Person     = P1 | P2 | P3 ;
  -- AfterPrep  = Yes | No ; 
@@ -342,6 +363,32 @@ dolzhen = Dolzhen;
      anim = anim
    } ** {lock_N = <>}  ;
 
+
+regN = \ray -> 
+    let
+      ra  = Predef.tk 1 ray ; 
+      y   = Predef.dp 1 ray ; 
+      r   = Predef.tk 2 ray ; 
+      ay  = Predef.dp 2 ray ;
+      rays =
+        case y of {
+          "а" => nMashina ray ; 
+          "ь" => nBol ray ;
+          "я" => case ay of { 
+                   "ия" => nMalyariya ray; 
+                    _  => nTetya ray };
+          "е" => case ay of {
+            "ее" => nObezbolivauchee ray ;
+            "ое" => nZhivotnoe ray  ;
+            _ => nProizvedenie ray  };
+          "о" => nChislo ray;
+           _=>  nStomatolog ray
+         }
+     in
+       rays ;
+
+  
+
   nMashina   = \s -> aEndInAnimateDecl s ** {lock_N = <>};
   nEdinica   = \s -> ej_aEndInAnimateDecl s ** {lock_N = <>};
   nZhenchina = \s -> (aEndAnimateDecl s) ** { g = Fem ; anim = Animate } ** {lock_N = <>}; 
@@ -374,35 +421,62 @@ dolzhen = Dolzhen;
   nNol       = \s -> softSignEndDeclMasc s ** {lock_N = <>};
   nUroven    = \s -> EN_softSignEndDeclMasc s ** {lock_N = <>};
 
--- mkFun     defined in syntax.RusU
- mkN2 n = funGen n ** {lock_N2 = <>} ; --   defined in syntax.RusU 
 
-mkN3 n p r = mkCommNoun3 n p r ** {lock_N3 = <>} ; --   defined in syntax.RusU 
+-- An individual-valued function is a common noun together with the
+-- preposition prefixed to its argument ("клZ+ о' дома").
+-- The situation is analogous to two-place adjectives and transitive verbs.
+--
+-- We allow the genitive construction to be used as a variant of
+-- all function applications. It would definitely be too restrictive only
+-- to allow it when the required case is genitive. We don't know if there
+-- are counterexamples to the liberal choice we've made.
+
+  mkFun f p = (UseN f) ** {s2 = p.s ; c = p.c}** {lock_N2 = <>}  ;
+
+-- The commonest cases are functions with Genitive.
+  mkN2 n = mkFun n nullPrep ;
+  nullPrep : Prep = {s = []; c= Gen; lock_Prep=<>} ;  
+
+  mkN3 f p r = (UseN f) ** {s2 = p.s ; c=p.c; s3=r.s ; c2=r.c; lock_N3 = <>} ; 
+
 
   mkPN = \ivan, g, anim -> 
     case g of { 
        Masc => mkProperNameMasc ivan anim ; 
        _ => mkProperNameFem ivan anim
     } ** {lock_PN =<>};
-  nounPN  n = (mkCNProperName n)**{lock_PN=<>};
+  nounPN n = {s=\\c => n.s! SF Sg c; anim=n.anim; g=n.g; lock_PN=<>};
+    
+  mkCN = UseN;
 
-  mkCN = UseN ;
   mkNP = \x,y,z -> UsePN (mkPN x y z) ;
 
 -- Adjective definitions
+  regA = \ray, comp -> 
+    let
+      ay  = Predef.dp 2 ray ;
+      rays =
+        case ay of {
+          "ый" => AStaruyj ray comp; 
+          "ой" => AMolodoj ray comp;
+          "ий" =>  AMalenkij ray comp;
+           _=>  AKhoroshij ray comp
+         }
+     in
+       rays ;
 
-  adjInvar = \s -> { s = \\af => s } ** {lock_A= <>};
+  adjInvar = \s -> { s = \\_,_ => s } ** {lock_A= <>};
 
-  AStaruyj s = uy_j_EndDecl s ** {lock_A = <>} ;       
-    AKhoroshij s = shij_End_Decl s ** {lock_A= <>}; 
-AMalenkij s = ij_EndK_G_KH_Decl s ** {lock_A= <>};       
-  AMolodoj s = uy_oj_EndDecl s ** {lock_A= <>};        
-  AKakoj_Nibud s t = i_oj_EndDecl s t ** {lock_A= <>}; 
+  AStaruyj s comp = mkAdjDeg (uy_j_EndDecl s) comp ** {lock_A = <>} ;       
+  AKhoroshij s comp = mkAdjDeg (shij_End_Decl s) comp ** {lock_A= <>}; 
+  AMalenkij s comp = mkAdjDeg (ij_EndK_G_KH_Decl s) comp ** {lock_A= <>};       
+  AMolodoj s comp = mkAdjDeg (uy_oj_EndDecl s) comp ** {lock_A= <>};        
+  AKakoj_Nibud s t  comp = mkAdjDeg (i_oj_EndDecl s t) comp ** {lock_A= <>}; 
 
-  mkA2 a p c= mkAdjective2 a p c ** {lock_A2 = <>};
-  mkADeg a s = mkAdjDeg a s ** {lock_ADeg = <>}; -- defined in morpho.RusU
+  mkA2 a p c=  a ** {s2 = p ; c = c; lock_A2 = <>};
+--  mkADeg a s = mkAdjDeg a s ** {lock_ADeg = <>}; -- defined in morpho.RusU
 
-  ap a p = mkAdjPhrase a p ** {lock_AP = <>};  -- defined in syntax module
+--  ap a p = mkAdjPhrase a p ** {lock_AP = <>};  -- defined in syntax module
 
   mkAdv x = ss x ** {lock_Adv = <>} ;
 
@@ -431,7 +505,7 @@ AMalenkij s = ij_EndK_G_KH_Decl s ** {lock_A= <>};
        PRF APl P3 => plP3   
      };
 
-    mkRegVerb a b c d e f g = verbDecl a b c d e f g ** {lock_V = <>} ;
+    regV a b c d e f g = verbDecl a b c d e f g ** {lock_V = <>} ;
    -- defined in morpho.RusU.gf
 {-
    mkV a b = extVerb a b ** {lock_V = <>};                         -- defined in types.RusU.gf
@@ -444,9 +518,451 @@ AMalenkij s = ij_EndK_G_KH_Decl s ** {lock_A= <>};
        VSubj gn => aller.s ! VFORM vox (VSUB gn)
        }; t = Present ; a = aller.asp ; w = vox ; lock_V = <>} ;
 -}
-   mkTV a b c = mkTransVerb a b c ** {lock_V2 = <>};                    -- defined in syntax.RusU.gf
-   tvDir v = mkDirectVerb v ** {lock_V2 = <>};                           -- defined in syntax.RusU.gf
-   tvDirDir v = mkDirDirectVerb v ** {lock_V3 = <>};                  -- defined in syntax.RusU.gf
-mkV3 v s w c d = mkDitransVerb v s w c d ** {lock_V3 = <>};  -- defined in syntax.RusU.gf
+   mkV2 v p cas = v ** {s2 = p ; c = cas; lock_V2 = <>}; 
+   dirV2 v = mkV2 v [] Acc;
 
+
+   tvDirDir v = mkV3 v "" "" Acc Dat; 
+
+-- *Ditransitive verbs* are verbs with three argument places.
+-- We treat so far only the rule in which the ditransitive
+-- verb takes both complements to form a verb phrase.
+
+   mkV3 v s1 s2 c1 c2 = v ** {s2 = s1; c = c1; s4 = s2; c2=c2; lock_V3 = <>};  
+ 
+
+----2 Parameters 
+----
+---- To abstract over gender names, we define the following identifiers.
+--
+--oper
+--  Gender : Type ; 
+--
+--  human     : Gender ;
+--  nonhuman  : Gender ;
+--  masculine : Gender ;
+--
+---- To abstract over number names, we define the following.
+--
+--  Number : Type ; 
+--
+--  singular : Number ;
+--  plural   : Number ;
+--
+---- To abstract over case names, we define the following.
+--
+--  Case : Type ;
+--
+--  nominative : Case ;
+--  genitive   : Case ;
+--
+---- Prepositions are used in many-argument functions for rection.
+--
+--  Preposition : Type ;
+--
+--
+----2 Nouns
+--
+---- Worst case: give all four forms and the semantic gender.
+--
+--  mkN  : (man,men,man's,men's : Str) -> N ;
+--
+---- The regular function captures the variants for nouns ending with
+---- "s","sh","x","z" or "y": "kiss - kisses", "flash - flashes"; 
+---- "fly - flies" (but "toy - toys"),
+--
+--  regN : Str -> N ;
+--
+---- In practice the worst case is just: give singular and plural nominative.
+--
+--  mk2N : (man,men : Str) -> N ;
+--
+---- All nouns created by the previous functions are marked as
+---- $nonhuman$. If you want a $human$ noun, wrap it with the following
+---- function:
+--
+--  genderN : Gender -> N -> N ;
+--
+----3 Compound nouns 
+----
+---- A compound noun ia an uninflected string attached to an inflected noun,
+---- such as "baby boom", "chief executive officer".
+--
+--  compoundN : Str -> N -> N ;
+--
+--
+----3 Relational nouns 
+---- 
+---- Relational nouns ("daughter of x") need a preposition. 
+--
+--  mkN2 : N -> Preposition -> N2 ;
+--
+---- The most common preposition is "of", and the following is a
+---- shortcut for regular relational nouns with "of".
+--
+--  regN2 : Str -> N2 ;
+--
+---- Use the function $mkPreposition$ or see the section on prepositions below to  
+---- form other prepositions.
+----
+---- Three-place relational nouns ("the connection from x to y") need two prepositions.
+--
+--  mkN3 : N -> Preposition -> Preposition -> N3 ;
+--
+--
+----3 Relational common noun phrases
+----
+---- In some cases, you may want to make a complex $CN$ into a
+---- relational noun (e.g. "the old town hall of").
+--
+--  cnN2 : CN -> Preposition -> N2 ;
+--  cnN3 : CN -> Preposition -> Preposition -> N3 ;
+--
+---- 
+----3 Proper names and noun phrases
+----
+---- Proper names, with a regular genitive, are formed as follows
+--
+--  regPN : Str -> Gender -> PN ;          -- John, John's
+--
+---- Sometimes you can reuse a common noun as a proper name, e.g. "Bank".
+--
+--  nounPN : N -> PN ;
+--
+---- To form a noun phrase that can also be plural and have an irregular
+---- genitive, you can use the worst-case function.
+--
+--  mkNP : Str -> Str -> Number -> Gender -> NP ; 
+--
+----2 Adjectives
+--
+---- Non-comparison one-place adjectives need two forms: one for
+---- the adjectival and one for the adverbial form ("free - freely")
+--
+--  mkA : (free,freely : Str) -> A ;
+--
+---- For regular adjectives, the adverbial form is derived. This holds
+---- even for cases with the variation "happy - happily".
+--
+--  regA : Str -> A ;
+-- 
+----3 Two-place adjectives
+----
+---- Two-place adjectives need a preposition for their second argument.
+--
+--  mkA2 : A -> Preposition -> A2 ;
+--
+---- Comparison adjectives may two more forms. 
+--
+--  ADeg : Type ;
+--
+--  mkADeg : (good,better,best,well : Str) -> ADeg ;
+--
+---- The regular pattern recognizes two common variations: 
+---- "-e" ("rude" - "ruder" - "rudest") and
+---- "-y" ("happy - happier - happiest - happily")
+--
+--  regADeg : Str -> ADeg ;      -- long, longer, longest
+--
+---- However, the duplication of the final consonant is nor predicted,
+---- but a separate pattern is used:
+--
+--  duplADeg : Str -> ADeg ;      -- fat, fatter, fattest
+--
+---- If comparison is formed by "more, "most", as in general for
+---- long adjective, the following pattern is used:
+--
+--  compoundADeg : A -> ADeg ; -- -/more/most ridiculous
+--
+---- From a given $ADeg$, it is possible to get back to $A$.
+--
+--  adegA : ADeg -> A ;
+--
+--
+----2 Adverbs
+--
+---- Adverbs are not inflected. Most lexical ones have position
+---- after the verb. Some can be preverbal (e.g. "always").
+--
+--  mkAdv : Str -> Adv ;
+--  mkAdV : Str -> AdV ;
+--
+---- Adverbs modifying adjectives and sentences can also be formed.
+--
+--  mkAdA : Str -> AdA ;
+--
+----2 Prepositions
+----
+---- A preposition as used for rection in the lexicon, as well as to
+---- build $PP$s in the resource API, just requires a string.
+--
+--  mkPreposition : Str -> Preposition ;
+--  mkPrep        : Str -> Prep ;
+--
+---- (These two functions are synonyms.)
+--
+----2 Verbs
+----
+---- Except for "be", the worst case needs five forms: the infinitive and
+---- the third person singular present, the past indicative, and the
+---- past and present participles.
+--
+--  mkV : (go, goes, went, gone, going : Str) -> V ;
+--
+---- The regular verb function recognizes the special cases where the last
+---- character is "y" ("cry - cries" but "buy - buys") or "s", "sh", "x", "z"
+---- ("fix - fixes", etc).
+--
+--  regV : Str -> V ;
+--
+---- The following variant duplicates the last letter in the forms like
+---- "rip - ripped - ripping".
+--
+--  regDuplV : Str -> V ;
+--
+---- There is an extensive list of irregular verbs in the module $IrregularEng$.
+---- In practice, it is enough to give three forms, 
+---- e.g. "drink - drank - drunk", with a variant indicating consonant
+---- duplication in the present participle.
+--
+--  irregV     : (drink, drank, drunk  : Str) -> V ;
+--  irregDuplV : (get,   got,   gotten : Str) -> V ;
+--
+--
+----3 Verbs with a particle.
+----
+---- The particle, such as in "switch on", is given as a string.
+--
+--  partV  : V -> Str -> V ;
+--
+----3 Reflexive verbs
+----
+---- By default, verbs are not reflexive; this function makes them that.
+--
+--  reflV  : V -> V ;
+--
+----3 Two-place verbs
+----
+---- Two-place verbs need a preposition, except the special case with direct object.
+---- (transitive verbs). Notice that a particle comes from the $V$.
+--
+--  mkV2  : V -> Preposition -> V2 ;
+--
+--  dirV2 : V -> V2 ;
+--
+----3 Three-place verbs
+----
+---- Three-place (ditransitive) verbs need two prepositions, of which
+---- the first one or both can be absent.
+--
+--  mkV3     : V -> Preposition -> Preposition -> V3 ; -- speak, with, about
+--  dirV3    : V -> Preposition -> V3 ;                -- give,_,to
+--  dirdirV3 : V -> V3 ;                               -- give,_,_
+--
+----3 Other complement patterns
+----
+---- Verbs and adjectives can take complements such as sentences,
+---- questions, verb phrases, and adjectives.
+--
+--  mkV0  : V -> V0 ;
+--  mkVS  : V -> VS ;
+--  mkV2S : V -> Str -> V2S ;
+--  mkVV  : V -> VV ;
+--  mkV2V : V -> Str -> Str -> V2V ;
+--  mkVA  : V -> VA ;
+--  mkV2A : V -> Str -> V2A ;
+--  mkVQ  : V -> VQ ;
+--  mkV2Q : V -> Str -> V2Q ;
+--
+--  mkAS  : A -> AS ;
+--  mkA2S : A -> Str -> A2S ;
+--  mkAV  : A -> AV ;
+--  mkA2V : A -> Str -> A2V ;
+--
+---- Notice: categories $V2S, V2V, V2A, V2Q$ are in v 1.0 treated
+---- just as synonyms of $V2$, and the second argument is given
+---- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
+---- $V0$ is just $V$.
+--
+--  V0, V2S, V2V, V2A, V2Q : Type ;
+--  AS, A2S, AV, A2V : Type ;
+--
+--
+----2 Definitions of paradigms
+----
+---- The definitions should not bother the user of the API. So they are
+---- hidden from the document.
+----.
+--
+--  Gender = MorphoEng.Gender ; 
+--  Number = MorphoEng.Number ;
+--  Case = MorphoEng.Case ;
+--  human = Masc ; 
+--  nonhuman = Neutr ;
+--  masculine = Masc ;
+--  feminine = Fem ;
+--  singular = Sg ;
+--  plural = Pl ;
+--  nominative = Nom ;
+--  genitive = Gen ;
+--
+--  Preposition = Str ;
+--
+--  regN = \ray -> 
+--    let
+--      ra  = Predef.tk 1 ray ; 
+--      y   = Predef.dp 1 ray ; 
+--      r   = Predef.tk 2 ray ; 
+--      ay  = Predef.dp 2 ray ;
+--      rays =
+--        case y of {
+--          "y" => y2ie ray "s" ; 
+--          "s" => ray + "es" ;
+--          "z" => ray + "es" ;
+--          "x" => ray + "es" ;
+--          _ => case ay of {
+--            "sh" => ray + "es" ;
+--            "ch" => ray + "es" ;
+--            _    => ray + "s"
+--            }
+--         }
+--     in
+--       mk2N ray rays ;
+--
+--  mk2N = \man,men -> 
+--    let mens = case last men of {
+--      "s" => men + "'" ;
+--      _   => men + "'s"
+--      }
+--    in
+--    mkN man men (man + "'s") mens ;
+--
+--  mkN = \man,men,man's,men's -> 
+--    mkNoun man man's men men's ** {g = Neutr ; lock_N = <>} ;
+--
+--  genderN g man = {s = man.s ; g = g ; lock_N = <>} ;
+--
+--  compoundN s n = {s = \\x,y => s ++ n.s ! x ! y ; g=n.g ; lock_N = <>} ;
+--
+--  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
+--  regN2 n = mkN2 (regN n) (mkPreposition "of") ;
+--  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
+--  cnN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
+--  cnN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
+--
+--  regPN n g = nameReg n g ** {lock_PN = <>} ;
+--  nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
+--  mkNP x y n g = {s = table {Gen => x ; _ => y} ; a = agrP3 n ;
+--  lock_NP = <>} ;
+--
+--  mkA a b = mkAdjective a a a b ** {lock_A = <>} ;
+--  regA a = regAdjective a ** {lock_A = <>} ;
+--
+--  mkA2 a p = a ** {c2 = p ; lock_A2 = <>} ;
+--
+--  ADeg = A ; ----
+--
+--  mkADeg a b c d = mkAdjective a b c d ** {lock_A = <>} ;
+--
+--  regADeg happy = 
+--    let
+--      happ = init happy ;
+--      y    = last happy ;
+--      happie = case y of {
+--        "y" => happ + "ie" ;
+--        "e" => happy ;
+--        _   => happy + "e"
+--        } ;
+--      happily = case y of {
+--        "y" => happ + "ily" ;
+--        _   => happy + "ly"
+--        } ;
+--    in mkADeg happy (happie + "r") (happie + "st") happily ;
+--
+--  duplADeg fat = 
+--    mkADeg fat 
+--    (fat + last fat + "er") (fat + last fat + "est") (fat + "ly") ;
+--
+--  compoundADeg a =
+--    let ad = (a.s ! AAdj Posit) 
+--    in mkADeg ad ("more" ++ ad) ("most" ++ ad) (a.s ! AAdv) ;
+--
+--  adegA a = a ;
+--
+--  mkAdv x = ss x ** {lock_Adv = <>} ;
+--  mkAdV x = ss x ** {lock_AdV = <>} ;
+--  mkAdA x = ss x ** {lock_AdA = <>} ;
+--
+--  mkPreposition p = p ;
+--  mkPrep p = ss p ** {lock_Prep = <>} ;
+--
+--  mkV a b c d e = mkVerb a b c d e ** {s1 = [] ; lock_V = <>} ;
+--
+--  regV cry = 
+--    let
+--      cr = init cry ;
+--      y  = last cry ;
+--      cries = (regN cry).s ! Pl ! Nom ; -- !
+--      crie  = init cries ;
+--      cried = case last crie of {
+--        "e" => crie + "d" ;
+--        _   => crie + "ed"
+--        } ;
+--      crying = case y of {
+--        "e" => case last cr of {
+--           "e" => cry + "ing" ; 
+--           _ => cr + "ing" 
+--           } ;
+--        _   => cry + "ing"
+--        }
+--    in mkV cry cries cried cried crying ;
+--
+--  regDuplV fit = 
+--    let fitt = fit + last fit in
+--    mkV fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing") ;
+--
+--  irregV x y z = let reg = (regV x).s in
+--    mkV x (reg ! VPres) y z (reg ! VPresPart) ** {s1 = [] ; lock_V = <>} ;
+--
+--  irregDuplV fit y z = 
+--    let 
+--      fitting = (regDuplV fit).s ! VPresPart
+--    in
+--    mkV fit (fit + "s") y z fitting ;
+--
+--  partV v p = verbPart v p ** {lock_V = <>} ;
+--  reflV v = {s = v.s ; part = v.part ; lock_V = v.lock_V ; isRefl = True} ;
+--
+--  mkV2 v p = v ** {s = v.s ; s1 = v.s1 ; c2 = p ; lock_V2 = <>} ;
+--  dirV2 v = mkV2 v [] ;
+--
+--  mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p ; c3 = q ; lock_V3 = <>} ;
+--  dirV3 v p = mkV3 v [] p ;
+--  dirdirV3 v = dirV3 v [] ;
+--
+--  mkVS  v = v ** {lock_VS = <>} ;
+--  mkVV  v = {
+--    s = table {VVF vf => v.s ! vf ; _ => variants {}} ; 
+--    isAux = False ; lock_VV = <>
+--    } ;
+--  mkVQ  v = v ** {lock_VQ = <>} ;
+--
+--  V0 : Type = V ;
+--  V2S, V2V, V2Q, V2A : Type = V2 ;
+--  AS, A2S, AV : Type = A ;
+--  A2V : Type = A2 ;
+--
+--  mkV0  v = v ** {lock_V = <>} ;
+--  mkV2S v p = mkV2 v p ** {lock_V2 = <>} ;
+--  mkV2V v p t = mkV2 v p ** {s4 = t ; lock_V2 = <>} ;
+--  mkVA  v = v ** {lock_VA = <>} ;
+--  mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
+--  mkV2Q v p = mkV2 v p ** {lock_V2 = <>} ;
+--
+--  mkAS  v = v ** {lock_A = <>} ;
+--  mkA2S v p = mkA2 v p ** {lock_A = <>} ;
+--  mkAV  v = v ** {lock_A = <>} ;
+--  mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
+--
 } ;
+

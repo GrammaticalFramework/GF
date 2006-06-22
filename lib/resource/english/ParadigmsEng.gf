@@ -1,10 +1,10 @@
---# -path=.:../abstract:../../prelude
+--# -path=.:../abstract:../../prelude:../common
 
 --1 English Lexical Paradigms
 --
--- Aarne Ranta 2003
+-- Aarne Ranta 2003--2005
 --
--- This is an API to the user of the resource grammar 
+-- This is an API for the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
 -- expressions of open categories: nouns, adjectives, verbs.
 -- 
@@ -21,13 +21,15 @@
 -- regular cases. Then we give a worst-case function $mkC$, which serves as an
 -- escape to construct the most irregular words of type $C$.
 -- However, this function should only seldom be needed: we have a
--- separate module $IrregularEng$, which covers all irregularly inflected
--- words.
--- 
--- The following modules are presupposed:
+-- separate module [``IrregEng`` ../../english/IrregEng.gf], 
+-- which covers irregular verbss.
 
-resource ParadigmsEng = open (Predef=Predef), Prelude, SyntaxEng,
-  CategoriesEng, RulesEng in {
+resource ParadigmsEng = open 
+  (Predef=Predef), 
+  Prelude, 
+  MorphoEng,
+  CatEng
+  in {
 --2 Parameters 
 --
 -- To abstract over gender names, we define the following identifiers.
@@ -38,7 +40,6 @@ oper
   human     : Gender ;
   nonhuman  : Gender ;
   masculine : Gender ;
-  feminite  : Gender ;
 
 -- To abstract over number names, we define the following.
 
@@ -55,13 +56,13 @@ oper
   genitive   : Case ;
 
 -- Prepositions are used in many-argument functions for rection.
+-- The resource category $Prep$ is used.
 
-  Preposition : Type ;
 
 
 --2 Nouns
 
--- Worst case: give all four forms and the semantic gender.
+-- Worst case: give all four forms.
 
   mkN  : (man,men,man's,men's : Str) -> N ;
 
@@ -83,27 +84,29 @@ oper
 
 --3 Compound nouns 
 --
--- All the functions above work quite as well to form compound nouns,
--- such as "baby boom". 
+-- A compound noun ia an uninflected string attached to an inflected noun,
+-- such as "baby boom", "chief executive officer".
+
+  compoundN : Str -> N -> N ;
 
 
 --3 Relational nouns 
 -- 
 -- Relational nouns ("daughter of x") need a preposition. 
 
-  mkN2 : N -> Preposition -> N2 ;
+  mkN2 : N -> Prep -> N2 ;
 
 -- The most common preposition is "of", and the following is a
--- shortcut for regular, $nonhuman$ relational nouns with "of".
+-- shortcut for regular relational nouns with "of".
 
   regN2 : Str -> N2 ;
 
--- Use the function $mkPreposition$ or see the section on prepositions below to  
+-- Use the function $mkPrep$ or see the section on prepositions below to  
 -- form other prepositions.
 --
 -- Three-place relational nouns ("the connection from x to y") need two prepositions.
 
-  mkN3 : N -> Preposition -> Preposition -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ;
 
 
 --3 Relational common noun phrases
@@ -111,15 +114,16 @@ oper
 -- In some cases, you may want to make a complex $CN$ into a
 -- relational noun (e.g. "the old town hall of").
 
-  cnN2 : CN -> Preposition -> N2 ;
-  cnN3 : CN -> Preposition -> Preposition -> N3 ;
+  cnN2 : CN -> Prep -> N2 ;
+  cnN3 : CN -> Prep -> Prep -> N3 ;
 
 -- 
 --3 Proper names and noun phrases
 --
 -- Proper names, with a regular genitive, are formed as follows
 
-  regPN : Str -> Gender -> PN ;          -- John, John's
+  regPN    : Str -> PN ;          
+  regGenPN : Str -> Gender -> PN ;     -- John, John's
 
 -- Sometimes you can reuse a common noun as a proper name, e.g. "Bank".
 
@@ -146,9 +150,11 @@ oper
 --
 -- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Preposition -> A2 ;
+  mkA2 : A -> Prep -> A2 ;
 
 -- Comparison adjectives may two more forms. 
+
+  ADeg : Type ;
 
   mkADeg : (good,better,best,well : Str) -> ADeg ;
 
@@ -163,7 +169,7 @@ oper
 
   duplADeg : Str -> ADeg ;      -- fat, fatter, fattest
 
--- If comparison is formed by "more, "most", as in general for
+-- If comparison is formed by "more", "most", as in general for
 -- long adjective, the following pattern is used:
 
   compoundADeg : A -> ADeg ; -- -/more/most ridiculous
@@ -190,8 +196,8 @@ oper
 -- A preposition as used for rection in the lexicon, as well as to
 -- build $PP$s in the resource API, just requires a string.
 
-  mkPreposition : Str -> Preposition ;
-  mkPrep        : Str -> Prep ;
+  mkPrep : Str -> Prep ;
+  noPrep : Prep ;
 
 -- (These two functions are synonyms.)
 
@@ -229,12 +235,18 @@ oper
 
   partV  : V -> Str -> V ;
 
+--3 Reflexive verbs
+--
+-- By default, verbs are not reflexive; this function makes them that.
+
+  reflV  : V -> V ;
+
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object.
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
-  mkV2  : V -> Preposition -> V2 ;
+  mkV2  : V -> Prep -> V2 ;
 
   dirV2 : V -> V2 ;
 
@@ -243,9 +255,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Str -> Str -> V3 ;    -- speak, with, about
-  dirV3    : V -> Str -> V3 ;           -- give,_,to
-  dirdirV3 : V -> V3 ;                  -- give,_,_
+  mkV3     : V -> Prep -> Prep -> V3 ;   -- speak, with, about
+  dirV3    : V -> Prep -> V3 ;           -- give,_,to
+  dirdirV3 : V -> V3 ;                   -- give,_,_
 
 --3 Other complement patterns
 --
@@ -254,29 +266,36 @@ oper
 
   mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
-  mkV2S : V -> Str -> V2S ;
+  mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
-  mkV2V : V -> Str -> Str -> V2V ;
+  mkV2V : V -> Prep -> Prep -> V2V ;
   mkVA  : V -> VA ;
-  mkV2A : V -> Str -> V2A ;
+  mkV2A : V -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
-  mkV2Q : V -> Str -> V2Q ;
+  mkV2Q : V -> Prep -> V2Q ;
 
   mkAS  : A -> AS ;
-  mkA2S : A -> Str -> A2S ;
+  mkA2S : A -> Prep -> A2S ;
   mkAV  : A -> AV ;
-  mkA2V : A -> Str -> A2V ;
+  mkA2V : A -> Prep -> A2V ;
 
+-- Notice: categories $V2S, V2V, V2A, V2Q$ are in v 1.0 treated
+-- just as synonyms of $V2$, and the second argument is given
+-- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
+-- $V0$ is just $V$.
 
+  V0, V2S, V2V, V2A, V2Q : Type ;
+  AS, A2S, AV, A2V : Type ;
+
+--.
 --2 Definitions of paradigms
 --
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
---.
 
-  Gender = SyntaxEng.Gender ; 
-  Number = SyntaxEng.Number ;
-  Case = SyntaxEng.Case ;
+  Gender = MorphoEng.Gender ; 
+  Number = MorphoEng.Number ;
+  Case = MorphoEng.Case ;
   human = Masc ; 
   nonhuman = Neutr ;
   masculine = Masc ;
@@ -286,7 +305,7 @@ oper
   nominative = Nom ;
   genitive = Gen ;
 
-  Preposition = Str ;
+  Preposition : Type = Str ; -- obsolete
 
   regN = \ray -> 
     let
@@ -318,27 +337,32 @@ oper
     mkN man men (man + "'s") mens ;
 
   mkN = \man,men,man's,men's -> 
-    mkNoun man men man's men's ** {g = Neutr ; lock_N = <>} ;
+    mkNoun man man's men men's ** {g = Neutr ; lock_N = <>} ;
 
   genderN g man = {s = man.s ; g = g ; lock_N = <>} ;
 
-  mkN2 = \n,p -> UseN n ** {lock_N2 = <> ; s2 = p} ;
-  regN2 n = mkN2 (regN n) (mkPreposition "of") ;
-  mkN3 = \n,p,q -> UseN n ** {lock_N3 = <> ; s2 = p ; s3 = q} ;
-  cnN2 = \n,p -> n ** {lock_N2 = <> ; s2 = p} ;
-  cnN3 = \n,p,q -> n ** {lock_N3 = <> ; s2 = p ; s3 = q} ;
+  compoundN s n = {s = \\x,y => s ++ n.s ! x ! y ; g=n.g ; lock_N = <>} ;
 
-  regPN n g = nameReg n g ** {lock_PN = <>} ;
+  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
+  regN2 n = mkN2 (regN n) (mkPrep "of") ;
+  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
+  cnN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
+  cnN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
+
+  regPN n = regGenPN n human ;
+  regGenPN n g = nameReg n g ** {lock_PN = <>} ;
   nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
-  mkNP x y n g = {s = table {GenP => x ; _ => y} ; a = toAgr n P3 g ;
+  mkNP x y n g = {s = table {Gen => x ; _ => y} ; a = agrP3 n ;
   lock_NP = <>} ;
 
-  mkA a b = mkAdjective a b ** {lock_A = <>} ;
+  mkA a b = mkAdjective a a a b ** {lock_A = <>} ;
   regA a = regAdjective a ** {lock_A = <>} ;
 
-  mkA2 a p = a ** {s2 = p ; lock_A2 = <>} ;
+  mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
 
-  mkADeg a b c d = mkAdjDegrWorst a b c c d d ** {lock_ADeg = <>} ;
+  ADeg = A ; ----
+
+  mkADeg a b c d = mkAdjective a b c d ** {lock_A = <>} ;
 
   regADeg happy = 
     let
@@ -353,22 +377,26 @@ oper
         "y" => happ + "ily" ;
         _   => happy + "ly"
         } ;
-    in mkADeg happy happily (happie + "r") (happie + "st") ;
+    in mkADeg happy (happie + "r") (happie + "st") happily ;
 
-  duplADeg fat = mkADeg fat 
-    (fat + "ly") (fat + last fat + "er") (fat + last fat + "est") ;
-  compoundADeg a = let ad = (a.s ! AAdj) in 
-    mkADeg ad (a.s ! AAdv) ("more" ++ ad) ("most" ++ ad) ;
-  adegA a = {s = a.s ! Pos ; lock_A = <>} ;
+  duplADeg fat = 
+    mkADeg fat 
+    (fat + last fat + "er") (fat + last fat + "est") (fat + "ly") ;
+
+  compoundADeg a =
+    let ad = (a.s ! AAdj Posit) 
+    in mkADeg ad ("more" ++ ad) ("most" ++ ad) (a.s ! AAdv) ;
+
+  adegA a = a ;
 
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
-  mkPreposition p = p ;
   mkPrep p = ss p ** {lock_Prep = <>} ;
+  noPrep = mkPrep [] ;
 
-  mkV a b c d e = mkVerbP3worst a b c d e ** {s1 = [] ; lock_V = <>} ;
+  mkV a b c d e = mkVerb a b c d e ** {s1 = [] ; lock_V = <>} ;
 
   regV cry = 
     let
@@ -394,36 +422,46 @@ oper
     mkV fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing") ;
 
   irregV x y z = let reg = (regV x).s in
-    mkV x (reg ! Indic Sg) y z (reg ! PresPart) ** {s1 = [] ; lock_V = <>} ;
+    mkV x (reg ! VPres) y z (reg ! VPresPart) ** {s1 = [] ; lock_V = <>} ;
 
   irregDuplV fit y z = 
     let 
-      fitting = (regDuplV fit).s ! PresPart
+      fitting = (regDuplV fit).s ! VPresPart
     in
     mkV fit (fit + "s") y z fitting ;
 
-  partV v p = {s = v.s ; s1 = p ; lock_V = <>} ;
+  partV v p = verbPart v p ** {lock_V = <>} ;
+  reflV v = {s = v.s ; part = v.part ; lock_V = v.lock_V ; isRefl = True} ;
 
-  mkV2 v p = v ** {s = v.s ; s1 = v.s1 ; s3 = p ; lock_V2 = <>} ;
-  dirV2 v = mkV2 v [] ;
+  mkV2 v p = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; lock_V2 = <>} ;
+  dirV2 v = mkV2 v noPrep ;
 
-  mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; s3 = p ; s4 = q ; lock_V3 = <>} ;
-  dirV3 v p = mkV3 v [] p ;
-  dirdirV3 v = dirV3 v [] ;
+  mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
+  dirV3 v p = mkV3 v noPrep p ;
+  dirdirV3 v = dirV3 v noPrep ;
 
-  mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {lock_VS = <>} ;
-  mkV2S v p = mkV2 v p ** {lock_V2S = <>} ;
-  mkVV  v = verb2aux v ** {isAux = False ; lock_VV = <>} ;
-  mkV2V v p t = mkV2 v p ** {s4 = t ; lock_V2V = <>} ;
+  mkVV  v = {
+    s = table {VVF vf => v.s ! vf ; _ => variants {}} ; 
+    isAux = False ; lock_VV = <>
+    } ;
+  mkVQ  v = v ** {lock_VQ = <>} ;
+
+  V0 : Type = V ;
+  V2S, V2V, V2Q, V2A : Type = V2 ;
+  AS, A2S, AV : Type = A ;
+  A2V : Type = A2 ;
+
+  mkV0  v = v ** {lock_V = <>} ;
+  mkV2S v p = mkV2 v p ** {lock_V2 = <>} ;
+  mkV2V v p t = mkV2 v p ** {s4 = t ; lock_V2 = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
-  mkVQ  v = v ** {lock_VQ = <>} ;
-  mkV2Q v p = mkV2 v p ** {lock_V2Q = <>} ;
+  mkV2Q v p = mkV2 v p ** {lock_V2 = <>} ;
 
-  mkAS  v = v ** {lock_AS = <>} ;
-  mkA2S v p = mkA2 v p ** {lock_A2S = <>} ;
-  mkAV  v = v ** {lock_AV = <>} ;
-  mkA2V v p = mkA2 v p ** {lock_A2V = <>} ;
+  mkAS  v = v ** {lock_A = <>} ;
+  mkA2S v p = mkA2 v p ** {lock_A = <>} ;
+  mkAV  v = v ** {lock_A = <>} ;
+  mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
 
 } ;

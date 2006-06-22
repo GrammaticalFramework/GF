@@ -1,103 +1,111 @@
---1 GF Resource Grammar API for Structural Words
+--1 Structural: Structural Words
 -- 
--- AR 21/11/2003
---
 -- Here we have some words belonging to closed classes and appearing
 -- in all languages we have considered.
--- Sometimes they are not really meaningful, e.g. $we_NP$ in Spanish
--- should be replaced by masculine and feminine variants.
+-- Sometimes more distinctions are needed, e.g. $we_Pron$ in Spanish
+-- should be replaced by masculine and feminine variants, found in
+-- [``ExtraSpa`` ../spanish/ExtraSpa.gf].
 
-abstract Structural = Categories, Numerals ** {
+abstract Structural = Cat ** {
 
   fun
 
--- First mount the numerals.
-
-  UseNumeral : Numeral-> Num ;
-
--- Then an alphabetical list of structural words
+-- This is an alphabetical list of structural words
 
   above_Prep : Prep ;
   after_Prep : Prep ;
-  all8mass_Det : Det ;
-  all_NDet : NDet ;
-  almost_Adv : AdA ;
+  all_Predet : Predet ;
+  almost_AdA : AdA ;   
+  almost_AdN : AdN ;   
   although_Subj : Subj ;
+  always_AdV : AdV ;
   and_Conj : Conj ;
   because_Subj : Subj ;
   before_Prep : Prep ;
   behind_Prep : Prep ;
   between_Prep : Prep ;
-  both_AndConjD : ConjD ;
+  both7and_DConj : DConj ;
+  but_PConj : PConj ;
   by8agent_Prep : Prep ;
   by8means_Prep : Prep ;
   can8know_VV : VV ;
   can_VV : VV ;
   during_Prep : Prep ;
-  either8or_ConjD : ConjD ;
+  either7or_DConj : DConj ;
   every_Det : Det ;
   everybody_NP : NP ;
   everything_NP : NP ;
   everywhere_Adv : Adv ;
+  first_Ord : Ord ;
+  few_Det : Det ;
   from_Prep : Prep ;
-  he_NP : NP ;
+  he_Pron : Pron ;
+  here_Adv : Adv ;
+  here7to_Adv : Adv ;
+  here7from_Adv : Adv ;
   how_IAdv : IAdv ;
   how8many_IDet : IDet ;
-  i_NP : NP ;
+  i_Pron : Pron ;
   if_Subj : Subj ;
   in8front_Prep : Prep ;
   in_Prep : Prep ;
-  it_NP : NP ;
+  it_Pron : Pron ;
+  less_CAdv : CAdv ;
   many_Det : Det ;
-  most_Det : Det ;
-  most8many_Det : Det ;
+  more_CAdv : CAdv ;
+  most_Predet : Predet ;
   much_Det : Det ;
   must_VV : VV ;
   no_Phr : Phr ;
   on_Prep : Prep ;
+  one_Quant : QuantSg ;
+  only_Predet : Predet ;
   or_Conj : Conj ;
-  otherwise_Adv : AdC ;
+  otherwise_PConj : PConj ;
   part_Prep : Prep ;
+  please_Voc : Voc ;
   possess_Prep : Prep ;
   quite_Adv : AdA ;
-  she_NP : NP ;
-  so_Adv : AdA ;
-  some_Det : Det ;
-  some_NDet : NDet ;
+  she_Pron : Pron ;
+  so_AdA : AdA ;
+  someSg_Det : Det ;
+  somePl_Det : Det ;
   somebody_NP : NP ;
   something_NP : NP ;
   somewhere_Adv : Adv ;
-  that_Det : Det ;
+  that_Quant : Quant ;
   that_NP : NP ;
-  therefore_Adv : AdC ;
-  these_NDet : NDet ;
-  they8fem_NP : NP ;
-  they_NP : NP ;
-  this_Det : Det ;
+  there_Adv : Adv ;
+  there7to_Adv : Adv ;
+  there7from_Adv : Adv ;
+  therefore_PConj : PConj ;
+  these_NP : NP ;
+  they_Pron : Pron ; 
+  this_Quant : Quant ;
   this_NP : NP ;
-  those_NDet : NDet ;
-  thou_NP : NP ;
+  those_NP : NP ;
   through_Prep : Prep ;
   to_Prep : Prep ;
-  too_Adv : AdA ;
+  too_AdA : AdA ;
   under_Prep : Prep ;
-  very_Adv : AdA ;
+  very_AdA : AdA ;
   want_VV : VV ;
-  we_NP : NP ;
-  what8many_IP : IP ;
-  what8one_IP : IP ;
+  we_Pron : Pron ;
+  whatPl_IP : IP ;
+  whatSg_IP : IP ;
   when_IAdv : IAdv ;
   when_Subj : Subj ;
   where_IAdv : IAdv ;
-  which8many_IDet : IDet ;
-  which8one_IDet : IDet ;
-  who8many_IP : IP ;
-  who8one_IP : IP ;
+  whichPl_IDet : IDet ;
+  whichSg_IDet : IDet ;
+  whoPl_IP : IP ;
+  whoSg_IP : IP ;
   why_IAdv : IAdv ;
   with_Prep : Prep ;
   without_Prep : Prep ;
-  ye_NP : NP ;
   yes_Phr : Phr ;
-  you_NP : NP ;
+  youSg_Pron : Pron ;
+  youPl_Pron : Pron ;
+  youPol_Pron : Pron ;
 
 }
