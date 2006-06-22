@@ -30,12 +30,12 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
     ComplVA v ap = 
       insertObj 
         (\\_,b,agr => 
-           ap.s ! False ! AN (NCase agr.n (npform2case v.c2.c))) --- v.cs.s ignored
+           ap.s ! False ! AN (NCase agr.n (npform2case agr.n v.c2.c))) --- v.cs.s ignored
         (predV v) ;
     ComplV2A v np ap = 
       insertObj 
         (\\fin,b,_ => appCompl fin b v.c2 np ++ 
-                    ap.s ! False ! AN (NCase np.a.n (npform2case v.c3.c))) --agr to obj
+                    ap.s ! False ! AN (NCase np.a.n (npform2case np.a.n v.c3.c))) --agr to obj
         (predV v) ;
 
     UseComp comp = 

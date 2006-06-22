@@ -56,7 +56,8 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
       isDef : Bool             -- True (verb agrees in Pl, Nom is not Part)
       } ;
     QuantSg, QuantPl = {s1 : Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
-    Predet, Ord = {s : Number => Case => Str} ;
+    Ord = {s : Number => Case => Str} ;
+    Predet = {s : Number => NPForm => Str} ;
     Quant = {s1 : Number => Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
     Num = {s : Number => Case => Str ; isNum : Bool} ;
 

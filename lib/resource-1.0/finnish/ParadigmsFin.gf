@@ -476,7 +476,7 @@ reg3N = \vesi,veden,vesiä ->
   regPN m = mkPN (regN m) ;
   mkPN n = mkProperName n ** {lock_PN = <>} ;
   mkNP noun num = {
-    s = \\c => noun.s ! NCase num (npform2case c) ; 
+    s = \\c => noun.s ! NCase num (npform2case num c) ; 
     a = agrP3 num ;
     isPron = False ;
     lock_NP = <>
