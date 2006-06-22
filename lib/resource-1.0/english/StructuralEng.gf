@@ -20,8 +20,8 @@ concrete StructuralEng of Structural = CatEng **
   by8agent_Prep = ss "by" ;
   by8means_Prep = ss "by" ;
   can8know_VV, can_VV = {
-    s = table VVForm [["be able to"] ; "can" ; "could" ; 
-         ["been able to"] ; ["being able to"] ; "can't" ; "couldn't"] ; 
+    s = table VVForm [["be able to"] ; "can" ; ["been able to"] ;  
+         ["being able to"] ; "could" ; "can't" ; "couldn't"] ; 
     isAux = True
     } ;
   during_Prep = ss "during" ;
@@ -50,8 +50,8 @@ concrete StructuralEng of Structural = CatEng **
   most_Predet = ss "most" ;
   much_Det = mkDeterminer Sg "much" ;
   must_VV = {
-    s = table VVForm [["be have to"] ; "must" ; ["had to"] ; 
-         ["had to"] ; ["having to"] ; "mustn't" ; ["hadn't to"]] ; ---- 
+    s = table VVForm [["have to"] ; "must" ; ["had to"] ; 
+         ["having to"] ; ["had to"] ; "mustn't" ; ["hadn't to"]] ; ---- 
     isAux = True
     } ;
   no_Phr = ss "no" ;
