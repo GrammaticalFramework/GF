@@ -11,7 +11,7 @@ concrete MathematicalFre of Mathematical =
   RelativeFre,
   ConjunctionFre,
   PhraseFre,
-  TextX,
+  TextX - [Tense,TPres,TPast,TFut,TCond],
   IdiomFre,
   StructuralFre,
   

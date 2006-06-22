@@ -113,6 +113,7 @@ incomplete concrete MultiI of Multi =
   ExistNP np = Lang.ExistNP np ** {point = np.point} ;
   ExistIP ip = Lang.ExistIP ip ** noPoint ;
   ProgrVP vp = Lang.ProgrVP vp ** {point = vp.point} ;
+  ImpPl1 vp = Lang.ImpPl1 vp ** {point = vp.point} ;
 
   everybody_NP = Lang.everybody_NP ** noPoint ;
   everything_NP = Lang.everything_NP ** noPoint ;

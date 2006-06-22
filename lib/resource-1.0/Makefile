@@ -29,7 +29,7 @@ alltenses:
 	$(GFC) german/German.gf
 	$(GFC) italian/Italian.gf
 	$(GFC) norwegian/Norwegian.gf
-	$(GFC) russian/LangRus.gf
+	$(GFC) russian/Russian.gf
 	$(GFC) spanish/Spanish.gf
 	$(GFC) swedish/Swedish.gf
 	cp -p */*.gfc */*.gfr ../alltenses
