@@ -59,7 +59,7 @@ resource ParadigmsAra = open
             _ => raw.s ! n ! d ! c
           };
         g = gen;
-        h = spec
+        h = spec ; lock_N = <>
       };
     
     regN' : Str -> Str -> Str -> Gender -> Species -> N =
@@ -104,7 +104,8 @@ resource ParadigmsAra = open
       \root,pat ->
       let { kabIr = mkWord pat root
       } in {
-        s = adj kabIr;
+        s = adj kabIr ;
+        lock_A = <>
       };
     
   --takes a root string only
@@ -203,7 +204,7 @@ resource ParadigmsAra = open
       let {
         nfs = mkRoot3 rootStr ;
       } in {
-        s = (v5sound nfs).s  ;
+        s = (v5sound nfs).s  ; lock_V = <>
       };
     
     --Verb Form VI : tafaacala 
