@@ -6,13 +6,16 @@
 -- which defines numerals for 88 languages.
 -- The resource grammar implementations add to this inflection (if needed)
 -- and ordinal numbers.
-
--- *Note*. Number 1 as defined 
+--
+-- *Note* 1. Number 1 as defined 
 -- in the category $Numeral$ here should not be used in the formation of
 -- noun phrases, and should therefore be removed. Instead, one should use
 -- [Structural Structural.html]$.one_Quant$. This makes the grammar simpler
 -- because we can assume that numbers form plural noun phrases.
-
+--
+-- *Note* 2. The implementations introduce spaces between
+-- parts of a numeral, which is often incorrect - more work on
+-- (un)lexing is needed to solve this problem.
 
 abstract Numeral = Cat ** {
 

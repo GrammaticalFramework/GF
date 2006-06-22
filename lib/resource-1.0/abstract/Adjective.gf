@@ -16,7 +16,7 @@ abstract Adjective = Cat ** {
     UseA2   : A2 -> A ;         -- divisible
 
 -- Sentence and question complements defined for all adjectival
--- phrases, although the semantics is only clear for some adjective.
+-- phrases, although the semantics is only clear for some adjectives.
  
     SentAP  : AP -> SC -> AP ;  -- great that she won, uncertain if she did
 

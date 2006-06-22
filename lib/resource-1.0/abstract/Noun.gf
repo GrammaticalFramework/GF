@@ -15,7 +15,7 @@ abstract Noun = Cat ** {
     UsePN   : PN -> NP ;          -- John
     UsePron : Pron -> NP ;        -- he
 
--- Pronouns are defined in the module [Structural Structural.html].
+-- Pronouns are defined in the module [``Structural`` Structural.html].
 
 -- A noun phrase already formed can be modified by a $Predet$erminer.
 
@@ -45,7 +45,8 @@ abstract Noun = Cat ** {
 
 -- Pronouns have possessive forms. Genitives of other kinds
 -- of noun phrases are not given here, since they are not possible
--- in e.g. Romance languages.
+-- in e.g. Romance languages. They can be found in
+-- [``Extra`` ../abstract/Extra.gf].
 
     PossPron : Pron -> Quant ;    -- my (house)
 
@@ -111,7 +112,7 @@ abstract Noun = Cat ** {
     UseN3   : N3 -> CN ;          -- flight
 
 -- Nouns can be modified by adjectives, relative clauses, and adverbs
--- (the last rule will give rise to many 'PP attachement' ambiguities
+-- (the last rule will give rise to many 'PP attachment' ambiguities
 -- when used in connection with verb phrases).
 
     AdjCN   : AP -> CN  -> CN ;   -- big house

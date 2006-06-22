@@ -7,7 +7,7 @@
 -- it is enough that both $Verb$ and $Noun$ use the same type $NP$,
 -- which is given here in $Cat$.
 -- 
--- Some categories are inherited from [Common Common.html].
+-- Some categories are inherited from [``Common`` Common.html].
 -- The reason they are defined there is that they have the same
 -- implementation in all languages in the resource (typically,
 -- just a string). These categories are
@@ -75,7 +75,7 @@ abstract Cat = Common ** {
     CN ;    -- common noun (without determiner)    e.g. "red house"
     NP ;    -- noun phrase (subject or object)     e.g. "the red house"
     Pron ;  -- personal pronoun                    e.g. "she"
-    Det ;   -- determiner phrase                   e.g. "all the seven"
+    Det ;   -- determiner phrase                   e.g. "those seven"
     Predet; -- predeterminer (prefixed Quant)      e.g. "all"
     QuantSg;-- quantifier ('nucleus' of sing. Det) e.g. "every"
     QuantPl;-- quantifier ('nucleus' of plur. Det) e.g. "many"

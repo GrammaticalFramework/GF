@@ -7,9 +7,10 @@
 -- - distributed conjunction: both X,...,X and X
 --
 --
--- *Note*. This module uses right-recursive lists. If backward
--- compatibility with API 0.9 is needed, use
--- [SeqConjunction SeqConjunction.html].
+-- $VP$ conjunctions are not covered here, because their applicability
+-- depends on language. Some special cases are defined in 
+-- [``Extra`` ../abstract/Extra.gf].
+
 
 abstract Conjunction = Cat ** {
 
@@ -44,3 +45,8 @@ abstract Conjunction = Cat ** {
   --  BaseC : C -> C   -> [C] ;  -- for C = S, AP, NP, Adv
   --  ConsC : C -> [C] -> [C] ;
 }
+
+--.
+-- *Note*. This module uses right-recursive lists. If backward
+-- compatibility with API 0.9 is needed, use
+-- [SeqConjunction SeqConjunction.html].
