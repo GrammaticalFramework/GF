@@ -4,9 +4,8 @@ Last update: %%date(%c)
 
 % NOTE: this is a txt2tags file.
 % Create an latex file from this file using:
-% txt2tags -ttex resource.txt
+% txt2tags -ttex --toc resource.txt
 %!style(tex) : isolatin1
-%!style(tex) : utf8x
 %!postproc: "section*{"  "section{"
 %!postproc(tex): "#SMALL"  "scriptsize"
 %!postproc(tex): "#BFIG" "begin{figure}"
@@ -27,10 +26,10 @@ Last update: %%date(%c)
 #CLEARPAGE
 
 This document is about the 
-GF Resource Grammar Library. It presuppose knowledge of GF and its
+GF Resource Grammar Library. It presupposes knowledge of GF and its
 module system, knowledge that can be acquired e.g. from the GF
 tutorial. We start with an introduction to the library, and proceed to
-details with the aim of covering all that one needs to know 
+details with the goal of covering all that one needs to know 
 in order to use the library. 
 How to write one's own resource grammar (i.e. to implement the API for
 a new language), is covered by a separate Resource-HOWTO document (available in
@@ -59,7 +58,7 @@ skills is typical of programmers who want to localize
 software to new languages.
 
 The current resource languages are
-- ``Ara``bic
+% - ``Ara``bic
 - ``Dan``ish
 - ``Eng``lish
 - ``Fin``nish
@@ -72,8 +71,8 @@ The current resource languages are
 - ``Swe``dish
 
 
-The first three letters (``Ara`` etc) are used in grammar module names.
-The Arabic implementation is still incomplete.
+The first three letters (``Eng`` etc) are used in grammar module names.
+%The Arabic implementation is still incomplete.
 
 To give an example application, consider
 music playing devices. In the application,
@@ -97,7 +96,7 @@ might also want to modify songs with properties, such as "American",
 "old", "good". The German grammar for adjectival modifications is
 particularly complex, because adjectives have to agree in gender,
 number, and case, and also depend on what determiner is used
-("ein Amerikanisches Lied" vs. "das Amerikanische Lied"). All this
+("ein amerikanisches Lied" vs. "das amerikanische Lied"). All this
 variation is taken care of by the resource grammar function
 ```
   fun AdjCN : AP -> CN -> CN
@@ -114,7 +113,7 @@ given that
   lincat Kind = CN
 ```
 The resource library API is devided into language-specific 
-and language-independet parts. To put it roughly,
+and language-independent parts. To put it roughly,
 - the lexicon API is language-specific
 - the syntax API is language-independent
 
@@ -176,7 +175,7 @@ inflectional paradigms module for that language:
       CatGer ** open ParadigmsGer in {
     lin
       song_N = reg2N "Lied" "Lieder" neuter ;
-      american_A = regA "Amerikanisch" ;
+      american_A = regA "amerikanisch" ;
     }
 
   concrete MusicLexFre of MusicLex = 
@@ -260,11 +259,21 @@ gives its own definition of this function:
 
 When the categories of the resource grammar are used
 in applications, a **lock field** is added to their linearization types.
-The lock field makes the linearization type of each category
+The lock field for a category ``C`` is a record field 
+```
+  lock_C : {}
+```
+with the only possible value
+```
+  lock_C = <>
+```
+The lock field carries no information, but its presence
+makes the linearization type of ``C``
 unique, so that categories
 with the same implementation are not confused with each other.
 (This is inspired by the ``newtype`` discipline in Haskell.)
-For instance, the lincats of adverbs and conjunctions are the same
+
+For example, the lincats of adverbs and conjunctions are the same
 in ``CatEng`` (and therefore in ``GrammarEng``, which inherits it):
 ```
   lincat Adv  = {s : Str} ;
@@ -728,7 +737,7 @@ formed in them:
 
 Because of mutual recursion such as in embedded sentences, this classification is
 not a complete order. However, no mutual dependence is needed between the 
-modules in a formal sense - they can all be compiled separately. This is due
+modules themselves - they can all be compiled separately. This is due
 to the module ``Cat``, which defines the type system common to the other modules.
 For instance, the types ``NP`` and ``VP`` are defined in ``Cat``, 
 and the module ``Verb`` only
@@ -772,9 +781,9 @@ ca. 350 content words:
 ```
 Using ``Lang`` instead of ``Grammar`` as a library may give 
 for free some words needed in an application. But its main purpose is to
-help testing the resource library. It does not seem possible to maintain
-a general-purpose multilingual lexicon, and this is the form that the module
-``Lexicon`` has.
+help testing the resource library, rather than as a resource itself. 
+It does not even seem realistic to develop
+a general-purpose multilingual resource lexicon. 
 
 The diagram in Figure 2 shows the structure of the API.
 
@@ -807,7 +816,7 @@ where ``ExtraEngAbs`` is a collection of syntactic structures specific to Englis
 and ``DictEngAbs`` is an English dictionary 
 (at the moment, it consists of ``IrregEngAbs``,
 the irregular verbs of English). Each of these language-specific grammars has 
-the potential to grow into a full-scale grammar of the language. These grammar
+the potential to grow into a full-scale grammar of the language. These grammars
 can also be used as libraries, but the possibility of using functors is lost.
 
 To give a better overview of language-specific structures, 
@@ -909,9 +918,9 @@ has only been exploited in a very small scale so far.
 
 ==Inflectional paradigms==
 
-===Arabic===
+% ===Arabic===
 
-%!include: ../lib/resource-1.0/arabic/ParadigmsAra.txt
+% %!include: ../lib/resource-1.0/arabic/ParadigmsAra.txt
 
 ===Danish===
 
@@ -945,7 +954,7 @@ has only been exploited in a very small scale so far.
 
 % %!include: ../lib/resource-1.0/russian/ParadigmsRus.txt
 
-%!include: ""./ParadigmsRus.tex""
+% %!include: ""./ParadigmsRus.tex""
 
 ===Spanish===
 
@@ -962,7 +971,8 @@ has only been exploited in a very small scale so far.
 
 These tables show all categories and functions in ``Grammar``,
 except the functions in ``Structural``.
-All example strings can be parsed in ``LangEng``.
+All example strings can be parsed in ``LangEng`` and therefore
+translated to the other ``Lang`` languages.
 
 
 ==Categories==
