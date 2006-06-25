@@ -13,12 +13,11 @@ concrete AdjectiveAra of Adjective = CatAra ** open ResAra, Prelude in {
             }
         } 
       };
---    ComparA a np = {
---      s = \\_ => a.s ! AAdj Compar ++ "تهَن" ++ np.s ! Nom ; 
---      isPre = False
---      } ;
+--  ComparA a np = {
+--    s = \\_ => a.s ! AAdj Compar ++ "مِنْ" ++ np.s ! Gen ; 
+--    } ;
 --
----- $SuperlA$ belongs to determiner syntax in $Noun$.
+-- $SuperlA$ belongs to determiner syntax in $Noun$.
 --
 --    ComplA2 a np = {
 --      s = \\_ => a.s ! AAdj Posit ++ a.c2 ++ np.s ! Acc ; 

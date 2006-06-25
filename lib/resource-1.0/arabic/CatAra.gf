@@ -7,7 +7,6 @@ concrete CatAra of Cat = CommonX - [Utt]  ** open ResAra, Prelude, ParamX in {
 -- Phrase
 
     Utt = {s : Gender => Str};
---    Voc = {s : Str} ;
 
 -- Tensed/Untensed
 
@@ -34,13 +33,7 @@ concrete CatAra of Cat = CommonX - [Utt]  ** open ResAra, Prelude, ParamX in {
 --    RP = {s : Case => Str ; a : RAgr} ;
 --
 -- Verb
---
-{-
-    VP = {
-      s : Tense => Polarity => Order => Agr => Str;
-      comp : NP
-      };
--}
+
     VP = ResAra.VP ;
     Comp = ResAra.Comp ; --{s : AAgr => Case => Str} ; 
 --    SC = {s : Str} ;

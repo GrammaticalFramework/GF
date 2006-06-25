@@ -4,27 +4,27 @@ concrete StructuralAra of Structural = CatAra **
   flags optimize=all ;
 
   lin
---  above_Prep = ss "َبْثي" ;
---  after_Prep = ss "َفتر" ;
+  above_Prep = ss "فَوْقَ" ;
+  after_Prep = ss "بَعْدَ" ;
 --  all_Predet = ss "َلّ" ;
 --  almost_AdA, almost_AdN = ss "َلمْست" ;
 --  although_Subj = ss "َلتهُْغه" ;
 --  always_AdV = ss "َلوَيس" ;
   and_Conj = ss "وَ" ** {n = Pl} ;
 --  because_Subj = ss "بعَُسي" ;
---  before_Prep = ss "بفْري" ;
---  behind_Prep = ss "بهِند" ;
---  between_Prep = ss "بتوّن" ;
+  before_Prep = ss "قَبْلَ" ;
+  behind_Prep = ss "خَلْفَ" ;
+  between_Prep = ss "بَيْنَ" ;
 --  both7and_DConj = sd2 "بْته" "َند" ** {n = Pl} ;
 --  but_PConj = ss "بُت" ;
---  by8agent_Prep = ss "بي" ;
---  by8means_Prep = ss "بي" ;
+  by8agent_Prep = ss "بِ" ;
+  by8means_Prep = ss "بِ" ;
 --  can8know_VV, can_VV = {
 --    s = table VVForm [["بي َبلي تْ"] ; "عَن" ; "عُْلد" ; 
 --         ["بّن َبلي تْ"] ; ["بِنغ َبلي تْ"] ; "عَنءت" ; "عُْلدنءت"] ; 
 --    isAux = True
 --    } ;
---  during_Prep = ss "دُرِنغ" ;
+  during_Prep = ss "خِلَالَ" ;
 --  either7or_DConj = sd2 "ِتهر" "ْر" ** {n = Sg} ;
 --  everybody_NP = regNP "ثريبْدي" Sg ;
   every_Det = mkDet "كُلّ" Sg Const ;
@@ -32,7 +32,7 @@ concrete StructuralAra of Structural = CatAra **
 --  everywhere_Adv = ss "ثريوهري" ;
   few_Det = mkDet "بَعض" Pl Const ;
 --  first_Ord = ss "فِرست" ;
---  from_Prep = ss "فرْم" ;
+  from_Prep = ss "مِنَ" ;
   he_Pron = mkNP "هُوَ" "هُ" "هُ" (Per3 Masc Sg) ;
   here_Adv = ss "هُنا" ;
 --  here7to_Adv = ss ["تْ هري"] ;
@@ -40,7 +40,7 @@ concrete StructuralAra of Structural = CatAra **
   how_IAdv = ss "كَيفَ" ;
 --  how8many_IDet = mkDeterminer Pl ["هْو مَني"] ;
 --  if_Subj = ss "ِف" ;
---  in8front_Prep = ss ["ِن فرْنت ْف"] ;
+  in8front_Prep = ss "مُقَابِلَ" ;
   i_Pron  = mkNP "أَنَا" "نِي" "ِي" (Per1 Sing);
   in_Prep = ss "فِي" ;
 --  it_Pron  = mkNP "ِت" "ِت" "ِتس" Sg P3 ;
@@ -54,15 +54,15 @@ concrete StructuralAra of Structural = CatAra **
 --         ["هَد تْ"] ; ["هَثِنغ تْ"] ; "مُستنءت" ; ["هَدنءت تْ"]] ; ---- 
 --    isAux = True
 --    } ;
---  no_Phr = ss "نْ" ;
---  on_Prep = ss "ْن" ;
+  no_Phr = ss "لا" ;
+  on_Prep = ss "عَلى" ;
   one_Quant = mkQuantNum "واحِد" Sg Indef ;
 --  only_Predet = ss "ْنلي" ;
 --  or_Conj = ss "ْر" ** {n = Sg} ;
 --  otherwise_PConj = ss "ْتهروِسي" ;
---  part_Prep = ss "ْف" ;
+  part_Prep = ss "مِنَ" ;
 --  please_Voc = ss "ةلَسي" ;
---  possess_Prep = ss "ْف" ;
+  possess_Prep = ss "ل" ;
 --  quite_Adv = ss "قُِتي" ;
 --  she_Pron = mkNP "سهي" "هر" "هر" Sg P3 ;
 --  so_AdA = ss "سْ" ;
@@ -82,10 +82,10 @@ concrete StructuralAra of Structural = CatAra **
   this_Quant = mkQuant7 "هَذا" "هَذِهِ" "هَذَان" "هَذَيْن" "هَاتَان" "هَاتَيْن" "هَؤُلَاء" Def;
 --  this_NP = regNP "تهِس" Sg ;
 --  those_NP = regNP "تهْسي" Pl ;
---  through_Prep = ss "تهرُْغه" ;
+  through_Prep = ss "عَبْرَ" ;
 --  too_AdA = ss "تّْ" ;
---  to_Prep = ss "تْ" ;
---  under_Prep = ss "ُندر" ;
+  to_Prep = ss "إِلى" ;
+  under_Prep = ss "تَحْتَ" ;
 --  very_AdA = ss "ثري" ;
 --  want_VV = P.mkVV (P.regV "وَنت") ;
   we_Pron = mkNP "نَحنُ" "نا" "نا" (Per1 Plur) ;
@@ -99,17 +99,11 @@ concrete StructuralAra of Structural = CatAra **
   whoSg_IP = mkIP "مَنْ" Sg ;
   whoPl_IP = mkIP "مَنْ" Pl ;
 --  why_IAdv = ss "وهي" ;
---  without_Prep = ss "وِتهُْت" ;
+  without_Prep = ss "بِدُونِ" ;
   with_Prep = ss "مَع" ;
---  yes_Phr = ss "يس" ;
+  yes_Phr = ss "نَعَم" ;
   youSg_Pron = mkNP "أَنتَ" "كَ" "كَ" (Per2 Masc Sg) ;
   youPl_Pron = mkNP "أَنتُمْ" "كُمْ" "كُمْ" (Per2 Masc Sg) ;
   youPol_Pron = mkNP "أَنتِ" "كِ" "كِ" (Per2 Fem Sg) ;
---
---
---oper
---  mkQuant : Str -> Str -> {s : Number => Str} = \x,y -> {
---    s = table Number [x ; y]
---    } ;
---
+
 }
