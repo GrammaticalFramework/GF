@@ -351,7 +351,7 @@ lin
 
   grammar_N = reg2N "Grammatik" "Grammatiken" feminine ;
   language_N = regN "Sprache" ;
-  rule_N = reg2N "Regel" "Regel" feminine ;
+  rule_N = reg2N "Regel" "Regeln" feminine ;
 
 
 } ;
