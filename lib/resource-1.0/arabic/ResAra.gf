@@ -99,10 +99,10 @@ resource ResAra = PatternsAra ** open  Prelude, Predef   in {
     NTable = Number => State => Case => Str;
 
     Noun : Type = {s : NTable ; g : Gender; h : Species} ;
-    Adj  : Type = {s : Gender => NTable } ;
+    Adj  : Type = {s : Gender => NTable} ;
+--    Adj  : Type = {s : AForm => Str} ;
     Verb : Type = {s : VForm => Str} ;
     
-
   param
     VForm =
         VPerf Voice PerGenNum
@@ -116,6 +116,9 @@ resource ResAra = PatternsAra ** open  Prelude, Predef   in {
     
     SgPl = Sing | Plur;
 
+    AForm = 
+        APosit Gender Number State Case
+      | AComp Case ;
 
 --verbal morphology
 
@@ -646,22 +649,26 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
 
 --Nominal Morphology
 
-    adj : Str -> Gender => NTable  =
-      \kabIr ->
-      let kabIra = kabIr + "َة" in 
+  adj : Str -> Gender => NTable  =
+    \kabIr ->
+    let kabIra = kabIr + "َة" in 
+    table {
+      Masc => sndm kabIr;
+      Fem  => sndf kabIra
+    };
+  
+  clr : Str -> Str -> Str -> Gender => NTable =
+    \eaHmar,HamrA',Humr ->
+    table {
+      Masc => reg eaHmar Humr;
+      Fem  => reg HamrA' Humr
+    };
+  {-in 
       table {
-        Masc => sndm kabIr;
-        Fem  => sndf kabIra
-      };
-
-    clr : Str -> Str -> Str -> Gender => NTable =
-      \eaHmar,HamrA',Humr ->
-      table {
-        Masc => reg eaHmar Humr;
-        Fem  => reg HamrA' Humr
-      };
-    
-            
+        APosit _ => posit;
+        AComp c => posit ! Masc ! Sg ! Const ! c
+      };-}
+  
     --takes 2 words, singular and broken plural, and gives the 
     --complete noun inflection table
     reg : Str -> Str -> NTable =
