@@ -13,6 +13,8 @@ The GF Resource Grammar Library defines the basic grammar of
 ten languages: 
 Danish, English, Finnish, French, German,
 Italian, Norwegian, Russian, Spanish, Swedish.
+A still incomplete implementation for Arabic is also
+included.
 
 **New**: [User manual of the resource library ../../../doc/resource.pdf].
 
@@ -24,6 +26,7 @@ on June 22, 2006.
 
 Inger Andersson and Therese Soderberg (Spanish morphology),
 Nicolas Barth and Sylvain Pogodalla (French verb list),
+Ali El Dada (Arabic modules),
 Janna Khegai (Russian modules),
 Bjorn Bringert (many Swadesh lexica),
 Carlos Gonzalía (Spanish cardinals), 
@@ -42,7 +45,6 @@ Lauri Carlson,
 Gloria Casanellas,
 Karin Cavallin,
 Robin Cooper,
-Ali El Dada,
 Hans-Joachim Daniels,
 Elisabet Engdahl,
 Markus Forsberg,
@@ -108,13 +110,15 @@ Do for instance
     > gr -cat=S -number=3 -cf | tb
 ```
 For more examples, see the [Overview slides clt2006.html]. 
+The ``make`` procedure does not make Arabic, but it can
+be compiled in a similar way as the other languages.
 
 
 ==Encoding==
 
 Finnish, German, Romance, and Scandinavian languages are in isolatin-1.
 
-Russian is in UTF-8.
+Arabic and Russian are in UTF-8.
 
 English is in pure ASCII.
 
