@@ -58,7 +58,7 @@ skills is typical of programmers who want to localize
 software to new languages.
 
 The current resource languages are
-% - ``Ara``bic
+- ``Ara``bic
 - ``Dan``ish
 - ``Eng``lish
 - ``Fin``nish
@@ -72,7 +72,8 @@ The current resource languages are
 
 
 The first three letters (``Eng`` etc) are used in grammar module names.
-%The Arabic implementation is still incomplete.
+The Arabic implementation is still incomplete, but enough to be used in
+examples like ``GF/examples/bronzeage``.
 
 To give an example application, consider
 music playing devices. In the application,
@@ -918,9 +919,9 @@ has only been exploited in a very small scale so far.
 
 ==Inflectional paradigms==
 
-% ===Arabic===
+===Arabic===
 
-% %!include: ../lib/resource-1.0/arabic/ParadigmsAra.txt
+%!include: ../lib/resource-1.0/arabic/ParadigmsAra.txt
 
 ===Danish===
 

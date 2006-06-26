@@ -80,7 +80,7 @@ resource ParadigmsAra = open
 --2 Adverbs
 
 -- Adverbs are not inflected. Most lexical ones have position
--- after the verb. Some can be preverbal (e.g. "َلوَيس").
+-- after the verb. Some can be preverbal.
 
   mkAdv : Str -> Adv ;
   mkAdV : Str -> AdV ;
@@ -178,12 +178,12 @@ resource ParadigmsAra = open
   V0, V2S, V2V, V2A, V2Q : Type ;
   AS, A2S, AV, A2V : Type ;
 
-
+--.
 --2 Definitions of paradigms
 
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
---.
+
 
   regV = \word ->
     case word of {
