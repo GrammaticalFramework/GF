@@ -17,7 +17,7 @@
 -- guarantee the correctness of bindings\/dependences.
 -----------------------------------------------------------------------------
 
-module GF.UseGrammar.Generate (generateTrees) where
+module GF.UseGrammar.Generate (generateTrees,generateAll) where
 
 import GF.Canon.GFC
 import GF.Grammar.LookAbs
@@ -29,7 +29,6 @@ import GF.Grammar.SGrammar
 import GF.Data.Operations
 import GF.Data.Zipper
 import GF.Infra.Option
-
 import Data.List
 
 -- Generate all trees of given category and depth. AR 30/4/2004
@@ -47,6 +46,18 @@ generateTrees opts gr cat n mn mt = map str2tr $ generate gr' ifm cat' n mn mt'
     cat' = prt $ snd cat
     mt'  = maybe Nothing (return . tr2str) mt
     ifm  = oElem withMetas opts
+
+generateAll :: Options -> (Exp -> IO ()) -> GFCGrammar -> Cat -> IO ()
+generateAll opts io gr cat = mapM_ (io . str2tr) $ gen cat'
+  where
+    gr'  = gr2sgr opts emptyProbs gr
+    cat' = prt $ snd cat
+    gen c = [SApp (f, xs) | 
+      (f,(cs,_)) <- funs c, 
+      xs <- combinations (map gen cs)
+      ]
+    funs c = errVal [] $ lookupTree id c gr'
+
 
 
 ------------------------------------------
