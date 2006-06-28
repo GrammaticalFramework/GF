@@ -28,6 +28,7 @@ import qualified GF.Grammar.MMacros as MMacros
 import qualified GF.Compile.GrammarToCanon as GrammarToCanon
 import GF.Grammar.Values
 import GF.UseGrammar.GetTree
+import GF.UseGrammar.Generate (generateAll) ---- should be in API
 import GF.UseGrammar.Treebank
 
 import GF.Shell.ShellCommands
@@ -302,6 +303,10 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
       _ -> do
         ts <- randomTreesIO opts gro (optIntOrN opts flagNumber 1)
         returnArg (ATrms ts) sa
+
+  CGenerateTrees | oElem showAll opts -> do
+    let cat = firstAbsCat opts gro
+    justOutput opts (generateAll opts (putStrLn . prt_) cgr cat) sa
   CGenerateTrees -> do
     let 
       a' = case a of
