@@ -6,7 +6,7 @@ lin
   FloatPN i  = {s = \\c => i.s} ; --- c
 
   CNIntNP cn i = {
-    s = \\c => cn.s ! NCase Sg (npform2case c) ++ i.s ;
+    s = \\c => cn.s ! NCase Sg (npform2case Sg c) ++ i.s ;
     a = agrP3 Sg ;
     isPron = False
     } ;
