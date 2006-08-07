@@ -21,7 +21,7 @@ lin n5 = mkNum "five"  "fifteen"  "fifty" "fifth" ;
 lin n6 = regNum "six" ;
 lin n7 = regNum "seven" ;
 lin n8 = mkNum "eight" "eighteen" "eighty" "eighth" ;
-lin n9 = regNum "nine" ;
+lin n9 = mkNum "nine" "nineteen" "ninety" "ninth" ;
 
 lin pot01 = mkNum "one" "eleven" "ten" "first" ** {n = Sg} ;
 lin pot0 d = d ** {n = Pl} ;
