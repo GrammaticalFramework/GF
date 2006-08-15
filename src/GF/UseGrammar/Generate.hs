@@ -50,8 +50,9 @@ generateTrees opts gr cat n mn mt = map str2tr $ generate gr' ifm cat' n mn mt'
     ifm  = oElem showOld opts
 
 generateAll :: Options -> (Exp -> IO ()) -> GFCGrammar -> Cat -> IO ()
-generateAll opts io gr cat = mapM_ (io . str2tr) $ gen cat'
+generateAll opts io gr cat = mapM_ (io . str2tr) $ num $ gen cat'
   where
+    num  = optIntOrAll opts flagNumber
     gr'  = gr2sgr opts emptyProbs gr
     cat' = prt $ snd cat
     gen c = generate gr' False c 10 Nothing Nothing
