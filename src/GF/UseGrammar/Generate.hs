@@ -39,24 +39,22 @@ import Data.List
 
 
 -- | the main function takes an abstract syntax and returns a list of trees
-generateTrees :: Options -> GFCGrammar -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
+generateTrees :: 
+  Options -> GFCGrammar -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
 generateTrees opts gr cat n mn mt = map str2tr $ generate gr' ifm cat' n mn mt'
   where
     gr'  = gr2sgr opts emptyProbs gr
     cat' = prt $ snd cat
     mt'  = maybe Nothing (return . tr2str) mt
-    ifm  = oElem withMetas opts
+---    ifm  = oElem withMetas opts
+    ifm  = oElem showOld opts
 
 generateAll :: Options -> (Exp -> IO ()) -> GFCGrammar -> Cat -> IO ()
 generateAll opts io gr cat = mapM_ (io . str2tr) $ gen cat'
   where
     gr'  = gr2sgr opts emptyProbs gr
     cat' = prt $ snd cat
-    gen c = [SApp (f, xs) | 
-      (f,(cs,_)) <- funs c, 
-      xs <- combinations (map gen cs)
-      ]
-    funs c = errVal [] $ lookupTree id c gr'
+    gen c = generate gr' False c 10 Nothing Nothing
 
 
 
@@ -69,11 +67,22 @@ generateAll opts io gr cat = mapM_ (io . str2tr) $ gen cat'
 
 generate :: SGrammar -> Bool -> SCat -> Int -> Maybe Int -> Maybe STree -> [STree]
 generate gr ifm cat i mn mt = case mt of
-  Nothing -> gen cat
+  Nothing -> gen ifm cat
   Just t  -> genM t
  where
+--- now use ifm to choose between two algorithms
+  gen True cat = concat $ errVal [] $ lookupTree id cat $ allTrees -- -old
+  gen _ cat = nub $ concatMap (\i -> gener i cat) [0..i-1] -- new
 
-  gen cat = concat $ errVal [] $ lookupTree id cat $ allTrees
+  gener 0 c = [SApp (f, []) | (f,([],_)) <- funs c]
+  gener i c = [
+    tr | 
+      (f,(cs,_)) <- funs c,
+      let alts = map (gener (i-1)) cs,
+      ts <- combinations alts,
+      let tr = SApp (f, ts)
+--      depth tr >= i
+    ]
 
   allTrees = genAll i
 
@@ -100,5 +109,5 @@ generate gr ifm cat i mn mt = case mt of
 
   genM t = case t of
     SApp (f,ts) -> [SApp (f,ts') | ts' <- combinations (map genM ts)]
-    SMeta k     -> gen k 
+    SMeta k     -> gen ifm k 
     _ -> [t]

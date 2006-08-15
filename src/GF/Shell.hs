@@ -305,8 +305,12 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
         returnArg (ATrms ts) sa
 
   CGenerateTrees | oElem showAll opts -> do
-    let cat = firstAbsCat opts gro
-    justOutput opts (generateAll opts (putStrLn . prt_) cgr cat) sa
+    let 
+      cat = firstAbsCat opts gro
+      outp 
+       | oElem (iOpt "lin") opts = optLinearizeTreeVal opts gro . term2tree gro
+       | otherwise = prt_
+    justOutput opts (generateAll opts (putStrLn . outp) cgr cat) sa
   CGenerateTrees -> do
     let 
       a' = case a of
