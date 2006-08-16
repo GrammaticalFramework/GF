@@ -349,14 +349,15 @@ txtHelpFile =
   "\n      the tree." ++
   "\n  options:" ++
   "\n      -metas    also return trees that include metavariables" ++
-  "\n      -all      generate all (lazily)" ++
+  "\n      -all      generate all (can be infinitely many, lazily)" ++
   "\n      -lin      linearize result of -all (otherwise, use pipe to linearize)" ++
   "\n  flags:" ++
   "\n      -depth    generate to this depth (default 3)" ++
   "\n      -atoms    take this number of atomic rules of each category (default unlimited)" ++
   "\n      -alts     take this number of alternatives at each branch (default unlimited)" ++
   "\n      -cat      generate in this category" ++
-  "\n      -old      use an older algorithm (usually more memory-consuming)" ++
+  "\n      -nonub    don't remove duplicates (faster, not effective with -mem)" ++
+  "\n      -mem      use a memorizing algorithm (often faster, usually more memory-consuming)" ++
   "\n      -lang     use the abstract syntax of this grammar" ++
   "\n      -number   generate (at most) this number of trees (also works with -all)" ++
   "\n      -noexpand don't expand these categories (comma-separated, e.g. -noexpand=V,CN)" ++

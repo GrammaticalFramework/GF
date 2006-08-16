@@ -320,14 +320,15 @@ gt, generate_trees: gt Tree?
       the tree.
   options:
       -metas    also return trees that include metavariables
-      -all      generate all (lazily)
+      -all      generate all (can be infinitely many, lazily)
       -lin      linearize result of -all (otherwise, use pipe to linearize)
   flags:
       -depth    generate to this depth (default 3)
       -atoms    take this number of atomic rules of each category (default unlimited)
       -alts     take this number of alternatives at each branch (default unlimited)
       -cat      generate in this category
-      -old      use an older algorithm (usually more memory-consuming)
+      -nonub    don't remove duplicates (faster, not effective with -mem)
+      -mem      use a memorizing algorithm (often faster, usually more memory-consuming)
       -lang     use the abstract syntax of this grammar
       -number   generate (at most) this number of trees (also works with -all)
       -noexpand don't expand these categories (comma-separated, e.g. -noexpand=V,CN)
