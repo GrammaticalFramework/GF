@@ -41,7 +41,7 @@ import Data.List
 -- | the main function takes an abstract syntax and returns a list of trees
 generateTrees :: 
   Options -> GFCGrammar -> Cat -> Int -> Maybe Int -> Maybe Tree -> [Exp]
-generateTrees opts gr cat n mn mt = map str2tr $ generate gr' ifm cat' n mn mt'
+generateTrees opts gr cat n mn mt = map str2tr $ generate gr' opts cat' n mn mt'
   where
     gr'  = gr2sgr opts emptyProbs gr
     cat' = prt $ snd cat
@@ -55,7 +55,7 @@ generateAll opts io gr cat = mapM_ (io . str2tr) $ num $ gen cat'
     num  = optIntOrAll opts flagNumber
     gr'  = gr2sgr opts emptyProbs gr
     cat' = prt $ snd cat
-    gen c = generate gr' False c 10 Nothing Nothing
+    gen c = generate gr' opts c 10 Nothing Nothing
 
 
 
@@ -66,14 +66,16 @@ generateAll opts io gr cat = mapM_ (io . str2tr) $ num $ gen cat'
 -- if the depth is large (more than 3)
 -- If a tree is given as argument, generation concerns its metavariables.
 
-generate :: SGrammar -> Bool -> SCat -> Int -> Maybe Int -> Maybe STree -> [STree]
-generate gr ifm cat i mn mt = case mt of
-  Nothing -> gen ifm cat
+generate :: SGrammar -> Options -> SCat -> Int -> Maybe Int -> Maybe STree -> [STree]
+generate gr opts cat i mn mt = case mt of
+  Nothing -> gen opts cat
   Just t  -> genM t
  where
 --- now use ifm to choose between two algorithms
-  gen True cat = concat $ errVal [] $ lookupTree id cat $ allTrees -- -old
-  gen _ cat = nub $ concatMap (\i -> gener i cat) [0..i-1] -- new
+  gen opts cat 
+   | oElem (iOpt "mem") opts   = concat $ errVal [] $ lookupTree id cat $ allTrees -- -old
+   | oElem (iOpt "nonub") opts =       concatMap (\i -> gener i cat) [0..i-1] -- some duplicates
+   | otherwise                 = nub $ concatMap (\i -> gener i cat) [0..i-1] -- new
 
   gener 0 c = [SApp (f, []) | (f,([],_)) <- funs c]
   gener i c = [
@@ -81,8 +83,8 @@ generate gr ifm cat i mn mt = case mt of
       (f,(cs,_)) <- funs c,
       let alts = map (gener (i-1)) cs,
       ts <- combinations alts,
-      let tr = SApp (f, ts)
---      depth tr >= i
+      let tr = SApp (f, ts),
+      depth tr >= i
     ]
 
   allTrees = genAll i
@@ -110,5 +112,5 @@ generate gr ifm cat i mn mt = case mt of
 
   genM t = case t of
     SApp (f,ts) -> [SApp (f,ts') | ts' <- combinations (map genM ts)]
-    SMeta k     -> gen ifm k 
+    SMeta k     -> gen opts k 
     _ -> [t]
