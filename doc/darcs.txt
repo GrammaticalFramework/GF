@@ -17,7 +17,7 @@ Last update: %%date(%c)
 Darcs is a decentralized revision control system. These are some of
 the reasons for switching GF from CVS to Darcs:
 
-- you can keep local revision control in your checked-out copy, since
+- You can keep local revision control in your checked-out copy, since
   each checked-out copy is a repository in itself. For example, this
   allows the WebALT project to keep a local GF repository for working
   on the resource grammars, and submit patches to the main repo when
@@ -25,9 +25,9 @@ the reasons for switching GF from CVS to Darcs:
   revision control over their own modifications before they are ready
   to submit them, or if they are temporarily without net access.
 
-- we can provide read-only access over HTTP using the existing CS web server.
+- We can provide read-only access over HTTP using the existing CS web server.
 
-- it is possible and easy to rename and remove both files and directories.
+- It is possible and easy to rename and remove both files and directories.
 
 
 For more information about Darcs, see http://darcs.net/.
@@ -56,8 +56,8 @@ $ darcs get --partial --set-scripts-executable http://www.cs.chalmers.se/Cs/Rese
 
 This will create a directory called ``GF`` in the current
 directory. See ``GF/src/INSTALL`` for instructions on compiling. The
-main difference to compiling a GF release from sources is that you
-need to run ``autoconf`` before ``configure``.
+main difference compared to compiling a GF release is that you
+need to run ``autoconf`` before ``./configure``.
 
 
 == Updating your copy ==
@@ -119,6 +119,12 @@ access, you can access the repository using ssh.
 You need to be a member of the ``langtech`` group to push changes to
 the repository.
 
+If darcs seems to ask for your **password multiple times** for a single 
+push or pull, try upgrading to recent versions of darcs and OpenSSH
+(OpenSSH version 4 or newer).
+Recent OpenSSH versions include a connection multiplexing feature, which
+recent darcs versions support.
+
 **Note: we seem to have some problems getting read-write access working smoothly on Windows.**
 If you figure out how to do this, let us know. If not, you can still use read-only access,
 record patches in your local repository, and send them by e-mail once in a while.
@@ -137,72 +143,21 @@ echo unsup >> $HOME/.vcs4/pathsetup
 Note that the path setup works differently on different Chalmers machines.
 The command above will setup you path on the newer machines correctly.
 
-== Setting up ssh alias and ControlMaster ==
-
-In order to avoid typing in you password multiple times for each
-action on the remote repository, you can use ssh's ControlMaster
-functionality. This allows several ssh instances to use the connection
-established by one existing instance.
-
-**NOTE: You need OpenSSH version 4 or newer for this to work.** You
-can check your OpenSSH version with ``ssh -V``. If you have an older
-version of OpenSSH, you need to remove the ControlPath line below,
-and you can skip the "Setting up an ssh ControlMaster connection"
-step. You will be typing in your password a lot...
-
-
-Add this to ``~/.ssh/config`` (create the file if it does not exist,
-replace ``bringert`` with your own username on the
-Chalmers system):
-
-```
-Host gfreposerver
-HostName momo.medic.chalmers.se
-User bringert
-ControlPath /tmp/ssh-gfreposerver
-```
-
-This sets up an alias ``gfreposerver`` for the server we use 
-for the Darcs repository. 
-Note that **you really need to use ``momo.medic.chalmers.se``** (or some other server with the new Linux system) since we need to have a server with Darcs 1.0.4. If you use some server with an earlier Darcs version you can mess up the repository.
-
-More information about the ControlMaster feature is available in 
-``man ssh_config``.
-
-
-== Setting up an ssh ControlMaster connection ==
-
-Before connecting to the remote server, you need to set up a master
-ssh connection to it. As long as this connection is up, you don't
-need to enter your password when connecting to the GF repository server.
-
-Start the master connection:
-
-```
-$ ssh -M gfreposerver
-```
-
-This looks just like a normal ssh login, and you get a shell on the server.
-Put this connection in the background, or keep it open in a window
-somewhere.
-
-**NOTE: You need to have a ControlMaster connection running whenever you want to access the repo using ssh.**
-You may want to create a script or alias for starting the connection.
-
-=== Automating the ControlMaster connection ===
-
-You can use a darcs wrapper which sets up a ControlMaster connection
-if there isn't one already. Put the script [darcs-cm darcs-cm]
-somewhere on your path and use it instead of ``darcs`` to work with 
-the remote repository.
 
 == Getting a fresh copy ==
 
-Get your copy with (all on one line):
+Get your copy with (all on one line),
+replacing ``bringert`` with your own username on the
+Chalmers system:
 
 ```
-$ darcs get --partial --set-scripts-executable gfreposerver:/users/cs/www/Research/Language-technology/darcs/GF/
+$ darcs get --partial --set-scripts-executable bringert@momo.medic.chalmers.se:/users/cs/www/Research/Language-technology/darcs/GF/
 ```
+
+Note that **you really need to use ``momo.medic.chalmers.se``** 
+(or some other server with the new Linux system) since we need to 
+have a server with at least Darcs 1.0.4. If you use some server 
+with an earlier Darcs version you can mess up the repository.
 
 The option ``--partial`` means that you do not download all of the
 history for the repository. This saves space, bandwidth and CPU time,
@@ -276,45 +231,15 @@ the section above on setting up your ``$PATH`` on the Chalmers system.
 == I get the error "(sftp) failed to fetch files." ==
 
 There seems to be a problem with how darcs 1.0.4 calls sftp, which
-means that normal password authentication does not work. Either use
-Darcs 1.0.3 on your client, and be prepared to enter your password
-many times, or use the ssh ControlMaster feature as described above.
-
-== I get the error "Not a repository: gfreposerver:..." ==
-
-You get this error when you have set up ControlMaster, but don't have a master
-connection running. Start a master connection:
-
-```
-$ ssh -M gfreposerver
-```
-
-or use the ``darcs-cm`` script shown above.
-
-== I'm using Cygwin and I get "mm_receive_fd: no fd" ==
-
-It seems like ssh connection multiplexing doesn't work under Cygwin:
-http://www.mail-archive.com/cygwin@cygwin.com/msg61323.html.
-
-The workaround is to use password authentication. Just remove the
-ControlPath line in ``.ssh/config``, and don't setup a ControlMaster
-connection (and don't use darcs-cm).
-
-You should then be able to checkout using just:
-
-```
-$ darcs get --partial --set-scripts-executable gfreposerver:/users/cs/www/Research/Language-technology/darcs/GF/
-```
-
-The problem is that when you pull and push, you have to enter your
-password quite a few times.
+means that normal password authentication does not work. 
+Try upgrading to a more recent version of darcs.
 
 
 == How do I avoid typing in my password so many times? ==
 
 === Using ssh ControlMaster ===
 
-See above.
+Get a recent darcs and OpenSSH, see above.
 
 
 === Using ssh-agent ===

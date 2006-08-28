@@ -8,7 +8,7 @@
 <P ALIGN="center"><CENTER><H1>GF Darcs repository</H1>
 <FONT SIZE="4">
 <I>Author: Björn Bringert &lt;bringert@cs.chalmers.se&gt;</I><BR>
-Last update: Thu Dec  8 11:04:16 2005
+Last update: Mon Aug 28 14:11:23 2006
 </FONT></CENTER>
 
 <P></P>
@@ -27,30 +27,23 @@ Last update: Thu Dec  8 11:04:16 2005
   <LI><A HREF="#toc8">Read-write access</A>
     <UL>
     <LI><A HREF="#toc9">Setting up your $PATH on the Chalmers system</A>
-    <LI><A HREF="#toc10">Setting up ssh alias and ControlMaster</A>
-    <LI><A HREF="#toc11">Setting up an ssh ControlMaster connection</A>
-      <UL>
-      <LI><A HREF="#toc12">Automating the ControlMaster connection</A>
-      </UL>
-    <LI><A HREF="#toc13">Getting a fresh copy</A>
-    <LI><A HREF="#toc14">Getting other people's changes?</A>
-    <LI><A HREF="#toc15">Commit your changes</A>
-    <LI><A HREF="#toc16">Apply a patch from someone else</A>
+    <LI><A HREF="#toc10">Getting a fresh copy</A>
+    <LI><A HREF="#toc11">Getting other people's changes?</A>
+    <LI><A HREF="#toc12">Commit your changes</A>
+    <LI><A HREF="#toc13">Apply a patch from someone else</A>
     </UL>
-  <LI><A HREF="#toc17">Troubleshooting</A>
+  <LI><A HREF="#toc14">Troubleshooting</A>
     <UL>
-    <LI><A HREF="#toc18">I get the error "darcs not found" when pushing</A>
-    <LI><A HREF="#toc19">I get the error "(sftp) failed to fetch files."</A>
-    <LI><A HREF="#toc20">I get the error "Not a repository: gfreposerver:..."</A>
-    <LI><A HREF="#toc21">I'm using Cygwin and I get "mm_receive_fd: no fd"</A>
-    <LI><A HREF="#toc22">How do I avoid typing in my password so many times?</A>
+    <LI><A HREF="#toc15">I get the error "darcs not found" when pushing</A>
+    <LI><A HREF="#toc16">I get the error "(sftp) failed to fetch files."</A>
+    <LI><A HREF="#toc17">How do I avoid typing in my password so many times?</A>
       <UL>
-      <LI><A HREF="#toc23">Using ssh ControlMaster</A>
-      <LI><A HREF="#toc24">Using ssh-agent</A>
+      <LI><A HREF="#toc18">Using ssh ControlMaster</A>
+      <LI><A HREF="#toc19">Using ssh-agent</A>
       </UL>
     </UL>
-  <LI><A HREF="#toc25">Technical Information</A>
-  <LI><A HREF="#toc26">Further information about Darcs</A>
+  <LI><A HREF="#toc20">Technical Information</A>
+  <LI><A HREF="#toc21">Further information about Darcs</A>
   </UL>
 
 <P></P>
@@ -66,7 +59,7 @@ Darcs is a decentralized revision control system. These are some of
 the reasons for switching GF from CVS to Darcs:
 </P>
 <UL>
-<LI>you can keep local revision control in your checked-out copy, since
+<LI>You can keep local revision control in your checked-out copy, since
   each checked-out copy is a repository in itself. For example, this
   allows the WebALT project to keep a local GF repository for working
   on the resource grammars, and submit patches to the main repo when
@@ -74,9 +67,9 @@ the reasons for switching GF from CVS to Darcs:
   revision control over their own modifications before they are ready
   to submit them, or if they are temporarily without net access.
 <P></P>
-<LI>we can provide read-only access over HTTP using the existing CS web server.
+<LI>We can provide read-only access over HTTP using the existing CS web server.
 <P></P>
-<LI>it is possible and easy to rename and remove both files and directories.
+<LI>It is possible and easy to rename and remove both files and directories.
 </UL>
 
 <P>
@@ -106,8 +99,8 @@ Anyone can get the latest development version of GF by running (all on one line)
 <P>
 This will create a directory called <CODE>GF</CODE> in the current
 directory. See <CODE>GF/src/INSTALL</CODE> for instructions on compiling. The
-main difference to compiling a GF release from sources is that you
-need to run <CODE>autoconf</CODE> before <CODE>configure</CODE>.
+main difference compared to compiling a GF release is that you
+need to run <CODE>autoconf</CODE> before <CODE>./configure</CODE>.
 </P>
 <A NAME="toc5"></A>
 <H2>Updating your copy</H2>
@@ -173,6 +166,13 @@ You need to be a member of the <CODE>langtech</CODE> group to push changes to
 the repository.
 </P>
 <P>
+If darcs seems to ask for your <B>password multiple times</B> for a single 
+push or pull, try upgrading to recent versions of darcs and OpenSSH
+(OpenSSH version 4 or newer).
+Recent OpenSSH versions include a connection multiplexing feature, which
+recent darcs versions support.
+</P>
+<P>
 <B>Note: we seem to have some problems getting read-write access working smoothly on Windows.</B>
 If you figure out how to do this, let us know. If not, you can still use read-only access,
 record patches in your local repository, and send them by e-mail once in a while.
@@ -194,88 +194,29 @@ Note that the path setup works differently on different Chalmers machines.
 The command above will setup you path on the newer machines correctly.
 </P>
 <A NAME="toc10"></A>
-<H2>Setting up ssh alias and ControlMaster</H2>
-<P>
-In order to avoid typing in you password multiple times for each
-action on the remote repository, you can use ssh's ControlMaster
-functionality. This allows several ssh instances to use the connection
-established by one existing instance.
-</P>
-<P>
-<B>NOTE: You need OpenSSH version 4 or newer for this to work.</B> You
-can check your OpenSSH version with <CODE>ssh -V</CODE>. If you have an older
-version of OpenSSH, you need to remove the ControlPath line below,
-and you can skip the "Setting up an ssh ControlMaster connection"
-step. You will be typing in your password a lot...
-</P>
-<P>
-Add this to <CODE>~/.ssh/config</CODE> (create the file if it does not exist,
-replace <CODE>bringert</CODE> with your own username on the
-Chalmers system):
-</P>
-<PRE>
-  Host gfreposerver
-  HostName momo.medic.chalmers.se
-  User bringert
-  ControlPath /tmp/ssh-gfreposerver
-</PRE>
-<P></P>
-<P>
-This sets up an alias <CODE>gfreposerver</CODE> for the server we use 
-for the Darcs repository. 
-Note that <B>you really need to use <CODE>momo.medic.chalmers.se</CODE></B> (or some other server with the new Linux system) since we need to have a server with Darcs 1.0.4. If you use some server with an earlier Darcs version you can mess up the repository.
-</P>
-<P>
-More information about the ControlMaster feature is available in 
-<CODE>man ssh_config</CODE>.
-</P>
-<A NAME="toc11"></A>
-<H2>Setting up an ssh ControlMaster connection</H2>
-<P>
-Before connecting to the remote server, you need to set up a master
-ssh connection to it. As long as this connection is up, you don't
-need to enter your password when connecting to the GF repository server.
-</P>
-<P>
-Start the master connection:
-</P>
-<PRE>
-  $ ssh -M gfreposerver
-</PRE>
-<P></P>
-<P>
-This looks just like a normal ssh login, and you get a shell on the server.
-Put this connection in the background, or keep it open in a window
-somewhere.
-</P>
-<P>
-<B>NOTE: You need to have a ControlMaster connection running whenever you want to access the repo using ssh.</B>
-You may want to create a script or alias for starting the connection.
-</P>
-<A NAME="toc12"></A>
-<H3>Automating the ControlMaster connection</H3>
-<P>
-You can use a darcs wrapper which sets up a ControlMaster connection
-if there isn't one already. Put the script <A HREF="darcs-cm">darcs-cm</A>
-somewhere on your path and use it instead of <CODE>darcs</CODE> to work with 
-the remote repository.
-</P>
-<A NAME="toc13"></A>
 <H2>Getting a fresh copy</H2>
 <P>
-Get your copy with (all on one line):
+Get your copy with (all on one line),
+replacing <CODE>bringert</CODE> with your own username on the
+Chalmers system:
 </P>
 <PRE>
-  $ darcs get --partial --set-scripts-executable gfreposerver:/users/cs/www/Research/Language-technology/darcs/GF/
+  $ darcs get --partial --set-scripts-executable bringert@momo.medic.chalmers.se:/users/cs/www/Research/Language-technology/darcs/GF/
 </PRE>
 <P></P>
+<P>
+Note that <B>you really need to use <CODE>momo.medic.chalmers.se</CODE></B> 
+(or some other server with the new Linux system) since we need to 
+have a server with at least Darcs 1.0.4. If you use some server 
+with an earlier Darcs version you can mess up the repository.
+</P>
 <P>
 The option <CODE>--partial</CODE> means that you do not download all of the
 history for the repository. This saves space, bandwidth and CPU time,
 and most people don't need the full history of all changes in the
 past.
 </P>
-<A NAME="toc14"></A>
+<A NAME="toc11"></A>
 <H2>Getting other people's changes?</H2>
 <P>
 Get all new patches from the main repo:
@@ -287,7 +228,7 @@ Get all new patches from the main repo:
 <P>
 Without <CODE>-a</CODE>, you can choose which patches you want to get.
 </P>
-<A NAME="toc15"></A>
+<A NAME="toc12"></A>
 <H2>Commit your changes</H2>
 <P>
 There are two steps to commiting a change to the main repo. First you
@@ -321,7 +262,7 @@ ssh-access, all you need to do is:
 If you use the <CODE>-a</CODE> flag to push, all local patches which are not in
 the main repo are pushed.
 </P>
-<A NAME="toc16"></A>
+<A NAME="toc13"></A>
 <H2>Apply a patch from someone else</H2>
 <P>
 Use:
@@ -334,66 +275,30 @@ Use:
 This applies the patch to your local repository. To commit it to the
 main repo, use <CODE>darcs push</CODE>.
 </P>
-<A NAME="toc17"></A>
+<A NAME="toc14"></A>
 <H1>Troubleshooting</H1>
-<A NAME="toc18"></A>
+<A NAME="toc15"></A>
 <H2>I get the error "darcs not found" when pushing</H2>
 <P>
 If you get <CODE>darcs not found</CODE> when you try to push your changes, you
 don't have darcs on your <CODE>$PATH</CODE> on the Chalmers system. See
 the section above on setting up your <CODE>$PATH</CODE> on the Chalmers system.
 </P>
-<A NAME="toc19"></A>
+<A NAME="toc16"></A>
 <H2>I get the error "(sftp) failed to fetch files."</H2>
 <P>
 There seems to be a problem with how darcs 1.0.4 calls sftp, which
-means that normal password authentication does not work. Either use
-Darcs 1.0.3 on your client, and be prepared to enter your password
-many times, or use the ssh ControlMaster feature as described above.
+means that normal password authentication does not work. 
+Try upgrading to a more recent version of darcs.
 </P>
-<A NAME="toc20"></A>
-<H2>I get the error "Not a repository: gfreposerver:..."</H2>
-<P>
-You get this error when you have set up ControlMaster, but don't have a master
-connection running. Start a master connection:
-</P>
-<PRE>
-  $ ssh -M gfreposerver
-</PRE>
-<P></P>
-<P>
-or use the <CODE>darcs-cm</CODE> script shown above.
-</P>
-<A NAME="toc21"></A>
-<H2>I'm using Cygwin and I get "mm_receive_fd: no fd"</H2>
-<P>
-It seems like ssh connection multiplexing doesn't work under Cygwin:
-<A HREF="http://www.mail-archive.com/cygwin@cygwin.com/msg61323.html">http://www.mail-archive.com/cygwin@cygwin.com/msg61323.html</A>.
-</P>
-<P>
-The workaround is to use password authentication. Just remove the
-ControlPath line in <CODE>.ssh/config</CODE>, and don't setup a ControlMaster
-connection (and don't use darcs-cm).
-</P>
-<P>
-You should then be able to checkout using just:
-</P>
-<PRE>
-  $ darcs get --partial --set-scripts-executable gfreposerver:/users/cs/www/Research/Language-technology/darcs/GF/
-</PRE>
-<P></P>
-<P>
-The problem is that when you pull and push, you have to enter your
-password quite a few times.
-</P>
-<A NAME="toc22"></A>
+<A NAME="toc17"></A>
 <H2>How do I avoid typing in my password so many times?</H2>
-<A NAME="toc23"></A>
+<A NAME="toc18"></A>
 <H3>Using ssh ControlMaster</H3>
 <P>
-See above.
+Get a recent darcs and OpenSSH, see above.
 </P>
-<A NAME="toc24"></A>
+<A NAME="toc19"></A>
 <H3>Using ssh-agent</H3>
 <P>
 <B>NOTE: the method below will not work with <CODE>momo.medic.chalmers.se</CODE></B>.
@@ -456,7 +361,7 @@ Try to use it to log in (with your own username again):
   zsh:bringert:[~]&gt;
 </PRE>
 <P></P>
-<A NAME="toc25"></A>
+<A NAME="toc20"></A>
 <H1>Technical Information</H1>
 <P>
 This section contains information about how the repository is set
@@ -486,12 +391,12 @@ The repo has this in <CODE>_darcs/prefs/defaults</CODE>:
 The server which we push to has darcs 1.0.4, which is needed for
 posthook support.
 </P>
-<A NAME="toc26"></A>
+<A NAME="toc21"></A>
 <H1>Further information about Darcs</H1>
 <P>
 For more info about what you can do with darcs, see <A HREF="http://darcs.net/manual/">http://darcs.net/manual/</A>
 </P>
 
-<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
-<!-- cmdline: txt2tags darcs.txt -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -t html -\-toc darcs.txt -->
 </BODY></HTML>
