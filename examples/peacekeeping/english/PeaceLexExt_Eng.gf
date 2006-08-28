@@ -37,7 +37,7 @@ concrete PeaceLexExt_Eng of PeaceLexExt =
     weapon_N = regN "weapon";
 
     -- Verbs
-    cooperate_V2 = mkV2 (regV "cooperate") (mkPreposition "with") ;
+    cooperate_V2 = mkV2 (regV "cooperate") (mkPrep "with") ;
     cough_V = regV "cough" ;
     drop_V2 = dirV2 (regDuplV "drop") ;
     hurt_V = hurt_V ;
