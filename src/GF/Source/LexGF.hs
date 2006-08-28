@@ -121,7 +121,7 @@ tokens str = go (alexStartPos, '\n', str)
       go inp@(pos, _, str) =
     	  case alexScan inp 0 of
     	    AlexEOF                -> []
-    	    AlexError (pos, _, _)  -> fail $ show pos ++ ": lexical error"
+    	    AlexError (pos, _, _)  -> [Err pos]
     	    AlexSkip  inp' len     -> go inp'
     	    AlexToken inp' len act -> act pos (take len str) : (go inp')
 
