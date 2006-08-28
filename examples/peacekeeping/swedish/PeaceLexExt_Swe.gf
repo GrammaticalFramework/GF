@@ -37,7 +37,7 @@ concrete PeaceLexExt_Swe of PeaceLexExt =
     weapon_N = mkN "vapen" "vapnet" "vapen" "vapnen" ;
 
     -- Verbs
-    cooperate_V2 = mkV2 (regV "samarbetar") (mkPreposition "med") ;
+    cooperate_V2 = mkV2 (regV "samarbetar") (mkPrep "med") ;
     cough_V = regV "hostar" ;
     drop_V2 = dirV2 (regV "släpper") ;
     hurt_V = partV göra_V "ont" ; -- FIXME: "Gör ont ditt ben?"
