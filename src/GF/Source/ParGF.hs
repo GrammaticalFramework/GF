@@ -3133,7 +3133,11 @@ thenM = (>>=)
 
 happyError :: [Token] -> Err a
 happyError ts =
-  Bad $ "syntax error at " ++ tokenPos ts ++ if null ts then [] else (" before " ++ unwords (map prToken (take 4 ts)))
+  Bad $ "syntax error at " ++ tokenPos ts ++ 
+  case ts of
+    [] -> []
+    [Err _] -> " due to lexer error" 
+    _ -> (" before " ++ unwords (map prToken (take 4 ts)))
 
 myLexer = tokens
 {-# LINE 1 "GenericTemplate.hs" #-}
