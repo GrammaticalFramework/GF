@@ -31,8 +31,10 @@ typPredefined :: Ident -> Err Type
 typPredefined c@(IC f) = case f of
   "Int"    -> return typePType
   "Float"  -> return typePType
+  "Error"  -> return typeType
   "Ints"   -> return $ mkFunType [cnPredef "Int"] typePType
   "PBool"  -> return typePType
+  "error"  -> return $ mkFunType [typeStr] (cnPredef "Error")  -- non-can. of empty set
   "PFalse" -> return $ cnPredef "PBool"
   "PTrue"  -> return $ cnPredef "PBool"
   "dp"     -> return $ mkFunType [cnPredef "Int",typeTok] typeTok

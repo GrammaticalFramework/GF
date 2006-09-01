@@ -288,6 +288,7 @@ computeLType gr t = do
     App (Q (IC "Predef") (IC "Ints")) _ -> return ty ---- shouldn't be needed
     Q (IC "Predef") (IC "Int")          -> return ty ---- shouldn't be needed
     Q (IC "Predef") (IC "Float")        -> return ty ---- shouldn't be needed
+    Q (IC "Predef") (IC "Error")        -> return ty ---- shouldn't be needed
 
     Q m c | elem c [cPredef,cPredefAbs] -> return ty
     Q m c | elem c [zIdent "Int"] -> 
@@ -777,12 +778,15 @@ checkEqLType env t u trm = do
         checkWarn $ "WARNING: missing lock field" +++ unwords (map prt lo)
         return t'
       Bad s -> raise (s +++ "type of" +++ prt trm +++ 
-                ": expected" ++++ prt t' ++++ "inferred" ++++ prt u')
+                ": expected" ++++ prt t' ++++ "inferred" ++++ prt u' ++++ show u')
  where
 
    -- t is a subtype of u 
    --- quick hack version of TC.eqVal
    alpha g t u = case (t,u) of  
+
+     -- error (the empty type!) is subtype of any other type
+     (_,Q (IC "Predef") (IC "Error")) -> True
 
      -- contravariance
      (Prod x a b, Prod y c d) -> alpha g c a && alpha ((x,y):g) b d 
