@@ -418,8 +418,13 @@ oper
     in mkV cry cries cried cried crying ;
 
   regDuplV fit = 
-    let fitt = fit + last fit in
-    mkV fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing") ;
+    case last fit of {
+      ("a" | "e" | "i" | "o" | "u" | "y") => 
+        Predef.error (["final duplication makes no sense for"] ++ fit) ;
+      t =>
+       let fitt = fit + t in
+       mkV fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing")
+      } ;
 
   irregV x y z = let reg = (regV x).s in
     mkV x (reg ! VPres) y z (reg ! VPresPart) ** {s1 = [] ; lock_V = <>} ;

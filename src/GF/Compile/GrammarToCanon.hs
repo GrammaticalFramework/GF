@@ -194,11 +194,12 @@ redCTerm t = case t of
   Vr x -> checkAgain 
             (liftM G.Arg $ redArgvar x) 
             (liftM G.LI  $ redIdent x) --- for parametrize optimization
-  App _ _ -> do  -- only constructor applications can remain
+  App _ s -> do  -- only constructor applications can remain
     (_,c,xx) <- termForm t
     xx' <- mapM redCTerm xx
     case c of
       QC p c -> liftM2 G.Par (redQIdent (p,c)) (return xx')
+      Q (IC "Predef") (IC "error") -> fail $ "error: " ++ stringFromTerm s
       _ -> prtBad "expected constructor head instead of" c
   Q p c  -> liftM G.I (redQIdent (p,c))
   QC p c -> liftM2 G.Par (redQIdent (p,c)) (return [])

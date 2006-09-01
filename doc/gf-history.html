@@ -14,7 +14,46 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
-22/6 (AR) Release of GF version 2.6.
+1/9 (AR) New way for managing errors in grammar compilation:
+<pre>
+  Predef.Error : Type ;
+  Predef.error : Str -> Predef.Error ;
+</pre>
+Denotationally, <tt>Error</tt> is the empty type and thus a
+subtype of any other types: it can be used anywhere. But the
+<tt>error</tt> function is not canonical. Hence the compilation
+is interrupted when <tt>(error s)</tt> is translated to GFC, and
+the message <tt>s</tt> is emitted. An example use is given in
+<tt>english/ParadigmsEng.gf</tt>:
+<pre>
+  regDuplV : Str -> V ;
+  regDuplV fit = 
+    case last fit of {
+      ("a" | "e" | "i" | "o" | "u" | "y") => 
+        Predef.error (["final duplication makes no sense for"] ++ fit) ;
+      t =>
+       let fitt = fit + t in
+       mkV fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing")
+      } ;
+</pre>
+This function thus cannot be applied to a stem ending with a vowel,
+which is exactly what we want. In future, it may be good to add similar
+checks to all morphological paradigms in the resource.
+
+
+<p>
+
+16/8 (AR) New generation  algorithm: slower but works with less
+memory. Default of <tt>gt</tt>; use <tt>gt -mem</tt> for the old
+algorithm. The new option <tt>gt -all</tt> lazily generates all 
+trees until interrupted. It cannot be piped to other GF commands,
+hence use <tt>gt -all -lin</tt> to print out linearized strings
+rather than trees.
+
+<hr>
+
+
+22/6 (AR) <b>Release of GF version 2.6</b>.
 
 <p>
 

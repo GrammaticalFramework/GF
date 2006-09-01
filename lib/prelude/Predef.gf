@@ -11,9 +11,11 @@ resource Predef = {
 
   param PBool = PTrue | PFalse ;
 
-  oper Int  : Type = variants {} ;                     -- the type of integers
-  oper Ints : Int -> Type = variants {} ;              -- the type of integers from 0 to n
+  oper Error : Type = variants {} ;          -- the empty type
+  oper Int   : Type = variants {} ;          -- the type of integers
+  oper Ints  : Int -> Type = variants {} ;   -- the type of integers from 0 to n
 
+  oper error  : Str        -> Error    = variants {} ; -- forms error message
   oper length : Tok ->        Int      = variants {} ; -- length of string
   oper drop   : Int -> Tok -> Tok      = variants {} ; -- drop prefix of length
   oper take   : Int -> Tok -> Tok      = variants {} ; -- take prefix of length

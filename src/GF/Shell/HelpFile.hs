@@ -614,7 +614,9 @@ txtHelpFile =
   "\n       The default is share for concrete, none for resource modules." ++
   "\n       Each of the flags can have the suffix _subs, which performs" ++
   "\n       common subexpression elimination after the main optimization." ++
-  "\n       Thus, -optimize=all_subs is the most aggressive one." ++
+  "\n       Thus, -optimize=all_subs is the most aggressive one. The _subs" ++
+  "\n       strategy only works in GFC, and applies therefore in concrete but" ++
+  "\n       not in resource modules." ++
   "\n    -optimize=share        share common branches in tables" ++
   "\n    -optimize=parametrize  first try parametrize then do share with the rest" ++
   "\n    -optimize=values       represent tables as courses-of-values" ++

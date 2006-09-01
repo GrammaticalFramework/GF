@@ -585,7 +585,9 @@ q, quit: q
        The default is share for concrete, none for resource modules.
        Each of the flags can have the suffix _subs, which performs
        common subexpression elimination after the main optimization.
-       Thus, -optimize=all_subs is the most aggressive one.
+       Thus, -optimize=all_subs is the most aggressive one. The _subs
+       strategy only works in GFC, and applies therefore in concrete but
+       not in resource modules.
     -optimize=share        share common branches in tables
     -optimize=parametrize  first try parametrize then do share with the rest
     -optimize=values       represent tables as courses-of-values
