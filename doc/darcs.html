@@ -8,7 +8,7 @@
 <P ALIGN="center"><CENTER><H1>GF Darcs repository</H1>
 <FONT SIZE="4">
 <I>Author: Björn Bringert &lt;bringert@cs.chalmers.se&gt;</I><BR>
-Last update: Mon Aug 28 14:11:23 2006
+Last update: Sun Sep  3 22:14:06 2006
 </FONT></CENTER>
 
 <P></P>
@@ -122,7 +122,18 @@ Without <CODE>-a</CODE>, you can choose which patches you want to get.
 <H2>Recording local changes</H2>
 <P>
 Since every copy is a repository, you can have local version control
-of your changes. To record some changes, use:
+of your changes.
+</P>
+<P>
+If you have added files, you first need to tell your local repository to 
+keep them under revision control:
+</P>
+<PRE>
+  $ darcs add file1 file2 ...
+</PRE>
+<P></P>
+<P>
+To record changes, use:
 </P>
 <PRE>
   $ darcs record
@@ -130,7 +141,15 @@ of your changes. To record some changes, use:
 <P></P>
 <P>
 This creates a patch against the previous version and stores it in your
-local repository. 
+local repository. You can record any number of changesets before
+pushing them to the main repo. In fact, you don't have to push them at
+all if you want to keep the changes only in your local repo.
+</P>
+<P>
+If you think there are too many questions about what to record, you
+can use the <CODE>-a</CODE> flag to <CODE>record</CODE>. Or answer <CODE>a</CODE> to the first
+question. Both of these record all the changes you have in your local
+repository.
 </P>
 <A NAME="toc7"></A>
 <H2>Submitting patches</H2>
@@ -232,23 +251,12 @@ Without <CODE>-a</CODE>, you can choose which patches you want to get.
 <H2>Commit your changes</H2>
 <P>
 There are two steps to commiting a change to the main repo. First you
-have to record the changes that you want to commit:
-</P>
-<PRE>
-  $ darcs record
-</PRE>
-<P></P>
-<P>
-This creates a patch against the previous version and stores it in your
-local repository. You can record any number of changesets before
-pushing them to the main repo. In fact, you don't have to push them at
-all if you want to keep the changes only in your local repo.
+have to record the changes that you want to commit, then you push them
+to the main repo.
 </P>
 <P>
-If you think there are too many questions about what to record, you
-can use the <CODE>-a</CODE> flag to <CODE>record</CODE>. Or answer <CODE>a</CODE> to the first
-question. Both of these record all the changes you have in your local
-repository.
+For instructions on recording your changes locally,
+see "Recording local changes" above.
 </P>
 <P>
 Then you can push the patch(es) to the main repo. If you are using

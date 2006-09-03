@@ -77,14 +77,31 @@ Without ``-a``, you can choose which patches you want to get.
 == Recording local changes ==
 
 Since every copy is a repository, you can have local version control
-of your changes. To record some changes, use:
+of your changes.
+
+If you have added files, you first need to tell your local repository to 
+keep them under revision control:
+
+```
+$ darcs add file1 file2 ...
+```
+
+To record changes, use:
 
 ```
 $ darcs record
 ```
 
 This creates a patch against the previous version and stores it in your
-local repository. 
+local repository. You can record any number of changesets before
+pushing them to the main repo. In fact, you don't have to push them at
+all if you want to keep the changes only in your local repo.
+
+If you think there are too many questions about what to record, you
+can use the ``-a`` flag to ``record``. Or answer ``a`` to the first
+question. Both of these record all the changes you have in your local
+repository.
+
 
 == Submitting patches ==
 
@@ -180,21 +197,11 @@ Without ``-a``, you can choose which patches you want to get.
 == Commit your changes ==
 
 There are two steps to commiting a change to the main repo. First you
-have to record the changes that you want to commit:
+have to record the changes that you want to commit, then you push them
+to the main repo.
 
-```
-$ darcs record
-```
-
-This creates a patch against the previous version and stores it in your
-local repository. You can record any number of changesets before
-pushing them to the main repo. In fact, you don't have to push them at
-all if you want to keep the changes only in your local repo.
-
-If you think there are too many questions about what to record, you
-can use the ``-a`` flag to ``record``. Or answer ``a`` to the first
-question. Both of these record all the changes you have in your local
-repository.
+For instructions on recording your changes locally,
+see "Recording local changes" above.
 
 Then you can push the patch(es) to the main repo. If you are using
 ssh-access, all you need to do is:
