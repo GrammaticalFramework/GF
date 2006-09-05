@@ -1,0 +1,42 @@
+Grm. Grammar  ::= Header ";" Abstract ";" [Concrete] ";" ;
+
+Hdr. Header   ::= "grammar" CId "(" [CId] ")" ;
+
+Abs. Abstract ::= "abstract" "{" [AbsDef] "}" ";" ;
+
+Cnc. Concrete ::= "concrete" CId "{" [CncDef] "}" ;
+
+Fun. AbsDef   ::= CId ":" Type "=" Exp ;
+Lin. CncDef   ::= CId "=" Term ;
+
+Typ. Type     ::= [CId] "->" CId ;
+Tr.  Exp      ::= "(" Atom [Exp] ")" ;
+AC.  Atom     ::= CId ;
+AS.  Atom     ::= String ;
+AI.  Atom     ::= Integer ;
+
+R.   Term     ::= "[" [Term] "]" ;          -- record/table
+P.   Term     ::= Term "[" Term "]" ;       -- projection/selection
+S.   Term     ::= "(" [Term] ")" ;          -- sequence with ++
+K.   Term     ::= Tokn ;                    -- token
+V.   Term     ::= "$" Integer ;             -- argument
+C.   Term     ::= Integer ;                 -- parameter value/label
+F.   Term     ::= CId ;                     -- global constant
+FV.  Term     ::= "[|" [Term] "|]" ;        -- free variation
+W.   Term     ::= "(" String "+" Term ")" ; -- prefix + suffix table
+
+KS.  Tokn  ::= String ;
+KP.  Tokn  ::= "[" "pre" [String] "[" [Variant] "]" "]" ;
+Var. Variant ::= [String] "/" [String] ;
+
+
+terminator Concrete ";" ;
+terminator AbsDef ";" ;
+terminator CncDef ";" ;
+terminator CId "" ;
+separator  Term "," ;
+terminator Exp "" ;
+terminator String "" ;
+separator  Variant "," ;
+
+token CId (('_' | letter) (letter | digit | '\'' | '_')*) ;
