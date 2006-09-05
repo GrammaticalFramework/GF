@@ -138,7 +138,7 @@ optConcrete defs = subex [C.Lin f (optTerm t) | C.Lin f t <- defs]
 -- suffix sets can later be shared by subex elim
 optTerm :: C.Term -> C.Term  
 optTerm tr = case tr of
-    C.R ts@(_:_) | all isK ts -> mkSuff $ optToks [s | C.K (C.KS s) <- ts]
+    C.R ts@(_:_:_) | all isK ts -> mkSuff $ optToks [s | C.K (C.KS s) <- ts]
     C.R ts  -> C.R $ map optTerm ts
     C.P t v -> C.P (optTerm t) v
     _ -> tr
