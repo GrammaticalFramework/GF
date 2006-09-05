@@ -82,21 +82,20 @@ mkTerm tr = case tr of
 
 -- translate tables and records to arrays, return just one module per language
 canon2canon :: CanonGrammar -> CanonGrammar
-canon2canon cgr = M.MGrammar $ reorder $ map c2c $ M.modules cgr where
-  reorder cgr = 
+canon2canon cgr = reorder $ M.MGrammar $ map c2c $ M.modules cgr where
+  reorder cg = M.MGrammar $ 
     (abs, M.ModMod $ 
-           M.Module M.MTAbstract M.MSComplete [] [] [] (sorted2tree adefs)):
+          M.Module M.MTAbstract M.MSComplete [] [] [] (sorted2tree adefs)):
       [(c, M.ModMod $ 
-           M.Module (M.MTConcrete abs) M.MSComplete [] [] [] (sorted2tree js)) 
-            | (c,js) <- cncs] 
+          M.Module (M.MTConcrete abs) M.MSComplete [] [] [] (sorted2tree js)) 
+            | (c,js) <- cncs cg] 
   abs  = maybe (error "no abstract") id $ M.greatestAbstract cgr
-  cns  = M.allConcretes cgr abs
   adefs = sortBy (\ (f,_) (g,_) -> compare f g) 
             [finfo | 
               (i,mo) <- mos, M.isModAbs mo, 
               finfo <- tree2list (M.jments mo)]
-  cncs = sortBy (\ (x,_) (y,_) -> compare x y)
-            [(lang, concr lang) | lang <- cns]
+  cncs cg = sortBy (\ (x,_) (y,_) -> compare x y)
+            [(lang, concr lang) | lang <- M.allConcretes cg abs]
   mos = M.allModMod cgr
   concr la = sortBy (\ (f,_) (g,_) -> compare f g) 
             [finfo | 
@@ -104,11 +103,11 @@ canon2canon cgr = M.MGrammar $ reorder $ map c2c $ M.modules cgr where
               finfo <- tree2list (M.jments mo)]
 
   c2c (c,m) = case m of
-    M.ModMod mo@(M.Module (M.MTConcrete _) M.MSComplete _ _ _ js) ->
-      (c, M.ModMod $ M.replaceJudgements mo $ mapTree (j2j c) js)
+    M.ModMod mo@(M.Module _ _ _ _ _ js) ->
+      (c, M.ModMod $ M.replaceJudgements mo $ mapTree j2j js)
     _ -> (c,m)
-  j2j c (f,j) = case j of
-    GFC.CncFun x y tr z -> (f,GFC.CncFun x y (t2t c tr) z)
+  j2j (f,j) = case j of
+    GFC.CncFun x y tr z -> (f,GFC.CncFun x y (t2t tr) z)
     _ -> (f,j)
   t2t = term2term cgr (paramValues cgr)
 
@@ -126,8 +125,8 @@ paramValues cgr = (untyps,typs) where
   typs = Map.fromList [(ci,Map.fromList (zip vs [0..])) | (ci,vs) <- params]
   untyps = Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
 
-term2term :: CanonGrammar -> ParamEnv -> Ident -> Term -> Term
-term2term cgr env@(untyps,typs) c tr = case tr of
+term2term :: CanonGrammar -> ParamEnv -> Term -> Term
+term2term cgr env@(untyps,typs) tr = case tr of
   Par c ps | any isVar ps -> mkCase c ps
   Par _ _ -> EInt $ valNum tr
   R rs | any (isStr . trmAss) rs -> R [Ass (r2r l) (t2t t) | Ass l t <- rs]
@@ -137,7 +136,7 @@ term2term cgr env@(untyps,typs) c tr = case tr of
   S t p    -> S (t2t t) (t2t p)
   _ -> composSafeOp t2t tr
  where
-   t2t = term2term cgr env c
+   t2t = term2term cgr env
    r2r l = L (IC "_111")  ---- TODO: number of label
    valNum tr = maybe 456 id $ Map.lookup tr untyps
    isStr tr = case tr of
