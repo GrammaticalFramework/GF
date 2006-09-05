@@ -71,7 +71,7 @@ mkTerm tr = case tr of
   K (KS s) -> C.K (C.KS s)
   K (KP ss _) -> C.K (C.KP ss []) ---- TODO: prefix variants
   E -> C.S []
-  Par _ _  -> C.C 123              ---- just for debugging
+  Par _ _  -> C.C 456              ---- just for debugging
   _ -> C.S [C.K (C.KS (A.prt tr))] ---- just for debugging
  where
    mkLab (L (IC l)) = case l of
@@ -98,7 +98,7 @@ canon2canon cgr = M.MGrammar $ reorder $ map c2c $ M.modules cgr where
   mos = M.allModMod cgr
   concr la = sortBy (\ (f,_) (g,_) -> compare f g) 
             [finfo | 
-              (i,mo) <- mos, M.isModCnc mo, ----- 
+              (i,mo) <- mos, M.isModCnc mo, ----- TODO: separate langs 
               finfo <- tree2list (M.jments mo)]
 
   c2c (c,m) = case m of
@@ -112,15 +112,24 @@ canon2canon cgr = M.MGrammar $ reorder $ map c2c $ M.modules cgr where
 
 term2term :: CanonGrammar -> Ident -> Term -> Term
 term2term cgr c tr = case tr of
-  Par (CIQ _ c) _ -> EInt 456 ----
-  R rs     -> R [Ass (l2l l) (t2t t) | Ass l t <- rs] ----
-  P t l    -> P (t2t t) (l2l l)
+  Par (CIQ _ c) ps | any isVar ps -> mkCase c ps
+  Par (CIQ _ c) _ -> EInt $ valNum tr
+  R rs | any isStrField rs -> R [Ass (r2r l) (t2t t) | Ass l t <- rs]
+  R rs     -> EInt $ valNum tr
+  P t l    -> P (t2t t) (r2r l)
   T ty cs  -> V ty [t2t t | Cas _ t <- cs]
   S t p    -> S (t2t t) (t2t p)
   _ -> composSafeOp t2t tr
  where
    t2t = term2term cgr c
-   l2l l = L (IC "_123") ----
+   r2r l = L (IC "_111")  ---- TODO: number of label
+   valNum tr = 456        ---- TODO: number of param value
+   isStrField a = True    ---- TODO: check if record has strings
+   mkCase c ps = EInt 666 ---- TODO: expand param constr with var
+   isVar p = case p of
+     Arg _ -> True
+     _ -> False
+     
 
 optConcrete :: [C.CncDef] -> [C.CncDef]
 optConcrete defs = subex [C.Lin f (optTerm t) | C.Lin f t <- defs]
