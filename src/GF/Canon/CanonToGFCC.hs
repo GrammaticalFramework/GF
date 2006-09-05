@@ -16,6 +16,7 @@ module GF.Canon.CanonToGFCC (prCanon2gfcc) where
 
 import GF.Canon.AbsGFC
 import qualified GF.Canon.GFC as GFC
+import qualified GF.Canon.Look as Look
 import qualified GF.Canon.GFCC.AbsGFCC as C
 import qualified GF.Canon.GFCC.PrintGFCC as Pr
 import GF.Canon.GFC
@@ -71,7 +72,8 @@ mkTerm tr = case tr of
   K (KS s) -> C.K (C.KS s)
   K (KP ss _) -> C.K (C.KP ss []) ---- TODO: prefix variants
   E -> C.S []
-  Par _ _  -> C.C 456              ---- just for debugging
+  Par _ _  -> C.C 444              ---- just for debugging
+----  _ -> C.S [C.K (C.KS (show tr))] ---- just for debugging
   _ -> C.S [C.K (C.KS (A.prt tr))] ---- just for debugging
  where
    mkLab (L (IC l)) = case l of
@@ -108,27 +110,49 @@ canon2canon cgr = M.MGrammar $ reorder $ map c2c $ M.modules cgr where
   j2j c (f,j) = case j of
     GFC.CncFun x y tr z -> (f,GFC.CncFun x y (t2t c tr) z)
     _ -> (f,j)
-  t2t = term2term cgr
+  t2t = term2term cgr (paramValues cgr)
 
-term2term :: CanonGrammar -> Ident -> Term -> Term
-term2term cgr c tr = case tr of
-  Par (CIQ _ c) ps | any isVar ps -> mkCase c ps
-  Par (CIQ _ c) _ -> EInt $ valNum tr
-  R rs | any isStrField rs -> R [Ass (r2r l) (t2t t) | Ass l t <- rs]
+type ParamEnv =
+  (Map.Map Term Integer,                  -- untyped terms to values
+   Map.Map CIdent (Map.Map Term Integer)) -- types to their terms to values
+
+paramValues :: CanonGrammar -> ParamEnv
+paramValues cgr = (untyps,typs) where
+  params = [(mty, errVal [] $ Look.lookupParamValues cgr mty) | 
+              (m,mo) <- M.allModMod cgr, 
+              (ty,ResPar _)  <- tree2list $ M.jments mo,
+              let mty = CIQ m ty
+           ]
+  typs = Map.fromList [(ci,Map.fromList (zip vs [0..])) | (ci,vs) <- params]
+  untyps = Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
+
+term2term :: CanonGrammar -> ParamEnv -> Ident -> Term -> Term
+term2term cgr env@(untyps,typs) c tr = case tr of
+  Par c ps | any isVar ps -> mkCase c ps
+  Par _ _ -> EInt $ valNum tr
+  R rs | any (isStr . trmAss) rs -> R [Ass (r2r l) (t2t t) | Ass l t <- rs]
   R rs     -> EInt $ valNum tr
   P t l    -> P (t2t t) (r2r l)
   T ty cs  -> V ty [t2t t | Cas _ t <- cs]
   S t p    -> S (t2t t) (t2t p)
   _ -> composSafeOp t2t tr
  where
-   t2t = term2term cgr c
+   t2t = term2term cgr env c
    r2r l = L (IC "_111")  ---- TODO: number of label
-   valNum tr = 456        ---- TODO: number of param value
-   isStrField a = True    ---- TODO: check if record has strings
-   mkCase c ps = EInt 666 ---- TODO: expand param constr with var
+   valNum tr = maybe 456 id $ Map.lookup tr untyps
+   isStr tr = case tr of
+     Par _ _ -> False
+     EInt _  -> False
+     R rs    -> any (isStr . trmAss) rs
+     FV ts   -> any isStr ts
+     P t r   -> True      ---- TODO
+     _ -> True
+   trmAss (Ass _ t) = t
    isVar p = case p of
      Arg _ -> True
+     P q _ -> isVar q
      _ -> False
+   mkCase c ps = EInt 666 ---- TODO: expand param constr with var
      
 
 optConcrete :: [C.CncDef] -> [C.CncDef]
