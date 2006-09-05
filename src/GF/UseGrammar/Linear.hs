@@ -153,6 +153,7 @@ unoptimizeCanonMod g = convMod where
       ps  <- mapM term2patt vs
       return $ T ty [Cas [p] t | (p,t) <- zip ps ts]
     FV ts -> liftM FV $ mapM exp ts
+    I _ -> comp t
     _ -> composOp exp t
    where
      alls = allParamValues g

@@ -34,6 +34,7 @@ import GF.Grammar.Values
 import qualified GF.Grammar.Grammar as G
 import qualified GF.Canon.AbsGFC as A
 import qualified GF.Canon.GFC as C
+import qualified GF.Canon.CanonToGFCC as GFCC
 import qualified GF.Source.AbsGF as GF
 import qualified GF.Grammar.MMacros as MM
 import GF.Grammar.AbsCompute
@@ -341,6 +342,7 @@ customMultiGrammarPrinter =
   customData "Printers for multiple grammars, selected by option -printer=x" $
   [
    (strCI "gfcm", const MC.prCanon)
+  ,(strCI "gfcc", const GFCC.prCanon2gfcc)
   ,(strCI "header", const (MC.prCanonMGr . unoptimizeCanon))
   ,(strCI "cfgm", prCanonAsCFGM)
   ,(strCI "graph", visualizeCanonGrammar)
