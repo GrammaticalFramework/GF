@@ -33,11 +33,17 @@ import GF.Data.Operations
 
 import Data.List
 import qualified Data.Map as Map
+import Debug.Trace ----
 
+-- the main function: generate GFCC from GFCM.
 
 prCanon2gfcc :: CanonGrammar -> String
-prCanon2gfcc = Pr.printTree . canon2gfcc . canon2canon . unoptimizeCanon
+prCanon2gfcc = 
+  Pr.printTree . canon2gfcc . reorder . canon2canon . unoptimizeCanon
+  -- phases defined below, except unoptimizeCanon. This is needed to
+  -- reorganize the grammar. GFCC has its own back-end optimization.
 
+-- Generate GFCC from GFCM.
 -- this assumes a grammar translated by canon2canon
 
 canon2gfcc :: CanonGrammar -> C.Grammar
@@ -72,36 +78,41 @@ mkTerm tr = case tr of
   K (KS s) -> C.K (C.KS s)
   K (KP ss _) -> C.K (C.KP ss []) ---- TODO: prefix variants
   E -> C.S []
-  Par _ _  -> C.C 444              ---- just for debugging
-----  _ -> C.S [C.K (C.KS (show tr))] ---- just for debugging
-  _ -> C.S [C.K (C.KS (A.prt tr))] ---- just for debugging
+  Par _ _  -> prtTrace tr $ C.C 66661            ---- just for debugging
+  _ -> C.S [C.K (C.KS (A.prt tr +++ "66662"))] ---- just for debugging
  where
    mkLab (L (IC l)) = case l of
      '_':ds -> (read ds) :: Integer
-     _ -> 789
+     _ -> prtTrace tr $ 66663
 
--- translate tables and records to arrays, return just one module per language
-canon2canon :: CanonGrammar -> CanonGrammar
-canon2canon cgr = reorder $ M.MGrammar $ map c2c $ M.modules cgr where
-  reorder cg = M.MGrammar $ 
+-- return just one module per language
+
+reorder :: CanonGrammar -> CanonGrammar
+reorder cg = M.MGrammar $ 
     (abs, M.ModMod $ 
-          M.Module M.MTAbstract M.MSComplete [] [] [] (sorted2tree adefs)):
+          M.Module M.MTAbstract M.MSComplete [] [] [] adefs):
       [(c, M.ModMod $ 
           M.Module (M.MTConcrete abs) M.MSComplete [] [] [] (sorted2tree js)) 
-            | (c,js) <- cncs cg] 
-  abs  = maybe (error "no abstract") id $ M.greatestAbstract cgr
-  adefs = sortBy (\ (f,_) (g,_) -> compare f g) 
+            | (c,js) <- cncs] 
+     where
+       abs = maybe (error "no abstract") id $ M.greatestAbstract cg
+       mos = M.allModMod cg
+       adefs = 
+         sorted2tree $ sortBy (\ (f,_) (g,_) -> compare f g) 
             [finfo | 
-              (i,mo) <- mos, M.isModAbs mo, 
+              (i,mo) <- M.allModMod cg, M.isModAbs mo, 
               finfo <- tree2list (M.jments mo)]
-  cncs cg = sortBy (\ (x,_) (y,_) -> compare x y)
+       cncs = sortBy (\ (x,_) (y,_) -> compare x y)
             [(lang, concr lang) | lang <- M.allConcretes cg abs]
-  mos = M.allModMod cgr
-  concr la = sortBy (\ (f,_) (g,_) -> compare f g) 
+       concr la = sortBy (\ (f,_) (g,_) -> compare f g) 
             [finfo | 
               (i,mo) <- mos, M.isModCnc mo, ----- TODO: separate langs 
               finfo <- tree2list (M.jments mo)]
 
+-- translate tables and records to arrays, parameters and labels to indices
+
+canon2canon :: CanonGrammar -> CanonGrammar
+canon2canon cg = tr $ M.MGrammar $ map c2c $ M.modules cg where
   c2c (c,m) = case m of
     M.ModMod mo@(M.Module _ _ _ _ _ js) ->
       (c, M.ModMod $ M.replaceJudgements mo $ mapTree j2j js)
@@ -109,36 +120,63 @@ canon2canon cgr = reorder $ M.MGrammar $ map c2c $ M.modules cgr where
   j2j (f,j) = case j of
     GFC.CncFun x y tr z -> (f,GFC.CncFun x y (t2t tr) z)
     _ -> (f,j)
-  t2t = term2term cgr (paramValues cgr)
+  t2t = term2term cg pv
+  pv@(labels,_,_) = paramValues cg
+  tr = trace 
+   (unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
+       ((c,l),i) <- Map.toList labels])
 
 type ParamEnv =
-  (Map.Map Term Integer,                  -- untyped terms to values
-   Map.Map CIdent (Map.Map Term Integer)) -- types to their terms to values
+  (Map.Map (Ident,[Label]) Integer,      -- numbered labels
+   Map.Map Term Integer,                 -- untyped terms to values
+   Map.Map CType (Map.Map Term Integer)) -- types to their terms to values
 
+--- gathers those param types that are actually used in lincats
 paramValues :: CanonGrammar -> ParamEnv
-paramValues cgr = (untyps,typs) where
-  params = [(mty, errVal [] $ Look.lookupParamValues cgr mty) | 
-              (m,mo) <- M.allModMod cgr, 
-              (ty,ResPar _)  <- tree2list $ M.jments mo,
-              let mty = CIQ m ty
-           ]
+paramValues cgr = (labels,untyps,typs) where
+  params = [(ty, errVal [] $ Look.allParamValues cgr ty) | ty <- partyps]
+  partyps = nub $ [ty | 
+              (_,(_,CncCat (RecType ls) _ _)) <- jments,
+              ty <- [ty | Lbg _ ty <- ls]
+            ] ++ [
+             Cn (CIQ m ty) | 
+              (m,(ty,ResPar _)) <- jments
+            ]
+  jments = [(m,j) | (m,mo) <- M.allModMod cgr, j <- tree2list $ M.jments mo]
   typs = Map.fromList [(ci,Map.fromList (zip vs [0..])) | (ci,vs) <- params]
   untyps = Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
+  lincats = [(cat,ls) | (_,(cat,CncCat (RecType ls) _ _)) <- jments]
+  labels = Map.fromList $ concat 
+    [((cat,[lab]),i):[((cat,[lab,lab2]),j) | 
+        RecType rs <- [typ], (Lbg lab2 _,j) <- zip rs [0..]] 
+      | 
+        (cat,ls) <- lincats, (Lbg lab typ,i) <- zip ls [0..]]
 
 term2term :: CanonGrammar -> ParamEnv -> Term -> Term
-term2term cgr env@(untyps,typs) tr = case tr of
+term2term cgr env@(labels,untyps,typs) tr = case tr of
   Par c ps | any isVar ps -> mkCase c ps
-  Par _ _ -> EInt $ valNum tr
-  R rs | any (isStr . trmAss) rs -> R [Ass (r2r l) (t2t t) | Ass l t <- rs]
-  R rs     -> EInt $ valNum tr
-  P t l    -> P (t2t t) (r2r l)
+  Par _ _  -> valNum tr
+  R rs | any (isStr . trmAss) rs -> 
+    R [Ass (mkLab i) (t2t t) | (i,Ass l t) <- zip [0..] rs, not (isLock l t)]
+  R rs     -> valNum tr
+  P t l    -> r2r tr
   T ty cs  -> V ty [t2t t | Cas _ t <- cs]
   S t p    -> S (t2t t) (t2t p)
   _ -> composSafeOp t2t tr
  where
    t2t = term2term cgr env
-   r2r l = L (IC "_111")  ---- TODO: number of label
-   valNum tr = maybe 456 id $ Map.lookup tr untyps
+   -- Conj@0.s
+   r2r tr = case tr of
+     P x@(Arg (A cat i)) lab ->
+        P x . mkLab $ maybe (prtTrace tr $ 66664) id $ 
+          Map.lookup (cat,[lab]) labels
+     P p@(P x@(Arg (A cat i)) lab1) lab2 ->
+        P (r2r p) . mkLab $ maybe (prtTrace tr $ 66664) id $ 
+          Map.lookup (cat,[lab1,lab2]) labels
+     P a lab -> P (t2t a) $ mkLab (prtTrace tr 66665)
+   mkLab k = L (IC ("_" ++ show k))
+   valNum tr = maybe (K (KS (A.prt tr +++ prtTrace tr "66667"))) EInt $ 
+     Map.lookup tr untyps
    isStr tr = case tr of
      Par _ _ -> False
      EInt _  -> False
@@ -146,19 +184,27 @@ term2term cgr env@(untyps,typs) tr = case tr of
      FV ts   -> any isStr ts
      P t r   -> True      ---- TODO
      _ -> True
+   isLock l t = case t of --- need not look at l
+     R [] -> True
+     _ -> False
    trmAss (Ass _ t) = t
    isVar p = case p of
      Arg _ -> True
      P q _ -> isVar q
      _ -> False
-   mkCase c ps = EInt 666 ---- TODO: expand param constr with var
+   mkCase c ps = EInt (prtTrace tr 66668) ---- TODO: expand param constr with var
      
+prtTrace tr n = n ----trace ("-- ERROR" +++ A.prt tr +++ show n +++ show tr) n
+
+-- back-end optimization: 
+-- suffix analysis followed by common subexpression elimination
 
 optConcrete :: [C.CncDef] -> [C.CncDef]
 optConcrete defs = subex [C.Lin f (optTerm t) | C.Lin f t <- defs]
 
 -- analyse word form lists into prefix + suffixes
 -- suffix sets can later be shared by subex elim
+
 optTerm :: C.Term -> C.Term  
 optTerm tr = case tr of
     C.R ts@(_:_:_) | all isK ts -> mkSuff $ optToks [s | C.K (C.KS s) <- ts]
@@ -174,17 +220,15 @@ optTerm tr = case tr of
   isK t = case t of
     C.K (C.KS _) -> True
     _ -> False
-
   mkSuff (p:ws) = C.W p (C.R (map (C.K . C.KS) ws))
 
 
+-- common subexpression elimination; see ./Subexpression.hs for the idea
 
 subex :: [C.CncDef] -> [C.CncDef]
 subex js = errVal js $ do
   (tree,_) <- appSTM (getSubtermsMod js) (Map.empty,0)
   return $ addSubexpConsts tree js
-
--- implementation
 
 type TermList = Map.Map C.Term (Int,Int) -- number of occs, id
 type TermM a = STM (TermList,Int) a
@@ -238,173 +282,3 @@ collectSubterms t = case t of
          _ ->            ((1,   i ), i+1)
      writeSTM (Map.insert t (count,id) ts, next)
 
-
-
-
-
-
-
-
-{-
-canon2sourceModule :: CanonModule -> Err G.SourceModule
-canon2sourceModule (i,mi) = do
-  i'    <- redIdent i 
-  info' <- case mi of
-    M.ModMod m -> do
-      (e,os) <- redExtOpen m
-      flags  <- mapM redFlag $ M.flags m 
-      (abstr,mt)  <- case M.mtype m of
-          M.MTConcrete a -> do
-            a' <- redIdent a
-            return (a', M.MTConcrete a') 
-          M.MTAbstract -> return (i',M.MTAbstract) --- c' not needed
-          M.MTResource -> return (i',M.MTResource) --- c' not needed
-          M.MTTransfer x y -> return (i',M.MTTransfer x y) --- c' not needed
-      defs   <- mapMTree redInfo $ M.jments m
-      return $ M.ModMod $ M.Module mt (M.mstatus m) flags e os defs
-    _ -> Bad $ "cannot decompile module type"
-  return (i',info')
- where
-   redExtOpen m = do
-     e'  <- return $ M.extend m
-     os' <- mapM (\ (M.OSimple q i) -> liftM (\i -> M.OQualif q i i) (redIdent i)) $ 
-                 M.opens m
-     return (e',os')
-
-redInfo :: (Ident,Info) -> Err (Ident,G.Info)
-redInfo (c,info) = errIn ("decompiling abstract" +++ show c) $ do
-  c' <- redIdent c 
-  info' <- case info of
-    AbsCat cont fs -> do
-      return $ G.AbsCat (Yes cont) (Yes (map (uncurry G.Q) fs))
-    AbsFun typ df -> do
-      return $ G.AbsFun (Yes typ) (Yes df)
-    AbsTrans t -> do
-      return $ G.AbsTrans t
-
-    ResPar par -> liftM (G.ResParam . Yes) $ mapM redParam par
-
-    CncCat pty ptr ppr -> do
-      ty'  <- redCType pty
-      trm' <- redCTerm ptr
-      ppr' <- redCTerm ppr 
-      return $ G.CncCat (Yes ty') (Yes trm') (Yes ppr')      
-    CncFun (CIQ abstr cat) xx body ppr -> do
-      xx'   <- mapM redArgVar xx
-      body' <- redCTerm body
-      ppr'  <- redCTerm ppr
-      cat'  <- redIdent cat
-      return $ G.CncFun (Just (cat', ([],F.typeStr))) -- Nothing 
-        (Yes (F.mkAbs xx' body')) (Yes ppr')
-
-    AnyInd b c -> liftM (G.AnyInd b) $ redIdent c
-
-  return (c',info')
-
-redQIdent :: CIdent -> Err G.QIdent
-redQIdent (CIQ m c) = liftM2 (,) (redIdent m) (redIdent c)
-
-redIdent :: Ident -> Err Ident
-redIdent = return
-
-redFlag :: Flag -> Err O.Option
-redFlag (Flg f x) = return $ O.Opt (prIdent f,[prIdent x])
-
-redDecl :: Decl -> Err G.Decl
-redDecl (Decl x a) = liftM2 (,) (redIdent x) (redTerm a)
-
-redType :: Exp -> Err G.Type
-redType = redTerm
-
-redTerm :: Exp -> Err G.Term
-redTerm t = return $ trExp t
-
--- resource
-
-redParam (ParD c cont) = do
-  c'    <- redIdent c
-  cont' <- mapM redCType cont
-  return $ (c', [(IW,t) | t <- cont'])
-
--- concrete syntax
-
-redCType :: CType -> Err G.Type
-redCType t = case t of
-  RecType lbs -> do
-    let (ls,ts) = unzip [(l,t) | Lbg l t <- lbs]
-        ls' = map redLabel ls
-    ts' <- mapM redCType ts
-    return $ G.RecType $ zip ls' ts'
-  Table p v  -> liftM2 G.Table (redCType p) (redCType v)
-  Cn mc  -> liftM (uncurry G.QC) $ redQIdent mc
-  TStr -> return $ F.typeStr
-  TInts i -> return $ F.typeInts (fromInteger i)
-
-redCTerm :: Term -> Err G.Term
-redCTerm x = case x of
-  Arg argvar  -> liftM G.Vr $ redArgVar argvar
-  I cident  -> liftM (uncurry G.Q) $ redQIdent cident
-  Par cident terms  -> liftM2 F.mkApp 
-                         (liftM (uncurry G.QC) $ redQIdent cident) 
-                         (mapM redCTerm terms)
-  LI id  -> liftM G.Vr $ redIdent id
-  R assigns  -> do
-    let (ls,ts) = unzip [(l,t) | Ass l t <- assigns]
-    let ls' = map redLabel ls
-    ts' <- mapM redCTerm ts
-    return $ G.R [(l,(Nothing,t)) | (l,t) <- zip ls' ts']
-  P term label  -> liftM2 G.P (redCTerm term) (return $ redLabel label)
-  T ctype cases  -> do
-    ctype' <- redCType ctype
-    let (ps,ts) = unzip [(ps,t) | Cas ps t <- cases]
-    ps' <- mapM (mapM redPatt) ps
-    ts' <- mapM redCTerm ts
-    let tinfo = case ps' of
-                  [[G.PV _]] -> G.TTyped ctype'
-                  _ -> G.TComp ctype'
-    return $ G.TSh tinfo $ zip ps' ts'
-  V ctype ts  -> do
-    ctype' <- redCType ctype
-    ts' <- mapM redCTerm ts
-    return $ G.V ctype' ts'
-  S term0 term  -> liftM2 G.S (redCTerm term0) (redCTerm term)
-  C term0 term  -> liftM2 G.C (redCTerm term0) (redCTerm term)
-  FV terms  -> liftM G.FV $ mapM redCTerm terms
-  K (KS str) -> return $ G.K str
-  EInt i     -> return $ G.EInt i
-  EFloat i   -> return $ G.EFloat i
-  E  -> return $ G.Empty
-  K (KP d vs)  -> return $ 
-                    G.Alts (tList d,[(tList s, G.Strs $ map G.K v) | Var s v <- vs])
- where
-   tList ss = case ss of --- this should be in Macros
-     [] -> G.Empty
-     _ -> foldr1 G.C $ map G.K ss
-
-failure x = Bad $ "not yet" +++ show x ----
-
-redArgVar :: ArgVar -> Err Ident
-redArgVar x = case x of
-  A x i -> return $ IA (prIdent x, fromInteger i)
-  AB x b i -> return $ IAV (prIdent x, fromInteger b, fromInteger i)
-
-redLabel :: Label -> G.Label
-redLabel (L x) = G.LIdent $ prIdent x
-redLabel (LV i) = G.LVar $ fromInteger i
-
-redPatt :: Patt -> Err G.Patt
-redPatt p = case p of
-  PV x -> liftM G.PV $ redIdent x
-  PC mc ps -> do
-    (m,c) <- redQIdent mc
-    liftM (G.PP m c) (mapM redPatt ps) 
-  PR rs -> do
-    let (ls,ts) = unzip [(l,t) | PAss l t <- rs]
-        ls' = map redLabel ls
-    ts <- mapM redPatt ts
-    return $ G.PR $ zip ls' ts
-  PI i -> return $ G.PInt i
-  PF i -> return $ G.PFloat i
-  _ -> Bad $ "cannot recompile pattern" +++ show p
-
--}
