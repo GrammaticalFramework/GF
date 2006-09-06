@@ -251,7 +251,8 @@ perfective: Aspect ;
 -- (singular, second person: "беги"), an infinitive ("бежать").
 -- Inherent aspect should also be specified.
 
-   mkVerbum : Aspect -> (presentSgP1,presentSgP2,presentSgP3,
+--   mkVerbum : Aspect -> (presentSgP1,presentSgP2,presentSgP3,
+   mkV : Aspect -> (presentSgP1,presentSgP2,presentSgP3,
                          presentPlP1,presentPlP2,presentPlP3,
                          pastSgMasculine,imperative,infinitive: Str) -> V ;
 
@@ -268,16 +269,6 @@ perfective: Aspect ;
 
    regV :Aspect -> Conjugation -> (stemPresentSgP1,endingPresentSgP1,
                          pastSgP1,imperative,infinitive : Str) -> V ; 
-
--- For writing an application grammar one usualy doesn't need
--- the whole inflection table, since each verb is used in 
--- a particular context that determines some of the parameters
--- (Tense and Voice while Aspect is fixed from the beginning) for certain usage. 
--- The "V" type, that have these parameters fixed. 
--- We can extract the "V" from the lexicon.
-
---   mkV: Verbum -> Voice ->  V ;
---   mkPresentV: Verbum -> Voice -> V ;
 
 
 -- Two-place verbs, and the special case with direct object. Notice that
@@ -482,7 +473,8 @@ regN = \ray ->
 
 -- Verb definitions 
 
-   mkVerbum = \asp, sgP1, sgP2, sgP3, plP1, plP2, plP3, 
+--   mkVerbum = \asp, sgP1, sgP2, sgP3, plP1, plP2, plP3, 
+   mkV = \asp, sgP1, sgP2, sgP3, plP1, plP2, plP3, 
      sgMascPast, imperSgP2, inf -> case asp of { 
        Perfective  =>  
          mkVerb (perfectiveActivePattern inf imperSgP2 
