@@ -1,4 +1,4 @@
-module GF.Canon.GFCC.DataGFCM where
+module GF.Canon.GFCC.DataGFCC where
 
 import GF.Canon.GFCC.AbsGFCC
 import Data.Map
@@ -28,6 +28,8 @@ realize trm = case trm of
   S ss     -> unwords $ Prelude.map realize ss
   K (KS s) -> s
   K (KP s _) -> unwords s ---- prefix choice TODO
+  W s t    -> s ++ " " ++ realize t
+  _ -> "ERROR " ++ show trm ---- debug
 
 linExp :: GFCC -> CId -> Exp -> Term
 linExp mcfg lang tree@(Tr at trees) = 
@@ -46,10 +48,13 @@ kks = K . KS
 compute :: GFCC -> CId -> [Term] -> Term -> Term
 compute mcfg lang args trm = case trm of
   P r p -> case (comp r, comp p) of 
-    (W s (R ss), C i) -> case comp $ ss !! (fromInteger i) of
-      K (KS u) -> kks (s ++ u)      -- the only case where W occurs 
+    (W s t, C i) -> case comp t of
+      R ss -> case comp $ ss !! (fromInteger i) of
+        K (KS u) -> kks (s ++ u)      -- the only case where W occurs 
     (R rs, C i) -> comp $ rs !! (fromInteger i)
     (r',p') -> P r' p'
+  W s t -> W s (comp t)
+  R ts  -> R $ Prelude.map comp ts
   V i   -> args !! (fromInteger i)  -- already computed
   S ts  -> S (Prelude.map comp ts)
   F c   -> comp $ look c  -- global constant: not yet comp'd (if contains argvar)
@@ -68,5 +73,6 @@ mkGFCC (Grm (Hdr a cs) ab@(Abs funs) ccs) = GFCC {
   concretes = fromAscList [(lang, mkCnc lins) | Cnc lang lins <- ccs]
   }
  where
-   mkCnc lins = fromAscList [(fun,lin) | Lin fun lin <- lins]
+   mkCnc lins = fromList [(fun,lin) | Lin fun lin <- lins] ---- Asc
+
 
