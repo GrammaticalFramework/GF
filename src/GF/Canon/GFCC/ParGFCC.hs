@@ -1,10 +1,10 @@
 {-# OPTIONS -fglasgow-exts -cpp #-}
 {-# OPTIONS -fno-warn-incomplete-patterns -fno-warn-overlapping-patterns #-}
-module ParGFCC where
-import AbsGFCC
-import LexGFCC
-import ErrM
-import Array
+module GF.Canon.GFCC.ParGFCC where
+import GF.Canon.GFCC.AbsGFCC
+import GF.Canon.GFCC.LexGFCC
+import GF.Data.Operations
+import Data.Array
 #if __GLASGOW_HASKELL__ >= 503
 import GHC.Exts
 #else

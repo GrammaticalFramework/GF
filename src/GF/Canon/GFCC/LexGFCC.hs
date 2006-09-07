@@ -1,7 +1,7 @@
 {-# OPTIONS -fglasgow-exts -cpp #-}
 {-# LINE 3 "LexGFCC.x" #-}
 {-# OPTIONS -fno-warn-incomplete-patterns #-}
-module LexGFCC where
+module GF.Canon.GFCC.LexGFCC where
 
 
 
