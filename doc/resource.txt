@@ -584,7 +584,6 @@ and an optional tailing vocative ("John", "please").
 
 The richest of the categories below Utterance is ``S``, Sentence. A Sentence
 is formed from a Clause (``Cl``), by fixing its Tense, Anteriority, and Polarity.
-The difference between Sentence and Clause is thus also rather technical.
 For example, each of the following strings has a distinct syntax tree
 in the category Sentence:
 ```
@@ -600,6 +599,9 @@ in the category Sentence:
 ```
 whereas in the category Clause all of them are just different forms of
 the same tree.
+The difference between Sentence and Clause is thus also rather technical.
+It may not correspond exactly to any standard usage of the terms
+"clause" and "sentence".
 
 Figure 1 shows a type-annotated syntax tree of the Text "John walks." 
 and gives an overview of the structural levels.

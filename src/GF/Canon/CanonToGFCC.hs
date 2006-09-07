@@ -149,16 +149,15 @@ paramValues cgr = (labels,untyps,typs) where
   labels = Map.fromList $ concat 
     [((cat,[lab]),i): 
       [((cat,[lab,lab2]),j) | 
-        RecType rs <- [typ], (Lbg lab2 _,j) <- zip rs [0..]] ++
-      [((cat,[lab,L (IC ("_")),lab2]),j) | 
         rs <- getRec typ, (Lbg lab2 _,j) <- zip rs [0..]] 
       | 
         (cat,ls) <- lincats, (Lbg lab typ,i) <- zip ls [0..]]
-    ---- this should be made recursive to give lists of any length
+    -- go to tables recursively
+    ---- TODO: even go to deeper records
    where
      getRec typ = case typ of
-       Table _ (RecType rs) -> [rs]
-       Table _ t -> getRec t
+       RecType rs -> [rs]
+       Table _ t  -> getRec t
        _ -> []
 
 term2term :: CanonGrammar -> ParamEnv -> Term -> Term
@@ -179,18 +178,15 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      P x@(Arg (A cat i)) lab ->
         P x . mkLab $ maybe (prtTrace tr $ 66664) id $ 
           Map.lookup (cat,[lab]) labels
-     P p@(P x@(Arg (A cat i)) lab1) lab2 ->
-        P (r2r p) . mkLab $ maybe (prtTrace tr $ 66664) id $ 
-          Map.lookup (cat,[lab1,lab2]) labels
      P p lab2 -> case getLab p of
        Just (cat,lab1) -> P (r2r p) . mkLab $ maybe (prtTrace tr $ 66664) id $ 
-          Map.lookup (cat,[lab1,L (IC ("_")),lab2]) labels
+          Map.lookup (cat,[lab1,lab2]) labels
        _ -> P (t2t p) $ mkLab (prtTrace tr 66665)
-     P p lab2 -> P (t2t p) $ mkLab (prtTrace tr 66665)
      _ -> tr ----
-     ---- this should be made recursive
+     -- this goes recursively in tables
+     ---- TODO: also recursive in records to get longer lists of labels
    getLab tr = case tr of
-     S (P (Arg (A cat i)) lab1) _ -> return (cat,lab1)
+     P (Arg (A cat i)) lab1 -> return (cat,lab1)
      S p _ -> getLab p
      _ -> Nothing
    mkLab k = L (IC ("_" ++ show k))
