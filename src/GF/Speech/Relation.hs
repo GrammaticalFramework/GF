@@ -20,7 +20,7 @@ module GF.Speech.Relation (Rel, mkRel
                            , symmetricSubrelation, reflexiveSubrelation
                            , equivalenceClasses
                            , isTransitive, isReflexive, isSymmetric
-                           , isEquivalence,
+                           , isEquivalence
                            , isSubRelationOf) where
 
 import Data.List
