@@ -46,24 +46,36 @@ kks :: String -> Term
 kks = K . KS
 
 compute :: GFCC -> CId -> [Term] -> Term -> Term
-compute mcfg lang args trm = case trm of
-  P r p -> case (comp r, comp p) of 
-    (W s t, C i) -> case comp t of
-      R ss -> case comp $ ss !! (fromInteger i) of
-        K (KS u) -> kks (s ++ u)      -- the only case where W occurs 
-    (R rs, C i) -> comp $ rs !! (fromInteger i)
-    (r',p') -> P r' p'
-  W s t -> W s (comp t)
-  R ts  -> R $ Prelude.map comp ts
-  V i   -> args !! (fromInteger i)  -- already computed
-  S ts  -> S (Prelude.map comp ts)
-  F c   -> comp $ look c  -- global constant: not yet comp'd (if contains argvar)
-  FV ts -> FV $ Prelude.map comp ts
-  _ -> trm
- where
-   comp = compute mcfg lang args
-   look = lookLin mcfg lang
+compute mcfg lang args = compg [] where
+  compg g trm = case trm of
 
+    -- for the abstraction optimization
+    P (A x t) p -> compg ((x,comp p):g) t 
+    L x   -> maybe (error (show x)) id $ Prelude.lookup x g
+
+    P r p -> case (comp r, comp p) of 
+
+    -- for the suffix optimization
+      (W s t, C i) -> case comp t of
+        R ss -> case comp $ idx ss (fromInteger i) of
+          K (KS u) -> kks (s ++ u)      -- the only case where W occurs
+ 
+      (R rs, C i) -> comp $ idx rs (fromInteger i)
+      (r',p') -> P r' p'
+    W s t -> W s (comp t)
+    R ts  -> R $ Prelude.map comp ts
+    V i   -> idx args (fromInteger i)  -- already computed
+    S ts  -> S (Prelude.map comp ts)
+    F c   -> comp $ look c  -- global const: not yet comp'd (if contains argvar)
+    FV ts -> FV $ Prelude.map comp ts
+    _ -> trm
+   where
+    comp = compg g 
+    look = lookLin mcfg lang
+    idx xs i = 
+      if length xs <= i  ---- debug
+      then error (show xs ++ " !! " ++ show i) else
+      xs !! i 
 
 mkGFCC :: Grammar -> GFCC
 mkGFCC (Grm (Hdr a cs) ab@(Abs funs) ccs) = GFCC {

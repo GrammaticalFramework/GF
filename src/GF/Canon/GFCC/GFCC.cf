@@ -14,6 +14,8 @@ Tr.  Exp      ::= "(" Atom [Exp] ")" ;
 AC.  Atom     ::= CId ;
 AS.  Atom     ::= String ;
 AI.  Atom     ::= Integer ;
+trA. Exp      ::= Atom ;
+define trA a = Tr a [] ;
 
 R.   Term     ::= "[" [Term] "]" ;          -- record/table
 P.   Term     ::= Term "[" Term "]" ;       -- projection/selection
@@ -22,6 +24,8 @@ K.   Term     ::= Tokn ;                    -- token
 V.   Term     ::= "$" Integer ;             -- argument
 C.   Term     ::= Integer ;                 -- parameter value/label
 F.   Term     ::= CId ;                     -- global constant
+L.   Term     ::= "$" CId ;                 -- local (bound) variable
+A.   Term     ::= "(" CId "->" Term ")" ;   -- lambda abstraction (compressed table)
 FV.  Term     ::= "[|" [Term] "|]" ;        -- free variation
 W.   Term     ::= "(" String "+" Term ")" ; -- prefix + suffix table
 

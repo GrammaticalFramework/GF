@@ -3,13 +3,6 @@
 {-# OPTIONS -fno-warn-incomplete-patterns #-}
 module GF.Canon.GFCC.LexGFCC where
 
-
-
-#if __GLASGOW_HASKELL__ >= 603
-#include "ghcconfig.h"
-#else
-#include "config.h"
-#endif
 #if __GLASGOW_HASKELL__ >= 503
 import Data.Array
 import Data.Char (ord)

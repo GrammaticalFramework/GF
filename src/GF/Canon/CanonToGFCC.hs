@@ -20,6 +20,7 @@ import qualified GF.Canon.Look as Look
 import qualified GF.Canon.GFCC.AbsGFCC as C
 import qualified GF.Canon.GFCC.PrintGFCC as Pr
 import GF.Canon.GFC
+import GF.Canon.Share
 import qualified GF.Grammar.Abstract as A
 import qualified GF.Grammar.Macros as GM
 import GF.Canon.MkGFC
@@ -39,9 +40,13 @@ import Debug.Trace ----
 
 prCanon2gfcc :: CanonGrammar -> String
 prCanon2gfcc = 
-  Pr.printTree . canon2gfcc . reorder . canon2canon . unoptimizeCanon
-  -- phases defined below, except unoptimizeCanon. This is needed to
-  -- reorganize the grammar. GFCC has its own back-end optimization.
+  Pr.printTree . canon2gfcc . reorder . canon2canon . normalize
+
+-- This is needed to reorganize the grammar. GFCC has its own back-end optimization.
+-- But we need to have the canonical order in tables, created by valOpt
+normalize :: CanonGrammar -> CanonGrammar
+normalize = share . unoptimizeCanon where
+  share = M.MGrammar . map (shareModule allOpt) . M.modules --- valOpt
 
 -- Generate GFCC from GFCM.
 -- this assumes a grammar translated by canon2canon
@@ -70,10 +75,12 @@ mkTerm tr = case tr of
   EInt i      -> C.C i
   R rs     -> C.R [mkTerm t | Ass _ t <- rs]
   P t l    -> C.P (mkTerm t) (C.C (mkLab l))
-  T _ cs   -> C.R [mkTerm t | Cas _ t <- cs]
+  T _ [Cas [PV (IC x)] t] -> C.A (C.CId x) (mkTerm t) -- abstraction
+  T _ cs   -> C.R [mkTerm t | Cas _ t <- cs] --- should not appear after values opt
   V _ cs   -> C.R [mkTerm t | t <- cs]
   S t p    -> C.P (mkTerm t) (mkTerm p)
   C s t    -> C.S [mkTerm x | x <- [s,t]]
+  LI(IC x) -> C.L (C.CId x)
   FV ts    -> C.FV [mkTerm t | t <- ts]
   K (KS s) -> C.K (C.KS s)
   K (KP ss _) -> C.K (C.KP ss []) ---- TODO: prefix variants
@@ -168,6 +175,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
     R [Ass (mkLab i) (t2t t) | (i,Ass l t) <- zip [0..] rs, not (isLock l t)]
   R rs     -> valNum tr
   P t l    -> r2r tr
+  T i [Cas p t] -> T i [Cas p (t2t t)]
   T ty cs  -> V ty [t2t t | Cas _ t <- cs]
   S t p    -> S (t2t t) (t2t p)
   _ -> composSafeOp t2t tr
@@ -210,6 +218,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    mkCase c ps = EInt (prtTrace tr 66668) ---- TODO: expand param constr with var
      
 prtTrace tr n = n ----trace ("-- ERROR" +++ A.prt tr +++ show n +++ show tr) n
+prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
 
 -- back-end optimization: 
 -- suffix analysis followed by common subexpression elimination
@@ -225,6 +234,7 @@ optTerm tr = case tr of
     C.R ts@(_:_:_) | all isK ts -> mkSuff $ optToks [s | C.K (C.KS s) <- ts]
     C.R ts  -> C.R $ map optTerm ts
     C.P t v -> C.P (optTerm t) v
+    C.A x t -> C.A x (optTerm t)
     _ -> tr
  where
   optToks ss = prf : suffs where
@@ -235,6 +245,7 @@ optTerm tr = case tr of
   isK t = case t of
     C.K (C.KS _) -> True
     _ -> False
+  mkSuff ("":ws) = C.R (map (C.K . C.KS) ws)
   mkSuff (p:ws) = C.W p (C.R (map (C.K . C.KS) ws))
 
 
@@ -262,6 +273,7 @@ addSubexpConsts tree lins =
        C.S ts  -> C.S $ map (recomp f) ts
        C.W s t -> C.W s (recomp f t)
        C.P t p -> C.P (recomp f t) (recomp f p)
+       C.A x t -> C.A x (recomp f t)
        _ -> t
    fid n = C.CId $ "_" ++ show n
    list = Map.toList tree
@@ -284,6 +296,8 @@ collectSubterms t = case t of
   C.S ts -> do
     mapM collectSubterms ts
     add t
+  C.A x b -> do
+    collectSubterms b -- t itself can only occur once in a grammar
   C.W s u -> do
     collectSubterms u
     add t
