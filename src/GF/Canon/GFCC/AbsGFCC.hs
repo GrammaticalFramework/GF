@@ -49,6 +49,8 @@ data Term =
  | V Integer
  | C Integer
  | F CId
+ | L CId
+ | A CId Term
  | FV [Term]
  | W String Term
   deriving (Eq,Ord,Show)
