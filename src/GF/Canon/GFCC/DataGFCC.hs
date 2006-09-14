@@ -2,6 +2,7 @@ module GF.Canon.GFCC.DataGFCC where
 
 import GF.Canon.GFCC.AbsGFCC
 import Data.Map
+import Data.List
 
 data GFCC = GFCC {
   absname   :: CId ,
@@ -10,7 +11,12 @@ data GFCC = GFCC {
   concretes :: Map CId Concr
   }
 
-type Abstr = Map CId Type
+-- redundant double representation for fast lookup
+data Abstr = Abstr {
+  funs :: Map CId Type, -- find the type of a fun
+  cats :: Map CId [CId] -- find the funs giving a cat
+  }
+
 type Concr = Map CId Term
 
 lookMap :: (Show i, Ord i) => i -> Map i a -> a 
@@ -28,7 +34,8 @@ realize trm = case trm of
   S ss     -> unwords $ Prelude.map realize ss
   K (KS s) -> s
   K (KP s _) -> unwords s ---- prefix choice TODO
-  W s t    -> s ++ " " ++ realize t
+  W s t    -> s ++ realize t
+  FV (t:_) -> realize t
   _ -> "ERROR " ++ show trm ---- debug
 
 linExp :: GFCC -> CId -> Exp -> Term
@@ -74,14 +81,20 @@ compute mcfg lang args = compg [] where
     look = lookLin mcfg lang
     idx xs i = 
       if length xs <= i  ---- debug
-      then error (show xs ++ " !! " ++ show i) else
+      then K (KS ("ERROR" ++ show xs ++ " !! " ++ show i)) else
       xs !! i 
 
 mkGFCC :: Grammar -> GFCC
 mkGFCC (Grm (Hdr a cs) ab@(Abs funs) ccs) = GFCC {
   absname = a,
   cncnames = cs,
-  abstract = fromAscList [(fun,typ)    | Fun fun typ _ <- funs] ,
+  abstract = 
+    let
+      fs = fromAscList [(fun,typ)    | Fun fun typ _ <- funs]
+      cats = sort $ nub [c | Fun f (Typ _ c) _ <- funs]
+      cs = fromAscList 
+             [(cat,[f | Fun f (Typ _ c) _ <- funs, c==cat]) | cat <- cats]
+    in Abstr fs cs,
   concretes = fromAscList [(lang, mkCnc lins) | Cnc lang lins <- ccs]
   }
  where
