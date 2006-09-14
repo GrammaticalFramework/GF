@@ -1,5 +1,6 @@
 module Main where
 
+import GF.Canon.GFCC.GenGFCC
 import GF.Canon.GFCC.DataGFCC
 import GF.Canon.GFCC.AbsGFCC
 import GF.Canon.GFCC.ParGFCC
@@ -24,12 +25,18 @@ loop grammar = do
     loop grammar
 
 treat :: GFCC -> String -> IO ()
-treat grammar s = do 
-  let t = readExp s
-  putStrLn $ printTree $ linExp grammar lang t 
-  putStrLn $ linearize grammar lang t
+treat grammar s = case words s of
+  "gt":cat:n:_ -> do
+    mapM_ prlin $ take (read n) $ generate grammar (CId cat)
+  _ -> lin $ readExp s
  where
   lang = head $ cncnames grammar
+  lin t = do
+    putStrLn $ printTree $ linExp grammar lang t 
+    putStrLn $ linearize grammar lang t
+  prlin t = do
+    putStrLn $ printTree t
+    lin t
 
 --- should be in an API
 
