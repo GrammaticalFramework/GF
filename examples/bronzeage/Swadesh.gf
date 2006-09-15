@@ -79,7 +79,7 @@ abstract Swadesh = Cat ** {
     near_A : A ;
     new_A : A ;
     old_A : A ;
-    other_A : A ;
+----    other_A : A ;
     red_A : A ;
     rotten_A : A ;
     round_A : A ;
