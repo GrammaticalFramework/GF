@@ -129,17 +129,19 @@ canon2canon cg = tr $ M.MGrammar $ map c2c $ M.modules cg where
     GFC.CncFun x y tr z -> (f,GFC.CncFun x y (t2t tr) z)
     _ -> (f,j)
   t2t = term2term cg pv
-  pv@(labels,untyps,_) = paramValues cg
+  pv@(labels,untyps,typs) = paramValues cg
   tr = trace $
    (unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
        ((c,l),i) <- Map.toList labels]) ++
    (unlines [A.prt t +++ "=" +++ show i  | 
-       (t,i) <- Map.toList untyps])
+       (t,i) <- Map.toList untyps]) ++
+   (unlines [A.prt t | 
+       (t,_) <- Map.toList typs])
 
 type ParamEnv =
-  (Map.Map (Ident,[Label]) Integer,      -- numbered labels
-   Map.Map Term Integer,                 -- untyped terms to values
-   Map.Map CType (Map.Map Term Integer)) -- types to their terms to values
+  (Map.Map (Ident,[Label]) (CType,Integer), -- numbered labels
+   Map.Map Term Integer,                    -- untyped terms to values
+   Map.Map CType (Map.Map Term Integer))    -- types to their terms to values
 
 --- gathers those param types that are actually used in lincats
 paramValues :: CanonGrammar -> ParamEnv
@@ -154,17 +156,17 @@ paramValues cgr = (labels,untyps,typs) where
               (m,(ty,ResPar _)) <- jments
             ]
   typsFrom ty = case ty of
-    Table p t  -> p : typsFrom t
-    RecType ls -> concat [typsFrom t | Lbg _ t <- ls]
+    Table p t  -> typsFrom p ++ typsFrom t
+    RecType ls -> ty : concat [typsFrom t | Lbg _ t <- ls]
     _ -> [ty] 
   jments = [(m,j) | (m,mo) <- M.allModMod cgr, j <- tree2list $ M.jments mo]
   typs = Map.fromList [(ci,Map.fromList (zip vs [0..])) | (ci,vs) <- params]
   untyps = Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
   lincats = [(cat,ls) | (_,(cat,CncCat (RecType ls) _ _)) <- jments]
   labels = Map.fromList $ concat 
-    [((cat,[lab]),i): 
-      [((cat,[lab,lab2]),j) | 
-        rs <- getRec typ, (Lbg lab2 _,j) <- zip rs [0..]] 
+    [((cat,[lab]),(typ,i)): 
+      [((cat,[lab,lab2]),(ty,j)) | 
+        rs <- getRec typ, (Lbg lab2 ty,j) <- zip rs [0..]] 
       | 
         (cat,ls) <- lincats, (Lbg lab typ,i) <- zip ls [0..]]
     -- go to tables recursively
@@ -177,8 +179,9 @@ paramValues cgr = (labels,untyps,typs) where
 
 term2term :: CanonGrammar -> ParamEnv -> Term -> Term
 term2term cgr env@(labels,untyps,typs) tr = case tr of
-  Par c ps | any isVar ps -> mkCase c ps
-  Par _ _  -> valNum tr
+  Par _ _ -> mkValCase tr 
+----  Par c ps | any isVar ps -> mkCase c ps
+----  Par _ _  -> valNum tr
   R rs | any (isStr . trmAss) rs -> 
     R [Ass (mkLab i) (t2t t) | (i,Ass l t) <- zip [0..] rs, not (isLock l t)]
   R rs     -> valNum tr
@@ -193,10 +196,10 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    -- Conj@0.s
    r2r tr = case tr of
      P x@(Arg (A cat i)) lab ->
-        P x . mkLab $ maybe (prtTrace tr $ 66664) id $ 
+        P x . mkLab $ maybe (prtTrace tr $ 66664) snd $ 
           Map.lookup (cat,[lab]) labels
      P p lab2 -> case getLab p of
-       Just (cat,lab1) -> P (r2r p) . mkLab $ maybe (prtTrace tr $ 66664) id $ 
+       Ok (cat,lab1) -> P (r2r p) . mkLab $ maybe (prtTrace tr $ 66664) snd $ 
           Map.lookup (cat,[lab1,lab2]) labels
        _ -> P (t2t p) $ mkLab (prtTrace tr 66665)
      _ -> tr ----
@@ -205,7 +208,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    getLab tr = case tr of
      P (Arg (A cat i)) lab1 -> return (cat,lab1)
      S p _ -> getLab p
-     _ -> Nothing
+     _ -> Bad "getLab"
    mkLab k = L (IC ("_" ++ show k))
    valNum tr = maybe (K (KS (A.prt tr +++ prtTrace tr "66667"))) EInt $ 
      Map.lookup tr untyps
@@ -220,12 +223,36 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      R [] -> True
      _ -> False
    trmAss (Ass _ t) = t
-   isVar p = case p of
-     Arg _ -> True
-     P q _ -> isVar q
-     _ -> False
-   mkCase c ps = EInt (prtTrace tr 66668) ---- TODO: expand param constr with var
-     
+
+   mkValCase tr = case appSTM (doVar tr) [] of
+     Ok (tr', st@(_:_)) -> t2t $ comp $ foldr mkCase tr' st
+     _ -> valNum tr
+
+   doVar :: Term -> STM [((CType,[Term]),(Term,Term))] Term
+--   doVar tr = case tr of
+--     P q@(Arg (A cat i)) lab -> do
+   doVar tr = case getLab tr of
+     Ok (cat, lab) -> do
+       k <- readSTM >>= return . length
+       let tr' = LI $ identC $ show k
+       let tyvs = case Map.lookup (cat,[lab]) labels of
+             Just (ty,_) -> case Map.lookup ty typs of
+               Just vs -> (ty,Map.keys vs)
+               _ -> error $ A.prt ty
+             _ -> error $ A.prt tr
+       updateSTM ((tyvs, (tr', tr)):) 
+       return tr'
+     _ -> composOp doVar tr
+
+   comp t = errVal t $ Look.ccompute cgr [] t
+
+   mkCase ((ty,vs),(x,p)) tr = 
+     S (V ty [mkBranch x v tr | v <- vs]) p
+   mkBranch x t tr = case tr of
+     _ | tr == x -> t
+     _ -> composSafeOp (mkBranch x t) tr     
+
+
 prtTrace tr n = n ----trace ("-- ERROR" +++ A.prt tr +++ show n +++ show tr) n
 prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
 
