@@ -17,6 +17,7 @@ module GF.Canon.CanonToGFCC (prCanon2gfcc) where
 import GF.Canon.AbsGFC
 import qualified GF.Canon.GFC as GFC
 import qualified GF.Canon.Look as Look
+import qualified GF.Canon.Subexpressions as Sub
 import qualified GF.Canon.GFCC.AbsGFCC as C
 import qualified GF.Canon.GFCC.PrintGFCC as Pr
 import GF.Canon.GFC
@@ -45,8 +46,8 @@ prCanon2gfcc =
 -- This is needed to reorganize the grammar. GFCC has its own back-end optimization.
 -- But we need to have the canonical order in tables, created by valOpt
 normalize :: CanonGrammar -> CanonGrammar
-normalize = share . unoptimizeCanon where
-  share = M.MGrammar . map (shareModule allOpt) . M.modules --- valOpt
+normalize = share . unoptimizeCanon . Sub.unSubelimCanon where
+  share = M.MGrammar . map (shareModule valOpt) . M.modules --- allOpt
 
 -- Generate GFCC from GFCM.
 -- this assumes a grammar translated by canon2canon
@@ -128,10 +129,12 @@ canon2canon cg = tr $ M.MGrammar $ map c2c $ M.modules cg where
     GFC.CncFun x y tr z -> (f,GFC.CncFun x y (t2t tr) z)
     _ -> (f,j)
   t2t = term2term cg pv
-  pv@(labels,_,_) = paramValues cg
-  tr = trace 
+  pv@(labels,untyps,_) = paramValues cg
+  tr = trace $
    (unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
-       ((c,l),i) <- Map.toList labels])
+       ((c,l),i) <- Map.toList labels]) ++
+   (unlines [A.prt t +++ "=" +++ show i  | 
+       (t,i) <- Map.toList untyps])
 
 type ParamEnv =
   (Map.Map (Ident,[Label]) Integer,      -- numbered labels
@@ -144,11 +147,16 @@ paramValues cgr = (labels,untyps,typs) where
   params = [(ty, errVal [] $ Look.allParamValues cgr ty) | ty <- partyps]
   partyps = nub $ [ty | 
               (_,(_,CncCat (RecType ls) _ _)) <- jments,
-              ty <- [ty | Lbg _ ty <- ls]
+              ty0 <- [ty | Lbg _ ty <- ls],
+              ty  <- typsFrom ty0
             ] ++ [
              Cn (CIQ m ty) | 
               (m,(ty,ResPar _)) <- jments
             ]
+  typsFrom ty = case ty of
+    Table p t  -> p : typsFrom t
+    RecType ls -> concat [typsFrom t | Lbg _ t <- ls]
+    _ -> [ty] 
   jments = [(m,j) | (m,mo) <- M.allModMod cgr, j <- tree2list $ M.jments mo]
   typs = Map.fromList [(ci,Map.fromList (zip vs [0..])) | (ci,vs) <- params]
   untyps = Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
@@ -177,6 +185,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
   P t l    -> r2r tr
   T i [Cas p t] -> T i [Cas p (t2t t)]
   T ty cs  -> V ty [t2t t | Cas _ t <- cs]
+  V ty ts  -> V ty [t2t t | t <- ts]
   S t p    -> S (t2t t) (t2t p)
   _ -> composSafeOp t2t tr
  where
@@ -238,10 +247,11 @@ optTerm tr = case tr of
     _ -> tr
  where
   optToks ss = prf : suffs where
-    prf = pref (sort ss)
+    prf = pref (head ss) (tail ss)
     suffs = map (drop (length prf)) ss
-    pref ss = longestPref (head ss) (last ss)
-    longestPref w u = if isPrefixOf w u then w else longestPref (init w) u
+    pref cand ss = case ss of
+      s1:ss2 -> if isPrefixOf cand s1 then pref cand ss2 else pref (init cand) ss
+      _ -> cand
   isK t = case t of
     C.K (C.KS _) -> True
     _ -> False
