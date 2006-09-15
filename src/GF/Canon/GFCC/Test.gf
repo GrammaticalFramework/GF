@@ -15,18 +15,27 @@ param Person = P1 | P2 | P3 ;
 param Number = Sg | Pl ;
 param Case = Nom | Part ;
 
+param NForm = NF Number Case ;
+param VForm = VF Number Person ;
+
+--lincat NP = {s : Case => Str ; n : Number ; p : Person} ;
 lincat NP = {s : Case => Str ; a : {n : Number ; p : Person}} ;
 lincat N  = Noun ; 
 lincat VP = Verb ; 
 
-oper Noun = {s : {n : Number ; c : Case} => Str} ;
-oper Verb = {s : {n : Number ; p : Person} => Str} ;
+oper Noun = {s : NForm => Str} ;
+oper Verb = {s : VForm => Str} ;
 
-lin Pred np vp = {s = np.s ! Nom ++ vp.s ! np.a} ;
-lin Pred2 np vp ob = {s = np.s ! Nom ++ vp.s ! np.a ++ ob.s ! Part} ;
-lin Det  no = {s = \\c => no.s ! {n = Sg ; c = c} ; a = {n = Sg ; p = P3}} ;
-lin Dets no = {s = \\c => no.s ! {n = Pl ; c = c} ; a = {n = Pl ; p = P3}} ;
+--lin Pred np vp = {s = np.s ! Nom ++ vp.s ! VF np.n np.p} ;
+lin Pred np vp = {s = np.s ! Nom ++ vp.s ! VF np.a.n np.a.p} ;
+lin Pred2 np vp ob = {s = np.s ! Nom ++ vp.s ! VF np.a.n np.a.p ++ ob.s ! Part} ;
+--lin Det  no = {s = \\c => no.s ! NF Sg c ; n = Sg ; p = P3} ;
+--lin Dets no = {s = \\c => no.s ! NF Pl c ; n = Pl ; p = P3} ;
+lin Det  no = {s = \\c => no.s ! NF Sg c ; a = {n = Sg ; p = P3}} ;
+lin Dets no = {s = \\c => no.s ! NF Pl c ; a = {n = Pl ; p = P3}} ;
 
+--lin Mina = {s = table Case ["minä" ; "minua"] ; n = Sg ; p = P1} ;
+--lin Te = {s = table Case ["te" ; "teitä"] ; n = Pl ; p = P2} ;
 lin Mina = {s = table Case ["minä" ; "minua"] ; a = {n = Sg ; p = P1}} ;
 lin Te = {s = table Case ["te" ; "teitä"] ; a = {n = Pl ; p = P2}} ;
 
@@ -39,21 +48,21 @@ lin Sanoa = mkV "sano" ;
 
 oper mkN : Str -> Noun = \raha -> {
   s = table {
-    {n = Sg ; c = Nom} => raha ;
-    {n = Sg ; c = Part} => raha + "a" ;
-    {n = Pl ; c = Nom} => raha + "t" ;
-    {n = Pl ; c = Part} => Predef.tk 1 raha + "oja"
+    NF Sg Nom  => raha ;
+    NF Sg Part => raha + "a" ;
+    NF Pl Nom  => raha + "t" ;
+    NF Pl Part => Predef.tk 1 raha + "oja"
     } 
   } ;
 
 oper mkV : Str -> Verb = \puhu -> {
   s = table {
-    {n = Sg ; p = P1} => puhu + "n" ;
-    {n = Sg ; p = P2} => puhu + "t" ;
-    {n = Sg ; p = P3} => puhu + Predef.dp 1 puhu ;
-    {n = Pl ; p = P1} => puhu + "mme" ;
-    {n = Pl ; p = P2} => puhu + "tte" ;
-    {n = Pl ; p = P3} => puhu + "vat"
+    VF Sg P1 => puhu + "n" ;
+    VF Sg P2 => puhu + "t" ;
+    VF Sg P3 => puhu + Predef.dp 1 puhu ;
+    VF Pl P1 => puhu + "mme" ;
+    VF Pl P2 => puhu + "tte" ;
+    VF Pl P3 => puhu + "vat"
     } 
   } ;
 
