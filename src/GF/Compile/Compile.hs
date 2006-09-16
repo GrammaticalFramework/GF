@@ -293,7 +293,7 @@ generateModuleCode opts path minfo@(name,info) = do
   let pname = prefixPathName path (prt name)
   minfo0     <- ioeErr $ redModInfo minfo
   let oopts  = addOptions opts (iOpts (flagsModule minfo))
-      optims = maybe "share" id $ getOptVal oopts useOptimizer
+      optims = maybe "all_subs" id $ getOptVal oopts useOptimizer
       optim  = takeWhile (/='_') optims
       subs   = drop 1 (dropWhile (/='_') optims) == "subs"
   minfo1     <- return $ 
@@ -316,7 +316,7 @@ generateModuleCode opts path minfo@(name,info) = do
   case info of
     ModMod m | emitsGFR m && emit && nomulti -> do
       let rminfo = if isCompilable info then minfo 
-                   else (name,emptyModInfo) 
+                   else (name, ModMod emptyModule) 
       let (file,out) = (gfrFile pname, prGrammar (MGrammar [rminfo]))
       putp ("  wrote file" +++ file) $ ioeIO $ writeFile file out
     _ -> return ()

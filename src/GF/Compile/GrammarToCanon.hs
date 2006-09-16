@@ -73,7 +73,8 @@ redModInfo (c,info) = do
       let defs0 = concat defss
       let lgh = length defs0
       defs  <- return $ sorted2tree $ defs0  -- sorted, but reduced
-      let flags' = G.Flg (identC "modulesize") (identC ("n"++show lgh)) : flags
+      let flags1 = if isIncompl then C.flagIncomplete : flags else flags
+      let flags' = G.Flg (identC "modulesize") (identC ("n"++show lgh)) : flags1
       return $ ModMod $ Module mt MSComplete flags' e os defs
   return (c',info')
  where

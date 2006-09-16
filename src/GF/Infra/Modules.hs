@@ -22,7 +22,7 @@ module GF.Infra.Modules (
 		MGrammar(..), ModInfo(..), Module(..), ModuleType(..),
 		MReuseType(..), MInclude (..),
 		extends, isInherited,inheritAll, 
-                updateMGrammar, updateModule, replaceJudgements,
+                updateMGrammar, updateModule, replaceJudgements, addFlag,
 		addOpenQualif, flagsModule, allFlags, mapModules,
 		MainGrammar(..), MainConcreteSpec(..), OpenSpec(..), OpenQualif(..),
 		oSimple, oQualif,
@@ -124,6 +124,9 @@ replaceJudgements (Module mt ms fs me ops _) js = Module mt ms fs me ops js
 addOpenQualif :: i -> i -> Module i f t -> Module i f t
 addOpenQualif i j (Module mt ms fs me ops js) = 
   Module mt ms fs me (oQualif i j : ops) js
+
+addFlag :: f -> Module i f t -> Module i f t
+addFlag f mo = mo {flags = f : flags mo} 
 
 flagsModule :: (i,ModInfo i f a) -> [f]
 flagsModule (_,mi) = case mi of

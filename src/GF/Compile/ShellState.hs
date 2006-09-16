@@ -85,7 +85,7 @@ type Treebank = Map.Map String [String] -- string, trees
 actualConcretes :: ShellState -> [((Ident,Ident),Bool)]
 actualConcretes sh = nub [((c,c),b) | 
   Just a <- [abstract sh],
-  c <- concretesOfAbstract sh a,
+  ((c,_),_) <- concretes sh, ----concretesOfAbstract sh a,
   let b = True -----
   ]
 
@@ -233,7 +233,10 @@ updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do
   let oldConcrs = map (snd . fst) (concretes sh)
       newConcrs = maybe [] (M.allConcretes gr) abstr0
       toRetain (c,v) = notElem c newConcrs
-  let concrs = nub $ newConcrs ++ oldConcrs
+  let complete m = case M.lookupModule gr m of
+        Ok mo -> not $ isIncompleteCanon (m,mo)
+        _ -> False
+  let concrs = filter complete $ nub $ newConcrs ++ oldConcrs
       concr0 = ifNull Nothing (return . head) concrs
       notInrts f = notElem f $ map fst rts
       subcgr = unSubelimCanon cgr
@@ -317,7 +320,7 @@ purgeShellState sh = ShSt {
   abstract   = abstr,
   concrete   = concrete sh,
   concretes  = concrs,
-  canModules = M.MGrammar $ purge $ M.modules $ canModules sh,
+  canModules = M.MGrammar $ filter complete $ purge $ M.modules $ canModules sh,
   srcModules = M.emptyMGrammar,
   cfs        = cfs sh,
   abstracts  = maybe [] (\a -> [(a,map (snd . fst) concrs)]) abstr,
@@ -341,6 +344,7 @@ purgeShellState sh = ShSt {
    needed = nub $ concatMap (requiredCanModules isSingle (canModules sh)) acncs
    purge = nubBy (\x y -> fst x == fst y) . filter (flip elem needed . fst)
    acncs = maybe [] singleton abstr ++ map (snd . fst) (actualConcretes sh)
+   complete = not . isIncompleteCanon
 
 changeMain :: Maybe Ident -> ShellState -> Err ShellState
 changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs fcfgs cfgs pinfos mos tbs pbs os rs acs s trs) = 
