@@ -32,6 +32,7 @@ import GF.UseGrammar.Linear (unoptimizeCanon)
 
 import GF.Infra.Ident
 import GF.Data.Operations
+import GF.Text.UTF8
 
 import Data.List
 import qualified Data.Map as Map
@@ -41,7 +42,7 @@ import Debug.Trace ----
 
 prCanon2gfcc :: CanonGrammar -> String
 prCanon2gfcc = 
-  Pr.printTree . canon2gfcc . reorder . canon2canon . normalize
+  Pr.printTree . canon2gfcc . reorder . utf8Conv . canon2canon . normalize
 
 -- This is needed to reorganize the grammar. GFCC has its own back-end optimization.
 -- But we need to have the canonical order in tables, created by valOpt
@@ -114,8 +115,22 @@ reorder cg = M.MGrammar $
             [(lang, concr lang) | lang <- M.allConcretes cg abs]
        concr la = sortBy (\ (f,_) (g,_) -> compare f g) 
             [finfo | 
-              (i,mo) <- mos, M.isModCnc mo, ----- TODO: separate langs 
+              (i,mo) <- mos, M.isModCnc mo, elem i (M.allExtends cg la),
               finfo <- tree2list (M.jments mo)]
+
+-- convert to UTF8 if not yet converted
+utf8Conv :: CanonGrammar -> CanonGrammar
+utf8Conv = M.MGrammar . map toUTF8 . M.modules where
+  toUTF8 mo = case mo of
+    (i, M.ModMod m) 
+      | hasFlagCanon (flagCanon "coding" "utf8") mo -> mo
+      | otherwise -> (i, M.ModMod $
+          m{ M.jments = 
+              mapTree (onSnd (mapInfoTerms (onTokens encodeUTF8))) (M.jments m),
+	     M.flags = setFlag "coding" "utf8" (M.flags m) }
+          )
+    _ -> mo
+ 
 
 -- translate tables and records to arrays, parameters and labels to indices
 
@@ -165,7 +180,7 @@ paramValues cgr = (labels,untyps,typs) where
   lincats = [(cat,ls) | (_,(cat,CncCat (RecType ls) _ _)) <- jments]
   labels = Map.fromList $ concat 
     [((cat,[lab]),(typ,i)): 
-      [((cat,[lab,lab2]),(ty,j)) | 
+      [((cat,[lab2,lab]),(ty,j)) | 
         rs <- getRec typ, (Lbg lab2 ty,j) <- zip rs [0..]] 
       | 
         (cat,ls) <- lincats, (Lbg lab typ,i) <- zip ls [0..]]
@@ -180,8 +195,6 @@ paramValues cgr = (labels,untyps,typs) where
 term2term :: CanonGrammar -> ParamEnv -> Term -> Term
 term2term cgr env@(labels,untyps,typs) tr = case tr of
   Par _ _ -> mkValCase tr 
-----  Par c ps | any isVar ps -> mkCase c ps
-----  Par _ _  -> valNum tr
   R rs | any (isStr . trmAss) rs -> 
     R [Ass (mkLab i) (t2t t) | (i,Ass l t) <- zip [0..] rs, not (isLock l t)]
   R rs     -> valNum tr
@@ -193,22 +206,21 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
   _ -> composSafeOp t2t tr
  where
    t2t = term2term cgr env
-   -- Conj@0.s
-   r2r tr = case tr of
-     P x@(Arg (A cat i)) lab ->
-        P x . mkLab $ maybe (prtTrace tr $ 66664) snd $ 
-          Map.lookup (cat,[lab]) labels
-     P p lab2 -> case getLab p of
-       Ok (cat,lab1) -> P (r2r p) . mkLab $ maybe (prtTrace tr $ 66664) snd $ 
-          Map.lookup (cat,[lab1,lab2]) labels
-       _ -> P (t2t p) $ mkLab (prtTrace tr 66665)
-     _ -> tr ----
-     -- this goes recursively in tables
-     ---- TODO: also recursive in records to get longer lists of labels
+
+   r2r tr@(P p _) = case getLab tr of
+     Ok (cat,labs) -> P (t2t p) . mkLab $ maybe (prtTrace tr $ 66664) snd $ 
+          Map.lookup (cat,labs) labels
+     _ -> K (KS (A.prt tr +++ prtTrace tr "66665"))
+
+   -- this goes recursively into tables (ignored) and records (accumulated)
    getLab tr = case tr of
-     P (Arg (A cat i)) lab1 -> return (cat,lab1)
+     Arg (A cat _) -> return (cat,[])
+     P p lab2 -> do
+       (cat,labs) <- getLab p
+       return (cat,lab2:labs) 
      S p _ -> getLab p
      _ -> Bad "getLab"
+
    mkLab k = L (IC ("_" ++ show k))
    valNum tr = maybe (K (KS (A.prt tr +++ prtTrace tr "66667"))) EInt $ 
      Map.lookup tr untyps
@@ -229,13 +241,11 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      _ -> valNum tr
 
    doVar :: Term -> STM [((CType,[Term]),(Term,Term))] Term
---   doVar tr = case tr of
---     P q@(Arg (A cat i)) lab -> do
    doVar tr = case getLab tr of
      Ok (cat, lab) -> do
        k <- readSTM >>= return . length
        let tr' = LI $ identC $ show k
-       let tyvs = case Map.lookup (cat,[lab]) labels of
+       let tyvs = case Map.lookup (cat,lab) labels of
              Just (ty,_) -> case Map.lookup ty typs of
                Just vs -> (ty,Map.keys vs)
                _ -> error $ A.prt ty
@@ -244,6 +254,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
        return tr'
      _ -> composOp doVar tr
 
+   --- this is mainly needed for parameter record projections
    comp t = errVal t $ Look.ccompute cgr [] t
 
    mkCase ((ty,vs),(x,p)) tr = 

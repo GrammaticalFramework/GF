@@ -50,7 +50,7 @@ optimizeModule opts ms mo@(_,mi) = case mi of
   _ -> evalModule oopts ms mo
  where
    oopts = addOptions opts (iOpts (flagsModule mo))
-   optim = maybe "none" id $ getOptVal oopts useOptimizer
+   optim = maybe "all" id $ getOptVal oopts useOptimizer
 
 evalModule :: Options -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
                Err (Ident,SourceModInfo)
@@ -92,7 +92,7 @@ evalResInfo oopts gr (c,info) = case info of
  where
    comp = if optres then computeConcrete gr else computeConcreteRec gr
    eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
-   optim = maybe "none" id $ getOptVal oopts useOptimizer
+   optim = maybe "all" id $ getOptVal oopts useOptimizer
    optres = case optim of
      "noexpand" -> False
      _ -> True

@@ -21,7 +21,11 @@ module GF.Canon.GFC (Context,
 	    Printname,
             prPrintnamesGrammar,
 	    mapInfoTerms,
-	    setFlag
+	    setFlag,
+            flagIncomplete,
+            isIncompleteCanon,
+            hasFlagCanon,
+            flagCanon
 	   ) where
 
 import GF.Canon.AbsGFC
@@ -69,7 +73,20 @@ mapInfoTerms f i = case i of
 	 _ -> i
 
 setFlag :: String -> String -> [Flag] -> [Flag]
-setFlag n v fs = Flg (IC n) (IC v):[f | f@(Flg (IC n') _) <- fs, n' /= n]
+setFlag n v fs = flagCanon n v : [f | f@(Flg (IC n') _) <- fs, n' /= n]
+
+flagIncomplete :: Flag
+flagIncomplete = flagCanon "incomplete" "true"
+
+isIncompleteCanon :: CanonModule -> Bool
+isIncompleteCanon = hasFlagCanon flagIncomplete
+
+hasFlagCanon :: Flag -> CanonModule -> Bool
+hasFlagCanon f (_,M.ModMod mo) = elem f $ M.flags mo
+hasFlagCanon f _ = True ---- safe, useless 
+
+flagCanon :: String -> String -> Flag
+flagCanon f v = Flg (identC f) (identC v)
 
 -- for Ha-Jo 20/2/2005
 
