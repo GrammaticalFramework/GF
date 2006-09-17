@@ -17,6 +17,14 @@ data Abstr = Abstr {
   cats :: Map CId [CId] -- find the funs giving a cat
   }
 
+statGFCC :: GFCC -> String
+statGFCC gfcc = unlines [
+  "Abstract\t" ++ pr (absname gfcc), 
+  "Concretes\t" ++ unwords (Prelude.map pr (cncnames gfcc)), 
+  "Categories\t" ++ unwords (Prelude.map pr (keys (cats (abstract gfcc)))) 
+  ]
+ where pr (CId s) = s
+
 type Concr = Map CId Term
 
 lookMap :: (Show i, Ord i) => i -> Map i a -> a 
@@ -55,6 +63,7 @@ kks = K . KS
 compute :: GFCC -> CId -> [Term] -> Term -> Term
 compute mcfg lang args = compg [] where
   compg g trm = case trm of
+    P r (FV ts) -> FV $ Prelude.map (comp . P r) ts
 
     -- for the abstraction optimization
     P (A x t) p -> compg ((x,comp p):g) t 
@@ -73,7 +82,7 @@ compute mcfg lang args = compg [] where
     R ts  -> R $ Prelude.map comp ts
     V i   -> idx args (fromInteger i)  -- already computed
     S ts  -> S (Prelude.map comp ts)
-    F c   -> comp $ look c  -- global const: not yet comp'd (if contains argvar)
+    F c   -> comp $ look c  -- global const: not comp'd (if contains argvar)
     FV ts -> FV $ Prelude.map comp ts
     _ -> trm
    where

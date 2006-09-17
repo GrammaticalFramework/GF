@@ -7,6 +7,7 @@ import GF.Canon.GFCC.ParGFCC
 import GF.Canon.GFCC.PrintGFCC
 import GF.Data.Operations
 import Data.Map
+import System.Random (newStdGen)
 import System
 
 -- Simple translation application built on GFCC. AR 7/9/2006
@@ -15,6 +16,7 @@ main :: IO ()
 main = do
   file  <- getLine ----getArgs
   grammar <- file2gfcc file
+  putStrLn $ statGFCC grammar
   loop grammar
 
 loop :: GFCC -> IO ()
@@ -27,16 +29,19 @@ loop grammar = do
 treat :: GFCC -> String -> IO ()
 treat grammar s = case words s of
   "gt":cat:n:_ -> do
-    mapM_ prlin $ take (read n) $ generate grammar (CId cat)
-  _ -> lin $ readExp s
+    mapM_ prlins $ take (read n) $ generate grammar (CId cat)
+  "gr":cat:n:_ -> do
+    gen <- newStdGen
+    mapM_ prlins $ take (read n) $ generateRandom gen grammar (CId cat)
+  _ -> lins $ readExp s
  where
-  lang = head $ cncnames grammar
-  lin t = do
-    putStrLn $ printTree $ linExp grammar lang t 
+  lins t = mapM_ (lin t) $ cncnames grammar
+  lin t lang = do
+    -- putStrLn $ printTree $ linExp grammar lang t 
     putStrLn $ linearize grammar lang t
-  prlin t = do
+  prlins t = do
     putStrLn $ printTree t
-    lin t
+    lins t
 
 --- should be in an API
 
