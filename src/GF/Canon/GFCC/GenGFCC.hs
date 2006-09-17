@@ -39,13 +39,16 @@ generateRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0) gen) cat where
                 (genTrees ds2 cat)          -- else (drop k ds)
 
   genTree rs = gett rs where
+    gett ds (CId "String") = (Tr (AS "foo") [], 1)
+    gett ds (CId "Int")    = (Tr (AI 12345) [], 1)
     gett ds cat = case fns cat of
       fs -> let 
           d:ds2    = ds
           (f,args) = getf d fs
           (ts,k)   = getts ds2 args
         in (Tr (AC f) ts, k+1)
-    getf d fs =  fs !! floor (d * fromIntegral (length fs))
+    getf d fs = let lg = (length fs) in
+      fs !! (floor (d * fromIntegral lg))
     getts ds cats = case cats of
       c:cs -> let 
           (t, k)  = gett ds c

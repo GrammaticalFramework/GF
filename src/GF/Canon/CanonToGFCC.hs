@@ -177,7 +177,9 @@ paramValues cgr = (labels,untyps,typs) where
   jments = [(m,j) | (m,mo) <- M.allModMod cgr, j <- tree2list $ M.jments mo]
   typs = Map.fromList [(ci,Map.fromList (zip vs [0..])) | (ci,vs) <- params]
   untyps = Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
-  lincats = [(cat,ls) | (_,(cat,CncCat (RecType ls) _ _)) <- jments]
+  lincats = 
+    [(IC cat,[Lbg (L (IC "s")) TStr]) | cat <- ["Int", "Float", "String"]] ++
+    [(cat,ls) | (_,(cat,CncCat (RecType ls) _ _)) <- jments]
   labels = Map.fromList $ concat 
     [((cat,[lab]),(typ,i)): 
       [((cat,[lab2,lab]),(ty,j)) | 
