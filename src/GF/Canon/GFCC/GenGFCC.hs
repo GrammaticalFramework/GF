@@ -41,6 +41,7 @@ generateRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0) gen) cat where
   genTree rs = gett rs where
     gett ds (CId "String") = (Tr (AS "foo") [], 1)
     gett ds (CId "Int")    = (Tr (AI 12345) [], 1)
+    gett [] _ = (Tr (AS "TIMEOUT") [], 1) ----
     gett ds cat = case fns cat of
       fs -> let 
           d:ds2    = ds
