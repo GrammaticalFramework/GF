@@ -1,0 +1,131 @@
+-- a portable format for FCFG (Peter Ljunglöf's MCFG modified by Krasimir Anglelov)
+-- Aarne Ranta September 2006
+
+FGr.     FGrammar ::= [FRule] ;
+FR.      FRule    ::= Abstract ":=" [[FSymbol]] ;
+Abs.     Abstract ::= FCat "->" [FCat] "." Name ;
+FSymCat. FSymbol  ::= "(" FCat Integer Integer ")" ;
+FSymTok. FSymbol  ::= String ;
+FC.      FCat     ::= "(" Integer Ident "[" [[PathEl]] "]" "[" [PathTerm] "]" ")" ;
+PLabel.  PathEl   ::= Label ;
+PTerm.   PathEl   ::= Term ;
+PtT.     PathTerm ::= "(" [PathEl] "," Term ")" ;
+Nm.      Name     ::= Ident "[" [Profile] "]" ;
+Unify.   Profile  ::= "[" [Integer] "]" ;
+Const.   Profile  ::= Forest ;
+
+FMeta.   Forest   ::= "?" ;
+FNode.   Forest   ::= "(" Ident [[Forest]] ")" ;
+FString. Forest   ::= String ;
+FInt.    Forest   ::= Integer ;
+FFloat.  Forest   ::= Double ;
+
+Arg.     Term     ::= "(" Integer Ident [PathEl] ")" ;
+Constr.  Term     ::= "(" CIdent "-" [Term] ")" ;
+Rec.     Term     ::= "[" [Assoc] "]" ;
+Proj.    Term     ::= "(" Term "." Label ")" ;
+Tbl.     Term     ::= "[-" [Case] "-]" ;
+Select.  Term     ::= "(" Term "!" Term ")" ;
+Vars.    Term     ::= "[|" [Term] "|]" ;
+Concat.  Term     ::= "(" Term "++" Term ")" ;
+Tok.     Term     ::= String ;
+Empty.   Term     ::= "(" ")" ;
+
+Cas.     Case     ::= Term "=>" Term ;
+Ass.     Assoc    ::= Label "=" Term ;
+
+L.       Label    ::= Ident ;
+LV.      Label    ::= "$" Integer ;
+CIQ.     CIdent   ::= Ident "." Ident ;
+
+terminator FRule ";" ;
+terminator [FSymbol] "|" ;
+terminator FSymbol "" ;
+terminator FCat "" ;
+terminator [Forest] "," ;
+terminator Forest "" ;
+terminator PathTerm "" ;
+terminator Profile "" ;
+terminator Integer "" ;
+terminator Term "," ;
+terminator Assoc "," ;
+terminator Case "," ;
+terminator [PathEl] "," ;
+terminator PathEl "." ;
+
+
+-- type FGrammar  = [FRule]
+-- data FRule     = FRule Abstract (Array Int (Array Int FSymbol))
+-- data Abstract  = Abs FCat [FCat] Name
+-- data FSymbol   = FSymCat FCat Int Int
+--                | FSymTok String
+-- data FCat      = FCat Int Ident [Path] [(Path,Term)]
+-- newtype Path   = Path [Either Label Term]
+-- type Name      = Name Ident [Profile]
+-- type Label     = AbsGFC.Label
+-- data Profile   = Unify [Int] | Constant SyntaxForest
+-- SyntaxForest   = FMeta 
+--		  | FNode Ident [[SyntaxForest]]
+--		  | FString String
+--	          | FInt    Integer
+--	          | FFloat  Double
+{-
+data Term
+    = Arg Int Ident Path       -- ^ argument variable, the 'Path' is a path 
+			         -- pointing into the term 
+    | Constr :^ [Term]       -- ^ constructor
+    | Rec [(Label, Term)]    -- ^ record
+    | Term :. Label          -- ^ record projection
+    | Tbl [(Term, Term)] -- ^ table of patterns\/terms
+    | Term :! Term       -- ^ table selection
+    | Variants [Term]        -- ^ variants
+    | Term :++ Term      -- ^ concatenation
+    | Token String   -- ^ single token
+    | Empty     -- ^ empty string
+-}
+
+
+
+
+
+-- type FGrammar = FCFGrammar  FCat Name Token
+-- type FRule    = FCFRule     FCat Name Token
+-- type FCFGrammar cat name tok = [FCFRule cat name tok]
+-- data FCFRule cat name tok = 
+--   FRule (Abstract cat name) (Array FLabel (Array FPointPos (FSymbol cat tok)))
+-- data Abstract cat name = Abs cat [cat] name
+-- data FSymbol cat tok = FSymCat cat FLabel Int | FSymTok tok
+-- type FLabel    = Int
+-- type FPointPos = Int
+-- data FCat     = FCat Int SCat [SPath] [(SPath,STerm)]
+-- newtype Path c t = Path [Either Label (Term c t)]
+-- type SCat = Ident.Ident
+-- type Fun  = Ident.Ident
+-- type SPath    = Path    SCat Token
+-- type STerm    = Term    SCat Token
+-- type Name = NameProfile Fun
+-- data NameProfile a = Name a [Profile (SyntaxForest a)]
+-- SyntaxForest n = FMeta 
+--		    | FNode n [[SyntaxForest n]]
+--		    | FString String
+--		    | FInt    Integer
+--		    | FFloat  Double
+-- type Token = String
+-- type Label  = AbsGFC.Label
+-- data Profile a = Unify [Int] | Constant a
+-- type Constr = AbsGFC.CIdent
+{-
+data Term c t
+    = Arg Int c (Path c t)       -- ^ argument variable, the 'Path' is a path 
+			         -- pointing into the term 
+    | Constr :^ [Term c t]       -- ^ constructor
+    | Rec [(Label, Term c t)]    -- ^ record
+    | Term c t :. Label          -- ^ record projection
+    | Tbl [(Term c t, Term c t)] -- ^ table of patterns\/terms
+    | Term c t :! Term c t       -- ^ table selection
+    | Variants [Term c t]        -- ^ variants
+    | Term c t :++ Term c t      -- ^ concatenation
+    | Token t   -- ^ single token
+    | Empty     -- ^ empty string
+-}
+

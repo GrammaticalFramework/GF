@@ -37,6 +37,7 @@ import qualified GF.Canon.GFC as C
 import qualified GF.Canon.CanonToGFCC as GFCC
 import qualified GF.Source.AbsGF as GF
 import qualified GF.Grammar.MMacros as MM
+import GF.FCFG.ToFCFG
 import GF.Grammar.AbsCompute
 import GF.Grammar.TypeCheck
 import GF.UseGrammar.Generate
@@ -310,6 +311,7 @@ customGrammarPrinter =
 -- grammar conversions:
   ,(strCI "mcfg",     \_ -> Prt.prt . stateMCFG)
   ,(strCI "fcfg",     \_ -> Prt.prt . stateFCFG)
+  ,(strCI "bfcfg",    \_ -> printFGrammar . stateFCFG)
   ,(strCI "mcfg2fcfg",\_ -> Prt.prt . Cnv.mcfg2fcfg . stateMCFG)
   ,(strCI "cfg",      \_ -> Prt.prt . stateCFG)
   ,(strCI "pinfo",    \_ -> Prt.prt . statePInfo)
