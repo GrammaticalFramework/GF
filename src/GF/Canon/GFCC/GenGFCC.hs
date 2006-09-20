@@ -61,3 +61,12 @@ generateRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0) gen) cat where
       let fs = maybe [] id $ M.lookup cat $ cats $ abstract gfcc
       in [(f,cs) | f <- fs, 
             Just (Typ cs _) <- [M.lookup f $ funs $ abstract gfcc]]
+
+-- brute-force parsing method; only returns the first result
+-- note: you cannot throw away rules with unknown words from the grammar
+-- because it is not known which field in each rule may match the input
+
+parse :: GFCC -> CId -> [String] -> [Exp]
+parse gfcc cat ws = [t | t <- gen, s <- lins t, words s == ws] where 
+  gen    = take 1024 $ generate gfcc cat
+  lins t = [linearize gfcc lang t | lang <- cncnames gfcc]
