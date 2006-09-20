@@ -67,4 +67,9 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
     en2,ea2,eext : Bool = False   -- indicate if the field exists
     } ;
 
+-- needed for VP conjunction
+  param
+    VPIForm = VPIInf | VPISup ; ---- sup not yet used
+
+
 }

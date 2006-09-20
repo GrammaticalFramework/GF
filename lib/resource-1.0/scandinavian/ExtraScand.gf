@@ -34,9 +34,6 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
     VPI   = {s : VPIForm => Agr => Str} ;
     [VPI] = {s1,s2 : VPIForm => Agr => Str} ;
 
-  param
-    VPIForm = VPIInf | VPISup ; ---- sup not yet used
-
   lin
     BaseVPI = twoTable2 VPIForm Agr ;
     ConsVPI = consrTable2 VPIForm Agr comma ;

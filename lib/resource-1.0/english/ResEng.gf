@@ -424,4 +424,10 @@ resource ResEng = ParamX ** open Prelude in {
               }
       } ;
 
+-- for VP conjunction
+
+  param
+    VPIForm = VPIInf | VPIPPart ;
+
+
 }

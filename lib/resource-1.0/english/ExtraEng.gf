@@ -23,9 +23,6 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     VPI   = {s : VPIForm => Agr => Str} ;
     [VPI] = {s1,s2 : VPIForm => Agr => Str} ;
 
-  param
-    VPIForm = VPIInf | VPIPPart ;
-
   lin
     BaseVPI = twoTable2 VPIForm Agr ;
     ConsVPI = consrTable2 VPIForm Agr comma ;
