@@ -26,7 +26,8 @@ module GF.UseGrammar.Treebank (
   lookupTreebank,
   assocsTreebank,
   isWordInTreebank,
-  printAssoc
+  printAssoc,
+  mkCompactTreebank
   ) where
 
 import GF.Compile.ShellState 
@@ -47,6 +48,7 @@ import GF.Infra.UseIO
 import qualified GF.Grammar.Abstract as A
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.List as L
 import Control.Monad (liftM)
 
 -- Generate a treebank with a multilingual grammar. AR 8/2/2006
@@ -91,8 +93,10 @@ uni2multiTreebank la tb =
 
 -- builds a treebank where trees are the keys, and writes a file (opt. XML)
 mkMultiTreebank :: Options -> ShellState -> String -> [A.Tree] -> Res
-mkMultiTreebank opts sh com trees = putInXML opts "treebank" comm (concatMap mkItem tris)
- where
+mkMultiTreebank opts sh com trees 
+  | oElem (iOpt "compact") opts = mkCompactTreebank opts sh trees
+mkMultiTreebank opts sh com trees = 
+ putInXML opts "treebank" comm (concatMap mkItem tris) where
    mkItem(t,i)= putInXML opts "item" (cat i)  (mkTree t ++ concatMap (mkLin t) langs)
 --   mkItem(t,i)= putInXML opts "item" (cat i)  (mkTree t >>mapM_ (mkLin t) langs)
    mkTree t   = putInXML opts "tree" []       (puts $ showTree t)
@@ -196,6 +200,29 @@ putInXML opts tag attrs io =
 
 tagXML :: String -> String
 tagXML s = "<" ++ s ++ ">"
+
+-- print the treebank in a compact format:
+-- first a sorted list of all words, referrable by index
+-- then the linearization of each tree, as sequences of word indices
+-- this format is usable in embedded translation systems.
+
+mkCompactTreebank :: Options -> ShellState -> [A.Tree] -> [String]
+mkCompactTreebank opts sh = printCompactTreebank . mkJustMultiTreebank opts sh
+
+printCompactTreebank :: MultiTreebank -> [String]
+printCompactTreebank tb = (unwords ws : "\n" : map lins tb) where
+  ws = L.sort $ L.nub $ concat $ map (concatMap (words . snd) . snd) tb
+  lins (_,ls) = unlines [unwords (map encode (words ws)) | (_,ws) <- ls]
+  encode w = maybe undefined id $ M.lookup w wmap
+  wmap = M.fromAscList $ zip ws (map show [0..])
+
+-- [(String,[(String,String)])]       -- tree,lang,lin
+mkJustMultiTreebank :: Options -> ShellState -> [A.Tree] -> MultiTreebank
+mkJustMultiTreebank opts sh ts = 
+    [(prt_ t, [(la, lin la t) | la <- langs]) | t <- ts] where
+  langs = map prt_ $ allLanguages sh
+  lin = linearize opts sh
+
 
 --- these handy functions are borrowed from EmbedAPI
 
