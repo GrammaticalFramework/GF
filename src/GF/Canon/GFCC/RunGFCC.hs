@@ -33,6 +33,10 @@ treat grammar s = case words s of
   "gr":cat:n:_ -> do
     gen <- newStdGen
     mapM_ prlins $ take (read n) $ generateRandom gen grammar (CId cat)
+  "p":cat:ws -> do
+    case parse grammar (CId cat) ws of
+      t:_ -> prlins t
+      _ -> putStrLn "no parse found" 
   _ -> lins $ readExp s
  where
   lins t = mapM_ (lin t) $ cncnames grammar
