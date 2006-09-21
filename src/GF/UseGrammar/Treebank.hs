@@ -209,17 +209,21 @@ tagXML s = "<" ++ s ++ ">"
 mkCompactTreebank :: Options -> ShellState -> [A.Tree] -> [String]
 mkCompactTreebank opts sh = printCompactTreebank . mkJustMultiTreebank opts sh
 
-printCompactTreebank :: MultiTreebank -> [String]
-printCompactTreebank tb = (unwords ws : "\n" : map lins tb) where
+printCompactTreebank :: (MultiTreebank,[String]) -> [String]
+printCompactTreebank (tb,lgs) = (stat:langs:unwords ws : "\n" : linss) where
   ws = L.sort $ L.nub $ concat $ map (concatMap (words . snd) . snd) tb
+  linss = map lins tb
   lins (_,ls) = unlines [unwords (map encode (words ws)) | (_,ws) <- ls]
   encode w = maybe undefined id $ M.lookup w wmap
   wmap = M.fromAscList $ zip ws (map show [0..])
+  stat = unwords $ map show [length ws, length lgs, length tb, smax]
+  langs = unwords lgs
+  smax = maximum [length (words l) | l <- linss]
 
 -- [(String,[(String,String)])]       -- tree,lang,lin
-mkJustMultiTreebank :: Options -> ShellState -> [A.Tree] -> MultiTreebank
+mkJustMultiTreebank :: Options -> ShellState -> [A.Tree] -> (MultiTreebank,[String])
 mkJustMultiTreebank opts sh ts = 
-    [(prt_ t, [(la, lin la t) | la <- langs]) | t <- ts] where
+    ([(prt_ t, [(la, lin la t) | la <- langs]) | t <- ts],langs) where
   langs = map prt_ $ allLanguages sh
   lin = linearize opts sh
 
