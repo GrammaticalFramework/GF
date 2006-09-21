@@ -212,13 +212,16 @@ mkCompactTreebank opts sh = printCompactTreebank . mkJustMultiTreebank opts sh
 printCompactTreebank :: (MultiTreebank,[String]) -> [String]
 printCompactTreebank (tb,lgs) = (stat:langs:unwords ws : "\n" : linss) where
   ws = L.sort $ L.nub $ concat $ map (concatMap (words . snd) . snd) tb
-  linss = map lins tb
-  lins (_,ls) = unlines [unwords (map encode (words ws)) | (_,ws) <- ls]
+
+  linss = map (unwords . pad) linss0
+  linss0 = map (map (show . encode) . words) allExs
+  allExs = concat [[snd (ls !! i) | (_,ls) <- tb] | i <- [0..length lgs - 1]]
   encode w = maybe undefined id $ M.lookup w wmap
-  wmap = M.fromAscList $ zip ws (map show [0..])
+  wmap = M.fromAscList $ zip ws [1..]
   stat = unwords $ map show [length ws, length lgs, length tb, smax]
   langs = unwords lgs
-  smax = maximum [length (words l) | l <- linss]
+  smax = maximum $ map length linss0
+  pad ws = ws ++ replicate (smax - length ws) "0"
 
 -- [(String,[(String,String)])]       -- tree,lang,lin
 mkJustMultiTreebank :: Options -> ShellState -> [A.Tree] -> (MultiTreebank,[String])
