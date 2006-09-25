@@ -197,8 +197,12 @@ paramValues cgr = (labels,untyps,typs) where
 term2term :: CanonGrammar -> ParamEnv -> Term -> Term
 term2term cgr env@(labels,untyps,typs) tr = case tr of
   Par _ _ -> mkValCase tr 
-  R rs -> ---- | any (isStr . trmAss) rs -> 
-    R [Ass (mkLab i) (t2t t) | (i,Ass l t) <- zip [0..] rs, not (isLock l t)]
+  R rs ->
+    let 
+      rs' = [Ass (mkLab i) (t2t t) | (i,Ass l t) <- zip [0..] rs, not (isLock l t)]
+    in if (any (isStr . trmAss) rs)
+      then R rs'
+      else R [Ass (mkLab 0) (valNum tr), Ass (mkLab 1) (R rs')]
   R rs     -> valNum tr
   P t l    -> r2r tr
   T i [Cas p t] -> T i [Cas p (t2t t)]
@@ -223,25 +227,6 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      S p _ -> getLab p
      _ -> Bad "getLab"
 
-   mkLab k = L (IC ("_" ++ show k))
-   valNum tr = maybe (K (KS (A.prt tr +++ prtTrace tr "66667"))) EInt $ 
-     Map.lookup tr untyps
-   isStr tr = case tr of
-     Par _ _ -> False
-     EInt _  -> False
-     R rs    -> any (isStr . trmAss) rs
-     FV ts   -> any isStr ts
-     P t r   -> True      ---- TODO
-     _ -> True
-   isLock l t = case t of --- need not look at l
-     R [] -> True
-     _ -> False
-   trmAss (Ass _ t) = t
-
-   mkValCase tr = case appSTM (doVar tr) [] of
-     Ok (tr', st@(_:_)) -> t2t $ comp $ foldr mkCase tr' st
-     _ -> valNum tr
-
    doVar :: Term -> STM [((CType,[Term]),(Term,Term))] Term
    doVar tr = case getLab tr of
      Ok (cat, lab) -> do
@@ -257,14 +242,34 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
        return tr'
      _ -> composOp doVar tr
 
-   --- this is mainly needed for parameter record projections
-   comp t = errVal t $ Look.ccompute cgr [] t
+   mkValCase tr = case appSTM (doVar tr) [] of
+     Ok (tr', st@(_:_)) -> t2t $ comp $ foldr mkCase tr' st
+     _ -> valNum tr
 
    mkCase ((ty,vs),(x,p)) tr = 
      S (V ty [mkBranch x v tr | v <- vs]) p
    mkBranch x t tr = case tr of
      _ | tr == x -> t
      _ -> composSafeOp (mkBranch x t) tr     
+
+   mkLab k = L (IC ("_" ++ show k))
+   valNum tr = maybe (K (KS (A.prt tr +++ prtTrace tr "66667"))) EInt $ 
+     Map.lookup tr untyps
+   isStr tr = case tr of
+     Par _ _ -> False
+     EInt _  -> False
+     R rs    -> any (isStr . trmAss) rs
+     FV ts   -> any isStr ts
+     P t r   -> True      ---- TODO
+     _ -> True
+   isLock l t = case t of --- need not look at l
+     R [] -> True
+     _ -> False
+   trmAss (Ass _ t) = t
+
+   --- this is mainly needed for parameter record projections
+   comp t = errVal t $ Look.ccompute cgr [] t
+
 
 
 prtTrace tr n = n ----trace ("-- ERROR" +++ A.prt tr +++ show n +++ show tr) n

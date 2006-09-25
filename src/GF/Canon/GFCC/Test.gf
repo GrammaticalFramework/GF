@@ -5,11 +5,9 @@ cat S ; NP ; N ; VP ;
 fun Pred : NP -> VP -> S ;
 fun Pred2 : NP -> VP -> NP -> S ;
 fun Det, Dets : N -> NP ;
-
 fun Mina, Te : NP ;
 fun Raha, Paska, Pallo : N ;
 fun Puhua, Munia, Sanoa : VP ;
-
 
 param Person = P1 | P2 | P3 ;
 param Number = Sg | Pl ;
@@ -24,7 +22,6 @@ lincat VP = Verb ;
 oper Noun = {s : NForm => Str} ;
 oper Verb = {s : VForm => Str} ;
 
--- {-
 lincat NP = {s : Case => Str ; n : Number ; p : Person} ;
 lin Pred np vp = {s = np.s ! Nom ++ vp.s ! VF np.n np.p} ;
 lin Pred2 np vp ob = {s = np.s ! Nom ++ vp.s ! VF np.n np.p ++ ob.s ! Part} ;
@@ -32,17 +29,17 @@ lin Det  no = {s = \\c => no.s ! NF Sg c ; n = Sg ; p = P3} ;
 lin Dets no = {s = \\c => no.s ! NF Pl c ; n = Pl ; p = P3} ;
 lin Mina = {s = table Case ["minä" ; "minua"] ; n = Sg ; p = P1} ;
 lin Te = {s = table Case ["te" ; "teitä"] ; n = Pl ; p = P2} ;
--- -}
 
-{-
-lincat NP = {s : Case => Str ; a : {n : Number ; p : Person}} ;
-lin Pred np vp = {s = np.s ! Nom ++ vp.s ! VF np.a.n np.a.p} ;
-lin Pred2 np vp ob = {s = np.s ! Nom ++ vp.s ! VF np.a.n np.a.p ++ ob.s ! Part} ;
-lin Det  no = {s = \\c => no.s ! NF Sg c ; a = {n = Sg ; p = P3}} ;
-lin Dets no = {s = \\c => no.s ! NF Pl c ; a = {n = Pl ; p = P3}} ;
-lin Mina = {s = table Case ["minä" ; "minua"] ; a = {n = Sg ; p = P1}} ;
-lin Te = {s = table Case ["te" ; "teitä"] ; a = {n = Pl ; p = P2}} ;
--}
+
+-- for test
+cat NPR ;
+fun PredR : NPR -> VP -> S ;
+fun Sina, Me : NPR ;
+lincat NPR = {s : Case => Str ; a : {n : Number ; p : Person}} ;
+lin PredR np vp = {s = np.s ! Nom ++ vp.s ! VF np.a.n np.a.p} ;
+lin Sina = {s = table Case ["sinä" ; "sinua"] ; a = {n = Sg ; p = P2}} ;
+lin Me = {s = table Case ["me" ; "meitä"] ; a = {n = Pl ; p = P1}} ;
+-- end test
 
 lin Raha  = mkN "raha" ;
 lin Paska = mkN "paska" ;
