@@ -182,7 +182,7 @@ paramValues cgr = (labels,untyps,typs) where
     [(cat,ls) | (_,(cat,CncCat (RecType ls) _ _)) <- jments]
   labels = Map.fromList $ concat 
     [((cat,[lab]),(typ,i)): 
-      [((cat,[lab2,lab]),(ty,j)) | 
+      [((cat,[lab,lab2]),(ty,j)) | 
         rs <- getRec typ, (Lbg lab2 ty,j) <- zip rs [0..]] 
       | 
         (cat,ls) <- lincats, (Lbg lab typ,i) <- zip ls [0..]]
@@ -197,7 +197,7 @@ paramValues cgr = (labels,untyps,typs) where
 term2term :: CanonGrammar -> ParamEnv -> Term -> Term
 term2term cgr env@(labels,untyps,typs) tr = case tr of
   Par _ _ -> mkValCase tr 
-  R rs | any (isStr . trmAss) rs -> 
+  R rs -> ---- | any (isStr . trmAss) rs -> 
     R [Ass (mkLab i) (t2t t) | (i,Ass l t) <- zip [0..] rs, not (isLock l t)]
   R rs     -> valNum tr
   P t l    -> r2r tr
@@ -219,7 +219,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      Arg (A cat _) -> return (cat,[])
      P p lab2 -> do
        (cat,labs) <- getLab p
-       return (cat,lab2:labs) 
+       return (cat,labs++[lab2]) 
      S p _ -> getLab p
      _ -> Bad "getLab"
 
@@ -249,7 +249,8 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
        let tr' = LI $ identC $ show k
        let tyvs = case Map.lookup (cat,lab) labels of
              Just (ty,_) -> case Map.lookup ty typs of
-               Just vs -> (ty,Map.keys vs)
+               Just vs -> (ty,[t | 
+                            (t,_) <- sortBy (\x y -> compare (snd x) (snd y)) (Map.assocs vs)])
                _ -> error $ A.prt ty
              _ -> error $ A.prt tr
        updateSTM ((tyvs, (tr', tr)):) 

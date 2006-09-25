@@ -27,11 +27,11 @@ statGFCC gfcc = unlines [
 
 type Concr = Map CId Term
 
-lookMap :: (Show i, Ord i) => i -> Map i a -> a 
-lookMap c m = maybe (error ("cannot find " ++ show c)) id $ Data.Map.lookup c m
+lookMap :: (Show i, Ord i) => a -> i -> Map i a -> a 
+lookMap d c m = maybe d id $ Data.Map.lookup c m
 
 lookLin :: GFCC -> CId -> CId -> Term
-lookLin mcfg lang fun = lookMap fun $ lookMap lang $ concretes mcfg
+lookLin mcfg lang fun = lookMap term0 fun $ lookMap undefined lang $ concretes mcfg
 
 linearize :: GFCC -> CId -> Exp -> String
 linearize mcfg lang = realize . linExp mcfg lang
@@ -57,6 +57,12 @@ linExp mcfg lang tree@(Tr at trees) =
    comp = compute mcfg lang
    look = lookLin mcfg lang
 
+exp0 :: Exp
+exp0 = Tr (AS "NO_PARSE") []
+
+term0 :: Term
+term0 = kks "UNKNOWN_ID"
+
 kks :: String -> Term
 kks = K . KS
 
@@ -81,7 +87,7 @@ compute mcfg lang args = compg [] where
     W s t -> W s (comp t)
     R ts  -> R $ Prelude.map comp ts
     V i   -> idx args (fromInteger i)  -- already computed
-    S ts  -> S (Prelude.map comp ts)
+    S ts  -> S $ Prelude.filter (/= S []) $ Prelude.map comp ts
     F c   -> comp $ look c  -- global const: not comp'd (if contains argvar)
     FV ts -> FV $ Prelude.map comp ts
     _ -> trm

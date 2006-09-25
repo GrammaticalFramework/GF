@@ -39,9 +39,11 @@ treat grammar s = case words s of
       _ -> putStrLn "no parse found" 
   _ -> lins $ readExp s
  where
-  lins t = mapM_ (lin t) $ cncnames grammar
+  lins t = mapM_ (lint t) $ cncnames grammar
+  lint t lang = do
+    putStrLn $ printTree $ linExp grammar lang t 
+    lin t lang
   lin t lang = do
-    -- putStrLn $ printTree $ linExp grammar lang t 
     putStrLn $ linearize grammar lang t
   prlins t = do
     putStrLn $ printTree t
@@ -54,7 +56,7 @@ file2gfcc f =
   readFile f >>= err (error "no parse") (return . mkGFCC) . pGrammar . myLexer
 
 readExp :: String -> Exp
-readExp = err (error "no parse") id . (pExp . myLexer)
+readExp = errVal exp0 . (pExp . myLexer)
 
 
 {-
