@@ -82,6 +82,8 @@ compute mcfg lang args = compg [] where
         R ss -> case comp $ idx ss (fromInteger i) of
           K (KS u) -> kks (s ++ u)      -- the only case where W occurs
  
+      (R [C _ , R rs], C i) -> comp $ idx rs (fromInteger i)
+      (R rs, R (C i : _)) -> comp $ idx rs (fromInteger i)
       (R rs, C i) -> comp $ idx rs (fromInteger i)
       (r',p') -> P r' p'
     W s t -> W s (comp t)
