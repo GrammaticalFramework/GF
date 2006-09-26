@@ -158,7 +158,7 @@ type ParamEnv =
    Map.Map Term Integer,                    -- untyped terms to values
    Map.Map CType (Map.Map Term Integer))    -- types to their terms to values
 
---- gathers those param types that are actually used in lincats
+--- gathers those param types that are actually used in lincats and in lin terms
 paramValues :: CanonGrammar -> ParamEnv
 paramValues cgr = (labels,untyps,typs) where
   params = [(ty, errVal [] $ Look.allParamValues cgr ty) | ty <- partyps]
@@ -169,11 +169,22 @@ paramValues cgr = (labels,untyps,typs) where
             ] ++ [
              Cn (CIQ m ty) | 
               (m,(ty,ResPar _)) <- jments
+            ] ++ [ty | 
+              (_,(_,CncFun _ _ tr _)) <- jments,
+              ty  <- err (const []) snd $ appSTM (typsFromTrm tr) []
             ]
   typsFrom ty = case ty of
     Table p t  -> typsFrom p ++ typsFrom t
     RecType ls -> ty : concat [typsFrom t | Lbg _ t <- ls]
-    _ -> [ty] 
+    _ -> [ty]
+ 
+  typsFromTrm :: Term -> STM [CType] Term
+  typsFromTrm tr = case tr of
+    V ty ts -> updateSTM (ty:) >> mapM_ typsFromTrm ts >> return tr
+    T ty cs -> updateSTM (ty:) >> mapM_ typsFromTrm [t | Cas _ t <- cs] >> return tr
+    _ -> composOp typsFromTrm tr
+
+
   jments = [(m,j) | (m,mo) <- M.allModMod cgr, j <- tree2list $ M.jments mo]
   typs = Map.fromList [(ci,Map.fromList (zip vs [0..])) | (ci,vs) <- params]
   untyps = Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
@@ -202,7 +213,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
       rs' = [Ass (mkLab i) (t2t t) | (i,Ass l t) <- zip [0..] rs, not (isLock l t)]
     in if (any (isStr . trmAss) rs)
       then R rs'
-      else R [Ass (mkLab 0) (valNum tr), Ass (mkLab 1) (R rs')]
+      else R [Ass (mkLab 0) (mkValCase tr), Ass (mkLab 1) (R rs')]
   P t l    -> r2r tr
   T i [Cas p t] -> T i [Cas p (t2t t)]
   T _ _    -> case expandLinTables cgr tr of  -- to normalize the order of cases
@@ -260,9 +271,15 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
       tryPerm tr = case tr of
         R rs -> case [v | Just v <- [Map.lookup (R rs') untyps | rs' <- permutations rs]] of
 	  v:_ -> EInt v
-          _ -> report
-        _ -> report
-      report = K (KS (A.prt tr +++ prtTrace tr "66667"))
+          _ -> valNumFV $ tryVar tr
+        _ -> valNumFV $ tryVar tr
+      tryVar tr = case tr of
+        Par c ts -> [Par c ts' | ts' <- combinations (map tryVar ts)]
+        FV ts -> ts
+        _ -> [tr]
+      valNumFV ts = case ts of
+        [tr] -> K (KS (A.prt tr +++ prtTrace tr "66667"))
+        _ -> FV $ map valNum ts
       permutations xx = case xx of
         [] -> [[]]
         _  -> [x:xs | x <- xx, xs <- permutations (xx \\ [x])]
