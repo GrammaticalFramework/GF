@@ -78,6 +78,8 @@ compute mcfg lang args = compg [] where
     P r p -> case (comp r, comp p) of 
 
     -- for the suffix optimization
+      (W s t, R (C i : _)) -> comp $ P (W s t) (C i)
+
       (W s t, C i) -> case comp t of
         R ss -> case comp $ idx ss (fromInteger i) of
           K (KS u) -> kks (s ++ u)      -- the only case where W occurs

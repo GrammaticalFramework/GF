@@ -29,9 +29,9 @@ A.   Term     ::= "(" CId "->" Term ")" ;   -- lambda abstraction (compressed ta
 FV.  Term     ::= "[|" [Term] "|]" ;        -- free variation
 W.   Term     ::= "(" String "+" Term ")" ; -- prefix + suffix table
 
-KS.  Tokn  ::= String ;
-KP.  Tokn  ::= "[" "pre" [String] "[" [Variant] "]" "]" ;
-Var. Variant ::= [String] "/" [String] ;
+KS.  Tokn     ::= String ;
+KP.  Tokn     ::= "[" "pre" [String] "[" [Variant] "]" "]" ;
+Var. Variant  ::= [String] "/" [String] ;
 
 
 terminator Concrete ";" ;
