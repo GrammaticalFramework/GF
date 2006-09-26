@@ -30,7 +30,7 @@ concrete RelativeGer of Relative = CatGer ** open ResGer in {
 
     FunRP p np rp = {
       s = \\gn,c => np.s ! c ++ appPrep p (rp.s ! gn) ;
-      a = RAg np.a
+      a = RAg {n = np.a.n ; p = np.a.p}
       } ;
 
     IdRP = {s = relPron ; a = RNoAg} ;

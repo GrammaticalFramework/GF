@@ -28,7 +28,7 @@ import GF.Canon.MkGFC
 import GF.Canon.CMacros
 import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
-import GF.UseGrammar.Linear (unoptimizeCanon)
+import GF.UseGrammar.Linear (expandLinTables, unoptimizeCanon)
 
 import GF.Infra.Ident
 import GF.Data.Operations
@@ -203,10 +203,11 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
     in if (any (isStr . trmAss) rs)
       then R rs'
       else R [Ass (mkLab 0) (valNum tr), Ass (mkLab 1) (R rs')]
-  R rs     -> valNum tr
   P t l    -> r2r tr
   T i [Cas p t] -> T i [Cas p (t2t t)]
-  T ty cs  -> V ty [t2t t | Cas _ t <- cs]
+  T _ _    -> case expandLinTables cgr tr of  -- to normalize the order of cases
+    Ok (T ty cs) -> V ty [t2t t | Cas _ t <- cs]
+    _ -> K (KS (A.prt tr +++ prtTrace tr "66668"))
   V ty ts  -> V ty [t2t t | t <- ts]
   S t p    -> S (t2t t) (t2t p)
   _ -> composSafeOp t2t tr
@@ -253,8 +254,18 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      _ -> composSafeOp (mkBranch x t) tr     
 
    mkLab k = L (IC ("_" ++ show k))
-   valNum tr = maybe (K (KS (A.prt tr +++ prtTrace tr "66667"))) EInt $ 
-     Map.lookup tr untyps
+   valNum tr = maybe (tryPerm tr) EInt $ Map.lookup tr untyps
+    --- a hack needed because GFCC does not guarantee canonical order of param records
+    where
+      tryPerm tr = case tr of
+        R rs -> case [v | Just v <- [Map.lookup (R rs') untyps | rs' <- permutations rs]] of
+	  v:_ -> EInt v
+          _ -> report
+        _ -> report
+      report = K (KS (A.prt tr +++ prtTrace tr "66667"))
+      permutations xx = case xx of
+        [] -> [[]]
+        _  -> [x:xs | x <- xx, xs <- permutations (xx \\ [x])]
    isStr tr = case tr of
      Par _ _ -> False
      EInt _  -> False
