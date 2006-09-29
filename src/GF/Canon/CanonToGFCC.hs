@@ -252,6 +252,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      Ok (cat, lab) -> do
        k <- readSTM >>= return . length
        let tr' = LI $ identC $ show k
+
        let tyvs = case Map.lookup (cat,lab) labels of
              Just (ty,_) -> case Map.lookup ty typs of
                Just vs -> (ty,[t | 
@@ -260,6 +261,19 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
                _ -> error $ A.prt ty
              _ -> error $ A.prt tr
        updateSTM ((tyvs, (tr', tr)):) 
+
+{-
+       case Map.lookup (cat,lab) labels of
+         Just (ty,_) -> case Map.lookup ty typs of
+           Just vs -> do
+             let tyvs = (ty,[t | 
+                            (t,_) <- sortBy (\x y -> compare (snd x) (snd y)) 
+                                            (Map.assocs vs)])
+             updateSTM ((tyvs, (tr', tr)):) 
+           _ -> return ()
+         _ -> return ()
+-}
+
        return tr'
      _ -> composOp doVar tr
 
@@ -280,7 +294,8 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
     --- complexity could be lowered by sorting the records
     where
       tryPerm tr = case tr of
-        R rs -> case [v | Just v <- [Map.lookup (R rs') untyps | rs' <- permutations rs]] of
+        R rs -> case [v | Just v <- 
+                       [Map.lookup (R rs') untyps | rs' <- permutations rs]] of
 	  v:_ -> EInt v
           _ -> valNumFV $ tryVar tr
         _ -> valNumFV $ tryVar tr
@@ -299,13 +314,16 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      EInt _  -> False
      R rs    -> any (isStr . trmAss) rs
      FV ts   -> any isStr ts
+     S t _   -> isStr t
+     E       -> True
+     T _ cs  -> any isStr [v | Cas _ v <- cs]
      P t r   -> case getLab tr of
        Ok (cat,labs) -> case 
           Map.lookup (cat,labs) labels of
             Just (ty,_) -> isStrType ty 
             _ -> True ---- TODO?
        _ -> True
-     _ -> True
+     _ -> True ----
    isStrType ty = case ty of
      TStr -> True
      RecType ts -> any isStrType [t | Lbg _ t <- ts]
