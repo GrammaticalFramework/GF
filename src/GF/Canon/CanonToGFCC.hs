@@ -75,20 +75,21 @@ mkTerm :: Term -> C.Term
 mkTerm tr = case tr of
   Arg (A _ i) -> C.V i
   EInt i      -> C.C i
+  -- record parameter alias - created in gfc preprocessing
+  R [Ass (L (IC "_")) i, Ass (L (IC "__")) t] -> C.RP (mkTerm i) (mkTerm t)
+  -- ordinary record
   R rs     -> C.R [mkTerm t | Ass _ t <- rs]
   P t l    -> C.P (mkTerm t) (C.C (mkLab l))
-  T _ [Cas [PV (IC x)] t] -> C.A (C.CId x) (mkTerm t) -- abstraction
-  T _ cs   -> C.R [mkTerm t | Cas _ t <- cs] --- should not appear after values opt
+  T _ cs   -> error $ "improper optimization for gfcc in" +++ A.prt tr
   V _ cs   -> C.R [mkTerm t | t <- cs]
   S t p    -> C.P (mkTerm t) (mkTerm p)
   C s t    -> C.S [mkTerm x | x <- [s,t]]
-  LI(IC x) -> C.L (C.CId x)
   FV ts    -> C.FV [mkTerm t | t <- ts]
   K (KS s) -> C.K (C.KS s)
   K (KP ss _) -> C.K (C.KP ss []) ---- TODO: prefix variants
-  E -> C.S []
-  Par _ _  -> prtTrace tr $ C.C 66661            ---- just for debugging
-  _ -> C.S [C.K (C.KS (A.prt tr +++ "66662"))] ---- just for debugging
+  E        -> C.S []
+  Par _ _  -> prtTrace tr $ C.C 66661          ---- for debugging
+  _ -> C.S [C.K (C.KS (A.prt tr +++ "66662"))] ---- for debugging
  where
    mkLab (L (IC l)) = case l of
      '_':ds -> (read ds) :: Integer
@@ -210,20 +211,27 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
   Par _ _ -> mkValCase tr 
   R rs ->
     let 
-      rs' = [Ass (mkLab i) (t2t t) | (i,Ass l t) <- zip [0..] rs, not (isLock l t)]
+      rs' = [Ass (mkLab i) (t2t t) | 
+               (i,Ass l t) <- zip [0..] rs, not (isLock l t)]
     in if (any (isStr . trmAss) rs)
       then R rs'
-      else R [Ass (mkLab 0) (mkValCase tr), Ass (mkLab 1) (R rs')]
+      else R [Ass (L (IC "_")) (mkValCase tr), Ass (L (IC "__")) (R rs')]
   P t l    -> r2r tr
-  T i [Cas p t] -> T i [Cas p (t2t t)]
-  T _ _    -> case expandLinTables cgr tr of  -- to normalize the order of cases
-    Ok (T ty cs) -> V ty [t2t t | Cas _ t <- cs]
-    _ -> K (KS (A.prt tr +++ prtTrace tr "66668"))
+  T _ cs0  -> checkCases cs0 $
+    case expandLinTables cgr tr of  -- normalize order of cases
+      Ok (T ty cs) -> V ty [t2t t | Cas _ t <- cs]
+      _ -> K (KS (A.prt tr +++ prtTrace tr "66668"))
   V ty ts  -> V ty [t2t t | t <- ts]
   S t p    -> S (t2t t) (t2t p)
   _ -> composSafeOp t2t tr
  where
    t2t = term2term cgr env
+
+   checkCases cs a = 
+     if null [() | Cas (_:_:_) _ <- cs] -- no share option active
+       then a
+       else error $ "Share optimization illegal for gfcc in" +++ A.prt tr ++++
+         "Recompile with -optimize=(values | none | subs | all_subs)."
 
    r2r tr@(P p _) = case getLab tr of
      Ok (cat,labs) -> P (t2t p) . mkLab $ maybe (prtTrace tr $ 66664) snd $ 
@@ -247,7 +255,8 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
        let tyvs = case Map.lookup (cat,lab) labels of
              Just (ty,_) -> case Map.lookup ty typs of
                Just vs -> (ty,[t | 
-                            (t,_) <- sortBy (\x y -> compare (snd x) (snd y)) (Map.assocs vs)])
+                            (t,_) <- sortBy (\x y -> compare (snd x) (snd y)) 
+                                            (Map.assocs vs)])
                _ -> error $ A.prt ty
              _ -> error $ A.prt tr
        updateSTM ((tyvs, (tr', tr)):) 
@@ -266,7 +275,9 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
 
    mkLab k = L (IC ("_" ++ show k))
    valNum tr = maybe (tryPerm tr) EInt $ Map.lookup tr untyps
-    --- a hack needed because GFCC does not guarantee canonical order of param records
+    --- a hack needed because GFCC does not guarantee 
+    --- canonical order of param records
+    --- complexity could be lowered by sorting the records
     where
       tryPerm tr = case tr of
         R rs -> case [v | Just v <- [Map.lookup (R rs') untyps | rs' <- permutations rs]] of
@@ -288,8 +299,18 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      EInt _  -> False
      R rs    -> any (isStr . trmAss) rs
      FV ts   -> any isStr ts
-     P t r   -> True      ---- TODO
+     P t r   -> case getLab tr of
+       Ok (cat,labs) -> case 
+          Map.lookup (cat,labs) labels of
+            Just (ty,_) -> isStrType ty 
+            _ -> True ---- TODO?
+       _ -> True
      _ -> True
+   isStrType ty = case ty of
+     TStr -> True
+     RecType ts -> any isStrType [t | Lbg _ t <- ts]
+     Table _ t -> isStrType t
+     _ -> False
    isLock l t = case t of --- need not look at l
      R [] -> True
      _ -> False
@@ -307,7 +328,8 @@ prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
 -- suffix analysis followed by common subexpression elimination
 
 optConcrete :: [C.CncDef] -> [C.CncDef]
-optConcrete defs = subex [C.Lin f (optTerm t) | C.Lin f t <- defs]
+optConcrete defs = subex 
+  [C.Lin f (optTerm t) | C.Lin f t <- defs]
 
 -- analyse word form lists into prefix + suffixes
 -- suffix sets can later be shared by subex elim
@@ -317,7 +339,7 @@ optTerm tr = case tr of
     C.R ts@(_:_:_) | all isK ts -> mkSuff $ optToks [s | C.K (C.KS s) <- ts]
     C.R ts  -> C.R $ map optTerm ts
     C.P t v -> C.P (optTerm t) v
-    C.A x t -> C.A x (optTerm t)
+--    C.A x t -> C.A x (optTerm t)
     _ -> tr
  where
   optToks ss = prf : suffs where
@@ -357,7 +379,7 @@ addSubexpConsts tree lins =
        C.S ts  -> C.S $ map (recomp f) ts
        C.W s t -> C.W s (recomp f t)
        C.P t p -> C.P (recomp f t) (recomp f p)
-       C.A x t -> C.A x (recomp f t)
+--       C.A x t -> C.A x (recomp f t)
        _ -> t
    fid n = C.CId $ "_" ++ show n
    list = Map.toList tree
@@ -380,8 +402,8 @@ collectSubterms t = case t of
   C.S ts -> do
     mapM collectSubterms ts
     add t
-  C.A x b -> do
-    collectSubterms b -- t itself can only occur once in a grammar
+--  C.A x b -> do
+--    collectSubterms b -- t itself can only occur once in a grammar
   C.W s u -> do
     collectSubterms u
     add t

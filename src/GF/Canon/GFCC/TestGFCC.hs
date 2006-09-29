@@ -5,16 +5,16 @@ module Main where
 import IO ( stdin, hGetContents )
 import System ( getArgs, getProgName )
 
-import LexGFCC
-import ParGFCC
-import SkelGFCC
-import PrintGFCC
-import AbsGFCC
+import GF.Canon.GFCC.LexGFCC
+import GF.Canon.GFCC.ParGFCC
+import GF.Canon.GFCC.SkelGFCC
+import GF.Canon.GFCC.PrintGFCC
+import GF.Canon.GFCC.AbsGFCC
 
 
 
 
-import ErrM
+import GF.Canon.GFCC.ErrM
 
 type ParseFun a = [Token] -> Err a
 

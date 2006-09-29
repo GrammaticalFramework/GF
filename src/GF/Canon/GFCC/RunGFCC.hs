@@ -5,7 +5,8 @@ import GF.Canon.GFCC.DataGFCC
 import GF.Canon.GFCC.AbsGFCC
 import GF.Canon.GFCC.ParGFCC
 import GF.Canon.GFCC.PrintGFCC
-import GF.Data.Operations
+import GF.Canon.GFCC.ErrM
+--import GF.Data.Operations
 import Data.Map
 import System.Random (newStdGen)
 import System
@@ -56,7 +57,11 @@ file2gfcc f =
   readFile f >>= err (error "no parse") (return . mkGFCC) . pGrammar . myLexer
 
 readExp :: String -> Exp
-readExp = errVal exp0 . (pExp . myLexer)
+readExp = err (const exp0) id . (pExp . myLexer)
+
+err f g ex = case ex of
+  Ok x -> g x
+  Bad s -> f s
 
 
 {-
