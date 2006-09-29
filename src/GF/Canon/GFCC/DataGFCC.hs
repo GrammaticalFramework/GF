@@ -3,6 +3,7 @@ module GF.Canon.GFCC.DataGFCC where
 import GF.Canon.GFCC.AbsGFCC
 import Data.Map
 import Data.List
+import Debug.Trace ----
 
 data GFCC = GFCC {
   absname   :: CId ,
@@ -44,6 +45,8 @@ realize trm = case trm of
   K (KP s _) -> unwords s ---- prefix choice TODO
   W s t    -> s ++ realize t
   FV (t:_) -> realize t
+
+  RP _ r -> realize r
   _ -> "ERROR " ++ show trm ---- debug
 
 linExp :: GFCC -> CId -> Exp -> Term
@@ -76,31 +79,16 @@ compute mcfg lang args = compg [] where
   compg g trm = case trm of
     P r (FV ts) -> FV $ Prelude.map (comp . P r) ts
 
-    -- for the abstraction optimization
---    P (A x t) p -> compg ((x,comp p):g) t 
---    L x   -> maybe (error (show x)) id $ Prelude.lookup x g
-
     P r p -> case (comp r, comp p) of 
 
     -- for the suffix optimization
       (W s t, R (C i : _)) -> comp $ P (W s t) (C i)
-
       (W s t, C i) -> case comp t of
         R ss -> case comp $ idx ss (fromInteger i) of
           K (KS u) -> kks (s ++ u)      -- the only case where W occurs
- 
-    ----TODO: this is only needed because of some GFCC compilation bug
-    --  (R [C _ , R rs], C i) -> comp $ idx rs (fromInteger i)
-      (R rs, R (C i : _)) -> comp $ idx rs (fromInteger i)
 
-    -- parameter record
-      (RP _ (R rs), C i) -> comp $ idx rs (fromInteger i)
-      (R rs, RP t _) -> case comp t of 
-         C i -> comp $ idx rs (fromInteger i)
-	 RP (C i) _  -> comp $ idx rs (fromInteger i) ---- why?
+      (r', p') -> comp $ idx (getFields r') (getIndex (P r' p') p')
 
-      (R rs, C i) -> comp $ idx rs (fromInteger i)
-      (r',p') -> P r' p'
     RP i t -> RP (comp i) (comp t)
     W s t -> W s (comp t)
     R ts  -> R $ Prelude.map comp ts
@@ -117,7 +105,15 @@ compute mcfg lang args = compg [] where
       then K (KS ("ERROR" ++ show xs ++ " !! " ++ show i)) else
       xs !! i 
 
+    getIndex t0 t =  case t of
+      C i -> fromInteger i
+      RP p _ -> getIndex t0 $ p
+      ---- TODO: this is workaround for a compiler bug
+      R (u : _) -> trace (show t ++ " IN\n" ++ show t0) $ getIndex t0 u
 
+    getFields t = case t of
+      R rs -> rs
+      RP _ r -> getFields r
 
 
 {-
