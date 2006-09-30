@@ -214,7 +214,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
       rs' = [Ass (mkLab i) (t2t t) | 
                (i,Ass l t) <- zip [0..] rs, not (isLock l t)]
     in if (any (isStr . trmAss) rs)
-      then R rs'
+      then trace (A.prt tr) $ R rs'
       else R [Ass (L (IC "_")) (mkValCase tr), Ass (L (IC "__")) (R rs')]
   P t l    -> r2r tr
   T _ cs0  -> checkCases cs0 $
@@ -317,6 +317,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      S t _   -> isStr t
      E       -> True
      T _ cs  -> any isStr [v | Cas _ v <- cs]
+     V _ ts  -> any isStr ts
      P t r   -> case getLab tr of
        Ok (cat,labs) -> case 
           Map.lookup (cat,labs) labels of

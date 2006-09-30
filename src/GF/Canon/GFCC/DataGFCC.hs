@@ -71,12 +71,9 @@ term0 = kks "UNKNOWN_ID"
 kks :: String -> Term
 kks = K . KS
 
-
-
-
 compute :: GFCC -> CId -> [Term] -> Term -> Term
-compute mcfg lang args = compg [] where
-  compg g trm = case trm of
+compute mcfg lang args = comp where
+  comp trm = case trm of
     P r (FV ts) -> FV $ Prelude.map (comp . P r) ts
 
     P r p -> case (comp r, comp p) of 
@@ -97,59 +94,23 @@ compute mcfg lang args = compg [] where
     F c   -> comp $ look c  -- global const: not comp'd (if contains argvar)
     FV ts -> FV $ Prelude.map comp ts
     _ -> trm
-   where
-    comp = compg g 
-    look = lookLin mcfg lang
-    idx xs i = 
+  look = lookLin mcfg lang
+  idx xs i = 
       if length xs <= i  ---- debug
       then K (KS ("ERROR" ++ show xs ++ " !! " ++ show i)) else
       xs !! i 
 
-    getIndex t0 t =  case t of
+  getIndex t0 t =  case t of
       C i -> fromInteger i
       RP p _ -> getIndex t0 $ p
+      _ -> error $ "compiler error: index from " ++ show t
       ---- TODO: this is workaround for a compiler bug
-      R (u : _) -> trace (show t ++ " IN\n" ++ show t0) $ getIndex t0 u
+      -- R (u : _) -> trace (show t ++ " IN\n" ++ show t0) $ getIndex t0 u
 
-    getFields t = case t of
+  getFields t = case t of
       R rs -> rs
       RP _ r -> getFields r
-
-
-{-
-
-compute :: GFCC -> CId -> [Term] -> Term -> Term
-compute mcfg lang args = comp where
-  comp trm = case trm of
-    P r (FV ts) -> FV $ Prelude.map (comp . P r) ts
-
-    P r p -> case (comp r, comp p) of 
-
-    -- suffix optimization
-      (W s t, R (C i : _)) -> comp $ P (W s t) (C i)
-      (W s t, C i) -> case comp t of
-        R ss -> case comp $ idx ss (fromInteger i) of
-          K (KS u) -> kks (s ++ u)      -- the only case where W occurs
-    -- parameter record
-      (RP _ (R rs), C i) -> comp $ idx rs (fromInteger i)
-      (R rs, RP i _)     -> comp $ idx rs (fromInteger i)
-    -- normal case
-      (R rs, C i) -> comp $ idx rs (fromInteger i)
-      (r',p') -> P r' p'
-    W s t -> W s (comp t)
-    R ts  -> R $ Prelude.map comp ts
-    RP i t -> RP i $ comp t
-    V i   -> idx args (fromInteger i)  -- already computed
-    S ts  -> S $ Prelude.filter (/= S []) $ Prelude.map comp ts
-    F c   -> comp $ look c  -- global const: not comp'd (if contains argvar)
-    FV ts -> FV $ Prelude.map comp ts
-    _ -> trm
-  look = lookLin mcfg lang
-  idx xs i = 
-    if length xs <= i  ---- debug
-    then K (KS ("ERROR" ++ show xs ++ " !! " ++ show i)) else
-    xs !! i 
--}
+      _ -> error $ "compiler error: fields from " ++ show t
 
 mkGFCC :: Grammar -> GFCC
 mkGFCC (Grm (Hdr a cs) ab@(Abs funs) ccs) = GFCC {
