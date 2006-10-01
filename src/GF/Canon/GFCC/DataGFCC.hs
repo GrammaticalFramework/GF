@@ -97,20 +97,21 @@ compute mcfg lang args = comp where
   look = lookLin mcfg lang
   idx xs i = 
       if length xs <= i  ---- debug
-      then K (KS ("ERROR" ++ show xs ++ " !! " ++ show i)) else
-      xs !! i 
+      then trace ("ERROR in compiler producing " ++ show xs ++ " !! " ++ show i)
+                 (last xs)
+      else xs !! i 
 
   getIndex t0 t =  case t of
       C i -> fromInteger i
       RP p _ -> getIndex t0 $ p
-      _ -> error $ "compiler error: index from " ++ show t
+      _ -> trace ("ERROR in compiler: index from " ++ show t) 0
       ---- TODO: this is workaround for a compiler bug
       -- R (u : _) -> trace (show t ++ " IN\n" ++ show t0) $ getIndex t0 u
 
   getFields t = case t of
       R rs -> rs
       RP _ r -> getFields r
-      _ -> error $ "compiler error: fields from " ++ show t
+      _ -> trace ("ERROR in compiler: fields from " ++ show t) [t]
 
 mkGFCC :: Grammar -> GFCC
 mkGFCC (Grm (Hdr a cs) ab@(Abs funs) ccs) = GFCC {

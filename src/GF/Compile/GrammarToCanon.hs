@@ -31,7 +31,7 @@ import GF.Canon.MkGFC
 import qualified GF.Canon.PrintGFC as P
 
 import Control.Monad
-import Data.List (nub)
+import Data.List (nub,sortBy)
 
 -- compilation of optimized grammars to canonical GF. AR 5/10/2001 -- 12/5/2003
 
@@ -155,6 +155,13 @@ redType = redTerm
 redTerm :: Type -> Err G.Exp
 redTerm t = return $ rtExp t
 
+-- to normalize records and record types
+sortByLabel :: (a -> Label) -> [a] -> [a]
+sortByLabel f = sortBy (\ x y -> compare (f x) (f y))
+
+sortByFst :: Ord a => [(a,b)] -> [(a,b)]
+sortByFst = sortBy (\ x y -> compare (fst x) (fst y))
+
 -- resource
 
 redParam :: Param -> Err G.ParDef
@@ -180,7 +187,7 @@ redCType t = case t of
     let (ls,ts) = unzip lbs
         ls' = map redLabel ls
     ts' <- mapM redCType ts
-    return $ G.RecType $ map (uncurry G.Lbg) $ zip ls' ts'
+    return $ G.RecType $ map (uncurry G.Lbg) $ sortByFst $ zip ls' ts'
   Table p v  -> liftM2 G.Table (redCType p) (redCType v)
   Q m c    -> liftM G.Cn $ redQIdent (m,c)
   QC m c   -> liftM G.Cn $ redQIdent (m,c)
@@ -208,7 +215,7 @@ redCTerm t = case t of
     let (ls,tts) = unzip rs
         ls' = map redLabel ls
     ts <- mapM (redCTerm . snd) tts
-    return $ G.R $ map (uncurry G.Ass) $ zip ls' ts
+    return $ G.R $ map (uncurry G.Ass) $ sortByFst $ zip ls' ts
   RecType [] -> return $ G.R [] --- comes out in parsing
   P tr l -> do
     tr' <- redCTerm tr
@@ -260,7 +267,7 @@ redPatt p = case p of
     let (ls,tts) = unzip rs
         ls' = map redLabel ls
     ts <- mapM redPatt tts
-    return $ G.PR $  map (uncurry G.PAss) $ zip ls' ts
+    return $ G.PR $  map (uncurry G.PAss) $ sortByFst $ zip ls' ts
   PT _ q -> redPatt q
   PInt i -> return $ G.PI i
   PFloat i -> return $ G.PF i
