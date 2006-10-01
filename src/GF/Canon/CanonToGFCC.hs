@@ -176,7 +176,7 @@ paramValues cgr = (labels,untyps,typs) where
             ]
   typsFrom ty = case ty of
     Table p t  -> typsFrom p ++ typsFrom t
-    RecType ls -> ty : concat [typsFrom t | Lbg _ t <- ls]
+    RecType ls -> RecType ls : concat [typsFrom t | Lbg _ t <- ls]
     _ -> [ty]
  
   typsFromTrm :: Term -> STM [CType] Term
@@ -210,11 +210,11 @@ term2term :: CanonGrammar -> ParamEnv -> Term -> Term
 term2term cgr env@(labels,untyps,typs) tr = case tr of
   Par _ _ -> mkValCase tr 
   R rs ->
-    let 
+    let
       rs' = [Ass (mkLab i) (t2t t) | 
-               (i,Ass l t) <- zip [0..] rs, not (isLock l t)]
+               (i,Ass l t) <- zip [0..] rs] ---- , not (isLock l t)]
     in if (any (isStr . trmAss) rs)
-      then trace (A.prt tr) $ R rs'
+      then R rs'
       else R [Ass (L (IC "_")) (mkValCase tr), Ass (L (IC "__")) (R rs')]
   P t l    -> r2r tr
   T _ cs0  -> checkCases cs0 $
@@ -261,19 +261,6 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
                _ -> error $ A.prt ty
              _ -> error $ A.prt tr
        updateSTM ((tyvs, (tr', tr)):) 
-
-{-
-       case Map.lookup (cat,lab) labels of
-         Just (ty,_) -> case Map.lookup ty typs of
-           Just vs -> do
-             let tyvs = (ty,[t | 
-                            (t,_) <- sortBy (\x y -> compare (snd x) (snd y)) 
-                                            (Map.assocs vs)])
-             updateSTM ((tyvs, (tr', tr)):) 
-           _ -> return ()
-         _ -> return ()
--}
-
        return tr'
      _ -> composOp doVar tr
 
@@ -288,15 +275,12 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      _ -> composSafeOp (mkBranch x t) tr     
 
    mkLab k = L (IC ("_" ++ show k))
+
    valNum tr = maybe (tryPerm tr) EInt $ Map.lookup tr untyps
-    --- a hack needed because GFCC does not guarantee 
-    --- canonical order of param records
-    --- complexity could be lowered by sorting the records
     where
       tryPerm tr = case tr of
-        R rs -> case [v | Just v <- 
-                       [Map.lookup (R rs') untyps | rs' <- permutations rs]] of
-	  v:_ -> EInt v
+        R rs -> case Map.lookup (R rs) untyps of
+	  Just v -> EInt v
           _ -> valNumFV $ tryVar tr
         _ -> valNumFV $ tryVar tr
       tryVar tr = case tr of
@@ -306,9 +290,6 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
       valNumFV ts = case ts of
         [tr] -> K (KS (A.prt tr +++ prtTrace tr "66667"))
         _ -> FV $ map valNum ts
-      permutations xx = case xx of
-        [] -> [[]]
-        _  -> [x:xs | x <- xx, xs <- permutations (xx \\ [x])]
    isStr tr = case tr of
      Par _ _ -> False
      EInt _  -> False
@@ -330,13 +311,18 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      RecType ts -> any isStrType [t | Lbg _ t <- ts]
      Table _ t -> isStrType t
      _ -> False
-   isLock l t = case t of --- need not look at l
-     R [] -> True
-     _ -> False
    trmAss (Ass _ t) = t
 
    --- this is mainly needed for parameter record projections
    comp t = errVal t $ Look.ccompute cgr [] t
+
+-- remove lock fields; currently not done
+isLock l t = case t of --- need not look at l
+     R [] -> True
+     _ -> False
+isLockTyp l t = case t of --- need not look at l
+     RecType [] -> True
+     _ -> False
 
 
 
@@ -398,6 +384,7 @@ addSubexpConsts tree lins =
        C.S ts  -> C.S $ map (recomp f) ts
        C.W s t -> C.W s (recomp f t)
        C.P t p -> C.P (recomp f t) (recomp f p)
+       C.RP t p -> C.RP (recomp f t) (recomp f p)
 --       C.A x t -> C.A x (recomp f t)
        _ -> t
    fid n = C.CId $ "_" ++ show n
@@ -418,11 +405,12 @@ collectSubterms t = case t of
   C.R ts -> do
     mapM collectSubterms ts
     add t
+  C.RP u v -> do
+    collectSubterms v
+    add t
   C.S ts -> do
     mapM collectSubterms ts
     add t
---  C.A x b -> do
---    collectSubterms b -- t itself can only occur once in a grammar
   C.W s u -> do
     collectSubterms u
     add t
