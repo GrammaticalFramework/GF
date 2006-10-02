@@ -1,0 +1,76 @@
+The GFCC Grammar Format
+
+GFCC is a low-level format for GF grammars. Its aim is to contain the minimum
+that is needed to process GF grammars at runtime. This minimality has three
+advantages:
+- compact grammar files and run-time objects
+- efficient processing
+- simple definition of interpreters
+
+
+GFCC is aimed to replace GFC as the run-time grammar format. GFC is designed
+to support separate compilation of grammars, to store the results of compiling 
+individual GF modules. But this means it has to contain extra information,
+such as type information, which is only needed in compilation and not at
+run-time. In particular, the pattern matching syntax and semantics of GFC is
+complex and therefore difficult to implement in new platforms.
+
+The main novelties of GFCC compared with GFC can be summarized as follows:
+- a GFCC grammar is multilingual, and consists of a common abstract syntax 
+  together with one concrete syntax per language
+- there are no modules, and therefore no qualified names
+- records and tables are replaced by arrays
+- record projection and table selection are replaced by array indexing
+
+
+
+Here is an example of a GF grammar, consisting of three modules, 
+as translated to GFCC.
+```  
+                                    grammar Ex (Eng Swe);
+
+abstract Ex = {                     abstract {
+  cat 
+    S ; NP ; VP ;
+  fun 
+    Pred : NP -> VP -> S ;            Pred : NP VP -> S = (Pred);
+    She, They : NP ;                  She : -> NP = (She);
+    Sleep : VP ;                      Sleep : -> VP = (Sleep); 
+                                      They : -> NP = (They);
+}                                     } ;
+                                    ;
+concrete Eng of Ex = {              concrete Eng {
+  lincat
+    S  = {s : Str} ;
+    NP = {s : Str ; n : Num} ;
+    VP = {s : Num => Str} ;
+  param
+    Num = Sg | Pl ;
+  lin
+    Pred np vp = {                    Pred = [($0[1], $1[0][$0[0]])] ;
+      s = np.s ++ vp.s ! np.n} ;      
+    She = {s = "she" ; n = Sg} ;      She = [0, "she"];
+    They = {s = "they" ; n = Pl} ;    
+    Sleep = {s = table {              Sleep = [("sleep" + ["s",""])];
+      Sg => "sleeps" ; 
+      Pl => "sleep"                   They = [1, "they"];
+      }                               } ;
+    } ;
+}
+
+concrete Swe of Ex = {              concrete Swe {
+  lincat
+    S  = {s : Str} ;
+    NP = {s : Str} ;
+    VP = {s : Str} ;
+  param
+    Num = Sg | Pl ;
+  lin
+    Pred np vp = {                    Pred = [($0[1], $1[0])];
+      s = np.s ++ vp.s} ;
+    She = {s = "hon"} ;               She = ["hon"];
+    They = {s = "de"} ;               They = ["de"];
+    Sleep = {s = "sover"} ;           Sleep = ["sover"];
+                                      } ;
+}                                   ;
+```
