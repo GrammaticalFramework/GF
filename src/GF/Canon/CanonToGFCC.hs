@@ -9,7 +9,7 @@
 -- > CVS $Author: aarne $
 -- > CVS $Revision: 1.15 $
 --
--- a decompiler. AR 12/6/2003 -- 19/4/2004
+-- GFC to GFCC compiler. AR Aug-Oct 2006
 -----------------------------------------------------------------------------
 
 module GF.Canon.CanonToGFCC (prCanon2gfcc) where
@@ -165,7 +165,7 @@ paramValues cgr = (labels,untyps,typs) where
   params = [(ty, errVal [] $ Look.allParamValues cgr ty) | ty <- partyps]
   partyps = nub $ [ty | 
               (_,(_,CncCat (RecType ls) _ _)) <- jments,
-              ty0 <- [ty | Lbg _ ty <- ls],
+              ty0 <- [ty | Lbg _ ty <- unlockTyp ls],
               ty  <- typsFrom ty0
             ] ++ [
              Cn (CIQ m ty) | 
@@ -176,7 +176,7 @@ paramValues cgr = (labels,untyps,typs) where
             ]
   typsFrom ty = case ty of
     Table p t  -> typsFrom p ++ typsFrom t
-    RecType ls -> RecType ls : concat [typsFrom t | Lbg _ t <- ls]
+    RecType ls -> RecType (unlockTyp ls) : concat [typsFrom t | Lbg _ t <- ls]
     _ -> [ty]
  
   typsFromTrm :: Term -> STM [CType] Term
@@ -191,7 +191,7 @@ paramValues cgr = (labels,untyps,typs) where
   untyps = Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
   lincats = 
     [(IC cat,[Lbg (L (IC "s")) TStr]) | cat <- ["Int", "Float", "String"]] ++
-    [(cat,ls) | (_,(cat,CncCat (RecType ls) _ _)) <- jments]
+    [(cat,(unlockTyp ls)) | (_,(cat,CncCat (RecType ls) _ _)) <- jments]
   labels = Map.fromList $ concat 
     [((cat,[lab]),(typ,i)): 
       [((cat,[lab,lab2]),(ty,j)) | 
@@ -212,7 +212,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
   R rs ->
     let
       rs' = [Ass (mkLab i) (t2t t) | 
-               (i,Ass l t) <- zip [0..] rs] ---- , not (isLock l t)]
+               (i,Ass l t) <- zip [0..] (unlock rs)]
     in if (any (isStr . trmAss) rs)
       then R rs'
       else R [Ass (L (IC "_")) (mkValCase tr), Ass (L (IC "__")) (R rs')]
@@ -233,6 +233,8 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
        else error $ "Share optimization illegal for gfcc in" +++ A.prt tr ++++
          "Recompile with -optimize=(values | none | subs | all_subs)."
 
+   r2r tr@(P (S (V ty ts) v) l) = t2t $ S (V ty [comp (P t l) | t <- ts]) v
+
    r2r tr@(P p _) = case getLab tr of
      Ok (cat,labs) -> P (t2t p) . mkLab $ maybe (prtTrace tr $ 66664) snd $ 
           Map.lookup (cat,labs) labels
@@ -246,6 +248,18 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
        return (cat,labs++[lab2]) 
      S p _ -> getLab p
      _ -> Bad "getLab"
+
+{-
+(table{n:ParamX.Number;p:ParamX.Person}
+  [{fin=\"am\";inf=[]}
+   {fin=\"are\";inf=[]}
+   {fin=\"is\";inf=[]}
+   {fin=\"are\";inf=[]}
+   {fin=\"are\";inf=[]}
+   {fin=\"are\";inf=[]}]  
+ ! (NP@0.a))
+.fin 66665"
+-}
 
    doVar :: Term -> STM [((CType,[Term]),(Term,Term))] Term
    doVar tr = case getLab tr of
@@ -316,14 +330,15 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    --- this is mainly needed for parameter record projections
    comp t = errVal t $ Look.ccompute cgr [] t
 
--- remove lock fields; currently not done
-isLock l t = case t of --- need not look at l
-     R [] -> True
-     _ -> False
-isLockTyp l t = case t of --- need not look at l
-     RecType [] -> True
-     _ -> False
-
+-- remove lock fields; in fact, any empty records and record types
+unlock = filter notlock where
+  notlock (Ass l t) = case t of --- need not look at l
+     R [] -> False
+     _ -> True
+unlockTyp = filter notlock where
+  notlock (Lbg l t) = case t of --- need not look at l
+     RecType [] -> False
+     _ -> True
 
 
 prtTrace tr n = n ----trace ("-- ERROR" +++ A.prt tr +++ show n +++ show tr) n
