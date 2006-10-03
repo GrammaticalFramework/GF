@@ -30,13 +30,18 @@ loop grammar = do
 treat :: GFCC -> String -> IO ()
 treat grammar s = case words s of
   "gt":cat:n:_ -> do
-    mapM_ prlins $ take (read n) $ generate grammar (CId cat)
+    mapM_ prlinonly $ take (read n) $ generate grammar (CId cat)
+  "gtt":cat:n:_ -> do
+    mapM_ prlin $ take (read n) $ generate grammar (CId cat)
   "gr":cat:n:_ -> do
     gen <- newStdGen
-    mapM_ prlins $ take (read n) $ generateRandom gen grammar (CId cat)
-  "p":cat:ws -> do
-    case parse grammar (CId cat) ws of
-      t:_ -> prlins t
+    mapM_ prlinonly $ take (read n) $ generateRandom gen grammar (CId cat)
+  "grt":cat:n:_ -> do
+    gen <- newStdGen
+    mapM_ prlin $ take (read n) $ generateRandom gen grammar (CId cat)
+  "p":cat:n:ws -> do
+    case parse (read n) grammar (CId cat) ws of
+      t:_ -> prlin t
       _ -> putStrLn "no parse found" 
   _ -> lins $ readExp s
  where
@@ -49,6 +54,11 @@ treat grammar s = case words s of
   prlins t = do
     putStrLn $ printTree t
     lins t
+  prlin t = do
+    putStrLn $ printTree t
+    prlinonly t
+  prlinonly t = mapM_ (lin t) $ cncnames grammar
+
 
 --- should be in an API
 
@@ -63,18 +73,3 @@ err f g ex = case ex of
   Ok x -> g x
   Bad s -> f s
 
-
-{-
-treat grammar s = putStrLn $ case comm of
-  ["lin"]        -> unlines $ linearizeAll grammar $ readTree grammar rest 
-  ["lin",lang]   -> linearize grammar lang $ readTree grammar rest 
-  ["parse",cat]  -> unlines $ map showTree $ concat $ parseAll grammar cat rest
-  ["parse",lang,cat] -> unlines $ map showTree $ parse grammar lang cat rest
-  ["langs"]      -> unwords $ languages grammar
-  ["cats"]       -> unwords $ categories grammar
-  ["help"]       -> helpMsg
-  _ -> "command not interpreted: " ++ s
- where
-   (comm,rest) = (words c,drop 1 r) where
-      (c,r) = span (/=':') s
--}
