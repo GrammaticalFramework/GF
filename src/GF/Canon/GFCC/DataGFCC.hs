@@ -78,11 +78,9 @@ compute mcfg lang args = comp where
 
     P r p -> case (comp r, comp p) of 
 
-    -- for the suffix optimization
-      (W s t, R (C i : _)) -> comp $ P (W s t) (C i)
-      (W s t, C i) -> case comp t of
-        R ss -> case comp $ idx ss (fromInteger i) of
-          K (KS u) -> kks (s ++ u)      -- the only case where W occurs
+       -- for the suffix optimization
+      (W s (R ss), p') -> case comp $ idx ss (getIndex p' p') of
+        K (KS u) -> kks (s ++ u)
 
       (r', p') -> comp $ idx (getFields r') (getIndex (P r' p') p')
 
