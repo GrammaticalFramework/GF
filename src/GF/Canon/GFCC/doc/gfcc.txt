@@ -504,8 +504,8 @@ GFCC translation removes unnecessary interface references.
 Here is an example, performed in
 [example/bronzeage ../../../../../examples/bronzeage].
 ```
-  i -src -path=.:prelude:resource-1.0/* -optimize=values BronzeageEng.gf
-  i -src -path=.:prelude:resource-1.0/* -optimize=values BronzeageGer.gf
+  i -src -path=.:prelude:resource-1.0/* -optimize=all_subs BronzeageEng.gf
+  i -src -path=.:prelude:resource-1.0/* -optimize=all_subs BronzeageGer.gf
   strip
   pm -printer=gfcc | wf bronze.gfcc
 ```
@@ -528,7 +528,7 @@ The reference interpreter written in Haskell consists of the following files:
 
   -- hand-written files
   DataGFCC.hs   -- post-parser grammar creation, linearization and evaluation
-  GenGFCC.hs    -- random and exhaustive generation, gen-and-test parsing
+  GenGFCC.hs    -- random and exhaustive generation, generate-and-test parsing
   RunGFCC.hs    -- main function - a simple command interpreter
 ```
 It is included in the
@@ -556,5 +556,23 @@ The available commands are
   until the given number have been generated
 - ``<Tree>``: linearize tree in all languages, also showing full records
 - ``quit``: terminate the system cleanly
+
+
+==Some things to do==
+
+Interpreters in Java and C++.
+
+Parsing via MCFG 
+- the FCFG format can possibly be simplified
+- parser grammars should be saved in files to make interpreters easier
+
+
+File compression of GFCC output.
+
+Syntax editor based on GFCC.
+
+Rewriting of resource libraries in order to exploit the
+word-suffix sharing better (depth-one tables, as in FM).
+
 
 
