@@ -119,6 +119,16 @@ reorder cg = M.MGrammar $
               (i,mo) <- mos, M.isModCnc mo, elem i (M.allExtends cg la),
               finfo <- tree2list (M.jments mo)]
 
+-- one grammar per language - needed for symtab generation
+repartition :: CanonGrammar -> [CanonGrammar]
+repartition cg = [M.partOfGrammar cg (lang,mo) | 
+  let abs = maybe (error "no abstract") id $ M.greatestAbstract cg,
+  let mos = M.allModMod cg,
+  lang <- M.allConcretes cg abs,
+  let mo = errVal 
+       (error ("no module found for " ++ A.prt lang)) $ M.lookupModule cg lang
+  ]
+
 -- convert to UTF8 if not yet converted
 utf8Conv :: CanonGrammar -> CanonGrammar
 utf8Conv = M.MGrammar . map toUTF8 . M.modules where
@@ -136,22 +146,25 @@ utf8Conv = M.MGrammar . map toUTF8 . M.modules where
 -- translate tables and records to arrays, parameters and labels to indices
 
 canon2canon :: CanonGrammar -> CanonGrammar
-canon2canon cg = tr $ M.MGrammar $ map c2c $ M.modules cg where
-  c2c (c,m) = case m of
-    M.ModMod mo@(M.Module _ _ _ _ _ js) ->
-      (c, M.ModMod $ M.replaceJudgements mo $ mapTree j2j js)
-    _ -> (c,m)
-  j2j (f,j) = case j of
-    GFC.CncFun x y tr z -> (f,GFC.CncFun x y (t2t tr) z)
-    _ -> (f,j)
-  t2t = term2term cg pv
-  pv@(labels,untyps,typs) = paramValues cg
-  tr = trace $
-   (unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
+canon2canon = recollect . map cl2cl . repartition where
+  recollect = 
+    M.MGrammar . nubBy (\ (i,_) (j,_) -> i==j) . concatMap M.modules
+  cl2cl cg = tr $ M.MGrammar $ map c2c $ M.modules cg where
+    c2c (c,m) = case m of
+      M.ModMod mo@(M.Module _ _ _ _ _ js) ->
+        (c, M.ModMod $ M.replaceJudgements mo $ mapTree j2j js)
+      _ -> (c,m)
+    j2j (f,j) = case j of
+      GFC.CncFun x y tr z -> (f,GFC.CncFun x y (t2t tr) z)
+      _ -> (f,j)
+    t2t = term2term cg pv
+    pv@(labels,untyps,typs) = paramValues cg
+    tr = trace $
+     (unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
        ((c,l),i) <- Map.toList labels]) ++
-   (unlines [A.prt t +++ "=" +++ show i  | 
+     (unlines [A.prt t +++ "=" +++ show i  | 
        (t,i) <- Map.toList untyps]) ++
-   (unlines [A.prt t | 
+     (unlines [A.prt t | 
        (t,_) <- Map.toList typs])
 
 type ParamEnv =

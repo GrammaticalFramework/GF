@@ -1,0 +1,721 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE>The GFCC Grammar Format</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>The GFCC Grammar Format</H1>
+<FONT SIZE="4">
+<I>Aarne Ranta</I><BR>
+October 3, 2006
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+    <UL>
+    <LI><A HREF="#toc1">What is GFCC</A>
+    <LI><A HREF="#toc2">GFCC vs. GFC</A>
+    <LI><A HREF="#toc3">The syntax of GFCC files</A>
+      <UL>
+      <LI><A HREF="#toc4">Top level</A>
+      <LI><A HREF="#toc5">Abstract syntax</A>
+      <LI><A HREF="#toc6">Concrete syntax</A>
+      </UL>
+    <LI><A HREF="#toc7">The semantics of concrete syntax terms</A>
+      <UL>
+      <LI><A HREF="#toc8">Linearization and realization</A>
+      <LI><A HREF="#toc9">Term evaluation</A>
+      <LI><A HREF="#toc10">The special term constructors</A>
+      </UL>
+    <LI><A HREF="#toc11">Compiling to GFCC</A>
+      <UL>
+      <LI><A HREF="#toc12">Problems in GFCC compilation</A>
+      <LI><A HREF="#toc13">Running the compiler and the GFCC interpreter</A>
+      </UL>
+    <LI><A HREF="#toc14">The reference interpreter</A>
+    <LI><A HREF="#toc15">Some things to do</A>
+    </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+Author's address:
+<A HREF="http://www.cs.chalmers.se/~aarne"><CODE>http://www.cs.chalmers.se/~aarne</CODE></A>
+</P>
+<A NAME="toc1"></A>
+<H2>What is GFCC</H2>
+<P>
+GFCC is a low-level format for GF grammars. Its aim is to contain the minimum
+that is needed to process GF grammars at runtime. This minimality has three
+advantages:
+</P>
+<UL>
+<LI>compact grammar files and run-time objects
+<LI>time and space efficient processing
+<LI>simple definition of interpreters
+</UL>
+
+<P>
+The idea is that all embedded GF applications are compiled to GFCC.
+The GF system would be primarily used as a compiler and as a grammar
+development tool.
+</P>
+<P>
+Since GFCC is implemented in BNFC, a parser of the format is readily
+available for C, C++, Haskell, Java, and OCaml. Also an XML 
+representation is generated in BNFC. A 
+<A HREF="../">reference implementation</A>
+of linearization and some other functions has been written in Haskell.
+</P>
+<A NAME="toc2"></A>
+<H2>GFCC vs. GFC</H2>
+<P>
+GFCC is aimed to replace GFC as the run-time grammar format. GFC was designed
+to be a run-time format, but also to
+support separate compilation of grammars, i.e.
+to store the results of compiling 
+individual GF modules. But this means that GFC has to contain extra information,
+such as type annotations, which is only needed in compilation and not at
+run-time. In particular, the pattern matching syntax and semantics of GFC is
+complex and therefore difficult to implement in new platforms.
+</P>
+<P>
+The main differences of GFCC compared with GFC can be summarized as follows:
+</P>
+<UL>
+<LI>there are no modules, and therefore no qualified names
+<LI>a GFCC grammar is multilingual, and consists of a common abstract syntax 
+  together with one concrete syntax per language
+<LI>records and tables are replaced by arrays
+<LI>record labels and parameter values are replaced by integers
+<LI>record projection and table selection are replaced by array indexing
+<LI>there is (so far) no support for dependent types or higher-order abstract
+  syntax (which would be easy to add, but make interpreters much more difficult
+  to write)
+</UL>
+
+<P>
+Here is an example of a GF grammar, consisting of three modules, 
+as translated to GFCC. The representations are aligned, with the exceptions
+due to the alphabetical sorting of GFCC grammars.
+</P>
+<PRE>
+                                      grammar Ex (Eng Swe);
+  
+  abstract Ex = {                     abstract {
+    cat 
+      S ; NP ; VP ;
+    fun 
+      Pred : NP -&gt; VP -&gt; S ;            Pred : NP VP -&gt; S = (Pred);
+      She, They : NP ;                  She : -&gt; NP = (She);
+      Sleep : VP ;                      Sleep : -&gt; VP = (Sleep); 
+                                        They : -&gt; NP = (They);
+  }                                     } ;
+                                      ;
+  concrete Eng of Ex = {              concrete Eng {
+    lincat
+      S  = {s : Str} ;
+      NP = {s : Str ; n : Num} ;
+      VP = {s : Num =&gt; Str} ;
+    param
+      Num = Sg | Pl ;
+    lin
+      Pred np vp = {                    Pred = [($0[1], $1[0][$0[0]])] ;
+        s = np.s ++ vp.s ! np.n} ;      
+      She = {s = "she" ; n = Sg} ;      She = [0, "she"];
+      They = {s = "they" ; n = Pl} ;    
+      Sleep = {s = table {              Sleep = [("sleep" + ["s",""])];
+        Sg =&gt; "sleeps" ; 
+        Pl =&gt; "sleep"                   They = [1, "they"];
+        }                               } ;
+      } ;
+  }
+  
+  concrete Swe of Ex = {              concrete Swe {
+    lincat
+      S  = {s : Str} ;
+      NP = {s : Str} ;
+      VP = {s : Str} ;
+    param
+      Num = Sg | Pl ;
+    lin
+      Pred np vp = {                    Pred = [($0[1], $1[0])];
+        s = np.s ++ vp.s} ;
+      She = {s = "hon"} ;               She = ["hon"];
+      They = {s = "de"} ;               They = ["de"];
+      Sleep = {s = "sover"} ;           Sleep = ["sover"];
+                                        } ;
+  }                                   ;
+</PRE>
+<P></P>
+<A NAME="toc3"></A>
+<H2>The syntax of GFCC files</H2>
+<A NAME="toc4"></A>
+<H3>Top level</H3>
+<P>
+A grammar has a header telling the name of the abstract syntax
+(often specifying an application domain), and the names of
+the concrete languages. The abstract syntax and the concrete
+syntaxes themselves follow.
+</P>
+<PRE>
+    Grammar  ::= Header ";" Abstract ";" [Concrete] ";" ;
+    Header   ::= "grammar" CId "(" [CId] ")" ;
+    Abstract ::= "abstract" "{" [AbsDef] "}" ";" ;
+    Concrete ::= "concrete" CId "{" [CncDef] "}" ;
+</PRE>
+<P>
+Abstract syntax judgements give typings and semantic definitions.
+Concrete syntax judgements give linearizations.
+</P>
+<PRE>
+    AbsDef   ::= CId ":" Type "=" Exp ;
+    CncDef   ::= CId "=" Term ;
+</PRE>
+<P>
+Also flags are possible, local to each "module" (i.e. abstract and concretes).
+</P>
+<PRE>
+    AbsDef   ::= "%" CId "=" String ;
+    CncDef   ::= "%" CId "=" String ;
+</PRE>
+<P>
+For the run-time system, the reference implementation in Haskell
+uses a structure that gives efficient look-up:
+</P>
+<PRE>
+    data GFCC = GFCC {
+      absname   :: CId ,
+      cncnames  :: [CId] ,
+      abstract  :: Abstr ,
+      concretes :: Map CId Concr
+      }
+  
+    data Abstr = Abstr {
+      funs :: Map CId Type,   -- find the type of a fun
+      cats :: Map CId [CId]   -- find the funs giving a cat
+      }
+  
+    type Concr = Map CId Term
+</PRE>
+<P></P>
+<A NAME="toc5"></A>
+<H3>Abstract syntax</H3>
+<P>
+Types are first-order function types built from
+category symbols. Syntax trees (<CODE>Exp</CODE>) are
+rose trees with the head (<CODE>Atom</CODE>) either a function
+constant, a metavariable, or a string, integer, or float
+literal.
+</P>
+<PRE>
+    Type     ::= [CId] "-&gt;" CId ;
+    Exp      ::= "(" Atom [Exp] ")" ;
+    Atom     ::= CId ;        -- function constant
+    Atom     ::= "?" ;        -- metavariable
+    Atom     ::= String ;     -- string literal
+    Atom     ::= Integer ;    -- integer literal
+    Atom     ::= Double ;     -- float literal
+</PRE>
+<P></P>
+<A NAME="toc6"></A>
+<H3>Concrete syntax</H3>
+<P>
+Linearization terms (<CODE>Term</CODE>) are built as follows.
+</P>
+<PRE>
+    Term     ::= "[" [Term] "]" ;          -- array
+    Term     ::= Term "[" Term "]" ;       -- access to indexed field
+    Term     ::= "(" [Term] ")" ;          -- sequence with ++
+    Term     ::= Tokn ;                    -- token
+    Term     ::= "$" Integer ;             -- argument subtree
+    Term     ::= Integer ;                 -- array index
+    Term     ::= "[|" [Term] "|]" ;        -- free variation
+</PRE>
+<P>
+Tokens are strings or (maybe obsolescent) prefix-dependent
+variant lists.
+</P>
+<PRE>
+    Tokn     ::= String ;
+    Tokn     ::= "[" "pre" [String] "[" [Variant] "]" "]" ;
+    Variant  ::= [String] "/" [String] ;
+</PRE>
+<P>
+Three special forms of terms are introduced by the compiler
+as optimizations. They can in principle be eliminated, but
+their presence makes grammars much more compact. Their semantics
+will be explained in a later section.
+</P>
+<PRE>
+    Term     ::= CId ;                     -- global constant
+    Term     ::= "(" String "+" Term ")" ; -- prefix + suffix table
+    Term     ::= "(" Term "@" Term ")";    -- record parameter alias
+</PRE>
+<P>
+Identifiers are like <CODE>Ident</CODE> in GF and GFC, except that
+the compiler produces constants prefixed with <CODE>_</CODE> in
+the common subterm elimination optimization.
+</P>
+<PRE>
+    token CId (('_' | letter) (letter | digit | '\'' | '_')*) ;
+</PRE>
+<P></P>
+<A NAME="toc7"></A>
+<H2>The semantics of concrete syntax terms</H2>
+<A NAME="toc8"></A>
+<H3>Linearization and realization</H3>
+<P>
+The linearization algorithm is essentially the same as in
+GFC: a tree is linearized by evaluating its linearization term
+in the environment of the linearizations of the subtrees.
+Literal atoms are linearized in the obvious way.
+The function also needs to know the language (i.e. concrete syntax)
+in which linearization is performed.
+</P>
+<PRE>
+    linExp :: GFCC -&gt; CId -&gt; Exp -&gt; Term
+    linExp mcfg lang tree@(Tr at trees) = case at of
+      AC fun -&gt; comp (Prelude.map lin trees) $ look fun
+      AS s   -&gt; R [kks (show s)] -- quoted
+      AI i   -&gt; R [kks (show i)]
+      AF d   -&gt; R [kks (show d)]
+      AM     -&gt; R [kks "?"]      ---- TODO: proper lincat
+     where
+       lin  = linExp mcfg lang
+       comp = compute mcfg lang
+       look = lookLin mcfg lang
+</PRE>
+<P>
+The result of linearization is usually a record, which is realized as
+a string using the following algorithm.
+</P>
+<PRE>
+    realize :: Term -&gt; String
+    realize trm = case trm of
+      R (t:_)  -&gt; realize t
+      S ss     -&gt; unwords $ Prelude.map realize ss
+      K (KS s) -&gt; s
+      K (KP s _) -&gt; unwords s ---- prefix choice TODO
+      W s t    -&gt; s ++ realize t
+      FV (t:_) -&gt; realize t
+</PRE>
+<P>
+Since the order of record fields is not necessarily
+the same as in GF source,
+this realization does not work securely for
+categories whose lincats more than one field.
+</P>
+<A NAME="toc9"></A>
+<H3>Term evaluation</H3>
+<P>
+Evaluation follows call-by-value order, with two environments
+needed:
+</P>
+<UL>
+<LI>the grammar (a concrete syntax) to give the global constants
+<LI>an array of terms to give the subtree linearizations
+</UL>
+
+<P>
+The code is cleaned from debugging information present in the working
+version.
+</P>
+<PRE>
+    compute :: GFCC -&gt; CId -&gt; [Term] -&gt; Term -&gt; Term
+    compute mcfg lang args = comp where
+      comp trm = case trm of
+        P r (FV ts) -&gt; FV $ Prelude.map (comp . P r) ts
+  
+        P r p -&gt; case (comp r, comp p) of 
+  
+          -- for the suffix optimization
+          (W s (R ss), p') -&gt; case comp $ idx ss (getIndex p') of
+            K (KS u) -&gt; kks (s ++ u)
+  
+          (r', p') -&gt; comp $ (getFields r') !! (getIndex p')
+  
+        RP i t -&gt; RP (comp i) (comp t)
+        W s t -&gt; W s (comp t)
+        R ts  -&gt; R $ Prelude.map comp ts
+        V i   -&gt; args !! (fromInteger i)    -- already computed
+        S ts  -&gt; S $ Prelude.filter (/= S []) $ Prelude.map comp ts
+        F c   -&gt; comp $ lookLin mcfg lang   -- not yet computed
+        FV ts -&gt; FV $ Prelude.map comp ts
+        _ -&gt; trm
+  
+      getIndex t =  case t of
+        C i -&gt; fromInteger i
+        RP p _ -&gt; getIndex p
+  
+      getFields t = case t of
+        R rs -&gt; rs
+        RP _ r -&gt; getFields r
+</PRE>
+<P></P>
+<A NAME="toc10"></A>
+<H3>The special term constructors</H3>
+<P>
+The three forms introduced by the compiler may a need special
+explanation.
+</P>
+<P>
+Global constants
+</P>
+<PRE>
+    Term     ::= CId ;
+</PRE>
+<P>
+are shorthands for complex terms. They are produced by the
+compiler by (iterated) common subexpression elimination.
+They are often more powerful than hand-devised code sharing in the source
+code. They could be computed off-line by replacing each identifier by 
+its definition.
+</P>
+<P>
+Prefix-suffix tables 
+</P>
+<PRE>
+    Term     ::= "(" String "+" Term ")" ; 
+</PRE>
+<P>
+represent tables of word forms divided to the longest common prefix
+and its array of suffixes. In the example grammar above, we have
+</P>
+<PRE>
+    Sleep = [("sleep" + ["s",""])]
+</PRE>
+<P>
+which in fact is equal to the array of full forms
+</P>
+<PRE>
+    ["sleeps", "sleep"]
+</PRE>
+<P>
+The power of this construction comes from the fact that suffix sets
+tend to be repeated in a language, and can therefore be collected
+by common subexpression elimination. It is this technique that
+explains the used syntax rather than the more accurate
+</P>
+<PRE>
+    "(" String "+" [String] ")"
+</PRE>
+<P>
+since we want the suffix part to be a <CODE>Term</CODE> for the optimization to
+take effect.
+</P>
+<P>
+The most curious construct of GFCC is the parameter array alias, 
+</P>
+<PRE>
+    Term     ::= "(" Term "@" Term ")";
+</PRE>
+<P>
+This form is used as the value of parameter records, such as the type
+</P>
+<PRE>
+    {n : Number ; p : Person}
+</PRE>
+<P>
+The problem with parameter records is their double role.
+They can be used like parameter values, as indices in selection,
+</P>
+<PRE>
+    VP.s ! {n = Sg ; p = P3}
+</PRE>
+<P>
+but also as records, from which parameters can be projected:
+</P>
+<PRE>
+    {n = Sg ; p = P3}.n
+</PRE>
+<P>
+Whichever use is selected as primary, a prohibitively complex
+case expression must be generated at compilation to GFCC to get the
+other use. The adopted
+solution is to generate a pair containing both a parameter value index 
+and an array of indices of record fields. For instance, if we have
+</P>
+<PRE>
+    param Number = Sg | Pl ; Person = P1 | P2 | P3 ;
+</PRE>
+<P>
+we get the encoding
+</P>
+<PRE>
+    {n = Sg ; p = P3}  ---&gt; (2 @ [0,2])
+</PRE>
+<P>
+The GFCC computation rules are essentially
+</P>
+<PRE>
+    t [(i @ r)]  = t[i]
+    (i @ r) [j]  = r[j]
+</PRE>
+<P></P>
+<A NAME="toc11"></A>
+<H2>Compiling to GFCC</H2>
+<P>
+Compilation to GFCC is performed by the GF grammar compiler, and
+GFCC interpreters need not know what it does. For grammar writers,
+however, it might be interesting to know what happens to the grammars
+in the process.
+</P>
+<P>
+The compilation phases are the following
+</P>
+<OL>
+<LI>translate GF source to GFC, as always in GF
+<LI>undo GFC back-end optimizations
+<LI>perform the <CODE>values</CODE> optimization to normalize tables
+<LI>create a symbol table mapping the GFC parameter and record types to
+  fixed-size arrays, and parameter values and record labels to integers
+<LI>traverse the linearization rules replacing parameters and labels by integers
+<LI>reorganize the created GFC grammar so that it has just one abstract syntax
+  and one concrete syntax per language
+<LI>apply UTF8 encoding to the grammar, if not yet applied (this is told by the
+  <CODE>coding</CODE> flag)
+<LI>translate the GFC syntax tree to a GFCC syntax tree, using a simple
+  compositional mapping
+<LI>perform the word-suffix optimization on GFCC linearization terms
+<LI>perform subexpression elimination on each concrete syntax module
+<LI>print out the GFCC code
+</OL>
+
+<P>
+Notice that a major part of the compilation is done within GFC, so that
+GFC-related tasks (such as parser generation) could be performed by
+using the old algorithms.
+</P>
+<A NAME="toc12"></A>
+<H3>Problems in GFCC compilation</H3>
+<P>
+Two major problems had to be solved in compiling GFC to GFCC:
+</P>
+<UL>
+<LI>consistent order of tables and records, to permit the array translation
+<LI>run-time variables in complex parameter values.
+</UL>
+
+<P>
+The current implementation is still experimental and may fail
+to generate correct code. Any errors remaining are likely to be 
+related to the two problems just mentioned.
+</P>
+<P>
+The order problem is solved in different ways for tables and records.
+For tables, the <CODE>values</CODE> optimization of GFC already manages to
+maintain a canonical order. But this order can be destroyed by the
+<CODE>share</CODE> optimization. To make sure that GFCC compilation works properly,
+it is safest to recompile the GF grammar by using the <CODE>values</CODE>
+optimization flag.
+</P>
+<P>
+Records can be canonically ordered by sorting them by labels.
+In fact, this was done in connection of the GFCC work as a part
+of the GFC generation, to guarantee consistency. This means that
+e.g. the <CODE>s</CODE> field will in general no longer appear as the first
+field, even if it does so in the GF source code. But relying on the
+order of fields in a labelled record would be misplaced anyway.
+</P>
+<P>
+The canonical form of records is further complicated by lock fields,
+i.e. dummy fields of form <CODE>lock_C = &lt;&gt;</CODE>, which are added to grammar
+libraries to force intensionality of linearization types. The problem
+is that the absence of a lock field only generates a warning, not
+an error. Therefore a GFC grammar can contain objects of the same
+type with and without a lock field. This problem was solved in GFCC
+generation by just removing all lock fields (defined as fields whose
+type is the empty record type). This has the further advantage of
+(slightly) reducing the grammar size. More importantly, it is safe
+to remove lock fields, because they are never used in computation,
+and because intensional types are only needed in grammars reused
+as libraries, not in grammars used at runtime.
+</P>
+<P>
+While the order problem is rather bureaucratic in nature, run-time 
+variables are an interesting problem. They arise in the presence
+of complex parameter values, created by argument-taking constructors
+and parameter records. To give an example, consider the GF parameter
+type system
+</P>
+<PRE>
+    Number = Sg | Pl ;
+    Person = P1 | P2 | P3 ;
+    Agr = Ag Number Person ;
+</PRE>
+<P>
+The values can be translated to integers in the expected way,
+</P>
+<PRE>
+    Sg = 0, Pl = 1
+    P1 = 0, P2 = 1, P3 = 2
+    Ag Sg P1 = 0, Ag Sg P2 = 1, Ag Sg P3 = 2,
+    Ag Pl P1 = 3, Ag Pl P2 = 4, Ag Pl P3 = 5
+</PRE>
+<P>
+However, an argument of <CODE>Agr</CODE> can be a run-time variable, as in
+</P>
+<PRE>
+    Ag np.n P3
+</PRE>
+<P>
+This expression must first be translated to a case expression,
+</P>
+<PRE>
+    case np.n of {
+      0 =&gt; 2 ;
+      1 =&gt; 5
+      }
+</PRE>
+<P>
+which can then be translated to the GFCC term
+</P>
+<PRE>
+    [2,5][$0[$1]]  
+</PRE>
+<P>
+assuming that the variable $np$ is the first argument and that its
+$Number$ field is the second in the record.
+</P>
+<P>
+This transformation of course has to be performed recursively, since
+there can be several run-time variables in a parameter value:
+</P>
+<PRE>
+    Ag np.n np.p
+</PRE>
+<P>
+A similar transformation would be possible to deal with the double
+role of parameter records discussed above. Thus the type
+</P>
+<PRE>
+    RNP = {n : Number ; p : Person}
+</PRE>
+<P>
+could be uniformly translated into the set <CODE>{0,1,2,3,4,5}</CODE>
+as <CODE>Agr</CODE> above. Selections would be simple instances of indexing.
+But any projection from the record should be translated into
+a case expression,
+</P>
+<PRE>
+    rnp.n  ===&gt; 
+    case rnp of {
+      0 =&gt; 0 ;
+      1 =&gt; 0 ;
+      2 =&gt; 0 ;
+      3 =&gt; 1 ;
+      4 =&gt; 1 ;
+      5 =&gt; 1
+      }
+</PRE>
+<P>
+To avoid the code bloat resulting from this, we chose the alias representation
+which is easy enough to deal with in interpreters.
+</P>
+<A NAME="toc13"></A>
+<H3>Running the compiler and the GFCC interpreter</H3>
+<P>
+GFCC generation is a part of the 
+<A HREF="http://www.cs.chalmers.se/Cs/Research/Language-technology/darcs/GF/doc/darcs.html">developers' version</A> 
+of GF since September 2006. To invoke the compiler, the flag 
+<CODE>-printer=gfcc</CODE> to the command
+<CODE>pm = print_multi</CODE> is used. It is wise to recompile the grammar from
+source, since previously compiled libraries may not obey the canonical
+order of records. To <CODE>strip</CODE> the grammar before
+GFCC translation removes unnecessary interface references.
+Here is an example, performed in
+<A HREF="../../../../../examples/bronzeage">example/bronzeage</A>.
+</P>
+<PRE>
+    i -src -path=.:prelude:resource-1.0/* -optimize=all_subs BronzeageEng.gf
+    i -src -path=.:prelude:resource-1.0/* -optimize=all_subs BronzeageGer.gf
+    strip
+    pm -printer=gfcc | wf bronze.gfcc
+</PRE>
+<P></P>
+<A NAME="toc14"></A>
+<H2>The reference interpreter</H2>
+<P>
+The reference interpreter written in Haskell consists of the following files:
+</P>
+<PRE>
+    -- source file for BNFC
+    GFCC.cf       -- labelled BNF grammar of gfcc
+  
+    -- files generated by BNFC
+    AbsGFCC.hs    -- abstrac syntax of gfcc
+    ErrM.hs       -- error monad used internally
+    LexGFCC.hs    -- lexer of gfcc files
+    ParGFCC.hs    -- parser of gfcc files and syntax trees
+    PrintGFCC.hs  -- printer of gfcc files and syntax trees
+  
+    -- hand-written files
+    DataGFCC.hs   -- post-parser grammar creation, linearization and evaluation
+    GenGFCC.hs    -- random and exhaustive generation, generate-and-test parsing
+    RunGFCC.hs    -- main function - a simple command interpreter
+</PRE>
+<P>
+It is included in the
+<A HREF="http://www.cs.chalmers.se/Cs/Research/Language-technology/darcs/GF/doc/darcs.html">developers' version</A>
+of GF, in the subdirectory <A HREF="../"><CODE>GF/src/GF/Canon/GFCC</CODE></A>.
+</P>
+<P>
+To compile the interpreter, type
+</P>
+<PRE>
+    make gfcc
+</PRE>
+<P>
+in <CODE>GF/src</CODE>. To run it, type
+</P>
+<PRE>
+    ./gfcc &lt;GFCC-file&gt;
+</PRE>
+<P>
+The available commands are
+</P>
+<UL>
+<LI><CODE>gr &lt;Cat&gt; &lt;Int&gt;</CODE>:  generate a number of random trees in category.
+  and show their linearizations in all languages
+<LI><CODE>grt &lt;Cat&gt; &lt;Int&gt;</CODE>:  generate a number of random trees in category.
+  and show the trees and their linearizations in all languages
+<LI><CODE>gt &lt;Cat&gt; &lt;Int&gt;</CODE>:  generate a number of trees in category from smallest,
+  and show their linearizations in all languages
+<LI><CODE>gtt &lt;Cat&gt; &lt;Int&gt;</CODE>:  generate a number of trees in category from smallest,
+  and show the trees and their linearizations in all languages
+<LI><CODE>p &lt;Int&gt; &lt;Cat&gt; &lt;String&gt;</CODE>: "parse", i.e. generate trees until match or 
+  until the given number have been generated
+<LI><CODE>&lt;Tree&gt;</CODE>: linearize tree in all languages, also showing full records
+<LI><CODE>quit</CODE>: terminate the system cleanly
+</UL>
+
+<A NAME="toc15"></A>
+<H2>Some things to do</H2>
+<P>
+Interpreters in Java and C++.
+</P>
+<P>
+Parsing via MCFG 
+</P>
+<UL>
+<LI>the FCFG format can possibly be simplified
+<LI>parser grammars should be saved in files to make interpreters easier
+</UL>
+
+<P>
+File compression of GFCC output.
+</P>
+<P>
+Syntax editor based on GFCC.
+</P>
+<P>
+Rewriting of resource libraries in order to exploit the
+word-suffix sharing better (depth-one tables, as in FM).
+</P>
+
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -thtml -\-toc gfcc.txt -->
+</BODY></HTML>
