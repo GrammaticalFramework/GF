@@ -15,7 +15,7 @@ import System
 
 main :: IO ()
 main = do
-  file  <- getLine ----getArgs
+  file:_  <- getArgs
   grammar <- file2gfcc file
   putStrLn $ statGFCC grammar
   loop grammar
