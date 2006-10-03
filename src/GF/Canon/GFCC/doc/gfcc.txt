@@ -497,12 +497,15 @@ GFCC generation is a part of the
 [developers' version http://www.cs.chalmers.se/Cs/Research/Language-technology/darcs/GF/doc/darcs.html] 
 of GF since September 2006. To invoke the compiler, the flag 
 ``-printer=gfcc`` to the command
-``pm = print_multi`` is used. It is wise to recompile the grammar with
-the ``values`` optimization, and to ``strip`` the grammar before
-GFCC translation. Here is an example, performed in
+``pm = print_multi`` is used. It is wise to recompile the grammar from
+source, since previously compiled libraries may not obey the canonical
+order of records. To ``strip`` the grammar before
+GFCC translation removes unnecessary interface references.
+Here is an example, performed in
 [example/bronzeage ../../../../../examples/bronzeage].
 ```
   i -src -path=.:prelude:resource-1.0/* -optimize=values BronzeageEng.gf
+  i -src -path=.:prelude:resource-1.0/* -optimize=values BronzeageGer.gf
   strip
   pm -printer=gfcc | wf bronze.gfcc
 ```
@@ -520,7 +523,7 @@ The reference interpreter written in Haskell consists of the following files:
   AbsGFCC.hs    -- abstrac syntax of gfcc
   ErrM.hs       -- error monad used internally
   LexGFCC.hs    -- lexer of gfcc files
-  ParGFCC.hs    -- parser of gfcc files
+  ParGFCC.hs    -- parser of gfcc files and syntax trees
   PrintGFCC.hs  -- printer of gfcc files and syntax trees
 
   -- hand-written files
@@ -542,11 +545,16 @@ in ``GF/src``. To run it, type
 ```
 The available commands are
 - ``gr <Cat> <Int>``:  generate a number of random trees in category.
-  with their linearizations in all languages
+  and show their linearizations in all languages
+- ``grt <Cat> <Int>``:  generate a number of random trees in category.
+  and show the trees and their linearizations in all languages
 - ``gt <Cat> <Int>``:  generate a number of trees in category from smallest,
-  with their linearizations in all languages
-- ``p <Cat> <String>``: "parse", i.e. generate trees until match or time-out
-- ``<Tree>``: linearize tree in all languages
+  and show their linearizations in all languages
+- ``gtt <Cat> <Int>``:  generate a number of trees in category from smallest,
+  and show the trees and their linearizations in all languages
+- ``p <Int> <Cat> <String>``: "parse", i.e. generate trees until match or 
+  until the given number have been generated
+- ``<Tree>``: linearize tree in all languages, also showing full records
 - ``quit``: terminate the system cleanly
 
 

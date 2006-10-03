@@ -217,10 +217,9 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
       then R rs'
       else R [Ass (L (IC "_")) (mkValCase tr), Ass (L (IC "__")) (R rs')]
   P t l    -> r2r tr
-  T _ cs0  -> checkCases cs0 $
-    case expandLinTables cgr tr of  -- normalize order of cases
-      Ok (T ty cs) -> V ty [t2t t | Cas _ t <- cs]
-      _ -> K (KS (A.prt tr +++ prtTrace tr "66668"))
+  T _ cs0  -> case expandLinTables cgr tr of  -- normalize order of cases
+    Ok (T ty cs) -> checkCases cs $ V ty [t2t t | Cas _ t <- cs]
+    _ -> K (KS (A.prt tr +++ prtTrace tr "66668"))
   V ty ts  -> V ty [t2t t | t <- ts]
   S t p    -> S (t2t t) (t2t p)
   _ -> composSafeOp t2t tr
@@ -248,18 +247,6 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
        return (cat,labs++[lab2]) 
      S p _ -> getLab p
      _ -> Bad "getLab"
-
-{-
-(table{n:ParamX.Number;p:ParamX.Person}
-  [{fin=\"am\";inf=[]}
-   {fin=\"are\";inf=[]}
-   {fin=\"is\";inf=[]}
-   {fin=\"are\";inf=[]}
-   {fin=\"are\";inf=[]}
-   {fin=\"are\";inf=[]}]  
- ! (NP@0.a))
-.fin 66665"
--}
 
    doVar :: Term -> STM [((CType,[Term]),(Term,Term))] Term
    doVar tr = case getLab tr of

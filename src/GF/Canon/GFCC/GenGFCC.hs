@@ -66,7 +66,7 @@ generateRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0) gen) cat where
 -- note: you cannot throw away rules with unknown words from the grammar
 -- because it is not known which field in each rule may match the input
 
-parse :: GFCC -> CId -> [String] -> [Exp]
-parse gfcc cat ws = [t | t <- gen, s <- lins t, words s == ws] where 
-  gen    = take 1024 $ generate gfcc cat
+parse :: Int -> GFCC -> CId -> [String] -> [Exp]
+parse i gfcc cat ws = [t | t <- gen, s <- lins t, words s == ws] where 
+  gen    = take i $ generate gfcc cat
   lins t = [linearize gfcc lang t | lang <- cncnames gfcc]
