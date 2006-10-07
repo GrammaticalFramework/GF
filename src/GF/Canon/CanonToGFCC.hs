@@ -12,7 +12,7 @@
 -- GFC to GFCC compiler. AR Aug-Oct 2006
 -----------------------------------------------------------------------------
 
-module GF.Canon.CanonToGFCC (prCanon2gfcc, prCanon2f_gfcc) where
+module GF.Canon.CanonToGFCC (prCanon2gfcc) where
 
 import GF.Canon.AbsGFC
 import qualified GF.Canon.GFC as GFC
@@ -30,11 +30,6 @@ import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 import GF.UseGrammar.Linear (expandLinTables, unoptimizeCanon)
 
--- these are needed for FCFG printing and might be moved
-import GF.FCFG.ToFCFG (printFGrammar)
-import GF.Conversion.GFC (gfc2fcfg)
-import GF.Infra.Option (noOptions)
-
 import GF.Infra.Ident
 import GF.Data.Operations
 import GF.Text.UTF8
@@ -49,24 +44,11 @@ prCanon2gfcc :: CanonGrammar -> String
 prCanon2gfcc = 
   Pr.printTree . canon2gfcc . reorder . utf8Conv . canon2canon . normalize
 
--- print FCFG corresponding to the GFCC
-prCanon2f_gfcc :: CanonGrammar -> String
-prCanon2f_gfcc = 
-  unlines . map printFGrammar . toFCFG . 
-  reorder . utf8Conv . canon2canon . normalizeNoOpt
- where
-   toFCFG cgr@(M.MGrammar (am:cms)) = 
-    [gfc2fcfg noOptions (M.MGrammar [am,cm],c) | cm@(c,_) <- cms]
--- gfc2fcfg :: Options -> (CanonGrammar, Ident) -> FGrammar
-
 -- This is needed to reorganize the grammar. GFCC has its own back-end optimization.
 -- But we need to have the canonical order in tables, created by valOpt
 normalize :: CanonGrammar -> CanonGrammar
 normalize = share . unoptimizeCanon . Sub.unSubelimCanon where
   share = M.MGrammar . map (shareModule valOpt) . M.modules --- allOpt
-
--- for FCFG generation
-normalizeNoOpt = unoptimizeCanon . Sub.unSubelimCanon
 
 -- Generate GFCC from GFCM.
 -- this assumes a grammar translated by canon2canon
@@ -133,9 +115,19 @@ reorder cg = M.MGrammar $
        cncs = sortBy (\ (x,_) (y,_) -> compare x y)
             [(lang, concr lang) | lang <- M.allConcretes cg abs]
        concr la = sortBy (\ (f,_) (g,_) -> compare f g) 
-            [changeTyp finfo | 
+            [finfo | 
               (i,mo) <- mos, M.isModCnc mo, elem i (M.allExtends cg la),
               finfo <- tree2list (M.jments mo)]
+
+-- one grammar per language - needed for symtab generation
+repartition :: CanonGrammar -> [CanonGrammar]
+repartition cg = [M.partOfGrammar cg (lang,mo) | 
+  let abs = maybe (error "no abstract") id $ M.greatestAbstract cg,
+  let mos = M.allModMod cg,
+  lang <- M.allConcretes cg abs,
+  let mo = errVal 
+       (error ("no module found for " ++ A.prt lang)) $ M.lookupModule cg lang
+  ]
 
 -- convert to UTF8 if not yet converted
 utf8Conv :: CanonGrammar -> CanonGrammar

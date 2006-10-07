@@ -44,7 +44,7 @@ abstract Swadesh = Cat ** {
 
     -- Prepositions
 
-    at_Prep : Prep ;  
+--    at_Prep : Prep ;  
     in_Prep : Prep ;
     with_Prep : Prep ;
 

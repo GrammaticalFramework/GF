@@ -345,7 +345,6 @@ customMultiGrammarPrinter =
   [
    (strCI "gfcm", const MC.prCanon)
   ,(strCI "gfcc", const GFCC.prCanon2gfcc)
-  ,(strCI "f_gfcc", const GFCC.prCanon2f_gfcc)
   ,(strCI "header", const (MC.prCanonMGr . unoptimizeCanon))
   ,(strCI "cfgm", prCanonAsCFGM)
   ,(strCI "graph", visualizeCanonGrammar)

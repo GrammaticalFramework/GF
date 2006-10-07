@@ -32,21 +32,23 @@ lookMap :: (Show i, Ord i) => a -> i -> Map i a -> a
 lookMap d c m = maybe d id $ Data.Map.lookup c m
 
 lookLin :: GFCC -> CId -> CId -> Term
-lookLin mcfg lang fun = lookMap term0 fun $ lookMap undefined lang $ concretes mcfg
+lookLin mcfg lang fun = 
+  lookMap (term0 fun) fun $ lookMap undefined lang $ concretes mcfg
 
 linearize :: GFCC -> CId -> Exp -> String
 linearize mcfg lang = realize . linExp mcfg lang
 
 realize :: Term -> String
 realize trm = case trm of
-  R (t:_)  -> realize t
+  R ts     -> realize (ts !! 0)
   S ss     -> unwords $ Prelude.map realize ss
-  K (KS s) -> s
-  K (KP s _) -> unwords s ---- prefix choice TODO
+  K t -> case t of
+    KS s -> s
+    KP s _ -> unwords s ---- prefix choice TODO
   W s t    -> s ++ realize t
-  FV (t:_) -> realize t
-
-  RP _ r -> realize r
+  FV ts    -> realize (ts !! 0)  ---- other variants TODO
+  RP _ r   -> realize r
+  TM       -> "?"
   _ -> "ERROR " ++ show trm ---- debug
 
 linExp :: GFCC -> CId -> Exp -> Term
@@ -56,7 +58,7 @@ linExp mcfg lang tree@(Tr at trees) =
     AS s   -> R [kks (show s)] -- quoted
     AI i   -> R [kks (show i)]
     AF d   -> R [kks (show d)]
-    AM     -> R [kks "?"]
+    AM     -> TM
  where
    lin  = linExp mcfg lang
    comp = compute mcfg lang
@@ -65,8 +67,8 @@ linExp mcfg lang tree@(Tr at trees) =
 exp0 :: Exp
 exp0 = Tr (AS "NO_PARSE") []
 
-term0 :: Term
-term0 = kks "UNKNOWN_ID"
+term0 :: CId -> Term
+term0 (CId s) = R [kks ("#" ++ s ++ "#")]
 
 kks :: String -> Term
 kks = K . KS
@@ -74,42 +76,40 @@ kks = K . KS
 compute :: GFCC -> CId -> [Term] -> Term -> Term
 compute mcfg lang args = comp where
   comp trm = case trm of
-    P r (FV ts) -> FV $ Prelude.map (comp . P r) ts
-
-    P r p -> case (comp r, comp p) of 
-
-       -- for the suffix optimization
-      (W s (R ss), p') -> case comp $ idx ss (getIndex p' p') of
-        K (KS u) -> kks (s ++ u)
-
-      (r', p') -> comp $ idx (getFields r') (getIndex (P r' p') p')
-
+    P r p  -> proj (comp r) (comp p) 
     RP i t -> RP (comp i) (comp t)
-    W s t -> W s (comp t)
-    R ts  -> R $ Prelude.map comp ts
-    V i   -> idx args (fromInteger i)  -- already computed
-    S ts  -> S $ Prelude.filter (/= S []) $ Prelude.map comp ts
-    F c   -> comp $ look c  -- global const: not comp'd (if contains argvar)
-    FV ts -> FV $ Prelude.map comp ts
+    W s t  -> W s (comp t)
+    R ts   -> R $ Prelude.map comp ts
+    V i    -> idx args (fromInteger i)    -- already computed
+    F c    -> comp $ look c               -- not computed (if contains argvar)
+    FV ts  -> FV $ Prelude.map comp ts
+    S ts   -> S $ Prelude.filter (/= S []) $ Prelude.map comp ts
     _ -> trm
+
   look = lookLin mcfg lang
-  idx xs i = 
-      if length xs <= i  ---- debug
-      then trace ("ERROR in compiler producing " ++ show xs ++ " !! " ++ show i)
-                 (last xs)
-      else xs !! i 
 
-  getIndex t0 t =  case t of
-      C i -> fromInteger i
-      RP p _ -> getIndex t0 $ p
-      _ -> trace ("ERROR in compiler: index from " ++ show t) 0
-      ---- TODO: this is workaround for a compiler bug
-      -- R (u : _) -> trace (show t ++ " IN\n" ++ show t0) $ getIndex t0 u
+  idx xs i = xs !! i 
 
-  getFields t = case t of
-      R rs -> rs
-      RP _ r -> getFields r
-      _ -> trace ("ERROR in compiler: fields from " ++ show t) [t]
+  proj r p = case (r,p) of
+    (_,     FV ts) -> FV $ Prelude.map (proj r) ts
+    (W s t, _)     -> kks (s ++ getString (proj t p))      
+    _              -> comp $ getField r (getIndex p)
+
+  getString t = case t of
+    K (KS s) -> s
+    _ -> trace ("ERROR in grammar compiler: string from "++ show t) "ERR"
+
+  getIndex t =  case t of
+    C i    -> fromInteger i
+    RP p _ -> getIndex p
+    TM     -> 0  -- default value for parameter
+    _ -> trace ("ERROR in grammar compiler: index from " ++ show t) 0
+
+  getField t i = case t of
+    R rs   -> idx rs i
+    RP _ r -> getField r i
+    TM     -> TM
+    _ -> trace ("ERROR in grammar compiler: field from " ++ show t) t
 
 mkGFCC :: Grammar -> GFCC
 mkGFCC (Grm (Hdr a cs) ab@(Abs funs) ccs) = GFCC {

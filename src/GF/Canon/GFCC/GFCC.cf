@@ -1,6 +1,6 @@
-Grm. Grammar  ::= Header ";" Abstract ";" [Concrete] ";" ;
+Grm. Grammar  ::= Header ";" Abstract ";" [Concrete] ;
 Hdr. Header   ::= "grammar" CId "(" [CId] ")" ;
-Abs. Abstract ::= "abstract" "{" [AbsDef] "}" ";" ;
+Abs. Abstract ::= "abstract" "{" [AbsDef] "}" ;
 Cnc. Concrete ::= "concrete" CId "{" [CncDef] "}" ;
 
 Fun. AbsDef   ::= CId ":" Type "=" Exp ;
@@ -19,7 +19,7 @@ trA. Exp      ::= Atom ;
 define trA a = Tr a [] ;
 
 R.   Term     ::= "[" [Term] "]" ;          -- record/table
-P.   Term     ::= Term "[" Term "]" ;       -- projection/selection
+P.   Term     ::= "(" Term "!" Term ")" ;   -- projection/selection
 S.   Term     ::= "(" [Term] ")" ;          -- sequence with ++
 K.   Term     ::= Tokn ;                    -- token
 V.   Term     ::= "$" Integer ;             -- argument
@@ -28,6 +28,7 @@ F.   Term     ::= CId ;                     -- global constant
 FV.  Term     ::= "[|" [Term] "|]" ;        -- free variation
 W.   Term     ::= "(" String "+" Term ")" ; -- prefix + suffix table
 RP.  Term     ::= "(" Term "@" Term ")";    -- record parameter alias
+TM.  Term     ::= "?" ;                     -- lin of metavariable
 
 KS.  Tokn     ::= String ;
 KP.  Tokn     ::= "[" "pre" [String] "[" [Variant] "]" "]" ;
@@ -37,7 +38,7 @@ Var. Variant  ::= [String] "/" [String] ;
 terminator Concrete ";" ;
 terminator AbsDef ";" ;
 terminator CncDef ";" ;
-terminator CId "" ;
+separator  CId "," ;
 separator  Term "," ;
 terminator Exp "" ;
 terminator String "" ;
