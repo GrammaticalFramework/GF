@@ -4,9 +4,9 @@ Abs. Abstract ::= "abstract" "{" [AbsDef] "}" ;
 Cnc. Concrete ::= "concrete" CId "{" [CncDef] "}" ;
 
 Fun. AbsDef   ::= CId ":" Type "=" Exp ;
-AFl. AbsDef   ::= "%" CId "=" String ; -- flag
+--AFl. AbsDef   ::= "%" CId "=" String ; -- flag
 Lin. CncDef   ::= CId "=" Term ;
-CFl. CncDef   ::= "%" CId "=" String ; -- flag
+--CFl. CncDef   ::= "%" CId "=" String ; -- flag
 
 Typ. Type     ::= [CId] "->" CId ;
 Tr.  Exp      ::= "(" Atom [Exp] ")" ;
