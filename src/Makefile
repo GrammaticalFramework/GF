@@ -179,6 +179,7 @@ tools/$(GF_DOC_EXE): tools/GFDoc.hs
 
 gfcc:
 	$(GHMAKE) $(GHCOPTFLAGS) -o gfcc GF/Canon/GFCC/RunGFCC.hs
+	strip gfcc
 
 #
 # Distribution

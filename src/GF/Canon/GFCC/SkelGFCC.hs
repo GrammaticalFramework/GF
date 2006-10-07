@@ -77,6 +77,7 @@ transTerm x = case x of
   FV terms  -> failure x
   W str term  -> failure x
   RP term0 term  -> failure x
+  TM  -> failure x
 
 
 transTokn :: Tokn -> Result

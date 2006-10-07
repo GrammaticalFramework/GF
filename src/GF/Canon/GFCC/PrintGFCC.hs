@@ -30,7 +30,7 @@ render d = rend 0 (map ($ "") $ d []) "" where
     t        :ts -> space t . rend i ts
     _            -> id
   new i   = showChar '\n' . replicateS (2*i) (showChar ' ') . dropWhile isSpace
-  space t = showString t . (\s -> if null s then "" else (' ':s))
+  space t = showString t . id ----(\s -> if null s then "" else (' ':s))
 
 parenth :: Doc -> Doc
 parenth ss = doc (showChar '(') . ss . doc (showChar ')')
@@ -82,13 +82,14 @@ instance Print CId where
   prt _ (CId i) = doc (showString i)
   prtList es = case es of
    [] -> (concatD [])
-   x:xs -> (concatD [prt 0 x , prt 0 xs])
+   [x] -> (concatD [prt 0 x])
+   x:xs -> (concatD [prt 0 x , doc (showString ",") , prt 0 xs])
 
 
 
 instance Print Grammar where
   prt i e = case e of
-   Grm header abstract concretes -> prPrec i 0 (concatD [prt 0 header , doc (showString ";") , prt 0 abstract , doc (showString ";") , prt 0 concretes , doc (showString ";")])
+   Grm header abstract concretes -> prPrec i 0 (concatD [prt 0 header , doc (showString ";") , prt 0 abstract , doc (showString ";") , prt 0 concretes])
 
 
 instance Print Header where
@@ -98,7 +99,7 @@ instance Print Header where
 
 instance Print Abstract where
   prt i e = case e of
-   Abs absdefs -> prPrec i 0 (concatD [doc (showString "abstract") , doc (showString "{") , prt 0 absdefs , doc (showString "}") , doc (showString ";")])
+   Abs absdefs -> prPrec i 0 (concatD [doc (showString "abstract") , doc (showString "{") , prt 0 absdefs , doc (showString "}")])
 
 
 instance Print Concrete where
@@ -152,7 +153,7 @@ instance Print Atom where
 instance Print Term where
   prt i e = case e of
    R terms -> prPrec i 0 (concatD [doc (showString "[") , prt 0 terms , doc (showString "]")])
-   P term0 term -> prPrec i 0 (concatD [prt 0 term0 , doc (showString "[") , prt 0 term , doc (showString "]")])
+   P term0 term -> prPrec i 0 (concatD [doc (showString "(") , prt 0 term0 , doc (showString "!") , prt 0 term , doc (showString ")")])
    S terms -> prPrec i 0 (concatD [doc (showString "(") , prt 0 terms , doc (showString ")")])
    K tokn -> prPrec i 0 (concatD [prt 0 tokn])
    V n -> prPrec i 0 (concatD [doc (showString "$") , prt 0 n])
@@ -161,6 +162,7 @@ instance Print Term where
    FV terms -> prPrec i 0 (concatD [doc (showString "[|") , prt 0 terms , doc (showString "|]")])
    W str term -> prPrec i 0 (concatD [doc (showString "(") , prt 0 str , doc (showString "+") , prt 0 term , doc (showString ")")])
    RP term0 term -> prPrec i 0 (concatD [doc (showString "(") , prt 0 term0 , doc (showString "@") , prt 0 term , doc (showString ")")])
+   TM  -> prPrec i 0 (concatD [doc (showString "?")])
 
   prtList es = case es of
    [] -> (concatD [])
