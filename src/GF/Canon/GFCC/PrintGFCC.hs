@@ -29,7 +29,7 @@ render d = rend 0 (map ($ "") $ d []) "" where
     t  : "]" :ts -> showString t . showChar ']' . rend i ts
     t        :ts -> space t . rend i ts
     _            -> id
-  new i   = showChar '\n' . replicateS (2*i) (showChar ' ') . dropWhile isSpace
+  new i   = showChar '\n' . replicateS (0) (showChar ' ') . dropWhile isSpace
   space t = showString t . id ----(\s -> if null s then "" else (' ':s))
 
 parenth :: Doc -> Doc
@@ -94,7 +94,7 @@ instance Print Grammar where
 
 instance Print Header where
   prt i e = case e of
-   Hdr cid cids -> prPrec i 0 (concatD [doc (showString "grammar") , prt 0 cid , doc (showString "(") , prt 0 cids , doc (showString ")")])
+   Hdr cid cids -> prPrec i 0 (concatD [doc (showString "grammar ") , prt 0 cid , doc (showString "(") , prt 0 cids , doc (showString ")")])
 
 
 instance Print Abstract where
@@ -104,7 +104,7 @@ instance Print Abstract where
 
 instance Print Concrete where
   prt i e = case e of
-   Cnc cid cncdefs -> prPrec i 0 (concatD [doc (showString "concrete") , prt 0 cid , doc (showString "{") , prt 0 cncdefs , doc (showString "}")])
+   Cnc cid cncdefs -> prPrec i 0 (concatD [doc (showString "concrete ") , prt 0 cid , doc (showString "{") , prt 0 cncdefs , doc (showString "}")])
 
   prtList es = case es of
    [] -> (concatD [])
