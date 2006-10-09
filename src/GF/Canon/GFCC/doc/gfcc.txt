@@ -55,18 +55,18 @@ Here is an example of a GF grammar, consisting of three modules,
 as translated to GFCC. The representations are aligned, with the exceptions
 due to the alphabetical sorting of GFCC grammars.
 ```  
-                                    grammar Ex (Eng Swe);
+                                    grammar Ex(Eng,Swe);
 
 abstract Ex = {                     abstract {
   cat 
     S ; NP ; VP ;
   fun 
-    Pred : NP -> VP -> S ;            Pred : NP VP -> S = (Pred);
+    Pred : NP -> VP -> S ;            Pred : NP,VP -> S = (Pred);
     She, They : NP ;                  She : -> NP = (She);
     Sleep : VP ;                      Sleep : -> VP = (Sleep); 
                                       They : -> NP = (They);
 }                                     } ;
-                                    ;
+                                    
 concrete Eng of Ex = {              concrete Eng {
   lincat
     S  = {s : Str} ;
@@ -75,7 +75,7 @@ concrete Eng of Ex = {              concrete Eng {
   param
     Num = Sg | Pl ;
   lin
-    Pred np vp = {                    Pred = [($0[1], $1[0][$0[0]])] ;
+    Pred np vp = {                    Pred = [(($0!1),(($1!0)!($0!0)))];
       s = np.s ++ vp.s ! np.n} ;      
     She = {s = "she" ; n = Sg} ;      She = [0, "she"];
     They = {s = "they" ; n = Pl} ;    
@@ -94,13 +94,12 @@ concrete Swe of Ex = {              concrete Swe {
   param
     Num = Sg | Pl ;
   lin
-    Pred np vp = {                    Pred = [($0[1], $1[0])];
+    Pred np vp = {                    Pred = [(($0!0),($1!0))];
       s = np.s ++ vp.s} ;
     She = {s = "hon"} ;               She = ["hon"];
     They = {s = "de"} ;               They = ["de"];
     Sleep = {s = "sover"} ;           Sleep = ["sover"];
-                                      } ;
-}                                   ;
+}                                     } ;                                   
 ```
 
 ==The syntax of GFCC files==
@@ -112,9 +111,9 @@ A grammar has a header telling the name of the abstract syntax
 the concrete languages. The abstract syntax and the concrete
 syntaxes themselves follow.
 ```
-  Grammar  ::= Header ";" Abstract ";" [Concrete] ";" ;
+  Grammar  ::= Header ";" Abstract ";" [Concrete] ;
   Header   ::= "grammar" CId "(" [CId] ")" ;
-  Abstract ::= "abstract" "{" [AbsDef] "}" ";" ;
+  Abstract ::= "abstract" "{" [AbsDef] "}" ;
   Concrete ::= "concrete" CId "{" [CncDef] "}" ;
 ```
 Abstract syntax judgements give typings and semantic definitions.
@@ -168,30 +167,33 @@ literal.
 ===Concrete syntax===
 
 Linearization terms (``Term``) are built as follows.
+Constructor names are shown to make the later code
+examples readable.
 ```
-  Term     ::= "[" [Term] "]" ;          -- array
-  Term     ::= Term "[" Term "]" ;       -- access to indexed field
-  Term     ::= "(" [Term] ")" ;          -- sequence with ++
-  Term     ::= Tokn ;                    -- token
-  Term     ::= "$" Integer ;             -- argument subtree
-  Term     ::= Integer ;                 -- array index
-  Term     ::= "[|" [Term] "|]" ;        -- free variation
+  R.  Term ::= "[" [Term] "]" ;        -- array
+  P.  Term ::= "(" Term "!" Term ")" ; -- access to indexed field
+  S.  Term ::= "(" [Term] ")" ;        -- sequence with ++
+  K.  Term ::= Tokn ;                  -- token
+  V.  Term ::= "$" Integer ;           -- argument
+  C.  Term ::= Integer ;               -- array index
+  FV. Term ::= "[|" [Term] "|]" ;      -- free variation
+  TM. Term ::= "?" ;                   -- linearization of metavariable
 ```
 Tokens are strings or (maybe obsolescent) prefix-dependent
 variant lists.
 ```
-  Tokn     ::= String ;
-  Tokn     ::= "[" "pre" [String] "[" [Variant] "]" "]" ;
-  Variant  ::= [String] "/" [String] ;
+  KS.  Tokn     ::= String ;
+  KP.  Tokn     ::= "[" "pre" [String] "[" [Variant] "]" "]" ;
+  Var. Variant  ::= [String] "/" [String] ;
 ```
 Three special forms of terms are introduced by the compiler
 as optimizations. They can in principle be eliminated, but
 their presence makes grammars much more compact. Their semantics
 will be explained in a later section.
 ```
-  Term     ::= CId ;                     -- global constant
-  Term     ::= "(" String "+" Term ")" ; -- prefix + suffix table
-  Term     ::= "(" Term "@" Term ")";    -- record parameter alias
+  F.  Term ::= CId ;                     -- global constant
+  W.  Term ::= "(" String "+" Term ")" ; -- prefix + suffix table
+  RP. Term ::= "(" Term "@" Term ")";    -- record parameter alias
 ```
 Identifiers are like ``Ident`` in GF and GFC, except that
 the compiler produces constants prefixed with ``_`` in
@@ -218,7 +220,7 @@ in which linearization is performed.
     AS s   -> R [kks (show s)] -- quoted
     AI i   -> R [kks (show i)]
     AF d   -> R [kks (show d)]
-    AM     -> R [kks "?"]      ---- TODO: proper lincat
+    AM     -> TM
    where
      lin  = linExp mcfg lang
      comp = compute mcfg lang
@@ -235,6 +237,7 @@ a string using the following algorithm.
     K (KP s _) -> unwords s ---- prefix choice TODO
     W s t    -> s ++ realize t
     FV (t:_) -> realize t
+    TM       -> "?"
 ```
 Since the order of record fields is not necessarily
 the same as in GF source,
@@ -250,38 +253,47 @@ needed:
 - an array of terms to give the subtree linearizations
 
 
-The code is cleaned from debugging information present in the working
-version.
+The code is presented in one-level pattern matching, to
+enable reimplementations in languages that do not permit
+deep patterns (such as Java and C++).
 ```
-  compute :: GFCC -> CId -> [Term] -> Term -> Term
-  compute mcfg lang args = comp where
-    comp trm = case trm of
-      P r (FV ts) -> FV $ Prelude.map (comp . P r) ts
+compute :: GFCC -> CId -> [Term] -> Term -> Term
+compute mcfg lang args = comp where
+  comp trm = case trm of
+    P r p  -> proj (comp r) (comp p)
+    RP i t -> RP (comp i) (comp t)
+    W s t  -> W s (comp t)
+    R ts   -> R $ Prelude.map comp ts
+    V i    -> idx args (fromInteger i)  -- already computed
+    F c    -> comp $ look c             -- not computed (if contains V)
+    FV ts  -> FV $ Prelude.map comp ts
+    S ts   -> S $ Prelude.filter (/= S []) $ Prelude.map comp ts
+    _ -> trm
 
-      P r p -> case (comp r, comp p) of 
+  look = lookLin mcfg lang
 
-        -- for the suffix optimization
-        (W s (R ss), p') -> case comp $ idx ss (getIndex p') of
-          K (KS u) -> kks (s ++ u)
+  idx xs i = xs !! i
 
-        (r', p') -> comp $ (getFields r') !! (getIndex p')
+  proj r p = case (r,p) of
+    (_,     FV ts) -> FV $ Prelude.map (proj r) ts
+    (W s t, _)     -> kks (s ++ getString (proj t p))
+    _              -> comp $ getField r (getIndex p)
 
-      RP i t -> RP (comp i) (comp t)
-      W s t -> W s (comp t)
-      R ts  -> R $ Prelude.map comp ts
-      V i   -> args !! (fromInteger i)    -- already computed
-      S ts  -> S $ Prelude.filter (/= S []) $ Prelude.map comp ts
-      F c   -> comp $ lookLin mcfg lang   -- not yet computed
-      FV ts -> FV $ Prelude.map comp ts
-      _ -> trm
+  getString t = case t of
+    K (KS s) -> s
+    _ -> trace ("ERROR in grammar compiler: string from "++ show t) "ERR"
 
-    getIndex t =  case t of
-      C i -> fromInteger i
-      RP p _ -> getIndex p
+  getIndex t =  case t of
+    C i    -> fromInteger i
+    RP p _ -> getIndex p
+    TM     -> 0  -- default value for parameter
+    _ -> trace ("ERROR in grammar compiler: index from " ++ show t) 0
 
-    getFields t = case t of
-      R rs -> rs
-      RP _ r -> getFields r
+  getField t i = case t of
+    R rs   -> idx rs i
+    RP _ r -> getField r i
+    TM     -> TM
+    _ -> trace ("ERROR in grammar compiler: field from " ++ show t) t
 ```
 
 ===The special term constructors===
@@ -291,7 +303,7 @@ explanation.
 
 Global constants
 ```
-  Term     ::= CId ;
+  Term ::= CId ;
 ```
 are shorthands for complex terms. They are produced by the
 compiler by (iterated) common subexpression elimination.
@@ -301,7 +313,7 @@ its definition.
 
 Prefix-suffix tables 
 ```
-  Term     ::= "(" String "+" Term ")" ; 
+  Term ::= "(" String "+" Term ")" ; 
 ```
 represent tables of word forms divided to the longest common prefix
 and its array of suffixes. In the example grammar above, we have
@@ -324,7 +336,7 @@ take effect.
 
 The most curious construct of GFCC is the parameter array alias, 
 ```
-  Term     ::= "(" Term "@" Term ")";
+  Term ::= "(" Term "@" Term ")";
 ```
 This form is used as the value of parameter records, such as the type
 ```
@@ -353,8 +365,8 @@ we get the encoding
 ```
 The GFCC computation rules are essentially
 ```
-  t [(i @ r)]  = t[i]
-  (i @ r) [j]  = r[j]
+  (t ! (i @ _)) = (t ! i)
+  ((_ @ r) ! j)  =(r ! j)
 ```
 
 
@@ -456,10 +468,10 @@ This expression must first be translated to a case expression,
 ```
 which can then be translated to the GFCC term
 ```
-  [2,5][$0[$1]]  
+  ([2,5] ! ($0 ! $1))  
 ```
-assuming that the variable $np$ is the first argument and that its
-$Number$ field is the second in the record.
+assuming that the variable ``np`` is the first argument and that its
+``Number`` field is the second in the record.
 
 This transformation of course has to be performed recursively, since
 there can be several run-time variables in a parameter value:
@@ -558,16 +570,46 @@ The available commands are
 - ``quit``: terminate the system cleanly
 
 
+==Interpreter in C++==
+
+A base-line interpreter in C++ has been started.
+Its main functionality is random generation of trees and linearization of them.
+
+Here are some results from running the different interpreters, compared
+to running the same grammar in GF, saved in ``.gfcm`` format.
+The grammar contains the English, German, and Norwegian
+versions of Bronzeage. The experiment was carried out on
+Ubuntu Linux laptop with 1.5 GHz Intel centrino processor.
+
+||                | GF        | gfcc(hs) | gfcc++ |
+| program size    |   7249k   |   803k   |  113k
+| grammar size    |    336k   |  119k    |  119k
+| read grammar    |   1150ms  |  510ms   |  150ms
+| generate 222    |   9500ms  |  450ms   |  800ms
+| memory          |     21M   |   10M    |    2M
+
+
+
+To summarize:
+- going from GF to gfcc is a major win in both code size and efficiency
+- going from Haskell to C++ interpreter is a win in code size and memory,
+  but not so much in speed
+
+
+
 ==Some things to do==
 
-Interpreters in Java and C++.
+Interpreter in Java.
 
 Parsing via MCFG 
 - the FCFG format can possibly be simplified
 - parser grammars should be saved in files to make interpreters easier
 
 
-File compression of GFCC output.
+Hand-written parsers for GFCC grammars to reduce code size
+(and efficiency?) of interpreters.
+
+Binary format and/or file compression of GFCC output.
 
 Syntax editor based on GFCC.
 
