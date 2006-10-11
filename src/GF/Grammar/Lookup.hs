@@ -30,7 +30,7 @@ import GF.Grammar.Abstract
 import GF.Infra.Modules
 import GF.Grammar.Lockfield
 
-import Data.List (nub)
+import Data.List (nub,sortBy)
 import Control.Monad
 
 -- whether lock fields are added in reuse
@@ -137,12 +137,14 @@ allParamValues cnc ptyp = case ptyp of
        return [EInt i | i <- [0..n]]
      QC p c -> lookupParamValues cnc p c
      RecType r -> do
-       let (ls,tys) = unzip r
+       let (ls,tys) = unzip $ sortByFst r
        tss <- mapM allPV tys
        return [R (zipAssign ls ts) | ts <- combinations tss]
      _ -> prtBad "cannot find parameter values for" ptyp
   where
     allPV = allParamValues cnc
+    -- to normalize records and record types
+    sortByFst = sortBy (\ x y -> compare (fst x) (fst y))
 
 qualifAnnot :: Ident -> Term -> Term
 qualifAnnot _ = id

@@ -156,9 +156,6 @@ redTerm :: Type -> Err G.Exp
 redTerm t = return $ rtExp t
 
 -- to normalize records and record types
-sortByLabel :: (a -> Label) -> [a] -> [a]
-sortByLabel f = sortBy (\ x y -> compare (f x) (f y))
-
 sortByFst :: Ord a => [(a,b)] -> [(a,b)]
 sortByFst = sortBy (\ x y -> compare (fst x) (fst y))
 
