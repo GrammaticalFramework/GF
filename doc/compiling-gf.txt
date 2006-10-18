@@ -125,15 +125,15 @@ grammars.
 
 ==Modules and separate compilation==
 
-The above diagram shows essentially what happens to each module.
+The above diagram shows what happens to each module.
 (But not quite, since some of the back-end formats must be
-built for sets of modules.)
+built for sets of modules: GFCC and the parser formats.)
 
 When the grammar compiler is called, it has a main module as its
 argument. It then builds recursively a dependency graph with all
 the other modules, and decides which ones must be recompiled.
 The behaviour is rather similar to GHC, and we don't go into
-details (although it would be beneficial to spell out the
+details (although it would be beneficial to make explicit the
 rules that are right now just in the implementation...)
 
 Separate compilation is //extremely important// when developing
@@ -141,3 +141,49 @@ big grammars, especially when using grammar libraries. Compiling
 the GF resource grammar library takes 5 minutes, whereas reading
 in the compiled image takes 10 seconds.
 
+
+==Techniques used==
+
+BNFC is used for generating both the parsers and printers.
+This has helped to make the formats portable.
+
+"Almost compositional functions" (``composOp``) are used in
+many compiler passes, making them easier to write and understand. 
+A grep on the sources reveals 40 uses (outside the definition itself).
+
+The key algorithmic ideas are
+- type-driven partial evaluation in GF-to-GFC generation
+- common subexpression elimination as back-end optimization
+- some ideas in GFC-to-MCFG encoding
+
+
+==Type-driven partial evaluation==
+
+Each abstract syntax category in GF has a corresponding linearization type:
+```
+  cat C
+  lincat C = T
+```
+The general form of a GF rule pair is
+```
+  fun f : C1 -> ... -> Cn -> C
+  lin f = t
+```
+with the typing condition following the ``lincat`` definitions
+```
+  t : T1 -> ... -> Tn -> T
+```
+The term ``t`` is in general built by using abstraction methods such
+as pattern matching, higher-order functions, local definitions,
+and library functions.
+
+The compilation technique proceeds as follows:
+- use eta-expansion on ``t`` to determine the canonical form of the term
+```
+  \ <C1>, ...., <Cn> -> (t <C1> .... <Cn>)
+```
+with unique variables ``<C1> .... <Cn>`` for the arguments; repeat this
+inside the term for records and tables
+- evaluate the resulting term using the computation rules of GF
+- what remains is a canonical term with ``<C1> .... <Cn>`` the only
+variables (the run-time input of the linearization function)
