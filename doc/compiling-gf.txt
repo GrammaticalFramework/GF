@@ -1,0 +1,143 @@
+Compiling GF
+Aarne Ranta
+
+==The compilation task==
+
+GF is a grammar formalism, i.e. a special purpose programming language
+for writing grammars.
+
+Cf: BNF, YACC, Happy (grammars for programming languages); 
+PATR, HPSG, LFG (grammars for natural languages).
+
+The grammar compiler prepares a GF grammar for two computational tasks:
+- linearization: take syntax trees to strings
+- parsing: take strings to syntax trees
+
+
+The grammar gives a declarative description of these functionalities,
+preferably on a high abstraction level enhancing grammar writing
+productivity.
+
+
+==Characteristics of GF language==
+
+Functional language with types, both built-in and user-defined.
+
+Pattern matching and higher-order functions.
+
+Module system reminiscent of ML (signatures, structures, functors).
+
+
+==GF vs. Haskell==
+
+Some things that (standard) Haskell hasn't:
+- records and record subtyping
+- regular expression patterns
+- dependent types
+- ML-style modules 
+
+
+Some things that GF hasn't:
+- infinite (recursive) data types
+- recursive functions
+- classes, polymorphism
+
+
+==GF vs. most linguistic grammar formalisms==
+
+GF separates abstract syntax from concrete syntax
+
+GF has a module system with separate compilation
+
+GF is generation-oriented (as opposed to parsing)
+
+GF has unidirectional matching (as opposed to unification)
+
+GF has a static type system (as opposed to a type-free universe)
+
+"I was - and I still am - firmly convinced that a program composed
+out of statically type-checked parts is more likely to faithfully
+express a well-thought-out design than a program relying on
+weakly-typed interfaces or dynamically-checked interfaces."
+(B. Stroustrup, 1994, p. 107)
+
+
+==The computation model==
+
+An abstract syntax defines a free algebra of trees (using
+dependent types, recursion, higher-order abstract syntax: GF has a
+complete Logical Framework).
+
+A concrete syntax defines a homomorphism (compositional mapping)
+from the abstract syntax to a system of tuples of strings.
+
+The homomorphism can as such be used as linearization algorithm.
+
+The parsing problem can be reduced to that of MPCFG (Multiple
+Parallel Context Free Grammars), see P. Ljunglöf's thesis (2004).
+
+
+==The compilation task, again==
+
+1. From a GF source grammar, derive a canonical GF grammar 
+(a much simpler format)
+
+2. From the canonical GF grammar derive an MPCFG grammar
+
+The canonical GF grammar can be used for linearization, with
+linear time complexity (w.r.t. the size of the tree).
+
+The MPCFG grammar can be used for parsing, with (unbounded)
+polynomial time complexity (w.r.t. the size of the string).
+
+For these target formats, we have also built interpreters in
+different programming languages (C++, Haskell, Java, Prolog).
+
+Moreover, we generate supplementary formats such as grammars
+required by various speech recognition systems.
+
+
+==An overview of compilation phases==
+
+Legend:
+- ellipse node: representation saved in a file
+- plain text node: internal representation
+- solid arrow or ellipse: essential phare or format
+- dashed arrow or ellipse: optional phase or format
+- arrow label: the module implementing the phase
+
+
+[gf-compiler.png]
+
+
+==Using the compiler==
+
+Batch mode (cf. GHC)
+
+Interactive mode, building the grammar incrementally from
+different files, with the possibility of testing them
+(cf. GHCI)
+
+The interactive mode was first, built on the model of ALF-2
+(L. Magnusson), and there was no file output of compiled
+grammars.
+
+
+==Modules and separate compilation==
+
+The above diagram shows essentially what happens to each module.
+(But not quite, since some of the back-end formats must be
+built for sets of modules.)
+
+When the grammar compiler is called, it has a main module as its
+argument. It then builds recursively a dependency graph with all
+the other modules, and decides which ones must be recompiled.
+The behaviour is rather similar to GHC, and we don't go into
+details (although it would be beneficial to spell out the
+rules that are right now just in the implementation...)
+
+Separate compilation is //extremely important// when developing
+big grammars, especially when using grammar libraries. Compiling
+the GF resource grammar library takes 5 minutes, whereas reading
+in the compiled image takes 10 seconds.
+

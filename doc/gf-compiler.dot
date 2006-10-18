@@ -43,6 +43,9 @@ gfc -> gf11 [label = " PrintGFC", style = "solid"];
 gf11 [label = "file.gfc", style = "solid", shape = "ellipse"];
 
 
+  gfcc [label = "file.gfcc", style = "solid", shape = "ellipse"];
+  gfc -> gfcc [label = " CanonToGFCC", style = "solid"];
+
   mcfg [label = "file.gfcm", style = "dashed", shape = "ellipse"];
   gfc -> mcfg [label = " PrintGFC", style = "dashed"];
 
