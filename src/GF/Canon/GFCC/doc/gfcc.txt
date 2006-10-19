@@ -1,11 +1,16 @@
 The GFCC Grammar Format
 Aarne Ranta
-October 3, 2006
+October 19, 2006
 
 Author's address:
 [``http://www.cs.chalmers.se/~aarne`` http://www.cs.chalmers.se/~aarne]
 
 % to compile: txt2tags -thtml --toc gfcc.txt
+
+History:
+- 19 Oct: translation of lincats, new figures on C++
+- 3 Oct 2006: first version
+
 
 ==What is GFCC==
 
@@ -502,6 +507,37 @@ To avoid the code bloat resulting from this, we chose the alias representation
 which is easy enough to deal with in interpreters.
 
 
+===The representation of linearization types===
+
+Linearization types (``lincat``) are not needed when generating with
+GFCC, but they have been added to enable parser generation directly from
+GFCC. The linearization type definitions are shown as a part of the
+concrete syntax, by using terms to represent types. Here is the table
+showing how different linearization types are encoded.
+```
+  P*                         = size(P)        -- parameter type              
+  {_ : I ; __ : R}*          = (I* @ R*)      -- record of parameters
+  {r1 : T1 ; ... ; rn : Tn}* = [T1*,...,Tn*]  -- other record
+  (P => T)*                  = [T* ,...,T*]   -- size(P) times
+  Str*                       = ()
+```
+The category symbols are prefixed with two underscores (``__``).
+For example, the linearization type ``present/CatEng.NP`` is
+translated as follows:
+```
+  NP = {
+    a : {                     -- 6 = 2*3 values
+      n : {ParamX.Number} ;   -- 2 values
+      p : {ParamX.Person}     -- 3 values
+    } ;
+    s : {ResEng.Case} => Str  -- 3 values
+  }
+
+  __NP = [(6@[2,3]),[(),(),()]]
+```
+
+
+
 
 ===Running the compiler and the GFCC interpreter===
 
@@ -584,16 +620,16 @@ Ubuntu Linux laptop with 1.5 GHz Intel centrino processor.
 ||                | GF        | gfcc(hs) | gfcc++ |
 | program size    |   7249k   |   803k   |  113k
 | grammar size    |    336k   |  119k    |  119k
-| read grammar    |   1150ms  |  510ms   |  150ms
+| read grammar    |   1150ms  |  510ms   |  100ms
 | generate 222    |   9500ms  |  450ms   |  800ms
-| memory          |     21M   |   10M    |    2M
+| memory          |     21M   |   10M    |   20M
 
 
 
 To summarize:
 - going from GF to gfcc is a major win in both code size and efficiency
-- going from Haskell to C++ interpreter is a win in code size and memory,
-  but not so much in speed
+- going from Haskell to C++ interpreter is not a win yet, because of a space
+  leak in the C++ version
 
 
 
