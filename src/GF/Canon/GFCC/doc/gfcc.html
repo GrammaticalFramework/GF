@@ -7,7 +7,7 @@
 <P ALIGN="center"><CENTER><H1>The GFCC Grammar Format</H1>
 <FONT SIZE="4">
 <I>Aarne Ranta</I><BR>
-October 3, 2006
+October 19, 2006
 </FONT></CENTER>
 
 <P></P>
@@ -31,11 +31,12 @@ October 3, 2006
     <LI><A HREF="#toc11">Compiling to GFCC</A>
       <UL>
       <LI><A HREF="#toc12">Problems in GFCC compilation</A>
-      <LI><A HREF="#toc13">Running the compiler and the GFCC interpreter</A>
+      <LI><A HREF="#toc13">The representation of linearization types</A>
+      <LI><A HREF="#toc14">Running the compiler and the GFCC interpreter</A>
       </UL>
-    <LI><A HREF="#toc14">The reference interpreter</A>
-    <LI><A HREF="#toc15">Interpreter in C++</A>
-    <LI><A HREF="#toc16">Some things to do</A>
+    <LI><A HREF="#toc15">The reference interpreter</A>
+    <LI><A HREF="#toc16">Interpreter in C++</A>
+    <LI><A HREF="#toc17">Some things to do</A>
     </UL>
 
 <P></P>
@@ -45,6 +46,14 @@ October 3, 2006
 Author's address:
 <A HREF="http://www.cs.chalmers.se/~aarne"><CODE>http://www.cs.chalmers.se/~aarne</CODE></A>
 </P>
+<P>
+History:
+</P>
+<UL>
+<LI>19 Oct: translation of lincats, new figures on C++
+<LI>3 Oct 2006: first version
+</UL>
+
 <A NAME="toc1"></A>
 <H2>What is GFCC</H2>
 <P>
@@ -629,6 +638,39 @@ To avoid the code bloat resulting from this, we chose the alias representation
 which is easy enough to deal with in interpreters.
 </P>
 <A NAME="toc13"></A>
+<H3>The representation of linearization types</H3>
+<P>
+Linearization types (<CODE>lincat</CODE>) are not needed when generating with
+GFCC, but they have been added to enable parser generation directly from
+GFCC. The linearization type definitions are shown as a part of the
+concrete syntax, by using terms to represent types. Here is the table
+showing how different linearization types are encoded.
+</P>
+<PRE>
+    P*                         = size(P)        -- parameter type              
+    {_ : I ; __ : R}*          = (I* @ R*)      -- record of parameters
+    {r1 : T1 ; ... ; rn : Tn}* = [T1*,...,Tn*]  -- other record
+    (P =&gt; T)*                  = [T* ,...,T*]   -- size(P) times
+    Str*                       = ()
+</PRE>
+<P>
+The category symbols are prefixed with two underscores (<CODE>__</CODE>).
+For example, the linearization type <CODE>present/CatEng.NP</CODE> is
+translated as follows:
+</P>
+<PRE>
+    NP = {
+      a : {                     -- 6 = 2*3 values
+        n : {ParamX.Number} ;   -- 2 values
+        p : {ParamX.Person}     -- 3 values
+      } ;
+      s : {ResEng.Case} =&gt; Str  -- 3 values
+    }
+  
+    __NP = [(6@[2,3]),[(),(),()]]
+</PRE>
+<P></P>
+<A NAME="toc14"></A>
 <H3>Running the compiler and the GFCC interpreter</H3>
 <P>
 GFCC generation is a part of the 
@@ -649,7 +691,7 @@ Here is an example, performed in
     pm -printer=gfcc | wf bronze.gfcc
 </PRE>
 <P></P>
-<A NAME="toc14"></A>
+<A NAME="toc15"></A>
 <H2>The reference interpreter</H2>
 <P>
 The reference interpreter written in Haskell consists of the following files:
@@ -705,7 +747,7 @@ The available commands are
 <LI><CODE>quit</CODE>: terminate the system cleanly
 </UL>
 
-<A NAME="toc15"></A>
+<A NAME="toc16"></A>
 <H2>Interpreter in C++</H2>
 <P>
 A base-line interpreter in C++ has been started.
@@ -741,7 +783,7 @@ Ubuntu Linux laptop with 1.5 GHz Intel centrino processor.
 <TD>read grammar</TD>
 <TD ALIGN="center">1150ms</TD>
 <TD ALIGN="center">510ms</TD>
-<TD ALIGN="right">150ms</TD>
+<TD ALIGN="right">100ms</TD>
 </TR>
 <TR>
 <TD>generate 222</TD>
@@ -753,7 +795,7 @@ Ubuntu Linux laptop with 1.5 GHz Intel centrino processor.
 <TD>memory</TD>
 <TD ALIGN="center">21M</TD>
 <TD ALIGN="center">10M</TD>
-<TD ALIGN="right">2M</TD>
+<TD ALIGN="right">20M</TD>
 </TR>
 </TABLE>
 
@@ -763,11 +805,11 @@ To summarize:
 </P>
 <UL>
 <LI>going from GF to gfcc is a major win in both code size and efficiency
-<LI>going from Haskell to C++ interpreter is a win in code size and memory,
-  but not so much in speed
+<LI>going from Haskell to C++ interpreter is not a win yet, because of a space
+  leak in the C++ version
 </UL>
 
-<A NAME="toc16"></A>
+<A NAME="toc17"></A>
 <H2>Some things to do</H2>
 <P>
 Interpreter in Java.
